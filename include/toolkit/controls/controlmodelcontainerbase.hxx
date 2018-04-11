@@ -108,7 +108,7 @@ public:
                         ControlModelContainerBase( const ControlModelContainerBase& rModel );
                         virtual ~ControlModelContainerBase() override;
 
-    UnoControlModel*    Clone() const override;
+    rtl::Reference<UnoControlModel> Clone() const override;
 
     // css::container::XContainer
     void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;

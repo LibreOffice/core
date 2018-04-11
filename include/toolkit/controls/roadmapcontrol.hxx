@@ -96,7 +96,7 @@ namespace toolkit
             UnoControlRoadmapModel_Base( rModel ),
             UnoControlRoadmapModel_IBase( rModel ),
             maContainerListeners( *this ) {}
-        UnoControlModel*    Clone() const override { return new UnoControlRoadmapModel( *this ); }
+        rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlRoadmapModel( *this ); }
 
 
     // XTypeProvider

@@ -38,6 +38,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase7.hxx>
 #include <comphelper/uno3.hxx>
+#include <rtl/ref.hxx>
 
 #include <vector>
 #include <map>
@@ -115,7 +116,7 @@ public:
                 UnoControlModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                 UnoControlModel( const UnoControlModel& rModel );
 
-    virtual UnoControlModel*    Clone() const = 0;
+    virtual rtl::Reference<UnoControlModel> Clone() const = 0;
 
     // css::uno::XInterface
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }

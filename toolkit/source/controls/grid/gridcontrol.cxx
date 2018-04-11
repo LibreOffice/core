@@ -157,7 +157,7 @@ UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
 }
 
 
-UnoControlModel* UnoGridModel::Clone() const
+rtl::Reference<UnoControlModel> UnoGridModel::Clone() const
 {
     return new UnoGridModel( *this );
 }

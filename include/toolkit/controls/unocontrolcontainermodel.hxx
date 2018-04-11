@@ -38,7 +38,7 @@ public:
                         UnoControlContainerModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
                         UnoControlContainerModel( const UnoControlContainerModel& rModel ) : UnoControlModel( rModel ) {}
 
-    UnoControlModel*    Clone() const override { return new UnoControlContainerModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlContainerModel( *this ); }
 
     // css::beans::XMultiPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
