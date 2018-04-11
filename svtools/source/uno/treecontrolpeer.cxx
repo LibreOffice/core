@@ -115,8 +115,7 @@ public:
     void            SetGraphicURL( const OUString& rGraphicURL );
     virtual void    Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
                           const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
-    SvLBoxItem*     Create() const override;
-    void            Clone( SvLBoxItem* pSource ) override;
+    std::unique_ptr<SvLBoxItem> Clone( SvLBoxItem const * pSource ) const override;
 
 private:
     OUString        maGraphicURL;
@@ -1510,20 +1509,13 @@ void UnoTreeListItem::Paint(
 }
 
 
-SvLBoxItem* UnoTreeListItem::Create() const
+std::unique_ptr<SvLBoxItem> UnoTreeListItem::Clone(SvLBoxItem const * pSource) const
 {
-    return new UnoTreeListItem;
-}
-
-
-void UnoTreeListItem::Clone( SvLBoxItem* pSource )
-{
-    UnoTreeListItem* pSourceItem = dynamic_cast< UnoTreeListItem* >( pSource );
-    if( pSourceItem )
-    {
-        maText = pSourceItem->maText;
-        maImage = pSourceItem->maImage;
-    }
+    std::unique_ptr<UnoTreeListItem> pNew(new UnoTreeListItem);
+    UnoTreeListItem const * pSourceItem = static_cast< UnoTreeListItem const * >( pSource );
+    pNew->maText = pSourceItem->maText;
+    pNew->maImage = pSourceItem->maImage;
+    return std::unique_ptr<SvLBoxItem>(pNew.release());
 }
 
 

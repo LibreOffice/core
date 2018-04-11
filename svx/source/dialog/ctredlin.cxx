@@ -75,9 +75,9 @@ SvLBoxColorString::~SvLBoxColorString()
 {
 }
 
-SvLBoxItem* SvLBoxColorString::Create() const
+std::unique_ptr<SvLBoxItem> SvLBoxColorString::Clone(SvLBoxItem const *) const
 {
-    return new SvLBoxColorString;
+    return std::unique_ptr<SvLBoxItem>(new SvLBoxColorString);
 }
 
 void SvLBoxColorString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
