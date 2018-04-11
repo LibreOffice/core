@@ -478,6 +478,18 @@ DECLARE_HTMLEXPORT_TEST(testReqIfTable, "reqif-table.xhtml")
     assertXPathNoAttribute(pDoc, "/html/body/div/table/tr/th", "bgcolor");
 }
 
+DECLARE_HTMLEXPORT_TEST(testReqIfList, "reqif-list.xhtml")
+{
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    pStream->Seek(STREAM_SEEK_TO_END);
+    sal_uInt64 nLength = pStream->Tell();
+    pStream->Seek(0);
+    OString aStream(read_uInt8s_ToOString(*pStream, nLength));
+    // This failed, <ul> was written.
+    CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:ul>") != -1);
+}
+
 DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOle2, "reqif-ole2.xhtml")
 {
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
