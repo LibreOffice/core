@@ -103,7 +103,7 @@ public:
 
 
     virtual void            SetFont( vcl::Font& rFont ) const override;
-    virtual TextAttrib*     Clone() const override;
+    virtual std::unique_ptr<TextAttrib> Clone() const override;
     virtual bool            operator==( const TextAttrib& rAttr ) const override;
 };
 
@@ -118,7 +118,7 @@ public:
     LanguageType            GetLanguage() const {return m_eLanguage;}
 
     virtual void            SetFont( vcl::Font& rFont ) const override;
-    virtual TextAttrib*     Clone() const override;
+    virtual std::unique_ptr<TextAttrib> Clone() const override;
     virtual bool            operator==( const TextAttrib& rAttr ) const override;
 };
 
@@ -131,7 +131,7 @@ public:
                             SpellBackgroundAttrib(const Color& rCol);
 
     virtual void            SetFont( vcl::Font& rFont ) const override;
-    virtual TextAttrib*     Clone() const override;
+    virtual std::unique_ptr<TextAttrib> Clone() const override;
     virtual bool            operator==( const TextAttrib& rAttr ) const override;
 };
 }//namespace svx
