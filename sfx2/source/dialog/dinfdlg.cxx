@@ -143,14 +143,13 @@ OUString CreateSizeText( sal_Int64 nSize )
     {
         aSizeStr = ::rtl::math::doubleToUString( fSize,
                 rtl_math_StringFormat_F, nDec,
-                rLocaleWrapper.getNumDecimalSep()[0] );
-        aSizeStr += aUnitStr;
-
-        aSizeStr += " (";
-        aSizeStr += rLocaleWrapper.getNum( nSize2, 0 );
-        aSizeStr += " ";
-        aSizeStr += SfxResId(STR_BYTES);
-        aSizeStr += ")";
+                rLocaleWrapper.getNumDecimalSep()[0] )
+                 + aUnitStr
+                 + " ("
+                 + rLocaleWrapper.getNum( nSize2, 0 )
+                 + " "
+                 + SfxResId(STR_BYTES)
+                 + ")";
     }
     return aSizeStr;
 }
@@ -161,9 +160,9 @@ OUString ConvertDateTime_Impl( const OUString& rName,
      Date aD(uDT);
      tools::Time aT(uDT);
      const OUString aDelim( ", " );
-     OUString aStr( rWrapper.getDate( aD ) );
-     aStr += aDelim;
-     aStr += rWrapper.getTime( aT );
+     OUString aStr = rWrapper.getDate( aD )
+                   + aDelim
+                   + rWrapper.getTime( aT );
      OUString aAuthor = comphelper::string::stripStart(rName, ' ');
      if (!aAuthor.isEmpty())
      {
@@ -726,9 +725,9 @@ namespace
 
         Date aDate( _nDate );
         tools::Time aTime( _nTime );
-        OUString aStr( rWrapper.getDate( aDate ) );
-        aStr += ", ";
-        aStr += rWrapper.getTime( aTime );
+        OUString aStr = rWrapper.getDate( aDate )
+                      + ", "
+                      + rWrapper.getTime( aTime );
         return aStr;
     }
 

@@ -2100,12 +2100,12 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                             rtl_math_StringFormat_Automatic,
                             rtl_math_DecimalPlaces_Max, '.', true );
 
-                    aBufStr = "C;X";
-                    aBufStr += OUString::number( c );
-                    aBufStr += ";Y";
-                    aBufStr += OUString::number( r );
-                    aBufStr += ";K";
-                    aBufStr += aValStr;
+                    aBufStr = "C;X"
+                            + OUString::number( c )
+                            + ";Y"
+                            + OUString::number( r )
+                            + ";K"
+                            + aValStr;
                     lcl_WriteSimpleString( rStrm, aBufStr );
                     goto checkformula;
 
@@ -2115,11 +2115,11 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                     aCellStr = pDoc->GetString(nCol, nRow, aRange.aStart.Tab());
                     aCellStr = aCellStr.replaceAll("\n", SYLK_LF);
 
-                    aBufStr = "C;X";
-                    aBufStr += OUString::number( c );
-                    aBufStr += ";Y";
-                    aBufStr += OUString::number( r );
-                    aBufStr += ";K";
+                    aBufStr = "C;X"
+                            + OUString::number( c )
+                            + ";Y"
+                            + OUString::number( r )
+                            + ";K";
                     lcl_WriteSimpleString( rStrm, aBufStr );
                     lcl_WriteString( rStrm, aCellStr, '"', ';' );
 
@@ -2160,21 +2160,21 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                                 pFCell->GetMatColsRows( nC, nR );
                                 nC += c - 1;
                                 nR += r - 1;
-                                aPrefix = ";R";
-                                aPrefix += OUString::number( nR );
-                                aPrefix += ";C";
-                                aPrefix += OUString::number( nC );
-                                aPrefix += ";M";
+                                aPrefix = ";R"
+                                        + OUString::number( nR )
+                                        + ";C"
+                                        + OUString::number( nC )
+                                        + ";M";
                             }
                             break;
                             case ScMatrixMode::Reference :
                             {   // diff expression with 'I' M$-extension
                                 ScAddress aPos;
                                 (void)pFCell->GetMatrixOrigin( aPos );
-                                aPrefix = ";I;R";
-                                aPrefix += OUString::number( aPos.Row() - nStartRow + 1 );
-                                aPrefix += ";C";
-                                aPrefix += OUString::number( aPos.Col() - nStartCol + 1 );
+                                aPrefix = ";I;R"
+                                        + OUString::number( aPos.Row() - nStartRow + 1 )
+                                        + ";C"
+                                        + OUString::number( aPos.Col() - nStartCol + 1 );
                             }
                             break;
                             default:
