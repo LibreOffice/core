@@ -28,6 +28,7 @@ $(eval $(call gb_CppunitTest_use_libraries,editeng_core, \
     sal \
     salhelper \
     sax \
+    sfx \
     sot \
     svl \
     svt \
