@@ -1,3 +1,7 @@
 Signature	FileName	MinVersion	MaxVersion	MinSize	MaxSize	MinDate	MaxDate	Languages
 s72	s255	S20	S20	I4	I4	I4	I4	S255
 Signature	Signature
+# Windows 8.1 S14 (KB 2919355) has kernel32.dll version 6.3.9600.17031; but since Signature table
+# compares minimal version only taking language into account, and we need language-independent comparison,
+# we use a value that is 1 less (see note at https://msdn.microsoft.com/en-us/library/aa371853).
+Win81S14	kernel32.dll	6.3.9600.17030						
