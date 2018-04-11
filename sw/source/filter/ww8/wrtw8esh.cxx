@@ -78,6 +78,7 @@
 #include "ww8par.hxx"
 #include <breakit.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include "ww8attributeoutput.hxx"
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"

@@ -21,7 +21,6 @@
 
 #include <memory>
 #include <rtl/ref.hxx>
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
@@ -34,7 +33,6 @@
 
 class SwDoc;
 class SfxDocumentInfoDialog;
-class SfxStyleSheetBasePool;
 class SfxInPlaceClient;
 class FontList;
 class SwEditShell;
@@ -47,9 +45,7 @@ class SwCursorShell;
 class SwSrcView;
 class SwPaM;
 class SwgReaderOption;
-class SwOLEObj;
 class IDocumentDeviceAccess;
-class IDocumentSettingAccess;
 class IDocumentChartDataProviderAccess;
 class SwDocShell;
 class SwDrawModel;
@@ -57,6 +53,7 @@ namespace svt
 {
 class EmbeddedObjectRef;
 }
+namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
 
 // initialize DrawModel (in form of a SwDrawModel) and DocShell (in form of a SwDocShell)
 // as needed, one or both parameters may be zero

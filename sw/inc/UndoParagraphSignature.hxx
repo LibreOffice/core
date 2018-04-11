@@ -23,11 +23,11 @@
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/text/XTextContent.hpp>
-#include <com/sun/star/text/XTextField.hpp>
 
-struct SwPosition;
 class SwDoc;
+
+namespace com { namespace sun { namespace star { namespace text { class XTextContent; } } } }
+namespace com { namespace sun { namespace star { namespace text { class XTextField; } } } }
 
 /// Undo/Redo Paragraph Signature.
 class SwUndoParagraphSigning : public SwUndo

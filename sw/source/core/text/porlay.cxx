@@ -33,6 +33,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/CTLScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <paratr.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/scripttypeitem.hxx>

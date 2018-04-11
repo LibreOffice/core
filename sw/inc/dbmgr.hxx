@@ -29,8 +29,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <memory>
 #include <vector>
@@ -45,7 +44,6 @@ namespace com{namespace sun{namespace star{
     namespace beans{
 
         class XPropertySet;
-        struct PropertyValue;
     }
     namespace sdbcx{
         class XColumnsSupplier;
@@ -56,6 +54,8 @@ namespace com{namespace sun{namespace star{
     namespace mail{
         class XSmtpService;
     }
+    namespace embed { class XStorage; }
+    namespace frame { class XStorable; }
 }}}
 namespace svx {
     class ODataAccessDescriptor;
@@ -74,7 +74,6 @@ namespace weld {
 
 class SwView;
 class SwWrtShell;
-class SfxProgress;
 class ListBox;
 class Button;
 class SvNumberFormatter;
@@ -232,7 +231,6 @@ struct SwMergeDescriptor
     }
 };
 
-class AbstractMailMergeDlg;
 class SwDoc;
 
 class SW_DLLPUBLIC SwDBManager

@@ -47,6 +47,7 @@
 #include <frmfmt.hxx>
 
 #include <vector>
+#include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;

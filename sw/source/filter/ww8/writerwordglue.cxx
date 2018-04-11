@@ -30,6 +30,7 @@
 #include <unicode/ubidi.h>
 #include <tools/tenccvt.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 
 #include <unotools/fontcvt.hxx>
 #include <editeng/paperinf.hxx>

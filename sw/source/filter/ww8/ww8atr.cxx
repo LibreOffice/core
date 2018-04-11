@@ -114,6 +114,7 @@
 #include <fmtftntx.hxx>
 #include <breakit.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/xenum.hxx>

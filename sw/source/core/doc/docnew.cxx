@@ -23,6 +23,7 @@
 #include <dcontact.hxx>
 #include <proofreadingiterator.hxx>
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
+#include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>

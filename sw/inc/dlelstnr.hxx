@@ -21,17 +21,16 @@
 #define INCLUDED_SW_INC_DLELSTNR_HXX
 
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
-#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <cppuhelper/implbase.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace linguistic2 {
-        class XDictionaryList;
         class XLinguServiceManager2;
         class XProofreadingIterator;
     }
     namespace frame {
-        class XTerminateListener;
+        class XDesktop2;
     }
 } } }
 

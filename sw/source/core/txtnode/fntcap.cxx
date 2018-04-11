@@ -24,6 +24,7 @@
 #include <vcl/outdev.hxx>
 #include <com/sun/star/i18n/CharType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 
 #include <vcl/print.hxx>
 #include <fntcache.hxx>
