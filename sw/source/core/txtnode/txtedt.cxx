@@ -328,7 +328,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
 {
     bool bRet = false;
 
-    SfxItemSet* pNewSet = nullptr;
+    std::unique_ptr<SfxItemSet> pNewSet;
 
     if ( !pSet1 )
     {
@@ -363,7 +363,6 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
     {
         if ( pNewSet->Count() )
             pStyleHandle = rStyleAccess.getAutomaticStyle( *pNewSet, IStyleAccess::AUTO_STYLE_CHAR );
-        delete pNewSet;
         bRet = true;
     }
 

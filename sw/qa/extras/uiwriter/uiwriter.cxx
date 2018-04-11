@@ -1981,7 +1981,7 @@ void SwUiWriterTest::testTdf79236()
     //Getting some paragraph style
     SwTextFormatColl* pTextFormat = pDoc->FindTextFormatCollByName("Text Body");
     const SwAttrSet& rAttrSet = pTextFormat->GetAttrSet();
-    SfxItemSet* pNewSet = rAttrSet.Clone();
+    std::unique_ptr<SfxItemSet> pNewSet = rAttrSet.Clone();
     sal_uInt16 initialCount = pNewSet->Count();
     SvxAdjustItem AdjustItem = rAttrSet.GetAdjust();
     SvxAdjust initialAdjust = AdjustItem.GetAdjust();

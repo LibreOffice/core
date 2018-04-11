@@ -215,7 +215,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
 
             if (pPrinter->GetName() != sPrinterName)
             {
-                VclPtrInstance<SfxPrinter> pNewPrinter( std::unique_ptr<SfxItemSet>(pPrinter->GetOptions().Clone()), sPrinterName );
+                VclPtrInstance<SfxPrinter> pNewPrinter( pPrinter->GetOptions().Clone(), sPrinterName );
                 if (pNewPrinter->IsKnown())
                     pDocShell->SetPrinter( pNewPrinter, SfxPrinterChangeFlags::PRINTER );
                 else

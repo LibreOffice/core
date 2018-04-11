@@ -725,7 +725,7 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                             SfxPrinter *pTempPrinter = pDocSh->GetPrinter( true );
                             if (pTempPrinter)
                             {
-                                VclPtr<SfxPrinter> pNewPrinter = VclPtr<SfxPrinter>::Create( std::unique_ptr<SfxItemSet>(pTempPrinter->GetOptions().Clone()), aPrinterName );
+                                VclPtr<SfxPrinter> pNewPrinter = VclPtr<SfxPrinter>::Create( pTempPrinter->GetOptions().Clone(), aPrinterName );
                                 pDocSh->SetPrinter( pNewPrinter );
                             }
                         }
@@ -748,7 +748,7 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                             bool bPreferPrinterPapersize = false;
                             if( pPrinter )
                             {
-                                pItemSet.reset(pPrinter->GetOptions().Clone());
+                                pItemSet = pPrinter->GetOptions().Clone();
                                 bPreferPrinterPapersize = pPrinter->GetPrinterSettingsPreferred();
                             }
                             else

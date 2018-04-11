@@ -385,7 +385,7 @@ ErrCode SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &
     css::uno::Reference< css::frame::XModel >  xModel ( xDoc->GetModel(), css::uno::UNO_QUERY );
     if ( xModel.is() )
     {
-        SfxItemSet* pNew = xDoc->GetMedium()->GetItemSet()->Clone();
+        std::unique_ptr<SfxItemSet> pNew = xDoc->GetMedium()->GetItemSet()->Clone();
         pNew->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
         pNew->ClearItem( SID_FILTER_NAME );
         css::uno::Sequence< css::beans::PropertyValue > aArgs;
@@ -395,7 +395,6 @@ ErrCode SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &
         aArgs[nLength].Name = "Title";
         aArgs[nLength].Value <<= xDoc->GetTitle( SFX_TITLE_DETECT );
         xModel->attachResource( OUString(), aArgs );
-        delete pNew;
     }
 
     return xDoc->GetErrorCode();

@@ -149,7 +149,6 @@ IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
     mnCurrentPageId ( HyperLinkPageType::NONE ),
 
     pSet            ( nullptr ),
-    pOutSet         ( nullptr ),
     pExampleSet     ( nullptr ),
     pRanges         ( nullptr )
 {
@@ -171,7 +170,7 @@ IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
     if ( pSet )
     {
         pExampleSet = new SfxItemSet( *pSet );
-        pOutSet = new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() );
+        pOutSet.reset(new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() ));
     }
 
     // Buttons
@@ -208,8 +207,7 @@ void IconChoiceDialog::dispose()
 
     delete pRanges;
     pRanges = nullptr;
-    delete pOutSet;
-    pOutSet = nullptr;
+    pOutSet.reset();
 
     m_pIconCtrl.clear();
     m_pOKBtn.clear();
@@ -503,7 +501,7 @@ void IconChoiceDialog::SetInputSet( const SfxItemSet* pInSet )
     if ( !bSet && !pExampleSet && !pOutSet )
     {
         pExampleSet = new SfxItemSet( *pSet );
-        pOutSet = new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() );
+        pOutSet.reset(new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() ));
     }
 }
 
@@ -623,7 +621,7 @@ void IconChoiceDialog::Ok()
         if ( !pExampleSet && pSet )
             pOutSet = pSet->Clone( false ); // without items
         else if ( pExampleSet )
-            pOutSet = new SfxItemSet( *pExampleSet );
+            pOutSet.reset(new SfxItemSet( *pExampleSet ));
     }
 
     for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )

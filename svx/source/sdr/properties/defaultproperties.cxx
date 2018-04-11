@@ -51,18 +51,17 @@ namespace sdr
         }
 
         DefaultProperties::DefaultProperties(const DefaultProperties& rProps, SdrObject& rObj)
-        :   BaseProperties(rObj),
-            mpItemSet(nullptr)
+        :   BaseProperties(rObj)
         {
             if(rProps.mpItemSet)
             {
                 // Clone may be to another model and thus another ItemPool.
                 // SfxItemSet supports that thus we are able to Clone all
                 // SfxItemState::SET items to the target pool.
-                mpItemSet.reset(
+                mpItemSet =
                     rProps.mpItemSet->Clone(
                         true,
-                        &rObj.getSdrModelFromSdrObject().GetItemPool()));
+                        &rObj.getSdrModelFromSdrObject().GetItemPool());
 
                 // React on ModelChange: If metric has changed, scale items.
                 // As seen above, clone is supported, but scale is not included,

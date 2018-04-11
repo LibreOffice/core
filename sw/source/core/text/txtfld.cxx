@@ -422,10 +422,10 @@ static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTextFor
                 std::shared_ptr<SfxItemSet> pSet(hint->GetAutoFormat().GetStyleHandle());
 
                 // Check each item and in case it should be ignored, then clear it.
-                std::shared_ptr<SfxItemSet> pCleanedSet;
+                std::unique_ptr<SfxItemSet> pCleanedSet;
                 if (pSet.get())
                 {
-                    pCleanedSet.reset(pSet->Clone());
+                    pCleanedSet = pSet->Clone();
 
                     SfxItemIter aIter(*pSet);
                     const SfxPoolItem* pItem = aIter.GetCurItem();

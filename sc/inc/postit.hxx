@@ -341,7 +341,7 @@ public:
      */
     static ScPostIt*    CreateNoteFromObjectData(
                             ScDocument& rDoc, const ScAddress& rPos,
-                            SfxItemSet* pItemSet, OutlinerParaObject* pOutlinerObj,
+                            std::unique_ptr<SfxItemSet> pItemSet, OutlinerParaObject* pOutlinerObj,
                             const tools::Rectangle& rCaptionRect, bool bShown,
                             bool bAlwaysCreateCaption );
 

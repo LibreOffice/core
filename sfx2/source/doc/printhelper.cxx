@@ -345,7 +345,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
 
             if ( aPrinterName != pPrinter->GetName() )
             {
-                pPrinter = VclPtr<SfxPrinter>::Create( std::unique_ptr<SfxItemSet>(pPrinter->GetOptions().Clone()), aPrinterName );
+                pPrinter = VclPtr<SfxPrinter>::Create( pPrinter->GetOptions().Clone(), aPrinterName );
                 nChangeFlags = SfxPrinterChangeFlags::PRINTER;
             }
             break;
