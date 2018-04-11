@@ -297,7 +297,7 @@ OUString ODsnTypeCollection::getEmbeddedDatabase() const
         }
     }
     if ( sEmbeddedDatabaseURL.isEmpty() )
-        sEmbeddedDatabaseURL = "sdbc:embedded:firebird";
+        sEmbeddedDatabaseURL = "sdbc:embedded:hsqldb";
 
     return sEmbeddedDatabaseURL;
 }

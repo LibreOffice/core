@@ -1,0 +1,11 @@
+--- misc/hsqldb/src/org/hsqldb/Library.java
++++ misc/build/hsqldb/src/org/hsqldb/Library.java
+@@ -1957,7 +1957,7 @@
+         functionMap.put("bitand", bitand);
+         functionMap.put("bitlength", bitLength);
+         functionMap.put("bitor", bitor);
+-        functionMap.put("bitxor", bitor);
++        functionMap.put("bitxor", bitxor);
+         functionMap.put("character", character);
+         functionMap.put("concat", concat);
+         functionMap.put("cot", cot);
