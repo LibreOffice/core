@@ -120,9 +120,9 @@ void UnusedVariableMore::run()
     {
         report(DiagnosticsEngine::Warning, "unused variable %0", varDecl->getLocation())
             << varDecl->getDeclName();
-        auto it = interestingDebugMap.find(varDecl);
-        if (it != interestingDebugMap.end())
-            it->second->dump();
+        //auto it = interestingDebugMap.find(varDecl);
+        //if (it != interestingDebugMap.end())
+        //    it->second->dump();
     }
 }
 
