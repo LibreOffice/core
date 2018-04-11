@@ -30,18 +30,14 @@ typedef struct _cairo_surface cairo_surface_t;
 class VCL_DLLPUBLIC SvpSalVirtualDevice : public SalVirtualDevice
 {
     DeviceFormat                        m_eFormat;
+    cairo_surface_t*                    m_pRefSurface;
     cairo_surface_t*                    m_pSurface;
     basegfx::B2IVector                  m_aFrameSize;
     double                              m_fScale;
     std::vector< SvpSalGraphics* >      m_aGraphics;
 
 public:
-    SvpSalVirtualDevice(DeviceFormat eFormat, double fScale)
-        : m_eFormat(eFormat)
-        , m_pSurface(nullptr)
-        , m_fScale(fScale)
-    {
-    }
+    SvpSalVirtualDevice(DeviceFormat eFormat, double fScale, cairo_surface_t* pRefSurface);
     virtual ~SvpSalVirtualDevice() override;
 
     // SalVirtualDevice
