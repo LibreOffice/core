@@ -727,7 +727,8 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
         paParent->mbExportFormFields = mpCbExportFormFields->IsChecked();
     }
 
-    paParent->maWatermarkText = mpEdWatermark->GetText();
+    if( mpCbWatermark->IsChecked() )
+        paParent->maWatermarkText = mpEdWatermark->GetText();
 
     /*
     * FIXME: the entries are only implicitly defined by the resource file. Should there
