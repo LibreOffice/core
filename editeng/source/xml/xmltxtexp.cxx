@@ -108,9 +108,9 @@ SvxEditEngineSource::~SvxEditEngineSource()
 {
 }
 
-SvxEditSource* SvxEditEngineSource::Clone() const
+std::unique_ptr<SvxEditSource> SvxEditEngineSource::Clone() const
 {
-    return new SvxEditEngineSource( mxImpl.get() );
+    return std::unique_ptr<SvxEditSource>(new SvxEditEngineSource( mxImpl.get() ));
 }
 
 SvxTextForwarder* SvxEditEngineSource::GetTextForwarder()

@@ -976,9 +976,9 @@ SvxTextEditSource::~SvxTextEditSource()
 }
 
 
-SvxEditSource* SvxTextEditSource::Clone() const
+std::unique_ptr<SvxEditSource> SvxTextEditSource::Clone() const
 {
-    return new SvxTextEditSource( mpImpl.get() );
+    return std::unique_ptr<SvxEditSource>(new SvxTextEditSource( mpImpl.get() ));
 }
 
 

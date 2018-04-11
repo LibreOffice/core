@@ -761,9 +761,9 @@ SmEditSource::~SmEditSource()
 {
 }
 
-SvxEditSource* SmEditSource::Clone() const
+std::unique_ptr<SvxEditSource> SmEditSource::Clone() const
 {
-    return new SmEditSource( *this );
+    return std::unique_ptr<SvxEditSource>(new SmEditSource( *this ));
 }
 
 SvxTextForwarder* SmEditSource::GetTextForwarder()

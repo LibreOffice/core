@@ -60,7 +60,7 @@ namespace accessibility
         SvxViewForwarder*       GetViewForwarder() override;
         SvxEditViewForwarder*   GetEditViewForwarder( bool bCreate = false ) override;
 
-        SvxEditSource*          Clone() const override;
+        std::unique_ptr<SvxEditSource> Clone() const override;
 
         void                    UpdateData() override;
 
@@ -82,7 +82,7 @@ namespace accessibility
         // SvxEditSource
         SvxTextForwarder*       GetTextForwarder() override { return this; }
         SvxViewForwarder*       GetViewForwarder() override { return this; }
-        SvxEditSource*          Clone() const override { return nullptr; }
+        std::unique_ptr<SvxEditSource> Clone() const override { return nullptr; }
         void                    UpdateData() override {}
         SfxBroadcaster&         GetBroadcaster() const override { return *const_cast<AccessibleEmptyEditSource_Impl*>(this); }
 
@@ -190,7 +190,7 @@ namespace accessibility
         return maEditSource.GetEditViewForwarder( bCreate );
     }
 
-    SvxEditSource* AccessibleProxyEditSource_Impl::Clone() const
+    std::unique_ptr<SvxEditSource> AccessibleProxyEditSource_Impl::Clone() const
     {
         return maEditSource.Clone();
     }
@@ -278,7 +278,7 @@ namespace accessibility
         return mpEditSource->GetEditViewForwarder( bCreate );
     }
 
-    SvxEditSource* AccessibleEmptyEditSource::Clone() const
+    std::unique_ptr<SvxEditSource> AccessibleEmptyEditSource::Clone() const
     {
         if( !mpEditSource.get() )
             return nullptr;

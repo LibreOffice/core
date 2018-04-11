@@ -172,7 +172,7 @@ public:
 
     // SvxEditSource
     virtual ~SvxDummyTextSource() override;
-    virtual SvxEditSource*          Clone() const override;
+    virtual std::unique_ptr<SvxEditSource> Clone() const override;
     virtual SvxTextForwarder*       GetTextForwarder() override;
     virtual void                    UpdateData() override;
 

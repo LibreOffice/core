@@ -219,7 +219,7 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase(const SvxEditSource* pSource, const Svx
 
     DBG_ASSERT(pSource,"SvxUnoTextRangeBase: I need a valid SvxEditSource!");
 
-    mpEditSource.reset( pSource->Clone() );
+    mpEditSource = pSource->Clone();
     if (mpEditSource != nullptr)
     {
         ESelection aSelection;
@@ -244,7 +244,8 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase(const SvxUnoTextRangeBase& rRange)
 {
     SolarMutexGuard aGuard;
 
-    mpEditSource.reset( rRange.mpEditSource ? rRange.mpEditSource->Clone() : nullptr );
+    if (rRange.mpEditSource)
+        mpEditSource = rRange.mpEditSource->Clone();
 
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
     if( pForwarder )
@@ -2291,9 +2292,9 @@ SvxDummyTextSource::~SvxDummyTextSource()
 {
 };
 
-SvxEditSource* SvxDummyTextSource::Clone() const
+std::unique_ptr<SvxEditSource> SvxDummyTextSource::Clone() const
 {
-    return new SvxDummyTextSource;
+    return std::unique_ptr<SvxEditSource>(new SvxDummyTextSource);
 }
 
 SvxTextForwarder* SvxDummyTextSource::GetTextForwarder()

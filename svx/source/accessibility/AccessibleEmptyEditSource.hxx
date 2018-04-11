@@ -56,7 +56,7 @@ namespace accessibility
         SvxTextForwarder*       GetTextForwarder() override;
         SvxViewForwarder*       GetViewForwarder() override;
 
-        SvxEditSource*          Clone() const override;
+        std::unique_ptr<SvxEditSource> Clone() const override;
 
         // this method internally switches from empty to proxy mode,
         // creating an SvxTextEditSource for the functionality.
