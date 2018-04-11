@@ -30,9 +30,19 @@
 
 using namespace basegfx;
 
+SvpSalVirtualDevice::SvpSalVirtualDevice(DeviceFormat eFormat, double fScale, cairo_surface_t* pRefSurface)
+    : m_eFormat(eFormat)
+    , m_pRefSurface(pRefSurface)
+    , m_pSurface(nullptr)
+    , m_fScale(fScale)
+{
+    cairo_surface_reference(m_pRefSurface);
+}
+
 SvpSalVirtualDevice::~SvpSalVirtualDevice()
 {
     cairo_surface_destroy(m_pSurface);
+    cairo_surface_destroy(m_pRefSurface);
 }
 
 SalGraphics* SvpSalVirtualDevice::AcquireGraphics()
@@ -77,7 +87,7 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
 
         if (m_eFormat == DeviceFormat::BITMASK)
         {
-            m_pSurface = cairo_image_surface_create(CAIRO_FORMAT_A1,
+            m_pSurface = cairo_surface_create_similar_image(m_pRefSurface, CAIRO_FORMAT_A1,
                                 nNewDX, nNewDY);
         }
         else
@@ -87,7 +97,7 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
                                    nNewDX, nNewDY,
                                    cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nNewDX))
                                  :
-                             cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+                             cairo_surface_create_similar_image(m_pRefSurface, CAIRO_FORMAT_ARGB32,
                                    nNewDX, nNewDY);
         }
 
