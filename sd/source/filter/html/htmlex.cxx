@@ -174,14 +174,12 @@ public:
 // close all still open tags
 OUString HtmlState::Flush()
 {
-    OUString aStr;
-
-    aStr += SetWeight(false);
-    aStr += SetItalic(false);
-    aStr += SetUnderline(false);
-    aStr += SetStrikeout(false);
-    aStr += SetColor(maDefColor);
-    aStr += SetLink("","");
+    OUString aStr = SetWeight(false)
+                  + SetItalic(false)
+                  + SetUnderline(false)
+                  + SetStrikeout(false)
+                  + SetColor(maDefColor)
+                  + SetLink("","");
 
     return aStr;
 }
