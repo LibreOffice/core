@@ -588,7 +588,7 @@ namespace dbaui
     {
         // Sets jdbc as the default selected database on startup.
         if (m_pRB_CreateDatabase->IsChecked() )
-            return m_pCollection->getTypeDisplayName( "sdbc:embedded:firebird" );
+            return m_pCollection->getTypeDisplayName( "jdbc:" );
 
         return OGeneralPage::getDatasourceName( _rSet );
     }
