@@ -58,7 +58,7 @@ namespace {
 
 void
 executeLoginDialog(
-    vcl::Window * pParent,
+    weld::Window* pParent,
     LoginErrorInfo & rInfo,
     OUString const & rRealm)
 {
@@ -82,40 +82,40 @@ executeLoginDialog(
     if (!bCanUseSysCreds)
         nFlags |= LoginFlags::NoUseSysCreds;
 
-    ScopedVclPtrInstance< LoginDialog > xDialog(pParent, nFlags, rInfo.GetServer(), rRealm);
+    LoginDialog aDialog(pParent, nFlags, rInfo.GetServer(), rRealm);
     if (!rInfo.GetErrorText().isEmpty())
-        xDialog->SetErrorText(rInfo.GetErrorText());
-    xDialog->SetName(rInfo.GetUserName());
+        aDialog.SetErrorText(rInfo.GetErrorText());
+    aDialog.SetName(rInfo.GetUserName());
     if (bAccount)
-        xDialog->ClearAccount();
+        aDialog.ClearAccount();
     else
-        xDialog->ClearPassword();
-    xDialog->SetPassword(rInfo.GetPassword());
+        aDialog.ClearPassword();
+    aDialog.SetPassword(rInfo.GetPassword());
 
     if (bSavePassword)
     {
         std::locale aLocale(Translate::Create("uui"));
-        xDialog->SetSavePasswordText(
+        aDialog.SetSavePasswordText(
             Translate::get(rInfo.GetIsRememberPersistent()
                       ? RID_SAVE_PASSWORD
                       : RID_KEEP_PASSWORD,
                   aLocale));
 
-        xDialog->SetSavePassword(rInfo.GetIsRememberPassword());
+        aDialog.SetSavePassword(rInfo.GetIsRememberPassword());
     }
 
     if ( bCanUseSysCreds )
-        xDialog->SetUseSystemCredentials( rInfo.GetIsUseSystemCredentials() );
+        aDialog.SetUseSystemCredentials( rInfo.GetIsUseSystemCredentials() );
 
-    rInfo.SetResult(xDialog->Execute() == RET_OK ? DialogMask::ButtonsOk :
-                                                   DialogMask::ButtonsCancel);
-    rInfo.SetUserName(xDialog->GetName());
-    rInfo.SetPassword(xDialog->GetPassword());
-    rInfo.SetAccount(xDialog->GetAccount());
-    rInfo.SetIsRememberPassword(xDialog->IsSavePassword());
+    rInfo.SetResult(aDialog.run() == RET_OK ? DialogMask::ButtonsOk :
+                                              DialogMask::ButtonsCancel);
+    rInfo.SetUserName(aDialog.GetName());
+    rInfo.SetPassword(aDialog.GetPassword());
+    rInfo.SetAccount(aDialog.GetAccount());
+    rInfo.SetIsRememberPassword(aDialog.IsSavePassword());
 
     if ( bCanUseSysCreds )
-      rInfo.SetIsUseSystemCredentials( xDialog->IsUseSystemCredentials() );
+      rInfo.SetIsUseSystemCredentials( aDialog.IsUseSystemCredentials() );
 }
 
 void getRememberModes(
@@ -172,7 +172,7 @@ void getRememberModes(
 
 void
 handleAuthenticationRequest_(
-    vcl::Window * pParent,
+    weld::Window * pParent,
     uno::Reference< task::XInteractionHandler2 > const & xIH,
     uno::Reference< uno::XComponentContext > const & xContext,
     ucb::AuthenticationRequest const & rRequest,
@@ -595,11 +595,12 @@ UUIInteractionHelper::handleAuthenticationRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
 {
     uno::Any aAnyRequest(rRequest->getRequest());
+    uno::Reference<awt::XWindow> xParent = getParentXWindow();
 
     ucb::URLAuthenticationRequest aURLAuthenticationRequest;
     if (aAnyRequest >>= aURLAuthenticationRequest)
     {
-        handleAuthenticationRequest_(getParentProperty(),
+        handleAuthenticationRequest_(Application::GetFrameWeld(xParent),
                                      getInteractionHandler(),
                                      m_xContext,
                                      aURLAuthenticationRequest,
@@ -611,7 +612,7 @@ UUIInteractionHelper::handleAuthenticationRequest(
     ucb::AuthenticationRequest aAuthenticationRequest;
     if (aAnyRequest >>= aAuthenticationRequest)
     {
-        handleAuthenticationRequest_(getParentProperty(),
+        handleAuthenticationRequest_(Application::GetFrameWeld(xParent),
                                      getInteractionHandler(),
                                      m_xContext,
                                      aAuthenticationRequest,

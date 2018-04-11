@@ -35,29 +35,11 @@ using namespace com::sun::star;
 
 LoginDialog::~LoginDialog()
 {
-    disposeOnce();
-}
-
-void LoginDialog::dispose()
-{
-    m_pErrorFT.clear();
-    m_pErrorInfo.clear();
-    m_pRequestInfo.clear();
-    m_pNameFT.clear();
-    m_pNameED.clear();
-    m_pPasswordFT.clear();
-    m_pPasswordED.clear();
-    m_pAccountFT.clear();
-    m_pAccountED.clear();
-    m_pSavePasswdBtn.clear();
-    m_pUseSysCredsCB.clear();
-    m_pOKBtn.clear();
-    ModalDialog::dispose();
 }
 
 void LoginDialog::SetPassword( const OUString& rNew )
 {
-    m_pPasswordED->SetText( rNew );
+    m_xPasswordED->set_text( rNew );
     SetRequest();
 }
 
@@ -65,138 +47,139 @@ void LoginDialog::HideControls_Impl( LoginFlags nFlags )
 {
     if ( nFlags & LoginFlags::NoUsername )
     {
-        m_pNameFT->Hide();
-        m_pNameED->Hide();
+        m_xNameFT->hide();
+        m_xNameED->hide();
     }
     else if ( nFlags & LoginFlags::UsernameReadonly )
     {
-        m_pNameED->Enable( false );
+        m_xNameED->set_sensitive( false );
     }
 
     if ( nFlags & LoginFlags::NoPassword )
     {
-        m_pPasswordFT->Hide();
-        m_pPasswordED->Hide();
+        m_xPasswordFT->hide();
+        m_xPasswordED->hide();
     }
 
     if ( nFlags & LoginFlags::NoSavePassword )
-        m_pSavePasswdBtn->Hide();
+        m_xSavePasswdBtn->hide();
 
     if ( nFlags & LoginFlags::NoErrorText )
     {
-        m_pErrorInfo->Hide();
-        m_pErrorFT->Hide();
+        m_xErrorInfo->hide();
+        m_xErrorFT->hide();
     }
 
     if ( nFlags & LoginFlags::NoAccount )
     {
-        m_pAccountFT->Hide();
-        m_pAccountED->Hide();
+        m_xAccountFT->hide();
+        m_xAccountED->hide();
     }
 
     if ( nFlags & LoginFlags::NoUseSysCreds )
     {
-        m_pUseSysCredsCB->Hide();
+        m_xUseSysCredsCB->hide();
     }
 }
 
-void LoginDialog::EnableUseSysCredsControls_Impl( bool bUseSysCredsEnabled )
+void LoginDialog::EnableUseSysCredsControls_Impl( bool bUseSysCredsset_sensitived )
 {
-    m_pErrorInfo->Enable( !bUseSysCredsEnabled );
-    m_pErrorFT->Enable( !bUseSysCredsEnabled );
-    m_pRequestInfo->Enable( !bUseSysCredsEnabled );
-    m_pNameFT->Enable( !bUseSysCredsEnabled );
-    m_pNameED->Enable( !bUseSysCredsEnabled );
-    m_pPasswordFT->Enable( !bUseSysCredsEnabled );
-    m_pPasswordED->Enable( !bUseSysCredsEnabled );
-    m_pAccountFT->Enable( !bUseSysCredsEnabled );
-    m_pAccountED->Enable( !bUseSysCredsEnabled );
+    m_xErrorInfo->set_sensitive( !bUseSysCredsset_sensitived );
+    m_xErrorFT->set_sensitive( !bUseSysCredsset_sensitived );
+    m_xRequestInfo->set_sensitive( !bUseSysCredsset_sensitived );
+    m_xNameFT->set_sensitive( !bUseSysCredsset_sensitived );
+    m_xNameED->set_sensitive( !bUseSysCredsset_sensitived );
+    m_xPasswordFT->set_sensitive( !bUseSysCredsset_sensitived );
+    m_xPasswordED->set_sensitive( !bUseSysCredsset_sensitived );
+    m_xAccountFT->set_sensitive( !bUseSysCredsset_sensitived );
+    m_xAccountED->set_sensitive( !bUseSysCredsset_sensitived );
 }
 
 void LoginDialog::SetRequest()
 {
-    bool oldPwd = !m_pPasswordED->GetText().isEmpty();
+    bool oldPwd = !m_xPasswordED->get_text().isEmpty();
     OUString aRequest;
-    if (m_pAccountFT->IsVisible() && !m_realm.isEmpty())
+    if (m_xAccountFT->get_visible() && !m_realm.isEmpty())
     {
-        aRequest = get<FixedText>(oldPwd ? "wrongloginrealm" : "loginrealm")
-            ->GetText();
+        std::unique_ptr<weld::Label> xText(m_xBuilder->weld_label(oldPwd ? "wrongloginrealm" : "loginrealm"));
+        aRequest = xText->get_label();
         aRequest = aRequest.replaceAll("%2", m_realm);
     }
     else
-        aRequest = get<FixedText>(oldPwd ? "wrongrequestinfo" : "requestinfo")
-            ->GetText();
+    {
+        std::unique_ptr<weld::Label> xText(m_xBuilder->weld_label(oldPwd ? "wrongrequestinfo" : "requestinfo"));
+        aRequest = xText->get_label();
+    }
     aRequest = aRequest.replaceAll("%1", m_server);
-    m_pRequestInfo->SetText(aRequest);
+    m_xRequestInfo->set_label(aRequest);
 }
 
-IMPL_LINK_NOARG(LoginDialog, OKHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(LoginDialog, OKHdl_Impl, weld::Button&, void)
 {
     // trim the strings
-    m_pNameED->SetText(comphelper::string::strip(m_pNameED->GetText(), ' '));
-    m_pPasswordED->SetText(comphelper::string::strip(m_pPasswordED->GetText(), ' '));
-    EndDialog( RET_OK );
+    m_xNameED->set_text(comphelper::string::strip(m_xNameED->get_text(), ' '));
+    m_xPasswordED->set_text(comphelper::string::strip(m_xPasswordED->get_text(), ' '));
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(LoginDialog, UseSysCredsHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(LoginDialog, UseSysCredsHdl_Impl, weld::Button&, void)
 {
-    EnableUseSysCredsControls_Impl( m_pUseSysCredsCB->IsChecked() );
+    EnableUseSysCredsControls_Impl( m_xUseSysCredsCB->get_active() );
 }
 
-LoginDialog::LoginDialog(vcl::Window* pParent, LoginFlags nFlags,
+LoginDialog::LoginDialog(weld::Window* pParent, LoginFlags nFlags,
     const OUString& rServer, const OUString& rRealm)
-    : ModalDialog(pParent, "LoginDialog", "uui/ui/logindialog.ui"),
-      m_server(rServer), m_realm(rRealm)
+    : GenericDialogController(pParent, "uui/ui/logindialog.ui", "LoginDialog")
+    , m_xErrorFT(m_xBuilder->weld_label("errorft"))
+    , m_xErrorInfo(m_xBuilder->weld_label("errorinfo"))
+    , m_xRequestInfo(m_xBuilder->weld_label("requestinfo"))
+    , m_xNameFT(m_xBuilder->weld_label("nameft"))
+    , m_xNameED(m_xBuilder->weld_entry("nameed"))
+    , m_xPasswordFT(m_xBuilder->weld_label("passwordft"))
+    , m_xPasswordED(m_xBuilder->weld_entry("passworded"))
+    , m_xAccountFT(m_xBuilder->weld_label("accountft"))
+    , m_xAccountED(m_xBuilder->weld_entry("accounted"))
+    , m_xSavePasswdBtn(m_xBuilder->weld_check_button("remember"))
+    , m_xUseSysCredsCB(m_xBuilder->weld_check_button("syscreds"))
+    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    , m_server(rServer), m_realm(rRealm)
 {
-    get(m_pErrorFT, "errorft");
-    get(m_pErrorInfo, "errorinfo");
-    get(m_pRequestInfo, "requestinfo");
-    get(m_pNameFT, "nameft");
-    get(m_pNameED, "nameed");
-    get(m_pPasswordFT, "passwordft");
-    get(m_pPasswordED, "passworded");
-    get(m_pAccountFT, "accountft");
-    get(m_pAccountED, "accounted");
-    get(m_pSavePasswdBtn, "remember");
-    get(m_pUseSysCredsCB, "syscreds");
-    get(m_pOKBtn, "ok");
-
     if ( !( nFlags & LoginFlags::NoUseSysCreds ) )
-      EnableUseSysCredsControls_Impl( m_pUseSysCredsCB->IsChecked() );
+      EnableUseSysCredsControls_Impl( m_xUseSysCredsCB->get_active() );
 
     SetRequest();
 
-    m_pNameED->SetMaxTextLen( _MAX_PATH );
+    m_xNameED->set_max_length( _MAX_PATH );
 
-    m_pOKBtn->SetClickHdl( LINK( this, LoginDialog, OKHdl_Impl ) );
-    m_pUseSysCredsCB->SetClickHdl( LINK( this, LoginDialog, UseSysCredsHdl_Impl ) );
+    m_xOKBtn->connect_clicked( LINK( this, LoginDialog, OKHdl_Impl ) );
+    m_xUseSysCredsCB->connect_clicked( LINK( this, LoginDialog, UseSysCredsHdl_Impl ) );
 
     HideControls_Impl( nFlags );
 }
 
 void LoginDialog::SetUseSystemCredentials( bool bUse )
 {
-    if ( m_pUseSysCredsCB->IsVisible() )
+    if ( m_xUseSysCredsCB->get_visible() )
     {
-        m_pUseSysCredsCB->Check( bUse );
+        m_xUseSysCredsCB->set_active( bUse );
         EnableUseSysCredsControls_Impl( bUse );
     }
 }
 
 void LoginDialog::ClearPassword()
 {
-    m_pPasswordED->SetText( OUString() );
+    m_xPasswordED->set_text( OUString() );
 
-    if ( m_pNameED->GetText().isEmpty() )
-        m_pNameED->GrabFocus();
+    if ( m_xNameED->get_text().isEmpty() )
+        m_xNameED->grab_focus();
     else
-        m_pPasswordED->GrabFocus();
+        m_xPasswordED->grab_focus();
 }
 
 void LoginDialog::ClearAccount()
 {
-    m_pAccountED->SetText( OUString() );
-    m_pAccountED->GrabFocus();
+    m_xAccountED->set_text( OUString() );
+    m_xAccountED->grab_focus();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
