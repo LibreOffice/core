@@ -810,6 +810,21 @@
           <value>false</value>
         </prop>
       </group>
+      <group oor:name="com.sun.star.sdbcx.comp.hsqldb.Driver">
+        <info>
+          <desc>Specifies settings for the driver accessing HSQL databases embedded into OpenOffice.org
+            database documents (.odb)</desc>
+        </info>
+        <group oor:name="PermittedJavaMethods" oor:extensible="true">
+          <info>
+            <desc>HSQLDB features calling Java code directly from SQL statements. For security
+              reasons, this is restricted to classes from the org.hsqldb.Library package,
+              the java.lang.math package, plus any methods specified in this configuration
+              setting. If a method specification ends with .*, then all methods
+              from the respective package are permitted.</desc>
+          </info>
+        </group>
+      </group>
     </group>
     <group oor:name="FormSearchOptions">
       <info>

@@ -45,6 +45,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,GPGMEPP,gpgmepp) \
 	$(call gb_Helper_optional,GRAPHITE,graphite) \
 	$(call gb_Helper_optional,HARFBUZZ,harfbuzz) \
+	$(call gb_Helper_optional,HSQLDB,hsqldb) \
 	$(call gb_Helper_optional,HUNSPELL,hunspell) \
 	$(call gb_Helper_optional,HYPHEN,hyphen) \
 	$(call gb_Helper_optional,ICU,icu) \
