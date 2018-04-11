@@ -1454,6 +1454,7 @@ void BitmapEx::CombineMaskOr(Color maskColor, sal_uInt8 nTol)
     if ( IsTransparent() )
          aNewMask.CombineSimple( maMask, BmpCombine::Or );
     maMask = aNewMask;
+    meTransparent = TransparentType::Bitmap;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
