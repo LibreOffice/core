@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_ACCMAP_HXX
 
 #include <cppuhelper/weakref.hxx>
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <rtl/ref.hxx>
 #include <osl/mutex.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
@@ -35,7 +34,6 @@
 
 class SwAccessibleParagraph;
 class SwViewShell;
-namespace tools { class Rectangle; }
 class SwFrame;
 class SwTextFrame;
 class SwPageFrame;
@@ -55,6 +53,7 @@ class SwFEShell;
 class Fraction;
 struct PreviewPage;
 namespace vcl { class Window; }
+namespace com { namespace sun { namespace star { namespace accessibility { class XAccessible; } } } }
 
 // The shape list is filled if an accessible shape is destroyed. It
 // simply keeps a reference to the accessible shape's XShape. These

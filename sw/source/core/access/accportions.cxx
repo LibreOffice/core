@@ -20,6 +20,7 @@
 #include "accportions.hxx"
 #include <rtl/ustring.hxx>
 #include <com/sun/star/i18n/Boundary.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <txttypes.hxx>
 
 // for portion replacement in Special()

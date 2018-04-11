@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_DOC_HXX
 
 // SwDoc interfaces
-#include <com/sun/star/embed/XStorage.hpp>
 #include <o3tl/deleter.hxx>
 #include <vcl/idle.hxx>
 #include "swdllapi.h"
@@ -29,13 +28,9 @@
 #include "flyenum.hxx"
 #include "flypos.hxx"
 #include "swdbdata.hxx"
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
-#include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <sfx2/objsh.hxx>
 #include <svl/style.hxx>
 #include <editeng/numitem.hxx>
-#include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
-#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include "tox.hxx"
 #include "frmfmt.hxx"
 #include "charfmt.hxx"
@@ -51,11 +46,8 @@
 
 namespace editeng { class SvxBorderLine; }
 
-class SvxForbiddenCharactersTable;
 class SwExtTextInput;
-class DateTime;
 class EditFieldInfo;
-class Color;
 class Outliner;
 class OutputDevice;
 class Point;
@@ -68,49 +60,30 @@ class SwAutoCompleteWord;
 class SwAutoCorrExceptWord;
 class SwCellFrame;
 class SwCellStyleTable;
-class SwCharFormat;
-class SwCharFormats;
-class SwConditionTextFormatColl;
 class SwCursorShell;
 class SwCursor;
 class SwDocShell;
-class SwDocUpdateField;
-class SwDrawFrameFormat;
 class SwDrawView;
 class SwEditShell;
-class SwFieldType;
-class SwField;
-class SwTextField;
-class SwFieldTypes;
-class SwFlyFrameFormat;
-class SwFormatsBase;
 class SwFormat;
 class SwFormatINetFormat;
 class SwFormatRefMark;
-class SwFrameFormat;
-class SwFrameFormats;
 class SwFootnoteIdxs;
 class SwFootnoteInfo;
 class SwEndNoteInfo;
-class SwGrfFormatColl;
-class SwGrfFormatColls;
 class SwLineNumberInfo;
 class SwDBManager;
 class SwNodeIndex;
 class SwNodeRange;
-class SwNodes;
 class SwNumRule;
-class SwNumRuleTable;
 class SwPagePreviewPrtData;
 class SwRootFrame;
 class SwRubyListEntry;
 class SwSectionFormat;
-class SwSectionFormats;
 class SwSectionData;
 class SwSelBoxes;
 class SwTableAutoFormatTable;
 class SwTOXBaseSection;
-class SwTOXTypes;
 class SwTabCols;
 class SwTable;
 class SwTableAutoFormat;
@@ -120,14 +93,10 @@ class SwTableFormat;
 class SwTableLineFormat;
 class SwTableNode;
 class SwTextBlocks;
-class SwTextFormatColl;
-class SwTextFormatColls;
 class SwURLStateChanged;
 class SwUnoCursor;
 class SwViewShell;
-class SetGetExpField;
 class SwDrawContact;
-class SwLayouter;
 class SdrView;
 class SdrMarkList;
 class SwAuthEntry;
@@ -135,23 +104,12 @@ class SwLayoutCache;
 class IStyleAccess;
 struct SwCallMouseEvent;
 struct SwDocStat;
-struct SwHash;
 struct SwSortOptions;
 struct SwDefTOXBase_Impl;
-class SwPrintData;
 class SwPrintUIOptions;
-class SdrPageView;
 struct SwConversionArgs;
-class SwRewriter;
-class SwMsgPoolItem;
-class SwChartDataProvider;
-class SwChartLockController_Helper;
 class IGrammarContact;
-class SwPrintData;
 class SwRenderData;
-class SwPageFrame;
-class SwViewOption;
-class SwList;
 class IDocumentUndoRedo;
 class IDocumentSettingAccess;
 class IDocumentDeviceAccess;
@@ -203,21 +161,18 @@ namespace sw {
 }
 
 namespace com { namespace sun { namespace star {
-namespace i18n {
-    struct ForbiddenCharacters;    //< comes from the I18N UNO interface
-}
-namespace uno {
-    template < class > class Sequence;
-}
 namespace container {
     class XNameContainer; //< for getXForms()/isXForms()/initXForms() methods
 }
+namespace embed { class XStorage; }
+namespace linguistic2 { class XHyphenatedWord; }
+namespace linguistic2 { class XProofreadingIterator; }
+namespace linguistic2 { class XSpellChecker1; }
+namespace script { namespace vba { class XVBAEventProcessor; } }
 }}}
 
 namespace sfx2 {
-    class SvLinkSource;
     class IXmlIdRegistry;
-    class LinkManager;
 }
 
 void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );

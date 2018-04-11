@@ -22,6 +22,7 @@
 #include <editeng/protitem.hxx>
 #include <tools/gen.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>

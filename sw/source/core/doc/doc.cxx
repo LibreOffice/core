@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <doc.hxx>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <DocumentFieldsManager.hxx>
 #include <DocumentSettingManager.hxx>
 #include <DocumentDrawModelManager.hxx>

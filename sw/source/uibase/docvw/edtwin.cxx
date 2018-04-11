@@ -26,6 +26,7 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
+#include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
 
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>

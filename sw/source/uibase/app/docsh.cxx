@@ -119,6 +119,7 @@
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/VndSunStarPkgUrlReferenceFactory.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 
 #include <unomid.h>
 #include <unotextrange.hxx>

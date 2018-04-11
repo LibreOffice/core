@@ -62,3 +62,13 @@ blacklist:
     sw/inc/unotxdoc.hxx:
     # sw::UnoImplPtr typedef
     - unobaseclass.hxx
+    sw/inc/breakit.hxx:
+    # std::unique_ptr dtor requires complete type
+    - com/sun/star/i18n/ForbiddenCharacters.hpp
+    sw/inc/dbmgr.hxx:
+    # uno::Sequence ctor needs the complete type
+    - com/sun/star/beans/PropertyValue.hpp
+    sw/inc/dlelstnr.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XTerminateListener.hpp
+    - com/sun/star/linguistic2/XLinguServiceEventListener.hpp

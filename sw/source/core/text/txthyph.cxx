@@ -20,6 +20,7 @@
 #include <hintids.hxx>
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <viewopt.hxx>
 #include <viewsh.hxx>
 #include <SwPortionHandler.hxx>
