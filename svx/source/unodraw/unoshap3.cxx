@@ -150,12 +150,12 @@ void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xSha
         throw uno::RuntimeException();
 
     SdrObject* pSdrShape = pShape->GetSdrObject();
-    if(pSdrShape == nullptr || pSdrShape->GetObjList()->GetOwnerObj() != GetSdrObject())
+    if(pSdrShape == nullptr || pSdrShape->getParentOfSdrObject()->GetOwnerObj() != GetSdrObject())
     {
         throw uno::RuntimeException();
     }
 
-    SdrObjList& rList = *pSdrShape->GetObjList();
+    SdrObjList& rList = *pSdrShape->getParentOfSdrObject();
 
     const size_t nObjCount = rList.GetObjCount();
     size_t nObjNum = 0;

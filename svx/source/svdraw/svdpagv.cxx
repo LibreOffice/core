@@ -901,7 +901,7 @@ void SdrPageView::CheckCurrentGroup()
     SdrObject* pGrp(GetCurrentGroup());
 
     while(nullptr != pGrp &&
-        (!pGrp->IsInserted() || nullptr == pGrp->GetObjList() || nullptr == pGrp->GetPage()))
+        (!pGrp->IsInserted() || nullptr == pGrp->getParentOfSdrObject() || nullptr == pGrp->GetPage()))
     {
         // anything outside of the borders?
         pGrp = pGrp->GetUpGroup();

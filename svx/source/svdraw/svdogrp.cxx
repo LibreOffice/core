@@ -160,9 +160,9 @@ void SdrObjGroup::NbcSetLayer(SdrLayerID nLayer)
 }
 
 
-void SdrObjGroup::SetObjList(SdrObjList* pNewObjList)
+void SdrObjGroup::setParentOfSdrObject(SdrObjList* pNewObjList)
 {
-    SdrObject::SetObjList(pNewObjList);
+    SdrObject::setParentOfSdrObject(pNewObjList);
     maSdrObjList.SetUpList(pNewObjList);
 }
 

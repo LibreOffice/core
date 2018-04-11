@@ -56,7 +56,7 @@ class Imp3DDepthRemapper;
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC E3dScene : public E3dObject
+class SVX_DLLPUBLIC E3dScene : public E3dObject, public SdrObjList
 {
 private:
     // to allow sdr::properties::E3dSceneProperties access to StructureChanged()
@@ -168,6 +168,27 @@ public:
     void ResumeReportingDirtyRects();
     void SetAllSceneRectsDirty();
 
+    // set selection fropm E3dObject (temporary flag for 3D actions)
+    virtual void SetSelected(bool bNew) override;
+
+    // derived from SdrObjList
+    virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
+    virtual void InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
+    virtual SdrObject* NbcRemoveObject(size_t nObjNum) override;
+    virtual SdrObject* RemoveObject(size_t nObjNum) override;
+
+    // needed for group functionality
+    virtual void SetRectsDirty(bool bNotMyself = false) override;
+    virtual void NbcSetLayer(SdrLayerID nLayer) override;
+    virtual void setParentOfSdrObject(SdrObjList* pNewObjList) override;
+    virtual void SetPage(SdrPage* pNewPage) override;
+    virtual SdrObjList* GetSubList() const override;
+    void Insert3DObj(E3dObject* p3DObj);
+    void Remove3DObj(E3dObject const * p3DObj);
+    virtual void SetTransformChanged() override;
+
+protected:
+    virtual basegfx::B3DRange RecalcBoundVolume() const override;
 };
 
 #endif // INCLUDED_SVX_SCENE3D_HXX

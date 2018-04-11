@@ -325,7 +325,7 @@ MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, con
     if( pPage )
     {
         mpPathObj->SetPage( pPage );
-        mpPathObj->SetObjList( pPage );
+        mpPathObj->setParentOfSdrObject( pPage );
     }
 
     XDash aDash( css::drawing::DashStyle_RECT, 1, 80, 1, 80, 80);

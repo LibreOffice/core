@@ -1536,7 +1536,7 @@ void ScDetectiveFunc::FindFrameForObject( const SdrObject* pObject, ScRange& rRa
     if (!pPage) return;
 
     // test if the object is a direct page member
-    if( pObject && pObject->GetPage() && (pObject->GetPage() == pObject->GetObjList()) )
+    if( pObject && pObject->GetPage() && (pObject->GetPage() == pObject->getParentOfSdrObject()) )
     {
         // Is there a previous object?
         const size_t nOrdNum = pObject->GetOrdNum();

@@ -36,10 +36,7 @@
 #include <basegfx/vector/b2enums.hxx>
 #include <svx/svxdllapi.h>
 
-
-// Forward declaration
-
-
+// Forward declarations
 class SfxPoolItem;
 class Viewport3D;
 class E3dScene;
@@ -71,30 +68,6 @@ public:
 
 /*************************************************************************
 |*
-|* List for 3D objects
-|*
-\************************************************************************/
-
-class E3dObjList final : public SdrObjList
-{
-public:
-    E3dObjList();
-    SVX_DLLPUBLIC virtual ~E3dObjList() override;
-
-    virtual E3dObjList* CloneSdrObjList(SdrModel* pNewModel = nullptr) const override;
-
-    virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
-    virtual void InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
-    virtual SdrObject* NbcRemoveObject(size_t nObjNum) override;
-    virtual SdrObject* RemoveObject(size_t nObjNum) override;
-
-private:
-    E3dObjList &operator=(const E3dObjList& rSrcList) = delete;
-    E3dObjList(const E3dObjList& rSrcList) = delete;
-};
-
-/*************************************************************************
-|*
 |* Base class for 3D objects
 |*
 \************************************************************************/
@@ -106,13 +79,10 @@ private:
     friend class sdr::properties::E3dProperties;
 
     // Allow everything for E3dObjList and E3dDragMethod
-    friend class E3dObjList;
     friend class E3dDragMethod;
 
  protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
-
-    E3dObjList                  maSubList;          // child objects
 
     basegfx::B3DRange           maLocalBoundVol;    // surrounding volume of the object (from the geometry generation)
     basegfx::B3DHomMatrix       maTransformation;   // local transformation
@@ -122,11 +92,10 @@ private:
     bool            mbTfHasChanged          : 1;
     bool            mbIsSelected            : 1;
 
- protected:
-    void SetTransformChanged();
+protected:
     virtual void NewObjectInserted(const E3dObject* p3DObj);
     virtual void StructureChanged();
-    basegfx::B3DRange RecalcBoundVolume() const;
+    virtual basegfx::B3DRange RecalcBoundVolume() const;
 
 protected:
     // E3dObject is only a helper class (for E3DScene and E3DCompoundObject)
@@ -135,31 +104,18 @@ protected:
     E3dObject(SdrModel& rSdrModel);
 
 public:
+    virtual void SetTransformChanged();
     virtual void RecalcSnapRect() override;
-    virtual void SetRectsDirty(bool bNotMyself = false) override;
 
     virtual ~E3dObject() override;
 
     virtual SdrInventor GetObjInventor() const override;
     virtual sal_uInt16  GetObjIdentifier() const override;
-
     virtual void        TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
-
-    virtual void        NbcSetLayer(SdrLayerID nLayer) override;
-
-    virtual void        SetObjList(SdrObjList* pNewObjList) override;
-    virtual void        SetPage(SdrPage* pNewPage) override;
     virtual void        NbcMove(const Size& rSize) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
-    virtual SdrObjList* GetSubList() const override;
-
-    // Insert 3D object into the group; transfer to other owner!
-    void Insert3DObj(E3dObject* p3DObj);
-    void Remove3DObj(E3dObject const * p3DObj);
-
     E3dObject* GetParentObj() const;
     virtual E3dScene* GetScene() const;
-
     const basegfx::B3DRange& GetBoundVolume() const;
     void InvalidateBoundVolume();
 
@@ -192,7 +148,7 @@ public:
 
     // get/set the selection
     bool GetSelected() const { return mbIsSelected; }
-    void SetSelected(bool bNew);
+    virtual void SetSelected(bool bNew);
 
     // break up
     virtual bool IsBreakObjPossible();
