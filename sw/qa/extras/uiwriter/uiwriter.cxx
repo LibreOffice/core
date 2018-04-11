@@ -131,7 +131,12 @@ public:
     //Regression test of fdo#70143
     //EDITING: undo search&replace corrupt text when searching backward
     void testReplaceBackward();
-    void testRedlineFrame();
+    void testRedlineFrame(char const*const file);
+    void testRedlineFrameAtCharStartOutside0();
+    void testRedlineFrameAtCharStartOutside();
+    void testRedlineFrameAtCharStartInside();
+    void testRedlineFrameAtParaStartOutside();
+    void testRedlineFrameAtParaEndInside();
     void testThreadedException();
     void testBookmarkCopy();
     void testFdo69893();
@@ -319,7 +324,11 @@ public:
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
     CPPUNIT_TEST(testReplaceBackward);
-    CPPUNIT_TEST(testRedlineFrame);
+    CPPUNIT_TEST(testRedlineFrameAtCharStartOutside0);
+    CPPUNIT_TEST(testRedlineFrameAtCharStartOutside);
+    CPPUNIT_TEST(testRedlineFrameAtCharStartInside);
+    CPPUNIT_TEST(testRedlineFrameAtParaStartOutside);
+    CPPUNIT_TEST(testRedlineFrameAtParaEndInside);
     CPPUNIT_TEST(testThreadedException);
     CPPUNIT_TEST(testBookmarkCopy);
     CPPUNIT_TEST(testFdo69893);
@@ -578,9 +587,9 @@ void SwUiWriterTest::testReplaceForward()
     CPPUNIT_ASSERT_EQUAL(ORIGINAL_REPLACE_CONTENT, pTextNode->GetText());
 }
 
-void SwUiWriterTest::testRedlineFrame()
+void SwUiWriterTest::testRedlineFrame(char const*const file)
 {
-    SwDoc * pDoc(createDoc("redlineFrame.fodt"));
+    SwDoc * pDoc(createDoc(file));
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -601,6 +610,31 @@ void SwUiWriterTest::testRedlineFrame()
 
     // there is still exactly one frame
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+}
+
+void SwUiWriterTest::testRedlineFrameAtCharStartOutside0()
+{
+    testRedlineFrame("redlineFrame.fodt");
+}
+
+void SwUiWriterTest::testRedlineFrameAtCharStartOutside()
+{
+    testRedlineFrame("redlineFrame_at_char_start_outside.fodt");
+}
+
+void SwUiWriterTest::testRedlineFrameAtCharStartInside()
+{
+    testRedlineFrame("redlineFrame_at_char_start_inside.fodt");
+}
+
+void SwUiWriterTest::testRedlineFrameAtParaStartOutside()
+{
+    testRedlineFrame("redline_fly_duplication_at_para_start_outside.fodt");
+}
+
+void SwUiWriterTest::testRedlineFrameAtParaEndInside()
+{
+    testRedlineFrame("redline_fly_duplication_at_para_end_inside.fodt");
 }
 
 void SwUiWriterTest::testThreadedException()
