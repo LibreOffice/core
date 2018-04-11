@@ -190,6 +190,21 @@ OString lclGetCSS1Color(const Color& rColor)
     return "#" + lclConvToHex(rColor.GetRed()) + lclConvToHex(rColor.GetGreen()) + lclConvToHex(rColor.GetBlue());
 }
 
+/// Determines if rProperty has to be suppressed due to ReqIF mode.
+bool IgnorePropertyForReqIF(bool bReqIF, const OString& rProperty)
+{
+    if (!bReqIF)
+        return false;
+
+    // Only allow these two keys, nothing else in ReqIF mode.
+    if (rProperty == sCSS1_P_text_decoration)
+        return false;
+
+    if (rProperty == sCSS1_P_color)
+        return false;
+
+    return true;
+}
 }
 
 class SwCSS1OutMode
@@ -220,6 +235,9 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
                                      const sal_Char *pVal,
                                      const OUString *pSVal )
 {
+    if (IgnorePropertyForReqIF(mbReqIF, pProp))
+        return;
+
     OStringBuffer sOut;
 
     if( m_bFirstCSS1Rule && (m_nCSS1OutMode & CSS1_OUTMODE_RULE_ON)!=0 )
@@ -1818,7 +1836,7 @@ Writer& OutCSS1_ParaTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
 }
 
 // Wrapper for Table background
-Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt, bool bClose )
+Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
@@ -1827,7 +1845,7 @@ Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt, bool bClo
                                    CSS1_OUTMODE_TABLEBOX, nullptr );
     OutCSS1_SvxBrush( rWrt, rHt, Css1Background::Table, nullptr );
 
-    if( !rHTMLWrt.m_bFirstCSS1Property && bClose )
+    if( !rHTMLWrt.m_bFirstCSS1Property )
         rWrt.Strm().WriteChar( '\"' );
 
     return rWrt;
@@ -2085,19 +2103,12 @@ void SwHTMLWriter::OutCSS1_TableFrameFormatOptions( const SwFrameFormat& rFrameF
         Strm().WriteChar( '\"' );
 }
 
-void SwHTMLWriter::OutCSS1_TableCellBorderHack(SwFrameFormat const& rFrameFormat, bool bClose)
+void SwHTMLWriter::OutCSS1_TableCellBorderHack(SwFrameFormat const& rFrameFormat)
 {
-    bool bFirstCSS1Property = m_bFirstCSS1Property;
-
     SwCSS1OutMode const aMode( *this,
         CSS1_OUTMODE_STYLE_OPT_ON|CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_TABLEBOX, nullptr );
-
-    if (!bFirstCSS1Property)
-        // Don't start the style attribute again if it was started already.
-        m_bFirstCSS1Property = bFirstCSS1Property;
-
     OutCSS1_SvxBox(*this, rFrameFormat.GetBox());
-    if (!m_bFirstCSS1Property && bClose)
+    if (!m_bFirstCSS1Property)
     {
         Strm().WriteChar( cCSS1_style_opt_end );
     }
