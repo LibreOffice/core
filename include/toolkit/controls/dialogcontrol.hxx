@@ -170,7 +170,7 @@ public:
     UnoMultiPageModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~UnoMultiPageModel() override;
 
-    UnoControlModel*    Clone() const override;
+    rtl::Reference<UnoControlModel> Clone() const override;
 
     DECLIMPL_SERVICEINFO_DERIVED( UnoMultiPageModel, ControlModelContainerBase, "com.sun.star.awt.UnoMultiPageModel" )
 
@@ -244,7 +244,7 @@ public:
     UnoPageModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~UnoPageModel() override;
 
-    UnoControlModel*    Clone() const override;
+    rtl::Reference<UnoControlModel> Clone() const override;
 
     DECLIMPL_SERVICEINFO_DERIVED( UnoPageModel, ControlModelContainerBase, "com.sun.star.awt.UnoPageModel" )
 
@@ -277,7 +277,7 @@ public:
     UnoFrameModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~UnoFrameModel() override;
 
-    UnoControlModel*    Clone() const override;
+    rtl::Reference<UnoControlModel> Clone() const override;
 
     DECLIMPL_SERVICEINFO_DERIVED( UnoFrameModel, ControlModelContainerBase, "com.sun.star.awt.UnoFrameModel" )
 

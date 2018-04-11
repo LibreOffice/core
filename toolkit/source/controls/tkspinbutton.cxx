@@ -48,7 +48,7 @@ protected:
 public:
     explicit UnoSpinButtonModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
 
-    UnoControlModel*    Clone() const override { return new UnoSpinButtonModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoSpinButtonModel( *this ); }
 
     // XMultiPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;

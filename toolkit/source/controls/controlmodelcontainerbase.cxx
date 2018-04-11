@@ -300,7 +300,7 @@ void ControlModelContainerBase::Clone_Impl(ControlModelContainerBase& _rClone) c
         CloneControlModel( _rClone.maModels )
     );
 }
-UnoControlModel* ControlModelContainerBase::Clone() const
+rtl::Reference<UnoControlModel> ControlModelContainerBase::Clone() const
 {
     // clone the container itself
     ControlModelContainerBase* pClone = new ControlModelContainerBase( *this );

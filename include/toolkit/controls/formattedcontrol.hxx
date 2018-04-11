@@ -44,7 +44,7 @@ namespace toolkit
         {
         }
 
-        UnoControlModel*    Clone() const override { return new UnoControlFormattedFieldModel( *this ); }
+        rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlFormattedFieldModel( *this ); }
 
         // css::io::XPersistObject
         OUString SAL_CALL getServiceName() override;

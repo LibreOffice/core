@@ -86,7 +86,7 @@ public:
                         UnoControlEditModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                         UnoControlEditModel( const UnoControlEditModel& rModel ) : UnoControlModel( rModel ) {}
 
-    UnoControlModel*    Clone() const override { return new UnoControlEditModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlEditModel( *this ); }
 
     // css::io::XPersistObject
     OUString SAL_CALL getServiceName() override;
@@ -192,7 +192,7 @@ public:
                         UnoControlFileControlModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                         UnoControlFileControlModel( const UnoControlFileControlModel& rModel ) : UnoControlModel( rModel ) {}
 
-    UnoControlModel*    Clone() const override { return new UnoControlFileControlModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlFileControlModel( *this ); }
 
     // css::io::XPersistObject
     OUString SAL_CALL getServiceName() override;
@@ -262,7 +262,7 @@ public:
                         UnoControlButtonModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                         UnoControlButtonModel( const UnoControlButtonModel& rModel ) : GraphicControlModel( rModel ) {}
 
-    UnoControlModel*    Clone() const override { return new UnoControlButtonModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlButtonModel( *this ); }
 
     // css::beans::XMultiPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -344,7 +344,7 @@ public:
                                     UnoControlImageControlModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                                     UnoControlImageControlModel( const UnoControlImageControlModel& rModel ) : GraphicControlModel( rModel ), mbAdjustingImageScaleMode( false ) { }
 
-    UnoControlModel*    Clone() const override { return new UnoControlImageControlModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlImageControlModel( *this ); }
 
     // css::beans::XMultiPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -407,7 +407,7 @@ public:
                         UnoControlRadioButtonModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                         UnoControlRadioButtonModel( const UnoControlRadioButtonModel& rModel ) : GraphicControlModel( rModel ) {}
 
-    UnoControlModel*    Clone() const override { return new UnoControlRadioButtonModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlRadioButtonModel( *this ); }
 
     // css::io::XPersistObject
     OUString SAL_CALL getServiceName() override;
@@ -488,7 +488,7 @@ public:
                         UnoControlCheckBoxModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                         UnoControlCheckBoxModel( const UnoControlCheckBoxModel& rModel ) : GraphicControlModel( rModel ) {}
 
-    UnoControlModel*    Clone() const override { return new UnoControlCheckBoxModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlCheckBoxModel( *this ); }
 
     // css::io::XPersistObject
     OUString SAL_CALL getServiceName() override;
@@ -571,7 +571,7 @@ public:
     UnoControlFixedHyperlinkModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     UnoControlFixedHyperlinkModel( const UnoControlFixedHyperlinkModel& rModel ) : UnoControlModel( rModel ) {}
 
-    UnoControlModel*    Clone() const override { return new UnoControlFixedHyperlinkModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlFixedHyperlinkModel( *this ); }
 
     // css::io::XPersistObject
     OUString SAL_CALL getServiceName() override;
@@ -645,7 +645,7 @@ public:
                         UnoControlFixedTextModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                         UnoControlFixedTextModel( const UnoControlFixedTextModel& rModel ) : UnoControlModel( rModel ) {}
 
-    UnoControlModel*    Clone() const override { return new UnoControlFixedTextModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlFixedTextModel( *this ); }
 
     // css::io::XPersistObject
     OUString SAL_CALL getServiceName() override;
@@ -712,7 +712,7 @@ public:
                         UnoControlGroupBoxModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                         UnoControlGroupBoxModel( const UnoControlGroupBoxModel& rModel ) : UnoControlModel( rModel ) {}
 
-    UnoControlModel*    Clone() const override { return new UnoControlGroupBoxModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlGroupBoxModel( *this ); }
 
     // css::io::XPersistObject
     OUString SAL_CALL getServiceName() override;
@@ -767,7 +767,7 @@ public:
                         UnoControlListBoxModel( const UnoControlListBoxModel& i_rSource );
                         virtual ~UnoControlListBoxModel() override;
 
-    UnoControlModel*    Clone() const override { return new UnoControlListBoxModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlListBoxModel( *this ); }
 
     virtual void        ImplNormalizePropertySequence(
                             const sal_Int32                 _nCount,        /// the number of entries in the arrays
@@ -939,7 +939,7 @@ public:
                         UnoControlComboBoxModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                         UnoControlComboBoxModel( const UnoControlComboBoxModel& rModel ) : UnoControlListBoxModel( rModel ) {}
 
-    UnoControlModel*    Clone() const override { return new UnoControlComboBoxModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlComboBoxModel( *this ); }
 
     // css::io::XPersistObject
     OUString SAL_CALL getServiceName() override;
@@ -1073,7 +1073,7 @@ public:
                 UnoControlDateFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                 UnoControlDateFieldModel( const UnoControlDateFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
-    UnoControlModel*    Clone() const override { return new UnoControlDateFieldModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlDateFieldModel( *this ); }
 
     // css::io::XPersistObject
     OUString SAL_CALL getServiceName() override;
@@ -1152,7 +1152,7 @@ public:
                         UnoControlTimeFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                         UnoControlTimeFieldModel( const UnoControlTimeFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
-    UnoControlModel*    Clone() const override { return new UnoControlTimeFieldModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlTimeFieldModel( *this ); }
 
     // css::io::XPersistObject
     OUString SAL_CALL getServiceName() override;
@@ -1229,7 +1229,7 @@ public:
                 UnoControlNumericFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                 UnoControlNumericFieldModel( const UnoControlNumericFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
-    UnoControlModel*    Clone() const override { return new UnoControlNumericFieldModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlNumericFieldModel( *this ); }
 
     // css::io::XPersistObject
     OUString SAL_CALL getServiceName() override;
@@ -1308,7 +1308,7 @@ public:
                         UnoControlCurrencyFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                         UnoControlCurrencyFieldModel( const UnoControlCurrencyFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
-    UnoControlModel*    Clone() const override { return new UnoControlCurrencyFieldModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlCurrencyFieldModel( *this ); }
 
     // css::io::XPersistObject
     OUString SAL_CALL getServiceName() override;
@@ -1387,7 +1387,7 @@ public:
                         UnoControlPatternFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                         UnoControlPatternFieldModel( const UnoControlPatternFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
-    UnoControlModel*    Clone() const override { return new UnoControlPatternFieldModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlPatternFieldModel( *this ); }
 
     // css::io::XPersistObject
     OUString SAL_CALL getServiceName() override;
@@ -1450,7 +1450,7 @@ public:
                         UnoControlProgressBarModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                         UnoControlProgressBarModel( const UnoControlProgressBarModel& rModel ) : UnoControlModel( rModel ) {}
 
-    UnoControlModel*    Clone() const override { return new UnoControlProgressBarModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlProgressBarModel( *this ); }
 
     // css::beans::XMultiPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -1509,7 +1509,7 @@ public:
                         UnoControlFixedLineModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                         UnoControlFixedLineModel( const UnoControlFixedLineModel& rModel ) : UnoControlModel( rModel ) {}
 
-    UnoControlModel*    Clone() const override { return new UnoControlFixedLineModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlFixedLineModel( *this ); }
 
     // css::beans::XMultiPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;

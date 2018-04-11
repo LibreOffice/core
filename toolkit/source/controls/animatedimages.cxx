@@ -265,7 +265,7 @@ namespace toolkit {
     }
 
 
-    UnoControlModel* AnimatedImagesControlModel::Clone() const
+    rtl::Reference<UnoControlModel> AnimatedImagesControlModel::Clone() const
     {
         return new AnimatedImagesControlModel( *this );
     }
