@@ -16,6 +16,24 @@
       "revId": "5b385618a68cfeffd61577cde9621041808db072",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_c2588359",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-04-11T11:41:50Z",
+      "side": 1,
+      "message": "I get it experimentally.\nIdeally it will be get string width, divide it by 2, and then use this value for center alignment.\nUnfortunately I don\u0027t know how to get such value, that\u0027s why I\u0027m estimating it with this formula.\n\nThe end results are far better that without any center alignment implementation.",
+      "parentUuid": "9a30ddce_825e8b43",
+      "revId": "5b385618a68cfeffd61577cde9621041808db072",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
