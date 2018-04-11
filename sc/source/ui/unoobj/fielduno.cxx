@@ -167,7 +167,7 @@ class ScUnoEditEngine : public ScEditEngineDefaulter
     ScUnoCollectMode    eMode;
     sal_uInt16          nFieldCount;
     sal_Int32           mnFieldType;
-    std::unique_ptr<SvxFieldData>
+    tools::SvRef<SvxFieldData>
                         pFound;         // local copy
     sal_Int32           nFieldPar;
     sal_Int32           nFieldPos;
@@ -214,14 +214,14 @@ OUString ScUnoEditEngine::CalcFieldValue( const SvxFieldItem& rField,
             {
                 if ( eMode == SC_UNO_COLLECT_FINDINDEX && !pFound && nFieldCount == nFieldIndex )
                 {
-                    pFound.reset( pFieldData->Clone() );
+                    pFound = pFieldData->Clone();
                     nFieldPar = nPara;
                     nFieldPos = nPos;
                 }
                 if ( eMode == SC_UNO_COLLECT_FINDPOS && !pFound &&
                         nPara == nFieldPar && nPos == nFieldPos )
                 {
-                    pFound.reset( pFieldData->Clone() );
+                    pFound = pFieldData->Clone();
                     nFieldIndex = nFieldCount;
                 }
                 ++nFieldCount;

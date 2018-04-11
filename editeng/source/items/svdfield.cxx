@@ -26,7 +26,7 @@ SdrMeasureField::~SdrMeasureField()
 {
 }
 
-SvxFieldData* SdrMeasureField::Clone() const
+tools::SvRef<SvxFieldData> SdrMeasureField::Clone() const
 {
     return new SdrMeasureField(*this);
 }
