@@ -699,6 +699,18 @@ cmd/sc_numberformatcurrencysimple.png cmd/sc_formattedfield.png
 cmd/lc_fontworkshapetype.png cmd/lc_fontwork.png
 cmd/sc_fontworkshapetype.png cmd/sc_fontwork.png
 
+# Ruler
+cmd/lc_showruler.png cmd/lc_ruler.png
+cmd/sc_showruler.png cmd/sc_ruler.png
+
+# Graphic Quality Color
+cmd/lc_outputqualitycolor.png cmd/lc_insertgraphic.png
+cmd/sc_outputqualitycolor.png cmd/sc_insertgraphic.png
+
+# InputLineVisible
+cmd/lc_inputlinevisible.png cmd/lc_dbviewfunctions.png
+cmd/sc_inputlinevisible.png cmd/sc_dbviewfunctions.png
+
 # Axis
 cmd/lc_toggleaxisdescr.png cmd/lc_helplinesvisible.png
 cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
