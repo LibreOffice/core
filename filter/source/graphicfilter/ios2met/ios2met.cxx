@@ -2037,16 +2037,10 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             sal_uInt16 nLen=nOrderLen;
             auto nWidth = ReadCoord(bCoord32);
             auto nHeight = ReadCoord(bCoord32);
-            if (nWidth < 0 || nHeight < 0 ||
-                nWidth > std::numeric_limits<decltype(nWidth)>::max() ||
-                nHeight > std::numeric_limits<decltype(nHeight)>::max())
-            {
+            if (nWidth < 0 || nHeight < 0)
                 aAttr.aChrCellSize = aDefAttr.aChrCellSize;
-            }
             else
-            {
                 aAttr.aChrCellSize = Size(nWidth, nHeight);
-            }
             if (bCoord32) nLen-=8; else nLen-=4;
             if (nLen>=4) {
                 pOS2MET->SeekRel(4); nLen-=4;
