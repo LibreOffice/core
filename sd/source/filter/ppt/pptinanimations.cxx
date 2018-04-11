@@ -1227,7 +1227,7 @@ int AnimationImporter::importTimeContainer( const Atom* pAtom, const Reference< 
                 {
 #ifdef DBG_ANIM_LOG
                     sal_uInt32 nU1, nU2;
-                    mrStCtrl >> nU1 >> nU2;
+                    mrStCtrl.ReadUInt32(nU1).ReadUInt32(nU2);
 
                     fprintf( mpFile, "<unknown_0xf136 nU1=\"%ld\" nU2=\"%ld\"/>\n", nU1, nU2 );
 #endif
@@ -2932,11 +2932,11 @@ void AnimationImporter::dump( sal_uInt32 nLen, bool bNewLine )
 
     sal_uInt32 i = 0;
     int b = 0;
-    sal_Int8 nData;
+    char nData;
 
     for( i = 0; i < nLen; i++ )
     {
-        mrStCtrl >> nData;
+        mrStCtrl.ReadChar(nData);
 
         fprintf( mpFile, "%c%c ", faul[ (nData >> 4) & 0x0f ], faul[ nData & 0x0f ] );
 
