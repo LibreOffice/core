@@ -644,6 +644,8 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
         mpCbExportNotesPages->SetToggleHdl( LINK(this, ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl ) );
         mpCbExportOnlyNotesPages->Show();
         mpCbExportOnlyNotesPages->Check(paParent->mbExportOnlyNotesPages);
+        // tdf#116473 Initially enable Export only note pages option depending on the checked state of Export notes pages option
+        mpCbExportOnlyNotesPages->Enable(mpCbExportNotesPages->IsChecked());
         mpCbExportHiddenSlides->Show();
         mpCbExportHiddenSlides->Check(paParent->mbExportHiddenSlides);
     }
