@@ -2810,7 +2810,10 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
 {
     SdrTextObj* pSdrTextObj;
 
+    static int foo;
     // check for group object (e.g. two parentheses)
+    fprintf(stderr, "access %p %d\n", pRecord->pObj, foo);
+    ++foo;
     if (SdrObjGroup* pThisGroup = dynamic_cast<SdrObjGroup*>( pRecord->pObj) )
     {
         // Group objects don't have text. Insert a text object into
