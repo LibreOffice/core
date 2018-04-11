@@ -1694,6 +1694,11 @@ public:
         gtk_window_resize(m_pWindow, 1, 1);
     }
 
+    virtual void window_move(int x, int y) override
+    {
+        gtk_window_move(m_pWindow, x, y);
+    }
+
     virtual ~GtkInstanceWindow() override
     {
         if (m_xWindow.is())

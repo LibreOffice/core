@@ -523,6 +523,11 @@ public:
         m_xWindow->setOptimalLayoutSize();
     }
 
+    virtual void window_move(int x, int y) override
+    {
+        m_xWindow->SetPosPixel(Point(x, y));
+    }
+
     virtual ~SalInstanceWindow() override
     {
         clear_child_help(m_xWindow);

@@ -18,129 +18,89 @@
  */
 
 #include <tools/lineend.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <runtime.hxx>
 #include <stdobj.hxx>
 #include <rtlproto.hxx>
 #include <memory>
 
-class SvRTLInputBox : public ModalDialog
+class SvRTLInputBox : public weld::GenericDialogController
 {
-    VclPtr<Edit> aEdit;
-    VclPtr<OKButton> aOk;
-    VclPtr<CancelButton> aCancel;
-    VclPtr<FixedText> aPromptText;
-    OUString aText;
+    std::unique_ptr<weld::Entry> m_xEdit;
+    std::unique_ptr<weld::Button> m_xOk;
+    std::unique_ptr<weld::Button> m_xCancel;
+    std::unique_ptr<weld::Label> m_xPromptText;
+    OUString m_aText;
 
-    void PositionDialog( long nXTwips, long nYTwips, const Size& rDlgSize );
-    void InitButtons( const Size& rDlgSize );
-    void PositionEdit( const Size& rDlgSize );
-    void PositionPrompt( const OUString& rPrompt, const Size& rDlgSize );
-    DECL_LINK( OkHdl, Button *, void );
-    DECL_LINK( CancelHdl, Button *, void );
+    void PositionDialog( long nXTwips, long nYTwips );
+    void InitButtons();
+    void SetPrompt(const OUString& rPrompt);
+    DECL_LINK( OkHdl, weld::Button&, void );
+    DECL_LINK( CancelHdl, weld::Button&, void );
 
 public:
-    SvRTLInputBox( vcl::Window* pParent, const OUString& rPrompt, const OUString& rTitle,
+    SvRTLInputBox(weld::Window* pParent, const OUString& rPrompt, const OUString& rTitle,
         const OUString& rDefault, long nXTwips, long nYTwips );
-    virtual ~SvRTLInputBox() override { disposeOnce(); }
-    virtual void dispose() override;
-    OUString GetText() const override { return aText; }
+    OUString GetText() const { return m_aText; }
 };
 
-SvRTLInputBox::SvRTLInputBox( vcl::Window* pParent, const OUString& rPrompt,
+SvRTLInputBox::SvRTLInputBox(weld::Window* pParent, const OUString& rPrompt,
         const OUString& rTitle, const OUString& rDefault,
-        long nXTwips, long nYTwips ) :
-    ModalDialog( pParent,WB_3DLOOK | WB_MOVEABLE | WB_CLOSEABLE ),
-    aEdit( VclPtr<Edit>::Create(this,  WB_LEFT | WB_BORDER) ),
-    aOk( VclPtr<OKButton>::Create(this) ), aCancel( VclPtr<CancelButton>::Create(this) ), aPromptText( VclPtr<FixedText>::Create(this, WB_WORDBREAK) )
+        long nXTwips, long nYTwips)
+    : GenericDialogController(pParent, "svt/ui/inputbox.ui", "InputBox")
+    , m_xEdit(m_xBuilder->weld_entry("entry"))
+    , m_xOk(m_xBuilder->weld_button("ok"))
+    , m_xCancel(m_xBuilder->weld_button("cancel"))
+    , m_xPromptText(m_xBuilder->weld_label("prompt"))
 {
-    SetMapMode( MapMode( MapUnit::MapAppFont ) );
-    Size aDlgSizeApp( 280, 80 );
-    PositionDialog( nXTwips, nYTwips, aDlgSizeApp );
-    InitButtons( aDlgSizeApp );
-    PositionEdit( aDlgSizeApp );
-    PositionPrompt( rPrompt, aDlgSizeApp );
-    aOk->Show();
-    aCancel->Show();
-    aEdit->Show();
-    aPromptText->Show();
-    SetText( rTitle );
-    vcl::Font aFont( GetFont());
-    Color aColor( GetBackground().GetColor() );
-    aFont.SetFillColor( aColor );
-    aEdit->SetFont( aFont );
-    aEdit->SetText( rDefault );
-    aEdit->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
+    PositionDialog( nXTwips, nYTwips );
+    InitButtons();
+    SetPrompt(rPrompt);
+    m_xDialog->set_title(rTitle);
+    m_xEdit->set_text(rDefault);
+    m_xEdit->select_region(0, -1);
 }
 
-void SvRTLInputBox::dispose()
+void SvRTLInputBox::InitButtons()
 {
-    aEdit.disposeAndClear();
-    aOk.disposeAndClear();
-    aCancel.disposeAndClear();
-    aPromptText.disposeAndClear();
-    ModalDialog::dispose();
+    m_xOk->connect_clicked(LINK(this,SvRTLInputBox, OkHdl));
+    m_xCancel->connect_clicked(LINK(this,SvRTLInputBox,CancelHdl));
 }
 
-void SvRTLInputBox::InitButtons( const Size& rDlgSize )
+void SvRTLInputBox::PositionDialog(long nXTwips, long nYTwips)
 {
-    aOk->SetSizePixel( LogicToPixel( Size( 45, 15) ));
-    aCancel->SetSizePixel( LogicToPixel( Size( 45, 15) ));
-    Point aPos( rDlgSize.Width()-45-10, 5 );
-    aOk->SetPosPixel( LogicToPixel( aPos ));
-    aPos.AdjustY(16 );
-    aCancel->SetPosPixel( LogicToPixel( aPos ));
-    aOk->SetClickHdl(LINK(this,SvRTLInputBox, OkHdl));
-    aCancel->SetClickHdl(LINK(this,SvRTLInputBox,CancelHdl));
-}
-
-void SvRTLInputBox::PositionDialog(long nXTwips, long nYTwips, const Size& rDlgSize)
-{
-    SetSizePixel( LogicToPixel(rDlgSize) );
     if( nXTwips != -1 && nYTwips != -1 )
     {
         Point aDlgPosApp( nXTwips, nYTwips );
-        SetPosPixel(LogicToPixel(aDlgPosApp, MapMode(MapUnit::MapTwip)));
+        OutputDevice* pDefaultDevice = Application::GetDefaultDevice();
+        pDefaultDevice->Push(PushFlags::MAPMODE);
+        pDefaultDevice->SetMapMode(MapMode( MapUnit::MapAppFont));
+        aDlgPosApp = pDefaultDevice->LogicToPixel(aDlgPosApp, MapMode(MapUnit::MapTwip));
+        pDefaultDevice->Pop();
+        m_xDialog->window_move(aDlgPosApp.X(), aDlgPosApp.Y());
     }
 }
 
-void SvRTLInputBox::PositionEdit( const Size& rDlgSize )
+void SvRTLInputBox::SetPrompt(const OUString& rPrompt)
 {
-    aEdit->SetPosPixel( LogicToPixel( Point( 5,rDlgSize.Height()-35)));
-    aEdit->SetSizePixel( LogicToPixel( Size(rDlgSize.Width()-15,12)));
-}
-
-
-void SvRTLInputBox::PositionPrompt(const OUString& rPrompt,const Size& rDlgSize)
-{
-    if ( rPrompt.isEmpty() )
+    if (rPrompt.isEmpty())
         return;
     OUString aText_(convertLineEnd(rPrompt, LINEEND_CR));
-    aPromptText->SetPosPixel( LogicToPixel(Point(5,5)));
-    aPromptText->SetText( aText_ );
-    Size aSize( rDlgSize );
-    aSize.AdjustWidth( -70 );
-    aSize.AdjustHeight( -50 );
-    aPromptText->SetSizePixel( LogicToPixel(aSize));
+    m_xPromptText->set_label( aText_ );
 }
 
-
-IMPL_LINK_NOARG( SvRTLInputBox, OkHdl, Button *, void )
+IMPL_LINK_NOARG( SvRTLInputBox, OkHdl, weld::Button&, void )
 {
-    aText = aEdit->GetText();
-    EndDialog( 1 );
+    m_aText = m_xEdit->get_text();
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG( SvRTLInputBox, CancelHdl, Button *, void )
+IMPL_LINK_NOARG( SvRTLInputBox, CancelHdl, weld::Button&, void )
 {
-    aText.clear();
-    EndDialog();
+    m_aText.clear();
+    m_xDialog->response(RET_CANCEL);
 }
-
 
 // Syntax: String InputBox( Prompt, [Title], [Default] [, nXpos, nYpos ] )
 
@@ -169,10 +129,10 @@ void SbRtl_InputBox(StarBASIC *, SbxArray & rPar, bool)
             nX = rPar.Get(4)->GetLong();
             nY = rPar.Get(5)->GetLong();
         }
-        VclPtrInstance<SvRTLInputBox> pDlg(Application::GetDefDialogParent(),
-                                           rPrompt,aTitle,aDefault,nX,nY);
-        pDlg->Execute();
-        rPar.Get(0)->PutString( pDlg->GetText() );
+        vcl::Window* pParent = Application::GetDefDialogParent();
+        SvRTLInputBox aDlg(pParent ? pParent->GetFrameWeld() : nullptr,rPrompt,aTitle,aDefault,nX,nY);
+        aDlg.run();
+        rPar.Get(0)->PutString(aDlg.GetText());
     }
 }
 
