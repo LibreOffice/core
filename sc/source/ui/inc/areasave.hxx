@@ -59,7 +59,7 @@ public:
     void Restore( ScDocument* pDoc );
 
     // returns NULL if empty
-    static ScAreaLinkSaveCollection* CreateFromDoc( const ScDocument* pDoc );
+    static std::unique_ptr<ScAreaLinkSaveCollection> CreateFromDoc( const ScDocument* pDoc );
 
     ScAreaLinkSaver& operator[](size_t nIndex);
     const ScAreaLinkSaver& operator[](size_t nIndex) const;
