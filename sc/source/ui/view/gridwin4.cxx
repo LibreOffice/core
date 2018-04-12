@@ -1021,7 +1021,12 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         }
 
         // paint the background
-        rDevice.DrawRect(rDevice.PixelToLogic(aBackground));
+        tools::Rectangle aLogicRect(rDevice.PixelToLogic(aBackground));
+        //tdf#100925, rhbz#1283420, Draw some text here, to get
+        //X11CairoTextRender::getCairoContext called, so that the forced read
+        //from the underlying X Drawable gets it to sync.
+        rDevice.DrawText(aLogicRect.BottomLeft(), " ");
+        rDevice.DrawRect(aLogicRect);
 
         // paint the editeng text
         tools::Rectangle aEditRect(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
