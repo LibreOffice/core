@@ -55,6 +55,26 @@
  	$(CHMOD_6) $@
  
  $(BUILD_FILE):	$(BUILD_Objects) $(COMMON_LIB)
+--- builds/posix/Makefile.in.examples
++++ builds/posix/Makefile.in.examples
+@@ -140,7 +140,7 @@
+ 
+ $(EXAMPLES_DEST)/empbuild.fdb : $(EXAMPLES_DEST)/empddl.sql $(EXAMPLES_DEST)/empbld.sql $(EXAMPLES_DEST)/isql$(EXEC_EXT)
+ 	-$(RM) $(EXAMPLES_DEST)/empbuild.fdb
+-	$(EXAMPLES_DEST)/isql$(EXEC_EXT) -i empbld.sql
++	$(LIBO_TUNNEL_LIBRARY_PATH) $(EXAMPLES_DEST)/isql$(EXEC_EXT) -i empbld.sql
+ 
+ # The chain for intlemp.fdb is the same a script file to create an empty database
+ # to allow a .e program to be compiled, to then create and populate with data
+@@ -158,7 +158,7 @@
+ 
+ $(EXAMPLES_DEST)/intlbuild.fdb : $(EXAMPLES_DEST)/intlddl.sql $(EXAMPLES_DEST)/intlbld.sql $(EXAMPLES_DEST)/isql$(EXEC_EXT)
+ 	-$(RM) intlbuild.fdb
+-	$(EXAMPLES_DEST)/isql$(EXEC_EXT) -i intlbld.sql
++	$(LIBO_TUNNEL_LIBRARY_PATH) $(EXAMPLES_DEST)/isql$(EXEC_EXT) -i intlbld.sql
+ 
+ 
+ $(EXAMPLES_DEST)/%.sql: $(EXAMPLES_SRC)/empbuild/%.sql
 --- builds/posix/make.rules
 +++ builds/posix/make.rules
 @@ -68,17 +68,17 @@
