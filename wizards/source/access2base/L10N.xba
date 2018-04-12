@@ -91,7 +91,7 @@ Dim sLocal As String
 				Case &quot;RECORDSET&quot;					:	sLocal = &quot;Recordset&quot;
 				Case &quot;FIELD&quot;						:	sLocal = &quot;Field&quot;
 				Case &quot;TEMPVAR&quot;						:	sLocal = &quot;Temporary variable&quot;
-				Case &quot;COMAMANDBAR&quot;					:	sLocal = &quot;Command bar&quot;
+				Case &quot;COMMANDBAR&quot;					:	sLocal = &quot;Command bar&quot;
 				Case &quot;COMMANDBARCONTROL&quot;			:	sLocal = &quot;Command bar control&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
 				Case &quot;ERR#&quot;							:	sLocal = &quot;Error #&quot;
@@ -204,7 +204,7 @@ Dim sLocal As String
 				Case &quot;RECORDSET&quot;					:	sLocal = &quot;Recordset&quot;
 				Case &quot;FIELD&quot;						:	sLocal = &quot;Champ&quot;
 				Case &quot;TEMPVAR&quot;						:	sLocal = &quot;Variable temporaire&quot;
-				Case &quot;COMAMANDBAR&quot;					:	sLocal = &quot;Barre de commande&quot;
+				Case &quot;COMMANDBAR&quot;					:	sLocal = &quot;Barre de commande&quot;
 				Case &quot;COMMANDBARCONTROL&quot;			:	sLocal = &quot;Elément de barre de commande&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
 				Case &quot;ERR#&quot;							:	sLocal = &quot;L&apos;erreur #&quot;
@@ -320,7 +320,7 @@ Dim sLocal As String
 				Case &quot;RECORDSET&quot;					:	sLocal = &quot;Recordset&quot;
 				Case &quot;FIELD&quot;						:	sLocal = &quot;Campo&quot;
 				Case &quot;TEMPVAR&quot;						:	sLocal = &quot;Variable temporal&quot;
-				Case &quot;COMAMANDBAR&quot;					:	sLocal = &quot;Barra de comandos&quot;
+				Case &quot;COMMANDBAR&quot;					:	sLocal = &quot;Barra de comandos&quot;
 				Case &quot;COMMANDBARCONTROL&quot;			:	sLocal = &quot;Control de barra de comandos&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
 				Case &quot;ERR#&quot;							:	sLocal = &quot;Error #&quot;
