@@ -726,6 +726,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf115861, "tdf115861.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("(k)"), getParagraph(2)->getString());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf116976, "tdf116976.docx")
+{
+    // This was 0, reltive size of shape after bitmap was ignored.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(40),
+                         getProperty<sal_Int16>(getShape(1), "RelativeWidth"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
