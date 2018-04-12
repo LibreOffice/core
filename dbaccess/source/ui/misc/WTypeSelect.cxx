@@ -445,7 +445,7 @@ bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
             }
 
             if (bCheckOk)
-                aContextMenu->CheckItem(aContextMenu->GetItemId("primarykey"));
+                aContextMenu->CheckItem("primarykey");
 
             if (aContextMenu->Execute(this, ptWhere))
             {

@@ -372,13 +372,13 @@ IMPL_LINK(ScNavigatorDlg, ToolBoxDropdownClickHdl, ToolBox *, pToolBox, void)
         switch (GetDropMode())
         {
             case 0:
-                aPop->CheckItem(aPop->GetItemId("hyperlink"));
+                aPop->CheckItem("hyperlink");
                 break;
             case 1:
-                aPop->CheckItem(aPop->GetItemId("link"));
+                aPop->CheckItem("link");
                 break;
             case 2:
-                aPop->CheckItem(aPop->GetItemId("copy"));
+                aPop->CheckItem("copy");
                 break;
         }
 

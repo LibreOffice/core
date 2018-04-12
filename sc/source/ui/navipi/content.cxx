@@ -609,13 +609,13 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                 switch (pParentWindow->GetDropMode())
                 {
                     case 0:
-                        aDropMenu->CheckItem(aDropMenu->GetItemId("hyperlink"));
+                        aDropMenu->CheckItem("hyperlink");
                         break;
                     case 1:
-                        aDropMenu->CheckItem(aDropMenu->GetItemId("link"));
+                        aDropMenu->CheckItem("link");
                         break;
                     case 2:
-                        aDropMenu->CheckItem(aDropMenu->GetItemId("copy"));
+                        aDropMenu->CheckItem("copy");
                         break;
                 }
 

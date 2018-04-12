@@ -904,9 +904,9 @@ VclPtr<PopupMenu> CustomAnimationList::CreateContextMenu()
         pEntry = static_cast< CustomAnimationListEntry* >(NextSelected( pEntry ));
     }
 
-    mxMenu->CheckItem(mxMenu->GetItemId("onclick"), nNodeType == EffectNodeType::ON_CLICK);
-    mxMenu->CheckItem(mxMenu->GetItemId("withprev"), nNodeType == EffectNodeType::WITH_PREVIOUS);
-    mxMenu->CheckItem(mxMenu->GetItemId("afterprev"), nNodeType == EffectNodeType::AFTER_PREVIOUS);
+    mxMenu->CheckItem("onclick", nNodeType == EffectNodeType::ON_CLICK);
+    mxMenu->CheckItem("withprev", nNodeType == EffectNodeType::WITH_PREVIOUS);
+    mxMenu->CheckItem("afterprev", nNodeType == EffectNodeType::AFTER_PREVIOUS);
     mxMenu->EnableItem(mxMenu->GetItemId("options"), nEntries == 1);
     mxMenu->EnableItem(mxMenu->GetItemId("timing"), nEntries == 1);
 

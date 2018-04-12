@@ -905,6 +905,11 @@ void Menu::CheckItem( sal_uInt16 nItemId, bool bCheck )
     ImplCallEventListeners( bCheck ? VclEventId::MenuItemChecked : VclEventId::MenuItemUnchecked, nPos );
 }
 
+void Menu::CheckItem( const OString &rIdent , bool bCheck )
+{
+    CheckItem( GetItemId( rIdent ), bCheck );
+}
+
 bool Menu::IsItemChecked( sal_uInt16 nItemId ) const
 {
     size_t          nPos;

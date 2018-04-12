@@ -1122,25 +1122,25 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnno
             if ( aSet.GetItemState( EE_CHAR_WEIGHT ) == SfxItemState::SET )
             {
                 if( aSet.Get( EE_CHAR_WEIGHT ).GetWeight() == WEIGHT_BOLD )
-                    pMenu->CheckItem(pMenu->GetItemId("bold"));
+                    pMenu->CheckItem("bold");
             }
 
             if ( aSet.GetItemState( EE_CHAR_ITALIC ) == SfxItemState::SET )
             {
                 if( aSet.Get( EE_CHAR_ITALIC ).GetPosture() != ITALIC_NONE )
-                    pMenu->CheckItem(pMenu->GetItemId("italic"));
+                    pMenu->CheckItem("italic");
 
             }
             if ( aSet.GetItemState( EE_CHAR_UNDERLINE ) == SfxItemState::SET )
             {
                 if( aSet.Get( EE_CHAR_UNDERLINE ).GetLineStyle() != LINESTYLE_NONE )
-                    pMenu->CheckItem(pMenu->GetItemId("underline"));
+                    pMenu->CheckItem("underline");
             }
 
             if ( aSet.GetItemState( EE_CHAR_STRIKEOUT ) == SfxItemState::SET )
             {
                 if( aSet.Get( EE_CHAR_STRIKEOUT ).GetStrikeout() != STRIKEOUT_NONE )
-                    pMenu->CheckItem(pMenu->GetItemId("strike"));
+                    pMenu->CheckItem("strike");
             }
             TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pAnnotationWindow ) );
             pMenu->EnableItem(pMenu->GetItemId("paste"), aDataHelper.GetFormatCount() != 0);

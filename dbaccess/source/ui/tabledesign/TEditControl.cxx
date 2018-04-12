@@ -1368,7 +1368,7 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                     aContextMenu->EnableItem(aContextMenu->GetItemId("delete"), IsDeleteAllowed(nRow));
                     aContextMenu->EnableItem(aContextMenu->GetItemId("primarykey"), IsPrimaryKeyAllowed(nRow));
                     aContextMenu->EnableItem(aContextMenu->GetItemId("insert"), IsInsertNewAllowed(nRow));
-                    aContextMenu->CheckItem(aContextMenu->GetItemId("primarykey"), IsRowSelected(GetCurRow()) && IsPrimaryKey());
+                    aContextMenu->CheckItem("primarykey", IsRowSelected(GetCurRow()) && IsPrimaryKey());
 
                     // remove all the disable entries
                     aContextMenu->RemoveDisabledEntries(true, true);

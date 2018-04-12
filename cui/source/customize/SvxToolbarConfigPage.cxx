@@ -825,17 +825,17 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
     {
         case 0:
         {
-            pGearMenu->CheckItem( pGearMenu->GetItemId("gear_iconOnly") );
+            pGearMenu->CheckItem( "gear_iconOnly" );
             break;
         }
         case 1:
         {
-            pGearMenu->CheckItem( pGearMenu->GetItemId("gear_textOnly") );
+            pGearMenu->CheckItem( "gear_textOnly" );
             break;
         }
         case 2:
         {
-            pGearMenu->CheckItem( pGearMenu->GetItemId("gear_iconAndText") );
+            pGearMenu->CheckItem( "gear_iconAndText" );
             break;
         }
     }
