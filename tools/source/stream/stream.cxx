@@ -1866,7 +1866,12 @@ bool SvMemoryStream::ReAllocateMemory( long nDiff )
 
 void SvMemoryStream::FreeMemory()
 {
-    delete[] pBuf;
+    assert(bOwnsData);
+    if (bOwnsData)
+    {
+        delete[] pBuf;
+        pBuf = nullptr;
+    }
 }
 
 void* SvMemoryStream::SwitchBuffer()
