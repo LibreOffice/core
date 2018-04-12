@@ -61,7 +61,7 @@ void JNI_interface_type_info::destroy( JNIEnv * jni_env )
     JNI_type_info::destruct( jni_env );
     jni_env->DeleteGlobalRef( m_proxy_ctor );
     jni_env->DeleteGlobalRef( m_type );
-    delete [] m_methods;
+    m_methods.reset();
     delete this;
 }
 
@@ -104,7 +104,7 @@ JNI_interface_type_info::JNI_interface_type_info(
                 reinterpret_cast< typelib_InterfaceTypeDescription * >(
                     m_td.get() );
             // coverity [ctor_dtor_leak]
-            m_methods = new jmethodID[ td->nMapFunctionIndexToMemberIndex ];
+            m_methods.reset(new jmethodID[ td->nMapFunctionIndexToMemberIndex ]);
             sal_Int32 nMethodIndex = 0;
             typelib_TypeDescriptionReference ** ppMembers = td->ppMembers;
             sal_Int32 nMembers = td->nMembers;
@@ -211,7 +211,7 @@ JNI_interface_type_info::JNI_interface_type_info(
         }
         catch (...)
         {
-            delete [] m_methods;
+            m_methods.reset();
             throw;
         }
     }
@@ -224,7 +224,7 @@ JNI_interface_type_info::JNI_interface_type_info(
 void JNI_compound_type_info::destroy( JNIEnv * jni_env )
 {
     JNI_type_info::destruct( jni_env );
-    delete [] m_fields;
+    m_fields.reset();
     delete this;
 }
 
@@ -289,7 +289,7 @@ JNI_compound_type_info::JNI_compound_type_info(
                 jni_info->m_RuntimeException_type.getTypeLibType() ))
         {
             // coverity [ctor_dtor_leak]
-            m_fields = new jfieldID[ 2 ];
+            m_fields.reset(new jfieldID[ 2 ]);
             m_fields[ 0 ] = nullptr; // special Throwable.getMessage()
             // field Context
             m_fields[ 1 ] = jni->GetFieldID(
@@ -301,7 +301,7 @@ JNI_compound_type_info::JNI_compound_type_info(
         {
             // retrieve field ids for all direct members
             sal_Int32 nMembers = td->nMembers;
-            m_fields = new jfieldID[ nMembers ];
+            m_fields.reset(new jfieldID[ nMembers ]);
 
             for ( sal_Int32 nPos = 0; nPos < nMembers; ++nPos )
             {
@@ -334,7 +334,7 @@ JNI_compound_type_info::JNI_compound_type_info(
     }
     catch (...)
     {
-        delete [] m_fields;
+        m_fields.reset();
         throw;
     }
 
