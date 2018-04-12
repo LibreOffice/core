@@ -711,56 +711,6 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
             {
             }
             break;
-#if OSL_DEBUG_LEVEL > 0
-        case ID_EDIT_QUERY_DESIGN:
-        case ID_EDIT_QUERY_SQL:
-            {
-                OUString aErrorMsg;
-                setStatement_fireEvent( getContainer()->getStatement() );
-                ::connectivity::OSQLParseNode* pNode = m_aSqlParser.parseTree( aErrorMsg, m_sStatement, m_bGraphicalDesign );
-                if ( pNode )
-                {
-                    vcl::Window* pView = getView();
-                    ScopedVclPtrInstance<ModalDialog> pWindow( pView, WB_STDMODAL | WB_SIZEMOVE | WB_CENTER );
-                    pWindow->SetSizePixel( ::Size( pView->GetSizePixel().Width() / 2, pView->GetSizePixel().Height() / 2 ) );
-                    ScopedVclPtrInstance<SvTreeListBox> pTreeBox( pWindow, WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_VSCROLL );
-                    pTreeBox->SetPosSizePixel( ::Point( 6, 6 ), ::Size( pWindow->GetSizePixel().Width() - 12, pWindow->GetSizePixel().Height() - 12 ));
-                    pTreeBox->SetNodeDefaultImages();
-
-                    if ( _nId == ID_EDIT_QUERY_DESIGN )
-                    {
-                        ::connectivity::OSQLParseNode* pTemp = pNode ? pNode->getChild(3)->getChild(1) : nullptr;
-                        // no where clause found
-                        if ( pTemp && !pTemp->isLeaf() )
-                        {
-                            ::connectivity::OSQLParseNode * pCondition = pTemp->getChild(1);
-                            if ( pCondition ) // no where clause
-                            {
-                                ::connectivity::OSQLParseNode::negateSearchCondition(pCondition);
-                                ::connectivity::OSQLParseNode *pNodeTmp = pTemp->getChild(1);
-
-                                ::connectivity::OSQLParseNode::disjunctiveNormalForm(pNodeTmp);
-                                pNodeTmp = pTemp->getChild(1);
-                                ::connectivity::OSQLParseNode::absorptions(pNodeTmp);
-                                pNodeTmp = pTemp->getChild(1);
-                                OSQLParseNode::compress(pNodeTmp);
-                            }
-                            OUString sTemp;
-                            pNode->parseNodeToStr(sTemp,getConnection());
-                            getContainer()->setStatement(sTemp);
-                        }
-                    }
-
-                    insertParseTree(pTreeBox,pNode);
-
-                    pTreeBox->Show();
-                    pWindow->Execute();
-
-                    delete pNode;
-                }
-                break;
-            }
-#endif
         default:
             OJoinController::Execute(_nId,aArgs);
             return; // else we would invalidate twice
