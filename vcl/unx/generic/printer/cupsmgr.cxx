@@ -34,9 +34,8 @@
 
 #include <officecfg/Office/Common.hxx>
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <algorithm>
 
@@ -827,66 +826,50 @@ bool CUPSManager::writePrinterConfig()
 
 namespace
 {
-    class RTSPWDialog : public ModalDialog
+    class RTSPWDialog : public weld::GenericDialogController
     {
-        VclPtr<FixedText> m_pText;
-        VclPtr<Edit>      m_pUserEdit;
-        VclPtr<Edit>      m_pPassEdit;
+        std::unique_ptr<weld::Label> m_xText;
+        std::unique_ptr<weld::Entry> m_xUserEdit;
+        std::unique_ptr<weld::Entry> m_xPassEdit;
 
     public:
-        RTSPWDialog(const OString& rServer, const OString& rUserName, vcl::Window* pParent);
-        virtual ~RTSPWDialog() override;
-        virtual void dispose() override;
+        RTSPWDialog(const OString& rServer, const OString& rUserName, weld::Window* pParent);
         OString getUserName() const;
         OString getPassword() const;
     };
 
-    RTSPWDialog::RTSPWDialog( const OString& rServer, const OString& rUserName, vcl::Window* pParent )
-        : ModalDialog(pParent, "CUPSPasswordDialog",
-            "vcl/ui/cupspassworddialog.ui")
+    RTSPWDialog::RTSPWDialog( const OString& rServer, const OString& rUserName, weld::Window* pParent )
+        : GenericDialogController(pParent, "vcl/ui/cupspassworddialog.ui", "CUPSPasswordDialog")
+        , m_xText(m_xBuilder->weld_label("text"))
+        , m_xUserEdit(m_xBuilder->weld_entry("user"))
+        , m_xPassEdit(m_xBuilder->weld_entry("pass"))
     {
-        get(m_pText, "text");
-        get(m_pUserEdit, "user");
-        get(m_pPassEdit, "pass");
-
-        OUString aText(m_pText->GetText());
+        OUString aText(m_xText->get_label());
         aText = aText.replaceFirst("%s", OStringToOUString(rServer, osl_getThreadTextEncoding()));
-        m_pText->SetText(aText);
-        m_pUserEdit->SetText( OStringToOUString(rUserName, osl_getThreadTextEncoding()));
-    }
-
-    RTSPWDialog::~RTSPWDialog()
-    {
-        disposeOnce();
-    }
-
-    void RTSPWDialog::dispose()
-    {
-        m_pText.clear();
-        m_pUserEdit.clear();
-        m_pPassEdit.clear();
-        ModalDialog::dispose();
+        m_xText->set_label(aText);
+        m_xUserEdit->set_text(OStringToOUString(rUserName, osl_getThreadTextEncoding()));
     }
 
     OString RTSPWDialog::getUserName() const
     {
-        return OUStringToOString( m_pUserEdit->GetText(), osl_getThreadTextEncoding() );
+        return OUStringToOString( m_xUserEdit->get_text(), osl_getThreadTextEncoding() );
     }
 
     OString RTSPWDialog::getPassword() const
     {
-        return OUStringToOString( m_pPassEdit->GetText(), osl_getThreadTextEncoding() );
+        return OUStringToOString( m_xPassEdit->get_text(), osl_getThreadTextEncoding() );
     }
 
     bool AuthenticateQuery(const OString& rServer, OString& rUserName, OString& rPassword)
     {
         bool bRet = false;
 
-        ScopedVclPtrInstance<RTSPWDialog> aDialog(rServer, rUserName, nullptr);
-        if (aDialog->Execute())
+        vcl::Window* pWin = Application::GetDefDialogParent();
+        RTSPWDialog aDialog(rServer, rUserName, pWin ? pWin->GetFrameWeld() : nullptr);
+        if (aDialog.run() == RET_OK)
         {
-            rUserName = aDialog->getUserName();
-            rPassword = aDialog->getPassword();
+            rUserName = aDialog.getUserName();
+            rPassword = aDialog.getPassword();
             bRet = true;
         }
 
