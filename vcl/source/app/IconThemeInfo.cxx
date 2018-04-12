@@ -16,11 +16,10 @@
 // constants for theme ids and display names. Only the theme id for hicontrast is used
 // outside of this class and hence made public.
 
-const OUStringLiteral vcl::IconThemeInfo::HIGH_CONTRAST_ID("hicontrast");
+const OUStringLiteral vcl::IconThemeInfo::HIGH_CONTRAST_ID("sifr");
 
 namespace {
 
-static const OUStringLiteral HIGH_CONTRAST_DISPLAY_NAME("High Contrast");
 static const OUStringLiteral TANGO_TESTING_ID("tango_testing");
 static const OUStringLiteral TANGO_TESTING_DISPLAY_NAME("Tango Testing");
 static const OUStringLiteral BREEZE_DARK_ID("breeze_dark");
@@ -128,10 +127,7 @@ IconThemeInfo::ThemeIdToDisplayName(const OUString& themeId)
     }
 
     // special cases
-    if (themeId.equalsIgnoreAsciiCase(HIGH_CONTRAST_ID)) {
-        return HIGH_CONTRAST_DISPLAY_NAME;
-    }
-    else if (themeId.equalsIgnoreAsciiCase(TANGO_TESTING_ID)) {
+    if (themeId.equalsIgnoreAsciiCase(TANGO_TESTING_ID)) {
         return TANGO_TESTING_DISPLAY_NAME;
     }
     else if (themeId.equalsIgnoreAsciiCase(BREEZE_DARK_ID)) {

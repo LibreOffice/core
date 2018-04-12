@@ -36,9 +36,6 @@ class IconThemeInfoTest : public CppUnit::TestFixture
     ThemeIdIsDetectedFromFileNameWithUnderscore();
 
     void
-    DisplayNameForHicontrastIsHighContrast();
-
-    void
     DisplayNameForTango_testingIsTangoTesting();
 
     void
@@ -53,7 +50,6 @@ class IconThemeInfoTest : public CppUnit::TestFixture
     CPPUNIT_TEST(ThemeIdIsDetectedFromFileNameWithUnderscore);
     CPPUNIT_TEST(ImagesZipIsNotValid);
     CPPUNIT_TEST(ImagesOxygenZipIsValid);
-    CPPUNIT_TEST(DisplayNameForHicontrastIsHighContrast);
     CPPUNIT_TEST(DisplayNameForTango_testingIsTangoTesting);
     CPPUNIT_TEST(ExceptionIsThrownWhenIdCannotBeDetermined1);
     CPPUNIT_TEST(ExceptionIsThrownWhenIdCannotBeDetermined2);
@@ -119,15 +115,6 @@ IconThemeInfoTest::ExceptionIsThrownWhenIdCannotBeDetermined2()
         thrown = true;
     }
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception was thrown", true, thrown);
-}
-
-void
-IconThemeInfoTest::DisplayNameForHicontrastIsHighContrast()
-{
-    OUString const id("hicontrast");
-    OUString const expected("High Contrast");
-    OUString displayName = vcl::IconThemeInfo::ThemeIdToDisplayName(id);
-    CPPUNIT_ASSERT_EQUAL(expected, displayName);
 }
 
 void
