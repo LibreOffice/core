@@ -139,6 +139,24 @@
       "revId": "99a833c9d315749757ae338159cabbc935624afa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_c0231b04",
+        "filename": "test/source/sheet/functiondescription.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-04-12T05:31:31Z",
+      "side": 1,
+      "message": "What do you think is ugly about the OString msg? I\u0027m curios.\n\nAlready kinda achieve that by having the else branch, which will point out which property is missing.",
+      "parentUuid": "9a30ddce_d8095533",
+      "revId": "99a833c9d315749757ae338159cabbc935624afa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
