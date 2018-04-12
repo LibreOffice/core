@@ -1210,38 +1210,35 @@ namespace osl_FileBase
         osl::FileBase::RC nError1, nError2;
         bool bOK;
 
-        oslFileHandle   *pHandle;
-        OUString *pUStr_DirURL;
-        OUString *pUStr_FileURL;
+        std::unique_ptr<oslFileHandle> pHandle;
+        std::unique_ptr<OUString> pUStr_DirURL;
+        std::unique_ptr<OUString> pUStr_FileURL;
 
     public:
         createTempFile()
             : nError1(osl::FileBase::E_None)
             , nError2(osl::FileBase::E_None)
             , bOK(false)
-            , pHandle(nullptr)
-            , pUStr_DirURL(nullptr)
-            , pUStr_FileURL(nullptr)
         {
         }
 
         void setUp() override
         {
-            pHandle = new oslFileHandle();
-            pUStr_DirURL = new OUString(aUserDirectoryURL);
-            pUStr_FileURL = new OUString();
+            pHandle.reset(new oslFileHandle());
+            pUStr_DirURL.reset(new OUString(aUserDirectoryURL));
+            pUStr_FileURL.reset(new OUString());
         }
 
         void tearDown() override
         {
-            delete pUStr_DirURL;
-            delete pUStr_FileURL;
-            delete pHandle;
+            pUStr_DirURL.reset();
+            pUStr_FileURL.reset();
+            pHandle.reset();
         }
 
         void createTempFile_001()
         {
-            nError1 = osl::FileBase::createTempFile(pUStr_DirURL, pHandle, pUStr_FileURL);
+            nError1 = osl::FileBase::createTempFile(pUStr_DirURL.get(), pHandle.get(), pUStr_FileURL.get());
             File testFile(*pUStr_FileURL);
             nError2 = testFile.open(osl_File_OpenFlag_Create);
 
@@ -1262,7 +1259,7 @@ namespace osl_FileBase
         void createTempFile_002()
         {
             bOK = false;
-            nError1 = osl::FileBase::createTempFile(pUStr_DirURL, pHandle, pUStr_FileURL);
+            nError1 = osl::FileBase::createTempFile(pUStr_DirURL.get(), pHandle.get(), pUStr_FileURL.get());
             File testFile(*pUStr_FileURL);
             nError2 = testFile.open(osl_File_OpenFlag_Create);
 
@@ -1287,7 +1284,7 @@ namespace osl_FileBase
 
         void createTempFile_003()
         {
-            nError1 = osl::FileBase::createTempFile(pUStr_DirURL, pHandle, nullptr);
+            nError1 = osl::FileBase::createTempFile(pUStr_DirURL.get(), pHandle.get(), nullptr);
             // the temp file will be removed when return from createTempFile
             bOK = (pHandle != nullptr && nError1 == osl::FileBase::E_None);
             if (bOK)
@@ -1301,7 +1298,7 @@ namespace osl_FileBase
 
         void createTempFile_004()
         {
-            nError1 = osl::FileBase::createTempFile(pUStr_DirURL, nullptr, pUStr_FileURL);
+            nError1 = osl::FileBase::createTempFile(pUStr_DirURL.get(), nullptr, pUStr_FileURL.get());
             bOK = (pUStr_FileURL != nullptr);
             CPPUNIT_ASSERT(bOK);
             File testFile(*pUStr_FileURL);
@@ -1403,12 +1400,11 @@ namespace osl_FileStatus
     class isValid : public CppUnit::TestFixture
     {
     private:
-        Directory *pDir;
+        std::unique_ptr<Directory> pDir;
         DirectoryItem rItem_file, rItem_link;
 
     public:
         isValid()
-            : pDir(nullptr)
         {
         }
 
@@ -1418,7 +1414,7 @@ namespace osl_FileStatus
             createTestDirectory(aTmpName3);
             createTestFile(aTmpName4);
 
-            pDir = new Directory(aTmpName3);
+            pDir.reset(new Directory(aTmpName3));
             osl::FileBase::RC nError1 = pDir->open();
             CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
             nError1 = pDir->getNextItem(rItem_file, 1);
@@ -1428,7 +1424,7 @@ namespace osl_FileStatus
         void tearDown() override
         {
             osl::FileBase::RC nError1 = pDir->close();
-            delete pDir;
+            pDir.reset();
             CPPUNIT_ASSERT_EQUAL_MESSAGE(errorToStr(nError1).getStr(), nError1, osl::FileBase::E_None);
 
             // remove the tempfile in $TEMP/tmpdir/tmpname.
