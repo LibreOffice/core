@@ -365,7 +365,6 @@
                               <item translatable="yes" context="optviewpage|iconstyle">Classic</item>
                               <item translatable="yes" context="optviewpage|iconstyle">Sifr</item>
                               <item translatable="yes" context="optviewpage|iconstyle">Breeze</item>
-                              <item translatable="yes" context="optviewpage|iconstyle">Tango Testing</item>
                             </items>
                           </object>
                           <packing>
