@@ -32,7 +32,7 @@ use installer::windows::language;
 use installer::windows::component;
 
 ##########################################################################
-# Assigning one cabinet file to each file. This is requrired,
+# Assigning one cabinet file to each file. This is required,
 # if cabinet files shall be equivalent to packages.
 ##########################################################################
 
@@ -108,7 +108,7 @@ sub assign_cab_to_files
 }
 
 ##########################################################################
-# Assigning sequencenumbers to files. This is requrired,
+# Assigning sequencenumbers to files. This is required,
 # if cabinet files shall be equivalent to packages.
 ##########################################################################
 
