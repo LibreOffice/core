@@ -476,9 +476,9 @@ bool HelpCompiler::compile()
 
     streamTable.dropappl();
     streamTable.appl_doc = docResolvedDoc;
-    streamTable.appl_hidlist = aparser.hidlist.release();
-    streamTable.appl_helptexts = aparser.helptexts.release();
-    streamTable.appl_keywords = aparser.keywords.release();
+    streamTable.appl_hidlist = std::move(aparser.hidlist);
+    streamTable.appl_helptexts = std::move(aparser.helptexts);
+    streamTable.appl_keywords = std::move(aparser.keywords);
 
     streamTable.document_id = documentId;
     streamTable.document_path = fileName;

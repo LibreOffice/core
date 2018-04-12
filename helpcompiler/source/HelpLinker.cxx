@@ -383,7 +383,7 @@ void HelpLinker::link()
             // add once this as its own id.
             addBookmark( pFileDbBase_DBHelp, documentPath, fileB, std::string(), jarfileB, titleB);
 
-            const HashSet *hidlist = streamTable.appl_hidlist;
+            const HashSet *hidlist = streamTable.appl_hidlist.get();
             if (hidlist && !hidlist->empty())
             {
                 // now iterate over all elements of the hidlist
@@ -403,7 +403,7 @@ void HelpLinker::link()
             }
 
             // now the keywords
-            const Hashtable *anchorToLL = streamTable.appl_keywords;
+            const Hashtable *anchorToLL = streamTable.appl_keywords.get();
             if (anchorToLL && !anchorToLL->empty())
             {
                 std::string fakedHid = URLEncoder::encode(documentPath);
@@ -424,7 +424,7 @@ void HelpLinker::link()
             }
 
             // and last the helptexts
-            const Stringtable *helpTextHash = streamTable.appl_helptexts;
+            const Stringtable *helpTextHash = streamTable.appl_helptexts.get();
             if (helpTextHash && !helpTextHash->empty())
             {
                 for (auto const& elem : *helpTextHash)
