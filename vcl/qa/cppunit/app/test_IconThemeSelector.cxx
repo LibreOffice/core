@@ -82,7 +82,7 @@ IconThemeSelectorTest::GetFakeInstalledThemes()
     r.push_back(a);
     a.mThemeId = "elementary";
     r.push_back(a);
-    a.mThemeId = "hicontrast";
+    a.mThemeId = "sifr";
     r.push_back(a);
     return r;
 }
@@ -124,7 +124,7 @@ IconThemeSelectorTest::ThemeIsOverriddenByHighContrastMode()
     std::vector<vcl::IconThemeInfo> themes = GetFakeInstalledThemes();
     OUString selected = s.SelectIconTheme(themes, "breeze");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'breeze' theme is overridden by high contrast mode",
-            OUString("hicontrast"), selected);
+            OUString("sifr"), selected);
     s.SetUseHighContrastTheme(false);
     selected = s.SelectIconTheme(themes, "breeze");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'breeze' theme is no longer overridden by high contrast mode",
