@@ -2609,7 +2609,7 @@ namespace
         ImplMetaReadData& m_rData;
         rtl_TextEncoding m_eOrigCharSet;
     public:
-        DepthGuard(ImplMetaReadData& rData, SvStream& rIStm)
+        DepthGuard(ImplMetaReadData& rData, SvStream const & rIStm)
             : m_rData(rData)
             , m_eOrigCharSet(m_rData.meActualCharSet)
         {

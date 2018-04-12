@@ -202,7 +202,7 @@ void ScDocument::SetRangeName( std::unique_ptr<ScRangeName> pNewRangeName )
     pRangeName = std::move(pNewRangeName);
 }
 
-bool ScDocument::IsAddressInRangeName( RangeNameScope eScope, ScAddress& rAddress )
+bool ScDocument::IsAddressInRangeName( RangeNameScope eScope, const ScAddress& rAddress )
 {
     ScRangeName* pRangeNames;
     ScRange aNameRange;

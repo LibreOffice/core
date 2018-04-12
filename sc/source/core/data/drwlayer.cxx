@@ -2150,7 +2150,7 @@ ScDrawLayer::GetObjectsAnchoredToRange(SCTAB nTab, SCCOL nCol, SCROW nStartRow, 
     return aRowObjects;
 }
 
-bool ScDrawLayer::HasObjectsAnchoredInRange(ScRange& rRange)
+bool ScDrawLayer::HasObjectsAnchoredInRange(const ScRange& rRange)
 {
     // This only works for one table at a time
     assert(rRange.aStart.Tab() == rRange.aEnd.Tab());
@@ -2174,7 +2174,7 @@ bool ScDrawLayer::HasObjectsAnchoredInRange(ScRange& rRange)
     return false;
 }
 
-void ScDrawLayer::MoveObject(SdrObject* pObject, ScAddress& rNewPosition)
+void ScDrawLayer::MoveObject(SdrObject* pObject, const ScAddress& rNewPosition)
 {
     // Get anchor data
     ScDrawObjData* pObjData = GetObjData(pObject, false);

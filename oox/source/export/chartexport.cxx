@@ -2962,7 +2962,7 @@ OUString getFieldTypeString( const chart2::DataPointCustomLabelFieldType aType )
     return OUString();
 }
 
-void writeRunProperties( ChartExport* pChartExport, Reference<XPropertySet>& xPropertySet )
+void writeRunProperties( ChartExport* pChartExport, Reference<XPropertySet> const & xPropertySet )
 {
     bool bDummy = false;
     sal_Int32 nDummy;

@@ -1816,7 +1816,7 @@ bool GtkSalFrame::GetWindowState( SalFrameState* pState )
     return true;
 }
 
-void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rectangle *pSize )
+void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rectangle const *pSize )
 {
     if( !m_pWindow )
         return;

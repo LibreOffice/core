@@ -16,7 +16,7 @@ namespace test {
 namespace
 {
 
-void drawLineOffset(OutputDevice& rDevice, tools::Rectangle& rRect, int nOffset)
+void drawLineOffset(OutputDevice& rDevice, tools::Rectangle const & rRect, int nOffset)
 {
     Point aLeftTop     (rRect.Left()  + nOffset, rRect.Top()    + nOffset);
     Point aRightTop    (rRect.Right() - nOffset, rRect.Top()    + nOffset);

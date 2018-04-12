@@ -60,7 +60,7 @@ namespace connectivity
             virtual ~OEvoabConnection() override;
 
         public:
-            explicit OEvoabConnection( OEvoabDriver& _rDriver );
+            explicit OEvoabConnection( OEvoabDriver const & _rDriver );
             /// @throws css::sdbc::SQLException
             void construct(const OUString& _rUrl,const css::uno::Sequence< css::beans::PropertyValue >& _rInfo );
 

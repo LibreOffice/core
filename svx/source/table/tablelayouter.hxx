@@ -89,7 +89,7 @@ public:
     /** returns the requested borderline in rpBorderLine or a null pointer if there is no border at this edge */
     editeng::SvxBorderLine* getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHorizontal )const;
 
-    void updateCells( ::tools::Rectangle& rRectangle );
+    void updateCells( ::tools::Rectangle const & rRectangle );
 
     sal_Int32 getHorizontalEdge( int nEdgeY, sal_Int32* pnMin, sal_Int32* pnMax );
     sal_Int32 getVerticalEdge( int nEdgeX , sal_Int32* pnMin, sal_Int32* pnMax);

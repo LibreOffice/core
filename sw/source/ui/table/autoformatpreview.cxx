@@ -87,7 +87,7 @@ static void lcl_SetFontProperties(vcl::Font& rFont, const SvxFontItem& rFontItem
     rCJKFont.MethodName(Value);                                                                    \
     rCTLFont.MethodName(Value);
 
-void AutoFormatPreview::MakeFonts(vcl::RenderContext& rRenderContext, sal_uInt8 nIndex,
+void AutoFormatPreview::MakeFonts(vcl::RenderContext const& rRenderContext, sal_uInt8 nIndex,
                                   vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont)
 {
     const SwBoxAutoFormat& rBoxFormat = aCurData.GetBoxFormat(nIndex);

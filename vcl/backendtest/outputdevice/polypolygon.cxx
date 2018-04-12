@@ -17,7 +17,7 @@ namespace test {
 namespace
 {
 
-tools::Polygon createPolygonOffset(tools::Rectangle& rRect, int nOffset)
+tools::Polygon createPolygonOffset(tools::Rectangle const & rRect, int nOffset)
 {
     tools::Polygon aPolygon(4);
     aPolygon.SetPoint(Point(rRect.Left()  + nOffset, rRect.Top()    + nOffset), 0);

@@ -186,8 +186,8 @@ public:
     static ScAnchorType     GetAnchorType( const SdrObject& );
     std::vector<SdrObject*> GetObjectsAnchoredToRows(SCTAB nTab, SCROW nStartRow, SCROW nEndRow);
     std::map<SCROW, std::vector<SdrObject*>> GetObjectsAnchoredToRange(SCTAB nTab, SCCOL nCol, SCROW nStartRow, SCROW nEndRow);
-    bool HasObjectsAnchoredInRange(ScRange& rRange);
-    void MoveObject(SdrObject* pObj, ScAddress& rNewPosition);
+    bool HasObjectsAnchoredInRange(const ScRange& rRange);
+    void MoveObject(SdrObject* pObj, const ScAddress& rNewPosition);
 
     // positions for detektive lines
     static ScDrawObjData* GetObjData( SdrObject* pObj, bool bCreate=false );

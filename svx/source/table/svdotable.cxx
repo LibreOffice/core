@@ -204,7 +204,7 @@ public:
     void LayoutTable( tools::Rectangle& rArea, bool bFitWidth, bool bFitHeight );
 
     void ApplyCellStyles();
-    void UpdateCells( tools::Rectangle& rArea );
+    void UpdateCells( tools::Rectangle const & rArea );
 
     SdrTableObjImpl();
     virtual ~SdrTableObjImpl() override;
@@ -721,7 +721,7 @@ void SdrTableObjImpl::LayoutTable( tools::Rectangle& rArea, bool bFitWidth, bool
     }
 }
 
-void SdrTableObjImpl::UpdateCells( tools::Rectangle& rArea )
+void SdrTableObjImpl::UpdateCells( tools::Rectangle const & rArea )
 {
     if( mpLayouter && mxTable.is() )
     {

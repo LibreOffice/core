@@ -157,7 +157,7 @@ extern "C" { static void thisModule() {} }
 
 #else
 
-extern "C" bool GetSpecialCharsForEdit( vcl::Window* i_pParent, const vcl::Font& i_rFont, OUString& o_rOutString );
+extern "C" bool GetSpecialCharsForEdit( vcl::Window const * i_pParent, const vcl::Font& i_rFont, OUString& o_rOutString );
 
 #endif
 

@@ -67,7 +67,7 @@ class CGMBitmap
     std::unique_ptr<CGMBitmapDescriptor>
                             pCGMBitmapDescriptor;
     bool                    ImplGetDimensions( CGMBitmapDescriptor& );
-    std::vector<Color>      ImplGeneratePalette( CGMBitmapDescriptor& );
+    std::vector<Color>      ImplGeneratePalette( CGMBitmapDescriptor const & );
     void                    ImplGetBitmap( CGMBitmapDescriptor& );
     void                    ImplInsert( CGMBitmapDescriptor const & rSource, CGMBitmapDescriptor& rDest );
 public:

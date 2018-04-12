@@ -263,7 +263,7 @@ private:
     virtual StorageRef  implCreateStorage(
                             const css::uno::Reference< css::io::XStream >& rxOutStream ) const override;
 
-    void importCustomFragments(css::uno::Reference<css::embed::XStorage>& xDocumentStorage);
+    void importCustomFragments(css::uno::Reference<css::embed::XStorage> const & xDocumentStorage);
 
 private:
     ::std::unique_ptr< XmlFilterBaseImpl > mxImpl;

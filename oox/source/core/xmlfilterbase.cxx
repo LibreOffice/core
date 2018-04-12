@@ -954,7 +954,7 @@ OUString XmlFilterBase::getNamespaceURL(sal_Int32 nNSID) const
     return itr->second;
 }
 
-void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStorage>& xDocumentStorage)
+void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStorage> const & xDocumentStorage)
 {
     Reference<XRelationshipAccess> xRelations(xDocumentStorage, UNO_QUERY);
     if (xRelations.is())
