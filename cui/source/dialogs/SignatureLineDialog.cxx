@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <svx/SignatureLineDialog.hxx>
+#include <SignatureLineDialog.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/xmltools.hxx>
