@@ -18,9 +18,6 @@
  */
 
 #include <string.h>
-#include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <osl/file.hxx>
@@ -59,65 +56,42 @@ using namespace com::sun::star::bridge;
 #include <sbintern.hxx>
 
 
-class SbiInputDialog : public ModalDialog {
-    VclPtr<Edit> aInput;
-    VclPtr<OKButton> aOk;
-    VclPtr<CancelButton> aCancel;
-    OUString aText;
-    DECL_LINK( Ok, Button *, void );
-    DECL_LINK( Cancel, Button *, void );
+class SbiInputDialog : public weld::GenericDialogController
+{
+    std::unique_ptr<weld::Entry> m_xInput;
+    std::unique_ptr<weld::Button> m_xOk;
+    std::unique_ptr<weld::Button> m_xCancel;
+    std::unique_ptr<weld::Label> m_xPromptText;
+    OUString m_aText;
+    DECL_LINK(Ok, weld::Button&, void);
+    DECL_LINK(Cancel, weld::Button&, void);
 public:
-    SbiInputDialog( vcl::Window*, const OUString& );
-    virtual ~SbiInputDialog() override { disposeOnce(); }
-    virtual void dispose() override;
-    const OUString& GetInput() { return aText; }
+    SbiInputDialog(weld::Window*, const OUString&);
+    const OUString& GetInput() { return m_aText; }
 };
 
-SbiInputDialog::SbiInputDialog( vcl::Window* pParent, const OUString& rPrompt )
-            :ModalDialog( pParent, WB_3DLOOK | WB_MOVEABLE | WB_CLOSEABLE ),
-             aInput( VclPtr<Edit>::Create(this, WB_3DLOOK | WB_LEFT | WB_BORDER) ),
-             aOk( VclPtr<OKButton>::Create(this) ), aCancel( VclPtr<CancelButton>::Create(this) )
+SbiInputDialog::SbiInputDialog(weld::Window* pParent, const OUString& rPrompt)
+    : GenericDialogController(pParent, "svt/ui/inputbox.ui", "InputBox")
+    , m_xInput(m_xBuilder->weld_entry("entry"))
+    , m_xOk(m_xBuilder->weld_button("ok"))
+    , m_xCancel(m_xBuilder->weld_button("cancel"))
+    , m_xPromptText(m_xBuilder->weld_label("prompt"))
 {
-    SetText( rPrompt );
-    aOk->SetClickHdl( LINK( this, SbiInputDialog, Ok ) );
-    aCancel->SetClickHdl( LINK( this, SbiInputDialog, Cancel ) );
-    SetMapMode( MapMode( MapUnit::MapAppFont ) );
-
-    Point aPt = LogicToPixel( Point( 50, 50 ) );
-    Size  aSz = LogicToPixel( Size( 145, 65 ) );
-    SetPosSizePixel( aPt, aSz );
-    aPt = LogicToPixel( Point( 10, 10 ) );
-    aSz = LogicToPixel( Size( 120, 12 ) );
-    aInput->SetPosSizePixel( aPt, aSz );
-    aPt = LogicToPixel( Point( 15, 30 ) );
-    aSz = LogicToPixel( Size( 45, 15) );
-    aOk->SetPosSizePixel( aPt, aSz );
-    aPt = LogicToPixel( Point( 80, 30 ) );
-    aSz = LogicToPixel( Size( 45, 15) );
-    aCancel->SetPosSizePixel( aPt, aSz );
-
-    aInput->Show();
-    aOk->Show();
-    aCancel->Show();
+    m_xDialog->set_title(rPrompt);
+    m_xPromptText->set_label(rPrompt);
+    m_xOk->connect_clicked( LINK( this, SbiInputDialog, Ok ) );
+    m_xCancel->connect_clicked( LINK( this, SbiInputDialog, Cancel ) );
 }
 
-void SbiInputDialog::dispose()
+IMPL_LINK_NOARG( SbiInputDialog, Ok, weld::Button&, void )
 {
-    aInput.disposeAndClear();
-    aOk.disposeAndClear();
-    aCancel.disposeAndClear();
-    ModalDialog::dispose();
+    m_aText = m_xInput->get_text();
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG( SbiInputDialog, Ok, Button *, void )
+IMPL_LINK_NOARG( SbiInputDialog, Cancel, weld::Button&, void )
 {
-    aText = aInput->GetText();
-    EndDialog( 1 );
-}
-
-IMPL_LINK_NOARG( SbiInputDialog, Cancel, Button *, void )
-{
-    EndDialog();
+    m_xDialog->response(RET_CANCEL);
 }
 
 SbiStream::SbiStream()
@@ -817,10 +791,10 @@ void SbiIoSystem::CloseAll()
 void SbiIoSystem::ReadCon(OString& rIn)
 {
     OUString aPromptStr(OStringToOUString(aPrompt, osl_getThreadTextEncoding()));
-    ScopedVclPtrInstance< SbiInputDialog > aDlg(nullptr, aPromptStr);
-    if( aDlg->Execute() )
+    SbiInputDialog aDlg(nullptr, aPromptStr);
+    if (aDlg.run() == RET_OK)
     {
-        rIn = OUStringToOString(aDlg->GetInput(), osl_getThreadTextEncoding());
+        rIn = OUStringToOString(aDlg.GetInput(), osl_getThreadTextEncoding());
     }
     else
     {
