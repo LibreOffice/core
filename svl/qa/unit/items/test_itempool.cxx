@@ -80,7 +80,7 @@ void PoolItemTest::testPool()
     }
 
     // Test rehash
-    for (SfxPoolItemArray_Impl *pSlice : pImpl->maPoolItems)
+    for (auto & pSlice : pImpl->maPoolItems)
     {
         if (pSlice)
             pSlice->ReHash();

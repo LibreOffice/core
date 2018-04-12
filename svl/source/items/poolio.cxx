@@ -104,7 +104,7 @@ bool SfxItemPool::CheckItemInPool(const SfxPoolItem *pItem) const
     if( IsStaticDefaultItem(pItem) || IsPoolDefaultItem(pItem) )
         return true;
 
-    SfxPoolItemArray_Impl* pItemArr = pImpl->maPoolItems[GetIndex_Impl(pItem->Which())];
+    SfxPoolItemArray_Impl* pItemArr = pImpl->maPoolItems[GetIndex_Impl(pItem->Which())].get();
     DBG_ASSERT(pItemArr, "ItemArr is not available");
 
     for ( size_t i = 0; i < pItemArr->size(); ++i )
