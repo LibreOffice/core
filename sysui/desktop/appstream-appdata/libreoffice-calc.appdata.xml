@@ -27,7 +27,11 @@ worrying about compatibility.
   <url type="translate">https://hub.libreoffice.org/translate</url>
   <screenshots>
     <screenshot type="default">
-      <image>http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Calc-02-exemple-ods.png</image>
+      <image>https://hub.libreoffice.org/screenshots/calc-01.png</image>
+      <caption><!-- Describe this screenshot in less than ~10 words --></caption>
+    </screenshot>
+    <screenshot>
+      <image>https://hub.libreoffice.org/screenshots/calc-02.png</image>
       <caption><!-- Describe this screenshot in less than ~10 words --></caption>
     </screenshot>
   </screenshots>
