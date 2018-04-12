@@ -669,13 +669,11 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         // Subdivided for better quality for older usages
                         if(1 == aInputPolyPolygon.Count())
                         {
-                            MetaAction* pAction = rMtf.ReplaceAction(
+                            rMtf.ReplaceAction(
                                 new MetaPolyLineAction(
                                     aInputPolyPolygon.GetObject(0),
                                     pPolyLineAction->GetLineInfo()),
                                 nLastPolygonAction);
-                            if(pAction)
-                                pAction->Delete();
                         }
                     }
                     else
@@ -688,12 +686,10 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                             // same sub-polygon count
                             if(pPolyPolygonAction->GetPolyPolygon().Count() == aInputPolyPolygon.Count())
                             {
-                                MetaAction* pAction = rMtf.ReplaceAction(
+                                rMtf.ReplaceAction(
                                     new MetaPolyPolygonAction(
                                         aInputPolyPolygon),
                                     nLastPolygonAction);
-                                if(pAction)
-                                    pAction->Delete();
                             }
                         }
                         else
@@ -705,12 +701,10 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                                 // replace MetaPolygonAction
                                 if(1 == aInputPolyPolygon.Count())
                                 {
-                                    MetaAction* pAction = rMtf.ReplaceAction(
+                                    rMtf.ReplaceAction(
                                         new MetaPolygonAction(
                                             aInputPolyPolygon.GetObject(0)),
                                         nLastPolygonAction);
-                                    if(pAction)
-                                        pAction->Delete();
                                 }
                             }
                         }

@@ -58,7 +58,7 @@ VCL_DLLPUBLIC SvStream& WriteGDIMetaFile( SvStream& rOStm, const GDIMetaFile& rG
 class VCL_DLLPUBLIC GDIMetaFile final
 {
 private:
-    ::std::vector< MetaAction* > m_aList;
+    ::std::vector< rtl::Reference<MetaAction> > m_aList;
     size_t          m_nCurrentActionElement;
 
     MapMode         m_aPrefMapMode;
@@ -157,14 +157,14 @@ public:
 
     size_t          GetActionSize() const;
 
-    void            AddAction( MetaAction* pAction );
-    void            AddAction( MetaAction* pAction, size_t nPos );
-    void            push_back( MetaAction* pAction );
+    void            AddAction( rtl::Reference<MetaAction> pAction );
+    void            AddAction( rtl::Reference<MetaAction> pAction, size_t nPos );
+    void            push_back( rtl::Reference<MetaAction> pAction );
     /**
      * @param pAction takes ownership
      * @param nAction the action to replace
      */
-    MetaAction*     ReplaceAction( MetaAction* pAction, size_t nAction );
+    void ReplaceAction( rtl::Reference<MetaAction> pAction, size_t nAction );
 
     MetaAction*     FirstAction();
     MetaAction*     NextAction();
