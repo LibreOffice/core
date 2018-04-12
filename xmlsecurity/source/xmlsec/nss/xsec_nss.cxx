@@ -42,15 +42,7 @@ void* nss_component_getFactory( const sal_Char* pImplName , void* pServiceManage
 
     if( pImplName != nullptr && pServiceManager != nullptr )
     {
-#ifdef XMLSEC_CRYPTO_NSS
-        if( SEInitializer_NssImpl_getImplementationName().equalsAscii( pImplName ) )
-        {
-            xFactory.set( createSingleFactory(
-                static_cast< XMultiServiceFactory * >( pServiceManager ),
-                OUString::createFromAscii( pImplName ),
-                SEInitializer_NssImpl_createInstance, SEInitializer_NssImpl_getSupportedServiceNames() ) );
-        }
-#else
+#ifndef XMLSEC_CRYPTO_NSS
         if( ONSSInitializer_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory.set( createSingleFactory(
