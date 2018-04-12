@@ -2243,7 +2243,7 @@ OUString GetURL_Impl(
     const OUString& rName, boost::optional< OUString > const & cwdUrl )
 {
     // if rName is a vnd.sun.star.script URL do not attempt to parse it
-    // as INetURLObj does not handle handle there URLs
+    // as INetURLObj does not handle URLs there
     if (rName.startsWith("vnd.sun.star.script"))
     {
         return rName;
