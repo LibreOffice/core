@@ -82,7 +82,7 @@ struct JNI_interface_type_info : public JNI_type_info
     jobject                                     m_proxy_ctor; // proxy ctor
     jobject                                     m_type;
     // sorted via typelib function index
-    jmethodID *                                 m_methods;
+    std::unique_ptr<jmethodID[]>                m_methods;
 
     virtual void destroy( JNIEnv * jni_env ) override;
     explicit JNI_interface_type_info(
@@ -98,7 +98,7 @@ struct JNI_compound_type_info : public JNI_type_info
     // ctor( msg ) for exceptions
     jmethodID                                   m_exc_ctor;
     // sorted via typelib member index
-    jfieldID *                                  m_fields;
+    std::unique_ptr<jfieldID[]>                 m_fields;
 
     virtual void destroy( JNIEnv * jni_env ) override;
     explicit JNI_compound_type_info(
