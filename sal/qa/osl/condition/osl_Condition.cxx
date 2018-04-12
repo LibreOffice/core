@@ -196,18 +196,18 @@ namespace osl_Condition
     {
     public:
         bool bRes, bRes1, bRes2;
-        TimeValue *tv1;
+        std::unique_ptr<TimeValue> tv1;
 
         void setUp() override
         {
-            tv1 = new TimeValue;
+            tv1.reset(new TimeValue);
             tv1->Seconds = 1;
             tv1->Nanosec = 0;
         }
 
         void tearDown() override
         {
-            delete tv1;
+            tv1.reset();
         }
 
         void wait_testAllCombos( )
@@ -219,9 +219,9 @@ namespace osl_Condition
             cond1.set();
             cond2.set();
 
-            osl::Condition::Result r1=cond1.wait(tv1);
+            osl::Condition::Result r1=cond1.wait(tv1.get());
             osl::Condition::Result r2=cond2.wait();
-            osl::Condition::Result r3=cond3.wait(tv1);
+            osl::Condition::Result r3=cond3.wait(tv1.get());
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "#test comment#: test three types of wait.",
                                     ::osl::Condition::result_ok, r1 );
@@ -238,10 +238,10 @@ namespace osl_Condition
 
             aCond.reset();
             bRes = aCond.check();
-            wRes = aCond.wait(tv1);
+            wRes = aCond.wait(tv1.get());
 
             aCond.set();
-            wRes1 = aCond.wait(tv1);
+            wRes1 = aCond.wait(tv1.get());
             bRes1 = aCond.check();
 
             CPPUNIT_ASSERT_MESSAGE("#test comment#: wait a condition after set/reset.",
