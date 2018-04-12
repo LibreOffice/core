@@ -50,6 +50,7 @@
 #include <svtools/treelistentry.hxx>
 #include <svtools/viewdataentry.hxx>
 #include <tools/diagnose_ex.h>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <algorithm>
 #include <strings.hrc>
@@ -2167,6 +2168,99 @@ sal_Int32 ToolbarSaveInData::GetSystemStyle( const OUString& rResourceURL )
     }
 
     return result;
+}
+
+void ToolbarSaveInData::SetSystemStyle(
+    const uno::Reference< frame::XFrame >& xFrame,
+    const OUString& rResourceURL,
+    sal_Int32 nStyle )
+{
+    // change the style using the API
+    SetSystemStyle( rResourceURL, nStyle );
+
+    // this code is a temporary hack as the UI is not updating after
+    // changing the toolbar style via the API
+    uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+    vcl::Window *window = nullptr;
+
+    uno::Reference< beans::XPropertySet > xPropSet( xFrame, uno::UNO_QUERY );
+    if ( xPropSet.is() )
+    {
+        uno::Any a = xPropSet->getPropertyValue( "LayoutManager" );
+        a >>= xLayoutManager;
+    }
+
+    if ( xLayoutManager.is() )
+    {
+        uno::Reference< css::ui::XUIElement > xUIElement =
+            xLayoutManager->getElement( rResourceURL );
+
+        // check reference before we call getRealInterface. The layout manager
+        // can only provide references for elements that have been created
+        // before. It's possible that the current element is not available.
+        uno::Reference< css::awt::XWindow > xWindow;
+        if ( xUIElement.is() )
+            xWindow.set( xUIElement->getRealInterface(), uno::UNO_QUERY );
+
+        window = VCLUnoHelper::GetWindow( xWindow ).get();
+    }
+
+    if ( window != nullptr && window->GetType() == WindowType::TOOLBOX )
+    {
+        ToolBox* toolbox = static_cast<ToolBox*>(window);
+
+        if ( nStyle == 0 )
+        {
+            toolbox->SetButtonType( ButtonType::SYMBOLONLY );
+        }
+        else if ( nStyle == 1 )
+        {
+            toolbox->SetButtonType( ButtonType::TEXT );
+        }
+        if ( nStyle == 2 )
+        {
+            toolbox->SetButtonType( ButtonType::SYMBOLTEXT );
+        }
+    }
+}
+
+void ToolbarSaveInData::SetSystemStyle(
+    const OUString& rResourceURL,
+    sal_Int32 nStyle )
+{
+    if ( rResourceURL.startsWith( "private" ) &&
+         m_xPersistentWindowState.is() &&
+         m_xPersistentWindowState->hasByName( rResourceURL ) )
+    {
+        try
+        {
+            uno::Sequence< beans::PropertyValue > aProps;
+
+            uno::Any a( m_xPersistentWindowState->getByName( rResourceURL ) );
+
+            if ( a >>= aProps )
+            {
+                for ( sal_Int32 i = 0; i < aProps.getLength(); ++i )
+                {
+                    if ( aProps[ i ].Name == ITEM_DESCRIPTOR_STYLE )
+                    {
+                        aProps[ i ].Value <<= nStyle;
+                        break;
+                    }
+                }
+            }
+
+            uno::Reference< container::XNameReplace >
+                xNameReplace( m_xPersistentWindowState, uno::UNO_QUERY );
+
+            xNameReplace->replaceByName( rResourceURL, uno::Any( aProps ) );
+        }
+        catch ( uno::Exception& )
+        {
+            // do nothing, a default value is returned
+            SAL_WARN("cui.customize", "Exception setting toolbar style");
+        }
+    }
 }
 
 OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )

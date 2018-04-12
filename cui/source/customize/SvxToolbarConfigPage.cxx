@@ -339,6 +339,7 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbarEntry, SvTreeListBox *, void
 IMPL_LINK( SvxToolbarConfigPage, GearHdl, MenuButton *, pButton, void )
 {
     OString sIdent = pButton->GetCurItemIdent();
+    SvxConfigEntry* pCurrentToolbar = GetTopLevelSelection();
 
     if (sIdent == "gear_add")
     {
@@ -402,9 +403,7 @@ IMPL_LINK( SvxToolbarConfigPage, GearHdl, MenuButton *, pButton, void )
     }
     else if (sIdent == "gear_delete")
     {
-        SvxConfigEntry* pToolbar = GetTopLevelSelection();
-
-        if ( pToolbar && pToolbar->IsDeletable() )
+        if ( pCurrentToolbar && pCurrentToolbar->IsDeletable() )
         {
             DeleteSelectedTopLevel();
             UpdateButtonStates();
@@ -442,6 +441,29 @@ IMPL_LINK( SvxToolbarConfigPage, GearHdl, MenuButton *, pButton, void )
             m_pTopLevelListBox->SetEntryData( nSelectionPos, pToolbar );
             m_pTopLevelListBox->SelectEntryPos( nSelectionPos );
         }
+    }
+    else if (sIdent == "gear_iconOnly" || sIdent == "gear_textOnly" || sIdent == "gear_iconAndText")
+    {
+        ToolbarSaveInData* pSaveInData = static_cast<ToolbarSaveInData*>( GetSaveInData() );
+
+        if (pCurrentToolbar == nullptr || pSaveInData == nullptr)
+        {
+            SAL_WARN("cui.customize", "NULL toolbar or savein data");
+            return;
+        }
+
+        sal_Int32 nStyle = 0;
+        if (sIdent == "gear_iconOnly")
+            nStyle = 0;
+        else if (sIdent == "gear_textOnly")
+            nStyle = 1;
+        else if (sIdent == "gear_iconAndText")
+            nStyle = 2;
+
+        pCurrentToolbar->SetStyle( nStyle );
+        pSaveInData->SetSystemStyle( m_xFrame, pCurrentToolbar->GetCommand(), nStyle );
+
+        m_pTopLevelListBox->GetSelectHdl().Call( *m_pTopLevelListBox );
     }
     else
     {
@@ -788,6 +810,7 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
         //TODO: Disable related buttons
         m_pInsertBtn->Enable( false );
         m_pResetBtn->Enable( false );
+        m_pGearBtn->Enable( false );
 
         return;
     }
@@ -795,6 +818,27 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
     {
         m_pInsertBtn->Enable();
         m_pResetBtn->Enable();
+        m_pGearBtn->Enable();
+    }
+
+    PopupMenu* pGearMenu = m_pGearBtn->GetPopupMenu();
+    switch( pToolbar->GetStyle() )
+    {
+        case 0:
+        {
+            pGearMenu->CheckItem( pGearMenu->GetItemId("gear_iconOnly") );
+            break;
+        }
+        case 1:
+        {
+            pGearMenu->CheckItem( pGearMenu->GetItemId("gear_textOnly") );
+            break;
+        }
+        case 2:
+        {
+            pGearMenu->CheckItem( pGearMenu->GetItemId("gear_iconAndText") );
+            break;
+        }
     }
 
     SvxEntries* pEntries = pToolbar->GetEntries();
