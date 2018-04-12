@@ -170,6 +170,7 @@ public:
     void            SelectEntryPos(int nPos) { m_xControl->set_active(nPos); }
 
     void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_aChangeHdl = rLink; }
+    void hide() { m_xControl->hide(); }
 };
 
 class SVX_DLLPUBLIC SvxLanguageComboBox : public ComboBox, public SvxLanguageBoxBase

@@ -92,7 +92,10 @@ using namespace css::uno;
 IMPL_ABSTDLG_BASE(AbstractSwWordCountFloatDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwInsertAbstractDlg_Impl);
 IMPL_ABSTDLG_BASE(SwAbstractSfxDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractSwAsciiFilterDlg_Impl);
+short AbstractSwAsciiFilterDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl);
 short AbstractSplitTableDialog_Impl::Execute()
 {
@@ -227,7 +230,7 @@ void SwAbstractSfxDialog_Impl::SetText( const OUString& rStr )
 
 void AbstractSwAsciiFilterDlg_Impl::FillOptions( SwAsciiOptions& rOptions )
 {
-    pDlg->FillOptions(rOptions);
+    m_xDlg->FillOptions(rOptions);
 }
 
 SplitTable_HeadlineOption AbstractSplitTableDialog_Impl::GetSplitMode()
@@ -705,11 +708,10 @@ VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateNumFormatDialog( v
     return VclPtr<SwAbstractSfxDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractSwAsciiFilterDlg> SwAbstractDialogFactory_Impl::CreateSwAsciiFilterDlg( SwDocShell& rDocSh,
-                                                                                SvStream* pStream )
+VclPtr<AbstractSwAsciiFilterDlg> SwAbstractDialogFactory_Impl::CreateSwAsciiFilterDlg(weld::Window* pParent,
+       SwDocShell& rDocSh, SvStream* pStream)
 {
-    VclPtr<SwAsciiFilterDlg> pDlg = VclPtr<SwAsciiFilterDlg>::Create( nullptr, rDocSh, pStream );
-    return VclPtr<AbstractSwAsciiFilterDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractSwAsciiFilterDlg_Impl>::Create(new SwAsciiFilterDlg(pParent, rDocSh, pStream));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwInsertBookmarkDlg( vcl::Window *pParent,
