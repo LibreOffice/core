@@ -620,11 +620,11 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
             typeid(rItem) == typeid(GetDefaultItem(nWhich)));
 
     const sal_uInt16 nIndex = GetIndex_Impl(nWhich);
-    SfxPoolItemArray_Impl* pItemArr = pImpl->maPoolItems[nIndex];
+    SfxPoolItemArray_Impl* pItemArr = pImpl->maPoolItems[nIndex].get();
     if (!pItemArr)
     {
-        pImpl->maPoolItems[nIndex] = new SfxPoolItemArray_Impl;
-        pItemArr = pImpl->maPoolItems[nIndex];
+        pImpl->maPoolItems[nIndex].reset(new SfxPoolItemArray_Impl);
+        pItemArr = pImpl->maPoolItems[nIndex].get();
     }
 
     std::vector<SfxPoolItem*>::iterator ppFree;
@@ -753,7 +753,7 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
         return;
 
     // Find Item in own Pool
-    SfxPoolItemArray_Impl* pItemArr = pImpl->maPoolItems[nIndex];
+    SfxPoolItemArray_Impl* pItemArr = pImpl->maPoolItems[nIndex].get();
     assert(pItemArr && "removing Item not in Pool");
 
     SfxPoolItemArray_Impl::PoolItemPtrToIndexMap::const_iterator it;
@@ -826,7 +826,7 @@ void SfxItemPool::FreezeIdRanges()
 }
 
 
-void SfxItemPool::FillItemIdRanges_Impl( sal_uInt16*& pWhichRanges ) const
+void SfxItemPool::FillItemIdRanges_Impl( std::unique_ptr<sal_uInt16[]>& pWhichRanges ) const
 {
     DBG_ASSERT( !pImpl->mpPoolRanges, "GetFrozenRanges() would be faster!" );
 
@@ -835,20 +835,20 @@ void SfxItemPool::FillItemIdRanges_Impl( sal_uInt16*& pWhichRanges ) const
     for( pPool = this; pPool; pPool = pPool->pImpl->mpSecondary )
         ++nLevel;
 
-    pWhichRanges = new sal_uInt16[ 2*nLevel + 1 ];
+    pWhichRanges.reset(new sal_uInt16[ 2*nLevel + 1 ]);
 
     nLevel = 0;
     for( pPool = this; pPool; pPool = pPool->pImpl->mpSecondary )
     {
-        *(pWhichRanges+(nLevel++)) = pPool->pImpl->mnStart;
-        *(pWhichRanges+(nLevel++)) = pPool->pImpl->mnEnd;
-        *(pWhichRanges+nLevel) = 0;
+        pWhichRanges[nLevel++] = pPool->pImpl->mnStart;
+        pWhichRanges[nLevel++] = pPool->pImpl->mnEnd;
+        pWhichRanges[nLevel] = 0;
     }
 }
 
 const sal_uInt16* SfxItemPool::GetFrozenIdRanges() const
 {
-    return pImpl->mpPoolRanges;
+    return pImpl->mpPoolRanges.get();
 }
 
 const SfxPoolItem *SfxItemPool::GetItem2Default(sal_uInt16 nWhich) const
@@ -870,7 +870,7 @@ const SfxPoolItem *SfxItemPool::GetItem2(sal_uInt16 nWhich, sal_uInt32 nOfst) co
     if ( nOfst == SFX_ITEMS_DEFAULT )
         return (*pImpl->mpStaticDefaults)[ GetIndex_Impl(nWhich) ];
 
-    SfxPoolItemArray_Impl* pItemArr = pImpl->maPoolItems[GetIndex_Impl(nWhich)];
+    SfxPoolItemArray_Impl* pItemArr = pImpl->maPoolItems[GetIndex_Impl(nWhich)].get();
     if( pItemArr && nOfst < pItemArr->size() )
         return (*pItemArr)[nOfst];
 
@@ -887,7 +887,7 @@ sal_uInt32 SfxItemPool::GetItemCount2(sal_uInt16 nWhich) const
         return 0;
     }
 
-    SfxPoolItemArray_Impl* pItemArr = pImpl->maPoolItems[GetIndex_Impl(nWhich)];
+    SfxPoolItemArray_Impl* pItemArr = pImpl->maPoolItems[GetIndex_Impl(nWhich)].get();
     if  ( pItemArr )
         return pItemArr->size();
     return 0;

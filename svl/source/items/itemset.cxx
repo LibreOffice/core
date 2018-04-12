@@ -94,8 +94,6 @@ SfxItemSet::SfxItemSet(SfxItemPool& rPool)
 {
     m_pWhichRanges = const_cast<sal_uInt16*>(m_pPool->GetFrozenIdRanges());
     assert( m_pWhichRanges && "don't create ItemSets with full range before FreezeIdRanges()" );
-    if (!m_pWhichRanges)
-        m_pPool->FillItemIdRanges_Impl( m_pWhichRanges );
 
     const sal_uInt16 nSize = TotalCount();
     m_pItems.reset(new const SfxPoolItem*[nSize]{});
