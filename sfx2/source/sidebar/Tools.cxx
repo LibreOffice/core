@@ -27,7 +27,6 @@
 #include <vcl/gradient.hxx>
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 
@@ -60,18 +59,10 @@ Image Tools::GetImage (
             const Image aPanelImage(vcl::CommandInfoProvider::GetImageForCommand(rsURL, rxFrame));
             return aPanelImage;
         }
-        else
+        else if (rsURL.startsWith("private:graphicrepository"))
         {
-            const Reference<XComponentContext> xContext (::comphelper::getProcessComponentContext());
-            const Reference<graphic::XGraphicProvider> xGraphicProvider =
-                graphic::GraphicProvider::create( xContext );
-            ::comphelper::NamedValueCollection aMediaProperties;
-            aMediaProperties.put("URL", rsURL);
-            const Reference<graphic::XGraphic> xGraphic (
-                xGraphicProvider->queryGraphic(aMediaProperties.getPropertyValues()),
-                UNO_QUERY);
-            if (xGraphic.is())
-                return Image(xGraphic);
+            const Image aPanelImage(rsURL);
+            return aPanelImage;
         }
     }
     return Image();

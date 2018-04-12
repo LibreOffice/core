@@ -54,13 +54,25 @@ Image::Image(const css::uno::Reference< css::graphic::XGraphic >& rxGraphic)
 
 Image::Image(const OUString & rFileUrl)
 {
-    OUString aPath;
-    osl::FileBase::getSystemPathFromFileURL(rFileUrl, aPath);
-    Graphic aGraphic;
-    const OUString aFilterName(IMP_PNG);
-    if (ERRCODE_NONE == GraphicFilter::LoadGraphic(aPath, aFilterName, aGraphic))
+    sal_Int32 nIndex = 0;
+    if (rFileUrl.getToken( 0, '/', nIndex ) == "private:graphicrepository")
     {
-        ImplInit(aGraphic.GetBitmapEx());
+        OUString sPathName(rFileUrl.copy(nIndex));
+        BitmapEx aBitmapEx;
+        if (vcl::ImageRepository::loadImage(sPathName, aBitmapEx))
+        {
+            ImplInit(aBitmapEx);
+        }
+    }
+    else
+    {
+        OUString aPath;
+        osl::FileBase::getSystemPathFromFileURL(rFileUrl, aPath);
+        Graphic aGraphic;
+        if (ERRCODE_NONE == GraphicFilter::LoadGraphic(aPath, IMP_PNG, aGraphic))
+        {
+            ImplInit(aGraphic.GetBitmapEx());
+        }
     }
 }
 
