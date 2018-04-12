@@ -302,21 +302,19 @@ struct ImpUserData
 /*                                                                   */
 /*********************************************************************/
 
-class OfaAutoFmtPrcntSet : public ModalDialog
+class OfaAutoFmtPrcntSet : public weld::GenericDialogController
 {
-    VclPtr<MetricField> m_pPrcntMF;
+    std::unique_ptr<weld::MetricSpinButton> m_xPrcntMF;
 public:
-    explicit OfaAutoFmtPrcntSet(vcl::Window* pParent)
-        : ModalDialog(pParent, "PercentDialog","cui/ui/percentdialog.ui")
+    explicit OfaAutoFmtPrcntSet(weld::Window* pParent)
+        : GenericDialogController(pParent, "cui/ui/percentdialog.ui", "PercentDialog")
+        , m_xPrcntMF(m_xBuilder->weld_metric_spin_button("margin", FUNIT_PERCENT))
     {
-        get(m_pPrcntMF, "margin");
     }
-    virtual ~OfaAutoFmtPrcntSet() override { disposeOnce(); }
-    virtual void dispose() override { m_pPrcntMF.clear(); ModalDialog::dispose(); }
 
-    MetricField& GetPrcntFld()
+    weld::MetricSpinButton& GetPrcntFld()
     {
-        return *m_pPrcntMF;
+        return *m_xPrcntMF;
     }
 };
 
@@ -744,11 +742,11 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl, Button*, void)
     else if( MERGE_SINGLE_LINE_PARA == nSelEntryPos )
     {
         // dialog for per cent settings
-        ScopedVclPtrInstance< OfaAutoFmtPrcntSet > aDlg(this);
-        aDlg->GetPrcntFld().SetValue(nPercent);
-        if(RET_OK == aDlg->Execute())
+        OfaAutoFmtPrcntSet aDlg(GetFrameWeld());
+        aDlg.GetPrcntFld().set_value(nPercent, FUNIT_PERCENT);
+        if (aDlg.run() == RET_OK)
         {
-            nPercent = static_cast<sal_uInt16>(aDlg->GetPrcntFld().GetValue());
+            nPercent = static_cast<sal_uInt16>(aDlg.GetPrcntFld().get_value(FUNIT_PERCENT));
             sMargin = " " +
                 unicode::formatPercent(nPercent, Application::GetSettings().GetUILanguageTag());
         }
