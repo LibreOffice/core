@@ -41,7 +41,7 @@
 
 namespace {
 
-void DrawRectangles(vcl::RenderContext& rRenderContext, Point& rUL, Point& rBR)
+void DrawRectangles(vcl::RenderContext& rRenderContext, Point const & rUL, Point const & rBR)
 {
     int nMiddleX, nMiddleY;
     Point aBL, aUR;

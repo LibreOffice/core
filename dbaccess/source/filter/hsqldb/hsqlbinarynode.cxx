@@ -32,7 +32,7 @@ HsqlBinaryNode::HsqlBinaryNode(sal_Int32 nPos)
 {
 }
 
-void HsqlBinaryNode::readChildren(HsqlRowInputStream& input)
+void HsqlBinaryNode::readChildren(HsqlRowInputStream const& input)
 {
     SvStream* pStream = input.getInputStream();
     if (!pStream)

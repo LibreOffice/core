@@ -44,7 +44,7 @@ using ColumnTypeVector = std::vector<dbahsql::ColumnDefinition>;
 using RowVector = std::vector<Any>;
 using IndexVector = std::vector<sal_Int32>;
 
-void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
+void lcl_setParams(const RowVector& row, Reference<XParameters> const& xParam,
                    const ColumnTypeVector& rColTypes)
 {
     assert(row.size() == rColTypes.size());

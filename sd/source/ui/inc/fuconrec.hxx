@@ -48,7 +48,7 @@ public:
     virtual void Deactivate() override;
 
     void SetAttributes(SfxItemSet& rAttr, SdrObject* pObj);
-    void SetLineEnds(SfxItemSet& rAttr, SdrObject& rObj);
+    void SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj);
 
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
 

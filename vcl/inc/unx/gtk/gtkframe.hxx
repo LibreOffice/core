@@ -341,7 +341,7 @@ class GtkSalFrame : public SalFrame
 
     enum class SetType { RetainSize, Fullscreen, UnFullscreen };
 
-    void SetScreen( unsigned int nNewScreen, SetType eType, tools::Rectangle *pSize = nullptr );
+    void SetScreen( unsigned int nNewScreen, SetType eType, tools::Rectangle const *pSize = nullptr );
 
 public:
 #if GTK_CHECK_VERSION(3,0,0)

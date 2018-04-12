@@ -724,7 +724,7 @@ static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, long nY, const lo
  * @param data will be filled with alpha data, if xBitmap is alpha/transparent image
  * @param bHasAlpha will be set to true if resulting surface has alpha
  **/
-void CanvasCairoExtractBitmapData( BitmapEx & aBmpEx, Bitmap & aBitmap, unsigned char*& data, bool& bHasAlpha, long& rnWidth, long& rnHeight )
+void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, unsigned char*& data, bool& bHasAlpha, long& rnWidth, long& rnHeight )
 {
     AlphaMask aAlpha = aBmpEx.GetAlpha();
 
@@ -944,7 +944,7 @@ void CanvasCairoExtractBitmapData( BitmapEx & aBmpEx, Bitmap & aBitmap, unsigned
 
 }
 
-    uno::Sequence< sal_Int8 > CanvasExtractBitmapData(BitmapEx & rBitmapEx, const geometry::IntegerRectangle2D& rect)
+    uno::Sequence< sal_Int8 > CanvasExtractBitmapData(BitmapEx const & rBitmapEx, const geometry::IntegerRectangle2D& rect)
     {
         Bitmap aBitmap( rBitmapEx.GetBitmap() );
         Bitmap aAlpha( rBitmapEx.GetAlpha().GetBitmap() );

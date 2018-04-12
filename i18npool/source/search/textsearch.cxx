@@ -885,7 +885,7 @@ void TextSearch::RESrchPrepare( const css::util::SearchOptions2& rOptions)
 }
 
 
-static bool lcl_findRegex( std::unique_ptr<RegexMatcher>& pRegexMatcher, sal_Int32 nStartPos, UErrorCode & rIcuErr )
+static bool lcl_findRegex( std::unique_ptr<RegexMatcher> const & pRegexMatcher, sal_Int32 nStartPos, UErrorCode & rIcuErr )
 {
     if (!pRegexMatcher->find( nStartPos, rIcuErr))
     {

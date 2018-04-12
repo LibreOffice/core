@@ -137,7 +137,7 @@ public:
     SdXImpressDocument(SdDrawDocument* pDoc, bool bClipBoard);
     virtual ~SdXImpressDocument() throw() override;
 
-    static rtl::Reference< SdXImpressDocument > GetModel( SdDrawDocument& rDoc );
+    static rtl::Reference< SdXImpressDocument > GetModel( SdDrawDocument const & rDoc );
 
     // intern
     bool operator==( const SdXImpressDocument& rModel ) const { return mpDoc == rModel.mpDoc; }

@@ -24,7 +24,7 @@ namespace apitest
  * @param   name            Name of property to test.
  */
 void OOO_DLLPUBLIC_TEST testBooleanProperty(
-    css::uno::Reference<css::beans::XPropertySet>& xPropertySet, const OUString& name);
+    css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, const OUString& name);
 
 /** @brief Tester for read-only property type 'boolean' of a @see com::sun::star::beans::XPropertySet.
  *
@@ -32,7 +32,7 @@ void OOO_DLLPUBLIC_TEST testBooleanProperty(
  * @param   name            Name of property to test.
  */
 void OOO_DLLPUBLIC_TEST testBooleanReadonlyProperty(
-    css::uno::Reference<css::beans::XPropertySet>& xPropertySet, const OUString& name);
+    css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, const OUString& name);
 
 /** @brief Tester for property type 'double' of a @see com::sun::star::beans::XPropertySet.
  *
@@ -41,7 +41,7 @@ void OOO_DLLPUBLIC_TEST testBooleanReadonlyProperty(
  * @param   nValue          Value to use when setting a new value.
  */
 void OOO_DLLPUBLIC_TEST
-testDoubleProperty(css::uno::Reference<css::beans::XPropertySet>& xPropertySet,
+testDoubleProperty(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet,
                    const OUString& name, const double& dValue = 42.0);
 
 /** @brief Tester for read-only property type 'double' of a @see com::sun::star::beans::XPropertySet.
@@ -51,7 +51,7 @@ testDoubleProperty(css::uno::Reference<css::beans::XPropertySet>& xPropertySet,
  * @param   nValue          Value to use when setting a new value.
  */
 void OOO_DLLPUBLIC_TEST
-testDoubleReadonlyProperty(css::uno::Reference<css::beans::XPropertySet>& xPropertySet,
+testDoubleReadonlyProperty(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet,
                            const OUString& name, const double& dValue = 42.0);
 
 /** @brief Tester for property type 'long' of a @see com::sun::star::beans::XPropertySet.
@@ -61,8 +61,8 @@ testDoubleReadonlyProperty(css::uno::Reference<css::beans::XPropertySet>& xPrope
  * @param   nValue          Value to use when setting a new value.
  */
 void OOO_DLLPUBLIC_TEST
-testLongProperty(css::uno::Reference<css::beans::XPropertySet>& xPropertySet, const OUString& name,
-                 const sal_Int32& nValue = 42);
+testLongProperty(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet,
+                 const OUString& name, const sal_Int32& nValue = 42);
 
 /** @brief Tester for read-only property type 'long' of a @see com::sun::star::beans::XPropertySet.
  *
@@ -71,7 +71,7 @@ testLongProperty(css::uno::Reference<css::beans::XPropertySet>& xPropertySet, co
  * @param   nValue          Value to use when setting a new value.
  */
 void OOO_DLLPUBLIC_TEST
-testLongReadonlyProperty(css::uno::Reference<css::beans::XPropertySet>& xPropertySet,
+testLongReadonlyProperty(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet,
                          const OUString& name, const sal_Int32& nValue = 42);
 
 /** @brief Tester for property type 'short' of a @see com::sun::star::beans::XPropertySet.
@@ -81,8 +81,8 @@ testLongReadonlyProperty(css::uno::Reference<css::beans::XPropertySet>& xPropert
  * @param   nValue          Value to use when setting a new value.
  */
 void OOO_DLLPUBLIC_TEST
-testShortProperty(css::uno::Reference<css::beans::XPropertySet>& xPropertySet, const OUString& name,
-                  const sal_Int16& nValue = 42);
+testShortProperty(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet,
+                  const OUString& name, const sal_Int16& nValue = 42);
 
 /** @brief Tester for read-only property type 'short' of a @see com::sun::star::beans::XPropertySet.
  *
@@ -91,7 +91,7 @@ testShortProperty(css::uno::Reference<css::beans::XPropertySet>& xPropertySet, c
  * @param   nValue          Value to use when setting a new value.
  */
 void OOO_DLLPUBLIC_TEST
-testShortReadonlyProperty(css::uno::Reference<css::beans::XPropertySet>& xPropertySet,
+testShortReadonlyProperty(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet,
                           const OUString& name, const sal_Int16& nValue = 42);
 
 /** @brief Tester for property type 'string' of a @see com::sun::star::beans::XPropertySet.
@@ -101,7 +101,7 @@ testShortReadonlyProperty(css::uno::Reference<css::beans::XPropertySet>& xProper
  * @param   rValue          Value to use when setting a new value.
  */
 void OOO_DLLPUBLIC_TEST
-testStringProperty(css::uno::Reference<css::beans::XPropertySet>& xPropertySet,
+testStringProperty(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet,
                    const OUString& name, const OUString& rValue);
 
 /** @brief Tester for read-only property type 'string' of a @see com::sun::star::beans::XPropertySet.
@@ -111,7 +111,7 @@ testStringProperty(css::uno::Reference<css::beans::XPropertySet>& xPropertySet,
  * @param   rValue          Value to use when setting a new value.
  */
 void OOO_DLLPUBLIC_TEST
-testStringReadonlyProperty(css::uno::Reference<css::beans::XPropertySet>& xPropertySet,
+testStringReadonlyProperty(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet,
                            const OUString& name, const OUString& rValue);
 } // namespace apitest
 #endif // INCLUDED_TEST_INC_UNOAPIPROPERTYTESTERS_HXX

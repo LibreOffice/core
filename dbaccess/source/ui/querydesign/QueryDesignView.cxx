@@ -695,7 +695,7 @@ namespace
         }
         return aFieldListStr.makeStringAndClear();
     }
-    bool GenerateCriterias( OQueryDesignView* _pView,
+    bool GenerateCriterias( OQueryDesignView const * _pView,
                                 OUStringBuffer& rRetStr,
                                 OUStringBuffer& rHavingStr,
                                 OTableFields& _rFieldList,
@@ -862,7 +862,7 @@ namespace
         }
         return true;
     }
-    SqlParseError GenerateOrder(    OQueryDesignView* _pView,
+    SqlParseError GenerateOrder(    OQueryDesignView const * _pView,
                                     OTableFields& _rFieldList,
                                     bool bMulti,
                                     OUString& _rsRet)

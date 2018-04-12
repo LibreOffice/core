@@ -615,7 +615,7 @@ public:
     SC_DLLPUBLIC ScRangeName*  GetRangeName() const;
     void                       SetRangeName(SCTAB nTab, std::unique_ptr<ScRangeName> pNew);
     void                       SetRangeName( std::unique_ptr<ScRangeName> pNewRangeName );
-    bool                       IsAddressInRangeName( RangeNameScope eScope, ScAddress& rAddress);
+    bool                       IsAddressInRangeName( RangeNameScope eScope, const ScAddress& rAddress);
 
     /** Find a named expression / range name in either global or a local scope.
         @param  nTab

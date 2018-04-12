@@ -525,7 +525,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
     return aRetval;
 }
 
-void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject& rObj)
+void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj)
 {
     if ( (rObj.GetObjIdentifier() == OBJ_EDGE &&
           nSlotId != SID_TOOL_CONNECTOR        &&

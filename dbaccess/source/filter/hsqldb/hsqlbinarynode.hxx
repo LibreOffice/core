@@ -37,7 +37,7 @@ public:
      *
      * @param rInput input stream where the positions should be read from.
      */
-    void readChildren(HsqlRowInputStream& rInput);
+    void readChildren(HsqlRowInputStream const& rInput);
 
     /**
      * Get Position of left children. It should be called only after position of

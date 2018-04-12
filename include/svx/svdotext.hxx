@@ -289,7 +289,7 @@ protected:
     void SetTextSizeDirty() { bTextSizeDirty=true; }
 
     // rAnchorRect is InOut-Parameter!
-    void ImpSetContourPolygon( SdrOutliner& rOutliner, tools::Rectangle& rAnchorRect, bool bLineWidth ) const;
+    void ImpSetContourPolygon( SdrOutliner& rOutliner, tools::Rectangle const & rAnchorRect, bool bLineWidth ) const;
 
     virtual SdrObjGeoData* NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;

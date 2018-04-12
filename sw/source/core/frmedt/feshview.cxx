@@ -892,7 +892,7 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
     }
 }
 
-void SwFEShell::SetLineEnds(SfxItemSet& rAttr, SdrObject& rObj, sal_uInt16 nSlotId)
+void SwFEShell::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj, sal_uInt16 nSlotId)
 {
     SdrModel& rModel(rObj.getSdrModelFromSdrObject());
 

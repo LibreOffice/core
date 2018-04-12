@@ -16,7 +16,7 @@ namespace test {
 namespace
 {
 
-void drawPolyLineOffset(OutputDevice& rDevice, tools::Rectangle& rRect, int nOffset)
+void drawPolyLineOffset(OutputDevice& rDevice, tools::Rectangle const & rRect, int nOffset)
 {
     tools::Polygon aPolygon(4);
     aPolygon.SetPoint(Point(rRect.Left()  + nOffset, rRect.Top()    + nOffset), 0);

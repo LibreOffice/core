@@ -108,7 +108,7 @@ bool SwFieldDlg::Close()
     return true;
 }
 
-void SwFieldDlg::Initialize(SfxChildWinInfo *pInfo)
+void SwFieldDlg::Initialize(SfxChildWinInfo const *pInfo)
 {
     Point aPos;
     Size aSize;

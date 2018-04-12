@@ -441,7 +441,7 @@ static void lcl_copyFlatten(RTFReferenceProperties& rProps, RTFSprms& rStyleAttr
 }
 
 writerfilter::Reference<Properties>::Pointer_t
-RTFDocumentImpl::getProperties(RTFSprms& rAttributes, RTFSprms& rSprms, Id nStyleType)
+RTFDocumentImpl::getProperties(RTFSprms& rAttributes, RTFSprms const& rSprms, Id nStyleType)
 {
     RTFSprms aSprms(rSprms);
     RTFValue::Pointer_t pAbstractList;

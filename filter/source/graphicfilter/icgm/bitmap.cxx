@@ -202,7 +202,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
         rDesc.mxBitmap = vcl::bitmap::CreateFromData(std::move(aBitmap));
 }
 
-std::vector<Color> CGMBitmap::ImplGeneratePalette( CGMBitmapDescriptor& rDesc )
+std::vector<Color> CGMBitmap::ImplGeneratePalette( CGMBitmapDescriptor const & rDesc )
 {
     sal_uInt16 nColors = sal::static_int_cast< sal_uInt16 >(
         1 << rDesc.mnDstBitsPerPixel);

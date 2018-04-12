@@ -97,7 +97,7 @@ void ScPivotLayoutTreeList::InsertEntryForSourceTarget(SvTreeListEntry* pSource,
     InsertEntryForItem(pOriginalItemValue, nPosition);
 }
 
-void ScPivotLayoutTreeList::InsertEntryForItem(ScItemValue* pItemValue, sal_uLong nPosition)
+void ScPivotLayoutTreeList::InsertEntryForItem(const ScItemValue* pItemValue, sal_uLong nPosition)
 {
     ScItemValue *pListItemValue = new ScItemValue(pItemValue);
     maItemValues.push_back(std::unique_ptr<ScItemValue>(pListItemValue));

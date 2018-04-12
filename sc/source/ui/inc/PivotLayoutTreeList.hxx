@@ -29,7 +29,7 @@ public:
 
 protected:
     virtual void InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget) override;
-    void InsertEntryForItem(ScItemValue* pItemValue, sal_uLong nPosition);
+    void InsertEntryForItem(const ScItemValue* pItemValue, sal_uLong nPosition);
 
     virtual void KeyInput(const KeyEvent& rKeyEvent) override;
 };

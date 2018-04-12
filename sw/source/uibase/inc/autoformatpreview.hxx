@@ -83,7 +83,7 @@ private:
     void DrawString(vcl::RenderContext& rRenderContext, size_t nCol, size_t nRow);
     void DrawBackground(vcl::RenderContext& rRenderContext);
 
-    void MakeFonts(vcl::RenderContext& rRenderContext, sal_uInt8 nIndex, vcl::Font& rFont,
+    void MakeFonts(vcl::RenderContext const& rRenderContext, sal_uInt8 nIndex, vcl::Font& rFont,
                    vcl::Font& rCJKFont, vcl::Font& rCTLFont);
 };
 

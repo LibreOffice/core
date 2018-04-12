@@ -20,7 +20,8 @@ using namespace com::sun::star::uno;
 
 namespace apitest
 {
-void testBooleanProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const OUString& name)
+void testBooleanProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
+                         const OUString& name)
 {
     uno::Any aNewValue;
 
@@ -39,7 +40,7 @@ void testBooleanProperty(uno::Reference<beans::XPropertySet>& xPropertySet, cons
     CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), !bPropertyGet, bPropertySet);
 }
 
-void testBooleanReadonlyProperty(uno::Reference<beans::XPropertySet>& xPropertySet,
+void testBooleanReadonlyProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
                                  const OUString& name)
 {
     uno::Any aNewValue;
@@ -58,8 +59,8 @@ void testBooleanReadonlyProperty(uno::Reference<beans::XPropertySet>& xPropertyS
     CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), bPropertyGet, bPropertySet);
 }
 
-void testDoubleProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const OUString& name,
-                        const double& dValue)
+void testDoubleProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
+                        const OUString& name, const double& dValue)
 {
     uno::Any aNewValue;
 
@@ -78,7 +79,7 @@ void testDoubleProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(msgSet.getStr(), dValue, dPropertySet, 0.5);
 }
 
-void testDoubleReadonlyProperty(uno::Reference<beans::XPropertySet>& xPropertySet,
+void testDoubleReadonlyProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
                                 const OUString& name, const double& dValue)
 {
     uno::Any aNewValue;
@@ -97,7 +98,7 @@ void testDoubleReadonlyProperty(uno::Reference<beans::XPropertySet>& xPropertySe
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(msgSet.getStr(), dPropertyGet, dPropertySet, 0.5);
 }
 
-void testLongProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const OUString& name,
+void testLongProperty(uno::Reference<beans::XPropertySet> const& xPropertySet, const OUString& name,
                       const sal_Int32& nValue)
 {
     uno::Any aNewValue;
@@ -117,7 +118,7 @@ void testLongProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const O
     CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), nValue, nPropertySet);
 }
 
-void testLongReadonlyProperty(uno::Reference<beans::XPropertySet>& xPropertySet,
+void testLongReadonlyProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
                               const OUString& name, const sal_Int32& nValue)
 {
     uno::Any aNewValue;
@@ -136,8 +137,8 @@ void testLongReadonlyProperty(uno::Reference<beans::XPropertySet>& xPropertySet,
     CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), nPropertyGet, nPropertySet);
 }
 
-void testShortProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const OUString& name,
-                       const sal_Int16& nValue)
+void testShortProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
+                       const OUString& name, const sal_Int16& nValue)
 {
     uno::Any aNewValue;
 
@@ -156,7 +157,7 @@ void testShortProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), nValue, nPropertySet);
 }
 
-void testShortReadonlyProperty(uno::Reference<beans::XPropertySet>& xPropertySet,
+void testShortReadonlyProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
                                const OUString& name, const sal_Int16& nValue)
 {
     uno::Any aNewValue;
@@ -175,8 +176,8 @@ void testShortReadonlyProperty(uno::Reference<beans::XPropertySet>& xPropertySet
     CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), nPropertyGet, nPropertySet);
 }
 
-void testStringProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const OUString& name,
-                        const OUString& rValue)
+void testStringProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
+                        const OUString& name, const OUString& rValue)
 {
     uno::Any aNewValue;
 
@@ -195,7 +196,7 @@ void testStringProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const
     CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), rValue, sPropertySet);
 }
 
-void testStringReadonlyProperty(uno::Reference<beans::XPropertySet>& xPropertySet,
+void testStringReadonlyProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
                                 const OUString& name, const OUString& rValue)
 {
     uno::Any aNewValue;
