@@ -157,6 +157,24 @@
       "revId": "99a833c9d315749757ae338159cabbc935624afa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_40f3ab73",
+        "filename": "test/source/sheet/functiondescription.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-04-12T07:13:16Z",
+      "side": 1,
+      "message": "I mean the clumsy construction of the msg to pass into CPPUNIT_ASSERT_MESSAGE.  When the test code would be spelled out fully, non-DRY-ly, as\n\n  if (value.Name \u003d\u003d \"Id\") {\n    sal_Int32 n;\n    CPPUNIT_ASSERT(value.Value \u003e\u003e\u003d n);\n  } else if (value.Name \u003d\u003d \"Category\") {\n    sal_Int32 n;\n    CPPUNIT_ASSERT(value.Value \u003e\u003e\u003d n);\n  } else ...\n\nyou wouldn\u0027t even need any messages (as the value.Name is implicit in the location of whichever failing CPPUNIT_ASSERT), and for debugging you can put a breakpoint on exactly (and only) the failure case, etc.\n\nAnd the else branch is not pointing out that one of the five expected values is missing.  It points out that there is an unexpected value.",
+      "parentUuid": "9a30ddce_c0231b04",
+      "revId": "99a833c9d315749757ae338159cabbc935624afa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
