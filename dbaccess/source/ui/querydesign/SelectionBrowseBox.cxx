@@ -1958,10 +1958,10 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
                 {
                     VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "dbaccess/ui/queryfuncmenu.ui", "");
                     VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
-                    aContextMenu->CheckItem(aContextMenu->GetItemId("functions"), m_bVisibleRow[BROW_FUNCTION_ROW]);
-                    aContextMenu->CheckItem(aContextMenu->GetItemId("tablename"), m_bVisibleRow[BROW_TABLE_ROW]);
-                    aContextMenu->CheckItem(aContextMenu->GetItemId("alias"), m_bVisibleRow[BROW_COLUMNALIAS_ROW]);
-                    aContextMenu->CheckItem(aContextMenu->GetItemId("distinct"), static_cast<OQueryController&>(getDesignView()->getController()).isDistinct());
+                    aContextMenu->CheckItem("functions", m_bVisibleRow[BROW_FUNCTION_ROW]);
+                    aContextMenu->CheckItem("tablename", m_bVisibleRow[BROW_TABLE_ROW]);
+                    aContextMenu->CheckItem("alias", m_bVisibleRow[BROW_COLUMNALIAS_ROW]);
+                    aContextMenu->CheckItem("distinct", static_cast<OQueryController&>(getDesignView()->getController()).isDistinct());
 
                     aContextMenu->Execute(this, aMenuPos);
 

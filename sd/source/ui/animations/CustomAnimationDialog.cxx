@@ -637,13 +637,13 @@ void RotationPropertyBox::updateMenu()
     bool bDirection = nValue >= 0;
     nValue = (nValue < 0 ? -nValue : nValue);
 
-    mpMenu->CheckItem(mpMenu->GetItemId("90"), nValue == 90);
-    mpMenu->CheckItem(mpMenu->GetItemId("180"), nValue == 180);
-    mpMenu->CheckItem(mpMenu->GetItemId("360"), nValue == 360);
-    mpMenu->CheckItem(mpMenu->GetItemId("720"), nValue == 720);
+    mpMenu->CheckItem("90", nValue == 90);
+    mpMenu->CheckItem("180", nValue == 180);
+    mpMenu->CheckItem("360", nValue == 360);
+    mpMenu->CheckItem("720", nValue == 720);
 
-    mpMenu->CheckItem(mpMenu->GetItemId("closewise"), bDirection);
-    mpMenu->CheckItem(mpMenu->GetItemId("counterclock"), !bDirection);
+    mpMenu->CheckItem("closewise", bDirection);
+    mpMenu->CheckItem("counterclock", !bDirection);
 }
 
 IMPL_LINK_NOARG(RotationPropertyBox, implModifyHdl, Edit&, void)
@@ -754,14 +754,14 @@ void ScalePropertyBox::updateMenu()
 {
     sal_Int64 nValue = mpMetric->GetValue();
 
-    mpMenu->CheckItem(mpMenu->GetItemId("25"), nValue == 25);
-    mpMenu->CheckItem(mpMenu->GetItemId("50"), nValue == 50);
-    mpMenu->CheckItem(mpMenu->GetItemId("150"), nValue == 150);
-    mpMenu->CheckItem(mpMenu->GetItemId("400"), nValue == 400);
+    mpMenu->CheckItem("25", nValue == 25);
+    mpMenu->CheckItem("50", nValue == 50);
+    mpMenu->CheckItem("150", nValue == 150);
+    mpMenu->CheckItem("400", nValue == 400);
 
-    mpMenu->CheckItem(mpMenu->GetItemId("hori"), mnDirection == 1);
-    mpMenu->CheckItem(mpMenu->GetItemId("vert"), mnDirection == 2);
-    mpMenu->CheckItem(mpMenu->GetItemId("both"), mnDirection == 3);
+    mpMenu->CheckItem("hori", mnDirection == 1);
+    mpMenu->CheckItem("vert", mnDirection == 2);
+    mpMenu->CheckItem("both", mnDirection == 3);
 }
 
 IMPL_LINK_NOARG(ScalePropertyBox, implModifyHdl, Edit&, void)
@@ -928,9 +928,9 @@ FontStylePropertyBox::~FontStylePropertyBox()
 void FontStylePropertyBox::update()
 {
     // update menu
-    mpMenu->CheckItem(mpMenu->GetItemId("bold"), mfFontWeight == awt::FontWeight::BOLD);
-    mpMenu->CheckItem(mpMenu->GetItemId("italic"), meFontSlant == awt::FontSlant_ITALIC);
-    mpMenu->CheckItem(mpMenu->GetItemId("underline"), mnFontUnderline != awt::FontUnderline::NONE );
+    mpMenu->CheckItem("bold", mfFontWeight == awt::FontWeight::BOLD);
+    mpMenu->CheckItem("italic", meFontSlant == awt::FontSlant_ITALIC);
+    mpMenu->CheckItem("underline", mnFontUnderline != awt::FontUnderline::NONE );
 
     // update sample edit
     vcl::Font aFont( mpEdit->GetFont() );

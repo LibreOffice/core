@@ -1930,7 +1930,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
     VclPtr<PopupMenu> pMenu(aBuilder.get_menu("menu"));
 
     // Adding button to display if in Pen  mode
-    pMenu->CheckItem(pMenu->GetItemId("pen"), mbUsePen);
+    pMenu->CheckItem("pen", mbUsePen);
 
     const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
     pMenu->EnableItem(pMenu->GetItemId("next"), mpSlideController->getNextSlideIndex() != -1);
@@ -1996,7 +1996,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
         PopupMenu* pBlankMenu = pMenu->GetPopupMenu(pMenu->GetItemId("screen"));
         if( pBlankMenu )
         {
-            pBlankMenu->CheckItem((mpShowWindow->GetBlankColor() == COL_WHITE) ? pBlankMenu->GetItemId("white") : pBlankMenu->GetItemId("black"));
+            pBlankMenu->CheckItem((mpShowWindow->GetBlankColor() == COL_WHITE) ? "white" : "black");
         }
     }
 
