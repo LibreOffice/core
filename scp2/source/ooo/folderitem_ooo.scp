@@ -65,26 +65,3 @@ FolderItemProperty gid_Fip_Soffice_Desktop_AppID
     Key = "System.AppUserModel.ID";
     Value = "TheDocumentFoundation.LibreOffice.Startcenter";
 End
-
-FolderItem gid_Folderitem_LibreOffice_SafeMode
-    Name = "%PRODUCTNAME (Safe Mode)";
-    ModuleID = gid_Module_Root;
-#ifdef ENABLE_SILENT_MSI
-    FolderID = PREDEFINED_STARTMENU;
-#else
-    FolderID = gid_Folder_Staroffice51;
-#endif
-    FileID = auto_brand_exe_soffice;
-    IconFile = auto_brand_exe_soffice;
-    IconID = 0;
-    WkDir = gid_Brand_Dir_Program;
-    Parameter = "--safe-mode";
-    Styles = (NON_ADVERTISED);
-    ALL_LANG(Tooltip, STR_FI_TOOLTIP_SOFFICE);
-End
-
-FolderItemProperty gid_Fip_LibreOffice_SafeMode
-    ShortcutID = gid_Folderitem_LibreOffice_SafeMode;
-    Key = "System.AppUserModel.ID";
-    Value = "TheDocumentFoundation.LibreOffice.SafeMode";
-End
