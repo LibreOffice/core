@@ -48,7 +48,7 @@
       <object class="GtkRadioMenuItem" id="gear_iconAndText">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="menuassignpage|gear_iconAndText">Icon _and text</property>
+        <property name="label" translatable="yes" context="menuassignpage|gear_iconAndText">_Icon and text</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -56,7 +56,7 @@
       <object class="GtkRadioMenuItem" id="gear_iconOnly">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="menuassignpage|gear_iconOnly">_Icon only</property>
+        <property name="label" translatable="yes" context="menuassignpage|gear_iconOnly">Icon _only</property>
         <property name="use_underline">True</property>
       </object>
     </child>
