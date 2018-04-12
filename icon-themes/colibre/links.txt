@@ -566,7 +566,7 @@ cmd/sc_justifypara.png cmd/sc_alignblock.png
 
 # View
 cmd/sc_sidebarmenu.png cmd/sc_sidebar.png
-cmd/ĺc_sidebarmenu.png cmd/lc_sidebar.png
+cmd/lc_sidebarmenu.png cmd/lc_sidebar.png
 
 # Vertical Text Alignment
 cmd/lc_cellverttop.png cmd/lc_aligntop.png
