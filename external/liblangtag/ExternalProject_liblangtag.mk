@@ -44,7 +44,7 @@ $(call gb_ExternalProject_get_state_target,liblangtag,build):
 			REAL_CC_FLAGS="$(filter -%,$(CC))") \
 		   $(if $(verbose),V=1) \
 		   $(MAKE) \
-                LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,liblangtag)/liblangtag/.libs))' \
+                LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(subst $$,$$$$,$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,liblangtag)/liblangtag/.libs)))' \
 		$(if $(filter MACOSX,$(OS)),\
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl URELIB \
 				$(EXTERNAL_WORKDIR)/liblangtag/.libs/liblangtag.1.dylib \
