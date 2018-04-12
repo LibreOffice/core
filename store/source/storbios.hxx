@@ -120,7 +120,7 @@ private:
     rtl::Reference<ILockBytes>    m_xLockBytes;
     osl::Mutex                    m_aMutex;
 
-    SuperBlockPage *              m_pSuper;
+    std::unique_ptr<SuperBlockPage> m_pSuper;
 
     bool                          m_bWriteable;
 
