@@ -34,11 +34,11 @@ worrying about compatibility.
   <url type="translate">https://hub.libreoffice.org/translate</url>
   <screenshots>
     <screenshot type="default">
-      <image>http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Writer-02-Table-of-Contents-Getting-Started-Guide-4-2.png</image>
+      <image>https://hub.libreoffice.org/screenshots/writer-01.png</image>
       <caption><!-- Describe this screenshot in less than ~10 words --></caption>
     </screenshot>
     <screenshot>
-      <image>http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Writer-03-Technical-Doc-fdo83524.png</image>
+      <image>https://hub.libreoffice.org/screenshots/writer-02.png</image>
       <caption><!-- Describe this screenshot in less than ~10 words --></caption>
     </screenshot>
   </screenshots>

@@ -32,11 +32,11 @@ worrying about compatibility.
   <url type="translate">https://hub.libreoffice.org/translate</url>
   <screenshots>
     <screenshot type="default">
-      <image>http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Draw-02-Tiger-fdo82219.png</image>
+      <image>https://hub.libreoffice.org/screenshots/draw-01.png</image>
       <caption><!-- Describe this screenshot in less than ~10 words --></caption>
     </screenshot>
     <screenshot>
-      <image>http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Draw-03-Square-fdo75097.png</image>
+      <image>https://hub.libreoffice.org/screenshots/draw-02.png</image>
       <caption><!-- Describe this screenshot in less than ~10 words --></caption>
     </screenshot>
   </screenshots>
