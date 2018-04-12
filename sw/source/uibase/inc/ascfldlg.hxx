@@ -30,30 +30,30 @@ class SwAsciiOptions;
 class SvStream;
 class SwDocShell;
 
-class SwAsciiFilterDlg : public SfxModalDialog
+class SwAsciiFilterDlg : public weld::GenericDialogController
 {
-    VclPtr<SvxTextEncodingBox> m_pCharSetLB;
-    VclPtr<FixedText>          m_pFontFT;
-    VclPtr<ListBox>            m_pFontLB;
-    VclPtr<FixedText>          m_pLanguageFT;
-    VclPtr<SvxLanguageBox>     m_pLanguageLB;
-    VclPtr<RadioButton>        m_pCRLF_RB;
-    VclPtr<RadioButton>        m_pCR_RB;
-    VclPtr<RadioButton>        m_pLF_RB;
-    bool                m_bSaveLineStatus;
+    bool m_bSaveLineStatus;
+    OUString m_sExtraData;
 
-    DECL_LINK( CharSetSelHdl, ListBox&, void );
-    DECL_LINK( LineEndHdl, RadioButton&, void );
+    std::unique_ptr<TextEncodingBox> m_xCharSetLB;
+    std::unique_ptr<weld::Label> m_xFontFT;
+    std::unique_ptr<weld::ComboBoxText> m_xFontLB;
+    std::unique_ptr<weld::Label> m_xLanguageFT;
+    std::unique_ptr<LanguageBox>     m_xLanguageLB;
+    std::unique_ptr<weld::RadioButton> m_xCRLF_RB;
+    std::unique_ptr<weld::RadioButton> m_xCR_RB;
+    std::unique_ptr<weld::RadioButton> m_xLF_RB;
+
+    DECL_LINK(CharSetSelHdl, weld::ComboBoxText&, void);
+    DECL_LINK(LineEndHdl, weld::ToggleButton&, void);
     void SetCRLF( LineEnd eEnd );
     LineEnd GetCRLF() const;
 
 public:
     // CTOR:    for import - pStream is the inputstream
     //          for export - pStream must be 0
-    SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
-                        SvStream* pStream );
+    SwAsciiFilterDlg(weld::Window* pParent, SwDocShell& rDocSh, SvStream* pStream);
     virtual ~SwAsciiFilterDlg() override;
-    virtual void dispose() override;
 
     void FillOptions( SwAsciiOptions& rOptions );
 };
