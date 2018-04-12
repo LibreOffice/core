@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_16d3b939",
+        "filename": "connectivity/source/parse/sqlnode.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1001240
+      },
+      "writtenOn": "2018-04-12T19:00:42Z",
+      "side": 1,
+      "message": "We cannot use dsntypes.hxx from connectivity",
+      "parentUuid": "9a30ddce_1b1202b5",
+      "range": {
+        "startLine": 355,
+        "startChar": 9,
+        "endLine": 355,
+        "endChar": 44
+      },
+      "revId": "94e69abc556c005274666aa90487512fb045b671",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_5b839acc",
         "filename": "dbaccess/source/core/api/SingleSelectQueryComposer.cxx",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2018-04-12T12:20:39Z",
       "side": 1,
       "message": "It seems to me that the change to OSQLParseNode::parseNodeToExecutableStatement replaces this one, and that this block of code should be removed.\n\nAlso, it seems to me that if it were to stay, it should use parseNoteTo*Executable*Statement, not parseNodeToStr.",
+      "range": {
+        "startLine": 1471,
+        "startChar": 0,
+        "endLine": 1490,
+        "endChar": 9
+      },
+      "revId": "94e69abc556c005274666aa90487512fb045b671",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_36d8bd53",
+        "filename": "dbaccess/source/core/api/SingleSelectQueryComposer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1001240
+      },
+      "writtenOn": "2018-04-12T19:00:42Z",
+      "side": 1,
+      "message": "That was accidental :)",
+      "parentUuid": "9a30ddce_5b839acc",
       "range": {
         "startLine": 1471,
         "startChar": 0,
