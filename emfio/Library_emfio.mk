@@ -47,6 +47,7 @@ $(eval $(call gb_Library_use_libraries,emfio,\
     sal \
     comphelper \
     tl \
+    salhelper \
     sax \
     vcl \
     svt \

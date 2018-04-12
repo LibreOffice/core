@@ -153,10 +153,6 @@ READ AND WRITE FUNCTIONS
 INTROSPECTIVE FUNCTIONS
 
 - GetType
-- GetRefCount                               - reference counter
-- ResetRefCount                             - reset to 1
-- Duplicate                                 - increment refcounter
-- Delete                                    - delete if all instances no longer being referenced
 
 
 

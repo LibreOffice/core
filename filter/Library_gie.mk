@@ -43,6 +43,7 @@ $(eval $(call gb_Library_use_libraries,gie,\
     tk \
     cppu \
     sal \
+    salhelper \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,gie,\
