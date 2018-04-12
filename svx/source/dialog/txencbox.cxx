@@ -223,4 +223,154 @@ void SvxTextEncodingBox::SelectTextEncoding( const rtl_TextEncoding nEnc )
         SelectEntryPos( nAt );
 }
 
+TextEncodingBox::TextEncodingBox(weld::ComboBoxText* pControl)
+    : m_xControl(pControl)
+{
+}
+
+TextEncodingBox::~TextEncodingBox()
+{
+}
+
+void TextEncodingBox::FillFromTextEncodingTable(
+        bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
+        sal_uInt32 nButIncludeInfoFlags )
+{
+    rtl_TextEncodingInfo aInfo;
+    aInfo.StructSize = sizeof(rtl_TextEncodingInfo);
+    const sal_uInt32 nCount = SAL_N_ELEMENTS(RID_SVXSTR_TEXTENCODING_TABLE);
+    for (sal_uInt32 j = 0; j < nCount; ++j)
+    {
+        bool bInsert = true;
+        rtl_TextEncoding nEnc = RID_SVXSTR_TEXTENCODING_TABLE[j].second;
+        if ( nExcludeInfoFlags )
+        {
+            if ( !rtl_getTextEncodingInfo( nEnc, &aInfo ) )
+                bInsert = false;
+            else
+            {
+                if ( (aInfo.Flags & nExcludeInfoFlags) == 0 )
+                {
+                    if ( (nExcludeInfoFlags & RTL_TEXTENCODING_INFO_UNICODE) &&
+                            ((nEnc == RTL_TEXTENCODING_UCS2) ||
+                            nEnc == RTL_TEXTENCODING_UCS4) )
+                        bInsert = false;    // InfoFlags don't work for Unicode :-(
+                }
+                else if ( (aInfo.Flags & nButIncludeInfoFlags) == 0 )
+                    bInsert = false;
+            }
+        }
+        if ( bInsert )
+        {
+            if ( bExcludeImportSubsets )
+            {
+                switch ( nEnc )
+                {
+                    // subsets of RTL_TEXTENCODING_GB_18030
+                    case RTL_TEXTENCODING_GB_2312 :
+                    case RTL_TEXTENCODING_GBK :
+                    case RTL_TEXTENCODING_MS_936 :
+                        bInsert = false;
+                    break;
+                }
+            }
+            if ( bInsert )
+                InsertTextEncoding(nEnc, SvxResId(RID_SVXSTR_TEXTENCODING_TABLE[j].first));
+        }
+    }
+}
+
+
+void TextEncodingBox::FillFromDbTextEncodingMap(
+        bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags )
+{
+#if !HAVE_FEATURE_DBCONNECTIVITY
+    (void)bExcludeImportSubsets;
+    (void)nExcludeInfoFlags;
+#else
+    rtl_TextEncodingInfo aInfo;
+    aInfo.StructSize = sizeof(rtl_TextEncodingInfo);
+    ::std::vector< rtl_TextEncoding > aEncs;
+    sal_Int32 nCount = svxform::charset_helper::getSupportedTextEncodings( aEncs );
+    for ( sal_Int32 j=0; j<nCount; j++ )
+    {
+        bool bInsert = true;
+        rtl_TextEncoding nEnc = rtl_TextEncoding( aEncs[j] );
+        if ( nExcludeInfoFlags )
+        {
+            if ( !rtl_getTextEncodingInfo( nEnc, &aInfo ) )
+                bInsert = false;
+            else
+            {
+                if ( (aInfo.Flags & nExcludeInfoFlags) == 0 )
+                {
+                    if ( (nExcludeInfoFlags & RTL_TEXTENCODING_INFO_UNICODE) &&
+                            ((nEnc == RTL_TEXTENCODING_UCS2) ||
+                            nEnc == RTL_TEXTENCODING_UCS4) )
+                        bInsert = false;    // InfoFlags don't work for Unicode :-(
+                }
+                else
+                    bInsert = false;
+            }
+        }
+        if ( bInsert )
+        {
+            if ( bExcludeImportSubsets )
+            {
+                switch ( nEnc )
+                {
+                    // subsets of RTL_TEXTENCODING_GB_18030
+                    case RTL_TEXTENCODING_GB_2312 :
+                    case RTL_TEXTENCODING_GBK :
+                    case RTL_TEXTENCODING_MS_936 :
+                        bInsert = false;
+                    break;
+                }
+            }
+            // CharsetMap offers a RTL_TEXTENCODING_DONTKNOW for internal use,
+            // makes no sense here and would result in an empty string as list
+            // entry.
+            if ( bInsert && nEnc != RTL_TEXTENCODING_DONTKNOW )
+                InsertTextEncoding( nEnc );
+        }
+    }
+#endif
+}
+
+void TextEncodingBox::FillWithMimeAndSelectBest()
+{
+    FillFromTextEncodingTable( false, 0xffffffff, RTL_TEXTENCODING_INFO_MIME );
+    rtl_TextEncoding nEnc = SvtSysLocale::GetBestMimeEncoding();
+    SelectTextEncoding( nEnc );
+}
+
+void TextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
+            const OUString& rEntry )
+{
+    m_xControl->append(OUString::number(nEnc), rEntry);
+}
+
+void TextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc )
+{
+    const OUString& rEntry = SvxTextEncodingTable::GetTextString(nEnc);
+    if (!rEntry.isEmpty())
+        InsertTextEncoding( nEnc, rEntry );
+    else
+        SAL_WARN( "svx.dialog", "TextEncodingBox::InsertTextEncoding: no resource string for text encoding: " << static_cast<sal_Int32>( nEnc ) );
+}
+
+rtl_TextEncoding TextEncodingBox::GetSelectTextEncoding() const
+{
+    OUString sId(m_xControl->get_active_id());
+    if (!sId.isEmpty())
+        return rtl_TextEncoding(sId.toInt32());
+    else
+        return RTL_TEXTENCODING_DONTKNOW;
+}
+
+void TextEncodingBox::SelectTextEncoding( const rtl_TextEncoding nEnc )
+{
+    m_xControl->set_active_id(OUString::number(nEnc));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

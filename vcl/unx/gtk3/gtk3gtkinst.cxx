@@ -4281,7 +4281,7 @@ weld::Window* GtkInstance::GetFrameWeld(const css::uno::Reference<css::awt::XWin
 {
     if (SalGtkXWindow* pGtkXWindow = dynamic_cast<SalGtkXWindow*>(rWindow.get()))
         return pGtkXWindow->getFrameWeld();
-    return nullptr;
+    return SalInstance::GetFrameWeld(rWindow);
 }
 
 weld::Window* GtkSalFrame::GetFrameWeld() const

@@ -30,6 +30,7 @@
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <vcl/svapp.hxx>
 
@@ -178,6 +179,7 @@ handleNoSuchFilterRequest_(
 
 void
 handleFilterOptionsRequest_(
+    uno::Reference<awt::XWindow> const & rWindow,
     uno::Reference< uno::XComponentContext > const & xContext,
     document::FilterOptionsRequest const & rRequest,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
@@ -226,11 +228,17 @@ handleFilterOptionsRequest_(
                         aProps[nProperty].Value >>= aServiceName;
                         if( !aServiceName.isEmpty() )
                         {
+                            uno::Sequence<uno::Any> aDialogArgs(comphelper::InitAnyPropertySequence(
+                            {
+                                {"ParentWindow", uno::Any(rWindow)},
+                            }));
+
                             uno::Reference<
                                 ui::dialogs::XExecutableDialog > xFilterDialog(
-                                    xContext->getServiceManager()->createInstanceWithContext(
-                                        aServiceName, xContext ),
+                                    xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                                        aServiceName, aDialogArgs, xContext ),
                                     uno::UNO_QUERY );
+
                             uno::Reference< beans::XPropertyAccess >
                                 xFilterProperties( xFilterDialog,
                                                    uno::UNO_QUERY );
@@ -302,7 +310,8 @@ UUIInteractionHelper::handleFilterOptionsRequest(
     document::FilterOptionsRequest aFilterOptionsRequest;
     if (aAnyRequest >>= aFilterOptionsRequest)
     {
-        handleFilterOptionsRequest_(m_xContext,
+        handleFilterOptionsRequest_(getParentXWindow(),
+                                    m_xContext,
                                     aFilterOptionsRequest,
                                     rRequest->getContinuations());
         return true;
