@@ -41,6 +41,7 @@
 #include <cuicharmap.hxx>
 #include <cuihyperdlg.hxx>
 #include <cfgutil.hxx>
+#include <SignatureLineDialog.hxx>
 #include <SignSignatureLineDialog.hxx>
 #include <SpellDialog.hxx>
 #include <zoom.hxx>

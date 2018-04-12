@@ -83,7 +83,6 @@
 #include <mailconfigpage.hxx>
 #include <uiborder.hxx>
 #include <mmresultdialogs.hxx>
-#include <svx/SignatureLineDialog.hxx>
 
 using namespace ::com::sun::star;
 using namespace css::frame;
@@ -119,10 +118,6 @@ short AbstractGenericDialog_Impl::Execute()
     return m_xDlg->run();
 }
 short AbstractSwSortDlg_Impl::Execute()
-{
-    return m_xDlg->execute();
-}
-short AbstractSignatureLineDialog_Impl::Execute()
 {
     return m_xDlg->execute();
 }
@@ -747,14 +742,6 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwCaptionDialog ( 
 {
     VclPtr<Dialog> pDlg = VclPtr<SwCaptionDialog>::Create( pParent, rV );
     return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
-}
-
-VclPtr<VclAbstractDialog>
-SwAbstractDialogFactory_Impl::CreateSignatureLineDialog(SwView& rV, Reference<XModel> xModel,
-                                                        bool bEditExisting)
-{
-    return VclPtr<AbstractSignatureLineDialog_Impl>::Create(
-        new SignatureLineDialog(rV.GetFrameWeld(), xModel, bEditExisting));
 }
 
 VclPtr<AbstractSwInsertDBColAutoPilot> SwAbstractDialogFactory_Impl::CreateSwInsertDBColAutoPilot( SwView& rView,
