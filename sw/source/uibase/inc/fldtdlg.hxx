@@ -53,7 +53,7 @@ public:
     DECL_LINK(OKHdl, Button*, void);
     DECL_LINK(CancelHdl, Button*, void);
 
-    void                Initialize(SfxChildWinInfo *pInfo);
+    void                Initialize(SfxChildWinInfo const *pInfo);
     void                ReInitDlg();
     void                EnableInsert(bool bEnable);
     void                InsertHdl();

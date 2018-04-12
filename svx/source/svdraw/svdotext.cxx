@@ -536,7 +536,7 @@ void SdrTextObj::AdaptTextMinSize()
     SetObjectItemSet(aSet);
 }
 
-void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, tools::Rectangle& rAnchorRect, bool bLineWidth ) const
+void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, tools::Rectangle const & rAnchorRect, bool bLineWidth ) const
 {
     basegfx::B2DPolyPolygon aXorPolyPolygon(TakeXorPoly());
     basegfx::B2DPolyPolygon* pContourPolyPolygon = nullptr;

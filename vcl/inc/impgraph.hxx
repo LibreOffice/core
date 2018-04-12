@@ -44,7 +44,7 @@ private:
     BitmapChecksum  mnID4;
 
 public:
-    GraphicID(ImpGraphic& rGraphic);
+    GraphicID(ImpGraphic const & rGraphic);
 
     bool operator==(const GraphicID& rID) const
     {

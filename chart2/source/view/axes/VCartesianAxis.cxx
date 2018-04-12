@@ -74,7 +74,7 @@ VCartesianAxis::~VCartesianAxis()
     m_pPosHelper = nullptr;
 }
 
-void lcl_ResizeTextShapeToFitAvailableSpace( Reference< drawing::XShape >& xShape2DText,
+void lcl_ResizeTextShapeToFitAvailableSpace( Reference< drawing::XShape > const & xShape2DText,
                                              const AxisLabelProperties& rAxisLabelProperties,
                                              const OUString& rLabel,
                                              const tNameSequence& rPropNames,

@@ -97,7 +97,7 @@ public:
     SvLinkSource_Entry_Impl *operator[](size_t idx) const { return mvData[idx].get(); }
     void push_back(SvLinkSource_Entry_Impl* rData) { mvData.emplace_back(rData); }
 
-    void DeleteAndDestroy(SvLinkSource_Entry_Impl* p)
+    void DeleteAndDestroy(SvLinkSource_Entry_Impl const * p)
     {
         for (auto it = mvData.begin(); it != mvData.end(); ++it)
             if (it->get() == p)
@@ -118,7 +118,7 @@ public:
     SvLinkSource_Entry_Impl* Curr()
                             { return nPos < aArr.size() ? aArr[ nPos ] : nullptr; }
     SvLinkSource_Entry_Impl* Next();
-    bool IsValidCurrValue( SvLinkSource_Entry_Impl* pEntry );
+    bool IsValidCurrValue( SvLinkSource_Entry_Impl const * pEntry );
 };
 
 SvLinkSource_EntryIter_Impl::SvLinkSource_EntryIter_Impl(
@@ -129,7 +129,7 @@ SvLinkSource_EntryIter_Impl::SvLinkSource_EntryIter_Impl(
         aArr.push_back(i.get());
 }
 
-bool SvLinkSource_EntryIter_Impl::IsValidCurrValue( SvLinkSource_Entry_Impl* pEntry )
+bool SvLinkSource_EntryIter_Impl::IsValidCurrValue( SvLinkSource_Entry_Impl const * pEntry )
 {
     if ( nPos >= aArr.size() )
         return false;

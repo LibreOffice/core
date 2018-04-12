@@ -101,7 +101,7 @@ Size GraphicReader::GetPreviewSize() const
     return aSize;
 }
 
-GraphicID::GraphicID(ImpGraphic & rGraphic)
+GraphicID::GraphicID(ImpGraphic const & rGraphic)
 {
     mnID1 = static_cast<sal_uLong>(rGraphic.ImplGetType()) << 28;
     mnID2 = mnID3 = mnID4 = 0;

@@ -559,7 +559,7 @@ void ScTable::CopyCellToDocument(SCCOL nSrcCol, SCROW nSrcRow, SCCOL nDestCol, S
 
 namespace {
 
-bool CheckAndDeduplicateCondFormat(ScDocument* pDocument, ScConditionalFormat* pOldFormat, ScConditionalFormat* pNewFormat, SCTAB nTab)
+bool CheckAndDeduplicateCondFormat(ScDocument* pDocument, ScConditionalFormat* pOldFormat, const ScConditionalFormat* pNewFormat, SCTAB nTab)
 {
     if (!pOldFormat)
         return false;

@@ -760,7 +760,7 @@ void TabControl::ImplShowFocus()
     ShowFocus( aRect );
 }
 
-void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* pItem, const tools::Rectangle& rCurRect,
+void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem const * pItem, const tools::Rectangle& rCurRect,
                               bool bFirstInGroup, bool bLastInGroup )
 {
     if (pItem->maRect.IsEmpty())

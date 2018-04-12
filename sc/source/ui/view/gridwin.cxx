@@ -1794,7 +1794,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     }
 }
 
-void lcl_executeList( ScViewData* pViewData, ScModule* pScMod, ScMarkData& rMark )
+void lcl_executeList( const ScViewData* pViewData, ScModule* pScMod, const ScMarkData& rMark )
 {
     pViewData->GetView()->SelectionChanged();
 

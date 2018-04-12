@@ -54,7 +54,7 @@ enum class MessageBoxStyle {
 
 DialogMask
 executeErrorDialog(
-    vcl::Window * pParent,
+    vcl::Window const * pParent,
     task::InteractionClassification eClassification,
     OUString const & rContext,
     OUString const & rMessage,

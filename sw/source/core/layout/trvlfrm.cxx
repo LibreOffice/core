@@ -1140,7 +1140,7 @@ static sal_uInt64 CalcDiff(const Point &rPt1, const Point &rPt2)
  * This will suit the purpose that the ContentFrame which lies in the "right" page part will be
  * accepted instead of one which doesn't lie there although his distance to the point is shorter.
  */
-static const SwLayoutFrame* lcl_Inside( const SwContentFrame *pCnt, Point& rPt )
+static const SwLayoutFrame* lcl_Inside( const SwContentFrame *pCnt, Point const & rPt )
 {
     const SwLayoutFrame* pUp = pCnt->GetUpper();
     while( pUp )

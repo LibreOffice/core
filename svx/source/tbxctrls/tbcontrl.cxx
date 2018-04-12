@@ -174,7 +174,7 @@ private:
     static Color    TestColorsVisible(const Color &FontCol, const Color &BackCol);
     static void     UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString &rStyleName);
     void            SetupEntry(vcl::RenderContext& rRenderContext, vcl::Window* pParent, sal_Int32 nItem, const tools::Rectangle& rRect, const OUString& rStyleName, bool bIsNotSelected);
-    static bool     AdjustFontForItemHeight(OutputDevice* pDevice, tools::Rectangle& rTextRect, long nHeight);
+    static bool     AdjustFontForItemHeight(OutputDevice* pDevice, tools::Rectangle const & rTextRect, long nHeight);
     void            SetOptimalSize();
     DECL_LINK( MenuSelectHdl, Menu *, bool );
 };
@@ -602,7 +602,7 @@ void SvxStyleBox_Impl::StateChanged( StateChangedType nStateChange )
     }
 }
 
-bool SvxStyleBox_Impl::AdjustFontForItemHeight(OutputDevice* pDevice, tools::Rectangle& rTextRect, long nHeight)
+bool SvxStyleBox_Impl::AdjustFontForItemHeight(OutputDevice* pDevice, tools::Rectangle const & rTextRect, long nHeight)
 {
     if (rTextRect.Bottom() > nHeight)
     {

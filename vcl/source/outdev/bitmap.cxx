@@ -720,8 +720,8 @@ struct LinearScaleContext
     std::unique_ptr<long[]> mpMapXOffset;
     std::unique_ptr<long[]> mpMapYOffset;
 
-    LinearScaleContext(tools::Rectangle const & aDstRect, tools::Rectangle& aBitmapRect,
-                 Size& aOutSize, long nOffX, long nOffY)
+    LinearScaleContext(tools::Rectangle const & aDstRect, tools::Rectangle const & aBitmapRect,
+                 Size const & aOutSize, long nOffX, long nOffY)
 
         : mpMapX(new long[aDstRect.GetWidth()])
         , mpMapY(new long[aDstRect.GetHeight()])
@@ -884,8 +884,8 @@ struct TradScaleContext
     std::unique_ptr<long[]> mpMapX;
     std::unique_ptr<long[]> mpMapY;
 
-    TradScaleContext(tools::Rectangle const & aDstRect, tools::Rectangle& aBitmapRect,
-                 Size& aOutSize, long nOffX, long nOffY)
+    TradScaleContext(tools::Rectangle const & aDstRect, tools::Rectangle const & aBitmapRect,
+                 Size const & aOutSize, long nOffX, long nOffY)
 
         : mpMapX(new long[aDstRect.GetWidth()])
         , mpMapY(new long[aDstRect.GetHeight()])
@@ -927,7 +927,8 @@ private:
 
 } // end anonymous namespace
 
-void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap, const AlphaMask& rAlpha, tools::Rectangle aDstRect, tools::Rectangle aBmpRect, Size& aOutSize, Point& aOutPoint)
+void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
+    const AlphaMask& rAlpha, tools::Rectangle aDstRect, tools::Rectangle aBmpRect, Size const & aOutSize, Point const & aOutPoint)
 {
     assert(!is_double_buffered_window());
 

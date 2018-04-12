@@ -45,7 +45,7 @@ public:
      */
     void seek(sal_Int32 nPos);
 
-    void setInputStream(css::uno::Reference<css::io::XInputStream>& rStream);
+    void setInputStream(css::uno::Reference<css::io::XInputStream> const& rStream);
     SvStream* getInputStream() const;
 };
 
