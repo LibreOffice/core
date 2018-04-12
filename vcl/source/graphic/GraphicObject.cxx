@@ -315,10 +315,16 @@ GraphicObject::GraphicObject(const Graphic& rGraphic)
 GraphicObject::GraphicObject(const GraphicObject& rGraphicObj)
     : maGraphic(rGraphicObj.GetGraphic())
     , maAttr(rGraphicObj.maAttr)
+    , maPrefSize(rGraphicObj.maPrefSize)
     , maPrefMapMode(rGraphicObj.maPrefMapMode)
+    , mnSizeBytes(rGraphicObj.mnSizeBytes)
+    , meType(rGraphicObj.meType)
     , maUserData(rGraphicObj.maUserData)
+    , mnAnimationLoopCount(rGraphicObj.mnAnimationLoopCount)
+    , mbTransparent(rGraphicObj.mbTransparent)
+    , mbAnimated(rGraphicObj.mbAnimated)
+    , mbEPS(rGraphicObj.mbEPS)
 {
-    ImplAssignGraphicData();
 }
 
 GraphicObject::~GraphicObject()
