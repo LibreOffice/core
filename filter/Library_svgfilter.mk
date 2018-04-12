@@ -69,9 +69,7 @@ $(eval $(call gb_Library_use_externals,svgfilter,\
 
 $(eval $(call gb_Library_add_exception_objects,svgfilter,\
 	filter/source/svg/b2dellipse \
-	filter/source/svg/impsvgdialog \
 	filter/source/svg/parserfragments \
-	filter/source/svg/svgdialog \
 	filter/source/svg/svgfilter \
 	filter/source/svg/svgimport \
 	filter/source/svg/svgreader \

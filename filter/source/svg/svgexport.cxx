@@ -21,7 +21,6 @@
 #include "svgfontexport.hxx"
 #include "svgfilter.hxx"
 #include <svgscript.hxx>
-#include "impsvgdialog.hxx"
 
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
@@ -66,6 +65,13 @@ using namespace ::xmloff::token;
 // - ooo elements and attributes -
 
 #define NSPREFIX "ooo:"
+
+#define SVG_PROP_TINYPROFILE                "TinyMode"
+#define SVG_PROP_DTDSTRING                  "DTDString"
+#define SVG_PROP_EMBEDFONTS                 "EmbedFonts"
+#define SVG_PROP_NATIVEDECORATION           "UseNativeTextDecoration"
+#define SVG_PROP_OPACITY                    "Opacity"
+#define SVG_PROP_POSITIONED_CHARACTERS      "UsePositionedCharacters"
 
 // ooo xml elements
 static const char    aOOOElemTextField[] = NSPREFIX "text_field";
