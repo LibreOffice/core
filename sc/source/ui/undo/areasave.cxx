@@ -146,9 +146,9 @@ void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc )
     }
 }
 
-ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocument* pDoc )
+std::unique_ptr<ScAreaLinkSaveCollection> ScAreaLinkSaveCollection::CreateFromDoc( const ScDocument* pDoc )
 {
-    ScAreaLinkSaveCollection* pColl = nullptr;
+    std::unique_ptr<ScAreaLinkSaveCollection> pColl;
 
     sfx2::LinkManager* pLinkManager = const_cast<ScDocument*>(pDoc)->GetLinkManager();
     if (pLinkManager)
@@ -161,7 +161,7 @@ ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocum
             if (dynamic_cast<const ScAreaLink*>( pBase) != nullptr)
             {
                 if (!pColl)
-                    pColl = new ScAreaLinkSaveCollection;
+                    pColl.reset(new ScAreaLinkSaveCollection);
 
                 pColl->push_back( ScAreaLinkSaver( *static_cast<ScAreaLink*>(pBase ) ) );
             }

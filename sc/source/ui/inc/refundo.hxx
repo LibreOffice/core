@@ -35,13 +35,13 @@ class ScUnoRefList;
 class ScRefUndoData
 {
 private:
-    ScDBCollection*             pDBCollection;
-    ScRangeName*                pRangeName;
-    ScPrintRangeSaver*          pPrintRanges;
-    ScDPCollection*             pDPCollection;
-    ScDetOpList*                pDetOpList;
-    ScChartListenerCollection*  pChartListenerCollection;
-    ScAreaLinkSaveCollection*   pAreaLinks;
+    std::unique_ptr<ScDBCollection>             pDBCollection;
+    std::unique_ptr<ScRangeName>                pRangeName;
+    std::unique_ptr<ScPrintRangeSaver>          pPrintRanges;
+    std::unique_ptr<ScDPCollection>             pDPCollection;
+    std::unique_ptr<ScDetOpList>                pDetOpList;
+    std::unique_ptr<ScChartListenerCollection>  pChartListenerCollection;
+    std::unique_ptr<ScAreaLinkSaveCollection>   pAreaLinks;
     std::unique_ptr<ScUnoRefList> pUnoRefs;
 
 public:
