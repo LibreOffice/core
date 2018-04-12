@@ -175,7 +175,7 @@ void AccessibleRelationSet::contents_flows_to_and_from()
     css::uno::Reference<css::accessibility::XAccessibleRelationSet> set2
         = oObj2->getAccessibleRelationSet();
 
-    sal_Int16 relationtypes[2];
+    sal_Int16 relationtypes[2] = { -1, -1 };
     css::uno::Reference<css::accessibility::XAccessibleText> atargets[2];
 
     if (set2.is())
