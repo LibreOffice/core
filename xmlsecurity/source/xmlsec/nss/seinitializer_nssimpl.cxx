@@ -108,29 +108,10 @@ void SAL_CALL SEInitializer_NssImpl::freeSecurityContext( const uno::Reference< 
     //NSS_Shutdown();
 }
 
-OUString SEInitializer_NssImpl_getImplementationName ()
-{
-    return OUString ("com.sun.star.xml.security.bridge.xmlsec.SEInitializer_NssImpl" );
-}
-
-uno::Sequence< OUString > SEInitializer_NssImpl_getSupportedServiceNames(  )
-{
-    uno::Sequence < OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] =  "com.sun.star.xml.crypto.SEInitializer";
-    pArray[1] =  NSS_SERVICE_NAME;
-    return aRet;
-}
-
-uno::Reference< uno::XInterface > SEInitializer_NssImpl_createInstance( const uno::Reference< lang::XMultiServiceFactory > & rxMSF)
-{
-    return static_cast<cppu::OWeakObject*>(new SEInitializer_NssImpl(comphelper::getComponentContext(rxMSF)));
-}
-
 /* XServiceInfo */
 OUString SAL_CALL SEInitializer_NssImpl::getImplementationName(  )
 {
-    return SEInitializer_NssImpl_getImplementationName();
+    return OUString("com.sun.star.xml.crypto.SEInitializer");
 }
 sal_Bool SAL_CALL SEInitializer_NssImpl::supportsService( const OUString& rServiceName )
 {
@@ -138,7 +119,46 @@ sal_Bool SAL_CALL SEInitializer_NssImpl::supportsService( const OUString& rServi
 }
 uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl::getSupportedServiceNames(  )
 {
-    return SEInitializer_NssImpl_getSupportedServiceNames();
+    uno::Sequence<OUString> seqServiceNames{ "com.sun.star.xml.crypto.SEInitializer" };
+    return seqServiceNames;
+}
+
+class NSSInitializer_NssImpl : public SEInitializer_NssImpl
+{
+public:
+    explicit NSSInitializer_NssImpl(const uno::Reference<uno::XComponentContext>& xContext);
+    OUString SAL_CALL getImplementationName() override;
+    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+};
+
+NSSInitializer_NssImpl::NSSInitializer_NssImpl(const uno::Reference<uno::XComponentContext>& xContext)
+    : SEInitializer_NssImpl(xContext)
+{
+}
+
+OUString NSSInitializer_NssImpl::getImplementationName()
+{
+    return OUString("com.sun.star.xml.crypto.NSSInitializer");
+}
+
+uno::Sequence<OUString> SAL_CALL NSSInitializer_NssImpl::getSupportedServiceNames()
+{
+    uno::Sequence<OUString> seqServiceNames{ "com.sun.star.xml.crypto.NSSInitializer" };
+    return seqServiceNames;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_xml_crypto_NSSInitializer_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new NSSInitializer_NssImpl(pCtx));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_xml_crypto_SEInitializer_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new SEInitializer_NssImpl(pCtx));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
