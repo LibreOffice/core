@@ -591,10 +591,9 @@ storeError OStorePageBIOS::initialize_Impl (
     if (eAccessMode != storeAccessMode::Create)
     {
         // Load SuperBlock page.
-        if ((m_pSuper = new SuperBlockPage()) == nullptr)
-            return store_E_OutOfMemory;
+        m_pSuper.reset(new SuperBlockPage());
 
-        eErrCode = read (0, m_pSuper, SuperBlockPage::theSize);
+        eErrCode = read (0, m_pSuper.get(), SuperBlockPage::theSize);
         if (eErrCode == store_E_None)
         {
             // Verify SuperBlock page (with repair).
@@ -630,8 +629,7 @@ storeError OStorePageBIOS::initialize_Impl (
         rnPageSize = ((rnPageSize + STORE_MINIMUM_PAGESIZE - 1) & ~(STORE_MINIMUM_PAGESIZE - 1));
 
         // Create initial page (w/ SuperBlock).
-        if ((m_pSuper = new(rnPageSize) SuperBlockPage(rnPageSize)) == nullptr)
-            return store_E_OutOfMemory;
+        m_pSuper.reset(new(rnPageSize) SuperBlockPage(rnPageSize));
         eErrCode = m_pSuper->save (*this, rnPageSize);
     }
     if (eErrCode == store_E_None)
@@ -670,8 +668,7 @@ void OStorePageBIOS::cleanup_Impl()
     }
 
     // Release SuperBlock page.
-    delete m_pSuper;
-    m_pSuper = nullptr;
+    m_pSuper.reset();
 
     // Release PageCache.
     m_xCache.clear();
