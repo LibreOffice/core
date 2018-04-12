@@ -167,8 +167,6 @@ void SAL_CALL BaseContainerControl::dispose()
     // remove controls
     Sequence< Reference< XControl > >   seqCtrls    =   getControls();
 
-    for ( auto & i : maControlInfoList )
-        delete i;
     maControlInfoList.clear();
 
     for ( Reference< XControl > const & control : seqCtrls )
