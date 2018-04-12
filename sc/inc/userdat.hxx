@@ -60,7 +60,7 @@ public:
     };
 
 private:
-     virtual ScDrawObjData* Clone( SdrObject* pObj ) const override;
+     virtual std::unique_ptr<SdrObjUserData> Clone( SdrObject* pObj ) const override;
 
     // Stores the last cell rect this shape was anchored to.
     // Needed when the cell is resized to resize the image accordingly.
@@ -78,7 +78,7 @@ public:
                     ScIMapInfo( const ScIMapInfo& rIMapInfo );
     virtual         ~ScIMapInfo() override;
 
-    virtual SdrObjUserData* Clone( SdrObject* pObj ) const override;
+    virtual std::unique_ptr<SdrObjUserData> Clone( SdrObject* pObj ) const override;
 
     void    SetImageMap( const ImageMap& rIMap )    { aImageMap = rIMap; }
     const ImageMap& GetImageMap() const             { return aImageMap; }
@@ -90,7 +90,7 @@ public:
                     ScMacroInfo();
     virtual         ~ScMacroInfo() override;
 
-    virtual SdrObjUserData* Clone( SdrObject* pObj ) const override;
+    virtual std::unique_ptr<SdrObjUserData> Clone( SdrObject* pObj ) const override;
 
     void            SetMacro( const OUString& rMacro ) { maMacro = rMacro; }
     const OUString& GetMacro() const { return maMacro; }

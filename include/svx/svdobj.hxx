@@ -213,7 +213,7 @@ public:
     SdrObjUserData(const SdrObjUserData& rData);
     virtual ~SdrObjUserData();
 
-    virtual SdrObjUserData* Clone(SdrObject* pObj1) const = 0; // #i71039# NULL -> 0
+    virtual std::unique_ptr<SdrObjUserData> Clone(SdrObject* pObj1) const = 0; // #i71039# NULL -> 0
     SdrInventor GetInventor() const { return nInventor;}
     sal_uInt16 GetId() const { return nIdentifier;}
 };
@@ -803,7 +803,7 @@ public:
     sal_uInt16 GetUserDataCount() const;
     SdrObjUserData* GetUserData(sal_uInt16 nNum) const;
 
-    void AppendUserData(SdrObjUserData* pData);
+    void AppendUserData(std::unique_ptr<SdrObjUserData> pData);
 
     // removes the record from the list and performs delete (FreeMem+Dtor).
     void DeleteUserData(sal_uInt16 nNum);

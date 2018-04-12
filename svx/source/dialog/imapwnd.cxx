@@ -290,7 +290,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
 
         pSdrObj->SetMergedItemSetAndBroadcast(aSet);
 
-        pSdrObj->AppendUserData( new IMapUserData( pCloneIMapObj ) );
+        pSdrObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new IMapUserData( pCloneIMapObj )) );
         pSdrObj->SetUserCall( GetSdrUserCall() );
     }
 
@@ -318,7 +318,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
             SdrRectObj*    pRectObj = const_cast<SdrRectObj*>(static_cast<const SdrRectObj*>(&rObj));
             IMapRectangleObject* pObj = new IMapRectangleObject( pRectObj->GetLogicRect(), "", "", "", "", "", true, false );
 
-            pRectObj->AppendUserData( new IMapUserData( IMapObjectPtr(pObj) ) );
+            pRectObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new IMapUserData( IMapObjectPtr(pObj) )) );
         }
         break;
 
@@ -331,7 +331,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
 
             IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, "", "", "", "", "", true, false );
             pObj->SetExtraEllipse( aPoly.GetBoundRect() );
-            pCircObj->AppendUserData( new IMapUserData( IMapObjectPtr(pObj) ) );
+            pCircObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new IMapUserData( IMapObjectPtr(pObj) )) );
         }
         break;
 
@@ -347,7 +347,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
             {
                 tools::Polygon aPoly(rXPolyPoly.getB2DPolygon(0));
                 IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, "", "", "", "", "", true, false );
-                pPathObj->AppendUserData( new IMapUserData( IMapObjectPtr(pObj) ) );
+                pPathObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new IMapUserData( IMapObjectPtr(pObj) )) );
             }
         }
         break;

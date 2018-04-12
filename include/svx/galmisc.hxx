@@ -105,11 +105,11 @@ public:
                                 SdrObjUserData( SdrInventor::SgaImap, ID_IMAPINFO ),
                                 aImageMap( rImageMap ) {};
 
-    virtual SdrObjUserData* Clone( SdrObject* ) const override
+    virtual std::unique_ptr<SdrObjUserData> Clone( SdrObject* ) const override
                             {
                                 SgaIMapInfo* pInfo = new SgaIMapInfo;
                                 pInfo->aImageMap = aImageMap;
-                                return pInfo;
+                                return std::unique_ptr<SdrObjUserData>(pInfo);
                             }
 
     const ImageMap&         GetImageMap() const { return aImageMap; }

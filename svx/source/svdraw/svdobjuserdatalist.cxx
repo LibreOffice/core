@@ -24,9 +24,9 @@ SdrObjUserData& SdrObjUserDataList::GetUserData(size_t nNum)
     return *maList.at(nNum).get();
 }
 
-void SdrObjUserDataList::AppendUserData(SdrObjUserData* pData)
+void SdrObjUserDataList::AppendUserData(std::unique_ptr<SdrObjUserData> pData)
 {
-    maList.push_back(std::unique_ptr<SdrObjUserData>(pData));
+    maList.push_back(std::move(pData));
 }
 
 void SdrObjUserDataList::DeleteUserData(size_t nNum)

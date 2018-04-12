@@ -1246,7 +1246,7 @@ bool GalleryTheme::InsertTransferable(const uno::Reference< datatransfer::XTrans
                         SdrPage*    pPage = aModel.GetModel()->GetPage(0);
                         SdrGrafObj* pGrafObj = new SdrGrafObj(*aModel.GetModel(), *pGraphic );
 
-                        pGrafObj->AppendUserData( new SgaIMapInfo( aImageMap ) );
+                        pGrafObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new SgaIMapInfo( aImageMap )) );
                         pPage->InsertObject( pGrafObj );
                         bRet = InsertModel( *aModel.GetModel(), nInsertPos );
                     }

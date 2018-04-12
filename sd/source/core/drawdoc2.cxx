@@ -1004,7 +1004,7 @@ SdAnimationInfo* SdDrawDocument::GetShapeUserData(SdrObject& rObject, bool bCrea
     if( (pRet == nullptr) && bCreate )
     {
         pRet = new SdAnimationInfo( rObject );
-        rObject.AppendUserData( pRet);
+        rObject.AppendUserData( std::unique_ptr<SdrObjUserData>(pRet) );
     }
 
     return pRet;

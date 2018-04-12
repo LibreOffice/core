@@ -108,7 +108,7 @@ ImpSdrObjTextLinkUserData::~ImpSdrObjTextLinkUserData()
 {
 }
 
-SdrObjUserData* ImpSdrObjTextLinkUserData::Clone(SdrObject* ) const
+std::unique_ptr<SdrObjUserData> ImpSdrObjTextLinkUserData::Clone(SdrObject* ) const
 {
     ImpSdrObjTextLinkUserData* pData=new ImpSdrObjTextLinkUserData;
     pData->aFileName  =aFileName;
@@ -116,7 +116,7 @@ SdrObjUserData* ImpSdrObjTextLinkUserData::Clone(SdrObject* ) const
     pData->aFileDate0 =aFileDate0;
     pData->eCharSet   =eCharSet;
     pData->pLink=nullptr;
-    return pData;
+    return std::unique_ptr<SdrObjUserData>(pData);
 }
 
 
@@ -132,7 +132,7 @@ void SdrTextObj::SetTextLink(const OUString& rFileName, const OUString& rFilterN
     pData->aFileName=rFileName;
     pData->aFilterName=rFilterName;
     pData->eCharSet=eCharSet;
-    AppendUserData(pData);
+    AppendUserData(std::unique_ptr<SdrObjUserData>(pData));
     ImpRegisterLink();
 }
 
