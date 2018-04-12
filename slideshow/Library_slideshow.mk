@@ -46,6 +46,7 @@ $(eval $(call gb_Library_use_libraries,slideshow,\
     cppu \
     cppuhelper \
     sal \
+    salhelper \
     svt \
     tl \
     utl \

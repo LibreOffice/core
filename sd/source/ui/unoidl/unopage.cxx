@@ -1112,8 +1112,8 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                 if (xMetaFile)
                 {
                     Size    aSize( GetPage()->GetSize() );
-                    xMetaFile->AddAction( static_cast<MetaAction*>(new MetaFillColorAction( COL_WHITE, true )), 0 );
-                    xMetaFile->AddAction( static_cast<MetaAction*>(new MetaRectAction( ::tools::Rectangle( Point(), aSize ) )), 1 );
+                    xMetaFile->AddAction( new MetaFillColorAction( COL_WHITE, true ), 0 );
+                    xMetaFile->AddAction( new MetaRectAction( ::tools::Rectangle( Point(), aSize ) ), 1 );
                     xMetaFile->SetPrefMapMode(MapMode(MapUnit::Map100thMM));
                     xMetaFile->SetPrefSize( aSize );
 

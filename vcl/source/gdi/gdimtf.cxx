@@ -136,10 +136,8 @@ GDIMetaFile::GDIMetaFile( const GDIMetaFile& rMtf ) :
     m_bRecord         ( false ),
     m_bUseCanvas      ( rMtf.m_bUseCanvas )
 {
-    // Increment RefCount of MetaActions
     for( size_t i = 0, n = rMtf.GetActionSize(); i < n; ++i )
     {
-        rMtf.GetAction( i )->Duplicate();
         m_aList.push_back( rMtf.GetAction( i ) );
     }
 
@@ -164,33 +162,29 @@ size_t GDIMetaFile::GetActionSize() const
 
 MetaAction* GDIMetaFile::GetAction( size_t nAction ) const
 {
-    return (nAction < m_aList.size()) ? m_aList[ nAction ] : nullptr;
+    return (nAction < m_aList.size()) ? m_aList[ nAction ].get() : nullptr;
 }
 
 MetaAction* GDIMetaFile::FirstAction()
 {
     m_nCurrentActionElement = 0;
-    return m_aList.empty() ? nullptr : m_aList[ 0 ];
+    return m_aList.empty() ? nullptr : m_aList[ 0 ].get();
 }
 
 MetaAction* GDIMetaFile::NextAction()
 {
-    return ( m_nCurrentActionElement + 1 < m_aList.size() ) ? m_aList[ ++m_nCurrentActionElement ] : nullptr;
+    return ( m_nCurrentActionElement + 1 < m_aList.size() ) ? m_aList[ ++m_nCurrentActionElement ].get() : nullptr;
 }
 
-MetaAction* GDIMetaFile::ReplaceAction( MetaAction* pAction, size_t nAction )
+void GDIMetaFile::ReplaceAction( rtl::Reference<MetaAction> pAction, size_t nAction )
 {
     if ( nAction >= m_aList.size() )
     {
-        // this method takes ownership of pAction and is
-        // therefore responsible for deleting it
-        pAction->Delete();
-        return nullptr;
+        return;
     }
     //fdo#39995 This doesn't increment the incoming action ref-count nor does it
     //decrement the outgoing action ref-count
     std::swap(pAction, m_aList[nAction]);
-    return pAction;
 }
 
 GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
@@ -202,7 +196,6 @@ GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
         // Increment RefCount of MetaActions
         for( size_t i = 0, n = rMtf.GetActionSize(); i < n; ++i )
         {
-            rMtf.GetAction( i )->Duplicate();
             m_aList.push_back( rMtf.GetAction( i ) );
         }
 
@@ -258,8 +251,6 @@ void GDIMetaFile::Clear()
     if( m_bRecord )
         Stop();
 
-    for(MetaAction* i : m_aList)
-        i->Delete();
     m_aList.clear();
 }
 
@@ -320,7 +311,6 @@ void GDIMetaFile::Play( GDIMetaFile& rMtf )
         {
             if( pAction )
             {
-                pAction->Duplicate();
                 rMtf.AddAction( pAction );
             }
 
@@ -552,24 +542,21 @@ void GDIMetaFile::WindPrev()
             --m_nCurrentActionElement;
 }
 
-void GDIMetaFile::AddAction( MetaAction* pAction )
+void GDIMetaFile::AddAction( rtl::Reference<MetaAction> pAction )
 {
     m_aList.push_back( pAction );
 
     if( m_pPrev )
     {
-        pAction->Duplicate();
         m_pPrev->AddAction( pAction );
     }
 }
 
-void GDIMetaFile::AddAction( MetaAction* pAction, size_t nPos )
+void GDIMetaFile::AddAction( rtl::Reference<MetaAction> pAction, size_t nPos )
 {
     if ( nPos < m_aList.size() )
     {
-        ::std::vector< MetaAction* >::iterator it = m_aList.begin();
-        ::std::advance( it, nPos );
-        m_aList.insert( it, pAction );
+        m_aList.insert( m_aList.begin() + nPos, pAction );
     }
     else
     {
@@ -578,12 +565,11 @@ void GDIMetaFile::AddAction( MetaAction* pAction, size_t nPos )
 
     if( m_pPrev )
     {
-        pAction->Duplicate();
         m_pPrev->AddAction( pAction, nPos );
     }
 }
 
-void GDIMetaFile::push_back( MetaAction* pAction )
+void GDIMetaFile::push_back( rtl::Reference<MetaAction> pAction )
 {
     m_aList.push_back( pAction );
 }
@@ -640,8 +626,8 @@ void GDIMetaFile::Move( long nX, long nY )
 
         if( pAct->GetRefCount() > 1 )
         {
-            m_aList[ m_nCurrentActionElement ] = pModAct = pAct->Clone();
-            pAct->Delete();
+            m_aList[ m_nCurrentActionElement ] = pAct->Clone();
+            pModAct = m_aList[ m_nCurrentActionElement ].get();
         }
         else
             pModAct = pAct;
@@ -675,8 +661,8 @@ void GDIMetaFile::Move( long nX, long nY, long nDPIX, long nDPIY )
 
         if( pAct->GetRefCount() > 1 )
         {
-            m_aList[ m_nCurrentActionElement ] = pModAct = pAct->Clone();
-            pAct->Delete();
+            m_aList[ m_nCurrentActionElement ] = pAct->Clone();
+            pModAct = m_aList[ m_nCurrentActionElement ].get();
         }
         else
             pModAct = pAct;
@@ -709,8 +695,8 @@ void GDIMetaFile::Scale( double fScaleX, double fScaleY )
 
         if( pAct->GetRefCount() > 1 )
         {
-            m_aList[ m_nCurrentActionElement ] = pModAct = pAct->Clone();
-            pAct->Delete();
+            m_aList[ m_nCurrentActionElement ] = pAct->Clone();
+            pModAct = m_aList[ m_nCurrentActionElement ].get();
         }
         else
             pModAct = pAct;
@@ -754,7 +740,6 @@ void GDIMetaFile::Clip( const tools::Rectangle& i_rClipRect )
                 aNewReg.Intersect( pOldAct->GetRegion() );
             MetaClipRegionAction* pNewAct = new MetaClipRegionAction( aNewReg, true );
             m_aList[ m_nCurrentActionElement ] = pNewAct;
-            pOldAct->Delete();
         }
     }
 }
@@ -809,7 +794,6 @@ void GDIMetaFile::ImplAddGradientEx( GDIMetaFile&         rMtf,
     for( i=0; i < nAct; ++i )
     {
         MetaAction* pMetaAct = aGradMtf.GetAction( i );
-        pMetaAct->Duplicate();
         rMtf.AddAction( pMetaAct );
     }
 }
@@ -1132,7 +1116,6 @@ void GDIMetaFile::Rotate( long nAngle10 )
                            || pCommentAct->GetComment() == "XPATHFILL_SEQ_END" )
                     {
                         pAction->Execute( aMapVDev.get() );
-                        pAction->Duplicate();
                         aMtf.AddAction( pAction );
                     }
                 }
@@ -1192,7 +1175,6 @@ void GDIMetaFile::Rotate( long nAngle10 )
                     aMtf.AddAction( new MetaClipRegionAction( vcl::Region( ImplGetRotatedPolyPolygon( pAct->GetRegion().GetAsPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ), true ) );
                 else
                 {
-                    pAction->Duplicate();
                     aMtf.AddAction( pAction );
                 }
             }
@@ -1216,7 +1198,6 @@ void GDIMetaFile::Rotate( long nAngle10 )
                     aMtf.AddAction( new MetaISectRegionClipRegionAction( vcl::Region( ImplGetRotatedPolyPolygon( rRegion.GetAsPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ) ) );
                 else
                 {
-                    pAction->Duplicate();
                     aMtf.AddAction( pAction );
                 }
             }
@@ -1255,7 +1236,6 @@ void GDIMetaFile::Rotate( long nAngle10 )
             default:
             {
                 pAction->Execute( aMapVDev.get() );
-                pAction->Duplicate();
                 aMtf.AddAction( pAction );
 
                 // update rotation point and offset, if necessary
@@ -1845,9 +1825,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             {
                 MetaLineColorAction* pAct = static_cast<MetaLineColorAction*>(pAction);
 
-                if( !pAct->IsSetting() )
-                    pAct->Duplicate();
-                else
+                if( pAct->IsSetting() )
                     pAct = new MetaLineColorAction( pFncCol( pAct->GetColor(), pColParam ), true );
 
                 aMtf.push_back( pAct );
@@ -1858,9 +1836,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             {
                 MetaFillColorAction* pAct = static_cast<MetaFillColorAction*>(pAction);
 
-                if( !pAct->IsSetting() )
-                    pAct->Duplicate();
-                else
+                if( pAct->IsSetting() )
                     pAct = new MetaFillColorAction( pFncCol( pAct->GetColor(), pColParam ), true );
 
                 aMtf.push_back( pAct );
@@ -1878,9 +1854,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             {
                 MetaTextFillColorAction* pAct = static_cast<MetaTextFillColorAction*>(pAction);
 
-                if( !pAct->IsSetting() )
-                    pAct->Duplicate();
-                else
+                if( pAct->IsSetting() )
                     pAct = new MetaTextFillColorAction( pFncCol( pAct->GetColor(), pColParam ), true );
 
                 aMtf.push_back( pAct );
@@ -1891,9 +1865,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             {
                 MetaTextLineColorAction* pAct = static_cast<MetaTextLineColorAction*>(pAction);
 
-                if( !pAct->IsSetting() )
-                    pAct->Duplicate();
-                else
+                if( pAct->IsSetting() )
                     pAct = new MetaTextLineColorAction( pFncCol( pAct->GetColor(), pColParam ), true );
 
                 aMtf.push_back( pAct );
@@ -1904,9 +1876,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             {
                 MetaOverlineColorAction* pAct = static_cast<MetaOverlineColorAction*>(pAction);
 
-                if( !pAct->IsSetting() )
-                    pAct->Duplicate();
-                else
+                if( pAct->IsSetting() )
                     pAct = new MetaOverlineColorAction( pFncCol( pAct->GetColor(), pColParam ), true );
 
                 aMtf.push_back( pAct );
@@ -2073,7 +2043,6 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
 
             default:
             {
-                pAction->Duplicate();
                 aMtf.push_back( pAction );
             }
             break;

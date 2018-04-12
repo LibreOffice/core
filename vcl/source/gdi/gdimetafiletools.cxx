@@ -1042,7 +1042,6 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
         }
         else
         {
-            const_cast< MetaAction* >(pAction)->Duplicate();
             aTarget.AddAction(const_cast< MetaAction* >(pAction));
         }
     }

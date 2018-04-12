@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_libraries,drawinglayer,\
     cppuhelper \
     i18nlangtag \
     sal \
+    salhelper \
     svl \
     svt \
     tk \

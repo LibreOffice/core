@@ -147,14 +147,17 @@ inline void ImplScaleLineInfo( LineInfo& rLineInfo, double fScaleX, double fScal
 } //anonymous namespace
 
 MetaAction::MetaAction() :
-    mnRefCount( 1 ),
     mnType( MetaActionType::NONE )
 {
 }
 
 MetaAction::MetaAction( MetaActionType nType ) :
-    mnRefCount( 1 ),
     mnType( nType )
+{
+}
+
+MetaAction::MetaAction( MetaAction const & rOther ) :
+    SimpleReferenceObject(), mnType( rOther.mnType )
 {
 }
 
@@ -166,7 +169,7 @@ void MetaAction::Execute( OutputDevice* )
 {
 }
 
-MetaAction* MetaAction::Clone()
+rtl::Reference<MetaAction> MetaAction::Clone()
 {
     return new MetaAction;
 }
@@ -286,11 +289,9 @@ void MetaPixelAction::Execute( OutputDevice* pOut )
     pOut->DrawPixel( maPt, maColor );
 }
 
-MetaAction* MetaPixelAction::Clone()
+rtl::Reference<MetaAction> MetaPixelAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaPixelAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaPixelAction( *this );
 }
 
 void MetaPixelAction::Move( long nHorzMove, long nVertMove )
@@ -335,11 +336,9 @@ void MetaPointAction::Execute( OutputDevice* pOut )
     pOut->DrawPixel( maPt );
 }
 
-MetaAction* MetaPointAction::Clone()
+rtl::Reference<MetaAction> MetaPointAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaPointAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaPointAction( *this );
 }
 
 void MetaPointAction::Move( long nHorzMove, long nVertMove )
@@ -394,11 +393,9 @@ void MetaLineAction::Execute( OutputDevice* pOut )
         pOut->DrawLine( maStartPt, maEndPt, maLineInfo );
 }
 
-MetaAction* MetaLineAction::Clone()
+rtl::Reference<MetaAction> MetaLineAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaLineAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaLineAction( *this );
 }
 
 void MetaLineAction::Move( long nHorzMove, long nVertMove )
@@ -456,11 +453,9 @@ void MetaRectAction::Execute( OutputDevice* pOut )
     pOut->DrawRect( maRect );
 }
 
-MetaAction* MetaRectAction::Clone()
+rtl::Reference<MetaAction> MetaRectAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaRectAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaRectAction( *this );
 }
 
 void MetaRectAction::Move( long nHorzMove, long nVertMove )
@@ -508,11 +503,9 @@ void MetaRoundRectAction::Execute( OutputDevice* pOut )
     pOut->DrawRect( maRect, mnHorzRound, mnVertRound );
 }
 
-MetaAction* MetaRoundRectAction::Clone()
+rtl::Reference<MetaAction> MetaRoundRectAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaRoundRectAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaRoundRectAction( *this );
 }
 
 void MetaRoundRectAction::Move( long nHorzMove, long nVertMove )
@@ -558,11 +551,9 @@ void MetaEllipseAction::Execute( OutputDevice* pOut )
     pOut->DrawEllipse( maRect );
 }
 
-MetaAction* MetaEllipseAction::Clone()
+rtl::Reference<MetaAction> MetaEllipseAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaEllipseAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaEllipseAction( *this );
 }
 
 void MetaEllipseAction::Move( long nHorzMove, long nVertMove )
@@ -608,11 +599,9 @@ void MetaArcAction::Execute( OutputDevice* pOut )
     pOut->DrawArc( maRect, maStartPt, maEndPt );
 }
 
-MetaAction* MetaArcAction::Clone()
+rtl::Reference<MetaAction> MetaArcAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaArcAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaArcAction( *this );
 }
 
 void MetaArcAction::Move( long nHorzMove, long nVertMove )
@@ -666,11 +655,9 @@ void MetaPieAction::Execute( OutputDevice* pOut )
     pOut->DrawPie( maRect, maStartPt, maEndPt );
 }
 
-MetaAction* MetaPieAction::Clone()
+rtl::Reference<MetaAction> MetaPieAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaPieAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaPieAction( *this );
 }
 
 void MetaPieAction::Move( long nHorzMove, long nVertMove )
@@ -724,11 +711,9 @@ void MetaChordAction::Execute( OutputDevice* pOut )
     pOut->DrawChord( maRect, maStartPt, maEndPt );
 }
 
-MetaAction* MetaChordAction::Clone()
+rtl::Reference<MetaAction> MetaChordAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaChordAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaChordAction( *this );
 }
 
 void MetaChordAction::Move( long nHorzMove, long nVertMove )
@@ -788,11 +773,9 @@ void MetaPolyLineAction::Execute( OutputDevice* pOut )
         pOut->DrawPolyLine( maPoly, maLineInfo );
 }
 
-MetaAction* MetaPolyLineAction::Clone()
+rtl::Reference<MetaAction> MetaPolyLineAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaPolyLineAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaPolyLineAction( *this );
 }
 
 void MetaPolyLineAction::Move( long nHorzMove, long nVertMove )
@@ -859,11 +842,9 @@ void MetaPolygonAction::Execute( OutputDevice* pOut )
     pOut->DrawPolygon( maPoly );
 }
 
-MetaAction* MetaPolygonAction::Clone()
+rtl::Reference<MetaAction> MetaPolygonAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaPolygonAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaPolygonAction( *this );
 }
 
 void MetaPolygonAction::Move( long nHorzMove, long nVertMove )
@@ -923,11 +904,9 @@ void MetaPolyPolygonAction::Execute( OutputDevice* pOut )
     pOut->DrawPolyPolygon( maPolyPoly );
 }
 
-MetaAction* MetaPolyPolygonAction::Clone()
+rtl::Reference<MetaAction> MetaPolyPolygonAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaPolyPolygonAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaPolyPolygonAction( *this );
 }
 
 void MetaPolyPolygonAction::Move( long nHorzMove, long nVertMove )
@@ -1031,11 +1010,9 @@ void MetaTextAction::Execute( OutputDevice* pOut )
     pOut->DrawText( maPt, maStr, mnIndex, mnLen );
 }
 
-MetaAction* MetaTextAction::Clone()
+rtl::Reference<MetaAction> MetaTextAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaTextAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaTextAction( *this );
 }
 
 void MetaTextAction::Move( long nHorzMove, long nVertMove )
@@ -1126,11 +1103,9 @@ void MetaTextArrayAction::Execute( OutputDevice* pOut )
     pOut->DrawTextArray( maStartPt, maStr, mpDXAry.get(), mnIndex, mnLen );
 }
 
-MetaAction* MetaTextArrayAction::Clone()
+rtl::Reference<MetaAction> MetaTextArrayAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaTextArrayAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaTextArrayAction( *this );
 }
 
 void MetaTextArrayAction::Move( long nHorzMove, long nVertMove )
@@ -1257,11 +1232,9 @@ void MetaStretchTextAction::Execute( OutputDevice* pOut )
     pOut->DrawStretchText( maPt, mnWidth, maStr, mnIndex, mnLen );
 }
 
-MetaAction* MetaStretchTextAction::Clone()
+rtl::Reference<MetaAction> MetaStretchTextAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaStretchTextAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaStretchTextAction( *this );
 }
 
 void MetaStretchTextAction::Move( long nHorzMove, long nVertMove )
@@ -1326,11 +1299,9 @@ void MetaTextRectAction::Execute( OutputDevice* pOut )
     pOut->DrawText( maRect, maStr, mnStyle );
 }
 
-MetaAction* MetaTextRectAction::Clone()
+rtl::Reference<MetaAction> MetaTextRectAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaTextRectAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaTextRectAction( *this );
 }
 
 void MetaTextRectAction::Move( long nHorzMove, long nVertMove )
@@ -1395,11 +1366,9 @@ void MetaTextLineAction::Execute( OutputDevice* pOut )
     pOut->DrawTextLine( maPos, mnWidth, meStrikeout, meUnderline, meOverline );
 }
 
-MetaAction* MetaTextLineAction::Clone()
+rtl::Reference<MetaAction> MetaTextLineAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaTextLineAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaTextLineAction( *this );
 }
 
 void MetaTextLineAction::Move( long nHorzMove, long nVertMove )
@@ -1469,11 +1438,9 @@ void MetaBmpAction::Execute( OutputDevice* pOut )
     pOut->DrawBitmap( maPt, maBmp );
 }
 
-MetaAction* MetaBmpAction::Clone()
+rtl::Reference<MetaAction> MetaBmpAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaBmpAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaBmpAction( *this );
 }
 
 void MetaBmpAction::Move( long nHorzMove, long nVertMove )
@@ -1524,11 +1491,9 @@ void MetaBmpScaleAction::Execute( OutputDevice* pOut )
     pOut->DrawBitmap( maPt, maSz, maBmp );
 }
 
-MetaAction* MetaBmpScaleAction::Clone()
+rtl::Reference<MetaAction> MetaBmpScaleAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaBmpScaleAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaBmpScaleAction( *this );
 }
 
 void MetaBmpScaleAction::Move( long nHorzMove, long nVertMove )
@@ -1587,11 +1552,9 @@ void MetaBmpScalePartAction::Execute( OutputDevice* pOut )
     pOut->DrawBitmap( maDstPt, maDstSz, maSrcPt, maSrcSz, maBmp );
 }
 
-MetaAction* MetaBmpScalePartAction::Clone()
+rtl::Reference<MetaAction> MetaBmpScalePartAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaBmpScalePartAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaBmpScalePartAction( *this );
 }
 
 void MetaBmpScalePartAction::Move( long nHorzMove, long nVertMove )
@@ -1649,11 +1612,9 @@ void MetaBmpExAction::Execute( OutputDevice* pOut )
     pOut->DrawBitmapEx( maPt, maBmpEx );
 }
 
-MetaAction* MetaBmpExAction::Clone()
+rtl::Reference<MetaAction> MetaBmpExAction::Clone()
 {
-    MetaBmpExAction* pClone = new MetaBmpExAction( *this );
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaBmpExAction( *this );
 }
 
 void MetaBmpExAction::Move( long nHorzMove, long nVertMove )
@@ -1704,11 +1665,9 @@ void MetaBmpExScaleAction::Execute( OutputDevice* pOut )
     pOut->DrawBitmapEx( maPt, maSz, maBmpEx );
 }
 
-MetaAction* MetaBmpExScaleAction::Clone()
+rtl::Reference<MetaAction> MetaBmpExScaleAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaBmpExScaleAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaBmpExScaleAction( *this );
 }
 
 void MetaBmpExScaleAction::Move( long nHorzMove, long nVertMove )
@@ -1767,11 +1726,9 @@ void MetaBmpExScalePartAction::Execute( OutputDevice* pOut )
     pOut->DrawBitmapEx( maDstPt, maDstSz, maSrcPt, maSrcSz, maBmpEx );
 }
 
-MetaAction* MetaBmpExScalePartAction::Clone()
+rtl::Reference<MetaAction> MetaBmpExScalePartAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaBmpExScalePartAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaBmpExScalePartAction( *this );
 }
 
 void MetaBmpExScalePartAction::Move( long nHorzMove, long nVertMove )
@@ -1832,11 +1789,9 @@ void MetaMaskAction::Execute( OutputDevice* pOut )
     pOut->DrawMask( maPt, maBmp, maColor );
 }
 
-MetaAction* MetaMaskAction::Clone()
+rtl::Reference<MetaAction> MetaMaskAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaMaskAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaMaskAction( *this );
 }
 
 void MetaMaskAction::Move( long nHorzMove, long nVertMove )
@@ -1889,11 +1844,9 @@ void MetaMaskScaleAction::Execute( OutputDevice* pOut )
     pOut->DrawMask( maPt, maSz, maBmp, maColor );
 }
 
-MetaAction* MetaMaskScaleAction::Clone()
+rtl::Reference<MetaAction> MetaMaskScaleAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaMaskScaleAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaMaskScaleAction( *this );
 }
 
 void MetaMaskScaleAction::Move( long nHorzMove, long nVertMove )
@@ -1954,11 +1907,9 @@ void MetaMaskScalePartAction::Execute( OutputDevice* pOut )
     pOut->DrawMask( maDstPt, maDstSz, maSrcPt, maSrcSz, maBmp, maColor, MetaActionType::MASKSCALE );
 }
 
-MetaAction* MetaMaskScalePartAction::Clone()
+rtl::Reference<MetaAction> MetaMaskScalePartAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaMaskScalePartAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaMaskScalePartAction( *this );
 }
 
 void MetaMaskScalePartAction::Move( long nHorzMove, long nVertMove )
@@ -2018,11 +1969,9 @@ void MetaGradientAction::Execute( OutputDevice* pOut )
     pOut->DrawGradient( maRect, maGradient );
 }
 
-MetaAction* MetaGradientAction::Clone()
+rtl::Reference<MetaAction> MetaGradientAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaGradientAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaGradientAction( *this );
 }
 
 void MetaGradientAction::Move( long nHorzMove, long nVertMove )
@@ -2067,16 +2016,13 @@ void MetaGradientExAction::Execute( OutputDevice* pOut )
 {
     if( pOut->GetConnectMetaFile() )
     {
-        Duplicate();
         pOut->GetConnectMetaFile()->AddAction( this );
     }
 }
 
-MetaAction* MetaGradientExAction::Clone()
+rtl::Reference<MetaAction> MetaGradientExAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaGradientExAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaGradientExAction( *this );
 }
 
 void MetaGradientExAction::Move( long nHorzMove, long nVertMove )
@@ -2128,11 +2074,9 @@ void MetaHatchAction::Execute( OutputDevice* pOut )
     pOut->DrawHatch( maPolyPoly, maHatch );
 }
 
-MetaAction* MetaHatchAction::Clone()
+rtl::Reference<MetaAction> MetaHatchAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaHatchAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaHatchAction( *this );
 }
 
 void MetaHatchAction::Move( long nHorzMove, long nVertMove )
@@ -2185,11 +2129,9 @@ void MetaWallpaperAction::Execute( OutputDevice* pOut )
     pOut->DrawWallpaper( maRect, maWallpaper );
 }
 
-MetaAction* MetaWallpaperAction::Clone()
+rtl::Reference<MetaAction> MetaWallpaperAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaWallpaperAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaWallpaperAction( *this );
 }
 
 void MetaWallpaperAction::Move( long nHorzMove, long nVertMove )
@@ -2238,11 +2180,9 @@ void MetaClipRegionAction::Execute( OutputDevice* pOut )
         pOut->SetClipRegion();
 }
 
-MetaAction* MetaClipRegionAction::Clone()
+rtl::Reference<MetaAction> MetaClipRegionAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaClipRegionAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaClipRegionAction( *this );
 }
 
 void MetaClipRegionAction::Move( long nHorzMove, long nVertMove )
@@ -2288,11 +2228,9 @@ void MetaISectRectClipRegionAction::Execute( OutputDevice* pOut )
     pOut->IntersectClipRegion( maRect );
 }
 
-MetaAction* MetaISectRectClipRegionAction::Clone()
+rtl::Reference<MetaAction> MetaISectRectClipRegionAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaISectRectClipRegionAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaISectRectClipRegionAction( *this );
 }
 
 void MetaISectRectClipRegionAction::Move( long nHorzMove, long nVertMove )
@@ -2336,11 +2274,9 @@ void MetaISectRegionClipRegionAction::Execute( OutputDevice* pOut )
     pOut->IntersectClipRegion( maRegion );
 }
 
-MetaAction* MetaISectRegionClipRegionAction::Clone()
+rtl::Reference<MetaAction> MetaISectRegionClipRegionAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaISectRegionClipRegionAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaISectRegionClipRegionAction( *this );
 }
 
 void MetaISectRegionClipRegionAction::Move( long nHorzMove, long nVertMove )
@@ -2386,11 +2322,9 @@ void MetaMoveClipRegionAction::Execute( OutputDevice* pOut )
     pOut->MoveClipRegion( mnHorzMove, mnVertMove );
 }
 
-MetaAction* MetaMoveClipRegionAction::Clone()
+rtl::Reference<MetaAction> MetaMoveClipRegionAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaMoveClipRegionAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaMoveClipRegionAction( *this );
 }
 
 void MetaMoveClipRegionAction::Scale( double fScaleX, double fScaleY )
@@ -2437,11 +2371,9 @@ void MetaLineColorAction::Execute( OutputDevice* pOut )
         pOut->SetLineColor();
 }
 
-MetaAction* MetaLineColorAction::Clone()
+rtl::Reference<MetaAction> MetaLineColorAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaLineColorAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaLineColorAction( *this );
 }
 
 void MetaLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -2481,11 +2413,9 @@ void MetaFillColorAction::Execute( OutputDevice* pOut )
         pOut->SetFillColor();
 }
 
-MetaAction* MetaFillColorAction::Clone()
+rtl::Reference<MetaAction> MetaFillColorAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaFillColorAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaFillColorAction( *this );
 }
 
 void MetaFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -2520,11 +2450,9 @@ void MetaTextColorAction::Execute( OutputDevice* pOut )
     pOut->SetTextColor( maColor );
 }
 
-MetaAction* MetaTextColorAction::Clone()
+rtl::Reference<MetaAction> MetaTextColorAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaTextColorAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaTextColorAction( *this );
 }
 
 void MetaTextColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -2562,11 +2490,9 @@ void MetaTextFillColorAction::Execute( OutputDevice* pOut )
         pOut->SetTextFillColor();
 }
 
-MetaAction* MetaTextFillColorAction::Clone()
+rtl::Reference<MetaAction> MetaTextFillColorAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaTextFillColorAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaTextFillColorAction( *this );
 }
 
 void MetaTextFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -2606,11 +2532,9 @@ void MetaTextLineColorAction::Execute( OutputDevice* pOut )
         pOut->SetTextLineColor();
 }
 
-MetaAction* MetaTextLineColorAction::Clone()
+rtl::Reference<MetaAction> MetaTextLineColorAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaTextLineColorAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaTextLineColorAction( *this );
 }
 
 void MetaTextLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -2650,11 +2574,9 @@ void MetaOverlineColorAction::Execute( OutputDevice* pOut )
         pOut->SetOverlineColor();
 }
 
-MetaAction* MetaOverlineColorAction::Clone()
+rtl::Reference<MetaAction> MetaOverlineColorAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaOverlineColorAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaOverlineColorAction( *this );
 }
 
 void MetaOverlineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -2690,11 +2612,9 @@ void MetaTextAlignAction::Execute( OutputDevice* pOut )
     pOut->SetTextAlign( maAlign );
 }
 
-MetaAction* MetaTextAlignAction::Clone()
+rtl::Reference<MetaAction> MetaTextAlignAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaTextAlignAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaTextAlignAction( *this );
 }
 
 void MetaTextAlignAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -2729,11 +2649,9 @@ void MetaMapModeAction::Execute( OutputDevice* pOut )
     pOut->SetMapMode( maMapMode );
 }
 
-MetaAction* MetaMapModeAction::Clone()
+rtl::Reference<MetaAction> MetaMapModeAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaMapModeAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaMapModeAction( *this );
 }
 
 void MetaMapModeAction::Scale( double fScaleX, double fScaleY )
@@ -2784,11 +2702,9 @@ void MetaFontAction::Execute( OutputDevice* pOut )
     pOut->SetFont( maFont );
 }
 
-MetaAction* MetaFontAction::Clone()
+rtl::Reference<MetaAction> MetaFontAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaFontAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaFontAction( *this );
 }
 
 void MetaFontAction::Scale( double fScaleX, double fScaleY )
@@ -2836,11 +2752,9 @@ void MetaPushAction::Execute( OutputDevice* pOut )
     pOut->Push( mnFlags );
 }
 
-MetaAction* MetaPushAction::Clone()
+rtl::Reference<MetaAction> MetaPushAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaPushAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaPushAction( *this );
 }
 
 void MetaPushAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -2870,11 +2784,9 @@ void MetaPopAction::Execute( OutputDevice* pOut )
     pOut->Pop();
 }
 
-MetaAction* MetaPopAction::Clone()
+rtl::Reference<MetaAction> MetaPopAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaPopAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaPopAction( *this );
 }
 
 void MetaPopAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -2907,11 +2819,9 @@ void MetaRasterOpAction::Execute( OutputDevice* pOut )
     pOut->SetRasterOp( meRasterOp );
 }
 
-MetaAction* MetaRasterOpAction::Clone()
+rtl::Reference<MetaAction> MetaRasterOpAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaRasterOpAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaRasterOpAction( *this );
 }
 
 void MetaRasterOpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -2948,11 +2858,9 @@ void MetaTransparentAction::Execute( OutputDevice* pOut )
     pOut->DrawTransparent( maPolyPoly, mnTransPercent );
 }
 
-MetaAction* MetaTransparentAction::Clone()
+rtl::Reference<MetaAction> MetaTransparentAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaTransparentAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaTransparentAction( *this );
 }
 
 void MetaTransparentAction::Move( long nHorzMove, long nVertMove )
@@ -3015,11 +2923,9 @@ void MetaFloatTransparentAction::Execute( OutputDevice* pOut )
     pOut->DrawTransparent( maMtf, maPoint, maSize, maGradient );
 }
 
-MetaAction* MetaFloatTransparentAction::Clone()
+rtl::Reference<MetaAction> MetaFloatTransparentAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaFloatTransparentAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaFloatTransparentAction( *this );
 }
 
 void MetaFloatTransparentAction::Move( long nHorzMove, long nVertMove )
@@ -3076,11 +2982,9 @@ void MetaEPSAction::Execute( OutputDevice* pOut )
     pOut->DrawEPS( maPoint, maSize, maGfxLink, &maSubst );
 }
 
-MetaAction* MetaEPSAction::Clone()
+rtl::Reference<MetaAction> MetaEPSAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaEPSAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaEPSAction( *this );
 }
 
 void MetaEPSAction::Move( long nHorzMove, long nVertMove )
@@ -3138,11 +3042,9 @@ void MetaRefPointAction::Execute( OutputDevice* pOut )
         pOut->SetRefPoint();
 }
 
-MetaAction* MetaRefPointAction::Clone()
+rtl::Reference<MetaAction> MetaRefPointAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaRefPointAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaRefPointAction( *this );
 }
 
 void MetaRefPointAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -3206,16 +3108,13 @@ void MetaCommentAction::Execute( OutputDevice* pOut )
 {
     if ( pOut->GetConnectMetaFile() )
     {
-        Duplicate();
         pOut->GetConnectMetaFile()->AddAction( this );
     }
 }
 
-MetaAction* MetaCommentAction::Clone()
+rtl::Reference<MetaAction> MetaCommentAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaCommentAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaCommentAction( *this );
 }
 
 void MetaCommentAction::Move( long nXMove, long nYMove )
@@ -3388,11 +3287,9 @@ void MetaLayoutModeAction::Execute( OutputDevice* pOut )
     pOut->SetLayoutMode( mnLayoutMode );
 }
 
-MetaAction* MetaLayoutModeAction::Clone()
+rtl::Reference<MetaAction> MetaLayoutModeAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaLayoutModeAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaLayoutModeAction( *this );
 }
 
 void MetaLayoutModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -3428,11 +3325,9 @@ void MetaTextLanguageAction::Execute( OutputDevice* pOut )
     pOut->SetDigitLanguage( meTextLanguage );
 }
 
-MetaAction* MetaTextLanguageAction::Clone()
+rtl::Reference<MetaAction> MetaTextLanguageAction::Clone()
 {
-    MetaAction* pClone = static_cast<MetaAction*>(new MetaTextLanguageAction( *this ));
-    pClone->ResetRefCount();
-    return pClone;
+    return new MetaTextLanguageAction( *this );
 }
 
 void MetaTextLanguageAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
