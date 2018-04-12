@@ -9,18 +9,16 @@
 #ifndef INCLUDED_CUI_INC_SIGNATURELINEDIALOG_HXX
 #define INCLUDED_CUI_INC_SIGNATURELINEDIALOG_HXX
 
-#include <vcl/weld.hxx>
+#include "SignatureLineDialogBase.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-class SignatureLineDialog : public weld::GenericDialogController
+class SignatureLineDialog : public SignatureLineDialogBase
 {
 public:
     SignatureLineDialog(weld::Widget* pParent, css::uno::Reference<css::frame::XModel> xModel,
                         bool bEditExisting);
-
-    short execute();
 
 private:
     std::unique_ptr<weld::Entry> m_xEditName;
@@ -30,12 +28,10 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCheckboxCanAddComments;
     std::unique_ptr<weld::CheckButton> m_xCheckboxShowSignDate;
 
-    css::uno::Reference<css::frame::XModel> m_xModel;
     css::uno::Reference<css::beans::XPropertySet> m_xExistingShapeProperties;
     OUString m_aSignatureLineId;
 
-    OUString getSignatureImage();
-    void Apply();
+    virtual void Apply() override;
 };
 
 #endif
