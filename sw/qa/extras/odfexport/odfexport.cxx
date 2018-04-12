@@ -208,7 +208,7 @@ void testTdf43569_CheckIfFieldParse()
 
 // Input document contains only one IF-field,
 // and it should be imported as com.sun.star.text.TextField.ConditionalText in any case,
-// instead of insertion of the the pair of two field-marks: <field:fieldmark-start> + <field:fieldmark-end>.
+// instead of insertion of the pair of two field-marks: <field:fieldmark-start> + <field:fieldmark-end>.
 DECLARE_ODFEXPORT_TEST(testTdf43569, "tdf43569_conditionalfield.doc")
 {
     // check if our parser is valid
