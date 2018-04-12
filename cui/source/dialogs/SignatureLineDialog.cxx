@@ -51,9 +51,13 @@ SignatureLineDialog::SignatureLineDialog(weld::Widget* pParent, Reference<XModel
     m_xEditInstructions->set_size_request(m_xEditInstructions->get_approximate_digit_width() * 48,
                                           m_xEditInstructions->get_text_height() * 5);
 
-    // No signature line selected - start with empty dialog and generate a new one
+    // No signature line selected - start with empty dialog and set some default values
     if (!bEditExisting)
+    {
+        m_xCheckboxCanAddComments->set_active(true);
+        m_xCheckboxShowSignDate->set_active(true);
         return;
+    }
 
     Reference<container::XIndexAccess> xIndexAccess(m_xModel->getCurrentSelection(),
                                                     UNO_QUERY_THROW);
