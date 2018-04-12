@@ -37,16 +37,13 @@
 #include <comphelper/fileurl.hxx>
 #include <rtl/ustring.hxx>
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/print.hxx>
 #include <vcl/pdfwriter.hxx>
 #include <printerinfomanager.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld.hxx>
 #include <strings.hrc>
 #include <saldatabasic.hxx>
 #include <unx/genprn.h>
@@ -88,63 +85,55 @@ static OUString getPdfDir( const PrinterInfo& rInfo )
 
 namespace
 {
-    class QueryString : public ModalDialog
+    class QueryString : public weld::GenericDialogController
     {
     private:
-        VclPtr<OKButton>    m_pOKButton;
-        VclPtr<FixedText>   m_pFixedText;
-        VclPtr<Edit>        m_pEdit;
         OUString&           m_rReturnValue;
 
-        DECL_LINK( ClickBtnHdl, Button*, void );
+        std::unique_ptr<weld::Button> m_xOKButton;
+        std::unique_ptr<weld::Label> m_xFixedText;
+        std::unique_ptr<weld::Entry> m_xEdit;
+
+        DECL_LINK( ClickBtnHdl, weld::Button&, void );
 
     public:
         // parent window, Query text, initial value
-        QueryString(vcl::Window*, OUString const &, OUString &);
-        virtual ~QueryString() override { disposeOnce(); }
-        virtual void dispose() override
-        {
-            m_pOKButton.clear();
-            m_pFixedText.clear();
-            m_pEdit.clear();
-            ModalDialog::dispose();
-        }
+        QueryString(weld::Window*, OUString const &, OUString &);
     };
 
     /*
      *  QueryString
      */
-    QueryString::QueryString(vcl::Window* pParent, OUString const & rQuery, OUString& rRet)
-        : ModalDialog(pParent, "QueryDialog",
-            "vcl/ui/querydialog.ui" )
+    QueryString::QueryString(weld::Window* pParent, OUString const & rQuery, OUString& rRet)
+        : GenericDialogController(pParent, "vcl/ui/querydialog.ui", "QueryDialog")
         , m_rReturnValue( rRet )
+        , m_xOKButton(m_xBuilder->weld_button("ok"))
+        , m_xFixedText(m_xBuilder->weld_label("label"))
+        , m_xEdit(m_xBuilder->weld_entry("entry"))
     {
-        get(m_pOKButton, "ok");
-        get(m_pFixedText, "label");
-        get(m_pEdit, "entry");
-
-        m_pOKButton->SetClickHdl(LINK(this, QueryString, ClickBtnHdl));
-        m_pFixedText->SetText(rQuery);
-        m_pEdit->SetText(m_rReturnValue);
-        SetText(rQuery);
+        m_xOKButton->connect_clicked(LINK(this, QueryString, ClickBtnHdl));
+        m_xFixedText->set_label(rQuery);
+        m_xEdit->set_text(m_rReturnValue);
+        m_xDialog->set_title(rQuery);
     }
 
-    IMPL_LINK( QueryString, ClickBtnHdl, Button*, pButton, void )
+    IMPL_LINK(QueryString, ClickBtnHdl, weld::Button&, rButton, void)
     {
-        if (pButton == m_pOKButton)
+        if (&rButton == m_xOKButton.get())
         {
-            m_rReturnValue = m_pEdit->GetText();
-            EndDialog( 1 );
+            m_rReturnValue = m_xEdit->get_text();
+            m_xDialog->response(RET_OK);
         }
         else
-            EndDialog();
+            m_xDialog->response(RET_CANCEL);
     }
 
     int QueryFaxNumber(OUString& rNumber)
     {
         OUString aTmpString(VclResId(SV_PRINT_QUERYFAXNUMBER_TXT));
-        ScopedVclPtrInstance< QueryString > aQuery( nullptr, aTmpString, rNumber );
-        return aQuery->Execute();
+        vcl::Window* pWin = Application::GetDefDialogParent();
+        QueryString aQuery(pWin ? pWin->GetFrameWeld() : nullptr, aTmpString, rNumber);
+        return aQuery.run();
     }
 }
 
