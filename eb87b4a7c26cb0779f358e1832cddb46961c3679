@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_3b6346b3",
+        "filename": "svx/source/svdraw/svdobj.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1962,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-12T09:55:22Z",
+      "side": 1,
+      "message": "aRef2 is not used anywhere?",
+      "revId": "eb87b4a7c26cb0779f358e1832cddb46961c3679",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
