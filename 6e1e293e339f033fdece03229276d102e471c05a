@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_96e7a911",
+        "filename": "connectivity/source/parse/sqlnode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-04-12T19:08:42Z",
+      "side": 1,
+      "message": "this should be equalsWithIgnoreAsciiCase, or even \"\u003d\u003d\" since that\u0027s how other places recognise an embedded Firebird URL.",
+      "range": {
+        "startLine": 355,
+        "startChar": 32,
+        "endLine": 355,
+        "endChar": 38
+      },
+      "revId": "6e1e293e339f033fdece03229276d102e471c05a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_b6e4ad0d",
+        "filename": "connectivity/source/parse/sqlnode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-04-12T19:08:42Z",
+      "side": 1,
+      "message": "This should be \"sdbc:firebird:\" in order not to match URLs like sdbc:firebirdng:/foo/bar or sdbc:firebirdcrocodile:/foo/bar",
+      "range": {
+        "startLine": 356,
+        "startChar": 19,
+        "endLine": 356,
+        "endChar": 77
+      },
+      "revId": "6e1e293e339f033fdece03229276d102e471c05a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
