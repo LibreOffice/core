@@ -6,16 +6,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_SW_INC_SIGNATURELINEDIALOG_HXX
-#define INCLUDED_SW_INC_SIGNATURELINEDIALOG_HXX
+#ifndef INCLUDED_CUI_INC_SIGNATURELINEDIALOG_HXX
+#define INCLUDED_CUI_INC_SIGNATURELINEDIALOG_HXX
 
-#include <svx/stddlg.hxx>
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-class SVX_DLLPUBLIC SignatureLineDialog : public weld::GenericDialogController
+class SignatureLineDialog : public weld::GenericDialogController
 {
 public:
     SignatureLineDialog(weld::Widget* pParent, css::uno::Reference<css::frame::XModel> xModel,

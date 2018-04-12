@@ -60,6 +60,7 @@
 #include <insdlg.hxx>
 #include <pastedlg.hxx>
 #include <linkdlg.hxx>
+#include <SignatureLineDialog.hxx>
 #include <SignSignatureLineDialog.hxx>
 #include <SpellDialog.hxx>
 #include <cfg.hxx>
@@ -190,6 +191,11 @@ const SfxItemSet* AbstractSvxCharacterMapDialog_Impl::GetOutputItemSet() const
 void AbstractSvxCharacterMapDialog_Impl::SetText(const OUString& rStr)
 {
     m_xDlg->set_title(rStr);
+}
+
+short AbstractSignatureLineDialog_Impl::Execute()
+{
+    return m_xDlg->execute();
 }
 
 short AbstractSignSignatureLineDialog_Impl::Execute()
@@ -1573,6 +1579,13 @@ VclPtr<AbstractScreenshotAnnotationDlg> AbstractDialogFactory_Impl::CreateScreen
 {
     VclPtrInstance<ScreenshotAnnotationDlg> pDlg(pParent, rParentDialog);
     return VclPtr<AbstractScreenshotAnnotationDlg_Impl>::Create(pDlg);
+}
+
+VclPtr<AbstractSignatureLineDialog> AbstractDialogFactory_Impl::CreateSignatureLineDialog(
+    weld::Window* pParent, const Reference<XModel> xModel, bool bEditExisting)
+{
+    return VclPtr<AbstractSignatureLineDialog_Impl>::Create(
+        new SignatureLineDialog(pParent, xModel, bEditExisting));
 }
 
 VclPtr<AbstractSignSignatureLineDialog>
