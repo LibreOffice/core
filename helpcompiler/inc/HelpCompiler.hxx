@@ -165,19 +165,19 @@ public:
     std::string document_module;
     std::string document_title;
 
-    HashSet *appl_hidlist;
-    Hashtable *appl_keywords;
-    Stringtable *appl_helptexts;
+    std::unique_ptr<HashSet> appl_hidlist;
+    std::unique_ptr<Hashtable> appl_keywords;
+    std::unique_ptr<Stringtable> appl_helptexts;
     xmlDocPtr appl_doc;
 
     StreamTable() :
-        appl_hidlist(nullptr), appl_keywords(nullptr), appl_helptexts(nullptr), appl_doc(nullptr)
+        appl_doc(nullptr)
     {}
     void dropappl()
     {
-        delete appl_hidlist;
-        delete appl_keywords;
-        delete appl_helptexts;
+        appl_hidlist.reset();
+        appl_keywords.reset();
+        appl_helptexts.reset();
         if (appl_doc) xmlFreeDoc(appl_doc);
     }
     ~StreamTable()
