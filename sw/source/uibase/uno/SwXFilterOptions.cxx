@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -96,7 +97,7 @@ sal_Int16 SwXFilterOptions::execute()
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        ScopedVclPtr<AbstractSwAsciiFilterDlg> pAsciiDlg(pFact->CreateSwAsciiFilterDlg(*pDocShell,
+        ScopedVclPtr<AbstractSwAsciiFilterDlg> pAsciiDlg(pFact->CreateSwAsciiFilterDlg(Application::GetFrameWeld(xDialogParent), *pDocShell,
             pInStream.get()));
         OSL_ENSURE(pAsciiDlg, "Dialog creation failed!");
         if(RET_OK == pAsciiDlg->Execute())
@@ -119,6 +120,13 @@ void   SwXFilterOptions::setTargetDocument( const uno::Reference< XComponent >& 
 void   SwXFilterOptions::setSourceDocument( const uno::Reference<XComponent >& xDoc )
 {
     xModel = xDoc;
+}
+
+void SAL_CALL SwXFilterOptions::initialize(const uno::Sequence<uno::Any>& rArguments)
+{
+    ::comphelper::NamedValueCollection aProperties(rArguments);
+    if (aProperties.has("ParentWindow"))
+        aProperties.get("ParentWindow") >>= xDialogParent;
 }
 
 OUString SwXFilterOptions::getImplementationName()
