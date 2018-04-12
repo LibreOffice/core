@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_3beee622",
+        "filename": "solenv/bin/assemble-flatpak.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-04-12T09:23:43Z",
+      "side": 1,
+      "message": "this looks like a copy/paste error?",
+      "revId": "f63f65fa313f64f226124f70f376cac6d1c3ac7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_7bf85ee6",
+        "filename": "solenv/bin/assemble-flatpak.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-04-12T09:23:43Z",
+      "side": 1,
+      "message": "see above comment, \"at least recent GNOME Software doesn\u0027t show more than five screenshots anyway, so restrict to one each from the five libreoffice-*.appdata.xml: Writer, Calc, Impress, Draw, Base\"",
+      "revId": "f63f65fa313f64f226124f70f376cac6d1c3ac7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
