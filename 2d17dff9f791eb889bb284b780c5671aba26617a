@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_c0ff9b32",
+        "filename": "sc/CppunitTest_sc_functiondescriptionobj.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-04-12T07:17:10Z",
+      "side": 1,
+      "message": "I would guess that, for example, these includes are also not needed.",
+      "revId": "2d17dff9f791eb889bb284b780c5671aba26617a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
