@@ -1087,10 +1087,12 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
         break;
         case NS_ooxml::LN_CT_SizeRelH_pctWidth:
         case NS_ooxml::LN_CT_SizeRelV_pctHeight:
-            if (m_xShape.is() && !m_pImpl->m_rPositivePercentages.empty())
+            if (m_pImpl->m_rPositivePercentages.empty())
+                break;
+
+            if (m_xShape.is())
             {
                 sal_Int16 nPositivePercentage = rtl::math::round(m_pImpl->m_rPositivePercentages.front().toDouble() / oox::drawingml::PER_PERCENT);
-                m_pImpl->m_rPositivePercentages.pop();
 
                 if (nPositivePercentage)
                 {
@@ -1099,6 +1101,10 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
                     xPropertySet->setPropertyValue(aProperty, uno::makeAny(nPositivePercentage));
                 }
             }
+
+            // Make sure the token is consumed even if xShape is an empty
+            // reference.
+            m_pImpl->m_rPositivePercentages.pop();
             break;
         case NS_ooxml::LN_EG_WrapType_wrapNone: // 90944; - doesn't contain attributes
             //depending on the behindDoc attribute text wraps through behind or in fron of the object
