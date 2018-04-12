@@ -277,6 +277,7 @@ public:
     vcl::KeyCode GetAccelKey( sal_uInt16 nItemId ) const;
 
     void CheckItem( sal_uInt16 nItemId, bool bCheck = true );
+    void CheckItem( const OString &rIdent, bool bCheck = true );
     bool IsItemChecked( sal_uInt16 nItemId ) const;
 
     virtual void SelectItem(sal_uInt16 nItemId) = 0;
