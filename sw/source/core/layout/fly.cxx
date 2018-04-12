@@ -2466,8 +2466,8 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
             // OD 16.04.2003 #i13147# - determine <GraphicObject> instead of <Graphic>
             // in order to avoid load of graphic, if <SwNoTextNode> contains a graphic
             // node and method is called for paint.
+            std::unique_ptr<GraphicObject> xTmpGrfObj;
             const GraphicObject* pGrfObj = nullptr;
-            bool bGrfObjCreated = false;
             const SwGrfNode* pGrfNd = pNd->GetGrfNode();
             if ( pGrfNd && _bForPaint )
             {
@@ -2475,11 +2475,11 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
             }
             else
             {
-                pGrfObj = new GraphicObject( pNd->GetGraphic() );
-                bGrfObjCreated = true;
+                xTmpGrfObj.reset(new GraphicObject(pNd->GetGraphic()));
+                pGrfObj = xTmpGrfObj.get();
             }
-            OSL_ENSURE( pGrfObj, "SwFlyFrame::GetContour() - No Graphic/GraphicObject found at <SwNoTextNode>." );
-            if ( pGrfObj && pGrfObj->GetType() != GraphicType::NONE )
+            assert(pGrfObj && "SwFlyFrame::GetContour() - No Graphic/GraphicObject found at <SwNoTextNode>.");
+            if (pGrfObj->GetType() != GraphicType::NONE)
             {
                 if( !pNd->HasContour() )
                 {
@@ -2538,10 +2538,7 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
                     }
                 }
                 // OD 17.04.2003 #i13147# - destroy created <GraphicObject>.
-                if ( bGrfObjCreated )
-                {
-                    delete pGrfObj;
-                }
+                xTmpGrfObj.reset();
                 rContour.Move( aOrig.Left(), aOrig.Top() );
                 if( !aClip.Width() )
                     aClip.Width( 1 );
