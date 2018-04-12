@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_9be7d211",
+        "filename": "filter/source/pdf/impdialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2018-04-12T10:38:45Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be mpCbWatermark instead - that\u0027t the checkbox UI item, this is the checkbox label item.",
+      "revId": "9e07c3c783f11872f65f802ed1201defe6e6fa4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
