@@ -62,7 +62,7 @@ void DrawViewShell::ExecIMap( SfxRequest const & rReq )
                 SdIMapInfo*     pIMapInfo = SdDrawDocument::GetIMapInfo( pSdrObj );
 
                 if ( !pIMapInfo )
-                    pSdrObj->AppendUserData( new SdIMapInfo( rImageMap ) );
+                    pSdrObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new SdIMapInfo( rImageMap )) );
                 else
                     pIMapInfo->SetImageMap( rImageMap );
 

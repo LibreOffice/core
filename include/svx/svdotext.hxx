@@ -116,7 +116,7 @@ public:
     ImpSdrObjTextLinkUserData();
     virtual ~ImpSdrObjTextLinkUserData() override;
 
-    virtual SdrObjUserData* Clone(SdrObject* pObj1) const override;
+    virtual std::unique_ptr<SdrObjUserData> Clone(SdrObject* pObj1) const override;
 };
 
 namespace sdr

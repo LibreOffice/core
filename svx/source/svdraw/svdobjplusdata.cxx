@@ -36,9 +36,9 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
         if (nCount!=0) {
             pNeuPlusData->pUserDataList.reset(new SdrObjUserDataList);
             for (sal_uInt16 i=0; i<nCount; i++) {
-                SdrObjUserData* pNeuUserData=pUserDataList->GetUserData(i).Clone(pObj1);
-                if (pNeuUserData!=nullptr) {
-                    pNeuPlusData->pUserDataList->AppendUserData(pNeuUserData);
+                std::unique_ptr<SdrObjUserData> pNewUserData=pUserDataList->GetUserData(i).Clone(pObj1);
+                if (pNewUserData!=nullptr) {
+                    pNeuPlusData->pUserDataList->AppendUserData(std::move(pNewUserData));
                 } else {
                     OSL_FAIL("SdrObjPlusData::Clone(): UserData.Clone() returns NULL.");
                 }

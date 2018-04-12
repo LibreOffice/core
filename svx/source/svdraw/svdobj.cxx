@@ -2614,7 +2614,7 @@ SdrObjUserData* SdrObject::GetUserData(sal_uInt16 nNum) const
     return &pPlusData->pUserDataList->GetUserData(nNum);
 }
 
-void SdrObject::AppendUserData(SdrObjUserData* pData)
+void SdrObject::AppendUserData(std::unique_ptr<SdrObjUserData> pData)
 {
     if (!pData)
     {
@@ -2626,7 +2626,7 @@ void SdrObject::AppendUserData(SdrObjUserData* pData)
     if (!pPlusData->pUserDataList)
         pPlusData->pUserDataList.reset( new SdrObjUserDataList );
 
-    pPlusData->pUserDataList->AppendUserData(pData);
+    pPlusData->pUserDataList->AppendUserData(std::move(pData));
 }
 
 void SdrObject::DeleteUserData(sal_uInt16 nNum)
