@@ -77,7 +77,7 @@ private:
 
 public:
     // for default SfxItemSet::CTOR, set default WhichRanges
-    void                            FillItemIdRanges_Impl( sal_uInt16*& pWhichRanges ) const;
+    void                            FillItemIdRanges_Impl( std::unique_ptr<sal_uInt16[]>& pWhichRanges ) const;
     const sal_uInt16*               GetFrozenIdRanges() const;
 
 protected:
