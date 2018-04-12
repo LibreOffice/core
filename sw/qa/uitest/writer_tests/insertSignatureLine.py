@@ -39,8 +39,8 @@ class insertSignatureLine(UITestCase):
         self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineSuggestedSignerTitle, "Title")
         self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineSuggestedSignerEmail, "Email")
         self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineSuggestedSignerTitle, "Title")
-        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineCanAddComment, True)
-        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineShowSignDate, False)
+        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineCanAddComment, False)
+        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineShowSignDate, True)
         self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineSigningInstructions, "Instructions")
 
         self.ui_test.close_doc()
@@ -75,8 +75,8 @@ class insertSignatureLine(UITestCase):
         self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineSuggestedSignerTitle, "Title")
         self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineSuggestedSignerEmail, "Email")
         self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineSuggestedSignerTitle, "Title")
-        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineCanAddComment, True)
-        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineShowSignDate, True)
+        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineCanAddComment, False)
+        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineShowSignDate, False)
         self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineSigningInstructions, "Instructions")
 
         self.ui_test.close_doc()
