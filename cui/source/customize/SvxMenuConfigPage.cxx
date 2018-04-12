@@ -143,6 +143,12 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
     pPopup->EnableItem( pPopup->GetItemId("restoreItem"), false );
     pPopup->RemoveDisabledEntries();
 
+    PopupMenu* pGearMenu = m_pGearBtn->GetPopupMenu();
+    pGearMenu->EnableItem( pGearMenu->GetItemId("gear_iconAndText"), false );
+    pGearMenu->EnableItem( pGearMenu->GetItemId("gear_iconOnly"), false );
+    pGearMenu->EnableItem( pGearMenu->GetItemId("gear_textOnly"), false );
+    pGearMenu->RemoveDisabledEntries();
+
     if ( !bIsMenuBar )
     {
         //TODO: Remove this when the gear button is implemented for context menus
