@@ -559,6 +559,12 @@ public:
 
     sal_Int32       GetSystemStyle( const OUString& rResourceURL );
 
+    void            SetSystemStyle( const OUString& rResourceURL, sal_Int32 nStyle );
+
+    void            SetSystemStyle(
+                        const css::uno::Reference< css::frame::XFrame >& xFrame,
+                        const OUString& rResourceURL, sal_Int32 nStyle );
+
     SvxEntries*     GetEntries() override;
     void            SetEntries( std::unique_ptr<SvxEntries> ) override;
     bool            HasSettings() override;
