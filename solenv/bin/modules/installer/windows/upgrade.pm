@@ -45,6 +45,18 @@ sub create_upgrade_table
     $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTS" . "\n";
     push(@upgradetable, $newline);
 
+    # Detecting if VC Runtime is installed on system
+    $newline = "VCRUNTIME_UPGRADE_CODE" . "\t" . "14.0.24215" . "\t" . "15.0.0" . "\t" . "" . "\t" . "258" . "\t" . "" . "\t" . "VCRUNTIME_DETECTED";
+    if ( $installer::globals::cpuname eq 'X86_64' )
+    {
+        $newline =~ s/VCRUNTIME_UPGRADE_CODE/{36F68A90-239C-34DF-B58C-64B30153CE35}/;
+    }
+    else
+    {
+        $newline =~ s/VCRUNTIME_UPGRADE_CODE/{65E5BD06-6392-3027-8C26-853107D3CF1A}/;
+    }
+    push(@upgradetable, $newline);
+
     # Saving the file
 
     my $upgradetablename = $basedir . $installer::globals::separator . "Upgrade.idt";
