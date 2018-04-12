@@ -103,23 +103,23 @@ cat <<EOF >/app/share/appdata/org.libreoffice.LibreOffice.appdata.xml
  <url type="translate">https://wiki.documentfoundation.org/Translating_LibreOffice</url>
  <screenshots>
   <screenshot type="default">
-   <image>http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Writer-02-Table-of-Contents-Getting-Started-Guide-4-2.png</image>
+   <image>https://hub.libreoffice.org/screenshots/writer-01.png</image>
    <caption><!-- Describe this screenshot in less than ~10 words --></caption>
   </screenshot>
   <screenshot>
-   <image>http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Calc-02-exemple-ods.png</image>
+   <image>https://hub.libreoffice.org/screenshots/calc-02.png</image>
    <caption><!-- Describe this screenshot in less than ~10 words --></caption>
   </screenshot>
   <screenshot>
-   <image>http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Impress-01-Blank.png</image>
+   <image>https://hub.libreoffice.org/screenshots/impress-01.png</image>
    <caption><!-- Describe this screenshot in less than ~10 words --></caption>
   </screenshot>
   <screenshot>
-   <image>http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Draw-02-Tiger-fdo82219.png</image>
+   <image>https://hub.libreoffice.org/screenshots/draw-02.png</image>
    <caption><!-- Describe this screenshot in less than ~10 words --></caption>
   </screenshot>
   <screenshot>
-   <image>http://www.libreoffice.org/assets/Uploads/Screenshots/Base/Screenshot-78.png</image>
+   <image>https://hub.libreoffice.org/screenshots/base-02.png</image>
    <caption><!-- Describe this screenshot in less than ~10 words --></caption>
   </screenshot>
  </screenshots>
