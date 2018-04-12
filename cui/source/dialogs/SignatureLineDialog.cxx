@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <svx/SignatureLineDialog.hxx>
+#include <SignatureLineDialog.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/xmltools.hxx>
@@ -39,7 +39,7 @@ using namespace css::graphic;
 
 SignatureLineDialog::SignatureLineDialog(weld::Widget* pParent, Reference<XModel> xModel,
                                          bool bEditExisting)
-    : GenericDialogController(pParent, "svx/ui/signatureline.ui", "SignatureLineDialog")
+    : GenericDialogController(pParent, "cui/ui/signatureline.ui", "SignatureLineDialog")
     , m_xEditName(m_xBuilder->weld_entry("edit_name"))
     , m_xEditTitle(m_xBuilder->weld_entry("edit_title"))
     , m_xEditEmail(m_xBuilder->weld_entry("edit_email"))

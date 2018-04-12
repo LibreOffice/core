@@ -121,6 +121,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/pastedlg \
     cui/source/dialogs/postdlg \
     cui/source/dialogs/scriptdlg \
+    cui/source/dialogs/SignatureLineDialog \
     cui/source/dialogs/SignSignatureLineDialog \
     cui/source/dialogs/sdrcelldlg \
     cui/source/dialogs/showcols \
