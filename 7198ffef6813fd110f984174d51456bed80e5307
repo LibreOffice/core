@@ -22,6 +22,30 @@
       "revId": "7198ffef6813fd110f984174d51456bed80e5307",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_36bfddd1",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2246,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2018-04-12T19:10:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a30ddce_60b0afde",
+      "range": {
+        "startLine": 2246,
+        "startChar": 37,
+        "endLine": 2246,
+        "endChar": 42
+      },
+      "revId": "7198ffef6813fd110f984174d51456bed80e5307",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
