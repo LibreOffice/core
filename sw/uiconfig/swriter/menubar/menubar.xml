@@ -300,6 +300,7 @@
       </menu:menu>
       <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>
       <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
+      <menu:menuitem menu:id=".uno:Watermark"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
       <menu:menuitem menu:id=".uno:InsertBookmark"/>
