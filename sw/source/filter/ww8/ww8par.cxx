@@ -168,7 +168,7 @@ static SwMacroInfo* GetMacroInfo( SdrObject* pObj )
             }
         }
         SwMacroInfo* pData = new SwMacroInfo;
-        pObj->AppendUserData(pData);
+        pObj->AppendUserData(std::unique_ptr<SdrObjUserData>(pData));
         return pData;
     }
 
@@ -6519,9 +6519,9 @@ SwMacroInfo::~SwMacroInfo()
 {
 }
 
-SdrObjUserData* SwMacroInfo::Clone( SdrObject* /*pObj*/ ) const
+std::unique_ptr<SdrObjUserData> SwMacroInfo::Clone( SdrObject* /*pObj*/ ) const
 {
-   return new SwMacroInfo( *this );
+   return std::unique_ptr<SdrObjUserData>(new SwMacroInfo( *this ));
 }
 
 std::unique_ptr<SfxItemSet> SwWW8ImplReader::SetCurrentItemSet(SfxItemSet* pItemSet)

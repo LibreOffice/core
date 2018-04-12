@@ -135,7 +135,7 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
                     ScIMapInfo*     pIMapInfo = ScDrawLayer::GetIMapInfo( pSdrObj );
 
                     if ( !pIMapInfo )
-                        pSdrObj->AppendUserData( new ScIMapInfo( rImageMap ) );
+                        pSdrObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new ScIMapInfo( rImageMap )) );
                     else
                         pIMapInfo->SetImageMap( rImageMap );
 

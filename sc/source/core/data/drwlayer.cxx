@@ -2211,7 +2211,7 @@ ScDrawObjData* ScDrawLayer::GetNonRotatedObjData( SdrObject* pObj, bool bCreate 
     if( pObj && bCreate )
     {
         ScDrawObjData* pData = new ScDrawObjData;
-        pObj->AppendUserData(pData);
+        pObj->AppendUserData(std::unique_ptr<SdrObjUserData>(pData));
         return pData;
     }
     return nullptr;
@@ -2225,7 +2225,7 @@ ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, bool bCreate )
     if( pObj && bCreate )
     {
         ScDrawObjData* pData = new ScDrawObjData;
-        pObj->AppendUserData(pData);
+        pObj->AppendUserData(std::unique_ptr<SdrObjUserData>(pData));
         return pData;
     }
     return nullptr;
@@ -2332,7 +2332,7 @@ ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, bool bCreate )
     if ( bCreate )
     {
         ScMacroInfo* pData = new ScMacroInfo;
-        pObj->AppendUserData(pData);
+        pObj->AppendUserData(std::unique_ptr<SdrObjUserData>(pData));
         return pData;
     }
     return nullptr;

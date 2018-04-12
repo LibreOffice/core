@@ -453,7 +453,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
             else
             {
                 // insert new user data with image map
-                pObj->AppendUserData(new ScIMapInfo(aImageMap) );
+                pObj->AppendUserData(std::unique_ptr<SdrObjUserData>(new ScIMapInfo(aImageMap) ));
             }
         }
     }

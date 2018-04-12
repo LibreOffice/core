@@ -89,13 +89,13 @@ SdAnimationInfo::~SdAnimationInfo()
 {
 }
 
-SdrObjUserData* SdAnimationInfo::Clone(SdrObject* pObject) const
+std::unique_ptr<SdrObjUserData> SdAnimationInfo::Clone(SdrObject* pObject) const
 {
     DBG_ASSERT( pObject, "SdAnimationInfo::Clone(), pObject must not be null!" );
     if( pObject == nullptr )
         pObject = &mrObject;
 
-    return new SdAnimationInfo(*this, *pObject );
+    return std::unique_ptr<SdrObjUserData>(new SdAnimationInfo(*this, *pObject ));
 }
 
 void SdAnimationInfo::SetBookmark( const OUString& rBookmark )

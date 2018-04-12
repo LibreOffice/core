@@ -40,7 +40,7 @@ public:
                         SfxListener(),
                         aImageMap( rIMapInfo.aImageMap ) {};
 
-    virtual SdrObjUserData* Clone( SdrObject* ) const override { return new SdIMapInfo( *this ); }
+    virtual std::unique_ptr<SdrObjUserData> Clone( SdrObject* ) const override { return std::unique_ptr<SdrObjUserData>(new SdIMapInfo( *this )); }
 
     void            SetImageMap( const ImageMap& rIMap ) { aImageMap = rIMap; }
     const ImageMap& GetImageMap() const { return aImageMap; }

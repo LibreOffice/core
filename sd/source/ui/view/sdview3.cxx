@@ -1019,7 +1019,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     InsertObjectAtView( pObj, *pPV, nOptions );
 
                     if( pImageMap )
-                        pObj->AppendUserData( new SdIMapInfo( *pImageMap ) );
+                        pObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new SdIMapInfo( *pImageMap )) );
 
                     if (pObj->IsChart())
                     {
@@ -1193,7 +1193,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     InsertObjectAtView( pObj, *pPV, nOptions );
 
                     if( pImageMap )
-                        pObj->AppendUserData( new SdIMapInfo( *pImageMap ) );
+                        pObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new SdIMapInfo( *pImageMap )) );
 
                     // let the object stay in loaded state after insertion
                     pObj->Unload();
