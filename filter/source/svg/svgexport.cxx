@@ -2004,12 +2004,10 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< css::drawing::XDraw
                                         if( bIsTextShapeStarted && ( nType == MetaActionType::BMPSCALE  || nType == MetaActionType::BMPEXSCALE ) )
                                         {
                                             GDIMetaFile aEmbeddedBitmapMtf;
-                                            pAction->Duplicate();
                                             aEmbeddedBitmapMtf.AddAction( pAction );
                                             aEmbeddedBitmapMtf.SetPrefSize( aSize );
                                             aEmbeddedBitmapMtf.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
                                             mEmbeddedBitmapActionSet.insert( ObjectRepresentation( rxShape, aEmbeddedBitmapMtf ) );
-                                            pAction->Duplicate();
                                             aMtf.AddAction( pAction );
                                         }
                                     }

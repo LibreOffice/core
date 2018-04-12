@@ -91,9 +91,9 @@ public:
 protected:
     virtual ~SimpleReferenceObject() COVERITY_NOEXCEPT_FALSE;
 
-private:
     oslInterlockedCount m_nCount;
 
+private:
     /** not implemented
      */
     SimpleReferenceObject(SimpleReferenceObject &) SAL_DELETED_FUNCTION;

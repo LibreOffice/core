@@ -1871,7 +1871,6 @@ BitmapChecksum SVGActionWriter::GetChecksum( const MetaAction* pAction )
 {
     GDIMetaFile aMtf;
     MetaAction* pA = const_cast<MetaAction*>(pAction);
-    pA->Duplicate();
     aMtf.AddAction( pA );
     return aMtf.GetChecksum();
 }

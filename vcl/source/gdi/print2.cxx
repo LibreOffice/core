@@ -1088,7 +1088,6 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         {
             // simply add this action (above, we inserted the actions
             // starting at index 0 up to and including nLastBgAction)
-            component.first->Duplicate();
             rOutMtf.AddAction( component.first );
         }
 
@@ -1300,7 +1299,6 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                 else
                 {
                     // simply add this action
-                    pCurrAct->Duplicate();
                     rOutMtf.AddAction( pCurrAct );
                 }
 

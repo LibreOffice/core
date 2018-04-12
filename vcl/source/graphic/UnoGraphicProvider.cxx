@@ -655,15 +655,13 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
                         ImplApplyBitmapResolution( aGraphic, nImageResolution,
                             aGraphic.GetSizePixel(), awt::Size( aSize100thmm2.Width(), aSize100thmm2.Height() ) );
 
-                        MetaAction* pNewAction;
+                        rtl::Reference<MetaAction> pNewAction;
                         if ( pAction->GetType() == MetaActionType::BMPSCALE )
                             pNewAction = new MetaBmpScaleAction ( aPos, aSize, aGraphic.GetBitmap() );
                         else
                             pNewAction = new MetaBmpExScaleAction( aPos, aSize, aGraphic.GetBitmapEx() );
 
-                        MetaAction* pDeleteAction = aMtf.ReplaceAction( pNewAction, i );
-                        if(pDeleteAction)
-                            pDeleteAction->Delete();
+                        aMtf.ReplaceAction( pNewAction, i );
                         break;
                     }
                     default:

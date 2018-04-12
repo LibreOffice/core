@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_pict_test, \
 	comphelper \
 	basegfx \
 	sal \
+	salhelper \
 	test \
 	tk \
 	tl \

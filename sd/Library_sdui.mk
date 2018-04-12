@@ -49,6 +49,7 @@ $(eval $(call gb_Library_use_libraries,sdui,\
     fwl \
     fwe \
     sal \
+    salhelper \
     sd \
     sfx \
     sot \
