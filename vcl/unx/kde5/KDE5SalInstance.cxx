@@ -42,9 +42,9 @@ KDE5SalInstance::KDE5SalInstance(SalYieldMutex* pMutex)
     pSVData->maAppData.mpToolkitName = new OUString("kde5");
 }
 
-KDE5SalFrame* KDE5SalInstance::CreateFrame( KDE5SalFrame *pParent, SalFrameStyleFlags nState )
+SalFrame* KDE5SalInstance::CreateFrame( SalFrame *pParent, SalFrameStyleFlags nState )
 {
-    return new KDE5SalFrame( pParent, nState, true );
+    return new KDE5SalFrame( static_cast<KDE5SalFrame*>(pParent), nState, true );
 }
 
 uno::Reference< ui::dialogs::XFilePicker2 > KDE5SalInstance::createFilePicker(
