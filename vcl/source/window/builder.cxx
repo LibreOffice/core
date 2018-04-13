@@ -2604,7 +2604,7 @@ std::vector<OUString> VclBuilder::handleItems(xmlreader::XmlReader &reader) cons
                 else
                     sFinalValue = OUString::fromUtf8(sValue);
 
-                if (m_pStringReplace)
+                if (m_bLegacy && m_pStringReplace)
                     sFinalValue = (*m_pStringReplace)(sFinalValue);
 
                 aItems.push_back(sFinalValue);
@@ -3349,7 +3349,7 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap) 
     if (!sProperty.isEmpty())
     {
         sProperty = sProperty.replace('_', '-');
-        if (m_pStringReplace)
+        if (m_bLegacy && m_pStringReplace)
             sFinalValue = (*m_pStringReplace)(sFinalValue);
         rMap[sProperty] = sFinalValue;
     }
