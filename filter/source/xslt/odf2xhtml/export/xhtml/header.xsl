@@ -86,15 +86,21 @@
 		<xsl:with-param name="globalData" select="$globalData" />
 	</xsl:call-template>
 <xsl:text>table { border-collapse:collapse; border-spacing:0; empty-cells:show }
-	</xsl:text>
-	<xsl:choose>
-		<xsl:when test="/*/office:body/office:spreadsheet"><xsl:text>td, th { vertical-align:top; font-size:10pt;}
-	</xsl:text></xsl:when>
-		<xsl:otherwise><xsl:text>td, th { vertical-align:top; font-size:12pt;}
-	</xsl:text></xsl:otherwise>
-	</xsl:choose>
-<xsl:text>h1, h2, h3, h4, h5, h6 { clear:both }
-	</xsl:text>
+    </xsl:text>
+    <xsl:choose>
+        <xsl:when test="/*/office:body/office:spreadsheet"><xsl:text>td, th { vertical-align:top; font-size:10pt;}
+    </xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>td, th { vertical-align:top; font-size:12pt;}
+    </xsl:text></xsl:otherwise>
+    </xsl:choose>
+<xsl:text>h1, h2, h3, h4, h5, h6 { clear:both;}
+    </xsl:text>
+<xsl:choose>
+    <xsl:when test="/*/office:body/office:spreadsheet">
+        <xsl:text>p { white-space: nowrap; }
+    </xsl:text>
+    </xsl:when>
+</xsl:choose>
 <xsl:text>ol, ul { margin:0; padding:0;}
 	</xsl:text>
 <xsl:text>li { list-style: none; margin:0; padding:0;}
