@@ -268,7 +268,7 @@ public:
 
         WidgetType getType() const { return Type; }
 
-        virtual AnyWidget* Clone() const = 0;
+        virtual std::unique_ptr<AnyWidget> Clone() const = 0;
 
     protected:
         // note that this equals the default compiler-generated copy-ctor, but we want to have it
@@ -327,9 +327,9 @@ public:
                   Dest( -1 ), Submit( false ), SubmitGet( false )
         {}
 
-        virtual AnyWidget* Clone() const override
+        virtual std::unique_ptr<AnyWidget> Clone() const override
         {
-            return new PushButtonWidget( *this );
+            return std::unique_ptr<AnyWidget>(new PushButtonWidget( *this ));
         }
     };
 
@@ -342,9 +342,9 @@ public:
                   Checked( false )
         {}
 
-        virtual AnyWidget* Clone() const override
+        virtual std::unique_ptr<AnyWidget> Clone() const override
         {
-            return new CheckBoxWidget( *this );
+            return std::unique_ptr<AnyWidget>(new CheckBoxWidget( *this ));
         }
     };
 
@@ -360,9 +360,9 @@ public:
                   RadioGroup( 0 )
         {}
 
-        virtual AnyWidget* Clone() const override
+        virtual std::unique_ptr<AnyWidget> Clone() const override
         {
-            return new RadioButtonWidget( *this );
+            return std::unique_ptr<AnyWidget>(new RadioButtonWidget( *this ));
         }
         // radio buttons having the same RadioGroup id comprise one
         // logical radio button group, that is at most one of the RadioButtons
@@ -389,9 +389,9 @@ public:
                   MaxLen( 0 )
         {}
 
-        virtual AnyWidget* Clone() const override
+        virtual std::unique_ptr<AnyWidget> Clone() const override
         {
-            return new EditWidget( *this );
+            return std::unique_ptr<AnyWidget>(new EditWidget( *this ));
         }
     };
 
@@ -411,9 +411,9 @@ public:
                   MultiSelect( false )
         {}
 
-        virtual AnyWidget* Clone() const override
+        virtual std::unique_ptr<AnyWidget> Clone() const override
         {
-            return new ListBoxWidget( *this );
+            return std::unique_ptr<AnyWidget>(new ListBoxWidget( *this ));
         }
     };
 
@@ -427,9 +427,9 @@ public:
                 : AnyWidget( vcl::PDFWriter::ComboBox )
         {}
 
-        virtual AnyWidget* Clone() const override
+        virtual std::unique_ptr<AnyWidget> Clone() const override
         {
-            return new ComboBoxWidget( *this );
+            return std::unique_ptr<AnyWidget>(new ComboBoxWidget( *this ));
         }
     };
 
@@ -439,9 +439,9 @@ public:
                 : AnyWidget( vcl::PDFWriter::Signature )
         {}
 
-        virtual AnyWidget* Clone() const override
+        virtual std::unique_ptr<AnyWidget> Clone() const override
         {
-            return new SignatureWidget( *this );
+            return std::unique_ptr<AnyWidget>(new SignatureWidget( *this ));
         }
     };
 
