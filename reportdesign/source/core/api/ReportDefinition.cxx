@@ -1607,7 +1607,7 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
 
     uno::Any aStorageSource;
     if ( xStream.is() )
-        aStorageSource = aStorageSource;
+        aStorageSource <<= xStream;
     else if ( !sURL.isEmpty() )
         aStorageSource <<= sURL;
     else
