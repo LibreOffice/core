@@ -59,6 +59,14 @@ def check_message_box_spacing(element):
     lint_assert(spacing.text == MESSAGE_BOX_SPACING,
                 "Button box 'spacing' should be " + MESSAGE_BOX_SPACING)
 
+def check_radio_buttons(root):
+    radios = [element for element in root.findall('.//object') if element.attrib['class'] == 'GtkRadioButton']
+    for radio in radios:
+        radio_underlines = radio.findall("./property[@name='use_underline']")
+        assert len(radio_underlines) <= 1
+        if len(radio_underlines) < 1:
+            lint_assert(False, "No use_underline in GtkRadioButton with id = '" + radio.attrib['id'] + "'")
+
 def check_frames(root):
     frames = [element for element in root.findall('.//object') if element.attrib['class'] == 'GtkFrame']
     for frame in frames:
@@ -119,6 +127,8 @@ def main():
         check_message_box_spacing(element)
 
     check_frames(root)
+
+    check_radio_buttons(root)
 
     check_title_labels(root)
 

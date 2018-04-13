@@ -26,6 +26,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="use_underline">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarwrap|buttonnone|tooltip_text">None</property>
                 <property name="action_name">.uno:WrapOff</property>
                 <property name="xalign">0</property>
@@ -49,6 +50,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="use_underline">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarwrap|buttonparallel|tooltip_text">Parallel</property>
                 <property name="action_name">.uno:WrapOn</property>
                 <property name="xalign">0</property>
@@ -71,6 +73,7 @@
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="use_underline">True</property>
                 <property name="receives_default">False</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarwrap|buttonoptimal|tooltip_text">Optimal</property>
                 <property name="action_name">.uno:WrapIdeal</property>
@@ -95,6 +98,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="use_underline">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarwrap|buttonbefore|tooltip_text">Before</property>
                 <property name="action_name">.uno:WrapLeft</property>
                 <property name="xalign">0</property>
@@ -118,6 +122,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="use_underline">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarwrap|buttonafter|tooltip_text">After</property>
                 <property name="action_name">.uno:WrapRight</property>
                 <property name="xalign">0</property>
@@ -141,6 +146,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="use_underline">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarwrap|buttonthrough|tooltip_text">Through</property>
                 <property name="action_name">.uno:WrapThrough</property>
                 <property name="xalign">0</property>

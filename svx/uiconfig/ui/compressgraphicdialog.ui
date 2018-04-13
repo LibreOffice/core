@@ -151,6 +151,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
                             <property name="tooltip_text" translatable="yes" context="compressgraphicdialog|radio-jpeg|tooltip_text">Lossy compression</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
@@ -167,6 +168,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
                             <property name="tooltip_text" translatable="yes" context="compressgraphicdialog|radio-lossless|tooltip_text">Lossless compression</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
