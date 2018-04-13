@@ -190,7 +190,7 @@
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
+                            <property name="top_attach">2</property>
                           </packing>
                         </child>
                         <child>
@@ -209,6 +209,36 @@
                                 <property name="vexpand">True</property>
                               </object>
                             </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_hint">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes" context="signsignatureline|label_hint">Instructions from the document creator:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">label_hint_text</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_hint_text">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="margin_left">12</property>
+                            <property name="mnemonic_widget">edit_comment</property>
+                            <attributes>
+                              <attribute name="style" value="oblique"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
