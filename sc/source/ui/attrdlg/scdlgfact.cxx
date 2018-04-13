@@ -82,7 +82,12 @@ IMPL_ABSTDLG_BASE(AbstractScCondFormatManagerDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataPilotDatabaseDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataPilotSourceTypeDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataPilotServiceDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScDeleteCellDlg_Impl);
+
+short AbstractScDeleteCellDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 //for dataform
 IMPL_ABSTDLG_BASE(AbstractScDataFormDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDeleteContentsDlg_Impl);
@@ -242,7 +247,7 @@ OUString AbstractScDataPilotServiceDlg_Impl::GetParPass() const
 
 DelCellCmd AbstractScDeleteCellDlg_Impl::GetDelCellCmd() const
 {
-    return pDlg->GetDelCellCmd();
+    return m_xDlg->GetDelCellCmd();
 }
 
 void AbstractScDeleteContentsDlg_Impl::DisableObjects()
@@ -679,11 +684,10 @@ VclPtr<AbstractScDataPilotServiceDlg> ScAbstractDialogFactory_Impl::CreateScData
     return VclPtr<AbstractScDataPilotServiceDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractScDeleteCellDlg> ScAbstractDialogFactory_Impl::CreateScDeleteCellDlg(vcl::Window* pParent,
+VclPtr<AbstractScDeleteCellDlg> ScAbstractDialogFactory_Impl::CreateScDeleteCellDlg(weld::Window* pParent,
     bool bDisallowCellMove)
 {
-    VclPtr<ScDeleteCellDlg> pDlg = VclPtr<ScDeleteCellDlg>::Create(pParent, bDisallowCellMove);
-    return VclPtr<AbstractScDeleteCellDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScDeleteCellDlg_Impl>::Create(new ScDeleteCellDlg(pParent, bDisallowCellMove));
 }
 
 VclPtr<AbstractScDataFormDlg> ScAbstractDialogFactory_Impl::CreateScDataFormDlg(vcl::Window* pParent,

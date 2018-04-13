@@ -25,73 +25,75 @@
 
 static sal_uInt8 nDelItemChecked=0;
 
-ScDeleteCellDlg::ScDeleteCellDlg(vcl::Window* pParent, bool bDisallowCellMove)
-    : ModalDialog(pParent, "DeleteCellsDialog", "modules/scalc/ui/deletecells.ui")
+ScDeleteCellDlg::ScDeleteCellDlg(weld::Window* pParent, bool bDisallowCellMove)
+    : GenericDialogController(pParent, "modules/scalc/ui/deletecells.ui", "DeleteCellsDialog")
+    , m_xBtnCellsUp(m_xBuilder->weld_radio_button("up"))
+    , m_xBtnCellsLeft(m_xBuilder->weld_radio_button("left"))
+    , m_xBtnDelRows(m_xBuilder->weld_radio_button("rows"))
+    , m_xBtnDelCols(m_xBuilder->weld_radio_button("cols"))
 {
-    get(m_pBtnCellsUp, "up");
-    get(m_pBtnCellsLeft, "left");
-    get(m_pBtnDelRows, "rows");
-    get(m_pBtnDelCols, "cols");
-
     if (bDisallowCellMove)
     {
-        m_pBtnCellsUp->Disable();
-        m_pBtnCellsLeft->Disable();
+        m_xBtnCellsUp->set_sensitive(false);
+        m_xBtnCellsLeft->set_sensitive(false);
 
-        switch(nDelItemChecked)
+        switch (nDelItemChecked)
         {
-            case 2: m_pBtnDelRows->Check();break;
-            case 3: m_pBtnDelCols->Check();break;
-            default:m_pBtnDelRows->Check();break;
+            case 2:
+                m_xBtnDelRows->set_active(true);
+                break;
+            case 3:
+                m_xBtnDelCols->set_active(true);
+                break;
+            default:
+                m_xBtnDelRows->set_active(true);
+                break;
         }
     }
     else
     {
-        switch(nDelItemChecked)
+        switch (nDelItemChecked)
         {
-            case 0: m_pBtnCellsUp->Check();break;
-            case 1: m_pBtnCellsLeft->Check();break;
-            case 2: m_pBtnDelRows->Check();break;
-            case 3: m_pBtnDelCols->Check();break;
+            case 0:
+                m_xBtnCellsUp->set_active(true);
+                break;
+            case 1:
+                m_xBtnCellsLeft->set_active(true);
+                break;
+            case 2:
+                m_xBtnDelRows->set_active(true);
+                break;
+            case 3:
+                m_xBtnDelCols->set_active(true);
+                break;
         }
     }
 }
 
 ScDeleteCellDlg::~ScDeleteCellDlg()
 {
-    disposeOnce();
 }
-
-void ScDeleteCellDlg::dispose()
-{
-    m_pBtnCellsUp.clear();
-    m_pBtnCellsLeft.clear();
-    m_pBtnDelRows.clear();
-    m_pBtnDelCols.clear();
-    ModalDialog::dispose();
-}
-
 
 DelCellCmd ScDeleteCellDlg::GetDelCellCmd() const
 {
     DelCellCmd nReturn = DEL_NONE;
 
-    if ( m_pBtnCellsUp->IsChecked()   )
+    if ( m_xBtnCellsUp->get_active()   )
     {
         nDelItemChecked=0;
         nReturn = DEL_CELLSUP;
     }
-    else if ( m_pBtnCellsLeft->IsChecked() )
+    else if ( m_xBtnCellsLeft->get_active() )
     {
         nDelItemChecked=1;
         nReturn = DEL_CELLSLEFT;
     }
-    else if ( m_pBtnDelRows->IsChecked()   )
+    else if ( m_xBtnDelRows->get_active()   )
     {
         nDelItemChecked=2;
         nReturn = DEL_DELROWS;
     }
-    else if ( m_pBtnDelCols->IsChecked()   )
+    else if ( m_xBtnDelCols->get_active()   )
     {
         nDelItemChecked=3;
         nReturn = DEL_DELCOLS;

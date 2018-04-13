@@ -20,24 +20,21 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DELCLDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DELCLDLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 
 #include <global.hxx>
 
-class ScDeleteCellDlg : public ModalDialog
+class ScDeleteCellDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<RadioButton> m_pBtnCellsUp;
-    VclPtr<RadioButton> m_pBtnCellsLeft;
-    VclPtr<RadioButton> m_pBtnDelRows;
-    VclPtr<RadioButton> m_pBtnDelCols;
+    std::unique_ptr<weld::RadioButton> m_xBtnCellsUp;
+    std::unique_ptr<weld::RadioButton> m_xBtnCellsLeft;
+    std::unique_ptr<weld::RadioButton> m_xBtnDelRows;
+    std::unique_ptr<weld::RadioButton> m_xBtnDelCols;
 
 public:
-    ScDeleteCellDlg(vcl::Window* pParent, bool bDisallowCellMove);
+    ScDeleteCellDlg(weld::Window* pParent, bool bDisallowCellMove);
     virtual ~ScDeleteCellDlg() override;
-    virtual void dispose() override;
 
     DelCellCmd GetDelCellCmd() const;
 };
