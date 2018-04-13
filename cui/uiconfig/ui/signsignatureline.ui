@@ -120,7 +120,7 @@
                             <property name="halign">start</property>
                             <property name="label" translatable="yes" context="signsignatureline|label_certificate" comments="Certificate to be used for signing">Certificate:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">edit_name</property>
+                            <property name="mnemonic_widget">btn_select_certificate</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
