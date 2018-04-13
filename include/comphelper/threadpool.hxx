@@ -43,6 +43,9 @@ public:
     /// count for the CPU
     static      ThreadPool& getSharedOptimalPool();
 
+    /// resets / closes shared optimal pool workers.
+    static      void resetSharedOptimalPool();
+
     static std::shared_ptr<ThreadTaskTag> createThreadTaskTag();
 
     static bool isTaskTagDone(const std::shared_ptr<ThreadTaskTag>&);
@@ -55,6 +58,9 @@ public:
 
     ThreadPool( sal_Int32 nWorkers );
     ~ThreadPool();
+
+    /// Instantiate a given number of workers
+    void        launchWorkers( sal_Int32 nWorkers );
 
     /// push a new task onto the work queue
     void        pushTask( ThreadTask *pTask /* takes ownership */ );
