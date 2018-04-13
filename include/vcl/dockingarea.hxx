@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_DOCKINGAREA_HXX
 
 #include <vcl/window.hxx>
+#include <memory>
 
 //  A simple container for docked toolbars
 //  - its main purpose is theming support
@@ -29,7 +30,7 @@ class VCL_DLLPUBLIC DockingAreaWindow : public vcl::Window
     class ImplData;
 
 private:
-    ImplData*       mpImplData;
+    std::unique_ptr<ImplData> mpImplData;
 
                     DockingAreaWindow (const DockingAreaWindow &) = delete;
                     DockingAreaWindow & operator= (const DockingAreaWindow &) = delete;
