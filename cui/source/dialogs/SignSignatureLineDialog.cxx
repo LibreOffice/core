@@ -53,6 +53,8 @@ SignSignatureLineDialog::SignSignatureLineDialog(weld::Widget* pParent, Referenc
     , m_xEditComment(m_xBuilder->weld_text_view("edit_comment"))
     , m_xBtnChooseCertificate(m_xBuilder->weld_button("btn_select_certificate"))
     , m_xBtnSign(m_xBuilder->weld_button("ok"))
+    , m_xLabelHint(m_xBuilder->weld_label("label_hint"))
+    , m_xLabelHintText(m_xBuilder->weld_label("label_hint_text"))
 {
     Reference<container::XIndexAccess> xIndexAccess(m_xModel->getCurrentSelection(),
                                                     UNO_QUERY_THROW);
@@ -84,7 +86,20 @@ SignSignatureLineDialog::SignSignatureLineDialog(weld::Widget* pParent, Referenc
         >>= m_aSuggestedSignerName;
     m_xShapeProperties->getPropertyValue("SignatureLineSuggestedSignerTitle")
         >>= m_aSuggestedSignerTitle;
+    OUString aSigningInstructions;
+    m_xShapeProperties->getPropertyValue("SignatureLineSigningInstructions")
+        >>= aSigningInstructions;
     m_xShapeProperties->getPropertyValue("SignatureLineShowSignDate") >>= m_bShowSignDate;
+
+    if (aSigningInstructions.isEmpty())
+    {
+        m_xLabelHint->hide();
+        m_xLabelHintText->hide();
+    }
+    else
+    {
+        m_xLabelHintText->set_label(aSigningInstructions);
+    }
 
     ValidateFields();
 }
