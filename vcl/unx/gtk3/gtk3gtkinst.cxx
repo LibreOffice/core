@@ -31,6 +31,7 @@
 #include <rtl/bootstrap.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/weld.hxx>
 
@@ -2343,6 +2344,31 @@ public:
     }
 };
 
+namespace
+{
+    OUString get_label(GtkLabel* pLabel)
+    {
+        const gchar* pStr = gtk_label_get_label(pLabel);
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
+    void set_label(GtkLabel* pLabel, const OUString& rText)
+    {
+        gtk_label_set_label(pLabel, MapToGtkAccelerator(rText).getStr());
+    }
+
+    OUString get_label(GtkButton* pButton)
+    {
+        const gchar* pStr = gtk_button_get_label(pButton);
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
+    void set_label(GtkButton* pButton, const OUString& rText)
+    {
+        gtk_button_set_label(pButton, MapToGtkAccelerator(rText).getStr());
+    }
+}
+
 class GtkInstanceButton : public GtkInstanceContainer, public virtual weld::Button
 {
 private:
@@ -2367,13 +2393,12 @@ public:
 
     virtual void set_label(const OUString& rText) override
     {
-        gtk_button_set_label(m_pButton, MapToGtkAccelerator(rText).getStr());
+        ::set_label(m_pButton, rText);
     }
 
     virtual OUString get_label() const override
     {
-        const gchar* pStr = gtk_button_get_label(m_pButton);
-        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+        return ::get_label(m_pButton);
     }
 
     virtual void clicked() override
@@ -3101,13 +3126,12 @@ public:
 
     virtual void set_label(const OUString& rText) override
     {
-        gtk_label_set_label(m_pLabel, MapToGtkAccelerator(rText).getStr());
+        ::set_label(m_pLabel, rText);
     }
 
     virtual OUString get_label() const override
     {
-        const char* pLabel = gtk_label_get_label(m_pLabel);
-        return OUString(pLabel, strlen(pLabel), RTL_TEXTENCODING_UTF8);
+        return ::get_label(m_pLabel);
     }
 };
 
@@ -3868,62 +3892,6 @@ namespace
 
         return false;
     }
-
-    void postprocess(gpointer data, gpointer user_data)
-    {
-        GObject* pObject = static_cast<GObject*>(data);
-        if (!GTK_IS_WIDGET(pObject))
-            return;
-        OString* pHelpRoot = static_cast<OString*>(user_data);
-        //fixup icons
-        //wanted: better way to do this, e.g. make gtk use gio for
-        //loading from a filename and provide gio protocol handler
-        //for our image in a zip urls
-        //
-        //unpack the images and keep them as dirs and just
-        //add the paths to the gtk icon theme dir
-        if (GTK_IS_IMAGE(pObject))
-        {
-            GtkImage* pImage = GTK_IMAGE(pObject);
-            const gchar* icon_name;
-            gtk_image_get_icon_name(pImage, &icon_name, nullptr);
-            GtkIconSize size;
-            g_object_get(pImage, "icon-size", &size, nullptr);
-            if (icon_name)
-            {
-                OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
-
-                SvMemoryStream aMemStm;
-                BitmapEx aBitmap(aIconName);
-                vcl::PNGWriter aWriter(aBitmap);
-                aWriter.Write(aMemStm);
-
-                GdkPixbufLoader *pixbuf_loader = gdk_pixbuf_loader_new();
-                gdk_pixbuf_loader_write(pixbuf_loader, static_cast<const guchar*>(aMemStm.GetData()),
-                                        aMemStm.Seek(STREAM_SEEK_TO_END), nullptr);
-                gdk_pixbuf_loader_close(pixbuf_loader, nullptr);
-                GdkPixbuf* pixbuf = gdk_pixbuf_loader_get_pixbuf(pixbuf_loader);
-
-                gtk_image_set_from_pixbuf(pImage, pixbuf);
-                g_object_unref(pixbuf_loader);
-            }
-        }
-        //set helpids
-        GtkWidget* pWidget = GTK_WIDGET(pObject);
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pWidget));
-        size_t nLen = pStr ? strlen(pStr) : 0;
-        if (!nLen)
-            return;
-        OString sHelpId = *pHelpRoot + OString(pStr, nLen);
-        set_help_id(pWidget, sHelpId);
-        //hook up for extended help
-        const ImplSVData* pSVData = ImplGetSVData();
-        if (pSVData->maHelpData.mbBalloonHelp && !GTK_IS_DIALOG(pWidget))
-        {
-            gtk_widget_set_has_tooltip(pWidget, true);
-            g_signal_connect(pObject, "query-tooltip", G_CALLBACK(signalTooltipQuery), nullptr);
-        }
-    }
 }
 
 namespace
@@ -3961,9 +3929,84 @@ class GtkInstanceBuilder : public weld::Builder
 {
 private:
     OUString m_sHelpRoot;
+    OString m_aUtf8HelpRoot;
     GtkBuilder* m_pBuilder;
     GSList* m_pObjectList;
     GtkWidget* m_pParentWidget;
+    std::vector<GtkButton*> m_aMnemonicButtons;
+    std::vector<GtkLabel*> m_aMnemonicLabels;
+
+    void postprocess_widget(GtkWidget* pWidget)
+    {
+        //fixup icons
+        //wanted: better way to do this, e.g. make gtk use gio for
+        //loading from a filename and provide gio protocol handler
+        //for our image in a zip urls
+        //
+        //unpack the images and keep them as dirs and just
+        //add the paths to the gtk icon theme dir
+        if (GTK_IS_IMAGE(pWidget))
+        {
+            GtkImage* pImage = GTK_IMAGE(pWidget);
+            const gchar* icon_name;
+            gtk_image_get_icon_name(pImage, &icon_name, nullptr);
+            GtkIconSize size;
+            g_object_get(pImage, "icon-size", &size, nullptr);
+            if (icon_name)
+            {
+                OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
+
+                SvMemoryStream aMemStm;
+                BitmapEx aBitmap(aIconName);
+                vcl::PNGWriter aWriter(aBitmap);
+                aWriter.Write(aMemStm);
+
+                GdkPixbufLoader *pixbuf_loader = gdk_pixbuf_loader_new();
+                gdk_pixbuf_loader_write(pixbuf_loader, static_cast<const guchar*>(aMemStm.GetData()),
+                                        aMemStm.Seek(STREAM_SEEK_TO_END), nullptr);
+                gdk_pixbuf_loader_close(pixbuf_loader, nullptr);
+                GdkPixbuf* pixbuf = gdk_pixbuf_loader_get_pixbuf(pixbuf_loader);
+
+                gtk_image_set_from_pixbuf(pImage, pixbuf);
+                g_object_unref(pixbuf_loader);
+            }
+        }
+        //set helpids
+        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pWidget));
+        size_t nLen = pStr ? strlen(pStr) : 0;
+        if (!nLen)
+            return;
+        OString sHelpId = m_aUtf8HelpRoot + OString(pStr, nLen);
+        set_help_id(pWidget, sHelpId);
+        //hook up for extended help
+        const ImplSVData* pSVData = ImplGetSVData();
+        if (pSVData->maHelpData.mbBalloonHelp && !GTK_IS_DIALOG(pWidget))
+        {
+            gtk_widget_set_has_tooltip(pWidget, true);
+            g_signal_connect(pWidget, "query-tooltip", G_CALLBACK(signalTooltipQuery), nullptr);
+        }
+
+        //missing mnemonics
+        if (GTK_IS_BUTTON(pWidget))
+        {
+            if (gtk_button_get_use_underline(GTK_BUTTON(pWidget)))
+                m_aMnemonicButtons.push_back(GTK_BUTTON(pWidget));
+        }
+        else if (GTK_IS_LABEL(pWidget))
+        {
+            if (gtk_label_get_use_underline(GTK_LABEL(pWidget)))
+                m_aMnemonicLabels.push_back(GTK_LABEL(pWidget));
+        }
+    }
+
+    static void postprocess(gpointer data, gpointer user_data)
+    {
+        GObject* pObject = static_cast<GObject*>(data);
+        if (!GTK_IS_WIDGET(pObject))
+            return;
+        GtkInstanceBuilder* pThis = static_cast<GtkInstanceBuilder*>(user_data);
+        pThis->postprocess_widget(GTK_WIDGET(pObject));
+    }
 public:
     GtkInstanceBuilder(GtkWidget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
         : weld::Builder(rUIFile)
@@ -3981,10 +4024,41 @@ public:
         if (nIdx != -1)
             m_sHelpRoot = m_sHelpRoot.copy(0, nIdx);
         m_sHelpRoot = m_sHelpRoot + OUString('/');
+        m_aUtf8HelpRoot = OUStringToOString(m_sHelpRoot, RTL_TEXTENCODING_UTF8);
 
         m_pObjectList = gtk_builder_get_objects(m_pBuilder);
-        OString aUtf8HelpRoot(OUStringToOString(m_sHelpRoot, RTL_TEXTENCODING_UTF8));
-        g_slist_foreach(m_pObjectList, postprocess, &aUtf8HelpRoot);
+        g_slist_foreach(m_pObjectList, postprocess, this);
+
+        GenerateMissingMnemonics();
+    }
+
+    void GenerateMissingMnemonics()
+    {
+        MnemonicGenerator aMnemonicGenerator('_');
+        for (const auto a : m_aMnemonicButtons)
+            aMnemonicGenerator.RegisterMnemonic(get_label(a));
+        for (const auto a : m_aMnemonicLabels)
+            aMnemonicGenerator.RegisterMnemonic(get_label(a));
+
+        for (const auto a : m_aMnemonicButtons)
+        {
+            OUString aLabel(get_label(a));
+            OUString aNewLabel = aMnemonicGenerator.CreateMnemonic(aLabel);
+            if (aLabel == aNewLabel)
+                continue;
+            set_label(a, aNewLabel);
+        }
+        for (const auto a : m_aMnemonicLabels)
+        {
+            OUString aLabel(get_label(a));
+            OUString aNewLabel = aMnemonicGenerator.CreateMnemonic(aLabel);
+            if (aLabel == aNewLabel)
+                continue;
+            set_label(a, aNewLabel);
+        }
+
+        m_aMnemonicLabels.clear();
+        m_aMnemonicButtons.clear();
     }
 
     virtual ~GtkInstanceBuilder() override
