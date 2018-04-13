@@ -40,6 +40,7 @@ private:
     virtual void Apply() override;
 
     DECL_LINK(chooseCertificate, weld::Button&, void);
+    DECL_LINK(entryChanged, weld::Entry&, void);
 };
 
 #endif
