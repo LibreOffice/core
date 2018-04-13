@@ -19,6 +19,7 @@ pdfium_patches += 0002-svx-more-accurate-PDF-text-importing.patch.2
 pdfium_patches += 0003-svx-import-PDF-images-as-BGRA.patch.2
 pdfium_patches += 0004-svx-support-PDF-text-color.patch.2
 pdfium_patches += 0005-svx-support-Paths-in-PDFs-while-importing.patch.2
+pdfium_patches += 0006-svx-improve-path-importing-from-PDF.patch.2
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
