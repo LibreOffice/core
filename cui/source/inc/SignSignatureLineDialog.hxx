@@ -25,12 +25,15 @@ private:
     std::unique_ptr<weld::TextView> m_xEditComment;
     std::unique_ptr<weld::Button> m_xBtnChooseCertificate;
     std::unique_ptr<weld::Button> m_xBtnSign;
+    std::unique_ptr<weld::Label> m_xLabelHint;
+    std::unique_ptr<weld::Label> m_xLabelHintText;
 
     css::uno::Reference<css::beans::XPropertySet> m_xShapeProperties;
     css::uno::Reference<css::security::XCertificate> m_xSelectedCertifate;
     OUString m_aSignatureLineId;
     OUString m_aSuggestedSignerName;
     OUString m_aSuggestedSignerTitle;
+    OUString m_aSigningInstructions;
     bool m_bShowSignDate;
 
     void ValidateFields();
