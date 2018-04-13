@@ -162,7 +162,13 @@ class AbstractScDataPilotServiceDlg_Impl : public AbstractScDataPilotServiceDlg
 
 class AbstractScDeleteCellDlg_Impl : public AbstractScDeleteCellDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScDeleteCellDlg_Impl,ScDeleteCellDlg)
+    std::unique_ptr<ScDeleteCellDlg> m_xDlg;
+public:
+    explicit AbstractScDeleteCellDlg_Impl(ScDeleteCellDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short           Execute() override;
     virtual DelCellCmd GetDelCellCmd() const override;
 };
 
@@ -435,7 +441,7 @@ public:
 
     virtual VclPtr<AbstractScDataPilotServiceDlg> CreateScDataPilotServiceDlg( vcl::Window* pParent,
                                                                         const std::vector<OUString>& rServices ) override;
-    virtual VclPtr<AbstractScDeleteCellDlg> CreateScDeleteCellDlg(vcl::Window* pParent, bool bDisallowCellMove ) override;
+    virtual VclPtr<AbstractScDeleteCellDlg> CreateScDeleteCellDlg(weld::Window* pParent, bool bDisallowCellMove ) override;
 
     //for dataform
     virtual VclPtr<AbstractScDataFormDlg> CreateScDataFormDlg(vcl::Window* pParent,

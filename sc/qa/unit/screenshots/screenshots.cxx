@@ -162,7 +162,7 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
 
         case 1: // "modules/scalc/ui/deletecells.ui"
         {
-            pReturnDialog = mpFact->CreateScDeleteCellDlg(mpViewShell->GetDialogParent(), false);
+            pReturnDialog = mpFact->CreateScDeleteCellDlg(mpViewShell->GetFrameWeld(), false);
             break;
         }
 
