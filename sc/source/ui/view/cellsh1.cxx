@@ -1830,7 +1830,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                ScopedVclPtr<AbstractScNameCreateDlg> pDlg(pFact->CreateScNameCreateDlg(pTabViewShell->GetDialogParent(), nFlags));
+                ScopedVclPtr<AbstractScNameCreateDlg> pDlg(pFact->CreateScNameCreateDlg(pTabViewShell->GetFrameWeld(), nFlags));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
 
                 if( pDlg->Execute() )

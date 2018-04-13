@@ -290,7 +290,13 @@ class AbstractScMoveTableDlg_Impl : public AbstractScMoveTableDlg
 
 class AbstractScNameCreateDlg_Impl : public AbstractScNameCreateDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScNameCreateDlg_Impl, ScNameCreateDlg)
+    std::unique_ptr<ScNameCreateDlg> m_xDlg;
+public:
+    explicit AbstractScNameCreateDlg_Impl(ScNameCreateDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short           Execute() override;
     virtual CreateNameFlags GetFlags() const override;
 };
 
@@ -487,7 +493,7 @@ public:
     virtual VclPtr<AbstractScMoveTableDlg> CreateScMoveTableDlg(vcl::Window * pParent,
         const OUString& rDefault) override;
 
-    virtual VclPtr<AbstractScNameCreateDlg> CreateScNameCreateDlg(vcl::Window * pParent,
+    virtual VclPtr<AbstractScNameCreateDlg> CreateScNameCreateDlg(weld::Window * pParent,
         CreateNameFlags nFlags) override;
 
     virtual VclPtr<AbstractScNamePasteDlg> CreateScNamePasteDlg ( vcl::Window * pParent, ScDocShell* pShell ) override;

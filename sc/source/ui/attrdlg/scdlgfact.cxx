@@ -104,7 +104,12 @@ IMPL_ABSTDLG_BASE(AbstractScInsertTableDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScSelEntryDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScMetricInputDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScMoveTableDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScNameCreateDlg_Impl);
+
+short AbstractScNameCreateDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractScNamePasteDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScPivotFilterDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDPFunctionDlg_Impl);
@@ -494,7 +499,7 @@ void    AbstractScMoveTableDlg_Impl::EnableRenameTable(bool bFlag)
 
 CreateNameFlags AbstractScNameCreateDlg_Impl::GetFlags() const
 {
-    return pDlg->GetFlags();
+    return m_xDlg->GetFlags();
 }
 
 std::vector<OUString> AbstractScNamePasteDlg_Impl::GetSelectedNames() const
@@ -777,10 +782,9 @@ VclPtr<AbstractScMoveTableDlg> ScAbstractDialogFactory_Impl::CreateScMoveTableDl
     return VclPtr<AbstractScMoveTableDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractScNameCreateDlg> ScAbstractDialogFactory_Impl::CreateScNameCreateDlg(vcl::Window * pParent, CreateNameFlags nFlags)
+VclPtr<AbstractScNameCreateDlg> ScAbstractDialogFactory_Impl::CreateScNameCreateDlg(weld::Window * pParent, CreateNameFlags nFlags)
 {
-    VclPtr<ScNameCreateDlg> pDlg = VclPtr<ScNameCreateDlg>::Create( pParent, nFlags );
-    return VclPtr<AbstractScNameCreateDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScNameCreateDlg_Impl>::Create(new ScNameCreateDlg(pParent, nFlags));
 }
 
 VclPtr<AbstractScNamePasteDlg> ScAbstractDialogFactory_Impl::CreateScNamePasteDlg ( vcl::Window * pParent, ScDocShell* pShell )
