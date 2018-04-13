@@ -54,8 +54,6 @@ class KDE5SalFrame : public Qt5Frame
     public:
         KDE5SalFrame( KDE5SalFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo );
 
-        virtual SalGraphics* AcquireGraphics() override;
-        virtual void ReleaseGraphics( SalGraphics *pGraphics ) override;
         void updateGraphics( bool bClear );
         virtual void UpdateSettings( AllSettings& rSettings ) override;
 
