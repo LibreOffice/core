@@ -545,6 +545,7 @@
                         <property name="label" translatable="yes" context="tocindexpage|captions">Captions</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="no_show_all">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
@@ -560,6 +561,7 @@
                         <property name="label" translatable="yes" context="tocindexpage|objnames">Object names</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="no_show_all">True</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
