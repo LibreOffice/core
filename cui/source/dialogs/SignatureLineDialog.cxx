@@ -101,8 +101,8 @@ void SignatureLineDialog::Apply()
 
     // Read svg and replace placeholder texts
     OUString aSvgImage(getSignatureImage());
-    aSvgImage = aSvgImage.replaceAll("[SIGNER_NAME]", aSignerName);
-    aSvgImage = aSvgImage.replaceAll("[SIGNER_TITLE]", aSignerTitle);
+    aSvgImage = aSvgImage.replaceAll("[SIGNER_NAME]", getCDataString(aSignerName));
+    aSvgImage = aSvgImage.replaceAll("[SIGNER_TITLE]", getCDataString(aSignerTitle));
 
     // These are only filled if the signature line is signed.
     aSvgImage = aSvgImage.replaceAll("[SIGNATURE]", "");
