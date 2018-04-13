@@ -565,7 +565,7 @@ void ImpSdrPdfImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr)
 
         if (mpVD->IsLineColor())
         {
-            mpLineAttr->Put(XLineStyleItem(drawing::LineStyle_SOLID));
+            mpLineAttr->Put(XLineStyleItem(drawing::LineStyle_SOLID)); //TODO support dashed lines.
             mpLineAttr->Put(XLineColorItem(OUString(), mpVD->GetLineColor()));
         }
         else
@@ -1250,6 +1250,10 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int nPageObjectIn
 void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex)
 {
     SAL_WARN("sd.filter", "Got page object PATH: " << nPageObjectIndex);
+
+    double a, b, c, d, e, f;
+    FPDFPath_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
+
     basegfx::B2DPolygon aPoly;
     std::vector<basegfx::B2DPoint> aBezier;
 
@@ -1266,9 +1270,14 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
                 continue;
             }
 
+            SAL_WARN("sd.filter", "Got point (" << x << ", " << y << ")");
+
+            x = a * x + c * y + e;
+            y = b * x + d * y + f;
+
             const bool bClose = FPDFPathSegment_GetClose(pPathSegment);
             SAL_WARN("sd.filter",
-                     "Got (" << x << ", " << y << "): " << (bClose ? "CLOSE" : "OPEN"));
+                     "Point corrected (" << x << ", " << y << "): " << (bClose ? "CLOSE" : "OPEN"));
             Point aPoint = PointsToLogic(x, y);
             x = aPoint.X();
             y = aPoint.Y();
@@ -1318,15 +1327,23 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
     FPDFPath_GetStrokeWidth(pPageObject, &fWidth);
     mnLineWidth = lcl_ToLogic(lcl_PointToPixel(fWidth));
 
-    unsigned int r;
-    unsigned int g;
-    unsigned int b;
-    unsigned int a;
-    FPDFPath_GetFillColor(pPageObject, &r, &g, &b, &a);
-    mpVD->SetFillColor(Color(r, g, b));
+    unsigned int nR;
+    unsigned int nG;
+    unsigned int nB;
+    unsigned int nA;
+    FPDFPath_GetFillColor(pPageObject, &nR, &nG, &nB, &nA);
+    SAL_WARN("sd.filter", "Got PATH fill color: " << nR << ", " << nG << ", " << nB << ", " << nA);
+    mpVD->SetFillColor(Color(nR, nG, nB));
 
-    FPDFPath_GetStrokeColor(pPageObject, &r, &g, &b, &a);
-    mpVD->SetLineColor(Color(r, g, b));
+    FPDFPath_GetStrokeColor(pPageObject, &nR, &nG, &nB, &nA);
+    SAL_WARN("sd.filter",
+             "Got PATH stroke color: " << nR << ", " << nG << ", " << nB << ", " << nA);
+    mpVD->SetLineColor(Color(nR, nG, nB));
+
+    // int nFillMode = 0; // No fill.
+    // bool bStroke = false;
+    // FPDFPath_GetDrawMode(pPageObject, &nFillMode, &bStroke);
+    // mpVD->Setstroke(Color(r, g, b));
 
     // if(!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(basegfx::B2DPolyPolygon(aSource)))
 

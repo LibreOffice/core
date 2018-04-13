@@ -209,7 +209,7 @@ index ca2cf3f..8073a18 100644
 +  return true;
 +}
 diff --git a/fpdfsdk/fpdfeditpath.cpp b/fpdfsdk/fpdfeditpath.cpp
-index a291987..d3b0bc1 100644
+index a291987..1ac8257 100644
 --- a/fpdfsdk/fpdfeditpath.cpp
 +++ b/fpdfsdk/fpdfeditpath.cpp
 @@ -101,6 +101,16 @@ FPDFPath_SetStrokeWidth(FPDF_PAGEOBJECT path, float width) {
@@ -229,6 +229,63 @@ index a291987..d3b0bc1 100644
  FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFPath_SetFillColor(FPDF_PAGEOBJECT path,
                                                            unsigned int R,
                                                            unsigned int G,
+@@ -217,6 +227,25 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFPath_SetDrawMode(FPDF_PAGEOBJECT path,
+   return true;
+ }
+ 
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFPath_GetDrawMode(FPDF_PAGEOBJECT path,
++                                                         int* fillmode,
++                                                         FPDF_BOOL* stroke)
++{
++  auto* pPathObj = CPDFPathObjectFromFPDFPageObject(path);
++  if (!pPathObj || !fillmode || !stroke)
++    return false;
++
++  if (pPathObj->m_FillType == FXFILL_ALTERNATE)
++    *fillmode = FPDF_FILLMODE_ALTERNATE;
++  else if (pPathObj->m_FillType == FXFILL_WINDING)
++    *fillmode = FPDF_FILLMODE_WINDING;
++  else
++    *fillmode = 0; // no fill
++
++  *stroke = pPathObj->m_bStroke;
++  return true;
++}
++
+ FPDF_EXPORT void FPDF_CALLCONV FPDFPath_SetLineJoin(FPDF_PAGEOBJECT path,
+                                                     int line_join) {
+   if (!path)
+@@ -250,6 +279,30 @@ FPDF_EXPORT void FPDF_CALLCONV FPDFPath_SetLineCap(FPDF_PAGEOBJECT path,
+ }
+ 
+ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
++FPDFPath_GetMatrix(FPDF_PAGEOBJECT path_object,
++                   double* a,
++                   double* b,
++                   double* c,
++                   double* d,
++                   double* e,
++                   double* f)
++{
++  if (!path_object || !a || !b || !c || !d || !e || !f)
++    return false;
++
++  auto* pPathObj = CPDFPageObjectFromFPDFPageObject(path_object);
++  CFX_Matrix* pMatrix = pPathObj->m_GeneralState.GetMutableMatrix();
++  *a = pMatrix->a;
++  *b = pMatrix->b;
++  *c = pMatrix->c;
++  *d = pMatrix->d;
++  *e = pMatrix->e;
++  *f = pMatrix->f;
++
++  return true;
++}
++
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
+ FPDFPathSegment_GetPoint(FPDF_PATHSEGMENT segment, float* x, float* y) {
+   auto* pPathPoint = FXPathPointFromFPDFPathSegment(segment);
+   if (!pPathPoint || !x || !y)
 diff --git a/fpdfsdk/fpdftext.cpp b/fpdfsdk/fpdftext.cpp
 index 68bf4f8..e073b20 100644
 --- a/fpdfsdk/fpdftext.cpp
@@ -300,7 +357,7 @@ index 77c2315..db3e734 100644
  
  CPDF_PageObject* CPDFPageObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object);
 diff --git a/public/fpdf_edit.h b/public/fpdf_edit.h
-index 54735a3..282bcdb 100644
+index 54735a3..a415c98 100644
 --- a/public/fpdf_edit.h
 +++ b/public/fpdf_edit.h
 @@ -520,6 +520,15 @@ FPDFPath_GetStrokeColor(FPDF_PAGEOBJECT path,
@@ -319,7 +376,44 @@ index 54735a3..282bcdb 100644
  // Set the line join of |page_object|.
  //
  // page_object  - handle to a page object.
-@@ -761,6 +770,73 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
+@@ -688,6 +697,36 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFPath_SetDrawMode(FPDF_PAGEOBJECT path,
+                                                          int fillmode,
+                                                          FPDF_BOOL stroke);
+ 
++// Get the drawing mode of a path.
++//
++// path     - the handle to the path object.
++// fillmode - the filling mode to be set: 0 for no fill, 1 for alternate, 2 for
++// winding.
++// stroke   - a boolean specifying if the path should be stroked or not.
++//
++// Returns TRUE on success
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFPath_GetDrawMode(FPDF_PAGEOBJECT path,
++                                                         int* fillmode,
++                                                         FPDF_BOOL* stroke);
++
++// Get the matrix of a particular text object.
++//
++// path_object - Handle of path object returned by FPDFPath_NewPathObj
++//   a            - Pointer to a double value receiving coefficient "a" of the matrix.
++//   b            - Pointer to a double value receiving coefficient "b" of the matrix.
++//   c            - Pointer to a double value receiving coefficient "c" of the matrix.
++//   d            - Pointer to a double value receiving coefficient "d" of the matrix.
++//   e            - Pointer to a double value receiving coefficient "e" of the matrix.
++//   f            - Pointer to a double value receiving coefficient "f" of the matrix.
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
++FPDFPath_GetMatrix(FPDF_PAGEOBJECT path_object,
++                      double* a,
++                      double* b,
++                      double* c,
++                      double* d,
++                      double* e,
++                      double* f);
++
+ // Create a new text object using one of the standard PDF fonts.
+ //
+ // document   - handle to the document.
+@@ -761,6 +800,73 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
                            FPDF_FONT font,
                            float font_size);
  
