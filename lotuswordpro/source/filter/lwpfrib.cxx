@@ -248,7 +248,7 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
     XFTextStyle* pNamedStyle = nullptr;
     if (m_pModifiers->HasCharStyle && pFoundry)
     {
-        pNamedStyle = static_cast<XFTextStyle*>
+        pNamedStyle = dynamic_cast<XFTextStyle*>
                                 (pFoundry->GetStyleManager()->GetStyle(m_pModifiers->CharStyleID));
     }
     if (pNamedStyle)
