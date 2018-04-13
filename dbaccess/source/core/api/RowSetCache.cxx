@@ -30,7 +30,6 @@
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
-#include <core_resource.hxx>
 #include <stringconstants.hxx>
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
