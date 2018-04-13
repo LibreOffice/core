@@ -1013,7 +1013,7 @@ namespace emfplushelper
                         // Silent MSVC warning C4701: potentially uninitialized local variable 'brushIndexOrColor' used
                         sal_uInt32 brushIndexOrColor = 999;
                         sal_Int32 rectangles;
-                        bool isColor = (flags & 0x8000);
+                        const bool isColor = (flags & 0x8000);
                         ::basegfx::B2DPolygon polygon;
 
                         if (EmfPlusRecordTypeFillRects == type)
@@ -1033,14 +1033,14 @@ namespace emfplushelper
                         {
                             float x, y, width, height;
                             ReadRectangle(rMS, x, y, width, height, bool(flags & 0x4000));
-
+                            polygon.clear();
                             polygon.append(Map(x, y));
                             polygon.append(Map(x + width, y));
                             polygon.append(Map(x + width, y + height));
                             polygon.append(Map(x, y + height));
-                            polygon.append(Map(x, y));
+                            polygon.setClosed(true);
 
-                            SAL_INFO("drawinglayer", "EMF+\trectangle: " << x << ", " << width << "x" << height);
+                            SAL_INFO("drawinglayer", "EMF+\t rectangle: " << x << ", "<< y << " " << width << "x" << height);
 
                             ::basegfx::B2DPolyPolygon polyPolygon(polygon);
                             if (type == EmfPlusRecordTypeFillRects)
@@ -1052,13 +1052,13 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeFillPolygon:
                     {
-                        sal_uInt8 index = flags & 0xff;
+                        const sal_uInt8 index = flags & 0xff;
                         sal_uInt32 brushIndexOrColor;
                         sal_Int32 points;
 
                         rMS.ReadUInt32(brushIndexOrColor);
                         rMS.ReadInt32(points);
-                        SAL_INFO("drawinglayer", "EMF+ FillPolygon in slot: " << +index << " points: " << points);
+                        SAL_INFO("drawinglayer", "EMF+ FillPolygon in slot: " << index << " points: " << points);
                         SAL_INFO("drawinglayer", "EMF+\t: " << ((flags & 0x8000) ? "color" : "brush index") << " 0x" << std::hex << brushIndexOrColor << std::dec);
 
                         EMFPPath path(points, true);
