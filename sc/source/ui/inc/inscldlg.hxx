@@ -20,24 +20,21 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_INSCLDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_INSCLDLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 
 #include <global.hxx>
 
-class ScInsertCellDlg : public ModalDialog
+class ScInsertCellDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<RadioButton> m_pBtnCellsDown;
-    VclPtr<RadioButton> m_pBtnCellsRight;
-    VclPtr<RadioButton> m_pBtnInsRow;
-    VclPtr<RadioButton> m_pBtnInsCol;
+    std::unique_ptr<weld::RadioButton> m_xBtnCellsDown;
+    std::unique_ptr<weld::RadioButton> m_xBtnCellsRight;
+    std::unique_ptr<weld::RadioButton> m_xBtnInsRow;
+    std::unique_ptr<weld::RadioButton> m_xBtnInsCol;
 
 public:
-            ScInsertCellDlg( vcl::Window* pParent, bool bDisallowCellMove );
+    ScInsertCellDlg(weld::Window* pParent, bool bDisallowCellMove);
     virtual ~ScInsertCellDlg() override;
-    virtual void dispose() override;
 
     InsCellCmd GetInsCellCmd() const;
 };
