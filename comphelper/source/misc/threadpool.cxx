@@ -134,12 +134,21 @@ ThreadPool::ThreadPool( sal_Int32 nWorkers ) :
     mnThreadsWorking( 0 ),
     mbTerminate( false )
 {
+    launchWorkers( nWorkers );
+}
+
+void ThreadPool::launchWorkers( sal_Int32 nWorkers )
+{
+    osl::MutexGuard aGuard( maGuard );
+
+    mbTerminate = false;
+    mnThreadsWorking = 0;
+
     for( sal_Int32 i = 0; i < nWorkers; i++ )
         maWorkers.push_back( new ThreadWorker( this ) );
 
     maTasksComplete.set();
 
-    osl::MutexGuard aGuard( maGuard );
     for(rtl::Reference<ThreadWorker> & rpWorker : maWorkers)
         rpWorker->launch();
 }
@@ -160,7 +169,15 @@ struct ThreadPoolStatic : public rtl::StaticWithInit< std::shared_ptr< ThreadPoo
 
 ThreadPool& ThreadPool::getSharedOptimalPool()
 {
-    return *ThreadPoolStatic::get().get();
+    ThreadPool *pPool = ThreadPoolStatic::get().get();
+    if (pPool->maWorkers.size() <= 0)
+        pPool->launchWorkers( ThreadPool::getPreferredConcurrency() );
+    return *pPool;
+}
+
+void ThreadPool::resetSharedOptimalPool()
+{
+    ThreadPoolStatic::get()->waitAndCleanupWorkers();
 }
 
 sal_Int32 ThreadPool::getPreferredConcurrency()
