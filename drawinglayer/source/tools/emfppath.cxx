@@ -160,6 +160,7 @@ namespace emfplushelper
                 polygon.append (rR.Map (pPoints [0], pPoints [1]) );
             else
                 polygon.append (::basegfx::B2DPoint (pPoints [0], pPoints [1]) );
+            polygon.setClosed (true);
         }
 
         if (polygon.count ())
