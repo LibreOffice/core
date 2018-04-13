@@ -22,44 +22,34 @@
 #include <namecrea.hxx>
 #include <scresid.hxx>
 
-ScNameCreateDlg::ScNameCreateDlg( vcl::Window * pParent, CreateNameFlags nFlags )
-    : ModalDialog(pParent, "CreateNamesDialog", "modules/scalc/ui/createnamesdialog.ui")
+ScNameCreateDlg::ScNameCreateDlg(weld::Window * pParent, CreateNameFlags nFlags)
+    : GenericDialogController(pParent, "modules/scalc/ui/createnamesdialog.ui", "CreateNamesDialog")
+    , m_xTopBox(m_xBuilder->weld_check_button("top"))
+    , m_xLeftBox(m_xBuilder->weld_check_button("left"))
+    , m_xBottomBox(m_xBuilder->weld_check_button("bottom"))
+    , m_xRightBox(m_xBuilder->weld_check_button("right"))
 {
-    get(m_pTopBox, "top");
-    get(m_pLeftBox, "left");
-    get(m_pBottomBox, "bottom");
-    get(m_pRightBox, "right");
-    m_pTopBox->Check   ( bool(nFlags & CreateNameFlags::Top) );
-    m_pLeftBox->Check  ( bool(nFlags & CreateNameFlags::Left) );
-    m_pBottomBox->Check( bool(nFlags & CreateNameFlags::Bottom) );
-    m_pRightBox->Check ( bool(nFlags & CreateNameFlags::Right) );
+    m_xTopBox->set_active( bool(nFlags & CreateNameFlags::Top) );
+    m_xLeftBox->set_active( bool(nFlags & CreateNameFlags::Left) );
+    m_xBottomBox->set_active( bool(nFlags & CreateNameFlags::Bottom) );
+    m_xRightBox->set_active( bool(nFlags & CreateNameFlags::Right) );
 }
 
 ScNameCreateDlg::~ScNameCreateDlg()
 {
-    disposeOnce();
-}
-
-void ScNameCreateDlg::dispose()
-{
-    m_pTopBox.clear();
-    m_pLeftBox.clear();
-    m_pBottomBox.clear();
-    m_pRightBox.clear();
-    ModalDialog::dispose();
 }
 
 CreateNameFlags ScNameCreateDlg::GetFlags() const
 {
     CreateNameFlags nResult = CreateNameFlags::NONE;
 
-    if (m_pTopBox->IsChecked())
+    if (m_xTopBox->get_active())
         nResult |= CreateNameFlags::Top;
-    if (m_pLeftBox->IsChecked())
+    if (m_xLeftBox->get_active())
         nResult |= CreateNameFlags::Left;
-    if (m_pBottomBox->IsChecked())
+    if (m_xBottomBox->get_active())
         nResult |= CreateNameFlags::Bottom;
-    if (m_pRightBox->IsChecked())
+    if (m_xRightBox->get_active())
         nResult |= CreateNameFlags::Right;
 
     return nResult;
