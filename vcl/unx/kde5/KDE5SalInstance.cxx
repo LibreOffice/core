@@ -23,7 +23,6 @@
 #include <QtWidgets/QApplication>
 #include <QtGui/QClipboard>
 #include <QtWidgets/QFrame>
-#include <QtX11Extras/QX11Info>
 
 #include <osl/process.h>
 #include <qt5/Qt5Data.hxx>
@@ -58,11 +57,6 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDE5SalInstance::createFilePicker(
     else*/
         return SalInstance::createFilePicker( xMSF );
 }
-
-/*SalX11Display* KDE5SalInstance::CreateDisplay() const
-{
-    return new SalKDE5Display( QX11Info::display() );
-}*/
 
 bool KDE5SalInstance::IsMainThread() const
 {
