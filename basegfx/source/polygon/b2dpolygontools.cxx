@@ -625,7 +625,6 @@ namespace basegfx
                     else if(fTools::equalZero(fDistance))
                     {
                         // start point of chosen edge
-                        aRetval = aRetval;
                     }
                     else
                     {
