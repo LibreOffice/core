@@ -224,6 +224,8 @@ class SfxWorkWindow final
     void                    SaveStatus_Impl(SfxChildWindow*, const SfxChildWinInfo&);
     static bool             IsPluginMode( SfxObjectShell const * pObjShell );
 
+    void                    FlushPendingChildSizes();
+
 public:
                             SfxWorkWindow( vcl::Window* pWin, SfxFrame* pFrm, SfxFrame* pMaster );
                             ~SfxWorkWindow();

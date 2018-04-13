@@ -695,6 +695,20 @@ void SfxWorkWindow::ArrangeChildren_Impl( bool bForce )
     ArrangeAutoHideWindows( nullptr );
 }
 
+void SfxWorkWindow::FlushPendingChildSizes()
+{
+    // tdf#116865, if any windows are being resized, i.e. their
+    // resize timer is active, then calling GetSizePixel on
+    // them forces the timer to fire and sets the final
+    // size to which they are getting resized towards.
+    for (size_t i = 0; i < aChildren.size(); ++i)
+    {
+        SfxChild_Impl *pCli = aChildren[i];
+        if (!pCli || !pCli->pWin)
+            continue;
+        (void)pCli->pWin->GetSizePixel();
+    }
+}
 
 SvBorder SfxWorkWindow::Arrange_Impl()
 
@@ -706,7 +720,14 @@ SvBorder SfxWorkWindow::Arrange_Impl()
     ClientArea, it is set to "not visible".
 */
 {
-
+    //tdf#116865 trigger pending sizing timers now so we arrange
+    //with the final size of the client area.
+    //
+    //Otherwise calling GetSizePixel in the following loop will trigger the
+    //timers, causing reentry into Arrange_Impl again where the inner
+    //Arrange_Impl arranges with the final size, and then returns to this outer
+    //Arrange_Impl which would rearrange with the old client area size
+    FlushPendingChildSizes();
     aClientArea = GetTopRect_Impl();
     aUpperClientArea = aClientArea;
 
