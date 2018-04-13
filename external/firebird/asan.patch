@@ -57,6 +57,15 @@
  $(BUILD_FILE):	$(BUILD_Objects) $(COMMON_LIB)
 --- builds/posix/Makefile.in.examples
 +++ builds/posix/Makefile.in.examples
+@@ -123,7 +123,7 @@
+ 
+ $(EMPLOYEE_DB):	$(EXAMPLES_DEST)/empbuild$(EXEC_EXT) $(INPUT_Sources) $(EXAMPLES_DEST)/isql$(EXEC_EXT)
+ 	-$(RM) $(EMPLOYEE_DB)
+-	./empbuild $(EMPLOYEE_DB)
++	$(LIBO_TUNNEL_LIBRARY_PATH) ./empbuild $(EMPLOYEE_DB)
+ 	$(GFIX) -write sync $(EMPLOYEE_DB)
+ 	-$(CHMOD_6) $(EMPLOYEE_DB)
+ 
 @@ -140,7 +140,7 @@
  
  $(EXAMPLES_DEST)/empbuild.fdb : $(EXAMPLES_DEST)/empddl.sql $(EXAMPLES_DEST)/empbld.sql $(EXAMPLES_DEST)/isql$(EXEC_EXT)
