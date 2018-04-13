@@ -827,8 +827,9 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
 
         LanguageTag aLangTag = Application::GetSettings().GetUILanguageTag();
         OUString sLocaleString = SvtLanguageTable::GetLanguageString( aLangTag.getLanguageType() );
-        OUString sPrimTex = xQueryBox->get_primary_text();
-        xQueryBox->set_primary_text(sPrimTex.replaceAll("$UILOCALE", sLocaleString));
+        OUString sPrimText = xQueryBox->get_primary_text();
+        xQueryBox->set_primary_text(Translate::GetReadStringHook()(sPrimText).replaceAll("$UILOCALE", sLocaleString));
+        xQueryBox->set_title(Translate::GetReadStringHook()(xQueryBox->get_title()));
         short OnlineHelpBox = xQueryBox->run();
 
         if(OnlineHelpBox == RET_OK)
