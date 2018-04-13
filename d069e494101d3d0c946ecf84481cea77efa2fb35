@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_952b1e82",
+        "filename": "vcl/CppunitTest_vcl_bitmap_render_test.mk",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-04-13T16:12:51Z",
+      "side": 1,
+      "message": "s/[spaces]/tab/ ?",
+      "revId": "d069e494101d3d0c946ecf84481cea77efa2fb35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_7526aabb",
+        "filename": "vcl/qa/cppunit/bitmaprender/BitmapRenderTest.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-04-13T16:12:51Z",
+      "side": 1,
+      "message": "can you separate that out into a 2nd patch, perhaps a draft? or bin it, if it does not serve a useful purpose",
+      "revId": "d069e494101d3d0c946ecf84481cea77efa2fb35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
