@@ -113,6 +113,7 @@
         <property name="label" translatable="yes" context="printerpaperpage|papersizefromsetup">Use only paper size from printer preferences</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="use_underline">True</property>
         <property name="draw_indicator">True</property>
       </object>
       <packing>

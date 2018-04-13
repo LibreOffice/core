@@ -421,6 +421,7 @@
                         <property name="label" translatable="yes" context="tp_ChartType|rounded-edge">Rounded edge</property>
                         <property name="visible">False</property>
                         <property name="can_focus">True</property>
+                        <property name="use_underline">True</property>
                         <property name="no_show_all">True</property>
                       </object>
                       <packing>

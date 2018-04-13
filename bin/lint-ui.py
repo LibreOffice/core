@@ -67,6 +67,15 @@ def check_radio_buttons(root):
         if len(radio_underlines) < 1:
             lint_assert(False, "No use_underline in GtkRadioButton with id = '" + radio.attrib['id'] + "'")
 
+def check_check_buttons(root):
+    radios = [element for element in root.findall('.//object') if element.attrib['class'] == 'GtkCheckButton']
+    for radio in radios:
+        radio_underlines = radio.findall("./property[@name='use_underline']")
+        assert len(radio_underlines) <= 1
+        if len(radio_underlines) < 1:
+            lint_assert(False, "No use_underline in GtkCheckButton with id = '" + radio.attrib['id'] + "'")
+
+
 def check_frames(root):
     frames = [element for element in root.findall('.//object') if element.attrib['class'] == 'GtkFrame']
     for frame in frames:
@@ -129,6 +138,8 @@ def main():
     check_frames(root)
 
     check_radio_buttons(root)
+
+    check_check_buttons(root)
 
     check_title_labels(root)
 
