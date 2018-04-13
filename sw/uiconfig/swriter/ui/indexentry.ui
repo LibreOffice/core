@@ -350,6 +350,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -364,6 +365,7 @@
                         <property name="label" translatable="yes" context="indexentry|applytoallcb">Apply to all similar texts</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="no_show_all">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
@@ -379,6 +381,7 @@
                         <property name="label" translatable="yes" context="indexentry|searchcasesensitivecb">Match case</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="no_show_all">True</property>
                         <property name="margin_left">12</property>
                         <property name="xalign">0</property>
@@ -395,6 +398,7 @@
                         <property name="label" translatable="yes" context="indexentry|searchcasewordonlycb">Whole words only</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="no_show_all">True</property>
                         <property name="margin_left">12</property>
                         <property name="xalign">0</property>
