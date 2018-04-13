@@ -82,7 +82,7 @@ class ImplBorderWindow : public vcl::Window
     friend class ImplStdBorderWindowView;
 
 private:
-    ImplBorderWindowView*   mpBorderView;
+    std::unique_ptr<ImplBorderWindowView> mpBorderView;
     VclPtr<vcl::Window>     mpMenuBarWindow;
     VclPtr<NotebookBar>     mpNotebookBar;
     long                    mnMinWidth;
