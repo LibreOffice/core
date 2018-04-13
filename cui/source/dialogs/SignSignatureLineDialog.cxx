@@ -119,7 +119,7 @@ IMPL_LINK_NOARG(SignSignatureLineDialog, chooseCertificate, weld::Button&, void)
     Reference<XDocumentDigitalSignatures> xSigner(DocumentDigitalSignatures::createWithVersion(
         comphelper::getProcessComponentContext(), "1.2"));
     OUString aDescription;
-    Reference<XCertificate> xSignCertificate = xSigner->chooseSigningCertificate(aDescription);
+    Reference<XCertificate> xSignCertificate = xSigner->selectSigningCertificate(aDescription);
 
     if (xSignCertificate.is())
     {

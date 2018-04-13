@@ -52,6 +52,7 @@ struct UserData
 enum class UserAction
 {
     Sign,
+    SelectSign, // Select signing certificate
     Encrypt
 };
 

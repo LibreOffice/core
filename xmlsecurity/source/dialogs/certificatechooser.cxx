@@ -168,6 +168,12 @@ void CertificateChooser::ImplInitialize()
             msPreferredKey = aUserOpts.GetSigningKey();
             break;
 
+        case UserAction::SelectSign:
+            m_pFTSign->Show();
+            m_pOKBtn->SetText( get<FixedText>("str_selectsign")->GetText() );
+            msPreferredKey = aUserOpts.GetSigningKey();
+            break;
+
         case UserAction::Encrypt:
             m_pFTEncrypt->Show();
             m_pFTDescription->Hide();
@@ -190,7 +196,7 @@ void CertificateChooser::ImplInitialize()
         uno::Sequence< uno::Reference< security::XCertificate > > xCerts;
         try
         {
-            if ( meAction == UserAction::Sign )
+            if ( meAction == UserAction::Sign || meAction == UserAction::SelectSign)
                 xCerts = secEnvironment->getPersonalCertificates();
             else
                 xCerts = secEnvironment->getAllCertificates();
@@ -235,7 +241,7 @@ void CertificateChooser::ImplInitialize()
             // only GPG has preferred keys
             if ( sIssuer == msPreferredKey )
             {
-                if ( meAction == UserAction::Sign )
+                if ( meAction == UserAction::Sign || meAction == UserAction::SelectSign )
                     m_pCertLB->Select( pEntry );
                 else if ( meAction == UserAction::Encrypt &&
                           aUserOpts.GetEncryptToSelf() )
