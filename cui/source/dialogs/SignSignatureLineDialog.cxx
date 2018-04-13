@@ -55,6 +55,7 @@ SignSignatureLineDialog::SignSignatureLineDialog(weld::Widget* pParent, Referenc
     , m_xBtnSign(m_xBuilder->weld_button("ok"))
     , m_xLabelHint(m_xBuilder->weld_label("label_hint"))
     , m_xLabelHintText(m_xBuilder->weld_label("label_hint_text"))
+    , m_xLabelAddComment(m_xBuilder->weld_label("label_add_comment"))
 {
     Reference<container::XIndexAccess> xIndexAccess(m_xModel->getCurrentSelection(),
                                                     UNO_QUERY_THROW);
@@ -71,15 +72,6 @@ SignSignatureLineDialog::SignSignatureLineDialog(weld::Widget* pParent, Referenc
     m_xBtnChooseCertificate->connect_clicked(
         LINK(this, SignSignatureLineDialog, chooseCertificate));
 
-    bool bCanAddComment;
-    m_xShapeProperties->getPropertyValue("SignatureLineCanAddComment") >>= bCanAddComment;
-    m_xEditComment->show(bCanAddComment);
-    if (bCanAddComment)
-        m_xEditComment->set_size_request(m_xEditComment->get_approximate_digit_width() * 48,
-                                         m_xEditComment->get_text_height() * 5);
-    else
-        m_xEditComment->set_size_request(0, 0);
-
     // Read properties from selected signature line
     m_xShapeProperties->getPropertyValue("SignatureLineId") >>= m_aSignatureLineId;
     m_xShapeProperties->getPropertyValue("SignatureLineSuggestedSignerName")
@@ -90,6 +82,8 @@ SignSignatureLineDialog::SignSignatureLineDialog(weld::Widget* pParent, Referenc
     m_xShapeProperties->getPropertyValue("SignatureLineSigningInstructions")
         >>= aSigningInstructions;
     m_xShapeProperties->getPropertyValue("SignatureLineShowSignDate") >>= m_bShowSignDate;
+    bool bCanAddComment;
+    m_xShapeProperties->getPropertyValue("SignatureLineCanAddComment") >>= bCanAddComment;
 
     if (aSigningInstructions.isEmpty())
     {
@@ -99,6 +93,18 @@ SignSignatureLineDialog::SignSignatureLineDialog(weld::Widget* pParent, Referenc
     else
     {
         m_xLabelHintText->set_label(aSigningInstructions);
+    }
+
+    if (bCanAddComment)
+    {
+        m_xEditComment->set_size_request(m_xEditComment->get_approximate_digit_width() * 48,
+                                         m_xEditComment->get_text_height() * 5);
+    }
+    else
+    {
+        m_xLabelAddComment->hide();
+        m_xEditComment->hide();
+        m_xEditComment->set_size_request(0, 0);
     }
 
     ValidateFields();
