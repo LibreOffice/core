@@ -249,10 +249,21 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if( xVbaEvents.is() )
         lcl_processCompatibleSfxHint( xVbaEvents, rHint );
 
-    if ( rHint.GetId() == SfxHintId::DocChanged )
+    if ( const SfxEventHint* pSfxEventHint = dynamic_cast<const SfxEventHint*>(&rHint) )
     {
-        uno::Sequence< css::uno::Any > aArgs;
-        SW_MOD()->CallAutomationApplicationEventSinks( "DocumentChange", aArgs );
+        switch( pSfxEventHint->GetEventId() )
+        {
+            case SfxEventHintId::ActivateDoc:
+            case SfxEventHintId::CreateDoc:
+            case SfxEventHintId::OpenDoc:
+            {
+                uno::Sequence< css::uno::Any > aArgs;
+                SW_MOD()->CallAutomationApplicationEventSinks( "DocumentChange", aArgs );
+                break;
+            }
+            default:
+                break;
+        }
     }
 
     sal_uInt16 nAction = 0;
