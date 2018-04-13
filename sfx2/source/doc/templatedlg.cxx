@@ -570,16 +570,15 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, OkClickHdl, Button*, void)
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, MoveClickHdl, Button*, void)
 {
     // modal dialog to select templates category
-    ScopedVclPtrInstance<SfxTemplateCategoryDialog> aDlg;
-    aDlg->SetCategoryLBEntries(mpLocalView->getFolderNames());
+    SfxTemplateCategoryDialog aDlg(GetFrameWeld());
+    aDlg.SetCategoryLBEntries(mpLocalView->getFolderNames());
 
     size_t nItemId = 0;
 
-    if (aDlg->Execute() == RET_OK)
+    if (aDlg.run() == RET_OK)
     {
-        OUString sCategory = aDlg->GetSelectedCategory();
-        bool bIsNewCategory = aDlg->IsNewCategoryCreated();
-        aDlg.disposeAndClear();
+        OUString sCategory = aDlg.GetSelectedCategory();
+        bool bIsNewCategory = aDlg.IsNewCategoryCreated();
         if(bIsNewCategory)
         {
             if (!sCategory.isEmpty())
@@ -612,14 +611,13 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, ExportClickHdl, Button*, void)
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, ImportClickHdl, Button*, void)
 {
     //Modal Dialog to select Category
-    ScopedVclPtrInstance<SfxTemplateCategoryDialog> aDlg;
-    aDlg->SetCategoryLBEntries(mpLocalView->getFolderNames());
+    SfxTemplateCategoryDialog aDlg(GetFrameWeld());
+    aDlg.SetCategoryLBEntries(mpLocalView->getFolderNames());
 
-    if (aDlg->Execute() == RET_OK)
+    if (aDlg.run() == RET_OK)
     {
-        OUString sCategory = aDlg->GetSelectedCategory();
-        bool bIsNewCategory = aDlg->IsNewCategoryCreated();
-        aDlg.disposeAndClear();
+        OUString sCategory = aDlg.GetSelectedCategory();
+        bool bIsNewCategory = aDlg.IsNewCategoryCreated();
         if(bIsNewCategory)
         {
             if(mpLocalView->createRegion(sCategory))
@@ -1168,16 +1166,15 @@ void SfxTemplateManagerDlg::OnCategoryRename()
 
 void SfxTemplateManagerDlg::OnCategoryDelete()
 {
-    ScopedVclPtrInstance< SfxTemplateCategoryDialog > aDlg;
-    aDlg->SetCategoryLBEntries(mpLocalView->getFolderNames());
-    aDlg->HideNewCategoryOption();
-    aDlg->SetText(SfxResId(STR_CATEGORY_DELETE));
-    aDlg->SetSelectLabelText(SfxResId(STR_CATEGORY_SELECT));
+    SfxTemplateCategoryDialog aDlg(GetFrameWeld());
+    aDlg.SetCategoryLBEntries(mpLocalView->getFolderNames());
+    aDlg.HideNewCategoryOption();
+    aDlg.set_title(SfxResId(STR_CATEGORY_DELETE));
+    aDlg.SetSelectLabelText(SfxResId(STR_CATEGORY_SELECT));
 
-    if (aDlg->Execute() == RET_OK)
+    if (aDlg.run() == RET_OK)
     {
-        OUString sCategory = aDlg->GetSelectedCategory();
-        aDlg.disposeAndClear();
+        OUString sCategory = aDlg.GetSelectedCategory();
         std::unique_ptr<weld::MessageDialog> popupDlg(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo,
                                                       SfxResId(STR_QMSG_SEL_FOLDER_DELETE)));
         if (popupDlg->run() != RET_YES)
@@ -1319,69 +1316,57 @@ static std::vector<OUString> lcl_getAllFactoryURLs ()
 
 //   Class SfxTemplateCategoryDialog --------------------------------------------------
 
-SfxTemplateCategoryDialog::SfxTemplateCategoryDialog():
-        ModalDialog(nullptr, "TemplatesCategoryDialog", "sfx/ui/templatecategorydlg.ui"),
-        msSelectedCategory(OUString()),
-        mbIsNewCategory(false)
+SfxTemplateCategoryDialog::SfxTemplateCategoryDialog(weld::Window* pParent)
+    : weld::GenericDialogController(pParent, "sfx/ui/templatecategorydlg.ui", "TemplatesCategoryDialog")
+    , msSelectedCategory(OUString())
+    , mbIsNewCategory(false)
+    , mxLBCategory(m_xBuilder->weld_tree_view("categorylb"))
+    , mxSelectLabel(m_xBuilder->weld_label("select_label"))
+    , mxNewCategoryEdit(m_xBuilder->weld_entry("category_entry"))
+    , mxCreateLabel(m_xBuilder->weld_label("create_label"))
+    , mxOKButton(m_xBuilder->weld_button("ok"))
 {
-    get(mpLBCategory, "categorylb");
-    get(mpNewCategoryEdit, "category_entry");
-    get(mpOKButton, "ok");
-    get(mpSelectLabel, "select_label");
-    get(mpCreateLabel, "create_label");
-
-    mpNewCategoryEdit->SetModifyHdl(LINK(this, SfxTemplateCategoryDialog, NewCategoryEditHdl));
-    mpLBCategory->SetSelectHdl(LINK(this, SfxTemplateCategoryDialog, SelectCategoryHdl));
-
-    mpOKButton->Disable();
+    mxNewCategoryEdit->connect_changed(LINK(this, SfxTemplateCategoryDialog, NewCategoryEditHdl));
+    mxLBCategory->set_size_request(mxLBCategory->get_approximate_digit_width() * 32,
+                                   mxLBCategory->get_height_rows(8));
+    mxLBCategory->connect_changed(LINK(this, SfxTemplateCategoryDialog, SelectCategoryHdl));
+    mxOKButton->set_sensitive(false);
 }
 
 SfxTemplateCategoryDialog::~SfxTemplateCategoryDialog()
 {
-    disposeOnce();
 }
 
-void SfxTemplateCategoryDialog::dispose()
+IMPL_LINK_NOARG(SfxTemplateCategoryDialog, NewCategoryEditHdl, weld::Entry&, void)
 {
-    mpLBCategory.clear();
-    mpNewCategoryEdit.clear();
-    mpOKButton.clear();
-    mpSelectLabel.clear();
-    mpCreateLabel.clear();
-
-    ModalDialog::dispose();
-}
-
-IMPL_LINK_NOARG(SfxTemplateCategoryDialog, NewCategoryEditHdl, Edit&, void)
-{
-    OUString sParam = comphelper::string::strip(mpNewCategoryEdit->GetText(), ' ');
-    mpLBCategory->Enable(sParam.isEmpty());
+    OUString sParam = comphelper::string::strip(mxNewCategoryEdit->get_text(), ' ');
+    mxLBCategory->set_sensitive(sParam.isEmpty());
     if(!sParam.isEmpty())
     {
         msSelectedCategory = sParam;
         mbIsNewCategory = true;
-        mpOKButton->Enable();
+        mxOKButton->set_sensitive(true);
     }
     else
     {
-        SelectCategoryHdl(*mpLBCategory);
+        SelectCategoryHdl(*mxLBCategory);
         mbIsNewCategory = false;
     }
 }
 
-IMPL_LINK_NOARG(SfxTemplateCategoryDialog, SelectCategoryHdl, ListBox&, void)
+IMPL_LINK_NOARG(SfxTemplateCategoryDialog, SelectCategoryHdl, weld::TreeView&, void)
 {
-    if(mpLBCategory->GetSelectedEntryPos() == 0)
+    if (mxLBCategory->get_selected_index() == 0)
     {
         msSelectedCategory = OUString();
-        mpOKButton->Disable();
-        mpNewCategoryEdit->Enable();
+        mxOKButton->set_sensitive(false);
+        mxNewCategoryEdit->set_sensitive(true);
     }
     else
     {
-        msSelectedCategory = mpLBCategory->GetSelectedEntry();
-        mpNewCategoryEdit->Disable();
-        mpOKButton->Enable();
+        msSelectedCategory = mxLBCategory->get_selected();
+        mxNewCategoryEdit->set_sensitive(false);
+        mxOKButton->set_sensitive(true);
     }
 
     mbIsNewCategory = false;
@@ -1392,15 +1377,15 @@ void SfxTemplateCategoryDialog::SetCategoryLBEntries(std::vector<OUString> aFold
     if (!aFolderNames.empty())
     {
         for (size_t i = 0, n = aFolderNames.size(); i < n; ++i)
-            mpLBCategory->InsertEntry(aFolderNames[i], i+1);
+            mxLBCategory->append_text(aFolderNames[i]);
     }
-    mpLBCategory->SelectEntryPos(0);
+    mxLBCategory->select(0);
 }
 
 void SfxTemplateCategoryDialog::HideNewCategoryOption()
 {
-    mpCreateLabel->Hide();
-    mpNewCategoryEdit->Hide();
+    mxCreateLabel->hide();
+    mxNewCategoryEdit->hide();
 }
 
 // SfxTemplateSelectionDialog -----------------------------------------------------------------

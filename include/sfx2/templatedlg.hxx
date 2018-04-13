@@ -18,6 +18,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/frame/XDesktop2.hpp>
 
 #include <sfx2/templatelocalview.hxx>
@@ -146,21 +147,21 @@ protected:
 
 //  class SfxTemplateCategoryDialog -------------------------------------------------------------------
 
-class SFX2_DLLPUBLIC SfxTemplateCategoryDialog : public ModalDialog
+class SFX2_DLLPUBLIC SfxTemplateCategoryDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<ListBox>         mpLBCategory;
-    VclPtr<FixedText>       mpSelectLabel;
-    VclPtr<Edit>            mpNewCategoryEdit;
-    VclPtr<FixedText>       mpCreateLabel;
-    VclPtr<PushButton>      mpOKButton;
-
     OUString   msSelectedCategory;
     bool       mbIsNewCategory;
 
+    std::unique_ptr<weld::TreeView> mxLBCategory;
+    std::unique_ptr<weld::Label> mxSelectLabel;
+    std::unique_ptr<weld::Entry> mxNewCategoryEdit;
+    std::unique_ptr<weld::Label> mxCreateLabel;
+    std::unique_ptr<weld::Button> mxOKButton;
+
 public:
-    DECL_LINK(NewCategoryEditHdl, Edit&, void);
-    DECL_LINK(SelectCategoryHdl, ListBox&, void);
+    DECL_LINK(NewCategoryEditHdl, weld::Entry&, void);
+    DECL_LINK(SelectCategoryHdl, weld::TreeView&, void);
 
     void SetCategoryLBEntries(std::vector<OUString> names);
 
@@ -171,7 +172,7 @@ public:
     };
 
     void SetSelectLabelText(OUString const & sText) const {
-        mpSelectLabel->SetText(sText);
+        mxSelectLabel->set_label(sText);
     };
 
     bool IsNewCategoryCreated() const {
@@ -180,10 +181,9 @@ public:
 
 public:
 
-    explicit SfxTemplateCategoryDialog();
+    explicit SfxTemplateCategoryDialog(weld::Window* pParent);
 
     virtual ~SfxTemplateCategoryDialog() override;
-    virtual void dispose() override;
 };
 
 
