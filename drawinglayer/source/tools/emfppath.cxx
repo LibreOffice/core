@@ -156,10 +156,7 @@ namespace emfplushelper
         // Draw an extra line between the last point and the first point, to close the shape.
         if (bAddLineToCloseShape)
         {
-            if (bMapIt)
-                polygon.append (rR.Map (pPoints [0], pPoints [1]) );
-            else
-                polygon.append (::basegfx::B2DPoint (pPoints [0], pPoints [1]) );
+            polygon.setClosed (true);
         }
 
         if (polygon.count ())
