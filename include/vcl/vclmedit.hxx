@@ -25,6 +25,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
+#include <memory>
 
 class ImpVclMEdit;
 class Timer;
@@ -77,12 +78,12 @@ class VCL_DLLPUBLIC VclMultiLineEdit : public Edit
     friend class VCLXAccessibleEdit;
 
 private:
-    ImpVclMEdit*      pImpVclMEdit;
+    std::unique_ptr<ImpVclMEdit> pImpVclMEdit;
 
     OUString          aSaveValue;
     Link<Edit&,void>  aModifyHdlLink;
 
-    Timer*            pUpdateDataTimer;
+    std::unique_ptr<Timer> pUpdateDataTimer;
     Link<Edit&,void>  aUpdateDataHdlLink;
 
 protected:
@@ -117,7 +118,7 @@ public:
     virtual bool    IsModified() const override;
 
     virtual void    EnableUpdateData( sal_uLong nTimeout = EDIT_UPDATEDATA_TIMEOUT ) override;
-    virtual void    DisableUpdateData() override { delete pUpdateDataTimer; pUpdateDataTimer = nullptr; }
+    virtual void    DisableUpdateData() override { pUpdateDataTimer.reset(); }
 
     virtual void    SetReadOnly( bool bReadOnly = true ) override;
     virtual bool    IsReadOnly() const override;

@@ -904,7 +904,7 @@ VclMultiLineEdit::VclMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle )
     : Edit( pParent, nWinStyle )
 {
     SetType( WindowType::MULTILINEEDIT );
-    pImpVclMEdit = new ImpVclMEdit( this, nWinStyle );
+    pImpVclMEdit.reset(new ImpVclMEdit( this, nWinStyle ));
     ImplInitSettings( true );
     pUpdateDataTimer = nullptr;
 
@@ -919,13 +919,8 @@ VclMultiLineEdit::~VclMultiLineEdit()
 
 void VclMultiLineEdit::dispose()
 {
-    {
-        std::unique_ptr< ImpVclMEdit > xDelete(pImpVclMEdit);
-        pImpVclMEdit = nullptr;
-    }
-    delete pUpdateDataTimer;
-    pUpdateDataTimer = nullptr;
-
+    pImpVclMEdit.reset();
+    pUpdateDataTimer.reset();
     Edit::dispose();
 }
 
@@ -1094,7 +1089,7 @@ void VclMultiLineEdit::EnableUpdateData( sal_uLong nTimeout )
     {
         if ( !pUpdateDataTimer )
         {
-            pUpdateDataTimer = new Timer("MultiLineEditTimer");
+            pUpdateDataTimer.reset(new Timer("MultiLineEditTimer"));
             pUpdateDataTimer->SetInvokeHandler( LINK( this, VclMultiLineEdit, ImpUpdateDataHdl ) );
         }
         pUpdateDataTimer->SetTimeout( nTimeout );
