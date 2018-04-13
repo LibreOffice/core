@@ -22,6 +22,7 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include <svl/fstathelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/transliterationwrapper.hxx>
@@ -32,6 +33,7 @@
 #include <glosdoc.hxx>
 #include <gloslst.hxx>
 #include <swunohelper.hxx>
+#include <view.hxx>
 
 #include <vector>
 
@@ -48,53 +50,39 @@ struct TripleString
     OUString sShort;
 };
 
-class SwGlossDecideDlg : public ModalDialog
+class SwGlossDecideDlg : public weld::GenericDialogController
 {
-    VclPtr<OKButton> m_pOk;
-    VclPtr<ListBox>  m_pListLB;
+    std::unique_ptr<weld::Button> m_xOk;
+    std::unique_ptr<weld::TreeView> m_xListLB;
 
-    DECL_LINK(DoubleClickHdl, ListBox&, void);
-    DECL_LINK(SelectHdl, ListBox&, void);
+    DECL_LINK(DoubleClickHdl, weld::TreeView&, void);
+    DECL_LINK(SelectHdl, weld::TreeView&, void);
 
 public:
-    explicit SwGlossDecideDlg(vcl::Window* pParent);
-    virtual ~SwGlossDecideDlg() override;
-    virtual void dispose() override;
+    explicit SwGlossDecideDlg(weld::Window* pParent);
 
-    ListBox&    GetListBox() {return *m_pListLB;}
+    weld::TreeView& GetTreeView() {return *m_xListLB;}
 };
 
-SwGlossDecideDlg::SwGlossDecideDlg(vcl::Window* pParent)
-    : ModalDialog(pParent, "SelectAutoTextDialog",
-        "modules/swriter/ui/selectautotextdialog.ui")
+SwGlossDecideDlg::SwGlossDecideDlg(weld::Window* pParent)
+    : GenericDialogController(pParent, "modules/swriter/ui/selectautotextdialog.ui", "SelectAutoTextDialog")
+    , m_xOk(m_xBuilder->weld_button("ok"))
+    , m_xListLB(m_xBuilder->weld_tree_view("treeview"))
 {
-    get(m_pOk, "ok");
-    get(m_pListLB, "treeview");
-    m_pListLB->set_height_request(m_pListLB->GetTextHeight() * 10);
-    m_pListLB->SetDoubleClickHdl(LINK(this, SwGlossDecideDlg, DoubleClickHdl));
-    m_pListLB->SetSelectHdl(LINK(this, SwGlossDecideDlg, SelectHdl));
+    m_xListLB->set_size_request(m_xListLB->get_approximate_digit_width() * 32,
+                                m_xListLB->get_height_rows(8));
+    m_xListLB->connect_row_activated(LINK(this, SwGlossDecideDlg, DoubleClickHdl));
+    m_xListLB->connect_changed(LINK(this, SwGlossDecideDlg, SelectHdl));
 }
 
-SwGlossDecideDlg::~SwGlossDecideDlg()
+IMPL_LINK_NOARG(SwGlossDecideDlg, DoubleClickHdl, weld::TreeView&, void)
 {
-    disposeOnce();
+    m_xDialog->response(RET_OK);
 }
 
-void SwGlossDecideDlg::dispose()
+IMPL_LINK_NOARG(SwGlossDecideDlg, SelectHdl, weld::TreeView&, void)
 {
-    m_pOk.clear();
-    m_pListLB.clear();
-    ModalDialog::dispose();
-}
-
-IMPL_LINK_NOARG(SwGlossDecideDlg, DoubleClickHdl, ListBox&, void)
-{
-    EndDialog(RET_OK);
-}
-
-IMPL_LINK_NOARG(SwGlossDecideDlg, SelectHdl, ListBox&, void)
-{
-    m_pOk->Enable(LISTBOX_ENTRY_NOTFOUND != m_pListLB->GetSelectedEntryPos());
+    m_xOk->set_sensitive(m_xListLB->get_selected_index() != -1);
 }
 
 SwGlossaryList::SwGlossaryList() :
@@ -155,19 +143,19 @@ bool SwGlossaryList::GetShortName(const OUString& rLongName,
     }
     else if(1 < nCount)
     {
-        ScopedVclPtrInstance< SwGlossDecideDlg > aDlg(nullptr);
-        OUString sTitle = aDlg->GetText() + " " + aTripleStrings.front().sBlock;
-        aDlg->SetText(sTitle);
+        SwView *pView  = ::GetActiveView();
+        SwGlossDecideDlg aDlg(pView ? pView->GetFrameWeld() : nullptr);
+        OUString sTitle = aDlg.get_title() + " " + aTripleStrings.front().sBlock;
+        aDlg.set_title(sTitle);
 
-        ListBox& rLB = aDlg->GetListBox();
+        weld::TreeView& rLB = aDlg.GetTreeView();
         for(std::vector<TripleString>::const_iterator i = aTripleStrings.begin(); i != aTripleStrings.end(); ++i)
-            rLB.InsertEntry(i->sGroup.getToken(0, GLOS_DELIM));
+            rLB.append_text(i->sGroup.getToken(0, GLOS_DELIM));
 
-        rLB.SelectEntryPos(0);
-        if(RET_OK == aDlg->Execute() &&
-            LISTBOX_ENTRY_NOTFOUND != rLB.GetSelectedEntryPos())
+        rLB.select(0);
+        if (aDlg.run() == RET_OK && rLB.get_selected_index() != -1)
         {
-            const TripleString& rTriple(aTripleStrings[rLB.GetSelectedEntryPos()]);
+            const TripleString& rTriple(aTripleStrings[rLB.get_selected_index()]);
             rShortName = rTriple.sShort;
             rGroupName = rTriple.sGroup;
             bRet = true;
