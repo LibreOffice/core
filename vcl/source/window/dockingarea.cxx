@@ -44,7 +44,7 @@ DockingAreaWindow::DockingAreaWindow( vcl::Window* pParent ) :
 {
     ImplInit( pParent, WB_CLIPCHILDREN|WB_3DLOOK, nullptr );
 
-    mpImplData = new ImplData;
+    mpImplData.reset(new ImplData);
 }
 
 DockingAreaWindow::~DockingAreaWindow()
@@ -54,7 +54,7 @@ DockingAreaWindow::~DockingAreaWindow()
 
 void DockingAreaWindow::dispose()
 {
-    delete mpImplData;
+    mpImplData.reset();
     Window::dispose();
 }
 
