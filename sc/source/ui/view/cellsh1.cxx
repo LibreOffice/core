@@ -428,7 +428,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        ScopedVclPtr<AbstractScDeleteContentsDlg> pDlg(pFact->CreateScDeleteContentsDlg(pTabViewShell->GetDialogParent()));
+                        ScopedVclPtr<AbstractScDeleteContentsDlg> pDlg(pFact->CreateScDeleteContentsDlg(pTabViewShell->GetFrameWeld()));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         ScDocument* pDoc = GetViewData()->GetDocument();
                         SCTAB nTab = GetViewData()->GetTabNo();

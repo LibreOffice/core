@@ -180,7 +180,13 @@ class AbstractScDataFormDlg_Impl : public AbstractScDataFormDlg
 
 class AbstractScDeleteContentsDlg_Impl : public AbstractScDeleteContentsDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScDeleteContentsDlg_Impl,ScDeleteContentsDlg)
+    std::unique_ptr<ScDeleteContentsDlg> m_xDlg;
+public:
+    explicit AbstractScDeleteContentsDlg_Impl(ScDeleteContentsDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short   Execute() override;
     virtual void    DisableObjects() override;
     virtual InsertDeleteFlags GetDelContentsCmdBits() const override;
 };
@@ -453,7 +459,7 @@ public:
     virtual VclPtr<AbstractScDataFormDlg> CreateScDataFormDlg(vcl::Window* pParent,
         ScTabViewShell* pTabViewShell) override;
 
-    virtual VclPtr<AbstractScDeleteContentsDlg> CreateScDeleteContentsDlg(vcl::Window* pParent) override;
+    virtual VclPtr<AbstractScDeleteContentsDlg> CreateScDeleteContentsDlg(weld::Window* pParent) override;
 
     virtual VclPtr<AbstractScFillSeriesDlg> CreateScFillSeriesDlg( vcl::Window*        pParent,
                                                             ScDocument&     rDocument,

@@ -429,7 +429,7 @@ public:
     virtual VclPtr<AbstractScDataFormDlg> CreateScDataFormDlg(vcl::Window* pParent,
         ScTabViewShell* pTabViewShell) = 0;
 
-    virtual VclPtr<AbstractScDeleteContentsDlg> CreateScDeleteContentsDlg(vcl::Window* pParent) = 0;
+    virtual VclPtr<AbstractScDeleteContentsDlg> CreateScDeleteContentsDlg(weld::Window* pParent) = 0;
     virtual VclPtr<AbstractScFillSeriesDlg> CreateScFillSeriesDlg( vcl::Window*        pParent,
                                                             ScDocument& rDocument,
                                                             FillDir     eFillDir,
