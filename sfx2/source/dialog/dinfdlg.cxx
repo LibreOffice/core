@@ -1255,78 +1255,54 @@ void CustomPropertiesYesNoButton::dispose()
     Control::dispose();
 }
 
-class DurationDialog_Impl : public ModalDialog
+class DurationDialog_Impl : public weld::GenericDialogController
 {
-    VclPtr<CheckBox>       m_pNegativeCB;
-    VclPtr<NumericField>   m_pYearNF;
-    VclPtr<NumericField>   m_pMonthNF;
-    VclPtr<NumericField>   m_pDayNF;
-    VclPtr<NumericField>   m_pHourNF;
-    VclPtr<NumericField>   m_pMinuteNF;
-    VclPtr<NumericField>   m_pSecondNF;
-    VclPtr<NumericField>   m_pMSecondNF;
+    std::unique_ptr<weld::CheckButton> m_xNegativeCB;
+    std::unique_ptr<weld::SpinButton> m_xYearNF;
+    std::unique_ptr<weld::SpinButton> m_xMonthNF;
+    std::unique_ptr<weld::SpinButton> m_xDayNF;
+    std::unique_ptr<weld::SpinButton> m_xHourNF;
+    std::unique_ptr<weld::SpinButton> m_xMinuteNF;
+    std::unique_ptr<weld::SpinButton> m_xSecondNF;
+    std::unique_ptr<weld::SpinButton> m_xMSecondNF;
 
 public:
-
-    DurationDialog_Impl( vcl::Window* pParent, const util::Duration& rDuration );
-    virtual ~DurationDialog_Impl() override;
-    virtual void dispose() override;
+    DurationDialog_Impl(weld::Window* pParent, const util::Duration& rDuration);
     util::Duration  GetDuration() const;
 };
 
-DurationDialog_Impl::DurationDialog_Impl(vcl::Window* pParent,
-    const util::Duration& rDuration)
-    : ModalDialog(pParent, "EditDurationDialog",
-        "sfx/ui/editdurationdialog.ui")
+DurationDialog_Impl::DurationDialog_Impl(weld::Window* pParent, const util::Duration& rDuration)
+    : GenericDialogController(pParent, "sfx/ui/editdurationdialog.ui", "EditDurationDialog")
+    , m_xNegativeCB(m_xBuilder->weld_check_button("negative"))
+    , m_xYearNF(m_xBuilder->weld_spin_button("years"))
+    , m_xMonthNF(m_xBuilder->weld_spin_button("months"))
+    , m_xDayNF(m_xBuilder->weld_spin_button("days"))
+    , m_xHourNF(m_xBuilder->weld_spin_button("hours"))
+    , m_xMinuteNF(m_xBuilder->weld_spin_button("minutes"))
+    , m_xSecondNF(m_xBuilder->weld_spin_button("seconds"))
+    , m_xMSecondNF(m_xBuilder->weld_spin_button("milliseconds"))
 {
-    get(m_pNegativeCB, "negative");
-    get(m_pYearNF, "years");
-    get(m_pMonthNF, "months");
-    get(m_pDayNF, "days");
-    get(m_pHourNF, "hours");
-    get(m_pMinuteNF, "minutes");
-    get(m_pSecondNF, "seconds");
-    get(m_pMSecondNF, "milliseconds");
-
-    m_pNegativeCB->Check(rDuration.Negative);
-    m_pYearNF->SetValue(rDuration.Years);
-    m_pMonthNF->SetValue(rDuration.Months);
-    m_pDayNF->SetValue(rDuration.Days);
-    m_pHourNF->SetValue(rDuration.Hours);
-    m_pMinuteNF->SetValue(rDuration.Minutes);
-    m_pSecondNF->SetValue(rDuration.Seconds);
-    m_pMSecondNF->SetValue(rDuration.NanoSeconds);
-}
-
-DurationDialog_Impl::~DurationDialog_Impl()
-{
-    disposeOnce();
-}
-
-void DurationDialog_Impl::dispose()
-{
-    m_pNegativeCB.clear();
-    m_pYearNF.clear();
-    m_pMonthNF.clear();
-    m_pDayNF.clear();
-    m_pHourNF.clear();
-    m_pMinuteNF.clear();
-    m_pSecondNF.clear();
-    m_pMSecondNF.clear();
-    ModalDialog::dispose();
+    m_xNegativeCB->set_active(rDuration.Negative);
+    m_xYearNF->set_value(rDuration.Years);
+    m_xMonthNF->set_value(rDuration.Months);
+    m_xDayNF->set_value(rDuration.Days);
+    m_xHourNF->set_value(rDuration.Hours);
+    m_xMinuteNF->set_value(rDuration.Minutes);
+    m_xSecondNF->set_value(rDuration.Seconds);
+    m_xMSecondNF->set_value(rDuration.NanoSeconds);
 }
 
 util::Duration  DurationDialog_Impl::GetDuration() const
 {
     util::Duration  aRet;
-    aRet.Negative = m_pNegativeCB->IsChecked();
-    aRet.Years = m_pYearNF->GetValue();
-    aRet.Months = m_pMonthNF->GetValue( );
-    aRet.Days = m_pDayNF->GetValue(   );
-    aRet.Hours  = m_pHourNF->GetValue( );
-    aRet.Minutes = m_pMinuteNF->GetValue();
-    aRet.Seconds = m_pSecondNF->GetValue();
-    aRet.NanoSeconds = m_pMSecondNF->GetValue();
+    aRet.Negative = m_xNegativeCB->get_active();
+    aRet.Years = m_xYearNF->get_value();
+    aRet.Months = m_xMonthNF->get_value();
+    aRet.Days = m_xDayNF->get_value();
+    aRet.Hours  = m_xHourNF->get_value();
+    aRet.Minutes = m_xMinuteNF->get_value();
+    aRet.Seconds = m_xSecondNF->get_value();
+    aRet.NanoSeconds = m_xMSecondNF->get_value();
     return aRet;
 }
 
@@ -1377,9 +1353,9 @@ CustomPropertiesEditButton::CustomPropertiesEditButton(vcl::Window* pParent, Win
 
 IMPL_LINK_NOARG(CustomPropertiesEditButton, ClickHdl, Button*, void)
 {
-    VclPtrInstance< DurationDialog_Impl > pDurationDlg( this, m_pLine->m_aDurationField->GetDuration() );
-    if ( RET_OK == pDurationDlg->Execute() )
-        m_pLine->m_aDurationField->SetDuration( pDurationDlg->GetDuration() );
+    DurationDialog_Impl aDurationDlg(GetFrameWeld(), m_pLine->m_aDurationField->GetDuration());
+    if (aDurationDlg.run() == RET_OK)
+        m_pLine->m_aDurationField->SetDuration(aDurationDlg.GetDuration());
 }
 
 void CustomPropertiesYesNoButton::Resize()
