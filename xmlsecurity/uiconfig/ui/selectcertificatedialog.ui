@@ -188,6 +188,11 @@
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes" context="selectcertificatedialog|str_sign">Sign</property>
                   </object>
+                  <object class="GtkLabel" id="str_selectsign">
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes" context="selectcertificatedialog|str_selectsign">Select</property>
+                  </object>
                   <object class="GtkLabel" id="str_encrypt">
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>

@@ -155,6 +155,8 @@ public:
         SAL_CALL chooseCertificate(OUString& rDescription) override;
     css::uno::Reference<css::security::XCertificate>
         SAL_CALL chooseSigningCertificate(OUString& rDescription) override;
+    css::uno::Reference<css::security::XCertificate>
+        SAL_CALL selectSigningCertificate(OUString& rDescription) override;
     css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>
         SAL_CALL chooseEncryptionCertificate() override;
     css::uno::Reference<css::security::XCertificate> SAL_CALL chooseCertificateWithProps(
@@ -647,6 +649,14 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseSignin
 {
     std::map<OUString, OUString> aProperties;
     Reference< css::security::XCertificate > xCert = chooseCertificatesImpl( aProperties, UserAction::Sign )[0];
+    rDescription = aProperties["Description"];
+    return xCert;
+}
+
+Reference< css::security::XCertificate > DocumentDigitalSignatures::selectSigningCertificate(OUString& rDescription)
+{
+    std::map<OUString, OUString> aProperties;
+    Reference< css::security::XCertificate > xCert = chooseCertificatesImpl( aProperties, UserAction::SelectSign )[0];
     rDescription = aProperties["Description"];
     return xCert;
 }
