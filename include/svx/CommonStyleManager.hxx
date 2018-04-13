@@ -28,7 +28,7 @@ public:
         : StyleManager(rShell)
     {}
 
-    virtual sfx2::StylePreviewRenderer* CreateStylePreviewRenderer(
+    virtual std::unique_ptr<sfx2::StylePreviewRenderer> CreateStylePreviewRenderer(
                                             OutputDevice& rOutputDev, SfxStyleSheetBase* pStyle,
                                             long nMaxHeight) override;
 };

@@ -49,8 +49,8 @@ void renderPreview(sfx2::StyleManager* pStyleManager, OutputDevice& aOutputDevic
 
     if (pStyleSheet)
     {
-        sfx2::StylePreviewRenderer* pStylePreviewRenderer;
-        pStylePreviewRenderer = pStyleManager->CreateStylePreviewRenderer(aOutputDevice, pStyleSheet, nHeight);
+        std::unique_ptr<sfx2::StylePreviewRenderer> pStylePreviewRenderer
+            = pStyleManager->CreateStylePreviewRenderer(aOutputDevice, pStyleSheet, nHeight);
         pStylePreviewRenderer->recalculate();
         pStylePreviewRenderer->render(aRect, sfx2::StylePreviewRenderer::RenderAlign::TOP);
     }
