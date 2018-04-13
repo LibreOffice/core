@@ -10,11 +10,9 @@
 
 #include <vcl/GraphicLoader.hxx>
 
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/graphic/GraphicProvider.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
+#include <unotools/ucbstreamhelper.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/wmf.hxx>
 
 using namespace css;
 
@@ -22,35 +20,38 @@ namespace vcl
 {
 namespace graphic
 {
-Graphic loadFromURL(OUString const& rURL)
+Graphic loadFromURL(OUString const& rURL, sal_Int16 nExtWidth, sal_Int16 nExtHeight,
+                    sal_Int16 nExtMapMode)
 {
+    // Define APM Header if goal height and width are defined
+    WmfExternal aExtHeader;
+    aExtHeader.xExt = nExtWidth;
+    aExtHeader.yExt = nExtHeight;
+    aExtHeader.mapMode = nExtMapMode;
+    WmfExternal* pExtHeader = nullptr;
+    if (nExtMapMode > 0)
+        pExtHeader = &aExtHeader;
+
     Graphic aGraphic;
 
-    try
+    std::unique_ptr<SvStream> pInputStream;
+    pInputStream.reset(utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ));
+
+    if (pInputStream)
     {
-        uno::Reference<css::graphic::XGraphic> xGraphic;
-        uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-        uno::Reference<css::graphic::XGraphicProvider> xProvider;
-        xProvider.set(css::graphic::GraphicProvider::create(xContext));
+        GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 
-        uno::Sequence<beans::PropertyValue> aLoadProps(1);
-        aLoadProps[0].Name = "URL";
-        aLoadProps[0].Value <<= rURL;
-
-        xGraphic = xProvider->queryGraphic(aLoadProps);
-
-        if (xGraphic.is())
-            aGraphic = Graphic(xGraphic);
-        else
-            aGraphic.SetDefaultType();
-        aGraphic.setOriginURL(rURL);
-    }
-    catch (uno::Exception const&)
-    {
+        ErrCode nError
+            = rFilter.ImportGraphic(aGraphic, rURL, *pInputStream, GRFILTER_FORMAT_DONTKNOW,
+                                    nullptr, GraphicFilterImportFlags::NONE, pExtHeader);
+        if (nError != ERRCODE_NONE || aGraphic.GetType() == GraphicType::NONE)
+            return Graphic();
     }
 
     return aGraphic;
 }
+
+Graphic loadFromURL(OUString const& rURL) { return loadFromURL(rURL, 0, 0, 0); }
 }
 } // end vcl::graphic
 

@@ -76,7 +76,7 @@ SvFileObject::~SvFileObject()
 
 bool SvFileObject::GetData( css::uno::Any & rData,
                                 const OUString & rMimeType,
-                                bool bGetSynchron )
+                                bool /*bGetSynchron*/ )
 {
     SotClipboardFormatId nFmt = SotExchange::RegisterFormatMimeType( rMimeType );
     switch( nType )
@@ -92,101 +92,11 @@ bool SvFileObject::GetData( css::uno::Any & rData,
         break;
 
     case FILETYPE_GRF:
-        if( !bLoadError )
+        if (SotClipboardFormatId::GDIMETAFILE == nFmt
+         || SotClipboardFormatId::BITMAP == nFmt
+         || SotClipboardFormatId::SVXB == nFmt)
         {
-            tools::SvRef<SfxMedium> xTmpMed;
-
-            if( SotClipboardFormatId::GDIMETAFILE == nFmt || SotClipboardFormatId::BITMAP == nFmt ||
-                SotClipboardFormatId::SVXB == nFmt )
-            {
-                Graphic aGrf;
-
-                // If the native format is requested, has to be reset at the
-                // end of the flag. Is solely in the sw/ndgrf.cxx used when
-                // the link is removed form GraphicNode.
-                bool bOldNativFormat = bNativFormat;
-
-                // If about to print, waiting for the data to be available
-                if( bGetSynchron )
-                {
-                    // call a LoadFile every second time to test the loading
-                    if( !xMed.is() )
-                        LoadFile_Impl();
-
-                    if( !bInCallDownload )
-                    {
-                        xTmpMed = xMed;
-                        while( bWaitForData )
-                            Application::Reschedule();
-
-                        xMed = xTmpMed;
-                        bClearMedium = true;
-                    }
-                }
-
-                if( !bWaitForData && ( xMed.is() ||  // was loaded as URL
-                      ( bSynchron && LoadFile_Impl() && xMed.is() ) ) )
-                {
-                    // If it was loaded from the Internet, do not retry
-                    if( !bGetSynchron )
-                        bLoadAgain = !xMed->IsRemote();
-                    bLoadError = !GetGraphic_Impl( aGrf, xMed->GetInStream() );
-                }
-                else if( !LoadFile_Impl() ||
-                        !GetGraphic_Impl( aGrf, xMed.is() ? xMed->GetInStream() : nullptr ))
-                {
-                    if( !xMed.is() )
-                        break;
-                    aGrf.SetDefaultType();
-                }
-
-                if( SotClipboardFormatId::SVXB != nFmt )
-                    nFmt = (bLoadError || GraphicType::Bitmap == aGrf.GetType())
-                                ? SotClipboardFormatId::BITMAP
-                                : SotClipboardFormatId::GDIMETAFILE;
-
-                SvMemoryStream aMemStm( 0, 65535 );
-                switch ( nFmt )
-                {
-                case SotClipboardFormatId::SVXB:
-                    if( GraphicType::NONE != aGrf.GetType() )
-                    {
-                        aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
-                        WriteGraphic( aMemStm, aGrf );
-                    }
-                    break;
-
-                case SotClipboardFormatId::BITMAP:
-                {
-                    const Bitmap aBitmap(aGrf.GetBitmap());
-
-                    if(!aBitmap.IsEmpty())
-                    {
-                        WriteDIB(aBitmap, aMemStm, false, true);
-                    }
-
-                    break;
-                }
-
-                default:
-                    if( aGrf.GetGDIMetaFile().GetActionSize() )
-                    {
-                        GDIMetaFile aMeta( aGrf.GetGDIMetaFile() );
-                        aMeta.Write( aMemStm );
-                    }
-                }
-                rData <<= css::uno::Sequence< sal_Int8 >( static_cast<sal_Int8 const *>(aMemStm.GetData()),
-                                        aMemStm.Seek( STREAM_SEEK_TO_END ) );
-
-                bNativFormat = bOldNativFormat;
-
-                // Everything ready?
-                if( xMed.is() && !bSynchron && bClearMedium )
-                {
-                    xMed.clear();
-                    bClearMedium = false;
-                }
-            }
+            rData <<= sFileNm;
         }
         break;
     case FILETYPE_OBJECT:

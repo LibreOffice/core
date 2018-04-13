@@ -73,11 +73,19 @@ SwGrfNode::SwGrfNode(
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( false )
 {
+    OUString sURLLink(pGraphic->getOriginURL());
+    if (sURLLink.isEmpty() && !rGrfName.isEmpty())
+    {
+        sURLLink = rGrfName;
+        Graphic aGraphic(*pGraphic);
+        aGraphic.setOriginURL(sURLLink);
+    }
+
     bInSwapIn = bChgTwipSize =
         bFrameInPaint = bScaleImageMap = false;
 
     bGraphicArrived = true;
-    ReRead(rGrfName, rFltName, pGraphic, nullptr, false);
+    ReRead(sURLLink, rFltName, pGraphic, nullptr, false);
 }
 
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
@@ -472,9 +480,52 @@ bool SwGrfNode::ImportGraphic( SvStream& rStrm )
  * @return true if ReRead or reading successful,
  *         false if not loaded
  */
-bool SwGrfNode::SwapIn( bool /*bWaitForData*/ )
+bool SwGrfNode::SwapIn(bool bWaitForData)
 {
-    return true;
+    if(bInSwapIn) // not recursively!
+        return true;
+
+    bool bRet = false;
+    bInSwapIn = true;
+    SwBaseLink* pLink = static_cast<SwBaseLink*>( refLink.get() );
+
+    if( pLink )
+    {
+        if( GraphicType::NONE == maGrfObj.GetType() ||
+            GraphicType::Default == maGrfObj.GetType() )
+        {
+            // link was not loaded yet
+            if( pLink->SwapIn( bWaitForData ) )
+            {
+                bRet = true;
+            }
+            else if( GraphicType::Default == maGrfObj.GetType() )
+            {
+                // no default bitmap anymore, thus re-paint
+                delete mpReplacementGraphic;
+                mpReplacementGraphic = nullptr;
+
+                maGrfObj.SetGraphic( Graphic() );
+                onGraphicChanged();
+                SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
+                ModifyNotification( &aMsgHint, &aMsgHint );
+            }
+        }
+        else
+        {
+            bRet = true;
+        }
+    }
+    else
+        bRet = true;
+
+    if (bRet)
+    {
+        if( !nGrfSize.Width() && !nGrfSize.Height() )
+            SetTwipSize( ::GetGraphicSizeTwip( maGrfObj.GetGraphic(), nullptr ) );
+    }
+    bInSwapIn = false;
+    return bRet;
 }
 
 bool SwGrfNode::SwapOut()

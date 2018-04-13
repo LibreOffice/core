@@ -31,6 +31,8 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <graphic/UnoGraphic.hxx>
+#include <vcl/GraphicExternalLink.hxx>
+
 
 using namespace ::com::sun::star;
 
@@ -196,6 +198,11 @@ Graphic::Graphic(const Graphic& rGraphic)
 
 Graphic::Graphic(Graphic&& rGraphic)
     : mxImpGraphic(std::move(rGraphic.mxImpGraphic))
+{
+}
+
+Graphic::Graphic(GraphicExternalLink const & rGraphicExternalLink)
+    : mxImpGraphic(vcl::graphic::Manager::get().newInstance(rGraphicExternalLink))
 {
 }
 

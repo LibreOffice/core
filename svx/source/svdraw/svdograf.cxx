@@ -102,6 +102,7 @@ const Graphic ImpLoadLinkedGraphic( const OUString& aFileName, const OUString& a
         // that it is a SVG graphic, but only because no one yet tried to interpret it.
         rGF.ImportGraphic( aGraphic, aFileName, *pInStrm, nFilter, nullptr, GraphicFilterImportFlags::NONE, &aFilterData );
     }
+    aGraphic.setOriginURL(aFileName);
     return aGraphic;
 }
 
@@ -227,8 +228,7 @@ void SdrGraphicLink::RemoveGraphicUpdater()
         Graphic aGraphic;
         if( sfx2::LinkManager::GetGraphicFromAny( rMimeType, rValue, aGraphic ))
         {
-               rGrafObj.NbcSetGraphic( aGraphic );
-            rGrafObj.ActionChanged();
+            rGrafObj.ImpSetLinkedGraphic(aGraphic);
         }
         else if( SotExchange::GetFormatIdFromMimeType( rMimeType ) != sfx2::LinkManager::RegisterStatusInfoId() )
         {
@@ -277,7 +277,6 @@ sdr::contact::ViewContact* SdrGrafObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfGraphic(*this);
 }
-
 
 // check if SVG and if try to get ObjectInfoPrimitive2D and extract info
 
@@ -426,7 +425,6 @@ const GraphicObject& SdrGrafObj::GetGraphicObject(bool bForceSwapIn) const
 {
     if (bForceSwapIn)
         ForceSwapIn();
-
     return *mpGraphicObject.get();
 }
 
@@ -460,15 +458,29 @@ void SdrGrafObj::NbcSetGraphic(const Graphic& rGraphic)
     onGraphicChanged();
 }
 
-void SdrGrafObj::SetGraphic( const Graphic& rGrf )
+void SdrGrafObj::SetGraphic( const Graphic& rGraphic )
 {
-    NbcSetGraphic(rGrf);
+    if (!rGraphic.getOriginURL().isEmpty())
+    {
+        ImpDeregisterLink();
+        aFileName = rGraphic.getOriginURL();
+        aReferer = "";
+        aFilterName = "";
+    }
+    NbcSetGraphic(rGraphic);
+    if (!rGraphic.getOriginURL().isEmpty())
+    {
+        ImpRegisterLink();
+        mpGraphicObject->SetUserData();
+    }
     SetChanged();
     BroadcastObjectChange();
+    ForceSwapIn();
 }
 
 const Graphic& SdrGrafObj::GetGraphic() const
 {
+    ForceSwapIn();
     return mpGraphicObject->GetGraphic();
 }
 
@@ -597,9 +609,13 @@ Size SdrGrafObj::getOriginalSize() const
     return aSize;
 }
 
-// TODO Remove
 void SdrGrafObj::ForceSwapIn() const
 {
+    if (pGraphicLink && (mpGraphicObject->GetType() == GraphicType::NONE  ||
+                         mpGraphicObject->GetType() == GraphicType::Default) )
+    {
+        pGraphicLink->Update();
+    }
 }
 
 void SdrGrafObj::ImpRegisterLink()
@@ -630,15 +646,11 @@ void SdrGrafObj::ImpDeregisterLink()
     }
 }
 
-void SdrGrafObj::SetGraphicLink(const OUString& rFileName, const OUString& rReferer, const OUString& rFilterName)
+void SdrGrafObj::SetGraphicLink(const OUString& rFileName, const OUString& /*rReferer*/, const OUString& /*rFilterName*/)
 {
-    ImpDeregisterLink();
-    aFileName = rFileName;
-    aReferer = rReferer;
-    aFilterName = rFilterName;
-    ImpRegisterLink();
-    mpGraphicObject->SetUserData();
-    SetGraphic(vcl::graphic::loadFromURL(aFileName));
+    Graphic aGraphic;
+    aGraphic.setOriginURL(rFileName);
+    SetGraphic(aGraphic);
 }
 
 void SdrGrafObj::ReleaseGraphicLink()
@@ -862,6 +874,7 @@ SdrObject* SdrGrafObj::getFullDragClone() const
     // temporary interaction object and load graphic
     if(pRetval && IsLinkedGraphic())
     {
+        pRetval->ForceSwapIn();
         pRetval->ReleaseGraphicLink();
     }
 

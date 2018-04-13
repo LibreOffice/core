@@ -33,6 +33,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 #include <basegfx/vector/b2dsize.hxx>
+#include <vcl/GraphicExternalLink.hxx>
 
 
 enum class GraphicType
@@ -114,6 +115,7 @@ public:
 
 public:
                     Graphic();
+                    Graphic( const GraphicExternalLink& rGraphicLink );
                     Graphic( const Graphic& rGraphic );
                     Graphic( Graphic&& rGraphic );
                     Graphic( const Bitmap& rBmp );

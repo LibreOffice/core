@@ -27,6 +27,7 @@
 #include <oox/token/tokens.hxx>
 #include <sfx2/docfile.hxx>
 #include <vcl/GraphicLoader.hxx>
+#include <vcl/GraphicExternalLink.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -161,7 +162,8 @@ BlipContext::BlipContext( ContextHandler2Helper const & rParent,
         // code rework.
         OUString aRelId = rAttribs.getString( R_TOKEN( link ), OUString() );
         OUString aTargetLink = getFilter().getAbsoluteUrl( getRelations().getExternalTargetFromRelId( aRelId ) );
-        Graphic aGraphic = vcl::graphic::loadFromURL(aTargetLink);
+        GraphicExternalLink aLink(aTargetLink);
+        Graphic aGraphic(aLink);
         mrBlipProps.mxFillGraphic = aGraphic.GetXGraphic();
     }
 }
