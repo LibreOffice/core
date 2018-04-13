@@ -359,6 +359,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116976, "tdf116976.docx")
                          getProperty<sal_Int16>(getShape(1), "RelativeWidth"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf116985, "tdf116985.docx")
+{
+    // Body frame width is 10800, 40% is the requested relative width, with 144
+    // spacing to text on the left/right side.  So ideal width would be 4032,
+    // was 3431. Allow one pixel tolerance, though.
+    sal_Int32 nWidth
+        = parseDump("/root/page[1]/body/txt[1]/anchored/fly/infos/bounds", "width").toInt32();
+    CPPUNIT_ASSERT(nWidth > 4000);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
