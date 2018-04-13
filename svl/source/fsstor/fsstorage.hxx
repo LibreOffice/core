@@ -43,7 +43,7 @@ class FSStorage : public css::lang::XTypeProvider
                 , public ::cppu::OWeakObject
 {
     ::osl::Mutex m_aMutex;
-    FSStorage_Impl* m_pImpl;
+    std::unique_ptr<FSStorage_Impl> m_pImpl;
 
 protected:
 

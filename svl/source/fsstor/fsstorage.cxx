@@ -1035,8 +1035,7 @@ void SAL_CALL FSStorage::dispose()
         m_pImpl->m_pListenersContainer->disposeAndClear( aSource );
     }
 
-    delete m_pImpl;
-    m_pImpl = nullptr;
+    m_pImpl.reset();
 }
 
 void SAL_CALL FSStorage::addEventListener(
