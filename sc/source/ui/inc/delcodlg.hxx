@@ -20,36 +20,33 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DELCODLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DELCODLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 #include <global.hxx>
 
-class ScDeleteContentsDlg : public ModalDialog
+class ScDeleteContentsDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<CheckBox>        aBtnDelAll;
-    VclPtr<CheckBox>        aBtnDelStrings;
-    VclPtr<CheckBox>        aBtnDelNumbers;
-    VclPtr<CheckBox>        aBtnDelDateTime;
-    VclPtr<CheckBox>        aBtnDelFormulas;
-    VclPtr<CheckBox>        aBtnDelNotes;
-    VclPtr<CheckBox>        aBtnDelAttrs;
-    VclPtr<CheckBox>        aBtnDelObjects;
-    VclPtr<OKButton>        aBtnOk;
+    bool                    m_bObjectsDisabled;
 
-    bool             bObjectsDisabled;
+    std::unique_ptr<weld::CheckButton> m_xBtnDelAll;
+    std::unique_ptr<weld::CheckButton> m_xBtnDelStrings;
+    std::unique_ptr<weld::CheckButton> m_xBtnDelNumbers;
+    std::unique_ptr<weld::CheckButton> m_xBtnDelDateTime;
+    std::unique_ptr<weld::CheckButton> m_xBtnDelFormulas;
+    std::unique_ptr<weld::CheckButton> m_xBtnDelNotes;
+    std::unique_ptr<weld::CheckButton> m_xBtnDelAttrs;
+    std::unique_ptr<weld::CheckButton> m_xBtnDelObjects;
+    std::unique_ptr<weld::Button>      m_xBtnOk;
 
     static bool         bPreviousAllCheck;
     static InsertDeleteFlags nPreviousChecks;
 
     void DisableChecks( bool bDelAllChecked );
-    DECL_LINK( DelAllHdl, Button*, void );
+    DECL_LINK( DelAllHdl, weld::Button&, void );
 
 public:
-            ScDeleteContentsDlg( vcl::Window* pParent,
-                                 InsertDeleteFlags nCheckDefaults );
-            virtual ~ScDeleteContentsDlg() override;
-    virtual void dispose() override;
+    ScDeleteContentsDlg(weld::Window* pParent, InsertDeleteFlags nCheckDefaults );
+    virtual ~ScDeleteContentsDlg() override;
     void    DisableObjects();
 
     InsertDeleteFlags GetDelContentsCmdBits() const;

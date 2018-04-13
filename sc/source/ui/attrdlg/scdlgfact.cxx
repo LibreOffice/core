@@ -90,7 +90,12 @@ short AbstractScDeleteCellDlg_Impl::Execute()
 
 //for dataform
 IMPL_ABSTDLG_BASE(AbstractScDataFormDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScDeleteContentsDlg_Impl);
+
+short AbstractScDeleteContentsDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractScFillSeriesDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScGroupDlg_Impl);
 
@@ -257,12 +262,12 @@ DelCellCmd AbstractScDeleteCellDlg_Impl::GetDelCellCmd() const
 
 void AbstractScDeleteContentsDlg_Impl::DisableObjects()
 {
-    pDlg->DisableObjects();
+    m_xDlg->DisableObjects();
 }
 
 InsertDeleteFlags AbstractScDeleteContentsDlg_Impl::GetDelContentsCmdBits() const
 {
-    return pDlg->GetDelContentsCmdBits();
+    return m_xDlg->GetDelContentsCmdBits();
 }
 
 FillDir AbstractScFillSeriesDlg_Impl::GetFillDir() const
@@ -702,10 +707,9 @@ VclPtr<AbstractScDataFormDlg> ScAbstractDialogFactory_Impl::CreateScDataFormDlg(
     return VclPtr<AbstractScDataFormDlg_Impl>::Create(pDlg);
 }
 
-VclPtr<AbstractScDeleteContentsDlg> ScAbstractDialogFactory_Impl::CreateScDeleteContentsDlg(vcl::Window* pParent)
+VclPtr<AbstractScDeleteContentsDlg> ScAbstractDialogFactory_Impl::CreateScDeleteContentsDlg(weld::Window* pParent)
 {
-    VclPtr<ScDeleteContentsDlg> pDlg = VclPtr<ScDeleteContentsDlg>::Create(pParent, InsertDeleteFlags::NONE);
-    return VclPtr<AbstractScDeleteContentsDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScDeleteContentsDlg_Impl>::Create(new ScDeleteContentsDlg(pParent, InsertDeleteFlags::NONE));
 }
 
 VclPtr<AbstractScFillSeriesDlg> ScAbstractDialogFactory_Impl::CreateScFillSeriesDlg( vcl::Window*       pParent,

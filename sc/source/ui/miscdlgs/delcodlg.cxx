@@ -28,88 +28,70 @@ InsertDeleteFlags ScDeleteContentsDlg::nPreviousChecks   = (InsertDeleteFlags::D
                                                  InsertDeleteFlags::NOTE     | InsertDeleteFlags::FORMULA |
                                                  InsertDeleteFlags::VALUE);
 
-ScDeleteContentsDlg::ScDeleteContentsDlg( vcl::Window* pParent,
-                                          InsertDeleteFlags nCheckDefaults ) :
-    ModalDialog     ( pParent, "DeleteContentsDialog", "modules/scalc/ui/deletecontents.ui" ),
-
-    bObjectsDisabled( false )
+ScDeleteContentsDlg::ScDeleteContentsDlg(weld::Window* pParent, InsertDeleteFlags nCheckDefaults)
+    : GenericDialogController(pParent, "modules/scalc/ui/deletecontents.ui", "DeleteContentsDialog")
+    , m_bObjectsDisabled(false)
+    , m_xBtnDelAll(m_xBuilder->weld_check_button("deleteall"))
+    , m_xBtnDelStrings(m_xBuilder->weld_check_button("text"))
+    , m_xBtnDelNumbers(m_xBuilder->weld_check_button("numbers"))
+    , m_xBtnDelDateTime(m_xBuilder->weld_check_button("datetime"))
+    , m_xBtnDelFormulas(m_xBuilder->weld_check_button("formulas"))
+    , m_xBtnDelNotes(m_xBuilder->weld_check_button("comments"))
+    , m_xBtnDelAttrs(m_xBuilder->weld_check_button("formats"))
+    , m_xBtnDelObjects(m_xBuilder->weld_check_button("objects"))
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
 {
-    get( aBtnDelAll, "deleteall" );
-    get( aBtnDelStrings, "text" );
-    get( aBtnDelNumbers, "numbers" );
-    get( aBtnDelDateTime, "datetime" );
-    get( aBtnDelFormulas, "formulas" );
-    get( aBtnDelNotes, "comments" );
-    get( aBtnDelAttrs, "formats" );
-    get( aBtnDelObjects, "objects" );
-    get( aBtnOk, "ok" );
-
     if ( nCheckDefaults != InsertDeleteFlags::NONE )
     {
         ScDeleteContentsDlg::nPreviousChecks = nCheckDefaults;
         ScDeleteContentsDlg::bPreviousAllCheck = false;
     }
 
-    aBtnDelAll->Check     ( ScDeleteContentsDlg::bPreviousAllCheck );
-    aBtnDelStrings->Check ( IS_SET( InsertDeleteFlags::STRING,
+    m_xBtnDelAll->set_active( ScDeleteContentsDlg::bPreviousAllCheck );
+    m_xBtnDelStrings->set_active( IS_SET( InsertDeleteFlags::STRING,
                                    ScDeleteContentsDlg::nPreviousChecks ) );
-    aBtnDelNumbers->Check ( IS_SET( InsertDeleteFlags::VALUE,
+    m_xBtnDelNumbers->set_active( IS_SET( InsertDeleteFlags::VALUE,
                                    ScDeleteContentsDlg::nPreviousChecks ) );
-    aBtnDelDateTime->Check( IS_SET( InsertDeleteFlags::DATETIME,
+    m_xBtnDelDateTime->set_active( IS_SET( InsertDeleteFlags::DATETIME,
                                    ScDeleteContentsDlg::nPreviousChecks ) );
-    aBtnDelFormulas->Check( IS_SET( InsertDeleteFlags::FORMULA,
+    m_xBtnDelFormulas->set_active( IS_SET( InsertDeleteFlags::FORMULA,
                                    ScDeleteContentsDlg::nPreviousChecks ) );
-    aBtnDelNotes->Check   ( IS_SET( InsertDeleteFlags::NOTE,
+    m_xBtnDelNotes->set_active( IS_SET( InsertDeleteFlags::NOTE,
                                    ScDeleteContentsDlg::nPreviousChecks ) );
-    aBtnDelAttrs->Check   ( IS_SET( InsertDeleteFlags::ATTRIB,
+    m_xBtnDelAttrs->set_active( IS_SET( InsertDeleteFlags::ATTRIB,
                                    ScDeleteContentsDlg::nPreviousChecks ) );
-    aBtnDelObjects->Check ( IS_SET( InsertDeleteFlags::OBJECTS,
+    m_xBtnDelObjects->set_active( IS_SET( InsertDeleteFlags::OBJECTS,
                                    ScDeleteContentsDlg::nPreviousChecks ) );
 
-    DisableChecks( aBtnDelAll->IsChecked() );
+    DisableChecks( m_xBtnDelAll->get_active() );
 
-    aBtnDelAll->SetClickHdl( LINK( this, ScDeleteContentsDlg, DelAllHdl ) );
+    m_xBtnDelAll->connect_clicked( LINK( this, ScDeleteContentsDlg, DelAllHdl ) );
 }
 
 ScDeleteContentsDlg::~ScDeleteContentsDlg()
 {
-    disposeOnce();
-}
-
-void ScDeleteContentsDlg::dispose()
-{
-    aBtnDelAll.clear();
-    aBtnDelStrings.clear();
-    aBtnDelNumbers.clear();
-    aBtnDelDateTime.clear();
-    aBtnDelFormulas.clear();
-    aBtnDelNotes.clear();
-    aBtnDelAttrs.clear();
-    aBtnDelObjects.clear();
-    aBtnOk.clear();
-    ModalDialog::dispose();
 }
 
 InsertDeleteFlags ScDeleteContentsDlg::GetDelContentsCmdBits() const
 {
     ScDeleteContentsDlg::nPreviousChecks = InsertDeleteFlags::NONE;
 
-    if ( aBtnDelStrings->IsChecked() )
+    if ( m_xBtnDelStrings->get_active() )
         ScDeleteContentsDlg::nPreviousChecks  = InsertDeleteFlags::STRING;
-    if ( aBtnDelNumbers->IsChecked() )
+    if ( m_xBtnDelNumbers->get_active() )
         ScDeleteContentsDlg::nPreviousChecks |= InsertDeleteFlags::VALUE;
-    if ( aBtnDelDateTime->IsChecked())
+    if ( m_xBtnDelDateTime->get_active())
         ScDeleteContentsDlg::nPreviousChecks |= InsertDeleteFlags::DATETIME;
-    if ( aBtnDelFormulas->IsChecked())
+    if ( m_xBtnDelFormulas->get_active())
         ScDeleteContentsDlg::nPreviousChecks |= InsertDeleteFlags::FORMULA;
-    if ( aBtnDelNotes->IsChecked()   )
+    if ( m_xBtnDelNotes->get_active()   )
         ScDeleteContentsDlg::nPreviousChecks |= InsertDeleteFlags::NOTE;
-    if ( aBtnDelAttrs->IsChecked()   )
+    if ( m_xBtnDelAttrs->get_active()   )
         ScDeleteContentsDlg::nPreviousChecks |= InsertDeleteFlags::ATTRIB;
-    if ( aBtnDelObjects->IsChecked() )
+    if ( m_xBtnDelObjects->get_active() )
         ScDeleteContentsDlg::nPreviousChecks |= InsertDeleteFlags::OBJECTS;
 
-    ScDeleteContentsDlg::bPreviousAllCheck = aBtnDelAll->IsChecked();
+    ScDeleteContentsDlg::bPreviousAllCheck = m_xBtnDelAll->get_active();
 
     return ( ScDeleteContentsDlg::bPreviousAllCheck
                 ? InsertDeleteFlags::ALL
@@ -120,39 +102,39 @@ void ScDeleteContentsDlg::DisableChecks( bool bDelAllChecked )
 {
     if ( bDelAllChecked )
     {
-        aBtnDelStrings->Disable();
-        aBtnDelNumbers->Disable();
-        aBtnDelDateTime->Disable();
-        aBtnDelFormulas->Disable();
-        aBtnDelNotes->Disable();
-        aBtnDelAttrs->Disable();
-        aBtnDelObjects->Disable();
+        m_xBtnDelStrings->set_sensitive(false);
+        m_xBtnDelNumbers->set_sensitive(false);
+        m_xBtnDelDateTime->set_sensitive(false);
+        m_xBtnDelFormulas->set_sensitive(false);
+        m_xBtnDelNotes->set_sensitive(false);
+        m_xBtnDelAttrs->set_sensitive(false);
+        m_xBtnDelObjects->set_sensitive(false);
     }
     else
     {
-        aBtnDelStrings->Enable();
-        aBtnDelNumbers->Enable();
-        aBtnDelDateTime->Enable();
-        aBtnDelFormulas->Enable();
-        aBtnDelNotes->Enable();
-        aBtnDelAttrs->Enable();
-        if (bObjectsDisabled)
-            aBtnDelObjects->Disable();
+        m_xBtnDelStrings->set_sensitive(true);
+        m_xBtnDelNumbers->set_sensitive(true);
+        m_xBtnDelDateTime->set_sensitive(true);
+        m_xBtnDelFormulas->set_sensitive(true);
+        m_xBtnDelNotes->set_sensitive(true);
+        m_xBtnDelAttrs->set_sensitive(true);
+        if (m_bObjectsDisabled)
+            m_xBtnDelObjects->set_sensitive(false);
         else
-            aBtnDelObjects->Enable();
+            m_xBtnDelObjects->set_sensitive(true);
     }
 }
 
 void ScDeleteContentsDlg::DisableObjects()
 {
-    bObjectsDisabled = true;
-    aBtnDelObjects->Check(false);
-    aBtnDelObjects->Disable();
+    m_bObjectsDisabled = true;
+    m_xBtnDelObjects->set_active(false);
+    m_xBtnDelObjects->set_sensitive(false);
 }
 
-IMPL_LINK_NOARG(ScDeleteContentsDlg, DelAllHdl, Button*, void)
+IMPL_LINK_NOARG(ScDeleteContentsDlg, DelAllHdl, weld::Button&, void)
 {
-    DisableChecks( aBtnDelAll->IsChecked() );
+    DisableChecks( m_xBtnDelAll->get_active() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
