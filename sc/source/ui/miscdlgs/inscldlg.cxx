@@ -25,73 +25,76 @@
 
 static sal_uInt8 nInsItemChecked=0;
 
-ScInsertCellDlg::ScInsertCellDlg( vcl::Window* pParent,bool bDisallowCellMove) :
-    ModalDialog     ( pParent, "InsertCellsDialog", "modules/scalc/ui/insertcells.ui")
+ScInsertCellDlg::ScInsertCellDlg(weld::Window* pParent,bool bDisallowCellMove)
+    : GenericDialogController(pParent, "modules/scalc/ui/insertcells.ui", "InsertCellsDialog")
+    , m_xBtnCellsDown(m_xBuilder->weld_radio_button("down"))
+    , m_xBtnCellsRight(m_xBuilder->weld_radio_button("right"))
+    , m_xBtnInsRow(m_xBuilder->weld_radio_button("rows"))
+    , m_xBtnInsCol(m_xBuilder->weld_radio_button("cols"))
 {
-    get(m_pBtnCellsDown, "down");
-    get(m_pBtnCellsRight, "right");
-    get(m_pBtnInsRow, "rows");
-    get(m_pBtnInsCol, "cols");
-
     if (bDisallowCellMove)
     {
-        m_pBtnCellsDown->Disable();
-        m_pBtnCellsRight->Disable();
-        m_pBtnInsRow->Check();
+        m_xBtnCellsDown->set_sensitive(false);
+        m_xBtnCellsRight->set_sensitive(false);
+        m_xBtnInsRow->set_active(true);
 
-        switch(nInsItemChecked)
+        switch (nInsItemChecked)
         {
-            case 2: m_pBtnInsRow->Check();break;
-            case 3: m_pBtnInsCol->Check();break;
-            default:m_pBtnInsRow->Check();break;
+            case 2:
+                m_xBtnInsRow->set_active(true);
+                break;
+            case 3:
+                m_xBtnInsCol->set_active(true);
+                break;
+            default:
+                m_xBtnInsRow->set_active(true);
+                break;
         }
     }
     else
     {
-        switch(nInsItemChecked)
+        switch (nInsItemChecked)
         {
-            case 0: m_pBtnCellsDown->Check();break;
-            case 1: m_pBtnCellsRight->Check();break;
-            case 2: m_pBtnInsRow->Check();break;
-            case 3: m_pBtnInsCol->Check();break;
+            case 0:
+                m_xBtnCellsDown->set_active(true);
+                break;
+            case 1:
+                m_xBtnCellsRight->set_active(true);
+                break;
+            case 2:
+                m_xBtnInsRow->set_active(true);
+                break;
+            case 3:
+                m_xBtnInsCol->set_active(true);
+                break;
         }
     }
 }
 
 ScInsertCellDlg::~ScInsertCellDlg()
 {
-    disposeOnce();
-}
-
-void ScInsertCellDlg::dispose()
-{
-    m_pBtnCellsDown.clear();
-    m_pBtnCellsRight.clear();
-    m_pBtnInsRow.clear();
-    m_pBtnInsCol.clear();
-    ModalDialog::dispose();
 }
 
 InsCellCmd ScInsertCellDlg::GetInsCellCmd() const
 {
     InsCellCmd nReturn = INS_NONE;
 
-    if ( m_pBtnCellsDown->IsChecked() )
+    if (m_xBtnCellsDown->get_active())
     {
         nInsItemChecked=0;
         nReturn = INS_CELLSDOWN;
     }
-    else if ( m_pBtnCellsRight->IsChecked())
+    else if (m_xBtnCellsRight->get_active())
     {
         nInsItemChecked=1;
         nReturn = INS_CELLSRIGHT;
     }
-    else if ( m_pBtnInsRow->IsChecked()   )
+    else if (m_xBtnInsRow->get_active())
     {
         nInsItemChecked=2;
         nReturn = INS_INSROWS_BEFORE;
     }
-    else if ( m_pBtnInsCol->IsChecked()   )
+    else if (m_xBtnInsCol->get_active())
     {
         nInsItemChecked=3;
         nReturn = INS_INSCOLS_BEFORE;

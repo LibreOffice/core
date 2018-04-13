@@ -88,7 +88,12 @@ IMPL_ABSTDLG_BASE(AbstractScDataFormDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDeleteContentsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScFillSeriesDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScGroupDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScInsertCellDlg_Impl);
+
+short AbstractScInsertCellDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractScInsertContentsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScInsertTableDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScSelEntryDlg_Impl);
@@ -113,6 +118,7 @@ IMPL_ABSTDLG_BASE(ScAbstractTabDialog_Impl);
 AbstractScLinkedAreaDlg_Impl::~AbstractScLinkedAreaDlg_Impl()
 {
 }
+
 short AbstractScLinkedAreaDlg_Impl::Execute()
 {
     return m_xDlg->run();
@@ -296,7 +302,7 @@ bool AbstractScGroupDlg_Impl::GetColsChecked() const
 
 InsCellCmd  AbstractScInsertCellDlg_Impl::GetInsCellCmd() const
 {
-    return pDlg->GetInsCellCmd();
+    return m_xDlg->GetInsCellCmd();
 }
 
 InsertDeleteFlags AbstractScInsertContentsDlg_Impl::GetInsContentsCmdBits() const
@@ -714,11 +720,10 @@ VclPtr<AbstractScGroupDlg> ScAbstractDialogFactory_Impl::CreateAbstractScGroupDl
     return VclPtr<AbstractScGroupDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractScInsertCellDlg> ScAbstractDialogFactory_Impl::CreateScInsertCellDlg( vcl::Window* pParent,
-                                                                bool bDisallowCellMove )
+VclPtr<AbstractScInsertCellDlg> ScAbstractDialogFactory_Impl::CreateScInsertCellDlg(weld::Window* pParent,
+                                                                bool bDisallowCellMove)
 {
-    VclPtr<ScInsertCellDlg> pDlg = VclPtr<ScInsertCellDlg>::Create( pParent, bDisallowCellMove);
-    return VclPtr<AbstractScInsertCellDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScInsertCellDlg_Impl>::Create(new ScInsertCellDlg(pParent, bDisallowCellMove));
 }
 
 VclPtr<AbstractScInsertContentsDlg> ScAbstractDialogFactory_Impl::CreateScInsertContentsDlg( vcl::Window*      pParent,

@@ -200,7 +200,13 @@ class AbstractScGroupDlg_Impl :  public AbstractScGroupDlg
 
 class AbstractScInsertCellDlg_Impl : public AbstractScInsertCellDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScInsertCellDlg_Impl, ScInsertCellDlg)
+    std::unique_ptr<ScInsertCellDlg> m_xDlg;
+public:
+    explicit AbstractScInsertCellDlg_Impl(ScInsertCellDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short           Execute() override;
     virtual InsCellCmd GetInsCellCmd() const override ;
 };
 
@@ -449,8 +455,8 @@ public:
     virtual VclPtr<AbstractScGroupDlg> CreateAbstractScGroupDlg( vcl::Window* pParent,
                                                             bool bUnGroup = false) override;
 
-    virtual VclPtr<AbstractScInsertCellDlg> CreateScInsertCellDlg( vcl::Window* pParent,
-                                                             bool bDisallowCellMove ) override;
+    virtual VclPtr<AbstractScInsertCellDlg> CreateScInsertCellDlg(weld::Window* pParent,
+                                                                  bool bDisallowCellMove) override;
 
     virtual VclPtr<AbstractScInsertContentsDlg> CreateScInsertContentsDlg( vcl::Window*        pParent,
                                                                     const OUString* pStrTitle = nullptr ) override;
