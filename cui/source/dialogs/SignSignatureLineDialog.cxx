@@ -71,6 +71,7 @@ SignSignatureLineDialog::SignSignatureLineDialog(weld::Widget* pParent, Referenc
 
     m_xBtnChooseCertificate->connect_clicked(
         LINK(this, SignSignatureLineDialog, chooseCertificate));
+    m_xEditName->connect_changed(LINK(this, SignSignatureLineDialog, entryChanged));
 
     // Read properties from selected signature line
     m_xShapeProperties->getPropertyValue("SignatureLineId") >>= m_aSignatureLineId;
@@ -124,6 +125,8 @@ IMPL_LINK_NOARG(SignSignatureLineDialog, chooseCertificate, weld::Button&, void)
     }
     ValidateFields();
 }
+
+IMPL_LINK_NOARG(SignSignatureLineDialog, entryChanged, weld::Entry&, void) { ValidateFields(); }
 
 void SignSignatureLineDialog::ValidateFields()
 {
