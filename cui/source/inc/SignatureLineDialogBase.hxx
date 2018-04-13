@@ -26,6 +26,7 @@ protected:
     css::uno::Reference<css::frame::XModel> m_xModel;
     OUString getSignatureImage();
     virtual void Apply() = 0;
+    OUString getCDataString(const OUString& rString);
 };
 
 #endif
