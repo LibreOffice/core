@@ -103,6 +103,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">pagerb</property>
@@ -124,6 +125,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">pagerb</property>
@@ -145,6 +147,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
@@ -205,6 +208,7 @@
                         <property name="margin_top">6</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <property name="use_underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="pagenumcb-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|pagenumcb-atkobject">Assigns the page number that you specify to the page that follows the manual page break. This option is only available if you assign a different page style to the page that follows manual page break.</property>
