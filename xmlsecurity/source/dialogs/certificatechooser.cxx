@@ -164,7 +164,6 @@ void CertificateChooser::ImplInitialize()
     {
         case UserAction::Sign:
             m_pFTSign->Show();
-            m_pOKBtn->SetText( get<FixedText>("str_sign")->GetText() );
             msPreferredKey = aUserOpts.GetSigningKey();
             break;
 

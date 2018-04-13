@@ -183,11 +183,6 @@
                     <property name="label" translatable="yes" context="selectcertificatedialog|STR_ENCIPHER_ONLY">Only for encipherment</property>
                   </object>
                   <!-- different prefix, STR_ is (mis)used in the code to map certificate usage flags to strings -->
-                  <object class="GtkLabel" id="str_sign">
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="selectcertificatedialog|str_sign">Sign</property>
-                  </object>
                   <object class="GtkLabel" id="str_encrypt">
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
