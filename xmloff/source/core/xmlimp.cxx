@@ -62,6 +62,7 @@
 #include <unotools/fontcvt.hxx>
 #include <o3tl/make_unique.hxx>
 #include <xmloff/fasttokenhandler.hxx>
+#include <vcl/GraphicExternalLink.hxx>
 
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <com/sun/star/rdf/XRepositorySupplier.hpp>
@@ -1370,19 +1371,10 @@ uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicByURL(OUString const &
         }
         else
         {
-            uno::Reference<graphic::XGraphicProvider> xProvider(graphic::GraphicProvider::create(GetComponentContext()));
             OUString const & rAbsoluteURL = GetAbsoluteReference(rURL);
-            uno::Sequence<beans::PropertyValue> aLoadProperties(comphelper::InitPropertySequence(
-            {
-                { "URL", uno::makeAny(rAbsoluteURL) }
-            }));
-
-            xGraphic = xProvider->queryGraphic(aLoadProperties);
-            if (xGraphic.is())
-            {
-                Graphic aGraphic(xGraphic);
-                aGraphic.setOriginURL(rAbsoluteURL);
-            }
+            GraphicExternalLink aExternalLink(rAbsoluteURL);
+            Graphic aGraphic(aExternalLink);
+            xGraphic = aGraphic.GetXGraphic();
         }
     }
 

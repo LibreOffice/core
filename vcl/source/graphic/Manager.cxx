@@ -179,6 +179,13 @@ std::shared_ptr<ImpGraphic> Manager::newInstance(const GDIMetaFile& rMetaFile)
     return pReturn;
 }
 
+std::shared_ptr<ImpGraphic> Manager::newInstance(const GraphicExternalLink& rGraphicLink)
+{
+    auto pReturn = std::make_shared<ImpGraphic>(rGraphicLink);
+    registerGraphic(pReturn, "GraphicExternalLink");
+    return pReturn;
+}
+
 void Manager::swappedIn(const ImpGraphic* pImpGraphic)
 {
     mnUsedSize += pImpGraphic->ImplGetSizeBytes();

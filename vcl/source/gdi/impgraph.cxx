@@ -226,6 +226,16 @@ ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic)
     rImpGraphic.mbDummyContext = false;
 }
 
+ImpGraphic::ImpGraphic(GraphicExternalLink const & rGraphicExternalLink) :
+        meType          ( GraphicType::Default ),
+        mnSizeBytes     ( 0 ),
+        mbSwapOut       ( false ),
+        mbDummyContext  ( false ),
+        maGraphicExternalLink(rGraphicExternalLink),
+        maLastUsed (std::chrono::high_resolution_clock::now())
+{
+}
+
 ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         maEx            ( rBitmap ),
         meType          ( !rBitmap.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),

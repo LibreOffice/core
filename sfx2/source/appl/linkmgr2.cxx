@@ -40,6 +40,7 @@
 #include <sfx2/request.hxx>
 #include <vcl/dibtools.hxx>
 #include <unotools/charclass.hxx>
+#include <vcl/GraphicLoader.hxx>
 
 #include "fileobj.hxx"
 #include "impldde.hxx"
@@ -498,12 +499,26 @@ SotClipboardFormatId LinkManager::RegisterStatusInfoId()
 
 bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
                                 const css::uno::Any & rValue,
-                                Graphic& rGrf )
+                                Graphic& rGraphic )
 {
     bool bRet = false;
-    css::uno::Sequence< sal_Int8 > aSeq;
-    if( rValue.hasValue() && ( rValue >>= aSeq ) )
+
+    if (!rValue.hasValue())
+        return bRet;
+
+    if (rValue.has<OUString>())
     {
+        OUString sURL = rValue.get<OUString>();
+        rGraphic = vcl::graphic::loadFromURL(sURL);
+        if (!rGraphic)
+            rGraphic.SetDefaultType();
+        rGraphic.setOriginURL(sURL);
+        return true;
+    }
+    else if (rValue.has<css::uno::Sequence<sal_Int8>>())
+    {
+        auto aSeq = rValue.get<css::uno::Sequence<sal_Int8>>();
+
         SvMemoryStream aMemStm( const_cast<sal_Int8 *>(aSeq.getConstArray()), aSeq.getLength(),
                                 StreamMode::READ );
         aMemStm.Seek( 0 );
@@ -512,7 +527,7 @@ bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
         {
         case SotClipboardFormatId::SVXB:
             {
-                ReadGraphic( aMemStm, rGrf );
+                ReadGraphic( aMemStm, rGraphic );
                 bRet = true;
             }
             break;
@@ -520,7 +535,7 @@ bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
             {
                 GDIMetaFile aMtf;
                 aMtf.Read( aMemStm );
-                rGrf = aMtf;
+                rGraphic = aMtf;
                 bRet = true;
             }
             break;
@@ -528,7 +543,7 @@ bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
             {
                 Bitmap aBmp;
                 ReadDIB(aBmp, aMemStm, true);
-                rGrf = aBmp;
+                rGraphic = aBmp;
                 bRet = true;
             }
             break;

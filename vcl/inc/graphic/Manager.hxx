@@ -17,6 +17,7 @@
 #include <vcl/vectorgraphicdata.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/GraphicExternalLink.hxx>
 
 #include <officecfg/Office/Common.hxx>
 #include <unotools/configmgr.hxx>
@@ -62,6 +63,7 @@ public:
     std::shared_ptr<ImpGraphic> newInstance(const VectorGraphicDataPtr& rVectorGraphicDataPtr);
     std::shared_ptr<ImpGraphic> newInstance(const Animation& rAnimation);
     std::shared_ptr<ImpGraphic> newInstance(const GDIMetaFile& rMtf);
+    std::shared_ptr<ImpGraphic> newInstance(const GraphicExternalLink& rGraphicLink);
 };
 }
 } // end namespace vcl::graphic

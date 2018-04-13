@@ -265,7 +265,7 @@ ErrCode SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
 
                 OUString sURL = URIHelper::SmartRel2Abs(
                     aTemp, rPath, URIHelper::GetMaybeFileHdl() );
-
+                aGraphic.setOriginURL(sURL);
                 rShell.Insert( sURL, rFilter, aGraphic, &aFrameManager );
             }
             else
