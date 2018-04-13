@@ -1666,8 +1666,7 @@ ImplBorderWindow::~ImplBorderWindow()
 
 void ImplBorderWindow::dispose()
 {
-    delete mpBorderView;
-    mpBorderView = nullptr;
+    mpBorderView.reset();
     mpMenuBarWindow.clear();
     mpNotebookBar.disposeAndClear();
     vcl::Window::dispose();
@@ -1834,18 +1833,18 @@ void ImplBorderWindow::DataChanged( const DataChangedEvent& rDCEvt )
 void ImplBorderWindow::InitView()
 {
     if ( mbSmallOutBorder )
-        mpBorderView = new ImplSmallBorderWindowView( this );
+        mpBorderView.reset(new ImplSmallBorderWindowView( this ));
     else if ( mpWindowImpl->mbFrame )
     {
         if( mbFrameBorder )
-            mpBorderView = new ImplStdBorderWindowView( this );
+            mpBorderView.reset(new ImplStdBorderWindowView( this ));
         else
-            mpBorderView = new ImplNoBorderWindowView;
+            mpBorderView.reset(new ImplNoBorderWindowView);
     }
     else if ( !mbFrameBorder )
-        mpBorderView = new ImplSmallBorderWindowView( this );
+        mpBorderView.reset(new ImplSmallBorderWindowView( this ));
     else
-        mpBorderView = new ImplStdBorderWindowView( this );
+        mpBorderView.reset(new ImplStdBorderWindowView( this ));
     Size aSize = GetOutputSizePixel();
     mpBorderView->Init( this, aSize.Width(), aSize.Height() );
 }
@@ -1861,7 +1860,7 @@ void ImplBorderWindow::UpdateView( bool bNewView, const Size& rNewOutSize )
 
     if ( bNewView )
     {
-        delete mpBorderView;
+        mpBorderView.reset();
         InitView();
     }
     else
