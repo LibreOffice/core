@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <headless/svpinst.hxx>
 #include <qt5/Qt5Instance.hxx>
 #include "KDE5SalFrame.hxx"
 
@@ -29,10 +28,6 @@ class KDE5XLib;
 
 class KDE5SalInstance : public Qt5Instance
 {
-
-protected:
-    //SalX11Display* CreateDisplay() const;
-
 public:
     explicit KDE5SalInstance(SalYieldMutex* pMutex);
     virtual KDE5SalFrame* CreateFrame( KDE5SalFrame* pParent, SalFrameStyleFlags nStyle );
