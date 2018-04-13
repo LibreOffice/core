@@ -35,7 +35,6 @@ private:
 
     void ValidateFields();
     virtual void Apply() override;
-    OUString getCDataString(const OUString& rString);
 
     DECL_LINK(chooseCertificate, weld::Button&, void);
 };

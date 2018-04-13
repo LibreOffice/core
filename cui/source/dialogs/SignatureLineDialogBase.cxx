@@ -30,6 +30,11 @@ short SignatureLineDialogBase::execute()
     return nRet;
 }
 
+OUString SignatureLineDialogBase::getCDataString(const OUString& rString)
+{
+    return "<![CDATA[" + rString + "]]>";
+}
+
 OUString SignatureLineDialogBase::getSignatureImage()
 {
     OUString const svg(
