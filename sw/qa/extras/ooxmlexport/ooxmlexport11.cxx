@@ -354,7 +354,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112118_DOCX, "tdf112118.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf116976, "tdf116976.docx")
 {
-    // This was 0, reltive size of shape after bitmap was ignored.
+    // This was 0, relative size of shape after bitmap was ignored.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(40),
                          getProperty<sal_Int16>(getShape(1), "RelativeWidth"));
 }
