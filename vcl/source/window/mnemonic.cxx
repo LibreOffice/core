@@ -28,7 +28,8 @@
 
 using namespace ::com::sun::star;
 
-MnemonicGenerator::MnemonicGenerator()
+MnemonicGenerator::MnemonicGenerator(sal_Unicode cMnemonic)
+    : m_cMnemonic(cMnemonic)
 {
     memset( maMnemonics, 1, sizeof( maMnemonics ) );
 }
@@ -59,10 +60,10 @@ sal_uInt16 MnemonicGenerator::ImplGetMnemonicIndex( sal_Unicode c )
 sal_Unicode MnemonicGenerator::ImplFindMnemonic( const OUString& rKey )
 {
     sal_Int32 nIndex = 0;
-    while ( (nIndex = rKey.indexOf( MNEMONIC_CHAR, nIndex )) != -1 )
+    while ( (nIndex = rKey.indexOf( m_cMnemonic, nIndex )) != -1 )
     {
         sal_Unicode cMnemonic = rKey[ nIndex+1 ];
-        if ( cMnemonic != MNEMONIC_CHAR )
+        if ( cMnemonic != m_cMnemonic )
             return cMnemonic;
         nIndex += 2;
     }
@@ -187,7 +188,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
                 if ( maMnemonics[nMnemonicIndex] )
                 {
                     maMnemonics[nMnemonicIndex] = 0;
-                    rKey = rKey.replaceAt( nIndex, 0, OUString(MNEMONIC_CHAR) );
+                    rKey = rKey.replaceAt( nIndex, 0, OUString(m_cMnemonic) );
                     bChanged = true;
                     break;
                 }
@@ -239,7 +240,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
             if ( nBestCount != 0xFFFF )
             {
                 maMnemonics[nBestMnemonicIndex] = 0;
-                rKey = rKey.replaceAt( nBestIndex, 0, OUString(MNEMONIC_CHAR) );
+                rKey = rKey.replaceAt( nBestIndex, 0, OUString(m_cMnemonic) );
                 bChanged = true;
             }
         }
@@ -260,7 +261,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
                 {
                     maMnemonics[nMnemonicIndex] = 0;
                     OUString aStr = OUStringBuffer().
-                        append('(').append(MNEMONIC_CHAR).append(sal_Unicode(rtl::toAsciiUpperCase(c))).
+                        append('(').append(m_cMnemonic).append(sal_Unicode(rtl::toAsciiUpperCase(c))).
                         append(')').makeStringAndClear();
                     nIndex = rKey.getLength();
                     if( nIndex >= 2 )
