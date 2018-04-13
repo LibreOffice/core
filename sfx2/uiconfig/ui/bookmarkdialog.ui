@@ -1,28 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.4 -->
 <interface domain="sfx">
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="BookmarkDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="bookmarkdialog|BookmarkDialog">Add to Bookmarks</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
-        <child>
-          <object class="GtkLabel" id="alttitle">
-            <property name="can_focus">False</property>
-            <property name="no_show_all">True</property>
-            <property name="label" translatable="yes" context="bookmarkdialog|alttitle">Rename Bookmark</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
@@ -73,6 +65,7 @@
                 <property name="fill">True</property>
                 <property name="pack_type">end</property>
                 <property name="position">2</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
           </object>
@@ -80,6 +73,18 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="alttitle">
+            <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
+            <property name="label" translatable="yes" context="bookmarkdialog|alttitle">Rename Bookmark</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
@@ -130,5 +135,8 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>
