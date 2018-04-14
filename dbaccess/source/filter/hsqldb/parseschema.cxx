@@ -143,6 +143,8 @@ SqlStatementVector SchemaParser::parseSchema()
             if (!parsedStmt.isEmpty())
                 parsedStatements.push_back(parsedStmt);
         }
+        else if (sSql.startsWith("CREATE VIEW"))
+            parsedStatements.push_back(sSql);
     }
 
     return parsedStatements;
