@@ -144,6 +144,9 @@ public:
     bool            IsAnimated() const;
     bool            IsEPS() const;
 
+    bool isAvailable() const;
+    bool makeAvailable();
+
     // #i102089# Access of Bitmap potentially will have to rasterconvert the Graphic
     // if it is a MetaFile. To be able to control this conversion it is necessary to
     // allow giving parameters which control AntiAliasing and LineSnapping of the

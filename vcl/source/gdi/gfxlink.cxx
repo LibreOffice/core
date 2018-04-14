@@ -109,7 +109,6 @@ bool GfxLink::LoadNative( Graphic& rGraphic )
             switch( meType )
             {
                 case GfxLinkType::NativeGif: nCvtType = ConvertDataFormat::GIF; break;
-                case GfxLinkType::NativeBmp: nCvtType = ConvertDataFormat::BMP; break;
                 case GfxLinkType::NativeJpg: nCvtType = ConvertDataFormat::JPG; break;
                 case GfxLinkType::NativePng: nCvtType = ConvertDataFormat::PNG; break;
                 case GfxLinkType::NativeTif: nCvtType = ConvertDataFormat::TIF; break;
@@ -117,6 +116,8 @@ bool GfxLink::LoadNative( Graphic& rGraphic )
                 case GfxLinkType::NativeMet: nCvtType = ConvertDataFormat::MET; break;
                 case GfxLinkType::NativePct: nCvtType = ConvertDataFormat::PCT; break;
                 case GfxLinkType::NativeSvg: nCvtType = ConvertDataFormat::SVG; break;
+                case GfxLinkType::NativeBmp: nCvtType = ConvertDataFormat::BMP; break;
+                case GfxLinkType::NativePdf: nCvtType = ConvertDataFormat::PDF; break;
 
                 default: nCvtType = ConvertDataFormat::Unknown; break;
             }
