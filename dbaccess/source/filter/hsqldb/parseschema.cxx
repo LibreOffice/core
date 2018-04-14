@@ -19,6 +19,7 @@
 
 #include "parseschema.hxx"
 #include "fbcreateparser.hxx"
+#include "fbalterparser.hxx"
 
 #include <com/sun/star/io/TextInputStream.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -132,6 +133,15 @@ SqlStatementVector SchemaParser::parseSchema()
             // save column definitions
             m_ColumnTypes[aCreateParser.getTableName()] = aCreateParser.getColumnDef();
             parsedStatements.push_back(sSql);
+        }
+        else if (sSql.startsWith("ALTER"))
+        {
+            FbAlterStmtParser aAlterParser;
+            aAlterParser.parse(sSql);
+            OUString parsedStmt = aAlterParser.compose();
+
+            if (!parsedStmt.isEmpty())
+                parsedStatements.push_back(parsedStmt);
         }
     }
 
