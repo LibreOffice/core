@@ -38,6 +38,7 @@
 #include <cellfrm.hxx>
 #include <rowfrm.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <svx/srchdlg.hxx>
 
 /// set cursor into next/previous cell
 bool SwCursorShell::GoNextCell( bool bAppendLine )
@@ -480,6 +481,8 @@ static bool lcl_FindPrevCell( SwNodeIndex& rIdx, bool bInReadOnly  )
 bool GotoPrevTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable,
                     bool bInReadOnly )
 {
+    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+
     SwNodeIndex aIdx( rCurrentCursor.GetPoint()->nNode );
 
     SwTableNode* pTableNd = aIdx.GetNode().FindTableNode();
@@ -497,12 +500,27 @@ bool GotoPrevTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
             aIdx.Assign( *pTableNd, - 1 );
     }
 
+    SwNodeIndex aOldIdx = aIdx;
+    sal_uLong nLastNd = rCurrentCursor.GetDoc()->GetNodes().Count() - 1;
     do {
         while( aIdx.GetIndex() &&
             nullptr == ( pTableNd = aIdx.GetNode().StartOfSectionNode()->GetTableNode()) )
+        {
             --aIdx;
+            if ( aIdx == aOldIdx )
+            {
+                SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
+                return false;
+            }
+        }
 
-        if( pTableNd ) // any further table node?
+        if ( !aIdx.GetIndex() )
+        {
+            SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::StartWrapped );
+            aIdx = nLastNd;
+            continue;
+        }
+
         {
             if( &fnPosTable == &fnMoveForward ) // at the beginning?
             {
@@ -535,7 +553,7 @@ bool GotoPrevTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
             }
             return true;
         }
-    } while( pTableNd );
+    } while( true );
 
     return false;
 }
@@ -543,18 +561,35 @@ bool GotoPrevTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
 bool GotoNextTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable,
                     bool bInReadOnly )
 {
+    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+
     SwNodeIndex aIdx( rCurrentCursor.GetPoint()->nNode );
     SwTableNode* pTableNd = aIdx.GetNode().FindTableNode();
 
     if( pTableNd )
         aIdx.Assign( *pTableNd->EndOfSectionNode(), 1 );
 
+    SwNodeIndex aOldIdx = aIdx;
     sal_uLong nLastNd = rCurrentCursor.GetDoc()->GetNodes().Count() - 1;
     do {
         while( aIdx.GetIndex() < nLastNd &&
                 nullptr == ( pTableNd = aIdx.GetNode().GetTableNode()) )
+        {
             ++aIdx;
-        if( pTableNd ) // any further table node?
+            if ( aIdx == aOldIdx )
+            {
+                SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
+                return false;
+            }
+        }
+
+        if ( aIdx.GetIndex() == nLastNd )
+        {
+            SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
+            aIdx = 0;
+            continue;
+        }
+
         {
             if( &fnPosTable == &fnMoveForward ) // at the beginning?
             {
@@ -587,7 +622,7 @@ bool GotoNextTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
             }
             return true;
         }
-    } while( pTableNd );
+    } while( true );
 
     return false;
 }
