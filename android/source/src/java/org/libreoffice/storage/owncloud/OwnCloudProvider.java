@@ -38,6 +38,7 @@ public class OwnCloudProvider implements IDocumentProvider,
     private String serverUrl;
     private String userName;
     private String password;
+    private RemoteOperationResult result;
 
     public OwnCloudProvider(int id, Context context) {
         this.id = id;
@@ -80,7 +81,7 @@ public class OwnCloudProvider implements IDocumentProvider,
     public IFile createFromUri(Context context, URI uri) {
         ReadRemoteFileOperation refreshOperation = new ReadRemoteFileOperation(
                 uri.getPath());
-        RemoteOperationResult result = refreshOperation.execute(client);
+        this.result = refreshOperation.execute(client);
         if (!result.isSuccess()) {
             throw buildRuntimeExceptionForResultCode(result.getCode());
         }
@@ -180,6 +181,6 @@ public class OwnCloudProvider implements IDocumentProvider,
 
     @Override
     public boolean checkProviderAvailability(Context context) {
-        return true;
+        return result != null && this.result.isSuccess();
     }
 }

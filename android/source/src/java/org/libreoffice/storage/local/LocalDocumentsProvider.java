@@ -16,8 +16,11 @@ import org.libreoffice.storage.IFile;
 
 import org.libreoffice.R;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.support.v4.content.ContextCompat;
 
 /**
  * Implementation of IDocumentProvider for the local file system.
@@ -52,6 +55,6 @@ public class LocalDocumentsProvider implements IDocumentProvider {
 
     @Override
     public boolean checkProviderAvailability(Context context) {
-        return true;
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 }
