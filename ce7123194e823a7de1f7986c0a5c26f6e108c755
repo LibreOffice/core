@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_98a6f3bf",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-14T19:41:40Z",
+      "side": 1,
+      "message": "this line can\u0027t be right. If searchterm startswith \"https://....\" and then you preprend another \"https:/...\" onto it, you\u0027re going to end up with a bad URL",
+      "revId": "ce7123194e823a7de1f7986c0a5c26f6e108c755",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_b8abb788",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-14T19:41:40Z",
+      "side": 1,
+      "message": "I can\u0027t make any sense of what this comment is trying to say, in this context",
+      "revId": "ce7123194e823a7de1f7986c0a5c26f6e108c755",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
