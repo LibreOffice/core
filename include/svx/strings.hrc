@@ -1255,6 +1255,7 @@
 #define RID_SVXSTR_SEARCH_END_WRAPPED                       NC_("RID_SVXSTR_SEARCH_END_WRAPPED", "Reached the end of the document, continued from the beginning")
 #define RID_SVXSTR_SEARCH_END_SHEET                         NC_("RID_SVXSTR_SEARCH_END_SHEET", "Reached the end of the sheet")
 #define RID_SVXSTR_SEARCH_NOT_FOUND                         NC_("RID_SVXSTR_SEARCH_NOT_FOUND", "Search key not found")
+#define RID_SVXSTR_SEARCH_NAV_ELEMENT_NOT_FOUND             NC_("RID_SVXSTR_SEARCH_NAV_ELEMENT_NOT_FOUND", "Navigation Element not found")
 #define RID_SVXSTR_SEARCH_START                             NC_("RID_SVXSTR_SEARCH_START", "Reached the beginning of the document")
 #define RID_SVXSTR_SEARCH_START_WRAPPED                     NC_("RID_SVXSTR_SEARCH_START_WRAPPED", "Reached the beginning of the document, continued from the end")
 

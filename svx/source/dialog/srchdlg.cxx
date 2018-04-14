@@ -2448,6 +2448,8 @@ void SvxSearchDialogWrapper::SetSearchLabel(const SearchLabel& rSL)
         sStr = SvxResId(RID_SVXSTR_SEARCH_END_SHEET);
     else if (rSL == SearchLabel::NotFound)
         sStr = SvxResId(RID_SVXSTR_SEARCH_NOT_FOUND);
+    else if (rSL == SearchLabel::NavElementNotFound)
+        sStr = SvxResId(RID_SVXSTR_SEARCH_NAV_ELEMENT_NOT_FOUND);
 
     lcl_SetSearchLabelWindow(sStr);
     if (SvxSearchDialogWrapper *pWrp = static_cast<SvxSearchDialogWrapper*>( SfxViewFrame::Current()->
