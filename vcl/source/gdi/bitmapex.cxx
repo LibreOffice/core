@@ -34,6 +34,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 #include <image.h>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -334,41 +335,18 @@ bool BitmapEx::Mirror( BmpMirrorFlags nMirrorFlags )
 
 bool BitmapEx::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
 {
-    bool bRet = false;
-
-    if( !!maBitmap )
-    {
-        bRet = maBitmap.Scale( rScaleX, rScaleY, nScaleFlag );
-
-        if( bRet && ( meTransparent == TransparentType::Bitmap ) && !!maMask )
-        {
-            maMask.Scale( rScaleX, rScaleY, nScaleFlag );
-        }
-
-        SetSizePixel(maBitmap.GetSizePixel());
-
-        SAL_WARN_IF( !!maMask && maBitmap.GetSizePixel() != maMask.GetSizePixel(), "vcl",
-                    "BitmapEx::Scale(): size mismatch for bitmap and alpha mask." );
-    }
-
-    return bRet;
+    return BitmapFilter::Filter(*this, BitmapScaleFilter(rScaleX, rScaleY, nScaleFlag));
 }
 
 bool BitmapEx::Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag )
 {
-    bool bRet;
+    bool bRet = true;
 
     if (GetSizePixel().Width() && GetSizePixel().Height()
             && (rNewSize.Width()  != GetSizePixel().Width()
                     || rNewSize.Height() != GetSizePixel().Height() ) )
     {
-        bRet = Scale( static_cast<double>(rNewSize.Width()) / GetSizePixel().Width(),
-                      static_cast<double>(rNewSize.Height()) / GetSizePixel().Height(),
-                      nScaleFlag );
-    }
-    else
-    {
-        bRet = true;
+        return BitmapFilter::Filter(*this, BitmapScaleFilter(rNewSize, nScaleFlag));
     }
 
     return bRet;
