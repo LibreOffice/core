@@ -730,8 +730,9 @@ ImportCGM(SvStream& rIn, uno::Reference< frame::XModel > const & rXModel, css::u
                     aXStatInd->end();
             }
         }
-        catch (const css::uno::Exception&)
+        catch (const css::uno::Exception& exc)
         {
+            SAL_WARN("filter.icgm", exc);
             nStatus = 0;
         }
     }
