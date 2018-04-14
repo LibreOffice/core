@@ -39,7 +39,7 @@ class SwAccessibleNoTextFrame : public  SwAccessibleFrameBase,
 {
     friend class SwAccessibleNoTextHyperlink;
     css::uno::Reference< css::accessibility::XAccessibleHyperlink > m_xHyperlink;
-    SwDepend        m_aDepend;
+    sw::WriterMultiListener        m_aListener;
     OUString msTitle;
     OUString msDesc;
 
