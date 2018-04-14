@@ -257,6 +257,16 @@ void Graphic::ImplTestRefCount()
     }
 }
 
+bool Graphic::isAvailable() const
+{
+    return mxImpGraphic->isAvailable();
+}
+
+bool Graphic::makeAvailable()
+{
+    return mxImpGraphic->makeAvailable();
+}
+
 Graphic& Graphic::operator=( const Graphic& rGraphic )
 {
     if( &rGraphic != this )

@@ -282,7 +282,7 @@ sdr::contact::ViewContact* SdrGrafObj::CreateObjectSpecificViewContact()
 
 void SdrGrafObj::onGraphicChanged()
 {
-    if (!mpGraphicObject) // don't force swap-in for this
+    if (!mpGraphicObject || !mpGraphicObject->GetGraphic().isAvailable())
         return;
 
     const VectorGraphicDataPtr& rVectorGraphicDataPtr = mpGraphicObject->GetGraphic().getVectorGraphicData();
