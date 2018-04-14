@@ -19,7 +19,7 @@
 <!ELEMENT groupuinames:template-group-list (groupuinames:template-group*)>
 <!ATTLIST groupuinames:template-group-list xmlns:groupuinames CDATA #FIXED "http://openoffice.org/2006/groupuinames"> 
 
-<!ELEMENT groupuinames:template-group>
+<!ELEMENT groupuinames:template-group EMPTY>
 <!ATTLIST groupuinames:template-group
 	groupuinames:name CDATA #REQUIRED
 	groupuinames:default-ui-name CDATA #REQUIRED
