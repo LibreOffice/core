@@ -553,7 +553,13 @@
         <node oor:name="1_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:NumberFormatDecimal</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:NumberFormatDecimal</value>
+          </prop>
+        </node>
+        <node oor:name="1_SHIFT_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:NumberFormatDecimal</value>
           </prop>
         </node>
         <node oor:name="2_MOD1" oor:op="replace">
@@ -565,19 +571,37 @@
         <node oor:name="2_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:NumberFormatScientific</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:NumberFormatScientific</value>
+          </prop>
+        </node>
+        <node oor:name="2_SHIFT_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:NumberFormatScientific</value>
           </prop>
         </node>
         <node oor:name="3_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:NumberFormatDate</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:NumberFormatDate</value>
+          </prop>
+        </node>
+        <node oor:name="3_SHIFT_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:NumberFormatDate</value>
           </prop>
         </node>
         <node oor:name="4_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:NumberFormatCurrency</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:NumberFormatCurrency</value>
+          </prop>
+        </node>
+        <node oor:name="4_SHIFT_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:NumberFormatCurrency</value>
           </prop>
         </node>
         <node oor:name="5_MOD1" oor:op="replace">
@@ -589,13 +613,25 @@
         <node oor:name="5_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:NumberFormatPercent</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:NumberFormatPercent</value>
+          </prop>
+        </node>
+        <node oor:name="5_SHIFT_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:NumberFormatPercent</value>
           </prop>
         </node>
         <node oor:name="6_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:NumberFormatStandard</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:NumberFormatStandard</value>
+          </prop>
+        </node>
+        <node oor:name="6_SHIFT_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:NumberFormatStandard</value>
           </prop>
         </node>
         <node oor:name="8_MOD1" oor:op="replace">
