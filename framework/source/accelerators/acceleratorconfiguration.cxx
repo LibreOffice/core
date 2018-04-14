@@ -838,7 +838,6 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
             aCache.takeOver(m_aPrimaryReadCache);
 
         AcceleratorCache::TKeyList lKeys;
-        AcceleratorCache::TKeyList::const_iterator pIt;
         if (m_pSecondaryWriteCache!=nullptr)
         {
             lKeys = m_pSecondaryWriteCache->getAllKeys();
