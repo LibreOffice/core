@@ -31,7 +31,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <framework/interaction.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/configuration.hxx>
 #include <officecfg/Office/Common.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>

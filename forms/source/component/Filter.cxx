@@ -47,7 +47,6 @@
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/awt/XItemList.hpp>
 
-#include <comphelper/numbers.hxx>
 #include <comphelper/property.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbconversion.hxx>

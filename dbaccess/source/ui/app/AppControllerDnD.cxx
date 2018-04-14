@@ -57,7 +57,6 @@
 #include <dbu_reghelper.hxx>
 #include <strings.hrc>
 #include <vcl/menu.hxx>
-#include <comphelper/uno3.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/svlbitm.hxx>
 #include <listviewitems.hxx>

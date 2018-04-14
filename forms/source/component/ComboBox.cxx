@@ -37,7 +37,6 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 
-#include <comphelper/numbers.hxx>
 #include <comphelper/basicio.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>

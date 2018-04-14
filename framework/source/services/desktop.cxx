@@ -69,7 +69,6 @@
 
 #include <vcl/errinf.hxx>
 #include <unotools/configmgr.hxx>
-#include <comphelper/extract.hxx>
 
 namespace framework{
 

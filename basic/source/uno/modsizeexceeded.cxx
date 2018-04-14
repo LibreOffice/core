@@ -20,6 +20,7 @@
 #include <basic/modsizeexceeded.hxx>
 
 #include <comphelper/interaction.hxx>
+#include <comphelper/sequence.hxx>
 #include <com/sun/star/script/ModuleSizeExceededRequest.hpp>
 
 using namespace com::sun::star;

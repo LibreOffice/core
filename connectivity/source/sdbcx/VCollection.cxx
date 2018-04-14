@@ -25,7 +25,6 @@
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/enumhelper.hxx>
-#include <comphelper/container.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>
 #include <TConnection.hxx>

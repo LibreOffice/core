@@ -43,7 +43,6 @@
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
 
 #include <algorithm>
-#include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/types.hxx>
 #include <resource/sharedresources.hxx>

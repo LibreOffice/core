@@ -39,7 +39,6 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include "RowSetRow.hxx"
-#include <comphelper/broadcasthelper.hxx>
 #include "RowSetCacheIterator.hxx"
 
 #include <functional>

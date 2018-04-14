@@ -19,7 +19,6 @@
 
 #include "timetargetelementcontext.hxx"
 
-#include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
 

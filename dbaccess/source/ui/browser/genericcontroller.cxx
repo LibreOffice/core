@@ -18,7 +18,6 @@
  */
 
 #include <dbaccess/genericcontroller.hxx>
-#include <comphelper/uno3.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <browserids.hxx>
 #include <vcl/svapp.hxx>
@@ -32,7 +31,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <framework/titlehelper.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/extract.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>

@@ -55,7 +55,6 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/sharedmutex.hxx>

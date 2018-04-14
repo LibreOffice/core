@@ -58,7 +58,6 @@
 #include <rtl/ref.hxx>
 #include <tools/wintypes.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>
 #include <cppuhelper/implbase.hxx>
 

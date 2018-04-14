@@ -116,7 +116,6 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
-#include <comphelper/graphicmimetype.hxx>
 #include <officecfg/Office/Common.hxx>
 
 using namespace ::std;

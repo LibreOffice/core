@@ -22,6 +22,7 @@
 #include <scitems.hxx>
 #include <document.hxx>
 
+#include <comphelper/processfactory.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/intitem.hxx>

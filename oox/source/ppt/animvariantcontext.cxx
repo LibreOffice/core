@@ -19,7 +19,6 @@
 
 #include "animvariantcontext.hxx"
 
-#include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/uno/Any.hxx>

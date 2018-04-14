@@ -25,9 +25,6 @@
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-#include <comphelper/broadcasthelper.hxx>
-#include <comphelper/uno3.hxx>
-
 
 namespace pcr
 {

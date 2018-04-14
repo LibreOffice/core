@@ -51,6 +51,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/childwin.hxx>

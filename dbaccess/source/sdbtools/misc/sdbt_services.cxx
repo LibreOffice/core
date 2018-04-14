@@ -18,7 +18,7 @@
  */
 
 #include <connectiontools.hxx>
-#include <comphelper/componentmodule.hxx>
+#include <cppuhelper/factory.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::XInterface;

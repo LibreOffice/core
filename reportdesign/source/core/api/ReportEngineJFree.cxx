@@ -18,7 +18,6 @@
  */
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <ReportEngineJFree.hxx>
-#include <comphelper/enumhelper.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <connectivity/dbtools.hxx>

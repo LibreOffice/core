@@ -22,7 +22,6 @@
 #include <vcl/svapp.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdpool.hxx>
-#include <comphelper/extract.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xflbmtit.hxx>

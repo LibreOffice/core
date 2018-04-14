@@ -24,7 +24,6 @@
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/uno3.hxx>
 
 
 namespace svxform

@@ -29,6 +29,7 @@
 #include <tools/globname.hxx>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <comphelper/types.hxx>
 #include <fmtanchr.hxx>
 #include <txtflcnt.hxx>
 #include <fmtcntnt.hxx>

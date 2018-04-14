@@ -15,7 +15,6 @@
 #include <com/sun/star/view/XPrintable.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <test/bootstrapfixture.hxx>

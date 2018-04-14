@@ -18,6 +18,7 @@
  */
 
 #include <rtl/math.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <unotools/textsearch.hxx>
 #include <svl/zforlist.hxx>

@@ -33,8 +33,6 @@
 
 #include <vcl/fixed.hxx>
 
-#include <comphelper/uno3.hxx>
-
 
 namespace pcr
 {

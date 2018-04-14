@@ -65,7 +65,6 @@
 #include <drawdoc.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <unotools/streamwrap.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <svx/svdpage.hxx>
 
 #include <bordertest.hxx>

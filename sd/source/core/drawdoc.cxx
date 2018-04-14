@@ -59,7 +59,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <editeng/outlobj.hxx>
 #include <unotools/saveopt.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/getexpandeduri.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>

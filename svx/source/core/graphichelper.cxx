@@ -30,7 +30,6 @@
 #include <vcl/weld.hxx>
 
 #include <cppuhelper/exc_hlp.hxx>
-#include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>

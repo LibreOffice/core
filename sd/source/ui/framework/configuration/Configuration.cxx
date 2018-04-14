@@ -21,6 +21,7 @@
 
 #include <framework/FrameworkHelper.hxx>
 
+#include <comphelper/sequence.hxx>
 #include <facreg.hxx>
 
 using namespace ::com::sun::star;

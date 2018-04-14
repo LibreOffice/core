@@ -23,7 +23,6 @@
 #include <com/sun/star/sdbc/IndexType.hpp>
 #include <stringconstants.hxx>
 #include <connectivity/dbtools.hxx>
-#include <comphelper/extract.hxx>
 
 
 using namespace connectivity;

@@ -23,8 +23,6 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
 
-#include <comphelper/broadcasthelper.hxx>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <cppcanvas/spritecanvas.hxx>

@@ -30,7 +30,6 @@
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
 #include <tools/link.hxx>
-#include <comphelper/uno3.hxx>
 #include <rtl/ustring.hxx>
 
 namespace svxform {

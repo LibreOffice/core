@@ -43,6 +43,7 @@
 #include <svx/fmtools.hxx>
 using namespace ::svxform;
 #include <comphelper/property.hxx>
+#include <comphelper/types.hxx>
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;

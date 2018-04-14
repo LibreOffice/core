@@ -43,7 +43,6 @@
 #include <comphelper/stl_types.hxx>
 #include <tools/link.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/uno3.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/vclptr.hxx>
 

@@ -43,8 +43,6 @@
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/dispatchcommand.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <comphelper/types.hxx>
 #include <svl/itemset.hxx>
 #include <unicode/uchar.h>

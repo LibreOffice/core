@@ -19,7 +19,6 @@
 
 #include "conditioncontext.hxx"
 
-#include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/animations/AnimationEndSync.hpp>

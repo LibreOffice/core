@@ -22,8 +22,6 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include <comphelper/broadcasthelper.hxx>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <cppcanvas/spritecanvas.hxx>

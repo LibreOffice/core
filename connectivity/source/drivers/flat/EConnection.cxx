@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <flat/EPreparedStatement.hxx>
 #include <flat/EStatement.hxx>
-#include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 
 using namespace connectivity::flat;

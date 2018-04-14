@@ -24,7 +24,6 @@
 #include "charttoolsdllapi.hxx"
 
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/uno3.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>

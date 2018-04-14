@@ -27,7 +27,6 @@
 #include <FormShellManager.hxx>
 #include <Window.hxx>
 
-#include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>

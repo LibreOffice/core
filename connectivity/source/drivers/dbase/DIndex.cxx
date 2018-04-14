@@ -31,7 +31,6 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <comphelper/extract.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>

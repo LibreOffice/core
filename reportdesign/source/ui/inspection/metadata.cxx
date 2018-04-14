@@ -18,7 +18,6 @@
  */
 #include <metadata.hxx>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
-#include <comphelper/extract.hxx>
 #include <core_resource.hxx>
 #include <helpids.h>
 #include <strings.hrc>

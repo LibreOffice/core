@@ -20,7 +20,6 @@
 #include "handlerhelper.hxx"
 #include <strings.hrc>
 #include <yesno.hrc>
-#include <comphelper/extract.hxx>
 #include "modulepcr.hxx"
 #include "enumrepresentation.hxx"
 #include "formmetadata.hxx"

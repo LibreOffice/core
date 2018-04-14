@@ -27,8 +27,6 @@
 #include <osl/diagnose.h>
 
 #include <cppuhelper/typeprovider.hxx>
-#include <comphelper/enumhelper.hxx>
-#include <comphelper/container.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
@@ -39,7 +37,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
-#include <comphelper/extract.hxx>
 #include <ContainerMediator.hxx>
 
 using namespace dbaccess;

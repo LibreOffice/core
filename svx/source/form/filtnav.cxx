@@ -36,7 +36,6 @@
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
-#include <comphelper/uno3.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqlnode.hxx>
 #include <cppuhelper/implbase.hxx>

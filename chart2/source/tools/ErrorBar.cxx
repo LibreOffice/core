@@ -23,6 +23,7 @@
 #include <PropertyHelper.hxx>
 #include <CloneHelper.hxx>
 
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svl/itemprop.hxx>
 #include <vcl/svapp.hxx>

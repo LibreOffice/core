@@ -66,6 +66,7 @@
 
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/convert.hxx>

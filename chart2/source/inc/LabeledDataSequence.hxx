@@ -20,7 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_INC_LABELEDDATASEQUENCE_HXX
 
 #include "MutexContainer.hxx"
-#include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>

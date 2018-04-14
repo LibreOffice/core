@@ -66,7 +66,6 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <vcl/cvtgrf.hxx>
 #include <tools/urlobj.hxx>
-#include <comphelper/extract.hxx>
 #include <rtl/crc.h>
 #include <comphelper/classids.hxx>
 #include <com/sun/star/text/FontRelief.hpp>

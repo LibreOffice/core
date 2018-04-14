@@ -90,7 +90,6 @@
 #include <strings.hrc>
 #include <fmtline.hxx>
 #include <fmtfsize.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/string.hxx>
 #include "sprmids.hxx"
 

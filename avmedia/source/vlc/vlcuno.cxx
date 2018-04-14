@@ -18,7 +18,6 @@
  */
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/configuration.hxx>
 #include <officecfg/Office/Common.hxx>
 
 #include "vlccommon.hxx"

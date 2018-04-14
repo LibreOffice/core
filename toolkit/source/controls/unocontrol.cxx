@@ -41,7 +41,6 @@
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/controls/accessiblecontrolcontext.hxx>
-#include <comphelper/container.hxx>
 
 #include <algorithm>
 #include <map>

@@ -29,7 +29,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/dbcharset.hxx>
 #include <connectivity/FValue.hxx>
-#include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 
 #include <string.h>

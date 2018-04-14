@@ -46,7 +46,6 @@
 #include <xmloff/SchXMLSeriesHelper.hxx>
 #include <xexptran.hxx>
 #include <rtl/math.hxx>
-#include <comphelper/extract.hxx>
 
 #include <vector>
 #include <typeinfo>

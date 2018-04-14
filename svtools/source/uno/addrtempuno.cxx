@@ -20,7 +20,6 @@
 #include <svtools/addresstemplate.hxx>
 #include <svtools/genericunodialog.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>

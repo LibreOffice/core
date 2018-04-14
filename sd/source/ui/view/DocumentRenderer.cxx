@@ -38,6 +38,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sfx2/printer.hxx>
 #include <editeng/editstat.hxx>

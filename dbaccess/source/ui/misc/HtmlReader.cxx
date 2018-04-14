@@ -23,7 +23,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/stream.hxx>
 #include <tools/tenccvt.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/string.hxx>
 #include <strings.hrc>
 #include <stringconstants.hxx>

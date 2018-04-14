@@ -46,7 +46,6 @@
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
-#include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/interaction.hxx>
 #include <connectivity/dbtools.hxx>

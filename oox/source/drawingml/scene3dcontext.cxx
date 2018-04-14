@@ -20,7 +20,6 @@
 #include <drawingml/scene3dcontext.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/exc_hlp.hxx>
-#include <comphelper/anytostring.hxx>
 #include <drawingml/colorchoicecontext.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <drawingml/fillproperties.hxx>

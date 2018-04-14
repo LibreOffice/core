@@ -44,7 +44,7 @@
 #include <svx/fmsrcimp.hxx>
 #include <svx/fmsearch.hxx>
 
-#include <comphelper/numbers.hxx>
+#include <comphelper/types.hxx>
 #include <unotools/syslocale.hxx>
 #include <i18nutil/searchopt.hxx>
 

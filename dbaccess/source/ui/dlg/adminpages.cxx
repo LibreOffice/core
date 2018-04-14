@@ -32,6 +32,7 @@
 #include "optionalboolitem.hxx"
 #include <sqlmessage.hxx>
 
+#include <comphelper/types.hxx>
 #include <osl/file.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/button.hxx>

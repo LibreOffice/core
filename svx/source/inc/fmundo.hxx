@@ -39,7 +39,6 @@
 
 
 #include <svl/lstner.hxx>
-#include <comphelper/uno3.hxx>
 
 class FmFormModel;
 class FmFormObj;

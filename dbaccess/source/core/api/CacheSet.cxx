@@ -36,7 +36,6 @@
 
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/sdbcx/KeyType.hpp>
-#include <comphelper/extract.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <comphelper/types.hxx>
 #include <rtl/ustrbuf.hxx>

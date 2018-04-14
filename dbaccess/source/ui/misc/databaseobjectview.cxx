@@ -30,7 +30,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 
-#include <comphelper/extract.hxx>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbtools.hxx>
 #include <osl/diagnose.h>

@@ -21,10 +21,8 @@
 #include <stringconstants.hxx>
 #include <View.hxx>
 
-#include <comphelper/enumhelper.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
-#include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 #include <rtl/ustrbuf.hxx>
 

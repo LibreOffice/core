@@ -26,7 +26,6 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <stringconstants.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <dsitems.hxx>
 #include <svl/stritem.hxx>

@@ -53,7 +53,6 @@
 #include <svx/svxerr.hxx>
 #include <treeopt.hxx>
 #include <svtools/langtab.hxx>
-#include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 using namespace ::com::sun::star;

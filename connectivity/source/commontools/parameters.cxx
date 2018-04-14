@@ -34,9 +34,7 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <connectivity/ParameterCont.hxx>
 #include <rtl/ustrbuf.hxx>
 

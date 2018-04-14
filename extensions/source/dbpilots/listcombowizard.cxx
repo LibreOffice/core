@@ -27,7 +27,6 @@
 #include <tools/debug.hxx>
 #include <connectivity/dbtools.hxx>
 #include <helpids.h>
-#include <comphelper/extract.hxx>
 
 
 namespace dbp

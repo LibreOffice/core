@@ -35,7 +35,6 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/form/XForm.hpp>
 
-#include <comphelper/container.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/eventattachermgr.hxx>
 #include <comphelper/property.hxx>

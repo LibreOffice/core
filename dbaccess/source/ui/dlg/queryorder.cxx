@@ -28,7 +28,6 @@
 #include <tools/debug.hxx>
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/dbtools.hxx>
-#include <comphelper/extract.hxx>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <tools/diagnose_ex.h>
 #include <vcl/settings.hxx>

@@ -64,7 +64,6 @@
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#include <comphelper/anytostring.hxx>
 #include <ooo/vba/VbQueryClose.hpp>
 #include <list>
 #include <memory>

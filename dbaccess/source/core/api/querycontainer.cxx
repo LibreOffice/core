@@ -34,11 +34,9 @@
 #include <connectivity/dbexception.hxx>
 
 #include <osl/diagnose.h>
-#include <comphelper/enumhelper.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/extract.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 using namespace dbtools;

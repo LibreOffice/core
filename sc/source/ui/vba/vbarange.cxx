@@ -158,7 +158,6 @@
 #include <queryentry.hxx>
 #include <markdata.hxx>
 #include <basic/sberrors.hxx>
-#include <comphelper/anytostring.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <global.hxx>

@@ -29,7 +29,6 @@
 #include <com/sun/star/io/TextInputStream.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
-#include <comphelper/namedvaluecollection.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 
