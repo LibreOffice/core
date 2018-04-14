@@ -17,12 +17,14 @@ namespace dbahsql
 enum class AlterAction
 {
     UNKNOWN,
+    ADD_FOREIGN,
     IDENTITY_RESTART
 };
 
 class SAL_DLLPUBLIC_EXPORT AlterStmtParser
 {
 private:
+    OUString m_sStmt;
     OUString m_sTableName;
     OUString m_sColumnName;
     AlterAction m_eAction = AlterAction::UNKNOWN;
@@ -32,6 +34,7 @@ protected:
     AlterAction getActionType() const { return m_eAction; }
     OUString getColumnName() const { return m_sColumnName; }
     sal_Int32 getIdentityParam() const { return m_nIdentityParam; }
+    OUString getStatement() const { return m_sStmt; }
 
 public:
     virtual ~AlterStmtParser() = default;

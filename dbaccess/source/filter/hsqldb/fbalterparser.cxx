@@ -29,6 +29,8 @@ OUString FbAlterStmtParser::compose() const
         SAL_WARN("dbaccess", "Unkown type of ALTER statement in FbAlterStmtParser");
         return OUString{};
     }
+    else if (getActionType() == AlterAction::ADD_FOREIGN)
+        return getStatement(); // do nothing with that
     OUStringBuffer sSql("ALTER TABLE ");
     sSql.append(getTableName());
 
