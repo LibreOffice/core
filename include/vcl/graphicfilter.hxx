@@ -100,6 +100,7 @@ namespace o3tl
 #define WMF_SHORTNAME           "WMF"
 #define EMF_SHORTNAME           "EMF"
 #define SVG_SHORTNAME           "SVG"
+#define PDF_SHORTNAME           "PDF"
 
 //  Info class for all supported file formats
 
@@ -283,12 +284,19 @@ public:
                                    sal_uInt16 * pDeterminedFormat = nullptr, GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
                                    WMF_EXTERNALHEADER *pExtHeader = nullptr );
 
+    /// Imports multiple graphics.
+    ///
+    /// The resulting graphic is added to rGraphics on success, nullptr is added on failure.
+    void ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGraphics, const std::vector< std::shared_ptr<SvStream> >& rStreams);
+
     sal_uInt16          ImportGraphic( Graphic& rGraphic, const OUString& rPath,
                                    SvStream& rStream,
                                    sal_uInt16 nFormat,
                                    sal_uInt16 * pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                    css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
                                    WMF_EXTERNALHEADER *pExtHeader = nullptr );
+
+    Graphic ImportUnloadedGraphic(SvStream& rIStream);
 
     const FilterErrorEx&    GetLastError() const { return *pErrorEx;}
     void                    ResetLastError();

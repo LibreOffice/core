@@ -202,6 +202,7 @@ private:
     void                    VCL_DLLPRIVATE ImplAssignGraphicData();
     static void             VCL_DLLPRIVATE ImplEnsureGraphicManager();
     void                    VCL_DLLPRIVATE ImplAutoSwapIn();
+
     bool                    VCL_DLLPRIVATE ImplGetCropParams(
                                 OutputDevice* pOut,
                                 Point& rPt,
@@ -396,14 +397,6 @@ public:
 
     OString                 GetUniqueID() const;
 
-    GraphicType             GetType() const { return meType; }
-    const Size&             GetPrefSize() const { return maPrefSize; }
-    const MapMode&          GetPrefMapMode() const { return maPrefMapMode; }
-    sal_uLong               GetSizeBytes() const { return mnSizeBytes; }
-    bool                    IsTransparent() const { return mbTransparent; }
-    bool                    IsAnimated() const { return mbAnimated; }
-    bool                    IsEPS() const { return mbEPS; }
-
     bool                    SwapOut();
     bool                    SwapOut( SvStream* pOStm );
     bool                    SwapIn();
@@ -411,6 +404,13 @@ public:
     bool                    IsInSwapIn() const { return mbIsInSwapIn; }
     bool                    IsInSwapOut() const { return mbIsInSwapOut; }
     bool                    IsSwappedOut() const { return( mbAutoSwapped || maGraphic.IsSwapOut() ); }
+
+    GraphicType             GetType() const;
+    Size                    GetPrefSize() const;
+    MapMode                 GetPrefMapMode() const;
+    bool                    IsTransparent() const;
+    bool                    IsAnimated() const;
+    bool                    IsEPS() const;
 
     bool                    Draw(
                                 OutputDevice* pOut,

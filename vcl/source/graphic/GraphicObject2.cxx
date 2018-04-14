@@ -165,8 +165,8 @@ void GraphicManager::ImplUnregisterObj( const GraphicObject& rObj )
 void GraphicManager::ImplGraphicObjectWasSwappedOut( const GraphicObject& rObj )
 {
     mpCache->GraphicObjectWasSwappedOut( rObj );
-    assert(mnUsedSize >= rObj.GetSizeBytes());
-    mnUsedSize -= rObj.GetSizeBytes();
+    assert(mnUsedSize >= rObj.GetGraphic().GetSizeBytes());
+    mnUsedSize -= rObj.GetGraphic().GetSizeBytes();
 }
 
 OString GraphicManager::ImplGetUniqueID( const GraphicObject& rObj ) const
@@ -215,7 +215,7 @@ void GraphicManager::ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGrap
             }
 
             // do not swap out when we have less than 16KB data objects
-            if(pObj->GetSizeBytes() >= (16 * 1024))
+            if(pObj->GetGraphic().GetSizeBytes() >= (16 * 1024))
             {
                 pObj->FireSwapOutRequest();
             }

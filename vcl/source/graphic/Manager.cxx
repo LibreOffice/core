@@ -68,7 +68,7 @@ void Manager::reduceGraphicMemory()
         if (mnUsedSize < mnTotalCacheSize * 0.7)
             return;
 
-        sal_Int64 nCurrentGraphicSize = pEachImpGraphic->ImplGetSizeBytes();
+        sal_Int64 nCurrentGraphicSize = getGraphicSizeBytes(pEachImpGraphic);
         if (!pEachImpGraphic->ImplIsSwapOut() && nCurrentGraphicSize > 1000000)
         {
             if (!pEachImpGraphic->mpContext)
@@ -82,6 +82,13 @@ void Manager::reduceGraphicMemory()
             }
         }
     }
+}
+
+sal_Int64 Manager::getGraphicSizeBytes(const ImpGraphic* pImpGraphic)
+{
+    if (!pImpGraphic->isAvailable())
+        return 0;
+    return pImpGraphic->ImplGetSizeBytes();
 }
 
 IMPL_LINK(Manager, SwapOutTimerHandler, Timer*, pTimer, void)
@@ -99,7 +106,7 @@ void Manager::registerGraphic(std::shared_ptr<ImpGraphic>& pImpGraphic,
         reduceGraphicMemory();
 
     // Insert and update the used size (bytes)
-    mnUsedSize += pImpGraphic->ImplGetSizeBytes();
+    mnUsedSize += getGraphicSizeBytes(pImpGraphic.get());
     m_pImpGraphicList.insert(pImpGraphic.get());
 
     // calculate size of the graphic set
@@ -108,7 +115,7 @@ void Manager::registerGraphic(std::shared_ptr<ImpGraphic>& pImpGraphic,
     {
         if (!pEachImpGraphic->ImplIsSwapOut())
         {
-            calculatedSize += pEachImpGraphic->ImplGetSizeBytes();
+            calculatedSize += getGraphicSizeBytes(pEachImpGraphic);
         }
     }
 
@@ -123,7 +130,7 @@ void Manager::registerGraphic(std::shared_ptr<ImpGraphic>& pImpGraphic,
 
 void Manager::unregisterGraphic(ImpGraphic* pImpGraphic)
 {
-    mnUsedSize -= pImpGraphic->ImplGetSizeBytes();
+    mnUsedSize -= getGraphicSizeBytes(pImpGraphic);
     m_pImpGraphicList.erase(pImpGraphic);
 }
 
@@ -178,18 +185,18 @@ std::shared_ptr<ImpGraphic> Manager::newInstance(const GDIMetaFile& rMetaFile)
 
 void Manager::swappedIn(const ImpGraphic* pImpGraphic)
 {
-    mnUsedSize += pImpGraphic->ImplGetSizeBytes();
+    mnUsedSize += getGraphicSizeBytes(pImpGraphic);
 }
 
 void Manager::swappedOut(const ImpGraphic* pImpGraphic)
 {
-    mnUsedSize -= pImpGraphic->ImplGetSizeBytes();
+    mnUsedSize -= getGraphicSizeBytes(pImpGraphic);
 }
 
 void Manager::changeExisting(const ImpGraphic* pImpGraphic, sal_Int64 nOldSizeBytes)
 {
     mnUsedSize -= nOldSizeBytes;
-    mnUsedSize += pImpGraphic->ImplGetSizeBytes();
+    mnUsedSize += getGraphicSizeBytes(pImpGraphic);
 }
 }
 } // end vcl::graphic

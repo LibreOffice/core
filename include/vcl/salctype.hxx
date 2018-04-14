@@ -37,7 +37,8 @@ enum class ConvertDataFormat
     TIF,
     WMF,
     EMF,
-    SVG
+    SVG,
+    PDF
 };
 
 class SvStream;

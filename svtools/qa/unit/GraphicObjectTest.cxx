@@ -189,7 +189,7 @@ void GraphicObjectTest::testSizeBasedAutoSwap()
     {
         // First image should be swapped out
         CPPUNIT_ASSERT(pGrafObj1->IsSwappedOut());
-        CPPUNIT_ASSERT_EQUAL(sal_uLong(697230), pGrafObj1->GetSizeBytes());
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(697230), pGrafObj1->GetGraphic().GetSizeBytes());
 
         // Still swapped out: size is cached
         CPPUNIT_ASSERT(pGrafObj1->IsSwappedOut());
@@ -200,7 +200,7 @@ void GraphicObjectTest::testSizeBasedAutoSwap()
         // Size based swap out is triggered by swap in, so the last swapped in image should be
         // in the memory despite of size limit is reached.
         CPPUNIT_ASSERT(!pGrafObj2->IsSwappedOut());
-        CPPUNIT_ASSERT_EQUAL(sal_uLong(1620000), pGrafObj2->GetSizeBytes());
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(1620000), pGrafObj2->GetGraphic().GetSizeBytes());
     }
 
     // Swap in first image -> second image will be swapped out
@@ -220,7 +220,7 @@ void GraphicObjectTest::testSizeBasedAutoSwap()
     // Use bigger cache
     {
         GraphicManager& rGrfMgr = pGrafObj1->GetGraphicManager();
-        rGrfMgr.SetMaxCacheSize((pGrafObj1->GetSizeBytes()+pGrafObj2->GetSizeBytes())*10);
+        rGrfMgr.SetMaxCacheSize((pGrafObj1->GetGraphic().GetSizeBytes()+pGrafObj2->GetGraphic().GetSizeBytes())*10);
     }
     // Swap in both images -> both should be swapped in
     {
@@ -279,7 +279,7 @@ void GraphicObjectTest::testTdf88935()
     // Set cache size
     {
         GraphicManager& rGrfMgr = pGraphObj1->GetGraphicManager();
-        rGrfMgr.SetMaxCacheSize((pGraphObj1->GetSizeBytes()+pGraphObj2->GetSizeBytes())*10);
+        rGrfMgr.SetMaxCacheSize((pGraphObj1->GetGraphic().GetSizeBytes()+pGraphObj2->GetGraphic().GetSizeBytes())*10);
     }
 
     // Both images fit into the cache
