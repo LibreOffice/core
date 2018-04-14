@@ -103,6 +103,8 @@ static inline long lcl_ToLogic(double value)
     const long out = OutputDevice::LogicToLogic(in, MapUnit::MapPixel, MapUnit::Map100thMM);
     return out / 100;
 }
+
+static inline double sqrt2(double a, double b) { return sqrt(a * a + b * b); }
 }
 
 struct FPDFBitmapDeleter
@@ -1020,53 +1022,56 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
         SAL_WARN("sd.filter", "FAILED to get TEXT bounds");
     }
 
-    SAL_WARN("sd.filter", "Got TEXT bounds left: " << left << ", right: " << right
-                                                   << ", top: " << top << ", bottom: " << bottom);
-    Rectangle aRect = PointsToLogic(left, right, top, bottom);
-
-    double dFontScale = 1.0;
-    geometry::Matrix2D aMatrix;
-    FPDFTextObj_GetMatrix(pPageObject, &aMatrix.m00, &aMatrix.m01, &aMatrix.m10, &aMatrix.m11);
-    if (aMatrix.m00 != aMatrix.m11 || aMatrix.m00 <= 0)
+    if (left == right || top == bottom)
     {
-        SAL_WARN("sd.filter", "Bogus font scale matrix (" << aMatrix.m00 << ',' << aMatrix.m11
-                                                          << "), will use heuristic height of "
-                                                          << aRect.GetHeight() << ".");
-        dFontScale = aRect.GetHeight();
+        SAL_WARN("sd.filter", "Skipping empty TEXT #" << nPageObjectIndex << " left: " << left
+                                                      << ", right: " << right << ", top: " << top
+                                                      << ", bottom: " << bottom);
+        return;
     }
-    else
-        dFontScale = aMatrix.m00;
-
-    double dFontSize = FPDFTextObj_GetFontSize(pPageObject);
-    SAL_WARN("sd.filter", "Got Font Size: " << dFontSize);
-    dFontSize *= dFontScale;
-    SAL_WARN("sd.filter", "Got Font Size Scaled: " << dFontSize);
-    dFontSize = lcl_PointToPixel(dFontSize);
-    SAL_WARN("sd.filter", "Got Font Pixel Size: " << dFontSize);
-    dFontSize = lcl_ToLogic(dFontSize);
-    SAL_WARN("sd.filter", "Got Font Logic Size: " << dFontSize);
-
-    unsigned int nR, nG, nB, nA;
-    if (FPDFTextObj_GetStrokeColor(pPageObject, &nR, &nG, &nB, &nA))
-        mpVD->SetTextColor(Color(nR, nG, nB));
-
-    vcl::Font aFnt = mpVD->GetFont();
-    aFnt.SetFontSize(Size(dFontSize, dFontSize));
-    mpVD->SetFont(aFnt);
 
     const int nChars = FPDFTextObj_CountChars(pPageObject);
     std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nChars + 1]); // + terminating null
 
     unsigned short* pShortText = reinterpret_cast<unsigned short*>(pText.get());
     const int nActualChars = FPDFTextObj_GetText(pPageObject, 0, nChars, pShortText);
-    OUString sText(pText.get(), nActualChars);
+    if (nActualChars <= 0)
+    {
+        SAL_WARN("sd.filter", "Got not TEXT");
+        return;
+    }
 
-    // for (int nChar = 0; nChar < nChars; ++nChar)
-    //     pText[nChar] = static_cast<sal_Unicode>(FPDFTextObj_GetUnicode(pPageObject, nChar));
-    // OUString sText(pText.get(), nChars);
+    OUString sText(pText.get(), nActualChars);
     SAL_WARN("sd.filter", "Got Text (" << nChars << "): [" << sText << "].");
 
-    ImportText(aRect.TopLeft(), sText);
+    double a, b, c, d, e, f;
+    FPDFTextObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
+    SAL_WARN("sd.filter", "Got font scale matrix (" << a << ", " << b << ", " << c << ", " << d
+                                                    << ", " << e << ", " << f << ')');
+    Point aPos = PointsToLogic(e, f);
+    SAL_WARN("sd.filter", "Got TEXT origin: " << aPos);
+
+    const double dFontSize = FPDFTextObj_GetFontSize(pPageObject);
+    double dFontSizeH = fabs(sqrt2(a, c) * dFontSize);
+    double dFontSizeV = fabs(sqrt2(b, d) * dFontSize);
+    SAL_WARN("sd.filter", "Got Font Size: " << dFontSize << ", Scaled Font Size H: " << dFontSizeH
+                                            << ", V: " << dFontSizeV);
+    dFontSizeH = lcl_PointToPixel(dFontSizeH);
+    dFontSizeV = lcl_PointToPixel(dFontSizeV);
+    SAL_WARN("sd.filter", "Got Pixel Font Size H: " << dFontSizeH << ", V: " << dFontSizeV);
+    dFontSizeH = lcl_ToLogic(dFontSizeH);
+    dFontSizeV = lcl_ToLogic(dFontSizeV);
+    SAL_WARN("sd.filter", "Got Logic Font Size H: " << dFontSizeH << ", V: " << dFontSizeV);
+
+    unsigned int nR, nG, nB, nA;
+    if (FPDFTextObj_GetStrokeColor(pPageObject, &nR, &nG, &nB, &nA))
+        mpVD->SetTextColor(Color(nR, nG, nB));
+
+    vcl::Font aFnt = mpVD->GetFont();
+    aFnt.SetFontSize(Size(dFontSizeH, dFontSizeV));
+    mpVD->SetFont(aFnt);
+
+    ImportText(aPos, sText);
 }
 
 void ImpSdrPdfImport::ImportText(const Point& rPos, const OUString& rStr)
@@ -1079,11 +1084,12 @@ void ImpSdrPdfImport::ImportText(const Point& rPos, const OUString& rStr)
 
     sal_Int32 nTextWidth = static_cast<sal_Int32>(mpVD->GetTextWidth(rStr) * mfScaleX);
     sal_Int32 nTextHeight = static_cast<sal_Int32>(mpVD->GetTextHeight() * mfScaleY);
-    SAL_WARN("sd.filter", "TextWidth: " << nTextWidth << ", TextHeight: " << nTextHeight);
+    SAL_WARN("sd.filter",
+             "Unscaled text size: " << mpVD->GetTextWidth(rStr) << 'x' << mpVD->GetTextHeight()
+                                    << ", Scaled: " << nTextWidth << 'x' << nTextHeight);
 
     Point aPos(FRound(rPos.X() * mfScaleX + maOfs.X()), FRound(rPos.Y() * mfScaleY + maOfs.Y()));
     Size aSize(nTextWidth, nTextHeight);
-    SAL_WARN("sd.filter", "Text Pos: " << aPos << ", Size: " << aSize);
 
     if (eAlg == ALIGN_BASELINE)
         aPos.Y() -= FRound(aFontMetric.GetAscent() * mfScaleY);
