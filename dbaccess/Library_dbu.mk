@@ -152,6 +152,7 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/dlg/textconnectionsettings \
     dbaccess/source/ui/dlg/UserAdmin \
     dbaccess/source/ui/dlg/UserAdminDlg \
+    dbaccess/source/ui/dlg/migrwarndlg \
     dbaccess/source/ui/misc/asyncmodaldialog \
     dbaccess/source/ui/misc/charsets \
     dbaccess/source/ui/misc/controllerframe \

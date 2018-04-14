@@ -575,22 +575,24 @@ void ODatabaseSource::disposing()
     m_pImpl.clear();
 }
 
+OUString SAL_CALL ODatabaseSource::getConnectionUrl()
+{
+    return m_pImpl->m_sConnectURL;
+}
+
 Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString& _rUid, const OUString& _rPwd)
 {
     Reference< XConnection > xReturn;
 
     Reference< XDriverManager > xManager;
 
-    bool bNeedMigration = false;
     OUString sMigrEnvVal;
     osl_getEnvironment(OUString("DBACCESS_HSQL_MIGRATION").pData,
             &sMigrEnvVal.pData);
-    if( m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb" &&
-            !sMigrEnvVal.isEmpty())
-    {
+    bool bNeedMigration =  m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb" &&
+            (m_bMigationNeeded || !sMigrEnvVal.isEmpty());
+    if(bNeedMigration)
         m_pImpl->m_sConnectURL = "sdbc:embedded:firebird";
-        bNeedMigration = true;
-    }
 
     try {
         xManager.set( ConnectionPool::create( m_pImpl->m_aContext ), UNO_QUERY_THROW );

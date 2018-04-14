@@ -10212,6 +10212,8 @@ module com {
    };
    module sdbc {
     published interface XDataSource {
+     [attribute] boolean MigrationNeeded;
+     string getConnectionUrl();
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::sdbc::XConnection getConnection([in] string user, [in] string password) raises (::com::sun::star::sdbc::SQLException);
      void setLoginTimeout([in] long seconds) raises (::com::sun::star::sdbc::SQLException);

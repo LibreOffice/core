@@ -84,6 +84,7 @@ private:
     using ODatabaseSource_Base::rBHelper;
     // note: this thing uses the ref-count of "this", see OBookmarkContainer::acquire!
     OBookmarkContainer m_Bookmarks;
+    bool m_bMigationNeeded = false;
     ::comphelper::OInterfaceContainerHelper2       m_aFlushListeners;
 
 private:
@@ -162,6 +163,9 @@ public:
     virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection( const OUString& user, const OUString& password ) override;
     virtual void SAL_CALL setLoginTimeout( sal_Int32 seconds ) override;
     virtual sal_Int32 SAL_CALL getLoginTimeout(  ) override;
+    virtual void SAL_CALL setMigrationNeeded( sal_Bool bNeeded ) override { m_bMigationNeeded = bNeeded; }
+    virtual sal_Bool SAL_CALL getMigrationNeeded() override { return m_bMigationNeeded; }
+    virtual OUString SAL_CALL getConnectionUrl() override;
 
 //::css::sdb::XBookmarksSupplier
     virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getBookmarks(  ) override;
