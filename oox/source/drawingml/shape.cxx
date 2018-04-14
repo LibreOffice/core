@@ -33,6 +33,7 @@
 #include <oox/drawingml/chart/chartconverter.hxx>
 #include <drawingml/chart/chartspacefragment.hxx>
 #include <drawingml/chart/chartspacemodel.hxx>
+#include <o3tl/safeint.hxx>
 #include <oox/ppt/pptimport.hxx>
 #include <oox/vml/vmldrawing.hxx>
 #include <oox/vml/vmlshape.hxx>
@@ -431,12 +432,12 @@ Reference< XShape > const & Shape::createAndInsert(
         maSize.Width = 0;
         for (auto const& elem : mpTablePropertiesPtr->getTableGrid())
         {
-            maSize.Width += elem;
+            maSize.Width = o3tl::saturating_add(maSize.Width, static_cast<sal_Int32>(elem));
         }
         maSize.Height = 0;
         for (auto const& elem : mpTablePropertiesPtr->getTableRows())
         {
-            maSize.Height += elem.getHeight();
+            maSize.Height = o3tl::saturating_add(maSize.Height, elem.getHeight());
         }
     }
 
