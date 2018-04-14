@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_1552ce67",
+        "filename": "sc/source/ui/miscdlgs/anyrefdg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-04-14T05:59:59Z",
+      "side": 1,
+      "message": "It seems both words exist: \"reenable\" and \"re-enable\"",
+      "range": {
+        "startLine": 622,
+        "startChar": 12,
+        "endLine": 622,
+        "endChar": 16
+      },
+      "revId": "652874c5d5b1c41740f9ef9bf6aeeea7f42a6c68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_354fd2be",
+        "filename": "sd/source/ui/slideshow/slideshowimpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2792,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-04-14T05:59:59Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 2792,
+        "startChar": 31,
+        "endLine": 2792,
+        "endChar": 34
+      },
+      "revId": "652874c5d5b1c41740f9ef9bf6aeeea7f42a6c68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_554c46c7",
+        "filename": "vcl/source/gdi/gdimtf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2733,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-04-14T05:59:59Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 2733,
+        "startChar": 74,
+        "endLine": 2733,
+        "endChar": 78
+      },
+      "revId": "652874c5d5b1c41740f9ef9bf6aeeea7f42a6c68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_75c78a12",
+        "filename": "vcl/unx/generic/window/screensaverinhibitor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-04-14T05:59:59Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 275,
+        "startChar": 19,
+        "endLine": 275,
+        "endChar": 21
+      },
+      "revId": "652874c5d5b1c41740f9ef9bf6aeeea7f42a6c68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
