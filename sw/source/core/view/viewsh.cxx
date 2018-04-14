@@ -91,6 +91,7 @@
 bool SwViewShell::mbLstAct = false;
 ShellResource *SwViewShell::mpShellRes = nullptr;
 vcl::DeleteOnDeinit< VclPtr<vcl::Window> > SwViewShell::mpCareWindow(new VclPtr<vcl::Window>);
+vcl::DeleteOnDeinit<std::shared_ptr<weld::Dialog>> SwViewShell::mpCareDialog(new std::shared_ptr<weld::Dialog>);
 
 static bool bInSizeNotify = false;
 
@@ -566,7 +567,7 @@ const SwRect& SwViewShell::VisArea() const
 
 void SwViewShell::MakeVisible( const SwRect &rRect )
 {
-    if ( !VisArea().IsInside( rRect ) || IsScrollMDI( this, rRect ) || GetCareWin(*this) )
+    if ( !VisArea().IsInside( rRect ) || IsScrollMDI( this, rRect ) || GetCareWin(*this) || GetCareDialog() )
     {
         if ( !IsViewLocked() )
         {
@@ -2466,6 +2467,11 @@ ShellResource* SwViewShell::GetShellRes()
 void SwViewShell::SetCareWin( vcl::Window* pNew )
 {
     (*mpCareWindow.get()) = pNew;
+}
+
+void SwViewShell::SetCareDialog(const std::shared_ptr<weld::Dialog>& rNew)
+{
+    (*mpCareDialog.get()) = rNew;
 }
 
 sal_uInt16 SwViewShell::GetPageCount() const
