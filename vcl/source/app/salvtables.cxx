@@ -528,6 +528,21 @@ public:
         m_xWindow->SetPosPixel(Point(x, y));
     }
 
+    SystemWindow* getWindow()
+    {
+        return m_xWindow.get();
+    }
+
+    virtual bool get_extents_relative_to(Window& rRelative, int& x, int &y, int& width, int &height) override
+    {
+        tools::Rectangle aRect(m_xWindow->GetWindowExtentsRelative(dynamic_cast<SalInstanceWindow&>(rRelative).getWindow()));
+        x = aRect.Left();
+        y = aRect.Top();
+        width = aRect.GetWidth();
+        height = aRect.GetHeight();
+        return true;
+    }
+
     virtual ~SalInstanceWindow() override
     {
         clear_child_help(m_xWindow);
@@ -1373,14 +1388,17 @@ public:
         return m_xTextView->GetText();
     }
 
-    virtual Selection get_selection() const override
+    bool get_selection_bounds(int& rStartPos, int &rEndPos) override
     {
-        return m_xTextView->GetSelection();
+        const Selection& rSelection = m_xTextView->GetSelection();
+        rStartPos = rSelection.Min();
+        rEndPos = rSelection.Max();
+        return rSelection.Len();
     }
 
-    virtual void set_selection(const Selection& rSelection) override
+    virtual void select_region(int nStartPos, int nEndPos) override
     {
-        m_xTextView->SetSelection(rSelection);
+        m_xTextView->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
     }
 
     virtual void set_editable(bool bEditable) override

@@ -1692,7 +1692,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
                         ScChangeAction* pScChangeAction=
                                 static_cast<ScChangeAction*>(pEntryData->pData);
 
-                        pViewData->GetDocShell()->ExecuteChangeCommentDialog( pScChangeAction, this,false);
+                        pViewData->GetDocShell()->ExecuteChangeCommentDialog(pScChangeAction, GetFrameWeld(), false);
                     }
                 }
             }

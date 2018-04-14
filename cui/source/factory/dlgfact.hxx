@@ -477,18 +477,25 @@ public:
 class SvxPostItDialog;
 class AbstractSvxPostItDialog_Impl :public AbstractSvxPostItDialog
 {
-    DECL_ABSTDLG_BASE( AbstractSvxPostItDialog_Impl, SvxPostItDialog )
+private:
+    std::unique_ptr<SvxPostItDialog> m_xDlg;
+public:
+    AbstractSvxPostItDialog_Impl(SvxPostItDialog* pDlg)
+        : m_xDlg(pDlg)
+    {
+    }
+    virtual short               Execute() override;
     virtual void                SetText( const OUString& rStr ) override;  //From class Window
     virtual const SfxItemSet*   GetOutputItemSet() const override;
-    virtual void                SetPrevHdl( const Link<AbstractSvxPostItDialog&,void>& rLink ) override ;
-    virtual void                SetNextHdl( const Link<AbstractSvxPostItDialog&,void>& rLink ) override ;
-    virtual void                EnableTravel(bool bNext, bool bPrev) override ;
-    virtual OUString            GetNote() override ;
-    virtual void                SetNote(const OUString& rTxt) override ;
-    virtual void                ShowLastAuthor(const OUString& rAuthor, const OUString& rDate) override ;
-    virtual void                DontChangeAuthor() override ;
-    virtual void                HideAuthor() override ;
-    virtual vcl::Window *       GetWindow() override;
+    virtual void                SetPrevHdl( const Link<AbstractSvxPostItDialog&,void>& rLink ) override;
+    virtual void                SetNextHdl( const Link<AbstractSvxPostItDialog&,void>& rLink ) override;
+    virtual void                EnableTravel(bool bNext, bool bPrev) override;
+    virtual OUString            GetNote() override;
+    virtual void                SetNote(const OUString& rTxt) override;
+    virtual void                ShowLastAuthor(const OUString& rAuthor, const OUString& rDate) override;
+    virtual void                DontChangeAuthor() override;
+    virtual void                HideAuthor() override;
+    virtual std::shared_ptr<weld::Dialog> GetDialog() override;
 private:
     Link<AbstractSvxPostItDialog&,void> aNextHdl;
     Link<AbstractSvxPostItDialog&,void> aPrevHdl;
@@ -698,7 +705,7 @@ public:
                                                                  SdrModel* pModel,
                                                                  const SdrObject* pObj,
                                                                  bool bHasObj ) override;
-    virtual VclPtr<AbstractSvxPostItDialog>        CreateSvxPostItDialog( vcl::Window* pParent,
+    virtual VclPtr<AbstractSvxPostItDialog>        CreateSvxPostItDialog( weld::Window* pParent,
                                                                         const SfxItemSet& rCoreSet,
                                                                         bool bPrevNext = false ) override;
 

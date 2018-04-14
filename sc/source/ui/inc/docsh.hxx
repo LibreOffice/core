@@ -237,7 +237,7 @@ public:
 
     ScChangeAction* GetChangeAction( const ScAddress& rPos );
     void            SetChangeComment( ScChangeAction* pAction, const OUString& rComment );
-    void            ExecuteChangeCommentDialog( ScChangeAction* pAction, vcl::Window* pParent, bool bPrevNext = true );
+    void            ExecuteChangeCommentDialog( ScChangeAction* pAction, weld::Window* pParent, bool bPrevNext = true );
                     /// Protect/unprotect ChangeTrack and return <TRUE/> if
                     /// protection was successfully changed.
                     /// If bJustQueryIfProtected==sal_True protection is not

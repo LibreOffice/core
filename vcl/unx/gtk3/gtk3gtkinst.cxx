@@ -1700,6 +1700,16 @@ public:
         gtk_window_move(m_pWindow, x, y);
     }
 
+    virtual bool get_extents_relative_to(Window& rRelative, int& x, int &y, int& width, int &height) override
+    {
+        //this is sadly futile under wayland, so we can't tell where a dialog is in order to allow
+        //the document underneath to auto-scroll to place content in a visible location
+        gboolean ret = gtk_widget_translate_coordinates(dynamic_cast<GtkInstanceWindow&>(rRelative).getWidget(), m_pWidget, 0, 0, &x, &y);
+        width = gtk_widget_get_allocated_width(m_pWidget);
+        height = gtk_widget_get_allocated_height(m_pWidget);
+        return ret;
+    }
+
     virtual ~GtkInstanceWindow() override
     {
         if (m_xWindow.is())
@@ -3176,20 +3186,22 @@ public:
         return sRet;
     }
 
-    virtual Selection get_selection() const override
+    virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) override
     {
         GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
         GtkTextIter start, end;
         gtk_text_buffer_get_selection_bounds(pBuffer, &start, &end);
-        return Selection(gtk_text_iter_get_offset(&start), gtk_text_iter_get_offset(&end));
+        rStartPos = gtk_text_iter_get_offset(&start);
+        rEndPos = gtk_text_iter_get_offset(&end);
+        return rStartPos != rEndPos;
     }
 
-    virtual void set_selection(const Selection& rSelection) override
+    virtual void select_region(int nStartPos, int nEndPos) override
     {
         GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
         GtkTextIter start, end;
-        gtk_text_buffer_get_iter_at_offset(pBuffer, &start, rSelection.Min());
-        gtk_text_buffer_get_iter_at_offset(pBuffer, &end, rSelection.Max());
+        gtk_text_buffer_get_iter_at_offset(pBuffer, &start, nStartPos);
+        gtk_text_buffer_get_iter_at_offset(pBuffer, &end, nEndPos);
         gtk_text_buffer_select_range(pBuffer, &start, &end);
         GtkTextMark* mark = gtk_text_buffer_create_mark(pBuffer, "scroll", &end, true);
         gtk_text_view_scroll_mark_onscreen(m_pTextView, mark);

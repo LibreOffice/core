@@ -592,7 +592,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                     SvxAbstractDialogFactory* pFact2 = SvxAbstractDialogFactory::Create();
                     assert(pFact2 && "Dialog creation failed!");
-                    ScopedVclPtr<AbstractSvxPostItDialog> pDlg(pFact2->CreateSvxPostItDialog( pMDI, aSet, bTravel ));
+                    ScopedVclPtr<AbstractSvxPostItDialog> pDlg(pFact2->CreateSvxPostItDialog(pMDI->GetFrameWeld(), aSet, bTravel));
                     assert(pDlg && "Dialog creation failed!");
                     pDlg->HideAuthor();
 
@@ -605,7 +605,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         pDlg->SetNextHdl(LINK(this, SwTextShell, RedlineNextHdl));
                     }
 
-                    SwViewShell::SetCareWin(pDlg->GetWindow());
+                    SwViewShell::SetCareDialog(pDlg->GetDialog());
                     g_bNoInterrupt = true;
 
                     if ( pDlg->Execute() == RET_OK )

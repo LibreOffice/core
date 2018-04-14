@@ -25,7 +25,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 
-ScRedComDialog::ScRedComDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet,
+ScRedComDialog::ScRedComDialog( weld::Window* pParent, const SfxItemSet& rCoreSet,
                     ScDocShell *pShell, ScChangeAction *pAction, bool bPrevNext)
     : pChangeAction(nullptr)
     , pDocShell(nullptr)

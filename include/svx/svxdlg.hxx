@@ -60,7 +60,10 @@ typedef const sal_uInt16*  (*DialogGetRanges)();
 typedef ::std::vector< OUString > TargetList;
 
 namespace svx{ class SpellDialogChildWindow;}
-namespace weld{ class Window; }
+namespace weld{
+    class Dialog;
+    class Window;
+}
 
 class AbstractSvxDistributeDialog :public VclAbstractDialog
 {
@@ -279,7 +282,7 @@ public:
     virtual void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink ) = 0;
 };
 
-class AbstractSvxPostItDialog :public VclAbstractDialog
+class AbstractSvxPostItDialog : public VclAbstractDialog
 {
 protected:
     virtual ~AbstractSvxPostItDialog() override = default;
@@ -294,7 +297,7 @@ public:
     virtual void                ShowLastAuthor(const OUString& rAuthor, const OUString& rDate) = 0;
     virtual void                DontChangeAuthor() = 0;
     virtual void                HideAuthor() = 0;
-    virtual vcl::Window *            GetWindow() = 0;
+    virtual std::shared_ptr<weld::Dialog> GetDialog() = 0;
 };
 
 class SvxAbstractSplitTableDialog : public VclAbstractDialog
@@ -441,9 +444,7 @@ public:
     virtual VclPtr<SfxAbstractDialog>       CreateEventConfigDialog( vcl::Window* pParent,
                                                                         const SfxItemSet& rAttr,
                                     const css::uno::Reference< css::frame::XFrame >& _rxFrame )=0;
-    virtual VclPtr<AbstractSvxPostItDialog>    CreateSvxPostItDialog( vcl::Window* pParent,
-                                                                        const SfxItemSet& rCoreSet,
-                                                                        bool bPrevNext = false) = 0;
+    virtual VclPtr<AbstractSvxPostItDialog>    CreateSvxPostItDialog(weld::Window* pParent, const SfxItemSet& rCoreSet, bool bPrevNext = false) = 0;
     virtual VclPtr<VclAbstractDialog>          CreateSvxScriptOrgDialog( vcl::Window* pParent, const OUString& rLanguage ) override = 0;
 
     virtual DialogGetRanges                    GetDialogGetRangesFunc() = 0;
