@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_5556062a",
+        "filename": "drawinglayer/source/tools/emfppath.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1001502
+      },
+      "writtenOn": "2018-04-14T13:53:27Z",
+      "side": 1,
+      "message": "can you adjust the comment?",
+      "revId": "27a65d1c7e24559bbe3a02f36d05d320633da98e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
