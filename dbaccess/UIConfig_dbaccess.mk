@@ -80,6 +80,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/useradmindialog \
     dbaccess/uiconfig/ui/useradminpage \
     dbaccess/uiconfig/ui/userdetailspage \
+    dbaccess/uiconfig/ui/migrwarndlg \
 ))
 
 # vim: set noet sw=4 ts=4:
