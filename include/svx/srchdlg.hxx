@@ -88,7 +88,8 @@ enum class SearchLabel
     EndSheet,
     NotFound,
     StartWrapped,
-    EndWrapped
+    EndWrapped,
+    NavElementNotFound
 };
 
 class SvxSearchDialog;
