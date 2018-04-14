@@ -1030,6 +1030,8 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
         return;
     }
 
+    const tools::Rectangle aRect = PointsToLogic(left, right, top, bottom);
+
     const int nChars = FPDFTextObj_CountChars(pPageObject);
     std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nChars + 1]); // + terminating null
 
@@ -1050,6 +1052,7 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
                                                     << ", " << e << ", " << f << ')');
     Point aPos = PointsToLogic(e, f);
     SAL_WARN("sd.filter", "Got TEXT origin: " << aPos);
+    SAL_WARN("sd.filter", "Got TEXT Bounds: " << aRect);
 
     const double dFontSize = FPDFTextObj_GetFontSize(pPageObject);
     double dFontSizeH = fabs(sqrt2(a, c) * dFontSize);
@@ -1071,10 +1074,10 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
     aFnt.SetFontSize(Size(dFontSizeH, dFontSizeV));
     mpVD->SetFont(aFnt);
 
-    ImportText(aPos, sText);
+    ImportText(aRect.TopLeft(), aRect.GetSize(), sText);
 }
 
-void ImpSdrPdfImport::ImportText(const Point& rPos, const OUString& rStr)
+void ImpSdrPdfImport::ImportText(const Point& rPos, const Size& rSize, const OUString& rStr)
 {
     // calc text box size, add 5% to make it fit safely
 
@@ -1089,6 +1092,7 @@ void ImpSdrPdfImport::ImportText(const Point& rPos, const OUString& rStr)
                                     << ", Scaled: " << nTextWidth << 'x' << nTextHeight);
 
     Point aPos(FRound(rPos.X() * mfScaleX + maOfs.X()), FRound(rPos.Y() * mfScaleY + maOfs.Y()));
+    Size bSize(FRound(rSize.Width() * mfScaleX), FRound(rSize.Height() * mfScaleY));
     Size aSize(nTextWidth, nTextHeight);
 
     if (eAlg == ALIGN_BASELINE)
@@ -1096,8 +1100,11 @@ void ImpSdrPdfImport::ImportText(const Point& rPos, const OUString& rStr)
     else if (eAlg == ALIGN_BOTTOM)
         aPos.Y() -= nTextHeight;
 
-    Rectangle aTextRect(aPos, aSize);
-    SAL_WARN("sd.filter", "Text Rect: " << aTextRect);
+    SAL_WARN("sd.filter", "Final POS: " << aPos);
+    SAL_WARN("sd.filter", "Final Text Size: " << aSize);
+    SAL_WARN("sd.filter", "Final Bound Size: " << bSize);
+    Rectangle aTextRect(aPos, bSize);
+    // SAL_WARN("sd.filter", "Text Rect: " << aTextRect);
     SdrRectObj* pText = new SdrRectObj(OBJ_TEXT, aTextRect);
 
     pText->SetMergedItem(makeSdrTextUpperDistItem(0));

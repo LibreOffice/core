@@ -106,7 +106,7 @@ class ImpSdrPdfImport final
     void ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex);
 
     void ImportText(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex);
-    void ImportText(const Point& rPos, const OUString& rStr);
+    void ImportText(const Point& rPos, const Size& rSize, const OUString& rStr);
     void SetAttributes(SdrObject* pObj, bool bForceTextAttr = false);
     void InsertObj(SdrObject* pObj, bool bScale = true);
     void MapScaling();
