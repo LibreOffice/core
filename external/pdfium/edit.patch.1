@@ -10,6 +10,33 @@ index 3b5a740..58ef90a 100644
  }
  
  void CPDF_ImageObject::SetImage(const RetainPtr<CPDF_Image>& pImage) {
+diff --git a/core/fpdfapi/page/cpdf_page.cpp b/core/fpdfapi/page/cpdf_page.cpp
+index ba93f4a..70d398b 100644
+--- a/core/fpdfapi/page/cpdf_page.cpp
++++ b/core/fpdfapi/page/cpdf_page.cpp
+@@ -35,12 +35,14 @@ CPDF_Page::CPDF_Page(CPDF_Document* pDocument,
+   CFX_FloatRect mediabox = GetBox("MediaBox");
+   if (mediabox.IsEmpty())
+     mediabox = CFX_FloatRect(0, 0, 612, 792);
++  fprintf(stderr, "Page mediabox: %f, %f, %f, %f\n", mediabox.left, mediabox.right, mediabox.top, mediabox.bottom);
+ 
+   m_BBox = GetBox("CropBox");
+   if (m_BBox.IsEmpty())
+     m_BBox = mediabox;
+   else
+     m_BBox.Intersect(mediabox);
++  fprintf(stderr, "Page cropbox: %f, %f, %f, %f\n", m_BBox.left, m_BBox.right, m_BBox.top, m_BBox.bottom);
+ 
+   m_PageSize.width = m_BBox.Width();
+   m_PageSize.height = m_BBox.Height();
+@@ -48,6 +50,7 @@ CPDF_Page::CPDF_Page(CPDF_Document* pDocument,
+   int rotate = GetPageRotation();
+   if (rotate % 2)
+     std::swap(m_PageSize.width, m_PageSize.height);
++  fprintf(stderr, "Page rotate: %d, Page Width: %f, Page Height: %f\n", rotate, m_PageSize.width, m_PageSize.height);
+ 
+   switch (rotate) {
+     case 0:
 diff --git a/core/fpdfapi/page/cpdf_pageobject.cpp b/core/fpdfapi/page/cpdf_pageobject.cpp
 index 8bb5bf5..9b5e2ce 100644
 --- a/core/fpdfapi/page/cpdf_pageobject.cpp
@@ -23,17 +50,37 @@ index 8bb5bf5..9b5e2ce 100644
    return rect.GetOuterRect();
  }
 diff --git a/core/fpdfapi/render/cpdf_renderstatus.cpp b/core/fpdfapi/render/cpdf_renderstatus.cpp
-index 0a01ae0..fad2920 100644
+index 0a01ae0..6947e3a 100644
 --- a/core/fpdfapi/render/cpdf_renderstatus.cpp
 +++ b/core/fpdfapi/render/cpdf_renderstatus.cpp
 @@ -1793,6 +1793,7 @@ bool CPDF_RenderStatus::ProcessText(CPDF_TextObject* textobj,
      return true;
  
    float font_size = textobj->m_TextState.GetFontSize();
-+  fprintf(stderr, "Font size: %f, matrix a: %f, b: %f, c: %f, d: %f, e: %f, f: %f\n", font_size, text_matrix.a, text_matrix.b, text_matrix.c, text_matrix.d, text_matrix.e, text_matrix.f);
++//   fprintf(stderr, "Font size: %f, matrix a: %f, b: %f, c: %f, d: %f, e: %f, f: %f\n", font_size, text_matrix.a, text_matrix.b, text_matrix.c, text_matrix.d, text_matrix.e, text_matrix.f);
    if (bPattern) {
      DrawTextPathWithPattern(textobj, pObj2Device, pFont, font_size,
                              &text_matrix, bFill, bStroke);
+diff --git a/core/fxge/cfx_pathdata.cpp b/core/fxge/cfx_pathdata.cpp
+index 4ac5cf6..28ea81f 100644
+--- a/core/fxge/cfx_pathdata.cpp
++++ b/core/fxge/cfx_pathdata.cpp
+@@ -199,6 +199,7 @@ void CFX_PathData::Append(const CFX_PathData* pSrc, const CFX_Matrix* pMatrix) {
+ void CFX_PathData::AppendPoint(const CFX_PointF& point,
+                                FXPT_TYPE type,
+                                bool closeFigure) {
++  fprintf(stderr, "Append: %f, %f (%s)\n", point.x, point.y, closeFigure ? "CLOSE" : "OPEN");
+   m_Points.push_back(FX_PATHPOINT(point, type, closeFigure));
+ }
+ 
+@@ -290,6 +291,7 @@ CFX_FloatRect CFX_PathData::GetBoundingBox(float line_width,
+ void CFX_PathData::Transform(const CFX_Matrix* pMatrix) {
+   if (!pMatrix)
+     return;
++  fprintf(stderr, "XForm: %f, %f %f, %f, %f, %f\n", pMatrix->a, pMatrix->b, pMatrix->c, pMatrix->d, pMatrix->e, pMatrix->f);
+   for (auto& point : m_Points)
+     point.m_Point = pMatrix->Transform(point.m_Point);
+ }
 diff --git a/fpdfsdk/fpdfeditimg.cpp b/fpdfsdk/fpdfeditimg.cpp
 index 0d7ba56..37bdf99 100644
 --- a/fpdfsdk/fpdfeditimg.cpp
@@ -214,7 +261,7 @@ index ca2cf3f..e7d633f 100644
 +  return true;
 +}
 diff --git a/fpdfsdk/fpdfeditpath.cpp b/fpdfsdk/fpdfeditpath.cpp
-index a291987..1ac8257 100644
+index a291987..0202284 100644
 --- a/fpdfsdk/fpdfeditpath.cpp
 +++ b/fpdfsdk/fpdfeditpath.cpp
 @@ -101,6 +101,16 @@ FPDFPath_SetStrokeWidth(FPDF_PAGEOBJECT path, float width) {
@@ -275,14 +322,14 @@ index a291987..1ac8257 100644
 +  if (!path_object || !a || !b || !c || !d || !e || !f)
 +    return false;
 +
-+  auto* pPathObj = CPDFPageObjectFromFPDFPageObject(path_object);
-+  CFX_Matrix* pMatrix = pPathObj->m_GeneralState.GetMutableMatrix();
-+  *a = pMatrix->a;
-+  *b = pMatrix->b;
-+  *c = pMatrix->c;
-+  *d = pMatrix->d;
-+  *e = pMatrix->e;
-+  *f = pMatrix->f;
++  CPDF_PathObject* pPathObj = CPDFPathObjectFromFPDFPageObject(path_object);
++  const CFX_Matrix& pMatrix = pPathObj->m_Matrix;
++  *a = pMatrix.a;
++  *b = pMatrix.b;
++  *c = pMatrix.c;
++  *d = pMatrix.d;
++  *e = pMatrix.e;
++  *f = pMatrix.f;
 +
 +  return true;
 +}
