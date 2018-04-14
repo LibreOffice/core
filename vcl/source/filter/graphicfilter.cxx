@@ -37,6 +37,7 @@
 #include <vcl/pngwrite.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 #include <vcl/virdev.hxx>
+#include <impgraph.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/file.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -1441,6 +1442,231 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
     }
 }
 
+Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream)
+{
+    Graphic aGraphic;
+    sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
+    GfxLinkType eLinkType = GfxLinkType::NONE;
+
+    ResetLastError();
+
+    const sal_uLong nStreamBegin = rIStream.Tell();
+
+    rIStream.Seek(nStreamBegin);
+
+    ErrCode nStatus = ImpTestOrFindFormat("", rIStream, nFormat);
+
+    rIStream.Seek(nStreamBegin);
+    const sal_uInt32 nStreamLength(rIStream.Seek(STREAM_SEEK_TO_END) - nStreamBegin);
+
+    OUString aFilterName = pConfig->GetImportFilterName(nFormat);
+    OUString aExternalFilterName = pConfig->GetExternalFilterName(nFormat, false);
+
+    std::unique_ptr<sal_uInt8[]> pGraphicContent;
+    sal_Int32 nGraphicContentSize = 0;
+
+    // read graphic
+    if (pConfig->IsImportInternalFilter(nFormat))
+    {
+        if (aFilterName.equalsIgnoreAsciiCase(IMP_GIF))
+        {
+            eLinkType = GfxLinkType::NativeGif;
+        }
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_PNG))
+        {
+            vcl::PNGReader aPNGReader(rIStream);
+
+            // check if this PNG contains a GIF chunk!
+            const std::vector<vcl::PNGReader::ChunkData>& rChunkData = aPNGReader.GetChunks();
+            for (auto const& chunk : rChunkData)
+            {
+                // Microsoft Office is storing Animated GIFs in following chunk
+                if (chunk.nType == PMGCHUNG_msOG)
+                {
+                    sal_uInt32 nChunkSize = chunk.aData.size();
+
+                    if (nChunkSize > 11)
+                    {
+                        const std::vector<sal_uInt8>& rData = chunk.aData;
+                        nGraphicContentSize = nChunkSize - 11;
+                        SvMemoryStream aIStrm(const_cast<sal_uInt8*>(&rData[11]), nGraphicContentSize, StreamMode::READ);
+                        pGraphicContent.reset(new sal_uInt8[nGraphicContentSize]);
+                        sal_uInt64 aCurrentPosition = aIStrm.Tell();
+                        aIStrm.ReadBytes(pGraphicContent.get(), nGraphicContentSize);
+                        aIStrm.Seek(aCurrentPosition);
+                        eLinkType = GfxLinkType::NativeGif;
+                        break;
+                    }
+                }
+            }
+            if (eLinkType == GfxLinkType::NONE)
+            {
+                eLinkType = GfxLinkType::NativePng;
+            }
+        }
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_JPEG))
+        {
+            eLinkType = GfxLinkType::NativeJpg;
+        }
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_SVG))
+        {
+            bool bOkay(false);
+
+            if (nStreamLength > 0)
+            {
+                std::vector<sal_uInt8> aTwoBytes(2);
+                rIStream.ReadBytes(aTwoBytes.data(), 2);
+                rIStream.Seek(nStreamBegin);
+
+                if (aTwoBytes[0] == 0x1F && aTwoBytes[1] == 0x8B)
+                {
+                    SvMemoryStream aMemStream;
+                    ZCodec aCodec;
+                    long nMemoryLength;
+
+                    aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, false, true);
+                    nMemoryLength = aCodec.Decompress(rIStream, aMemStream);
+                    aCodec.EndCompression();
+
+                    if (!rIStream.GetError() && nMemoryLength >= 0)
+                    {
+                        nGraphicContentSize = nMemoryLength;
+                        pGraphicContent.reset(new sal_uInt8[nGraphicContentSize]);
+
+                        aMemStream.Seek(STREAM_SEEK_TO_BEGIN);
+                        aMemStream.ReadBytes(pGraphicContent.get(), nGraphicContentSize);
+
+                        bOkay = true;
+                    }
+                }
+                else
+                {
+                    nGraphicContentSize = nStreamLength;
+                    pGraphicContent.reset(new sal_uInt8[nGraphicContentSize]);
+                    rIStream.ReadBytes(pGraphicContent.get(), nStreamLength);
+
+                    bOkay = true;
+                }
+            }
+
+            if (bOkay)
+            {
+                eLinkType = GfxLinkType::NativeSvg;
+            }
+            else
+            {
+                nStatus = ERRCODE_GRFILTER_FILTERERROR;
+            }
+        }
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_BMP))
+        {
+            eLinkType = GfxLinkType::NativeBmp;
+        }
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_MOV))
+        {
+            eLinkType = GfxLinkType::NativeMov;
+        }
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_WMF) ||
+                 aFilterName.equalsIgnoreAsciiCase(IMP_EMF))
+        {
+            nGraphicContentSize = nStreamLength;
+            pGraphicContent.reset(new sal_uInt8[nGraphicContentSize]);
+
+            rIStream.ReadBytes(pGraphicContent.get(), nStreamLength);
+
+            if (!rIStream.GetError())
+            {
+                eLinkType = GfxLinkType::NativeWmf;
+            }
+            else
+            {
+                nStatus = ERRCODE_GRFILTER_FILTERERROR;
+            }
+        }
+        else if (aFilterName == IMP_PDF)
+        {
+            eLinkType = GfxLinkType::NativePdf;
+        }
+        else
+        {
+            nStatus = ERRCODE_GRFILTER_FILTERERROR;
+        }
+    }
+    else
+    {
+        ImpFilterLibCacheEntry* pFilter = nullptr;
+
+        // find first filter in filter paths
+        sal_Int32 i, nTokenCount = getTokenCount(aFilterPath, ';');
+        ImpFilterLibCache &rCache = Cache::get();
+        for( i = 0; ( i < nTokenCount ) && ( pFilter == nullptr ); i++ )
+            pFilter = rCache.GetFilter(aFilterPath.getToken(i, ';'), aFilterName, aExternalFilterName);
+        if( !pFilter )
+            nStatus = ERRCODE_GRFILTER_FILTERERROR;
+        else
+        {
+            PFilterCall pFunc = pFilter->GetImportFunction();
+
+            if (!pFunc)
+                nStatus = ERRCODE_GRFILTER_FILTERERROR;
+            else
+            {
+                OUString aShortName;
+                if (nFormat != GRFILTER_FORMAT_DONTKNOW)
+                    aShortName = GetImportFormatShortName(nFormat).toAsciiUpperCase();
+
+                if (aShortName.startsWith(TIF_SHORTNAME))
+                    eLinkType = GfxLinkType::NativeTif;
+                else if( aShortName.startsWith(MET_SHORTNAME))
+                    eLinkType = GfxLinkType::NativeMet;
+                else if( aShortName.startsWith(PCT_SHORTNAME))
+                    eLinkType = GfxLinkType::NativePct;
+            }
+        }
+    }
+
+    if (nStatus == ERRCODE_NONE && eLinkType != GfxLinkType::NONE)
+    {
+        if (!pGraphicContent)
+        {
+            nGraphicContentSize = nStreamLength;
+
+            if (nGraphicContentSize > 0)
+            {
+                try
+                {
+                    pGraphicContent.reset(new sal_uInt8[nGraphicContentSize]);
+                }
+                catch (const std::bad_alloc&)
+                {
+                    nStatus = ERRCODE_GRFILTER_TOOBIG;
+                }
+
+                if (nStatus == ERRCODE_NONE)
+                {
+                    rIStream.Seek(nStreamBegin);
+                    rIStream.ReadBytes(pGraphicContent.get(), nGraphicContentSize);
+                }
+            }
+        }
+
+        if( nStatus == ERRCODE_NONE )
+        {
+            aGraphic.SetGfxLink(GfxLink(std::move(pGraphicContent), nGraphicContentSize, eLinkType));
+            aGraphic.ImplGetImpGraphic()->ImplSetPrepared();
+        }
+    }
+
+    // Set error code or try to set native buffer
+    if(nStatus != ERRCODE_NONE)
+    {
+        ImplSetError(nStatus, &rIStream);
+        rIStream.Seek(nStreamBegin);
+    }
+
+    return aGraphic;
+}
+
 ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                      css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
@@ -2272,6 +2498,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
         case ConvertDataFormat::WMF: aShortName = WMF_SHORTNAME; break;
         case ConvertDataFormat::EMF: aShortName = EMF_SHORTNAME; break;
         case ConvertDataFormat::SVG: aShortName = SVG_SHORTNAME; break;
+        case ConvertDataFormat::PDF: aShortName = PDF_SHORTNAME; break;
 
         default:
         break;

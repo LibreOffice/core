@@ -493,15 +493,20 @@ OUString SvXMLGraphicHelper::ImplGetGraphicMimeType( const OUString& rFileName )
 Graphic SvXMLGraphicHelper::ImplReadGraphic( const OUString& rPictureStorageName,
                                              const OUString& rPictureStreamName )
 {
-    Graphic             aGraphic;
+    Graphic aReturnGraphic;
     SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName ) );
-    if( aStream.xStream.is() )
+    if (aStream.xStream.is())
     {
-        std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aStream.xStream ));
-        GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, "", *pStream );
+        GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+        std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(aStream.xStream));
+        Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(*pStream);
+        if (aGraphic)
+            aReturnGraphic = aGraphic;
+        else
+            rGraphicFilter.ImportGraphic(aReturnGraphic, "", *pStream);
     }
 
-    return aGraphic;
+    return aReturnGraphic;
 }
 
 void SvXMLGraphicHelper::Init( const uno::Reference < embed::XStorage >& rXMLStorage,
