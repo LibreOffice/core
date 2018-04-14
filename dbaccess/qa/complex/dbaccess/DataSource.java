@@ -21,7 +21,7 @@ import com.sun.star.container.XNameAccess;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XNamingService;
 import connectivity.tools.CRMDatabase;
-import connectivity.tools.FirebirdDatabase;
+import connectivity.tools.HsqlDatabase;
 
 // ---------- junit imports -----------------
 import org.junit.Test;
@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
 public class DataSource extends TestCase
 {
 
-    FirebirdDatabase m_database;
+    HsqlDatabase m_database;
     connectivity.tools.DataSource m_dataSource;
 
 

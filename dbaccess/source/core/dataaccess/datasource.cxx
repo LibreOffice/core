@@ -582,7 +582,11 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
     Reference< XDriverManager > xManager;
 
     bool bNeedMigration = false;
-    if( m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
+    OUString sMigrEnvVal;
+    osl_getEnvironment(OUString("DBACCESS_HSQL_MIGRATION").pData,
+            &sMigrEnvVal.pData);
+    if( m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb" &&
+            !sMigrEnvVal.isEmpty())
     {
         m_pImpl->m_sConnectURL = "sdbc:embedded:firebird";
         bNeedMigration = true;

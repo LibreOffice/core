@@ -27,12 +27,21 @@ class HsqlBinaryImportTest : public DBTestBase
 public:
     void testBinaryImport();
 
+    virtual void setUp() override;
+
     CPPUNIT_TEST_SUITE(HsqlBinaryImportTest);
 
     CPPUNIT_TEST(testBinaryImport);
 
     CPPUNIT_TEST_SUITE_END();
 };
+
+void HsqlBinaryImportTest::setUp()
+{
+    DBTestBase::setUp();
+    SvtMiscOptions aMiscOptions;
+    osl_setEnvironment(OUString{ "DBACCESS_HSQL_MIGRATION" }.pData, OUString{ "1" }.pData);
+}
 
 void HsqlBinaryImportTest::testBinaryImport()
 {

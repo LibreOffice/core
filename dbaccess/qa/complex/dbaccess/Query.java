@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
 public class Query extends TestCase
 {
 
-    connectivity.tools.FirebirdDatabase m_database;
+    connectivity.tools.HsqlDatabase m_database;
 
 
     private void createTestCase()

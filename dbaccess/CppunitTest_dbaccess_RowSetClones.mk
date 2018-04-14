@@ -67,7 +67,8 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_RowSetClones,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
-    connectivity/source/drivers/firebird/firebird_sdbc \
+    connectivity/source/drivers/hsqldb/hsqldb \
+    connectivity/source/drivers/jdbc/jdbc \
     connectivity/source/manager/sdbc2 \
     dbaccess/util/dba \
     dbaccess/util/dbu \
