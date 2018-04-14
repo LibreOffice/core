@@ -69,7 +69,6 @@ BEGIN
         "eo",
         "ka",
         "ga",
-        "uk",
         "gd",
         "my",
         "mai",

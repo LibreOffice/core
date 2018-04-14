@@ -1228,7 +1228,7 @@ sub nsis_language_converter
     elsif ( $language eq "th" ) { $nsislanguage = "Thai"; }
     elsif ( $language eq "zh-TW" ) { $nsislanguage = "TradChinese"; }
     elsif ( $language eq "tr" ) { $nsislanguage = "Turkish"; }
-    elsif ( $language eq "uk" ) { $nsislanguage = "Ukrainian"; }
+    #elsif ( $language eq "uk" ) { $nsislanguage = "Ukrainian"; } #temporarily disabled (problem in Ukrainian.nsh)
     elsif ( $language eq "vi" ) { $nsislanguage = "Vietnamese"; }
     elsif ( $language eq "cy" ) { $nsislanguage = "Welsh"; }
     else
