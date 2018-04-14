@@ -1279,12 +1279,16 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
                 continue;
             }
 
-            SAL_WARN("sd.filter", "Got point (" << x << ", " << y << ")");
+            SAL_WARN("sd.filter", "Got point (" << x << ", " << y << ") matrix (" << a << ", " << b
+                                                << ", " << c << ", " << d << ", " << e << ", " << f
+                                                << ')');
 
             x = a * x + c * y + e;
             y = b * x + d * y + f;
 
             const bool bClose = FPDFPathSegment_GetClose(pPathSegment);
+            if (bClose)
+                aPoly.setClosed(bClose); // TODO: Review
             SAL_WARN("sd.filter",
                      "Point corrected (" << x << ", " << y << "): " << (bClose ? "CLOSE" : "OPEN"));
             Point aPoint = PointsToLogic(x, y);
@@ -1334,7 +1338,10 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
 
     float fWidth = 1;
     FPDFPath_GetStrokeWidth(pPageObject, &fWidth);
-    mnLineWidth = lcl_ToLogic(lcl_PointToPixel(fWidth));
+    SAL_WARN("sd.filter", "Path Stroke Width: " << fWidth);
+    const double dWidth = fabs(sqrt2(a, c) * fWidth);
+    SAL_WARN("sd.filter", "Path Stroke Width scaled: " << dWidth);
+    mnLineWidth = lcl_ToLogic(lcl_PointToPixel(dWidth));
 
     unsigned int nR;
     unsigned int nG;
@@ -1356,7 +1363,6 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
 
     // if(!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(basegfx::B2DPolyPolygon(aSource)))
 
-    aPoly.setClosed(true); // TODO: Review
     SdrPathObj* pPath = new SdrPathObj(OBJ_POLY, basegfx::B2DPolyPolygon(aPoly));
     SetAttributes(pPath);
     InsertObj(pPath, false);
