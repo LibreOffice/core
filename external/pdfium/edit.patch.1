@@ -66,7 +66,7 @@ index 0d7ba56..37bdf99 100644
  FPDFImageObj_GetImageDataDecoded(FPDF_PAGEOBJECT image_object,
                                   void* buffer,
 diff --git a/fpdfsdk/fpdfeditpage.cpp b/fpdfsdk/fpdfeditpage.cpp
-index ca2cf3f..8073a18 100644
+index ca2cf3f..e7d633f 100644
 --- a/fpdfsdk/fpdfeditpage.cpp
 +++ b/fpdfsdk/fpdfeditpage.cpp
 @@ -11,12 +11,14 @@
@@ -84,7 +84,7 @@ index ca2cf3f..8073a18 100644
  #include "core/fpdfapi/page/cpdf_shadingobject.h"
  #include "core/fpdfapi/parser/cpdf_array.h"
  #include "core/fpdfapi/parser/cpdf_document.h"
-@@ -363,3 +365,123 @@ FPDFPageObj_GetBounds(FPDF_PAGEOBJECT pageObject,
+@@ -363,3 +365,128 @@ FPDFPageObj_GetBounds(FPDF_PAGEOBJECT pageObject,
    *top = bbox.top;
    return true;
  }
@@ -114,8 +114,11 @@ index ca2cf3f..8073a18 100644
 +                      double* a,
 +                      double* b,
 +                      double* c,
-+                      double* d) {
-+  if (!text_object)
++                      double* d,
++                      double* e,
++                      double* f)
++{
++  if (!text_object || !a || !b || !c || !d || !e || !f)
 +    return;
 +
 +  CPDF_TextObject* pTxtObj = CPDFTextObjectFromFPDFPageObject(text_object);
@@ -124,6 +127,8 @@ index ca2cf3f..8073a18 100644
 +  *b = matrix.b;
 +  *c = matrix.c;
 +  *d = matrix.d;
++  *e = matrix.e;
++  *f = matrix.f;
 +}
 +
 +FPDF_EXPORT int FPDF_CALLCONV
@@ -357,7 +362,7 @@ index 77c2315..db3e734 100644
  
  CPDF_PageObject* CPDFPageObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object);
 diff --git a/public/fpdf_edit.h b/public/fpdf_edit.h
-index 54735a3..a415c98 100644
+index 54735a3..c86b638 100644
 --- a/public/fpdf_edit.h
 +++ b/public/fpdf_edit.h
 @@ -520,6 +520,15 @@ FPDFPath_GetStrokeColor(FPDF_PAGEOBJECT path,
@@ -413,7 +418,7 @@ index 54735a3..a415c98 100644
  // Create a new text object using one of the standard PDF fonts.
  //
  // document   - handle to the document.
-@@ -761,6 +800,73 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
+@@ -761,6 +800,77 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
                            FPDF_FONT font,
                            float font_size);
  
@@ -445,12 +450,16 @@ index 54735a3..a415c98 100644
 +//   b            - Pointer to a double value receiving coefficient "b" of the matrix.
 +//   c            - Pointer to a double value receiving coefficient "c" of the matrix.
 +//   d            - Pointer to a double value receiving coefficient "d" of the matrix.
++//   e            - Pointer to a double value receiving coefficient "e" of the matrix.
++//   f            - Pointer to a double value receiving coefficient "f" of the matrix.
 +FPDF_EXPORT void FPDF_CALLCONV
 +FPDFTextObj_GetMatrix(FPDF_PAGEOBJECT text_object,
 +                      double* a,
 +                      double* b,
 +                      double* c,
-+                      double* d);
++                      double* d,
++                      double* e,
++                      double* f);
 +
 +// Get the unicode of a special character in a text object.
 +//
