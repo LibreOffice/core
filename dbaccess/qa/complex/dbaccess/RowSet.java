@@ -41,7 +41,7 @@ import com.sun.star.uno.UnoRuntime;
 
 import connectivity.tools.CRMDatabase;
 import connectivity.tools.DataSource;
-import connectivity.tools.FirebirdDatabase;
+import connectivity.tools.HsqlDatabase;
 import connectivity.tools.sdb.Connection;
 import java.lang.reflect.Method;
 import java.util.Random;
@@ -59,7 +59,7 @@ public class RowSet extends TestCase
     static final int MAX_FETCH_ROWS = 10;
     private static final String NEXT = "next";
     private static final String TEST21 = "Test21";
-    FirebirdDatabase m_database;
+    HsqlDatabase m_database;
     DataSource m_dataSource;
     XRowSet m_rowSet;
     XResultSet m_resultSet;
@@ -220,10 +220,8 @@ public class RowSet extends TestCase
 
     void createStructure() throws SQLException
     {
-        m_database.executeSQL("EXECUTE BLOCK AS BEGIN"
-               + " if (not exists(select 1 from rdb$relations where rdb$relation_name = '\"TEST1\"')) then"
-               + " execute statement 'CREATE TABLE \"TEST1\" (\"ID\" integer not null primary key, \"col2\" varchar(50) )';"
-               + " END");
+        m_database.executeSQL("DROP TABLE \"TEST1\" IF EXISTS");
+        m_database.executeSQL("CREATE TABLE \"TEST1\" (\"ID\" integer not null primary key, \"col2\" varchar(50) )");
 
         final Connection connection = m_database.defaultConnection();
         final XPreparedStatement prep = connection.prepareStatement("INSERT INTO \"TEST1\" values (?,?)");
@@ -933,12 +931,12 @@ public class RowSet extends TestCase
         // use an own RowSet instance, not the one which is also used for the other cases
 
         testTableParameters();
-        //testParametrizedQuery();
-        //testParametersInFilter();
+        testParametrizedQuery();
+        testParametersInFilter();
 
-        //testParametersAfterNormalExecute();
+        testParametersAfterNormalExecute();
 
-        //testParametersInteraction();
+        testParametersInteraction();
     }
 }
 

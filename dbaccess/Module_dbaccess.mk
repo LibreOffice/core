@@ -48,7 +48,7 @@ $(eval $(call gb_Module_add_check_targets,dbaccess,\
 	CppunitTest_dbaccess_hsqlschema_import \
 ))
 
-ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
+ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Module_add_check_targets,dbaccess,\
     CppunitTest_dbaccess_hsqldb_test \
 	CppunitTest_dbaccess_RowSetClones \
@@ -58,23 +58,20 @@ endif
 # This runs a suite of performance tests on embedded firebird and HSQLDB.
 # Instructions on running the test can be found in qa/unit/embeddedb_performancetest
 ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
+ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Module_add_check_targets,dbaccess,\
     CppunitTest_dbaccess_embeddeddb_performancetest \
 ))
 endif
-
-ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
-$(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
-	JunitTest_dbaccess_complex \
-))
 endif
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
+	JunitTest_dbaccess_complex \
     JunitTest_dbaccess_unoapi \
 ))
 
 ifneq ($(DISABLE_PYTHON),TRUE)
-ifneq ($(ENABLE_FIREBIRD_SDBC),)
+ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
 	PythonTest_dbaccess_python \
 ))
