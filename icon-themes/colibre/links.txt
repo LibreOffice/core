@@ -732,6 +732,24 @@ cmd/lc_rulerrows.png cmd/lc_extrusiontiltleft.png
 cmd/sc_rulerrowsvertical.png cmd/sc_extrusiontiltright.png
 cmd/sc_rulerrows.png cmd/sc_extrusiontiltleft.png
 
+# Light
+svx/res/lightofffrombottom_22.png svx/res/light.png
+svx/res/lightofffrombottomleft_22.png svx/res/light.png
+svx/res/lightofffrombottomright_22.png svx/res/light.png
+svx/res/lightofffromleft_22.png svx/res/light.png
+svx/res/lightofffromright_22.png svx/res/light.png
+svx/res/lightofffromtop_22.png svx/res/light.png
+svx/res/lightofffromtopleft_22.png svx/res/light.png
+svx/res/lightofffromtopright_22.png svx/res/light.png
+svx/res/lightonfrombottom_22.png svx/res/lighton.png
+svx/res/lightonfrombottomleft_22.png svx/res/lighton.png
+svx/res/lightonfrombottomright_22.png svx/res/lighton.png
+svx/res/lightonfromleft_22.png svx/res/lighton.png
+svx/res/lightonfromright_22.png svx/res/lighton.png
+svx/res/lightonfromtop_22.png svx/res/lighton.png
+svx/res/lightonfromtopleft_22.png svx/res/lighton.png
+svx/res/lightonfromtopright_22.png svx/res/lighton.png
+
 # Presentation
 cmd/lc_diaauto.png cmd/lc_dia.png
 cmd/sc_diaauto.png cmd/sc_dia.png
