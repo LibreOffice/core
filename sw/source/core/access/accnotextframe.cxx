@@ -60,11 +60,12 @@ SwAccessibleNoTextFrame::SwAccessibleNoTextFrame(
         sal_Int16 nInitRole,
         const SwFlyFrame* pFlyFrame  ) :
     SwAccessibleFrameBase( pInitMap, nInitRole, pFlyFrame ),
-    m_aDepend( this, const_cast < SwNoTextNode * >( GetNoTextNode() ) ),
+    m_aListener(*this),
     msTitle(),
     msDesc()
 {
     const SwNoTextNode* pNd = GetNoTextNode();
+    m_aListener.StartListening(const_cast<SwNoTextNode*>(pNd));
     // #i73249#
     // consider new attributes Title and Description
     if( pNd )
@@ -102,7 +103,7 @@ void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem
         return;
 
     const SwNoTextNode *pNd = GetNoTextNode();
-    OSL_ENSURE( pNd == m_aDepend.GetRegisteredIn(), "invalid frame" );
+    assert( m_aListener.IsListeningTo(pNd) && "invalid frame" );
     switch( nWhich )
     {
         // #i73249#
@@ -163,7 +164,7 @@ void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem
 void SwAccessibleNoTextFrame::Dispose(bool bRecursive, bool bCanSkipInvisible)
 {
     SolarMutexGuard aGuard;
-    m_aDepend.EndListeningAll();
+    m_aListener.EndListeningAll();
     SwAccessibleFrameBase::Dispose(bRecursive, bCanSkipInvisible);
 }
 
