@@ -71,6 +71,6 @@ public class LocalDocumentsDirectoryProvider extends LocalDocumentsProvider {
     @Override
     public boolean checkProviderAvailability(Context context) {
         File documentsDirectory = getDocumentsDir();
-        return documentsDirectory.exists() || ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        return documentsDirectory.exists() && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 }

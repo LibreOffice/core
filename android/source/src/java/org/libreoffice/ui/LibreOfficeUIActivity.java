@@ -65,6 +65,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.libreoffice.AboutDialogFragment;
+import org.libreoffice.LOKitShell;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
 import org.libreoffice.SettingsActivity;
@@ -95,7 +96,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     private int sortMode;
     private boolean showHiddenFiles;
     // dynamic permissions IDs
-    private static int PERMISSION_READ_EXTERNAL_STORAGE = 0;
+    private static final int PERMISSION_READ_EXTERNAL_STORAGE = 0;
 
     FileFilter fileFilter;
     FilenameFilter filenameFilter;
@@ -166,16 +167,15 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         registerReceiver(mUSBReceiver, filter);
         // init UI and populate with contents from the provider
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: remove local document providers if really is denied, code right now assumes it is granted/
-            // there is no onRequestPermissionsResult evaluating the callback
-            // without the read permissions, LO could only load documents passed via intent from other apps
             Log.i(LOGTAG, "no permission to read external storage - asking for permission");
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     PERMISSION_READ_EXTERNAL_STORAGE);
+        } else {
+            switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
+            setEditFABVisibility(View.VISIBLE);
         }
 
-        switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
         createUI();
         fabOpenAnimation = AnimationUtils.loadAnimation(this, R.anim.fab_open);
         fabCloseAnimation = AnimationUtils.loadAnimation(this, R.anim.fab_close);
@@ -215,7 +215,8 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         final ArrayList<IFile> recentFiles = new ArrayList<IFile>();
         for (String recentFileString : recentFileStrings) {
             try {
-                recentFiles.add(documentProvider.createFromUri(this, new URI(recentFileString)));
+                if(documentProvider != null)
+                    recentFiles.add(documentProvider.createFromUri(this, new URI(recentFileString)));
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             } catch (RuntimeException e){
@@ -347,7 +348,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
     private void refreshView() {
         // enable home icon as "up" if required
-        if (!currentDirectory.equals(homeDirectory)) {
+        if (currentDirectory != null && homeDirectory != null && !currentDirectory.equals(homeDirectory)) {
             drawerToggle.setDrawerIndicatorEnabled(false);
         } else {
             drawerToggle.setDrawerIndicatorEnabled(true);
@@ -371,7 +372,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             if (isFabMenuOpen) {
                 collapseFabMenu();
             }
-        } else if (!currentDirectory.equals(homeDirectory)) {
+        } else if (currentDirectory != null && homeDirectory != null && !currentDirectory.equals(homeDirectory)) {
             // navigate upwards in directory hierarchy
             openParentDirectory();
         } else if (isFabMenuOpen) {
@@ -864,13 +865,18 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     protected void onSaveInstanceState(Bundle outState) {
         // TODO Auto-generated method stub
         super.onSaveInstanceState(outState);
-        outState.putString(CURRENT_DIRECTORY_KEY, currentDirectory.getUri().toString());
+
+        if(currentDirectory != null) {
+            outState.putString(CURRENT_DIRECTORY_KEY, currentDirectory.getUri().toString());
+            Log.d(LOGTAG, currentDirectory.toString() + Integer.toString(filterMode) + Integer.toString(viewMode));
+        }
         outState.putInt(FILTER_MODE_KEY, filterMode);
         outState.putInt(EXPLORER_VIEW_TYPE_KEY , viewMode);
-        outState.putInt(DOC_PROVIDER_KEY, documentProvider.getId());
+        if(documentProvider != null)
+            outState.putInt(DOC_PROVIDER_KEY, documentProvider.getId());
+
         outState.putBoolean(ENABLE_SHOW_HIDDEN_FILES_KEY , showHiddenFiles);
 
-        Log.d(LOGTAG, currentDirectory.toString() + Integer.toString(filterMode) + Integer.toString(viewMode));
         //prefs.edit().putInt(EXPLORER_VIEW_TYPE, viewType).commit();
         Log.d(LOGTAG, "savedInstanceState");
     }
@@ -1163,6 +1169,31 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                     fileDateView = itemView.findViewById(R.id.file_item_date);
                 }
             }
+        }
+    }
+
+    private void setEditFABVisibility(final int visibility){
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                editFAB.setVisibility(visibility);
+            }
+        });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch(requestCode){
+            case PERMISSION_READ_EXTERNAL_STORAGE:
+                if(permissions.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
+                    setEditFABVisibility(View.VISIBLE);
+                } else {
+                    setEditFABVisibility(View.INVISIBLE);
+                }
+                break;
+                default:
+                    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 }
