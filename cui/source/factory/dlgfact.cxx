@@ -171,7 +171,11 @@ short AbstractInsertObjectDialog_Impl::Execute()
 
 IMPL_ABSTDLG_BASE(AbstractLinksDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSpellDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractSvxPostItDialog_Impl);
+
+short AbstractSvxPostItDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractPasswordToOpenModifyDialog_Impl::Execute()
 {
@@ -783,63 +787,75 @@ void AbstractSvxAreaTabDialog_Impl::SetText( const OUString& rStr )
 
 void AbstractSvxPostItDialog_Impl::SetText( const OUString& rStr )
 {
-    pDlg->SetText( rStr );
+    m_xDlg->set_title(rStr);
 }
+
 const SfxItemSet* AbstractSvxPostItDialog_Impl::GetOutputItemSet() const
 {
-    return pDlg->GetOutputItemSet();
+    return m_xDlg->GetOutputItemSet();
 }
+
 void AbstractSvxPostItDialog_Impl::EnableTravel(bool bNext, bool bPrev)
 {
-    pDlg->EnableTravel( bNext, bPrev );
+    m_xDlg->EnableTravel( bNext, bPrev );
 }
+
 OUString AbstractSvxPostItDialog_Impl::GetNote()
 {
-    return pDlg->GetNote();
+    return m_xDlg->GetNote();
 }
+
 void AbstractSvxPostItDialog_Impl::SetNote(const OUString& rTxt)
 {
-    pDlg->SetNote( rTxt );
+    m_xDlg->SetNote( rTxt );
 }
+
 void AbstractSvxPostItDialog_Impl::ShowLastAuthor(const OUString& rAuthor, const OUString& rDate)
 {
-    pDlg->ShowLastAuthor( rAuthor, rDate );
+    m_xDlg->ShowLastAuthor( rAuthor, rDate );
 }
+
 void AbstractSvxPostItDialog_Impl::DontChangeAuthor()
 {
-    pDlg->DontChangeAuthor();
+    m_xDlg->DontChangeAuthor();
 }
+
 void AbstractSvxPostItDialog_Impl::HideAuthor()
 {
-    pDlg->HideAuthor();
+    m_xDlg->HideAuthor();
 }
+
 void AbstractSvxPostItDialog_Impl::SetNextHdl( const Link<AbstractSvxPostItDialog&,void>& rLink )
 {
     aNextHdl = rLink;
     if( rLink.IsSet() )
-        pDlg->SetNextHdl( LINK(this, AbstractSvxPostItDialog_Impl, NextHdl ) );
+        m_xDlg->SetNextHdl( LINK(this, AbstractSvxPostItDialog_Impl, NextHdl ) );
     else
-        pDlg->SetNextHdl( Link<SvxPostItDialog&,void>() );
+        m_xDlg->SetNextHdl( Link<SvxPostItDialog&,void>() );
 }
+
 void AbstractSvxPostItDialog_Impl::SetPrevHdl( const Link<AbstractSvxPostItDialog&,void>& rLink )
 {
     aPrevHdl = rLink;
     if( rLink.IsSet() )
-        pDlg->SetPrevHdl( LINK(this, AbstractSvxPostItDialog_Impl, PrevHdl ) );
+        m_xDlg->SetPrevHdl( LINK(this, AbstractSvxPostItDialog_Impl, PrevHdl ) );
     else
-        pDlg->SetPrevHdl( Link<SvxPostItDialog&,void>() );
+        m_xDlg->SetPrevHdl( Link<SvxPostItDialog&,void>() );
 }
+
 IMPL_LINK_NOARG(AbstractSvxPostItDialog_Impl, NextHdl, SvxPostItDialog&, void)
 {
     aNextHdl.Call(*this);
 }
+
 IMPL_LINK_NOARG(AbstractSvxPostItDialog_Impl, PrevHdl, SvxPostItDialog&, void)
 {
     aPrevHdl.Call(*this);
 }
-vcl::Window * AbstractSvxPostItDialog_Impl::GetWindow()
+
+std::shared_ptr<weld::Dialog> AbstractSvxPostItDialog_Impl::GetDialog()
 {
-    return static_cast<vcl::Window *>(pDlg);
+    return m_xDlg->GetDialog();
 }
 
 OUString AbstractPasswordToOpenModifyDialog_Impl::GetPasswordToOpen() const
@@ -1308,12 +1324,11 @@ VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog( vcl::Wind
     return nullptr;
 }
 
-VclPtr<AbstractSvxPostItDialog> AbstractDialogFactory_Impl::CreateSvxPostItDialog( vcl::Window* pParent,
+VclPtr<AbstractSvxPostItDialog> AbstractDialogFactory_Impl::CreateSvxPostItDialog( weld::Window* pParent,
                                                                         const SfxItemSet& rCoreSet,
                                                                         bool bPrevNext )
 {
-    VclPtrInstance<SvxPostItDialog> pDlg( pParent, rCoreSet, bPrevNext );
-    return VclPtr<AbstractSvxPostItDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractSvxPostItDialog_Impl>::Create(new SvxPostItDialog(pParent, rCoreSet, bPrevNext));
 }
 
 class SvxMacroAssignDialog : public VclAbstractDialog

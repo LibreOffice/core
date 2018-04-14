@@ -1088,7 +1088,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
                         rRedline.GetRedlineData().GetTimeStamp() ),
                         SID_ATTR_POSTIT_DATE ));
 
-            ScopedVclPtr<AbstractSvxPostItDialog> pDlg(pFact->CreateSvxPostItDialog( m_pParentDlg, aSet ));
+            ScopedVclPtr<AbstractSvxPostItDialog> pDlg(pFact->CreateSvxPostItDialog(m_pParentDlg->GetFrameWeld(), aSet));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
 
             pDlg->HideAuthor();
@@ -1116,7 +1116,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
                 sTitle += SwResId(pResId);
             pDlg->SetText(sTitle);
 
-            SwViewShell::SetCareWin(pDlg->GetWindow());
+            SwViewShell::SetCareDialog(pDlg->GetDialog());
 
             if ( pDlg->Execute() == RET_OK )
             {
@@ -1129,7 +1129,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
             }
 
             pDlg.disposeAndClear();
-            SwViewShell::SetCareWin(nullptr);
+            SwViewShell::SetCareDialog(nullptr);
         }
     }
     else if (nRet)
