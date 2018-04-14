@@ -1932,7 +1932,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if (bImport)
         {
             uno::Sequence< beans::PropertyValues > aHandles( nNumElem );
-            for ( sal_uInt16 i = 0; i < nNumElem; i++ )
+            for (sal_uInt32 i = 0; i < nNumElem; ++i)
             {
                 PropVec aHandlePropVec;
                 sal_uInt32 nFlagsTmp(0);
@@ -1987,7 +1987,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     if ( nCenterY == 2 )
                         nCenterY = nCoordHeight / 2;
                     if ( ( nPositionY >= 0x256 ) || ( nPositionY <= 0x107 ) )   // position y
-                        nAdjustmentsWhichNeedsToBeConverted |= ( 1 << i );
+                        nAdjustmentsWhichNeedsToBeConverted |= ( 1U << i );
                     EnhancedCustomShapeParameterPair aPolar;
                     EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPolar.First,  nCenterX, bool( nFlags & SvxMSDffHandleFlags::CENTER_X_IS_SPECIAL ), true  );
                     EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPolar.Second, nCenterY, bool( nFlags & SvxMSDffHandleFlags::CENTER_Y_IS_SPECIAL ), false );
@@ -2104,14 +2104,14 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( rObjData.eShapeType );
         if ( pDefCustomShape && pDefCustomShape->nHandles && pDefCustomShape->pHandles )
         {
-            sal_Int32 i, nCnt = pDefCustomShape->nHandles;
+            sal_uInt32 i, nCnt = pDefCustomShape->nHandles;
             const SvxMSDffHandle* pData = pDefCustomShape->pHandles;
             for ( i = 0; i < nCnt; i++, pData++ )
             {
                 if ( pData->nFlags & SvxMSDffHandleFlags::POLAR )
                 {
                     if ( ( pData->nPositionY >= 0x256 ) || ( pData->nPositionY <= 0x107 ) )
-                        nAdjustmentsWhichNeedsToBeConverted |= ( 1 << i );
+                        nAdjustmentsWhichNeedsToBeConverted |= ( 1U << i );
                 }
             }
         }
