@@ -140,7 +140,7 @@ void GraphicObject::ImplAssignGraphicData()
     mnSizeBytes = maGraphic.GetSizeBytes();
     meType = maGraphic.GetType();
     mbTransparent = maGraphic.IsTransparent();
-    mbAlpha = maGraphic.IsAlpha();
+    // mbAlpha = maGraphic.IsAlpha();
     mbAnimated = maGraphic.IsAnimated();
     mbEPS = maGraphic.IsEPS();
     mnAnimationLoopCount = ( mbAnimated ? maGraphic.GetAnimationLoopCount() : 0 );
@@ -234,7 +234,37 @@ void GraphicObject::ImplAutoSwapIn()
     }
 }
 
-bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
+GraphicType GraphicObject::GetType() const
+{
+    return maGraphic.GetType();
+}
+
+Size GraphicObject::GetPrefSize() const
+{
+    return maGraphic.GetPrefSize();
+}
+
+MapMode GraphicObject::GetPrefMapMode() const
+{
+    return maGraphic.GetPrefMapMode();
+}
+
+bool GraphicObject::IsTransparent() const
+{
+    return maGraphic.IsTransparent();
+}
+
+bool GraphicObject::IsAnimated() const
+{
+    return maGraphic.IsAnimated();
+}
+
+bool GraphicObject::IsEPS() const
+{
+    return maGraphic.IsEPS();
+}
+
+bool GraphicObject::ImplGetCropParams( OutputDevice * pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
                                        tools::PolyPolygon& rClipPolyPoly, bool& bRectClipRegion ) const
 {
     bool bRet = false;
@@ -316,7 +346,6 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
         maAttr = rGraphicObj.maAttr;
         maLink = rGraphicObj.maLink;
         maUserData = rGraphicObj.maUserData;
-        ImplAssignGraphicData();
         mbAutoSwapped = false;
         mpGlobalMgr->ImplRegisterObj( *this, maGraphic, nullptr, &rGraphicObj );
         if( rGraphicObj.HasUserData() && rGraphicObj.IsSwappedOut() )
@@ -633,7 +662,6 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pC
 
     maGraphic = rGraphic;
     mbAutoSwapped = false;
-    ImplAssignGraphicData();
     maLink.clear();
     mxSimpleCache.reset();
 
@@ -920,7 +948,7 @@ Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const /
             if( ( GetType() == GraphicType::Bitmap ) && IsAnimated() )
             {
                 Animation aAnimation( maGraphic.GetAnimation() );
-                aAnimation.SetLoopCount( mnAnimationLoopCount );
+                aAnimation.SetLoopCount(maGraphic.GetAnimationLoopCount());
                 aGraphic = aAnimation;
             }
             else

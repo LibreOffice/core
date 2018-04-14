@@ -186,15 +186,11 @@ void Test::testLinkedGraphicRT()
             {
                 SwGrfNode* pGrfNode = aNodes[nIndex]->GetGrfNode();
                 CPPUNIT_ASSERT(pGrfNode);
-                // RT via DOCX makes linked graphic embedded?!
-                if( aFilterNames[nFilter] != "Office Open XML Text" )
-                {
-                    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pGrfNode->IsGrfLink());
-                }
+
                 const GraphicObject& rGraphicObj = pGrfNode->GetGrfObj(true);
-                CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), !rGraphicObj.IsSwappedOut());
-                CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), int(GraphicType::Bitmap), int(rGraphicObj.GetType()));
-                CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), static_cast<sal_uLong>(864900), rGraphicObj.GetSizeBytes());
+                const Graphic& rGraphic = rGraphicObj.GetGraphic();
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), int(GraphicType::Bitmap), int(rGraphic.GetType()));
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_uLong(864900), rGraphic.GetSizeBytes());
                 bImageFound = true;
             }
         }

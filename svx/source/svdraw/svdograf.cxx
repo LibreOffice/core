@@ -288,7 +288,7 @@ sdr::contact::ViewContact* SdrGrafObj::CreateObjectSpecificViewContact()
 
 void SdrGrafObj::onGraphicChanged()
 {
-    if (!pGraphic || pGraphic->IsSwappedOut()) // don't force swap-in for this
+    if (!pGraphic || !pGraphic->GetGraphic().isAvailable())
         return;
 
     const SvgDataPtr& rSvgDataPtr = pGraphic->GetGraphic().getSvgData();
@@ -552,12 +552,12 @@ bool SdrGrafObj::IsSwappedOut() const
     return mbIsPreview || pGraphic->IsSwappedOut();
 }
 
-const MapMode& SdrGrafObj::GetGrafPrefMapMode() const
+MapMode SdrGrafObj::GetGrafPrefMapMode() const
 {
     return pGraphic->GetPrefMapMode();
 }
 
-const Size& SdrGrafObj::GetGrafPrefSize() const
+Size SdrGrafObj::GetGrafPrefSize() const
 {
     return pGraphic->GetPrefSize();
 }
@@ -1338,7 +1338,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, const GraphicObject*, pO, SvStream* )
 
     if( pO->IsInSwapOut() )
     {
-        if( pModel && !mbIsPreview && pModel->IsSwapGraphics() && pGraphic->GetSizeBytes() > 20480 )
+        if( pModel && !mbIsPreview && pModel->IsSwapGraphics() && pGraphic->GetGraphic().GetSizeBytes() > 20480 )
         {
             // test if this object is visualized from someone
             // ## test only if there are VOCs other than the preview renderer
