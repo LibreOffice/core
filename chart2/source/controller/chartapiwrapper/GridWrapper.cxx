@@ -27,6 +27,7 @@
 #include <UserDefinedProperties.hxx>
 #include <WrappedDefaultProperty.hxx>
 
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <algorithm>
 #include <rtl/ustrbuf.hxx>

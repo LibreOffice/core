@@ -21,7 +21,6 @@
 
 #include "charttoolsdllapi.hxx"
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/uno3.hxx>
 #include <com/sun/star/chart2/XColorScheme.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

@@ -17,7 +17,6 @@
 #include <vcl/tabctrl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>

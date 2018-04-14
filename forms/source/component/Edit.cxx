@@ -38,9 +38,6 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <comphelper/container.hxx>
-#include <comphelper/numbers.hxx>
-
 using namespace dbtools;
 
 namespace frm

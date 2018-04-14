@@ -33,7 +33,6 @@
 #include <com/sun/star/ucb/OpenCommandArgument.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
-#include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <ucbhelper/content.hxx>
 #include <strings.hrc>

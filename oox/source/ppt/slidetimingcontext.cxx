@@ -19,7 +19,6 @@
 
 #include <oox/ppt/slidetimingcontext.hxx>
 
-#include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/drawing/XShapes.hpp>

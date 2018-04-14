@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/extract.hxx>
 #include "ximp3dobject.hxx"
 #include <xmloff/XMLShapeStyleContext.hxx>
 #include <xmloff/xmluconv.hxx>

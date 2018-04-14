@@ -24,7 +24,6 @@
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/enumhelper.hxx>
-#include <comphelper/extract.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

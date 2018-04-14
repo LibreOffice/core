@@ -32,7 +32,6 @@
 #include <ConnectionLineData.hxx>
 #include <RTableConnectionData.hxx>
 #include <stringconstants.hxx>
-#include <comphelper/extract.hxx>
 #include <UITools.hxx>
 
 using namespace ::dbaui;

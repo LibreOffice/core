@@ -33,7 +33,6 @@
 #include <svtools/fmtfield.hxx>
 
 
-#include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/awt/XItemEventBroadcaster.hpp>
 

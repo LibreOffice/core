@@ -107,7 +107,6 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <editeng/unolingu.hxx>
 #include <vcl/scheduler.hxx>

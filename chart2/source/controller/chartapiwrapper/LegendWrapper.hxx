@@ -22,7 +22,6 @@
 #include <WrappedPropertySet.hxx>
 #include "ReferenceSizePropertyProvider.hxx"
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/uno3.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

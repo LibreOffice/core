@@ -36,6 +36,7 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 

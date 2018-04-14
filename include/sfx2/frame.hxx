@@ -26,7 +26,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <vcl/vclptr.hxx>
-#include <comphelper/namedvaluecollection.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
 #include <tools/ref.hxx>

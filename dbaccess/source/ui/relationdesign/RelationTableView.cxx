@@ -19,7 +19,6 @@
 
 #include <RelationTableView.hxx>
 #include <JoinExchange.hxx>
-#include <comphelper/extract.hxx>
 #include <core_resource.hxx>
 #include <browserids.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>

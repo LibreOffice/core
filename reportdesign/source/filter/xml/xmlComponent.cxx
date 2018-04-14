@@ -27,7 +27,6 @@
 #include <strings.hxx>
 #include "xmlStyleImport.hxx"
 #include <ucbhelper/content.hxx>
-#include <comphelper/namecontainer.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

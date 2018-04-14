@@ -30,7 +30,6 @@
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <comphelper/namecontainer.hxx>
 #include <comphelper/propertysequence.hxx>
 
 namespace dbaxml

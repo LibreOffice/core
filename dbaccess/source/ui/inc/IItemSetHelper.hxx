@@ -21,7 +21,6 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_IITEMSETHELPER_HXX
 
 #include <sal/types.h>
-#include <comphelper/uno3.hxx>
 #include <dsntypes.hxx>
 
 namespace com { namespace sun { namespace star {

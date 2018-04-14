@@ -30,7 +30,6 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <unotools/eventlisteneradapter.hxx>
-#include <comphelper/uno3.hxx>
 
 #include <memory>
 

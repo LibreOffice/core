@@ -102,7 +102,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/date.hxx>
 #include <i18nlangtag/lang.h>
-#include <comphelper/extract.hxx>
 #include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;

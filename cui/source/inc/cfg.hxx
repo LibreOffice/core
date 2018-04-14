@@ -32,7 +32,6 @@
 #include <svtools/svmedit2.hxx>
 #include <svtools/svmedit.hxx>
 
-#include <comphelper/documentinfo.hxx>
 #include <comphelper/random.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>

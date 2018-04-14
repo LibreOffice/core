@@ -64,7 +64,6 @@
 #include <facreg.hxx>
 #include <xexptran.hxx>
 
-#include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <PropertySetMerger.hxx>

@@ -22,7 +22,6 @@
 #include <comphelper/types.hxx>
 #include <stringconstants.hxx>
 #include <connectivity/dbtools.hxx>
-#include <comphelper/extract.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>

@@ -19,7 +19,6 @@
 
 #include <oox/ppt/timenodelistcontext.hxx>
 
-#include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/math.hxx>
 

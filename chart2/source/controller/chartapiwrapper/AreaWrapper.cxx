@@ -21,6 +21,7 @@
 #include "Chart2ModelContact.hxx"
 #include <WrappedDirectStateProperty.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <LinePropertiesHelper.hxx>

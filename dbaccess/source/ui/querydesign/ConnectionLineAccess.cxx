@@ -25,7 +25,6 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <TableConnection.hxx>
 #include <TableWindow.hxx>
-#include <comphelper/uno3.hxx>
 #include <JoinDesignView.hxx>
 #include <JoinController.hxx>
 #include <comphelper/sequence.hxx>

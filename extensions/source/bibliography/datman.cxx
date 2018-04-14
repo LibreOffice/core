@@ -48,7 +48,6 @@
 #include <com/sun/star/io/XDataInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <comphelper/container.hxx>
 #include <svl/urihelper.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>

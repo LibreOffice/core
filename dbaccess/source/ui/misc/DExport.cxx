@@ -41,7 +41,6 @@
 #include <sfx2/sfxhtml.hxx>
 #include <svl/numuno.hxx>
 #include <connectivity/dbtools.hxx>
-#include <comphelper/extract.hxx>
 #include <TypeInfo.hxx>
 #include <FieldDescriptions.hxx>
 #include <UITools.hxx>

@@ -25,7 +25,6 @@
 #include <sqlbison.hxx>
 #include <QueryTableView.hxx>
 #include <browserids.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>

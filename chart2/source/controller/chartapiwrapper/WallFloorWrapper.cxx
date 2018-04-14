@@ -19,6 +19,7 @@
 
 #include "WallFloorWrapper.hxx"
 #include "Chart2ModelContact.hxx"
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>

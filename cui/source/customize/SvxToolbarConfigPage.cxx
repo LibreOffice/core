@@ -61,7 +61,6 @@
 #include "eventdlg.hxx"
 #include <dialmgr.hxx>
 
-#include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <unotools/configmgr.hxx>

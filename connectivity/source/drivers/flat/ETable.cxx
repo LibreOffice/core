@@ -28,7 +28,6 @@
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>

@@ -37,7 +37,6 @@
 #include <svx/svdotable.hxx>
 #include <editeng/unolingu.hxx>
 #include <svx/svditer.hxx>
-#include <comphelper/extract.hxx>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <editeng/forbiddencharacterstable.hxx>

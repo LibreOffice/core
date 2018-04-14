@@ -22,7 +22,6 @@
 #include <dbu_reghelper.hxx>
 #include <unoadmin.hxx>
 #include <dbadmin.hxx>
-#include <comphelper/extract.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
 

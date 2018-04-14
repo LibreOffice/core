@@ -28,8 +28,6 @@
 #include <svx/unoprov.hxx>
 #include <editeng/unotext.hxx>
 
-#include <comphelper/extract.hxx>
-
 #include <unoprnms.hxx>
 #include <unosrch.hxx>
 

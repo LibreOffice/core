@@ -29,8 +29,6 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 
-#include <comphelper/enumhelper.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>

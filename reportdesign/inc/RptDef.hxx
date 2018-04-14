@@ -27,7 +27,6 @@
 
 #include "dllapi.h"
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <comphelper/uno3.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdobj.hxx>
 

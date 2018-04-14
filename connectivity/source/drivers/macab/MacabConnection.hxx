@@ -27,7 +27,6 @@
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <TConnection.hxx>
 

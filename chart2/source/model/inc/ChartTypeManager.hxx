@@ -22,7 +22,6 @@
 #include <OPropertySet.hxx>
 #include <MutexContainer.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/uno3.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

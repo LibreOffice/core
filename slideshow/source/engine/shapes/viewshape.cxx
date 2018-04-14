@@ -30,7 +30,6 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
-#include <comphelper/anytostring.hxx>
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/numeric/ftools.hxx>

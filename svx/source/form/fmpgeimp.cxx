@@ -43,7 +43,6 @@
 #include <vcl/stdtext.hxx>
 #include <svx/dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/uno3.hxx>
 #include <comphelper/types.hxx>
 #include <unotools/streamwrap.hxx>
 #include <connectivity/dbtools.hxx>

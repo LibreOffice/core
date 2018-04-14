@@ -18,6 +18,8 @@
  */
 
 #include <comphelper/interaction.hxx>
+
+#include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 
 

@@ -39,7 +39,6 @@
 #include <bookmarkcontainer.hxx>
 #include <rtl/ref.hxx>
 #include <connectivity/CommonTools.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>

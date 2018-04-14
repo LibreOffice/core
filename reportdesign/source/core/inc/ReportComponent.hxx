@@ -30,7 +30,6 @@
 #include <com/sun/star/report/XReportComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/weakref.hxx>
-#include <comphelper/uno3.hxx>
 
 namespace reportdesign
 {

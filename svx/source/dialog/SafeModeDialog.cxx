@@ -15,7 +15,6 @@
 #include <sfx2/safemode.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ZipPackageHelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>

@@ -34,7 +34,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <comphelper/uno3.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/sdbcx/XRename.hpp>

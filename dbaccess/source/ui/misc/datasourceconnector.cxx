@@ -29,7 +29,6 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <osl/thread.h>
-#include <comphelper/extract.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>

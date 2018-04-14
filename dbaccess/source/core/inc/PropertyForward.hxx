@@ -25,7 +25,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <comphelper/broadcasthelper.hxx>
 
 #include <vector>
 

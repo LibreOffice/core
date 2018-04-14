@@ -24,7 +24,6 @@
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include "NPreparedStatement.hxx"
 #include "NStatement.hxx"
-#include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/sequence.hxx>
 #include <rtl/ustring.hxx>

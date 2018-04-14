@@ -20,7 +20,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <sfx2/charwin.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/app.hxx>

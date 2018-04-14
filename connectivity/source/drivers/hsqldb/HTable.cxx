@@ -29,7 +29,6 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <comphelper/property.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>

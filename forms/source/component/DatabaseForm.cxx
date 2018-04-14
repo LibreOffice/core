@@ -55,8 +55,6 @@
 #include <com/sun/star/util/XModifiable2.hpp>
 
 #include <comphelper/basicio.hxx>
-#include <comphelper/container.hxx>
-#include <comphelper/enumhelper.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbtools.hxx>

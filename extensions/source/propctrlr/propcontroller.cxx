@@ -38,7 +38,6 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/types.hxx>
-#include <comphelper/extract.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/property.hxx>

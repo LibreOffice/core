@@ -19,7 +19,6 @@
 
 #include <oox/ppt/soundactioncontext.hxx>
 
-#include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <oox/helper/attributelist.hxx>

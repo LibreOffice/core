@@ -27,7 +27,6 @@
 #include <vcl/group.hxx>
 #include <TableGrantCtrl.hxx>
 #include "adminpages.hxx"
-#include <comphelper/uno3.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace sdbc {

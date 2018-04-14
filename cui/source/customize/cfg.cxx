@@ -95,6 +95,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
+#include <comphelper/documentinfo.hxx>
 #include <comphelper/propertysequence.hxx>
 
 #include <dlgname.hxx>

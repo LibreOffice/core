@@ -35,7 +35,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbhelper.hxx>
-#include <comphelper/anytostring.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <xmlscript/xml_helper.hxx>
 #include <comphelper/lok.hxx>

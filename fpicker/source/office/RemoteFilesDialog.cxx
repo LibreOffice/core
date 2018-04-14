@@ -10,6 +10,7 @@
 #include "RemoteFilesDialog.hxx"
 #include <fpsofficeResMgr.hxx>
 #include <strings.hrc>
+#include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/stillreadwriteinteraction.hxx>
 #include <bitmaps.hlst>
 

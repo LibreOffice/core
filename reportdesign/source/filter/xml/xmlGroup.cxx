@@ -27,7 +27,6 @@
 #include "xmlHelper.hxx"
 #include "xmlEnums.hxx"
 #include <ucbhelper/content.hxx>
-#include <comphelper/namecontainer.hxx>
 #include <com/sun/star/report/GroupOn.hpp>
 #include <com/sun/star/report/KeepTogether.hpp>
 

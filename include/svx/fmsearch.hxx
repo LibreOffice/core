@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_FMSEARCH_HXX
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include <comphelper/uno3.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/button.hxx>

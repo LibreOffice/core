@@ -54,7 +54,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <comphelper/extract.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/javainteractionhandler.hxx>
 #include <uno/current_context.hxx>

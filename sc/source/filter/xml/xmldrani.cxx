@@ -45,7 +45,6 @@
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/sheet/DataImportMode.hpp>
-#include <comphelper/extract.hxx>
 
 #include <memory>
 

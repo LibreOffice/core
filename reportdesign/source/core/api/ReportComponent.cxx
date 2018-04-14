@@ -30,6 +30,7 @@
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <comphelper/uno3.hxx>
 #include <editeng/unolingu.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/lingucfg.hxx>

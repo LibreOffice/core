@@ -27,7 +27,6 @@
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <hsqldb/HCatalog.hxx>
-#include <comphelper/extract.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/interfacecontainer.h>

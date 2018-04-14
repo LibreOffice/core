@@ -23,7 +23,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <ado/AColumns.hxx>
-#include <comphelper/extract.hxx>
 #include <TConnection.hxx>
 #include <comphelper/types.hxx>
 

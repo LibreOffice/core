@@ -33,7 +33,6 @@
 #include <ConnectionLineData.hxx>
 #include <TableConnectionData.hxx>
 #include <stringconstants.hxx>
-#include <comphelper/extract.hxx>
 #include <UITools.hxx>
 #include <vcl/settings.hxx>
 

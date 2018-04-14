@@ -26,7 +26,6 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <basegfx/vector/b2isize.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/uno3.hxx>
 #include <canvas/base/basemutexhelper.hxx>
 #include <canvas/base/integerbitmapbase.hxx>
 

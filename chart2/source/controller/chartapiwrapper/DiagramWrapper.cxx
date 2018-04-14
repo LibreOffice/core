@@ -46,6 +46,7 @@
 #include "WrappedAutomaticPositionProperties.hxx"
 #include <CommonConverters.hxx>
 #include <unonames.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>

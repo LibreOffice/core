@@ -28,7 +28,6 @@
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <cppuhelper/queryinterface.hxx>
-#include <comphelper/anytostring.hxx>
 
 #include "vbawsfunction.hxx"
 #include <compiler.hxx>

@@ -28,8 +28,6 @@
 
 #include <osl/diagnose.h>
 #include <cppuhelper/typeprovider.hxx>
-#include <comphelper/enumhelper.hxx>
-#include <comphelper/container.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/util/XRefreshListener.hpp>

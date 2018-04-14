@@ -45,7 +45,6 @@
 #include <vcl/settings.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/configuration.hxx>
 
 #include <bordertest.hxx>
 

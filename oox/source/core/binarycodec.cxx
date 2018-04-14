@@ -25,7 +25,6 @@
 
 #include <osl/diagnose.h>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/docpasswordhelper.hxx>
 
 using namespace ::com::sun::star;
 

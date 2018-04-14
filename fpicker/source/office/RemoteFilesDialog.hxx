@@ -10,8 +10,6 @@
 #ifndef INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX
 #define INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX
 
-#include <comphelper/docpasswordrequest.hxx>
-
 #include <svtools/autocmpledit.hxx>
 #include <svtools/foldertree.hxx>
 #include <svtools/place.hxx>

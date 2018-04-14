@@ -19,6 +19,7 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_FUNCTION_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_FUNCTION_HXX
 
+#include <comphelper/uno3.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <com/sun/star/report/XFunction.hpp>
 #include <cppuhelper/basemutex.hxx>

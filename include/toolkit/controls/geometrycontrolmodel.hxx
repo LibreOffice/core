@@ -21,7 +21,6 @@
 #define INCLUDED_TOOLKIT_CONTROLS_GEOMETRYCONTROLMODEL_HXX
 
 #include <comphelper/broadcasthelper.hxx>
-#include <comphelper/uno3.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>

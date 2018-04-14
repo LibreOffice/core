@@ -36,7 +36,6 @@
 #include <strings.hrc>
 #include <strings.hxx>
 #include <unotools/configmgr.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>

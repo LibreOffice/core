@@ -26,7 +26,6 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <comphelper/extract.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <TConnection.hxx>
 #include <comphelper/types.hxx>

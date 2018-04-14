@@ -23,6 +23,7 @@
 
 #include <sax/tools/documenthandleradapter.hxx>
 
+#include <osl/diagnose.h>
 #include <osl/time.h>
 #include <osl/conditn.hxx>
 #include <rtl/strbuf.hxx>

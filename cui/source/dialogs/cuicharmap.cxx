@@ -35,7 +35,6 @@
 #include <o3tl/make_unique.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>
 
 #include <dialmgr.hxx>

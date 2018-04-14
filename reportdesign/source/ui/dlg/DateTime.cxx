@@ -31,7 +31,6 @@
 #include <com/sun/star/util/XNumberFormatPreviewer.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
-#include <comphelper/numbers.hxx>
 #include <algorithm>
 
 namespace rptui

@@ -31,7 +31,6 @@
 #include <comphelper/make_shared_from_uno.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/servicedecl.hxx>
-#include <comphelper/namecontainer.hxx>
 
 #include <cppcanvas/spritecanvas.hxx>
 #include <cppcanvas/vclfactory.hxx>

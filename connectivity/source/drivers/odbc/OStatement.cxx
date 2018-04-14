@@ -32,7 +32,6 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <algorithm>
 #include <strings.hrc>

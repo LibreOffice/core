@@ -51,7 +51,6 @@
 
 #include <basic/basmgr.hxx>
 #include <comphelper/enumhelper.hxx>
-#include <comphelper/evtlistenerhlp.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>

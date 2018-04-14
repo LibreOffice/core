@@ -24,7 +24,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <cppuhelper/queryinterface.hxx>
-#include <comphelper/extract.hxx>
 #include <stringconstants.hxx>
 #include <dbu_reghelper.hxx>
 #include <comphelper/property.hxx>

@@ -74,6 +74,7 @@
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
+#include <comphelper/processfactory.hxx>
 #include <o3tl/numeric.hxx>
 #include <o3tl/make_unique.hxx>
 #include <sfx2/objsh.hxx>

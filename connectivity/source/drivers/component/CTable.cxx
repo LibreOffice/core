@@ -43,7 +43,6 @@
 #include <comphelper/sequence.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
-#include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <comphelper/types.hxx>

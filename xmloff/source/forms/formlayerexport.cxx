@@ -25,7 +25,6 @@
 #include "layerexport.hxx"
 #include "propertyexport.hxx"
 #include <osl/diagnose.h>
-#include <comphelper/extract.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "officeforms.hxx"
 

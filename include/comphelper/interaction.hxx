@@ -20,7 +20,6 @@
 #ifndef INCLUDED_COMPHELPER_INTERACTION_HXX
 #define INCLUDED_COMPHELPER_INTERACTION_HXX
 
-#include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionDisapprove.hpp>

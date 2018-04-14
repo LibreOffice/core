@@ -44,7 +44,6 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 
-#include <comphelper/container.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>

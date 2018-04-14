@@ -55,8 +55,8 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/types.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/uno3.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <connectivity/DriversConfig.hxx>
 #include <dsntypes.hxx>

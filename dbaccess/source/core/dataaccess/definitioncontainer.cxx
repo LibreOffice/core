@@ -28,7 +28,6 @@
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/enumhelper.hxx>
-#include <comphelper/extract.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

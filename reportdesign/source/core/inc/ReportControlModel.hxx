@@ -28,7 +28,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <comphelper/uno3.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 
 

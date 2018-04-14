@@ -49,9 +49,7 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
 #include <comphelper/documentinfo.hxx>
-#include <comphelper/uno3.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
 

@@ -37,7 +37,6 @@
 #include <querycontroller.hxx>
 #include <stringconstants.hxx>
 #include <bitmaps.hlst>
-#include <comphelper/extract.hxx>
 #include <UITools.hxx>
 #include <TableWindowAccess.hxx>
 #include <browserids.hxx>

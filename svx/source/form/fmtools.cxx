@@ -62,13 +62,10 @@
 #include <basic/sbxvar.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <comphelper/container.hxx>
-#include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
-#include <comphelper/uno3.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/typeprovider.hxx>

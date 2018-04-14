@@ -22,7 +22,6 @@
 #include <connectivity/ConnectionWrapper.hxx>
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <comphelper/types.hxx>
-#include <comphelper/uno3.hxx>
 #include <cppuhelper/component.hxx>
 
 using namespace ::com::sun::star::uno;

@@ -43,7 +43,6 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <comphelper/extract.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/packages/WrongPasswordException.hpp>

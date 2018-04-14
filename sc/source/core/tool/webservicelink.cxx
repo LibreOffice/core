@@ -8,6 +8,7 @@
  */
 
 #include <comphelper/fileformat.h>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <osl/thread.h>
 #include <sfx2/linkmgr.hxx>

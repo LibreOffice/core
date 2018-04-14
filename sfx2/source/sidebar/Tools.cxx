@@ -22,7 +22,6 @@
 #include <sfx2/sidebar/Theme.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/namedvaluecollection.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/gradient.hxx>
 

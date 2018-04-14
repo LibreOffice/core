@@ -22,7 +22,6 @@
 
 #include <sfx2/basedlgs.hxx>
 #include "IItemSetHelper.hxx"
-#include <comphelper/uno3.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <memory>

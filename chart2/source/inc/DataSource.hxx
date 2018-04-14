@@ -24,7 +24,6 @@
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/uno3.hxx>
 
 namespace chart
 {

@@ -31,7 +31,6 @@
 #include <sal/log.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <ucbhelper/content.hxx>
-#include <comphelper/anytostring.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/sequence.hxx>
 #include <xmlscript/xml_helper.hxx>

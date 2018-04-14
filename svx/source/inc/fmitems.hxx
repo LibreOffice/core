@@ -21,7 +21,6 @@
 
 
 #include <svl/poolitem.hxx>
-#include <comphelper/uno3.hxx>
 
 
 class FmInterfaceItem : public SfxPoolItem

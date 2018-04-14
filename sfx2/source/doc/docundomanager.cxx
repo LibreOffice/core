@@ -25,7 +25,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <comphelper/anytostring.hxx>
 #include <comphelper/flagguard.hxx>
 #include <svl/undo.hxx>
 #include <tools/diagnose_ex.h>
