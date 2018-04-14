@@ -25,6 +25,7 @@ namespace dbahsql
 {
 void AlterStmtParser::parse(const OUString& sSql)
 {
+    m_sStmt = sSql;
     if (!sSql.startsWith("ALTER"))
     {
         SAL_WARN("dbaccess", "Not an ALTER statement");
@@ -35,11 +36,17 @@ void AlterStmtParser::parse(const OUString& sSql)
     auto words = comphelper::string::split(sSql, sal_Unicode(u' '));
 
     if (words[3] == "ALTER" && words[4] == "COLUMN")
-        m_sColumnName = words[5];
-    if (words[6] == "RESTART" && words[7] == "WITH")
     {
-        m_eAction = AlterAction::IDENTITY_RESTART;
-        m_nIdentityParam = words[8].toInt32();
+        m_sColumnName = words[5];
+        if (words[6] == "RESTART" && words[7] == "WITH")
+        {
+            m_eAction = AlterAction::IDENTITY_RESTART;
+            m_nIdentityParam = words[8].toInt32();
+        }
+    }
+    else if (words[3] == "ADD" && words[4] == "CONSTRAINT")
+    {
+        m_eAction = AlterAction::ADD_FOREIGN;
     }
 }
 
