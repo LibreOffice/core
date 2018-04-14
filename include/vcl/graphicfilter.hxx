@@ -98,6 +98,7 @@ namespace o3tl
 #define WMF_SHORTNAME           "WMF"
 #define EMF_SHORTNAME           "EMF"
 #define SVG_SHORTNAME           "SVG"
+#define PDF_SHORTNAME           "PDF"
 
 //  Info class for all supported file formats
 
@@ -288,6 +289,8 @@ public:
                                    sal_uInt16 * pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                    css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
                                    WmfExternal const *pExtHeader = nullptr );
+
+    Graphic ImportUnloadedGraphic(SvStream& rIStream);
 
     const FilterErrorEx&    GetLastError() const { return *pErrorEx;}
     void                    ResetLastError();
