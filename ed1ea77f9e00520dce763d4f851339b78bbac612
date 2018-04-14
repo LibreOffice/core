@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_9536be01",
+        "filename": "drawinglayer/source/tools/emfppath.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1001502
+      },
+      "writtenOn": "2018-04-14T13:55:40Z",
+      "side": 1,
+      "message": "same as in 6.0 branch, can you adjust the comment?",
+      "revId": "ed1ea77f9e00520dce763d4f851339b78bbac612",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
