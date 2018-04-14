@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_d55f5670",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Addons.xcs",
+        "patchSetId": 4
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-04-14T05:55:46Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it be \"It\"?\nIndeed, beginning a sentence with \"And\" is not very expected",
+      "range": {
+        "startLine": 186,
+        "startChar": 75,
+        "endLine": 186,
+        "endChar": 78
+      },
+      "revId": "e77f582e81ace5b4f2166e60d37fc0806b631e47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
