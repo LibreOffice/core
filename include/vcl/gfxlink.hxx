@@ -64,17 +64,17 @@ private:
 
     };
 
-    GfxLinkType     meType = GfxLinkType::NONE;
-    sal_uInt32      mnUserId = 0;
+    GfxLinkType     meType;
+    sal_uInt32      mnUserId;
 
     std::shared_ptr<sal_uInt8> mpSwapInData;
     std::shared_ptr<SwapOutData> mpSwapOutData;
 
-    sal_uInt32      mnSwapInDataSize = 0;
+    sal_uInt32      mnSwapInDataSize;
     MapMode         maPrefMapMode;
     Size            maPrefSize;
-    bool            mbPrefMapModeValid = false;
-    bool            mbPrefSizeValid = false;
+    bool            mbPrefMapModeValid;
+    bool            mbPrefSizeValid;
 
     SAL_DLLPRIVATE std::shared_ptr<sal_uInt8> GetSwapInData() const;
 public:

@@ -24,21 +24,28 @@
 #include <vcl/graph.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <memory>
 #include <o3tl/make_shared.hxx>
 
 GfxLink::GfxLink()
+    : meType(GfxLinkType::NONE)
+    , mnUserId(0)
+    , mnSwapInDataSize(0)
+    , mbPrefMapModeValid(false)
+    , mbPrefSizeValid(false)
 {
 }
 
-GfxLink::GfxLink( std::unique_ptr<sal_uInt8[]> pBuf, sal_uInt32 nSize, GfxLinkType nType )
+GfxLink::GfxLink(std::unique_ptr<sal_uInt8[]> pBuf, sal_uInt32 nSize, GfxLinkType nType)
+    : meType(nType)
+    , mnUserId(0)
+    , mpSwapInData(std::shared_ptr<sal_uInt8>(pBuf.release(), pBuf.get_deleter())) // std::move(pBuf) does not compile on Jenkins MacOSX (24 May 2016)
+    , mnSwapInDataSize(nSize)
+    , mbPrefMapModeValid(false)
+    , mbPrefSizeValid(false)
 {
-    SAL_WARN_IF( pBuf == nullptr || !nSize, "vcl",
-                "GfxLink::GfxLink(): empty/NULL buffer given" );
-
-    meType = nType;
-    mnSwapInDataSize = nSize;
-    mpSwapInData = std::shared_ptr<sal_uInt8>(pBuf.release(), pBuf.get_deleter());  // std::move(pBuf) does not compile on Jenkins MacOSX (24 May 2016)
+    SAL_WARN_IF(mpSwapInData.get() == nullptr || mnSwapInDataSize <= 0, "vcl", "GfxLink::GfxLink(): empty/NULL buffer given");
 }
 
 bool GfxLink::operator==( const GfxLink& rGfxLink ) const
@@ -98,31 +105,33 @@ bool GfxLink::LoadNative( Graphic& rGraphic )
     if( IsNative() && mnSwapInDataSize )
     {
         const sal_uInt8* pData = GetData();
-
-        if( pData )
+        if (pData)
         {
-            SvMemoryStream    aMemStm;
-            ConvertDataFormat nCvtType;
+            SvMemoryStream aMemoryStream(const_cast<sal_uInt8*>(pData), mnSwapInDataSize, StreamMode::READ | StreamMode::WRITE);
+            OUString aShortName;
 
-            aMemStm.SetBuffer( const_cast<sal_uInt8*>(pData), mnSwapInDataSize, mnSwapInDataSize );
-
-            switch( meType )
+            switch (meType)
             {
-                case GfxLinkType::NativeGif: nCvtType = ConvertDataFormat::GIF; break;
-                case GfxLinkType::NativeBmp: nCvtType = ConvertDataFormat::BMP; break;
-                case GfxLinkType::NativeJpg: nCvtType = ConvertDataFormat::JPG; break;
-                case GfxLinkType::NativePng: nCvtType = ConvertDataFormat::PNG; break;
-                case GfxLinkType::NativeTif: nCvtType = ConvertDataFormat::TIF; break;
-                case GfxLinkType::NativeWmf: nCvtType = ConvertDataFormat::WMF; break;
-                case GfxLinkType::NativeMet: nCvtType = ConvertDataFormat::MET; break;
-                case GfxLinkType::NativePct: nCvtType = ConvertDataFormat::PCT; break;
-                case GfxLinkType::NativeSvg: nCvtType = ConvertDataFormat::SVG; break;
-
-                default: nCvtType = ConvertDataFormat::Unknown; break;
+                case GfxLinkType::NativeGif: aShortName = GIF_SHORTNAME; break;
+                case GfxLinkType::NativeJpg: aShortName = JPG_SHORTNAME; break;
+                case GfxLinkType::NativePng: aShortName = PNG_SHORTNAME; break;
+                case GfxLinkType::NativeTif: aShortName = TIF_SHORTNAME; break;
+                case GfxLinkType::NativeWmf: aShortName = WMF_SHORTNAME; break;
+                case GfxLinkType::NativeMet: aShortName = MET_SHORTNAME; break;
+                case GfxLinkType::NativePct: aShortName = PCT_SHORTNAME; break;
+                case GfxLinkType::NativeSvg: aShortName = SVG_SHORTNAME; break;
+                case GfxLinkType::NativeBmp: aShortName = BMP_SHORTNAME; break;
+                case GfxLinkType::NativePdf: aShortName = PDF_SHORTNAME; break;
+                default: break;
             }
-
-            if( nCvtType != ConvertDataFormat::Unknown && ( GraphicConverter::Import( aMemStm, rGraphic, nCvtType ) == ERRCODE_NONE ) )
-                bRet = true;
+            if (!aShortName.isEmpty())
+            {
+                GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+                sal_uInt16 nFormat = rFilter.GetImportFormatNumberForShortName(aShortName);
+                ErrCode nResult = rFilter.ImportGraphic(rGraphic, OUString(), aMemoryStream, nFormat);
+                if (nResult == ERRCODE_NONE)
+                    bRet = true;
+            }
         }
     }
 

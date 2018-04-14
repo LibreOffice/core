@@ -46,6 +46,8 @@ private:
 
     DECL_LINK(SwapOutTimerHandler, Timer*, void);
 
+    static sal_Int64 getGraphicSizeBytes(const ImpGraphic* pImpGraphic);
+
 public:
     static Manager& get();
 
