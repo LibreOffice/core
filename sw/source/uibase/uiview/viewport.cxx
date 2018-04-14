@@ -401,10 +401,22 @@ void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt
     long nDiffY = 0;
 
     vcl::Window* pCareWn = SwViewShell::GetCareWin(GetWrtShell());
-    if ( pCareWn )
+    weld::Dialog* pCareDialog = SwViewShell::GetCareDialog();
+    if (pCareWn || pCareDialog)
     {
-        tools::Rectangle aDlgRect( GetEditWin().PixelToLogic(
-                pCareWn->GetWindowExtentsRelative( &GetEditWin() ) ) );
+        int x, y, width, height;
+        tools::Rectangle aDlgRect;
+        if (pCareWn)
+        {
+            aDlgRect = GetEditWin().PixelToLogic(pCareWn->GetWindowExtentsRelative(&GetEditWin()));
+        }
+        else if (pCareDialog && pCareDialog->get_extents_relative_to(*GetEditWin().GetFrameWeld(), x, y, width, height))
+        {
+            Point aTopLeft(GetEditWin().GetSystemWindow()->OutputToAbsoluteScreenPixel(Point(x, y)));
+            aTopLeft = GetEditWin().AbsoluteScreenToOutputPixel(aTopLeft);
+            aDlgRect = GetEditWin().PixelToLogic(tools::Rectangle(aTopLeft, Size(width, height)));
+        }
+
         // Only if the dialogue is not the VisArea right or left:
         if ( aDlgRect.Left() < m_aVisArea.Right() &&
              aDlgRect.Right() > m_aVisArea.Left() )
@@ -505,7 +517,7 @@ void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt
         aPnt.setX( std::max( (GetLeftMargin( *this ) - lMin) + nLeftOfst, aPnt.X() ) );
     }
     m_aVisArea = aOldVisArea;
-    if( pCareWn )
+    if (pCareWn || pCareDialog)
     {   // If we want to avoid only a dialogue, we do
         // not want to go beyond the end of the document.
         aPnt.setY( SetVScrollMax( aPnt.Y() ) );

@@ -1016,7 +1016,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
                     else
                     {
-                        pDocSh->ExecuteChangeCommentDialog( pAction, GetDialogParent() );
+                        pDocSh->ExecuteChangeCommentDialog(pAction, GetFrameWeld());
                         rReq.Done();
                     }
                 }

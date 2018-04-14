@@ -143,6 +143,8 @@ public:
     virtual OUString get_title() const = 0;
     virtual void set_busy_cursor(bool bBusy) = 0;
     virtual void window_move(int x, int y) = 0;
+    virtual bool get_extents_relative_to(Window& rRelative, int& x, int& y, int& width, int& height)
+        = 0;
 
     virtual css::uno::Reference<css::awt::XWindow> GetXWindow() = 0;
 
@@ -606,9 +608,14 @@ class VCL_DLLPUBLIC TextView : virtual public Container
 public:
     virtual void set_text(const OUString& rText) = 0;
     virtual OUString get_text() const = 0;
-    virtual Selection get_selection() const = 0;
-    virtual void set_selection(const Selection&) = 0;
+    virtual void select_region(int nStartPos, int nEndPos) = 0;
+    virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void set_editable(bool bEditable) = 0;
+    int get_height_rows(int nRows) const
+    {
+        //can improve this if needed
+        return get_text_height() * nRows;
+    }
 };
 
 class VCL_DLLPUBLIC Expander : virtual public Container
@@ -745,7 +752,7 @@ private:
 
 protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Dialog> m_xDialog;
+    std::shared_ptr<weld::Dialog> m_xDialog;
 
 public:
     GenericDialogController(weld::Widget* pParent, const OUString& rUIFile,
