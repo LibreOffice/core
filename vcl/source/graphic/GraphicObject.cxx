@@ -303,27 +303,17 @@ struct GrfSimpleCacheObj
 
 GraphicObject::GraphicObject()
 {
-    ImplAssignGraphicData();
 }
 
 GraphicObject::GraphicObject(const Graphic& rGraphic)
     : maGraphic(rGraphic)
 {
-    ImplAssignGraphicData();
 }
 
 GraphicObject::GraphicObject(const GraphicObject& rGraphicObj)
     : maGraphic(rGraphicObj.GetGraphic())
     , maAttr(rGraphicObj.maAttr)
-    , maPrefSize(rGraphicObj.maPrefSize)
-    , maPrefMapMode(rGraphicObj.maPrefMapMode)
-    , mnSizeBytes(rGraphicObj.mnSizeBytes)
-    , meType(rGraphicObj.meType)
     , maUserData(rGraphicObj.maUserData)
-    , mnAnimationLoopCount(rGraphicObj.mnAnimationLoopCount)
-    , mbTransparent(rGraphicObj.mbTransparent)
-    , mbAnimated(rGraphicObj.mbAnimated)
-    , mbEPS(rGraphicObj.mbEPS)
 {
 }
 
@@ -331,16 +321,34 @@ GraphicObject::~GraphicObject()
 {
 }
 
-void GraphicObject::ImplAssignGraphicData()
+GraphicType GraphicObject::GetType() const
 {
-    maPrefSize = maGraphic.GetPrefSize();
-    maPrefMapMode = maGraphic.GetPrefMapMode();
-    mnSizeBytes = maGraphic.GetSizeBytes();
-    meType = maGraphic.GetType();
-    mbTransparent = maGraphic.IsTransparent();
-    mbAnimated = maGraphic.IsAnimated();
-    mbEPS = maGraphic.IsEPS();
-    mnAnimationLoopCount = ( mbAnimated ? maGraphic.GetAnimationLoopCount() : 0 );
+    return maGraphic.GetType();
+}
+
+Size GraphicObject::GetPrefSize() const
+{
+    return maGraphic.GetPrefSize();
+}
+
+MapMode GraphicObject::GetPrefMapMode() const
+{
+    return maGraphic.GetPrefMapMode();
+}
+
+bool GraphicObject::IsTransparent() const
+{
+    return maGraphic.IsTransparent();
+}
+
+bool GraphicObject::IsAnimated() const
+{
+    return maGraphic.IsAnimated();
+}
+
+bool GraphicObject::IsEPS() const
+{
+    return maGraphic.IsEPS();
 }
 
 bool GraphicObject::ImplGetCropParams( OutputDevice const * pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
@@ -420,7 +428,6 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
         maGraphic = rGraphicObj.GetGraphic();
         maAttr = rGraphicObj.maAttr;
         maUserData = rGraphicObj.maUserData;
-        ImplAssignGraphicData();
     }
 
     return *this;
@@ -551,10 +558,9 @@ bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
 
     GetGraphic();
 
-
     const GraphicAttr aAttr( GetAttr() );
 
-    if( mbAnimated )
+    if (IsAnimated())
     {
         Point   aPt( rPt );
         Size    aSz( rSz );
@@ -610,7 +616,6 @@ const Graphic& GraphicObject::GetGraphic() const
 void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* /*pCopyObj*/)
 {
     maGraphic = rGraphic;
-    ImplAssignGraphicData();
 }
 
 void GraphicObject::SetGraphic( const Graphic& rGraphic, const OUString& /*rLink*/ )
@@ -862,7 +867,7 @@ Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const
                 {
                     Animation aAnimation( maGraphic.GetAnimation() );
                     lclImplAdjust( aAnimation, aAttr, GraphicAdjustmentFlags::ALL );
-                    aAnimation.SetLoopCount( mnAnimationLoopCount );
+                    aAnimation.SetLoopCount(maGraphic.GetAnimationLoopCount());
                     aGraphic = aAnimation;
                 }
                 else
@@ -884,7 +889,7 @@ Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const
             if( ( GetType() == GraphicType::Bitmap ) && IsAnimated() )
             {
                 Animation aAnimation( maGraphic.GetAnimation() );
-                aAnimation.SetLoopCount( mnAnimationLoopCount );
+                aAnimation.SetLoopCount(maGraphic.GetAnimationLoopCount());
                 aGraphic = aAnimation;
             }
             else

@@ -172,19 +172,9 @@ class VCL_DLLPUBLIC GraphicObject
 private:
     Graphic                 maGraphic;
     GraphicAttr             maAttr;
-    Size                    maPrefSize;
-    MapMode                 maPrefMapMode;
-    sal_uLong               mnSizeBytes;
-    GraphicType             meType;
     OUString                maUserData;
     std::unique_ptr<GrfSimpleCacheObj> mxSimpleCache;
-    sal_uInt32              mnAnimationLoopCount;
 
-    bool                    mbTransparent   : 1;
-    bool                    mbAnimated      : 1;
-    bool                    mbEPS           : 1;
-
-    void                    VCL_DLLPRIVATE ImplAssignGraphicData();
     bool                    VCL_DLLPRIVATE ImplGetCropParams(
                                 OutputDevice const * pOut,
                                 Point& rPt,
@@ -342,13 +332,12 @@ public:
 
     OString                 GetUniqueID() const;
 
-    GraphicType             GetType() const { return meType; }
-    const Size&             GetPrefSize() const { return maPrefSize; }
-    const MapMode&          GetPrefMapMode() const { return maPrefMapMode; }
-    sal_uLong               GetSizeBytes() const { return mnSizeBytes; }
-    bool                    IsTransparent() const { return mbTransparent; }
-    bool                    IsAnimated() const { return mbAnimated; }
-    bool                    IsEPS() const { return mbEPS; }
+    GraphicType             GetType() const;
+    Size                    GetPrefSize() const;
+    MapMode                 GetPrefMapMode() const;
+    bool                    IsTransparent() const;
+    bool                    IsAnimated() const;
+    bool                    IsEPS() const;
 
     bool                    Draw(
                                 OutputDevice* pOut,

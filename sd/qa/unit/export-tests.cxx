@@ -590,7 +590,7 @@ void SdExportTest::testLinkedGraphicRT()
 
             const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedImportMessage.getStr(), int(GraphicType::Bitmap), int(rGraphicObj.GetGraphic().GetType()));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedImportMessage.getStr(), sal_uLong(864900), rGraphicObj.GetSizeBytes());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedImportMessage.getStr(), sal_uLong(864900), rGraphicObj.GetGraphic().GetSizeBytes());
         }
 
         // Save and reload
@@ -615,7 +615,7 @@ void SdExportTest::testLinkedGraphicRT()
 
             const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
             CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), int(GraphicType::Bitmap), int(rGraphicObj.GetGraphic().GetType()));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), sal_uLong(864900), rGraphicObj.GetSizeBytes());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), sal_uLong(864900), rGraphicObj.GetGraphic().GetSizeBytes());
         }
 
         xDocShRef->DoClose();

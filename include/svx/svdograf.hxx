@@ -156,8 +156,8 @@ public:
     bool IsEPS() const;
     bool IsSwappedOut() const;
 
-    const MapMode&          GetGrafPrefMapMode() const;
-    const Size&             GetGrafPrefSize() const;
+    MapMode          GetGrafPrefMapMode() const;
+    Size             GetGrafPrefSize() const;
 
     void                    SetGrafStreamURL( const OUString& rGraphicStreamURL );
     OUString const &        GetGrafStreamURL() const;

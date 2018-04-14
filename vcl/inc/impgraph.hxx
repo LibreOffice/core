@@ -27,6 +27,13 @@ struct ImpSwapInfo
 {
     MapMode     maPrefMapMode;
     Size        maPrefSize;
+
+    bool mbIsAnimated;
+    bool mbIsEPS;
+    bool mbIsTransparent;
+    bool mbIsAlpha;
+
+    sal_uInt32 mnAnimationLoopCount;
 };
 
 class OutputDevice;
@@ -85,6 +92,7 @@ private:
     GraphicExternalLink          maGraphicExternalLink;
 
     std::chrono::high_resolution_clock::time_point maLastUsed;
+    bool mbPrepared;
 
 public:
     ImpGraphic();
@@ -97,6 +105,8 @@ public:
     ImpGraphic( const Animation& rAnimation );
     ImpGraphic( const GDIMetaFile& rMtf );
     ~ImpGraphic();
+
+    void ImplSetPrepared();
 
 private:
 
@@ -134,6 +144,9 @@ private:
     bool                ImplIsAlpha() const;
     bool                ImplIsAnimated() const;
     bool                ImplIsEPS() const;
+
+    bool isAvailable() const;
+    bool makeAvailable();
 
     Bitmap              ImplGetBitmap(const GraphicConversionParameters& rParameters) const;
     BitmapEx            ImplGetBitmapEx(const GraphicConversionParameters& rParameters) const;
@@ -203,6 +216,8 @@ private:
     void setPdfData(const css::uno::Sequence<sal_Int8>& rPdfData);
 
     bool ensureAvailable () const;
+
+    bool loadPrepared();
 };
 
 #endif // INCLUDED_VCL_INC_IMPGRAPH_HXX
