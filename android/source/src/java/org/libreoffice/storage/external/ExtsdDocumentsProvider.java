@@ -1,8 +1,10 @@
 package org.libreoffice.storage.external;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -160,7 +162,7 @@ public class ExtsdDocumentsProvider implements IExternalDocumentProvider,
         // getExternalStorageState().equals(Environment.MEDIA_MOUNTED) && isExternalStorageRemovable()
         // but they refer to the primary external storage anyway, so what currently is covered by the
         // "LocalDocumentsProvider"
-        return rootPathURI!=null;
+        return rootPathURI!=null && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
     @Override

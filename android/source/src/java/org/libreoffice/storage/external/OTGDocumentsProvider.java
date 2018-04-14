@@ -85,6 +85,6 @@ public class OTGDocumentsProvider implements IExternalDocumentProvider,
     @Override
     public boolean checkProviderAvailability(Context context) {
         // check if system supports USB Host
-        return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_USB_HOST);
+        return rootPathURI.length()>0 && context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_USB_HOST);
     }
 }
