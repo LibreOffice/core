@@ -56,7 +56,10 @@ IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvi
          desktopEnvironment.equalsIgnoreAsciiCase("macosx") ) {
         r = "breeze";
     }
-    else if ( desktopEnvironment.equalsIgnoreAsciiCase("gnome") ) {
+    else
+    if ( desktopEnvironment.equalsIgnoreAsciiCase("gnome") ||
+         desktopEnvironment.equalsIgnoreAsciiCase("mate") ||
+         desktopEnvironment.equalsIgnoreAsciiCase("unity") ) {
         r = "elementary";
     }
     else {
