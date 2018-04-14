@@ -1,0 +1,52 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_ALTERPARSER_HXX
+#define INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_ALTERPARSER_HXX
+
+#include <rtl/ustrbuf.hxx>
+
+namespace dbahsql
+{
+enum class AlterAction
+{
+    UNKNOWN,
+    IDENTITY_RESTART
+};
+
+class SAL_DLLPUBLIC_EXPORT AlterStmtParser
+{
+private:
+    OUString m_sTableName;
+    OUString m_sColumnName;
+    AlterAction m_eAction = AlterAction::UNKNOWN;
+    sal_Int32 m_nIdentityParam = 0;
+
+protected:
+    AlterAction getActionType() const { return m_eAction; }
+    OUString getColumnName() const { return m_sColumnName; }
+    sal_Int32 getIdentityParam() const { return m_nIdentityParam; }
+
+public:
+    virtual ~AlterStmtParser() = default;
+
+    /**
+     * @return name of the table which is to be created.
+     */
+    OUString getTableName() const { return m_sTableName; }
+
+    void parse(const OUString& sSql);
+
+    virtual OUString compose() const = 0;
+};
+}
+
+#endif // INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_ALTERPARSER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

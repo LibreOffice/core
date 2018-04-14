@@ -19,6 +19,7 @@
 
 #include <comphelper/string.hxx>
 #include "createparser.hxx"
+#include "utils.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 
 using namespace ::comphelper;
@@ -26,28 +27,6 @@ using namespace css::sdbc;
 
 namespace
 {
-OUString lcl_getTableName(const OUString& sSql)
-{
-    auto stmtComponents = string::split(sSql, sal_Unicode(u' '));
-    assert(stmtComponents.size() > 2);
-    auto wordIter = stmtComponents.begin();
-
-    if (*wordIter == "CREATE")
-        ++wordIter;
-    if (*wordIter == "CACHED")
-        ++wordIter;
-    if (*wordIter == "TABLE")
-        ++wordIter;
-
-    // next word is the table's name
-    // it might stuck together with the column definitions.
-    sal_Int32 nParenPos = wordIter->indexOf("(");
-    if (nParenPos > 0)
-        return wordIter->copy(0, nParenPos);
-    else
-        return *wordIter;
-}
-
 /// Returns substring of sSql from the first occurrence of '(' until the
 /// last occurrence of ')' (excluding the parenthesis)
 OUString lcl_getColumnPart(const OUString& sSql)
@@ -225,7 +204,7 @@ void CreateStmtParser::parse(const OUString& sSql)
         return;
     }
 
-    m_sTableName = lcl_getTableName(sSql);
+    m_sTableName = utils::getTableNameFromStmt(sSql);
     OUString sColumnPart = lcl_getColumnPart(sSql);
     parseColumnPart(sColumnPart);
 }
