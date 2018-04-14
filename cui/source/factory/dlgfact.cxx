@@ -898,7 +898,7 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateVclDialog( vcl::Wind
     return nullptr;
 }
 
-VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateFrameDialog( const Reference< frame::XFrame >& rxFrame,
+VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateFrameDialog(vcl::Window* pParent, const Reference< frame::XFrame >& rxFrame,
     sal_uInt32 nResId, const OUString& rParameter )
 {
     VclPtr<Dialog> pDlg;
@@ -906,7 +906,7 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateFrameDialog( const R
     {
         // only activate last page if we don't want to activate a special page
         bool bActivateLastSelection = ( nResId != SID_OPTIONS_DATABASES && rParameter.isEmpty() );
-        VclPtrInstance<OfaTreeOptionsDialog> pOptDlg( nullptr, rxFrame, bActivateLastSelection );
+        VclPtrInstance<OfaTreeOptionsDialog> pOptDlg(pParent, rxFrame, bActivateLastSelection);
         if ( nResId == SID_OPTIONS_DATABASES )
             pOptDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
         else if ( !rParameter.isEmpty() )

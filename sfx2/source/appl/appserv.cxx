@@ -1358,7 +1358,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             if ( pFact )
             {
                 VclPtr<VclAbstractDialog> pDlg =
-                    pFact->CreateFrameDialog( xFrame, rReq.GetSlot(), sPageURL );
+                    pFact->CreateFrameDialog(rReq.GetFrameWindow(), xFrame, rReq.GetSlot(), sPageURL );
                 short nRet = pDlg->Execute();
                 pDlg.disposeAndClear();
                 SfxViewFrame* pView = SfxViewFrame::GetFirst();
