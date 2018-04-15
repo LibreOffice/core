@@ -96,12 +96,13 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     if ( !mbStatus )
         return false;
 
-    bool bPalette(false);
     std::vector<Color> aPalette;
-
     bool bOk = true;
+
     if ( mnDstBitsPerPix <= 8 )     // pallets pictures
     {
+        bool bPalette(false);
+
         if ( mnColorMapType == RAS_COLOR_RAW_MAP )      // RAW color map is skipped
         {
             sal_uLong nCurPos = m_rRAS.Tell();
@@ -144,7 +145,6 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
                 sal_uLong nCount = 255 - ( 255 * i / ( mnDstColors - 1 ) );
                 aPalette[i] = Color(static_cast<sal_uInt8>(nCount), static_cast<sal_uInt8>(nCount), static_cast<sal_uInt8>(nCount));
             }
-            bPalette = true;
         }
     }
     else

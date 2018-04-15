@@ -2841,7 +2841,6 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
     // Header & Footer Styles
     {
         OUString sName;
-        bool bIsPhysical;
         boost::property_tree::ptree aChild;
         boost::property_tree::ptree aChildren;
         const OUString sPageStyles("PageStyles");
@@ -2853,6 +2852,7 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
             uno::Sequence<OUString> aSeqNames = xContainer->getElementNames();
             for (sal_Int32 itName = 0; itName < aSeqNames.getLength(); itName++)
             {
+                bool bIsPhysical;
                 sName = aSeqNames[itName];
                 xProperty.set(xContainer->getByName(sName), uno::UNO_QUERY);
                 if (xProperty.is() && (xProperty->getPropertyValue("IsPhysical") >>= bIsPhysical) && bIsPhysical)
@@ -2861,8 +2861,6 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
                     aChild.put("", sName.toUtf8());
                     aChildren.push_back(std::make_pair("", aChild));
                 }
-                else
-                    bIsPhysical = false;
             }
             aValues.add_child("HeaderFooter", aChildren);
         }
