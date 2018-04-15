@@ -19,12 +19,11 @@
 
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>
+
 #include <o3tl/any.hxx>
 #include <tools/debug.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/stream.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-
 #include <vcl/ImageTree.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
@@ -36,17 +35,16 @@
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 
+#include <image.h>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+
 // BitmapEx::Create
 #include <salbmp.hxx>
 #include <salinst.hxx>
 #include <svdata.hxx>
-#include <BitmapFastScaleFilter.hxx>
-#include <bitmapwriteaccess.hxx>
-#include <image.h>
-
 #include <com/sun/star/beans/XFastPropertySet.hpp>
-
 #include <memory>
+#include <bitmapwriteaccess.hxx>
 
 using namespace ::com::sun::star;
 
@@ -120,7 +118,6 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
         meTransparent    ( !rMask ? TransparentType::NONE : TransparentType::Bitmap ),
         mbAlpha          ( false )
 {
-    SAL_INFO("vcl.gdi", "Bitmap size: " << maBitmapSize);
     // Ensure a mask is exactly one bit deep
     if( !!maMask && maMask.GetBitCount() != 1 )
     {
