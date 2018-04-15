@@ -745,7 +745,8 @@ namespace emfplushelper
         mMFlags(0),
         mMStream(),
         mrTargetHolders(rTargetHolders),
-        mrPropertyHolders(rPropertyHolders)
+        mrPropertyHolders(rPropertyHolders),
+        bIsGetDCProcessing(false)
     {
         rMS.ReadInt32(mnFrameLeft).ReadInt32(mnFrameTop).ReadInt32(mnFrameRight).ReadInt32(mnFrameBottom);
         SAL_INFO("drawinglayer", "EMF+ picture frame: " << mnFrameLeft << "," << mnFrameTop << " - " << mnFrameRight << "," << mnFrameBottom);
@@ -838,6 +839,12 @@ namespace emfplushelper
 
             SAL_INFO("drawinglayer", "EMF+ record size: " << size << " type: " << emfTypeToName(type) << " flags: " << flags << " data size: " << dataSize);
 
+            if (bIsGetDCProcessing)
+            {
+                SAL_INFO("drawinglayer", "EMF+ Resets the current clipping region for the world space to infinity.");
+                wmfemfhelper::HandleNewClipRegion(::basegfx::B2DPolyPolygon(), mrTargetHolders, mrPropertyHolders);
+                bIsGetDCProcessing = false;
+            }
             if (type == EmfPlusRecordTypeObject && ((mbMultipart && (flags & 0x7fff) == (mMFlags & 0x7fff)) || (flags & 0x8000)))
             {
                 if (!mbMultipart)
@@ -912,6 +919,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeGetDC:
                     {
+                        bIsGetDCProcessing = true;
                         SAL_INFO("drawinglayer", "EMF+ GetDC");
                         SAL_INFO("drawinglayer", "EMF+\talready used in svtools wmf/emf filter parser");
                         break;
