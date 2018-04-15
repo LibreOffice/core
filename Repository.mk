@@ -1062,7 +1062,7 @@ $(eval $(call gb_Helper_register_packages_for_install,python, \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,python_scriptprovider, \
-    scriptproviderforpython \
+    scripting_scriptproviderforpython \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,python_librelogo, \
