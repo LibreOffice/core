@@ -2,3 +2,5 @@ Condition	Description
 s255	l255
 65001	LaunchCondition	Condition
 Privileged	OOO_LAUNCH_1
+Installed Or VersionNT > WindowsMinVersionNumber Or (VersionNT = WindowsMinVersionNumber And ServicePackLevel >= WindowsMinSPNumber)	OOO_LAUNCH_2
+Installed Or VersionNT <> 603 Or WIN81S14	OOO_LAUNCH_3

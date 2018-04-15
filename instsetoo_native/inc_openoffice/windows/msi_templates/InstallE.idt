@@ -71,4 +71,3 @@ ValidateProductID		300
 WriteEnvironmentStrings		2500
 WriteIniValues		2450
 WriteRegistryValues		2400
-WrongWindowsVersion	(VersionNT < WindowsMinVersionNumber) OR ((VersionNT = WindowsMinVersionNumber) AND (ServicePackLevel < WindowsMinSPNumber))	10

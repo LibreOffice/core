@@ -17,17 +17,12 @@ $(eval $(call gb_InstallModule_add_defs,scp2/windows,\
 	$(if $(WINDOWS_SDK_HOME),\
 		-DHAVE_WINDOWS_SDK \
 	) \
-	$(if $(MSM_PATH),\
-		-DMSM_PATH \
-	) \
-	$(if $(VCREDIST_DIR),\
-		-DVCREDIST_EXE_NAME="$(VCREDIST_EXE)" \
-	) \
 ))
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/windows,\
     scp2/source/ooo/folder_ooo \
-    scp2/source/ooo/vc_redist \
+    $(if $(MSM_PATH),scp2/source/ooo/vc_redist) \
+    $(if $(UCRT_REDISTDIR),scp2/source/ooo/ucrt) \
     scp2/source/ooo/windowscustomaction_ooo \
 ))
 

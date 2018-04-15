@@ -8,5 +8,9 @@ policy.1.0.cli_oootypes.dll
 policy.1.0.cli_ure.dll
 policy.1.0.cli_cppuhelper.dll
 policy.1.0.cli_basetypes.dll
-vc_redist.x64.exe
-vc_redist.x86.exe
+Windows6.1-KB2999226-x64.msu
+Windows6.1-KB2999226-x86.msu
+Windows8.1-KB2999226-x64.msu
+Windows8.1-KB2999226-x86.msu
+Windows8-RT-KB2999226-x64.msu
+Windows8-RT-KB2999226-x86.msu
