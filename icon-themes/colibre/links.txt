@@ -1399,10 +1399,15 @@ svx/res/convrt3d.png cmd/sc_convertinto3d.png
 svx/res/filter3d.png cmd/sc_datafilterstandardfilter.png
 svx/res/fontworkaligncentered_16.png cmd/sc_alignhorizontalcenter.png
 svx/res/fontworkalignjustified_16.png cmd/sc_alignblock.png
-svx/res/fontworkalignjustified_26.png cmd/lc_alignblock.png
 svx/res/fontworkalignleft_16.png cmd/sc_alignleft.png
 svx/res/fontworkalignright_16.png cmd/sc_alignright.png
 svx/res/fontworkalignstretch_16.png cmd/sc_text_marquee.png
+svx/res/fontworkaligncentered_26.png cmd/lc_alignhorizontalcenter.png
+svx/res/fontworkalignjustified_26.png cmd/lc_alignblock.png
+svx/res/fontworkalignjustified_26.png cmd/lc_alignblock.png
+svx/res/fontworkalignleft_26.png cmd/lc_alignleft.png
+svx/res/fontworkalignright_26.png cmd/lc_alignright.png
+svx/res/fontworkalignstretch_26.png cmd/lc_text_marquee.png
 
 svx/res/fw07.png cmd/sc_alignleft.png
 svx/res/fw08.png cmd/sc_alignhorizontalcenter.png
@@ -1533,6 +1538,7 @@ sw/res/sr20019.png cmd/sc_remove.png
 
 sw/res/sx03.png cmd/sc_dbqueryedit.png
 svx/res/reload.png cmd/sc_reload.png
+svx/res/time.png cmd/sc_timefield.png
 
 # res
 sw/res/all_left.png cmd/sc_firstrecord.png
