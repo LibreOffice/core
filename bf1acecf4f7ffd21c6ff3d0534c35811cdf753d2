@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_1b111d53",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2852,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-15T10:17:59Z",
+      "side": 1,
+      "message": "this can be moved inside the for loop below, and the \n    bIsPhysical \u003d false\ncan be removed",
+      "revId": "bf1acecf4f7ffd21c6ff3d0534c35811cdf753d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
