@@ -1030,7 +1030,7 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
         return;
     }
 
-    const tools::Rectangle aRect = PointsToLogic(left, right, top, bottom);
+    const Rectangle aRect = PointsToLogic(left, right, top, bottom);
 
     const int nChars = FPDFTextObj_CountChars(pPageObject);
     std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nChars + 1]); // + terminating null
@@ -1066,13 +1066,25 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
     dFontSizeV = lcl_ToLogic(dFontSizeV);
     SAL_WARN("sd.filter", "Got Logic Font Size H: " << dFontSizeH << ", V: " << dFontSizeV);
 
-    unsigned int nR, nG, nB, nA;
-    if (FPDFTextObj_GetStrokeColor(pPageObject, &nR, &nG, &nB, &nA))
-        mpVD->SetTextColor(Color(nR, nG, nB));
-
+    const Size aFontSize(dFontSizeH, dFontSizeV);
     vcl::Font aFnt = mpVD->GetFont();
-    aFnt.SetFontSize(Size(dFontSizeH, dFontSizeV));
-    mpVD->SetFont(aFnt);
+    if (aFontSize != aFnt.GetFontSize())
+    {
+        aFnt.SetFontSize(aFontSize);
+        mpVD->SetFont(aFnt);
+        mbFntDirty = true;
+    }
+
+    Color aTextColor(COL_TRANSPARENT);
+    unsigned int nR, nG, nB, nA;
+    if (FPDFTextObj_GetColor(pPageObject, &nR, &nG, &nB, &nA))
+        aTextColor = Color(nR, nG, nB);
+
+    if (aTextColor != mpVD->GetTextColor())
+    {
+        mpVD->SetTextColor(aTextColor);
+        mbFntDirty = true;
+    }
 
     ImportText(aRect.TopLeft(), aRect.GetSize(), sText);
 }
@@ -1375,14 +1387,14 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
 Point ImpSdrPdfImport::PointsToLogic(double x, double y) const
 {
     y = correctVertOrigin(y);
-    SAL_WARN("sd.filter", "Corrected point x: " << x << ", y: " << y);
+    // SAL_WARN("sd.filter", "Corrected point x: " << x << ", y: " << y);
     x = lcl_PointToPixel(x);
     y = lcl_PointToPixel(y);
 
-    SAL_WARN("sd.filter", "Pixel point x: " << x << ", y: " << y);
+    // SAL_WARN("sd.filter", "Pixel point x: " << x << ", y: " << y);
 
     Point aPos(lcl_ToLogic(x), lcl_ToLogic(y));
-    SAL_WARN("sd.filter", "Logical Pos: " << aPos);
+    // SAL_WARN("sd.filter", "Logical Pos: " << aPos);
 
     return aPos;
 }
@@ -1392,24 +1404,20 @@ Rectangle ImpSdrPdfImport::PointsToLogic(double left, double right, double top,
 {
     top = correctVertOrigin(top);
     bottom = correctVertOrigin(bottom);
-    SAL_WARN("sd.filter", "Corrected bounds left: " << left << ", right: " << right
-                                                    << ", top: " << top << ", bottom: " << bottom);
+    // SAL_WARN("sd.filter", "Corrected bounds left: " << left << ", right: " << right
+    //                                                 << ", top: " << top << ", bottom: " << bottom);
     left = lcl_PointToPixel(left);
     right = lcl_PointToPixel(right);
     top = lcl_PointToPixel(top);
     bottom = lcl_PointToPixel(bottom);
-    // if (top > bottom)
-    //     std::swap(top, bottom);
-    // if (left > right)
-    //     std::swap(left, right);
 
-    SAL_WARN("sd.filter", "Pixel bounds left: " << left << ", right: " << right << ", top: " << top
-                                                << ", bottom: " << bottom);
+    // SAL_WARN("sd.filter", "Pixel bounds left: " << left << ", right: " << right << ", top: " << top
+    //                                             << ", bottom: " << bottom);
 
     Point aPos(lcl_ToLogic(left), lcl_ToLogic(top));
     Size aSize(lcl_ToLogic(right - left), lcl_ToLogic(bottom - top));
     Rectangle aRect(aPos, aSize);
-    SAL_WARN("sd.filter", "Logical BBox: " << aRect);
+    // SAL_WARN("sd.filter", "Logical BBox: " << aRect);
 
     return aRect;
 }
