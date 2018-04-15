@@ -235,8 +235,8 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
     tools::Rectangle           aRect = rUsrEvt.GetRect();
     tools::Rectangle           aSlider = aRect;
 
-    long nSliderHeight  = 2 * pDev->GetDPIScaleFactor();
-    long nSnappingHeight = 4 * pDev->GetDPIScaleFactor();
+    long nSliderHeight  = 1 * pDev->GetDPIScaleFactor();
+    long nSnappingHeight = 2 * pDev->GetDPIScaleFactor();
 
     aSlider.AdjustTop((aControlRect.GetHeight() - nSliderHeight)/2 );
     aSlider.SetBottom( aSlider.Top() + nSliderHeight - 1 );
@@ -247,9 +247,15 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
     Color               aOldFillColor = pDev->GetFillColor();
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    pDev->SetLineColor( rStyleSettings.GetShadowColor() );
-    pDev->SetFillColor( rStyleSettings.GetShadowColor() );
+    pDev->SetLineColor( rStyleSettings.GetDarkShadowColor() );
+    pDev->SetFillColor( rStyleSettings.GetDarkShadowColor() );
 
+    // draw slider
+    pDev->DrawRect( aSlider );
+    // shadow
+    pDev->SetLineColor( rStyleSettings.GetShadowColor() );
+    pDev->DrawLine(Point(aSlider.Left()+1,aSlider.Bottom()+1), Point(aSlider.Right()+1,aSlider.Bottom()+1));
+    pDev->SetLineColor( rStyleSettings.GetDarkShadowColor() );
 
     // draw snapping points:
     for ( std::vector< long >::const_iterator aSnappingPointIter = mxImpl->maSnappingPointOffsets.begin(),
@@ -262,9 +268,6 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
         pDev->DrawRect( tools::Rectangle( nSnapPosX - 1, aSlider.Top() - nSnappingHeight,
                     nSnapPosX, aSlider.Bottom() + nSnappingHeight ) );
     }
-
-    // draw slider
-    pDev->DrawRect( aSlider );
 
     // draw slider button
     Point aImagePoint = aRect.TopLeft();
