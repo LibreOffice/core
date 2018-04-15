@@ -346,22 +346,21 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
 
         long nTextHeight = rRenderContext.GetTextHeight();
 
-        long nTextWidth1 = rRenderContext.GetTextWidth(maWelcomeLine1);
-        long nTextWidth2 = rRenderContext.GetTextWidth(maWelcomeLine2);
-
         const Size& rImgSize = maWelcomeImage.GetSizePixel();
         const Size& rSize = GetSizePixel();
 
         const int nX = (rSize.Width() - rImgSize.Width())/2;
-        const int nY = (rSize.Height() - 3 * nTextHeight - rImgSize.Height())/2;
-
+        int nY = (rSize.Height() - 3 * nTextHeight - rImgSize.Height())/2;
         Point aImgPoint(nX, nY);
-        Point aStr1Point((rSize.Width() - nTextWidth1)/2, nY + rImgSize.Height());
-        Point aStr2Point((rSize.Width() - nTextWidth2)/2, nY + rImgSize.Height() + 1.5 * nTextHeight);
-
         rRenderContext.DrawImage(aImgPoint, rImgSize, maWelcomeImage);
-        rRenderContext.DrawText(aStr1Point, maWelcomeLine1);
-        rRenderContext.DrawText(aStr2Point, maWelcomeLine2);
+
+        nY = nY + rImgSize.Height();
+        rRenderContext.DrawText(tools::Rectangle(0, nY, rSize.Width(), nY + nTextHeight),
+                                maWelcomeLine1,
+                                DrawTextFlags::Center);
+        rRenderContext.DrawText(tools::Rectangle(0, nY + 1.5 * nTextHeight, rSize.Width(), rSize.Height()),
+                                maWelcomeLine2,
+                                DrawTextFlags::MultiLine | DrawTextFlags::WordBreak | DrawTextFlags::Center);
 
         rRenderContext.Pop();
     }
