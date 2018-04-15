@@ -40,6 +40,7 @@
     <property name="test.src.dir" location="src/test/java"/>
     <property name="test.build.dir" location="${build.base.dir}/test"/>
     <property name="test.reports.dir" location="${build.base.dir}/test-reports"/>
+    <property name="java.baseline.version" value="1.7"/>
     <property name="jar.dir" location="${WORKDIR}/Ant"/>
 
     <property name="main.debug" value="true"/>
@@ -111,6 +112,8 @@
         <mkdir dir="${main.build.dir}"/>
         <javac srcdir="${main.src.dir}"
                destdir="${main.build.dir}"
+               source="${java.baseline.version}"
+               target="${java.baseline.version}"
                debug="${main.debug}"
                debuglevel="lines,vars,source"
                deprecation="${main.deprecation}"
@@ -144,6 +147,8 @@
         <mkdir dir="${test.build.dir}" unless:set="test.skip"/>
         <javac srcdir="${test.src.dir}"
                destdir="${test.build.dir}"
+               source="${java.baseline.version}"
+               target="${java.baseline.version}"
                debug="${test.debug}"
                debuglevel="lines,vars,source"
                deprecation="${test.deprecation}"
