@@ -2840,7 +2840,6 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
     // Header & Footer Styles
     {
         OUString sName;
-        bool bIsPhysical;
         boost::property_tree::ptree aChild;
         boost::property_tree::ptree aChildren;
         const OUString sPageStyles("PageStyles");
@@ -2849,6 +2848,7 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
 
         if (xStyleFamilies->hasByName(sPageStyles) && (xStyleFamilies->getByName(sPageStyles) >>= xContainer))
         {
+            bool bIsPhysical;
             uno::Sequence<OUString> aSeqNames = xContainer->getElementNames();
             for (sal_Int32 itName = 0; itName < aSeqNames.getLength(); itName++)
             {
