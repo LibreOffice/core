@@ -236,7 +236,7 @@ SetupError	I	PushButton	192	80	66	17	3		OOO_CONTROL_207
 SetupError	N	PushButton	192	80	66	17	3		OOO_CONTROL_208		
 SetupError	O	PushButton	192	80	66	17	3		OOO_CONTROL_209		
 SetupError	R	PushButton	192	80	66	17	3		OOO_CONTROL_210		
-SetupError	WarningIcon	Icon	15	15	24	24	5242881		CautionIco		
+SetupError	ErrorIcon	Icon	15	15	24	24	5242881		CautionIco		
 SetupError	Y	PushButton	192	80	66	17	3		OOO_CONTROL_211		
 SetupInitialization	ActionData	Text	135	125	228	12	65539				
 SetupInitialization	ActionText	Text	135	109	220	36	65539				

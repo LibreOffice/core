@@ -1009,6 +1009,7 @@ sub set_uuid_into_component_table
 # Adding final 64 properties into msi database, if required.
 # RegLocator : +16 in type column to search in 64 bit registry.
 # All conditions: "VersionNT" -> "VersionNT64" (several tables).
+# DrLocator: "SystemFolder" -> "System64Folder"
 # Already done: "+256" in Attributes column of table "Component".
 # Still following: Setting "x64" instead of "Intel" in Summary
 # Information Stream of msi database in "get_template_for_sis".
@@ -1097,6 +1098,34 @@ sub prepare_64bit_database
                     $infoline = "Making idt file 64 bit conform: $fullfilename\n";
                     push(@installer::globals::logfileinfo, $infoline);
                 }
+            }
+        }
+
+        # 3. Replacing all occurrences of "SystemFolder" by "System64Folder" in "DrLocato.idt"
+
+        my $drlocatofilename = $basedir . $installer::globals::separator . "DrLocato.idt";
+        if ( -f $drlocatofilename )
+        {
+            my $saving_required = 0;
+            my $drlocatofile = installer::files::read_file($drlocatofilename);
+
+            for ( my $i = 3; $i <= $#{$drlocatofile}; $i++ )    # ignoring the first three lines
+            {
+                my $oneline = ${$drlocatofile}[$i];
+
+                if ( $oneline =~ /\bSystemFolder\b/ )
+                {
+                    ${$drlocatofile}[$i] =~ s/\bSystemFolder\b/System64Folder/g;
+                    $saving_required = 1;
+                }
+            }
+
+            if ( $saving_required )
+            {
+                # Saving the files
+                installer::files::save_file($drlocatofilename ,$drlocatofile);
+                $infoline = "Making idt file 64 bit conform: $drlocatofilename\n";
+                push(@installer::globals::logfileinfo, $infoline);
             }
         }
     }

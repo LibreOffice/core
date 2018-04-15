@@ -1084,9 +1084,8 @@ sub add_custom_action_to_install_table
 
         my $actionposition = 0;
 
-        if ( $position eq "end" ) { $actionposition = get_last_position_in_sequencetable($installtable) + 25; }
-        elsif ( $position =~ /^\s*behind_/ ) { $actionposition = get_position_in_sequencetable($position, $installtable) + 2; }
-        else { $actionposition = get_position_in_sequencetable($position, $installtable) - 2; }
+        if ( $position =~ /^\s*\d+\s*$/ ) { $actionposition = $position; }    # setting the position directly, number defined in scp2
+        else { $actionposition = "POSITIONTEMPLATE_" . $position; }
 
         my $line = $actionname . "\t" . $actioncondition . "\t" . $actionposition . "\n";
         push(@{$installtable}, $line);
@@ -1128,12 +1127,6 @@ sub add_custom_action_to_install_table
         # then the InstallE.idt.idt or InstallU.idt.idt
 
         $actioncondition =~ s/FEATURETEMPLATE/$feature/g;   # only execute Custom Action, if feature of the file is installed
-
-#       my $actionposition = 0;
-#       if ( $position eq "end" ) { $actionposition = get_last_position_in_sequencetable($installtable) + 25; }
-#       elsif ( $position =~ /^\s*behind_/ ) { $actionposition = get_position_in_sequencetable($position, $installtable) + 2; }
-#       else { $actionposition = get_position_in_sequencetable($position, $installtable) - 2; }
-#       my $line = $actionname . "\t" . $actioncondition . "\t" . $actionposition . "\n";
 
         my $positiontemplate = "";
         if ( $position =~ /^\s*\d+\s*$/ ) { $positiontemplate = $position; }    # setting the position directly, number defined in scp2

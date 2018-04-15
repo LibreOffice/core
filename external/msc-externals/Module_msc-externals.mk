@@ -17,11 +17,11 @@ $(eval $(call gb_Module_add_targets,msc-externals,\
 
 endif
 
-# Install the universal crts and VC runtimes (tdf#108580)
-ifneq ($(VCREDIST_DIR),)
+# Install the universal crts (tdf#108580)
+ifneq ($(UCRT_REDISTDIR),)
 
 $(eval $(call gb_Module_add_targets,msc-externals,\
-	Package_vcredist_exe \
+	Package_ucrt \
 ))
 
 endif
