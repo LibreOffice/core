@@ -45,7 +45,7 @@
     A third possibility is:
 
     - temporarily (!) change the DOCTYPE of your file to read (all on one line)
-      <!DOCTYPE Locale SYSTEM "http://cgit.freedesktop.org/libreoffice/core/plain/i18npool/source/localedata/data/locale.dtd">
+      <!DOCTYPE Locale SYSTEM "https://cgit.freedesktop.org/libreoffice/core/plain/i18npool/source/localedata/data/locale.dtd">
 
     - upload it to the form available at http://www.validome.org/xml/
 

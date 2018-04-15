@@ -17,7 +17,7 @@
   </licenses>
 
   <scm>
-    <url>http://cgit.freedesktop.org/libreoffice/core</url>
+    <url>https://cgit.freedesktop.org/libreoffice/core</url>
     <connection>https://gerrit.libreoffice.org/#/admin/projects/core</connection>
   </scm>
 

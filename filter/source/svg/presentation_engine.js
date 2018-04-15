@@ -1707,7 +1707,7 @@ function configureDetectionTools()
  * files placed under the folder '/slideshow/source' and
  * sub-folders. This got later rebased onto the AL2-licensed versions
  * of those files in early 2013.
- * @source http://cgit.freedesktop.org/libreoffice/core/tree/slideshow/source
+ * @source https://cgit.freedesktop.org/libreoffice/core/tree/slideshow/source
  *
  */
 
@@ -16287,7 +16287,7 @@ ElapsedTime.prototype.getElapsedTimeImpl = function()
  * Several parts of the above code are the result of the porting,
  * started on August 2011, of the C++ code included in the source files
  * placed under the folder '/slideshow/source' and subfolders.
- * @source http://cgit.freedesktop.org/libreoffice/core/tree/slideshow/source
+ * @source https://cgit.freedesktop.org/libreoffice/core/tree/slideshow/source
  *
  */
 
