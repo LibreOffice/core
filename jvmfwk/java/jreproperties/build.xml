@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ ***********************************************************-->
+
+
+<project name="jreproperties" default="main">
+
+    <property file="../../../ant.properties"/>
+    <import file="${SRC_ROOT}/solenv/ant/aoo-ant.xml"/>
+
+    <!-- custom delivery: JREProperties.class must be in ${OUTDIR}/bin and ${OUTDIR}/lib -->
+    <!-- The JAR is irrelevant and only there to make gbuild happy. -->
+
+    <target name="main" depends="jar">
+        <copy file="${main.build.dir}/JREProperties.class"
+            tofile="${OUTDIR}/bin/JREProperties.class"/>
+        <copy file="${main.build.dir}/JREProperties.class"
+            tofile="${OUTDIR}/lib/JREProperties.class"/>
+    </target>
+
+    <target name="clean-delivered-class" extensionOf="pre-clean">
+        <delete file="${OUTDIR}/bin/JREProperties.class"/>
+        <delete file="${OUTDIR}/lib/JREProperties.class"/>
+    </target>
+
+</project>
+

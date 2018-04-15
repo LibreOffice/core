@@ -21,32 +21,11 @@
 
 
 
-PRJ=..$/..$/..
+$(eval $(call gb_Package_Package,jvmfwk_sunjavapluginrc,$(SRCDIR)/jvmfwk/plugins/sunmajor/pluginlib))
 
-PRJNAME=javaldx
-TARGET=javaldx
-TARGETTYPE=CUI
-NO_DEFAULT_STL=TRUE
-LIBTARGET=NO
-ENABLE_EXCEPTIONS=true
+ifeq ($(GUI),WNT)
+$(eval $(call gb_Package_add_file,jvmfwk_sunjavapluginrc,bin/sunjavaplugin.ini,sunjavapluginrc))
+else
+$(eval $(call gb_Package_add_file,jvmfwk_sunjavapluginrc,lib/sunjavapluginrc,sunjavapluginrc))
+endif
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-# --- Files --------------------------------------------------------
-
-.IF "$(OS)" != "MACOSX" && "$(SOLAR_JAVA)" != ""
-
-OBJFILES=$(OBJ)$/javaldx.obj
-
-APP1TARGET=javaldx
-APP1OBJS=$(OBJFILES)
-APP1STDLIBS=$(SALLIB) $(JVMFWKLIB)
-APP1RPATH=UREBIN
-
-.ENDIF
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk

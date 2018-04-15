@@ -21,41 +21,23 @@
 
 
 
-PRJ = ..$/..
-PRJNAME = jvmfwk
-TARGET = vendors_ooo
+$(eval $(call gb_Module_Module,jvmfwk))
 
-.INCLUDE: settings.mk
+$(eval $(call gb_Module_add_targets,jvmfwk,\
+	Ant_jreproperties \
+	Library_jvmfwk \
+	Library_sunjavaplugin \
+	Package_inc \
+	Package_javasettingsunopkginstall \
+	Package_javavendors \
+	Package_jvmfwk3rc \
+	Package_sunjavapluginrc \
+))
 
-.IF "$(SOLAR_JAVA)"==""
-nojava:
-    @echo "Not building jvmfwk  because Java is disabled"
-.ENDIF
+ifeq ($(GUI),UNX)
+$(eval $(call gb_Module_add_targets,jvmfwk,\
+	Executable_javaldx \
+))
+endif
 
-.IF "$(SOLAR_JAVA)"!=""
-$(BIN)$/javavendors.xml: javavendors_unx.xml javavendors_wnt.xml javavendors_macosx.xml javavendors_linux.xml
-.IF "$(GUI)"=="UNX"
-.IF "$(OS)"=="FREEBSD"
-    -$(COPY) javavendors_freebsd.xml $(BIN)$/javavendors.xml
-.ELIF "$(OS)"=="MACOSX"
-    -$(COPY) javavendors_macosx.xml $(BIN)$/javavendors.xml
-.ELIF "$(OS)"=="LINUX"
-    -$(COPY) javavendors_linux.xml $(BIN)$/javavendors.xml
-.ELSE
-    -$(COPY) javavendors_unx.xml $(BIN)$/javavendors.xml
-.ENDIF
-.ELIF "$(GUI)"=="WNT"
-    -$(COPY) javavendors_wnt.xml $(BIN)$/javavendors.xml	
-.ELIF "$(GUI)"=="OS2"
-    -$(COPY) javavendors_os2.xml $(BIN)$/javavendors.xml	
-.ELSE
-    @echo Unsupported platform.
-.ENDIF
-
-.ENDIF          # "$(SOLAR_JAVA)"!=""
-
-
-
-
-.INCLUDE: target.mk
-
+# vim: set noet sw=4 ts=4:

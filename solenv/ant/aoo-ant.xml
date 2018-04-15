@@ -197,7 +197,9 @@
         </jar>
     </target>
 
-    <target name="clean" depends="prepare">
+    <extension-point name="pre-clean" depends="prepare"/>
+
+    <target name="clean" depends="pre-clean">
         <delete dir="${build.base.dir}"/>
         <delete file="${jar.dir}/${jar.name}.jar"/>
     </target>

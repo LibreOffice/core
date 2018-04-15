@@ -63,11 +63,12 @@ gb_COMPILERDEFS := \
 	-DFULL_DESK \
 	-DM1500 \
 
+gb_CPUDEFS := -D$(CPUNAME)
 ifeq ($(CPUNAME),INTEL)
-gb_CPUDEFS := -DINTEL -D_X86_=1
+gb_CPUDEFS += -D_X86_=1
 endif
 ifeq ($(CPUNAME),X86_64)
-gb_CPUDEFS := -DX86_64 -D_AMD64_=1
+gb_CPUDEFS += -D_AMD64_=1
 endif
 
 gb_RCDEFS := \

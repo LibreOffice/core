@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_jvmfwk.hxx"
+#include "precompiled_plugin.hxx"
 
 #include "sunversion.hxx"
 #include "osl/thread.h"

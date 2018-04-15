@@ -51,6 +51,7 @@ $(eval $(call gb_Helper_register_executables,SDK, \
 ))
 
 $(eval $(call gb_Helper_register_executables,UREBIN, \
+    javaldx \
     regmerge \
     regview \
 ))
@@ -179,6 +180,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     jpipe \
     jpipx \
+    sunjavaplugin \
     xmlreader \
 ))
 

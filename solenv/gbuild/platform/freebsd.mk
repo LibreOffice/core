@@ -61,12 +61,9 @@ gb_COMPILERDEFS := \
 	-DHAVE_GCC_VISIBILITY_FEATURE \
 	-DCPPU_ENV=$(COMNAME) \
 
-ifeq ($(CPUNAME),X86_64)
 gb_CPUDEFS := -D$(CPUNAME)
-else ifeq ($(CPUNAME),POWERPC64)
-gb_CPUDEFS := -D$(CPUNAME)
-else
-gb_CPUDEFS := -DX86
+ifeq ($(CPUNAME),INTEL)
+gb_CPUDEFS += -DX86
 endif
 
 gb_CFLAGS := \

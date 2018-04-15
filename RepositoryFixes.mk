@@ -38,6 +38,7 @@ gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salh
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst spell:spell.uno%,spell:libspell.uno%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst store:libuno_store%,store:libstore%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst sunjavaplugin:libsunjavaplugin%,sunjavaplugin:sunjavaplugin%,$(gb_Library_FILENAMES))
 
 gb_Library_FILENAMES := $(patsubst stl:%,stl:libstdc++.so,$(gb_Library_FILENAMES))
 gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
@@ -55,6 +56,7 @@ gb_Library_FILENAMES := $(patsubst reg:libuno_reg%,reg:libreg%,$(gb_Library_FILE
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst spell:spell.uno%,spell:libspell.uno%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst store:libuno_store%,store:libstore%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst sunjavaplugin:libsunjavaplugin%,sunjavaplugin:sunjavaplugin%,$(gb_Library_FILENAMES))
 #$(info libnames: $(gb_Library_FILENAMES))
 
 endif
@@ -70,6 +72,7 @@ gb_Library_FILENAMES := $(patsubst reg:libuno_reg%,reg:libreg%,$(gb_Library_FILE
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst spell:spell.uno%,spell:libspell.uno%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst store:libuno_store%,store:libstore%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst sunjavaplugin:libsunjavaplugin%,sunjavaplugin:sunjavaplugin%,$(gb_Library_FILENAMES))
 
 ifneq ($(MACOSX_DEPLOYMENT_TARGET),10.4) # default to use libc++
 gb_Library_FILENAMES := $(patsubst stl:%,stl:libc++.dylib,$(gb_Library_FILENAMES))
@@ -281,6 +284,7 @@ gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salh
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst spell:spell.uno%,spell:libspell.uno%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst store:libuno_store%,store:libstore%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst sunjavaplugin:libsunjavaplugin%,sunjavaplugin:sunjavaplugin%,$(gb_Library_FILENAMES))
 
 gb_Library_FILENAMES := $(patsubst stl:%,stl:libstdc++.so,$(gb_Library_FILENAMES))
 gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))

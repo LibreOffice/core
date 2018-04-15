@@ -20,24 +20,7 @@
 #**************************************************************
 
 
-PRJ=..
 
-PRJNAME=jvmfwk
-TARGET=inc
+$(eval $(call gb_Package_Package,jvmfwk_javasettingsunopkginstall,$(SRCDIR)/jvmfwk/source))
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-# --- Files --------------------------------------------------------
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-.IF "$(ENABLE_PCH)"!=""
-ALLTAR : \
-    $(SLO)$/precompiled.pch \
-    $(SLO)$/precompiled_ex.pch
-    
-.ENDIF			# "$(ENABLE_PCH)"!=""
-
+$(eval $(call gb_Package_add_file,jvmfwk_javasettingsunopkginstall,bin/javasettingsunopkginstall.xml,javasettingsunopkginstall.xml))
