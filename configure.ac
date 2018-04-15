@@ -6937,6 +6937,21 @@ fi
 AC_SUBST([JITC_PROCESSOR_TYPE])
 
 # Misc Windows Stuff
+AC_ARG_WITH(ucrt-dir,
+    AS_HELP_STRING([--with-ucrt-dir],
+        [path to the directory with the arch-specific MSU packages of the Windows Universal CRT redistributables
+        (MS KB 2999226) for packaging into the installsets (without those the target system needs to install
+        the UCRT or Visual C++ Runtimes manually). The directory must contain the following 6 files:
+            Windows6.1-KB2999226-x64.msu
+            Windows6.1-KB2999226-x86.msu
+            Windows8.1-KB2999226-x64.msu
+            Windows8.1-KB2999226-x86.msu
+            Windows8-RT-KB2999226-x64.msu
+            Windows8-RT-KB2999226-x86.msu
+        A zip archive including those files is available from Microsoft site:
+        https://www.microsoft.com/en-us/download/details.aspx?id=48234]),
+,)
+UCRT_REDISTDIR="$with_ucrt_dir"
 if test $_os = "WINNT" -a "$WITH_MINGW" != yes; then
     find_msvc_x64_dlls
     find_msms
@@ -6944,8 +6959,39 @@ if test $_os = "WINNT" -a "$WITH_MINGW" != yes; then
     MSVC_DLLS="$msvcdlls"
     MSM_PATH="$msmdir"
     SCPDEFS="$SCPDEFS -DWITH_VC${VCVER}_REDIST"
+
+    # MSVC 15.3 changed it to VC141
+    if echo "$MSVC_DLL_PATH" | grep -q "VC141.CRT$"; then
+        SCPDEFS="$SCPDEFS -DWITH_VC141_REDIST"
+    else
+        SCPDEFS="$SCPDEFS -DWITH_VC${VCVER}_REDIST"
+    fi
+    if test "$UCRT_REDISTDIR" = "no"; then
+        dnl explicitly disabled
+        UCRT_REDISTDIR=""
+    else
+        if ! test -f "$UCRT_REDISTDIR/Windows6.1-KB2999226-x64.msu" -a \
+                  -f "$UCRT_REDISTDIR/Windows6.1-KB2999226-x86.msu" -a \
+                  -f "$UCRT_REDISTDIR/Windows8.1-KB2999226-x64.msu" -a \
+                  -f "$UCRT_REDISTDIR/Windows8.1-KB2999226-x86.msu" -a \
+                  -f "$UCRT_REDISTDIR/Windows8-RT-KB2999226-x64.msu" -a \
+                  -f "$UCRT_REDISTDIR/Windows8-RT-KB2999226-x86.msu"; then
+            UCRT_REDISTDIR=""
+            if test -n "$PKGFORMAT"; then
+               for i in $PKGFORMAT; do
+                   case "$i" in
+                   msi)
+                       AC_MSG_WARN([--without-ucrt-dir not specified or MSUs not found - installer will have runtime dependency])
+                       add_warning "--without-ucrt-dir not specified or MSUs not found - installer will have runtime dependency"
+                       ;;
+                   esac
+               done
+            fi
+        fi
+    fi
 fi
 
+AC_SUBST(UCRT_REDISTDIR)
 AC_SUBST(MSVC_DLL_PATH)
 AC_SUBST(MSVC_DLLS)
 AC_SUBST(MSM_PATH)

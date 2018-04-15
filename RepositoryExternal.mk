@@ -3980,4 +3980,8 @@ $(call gb_LinkTarget_set_include,$(1), \
 $(call gb_LinkTarget_use_libraries,$(1),clew)
 endef
 
+$(eval $(call gb_Helper_register_packages_for_install,ucrt_binarytable,\
+	$(if $(UCRT_REDISTDIR),ucrt) \
+))
+
 # vim: set noet sw=4 ts=4:
