@@ -32,6 +32,7 @@
 #include <impoctree.hxx>
 #include <BitmapScaleSuperFilter.hxx>
 #include <BitmapScaleConvolutionFilter.hxx>
+#include <BitmapFastScaleFilter.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <octree.hxx>
 
