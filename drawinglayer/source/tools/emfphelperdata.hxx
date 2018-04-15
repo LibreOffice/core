@@ -171,6 +171,7 @@ namespace emfplushelper
         /// data holders
         wmfemfhelper::TargetHolders&    mrTargetHolders;
         wmfemfhelper::PropertyHolders&  mrPropertyHolders;
+        bool                            isEmfProcessing;
 
         // readers
         void processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_uInt32 dataSize, bool bUseWholeStream = false);

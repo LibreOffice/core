@@ -745,7 +745,8 @@ namespace emfplushelper
         mMFlags(0),
         mMStream(),
         mrTargetHolders(rTargetHolders),
-        mrPropertyHolders(rPropertyHolders)
+        mrPropertyHolders(rPropertyHolders),
+        isEmfProcessing(false)
     {
         rMS.ReadInt32(mnFrameLeft).ReadInt32(mnFrameTop).ReadInt32(mnFrameRight).ReadInt32(mnFrameBottom);
         SAL_INFO("drawinglayer", "EMF+ picture frame: " << mnFrameLeft << "," << mnFrameTop << " - " << mnFrameRight << "," << mnFrameBottom);
@@ -867,6 +868,14 @@ namespace emfplushelper
 
             if (type != EmfPlusRecordTypeObject || !(flags & 0x8000))
             {
+                if (isEmfProcessing)
+                {
+                    SAL_INFO("drawinglayer", "EMF+ Resets the current clipping region for the world space to infinity.");
+                    wmfemfhelper::HandleNewClipRegion(::basegfx::B2DPolyPolygon(), mrTargetHolders, mrPropertyHolders);
+                    isEmfProcessing = false;
+                }
+
+
                 switch (type)
                 {
                     case EmfPlusRecordTypeHeader:
@@ -912,6 +921,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeGetDC:
                     {
+                        isEmfProcessing = true;
                         SAL_INFO("drawinglayer", "EMF+ GetDC");
                         SAL_INFO("drawinglayer", "EMF+\talready used in svtools wmf/emf filter parser");
                         break;
