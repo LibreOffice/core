@@ -79,7 +79,7 @@ function proc_text
     # Headings: == bleh ==
     # Paragraphs: \n\n
     sed -re ' s/\[\[([-_a-zA-Z0-9]+)\]\]/<a href="\1.html">\1<\/a>/g' - \
-        | sed -re ' s/\[git:([^]]+)\]/<a href="http:\/\/cgit.freedesktop.org\/libreoffice\/core\/tree\/\1">\1<\/a>/g' \
+        | sed -re ' s/\[git:([^]]+)\]/<a href="https:\/\/cgit.freedesktop.org\/libreoffice\/core\/tree\/\1">\1<\/a>/g' \
         | sed -re ' s/\[([^]]+)\]/<a href="\1">\1<\/a>/g' \
         | sed -re ' s/====([^=]+)====/<h4>\1<\/h4>/g' \
         | sed -re ' s/===([^=]+)===/<h3>\1<\/h3>/g' \
@@ -110,7 +110,7 @@ for module_name in *; do
             # write detailed module content
             header "$module_name" "<a href=\"index.html\">LibreOffice</a> &raquo; ${module_name}" "$BASE_OUTPUT/${module_name}.html"
             text="<p><b>View module in:</b>"
-            text="${text} &nbsp; <a href=\"http://cgit.freedesktop.org/libreoffice/core/tree/${module_name}\">cgit</a>"
+            text="${text} &nbsp; <a href=\"https://cgit.freedesktop.org/libreoffice/core/tree/${module_name}\">cgit</a>"
             if [ -d ./docs/${module_name} ] ; then
                 text="${text} &nbsp; <a href=\"${module_name}/html/classes.html\">Doxygen</a>"
             fi
@@ -127,7 +127,7 @@ done
 if [ ${#empty_modules[*]} -gt 0 ]; then
     echo -e "<p>&nbsp;</p><p>READMEs were not available for these modules:</p><ul>\n" >> "$BASE_OUTPUT/index.html"
     for module_name in "${empty_modules[@]}"; do
-        echo -e "<li><a href=\"http://cgit.freedesktop.org/libreoffice/core/tree/${module_name}\">${module_name}</a></li>\n" >> "$BASE_OUTPUT/index.html"
+        echo -e "<li><a href=\"https://cgit.freedesktop.org/libreoffice/core/tree/${module_name}\">${module_name}</a></li>\n" >> "$BASE_OUTPUT/index.html"
     done
     echo -e "</ul>\n" >> "$BASE_OUTPUT/index.html"
 fi

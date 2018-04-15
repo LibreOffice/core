@@ -39,7 +39,7 @@ module com { module sun { module star { module i18n {
     respectively localedata*.dll.
 
     <p> For XML locale data files definitions see <a
-    href="http://cgit.freedesktop.org/libreoffice/core/tree/i18npool/source/localedata/data/locale.dtd">
+    href="https://cgit.freedesktop.org/libreoffice/core/tree/i18npool/source/localedata/data/locale.dtd">
     the DTD file</a>. </p>
  */
 
