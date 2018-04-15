@@ -1425,6 +1425,11 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
         {
             //don't call InputChanged for CommandEventId::Swipe
         }
+        else if ( nCommand == CommandEventId::ModKeyChange )
+        {
+            //pass alt press/release to parent impl
+            Window::Command(rCEvt);
+        }
         else
             SC_MOD()->InputChanged( mpEditView.get() );
     }
