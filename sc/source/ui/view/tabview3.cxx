@@ -536,8 +536,6 @@ void ScTabView::SelectionChanged()
     rBindings.Invalidate( FID_INS_CELL );
     rBindings.Invalidate( FID_INS_CELLSDOWN );
     rBindings.Invalidate( FID_INS_CELLSRIGHT );
-    rBindings.Invalidate( SID_ROW_OPERATIONS );
-    rBindings.Invalidate( SID_COLUMN_OPERATIONS );
 
     rBindings.Invalidate( FID_CHG_COMMENT );
 
