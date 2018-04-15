@@ -144,8 +144,9 @@ bool SunVersion::init(const char *szVersion)
                 if ( ! isdigit(*pCur))
                 {
                     //1.4.1_01-, 1.4.1_01a, the numerical part may only be 2 chars.
+                    //1.7.0_161, 1.8.0_162, it's as long as 3 chars in later Java version.
                     int len = pCur - pLast;
-                    if (len > 2)
+                    if (len > 3)
                         return false;
                     //we've got the update: 01, 02 etc
                     strncpy(buf, pLast, len);
