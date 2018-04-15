@@ -221,3 +221,48 @@ WindowsCustomAction gid_Customaction_RegisterSomeExtensions
 End
 
 #endif /* HAVE_WINDOWS_SDK */
+
+#if defined(VCREDIST_EXE_NAME)
+
+/* A deferred not-impersonated action that will call wusa.exe to actually install
+   msu. Since deferred actions don't have access to current DB, the action depends
+   on immediate-executed action inst_ucrt (see below) that precedes it and starts
+   a named pipe to pass the binary.
+*/
+WindowsCustomAction gid_Customaction_inst_msu
+	Name = "inst_msu";
+	Typ = "3073";
+	Source = "inst_msu_msi.dll";
+	Target = "InstallMSU";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed And INST_UCRT", "InstallFiles");
+End
+
+/* An immediately-executed asynchronous action that will run in background until
+   inst_msu will connect to the named pipe that it creates, and then pass over it
+   a binary, which name in binary table is set in INST_UCRT property.
+   To allow it to be terinated on cancel or an error, it also waits for an event
+   which will be signalled by end_inst_ucrt rollback action.
+*/
+WindowsCustomAction gid_Customaction_inst_ucrt
+	Name = "inst_ucrt";
+	Typ = "129";
+	Source = "inst_msu_msi.dll";
+	Target = "InstallUCRT";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed And INST_UCRT", "inst_msu");
+End
+
+/* A rollback action that sets the cancellation event for inst_ucrt and inst_msu.
+   It must precede both, so it would be called if any of them were started.
+*/
+WindowsCustomAction gid_Customaction_end_inst_ucrt
+	Name = "end_inst_ucrt";
+	Typ = "1345";
+	Source = "inst_msu_msi.dll";
+	Target = "EndInstallUCRT";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed", "inst_ucrt");
+End
+
+#endif /* VCREDIST_EXE_NAME */
