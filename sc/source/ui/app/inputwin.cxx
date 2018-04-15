@@ -1425,6 +1425,10 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
         {
             //don't call InputChanged for CommandEventId::Swipe
         }
+        else if ( nCommand == CommandEventId::ModKeyChange )
+        {
+            //don't call InputChanged for CommandEventId::ModKeyChange
+        }
         else
             SC_MOD()->InputChanged( mpEditView.get() );
     }
