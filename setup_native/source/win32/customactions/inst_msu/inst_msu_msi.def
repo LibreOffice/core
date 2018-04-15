@@ -1,0 +1,6 @@
+LIBRARY		"inst_msu_msi.dll"
+EXPORTS
+			UnpackMSUForInstall
+			InstallMSU
+			CleanupMSU
+			CheckWow64
