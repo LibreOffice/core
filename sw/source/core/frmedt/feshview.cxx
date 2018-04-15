@@ -101,6 +101,8 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 
+#include <svx/srchdlg.hxx>
+
 #define SCROLLVAL 75
 
 using namespace com::sun::star;
@@ -1631,7 +1633,10 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
         }
         // unfortunately nothing found
         if( bNext ? (aBestPos.getX() == LONG_MAX) : (aBestPos.getX() == 0) )
+        {
             pBest = pTop;
+            SvxSearchDialogWrapper::SetSearchLabel( bNext ? SearchLabel::EndWrapped : SearchLabel::StartWrapped );
+        }
     }
 
     return pBest;
@@ -1639,10 +1644,15 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
 
 bool SwFEShell::GotoObj( bool bNext, GotoObjFlags eType )
 {
+    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+
     const SdrObject* pBest = GetBestObject( bNext, eType );
 
     if ( !pBest )
+    {
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
         return false;
+    }
 
     const SwVirtFlyDrawObj *pVirtO = dynamic_cast<const SwVirtFlyDrawObj*>(pBest);
     if (pVirtO)
