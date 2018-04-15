@@ -18,17 +18,6 @@
 
 #include "macros.inc"
 
-#if defined(WITH_VC100_REDIST)
-
-MergeModule gid_MergeModule_Microsoft_VC100_CRT_x86
-    Feature = gm_Root;
-    Name = "Microsoft_VC100_CRT_x86.msm";
-    RootDir = "TARGETDIR";
-    ComponentCondition = "VC_REDIST=1";
-End
-
-#endif
-
 #if defined(WITH_VC110_REDIST)
 
 MergeModule gid_MergeModule_Microsoft_VC110_CRT_x86
@@ -77,4 +66,3 @@ MergeModule gid_MergeModule_Microsoft_VC140_CRT_x86
 End
 
 #endif
-

@@ -22,6 +22,7 @@ $(eval $(call gb_InstallModule_add_defs,scp2/windows,\
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/windows,\
     scp2/source/ooo/folder_ooo \
     $(if $(MSM_PATH),scp2/source/ooo/vc_redist) \
+    $(if $(UCRT_REDISTDIR),scp2/source/ooo/ucrt) \
     scp2/source/ooo/windowscustomaction_ooo \
 ))
 

@@ -1,0 +1,154 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "macros.inc"
+
+File gid_File_Windows6_1_KB2999226_x64_msu
+    Name = "Windows6.1-KB2999226-x64.msu";
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
+End
+
+File gid_File_Windows8_RT_KB2999226_x64_msu
+    Name = "Windows8-RT-KB2999226-x64.msu";
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
+End
+
+File gid_File_Windows8_1_KB2999226_x64_msu
+    Name = "Windows8.1-KB2999226-x64.msu";
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
+End
+
+#ifndef WINDOWS_X64
+
+File gid_File_Windows6_1_KB2999226_x86_msu
+    Name = "Windows6.1-KB2999226-x86.msu";
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
+End
+
+File gid_File_Windows8_RT_KB2999226_x86_msu
+    Name = "Windows8-RT-KB2999226-x86.msu";
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
+End
+
+File gid_File_Windows8_1_KB2999226_x86_msu
+    Name = "Windows8.1-KB2999226-x86.msu";
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
+End
+
+#endif /* WINDOWS_X64 */
+
+/* A deferred not-impersonated action that will call wusa.exe to actually install
+   msu. Since deferred actions don't have access to current DB, the action depends
+   on immediate-executed action inst_ucrt (see below) that precedes it, unpacks
+   the binary to a temp file, and sets this action's CustomActionData property.
+*/
+WindowsCustomAction gid_Customaction_inst_msu
+	Name = "inst_msu";
+	Typ = "3073";
+	Source = "inst_msu_msi.dll";
+	Target = "InstallMSU";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed And inst_msu", "InstallFiles");
+End
+
+/* An immediately-executed action that will unpack a binary, which name in binary table is set
+   in "InstMSUBinary" property, to a temporary file, and sets "inst_msu" and "cleanup_msu" props.
+*/
+WindowsCustomAction gid_Customaction_unpack_msu
+	Name = "unpack_msu";
+	Typ = "1";
+	Source = "inst_msu_msi.dll";
+	Target = "UnpackMSUForInstall";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed And InstMSUBinary", "cleanup_msu");
+End
+
+/* A rollback action that removes temp file. It must precede inst_msu.
+*/
+WindowsCustomAction gid_Customaction_cleanup_msu
+	Name = "cleanup_msu";
+	Typ = "1345";
+	Source = "inst_msu_msi.dll";
+	Target = "CleanupMSU";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed And cleanup_msu", "inst_msu");
+End
+
+WindowsCustomAction gid_Customaction_check_win7x64_ucrt
+	Name = "check_win7x64_ucrt";
+	Typ = "51";
+	Source = "InstMSUBinary";
+	Target = "Windows61-KB2999226-x64msu";
+	Inbinarytable = 0;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 601 And VersionNT64 And Not UCRT_DETECTED", "FileCost");
+	Styles = "NO_FILE";
+End
+
+WindowsCustomAction gid_Customaction_check_win8x64_ucrt
+	Name = "check_win8x64_ucrt";
+	Typ = "51";
+	Source = "InstMSUBinary";
+	Target = "Windows8-RT-KB2999226-x64msu";
+	Inbinarytable = 0;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 602 And VersionNT64 And Not UCRT_DETECTED", "check_win7x64_ucrt");
+	Styles = "NO_FILE";
+End
+
+WindowsCustomAction gid_Customaction_check_win81x64_ucrt
+	Name = "check_win81x64_ucrt";
+	Typ = "51";
+	Source = "InstMSUBinary";
+	Target = "Windows81-KB2999226-x64msu";
+	Inbinarytable = 0;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 603 And VersionNT64 And Not UCRT_DETECTED", "check_win8x64_ucrt");
+	Styles = "NO_FILE";
+End
+
+#ifndef WINDOWS_X64
+
+/* 32-bit installer must be prepared to run on both 32- and 64-bit Windows. So, it might need to
+   install either 32-bit or 64-bit UCRT package, depending on OS bitness.
+*/
+
+WindowsCustomAction gid_Customaction_check_win7x32_ucrt
+	Name = "check_win7x32_ucrt";
+	Typ = "51";
+	Source = "InstMSUBinary";
+	Target = "Windows61-KB2999226-x86msu";
+	Inbinarytable = 0;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 601 And Not VersionNT64 And Not UCRT_DETECTED", "check_win81x64_ucrt");
+	Styles = "NO_FILE";
+End
+
+WindowsCustomAction gid_Customaction_check_win8x32_ucrt
+	Name = "check_win8x32_ucrt";
+	Typ = "51";
+	Source = "InstMSUBinary";
+	Target = "Windows8-RT-KB2999226-x86msu";
+	Inbinarytable = 0;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 602 And Not VersionNT64 And Not UCRT_DETECTED", "check_win7x32_ucrt");
+	Styles = "NO_FILE";
+End
+
+WindowsCustomAction gid_Customaction_check_win81x32_ucrt
+	Name = "check_win81x32_ucrt";
+	Typ = "51";
+	Source = "InstMSUBinary";
+	Target = "Windows81-KB2999226-x86msu";
+	Inbinarytable = 0;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 603 And Not VersionNT64 And Not UCRT_DETECTED", "check_win8x32_ucrt");
+	Styles = "NO_FILE";
+End
+
+#endif /* WINDOWS_X64 */
