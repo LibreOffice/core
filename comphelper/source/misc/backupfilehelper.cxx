@@ -1898,10 +1898,9 @@ namespace comphelper
 
     void BackupFileHelper::tryPop()
     {
-        bool bDidPop(false);
-
         if (mbActive)
         {
+            bool bDidPop(false);
             const OUString aPackURL(getPackURL());
 
             // ensure dir and file vectors
@@ -1941,10 +1940,9 @@ namespace comphelper
 
     void BackupFileHelper::tryPopExtensionInfo()
     {
-        bool bDidPop(false);
-
         if (mbActive && mbExtensions)
         {
+            bool bDidPop(false);
             const OUString aPackURL(getPackURL());
 
             bDidPop = tryPop_extensionInfo(aPackURL);
