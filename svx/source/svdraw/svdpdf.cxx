@@ -1358,6 +1358,7 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
     const double dWidth = fabs(sqrt2(a, c) * fWidth);
     SAL_WARN("sd.filter", "Path Stroke Width scaled: " << dWidth);
     mnLineWidth = lcl_ToLogic(lcl_PointToPixel(dWidth));
+    mnLineWidth /= 2;
 
     unsigned int nR;
     unsigned int nG;
