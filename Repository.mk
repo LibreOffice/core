@@ -811,7 +811,7 @@ $(eval $(call gb_Helper_register_packages, \
 	postprocess_registry \
 	readlicense_oo_readmes \
 	setup_native_misc \
-	share \
+	sysui_share \
 	vcl_fontunxpsprint \
 ))
 
