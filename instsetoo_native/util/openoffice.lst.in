@@ -70,7 +70,7 @@ LibreOffice
             PATCHCODEFILE ooo_patchcodes.txt
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL https://www.libreoffice.org/
-            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
+            STARTCENTER_TEMPLREP_URL https://extensions.libreoffice.org/templates/
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
@@ -123,7 +123,7 @@ LibreOfficeDev
             LOCALUSERDIR $ORIGIN/..
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL https://www.libreoffice.org/
-            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
+            STARTCENTER_TEMPLREP_URL https://extensions.libreoffice.org/templates/
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
@@ -165,7 +165,7 @@ LibreOffice_SDK
             DONTUSESTARTMENUFOLDER 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL https://www.libreoffice.org/
-            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
+            STARTCENTER_TEMPLREP_URL https://extensions.libreoffice.org/templates/
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
@@ -211,7 +211,7 @@ LibreOfficeDev_SDK
             DONTUSESTARTMENUFOLDER 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL https://www.libreoffice.org/
-            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
+            STARTCENTER_TEMPLREP_URL https://extensions.libreoffice.org/templates/
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }

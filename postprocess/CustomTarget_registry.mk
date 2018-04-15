@@ -549,7 +549,7 @@ postprocess_main_SED := \
 	-e 's,$${STARTCENTER_ADDFEATURE_URL},http://extensions.libreoffice.org/,g' \
 	-e 's,$${STARTCENTER_INFO_URL},https://www.libreoffice.org/,g' \
 	-e 's,$${STARTCENTER_HIDE_EXTERNAL_LINKS},0,g' \
-	-e 's,$${STARTCENTER_TEMPLREP_URL},http://templates.libreoffice.org/,g' \
+	-e 's,$${STARTCENTER_TEMPLREP_URL},https://extensions.libreoffice.org/templates/,g' \
 	-e 's,$${SYSTEM_LIBEXTTEXTCAT_DATA},$(SYSTEM_LIBEXTTEXTCAT_DATA),g' \
 
 $(call gb_XcdTarget_get_target,main.xcd) \
