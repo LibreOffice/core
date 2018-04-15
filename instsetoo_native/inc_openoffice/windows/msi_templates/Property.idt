@@ -43,7 +43,7 @@ ProgressType3	installs
 Quickstarterlinkname	QUICKSTARTERLINKNAMETEMPLATE
 RebootYesNo	Yes
 ReinstallModeText	omus
-SecureCustomProperties	NEWPRODUCTS;OLDPRODUCTS;VCRUNTIME_DETECTED
+SecureCustomProperties	NEWPRODUCTS;OLDPRODUCTS
 SetupType	Typical
 SELECT_WORD	0
 SELECT_EXCEL	0
