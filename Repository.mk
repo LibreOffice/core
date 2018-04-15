@@ -666,6 +666,7 @@ endif
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooobinarytable, \
 	$(if $(WINDOWS_SDK_HOME),\
 		instooofiltmsi \
+		inst_msu_msi \
 		qslnkmsi \
 		reg4allmsdoc \
 		sdqsmsi \
@@ -834,7 +835,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 		jvmfwk_jreproperties \
 		$(if $(filter MACOSX,$(OS)),bridges_jnilib_java_uno) \
 	) \
-	$(if $(UCRT_REDISTDIR),ucrt) \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,postgresqlsdbc,\

@@ -4086,4 +4086,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
 ))
 endif
 
+$(eval $(call gb_Helper_register_packages_for_install,ucrt_binarytable,\
+	$(if $(UCRT_REDISTDIR),ucrt) \
+))
+
 # vim: set noet sw=4 ts=4:

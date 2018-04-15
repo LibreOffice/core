@@ -9,13 +9,15 @@
 
 $(eval $(call gb_Module_Module,msc-externals))
 
+ifneq ($(BUILD_X64),)
+
 $(eval $(call gb_Module_add_targets,msc-externals,\
 	Package_msvc_dlls \
 ))
 
-# TODO: hackaround to install the universal crts locally (tdf#108580)
-# ideally we can create a chained installer or similar that installs them
-# systemwide using windows update
+endif
+
+# Install the universal crts (tdf#108580)
 ifneq ($(UCRT_REDISTDIR),)
 
 $(eval $(call gb_Module_add_targets,msc-externals,\
