@@ -91,25 +91,30 @@ char const *g_arCollectDirs[] = {
     "jvm/"
 };
 
+struct JavaSearchPathEntry {
+    int searchImmediateContents; // More thorough, too slow for /usr/bin and /usr/lib
+    char const *path;
+};
+
 /* These are directories in which a java installation is
    looked for.
 */
-char const *g_arSearchPaths[] = {
+struct JavaSearchPathEntry g_arSearchPaths[] = {
 #ifdef MACOSX
-    "",
-    "Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin",
-    "System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/"
+    { 0, "" },
+    { 0, "Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin" },
+    { 0, "System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/" },
 #else
-    "",
-    "usr/",
-    "usr/local/",
-    "usr/local/IBMJava2-ppc-142",
-    "usr/local/j2sdk1.3.1",
+    { 0, "" },
+    { 1, "usr/" },
+    { 1, "usr/local/" },
+    { 0, "usr/local/IBMJava2-ppc-142" },
+    { 0, "usr/local/j2sdk1.3.1" },
 #ifdef X86_64
-    "usr/lib64/",
+    { 0, "usr/lib64/" },
 #endif
-    "usr/lib/",
-    "usr/bin/"
+    { 0, "usr/lib/" },
+    { 0, "usr/bin/" }
 #endif
 };
 }
@@ -1148,11 +1153,11 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
         arNames[i] = OUString(g_arJavaNames[i], strlen(g_arJavaNames[i]),
                               RTL_TEXTENCODING_UTF8);
 
-    int cSearchPaths= sizeof(g_arSearchPaths) / sizeof(char*);
+    int cSearchPaths= sizeof(g_arSearchPaths) / sizeof(g_arSearchPaths[0]);
     boost::scoped_array<OUString> sarPathNames(new OUString[cSearchPaths]);
     OUString *arPaths = sarPathNames.get();
     for(int c = 0; c < cSearchPaths; c++)
-        arPaths[c] = OUString(g_arSearchPaths[c], strlen(g_arSearchPaths[c]),
+        arPaths[c] = OUString(g_arSearchPaths[c].path, strlen(g_arSearchPaths[c].path),
                                RTL_TEXTENCODING_UTF8);
 
     int cCollectDirs = sizeof(g_arCollectDirs) / sizeof(char*);
@@ -1174,8 +1179,8 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
             for(int j= 0; j < cCollectDirs; j++)
             {
                 OUString usDir2(usDir1 + arCollectDirs[j]);
-                // prevent that we scan the whole /usr, /usr/lib, etc directories
-                if (arCollectDirs[j] != OUString())
+                // prevent that we scan the whole /usr/bin, /usr/lib, etc directories
+                if (g_arSearchPaths[ii].searchImmediateContents || arCollectDirs[j] != OUString())
                 {
                     //usr/java/xxx
                     //Examin every subdirectory
@@ -1227,33 +1232,31 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                                 + usDir2 + OUSTR(". Osl file error: ")
                                 + OUString::valueOf((sal_Int32) openErr));
                 }
-                else
-                {
-                    //usr/java
-                    //When we look directly into a dir like /usr, /usr/lib, etc. then we only
-                    //look for certain java directories, such as jre, jdk, etc. Whe do not want
-                    //to examine the whole directory because of performance reasons.
-                    DirectoryItem item2;
-                    if(DirectoryItem::get(usDir2, item2) == File::E_None)
-                    {
-                        for( int k= 0; k < cJavaNames; k++)
-                        {
-                            // /usr/java/j2re1.4.0
-                            OUString usDir3(usDir2 + arNames[k]);
+            }
+            for (int j= 0; j < cJavaNames; j++)
+            {
+                //When we look directly into a dir like /usr/bin, /usr/lib, etc. then we only
+                //look for certain java directories, such as jre, jdk, etc. Whe do not want
+                //to examine the whole directory because of performance reasons.
 
-                            DirectoryItem item3;
-                            if(DirectoryItem::get(usDir3, item) == File::E_None)
-                            {
-                                //remove trailing '/'
-                                sal_Int32 islash = usDir3.lastIndexOf('/');
-                                if (islash == usDir3.getLength() - 1
-                                    && (islash
-                                        > RTL_CONSTASCII_LENGTH("file://")))
-                                    usDir3 = usDir3.copy(0, islash);
-                                getJREInfoByPath(usDir3,vecInfos);
-                            }
-                        }
-                    }
+                //  usFile          arNames[j]
+                // <------>        <->
+                // file:///usr/lib/jvm
+                //         <------>
+                //          arPaths[ii] (usDir1)
+                //
+                OUString usDir3(usDir1 + arNames[j]);
+
+                DirectoryItem item3;
+                if(DirectoryItem::get(usDir3, item3) == File::E_None)
+                {
+                    //remove trailing '/'
+                    sal_Int32 islash = usDir3.lastIndexOf('/');
+                    if (islash == usDir3.getLength() - 1
+                        && (islash
+                            > RTL_CONSTASCII_LENGTH("file://")))
+                        usDir3 = usDir3.copy(0, islash);
+                    getJREInfoByPath(usDir3,vecInfos);
                 }
             }
         }
