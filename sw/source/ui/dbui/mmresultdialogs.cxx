@@ -188,32 +188,24 @@ IMPL_LINK( SwSendQueryBox_Impl, ModifyHdl, weld::Entry&, rEdit, void)
     m_xOKPB->set_sensitive(bIsEmptyAllowed  || !rEdit.get_text().isEmpty());
 }
 
-class SwCopyToDialog : public SfxModalDialog
+class SwCopyToDialog : public weld::GenericDialogController
 {
-    VclPtr<Edit> m_pCCED;
-    VclPtr<Edit> m_pBCCED;
+    std::unique_ptr<weld::Entry> m_xCCED;
+    std::unique_ptr<weld::Entry> m_xBCCED;
 
 public:
-    explicit SwCopyToDialog(vcl::Window* pParent)
-        : SfxModalDialog(pParent, "CCDialog",
-            "modules/swriter/ui/ccdialog.ui")
+    explicit SwCopyToDialog(weld::Window* pParent)
+        : GenericDialogController(pParent, "modules/swriter/ui/ccdialog.ui", "CCDialog")
+        , m_xCCED(m_xBuilder->weld_entry("cc"))
+        , m_xBCCED(m_xBuilder->weld_entry("bcc"))
     {
-        get(m_pCCED, "cc");
-        get(m_pBCCED, "bcc");
-    }
-    virtual ~SwCopyToDialog() override { disposeOnce(); }
-    virtual void dispose() override
-    {
-        m_pCCED.clear();
-        m_pBCCED.clear();
-        SfxModalDialog::dispose();
     }
 
-    OUString GetCC() {return m_pCCED->GetText();}
-    void SetCC(const OUString& rSet) {m_pCCED->SetText(rSet);}
+    OUString GetCC() {return m_xCCED->get_text();}
+    void SetCC(const OUString& rSet) {m_xCCED->set_text(rSet);}
 
-    OUString GetBCC() {return m_pBCCED->GetText();}
-    void SetBCC(const OUString& rSet) {m_pBCCED->SetText(rSet);}
+    OUString GetBCC() {return m_xBCCED->get_text();}
+    void SetBCC(const OUString& rSet) {m_xBCCED->set_text(rSet);}
 };
 
 SwMMResultSaveDialog::SwMMResultSaveDialog()
@@ -493,15 +485,15 @@ IMPL_LINK(SwMMResultEmailDialog, DocumentSelectionHdl_Impl, Button*, pButton, vo
     m_pToNF->Enable(bEnableFromTo);
 }
 
-IMPL_LINK(SwMMResultEmailDialog, CopyToHdl_Impl, Button*, pButton, void)
+IMPL_LINK_NOARG(SwMMResultEmailDialog, CopyToHdl_Impl, Button*, void)
 {
-    ScopedVclPtrInstance< SwCopyToDialog > pDlg(pButton);
-    pDlg->SetCC(m_sCC );
-    pDlg->SetBCC(m_sBCC);
-    if(RET_OK == pDlg->Execute())
+    SwCopyToDialog aDlg(GetFrameWeld());
+    aDlg.SetCC(m_sCC );
+    aDlg.SetBCC(m_sBCC);
+    if (aDlg.run() == RET_OK)
     {
-        m_sCC =     pDlg->GetCC() ;
-        m_sBCC =    pDlg->GetBCC();
+        m_sCC = aDlg.GetCC() ;
+        m_sBCC = aDlg.GetBCC();
     }
 }
 
