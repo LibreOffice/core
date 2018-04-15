@@ -41,28 +41,6 @@
 #define PROPERTY_Orientation    0
 #define PROPERTY_Horizontal     1
 
-css::beans::Property* ImplGetProperties( sal_uInt16& rElementCount )
-{
-    static css::beans::Property* pProperties = nullptr;
-    static sal_uInt16 nElements = 0;
-    if( !pProperties )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pProperties )
-        {
-            static css::beans::Property aPropTable[] =
-            {
-                css::beans::Property( "Orientation", PROPERTY_Orientation, cppu::UnoType<sal_Int16>::get(), 0 ),
-                css::beans::Property( "Horizontal", PROPERTY_Horizontal, cppu::UnoType<bool>::get(), 0 )
-            };
-            pProperties = aPropTable;
-            nElements = SAL_N_ELEMENTS( aPropTable );
-        }
-    }
-    rElementCount = nElements;
-    return pProperties;
-}
-
 //    ----------------------------------------------------
 //    class VCLXPrinterPropertySet
 //    ----------------------------------------------------
@@ -105,18 +83,13 @@ css::uno::Reference< css::beans::XPropertySetInfo > VCLXPrinterPropertySet::getP
 
 ::cppu::IPropertyArrayHelper& VCLXPrinterPropertySet::getInfoHelper()
 {
-    static ::cppu::OPropertyArrayHelper* pPropertyArrayHelper = nullptr;
-    if ( !pPropertyArrayHelper )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pPropertyArrayHelper )
-        {
-            sal_uInt16 nElements;
-            css::beans::Property* pProps = ImplGetProperties( nElements );
-            pPropertyArrayHelper = new ::cppu::OPropertyArrayHelper( pProps, nElements, false );
-        }
-    }
-    return *pPropertyArrayHelper ;
+    static ::cppu::OPropertyArrayHelper s_PropertyArrayHelper(
+            css::uno::Sequence<css::beans::Property>{
+                    css::beans::Property( "Orientation", PROPERTY_Orientation, cppu::UnoType<sal_Int16>::get(), 0 ),
+                    css::beans::Property( "Horizontal", PROPERTY_Horizontal, cppu::UnoType<bool>::get(), 0 )},
+            false);
+
+    return s_PropertyArrayHelper;
 }
 
 sal_Bool VCLXPrinterPropertySet::convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue )
