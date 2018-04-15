@@ -12,9 +12,9 @@
 # Package instead of an AllLangPackage (whose content would need to go into a
 # language pack in scp2) for now.
 
-$(eval $(call gb_Package_Package,reportbuilder-templates,$(SRCDIR)/reportbuilder/template))
+$(eval $(call gb_Package_Package,reportbuilder_templates,$(SRCDIR)/reportbuilder/template))
 
-$(eval $(call gb_Package_add_files_with_dir,reportbuilder-templates,$(LIBO_SHARE_FOLDER)/template, \
+$(eval $(call gb_Package_add_files_with_dir,reportbuilder_templates,$(LIBO_SHARE_FOLDER)/template, \
     common/wizard/report/default.otr \
 ))
 

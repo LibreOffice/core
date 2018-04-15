@@ -1000,7 +1000,7 @@ $(eval $(call gb_Helper_register_packages_for_install,pdfimport, \
 endif
 
 $(eval $(call gb_Helper_register_packages_for_install,reportbuilder,\
-	reportbuilder-templates \
+	reportbuilder_templates \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,xsltfilter,\
