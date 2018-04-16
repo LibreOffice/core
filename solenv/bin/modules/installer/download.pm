@@ -1177,7 +1177,7 @@ sub nsis_language_converter
     if ( $language eq "en-US" ) { $nsislanguage = "English"; }
     elsif ( $language eq "af" ) { $nsislanguage = "Afrikaans"; }
     elsif ( $language eq "sq" ) { $nsislanguage = "Albanian"; }
-    elsif ( $language eq "ar" ) { $nsislanguage = "Arabic"; }
+    #elsif ( $language eq "ar" ) { $nsislanguage = "Arabic"; } # Temporarily disabled (Malformed LO surrogate)
     elsif ( $language eq "hy" ) { $nsislanguage = "Armenian"; }
     elsif ( $language eq "ast" ) { $nsislanguage = "Asturian"; }
     elsif ( $language eq "eu" ) { $nsislanguage = "Basque"; }
@@ -1228,7 +1228,7 @@ sub nsis_language_converter
     elsif ( $language eq "th" ) { $nsislanguage = "Thai"; }
     elsif ( $language eq "zh-TW" ) { $nsislanguage = "TradChinese"; }
     elsif ( $language eq "tr" ) { $nsislanguage = "Turkish"; }
-    #elsif ( $language eq "uk" ) { $nsislanguage = "Ukrainian"; } #temporarily disabled (problem in Ukrainian.nsh)
+    #elsif ( $language eq "uk" ) { $nsislanguage = "Ukrainian"; } # Temporarily disabled (Problem in Ukrainian.nsh)
     elsif ( $language eq "vi" ) { $nsislanguage = "Vietnamese"; }
     elsif ( $language eq "cy" ) { $nsislanguage = "Welsh"; }
     else
@@ -1374,7 +1374,7 @@ sub get_language_string_from_language_block
 ##################################################################
 # Windows: Replacing strings in NSIS nsh file
 # nsh file syntax:
-# !define MUI_TEXT_DIRECTORY_TITLE "Zielverzeichnis auswählen"
+# !define MUI_TEXT_DIRECTORY_TITLE "Choose Install Location"
 ##################################################################
 
 sub replace_identifier_in_nshfile
@@ -1400,7 +1400,7 @@ sub replace_identifier_in_nshfile
 # Windows: Replacing strings in NSIS nlf file
 # nlf file syntax (2 lines):
 # # ^DirSubText
-# Zielverzeichnis
+# Destination Folder
 ##################################################################
 
 sub replace_identifier_in_nlffile
@@ -1771,8 +1771,7 @@ sub create_link_tree
 }
 
 #######################################################
-# Setting supported platform for Sun OpenOffice.org
-# builds
+# Setting supported platform for OpenOffice builds
 #######################################################
 
 sub is_supported_platform
@@ -1979,7 +1978,7 @@ sub create_download_link_tree
     my ($downloaddir, $languagestringref, $allvariableshashref) = @_;
 
     $installer::logger::Info->print("\n");
-    $installer::logger::Info->print("******************************************\n"); #
+    $installer::logger::Info->print("******************************************\n");
     $installer::logger::Info->print("... creating download hard link ...\n");
     $installer::logger::Info->print("******************************************\n");
 
