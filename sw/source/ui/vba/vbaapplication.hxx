@@ -72,6 +72,8 @@ public:
     virtual void SAL_CALL setDisplayAutoCompleteTips( sal_Bool _displayAutoCompleteTips ) override;
     virtual sal_Int32 SAL_CALL getEnableCancelKey() override;
     virtual void SAL_CALL setEnableCancelKey( sal_Int32 _enableCancelKey ) override;
+    virtual sal_Int32 SAL_CALL getWindowState() override;
+    virtual void SAL_CALL setWindowState( sal_Int32 _windowstate ) override;
     virtual float SAL_CALL CentimetersToPoints( float Centimeters ) override;
     virtual void SAL_CALL ShowMe() override;
 
