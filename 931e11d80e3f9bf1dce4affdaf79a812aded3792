@@ -22,6 +22,30 @@
       "revId": "931e11d80e3f9bf1dce4affdaf79a812aded3792",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_bee8ff7d",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_languages/Property.ulf",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001032
+      },
+      "writtenOn": "2018-04-16T14:40:08Z",
+      "side": 1,
+      "message": "https://imgur.com/a/alObw\n\nThis is a Screenshot of my Apps and Features stuff. The Supportlink goes to Documentfoundation.org which is simply wrong. This would be right if that would be \"Producers Homepage\" or the like.",
+      "parentUuid": "9a30ddce_d86a351a",
+      "range": {
+        "startLine": 26,
+        "startChar": 20,
+        "endLine": 26,
+        "endChar": 44
+      },
+      "revId": "931e11d80e3f9bf1dce4affdaf79a812aded3792",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

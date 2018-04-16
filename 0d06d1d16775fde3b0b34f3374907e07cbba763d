@@ -22,6 +22,30 @@
       "revId": "0d06d1d16775fde3b0b34f3374907e07cbba763d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_5efaa343",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_languages/Property.ulf",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001032
+      },
+      "writtenOn": "2018-04-16T14:40:08Z",
+      "side": 0,
+      "message": "see also other comment\u0027s screenshot: most applications do not have such number provided at all. (Yes, the idea is stolen from AOO dev ml)",
+      "parentUuid": "9a30ddce_f877f9ff",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 23
+      },
+      "revId": "0d06d1d16775fde3b0b34f3374907e07cbba763d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
