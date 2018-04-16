@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_5ee54335",
+        "filename": "offapi/com/sun/star/sdbc/XDataSource.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-04-16T08:50:37Z",
+      "side": 1,
+      "message": "was there any discussion about this change of a published interface?\n\nis there any risk that an extension might be using it, e.g. the MySQL/MariaDB thing?\n\nthese look like they could simply be implemented as a writeable and a read-only property without any compatibility impact.",
+      "revId": "5b0ceb86c342754d8f4e83408c7ae0da0e3931d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
