@@ -18,10 +18,12 @@ class SwLayoutWriter : public SwModelTestBase
 public:
     void testTdf116830();
     void testTdf116925();
+    void testTdf117028();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
     CPPUNIT_TEST(testTdf116925);
+    CPPUNIT_TEST(testTdf117028);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -82,6 +84,28 @@ void SwLayoutWriter::testTdf116925()
     assertXPath(
         pXmlDoc,
         "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[3]/textcolor[@color='#ffffff']", 1);
+}
+
+void SwLayoutWriter::testTdf117028()
+{
+    SwDoc* pDoc = createDoc("tdf117028.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumper.dumpAndParse(*xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // The only polypolygon in the rendering result was the white background we
+    // want to avoid.
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polypolygon");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
+    xmlXPathFreeObject(pXmlObj);
+
+    // Make sure the text is still rendered.
+    assertXPathContent(pXmlDoc, "//textarray/text", "Hello");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
