@@ -46,6 +46,30 @@
       "revId": "931e11d80e3f9bf1dce4affdaf79a812aded3792",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_296dbb98",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_languages/Property.ulf",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-16T14:44:43Z",
+      "side": 1,
+      "message": "https://msdn.microsoft.com/en-us/library/aa367752\n\nI don\u0027t know why the link is shown as \"support\" link; still, we use this link as suggested by MS...",
+      "parentUuid": "9a30ddce_bee8ff7d",
+      "range": {
+        "startLine": 26,
+        "startChar": 20,
+        "endLine": 26,
+        "endChar": 44
+      },
+      "revId": "931e11d80e3f9bf1dce4affdaf79a812aded3792",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

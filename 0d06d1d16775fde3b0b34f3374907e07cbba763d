@@ -46,6 +46,30 @@
       "revId": "0d06d1d16775fde3b0b34f3374907e07cbba763d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_0970f771",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_languages/Property.ulf",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-16T14:44:43Z",
+      "side": 0,
+      "message": "Let\u0027s do this :)",
+      "parentUuid": "9a30ddce_5efaa343",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 23
+      },
+      "revId": "0d06d1d16775fde3b0b34f3374907e07cbba763d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
