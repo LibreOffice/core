@@ -2161,11 +2161,20 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
         for (sal_uInt16 nLevel = 0; nLevel<nLevelCount; nLevel++)
         {
+            const sal_uInt16 nGroupNo = nLevelCount - nLevel - 1;
+            const ScSubTotalFunc* pResFunc = rParam.pFunctions[nGroupNo];
+            if (!pResFunc)
+            {
+                // No subtotal function given for this group => no formula or
+                // label and do not insert a row.
+                continue;
+            }
+
             // increment end row
             nGlobalEndRow++;
 
             // add row entry for formula
-            aRowEntry.nGroupNo = nLevelCount - nLevel - 1;
+            aRowEntry.nGroupNo = nGroupNo;
             aRowEntry.nSubStartRow = nGlobalStartRow;
             aRowEntry.nFuncStart = nGlobalStartFunc;
             aRowEntry.nDestRow = nGlobalEndRow;
@@ -2183,10 +2192,9 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                 DBShowRow(aRowEntry.nDestRow, true);
 
                 // insert label
-                ScSubTotalFunc* eResFunc = rParam.pFunctions[aRowEntry.nGroupNo];
                 OUString label = ScGlobal::GetRscString(STR_TABLE_GRAND);
                 label += " ";
-                label += ScGlobal::GetRscString(lcl_GetSubTotalStrId(eResFunc[0]));
+                label += ScGlobal::GetRscString(lcl_GetSubTotalStrId(pResFunc[0]));
                 SetString(nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, nTab, label);
                 ApplyStyle(nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, pStyle);
             }
