@@ -1205,10 +1205,10 @@ void DrawingML::WritePattFill(const Reference<XPropertySet>& rXPropSet, const cs
 
         ::Color nColor = COL_WHITE;
         sal_Int32 nAlpha  = 0;
-        bool isBackgroundFilled = false;
 
         if ( GetProperty( rXPropSet, "FillBackground" ) )
         {
+            bool isBackgroundFilled = false;
             mAny >>= isBackgroundFilled;
             if( isBackgroundFilled )
             {
