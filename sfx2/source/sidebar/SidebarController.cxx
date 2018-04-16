@@ -961,7 +961,7 @@ VclPtr<PopupMenu> SidebarController::CreatePopupMenu (
     const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
 {
     // Create the top level popup menu.
-    VclPtrInstance<PopupMenu> pMenu;
+    auto pMenu = VclPtr<PopupMenu>::Create();
     FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
     if (pMenuWindow != nullptr)
     {

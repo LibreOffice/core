@@ -327,7 +327,7 @@ VclPtr<SfxInfoBarWindow> SfxInfoBarContainerWindow::appendInfoBar(const OUString
 {
     Size aSize = GetSizePixel();
 
-    VclPtrInstance<SfxInfoBarWindow> pInfoBar(this, sId, sMessage, ibType, nMessageStyle);
+    auto pInfoBar = VclPtr<SfxInfoBarWindow>::Create(this, sId, sMessage, ibType, nMessageStyle);
 
     basegfx::BColor aBackgroundColor;
     basegfx::BColor aForegroundColor;
