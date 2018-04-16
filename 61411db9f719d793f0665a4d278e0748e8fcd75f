@@ -1,0 +1,947 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_de7213e5",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1079,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d26945",
+      "range": {
+        "startLine": 1079,
+        "startChar": 12,
+        "endLine": 1079,
+        "endChar": 18
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_fe77d7d1",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d28701",
+      "range": {
+        "startLine": 1084,
+        "startChar": 16,
+        "endLine": 1084,
+        "endChar": 22
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_3e824f95",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d26945",
+      "range": {
+        "startLine": 1087,
+        "startChar": 16,
+        "endLine": 1087,
+        "endChar": 22
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_5e7f03aa",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1264,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d11860",
+      "range": {
+        "startLine": 1264,
+        "startChar": 19,
+        "endLine": 1264,
+        "endChar": 25
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_7e4a0785",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1315,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Reverting this line.",
+      "range": {
+        "startLine": 1315,
+        "startChar": 26,
+        "endLine": 1315,
+        "endChar": 32
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_9e4fbb91",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1326,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Reverting this line.",
+      "range": {
+        "startLine": 1326,
+        "startChar": 26,
+        "endLine": 1326,
+        "endChar": 32
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_be447f74",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1369,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d11860",
+      "range": {
+        "startLine": 1369,
+        "startChar": 19,
+        "endLine": 1369,
+        "endChar": 24
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_de49338d",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1374,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d11860",
+      "range": {
+        "startLine": 1374,
+        "startChar": 22,
+        "endLine": 1374,
+        "endChar": 28
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_fe5ef743",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1400,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d11859",
+      "range": {
+        "startLine": 1400,
+        "startChar": 23,
+        "endLine": 1400,
+        "endChar": 28
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_1e5cab4a",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1410,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d11860",
+      "range": {
+        "startLine": 1410,
+        "startChar": 30,
+        "endLine": 1410,
+        "endChar": 36
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_7e31270b",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1414,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d102458",
+      "range": {
+        "startLine": 1414,
+        "startChar": 16,
+        "endLine": 1414,
+        "endChar": 23
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_5e56232a",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1423,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d11859",
+      "range": {
+        "startLine": 1423,
+        "startChar": 34,
+        "endLine": 1423,
+        "endChar": 40
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_9e36db01",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d102458",
+      "range": {
+        "startLine": 1443,
+        "startChar": 28,
+        "endLine": 1443,
+        "endChar": 35
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_be3b9fea",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d11859",
+      "range": {
+        "startLine": 1466,
+        "startChar": 35,
+        "endLine": 1466,
+        "endChar": 40
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_de405359",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1489,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d102458",
+      "range": {
+        "startLine": 1489,
+        "startChar": 28,
+        "endLine": 1489,
+        "endChar": 35
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_fe0c3744",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1516,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d25029",
+      "range": {
+        "startLine": 1516,
+        "startChar": 23,
+        "endLine": 1516,
+        "endChar": 28
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_fe2517c2",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1521,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d11860",
+      "range": {
+        "startLine": 1521,
+        "startChar": 22,
+        "endLine": 1521,
+        "endChar": 28
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_1e23cbbe",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1535,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d11860",
+      "range": {
+        "startLine": 1535,
+        "startChar": 19,
+        "endLine": 1535,
+        "endChar": 25
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_3e308f01",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1590,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d11860",
+      "range": {
+        "startLine": 1590,
+        "startChar": 19,
+        "endLine": 1590,
+        "endChar": 25
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_9e1dfb75",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1601,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d102458",
+      "range": {
+        "startLine": 1601,
+        "startChar": 12,
+        "endLine": 1601,
+        "endChar": 19
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_be12bf60",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1626,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d11860",
+      "range": {
+        "startLine": 1626,
+        "startChar": 19,
+        "endLine": 1626,
+        "endChar": 25
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_1e0aeb26",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1669,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d26250",
+      "range": {
+        "startLine": 1669,
+        "startChar": 9,
+        "endLine": 1669,
+        "endChar": 14
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_3e07af1d",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1673,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Closed Obsolete: https://bz.apache.org/ooo/show_bug.cgi?id\u003d115759",
+      "range": {
+        "startLine": 1673,
+        "startChar": 15,
+        "endLine": 1673,
+        "endChar": 21
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_5e046316",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1686,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d26250",
+      "range": {
+        "startLine": 1686,
+        "startChar": 20,
+        "endLine": 1686,
+        "endChar": 25
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_69ffb301",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1900,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d26831",
+      "range": {
+        "startLine": 1900,
+        "startChar": 12,
+        "endLine": 1900,
+        "endChar": 18
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_8904e715",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1935,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d27145",
+      "range": {
+        "startLine": 1935,
+        "startChar": 17,
+        "endLine": 1935,
+        "endChar": 22
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_c90edf33",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1944,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d27145",
+      "range": {
+        "startLine": 1944,
+        "startChar": 16,
+        "endLine": 1944,
+        "endChar": 22
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_e913a35a",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1959,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d26831",
+      "range": {
+        "startLine": 1959,
+        "startChar": 16,
+        "endLine": 1959,
+        "endChar": 22
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_0911d752",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1987,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d97265",
+      "range": {
+        "startLine": 1987,
+        "startChar": 26,
+        "endLine": 1987,
+        "endChar": 31
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_291e9b63",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1992,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d106452",
+      "range": {
+        "startLine": 1992,
+        "startChar": 17,
+        "endLine": 1992,
+        "endChar": 23
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_491bcf72",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2059,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d37084",
+      "range": {
+        "startLine": 2059,
+        "startChar": 13,
+        "endLine": 2059,
+        "endChar": 18
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_6926d3bb",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2078,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "This one has CLOSED WONT_FIX and is from 2009. Reverting this line but this issue might be obsolete.\nIssue: https://bz.apache.org/ooo/show_bug.cgi?id\u003d104840",
+      "range": {
+        "startLine": 2078,
+        "startChar": 31,
+        "endLine": 2078,
+        "endChar": 37
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_e93ac3cc",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2122,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "These are comments for a few fixes of the same issue. Only leaving the final part.\ni53139 is fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d53139",
+      "range": {
+        "startLine": 2107,
+        "startChar": 0,
+        "endLine": 2122,
+        "endChar": 41
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_0938f7d2",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2167,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d53139",
+      "range": {
+        "startLine": 2167,
+        "startChar": 16,
+        "endLine": 2167,
+        "endChar": 22
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_2935bbd9",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2168,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d69409",
+      "range": {
+        "startLine": 2168,
+        "startChar": 17,
+        "endLine": 2168,
+        "endChar": 22
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_89522712",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2169,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d71065",
+      "range": {
+        "startLine": 2169,
+        "startChar": 17,
+        "endLine": 2169,
+        "endChar": 22
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_c95c1f28",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2179,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "These are also related to i53139 above (line 2107).",
+      "range": {
+        "startLine": 2172,
+        "startChar": 0,
+        "endLine": 2179,
+        "endChar": 66
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_e941e33a",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2371,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d21478",
+      "range": {
+        "startLine": 2371,
+        "startChar": 23,
+        "endLine": 2371,
+        "endChar": 28
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_093f17b5",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2373,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d38232",
+      "range": {
+        "startLine": 2373,
+        "startChar": 9,
+        "endLine": 2373,
+        "endChar": 14
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_294cdb6f",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2379,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d38232",
+      "range": {
+        "startLine": 2379,
+        "startChar": 13,
+        "endLine": 2379,
+        "endChar": 18
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_49490f5f",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2532,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T13:30:15Z",
+      "side": 0,
+      "message": "Fixed: https://bz.apache.org/ooo/show_bug.cgi?id\u003d97265",
+      "range": {
+        "startLine": 2532,
+        "startChar": 30,
+        "endLine": 2532,
+        "endChar": 35
+      },
+      "revId": "61411db9f719d793f0665a4d278e0748e8fcd75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
