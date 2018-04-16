@@ -143,10 +143,10 @@ std::vector< SdrUndoAction* > SdrEditView::CreateConnectorUndo( SdrObject& rO )
 
     if ( rO.GetBroadcaster() )
     {
-        const SdrPage* pPage = rO.GetPage();
+        const SdrPage* pPage = rO.getSdrPageFromSdrObject();
         if ( pPage )
         {
-            SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
+            SdrObjListIter aIter(pPage, SdrIterMode::DeepWithGroups);
             while( aIter.IsMore() )
             {
                 SdrObject* pPartObj = aIter.Next();
@@ -600,7 +600,7 @@ void SdrEditView::CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookM
         if (bNoContortion || pOL==nullptr) {
             ImpCrookObj(pO,rRef,rRad,eMode,bVertical,bNoContortion,bRotate,aMarkRect);
         } else {
-            SdrObjListIter aIter(*pOL,SdrIterMode::DeepNoGroups);
+            SdrObjListIter aIter(pOL,SdrIterMode::DeepNoGroups);
             while (aIter.IsMore()) {
                 SdrObject* pO1=aIter.Next();
                 ImpCrookObj(pO1,rRef,rRad,eMode,bVertical,bNoContortion,bRotate,aMarkRect);
@@ -674,7 +674,7 @@ void SdrEditView::DistortMarkedObj(const tools::Rectangle& rRef, const XPolygon&
         if (bNoContortion || pOL==nullptr) {
             ImpDistortObj(pO,aRefRect,rDistortedRect,bNoContortion);
         } else {
-            SdrObjListIter aIter(*pOL,SdrIterMode::DeepNoGroups);
+            SdrObjListIter aIter(pOL,SdrIterMode::DeepNoGroups);
             while (aIter.IsMore()) {
                 SdrObject* pO1=aIter.Next();
                 ImpDistortObj(pO1,aRefRect,rDistortedRect,bNoContortion);
@@ -1805,7 +1805,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
         if (nMarkCount==1)
         {   // align single object to page
             const SdrObject* pObj=GetMarkedObjectByIndex(0);
-            const SdrPage* pPage=pObj->GetPage();
+            const SdrPage* pPage=pObj->getSdrPageFromSdrObject();
             const SdrPageGridFrameList* pGFL=pPage->GetGridFrameList(GetSdrPageViewOfMarkedByIndex(0),&(pObj->GetSnapRect()));
             const SdrPageGridFrame* pFrame=nullptr;
             if (pGFL!=nullptr && pGFL->GetCount()!=0)

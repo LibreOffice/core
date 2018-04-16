@@ -178,9 +178,6 @@ E3dScene::E3dScene(SdrModel& rSdrModel)
     bDrawOnlySelected(false),
     mbSkipSettingDirty(false)
 {
-    SetOwnerObj(this);
-    SetListKind(SdrObjListKind::GroupObj);
-
     // Set defaults
     SetDefaultAttributes();
 }
@@ -216,6 +213,26 @@ void E3dScene::SetDefaultAttributes()
 E3dScene::~E3dScene()
 {
     ImpCleanup3DDepthMapper();
+}
+
+SdrPage* E3dScene::getSdrPageFromSdrObjList() const
+{
+    return getSdrPageFromSdrObject();
+}
+
+SdrObject* E3dScene::getSdrObjectFromSdrObjList() const
+{
+    return const_cast< E3dScene* >(this);
+}
+
+SdrModel& E3dScene::getSdrModelFromSdrObjList() const
+{
+    return getSdrModelFromSdrObject();
+}
+
+SdrObjList* E3dScene::getChildrenOfSdrObject() const
+{
+    return const_cast< E3dScene* >(this);
 }
 
 basegfx::B2DPolyPolygon E3dScene::TakeXorPoly() const
@@ -467,14 +484,13 @@ void E3dScene::SetAllSceneRectsDirty()
 void E3dScene::RebuildLists()
 {
     // first delete
-    SdrLayerID nCurrLayerID = GetLayer();
-
-    SdrObjListIter a3DIterator(static_cast< SdrObjList& >(*this), SdrIterMode::Flat);
+    const SdrLayerID nCurrLayerID(GetLayer());
+    SdrObjListIter a3DIterator(GetSubList(), SdrIterMode::Flat);
 
     // then examine all the objects in the scene
-    while ( a3DIterator.IsMore() )
+    while(a3DIterator.IsMore())
     {
-        E3dObject* p3DObj = static_cast<E3dObject*>(a3DIterator.Next());
+        E3dObject* p3DObj(static_cast< E3dObject* >(a3DIterator.Next()));
         p3DObj->NbcSetLayer(nCurrLayerID);
         NewObjectInserted(p3DObj);
     }
@@ -657,7 +673,7 @@ void E3dScene::RecalcSnapRect()
 bool E3dScene::IsBreakObjPossible()
 {
     // Break scene, if all members are able to break
-    SdrObjListIter a3DIterator(static_cast< SdrObjList& >(*this), SdrIterMode::DeepWithGroups);
+    SdrObjListIter a3DIterator(GetSubList(), SdrIterMode::DeepWithGroups);
 
     while ( a3DIterator.IsMore() )
     {
@@ -734,11 +750,8 @@ void E3dScene::SetSelected(bool bNew)
 
 void E3dScene::NbcInsertObject(SdrObject* pObj, size_t nPos)
 {
-    // Get owner
-    DBG_ASSERT(dynamic_cast<const E3dObject*>(GetOwnerObj()), "Insert 3D object in parent != 3DObject");
-
     // Is it even a 3D object?
-    if(pObj && nullptr != dynamic_cast< const E3dObject* >(pObj))
+    if(nullptr != dynamic_cast< const E3dObject* >(pObj))
     {
         // Normal 3D object, insert means
         // call parent
@@ -747,14 +760,12 @@ void E3dScene::NbcInsertObject(SdrObject* pObj, size_t nPos)
     else
     {
         // No 3D object, inserted a page in place in a scene ...
-        GetOwnerObj()->GetPage()->InsertObject(pObj, nPos);
+        getSdrObjectFromSdrObjList()->getSdrPageFromSdrObject()->InsertObject(pObj, nPos);
     }
 }
 
 void E3dScene::InsertObject(SdrObject* pObj, size_t nPos)
 {
-    OSL_ENSURE(dynamic_cast<const E3dObject*>(GetOwnerObj()), "Insert 3D object in non-3D Parent");
-
     // call parent
     SdrObjList::InsertObject(pObj, nPos);
 
@@ -763,8 +774,6 @@ void E3dScene::InsertObject(SdrObject* pObj, size_t nPos)
 
 SdrObject* E3dScene::NbcRemoveObject(size_t nObjNum)
 {
-    DBG_ASSERT(dynamic_cast<const E3dObject*>(GetOwnerObj()), "Remove 3D object from Parent != 3DObject");
-
     // call parent
     SdrObject* pRetval = SdrObjList::NbcRemoveObject(nObjNum);
 
@@ -775,8 +784,6 @@ SdrObject* E3dScene::NbcRemoveObject(size_t nObjNum)
 
 SdrObject* E3dScene::RemoveObject(size_t nObjNum)
 {
-    OSL_ENSURE(dynamic_cast<const E3dObject*>(GetOwnerObj()), "3D object is removed from non-3D Parent");
-
     // call parent
     SdrObject* pRetval = SdrObjList::RemoveObject(nObjNum);
 
@@ -785,10 +792,10 @@ SdrObject* E3dScene::RemoveObject(size_t nObjNum)
     return pRetval;
 }
 
-void E3dScene::SetRectsDirty(bool bNotMyself)
+void E3dScene::SetRectsDirty(bool bNotMyself, bool bRecursive)
 {
     // call parent
-    E3dObject::SetRectsDirty(bNotMyself);
+    E3dObject::SetRectsDirty(bNotMyself, bRecursive);
 
     for(size_t a = 0; a < GetObjCount(); ++a)
     {
@@ -796,7 +803,7 @@ void E3dScene::SetRectsDirty(bool bNotMyself)
 
         if(pCandidate)
         {
-            pCandidate->SetRectsDirty(bNotMyself);
+            pCandidate->SetRectsDirty(bNotMyself, false);
         }
     }
 }
@@ -817,21 +824,27 @@ void E3dScene::NbcSetLayer(SdrLayerID nLayer)
     }
 }
 
-void E3dScene::setParentOfSdrObject(SdrObjList* pNewObjList)
+void E3dScene::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
 {
-    // call parent
-    E3dObject::setParentOfSdrObject(pNewObjList);
+    if(pOldPage != pNewPage)
+    {
+        // call parent
+        E3dObject::handlePageChange(pOldPage, pNewPage);
 
-    SetUpList(pNewObjList);
-}
+        for(size_t a(0); a < GetObjCount(); a++)
+        {
+            E3dObject* pCandidate = dynamic_cast< E3dObject* >(GetObj(a));
 
-void E3dScene::SetPage(SdrPage* pNewPage)
-{
-    // call parent
-    E3dObject::SetPage(pNewPage);
-
-    // set at SdrObjList
-    SdrObjList::SetPage(pNewPage);
+            if(pCandidate)
+            {
+                pCandidate->handlePageChange(pOldPage, pNewPage);
+            }
+            else
+            {
+                OSL_ENSURE(false, "E3dScene::handlePageChange invalid object list (!)");
+            }
+        }
+    }
 }
 
 SdrObjList* E3dScene::GetSubList() const
@@ -842,9 +855,7 @@ SdrObjList* E3dScene::GetSubList() const
 void E3dScene::Insert3DObj(E3dObject* p3DObj)
 {
     DBG_ASSERT(p3DObj, "Insert3DObj with NULL-pointer!");
-    SdrPage* pPg = pPage;
     InsertObject(p3DObj);
-    pPage = pPg;
     InvalidateBoundVolume();
     NewObjectInserted(p3DObj);
     StructureChanged();
@@ -856,10 +867,7 @@ void E3dScene::Remove3DObj(E3dObject const * p3DObj)
 
     if(p3DObj->GetParentObj() == this)
     {
-        SdrPage* pPg = pPage;
         RemoveObject(p3DObj->GetOrdNum());
-        pPage = pPg;
-
         InvalidateBoundVolume();
         StructureChanged();
     }

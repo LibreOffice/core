@@ -333,7 +333,7 @@ bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
         SdrObjList* pObjList = pObj->getParentOfSdrObject();
         if( !pObjList )
             return false;
-        SdrObject* pOwner = pObjList->GetOwnerObj();
+        SdrObject* pOwner = pObjList->getSdrObjectFromSdrObjList();
         if( !pOwner )
             return false;
         pObj = pOwner;
@@ -483,7 +483,7 @@ SdrObject* SelectionHelper::getMarkHandlesObject( SdrObject* pObj )
     SdrObjList* pSubList = pObj->GetSubList();
     if(pSubList)
     {
-        SdrObjListIter aIterator(*pSubList, SdrIterMode::Flat);
+        SdrObjListIter aIterator(pSubList, SdrIterMode::Flat);
         while (aIterator.IsMore())
         {
             SdrObject* pMarkHandles = SelectionHelper::getMarkHandlesObject( aIterator.Next() );
@@ -508,7 +508,7 @@ SdrObject* SelectionHelper::getObjectToMark()
         SdrObjList* pSubList = pObj->GetSubList();
         if(pSubList)
         {
-            SdrObjListIter aIterator(*pSubList, SdrIterMode::Flat);
+            SdrObjListIter aIterator(pSubList, SdrIterMode::Flat);
             while (aIterator.IsMore())
             {
                 SdrObject* pMarkHandles = SelectionHelper::getMarkHandlesObject( aIterator.Next() );
@@ -539,7 +539,7 @@ E3dScene* SelectionHelper::getSceneToRotate( SdrObject* pObj )
             SdrObjList* pSubList = pObj->GetSubList();
             if(pSubList)
             {
-                SdrObjListIter aIterator(*pSubList, SdrIterMode::DeepWithGroups);
+                SdrObjListIter aIterator(pSubList, SdrIterMode::DeepWithGroups);
                 while( aIterator.IsMore() && !pRotateable )
                 {
                     SdrObject* pSubObj = aIterator.Next();
@@ -628,7 +628,7 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
         return false;
     }
 
-    SdrObjListIter aIterator(*pSubList, SdrIterMode::Flat);
+    SdrObjListIter aIterator(pSubList, SdrIterMode::Flat);
 
     while (aIterator.IsMore())
     {

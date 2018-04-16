@@ -95,6 +95,14 @@ protected:
 public:
     E3dScene(SdrModel& rSdrModel);
 
+    // derived from SdrObjList
+    virtual SdrPage* getSdrPageFromSdrObjList() const override;
+    virtual SdrObject* getSdrObjectFromSdrObjList() const override;
+    virtual SdrModel& getSdrModelFromSdrObjList() const override;
+
+    // derived from SdrObject
+    virtual SdrObjList* getChildrenOfSdrObject() const override;
+
     virtual void SetBoundRectDirty() override;
 
     // access to cleanup of depth mapper
@@ -180,10 +188,12 @@ public:
     virtual SdrObject* RemoveObject(size_t nObjNum) override;
 
     // needed for group functionality
-    virtual void SetRectsDirty(bool bNotMyself = false) override;
+    virtual void SetRectsDirty(bool bNotMyself = false, bool bRecursive = true) override;
     virtual void NbcSetLayer(SdrLayerID nLayer) override;
-    virtual void setParentOfSdrObject(SdrObjList* pNewObjList) override;
-    virtual void SetPage(SdrPage* pNewPage) override;
+
+    // react on model/page change
+    virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage) override;
+
     virtual SdrObjList* GetSubList() const override;
     void Insert3DObj(E3dObject* p3DObj);
     void Remove3DObj(E3dObject const * p3DObj);

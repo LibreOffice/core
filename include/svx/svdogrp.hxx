@@ -29,13 +29,12 @@
 class SfxItemSet;
 
 //   SdrObjGroup
-class SVX_DLLPUBLIC SdrObjGroup final : public SdrObject
+class SVX_DLLPUBLIC SdrObjGroup final : public SdrObject, public SdrObjList
 {
 private:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
-    SdrObjList                  maSdrObjList;   // sub list (children)
     Point                       aRefPoint;      // Reference point inside the object group
 
 private:
@@ -45,13 +44,23 @@ private:
 public:
     SdrObjGroup(SdrModel& rSdrModel);
 
+    // derived from SdrObjList
+    virtual SdrPage* getSdrPageFromSdrObjList() const override;
+    virtual SdrObject* getSdrObjectFromSdrObjList() const override;
+    virtual SdrModel& getSdrModelFromSdrObjList() const override;
+
+    // derived from SdrObject
+    virtual SdrObjList* getChildrenOfSdrObject() const override;
+
     virtual void SetBoundRectDirty() override;
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrLayerID GetLayer() const override;
     virtual void NbcSetLayer(SdrLayerID nLayer) override;
-    virtual void setParentOfSdrObject(SdrObjList* pNewObjList) override;
-    virtual void SetPage(SdrPage* pNewPage) override;
+
+    // react on model/page change
+    virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage) override;
+
     virtual SdrObjList* GetSubList() const override;
 
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;
