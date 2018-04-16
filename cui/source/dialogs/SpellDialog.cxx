@@ -1593,9 +1593,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
     //if an attrib has been found search for the end of the error string
     if(aCursor.GetIndex() < nTextLen)
     {
-        m_nErrorStart = aCursor.GetIndex();
-        m_nErrorEnd = pNextError->GetEnd();
-        MoveErrorMarkTo(m_nErrorStart, m_nErrorEnd, bGrammarError);
+        MoveErrorMarkTo(aCursor.GetIndex(), pNextError->GetEnd(), bGrammarError);
         bRet = true;
         //add an undo action
         SpellUndoAction_Impl* pAction = new SpellUndoAction_Impl(
