@@ -540,7 +540,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         mbDataValid = false;
     }
 
-    if( mpObject && mpText && !mbDataValid && mpObject->IsInserted() && mpObject->GetPage() )
+    if( mpObject && mpText && !mbDataValid && mpObject->IsInserted() && mpObject->getSdrPageFromSdrObject() )
     {
         mpTextForwarder->flushCache();
 
@@ -555,7 +555,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         else
             pOutlinerParaObject = mpText->GetOutlinerParaObject();
 
-        if( pOutlinerParaObject && ( bOwnParaObj || !mpObject->IsEmptyPresObj() || mpObject->GetPage()->IsMasterPage() ) )
+        if( pOutlinerParaObject && ( bOwnParaObj || !mpObject->IsEmptyPresObj() || mpObject->getSdrPageFromSdrObject()->IsMasterPage() ) )
         {
             mpOutliner->SetText( *pOutlinerParaObject );
 
@@ -579,7 +579,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             if( pPool )
                 mpOutliner->SetStyleSheetPool( pPool );
 
-            SfxStyleSheet* pStyleSheet = mpObject->GetPage()->GetTextStyleSheetForObject( mpObject );
+            SfxStyleSheet* pStyleSheet = mpObject->getSdrPageFromSdrObject()->GetTextStyleSheetForObject( mpObject );
             if( pStyleSheet )
                 mpOutliner->SetStyleSheet( 0, pStyleSheet );
 

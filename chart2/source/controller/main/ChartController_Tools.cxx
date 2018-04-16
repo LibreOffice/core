@@ -393,7 +393,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
             for ( sal_uInt16 i = 0; i < nCount; ++i )
             {
                 const SdrPage* pPage = pModel->GetPage( i );
-                SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
+                SdrObjListIter aIter( pPage, SdrIterMode::DeepNoGroups );
                 while ( aIter.IsMore() )
                 {
                     SdrObject* pObj(aIter.Next());
@@ -402,8 +402,6 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
 
                     if ( pNewObj )
                     {
-                        pNewObj->SetPage( pDestPage );
-
                         // set position
                         Reference< drawing::XShape > xShape( pNewObj->getUnoShape(), uno::UNO_QUERY );
                         if ( xShape.is() )

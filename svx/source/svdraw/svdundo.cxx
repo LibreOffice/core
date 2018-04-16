@@ -237,9 +237,9 @@ void SdrUndoObj::ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr, 
 // common call method for possible change of the page when UNDO/REDO is triggered
 void SdrUndoObj::ImpShowPageOfThisObject()
 {
-    if(pObj && pObj->IsInserted() && pObj->GetPage())
+    if(pObj && pObj->IsInserted() && pObj->getSdrPageFromSdrObject())
     {
-        SdrHint aHint(SdrHintKind::SwitchToPage, *pObj, pObj->GetPage());
+        SdrHint aHint(SdrHintKind::SwitchToPage, *pObj, pObj->getSdrPageFromSdrObject());
         pObj->getSdrModelFromSdrObject().Broadcast(aHint);
     }
 }
@@ -700,12 +700,12 @@ void SdrUndoRemoveObj::Undo()
         // position of the target object.
         Point aOwnerAnchorPos(0, 0);
 
-        if (dynamic_cast<const SdrObjGroup*>(pObjList->GetOwnerObj()) != nullptr)
+        if (dynamic_cast< const SdrObjGroup* >(pObjList->getSdrObjectFromSdrObjList()) != nullptr)
         {
-            aOwnerAnchorPos = pObjList->GetOwnerObj()->GetAnchorPos();
+            aOwnerAnchorPos = pObjList->getSdrObjectFromSdrObjList()->GetAnchorPos();
         }
 
-        E3DModifySceneSnapRectUpdater aUpdater(pObjList->GetOwnerObj());
+        E3DModifySceneSnapRectUpdater aUpdater(pObjList->getSdrObjectFromSdrObjList());
         pObjList->InsertObject(pObj,nOrdNum);
 
         // #i11426#
@@ -759,7 +759,8 @@ void SdrUndoInsertObj::Redo()
         // which becomes a member of a group, because its cleared in method
         // <InsertObject(..)>. Needed for correct Redo in Writer. (#i45952#)
         Point aAnchorPos( 0, 0 );
-        if (dynamic_cast<const SdrObjGroup*>(pObjList->GetOwnerObj()) != nullptr)
+
+        if (dynamic_cast<const SdrObjGroup*>(pObjList->getSdrObjectFromSdrObjList()) != nullptr)
         {
             aAnchorPos = pObj->GetAnchorPos();
         }

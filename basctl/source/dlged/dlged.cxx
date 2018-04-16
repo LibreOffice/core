@@ -615,8 +615,7 @@ void DlgEditor::CreateDefaultObject()
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         *pDlgEdModel,
         pDlgEdView->GetCurrentObjInventor(),
-        pDlgEdView->GetCurrentObjIdentifier(),
-        pDlgEdPage);
+        pDlgEdView->GetCurrentObjIdentifier());
 
     if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pObj))
     {

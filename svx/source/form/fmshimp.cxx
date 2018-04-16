@@ -288,7 +288,7 @@ namespace
             std::unique_ptr<SdrObjListIter> pGroupIterator;
             if ( pCurrent->IsGroupObject() )
             {
-                pGroupIterator.reset(new SdrObjListIter( *pCurrent->GetSubList() ));
+                pGroupIterator.reset(new SdrObjListIter( pCurrent->GetSubList() ));
                 pCurrent = pGroupIterator->IsMore() ? pGroupIterator->Next() : nullptr;
             }
 
@@ -577,7 +577,7 @@ bool isControlList(const SdrMarkList& rMarkList)
         {
             if (pObj->IsGroupObject())
             {
-                SdrObjListIter aIter(*pObj->GetSubList());
+                SdrObjListIter aIter(pObj->GetSubList());
                 while (aIter.IsMore() && bControlList)
                 {
                     bControlList = SdrInventor::FmForm == aIter.Next()->GetObjInventor();
@@ -1100,7 +1100,7 @@ bool FmXFormShell::executeControlConversionSlot_Lock(const Reference<XFormCompon
             Reference< XInterface > xNormalizedObject( _rxObject, UNO_QUERY );
 
             FmFormObj* pFormObject = nullptr;
-            SdrObjListIter aPageIter( *pFormPage );
+            SdrObjListIter aPageIter( pFormPage );
             while ( aPageIter.IsMore() )
             {
                 SdrObject* pCurrent = aPageIter.Next();
@@ -2349,7 +2349,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest_Lock, FmSearchContext&, rfmscCont
     // Search all SdrControls of this page...
     OUString sControlSource, aName;
 
-    SdrObjListIter aPageIter( *pCurrentPage );
+    SdrObjListIter aPageIter( pCurrentPage );
     while ( aPageIter.IsMore() )
     {
         SdrObject* pCurrent = aPageIter.Next();

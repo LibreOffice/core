@@ -129,7 +129,7 @@ static SdPage* GetCurrentPage( sd::ViewShell const * pViewSh, EditFieldInfo cons
 
             if( pTextObj )
             {
-                pPage = dynamic_cast< SdPage* >( pTextObj->GetPage() );
+                pPage = dynamic_cast< SdPage* >( pTextObj->getSdrPageFromSdrObject() );
             }
         }
 

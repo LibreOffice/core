@@ -382,7 +382,7 @@ void ScCaptionCreator::CreateCaption( bool bShown, bool bTailFront )
             aTextRect,
             aTailPos),
         [](SdrCaptionObj* pCaptionObj){
-            SdrPage* pDrawPage(pCaptionObj->GetPage());
+            SdrPage* pDrawPage(pCaptionObj->getSdrPageFromSdrObject());
             if (pDrawPage)
             {
                 pDrawPage->RemoveObject(pCaptionObj->GetOrdNum());
@@ -444,8 +444,8 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
 {
     SdrPage* pDrawPage = GetDrawPage();
     OSL_ENSURE( pDrawPage, "ScNoteCaptionCreator::ScNoteCaptionCreator - no drawing page" );
-    OSL_ENSURE( pCaption->GetPage() == pDrawPage, "ScNoteCaptionCreator::ScNoteCaptionCreator - wrong drawing page in caption" );
-    if( pDrawPage && (pCaption->GetPage() == pDrawPage) )
+    OSL_ENSURE( pCaption->getSdrPageFromSdrObject() == pDrawPage, "ScNoteCaptionCreator::ScNoteCaptionCreator - wrong drawing page in caption" );
+    if( pDrawPage && (pCaption->getSdrPageFromSdrObject() == pDrawPage) )
     {
         // store note position in user data of caption object
         ScCaptionUtil::SetCaptionUserData( *pCaption, rPos );
@@ -458,7 +458,7 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
 
 void removeFromDrawPageAndFree( const std::shared_ptr< SdrCaptionObj >& pCaption, bool bIgnoreUndo = false )
 {
-    SdrPage* pDrawPage(pCaption->GetPage());
+    SdrPage* pDrawPage(pCaption->getSdrPageFromSdrObject());
     SAL_WARN_IF( !pDrawPage, "sc.core", "ScCaptionPtr::removeFromDrawPageAndFree - object without drawing page");
     if (pDrawPage)
     {
@@ -882,7 +882,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
 {
     ScNoteData aNoteData( true/*bShown*/ );
     aNoteData.m_pCaption.reset(pCaption, [](SdrCaptionObj* pCaptionObj) {
-        SdrPage* pDrawPage(pCaptionObj->GetPage());
+        SdrPage* pDrawPage(pCaptionObj->getSdrPageFromSdrObject());
         if (pDrawPage)
         {
             pDrawPage->RemoveObject(pCaptionObj->GetOrdNum());

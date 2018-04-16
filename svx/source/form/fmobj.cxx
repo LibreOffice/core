@@ -164,26 +164,21 @@ void FmFormObj::impl_isolateControlModel_nothrow()
 }
 
 
-void FmFormObj::SetPage(SdrPage* _pNewPage)
+void FmFormObj::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
 {
-    if ( GetPage() == _pNewPage )
-    {
-        SdrUnoObj::SetPage(_pNewPage);
-        return;
-    }
-
-    FmFormPage* pOldFormPage = dynamic_cast<FmFormPage*>( GetPage()  );
+    FmFormPage* pOldFormPage(dynamic_cast< FmFormPage* >(getSdrPageFromSdrObject()));
     if ( pOldFormPage )
         pOldFormPage->GetImpl().formObjectRemoved( *this );
 
-    FmFormPage* pNewFormPage = dynamic_cast<FmFormPage*>( _pNewPage  );
+    FmFormPage* pNewFormPage = dynamic_cast<FmFormPage*>( pNewPage  );
     if ( !pNewFormPage )
-    {   // Maybe it makes sense to create an environment history here : if somebody set's our page to NULL, and we have a valid page before,
+    {
+        // Maybe it makes sense to create an environment history here : if somebody set's our page to NULL, and we have a valid page before,
         // me may want to remember our place within the old page. For this we could create a new m_xEnvironmentHistory to store it.
         // So the next SetPage with a valid new page would restore that environment within the new page.
         // But for the original Bug (#57300#) we don't need that, so I omit it here. Maybe this will be implemented later.
         impl_isolateControlModel_nothrow();
-        SdrUnoObj::SetPage(_pNewPage);
+        SdrUnoObj::handlePageChange(pOldPage, pNewPage);
         return;
     }
 
@@ -195,7 +190,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
     // do we have a history ? (from :Clone)
     if ( m_xEnvironmentHistory.is() )
     {
-        // the element in m_xEnvironmentHistory which is equivalent to my new parent (which (perhaps) has to be created within _pNewPage->GetForms)
+        // the element in m_xEnvironmentHistory which is equivalent to my new parent (which (perhaps) has to be created within pNewPage->GetForms)
         // is the right-most element in the tree.
         Reference< XIndexContainer > xRightMostLeaf( m_xEnvironmentHistory, UNO_QUERY_THROW );
         try
@@ -268,7 +263,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
     }
 
     // now set the page
-    SdrUnoObj::SetPage(_pNewPage);
+    SdrUnoObj::handlePageChange(pOldPage, pNewPage);
 
     // place my model within the new parent container
     if (xNewParent.is())
@@ -284,6 +279,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
                 if (nPos > -1)
                     xOldParent->removeByIndex(nPos);
             }
+
             // and insert into the new container
             xNewParent->insertByIndex(xNewParent->getCount(), makeAny(xMeAsFormComp));
 
@@ -614,7 +610,7 @@ void FmFormObj::SetUnoControlModel( const Reference< css::awt::XControlModel >& 
 {
     SdrUnoObj::SetUnoControlModel( _rxModel );
 
-    FmFormPage* pFormPage = dynamic_cast<FmFormPage*>( GetPage()  );
+    FmFormPage* pFormPage(dynamic_cast< FmFormPage* >(getSdrPageFromSdrObject()));
     if ( pFormPage )
         pFormPage->GetImpl().formModelAssigned( *this );
 
@@ -627,10 +623,10 @@ bool FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
     bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
     if ( bResult && SdrCreateCmd::ForceEnd == eCmd && rStat.GetView() )
     {
-        if ( pPage )
-        {
-            FmFormPage& rPage = dynamic_cast< FmFormPage& >( *pPage );
+        FmFormPage* pFormPage(dynamic_cast< FmFormPage* >(getSdrPageFromSdrObject()));
 
+        if (nullptr != pFormPage)
+        {
             try
             {
                 Reference< XFormComponent >  xContent( xUnoControlModel, UNO_QUERY_THROW );
@@ -640,7 +636,7 @@ bool FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
 
                 if ( !xParentForm.is() )
                 {   // model is not yet part of a form component hierarchy
-                    xParentForm.set( rPage.GetImpl().findPlaceInFormComponentHierarchy( xContent ), UNO_SET_THROW );
+                    xParentForm.set( pFormPage->GetImpl().findPlaceInFormComponentHierarchy( xContent ), UNO_SET_THROW );
                     xFormToInsertInto.set( xParentForm, UNO_QUERY_THROW );
                 }
 

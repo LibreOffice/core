@@ -273,7 +273,7 @@ void FmFormView::ChangeDesignMode(bool bDesign)
             // redraw UNO objects
             if ( GetSdrPageView() )
             {
-                SdrObjListIter aIter(*pCurPage);
+                SdrObjListIter aIter(pCurPage);
                 while( aIter.IsMore() )
                 {
                     SdrObject* pObj = aIter.Next();

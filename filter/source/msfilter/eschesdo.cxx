@@ -1015,7 +1015,7 @@ ImplEESdrObject::ImplEESdrObject( ImplEESdrWriter& rEx,
     mbEmptyPresObj( false ),
     mbOOXML(bOOXML)
 {
-    SdrPage* pPage = rObj.GetPage();
+    SdrPage* pPage = rObj.getSdrPageFromSdrObject();
     DBG_ASSERT( pPage, "ImplEESdrObject::ImplEESdrObject: no SdrPage" );
     if( pPage && rEx.ImplInitPage( *pPage ) )
     {

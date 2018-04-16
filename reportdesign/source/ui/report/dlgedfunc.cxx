@@ -420,7 +420,7 @@ void DlgEdFunc::deactivateOle(bool _bSelect)
     for(sal_uLong i = 0 ; i< nCount;++i)
     {
         SdrOle2Obj* pObj = rObjCache[i];
-        if ( m_pParent->getPage() == pObj->GetPage() )
+        if ( m_pParent->getPage() == pObj->getSdrPageFromSdrObject() )
         {
             uno::Reference< embed::XEmbeddedObject > xObj = pObj->GetObjRef();
             if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::UI_ACTIVE )
@@ -567,7 +567,7 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
         const SdrDragStat& rDragStat = m_rView.GetDragStat();
         if (rDragStat.GetDragMethod() != nullptr)
         {
-            SdrObjListIter aIter(*m_pParent->getPage(),SdrIterMode::DeepNoGroups);
+            SdrObjListIter aIter(m_pParent->getPage(),SdrIterMode::DeepNoGroups);
             SdrObject* pObjIter = nullptr;
             // loop through all marked objects and check if there new rect overlapps an old one.
             while( (pObjIter = aIter.Next()) != nullptr && !bIsSetPoint)

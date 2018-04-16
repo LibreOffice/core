@@ -993,7 +993,7 @@ void AppendObj(SwFrame *const pFrame, SwPageFrame *const pPage, SwFrameFormat *c
                 }
                 if ( pSdrObj )
                 {
-                    if ( !pSdrObj->GetPage() )
+                    if ( !pSdrObj->getSdrPageFromSdrObject() )
                     {
                         pFormat->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0)->
                                 InsertObject(pSdrObj, pSdrObj->GetOrdNumDirect());
@@ -2756,10 +2756,10 @@ static void lcl_Regist( SwPageFrame *pPage, const SwFrame *pAnch )
         const SwFlyFrame* pFly = pAnch->FindFlyFrame();
         if ( pFly &&
              pObj->GetDrawObj()->GetOrdNum() < pFly->GetVirtDrawObj()->GetOrdNum() &&
-             pObj->GetDrawObj()->GetPage() )
+             pObj->GetDrawObj()->getSdrPageFromSdrObject() )
         {
             //#i119945# set pFly's OrdNum to pObj's. So when pFly is removed by Undo, the original OrdNum will not be changed.
-            pObj->DrawObj()->GetPage()->SetObjectOrdNum( pFly->GetVirtDrawObj()->GetOrdNumDirect(),
+            pObj->DrawObj()->getSdrPageFromSdrObject()->SetObjectOrdNum( pFly->GetVirtDrawObj()->GetOrdNumDirect(),
                                                          pObj->GetDrawObj()->GetOrdNumDirect() );
         }
     }

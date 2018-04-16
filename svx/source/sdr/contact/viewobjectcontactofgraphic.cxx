@@ -248,7 +248,7 @@ namespace sdr
             {
                 // sometimes it is needed that each graphic is completely available and swapped in
                 // for these cases a ForceSwapIn is called later at the graphic object
-                if ( rGrafObj.GetPage() && rGrafObj.GetPage()->IsMasterPage() )
+                if ( rGrafObj.getSdrPageFromSdrObject() && rGrafObj.getSdrPageFromSdrObject()->IsMasterPage() )
                 {
                     // #i102380# force Swap-In for GraphicObjects on MasterPage to have a nicer visualisation
                     bDoAsynchronGraphicLoading = false;

@@ -402,19 +402,13 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, cons
             if(pPreparedFactoryObject)
             {
                 pCurrentCreate = pPreparedFactoryObject;
-
-                if(pCreatePV->GetPage())
-                {
-                    pCurrentCreate->SetPage(pCreatePV->GetPage());
-                }
             }
             else
             {
                 pCurrentCreate = SdrObjFactory::MakeNewObject(
                     *mpModel,
                     nInvent,
-                    nIdent,
-                    pCreatePV->GetPage());
+                    nIdent);
             }
 
             Point aPnt(rPnt);

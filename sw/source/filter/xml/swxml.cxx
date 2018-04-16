@@ -440,7 +440,7 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs(SwDoc& _rDoc)
         const SdrPage& rSdrPage( *(_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )) );
 
         // iterate recursive with group objects over all shapes on the draw page
-        SdrObjListIter aIter( rSdrPage );
+        SdrObjListIter aIter( &rSdrPage );
         while( aIter.IsMore() )
         {
             SdrOle2Obj* pOle2Obj = dynamic_cast< SdrOle2Obj* >( aIter.Next() );

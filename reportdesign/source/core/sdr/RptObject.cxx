@@ -506,7 +506,7 @@ SdrInventor OCustomShape::GetObjInventor() const
 
 SdrPage* OCustomShape::GetImplPage() const
 {
-    return GetPage();
+    return getSdrPageFromSdrObject();
 }
 
 void OCustomShape::NbcMove( const Size& rSize )
@@ -652,7 +652,7 @@ SdrInventor OUnoObject::GetObjInventor() const
 
 SdrPage* OUnoObject::GetImplPage() const
 {
-    return GetPage();
+    return getSdrPageFromSdrObject();
 }
 
 void OUnoObject::NbcMove( const Size& rSize )
@@ -947,7 +947,7 @@ SdrInventor OOle2Obj::GetObjInventor() const
 
 SdrPage* OOle2Obj::GetImplPage() const
 {
-    return GetPage();
+    return getSdrPageFromSdrObject();
 }
 
 void OOle2Obj::NbcMove( const Size& rSize )

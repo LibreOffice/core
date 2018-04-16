@@ -1274,7 +1274,7 @@ namespace
 {
     SdrUnoObj* lcl_findUnoObject( const SdrObjList& _rObjList, const Reference< XControlModel >& _rxModel )
     {
-        SdrObjListIter aIter( _rObjList );
+        SdrObjListIter aIter( &_rObjList );
         while ( aIter.IsMore() )
         {
             SdrObject* pObject = aIter.Next();

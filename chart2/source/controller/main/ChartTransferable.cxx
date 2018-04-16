@@ -130,7 +130,7 @@ bool ChartTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
                     for ( sal_uInt16 i = 0; i < nCount; ++i )
                     {
                         const SdrPage* pPage = pMarkedObjModel->GetPage( i );
-                        SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
+                        SdrObjListIter aIter( pPage, SdrIterMode::DeepNoGroups );
                         while ( aIter.IsMore() )
                         {
                             SdrObject* pObj = aIter.Next();

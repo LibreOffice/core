@@ -285,9 +285,9 @@ E3dObject* E3dObject::GetParentObj() const
 {
     E3dObject* pRetval = nullptr;
 
-    if(getParentOfSdrObject() && getParentOfSdrObject()->GetOwnerObj())
+    if(getParentOfSdrObject())
     {
-        pRetval = dynamic_cast<E3dObject*>(getParentOfSdrObject()->GetOwnerObj());
+        pRetval = dynamic_cast< E3dObject* >(getParentOfSdrObject()->getSdrObjectFromSdrObjList());
     }
 
     return pRetval;
@@ -677,11 +677,9 @@ basegfx::B2DPolyPolygon E3dCompoundObject::TransformToScreenCoor(const basegfx::
 
 bool E3dCompoundObject::IsAOrdNumRemapCandidate(E3dScene*& prScene) const
 {
-    if(getParentOfSdrObject()
-        && getParentOfSdrObject()->GetOwnerObj()
-        && dynamic_cast<const E3dObject*>(getParentOfSdrObject()->GetOwnerObj()))
+    if(getParentOfSdrObject() && getParentOfSdrObject()->getSdrObjectFromSdrObjList())
     {
-        prScene = static_cast<E3dScene*>(getParentOfSdrObject()->GetOwnerObj());
+        prScene = static_cast< E3dScene* >(getParentOfSdrObject()->getSdrObjectFromSdrObjList());
         return true;
     }
 

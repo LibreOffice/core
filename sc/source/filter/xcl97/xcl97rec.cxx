@@ -497,7 +497,20 @@ void XclObj::SaveTextRecs( XclExpStream& rStrm )
 XclObjComment::XclObjComment( XclExpObjectManager& rObjMgr, const tools::Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, const tools::Rectangle &rFrom, const tools::Rectangle &rTo ) :
     XclObj( rObjMgr, EXC_OBJTYPE_NOTE, true )
             , maScPos( rAddress )
-            , mpCaption( pCaption->CloneSdrObject(pCaption->getSdrModelFromSdrObject()) )
+
+            // No need to CloneSdrObject(...) here, the SdrCaptionObj will exist
+            // during the whole im/export time. Seems that this was done
+            // initially to make UnitTest CppunitTest_sc_subsequent_export_test
+            // work (better: not crash) which had not added emfio/emfio to
+            // CppunitTest_sc_subsequent_export_test.mk and thus failed.
+            // Probably the Graphic created from the Clone was wrong.
+            // Problem with creating a Clone here is that it gets cloned, but not inserted to a
+            // SdrPage. In deeper export layers this then goes wrong since without being inserted
+            // to a Page, no SvxPage/UnoApiPage can be accessed. This was different in previous
+            // revisions of the code in that a SdrObject could be *not* insterted, but have a
+            // SdrPage*. That again was redundant, wrong and inconsequent.
+            , mpCaption( pCaption )
+
             , mbVisible( bVisible )
             , maFrom ( rFrom )
             , maTo ( rTo )
@@ -675,7 +688,7 @@ void VmlCommentExporter::EndShape( sal_Int32 nShapeElement )
 
 void XclObjComment::SaveXml( XclExpXmlStream& rStrm )
 {
-    VmlCommentExporter aCommentExporter( rStrm.GetCurrentStream(), maScPos, mpCaption.get(), mbVisible, maFrom, maTo );
+    VmlCommentExporter aCommentExporter( rStrm.GetCurrentStream(), maScPos, mpCaption, mbVisible, maFrom, maTo );
     aCommentExporter.AddSdrObject( *mpCaption );
 }
 

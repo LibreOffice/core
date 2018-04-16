@@ -171,7 +171,7 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
     if( bCreated && maTargets.hasValue() )
     {
         SdrPathObj* pPathObj = dynamic_cast< SdrPathObj* >( mpView->GetSdrPageView()->GetObjList()->GetObj( nCount ) );
-        SdPage* pPage = dynamic_cast< SdPage* >( pPathObj ? pPathObj->GetPage() : nullptr );
+        SdPage* pPage = dynamic_cast< SdPage* >( pPathObj ? pPathObj->getSdrPageFromSdrObject() : nullptr );
         if( pPage )
         {
             std::shared_ptr< sd::MainSequence > pMainSequence( pPage->getMainSequence() );

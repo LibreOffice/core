@@ -704,7 +704,7 @@ namespace svxform
         }
         else if ( pObj->IsGroupObject() )
         {
-            SdrObjListIter aIter( *pObj->GetSubList() );
+            SdrObjListIter aIter( pObj->GetSubList() );
             while ( aIter.IsMore() )
                 InsertSdrObj( aIter.Next() );
         }
@@ -730,7 +730,7 @@ namespace svxform
         }
         else if ( pObj->IsGroupObject() )
         {
-            SdrObjListIter aIter( *pObj->GetSubList() );
+            SdrObjListIter aIter( pObj->GetSubList() );
             while ( aIter.IsMore() )
                 RemoveSdrObj( aIter.Next() );
         }

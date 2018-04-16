@@ -758,20 +758,6 @@ void DocxSdrExport::endDMLAnchorInline(const SwFrameFormat* pFrameFormat)
 
 void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat)
 {
-    bool bSwapInPage = false;
-    if (!sdrObj->GetPage())
-    {
-        if (SdrModel* pModel
-            = m_pImpl->m_rExport.m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
-        {
-            if (SdrPage* pPage = pModel->GetPage(0))
-            {
-                bSwapInPage = true;
-                const_cast<SdrObject*>(sdrObj)->SetPage(pPage);
-            }
-        }
-    }
-
     m_pImpl->m_pSerializer->startElementNS(XML_w, XML_pict, FSEND);
     m_pImpl->m_pDrawingML->SetFS(m_pImpl->m_pSerializer);
     // See WinwordAnchoring::SetAnchoring(), these are not part of the SdrObject, have to be passed around manually.
@@ -782,9 +768,6 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
         *sdrObj, rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(), rHoriOri.GetRelationOrient(),
         rVertOri.GetRelationOrient(), true);
     m_pImpl->m_pSerializer->endElementNS(XML_w, XML_pict);
-
-    if (bSwapInPage)
-        const_cast<SdrObject*>(sdrObj)->SetPage(nullptr);
 }
 
 bool lcl_isLockedCanvas(const uno::Reference<drawing::XShape>& xShape)

@@ -44,32 +44,11 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdograf.hxx>
-#include <svx/svdoole2.hxx>
 
 namespace sdr
 {
     namespace properties
     {
-        SfxStyleSheet* AttributeProperties::ImpGetDefaultStyleSheet() const
-        {
-            // use correct default stylesheet #119287#
-            const SdrGrafObj* pIsSdrGrafObj(dynamic_cast< const SdrGrafObj* >(&GetSdrObject()));
-            const SdrOle2Obj* pIsSdrOle2Obj(dynamic_cast< const SdrOle2Obj* >(&GetSdrObject()));
-            SfxStyleSheet* pRetval(nullptr);
-
-            if(pIsSdrGrafObj || pIsSdrOle2Obj)
-            {
-                pRetval = GetSdrObject().getSdrModelFromSdrObject().GetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj();
-            }
-            else
-            {
-                pRetval = GetSdrObject().getSdrModelFromSdrObject().GetDefaultStyleSheet();
-            }
-
-            return pRetval;
-        }
-
         void AttributeProperties::ImpSetParentAtSfxItemSet(bool bDontRemoveHardAttr)
         {
             if(HasSfxItemSet() && mpStyleSheet)
@@ -269,25 +248,29 @@ namespace sdr
 
             if(!bHadSfxItemSet)
             {
-                if(GetStyleSheet())
+                // SfxItemSet was created and ForceDefaultAttributes() is done.
+                // We now need to set a default SfxStyleSheet at the SdrObject. This
+                // is possible now since we always have the SdrModel in SdrObject,
+                // so use applyDefaultStyleSheetFromSdrModel() which will do the
+                // right thing in each derivation of BaseProperties.
+                // We also need to 'rescue' mpStyleSheet if it is already set,
+                // which means a SfxStyleSheet was already set/ocopied but not
+                // yet set at the SdrObject. See copy-constructor and how it remembers
+                // the SfxStyleSheet there. This time, do not reset the
+                // attributes already set - this is done above.
+                SfxStyleSheet* pImplicitelyAlreadySet(mpStyleSheet);
+
+                // Set missing defaults and do RemoveHardAttributes. This is
+                // important, it deletes again the attributes set in
+                // ForceDefaultAttributes() which are set in the default
+                // SfxStyleSheet.
+                const_cast< AttributeProperties* >(this)->applyDefaultStyleSheetFromSdrModel();
+
+                if(pImplicitelyAlreadySet)
                 {
                     // Late-Init of setting parent to SfxStyleSheet after
-                    // it's creation. See copy-constructor and how it remembers
-                    // the SfxStyleSheet there.
-                    // It is necessary to reset mpStyleSheet to nullptr to
-                    // not trigger alarm inside ImpAddStyleSheet (!)
-                    SfxStyleSheet* pNew(mpStyleSheet);
-                    const_cast< AttributeProperties* >(this)->mpStyleSheet = nullptr;
-                    const_cast< AttributeProperties* >(this)->ImpAddStyleSheet(
-                        pNew,
-                        true);
-                }
-                else
-                {
-                    // Set missing defaults and do not RemoveHardAttributes
-                    const_cast< AttributeProperties* >(this)->ImpAddStyleSheet(
-                        ImpGetDefaultStyleSheet(),
-                        true);
+                    // it's creation.
+                    const_cast< AttributeProperties* >(this)->SetStyleSheet(pImplicitelyAlreadySet, true);
                 }
             }
 
@@ -544,7 +527,7 @@ namespace sdr
             const SdrObject& rObj(GetSdrObject());
             if (rObj.IsInserted())
             {
-                const SdrPage* const pPage(rObj.GetPage());
+                const SdrPage* const pPage(rObj.getSdrPageFromSdrObject());
                 if (pPage && pPage->IsInserted())
                     return true;
             }

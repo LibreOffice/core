@@ -195,20 +195,20 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
     SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
-    if(pObject && pObject->GetPage())
+    if(pObject && pObject->getSdrPageFromSdrObject())
     {
-        const bool bDoCreateGeometry(pObject->GetPage()->checkVisibility( rOriginal, rDisplayInfo, true ));
+        const bool bDoCreateGeometry(pObject->getSdrPageFromSdrObject()->checkVisibility( rOriginal, rDisplayInfo, true ));
 
         if(!bDoCreateGeometry && !(( pObject->GetObjInventor() == SdrInventor::Default ) && ( pObject->GetObjIdentifier() == OBJ_PAGE )) )
             return xRetval;
 
         PresObjKind eKind(PRESOBJ_NONE);
         const bool bSubContentProcessing(rDisplayInfo.GetSubContentActive());
-        const bool bIsMasterPageObject(pObject->GetPage()->IsMasterPage());
+        const bool bIsMasterPageObject(pObject->getSdrPageFromSdrObject()->IsMasterPage());
         const bool bIsPrinting(rOriginal.GetObjectContact().isOutputToPrinter());
         const SdrPageView* pPageView = rOriginal.GetObjectContact().TryToGetSdrPageView();
         const SdrPage* pVisualizedPage = GetSdrPageFromXDrawPage(rOriginal.GetObjectContact().getViewInformation2D().getVisualizedPage());
-        const SdPage* pObjectsSdPage = dynamic_cast< SdPage* >(pObject->GetPage());
+        const SdPage* pObjectsSdPage = dynamic_cast< SdPage* >(pObject->getSdrPageFromSdrObject());
         const bool bIsInsidePageObj(pPageView && pPageView->GetPage() != pVisualizedPage);
 
         // check if we need to draw a placeholder border. Never do it for
@@ -554,7 +554,7 @@ bool View::IsPresObjSelected(bool bOnPage, bool bOnMasterPage, bool bCheckPresOb
 
         if ( pObj && ( bCheckPresObjListOnly || pObj->IsEmptyPresObj() || pObj->GetUserCall() ) )
         {
-            pPage = static_cast<SdPage*>( pObj->GetPage() );
+            pPage = static_cast<SdPage*>( pObj->getSdrPageFromSdrObject() );
             bMasterPage = pPage && pPage->IsMasterPage();
 
             if ( (bMasterPage && bOnMasterPage) || (!bMasterPage && bOnPage) )
@@ -652,7 +652,7 @@ bool View::SdrBeginTextEdit(
     SdrOutliner* pOutl, OutlinerView* pGivenOutlinerView,
     bool bDontDeleteOutliner, bool bOnlyOneView, bool bGrabFocus )
 {
-    SdrPage* pPage = pObj ? pObj->GetPage() : nullptr;
+    SdrPage* pPage = pObj ? pObj->getSdrPageFromSdrObject() : nullptr;
     bool bMasterPage = pPage && pPage->IsMasterPage();
 
     GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(
@@ -735,7 +735,7 @@ bool View::SdrBeginTextEdit(
     if (bMasterPage && bReturn && pOutl)
     {
         const SdrTextObj* pTextObj = pOutl->GetTextObj();
-        const SdPage* pSdPage = pTextObj ? static_cast<const SdPage*>(pTextObj->GetPage()) : nullptr;
+        const SdPage* pSdPage = pTextObj ? static_cast<const SdPage*>(pTextObj->getSdrPageFromSdrObject()) : nullptr;
         const PresObjKind eKind = pSdPage ? pSdPage->GetPresObjKind(const_cast<SdrTextObj*>(pTextObj)) : PRESOBJ_NONE;
         switch (eKind)
         {
@@ -779,7 +779,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
         SdrTextObj* pObj = xObj.get();
         if( pObj && pObj->HasText() )
         {
-            SdrPage* pPage = pObj->GetPage();
+            SdrPage* pPage = pObj->getSdrPageFromSdrObject();
             if( !pPage || !pPage->IsMasterPage() )
                 pObj->SetEmptyPresObj( false );
         }
@@ -800,7 +800,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
 
         }
 
-        SdPage* pPage = dynamic_cast< SdPage* >( xObj->GetPage() );
+        SdPage* pPage = dynamic_cast< SdPage* >( xObj->getSdrPageFromSdrObject() );
         if( pPage )
             pPage->onEndTextEdit( xObj.get() );
     }
@@ -818,7 +818,7 @@ bool View::RestoreDefaultText( SdrTextObj* pTextObj )
     {
         if( !pTextObj->HasText() )
         {
-            SdPage* pPage = dynamic_cast< SdPage* >( pTextObj->GetPage() );
+            SdPage* pPage = dynamic_cast< SdPage* >( pTextObj->getSdrPageFromSdrObject() );
 
             if(pPage)
             {
@@ -1068,7 +1068,7 @@ IMPL_LINK( View, OnParagraphInsertedHdl, ::Outliner::ParagraphHdlParam, aParam, 
 
     if( aParam.pPara && pObj )
     {
-        SdPage* pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
+        SdPage* pPage = dynamic_cast< SdPage* >( pObj->getSdrPageFromSdrObject() );
         if( pPage )
             pPage->onParagraphInserted( aParam.pOutliner, aParam.pPara, pObj );
     }
@@ -1083,7 +1083,7 @@ IMPL_LINK( View, OnParagraphRemovingHdl, ::Outliner::ParagraphHdlParam, aParam, 
 
     if( aParam.pPara && pObj )
     {
-        SdPage* pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
+        SdPage* pPage = dynamic_cast< SdPage* >( pObj->getSdrPageFromSdrObject() );
         if( pPage )
             pPage->onParagraphRemoving( aParam.pOutliner, aParam.pPara, pObj );
     }
@@ -1201,10 +1201,10 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfo )
     /* Style Sheet handling */
     SdrTextObj* pTextObj = GetTextEditObject();
     SdrOutliner* pOutliner = GetTextEditOutliner();
-    if( !pOutliner || !pTextObj || !pTextObj->GetPage() )
+    if( !pOutliner || !pTextObj || !pTextObj->getSdrPageFromSdrObject() )
         return;
 
-    SdPage* pPage = static_cast< SdPage* >( pTextObj->GetPage() );
+    SdPage* pPage = static_cast< SdPage* >( pTextObj->getSdrPageFromSdrObject() );
     const PresObjKind eKind = pPage->GetPresObjKind(pTextObj);
 
     // outline kinds are taken care of in Outliner::ImplSetLevelDependentStyleSheet

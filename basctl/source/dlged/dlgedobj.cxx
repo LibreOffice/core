@@ -955,7 +955,7 @@ bool DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 void DlgEdObj::SetDefaults()
 {
     // set parent form
-    pDlgEdForm = static_cast<DlgEdPage*>(GetPage())->GetDlgEdForm();
+    pDlgEdForm = static_cast<DlgEdPage*>(getSdrPageFromSdrObject())->GetDlgEdForm();
 
     if ( pDlgEdForm )
     {
@@ -1379,7 +1379,7 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
 
 void DlgEdForm::UpdateStep()
 {
-    SdrPage* pSdrPage = GetPage();
+    SdrPage* pSdrPage = getSdrPageFromSdrObject();
 
     if ( pSdrPage )
     {

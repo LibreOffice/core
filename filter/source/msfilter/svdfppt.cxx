@@ -7573,7 +7573,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, const sal_uInt32
     std::set< sal_Int32 > aRows;
     std::set< sal_Int32 > aColumns;
 
-    SdrObjListIter aGroupIter( *pSubList, SdrIterMode::DeepNoGroups, false );
+    SdrObjListIter aGroupIter( pSubList, SdrIterMode::DeepNoGroups, false );
     while( aGroupIter.IsMore() )
     {
         const SdrObject* pObj( aGroupIter.Next() );
