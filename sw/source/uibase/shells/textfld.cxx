@@ -198,7 +198,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     }
                     else
                     {
-                        rSh.StartInputFieldDlg( rSh.GetCurField( true ), false, false );
+                        rSh.StartInputFieldDlg(rSh.GetCurField(true), false, false, GetView().GetFrameWeld());
                     }
                     bRet = true;
                 }

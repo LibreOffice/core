@@ -263,8 +263,6 @@ class AbstractSwInsertDBColAutoPilot_Impl :  public AbstractSwInsertDBColAutoPil
 class AbstractDropDownFieldDialog_Impl : public AbstractDropDownFieldDialog
 {
     DECL_ABSTDLG_BASE(AbstractDropDownFieldDialog_Impl, sw::DropDownFieldDialog)
-    virtual OString       GetWindowState() const override; //this method inherit from SystemWindow
-    virtual void          SetWindowState( const OString& rStr ) override; //this method inherit from SystemWindow
     virtual bool          PrevButtonPressed() const override;
     virtual bool          NextButtonPressed() const override;
 };
@@ -355,10 +353,14 @@ class AbstractGlossaryDlg_Impl : public AbstractGlossaryDlg
 class SwFieldInputDlg;
 class AbstractFieldInputDlg_Impl : public AbstractFieldInputDlg
 {
-    DECL_ABSTDLG_BASE(AbstractFieldInputDlg_Impl,SwFieldInputDlg)
-    //from class SalFrame
-    virtual void          SetWindowState( const OString & rStr ) override;
-    virtual OString       GetWindowState() const override;
+protected:
+    std::unique_ptr<SwFieldInputDlg> m_xDlg;
+public:
+    explicit AbstractFieldInputDlg_Impl(SwFieldInputDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual void          EndDialog(sal_Int32) override;
     virtual bool          PrevButtonPressed() const override;
     virtual bool          NextButtonPressed() const override;
@@ -587,7 +589,7 @@ public:
     virtual VclPtr<AbstractGlossaryDlg>        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) override;
-    virtual VclPtr<AbstractFieldInputDlg>        CreateFieldInputDlg(vcl::Window *pParent,
+    virtual VclPtr<AbstractFieldInputDlg>        CreateFieldInputDlg(weld::Window *pParent,
         SwWrtShell &rSh, SwField* pField, bool bPrevButton, bool bNextButton) override;
     virtual VclPtr<AbstractInsFootNoteDlg>     CreateInsFootNoteDlg(
         weld::Window * pParent, SwWrtShell &rSh, bool bEd = false) override;
