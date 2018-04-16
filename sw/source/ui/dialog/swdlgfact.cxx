@@ -144,7 +144,11 @@ short AbstractSwRenameXNamedDlg_Impl::Execute()
 }
 IMPL_ABSTDLG_BASE(AbstractSwModalRedlineAcceptDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractGlossaryDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractFieldInputDlg_Impl);
+
+short AbstractFieldInputDlg_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
 
 short AbstractInsFootNoteDlg_Impl::Execute()
 {
@@ -270,16 +274,6 @@ void AbstractSwInsertDBColAutoPilot_Impl::DataToDoc( const uno::Sequence< uno::A
         uno::Reference< sdbc::XResultSet > xResultSet)
 {
     pDlg->DataToDoc(rSelection, rxSource, xConnection, xResultSet);
-}
-
-OString AbstractDropDownFieldDialog_Impl::GetWindowState() const
-{
-    return pDlg->GetWindowState();
-}
-
-void AbstractDropDownFieldDialog_Impl::SetWindowState( const OString& rStr )
-{
-    pDlg->SetWindowState(rStr);
 }
 
 bool AbstractDropDownFieldDialog_Impl::PrevButtonPressed() const
@@ -439,29 +433,19 @@ OUString AbstractGlossaryDlg_Impl::GetCurrShortName() const
     return pDlg->GetCurrShortName();
 }
 
-void AbstractFieldInputDlg_Impl::SetWindowState( const OString& rStr )
-{
-    pDlg->SetWindowState( rStr );
-}
-
-OString AbstractFieldInputDlg_Impl::GetWindowState() const
-{
-    return pDlg->GetWindowState();
-}
-
 void AbstractFieldInputDlg_Impl::EndDialog(sal_Int32 n)
 {
-    pDlg->EndDialog(n);
+    m_xDlg->response(n);
 }
 
 bool AbstractFieldInputDlg_Impl::PrevButtonPressed() const
 {
-    return pDlg->PrevButtonPressed();
+    return m_xDlg->PrevButtonPressed();
 }
 
 bool AbstractFieldInputDlg_Impl::NextButtonPressed() const
 {
-    return pDlg->NextButtonPressed();
+    return m_xDlg->NextButtonPressed();
 }
 
 OUString AbstractInsFootNoteDlg_Impl::GetFontName()
@@ -930,11 +914,10 @@ VclPtr<AbstractGlossaryDlg> SwAbstractDialogFactory_Impl::CreateGlossaryDlg(SfxV
     return VclPtr<AbstractGlossaryDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractFieldInputDlg> SwAbstractDialogFactory_Impl::CreateFieldInputDlg(vcl::Window *pParent,
+VclPtr<AbstractFieldInputDlg> SwAbstractDialogFactory_Impl::CreateFieldInputDlg(weld::Window *pParent,
     SwWrtShell &rSh, SwField* pField, bool bPrevButton, bool bNextButton)
 {
-    VclPtr<SwFieldInputDlg> pDlg = VclPtr<SwFieldInputDlg>::Create( pParent, rSh, pField, bPrevButton, bNextButton );
-    return VclPtr<AbstractFieldInputDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractFieldInputDlg_Impl>::Create(new SwFieldInputDlg(pParent, rSh, pField, bPrevButton, bNextButton));
 }
 
 VclPtr<AbstractInsFootNoteDlg> SwAbstractDialogFactory_Impl::CreateInsFootNoteDlg(

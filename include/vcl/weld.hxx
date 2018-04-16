@@ -745,6 +745,7 @@ public:
     OUString get_title() const { return getConstDialog()->get_title(); }
     void set_help_id(const OString& rHelpId) { getDialog()->set_help_id(rHelpId); }
     OString get_help_id() const { return getConstDialog()->get_help_id(); }
+    void response(int nResponse) { getDialog()->response(nResponse); }
     virtual ~DialogController();
 };
 
