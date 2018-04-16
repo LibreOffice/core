@@ -184,15 +184,14 @@ void CGM::ImplDoClass4()
                 sal_uInt32 nType = ImplGetUI16();
                 sal_uInt32 nSize = ImplGetUI( 1 );
 
-                if (static_cast<sal_uIntPtr>(mpEndValidSource - (mpSource + mnParaSize)) <= nSize)
+                if (static_cast<sal_uIntPtr>(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
                     throw css::uno::Exception("attempt to read past end of input", nullptr);
 
-                mpSource[mnParaSize + nSize] = 0;
+                OUString aStr(reinterpret_cast<char*>(mpSource) + mnParaSize, nSize, RTL_TEXTENCODING_ASCII_US);
 
                 awt::Size aSize;
                 awt::Point aPoint( static_cast<long>(aFloatPoint.X), static_cast<long>(aFloatPoint.Y) );
-                mpOutAct->DrawText( aPoint, aSize,
-                                reinterpret_cast<char*>(mpSource) + mnParaSize, static_cast<FinalFlag>(nType) );
+                mpOutAct->DrawText(aPoint, aSize, aStr, static_cast<FinalFlag>(nType));
                 mnParaSize = mnElementSize;
             }
             break;
@@ -222,15 +221,14 @@ void CGM::ImplDoClass4()
                 sal_uInt32 nType = ImplGetUI16();
                 sal_uInt32 nSize = ImplGetUI(1);
 
-                if (static_cast<sal_uIntPtr>(mpEndValidSource - (mpSource + mnParaSize)) <= nSize)
+                if (static_cast<sal_uIntPtr>(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
                     throw css::uno::Exception("attempt to read past end of input", nullptr);
 
-                mpSource[ mnParaSize + nSize ] = 0;
+                OUString aStr(reinterpret_cast<char*>(mpSource) + mnParaSize, nSize, RTL_TEXTENCODING_ASCII_US);
 
                 awt::Point aPoint( static_cast<long>(aFloatPoint.X), static_cast<long>(aFloatPoint.Y) );
                 awt::Size aSize(static_cast<long>(dx), static_cast<long>(dy));
-                mpOutAct->DrawText( aPoint, aSize ,
-                                reinterpret_cast<char*>(mpSource) + mnParaSize, static_cast<FinalFlag>(nType) );
+                mpOutAct->DrawText(aPoint, aSize , aStr, static_cast<FinalFlag>(nType));
                 mnParaSize = mnElementSize;
             }
             break;
