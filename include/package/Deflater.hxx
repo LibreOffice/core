@@ -22,6 +22,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <package/packagedllapi.hxx>
+#include <memory>
 
 struct z_stream_s;
 
@@ -35,7 +36,7 @@ class DLLPUBLIC_PACKAGE Deflater final
     bool                    bFinish;
     bool                    bFinished;
     sal_Int64               nOffset, nLength;
-    z_stream*               pStream;
+    std::unique_ptr<z_stream> pStream;
 
     void init (sal_Int32 nLevel, bool bNowrap);
     sal_Int32 doDeflateBytes (css::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);

@@ -22,6 +22,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <package/packagedllapi.hxx>
+#include <memory>
 
 struct z_stream_s;
 
@@ -33,7 +34,7 @@ class DLLPUBLIC_PACKAGE Inflater final
 
     bool                    bFinished, bNeedDict;
     sal_Int32               nOffset, nLength, nLastInflateError;
-    z_stream*               pStream;
+    std::unique_ptr<z_stream>  pStream;
     css::uno::Sequence < sal_Int8 >  sInBuffer;
     sal_Int32   doInflateBytes (css::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
 

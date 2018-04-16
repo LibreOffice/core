@@ -37,20 +37,20 @@ Deflater::~Deflater()
 }
 void Deflater::init (sal_Int32 nLevelArg, bool bNowrap)
 {
-    pStream = new z_stream;
+    pStream.reset(new z_stream);
     /* Memset it to 0...sets zalloc/zfree/opaque to NULL */
-    memset (pStream, 0, sizeof(*pStream));
+    memset (pStream.get(), 0, sizeof(*pStream));
 
-    switch (deflateInit2(pStream, nLevelArg, Z_DEFLATED, bNowrap? -MAX_WBITS : MAX_WBITS,
+    switch (deflateInit2(pStream.get(), nLevelArg, Z_DEFLATED, bNowrap? -MAX_WBITS : MAX_WBITS,
                 DEF_MEM_LEVEL, DEFAULT_STRATEGY))
     {
         case Z_OK:
             break;
         case Z_MEM_ERROR:
-            delete pStream;
+            pStream.reset();
             break;
         case Z_STREAM_ERROR:
-            delete pStream;
+            pStream.reset();
             break;
         default:
              break;
@@ -75,9 +75,9 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
     pStream->avail_out = nNewLength;
 
 #if !defined Z_PREFIX
-    nResult = deflate(pStream, bFinish ? Z_FINISH : Z_NO_FLUSH);
+    nResult = deflate(pStream.get(), bFinish ? Z_FINISH : Z_NO_FLUSH);
 #else
-    nResult = z_deflate(pStream, bFinish ? Z_FINISH : Z_NO_FLUSH);
+    nResult = z_deflate(pStream.get(), bFinish ? Z_FINISH : Z_NO_FLUSH);
 #endif
     switch (nResult)
     {
@@ -124,9 +124,9 @@ sal_Int64 Deflater::getTotalOut(  )
 void Deflater::reset(  )
 {
 #if !defined Z_PREFIX
-    deflateReset(pStream);
+    deflateReset(pStream.get());
 #else
-    z_deflateReset(pStream);
+    z_deflateReset(pStream.get());
 #endif
     bFinish = false;
     bFinished = false;
@@ -134,16 +134,15 @@ void Deflater::reset(  )
 }
 void Deflater::end(  )
 {
-    if (pStream != nullptr)
+    if (pStream)
     {
 #if !defined Z_PREFIX
-        deflateEnd(pStream);
+        deflateEnd(pStream.get());
 #else
-        z_deflateEnd(pStream);
+        z_deflateEnd(pStream.get());
 #endif
-        delete pStream;
+        pStream.reset();
     }
-    pStream = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
