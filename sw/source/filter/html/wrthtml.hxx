@@ -503,8 +503,8 @@ public:
     void OutNewLine( bool bCheck=false );
 
     // for HTMLSaveData
-    SwPaM* GetEndPaM() { return pOrigPam; }
-    void SetEndPaM( SwPaM* pPam ) { pOrigPam = pPam; }
+    SwPaM* GetEndPaM() { return m_pOrigPam; }
+    void SetEndPaM( SwPaM* pPam ) { m_pOrigPam = pPam; }
 
     static sal_uInt32 ToPixel( sal_uInt32 nVal, const bool bVert );
 

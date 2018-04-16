@@ -1986,15 +1986,15 @@ void WW8Export::SaveData( sal_uLong nStt, sal_uLong nEnd )
     else
         rData.pOOld = nullptr; // reuse pO
 
-    rData.bOldWriteAll = GetWriter().bWriteAll;
-    GetWriter().bWriteAll = true;
+    rData.bOldWriteAll = GetWriter().m_bWriteAll;
+    GetWriter().m_bWriteAll = true;
 }
 
 void WW8Export::RestoreData()
 {
     MSWordSaveData &rData = m_aSaveData.top();
 
-    GetWriter().bWriteAll = rData.bOldWriteAll;
+    GetWriter().m_bWriteAll = rData.bOldWriteAll;
 
     OSL_ENSURE( pO->empty(), "pO is not empty in WW8Export::RestoreData()" );
     if ( rData.pOOld )
@@ -3506,31 +3506,31 @@ void WW8Export::PrepareStorage()
 ErrCode SwWW8Writer::WriteStorage()
 {
     // #i34818# - update layout (if present), for SwWriteTable
-    SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     if( pViewShell != nullptr )
         pViewShell->CalcLayout();
 
-    long nMaxNode = pDoc->GetNodes().Count();
-    ::StartProgress( STR_STATSTR_W4WWRITE, 0, nMaxNode, pDoc->GetDocShell() );
+    long nMaxNode = m_pDoc->GetNodes().Count();
+    ::StartProgress( STR_STATSTR_W4WWRITE, 0, nMaxNode, m_pDoc->GetDocShell() );
 
     // Respect table at the beginning of the document
     {
-        SwTableNode* pTNd = pCurPam->GetNode().FindTableNode();
-        if( pTNd && bWriteAll )
+        SwTableNode* pTNd = m_pCurrentPam->GetNode().FindTableNode();
+        if( pTNd && m_bWriteAll )
             // start with the table node !!
-            pCurPam->GetPoint()->nNode = *pTNd;
+            m_pCurrentPam->GetPoint()->nNode = *pTNd;
     }
 
     // Do the actual export
     {
         bool bDot = mpMedium->GetFilter()->GetName().endsWith("Vorlage");
-        WW8Export aExport(this, pDoc, pCurPam, pOrigPam, bDot);
+        WW8Export aExport(this, m_pDoc, m_pCurrentPam, m_pOrigPam, bDot);
         m_pExport = &aExport;
-        aExport.ExportDocument( bWriteAll );
+        aExport.ExportDocument( m_bWriteAll );
         m_pExport = nullptr;
     }
 
-    ::EndProgress( pDoc->GetDocShell() );
+    ::EndProgress( m_pDoc->GetDocShell() );
     return ERRCODE_NONE;
 }
 

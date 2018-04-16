@@ -195,7 +195,7 @@ sal_uInt16 SwHTMLWriter::GuessFrameType( const SwFrameFormat& rFrameFormat,
 
         const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
         sal_uLong nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
-        const SwNode* pNd = pDoc->GetNodes()[ nStt ];
+        const SwNode* pNd = m_pDoc->GetNodes()[ nStt ];
 
         if( pNd->IsGrfNode() )
         {
@@ -209,7 +209,7 @@ sal_uInt16 SwHTMLWriter::GuessFrameType( const SwFrameFormat& rFrameFormat,
         }
         else
         {
-            sal_uLong nEnd = pDoc->GetNodes()[nStt-1]->EndOfSectionIndex();
+            sal_uLong nEnd = m_pDoc->GetNodes()[nStt-1]->EndOfSectionIndex();
 
             const SfxPoolItem* pItem;
             const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
@@ -271,10 +271,10 @@ sal_uInt16 SwHTMLWriter::GuessFrameType( const SwFrameFormat& rFrameFormat,
                     // empty frame
                     eType = HTML_FRMTYPE_EMPTY;
                 }
-                else if( pDoc->GetNodes()[nStt+1]->IsTableNode() )
+                else if( m_pDoc->GetNodes()[nStt+1]->IsTableNode() )
                 {
                     const SwTableNode *pTableNd =
-                        pDoc->GetNodes()[nStt+1]->GetTableNode();
+                        m_pDoc->GetNodes()[nStt+1]->GetTableNode();
                     if( pTableNd->EndOfSectionIndex()+1 == nEnd )
                     {
                         // table with heading
@@ -293,7 +293,7 @@ void SwHTMLWriter::CollectFlyFrames()
     OSL_ENSURE( HTML_CFG_MAX+1 == MAX_BROWSERS,
             "number of browser configurations has changed" );
 
-    SwPosFlyFrames aFlyPos(pDoc->GetAllFlyFormats(bWriteAll ? nullptr : pCurPam, true));
+    SwPosFlyFrames aFlyPos(m_pDoc->GetAllFlyFormats(m_bWriteAll ? nullptr : m_pCurrentPam, true));
 
     for(SwPosFlyFrames::const_iterator aIter(aFlyPos.begin()); aIter != aFlyPos.end(); ++aIter)
     {
@@ -1520,20 +1520,20 @@ static Writer& OutHTML_FrameFormatTableNode( Writer& rWrt, const SwFrameFormat& 
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
     sal_uLong nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
-    sal_uLong nEnd = rHTMLWrt.pDoc->GetNodes()[nStt-1]->EndOfSectionIndex();
+    sal_uLong nEnd = rHTMLWrt.m_pDoc->GetNodes()[nStt-1]->EndOfSectionIndex();
 
     OUString aCaption;
     bool bTopCaption = false;
 
     // Not const, because GetTable won't be const sometime later
-    SwNode *pNd = rHTMLWrt.pDoc->GetNodes()[ nStt ];
+    SwNode *pNd = rHTMLWrt.m_pDoc->GetNodes()[ nStt ];
     SwTableNode *pTableNd = pNd->GetTableNode();
     const SwTextNode *pTextNd = pNd->GetTextNode();
     if( !pTableNd && pTextNd )
     {
         // Table with heading
         bTopCaption = true;
-        pTableNd = rHTMLWrt.pDoc->GetNodes()[nStt+1]->GetTableNode();
+        pTableNd = rHTMLWrt.m_pDoc->GetNodes()[nStt+1]->GetTableNode();
     }
     OSL_ENSURE( pTableNd, "Frame does not contain a table" );
     if( pTableNd )
@@ -1544,7 +1544,7 @@ static Writer& OutHTML_FrameFormatTableNode( Writer& rWrt, const SwFrameFormat& 
                 "Invalid frame content for a table" );
 
         if( nTableEnd == nEnd - 2 )
-            pTextNd = rHTMLWrt.pDoc->GetNodes()[nTableEnd+1]->GetTextNode();
+            pTextNd = rHTMLWrt.m_pDoc->GetNodes()[nTableEnd+1]->GetTextNode();
     }
     if( pTextNd )
         aCaption = pTextNd->GetText();
@@ -1622,7 +1622,7 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
     sal_uLong nStt = rFlyContent.GetContentIdx()->GetIndex();
-    const SwStartNode* pSttNd = rWrt.pDoc->GetNodes()[nStt]->GetStartNode();
+    const SwStartNode* pSttNd = rWrt.m_pDoc->GetNodes()[nStt]->GetStartNode();
     OSL_ENSURE( pSttNd, "Where is the start node" );
 
     {
@@ -1632,7 +1632,7 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
                                 pSttNd->EndOfSectionIndex(),
                                    true, &rFrameFormat );
         rHTMLWrt.m_bOutFlyFrame = true;
-        rHTMLWrt.Out_SwDoc( rWrt.pCurPam );
+        rHTMLWrt.Out_SwDoc( rWrt.m_pCurrentPam );
     }
 
     rHTMLWrt.DecIndentLevel();  // indent the content of Multicol;
@@ -1709,7 +1709,7 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
     // Output frame-anchored frames that are anchored to the start node
     rHTMLWrt.OutFlyFrame( nStt, 0, HtmlPosition::Any );
 
-    const SwStartNode* pSttNd = rWrt.pDoc->GetNodes()[nStt]->GetStartNode();
+    const SwStartNode* pSttNd = rWrt.m_pDoc->GetNodes()[nStt]->GetStartNode();
     OSL_ENSURE( pSttNd, "Where is the start node" );
 
     {
@@ -1719,7 +1719,7 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
                                 pSttNd->EndOfSectionIndex(),
                                    true, &rFrameFormat );
         rHTMLWrt.m_bOutFlyFrame = true;
-        rHTMLWrt.Out_SwDoc( rWrt.pCurPam );
+        rHTMLWrt.Out_SwDoc( rWrt.m_pCurrentPam );
     }
 
     rHTMLWrt.DecIndentLevel();  // indent the content of Multicol;
@@ -1781,7 +1781,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
     sal_uLong nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
-    SwGrfNode *pGrfNd = rHTMLWrt.pDoc->GetNodes()[ nStt ]->GetGrfNode();
+    SwGrfNode *pGrfNd = rHTMLWrt.m_pDoc->GetNodes()[ nStt ]->GetGrfNode();
     OSL_ENSURE( pGrfNd, "Grf node expected" );
     if( !pGrfNd )
         return rWrt;
@@ -1932,7 +1932,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
     sal_uLong nStt = rFlyContent.GetContentIdx()->GetIndex();
-    const SwStartNode* pSttNd = rWrt.pDoc->GetNodes()[nStt]->GetStartNode();
+    const SwStartNode* pSttNd = rWrt.m_pDoc->GetNodes()[nStt]->GetStartNode();
     OSL_ENSURE( pSttNd, "Where is the start node" );
 
     if( !bHeader && !aSpacer.isEmpty() )
@@ -1953,7 +1953,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
         else
             rHTMLWrt.m_bOutFooter = true;
 
-        rHTMLWrt.Out_SwDoc( rWrt.pCurPam );
+        rHTMLWrt.Out_SwDoc( rWrt.m_pCurrentPam );
     }
 
     if( bHeader && !aSpacer.isEmpty() )
@@ -2030,8 +2030,8 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
         // Here, we need position and name. That's why we sort a
         // sal_uInt16 and a string array ourselves.
         OUString aOutline( aURL.copy( 0, nPos-1 ) );
-        SwPosition aPos( *pCurPam->GetPoint() );
-        if( pDoc->GotoOutline( aPos, aOutline ) )
+        SwPosition aPos( *m_pCurrentPam->GetPoint() );
+        if( m_pDoc->GotoOutline( aPos, aOutline ) )
         {
             sal_uInt32 nIdx = aPos.nNode.GetIndex();
 
@@ -2055,12 +2055,12 @@ void SwHTMLWriter::CollectLinkTargets()
     const SwFormatINetFormat* pINetFormat;
     const SwTextINetFormat* pTextAttr;
 
-    sal_uInt32 n, nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
+    sal_uInt32 n, nMaxItems = m_pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
     for( n = 0; n < nMaxItems; ++n )
     {
         const SwTextNode* pTextNd;
 
-        if( nullptr != ( pINetFormat = pDoc->GetAttrPool().GetItem2( RES_TXTATR_INETFMT, n ) ) &&
+        if( nullptr != ( pINetFormat = m_pDoc->GetAttrPool().GetItem2( RES_TXTATR_INETFMT, n ) ) &&
             nullptr != ( pTextAttr = pINetFormat->GetTextINetFormat()) &&
             nullptr != ( pTextNd = pTextAttr->GetpTextNode() ) &&
             pTextNd->GetNodes().IsDocNodes() )
@@ -2070,10 +2070,10 @@ void SwHTMLWriter::CollectLinkTargets()
     }
 
     const SwFormatURL *pURL;
-    nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_URL );
+    nMaxItems = m_pDoc->GetAttrPool().GetItemCount2( RES_URL );
     for( n = 0; n < nMaxItems; ++n )
     {
-        if( nullptr != (pURL = pDoc->GetAttrPool().GetItem2(
+        if( nullptr != (pURL = m_pDoc->GetAttrPool().GetItem2(
             RES_URL, n ) ) )
         {
             AddLinkTarget( pURL->GetURL() );

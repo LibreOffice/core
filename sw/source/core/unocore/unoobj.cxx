@@ -180,15 +180,15 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
         return;
 
     SwWriter aWriter( aStream, rPam );
-    xWrt->bASCII_NoLastLineEnd = true;
-    xWrt->bExportPargraphNumbering = false;
+    xWrt->m_bASCII_NoLastLineEnd = true;
+    xWrt->m_bExportPargraphNumbering = false;
     SwAsciiOptions aOpt = xWrt->GetAsciiOptions();
     aOpt.SetCharSet( RTL_TEXTENCODING_UNICODE );
     xWrt->SetAsciiOptions( aOpt );
-    xWrt->bUCS2_WithStartChar = false;
+    xWrt->m_bUCS2_WithStartChar = false;
     // #i68522#
-    const bool bOldShowProgress = xWrt->bShowProgress;
-    xWrt->bShowProgress = false;
+    const bool bOldShowProgress = xWrt->m_bShowProgress;
+    xWrt->m_bShowProgress = false;
 
     if( ! aWriter.Write( xWrt ).IsError() )
     {
@@ -205,7 +205,7 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
             rBuffer = OUString(pStr, SAL_NO_ACQUIRE);
         }
     }
-    xWrt->bShowProgress = bOldShowProgress;
+    xWrt->m_bShowProgress = bOldShowProgress;
 
 }
 

@@ -724,7 +724,7 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
             xWrt->SetAsciiOptions( aAOpt );
 
             // no start char for clipboard
-            xWrt->bUCS2_WithStartChar = false;
+            xWrt->m_bUCS2_WithStartChar = false;
         }
         break;
     default: break;
@@ -733,8 +733,8 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
     if( xWrt.is() )
     {
         SwDoc* pDoc = static_cast<SwDoc*>(pObject);
-        xWrt->bWriteClipboardDoc = true;
-        xWrt->bWriteOnlyFirstTable = bool(TransferBufferType::Table & m_eBufferType);
+        xWrt->m_bWriteClipboardDoc = true;
+        xWrt->m_bWriteOnlyFirstTable = bool(TransferBufferType::Table & m_eBufferType);
         xWrt->SetShowProgress(false);
 
 #if defined(DEBUGPASTE)

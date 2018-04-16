@@ -117,13 +117,13 @@ void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
 
 Writer::Writer()
     : m_pImpl(o3tl::make_unique<Writer_Impl>())
-    , pOrigFileName(nullptr), pDoc(nullptr), pOrigPam(nullptr), pCurPam(nullptr)
+    , m_pOrigFileName(nullptr), m_pDoc(nullptr), m_pOrigPam(nullptr), m_pCurrentPam(nullptr)
 {
-    bWriteAll = bShowProgress = bUCS2_WithStartChar = true;
-    bASCII_NoLastLineEnd = bASCII_ParaAsBlanc = bASCII_ParaAsCR =
-        bWriteClipboardDoc = bWriteOnlyFirstTable = bBlock =
-        bOrganizerMode = false;
-    bExportPargraphNumbering = true;
+    m_bWriteAll = m_bShowProgress = m_bUCS2_WithStartChar = true;
+    m_bASCII_NoLastLineEnd = m_bASCII_ParaAsBlank = m_bASCII_ParaAsCR =
+        m_bWriteClipboardDoc = m_bWriteOnlyFirstTable = m_bBlock =
+        m_bOrganizerMode = false;
+    m_bExportPargraphNumbering = true;
 }
 
 Writer::~Writer()
@@ -133,45 +133,45 @@ Writer::~Writer()
 /*
  * Document Interface Access
  */
-IDocumentSettingAccess& Writer::getIDocumentSettingAccess() { return pDoc->getIDocumentSettingAccess(); }
-const IDocumentSettingAccess& Writer::getIDocumentSettingAccess() const { return pDoc->getIDocumentSettingAccess(); }
-IDocumentStylePoolAccess& Writer::getIDocumentStylePoolAccess() { return pDoc->getIDocumentStylePoolAccess(); }
-const IDocumentStylePoolAccess& Writer::getIDocumentStylePoolAccess() const { return pDoc->getIDocumentStylePoolAccess(); }
+IDocumentSettingAccess& Writer::getIDocumentSettingAccess() { return m_pDoc->getIDocumentSettingAccess(); }
+const IDocumentSettingAccess& Writer::getIDocumentSettingAccess() const { return m_pDoc->getIDocumentSettingAccess(); }
+IDocumentStylePoolAccess& Writer::getIDocumentStylePoolAccess() { return m_pDoc->getIDocumentStylePoolAccess(); }
+const IDocumentStylePoolAccess& Writer::getIDocumentStylePoolAccess() const { return m_pDoc->getIDocumentStylePoolAccess(); }
 
 void Writer::ResetWriter()
 {
-    m_pImpl->RemoveFontList( *pDoc );
+    m_pImpl->RemoveFontList( *m_pDoc );
     m_pImpl.reset(new Writer_Impl);
 
-    if( pCurPam )
+    if( m_pCurrentPam )
     {
-        while( pCurPam->GetNext() != pCurPam )
-            delete pCurPam->GetNext();
-        delete pCurPam;
+        while( m_pCurrentPam->GetNext() != m_pCurrentPam )
+            delete m_pCurrentPam->GetNext();
+        delete m_pCurrentPam;
     }
-    pCurPam = nullptr;
-    pOrigFileName = nullptr;
-    pDoc = nullptr;
+    m_pCurrentPam = nullptr;
+    m_pOrigFileName = nullptr;
+    m_pDoc = nullptr;
 
-    bShowProgress = bUCS2_WithStartChar = true;
-    bASCII_NoLastLineEnd = bASCII_ParaAsBlanc = bASCII_ParaAsCR =
-        bWriteClipboardDoc = bWriteOnlyFirstTable = bBlock =
-        bOrganizerMode = false;
+    m_bShowProgress = m_bUCS2_WithStartChar = true;
+    m_bASCII_NoLastLineEnd = m_bASCII_ParaAsBlank = m_bASCII_ParaAsCR =
+        m_bWriteClipboardDoc = m_bWriteOnlyFirstTable = m_bBlock =
+        m_bOrganizerMode = false;
 }
 
 bool Writer::CopyNextPam( SwPaM ** ppPam )
 {
-    if( (*ppPam)->GetNext() == pOrigPam )
+    if( (*ppPam)->GetNext() == m_pOrigPam )
     {
-        *ppPam = pOrigPam;          // set back to the beginning pam
+        *ppPam = m_pOrigPam;          // set back to the beginning pam
         return false;           // end of the ring
     }
 
     // otherwise copy the next value from the next Pam
     *ppPam = (*ppPam)->GetNext();
 
-    *pCurPam->GetPoint() = *(*ppPam)->Start();
-    *pCurPam->GetMark() = *(*ppPam)->End();
+    *m_pCurrentPam->GetPoint() = *(*ppPam)->Start();
+    *m_pCurrentPam->GetMark() = *(*ppPam)->End();
 
     return true;
 }
@@ -180,7 +180,7 @@ bool Writer::CopyNextPam( SwPaM ** ppPam )
 
 sal_Int32 Writer::FindPos_Bkmk(const SwPosition& rPos) const
 {
-    const IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    const IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
     const IDocumentMarkAccess::const_iterator_t ppBkmk = std::lower_bound(
         pMarkAccess->getAllMarksBegin(),
         pMarkAccess->getAllMarksEnd(),
@@ -260,14 +260,14 @@ ErrCode Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
         return nResult;
     }
 
-    pDoc = rPaM.GetDoc();
-    pOrigFileName = pFName;
+    m_pDoc = rPaM.GetDoc();
+    m_pOrigFileName = pFName;
     m_pImpl->m_pStream = &rStrm;
 
     // Copy PaM, so that it can be modified
-    pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
+    m_pCurrentPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
     // for comparison secure to the current Pam
-    pOrigPam = &rPaM;
+    m_pOrigPam = &rPaM;
 
     ErrCode nRet = WriteStream();
 
@@ -301,11 +301,11 @@ ErrCode Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, const 
 
 bool Writer::CopyLocalFileToINet( OUString& rFileNm )
 {
-    if( !pOrigFileName )                // can be happen, by example if we
+    if( !m_pOrigFileName )                // can be happen, by example if we
         return false;                   // write into the clipboard
 
     bool bRet = false;
-    INetURLObject aFileUrl( rFileNm ), aTargetUrl( *pOrigFileName );
+    INetURLObject aFileUrl( rFileNm ), aTargetUrl( *m_pOrigFileName );
 
 // this is our old without the Mail-Export
     if( ! ( INetProtocol::File == aFileUrl.GetProtocol() &&
@@ -357,8 +357,8 @@ void Writer::PutNumFormatFontsInAttrPool()
     // then there are a few fonts in the NumRules
     // These put into the Pool. After this does they have a RefCount > 1
     // it can be removed - it is already in the Pool
-    SfxItemPool& rPool = pDoc->GetAttrPool();
-    const SwNumRuleTable& rListTable = pDoc->GetNumRuleTable();
+    SfxItemPool& rPool = m_pDoc->GetAttrPool();
+    const SwNumRuleTable& rListTable = m_pDoc->GetNumRuleTable();
     const SwNumRule* pRule;
     const SwNumFormat* pFormat;
     const vcl::Font* pFont;
@@ -390,7 +390,7 @@ void Writer::PutNumFormatFontsInAttrPool()
 
 void Writer::PutEditEngFontsInAttrPool()
 {
-    SfxItemPool& rPool = pDoc->GetAttrPool();
+    SfxItemPool& rPool = m_pDoc->GetAttrPool();
     if( rPool.GetSecondaryPool() )
     {
         AddFontItems_( rPool, EE_CHAR_FONTINFO );
@@ -437,7 +437,7 @@ void Writer::AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont )
 // OtherPos of the bookmarks also inserted.
 void Writer::CreateBookmarkTable()
 {
-    const IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    const IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
     for(IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->getBookmarksBegin();
         ppBkmk != pMarkAccess->getBookmarksEnd();
         ++ppBkmk)
@@ -498,13 +498,13 @@ ErrCode StgWriter::Write( SwPaM& rPaM, SotStorage& rStg, const OUString* pFName 
 {
     SetStream(nullptr);
     pStg = &rStg;
-    pDoc = rPaM.GetDoc();
-    pOrigFileName = pFName;
+    m_pDoc = rPaM.GetDoc();
+    m_pOrigFileName = pFName;
 
     // Copy PaM, so that it can be modified
-    pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
+    m_pCurrentPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
     // for comparison secure to the current Pam
-    pOrigPam = &rPaM;
+    m_pOrigPam = &rPaM;
 
     ErrCode nRet = WriteStorage();
 
@@ -519,13 +519,13 @@ ErrCode StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >&
     SetStream(nullptr);
     pStg = nullptr;
     xStg = rStg;
-    pDoc = rPaM.GetDoc();
-    pOrigFileName = pFName;
+    m_pDoc = rPaM.GetDoc();
+    m_pOrigFileName = pFName;
 
     // Copy PaM, so that it can be modified
-    pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
+    m_pCurrentPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
     // for comparison secure to the current Pam
-    pOrigPam = &rPaM;
+    m_pOrigPam = &rPaM;
 
     ErrCode nRet = pMedium ? WriteMedium( *pMedium ) : WriteStorage();
 

@@ -561,30 +561,30 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
 
     // the Default-TextStyle is not also exported !!
     // 0-Style is the Default; is never exported !!
-    const size_t nTextFormats = pDoc->GetTextFormatColls()->size();
+    const size_t nTextFormats = m_pDoc->GetTextFormatColls()->size();
     for( size_t i = 1; i < nTextFormats; ++i )
     {
-        const SwTextFormatColl* pColl = (*pDoc->GetTextFormatColls())[i];
+        const SwTextFormatColl* pColl = (*m_pDoc->GetTextFormatColls())[i];
         sal_uInt16 nPoolId = pColl->GetPoolFormatId();
-        if( nPoolId == RES_POOLCOLL_TEXT || pDoc->IsUsed( *pColl ) )
-            OutCSS1_SwFormat( *this, *pColl, &pDoc->getIDocumentStylePoolAccess(), m_xTemplate.get() );
+        if( nPoolId == RES_POOLCOLL_TEXT || m_pDoc->IsUsed( *pColl ) )
+            OutCSS1_SwFormat( *this, *pColl, &m_pDoc->getIDocumentStylePoolAccess(), m_xTemplate.get() );
     }
 
     // the Default-TextStyle is not also exported !!
-    const size_t nCharFormats = pDoc->GetCharFormats()->size();
+    const size_t nCharFormats = m_pDoc->GetCharFormats()->size();
     for( size_t i = 1; i < nCharFormats; ++i )
     {
-        const SwCharFormat *pCFormat = (*pDoc->GetCharFormats())[i];
+        const SwCharFormat *pCFormat = (*m_pDoc->GetCharFormats())[i];
         sal_uInt16 nPoolId = pCFormat->GetPoolFormatId();
         if( nPoolId == RES_POOLCHR_INET_NORMAL ||
             nPoolId == RES_POOLCHR_INET_VISIT ||
-            pDoc->IsUsed( *pCFormat ) )
-            OutCSS1_SwFormat( *this, *pCFormat, &pDoc->getIDocumentStylePoolAccess(), m_xTemplate.get() );
+            m_pDoc->IsUsed( *pCFormat ) )
+            OutCSS1_SwFormat( *this, *pCFormat, &m_pDoc->getIDocumentStylePoolAccess(), m_xTemplate.get() );
     }
 
     bool bHasEndNotes {false};
     bool bHasFootNotes {false};
-    const SwFootnoteIdxs& rIdxs = pDoc->GetFootnoteIdxs();
+    const SwFootnoteIdxs& rIdxs = m_pDoc->GetFootnoteIdxs();
     for( auto pIdx : rIdxs )
     {
         if( pIdx->GetFootnote().IsEndNote() )
@@ -600,8 +600,8 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
                 break;
         }
     }
-    OutCSS1_SwFootnoteInfo( *this, pDoc->GetFootnoteInfo(), pDoc, bHasFootNotes, false );
-    OutCSS1_SwFootnoteInfo( *this, pDoc->GetEndNoteInfo(), pDoc, bHasEndNotes, true );
+    OutCSS1_SwFootnoteInfo( *this, m_pDoc->GetFootnoteInfo(), m_pDoc, bHasFootNotes, false );
+    OutCSS1_SwFootnoteInfo( *this, m_pDoc->GetEndNoteInfo(), m_pDoc, bHasEndNotes, true );
 
     if( !m_bFirstCSS1Rule )
     {
@@ -1393,7 +1393,7 @@ static void OutCSS1DropCapRule(
                 OutCSS1_SwFormatDropAttrs( rHTMLWrt, rDrop );
             }
 
-            SfxItemSet aScriptItemSet( rHTMLWrt.pDoc->GetAttrPool(),
+            SfxItemSet aScriptItemSet( rHTMLWrt.m_pDoc->GetAttrPool(),
                                        svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
                                        RES_CHRATR_LANGUAGE, RES_CHRATR_POSTURE,
                                        RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
@@ -2224,10 +2224,10 @@ void SwHTMLWriter::OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFor
         // The background color is normally only used in Browse-Mode.
         // We always use it for a HTML document, but for a text document
         // only if viewed in Browse-Mode.
-        if( pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) ||
-            pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE))
+        if( m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) ||
+            m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE))
         {
-            SwViewShell *pVSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+            SwViewShell *pVSh = m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
             if ( pVSh &&
                  COL_TRANSPARENT != pVSh->GetViewOptions()->GetRetoucheColor())
                 aColor = pVSh->GetViewOptions()->GetRetoucheColor();
@@ -3107,7 +3107,7 @@ static Writer& OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( Writer& rWrt,
     if( ( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) ||
           !rHTMLWrt.m_bCSS1IgnoreFirstPageDesc ||
           rHTMLWrt.m_pStartNdIdx->GetIndex() !=
-                      rHTMLWrt.pCurPam->GetPoint()->nNode.GetIndex() ) &&
+                      rHTMLWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() ) &&
         SfxItemState::SET==rItemSet.GetItemState( RES_PAGEDESC, bDeep, &pItem ))
         pPDescItem = static_cast<const SwFormatPageDesc*>(pItem);
 

@@ -6153,8 +6153,8 @@ void SwUiWriterTest::testHtmlCopyImages()
     xWrt = new SwHTMLWriter( /*rBaseURL=*/OUString() );
     CPPUNIT_ASSERT(xWrt.is());
 
-    xWrt->bWriteClipboardDoc = true;
-    xWrt->bWriteOnlyFirstTable = false;
+    xWrt->m_bWriteClipboardDoc = true;
+    xWrt->m_bWriteOnlyFirstTable = false;
     xWrt->SetShowProgress(false);
     {
         SvFileStream aStream(maTempFile.GetURL(), StreamMode::WRITE|StreamMode::TRUNC);

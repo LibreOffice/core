@@ -254,7 +254,7 @@ void SwHTMLWriter::OutBasic()
     if( !m_bCfgStarBasic )
         return;
 
-    BasicManager *pBasicMan = pDoc->GetDocShell()->GetBasicManager();
+    BasicManager *pBasicMan = m_pDoc->GetDocShell()->GetBasicManager();
     OSL_ENSURE( pBasicMan, "Where is the Basic-Manager?" );
     // Only write DocumentBasic
     if( !pBasicMan || pBasicMan == SfxApplication::GetBasicManager() )
@@ -307,7 +307,7 @@ static const char* aEventNames[] =
 
 void SwHTMLWriter::OutBasicBodyEvents()
 {
-    SwDocShell *pDocSh = pDoc->GetDocShell();
+    SwDocShell *pDocSh = m_pDoc->GetDocShell();
     if( !pDocSh )
         return;
 

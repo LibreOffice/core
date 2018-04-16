@@ -294,7 +294,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
             OSL_ENSURE( nFormat, "number format is 0" );
             sOut.append(HTMLOutFuncs::CreateTableDataOptionsValNum(
                 bNumValue, dNumValue, nFormat,
-                *rHTMLWrt.pDoc->GetNumberFormatter(), rHTMLWrt.m_eDestEnc,
+                *rHTMLWrt.m_pDoc->GetNumberFormatter(), rHTMLWrt.m_eDestEnc,
                 &rHTMLWrt.m_aNonConvertableCharacters));
         }
         if( bFixed )
@@ -326,7 +326,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
     {
         //sequence of (start, end) property ranges we want to
         //query
-        SfxItemSet aScriptItemSet( rWrt.pDoc->GetAttrPool(),
+        SfxItemSet aScriptItemSet( rWrt.m_pDoc->GetAttrPool(),
                                    svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
                                    RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
                                    RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,

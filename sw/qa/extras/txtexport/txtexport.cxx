@@ -32,7 +32,7 @@ public:
         CPPUNIT_ASSERT(rAsciiWriter.is());
 
         // no start char
-        rAsciiWriter->bUCS2_WithStartChar = false;
+        rAsciiWriter->m_bUCS2_WithStartChar = false;
 
         SvMemoryStream aMemoryStream;
 
