@@ -93,7 +93,7 @@ WindowsCustomAction gid_Customaction_InstallVCRedist
     Source = VCREDIST_EXE_NAME;
     Target = "/repair /norestart /passive";
     Inbinarytable = 1;
-    Assignment1 = ("InstallUISequence", "Not Installed And Not ( VCRUNTIME_DETECTED And UCRT_DETECTED ) And VC_REDIST = 1", "behind_ExecuteAction");
+    Assignment1 = ("InstallUISequence", "Not Installed And Not ( (VCRUNTIME_DETECTED Or VCRUNTIME_DETECTED_32) And UCRT_DETECTED ) And VC_REDIST = 1", "behind_ExecuteAction");
 End
 
 #endif
