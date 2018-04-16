@@ -23,17 +23,11 @@ public:
     {
     }
 
-    explicit BitmapInterpolateScaleFilter(Size aSize)
-        : maSize(aSize)
-    {
-    }
-
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) override;
 
 private:
     double mfScaleX;
     double mfScaleY;
-    Size maSize;
 };
 
 #endif
