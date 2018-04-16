@@ -78,7 +78,7 @@ OPreparedStatement::OPreparedStatement(OConnection* _pConnection, sql::PreparedS
     m_xConnection = _pConnection;
 
     try {
-        m_paramCount = static_cast<sql::PreparedStatement *>(cppStatement)->getParameterMetaData()->getParameterCount();
+        m_paramCount = static_cast<sql::PreparedStatement *>(cppStatement.get())->getParameterMetaData()->getParameterCount();
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
     }
@@ -122,7 +122,7 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData()
     try {
         if (!m_xMetaData.is()) {
             m_xMetaData = new OResultSetMetaData(
-                                    static_cast<sql::PreparedStatement *>(cppStatement)->getMetaData(),
+                                    static_cast<sql::PreparedStatement *>(cppStatement.get())->getMetaData(),
                                     getOwnConnection()->getConnectionEncoding()
                                 );
         }
@@ -158,7 +158,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
 
     bool success = false;
     try {
-        success = static_cast<sql::PreparedStatement *>(cppStatement)->execute();
+        success = static_cast<sql::PreparedStatement *>(cppStatement.get())->execute();
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
     }
@@ -172,7 +172,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
 
     sal_Int32 affectedRows = 0;
     try {
-        affectedRows = static_cast<sql::PreparedStatement *>(cppStatement)->executeUpdate();
+        affectedRows = static_cast<sql::PreparedStatement *>(cppStatement.get())->executeUpdate();
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
     }
@@ -187,7 +187,7 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 parameter, const rtl::OUSt
 
     try {
         std::string stringie(rtl::OUStringToOString(x, m_xConnection->getConnectionEncoding()).getStr());
-        static_cast<sql::PreparedStatement *>(cppStatement)->setString(parameter, stringie);
+        static_cast<sql::PreparedStatement *>(cppStatement.get())->setString(parameter, stringie);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::clearParameters", *this);
     } catch (const sql::SQLException &e) {
@@ -210,7 +210,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
 
     Reference< XResultSet > xResultSet;
     try {
-        sql::ResultSet * res = static_cast<sql::PreparedStatement *>(cppStatement)->executeQuery();
+        sql::ResultSet * res = static_cast<sql::PreparedStatement *>(cppStatement.get())->executeQuery();
         xResultSet = new OResultSet(this, res, getOwnConnection()->getConnectionEncoding());
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
@@ -225,7 +225,7 @@ void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 parameter, sal_Bool x)
     checkParameterIndex(parameter);
 
     try {
-        static_cast<sql::PreparedStatement *>(cppStatement)->setBoolean(parameter, x);
+        static_cast<sql::PreparedStatement *>(cppStatement.get())->setBoolean(parameter, x);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setBoolean", *this);
     } catch (const sql::SQLException &e) {
@@ -240,7 +240,7 @@ void SAL_CALL OPreparedStatement::setByte(sal_Int32 parameter, sal_Int8 x)
     checkParameterIndex(parameter);
 
     try {
-        static_cast<sql::PreparedStatement *>(cppStatement)->setInt(parameter, x);
+        static_cast<sql::PreparedStatement *>(cppStatement.get())->setInt(parameter, x);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setByte", *this);
     } catch (const sql::SQLException &e) {
@@ -263,7 +263,7 @@ void SAL_CALL OPreparedStatement::setDate(sal_Int32 parameter, const Date& aData
     dateStr.append(my_i_to_a(buf, sizeof(buf)-1, aData.Day));
 
     try {
-        static_cast<sql::PreparedStatement *>(cppStatement)->setDateTime(parameter, dateStr);
+        static_cast<sql::PreparedStatement *>(cppStatement.get())->setDateTime(parameter, dateStr);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setDate", *this);
     } catch (const sql::SQLException &e) {
@@ -286,7 +286,7 @@ void SAL_CALL OPreparedStatement::setTime(sal_Int32 parameter, const Time& aVal)
     timeStr.append(my_i_to_a(buf, sizeof(buf)-1, aVal.Seconds));
 
     try {
-        static_cast<sql::PreparedStatement *>(cppStatement)->setDateTime(parameter, timeStr);
+        static_cast<sql::PreparedStatement *>(cppStatement.get())->setDateTime(parameter, timeStr);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setTime", *this);
     } catch (const sql::SQLException &e) {
@@ -317,7 +317,7 @@ void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 parameter, const DateTi
     timeStr.append(my_i_to_a(buf, sizeof(buf)-1, aVal.Seconds));
 
     try {
-        static_cast<sql::PreparedStatement *>(cppStatement)->setDateTime(parameter, timeStr);
+        static_cast<sql::PreparedStatement *>(cppStatement.get())->setDateTime(parameter, timeStr);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setTimestamp", *this);
     } catch (const sql::SQLException &e) {
@@ -332,7 +332,7 @@ void SAL_CALL OPreparedStatement::setDouble(sal_Int32 parameter, double x)
     checkParameterIndex(parameter);
 
     try {
-        static_cast<sql::PreparedStatement *>(cppStatement)->setDouble(parameter, x);
+        static_cast<sql::PreparedStatement *>(cppStatement.get())->setDouble(parameter, x);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setDouble", *this);
     } catch (const sql::SQLException &e) {
@@ -347,7 +347,7 @@ void SAL_CALL OPreparedStatement::setFloat(sal_Int32 parameter, float x)
     checkParameterIndex(parameter);
 
     try {
-        static_cast<sql::PreparedStatement *>(cppStatement)->setDouble(parameter, x);
+        static_cast<sql::PreparedStatement *>(cppStatement.get())->setDouble(parameter, x);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setFloat", *this);
     } catch (const sql::SQLException &e) {
@@ -362,7 +362,7 @@ void SAL_CALL OPreparedStatement::setInt(sal_Int32 parameter, sal_Int32 x)
     checkParameterIndex(parameter);
 
     try {
-        static_cast<sql::PreparedStatement *>(cppStatement)->setInt(parameter, x);
+        static_cast<sql::PreparedStatement *>(cppStatement.get())->setInt(parameter, x);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setInt", *this);
     } catch (const sql::SQLException &e) {
@@ -377,7 +377,7 @@ void SAL_CALL OPreparedStatement::setLong(sal_Int32 parameter, sal_Int64 aVal)
     checkParameterIndex(parameter);
 
     try {
-        static_cast<sql::PreparedStatement *>(cppStatement)->setInt64(parameter, aVal);
+        static_cast<sql::PreparedStatement *>(cppStatement.get())->setInt64(parameter, aVal);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setLong", *this);
     } catch (const sql::SQLException &e) {
@@ -392,7 +392,7 @@ void SAL_CALL OPreparedStatement::setNull(sal_Int32 parameter, sal_Int32 sqlType
     checkParameterIndex(parameter);
 
     try {
-        static_cast<sql::PreparedStatement *>(cppStatement)->setNull(parameter, sqlType);
+        static_cast<sql::PreparedStatement *>(cppStatement.get())->setNull(parameter, sqlType);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setNull", *this);
     } catch (const sql::SQLException &e) {
@@ -630,7 +630,7 @@ void SAL_CALL OPreparedStatement::setShort(sal_Int32 parameter, sal_Int16 x)
     checkParameterIndex(parameter);
 
     try {
-        static_cast<sql::PreparedStatement *>(cppStatement)->setInt(parameter, x);
+        static_cast<sql::PreparedStatement *>(cppStatement.get())->setInt(parameter, x);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setShort", *this);
     } catch (const sql::SQLException &e) {
@@ -646,7 +646,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 parameter, const Sequence< 
 
     std::string blobby(reinterpret_cast<char const *>(x.getConstArray()), x.getLength());
     try {
-        static_cast<sql::PreparedStatement *>(cppStatement)->setString(parameter, blobby);
+        static_cast<sql::PreparedStatement *>(cppStatement.get())->setString(parameter, blobby);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setBytes", *this);
     } catch (const sql::SQLException &e) {
@@ -682,7 +682,7 @@ void SAL_CALL OPreparedStatement::clearParameters()
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
 
     try {
-        static_cast<sql::PreparedStatement *>(cppStatement)->clearParameters();
+        static_cast<sql::PreparedStatement *>(cppStatement.get())->clearParameters();
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::clearParameters", *this);
     } catch (const sql::SQLException &e) {

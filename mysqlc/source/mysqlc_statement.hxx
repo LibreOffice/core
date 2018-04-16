@@ -66,7 +66,7 @@ namespace connectivity
         protected:
             rtl::Reference<OConnection> m_xConnection;  // The owning Connection object
 
-            sql::Statement          *cppStatement;
+            std::unique_ptr<sql::Statement> cppStatement;
 
         protected:
             void disposeResultSet();
