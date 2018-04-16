@@ -2511,7 +2511,7 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
                 /// OD 21.08.2002 #99657#
                 ///     There is a user defined setting for the background, if there
                 ///     is a background brush and its color is *not* "no fill"/"auto fill".
-                if( GetFrame()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, false ) )
+                if( GetFrame()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, false, /*bConsiderTextBox=*/true ) )
                 {
                     if (aFillAttributes.get() && aFillAttributes->isUsed())
                     {

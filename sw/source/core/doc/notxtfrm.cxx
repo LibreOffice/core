@@ -187,7 +187,7 @@ static void lcl_ClearArea( const SwFrame &rFrame,
         SwRect aOrigRect;
         drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
-        if ( rFrame.GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigRect, false ) )
+        if ( rFrame.GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigRect, false, /*bConsiderTextBox=*/false ) )
         {
             SwRegionRects const region(rPtArea);
             basegfx::utils::B2DClipState aClipState;
