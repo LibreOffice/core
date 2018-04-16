@@ -2262,7 +2262,7 @@ class QueryEvaluator
     svl::SharedStringPool& mrStrPool;
     const ScTable& mrTab;
     const ScQueryParam& mrParam;
-    const bool* mpTestEqualCondition;
+    bool mpTestEqualCondition;
     utl::TransliterationWrapper* mpTransliteration;
     CollatorWrapper* mpCollator;
     const bool mbMatchWholeCell;
@@ -2336,7 +2336,7 @@ class QueryEvaluator
 
 public:
     QueryEvaluator(ScDocument& rDoc, const ScTable& rTab, const ScQueryParam& rParam,
-                   const bool* pTestEqualCondition) :
+                   bool pTestEqualCondition) :
         mrDoc(rDoc),
         mrStrPool(rDoc.GetSharedStringPool()),
         mrTab(rTab),
@@ -2767,7 +2767,7 @@ bool ScTable::ValidQuery(
     bool* pTest = ( nEntryCount <= nFixedBools ? &aTest[0] : new bool[nEntryCount] );
 
     long    nPos = -1;
-    QueryEvaluator aEval(*pDocument, *this, rParam, pbTestEqualCondition);
+    QueryEvaluator aEval(*pDocument, *this, rParam, pbTestEqualCondition != nullptr);
     ScQueryParam::const_iterator it, itBeg = rParam.begin(), itEnd = rParam.end();
     for (it = itBeg; it != itEnd && (*it)->bDoQuery; ++it)
     {
@@ -2855,7 +2855,7 @@ bool ScTable::ValidQuery(
     bool bRet = pPasst[0];
     if ( pPasst != &aBool[0] )
         delete [] pPasst;
-    if ( pbTestEqualCondition )
+    if ( pbTestEqualCondition != nullptr )
         *pbTestEqualCondition = pTest[0];
     if ( pTest != &aTest[0] )
         delete [] pTest;
