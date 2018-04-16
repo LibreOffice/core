@@ -79,6 +79,7 @@ public:
     virtual float SAL_CALL CentimetersToPoints( float Centimeters ) override;
     virtual void SAL_CALL ShowMe() override;
     virtual void SAL_CALL Resize( sal_Int32 Width, sal_Int32 Height ) override;
+    virtual void SAL_CALL Move( sal_Int32 Left, sal_Int32 Top ) override;
 
     // XInterfaceWithIID
     virtual OUString SAL_CALL getIID() override;
