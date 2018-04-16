@@ -54,7 +54,7 @@ class SwitchablePersistenceStream
 
     const css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-    SPStreamData_Impl* m_pStreamData;
+    std::unique_ptr<SPStreamData_Impl> m_pStreamData;
 
     void CloseAll_Impl();
 
