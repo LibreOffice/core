@@ -66,7 +66,6 @@ XFDrawPolygon::XFDrawPolygon()
 void XFDrawPolygon::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
-    std::vector<XFPoint>::iterator it;
 
     pAttrList->Clear();
     //view-box:
