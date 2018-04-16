@@ -115,7 +115,7 @@ bool SdrExchangeView::ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerID& r
     bool bRet=false;
     rLayer=SdrLayerID(0);
     if (pObjList!=nullptr) {
-        const SdrPage* pPg=pObjList->GetPage();
+        const SdrPage* pPg=pObjList->getSdrPageFromSdrObjList();
         if (pPg!=nullptr) {
             rLayer=pPg->GetLayerAdmin().GetLayerID(maActualLayer);
             if (rLayer==SDRLAYER_NOTFOUND) rLayer=SdrLayerID(0);
@@ -142,7 +142,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
     bool bUnmark = (nOptions & (SdrInsertFlags::DONTMARK|SdrInsertFlags::ADDMARK))==SdrInsertFlags::NONE && !IsTextEdit();
     if (bUnmark) UnmarkAllObj();
     tools::Rectangle aTextRect(0,0,500,500);
-    SdrPage* pPage=pLst->GetPage();
+    SdrPage* pPage=pLst->getSdrPageFromSdrObjList();
     if (pPage!=nullptr) {
         aTextRect.SetSize(pPage->GetSize());
     }
@@ -182,7 +182,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, EETextFormat eFormat, const Point&
     bool bUnmark=(nOptions&(SdrInsertFlags::DONTMARK|SdrInsertFlags::ADDMARK))==SdrInsertFlags::NONE && !IsTextEdit();
     if (bUnmark) UnmarkAllObj();
     tools::Rectangle aTextRect(0,0,500,500);
-    SdrPage* pPage=pLst->GetPage();
+    SdrPage* pPage=pLst->getSdrPageFromSdrObjList();
     if (pPage!=nullptr) {
         aTextRect.SetSize(pPage->GetSize());
     }
@@ -320,10 +320,9 @@ bool SdrExchangeView::Paste(
                 }
 
                 // #i39861#
-                pNewObj->SetPage(pDstLst->GetPage());
                 pNewObj->NbcMove(aSiz);
 
-                const SdrPage* pPg = pDstLst->GetPage();
+                const SdrPage* pPg = pDstLst->getSdrPageFromSdrObjList();
 
                 if(pPg)
                 {
@@ -702,7 +701,7 @@ void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut) const
 
     if(aSdrObjects.size())
     {
-        sdr::contact::ObjectContactOfObjListPainter aPainter(rOut, aSdrObjects, aSdrObjects[0]->GetPage());
+        sdr::contact::ObjectContactOfObjListPainter aPainter(rOut, aSdrObjects, aSdrObjects[0]->getSdrPageFromSdrObject());
         sdr::contact::DisplayInfo aDisplayInfo;
 
         // do processing
@@ -755,7 +754,6 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
 
         if(pNewObj)
         {
-            pNewObj->SetPage(pNewPage);
             pNewPage->InsertObject(pNewObj, SAL_MAX_SIZE);
 
             // #i13033#

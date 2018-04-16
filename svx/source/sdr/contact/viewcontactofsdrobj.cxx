@@ -99,9 +99,9 @@ ViewContact* ViewContactOfSdrObj::GetParentContact() const
         else
         {
             // Is a group?
-            if(pObjList->GetOwnerObj())
+            if(pObjList->getSdrObjectFromSdrObjList())
             {
-                pRetval = &(pObjList->GetOwnerObj()->GetViewContact());
+                pRetval = &(pObjList->getSdrObjectFromSdrObjList()->GetViewContact());
             }
         }
     }

@@ -549,7 +549,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
 
     if( !HasEffect() )
         return;
-    if( !pObj || !pObj->GetPage() )
+    if( !pObj || !pObj->getSdrPageFromSdrObject() )
     {
         OSL_FAIL("no valid SdrObject or page found for ppt import");
         return;
@@ -561,7 +561,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
         OSL_FAIL("no XShape interface found for ppt import");
         return;
     }
-    ::sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
+    ::sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->getSdrPageFromSdrObject())->getMainSequence();
     if( !pMainSequence.get() )
     {
         OSL_FAIL("no MainSequence found for ppt import");

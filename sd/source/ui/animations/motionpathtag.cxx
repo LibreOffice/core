@@ -321,13 +321,6 @@ MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, con
     if (mxOrigin.is())
         maOriginPos = mxOrigin->getPosition();
 
-    SdrPage* pPage = mrView.GetSdrPageView()->GetPage();
-    if( pPage )
-    {
-        mpPathObj->SetPage( pPage );
-        mpPathObj->setParentOfSdrObject( pPage );
-    }
-
     XDash aDash( css::drawing::DashStyle_RECT, 1, 80, 1, 80, 80);
     OUString aEmpty( "?" );
     mpPathObj->SetMergedItem( XLineDashItem( aEmpty, aDash ) );

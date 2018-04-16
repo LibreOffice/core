@@ -664,7 +664,7 @@ SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
     slides masterpage */
 SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
 {
-    OUString aStyleName( mpPage->GetLayoutName() );
+    OUString aStyleName( GetLayoutName() );
     const OUString aSep( SD_LT_SEPARATOR );
     sal_Int32 nIndex = aStyleName.indexOf(aSep);
     if( nIndex != -1 )
@@ -2826,7 +2826,7 @@ bool SdPage::checkVisibility(
 
     if( ( pObj->GetObjInventor() == SdrInventor::Default ) && ( pObj->GetObjIdentifier() == OBJ_TEXT ) )
     {
-           const SdPage* pCheckPage = dynamic_cast< const SdPage* >(pObj->GetPage());
+           const SdPage* pCheckPage = dynamic_cast< const SdPage* >(pObj->getSdrPageFromSdrObject());
 
         if( pCheckPage )
         {
@@ -2873,7 +2873,7 @@ bool SdPage::checkVisibility(
     // i63977, do not print SdrpageObjs from master pages
     if( ( pObj->GetObjInventor() == SdrInventor::Default ) && ( pObj->GetObjIdentifier() == OBJ_PAGE ) )
     {
-        if( pObj->GetPage() && pObj->GetPage()->IsMasterPage() )
+        if( pObj->getSdrPageFromSdrObject() && pObj->getSdrPageFromSdrObject()->IsMasterPage() )
             return false;
     }
 
@@ -2953,7 +2953,7 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
     if( eLayout == AUTOLAYOUT_NONE )
     {
         // use layout from handout master
-        SdrObjListIter aShapeIter (rHandoutMaster);
+        SdrObjListIter aShapeIter(&rHandoutMaster);
 
         std::vector< ::tools::Rectangle > vSlidesAreas;
         while ( aShapeIter.IsMore() )
