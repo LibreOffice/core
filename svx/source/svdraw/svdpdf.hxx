@@ -115,7 +115,7 @@ class ImpSdrPdfImport final
     bool CheckLastLineMerge(const basegfx::B2DPolygon& rSrcPoly);
     bool CheckLastPolyLineAndFillMerge(const basegfx::B2DPolyPolygon& rPolyPolygon);
 
-    void DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport);
+    void DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport, int nPageIndex);
 
     // Copy assignment is forbidden and not implemented.
     ImpSdrPdfImport(const ImpSdrPdfImport&) = delete;
@@ -128,7 +128,7 @@ public:
 
     int GetPageCount() const { return mnPageCount; }
 
-    size_t DoImport(SdrObjList& rDestList, size_t nInsPos, size_t nPageNumber,
+    size_t DoImport(SdrObjList& rDestList, size_t nInsPos, int nPageNumber,
                     SvdProgressInfo* pProgrInfo = nullptr);
 };
 

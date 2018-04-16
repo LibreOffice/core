@@ -200,7 +200,7 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
     , maLastUsed (std::chrono::high_resolution_clock::now())
     , mbPrepared (rImpGraphic.mbPrepared)
-    , mnPageNumber(-1)
+    , mnPageNumber(rImpGraphic.mnPageNumber)
 {
     if( rImpGraphic.mpGfxLink )
         mpGfxLink = o3tl::make_unique<GfxLink>( *rImpGraphic.mpGfxLink );
@@ -229,7 +229,7 @@ ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic)
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
     , maLastUsed (std::chrono::high_resolution_clock::now())
     , mbPrepared (rImpGraphic.mbPrepared)
-    , mnPageNumber(-1)
+    , mnPageNumber(rImpGraphic.mnPageNumber)
 {
     rImpGraphic.ImplClear();
     rImpGraphic.mbDummyContext = false;
