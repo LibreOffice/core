@@ -28,7 +28,6 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 #endif
 
-#include <impbmp.hxx>
 #include <impoctree.hxx>
 #include <BitmapScaleSuperFilter.hxx>
 #include <BitmapScaleConvolutionFilter.hxx>
@@ -36,6 +35,9 @@
 #include <BitmapInterpolateScaleFilter.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <octree.hxx>
+#include <svdata.hxx>
+#include <salinst.hxx>
+#include <salbmp.hxx>
 
 #include "impvect.hxx"
 
@@ -222,17 +224,17 @@ const long FloydIndexMap[6] =
 bool Bitmap::Convert( BmpConversion eConversion )
 {
     // try to convert in backend
-    if (mxImpBmp)
+    if (mxSalBmp)
     {
         // avoid large chunk of obsolete and hopefully rarely used conversions.
         if (eConversion == BmpConversion::N8BitGreys)
         {
-            std::shared_ptr<ImpBitmap> xImpBmp(new ImpBitmap);
+            std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
             // frequently used conversion for creating alpha masks
-            if (xImpBmp->Create(*mxImpBmp) && xImpBmp->ConvertToGreyscale())
+            if (xImpBmp->Create(*mxSalBmp) && xImpBmp->ConvertToGreyscale())
             {
-                ImplSetImpBitmap(xImpBmp);
-                SAL_INFO( "vcl.opengl", "Ref count: " << mxImpBmp.use_count() );
+                ImplSetSalBitmap(xImpBmp);
+                SAL_INFO( "vcl.opengl", "Ref count: " << mxSalBmp.use_count() );
                 return true;
             }
         }
@@ -732,14 +734,14 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
 
     const sal_uInt16 nStartCount(GetBitCount());
 
-    if (mxImpBmp && mxImpBmp->ScalingSupported())
+    if (mxSalBmp && mxSalBmp->ScalingSupported())
     {
         // implementation specific scaling
-        std::shared_ptr<ImpBitmap> xImpBmp(new ImpBitmap);
-        if (xImpBmp->Create(*mxImpBmp) && xImpBmp->Scale(rScaleX, rScaleY, nScaleFlag))
+        std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+        if (xImpBmp->Create(*mxSalBmp) && xImpBmp->Scale(rScaleX, rScaleY, nScaleFlag))
         {
-            ImplSetImpBitmap(xImpBmp);
-            SAL_INFO( "vcl.opengl", "Ref count: " << mxImpBmp.use_count() );
+            ImplSetSalBitmap(xImpBmp);
+            SAL_INFO( "vcl.opengl", "Ref count: " << mxSalBmp.use_count() );
             maPrefMapMode = MapMode( MapUnit::MapPixel );
             maPrefSize = xImpBmp->GetSize();
             return true;
