@@ -24,19 +24,14 @@
 
 module ooo {  module vba {  module word {
 
-interface XDocument;
-interface XWindow;
-interface XSystem;
-interface XOptions;
-interface XSelection;
 interface XApplication : XConnectable
 {
     [attribute, readonly] XDocument ActiveDocument;
     [attribute, readonly] XWindow ActiveWindow;
     [attribute, readonly] string Name;
-    [attribute, readonly] ooo::vba::word::XSystem System;
-    [attribute, readonly] ooo::vba::word::XOptions Options;
-    [attribute, readonly] ooo::vba::word::XSelection Selection;
+    [attribute, readonly] XSystem System;
+    [attribute, readonly] XOptions Options;
+    [attribute, readonly] XSelection Selection;
     [attribute] boolean DisplayAutoCompleteTips;
     [attribute] long EnableCancelKey;
 
