@@ -143,7 +143,7 @@ bool Bitmap::Invert()
             }
         }
 
-        mxImpBmp->ImplInvalidateChecksum();
+        mxImpBmp->InvalidateChecksum();
         pAcc.reset();
         bRet = true;
     }
@@ -860,12 +860,11 @@ bool Bitmap::Replace(const Color& rSearchColor, const Color& rReplaceColor, sal_
     {
         // implementation specific replace
         std::shared_ptr<ImpBitmap> xImpBmp(new ImpBitmap);
-        if (xImpBmp->ImplCreate(*mxImpBmp)
-            && xImpBmp->ImplReplace(rSearchColor, rReplaceColor, nTol))
+        if (xImpBmp->Create(*mxImpBmp) && xImpBmp->Replace(rSearchColor, rReplaceColor, nTol))
         {
             ImplSetImpBitmap(xImpBmp);
             maPrefMapMode = MapMode(MapUnit::MapPixel);
-            maPrefSize = xImpBmp->ImplGetSize();
+            maPrefSize = xImpBmp->GetSize();
             return true;
         }
     }

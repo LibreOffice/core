@@ -117,7 +117,7 @@ void OutputDevice::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
                            ImplLogicHeightToDevicePixel(rDestSize.Height()));
 
         // we don't want to mirror via coordinates
-        const BmpMirrorFlags nMirrFlags = AdjustTwoRect( aPosAry, xImpBmp->ImplGetSize() );
+        const BmpMirrorFlags nMirrFlags = AdjustTwoRect( aPosAry, xImpBmp->GetSize() );
 
         // check if output is necessary
         if( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
