@@ -85,7 +85,7 @@ public:
     void                        DrawPolyLine( tools::Polygon& );
     void                        DrawPolybezier( tools::Polygon& );
     void                        DrawPolyPolygon( tools::PolyPolygon& );
-    void                        DrawText( css::awt::Point& TextRectPos, css::awt::Size& TextRectSize, char* String, FinalFlag );
+    void                        DrawText( css::awt::Point& TextRectPos, css::awt::Size& TextRectSize, const OUString& rString, FinalFlag );
     void                        AppendText( const char* String );
 
     void                        FirstOutPut() { mpCGM->mbFirstOutPut = false; } ;
