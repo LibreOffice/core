@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_fe02773d",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T12:39:03Z",
+      "side": 1,
+      "message": "Which one of these is more appropriate in terms of performance:\n- Leaving the declaration outside and changing the value inside the loop.\n- Doing the declaration inside the loop at each call.",
+      "range": {
+        "startLine": 128,
+        "startChar": 12,
+        "endLine": 128,
+        "endChar": 29
+      },
+      "revId": "55675622afdd109417626d845581c4d566b0c336",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
