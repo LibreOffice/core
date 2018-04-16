@@ -46,16 +46,15 @@ sub create_upgrade_table
     push(@upgradetable, $newline);
 
     # Detecting if VC Runtime is installed on system
-    $newline = "VCRUNTIME_UPGRADE_CODE" . "\t" . "14.0.24215" . "\t" . "15.0.0" . "\t" . "" . "\t" . "258" . "\t" . "" . "\t" . "VCRUNTIME_DETECTED";
-    if ( $installer::globals::cpuname eq 'X86_64' )
-    {
-        $newline =~ s/VCRUNTIME_UPGRADE_CODE/{36F68A90-239C-34DF-B58C-64B30153CE35}/;
-    }
-    else
-    {
-        $newline =~ s/VCRUNTIME_UPGRADE_CODE/{65E5BD06-6392-3027-8C26-853107D3CF1A}/;
-    }
+    $newline = "{36F68A90-239C-34DF-B58C-64B30153CE35}" . "\t" . "14.0.24215" . "\t" . "15.0.0" . "\t" . "" . "\t" . "258" . "\t" . "" . "\t" . "VCRUNTIME_DETECTED";
     push(@upgradetable, $newline);
+
+    # 32-bit installer must also detect if 32-bit Runtime is installed
+    if ( $installer::globals::cpuname ne 'X86_64' )
+    {
+        $newline = "{65E5BD06-6392-3027-8C26-853107D3CF1A}" . "\t" . "14.0.24215" . "\t" . "15.0.0" . "\t" . "" . "\t" . "258" . "\t" . "" . "\t" . "VCRUNTIME_DETECTED";
+        push(@upgradetable, $newline);
+    }
 
     # Saving the file
 
