@@ -1427,7 +1427,7 @@ void SdTiledRenderingTest::testPostKeyEventInvalidation()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(pView2->GetTextEditObject());
 
-    // Now go left with the cursor in the second view an watch for
+    // Now go left with the cursor in the second view and watch for
     // invalidations.
     aView2.m_bTilesInvalidated = false;
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT);
