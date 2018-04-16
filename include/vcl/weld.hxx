@@ -745,6 +745,7 @@ public:
     OUString get_title() const { return getConstDialog()->get_title(); }
     void set_help_id(const OString& rHelpId) { getDialog()->set_help_id(rHelpId); }
     OString get_help_id() const { return getConstDialog()->get_help_id(); }
+    void response(int nResponse) { getDialog()->response(nResponse); }
     virtual ~DialogController();
 };
 
@@ -781,7 +782,7 @@ public:
     virtual ~MessageDialogController() override;
     void set_primary_text(const OUString& rText) { m_xDialog->set_primary_text(rText); }
     OUString get_primary_text() const { return m_xDialog->get_primary_text(); }
-    void set_default_response(int response) { m_xDialog->set_default_response(response); }
+    void set_default_response(int nResponse) { m_xDialog->set_default_response(nResponse); }
 };
 }
 #endif

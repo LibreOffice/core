@@ -104,9 +104,6 @@ class AbstractFieldInputDlg : public VclAbstractTerminatedDialog
 protected:
     virtual ~AbstractFieldInputDlg() override = default;
 public:
-    //from class SalFrame
-    virtual void          SetWindowState( const OString & rStr ) = 0;
-    virtual OString       GetWindowState() const = 0;
     virtual void          EndDialog(sal_Int32 nResult) override = 0;
     virtual bool          PrevButtonPressed() const = 0;
     virtual bool          NextButtonPressed() const = 0;
@@ -278,8 +275,6 @@ class AbstractDropDownFieldDialog : public VclAbstractDialog
 protected:
     virtual ~AbstractDropDownFieldDialog() override = default;
 public:
-    virtual OString       GetWindowState() const = 0; //this method inherit from SystemWindow
-    virtual void          SetWindowState( const OString & rStr ) = 0; //this method inherit from SystemWindow
     virtual bool          PrevButtonPressed() const = 0;
     virtual bool          NextButtonPressed() const = 0;
 };
@@ -460,7 +455,7 @@ public:
     virtual VclPtr<AbstractGlossaryDlg>        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) = 0;
-    virtual VclPtr<AbstractFieldInputDlg>        CreateFieldInputDlg(vcl::Window *pParent,
+    virtual VclPtr<AbstractFieldInputDlg>        CreateFieldInputDlg(weld::Window *pParent,
         SwWrtShell &rSh, SwField* pField, bool bPrevButton, bool bNextButton) = 0;
     virtual VclPtr<AbstractInsFootNoteDlg>     CreateInsFootNoteDlg(weld::Window * pParent,
         SwWrtShell &rSh, bool bEd = false) = 0;

@@ -143,7 +143,6 @@ void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
         pTmp->PushCursor();
 
         bool bCancel = false;
-        OString aDlgPos;
 
         size_t nIndex = 0;
         FieldDialogPressedButton ePressedButton = BTN_NONE;
@@ -169,10 +168,10 @@ void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
             pField = pTmp->GetField(nIndex);
             if (pField->GetTyp()->Which() == SwFieldIds::Dropdown)
             {
-                bCancel = StartDropDownFieldDlg(pField, bPrev, bNext, &aDlgPos, &ePressedButton);
+                bCancel = StartDropDownFieldDlg(pField, bPrev, bNext, &ePressedButton);
             }
             else
-                bCancel = StartInputFieldDlg(pField, bPrev, bNext, nullptr, &aDlgPos, &ePressedButton);
+                bCancel = StartInputFieldDlg(pField, bPrev, bNext, GetView().GetFrameWeld(), &ePressedButton);
 
             if (!bCancel)
             {
@@ -251,16 +250,14 @@ class FieldDeletionModify : public SwModify
 };
 
 // Start input dialog for a specific field
-bool SwWrtShell::StartInputFieldDlg( SwField* pField, bool bPrevButton, bool bNextButton,
-                                   vcl::Window* pParentWin, OString* pWindowState, SwWrtShell::FieldDialogPressedButton* pPressedButton )
+bool SwWrtShell::StartInputFieldDlg(SwField* pField, bool bPrevButton, bool bNextButton,
+                                    weld::Window* pParentWin, SwWrtShell::FieldDialogPressedButton* pPressedButton)
 {
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
     ScopedVclPtr<AbstractFieldInputDlg> pDlg(pFact->CreateFieldInputDlg(pParentWin, *this, pField, bPrevButton, bNextButton));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
-    if(pWindowState && !pWindowState->isEmpty())
-        pDlg->SetWindowState(*pWindowState);
 
     bool bRet;
 
@@ -268,9 +265,6 @@ bool SwWrtShell::StartInputFieldDlg( SwField* pField, bool bPrevButton, bool bNe
         FieldDeletionModify aModify(pDlg.get(), pField);
         bRet = RET_CANCEL == pDlg->Execute();
     }
-
-    if(pWindowState)
-        *pWindowState = pDlg->GetWindowState();
 
     if (pPressedButton)
     {
@@ -285,18 +279,14 @@ bool SwWrtShell::StartInputFieldDlg( SwField* pField, bool bPrevButton, bool bNe
     return bRet;
 }
 
-bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bPrevButton, bool bNextButton, OString* pWindowState, SwWrtShell::FieldDialogPressedButton* pPressedButton)
+bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bPrevButton, bool bNextButton, SwWrtShell::FieldDialogPressedButton* pPressedButton)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     ScopedVclPtr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(*this, pField, bPrevButton, bNextButton));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
-    if(pWindowState && !pWindowState->isEmpty())
-        pDlg->SetWindowState(*pWindowState);
     const short nRet = pDlg->Execute();
-    if(pWindowState)
-        *pWindowState = pDlg->GetWindowState();
 
     if (pPressedButton)
     {
@@ -430,14 +420,14 @@ void SwWrtShell::ClickToField( const SwField& rField )
             const SwInputField* pInputField = dynamic_cast<const SwInputField*>(&rField);
             if ( pInputField == nullptr )
             {
-                StartInputFieldDlg( const_cast<SwField*>(&rField), false, false );
+                StartInputFieldDlg(const_cast<SwField*>(&rField), false, false, GetView().GetFrameWeld());
             }
         }
         break;
 
     case SwFieldIds::SetExp:
         if( static_cast<const SwSetExpField&>(rField).GetInputFlag() )
-            StartInputFieldDlg( const_cast<SwField*>(&rField), false, false );
+            StartInputFieldDlg(const_cast<SwField*>(&rField), false, false, GetView().GetFrameWeld());
         break;
     case SwFieldIds::Dropdown :
         StartDropDownFieldDlg( const_cast<SwField*>(&rField), false, false );
