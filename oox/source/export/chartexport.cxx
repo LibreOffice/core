@@ -2979,7 +2979,6 @@ void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,
     pFS->singleElement(FSNS(XML_a, XML_bodyPr), FSEND);
 
     OUString sFieldType;
-    bool bNewParagraph;
     pFS->startElement(FSNS(XML_a, XML_p), FSEND);
 
     for (auto& rField : rCustomLabelFields)
@@ -2987,7 +2986,7 @@ void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,
         Reference<XPropertySet> xPropertySet(rField, UNO_QUERY);
         chart2::DataPointCustomLabelFieldType aType = rField->getFieldType();
         sFieldType.clear();
-        bNewParagraph = false;
+        bool bNewParagraph = false;
 
         if (aType == chart2::DataPointCustomLabelFieldType_NEWLINE)
             bNewParagraph = true;
