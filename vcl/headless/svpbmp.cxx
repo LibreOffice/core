@@ -271,8 +271,10 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer(BitmapAccessMode)
     return mpDIB;
 }
 
-void SvpSalBitmap::ReleaseBuffer(BitmapBuffer*, BitmapAccessMode)
+void SvpSalBitmap::ReleaseBuffer(BitmapBuffer*, BitmapAccessMode nMode)
 {
+    if( nMode == BitmapAccessMode::Write )
+        InvalidateChecksum();
 }
 
 bool SvpSalBitmap::GetSystemData( BitmapSystemData& )

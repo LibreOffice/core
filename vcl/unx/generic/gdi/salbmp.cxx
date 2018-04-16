@@ -887,6 +887,7 @@ void X11SalBitmap::ReleaseBuffer( BitmapBuffer*, BitmapAccessMode nMode )
 
         if( mpCache )
             mpCache->ImplRemove( this );
+        InvalidateChecksum();
     }
 }
 

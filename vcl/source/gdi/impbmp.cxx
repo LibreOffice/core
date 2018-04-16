@@ -85,9 +85,6 @@ BitmapBuffer* ImpBitmap::ImplAcquireBuffer( BitmapAccessMode nMode )
 void ImpBitmap::ImplReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode )
 {
     mpSalBitmap->ReleaseBuffer( pBuffer, nMode );
-
-    if( nMode == BitmapAccessMode::Write )
-        ImplInvalidateChecksum();
 }
 
 BitmapChecksum ImpBitmap::ImplGetChecksum() const
