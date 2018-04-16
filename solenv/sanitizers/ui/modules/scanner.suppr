@@ -1,0 +1,3 @@
+extensions/uiconfig/scanner/ui/sanedialog.ui://GtkLabel[@id='optionTitleLabel:border'] orphan-label
+extensions/uiconfig/scanner/ui/sanedialog.ui://GtkLabel[@id='optionsDescLabel'] orphan-label
+extensions/uiconfig/scanner/ui/sanedialog.ui://GtkCheckButton[@id='boolCheckbutton'] button-no-label

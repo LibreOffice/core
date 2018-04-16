@@ -1,3 +1,12 @@
+sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://GtkLabel[@id='start_effect'] orphan-label
+sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://GtkLabel[@id='effect_property'] orphan-label
+sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://GtkLabel[@id='categorylabel'] orphan-label
+sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://GtkLabel[@id='effect_duration'] orphan-label
+sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://GtkLabel[@id='delay_label'] orphan-label
+sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://GtkLabel[@id='effectlabel'] orphan-label
+sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://GtkButton[@id='more_properties'] button-no-label
+sd/uiconfig/simpress/ui/customanimationeffecttab.ui://GtkButton[@id='sound_preview'] button-no-label
+sd/uiconfig/simpress/ui/customanimationeffecttab.ui://GtkLabel[@id='text_delay_label'] orphan-label
 sd/uiconfig/simpress/ui/headerfootertab.ui://GtkRadioButton[@id='rb_auto'] missing-label-for
 sd/uiconfig/simpress/ui/prntopts.ui://GtkCheckButton[@id='frontcb'] missing-label-for
 sd/uiconfig/simpress/ui/prntopts.ui://GtkCheckButton[@id='backcb'] missing-label-for

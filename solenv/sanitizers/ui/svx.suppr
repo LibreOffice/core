@@ -1,3 +1,5 @@
+svx/uiconfig/ui/colorwindow.ui://GtkButton[@id='auto_color_button'] button-no-label
+svx/uiconfig/ui/colorwindow.ui://GtkLabel[@id='label1'] orphan-label
 svx/uiconfig/ui/compressgraphicdialog.ui://GtkScale[@id='scale-quality'] no-labelled-by
 svx/uiconfig/ui/compressgraphicdialog.ui://GtkScale[@id='scale-compression'] no-labelled-by
 svx/uiconfig/ui/mediaplayback.ui://GtkLabel[@id='label1'] orphan-label
