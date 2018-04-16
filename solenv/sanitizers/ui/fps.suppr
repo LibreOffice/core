@@ -1,0 +1,3 @@
+fpicker/uiconfig/ui/explorerfiledialog.ui://GtkLabel[@id='shared_label'] orphan-label
+fpicker/uiconfig/ui/explorerfiledialog.ui://GtkCheckButton[@id='link'] button-no-label
+fpicker/uiconfig/ui/explorerfiledialog.ui://GtkCheckButton[@id='cb_preview'] button-no-label

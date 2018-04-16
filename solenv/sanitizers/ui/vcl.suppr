@@ -1,0 +1,3 @@
+vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='totalnumpages'] orphan-label
+vcl/uiconfig/ui/printdialog.ui://GtkButton[@id='forward'] button-no-label
+vcl/uiconfig/ui/printdialog.ui://GtkButton[@id='backward'] button-no-label

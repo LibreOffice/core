@@ -1,0 +1,14 @@
+dbaccess/uiconfig/ui/applycolpage.ui://GtkButton[@id='colrh'] button-no-label
+dbaccess/uiconfig/ui/applycolpage.ui://GtkButton[@id='colsrh'] button-no-label
+dbaccess/uiconfig/ui/applycolpage.ui://GtkButton[@id='collh'] button-no-label
+dbaccess/uiconfig/ui/applycolpage.ui://GtkButton[@id='colslh'] button-no-label
+dbaccess/uiconfig/ui/dbaseindexdialog.ui://GtkButton[@id='add'] button-no-label
+dbaccess/uiconfig/ui/dbaseindexdialog.ui://GtkButton[@id='addall'] button-no-label
+dbaccess/uiconfig/ui/dbaseindexdialog.ui://GtkButton[@id='remove'] button-no-label
+dbaccess/uiconfig/ui/dbaseindexdialog.ui://GtkButton[@id='removeall'] button-no-label
+dbaccess/uiconfig/ui/namematchingpage.ui://GtkButton[@id='up'] button-no-label
+dbaccess/uiconfig/ui/namematchingpage.ui://GtkButton[@id='down'] button-no-label
+dbaccess/uiconfig/ui/namematchingpage.ui://GtkLabel[@id='leftlabel'] orphan-label
+dbaccess/uiconfig/ui/namematchingpage.ui://GtkLabel[@id='rightlabel'] orphan-label
+dbaccess/uiconfig/ui/namematchingpage.ui://GtkButton[@id='up_right'] button-no-label
+dbaccess/uiconfig/ui/namematchingpage.ui://GtkButton[@id='down_right'] button-no-label
