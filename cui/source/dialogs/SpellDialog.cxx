@@ -1242,15 +1242,16 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         {
             TextEngine* pTextEngine = GetTextEngine();
             TextView* pTextView = pTextEngine->GetActiveView();
-            const TextSelection& rCurrentSelection = pTextView->GetSelection();
+            TextSelection aCurrentSelection = pTextView->GetSelection();
+            aCurrentSelection.Justify();
             //determine if the selection contains a field
             bool bHasFieldLeft = false;
             bool bHasErrorLeft = false;
 
-            bool bHasRange = rCurrentSelection.HasRange();
+            bool bHasRange = aCurrentSelection.HasRange();
             sal_uInt8 nSelectionType = 0; // invalid type!
 
-            TextPaM aCursor(rCurrentSelection.GetStart());
+            TextPaM aCursor(aCurrentSelection.GetStart());
             const TextCharAttrib* pBackAttr = pTextEngine->FindCharAttrib( aCursor, TEXTATTR_SPELL_BACKGROUND );
             const TextCharAttrib* pErrorAttr = pTextEngine->FindCharAttrib( aCursor, TEXTATTR_SPELL_ERROR );
             const TextCharAttrib* pBackAttrLeft = nullptr;
@@ -1261,21 +1262,21 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             if(bHasRange)
             {
                 if(pBackAttr &&
-                        pBackAttr->GetStart() == rCurrentSelection.GetStart().GetIndex() &&
-                        pBackAttr->GetEnd() == rCurrentSelection.GetEnd().GetIndex())
+                        pBackAttr->GetStart() == aCurrentSelection.GetStart().GetIndex() &&
+                        pBackAttr->GetEnd() == aCurrentSelection.GetEnd().GetIndex())
                 {
                     nSelectionType = FULL;
                 }
                 else if(pErrorAttr &&
-                        pErrorAttr->GetStart() <= rCurrentSelection.GetStart().GetIndex() &&
-                        pErrorAttr->GetEnd() >= rCurrentSelection.GetEnd().GetIndex())
+                        pErrorAttr->GetStart() <= aCurrentSelection.GetStart().GetIndex() &&
+                        pErrorAttr->GetEnd() >= aCurrentSelection.GetEnd().GetIndex())
                 {
                     nSelectionType = INSIDE_YES;
                 }
                 else
                 {
                     nSelectionType = bHasField||bHasError ? BRACE : OUTSIDE_NO;
-                    while(aCursor.GetIndex() < rCurrentSelection.GetEnd().GetIndex())
+                    while(aCursor.GetIndex() < aCurrentSelection.GetEnd().GetIndex())
                     {
                         ++aCursor.GetIndex();
                         const TextCharAttrib* pIntBackAttr = pTextEngine->FindCharAttrib( aCursor, TEXTATTR_SPELL_BACKGROUND );
@@ -1296,8 +1297,8 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 const TextCharAttrib* pCurAttr = pBackAttr ? pBackAttr : pErrorAttr;
                 if(pCurAttr)
                 {
-                    nSelectionType = pCurAttr->GetStart() == rCurrentSelection.GetStart().GetIndex() ?
-                            LEFT_NO : pCurAttr->GetEnd() == rCurrentSelection.GetEnd().GetIndex() ? RIGHT_NO : INSIDE_NO;
+                    nSelectionType = pCurAttr->GetStart() == aCurrentSelection.GetStart().GetIndex() ?
+                            LEFT_NO : pCurAttr->GetEnd() == aCurrentSelection.GetEnd().GetIndex() ? RIGHT_NO : INSIDE_NO;
                 }
                 else
                     nSelectionType = OUTSIDE_NO;
