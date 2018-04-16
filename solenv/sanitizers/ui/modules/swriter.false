@@ -1,1 +1,2 @@
 sw/uiconfig/swriter/ui/sortdialog.ui://GtkLabel[@id='order'] orphan-label
+sw/uiconfig/swriter/ui/pageformatpanel.ui://GtkLabel[@id='customlabel'] orphan-label
