@@ -83,10 +83,10 @@ namespace dbaui
     #define DECLARE_MULTIPLEXER_BOOL_METHOD(methodname, eventtype)                          \
         virtual sal_Bool SAL_CALL methodname(const eventtype& e) override;   \
 
-    #define END_DECLARE_LISTENER_MULTIPLEXER()                                              \
-    /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */    \
-        void * operator new( size_t size ) throw() { return OSbaWeakSubObject::operator new(size); }   \
-        void operator delete( void * p ) throw() { OSbaWeakSubObject::operator delete(p); }    \
+    #define END_DECLARE_LISTENER_MULTIPLEXER()                                               \
+        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */    \
+        using OSbaWeakSubObject::operator new;   \
+        using OSbaWeakSubObject::operator delete;    \
     };                                                                                      \
 
     // implementation of a listener multiplexer class

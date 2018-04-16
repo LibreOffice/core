@@ -45,14 +45,6 @@ namespace connectivity
         public:
             OSQLAnalyzer(OConnection* _pConnection);
             ~OSQLAnalyzer();
-            static void * operator new( size_t nSize )
-                { return ::rtl_allocateMemory( nSize ); }
-            static void * operator new( size_t /*nSize*/,void* _pHint )
-                { return _pHint; }
-            static void operator delete( void * pMem )
-                { ::rtl_freeMemory( pMem ); }
-            static void operator delete( void * /*pMem*/,void* /*_pHint*/ )
-                {  }
 
             OConnection* getConnection() const { return m_pConnection; }
             void bindEvaluationRow(OValueRefRow const & _pRow); // Bind an evaluation row to the restriction

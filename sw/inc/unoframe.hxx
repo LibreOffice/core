@@ -235,9 +235,6 @@ public:
 
     //XPropertySet
     virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-
-    void * operator new( size_t ) throw();
-    void operator delete( void * ) throw();
 };
 
 typedef cppu::ImplInheritanceHelper
@@ -266,9 +263,6 @@ public:
 
     // XEventsSupplier
     virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) override;
-
-    void * operator new( size_t ) throw();
-    void operator delete( void * ) throw();
 };
 
 typedef cppu::ImplInheritanceHelper
@@ -307,8 +301,6 @@ public:
 
     // XEventsSupplier
     virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) override;
-    void * operator new( size_t ) throw();
-    void operator delete( void * ) throw();
 };
 
 class SwXOLEListener : public cppu::WeakImplHelper<css::util::XModifyListener>,

@@ -44,15 +44,6 @@ namespace connectivity
         OSQLScanner();
         virtual ~OSQLScanner();
 
-        static void * operator new( size_t nSize )
-            { return ::rtl_allocateMemory( nSize ); }
-        static void * operator new( size_t,void* _pHint )
-            { return _pHint; }
-        static void operator delete( void * pMem )
-            { ::rtl_freeMemory( pMem ); }
-        static void operator delete( void *,void* )
-            {  }
-
         sal_Int32 SQLyygetc();
         void SQLyyerror(char const *fmt);
         IParseContext::InternationalKeyCode getInternationalTokenID(const char* sToken) const;

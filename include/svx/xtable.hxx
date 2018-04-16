@@ -157,10 +157,6 @@ class XGradientList ; typedef rtl::Reference< class XGradientList > XGradientLis
 
 class SVX_DLLPUBLIC XPropertyList : public cppu::OWeakObject
 {
-private:
-    SAL_DLLPRIVATE void* operator new(size_t);
-protected:
-    void operator delete(void *);
 protected:
     XPropertyListType   meType;
     OUString            maName; // not persistent

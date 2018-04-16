@@ -450,10 +450,6 @@ public:
                                             css::uno::Reference< css::uno::XInterface > const & xLastResult);
 
     SwDocShell*                 GetDocShell() {return pDocShell;}
-
-    void * operator new( size_t ) throw();
-    void operator delete( void * ) throw();
-
 };
 
 class SwXLinkTargetSupplier : public cppu::WeakImplHelper

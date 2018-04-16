@@ -374,18 +374,6 @@ XPropertyList::CreatePropertyListFromURL( XPropertyListType t,
     return pList;
 }
 
-// catch people being silly with ref counting ...
-
-void* XPropertyList::operator new (size_t nCount)
-{
-    return rtl_allocateMemory( nCount );
-}
-
-void XPropertyList::operator delete(void *pPtr)
-{
-    return rtl_freeMemory( pPtr );
-}
-
 static struct {
     XPropertyListType t;
     const char *pExt;

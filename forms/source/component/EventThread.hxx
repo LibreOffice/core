@@ -96,9 +96,9 @@ public:
     // css::lang::XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource ) override;
 
-    // Resolve ambiguity: both OWeakObject and OObject have these memory operators
-    void * operator new( size_t size ) throw() { return osl::Thread::operator new(size); }
-    void operator delete( void * p ) throw() { osl::Thread::operator delete(p); }
+    // Resolve ambiguity: both OWeakObject and osl::Thread have these memory operators
+    using osl::Thread::operator new;
+    using osl::Thread::operator delete;
 
 private:
     void    impl_clearEventQueue();

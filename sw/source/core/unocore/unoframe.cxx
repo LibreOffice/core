@@ -3222,16 +3222,6 @@ uno::Sequence< OUString > SwXTextFrame::getSupportedServiceNames()
     return aRet;
 }
 
-void * SwXTextFrame::operator new( size_t t) throw()
-{
-    return SwXTextFrameBaseClass::operator new( t);
-}
-
-void SwXTextFrame::operator delete( void * p) throw()
-{
-    SwXTextFrameBaseClass::operator delete(p);
-}
-
 uno::Reference<container::XNameReplace > SAL_CALL SwXTextFrame::getEvents()
 {
     return new SwFrameEventDescriptor( *this );
@@ -3301,16 +3291,6 @@ uno::Sequence< OUString > SwXTextGraphicObject::getSupportedServiceNames()
     OUString* pArray = aRet.getArray();
     pArray[aRet.getLength() - 1] = "com.sun.star.text.TextGraphicObject";
     return aRet;
-}
-
-void * SwXTextGraphicObject::operator new( size_t t) throw()
-{
-    return SwXTextGraphicObjectBaseClass::operator new(t);
-}
-
-void SwXTextGraphicObject::operator delete( void * p) throw()
-{
-    SwXTextGraphicObjectBaseClass::operator delete(p);
 }
 
 uno::Reference<container::XNameReplace> SAL_CALL
@@ -3450,16 +3430,6 @@ uno::Sequence< OUString > SwXTextEmbeddedObject::getSupportedServiceNames()
     OUString* pArray = aRet.getArray();
     pArray[aRet.getLength() - 1] = "com.sun.star.text.TextEmbeddedObject";
     return aRet;
-}
-
-void * SwXTextEmbeddedObject::operator new( size_t t) throw()
-{
-    return SwXTextEmbeddedObjectBaseClass::operator new(t);
-}
-
-void SwXTextEmbeddedObject::operator delete( void * p) throw()
-{
-    SwXTextEmbeddedObjectBaseClass::operator delete(p);
 }
 
 uno::Reference<container::XNameReplace> SAL_CALL
