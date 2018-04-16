@@ -24,6 +24,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/syswin.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 
 class ToolBox;
 
@@ -86,7 +87,7 @@ private:
     VclPtr<FloatingWindow>  mpNextFloat;
     VclPtr<vcl::Window>     mpFirstPopupModeWin;
     VclPtr<vcl::Window>     mxPrevFocusWin;
-    ImplData*       mpImplData;
+    std::unique_ptr<ImplData> mpImplData;
     tools::Rectangle       maFloatRect;
     ImplSVEvent *   mnPostId;
     FloatWinPopupFlags   mnPopupModeFlags;
