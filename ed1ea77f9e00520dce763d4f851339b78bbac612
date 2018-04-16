@@ -16,6 +16,24 @@
       "revId": "ed1ea77f9e00520dce763d4f851339b78bbac612",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_debbf370",
+        "filename": "drawinglayer/source/tools/emfppath.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-04-16T21:09:02Z",
+      "side": 1,
+      "message": "Thanks Patrick for your comment.\n\nGenerally I think my  comment is still valid.\nWhat \"setClosed\" method do is adding line between last and first point, and it closing the shape in that way.\n\nThe benefit of \"setClosed\" solution, is that it is correctly rendering junction point (for rectangle it will be a corner).\nSuch corners could have different shapes (even for rectangles).\nThay can be sharp, rounded or  rubbed.\nBy using \"setClosed\" method, all these cases is be handled correcly\n\nThat\u0027s why I decided to use this method instead of adding lines explicetely.",
+      "parentUuid": "9a30ddce_9536be01",
+      "revId": "ed1ea77f9e00520dce763d4f851339b78bbac612",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
