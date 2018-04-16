@@ -1166,7 +1166,7 @@ sal_uInt16 SplitWindow::ImplTestSplit( SplitWindow* pWindow, const Point& rPos,
         if ( (nTPos >= nPos) && (nTPos <= nPos+nSplitSize+nBorder) )
         {
             rMouseOff = nTPos-nPos;
-            *ppFoundSet = pWindow->mpMainSet;
+            *ppFoundSet = pWindow->mpMainSet.get();
             if ( !pWindow->mpMainSet->mvItems.empty() )
                 rFoundPos = pWindow->mpMainSet->mvItems.size() - 1;
             else
@@ -1178,7 +1178,7 @@ sal_uInt16 SplitWindow::ImplTestSplit( SplitWindow* pWindow, const Point& rPos,
         }
     }
 
-    return ImplTestSplit( pWindow->mpMainSet, rPos, rMouseOff, ppFoundSet, rFoundPos,
+    return ImplTestSplit( pWindow->mpMainSet.get(), rPos, rMouseOff, ppFoundSet, rFoundPos,
                          pWindow->mbHorz );
 }
 
@@ -1219,10 +1219,8 @@ void SplitWindow::ImplDrawSplitTracking(const Point& rPos)
 
 void SplitWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
-    ImplSplitSet* pNewSet   = new ImplSplitSet();
-
-    mpMainSet               = pNewSet;
-    mpBaseSet               = pNewSet;
+    mpMainSet.reset(new ImplSplitSet());
+    mpBaseSet               = mpMainSet.get();
     mpSplitSet              = nullptr;
     mpLastSizes             = nullptr;
     mnDX                    = 0;
@@ -1256,7 +1254,7 @@ void SplitWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     if ( nStyle & WB_NOSPLITDRAW )
     {
-        pNewSet->mnSplitSize -= 2;
+        mpMainSet->mnSplitSize -= 2;
         mbInvalidate = false;
     }
 
@@ -1317,10 +1315,7 @@ SplitWindow::~SplitWindow()
 void SplitWindow::dispose()
 {
     // delete Sets
-    if (mpMainSet) {
-        delete mpMainSet ;
-        mpMainSet = nullptr; //NULL for base-class callbacks during destruction
-    }
+    mpMainSet.reset();
     DockingWindow::dispose();
 }
 
@@ -1501,8 +1496,8 @@ void SplitWindow::ImplCalcLayout()
     }
 
     // calculate sets recursive
-    ImplCalcSet( mpMainSet, nL, nT, nW, nH, mbHorz, !mbBottomRight );
-    ImplCalcSet2( this, mpMainSet, false, mbHorz );
+    ImplCalcSet( mpMainSet.get(), nL, nT, nW, nH, mbHorz, !mbBottomRight );
+    ImplCalcSet2( this, mpMainSet.get(), false, mbHorz );
     mbCalc = false;
 }
 
@@ -1794,7 +1789,7 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
     if ( !mpSplitSet->mvItems.empty() )
     {
         bool bDown = true;
-        if ( (mpSplitSet == mpMainSet) && mbBottomRight )
+        if ( (mpSplitSet == mpMainSet.get()) && mbBottomRight )
             bDown = false;
 
         pSplitItem          = &mpSplitSet->mvItems[mnSplitPos];
@@ -1847,7 +1842,7 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
             }
         }
 
-        if ( (mpSplitSet == mpMainSet) && (mnWinStyle & WB_SIZEABLE) && !bPropSmaller )
+        if ( (mpSplitSet == mpMainSet.get()) && (mnWinStyle & WB_SIZEABLE) && !bPropSmaller )
         {
             if ( bDown )
             {
@@ -2157,14 +2152,14 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
 
             if ( (mnSplitTest & SPLIT_WINDOW) && mpMainSet->mvItems.empty() )
             {
-                if ( (mpSplitSet == mpMainSet) && mbBottomRight )
+                if ( (mpSplitSet == mpMainSet.get()) && mbBottomRight )
                     nDelta *= -1;
                 ImplSetWindowSize( nDelta );
             }
             else
             {
                 long nNewSize = mpSplitSet->mvItems[mnSplitPos].mnPixSize;
-                if ( (mpSplitSet == mpMainSet) && mbBottomRight )
+                if ( (mpSplitSet == mpMainSet.get()) && mbBottomRight )
                     nNewSize -= nDelta;
                 else
                     nNewSize += nDelta;
@@ -2235,12 +2230,12 @@ void SplitWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     ImplDrawFadeIn(rRenderContext);
 
     // draw FrameSet-backgrounds
-    ImplDrawBack(rRenderContext, mpMainSet);
+    ImplDrawBack(rRenderContext, mpMainSet.get());
 
     // draw splitter
     if (!(mnWinStyle & WB_NOSPLITDRAW))
     {
-        ImplDrawSplit(rRenderContext, mpMainSet, mbHorz, !mbBottomRight);
+        ImplDrawSplit(rRenderContext, mpMainSet.get(), mbHorz, !mbBottomRight);
     }
 }
 
@@ -2336,14 +2331,14 @@ void SplitWindow::InsertItem( sal_uInt16 nId, vcl::Window* pWindow, long nSize,
 {
 #ifdef DBG_UTIL
     sal_uInt16 nDbgDummy;
-    SAL_WARN_IF( ImplFindItem( mpMainSet, nId, nDbgDummy ), "vcl", "SplitWindow::InsertItem() - Id already exists" );
+    SAL_WARN_IF( ImplFindItem( mpMainSet.get(), nId, nDbgDummy ), "vcl", "SplitWindow::InsertItem() - Id already exists" );
 #endif
 
     // Size has to be at least 1.
     if ( nSize < 1 )
         nSize = 1;
 
-    ImplSplitSet* pSet       = ImplFindSet( mpMainSet, nIntoSetId );
+    ImplSplitSet* pSet       = ImplFindSet( mpMainSet.get(), nIntoSetId );
 #ifdef DBG_UTIL
     SAL_WARN_IF( !pSet, "vcl", "SplitWindow::InsertItem() - Set not exists" );
 #endif
@@ -2403,12 +2398,12 @@ void SplitWindow::RemoveItem( sal_uInt16 nId )
 {
 #ifdef DBG_UTIL
     sal_uInt16 nDbgDummy;
-    SAL_WARN_IF( !ImplFindItem( mpMainSet, nId, nDbgDummy ), "vcl", "SplitWindow::RemoveItem() - Id not found" );
+    SAL_WARN_IF( !ImplFindItem( mpMainSet.get(), nId, nDbgDummy ), "vcl", "SplitWindow::RemoveItem() - Id not found" );
 #endif
 
     // search set
     sal_uInt16     nPos;
-    ImplSplitSet*  pSet    = ImplFindItem( mpMainSet, nId, nPos );
+    ImplSplitSet*  pSet    = ImplFindItem( mpMainSet.get(), nId, nPos );
 
     if (!pSet)
         return;
@@ -2442,14 +2437,11 @@ void SplitWindow::RemoveItem( sal_uInt16 nId )
 
 void SplitWindow::Clear()
 {
-    // delete all sets
-    delete mpMainSet ;
-
     // create Main-Set again
-    mpMainSet = new ImplSplitSet();
+    mpMainSet.reset(new ImplSplitSet());
     if ( mnWinStyle & WB_NOSPLITDRAW )
         mpMainSet->mnSplitSize -= 2;
-    mpBaseSet = mpMainSet;
+    mpBaseSet = mpMainSet.get();
 
     // and invalidate again
     ImplUpdate();
@@ -2498,7 +2490,7 @@ void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
     // treat TopSet different if the window is sizeable
     bool bSmall  = true;
     bool bGreat  = true;
-    if ( (pSet == mpMainSet) && (mnWinStyle & WB_SIZEABLE) )
+    if ( (pSet == mpMainSet.get()) && (mnWinStyle & WB_SIZEABLE) )
     {
         if ( nPos < pSet->mvItems.size()-1 )
         {
