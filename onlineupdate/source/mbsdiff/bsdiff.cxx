@@ -136,7 +136,7 @@ static void
 qsufsort(int32_t *I,int32_t *V,unsigned char *old,int32_t oldsize)
 {
     int32_t buckets[256];
-    int32_t i,h,len;
+    int32_t i,h;
 
     for(i=0;i<256;i++) buckets[i]=0;
     for(i=0;i<oldsize;i++) buckets[old[i]]++;
@@ -152,7 +152,7 @@ qsufsort(int32_t *I,int32_t *V,unsigned char *old,int32_t oldsize)
     I[0]=-1;
 
     for(h=1;I[0]!=-(oldsize+1);h+=h) {
-        len=0;
+        int32_t len=0;
         for(i=0;i<oldsize+1;) {
             if(I[i]<0) {
                 len-=I[i];
@@ -186,9 +186,10 @@ static int32_t
 search(int32_t *I,unsigned char *old,int32_t oldsize,
        unsigned char *newbuf,int32_t newsize,int32_t st,int32_t en,int32_t *pos)
 {
-    int32_t x,y;
+    int32_t x;
 
     if(en-st<2) {
+        int32_t y;
         x=matchlen(old+I[st],oldsize-I[st],newbuf,newsize);
         y=matchlen(old+I[en],oldsize-I[en],newbuf,newsize);
 
@@ -218,7 +219,7 @@ int main(int argc,char *argv[])
 
     int32_t scan,pos = 0,len;
     int32_t lastscan,lastpos,lastoffset;
-    int32_t oldscore,scsc;
+    int32_t scsc;
 
     int32_t s,Sf,lenf,Sb,lenb;
     int32_t overlap,Ss,lens;
@@ -290,7 +291,7 @@ int main(int argc,char *argv[])
     lastscan=0;lastpos=0;lastoffset=0;
     numtriples = 0;
     while(scan<newsize) {
-        oldscore=0;
+        int32_t oldscore=0;
 
         for(scsc=scan+=len;scan<newsize;scan++) {
             len=search(I,old,oldsize,newbuf+scan,newsize-scan,
