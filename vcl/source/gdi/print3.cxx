@@ -473,7 +473,8 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     {
         try
         {
-            ScopedVclPtrInstance< PrintDialog > aDlg( nullptr, xController );
+            VclPtr<vcl::Window> xParent = xController->getWindow();
+            ScopedVclPtrInstance< PrintDialog > aDlg( xParent, xController );
             if( ! aDlg->Execute() )
             {
                 xController->abortJob();
