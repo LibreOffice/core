@@ -118,6 +118,54 @@
       "revId": "931e11d80e3f9bf1dce4affdaf79a812aded3792",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_49182f1e",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_languages/Property.ulf",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001032
+      },
+      "writtenOn": "2018-04-16T15:31:47Z",
+      "side": 1,
+      "message": "see comment above: it is helpful as it \"retriggers\" the translation to correct the link. no translator is knowing that this is the link for getting support listed in the apps and features section.",
+      "parentUuid": "9a30ddce_49010fae",
+      "range": {
+        "startLine": 26,
+        "startChar": 20,
+        "endLine": 26,
+        "endChar": 44
+      },
+      "revId": "931e11d80e3f9bf1dce4affdaf79a812aded3792",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_291bfb1c",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_languages/Property.ulf",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001032
+      },
+      "writtenOn": "2018-04-16T15:31:47Z",
+      "side": 1,
+      "message": "well, if the translator gets tdf.org he do not know that the help link should be used. --\u003e he also uses tdf.org",
+      "parentUuid": "9a30ddce_890a27d1",
+      "range": {
+        "startLine": 26,
+        "startChar": 20,
+        "endLine": 26,
+        "endChar": 44
+      },
+      "revId": "931e11d80e3f9bf1dce4affdaf79a812aded3792",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
