@@ -57,7 +57,6 @@ ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, ScAttr
 {
     if ( nCol != -1 && pDefaultColAttrArray && !pDefaultColAttrArray->mvData.empty())
     {
-        bool bNumFormatChanged;
         ScAddress aAdrStart( nCol, 0, nTab );
         ScAddress aAdrEnd( nCol, 0, nTab );
         mvData.resize( pDefaultColAttrArray->mvData.size() );
@@ -66,7 +65,7 @@ ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, ScAttr
             mvData[nIdx].nEndRow = pDefaultColAttrArray->mvData[nIdx].nEndRow;
             ScPatternAttr aNewPattern( *(pDefaultColAttrArray->mvData[nIdx].pPattern) );
             mvData[nIdx].pPattern = static_cast<const ScPatternAttr*>( &pDocument->GetPool()->Put( aNewPattern ) );
-            bNumFormatChanged = false;
+            bool bNumFormatChanged = false;
             if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
                  mvData[nIdx].pPattern->GetItemSet(), pDocument->GetDefPattern()->GetItemSet() ) )
             {
