@@ -906,7 +906,7 @@ void OFieldDescControl::InitializeControl(Control* _pControl,const OString& _sHe
 
 VclPtr<FixedText> OFieldDescControl::CreateText(const char* pTextRes)
 {
-    VclPtrInstance<FixedText> pFixedText( this );
+    auto pFixedText = VclPtr<FixedText>::Create( this );
     pFixedText->SetText(DBA_RES(pTextRes));
     pFixedText->EnableClipSiblings();
     return pFixedText;
@@ -914,7 +914,7 @@ VclPtr<FixedText> OFieldDescControl::CreateText(const char* pTextRes)
 
 VclPtr<OPropNumericEditCtrl> OFieldDescControl::CreateNumericControl(const char* pHelpId, short _nProperty, const OString& _sHelpId)
 {
-    VclPtrInstance<OPropNumericEditCtrl> pControl(this, pHelpId, _nProperty, WB_BORDER);
+    auto pControl = VclPtr<OPropNumericEditCtrl>::Create(this, pHelpId, _nProperty, WB_BORDER);
     pControl->SetDecimalDigits(0);
     pControl->SetMin(0);
     pControl->SetMax(0x7FFFFFFF);   // Should be changed outside, if needed
