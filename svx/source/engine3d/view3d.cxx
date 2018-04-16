@@ -456,10 +456,10 @@ bool E3dView::Paste(
         return false;
 
     // Get owner of the list
-    SdrObject* pOwner = pDstList->GetOwnerObj();
-    if(pOwner && dynamic_cast< const E3dScene* >(pOwner) !=  nullptr)
+    E3dScene* pDstScene(dynamic_cast< E3dScene* >(pDstList->getSdrObjectFromSdrObjList()));
+
+    if(nullptr != pDstScene)
     {
-        E3dScene* pDstScene = static_cast<E3dScene*>(pOwner);
         BegUndo(SvxResId(RID_SVX_3D_UNDO_EXCHANGE_PASTE));
 
         // Copy all objects from E3dScenes and insert them directly
@@ -581,7 +581,6 @@ bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene const * pSrcScene, E3dSce
                     pNewCompoundObj->SetTransform(aModifyingTransform * aNewObjectTrans);
 
                     // fill and insert new object
-                    pNewCompoundObj->SetPage(pDstScene->E3dObject::GetPage());
                     pNewCompoundObj->NbcSetLayer(pCompoundObj->GetLayer());
                     pNewCompoundObj->NbcSetStyleSheet(pCompoundObj->GetStyleSheet(), true);
                     pDstScene->Insert3DObj(pNewCompoundObj);
@@ -655,7 +654,7 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
         if(rTextColorItem.GetValue() == COL_BLACK)
         {
             //For black text objects, the color set to gray
-            if(pObj->GetPage())
+            if(pObj->getSdrPageFromSdrObject())
             {
                 // if black is only default attribute from
                 // pattern set it hard so that it is used in undo.
@@ -685,8 +684,11 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
             && !nLineWidth
             && eFillStyle != drawing::FillStyle_NONE)
         {
-            if(pObj->GetPage() && GetModel()->IsUndoEnabled() )
+            if(pObj->getSdrPageFromSdrObject() && GetModel()->IsUndoEnabled() )
+            {
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
+            }
+
             pObj->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
             pObj->SetMergedItem(XLineWidthItem(0));
         }
@@ -1035,7 +1037,7 @@ void E3dView::DoDepthArrange(E3dScene const * pScene, double fDepth)
     if(pScene && pScene->GetSubList() && pScene->GetSubList()->GetObjCount() > 1)
     {
         SdrObjList* pSubList = pScene->GetSubList();
-        SdrObjListIter aIter(*pSubList, SdrIterMode::Flat);
+        SdrObjListIter aIter(pSubList, SdrIterMode::Flat);
         E3dDepthLayer* pBaseLayer = nullptr;
         E3dDepthLayer* pLayer = nullptr;
         sal_Int32 nNumLayers = 0;
@@ -1550,7 +1552,7 @@ void E3dView::BreakSingle3DObj(E3dObject* pObj)
     if(dynamic_cast< const E3dScene* >(pObj) !=  nullptr)
     {
         SdrObjList* pSubList = pObj->GetSubList();
-        SdrObjListIter aIter(*pSubList, SdrIterMode::Flat);
+        SdrObjListIter aIter(pSubList, SdrIterMode::Flat);
 
         while(aIter.IsMore())
         {

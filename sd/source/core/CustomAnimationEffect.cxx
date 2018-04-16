@@ -1543,7 +1543,7 @@ void CustomAnimationEffect::updateSdrPathObjFromPath( SdrPathObj& rPathObj )
         SdrObject* pObj = GetSdrObjectFromXShape( getTargetShape() );
         if( pObj )
         {
-            SdrPage* pPage = pObj->GetPage();
+            SdrPage* pPage = pObj->getSdrPageFromSdrObject();
             if( pPage )
             {
                 const Size aPageSize( pPage->GetSize() );
@@ -1583,7 +1583,7 @@ void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj
 
         aPolyPoly.transform(basegfx::utils::createTranslateB2DHomMatrix(-aCenter.X(), -aCenter.Y()));
 
-        SdrPage* pPage = pObj->GetPage();
+        SdrPage* pPage = pObj->getSdrPageFromSdrObject();
         if( pPage )
         {
             const Size aPageSize( pPage->GetSize() );

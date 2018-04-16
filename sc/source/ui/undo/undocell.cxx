@@ -736,9 +736,9 @@ ScUndoSdrCaptionObj::~ScUndoSdrCaptionObj()
 
 void ScUndoSdrCaptionObj::BroadcastSwitchToPage()
 {
-    if (m_pCaptionObj && m_pCaptionObj->IsInserted() && m_pCaptionObj->GetPage())
+    if (m_pCaptionObj && m_pCaptionObj->IsInserted() && m_pCaptionObj->getSdrPageFromSdrObject())
     {
-        SdrHint aHint(SdrHintKind::SwitchToPage, *m_pCaptionObj, m_pCaptionObj->GetPage());
+        SdrHint aHint(SdrHintKind::SwitchToPage, *m_pCaptionObj, m_pCaptionObj->getSdrPageFromSdrObject());
         rMod.Broadcast(aHint);
     }
 }
@@ -785,12 +785,12 @@ void ScUndoDelSdrCaptionObj::Undo()
     {
         Point aOwnerAnchorPos(0, 0);
 
-        if (dynamic_cast< const SdrObjGroup* >(m_pObjList->GetOwnerObj()) != nullptr)
+        if (dynamic_cast< const SdrObjGroup* >(m_pObjList->getSdrObjectFromSdrObjList()) != nullptr)
         {
-            aOwnerAnchorPos = m_pObjList->GetOwnerObj()->GetAnchorPos();
+            aOwnerAnchorPos = m_pObjList->getSdrObjectFromSdrObjList()->GetAnchorPos();
         }
 
-        E3DModifySceneSnapRectUpdater aUpdater(m_pObjList->GetOwnerObj());
+        E3DModifySceneSnapRectUpdater aUpdater(m_pObjList->getSdrObjectFromSdrObjList());
         m_pObjList->InsertObject(m_pCaptionObj.get(), m_nOrdNum);
 
         if(aOwnerAnchorPos.X() || aOwnerAnchorPos.Y())
@@ -861,7 +861,7 @@ void ScUndoNewSdrCaptionObj::Redo()
     {
         Point aAnchorPos( 0, 0 );
 
-        if (dynamic_cast<const SdrObjGroup*>(m_pObjList->GetOwnerObj()) != nullptr)
+        if (dynamic_cast<const SdrObjGroup*>(m_pObjList->getSdrObjectFromSdrObjList()) != nullptr)
         {
             aAnchorPos = m_pCaptionObj->GetAnchorPos();
         }

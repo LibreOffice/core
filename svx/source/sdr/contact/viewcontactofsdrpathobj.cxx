@@ -96,7 +96,7 @@ namespace sdr
                 //width/height to avoid oom and massive churn generating a huge
                 //polygon chain to cover the length in applyLineDashing if this
                 //line is dashed
-                const SdrPage* pPage = GetPathObj().GetPage();
+                const SdrPage* pPage(GetPathObj().getSdrPageFromSdrObject());
                 sal_Int32 nPageWidth = pPage ? pPage->GetWidth() : 0;
                 sal_Int32 nPageHeight = pPage ? pPage->GetHeight() : 0;
 

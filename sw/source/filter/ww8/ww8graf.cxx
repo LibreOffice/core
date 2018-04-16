@@ -2867,7 +2867,7 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SvxMSDffImportRec *pRecord,
                 // remove the object from Z-Order list
                 m_xMSDffManager->RemoveFromShapeOrder( pSdrTextObj );
                 // take the object from the drawing page
-                if( pSdrTextObj->GetPage() )
+                if( pSdrTextObj->getSdrPageFromSdrObject() )
                     m_pDrawPg->RemoveObject( pSdrTextObj->GetOrdNum() );
                 // and delete FrameFormat, because replaced by graphic
                 // (this also deletes the object)
@@ -3095,7 +3095,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
     // remove old object from Z-Order-List
     m_xMSDffManager->RemoveFromShapeOrder( rpObject );
     // remove from Drawing-Page
-    if( rpObject->GetPage() )
+    if( rpObject->getSdrPageFromSdrObject() )
         m_pDrawPg->RemoveObject( rpObject->GetOrdNum() );
 
     // and delete the object

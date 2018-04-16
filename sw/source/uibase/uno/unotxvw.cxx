@@ -306,7 +306,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
         for (SdrObject* pSdrObject : sdrObjects)
         {
             // GetSelectableFromAny did not check pSdrObject is in right doc!
-            if (pPV && pSdrObject->GetPage() == pPV->GetPage())
+            if (pPV && pSdrObject->getSdrPageFromSdrObject() == pPV->GetPage())
             {
                 pDrawView->MarkObj(pSdrObject, pPV);
                 bRet = true;

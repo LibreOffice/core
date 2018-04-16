@@ -522,7 +522,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                                 if( pPage )
                                 {
-                                    SdrObjListIter aIter( *pPage );
+                                    SdrObjListIter aIter( pPage );
                                     while( aIter.IsMore() )
                                     {
                                         SdrObject* pObj = aIter.Next();

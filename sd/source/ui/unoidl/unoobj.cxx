@@ -354,7 +354,7 @@ beans::PropertyState SAL_CALL SdXShape::getPropertyState( const OUString& Proper
     else
     {
         SdrObject* pObj = mpShape->GetSdrObject();
-        if( pObj == nullptr || ( pObj->GetPage()->IsMasterPage() && pObj->IsEmptyPresObj() ) )
+        if( pObj == nullptr || ( pObj->getSdrPageFromSdrObject()->IsMasterPage() && pObj->IsEmptyPresObj() ) )
             return beans::PropertyState_DEFAULT_VALUE;
 
         return mpShape->_getPropertyState( PropertyName );
@@ -492,7 +492,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
                     if(bIsAnimation)
                     {
                         SdrObjGroup* pGroup = dynamic_cast< SdrObjGroup* >(pObj);
-                        SdPage* pPage = pGroup ? dynamic_cast< SdPage* >(pGroup->GetPage()) : nullptr;
+                        SdPage* pPage = pGroup ? dynamic_cast< SdPage* >(pGroup->getSdrPageFromSdrObject()) : nullptr;
 
                         if (pPage)
                         {
@@ -872,7 +872,7 @@ bool SdXShape::IsPresObj() const
     SdrObject* pObj = mpShape->GetSdrObject();
     if(pObj)
     {
-        SdPage* pPage = dynamic_cast<SdPage* >(pObj->GetPage());
+        SdPage* pPage = dynamic_cast<SdPage* >(pObj->getSdrPageFromSdrObject());
         if(pPage)
             return pPage->GetPresObjKind(pObj) != PRESOBJ_NONE;
     }
@@ -908,7 +908,7 @@ OUString SdXShape::GetPlaceholderText() const
     if( pObj == nullptr )
         return OUString();
 
-    SdPage* pPage = dynamic_cast< SdPage* >(pObj->GetPage());
+    SdPage* pPage = dynamic_cast< SdPage* >(pObj->getSdrPageFromSdrObject());
     DBG_ASSERT( pPage, "no page?" );
     if( pPage == nullptr )
         return OUString();
@@ -972,7 +972,7 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
                 if( pOutliner == nullptr )
                     break;
 
-                SdPage* pPage = dynamic_cast< SdPage* >(pObj->GetPage());
+                SdPage* pPage = dynamic_cast< SdPage* >(pObj->getSdrPageFromSdrObject());
                 DBG_ASSERT( pPage, "no page?" );
                 if( pPage == nullptr )
                     break;
@@ -1011,7 +1011,7 @@ void SdXShape::SetMasterDepend( bool bDepend ) throw()
         {
             if( bDepend )
             {
-                SdPage* pPage = dynamic_cast< SdPage* >(pObj->GetPage());
+                SdPage* pPage = dynamic_cast< SdPage* >(pObj->getSdrPageFromSdrObject());
                 pObj->SetUserCall( pPage );
             }
             else

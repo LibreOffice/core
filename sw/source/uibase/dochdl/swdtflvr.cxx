@@ -628,7 +628,7 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
             for(sal_uInt16 a(0); a < pModel->GetPageCount(); a++)
             {
                 const SdrPage* pPage = pModel->GetPage(a);
-                SdrObjListIter aIter(*pPage, SdrIterMode::DeepNoGroups);
+                SdrObjListIter aIter(pPage, SdrIterMode::DeepNoGroups);
 
                 while(aIter.IsMore())
                 {

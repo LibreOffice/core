@@ -1240,7 +1240,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
                     // Register an outliner view for all other sdr views that
                     // show the same page, so that when the text edit changes,
                     // all interested windows get an invalidation.
-                    SdrViewIter aIter(pObj->GetPage());
+                    SdrViewIter aIter(pObj->getSdrPageFromSdrObject());
                     for (SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView())
                     {
                         if (pView == this)

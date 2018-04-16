@@ -266,10 +266,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                         {
                             // Clone to target SdrModel
                             SdrObject* pNewObj(pObject->CloneSdrObject(*m_pModel.get()));
-
-                            pNewObj->SetPage( m_pPage );
                             m_pPage->InsertObject(pNewObj, SAL_MAX_SIZE);
-
                             tools::Rectangle aRet(VCLPoint((*pCopiesIter)->getPosition()),VCLSize((*pCopiesIter)->getSize()));
                             aRet.setHeight(aRet.getHeight() + 1);
                             aRet.setWidth(aRet.getWidth() + 1);
@@ -418,7 +415,7 @@ void OReportSection::SelectAll(const sal_uInt16 _nObjectType)
         else
         {
             m_pView->UnmarkAll();
-            SdrObjListIter aIter(*m_pPage,SdrIterMode::DeepNoGroups);
+            SdrObjListIter aIter(m_pPage,SdrIterMode::DeepNoGroups);
             SdrObject* pObjIter = nullptr;
             while( (pObjIter = aIter.Next()) != nullptr )
             {

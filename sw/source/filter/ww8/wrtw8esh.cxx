@@ -2294,23 +2294,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                     const SdrObject* pSdrObj = rFormat.FindRealSdrObject();
                     if (pSdrObj)
                     {
-                        bool bSwapInPage = false;
-                        if (!pSdrObj->GetPage())
-                        {
-                            if (SwDrawModel* pModel = rWrt.m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
-                            {
-                                if (SdrPage *pPage = pModel->GetPage(0))
-                                {
-                                    bSwapInPage = true;
-                                    const_cast<SdrObject*>(pSdrObj)->SetPage(pPage);
-                                }
-                            }
-                        }
-
                         nShapeId = AddSdrObject(*pSdrObj);
-
-                        if (bSwapInPage)
-                            const_cast<SdrObject*>(pSdrObj)->SetPage(nullptr);
                     }
 #if OSL_DEBUG_LEVEL > 0
                     else

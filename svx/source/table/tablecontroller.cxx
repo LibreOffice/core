@@ -1879,7 +1879,7 @@ void SvxTableController::EditCell(const CellPos& rPos, vcl::Window* pWindow, Tbl
 
     SdrTableObj& rTableObj(*mxTableObj.get());
 
-    if(rTableObj.GetPage() == pPV->GetPage())
+    if(rTableObj.getSdrPageFromSdrObject() == pPV->GetPage())
     {
         bool bEmptyOutliner = false;
 

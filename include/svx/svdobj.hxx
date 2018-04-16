@@ -343,8 +343,20 @@ public:
     // A SdrObject always needs a SdrModel for lifetime (Pool, ...)
     SdrObject(SdrModel& rSdrModel);
 
-    // SdrModel access on SdrObject level
-    SdrModel& getSdrModelFromSdrObject() const { return mrSdrModelFromSdrObject; }
+    // SdrModel/SdrPage access on SdrObject level
+    virtual SdrPage* getSdrPageFromSdrObject() const;
+    SdrModel& getSdrModelFromSdrObject() const;
+    SdrObjList* getParentOfSdrObject() const;
+    virtual SdrObjList* getChildrenOfSdrObject() const;
+
+private:
+    // only allow SetParentAtSdrObjectFromSdrObjList to call setParentOfSdrObject
+    friend void SetParentAtSdrObjectFromSdrObjList(SdrObject& rSdrObject, SdrObjList* pNew);
+    SVX_DLLPRIVATE void setParentOfSdrObject(SdrObjList* pNew);
+
+public:
+    // react on model/page change
+    virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage);
 
     void AddObjectUser(sdr::ObjectUser& rNewUser);
     void RemoveObjectUser(sdr::ObjectUser& rOldUser);
@@ -373,7 +385,7 @@ public:
     ///
     /// This is needed for instance for NbcMove, because usually one moves SnapRect and aOutRect
     /// at the same time to avoid recomputation.
-    virtual void SetRectsDirty(bool bNotMyself = false);
+    virtual void SetRectsDirty(bool bNotMyself = false, bool bRecursive = true);
 
     // frees the SdrObject pointed to by the argument
     // In case the object has an SvxShape, which has the ownership of the object, it
@@ -383,11 +395,6 @@ public:
     // this method is only for access from Property objects
     virtual void SetBoundRectDirty();
 
-    virtual void setParentOfSdrObject(SdrObjList* pNewObjList);
-    SdrObjList* getParentOfSdrObject() const { return mpParentOfSdrObject;}
-
-    virtual void SetPage(SdrPage* pNewPage);
-    SdrPage* GetPage() const { return pPage;}
     SfxItemPool & GetObjectItemPool() const;
 
     void AddListener(SfxListener& rListener);
@@ -909,9 +916,8 @@ public:
     void setSuitableOutlinerBg(Outliner& rOutliner) const;
 
 protected:
-    tools::Rectangle                   aOutRect;     // surrounding rectangle for Paint (incl. LineWdt, ...)
+    tools::Rectangle            aOutRect;     // surrounding rectangle for Paint (incl. LineWdt, ...)
     Point                       aAnchor;      // anchor position (Writer)
-    SdrPage*                    pPage;
     SdrObjUserCall*             pUserCall;
     std::unique_ptr<SdrObjPlusData>
                                 pPlusData;    // Broadcaster, UserData, connectors, ... (this is the Bitsack)
@@ -1074,7 +1080,6 @@ public:
         SdrModel& rSdrModel,
         SdrInventor nInventor,
         sal_uInt16 nObjIdentifier,
-        SdrPage* pPage = nullptr,
         const tools::Rectangle* pSnapRect = nullptr);
 
     static void InsertMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> const & rLink);

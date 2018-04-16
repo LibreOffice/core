@@ -30,6 +30,9 @@ namespace sdr
         class OleProperties : public RectangleProperties
         {
         protected:
+            // apply the correct SfyStyleSheet from SdrObject's SdrModel
+            virtual void applyDefaultStyleSheetFromSdrModel() override;
+
         public:
             // basic constructor
             explicit OleProperties(SdrObject& rObj);

@@ -64,20 +64,6 @@ typedef o3tl::strong_int<sal_uInt8,SdrLayerIDTag> SdrLayerID;
 constexpr SdrLayerID SDRLAYER_NOTFOUND(0xff);
 
 /*
- * Page + ObjList
- */
-enum class SdrObjListKind {
-    Unknown    = 0x00,
-    // pure object lists:
-    GroupObj   = 0x01,
-    // Here is space for 12 more types of lists
-    // Pages:
-    DrawPage   = 0x10,
-    MasterPage = 0x11
-    // Here is space for 8 more types of pages
-};   // reserved for Surrogate
-
-/*
  * Repeat
  */
 enum class SdrRepeatFunc {

@@ -429,8 +429,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
             pObj = SdrObjFactory::MakeNewObject(
                 pDrawModelWrapper->getSdrModel(),
                 pDrawViewWrapper->GetCurrentObjInventor(),
-                pDrawViewWrapper->GetCurrentObjIdentifier(),
-                pPage);
+                pDrawViewWrapper->GetCurrentObjIdentifier());
 
             if ( pObj )
             {

@@ -385,7 +385,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
             // if we have a pick obj we need to make this new ole a pres obj replacing the current pick obj
             if( pPickObj )
             {
-                SdPage* pPage = static_cast< SdPage* >(pPickObj->GetPage());
+                SdPage* pPage = static_cast< SdPage* >(pPickObj->getSdrPageFromSdrObject());
                 if(pPage && pPage->IsPresObj(pPickObj))
                 {
                     pPage->InsertPresObj( pOleObj, ePresObjKind );

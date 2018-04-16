@@ -91,7 +91,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     SdrPage* pPage = m_pModel->GetPage(0);
     if (pPage)
     {
-        SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
+        SdrObjListIter aIter( pPage, SdrIterMode::Flat );
         SdrObject* pObject = aIter.Next();
         if (pObject && !aIter.Next())               // exactly one object?
         {
@@ -262,7 +262,7 @@ static bool lcl_HasOnlyControls( SdrModel* pModel )
         SdrPage* pPage = pModel->GetPage(0);
         if (pPage)
         {
-            SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
+            SdrObjListIter aIter( pPage, SdrIterMode::DeepNoGroups );
             SdrObject* pObj = aIter.Next();
             if ( pObj )
             {
@@ -413,7 +413,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
             SdrPage* pPage = m_pModel->GetPage(0);
             if (pPage)
             {
-                SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
+                SdrObjListIter aIter( pPage, SdrIterMode::Flat );
                 SdrObject* pObject = aIter.Next();
                 if (pObject && pObject->GetObjIdentifier() == OBJ_GRAF)
                 {
@@ -472,8 +472,8 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
 
                 for(sal_uInt16 a(0); a < m_pModel->GetPageCount(); a++)
                 {
-                    const SdrPage* pPage = m_pModel->GetPage(a);
-                    SdrObjListIter aIter(*pPage, SdrIterMode::DeepNoGroups);
+                    const SdrPage* pPage(m_pModel->GetPage(a));
+                    SdrObjListIter aIter(pPage, SdrIterMode::DeepNoGroups);
 
                     while(aIter.IsMore())
                     {
@@ -671,7 +671,7 @@ SdrOle2Obj* ScDrawTransferObj::GetSingleObject()
     SdrPage* pPage = m_pModel->GetPage(0);
     if (pPage)
     {
-        SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
+        SdrObjListIter aIter( pPage, SdrIterMode::Flat );
         SdrObject* pObject = aIter.Next();
         if (pObject && pObject->GetObjIdentifier() == OBJ_OLE2)
         {
@@ -731,7 +731,7 @@ void ScDrawTransferObj::InitDocShell()
         SdrPage* pPage = pDestModel->GetPage(0);
         if (pPage)
         {
-            SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
+            SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {

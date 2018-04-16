@@ -713,7 +713,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
                                 pOurNewObject );
 
                             // delete and destroy old SdrGrafObj from page
-                            if (pObject->GetPage())
+                            if (pObject->getSdrPageFromSdrObject())
                                 m_pDrawPg->RemoveObject(pObject->GetOrdNum());
                             SdrObject::Free( pObject );
                         }
@@ -725,7 +725,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
                     m_xMSDffManager->RemoveFromShapeOrder( pObject );
 
                 // also delete this from the page if not grouped
-                if (pTextObj && !bTextObjWasGrouped && pTextObj->GetPage())
+                if (pTextObj && !bTextObjWasGrouped && pTextObj->getSdrPageFromSdrObject())
                     m_pDrawPg->RemoveObject( pTextObj->GetOrdNum() );
             }
             m_xMSDffManager->EnableFallbackStream();

@@ -540,7 +540,7 @@ void DrawView::DeleteMarked()
             SdrObject* pObj = aList.GetMark(nMark)->GetMarkedSdrObj();
             if( pObj && !pObj->IsEmptyPresObj() && pObj->GetUserCall() )
             {
-                pPage = static_cast< SdPage* >( pObj->GetPage() );
+                pPage = static_cast< SdPage* >( pObj->getSdrPageFromSdrObject() );
                 if (pPage)
                 {
                     PresObjKind ePresObjKind(pPage->GetPresObjKind(pObj));

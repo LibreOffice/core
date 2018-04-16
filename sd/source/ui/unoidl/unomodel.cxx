@@ -1571,7 +1571,7 @@ sal_Int32 ImplPDFGetBookmarkPage( const OUString& rBookmark, SdDrawDocument cons
         // is the bookmark a object ?
         pObj = rDoc.GetObj( aBookmark );
         if (pObj)
-            nPgNum = pObj->GetPage()->GetPageNum();
+            nPgNum = pObj->getSdrPageFromSdrObject()->GetPageNum();
     }
     if ( nPgNum != SDRPAGE_NOTFOUND )
         nPage = ( nPgNum - 1 ) / 2;
@@ -1791,9 +1791,9 @@ drawinglayer::primitive2d::Primitive2DContainer ImplRenderPaintProc::createRedir
     {
         drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
-        if(pObject->GetPage())
+        if(pObject->getSdrPageFromSdrObject())
         {
-            if(pObject->GetPage()->checkVisibility(rOriginal, rDisplayInfo, false))
+            if(pObject->getSdrPageFromSdrObject()->checkVisibility(rOriginal, rDisplayInfo, false))
             {
                 if(IsVisible(pObject) && IsPrintable(pObject))
                 {
@@ -2207,12 +2207,12 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                     if( pShape )
                                     {
                                         SdrObject* pObj = pShape->GetSdrObject();
-                                        if( pObj && pObj->GetPage()
+                                        if( pObj && pObj->getSdrPageFromSdrObject()
                                             && aImplRenderPaintProc.IsVisible( pObj )
                                                 && aImplRenderPaintProc.IsPrintable( pObj ) )
                                         {
                                             if( !pPV )
-                                                pPV = pView->ShowSdrPage( pObj->GetPage() );
+                                                pPV = pView->ShowSdrPage( pObj->getSdrPageFromSdrObject() );
 
                                             if( pPV )
                                                 pView->MarkObj( pObj, pPV );

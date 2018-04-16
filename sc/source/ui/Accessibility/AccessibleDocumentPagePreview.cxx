@@ -691,7 +691,7 @@ void ScShapeChildren::Notify(SfxBroadcaster&, const SfxHint& rHint)
     if (pSdrHint)
     {
         SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject());
-        if (pObj && (pObj->GetPage() == GetDrawPage()))
+        if (pObj && (pObj->getSdrPageFromSdrObject() == GetDrawPage()))
         {
             switch (pSdrHint->GetKind())
             {

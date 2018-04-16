@@ -885,7 +885,7 @@ namespace
         {
             Reference< XInterface > xNormalizedForm( _rxForm, UNO_QUERY_THROW );
 
-            SdrObjListIter aSdrObjectLoop( _rPage, SdrIterMode::DeepNoGroups );
+            SdrObjListIter aSdrObjectLoop( &_rPage, SdrIterMode::DeepNoGroups );
             while ( aSdrObjectLoop.IsMore() )
             {
                 FmFormObj* pFormObject = FmFormObj::GetFormObject( aSdrObjectLoop.Next() );
@@ -1539,7 +1539,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
     const Reference< XPropertySet >& _rxField,
     const Reference< XNumberFormats >& _rxNumberFormats, sal_uInt16 _nControlObjectID,
     const OUString& _rFieldPostfix, SdrInventor _nInventor, sal_uInt16 _nLabelObjectID,
-    SdrPage* _pLabelPage, SdrPage* _pControlPage, SdrModel* _pModel, SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
+    SdrPage* /*_pLabelPage*/, SdrPage* /*_pControlPage*/, SdrModel* _pModel, SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
 {
     sal_Int32 nDataType = 0;
     OUString sFieldName;
@@ -1584,8 +1584,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
             SdrObjFactory::MakeNewObject(
                 *_pModel,
                 _nInventor,
-                _nLabelObjectID,
-                _pLabelPage)));
+                _nLabelObjectID)));
 
         OSL_ENSURE( pLabel.get(), "FmXFormView::createControlLabelPair: could not create the label!" );
 
@@ -1617,8 +1616,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
         SdrObjFactory::MakeNewObject(
             *_pModel,
              _nInventor,
-             _nControlObjectID,
-             _pControlPage)));
+             _nControlObjectID)));
 
     OSL_ENSURE( pControl.get(), "FmXFormView::createControlLabelPair: could not create the control!" );
 
@@ -1782,7 +1780,7 @@ void FmXFormView::saveMarkList()
             {
                 if ( pObj->IsGroupObject() )
                 {
-                    SdrObjListIter aIter( *pObj->GetSubList() );
+                    SdrObjListIter aIter( pObj->GetSubList() );
                     bool bMixed = false;
                     while ( aIter.IsMore() && !bMixed )
                         bMixed = ( aIter.Next()->GetObjInventor() != SdrInventor::FmForm );
@@ -1866,7 +1864,7 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
         // it is important that the objects of the mark list are not accessed,
         // because they can be already destroyed
         SdrPageView* pCurPageView = m_pView->GetSdrPageView();
-        SdrObjListIter aPageIter( *pPage );
+        SdrObjListIter aPageIter( pPage );
         bool bFound = true;
 
         // do all objects still exist
@@ -1877,7 +1875,7 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
             SdrObject* pObj  = pMark->GetMarkedSdrObj();
             if (pObj->IsGroupObject())
             {
-                SdrObjListIter aIter(*pObj->GetSubList());
+                SdrObjListIter aIter(pObj->GetSubList());
                 while (aIter.IsMore() && bFound)
                     bFound = lcl_hasObject(aPageIter, aIter.Next());
             }

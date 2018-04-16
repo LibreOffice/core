@@ -163,7 +163,7 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
         if( pShape && (pShape->GetSdrObject() != nullptr) )
         {
             SdrObject* pObj = pShape->GetSdrObject();
-            pSdrPage = pObj->GetPage();
+            pSdrPage = pObj->getSdrPageFromSdrObject();
             aObjects.push_back( pObj );
         }
         else
@@ -194,9 +194,9 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
 
                     if( pSdrPage == nullptr )
                     {
-                        pSdrPage = pObj->GetPage();
+                        pSdrPage = pObj->getSdrPageFromSdrObject();
                     }
-                    else if( pSdrPage != pObj->GetPage() )
+                    else if( pSdrPage != pObj->getSdrPageFromSdrObject() )
                     {
                         bOk = false;
                         break;
@@ -263,10 +263,10 @@ Any SAL_CALL SdUnoDrawView::getSelection()
                     continue;
 
                 SdrObject *pObj = pMark->GetMarkedSdrObj();
-                if(pObj==nullptr || pObj->GetPage() == nullptr)
+                if(pObj==nullptr || pObj->getSdrPageFromSdrObject() == nullptr)
                     continue;
 
-                Reference< drawing::XDrawPage > xPage( pObj->GetPage()->getUnoPage(), UNO_QUERY);
+                Reference< drawing::XDrawPage > xPage( pObj->getSdrPageFromSdrObject()->getUnoPage(), UNO_QUERY);
 
                 if(!xPage.is())
                     continue;

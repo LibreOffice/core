@@ -646,7 +646,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             SdDrawDocument* pWorkModel = const_cast<SdDrawDocument*>(pOwnData->GetWorkDocument());
             SdPage*         pWorkPage = pWorkModel->GetSdPage( 0, PageKind::Standard );
 
-            pWorkPage->SetRectsDirty();
+            pWorkPage->SetSdrObjListRectsDirty();
 
             // #i120393# Clipboard data uses full object geometry range
             const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
@@ -816,7 +816,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 {
                     SdrPage* pWorkPage = pModel->GetSdPage( 0, PageKind::Standard );
 
-                    pWorkPage->SetRectsDirty();
+                    pWorkPage->SetSdrObjListRectsDirty();
 
                     if( pOwnData )
                     {
@@ -890,7 +890,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     SdDrawDocument* pModel = xDocShRef->GetDoc();
                     SdPage*         pWorkPage = pModel->GetSdPage( 0, PageKind::Standard );
 
-                    pWorkPage->SetRectsDirty();
+                    pWorkPage->SetSdrObjListRectsDirty();
 
                     if( pOwnData )
                     {
@@ -1228,7 +1228,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                                     pWorkModel->GetSdPage( 0, PageKind::Standard ) :
                                                     pWorkModel->GetPage( 0 ) );
 
-                pWorkPage->SetRectsDirty();
+                pWorkPage->SetSdrObjListRectsDirty();
 
                 // #i120393# Clipboard data uses full object geometry range
                 const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
@@ -1260,7 +1260,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                                 pWorkModel->GetSdPage( 0, PageKind::Standard ) :
                                                 pWorkModel->GetPage( 0 ) );
 
-            pWorkPage->SetRectsDirty();
+            pWorkPage->SetSdrObjListRectsDirty();
 
             // #i120393# Clipboard data uses full object geometry range
             const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
@@ -1309,7 +1309,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                                     pWorkModel->GetSdPage( 0, PageKind::Standard ) :
                                                     pWorkModel->GetPage( 0 ) );
 
-                pWorkPage->SetRectsDirty();
+                pWorkPage->SetSdrObjListRectsDirty();
 
                 // #i120393# Clipboard data uses full object geometry range
                 const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );

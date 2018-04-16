@@ -1900,20 +1900,6 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
             const SdrObject* pSdrObj = rFrame.GetFrameFormat().FindRealSdrObject();
             if (pSdrObj)
             {
-                bool bSwapInPage = false;
-                if (!pSdrObj->GetPage())
-                {
-                    if (SwDrawModel* pModel
-                        = m_rExport.m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
-                    {
-                        if (SdrPage* pPage = pModel->GetPage(0))
-                        {
-                            bSwapInPage = true;
-                            const_cast<SdrObject*>(pSdrObj)->SetPage(pPage);
-                        }
-                    }
-                }
-
                 m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_FIELD "{");
                 m_aRunText->append(OOO_STRING_SVTOOLS_RTF_IGNORE);
                 m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLDINST);
@@ -1925,9 +1911,6 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
 
                 m_aRunText->append('}');
                 m_aRunText->append('}');
-
-                if (bSwapInPage)
-                    const_cast<SdrObject*>(pSdrObj)->SetPage(nullptr);
             }
         }
         break;

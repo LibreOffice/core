@@ -243,7 +243,7 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
     if( pShape )
         pSdrShape = pShape->GetSdrObject();
 
-    if( !HasSdrObject() || pSdrShape == nullptr || pSdrShape->getParentOfSdrObject()->GetOwnerObj() != GetSdrObject() )
+    if( !HasSdrObject() || pSdrShape == nullptr || pSdrShape->getParentOfSdrObject()->getSdrObjectFromSdrObjList() != GetSdrObject() )
         throw uno::RuntimeException();
 
     SdrObjList& rList = *pSdrShape->getParentOfSdrObject();

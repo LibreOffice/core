@@ -24,73 +24,117 @@
 #include <svx/svdmark.hxx>
 #include <svx/scene3d.hxx>
 
-SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, bool bReverse)
-:   mnIndex(0),
-    mbReverse(bReverse)
+SdrObjListIter::SdrObjListIter(const SdrObjList* pObjList, SdrIterMode eMode, bool bReverse)
+:   maObjList(),
+    mnIndex(0),
+    mbReverse(bReverse),
+    mbUseZOrder(true)
 {
-    ImpProcessObjectList(rObjList, eMode, true);
+    if(nullptr != pObjList)
+    {
+        ImpProcessObjectList(*pObjList, eMode);
+    }
+
     Reset();
 }
 
-SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, bool bUseZOrder, SdrIterMode eMode)
-:   mnIndex(0),
-    mbReverse(false)
+SdrObjListIter::SdrObjListIter(const SdrObjList* pObjList, bool bUseZOrder, SdrIterMode eMode, bool bReverse)
+:   maObjList(),
+    mnIndex(0),
+    mbReverse(bReverse),
+    mbUseZOrder(bUseZOrder)
 {
-    ImpProcessObjectList(rObjList, eMode, bUseZOrder);
+    if(nullptr != pObjList)
+    {
+        // correct when we have no ObjectNavigationOrder
+        if(!mbUseZOrder && !pObjList->HasObjectNavigationOrder())
+        {
+            mbUseZOrder = false;
+        }
+
+        ImpProcessObjectList(*pObjList, eMode);
+    }
+
     Reset();
 }
 
-SdrObjListIter::SdrObjListIter( const SdrObject& rObj, SdrIterMode eMode )
-:   mnIndex(0),
-    mbReverse(false)
+SdrObjListIter::SdrObjListIter(const SdrObject& rSdrObject, SdrIterMode eMode, bool bReverse)
+:   maObjList(),
+    mnIndex(0),
+    mbReverse(bReverse),
+    mbUseZOrder(true)
 {
-    if ( dynamic_cast<const SdrObjGroup*>(&rObj) !=  nullptr )
-        ImpProcessObjectList(*rObj.GetSubList(), eMode, true);
-    else
-        maObjList.push_back(const_cast<SdrObject*>(&rObj));
+    ImpProcessObj(rSdrObject, eMode);
+    Reset();
+}
+
+SdrObjListIter::SdrObjListIter(const SdrPage* pSdrPage, SdrIterMode eMode, bool bReverse)
+:   maObjList(),
+    mnIndex(0),
+    mbReverse(bReverse),
+    mbUseZOrder(true)
+{
+    if(nullptr != pSdrPage)
+    {
+        ImpProcessObjectList(*dynamic_cast< const SdrObjList* >(pSdrPage), eMode);
+    }
+
     Reset();
 }
 
 SdrObjListIter::SdrObjListIter( const SdrMarkList& rMarkList, SdrIterMode eMode )
-:   mnIndex(0),
-    mbReverse(false)
+:   maObjList(),
+    mnIndex(0),
+    mbReverse(false),
+    mbUseZOrder(true)
 {
     ImpProcessMarkList(rMarkList, eMode);
     Reset();
 }
 
-void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode, bool bUseZOrder)
-{
-    for( size_t nIdx = 0, nCount = rObjList.GetObjCount(); nIdx < nCount; ++nIdx )
+void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode)
+{    for(size_t nIdx(0), nCount(rObjList.GetObjCount()); nIdx < nCount; ++nIdx)
     {
-        SdrObject* pObj = bUseZOrder ?
-            rObjList.GetObj( nIdx ) : rObjList.GetObjectForNavigationPosition( nIdx );
-        OSL_ASSERT( pObj != nullptr );
-        if( pObj )
-            ImpProcessObj( pObj, eMode, bUseZOrder );
+        const SdrObject* pSdrObject(mbUseZOrder
+            ? rObjList.GetObj(nIdx)
+            : rObjList.GetObjectForNavigationPosition(nIdx));
+
+        if(nullptr == pSdrObject)
+        {
+            OSL_ENSURE(false, "SdrObjListIter: corrupted SdrObjList (!)");
+        }
+        else
+        {
+            ImpProcessObj(*pSdrObject, eMode);
+        }
     }
 }
 
-void SdrObjListIter::ImpProcessMarkList( const SdrMarkList& rMarkList, SdrIterMode eMode )
+void SdrObjListIter::ImpProcessMarkList(const SdrMarkList& rMarkList, SdrIterMode eMode)
 {
     for( size_t nIdx = 0, nCount = rMarkList.GetMarkCount(); nIdx < nCount; ++nIdx )
+    {
         if( SdrObject* pObj = rMarkList.GetMark( nIdx )->GetMarkedSdrObj() )
-            ImpProcessObj( pObj, eMode, false );
+        {
+            ImpProcessObj(*pObj, eMode);
+        }
+    }
 }
 
-void SdrObjListIter::ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, bool bUseZOrder)
+void SdrObjListIter::ImpProcessObj(const SdrObject& rSdrObject, SdrIterMode eMode)
 {
-    bool bIsGroup = pObj->IsGroupObject();
-    // 3D objects are not group objects, IsGroupObject()
-    // only tests if pSub is not null ptr :-(
-    if( bIsGroup && dynamic_cast<const E3dObject* >(pObj) != nullptr && dynamic_cast<const E3dScene* >(pObj) == nullptr)
-        bIsGroup = false;
+    const SdrObjList* pChildren(rSdrObject.getChildrenOfSdrObject());
+    const bool bIsGroup(nullptr != pChildren);
 
-    if( !bIsGroup || (eMode != SdrIterMode::DeepNoGroups) )
-        maObjList.push_back(pObj);
+    if(!bIsGroup || (SdrIterMode::DeepNoGroups != eMode))
+    {
+        maObjList.push_back(&rSdrObject);
+    }
 
-    if( bIsGroup && (eMode != SdrIterMode::Flat) )
-        ImpProcessObjectList( *pObj->GetSubList(), eMode, bUseZOrder );
+    if(bIsGroup && (SdrIterMode::Flat != eMode))
+    {
+        ImpProcessObjectList(*pChildren, eMode);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -36,7 +36,7 @@ namespace sdr
         {
             if (const SdrObjGroup* pGroupObj = dynamic_cast<const SdrObjGroup*>(&rObj))
             {
-                SdrObjListIter aIter(*pGroupObj, SdrIterMode::DeepNoGroups);
+                SdrObjListIter aIter(pGroupObj->GetSubList(), SdrIterMode::DeepNoGroups);
                 maRectangles.reserve(aIter.Count());
 
                 while(aIter.IsMore())
