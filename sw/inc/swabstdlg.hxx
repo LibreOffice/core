@@ -467,7 +467,7 @@ public:
     virtual VclPtr<VclAbstractDialog>          CreateTitlePageDlg ( vcl::Window * pParent ) = 0;
     virtual VclPtr<VclAbstractDialog>         CreateVclSwViewDialog(SwView& rView) = 0;
     virtual VclPtr<AbstractInsTableDlg>        CreateInsTableDlg(SwView& rView) = 0;
-    virtual VclPtr<AbstractJavaEditDialog>     CreateJavaEditDialog(vcl::Window* pParent,
+    virtual VclPtr<AbstractJavaEditDialog>     CreateJavaEditDialog(weld::Window* pParent,
         SwWrtShell* pWrtSh) = 0;
     virtual VclPtr<AbstractMailMergeDlg>       CreateMailMergeDlg(
                                                 vcl::Window* pParent, SwWrtShell& rSh,

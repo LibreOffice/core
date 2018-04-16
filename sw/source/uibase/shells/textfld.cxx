@@ -592,7 +592,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                     SvxAbstractDialogFactory* pFact2 = SvxAbstractDialogFactory::Create();
                     assert(pFact2 && "Dialog creation failed!");
-                    ScopedVclPtr<AbstractSvxPostItDialog> pDlg(pFact2->CreateSvxPostItDialog(pMDI->GetFrameWeld(), aSet, bTravel));
+                    ScopedVclPtr<AbstractSvxPostItDialog> pDlg(pFact2->CreateSvxPostItDialog(GetView().GetFrameWeld(), aSet, bTravel));
                     assert(pDlg && "Dialog creation failed!");
                     pDlg->HideAuthor();
 
@@ -651,7 +651,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 {
                     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                     assert(pFact && "Dialog creation failed!");
-                    ScopedVclPtr<AbstractJavaEditDialog> pDlg(pFact->CreateJavaEditDialog(pMDI, &rSh));
+                    ScopedVclPtr<AbstractJavaEditDialog> pDlg(pFact->CreateJavaEditDialog(GetView().GetFrameWeld(), &rSh));
                     assert(pDlg && "Dialog creation failed!");
                     if ( pDlg->Execute() )
                     {

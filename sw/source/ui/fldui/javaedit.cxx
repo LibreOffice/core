@@ -37,105 +37,78 @@
 
 using namespace ::com::sun::star;
 
-SwJavaEditDialog::SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh) :
-    SvxStandardDialog(pParent, "InsertScriptDialog", "modules/swriter/ui/insertscript.ui"),
-
-    bNew(true),
-    bIsUrl(false),
-
-    pSh(pWrtSh),
-    pFileDlg(nullptr)
+SwJavaEditDialog::SwJavaEditDialog(weld::Window* pParent, SwWrtShell* pWrtSh)
+    : GenericDialogController(pParent, "modules/swriter/ui/insertscript.ui", "InsertScriptDialog")
+    , m_bNew(true)
+    , m_bIsUrl(false)
+    , m_pSh(pWrtSh)
+    , m_pFileDlg(nullptr)
+    , m_xTypeED(m_xBuilder->weld_entry("scripttype"))
+    , m_xUrlRB(m_xBuilder->weld_radio_button("url"))
+    , m_xEditRB(m_xBuilder->weld_radio_button("text"))
+    , m_xUrlPB(m_xBuilder->weld_button("browse"))
+    , m_xUrlED(m_xBuilder->weld_entry("urlentry"))
+    , m_xEditED(m_xBuilder->weld_text_view("textentry"))
+    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    , m_xPrevBtn(m_xBuilder->weld_button("previous"))
+    , m_xNextBtn(m_xBuilder->weld_button("next"))
 {
-    get(m_pTypeED, "scripttype");
-    get(m_pUrlRB, "url");
-    get(m_pUrlED, "urlentry");
-    get(m_pUrlPB, "browse");
-    get(m_pEditRB, "text");
-    get(m_pEditED, "textentry");
-
-    get(m_pOKBtn, "ok");
-    get(m_pPrevBtn, "previous");
-    get(m_pNextBtn, "next");
-
     // install handler
-    m_pPrevBtn->SetClickHdl( LINK( this, SwJavaEditDialog, PrevHdl ) );
-    m_pNextBtn->SetClickHdl( LINK( this, SwJavaEditDialog, NextHdl ) );
-    m_pOKBtn->SetClickHdl( LINK( this, SwJavaEditDialog, OKHdl ) );
+    m_xPrevBtn->connect_clicked( LINK( this, SwJavaEditDialog, PrevHdl ) );
+    m_xNextBtn->connect_clicked( LINK( this, SwJavaEditDialog, NextHdl ) );
+    m_xOKBtn->connect_clicked( LINK( this, SwJavaEditDialog, OKHdl ) );
 
-    Link<Button*,void> aLk = LINK(this, SwJavaEditDialog, RadioButtonHdl);
-    m_pUrlRB->SetClickHdl(aLk);
-    m_pEditRB->SetClickHdl(aLk);
-    m_pUrlPB->SetClickHdl(LINK(this, SwJavaEditDialog, InsertFileHdl));
+    Link<weld::Button&,void> aLk = LINK(this, SwJavaEditDialog, RadioButtonHdl);
+    m_xUrlRB->connect_clicked(aLk);
+    m_xEditRB->connect_clicked(aLk);
+    m_xUrlPB->connect_clicked(LINK(this, SwJavaEditDialog, InsertFileHdl));
 
-    vcl::Font aFont( m_pEditED->GetFont() );
-    aFont.SetWeight( WEIGHT_LIGHT );
-    m_pEditED->SetFont( aFont );
+    m_pMgr = new SwFieldMgr(m_pSh);
+    m_pField = static_cast<SwScriptField*>(m_pMgr->GetCurField());
 
-    pMgr = new SwFieldMgr(pSh);
-    pField = static_cast<SwScriptField*>(pMgr->GetCurField());
-
-    bNew = !(pField && pField->GetTyp()->Which() == SwFieldIds::Script);
+    m_bNew = !(m_pField && m_pField->GetTyp()->Which() == SwFieldIds::Script);
 
     CheckTravel();
 
-    if( !bNew )
-        SetText( SwResId( STR_JAVA_EDIT ) );
+    if (!m_bNew)
+        m_xDialog->set_title(SwResId(STR_JAVA_EDIT));
 
-    RadioButtonHdl(nullptr);
+    RadioButtonHdl(*m_xUrlRB);
 }
 
 SwJavaEditDialog::~SwJavaEditDialog()
 {
-    disposeOnce();
+    m_pSh->EnterStdMode();
+    delete m_pMgr;
+    delete m_pFileDlg;
 }
 
-void SwJavaEditDialog::dispose()
+IMPL_LINK_NOARG(SwJavaEditDialog, PrevHdl, weld::Button&, void)
 {
-    pSh->EnterStdMode();
-    delete pMgr;
-    delete pFileDlg;
-    m_pTypeED.clear();
-    m_pUrlRB.clear();
-    m_pEditRB.clear();
-    m_pUrlPB.clear();
-    m_pUrlED.clear();
-    m_pEditED.clear();
-    m_pOKBtn.clear();
-    m_pPrevBtn.clear();
-    m_pNextBtn.clear();
-    SvxStandardDialog::dispose();
-}
-
-IMPL_LINK_NOARG(SwJavaEditDialog, PrevHdl, Button*, void)
-{
-    pSh->EnterStdMode();
+    m_pSh->EnterStdMode();
 
     SetField();
-    pMgr->GoPrev();
-    pField = static_cast<SwScriptField*>(pMgr->GetCurField());
+    m_pMgr->GoPrev();
+    m_pField = static_cast<SwScriptField*>(m_pMgr->GetCurField());
     CheckTravel();
-    RadioButtonHdl(nullptr);
+    RadioButtonHdl(*m_xUrlRB);
 }
 
-IMPL_LINK_NOARG(SwJavaEditDialog, NextHdl, Button*, void)
+IMPL_LINK_NOARG(SwJavaEditDialog, NextHdl, weld::Button&, void)
 {
-    pSh->EnterStdMode();
+    m_pSh->EnterStdMode();
 
     SetField();
-    pMgr->GoNext();
-    pField = static_cast<SwScriptField*>(pMgr->GetCurField());
+    m_pMgr->GoNext();
+    m_pField = static_cast<SwScriptField*>(m_pMgr->GetCurField());
     CheckTravel();
-    RadioButtonHdl(nullptr);
+    RadioButtonHdl(*m_xUrlRB);
 }
 
-IMPL_LINK_NOARG(SwJavaEditDialog, OKHdl, Button*, void)
+IMPL_LINK_NOARG(SwJavaEditDialog, OKHdl, weld::Button&, void)
 {
     SetField();
-    EndDialog( RET_OK );
-}
-
-void SwJavaEditDialog::Apply()
-{
+    m_xDialog->response(RET_OK);
 }
 
 void SwJavaEditDialog::CheckTravel()
@@ -143,135 +116,135 @@ void SwJavaEditDialog::CheckTravel()
     bool bTravel = false;
     bool bNext(false), bPrev(false);
 
-    if(!bNew)
+    if (!m_bNew)
     {
         // Traveling only when more than one field
-        pSh->StartAction();
-        pSh->CreateCursor();
+        m_pSh->StartAction();
+        m_pSh->CreateCursor();
 
-        bNext = pMgr->GoNext();
+        bNext = m_pMgr->GoNext();
         if( bNext )
-            pMgr->GoPrev();
+            m_pMgr->GoPrev();
 
-        bPrev = pMgr->GoPrev();
+        bPrev = m_pMgr->GoPrev();
         if( bPrev )
-            pMgr->GoNext();
+            m_pMgr->GoNext();
         bTravel |= bNext || bPrev;
 
-        pSh->DestroyCursor();
-        pSh->EndAction();
+        m_pSh->DestroyCursor();
+        m_pSh->EndAction();
 
-        if (pField->IsCodeURL())
+        if (m_pField->IsCodeURL())
         {
-            OUString sURL(pField->GetPar2());
+            OUString sURL(m_pField->GetPar2());
             if(!sURL.isEmpty())
             {
                 INetURLObject aINetURL(sURL);
                 if(INetProtocol::File == aINetURL.GetProtocol())
                     sURL = aINetURL.PathToFileName();
             }
-            m_pUrlED->SetText(sURL);
-            m_pEditED->SetText(OUString());
-            m_pUrlRB->Check();
+            m_xUrlED->set_text(sURL);
+            m_xEditED->set_text(OUString());
+            m_xUrlRB->set_active(true);
         }
         else
         {
-            m_pEditED->SetText(pField->GetPar2());
-            m_pUrlED->SetText(OUString());
-            m_pEditRB->Check();
+            m_xEditED->set_text(m_pField->GetPar2());
+            m_xUrlED->set_text(OUString());
+            m_xEditRB->set_active(true);
         }
-        m_pTypeED->SetText(pField->GetPar1());
+        m_xTypeED->set_text(m_pField->GetPar1());
     }
 
     if ( !bTravel )
     {
-        m_pPrevBtn->Hide();
-        m_pNextBtn->Hide();
+        m_xPrevBtn->hide();
+        m_xNextBtn->hide();
     }
     else
     {
-        m_pPrevBtn->Enable(bPrev);
-        m_pNextBtn->Enable(bNext);
+        m_xPrevBtn->set_sensitive(bPrev);
+        m_xNextBtn->set_sensitive(bNext);
     }
 }
 
 void SwJavaEditDialog::SetField()
 {
-    if( !m_pOKBtn->IsEnabled() )
+    if( !m_xOKBtn->get_sensitive() )
         return ;
 
-    aType = m_pTypeED->GetText();
-    bIsUrl = m_pUrlRB->IsChecked();
+    m_aType = m_xTypeED->get_text();
+    m_bIsUrl = m_xUrlRB->get_active();
 
-    if( bIsUrl )
+    if (m_bIsUrl)
     {
-        aText = m_pUrlED->GetText();
-        if (!aText.isEmpty())
+        m_aText = m_xUrlED->get_text();
+        if (!m_aText.isEmpty())
         {
-            SfxMedium* pMedium = pSh->GetView().GetDocShell()->GetMedium();
+            SfxMedium* pMedium = m_pSh->GetView().GetDocShell()->GetMedium();
             INetURLObject aAbs;
             if( pMedium )
                 aAbs = pMedium->GetURLObject();
 
-            aText = URIHelper::SmartRel2Abs(
-                aAbs, aText, URIHelper::GetMaybeFileHdl());
+            m_aText = URIHelper::SmartRel2Abs(
+                aAbs, m_aText, URIHelper::GetMaybeFileHdl());
         }
     }
     else
-        aText = m_pEditED->GetText();
+        m_aText = m_xEditED->get_text();
 
-    if( aType.isEmpty() )
-        aType = "JavaScript";
+    if (m_aType.isEmpty())
+        m_aType = "JavaScript";
 }
 
 bool SwJavaEditDialog::IsUpdate() const
 {
-    return pField && ( sal_uInt32(bIsUrl ? 1 : 0) != pField->GetFormat() || pField->GetPar2() != aType || pField->GetPar1() != aText );
+    return m_pField && ( sal_uInt32(m_bIsUrl ? 1 : 0) != m_pField->GetFormat() || m_pField->GetPar2() != m_aType || m_pField->GetPar1() != m_aText );
 }
 
-IMPL_LINK_NOARG(SwJavaEditDialog, RadioButtonHdl, Button*, void)
+IMPL_LINK_NOARG(SwJavaEditDialog, RadioButtonHdl, weld::Button&, void)
 {
-    bool bEnable = m_pUrlRB->IsChecked();
-    m_pUrlPB->Enable(bEnable);
-    m_pUrlED->Enable(bEnable);
-    m_pEditED->Enable(!bEnable);
+    bool bEnable = m_xUrlRB->get_active();
+    m_xUrlPB->set_sensitive(bEnable);
+    m_xUrlED->set_sensitive(bEnable);
+    m_xEditED->set_sensitive(!bEnable);
 
-    if( !bNew )
+    if (!m_bNew)
     {
-        bEnable = !pSh->IsReadOnlyAvailable() || !pSh->HasReadonlySel();
-        m_pOKBtn->Enable( bEnable );
-        m_pUrlED->SetReadOnly( !bEnable );
-        m_pEditED->SetReadOnly( !bEnable);
-        m_pTypeED->SetReadOnly( !bEnable);
-        if( m_pUrlPB->IsEnabled() && !bEnable )
-            m_pUrlPB->Enable( false );
+        bEnable = !m_pSh->IsReadOnlyAvailable() || !m_pSh->HasReadonlySel();
+        m_xOKBtn->set_sensitive(bEnable);
+        m_xUrlED->set_editable(bEnable);
+        m_xEditED->set_editable(bEnable);
+        m_xTypeED->set_editable(bEnable);
+        if( m_xUrlPB->get_sensitive() && !bEnable )
+            m_xUrlPB->set_sensitive( false );
     }
 }
 
-IMPL_LINK_NOARG( SwJavaEditDialog, InsertFileHdl, Button *, void )
+IMPL_LINK_NOARG( SwJavaEditDialog, InsertFileHdl, weld::Button&, void )
 {
-    if ( !pFileDlg )
+    if (!m_pFileDlg)
     {
-        pFileDlg = new ::sfx2::FileDialogHelper(
+        m_pFileDlg = new ::sfx2::FileDialogHelper(
             ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-            FileDialogFlags::Insert, "swriter", SfxFilterFlags::NONE, SfxFilterFlags::NONE, GetFrameWeld());
+            FileDialogFlags::Insert, "swriter", SfxFilterFlags::NONE, SfxFilterFlags::NONE, m_xDialog.get());
     }
 
-    pFileDlg->StartExecuteModal( LINK( this, SwJavaEditDialog, DlgClosedHdl ) );
+    m_pFileDlg->StartExecuteModal( LINK( this, SwJavaEditDialog, DlgClosedHdl ) );
 }
 
 IMPL_LINK_NOARG(SwJavaEditDialog, DlgClosedHdl, sfx2::FileDialogHelper *, void)
 {
-    if ( pFileDlg->GetError() == ERRCODE_NONE )
+    if (m_pFileDlg->GetError() == ERRCODE_NONE)
     {
-        OUString sFileName = pFileDlg->GetPath();
+        OUString sFileName = m_pFileDlg->GetPath();
         if ( !sFileName.isEmpty() )
         {
             INetURLObject aINetURL( sFileName );
             if ( INetProtocol::File == aINetURL.GetProtocol() )
                 sFileName = aINetURL.PathToFileName();
         }
-        m_pUrlED->SetText( sFileName );
+        m_xUrlED->set_text(sFileName);
     }
 }
 

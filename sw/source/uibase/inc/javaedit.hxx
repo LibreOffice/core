@@ -19,10 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_JAVAEDIT_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_JAVAEDIT_HXX
 
-#include <svx/stddlg.hxx>
-#include <vcl/fixed.hxx>
-#include <svtools/svmedit.hxx>
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 
 class SwWrtShell;
 class SwFieldMgr;
@@ -30,54 +27,50 @@ class SwScriptField;
 
 namespace sfx2 { class FileDialogHelper; }
 
-class SwJavaEditDialog : public SvxStandardDialog
+class SwJavaEditDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<Edit>               m_pTypeED;
-    VclPtr<RadioButton>        m_pUrlRB;
-    VclPtr<RadioButton>        m_pEditRB;
-    VclPtr<PushButton>         m_pUrlPB;
-    VclPtr<Edit>               m_pUrlED;
-    VclPtr<VclMultiLineEdit>   m_pEditED;
+    OUString       m_aText;
+    OUString       m_aType;
 
-    VclPtr<OKButton>           m_pOKBtn;
-    VclPtr<PushButton>         m_pPrevBtn;
-    VclPtr<PushButton>         m_pNextBtn;
+    bool           m_bNew;
+    bool           m_bIsUrl;
 
-    OUString       aText;
-    OUString       aType;
+    SwScriptField*          m_pField;
+    SwFieldMgr*             m_pMgr;
+    SwWrtShell*             m_pSh;
+    sfx2::FileDialogHelper* m_pFileDlg;
 
-    bool                bNew;
-    bool                bIsUrl;
+    std::unique_ptr<weld::Entry>        m_xTypeED;
+    std::unique_ptr<weld::RadioButton>  m_xUrlRB;
+    std::unique_ptr<weld::RadioButton>  m_xEditRB;
+    std::unique_ptr<weld::Button>       m_xUrlPB;
+    std::unique_ptr<weld::Entry>        m_xUrlED;
+    std::unique_ptr<weld::TextView>     m_xEditED;
+    std::unique_ptr<weld::Button>       m_xOKBtn;
+    std::unique_ptr<weld::Button>       m_xPrevBtn;
+    std::unique_ptr<weld::Button>       m_xNextBtn;
 
-    SwScriptField*          pField;
-    SwFieldMgr*               pMgr;
-    SwWrtShell*             pSh;
-    sfx2::FileDialogHelper* pFileDlg;
-
-    DECL_LINK(OKHdl, Button*, void);
-    DECL_LINK(PrevHdl, Button*, void);
-    DECL_LINK(NextHdl, Button*, void);
-    DECL_LINK(RadioButtonHdl, Button*, void);
-    DECL_LINK(InsertFileHdl, Button *, void);
+    DECL_LINK(OKHdl, weld::Button&, void);
+    DECL_LINK(PrevHdl, weld::Button&, void);
+    DECL_LINK(NextHdl, weld::Button&, void);
+    DECL_LINK(RadioButtonHdl, weld::Button&, void);
+    DECL_LINK(InsertFileHdl, weld::Button&, void);
     DECL_LINK(DlgClosedHdl, sfx2::FileDialogHelper *, void);
-
-    virtual void    Apply() override;
 
     void            CheckTravel();
     void            SetField();
 
 public:
-    SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh);
+    SwJavaEditDialog(weld::Window* pParent, SwWrtShell* pWrtSh);
     virtual ~SwJavaEditDialog() override;
-    virtual void dispose() override;
 
-    const OUString& GetScriptText() const { return aText; }
+    const OUString& GetScriptText() const { return m_aText; }
 
-    const OUString& GetScriptType() const { return aType; }
+    const OUString& GetScriptType() const { return m_aType; }
 
-    bool IsUrl() const { return bIsUrl; }
-    bool IsNew() const { return bNew; }
+    bool IsUrl() const { return m_bIsUrl; }
+    bool IsNew() const { return m_bNew; }
     bool IsUpdate() const;
 };
 
