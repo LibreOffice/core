@@ -22,6 +22,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes" context="pageformatpanel|size">Size:</property>
             <property name="xalign">1</property>
+            <property name="mnemonic_widget">papersize</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -34,6 +35,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes" context="pageformatpanel|width">Width:</property>
             <property name="xalign">1</property>
+            <property name="mnemonic_widget">paperwidth</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -46,6 +48,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes" context="pageformatpanel|height">Height:</property>
             <property name="xalign">1</property>
+            <property name="mnemonic_widget">paperheight</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -58,6 +61,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes" context="pageformatpanel|orientation">Orientation:</property>
             <property name="xalign">1</property>
+            <property name="mnemonic_widget">paperorientation</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -124,6 +128,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes" context="pageformatpanel|margin">Margins:</property>
             <property name="xalign">1</property>
+            <property name="mnemonic_widget">marginLB</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
