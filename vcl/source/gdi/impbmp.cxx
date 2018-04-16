@@ -114,13 +114,8 @@ bool ImpBitmap::ImplReplace( const Color& rSearchColor, const Color& rReplaceCol
     return mpSalBitmap->Replace( rSearchColor, rReplaceColor, nTol );
 }
 
-bool ImpBitmap::ImplConvert( BmpConversion eConversion )
+bool ImpBitmap::ConvertToGreyscale()
 {
-    // avoid large chunk of obsolete and hopefully rarely used conversions.
-    if (eConversion != BmpConversion::N8BitGreys)
-        return false;
-
-    // frequently used conversion for creating alpha masks
     return mpSalBitmap->ConvertToGreyscale();
 }
 

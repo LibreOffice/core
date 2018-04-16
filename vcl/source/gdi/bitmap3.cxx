@@ -224,12 +224,17 @@ bool Bitmap::Convert( BmpConversion eConversion )
     // try to convert in backend
     if (mxImpBmp)
     {
-        std::shared_ptr<ImpBitmap> xImpBmp(new ImpBitmap);
-        if (xImpBmp->ImplCreate(*mxImpBmp) && xImpBmp->ImplConvert(eConversion))
+        // avoid large chunk of obsolete and hopefully rarely used conversions.
+        if (eConversion == BmpConversion::N8BitGreys)
         {
-            ImplSetImpBitmap(xImpBmp);
-            SAL_INFO( "vcl.opengl", "Ref count: " << mxImpBmp.use_count() );
-            return true;
+            std::shared_ptr<ImpBitmap> xImpBmp(new ImpBitmap);
+            // frequently used conversion for creating alpha masks
+            if (xImpBmp->ImplCreate(*mxImpBmp) && xImpBmp->ConvertToGreyscale())
+            {
+                ImplSetImpBitmap(xImpBmp);
+                SAL_INFO( "vcl.opengl", "Ref count: " << mxImpBmp.use_count() );
+                return true;
+            }
         }
     }
 
