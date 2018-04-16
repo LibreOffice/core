@@ -156,7 +156,7 @@ private:
     bool bKilled : 1; ///< Killed
 
     css::uno::Reference<css::accessibility::XAccessible > mxAccessible;
-    mutable vcl::MenuLayoutData* mpLayoutData;
+    mutable std::unique_ptr<vcl::MenuLayoutData> mpLayoutData;
     SalMenu* mpSalMenu;
 
 protected:
