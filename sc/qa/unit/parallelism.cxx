@@ -288,12 +288,10 @@ void ScParallelismTest::testVLOOKUPSUM()
 
     m_xDocShell->DoHardRecalc();
 
-    size_t nArg;
     for (size_t i = 0; i < nNumRows; ++i)
     {
         OString aMsg = "At row " + OString::number(i);
-        nArg = nNumRows - i - 1;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), 6*nArg + 101, static_cast<size_t>(m_pDoc->GetValue(3, i, 0)));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), 6 * (nNumRows - i - 1) + 101, static_cast<size_t>(m_pDoc->GetValue(3, i, 0)));
     }
     m_pDoc->DeleteTab(0);
 }

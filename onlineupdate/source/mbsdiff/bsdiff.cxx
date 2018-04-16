@@ -218,7 +218,7 @@ int main(int argc,char *argv[])
 
     int32_t scan,pos = 0,len;
     int32_t lastscan,lastpos,lastoffset;
-    int32_t oldscore,scsc;
+    int32_t scsc;
 
     int32_t s,Sf,lenf,Sb,lenb;
     int32_t overlap,Ss,lens;
@@ -227,7 +227,7 @@ int main(int argc,char *argv[])
     int32_t dblen,eblen;
     unsigned char *db,*eb = nullptr;
 
-    unsigned int scrc;
+    unsigned int oldscore,scrc;
 
     MBSPatchHeader header = {
         {'M','B','D','I','F','F','1','0'},
