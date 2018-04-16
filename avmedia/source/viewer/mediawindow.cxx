@@ -211,7 +211,7 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 
 bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, bool *const o_pbLink)
 {
-    ::sfx2::FileDialogHelper        aDlg(o_pbLink
+    ::sfx2::FileDialogHelper        aDlg(o_pbLink != nullptr
             ? ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW
             : ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             FileDialogFlags::NONE, pParent);
@@ -220,7 +220,7 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
     static const char               aSeparator[] = ";";
     OUString                        aAllTypes;
 
-    aDlg.SetTitle( AvmResId( o_pbLink
+    aDlg.SetTitle( AvmResId( o_pbLink != nullptr
                 ? AVMEDIA_STR_INSERTMEDIA_DLG : AVMEDIA_STR_OPENMEDIA_DLG ) );
 
     getMediaFilters( aFilters );
@@ -261,7 +261,7 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
     uno::Reference<ui::dialogs::XFilePicker3> const xFP(aDlg.GetFilePicker());
     uno::Reference<ui::dialogs::XFilePickerControlAccess> const xCtrlAcc(xFP,
             uno::UNO_QUERY_THROW);
-    if (o_pbLink)
+    if (o_pbLink != nullptr)
     {
         // for video link should be the default
         xCtrlAcc->setValue(
@@ -278,7 +278,7 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
         const INetURLObject aURL( aDlg.GetPath() );
         rURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
 
-        if (o_pbLink)
+        if (o_pbLink != nullptr)
         {
             uno::Any const any = xCtrlAcc->getValue(
                 ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
