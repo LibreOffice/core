@@ -110,6 +110,31 @@ index 8bb5bf5..9b5e2ce 100644
 +  fprintf(stderr, "PageObject BB: %f, %f, %f, %f\n", rc.left, rc.right, rc.top, rc.bottom);
    return rect.GetOuterRect();
  }
+diff --git a/core/fpdfapi/page/cpdf_pageobjectlist.cpp b/core/fpdfapi/page/cpdf_pageobjectlist.cpp
+index afd2c98..2c8e061 100644
+--- a/core/fpdfapi/page/cpdf_pageobjectlist.cpp
++++ b/core/fpdfapi/page/cpdf_pageobjectlist.cpp
+@@ -8,6 +8,6 @@
+ 
+ #include "third_party/base/stl_util.h"
+ 
+-CPDF_PageObject* CPDF_PageObjectList::GetPageObjectByIndex(int index) {
++CPDF_PageObject* CPDF_PageObjectList::GetPageObjectByIndex(int index) const {
+   return pdfium::IndexInBounds(*this, index) ? (*this)[index].get() : nullptr;
+ }
+diff --git a/core/fpdfapi/page/cpdf_pageobjectlist.h b/core/fpdfapi/page/cpdf_pageobjectlist.h
+index b450537..77c7d81 100644
+--- a/core/fpdfapi/page/cpdf_pageobjectlist.h
++++ b/core/fpdfapi/page/cpdf_pageobjectlist.h
+@@ -15,7 +15,7 @@ class CPDF_PageObject;
+ class CPDF_PageObjectList
+     : public std::deque<std::unique_ptr<CPDF_PageObject>> {
+  public:
+-  CPDF_PageObject* GetPageObjectByIndex(int index);
++  CPDF_PageObject* GetPageObjectByIndex(int index) const;
+ };
+ 
+ #endif  // CORE_FPDFAPI_PAGE_CPDF_PAGEOBJECTLIST_H_
 diff --git a/core/fpdfapi/render/cpdf_renderstatus.cpp b/core/fpdfapi/render/cpdf_renderstatus.cpp
 index 0a01ae0..6947e3a 100644
 --- a/core/fpdfapi/render/cpdf_renderstatus.cpp
@@ -174,7 +199,7 @@ index 0d7ba56..37bdf99 100644
  FPDFImageObj_GetImageDataDecoded(FPDF_PAGEOBJECT image_object,
                                   void* buffer,
 diff --git a/fpdfsdk/fpdfeditpage.cpp b/fpdfsdk/fpdfeditpage.cpp
-index ca2cf3f..f86201d 100644
+index ca2cf3f..8ecab60 100644
 --- a/fpdfsdk/fpdfeditpage.cpp
 +++ b/fpdfsdk/fpdfeditpage.cpp
 @@ -11,12 +11,14 @@
@@ -192,7 +217,7 @@ index ca2cf3f..f86201d 100644
  #include "core/fpdfapi/page/cpdf_shadingobject.h"
  #include "core/fpdfapi/parser/cpdf_array.h"
  #include "core/fpdfapi/parser/cpdf_document.h"
-@@ -363,3 +365,157 @@ FPDFPageObj_GetBounds(FPDF_PAGEOBJECT pageObject,
+@@ -363,3 +365,187 @@ FPDFPageObj_GetBounds(FPDF_PAGEOBJECT pageObject,
    *top = bbox.top;
    return true;
  }
@@ -350,6 +375,36 @@ index ca2cf3f..f86201d 100644
 +
 +  return true;
 +}
++
++FPDF_EXPORT int FPDF_CALLCONV
++FPDFFormObj_CountSubObjects(FPDF_PAGEOBJECT form_object)
++{
++  CPDF_FormObject* pFrmObj = CPDFFormObjectFromFPDFPageObject(form_object);
++  if (pFrmObj)
++  {
++    const CPDF_PageObjectList* pObjectList = pFrmObj->form()->GetPageObjectList();
++    if (pObjectList)
++        return pObjectList->size();
++  }
++
++  return 0;
++}
++
++FPDF_EXPORT FPDF_PAGEOBJECT FPDF_CALLCONV
++FPDFFormObj_GetSubObject(FPDF_PAGEOBJECT form_object, int index)
++{
++  CPDF_FormObject* pFrmObj = CPDFFormObjectFromFPDFPageObject(form_object);
++  if (pFrmObj)
++  {
++    const CFX_Matrix& matrix = pFrmObj->form_matrix();
++    fprintf(stderr, "Form matrix a: %f, b: %f, c: %f, d: %f, e: %f, f: %f\n", matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f);
++    const CPDF_PageObjectList* pObjectList = pFrmObj->form()->GetPageObjectList();
++    if (pObjectList)
++        return pObjectList->GetPageObjectByIndex(index);
++  }
++
++  return nullptr;
++}
 diff --git a/fpdfsdk/fpdfeditpath.cpp b/fpdfsdk/fpdfeditpath.cpp
 index a291987..0202284 100644
 --- a/fpdfsdk/fpdfeditpath.cpp
@@ -462,10 +517,10 @@ index 68bf4f8..e073b20 100644
                                                          int index,
                                                          double* left,
 diff --git a/fpdfsdk/fpdfview.cpp b/fpdfsdk/fpdfview.cpp
-index e890aa0..709bea3 100644
+index e890aa0..b62283f 100644
 --- a/fpdfsdk/fpdfview.cpp
 +++ b/fpdfsdk/fpdfview.cpp
-@@ -336,6 +336,11 @@ CPDF_Page* CPDFPageFromFPDFPage(FPDF_PAGE page) {
+@@ -336,6 +336,16 @@ CPDF_Page* CPDFPageFromFPDFPage(FPDF_PAGE page) {
  #endif  // PDF_ENABLE_XFA
  }
  
@@ -474,32 +529,40 @@ index e890aa0..709bea3 100644
 +  return obj ? obj->AsText() : nullptr;
 +}
 +
++CPDF_FormObject* CPDFFormObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object) {
++  auto* obj = CPDFPageObjectFromFPDFPageObject(page_object);
++  return obj ? obj->AsForm() : nullptr;
++}
++
  CPDF_PathObject* CPDFPathObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object) {
    auto* obj = CPDFPageObjectFromFPDFPageObject(page_object);
    return obj ? obj->AsPath() : nullptr;
 diff --git a/fpdfsdk/fsdk_define.h b/fpdfsdk/fsdk_define.h
-index 77c2315..db3e734 100644
+index 77c2315..b61f447 100644
 --- a/fpdfsdk/fsdk_define.h
 +++ b/fpdfsdk/fsdk_define.h
-@@ -25,6 +25,7 @@ class CPDF_Annot;
+@@ -25,6 +25,8 @@ class CPDF_Annot;
  class CPDF_Page;
  class CPDF_PageObject;
  class CPDF_PageRenderContext;
 +class CPDF_TextObject;
++class CPDF_FormObject;
  class CPDF_PathObject;
  class CPDF_Stream;
  class IFSDK_PAUSE_Adapter;
-@@ -65,6 +66,8 @@ FPDF_DOCUMENT FPDFDocumentFromCPDFDocument(CPDF_Document* doc);
+@@ -65,6 +67,10 @@ FPDF_DOCUMENT FPDFDocumentFromCPDFDocument(CPDF_Document* doc);
  
  CPDF_Page* CPDFPageFromFPDFPage(FPDF_PAGE page);
  
 +CPDF_TextObject* CPDFTextObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object);
 +
++CPDF_FormObject* CPDFFormObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object);
++
  CPDF_PathObject* CPDFPathObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object);
  
  CPDF_PageObject* CPDFPageObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object);
 diff --git a/public/fpdf_edit.h b/public/fpdf_edit.h
-index 54735a3..c0231c2 100644
+index 54735a3..1b933bb 100644
 --- a/public/fpdf_edit.h
 +++ b/public/fpdf_edit.h
 @@ -520,6 +520,15 @@ FPDFPath_GetStrokeColor(FPDF_PAGEOBJECT path,
@@ -555,7 +618,7 @@ index 54735a3..c0231c2 100644
  // Create a new text object using one of the standard PDF fonts.
  //
  // document   - handle to the document.
-@@ -761,6 +800,77 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
+@@ -761,6 +800,94 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
                            FPDF_FONT font,
                            float font_size);
  
@@ -629,6 +692,23 @@ index 54735a3..c0231c2 100644
 +                     unsigned int* G,
 +                     unsigned int* B,
 +                     unsigned int* A);
++
++// Get number of page objects inside the form object.
++//
++// form_object - Handle to a form object. Returned by FPDFPage_GetObject.
++// Return value:
++// The number of the page objects.
++FPDF_EXPORT int FPDF_CALLCONV
++FPDFFormObj_CountSubObjects(FPDF_PAGEOBJECT form_object);
++
++// Get the page object from a form object.
++//
++// form_object - Handle to a form object. Returned by FPDFPage_GetObject.
++// index - The index of a page object.
++// Return value:
++// The handle of the page object. Null for failed.
++FPDF_EXPORT FPDF_PAGEOBJECT FPDF_CALLCONV
++FPDFFormObj_GetSubObject(FPDF_PAGEOBJECT form_object, int index);
 +
  #ifdef __cplusplus
  }  // extern "C"
