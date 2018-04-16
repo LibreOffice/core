@@ -88,7 +88,7 @@ SdrObject* SdDrawDocument::GetObj(const OUString& rObjName) const
     while (nPage < nMaxPages && !pObjFound)
     {
         pPage = static_cast<const SdPage*>( GetPage(nPage) );
-        SdrObjListIter aIter(*pPage, SdrIterMode::DeepWithGroups);
+        SdrObjListIter aIter(pPage, SdrIterMode::DeepWithGroups);
 
         while (aIter.IsMore() && !pObjFound)
         {
@@ -113,7 +113,7 @@ SdrObject* SdDrawDocument::GetObj(const OUString& rObjName) const
     while (nPage < nMaxMasterPages && !pObjFound)
     {
         pPage = static_cast<const SdPage*>( GetMasterPage(nPage) );
-        SdrObjListIter aIter(*pPage, SdrIterMode::DeepWithGroups);
+        SdrObjListIter aIter(pPage, SdrIterMode::DeepWithGroups);
 
         while (aIter.IsMore() && !pObjFound)
         {

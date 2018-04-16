@@ -279,6 +279,52 @@ void SdrObject::ActionChanged() const
     GetViewContact().ActionChanged();
 }
 
+SdrPage* SdrObject::getSdrPageFromSdrObject() const
+{
+    if(getParentOfSdrObject())
+    {
+        return getParentOfSdrObject()->getSdrPageFromSdrObjList();
+    }
+
+    return nullptr;
+}
+
+SdrModel& SdrObject::getSdrModelFromSdrObject() const
+{
+    return mrSdrModelFromSdrObject;
+}
+
+void SdrObject::setParentOfSdrObject(SdrObjList* pNewObjList)
+{
+    if(getParentOfSdrObject() != pNewObjList)
+    {
+        // remember current page
+        SdrPage* pOldPage(getSdrPageFromSdrObject());
+
+        // set new parent
+        mpParentOfSdrObject = pNewObjList;
+
+        // get new page
+        SdrPage* pNewPage(getSdrPageFromSdrObject());
+
+        // broadcast page change over objects if needed
+        if(pOldPage != pNewPage)
+        {
+            handlePageChange(pOldPage, pNewPage);
+        }
+    }
+}
+
+SdrObjList* SdrObject::getParentOfSdrObject() const
+{
+    return mpParentOfSdrObject;
+}
+
+SdrObjList* SdrObject::getChildrenOfSdrObject() const
+{
+    // default has no children
+    return nullptr;
+}
 
 void SdrObject::SetBoundRectDirty()
 {
@@ -289,7 +335,6 @@ void SdrObject::SetBoundRectDirty()
 SdrObject::SdrObject(SdrModel& rSdrModel)
 :   mpFillGeometryDefiningShape(nullptr)
     ,mrSdrModelFromSdrObject(rSdrModel)
-    ,pPage(nullptr)
     ,pUserCall(nullptr)
     ,pPlusData(nullptr)
     ,mpImpl(new Impl)
@@ -393,48 +438,22 @@ void SdrObject::Free( SdrObject*& _rpObject )
     delete pObject;
 }
 
-void SdrObject::SetRectsDirty(bool bNotMyself)
+void SdrObject::SetRectsDirty(bool bNotMyself, bool bRecursive)
 {
-    if (!bNotMyself) {
+    if (!bNotMyself)
+    {
         SetBoundRectDirty();
         bSnapRectDirty=true;
     }
 
-    if (nullptr != getParentOfSdrObject())
+    if (bRecursive && nullptr != getParentOfSdrObject())
     {
-        getParentOfSdrObject()->SetRectsDirty();
+        getParentOfSdrObject()->SetSdrObjListRectsDirty();
     }
 }
 
-void SdrObject::setParentOfSdrObject(SdrObjList* pNewObjList)
+void SdrObject::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
 {
-    if(getParentOfSdrObject() != pNewObjList)
-    {
-        mpParentOfSdrObject = pNewObjList;
-    }
-}
-
-
-void SdrObject::SetPage(SdrPage* pNewPage)
-{
-    SdrModel* pOldModel(&getSdrModelFromSdrObject());
-    SdrPage* pOldPage(pPage);
-
-    pPage = pNewPage;
-
-    // TTTT Possibility here to add a warning for the future -> SdrModel
-    // of SdrObject (this) and SdrPage. It is added to *have* the
-    // same SdrModel
-    // if(nullptr != pPage)
-    // {
-    //     SdrModel* pMod(&pPage->getSdrModelFromSdrPage());
-    //
-    //     if(pMod != &getSdrModelFromSdrObject())
-    //     {
-    //         SetModel(pMod);
-    //     }
-    // }
-
     // The creation of the UNO shape in SdrObject::getUnoShape is influenced
     // by pPage, so when the page changes we need to discard the cached UNO
     // shape so that a new one will be created.
@@ -447,15 +466,17 @@ void SdrObject::SetPage(SdrPage* pNewPage)
     // good to think about if this is really needed - it *seems* to be intended
     // for a xShape being a on-demand-creatable resource - wit hthe argument that
     // the SdrPage/UnoPage used influences the SvxShape creation. This uses
-    // resources and would be nice to get rid of anyways.
-    if (pOldPage != pPage && !(pOldPage && pPage && pOldModel == &getSdrModelFromSdrObject()))
+    // ressources and would be nice to get rid of anyways.
+    if(nullptr == pOldPage || nullptr == pNewPage)
     {
         SvxShape* const pShape(getSvxShape());
+
         if (pShape && !pShape->HasSdrObjectOwnership())
+        {
             setUnoShape(nullptr);
+        }
     }
 }
-
 
 // init global static itempool
 SdrItemPool* SdrObject::mpGlobalItemPool = nullptr;
@@ -626,7 +647,7 @@ SdrObjList* SdrObject::GetSubList() const
 
 SdrObject* SdrObject::GetUpGroup() const
 {
-    return nullptr != getParentOfSdrObject() ? getParentOfSdrObject()->GetOwnerObj() : nullptr;
+    return nullptr != getParentOfSdrObject() ? getParentOfSdrObject()->getSdrObjectFromSdrObjList() : nullptr;
 }
 
 void SdrObject::SetName(const OUString& rStr)
@@ -921,7 +942,7 @@ void SdrObject::SingleObjectPainter(OutputDevice& rOut) const
     sdr::contact::SdrObjectVector aObjectVector;
     aObjectVector.push_back(const_cast< SdrObject* >(this));
 
-    sdr::contact::ObjectContactOfObjListPainter aPainter(rOut, aObjectVector, GetPage());
+    sdr::contact::ObjectContactOfObjListPainter aPainter(rOut, aObjectVector, getSdrPageFromSdrObject());
     sdr::contact::DisplayInfo aDisplayInfo;
 
     aPainter.ProcessDisplay(aDisplayInfo);
@@ -957,7 +978,6 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
     // draw object, an SdrObject needs to be provided, as in the normal constructor.
     mpProperties = rObj.GetProperties().Clone(*this);
 
-    pPage = rObj.pPage;
     aOutRect=rObj.aOutRect;
     mnLayerID = rObj.mnLayerID;
     aAnchor =rObj.aAnchor;
@@ -2045,7 +2065,9 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     if (rAttr.GetItemState(SDRATTR_LAYERNAME,true,&pPoolItem)==SfxItemState::SET)
     {
         OUString aLayerName = static_cast<const SdrLayerNameItem*>(pPoolItem)->GetValue();
-        const SdrLayerAdmin& rLayAd(nullptr != pPage ? pPage->GetLayerAdmin() : getSdrModelFromSdrObject().GetLayerAdmin());
+        const SdrLayerAdmin& rLayAd(nullptr != getSdrPageFromSdrObject()
+            ? getSdrPageFromSdrObject()->GetLayerAdmin()
+            : getSdrModelFromSdrObject().GetLayerAdmin());
         const SdrLayer* pLayer = rLayAd.GetLayer(aLayerName);
 
         if(nullptr != pLayer)
@@ -2114,7 +2136,9 @@ void SdrObject::TakeNotPersistAttr(SfxItemSet& rAttr) const
     }
 
     rAttr.Put(SdrLayerIdItem(GetLayer()));
-    const SdrLayerAdmin& rLayAd(nullptr != pPage ? pPage->GetLayerAdmin() : getSdrModelFromSdrObject().GetLayerAdmin());
+    const SdrLayerAdmin& rLayAd(nullptr != getSdrPageFromSdrObject()
+        ? getSdrPageFromSdrObject()->GetLayerAdmin()
+        : getSdrModelFromSdrObject().GetLayerAdmin());
     const SdrLayer* pLayer = rLayAd.GetLayerPerID(GetLayer());
     if(nullptr != pLayer)
     {
@@ -2653,9 +2677,9 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& 
 {
     SdrObject* pGroup = nullptr;
 
-    if(nullptr != getParentOfSdrObject() && SdrObjListKind::GroupObj == getParentOfSdrObject()->GetListKind())
+    if(nullptr != getParentOfSdrObject()) // && SdrObjListKind::GroupObj == getParentOfSdrObject()->GetListKind())
     {
-        pGroup = getParentOfSdrObject()->GetOwnerObj();
+        pGroup = getParentOfSdrObject()->getSdrObjectFromSdrObjList();
     }
 
     if ( pUserCall )
@@ -2702,11 +2726,10 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& 
             pGroup->GetUserCall()->Changed( *this, eChildUserType, rBoundRect );
         }
 
-        if( pGroup->getParentOfSdrObject()                                       &&
-            pGroup->getParentOfSdrObject()->GetListKind() == SdrObjListKind::GroupObj &&
-            pGroup != getParentOfSdrObject()->GetOwnerObj() )
+        if( pGroup->getParentOfSdrObject() &&
+            pGroup != getParentOfSdrObject()->getSdrObjectFromSdrObjList() )
         {
-            pGroup = getParentOfSdrObject()->GetOwnerObj();
+            pGroup = getParentOfSdrObject()->getSdrObjectFromSdrObjList();
         }
         else
         {
@@ -2792,9 +2815,9 @@ css::uno::Reference< css::uno::XInterface > SdrObject::getUnoShape()
     if( !xShape.is() )
     {
         OSL_ENSURE( mpSvxShape == nullptr, "SdrObject::getUnoShape: XShape already dead, but still an IMPL pointer!" );
-        if ( pPage )
+        if ( getSdrPageFromSdrObject() )
         {
-            uno::Reference< uno::XInterface > xPage( pPage->getUnoPage() );
+            uno::Reference< uno::XInterface > xPage( getSdrPageFromSdrObject()->getUnoPage() );
             if( xPage.is() )
             {
                 SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation(xPage);
@@ -2996,7 +3019,6 @@ SdrObject* SdrObjFactory::MakeNewObject(
     SdrModel& rSdrModel,
     SdrInventor nInventor,
     sal_uInt16 nIdentifier,
-    SdrPage* pPage,
     const tools::Rectangle* pSnapRect)
 {
     SdrObject* pObj(nullptr);
@@ -3124,11 +3146,6 @@ SdrObject* SdrObjFactory::MakeNewObject(
     {
         // Well, if no one wants it...
         return nullptr;
-    }
-
-    if(nullptr != pPage)
-    {
-        pObj->SetPage(pPage);
     }
 
     if(bSetSnapRect && nullptr != pSnapRect)

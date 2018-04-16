@@ -1238,38 +1238,23 @@ SdrObject* SdrOle2Obj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
     return nullptr;
 }
 
-void SdrOle2Obj::SetPage(SdrPage* pNewPage)
+void SdrOle2Obj::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
 {
-    bool bRemove=pNewPage==nullptr && pPage!=nullptr;
-    bool bInsert=pNewPage!=nullptr && pPage==nullptr;
+    const bool bRemove(pNewPage == nullptr && pOldPage != nullptr);
+    const bool bInsert(pNewPage != nullptr && pOldPage == nullptr);
 
     if (bRemove && mpImpl->mbConnected )
-        Disconnect();
-
-    if(!GetStyleSheet() && pNewPage)
     {
-        // #i119287# Set default StyleSheet for SdrGrafObj here, it is different from 'Default'. This
-        // needs to be done before the style 'Default' is set from the :SetModel() call which is triggered
-        // from the following :SetPage().
-        // TTTT: Needs to be moved in branch aw080 due to having a SdrModel from the beginning, is at this
-        // place for convenience currently (works in both versions, is not in the way)
-        SfxStyleSheet* pSheet = pNewPage->getSdrModelFromSdrPage().GetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj();
-
-        if(pSheet)
-        {
-            SetStyleSheet(pSheet, false);
-        }
-        else
-        {
-            SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
-            SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
-        }
+        Disconnect();
     }
 
-    SdrRectObj::SetPage(pNewPage);
+    // call parent
+    SdrRectObj::handlePageChange(pOldPage, pNewPage);
 
     if (bInsert && !mpImpl->mbConnected )
+    {
         Connect();
+    }
 }
 
 void SdrOle2Obj::SetObjRef( const css::uno::Reference < css::embed::XEmbeddedObject >& rNewObjRef )

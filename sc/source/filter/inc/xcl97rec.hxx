@@ -158,11 +158,13 @@ public:
 class XclObjComment : public XclObj
 {
     ScAddress                   maScPos;
-    std::unique_ptr< SdrCaptionObj, SdrObjectFreeOp >
-                                mpCaption;
+
+    // no need to use std::unique_ptr< SdrCaptionObj, SdrObjectFreeOp >
+    SdrCaptionObj*              mpCaption;
+
     bool                        mbVisible;
-    tools::Rectangle                   maFrom;
-    tools::Rectangle                   maTo;
+    tools::Rectangle            maFrom;
+    tools::Rectangle            maTo;
 
 public:
                                 XclObjComment( XclExpObjectManager& rObjMgr,
