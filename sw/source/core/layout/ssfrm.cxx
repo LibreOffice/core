@@ -455,6 +455,8 @@ void SwLayoutFrame::DestroyImpl()
     {
         while ( pFrame )
         {
+            if (pFrame->IsDeleteForbidden())
+                throw std::runtime_error("delete forbidden");
             //First delete the Objs of the Frame because they can't unregister
             //from the page after remove.
             //We don't want to create an endless loop only because one couldn't
