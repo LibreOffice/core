@@ -77,6 +77,14 @@ public:
     virtual void SAL_CALL setEnableCancelKey( sal_Int32 _enableCancelKey ) override;
     virtual sal_Int32 SAL_CALL getWindowState() override;
     virtual void SAL_CALL setWindowState( sal_Int32 _windowstate ) override;
+    virtual sal_Int32 SAL_CALL getWidth() override;
+    virtual void SAL_CALL setWidth( sal_Int32 _width ) override;
+    virtual sal_Int32 SAL_CALL getHeight() override;
+    virtual void SAL_CALL setHeight( sal_Int32 _height ) override;
+    virtual sal_Int32 SAL_CALL getLeft() override;
+    virtual void SAL_CALL setLeft( sal_Int32 _left ) override;
+    virtual sal_Int32 SAL_CALL getTop() override;
+    virtual void SAL_CALL setTop( sal_Int32 _top ) override;
     virtual float SAL_CALL CentimetersToPoints( float Centimeters ) override;
     virtual void SAL_CALL ShowMe() override;
     virtual void SAL_CALL Resize( sal_Int32 Width, sal_Int32 Height ) override;

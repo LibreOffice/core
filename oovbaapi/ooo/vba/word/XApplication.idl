@@ -35,6 +35,10 @@ interface XApplication : XConnectable
     [attribute] boolean DisplayAutoCompleteTips;
     [attribute] long EnableCancelKey;
     [attribute] long WindowState;
+    [attribute] long Width;
+    [attribute] long Height;
+    [attribute] long Left;
+    [attribute] long Top;
 
     any CommandBars( [in] any Index );
     any Documents( [in] any Index );

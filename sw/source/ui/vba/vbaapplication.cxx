@@ -221,6 +221,54 @@ void SAL_CALL SwVbaApplication::setWindowState( sal_Int32 _windowstate )
     }
 }
 
+sal_Int32 SAL_CALL SwVbaApplication::getWidth()
+{
+    auto pWindow = getActiveSwVbaWindow();
+    return pWindow->getWidth();
+}
+
+void SAL_CALL SwVbaApplication::setWidth( sal_Int32 _width )
+{
+    auto pWindow = getActiveSwVbaWindow();
+    pWindow->setWidth( _width );
+}
+
+sal_Int32 SAL_CALL SwVbaApplication::getHeight()
+{
+    auto pWindow = getActiveSwVbaWindow();
+    return pWindow->getHeight();
+}
+
+void SAL_CALL SwVbaApplication::setHeight( sal_Int32 _height )
+{
+    auto pWindow = getActiveSwVbaWindow();
+    pWindow->setHeight( _height );
+}
+
+sal_Int32 SAL_CALL SwVbaApplication::getLeft()
+{
+    auto pWindow = getActiveSwVbaWindow();
+    return pWindow->getLeft();
+}
+
+void SAL_CALL SwVbaApplication::setLeft( sal_Int32 _left )
+{
+    auto pWindow = getActiveSwVbaWindow();
+    pWindow->setLeft( _left );
+}
+
+sal_Int32 SAL_CALL SwVbaApplication::getTop()
+{
+    auto pWindow = getActiveSwVbaWindow();
+    return pWindow->getTop();
+}
+
+void SAL_CALL SwVbaApplication::setTop( sal_Int32 _top )
+{
+    auto pWindow = getActiveSwVbaWindow();
+    pWindow->setTop( _top );
+}
+
 float SAL_CALL SwVbaApplication::CentimetersToPoints( float Centimeters )
 {
     return VbaApplicationBase::CentimetersToPoints( Centimeters );
