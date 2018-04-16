@@ -389,7 +389,14 @@ public:
 class SwJavaEditDialog;
 class AbstractJavaEditDialog_Impl : public AbstractJavaEditDialog
 {
-    DECL_ABSTDLG_BASE(AbstractJavaEditDialog_Impl,SwJavaEditDialog)
+protected:
+    std::unique_ptr<SwJavaEditDialog> m_xDlg;
+public:
+    explicit AbstractJavaEditDialog_Impl(SwJavaEditDialog* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual OUString            GetScriptText() const override;
     virtual OUString            GetScriptType() const override;
     virtual bool                IsUrl() const override;
@@ -574,7 +581,7 @@ public:
     virtual VclPtr<VclAbstractDialog>         CreateTitlePageDlg ( vcl::Window * pParent ) override;
     virtual VclPtr<VclAbstractDialog>         CreateVclSwViewDialog(SwView& rView) override;
     virtual VclPtr<AbstractInsTableDlg>        CreateInsTableDlg(SwView& rView) override;
-    virtual VclPtr<AbstractJavaEditDialog>     CreateJavaEditDialog(vcl::Window* pParent,
+    virtual VclPtr<AbstractJavaEditDialog>     CreateJavaEditDialog(weld::Window* pParent,
         SwWrtShell* pWrtSh) override;
     virtual VclPtr<AbstractMailMergeDlg>       CreateMailMergeDlg(
                                                 vcl::Window* pParent, SwWrtShell& rSh,

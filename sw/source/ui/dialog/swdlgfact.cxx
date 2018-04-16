@@ -155,7 +155,11 @@ short AbstractInsTableDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractJavaEditDialog_Impl);
+short AbstractJavaEditDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractMailMergeDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractMailMergeCreateFromDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractMailMergeFieldConnectionsDlg_Impl);
@@ -493,27 +497,27 @@ void AbstractInsTableDlg_Impl::GetValues( OUString& rName, sal_uInt16& rRow, sal
 
 OUString AbstractJavaEditDialog_Impl::GetScriptText() const
 {
-    return pDlg->GetScriptText();
+    return m_xDlg->GetScriptText();
 }
 
 OUString AbstractJavaEditDialog_Impl::GetScriptType() const
 {
-    return pDlg->GetScriptType();
+    return m_xDlg->GetScriptType();
 }
 
 bool AbstractJavaEditDialog_Impl::IsUrl() const
 {
-    return pDlg->IsUrl();
+    return m_xDlg->IsUrl();
 }
 
 bool AbstractJavaEditDialog_Impl::IsNew() const
 {
-    return pDlg->IsNew();
+    return m_xDlg->IsNew();
 }
 
 bool AbstractJavaEditDialog_Impl::IsUpdate() const
 {
-    return pDlg->IsUpdate();
+    return m_xDlg->IsUpdate();
 }
 
 DBManagerOptions AbstractMailMergeDlg_Impl::GetMergeType()
@@ -955,10 +959,9 @@ VclPtr<AbstractInsTableDlg> SwAbstractDialogFactory_Impl::CreateInsTableDlg(SwVi
 }
 
 VclPtr<AbstractJavaEditDialog> SwAbstractDialogFactory_Impl::CreateJavaEditDialog(
-    vcl::Window* pParent, SwWrtShell* pWrtSh)
+    weld::Window* pParent, SwWrtShell* pWrtSh)
 {
-    VclPtr<SwJavaEditDialog> pDlg = VclPtr<SwJavaEditDialog>::Create(pParent, pWrtSh);
-    return VclPtr<AbstractJavaEditDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractJavaEditDialog_Impl>::Create(new SwJavaEditDialog(pParent, pWrtSh));
 }
 
 VclPtr<AbstractMailMergeDlg> SwAbstractDialogFactory_Impl::CreateMailMergeDlg(
