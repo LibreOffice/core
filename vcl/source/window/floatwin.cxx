@@ -54,7 +54,7 @@ tools::Rectangle& FloatingWindow::ImplGetItemEdgeClipRect()
 
 void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
-    mpImplData = new ImplData;
+    mpImplData.reset(new ImplData);
 
     mpWindowImpl->mbFloatWin = true;
     mbInCleanUp = false;
@@ -216,8 +216,7 @@ void FloatingWindow::dispose()
         mnPostId = nullptr;
     }
 
-    delete mpImplData;
-    mpImplData = nullptr;
+    mpImplData.reset();
 
     mpNextFloat.clear();
     mpFirstPopupModeWin.clear();
