@@ -889,7 +889,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
 
     if (drawing::FillStyle_NONE == pBackgroundFillSet->Get(XATTR_FILLSTYLE).GetValue())
     {
-        SdrPage *pOwnerPage = GetPage();
+        SdrPage* pOwnerPage(getSdrPageFromSdrObject());
         if (pOwnerPage)
         {
             pBackgroundFillSet = &pOwnerPage->getSdrPageProperties().GetItemSet();
@@ -1438,16 +1438,19 @@ void SdrTextObj::impHandleChainingEventsDuringDecomposition(SdrOutliner &rOutlin
     TextChainFlow aTxtChainFlow(const_cast<SdrTextObj*>(this));
     bool bIsOverflow;
 
+#ifdef DBG_UTIL
     // Some debug output
-    size_t nObjCount = pPage->GetObjCount();
-    for (size_t i = 0; i < nObjCount; i++) {
-        SdrTextObj *pCurObj = static_cast<SdrTextObj *>(pPage->GetObj(i));
-
-        if (pCurObj == this) {
+    size_t nObjCount(getSdrPageFromSdrObject()->GetObjCount());
+    for (size_t i = 0; i < nObjCount; i++)
+    {
+        SdrTextObj* pCurObj(dynamic_cast< SdrTextObj* >(getSdrPageFromSdrObject()->GetObj(i)));
+        if(pCurObj == this)
+        {
             SAL_INFO("svx.chaining", "Working on TextBox " << i);
             break;
         }
     }
+#endif
 
     aTxtChainFlow.CheckForFlowEvents(&rOutliner);
 

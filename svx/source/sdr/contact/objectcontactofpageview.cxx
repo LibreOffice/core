@@ -339,15 +339,15 @@ namespace sdr
 
             if(pActiveGroupList)
             {
-                if(dynamic_cast<const SdrPage*>( pActiveGroupList) !=  nullptr)
+                if(nullptr != pActiveGroupList->getSdrPageFromSdrObjList())
                 {
                     // It's a Page itself
-                    return &(static_cast<SdrPage*>(pActiveGroupList)->GetViewContact());
+                    return &(pActiveGroupList->getSdrPageFromSdrObjList()->GetViewContact());
                 }
-                else if(pActiveGroupList->GetOwnerObj())
+                else if(pActiveGroupList->getSdrObjectFromSdrObjList())
                 {
                     // Group object
-                    return &(pActiveGroupList->GetOwnerObj()->GetViewContact());
+                    return &(pActiveGroupList->getSdrObjectFromSdrObjList()->GetViewContact());
                 }
             }
             else if(GetSdrPage())

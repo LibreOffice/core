@@ -404,24 +404,6 @@ SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShap
     if( !aType.startsWith( aPrefix ) )
     {
         SdrObject* pObj = SvxFmDrawPage::CreateSdrObject_( xShape );
-        if( pObj && ( (pObj->GetObjInventor() != SdrInventor::Default) || (pObj->GetObjIdentifier() != OBJ_PAGE) ) )
-        {
-            SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage()));
-            // #i119287# similar to the code in the SdrObject methods the graphic and ole
-            // SdrObjects need another default style than the rest, see task. Adding here, too.
-            // TTTT: Same as for #i119287#: Can be removed in branch aw080 again
-            const bool bIsSdrGrafObj(dynamic_cast< const SdrGrafObj* >(pObj) !=  nullptr);
-            const bool bIsSdrOle2Obj(dynamic_cast< const SdrOle2Obj* >(pObj) !=  nullptr);
-
-            if(bIsSdrGrafObj || bIsSdrOle2Obj)
-            {
-                pObj->NbcSetStyleSheet(rDoc.GetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj(), true);
-            }
-            else
-            {
-                pObj->NbcSetStyleSheet(rDoc.GetDefaultStyleSheet(), true);
-            }
-        }
         return pObj;
     }
 
@@ -1902,7 +1884,7 @@ sal_Bool SAL_CALL SdPageLinkTargets::hasElements()
     SdPage* pPage = mpUnoPage->GetPage();
     if( pPage != nullptr )
     {
-        SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
+        SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );
 
         while( aIter.IsMore() )
         {
@@ -1948,7 +1930,7 @@ Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
     SdPage* pPage = mpUnoPage->GetPage();
     if( pPage != nullptr )
     {
-        SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
+        SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );
         while( aIter.IsMore() )
         {
             SdrObject* pObj = aIter.Next();
@@ -1965,7 +1947,7 @@ Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
     {
         OUString* pStr = aSeq.getArray();
 
-        SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
+        SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );
         while( aIter.IsMore() )
         {
             SdrObject* pObj = aIter.Next();
@@ -1993,7 +1975,7 @@ SdrObject* SdPageLinkTargets::FindObject( const OUString& rName ) const throw()
     if( pPage == nullptr )
         return nullptr;
 
-    SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
+    SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );
 
     while( aIter.IsMore() )
     {
