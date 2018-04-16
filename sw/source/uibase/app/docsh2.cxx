@@ -264,6 +264,30 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             default:
                 break;
         }
+
+        switch( pSfxEventHint->GetEventId() )
+        {
+            case SfxEventHintId::CreateDoc:
+                {
+                    uno::Any aDocument;
+                    aDocument <<= mxAutomationDocumentObject;
+                    uno::Sequence< uno::Any > aArgs(1);
+                    aArgs[0] = aDocument;
+                    SW_MOD()->CallAutomationApplicationEventSinks( "NewDocument", aArgs );
+                }
+                break;
+            case SfxEventHintId::OpenDoc:
+                {
+                    uno::Any aDocument;
+                    aDocument <<= mxAutomationDocumentObject;
+                    uno::Sequence< uno::Any > aArgs(1);
+                    aArgs[0] = aDocument;
+                    SW_MOD()->CallAutomationApplicationEventSinks( "DocumentOpen", aArgs );
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     sal_uInt16 nAction = 0;

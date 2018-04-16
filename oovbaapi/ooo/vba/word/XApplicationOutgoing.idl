@@ -25,9 +25,11 @@ module ooo {  module vba {  module word {
 
 interface XApplicationOutgoing : XInterfaceWithIID
 {
-    void DocumentChange();
     void Quit();
+    void DocumentChange();
+    void DocumentOpen([in] any Document);
     void DocumentBeforeClose([in] any Document, [out] any Cancel);
+    void NewDocument([in] any Document);
 };
 
 }; }; };
