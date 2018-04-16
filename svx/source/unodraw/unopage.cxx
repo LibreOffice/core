@@ -510,7 +510,6 @@ SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
         *mpModel,
         nInventor,
         nType,
-        mpPage,
         &aRect);
 
     if (!pNewObj)

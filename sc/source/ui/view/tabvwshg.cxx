@@ -63,8 +63,8 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         *pModel,
         SdrInventor::FmForm,
-        OBJ_FM_BUTTON,
-        pDrView->GetSdrPageView()->GetPage());
+        OBJ_FM_BUTTON);
+
     SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( pObj );
     OSL_ENSURE( pUnoCtrl, "no SdrUnoObj");
     if( !pUnoCtrl )

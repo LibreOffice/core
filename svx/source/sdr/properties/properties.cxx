@@ -40,6 +40,11 @@ namespace sdr
         {
         }
 
+        void BaseProperties::applyDefaultStyleSheetFromSdrModel()
+        {
+            SetStyleSheet(GetSdrObject().getSdrModelFromSdrObject().GetDefaultStyleSheet(), false);
+        }
+
         const SdrObject& BaseProperties::GetSdrObject() const
         {
             return mrObject;

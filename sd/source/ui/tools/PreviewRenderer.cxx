@@ -493,7 +493,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
 {
     SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
 
-    if (pObject==nullptr || pObject->GetPage() == nullptr)
+    if (pObject==nullptr || pObject->getSdrPageFromSdrObject() == nullptr)
     {
         // not a SdrObject visualisation (maybe e.g. page) or no page
         return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
@@ -501,7 +501,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
             rDisplayInfo);
     }
 
-    const bool bDoCreateGeometry (pObject->GetPage()->checkVisibility( rOriginal, rDisplayInfo, true));
+    const bool bDoCreateGeometry (pObject->getSdrPageFromSdrObject()->checkVisibility( rOriginal, rDisplayInfo, true));
 
     if ( ! bDoCreateGeometry
         && (pObject->GetObjInventor() != SdrInventor::Default || pObject->GetObjIdentifier() != OBJ_PAGE))

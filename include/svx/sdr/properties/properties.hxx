@@ -82,6 +82,8 @@ namespace sdr
             SdrObject&                                      mrObject;
 
         protected:
+            // apply the correct SfyStyleSheet from SdrObject's SdrModel
+            virtual void applyDefaultStyleSheetFromSdrModel();
 
             // create a new object specific itemset with object specific ranges.
             virtual std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& pPool) = 0;

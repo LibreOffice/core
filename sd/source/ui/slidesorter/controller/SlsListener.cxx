@@ -380,7 +380,7 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
             if (rEvent.mpUserData != nullptr)
             {
                 const SdrObject* pObject = static_cast<const SdrObject*>(rEvent.mpUserData);
-                HandleShapeModification(pObject->GetPage());
+                HandleShapeModification(pObject->getSdrPageFromSdrObject());
             }
             break;
 
