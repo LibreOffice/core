@@ -1573,7 +1573,7 @@ public:
             nTime = GtkSalFrame::GetLastInputEventTime();
         }
 
-        gtk_menu_popup(GTK_MENU(pWidget), nullptr, nullptr, nullptr, nullptr, nButton, nTime);
+        gtk_menu_popup(m_pMenu, nullptr, nullptr, nullptr, nullptr, nButton, nTime);
 #endif
 
         if (g_main_loop_is_running(pLoop))
