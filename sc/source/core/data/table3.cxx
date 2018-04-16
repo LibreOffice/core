@@ -2036,7 +2036,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
         // how many results per level
         SCCOL nResCount         = rParam.nSubTotals[aRowEntry.nGroupNo];
         // result functions
-        ScSubTotalFunc* eResFunc = rParam.pFunctions[aRowEntry.nGroupNo];
+        ScSubTotalFunc* pResFunc = rParam.pFunctions[aRowEntry.nGroupNo];
 
         if (nResCount > 0)                                      // otherwise only sort
         {
@@ -2122,7 +2122,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         aOutString += " ";
                         const char* pStrId = STR_TABLE_ERGEBNIS;
                         if ( nResCount == 1 )
-                            pStrId = lcl_GetSubTotalStrId(eResFunc[0]);
+                            pStrId = lcl_GetSubTotalStrId(pResFunc[0]);
                         aOutString += ScGlobal::GetRscString(pStrId);
                         SetString( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, nTab, aOutString );
                         ApplyStyle( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, pStyle );
@@ -2211,7 +2211,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     {
         SCCOL nResCount         = rParam.nSubTotals[iEntry->nGroupNo];
         SCCOL* nResCols         = rParam.pSubTotals[iEntry->nGroupNo];
-        ScSubTotalFunc* eResFunc = rParam.pFunctions[iEntry->nGroupNo];
+        ScSubTotalFunc* pResFunc = rParam.pFunctions[iEntry->nGroupNo];
         for ( SCCOL nResult=0; nResult < nResCount; ++nResult )
         {
             aRef.Ref1.SetAbsCol(nResCols[nResult]);
@@ -2222,7 +2222,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             ScTokenArray aArr;
             aArr.AddOpCode( ocSubTotal );
             aArr.AddOpCode( ocOpen );
-            aArr.AddDouble( static_cast<double>(eResFunc[nResult]) );
+            aArr.AddDouble( static_cast<double>(pResFunc[nResult]) );
             aArr.AddOpCode( ocSep );
             aArr.AddDoubleReference( aRef );
             aArr.AddOpCode( ocClose );
