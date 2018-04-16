@@ -413,8 +413,7 @@ void SAL_CALL OZipFileAccess::dispose()
     {
            lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
         m_pListenersContainer->disposeAndClear( aSource );
-        delete m_pListenersContainer;
-        m_pListenersContainer = nullptr;
+        m_pListenersContainer.reset();
     }
 
     m_pZipFile.reset();
@@ -436,7 +435,7 @@ void SAL_CALL OZipFileAccess::addEventListener( const uno::Reference< lang::XEve
         throw lang::DisposedException(THROW_WHERE );
 
     if ( !m_pListenersContainer )
-        m_pListenersContainer = new ::comphelper::OInterfaceContainerHelper2( m_aMutexHolder->GetMutex() );
+        m_pListenersContainer.reset( new ::comphelper::OInterfaceContainerHelper2( m_aMutexHolder->GetMutex() ) );
     m_pListenersContainer->addInterface( xListener );
 }
 

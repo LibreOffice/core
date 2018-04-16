@@ -47,7 +47,7 @@ class OZipFileAccess : public ::cppu::WeakImplHelper<
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::io::XInputStream > m_xContentStream;
     std::unique_ptr<ZipFile> m_pZipFile;
-    ::comphelper::OInterfaceContainerHelper2* m_pListenersContainer;
+    std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pListenersContainer;
     bool m_bDisposed;
     bool m_bOwnContent;
 
