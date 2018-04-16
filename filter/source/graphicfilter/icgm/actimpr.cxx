@@ -706,7 +706,7 @@ void CGMImpressOutAct::DrawPolyPolygon( tools::PolyPolygon const & rPolyPolygon 
     }
 }
 
-void CGMImpressOutAct::DrawText( awt::Point const & rTextPos, awt::Size const & rTextSize, char const * pString, FinalFlag eFlag )
+void CGMImpressOutAct::DrawText(awt::Point const & rTextPos, awt::Size const & rTextSize, const OUString& rString, FinalFlag eFlag)
 {
     if ( ImplCreateShape( "com.sun.star.drawing.TextShape" ) )
     {
@@ -796,8 +796,6 @@ void CGMImpressOutAct::DrawText( awt::Point const & rTextPos, awt::Size const & 
         uno::Any aFirstQuery( maXShape->queryInterface( cppu::UnoType<text::XText>::get()));
         if( aFirstQuery >>= xText )
         {
-            OUString aStr(pString, rtl_str_getLength(pString), RTL_TEXTENCODING_ASCII_US);
-
             uno::Reference< text::XTextCursor >  aXTextCursor( xText->createTextCursor() );
             {
                 aXTextCursor->gotoEnd( false );
@@ -833,7 +831,7 @@ void CGMImpressOutAct::DrawText( awt::Point const & rTextPos, awt::Size const & 
                             aAny <<= true;
                             maXPropSet->setPropertyValue( "TextFitToSize", aAny );
                         }
-                        aCursorText->setString( aStr );
+                        aCursorText->setString(rString);
                         aXTextCursor->gotoEnd( true );
                         ImplSetTextBundle( aCursorPropSet );
                     }
