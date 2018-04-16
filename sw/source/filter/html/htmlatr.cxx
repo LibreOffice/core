@@ -441,7 +441,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     sal_uInt8 nBulletGrfLvl = 255;  // The bullet graphic we want to output
 
     // Are we in a bulleted or numbered list?
-    const SwTextNode* pTextNd = rWrt.pCurPam->GetNode().GetTextNode();
+    const SwTextNode* pTextNd = rWrt.m_pCurrentPam->GetNode().GetTextNode();
 
     SwHTMLNumRuleInfo aNumInfo;
     if( rHWrt.GetNextNumInfo() )
@@ -495,7 +495,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     }
     else
     {
-        pFormatInfo = new SwHTMLFormatInfo( &rFormat, rWrt.pDoc, rHWrt.m_xTemplate.get(),
+        pFormatInfo = new SwHTMLFormatInfo( &rFormat, rWrt.m_pDoc, rHWrt.m_xTemplate.get(),
                                       rHWrt.m_bCfgOutStyles, rHWrt.m_eLang,
                                       rHWrt.m_nCSS1Script );
         rHWrt.m_TextCollInfos.insert(std::unique_ptr<SwHTMLFormatInfo>(pFormatInfo));
@@ -578,8 +578,8 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
                      : rFormat.GetULSpace();
 
     if( (rHWrt.m_bOutHeader &&
-         rWrt.pCurPam->GetPoint()->nNode.GetIndex() ==
-            rWrt.pCurPam->GetMark()->nNode.GetIndex()) ||
+         rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() ==
+            rWrt.m_pCurrentPam->GetMark()->nNode.GetIndex()) ||
          rHWrt.m_bOutFooter )
     {
         if( rHWrt.m_bCfgOutStyles )
@@ -624,8 +624,8 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     // Consider the lower spacing of the paragraph? (never in the last
     // paragraph of tables)
     bool bUseParSpace = !rHWrt.m_bOutTable ||
-                        (rWrt.pCurPam->GetPoint()->nNode.GetIndex() !=
-                         rWrt.pCurPam->GetMark()->nNode.GetIndex());
+                        (rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() !=
+                         rWrt.m_pCurrentPam->GetMark()->nNode.GetIndex());
     // If styles are exported, indented paragraphs become definition lists
     const SvxLRSpaceItem& rLRSpace =
         pNodeItemSet ? pNodeItemSet->Get(RES_LR_SPACE)
@@ -656,7 +656,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         }
 
         bool bIsNextTextNode =
-            rWrt.pDoc->GetNodes()[rWrt.pCurPam->GetPoint()->nNode.GetIndex()+1]
+            rWrt.m_pDoc->GetNodes()[rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex()+1]
                      ->IsTextNode();
 
         if( bForceDL && bDT )
@@ -2046,7 +2046,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
             if( nLeft || nRight )
             {
                 const SwFrameFormat& rPgFormat =
-                    rHTMLWrt.pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool
+                    rHTMLWrt.m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool
                     ( RES_POOLPAGE_HTML, false )->GetMaster();
                 const SwFormatFrameSize& rSz   = rPgFormat.GetFrameSize();
                 const SvxLRSpaceItem& rLR = rPgFormat.GetLRSpace();
@@ -2119,9 +2119,9 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
             40 == static_cast<const SvxFontHeightItem *>(pItem)->GetHeight() )
         {
             // ... moreover, the 2pt font is set ...
-            sal_uLong nNdPos = rWrt.pCurPam->GetPoint()->nNode.GetIndex();
-            const SwNode *pNextNd = rWrt.pDoc->GetNodes()[nNdPos+1];
-            const SwNode *pPrevNd = rWrt.pDoc->GetNodes()[nNdPos-1];
+            sal_uLong nNdPos = rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex();
+            const SwNode *pNextNd = rWrt.m_pDoc->GetNodes()[nNdPos+1];
+            const SwNode *pPrevNd = rWrt.m_pDoc->GetNodes()[nNdPos-1];
             bool bStdColl = nPoolId == RES_POOLCOLL_STANDARD;
             if( ( bStdColl && (pNextNd->IsTableNode() || pNextNd->IsSectionNode()) ) ||
                 ( !bStdColl &&
@@ -2146,7 +2146,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     bool bPageBreakBehind = false;
     if( rHTMLWrt.m_bCfgFormFeed &&
         !(rHTMLWrt.m_bOutTable || rHTMLWrt.m_bOutFlyFrame) &&
-        rHTMLWrt.m_pStartNdIdx->GetIndex() != rHTMLWrt.pCurPam->GetPoint()->nNode.GetIndex() )
+        rHTMLWrt.m_pStartNdIdx->GetIndex() != rHTMLWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() )
     {
         bool bPageBreakBefore = false;
         const SfxPoolItem* pItem;
@@ -2196,9 +2196,9 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
         bFlysLeft = rHTMLWrt.OutFlyFrame( rNode.GetIndex(), 0, HtmlPosition::Before );
     }
 
-    if( rHTMLWrt.pCurPam->GetPoint()->nNode == rHTMLWrt.pCurPam->GetMark()->nNode )
+    if( rHTMLWrt.m_pCurrentPam->GetPoint()->nNode == rHTMLWrt.m_pCurrentPam->GetMark()->nNode )
     {
-        nEnd = rHTMLWrt.pCurPam->GetMark()->nContent.GetIndex();
+        nEnd = rHTMLWrt.m_pCurrentPam->GetMark()->nContent.GetIndex();
     }
 
     // are there any hard attributes that must be written as options?
@@ -2257,7 +2257,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
 
     // are there any hard attributes that must be written as tags?
     aFullText += rStr;
-    HTMLEndPosLst aEndPosLst( rWrt.pDoc, rHTMLWrt.m_xTemplate.get(),
+    HTMLEndPosLst aEndPosLst( rWrt.m_pDoc, rHTMLWrt.m_xTemplate.get(),
                               rHTMLWrt.m_pDfltColor, rHTMLWrt.m_bCfgOutStyles,
                               rHTMLWrt.GetHTMLMode(), aFullText,
                                  rHTMLWrt.m_aScriptTextStyles );
@@ -2294,7 +2294,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     rHTMLWrt.m_bTextAttr = true;
 
     size_t nAttrPos = 0;
-    sal_Int32 nStrPos = rHTMLWrt.pCurPam->GetPoint()->nContent.GetIndex();
+    sal_Int32 nStrPos = rHTMLWrt.m_pCurrentPam->GetPoint()->nContent.GetIndex();
     const SwTextAttr * pHt = nullptr;
     const size_t nCntAttr = pNd->HasHints() ? pNd->GetSwpHints().Count() : 0;
     if( nCntAttr && nStrPos > ( pHt = pNd->GetSwpHints().Get(0) )->GetStart() )
@@ -2312,7 +2312,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
             {
                 const sal_Int32 nHtEnd = *pHt->End(),
                        nHtStt = pHt->GetStart();
-                if( !rHTMLWrt.bWriteAll && nHtEnd <= nStrPos )
+                if( !rHTMLWrt.m_bWriteAll && nHtEnd <= nStrPos )
                     continue;
 
                 // don't consider empty hints at the beginning - or should we ??
@@ -2320,7 +2320,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                     continue;
 
                 // add attribute to the list
-                if( rHTMLWrt.bWriteAll )
+                if( rHTMLWrt.m_bWriteAll )
                     aEndPosLst.Insert( pHt->GetAttr(), nHtStt + nOffset,
                                        nHtEnd + nOffset,
                                        rHTMLWrt.m_CharFormatInfos );
@@ -2480,7 +2480,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                     {
                         // Placeholder for a single-point fieldmark.
 
-                        SwPosition aMarkPos = *rWrt.pCurPam->GetPoint();
+                        SwPosition aMarkPos = *rWrt.m_pCurrentPam->GetPoint();
                         aMarkPos.nContent += nStrPos - aMarkPos.nContent.GetIndex();
                         rHTMLWrt.OutPointFieldmarks(aMarkPos);
                     }
@@ -2511,8 +2511,8 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     if( bWriteBreak )
     {
         bool bEndOfCell = rHTMLWrt.m_bOutTable &&
-                         rWrt.pCurPam->GetPoint()->nNode.GetIndex() ==
-                         rWrt.pCurPam->GetMark()->nNode.GetIndex();
+                         rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() ==
+                         rWrt.m_pCurrentPam->GetMark()->nNode.GetIndex();
 
         if( bEndOfCell && !nEnd &&
             rHTMLWrt.IsHTMLMode(HTMLMODE_NBSP_IN_TABLES) )
@@ -2889,7 +2889,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
 
     bool bScriptDependent = false;
     {
-        const SwCharFormat* pFormat = rWrt.pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
+        const SwCharFormat* pFormat = rWrt.m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
                  RES_POOLCHR_INET_NORMAL );
         std::unique_ptr<SwHTMLFormatInfo> pFormatInfo(new SwHTMLFormatInfo(pFormat));
         auto const it = rHTMLWrt.m_CharFormatInfos.find( pFormatInfo );
@@ -2900,7 +2900,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
     }
     if( !bScriptDependent )
     {
-        const SwCharFormat* pFormat = rWrt.pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
+        const SwCharFormat* pFormat = rWrt.m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
                  RES_POOLCHR_INET_VISIT );
         std::unique_ptr<SwHTMLFormatInfo> pFormatInfo(new SwHTMLFormatInfo(pFormat));
         auto const it = rHTMLWrt.m_CharFormatInfos.find( pFormatInfo );

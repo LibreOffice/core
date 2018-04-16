@@ -148,10 +148,10 @@ bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
                         if( !rFootnote.GetNumStr().isEmpty() )
                             sOut = rFootnote.GetNumStr();
                         else if( rFootnote.IsEndNote() )
-                            sOut = rWrt.pDoc->GetEndNoteInfo().aFormat.
+                            sOut = rWrt.m_pDoc->GetEndNoteInfo().aFormat.
                             GetNumStr( rFootnote.GetNumber() );
                         else
-                            sOut = rWrt.pDoc->GetFootnoteInfo().aFormat.
+                            sOut = rWrt.m_pDoc->GetFootnoteInfo().aFormat.
                             GetNumStr( rFootnote.GetNumber() );
                     }
                     break;
@@ -172,19 +172,19 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
 {
     const SwTextNode& rNd = static_cast<SwTextNode&>(rNode);
 
-    sal_Int32 nStrPos = rWrt.pCurPam->GetPoint()->nContent.GetIndex();
+    sal_Int32 nStrPos = rWrt.m_pCurrentPam->GetPoint()->nContent.GetIndex();
     const sal_Int32 nNodeEnd = rNd.Len();
     sal_Int32 nEnd = nNodeEnd;
-    bool bLastNd =  rWrt.pCurPam->GetPoint()->nNode == rWrt.pCurPam->GetMark()->nNode;
+    bool bLastNd =  rWrt.m_pCurrentPam->GetPoint()->nNode == rWrt.m_pCurrentPam->GetMark()->nNode;
     if( bLastNd )
-        nEnd = rWrt.pCurPam->GetMark()->nContent.GetIndex();
+        nEnd = rWrt.m_pCurrentPam->GetMark()->nContent.GetIndex();
 
-    bool bIsOneParagraph = rWrt.pOrigPam->Start()->nNode == rWrt.pOrigPam->End()->nNode;
+    bool bIsOneParagraph = rWrt.m_pOrigPam->Start()->nNode == rWrt.m_pOrigPam->End()->nNode;
 
     SwASC_AttrIter aAttrIter( static_cast<SwASCWriter&>(rWrt), rNd, nStrPos );
 
     const SwNumRule* pNumRule = rNd.GetNumRule();
-    if (pNumRule && !nStrPos && rWrt.bExportPargraphNumbering && !bIsOneParagraph)
+    if (pNumRule && !nStrPos && rWrt.m_bExportPargraphNumbering && !bIsOneParagraph)
     {
         bool bIsOutlineNumRule = pNumRule == rNd.GetDoc()->GetOutlineNumRule();
 
@@ -213,7 +213,7 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
     }
 
     OUString aStr( rNd.GetText() );
-    if( rWrt.bASCII_ParaAsBlanc )
+    if( rWrt.m_bASCII_ParaAsBlank )
         aStr = aStr.replace(0x0A, ' ');
 
     const bool bExportSoftHyphens = RTL_TEXTENCODING_UCS2 == rWrt.GetAsciiOptions().GetCharSet() ||
@@ -251,7 +251,7 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
     }
 
     if( !bLastNd ||
-        ( ( !rWrt.bWriteClipboardDoc && !rWrt.bASCII_NoLastLineEnd )
+        ( ( !rWrt.m_bWriteClipboardDoc && !rWrt.m_bASCII_NoLastLineEnd )
             && !nStrPos && nEnd == nNodeEnd ) )
         rWrt.Strm().WriteUnicodeOrByteText( static_cast<SwASCWriter&>(rWrt).GetLineEnd());
 

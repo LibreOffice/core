@@ -1101,7 +1101,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
     sal_uLong nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
-    SwOLENode *pOLENd = rHTMLWrt.pDoc->GetNodes()[ nStt ]->GetOLENode();
+    SwOLENode *pOLENd = rHTMLWrt.m_pDoc->GetNodes()[ nStt ]->GetOLENode();
 
     OSL_ENSURE( pOLENd, "OLE-Node expected" );
     if( !pOLENd )
@@ -1369,7 +1369,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
     sal_uLong nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
-    SwOLENode *pOLENd = rHTMLWrt.pDoc->GetNodes()[ nStt ]->GetOLENode();
+    SwOLENode *pOLENd = rHTMLWrt.m_pDoc->GetNodes()[ nStt ]->GetOLENode();
 
     OSL_ENSURE( pOLENd, "OLE-Node expected" );
     if( !pOLENd )
@@ -1379,7 +1379,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
     {
         // If we skip images, embedded objects would be completely lost.
         // Instead, try to use the HTML export of the embedded object.
-        uno::Reference<text::XTextContent> xTextContent = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(*rHTMLWrt.pDoc, const_cast<SwFrameFormat*>(&rFrameFormat));
+        uno::Reference<text::XTextContent> xTextContent = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(*rHTMLWrt.m_pDoc, const_cast<SwFrameFormat*>(&rFrameFormat));
         uno::Reference<document::XEmbeddedObjectSupplier2> xEmbeddedObjectSupplier(xTextContent, uno::UNO_QUERY);
         uno::Reference<frame::XStorable> xStorable(xEmbeddedObjectSupplier->getEmbeddedObject(), uno::UNO_QUERY);
         SAL_WARN_IF(!xStorable.is(), "sw.html", "OutHTML_FrameFormatOLENodeGrf: no embedded object");
@@ -1424,7 +1424,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
 
     Graphic aGraphic( *pOLENd->GetGraphic() );
 
-    SwDocShell* pDocSh = rHTMLWrt.pDoc->GetDocShell();
+    SwDocShell* pDocSh = rHTMLWrt.m_pDoc->GetDocShell();
     bool bObjectOpened = false;
     if (rHTMLWrt.mbXHTML && pDocSh)
     {

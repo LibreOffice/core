@@ -442,7 +442,7 @@ void RtfExport::WriteMainText()
     }
 
     SwTableNode* pTableNode = m_pCurPam->GetNode().FindTableNode();
-    if (m_pWriter && m_pWriter->bWriteOnlyFirstTable && pTableNode != nullptr)
+    if (m_pWriter && m_pWriter->m_bWriteOnlyFirstTable && pTableNode != nullptr)
     {
         m_pCurPam->GetPoint()->nNode = *pTableNode;
         m_pCurPam->GetMark()->nNode = *(pTableNode->EndOfSectionNode());
@@ -1444,8 +1444,8 @@ SwRTFWriter::SwRTFWriter(const OUString& rFilterName, const OUString& rBaseURL)
 
 ErrCode SwRTFWriter::WriteStream()
 {
-    SwPaM aPam(*pCurPam->End(), *pCurPam->Start());
-    RtfExport aExport(nullptr, pDoc, &aPam, pCurPam, this, m_bOutOutlineOnly);
+    SwPaM aPam(*m_pCurrentPam->End(), *m_pCurrentPam->Start());
+    RtfExport aExport(nullptr, m_pDoc, &aPam, m_pCurrentPam, this, m_bOutOutlineOnly);
     aExport.ExportDocument(true);
     return ERRCODE_NONE;
 }

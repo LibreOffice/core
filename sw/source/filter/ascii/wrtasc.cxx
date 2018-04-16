@@ -85,9 +85,9 @@ SwASCWriter::~SwASCWriter() {}
 
 ErrCode SwASCWriter::WriteStream()
 {
-    if( bASCII_ParaAsCR )           // If predefined
+    if( m_bASCII_ParaAsCR )           // If predefined
         m_sLineEnd = "\015";
-    else if( bASCII_ParaAsBlanc )
+    else if( m_bASCII_ParaAsBlank )
         m_sLineEnd = " ";
     else
         switch( GetAsciiOptions().GetParaFlags() )
@@ -97,14 +97,14 @@ ErrCode SwASCWriter::WriteStream()
         case LINEEND_CRLF:  m_sLineEnd = "\015\012"; break;
         }
 
-    long nMaxNode = pDoc->GetNodes().Count();
+    long nMaxNode = m_pDoc->GetNodes().Count();
 
-    if( bShowProgress )
-        ::StartProgress( STR_STATSTR_W4WWRITE, 0, nMaxNode, pDoc->GetDocShell() );
+    if( m_bShowProgress )
+        ::StartProgress( STR_STATSTR_W4WWRITE, 0, nMaxNode, m_pDoc->GetDocShell() );
 
-    SwPaM* pPam = pOrigPam;
+    SwPaM* pPam = m_pOrigPam;
 
-    bool bWriteSttTag = bUCS2_WithStartChar &&
+    bool bWriteSttTag = m_bUCS2_WithStartChar &&
         (RTL_TEXTENCODING_UCS2 == GetAsciiOptions().GetCharSet() ||
         RTL_TEXTENCODING_UTF8 == GetAsciiOptions().GetCharSet());
 
@@ -114,36 +114,36 @@ ErrCode SwASCWriter::WriteStream()
     // Output all areas of the pam into the ASC file
     do {
         bool bTstFly = true;
-        while( pCurPam->GetPoint()->nNode.GetIndex() < pCurPam->GetMark()->nNode.GetIndex() ||
-              (pCurPam->GetPoint()->nNode.GetIndex() == pCurPam->GetMark()->nNode.GetIndex() &&
-               pCurPam->GetPoint()->nContent.GetIndex() <= pCurPam->GetMark()->nContent.GetIndex()) )
+        while( m_pCurrentPam->GetPoint()->nNode.GetIndex() < m_pCurrentPam->GetMark()->nNode.GetIndex() ||
+              (m_pCurrentPam->GetPoint()->nNode.GetIndex() == m_pCurrentPam->GetMark()->nNode.GetIndex() &&
+               m_pCurrentPam->GetPoint()->nContent.GetIndex() <= m_pCurrentPam->GetMark()->nContent.GetIndex()) )
         {
-            SwTextNode* pNd = pCurPam->GetPoint()->nNode.GetNode().GetTextNode();
+            SwTextNode* pNd = m_pCurrentPam->GetPoint()->nNode.GetNode().GetTextNode();
             if( pNd )
             {
                 // Should we have frames only?
                 // That's possible, if we put a frame selection into the clipboard
-                if( bTstFly && bWriteAll &&
+                if( bTstFly && m_bWriteAll &&
                     pNd->GetText().isEmpty() &&
                     // Frame exists
-                    pDoc->GetSpzFrameFormats()->size() &&
+                    m_pDoc->GetSpzFrameFormats()->size() &&
                     // Only one node in the array
-                    pDoc->GetNodes().GetEndOfExtras().GetIndex() + 3 ==
-                    pDoc->GetNodes().GetEndOfContent().GetIndex() &&
+                    m_pDoc->GetNodes().GetEndOfExtras().GetIndex() + 3 ==
+                    m_pDoc->GetNodes().GetEndOfContent().GetIndex() &&
                     // And exactly this one is selected
-                    pDoc->GetNodes().GetEndOfContent().GetIndex() - 1 ==
-                    pCurPam->GetPoint()->nNode.GetIndex() )
+                    m_pDoc->GetNodes().GetEndOfContent().GetIndex() - 1 ==
+                    m_pCurrentPam->GetPoint()->nNode.GetIndex() )
                 {
                     // Print the frame's content.
                     // It is always at position 0!
-                    const SwFrameFormat* pFormat = (*pDoc->GetSpzFrameFormats())[ 0 ];
+                    const SwFrameFormat* pFormat = (*m_pDoc->GetSpzFrameFormats())[ 0 ];
                     const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
                     if( pIdx )
                     {
-                        delete pCurPam;
-                        pCurPam = NewSwPaM( *pDoc, pIdx->GetIndex(),
+                        delete m_pCurrentPam;
+                        m_pCurrentPam = NewSwPaM( *m_pDoc, pIdx->GetIndex(),
                                     pIdx->GetNode().EndOfSectionIndex() );
-                        pCurPam->Exchange();
+                        m_pCurrentPam->Exchange();
                         continue;       // reset while loop!
                     }
                 }
@@ -174,20 +174,20 @@ ErrCode SwASCWriter::WriteStream()
                 bTstFly = false;        // Testing once is enough
             }
 
-            if( !pCurPam->Move( fnMoveForward, GoInNode ) )
+            if( !m_pCurrentPam->Move( fnMoveForward, GoInNode ) )
                 break;
 
-            if( bShowProgress )
-                ::SetProgressState( pCurPam->GetPoint()->nNode.GetIndex(),
-                                    pDoc->GetDocShell() );   // How far?
+            if( m_bShowProgress )
+                ::SetProgressState( m_pCurrentPam->GetPoint()->nNode.GetIndex(),
+                                    m_pDoc->GetDocShell() );   // How far?
 
         }
     } while( CopyNextPam( &pPam ) ); // Until all pams are processed
 
     Strm().SetStreamCharSet( eOld );
 
-    if( bShowProgress )
-        ::EndProgress( pDoc->GetDocShell() );
+    if( m_bShowProgress )
+        ::EndProgress( m_pDoc->GetDocShell() );
 
     return ERRCODE_NONE;
 }

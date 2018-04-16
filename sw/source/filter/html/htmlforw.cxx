@@ -211,7 +211,7 @@ static bool lcl_html_isHTMLControl( sal_Int16 nClassId )
 
 bool SwHTMLWriter::HasControls() const
 {
-    sal_uInt32 nStartIdx = pCurPam->GetPoint()->nNode.GetIndex();
+    sal_uInt32 nStartIdx = m_pCurrentPam->GetPoint()->nNode.GetIndex();
     size_t i = 0;
 
     // Skip all controls in front of the current paragraph
@@ -240,7 +240,7 @@ void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
 
     uno::Reference< container::XIndexContainer > xNewFormComps;
     sal_uInt32 nStartIdx = pStartNd ? pStartNd->GetIndex()
-                                    : pCurPam->GetPoint()->nNode.GetIndex();
+                                    : m_pCurrentPam->GetPoint()->nNode.GetIndex();
 
     // skip controls before the interesting area
     size_t i = 0;
@@ -269,7 +269,7 @@ void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
             m_aHTMLControls[i]->nNdIdx <= nEndIdx; i++ )
         {
             const SwStartNode *pCntrlStNd =
-                pDoc->GetNodes()[m_aHTMLControls[i]->nNdIdx]->StartOfSectionNode();
+                m_pDoc->GetNodes()[m_aHTMLControls[i]->nNdIdx]->StartOfSectionNode();
 
             if( xCurrentFormComps.is() )
             {
@@ -338,10 +338,10 @@ void SwHTMLWriter::OutHiddenForms()
 {
     // Without DrawModel there can't be controls. Then you also can't access the
     // document via UNO, because otherwise a DrawModel would be created.
-    if( !pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
+    if( !m_pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
         return;
 
-    SwDocShell *pDocSh = pDoc->GetDocShell();
+    SwDocShell *pDocSh = m_pDoc->GetDocShell();
     if( !pDocSh )
         return;
 
@@ -783,7 +783,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             if( !*b1 )
             {
                 Size aSz( 0, 0 );
-                GetControlSize( rFormObj, aSz, rWrt.pDoc );
+                GetControlSize( rFormObj, aSz, rWrt.m_pDoc );
 
                 // How many are visible ??
                 if( aSz.Height() )
@@ -807,7 +807,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     case form::FormComponentType::TEXTFIELD:
         {
             Size aSz( 0, 0 );
-            GetControlSize( rFormObj, aSz, rWrt.pDoc );
+            GetControlSize( rFormObj, aSz, rWrt.m_pDoc );
 
             bool bMultiLine = false;
             OUString sMultiLine("MultiLine");
@@ -897,7 +897,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     case form::FormComponentType::FILECONTROL:
         {
             Size aSz( 0, 0 );
-            GetControlSize( rFormObj, aSz, rWrt.pDoc );
+            GetControlSize( rFormObj, aSz, rWrt.m_pDoc );
             eType = TYPE_FILE;
 
             if( aSz.Width() )
@@ -1041,7 +1041,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
         bool bEdit = TAG_TEXTAREA == eTag || TYPE_FILE == eType ||
                      TYPE_TEXT == eType;
 
-        SfxItemSet aItemSet( rHTMLWrt.pDoc->GetAttrPool(), svl::Items<RES_CHRATR_BEGIN,
+        SfxItemSet aItemSet( rHTMLWrt.m_pDoc->GetAttrPool(), svl::Items<RES_CHRATR_BEGIN,
                              RES_CHRATR_END>{} );
         if( xPropSetInfo->hasPropertyByName( "BackgroundColor" ) )
         {
@@ -1336,7 +1336,7 @@ void SwHTMLWriter::GetControls()
     }
 
     // and now the ones in a character-bound frame
-    const SwFrameFormats* pSpzFrameFormats = pDoc->GetSpzFrameFormats();
+    const SwFrameFormats* pSpzFrameFormats = m_pDoc->GetSpzFrameFormats();
     for( size_t i=0; i<pSpzFrameFormats->size(); i++ )
     {
         const SwFrameFormat *pFrameFormat = (*pSpzFrameFormats)[i];

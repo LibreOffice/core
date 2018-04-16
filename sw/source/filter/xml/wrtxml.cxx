@@ -91,7 +91,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
                                                  SvXMLGraphicHelperMode::Write );
     xGraphicResolver = xGraphicHelper.get();
 
-    SfxObjectShell *pPersist = pDoc->GetPersist();
+    SfxObjectShell *pPersist = m_pDoc->GetPersist();
     if( pPersist )
     {
         xObjectHelper = SvXMLEmbeddedObjectHelper::Create(
@@ -161,7 +161,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     xInfoSet->setPropertyValue( "TargetStorage", Any( xStg ) );
 
     uno::Any aAny;
-    if (bShowProgress)
+    if (m_bShowProgress)
     {
         // set progress range and start status indicator
         sal_Int32 nProgressRange(1000000);
@@ -180,18 +180,18 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
 
     // save show redline mode ...
     const OUString sShowChanges("ShowChanges");
-    RedlineFlags nRedlineFlags = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+    RedlineFlags nRedlineFlags = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
     xInfoSet->setPropertyValue( sShowChanges,
         makeAny( IDocumentRedlineAccess::IsShowChanges( nRedlineFlags ) ) );
     // ... and hide redlines for export
     nRedlineFlags &= ~RedlineFlags::ShowMask;
     nRedlineFlags |= RedlineFlags::ShowInsert;
-    pDoc->getIDocumentRedlineAccess().SetRedlineFlags( nRedlineFlags );
+    m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags( nRedlineFlags );
 
     // Set base URI
     xInfoSet->setPropertyValue( "BaseURI", makeAny( GetBaseURL() ) );
 
-    if( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocShell()->GetCreateMode() )
+    if( SfxObjectCreateMode::EMBEDDED == m_pDoc->GetDocShell()->GetCreateMode() )
     {
         const OUString aName( !aDocHierarchicalName.isEmpty()
             ? aDocHierarchicalName
@@ -200,7 +200,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
         xInfoSet->setPropertyValue( "StreamRelPath", makeAny( aName ) );
     }
 
-    if( bBlock )
+    if( m_bBlock )
     {
         xInfoSet->setPropertyValue( "AutoTextMode", makeAny(true) );
     }
@@ -208,7 +208,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     // #i69627#
     const bool bOASIS = ( SotStorage::GetVersion( xStg ) > SOFFICE_FILEFORMAT_60 );
     if ( bOASIS &&
-         docfunc::HasOutlineStyleToBeWrittenAsNormalListStyle( *pDoc ) )
+         docfunc::HasOutlineStyleToBeWrittenAsNormalListStyle( *m_pDoc ) )
     {
         xInfoSet->setPropertyValue( "OutlineStyleAsNormalListStyle", makeAny( true ) );
     }
@@ -245,7 +245,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
 
     //Get model
     uno::Reference< lang::XComponent > xModelComp(
-        pDoc->GetDocShell()->GetModel(), UNO_QUERY );
+        m_pDoc->GetDocShell()->GetModel(), UNO_QUERY );
     OSL_ENSURE( xModelComp.is(), "XMLWriter::Write: got no model" );
     if( !xModelComp.is() )
         return ERR_SWG_WRITE_ERROR;
@@ -254,12 +254,12 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     PutEditEngFontsInAttrPool();
 
     // properties
-    Sequence < PropertyValue > aProps( pOrigFileName ? 1 : 0 );
-    if( pOrigFileName )
+    Sequence < PropertyValue > aProps( m_pOrigFileName ? 1 : 0 );
+    if( m_pOrigFileName )
     {
         PropertyValue *pProps = aProps.getArray();
         pProps->Name = "FileName";
-        pProps->Value <<= *pOrigFileName;
+        pProps->Value <<= *m_pOrigFileName;
     }
 
     // export sub streams for package, else full stream into a file
@@ -292,7 +292,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
         }
     }
 
-    bool bStoreMeta = ( SfxObjectCreateMode::EMBEDDED != pDoc->GetDocShell()->GetCreateMode() );
+    bool bStoreMeta = ( SfxObjectCreateMode::EMBEDDED != m_pDoc->GetDocShell()->GetCreateMode() );
     if ( !bStoreMeta )
     {
         try
@@ -311,7 +311,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     }
 
     OUString sWarnFile;
-    if( !bOrganizerMode && !bBlock && bStoreMeta )
+    if( !m_bOrganizerMode && !m_bBlock && bStoreMeta )
     {
         if( !WriteThroughComponent(
                 xModelComp, "meta.xml", xContext,
@@ -324,7 +324,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
         }
     }
 
-    if( !bBlock )
+    if( !m_bBlock )
     {
         if( !WriteThroughComponent(
             xModelComp, "settings.xml", xContext,
@@ -353,7 +353,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
         sErrFile = "styles.xml";
     }
 
-    if( !bOrganizerMode && !bErr )
+    if( !m_bOrganizerMode && !bErr )
     {
         if( !WriteThroughComponent(
                 xModelComp, "content.xml", xContext,
@@ -366,8 +366,8 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
         }
     }
 
-    if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() && pDoc->getIDocumentStatistics().GetDocStat().nPage > 1 &&
-        !(bOrganizerMode || bBlock || bErr) )
+    if( m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() && m_pDoc->getIDocumentStatistics().GetDocStat().nPage > 1 &&
+        !(m_bOrganizerMode || m_bBlock || bErr) )
     {
         try
         {
@@ -379,7 +379,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
                 uno::Any aAny2;
                 aAny2 <<= OUString("application/binary");
                 xSet->setPropertyValue("MediaType", aAny2 );
-                pDoc->WriteLayoutCache( *pStream );
+                m_pDoc->WriteLayoutCache( *pStream );
             }
 
             delete pStream;
@@ -401,12 +401,12 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
 
     // restore redline mode
     aAny = xInfoSet->getPropertyValue( sShowChanges );
-    nRedlineFlags = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+    nRedlineFlags = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
     nRedlineFlags &= ~RedlineFlags::ShowMask;
     nRedlineFlags |= RedlineFlags::ShowInsert;
     if ( *o3tl::doAccess<bool>(aAny) )
         nRedlineFlags |= RedlineFlags::ShowDelete;
-    pDoc->getIDocumentRedlineAccess().SetRedlineFlags( nRedlineFlags );
+    m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags( nRedlineFlags );
 
     if (xStatusIndicator.is())
     {

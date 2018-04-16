@@ -320,9 +320,9 @@ ErrCode SwXMLTextBlocks::PutBlock()
     ::GetXMLWriter ( OUString(), GetBaseURL(), xWrt);
     SwWriter aWriter (xRoot, *m_xDoc );
 
-    xWrt->bBlock = true;
+    xWrt->m_bBlock = true;
     nRes = aWriter.Write ( xWrt );
-    xWrt->bBlock = false;
+    xWrt->m_bBlock = false;
     // Save OLE objects if there are some
     SwDocShell *pDocSh = m_xDoc->GetDocShell();
 

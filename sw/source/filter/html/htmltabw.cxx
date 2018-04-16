@@ -270,7 +270,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
 
         // determine the type of cell (TD/TH)
         SwNode* pNd;
-        while( !( pNd = rWrt.pDoc->GetNodes()[nNdPos])->IsEndNode() )
+        while( !( pNd = rWrt.m_pDoc->GetNodes()[nNdPos])->IsEndNode() )
         {
             if( pNd->IsTextNode() )
             {
@@ -442,7 +442,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     if( bNumFormat || bValue )
     {
         sOut.append(HTMLOutFuncs::CreateTableDataOptionsValNum(bValue, nValue,
-            nNumFormat, *rWrt.pDoc->GetNumberFormatter(), rWrt.m_eDestEnc,
+            nNumFormat, *rWrt.m_pDoc->GetNumberFormatter(), rWrt.m_eDestEnc,
             &rWrt.m_aNonConvertableCharacters));
     }
     sOut.append('>');
@@ -455,7 +455,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     {
         HTMLSaveData aSaveData( rWrt, pSttNd->GetIndex()+1,
                                 pSttNd->EndOfSectionIndex() );
-        rWrt.Out_SwDoc( rWrt.pCurPam );
+        rWrt.Out_SwDoc( rWrt.m_pCurrentPam );
     }
     else
     {
@@ -1079,7 +1079,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
 
 #ifdef DBG_UTIL
     {
-    SwViewShell *pSh = rWrt.pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell *pSh = rWrt.m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     if ( pSh && pSh->GetViewOptions()->IsTest1() )
         pLayout = nullptr;
     }
@@ -1117,7 +1117,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     }
 
     // move Pam behind the table
-    rHTMLWrt.pCurPam->GetPoint()->nNode = *rNode.EndOfSectionNode();
+    rHTMLWrt.m_pCurrentPam->GetPoint()->nNode = *rNode.EndOfSectionNode();
 
     if( bPreserveForm )
     {

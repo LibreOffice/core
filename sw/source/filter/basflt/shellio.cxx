@@ -812,7 +812,7 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
         }
     }
 
-    rxWriter->bWriteAll = bWriteAll;
+    rxWriter->m_bWriteAll = bWriteAll;
     SwDoc* pOutDoc = xDoc.is() ? xDoc.get() : &rDoc;
 
     // If the default PageDesc has still the initial value,

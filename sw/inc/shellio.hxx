@@ -357,8 +357,8 @@ class IDocumentStylePoolAccess;
 class SW_DLLPUBLIC Writer
     : public SvRefBase
 {
-    SwAsciiOptions aAscOpts;
-    OUString       sBaseURL;
+    SwAsciiOptions m_aAsciiOptions;
+    OUString       m_sBaseURL;
 
     void AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont );
     void AddFontItems_( SfxItemPool& rPool, sal_uInt16 nWhichId );
@@ -370,7 +370,7 @@ class SW_DLLPUBLIC Writer
 
 protected:
 
-    const OUString* pOrigFileName;
+    const OUString* m_pOrigFileName;
 
     void ResetWriter();
     bool CopyNextPam( SwPaM ** );
@@ -379,7 +379,7 @@ protected:
     void PutEditEngFontsInAttrPool();
 
     virtual ErrCode WriteStream() = 0;
-    void                SetBaseURL( const OUString& rURL ) { sBaseURL = rURL; }
+    void                SetBaseURL( const OUString& rURL ) { m_sBaseURL = rURL; }
 
     IDocumentSettingAccess& getIDocumentSettingAccess();
     const IDocumentSettingAccess& getIDocumentSettingAccess() const;
@@ -388,21 +388,21 @@ protected:
     const IDocumentStylePoolAccess& getIDocumentStylePoolAccess() const;
 
 public:
-    SwDoc* pDoc;
-    SwPaM* pOrigPam;            // Last Pam that has to be processed.
-    SwPaM* pCurPam;
-    bool bWriteAll : 1;
-    bool bShowProgress : 1;
-    bool bWriteClipboardDoc : 1;
-    bool bWriteOnlyFirstTable : 1;
-    bool bASCII_ParaAsCR : 1;
-    bool bASCII_ParaAsBlanc : 1;
-    bool bASCII_NoLastLineEnd : 1;
-    bool bUCS2_WithStartChar : 1;
-    bool bExportPargraphNumbering : 1;
+    SwDoc* m_pDoc;
+    SwPaM* m_pOrigPam;            // Last Pam that has to be processed.
+    SwPaM* m_pCurrentPam;
+    bool m_bWriteAll : 1;
+    bool m_bShowProgress : 1;
+    bool m_bWriteClipboardDoc : 1;
+    bool m_bWriteOnlyFirstTable : 1;
+    bool m_bASCII_ParaAsCR : 1;
+    bool m_bASCII_ParaAsBlank : 1;
+    bool m_bASCII_NoLastLineEnd : 1;
+    bool m_bUCS2_WithStartChar : 1;
+    bool m_bExportPargraphNumbering : 1;
 
-    bool bBlock : 1;
-    bool bOrganizerMode : 1;
+    bool m_bBlock : 1;
+    bool m_bOrganizerMode : 1;
 
     Writer();
     virtual ~Writer() override;
@@ -416,14 +416,14 @@ public:
 
     virtual bool IsStgWriter() const;
 
-    void SetShowProgress( bool bFlag )  { bShowProgress = bFlag; }
+    void SetShowProgress( bool bFlag )  { m_bShowProgress = bFlag; }
 
-    const OUString* GetOrigFileName() const       { return pOrigFileName; }
+    const OUString* GetOrigFileName() const       { return m_pOrigFileName; }
 
-    const SwAsciiOptions& GetAsciiOptions() const { return aAscOpts; }
-    void SetAsciiOptions( const SwAsciiOptions& rOpt ) { aAscOpts = rOpt; }
+    const SwAsciiOptions& GetAsciiOptions() const { return m_aAsciiOptions; }
+    void SetAsciiOptions( const SwAsciiOptions& rOpt ) { m_aAsciiOptions = rOpt; }
 
-    const OUString& GetBaseURL() const { return sBaseURL;}
+    const OUString& GetBaseURL() const { return m_sBaseURL;}
 
     // Look up next bookmark position from bookmark-table.
     sal_Int32 FindPos_Bkmk( const SwPosition& rPos ) const;
@@ -451,7 +451,7 @@ public:
     void SetStream(SvStream *const pStream);
     SvStream& Strm();
 
-    void SetOrganizerMode( bool bSet ) { bOrganizerMode = bSet; }
+    void SetOrganizerMode( bool bSet ) { m_bOrganizerMode = bSet; }
 };
 
 typedef tools::SvRef<Writer> WriterRef;

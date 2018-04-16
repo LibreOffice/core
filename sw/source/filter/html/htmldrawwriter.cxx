@@ -130,7 +130,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
 {
     SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
-    OSL_ENSURE( rWrt.pDoc->getIDocumentDrawModelAccess().GetDrawModel(),
+    OSL_ENSURE( rWrt.m_pDoc->getIDocumentDrawModelAccess().GetDrawModel(),
             "There is a Draw-Obj with no Draw-Model?" );
     const SdrTextObj *pTextObj = static_cast<const SdrTextObj *>(&rSdrObject);
 
