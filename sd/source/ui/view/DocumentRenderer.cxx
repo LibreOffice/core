@@ -952,7 +952,7 @@ namespace {
 
             // Collect the page objects of the handout master.
             std::vector<SdrPageObj*> aHandoutPageObjects;
-            SdrObjListIter aShapeIter (rHandoutPage);
+            SdrObjListIter aShapeIter (&rHandoutPage);
             while (aShapeIter.IsMore())
             {
                 SdrPageObj* pPageObj = dynamic_cast<SdrPageObj*>(aShapeIter.Next());
@@ -1803,7 +1803,7 @@ private:
 
         // Count page shapes.
         sal_uInt32 nShapeCount (0);
-        SdrObjListIter aShapeIter (rHandoutPage);
+        SdrObjListIter aShapeIter (&rHandoutPage);
         while (aShapeIter.IsMore())
         {
             SdrPageObj* pPageObj = dynamic_cast<SdrPageObj*>(aShapeIter.Next());

@@ -431,8 +431,8 @@ SwVirtFlyDrawObj::SwVirtFlyDrawObj(
 
 SwVirtFlyDrawObj::~SwVirtFlyDrawObj()
 {
-    if ( GetPage() )    //Withdraw SdrPage the responsibility.
-        GetPage()->RemoveObject( GetOrdNum() );
+    if ( getSdrPageFromSdrObject() )    //Withdraw SdrPage the responsibility.
+        getSdrPageFromSdrObject()->RemoveObject( GetOrdNum() );
 }
 
 const SwFrameFormat *SwVirtFlyDrawObj::GetFormat() const

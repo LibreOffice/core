@@ -150,7 +150,7 @@ void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xSha
         throw uno::RuntimeException();
 
     SdrObject* pSdrShape = pShape->GetSdrObject();
-    if(pSdrShape == nullptr || pSdrShape->getParentOfSdrObject()->GetOwnerObj() != GetSdrObject())
+    if(pSdrShape == nullptr || pSdrShape->getParentOfSdrObject()->getSdrObjectFromSdrObjList() != GetSdrObject())
     {
         throw uno::RuntimeException();
     }
@@ -280,7 +280,7 @@ bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             aSceneTAR.maRect = pScene->GetSnapRect();
 
             // rescue object transformations
-            SdrObjListIter aIter(*pScene->GetSubList(), SdrIterMode::DeepWithGroups);
+            SdrObjListIter aIter(pScene->GetSubList(), SdrIterMode::DeepWithGroups);
             std::vector<basegfx::B3DHomMatrix*> aObjTrans;
             while(aIter.IsMore())
             {

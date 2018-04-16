@@ -60,7 +60,7 @@ SdrOle2Obj* ScClient::GetDrawObj()
     for (sal_uInt16 nPNr=0; nPNr<nPages && !pOle2Obj; nPNr++)
     {
         SdrPage* pPage = pModel->GetPage(nPNr);
-        SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
+        SdrObjListIter aIter( pPage, SdrIterMode::DeepNoGroups );
         SdrObject* pObject = aIter.Next();
         while (pObject && !pOle2Obj)
         {

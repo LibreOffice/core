@@ -1017,7 +1017,7 @@ void FuText::Deactivate()
 void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
 {
     SdrPageView* pPV = mpView->GetSdrPageView();
-    if( mxTextObj.is() && (mxTextObj->GetPage() == pPV->GetPage()) )
+    if( mxTextObj.is() && (mxTextObj->getSdrPageFromSdrObject() == pPV->GetPage()) )
     {
         mpView->SetCurrentObj(OBJ_TEXT);
 
@@ -1150,7 +1150,7 @@ void FuText::DeleteDefaultText()
 {
     if ( mxTextObj.is() && mxTextObj->IsEmptyPresObj() )
     {
-        SdPage* pPage = static_cast<SdPage*>( mxTextObj->GetPage() );
+        SdPage* pPage = static_cast<SdPage*>( mxTextObj->getSdrPageFromSdrObject() );
 
         if (pPage)
         {

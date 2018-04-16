@@ -70,7 +70,8 @@ public:
     SAL_DLLPRIVATE void ClearObjEnv();
 
 public:
-    SAL_DLLPRIVATE virtual void SetPage(SdrPage* pNewPage) override;
+    // react on page change
+    virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage) override;
 
     SAL_DLLPRIVATE virtual SdrInventor GetObjInventor() const override;
     SAL_DLLPRIVATE virtual sal_uInt16 GetObjIdentifier() const override;

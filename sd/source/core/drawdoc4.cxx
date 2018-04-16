@@ -789,7 +789,7 @@ void SdDrawDocument::StartOnlineSpelling(bool bForceSpelling)
 // Fill OnlineSpelling list
 void SdDrawDocument::FillOnlineSpellingList(SdPage const * pPage)
 {
-    SdrObjListIter aIter(*pPage, SdrIterMode::Flat);
+    SdrObjListIter aIter(pPage, SdrIterMode::Flat);
 
     while (aIter.IsMore())
     {
@@ -806,8 +806,7 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage const * pPage)
         else if (pObj->GetObjIdentifier() == OBJ_GRUP)
         {
             // Found a group object
-            SdrObjListIter aGroupIter(*static_cast<SdrObjGroup*>(pObj)->GetSubList(),
-                                      SdrIterMode::DeepNoGroups);
+            SdrObjListIter aGroupIter(static_cast< SdrObjGroup* >(pObj)->GetSubList(), SdrIterMode::DeepNoGroups);
 
             bool bSubTextObjFound = false;
 
@@ -847,8 +846,7 @@ IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl, Timer *, void)
             else if (pObj->GetObjIdentifier() == OBJ_GRUP)
             {
                 // Found a group object
-                SdrObjListIter aGroupIter(*static_cast<SdrObjGroup*>(pObj)->GetSubList(),
-                                          SdrIterMode::DeepNoGroups);
+                SdrObjListIter aGroupIter(static_cast< SdrObjGroup* >(pObj)->GetSubList(), SdrIterMode::DeepNoGroups);
 
 
                 while (aGroupIter.IsMore())

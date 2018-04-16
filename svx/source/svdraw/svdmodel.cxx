@@ -2061,7 +2061,7 @@ SdrHint::SdrHint(SdrHintKind eNewHint)
 SdrHint::SdrHint(SdrHintKind eNewHint, const SdrObject& rNewObj)
 :   meHint(eNewHint),
     mpObj(&rNewObj),
-    mpPage(rNewObj.GetPage())
+    mpPage(rNewObj.getSdrPageFromSdrObject())
 {
 }
 

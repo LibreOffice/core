@@ -484,8 +484,8 @@ SwFlyDrawContact::~SwFlyDrawContact()
     if ( mpMasterObj )
     {
         mpMasterObj->SetUserCall( nullptr );
-        if ( mpMasterObj->GetPage() )
-            mpMasterObj->GetPage()->RemoveObject( mpMasterObj->GetOrdNum() );
+        if ( mpMasterObj->getSdrPageFromSdrObject() )
+            mpMasterObj->getSdrPageFromSdrObject()->RemoveObject( mpMasterObj->GetOrdNum() );
     }
 }
 
@@ -531,7 +531,7 @@ SwVirtFlyDrawObj* SwFlyDrawContact::CreateNewRef(SwFlyFrame* pFly, SwFlyFrameFor
     // After creating the first Reference the Masters are removed from the
     // List and are not important anymore.
     SdrPage* pPg(nullptr);
-    if(nullptr != (pPg = pContact->GetMaster()->GetPage()))
+    if(nullptr != (pPg = pContact->GetMaster()->getSdrPageFromSdrObject()))
     {
         const size_t nOrdNum = pContact->GetMaster()->GetOrdNum();
         pPg->ReplaceObject(pDrawObj, nOrdNum);
@@ -2232,14 +2232,14 @@ void SwDrawVirtObj::AddToDrawingPage()
     // insert 'virtual' drawing object into page, set layer and user call.
     SdrPage* pDrawPg;
     // #i27030# - apply order number of referenced object
-    if ( nullptr != ( pDrawPg = pOrgMasterSdrObj->GetPage() ) )
+    if ( nullptr != ( pDrawPg = pOrgMasterSdrObj->getSdrPageFromSdrObject() ) )
     {
         // #i27030# - apply order number of referenced object
         pDrawPg->InsertObject( this, GetReferencedObj().GetOrdNum() );
     }
     else
     {
-        pDrawPg = GetPage();
+        pDrawPg = getSdrPageFromSdrObject();
         if ( pDrawPg )
         {
             pDrawPg->SetObjectOrdNum( GetOrdNumDirect(),
@@ -2256,9 +2256,9 @@ void SwDrawVirtObj::AddToDrawingPage()
 void SwDrawVirtObj::RemoveFromDrawingPage()
 {
     SetUserCall( nullptr );
-    if ( GetPage() )
+    if ( getSdrPageFromSdrObject() )
     {
-        GetPage()->RemoveObject( GetOrdNum() );
+        getSdrPageFromSdrObject()->RemoveObject( GetOrdNum() );
     }
 }
 
@@ -2266,7 +2266,7 @@ void SwDrawVirtObj::RemoveFromDrawingPage()
 bool SwDrawVirtObj::IsConnected() const
 {
     bool bRetVal = GetAnchorFrame() &&
-                   ( GetPage() && GetUserCall() );
+                   ( getSdrPageFromSdrObject() && GetUserCall() );
 
     return bRetVal;
 }

@@ -1027,7 +1027,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
                     pBMView->EndListening(*pBookmarkDoc);
                 }
 
-                pPage = pObj->GetPage();
+                pPage = pObj->getSdrPageFromSdrObject();
 
                 if (pPage->IsMasterPage())
                 {

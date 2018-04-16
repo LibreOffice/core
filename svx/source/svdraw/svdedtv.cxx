@@ -789,9 +789,9 @@ void SdrEditView::DeleteMarkedObj()
             for(size_t a = 0; a < nCount; ++a)
             {
                 // in the first run, add all found parents, but only once
-                SdrMark* pMark = rMarkList.GetMark(a);
-                SdrObject* pObject = pMark->GetMarkedSdrObj();
-                SdrObject* pParent = pObject->getParentOfSdrObject()->GetOwnerObj();
+                SdrMark* pMark(rMarkList.GetMark(a));
+                SdrObject* pObject(pMark->GetMarkedSdrObj());
+                SdrObject* pParent(pObject->getParentOfSdrObject()->getSdrObjectFromSdrObjList());
 
                 if(pParent)
                 {

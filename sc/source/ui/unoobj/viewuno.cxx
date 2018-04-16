@@ -645,7 +645,7 @@ static void lcl_ShowObject( ScTabViewShell& rViewSh, const ScDrawView& rDrawView
         SdrPage* pPage = pModel->GetPage(i);
         if (pPage)
         {
-            SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
+            SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );
             SdrObject* pObject = aIter.Next();
             while (pObject && !bFound)
             {
@@ -776,7 +776,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                 {
                     lcl_ShowObject( *pViewSh, *pDrawView, pObj );
                     SdrPageView* pPV = pDrawView->GetSdrPageView();
-                    if ( pPV && pObj->GetPage() == pPV->GetPage() )
+                    if ( pPV && pObj->getSdrPageFromSdrObject() == pPV->GetPage() )
                     {
                         pDrawView->MarkObj( pObj, pPV );
                         bRet = true;
@@ -816,7 +816,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                                         lcl_ShowObject( *pViewSh, *pDrawView, pObj );
                                         pPV = pDrawView->GetSdrPageView();
                                     }
-                                    if ( pPV && pObj->GetPage() == pPV->GetPage() )
+                                    if ( pPV && pObj->getSdrPageFromSdrObject() == pPV->GetPage() )
                                     {
                                         if (pDrawView->IsObjMarkable( pObj, pPV ))
                                             pDrawView->MarkObj( pObj, pPV );

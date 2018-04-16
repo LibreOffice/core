@@ -518,7 +518,7 @@ namespace
         Color& rCol)
     {
         bool bRet(false);
-        bool bMaster(rList.GetPage() && rList.GetPage()->IsMasterPage());
+        bool bMaster(rList.getSdrPageFromSdrObjList() && rList.getSdrPageFromSdrObjList()->IsMasterPage());
 
         for(size_t no(rList.GetObjCount()); !bRet && no > 0; )
         {

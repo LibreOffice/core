@@ -197,7 +197,8 @@ public:
 
     bool                    HasGDIMetaFile() const;
 
-    virtual void            SetPage(SdrPage* pNewPage) override;
+    // react on model/page change
+    virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage) override;
 
     bool isEmbeddedVectorGraphicData() const;
     GDIMetaFile getMetafileFromEmbeddedVectorGraphicData() const;

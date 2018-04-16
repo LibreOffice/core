@@ -931,11 +931,11 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                             SdrObjList* pList = pNew->getParentOfSdrObject();
                             if ( pList )
                             {
-                                SdrObject* pOwner = pList->GetOwnerObj();
-                                if ( pOwner )
+                                SdrObjGroup* pOwner(dynamic_cast< SdrObjGroup* >(pList->getSdrObjectFromSdrObjList()));
+
+                                if(nullptr != pOwner)
                                 {
-                                    SdrObjGroup* pThisGroup = dynamic_cast<SdrObjGroup*>( pOwner );
-                                    aGrpAnchor = pThisGroup->GetAnchorPos();
+                                    aGrpAnchor = pOwner->GetAnchorPos();
                                 }
                             }
 
@@ -1269,7 +1269,7 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel& _rModel )
     {
         // setup object iterator in order to iterate through all objects
         // including objects in group objects, but exclusive group objects.
-        SdrObjListIter aIter(*(_rModel.GetPage( nPgNum )));
+        SdrObjListIter aIter(_rModel.GetPage(nPgNum));
         while( aIter.IsMore() )
         {
             SdrOle2Obj* pOle2Obj = dynamic_cast< SdrOle2Obj* >( aIter.Next() );

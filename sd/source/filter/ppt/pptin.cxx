@@ -1841,7 +1841,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
         tAnimationVector aAnimationsOnThisPage;
 
         // add effects from page in correct order
-        SdrObjListIter aSdrIter( *pPage, SdrIterMode::Flat );
+        SdrObjListIter aSdrIter( pPage, SdrIterMode::Flat );
         while ( aSdrIter.IsMore() )
         {
             SdrObject* pObj = aSdrIter.Next();

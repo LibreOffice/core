@@ -691,12 +691,12 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
     DBG_TESTSOLARMUTEX();
     uno::Any aAny;
 
-    if( !HasSdrObject() || !GetSdrObject()->IsInserted() || nullptr == GetSdrObject()->GetPage() )
+    if( !HasSdrObject() || !GetSdrObject()->IsInserted() || nullptr == GetSdrObject()->getSdrPageFromSdrObject() )
         return aAny;
 
     ScopedVclPtrInstance< VirtualDevice > pVDev;
     pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
-    SdrPage* pPage = GetSdrObject()->GetPage();
+    SdrPage* pPage = GetSdrObject()->getSdrPageFromSdrObject();
 
     std::unique_ptr<E3dView> pView(
         new E3dView(
@@ -1344,13 +1344,13 @@ void SAL_CALL SvxShape::dispose()
         EndListening( pObject->getSdrModelFromSdrObject() );
         bool bFreeSdrObject = false;
 
-        if ( pObject->IsInserted() && pObject->GetPage() )
+        if ( pObject->IsInserted() && pObject->getSdrPageFromSdrObject() )
         {
             OSL_ENSURE( HasSdrObjectOwnership(), "SvxShape::dispose: is the below code correct?" );
                 // normally, we are allowed to free the SdrObject only if we have its ownership.
                 // Why isn't this checked here?
 
-            SdrPage* pPage = pObject->GetPage();
+            SdrPage* pPage = pObject->getSdrPageFromSdrObject();
             // delete the SdrObject from the page
             const size_t nCount = pPage->GetObjCount();
             for ( size_t nNum = 0; nNum < nCount; ++nNum )
@@ -3739,28 +3739,47 @@ uno::Reference< container::XIndexContainer > SAL_CALL SvxShape::getGluePoints()
 uno::Reference<uno::XInterface> SAL_CALL SvxShape::getParent()
 {
     ::SolarMutexGuard aGuard;
+    const SdrObject* pSdrObject(GetSdrObject());
 
-    if( HasSdrObject() && GetSdrObject()->getParentOfSdrObject() )
+    if(nullptr != pSdrObject)
     {
-        SdrObjList* pObjList = GetSdrObject()->getParentOfSdrObject();
+        const SdrObjList* pParentSdrObjList(GetSdrObject()->getParentOfSdrObject());
 
-        switch (pObjList->GetListKind())
+        if(nullptr != pParentSdrObjList)
         {
-            case SdrObjListKind::GroupObj:
-                if (SdrObjGroup *pGroup = dynamic_cast<SdrObjGroup*>(pObjList->GetOwnerObj()))
-                    return pGroup->getUnoShape();
-                else if (E3dScene *pScene = dynamic_cast<E3dScene*>(pObjList->GetOwnerObj()))
-                    return pScene->getUnoShape();
-                break;
-            case SdrObjListKind::DrawPage:
-            case SdrObjListKind::MasterPage:
-                return dynamic_cast<SdrPage&>(*pObjList).getUnoPage();
-            default:
-                OSL_FAIL( "SvxShape::getParent(  ): unexpected SdrObjListKind" );
-                break;
+            // SdrObject is member of a SdrObjList. That may be a SdrObject
+            // (SdrObjGroup or E3dScene) or a SdrPage.
+            // Check for SdrObject first - using getSdrPageFromSdrObjList
+            // *will* get the SdrPage even when the SdrObject is deep buried
+            // in a construct of SdrObjGroup.
+            // We want to ask for the direct parent here...
+            SdrObject* pParentSdrObject(pParentSdrObjList->getSdrObjectFromSdrObjList());
+
+            if(nullptr != pParentSdrObject)
+            {
+                // SdrObject is member of a SdrObject-based Group (SdrObjGroup or E3dScene).
+                return pParentSdrObject->getUnoShape();
+            }
+            else
+            {
+                SdrPage* pParentSdrPage(pParentSdrObjList->getSdrPageFromSdrObjList());
+
+                if(nullptr != pParentSdrPage)
+                {
+                    // SdrObject is inserted to a SdrPage. Since
+                    // we checked for getSdrObjectFromSdrObjList first,
+                    // we can even say that it is directly member of that
+                    // SdrPage.
+                    return pParentSdrPage->getUnoPage();
+                }
+            }
+
+            // not member of any SdrObjList, no parent
+            OSL_FAIL( "SvxShape::getParent(  ): unexpected Parent SdrObjList" );
         }
     }
 
+    // no SdrObject, no parent
     return uno::Reference<uno::XInterface>();
 }
 

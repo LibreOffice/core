@@ -485,8 +485,8 @@ uno::Reference< awt::XControl > SdrUnoObj::GetUnoControl(const SdrView& _rView, 
     uno::Reference< awt::XControl > xControl;
 
     SdrPageView* pPageView = _rView.GetSdrPageView();
-    OSL_ENSURE( pPageView && GetPage() == pPageView->GetPage(), "SdrUnoObj::GetUnoControl: This object is not displayed in that particular view!" );
-    if ( !pPageView || GetPage() != pPageView->GetPage() )
+    OSL_ENSURE( pPageView && getSdrPageFromSdrObject() == pPageView->GetPage(), "SdrUnoObj::GetUnoControl: This object is not displayed in that particular view!" );
+    if ( !pPageView || getSdrPageFromSdrObject() != pPageView->GetPage() )
         return nullptr;
 
     SdrPageWindow* pPageWindow = pPageView->FindPageWindow( _rOut );

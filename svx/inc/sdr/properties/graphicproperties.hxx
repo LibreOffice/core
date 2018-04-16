@@ -30,6 +30,9 @@ namespace sdr
         class GraphicProperties : public RectangleProperties
         {
         protected:
+            // apply the correct SfyStyleSheet from SdrObject's SdrModel
+            virtual void applyDefaultStyleSheetFromSdrModel() override;
+
             // create a new itemset
             virtual std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 

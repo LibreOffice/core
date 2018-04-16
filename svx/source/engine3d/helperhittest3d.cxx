@@ -162,7 +162,7 @@ void getAllHit3DObjectsSortedFrontToBack(
     o_rResult.clear();
     SdrObjList* pList = rScene.GetSubList();
 
-    if(pList && pList->GetObjCount())
+    if(nullptr != pList && 0 != pList->GetObjCount())
     {
         // prepare relative HitPoint. To do so, get the VC of the 3DScene and from there
         // the Scene's 2D transformation. Multiplying with the inverse transformation
@@ -175,7 +175,7 @@ void getAllHit3DObjectsSortedFrontToBack(
         // check if test point is inside scene's area at all
         if(aRelativePoint.getX() >= 0.0 && aRelativePoint.getX() <= 1.0 && aRelativePoint.getY() >= 0.0 && aRelativePoint.getY() <= 1.0)
         {
-            SdrObjListIter aIterator(*pList, SdrIterMode::DeepNoGroups);
+            SdrObjListIter aIterator(pList, SdrIterMode::DeepNoGroups);
             ::std::vector< ImplPairDephAndObject > aDepthAndObjectResults;
             const uno::Sequence< beans::PropertyValue > aEmptyParameters;
             drawinglayer::geometry::ViewInformation3D aViewInfo3D(aEmptyParameters);

@@ -331,7 +331,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                             // New: double click on selected Group object
                             // enter group
                             if ( ! bSelectionOnly
-                                && pObj->GetPage() == pPV->GetPage())
+                                && pObj->getSdrPageFromSdrObject() == pPV->GetPage())
                                 bReturn = pPV->EnterGroup(pObj);
                         }
                     }
@@ -339,7 +339,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                 // #i71727# replaced else here with two possibilities, once the original else (!pObj)
                 // and also ignoring the found object when it's on a masterpage
-                if(!pObj || (pObj->GetPage() && pObj->GetPage()->IsMasterPage()))
+                if(!pObj || (pObj->getSdrPageFromSdrObject() && pObj->getSdrPageFromSdrObject()->IsMasterPage()))
                 {
                     if(mpView->IsGroupEntered() && 2 == rMEvt.GetClicks())
                     {

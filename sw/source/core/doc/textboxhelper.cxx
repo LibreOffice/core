@@ -214,7 +214,7 @@ uno::Any SwTextBoxHelper::getByIndex(SdrPage const* pPage, sal_Int32 nIndex)
 
 sal_Int32 SwTextBoxHelper::getOrdNum(const SdrObject* pObject)
 {
-    if (const SdrPage* pPage = pObject->GetPage())
+    if (const SdrPage* pPage = pObject->getSdrPageFromSdrObject())
     {
         sal_Int32 nOrder = 0; // Current logical order.
         for (std::size_t i = 0; i < pPage->GetObjCount(); ++i)
