@@ -16,6 +16,24 @@
       "revId": "bdd8c928f66d60940aa74aea06f7e68e7c570a48",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_fedb57eb",
+        "filename": "dbaccess/source/ui/querydesign/QueryDesignView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T12:39:23Z",
+      "side": 1,
+      "message": "Got it!",
+      "parentUuid": "9a30ddce_bed1dfcf",
+      "revId": "bdd8c928f66d60940aa74aea06f7e68e7c570a48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
