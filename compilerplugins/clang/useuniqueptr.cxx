@@ -42,6 +42,9 @@ public:
         // this just too clever for me
         if (fn == SRCDIR "/sc/source/core/tool/chgtrack.cxx")
             return;
+        // too clever
+        if (fn == SRCDIR "/pyuno/source/module/pyuno_runtime.cxx")
+            return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
