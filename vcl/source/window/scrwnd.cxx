@@ -71,7 +71,7 @@ ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
         ImplSetWheelMode( WheelMode::V );
 
     // init timer
-    mpTimer = new Timer("WheelWindowTimer");
+    mpTimer.reset(new Timer("WheelWindowTimer"));
     mpTimer->SetInvokeHandler( LINK( this, ImplWheelWindow, ImplScrollHdl ) );
     mpTimer->SetTimeout( mnTimeout );
     mpTimer->Start();
@@ -87,9 +87,7 @@ ImplWheelWindow::~ImplWheelWindow()
 void ImplWheelWindow::dispose()
 {
     ImplStop();
-    delete mpTimer;
-    mpTimer = nullptr;
-
+    mpTimer.reset();
     FloatingWindow::dispose();
 }
 
