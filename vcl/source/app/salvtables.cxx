@@ -1065,6 +1065,16 @@ public:
         m_xEntry->SetReadOnly(!bEditable);
     }
 
+    virtual vcl::Font get_font() override
+    {
+        return m_xEntry->GetFont();
+    }
+
+    virtual void set_font(const vcl::Font& rFont) override
+    {
+        m_xEntry->SetFont(rFont);
+    }
+
     virtual ~SalInstanceEntry() override
     {
         m_xEntry->SetTextFilter(nullptr);

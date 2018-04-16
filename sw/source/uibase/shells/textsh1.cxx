@@ -564,7 +564,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialog creation failed!");
             ScopedVclPtr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
-                GetView().GetWindow(), rWrtSh));
+                GetView().GetFrameWeld(), rWrtSh));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(nSlot)->GetCommand());
             if ( pDlg->Execute() == RET_OK )
@@ -647,7 +647,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 assert(pFact && "SwAbstractDialogFactory fail!");
-                ScopedVclPtr<AbstractSwBreakDlg> pDlg(pFact->CreateSwBreakDlg(GetView().GetWindow()->GetFrameWeld(), rWrtSh));
+                ScopedVclPtr<AbstractSwBreakDlg> pDlg(pFact->CreateSwBreakDlg(GetView().GetFrameWeld(), rWrtSh));
                 assert(pDlg && "Dialog creation failed!");
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -740,7 +740,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             ScopedVclPtr<AbstractSwModalRedlineAcceptDlg> pDlg(pFact->CreateSwModalRedlineAcceptDlg(&GetView().GetEditWin()));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
 
-            switch (lcl_AskRedlineFlags(GetView().GetEditWin().GetFrameWeld()))
+            switch (lcl_AskRedlineFlags(GetView().GetFrameWeld()))
             {
                 case RET_OK:
                 {

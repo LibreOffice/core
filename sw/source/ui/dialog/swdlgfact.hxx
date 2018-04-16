@@ -354,7 +354,14 @@ class AbstractFieldInputDlg_Impl : public AbstractFieldInputDlg
 class SwInsFootNoteDlg;
 class AbstractInsFootNoteDlg_Impl : public AbstractInsFootNoteDlg
 {
-    DECL_ABSTDLG_BASE(AbstractInsFootNoteDlg_Impl,SwInsFootNoteDlg)
+protected:
+    std::unique_ptr<SwInsFootNoteDlg> m_xDlg;
+public:
+    explicit AbstractInsFootNoteDlg_Impl(SwInsFootNoteDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual OUString        GetFontName() override;
     virtual bool            IsEndNote() override;
     virtual OUString        GetStr() override;
@@ -563,7 +570,7 @@ public:
     virtual VclPtr<AbstractFieldInputDlg>        CreateFieldInputDlg(vcl::Window *pParent,
         SwWrtShell &rSh, SwField* pField, bool bPrevButton, bool bNextButton) override;
     virtual VclPtr<AbstractInsFootNoteDlg>     CreateInsFootNoteDlg(
-        vcl::Window * pParent, SwWrtShell &rSh, bool bEd = false) override;
+        weld::Window * pParent, SwWrtShell &rSh, bool bEd = false) override;
     virtual VclPtr<VclAbstractDialog>         CreateTitlePageDlg ( vcl::Window * pParent ) override;
     virtual VclPtr<VclAbstractDialog>         CreateVclSwViewDialog(SwView& rView) override;
     virtual VclPtr<AbstractInsTableDlg>        CreateInsTableDlg(SwView& rView) override;

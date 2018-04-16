@@ -2775,6 +2775,11 @@ static inline ::Color getColor( const GdkRGBA& rCol )
 static vcl::Font getFont(GtkStyleContext* pStyle, const css::lang::Locale& rLocale)
 {
     const PangoFontDescription* font = gtk_style_context_get_font(pStyle, gtk_style_context_get_state(pStyle));
+    return pango_to_vcl(font, rLocale);
+}
+
+vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale& rLocale)
+{
     OString    aFamily        = pango_font_description_get_family( font );
     int nPangoHeight    = pango_font_description_get_size( font );
     PangoStyle    eStyle    = pango_font_description_get_style( font );

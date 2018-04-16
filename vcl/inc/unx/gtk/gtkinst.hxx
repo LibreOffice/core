@@ -43,6 +43,8 @@ class GtkPrintWrapper;
 }
 }
 
+vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale& rLocale);
+
 class GenPspGraphics;
 class GtkYieldMutex : public SalYieldMutex
 {

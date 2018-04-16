@@ -409,6 +409,9 @@ public:
     virtual void set_position(int nCursorPos) = 0;
     virtual void set_editable(bool bEditable) = 0;
 
+    virtual vcl::Font get_font() = 0;
+    virtual void set_font(const vcl::Font& rFont) = 0;
+
     void connect_changed(const Link<Entry&, void>& rLink) { m_aChangeHdl = rLink; }
 
     void connect_insert_text(const Link<OUString&, bool>& rLink) { m_aInsertTextHdl = rLink; }
