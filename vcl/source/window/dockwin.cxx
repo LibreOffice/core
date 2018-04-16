@@ -277,7 +277,7 @@ void DockingWindow::ImplInitDockingWindowData()
     mpWindowImpl->mbDockWin = true;
     mpFloatWin     = nullptr;
     mpOldBorderWin = nullptr;
-    mpImplData     = new ImplData;
+    mpImplData.reset(new ImplData);
     mnTrackX       = 0;
     mnTrackY       = 0;
     mnTrackWidth   = 0;
@@ -391,8 +391,7 @@ void DockingWindow::dispose()
         Show( false, ShowFlags::NoFocusChange );
         SetFloatingMode(false);
     }
-    delete mpImplData;
-    mpImplData = nullptr;
+    mpImplData.reset();
     mpFloatWin.clear();
     mpOldBorderWin.clear();
     mpDialogParent.clear();

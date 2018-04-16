@@ -214,7 +214,7 @@ class VCL_DLLPUBLIC DockingWindow
 private:
     VclPtr<FloatingWindow> mpFloatWin;
     VclPtr<vcl::Window>    mpOldBorderWin;
-    ImplData*       mpImplData;
+    std::unique_ptr<ImplData> mpImplData;
     Point           maFloatPos;
     Point           maDockPos;
     Point           maMouseOff;
