@@ -24,6 +24,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 #include <vector>
 
 struct ImplStatusItem;
@@ -59,8 +60,8 @@ class VCL_DLLPUBLIC StatusBar : public vcl::Window
 {
     class   ImplData;
 private:
-    std::vector<ImplStatusItem *> mpItemList;
-    ImplData*           mpImplData;
+    std::vector<std::unique_ptr<ImplStatusItem>> mvItemList;
+    std::unique_ptr<ImplData> mpImplData;
     OUString            maPrgsTxt;
     Point               maPrgsTxtPos;
     tools::Rectangle           maPrgsFrameRect;
