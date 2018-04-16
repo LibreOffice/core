@@ -48,7 +48,7 @@ SdrViewIter::SdrViewIter(const SdrObject* pObject)
 {
     mpObject = pObject;
     mpModel = pObject ? &pObject->getSdrModelFromSdrObject() : nullptr;
-    mpPage = pObject ? pObject->GetPage() : nullptr;
+    mpPage = pObject ? pObject->getSdrPageFromSdrObject() : nullptr;
 
     if(!mpModel || !mpPage)
     {

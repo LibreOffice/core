@@ -159,9 +159,6 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
                 if (pNewObj!=nullptr)
                 {
-                    // pNewObj->SetModel(pDrawModel);
-                    pNewObj->SetPage(pDestPage);
-
                     //  copy graphics within the same model - always needs new name
                     if ( dynamic_cast<const SdrGrafObj*>( pNewObj) !=  nullptr && !bPasteIsMove )
                         pNewObj->SetName(static_cast<ScDrawLayer*>(pDrawModel)->GetNewGraphicName());
@@ -232,7 +229,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         // controls must be on SC_LAYER_CONTROLS
         if (pPage)
         {
-            SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
+            SdrObjListIter aIter( pPage, SdrIterMode::DeepNoGroups );
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {

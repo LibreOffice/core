@@ -197,7 +197,7 @@ bool FuPoor::IsDetectiveHit( const Point& rLogicPos )
         return false;
 
     bool bFound = false;
-    SdrObjListIter aIter( *pPV->GetObjList(), SdrIterMode::Flat );
+    SdrObjListIter aIter( pPV->GetObjList(), SdrIterMode::Flat );
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
     {

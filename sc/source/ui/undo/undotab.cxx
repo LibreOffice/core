@@ -1455,7 +1455,7 @@ SdrObject* ScUndoRenameObject::GetObject()
             SdrPage* pPage = pDrawLayer->GetPage(nTab);
             assert(pPage && "Page ?");
 
-            SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
+            SdrObjListIter aIter( pPage, SdrIterMode::DeepNoGroups );
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {

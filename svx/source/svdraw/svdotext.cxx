@@ -452,19 +452,22 @@ bool SdrTextObj::HasTextImpl( SdrOutliner const * pOutliner )
     return bRet;
 }
 
-void SdrTextObj::SetPage(SdrPage* pNewPage)
+void SdrTextObj::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
 {
-    bool bRemove=pNewPage==nullptr && pPage!=nullptr;
-    bool bInsert=pNewPage!=nullptr && pPage==nullptr;
-    bool bLinked=IsLinkedText();
+    const bool bRemove(pNewPage == nullptr && pOldPage != nullptr);
+    const bool bInsert(pNewPage != nullptr && pOldPage == nullptr);
+    const bool bLinked(IsLinkedText());
 
-    if (bLinked && bRemove) {
+    if (bLinked && bRemove)
+    {
         ImpDeregisterLink();
     }
 
-    SdrAttrObj::SetPage(pNewPage);
+    // call parent
+    SdrAttrObj::handlePageChange(pOldPage, pNewPage);
 
-    if (bLinked && bInsert) {
+    if (bLinked && bInsert)
+    {
         ImpRegisterLink();
     }
 }
@@ -1949,7 +1952,7 @@ void ImpUpdateChainLinks(SdrTextObj *pTextObj, OUString const& aNextLinkName)
         return;
     }
 
-    SdrPage *pPage = pTextObj->GetPage();
+    SdrPage *pPage(pTextObj->getSdrPageFromSdrObject());
     assert(pPage);
     SdrTextObj *pNextTextObj = dynamic_cast< SdrTextObj * >
                                 (ImpGetObjByName(pPage, aNextLinkName));
