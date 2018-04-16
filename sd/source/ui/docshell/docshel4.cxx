@@ -767,7 +767,7 @@ void DrawDocShell::GotoBookmark(const OUString& rBookmark)
 
                 if (pObj)
                 {
-                    nPageNumber = pObj->GetPage()->GetPageNum();
+                    nPageNumber = pObj->getSdrPageFromSdrObject()->GetPageNum();
                 }
             }
         }

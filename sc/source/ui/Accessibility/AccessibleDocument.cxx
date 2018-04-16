@@ -409,8 +409,8 @@ void ScChildrenShapes::Notify(SfxBroadcaster&, const SfxHint& rHint)
     if (pSdrHint)
     {
         SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject());
-        if (pObj && /*(pObj->GetLayer() != SC_LAYER_INTERN) && */(pObj->GetPage() == GetDrawPage()) &&
-            (pObj->GetPage() == pObj->getParentOfSdrObject()) ) //only do something if the object lies direct on the page
+        if (pObj && /*(pObj->GetLayer() != SC_LAYER_INTERN) && */(pObj->getSdrPageFromSdrObject() == GetDrawPage()) &&
+            (pObj->getSdrPageFromSdrObject() == pObj->getParentOfSdrObject()) ) //only do something if the object lies direct on the page
         {
             switch (pSdrHint->GetKind())
             {

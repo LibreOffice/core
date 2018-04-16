@@ -1294,7 +1294,7 @@ void HtmlExport::WriteTable(OUStringBuffer& aStr, SdrTableObj const * pTableObje
 void HtmlExport::WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup const * pObjectGroup, SdrOutliner* pOutliner,
                                   const Color& rBackgroundColor, bool bHeadLine)
 {
-    SdrObjListIter aGroupIterator(*pObjectGroup->GetSubList(), SdrIterMode::DeepNoGroups);
+    SdrObjListIter aGroupIterator(pObjectGroup->GetSubList(), SdrIterMode::DeepNoGroups);
     while (aGroupIterator.IsMore())
     {
         SdrObject* pCurrentObject = aGroupIterator.Next();
@@ -1560,7 +1560,7 @@ bool HtmlExport::CreateHtmlForPresPages()
         while (!bMasterDone)
         {
             // sal_True = backwards
-            SdrObjListIter aIter(*pPage, SdrIterMode::DeepWithGroups, true);
+            SdrObjListIter aIter(pPage, SdrIterMode::DeepWithGroups, true);
 
             SdrObject* pObject = aIter.Next();
             while (pObject)
@@ -1727,7 +1727,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                             // is the bookmark a object?
                             pObj = mpDoc->GetObj( aURL );
                             if (pObj)
-                                nPgNum = pObj->GetPage()->GetPageNum();
+                                nPgNum = pObj->getSdrPageFromSdrObject()->GetPageNum();
                         }
                         if (nPgNum != SDRPAGE_NOTFOUND)
                         {
@@ -1813,7 +1813,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                                 // is the bookmark a object?
                                 pObj = mpDoc->GetObj(pInfo->GetBookmark());
                                 if (pObj)
-                                    nPgNum = pObj->GetPage()->GetPageNum();
+                                    nPgNum = pObj->getSdrPageFromSdrObject()->GetPageNum();
                             }
 
                             if( SDRPAGE_NOTFOUND != nPgNum )

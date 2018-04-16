@@ -507,7 +507,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             for (sal_uInt16 i=0; i<nPages; i++)
             {
                 SdrPage* pPage = pModel->GetPage(i);
-                SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
+                SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {

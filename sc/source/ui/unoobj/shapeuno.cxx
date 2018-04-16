@@ -334,7 +334,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
         if (pObj)
         {
             ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
-            SdrPage* pPage(pObj->GetPage());
+            SdrPage* pPage(pObj->getSdrPageFromSdrObject());
 
             if ( pPage )
             {
@@ -466,7 +466,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
             if (pObj)
             {
                 ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
-                SdrPage* pPage(pObj->GetPage());
+                SdrPage* pPage(pObj->getSdrPageFromSdrObject());
 
                 if ( pPage )
                 {
@@ -565,7 +565,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
             if (pObj)
             {
                 ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
-                SdrPage* pPage(pObj->GetPage());
+                SdrPage* pPage(pObj->getSdrPageFromSdrObject());
 
                 if ( pPage )
                 {
@@ -662,7 +662,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
         if (pObj)
         {
             ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
-            SdrPage* pPage(pObj->GetPage());
+            SdrPage* pPage(pObj->getSdrPageFromSdrObject());
 
             if ( pPage )
             {
@@ -711,7 +711,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
         if (pObj)
         {
             ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
-            SdrPage* pPage(pObj->GetPage());
+            SdrPage* pPage(pObj->getSdrPageFromSdrObject());
 
             if ( pPage )
             {
@@ -771,7 +771,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
         if (pObj)
         {
             ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
-            SdrPage* pPage(pObj->GetPage());
+            SdrPage* pPage(pObj->getSdrPageFromSdrObject());
 
             if ( pPage )
             {
@@ -1005,7 +1005,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getAnchor()
     if( pObj )
     {
         ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
-        SdrPage* pPage(pObj->GetPage());
+        SdrPage* pPage(pObj->getSdrPageFromSdrObject());
         ScDocument* pDoc = rModel.GetDocument();
 
         if ( pPage && pDoc )
@@ -1248,7 +1248,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScShapeObj::getParent()
     if( pObj )
     {
         ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
-        SdrPage* pPage(pObj->GetPage());
+        SdrPage* pPage(pObj->getSdrPageFromSdrObject());
         ScDocument* pDoc = rModel.GetDocument();
 
         if ( pPage && pDoc )

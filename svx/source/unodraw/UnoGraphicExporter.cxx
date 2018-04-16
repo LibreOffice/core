@@ -302,8 +302,11 @@ drawinglayer::primitive2d::Primitive2DContainer ImplExportCheckVisisbilityRedire
     if(pObject)
     {
         SdrPage* pPage = mpCurrentPage;
-        if( pPage == nullptr )
-            pPage = pObject->GetPage();
+
+        if(nullptr == pPage)
+        {
+            pPage = pObject->getSdrPageFromSdrObject();
+        }
 
         if( (pPage == nullptr) || pPage->checkVisibility(rOriginal, rDisplayInfo, false) )
         {
@@ -1181,7 +1184,7 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
             {
                 mxShapes->getByIndex( nIndex ) >>= xShape;
                 pObj = GetSdrObjectFromXShape( xShape );
-                bOk = pObj && pObj->GetPage() == pPage;
+                bOk = pObj && pObj->getSdrPageFromSdrObject() == pPage;
             }
 
             if( !bOk )

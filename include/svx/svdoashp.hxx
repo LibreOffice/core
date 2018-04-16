@@ -224,7 +224,8 @@ public:
 
     virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
-    virtual void SetPage( SdrPage* pNewPage ) override;
+    // react on model/page change
+    virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage) override;
 
     virtual SdrObjGeoData *NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData &rGeo) const override;

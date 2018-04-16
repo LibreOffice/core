@@ -106,7 +106,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         if( IsUndoEnabled() )
             BegUndo(SdResId(STR_INSERTGRAPHIC));
 
-        SdPage* pPage = static_cast<SdPage*>( pPickObj->GetPage() );
+        SdPage* pPage = static_cast<SdPage*>( pPickObj->getSdrPageFromSdrObject() );
 
         if( bIsGraphic )
         {
@@ -214,7 +214,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
         if( ( mnAction & DND_ACTION_MOVE ) && pPickObj && (pPickObj->IsEmptyPresObj() || pPickObj->GetUserCall()) )
         {
-            SdPage* pP = static_cast< SdPage* >( pPickObj->GetPage() );
+            SdPage* pP = static_cast< SdPage* >( pPickObj->getSdrPageFromSdrObject() );
 
             if ( pP && pP->IsMasterPage() )
                 bIsPresTarget = pP->IsPresObj(pPickObj);
@@ -342,7 +342,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
         bool bIsPres = false;
         if( pPickObj )
         {
-            SdPage* pPage = static_cast< SdPage* >(pPickObj->GetPage());
+            SdPage* pPage = static_cast< SdPage* >(pPickObj->getSdrPageFromSdrObject());
             bIsPres = pPage && pPage->IsPresObj(pPickObj);
             if( bIsPres )
             {
