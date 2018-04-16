@@ -34,6 +34,7 @@ interface XApplication : XConnectable
     [attribute, readonly] XSelection Selection;
     [attribute] boolean DisplayAutoCompleteTips;
     [attribute] long EnableCancelKey;
+    [attribute] long WindowState;
 
     any CommandBars( [in] any Index );
     any Documents( [in] any Index );

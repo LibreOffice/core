@@ -29,6 +29,7 @@
 #include "vbadialogs.hxx"
 #include <ooo/vba/XConnectionPoint.hpp>
 #include <ooo/vba/word/WdEnableCancelKey.hpp>
+#include <ooo/vba/word/WdWindowState.hpp>
 #include <ooo/vba/word/XApplicationOutgoing.hpp>
 #include <basic/sbuno.hxx>
 #include <editeng/acorrcfg.hxx>
@@ -187,6 +188,31 @@ sal_Int32 SAL_CALL SwVbaApplication::getEnableCancelKey()
 void SAL_CALL SwVbaApplication::setEnableCancelKey( sal_Int32/* _enableCancelKey */)
 {
     // seems not supported in Writer
+}
+
+sal_Int32 SAL_CALL SwVbaApplication::getWindowState()
+{
+    auto xWindow = getActiveWindow();
+    if (xWindow.is())
+    {
+        uno::Any aState = xWindow->getWindowState();
+        sal_Int32 nState;
+        if (aState >>= nState)
+            return nState;
+    }
+
+    return word::WdWindowState::wdWindowStateNormal; // ?
+}
+
+void SAL_CALL SwVbaApplication::setWindowState( sal_Int32 _windowstate )
+{
+    auto xWindow = getActiveWindow();
+    if (xWindow.is())
+    {
+        uno::Any aState;
+        aState <<= _windowstate;
+        xWindow->setWindowState( aState );
+    }
 }
 
 float SAL_CALL SwVbaApplication::CentimetersToPoints( float Centimeters )
