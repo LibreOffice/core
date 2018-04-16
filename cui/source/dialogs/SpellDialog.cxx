@@ -657,7 +657,9 @@ IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl&, rAction, void )
         break;
         case SPELLUNDO_CHANGE_NEXTERROR:
         {
-            m_pSentenceED->MoveErrorMarkTo(static_cast<sal_uInt16>(rAction.GetOldErrorStart()), static_cast<sal_uInt16>(rAction.GetOldErrorEnd()), false);
+            m_pSentenceED->MoveErrorMarkTo(static_cast<sal_Int32>(rAction.GetOldErrorStart()),
+                                           static_cast<sal_Int32>(rAction.GetOldErrorEnd()),
+                                           false);
             if(rAction.IsErrorLanguageSelected())
             {
                 UpdateBoxes_Impl();
@@ -1534,8 +1536,8 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
     //if it's not already modified the modified flag has to be reset at the end of the marking
     bool bModified = IsModified();
     bool bRet = false;
-    const sal_uInt16 nOldErrorStart = m_nErrorStart;
-    const sal_uInt16 nOldErrorEnd   = m_nErrorEnd;
+    const sal_Int32 nOldErrorStart = m_nErrorStart;
+    const sal_Int32 nOldErrorEnd   = m_nErrorEnd;
 
     //create a cursor behind the end of the last error
     //- or at 0 at the start of the sentence
@@ -1576,7 +1578,12 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
 
             aCursor.GetIndex() += xEntry->getReplacementText().getLength();
         // maybe the error found here is already added to the dictionary and has to be ignored
-        } else if(pSpellErrorDescription && !bGrammarError && xSpell->isValid( GetErrorText(), static_cast<sal_uInt16>(LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale )), Sequence< PropertyValue >() )) {
+        }
+        else if(pSpellErrorDescription && !bGrammarError &&
+                xSpell->isValid(GetErrorText(),
+                                static_cast<sal_uInt16>(LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale )),
+                                Sequence< PropertyValue >() ))
+        {
             ++aCursor.GetIndex();
         }
         else
@@ -1679,7 +1686,7 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Languag
     //adjust end position
     long nEndTemp = m_nErrorEnd;
     nEndTemp += nDiffLen;
-    m_nErrorEnd = static_cast<sal_uInt16>(nEndTemp);
+    m_nErrorEnd = static_cast<sal_Int32>(nEndTemp);
 
     SpellUndoAction_Impl* pAction = new SpellUndoAction_Impl(
                     SPELLUNDO_MOVE_ERROREND, GetSpellDialog()->aDialogUndoLink);
@@ -1759,10 +1766,10 @@ void SentenceEditWindow_Impl::SetText( const OUString& rStr )
 
 struct LanguagePosition_Impl
 {
-    sal_uInt16          nPosition;
+    sal_Int32       nPosition;
     LanguageType    eLanguage;
 
-    LanguagePosition_Impl(sal_uInt16 nPos, LanguageType eLang) :
+    LanguagePosition_Impl(sal_Int32 nPos, LanguageType eLang) :
         nPosition(nPos),
         eLanguage(eLang)
         {}
@@ -1770,7 +1777,7 @@ struct LanguagePosition_Impl
 typedef std::vector<LanguagePosition_Impl> LanguagePositions_Impl;
 
 static void lcl_InsertBreakPosition_Impl(
-        LanguagePositions_Impl& rBreakPositions, sal_uInt16 nInsert, LanguageType eLanguage)
+        LanguagePositions_Impl& rBreakPositions, sal_Int32 nInsert, LanguageType eLanguage)
 {
     LanguagePositions_Impl::iterator aStart = rBreakPositions.begin();
     while(aStart != rBreakPositions.end())
@@ -1847,7 +1854,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
             LanguagePositions_Impl::iterator aStart = aBreakPositions.begin();
             //start should always be Null
             eLang = aStart->eLanguage;
-            sal_uInt16 nStart = aStart->nPosition;
+            sal_Int32 nStart = aStart->nPosition;
             DBG_ASSERT(!nStart, "invalid start position - language attribute missing?");
             ++aStart;
 
@@ -1952,10 +1959,11 @@ void SentenceEditWindow_Impl::UndoActionEnd()
 
 void SentenceEditWindow_Impl::MoveErrorEnd(long nOffset)
 {
+    // Shoudn't we always add the real signed value instead???
     if(nOffset > 0)
-        m_nErrorEnd = m_nErrorEnd - static_cast<sal_uInt16>(nOffset);
+        m_nErrorEnd = m_nErrorEnd - static_cast<sal_Int32>(nOffset);
     else
-        m_nErrorEnd = m_nErrorEnd -static_cast<sal_uInt16>(- nOffset);
+        m_nErrorEnd = m_nErrorEnd - static_cast<sal_Int32>(-nOffset);
 }
 
 
