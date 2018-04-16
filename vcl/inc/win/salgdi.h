@@ -166,6 +166,8 @@ private:
     HFONT                   mhFonts[ MAX_FALLBACK ];        // Font + Fallbacks
     const WinFontFace*  mpWinFontData[ MAX_FALLBACK ];  // pointer to the most recent font face
     WinFontInstance*       mpWinFontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
+    float                   mfFontScale[ MAX_FALLBACK ];        // allows metrics emulation of huge font sizes
+    float                   mfCurrentFontScale;
     HRGN                    mhRegion;           // vcl::Region Handle
     HPEN                    mhDefPen;           // DefaultPen
     HBRUSH                  mhDefBrush;         // DefaultBrush
@@ -205,7 +207,7 @@ public:
 
     HWND gethWnd();
 
-    HFONT                   ImplDoSetFont( FontSelectPattern const * i_pFont, HFONT& o_rOldFont );
+    HFONT                   ImplDoSetFont( FontSelectPattern const * i_pFont, float& o_rFontScale, HFONT& o_rOldFont );
 
 public:
     explicit WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd,
