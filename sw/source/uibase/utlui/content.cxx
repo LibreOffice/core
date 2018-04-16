@@ -1156,7 +1156,7 @@ sal_Int8 SwContentTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
 {
-    VclPtrInstance<PopupMenu> pPop;
+    auto pPop = VclPtr<PopupMenu>::Create();
     VclPtrInstance<PopupMenu> pSubPop1;
     VclPtrInstance<PopupMenu> pSubPop2;
     VclPtrInstance<PopupMenu> pSubPop3;
