@@ -80,8 +80,6 @@ protected:
     static  WeakReference< XNumberFormatsSupplier >  s_xDefaultFormatsSupplier;
 public:
     static Reference< XNumberFormatsSupplier > get( const Reference< XComponentContext >& _rxORB );
-    using SvNumberFormatsSupplierObj::operator new;
-    using SvNumberFormatsSupplierObj::operator delete;
 protected:
     StandardFormatsSupplier(const Reference< XComponentContext >& _rxFactory,LanguageType _eSysLanguage);
     virtual ~StandardFormatsSupplier() override;

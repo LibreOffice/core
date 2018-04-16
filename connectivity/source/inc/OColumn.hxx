@@ -95,15 +95,6 @@ namespace connectivity
                 m_ColumnLabel = _aColumnName;
         }
 
-        static void * operator new( size_t nSize )
-            { return ::rtl_allocateMemory( nSize ); }
-        static void * operator new( size_t ,void* _pHint )
-            { return _pHint; }
-        static void operator delete( void * pMem )
-            { ::rtl_freeMemory( pMem ); }
-        static void operator delete( void *,void* )
-            {  }
-
         bool isAutoIncrement()              const { return m_AutoIncrement; }
         bool isCaseSensitive()              const { return m_CaseSensitive; }
         bool isSearchable()                 const { return m_Searchable; }
