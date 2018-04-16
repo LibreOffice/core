@@ -1069,7 +1069,7 @@ static rtlCipherError rtl_cipherARCFOUR_init_Impl(
 {
     unsigned int  K[CIPHER_CBLOCK_ARCFOUR];
     unsigned int *L, *S;
-    unsigned int  x, y, t;
+    unsigned int  x, y;
     sal_Size      n, k;
 
     S = &(ctx->m_S[0]);
@@ -1099,7 +1099,7 @@ static rtlCipherError rtl_cipherARCFOUR_init_Impl(
     {
         y = (y + S[x] + K[x]) % CIPHER_CBLOCK_ARCFOUR;
         /* swap S[x] and S[y] */
-        t = S[x];
+        unsigned int t = S[x];
         S[x] = S[y];
         S[y] = t;
     }
@@ -1117,7 +1117,6 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl(
     sal_uInt8           *pBuffer, sal_Size nBufLen)
 {
     unsigned int *S;
-    unsigned int t;
     sal_Size k;
 
     /* Check arguments. */
@@ -1140,7 +1139,7 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl(
         ctx->m_Y = y;
 
         /* Swap S[x] and S[y]. */
-        t = S[x];
+        unsigned int t = S[x];
         S[x] = S[y];
         S[y] = t;
 

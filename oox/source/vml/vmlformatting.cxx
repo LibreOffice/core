@@ -960,7 +960,6 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
     if (!moTrim.has() || !moTrim.get())
     {
         OUString sText = moString.get();
-        double fRatio = 0;
         VclPtr<VirtualDevice> pDevice = VclPtr<VirtualDevice>::Create();
         vcl::Font aFont = pDevice->GetFont();
         aFont.SetFamilyName(sFont);
@@ -970,10 +969,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
         auto nTextWidth = pDevice->GetTextWidth(sText);
         if (nTextWidth)
         {
-            fRatio = pDevice->GetTextHeight();
-            fRatio /= nTextWidth;
-
-            sal_Int32 nNewHeight = fRatio * xShape->getSize().Width;
+            sal_Int32 nNewHeight = (static_cast<double>(pDevice->GetTextHeight()) / nTextWidth) * xShape->getSize().Width;
             xShape->setSize(awt::Size(xShape->getSize().Width, nNewHeight));
         }
     }
