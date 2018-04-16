@@ -46,6 +46,30 @@
       "revId": "55675622afdd109417626d845581c4d566b0c336",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_9ec17be7",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-16T12:46:27Z",
+      "side": 1,
+      "message": "Thank you for the clarification. I am leaving it like this.",
+      "parentUuid": "9a30ddce_3e940fe1",
+      "range": {
+        "startLine": 128,
+        "startChar": 12,
+        "endLine": 128,
+        "endChar": 29
+      },
+      "revId": "55675622afdd109417626d845581c4d566b0c336",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
