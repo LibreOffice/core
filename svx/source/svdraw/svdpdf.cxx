@@ -226,32 +226,7 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
         for (int nPageObjectIndex = 0; nPageObjectIndex < nPageObjectCount; ++nPageObjectIndex)
         {
             FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage, nPageObjectIndex);
-            if (pPageObject == nullptr)
-                continue;
-
-            const int nPageObjectType = FPDFPageObj_GetType(pPageObject);
-            switch (nPageObjectType)
-            {
-                case FPDF_PAGEOBJ_TEXT:
-                    ImportText(pPageObject, nPageObjectIndex);
-                    break;
-                case FPDF_PAGEOBJ_PATH:
-                    ImportPath(pPageObject, nPageObjectIndex);
-                    break;
-                case FPDF_PAGEOBJ_IMAGE:
-                    ImportImage(pPageObject, nPageObjectIndex);
-                    break;
-                case FPDF_PAGEOBJ_SHADING:
-                    SAL_WARN("sd.filter", "Got page object SHADING: " << nPageObjectIndex);
-                    break;
-                case FPDF_PAGEOBJ_FORM:
-                    SAL_WARN("sd.filter", "Got page object FORM: " << nPageObjectIndex);
-                    break;
-                default:
-                    SAL_WARN("sd.filter", "Unknown PDF page object type: "
-                                              << nPageObjectType << ": " << nPageObjectIndex);
-                    break;
-            }
+            ImportPdfObject(pPageObject, nPageObjectIndex);
         }
 
 #if 0
@@ -1011,6 +986,49 @@ void ImpSdrPdfImport::checkClip()
 }
 
 bool ImpSdrPdfImport::isClip() const { return !maClip.getB2DRange().isEmpty(); }
+
+void ImpSdrPdfImport::ImportPdfObject(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex)
+{
+    if (pPageObject == nullptr)
+        return;
+
+    const int nPageObjectType = FPDFPageObj_GetType(pPageObject);
+    switch (nPageObjectType)
+    {
+        case FPDF_PAGEOBJ_TEXT:
+            ImportText(pPageObject, nPageObjectIndex);
+            break;
+        case FPDF_PAGEOBJ_PATH:
+            ImportPath(pPageObject, nPageObjectIndex);
+            break;
+        case FPDF_PAGEOBJ_IMAGE:
+            ImportImage(pPageObject, nPageObjectIndex);
+            break;
+        case FPDF_PAGEOBJ_SHADING:
+            SAL_WARN("sd.filter", "Got page object SHADING: " << nPageObjectIndex);
+            break;
+        case FPDF_PAGEOBJ_FORM:
+            ImportForm(pPageObject, nPageObjectIndex);
+            break;
+        default:
+            SAL_WARN("sd.filter", "Unknown PDF page object #" << nPageObjectIndex
+                                                              << " of type: " << nPageObjectType);
+            break;
+    }
+}
+
+void ImpSdrPdfImport::ImportForm(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex)
+{
+    SAL_WARN("sd.filter", "Got page object FORM: " << nPageObjectIndex);
+
+    const int nCount = FPDFFormObj_CountSubObjects(pPageObject);
+    for (int nIndex = 0; nIndex < nCount; ++nIndex)
+    {
+        FPDF_PAGEOBJECT pFormObject = FPDFFormObj_GetSubObject(pPageObject, nIndex);
+        ImportPdfObject(pFormObject, -1);
+    }
+}
+
 void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex)
 {
     SAL_WARN("sd.filter", "Got page object TEXT: " << nPageObjectIndex);
