@@ -204,7 +204,7 @@
  #ifdef DEBUG_GDS_ALLOC
 --- src/include/firebird.h
 +++ src/include/firebird.h
-@@ -38,10 +38,19 @@
+@@ -38,8 +38,17 @@
  #include "gen/autoconfig.h"
  #endif
  
@@ -213,17 +213,16 @@
 +#define USE_ASAN
 +#endif
 +#endif
++#if defined __clang__ && (defined __apple_build_version__ ? __clang_major__ >= 9 : __clang_major__ >= 4)
++#define USE_ASAN
++#endif
 +
  // Using our debugging code is pointless when we may use Valgrind features
- #if defined(DEV_BUILD) && !defined(USE_VALGRIND)
+-#if defined(DEV_BUILD) && !defined(USE_VALGRIND)
++#if defined(DEV_BUILD) && !(defined(USE_VALGRIND) || defined(USE_ASAN))
  #define DEBUG_GDS_ALLOC
  #endif
-+#if defined USE_ASAN
-+#undef DEBUG_GDS_ALLOC
-+#endif
  
- #if defined(WIN_NT)
- #define FB_DLL_EXPORT __declspec(dllexport)
 --- src/jrd/SimilarToMatcher.h
 +++ src/jrd/SimilarToMatcher.h
 @@ -338,7 +338,7 @@
