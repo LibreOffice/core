@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column:100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -233,9 +233,20 @@ void SAL_CALL SwVbaApplication::ShowMe()
 
 void SAL_CALL SwVbaApplication::Resize( sal_Int32 Width, sal_Int32 Height )
 {
+    // Have to do it like this as the Width and Height are hidden away in the ooo::vba::XWindowBase
+    // which ooo::vba::word::XApplication does not inherit from. SwVbaWindow, however, does inherit
+    // from XWindowBase. Ugh.
     auto pWindow = getActiveSwVbaWindow();
     pWindow->setWidth( Width );
     pWindow->setHeight( Height );
+}
+
+void SAL_CALL SwVbaApplication::Move( sal_Int32 Left, sal_Int32 Top )
+{
+    // See comment in Resize().
+    auto pWindow = getActiveSwVbaWindow();
+    pWindow->setLeft( Left );
+    pWindow->setTop( Top );
 }
 
 // XInterfaceWithIID

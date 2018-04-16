@@ -44,6 +44,7 @@ interface XApplication : XConnectable
     float CentimetersToPoints([in] float Centimeters );
     void ShowMe();
     void Resize( [in] long Width, [in] long Height );
+    void Move( [in] long Left, [in] long Top );
 };
 
 }; }; };
