@@ -2208,21 +2208,21 @@ Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
                     case VT_BYREF|VT_I2:
                         {
                             SHORT *pI = (SHORT*)aDispParams.rgvarg[i].byref;
-                            Arguments[i] <<= (sal_Int16)*pI;
+                            Arguments[nIncomingArgIndex] <<= (sal_Int16)*pI;
                             delete pI;
                         }
                         break;
                     case VT_BYREF|VT_I4:
                         {
                             LONG *pL = (LONG*)aDispParams.rgvarg[i].byref;
-                            Arguments[i] <<= (sal_Int32)*pL;
+                            Arguments[nIncomingArgIndex] <<= (sal_Int32)*pL;
                             delete pL;
                         }
                         break;
                     case VT_BYREF|VT_BSTR:
                         {
                             BSTR *pBstr = (BSTR*)aDispParams.rgvarg[i].byref;
-                            Arguments[i] <<= OUString(o3tl::toU(*pBstr));
+                            Arguments[nIncomingArgIndex] <<= OUString(o3tl::toU(*pBstr));
                             // Undo SysAllocString() done in anyToVariant()
                             SysFreeString(*pBstr);
                             delete pBstr;
@@ -2232,7 +2232,7 @@ Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
                         {
                             VARIANT_BOOL *pBool = (VARIANT_BOOL*)aDispParams.rgvarg[i].byref;
                             // SAL_ DEBUG("===> VT_BOOL: byref is now " << aDispParams.rgvarg[i].byref << ", " << (int)*pBool);
-                            Arguments[i] <<= (sal_Bool)(*pBool != VARIANT_FALSE ? sal_True : sal_False);
+                            Arguments[nIncomingArgIndex] <<= (sal_Bool)(*pBool != VARIANT_FALSE ? sal_True : sal_False);
                             delete pBool;
                         }
                         break;
