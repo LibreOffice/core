@@ -998,7 +998,7 @@ static bool lcl_GetBackgroundColor( Color & rColor,
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
     if ( pFrame &&
-         pFrame->GetBackgroundBrush( aFillAttributes, pBackgrdBrush, pSectionTOXColor, aDummyRect, false ) )
+         pFrame->GetBackgroundBrush( aFillAttributes, pBackgrdBrush, pSectionTOXColor, aDummyRect, false, /*bConsiderTextBox=*/false ) )
     {
         if ( pSectionTOXColor )
         {
