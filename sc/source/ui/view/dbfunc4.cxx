@@ -41,7 +41,7 @@ sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bo
         SdrPage* pPage = pModel->GetPage(nPageNo);
         OSL_ENSURE(pPage,"Page ?");
 
-        SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
+        SdrObjListIter aIter( pPage, SdrIterMode::DeepNoGroups );
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {

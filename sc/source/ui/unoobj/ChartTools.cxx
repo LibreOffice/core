@@ -72,7 +72,7 @@ ChartIterator::ChartIterator(ScDocShell* pDocShell, SCTAB nTab, ChartSourceType 
     SdrPage* pPage = pDrawLayer->GetPage(sal_uInt16(nTab));
     if (!pPage)
         return;
-    m_pIterator.reset(new SdrObjListIter(*pPage, SdrIterMode::DeepNoGroups));
+    m_pIterator.reset(new SdrObjListIter(pPage, SdrIterMode::DeepNoGroups));
 }
 
 SdrOle2Obj* ChartIterator::next()

@@ -255,8 +255,6 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText(
                 pRenderedShape = new SdrObjGroup(rSdrObjCustomShape.getSdrModelFromSdrObject());
                 static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
             }
-
-            pRenderedShape->SetPage(rSdrObjCustomShape.GetPage());
         }
     }
 

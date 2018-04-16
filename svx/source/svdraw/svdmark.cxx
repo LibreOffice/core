@@ -762,7 +762,7 @@ namespace sdr
                                 SfxListener* pLst = pBC->GetListener(nl);
                                 SdrEdgeObj* pEdge = dynamic_cast<SdrEdgeObj*>( pLst );
 
-                                if(pEdge && pEdge->IsInserted() && pEdge->GetPage() == pCandidate->GetPage())
+                                if(pEdge && pEdge->IsInserted() && pEdge->getSdrPageFromSdrObject() == pCandidate->getSdrPageFromSdrObject())
                                 {
                                     SdrMark aM(pEdge, maMarkedObjectList.GetMark(a)->GetPageView());
 

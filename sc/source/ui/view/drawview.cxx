@@ -655,7 +655,7 @@ SdrObject* ScDrawView::GetObjectByName(const OUString& rName)
             DBG_ASSERT(pPage,"Page ?");
             if (pPage)
             {
-                SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
+                SdrObjListIter aIter( pPage, SdrIterMode::DeepNoGroups );
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
@@ -689,7 +689,7 @@ void ScDrawView::SelectCurrentViewObject( const OUString& rName )
             DBG_ASSERT(pPage,"Page ?");
             if (pPage)
             {
-                SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
+                SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );
                 SdrObject* pObject = aIter.Next();
                 while (pObject && !pFound)
                 {
@@ -743,7 +743,7 @@ bool ScDrawView::SelectObject( const OUString& rName )
             OSL_ENSURE(pPage,"Page ?");
             if (pPage)
             {
-                SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
+                SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );
                 SdrObject* pObject = aIter.Next();
                 while (pObject && !pFound)
                 {

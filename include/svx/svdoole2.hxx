@@ -120,7 +120,8 @@ public:
 
     void AbandonObject();
 
-    virtual void SetPage(SdrPage* pNewPage) override;
+    // react on model/page change
+    virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage) override;
 
     /** Change the IsClosedObj attribute
 

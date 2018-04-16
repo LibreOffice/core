@@ -2836,11 +2836,12 @@ void SdrObjCustomShape::NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, bool bD
     SdrObject::NbcSetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
 }
 
-void SdrObjCustomShape::SetPage( SdrPage* pNewPage )
+void SdrObjCustomShape::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
 {
-    SdrTextObj::SetPage( pNewPage );
+    // call parent
+    SdrTextObj::handlePageChange(pOldPage, pNewPage);
 
-    if( pNewPage )
+    if(nullptr != pNewPage)
     {
         // invalidating rectangles by SetRectsDirty is not sufficient,
         // AdjustTextFrameWidthAndHeight() also has to be made, both
