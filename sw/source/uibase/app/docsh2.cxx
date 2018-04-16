@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -365,23 +365,33 @@ bool SwDocShell::PrepareClose( bool bUI )
 {
     bool bRet = SfxObjectShell::PrepareClose( bUI );
 
-    if( bRet )
-        EndListening( *this );
-
-    if (m_xDoc && IsInPrepareClose())
+    // If we are going to close it at this point, let potential DocumentBeforeClose event handlers
+    // in Automation clients veto it.
+    if (bRet && m_xDoc && IsInPrepareClose())
     {
         uno::Any aDocument;
         aDocument <<= mxAutomationDocumentObject;
 
         uno::Sequence< uno::Any > aArgs(2);
+        // Arg 0: Document
         aArgs[0] = aDocument;
-        // FIXME: This should be an out argument, hmm?
+        // Arg 1: Cancel
         aArgs[1] <<= false;
 
         SW_MOD()->CallAutomationApplicationEventSinks( "DocumentBeforeClose", aArgs );
 
-        // FIXME: Do something based on what value the callback set the second argument to
+        // If the Cancel argument was set to True by an event handler, return false.
+        bool bCancel;
+        aArgs[1] >>= bCancel;
+        if (bCancel)
+            bRet = false;
+    }
 
+    if( bRet )
+        EndListening( *this );
+
+    if (m_xDoc && IsInPrepareClose())
+    {
         uno::Reference< script::vba::XVBAEventProcessor > const xVbaEvents =
             m_xDoc->GetVbaEventProcessor();
         if( xVbaEvents.is() )
