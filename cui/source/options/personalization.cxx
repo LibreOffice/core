@@ -745,7 +745,6 @@ void SearchAndParseThread::execute()
         }
 
         std::vector<OUString> vLearnmoreURLs;
-        std::vector<OUString>::iterator it;
         sal_Int32 nIndex = 0;
         GraphicFilter aFilter;
         Graphic aGraphic;
