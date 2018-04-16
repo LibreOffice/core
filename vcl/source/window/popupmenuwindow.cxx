@@ -46,7 +46,7 @@ PopupMenuFloatingWindow::~PopupMenuFloatingWindow()
 
 void PopupMenuFloatingWindow::dispose()
 {
-    delete mpImplData;
+    mpImplData.reset();
     FloatingWindow::dispose();
 }
 
