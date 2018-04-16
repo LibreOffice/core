@@ -20,28 +20,31 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_MULTMRK_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_MULTMRK_HXX
 
-#include <svx/stddlg.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 
 class SwTOXMgr;
 
 // insert mark for index entry
-class SwMultiTOXMarkDlg : public SvxStandardDialog
+class SwMultiTOXMarkDlg : public weld::GenericDialogController
 {
-    DECL_LINK( SelectHdl, ListBox&, void );
-    VclPtr<FixedText>         m_pTextFT;
-    VclPtr<ListBox>           m_pTOXLB;
+    DECL_LINK(SelectHdl, weld::TreeView&, void);
+    SwTOXMgr&          m_rMgr;
+    sal_uInt16         m_nPos;
 
-    SwTOXMgr&          rMgr;
-    sal_uInt16              nPos;
+    std::unique_ptr<weld::Label> m_xTextFT;
+    std::unique_ptr<weld::TreeView> m_xTOXLB;
 
-    void                Apply() override;
+    void                Apply();
 public:
-    SwMultiTOXMarkDlg( vcl::Window* pParent, SwTOXMgr &rTOXMgr );
+    SwMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr &rTOXMgr);
     virtual ~SwMultiTOXMarkDlg() override;
-    virtual void dispose() override;
+    short execute()
+    {
+        short nRet = run();
+        if (nRet == RET_OK)
+            Apply();
+        return nRet;
+    }
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_MULTMRK_HXX

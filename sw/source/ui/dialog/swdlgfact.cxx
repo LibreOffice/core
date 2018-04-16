@@ -124,6 +124,10 @@ short AbstractSwSortDlg_Impl::Execute()
 {
     return m_xDlg->execute();
 }
+short AbstractMultiTOXMarkDlg_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
 short AbstractSwConvertTableDlg_Impl::Execute()
 {
@@ -985,10 +989,9 @@ VclPtr<AbstractMailMergeFieldConnectionsDlg> SwAbstractDialogFactory_Impl::Creat
     return VclPtr<AbstractMailMergeFieldConnectionsDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXMarkDlg(vcl::Window* pParent, SwTOXMgr &rTOXMgr)
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr &rTOXMgr)
 {
-    VclPtr<Dialog> pDlg = VclPtr<SwMultiTOXMarkDlg>::Create(pParent, rTOXMgr);
-    return VclPtr<VclAbstractDialog_Impl>::Create(pDlg);
+    return VclPtr<AbstractMultiTOXMarkDlg_Impl>::Create(new SwMultiTOXMarkDlg(pParent, rTOXMgr));
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSvxNumBulletTabDialog(vcl::Window* pParent,
