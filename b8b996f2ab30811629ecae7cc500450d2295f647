@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_be20ff9c",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1592,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-04-16T07:14:52Z",
+      "side": 1,
+      "message": "Nitpick: it\u0027s good to document what was the old value before fixing; there is a difference between the case when the old value was 4005 and 0, e.g.",
+      "revId": "b8b996f2ab30811629ecae7cc500450d2295f647",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
