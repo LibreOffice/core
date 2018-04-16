@@ -1369,7 +1369,7 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
                 {
                     rDoc.GetChartListenerCollection()->removeByName(pChartObject->GetName());
                     pModel->AddUndo(new SdrUndoDelObj(*pChartObject));
-                    pChartObject->GetPage()->RemoveObject(pChartObject->GetOrdNum());
+                    pChartObject->getSdrPageFromSdrObject()->RemoveObject(pChartObject->GetOrdNum());
                 }
             }
         }

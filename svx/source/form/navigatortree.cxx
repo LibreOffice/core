@@ -93,7 +93,7 @@ namespace svxform
 
         _rMapping.clear();
 
-        SdrObjListIter aIter( *_pPage );
+        SdrObjListIter aIter( _pPage );
         while ( aIter.IsMore() )
         {
             SdrObject* pSdrObject = aIter.Next();
@@ -2049,7 +2049,7 @@ namespace svxform
         SdrPage*        pPage           = pPageView->GetPage();
         //FmFormPage*     pFormPage       = dynamic_cast< FmFormPage* >( pPage );
 
-        SdrObjListIter aIter( *pPage );
+        SdrObjListIter aIter( pPage );
         while ( aIter.IsMore() )
         {
             SdrObject* pSdrObject = aIter.Next();
@@ -2110,7 +2110,7 @@ namespace svxform
         SdrPage*        pPage           = pPageView->GetPage();
 
         bool bPaint = false;
-        SdrObjListIter aIter( *pPage );
+        SdrObjListIter aIter( pPage );
         while ( aIter.IsMore() )
         {
             SdrObject* pSdrObject = aIter.Next();
