@@ -1,0 +1,4 @@
+reportdesign/uiconfig/dbreport/ui/conditionwin.ui://GtkLabel[@id='headerLabel'] orphan-label
+reportdesign/uiconfig/dbreport/ui/conditionwin.ui://GtkLabel[@id='andLabel'] orphan-label
+reportdesign/uiconfig/dbreport/ui/conditionwin.ui://GtkButton[@id='upButton'] button-no-label
+reportdesign/uiconfig/dbreport/ui/conditionwin.ui://GtkButton[@id='downButton'] button-no-label
