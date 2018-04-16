@@ -215,7 +215,7 @@ BitmapBuffer* Qt5Bitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
     return pBuffer;
 }
 
-void Qt5Bitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode /*nMode*/)
+void Qt5Bitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
 {
     m_aPalette = pBuffer->maPalette;
     auto count = m_aPalette.GetEntryCount();
