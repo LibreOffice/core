@@ -28,6 +28,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="headertoggle-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="PageHeaderPanel|headertoggle-atkobject">Enable header</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -42,6 +47,7 @@
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes" context="pageheaderpanel|margins">Margins:</property>
+                <property name="mnemonic_widget">headermarginpreset</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -71,6 +77,7 @@
             <property name="can_focus">False</property>
             <property name="halign">end</property>
             <property name="label" translatable="yes" context="pageheaderpanel|spacing">Spacing:</property>
+            <property name="mnemonic_widget">spacingpreset</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -83,6 +90,7 @@
             <property name="can_focus">False</property>
             <property name="halign">end</property>
             <property name="label" translatable="yes" context="pageheaderpanel|samecontent">Same Content:</property>
+            <property name="mnemonic_widget">samecontentLB</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
