@@ -3724,16 +3724,6 @@ void SAL_CALL SwXTextDocument::paintTile( const ::css::uno::Any& Parent, ::sal_I
     #endif
 }
 
-void * SwXTextDocument::operator new( size_t t) throw()
-{
-    return SwXTextDocumentBaseClass::operator new(t);
-}
-
-void SwXTextDocument::operator delete( void * p) throw()
-{
-    SwXTextDocumentBaseClass::operator delete(p);
-}
-
 /**
  * retrieve languages already used in current document
  */

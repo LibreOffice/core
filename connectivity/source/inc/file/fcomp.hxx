@@ -48,14 +48,6 @@ namespace connectivity
 
             virtual ~OPredicateCompiler() override;
 
-            static void * operator new( size_t nSize )
-                { return ::rtl_allocateMemory( nSize ); }
-            static void * operator new( size_t /*nSize*/,void* _pHint )
-                { return _pHint; }
-            static void operator delete( void * pMem )
-                { ::rtl_freeMemory( pMem ); }
-            static void operator delete( void * /*pMem*/,void* /*_pHint*/ )
-                {  }
             void dispose();
 
             void start(connectivity::OSQLParseNode const * pSQLParseNode);
