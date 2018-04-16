@@ -52,7 +52,7 @@ sub create_upgrade_table
     # 32-bit installer must also detect if 32-bit Runtime is installed
     if ( $installer::globals::cpuname ne 'X86_64' )
     {
-        $newline = "{65E5BD06-6392-3027-8C26-853107D3CF1A}" . "\t" . "14.0.24215" . "\t" . "15.0.0" . "\t" . "" . "\t" . "258" . "\t" . "" . "\t" . "VCRUNTIME_DETECTED";
+        $newline = "{65E5BD06-6392-3027-8C26-853107D3CF1A}" . "\t" . "14.0.24215" . "\t" . "15.0.0" . "\t" . "" . "\t" . "258" . "\t" . "" . "\t" . "VCRUNTIME_DETECTED_32";
         push(@upgradetable, $newline);
     }
 
