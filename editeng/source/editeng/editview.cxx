@@ -66,6 +66,7 @@
 #include <vcl/settings.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -1025,6 +1026,9 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         EPaM aP = pImpEditView->pEditEngine->pImpEditEngine->CreateEPaM(aPaM);
         EPaM aP2 = pImpEditView->pEditEngine->pImpEditEngine->CreateEPaM(aPaM2);
 
+
+        if (comphelper::LibreOfficeKit::isActive())
+            aPopupMenu->SetLOKNotifier(SfxViewShell::Current());
         sal_uInt16 nId = aPopupMenu->Execute(pImpEditView->GetWindow(), aTempRect, PopupMenuFlags::NoMouseUpClose);
 
         aPaM2 = pImpEditView->pEditEngine->pImpEditEngine->CreateEditPaM(aP2);
