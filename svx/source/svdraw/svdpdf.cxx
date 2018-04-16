@@ -204,16 +204,17 @@ ImpSdrPdfImport::~ImpSdrPdfImport()
     FPDF_DestroyLibrary();
 }
 
-void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport)
+void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport,
+                                    int nPageIndex)
 {
     const int nPageCount = FPDF_GetPageCount(mpPdfDocument);
-    SAL_WARN("sd.filter", "Pages: " << nPageCount);
-    for (size_t nPageIndex = 0; nPageIndex <= 0; ++nPageIndex)
+    SAL_WARN("sd.filter", "Importing page " << nPageIndex << " of " << nPageCount);
+    if (nPageCount > 0 && nPageIndex >= 0 && nPageIndex < nPageCount)
     {
         // Render next page.
         FPDF_PAGE pPdfPage = FPDF_LoadPage(mpPdfDocument, nPageIndex);
         if (pPdfPage == nullptr)
-            break;
+            return;
 
         const double dPageWidth = FPDF_GetPageWidth(pPdfPage);
         const double dPageHeight = FPDF_GetPageHeight(pPdfPage);
@@ -479,7 +480,7 @@ void ImpSdrPdfImport::SetupPageScale(const double dPageWidth, const double dPage
     //                                 << "(" << mfScaleY << ")");
 }
 
-size_t ImpSdrPdfImport::DoImport(SdrObjList& rOL, size_t nInsPos, size_t nPageNumber,
+size_t ImpSdrPdfImport::DoImport(SdrObjList& rOL, size_t nInsPos, int nPageNumber,
                                  SvdProgressInfo* pProgrInfo)
 {
     if (pProgrInfo)
@@ -490,7 +491,7 @@ size_t ImpSdrPdfImport::DoImport(SdrObjList& rOL, size_t nInsPos, size_t nPageNu
     sal_uInt32 nActionsToReport(0);
 
     // execute
-    DoLoopActions(pProgrInfo, &nActionsToReport);
+    DoLoopActions(pProgrInfo, &nActionsToReport, nPageNumber);
 
     if (pProgrInfo)
     {
