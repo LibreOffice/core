@@ -1240,7 +1240,8 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         {
             TextEngine* pTextEngine = GetTextEngine();
             TextView* pTextView = pTextEngine->GetActiveView();
-            const TextSelection& rCurrentSelection = pTextView->GetSelection();
+            TextSelection rCurrentSelection = pTextView->GetSelection();
+            rCurrentSelection.Justify();
             //determine if the selection contains a field
             bool bHasFieldLeft = false;
             bool bHasErrorLeft = false;
