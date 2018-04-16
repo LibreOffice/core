@@ -307,7 +307,8 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
             if(0 < pItem->GetGradientList()->Count())
             {
                 const XGradient aGradient = pItem->GetGradientList()->GetGradient(0)->GetGradient();
-                const XFillGradientItem aXFillGradientItem(aGradient);
+                const OUString aName = pItem->GetGradientList()->GetGradient(0)->GetName();
+                const XFillGradientItem aXFillGradientItem(aName, aGradient);
 
                 // #i122676# change FillStyle and Gradient in one call
                 XFillStyleItem aXFillStyleItem(drawing::FillStyle_GRADIENT);
@@ -346,7 +347,8 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
                     if(mnLastPosHatch < pXHatchList->Count())
                     {
                         const XHatch aHatch = pXHatchList->GetHatch(mnLastPosHatch)->GetHatch();
-                        const XFillHatchItem aXFillHatchItem(mpLbFillAttr->GetSelectedEntry(), aHatch);
+                        const OUString aName = pXHatchList->GetHatch(mnLastPosHatch)->GetName();
+                        const XFillHatchItem aXFillHatchItem(aName, aHatch);
 
                         // #i122676# change FillStyle and Hatch in one call
                         XFillStyleItem aXFillStyleItem(drawing::FillStyle_HATCH);
@@ -392,7 +394,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
                         {
                             const XBitmapEntry* pXBitmapEntry = pXBitmapList->GetBitmap(mnLastPosBitmap);
                             aBitmap = pXBitmapEntry->GetGraphicObject();
-                            aName = mpLbFillAttr->GetSelectedEntry();
+                            aName = pXBitmapEntry->GetName();
                             mpLbFillAttr->SelectEntryPos(mnLastPosBitmap);
                         }
                     }
