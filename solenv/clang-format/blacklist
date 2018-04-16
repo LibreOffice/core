@@ -17587,7 +17587,6 @@ vcl/inc/headless/svpvd.hxx
 vcl/inc/helpwin.hxx
 vcl/inc/image.h
 vcl/inc/impanmvw.hxx
-vcl/inc/impbmp.hxx
 vcl/inc/impdel.hxx
 vcl/inc/impfont.hxx
 vcl/inc/impfontcache.hxx
@@ -18169,7 +18168,6 @@ vcl/source/gdi/graph.cxx
 vcl/source/gdi/graphictools.cxx
 vcl/source/gdi/hatch.cxx
 vcl/source/gdi/impanmvw.cxx
-vcl/source/gdi/impbmp.cxx
 vcl/source/gdi/impgraph.cxx
 vcl/source/gdi/impvect.cxx
 vcl/source/gdi/impvect.hxx

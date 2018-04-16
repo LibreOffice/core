@@ -187,7 +187,6 @@ class   BitmapInfoAccess;
 class   BitmapReadAccess;
 class   BitmapWriteAccess;
 class   BitmapPalette;
-class   ImpBitmap;
 class   Color;
 class   GDIMetaFile;
 class   AlphaMask;
@@ -227,8 +226,8 @@ public:
     inline bool             operator!() const;
     bool                    operator==( const Bitmap& rBitmap ) const;
     bool                    operator!=( const Bitmap& rBitmap ) const { return !operator==(rBitmap); }
-    // only compares if we are using the same internal copy-on-write Impl class
-    bool                    ShallowEquals( const Bitmap& rBitmap ) const { return mxImpBmp == rBitmap.mxImpBmp; }
+    // only compares if we are using the same internal copy-on-write SalBitmap class
+    bool                    ShallowEquals( const Bitmap& rBitmap ) const { return mxSalBmp == rBitmap.mxSalBmp; }
 
     inline bool             IsEmpty() const;
     void                    SetEmpty();
@@ -671,8 +670,8 @@ public:
     SAL_DLLPRIVATE void     ReassignWithSize(const Bitmap& rBitmap);
 
     SAL_DLLPRIVATE void     ImplMakeUnique();
-    const std::shared_ptr<ImpBitmap>& ImplGetImpBitmap() const { return mxImpBmp; }
-    SAL_DLLPRIVATE void     ImplSetImpBitmap( const std::shared_ptr<ImpBitmap>& xImpBmp );
+    const std::shared_ptr<SalBitmap>& ImplGetSalBitmap() const { return mxSalBmp; }
+    SAL_DLLPRIVATE void     ImplSetSalBitmap( const std::shared_ptr<SalBitmap>& xImpBmp );
 
     SAL_DLLPRIVATE bool     ImplScaleFast( const double& rScaleX, const double& rScaleY );
     SAL_DLLPRIVATE bool     ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
@@ -736,7 +735,7 @@ private:
     SAL_DLLPRIVATE bool ImplConvertGhosted();
 
 private:
-    std::shared_ptr<ImpBitmap> mxImpBmp;
+    std::shared_ptr<SalBitmap> mxSalBmp;
     MapMode maPrefMapMode;
     Size maPrefSize;
 
@@ -744,12 +743,12 @@ private:
 
 inline bool Bitmap::operator!() const
 {
-    return( mxImpBmp == nullptr );
+    return( mxSalBmp == nullptr );
 }
 
 inline bool Bitmap::IsEmpty() const
 {
-    return( mxImpBmp == nullptr );
+    return( mxSalBmp == nullptr );
 }
 
 inline const MapMode& Bitmap::GetPrefMapMode() const

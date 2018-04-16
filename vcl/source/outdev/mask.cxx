@@ -26,7 +26,7 @@
 #include <vcl/window.hxx>
 
 #include <salgdi.hxx>
-#include <impbmp.hxx>
+#include <salbmp.hxx>
 #include <outdata.hxx>
 
 void OutputDevice::DrawMask( const Point& rDestPt,
@@ -108,7 +108,7 @@ void OutputDevice::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
 {
     assert(!is_double_buffered_window());
 
-    const std::shared_ptr<ImpBitmap>& xImpBmp = rMask.ImplGetImpBitmap();
+    const std::shared_ptr<SalBitmap>& xImpBmp = rMask.ImplGetSalBitmap();
     if (xImpBmp)
     {
         SalTwoRect aPosAry(rSrcPtPixel.X(), rSrcPtPixel.Y(), rSrcSizePixel.Width(), rSrcSizePixel.Height(),
@@ -127,12 +127,11 @@ void OutputDevice::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
             {
                 Bitmap aTmp( rMask );
                 aTmp.Mirror( nMirrFlags );
-                mpGraphics->DrawMask( aPosAry, *aTmp.ImplGetImpBitmap()->ImplGetSalBitmap(),
+                mpGraphics->DrawMask( aPosAry, *aTmp.ImplGetSalBitmap(),
                                       rMaskColor, this);
             }
             else
-                mpGraphics->DrawMask( aPosAry, *xImpBmp->ImplGetSalBitmap(),
-                                      rMaskColor, this );
+                mpGraphics->DrawMask( aPosAry, *xImpBmp, rMaskColor, this );
 
         }
     }
