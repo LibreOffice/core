@@ -145,7 +145,7 @@ void SAL_CALL ODBTable::disposing()
 void ODBTable::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 {
     if ((PROPERTY_ID_PRIVILEGES == _nHandle) && (-1 == m_nPrivileges))
-    {   // somebody is asking for the privileges an we do not know them, yet
+    {   // somebody is asking for the privileges and we do not know them, yet
         const_cast<ODBTable*>(this)->m_nPrivileges = ::dbtools::getTablePrivileges(getMetaData(),m_CatalogName,m_SchemaName, m_Name);
     }
 

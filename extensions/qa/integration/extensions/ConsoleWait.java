@@ -70,7 +70,7 @@ public class ConsoleWait implements com.sun.star.lang.XEventListener
     /** creates a ConsoleWait instance
      *  @param _disposable
      *      a component whose disposal should be monitored. When this component dies,
-     *      the ConsoleWait also returns from an waitForConsole call, even if the user
+     *      the ConsoleWait also returns from a waitForConsole call, even if the user
      *      did not yet press the enter key
      */
     public ConsoleWait( Object _disposable )

@@ -375,7 +375,7 @@ void SAL_CALL BaseContainerControl::setVisible ( sal_Bool bVisible )
 
 WindowDescriptor* BaseContainerControl::impl_getWindowDescriptor ( const Reference< XWindowPeer > & rParentPeer )
 {
-    // - used from "createPeer()" to set the values of an WindowDescriptor!!!
+    // - used from "createPeer()" to set the values of a WindowDescriptor!!!
     // - if you will change the descriptor-values, you must override this virtual function
     // - the caller must release the memory for this dynamical descriptor!!!
 

@@ -183,7 +183,7 @@
       </prop>
       <prop oor:name="ControlType" oor:type="xs:string">
         <info>
-          <desc>A property to define the control type of the toolbar item. An will be interpreted as OpenOffice.org default toggle button.</desc>
+          <desc>A property to define the control type of the toolbar item. It will be interpreted as OpenOffice.org default toggle button.</desc>
         </info>
       </prop>
       <prop oor:name="Width" oor:type="xs:long">

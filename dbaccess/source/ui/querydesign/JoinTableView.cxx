@@ -1268,7 +1268,7 @@ bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
                                     // the last win is active and we're travelling forward -> select the first conn
                                     pNextConn = m_vTableConnection.begin()->get();
                                 if ((aIter == m_aTableMap.begin()) && !bForward)
-                                    // the first win is active an we're traveling backward -> select the last conn
+                                    // the first win is active and we're traveling backward -> select the last conn
                                     pNextConn = m_vTableConnection.rbegin()->get();
                             }
 

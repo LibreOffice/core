@@ -2048,7 +2048,7 @@ bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,
 
                 if( aContent[ i ] != nullptr )
                 {
-                    // is it an writer or sdr - textbox?
+                    // is it a writer or sdr - textbox?
                     const SdrObject& rObj = *static_cast<SdrObject const *>(aContent[ i ]);
                     if (rObj.GetObjInventor() == SdrInventor::FmForm)
                     {
@@ -2304,7 +2304,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 for ( sal_uInt16 i = 0; i < nLen; ++i )
                 {
                     // write textbox story - FTXBXS
-                    // is it an writer or sdr - textbox?
+                    // is it a writer or sdr - textbox?
                     const SdrObject* pObj = static_cast<SdrObject const *>(aContent[ i ]);
                     sal_Int32 nCnt = 1;
                     if (pObj && dynamic_cast< const SdrTextObj *>( pObj ) ==  nullptr )
