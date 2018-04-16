@@ -47,7 +47,7 @@ import com.sun.star.document.XDocumentProperties;
  * XFileIdentifierConverter, saves the permanent
  * overhead of querying for those interfaces, and delivers
  * convenience methods for using them.
- * These Convenince methods include mainly Exception-handling.
+ * These Convenience methods include mainly Exception-handling.
  */
 public class FileAccess
 {
