@@ -1915,7 +1915,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
                             aSelection.realloc(pSelection->GetSelectCount());
                             long nIdx = pSelection->FirstSelected();
                             Any* pSelectionNos = aSelection.getArray();
-                            while (nIdx >= 0)
+                            while (nIdx != SFX_ENDOFSELECTION)
                             {
                                 *pSelectionNos++ <<= static_cast<sal_Int32>(nIdx + 1);
                                 nIdx = pSelection->NextSelected();
