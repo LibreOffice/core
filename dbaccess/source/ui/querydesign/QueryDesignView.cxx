@@ -641,11 +641,11 @@ namespace
                     {
                         // we have to look if we have alias.* here but before we have to check if the column doesn't already exist
                         OTableFieldDescRef  aInfo = new OTableFieldDesc();
-                        bool bFound = false;
                         for (auto const& table : rTabList)
                         {
                             OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(table.second.get());
 
+                            bool bFound = false;
                             bFound = pTabWin->ExistsField( rFieldName, aInfo );
                             if ( bFound )
                             {

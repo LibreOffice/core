@@ -122,11 +122,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportHWP(SvStream &rStream)
     {
         std::unique_ptr<HStream> stream(new HStream);
         byte aData[32768];
-        std::size_t nRead;
 
         while (true)
         {
-            nRead = rStream.ReadBytes(aData, 32768);
+            std::size_t nRead = rStream.ReadBytes(aData, 32768);
             if (nRead == 0)
                 break;
             stream->addData(aData, static_cast<int>(nRead));

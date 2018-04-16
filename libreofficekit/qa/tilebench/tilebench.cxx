@@ -104,12 +104,6 @@ int main( int argc, char* argv[] )
         return 1;
     }
 
-    // Use realistic dimensions, similar to the Online client.
-    long nTilePixelWidth = 512;
-    long nTilePixelHeight = 512;
-    long nTileTwipWidth = 3840;
-    long nTileTwipHeight = 3840;
-
     aTimes.emplace_back("initialization");
     // coverity[tainted_string] - build time test tool
     Office *pOffice = lok_cpp_init(argv[1]);
@@ -152,6 +146,12 @@ int main( int argc, char* argv[] )
             free (pName);
         }
         aTimes.emplace_back();
+
+        // Use realistic dimensions, similar to the Online client.
+        long nTilePixelWidth = 512;
+        long nTilePixelHeight = 512;
+        long nTileTwipWidth = 3840;
+        long nTileTwipHeight = 3840;
 
         // Estimate the maximum tiles based on the number of parts requested, if Writer.
         if (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT)
