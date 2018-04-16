@@ -229,7 +229,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
         {
             std::shared_ptr<ImpBitmap> xImpBmp(new ImpBitmap);
             // frequently used conversion for creating alpha masks
-            if (xImpBmp->ImplCreate(*mxImpBmp) && xImpBmp->ConvertToGreyscale())
+            if (xImpBmp->Create(*mxImpBmp) && xImpBmp->ConvertToGreyscale())
             {
                 ImplSetImpBitmap(xImpBmp);
                 SAL_INFO( "vcl.opengl", "Ref count: " << mxImpBmp.use_count() );
@@ -732,16 +732,16 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
 
     const sal_uInt16 nStartCount(GetBitCount());
 
-    if (mxImpBmp && mxImpBmp->ImplScalingSupported())
+    if (mxImpBmp && mxImpBmp->ScalingSupported())
     {
         // implementation specific scaling
         std::shared_ptr<ImpBitmap> xImpBmp(new ImpBitmap);
-        if (xImpBmp->ImplCreate(*mxImpBmp) && xImpBmp->ImplScale(rScaleX, rScaleY, nScaleFlag))
+        if (xImpBmp->Create(*mxImpBmp) && xImpBmp->Scale(rScaleX, rScaleY, nScaleFlag))
         {
             ImplSetImpBitmap(xImpBmp);
             SAL_INFO( "vcl.opengl", "Ref count: " << mxImpBmp.use_count() );
             maPrefMapMode = MapMode( MapUnit::MapPixel );
-            maPrefSize = xImpBmp->ImplGetSize();
+            maPrefSize = xImpBmp->GetSize();
             return true;
         }
     }

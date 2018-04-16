@@ -53,23 +53,23 @@ public:
 
     SalBitmap*          ImplGetSalBitmap() const { return mpSalBitmap.get(); }
 
-    void                ImplCreate( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal );
-    bool                ImplCreate( const ImpBitmap& rImpBitmap );
-    bool                ImplCreate( const ImpBitmap& rImpBitmap, SalGraphics* pGraphics );
-    bool                ImplCreate( const ImpBitmap& rImpBitmap, sal_uInt16 nNewBitCount );
+    void                Create( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal );
+    bool                Create( const ImpBitmap& rImpBitmap );
+    bool                Create( const ImpBitmap& rImpBitmap, SalGraphics* pGraphics );
+    bool                Create( const ImpBitmap& rImpBitmap, sal_uInt16 nNewBitCount );
 
-    Size                ImplGetSize() const;
-    sal_uInt16          ImplGetBitCount() const;
+    Size                GetSize() const;
+    sal_uInt16          GetBitCount() const;
 
-    BitmapBuffer*       ImplAcquireBuffer( BitmapAccessMode nMode );
-    void                ImplReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode );
+    BitmapBuffer*       AcquireBuffer( BitmapAccessMode nMode );
+    void                ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode );
 
-    BitmapChecksum      ImplGetChecksum() const;
-    void                ImplInvalidateChecksum();
+    BitmapChecksum      GetChecksum() const;
+    void                InvalidateChecksum();
 
-    bool                ImplScalingSupported() const;
-    bool                ImplScale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag );
-    bool                ImplReplace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol );
+    bool                ScalingSupported() const;
+    bool                Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag );
+    bool                Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol );
     bool                ConvertToGreyscale();
 };
 

@@ -49,16 +49,16 @@ BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
                         "Unpredictable results: bitmap is referenced more than once!" );
         }
 
-        mpBuffer = xImpBmp->ImplAcquireBuffer( mnAccessMode );
+        mpBuffer = xImpBmp->AcquireBuffer( mnAccessMode );
 
         if( !mpBuffer )
         {
             std::shared_ptr<ImpBitmap> xNewImpBmp(new ImpBitmap);
-            if (xNewImpBmp->ImplCreate(*xImpBmp, rBitmap.GetBitCount()))
+            if (xNewImpBmp->Create(*xImpBmp, rBitmap.GetBitCount()))
             {
                 xImpBmp = xNewImpBmp;
                 rBitmap.ImplSetImpBitmap( xImpBmp );
-                mpBuffer = xImpBmp->ImplAcquireBuffer( mnAccessMode );
+                mpBuffer = xImpBmp->AcquireBuffer( mnAccessMode );
             }
         }
 
@@ -72,7 +72,7 @@ BitmapInfoAccess::~BitmapInfoAccess()
 
     if (mpBuffer && xImpBmp)
     {
-        xImpBmp->ImplReleaseBuffer( mpBuffer, mnAccessMode );
+        xImpBmp->ReleaseBuffer( mpBuffer, mnAccessMode );
         mpBuffer = nullptr;
     }
 }
@@ -100,7 +100,7 @@ BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
 
     if (!bOk)
     {
-        xImpBmp->ImplReleaseBuffer( mpBuffer, mnAccessMode );
+        xImpBmp->ReleaseBuffer( mpBuffer, mnAccessMode );
         mpBuffer = nullptr;
     }
 }

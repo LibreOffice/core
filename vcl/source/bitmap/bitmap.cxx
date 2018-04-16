@@ -43,7 +43,7 @@ Bitmap::Bitmap(const Bitmap& rBitmap)
 Bitmap::Bitmap(SalBitmap* pSalBitmap)
     : mxImpBmp(new ImpBitmap(pSalBitmap))
     , maPrefMapMode(MapMode(MapUnit::MapPixel))
-    , maPrefSize(mxImpBmp->ImplGetSize())
+    , maPrefSize(mxImpBmp->GetSize())
 {
 }
 
@@ -104,7 +104,7 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
         }
 
         mxImpBmp.reset(new ImpBitmap);
-        mxImpBmp->ImplCreate( rSizePixel, nBitCount, pRealPal ? *pRealPal : aPal );
+        mxImpBmp->Create( rSizePixel, nBitCount, pRealPal ? *pRealPal : aPal );
     }
 }
 
@@ -242,12 +242,12 @@ void Bitmap::SetEmpty()
 
 Size Bitmap::GetSizePixel() const
 {
-    return( mxImpBmp ? mxImpBmp->ImplGetSize() : Size() );
+    return( mxImpBmp ? mxImpBmp->GetSize() : Size() );
 }
 
 sal_uInt16 Bitmap::GetBitCount() const
 {
-    return( mxImpBmp ? mxImpBmp->ImplGetBitCount() : 0 );
+    return( mxImpBmp ? mxImpBmp->GetBitCount() : 0 );
 }
 
 bool Bitmap::HasGreyPalette() const
@@ -271,7 +271,7 @@ BitmapChecksum Bitmap::GetChecksum() const
 
     if( mxImpBmp )
     {
-        nRet = mxImpBmp->ImplGetChecksum();
+        nRet = mxImpBmp->GetChecksum();
 
         if (!nRet)
         {
@@ -280,11 +280,11 @@ BitmapChecksum Bitmap::GetChecksum() const
             // so, we need to update the imp bitmap for this bitmap instance
             // as we do in BitmapInfoAccess::ImplCreate
             std::shared_ptr<ImpBitmap> xNewImpBmp(new ImpBitmap);
-            if (xNewImpBmp->ImplCreate(*mxImpBmp, GetBitCount()))
+            if (xNewImpBmp->Create(*mxImpBmp, GetBitCount()))
             {
                 Bitmap* pThis = const_cast<Bitmap*>(this);
                 pThis->mxImpBmp = xNewImpBmp;
-                nRet = mxImpBmp->ImplGetChecksum();
+                nRet = mxImpBmp->GetChecksum();
             }
         }
     }
@@ -298,7 +298,7 @@ void Bitmap::ImplMakeUnique()
     {
         std::shared_ptr<ImpBitmap> xOldImpBmp = mxImpBmp;
         mxImpBmp.reset(new ImpBitmap);
-        mxImpBmp->ImplCreate(*xOldImpBmp);
+        mxImpBmp->Create(*xOldImpBmp);
     }
 }
 
@@ -829,7 +829,7 @@ Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay )
     if( mxImpBmp && pDispGraphics )
     {
         std::shared_ptr<ImpBitmap> xImpDispBmp(new ImpBitmap);
-        if (xImpDispBmp->ImplCreate(*mxImpBmp, pDispGraphics))
+        if (xImpDispBmp->Create(*mxImpBmp, pDispGraphics))
             aDispBmp.ImplSetImpBitmap(xImpDispBmp);
     }
 
