@@ -282,7 +282,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
                 sal_uInt16 nCount = mpDoc->GetPageCount();
                 for ( sal_uInt16 itPage = 0; itPage < nCount && !bLanguageFound; itPage++ )
                 {
-                    SdrObjListIter aListIter(*mpDoc->GetPage(itPage), SdrIterMode::DeepWithGroups);
+                    SdrObjListIter aListIter(mpDoc->GetPage(itPage), SdrIterMode::DeepWithGroups);
                     while ( aListIter.IsMore() && !bLanguageFound )
                     {
                         pObj = aListIter.Next();

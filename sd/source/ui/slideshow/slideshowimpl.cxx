@@ -1556,8 +1556,8 @@ sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark
 
         if( pObj )
         {
-            nPgNum = pObj->GetPage()->GetPageNum();
-            bIsMasterPage = pObj->GetPage()->IsMasterPage();
+            nPgNum = pObj->getSdrPageFromSdrObject()->GetPageNum();
+            bIsMasterPage = pObj->getSdrPageFromSdrObject()->IsMasterPage();
         }
     }
 

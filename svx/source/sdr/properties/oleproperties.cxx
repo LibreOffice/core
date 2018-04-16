@@ -17,17 +17,32 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sdr/properties/oleproperties.hxx>
 #include <svl/itemset.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
-
+#include <svx/svdobj.hxx>
+#include <svx/svdmodel.hxx>
 
 namespace sdr
 {
     namespace properties
     {
+        void OleProperties::applyDefaultStyleSheetFromSdrModel()
+        {
+            SfxStyleSheet* pStyleSheet(GetSdrObject().getSdrModelFromSdrObject().GetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj());
+
+            if(pStyleSheet)
+            {
+                SetStyleSheet(pStyleSheet, false);
+            }
+            else
+            {
+                SetMergedItem(XFillStyleItem(com::sun::star::drawing::FillStyle_NONE));
+                SetMergedItem(XLineStyleItem(com::sun::star::drawing::LineStyle_NONE));
+            }
+        }
+
         OleProperties::OleProperties(SdrObject& rObj)
         :   RectangleProperties(rObj)
         {
