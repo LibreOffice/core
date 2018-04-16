@@ -45,7 +45,7 @@ ViewShellId SdUndoAction::GetViewShellId() const
 
 UndoRemovePresObjectImpl::UndoRemovePresObjectImpl( SdrObject& rObject )
 {
-    SdPage* pPage = dynamic_cast< SdPage* >( rObject.GetPage() );
+    SdPage* pPage = dynamic_cast< SdPage* >( rObject.getSdrPageFromSdrObject() );
     if( pPage )
     {
         if( pPage->IsPresObj(&rObject) )
@@ -177,7 +177,7 @@ UndoObjectSetText::UndoObjectSetText( SdrObject& rObject, sal_Int32 nText )
 , mbNewEmptyPresObj(false)
 , mxSdrObject( &rObject )
 {
-    SdPage* pPage = dynamic_cast< SdPage* >( rObject.GetPage() );
+    SdPage* pPage = dynamic_cast< SdPage* >( rObject.getSdrPageFromSdrObject() );
     if( pPage && pPage->hasAnimationNode() )
     {
         css::uno::Reference< css::drawing::XShape > xShape( rObject.getUnoShape(), css::uno::UNO_QUERY );
@@ -254,7 +254,7 @@ UndoObjectPresentationKind::UndoObjectPresentationKind(SdrObject& rObject)
 :   SdrUndoObj(rObject)
 ,   meOldKind(PRESOBJ_NONE)
 ,   meNewKind(PRESOBJ_NONE)
-,   mxPage( static_cast<SdPage*>(rObject.GetPage()) )
+,   mxPage( static_cast<SdPage*>(rObject.getSdrPageFromSdrObject()) )
 ,   mxSdrObject( &rObject )
 {
     DBG_ASSERT( mxPage.is(), "sd::UndoObjectPresentationKind::UndoObjectPresentationKind(), does not work for shapes without a slide!" );
@@ -307,7 +307,7 @@ void UndoAutoLayoutPosAndSize::Redo()
 
 UndoGeoObject::UndoGeoObject( SdrObject& rNewObj )
 : SdrUndoGeoObj( rNewObj )
-, mxPage( static_cast<SdPage*>(rNewObj.GetPage()) )
+, mxPage( static_cast<SdPage*>(rNewObj.getSdrPageFromSdrObject()) )
 , mxSdrObject( &rNewObj )
 {
 }
@@ -348,7 +348,7 @@ void UndoGeoObject::Redo()
 
 UndoAttrObject::UndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )
 : SdrUndoAttrObj( rObject, bStyleSheet1, bSaveText )
-, mxPage( static_cast<SdPage*>(rObject.GetPage()) )
+, mxPage( static_cast<SdPage*>(rObject.getSdrPageFromSdrObject()) )
 , mxSdrObject( &rObject )
 {
 }

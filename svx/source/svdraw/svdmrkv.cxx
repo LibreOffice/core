@@ -1753,8 +1753,8 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
     if (pOL!=nullptr)
     {
         bool bBack(nOptions & SdrSearchOptions::BACKWARD);
-        bool bRemap(pOL->GetOwnerObj() && dynamic_cast< const E3dScene* >(pOL->GetOwnerObj()) != nullptr);
-        E3dScene* pRemapScene = (bRemap ? static_cast<E3dScene*>(pOL->GetOwnerObj()) : nullptr);
+        bool bRemap(pOL->getSdrObjectFromSdrObjList() && dynamic_cast< const E3dScene* >(pOL->getSdrObjectFromSdrObjList()) != nullptr);
+        E3dScene* pRemapScene = (bRemap ? static_cast< E3dScene* >(pOL->getSdrObjectFromSdrObjList()) : nullptr);
 
         const size_t nObjCount=pOL->GetObjCount();
         size_t nObjNum=bBack ? 0 : nObjCount;

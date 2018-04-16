@@ -102,6 +102,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_subsequent_export_test,\
     vcl/vcl.common \
     xmloff/util/xo \
     xmlsecurity/util/xmlsecurity \
+    emfio/emfio \
 ))
 
 $(eval $(call gb_CppunitTest_use_components,sc_subsequent_export_test,\

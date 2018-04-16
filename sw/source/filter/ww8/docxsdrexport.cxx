@@ -759,7 +759,7 @@ void DocxSdrExport::endDMLAnchorInline(const SwFrameFormat* pFrameFormat)
 void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat)
 {
     bool bSwapInPage = false;
-    if (!sdrObj->GetPage())
+    if (!sdrObj->getSdrPageFromSdrObject())
     {
         if (SdrModel* pModel
             = m_pImpl->m_rExport.m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
@@ -767,7 +767,6 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
             if (SdrPage* pPage = pModel->GetPage(0))
             {
                 bSwapInPage = true;
-                const_cast<SdrObject*>(sdrObj)->SetPage(pPage);
             }
         }
     }
@@ -782,9 +781,6 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
         *sdrObj, rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(), rHoriOri.GetRelationOrient(),
         rVertOri.GetRelationOrient(), true);
     m_pImpl->m_pSerializer->endElementNS(XML_w, XML_pict);
-
-    if (bSwapInPage)
-        const_cast<SdrObject*>(sdrObj)->SetPage(nullptr);
 }
 
 bool lcl_isLockedCanvas(const uno::Reference<drawing::XShape>& xShape)

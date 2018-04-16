@@ -186,7 +186,7 @@ OUString ScContentTree::getAltLongDescText( SvTreeListEntry* pEntry, bool isAltT
                     DBG_ASSERT(pPage,"Page ?");
                     if (pPage)
                     {
-                        SdrObjListIter aIter( *pPage, eIter );
+                        SdrObjListIter aIter( pPage, eIter );
                         SdrObject* pObject = aIter.Next();
                         while (pObject)
                         {
@@ -985,7 +985,7 @@ void ScContentTree::GetDrawNames( ScContentId nType )
             OSL_ENSURE(pPage,"Page ?");
             if (pPage)
             {
-                SdrObjListIter aIter( *pPage, eIter );
+                SdrObjListIter aIter( pPage, eIter );
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
@@ -1171,7 +1171,7 @@ bool ScContentTree::DrawNamesChanged( ScContentId nType )
             OSL_ENSURE(pPage,"Page ?");
             if (pPage)
             {
-                SdrObjListIter aIter( *pPage, eIter );
+                SdrObjListIter aIter( pPage, eIter );
                 SdrObject* pObject = aIter.Next();
                 while (pObject && bEqual)
                 {

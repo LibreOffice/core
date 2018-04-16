@@ -553,7 +553,7 @@ IteratorImplBase* ViewIteratorImpl::Clone (IteratorImplBase* pObject) const
 
     if (mpObjectIterator != nullptr)
     {
-        pIterator->mpObjectIterator = new SdrObjListIter(*mpPage, SdrIterMode::DeepNoGroups, !mbDirectionIsForward);
+        pIterator->mpObjectIterator = new SdrObjListIter(mpPage, SdrIterMode::DeepNoGroups, !mbDirectionIsForward);
 
         // No direct way to set the object iterator to the current object.
         pIterator->maPosition.mxObject.reset(nullptr);
@@ -598,7 +598,7 @@ void ViewIteratorImpl::GotoNextText()
             SetPage (maPosition.mnPageIndex-1);
 
         if (mpPage != nullptr)
-            mpObjectIterator = new SdrObjListIter(*mpPage, SdrIterMode::DeepNoGroups, !mbDirectionIsForward);
+            mpObjectIterator = new SdrObjListIter(mpPage, SdrIterMode::DeepNoGroups, !mbDirectionIsForward);
         if (mpObjectIterator!=nullptr && mpObjectIterator->IsMore())
             maPosition.mxObject.reset(mpObjectIterator->Next());
         else
@@ -650,7 +650,7 @@ void ViewIteratorImpl::SetPage (sal_Int32 nPageIndex)
 
     // Set up object list iterator.
     if (mpPage != nullptr)
-        mpObjectIterator = new SdrObjListIter(*mpPage, SdrIterMode::DeepNoGroups, ! mbDirectionIsForward);
+        mpObjectIterator = new SdrObjListIter(mpPage, SdrIterMode::DeepNoGroups, ! mbDirectionIsForward);
     else
         mpObjectIterator = nullptr;
 
@@ -677,7 +677,7 @@ void ViewIteratorImpl::Reverse()
     // Create reversed object list iterator.
     delete mpObjectIterator;
     if (mpPage != nullptr)
-        mpObjectIterator = new SdrObjListIter(*mpPage, SdrIterMode::DeepNoGroups, ! mbDirectionIsForward);
+        mpObjectIterator = new SdrObjListIter(mpPage, SdrIterMode::DeepNoGroups, ! mbDirectionIsForward);
     else
         mpObjectIterator = nullptr;
 
