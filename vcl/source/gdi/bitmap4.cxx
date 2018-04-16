@@ -22,7 +22,6 @@
 #include <osl/diagnose.h>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmap.hxx>
-#include <impbmp.hxx>
 #include <bitmapwriteaccess.hxx>
 
 #define S2(a,b)             { long t; if( ( t = b - a ) < 0 ) { a += t; b -= t; } }

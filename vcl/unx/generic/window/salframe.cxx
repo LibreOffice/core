@@ -69,7 +69,6 @@
 #include <svdata.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
-#include <impbmp.hxx>
 
 #include <boost/optional.hpp>
 
@@ -334,7 +333,7 @@ static bool lcl_SelectAppIconPixmap( SalDisplay const *pDisplay, SalX11Screen nX
         return false;
 
     X11SalBitmap *pBitmap = dynamic_cast < X11SalBitmap * >
-        (aIcon.ImplGetBitmapImpBitmap()->ImplGetSalBitmap());
+        (aIcon.ImplGetBitmapSalBitmap().get());
     if (!pBitmap) // FIXME: opengl
         return false;
 
@@ -374,7 +373,7 @@ static bool lcl_SelectAppIconPixmap( SalDisplay const *pDisplay, SalX11Screen nX
         aMask.Invert();
 
         X11SalBitmap *pMask = static_cast < X11SalBitmap * >
-            (aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
+            (aMask.ImplGetSalBitmap().get());
 
         pMask->ImplDraw(icon_mask, nXScreen, 1, aRect, aMonoGC);
         XFreeGC( pDisplay->GetDisplay(), aMonoGC );

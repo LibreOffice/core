@@ -266,7 +266,6 @@
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <impbmp.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/make_unique.hxx>
 #include <o3tl/strong_int.hxx>

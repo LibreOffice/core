@@ -38,7 +38,6 @@
 #include <fontinstance.hxx>
 #include <outdev.h>
 #include <svdata.hxx>
-#include <impbmp.hxx>
 #include <salbmp.hxx>
 #include <salgdi.hxx>
 #include <salframe.hxx>
