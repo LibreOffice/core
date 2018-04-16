@@ -445,7 +445,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         return nullptr;
     }
 
-    // If we have an Window with an Caption Bar and without
+    // If we have a Window with an Caption Bar and without
     // an MaximizeBox, we change the SystemMenu
     if ( (nSysStyle & (WS_CAPTION | WS_MAXIMIZEBOX)) == (WS_CAPTION) )
     {

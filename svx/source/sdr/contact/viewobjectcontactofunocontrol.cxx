@@ -997,7 +997,7 @@ namespace sdr { namespace contact {
             // We once had a situation where this was called reentrantly, which lead to all kind of strange effects. All
             // those affected the grid control, which is the only control so far which is visible in design mode (and
             // not only in alive mode).
-            // Creating the control triggered an Window::Update on some of its child windows, which triggered a
+            // Creating the control triggered a Window::Update on some of its child windows, which triggered a
             // Paint on parent of the grid control (e.g. the SwEditWin), which triggered a reentrant call to this method,
             // which it is not really prepared for.
 

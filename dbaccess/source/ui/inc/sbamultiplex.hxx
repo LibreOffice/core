@@ -47,7 +47,7 @@
 
 namespace dbaui
 {
-    // TODO : replace this class if MM provides an WeakSubObject in cppu
+    // TODO : replace this class if MM provides a WeakSubObject in cppu
     class OSbaWeakSubObject : public ::cppu::OWeakObject
     {
     protected:
