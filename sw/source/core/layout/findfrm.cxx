@@ -1265,9 +1265,12 @@ static bool lcl_IsInSectionDirectly( const SwFrame *pUp )
         else if( pUp->IsSctFrame() )
         {
             auto pSection = static_cast<const SwSectionFrame*>(pUp);
+            const SwFrame* pHeaderFooter = pSection->FindFooterOrHeader();
+            // When the section frame is not in header/footer:
             // Allow move of frame in case our only column is not growable.
             // Also allow if there is a previous section frame (to move back).
-            return bSeenColumn || !pSection->Growable() || pSection->GetPrecede();
+            bool bAllowOutsideHeaderFooter = !pSection->Growable() || pSection->GetPrecede();
+            return bSeenColumn || (!pHeaderFooter && bAllowOutsideHeaderFooter);
         }
         else if( pUp->IsTabFrame() )
             return false;
