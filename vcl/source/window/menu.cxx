@@ -228,8 +228,7 @@ void Menu::dispose()
     bKilled = true;
 
     pItemList->Clear();
-    delete mpLayoutData;
-    mpLayoutData = nullptr;
+    mpLayoutData.reset();
 
     // Native-support: destroy SalMenu
     ImplClearSalMenu();
@@ -452,8 +451,7 @@ void Menu::InsertItem(sal_uInt16 nItemId, const OUString& rStr, MenuItemBits nIt
     NbcInsertItem(nItemId, nItemBits, rStr, this, nPos, rIdent);
 
     vcl::Window* pWin = ImplGetWindow();
-    delete mpLayoutData;
-    mpLayoutData = nullptr;
+    mpLayoutData.reset();
     if ( pWin )
     {
         ImplCalcSize( pWin );
@@ -518,8 +516,7 @@ void Menu::InsertSeparator(const OString &rIdent, sal_uInt16 nPos)
     if( ImplGetSalMenu() && pData && pData->pSalMenuItem )
         ImplGetSalMenu()->InsertItem( pData->pSalMenuItem, nPos );
 
-    delete mpLayoutData;
-    mpLayoutData = nullptr;
+    mpLayoutData.reset();
 
     ImplCallEventListeners( VclEventId::MenuInsertItem, nPos );
 }
@@ -545,8 +542,7 @@ void Menu::RemoveItem( sal_uInt16 nPos )
         if ( pWin->IsVisible() )
             pWin->Invalidate();
     }
-    delete mpLayoutData;
-    mpLayoutData = nullptr;
+    mpLayoutData.reset();
 
     if ( bRemove )
         ImplCallEventListeners( VclEventId::MenuRemoveItem, nPos );
@@ -1005,8 +1001,7 @@ void Menu::SetItemText( sal_uInt16 nItemId, const OUString& rStr )
             ImplGetSalMenu()->SetItemText( nPos, pData->pSalMenuItem, rStr );
 
         vcl::Window* pWin = ImplGetWindow();
-        delete mpLayoutData;
-        mpLayoutData = nullptr;
+        mpLayoutData.reset();
         if (pWin && IsMenuBar())
         {
             ImplCalcSize( pWin );
@@ -2201,8 +2196,7 @@ void Menu::RemoveDisabledEntries( bool bCheckPopups, bool bRemoveEmptyPopups )
         if ( pItem->eType == MenuItemType::SEPARATOR )
             RemoveItem( nLast );
     }
-    delete mpLayoutData;
-    mpLayoutData = nullptr;
+    mpLayoutData.reset();
 }
 
 void Menu::UpdateNativeMenu()
@@ -2217,15 +2211,14 @@ void Menu::MenuBarKeyInput(const KeyEvent&)
 
 void Menu::ImplKillLayoutData() const
 {
-    delete mpLayoutData;
-    mpLayoutData = nullptr;
+    mpLayoutData.reset();
 }
 
 void Menu::ImplFillLayoutData() const
 {
     if (pWindow && pWindow->IsReallyVisible())
     {
-        mpLayoutData = new MenuLayoutData;
+        mpLayoutData.reset(new MenuLayoutData);
         if (IsMenuBar())
         {
             ImplPaint(*pWindow, pWindow->GetOutputSizePixel(), 0, 0, nullptr, false, true); // FIXME
@@ -2813,8 +2806,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
         pMenuBarWindow->SetMBWHideAccel( !(pMenuBarWindow->GetMBWMenuKey()) );
     }
 
-    delete mpLayoutData;
-    mpLayoutData = nullptr;
+    mpLayoutData.reset();
 
     ImplSVData* pSVData = ImplGetSVData();
 
