@@ -53,6 +53,7 @@ class Qt5Widget : public QWidget
     virtual void resizeEvent(QResizeEvent*) override;
     virtual void showEvent(QShowEvent*) override;
     virtual void wheelEvent(QWheelEvent*) override;
+    virtual void closeEvent(QCloseEvent*) override;
 
 public:
     Qt5Widget(Qt5Frame& rFrame, QWidget* parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags());

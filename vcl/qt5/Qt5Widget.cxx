@@ -173,6 +173,11 @@ void Qt5Widget::showEvent(QShowEvent*)
     m_pFrame->CallCallback(SalEvent::Paint, &aPaintEvt);
 }
 
+void Qt5Widget::closeEvent(QCloseEvent* /*pEvent*/)
+{
+    m_pFrame->CallCallback(SalEvent::Close, nullptr);
+}
+
 static sal_uInt16 GetKeyCode(int keyval)
 {
     sal_uInt16 nCode = 0;
