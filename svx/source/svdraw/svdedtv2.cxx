@@ -540,7 +540,7 @@ void SdrEditView::ImpCopyAttributes(const SdrObject* pSource, SdrObject* pDest) 
     if (pSource!=nullptr) {
         SdrObjList* pOL=pSource->GetSubList();
         if (pOL!=nullptr && !pSource->Is3DObj()) { // get first non-group object from group
-            SdrObjListIter aIter(*pOL,SdrIterMode::DeepNoGroups);
+            SdrObjListIter aIter(pOL,SdrIterMode::DeepNoGroups);
             pSource=aIter.Next();
         }
     }
@@ -586,7 +586,7 @@ bool SdrEditView::ImpCanConvertForCombine(const SdrObject* pObj)
 
     if(pOL && !pObj->Is3DObj())
     {
-        SdrObjListIter aIter(*pOL, SdrIterMode::DeepNoGroups);
+        SdrObjListIter aIter(pOL, SdrIterMode::DeepNoGroups);
 
         while(aIter.IsMore())
         {
@@ -629,7 +629,7 @@ basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj)
 
             if(pOL)
             {
-                SdrObjListIter aIter(*pOL, SdrIterMode::DeepNoGroups);
+                SdrObjListIter aIter(pOL, SdrIterMode::DeepNoGroups);
 
                 while(aIter.IsMore())
                 {
@@ -666,7 +666,7 @@ basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon(const SdrObject* pObj)
     if(pOL && !pObj->Is3DObj())
     {
         basegfx::B2DPolyPolygon aRetval;
-        SdrObjListIter aIter(*pOL, SdrIterMode::DeepNoGroups);
+        SdrObjListIter aIter(pOL, SdrIterMode::DeepNoGroups);
 
         while(aIter.IsMore())
         {
@@ -1433,7 +1433,7 @@ bool SdrEditView::ImpCanDismantle(const SdrObject* pObj, bool bMakeLines)
     if(pOL)
     {
         // group object -- check all members if they're PathObjs
-        SdrObjListIter aIter(*pOL, SdrIterMode::DeepNoGroups);
+        SdrObjListIter aIter(pOL, SdrIterMode::DeepNoGroups);
 
         while(aIter.IsMore() && !bOtherObjs)
         {
@@ -1685,7 +1685,7 @@ void SdrEditView::DismantleMarkedObjects(bool bMakeLines)
             size_t nPos=nPos0+1;
             SdrObjList* pSubList=pObj->GetSubList();
             if (pSubList!=nullptr && !pObj->Is3DObj()) {
-                SdrObjListIter aIter(*pSubList,SdrIterMode::DeepNoGroups);
+                SdrObjListIter aIter(pSubList,SdrIterMode::DeepNoGroups);
                 while (aIter.IsMore()) {
                     const SdrObject* pObj1=aIter.Next();
                     ImpDismantleOneObject(pObj1,*pOL,nPos,pPV,bMakeLines);
@@ -1970,7 +1970,7 @@ void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
             SdrPageView* pPV=pM->GetPageView();
             if (pObj->IsGroupObject() && !pObj->Is3DObj()) {
                 SdrObject* pGrp=pObj;
-                SdrObjListIter aIter(*pGrp,SdrIterMode::DeepNoGroups);
+                SdrObjListIter aIter(*pGrp, SdrIterMode::DeepNoGroups);
                 while (aIter.IsMore()) {
                     pObj=aIter.Next();
                     ImpConvertOneObj(pObj,bPath,bLineToArea);

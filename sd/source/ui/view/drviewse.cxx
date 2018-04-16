@@ -655,7 +655,7 @@ void DrawViewShell::FuDeleteSelectedObjects()
         for (size_t i=0; i < rMarkList.GetMarkCount(); ++i)
         {
             SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-            SdPage* pPage = static_cast<SdPage*>(pObj->GetPage());
+            SdPage* pPage = static_cast<SdPage*>(pObj->getSdrPageFromSdrObject());
             PresObjKind eKind = pPage->GetPresObjKind(pObj);
             if (eKind == PRESOBJ_FOOTER || eKind == PRESOBJ_HEADER ||
                 eKind == PRESOBJ_DATETIME || eKind == PRESOBJ_SLIDENUMBER)
@@ -668,7 +668,7 @@ void DrawViewShell::FuDeleteSelectedObjects()
         {
             //Unmark object
             mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView(), true);
-            SdPage* pPage = static_cast<SdPage*>(pObj->GetPage());
+            SdPage* pPage = static_cast<SdPage*>(pObj->getSdrPageFromSdrObject());
             //remove placeholder from master page
             pPage->DestroyDefaultPresObj(pPage->GetPresObjKind(pObj));
         }
@@ -1540,8 +1540,8 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
             SdrObjFactory::MakeNewObject(
                 GetView()->getSdrModelFromSdrView(),
                 SdrInventor::FmForm,
-                OBJ_FM_BUTTON,
-                mpDrawView->GetSdrPageView()->GetPage()));
+                OBJ_FM_BUTTON)); //,
+                //mpDrawView->GetSdrPageView()->GetPage()));
 
         Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), uno::UNO_QUERY_THROW );
         Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY_THROW );

@@ -24,6 +24,7 @@
 #include <svx/svditer.hxx>
 #include <svx/xfillit0.hxx>
 #include <vcl/outdev.hxx>
+#include <svx/svdmodel.hxx>
 
 using namespace com::sun::star;
 
@@ -38,6 +39,11 @@ namespace sdr
 
         BaseProperties::~BaseProperties()
         {
+        }
+
+        void BaseProperties::applyDefaultStyleSheetFromSdrModel()
+        {
+            SetStyleSheet(GetSdrObject().getSdrModelFromSdrObject().GetDefaultStyleSheet(), false);
         }
 
         const SdrObject& BaseProperties::GetSdrObject() const

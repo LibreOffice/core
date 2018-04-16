@@ -434,8 +434,8 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
 {
     SdrPage* pDrawPage = GetDrawPage();
     OSL_ENSURE( pDrawPage, "ScNoteCaptionCreator::ScNoteCaptionCreator - no drawing page" );
-    OSL_ENSURE( xCaption->GetPage() == pDrawPage, "ScNoteCaptionCreator::ScNoteCaptionCreator - wrong drawing page in caption" );
-    if( pDrawPage && (xCaption->GetPage() == pDrawPage) )
+    OSL_ENSURE( xCaption->getSdrPageFromSdrObject() == pDrawPage, "ScNoteCaptionCreator::ScNoteCaptionCreator - wrong drawing page in caption" );
+    if( pDrawPage && (xCaption->getSdrPageFromSdrObject() == pDrawPage) )
     {
         // store note position in user data of caption object
         ScCaptionUtil::SetCaptionUserData( *xCaption, rPos );
@@ -750,7 +750,7 @@ void ScCaptionPtr::removeFromDrawPage( SdrPage& rDrawPage )
 void ScCaptionPtr::removeFromDrawPageAndFree( bool bIgnoreUndo )
 {
     assert(mpHead && mpCaption);
-    SdrPage* pDrawPage = mpCaption->GetPage();
+    SdrPage* pDrawPage(mpCaption->getSdrPageFromSdrObject());
     SAL_WARN_IF( !pDrawPage, "sc.core", "ScCaptionPtr::removeFromDrawPageAndFree - object without drawing page");
     if (pDrawPage)
     {

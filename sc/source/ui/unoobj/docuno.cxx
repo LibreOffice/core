@@ -1467,7 +1467,7 @@ static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, too
                 OSL_ENSURE(pPage,"Page ?");
                 if (pPage)
                 {
-                    SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
+                    SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );
                     SdrObject* pObject = aIter.Next();
                     while (pObject && !bRangeValid)
                     {

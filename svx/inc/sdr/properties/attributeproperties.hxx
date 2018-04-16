@@ -31,9 +31,6 @@ namespace sdr
     {
         class AttributeProperties : public DefaultProperties, public SfxListener, public svl::StyleSheetUser
         {
-            // get the correct (#119287#) default SfyStyleSheet from SdrObject's SdrModel
-            SfxStyleSheet* ImpGetDefaultStyleSheet() const;
-
             // core to set parent at SfxItemSet and to execute the hard attribute computations
             void ImpSetParentAtSfxItemSet(bool bDontRemoveHardAttr);
 

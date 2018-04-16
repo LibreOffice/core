@@ -390,7 +390,7 @@ bool ScDetectiveFunc::HasArrow( const ScAddress& rStart,
     OSL_ENSURE(pPage,"Page ?");
 
     bool bFound = false;
-    SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
+    SdrObjListIter aIter( pPage, SdrIterMode::Flat );
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
     {
@@ -671,7 +671,7 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
         size_t nDelCount = 0;
         std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
 
-        SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
+        SdrObjListIter aIter( pPage, SdrIterMode::Flat );
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
@@ -744,7 +744,7 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
         size_t nDelCount = 0;
         std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
 
-        SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
+        SdrObjListIter aIter( pPage, SdrIterMode::Flat );
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
@@ -1246,7 +1246,7 @@ bool ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
     {
         std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
 
-        SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
+        SdrObjListIter aIter( pPage, SdrIterMode::Flat );
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
@@ -1418,7 +1418,7 @@ void ScDetectiveFunc::UpdateAllComments( ScDocument& rDoc )
         OSL_ENSURE( pPage, "Page ?" );
         if( pPage )
         {
-            SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
+            SdrObjListIter aIter( pPage, SdrIterMode::Flat );
             for( SdrObject* pObject = aIter.Next(); pObject; pObject = aIter.Next() )
             {
                 if ( ScDrawObjData* pData = ScDrawLayer::GetNoteCaptionData( pObject, nObjTab ) )
@@ -1459,7 +1459,7 @@ void ScDetectiveFunc::UpdateAllArrowColors()
         OSL_ENSURE( pPage, "Page ?" );
         if( pPage )
         {
-            SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
+            SdrObjListIter aIter( pPage, SdrIterMode::Flat );
             for( SdrObject* pObject = aIter.Next(); pObject; pObject = aIter.Next() )
             {
                 if ( pObject->GetLayer() == SC_LAYER_INTERN )
@@ -1536,7 +1536,7 @@ void ScDetectiveFunc::FindFrameForObject( const SdrObject* pObject, ScRange& rRa
     if (!pPage) return;
 
     // test if the object is a direct page member
-    if( pObject && pObject->GetPage() && (pObject->GetPage() == pObject->getParentOfSdrObject()) )
+    if( pObject && pObject->getSdrPageFromSdrObject() && (pObject->getSdrPageFromSdrObject() == pObject->getParentOfSdrObject()->getSdrPageFromSdrObjList()) )
     {
         // Is there a previous object?
         const size_t nOrdNum = pObject->GetOrdNum();
