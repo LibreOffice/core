@@ -228,6 +228,8 @@ void Qt5Bitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode /*nMode*/)
         m_pImage->setColorTable(aColorTable);
     }
     delete pBuffer;
+    if (nMode == BitmapAccessMode::Write)
+        InvalidateChecksum();
 }
 
 bool Qt5Bitmap::GetSystemData(BitmapSystemData& /*rData*/) { return false; }

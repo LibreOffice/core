@@ -957,6 +957,8 @@ void WinSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode 
 
         delete pBuffer;
     }
+    if( nMode == BitmapAccessMode::Write )
+        InvalidateChecksum();
 }
 
 void WinSalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,

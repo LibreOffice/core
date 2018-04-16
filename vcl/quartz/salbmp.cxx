@@ -805,6 +805,7 @@ void QuartzSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMo
         {
             DestroyContext();
         }
+        InvalidateChecksum();
     }
 
     delete pBuffer;
