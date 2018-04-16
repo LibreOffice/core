@@ -22,6 +22,30 @@
       "revId": "55675622afdd109417626d845581c4d566b0c336",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_3e940fe1",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-16T12:44:52Z",
+      "side": 1,
+      "message": "Thee is no difference in performance, the compiler does dataflow analysis and will allocate registers optimally. In general, inside a method, where you put local variables does not matter",
+      "parentUuid": "9a30ddce_fe02773d",
+      "range": {
+        "startLine": 128,
+        "startChar": 12,
+        "endLine": 128,
+        "endChar": 29
+      },
+      "revId": "55675622afdd109417626d845581c4d566b0c336",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
