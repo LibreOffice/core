@@ -1374,8 +1374,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
     {
         ScDocumentUniquePtr pBorderDoc(new ScDocument( SCDOCMODE_UNDO ));
         pBorderDoc->InitUndo( pDoc, 0,0, true,true );
-        if (pBorderData)
-            pBorderDoc->ApplyAttr( 0,0,0, *pBorderData );
+        pBorderDoc->ApplyAttr( 0,0,0, *pBorderData );
 
         ScTableInfo aTabInfo;
         pBorderDoc->FillInfo( aTabInfo, 0,0, 0,0, 0,
@@ -1390,8 +1389,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
                                     nScrX+nLeft, nScrY+nTop, 0,0, 0,0, nScaleX, nScaleY );
         aOutputData.SetUseStyleColor( bUseStyleColor );
 
-        if (pBorderData)
-            aOutputData.DrawFrame(*pDev);
+        aOutputData.DrawFrame(*pDev);
     }
 }
 

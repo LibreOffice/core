@@ -779,10 +779,10 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                 if (bMatch && bMatchWholeCell
                     && (nStart != 0 || nEnd != aCellStr.getLength()))
                     bMatch = false;    // RegExp must match entire cell string
-                if (bRealWildOrRegExp)
-                    bOk = ((rEntry.eOp == SC_NOT_EQUAL) ? !bMatch : bMatch);
+
+                bOk = ((rEntry.eOp == SC_NOT_EQUAL) ? !bMatch : bMatch);
             }
-            if (!bRealWildOrRegExp)
+            else
             {
                 if (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL)
                 {
