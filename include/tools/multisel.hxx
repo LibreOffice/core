@@ -26,7 +26,7 @@
 #include <vector>
 #include <set>
 
-#define SFX_ENDOFSELECTION      SAL_MAX_INT32
+#define SFX_ENDOFSELECTION      SAL_MIN_INT32
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC MultiSelection
 {

@@ -714,7 +714,7 @@ void OTableEditorCtrl::CopyRows()
     std::vector< std::shared_ptr<OTableRow> > vClipboardList;
     vClipboardList.reserve(GetSelectRowCount());
 
-    for( long nIndex=FirstSelectedRow(); nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()); nIndex=NextSelectedRow() )
+    for( long nIndex=FirstSelectedRow(); nIndex != SFX_ENDOFSELECTION; nIndex=NextSelectedRow() )
     {
         pRow = (*m_pRowList)[nIndex];
         OSL_ENSURE(pRow,"OTableEditorCtrl::CopyRows: Row is NULL!");
@@ -813,7 +813,7 @@ void OTableEditorCtrl::DeleteRows()
     long nIndex = FirstSelectedRow();
     nOldDataPos = nIndex;
 
-    while( nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()) )
+    while( nIndex != SFX_ENDOFSELECTION )
     {
         // Remove rows
         m_pRowList->erase( m_pRowList->begin()+nIndex );
@@ -1119,7 +1119,7 @@ bool OTableEditorCtrl::IsCopyAllowed()
         // If one of the selected rows is empty, Copy is not possible
          std::shared_ptr<OTableRow>  pRow;
         long nIndex = FirstSelectedRow();
-        while( nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()) )
+        while( nIndex != SFX_ENDOFSELECTION )
         {
             pRow = (*m_pRowList)[nIndex];
             if( !pRow->GetActFieldDescr() )
@@ -1277,7 +1277,7 @@ bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
     // - DROP is not permitted (see above) and the column is not Required (not null flag is not set).
     long nIndex = FirstSelectedRow();
      std::shared_ptr<OTableRow>  pRow;
-    while( nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()) )
+    while( nIndex != SFX_ENDOFSELECTION )
     {
         pRow = (*m_pRowList)[nIndex];
         OFieldDescription* pFieldDescr = pRow->GetActFieldDescr();
@@ -1512,7 +1512,7 @@ void OTableEditorCtrl::SetPrimaryKey( bool bSet )
     if( bSet )
     {
         long nIndex = FirstSelectedRow();
-        while( nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()) )
+        while( nIndex != SFX_ENDOFSELECTION )
         {
             // Set the key
              std::shared_ptr<OTableRow>  pRow = (*m_pRowList)[nIndex];
