@@ -122,7 +122,7 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     , maSvgData(rImpGraphic.maSvgData)
     , mpPdfData(rImpGraphic.mpPdfData)
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
-    , mnPageNumber(-1)
+    , mnPageNumber(rImpGraphic.mnPageNumber)
 {
     if( rImpGraphic.mpGfxLink )
         mpGfxLink = o3tl::make_unique<GfxLink>( *rImpGraphic.mpGfxLink );
@@ -149,7 +149,7 @@ ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic)
     , maSvgData(std::move(rImpGraphic.maSvgData))
     , mpPdfData(std::move(rImpGraphic.mpPdfData))
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
-    , mnPageNumber(-1)
+    , mnPageNumber(rImpGraphic.mnPageNumber)
 {
     rImpGraphic.ImplClear();
     rImpGraphic.mbDummyContext = false;
