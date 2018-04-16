@@ -393,7 +393,6 @@ ScMultiSelIter::ScMultiSelIter( const ScMultiSel& rMultiSel, SCCOL nCol ) :
     {
         pRowSegs.reset( new ScFlatBoolRowSegments);
         pRowSegs->setFalse( 0, MAXROW );
-        if ( bHasMarks1 )
         {
             ScMarkArrayIter aMarkIter( &rMultiSel.aRowSel );
             SCROW nTop, nBottom;
@@ -401,7 +400,6 @@ ScMultiSelIter::ScMultiSelIter( const ScMultiSel& rMultiSel, SCCOL nCol ) :
                 pRowSegs->setTrue( nTop, nBottom );
         }
 
-        if ( bHasMarks2 )
         {
             ScMarkArrayIter aMarkIter( &aIter->second );
             SCROW nTop, nBottom;

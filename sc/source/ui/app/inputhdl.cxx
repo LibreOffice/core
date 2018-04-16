@@ -3446,10 +3446,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                 }
                 if( bUsed && bFormulaMode && nCode == KEY_BACKSPACE )
                 {
-                    if (bFormulaMode)
-                        UseFormulaData();
-                    else
-                        UseColData();
+                    UseFormulaData();
                 }
 
             }
