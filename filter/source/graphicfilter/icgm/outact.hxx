@@ -91,7 +91,7 @@ public:
     void                        DrawPolyLine( tools::Polygon& );
     void                        DrawPolybezier( tools::Polygon& );
     void                        DrawPolyPolygon( tools::PolyPolygon const & );
-    void                        DrawText( css::awt::Point const & TextRectPos, css::awt::Size const & TextRectSize, char const * String, FinalFlag );
+    void                        DrawText(css::awt::Point const & TextRectPos, css::awt::Size const & TextRectSize, const OUString& rString, FinalFlag);
     void                        AppendText( const char* String );
 
     void                        FirstOutPut() { mpCGM->mbFirstOutPut = false; } ;
