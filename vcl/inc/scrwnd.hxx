@@ -46,7 +46,7 @@ private:
     std::vector<Image>  maImgList;
     Point               maLastMousePos;
     Point               maCenter;
-    Timer*              mpTimer;
+    std::unique_ptr<Timer> mpTimer;
     sal_uInt64          mnRepaintTime;
     sal_uInt64          mnTimeout;
     WheelMode           mnWheelMode;
