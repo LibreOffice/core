@@ -1984,10 +1984,6 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 pPre->GetAttrSet()->GetKeep().GetValue()) )
             {
                 m_bCalcLowers = true;
-                // #i99267#
-                // reset <bSplit> after forward move to assure that follows
-                // can be joined, if further space is available.
-                bSplit = false;
             }
         }
 
