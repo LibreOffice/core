@@ -67,8 +67,7 @@ OCommonStatement::~OCommonStatement()
 void OCommonStatement::disposeResultSet()
 {
     // free the cursor if alive
-    delete cppStatement;
-    cppStatement = nullptr;
+    cppStatement.reset();
 }
 
 void OCommonStatement::disposing()
@@ -78,7 +77,7 @@ void OCommonStatement::disposing()
     disposeResultSet();
 
     m_xConnection.clear();
-    delete cppStatement;
+    cppStatement.reset();
 
     OCommonStatement_IBase::disposing();
 }
