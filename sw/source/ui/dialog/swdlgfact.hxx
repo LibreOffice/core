@@ -25,6 +25,7 @@ class SwInsertAbstractDlg;
 class SwAsciiFilterDlg;
 class Dialog;
 class SwBreakDlg;
+class SwMultiTOXMarkDlg;
 class SwSortDlg;
 class SwTableHeightDlg;
 class SwTableWidthDlg;
@@ -129,6 +130,18 @@ protected:
     std::unique_ptr<SwSortDlg> m_xDlg;
 public:
     explicit AbstractSwSortDlg_Impl(SwSortDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
+};
+
+class AbstractMultiTOXMarkDlg_Impl : public VclAbstractDialog
+{
+protected:
+    std::unique_ptr<SwMultiTOXMarkDlg> m_xDlg;
+public:
+    explicit AbstractMultiTOXMarkDlg_Impl(SwMultiTOXMarkDlg* p)
         : m_xDlg(p)
     {
     }
@@ -591,7 +604,7 @@ public:
                                                 const css::uno::Reference< css::sdbc::XConnection>& xConnection ) override;
     virtual VclPtr<AbstractMailMergeCreateFromDlg>     CreateMailMergeCreateFromDlg(vcl::Window* pParent) override;
     virtual VclPtr<AbstractMailMergeFieldConnectionsDlg> CreateMailMergeFieldConnectionsDlg(vcl::Window* pParent) override;
-    virtual VclPtr<VclAbstractDialog>          CreateMultiTOXMarkDlg(vcl::Window* pParent, SwTOXMgr &rTOXMgr) override;
+    virtual VclPtr<VclAbstractDialog>          CreateMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr &rTOXMgr) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateOutlineTabDialog(vcl::Window* pParent, const SfxItemSet* pSwItemSet,
                                                 SwWrtShell &) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSvxNumBulletTabDialog(vcl::Window* pParent,
