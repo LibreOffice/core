@@ -1460,6 +1460,7 @@ void CalcContent( SwLayoutFrame *pLay,
                 static_cast<SwTextFrame*>(pFrame)->ForbidFollowFormat();
 
             {
+                SwFrameDeleteGuard aDeletePageGuard(pSect->FindPageFrame());
                 SwFrameDeleteGuard aDeleteGuard(pSect);
                 pFrame->Calc(pRenderContext);
             }
