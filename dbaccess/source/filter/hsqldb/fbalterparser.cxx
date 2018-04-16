@@ -26,7 +26,7 @@ OUString FbAlterStmtParser::compose() const
 {
     if (getActionType() == AlterAction::UNKNOWN)
     {
-        SAL_WARN("dbaccess", "Unkown type of ALTER statement in FbAlterStmtParser");
+        SAL_WARN("dbaccess", "Unknown type of ALTER statement in FbAlterStmtParser");
         return OUString{};
     }
     else if (getActionType() == AlterAction::ADD_FOREIGN)
