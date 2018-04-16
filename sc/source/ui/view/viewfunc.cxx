@@ -1495,8 +1495,13 @@ void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, long nOffset)
                     SCCOL nX = pTabViewShell->GetViewData().GetCurX();
                     if (nX > nStartCol || (nX == nStartCol && nOffset > 0))
                     {
+                        ScInputHandler* pInputHdl = pTabViewShell->GetInputHandler();
                         SCROW nY = pTabViewShell->GetViewData().GetCurY();
                         pTabViewShell->SetCursor(nX + nOffset, nY);
+                        if (pInputHdl && pInputHdl->IsInputMode())
+                        {
+                            pInputHdl->SetModified();
+                        }
                     }
 
                     ScMarkData aMultiMark( pTabViewShell->GetViewData().GetMarkData() );
@@ -1545,8 +1550,13 @@ void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, long nOffset)
                     SCROW nY = pTabViewShell->GetViewData().GetCurY();
                     if (nY > nStartRow || (nY == nStartRow && nOffset > 0))
                     {
+                        ScInputHandler* pInputHdl = pTabViewShell->GetInputHandler();
                         SCCOL nX = pTabViewShell->GetViewData().GetCurX();
                         pTabViewShell->SetCursor(nX, nY + nOffset);
+                        if (pInputHdl && pInputHdl->IsInputMode())
+                        {
+                            pInputHdl->SetModified();
+                        }
                     }
 
                     ScMarkData aMultiMark( pTabViewShell->GetViewData().GetMarkData() );
