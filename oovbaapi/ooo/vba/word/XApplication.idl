@@ -43,6 +43,7 @@ interface XApplication : XConnectable
     any ListGalleries( [in] any aIndex );
     float CentimetersToPoints([in] float Centimeters );
     void ShowMe();
+    void Resize( [in] long Width, [in] long Height );
 };
 
 }; }; };

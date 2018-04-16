@@ -34,6 +34,8 @@
 #include <vbahelper/vbaapplicationbase.hxx>
 #include <cppuhelper/implbase.hxx>
 
+#include "vbawindow.hxx"
+
 //typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XApplication > SwVbaApplication_BASE;
 typedef cppu::ImplInheritanceHelper< VbaApplicationBase, ooo::vba::word::XApplication, ooo::vba::XSinkCaller > SwVbaApplication_BASE;
 
@@ -48,6 +50,7 @@ typedef cppu::ImplInheritanceHelper< VbaApplicationBase, ooo::vba::word::XApplic
 class SwVbaApplication : public SwVbaApplication_BASE
 {
     std::vector<css::uno::Reference< ooo::vba::XSink >> mvSinks;
+    SwVbaWindow* getActiveSwVbaWindow();
 
 public:
     explicit SwVbaApplication( css::uno::Reference< css::uno::XComponentContext >& m_xContext );
@@ -76,6 +79,7 @@ public:
     virtual void SAL_CALL setWindowState( sal_Int32 _windowstate ) override;
     virtual float SAL_CALL CentimetersToPoints( float Centimeters ) override;
     virtual void SAL_CALL ShowMe() override;
+    virtual void SAL_CALL Resize( sal_Int32 Width, sal_Int32 Height ) override;
 
     // XInterfaceWithIID
     virtual OUString SAL_CALL getIID() override;

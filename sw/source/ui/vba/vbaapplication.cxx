@@ -99,13 +99,19 @@ SwVbaApplication::getActiveDocument()
     return new SwVbaDocument( this, mxContext, getCurrentDocument() );
 }
 
-uno::Reference< word::XWindow > SAL_CALL
-SwVbaApplication::getActiveWindow()
+SwVbaWindow *
+SwVbaApplication::getActiveSwVbaWindow()
 {
     // #FIXME so far can't determine Parent
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
     uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
     return new SwVbaWindow( uno::Reference< XHelperInterface >(), mxContext, xModel, xController );
+}
+
+uno::Reference< word::XWindow > SAL_CALL
+SwVbaApplication::getActiveWindow()
+{
+    return getActiveSwVbaWindow();
 }
 
 uno::Reference<word::XSystem > SAL_CALL
@@ -223,6 +229,13 @@ float SAL_CALL SwVbaApplication::CentimetersToPoints( float Centimeters )
 void SAL_CALL SwVbaApplication::ShowMe()
 {
     // No idea what we should or could do
+}
+
+void SAL_CALL SwVbaApplication::Resize( sal_Int32 Width, sal_Int32 Height )
+{
+    auto pWindow = getActiveSwVbaWindow();
+    pWindow->setWidth( Width );
+    pWindow->setHeight( Height );
 }
 
 // XInterfaceWithIID
