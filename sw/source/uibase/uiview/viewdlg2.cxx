@@ -97,7 +97,7 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             assert(pFact && "Dialog creation failed!");
             ScopedVclPtr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
-                &rMDI, *m_pWrtShell, true));
+                GetFrameWeld(), *m_pWrtShell, true));
             assert(pDlg && "Dialog creation failed!");
 
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(FN_EDIT_FOOTNOTE)->GetCommand());

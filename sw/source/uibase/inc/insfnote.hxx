@@ -19,64 +19,65 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_INSFNOTE_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_INSFNOTE_HXX
 
-#include <svx/stddlg.hxx>
-
-#include <vcl/button.hxx>
-
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 
 class SwWrtShell;
 
 class VclFrame;
 
-class SwInsFootNoteDlg: public SvxStandardDialog
+class SwInsFootNoteDlg: public weld::GenericDialogController
 {
-    SwWrtShell     &rSh;
+    SwWrtShell     &m_rSh;
 
     // everything for the character(s)
     OUString        m_aFontName;
-    rtl_TextEncoding eCharSet;
-    bool        bExtCharAvailable;
-    bool        bEdit;
+    rtl_TextEncoding m_eCharSet;
+    bool        m_bExtCharAvailable;
+    bool        m_bEdit;
 
-    VclPtr<VclFrame>       m_pNumberFrame;
-    VclPtr<RadioButton>    m_pNumberAutoBtn;
-    VclPtr<RadioButton>    m_pNumberCharBtn;
-    VclPtr<Edit>           m_pNumberCharEdit;
-    VclPtr<PushButton>     m_pNumberExtChar;
+    std::unique_ptr<weld::Widget>     m_xNumberFrame;
+    std::unique_ptr<weld::RadioButton>    m_xNumberAutoBtn;
+    std::unique_ptr<weld::RadioButton>    m_xNumberCharBtn;
+    std::unique_ptr<weld::Entry>      m_xNumberCharEdit;
+    std::unique_ptr<weld::Button>     m_xNumberExtChar;
 
     // everything for the selection footnote/endnote
-    VclPtr<RadioButton>    m_pFootnoteBtn;
-    VclPtr<RadioButton>    m_pEndNoteBtn;
+    std::unique_ptr<weld::RadioButton>    m_xFootnoteBtn;
+    std::unique_ptr<weld::RadioButton>    m_xEndNoteBtn;
 
-    VclPtr<PushButton>     m_pOkBtn;
-    VclPtr<PushButton>     m_pPrevBT;
-    VclPtr<PushButton>     m_pNextBT;
+    std::unique_ptr<weld::Button>     m_xOkBtn;
+    std::unique_ptr<weld::Button>     m_xPrevBT;
+    std::unique_ptr<weld::Button>     m_xNextBT;
 
-    DECL_LINK(NumberCharHdl, Button *, void);
-    DECL_LINK(NumberEditHdl, Edit&, void);
-    DECL_LINK(NumberAutoBtnHdl, Button *, void);
-    DECL_LINK(NumberExtCharHdl, Button *, void);
-    DECL_LINK(NextPrevHdl, Button *, void);
+    DECL_LINK(NumberCharHdl, weld::Button&, void);
+    DECL_LINK(NumberEditHdl, weld::Entry&, void);
+    DECL_LINK(NumberAutoBtnHdl, weld::Button&, void);
+    DECL_LINK(NumberExtCharHdl, weld::Button&, void);
+    DECL_LINK(NextPrevHdl, weld::Button&, void);
 
-    virtual void    Apply() override;
+    void    Apply();
 
     void            Init();
 
 public:
-    SwInsFootNoteDlg(vcl::Window * pParent, SwWrtShell &rSh, bool bEd);
+    SwInsFootNoteDlg(weld::Window * pParent, SwWrtShell &rSh, bool bEd);
     virtual ~SwInsFootNoteDlg() override;
-    virtual void dispose() override;
 
     const OUString& GetFontName() { return m_aFontName; }
-    bool            IsEndNote() { return m_pEndNoteBtn->IsChecked(); }
+    bool            IsEndNote() const { return m_xEndNoteBtn->get_active(); }
     OUString        GetStr()
-                    {
-                        if ( m_pNumberCharBtn->IsChecked() )
-                            return m_pNumberCharEdit->GetText();
-                        return OUString();
-                    }
+    {
+        if (m_xNumberCharBtn->get_active())
+            return m_xNumberCharEdit->get_text();
+        return OUString();
+    }
+    short execute()
+    {
+        short nRet = run();
+        if (nRet == RET_OK)
+            Apply();
+        return nRet;
+    }
 };
 
 #endif

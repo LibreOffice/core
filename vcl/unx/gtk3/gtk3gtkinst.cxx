@@ -2675,6 +2675,88 @@ public:
         g_signal_handler_unblock(m_pEntry, m_nInsertTextSignalId);
     }
 
+    virtual vcl::Font get_font() override
+    {
+        PangoContext* pContext = gtk_widget_get_pango_context(m_pWidget);
+        return pango_to_vcl(pango_context_get_font_description(pContext),
+                            Application::GetSettings().GetUILanguageTag().getLocale());
+    }
+
+    virtual void set_font(const vcl::Font& rFont) override
+    {
+        PangoAttrList* pAttrList = pango_attr_list_new();
+        pango_attr_list_insert(pAttrList, pango_attr_family_new(OUStringToOString(rFont.GetFamilyName(), RTL_TEXTENCODING_UTF8).getStr()));
+        pango_attr_list_insert(pAttrList, pango_attr_size_new(rFont.GetFontSize().Height() * PANGO_SCALE));
+        switch (rFont.GetItalic())
+        {
+            case ITALIC_NONE:
+                pango_attr_list_insert(pAttrList, pango_attr_style_new(PANGO_STYLE_NORMAL));
+                break;
+            case ITALIC_NORMAL:
+                pango_attr_list_insert(pAttrList, pango_attr_style_new(PANGO_STYLE_ITALIC));
+                break;
+            case ITALIC_OBLIQUE:
+                pango_attr_list_insert(pAttrList, pango_attr_style_new(PANGO_STYLE_OBLIQUE));
+                break;
+            default:
+                break;
+        }
+        switch (rFont.GetWeight())
+        {
+            case WEIGHT_ULTRALIGHT:
+                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_ULTRALIGHT));
+                break;
+            case WEIGHT_LIGHT:
+                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_LIGHT));
+                break;
+            case WEIGHT_NORMAL:
+                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_NORMAL));
+                break;
+            case WEIGHT_BOLD:
+                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_BOLD));
+                break;
+            case WEIGHT_ULTRABOLD:
+                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_ULTRABOLD));
+                break;
+            default:
+                break;
+        }
+        switch (rFont.GetWidthType())
+        {
+            case WIDTH_ULTRA_CONDENSED:
+                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_ULTRA_CONDENSED));
+                break;
+            case WIDTH_EXTRA_CONDENSED:
+                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXTRA_CONDENSED));
+                break;
+            case WIDTH_CONDENSED:
+                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_CONDENSED));
+                break;
+            case WIDTH_SEMI_CONDENSED:
+                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_SEMI_CONDENSED));
+                break;
+            case WIDTH_NORMAL:
+                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_NORMAL));
+                break;
+            case WIDTH_SEMI_EXPANDED:
+                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_SEMI_EXPANDED));
+                break;
+            case WIDTH_EXPANDED:
+                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXPANDED));
+                break;
+            case WIDTH_EXTRA_EXPANDED:
+                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXTRA_EXPANDED));
+                break;
+            case WIDTH_ULTRA_EXPANDED:
+                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_ULTRA_EXPANDED));
+                break;
+            default:
+                break;
+        }
+        gtk_entry_set_attributes(m_pEntry, pAttrList);
+        pango_attr_list_unref(pAttrList);
+    }
+
     virtual ~GtkInstanceEntry() override
     {
         g_signal_handler_disconnect(m_pEntry, m_nInsertTextSignalId);
@@ -3722,7 +3804,7 @@ public:
     {
         m_xSorter.reset(new comphelper::string::NaturalStringSorter(
                             ::comphelper::getProcessComponentContext(),
-                            Application::GetSettings().GetLanguageTag().getLocale()));
+                            Application::GetSettings().GetUILanguageTag().getLocale()));
         GtkTreeModel* pModel = gtk_combo_box_get_model(GTK_COMBO_BOX(m_pComboBoxText));
         GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(pModel);
         gtk_tree_sortable_set_sort_func(pSortable, 0, sort_func, m_xSorter.get(), nullptr);

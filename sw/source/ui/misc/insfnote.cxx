@@ -43,169 +43,149 @@ static bool bFootnote = true;
 void SwInsFootNoteDlg::Apply()
 {
     OUString aStr;
-    if ( m_pNumberCharBtn->IsChecked() )
-        aStr = m_pNumberCharEdit->GetText();
+    if ( m_xNumberCharBtn->get_active() )
+        aStr = m_xNumberCharEdit->get_text();
 
-    if ( bEdit )
+    if (m_bEdit)
     {
-        rSh.StartAction();
-        rSh.Left(CRSR_SKIP_CHARS, false, 1, false );
-        rSh.StartUndo( SwUndoId::START );
-        SwFormatFootnote aNote( m_pEndNoteBtn->IsChecked() );
+        m_rSh.StartAction();
+        m_rSh.Left(CRSR_SKIP_CHARS, false, 1, false );
+        m_rSh.StartUndo( SwUndoId::START );
+        SwFormatFootnote aNote( m_xEndNoteBtn->get_active() );
         aNote.SetNumStr( aStr );
 
-        if( rSh.SetCurFootnote( aNote ) && bExtCharAvailable )
+        if (m_rSh.SetCurFootnote( aNote ) && m_bExtCharAvailable)
         {
-            rSh.Right(CRSR_SKIP_CHARS, true, 1, false );
-            SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT>{} );
-            rSh.GetCurAttr( aSet );
+            m_rSh.Right(CRSR_SKIP_CHARS, true, 1, false );
+            SfxItemSet aSet(m_rSh.GetAttrPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT>{});
+            m_rSh.GetCurAttr(aSet);
             const SvxFontItem &rFont = aSet.Get( RES_CHRATR_FONT );
             SvxFontItem aFont( rFont.GetFamily(), m_aFontName,
                                rFont.GetStyleName(), rFont.GetPitch(),
-                               eCharSet, RES_CHRATR_FONT );
+                               m_eCharSet, RES_CHRATR_FONT );
             aSet.Put( aFont );
-            rSh.SetAttrSet( aSet, SetAttrMode::DONTEXPAND );
-            rSh.ResetSelect(nullptr, false);
-            rSh.Left(CRSR_SKIP_CHARS, false, 1, false );
+            m_rSh.SetAttrSet( aSet, SetAttrMode::DONTEXPAND );
+            m_rSh.ResetSelect(nullptr, false);
+            m_rSh.Left(CRSR_SKIP_CHARS, false, 1, false );
         }
-        rSh.EndUndo( SwUndoId::END );
-        rSh.EndAction();
+        m_rSh.EndUndo( SwUndoId::END );
+        m_rSh.EndAction();
     }
 
-    bFootnote = m_pFootnoteBtn->IsChecked();
+    bFootnote = m_xFootnoteBtn->get_active();
 }
 
-IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberCharHdl, Button*, void)
+IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberCharHdl, weld::Button&, void)
 {
-    m_pNumberCharEdit->GrabFocus();
-    m_pOkBtn->Enable( !m_pNumberCharEdit->GetText().isEmpty() || bExtCharAvailable );
+    m_xNumberCharEdit->grab_focus();
+    m_xOkBtn->set_sensitive( !m_xNumberCharEdit->get_text().isEmpty() || m_bExtCharAvailable );
 }
 
-IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberEditHdl, Edit&, void)
+IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberEditHdl, weld::Entry&, void)
 {
-    m_pNumberCharBtn->Check();
-    m_pOkBtn->Enable( !m_pNumberCharEdit->GetText().isEmpty() );
+    m_xNumberCharBtn->set_active(true);
+    m_xOkBtn->set_sensitive( !m_xNumberCharEdit->get_text().isEmpty() );
 }
 
-IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberAutoBtnHdl, Button*, void)
+IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberAutoBtnHdl, weld::Button&, void)
 {
-    m_pOkBtn->Enable();
+    m_xOkBtn->set_sensitive(true);
 }
 
-IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl, Button*, void)
+IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl, weld::Button&, void)
 {
-    m_pNumberCharBtn->Check();
+    m_xNumberCharBtn->set_active(true);
 
-    SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT>{} );
-    rSh.GetCurAttr( aSet );
+    SfxItemSet aSet(m_rSh.GetAttrPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT>{});
+    m_rSh.GetCurAttr( aSet );
     const SvxFontItem &rFont = aSet.Get( RES_CHRATR_FONT );
 
-    SfxAllItemSet aAllSet( rSh.GetAttrPool() );
+    SfxAllItemSet aAllSet(m_rSh.GetAttrPool());
     aAllSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
     aAllSet.Put( rFont );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(GetFrameWeld(), aAllSet, false));
+    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(m_xDialog.get(), aAllSet, false));
     if (RET_OK == pDlg->Execute())
     {
         const SfxStringItem* pItem = SfxItemSet::GetItem<SfxStringItem>(pDlg->GetOutputItemSet(), SID_CHARMAP, false);
         const SvxFontItem* pFontItem = SfxItemSet::GetItem<SvxFontItem>(pDlg->GetOutputItemSet(), SID_ATTR_CHAR_FONT, false);
         if ( pItem )
         {
-            m_pNumberCharEdit->SetText( pItem->GetValue() );
+            m_xNumberCharEdit->set_text(pItem->GetValue());
 
             if ( pFontItem )
             {
                 m_aFontName = pFontItem->GetFamilyName();
-                eCharSet  = pFontItem->GetCharSet();
-                vcl::Font aFont( m_aFontName, pFontItem->GetStyleName(), m_pNumberCharEdit->GetFont().GetFontSize() );
+                m_eCharSet  = pFontItem->GetCharSet();
+                vcl::Font aFont(m_aFontName, pFontItem->GetStyleName(), m_xNumberCharEdit->get_font().GetFontSize());
                 aFont.SetCharSet( pFontItem->GetCharSet() );
                 aFont.SetPitch( pFontItem->GetPitch() );
-                m_pNumberCharEdit->SetFont( aFont  );
+                m_xNumberCharEdit->set_font(aFont);
             }
 
-            bExtCharAvailable = true;
-            m_pOkBtn->Enable(!m_pNumberCharEdit->GetText().isEmpty());
+            m_bExtCharAvailable = true;
+            m_xOkBtn->set_sensitive(!m_xNumberCharEdit->get_text().isEmpty());
         }
     }
 }
 
-IMPL_LINK( SwInsFootNoteDlg, NextPrevHdl, Button *, pBtn, void )
+IMPL_LINK( SwInsFootNoteDlg, NextPrevHdl, weld::Button&, rBtn, void )
 {
     Apply();
 
     // go to the next foot/endnote here
-    rSh.ResetSelect(nullptr, false);
-    if (pBtn == m_pNextBT)
-        rSh.GotoNextFootnoteAnchor();
+    m_rSh.ResetSelect(nullptr, false);
+    if (&rBtn == m_xNextBT.get())
+        m_rSh.GotoNextFootnoteAnchor();
     else
-        rSh.GotoPrevFootnoteAnchor();
+        m_rSh.GotoPrevFootnoteAnchor();
 
     Init();
 }
 
-SwInsFootNoteDlg::SwInsFootNoteDlg(vcl::Window *pParent, SwWrtShell &rShell, bool bEd)
-    : SvxStandardDialog(pParent, "InsertFootnoteDialog", "modules/swriter/ui/insertfootnote.ui")
-    , rSh(rShell)
-    , eCharSet(RTL_TEXTENCODING_DONTKNOW)
-    , bExtCharAvailable(false)
-    , bEdit(bEd)
+SwInsFootNoteDlg::SwInsFootNoteDlg(weld::Window *pParent, SwWrtShell &rShell, bool bEd)
+    : GenericDialogController(pParent, "modules/swriter/ui/insertfootnote.ui", "InsertFootnoteDialog")
+    , m_rSh(rShell)
+    , m_eCharSet(RTL_TEXTENCODING_DONTKNOW)
+    , m_bExtCharAvailable(false)
+    , m_bEdit(bEd)
+    , m_xNumberFrame(m_xBuilder->weld_widget("numberingframe"))
+    , m_xNumberAutoBtn(m_xBuilder->weld_radio_button("automatic"))
+    , m_xNumberCharBtn(m_xBuilder->weld_radio_button("character"))
+    , m_xNumberCharEdit(m_xBuilder->weld_entry("characterentry"))
+    , m_xNumberExtChar(m_xBuilder->weld_button("choosecharacter"))
+    , m_xFootnoteBtn(m_xBuilder->weld_radio_button("footnote"))
+    , m_xEndNoteBtn(m_xBuilder->weld_radio_button("endnote"))
+    , m_xOkBtn(m_xBuilder->weld_button("ok"))
+    , m_xPrevBT(m_xBuilder->weld_button("prev"))
+    , m_xNextBT(m_xBuilder->weld_button("next"))
 {
-    get(m_pNumberFrame, "numberingframe");
-    get(m_pNumberAutoBtn, "automatic");
-    get(m_pNumberCharBtn, "character");
-    get(m_pNumberCharEdit, "characterentry");
-    get(m_pNumberExtChar, "choosecharacter");
-    get(m_pFootnoteBtn, "footnote");
-    get(m_pEndNoteBtn, "endnote");
-    get(m_pOkBtn, "ok");
-    get(m_pPrevBT, "prev");
-    get(m_pNextBT, "next");
+    m_xNumberAutoBtn->connect_clicked(LINK(this,SwInsFootNoteDlg,NumberAutoBtnHdl));
+    m_xNumberExtChar->connect_clicked(LINK(this,SwInsFootNoteDlg,NumberExtCharHdl));
+    m_xNumberCharBtn->connect_clicked(LINK(this,SwInsFootNoteDlg,NumberCharHdl));
+    m_xNumberCharEdit->connect_changed(LINK(this,SwInsFootNoteDlg,NumberEditHdl));
 
-    m_pNumberAutoBtn->SetClickHdl(LINK(this,SwInsFootNoteDlg,NumberAutoBtnHdl));
-    m_pNumberExtChar->SetClickHdl(LINK(this,SwInsFootNoteDlg,NumberExtCharHdl));
-    m_pNumberCharBtn->SetClickHdl(LINK(this,SwInsFootNoteDlg,NumberCharHdl));
-    m_pNumberCharEdit->SetModifyHdl(LINK(this,SwInsFootNoteDlg,NumberEditHdl));
-    m_pNumberCharEdit->SetMaxTextLen(10);
-    m_pNumberCharEdit->Enable();
+    m_xPrevBT->connect_clicked(LINK(this, SwInsFootNoteDlg, NextPrevHdl));
+    m_xNextBT->connect_clicked(LINK(this, SwInsFootNoteDlg, NextPrevHdl));
 
-    m_pPrevBT->SetClickHdl(LINK(this, SwInsFootNoteDlg, NextPrevHdl));
-    m_pNextBT->SetClickHdl(LINK(this, SwInsFootNoteDlg, NextPrevHdl));
+    SwViewShell::SetCareDialog(m_xDialog);
 
-    SwViewShell::SetCareWin(this);
-
-    if (bEdit)
+    if (m_bEdit)
     {
         Init();
 
-        m_pPrevBT->Show();
-        m_pNextBT->Show();
+        m_xPrevBT->show();
+        m_xNextBT->show();
     }
 }
 
 SwInsFootNoteDlg::~SwInsFootNoteDlg()
 {
-    disposeOnce();
-}
+    SwViewShell::SetCareDialog(nullptr);
 
-void SwInsFootNoteDlg::dispose()
-{
-    SwViewShell::SetCareWin(nullptr);
-
-    if (bEdit)
-        rSh.ResetSelect(nullptr, false);
-
-    m_pNumberFrame.clear();
-    m_pNumberAutoBtn.clear();
-    m_pNumberCharBtn.clear();
-    m_pNumberCharEdit.clear();
-    m_pNumberExtChar.clear();
-    m_pFootnoteBtn.clear();
-    m_pEndNoteBtn.clear();
-    m_pOkBtn.clear();
-    m_pPrevBT.clear();
-    m_pNextBT.clear();
-    SvxStandardDialog::dispose();
+    if (m_bEdit)
+        m_rSh.ResetSelect(nullptr, false);
 }
 
 void SwInsFootNoteDlg::Init()
@@ -213,62 +193,61 @@ void SwInsFootNoteDlg::Init()
     SwFormatFootnote aFootnoteNote;
     OUString sNumStr;
     vcl::Font aFont;
-    bExtCharAvailable = false;
+    m_bExtCharAvailable = false;
 
-    rSh.StartAction();
+    m_rSh.StartAction();
 
-    if( rSh.GetCurFootnote( &aFootnoteNote ))
+    if (m_rSh.GetCurFootnote(&aFootnoteNote))
     {
         if (!aFootnoteNote.GetNumStr().isEmpty())
         {
             sNumStr = aFootnoteNote.GetNumStr();
 
-            rSh.Right(CRSR_SKIP_CHARS, true, 1, false );
-            SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT>{} );
-            rSh.GetCurAttr( aSet );
+            m_rSh.Right(CRSR_SKIP_CHARS, true, 1, false );
+            SfxItemSet aSet(m_rSh.GetAttrPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT>{});
+            m_rSh.GetCurAttr(aSet);
             const SvxFontItem &rFont = aSet.Get( RES_CHRATR_FONT );
-
-            aFont = m_pNumberCharEdit->GetFont();
+            aFont = m_xNumberCharEdit->get_font();
             m_aFontName = rFont.GetFamilyName();
-            eCharSet = rFont.GetCharSet();
+            m_eCharSet = rFont.GetCharSet();
             aFont.SetFamilyName(m_aFontName);
-            aFont.SetCharSet(eCharSet);
-            bExtCharAvailable = true;
-            rSh.Left( CRSR_SKIP_CHARS, false, 1, false );
+            aFont.SetCharSet(m_eCharSet);
+            m_bExtCharAvailable = true;
+            m_rSh.Left( CRSR_SKIP_CHARS, false, 1, false );
         }
         bFootnote = !aFootnoteNote.IsEndNote();
     }
-    m_pNumberCharEdit->SetFont(aFont);
+    m_xNumberCharEdit->set_font(aFont);
 
     const bool bNumChar = !sNumStr.isEmpty();
 
-    m_pNumberCharEdit->SetText(sNumStr);
-    m_pNumberCharBtn->Check(bNumChar);
-    m_pNumberAutoBtn->Check(!bNumChar);
+    m_xNumberCharEdit->set_text(sNumStr);
+    m_xNumberCharBtn->set_active(bNumChar);
+    m_xNumberAutoBtn->set_active(!bNumChar);
     if (bNumChar)
-        m_pNumberCharEdit->GrabFocus();
+        m_xNumberCharEdit->grab_focus();
 
     if (bFootnote)
-        m_pFootnoteBtn->Check();
+        m_xFootnoteBtn->set_active(true);
     else
-        m_pEndNoteBtn->Check();
+        m_xEndNoteBtn->set_active(true);
 
-    bool bNext = rSh.GotoNextFootnoteAnchor();
+    bool bNext = m_rSh.GotoNextFootnoteAnchor();
 
     if (bNext)
-        rSh.GotoPrevFootnoteAnchor();
+        m_rSh.GotoPrevFootnoteAnchor();
 
-    bool bPrev = rSh.GotoPrevFootnoteAnchor();
+    bool bPrev = m_rSh.GotoPrevFootnoteAnchor();
 
     if (bPrev)
-        rSh.GotoNextFootnoteAnchor();
+        m_rSh.GotoNextFootnoteAnchor();
 
-    m_pPrevBT->Enable(bPrev);
-    m_pNextBT->Enable(bNext);
+    m_xPrevBT->set_sensitive(bPrev);
+    m_xNextBT->set_sensitive(bNext);
 
-    rSh.Right(CRSR_SKIP_CHARS, true, 1, false );
+    m_rSh.Right(CRSR_SKIP_CHARS, true, 1, false );
 
-    rSh.EndAction();
+    m_rSh.EndAction();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -145,11 +145,17 @@ short AbstractSwRenameXNamedDlg_Impl::Execute()
 IMPL_ABSTDLG_BASE(AbstractSwModalRedlineAcceptDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractGlossaryDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractFieldInputDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractInsFootNoteDlg_Impl);
+
+short AbstractInsFootNoteDlg_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
+
 short AbstractInsTableDlg_Impl::Execute()
 {
     return m_xDlg->run();
 }
+
 IMPL_ABSTDLG_BASE(AbstractJavaEditDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractMailMergeDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractMailMergeCreateFromDlg_Impl);
@@ -456,27 +462,27 @@ bool AbstractFieldInputDlg_Impl::NextButtonPressed() const
 
 OUString AbstractInsFootNoteDlg_Impl::GetFontName()
 {
-    return pDlg->GetFontName();
+    return m_xDlg->GetFontName();
 }
 
 bool AbstractInsFootNoteDlg_Impl::IsEndNote()
 {
-    return pDlg->IsEndNote();
+    return m_xDlg->IsEndNote();
 }
 
 OUString AbstractInsFootNoteDlg_Impl::GetStr()
 {
-    return pDlg->GetStr();
+    return m_xDlg->GetStr();
 }
 
-void AbstractInsFootNoteDlg_Impl::SetHelpId( const OString& sHelpId )
+void AbstractInsFootNoteDlg_Impl::SetHelpId(const OString& rHelpId)
 {
-    pDlg->SetHelpId( sHelpId );
+    m_xDlg->set_help_id(rHelpId);
 }
 
 void AbstractInsFootNoteDlg_Impl::SetText( const OUString& rStr )
 {
-    pDlg->SetText( rStr );
+    m_xDlg->set_title(rStr);
 }
 
 void AbstractInsTableDlg_Impl::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
@@ -928,10 +934,9 @@ VclPtr<AbstractFieldInputDlg> SwAbstractDialogFactory_Impl::CreateFieldInputDlg(
 }
 
 VclPtr<AbstractInsFootNoteDlg> SwAbstractDialogFactory_Impl::CreateInsFootNoteDlg(
-    vcl::Window * pParent, SwWrtShell &rSh, bool bEd )
+    weld::Window * pParent, SwWrtShell &rSh, bool bEd )
 {
-    VclPtr<SwInsFootNoteDlg> pDlg = VclPtr<SwInsFootNoteDlg>::Create(pParent, rSh, bEd);
-    return VclPtr<AbstractInsFootNoteDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractInsFootNoteDlg_Impl>::Create(new SwInsFootNoteDlg(pParent, rSh, bEd));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateTitlePageDlg ( vcl::Window *pParent )
