@@ -3970,7 +3970,7 @@ bool SwFlyFrame::IsBackgroundTransparent() const
         SwRect aDummyRect;
         drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
-        if ( GetBackgroundBrush( aFillAttributes, pBackgrdBrush, pSectionTOXColor, aDummyRect, false) )
+        if ( GetBackgroundBrush( aFillAttributes, pBackgrdBrush, pSectionTOXColor, aDummyRect, false, /*bConsiderTextBox=*/false) )
         {
             if ( pSectionTOXColor &&
                  (pSectionTOXColor->GetTransparency() != 0) &&
@@ -6509,7 +6509,7 @@ void SwFrame::PaintBackground( const SwRect &rRect, const SwPageFrame *pPage,
     bool bLowMode = true;
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
-    bool bBack = GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, bLowerMode );
+    bool bBack = GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, bLowerMode, /*bConsiderTextBox=*/false );
     //- Output if a separate background is used.
     bool bNoFlyBackground = !gProp.bSFlyMetafile && !bBack && IsFlyFrame();
     if ( bNoFlyBackground )
@@ -6519,7 +6519,7 @@ void SwFrame::PaintBackground( const SwRect &rRect, const SwPageFrame *pPage,
         // <GetBackgroundBrush> disabled this option with the parameter <bLowerMode>
         if ( bLowerMode )
         {
-            bBack = GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, false );
+            bBack = GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, false, /*bConsiderTextBox=*/false );
         }
         // If still no background found for the fly frame, initialize the
         // background brush <pItem> with global retouche color and set <bBack>
@@ -7311,7 +7311,7 @@ const Color SwPageFrame::GetDrawBackgrdColor() const
     SwRect aDummyRect;
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
-    if ( GetBackgroundBrush( aFillAttributes, pBrushItem, pDummyColor, aDummyRect, true) )
+    if ( GetBackgroundBrush( aFillAttributes, pBrushItem, pDummyColor, aDummyRect, true, /*bConsiderTextBox=*/false) )
     {
         if(aFillAttributes.get() && aFillAttributes->isUsed())
         {
@@ -7475,6 +7475,10 @@ void SwFrame::Retouch( const SwPageFrame * pPage, const SwRect &rRect ) const
  * input parameter - boolean indicating, if background brush should *not* be
  * taken from parent.
  *
+ * @param bConsiderTextBox
+ * consider the TextBox of this fly frame (if there is any) when determining
+ * the background color, useful for automatic font color.
+ *
  * @return true, if a background brush for the frame is found
  */
 bool SwFrame::GetBackgroundBrush(
@@ -7482,7 +7486,8 @@ bool SwFrame::GetBackgroundBrush(
     const SvxBrushItem* & rpBrush,
     const Color*& rpCol,
     SwRect &rOrigRect,
-    bool bLowerMode ) const
+    bool bLowerMode,
+    bool bConsiderTextBox ) const
 {
     const SwFrame *pFrame = this;
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
@@ -7496,8 +7501,8 @@ bool SwFrame::GetBackgroundBrush(
 
         if (pFrame->supportsFullDrawingLayerFillAttributeSet())
         {
-            bool bTextBox = false;
-            if (pFrame->IsFlyFrame())
+            bool bHandledTextBox = false;
+            if (pFrame->IsFlyFrame() && bConsiderTextBox)
             {
                 const SwFlyFrame* pFlyFrame = static_cast<const SwFlyFrame*>(pFrame);
                 SwFrameFormat* pShape
@@ -7511,12 +7516,12 @@ bool SwFrame::GetBackgroundBrush(
                         rFillAttributes.reset(
                             new drawinglayer::attribute::SdrAllFillAttributesHelper(
                                 pObject->GetMergedItemSet()));
-                        bTextBox = true;
+                        bHandledTextBox = true;
                     }
                 }
             }
 
-            if (!bTextBox)
+            if (!bHandledTextBox)
                 rFillAttributes = pFrame->getSdrAllFillAttributesHelper();
         }
         const SvxBrushItem &rBack = pFrame->GetAttrSet()->GetBackground();
