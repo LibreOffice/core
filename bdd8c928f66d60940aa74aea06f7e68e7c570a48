@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_bed1dfcf",
+        "filename": "dbaccess/source/ui/querydesign/QueryDesignView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-16T12:36:10Z",
+      "side": 1,
+      "message": "just drop the variable and rather go\n   if (pTabWin-\u003eExistsField( rFieldName, aInfo ))",
+      "revId": "bdd8c928f66d60940aa74aea06f7e68e7c570a48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
