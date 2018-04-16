@@ -22,8 +22,10 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/alpha.hxx>
 
-#include <impbmp.hxx>
 #include <bitmapwriteaccess.hxx>
+#include <salbmp.hxx>
+#include <svdata.hxx>
+#include <salinst.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -143,7 +145,7 @@ bool Bitmap::Invert()
             }
         }
 
-        mxImpBmp->InvalidateChecksum();
+        mxSalBmp->InvalidateChecksum();
         pAcc.reset();
         bRet = true;
     }
@@ -856,13 +858,13 @@ bool Bitmap::Replace(const AlphaMask& rAlpha, const Color& rMergeColor)
 
 bool Bitmap::Replace(const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol)
 {
-    if (mxImpBmp)
+    if (mxSalBmp)
     {
         // implementation specific replace
-        std::shared_ptr<ImpBitmap> xImpBmp(new ImpBitmap);
-        if (xImpBmp->Create(*mxImpBmp) && xImpBmp->Replace(rSearchColor, rReplaceColor, nTol))
+        std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+        if (xImpBmp->Create(*mxSalBmp) && xImpBmp->Replace(rSearchColor, rReplaceColor, nTol))
         {
-            ImplSetImpBitmap(xImpBmp);
+            ImplSetSalBitmap(xImpBmp);
             maPrefMapMode = MapMode(MapUnit::MapPixel);
             maPrefSize = xImpBmp->GetSize();
             return true;

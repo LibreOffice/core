@@ -55,7 +55,6 @@
 #include <osx/runinmain.hxx>
 
 #include <print.h>
-#include <impbmp.hxx>
 #include <salimestatus.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -998,11 +997,11 @@ CGImageRef CreateCGImage( const Image& rImage )
     BitmapEx aBmpEx( rImage.GetBitmapEx() );
     Bitmap aBmp( aBmpEx.GetBitmap() );
 
-    if( ! aBmp || ! aBmp.ImplGetImpBitmap() )
+    if( ! aBmp || ! aBmp.ImplGetSalBitmap() )
         return nullptr;
 
     // simple case, no transparency
-    QuartzSalBitmap* pSalBmp = static_cast<QuartzSalBitmap*>(aBmp.ImplGetImpBitmap()->ImplGetSalBitmap());
+    QuartzSalBitmap* pSalBmp = static_cast<QuartzSalBitmap*>(aBmp.ImplGetSalBitmap().get());
 
     if( ! pSalBmp )
         return nullptr;
@@ -1014,7 +1013,7 @@ CGImageRef CreateCGImage( const Image& rImage )
     {
         AlphaMask aAlphaMask( aBmpEx.GetAlpha() );
         Bitmap aMask( aAlphaMask.GetBitmap() );
-        QuartzSalBitmap* pMaskBmp = static_cast<QuartzSalBitmap*>(aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
+        QuartzSalBitmap* pMaskBmp = static_cast<QuartzSalBitmap*>(aMask.ImplGetSalBitmap().get());
         if( pMaskBmp )
             xImage = pSalBmp->CreateWithMask( *pMaskBmp, 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
         else
@@ -1023,7 +1022,7 @@ CGImageRef CreateCGImage( const Image& rImage )
     else if( aBmpEx.GetTransparentType() == TransparentType::Bitmap )
     {
         Bitmap aMask( aBmpEx.GetMask() );
-        QuartzSalBitmap* pMaskBmp = static_cast<QuartzSalBitmap*>(aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
+        QuartzSalBitmap* pMaskBmp = static_cast<QuartzSalBitmap*>(aMask.ImplGetSalBitmap().get());
         if( pMaskBmp )
             xImage = pSalBmp->CreateWithMask( *pMaskBmp, 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
         else

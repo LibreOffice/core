@@ -35,7 +35,7 @@
 
 #include <bmpfast.hxx>
 #include <salgdi.hxx>
-#include <impbmp.hxx>
+#include <salbmp.hxx>
 #include <image.h>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -163,7 +163,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                 if ( nAction == MetaActionType::BMPSCALE )
                     ScaleBitmap (aBmp, aPosAry);
 
-                mpGraphics->DrawBitmap( aPosAry, *aBmp.ImplGetImpBitmap()->ImplGetSalBitmap(), this );
+                mpGraphics->DrawBitmap( aPosAry, *aBmp.ImplGetSalBitmap(), this );
             }
         }
     }
@@ -468,8 +468,8 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 
                 if( pSalBmp )
                 {
-                    std::shared_ptr<ImpBitmap> xImpBmp(new ImpBitmap(pSalBmp));
-                    aBmp.ImplSetImpBitmap(xImpBmp);
+                    std::shared_ptr<SalBitmap> xImpBmp(pSalBmp);
+                    aBmp.ImplSetSalBitmap(xImpBmp);
                 }
             }
         }
@@ -521,15 +521,14 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
             if (nMirrFlags != BmpMirrorFlags::NONE)
                 rBitmapEx.Mirror(nMirrFlags);
 
-            const SalBitmap* pSalSrcBmp = rBitmapEx.ImplGetBitmapImpBitmap()->ImplGetSalBitmap();
-            std::shared_ptr<ImpBitmap> xMaskBmp = rBitmapEx.ImplGetMaskImpBitmap();
+            const SalBitmap* pSalSrcBmp = rBitmapEx.ImplGetBitmapSalBitmap().get();
+            std::shared_ptr<SalBitmap> xMaskBmp = rBitmapEx.ImplGetMaskSalBitmap();
 
             if (xMaskBmp)
             {
-                SalBitmap* pSalAlphaBmp = xMaskBmp->ImplGetSalBitmap();
-                bool bTryDirectPaint(pSalSrcBmp && pSalAlphaBmp);
+                bool bTryDirectPaint(pSalSrcBmp);
 
-                if (bTryDirectPaint && mpGraphics->DrawAlphaBitmap(aPosAry, *pSalSrcBmp, *pSalAlphaBmp, this))
+                if (bTryDirectPaint && mpGraphics->DrawAlphaBitmap(aPosAry, *pSalSrcBmp, *xMaskBmp, this))
                 {
                     // tried to paint as alpha directly. If tis worked, we are done (except
                     // alpha, see below)
@@ -592,9 +591,7 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                         }
                     }
 
-                    mpGraphics->DrawBitmap(aPosAry, *pSalSrcBmp,
-                                           *xMaskBmp->ImplGetSalBitmap(),
-                                           this);
+                    mpGraphics->DrawBitmap(aPosAry, *pSalSrcBmp, *xMaskBmp, this);
                 }
 
                 // #110958# Paint mask to alpha channel. Luckily, the
@@ -669,16 +666,16 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
                 aRelPt.X(), aRelPt.Y(),
                 aOutSz.Width(), aOutSz.Height());
 
-            SalBitmap* pSalSrcBmp = rBmp.ImplGetImpBitmap()->ImplGetSalBitmap();
-            SalBitmap* pSalAlphaBmp = rAlpha.ImplGetImpBitmap()->ImplGetSalBitmap();
+            SalBitmap* pSalSrcBmp = rBmp.ImplGetSalBitmap().get();
+            SalBitmap* pSalAlphaBmp = rAlpha.ImplGetSalBitmap().get();
 
             // try to blend the alpha bitmap with the alpha virtual device
             if (mpAlphaVDev)
             {
                 Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmap( aRelPt, aOutSz ) );
-                if (aAlphaBitmap.ImplGetImpBitmap())
+                if (aAlphaBitmap.ImplGetSalBitmap())
                 {
-                    SalBitmap* pSalAlphaBmp2 = aAlphaBitmap.ImplGetImpBitmap()->ImplGetSalBitmap();
+                    SalBitmap* pSalAlphaBmp2 = aAlphaBitmap.ImplGetSalBitmap().get();
                     if (mpGraphics->BlendAlphaBitmap(aTR, *pSalSrcBmp, *pSalAlphaBmp, *pSalAlphaBmp2, this))
                     {
                         mpAlphaVDev->BlendBitmap(aTR, rAlpha);
@@ -953,7 +950,7 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
     // since we later use it (in nDstWidth/Height) for pixel
     // access)
     // #i38887# reading from screen may sometimes fail
-    if (aBmp.ImplGetImpBitmap())
+    if (aBmp.ImplGetSalBitmap())
     {
         aDstRect.SetSize(aBmp.GetSizePixel());
     }
@@ -982,7 +979,7 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
                 "OutputDevice::ImplDrawAlpha(): non-8bit alpha no longer supported!" );
 
     // #i38887# reading from screen may sometimes fail
-    if (aBmp.ImplGetImpBitmap())
+    if (aBmp.ImplGetSalBitmap())
     {
         Bitmap aNewBitmap;
 
@@ -1057,18 +1054,18 @@ bool OutputDevice::DrawTransformBitmapExDirect(
     const basegfx::B2DPoint aNull(aFullTransform * basegfx::B2DPoint(0.0, 0.0));
     const basegfx::B2DPoint aTopX(aFullTransform * basegfx::B2DPoint(1.0, 0.0));
     const basegfx::B2DPoint aTopY(aFullTransform * basegfx::B2DPoint(0.0, 1.0));
-    SalBitmap* pSalSrcBmp = rBitmapEx.GetBitmap().ImplGetImpBitmap()->ImplGetSalBitmap();
+    SalBitmap* pSalSrcBmp = rBitmapEx.GetBitmap().ImplGetSalBitmap().get();
     SalBitmap* pSalAlphaBmp = nullptr;
 
     if(rBitmapEx.IsTransparent())
     {
         if(rBitmapEx.IsAlpha())
         {
-            pSalAlphaBmp = rBitmapEx.GetAlpha().ImplGetImpBitmap()->ImplGetSalBitmap();
+            pSalAlphaBmp = rBitmapEx.GetAlpha().ImplGetSalBitmap().get();
         }
         else
         {
-            pSalAlphaBmp = rBitmapEx.GetMask().ImplGetImpBitmap()->ImplGetSalBitmap();
+            pSalAlphaBmp = rBitmapEx.GetMask().ImplGetSalBitmap().get();
         }
     }
 
@@ -1385,7 +1382,7 @@ void OutputDevice::BlendBitmap(
             const SalTwoRect&   rPosAry,
             const Bitmap&       rBmp )
 {
-    mpGraphics->BlendBitmap( rPosAry, *rBmp.ImplGetImpBitmap()->ImplGetSalBitmap(), this );
+    mpGraphics->BlendBitmap( rPosAry, *rBmp.ImplGetSalBitmap(), this );
 }
 
 Bitmap OutputDevice::BlendBitmapWithAlpha(

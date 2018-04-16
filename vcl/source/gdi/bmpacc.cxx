@@ -21,8 +21,10 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
 
-#include <impbmp.hxx>
 #include <bitmapwriteaccess.hxx>
+#include <salbmp.hxx>
+#include <svdata.hxx>
+#include <salinst.hxx>
 
 #include <string.h>
 
@@ -30,17 +32,17 @@ BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
             mpBuffer        ( nullptr ),
             mnAccessMode    ( nMode )
 {
-    std::shared_ptr<ImpBitmap> xImpBmp = rBitmap.ImplGetImpBitmap();
+    std::shared_ptr<SalBitmap> xImpBmp = rBitmap.ImplGetSalBitmap();
 
     SAL_WARN_IF( !xImpBmp, "vcl", "Forbidden Access to empty bitmap!" );
 
     if( xImpBmp )
     {
-        if( mnAccessMode == BitmapAccessMode::Write && !maBitmap.ImplGetImpBitmap() )
+        if( mnAccessMode == BitmapAccessMode::Write && !maBitmap.ImplGetSalBitmap() )
         {
             xImpBmp.reset();
             rBitmap.ImplMakeUnique();
-            xImpBmp = rBitmap.ImplGetImpBitmap();
+            xImpBmp = rBitmap.ImplGetSalBitmap();
         }
         else
         {
@@ -53,11 +55,11 @@ BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
 
         if( !mpBuffer )
         {
-            std::shared_ptr<ImpBitmap> xNewImpBmp(new ImpBitmap);
+            std::shared_ptr<SalBitmap> xNewImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
             if (xNewImpBmp->Create(*xImpBmp, rBitmap.GetBitCount()))
             {
                 xImpBmp = xNewImpBmp;
-                rBitmap.ImplSetImpBitmap( xImpBmp );
+                rBitmap.ImplSetSalBitmap( xImpBmp );
                 mpBuffer = xImpBmp->AcquireBuffer( mnAccessMode );
             }
         }
@@ -68,7 +70,7 @@ BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
 
 BitmapInfoAccess::~BitmapInfoAccess()
 {
-    std::shared_ptr<ImpBitmap> xImpBmp = maBitmap.ImplGetImpBitmap();
+    std::shared_ptr<SalBitmap> xImpBmp = maBitmap.ImplGetSalBitmap();
 
     if (mpBuffer && xImpBmp)
     {
@@ -90,7 +92,7 @@ BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
     if (!mpBuffer)
         return;
 
-    std::shared_ptr<ImpBitmap> xImpBmp = rBitmap.ImplGetImpBitmap();
+    std::shared_ptr<SalBitmap> xImpBmp = rBitmap.ImplGetSalBitmap();
     if (!xImpBmp)
         return;
 

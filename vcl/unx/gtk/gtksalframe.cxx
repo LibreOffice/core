@@ -53,7 +53,6 @@
 
 #include <dlfcn.h>
 #include <vcl/salbtype.hxx>
-#include <impbmp.hxx>
 #include <window.h>
 #include <strings.hrc>
 #include <bitmaps.hlst>

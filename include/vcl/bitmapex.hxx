@@ -463,8 +463,8 @@ public:
     void                CombineMaskOr(Color maskColor, sal_uInt8 nTol);
 public:
 
-    SAL_DLLPRIVATE std::shared_ptr<ImpBitmap> const & ImplGetBitmapImpBitmap() const { return maBitmap.ImplGetImpBitmap(); }
-    SAL_DLLPRIVATE std::shared_ptr<ImpBitmap> const & ImplGetMaskImpBitmap() const { return maMask.ImplGetImpBitmap(); }
+    SAL_DLLPRIVATE std::shared_ptr<SalBitmap> const & ImplGetBitmapSalBitmap() const { return maBitmap.ImplGetSalBitmap(); }
+    SAL_DLLPRIVATE std::shared_ptr<SalBitmap> const & ImplGetMaskSalBitmap() const { return maMask.ImplGetSalBitmap(); }
 
 
 private:
