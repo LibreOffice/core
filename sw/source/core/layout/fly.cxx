@@ -1421,6 +1421,7 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
             }
 
             {
+                SwFrameDeleteGuard aDeletePageGuard(pSect->FindPageFrame());
                 SwFrameDeleteGuard aDeleteGuard(pSect);
                 pFrame->Calc(pRenderContext);
             }

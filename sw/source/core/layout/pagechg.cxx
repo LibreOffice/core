@@ -1244,6 +1244,8 @@ namespace
              !pSibling->FindFirstBodyContent() &&
              (!pRefPage || !isDeleteForbidden(pSibling)) )
         {
+            if (pSibling->IsDeleteForbidden())
+                throw uno::RuntimeException("bad layout");
             pRoot->RemovePage( pRefSibling, SwRemoveResult::Next ) ;
             return false;
         }
