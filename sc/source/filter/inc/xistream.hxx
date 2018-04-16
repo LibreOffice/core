@@ -259,7 +259,7 @@ private:
     initially enables it. DisableDecryption() may be used to stop the usage of
     the decryption temporarily (sometimes record contents are never encrypted,
     i.e. all BOF records or the stream position in BOUNDSHEET). Decryption will
-    be reenabled automatically, if a new record is started with the function
+    be re-enabled automatically, if a new record is started with the function
     StartNextRecord().
 
     It is possible to store several stream positions inside a record (including

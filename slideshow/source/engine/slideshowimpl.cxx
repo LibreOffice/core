@@ -267,7 +267,7 @@ public:
     bool notifyHyperLinkClicked( OUString const& hyperLink );
 
     /** Notification from eventmultiplexer that an animation event has occurred.
-        This will be forewarded to all registered XSlideShowListener
+        This will be forwarded to all registered XSlideShowListener
      */
     bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode );
 
@@ -2313,7 +2313,7 @@ bool SlideShowImpl::notifyHyperLinkClicked( OUString const& hyperLink )
 }
 
 /** Notification from eventmultiplexer that an animation event has occurred.
-    This will be forewarded to all registered XSlideShoeListener
+    This will be forwarded to all registered XSlideShoeListener
  */
 bool SlideShowImpl::handleAnimationEvent( const AnimationNodeSharedPtr& rNode )
 {
