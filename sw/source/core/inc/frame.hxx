@@ -557,7 +557,8 @@ public:
         const SvxBrushItem*& rpBrush,
         const Color*& rpColor,
         SwRect &rOrigRect,
-        bool bLowerMode ) const;
+        bool bLowerMode,
+        bool bConsiderTextBox ) const;
 
     inline void SetCompletePaint() const;
     inline void ResetCompletePaint() const;

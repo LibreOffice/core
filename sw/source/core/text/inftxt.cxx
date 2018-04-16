@@ -535,7 +535,7 @@ static bool lcl_IsDarkBackground( const SwTextPaintInfo& rInf )
         // See implementation in /core/layout/paintfrm.cxx
         // There is a background color, if there is a background brush and
         // its color is *not* "no fill"/"auto fill".
-        if( rInf.GetTextFrame()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, false ) )
+        if( rInf.GetTextFrame()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, false, /*bConsiderTextBox=*/false ) )
         {
             if ( !pCol )
                 pCol = &pItem->GetColor();
