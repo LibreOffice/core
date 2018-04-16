@@ -19,11 +19,13 @@ public:
     void testTdf116830();
     void testTdf116925();
     void testTdf117028();
+    void testTdf116848();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
     CPPUNIT_TEST(testTdf116925);
     CPPUNIT_TEST(testTdf117028);
+    CPPUNIT_TEST(testTdf116848);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -106,6 +108,13 @@ void SwLayoutWriter::testTdf117028()
 
     // Make sure the text is still rendered.
     assertXPathContent(pXmlDoc, "//textarray/text", "Hello");
+}
+
+void SwLayoutWriter::testTdf116848()
+{
+    SwDoc* pDoc = createDoc("tdf116848.odt");
+    // This resulted in a layout loop.
+    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
