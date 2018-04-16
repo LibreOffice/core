@@ -47,7 +47,7 @@ namespace o3tl
 class VCL_DLLPUBLIC SplitWindow : public DockingWindow
 {
 private:
-    ImplSplitSet*       mpMainSet;
+    std::unique_ptr<ImplSplitSet> mpMainSet;
     ImplSplitSet*       mpBaseSet;
     ImplSplitSet*       mpSplitSet;
     long*               mpLastSizes;
