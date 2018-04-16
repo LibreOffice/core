@@ -29,7 +29,6 @@
 #include <win/salframe.h>
 #include <win/salmenu.h>
 
-#include <impbmp.hxx>
 #include <salgdi.hxx>
 
 static DWORD myerr=0;

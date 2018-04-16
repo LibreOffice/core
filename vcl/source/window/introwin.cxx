@@ -21,7 +21,6 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/introwin.hxx>
 
-#include <impbmp.hxx>
 #include <svdata.hxx>
 #include <salframe.hxx>
 

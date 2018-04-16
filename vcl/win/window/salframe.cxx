@@ -64,7 +64,6 @@
 #include <win/saltimer.h>
 
 #include <helpwin.hxx>
-#include <impbmp.hxx>
 #include <window.h>
 #include <sallayout.hxx>
 
@@ -4543,7 +4542,7 @@ static LRESULT ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
             aBitmap.Replace( COL_LIGHTMAGENTA,
                 Color( GetRValue(colBackground),GetGValue(colBackground),GetBValue(colBackground) ));
 
-            WinSalBitmap* pSalBmp = static_cast<WinSalBitmap*>(aBitmap.ImplGetImpBitmap()->ImplGetSalBitmap());
+            WinSalBitmap* pSalBmp = static_cast<WinSalBitmap*>(aBitmap.ImplGetSalBitmap().get());
             HGLOBAL hDrawDIB = pSalBmp->ImplGethDIB();
 
             if( hDrawDIB )

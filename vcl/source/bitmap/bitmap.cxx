@@ -22,7 +22,8 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/outdev.hxx>
 
-#include <impbmp.hxx>
+#include <svdata.hxx>
+#include <salinst.hxx>
 #include <salbmp.hxx>
 #include <bitmapwriteaccess.hxx>
 
@@ -34,16 +35,16 @@ Bitmap::Bitmap()
 }
 
 Bitmap::Bitmap(const Bitmap& rBitmap)
-    : mxImpBmp(rBitmap.mxImpBmp)
+    : mxSalBmp(rBitmap.mxSalBmp)
     , maPrefMapMode(rBitmap.maPrefMapMode)
     , maPrefSize(rBitmap.maPrefSize)
 {
 }
 
 Bitmap::Bitmap(SalBitmap* pSalBitmap)
-    : mxImpBmp(new ImpBitmap(pSalBitmap))
+    : mxSalBmp(pSalBitmap)
     , maPrefMapMode(MapMode(MapUnit::MapPixel))
-    , maPrefSize(mxImpBmp->GetSize())
+    , maPrefSize(mxSalBmp->GetSize())
 {
 }
 
@@ -103,8 +104,8 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
                 pRealPal = const_cast<BitmapPalette*>(pPal);
         }
 
-        mxImpBmp.reset(new ImpBitmap);
-        mxImpBmp->Create( rSizePixel, nBitCount, pRealPal ? *pRealPal : aPal );
+        mxSalBmp.reset(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+        mxSalBmp->Create( rSizePixel, nBitCount, pRealPal ? *pRealPal : aPal );
     }
 }
 
@@ -213,7 +214,7 @@ Bitmap& Bitmap::operator=( const Bitmap& rBitmap )
 
     maPrefSize = rBitmap.maPrefSize;
     maPrefMapMode = rBitmap.maPrefMapMode;
-    mxImpBmp = rBitmap.mxImpBmp;
+    mxSalBmp = rBitmap.mxSalBmp;
 
     return *this;
 }
@@ -222,34 +223,43 @@ Bitmap& Bitmap::operator=( Bitmap&& rBitmap )
 {
     maPrefSize = std::move(rBitmap.maPrefSize);
     maPrefMapMode = std::move(rBitmap.maPrefMapMode);
-    mxImpBmp = std::move(rBitmap.mxImpBmp);
+    mxSalBmp = std::move(rBitmap.mxSalBmp);
 
     return *this;
 }
 
 bool Bitmap::operator==( const Bitmap& rBmp ) const
 {
-    return rBmp.mxImpBmp == mxImpBmp || // Includes both are nullptr
-           (rBmp.mxImpBmp && mxImpBmp && mxImpBmp->ImplIsEqual(*rBmp.mxImpBmp));
+    if (rBmp.mxSalBmp == mxSalBmp) // Includes both are nullptr
+        return true;
+    if (!rBmp.mxSalBmp || !mxSalBmp)
+        return false;
+    if (rBmp.mxSalBmp->GetSize() != mxSalBmp->GetSize() ||
+        rBmp.mxSalBmp->GetBitCount() != mxSalBmp->GetBitCount())
+        return false;
+    BitmapChecksum aChecksum1, aChecksum2;
+    rBmp.mxSalBmp->GetChecksum(aChecksum1);
+    mxSalBmp->GetChecksum(aChecksum2);
+    return aChecksum1 == aChecksum2;
 }
 
 void Bitmap::SetEmpty()
 {
     maPrefMapMode = MapMode();
     maPrefSize = Size();
-    mxImpBmp.reset();
+    mxSalBmp.reset();
 }
 
 Size Bitmap::GetSizePixel() const
 {
-    return( mxImpBmp ? mxImpBmp->GetSize() : Size() );
+    return( mxSalBmp ? mxSalBmp->GetSize() : Size() );
 }
 
 sal_uInt16 Bitmap::GetBitCount() const
 {
-    if (!mxImpBmp)
+    if (!mxSalBmp)
         return 0;
-    sal_uInt16 nBitCount = mxImpBmp->GetBitCount();
+    sal_uInt16 nBitCount = mxSalBmp->GetBitCount();
     return ( nBitCount <= 4 ) ? ( ( nBitCount <= 1 ) ? 1 : 4 ):
                                 ( ( nBitCount <= 8 ) ? 8 : 24);
 }
@@ -273,9 +283,9 @@ BitmapChecksum Bitmap::GetChecksum() const
 {
     BitmapChecksum nRet = 0;
 
-    if( mxImpBmp )
+    if( mxSalBmp )
     {
-        nRet = mxImpBmp->GetChecksum();
+        mxSalBmp->GetChecksum(nRet);
 
         if (!nRet)
         {
@@ -283,12 +293,12 @@ BitmapChecksum Bitmap::GetChecksum() const
             // the buffer in SalBitmap::updateChecksum;
             // so, we need to update the imp bitmap for this bitmap instance
             // as we do in BitmapInfoAccess::ImplCreate
-            std::shared_ptr<ImpBitmap> xNewImpBmp(new ImpBitmap);
-            if (xNewImpBmp->Create(*mxImpBmp, GetBitCount()))
+            std::shared_ptr<SalBitmap> xNewImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+            if (xNewImpBmp->Create(*mxSalBmp, GetBitCount()))
             {
                 Bitmap* pThis = const_cast<Bitmap*>(this);
-                pThis->mxImpBmp = xNewImpBmp;
-                nRet = mxImpBmp->GetChecksum();
+                pThis->mxSalBmp = xNewImpBmp;
+                mxSalBmp->GetChecksum(nRet);
             }
         }
     }
@@ -298,11 +308,11 @@ BitmapChecksum Bitmap::GetChecksum() const
 
 void Bitmap::ImplMakeUnique()
 {
-    if (mxImpBmp && mxImpBmp.use_count() > 1)
+    if (mxSalBmp && mxSalBmp.use_count() > 1)
     {
-        std::shared_ptr<ImpBitmap> xOldImpBmp = mxImpBmp;
-        mxImpBmp.reset(new ImpBitmap);
-        mxImpBmp->Create(*xOldImpBmp);
+        std::shared_ptr<SalBitmap> xOldImpBmp = mxSalBmp;
+        mxSalBmp.reset(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+        mxSalBmp->Create(*xOldImpBmp);
     }
 }
 
@@ -330,9 +340,9 @@ void Bitmap::ReassignWithSize(const Bitmap& rBitmap)
 }
 
 
-void Bitmap::ImplSetImpBitmap(const std::shared_ptr<ImpBitmap>& xImpBmp)
+void Bitmap::ImplSetSalBitmap(const std::shared_ptr<SalBitmap>& xImpBmp)
 {
-    mxImpBmp = xImpBmp;
+    mxSalBmp = xImpBmp;
 }
 
 BitmapInfoAccess* Bitmap::AcquireInfoAccess()
@@ -437,7 +447,7 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
 
     if( !aRectDst.IsEmpty() )
     {
-        if( pBmpSrc && ( pBmpSrc->mxImpBmp != mxImpBmp ) )
+        if( pBmpSrc && ( pBmpSrc->mxSalBmp != mxSalBmp ) )
         {
             Bitmap*         pSrc = const_cast<Bitmap*>(pBmpSrc);
             const Size      aCopySizePix( pSrc->GetSizePixel() );
@@ -644,7 +654,7 @@ bool Bitmap::CopyPixel_AlphaOptimized( const tools::Rectangle& rRectDst, const t
 
     if( !aRectDst.IsEmpty() )
     {
-        if( pBmpSrc && ( pBmpSrc->mxImpBmp != mxImpBmp ) )
+        if( pBmpSrc && ( pBmpSrc->mxSalBmp != mxSalBmp ) )
         {
             Bitmap*         pSrc = const_cast<Bitmap*>(pBmpSrc);
             const Size      aCopySizePix( pSrc->GetSizePixel() );
@@ -830,11 +840,11 @@ Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay )
 
     SalGraphics* pDispGraphics = pDisplay->GetGraphics();
 
-    if( mxImpBmp && pDispGraphics )
+    if( mxSalBmp && pDispGraphics )
     {
-        std::shared_ptr<ImpBitmap> xImpDispBmp(new ImpBitmap);
-        if (xImpDispBmp->Create(*mxImpBmp, pDispGraphics))
-            aDispBmp.ImplSetImpBitmap(xImpDispBmp);
+        std::shared_ptr<SalBitmap> xImpDispBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+        if (xImpDispBmp->Create(*mxSalBmp, pDispGraphics))
+            aDispBmp.ImplSetSalBitmap(xImpDispBmp);
     }
 
     return aDispBmp;
@@ -919,9 +929,9 @@ bool Bitmap::MakeMonochrome(sal_uInt8 cThreshold)
 bool Bitmap::GetSystemData( BitmapSystemData& rData ) const
 {
     bool bRet = false;
-    if (mxImpBmp)
+    if (mxSalBmp)
     {
-        SalBitmap* pSalBitmap = mxImpBmp->ImplGetSalBitmap();
+        SalBitmap* pSalBitmap = mxSalBmp.get();
         if( pSalBitmap )
             bRet = pSalBitmap->GetSystemData( rData );
     }
