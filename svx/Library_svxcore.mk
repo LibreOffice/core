@@ -449,6 +449,15 @@ $(eval $(call gb_LinkTarget_set_cxx_optimization, \
 ))
 endif
 
+# g++49 -Os sometimes leaves inline class methods undefined,
+# See: <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=65009>
+ifeq ($(COM)$(shell expr $(CCNUMVER) '>=' 000400090000 '&' $(CCNUMVER) '<' 000500000000),GCC1)
+$(eval $(call gb_LinkTarget_set_cxx_optimization, \
+    svx/source/fmcomp/fmgridif, \
+    $(gb_COMPILEROPTFLAGS) -fno-devirtualize -fno-devirtualize-speculatively \
+))
+endif
+
 $(eval $(call gb_SdiTarget_SdiTarget,svx/sdi/svxslots,svx/sdi/svx))
 
 $(eval $(call gb_SdiTarget_set_include,svx/sdi/svxslots,\
