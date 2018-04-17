@@ -26,5 +26,5 @@
         <prop oor:name="UIName">
             <value xml:lang="en-US">DocBook</value>
         </prop>
-        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER EXOTIC</value></prop>
     </node>

@@ -8,7 +8,7 @@
 
 <node oor:name="DosWord" oor:op="replace">
     <prop oor:name="Flags">
-        <value>IMPORT ALIEN 3RDPARTYFILTER</value>
+        <value>IMPORT ALIEN 3RDPARTYFILTER EXOTIC</value>
     </prop>
     <prop oor:name="FilterService">
         <value>com.sun.star.comp.Writer.MSWorksImportFilter</value>
