@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_efdd6371",
+        "filename": "onlineupdate/source/mbsdiff/bsdiff.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-17T14:22:31Z",
+      "side": 1,
+      "message": "OK, I will revert this. I will not touch the onlineupdate module regarding your comment. Thanks!",
+      "parentUuid": "9a30ddce_4f8e6f79",
+      "revId": "ac2e63c90bc4c3c2e50af1a8f31b040e6aa8d5b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_2f913b9a",
         "filename": "oox/source/vml/vmlformatting.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2018-04-17T14:18:10Z",
       "side": 1,
       "message": "have to be careful here. the old code was doing floating point computation, this code is doing purely integer computation, which will yield different results. \n\nYou need something like:\n    sal_Int32 nNewHeight \u003d (static_cast\u003cfloat\u003e(pDevice-\u003eGetTextHeight()) / nTextWidth) * xShape-\u003egetSize().Width;",
+      "revId": "ac2e63c90bc4c3c2e50af1a8f31b040e6aa8d5b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_8feea720",
+        "filename": "oox/source/vml/vmlformatting.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-17T14:22:31Z",
+      "side": 1,
+      "message": "Oh, you are right. That was completely unintentional. Is it safe to do a type casting or should we just revert it to the previous state like:\n\n    fRatio \u003d pDevice-\u003eGetTextHeight() / nTextWidth;\n    sal_Int32 nNewHeight \u003d fRatio * xShape-\u003egetSize().Width;\n\nOr does this also yield to an integer?",
+      "parentUuid": "9a30ddce_2f913b9a",
       "revId": "ac2e63c90bc4c3c2e50af1a8f31b040e6aa8d5b3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
