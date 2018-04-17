@@ -268,15 +268,19 @@ typedef std::set<std::unique_ptr<SvxMSDffImportRec>,
 
 /** block of parameters for import/export for a single call of
     ImportObjAtCurrentStreamPos() */
-struct SvxMSDffImportData
+struct MSFILTER_DLLPUBLIC SvxMSDffImportData
 {
     MSDffImportRecords  m_Records;  ///< Shape pointer, Shape ids and private data
     tools::Rectangle           aParentRect;///< Rectangle of the surrounding groups,
                                     ///< which might have been provided externally
 
-    explicit SvxMSDffImportData( const tools::Rectangle& rParentRect ) : aParentRect( rParentRect ) {}
+    explicit SvxMSDffImportData(const tools::Rectangle& rParentRect);
+    SvxMSDffImportData& operator=( SvxMSDffImportData const & ) = delete; // MSVC2015 workaround
+    SvxMSDffImportData( SvxMSDffImportData const & ) = delete; // MSVC2015 workaround
+    ~SvxMSDffImportData();
     bool empty() const { return m_Records.empty(); }
     size_t size() const { return m_Records.size(); }
+    SvxMSDffImportRec* find(const SdrObject* pObj);
     MSDffImportRecords::const_iterator begin() const { return m_Records.begin();  }
     MSDffImportRecords::const_iterator end() const { return m_Records.end();  }
 };
@@ -499,7 +503,8 @@ protected:
                                    void* pData,
                                    tools::Rectangle& rTextRect,
                                    SdrObject* pObj);
-    virtual void FreeObj(void* pData, SdrObject* pObj);
+    virtual void NotifyFreeObj(void* pData, SdrObject* pObj);
+    void FreeObj(void* pData, SdrObject* pObj);
 
 
     /** Object finalization, used by the Excel filter to correctly
