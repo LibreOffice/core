@@ -2316,7 +2316,7 @@
             </info>
           </enumeration>
         </constraints>
-        <value>2</value>
+        <value>1</value>
       </prop>
       <prop oor:name="EnableExpertConfiguration" oor:type="xs:boolean" oor:nillable="false">
         <info>
