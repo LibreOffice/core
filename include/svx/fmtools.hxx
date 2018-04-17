@@ -72,7 +72,7 @@ namespace vcl { class Window; }
 // display info about a simple css::sdbc::SQLException
 void displayException(const css::sdbc::SQLException&, vcl::Window* _pParent);
 SVX_DLLPUBLIC void displayException(const css::sdb::SQLContext&, vcl::Window* _pParent);
-void displayException(const css::sdb::SQLErrorEvent&);
+void displayException(const css::sdb::SQLErrorEvent&, vcl::Window* _pParent = nullptr);
 void displayException(const css::uno::Any&, vcl::Window* _pParent = nullptr);
 
 sal_Int32 getElementPos(const css::uno::Reference< css::container::XIndexAccess>& xCont, const css::uno::Reference< css::uno::XInterface>& xElement);
