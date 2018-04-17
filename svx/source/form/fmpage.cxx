@@ -70,9 +70,9 @@ FmFormPage::~FmFormPage()
 {
 }
 
-SdrPage* FmFormPage::Clone(SdrModel* pNewModel) const
+SdrPage* FmFormPage::Clone(SdrModel* pNewModelel) const
 {
-    FmFormModel& rFmFormModel(static_cast< FmFormModel& >(nullptr == pNewModel ? getSdrModelFromSdrPage() : *pNewModel));
+    FmFormModel& rFmFormModel(static_cast< FmFormModel& >(nullptr == pNewModelel ? getSdrModelFromSdrPage() : *pNewModelel));
     FmFormPage* pClonedFmFormPage(
         new FmFormPage(
             rFmFormModel,

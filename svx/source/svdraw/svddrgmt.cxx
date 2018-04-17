@@ -1976,29 +1976,29 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
         }
     }
 
-    Fraction aNeuXFact(nXMul,nXDiv);
-    Fraction aNeuYFact(nYMul,nYDiv);
+    Fraction aNewXFact(nXMul,nXDiv);
+    Fraction aNewYFact(nYMul,nYDiv);
 
     if (bOrtho)
     {
-        if (aNeuXFact>aMaxFact)
+        if (aNewXFact>aMaxFact)
         {
-            aNeuXFact=aMaxFact;
-            aNeuYFact=aMaxFact;
+            aNewXFact=aMaxFact;
+            aNewYFact=aMaxFact;
         }
 
-        if (aNeuYFact>aMaxFact)
+        if (aNewYFact>aMaxFact)
         {
-            aNeuXFact=aMaxFact;
-            aNeuYFact=aMaxFact;
+            aNewXFact=aMaxFact;
+            aNewYFact=aMaxFact;
         }
     }
 
     if (bXNeg)
-        aNeuXFact=Fraction(-aNeuXFact.GetNumerator(),aNeuXFact.GetDenominator());
+        aNewXFact=Fraction(-aNewXFact.GetNumerator(),aNewXFact.GetDenominator());
 
     if (bYNeg)
-        aNeuYFact=Fraction(-aNeuYFact.GetNumerator(),aNeuYFact.GetDenominator());
+        aNewYFact=Fraction(-aNewYFact.GetNumerator(),aNewYFact.GetDenominator());
 
     if (DragStat().CheckMinMoved(aPnt))
     {
@@ -2007,8 +2007,8 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
         {
             Hide();
             DragStat().NextMove(aPnt);
-            aXFact=aNeuXFact;
-            aYFact=aNeuYFact;
+            aXFact=aNewXFact;
+            aYFact=aNewYFact;
             Show();
         }
     }
@@ -2294,7 +2294,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
 
     Point aP0(DragStat().GetStart());
     Point aPnt(rPnt);
-    Fraction aNeuFact(1,1);
+    Fraction aNewFract(1,1);
 
     // if angle snapping not activated, snap to raster (except when using slant)
     if (nSA==0 && !bSlant)
@@ -2339,11 +2339,11 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
 
             if (bVertical)
             {
-                aNeuFact=Fraction(aPt2.X()-aRef.X(),aP0.X()-aRef.X());
+                aNewFract=Fraction(aPt2.X()-aRef.X(),aP0.X()-aRef.X());
             }
             else
             {
-                aNeuFact=Fraction(aPt2.Y()-aRef.Y(),aP0.Y()-aRef.Y());
+                aNewFract=Fraction(aPt2.Y()-aRef.Y(),aP0.Y()-aRef.Y());
             }
         }
     }
@@ -2370,7 +2370,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
         if (bUpSideDown) nNewAngle-=18000;
         if (bNeg) nTmpAngle=-nTmpAngle;
         bResize=true;
-        aNeuFact = cos(nTmpAngle*nPi180);
+        aNewFract = cos(nTmpAngle*nPi180);
         aFact.ReduceInaccurate(10); // three decimals should be enough
     }
 
@@ -2380,10 +2380,10 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
     if (bNeg)
         nNewAngle=-nNewAngle;
 
-    if (nAngle!=nNewAngle || aFact!=aNeuFact)
+    if (nAngle!=nNewAngle || aFact!=aNewFract)
     {
         nAngle=nNewAngle;
-        aFact=aNeuFact;
+        aFact=aNewFract;
         double a=nAngle*nPi180;
         double nTan1=tan(a); // calculate now, so as little time as possible passes between Hide() and Show()
         Hide();
@@ -2567,13 +2567,13 @@ void SdrDragMirror::MoveSdrDrag(const Point& rPnt)
 {
     if (DragStat().CheckMinMoved(rPnt))
     {
-        bool bNeuSide=ImpCheckSide(rPnt);
-        bool bNeuMirr=bSide0!=bNeuSide;
+        bool bNewSide=ImpCheckSide(rPnt);
+        bool bNewMirrored=bSide0!=bNewSide;
 
-        if (bMirrored!=bNeuMirr)
+        if (bMirrored!=bNewMirrored)
         {
             Hide();
-            bMirrored=bNeuMirr;
+            bMirrored=bNewMirrored;
             DragStat().NextMove(rPnt);
             Show();
         }
@@ -3087,44 +3087,44 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
     if (!DragStat().CheckMinMoved(rPnt))
         return;
 
-    bool bNeuMoveOnly=getSdrDragView().IsMoveOnlyDragging();
+    bool bNewMoveOnly=getSdrDragView().IsMoveOnlyDragging();
     bAtCenter=false;
-    SdrCrookMode eNeuMode=getSdrDragView().GetCrookMode();
-    bool bNeuContortion=!bNeuMoveOnly && ((bContortionAllowed && !getSdrDragView().IsCrookNoContortion()) || !bNoContortionAllowed);
-    bResize=!getSdrDragView().IsOrtho() && bResizeAllowed && !bNeuMoveOnly;
-    bool bNeuRotate=bRotateAllowed && !bNeuContortion && !bNeuMoveOnly && eNeuMode==SdrCrookMode::Rotate;
+    SdrCrookMode eNewMode=getSdrDragView().GetCrookMode();
+    bool bNewContortion=!bNewMoveOnly && ((bContortionAllowed && !getSdrDragView().IsCrookNoContortion()) || !bNoContortionAllowed);
+    bResize=!getSdrDragView().IsOrtho() && bResizeAllowed && !bNewMoveOnly;
+    bool bNewRotate=bRotateAllowed && !bNewContortion && !bNewMoveOnly && eNewMode==SdrCrookMode::Rotate;
 
     Point aPnt(GetSnapPos(rPnt));
 
-    Point aNeuCenter(aMarkCenter.X(),aStart.Y());
+    Point aNewCenter(aMarkCenter.X(),aStart.Y());
 
     if (bVertical)
     {
-        aNeuCenter.setX(aStart.X() );
-        aNeuCenter.setY(aMarkCenter.Y() );
+        aNewCenter.setX(aStart.X() );
+        aNewCenter.setY(aMarkCenter.Y() );
     }
 
     if (!getSdrDragView().IsCrookAtCenter())
     {
         switch (GetDragHdlKind())
         {
-            case SdrHdlKind::UpperLeft: aNeuCenter.setX(aMarkRect.Right() );  bLft=true; break;
-            case SdrHdlKind::Upper: aNeuCenter.setY(aMarkRect.Bottom() ); bUpr=true; break;
-            case SdrHdlKind::UpperRight: aNeuCenter.setX(aMarkRect.Left() );   bRgt=true; break;
-            case SdrHdlKind::Left : aNeuCenter.setX(aMarkRect.Right() );  bLft=true; break;
-            case SdrHdlKind::Right: aNeuCenter.setX(aMarkRect.Left() );   bRgt=true; break;
-            case SdrHdlKind::LowerLeft: aNeuCenter.setX(aMarkRect.Right() );  bLft=true; break;
-            case SdrHdlKind::Lower: aNeuCenter.setY(aMarkRect.Top() );    bLwr=true; break;
-            case SdrHdlKind::LowerRight: aNeuCenter.setX(aMarkRect.Left() );   bRgt=true; break;
+            case SdrHdlKind::UpperLeft: aNewCenter.setX(aMarkRect.Right() );  bLft=true; break;
+            case SdrHdlKind::Upper: aNewCenter.setY(aMarkRect.Bottom() ); bUpr=true; break;
+            case SdrHdlKind::UpperRight: aNewCenter.setX(aMarkRect.Left() );   bRgt=true; break;
+            case SdrHdlKind::Left : aNewCenter.setX(aMarkRect.Right() );  bLft=true; break;
+            case SdrHdlKind::Right: aNewCenter.setX(aMarkRect.Left() );   bRgt=true; break;
+            case SdrHdlKind::LowerLeft: aNewCenter.setX(aMarkRect.Right() );  bLft=true; break;
+            case SdrHdlKind::Lower: aNewCenter.setY(aMarkRect.Top() );    bLwr=true; break;
+            case SdrHdlKind::LowerRight: aNewCenter.setX(aMarkRect.Left() );   bRgt=true; break;
             default: bAtCenter=true;
         }
     }
     else
         bAtCenter=true;
 
-    Fraction aNeuFact(1,1);
-    long dx1=aPnt.X()-aNeuCenter.X();
-    long dy1=aPnt.Y()-aNeuCenter.Y();
+    Fraction aNewFract(1,1);
+    long dx1=aPnt.X()-aNewCenter.X();
+    long dy1=aPnt.Y()-aNewCenter.Y();
     bValid=bVertical ? dx1!=0 : dy1!=0;
 
     if (bValid)
@@ -3135,7 +3135,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
             bValid = std::abs(dy1)*100>std::abs(dx1);
     }
 
-    long nNeuRad=0;
+    long nNewRad=0;
     nAngle=0;
 
     if (bValid)
@@ -3146,21 +3146,21 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
         if (bVertical)
         {
             a=static_cast<double>(dy1)/static_cast<double>(dx1); // slope of the radius
-            nNeuRad=(static_cast<long>(dy1*a)+dx1) /2;
-            aNeuCenter.AdjustX(nNeuRad );
-            nPntWink=GetAngle(aPnt-aNeuCenter);
+            nNewRad=(static_cast<long>(dy1*a)+dx1) /2;
+            aNewCenter.AdjustX(nNewRad );
+            nPntWink=GetAngle(aPnt-aNewCenter);
         }
         else
         {
             a=static_cast<double>(dx1)/static_cast<double>(dy1); // slope of the radius
-            nNeuRad=(static_cast<long>(dx1*a)+dy1) /2;
-            aNeuCenter.AdjustY(nNeuRad );
-            nPntWink=GetAngle(aPnt-aNeuCenter)-9000;
+            nNewRad=(static_cast<long>(dx1*a)+dy1) /2;
+            aNewCenter.AdjustY(nNewRad );
+            nPntWink=GetAngle(aPnt-aNewCenter)-9000;
         }
 
         if (!bAtCenter)
         {
-            if (nNeuRad<0)
+            if (nNewRad<0)
             {
                 if (bRgt) nPntWink+=18000;
                 if (bLft) nPntWink=18000-nPntWink;
@@ -3177,13 +3177,13 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
         }
         else
         {
-            if (nNeuRad<0) nPntWink+=18000;
+            if (nNewRad<0) nPntWink+=18000;
             if (bVertical) nPntWink=18000-nPntWink;
             nPntWink=NormAngle180(nPntWink);
             nPntWink = std::abs(nPntWink);
         }
 
-        double nUmfang = 2 * std::abs(nNeuRad)*nPi;
+        double nUmfang = 2 * std::abs(nNewRad)*nPi;
 
         if (bResize)
         {
@@ -3192,7 +3192,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
             if (bAtCenter)
                 nMul*=2;
 
-            aNeuFact=Fraction(nMul,nMarkSize);
+            aNewFract=Fraction(nMul,nMarkSize);
             nAngle=nPntWink;
         }
         else
@@ -3204,11 +3204,11 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
         }
     }
 
-    if (nAngle==0 || nNeuRad==0)
+    if (nAngle==0 || nNewRad==0)
         bValid=false;
 
     if (!bValid)
-        nNeuRad=0;
+        nNewRad=0;
 
     if (!bValid && bResize)
     {
@@ -3225,21 +3225,21 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
             nMul = std::abs(nMul);
         }
 
-        aNeuFact=Fraction(nMul,nDiv);
+        aNewFract=Fraction(nMul,nDiv);
     }
 
-    if (aNeuCenter==aCenter && bNeuContortion==bContortion && aNeuFact==aFact &&
-        bNeuMoveOnly == getMoveOnly() && bNeuRotate==bRotate && eNeuMode==eMode)
+    if (aNewCenter==aCenter && bNewContortion==bContortion && aNewFract==aFact &&
+        bNewMoveOnly == getMoveOnly() && bNewRotate==bRotate && eNewMode==eMode)
         return;
 
     Hide();
-    setMoveOnly(bNeuMoveOnly);
-    bRotate=bNeuRotate;
-    eMode=eNeuMode;
-    bContortion=bNeuContortion;
-    aCenter=aNeuCenter;
-    aFact=aNeuFact;
-    aRad=Point(nNeuRad,nNeuRad);
+    setMoveOnly(bNewMoveOnly);
+    bRotate=bNewRotate;
+    eMode=eNewMode;
+    bContortion=bNewContortion;
+    aCenter=aNewCenter;
+    aFact=aNewFract;
+    aRad=Point(nNewRad,nNewRad);
     bResize=aFact!=Fraction(1,1) && aFact.GetDenominator()!=0 && aFact.IsValid();
     DragStat().NextMove(aPnt);
     Show();
@@ -3488,13 +3488,13 @@ void SdrDragDistort::MoveSdrDrag(const Point& rPnt)
         if (getSdrDragView().IsOrtho())
             OrthoDistance8(DragStat().GetStart(),aPnt,getSdrDragView().IsBigOrtho());
 
-        bool bNeuContortion=(bContortionAllowed && !getSdrDragView().IsCrookNoContortion()) || !bNoContortionAllowed;
+        bool bNewContortion=(bContortionAllowed && !getSdrDragView().IsCrookNoContortion()) || !bNoContortionAllowed;
 
-        if (bNeuContortion!=bContortion || aDistortedRect[nPolyPt]!=aPnt)
+        if (bNewContortion!=bContortion || aDistortedRect[nPolyPt]!=aPnt)
         {
             Hide();
             aDistortedRect[nPolyPt]=aPnt;
-            bContortion=bNeuContortion;
+            bContortion=bNewContortion;
             DragStat().NextMove(aPnt);
             Show();
         }

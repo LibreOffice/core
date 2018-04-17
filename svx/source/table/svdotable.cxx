@@ -198,7 +198,7 @@ public:
     std::vector<std::unique_ptr<SdrUndoAction>> maUndos;
     bool mbSkipChangeLayout;
 
-    void SetModel(SdrModel* pNewModel);
+    void SetModel(SdrModel* pNewModelel);
 
     CellRef getCell( const CellPos& rPos ) const;
     void LayoutTable( tools::Rectangle& rArea, bool bFitWidth, bool bFitHeight );
@@ -320,7 +320,7 @@ SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
 }
 
 
-void SdrTableObjImpl::SetModel(SdrModel* pNewModel)
+void SdrTableObjImpl::SetModel(SdrModel* pNewModelel)
 {
     // try to find new table style
     disconnectTableStyle();
@@ -330,7 +330,7 @@ void SdrTableObjImpl::SetModel(SdrModel* pNewModel)
     {
         const OUString sStyleName( Reference< XNamed >( mxTableStyle, UNO_QUERY_THROW )->getName() );
 
-        Reference< XStyleFamiliesSupplier > xSFS( pNewModel->getUnoModel(), UNO_QUERY_THROW );
+        Reference< XStyleFamiliesSupplier > xSFS( pNewModelel->getUnoModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilyNameAccess( xSFS->getStyleFamilies(), UNO_QUERY_THROW );
         const OUString sFamilyName( "table" );
         Reference< XNameAccess > xTableFamilyAccess( xFamilyNameAccess->getByName( sFamilyName ), UNO_QUERY_THROW );
@@ -1856,14 +1856,14 @@ void SdrTableObj::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
 
 bool SdrTableObj::AdjustTextFrameWidthAndHeight()
 {
-    tools::Rectangle aNeuRect(maLogicRect);
-    bool bRet=AdjustTextFrameWidthAndHeight(aNeuRect);
+    tools::Rectangle aNewRect(maLogicRect);
+    bool bRet=AdjustTextFrameWidthAndHeight(aNewRect);
     if (bRet)
     {
         tools::Rectangle aBoundRect0;
         if (pUserCall!=nullptr)
             aBoundRect0=GetLastBoundRect();
-        maRect = aNeuRect;
+        maRect = aNewRect;
         SetRectsDirty();
         SetChanged();
         BroadcastObjectChange();

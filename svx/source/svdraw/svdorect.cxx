@@ -116,19 +116,19 @@ XPolygon SdrRectObj::ImpCalcXPoly(const tools::Rectangle& rRect1, long nRad1) co
 {
     XPolygon aXPoly(rRect1,nRad1,nRad1);
     const sal_uInt16 nPointCnt(aXPoly.GetPointCount());
-    XPolygon aNeuPoly(nPointCnt+1);
+    XPolygon aNewPoly(nPointCnt+1);
     sal_uInt16 nShift=nPointCnt-2;
     if (nRad1!=0) nShift=nPointCnt-5;
     sal_uInt16 j=nShift;
     for (sal_uInt16 i=1; i<nPointCnt; i++) {
-        aNeuPoly[i]=aXPoly[j];
-        aNeuPoly.SetFlags(i,aXPoly.GetFlags(j));
+        aNewPoly[i]=aXPoly[j];
+        aNewPoly.SetFlags(i,aXPoly.GetFlags(j));
         j++;
         if (j>=nPointCnt) j=1;
     }
-    aNeuPoly[0]=rRect1.BottomCenter();
-    aNeuPoly[nPointCnt]=aNeuPoly[0];
-    aXPoly=aNeuPoly;
+    aNewPoly[0]=rRect1.BottomCenter();
+    aNewPoly[nPointCnt]=aNewPoly[0];
+    aXPoly=aNewPoly;
 
     // these angles always relate to the top left corner of aRect
     if (aGeo.nShearAngle!=0) ShearXPoly(aXPoly,maRect.TopLeft(),aGeo.nTan);

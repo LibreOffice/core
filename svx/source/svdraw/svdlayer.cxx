@@ -172,14 +172,14 @@ SdrLayerAdmin& SdrLayerAdmin::operator=(const SdrLayerAdmin& rSrcLayerAdmin)
     return *this;
 }
 
-void SdrLayerAdmin::SetModel(SdrModel* pNewModel)
+void SdrLayerAdmin::SetModel(SdrModel* pNewModelel)
 {
-    if (pNewModel!=pModel) {
-        pModel=pNewModel;
+    if (pNewModelel!=pModel) {
+        pModel=pNewModelel;
         sal_uInt16 nCount=GetLayerCount();
         sal_uInt16 i;
         for (i=0; i<nCount; i++) {
-            GetLayer(i)->SetModel(pNewModel);
+            GetLayer(i)->SetModel(pNewModelel);
         }
     }
 }
