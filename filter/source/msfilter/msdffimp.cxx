@@ -5029,8 +5029,34 @@ void SvxMSDffManager::GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt
     }
 }
 
-void SvxMSDffManager::FreeObj(void* /*pData*/, SdrObject* pObj)
+SvxMSDffImportRec* SvxMSDffImportData::find(const SdrObject* pObj)
 {
+    for (const auto& it : *this)
+    {
+        if (it->pObj == pObj)
+            return it.get();
+    }
+    return nullptr;
+}
+
+void SvxMSDffManager::NotifyFreeObj(void* pData, SdrObject* pObj)
+{
+    if (SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(pObj))
+    {
+        SdrObjList* pSubList = pGroup->GetSubList();
+        size_t nObjCount = pSubList->GetObjCount();
+        for (size_t i = 0; i < nObjCount; ++i)
+            NotifyFreeObj(pData, pSubList->GetObj(i));
+    }
+
+    SvxMSDffImportData& rImportData = *static_cast<SvxMSDffImportData*>(pData);
+    if (SvxMSDffImportRec* pRecord = rImportData.find(pObj))
+        pRecord->pObj = nullptr;
+}
+
+void SvxMSDffManager::FreeObj(void* pData, SdrObject* pObj)
+{
+    NotifyFreeObj(pData, pObj);
     SdrObject::Free(pObj);
 }
 

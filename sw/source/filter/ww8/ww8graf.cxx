@@ -2616,20 +2616,11 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     if (aData.size() != 1)
         bReplaceable = false;
 
-    SvxMSDffImportRec* pRecord = nullptr;
     /*
         Get the record for top level object, so we can get the word anchoring
         and wrapping information for it.
     */
-    for (auto const & it : aData)
-    {
-        if (it->pObj == pObject)
-        {
-            pRecord = it.get();
-            break;
-        }
-    }
-
+    SvxMSDffImportRec* pRecord = aData.find(pObject);
     OSL_ENSURE(pRecord, "how did that happen?");
     if (!pRecord)
     {
