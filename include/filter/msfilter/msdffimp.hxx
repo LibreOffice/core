@@ -277,6 +277,7 @@ struct SvxMSDffImportData
     explicit SvxMSDffImportData( const tools::Rectangle& rParentRect ) : aParentRect( rParentRect ) {}
     bool empty() const { return m_Records.empty(); }
     size_t size() const { return m_Records.size(); }
+    SvxMSDffImportRec* find(const SdrObject* pObj);
     MSDffImportRecords::const_iterator begin() const { return m_Records.begin();  }
     MSDffImportRecords::const_iterator end() const { return m_Records.end();  }
 };
@@ -499,7 +500,8 @@ protected:
                                    void* pData,
                                    tools::Rectangle& rTextRect,
                                    SdrObject* pObj);
-    virtual void FreeObj(void* pData, SdrObject* pObj);
+    virtual void NotifyFreeObj(void* pData, SdrObject* pObj);
+    void FreeObj(void* pData, SdrObject* pObj);
 
 
     /** Object finalization, used by the Excel filter to correctly
