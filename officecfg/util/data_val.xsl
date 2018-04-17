@@ -48,6 +48,7 @@
             <xsl:apply-templates select=".">
                 <xsl:with-param name="context" select="$component-schema/component/*[@oor:name = current()/@oor:name]"/>
                 <xsl:with-param name="component-schema" select="$component-schema"/>
+                <xsl:with-param name="parent-schema-type" select="local-name($component-schema)"/>
             </xsl:apply-templates>
         </xsl:for-each>
     </xsl:template>
@@ -72,9 +73,11 @@
 
         <xsl:choose>
             <xsl:when test="$schema-type='node-ref'">
+                <xsl:variable name="context" select="$component-schema/templates/*[@oor:name = $node-type]"/>
                 <xsl:apply-templates select=".">
-                    <xsl:with-param name="context" select="$component-schema/templates/*[@oor:name = $node-type]"/>
+                    <xsl:with-param name="context" select="$context"/>
                     <xsl:with-param name="component-schema" select="$component-schema"/>
+                    <xsl:with-param name="parent-schema-type" select="local-name($context)"/>
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:when test="$schema-type='set'">
@@ -82,6 +85,7 @@
                     <xsl:apply-templates select=".">
                         <xsl:with-param name="context" select="$component-schema/templates/*[@oor:name = $node-type]"/>
                         <xsl:with-param name="component-schema" select="$component-schema"/>
+                        <xsl:with-param name="parent-schema-type" select="$schema-type"/>
                     </xsl:apply-templates>
                 </xsl:for-each>
             </xsl:when>
@@ -99,6 +103,7 @@
     <xsl:template match="node">
         <xsl:param name = "context"/>
         <xsl:param name = "component-schema"/>
+        <xsl:param name = "parent-schema-type"/>
         <xsl:variable name = "path">
             <xsl:call-template name="collectPath"/>
         </xsl:variable>
@@ -139,6 +144,7 @@
                     <xsl:apply-templates select="." mode="extensible">
                         <xsl:with-param name="context" select="$context/*[@oor:name = current()/@oor:name]"/>
                         <xsl:with-param name="component-schema" select="$component-schema"/>
+                        <xsl:with-param name="parent-schema-type" select="local-name($context)"/>
                     </xsl:apply-templates>
                 </xsl:for-each>
             </xsl:when>
@@ -147,10 +153,15 @@
                     <xsl:apply-templates select=".">
                         <xsl:with-param name="context" select="$context/*[@oor:name = current()/@oor:name]"/>
                         <xsl:with-param name="component-schema" select="$component-schema"/>
+                        <xsl:with-param name="parent-schema-type" select="local-name($context)"/>
                     </xsl:apply-templates>
                 </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>
+
+        <xsl:if test="@oor:mandatory='true' and $parent-schema-type!='set'">
+            <xsl:message terminate="yes">ERROR: Node '<xsl:value-of select="$path"/>' that is not a set element is marked as mandatory!</xsl:message>
+        </xsl:if>
     </xsl:template>
 
 <!-- ****************************************** -->
