@@ -676,14 +676,6 @@ public:
     SAL_DLLPRIVATE bool     ImplScaleFast( const double& rScaleX, const double& rScaleY );
     SAL_DLLPRIVATE bool     ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
 
-    SAL_DLLPRIVATE bool     ImplConvolutionPass(
-                                Bitmap& aNewBitmap,
-                                BitmapReadAccess const * pReadAcc,
-                                int aNumberOfContributions,
-                                const double* pWeights,
-                                int const * pPixels,
-                                const int* pCount );
-
     SAL_DLLPRIVATE bool     ImplMakeGreyscales( sal_uInt16 nGreyscales );
     SAL_DLLPRIVATE bool     ImplDitherMatrix();
     SAL_DLLPRIVATE bool     ImplDitherFloyd();
@@ -710,13 +702,6 @@ public:
     SAL_DLLPRIVATE bool     ImplSeparableBlurFilter( const double aRadius );
     SAL_DLLPRIVATE bool     ImplSeparableUnsharpenFilter( const double aRadius );
     SAL_DLLPRIVATE bool     ImplDuotoneFilter( const sal_uLong nColorOne,  sal_uLong nColorTwo );
-    SAL_DLLPRIVATE static void ImplBlurContributions(
-                                const int aSize,
-                                const int aNumberOfContributions,
-                                const double* pBlurVector,
-                                double*& pWeights,
-                                int*& pPixels,
-                                int*& pCount );
 
 public:
 
