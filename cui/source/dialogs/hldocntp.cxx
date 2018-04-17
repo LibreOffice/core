@@ -21,6 +21,7 @@
 #include <osl/file.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfac.hxx>
+#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -286,6 +287,83 @@ bool SvxHyperlinkNewDocTp::AskApply()
     return bRet;
 }
 
+namespace
+{
+    struct ExecuteInfo
+    {
+        bool bRbtEditLater;
+        bool bRbtEditNow;
+        INetURLObject aURL;
+        OUString aStrDocName;
+        // current document
+        css::uno::Reference<css::frame::XFrame> xFrame;
+        SfxDispatcher* pDispatcher;
+    };
+}
+
+IMPL_STATIC_LINK(SvxHyperlinkNewDocTp, DispatchDocument, void*, p, void)
+{
+    std::unique_ptr<ExecuteInfo> xExecuteInfo(static_cast<ExecuteInfo*>(p));
+    if (!xExecuteInfo->xFrame.is())
+        return;
+    try
+    {
+        //if it throws dispatcher is invalid
+        css::uno::Reference<css::awt::XTopWindow>(xExecuteInfo->xFrame->getContainerWindow(), css::uno::UNO_QUERY_THROW);
+
+        SfxViewFrame *pViewFrame = nullptr;
+
+        // create items
+        SfxStringItem aName( SID_FILE_NAME, xExecuteInfo->aStrDocName );
+        SfxStringItem aReferer( SID_REFERER, OUString("private:user") );
+        SfxStringItem aFrame( SID_TARGETNAME, OUString("_blank") );
+
+        OUString aStrFlags('S');
+        if (xExecuteInfo->bRbtEditLater)
+        {
+            aStrFlags += "H";
+        }
+        SfxStringItem aFlags (SID_OPTIONS, aStrFlags);
+
+        // open url
+        const SfxPoolItem* pReturn = xExecuteInfo->pDispatcher->ExecuteList(
+                SID_OPENDOC, SfxCallMode::SYNCHRON,
+                { &aName, &aFlags, &aFrame, &aReferer });
+
+        // save new doc
+        const SfxViewFrameItem *pItem = dynamic_cast<const SfxViewFrameItem*>( pReturn  );  // SJ: pReturn is NULL if the Hyperlink
+        if ( pItem )                                                            // creation is cancelled #106216#
+        {
+            pViewFrame = pItem->GetFrame();
+            if (pViewFrame)
+            {
+                SfxStringItem aNewName( SID_FILE_NAME, xExecuteInfo->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+                SfxUnoFrameItem aDocFrame( SID_FILLFRAME, pViewFrame->GetFrame().GetFrameInterface() );
+                fprintf(stderr, "is there a frame int %p\n", pViewFrame->GetFrame().GetFrameInterface().get() );
+                pViewFrame->GetDispatcher()->ExecuteList(
+                    SID_SAVEASDOC, SfxCallMode::SYNCHRON,
+                    { &aNewName }, { &aDocFrame });
+            }
+        }
+
+        if (xExecuteInfo->bRbtEditNow)
+        {
+            css::uno::Reference<css::awt::XTopWindow> xWindow(xExecuteInfo->xFrame->getContainerWindow(), css::uno::UNO_QUERY);
+            if (xWindow.is()) //will be false if the frame was exited while the document was loading (e.g. we waited for warning dialogs)
+                xWindow->toFront();
+        }
+
+        if (pViewFrame && xExecuteInfo->bRbtEditLater)
+        {
+            SfxObjectShell* pObjShell = pViewFrame->GetObjectShell();
+            pObjShell->DoClose();
+        }
+    }
+    catch (...)
+    {
+    }
+}
+
 /*************************************************************************
 |*
 |* Any action to do after apply-button is pressed
@@ -302,101 +380,53 @@ void SvxHyperlinkNewDocTp::DoApply ()
     if ( aStrNewName.isEmpty() )
         aStrNewName = maStrInitURL;
 
-
     // create a real URL-String
-
     INetURLObject aURL;
     if ( ImplGetURLObject( aStrNewName, m_pCbbPath->GetBaseURL(), aURL ) )
     {
-
-
         // create Document
-
         aStrNewName = aURL.GetURLPath( INetURLObject::DecodeMechanism::NONE );
-        SfxViewFrame *pViewFrame = nullptr;
+        bool bCreate = true;
         try
         {
-            bool bCreate = true;
-
             // check if file exists, warn before we overwrite it
+            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
+
+            bool bOk = pIStm && ( pIStm->GetError() == ERRCODE_NONE);
+
+            delete pIStm;
+
+            if( bOk )
             {
-                SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
-
-                bool bOk = pIStm && ( pIStm->GetError() == ERRCODE_NONE);
-
-                delete pIStm;
-
-                if( bOk )
-                {
-                    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
-                                                               VclMessageType::Warning, VclButtonsType::YesNo,
-                                                               CuiResId(RID_SVXSTR_HYPERDLG_QUERYOVERWRITE)));
-                    bCreate = xWarn->run() == RET_YES;
-                }
-            }
-
-            if( bCreate )
-            {
-                // current document
-                SfxViewFrame* pCurrentDocFrame = SfxViewFrame::Current();
-
-                if ( !aStrNewName.isEmpty() )
-                {
-                    // get private-url
-                    sal_Int32 nPos = m_pLbDocTypes->GetSelectedEntryPos();
-                    if( nPos == LISTBOX_ENTRY_NOTFOUND )
-                        nPos=0;
-                    OUString aStrDocName ( static_cast<DocumentTypeData*>(
-                                         m_pLbDocTypes->GetEntryData( nPos ))->aStrURL );
-
-                    // create items
-                    SfxStringItem aName( SID_FILE_NAME, aStrDocName );
-                    SfxStringItem aReferer( SID_REFERER, OUString("private:user") );
-                    SfxStringItem aFrame( SID_TARGETNAME, OUString("_blank") );
-
-                    OUString aStrFlags('S');
-                    if ( m_pRbtEditLater->IsChecked() )
-                    {
-                        aStrFlags += "H";
-                    }
-                    SfxStringItem aFlags (SID_OPTIONS, aStrFlags);
-
-                    // open url
-                    const SfxPoolItem* pReturn = GetDispatcher()->ExecuteList(
-                            SID_OPENDOC, SfxCallMode::SYNCHRON,
-                            { &aName, &aFlags, &aFrame, &aReferer });
-
-                    // save new doc
-                    const SfxViewFrameItem *pItem = dynamic_cast<const SfxViewFrameItem*>( pReturn  );  // SJ: pReturn is NULL if the Hyperlink
-                    if ( pItem )                                                            // creation is cancelled #106216#
-                    {
-                        pViewFrame = pItem->GetFrame();
-                        if (pViewFrame)
-                        {
-                            SfxStringItem aNewName( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-                            SfxUnoFrameItem aDocFrame( SID_FILLFRAME, pViewFrame->GetFrame().GetFrameInterface() );
-
-                            pViewFrame->GetDispatcher()->ExecuteList(
-                                SID_SAVEASDOC, SfxCallMode::SYNCHRON,
-                                { &aNewName }, { &aDocFrame } );
-                        }
-                    }
-                }
-
-                if ( m_pRbtEditNow->IsChecked() && pCurrentDocFrame )
-                {
-                    pCurrentDocFrame->ToTop();
-                }
+                std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+                                                           VclMessageType::Warning, VclButtonsType::YesNo,
+                                                           CuiResId(RID_SVXSTR_HYPERDLG_QUERYOVERWRITE)));
+                bCreate = xWarn->run() == RET_YES;
             }
         }
         catch (const uno::Exception&)
         {
         }
 
-        if ( pViewFrame && m_pRbtEditLater->IsChecked() )
+        if (bCreate && !aStrNewName.isEmpty())
         {
-            SfxObjectShell* pObjShell = pViewFrame->GetObjectShell();
-            pObjShell->DoClose();
+            ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+
+            pExecuteInfo->bRbtEditLater = m_pRbtEditLater->IsChecked();
+            pExecuteInfo->bRbtEditNow = m_pRbtEditNow->IsChecked();
+            // get private-url
+            sal_Int32 nPos = m_pLbDocTypes->GetSelectedEntryPos();
+            if( nPos == LISTBOX_ENTRY_NOTFOUND )
+                nPos=0;
+            pExecuteInfo->aURL = aURL;
+            pExecuteInfo->aStrDocName = static_cast<DocumentTypeData*>(
+                                 m_pLbDocTypes->GetEntryData( nPos ))->aStrURL;
+
+            // current document
+            pExecuteInfo->xFrame = GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface();
+            pExecuteInfo->pDispatcher = GetDispatcher();
+
+            Application::PostUserEvent(LINK(nullptr, SvxHyperlinkNewDocTp, DispatchDocument), pExecuteInfo);
         }
     }
 
