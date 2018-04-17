@@ -65,6 +65,11 @@
           <value xml:lang="en-US">Text Box Formatting</value>
         </prop>
       </node>
+      <node oor:name="private:resource/popupmenu/formulabar" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Formula Bar</value>
+        </prop>
+      </node>
       <node oor:name="private:resource/popupmenu/graphic" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Image</value>

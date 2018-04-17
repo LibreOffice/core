@@ -1418,6 +1418,20 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
                 rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
             }
         }
+        else if ( nCommand == CommandEventId::ContextMenu )
+        {
+            SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+            if (pViewFrm)
+            {
+                Point aPos = rCEvt.GetMousePosPixel();
+                if (!rCEvt.IsMouseEvent())
+                {
+                    Size aSize = GetOutputSizePixel();
+                    aPos = Point(aSize.Width() / 2, aSize.Height() / 2);
+                }
+                pViewFrm->GetDispatcher()->ExecutePopup("formulabar", this, &aPos);
+            }
+        }
         else if ( nCommand == CommandEventId::Wheel )
         {
             //don't call InputChanged for CommandEventId::Wheel
