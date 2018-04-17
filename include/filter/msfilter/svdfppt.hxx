@@ -483,7 +483,8 @@ public:
     void                RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic& rGraph );
     virtual SdrObject*  ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPageCapsule pPage ) const;
     virtual SdrObject*  ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, tools::Rectangle& rTextRect, SdrObject* pObj ) override;
-    virtual void        FreeObj(void* pData, SdrObject* pObj) override;
+    virtual void        NotifyFreeObj(void* pData, SdrObject* pObj) override;
+    void                FreeObj(void* pData, SdrObject* pObj);
     virtual void        ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, void* pData, DffObjData& rObj ) override;
     void                ImportHeaderFooterContainer( DffRecordHeader const & rHeader, HeaderFooterEntry& rEntry );
 };
