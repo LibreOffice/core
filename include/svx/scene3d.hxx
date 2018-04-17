@@ -168,7 +168,7 @@ public:
     void ResumeReportingDirtyRects();
     void SetAllSceneRectsDirty();
 
-    // set selection fropm E3dObject (temporary flag for 3D actions)
+    // set selection from E3dObject (temporary flag for 3D actions)
     virtual void SetSelected(bool bNew) override;
 
     // derived from SdrObjList

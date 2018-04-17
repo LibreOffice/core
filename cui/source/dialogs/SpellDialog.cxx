@@ -1958,7 +1958,7 @@ void SentenceEditWindow_Impl::UndoActionEnd()
 
 void SentenceEditWindow_Impl::MoveErrorEnd(long nOffset)
 {
-    // Shoudn't we always add the real signed value instead???
+    // Shouldn't we always add the real signed value instead???
     if(nOffset > 0)
         m_nErrorEnd = m_nErrorEnd - static_cast<sal_Int32>(nOffset);
     else
