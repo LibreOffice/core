@@ -40,6 +40,7 @@ private:
     void                FillDocumentList ();
 
     DECL_LINK (ClickNewHdl_Impl, Button*, void );
+    DECL_STATIC_LINK(SvxHyperlinkNewDocTp, DispatchDocument, void*, void);
 
 protected:
     void FillDlgFields(const OUString& rStrURL) override;
