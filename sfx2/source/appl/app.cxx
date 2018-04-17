@@ -48,7 +48,6 @@
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/request.hxx>
 #include <sfxtypes.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <arrdecl.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/objsh.hxx>
@@ -62,7 +61,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <appdata.hxx>
 #include <openflag.hxx>
-#include <sfx2/strings.hrc>
 #include <sfx2/module.hxx>
 #include <sfx2/event.hxx>
 #include "imestatuswindow.hxx"

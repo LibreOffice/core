@@ -123,9 +123,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <sfx2/strings.hrc>
 #include <openflag.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/propertysequence.hxx>
 

@@ -32,11 +32,9 @@
 #include <sfx2/app.hxx>
 #include <arrdecl.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/msgpool.hxx>
-#include <sfx2/strings.hrc>
 #include <sfx2/docfile.hxx>
 #include <workwin.hxx>
 

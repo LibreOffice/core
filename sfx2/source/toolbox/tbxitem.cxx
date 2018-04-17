@@ -71,7 +71,6 @@
 #include <statcach.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfxtypes.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfac.hxx>

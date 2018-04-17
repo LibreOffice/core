@@ -38,8 +38,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/unoctitm.hxx>
-#include <sfx2/strings.hrc>
-#include <sfx2/sfxresid.hxx>
 #include <objshimp.hxx>
 #include "imestatuswindow.hxx"
 #include <appbaslib.hxx>

@@ -20,7 +20,6 @@
 #include <cstdarg>
 #include <sfx2/module.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <sfx2/styfitem.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/tbxctrl.hxx>

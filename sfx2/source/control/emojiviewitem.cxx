@@ -21,9 +21,6 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <vcl/button.hxx>
 #include <vcl/graph.hxx>
-#include <sfx2/sfxresid.hxx>
-
-#include <sfx2/strings.hrc>
 
 using namespace basegfx;
 using namespace basegfx::utils;

@@ -36,7 +36,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <eventsupplier.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>

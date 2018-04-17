@@ -36,7 +36,6 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dockwin.hxx>
-#include <sfx2/sfxresid.hxx>
 
 #include <pres.hxx>
 #include <navigatr.hxx>

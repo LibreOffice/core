@@ -31,7 +31,6 @@
 #include <svtools/colorcfg.hxx>
 #include <svtools/langhelp.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <sfx2/templatecontaineritem.hxx>
 #include <vcl/toolbox.hxx>
 

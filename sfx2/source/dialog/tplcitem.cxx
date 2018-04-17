@@ -26,8 +26,6 @@
 #include <tplcitem.hxx>
 #include <templdgi.hxx>
 
-#include <sfx2/strings.hrc>
-
 // Constructor
 
 SfxTemplateControllerItem::SfxTemplateControllerItem(
