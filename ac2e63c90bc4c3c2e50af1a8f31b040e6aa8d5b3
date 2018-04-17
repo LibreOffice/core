@@ -69,6 +69,24 @@
       "revId": "ac2e63c90bc4c3c2e50af1a8f31b040e6aa8d5b3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_4fc66f68",
+        "filename": "oox/source/vml/vmlformatting.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-17T15:37:25Z",
+      "side": 1,
+      "message": "I checked the types but they all seem to be \"long\". Am I missing something here?",
+      "parentUuid": "9a30ddce_8feea720",
+      "revId": "ac2e63c90bc4c3c2e50af1a8f31b040e6aa8d5b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
