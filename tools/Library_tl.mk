@@ -49,6 +49,7 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/datetime/tdate \
     tools/source/datetime/ttime \
     tools/source/debug/debug \
+    tools/source/fsys/fileutil \
     tools/source/fsys/urlobj \
     tools/source/fsys/wldcrd \
     tools/source/generic/b3dtrans \
