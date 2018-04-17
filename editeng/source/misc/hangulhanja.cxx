@@ -37,7 +37,6 @@
 #include <unotools/charclass.hxx>
 
 #include <editeng/edtdlg.hxx>
-#include <editeng/editrids.hrc>
 #include <editeng/unolingu.hxx>
 
 #define HHC HangulHanjaConversion

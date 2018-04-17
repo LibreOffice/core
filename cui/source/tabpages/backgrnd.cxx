@@ -34,7 +34,6 @@
 #include <strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <editeng/memberids.h>
-#include <editeng/eerdll.hxx>
 
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>

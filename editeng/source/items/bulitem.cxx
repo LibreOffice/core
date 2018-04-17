@@ -21,7 +21,6 @@
 #include <vcl/outdev.hxx>
 
 #include <editeng/bulletitem.hxx>
-#include <editeng/editrids.hrc>
 
 #include <tools/tenccvt.hxx>
 #include <vcl/dibtools.hxx>

@@ -22,7 +22,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editdata.hxx>
-#include <editeng/eerdll.hxx>
+
 #include <editeng/lrspitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <svl/style.hxx>

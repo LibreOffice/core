@@ -26,7 +26,8 @@
 
 #include <editeng/borderline.hxx>
 #include <editeng/itemtype.hxx>
-
+#include <editeng/editrids.hrc>
+#include <editeng/eerdll.hxx>
 
 using namespace ::com::sun::star::table::BorderLineStyle;
 

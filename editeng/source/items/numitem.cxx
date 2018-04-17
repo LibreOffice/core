@@ -27,7 +27,6 @@
 #include <vcl/font.hxx>
 #include <vcl/settings.hxx>
 #include <editeng/editids.hrc>
-#include <editeng/editrids.hrc>
 #include <editeng/numdef.hxx>
 #include <editeng/eeitem.hxx>
 #include <vcl/graph.hxx>
