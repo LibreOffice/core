@@ -168,7 +168,7 @@ void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
             pField = pTmp->GetField(nIndex);
             if (pField->GetTyp()->Which() == SwFieldIds::Dropdown)
             {
-                bCancel = StartDropDownFieldDlg(pField, bPrev, bNext, &ePressedButton);
+                bCancel = StartDropDownFieldDlg(pField, bPrev, bNext, GetView().GetFrameWeld(), &ePressedButton);
             }
             else
                 bCancel = StartInputFieldDlg(pField, bPrev, bNext, GetView().GetFrameWeld(), &ePressedButton);
@@ -279,12 +279,13 @@ bool SwWrtShell::StartInputFieldDlg(SwField* pField, bool bPrevButton, bool bNex
     return bRet;
 }
 
-bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bPrevButton, bool bNextButton, SwWrtShell::FieldDialogPressedButton* pPressedButton)
+bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bPrevButton, bool bNextButton,
+                                       weld::Window* pParentWin, SwWrtShell::FieldDialogPressedButton* pPressedButton)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    ScopedVclPtr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(*this, pField, bPrevButton, bNextButton));
+    ScopedVclPtr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(pParentWin, *this, pField, bPrevButton, bNextButton));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     const short nRet = pDlg->Execute();
 
@@ -430,7 +431,7 @@ void SwWrtShell::ClickToField( const SwField& rField )
             StartInputFieldDlg(const_cast<SwField*>(&rField), false, false, GetView().GetFrameWeld());
         break;
     case SwFieldIds::Dropdown :
-        StartDropDownFieldDlg( const_cast<SwField*>(&rField), false, false );
+        StartDropDownFieldDlg(const_cast<SwField*>(&rField), false, false, GetView().GetFrameWeld());
     break;
     default:
         SAL_WARN_IF(rField.IsClickable(), "sw", "unhandled clickable field!");
