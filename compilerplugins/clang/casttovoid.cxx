@@ -380,6 +380,11 @@ private:
                 } else if (!i.second.castToVoid.empty()
                            && !isWarnUnusedType(i.first->getType()))
                 {
+                    auto const fun = dyn_cast_or_null<FunctionDecl>(i.first->getDeclContext());
+                    assert(fun != nullptr);
+                    if (containsPreprocessingConditionalInclusion(fun->getSourceRange())) {
+                        continue;
+                    }
                     report(
                         DiagnosticsEngine::Warning,
                         "unused variable %select{declaration|name}0",
