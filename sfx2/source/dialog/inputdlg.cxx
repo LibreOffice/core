@@ -8,7 +8,6 @@
  */
 
 #include <sfx2/inputdlg.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <vcl/svapp.hxx>
 
 InputDialog::InputDialog(weld::Window* pParent, const OUString &rLabelText)

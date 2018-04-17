@@ -29,7 +29,6 @@
 #include <sfx2/msg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/msgpool.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <sfx2/objsh.hxx>
 #include <rtl/strbuf.hxx>
 

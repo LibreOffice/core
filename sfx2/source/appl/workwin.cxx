@@ -33,7 +33,6 @@
 #include <splitwin.hxx>
 #include <childwinimpl.hxx>
 #include <sfx2/msgpool.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/toolbarids.hxx>
 #include <vcl/taskpanelist.hxx>

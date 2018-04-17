@@ -130,7 +130,6 @@
 #include <vcl/GraphicNativeMetadata.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/classificationhelper.hxx>
-#include <sfx2/sfxresid.hxx>
 
 #include <memory>
 

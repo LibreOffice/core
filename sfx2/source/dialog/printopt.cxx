@@ -26,7 +26,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <sfx2/sfxresid.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/printopt.hxx>
 

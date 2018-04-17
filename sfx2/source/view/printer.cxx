@@ -31,7 +31,6 @@
 #include <sfx2/prnmon.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <sfx2/sfxresid.hxx>
 
 // struct SfxPrinter_Impl ------------------------------------------------
 

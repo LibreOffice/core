@@ -49,7 +49,6 @@
 #include <vcl/edit.hxx>
 
 #include <sfx2/unoctitm.hxx>
-#include <sfx2/strings.hrc>
 #include <appdata.hxx>
 #include <arrdecl.hxx>
 #include <sfx2/dispatch.hxx>
@@ -58,7 +57,6 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/sfxhelp.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <sfxtypes.hxx>
 #include <sfx2/viewsh.hxx>
 #include <nochaos.hxx>
