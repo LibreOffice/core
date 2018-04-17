@@ -668,7 +668,7 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
             Point  aPos(rDrag.GetNow());      // current position
             Point  aPnt(mpSdrPathDragData->aXP[nPnt]);      // the dragged point
             sal_uInt16 nPnt1=0xFFFF,nPnt2=0xFFFF; // its neighboring points
-            Point  aNeuPos1,aNeuPos2;         // new alternative for aPos
+            Point  aNewPos1,aNewPos2;         // new alternative for aPos
             bool bPnt1 = false, bPnt2 = false; // are these valid alternatives?
             if (!bClosed && mpSdrPathDragData->nPointCount>=2) { // minimum of 2 points for lines
                 if (!bBegPnt) nPnt1=nPrevPnt;
@@ -694,9 +694,9 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
                     bool bVer=bVLin || (!bHLin && (nXFact<=nYFact)==bBigOrtho);
                     if (bHor) ndy=long(ndy0*nXFact);
                     if (bVer) ndx=long(ndx0*nYFact);
-                    aNeuPos1=aPnt1;
-                    aNeuPos1.AdjustX(ndx );
-                    aNeuPos1.AdjustY(ndy );
+                    aNewPos1=aPnt1;
+                    aNewPos1.AdjustX(ndx );
+                    aNewPos1.AdjustY(ndy );
                 }
             }
             if (nPnt2!=0xFFFF && !bNextIsControl) {
@@ -715,23 +715,23 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
                     bool bVer=bVLin || (!bHLin && (nXFact<=nYFact)==bBigOrtho);
                     if (bHor) ndy=long(ndy0*nXFact);
                     if (bVer) ndx=long(ndx0*nYFact);
-                    aNeuPos2=aPnt2;
-                    aNeuPos2.AdjustX(ndx );
-                    aNeuPos2.AdjustY(ndy );
+                    aNewPos2=aPnt2;
+                    aNewPos2.AdjustX(ndx );
+                    aNewPos2.AdjustY(ndy );
                 }
             }
             if (bPnt1 && bPnt2) { // both alternatives exist (and compete)
-                BigInt nX1(aNeuPos1.X()-aPos.X()); nX1*=nX1;
-                BigInt nY1(aNeuPos1.Y()-aPos.Y()); nY1*=nY1;
-                BigInt nX2(aNeuPos2.X()-aPos.X()); nX2*=nX2;
-                BigInt nY2(aNeuPos2.Y()-aPos.Y()); nY2*=nY2;
+                BigInt nX1(aNewPos1.X()-aPos.X()); nX1*=nX1;
+                BigInt nY1(aNewPos1.Y()-aPos.Y()); nY1*=nY1;
+                BigInt nX2(aNewPos2.X()-aPos.X()); nX2*=nX2;
+                BigInt nY2(aNewPos2.Y()-aPos.Y()); nY2*=nY2;
                 nX1+=nY1; // correction distance to square
                 nX2+=nY2; // correction distance to square
                 // let the alternative that allows fewer correction win
                 if (nX1<nX2) bPnt2=false; else bPnt1=false;
             }
-            if (bPnt1) rDrag.SetNow(aNeuPos1);
-            if (bPnt2) rDrag.SetNow(aNeuPos2);
+            if (bPnt1) rDrag.SetNow(aNewPos1);
+            if (bPnt2) rDrag.SetNow(aNewPos2);
         }
         rDrag.SetActionRect(tools::Rectangle(rDrag.GetNow(),rDrag.GetNow()));
 

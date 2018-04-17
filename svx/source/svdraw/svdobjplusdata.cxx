@@ -30,31 +30,31 @@ SdrObjPlusData::~SdrObjPlusData()
 
 SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
 {
-    SdrObjPlusData* pNeuPlusData=new SdrObjPlusData;
+    SdrObjPlusData* pNewPlusData=new SdrObjPlusData;
     if (pUserDataList!=nullptr) {
         sal_uInt16 nCount=pUserDataList->GetUserDataCount();
         if (nCount!=0) {
-            pNeuPlusData->pUserDataList.reset(new SdrObjUserDataList);
+            pNewPlusData->pUserDataList.reset(new SdrObjUserDataList);
             for (sal_uInt16 i=0; i<nCount; i++) {
                 std::unique_ptr<SdrObjUserData> pNewUserData=pUserDataList->GetUserData(i).Clone(pObj1);
                 if (pNewUserData!=nullptr) {
-                    pNeuPlusData->pUserDataList->AppendUserData(std::move(pNewUserData));
+                    pNewPlusData->pUserDataList->AppendUserData(std::move(pNewUserData));
                 } else {
                     OSL_FAIL("SdrObjPlusData::Clone(): UserData.Clone() returns NULL.");
                 }
             }
         }
     }
-    if (pGluePoints!=nullptr) pNeuPlusData->pGluePoints.reset(new SdrGluePointList(*pGluePoints));
+    if (pGluePoints!=nullptr) pNewPlusData->pGluePoints.reset(new SdrGluePointList(*pGluePoints));
     // MtfAnimator isn't copied either
 
     // #i68101#
     // copy object name, title and description
-    pNeuPlusData->aObjName = aObjName;
-    pNeuPlusData->aObjTitle = aObjTitle;
-    pNeuPlusData->aObjDescription = aObjDescription;
+    pNewPlusData->aObjName = aObjName;
+    pNewPlusData->aObjTitle = aObjTitle;
+    pNewPlusData->aObjDescription = aObjDescription;
 
-    return pNeuPlusData;
+    return pNewPlusData;
 }
 
 void SdrObjPlusData::SetGluePoints(const SdrGluePointList& rPts)

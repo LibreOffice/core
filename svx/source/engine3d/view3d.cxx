@@ -363,7 +363,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
         return SdrView::GetMarkedObjModel();
     }
 
-    SdrModel* pNewModel = nullptr;
+    SdrModel* pNewModelel = nullptr;
     tools::Rectangle aSelectedSnapRect;
 
     // set 3d selection flags at all directly selected objects
@@ -405,13 +405,13 @@ SdrModel* E3dView::GetMarkedObjModel() const
 
     // call parent. This will copy all scenes and the selection flags at the 3D objects. So
     // it will be possible to delete all non-selected 3d objects from the cloned 3d scenes
-    pNewModel = SdrView::GetMarkedObjModel();
+    pNewModelel = SdrView::GetMarkedObjModel();
 
-    if(pNewModel)
+    if(pNewModelel)
     {
-        for(sal_uInt16 nPg(0); nPg < pNewModel->GetPageCount(); nPg++)
+        for(sal_uInt16 nPg(0); nPg < pNewModelel->GetPageCount(); nPg++)
         {
-            const SdrPage* pSrcPg=pNewModel->GetPage(nPg);
+            const SdrPage* pSrcPg=pNewModelel->GetPage(nPg);
             const size_t nObjCount(pSrcPg->GetObjCount());
 
             for(size_t nOb = 0; nOb < nObjCount; ++nOb)
@@ -436,7 +436,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
     // restore old selection
     rCurrentMarkList = aOldML;
 
-    return pNewModel;
+    return pNewModelel;
 }
 
 // When pasting objects have to integrated if a scene is inserted, but
