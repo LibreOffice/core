@@ -1,16 +1,18 @@
 diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
---- icu.org/source/common/dictbe.cpp	2017-01-20 01:20:31.000000000 +0100
-+++ icu/source/common/dictbe.cpp	2017-04-21 23:14:23.845894374 +0200
-@@ -29,8 +29,17 @@
+--- icu.org/source/common/dictbe.cpp	2018-03-26 15:38:30.000000000 +0200
++++ icu/source/common/dictbe.cpp	2018-04-17 17:55:38.620944919 +0200
+@@ -29,7 +29,19 @@
   ******************************************************************
   */
  
--DictionaryBreakEngine::DictionaryBreakEngine(uint32_t breakTypes) {
-+DictionaryBreakEngine::DictionaryBreakEngine(uint32_t breakTypes) :
-+    clusterLimit(3)
-+{
+-DictionaryBreakEngine::DictionaryBreakEngine() {
++DictionaryBreakEngine::DictionaryBreakEngine()
++    : fTypes(0), clusterLimit(0) {
++}
++
++DictionaryBreakEngine::DictionaryBreakEngine(uint32_t breakTypes)
++    : fTypes(breakTypes), clusterLimit(3) {
 +    UErrorCode status = U_ZERO_ERROR;
-     fTypes = breakTypes;
 +    fViramaSet.applyPattern(UNICODE_STRING_SIMPLE("[[:ccc=VR:]]"), status);
 +
 +    // note Skip Sets contain fIgnoreSet characters too.
@@ -20,16 +22,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
  }
  
  DictionaryBreakEngine::~DictionaryBreakEngine() {
-@@ -92,7 +101,7 @@
-         result = divideUpDictionaryRange(text, rangeStart, rangeEnd, foundBreaks);
-         utext_setNativeIndex(text, current);
-     }
--    
-+
-     return result;
- }
- 
-@@ -103,6 +112,169 @@
+@@ -76,6 +88,169 @@
      fSet.compact();
  }
  
@@ -199,7 +192,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
  /*
   ******************************************************************
   * PossibleWord
-@@ -130,35 +302,35 @@
+@@ -103,35 +278,35 @@
  public:
      PossibleWord() : count(0), prefix(0), offset(-1), mark(0), current(0) {};
      ~PossibleWord() {};
@@ -244,7 +237,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
          // Dictionary leaves text after longest prefix, not longest word. Back up.
          if (count <= 0) {
              utext_setNativeIndex(text, start);
-@@ -830,51 +1002,28 @@
+@@ -803,51 +978,28 @@
   * KhmerBreakEngine
   */
  
@@ -265,7 +258,8 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 -static const int32_t KHMER_MIN_WORD_SPAN = KHMER_MIN_WORD * 2;
 -
  KhmerBreakEngine::KhmerBreakEngine(DictionaryMatcher *adoptDictionary, UErrorCode &status)
-     : DictionaryBreakEngine((1 << UBRK_WORD) | (1 << UBRK_LINE)),
+-    : DictionaryBreakEngine(),
++    : DictionaryBreakEngine((1 << UBRK_WORD) | (1 << UBRK_LINE)),
        fDictionary(adoptDictionary)
  {
 -    fKhmerWordSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]&[:LineBreak=SA:]]"), status);
@@ -301,13 +295,13 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 -    fEndWordSet.compact();
 -    fBeginWordSet.compact();
 -//    fSuffixSet.compact();
-+	fIgnoreSet.compact();
-+	fBaseSet.compact();
-+	fPuncSet.compact();
++    fIgnoreSet.compact();
++    fBaseSet.compact();
++    fPuncSet.compact();
  }
  
  KhmerBreakEngine::~KhmerBreakEngine() {
-@@ -886,180 +1035,204 @@
+@@ -859,180 +1011,204 @@
                                                  int32_t rangeStart,
                                                  int32_t rangeEnd,
                                                  UVector32 &foundBreaks ) const {
@@ -350,17 +344,6 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 +            foundBreaks.push(rangeEnd, status);
 +        return foundBreaks.size() - wordsFound;
 +    }
-+
-+    scanStart = rangeStart;
-+    scanWJ(text, scanStart, rangeEnd, before, after);
-+    if (startZwsp || initAfter >= before) {
-+        after = initAfter;
-+        before = 0;
-+    }
-+    if (!endZwsp && after > finalBefore && after < rangeEnd)
-+        endZwsp = true;
-+    if (endZwsp && before > finalBefore)
-+        before = finalBefore;
  
 -    while (U_SUCCESS(status) && (current = (int32_t)utext_getNativeIndex(text)) < rangeEnd) {
 -        cuWordLength = 0;
@@ -375,7 +358,17 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 -            cpWordLength = words[wordsFound % KHMER_LOOKAHEAD].markedCPLength();
 -            wordsFound += 1;
 -        }
--
++    scanStart = rangeStart;
++    scanWJ(text, scanStart, rangeEnd, before, after);
++    if (startZwsp || initAfter >= before) {
++        after = initAfter;
++        before = 0;
++    }
++    if (!endZwsp && after > finalBefore && after < rangeEnd)
++        endZwsp = true;
++    if (endZwsp && before > finalBefore)
++        before = finalBefore;
+ 
 -        // If there was more than one, see which one can take us forward the most words
 -        else if (candidates > 1) {
 -            // If we're already at the end of the range, we're done
@@ -390,12 +383,28 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 -                        words[wordsFound % KHMER_LOOKAHEAD].markCurrent();
 -                        wordsMatched = 2;
 -                    }
--
++    utext_setNativeIndex(text, rangeStart);
++    int32_t numCodePts = rangeEnd - rangeStart;
++    // bestSnlp[i] is the snlp of the best segmentation of the first i
++    // code points in the range to be matched.
++    UVector32 bestSnlp(numCodePts + 1, status);
++    bestSnlp.addElement(0, status);
++    for(int32_t i = 1; i <= numCodePts; i++) {
++        bestSnlp.addElement(kuint32max, status);
++    }
+ 
 -                    // If we're already at the end of the range, we're done
 -                    if ((int32_t)utext_getNativeIndex(text) >= rangeEnd) {
 -                        goto foundBest;
 -                    }
--
++    // prev[i] is the index of the last code point in the previous word in
++    // the best segmentation of the first i characters. Note negative implies
++	// that the code point is part of an unknown word.
++    UVector32 prev(numCodePts + 1, status);
++    for(int32_t i = 0; i <= numCodePts; i++) {
++        prev.addElement(kuint32max, status);
++    }
+ 
 -                    // See if any of the possible second words is followed by a third word
 -                    do {
 -                        // If we find a third word, stop right away
@@ -406,24 +415,6 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 -                    }
 -                    while (words[(wordsFound + 1) % KHMER_LOOKAHEAD].backUp(text));
 -                }
-+    utext_setNativeIndex(text, rangeStart);
-+    int32_t numCodePts = rangeEnd - rangeStart;
-+    // bestSnlp[i] is the snlp of the best segmentation of the first i
-+    // code points in the range to be matched.
-+    UVector32 bestSnlp(numCodePts + 1, status);
-+    bestSnlp.addElement(0, status);
-+    for(int32_t i = 1; i <= numCodePts; i++) {
-+        bestSnlp.addElement(kuint32max, status);
-+    }
-+
-+    // prev[i] is the index of the last code point in the previous word in
-+    // the best segmentation of the first i characters. Note negative implies
-+	// that the code point is part of an unknown word.
-+    UVector32 prev(numCodePts + 1, status);
-+    for(int32_t i = 0; i <= numCodePts; i++) {
-+        prev.addElement(kuint32max, status);
-+    }
-+
 +    const int32_t maxWordSize = 20;
 +    UVector32 values(maxWordSize, status);
 +    values.setSize(maxWordSize);
@@ -528,27 +519,17 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 -                if (cuWordLength <= 0) {
 -                    wordsFound += 1;
 -                }
--
--                // Update the length with the passed-over characters
--                cuWordLength += chars;
--            }
--            else {
--                // Back up to where we were for next iteration
--                utext_setNativeIndex(text, current+cuWordLength);
 +                } while (fMarkSet.contains(c) || fIgnoreSet.contains(c));
 +                values.setElementAt(BADSNLP, count);
 +                lengths.setElementAt(utext_getNativeIndex(text) - currix, count++);
 +            } else {
 +                values.setElementAt(BADSNLP, count);
 +                lengths.setElementAt(1, count++);
-             }
-         }
++            }
++        }
  
--        // Never stop before a combining mark.
--        int32_t currPos;
--        while ((currPos = (int32_t)utext_getNativeIndex(text)) < rangeEnd && fMarkSet.contains(utext_current32(text))) {
--            utext_next32(text);
--            cuWordLength += (int32_t)utext_getNativeIndex(text) - currPos;
+-                // Update the length with the passed-over characters
+-                cuWordLength += chars;
 +        for (int32_t j = 0; j < count; j++) {
 +            uint32_t v = values.elementAti(j);
 +            int32_t newSnlp = bestSnlp.elementAti(i) + v;
@@ -559,7 +540,10 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 +                ++ln;
 +                utext_next32(text);
 +                c = utext_current32(text);
-+            }
+             }
+-            else {
+-                // Back up to where we were for next iteration
+-                utext_setNativeIndex(text, current+cuWordLength);
 +            int32_t ln_j_i = ln + i;   // yes really i!
 +            if (newSnlp < bestSnlp.elementAti(ln_j_i)) {
 +                if (v == BADSNLP) {
@@ -572,9 +556,38 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 +                else
 +                    prev.setElementAt(i, ln_j_i);
 +                bestSnlp.setElementAt(newSnlp, ln_j_i);
-+            }
+             }
          }
 -
+-        // Never stop before a combining mark.
+-        int32_t currPos;
+-        while ((currPos = (int32_t)utext_getNativeIndex(text)) < rangeEnd && fMarkSet.contains(utext_current32(text))) {
+-            utext_next32(text);
+-            cuWordLength += (int32_t)utext_getNativeIndex(text) - currPos;
++    }
++    // Start pushing the optimal offset index into t_boundary (t for tentative).
++    // prev[numCodePts] is guaranteed to be meaningful.
++    // We'll first push in the reverse order, i.e.,
++    // t_boundary[0] = numCodePts, and afterwards do a swap.
++    UVector32 t_boundary(numCodePts+1, status);
++
++    int32_t numBreaks = 0;
++    // No segmentation found, set boundary to end of range
++    while (numCodePts >= 0 && (uint32_t)bestSnlp.elementAti(numCodePts) == kuint32max) {
++        --numCodePts;
++    }
++    if (numCodePts < 0) {
++        t_boundary.addElement(numCodePts, status);
++        numBreaks++;
++    } else {
++        for (int32_t i = numCodePts; (uint32_t)i != kuint32max; i = prev.elementAti(i)) {
++            if (i < 0) i = -i;
++            t_boundary.addElement(i, status);
++            numBreaks++;
+         }
++        U_ASSERT(prev.elementAti(t_boundary.elementAti(numBreaks - 1)) == 0);
++    }
+ 
 -        // Look ahead for possible suffixes if a dictionary word does not follow.
 -        // We do this in code rather than using a rule so that the heuristic
 -        // resynch continues to function. For example, one of the suffix characters
@@ -616,30 +629,6 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 -        // Did we find a word on this iteration? If so, push it on the break stack
 -        if (cuWordLength > 0) {
 -            foundBreaks.push((current+cuWordLength), status);
-+    }
-+    // Start pushing the optimal offset index into t_boundary (t for tentative).
-+    // prev[numCodePts] is guaranteed to be meaningful.
-+    // We'll first push in the reverse order, i.e.,
-+    // t_boundary[0] = numCodePts, and afterwards do a swap.
-+    UVector32 t_boundary(numCodePts+1, status);
-+
-+    int32_t numBreaks = 0;
-+    // No segmentation found, set boundary to end of range
-+    while (numCodePts >= 0 && (uint32_t)bestSnlp.elementAti(numCodePts) == kuint32max) {
-+        --numCodePts;
-+    }
-+    if (numCodePts < 0) {
-+        t_boundary.addElement(numCodePts, status);
-+        numBreaks++;
-+    } else {
-+        for (int32_t i = numCodePts; (uint32_t)i != kuint32max; i = prev.elementAti(i)) {
-+            if (i < 0) i = -i;
-+            t_boundary.addElement(i, status);
-+            numBreaks++;
-+        }
-+        U_ASSERT(prev.elementAti(t_boundary.elementAti(numBreaks - 1)) == 0);
-+    }
-+
 +    // Now that we're done, convert positions in t_boundary[] (indices in
 +    // the normalized input string) back to indices in the original input UText
 +    // while reversing t_boundary and pushing values to foundBreaks.
@@ -669,38 +658,35 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
  
  #if !UCONFIG_NO_NORMALIZATION
 diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
---- icu.org/source/common/dictbe.h	2017-01-20 01:20:31.000000000 +0100
-+++ icu/source/common/dictbe.h	2017-04-21 23:14:23.845894374 +0200
-@@ -34,6 +34,15 @@
+--- icu.org/source/common/dictbe.h	2018-03-26 15:38:30.000000000 +0200
++++ icu/source/common/dictbe.h	2018-04-17 14:55:33.307639865 +0200
+@@ -34,7 +34,8 @@
+  * threads without synchronization.</p>
   */
  class DictionaryBreakEngine : public LanguageBreakEngine {
-  private:
-+
-+  /**
-+   * <p>Default constructor.</p>
-+   *
-+   */
-+  DictionaryBreakEngine();
-+
+- private:
 + protected:
 +
      /**
       * The set of characters handled by this engine
       * @internal
-@@ -48,11 +57,63 @@
+@@ -42,14 +43,84 @@
  
-   uint32_t      fTypes;
+   UnicodeSet    fSet;
  
 +  const int32_t WJ   = 0x2060;
 +  const int32_t ZWSP = 0x200B;
 +
-   /**
--   * <p>Default constructor.</p>
--   *
++  /**
++   * The break types it was constructed with
++   * @internal
++   */
++  uint32_t      fTypes;
++
++  /**
 +   * A Unicode set of all viramas
 +   * @internal
-    */
--  DictionaryBreakEngine();
++   */
 +  UnicodeSet    fViramaSet;
 +
 +  /**
@@ -751,10 +737,26 @@ diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
 +  bool scanAfterEnd(UText *text, int32_t rangeEnd, int32_t& end, bool &doBreak) const;
 +  void scanBackClusters(UText *text, int32_t textStart, int32_t& start) const;
 +  void scanFwdClusters(UText *text, int32_t textEnd, int32_t& end) const;
- 
++
   public:
  
-@@ -83,7 +144,7 @@
+   /**
+-   * <p>Constructor </p>
++   * <p>Default constructor.</p>
++   *
+    */
+   DictionaryBreakEngine();
+ 
+   /**
++   * <p>Constructor with break types.</p>
++   */
++  explicit DictionaryBreakEngine(uint32_t breakTypes);
++
++  /**
+    * <p>Virtual destructor.</p>
+    */
+   virtual ~DictionaryBreakEngine();
+@@ -68,7 +139,7 @@
     * <p>Find any breaks within a run in the supplied text.</p>
     *
     * @param text A UText representing the text. The iterator is left at
@@ -763,7 +765,7 @@ diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
     * that starts from the first character in the range.
     * @param startPos The start of the run within the supplied text.
     * @param endPos The end of the run within the supplied text.
-@@ -245,118 +306,120 @@
+@@ -218,118 +289,120 @@
  
  };
  
@@ -997,8 +999,8 @@ diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
  
  /*******************************************************************
 diff -ur icu.org/source/common/dictionarydata.cpp icu/source/common/dictionarydata.cpp
---- icu.org/source/common/dictionarydata.cpp	2017-01-20 01:20:31.000000000 +0100
-+++ icu/source/common/dictionarydata.cpp	2017-04-21 23:14:23.846894372 +0200
+--- icu.org/source/common/dictionarydata.cpp	2018-03-26 15:38:30.000000000 +0200
++++ icu/source/common/dictionarydata.cpp	2018-04-17 14:04:50.775567214 +0200
 @@ -44,7 +44,7 @@
  
  int32_t UCharsDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t limit,
@@ -1046,8 +1048,8 @@ diff -ur icu.org/source/common/dictionarydata.cpp icu/source/common/dictionaryda
                  if (values != NULL) {
                      values[wordCount] = bt.getValue();
 diff -ur icu.org/source/common/dictionarydata.h icu/source/common/dictionarydata.h
---- icu.org/source/common/dictionarydata.h	2017-01-20 01:20:31.000000000 +0100
-+++ icu/source/common/dictionarydata.h	2017-04-21 23:14:23.846894372 +0200
+--- icu.org/source/common/dictionarydata.h	2018-03-26 15:38:30.000000000 +0200
++++ icu/source/common/dictionarydata.h	2018-04-17 14:04:50.775567214 +0200
 @@ -21,6 +21,7 @@
  #include "unicode/utext.h"
  #include "unicode/udata.h"
@@ -1084,8 +1086,8 @@ diff -ur icu.org/source/common/dictionarydata.h icu/source/common/dictionarydata
  private:
      UChar32 transform(UChar32 c) const;
 diff -ur icu.org/source/data/Makefile.in icu/source/data/Makefile.in
---- icu.org/source/data/Makefile.in	2017-04-21 23:13:03.248087545 +0200
-+++ icu/source/data/Makefile.in	2017-04-21 23:14:23.846894372 +0200
+--- icu.org/source/data/Makefile.in	2018-04-17 12:28:37.098707466 +0200
++++ icu/source/data/Makefile.in	2018-04-17 14:04:50.775567214 +0200
 @@ -183,7 +183,7 @@
  endif
  endif
