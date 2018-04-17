@@ -127,7 +127,7 @@ namespace emfplushelper
             }
             case UnitTypeMillimeter:
             {
-                SAL_INFO("drawinglayer", "EMF+\t TODO Test Converting Milimeters to Pixels, if it is working correctly.");
+                SAL_INFO("drawinglayer", "EMF+\t TODO Test Converting Millimeters to Pixels, if it is working correctly.");
                 return 3.779528f;
             }
             case UnitTypeDocument:
