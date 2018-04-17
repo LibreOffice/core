@@ -930,6 +930,9 @@ OUString WinSalInstance::GetConnectionIdentifier()
 */
 void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& /*rMimeType*/, const OUString& rDocumentService)
 {
+    if (Application::IsHeadlessModeEnabled())
+        return;
+
     OUString system_path;
     osl::FileBase::RC rc = osl::FileBase::getSystemPathFromFileURL(rFileUrl, system_path);
 
