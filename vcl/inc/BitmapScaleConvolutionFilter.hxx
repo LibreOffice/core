@@ -28,19 +28,18 @@ namespace vcl
 {
 class VCL_DLLPUBLIC BitmapScaleConvolutionFilter : public BitmapFilter
 {
-public:
-    BitmapScaleConvolutionFilter(const double& rScaleX, const double& rScaleY)
-        : mrScaleX(rScaleX)
+protected:
+    BitmapScaleConvolutionFilter(const double& rScaleX, const double& rScaleY, Kernel* pKernel)
+        : mpKernel(pKernel)
+        , mrScaleX(rScaleX)
         , mrScaleY(rScaleY)
     {
     }
 
     virtual BitmapEx execute(BitmapEx const& rBitmap) override;
 
-protected:
-    Kernel* mpKernel;
-
 private:
+    Kernel* mpKernel;
     double mrScaleX;
     double mrScaleY;
 };
@@ -49,9 +48,8 @@ class VCL_DLLPUBLIC BitmapScaleBilinearFilter : public BitmapScaleConvolutionFil
 {
 public:
     BitmapScaleBilinearFilter(const double& rScaleX, const double& rScaleY)
-        : BitmapScaleConvolutionFilter(rScaleX, rScaleY)
+        : BitmapScaleConvolutionFilter(rScaleX, rScaleY, new BilinearKernel)
     {
-        mpKernel = new BilinearKernel();
     }
 };
 
@@ -59,9 +57,8 @@ class VCL_DLLPUBLIC BitmapScaleBicubicFilter : public BitmapScaleConvolutionFilt
 {
 public:
     BitmapScaleBicubicFilter(const double& rScaleX, const double& rScaleY)
-      : BitmapScaleConvolutionFilter(rScaleX, rScaleY)
+      : BitmapScaleConvolutionFilter(rScaleX, rScaleY, new BicubicKernel)
     {
-        mpKernel = new BicubicKernel();
     }
 };
 
@@ -69,9 +66,8 @@ class VCL_DLLPUBLIC BitmapScaleLanczos3Filter : public BitmapScaleConvolutionFil
 {
 public:
     BitmapScaleLanczos3Filter(const double& rScaleX, const double& rScaleY)
-        : BitmapScaleConvolutionFilter(rScaleX, rScaleY)
+        : BitmapScaleConvolutionFilter(rScaleX, rScaleY, new Lanczos3Kernel)
     {
-        mpKernel = new Lanczos3Kernel();
     }
 };
 
