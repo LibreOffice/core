@@ -49,6 +49,8 @@
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
 #include <editeng/itemtype.hxx>
+#include <editeng/editrids.hrc>
+#include <editeng/eerdll.hxx>
 #include <svx/xdef.hxx>
 #include <svx/unomid.hxx>
 #include <svx/svdmodel.hxx>

@@ -17,10 +17,8 @@
 
 #include <sfx2/app.hxx>
 #include <svl/itempool.hxx>
-#include <editeng/eerdll.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/editids.hrc>
 #include <editeng/lspcitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/unofield.hxx>
