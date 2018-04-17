@@ -17,12 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/animate.hxx>
 #include <tools/stream.hxx>
 #include <rtl/crc.h>
+
+#include <vcl/animate.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/BitmapColorQuantizationFilter.hxx>
 
 #include <impanmvw.hxx>
 
@@ -527,13 +529,17 @@ bool Animation::ReduceColors( sal_uInt16 nNewColorCount )
     {
         bRet = true;
 
-        for( size_t i = 0, n = maList.size(); ( i < n ) && bRet; ++i )
-            bRet = maList[ i ]->aBmpEx.ReduceColors( nNewColorCount );
+        for (size_t i = 0, n = maList.size(); (i < n) && bRet; ++i)
+        {
+            bRet = BitmapFilter::Filter(maList[i]->aBmpEx, BitmapColorQuantizationFilter(nNewColorCount));
+        }
 
-        maBitmapEx.ReduceColors( nNewColorCount );
+        BitmapFilter::Filter(maBitmapEx, BitmapColorQuantizationFilter(nNewColorCount));
     }
     else
+    {
         bRet = false;
+    }
 
     return bRet;
 }

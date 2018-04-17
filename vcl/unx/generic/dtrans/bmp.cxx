@@ -17,20 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <unistd.h>
-#include <cstdio>
-#include <cstring>
-
-#include "bmp.hxx"
-
-#include "X11_selection.hxx"
-#include <unx/x11/xlimits.hxx>
-
 #include <sal/macros.h>
 #include <tools/stream.hxx>
+
 #include <vcl/dibtools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/BitmapSimpleColorQuantizationFilter.hxx>
+
+#include <unx/x11/xlimits.hxx>
+
+#include "bmp.hxx"
+#include "X11_selection.hxx"
+
+#include <unistd.h>
+#include <cstdio>
+#include <cstring>
 
 using namespace x11;
 
@@ -753,11 +756,21 @@ css::uno::Sequence<sal_Int8> x11::convertBitmapDepth(
             bm.Convert(BmpConversion::N1BitThreshold);
             break;
         case 4:
-            bm.ReduceColors(1<<4);
-            break;
+        {
+            BitmapEx aBmpEx(bm);
+            BitmapFilter::Filter(aBmpEx, BitmapSimpleColorQuantizationFilter(1<<4));
+            bm = aBmpEx.GetBitmap();
+        }
+        break;
+
         case 8:
-            bm.ReduceColors(1<<8);
-            break;
+        {
+            BitmapEx aBmpEx(bm);
+            BitmapFilter::Filter(aBmpEx, BitmapSimpleColorQuantizationFilter(1<<8));
+            bm = aBmpEx.GetBitmap();
+        }
+        break;
+
         case 24:
             bm.Convert(BmpConversion::N24Bit);
             break;
