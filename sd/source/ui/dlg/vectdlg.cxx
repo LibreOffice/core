@@ -19,13 +19,14 @@
 
 #include <vcl/vclenum.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/bitmapaccess.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/BitmapSimpleColorQuantizationFilter.hxx>
 
 #include <DrawDocShell.hxx>
 #include <sdmod.hxx>
 #include <sdiocmpt.hxx>
 #include <vectdlg.hxx>
-#include <vcl/bitmapaccess.hxx>
-#include <vcl/metaact.hxx>
 
 #define VECTORIZE_MAX_EXTENT 512
 
@@ -140,7 +141,9 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap const & rBmp, Fraction& rScale 
     else
         rScale = Fraction( 1, 1 );
 
-    aNew.ReduceColors( static_cast<sal_uInt16>(m_pNmLayers->GetValue()) );
+    BitmapEx aNewBmpEx(aNew);
+    BitmapFilter::Filter(aNewBmpEx, BitmapSimpleColorQuantizationFilter(static_cast<sal_uInt16>(m_pNmLayers->GetValue())));
+    aNew = aNewBmpEx.GetBitmap();
 
     return aNew;
 }

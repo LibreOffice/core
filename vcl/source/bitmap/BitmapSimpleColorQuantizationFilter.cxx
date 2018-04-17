@@ -1,0 +1,108 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+#include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapSimpleColorQuantizationFilter.hxx>
+
+#include <bitmapwriteaccess.hxx>
+#include <impoctree.hxx>
+
+#include <cstdlib>
+
+BitmapEx BitmapSimpleColorQuantizationFilter::execute(BitmapEx const& aBitmapEx)
+{
+    Bitmap aBitmap = aBitmapEx.GetBitmap();
+
+    bool bRet = false;
+
+    if (aBitmap.GetColorCount() <= static_cast<sal_uLong>(mnNewColorCount))
+    {
+        bRet = true;
+    }
+    else
+    {
+        Bitmap aNewBmp;
+        Bitmap::ScopedReadAccess pRAcc(aBitmap);
+        const sal_uInt16 nColorCount = std::min(nColorCount, sal_uInt16(256));
+        sal_uInt16 nBitCount = 0;
+
+        if (pRAcc)
+        {
+            Octree aOct(*pRAcc, nColorCount);
+            const BitmapPalette& rPal = aOct.GetPalette();
+
+            aNewBmp = Bitmap(aBitmap.GetSizePixel(), nBitCount, &rPal);
+            BitmapScopedWriteAccess pWAcc(aNewBmp);
+
+            if (pWAcc)
+            {
+                const long nWidth = pRAcc->Width();
+                const long nHeight = pRAcc->Height();
+
+                if (pRAcc->HasPalette())
+                {
+                    for (long nY = 0; nY < nHeight; nY++)
+                    {
+                        Scanline pScanline = pWAcc->GetScanline(nY);
+                        Scanline pScanlineRead = pRAcc->GetScanline(nY);
+                        for (long nX = 0; nX < nWidth; nX++)
+                        {
+                            auto c = pRAcc->GetPaletteColor(
+                                pRAcc->GetIndexFromData(pScanlineRead, nX));
+                            pWAcc->SetPixelOnData(
+                                pScanline, nX,
+                                BitmapColor(static_cast<sal_uInt8>(aOct.GetBestPaletteIndex(c))));
+                        }
+                    }
+                }
+                else
+                {
+                    for (long nY = 0; nY < nHeight; nY++)
+                    {
+                        Scanline pScanline = pWAcc->GetScanline(nY);
+                        Scanline pScanlineRead = pRAcc->GetScanline(nY);
+                        for (long nX = 0; nX < nWidth; nX++)
+                        {
+                            auto c = pRAcc->GetPixelFromData(pScanlineRead, nX);
+                            pWAcc->SetPixelOnData(
+                                pScanline, nX,
+                                BitmapColor(static_cast<sal_uInt8>(aOct.GetBestPaletteIndex(c))));
+                        }
+                    }
+                }
+
+                pWAcc.reset();
+                bRet = true;
+            }
+
+            pRAcc.reset();
+        }
+
+        if (bRet)
+        {
+            const MapMode aMap(aBitmap.GetPrefMapMode());
+            const Size aSize(aBitmap.GetPrefSize());
+
+            aBitmap = aNewBmp;
+
+            aBitmap.SetPrefMapMode(aMap);
+            aBitmap.SetPrefSize(aSize);
+        }
+    }
+
+    if (bRet)
+        return BitmapEx(aBitmap);
+
+    return BitmapEx();
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
