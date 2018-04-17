@@ -72,3 +72,23 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/frame/XTerminateListener.hpp
     - com/sun/star/linguistic2/XLinguServiceEventListener.hpp
+    sw/inc/finalthreadmanager.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XTerminateListener2.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XJobManager.hpp
+    - o3tl/deleter.hxx
+    sw/inc/splargs.hxx:
+    # inline dtor, complete type is needed
+    - com/sun/star/linguistic2/XSpellAlternatives.hpp
+    - com/sun/star/linguistic2/XSpellChecker1.hpp
+    sw/inc/unocoll.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/container/XNameAccess.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sw/inc/unobaseclass.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/container/XEnumeration.hpp

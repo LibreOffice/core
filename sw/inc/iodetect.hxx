@@ -24,7 +24,6 @@
 #include <rtl/ustring.hxx>
 #include <tools/lineend.hxx>
 #include <tools/solar.h>
-#include <com/sun/star/embed/XStorage.hpp>
 #include "swdllapi.h"
 
 #define FILTER_RTF      "RTF"       ///< RTF filter
@@ -48,6 +47,8 @@ class SfxFilter;
 class SfxFilterContainer;
 class SotStorage;
 class SvStream;
+namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <typename> class Reference; } } } }
 
 struct SwIoDetect
 {

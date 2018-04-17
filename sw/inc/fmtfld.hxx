@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SW_INC_FMTFLD_HXX
 #define INCLUDED_SW_INC_FMTFLD_HXX
 
-#include <com/sun/star/text/XTextField.hpp>
-
 #include <cppuhelper/weakref.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/SfxBroadcaster.hxx>
@@ -33,6 +31,7 @@ class SwField;
 class SwTextField;
 class SwView;
 class SwFieldType;
+namespace com { namespace sun { namespace star { namespace text { class XTextField; } } } }
 
 // ATT_FLD
 class SW_DLLPUBLIC SwFormatField

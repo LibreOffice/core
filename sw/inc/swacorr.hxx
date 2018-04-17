@@ -23,11 +23,11 @@
 #include <editeng/svxacorr.hxx>
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/embed/XStorage.hpp>
 
 #include "swdllapi.h"
 
 class SwXMLTextBlocks;
+namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
 
 class SW_DLLPUBLIC SwAutoCorrect : public SvxAutoCorrect
 {

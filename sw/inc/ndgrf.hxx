@@ -23,15 +23,13 @@
 #include <sfx2/lnkbase.hxx>
 #include <vcl/GraphicObject.hxx>
 #include "ndnotxt.hxx"
-#include <com/sun/star/embed/XStorage.hpp>
 #include <memory>
 
 class SwAsyncRetrieveInputStreamThreadConsumer;
 
 class SwGrfFormatColl;
 class SwDoc;
-class GraphicAttr;
-class SotStorage;
+namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
 
 // SwGrfNode
 class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
