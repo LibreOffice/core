@@ -2451,9 +2451,14 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                         break;
                         case SvxNumberFormat::SPACE:
                         case SvxNumberFormat::NOTHING:
-                        case SvxNumberFormat::NEWLINE:
                         {
                             nTextXPos = nNumberXPos + nBulletWidth;
+                        }
+                        break;
+                        case SvxNumberFormat::NEWLINE:
+                        {
+                            nYStart = nYStart + nLineHeight;
+                            nTextXPos = rFmt.GetIndentAt() / nWidthRelation;
                         }
                         break;
                     }
@@ -2465,7 +2470,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                 pVDev->SetFillColor(aBackColor);
                 pVDev->DrawRect(aRect1);
 
-                ::tools::Rectangle aRect2(Point(nXStart, nYStart + nLineHeight + nFontHeight / 2 ), Size(aSize.Width() / 2, 2));
+                ::tools::Rectangle aRect2(Point(nXStart, nYStart + nLineHeight + nFontHeight / 2), Size(aSize.Width() / 2, 2));
                 pVDev->DrawRect(aRect2);
                 nYStart += 2 * nLineHeight;
             }

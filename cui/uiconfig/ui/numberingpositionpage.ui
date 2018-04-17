@@ -45,6 +45,9 @@
       <row>
         <col id="0" translatable="yes" context="numberingpositionpage|liststore2">Nothing</col>
       </row>
+      <row>
+        <col id="0" translatable="yes" context="numberingpositionpage|liststore2">New Line</col>
+      </row>
     </data>
   </object>
   <object class="GtkBox" id="NumberingPositionPage">
