@@ -1382,7 +1382,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             // display info
             SolarMutexGuard aGuard;
             svtools::executeRestartDialog(
-                comphelper::getProcessComponentContext(), nullptr,
+                comphelper::getProcessComponentContext(), GetFrameWeld(),
                 svtools::RESTART_REASON_LANGUAGE_CHANGE);
 
             // tell quickstarter to stop being a veto listener
