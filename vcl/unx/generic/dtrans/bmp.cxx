@@ -753,11 +753,21 @@ css::uno::Sequence<sal_Int8> x11::convertBitmapDepth(
             bm.Convert(BmpConversion::N1BitThreshold);
             break;
         case 4:
-            bm.ReduceColors(1<<4);
-            break;
+        {
+            BitmapEx aBmpEx(bm);
+            BitmapFilter::Filter(aBmpEx, BitmapSimpleColorQuantizationFilter(1<<4));
+            bm = aBmpEx.GetBitmap();
+        }
+        break;
+
         case 8:
-            bm.ReduceColors(1<<8);
-            break;
+        {
+            BitmapEx aBmpEx(bm);
+            BitmapFilter::Filter(aBmpEx, BitmapSimpleColorQuantizationFilter(1<<8));
+            bm = aBmpEx.GetBitmap();
+        }
+        break;
+
         case 24:
             bm.Convert(BmpConversion::N24Bit);
             break;

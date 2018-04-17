@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/BitmapColorQuantizationFilter.hxx>
 #include <vcl/builderfactory.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
@@ -502,7 +503,7 @@ Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic, double
     {
         BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-        if( aBmpEx.ReduceColors( nPosterCount ) )
+        if (BitmapFilter::Filter(aBmpEx, BitmapColorQuantizationFilter(nPosterCount)))
             aRet = aBmpEx;
     }
 
