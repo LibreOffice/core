@@ -31,6 +31,7 @@
 #include <rtl/bootstrap.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/weld.hxx>
@@ -1636,6 +1637,75 @@ weld::Container* GtkInstanceWidget::weld_parent() const
     return pParent ? new GtkInstanceContainer(GTK_CONTAINER(pParent), false) : nullptr;
 }
 
+namespace
+{
+    OString MapToGtkAccelerator(const OUString &rStr)
+    {
+        return OUStringToOString(rStr.replaceFirst("~", "_"), RTL_TEXTENCODING_UTF8);
+    }
+
+    OUString get_label(GtkLabel* pLabel)
+    {
+        const gchar* pStr = gtk_label_get_label(pLabel);
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
+    void set_label(GtkLabel* pLabel, const OUString& rText)
+    {
+        gtk_label_set_label(pLabel, MapToGtkAccelerator(rText).getStr());
+    }
+
+    OUString get_label(GtkButton* pButton)
+    {
+        const gchar* pStr = gtk_button_get_label(pButton);
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
+    void set_label(GtkButton* pButton, const OUString& rText)
+    {
+        gtk_button_set_label(pButton, MapToGtkAccelerator(rText).getStr());
+    }
+
+    OUString get_title(GtkWindow* pWindow)
+    {
+        const gchar* pStr = gtk_window_get_title(pWindow);
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
+    void set_title(GtkWindow* pWindow, const OUString& rTitle)
+    {
+        gtk_window_set_title(pWindow, OUStringToOString(rTitle, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    OUString get_primary_text(GtkMessageDialog* pMessageDialog)
+    {
+        gchar* pText = nullptr;
+        g_object_get(G_OBJECT(pMessageDialog), "text", &pText, nullptr);
+        return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
+    void set_primary_text(GtkMessageDialog* pMessageDialog, const OUString& rText)
+    {
+        g_object_set(G_OBJECT(pMessageDialog), "text",
+            OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+            nullptr);
+    }
+
+    void set_secondary_text(GtkMessageDialog* pMessageDialog, const OUString& rText)
+    {
+        g_object_set(G_OBJECT(pMessageDialog), "secondary-text",
+                OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                nullptr);
+    }
+
+    OUString get_secondary_text(GtkMessageDialog* pMessageDialog)
+    {
+        gchar* pText = nullptr;
+        g_object_get(G_OBJECT(pMessageDialog), "secondary-text", &pText, nullptr);
+        return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
+    }
+}
+
 class GtkInstanceWindow : public GtkInstanceContainer, public virtual weld::Window
 {
 private:
@@ -1663,13 +1733,12 @@ public:
 
     virtual void set_title(const OUString& rTitle) override
     {
-        gtk_window_set_title(m_pWindow, OUStringToOString(rTitle, RTL_TEXTENCODING_UTF8).getStr());
+        ::set_title(m_pWindow, rTitle);
     }
 
     virtual OUString get_title() const override
     {
-        const gchar* pStr = gtk_window_get_title(m_pWindow);
-        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+        return ::get_title(m_pWindow);
     }
 
     virtual css::uno::Reference<css::awt::XWindow> GetXWindow() override
@@ -1788,11 +1857,6 @@ namespace
         for (size_t pos = 0; pos < aChildren.size(); ++pos)
             gtk_box_reorder_child(pContainer, aChildren[pos], pos);
     }
-}
-
-static OString MapToGtkAccelerator(const OUString &rStr)
-{
-    return OUStringToOString(rStr.replaceFirst("~", "_"), RTL_TEXTENCODING_UTF8);
 }
 
 class GtkInstanceDialog : public GtkInstanceWindow, public virtual weld::Dialog
@@ -1949,30 +2013,22 @@ public:
 
     virtual void set_primary_text(const OUString& rText) override
     {
-        g_object_set(G_OBJECT(m_pMessageDialog), "text",
-                OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
-                nullptr);
+        ::set_primary_text(m_pMessageDialog, rText);
     }
 
     virtual OUString get_primary_text() const override
     {
-        gchar* pText = nullptr;
-        g_object_get(G_OBJECT(m_pMessageDialog), "text", &pText, nullptr);
-        return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
+        return ::get_primary_text(m_pMessageDialog);
     }
 
     virtual void set_secondary_text(const OUString& rText) override
     {
-        g_object_set(G_OBJECT(m_pMessageDialog), "secondary-text",
-                OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
-                nullptr);
+        ::set_secondary_text(m_pMessageDialog, rText);
     }
 
     virtual OUString get_secondary_text() const override
     {
-        gchar* pText = nullptr;
-        g_object_get(G_OBJECT(m_pMessageDialog), "secondary-text", &pText, nullptr);
-        return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
+        return ::get_secondary_text(m_pMessageDialog);
     }
 
     virtual Container* weld_message_area() override
@@ -2353,31 +2409,6 @@ public:
         g_signal_handler_disconnect(m_pNotebook, m_nSignalId);
     }
 };
-
-namespace
-{
-    OUString get_label(GtkLabel* pLabel)
-    {
-        const gchar* pStr = gtk_label_get_label(pLabel);
-        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
-    }
-
-    void set_label(GtkLabel* pLabel, const OUString& rText)
-    {
-        gtk_label_set_label(pLabel, MapToGtkAccelerator(rText).getStr());
-    }
-
-    OUString get_label(GtkButton* pButton)
-    {
-        const gchar* pStr = gtk_button_get_label(pButton);
-        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
-    }
-
-    void set_label(GtkButton* pButton, const OUString& rText)
-    {
-        gtk_button_set_label(pButton, MapToGtkAccelerator(rText).getStr());
-    }
-}
 
 class GtkInstanceButton : public GtkInstanceContainer, public virtual weld::Button
 {
@@ -4022,6 +4053,7 @@ void ensure_intercept_drawing_area_accessibility()
 class GtkInstanceBuilder : public weld::Builder
 {
 private:
+    ResHookProc m_pStringReplace;
     OUString m_sHelpRoot;
     OString m_aUtf8HelpRoot;
     GtkBuilder* m_pBuilder;
@@ -4080,16 +4112,31 @@ private:
             g_signal_connect(pWidget, "query-tooltip", G_CALLBACK(signalTooltipQuery), nullptr);
         }
 
-        //missing mnemonics
+        // expand placeholder and collect potentially missing mnemonics
         if (GTK_IS_BUTTON(pWidget))
         {
-            if (gtk_button_get_use_underline(GTK_BUTTON(pWidget)))
-                m_aMnemonicButtons.push_back(GTK_BUTTON(pWidget));
+            GtkButton* pButton = GTK_BUTTON(pWidget);
+            set_label(pButton, (*m_pStringReplace)(get_label(pButton)));
+            if (gtk_button_get_use_underline(pButton))
+                m_aMnemonicButtons.push_back(pButton);
         }
         else if (GTK_IS_LABEL(pWidget))
         {
-            if (gtk_label_get_use_underline(GTK_LABEL(pWidget)))
-                m_aMnemonicLabels.push_back(GTK_LABEL(pWidget));
+            GtkLabel* pLabel = GTK_LABEL(pWidget);
+            set_label(pLabel, (*m_pStringReplace)(get_label(pLabel)));
+            if (gtk_label_get_use_underline(pLabel))
+                m_aMnemonicLabels.push_back(pLabel);
+        }
+        else if (GTK_IS_WINDOW(pWidget))
+        {
+            GtkWindow* pWindow = GTK_WINDOW(pWidget);
+            set_title(pWindow, (*m_pStringReplace)(get_title(pWindow)));
+            if (GTK_IS_MESSAGE_DIALOG(pWindow))
+            {
+                GtkMessageDialog* pMessageDialog = GTK_MESSAGE_DIALOG(pWindow);
+                set_primary_text(pMessageDialog, (*m_pStringReplace)(get_primary_text(pMessageDialog)));
+                set_secondary_text(pMessageDialog, (*m_pStringReplace)(get_secondary_text(pMessageDialog)));
+            }
         }
     }
 
@@ -4104,6 +4151,7 @@ private:
 public:
     GtkInstanceBuilder(GtkWidget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
         : weld::Builder(rUIFile)
+        , m_pStringReplace(Translate::GetReadStringHook())
         , m_sHelpRoot(rUIFile)
         , m_pParentWidget(pParent)
     {
