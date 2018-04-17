@@ -65,26 +65,6 @@
  	cp -r ../gen/firebird/help $(FB_FW)/Resources/English.lproj/var/help
  	cp ../gen/firebird/security2.fdb $(FB_FW)/Resources/English.lproj/var
  	mkdir -p $(FB_FW)/Resources/doc
---- firebird.org/builds/posix/prefix.darwin_i386	2016-08-01 22:55:34.000000000 +0200
-+++ firebird/builds/posix/prefix.darwin_i386	2016-08-01 23:02:46.000000000 +0200
-@@ -26,14 +26,14 @@
- # 4. for  CFLAGS, CXXFLAGS, LDFLAGS export '-m32 -arch i386'
- # 5. export MACOSX_DEPLOYMENT_TARGET=10.7 
- 
--DYLD_LIBRARY_PATH=$(FIREBIRD)/lib
-+DYLD_LIBRARY_PATH:=$(FIREBIRD)/lib:$(DYLD_LIBRARY_PATH)
- export DYLD_LIBRARY_PATH
- 
- MACOSX_DEPLOYMENT_TARGET=10.7
- export MACOSX_DEPLOYMENT_TARGET
- 
--PROD_FLAGS=-O1 -DDARWIN -pipe -MMD -fPIC -fno-common -arch i386 -mmacosx-version-min=10.7
--DEV_FLAGS=-ggdb -DDARWIN -pipe -MMD -fPIC -fno-common -Wall -arch i386 -mmacosx-version-min=10.7 -Wno-non-virtual-dtor
-+PROD_FLAGS=-O1 -DDARWIN -pipe -MMD -fPIC -fno-common -arch i386
-+DEV_FLAGS=-ggdb -DDARWIN -pipe -MMD -fPIC -fno-common -Wall -arch i386 -Wno-non-virtual-dtor
- CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden -fno-weak
- 
- EXE_LINK_OPTIONS:=-m32
 --- firebird.org/builds/posix/Makefile.in	2016-08-08 17:58:20.000000000 +0200
 +++ firebird/builds/posix/Makefile.in	2016-08-08 17:57:17.000000000 +0200
 @@ -191,6 +191,9 @@
