@@ -247,7 +247,11 @@ Size Bitmap::GetSizePixel() const
 
 sal_uInt16 Bitmap::GetBitCount() const
 {
-    return( mxImpBmp ? mxImpBmp->GetBitCount() : 0 );
+    if (!mxImpBmp)
+        return 0;
+    sal_uInt16 nBitCount = mxImpBmp->GetBitCount();
+    return ( nBitCount <= 4 ) ? ( ( nBitCount <= 1 ) ? 1 : 4 ):
+                                ( ( nBitCount <= 8 ) ? 8 : 24);
 }
 
 bool Bitmap::HasGreyPalette() const
