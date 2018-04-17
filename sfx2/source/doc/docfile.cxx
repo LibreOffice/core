@@ -70,6 +70,7 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/fileutil.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/tempfile.hxx>
 #include <comphelper/fileurl.hxx>
@@ -1289,7 +1290,13 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool b
                                 }
                                 catch (const uno::Exception&)
                                 {
-                                    if (bLoading && !bNoUI)
+                                    if (tools::IsMappedWebDAVPath(GetURLObject()))
+                                    {
+                                        // This is a path that redirects to a WebDAV resource;
+                                        // so failure creating lockfile is not an error here.
+                                        bResult = true;
+                                    }
+                                    else if (bLoading && !bNoUI)
                                     {
                                         bIoErr = true;
                                         ShowLockFileProblemDialog(MessageDlg::LockFileIgnore);
