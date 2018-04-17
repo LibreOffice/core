@@ -3829,7 +3829,7 @@ void SAL_CALL FormController::errorOccured(const SQLErrorEvent& aEvent)
     else
     {
         aGuard.clear();
-        displayException( aEvent );
+        displayException(aEvent, getDialogParentWindow());
     }
 }
 
