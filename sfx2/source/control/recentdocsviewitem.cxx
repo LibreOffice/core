@@ -17,13 +17,11 @@
 #include <i18nutil/paper.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/recentdocsview.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <sfx2/templatelocalview.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/svapp.hxx>
 
-#include <sfx2/strings.hrc>
 #include <bitmaps.hlst>
 
 using namespace basegfx;

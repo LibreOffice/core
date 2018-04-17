@@ -43,7 +43,6 @@
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
 
-#include <sfx2/sfxresid.hxx>
 #include <sfx2/app.hxx>
 #include <appdata.hxx>
 #include <sfx2/tbxctrl.hxx>
@@ -56,7 +55,6 @@
 #include <sfx2/dispatch.hxx>
 #include <workwin.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <sfx2/strings.hrc>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/msgpool.hxx>

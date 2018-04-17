@@ -10,7 +10,6 @@
 #include <sfx2/emojiview.hxx>
 #include <sfx2/emojiviewitem.hxx>
 #include <sfx2/templatelocalview.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
 #include <rtl/bootstrap.hxx>
@@ -24,8 +23,6 @@
 #include <string>
 #include <fstream>
 #include <streambuf>
-
-#include <sfx2/strings.hrc>
 
 #include <vcl/builderfactory.hxx>
 using namespace ::com::sun::star;

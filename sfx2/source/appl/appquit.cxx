@@ -29,7 +29,6 @@
 #include <unotools/saveopt.hxx>
 #include <unotools/misccfg.hxx>
 
-#include <sfx2/strings.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/unoctitm.hxx>
@@ -38,7 +37,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
 #include <arrdecl.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/msgpool.hxx>

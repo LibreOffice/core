@@ -19,7 +19,6 @@
 
 
 #include <sal/macros.h>
-#include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <unotools/saveopt.hxx>
 #include <vcl/svapp.hxx>
