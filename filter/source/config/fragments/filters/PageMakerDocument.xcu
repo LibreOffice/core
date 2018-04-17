@@ -1,5 +1,5 @@
     <node oor:name="PageMaker Document" oor:op="replace">
-        <prop oor:name="Flags"><value>IMPORT ALIEN 3RDPARTYFILTER PREFERRED</value></prop>
+        <prop oor:name="Flags"><value>IMPORT ALIEN 3RDPARTYFILTER PREFERRED EXOTIC</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"><value>org.libreoffice.comp.Draw.PageMakerImportFilter</value></prop>
         <prop oor:name="UserData"><value></value></prop>

@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
     <node oor:name="ClarisWorks_Impress" oor:op="replace">
-        <prop oor:name="Flags"><value>IMPORT ALIEN 3RDPARTYFILTER PREFERRED</value></prop>
+        <prop oor:name="Flags"><value>IMPORT ALIEN 3RDPARTYFILTER PREFERRED EXOTIC</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"><value>com.sun.star.comp.Impress.MWAWPresentationImportFilter</value></prop>
         <prop oor:name="UserData"><value></value></prop>
