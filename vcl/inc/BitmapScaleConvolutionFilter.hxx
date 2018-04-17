@@ -30,7 +30,7 @@ class VCL_DLLPUBLIC BitmapScaleConvolutionFilter : public BitmapFilter
 {
 protected:
     BitmapScaleConvolutionFilter(const double& rScaleX, const double& rScaleY, Kernel* pKernel)
-        : mpKernel(pKernel)
+        : mxKernel(pKernel)
         , mrScaleX(rScaleX)
         , mrScaleY(rScaleY)
     {
@@ -39,7 +39,7 @@ protected:
     virtual BitmapEx execute(BitmapEx const& rBitmap) override;
 
 private:
-    Kernel* mpKernel;
+    std::unique_ptr<Kernel> mxKernel;
     double mrScaleX;
     double mrScaleY;
 };

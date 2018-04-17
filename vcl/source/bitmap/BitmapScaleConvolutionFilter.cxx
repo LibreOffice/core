@@ -377,7 +377,7 @@ BitmapEx BitmapScaleConvolutionFilter::execute(BitmapEx const& rBitmapEx)
     bool bRetval = false;
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
-    bRetval = ImplScaleConvolution(aBitmap, mrScaleX, mrScaleY, *mpKernel);
+    bRetval = ImplScaleConvolution(aBitmap, mrScaleX, mrScaleY, *mxKernel);
 
     if (bRetval)
         return BitmapEx(aBitmap);
