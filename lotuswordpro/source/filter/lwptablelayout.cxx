@@ -543,8 +543,13 @@ OUString LwpTableLayout::GetColumnWidth(sal_uInt16 nCol)
  */
 void LwpTableLayout::RegisterColumns()
 {
-    LwpTable * pTable = GetTable();
-    LwpSuperTableLayout * pSuper = GetSuperTableLayout();
+    LwpTable* pTable = GetTable();
+    if (!pTable)
+        throw std::range_error("corrupt LwpTableLayout");
+
+    LwpSuperTableLayout* pSuper = GetSuperTableLayout();
+    if (!pSuper)
+        throw std::range_error("corrupt LwpTableLayout");
 
     sal_uInt16 nCols = m_nCols;
 
@@ -555,9 +560,6 @@ void LwpTableLayout::RegisterColumns()
         pWidthCalculated[i] = false;
         m_aColumns[i] = nullptr;
     }
-
-    if (!pTable)
-        throw std::range_error("corrupt LwpTableLayout");
 
     double dDefaultColumn = pTable->GetWidth();
     sal_uInt16 nJustifiableColumn = nCols;
