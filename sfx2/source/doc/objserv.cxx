@@ -698,7 +698,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( lErr != ERRCODE_IO_ABORT )
             {
                 SfxErrorContext aEc(ERRCTX_SFX_SAVEASDOC,GetTitle());
-                ErrorHandler::HandleError( lErr );
+                ErrorHandler::HandleError(lErr, rReq.GetFrameWeld());
             }
 
             if ( nId == SID_EXPORTDOCASPDF )
@@ -787,7 +787,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             SetModified( false );
             ErrCode lErr = GetErrorCode();
-            ErrorHandler::HandleError(lErr);
+            ErrorHandler::HandleError(lErr, rReq.GetFrameWeld());
 
             rReq.SetReturnValue( SfxBoolItem(0, true) );
             rReq.Done();

@@ -1079,7 +1079,8 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
         });
 */
 const SfxPoolItem* SfxDispatcher::ExecuteList(sal_uInt16 nSlot, SfxCallMode eCall,
-        std::initializer_list<SfxPoolItem const*> args)
+        std::initializer_list<SfxPoolItem const*> args,
+        std::initializer_list<SfxPoolItem const*> internalargs)
 {
     if ( IsLocked() )
         return nullptr;
@@ -1097,7 +1098,19 @@ const SfxPoolItem* SfxDispatcher::ExecuteList(sal_uInt16 nSlot, SfxCallMode eCal
            MappedPut_Impl( aSet, *pArg );
        }
 
-       SfxRequest aReq( nSlot, eCall, aSet );
+       SfxRequest aReq(nSlot, eCall, aSet);
+
+       if (internalargs.begin() != internalargs.end())
+       {
+           SfxAllItemSet aInternalSet(SfxGetpApp()->GetPool());
+           for (const SfxPoolItem *pArg : internalargs)
+           {
+               assert(pArg);
+               aInternalSet.Put(*pArg);
+           }
+           aReq.SetInternalArgs_Impl(aInternalSet);
+       }
+
        Execute_( *pShell, *pSlot, aReq, eCall );
        return aReq.GetReturnValue();
     }
