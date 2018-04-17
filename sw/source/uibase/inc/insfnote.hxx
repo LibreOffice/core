@@ -61,7 +61,7 @@ class SwInsFootNoteDlg: public weld::GenericDialogController
 
 public:
     SwInsFootNoteDlg(weld::Window * pParent, SwWrtShell &rSh, bool bEd);
-    virtual ~SwInsFootNoteDlg() override;
+    virtual ~SwInsFootNoteDlg() COVERITY_NOEXCEPT_FALSE override;
 
     const OUString& GetFontName() { return m_aFontName; }
     bool            IsEndNote() const { return m_xEndNoteBtn->get_active(); }

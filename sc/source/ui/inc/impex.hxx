@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_IMPEX_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_IMPEX_HXX
 
+#include <o3tl/deleter.hxx>
 #include <sot/exchange.hxx>
 #include <global.hxx>
 #include <address.hxx>
@@ -48,7 +49,7 @@ class ScImportExport
 {
     ScDocShell* pDocSh;
     ScDocument* pDoc;
-    std::unique_ptr<ScDocument> pUndoDoc;
+    std::unique_ptr<ScDocument, o3tl::default_delete<ScDocument>> pUndoDoc;
     ScRange     aRange;
     OUString    aStreamPath;
     OUString    aNonConvertibleChars;

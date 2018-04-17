@@ -2024,7 +2024,9 @@ namespace weld
         return rController->getDialog()->runAsync(rController, func);
     }
 
-    DialogController::~DialogController() = default;
+    DialogController::~DialogController() COVERITY_NOEXCEPT_FALSE
+    {
+    }
 
     Dialog* GenericDialogController::getDialog() { return m_xDialog.get(); }
 
@@ -2034,7 +2036,9 @@ namespace weld
     {
     }
 
-    GenericDialogController::~GenericDialogController() = default;
+    GenericDialogController::~GenericDialogController() COVERITY_NOEXCEPT_FALSE
+    {
+    }
 
     Dialog* MessageDialogController::getDialog() { return m_xDialog.get(); }
 
