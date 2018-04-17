@@ -180,7 +180,7 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(weld::Window *pParent, SwWrtShell &rShell, bo
     }
 }
 
-SwInsFootNoteDlg::~SwInsFootNoteDlg()
+SwInsFootNoteDlg::~SwInsFootNoteDlg() COVERITY_NOEXCEPT_FALSE
 {
     SwViewShell::SetCareDialog(nullptr);
 

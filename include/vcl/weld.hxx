@@ -745,7 +745,7 @@ public:
     OUString get_title() const { return getConstDialog()->get_title(); }
     void set_help_id(const OString& rHelpId) { getDialog()->set_help_id(rHelpId); }
     OString get_help_id() const { return getConstDialog()->get_help_id(); }
-    virtual ~DialogController();
+    virtual ~DialogController() COVERITY_NOEXCEPT_FALSE;
 };
 
 class VCL_DLLPUBLIC GenericDialogController : public DialogController
@@ -760,7 +760,7 @@ protected:
 public:
     GenericDialogController(weld::Widget* pParent, const OUString& rUIFile,
                             const OString& rDialogId);
-    virtual ~GenericDialogController() override;
+    virtual ~GenericDialogController() COVERITY_NOEXCEPT_FALSE override;
 };
 
 class VCL_DLLPUBLIC MessageDialogController : public DialogController
