@@ -89,12 +89,6 @@ enum class BmpCombine
     Or, And
 };
 
-enum BmpReduce
-{
-    BMP_REDUCE_SIMPLE = 0,
-    BMP_REDUCE_POPULAR = 1
-};
-
 enum class BmpFilter
 {
     Smooth = 0,
@@ -284,20 +278,6 @@ public:
         @return true conversion to monochrome bitmap was successful
     */
     bool                    MakeMonochrome(sal_uInt8 cThreshold);
-
-    /** Reduce number of colors for the bitmap
-
-        @param nNewColorCount
-        Maximal number of bitmap colors after the reduce operation
-
-        @param eReduce
-        Algorithm to use for color reduction
-
-        @return true the color reduction operation was completed successfully.
-     */
-    bool                    ReduceColors(
-                                sal_uInt16 nNewColorCount,
-                                BmpReduce eReduce = BMP_REDUCE_SIMPLE );
 
     /** Apply a dither algorithm to the bitmap
 
@@ -680,14 +660,6 @@ public:
     SAL_DLLPRIVATE bool     ImplDitherMatrix();
     SAL_DLLPRIVATE bool     ImplDitherFloyd();
     SAL_DLLPRIVATE bool     ImplDitherFloyd16();
-    SAL_DLLPRIVATE bool     ImplReduceSimple( sal_uInt16 nColorCount );
-    SAL_DLLPRIVATE bool     ImplReducePopular( sal_uInt16 nColorCount );
-    SAL_DLLPRIVATE bool     ImplReduceMedian( sal_uInt16 nColorCount );
-    SAL_DLLPRIVATE void     ImplMedianCut(
-                                sal_uLong* pColBuf,
-                                BitmapPalette& rPal,
-                                long nR1, long nR2, long nG1, long nG2, long nB1, long nB2,
-                                long nColors, long nPixels, long& rIndex );
 
     SAL_DLLPRIVATE bool     ImplConvolute3( const long* pMatrix );
 
