@@ -23,9 +23,6 @@
 #include <sfx2/sfxdlg.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <boost/optional.hpp>
 #include "dbmgr.hxx"
 #include <cnttab.hxx>
@@ -34,15 +31,11 @@
 class SfxViewFrame;
 class SfxBindings;
 class SfxItemSet;
-class ResId;
 namespace vcl { class Window; }
-class SfxItemPool;
 class SfxStyleSheetBase;
 class SwGlossaryHdl;
 class SwField;
 
-class SwLabFormatPage;
-class SwLabRec;
 class SwAsciiOptions;
 class SwDocShell;
 class SvStream;
@@ -51,16 +44,12 @@ class SfxRequest;
 class SwView;
 class SwTableAutoFormat;
 class SwTOXMgr;
-class SwForm;
-struct CurTOXType;
 class SwTOXDescription;
 class SwTOXBase;
 class SwSectionData;
 struct SwDBData;
-class SwField;
 class Printer;
 class SwLabItem;
-class SwDBManager;
 class SwTableFUNC;
 class SwChildWinWrapper;
 struct SfxChildWinInfo;
@@ -73,7 +62,7 @@ enum class SfxStyleFamily;
 
 namespace com{namespace sun{namespace star{
     namespace frame{
-        class XFrame;
+        class XModel;
     }
     namespace sdbcx{
     class XColumnsSupplier;
@@ -83,6 +72,8 @@ namespace com{namespace sun{namespace star{
     class XConnection;
     class XResultSet;
     }
+    namespace container { class XNameAccess; }
+    namespace container { class XNamed; }
 }}}
 
 typedef   void (*SwLabDlgMethod) (css::uno::Reference< css::frame::XModel> const & xModel, const SwLabItem& rItem);
@@ -351,7 +342,6 @@ public:
 #define RET_TARGET_CREATED      103
 #define RET_REMOVE_TARGET       104
 
-class SwView;
 class SwMailMergeConfigItem;
 
 class AbstractMailMergeWizard : public VclAbstractDialog2

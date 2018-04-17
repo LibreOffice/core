@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_FESH_HXX
 
 #include <com/sun/star/text/RelOrientation.hpp>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <svx/svdobj.hxx>
 #include "swdllapi.h"
@@ -45,10 +44,7 @@ class SwTableAutoFormat;
 class SwFrame;
 class SwFormatFrameSize;
 class SwFormatRowSplit;
-class SdrObject;
-class Color;
 class Outliner;
-class SotDataObject;
 class SwFrameFormat;
 struct SwSortOptions;
 class SdrMarkList;
@@ -58,6 +54,7 @@ namespace svx
 {
     class ISdrObjectFilter;
 }
+namespace com { namespace sun { namespace star { namespace embed { class XEmbeddedObject; } } } }
 
 // return values for GetFrameType() and GetSelFrameType().
 //! values can be combined via logical or

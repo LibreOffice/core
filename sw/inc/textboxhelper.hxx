@@ -14,7 +14,6 @@
 #include <set>
 #include <vector>
 
-#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Type.h>
 
@@ -32,7 +31,19 @@ namespace tools
 class Rectangle;
 }
 class ZSortFly;
-class SwNode;
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace drawing
+{
+class XShape;
+}
+}
+}
+}
 
 /**
  * A TextBox is a TextFrame, that is tied to a drawinglayer shape.

@@ -22,7 +22,6 @@
 #include <memory>
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <sot/storage.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -53,6 +52,7 @@ namespace mark
 class IMark;
 }
 }
+namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
 
 // Defines the count of chars at which a paragraph read via ASCII/W4W-Reader
 // is forced to wrap. It has to be always greater than 200!!!

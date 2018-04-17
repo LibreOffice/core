@@ -31,8 +31,6 @@
 #include "swdllapi.h"
 #include "shellid.hxx"
 #include "fldupde.hxx"
-#include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
-#include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 
 class Color;
 class SfxItemSet;
@@ -68,6 +66,8 @@ enum class SvViewOpt {
 namespace com{ namespace sun{ namespace star{ namespace scanner{
     class XScannerManager2;
 }}}}
+namespace com { namespace sun { namespace star { namespace linguistic2 { class XLanguageGuessing; } } } }
+namespace com { namespace sun { namespace star { namespace linguistic2 { class XLinguServiceEventListener; } } } }
 
 class SW_DLLPUBLIC SwModule final : public SfxModule, public SfxListener, public utl::ConfigurationListener
 {

@@ -25,11 +25,12 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XJobManager.hpp>
 #include <com/sun/star/frame/XTerminateListener2.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <o3tl/deleter.hxx>
 #include <osl/mutex.hxx>
 #include <list>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 class CancelJobsThread;
 class TerminateOfficeThread;

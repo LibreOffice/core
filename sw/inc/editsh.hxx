@@ -29,16 +29,12 @@
 #include "tblenum.hxx"
 #include "tox.hxx"
 
-#include <com/sun/star/linguistic2/ProofreadingResult.hpp>
-#include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
-
 #include <memory>
 #include <vector>
 #include <set>
 
 namespace tools { class PolyPolygon; }
 class SwDoc;
-class DateTime;
 class CommandExtTextInputData;
 
 class SvNumberFormatter;
@@ -47,8 +43,6 @@ class SfxItemSet;
 class SfxWatermarkItem;
 class SvxAutoCorrect;
 
-class SwField;
-class SwFieldType;
 class SwDDEFieldType;
 class SwDBManager;
 
@@ -61,11 +55,7 @@ class SwNumRule;
 
 class SwTextFormatColl;
 class SwGrfNode;
-class SwFlyFrameFormat;
 
-class SwFrameFormat;
-class SwCharFormat;
-class SwExtTextInput;
 class Graphic;
 class GraphicObject;
 class GraphicAttr;
@@ -103,6 +93,8 @@ enum class GraphicType;
 namespace com { namespace sun { namespace star { namespace uno {
     template < class > class Sequence;
 }}}}
+namespace com { namespace sun { namespace star { namespace linguistic2 { class XSpellAlternatives; } } } }
+namespace com { namespace sun { namespace star { namespace linguistic2 { struct ProofreadingResult; } } } }
 
 namespace svx{
     struct SpellPortion;
