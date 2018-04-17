@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_0f3f17b5",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-17T13:17:07Z",
+      "side": 1,
+      "message": "This seems to never change from \"false\" but left it since its purpose might be to have a meaningfully named variable.",
+      "range": {
+        "startLine": 68,
+        "startChar": 12,
+        "endLine": 68,
+        "endChar": 43
+      },
+      "revId": "9d7b6342146222f0715d920e9b3a4a233d206cc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
