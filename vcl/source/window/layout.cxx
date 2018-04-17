@@ -2451,6 +2451,7 @@ void MessageDialog::set_primary_text(const OUString &rPrimaryString)
     {
         m_pPrimaryMessage->SetText(m_sPrimaryString);
         m_pPrimaryMessage->Show(!m_sPrimaryString.isEmpty());
+        MessageDialog::SetMessagesWidths(this, m_pPrimaryMessage, !m_sSecondaryString.isEmpty() ? m_pSecondaryMessage.get() : nullptr);
     }
 }
 
@@ -2461,6 +2462,7 @@ void MessageDialog::set_secondary_text(const OUString &rSecondaryString)
     {
         m_pSecondaryMessage->SetText("\n" + m_sSecondaryString);
         m_pSecondaryMessage->Show(!m_sSecondaryString.isEmpty());
+        MessageDialog::SetMessagesWidths(this, m_pPrimaryMessage, !m_sSecondaryString.isEmpty() ? m_pSecondaryMessage.get() : nullptr);
     }
 }
 
