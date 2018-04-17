@@ -15,10 +15,6 @@ namespace dbaccess
 {
 class MigrationWarnDialog : public weld::MessageDialogController
 {
-private:
-    std::unique_ptr<weld::Button> m_xOkBtn;
-    std::unique_ptr<weld::Button> m_xLaterBtn;
-
 public:
     MigrationWarnDialog(weld::Window* pParent);
 };

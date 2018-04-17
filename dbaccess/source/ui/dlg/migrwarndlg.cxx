@@ -13,8 +13,6 @@ namespace dbaui
 {
 MigrationWarnDialog::MigrationWarnDialog(weld::Window* pParent)
     : MessageDialogController(pParent, "dbaccess/ui/migrwarndlg.ui", "MigrationWarnDialog")
-    , m_xOkBtn(m_xBuilder->weld_button("yes"))
-    , m_xLaterBtn(m_xBuilder->weld_button("later"))
 {
 }
 }
