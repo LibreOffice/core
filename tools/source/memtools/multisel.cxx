@@ -238,7 +238,7 @@ void MultiSelection::Select( const Range& rIndexRange, bool bSelect )
     DBG_ASSERT(aTotRange.IsInside(nTmpMin), "selected index out of range" );
 
     // replace whole selection?
-    if( nTmpMin <= nCurMin && nTmpMax >= nCurMax )
+    if( aSels.empty() || (nTmpMin <= nCurMin && nTmpMax >= nCurMax ) )
     {
         ImplClear();
         if ( bSelect )
