@@ -133,7 +133,12 @@ short AbstractSwConvertTableDlg_Impl::Execute()
     return m_xDlg->run();
 }
 IMPL_ABSTDLG_BASE(AbstractSwInsertDBColAutoPilot_Impl);
-IMPL_ABSTDLG_BASE(AbstractDropDownFieldDialog_Impl);
+
+short AbstractDropDownFieldDialog_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
+
 IMPL_ABSTDLG_BASE(AbstractSwLabDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwSelGlossaryDlg_Impl);
 short AbstractSwAutoFormatDlg_Impl::Execute()
@@ -281,12 +286,12 @@ void AbstractSwInsertDBColAutoPilot_Impl::DataToDoc( const uno::Sequence< uno::A
 
 bool AbstractDropDownFieldDialog_Impl::PrevButtonPressed() const
 {
-    return pDlg->PrevButtonPressed();
+    return m_xDlg->PrevButtonPressed();
 }
 
 bool AbstractDropDownFieldDialog_Impl::NextButtonPressed() const
 {
-    return pDlg->NextButtonPressed();
+    return m_xDlg->NextButtonPressed();
 }
 
 void AbstractSwLabDlg_Impl::SetCurPageId( sal_uInt16 nId )
@@ -758,11 +763,10 @@ VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwFootNoteOptio
     return VclPtr<AbstractTabDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractDropDownFieldDialog> SwAbstractDialogFactory_Impl::CreateDropDownFieldDialog(
+VclPtr<AbstractDropDownFieldDialog> SwAbstractDialogFactory_Impl::CreateDropDownFieldDialog(weld::Window *pParent,
     SwWrtShell &rSh, SwField* pField, bool bPrevButton, bool bNextButton)
 {
-    VclPtr<sw::DropDownFieldDialog> pDlg = VclPtr<sw::DropDownFieldDialog>::Create(nullptr, rSh, pField, bPrevButton, bNextButton);
-    return VclPtr<AbstractDropDownFieldDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractDropDownFieldDialog_Impl>::Create(new sw::DropDownFieldDialog(pParent, rSh, pField, bPrevButton, bNextButton));
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwEnvDlg ( vcl::Window* pParent, const SfxItemSet& rSet,
