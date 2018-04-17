@@ -710,7 +710,7 @@ sal_uLong DffPropSet::SanitizeEndPos(SvStream &rIn, sal_uLong nEndRecPos)
     return nEndRecPos;
 }
 
-void SdrEscherImport::FreeObj(void* pData, SdrObject* pObj)
+void SdrEscherImport::NotifyFreeObj(void* pData, SdrObject* pObj)
 {
     ProcessData& rData = *static_cast<ProcessData*>(pData);
     PptSlidePersistEntry& rPersistEntry = rData.rPersistEntry;
@@ -726,7 +726,6 @@ void SdrEscherImport::FreeObj(void* pData, SdrObject* pObj)
                 pPtr->pCObj = nullptr;
         }
     }
-    SvxMSDffManager::FreeObj(pData, pObj);
 }
 
 /* ProcessObject is called from ImplSdPPTImport::ProcessObj to handle all application specific things,
