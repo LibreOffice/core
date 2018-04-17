@@ -13,8 +13,6 @@ namespace dbaccess
 {
 MigrationWarnDialog::MigrationWarnDialog(weld::Window* pParent)
     : MessageDialogController(pParent, "TODOUIfile", "MigrationWarnDialog", "ask")
-    , m_xOkBtn(m_xBuilder->weld_button("yes"))
-    , m_xLaterBtn(m_xBuilder->weld_button("later"))
 {
 }
 }
