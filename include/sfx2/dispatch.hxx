@@ -130,9 +130,10 @@ public:
                                 SfxItemSet const * pInternalArgs,
                                 sal_uInt16 nModi);
 
-    const SfxPoolItem*  ExecuteList( sal_uInt16 nSlot,
-                                 SfxCallMode nCall,
-                                 std::initializer_list<SfxPoolItem const*> args);
+    const SfxPoolItem*  ExecuteList(sal_uInt16 nSlot,
+                                    SfxCallMode nCall,
+                                    std::initializer_list<SfxPoolItem const*> args,
+                                    std::initializer_list<SfxPoolItem const*> internalargs = std::initializer_list<SfxPoolItem const*>());
 
     const SfxPoolItem*  Execute( sal_uInt16 nSlot,
                                  SfxCallMode nCall,

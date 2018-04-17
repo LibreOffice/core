@@ -374,11 +374,11 @@ void SvxHyperlinkNewDocTp::DoApply ()
                         if (pViewFrame)
                         {
                             SfxStringItem aNewName( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+                            SfxUnoFrameItem aDocFrame( SID_FILLFRAME, pViewFrame->GetFrame().GetFrameInterface() );
 
                             pViewFrame->GetDispatcher()->ExecuteList(
                                 SID_SAVEASDOC, SfxCallMode::SYNCHRON,
-                                { &aNewName });
-
+                                { &aNewName }, { &aDocFrame } );
                         }
                     }
                 }
