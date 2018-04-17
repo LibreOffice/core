@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_6f95f3e2",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4456,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-17T20:21:46Z",
+      "side": 1,
+      "message": "I find naming this CompileTokenArray() and overwriting the FormulaCompiler one confusing. Is it really wanted that whenever CompileTokenArray() is called at ScCompiler it also does this new handling additionally to the FormulaCompiler::CompileTokenArray()?",
+      "range": {
+        "startLine": 4456,
+        "startChar": 17,
+        "endLine": 4456,
+        "endChar": 34
+      },
+      "revId": "31ae83b65f8f630113abc4970af7959f9d352c84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_2ffdbb3a",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4476,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-17T20:21:46Z",
+      "side": 1,
+      "message": "Note there is FormulaCompiler::IsOpCodeJumpCommand() for exactly this.",
+      "revId": "31ae83b65f8f630113abc4970af7959f9d352c84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
