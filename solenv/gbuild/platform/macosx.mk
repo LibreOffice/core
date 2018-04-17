@@ -22,7 +22,9 @@ export VCL_HIDE_WINDOWS=1
 
 gb_SDKDIR := $(MACOSX_SDK_PATH)
 
+ifeq (PRE_9_1_0,$(shell test $(CLANGVER) -lt 90100 && echo PRE_9_1_0))
 gb_COMPILEROPTFLAGS := -O1
+endif
 
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
