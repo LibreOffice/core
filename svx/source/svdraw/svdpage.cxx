@@ -89,22 +89,22 @@ SdrObjList::~SdrObjList()
     Clear(); // delete contents of container
 }
 
-SdrObjList* SdrObjList::CloneSdrObjList(SdrModel* pNewModel) const
+SdrObjList* SdrObjList::CloneSdrObjList(SdrModel* pNewModelel) const
 {
     SdrObjList* pObjList = new SdrObjList();
-    pObjList->copyDataFromSdrObjList(*this, pNewModel);
+    pObjList->copyDataFromSdrObjList(*this, pNewModelel);
     return pObjList;
 }
 
-void SdrObjList::copyDataFromSdrObjList(const SdrObjList& rSrcList, SdrModel* pNewModel)
+void SdrObjList::copyDataFromSdrObjList(const SdrObjList& rSrcList, SdrModel* pNewModelel)
 {
     // this function is only supposed to be called once, right after construction
     assert(maList.empty());
     eListKind=rSrcList.eListKind;
-    CopyObjects(rSrcList, pNewModel);
+    CopyObjects(rSrcList, pNewModelel);
 }
 
-void SdrObjList::CopyObjects(const SdrObjList& rSrcList, SdrModel* pNewModel)
+void SdrObjList::CopyObjects(const SdrObjList& rSrcList, SdrModel* pNewModelel)
 {
     Clear();
     bObjOrdNumsDirty = false;
@@ -115,7 +115,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList, SdrModel* pNewModel)
     for (size_t no(0); no < nCount; ++no)
     {
         SdrObject* pSO(rSrcList.GetObj(no));
-        SdrObject* pDO(pSO->Clone(pNewModel));
+        SdrObject* pDO(pSO->Clone(pNewModelel));
 
         if(nullptr != pDO)
         {
@@ -1219,9 +1219,9 @@ void SdrPage::lateInit(const SdrPage& rSrcPage)
     eListKind = (mbMaster) ? SdrObjListKind::MasterPage : SdrObjListKind::DrawPage;
 }
 
-SdrPage* SdrPage::Clone(SdrModel* pNewModel) const
+SdrPage* SdrPage::Clone(SdrModel* pNewModelel) const
 {
-    SdrPage* pClonedPage(new SdrPage(nullptr == pNewModel ? getSdrModelFromSdrPage() : *pNewModel));
+    SdrPage* pClonedPage(new SdrPage(nullptr == pNewModelel ? getSdrModelFromSdrPage() : *pNewModelel));
     pClonedPage->lateInit(*this);
     return pClonedPage;
 }

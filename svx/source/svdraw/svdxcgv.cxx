@@ -714,11 +714,11 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
     // Sorting the MarkList here might be problematic in the future, so
     // use a copy.
     SortMarkedObjects();
-    SdrModel* pNeuMod=mpModel->AllocModel();
-    SdrPage* pNeuPag=pNeuMod->AllocPage(false);
-    pNeuMod->InsertPage(pNeuPag);
+    SdrModel* pNewModel=mpModel->AllocModel();
+    SdrPage* pnewPage=pNewModel->AllocPage(false);
+    pNewModel->InsertPage(pnewPage);
 
-    if( !mxSelectionController.is() || !mxSelectionController->GetMarkedObjModel( pNeuPag ) )
+    if( !mxSelectionController.is() || !mxSelectionController->GetMarkedObjModel( pnewPage ) )
     {
         ::std::vector< SdrObject* > aSdrObjects(GetMarkedObjects());
 
@@ -735,18 +735,18 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
                 // convert SdrPageObj's to a graphic representation, because
                 // virtual connection to referenced page gets lost in new model
                 pNewObj = new SdrGrafObj(
-                    *pNeuMod,
+                    *pNewModel,
                     GetObjGraphic(*pObj),
                     pObj->GetLogicRect());
-                pNewObj->SetPage( pNeuPag );
+                pNewObj->SetPage( pnewPage );
             }
             else
             {
                 pNewObj = pObj->Clone();
-                pNewObj->SetPage( pNeuPag );
+                pNewObj->SetPage( pnewPage );
             }
 
-            pNeuPag->InsertObject(pNewObj, SAL_MAX_SIZE);
+            pnewPage->InsertObject(pNewObj, SAL_MAX_SIZE);
 
             // #i13033#
             aCloneList.AddPair(pObj, pNewObj);
@@ -757,7 +757,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
         aCloneList.CopyConnections();
     }
 
-    return pNeuMod;
+    return pNewModel;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

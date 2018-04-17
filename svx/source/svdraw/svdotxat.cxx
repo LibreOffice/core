@@ -271,11 +271,11 @@ bool SdrTextObj::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 
 bool SdrTextObj::AdjustTextFrameWidthAndHeight()
 {
-    tools::Rectangle aNeuRect(maRect);
-    bool bRet=AdjustTextFrameWidthAndHeight(aNeuRect);
+    tools::Rectangle aNewRect(maRect);
+    bool bRet=AdjustTextFrameWidthAndHeight(aNewRect);
     if (bRet) {
         tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-        maRect = aNeuRect;
+        maRect = aNewRect;
         SetRectsDirty();
         if (dynamic_cast<const SdrRectObj *>(this) != nullptr) { // this is a hack
             static_cast<SdrRectObj*>(this)->SetXPolyDirty();
