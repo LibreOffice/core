@@ -27,6 +27,7 @@
 #include <mailmergehelper.hxx>
 #include <cmdid.h>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/mail/MailServiceType.hpp>
 #include <com/sun/star/mail/XMailService.hpp>
@@ -72,45 +73,39 @@ public:
     virtual void dispose() override;
 };
 
-class SwAuthenticationSettingsDialog : public SfxModalDialog
+class SwAuthenticationSettingsDialog : public weld::GenericDialogController
 {
-    VclPtr<CheckBox>        m_pAuthenticationCB;
+    SwMailMergeConfigItem& m_rConfigItem;
 
-    VclPtr<RadioButton>     m_pSeparateAuthenticationRB;
-    VclPtr<RadioButton>     m_pSMTPAfterPOPRB;
+    std::unique_ptr<weld::CheckButton> m_xAuthenticationCB;
+    std::unique_ptr<weld::RadioButton> m_xSeparateAuthenticationRB;
+    std::unique_ptr<weld::RadioButton> m_xSMTPAfterPOPRB;
+    std::unique_ptr<weld::Label>       m_xOutgoingServerFT;
+    std::unique_ptr<weld::Label>       m_xUserNameFT;
+    std::unique_ptr<weld::Entry>       m_xUserNameED;
+    std::unique_ptr<weld::Label>       m_xOutPasswordFT;
+    std::unique_ptr<weld::Entry>       m_xOutPasswordED;
+    std::unique_ptr<weld::Label>       m_xIncomingServerFT;
+    std::unique_ptr<weld::Label>       m_xServerFT;
+    std::unique_ptr<weld::Entry>       m_xServerED;
+    std::unique_ptr<weld::Label>       m_xPortFT;
+    std::unique_ptr<weld::SpinButton>  m_xPortNF;
+    std::unique_ptr<weld::Label>       m_xProtocolFT;
+    std::unique_ptr<weld::RadioButton> m_xPOP3RB;
+    std::unique_ptr<weld::RadioButton> m_xIMAPRB;
+    std::unique_ptr<weld::Label>       m_xInUsernameFT;
+    std::unique_ptr<weld::Entry>       m_xInUsernameED;
+    std::unique_ptr<weld::Label>       m_xInPasswordFT;
+    std::unique_ptr<weld::Entry>       m_xInPasswordED;
+    std::unique_ptr<weld::Button>      m_xOKPB;
 
-    VclPtr<FixedText>       m_pOutgoingServerFT;
-    VclPtr<FixedText>       m_pUserNameFT;
-    VclPtr<Edit>            m_pUserNameED;
-    VclPtr<FixedText>       m_pOutPasswordFT;
-    VclPtr<Edit>            m_pOutPasswordED;
-
-    VclPtr<FixedText>       m_pIncomingServerFT;
-    VclPtr<FixedText>       m_pServerFT;
-    VclPtr<Edit>            m_pServerED;
-    VclPtr<FixedText>       m_pPortFT;
-    VclPtr<NumericField>    m_pPortNF;
-    VclPtr<FixedText>       m_pProtocolFT;
-    VclPtr<RadioButton>     m_pPOP3RB;
-    VclPtr<RadioButton>     m_pIMAPRB;
-    VclPtr<FixedText>       m_pInUsernameFT;
-    VclPtr<Edit>            m_pInUsernameED;
-    VclPtr<FixedText>       m_pInPasswordFT;
-    VclPtr<Edit>            m_pInPasswordED;
-
-    VclPtr<OKButton>        m_pOKPB;
-
-    SwMailMergeConfigItem& rConfigItem;
-
-    DECL_LINK(OKHdl_Impl, Button*, void);
-    DECL_LINK( CheckBoxHdl_Impl, Button*, void);
-    DECL_LINK(RadioButtonHdl_Impl, Button*, void);
-    DECL_LINK(InServerHdl_Impl, Button*, void);
+    DECL_LINK(OKHdl_Impl, weld::Button&, void);
+    DECL_LINK(CheckBoxHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(RadioButtonHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(InServerHdl_Impl, weld::Button&, void);
 
 public:
-    SwAuthenticationSettingsDialog(SwMailConfigPage* pParent, SwMailMergeConfigItem& rItem);
-    virtual ~SwAuthenticationSettingsDialog() override;
-    virtual void dispose() override;
+    SwAuthenticationSettingsDialog(weld::Window* pParent, SwMailMergeConfigItem& rItem);
 };
 
 SwMailConfigPage::SwMailConfigPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
@@ -215,8 +210,8 @@ IMPL_LINK_NOARG(SwMailConfigPage, AuthenticationHdl, Button*, void)
 {
     m_pConfigItem->SetMailAddress(m_pAddressED->GetText());
 
-    ScopedVclPtrInstance< SwAuthenticationSettingsDialog > aDlg(this, *m_pConfigItem);
-    aDlg->Execute();
+    SwAuthenticationSettingsDialog aDlg(GetFrameWeld(), *m_pConfigItem);
+    aDlg.run();
 }
 
 IMPL_LINK_NOARG(SwMailConfigPage, TestHdl, Button*, void)
@@ -397,158 +392,124 @@ SwMailConfigDlg::SwMailConfigDlg(vcl::Window* pParent, SfxItemSet& rSet)
 }
 
 SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
-    SwMailConfigPage* pParent, SwMailMergeConfigItem& rItem)
-    : SfxModalDialog(pParent, "AuthenticationSettingsDialog", "modules/swriter/ui/authenticationsettingsdialog.ui")
-    , rConfigItem( rItem )
+    weld::Window* pParent, SwMailMergeConfigItem& rItem)
+    : GenericDialogController(pParent, "modules/swriter/ui/authenticationsettingsdialog.ui", "AuthenticationSettingsDialog")
+    , m_rConfigItem(rItem)
+    , m_xAuthenticationCB(m_xBuilder->weld_check_button("authentication"))
+    , m_xSeparateAuthenticationRB(m_xBuilder->weld_radio_button("separateauthentication"))
+    , m_xSMTPAfterPOPRB(m_xBuilder->weld_radio_button("smtpafterpop"))
+    , m_xOutgoingServerFT(m_xBuilder->weld_label("label1"))
+    , m_xUserNameFT(m_xBuilder->weld_label("username_label"))
+    , m_xUserNameED(m_xBuilder->weld_entry("username"))
+    , m_xOutPasswordFT(m_xBuilder->weld_label("outpassword_label"))
+    , m_xOutPasswordED(m_xBuilder->weld_entry("outpassword"))
+    , m_xIncomingServerFT(m_xBuilder->weld_label("label2"))
+    , m_xServerFT(m_xBuilder->weld_label("server_label"))
+    , m_xServerED(m_xBuilder->weld_entry("server"))
+    , m_xPortFT(m_xBuilder->weld_label("port_label"))
+    , m_xPortNF(m_xBuilder->weld_spin_button("port"))
+    , m_xProtocolFT(m_xBuilder->weld_label("label3"))
+    , m_xPOP3RB(m_xBuilder->weld_radio_button("pop3"))
+    , m_xIMAPRB(m_xBuilder->weld_radio_button("imap"))
+    , m_xInUsernameFT(m_xBuilder->weld_label("inusername_label"))
+    , m_xInUsernameED(m_xBuilder->weld_entry("inusername"))
+    , m_xInPasswordFT(m_xBuilder->weld_label("inpassword_label"))
+    , m_xInPasswordED(m_xBuilder->weld_entry("inpassword"))
+    , m_xOKPB(m_xBuilder->weld_button("ok"))
 {
-    get(m_pAuthenticationCB,"authentication");
-    get(m_pSeparateAuthenticationRB,"separateauthentication");
-    get(m_pSMTPAfterPOPRB,"smtpafterpop");
-    get(m_pOutgoingServerFT,"label1");
-    get(m_pUserNameFT,"username_label");
-    get(m_pUserNameED,"username");
-    get(m_pOutPasswordFT,"outpassword_label");
-    get(m_pOutPasswordED,"outpassword");
-    get(m_pIncomingServerFT,"label2");
-    get(m_pServerFT,"server_label");
-    get(m_pServerED,"server");
-    get(m_pPortFT,"port_label");
-    get(m_pPortNF,"port");
-    get(m_pProtocolFT,"label3");
-    get(m_pPOP3RB,"pop3");
-    get(m_pIMAPRB,"imap");
-    get(m_pInUsernameFT,"inusername_label");
-    get(m_pInUsernameED,"inusername");
-    get(m_pInPasswordFT,"inpassword_label");
-    get(m_pInPasswordED,"inpassword");
+    m_xAuthenticationCB->connect_toggled( LINK( this, SwAuthenticationSettingsDialog, CheckBoxHdl_Impl));
+    Link<weld::ToggleButton&,void> aRBLink = LINK( this, SwAuthenticationSettingsDialog, RadioButtonHdl_Impl );
+    m_xSeparateAuthenticationRB->connect_toggled( aRBLink );
+    m_xSMTPAfterPOPRB->connect_toggled( aRBLink );
+    m_xOKPB->connect_clicked( LINK( this, SwAuthenticationSettingsDialog, OKHdl_Impl));
+    Link<weld::Button&,void> aInServerLink = LINK( this, SwAuthenticationSettingsDialog, InServerHdl_Impl );
+    m_xPOP3RB->connect_clicked( aInServerLink );
+    m_xIMAPRB->connect_clicked( aInServerLink );
 
-    get(m_pOKPB,"ok");
-
-    m_pAuthenticationCB->SetClickHdl( LINK( this, SwAuthenticationSettingsDialog, CheckBoxHdl_Impl));
-    Link<Button*,void> aRBLink = LINK( this, SwAuthenticationSettingsDialog, RadioButtonHdl_Impl );
-    m_pSeparateAuthenticationRB->SetClickHdl( aRBLink );
-    m_pSMTPAfterPOPRB->SetClickHdl( aRBLink );
-    m_pOKPB->SetClickHdl( LINK( this, SwAuthenticationSettingsDialog, OKHdl_Impl));
-    Link<Button*,void> aInServerLink = LINK( this, SwAuthenticationSettingsDialog, InServerHdl_Impl );
-    m_pPOP3RB->SetClickHdl( aInServerLink );
-    m_pIMAPRB->SetClickHdl( aInServerLink );
-
-    m_pAuthenticationCB->Check( rConfigItem.IsAuthentication() );
-    if(rConfigItem.IsSMTPAfterPOP())
-        m_pSMTPAfterPOPRB->Check();
+    m_xAuthenticationCB->set_active(m_rConfigItem.IsAuthentication());
+    if (m_rConfigItem.IsSMTPAfterPOP())
+        m_xSMTPAfterPOPRB->set_active(true);
     else
-        m_pSeparateAuthenticationRB->Check();
-    m_pUserNameED->SetText( rConfigItem.GetMailUserName() );
-    m_pOutPasswordED->SetText( rConfigItem.GetMailPassword() );
+        m_xSeparateAuthenticationRB->set_active(true);
+    m_xUserNameED->set_text(m_rConfigItem.GetMailUserName());
+    m_xOutPasswordED->set_text(m_rConfigItem.GetMailPassword());
 
-    m_pServerED->SetText( rConfigItem.GetInServerName() );
-    m_pPortNF->SetValue( rConfigItem.GetInServerPort() );
-    if(rConfigItem.IsInServerPOP())
-        m_pPOP3RB->Check();
+    m_xServerED->set_text(m_rConfigItem.GetInServerName());
+    m_xPortNF->set_value(m_rConfigItem.GetInServerPort());
+    if (m_rConfigItem.IsInServerPOP())
+        m_xPOP3RB->set_active(true);
     else
-        m_pIMAPRB->Check();
-    m_pInUsernameED->SetText( rConfigItem.GetInServerUserName());
-    m_pInPasswordED->SetText( rConfigItem.GetInServerPassword() );
+        m_xIMAPRB->set_active(true);
+    m_xInUsernameED->set_text(m_rConfigItem.GetInServerUserName());
+    m_xInPasswordED->set_text(m_rConfigItem.GetInServerPassword());
 
-    CheckBoxHdl_Impl( m_pAuthenticationCB );
+    CheckBoxHdl_Impl(*m_xAuthenticationCB);
 }
 
-SwAuthenticationSettingsDialog::~SwAuthenticationSettingsDialog()
+IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, OKHdl_Impl, weld::Button&, void)
 {
-    disposeOnce();
+    m_rConfigItem.SetAuthentication( m_xAuthenticationCB->get_active() );
+    m_rConfigItem.SetSMTPAfterPOP(m_xSMTPAfterPOPRB->get_active());
+    m_rConfigItem.SetMailUserName(m_xUserNameED->get_text());
+    m_rConfigItem.SetMailPassword(m_xOutPasswordED->get_text());
+    m_rConfigItem.SetInServerName(m_xServerED->get_text());
+    m_rConfigItem.SetInServerPort(m_xPortNF->get_value());
+    m_rConfigItem.SetInServerPOP(m_xPOP3RB->get_active());
+    m_rConfigItem.SetInServerUserName(m_xInUsernameED->get_text());
+    m_rConfigItem.SetInServerPassword(m_xInPasswordED->get_text());
+    m_xDialog->response(RET_OK);
 }
 
-void SwAuthenticationSettingsDialog::dispose()
+IMPL_LINK( SwAuthenticationSettingsDialog, CheckBoxHdl_Impl, weld::ToggleButton&, rBox, void)
 {
-    m_pAuthenticationCB.clear();
-    m_pSeparateAuthenticationRB.clear();
-    m_pSMTPAfterPOPRB.clear();
-    m_pOutgoingServerFT.clear();
-    m_pUserNameFT.clear();
-    m_pUserNameED.clear();
-    m_pOutPasswordFT.clear();
-    m_pOutPasswordED.clear();
-    m_pIncomingServerFT.clear();
-    m_pServerFT.clear();
-    m_pServerED.clear();
-    m_pPortFT.clear();
-    m_pPortNF.clear();
-    m_pProtocolFT.clear();
-    m_pPOP3RB.clear();
-    m_pIMAPRB.clear();
-    m_pInUsernameFT.clear();
-    m_pInUsernameED.clear();
-    m_pInPasswordFT.clear();
-    m_pInPasswordED.clear();
-    m_pOKPB.clear();
-    SfxModalDialog::dispose();
+    bool bChecked = rBox.get_active();
+    m_xSeparateAuthenticationRB->set_sensitive(bChecked);
+    m_xSMTPAfterPOPRB->set_sensitive(bChecked);
+    RadioButtonHdl_Impl(*m_xSeparateAuthenticationRB);
 }
 
-IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, OKHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl, weld::ToggleButton&, void)
 {
-    rConfigItem.SetAuthentication( m_pAuthenticationCB->IsChecked() );
-    rConfigItem.SetSMTPAfterPOP(m_pSMTPAfterPOPRB->IsChecked());
-    rConfigItem.SetMailUserName(m_pUserNameED->GetText());
-    rConfigItem.SetMailPassword(m_pOutPasswordED->GetText());
-    rConfigItem.SetInServerName(m_pServerED->GetText());
-    rConfigItem.SetInServerPort(sal::static_int_cast< sal_Int16, sal_Int64 >(m_pPortNF->GetValue( ) ));
-    rConfigItem.SetInServerPOP(m_pPOP3RB->IsChecked());
-    rConfigItem.SetInServerUserName(m_pInUsernameED->GetText());
-
-    rConfigItem.SetInServerPassword(m_pInPasswordED->GetText());
-    EndDialog(RET_OK);
-}
-
-IMPL_LINK( SwAuthenticationSettingsDialog, CheckBoxHdl_Impl, Button*, pBox, void)
-{
-    bool bChecked = static_cast<CheckBox*>(pBox)->IsChecked();
-    m_pSeparateAuthenticationRB->Enable(bChecked);
-    m_pSMTPAfterPOPRB->Enable(bChecked);
-    RadioButtonHdl_Impl( nullptr );
-}
-
-IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl, Button*, void)
-{
-    bool bSeparate = m_pSeparateAuthenticationRB->IsChecked();
-    bool bIsEnabled = m_pSeparateAuthenticationRB->IsEnabled();
+    bool bSeparate = m_xSeparateAuthenticationRB->get_active();
+    bool bIsEnabled = m_xSeparateAuthenticationRB->get_sensitive();
     bool bNotSeparate = !bSeparate && bIsEnabled;
     bSeparate &= bIsEnabled;
 
-    if ( bSeparate && m_pUserNameED->GetText().isEmpty() )
-        m_pUserNameED->SetText( rConfigItem.GetMailAddress() );
-    else if ( !bSeparate && m_pUserNameED->GetText() == rConfigItem.GetMailAddress() )
-        m_pUserNameED->SetText("");
+    if (bSeparate && m_xUserNameED->get_text().isEmpty())
+        m_xUserNameED->set_text(m_rConfigItem.GetMailAddress());
+    else if (!bSeparate && m_xUserNameED->get_text() == m_rConfigItem.GetMailAddress())
+        m_xUserNameED->set_text("");
 
-    if ( bNotSeparate && m_pInUsernameED->GetText().isEmpty() )
-        m_pInUsernameED->SetText( rConfigItem.GetMailAddress() );
-    else if ( !bNotSeparate && m_pInUsernameED->GetText() == rConfigItem.GetMailAddress() )
-        m_pInUsernameED->SetText("");
+    if (bNotSeparate && m_xInUsernameED->get_text().isEmpty())
+        m_xInUsernameED->set_text(m_rConfigItem.GetMailAddress());
+    else if (!bNotSeparate && m_xInUsernameED->get_text() == m_rConfigItem.GetMailAddress())
+        m_xInUsernameED->set_text("");
 
-    m_pOutgoingServerFT->Enable(bSeparate);
-    m_pUserNameFT->Enable(bSeparate);
-    m_pUserNameED->Enable(bSeparate);
-    m_pOutPasswordFT->Enable(bSeparate);
-    m_pOutPasswordED->Enable(bSeparate);
+    m_xOutgoingServerFT->set_sensitive(bSeparate);
+    m_xUserNameFT->set_sensitive(bSeparate);
+    m_xUserNameED->set_sensitive(bSeparate);
+    m_xOutPasswordFT->set_sensitive(bSeparate);
+    m_xOutPasswordED->set_sensitive(bSeparate);
 
-    m_pIncomingServerFT->Enable(bNotSeparate);
-    m_pServerFT->Enable(bNotSeparate);
-    m_pServerED->Enable(bNotSeparate);
-    m_pPortFT->Enable(bNotSeparate);
-    m_pPortNF->Enable(bNotSeparate);
-    m_pInUsernameFT->Enable(bNotSeparate);
-    m_pInUsernameED->Enable(bNotSeparate);
-    m_pProtocolFT->Enable(bNotSeparate);
-    m_pPOP3RB->Enable(bNotSeparate);
-    m_pIMAPRB->Enable(bNotSeparate);
-    m_pInPasswordFT->Enable(bNotSeparate);
-    m_pInPasswordED->Enable(bNotSeparate);
+    m_xIncomingServerFT->set_sensitive(bNotSeparate);
+    m_xServerFT->set_sensitive(bNotSeparate);
+    m_xServerED->set_sensitive(bNotSeparate);
+    m_xPortFT->set_sensitive(bNotSeparate);
+    m_xPortNF->set_sensitive(bNotSeparate);
+    m_xInUsernameFT->set_sensitive(bNotSeparate);
+    m_xInUsernameED->set_sensitive(bNotSeparate);
+    m_xProtocolFT->set_sensitive(bNotSeparate);
+    m_xPOP3RB->set_sensitive(bNotSeparate);
+    m_xIMAPRB->set_sensitive(bNotSeparate);
+    m_xInPasswordFT->set_sensitive(bNotSeparate);
+    m_xInPasswordED->set_sensitive(bNotSeparate);
 }
 
-IMPL_LINK_NOARG( SwAuthenticationSettingsDialog, InServerHdl_Impl, Button*, void)
+IMPL_LINK_NOARG( SwAuthenticationSettingsDialog, InServerHdl_Impl, weld::Button&, void)
 {
-    bool bPOP = m_pPOP3RB->IsChecked();
-    rConfigItem.SetInServerPOP(bPOP);
-    m_pPortNF->SetValue(rConfigItem.GetInServerPort());
+    bool bPOP = m_xPOP3RB->get_active();
+    m_rConfigItem.SetInServerPOP(bPOP);
+    m_xPortNF->set_value(m_rConfigItem.GetInServerPort());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
