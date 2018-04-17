@@ -1,0 +1,35 @@
+# https://ssl.icu-project.org/trac/ticket/13709
+# Werror=shadow fails for unistr.h
+diff -ur icu.org/source/common/unicode/unistr.h icu/source/common/unicode/unistr.h
+--- icu.org/source/common/unicode/unistr.h	2018-03-26 15:38:29.000000000 +0200
++++ icu/source/common/unicode/unistr.h	2018-04-18 10:44:16.321188314 +0200
+@@ -3053,11 +3053,11 @@
+    * uint16_t * constructor.
+    * Delegates to UnicodeString(const char16_t *, int32_t).
+    * @param text UTF-16 string
+-   * @param length string length
++   * @param textLength string length
+    * @stable ICU 59
+    */
+-  UnicodeString(const uint16_t *text, int32_t length) :
+-      UnicodeString(ConstChar16Ptr(text), length) {}
++  UnicodeString(const uint16_t *text, int32_t textLength) :
++      UnicodeString(ConstChar16Ptr(text), textLength) {}
+ #endif
+ 
+ #if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
+@@ -3066,11 +3066,11 @@
+    * (Only defined if U_SIZEOF_WCHAR_T==2.)
+    * Delegates to UnicodeString(const char16_t *, int32_t).
+    * @param text NUL-terminated UTF-16 string
+-   * @param length string length
++   * @param textLength string length
+    * @stable ICU 59
+    */
+-  UnicodeString(const wchar_t *text, int32_t length) :
+-      UnicodeString(ConstChar16Ptr(text), length) {}
++  UnicodeString(const wchar_t *text, int32_t textLength) :
++      UnicodeString(ConstChar16Ptr(text), textLength) {}
+ #endif
+ 
+   /**
