@@ -1986,7 +1986,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         nCenterX = nCoordWidth / 2;
                     if ( nCenterY == 2 )
                         nCenterY = nCoordHeight / 2;
-                    if ( ( nPositionY >= 0x256 ) || ( nPositionY <= 0x107 ) )   // position y
+                    if ((nPositionY >= 0x256 || nPositionY <= 0x107) && i < sizeof(sal_uInt32) * 8)   // position y
                         nAdjustmentsWhichNeedsToBeConverted |= ( 1U << i );
                     EnhancedCustomShapeParameterPair aPolar;
                     EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPolar.First,  nCenterX, bool( nFlags & SvxMSDffHandleFlags::CENTER_X_IS_SPECIAL ), true  );
