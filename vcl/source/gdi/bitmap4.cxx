@@ -17,12 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
-#include <stdlib.h>
 #include <osl/diagnose.h>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/BitmapGaussianSeperableBlurFilter.hxx>
+
 #include <bitmapwriteaccess.hxx>
+
+#include <memory>
+#include <stdlib.h>
 
 #define S2(a,b)             { long t; if( ( t = b - a ) < 0 ) { a += t; b -= t; } }
 #define MN3(a,b,c)          S2(a,b); S2(a,c);
@@ -51,7 +54,9 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
             // Blur for positive values of mnRadius
             if (pFilterParam->mnRadius > 0.0)
             {
-                bRet = ImplSeparableBlurFilter(pFilterParam->mnRadius);
+                BitmapEx aBmpEx(*this);
+                bRet = BitmapFilter::Filter(aBmpEx, BitmapGaussianSeperableBlurFilter(pFilterParam->mnRadius));
+                *this = aBmpEx.GetBitmap();
             }
             // Unsharpen Mask for negative values of mnRadius
             else if (pFilterParam->mnRadius < 0.0)
@@ -1131,75 +1136,6 @@ void Bitmap::ImplBlurContributions( const int aSize, const int aNumberOfContribu
     }
 }
 
-// Separable Gaussian Blur
-
-// Separable Gaussian Blur filter and accepts a blur radius
-// as a parameter so the user can change the strength of the blur.
-// Radius of 1.0 is 3 * standard deviation of gauss function.
-
-// Separable Blur implementation uses 2x separable 1D convolution
-// to process the image.
-bool Bitmap::ImplSeparableBlurFilter(const double radius)
-{
-    const long  nWidth = GetSizePixel().Width();
-    const long  nHeight = GetSizePixel().Height();
-
-    // Prepare Blur Vector
-    int aNumberOfContributions;
-    double* pBlurVector = MakeBlurKernel(radius, aNumberOfContributions);
-
-    double* pWeights;
-    int* pPixels;
-    int* pCount;
-
-    // Do horizontal filtering
-    ImplBlurContributions( nWidth, aNumberOfContributions, pBlurVector, pWeights, pPixels, pCount);
-
-    ScopedReadAccess pReadAcc(*this);
-
-    // switch coordinates as convolution pass transposes result
-    Bitmap aNewBitmap( Size( nHeight, nWidth ), 24 );
-
-    bool bResult = ImplConvolutionPass( aNewBitmap, pReadAcc.get(), aNumberOfContributions, pWeights, pPixels, pCount );
-
-    // Cleanup
-    pReadAcc.reset();
-    delete[] pWeights;
-    delete[] pPixels;
-    delete[] pCount;
-
-    if ( !bResult )
-    {
-        delete[] pBlurVector;
-        return bResult;
-    }
-
-    // Swap current bitmap with new bitmap
-    ReassignWithSize(aNewBitmap);
-
-    // Do vertical filtering
-    ImplBlurContributions(nHeight, aNumberOfContributions, pBlurVector, pWeights, pPixels, pCount );
-
-    pReadAcc = ScopedReadAccess(*this);
-    aNewBitmap = Bitmap( Size( nWidth, nHeight ), 24 );
-    bResult = ImplConvolutionPass( aNewBitmap, pReadAcc.get(), aNumberOfContributions, pWeights, pPixels, pCount );
-
-    // Cleanup
-    pReadAcc.reset();
-    delete[] pWeights;
-    delete[] pCount;
-    delete[] pPixels;
-    delete[] pBlurVector;
-
-    if ( !bResult )
-        return bResult;
-
-    // Swap current bitmap with new bitmap
-    ReassignWithSize(aNewBitmap);
-
-    return true;
-}
-
 // Separable Unsharpen Mask filter is actually a subtracted blurred
 // image from the original image.
 bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
@@ -1207,7 +1143,10 @@ bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
     const long  nHeight = GetSizePixel().Height();
 
     Bitmap aBlur( *this );
-    aBlur.ImplSeparableBlurFilter(-radius);
+    BitmapEx aBlurEx(aBlur);
+
+    BitmapFilter::Filter(aBlurEx, BitmapGaussianSeperableBlurFilter(-radius));
+    aBlur = aBlurEx.GetBitmap();
 
     // Amount of unsharpening effect on image - currently set to a fixed value
     double aAmount = 2.0;
