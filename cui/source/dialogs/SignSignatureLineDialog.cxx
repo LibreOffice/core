@@ -56,12 +56,13 @@ SignSignatureLineDialog::SignSignatureLineDialog(weld::Widget* pParent, Referenc
     , m_xLabelHint(m_xBuilder->weld_label("label_hint"))
     , m_xLabelHintText(m_xBuilder->weld_label("label_hint_text"))
     , m_xLabelAddComment(m_xBuilder->weld_label("label_add_comment"))
+    , m_bShowSignDate(false)
 {
     Reference<container::XIndexAccess> xIndexAccess(m_xModel->getCurrentSelection(),
                                                     UNO_QUERY_THROW);
     m_xShapeProperties.set(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
 
-    bool bIsSignatureLine;
+    bool bIsSignatureLine(false);
     m_xShapeProperties->getPropertyValue("IsSignatureLine") >>= bIsSignatureLine;
     if (!bIsSignatureLine)
     {
