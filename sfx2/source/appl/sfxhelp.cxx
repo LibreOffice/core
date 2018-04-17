@@ -909,8 +909,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
         LanguageTag aLangTag = Application::GetSettings().GetUILanguageTag();
         OUString sLocaleString = SvtLanguageTable::GetLanguageString( aLangTag.getLanguageType() );
         OUString sPrimText = xQueryBox->get_primary_text();
-        xQueryBox->set_primary_text(Translate::GetReadStringHook()(sPrimText).replaceAll("$UILOCALE", sLocaleString));
-        xQueryBox->set_title(Translate::GetReadStringHook()(xQueryBox->get_title()));
+        xQueryBox->set_primary_text(sPrimText.replaceAll("$UILOCALE", sLocaleString));
         short OnlineHelpBox = xQueryBox->run();
 
         if(OnlineHelpBox == RET_OK)
@@ -1056,8 +1055,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
         LanguageTag aLangTag = Application::GetSettings().GetUILanguageTag();
         OUString sLocaleString = SvtLanguageTable::GetLanguageString( aLangTag.getLanguageType() );
         OUString sPrimText = xQueryBox->get_primary_text();
-        xQueryBox->set_primary_text(Translate::GetReadStringHook()(sPrimText).replaceAll("$UILOCALE", sLocaleString));
-        xQueryBox->set_title(Translate::GetReadStringHook()(xQueryBox->get_title()));
+        xQueryBox->set_primary_text(sPrimText.replaceAll("$UILOCALE", sLocaleString));
         xQueryBox->connect_help(LINK(nullptr, NoHelpErrorBox, HelpRequestHdl));
         short OnlineHelpBox = xQueryBox->run();
         xQueryBox->hide();

@@ -313,13 +313,10 @@ namespace
 
     class LicenseDialog : public weld::GenericDialogController
     {
-        std::unique_ptr<weld::Label> m_xLabel;
     public:
         LicenseDialog(weld::Window* pParent)
             : GenericDialogController(pParent, "sfx/ui/licensedialog.ui",  "LicenseDialog")
-            , m_xLabel(m_xBuilder->weld_label("label"))
         {
-            m_xLabel->set_label(Translate::GetReadStringHook()(m_xLabel->get_label()));
         }
 
         short execute()
@@ -337,7 +334,6 @@ namespace
         SafeModeQueryDialog(weld::Window* pParent)
             : MessageDialogController(pParent, "sfx/ui/safemodequerydialog.ui", "SafeModeQueryDialog")
         {
-            m_xDialog->set_primary_text(Translate::GetReadStringHook()(m_xDialog->get_primary_text()));
         }
 
         short execute()

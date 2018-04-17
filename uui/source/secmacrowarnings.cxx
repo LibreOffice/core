@@ -74,8 +74,6 @@ MacroWarning::MacroWarning(weld::Window* pParent, bool _bWithSignatures)
     , mbShowSignatures       ( _bWithSignatures )
     , mnActSecLevel          ( 0 )
 {
-    m_xDialog->set_title(Translate::GetReadStringHook()(m_xDialog->get_title()));
-
     InitControls();
 
     mxEnableBtn->connect_clicked(LINK(this, MacroWarning, EnableBtnHdl));
