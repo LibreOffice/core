@@ -37,6 +37,8 @@
 #include <svx/algitem.hxx>
 #include <svx/dialmgr.hxx>
 #include <editeng/itemtype.hxx>
+#include <editeng/editrids.hrc>
+#include <editeng/eerdll.hxx>
 #include <svx/unomid.hxx>
 
 using namespace ::com::sun::star;

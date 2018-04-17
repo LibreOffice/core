@@ -48,6 +48,8 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/hngpnctitem.hxx>
 #include <editeng/itemtype.hxx>
+#include <editeng/editrids.hrc>
+#include <editeng/eerdll.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svx/pageitem.hxx>

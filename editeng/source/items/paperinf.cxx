@@ -19,9 +19,7 @@
 
 #include <limits.h>
 #include <vcl/svapp.hxx>
-#include <editeng/editrids.hrc>
 #include <editeng/paperinf.hxx>
-#include <editeng/eerdll.hxx>
 
 /*--------------------------------------------------------------------
     Description:    Is the printer valid

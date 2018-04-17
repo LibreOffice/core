@@ -27,8 +27,6 @@
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
 #include <unotools/pathoptions.hxx>
-#include <editeng/editrids.hrc>
-#include <editeng/eerdll.hxx>
 #include <vcl/builderfactory.hxx>
 
 #define HDL(hdl) LINK(this,ScTabBgColorDlg,hdl)

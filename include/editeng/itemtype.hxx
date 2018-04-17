@@ -19,9 +19,6 @@
 #ifndef INCLUDED_EDITENG_ITEMTYPE_HXX
 #define INCLUDED_EDITENG_ITEMTYPE_HXX
 
-#include <editeng/editrids.hrc>
-#include <editeng/eerdll.hxx>
-
 // forward ---------------------------------------------------------------
 #include <rtl/ustring.hxx>
 #include <tools/bigint.hxx>
