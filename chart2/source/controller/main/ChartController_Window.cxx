@@ -66,6 +66,7 @@
 #include <toolkit/awt/vclxmenu.hxx>
 
 #include <sfx2/viewsh.hxx>
+#include <sfx2/ipclient.hxx>
 #include <svx/svxids.hrc>
 #include <svx/ActionDescriptionProvider.hxx>
 #include <svx/obj3d.hxx>
@@ -1258,6 +1259,19 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
         {
             PopupMenu* pPopupMenu = static_cast<PopupMenu*>(VCLXMenu::GetImplementation(xPopupMenu)->GetMenu());
             pPopupMenu->SetLOKNotifier(SfxViewShell::Current());
+
+            // the context menu expects a position related to the document window,
+            // not to the chart window
+            SfxInPlaceClient* pIPClient = SfxViewShell::Current()->GetIPClient();
+            if (pIPClient)
+            {
+                vcl::Window* pRootWin = pIPClient->GetEditWin();
+                if (pRootWin)
+                {
+                    Point aOffset = pChartWindow->GetOffsetPixelFrom(*pRootWin);
+                    aPos += aOffset;
+                }
+            }
         }
 
         xPopupController->setPopupMenu( xPopupMenu );
