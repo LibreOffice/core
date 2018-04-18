@@ -340,6 +340,10 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
             nWidth = GetAbsWidth( nCol, nColSpan );
     }
 
+    if (rWrt.mbReqIF)
+        // ReqIF implies strict XHTML: no width for <td>.
+        bOutWidth = false;
+
     long nHeight = pCell->GetHeight() > 0
                         ? GetAbsHeight( pCell->GetHeight(), nRow, nRowSpan )
                         : 0;
@@ -734,8 +738,8 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
             const SwWriteTableCol *pColumn = m_aCols[nCol];
 
-            OStringBuffer sOutStr;
-            sOutStr.append('<').append(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_col);
+            HtmlWriter html(rWrt.Strm(), rWrt.maNamespace);
+            html.start(OOO_STRING_SVTOOLS_HTML_col);
 
             sal_uInt32 nWidth;
             bool bRel;
@@ -750,14 +754,11 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
                 nWidth = bRel ? GetRelWidth(nCol,1) : GetAbsWidth(nCol,1);
             }
 
-            sOutStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
-                append("=\"");
             if( bRel )
-                sOutStr.append(static_cast<sal_Int32>(nWidth)).append('*');
+                html.attribute(OOO_STRING_SVTOOLS_HTML_O_width, OString::number(nWidth) + "*");
             else
-                sOutStr.append(static_cast<sal_Int32>(SwHTMLWriter::ToPixel(nWidth,false)));
-            sOutStr.append("\">");
-            rWrt.Strm().WriteCharPtr( sOutStr.makeStringAndClear().getStr() );
+                html.attribute(OOO_STRING_SVTOOLS_HTML_O_width, OString::number(SwHTMLWriter::ToPixel(nWidth,false)));
+            html.end();
 
             if( bColGroups && pColumn->bRightBorder && nCol<nCols-1 )
             {
