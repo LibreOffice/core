@@ -15150,7 +15150,6 @@ sw/inc/viscrs.hxx
 sw/inc/wdocsh.hxx
 sw/qa/core/Test-BigPtrArray.cxx
 sw/qa/core/filters-test.cxx
-sw/qa/core/layout-test.cxx
 sw/qa/core/macros-test.cxx
 sw/qa/core/test_ToxLinkProcessor.cxx
 sw/qa/core/test_ToxMiscTest.cxx
