@@ -10,7 +10,7 @@
 #include "EPUBExportUIComponent.hxx"
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-
+#include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclptr.hxx>
@@ -72,12 +72,19 @@ void EPUBExportUIComponent::setTitle(const OUString &/*rTitle*/)
 {
 }
 
+void SAL_CALL EPUBExportUIComponent::initialize(const uno::Sequence<uno::Any>& rArguments)
+{
+    ::comphelper::NamedValueCollection aProperties(rArguments);
+    if (aProperties.has("ParentWindow"))
+        aProperties.get("ParentWindow") >>= mxDialogParent;
+}
+
 sal_Int16 EPUBExportUIComponent::execute()
 {
     SolarMutexGuard aGuard;
 
-    ScopedVclPtrInstance<EPUBExportDialog> pDialog(Application::GetDefDialogParent(), maFilterData, mxContext, mxSourceDocument);
-    if (pDialog->Execute() == RET_OK)
+    EPUBExportDialog aDialog(Application::GetFrameWeld(mxDialogParent), maFilterData, mxContext, mxSourceDocument);
+    if (aDialog.run() == RET_OK)
         return ui::dialogs::ExecutableDialogResults::OK;
     return ui::dialogs::ExecutableDialogResults::CANCEL;
 }
