@@ -126,6 +126,19 @@ DECLARE_HTMLIMPORT_TEST(testInlinedImagesPageAndParagraph, "PageAndParagraphFill
     }
 }
 
+DECLARE_HTMLIMPORT_TEST(testImageSize, "image-size.html")
+{
+    awt::Size aSize = getShape(1)->getSize();
+    OutputDevice* pDevice = Application::GetDefaultDevice();
+    Size aPixelSize(200, 400);
+    Size aExpected = pDevice->PixelToLogic(aPixelSize, MapMode(MAP_100TH_MM));
+
+    // This was 1997, i.e. a hardcoded default, we did not look at the image
+    // header when the HTML markup declared no size.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aExpected.getWidth()), aSize.Width);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aExpected.getHeight()), aSize.Height);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
