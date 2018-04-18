@@ -1557,6 +1557,8 @@ public:
             gtk_menu_popup_at_rect(m_pMenu, gtk_widget_get_window(pWidget), &aRect, GDK_GRAVITY_NORTH_WEST, GDK_GRAVITY_NORTH_WEST, nullptr);
         }
         else
+#else
+        (void) rRect;
 #endif
         {
             guint nButton;
