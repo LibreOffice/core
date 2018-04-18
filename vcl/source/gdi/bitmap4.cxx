@@ -22,19 +22,12 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/BitmapSmoothenFilter.hxx>
 #include <vcl/BitmapSharpenFilter.hxx>
+#include <vcl/BitmapMedianFilter.hxx>
 
 #include <bitmapwriteaccess.hxx>
 
 #include <memory>
 #include <stdlib.h>
-
-#define S2(a,b)             { long t; if( ( t = b - a ) < 0 ) { a += t; b -= t; } }
-#define MN3(a,b,c)          S2(a,b); S2(a,c);
-#define MX3(a,b,c)          S2(b,c); S2(a,c);
-#define MNMX3(a,b,c)        MX3(a,b,c); S2(a,b);
-#define MNMX4(a,b,c,d)      S2(a,b); S2(c,d); S2(a,c); S2(b,d);
-#define MNMX5(a,b,c,d,e)    S2(a,b); S2(c,d); MN3(a,c,e); MX3(b,d,e);
-#define MNMX6(a,b,c,d,e,f)  S2(a,d); S2(b,e); S2(c,f); MN3(a,b,c); MX3(d,e,f);
 
 static inline sal_uInt8 lcl_getDuotoneColorComponent( sal_uInt8 base, sal_uInt16 color1, sal_uInt16 color2 )
 {
@@ -67,7 +60,11 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
         break;
 
         case BmpFilter::RemoveNoise:
-            bRet = ImplMedianFilter();
+        {
+            BitmapEx aBmpEx(*this);
+            bRet = BitmapFilter::Filter(aBmpEx, BitmapMedianFilter());
+            *this = aBmpEx.GetBitmap();
+        }
         break;
 
         case BmpFilter::SobelGrey:
@@ -106,166 +103,6 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
     return bRet;
 }
 
-
-bool Bitmap::ImplMedianFilter()
-{
-    ScopedReadAccess    pReadAcc(*this);
-    bool                bRet = false;
-
-    if( pReadAcc )
-    {
-        Bitmap              aNewBmp( GetSizePixel(), 24 );
-        BitmapScopedWriteAccess pWriteAcc(aNewBmp);
-
-        if( pWriteAcc )
-        {
-            const long      nWidth = pWriteAcc->Width(), nWidth2 = nWidth + 2;
-            const long      nHeight = pWriteAcc->Height(), nHeight2 = nHeight + 2;
-            long*           pColm = new long[ nWidth2 ];
-            long*           pRows = new long[ nHeight2 ];
-            BitmapColor*    pColRow1 = reinterpret_cast<BitmapColor*>(new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ]);
-            BitmapColor*    pColRow2 = reinterpret_cast<BitmapColor*>(new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ]);
-            BitmapColor*    pColRow3 = reinterpret_cast<BitmapColor*>(new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ]);
-            BitmapColor*    pRowTmp1 = pColRow1;
-            BitmapColor*    pRowTmp2 = pColRow2;
-            BitmapColor*    pRowTmp3 = pColRow3;
-            BitmapColor*    pColor;
-            long            nY, nX, i;
-            long            nR1, nR2, nR3, nR4, nR5, nR6, nR7, nR8, nR9;
-            long            nG1, nG2, nG3, nG4, nG5, nG6, nG7, nG8, nG9;
-            long            nB1, nB2, nB3, nB4, nB5, nB6, nB7, nB8, nB9;
-
-            // create column LUT
-            for( i = 0; i < nWidth2; i++ )
-                pColm[ i ] = ( i > 0 ) ? ( i - 1 ) : 0;
-
-            pColm[ nWidth + 1 ] = pColm[ nWidth ];
-
-            // create row LUT
-            for( i = 0; i < nHeight2; i++ )
-                pRows[ i ] = ( i > 0 ) ? ( i - 1 ) : 0;
-
-            pRows[ nHeight + 1 ] = pRows[ nHeight ];
-
-            // read first three rows of bitmap color
-            if (nHeight2 > 2)
-            {
-                for( i = 0; i < nWidth2; i++ )
-                {
-                    pColRow1[ i ] = pReadAcc->GetColor( pRows[ 0 ], pColm[ i ] );
-                    pColRow2[ i ] = pReadAcc->GetColor( pRows[ 1 ], pColm[ i ] );
-                    pColRow3[ i ] = pReadAcc->GetColor( pRows[ 2 ], pColm[ i ] );
-                }
-            }
-
-            // do median filtering
-            for( nY = 0; nY < nHeight; )
-            {
-                Scanline pScanline = pWriteAcc->GetScanline(nY);
-                for( nX = 0; nX < nWidth; nX++ )
-                {
-                    nR1 = ( pColor = pRowTmp1 + nX )->GetRed();
-                    nG1 = pColor->GetGreen();
-                    nB1 = pColor->GetBlue();
-                    nR2 = ( ++pColor )->GetRed();
-                    nG2 = pColor->GetGreen();
-                    nB2 = pColor->GetBlue();
-                    nR3 = ( ++pColor )->GetRed();
-                    nG3 = pColor->GetGreen();
-                    nB3 = pColor->GetBlue();
-
-                    nR4 = ( pColor = pRowTmp2 + nX )->GetRed();
-                    nG4 = pColor->GetGreen();
-                    nB4 = pColor->GetBlue();
-                    nR5 = ( ++pColor )->GetRed();
-                    nG5 = pColor->GetGreen();
-                    nB5 = pColor->GetBlue();
-                    nR6 = ( ++pColor )->GetRed();
-                    nG6 = pColor->GetGreen();
-                    nB6 = pColor->GetBlue();
-
-                    nR7 = ( pColor = pRowTmp3 + nX )->GetRed();
-                    nG7 = pColor->GetGreen();
-                    nB7 = pColor->GetBlue();
-                    nR8 = ( ++pColor )->GetRed();
-                    nG8 = pColor->GetGreen();
-                    nB8 = pColor->GetBlue();
-                    nR9 = ( ++pColor )->GetRed();
-                    nG9 = pColor->GetGreen();
-                    nB9 = pColor->GetBlue();
-
-                    MNMX6( nR1, nR2, nR3, nR4, nR5, nR6 );
-                    MNMX5( nR7, nR2, nR3, nR4, nR5 );
-                    MNMX4( nR8, nR2, nR3, nR4 );
-                    MNMX3( nR9, nR2, nR3 );
-
-                    MNMX6( nG1, nG2, nG3, nG4, nG5, nG6 );
-                    MNMX5( nG7, nG2, nG3, nG4, nG5 );
-                    MNMX4( nG8, nG2, nG3, nG4 );
-                    MNMX3( nG9, nG2, nG3 );
-
-                    MNMX6( nB1, nB2, nB3, nB4, nB5, nB6 );
-                    MNMX5( nB7, nB2, nB3, nB4, nB5 );
-                    MNMX4( nB8, nB2, nB3, nB4 );
-                    MNMX3( nB9, nB2, nB3 );
-
-                    // set destination color
-                    pWriteAcc->SetPixelOnData( pScanline, nX, BitmapColor( static_cast<sal_uInt8>(nR2), static_cast<sal_uInt8>(nG2), static_cast<sal_uInt8>(nB2) ) );
-                }
-
-                if( ++nY < nHeight )
-                {
-                    if( pRowTmp1 == pColRow1 )
-                    {
-                        pRowTmp1 = pColRow2;
-                        pRowTmp2 = pColRow3;
-                        pRowTmp3 = pColRow1;
-                    }
-                    else if( pRowTmp1 == pColRow2 )
-                    {
-                        pRowTmp1 = pColRow3;
-                        pRowTmp2 = pColRow1;
-                        pRowTmp3 = pColRow2;
-                    }
-                    else
-                    {
-                        pRowTmp1 = pColRow1;
-                        pRowTmp2 = pColRow2;
-                        pRowTmp3 = pColRow3;
-                    }
-
-                    for( i = 0; i < nWidth2; i++ )
-                        pRowTmp3[ i ] = pReadAcc->GetColor( pRows[ nY + 2 ], pColm[ i ] );
-                }
-            }
-
-            delete[] reinterpret_cast<sal_uInt8*>(pColRow1);
-            delete[] reinterpret_cast<sal_uInt8*>(pColRow2);
-            delete[] reinterpret_cast<sal_uInt8*>(pColRow3);
-            delete[] pColm;
-            delete[] pRows;
-
-            pWriteAcc.reset();
-
-            bRet = true;
-        }
-
-        pReadAcc.reset();
-
-        if( bRet )
-        {
-            const MapMode   aMap( maPrefMapMode );
-            const Size      aSize( maPrefSize );
-
-            *this = aNewBmp;
-
-            maPrefMapMode = aMap;
-            maPrefSize = aSize;
-        }
-    }
-
-    return bRet;
-}
 
 bool Bitmap::ImplSobelGrey()
 {

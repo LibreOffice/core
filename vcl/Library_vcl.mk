@@ -60,7 +60,7 @@ endif
 $(eval $(call gb_Library_use_sdk_api,vcl))
 
 $(eval $(call gb_Library_use_custom_headers,vcl,\
-	officecfg/registry \
+    officecfg/registry \
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
@@ -313,6 +313,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/bitmap \
     vcl/source/bitmap/bitmapfilter \
     vcl/source/bitmap/BitmapConvolutionMatrixFilter \
+    vcl/source/bitmap/BitmapMedianFilter \
     vcl/source/bitmap/BitmapInterpolateScaleFilter \
     vcl/source/bitmap/BitmapLightenFilter \
     vcl/source/bitmap/BitmapDisabledImageFilter \
