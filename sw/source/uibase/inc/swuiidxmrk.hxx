@@ -31,6 +31,7 @@
 #include <vcl/group.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <sfx2/childwin.hxx>
 #include <toxe.hxx>
@@ -216,7 +217,8 @@ class SwAuthorMarkPane
     DECL_LINK(CreateEntryHdl, Button*, void);
     DECL_LINK(CompEntryHdl, ListBox&, void);
     DECL_LINK(ChangeSourceHdl, Button*, void);
-    DECL_LINK(IsEntryAllowedHdl, Edit*, bool);
+    DECL_LINK(IsEditAllowedHdl, Edit*, bool);
+    DECL_LINK(IsEntryAllowedHdl, weld::Entry&, bool);
     DECL_LINK(EditModifyHdl, Edit&, void);
 
     void InitControls();
