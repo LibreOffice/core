@@ -345,13 +345,13 @@ ScUndoDeleteCells::ScUndoDeleteCells( ScDocShell* pNewDocShell,
     pScenarios( pNewScenarios ),
     eCmd( eNewCmd )
 {
-    if (eCmd == DEL_DELROWS)            // whole row?
+    if (eCmd == DelCellCmd::Rows)            // whole row?
     {
         aEffRange.aStart.SetCol(0);
         aEffRange.aEnd.SetCol(MAXCOL);
     }
 
-    if (eCmd == DEL_DELCOLS)            // whole column?
+    if (eCmd == DelCellCmd::Cols)            // whole column?
     {
         aEffRange.aStart.SetRow(0);
         aEffRange.aEnd.SetRow(MAXROW);
@@ -397,8 +397,8 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
 
     switch (eCmd)
     {
-        case DEL_DELROWS:
-        case DEL_CELLSUP:
+        case DelCellCmd::Rows:
+        case DelCellCmd::CellsUp:
             for( i=0; i<nCount; i++ )
             {
                 if (bUndo)
@@ -415,8 +415,8 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
                 }
             }
             break;
-        case DEL_DELCOLS:
-        case DEL_CELLSLEFT:
+        case DelCellCmd::Cols:
+        case DelCellCmd::CellsLeft:
             for( i=0; i<nCount; i++ )
             {
                 if (bUndo)
@@ -447,7 +447,7 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
     }
 
     ScRange aWorkRange( aEffRange );
-    if ( eCmd == DEL_CELLSLEFT )        // only "shift left" requires refresh of the moved area
+    if ( eCmd == DelCellCmd::CellsLeft )        // only "shift left" requires refresh of the moved area
         aWorkRange.aEnd.SetCol(MAXCOL);
 
     for( i=0; i<nCount; i++ )
@@ -460,9 +460,9 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
 
             if ( !bUndo )
             {
-                if ( eCmd==DEL_DELCOLS || eCmd==DEL_CELLSLEFT )
+                if ( eCmd==DelCellCmd::Cols || eCmd==DelCellCmd::CellsLeft )
                     aWorkRange.aEnd.SetCol(MAXCOL);
-                if ( eCmd==DEL_DELROWS || eCmd==DEL_CELLSUP )
+                if ( eCmd==DelCellCmd::Rows || eCmd==DelCellCmd::CellsUp )
                     aWorkRange.aEnd.SetRow(MAXROW);
                 ScMarkData aMarkData;
                 aMarkData.SelectOneTable( aWorkRange.aStart.Tab() );
@@ -483,11 +483,11 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
     PaintPartFlags nPaint = PaintPartFlags::Grid;
     switch (eCmd)
     {
-        case DEL_DELROWS:
+        case DelCellCmd::Rows:
             nPaint |= PaintPartFlags::Left;
             aWorkRange.aEnd.SetRow(MAXROW);
             break;
-        case DEL_CELLSUP:
+        case DelCellCmd::CellsUp:
             for( i=0; i<nCount; i++ )
             {
                 aWorkRange.aEnd.SetRow(MAXROW);
@@ -499,10 +499,10 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
                 }
             }
             break;
-        case DEL_DELCOLS:
+        case DelCellCmd::Cols:
             nPaint |= PaintPartFlags::Top;                // top bar
             SAL_FALLTHROUGH;
-        case DEL_CELLSLEFT:
+        case DelCellCmd::CellsLeft:
             for( i=0; i<nCount; i++ )
             {
                 aWorkRange.aEnd.SetCol(MAXCOL);     // to the far right
@@ -534,10 +534,10 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
     {
         if (comphelper::LibreOfficeKit::isActive())
         {
-            if (eCmd == DEL_DELCOLS || eCmd == DEL_CELLSLEFT)
+            if (eCmd == DelCellCmd::Cols || eCmd == DelCellCmd::CellsLeft)
                 ScTabViewShell::notifyAllViewsHeaderInvalidation(COLUMN_HEADER,  pViewShell->GetViewData().GetTabNo());
 
-            if (eCmd == DEL_DELROWS || eCmd == DEL_CELLSUP)
+            if (eCmd == DelCellCmd::Rows || eCmd == DelCellCmd::CellsUp)
                 ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER,  pViewShell->GetViewData().GetTabNo());
         }
 
@@ -767,7 +767,7 @@ void ScUndoDeleteMulti::Repeat(SfxRepeatTarget& rTarget)
 {
     // if single selection
     if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DeleteCells( DEL_DELROWS );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DeleteCells( DelCellCmd::Rows );
 }
 
 bool ScUndoDeleteMulti::CanRepeat(SfxRepeatTarget& rTarget) const

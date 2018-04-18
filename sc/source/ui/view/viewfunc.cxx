@@ -1650,11 +1650,11 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
 
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
         // #i94841# [Collaboration] if deleting rows is rejected, the content is sometimes wrong
-        if ( pDocSh->IsDocShared() && ( eCmd == DEL_DELROWS || eCmd == DEL_DELCOLS ) )
+        if ( pDocSh->IsDocShared() && ( eCmd == DelCellCmd::Rows || eCmd == DelCellCmd::Cols ) )
         {
             ScRange aDelRange( aRange.aStart );
             SCCOLROW nCount = 0;
-            if ( eCmd == DEL_DELROWS )
+            if ( eCmd == DelCellCmd::Rows )
             {
                 nCount = sal::static_int_cast< SCCOLROW >( aRange.aEnd.Row() - aRange.aStart.Row() + 1 );
             }
@@ -1678,9 +1678,9 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
         CellContentChanged();
         ResetAutoSpell();
 
-        if ( eCmd == DEL_DELROWS || eCmd == DEL_DELCOLS )
+        if ( eCmd == DelCellCmd::Rows || eCmd == DelCellCmd::Cols )
         {
-            OUString aOperation = ( eCmd == DEL_DELROWS) ?
+            OUString aOperation = ( eCmd == DelCellCmd::Rows) ?
               OUString("delete-rows"):
               OUString("delete-columns");
             HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, aRange, aOperation);
@@ -1689,7 +1689,7 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
         //  put cursor directly behind deleted range
         SCCOL nCurX = GetViewData().GetCurX();
         SCROW nCurY = GetViewData().GetCurY();
-        if ( eCmd==DEL_CELLSLEFT || eCmd==DEL_DELCOLS )
+        if ( eCmd==DelCellCmd::CellsLeft || eCmd==DelCellCmd::Cols )
             nCurX = aRange.aStart.Col();
         else
             nCurY = aRange.aStart.Row();
@@ -1697,18 +1697,18 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
 
         if (comphelper::LibreOfficeKit::isActive())
         {
-            if (eCmd == DEL_DELCOLS)
+            if (eCmd == DelCellCmd::Cols)
                 ScTabViewShell::notifyAllViewsHeaderInvalidation(COLUMN_HEADER, GetViewData().GetTabNo());
 
-            if (eCmd == DEL_DELROWS)
+            if (eCmd == DelCellCmd::Rows)
                 ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, GetViewData().GetTabNo());
         }
     }
     else
     {
-        if (eCmd == DEL_DELCOLS)
+        if (eCmd == DelCellCmd::Cols)
             DeleteMulti( false );
-        else if (eCmd == DEL_DELROWS)
+        else if (eCmd == DelCellCmd::Rows)
             DeleteMulti( true );
         else
             ErrorMessage(STR_NOMULTISELECT);

@@ -7128,14 +7128,14 @@ void SAL_CALL ScTableSheetObj::removeRange( const table::CellRangeAddress& rRang
     if ( pDocSh )
     {
         bool bDo = true;
-        DelCellCmd eCmd = DEL_NONE;
+        DelCellCmd eCmd = DelCellCmd::NONE;
         switch (nMode)
         {
             case sheet::CellDeleteMode_NONE:     bDo = false;           break;
-            case sheet::CellDeleteMode_UP:       eCmd = DEL_CELLSUP;    break;
-            case sheet::CellDeleteMode_LEFT:     eCmd = DEL_CELLSLEFT;  break;
-            case sheet::CellDeleteMode_ROWS:     eCmd = DEL_DELROWS;    break;
-            case sheet::CellDeleteMode_COLUMNS:  eCmd = DEL_DELCOLS;    break;
+            case sheet::CellDeleteMode_UP:       eCmd = DelCellCmd::CellsUp;    break;
+            case sheet::CellDeleteMode_LEFT:     eCmd = DelCellCmd::CellsLeft;  break;
+            case sheet::CellDeleteMode_ROWS:     eCmd = DelCellCmd::Rows;    break;
+            case sheet::CellDeleteMode_COLUMNS:  eCmd = DelCellCmd::Cols;    break;
             default:
                 OSL_FAIL("deleteCells: wrong mode");
                 bDo = false;

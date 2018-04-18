@@ -74,27 +74,27 @@ ScDeleteCellDlg::~ScDeleteCellDlg()
 
 DelCellCmd ScDeleteCellDlg::GetDelCellCmd() const
 {
-    DelCellCmd nReturn = DEL_NONE;
+    DelCellCmd nReturn = DelCellCmd::NONE;
 
     if ( m_xBtnCellsUp->get_active()   )
     {
         nDelItemChecked=0;
-        nReturn = DEL_CELLSUP;
+        nReturn = DelCellCmd::CellsUp;
     }
     else if ( m_xBtnCellsLeft->get_active() )
     {
         nDelItemChecked=1;
-        nReturn = DEL_CELLSLEFT;
+        nReturn = DelCellCmd::CellsLeft;
     }
     else if ( m_xBtnDelRows->get_active()   )
     {
         nDelItemChecked=2;
-        nReturn = DEL_DELROWS;
+        nReturn = DelCellCmd::Rows;
     }
     else if ( m_xBtnDelCols->get_active()   )
     {
         nDelItemChecked=3;
-        nReturn = DEL_DELCOLS;
+        nReturn = DelCellCmd::Cols;
     }
 
     return nReturn;

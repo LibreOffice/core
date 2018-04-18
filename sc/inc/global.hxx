@@ -288,13 +288,13 @@ enum CellType
         CELLTYPE_EDIT,
     };
 
-enum DelCellCmd
+enum class DelCellCmd
     {
-        DEL_CELLSUP,
-        DEL_CELLSLEFT,
-        DEL_DELROWS,
-        DEL_DELCOLS,
-        DEL_NONE
+        CellsUp,
+        CellsLeft,
+        Rows,
+        Cols,
+        NONE
     };
 
 enum InsCellCmd

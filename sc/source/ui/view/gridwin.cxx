@@ -4039,29 +4039,29 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
 
                 if ( bDone && meDragInsertMode != INS_NONE && bIsMove && nThisTab == nSourceTab )
                 {
-                    DelCellCmd eCmd = DEL_NONE;
+                    DelCellCmd eCmd = DelCellCmd::NONE;
                     if ( meDragInsertMode == INS_CELLSDOWN )
                     {
-                        eCmd = DEL_CELLSUP;
+                        eCmd = DelCellCmd::CellsUp;
                     }
                     else if ( meDragInsertMode == INS_CELLSRIGHT )
                     {
-                        eCmd = DEL_CELLSLEFT;
+                        eCmd = DelCellCmd::CellsLeft;
                     }
 
-                    if ( ( eCmd == DEL_CELLSUP  && nDestPosX == aSource.aStart.Col() ) ||
-                         ( eCmd == DEL_CELLSLEFT && nDestPosY == aSource.aStart.Row() ) )
+                    if ( ( eCmd == DelCellCmd::CellsUp  && nDestPosX == aSource.aStart.Col() ) ||
+                         ( eCmd == DelCellCmd::CellsLeft && nDestPosY == aSource.aStart.Row() ) )
                     {
                         // call with bApi = sal_True to avoid error messages in drop handler
                         bDone = pDocSh->GetDocFunc().DeleteCells( aSource, nullptr, eCmd, true /*bApi*/ );
                         if ( bDone )
                         {
-                            if ( eCmd == DEL_CELLSUP && nDestPosY > aSource.aEnd.Row() )
+                            if ( eCmd == DelCellCmd::CellsUp && nDestPosY > aSource.aEnd.Row() )
                             {
                                 ScRange aErrorRange( ScAddress::UNINITIALIZED );
                                 bDone = aDest.Move( 0, -nSizeY, 0, aErrorRange, pThisDoc );
                             }
-                            else if ( eCmd == DEL_CELLSLEFT && nDestPosX > aSource.aEnd.Col() )
+                            else if ( eCmd == DelCellCmd::CellsLeft && nDestPosX > aSource.aEnd.Col() )
                             {
                                 ScRange aErrorRange( ScAddress::UNINITIALIZED );
                                 bDone = aDest.Move( -nSizeX, 0, 0, aErrorRange, pThisDoc );
