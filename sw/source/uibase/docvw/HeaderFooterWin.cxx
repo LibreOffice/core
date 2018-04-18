@@ -10,7 +10,6 @@
 #include <app.hrc>
 #include <strings.hrc>
 #include <globals.hrc>
-#include <svtools/strings.hrc>
 
 #include <cmdid.h>
 #include <DashedLine.hxx>
@@ -39,7 +38,6 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <editeng/boxitem.hxx>
-#include <svtools/svtresid.hxx>
 #include <svx/hdft.hxx>
 #include <sfx2/dispatch.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>

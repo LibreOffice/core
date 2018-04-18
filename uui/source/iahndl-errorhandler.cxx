@@ -27,7 +27,6 @@
 #include <com/sun/star/task/XInteractionRetry.hpp>
 
 #include <vcl/errinf.hxx>
-#include <svtools/strings.hrc>
 #include <svx/svxerr.hxx>
 #include <svx/dialogs.hrc>
 #include <unotools/resmgr.hxx>

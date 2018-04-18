@@ -43,7 +43,6 @@
 
 #include <fpicker/strings.hrc>
 #include <svtools/helpids.h>
-#include <svtools/strings.hrc>
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include "asyncfilepicker.hxx"

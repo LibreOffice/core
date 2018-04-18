@@ -37,7 +37,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <svtools/strings.hrc>
 #include <svtools/insdlg.hxx>
 #include <sfx2/request.hxx>
 #include <svl/globalnameitem.hxx>

@@ -101,7 +101,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
 #include <basic/basmgr.hxx>
-#include <svtools/strings.hrc>
 #include <sfx2/event.hxx>
 #include <eventsupplier.hxx>
 #include <sfx2/evntconf.hxx>

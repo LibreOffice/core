@@ -63,7 +63,6 @@
 #include <appdata.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <basic/basmgr.hxx>
-#include <svtools/strings.hrc>
 #include <unotools/configmgr.hxx>
 #include <sorgitm.hxx>
 #include <appbaslib.hxx>
