@@ -1031,7 +1031,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             if ( pDel->IsTopDelete() )
                             {
                                 aSourceRange = pDel->GetOverAllRange().MakeRange();
-                                (void)GetDocFunc().DeleteCells( aSourceRange, nullptr, DEL_DELROWS, false );
+                                (void)GetDocFunc().DeleteCells( aSourceRange, nullptr, DelCellCmd::Rows, false );
 
                                 // #i101099# [Collaboration] Changes are not correctly shown
                                 if ( bShared )
@@ -1051,7 +1051,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             if ( pDel->IsTopDelete() && !pDel->IsTabDeleteCol() )
                             {   // deleted table contains deleted cols, which are not
                                 aSourceRange = pDel->GetOverAllRange().MakeRange();
-                                (void)GetDocFunc().DeleteCells( aSourceRange, nullptr, DEL_DELCOLS, false );
+                                (void)GetDocFunc().DeleteCells( aSourceRange, nullptr, DelCellCmd::Cols, false );
                             }
                         }
                         break;

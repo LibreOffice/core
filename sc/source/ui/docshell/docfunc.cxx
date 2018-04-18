@@ -1560,13 +1560,13 @@ bool canDeleteCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, D
 
     switch (eCmd)
     {
-        case DEL_DELROWS:
+        case DelCellCmd::Rows:
         {
             aRange.aStart.SetCol(0);
             aRange.aEnd.SetCol(MAXCOL);
             SAL_FALLTHROUGH;
         }
-        case DEL_CELLSUP:
+        case DelCellCmd::CellsUp:
         {
             for (ScMarkData::const_iterator it = itBeg; it != itEnd; ++it)
             {
@@ -1585,13 +1585,13 @@ bool canDeleteCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, D
             }
         }
         break;
-        case DEL_DELCOLS:
+        case DelCellCmd::Cols:
         {
             aRange.aStart.SetRow(0);
             aRange.aEnd.SetRow(MAXROW);
             SAL_FALLTHROUGH;
         }
-        case DEL_CELLSLEFT:
+        case DelCellCmd::CellsLeft:
         {
             for (ScMarkData::const_iterator it = itBeg; it != itEnd; ++it)
             {
@@ -2157,8 +2157,8 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     ScDocShellModificator aModificator( rDocShell );
 
     if (rDocShell.GetDocument().GetChangeTrack() &&
-            ((eCmd == DEL_CELLSUP   && (rRange.aStart.Col() != 0 || rRange.aEnd.Col() != MAXCOL)) ||
-             (eCmd == DEL_CELLSLEFT && (rRange.aStart.Row() != 0 || rRange.aEnd.Row() != MAXROW))))
+            ((eCmd == DelCellCmd::CellsUp   && (rRange.aStart.Col() != 0 || rRange.aEnd.Col() != MAXCOL)) ||
+             (eCmd == DelCellCmd::CellsLeft && (rRange.aStart.Row() != 0 || rRange.aEnd.Row() != MAXROW))))
     {
         // We should not reach this via UI disabled slots.
         assert(bApi);
@@ -2236,12 +2236,12 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         nPaintEndRow = nUndoEndRow;
     }
 
-    if (eCmd==DEL_DELROWS)
+    if (eCmd==DelCellCmd::Rows)
     {
         nUndoStartCol = 0;
         nUndoEndCol = MAXCOL;
     }
-    if (eCmd==DEL_DELCOLS)
+    if (eCmd==DelCellCmd::Cols)
     {
         nUndoStartRow = 0;
         nUndoEndRow = MAXROW;
@@ -2249,21 +2249,21 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                     // Test for cell protection
 
     SCCOL nEditTestEndX = nUndoEndCol;
-    if ( eCmd==DEL_DELCOLS || eCmd==DEL_CELLSLEFT )
+    if ( eCmd==DelCellCmd::Cols || eCmd==DelCellCmd::CellsLeft )
         nEditTestEndX = MAXCOL;
     SCROW nEditTestEndY = nUndoEndRow;
-    if ( eCmd==DEL_DELROWS || eCmd==DEL_CELLSUP )
+    if ( eCmd==DelCellCmd::Rows || eCmd==DelCellCmd::CellsUp )
         nEditTestEndY = MAXROW;
 
     ScEditableTester aTester;
 
     switch (eCmd)
     {
-        case DEL_DELCOLS:
+        case DelCellCmd::Cols:
             aTester = ScEditableTester(
                 rDoc, sc::ColRowEditAction::DeleteColumns, nUndoStartCol, nUndoEndCol, aMark);
             break;
-        case DEL_DELROWS:
+        case DelCellCmd::Rows:
             aTester = ScEditableTester(
                 rDoc, sc::ColRowEditAction::DeleteRows, nUndoStartRow, nUndoEndRow, aMark);
             break;
@@ -2287,8 +2287,8 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     }
                     // Test for merged cells
 
-    SCCOL nMergeTestEndCol = (eCmd==DEL_CELLSLEFT) ? MAXCOL : nUndoEndCol;
-    SCROW nMergeTestEndRow = (eCmd==DEL_CELLSUP)   ? MAXROW : nUndoEndRow;
+    SCCOL nMergeTestEndCol = (eCmd==DelCellCmd::CellsLeft) ? MAXCOL : nUndoEndCol;
+    SCROW nMergeTestEndRow = (eCmd==DelCellCmd::CellsUp)   ? MAXROW : nUndoEndRow;
     SCCOL nExtendStartCol = nUndoStartCol;
     SCROW nExtendStartRow = nUndoStartRow;
     bool bNeedRefresh = false;
@@ -2320,8 +2320,8 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
             rDoc.ExtendMerge( nMergeStartCol, nMergeStartRow, nMergeEndCol, nMergeEndRow, i );
             rDoc.ExtendOverlapped( nMergeStartCol, nMergeStartRow, nMergeEndCol, nMergeEndRow, i );
-            if( ( eCmd == DEL_CELLSUP && ( nMergeStartCol != nUndoStartCol || nMergeEndCol != nMergeTestEndCol))||
-                ( eCmd == DEL_CELLSLEFT && ( nMergeStartRow != nUndoStartRow || nMergeEndRow != nMergeTestEndRow)))
+            if( ( eCmd == DelCellCmd::CellsUp && ( nMergeStartCol != nUndoStartCol || nMergeEndCol != nMergeTestEndCol))||
+                ( eCmd == DelCellCmd::CellsLeft && ( nMergeStartRow != nUndoStartRow || nMergeEndRow != nMergeTestEndRow)))
             {
                 if (!bApi)
                     rDocShell.ErrorMessage(STR_MSSG_DELETECELLS_0);
@@ -2380,13 +2380,13 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             if( bDeletingMerge )
             {
 
-                if( eCmd == DEL_DELROWS || eCmd == DEL_CELLSUP )
+                if( eCmd == DelCellCmd::Rows || eCmd == DelCellCmd::CellsUp )
                 {
                     nStartRow = aExtendMergeRange.aStart.Row();
                     nEndRow = aExtendMergeRange.aEnd.Row();
                     bNeedRefresh = true;
 
-                    if( eCmd == DEL_CELLSUP )
+                    if( eCmd == DelCellCmd::CellsUp )
                     {
                         nEndCol = aExtendMergeRange.aEnd.Col();
                     }
@@ -2396,12 +2396,12 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                         nEndCol = MAXCOL;
                     }
                 }
-                else if( eCmd == DEL_CELLSLEFT || eCmd == DEL_DELCOLS )
+                else if( eCmd == DelCellCmd::CellsLeft || eCmd == DelCellCmd::Cols )
                 {
 
                     nStartCol = aExtendMergeRange.aStart.Col();
                     nEndCol = aExtendMergeRange.aEnd.Col();
-                    if( eCmd == DEL_CELLSLEFT )
+                    if( eCmd == DelCellCmd::CellsLeft )
                     {
                         nEndRow = aExtendMergeRange.aEnd.Row();
                         bNeedRefresh = true;
@@ -2460,7 +2460,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         // so it's no longer necessary to copy more than the deleted range into pUndoDoc.
 
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-        pUndoDoc->InitUndo( &rDoc, 0, nTabCount-1, (eCmd==DEL_DELCOLS), (eCmd==DEL_DELROWS) );
+        pUndoDoc->InitUndo( &rDoc, 0, nTabCount-1, (eCmd==DelCellCmd::Cols), (eCmd==DelCellCmd::Rows) );
         itr = aMark.begin();
         for (; itr != itrEnd && *itr < nTabCount; ++itr)
         {
@@ -2491,22 +2491,22 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     bool bUndoOutline = false;
     switch (eCmd)
     {
-        case DEL_CELLSUP:
+        case DelCellCmd::CellsUp:
             rDoc.DeleteRow( nStartCol, 0, nEndCol, MAXTAB, nStartRow, static_cast<SCSIZE>(nEndRow-nStartRow+1), pRefUndoDoc, nullptr, &aFullMark );
             nPaintEndRow = MAXROW;
             break;
-        case DEL_DELROWS:
+        case DelCellCmd::Rows:
             rDoc.DeleteRow( 0, 0, MAXCOL, MAXTAB, nStartRow, static_cast<SCSIZE>(nEndRow-nStartRow+1), pRefUndoDoc, &bUndoOutline, &aFullMark );
             nPaintStartCol = 0;
             nPaintEndCol = MAXCOL;
             nPaintEndRow = MAXROW;
             nPaintFlags |= PaintPartFlags::Left;
             break;
-        case DEL_CELLSLEFT:
+        case DelCellCmd::CellsLeft:
             rDoc.DeleteCol( nStartRow, 0, nEndRow, MAXTAB, nStartCol, static_cast<SCSIZE>(nEndCol-nStartCol+1), pRefUndoDoc, nullptr, &aFullMark );
             nPaintEndCol = MAXCOL;
             break;
-        case DEL_DELCOLS:
+        case DelCellCmd::Cols:
             rDoc.DeleteCol( 0, 0, MAXROW, MAXTAB, nStartCol, static_cast<SCSIZE>(nEndCol-nStartCol+1), pRefUndoDoc, &bUndoOutline, &aFullMark );
             nPaintStartRow = 0;
             nPaintEndRow = MAXROW;
@@ -2570,7 +2570,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
         long nDecreaseRowCount = 0;
         long nDecreaseColCount = 0;
-        if( eCmd == DEL_CELLSUP || eCmd == DEL_DELROWS )
+        if( eCmd == DelCellCmd::CellsUp || eCmd == DelCellCmd::Rows )
         {
             if( nStartRow >= aRange.aStart.Row() && nStartRow <= aRange.aEnd.Row() && nEndRow>= aRange.aStart.Row() && nEndRow <= aRange.aEnd.Row() )
                 nDecreaseRowCount = nEndRow-nStartRow+1;
@@ -2579,7 +2579,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             else if( nStartRow >= aRange.aStart.Row() && nStartRow >= aRange.aEnd.Row() && nEndRow>= aRange.aStart.Row() && nEndRow <= aRange.aEnd.Row() )
                 nDecreaseRowCount = aRange.aEnd.Row()-nEndRow+1;
         }
-        else if( eCmd == DEL_CELLSLEFT || eCmd == DEL_DELCOLS )
+        else if( eCmd == DelCellCmd::CellsLeft || eCmd == DelCellCmd::Cols )
         {
             if( nStartCol >= aRange.aStart.Col() && nStartCol <= aRange.aEnd.Col() && nEndCol>= aRange.aStart.Col() && nEndCol <= aRange.aEnd.Col() )
                 nDecreaseColCount = nEndCol-nStartCol+1;
@@ -2591,12 +2591,12 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
         switch (eCmd)
         {
-            case DEL_CELLSUP:
-            case DEL_DELROWS:
+            case DelCellCmd::CellsUp:
+            case DelCellCmd::Rows:
                 aRange.aEnd.SetRow(static_cast<SCCOL>( aRange.aEnd.Row()-nDecreaseRowCount));
                 break;
-            case DEL_CELLSLEFT:
-            case DEL_DELCOLS:
+            case DelCellCmd::CellsLeft:
+            case DelCellCmd::Cols:
                 aRange.aEnd.SetCol(static_cast<SCCOL>( aRange.aEnd.Col()-nDecreaseColCount));
                 break;
             default:
@@ -2619,9 +2619,9 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         // #i51445# old merge flag attributes must be deleted also for single cells,
         // not only for whole columns/rows
 
-        if ( eCmd==DEL_DELCOLS || eCmd==DEL_CELLSLEFT )
+        if ( eCmd==DelCellCmd::Cols || eCmd==DelCellCmd::CellsLeft )
             nMergeTestEndCol = MAXCOL;
-        if ( eCmd==DEL_DELROWS || eCmd==DEL_CELLSUP )
+        if ( eCmd==DelCellCmd::Rows || eCmd==DelCellCmd::CellsUp )
             nMergeTestEndRow = MAXROW;
         ScPatternAttr aPattern( rDoc.GetPool() );
         aPattern.GetItemSet().Put( ScMergeFlagAttr() );
@@ -2648,7 +2648,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     {
         rDoc.SetDrawPageSize(*itr);
 
-        if ( eCmd == DEL_DELCOLS || eCmd == DEL_DELROWS )
+        if ( eCmd == DelCellCmd::Cols || eCmd == DelCellCmd::Rows )
             rDoc.UpdatePageBreaks( *itr );
 
         rDocShell.UpdatePaintExt( nExtFlags, nPaintStartCol, nPaintStartRow, *itr, nPaintEndCol, nPaintEndRow, *itr );
@@ -2659,7 +2659,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             nScenarioCount ++;
 
         //  delete entire rows: do not adjust
-        if ( eCmd == DEL_DELROWS || !AdjustRowHeight(ScRange( 0, nPaintStartRow, *itr, MAXCOL, nPaintEndRow, *itr+nScenarioCount )) )
+        if ( eCmd == DelCellCmd::Rows || !AdjustRowHeight(ScRange( 0, nPaintStartRow, *itr, MAXCOL, nPaintEndRow, *itr+nScenarioCount )) )
             rDocShell.PostPaint( nPaintStartCol, nPaintStartRow, *itr, nPaintEndCol, nPaintEndRow, *itr+nScenarioCount, nPaintFlags,  nExtFlags );
         else
         {
@@ -2676,11 +2676,11 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
     if (pViewSh)
     {
-        if (eCmd == DEL_DELCOLS)
+        if (eCmd == DelCellCmd::Cols)
         {
             pViewSh->OnLOKInsertDeleteColumn(rRange.aStart.Col(), -1);
         }
-        if (eCmd == DEL_DELROWS)
+        if (eCmd == DelCellCmd::Rows)
         {
             pViewSh->OnLOKInsertDeleteRow(rRange.aStart.Row(), -1);
         }

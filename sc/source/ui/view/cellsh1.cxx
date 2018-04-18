@@ -247,12 +247,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
 
         case SID_DEL_ROWS:
-            pTabViewShell->DeleteCells( DEL_DELROWS );
+            pTabViewShell->DeleteCells( DelCellCmd::Rows );
             rReq.Done();
             break;
 
         case SID_DEL_COLS:
-            pTabViewShell->DeleteCells( DEL_DELCOLS );
+            pTabViewShell->DeleteCells( DelCellCmd::Cols );
             rReq.Done();
             break;
 
@@ -327,7 +327,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case FID_DELETE_CELL:
             {
-                DelCellCmd eCmd = DEL_NONE;
+                DelCellCmd eCmd = DelCellCmd::NONE;
 
                 if ( pReqArgs )
                 {
@@ -340,19 +340,19 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         switch( aFlags[0] )
                         {
-                            case 'U': eCmd = DEL_CELLSUP ;break;
-                            case 'L': eCmd = DEL_CELLSLEFT ;break;
-                            case 'R': eCmd = DEL_DELROWS ;break;
-                            case 'C': eCmd = DEL_DELCOLS ;break;
+                            case 'U': eCmd = DelCellCmd::CellsUp ;break;
+                            case 'L': eCmd = DelCellCmd::CellsLeft ;break;
+                            case 'R': eCmd = DelCellCmd::Rows ;break;
+                            case 'C': eCmd = DelCellCmd::Cols ;break;
                         }
                     }
                 }
                 else
                 {
                     if ( GetViewData()->SimpleColMarked() )
-                        eCmd = DEL_DELCOLS;
+                        eCmd = DelCellCmd::Cols;
                     else if ( GetViewData()->SimpleRowMarked() )
-                        eCmd = DEL_DELROWS;
+                        eCmd = DelCellCmd::Rows;
                     else
                     {
                         ScRange aRange;
@@ -372,7 +372,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                 }
 
-                if (eCmd != DEL_NONE )
+                if (eCmd != DelCellCmd::NONE )
                 {
                     pTabViewShell->DeleteCells( eCmd );
 
@@ -382,10 +382,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                         switch( eCmd )
                         {
-                            case DEL_CELLSUP: aParam = "U"; break;
-                            case DEL_CELLSLEFT: aParam = "L"; break;
-                            case DEL_DELROWS: aParam = "R"; break;
-                            case DEL_DELCOLS: aParam = "C"; break;
+                            case DelCellCmd::CellsUp: aParam = "U"; break;
+                            case DelCellCmd::CellsLeft: aParam = "L"; break;
+                            case DelCellCmd::Rows: aParam = "R"; break;
+                            case DelCellCmd::Cols: aParam = "C"; break;
                             default:
                             {
                                 // added to avoid warnings

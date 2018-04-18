@@ -3828,7 +3828,7 @@ void SAL_CALL ScTableColumnsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCou
     {
         ScRange aRange( static_cast<SCCOL>(nStartCol+nIndex), 0, nTab,
                         static_cast<SCCOL>(nStartCol+nIndex+nCount-1), MAXROW, nTab );
-        bDone = pDocShell->GetDocFunc().DeleteCells( aRange, nullptr, DEL_DELCOLS, true );
+        bDone = pDocShell->GetDocFunc().DeleteCells( aRange, nullptr, DelCellCmd::Cols, true );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -4067,7 +4067,7 @@ void SAL_CALL ScTableRowsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount 
     {
         ScRange aRange( 0, static_cast<SCROW>(nStartRow+nIndex), nTab,
                         MAXCOL, static_cast<SCROW>(nStartRow+nIndex+nCount-1), nTab );
-        bDone = pDocShell->GetDocFunc().DeleteCells( aRange, nullptr, DEL_DELROWS, true );
+        bDone = pDocShell->GetDocFunc().DeleteCells( aRange, nullptr, DelCellCmd::Rows, true );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified

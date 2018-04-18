@@ -4273,7 +4273,7 @@ void Test::testCopyPasteRepeatOneFormula()
     }
 
     // Delete row at row 1 to shift the cells up.
-    rFunc.DeleteCells(aRowOne, &aMark, DEL_DELROWS, true);
+    rFunc.DeleteCells(aRowOne, &aMark, DelCellCmd::Rows, true);
 
     // Check the formula results again.
     for (SCROW i = 0; i < 10; ++i)
@@ -5245,7 +5245,7 @@ void Test::testNoteDeleteRow()
     ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    rDocFunc.DeleteCells(ScRange(0,1,0,MAXCOL,1,0), &aMark, DEL_CELLSUP, true);
+    rDocFunc.DeleteCells(ScRange(0,1,0,MAXCOL,1,0), &aMark, DelCellCmd::CellsUp, true);
 
     // Check to make sure the notes have shifted upward.
     pNote = m_pDoc->GetNote(ScAddress(1,1,0));
@@ -5274,7 +5274,7 @@ void Test::testNoteDeleteRow()
     CPPUNIT_ASSERT_EQUAL(OUString("Second Note"), pNote->GetText());
 
     // Delete row 3.
-    rDocFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DEL_CELLSUP, true);
+    rDocFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DelCellCmd::CellsUp, true);
 
     pNote = m_pDoc->GetNote(ScAddress(1,2,0));
     CPPUNIT_ASSERT_MESSAGE("B3 should have a note.", pNote);
@@ -6965,7 +6965,7 @@ void Test::testProtectedSheetEditByRow()
         ScRange aRow3(0,2,0,MAXCOL,2,0);
         ScMarkData aMark;
         aMark.SelectOneTable(0);
-        bool bDeleted = rDocFunc.DeleteCells(aRow3, &aMark, DEL_DELROWS, true);
+        bool bDeleted = rDocFunc.DeleteCells(aRow3, &aMark, DelCellCmd::Rows, true);
         CPPUNIT_ASSERT_MESSAGE("deletion of row 3 should fail.", !bDeleted);
 
         // Protect the sheet but allow row deletion.
@@ -6973,12 +6973,12 @@ void Test::testProtectedSheetEditByRow()
         m_pDoc->SetTabProtection(0, &aProtect);
 
         // Now we should be able to delete row 3.
-        bDeleted = rDocFunc.DeleteCells(aRow3, &aMark, DEL_DELROWS, true);
+        bDeleted = rDocFunc.DeleteCells(aRow3, &aMark, DelCellCmd::Rows, true);
         CPPUNIT_ASSERT_MESSAGE("deletion of row 3 should succeed.", bDeleted);
 
         // But, row deletion should still fail on a protected row.
         ScRange aRow10(0,9,0,MAXCOL,9,0);
-        bDeleted = rDocFunc.DeleteCells(aRow10, &aMark, DEL_DELROWS, true);
+        bDeleted = rDocFunc.DeleteCells(aRow10, &aMark, DelCellCmd::Rows, true);
         CPPUNIT_ASSERT_MESSAGE("deletion of row 10 should not be allowed.", !bDeleted);
 
         // Try inserting a new row.  It should fail.
@@ -7041,7 +7041,7 @@ void Test::testProtectedSheetEditByColumn()
         ScRange aCol3(2,0,0,2,MAXROW,0);
         ScMarkData aMark;
         aMark.SelectOneTable(0);
-        bool bDeleted = rDocFunc.DeleteCells(aCol3, &aMark, DEL_DELCOLS, true);
+        bool bDeleted = rDocFunc.DeleteCells(aCol3, &aMark, DelCellCmd::Cols, true);
         CPPUNIT_ASSERT_MESSAGE("deletion of column 3 should fail.", !bDeleted);
 
         // Protect the sheet but allow column deletion.
@@ -7049,12 +7049,12 @@ void Test::testProtectedSheetEditByColumn()
         m_pDoc->SetTabProtection(0, &aProtect);
 
         // Now we should be able to delete column C.
-        bDeleted = rDocFunc.DeleteCells(aCol3, &aMark, DEL_DELCOLS, true);
+        bDeleted = rDocFunc.DeleteCells(aCol3, &aMark, DelCellCmd::Cols, true);
         CPPUNIT_ASSERT_MESSAGE("deletion of column 3 should succeed.", bDeleted);
 
         // But, column deletion should still fail on a protected column.
         ScRange aCol10(9,0,0,9,MAXROW,0);
-        bDeleted = rDocFunc.DeleteCells(aCol10, &aMark, DEL_DELCOLS, true);
+        bDeleted = rDocFunc.DeleteCells(aCol10, &aMark, DelCellCmd::Cols, true);
         CPPUNIT_ASSERT_MESSAGE("deletion of column 10 should not be allowed.", !bDeleted);
 
         // Try inserting a new column.  It should fail.
