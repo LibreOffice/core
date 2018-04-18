@@ -3010,7 +3010,7 @@ StyleSettings::DetermineIconTheme() const
     if (sTheme.isEmpty())
     {
         if (utl::ConfigManager::IsFuzzing())
-            sTheme = "galaxy";
+            sTheme = "colibre";
         else
         {
             // read from the configuration, or fallback to what the desktop wants

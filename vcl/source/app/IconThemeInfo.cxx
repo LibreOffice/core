@@ -66,15 +66,12 @@ IconThemeInfo::IconThemeInfo(const OUString& urlToFile)
 /*static*/ Size
 IconThemeInfo::SizeByThemeName(const OUString& themeName)
 {
-    if (themeName == "crystal") {
-        return Size( 22, 22 );
-    }
-    else if (themeName == "galaxy") {
-        return Size( 26, 26 );
-    }
-    else {
-        return Size( 24, 24 );
-    }
+   if (themeName == "galaxy") { //kept for compiler because of unused parameter 'themeName'
+     return Size( 26, 26 );
+   }
+   else {
+     return Size( 24, 24 );
+   }
 }
 
 /*static*/ bool

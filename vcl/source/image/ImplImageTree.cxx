@@ -300,18 +300,14 @@ OUString ImplImageTree::fallbackStyle(const OUString& rsStyle)
 {
     OUString sResult;
 
-    if (rsStyle == "galaxy")
+    if (rsStyle == "colibre" || rsStyle == "helpimg")
         sResult = "";
-    else if (rsStyle == "industrial" || rsStyle == "tango" || rsStyle == "breeze")
-        sResult = "galaxy";
     else if (rsStyle == "sifr" || rsStyle == "breeze_dark")
         sResult = "breeze";
     else if (rsStyle == "sifr_dark" )
         sResult = "breeze_dark";
-    else if (rsStyle == "helpimg")
-        sResult = "";
     else
-        sResult = "tango";
+        sResult = "colibre";
 
     return sResult;
 }
