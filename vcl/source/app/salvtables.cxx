@@ -296,6 +296,26 @@ public:
         return m_xWidget->get_grid_top_attach();
     }
 
+    virtual void set_hexpand(bool bExpand) override
+    {
+        m_xWidget->set_hexpand(bExpand);
+    }
+
+    virtual bool get_hexpand() const override
+    {
+        return m_xWidget->get_hexpand();
+    }
+
+    virtual void set_vexpand(bool bExpand) override
+    {
+        m_xWidget->set_vexpand(bExpand);
+    }
+
+    virtual bool get_vexpand() const override
+    {
+        return m_xWidget->get_vexpand();
+    }
+
     virtual void set_margin_top(int nMargin) override
     {
         m_xWidget->set_margin_top(nMargin);
@@ -422,17 +442,13 @@ public:
         , m_xContainer(pContainer)
     {
     }
-    virtual void remove(weld::Widget* pWidget) override
+    virtual void move(weld::Widget* pWidget, weld::Container* pNewParent) override
     {
         SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
         assert(pVclWidget);
-        pVclWidget->getWidget()->SetParent(nullptr);
-    }
-    virtual void add(weld::Widget* pWidget) override
-    {
-        SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
-        assert(pVclWidget);
-        pVclWidget->getWidget()->SetParent(m_xContainer);
+        SalInstanceContainer* pNewVclParent = dynamic_cast<SalInstanceContainer*>(pNewParent);
+        assert(pNewVclParent);
+        pVclWidget->getWidget()->SetParent(pNewVclParent->getWidget());
     }
 };
 
@@ -1129,8 +1145,6 @@ public:
         m_xTreeView->SetEntryData(nInsertedAt, new OUString(rId));
     }
 
-    using SalInstanceContainer::remove;
-
     virtual void remove(int pos) override
     {
         m_xTreeView->RemoveEntry(pos);
@@ -1373,6 +1387,12 @@ public:
     virtual OUString get_label() const override
     {
         return m_xLabel->GetText();
+    }
+
+    virtual void set_mnemonic_widget(Widget* pTarget) override
+    {
+        SalInstanceWidget* pTargetWidget = dynamic_cast<SalInstanceWidget*>(pTarget);
+        m_xLabel->set_mnemonic_widget(pTargetWidget ? pTargetWidget->getWidget() : nullptr);
     }
 };
 
@@ -1695,8 +1715,6 @@ public:
         return m_xComboBoxText->GetSelectedEntry();
     }
 
-    using SalInstanceContainer::remove;
-
     virtual void remove(int pos) override
     {
         m_xComboBoxText->RemoveEntry(pos);
@@ -1764,8 +1782,6 @@ public:
     {
         return m_xComboBoxText->GetText();
     }
-
-    using SalInstanceContainer::remove;
 
     virtual void remove(int pos) override
     {
@@ -2054,8 +2070,7 @@ namespace weld
             m_xOrigParent.reset(m_xRelocate->weld_parent());
             //fdo#75121, a bit tricky because the widgets we want to align with
             //don't actually exist in the ui description, they're implied
-            m_xOrigParent->remove(m_xRelocate.get());
-            m_xContentArea->add(m_xRelocate.get());
+            m_xOrigParent->move(m_xRelocate.get(), m_xContentArea.get());
         }
     }
 
@@ -2063,8 +2078,7 @@ namespace weld
     {
         if (m_xRelocate)
         {
-            m_xContentArea->remove(m_xRelocate.get());
-            m_xOrigParent->add(m_xRelocate.get());
+            m_xContentArea->move(m_xRelocate.get(), m_xOrigParent.get());
         }
     }
 }

@@ -992,38 +992,41 @@ void SwIndexMarkModalDlg::dispose()
     SvxStandardDialog::dispose();
 }
 
-class SwCreateAuthEntryDlg_Impl : public ModalDialog
+class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
 {
-    VclPtr<FixedText>      pFixedTexts[AUTH_FIELD_END];
-    VclPtr<ListBox>        pTypeListBox;
-    VclPtr<ComboBox>       pIdentifierBox;
-    VclPtr<Edit>           pEdits[AUTH_FIELD_END];
+    std::vector<std::unique_ptr<weld::Builder>> m_aBuilders;
 
-    VclPtr<OKButton>       m_pOKBT;
-
-    Link<Edit*,bool>       aShortNameCheckLink;
+    Link<weld::Entry&,bool>       aShortNameCheckLink;
 
     SwWrtShell&     rWrtSh;
 
     bool            m_bNewEntryMode;
     bool            m_bNameAllowed;
 
-    DECL_LINK(IdentifierHdl, ComboBox&, void);
-    DECL_LINK(ShortNameHdl, Edit&, void);
-    DECL_LINK(EnableHdl, ListBox&, void);
+    std::vector<std::unique_ptr<weld::Container>> m_aOrigContainers;
+    std::vector<std::unique_ptr<weld::Label>> m_aFixedTexts;
+    std::unique_ptr<weld::Entry> pEdits[AUTH_FIELD_END];
+    std::unique_ptr<weld::Button> m_xOKBT;
+    std::unique_ptr<weld::Container> m_xBox;
+    std::unique_ptr<weld::Container> m_xLeft;
+    std::unique_ptr<weld::Container> m_xRight;
+    std::unique_ptr<weld::ComboBoxText> m_xTypeListBox;
+    std::unique_ptr<weld::ComboBoxText> m_xIdentifierBox;
+
+    DECL_LINK(IdentifierHdl, weld::ComboBoxText&, void);
+    DECL_LINK(ShortNameHdl, weld::Entry&, void);
+    DECL_LINK(EnableHdl, weld::ComboBoxText&, void);
 
 public:
-    SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
-                            const OUString pFields[],
-                            SwWrtShell& rSh,
-                            bool bNewEntry,
-                            bool bCreate);
-    virtual ~SwCreateAuthEntryDlg_Impl() override;
-    virtual void    dispose() override;
+    SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
+                              const OUString pFields[],
+                              SwWrtShell& rSh,
+                              bool bNewEntry,
+                              bool bCreate);
 
     OUString        GetEntryText(ToxAuthorityField eField) const;
 
-    void            SetCheckNameHdl(const Link<Edit*,bool>& rLink) {aShortNameCheckLink = rLink;}
+    void            SetCheckNameHdl(const Link<weld::Entry&,bool>& rLink) {aShortNameCheckLink = rLink;}
 
 };
 
@@ -1251,14 +1254,14 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, Button*, pButton, void)
     OUString sOldId = m_sCreatedEntry[0];
     for(int i = 0; i < AUTH_FIELD_END; i++)
         m_sCreatedEntry[i] = bCreate ? OUString() : m_sFields[i];
-    ScopedVclPtrInstance<SwCreateAuthEntryDlg_Impl> aDlg(pButton,
+    SwCreateAuthEntryDlg_Impl aDlg(pButton->GetFrameWeld(),
                 bCreate ? m_sCreatedEntry : m_sFields,
                 *pSh, bNewEntry, bCreate);
     if(bNewEntry)
     {
-        aDlg->SetCheckNameHdl(LINK(this, SwAuthorMarkPane, IsEntryAllowedHdl));
+        aDlg.SetCheckNameHdl(LINK(this, SwAuthorMarkPane, IsEntryAllowedHdl));
     }
-    if(RET_OK == aDlg->Execute())
+    if(RET_OK == aDlg.run())
     {
         if(bCreate && !sOldId.isEmpty())
         {
@@ -1266,7 +1269,7 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, Button*, pButton, void)
         }
         for(int i = 0; i < AUTH_FIELD_END; i++)
         {
-            m_sFields[i] = aDlg->GetEntryText(static_cast<ToxAuthorityField>(i));
+            m_sFields[i] = aDlg.GetEntryText(static_cast<ToxAuthorityField>(i));
             m_sCreatedEntry[i] = m_sFields[i];
         }
         if(bNewEntry && !m_pFromDocContentRB->IsChecked())
@@ -1352,7 +1355,7 @@ IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, Button*, pButton, void)
 
 IMPL_LINK(SwAuthorMarkPane, EditModifyHdl, Edit&, rEdit, void)
 {
-    Link<Edit*,bool> aAllowed = LINK(this, SwAuthorMarkPane, IsEntryAllowedHdl);
+    Link<Edit*,bool> aAllowed = LINK(this, SwAuthorMarkPane, IsEditAllowedHdl);
     bool bResult = aAllowed.Call(&rEdit);
     m_pActionBT->Enable(bResult);
     if(bResult)
@@ -1363,7 +1366,29 @@ IMPL_LINK(SwAuthorMarkPane, EditModifyHdl, Edit&, rEdit, void)
     }
 };
 
-IMPL_LINK(SwAuthorMarkPane, IsEntryAllowedHdl, Edit*, pEdit, bool)
+IMPL_LINK(SwAuthorMarkPane, IsEntryAllowedHdl, weld::Entry&, rEdit, bool)
+{
+    OUString sEntry = rEdit.get_text();
+    bool bAllowed = false;
+    if(!sEntry.isEmpty())
+    {
+        if(m_pEntryLB->GetEntryPos(sEntry) != LISTBOX_ENTRY_NOTFOUND)
+            return false;
+        else if(bIsFromComponent)
+        {
+            const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
+                                        pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
+            bAllowed = !pFType || !pFType->GetEntryByIdentifier(sEntry);
+        }
+        else
+        {
+            bAllowed = !xBibAccess.is() || !xBibAccess->hasByName(sEntry);
+        }
+    }
+    return bAllowed;
+}
+
+IMPL_LINK(SwAuthorMarkPane, IsEditAllowedHdl, Edit*, pEdit, bool)
 {
     OUString sEntry = pEdit->GetText();
     bool bAllowed = false;
@@ -1458,62 +1483,69 @@ namespace
     };
 }
 
-SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
+SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         const OUString pFields[],
         SwWrtShell& rSh,
         bool bNewEntry,
         bool bCreate)
-    : ModalDialog(pParent, "CreateAuthorEntryDialog", "modules/swriter/ui/createauthorentry.ui")
-
-    ,
-
-    pTypeListBox(nullptr),
-    pIdentifierBox(nullptr),
-    rWrtSh(rSh),
-    m_bNewEntryMode(bNewEntry),
-    m_bNameAllowed(true)
+    : GenericDialogController(pParent, "modules/swriter/ui/createauthorentry.ui", "CreateAuthorEntryDialog")
+    , rWrtSh(rSh)
+    , m_bNewEntryMode(bNewEntry)
+    , m_bNameAllowed(true)
+    , m_xOKBT(m_xBuilder->weld_button("ok"))
+    , m_xBox(m_xBuilder->weld_container("box"))
+    , m_xLeft(m_xBuilder->weld_container("leftgrid"))
+    , m_xRight(m_xBuilder->weld_container("rightgrid"))
 {
-    get(m_pOKBT, "ok");
-
-    VclGrid *pLeft = get<VclGrid>("leftgrid");
-    VclGrid *pRight = get<VclGrid>("rightgrid");
-
     bool bLeft = true;
     sal_Int32 nLeftRow(0), nRightRow(0);
     for(int nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
     {
+        //m_xBox parent just to have some parent during setup, added contents are not directly visible under m_xBox
+        m_aBuilders.emplace_back(Application::CreateBuilder(m_xBox.get(), "modules/swriter/ui/bibliofragment.ui"));
         const TextInfo aCurInfo = aTextInfoArr[nIndex];
 
-        pFixedTexts[nIndex] = VclPtr<FixedText>::Create(bLeft ? pLeft : pRight, WB_VCENTER);
-
-        pFixedTexts[nIndex]->set_grid_left_attach(0);
-        pFixedTexts[nIndex]->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
-        pFixedTexts[nIndex]->SetText(SwResId(STR_AUTH_FIELD_ARY[aCurInfo.nToxField]));
-        pFixedTexts[nIndex]->Show();
-        pEdits[nIndex] = nullptr;
+        m_aOrigContainers.emplace_back(m_aBuilders.back()->weld_container("biblioentry"));
+        m_aFixedTexts.emplace_back(m_aBuilders.back()->weld_label("label"));
+        if (bLeft)
+            m_aOrigContainers.back()->move(m_aFixedTexts.back().get(), m_xLeft.get());
+        else
+            m_aOrigContainers.back()->move(m_aFixedTexts.back().get(), m_xRight.get());
+        m_aFixedTexts.back()->set_grid_left_attach(0);
+        m_aFixedTexts.back()->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
+        m_aFixedTexts.back()->set_label(SwResId(STR_AUTH_FIELD_ARY[aCurInfo.nToxField]));
+        m_aFixedTexts.back()->show();
         if( AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField )
         {
-            pTypeListBox = VclPtr<ListBox>::Create(bLeft ? pLeft : pRight, WB_DROPDOWN|WB_BORDER|WB_VCENTER);
+            m_xTypeListBox.reset(m_aBuilders.back()->weld_combo_box_text("listbox"));
+            if (bLeft)
+                m_aOrigContainers.back()->move(m_xTypeListBox.get(), m_xLeft.get());
+            else
+                m_aOrigContainers.back()->move(m_xTypeListBox.get(), m_xRight.get());
+
             for (int j = 0; j < AUTH_TYPE_END; j++)
-                pTypeListBox->InsertEntry(SwAuthorityFieldType::GetAuthTypeName(static_cast<ToxAuthorityType>(j)));
-            pTypeListBox->EnableAutoSize(true);
+                m_xTypeListBox->append_text(SwAuthorityFieldType::GetAuthTypeName(static_cast<ToxAuthorityType>(j)));
             if(!pFields[aCurInfo.nToxField].isEmpty())
             {
-                pTypeListBox->SelectEntryPos(pFields[aCurInfo.nToxField].toInt32());
+                m_xTypeListBox->set_active(pFields[aCurInfo.nToxField].toInt32());
             }
-            pTypeListBox->set_grid_left_attach(1);
-            pTypeListBox->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
-            pTypeListBox->set_hexpand(true);
-            pTypeListBox->Show();
-            pTypeListBox->SetSelectHdl(LINK(this, SwCreateAuthEntryDlg_Impl, EnableHdl));
-            pTypeListBox->SetHelpId(aCurInfo.pHelpId);
-            pFixedTexts[nIndex]->set_mnemonic_widget(pTypeListBox);
+            m_xTypeListBox->set_grid_left_attach(1);
+            m_xTypeListBox->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
+            m_xTypeListBox->set_hexpand(true);
+            m_xTypeListBox->show();
+            m_xTypeListBox->connect_changed(LINK(this, SwCreateAuthEntryDlg_Impl, EnableHdl));
+            m_xTypeListBox->set_help_id(aCurInfo.pHelpId);
+            m_aFixedTexts.back()->set_mnemonic_widget(m_xTypeListBox.get());
         }
         else if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField && !m_bNewEntryMode)
         {
-            pIdentifierBox = VclPtr<ComboBox>::Create(bLeft ? pLeft : pRight, WB_BORDER|WB_DROPDOWN|WB_VCENTER);
+            m_xIdentifierBox.reset(m_aBuilders.back()->weld_combo_box_text("combobox"));
+            if (bLeft)
+                m_aOrigContainers.back()->move(m_xIdentifierBox.get(), m_xLeft.get());
+            else
+                m_aOrigContainers.back()->move(m_xIdentifierBox.get(), m_xRight.get());
 
-            pIdentifierBox->SetSelectHdl(LINK(this,
+            m_xIdentifierBox->connect_changed(LINK(this,
                                     SwCreateAuthEntryDlg_Impl, IdentifierHdl));
 
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
@@ -1522,38 +1554,42 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
             {
                 std::vector<OUString> aIds;
                 pFType->GetAllEntryIdentifiers( aIds );
-                for(const OUString & i : aIds)
-                    pIdentifierBox->InsertEntry(i);
+                for (const OUString& a : aIds)
+                    m_xIdentifierBox->append_text(a);
             }
-            pIdentifierBox->SetText(pFields[aCurInfo.nToxField]);
-            pIdentifierBox->set_grid_left_attach(1);
-            pIdentifierBox->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
-            pIdentifierBox->set_hexpand(true);
-            pIdentifierBox->Show();
-            pIdentifierBox->SetHelpId(aCurInfo.pHelpId);
-            pFixedTexts[nIndex]->set_mnemonic_widget(pIdentifierBox);
+            m_xIdentifierBox->set_entry_text(pFields[aCurInfo.nToxField]);
+            m_xIdentifierBox->set_grid_left_attach(1);
+            m_xIdentifierBox->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
+            m_xIdentifierBox->set_hexpand(true);
+            m_xIdentifierBox->show();
+            m_xIdentifierBox->set_help_id(aCurInfo.pHelpId);
+            m_aFixedTexts.back()->set_mnemonic_widget(m_xIdentifierBox.get());
         }
         else
         {
-            pEdits[nIndex] = VclPtr<Edit>::Create(bLeft ? pLeft : pRight, WB_BORDER|WB_VCENTER);
-            pEdits[nIndex]->SetWidthInChars(14);
+            pEdits[nIndex].reset(m_aBuilders.back()->weld_entry("entry"));
+            if (bLeft)
+                m_aOrigContainers.back()->move(pEdits[nIndex].get(), m_xLeft.get());
+            else
+                m_aOrigContainers.back()->move(pEdits[nIndex].get(), m_xRight.get());
+
             pEdits[nIndex]->set_grid_left_attach(1);
             pEdits[nIndex]->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
             pEdits[nIndex]->set_hexpand(true);
-            pEdits[nIndex]->SetText(pFields[aCurInfo.nToxField]);
-            pEdits[nIndex]->Show();
-            pEdits[nIndex]->SetHelpId(aCurInfo.pHelpId);
+            pEdits[nIndex]->set_text(pFields[aCurInfo.nToxField]);
+            pEdits[nIndex]->show();
+            pEdits[nIndex]->set_help_id(aCurInfo.pHelpId);
             if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField)
             {
-                pEdits[nIndex]->SetModifyHdl(LINK(this, SwCreateAuthEntryDlg_Impl, ShortNameHdl));
+                pEdits[nIndex]->connect_changed(LINK(this, SwCreateAuthEntryDlg_Impl, ShortNameHdl));
                 m_bNameAllowed = !pFields[nIndex].isEmpty();
                 if(!bCreate)
                 {
-                    pFixedTexts[nIndex]->Enable(false);
-                    pEdits[nIndex]->Enable(false);
+                    m_aFixedTexts.back()->set_sensitive(false);
+                    pEdits[nIndex]->set_sensitive(false);
                 }
             }
-            pFixedTexts[nIndex]->set_mnemonic_widget(pEdits[nIndex]);
+            m_aFixedTexts.back()->set_mnemonic_widget(pEdits[nIndex].get());
         }
         if(bLeft)
             ++nLeftRow;
@@ -1561,39 +1597,21 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
             ++nRightRow;
         bLeft = !bLeft;
     }
-    EnableHdl(*pTypeListBox);
-}
-
-SwCreateAuthEntryDlg_Impl::~SwCreateAuthEntryDlg_Impl()
-{
-    disposeOnce();
-}
-
-void SwCreateAuthEntryDlg_Impl::dispose()
-{
-    for(int i = 0; i < AUTH_FIELD_END; i++)
-    {
-        pFixedTexts[i].disposeAndClear();
-        pEdits[i].disposeAndClear();
-    }
-    pTypeListBox.disposeAndClear();
-    pIdentifierBox.disposeAndClear();
-    m_pOKBT.clear();
-    ModalDialog::dispose();
+    EnableHdl(*m_xTypeListBox);
 }
 
 OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) const
 {
     if( AUTH_FIELD_AUTHORITY_TYPE == eField )
     {
-        OSL_ENSURE(pTypeListBox, "No ListBox");
-        return OUString::number(pTypeListBox->GetSelectedEntryPos());
+        OSL_ENSURE(m_xTypeListBox, "No ListBox");
+        return OUString::number(m_xTypeListBox->get_active());
     }
 
     if( AUTH_FIELD_IDENTIFIER == eField && !m_bNewEntryMode)
     {
-        OSL_ENSURE(pIdentifierBox, "No ComboBox");
-        return pIdentifierBox->GetText();
+        OSL_ENSURE(m_xIdentifierBox, "No ComboBox");
+        return m_xIdentifierBox->get_active_text();
     }
 
     for(int nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
@@ -1601,21 +1619,21 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
         const TextInfo aCurInfo = aTextInfoArr[nIndex];
         if(aCurInfo.nToxField == eField)
         {
-            return pEdits[nIndex]->GetText();
+            return pEdits[nIndex]->get_text();
         }
     }
 
     return OUString();
 }
 
-IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, ComboBox&, rBox, void)
+IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, weld::ComboBoxText&, rBox, void)
 {
     const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
                                 rWrtSh.GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
     if(pFType)
     {
         const SwAuthEntry* pEntry = pFType->GetEntryByIdentifier(
-                                                        rBox.GetText());
+                                                        rBox.get_active_text());
         if(pEntry)
         {
             for(int i = 0; i < AUTH_FIELD_END; i++)
@@ -1624,29 +1642,29 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, ComboBox&, rBox, void)
                 if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField)
                     continue;
                 if(AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField)
-                    pTypeListBox->SelectEntry(
+                    m_xTypeListBox->set_active(
                                 pEntry->GetAuthorField(aCurInfo.nToxField));
                 else
-                    pEdits[i]->SetText(
+                    pEdits[i]->set_text(
                                 pEntry->GetAuthorField(aCurInfo.nToxField));
             }
         }
     }
 }
 
-IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, Edit&, rEdit, void)
+IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, weld::Entry&, rEdit, void)
 {
-    if(aShortNameCheckLink.IsSet())
+    if (aShortNameCheckLink.IsSet())
     {
-        bool bEnable = aShortNameCheckLink.Call(&rEdit);
+        bool bEnable = aShortNameCheckLink.Call(rEdit);
         m_bNameAllowed |= bEnable;
-        m_pOKBT->Enable(pTypeListBox->GetSelectedEntryCount() && bEnable);
+        m_xOKBT->set_sensitive(m_xTypeListBox->get_active() != -1 && bEnable);
     }
 }
 
-IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, ListBox&, rBox, void)
+IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, weld::ComboBoxText&, rBox, void)
 {
-    m_pOKBT->Enable(m_bNameAllowed && rBox.GetSelectedEntryCount());
+    m_xOKBT->set_sensitive(m_bNameAllowed && rBox.get_active() != -1);
 };
 
 SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* _pBindings,
