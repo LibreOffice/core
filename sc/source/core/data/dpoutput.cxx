@@ -297,7 +297,7 @@ void lcl_SetStyleById(ScDocument* pDoc, SCTAB nTab,
         //  create new style (was in ScPivot::SetStyle)
 
         pStyle = static_cast<ScStyleSheet*>( &pStlPool->Make( aStyleName, SfxStyleFamily::Para,
-                                                    SFXSTYLEBIT_USERDEF ) );
+                                                    SfxStyleSearchBits::UserDefined ) );
         pStyle->SetParent( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
         SfxItemSet& rSet = pStyle->GetItemSet();
         if (strcmp(pStrId, STR_PIVOT_STYLENAME_RESULT) == 0 || strcmp(pStrId, STR_PIVOT_STYLENAME_TITLE) == 0){

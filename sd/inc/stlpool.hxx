@@ -126,7 +126,7 @@ private:
     void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets );
     void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets, const OUString &rRenameSuffix );
 
-    virtual SfxStyleSheetBase* Create(const OUString& rName, SfxStyleFamily eFamily, sal_uInt16 nMask) override;
+    virtual SfxStyleSheetBase* Create(const OUString& rName, SfxStyleFamily eFamily, SfxStyleSearchBits nMask) override;
 
     using  SfxStyleSheetPool::Create;
     virtual ~SdStyleSheetPool() override;

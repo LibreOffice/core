@@ -193,7 +193,7 @@ protected:
 
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
     sal_uInt16 nActFilter; // FilterIdx
-    sal_uInt16 nAppFilter; // Filter, which has set the application (for automatic)
+    SfxStyleSearchBits nAppFilter; // Filter, which has set the application (for automatic)
 
     bool bDontUpdate :1;
     bool bIsWater :1;
@@ -244,7 +244,7 @@ protected:
     void ShowHdl();
 
     bool Execute_Impl(sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
-                      sal_uInt16 nFamily, sal_uInt16 nMask = 0,
+                      sal_uInt16 nFamily, SfxStyleSearchBits nMask = SfxStyleSearchBits::Auto,
                       sal_uInt16* pIdx = nullptr, const sal_uInt16* pModifier = nullptr );
 
     void UpdateStyles_Impl(StyleFlags nFlags);

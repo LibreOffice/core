@@ -119,7 +119,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     }
 
     OUString aStyleName;
-    sal_uInt16 nRetMask = SFXSTYLEBIT_ALL;
+    sal_uInt16 nRetMask = static_cast<sal_uInt16>(SfxStyleSearchBits::All);
 
     switch( nSId )
     {
@@ -167,7 +167,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 pSSPool->Remove(p);
                 p = nullptr;
             }
-            pStyleSheet = &pSSPool->Make( aStyleName, nFamily, SFXSTYLEBIT_USERDEF );
+            pStyleSheet = &pSSPool->Make( aStyleName, nFamily, SfxStyleSearchBits::UserDefined );
 
             if (pArgs && pArgs->GetItemState(SID_STYLE_REFERENCE) == SfxItemState::SET)
             {
@@ -190,7 +190,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 pSSPool->Remove(p);
                 p = nullptr;
             }
-            pStyleSheet = &pSSPool->Make( aStyleName, nFamily, SFXSTYLEBIT_USERDEF );
+            pStyleSheet = &pSSPool->Make( aStyleName, nFamily, SfxStyleSearchBits::UserDefined );
             pStyleSheet->SetParent(SdResId(STR_STANDARD_STYLESHEET_NAME));
         }
         break;
@@ -382,7 +382,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 {
                     case RET_OK:
                     {
-                        nRetMask = pStyleSheet->GetMask();
+                        nRetMask = static_cast<sal_uInt16>(pStyleSheet->GetMask());
 
                         if (eFamily == SfxStyleFamily::Pseudo)
                         {
@@ -568,7 +568,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         {
             if( pStyleSheet )
             {
-                nRetMask = pStyleSheet->GetMask();
+                nRetMask = static_cast<sal_uInt16>(pStyleSheet->GetMask());
                 SfxItemSet aCoreSet( mpDoc->GetPool() );
                 mpView->GetAttributes( aCoreSet, true );
 
@@ -612,7 +612,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                 if( pStyleSheet )
                 {
-                    nRetMask = pStyleSheet->GetMask();
+                    nRetMask = static_cast<sal_uInt16>(pStyleSheet->GetMask());
                     SfxItemSet aCoreSet( mpDoc->GetPool() );
                     mpView->GetAttributes( aCoreSet );
 
@@ -630,7 +630,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         break;
 
     }
-    if( nRetMask != SFXSTYLEBIT_ALL )
+    if( nRetMask != static_cast<sal_uInt16>(SfxStyleSearchBits::All) )
         rReq.SetReturnValue( SfxUInt16Item( nSId, nRetMask ) );
 }
 

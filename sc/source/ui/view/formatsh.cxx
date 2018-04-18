@@ -388,7 +388,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     }
 
                     pStyleSheet = &(pStylePool->Make( aStyleName, eFamily,
-                                                      SFXSTYLEBIT_USERDEF ) );
+                                                      SfxStyleSearchBits::UserDefined ) );
 
                     if ( pStyleSheet && pStyleSheet->HasParentSupport() )
                         pStyleSheet->SetParent(aRefName);
@@ -598,7 +598,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                             // ...and create new
                             pStyleSheet = &pStylePool->Make( aStyleName, eFamily,
-                                                             SFXSTYLEBIT_USERDEF );
+                                                             SfxStyleSearchBits::UserDefined );
 
                             // when a style is present, then this will become
                             // the parent of the new style:
@@ -743,7 +743,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                             // ...and create new
                             pStyleSheet = &pStylePool->Make( aStyleName, eFamily,
-                                                             SFXSTYLEBIT_USERDEF );
+                                                             SfxStyleSearchBits::UserDefined );
 
                             // Adopt attribute
                             pStyleSheet->GetItemSet().Put( aAttrSet );
@@ -870,7 +870,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                     if ( pOutSet )
                     {
-                        nRetMask = pStyleSheet->GetMask();
+                        nRetMask = sal_uInt16(pStyleSheet->GetMask());
 
                         // Attribute comparisons (earlier in ModifyStyleSheet) now here
                         // with the old values (the style is already changed)

@@ -32,6 +32,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/stylesheetuser.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
 
@@ -49,14 +50,31 @@ enum class SfxStyleFamily {
     All     = 0x7fff
 };
 
-#define SFXSTYLEBIT_AUTO        0x0000 ///< automatic: flags from application
-#define SFXSTYLEBIT_HIDDEN      0x0200 ///< hidden styles (search mask)
-#define SFXSTYLEBIT_HIERARCHY   0x1000 ///< hierarchical view - just for dialog
-#define SFXSTYLEBIT_READONLY    0x2000 ///< readonly styles (search mask)
-#define SFXSTYLEBIT_USED        0x4000 ///< used styles (search mask)
-#define SFXSTYLEBIT_USERDEF     0x8000 ///< user defined styles (search mask)
-#define SFXSTYLEBIT_ALL_VISIBLE 0xFDFF ///< all styles
-#define SFXSTYLEBIT_ALL         0xFFFF ///< all styles
+enum class SfxStyleSearchBits {
+    // sc/calc styles
+    ScStandard  = 0x0001,
+
+    // sw/writer styles
+    SwText      = 0x0001,
+    SwChapter   = 0x0002,
+    SwList      = 0x0004,
+    SwIndex     = 0x0008,
+    SwExtra     = 0x0010,
+    SwHtml      = 0x0020,
+    SwCondColl  = 0x0040,
+
+    Auto        = 0x0000, ///< automatic: flags from application
+    Hidden      = 0x0200, ///< hidden styles (search mask)
+    ReadOnly    = 0x2000, ///< readonly styles (search mask)
+    Used        = 0x4000, ///< used styles (search mask)
+    UserDefined = 0x8000, ///< user defined styles (search mask)
+    AllVisible  = 0xFDFF, ///< all styles
+    All         = 0xFFFF, ///< all styles
+};
+namespace o3tl {
+    template<> struct typed_flags<SfxStyleSearchBits> : is_typed_flags<SfxStyleSearchBits, 0xffff> {};
+}
+
 
 class SfxItemSet;
 class SfxItemPool;
@@ -104,14 +122,14 @@ protected:
     OUString                aName, aParent, aFollow;
     OUString                aHelpFile;      // name of the help file
     SfxItemSet*             pSet;           // ItemSet
-    sal_uInt16              nMask;          // Flags
+    SfxStyleSearchBits      nMask;          // Flags
 
     sal_uLong               nHelpId;        // help ID
 
     bool                    bMySet;         // sal_True: delete Set in dtor
     bool                    bHidden;
 
-    SfxStyleSheetBase( const OUString&, SfxStyleSheetBasePool*, SfxStyleFamily eFam, sal_uInt16 mask );
+    SfxStyleSheetBase( const OUString&, SfxStyleSheetBasePool*, SfxStyleFamily eFam, SfxStyleSearchBits mask );
     SfxStyleSheetBase( const SfxStyleSheetBase& );
     virtual ~SfxStyleSheetBase() override;
     virtual void Load( SvStream&, sal_uInt16 );
@@ -141,10 +159,10 @@ public:
 
     SfxStyleSheetBasePool* GetPool() { return m_pPool; }
     SfxStyleFamily GetFamily() const     { return nFamily; }
-    sal_uInt16   GetMask() const     { return nMask; }
-    void     SetMask( sal_uInt16 mask) { nMask = mask; }
+    SfxStyleSearchBits   GetMask() const     { return nMask; }
+    void     SetMask( SfxStyleSearchBits mask) { nMask = mask; }
     bool     IsUserDefined() const
-           { return ( nMask & SFXSTYLEBIT_USERDEF) != 0; }
+           { return bool( nMask & SfxStyleSearchBits::UserDefined); }
 
     virtual bool IsHidden() const { return bHidden; }
     virtual void SetHidden( bool bValue );
@@ -168,8 +186,8 @@ public:
      * The iterator will only iterate over style sheets which have the family \p eFam
      */
     SfxStyleSheetIterator(SfxStyleSheetBasePool *pBase,
-                          SfxStyleFamily eFam, sal_uInt16 n=SFXSTYLEBIT_ALL );
-    sal_uInt16 GetSearchMask() const;
+                          SfxStyleFamily eFam, SfxStyleSearchBits n=SfxStyleSearchBits::All );
+    SfxStyleSearchBits GetSearchMask() const;
     SfxStyleFamily GetSearchFamily() const;
     virtual sal_uInt16 Count();
     virtual SfxStyleSheetBase *operator[](sal_uInt16 nIdx);
@@ -184,7 +202,7 @@ protected:
 
     SfxStyleSheetBasePool*  pBasePool;
     SfxStyleFamily          nSearchFamily;
-    sal_uInt16              nMask;
+    SfxStyleSearchBits      nMask;
 
 
 private:
@@ -211,10 +229,10 @@ protected:
 
     SfxItemPool&                rPool;
     SfxStyleFamily              nSearchFamily;
-    sal_uInt16                  nMask;
+    SfxStyleSearchBits          nMask;
 
     void                        ChangeParent( const OUString&, const OUString&, bool bVirtual = true );
-    virtual SfxStyleSheetBase*  Create( const OUString&, SfxStyleFamily, sal_uInt16 );
+    virtual SfxStyleSheetBase*  Create( const OUString&, SfxStyleFamily, SfxStyleSearchBits );
     virtual SfxStyleSheetBase*  Create( const SfxStyleSheetBase& );
 
     virtual                     ~SfxStyleSheetBasePool() override;
@@ -235,13 +253,13 @@ public:
     SfxItemPool&                GetPool() { return rPool;}
     const SfxItemPool&          GetPool() const { return rPool;}
 
-    virtual std::shared_ptr<SfxStyleSheetIterator> CreateIterator(SfxStyleFamily, sal_uInt16 nMask);
+    virtual std::shared_ptr<SfxStyleSheetIterator> CreateIterator(SfxStyleFamily, SfxStyleSearchBits nMask);
     sal_uInt16              Count();
     SfxStyleSheetBase*  operator[](sal_uInt16 nIdx);
 
     virtual SfxStyleSheetBase&  Make(const OUString&,
                                      SfxStyleFamily eFam,
-                                     sal_uInt16 nMask = SFXSTYLEBIT_ALL);
+                                     SfxStyleSearchBits nMask = SfxStyleSearchBits::All);
 
     virtual void                Remove( SfxStyleSheetBase* );
     void                Insert( SfxStyleSheetBase* );
@@ -253,7 +271,7 @@ public:
 
     SfxStyleSheetBase*  First();
     SfxStyleSheetBase*  Next();
-    virtual SfxStyleSheetBase*  Find( const OUString&, SfxStyleFamily eFam, sal_uInt16 n=SFXSTYLEBIT_ALL );
+    virtual SfxStyleSheetBase*  Find( const OUString&, SfxStyleFamily eFam, SfxStyleSearchBits n=SfxStyleSearchBits::All );
 
     virtual bool                SetParent(SfxStyleFamily eFam,
                                           const OUString &rStyle,
@@ -262,8 +280,8 @@ public:
     SfxStyleSheetBase*          Find(const OUString& rStr)
                                 { return Find(rStr, nSearchFamily, nMask); }
 
-    void                        SetSearchMask(SfxStyleFamily eFam, sal_uInt16 n=SFXSTYLEBIT_ALL );
-    sal_uInt16                      GetSearchMask() const { return nMask;}
+    void                        SetSearchMask(SfxStyleFamily eFam, SfxStyleSearchBits n=SfxStyleSearchBits::All );
+    SfxStyleSearchBits          GetSearchMask() const { return nMask;}
     SfxStyleFamily              GetSearchFamily() const  { return nSearchFamily; }
 
     void                        Reindex();
@@ -278,7 +296,7 @@ class SVL_DLLPUBLIC SfxStyleSheet: public SfxStyleSheetBase,
 {
 public:
 
-                        SfxStyleSheet( const OUString&, const SfxStyleSheetBasePool&, SfxStyleFamily, sal_uInt16 );
+                        SfxStyleSheet( const OUString&, const SfxStyleSheetBasePool&, SfxStyleFamily, SfxStyleSearchBits );
                         SfxStyleSheet( const SfxStyleSheet& );
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
@@ -295,7 +313,7 @@ class SVL_DLLPUBLIC SfxStyleSheetPool: public SfxStyleSheetBasePool
 {
 protected:
     using SfxStyleSheetBasePool::Create;
-    virtual SfxStyleSheetBase* Create(const OUString&, SfxStyleFamily, sal_uInt16 mask) override;
+    virtual SfxStyleSheetBase* Create(const OUString&, SfxStyleFamily, SfxStyleSearchBits mask) override;
 
 public:
     SfxStyleSheetPool( SfxItemPool const& );
@@ -331,7 +349,7 @@ public:
 class SVL_DLLPUBLIC SfxUnoStyleSheet : public cppu::ImplInheritanceHelper<SfxStyleSheet, css::style::XStyle, css::lang::XUnoTunnel>
 {
 public:
-    SfxUnoStyleSheet( const OUString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, sal_uInt16 _nMaske );
+    SfxUnoStyleSheet( const OUString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, SfxStyleSearchBits _nMask );
 
     static SfxUnoStyleSheet* getUnoStyleSheet( const css::uno::Reference< css::style::XStyle >& xStyle );
 

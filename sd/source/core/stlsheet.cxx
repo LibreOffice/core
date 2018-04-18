@@ -129,7 +129,7 @@ void ModifyListenerForewarder::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*
         mpStyleSheet->notifyModifyListener();
 }
 
-SdStyleSheet::SdStyleSheet(const OUString& rDisplayName, SfxStyleSheetBasePool& _rPool, SfxStyleFamily eFamily, sal_uInt16 _nMask)
+SdStyleSheet::SdStyleSheet(const OUString& rDisplayName, SfxStyleSheetBasePool& _rPool, SfxStyleFamily eFamily, SfxStyleSearchBits _nMask)
 : SdStyleSheetBase( rDisplayName, _rPool, eFamily, _nMask)
 , ::cppu::BaseMutex()
 , msApiName( rDisplayName )
@@ -162,10 +162,10 @@ void SdStyleSheet::Load (SvStream& rIn, sal_uInt16 nVersion)
     SfxStyleSheetBase::Load(rIn, nVersion);
 
     /* previously, the default mask was 0xAFFE. The needed flags were masked
-       from this mask. Now the flag SFXSTYLEBIT_READONLY was introduced and with
+       from this mask. Now the flag SfxStyleSearchBits::ReadOnly was introduced and with
        this, all style sheets are read only. Since no style sheet should be read
        only in Draw, we reset the flag here.  */
-    nMask &= ~SFXSTYLEBIT_READONLY;
+    nMask &= ~SfxStyleSearchBits::ReadOnly;
 }
 
 bool SdStyleSheet::SetParent(const OUString& rParentName)
@@ -661,7 +661,7 @@ SdStyleSheet* SdStyleSheet::CreateEmptyUserStyle( SfxStyleSheetBasePool& rPool, 
     }
     while( rPool.Find( aName, eFamily ) != nullptr );
 
-    return new SdStyleSheet(aName, rPool, eFamily, SFXSTYLEBIT_USERDEF);
+    return new SdStyleSheet(aName, rPool, eFamily, SfxStyleSearchBits::UserDefined);
 }
 
 // XInterface

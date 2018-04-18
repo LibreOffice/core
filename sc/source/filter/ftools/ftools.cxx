@@ -248,7 +248,7 @@ ScStyleSheet& lclMakeStyleSheet( ScStyleSheetPool& rPool, const OUString& rStyle
     }
 
     // create new style sheet
-    return static_cast< ScStyleSheet& >( rPool.Make( aNewName, eFamily, SFXSTYLEBIT_USERDEF ) );
+    return static_cast< ScStyleSheet& >( rPool.Make( aNewName, eFamily, SfxStyleSearchBits::UserDefined ) );
 }
 
 } // namespace

@@ -68,7 +68,6 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentListsAccess.hxx>
 #include <IDocumentState.hxx>
-#include <swstyle.h>
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
 #include <poolfmt.hxx>
@@ -164,23 +163,23 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 
                     SfxTemplateItem aItem(nWhich, aName);
 
-                    sal_uInt16 nMask = 0;
+                    SfxStyleSearchBits nMask = SfxStyleSearchBits::Auto;
                     if (m_xDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE))
-                        nMask = SWSTYLEBIT_HTML;
+                        nMask = SfxStyleSearchBits::SwHtml;
                     else
                     {
                         const FrameTypeFlags nSelection = pShell->GetFrameType(nullptr,true);
                         if(pShell->GetCurTOX())
-                            nMask = SWSTYLEBIT_IDX  ;
+                            nMask = SfxStyleSearchBits::SwIndex  ;
                         else if(nSelection & FrameTypeFlags::HEADER     ||
                                 nSelection & FrameTypeFlags::FOOTER     ||
                                 nSelection & FrameTypeFlags::TABLE      ||
                                 nSelection & FrameTypeFlags::FLY_ANY    ||
                                 nSelection & FrameTypeFlags::FOOTNOTE   ||
                                 nSelection & FrameTypeFlags::FTNPAGE)
-                            nMask = SWSTYLEBIT_EXTRA;
+                            nMask = SfxStyleSearchBits::SwExtra;
                         else
-                            nMask = SWSTYLEBIT_TEXT;
+                            nMask = SfxStyleSearchBits::SwText;
                     }
 
                     aItem.SetValue(nMask);
@@ -307,13 +306,13 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             const SfxStyleFamily nFamily = static_cast<SfxStyleFamily>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
 
             OUString sName;
-            sal_uInt16 nMask = 0;
+            SfxStyleSearchBits nMask = SfxStyleSearchBits::Auto;
             if( SfxItemState::SET == pArgs->GetItemState( SID_STYLE_NEW,
                 false, &pItem ))
                 sName = static_cast<const SfxStringItem*>(pItem)->GetValue();
             if( SfxItemState::SET == pArgs->GetItemState( SID_STYLE_MASK,
                 false, &pItem ))
-                nMask = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                nMask = static_cast<SfxStyleSearchBits>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
             OUString sParent;
             if( SfxItemState::SET == pArgs->GetItemState( SID_STYLE_REFERENCE,
                 false, &pItem ))
@@ -371,7 +370,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
         {
             OUString aParam;
             SfxStyleFamily nFamily = SfxStyleFamily::Para;
-            sal_uInt16 nMask = 0;
+            SfxStyleSearchBits nMask = SfxStyleSearchBits::Auto;
             SwWrtShell* pActShell = nullptr;
 
             if( !pArgs )
@@ -440,7 +439,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 
                 if( SfxItemState::SET == pArgs->GetItemState(SID_STYLE_MASK,
                     false, &pItem ))
-                    nMask = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                    nMask = static_cast<SfxStyleSearchBits>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
                 if( SfxItemState::SET == pArgs->GetItemState(FN_PARAM_WRTSHELL,
                     false, &pItem ))
                     pActShell = pShell = static_cast<SwWrtShell*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
@@ -489,7 +488,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             }
             if (!aParam.isEmpty() || nSlot == SID_STYLE_WATERCAN )
             {
-                sal_uInt16 nRet = SFXSTYLEBIT_ALL;
+                sal_uInt16 nRet = 0xffff;
                 bool bReturns = false;
 
                 switch(nSlot)
@@ -645,7 +644,7 @@ void SwDocShell::Edit(
     const OUString &rName,
     const OUString &rParent,
     const SfxStyleFamily nFamily,
-    sal_uInt16 nMask,
+    SfxStyleSearchBits nMask,
     const bool bNew,
     const OString& sPage,
     SwWrtShell* pActShell,
@@ -669,10 +668,10 @@ void SwDocShell::Edit(
             m_pWrtShell->StartUndo();
         }
 
-        if( SFXSTYLEBIT_ALL != nMask && SFXSTYLEBIT_ALL_VISIBLE != nMask && SFXSTYLEBIT_USED != nMask )
-            nMask |= SFXSTYLEBIT_USERDEF;
+        if( SfxStyleSearchBits::All != nMask && SfxStyleSearchBits::AllVisible != nMask && SfxStyleSearchBits::Used != nMask )
+            nMask |= SfxStyleSearchBits::UserDefined;
         else
-            nMask = SFXSTYLEBIT_USERDEF;
+            nMask = SfxStyleSearchBits::UserDefined;
 
         pStyle = &m_xBasePool->Make( rName, nFamily, nMask );
 
@@ -1147,7 +1146,7 @@ void SwDocShell::UpdateStyle(const OUString &rName, SfxStyleFamily nFamily, SwWr
 
 // NewByExample
 void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
-                                    sal_uInt16 nMask, SwWrtShell* pShell )
+                                    SfxStyleSearchBits nMask, SwWrtShell* pShell )
 {
     SwWrtShell* pCurrWrtShell = pShell ? pShell : GetWrtShell();
     SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>( m_xBasePool->Find(
@@ -1156,10 +1155,10 @@ void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
     {
         // preserve the current mask of PI, then the new one is
         // immediately merged with the viewable area
-        if( SFXSTYLEBIT_ALL == nMask || SFXSTYLEBIT_USED == nMask )
-            nMask = SFXSTYLEBIT_USERDEF;
+        if( SfxStyleSearchBits::All == nMask || SfxStyleSearchBits::Used == nMask )
+            nMask = SfxStyleSearchBits::UserDefined;
         else
-            nMask |= SFXSTYLEBIT_USERDEF;
+            nMask |= SfxStyleSearchBits::UserDefined;
 
         pStyle = static_cast<SwDocStyleSheet*>( &m_xBasePool->Make(rName,
                                 nFamily, nMask ) );
@@ -1179,26 +1178,27 @@ void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
 
                     // set the mask at the Collection:
                 sal_uInt16 nId = pColl->GetPoolFormatId() & 0x87ff;
-                switch( nMask & 0x0fff )
+                switch( nMask & static_cast<SfxStyleSearchBits>(0x0fff) )
                 {
-                    case SWSTYLEBIT_TEXT:
+                    case SfxStyleSearchBits::SwText:
                         nId |= COLL_TEXT_BITS;
                         break;
-                    case SWSTYLEBIT_CHAPTER:
+                    case SfxStyleSearchBits::SwChapter:
                         nId |= COLL_DOC_BITS;
                         break;
-                    case SWSTYLEBIT_LIST:
+                    case SfxStyleSearchBits::SwList:
                         nId |= COLL_LISTS_BITS;
                         break;
-                    case SWSTYLEBIT_IDX:
+                    case SfxStyleSearchBits::SwIndex:
                         nId |= COLL_REGISTER_BITS;
                         break;
-                    case SWSTYLEBIT_EXTRA:
+                    case SfxStyleSearchBits::SwExtra:
                         nId |= COLL_EXTRA_BITS;
                         break;
-                    case SWSTYLEBIT_HTML:
+                    case SfxStyleSearchBits::SwHtml:
                         nId |= COLL_HTML_BITS;
                         break;
+                    default: break;
                 }
                 pColl->SetPoolFormatId(nId);
 
@@ -1375,7 +1375,7 @@ void SwDocShell::FormatPage(
     SwWrtShell& rActShell,
     SfxRequest* pRequest)
 {
-    Edit(rPage, aEmptyOUStr, SfxStyleFamily::Page, 0, false, rPageId, &rActShell, pRequest);
+    Edit(rPage, aEmptyOUStr, SfxStyleFamily::Page, SfxStyleSearchBits::Auto, false, rPageId, &rActShell, pRequest);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

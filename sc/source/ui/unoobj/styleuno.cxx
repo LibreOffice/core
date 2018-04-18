@@ -671,7 +671,7 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
             if ( pStylePool->Find( aNameStr, eFamily ) )   // not available yet
                 throw container::ElementExistException();
 
-            (void)pStylePool->Make( aNameStr, eFamily, SFXSTYLEBIT_USERDEF );
+            (void)pStylePool->Make( aNameStr, eFamily, SfxStyleSearchBits::UserDefined );
 
             if ( eFamily == SfxStyleFamily::Para && !rDoc.IsImportingXML() )
                 rDoc.GetPool()->CellStyleCreated( aNameStr, &rDoc );

@@ -127,7 +127,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
     else if ( !bDelete )
     {
         // create style (with new name)
-        pStyle = &pStlPool->Make( aNewName, eStyleFamily, SFXSTYLEBIT_USERDEF );
+        pStyle = &pStlPool->Make( aNewName, eStyleFamily, SfxStyleSearchBits::UserDefined );
 
         if ( eStyleFamily == SfxStyleFamily::Para )
             rDoc.GetPool()->CellStyleCreated( aNewName, &rDoc );

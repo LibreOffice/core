@@ -50,7 +50,6 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentState.hxx>
 #include <cmdid.h>
-#include <swstyle.h>
 #include <app.hrc>
 #include <strings.hrc>
 #include <paratr.hxx>
@@ -454,7 +453,7 @@ void SwStyleSheetIterator::SwPoolFormatList::Append( char cChar, const OUString&
 SwDocStyleSheet::SwDocStyleSheet(   SwDoc&                rDocument,
                                     SwDocStyleSheetPool*  _rPool) :
 
-    SfxStyleSheetBase( OUString(), _rPool, SfxStyleFamily::Char, 0 ),
+    SfxStyleSheetBase( OUString(), _rPool, SfxStyleFamily::Char, SfxStyleSearchBits::Auto ),
     pCharFormat(nullptr),
     pColl(nullptr),
     pFrameFormat(nullptr),
@@ -1565,26 +1564,27 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
 
             sal_uInt16 nId = pColl->GetPoolFormatId() &
                             ~ ( COLL_GET_RANGE_BITS | POOLGRP_NOCOLLID );
-            switch( GetMask() & ( 0x0fff & ~SWSTYLEBIT_CONDCOLL ) )
+            switch( GetMask() & ( static_cast<SfxStyleSearchBits>(0x0fff) & ~SfxStyleSearchBits::SwCondColl ) )
             {
-                case SWSTYLEBIT_TEXT:
+                case SfxStyleSearchBits::SwText:
                     nId |= COLL_TEXT_BITS;
                     break;
-                case SWSTYLEBIT_CHAPTER:
+                case SfxStyleSearchBits::SwChapter:
                     nId |= COLL_DOC_BITS;
                     break;
-                case SWSTYLEBIT_LIST:
+                case SfxStyleSearchBits::SwList:
                     nId |= COLL_LISTS_BITS;
                     break;
-                case SWSTYLEBIT_IDX:
+                case SfxStyleSearchBits::SwIndex:
                     nId |= COLL_REGISTER_BITS;
                     break;
-                case SWSTYLEBIT_EXTRA:
+                case SfxStyleSearchBits::SwExtra:
                     nId |= COLL_EXTRA_BITS;
                     break;
-                case SWSTYLEBIT_HTML:
+                case SfxStyleSearchBits::SwHtml:
                     nId |= COLL_HTML_BITS;
                     break;
+                default: break;
             }
             pColl->SetPoolFormatId( nId );
             break;
@@ -1962,7 +1962,7 @@ bool SwDocStyleSheet::FillStyleSheet(
         }
         else if( !bCreate )
             nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::PageDesc );
-        SetMask( (USER_FMT & nPoolId) ? SFXSTYLEBIT_USERDEF : 0 );
+        SetMask( (USER_FMT & nPoolId) ? SfxStyleSearchBits::UserDefined : SfxStyleSearchBits::Auto );
 
         bRet = nullptr != pDesc || USHRT_MAX != nPoolId;
         if( bDeleteInfo )
@@ -1991,7 +1991,7 @@ bool SwDocStyleSheet::FillStyleSheet(
         }
         else if( !bCreate )
             nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::NumRule );
-        SetMask( (USER_FMT & nPoolId) ? SFXSTYLEBIT_USERDEF : 0 );
+        SetMask( (USER_FMT & nPoolId) ? SfxStyleSearchBits::UserDefined : SfxStyleSearchBits::Auto );
 
         bRet = nullptr != pNumRule || USHRT_MAX != nPoolId;
 
@@ -2001,7 +2001,7 @@ bool SwDocStyleSheet::FillStyleSheet(
 
     case SfxStyleFamily::Table:
         pTableFormat = lcl_FindTableStyle(rDoc, aName, this, bCreate);
-        SetMask((pTableFormat && pTableFormat->IsUserDefined()) ? SFXSTYLEBIT_USERDEF : 0);
+        SetMask((pTableFormat && pTableFormat->IsUserDefined()) ? SfxStyleSearchBits::UserDefined : SfxStyleSearchBits::Auto);
         bRet = bPhysical = (nullptr != pTableFormat);
         break;
 
@@ -2019,20 +2019,20 @@ bool SwDocStyleSheet::FillStyleSheet(
         if( pFormat )
             nPoolId = pFormat->GetPoolFormatId();
 
-        sal_uInt16 _nMask = 0;
+        SfxStyleSearchBits _nMask = SfxStyleSearchBits::Auto;
         if( pFormat == rDoc.GetDfltCharFormat() )
-            _nMask |= SFXSTYLEBIT_READONLY;
+            _nMask |= SfxStyleSearchBits::ReadOnly;
         else if( USER_FMT & nPoolId )
-            _nMask |= SFXSTYLEBIT_USERDEF;
+            _nMask |= SfxStyleSearchBits::UserDefined;
 
         switch ( COLL_GET_RANGE_BITS & nPoolId )
         {
-        case COLL_TEXT_BITS:     _nMask |= SWSTYLEBIT_TEXT;   break;
-        case COLL_DOC_BITS :     _nMask |= SWSTYLEBIT_CHAPTER; break;
-        case COLL_LISTS_BITS:    _nMask |= SWSTYLEBIT_LIST;   break;
-        case COLL_REGISTER_BITS: _nMask |= SWSTYLEBIT_IDX;    break;
-        case COLL_EXTRA_BITS:    _nMask |= SWSTYLEBIT_EXTRA;      break;
-        case COLL_HTML_BITS:     _nMask |= SWSTYLEBIT_HTML;   break;
+        case COLL_TEXT_BITS:     _nMask |= SfxStyleSearchBits::SwText;    break;
+        case COLL_DOC_BITS :     _nMask |= SfxStyleSearchBits::SwChapter; break;
+        case COLL_LISTS_BITS:    _nMask |= SfxStyleSearchBits::SwList;    break;
+        case COLL_REGISTER_BITS: _nMask |= SfxStyleSearchBits::SwIndex;   break;
+        case COLL_EXTRA_BITS:    _nMask |= SfxStyleSearchBits::SwExtra;   break;
+        case COLL_HTML_BITS:     _nMask |= SfxStyleSearchBits::SwHtml;    break;
         }
 
         if( pFormat )
@@ -2046,7 +2046,7 @@ bool SwDocStyleSheet::FillStyleSheet(
                 aHelpFile.clear();
 
             if( RES_CONDTXTFMTCOLL == pFormat->Which() )
-                _nMask |= SWSTYLEBIT_CONDCOLL;
+                _nMask |= SfxStyleSearchBits::SwCondColl;
 
             if (FillPreview == eFType)
             {
@@ -2087,7 +2087,7 @@ void SwDocStyleSheet::Create()
             if( !pColl )
             {
                 SwTextFormatColl *pPar = (*rDoc.GetTextFormatColls())[0];
-                if( nMask & SWSTYLEBIT_CONDCOLL )
+                if( nMask & SfxStyleSearchBits::SwCondColl )
                     pColl = rDoc.MakeCondTextFormatColl( aName, pPar );
                 else
                     pColl = rDoc.MakeTextFormatColl( aName, pPar );
@@ -2404,7 +2404,7 @@ SwDocStyleSheetPool::SwDocStyleSheetPool( SwDoc& rDocument, bool bOrg )
 
 SfxStyleSheetBase&   SwDocStyleSheetPool::Make( const OUString&   rName,
                                                 SfxStyleFamily  eFam,
-                                                sal_uInt16          _nMask)
+                                                SfxStyleSearchBits _nMask)
 {
     mxStyleSheet->PresetName(rName);
     mxStyleSheet->PresetParent(OUString());
@@ -2424,13 +2424,13 @@ SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const SfxStyleSheetBase& /*rOr
 }
 
 SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const OUString &,
-                                                  SfxStyleFamily, sal_uInt16 )
+                                                  SfxStyleFamily, SfxStyleSearchBits )
 {
     OSL_ENSURE( false, "Create in SW-Stylesheet-Pool not possible" );
     return nullptr;
 }
 
-std::shared_ptr<SfxStyleSheetIterator> SwDocStyleSheetPool::CreateIterator( SfxStyleFamily eFam, sal_uInt16 _nMask )
+std::shared_ptr<SfxStyleSheetIterator> SwDocStyleSheetPool::CreateIterator( SfxStyleFamily eFam, SfxStyleSearchBits _nMask )
 {
     return std::shared_ptr<SfxStyleSheetIterator>(new SwStyleSheetIterator( this, eFam, _nMask ));
 }
@@ -2558,22 +2558,22 @@ bool  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
 }
 
 SfxStyleSheetBase* SwDocStyleSheetPool::Find( const OUString& rName,
-                                              SfxStyleFamily eFam, sal_uInt16 n )
+                                              SfxStyleFamily eFam, SfxStyleSearchBits n )
 {
-    sal_uInt16 nSMask = n;
+    SfxStyleSearchBits nSMask = n;
     if( SfxStyleFamily::Para == eFam &&  rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) )
     {
         // then only HTML-Templates are of interest
-        if( USHRT_MAX == nSMask )
-            nSMask = SWSTYLEBIT_HTML | SFXSTYLEBIT_USERDEF | SFXSTYLEBIT_USED;
+        if( SfxStyleSearchBits::All == nSMask )
+            nSMask = SfxStyleSearchBits::SwHtml | SfxStyleSearchBits::UserDefined | SfxStyleSearchBits::Used;
         else
-            nSMask &= SFXSTYLEBIT_USED | SFXSTYLEBIT_USERDEF |
-                                SWSTYLEBIT_CONDCOLL | SWSTYLEBIT_HTML;
-        if( !nSMask )
-            nSMask = SWSTYLEBIT_HTML;
+            nSMask &= SfxStyleSearchBits::Used | SfxStyleSearchBits::UserDefined |
+                                SfxStyleSearchBits::SwCondColl | SfxStyleSearchBits::SwHtml;
+        if( nSMask == SfxStyleSearchBits::Auto )
+            nSMask = SfxStyleSearchBits::SwHtml;
     }
 
-    const bool bSearchUsed = ( n != SFXSTYLEBIT_ALL && n & SFXSTYLEBIT_USED );
+    const bool bSearchUsed = ( n != SfxStyleSearchBits::All && n & SfxStyleSearchBits::Used );
     const SwModify* pMod = nullptr;
 
     mxStyleSheet->SetPhysical( false );
@@ -2606,7 +2606,7 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const OUString& rName,
                 const SwNumRule* pRule = mxStyleSheet->GetNumRule();
                 if( pRule &&
                     !bSearchUsed &&
-                    (( nSMask & ~SFXSTYLEBIT_USED) == SFXSTYLEBIT_USERDEF
+                    (( nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::UserDefined
                             ? !(pRule->GetPoolFormatId() & USER_FMT)
                                 // searched for used and found none
                             : bSearchUsed ))
@@ -2629,7 +2629,7 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const OUString& rName,
                         ? static_cast<const SwPageDesc*>(pMod)->GetPoolFormatId()
                         : static_cast<const SwFormat*>(pMod)->GetPoolFormatId();
 
-        if( ( nSMask & ~SFXSTYLEBIT_USED) == SFXSTYLEBIT_USERDEF
+        if( ( nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::UserDefined
             ? !(nId & USER_FMT)
                 // searched for used and found none
             : bSearchUsed )
@@ -2639,7 +2639,7 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const OUString& rName,
 }
 
 SwStyleSheetIterator::SwStyleSheetIterator( SwDocStyleSheetPool* pBase,
-                                SfxStyleFamily eFam, sal_uInt16 n )
+                                SfxStyleFamily eFam, SfxStyleSearchBits n )
     : SfxStyleSheetIterator( pBase, eFam, n ),
     mxIterSheet( new SwDocStyleSheet( pBase->GetDoc(), pBase ) ),
     mxStyleSheet( new SwDocStyleSheet( pBase->GetDoc(), pBase ) )
@@ -2685,14 +2685,14 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
     mxIterSheet->Reset();
 
     SwDoc& rDoc = static_cast<SwDocStyleSheetPool*>(pBasePool)->GetDoc();
-    const sal_uInt16 nSrchMask = nMask;
+    const SfxStyleSearchBits nSrchMask = nMask;
     const bool bIsSearchUsed = SearchUsed();
 
-    bool bSearchHidden = ( nMask & SFXSTYLEBIT_HIDDEN );
-    bool bOnlyHidden = nMask == SFXSTYLEBIT_HIDDEN;
+    bool bSearchHidden( nMask & SfxStyleSearchBits::Hidden );
+    bool bOnlyHidden = nMask == SfxStyleSearchBits::Hidden;
 
     const bool bOrganizer = static_cast<SwDocStyleSheetPool*>(pBasePool)->IsOrganizerMode();
-    bool bAll = ( nSrchMask & SFXSTYLEBIT_ALL_VISIBLE ) == SFXSTYLEBIT_ALL_VISIBLE;
+    bool bAll = ( nSrchMask & SfxStyleSearchBits::AllVisible ) == SfxStyleSearchBits::AllVisible;
 
     if( nSearchFamily == SfxStyleFamily::Char
      || nSearchFamily == SfxStyleFamily::All )
@@ -2706,7 +2706,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             if( ( !bSearchHidden && pFormat->IsHidden() && !bUsed ) || ( pFormat->IsDefault() && pFormat != rDoc.GetDfltCharFormat() ) )
                 continue;
 
-            if ( nSrchMask == SFXSTYLEBIT_HIDDEN && !pFormat->IsHidden( ) )
+            if ( nSrchMask == SfxStyleSearchBits::Hidden && !pFormat->IsHidden( ) )
                 continue;
 
             if( !bUsed )
@@ -2715,7 +2715,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 const sal_uInt16 nId = rDoc.GetDfltCharFormat() == pFormat ?
                         sal_uInt16( RES_POOLCHR_INET_NORMAL ):
                                 pFormat->GetPoolFormatId();
-                if( (nSrchMask & ~SFXSTYLEBIT_USED) == SFXSTYLEBIT_USERDEF
+                if( (nSrchMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::UserDefined
                     ? !(nId & USER_FMT)
                         // searched for used and found none
                     : bIsSearchUsed )
@@ -2766,18 +2766,18 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
     if( nSearchFamily == SfxStyleFamily::Para ||
         nSearchFamily == SfxStyleFamily::All )
     {
-        sal_uInt16 nSMask = nSrchMask;
+        SfxStyleSearchBits nSMask = nSrchMask;
         if(  rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) )
         {
             // then only HTML-Template are of interest
-            if( SFXSTYLEBIT_ALL_VISIBLE == ( nSMask & SFXSTYLEBIT_ALL_VISIBLE ) )
-                nSMask = SWSTYLEBIT_HTML | SFXSTYLEBIT_USERDEF |
-                            SFXSTYLEBIT_USED;
+            if( SfxStyleSearchBits::AllVisible == ( nSMask & SfxStyleSearchBits::AllVisible ) )
+                nSMask = SfxStyleSearchBits::SwHtml | SfxStyleSearchBits::UserDefined |
+                            SfxStyleSearchBits::Used;
             else
-                nSMask &= SFXSTYLEBIT_USED | SFXSTYLEBIT_USERDEF |
-                                SWSTYLEBIT_CONDCOLL | SWSTYLEBIT_HTML;
-            if( !nSMask )
-                nSMask = SWSTYLEBIT_HTML;
+                nSMask &= SfxStyleSearchBits::Used | SfxStyleSearchBits::UserDefined |
+                                SfxStyleSearchBits::SwCondColl | SfxStyleSearchBits::SwHtml;
+            if( nSMask == SfxStyleSearchBits::Auto )
+                nSMask = SfxStyleSearchBits::SwHtml;
         }
 
         const size_t nArrLen = rDoc.GetTextFormatColls()->size();
@@ -2789,38 +2789,43 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             if ( ( !bSearchHidden && pColl->IsHidden( ) && !bUsed ) || pColl->IsDefault() )
                 continue;
 
-            if ( nSMask == SFXSTYLEBIT_HIDDEN && !pColl->IsHidden( ) )
+            if ( nSMask == SfxStyleSearchBits::Hidden && !pColl->IsHidden( ) )
                 continue;
 
             if( !(bIsSearchUsed && bUsed ))
             {
                 const sal_uInt16 nId = pColl->GetPoolFormatId();
-                switch ( nSMask & ~SFXSTYLEBIT_USED )
+                auto tmpMask = nSMask & ~SfxStyleSearchBits::Used;
+                if (tmpMask == SfxStyleSearchBits::UserDefined)
                 {
-                case SFXSTYLEBIT_USERDEF:
                     if(!IsPoolUserFormat(nId)) continue;
-                    break;
-                case SWSTYLEBIT_TEXT:
+                }
+                else if (tmpMask == SfxStyleSearchBits::SwText)
+                {
                     if((nId & COLL_GET_RANGE_BITS) != COLL_TEXT_BITS) continue;
-                    break;
-                case SWSTYLEBIT_CHAPTER:
+                }
+                else if (tmpMask == SfxStyleSearchBits::SwChapter)
+                {
                     if((nId  & COLL_GET_RANGE_BITS) != COLL_DOC_BITS) continue;
-                    break;
-                case SWSTYLEBIT_LIST:
+                }
+                else if (tmpMask == SfxStyleSearchBits::SwList)
+                {
                     if((nId  & COLL_GET_RANGE_BITS) != COLL_LISTS_BITS) continue;
-                    break;
-                case SWSTYLEBIT_IDX:
+                }
+                else if (tmpMask == SfxStyleSearchBits::SwIndex)
+                {
                     if((nId  & COLL_GET_RANGE_BITS) != COLL_REGISTER_BITS) continue;
-                    break;
-                case SWSTYLEBIT_EXTRA:
+                }
+                else if (tmpMask == SfxStyleSearchBits::SwExtra)
+                {
                     if((nId  & COLL_GET_RANGE_BITS) != COLL_EXTRA_BITS) continue;
-                    break;
-                case SWSTYLEBIT_HTML | SFXSTYLEBIT_USERDEF:
-                    if(IsPoolUserFormat(nId))
-                        break;
-                    SAL_FALLTHROUGH;
-                case SWSTYLEBIT_HTML:
-                    if( (nId  & COLL_GET_RANGE_BITS) != COLL_HTML_BITS)
+                }
+                else if (tmpMask == (SfxStyleSearchBits::SwHtml | SfxStyleSearchBits::UserDefined)
+                         || tmpMask == SfxStyleSearchBits::SwHtml)
+                {
+                    if((tmpMask & SfxStyleSearchBits::UserDefined) && IsPoolUserFormat(nId))
+                        ; // do nothing
+                    else if( (nId & COLL_GET_RANGE_BITS) != COLL_HTML_BITS)
                     {
                         // but some we also want to see in this section
                         bool bContinue = true;
@@ -2846,11 +2851,13 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                         if( bContinue )
                             continue;
                     }
-                    break;
-                case SWSTYLEBIT_CONDCOLL:
+                }
+                else if (tmpMask == SfxStyleSearchBits::SwCondColl)
+                {
                     if( RES_CONDTXTFMTCOLL != pColl->Which() ) continue;
-                    break;
-                default:
+                }
+                else
+                {
                     // searched for used and found none
                     if( bIsSearchUsed )
                         continue;
@@ -2859,23 +2866,23 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             aLst.Append( cPARA, pColl->GetName() );
         }
 
-        bAll = ( nSMask & SFXSTYLEBIT_ALL_VISIBLE ) == SFXSTYLEBIT_ALL_VISIBLE;
-        if ( bAll || (nSMask & ~SFXSTYLEBIT_USED) == SWSTYLEBIT_TEXT )
+        bAll = ( nSMask & SfxStyleSearchBits::AllVisible ) == SfxStyleSearchBits::AllVisible;
+        if ( bAll || (nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::SwText )
             AppendStyleList(SwStyleNameMapper::GetTextUINameArray(),
                             bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA );
-        if ( bAll || (nSMask & ~SFXSTYLEBIT_USED) == SWSTYLEBIT_CHAPTER )
+        if ( bAll || (nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::SwChapter )
             AppendStyleList(SwStyleNameMapper::GetDocUINameArray(),
                             bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA ) ;
-        if ( bAll || (nSMask & ~SFXSTYLEBIT_USED) == SWSTYLEBIT_LIST )
+        if ( bAll || (nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::SwList )
             AppendStyleList(SwStyleNameMapper::GetListsUINameArray(),
                             bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA ) ;
-        if ( bAll || (nSMask & ~SFXSTYLEBIT_USED) == SWSTYLEBIT_IDX )
+        if ( bAll || (nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::SwIndex )
             AppendStyleList(SwStyleNameMapper::GetRegisterUINameArray(),
                             bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA ) ;
-        if ( bAll || (nSMask & ~SFXSTYLEBIT_USED) == SWSTYLEBIT_EXTRA )
+        if ( bAll || (nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::SwExtra )
             AppendStyleList(SwStyleNameMapper::GetExtraUINameArray(),
                             bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA ) ;
-        if ( bAll || (nSMask & ~SFXSTYLEBIT_USED) == SWSTYLEBIT_CONDCOLL )
+        if ( bAll || (nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::SwCondColl )
         {
             if( !bIsSearchUsed ||
                 rDoc.getIDocumentStylePoolAccess().IsPoolTextCollUsed( RES_POOLCOLL_TEXT ))
@@ -2883,9 +2890,9 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                         RES_POOLCOLL_TEXT - RES_POOLCOLL_TEXT_BEGIN ] );
         }
         if ( bAll ||
-            (nSMask & ~SFXSTYLEBIT_USED) == SWSTYLEBIT_HTML ||
-            (nSMask & ~SFXSTYLEBIT_USED) ==
-                        (SWSTYLEBIT_HTML | SFXSTYLEBIT_USERDEF) )
+            (nSMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::SwHtml ||
+            (nSMask & ~SfxStyleSearchBits::Used) ==
+                        (SfxStyleSearchBits::SwHtml | SfxStyleSearchBits::UserDefined) )
         {
             AppendStyleList(SwStyleNameMapper::GetHTMLUINameArray(),
                             bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::TxtColl, cPARA ) ;
@@ -2935,13 +2942,13 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             if( ( !bSearchHidden && pFormat->IsHidden( ) && !bUsed ) || pFormat->IsDefault() || pFormat->IsAuto() )
                 continue;
 
-            if ( nSrchMask == SFXSTYLEBIT_HIDDEN && !pFormat->IsHidden( ) )
+            if ( nSrchMask == SfxStyleSearchBits::Hidden && !pFormat->IsHidden( ) )
                 continue;
 
             const sal_uInt16 nId = pFormat->GetPoolFormatId();
             if( !bUsed )
             {
-                if( (nSrchMask & ~SFXSTYLEBIT_USED) == SFXSTYLEBIT_USERDEF
+                if( (nSrchMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::UserDefined
                     ? !(nId & USER_FMT)
                     // searched for used and found none
                     : bIsSearchUsed )
@@ -2971,14 +2978,14 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             if( !bUsed )
             {
                 if ( ( !bSearchHidden && rDesc.IsHidden() ) ||
-                       ( (nSrchMask & ~SFXSTYLEBIT_USED) == SFXSTYLEBIT_USERDEF
+                       ( (nSrchMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::UserDefined
                     ? !(nId & USER_FMT)
                     // searched for used and found none
                     : bIsSearchUsed ) )
                     continue;
             }
 
-            if ( nSrchMask == SFXSTYLEBIT_HIDDEN && !rDesc.IsHidden( ) )
+            if ( nSrchMask == SfxStyleSearchBits::Hidden && !rDesc.IsHidden( ) )
                 continue;
 
             aLst.Append( cPAGE, rDesc.GetName() );
@@ -2997,14 +3004,14 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             const SwNumRule& rRule = *rNumTable[ i ];
             if( !rRule.IsAutoRule() )
             {
-                if ( nSrchMask == SFXSTYLEBIT_HIDDEN && !rRule.IsHidden( ) )
+                if ( nSrchMask == SfxStyleSearchBits::Hidden && !rRule.IsHidden( ) )
                     continue;
 
                 bool bUsed = bIsSearchUsed && ( bOrganizer || SwDoc::IsUsed(rRule) );
                 if( !bUsed )
                 {
                     if( ( !bSearchHidden && rRule.IsHidden() ) ||
-                           ( (nSrchMask & ~SFXSTYLEBIT_USED) == SFXSTYLEBIT_USERDEF
+                           ( (nSrchMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::UserDefined
                         ? !(rRule.GetPoolFormatId() & USER_FMT)
                         // searched for used and found none
                         : bIsSearchUsed ) )
@@ -3030,11 +3037,11 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             bool bUsed = bIsSearchUsed && (bOrganizer || rDoc.IsUsed(rTableStyle));
             if(!bUsed)
             {
-                if(nSrchMask == SFXSTYLEBIT_HIDDEN && !rTableStyle.IsHidden())
+                if(nSrchMask == SfxStyleSearchBits::Hidden && !rTableStyle.IsHidden())
                     continue;
 
                 if( (!bSearchHidden && rTableStyle.IsHidden() ) ||
-                        ( (nSrchMask & ~SFXSTYLEBIT_USED) == SFXSTYLEBIT_USERDEF
+                        ( (nSrchMask & ~SfxStyleSearchBits::Used) == SfxStyleSearchBits::UserDefined
                     ? !rTableStyle.IsUserDefined()
                     // searched for used and found none
                     : bIsSearchUsed ) )

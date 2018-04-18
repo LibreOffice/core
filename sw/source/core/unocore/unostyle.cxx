@@ -46,7 +46,6 @@
 #include <unostyle.hxx>
 #include <unosett.hxx>
 #include <docsh.hxx>
-#include <swstyle.h>
 #include <paratr.hxx>
 #include <unoprnms.hxx>
 #include <shellio.hxx>
@@ -145,14 +144,13 @@ namespace
     #define nPoolCollDocStackedStart      ( nPoolCollRegisterStackedStart + nPoolCollRegisterRange)
     #define nPoolCollHtmlStackedStart     ( nPoolCollDocStackedStart      + nPoolCollDocRange)
     using paragraphstyle_t = std::remove_const<decltype(style::ParagraphStyleCategory::TEXT)>::type;
-    using swstylebits_t = sal_uInt16;
     using collectionbits_t = sal_uInt16;
     struct ParagraphStyleCategoryEntry
     {
         paragraphstyle_t m_eCategory;
-        swstylebits_t m_nSwStyleBits;
+        SfxStyleSearchBits m_nSwStyleBits;
         collectionbits_t m_nCollectionBits;
-        ParagraphStyleCategoryEntry(paragraphstyle_t eCategory, swstylebits_t nSwStyleBits, collectionbits_t nCollectionBits)
+        ParagraphStyleCategoryEntry(paragraphstyle_t eCategory, SfxStyleSearchBits nSwStyleBits, collectionbits_t nCollectionBits)
                 : m_eCategory(eCategory)
                 , m_nSwStyleBits(nSwStyleBits)
                 , m_nCollectionBits(nCollectionBits)
@@ -861,7 +859,7 @@ uno::Sequence<OUString> XStyleFamily::getElementNames()
     if(!m_pBasePool)
         throw uno::RuntimeException();
     std::vector<OUString> vRet;
-    std::shared_ptr<SfxStyleSheetIterator> pIt = m_pBasePool->CreateIterator(m_rEntry.m_eFamily, SFXSTYLEBIT_ALL);
+    std::shared_ptr<SfxStyleSheetIterator> pIt = m_pBasePool->CreateIterator(m_rEntry.m_eFamily, SfxStyleSearchBits::All);
     for (SfxStyleSheetBase* pStyle = pIt->First(); pStyle; pStyle = pIt->Next())
     {
         OUString sName;
@@ -935,9 +933,9 @@ void XStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
         if (!pNewStyle || !pNewStyle->IsDescriptor() || pNewStyle->GetFamily() != m_rEntry.m_eFamily)
             throw lang::IllegalArgumentException();
 
-        sal_uInt16 nMask = SFXSTYLEBIT_ALL;
+        SfxStyleSearchBits nMask = SfxStyleSearchBits::All;
         if(m_rEntry.m_eFamily == SfxStyleFamily::Para && !pNewStyle->IsConditional())
-            nMask &= ~SWSTYLEBIT_CONDCOLL;
+            nMask &= ~SfxStyleSearchBits::SwCondColl;
         m_pBasePool->Make(sStyleName, m_rEntry.m_eFamily, nMask);
         pNewStyle->SetDoc(m_pDocShell->GetDoc(), m_pBasePool);
         pNewStyle->SetStyleName(sStyleName);
@@ -1088,12 +1086,12 @@ static const std::vector<ParagraphStyleCategoryEntry>* lcl_GetParagraphStyleCate
     if(!our_pParagraphStyleCategoryEntries)
     {
         our_pParagraphStyleCategoryEntries = new std::vector<ParagraphStyleCategoryEntry>{
-            { style::ParagraphStyleCategory::TEXT,    SWSTYLEBIT_TEXT,    COLL_TEXT_BITS     },
-            { style::ParagraphStyleCategory::CHAPTER, SWSTYLEBIT_CHAPTER, COLL_DOC_BITS      },
-            { style::ParagraphStyleCategory::LIST,    SWSTYLEBIT_LIST,    COLL_LISTS_BITS    },
-            { style::ParagraphStyleCategory::INDEX,   SWSTYLEBIT_IDX,     COLL_REGISTER_BITS },
-            { style::ParagraphStyleCategory::EXTRA,   SWSTYLEBIT_EXTRA,   COLL_EXTRA_BITS    },
-            { style::ParagraphStyleCategory::HTML,    SWSTYLEBIT_HTML,    COLL_HTML_BITS     }
+            { style::ParagraphStyleCategory::TEXT,    SfxStyleSearchBits::SwText,    COLL_TEXT_BITS     },
+            { style::ParagraphStyleCategory::CHAPTER, SfxStyleSearchBits::SwChapter, COLL_DOC_BITS      },
+            { style::ParagraphStyleCategory::LIST,    SfxStyleSearchBits::SwList,    COLL_LISTS_BITS    },
+            { style::ParagraphStyleCategory::INDEX,   SfxStyleSearchBits::SwIndex,     COLL_REGISTER_BITS },
+            { style::ParagraphStyleCategory::EXTRA,   SfxStyleSearchBits::SwExtra,   COLL_EXTRA_BITS    },
+            { style::ParagraphStyleCategory::HTML,    SfxStyleSearchBits::SwHtml,    COLL_HTML_BITS     }
         };
     }
     return our_pParagraphStyleCategoryEntries;
@@ -1376,7 +1374,7 @@ sal_Bool SwXStyle::isInUse()
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
         throw uno::RuntimeException();
-    m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, SFXSTYLEBIT_USED);
+    m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, SfxStyleSearchBits::Used);
     SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
     return pBase && pBase->IsUsed();
 }
@@ -1873,18 +1871,18 @@ void SwXStyle::SetPropertyValue<FN_UNO_CATEGORY>(const SfxItemPropertySimpleEntr
 {
     if(!o_rStyleBase.getNewBase()->IsUserDefined() || !rValue.has<paragraphstyle_t>())
         throw lang::IllegalArgumentException();
-    static std::unique_ptr<std::map<paragraphstyle_t, swstylebits_t>> pUnoToCore;
+    static std::unique_ptr<std::map<paragraphstyle_t, SfxStyleSearchBits>> pUnoToCore;
     if(!pUnoToCore)
     {
-        pUnoToCore.reset(new std::map<paragraphstyle_t, swstylebits_t>);
+        pUnoToCore.reset(new std::map<paragraphstyle_t, SfxStyleSearchBits>);
         auto pEntries = lcl_GetParagraphStyleCategoryEntries();
         std::transform(pEntries->begin(), pEntries->end(), std::inserter(*pUnoToCore, pUnoToCore->end()),
-            [] (const ParagraphStyleCategoryEntry& rEntry) { return std::pair<paragraphstyle_t, swstylebits_t>(rEntry.m_eCategory, rEntry.m_nSwStyleBits); });
+            [] (const ParagraphStyleCategoryEntry& rEntry) { return std::pair<paragraphstyle_t, SfxStyleSearchBits>(rEntry.m_eCategory, rEntry.m_nSwStyleBits); });
     }
     const auto pUnoToCoreIt(pUnoToCore->find(rValue.get<paragraphstyle_t>()));
     if(pUnoToCoreIt == pUnoToCore->end())
         throw lang::IllegalArgumentException();
-    o_rStyleBase.getNewBase()->SetMask( pUnoToCoreIt->second|SFXSTYLEBIT_USERDEF );
+    o_rStyleBase.getNewBase()->SetMask( pUnoToCoreIt->second|SfxStyleSearchBits::UserDefined );
 }
 template<>
 void SwXStyle::SetPropertyValue<SID_SWREGISTER_COLLECTION>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
@@ -2031,7 +2029,7 @@ void SwXStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rPropertyNa
     SwStyleBase_Impl aBaseImpl(*m_pDoc, m_sStyleName, &GetDoc()->GetDfltTextFormatColl()->GetAttrSet()); // add pDfltTextFormatColl as parent
     if(m_pBasePool)
     {
-        const sal_uInt16 nSaveMask = m_pBasePool->GetSearchMask();
+        const SfxStyleSearchBits nSaveMask = m_pBasePool->GetSearchMask();
         m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
         SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
         m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, nSaveMask);
@@ -2084,7 +2082,7 @@ SfxStyleSheetBase* SwXStyle::GetStyleSheetBase()
 {
     if(!m_pBasePool)
         return nullptr;
-    const sal_uInt16 nSaveMask = m_pBasePool->GetSearchMask();
+    const SfxStyleSearchBits nSaveMask = m_pBasePool->GetSearchMask();
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
     SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, nSaveMask );
