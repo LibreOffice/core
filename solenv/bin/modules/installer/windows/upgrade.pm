@@ -46,7 +46,7 @@ sub create_upgrade_table
     push(@upgradetable, $newline);
 
     # Detecting if VC Runtime is installed on system
-    $newline = "VCRUNTIME_UPGRADE_CODE" . "\t" . "14.0.24215" . "\t" . "15.0.0" . "\t" . "" . "\t" . "258" . "\t" . "" . "\t" . "VCRUNTIME_DETECTED";
+    $newline = "VCRUNTIME_UPGRADE_CODE" . "\t" . "14.0.24215" . "\t" . "15.0.0" . "\t" . "" . "\t" . "258" . "\t" . "" . "\t" . "VCRUNTIME_DETECTED" . "\n";
     if ( $installer::globals::cpuname eq 'X86_64' )
     {
         $newline =~ s/VCRUNTIME_UPGRADE_CODE/{36F68A90-239C-34DF-B58C-64B30153CE35}/;
