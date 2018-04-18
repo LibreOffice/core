@@ -10,8 +10,10 @@
 #ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EPUBEXPORTUICOMPONENT_HXX
 #define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EPUBEXPORTUICOMPONENT_HXX
 
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/document/XExporter.hpp>
@@ -26,6 +28,7 @@ namespace writerperfect
 class EPUBExportUIComponent : public cppu::WeakImplHelper
     <
     css::beans::XPropertyAccess,
+    css::lang::XInitialization,
     css::lang::XServiceInfo,
     css::ui::dialogs::XExecutableDialog,
     css::document::XExporter
@@ -50,6 +53,9 @@ public:
     // XExporter
     void SAL_CALL setSourceDocument(const css::uno::Reference<css::lang::XComponent> &xDocument) override;
 
+    // XInitialization
+    void SAL_CALL   initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+
 private:
     /// The full set of property values.
     comphelper::SequenceAsHashMap maMediaDescriptor;
@@ -58,6 +64,7 @@ private:
     /// UNO context.
     css::uno::Reference<css::uno::XComponentContext> mxContext;
     css::uno::Reference<css::lang::XComponent> mxSourceDocument;
+    css::uno::Reference<css::awt::XWindow> mxDialogParent;
 };
 
 } // namespace writerperfect

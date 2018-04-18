@@ -80,6 +80,7 @@ public:
                                     const OUString& aDefExtension,
                                     bool rDefaultIsAlien );
 
+    static css::uno::Reference<css::awt::XWindow> GetModelXWindow(const css::uno::Reference<css::frame::XModel>& rModel);
     static vcl::Window* GetModelWindow( const css::uno::Reference< css::frame::XModel >& xModel );
 
 };
