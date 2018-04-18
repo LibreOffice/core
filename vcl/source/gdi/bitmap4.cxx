@@ -20,8 +20,7 @@
 #include <osl/diagnose.h>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/BitmapGaussianSeparableBlurFilter.hxx>
-#include <vcl/BitmapSeparableUnsharpenFilter.hxx>
+#include <vcl/BitmapSmoothenFilter.hxx>
 #include <vcl/BitmapConvolutionMatrixFilter.hxx>
 
 #include <bitmapwriteaccess.hxx>
@@ -53,24 +52,9 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
     {
         case BmpFilter::Smooth:
         {
-            // Blur for positive values of mnRadius
-            if (pFilterParam->mnRadius > 0.0)
-            {
-                BitmapEx aBmpEx(*this);
-                bRet = BitmapFilter::Filter(aBmpEx, BitmapGaussianSeparableBlurFilter(pFilterParam->mnRadius));
-                *this = aBmpEx.GetBitmap();
-            }
-            // Unsharpen Mask for negative values of mnRadius
-            else if (pFilterParam->mnRadius < 0.0)
-            {
-                BitmapEx aBmpEx(*this);
-                bRet = BitmapFilter::Filter(aBmpEx, BitmapSeparableUnsharpenFilter(pFilterParam->mnRadius));
-                *this = aBmpEx.GetBitmap();
-            }
-            else
-            {
-                bRet = false;
-            }
+            BitmapEx aBmpEx(*this);
+            bRet = BitmapFilter::Filter(aBmpEx, BitmapSmoothenFilter(pFilterParam->mnRadius));
+            *this = aBmpEx.GetBitmap();
         }
         break;
 
