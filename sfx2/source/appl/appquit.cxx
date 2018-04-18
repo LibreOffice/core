@@ -53,7 +53,6 @@
 #include <ctrlfactoryimpl.hxx>
 #include <shellimpl.hxx>
 #include <basic/basicmanagerrepository.hxx>
-#include <svtools/svtresid.hxx>
 
 using ::basic::BasicManagerRepository;
 

@@ -11,7 +11,6 @@
 #include <svtools/PlaceEditDialog.hxx>
 
 #include <svtools/headbar.hxx>
-#include <svtools/svtresid.hxx>
 #include <bitmaps.hlst>
 
 #define COLUMN_NAME     1

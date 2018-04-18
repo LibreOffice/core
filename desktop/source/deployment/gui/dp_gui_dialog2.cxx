@@ -20,7 +20,6 @@
 #include <strings.hrc>
 #include <helpids.h>
 #include <svtools/controldims.hxx>
-#include <svtools/strings.hrc>
 
 #include "dp_gui.h"
 #include "dp_gui_dialog2.hxx"

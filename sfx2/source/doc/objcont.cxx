@@ -64,7 +64,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
 #include <basic/basmgr.hxx>
-#include <svtools/strings.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/strings.hrc>
