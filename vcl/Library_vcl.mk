@@ -45,10 +45,10 @@ $(eval $(call gb_Library_set_include,vcl,\
 $(eval $(call gb_Library_add_defs,vcl,\
     -DVCL_DLLIMPLEMENTATION \
     -DDLLIMPLEMENTATION_UITEST \
-	-DCUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,cui))\" \
-	-DDESKTOP_DETECTOR_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,desktop_detector))\" \
-	-DTK_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,tk))\" \
-	-DENABLE_MERGELIBS=$(if $(MERGELIBS),1,0) \
+    -DCUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,cui))\" \
+    -DDESKTOP_DETECTOR_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,desktop_detector))\" \
+    -DTK_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,tk))\" \
+    -DENABLE_MERGELIBS=$(if $(MERGELIBS),1,0) \
 ))
 
 ifeq ($(SYSTEM_GLM),TRUE)
@@ -60,7 +60,7 @@ endif
 $(eval $(call gb_Library_use_sdk_api,vcl))
 
 $(eval $(call gb_Library_use_custom_headers,vcl,\
-	officecfg/registry \
+    officecfg/registry \
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
@@ -313,6 +313,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/bitmap \
     vcl/source/bitmap/bitmapfilter \
     vcl/source/bitmap/BitmapConvolutionMatrixFilter \
+    vcl/source/bitmap/BitmapMedianFilter \
     vcl/source/bitmap/BitmapInterpolateScaleFilter \
     vcl/source/bitmap/BitmapLightenFilter \
     vcl/source/bitmap/BitmapDisabledImageFilter \
