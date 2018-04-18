@@ -4119,26 +4119,32 @@ private:
         if (GTK_IS_BUTTON(pWidget))
         {
             GtkButton* pButton = GTK_BUTTON(pWidget);
-            set_label(pButton, (*m_pStringReplace)(get_label(pButton)));
+            if (m_pStringReplace != nullptr) {
+                set_label(pButton, (*m_pStringReplace)(get_label(pButton)));
+            }
             if (gtk_button_get_use_underline(pButton))
                 m_aMnemonicButtons.push_back(pButton);
         }
         else if (GTK_IS_LABEL(pWidget))
         {
             GtkLabel* pLabel = GTK_LABEL(pWidget);
-            set_label(pLabel, (*m_pStringReplace)(get_label(pLabel)));
+            if (m_pStringReplace != nullptr) {
+                set_label(pLabel, (*m_pStringReplace)(get_label(pLabel)));
+            }
             if (gtk_label_get_use_underline(pLabel))
                 m_aMnemonicLabels.push_back(pLabel);
         }
         else if (GTK_IS_WINDOW(pWidget))
         {
-            GtkWindow* pWindow = GTK_WINDOW(pWidget);
-            set_title(pWindow, (*m_pStringReplace)(get_title(pWindow)));
-            if (GTK_IS_MESSAGE_DIALOG(pWindow))
-            {
-                GtkMessageDialog* pMessageDialog = GTK_MESSAGE_DIALOG(pWindow);
-                set_primary_text(pMessageDialog, (*m_pStringReplace)(get_primary_text(pMessageDialog)));
-                set_secondary_text(pMessageDialog, (*m_pStringReplace)(get_secondary_text(pMessageDialog)));
+            if (m_pStringReplace != nullptr) {
+                GtkWindow* pWindow = GTK_WINDOW(pWidget);
+                set_title(pWindow, (*m_pStringReplace)(get_title(pWindow)));
+                if (GTK_IS_MESSAGE_DIALOG(pWindow))
+                {
+                    GtkMessageDialog* pMessageDialog = GTK_MESSAGE_DIALOG(pWindow);
+                    set_primary_text(pMessageDialog, (*m_pStringReplace)(get_primary_text(pMessageDialog)));
+                    set_secondary_text(pMessageDialog, (*m_pStringReplace)(get_secondary_text(pMessageDialog)));
+                }
             }
         }
     }
