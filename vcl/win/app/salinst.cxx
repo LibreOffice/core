@@ -921,8 +921,7 @@ OUString WinSalInstance::GetConnectionIdentifier()
 */
 void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& /*rMimeType*/, const OUString& rDocumentService)
 {
-    static bool const s_isTest(getenv("LO_TESTNAME") != nullptr);
-    if (s_isTest)
+    if (Application::IsHeadlessModeEnabled())
         return;
 
     OUString system_path;
