@@ -13,7 +13,7 @@ In general the layering is done like this:
 <leaf theme>
 tango
 industrial
-galaxy
+colibre
 
 
 How to add a new image set:
@@ -51,13 +51,13 @@ How to add a new icon for a new command:
   Here, you need to define a property named "Properties", with its value set
   to 1 so that the icons show up.
 
-- Now, you need to add 2 new icon images under icon-themes/galaxy/cmd/, one
+- Now, you need to add 2 new icon images under icon-themes/colibre/cmd/, one
   for the large size and one for the smaller size.  The name of each image
   must be lc_<command name>.png and sc_<command name>.png.  Here, the command
   name is the name given in the above .xcu file without the ".uno:" prefix and
   all its letters lower-cased.  In this example, the file names will be
   lc_openfromcalc.png and sc_openfromcalc.png.  Note that you need to add new
-  images to the galaxy theme for them to show up in any themes at all.
+  images to the colibre theme for them to show up in any themes at all.
 
 How to call optipng to optimize size:
 ---------------------------

@@ -19,7 +19,7 @@ $(eval $(call gb_Extension_add_file,mysql-connector-ooo,components.rdb,$(call gb
 $(eval $(call gb_Extension_add_file,mysql-connector-ooo,registry/data/org/openoffice/Office/DataAccess/Drivers.xcu,$(call gb_XcuFile_for_extension,mysqlc/source/registry/data/org/openoffice/Office/DataAccess/Drivers.xcu)))
 
 $(eval $(call gb_Extension_add_files,mysql-connector-ooo,images,\
-    $(SRCDIR)/icon-themes/galaxy/desktop/res/extension_32.png \
+    $(SRCDIR)/icon-themes/colibre/desktop/res/extension_32.png \
 ))
 
 ifeq ($(SYSTEM_MYSQL_CONNECTOR_CPP),)
