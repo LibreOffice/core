@@ -858,7 +858,6 @@ SwContentTree::SwContentTree(vcl::Window* pParent, SwNavigationPI* pDialog)
     , m_bViewHasChanged(false)
     , m_bIsKeySpace(false)
 {
-    SetSublistDontOpenWithDoubleClick();
     SetHelpId(HID_NAVIGATOR_TREELIST);
 
     SetNodeDefaultImages();
@@ -2705,7 +2704,15 @@ void SwContentTree::MouseButtonDown( const MouseEvent& rMEvt )
     if( !pEntry && rMEvt.IsLeft() && rMEvt.IsMod1() && (rMEvt.GetClicks() % 2) == 0)
         Control::MouseButtonDown( rMEvt );
     else
+    {
+        if( pEntry && (rMEvt.GetClicks() % 2) == 0)
+        {
+            SwContent* pCnt = static_cast<SwContent*>(pEntry->GetUserData());
+            const ContentTypeId nActType = pCnt->GetParent()->GetType();
+            SetSublistDontOpenWithDoubleClick( nActType == ContentTypeId::OUTLINE );
+        }
         SvTreeListBox::MouseButtonDown( rMEvt );
+    }
 }
 
 // Update immediately

@@ -427,7 +427,8 @@ void SvTreeListBox::DeselectHdl()
 
 bool SvTreeListBox::DoubleClickHdl()
 {
-    return !aDoubleClickHdl.IsSet() || aDoubleClickHdl.Call(this);
+    aDoubleClickHdl.Call( this );
+    return true;
 }
 
 
@@ -1433,9 +1434,9 @@ void SvTreeListBox::SetSublistOpenWithLeftRight()
     pImpl->bSubLstOpLR = true;
 }
 
-void SvTreeListBox::SetSublistDontOpenWithDoubleClick()
+void SvTreeListBox::SetSublistDontOpenWithDoubleClick(bool bDontOpen)
 {
-    pImpl->bSubLstOpDblClick = false;
+    pImpl->bSubLstOpDblClick = !bDontOpen;
 }
 
 void SvTreeListBox::Resize()
