@@ -88,7 +88,6 @@
 #include <appdata.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <basic/basmgr.hxx>
-#include <svtools/strings.hrc>
 #include <sfx2/QuerySaveDocument.hxx>
 #include <sfx2/msg.hxx>
 #include <appbaslib.hxx>
