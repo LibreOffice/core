@@ -1319,6 +1319,26 @@ public:
         return nAttach;
     }
 
+    virtual void set_hexpand(bool bExpand) override
+    {
+        gtk_widget_set_hexpand(m_pWidget, bExpand);
+    }
+
+    virtual bool get_hexpand() const override
+    {
+        return gtk_widget_get_hexpand(m_pWidget);
+    }
+
+    virtual void set_vexpand(bool bExpand) override
+    {
+        gtk_widget_set_vexpand(m_pWidget, bExpand);
+    }
+
+    virtual bool get_vexpand() const override
+    {
+        return gtk_widget_get_vexpand(m_pWidget);
+    }
+
     virtual void set_margin_top(int nMargin) override
     {
         gtk_widget_set_margin_top(m_pWidget, nMargin);
@@ -1621,18 +1641,19 @@ public:
     {
     }
 
-    virtual void remove(weld::Widget* pWidget) override
-    {
-        GtkInstanceWidget* pGtkWidget = dynamic_cast<GtkInstanceWidget*>(pWidget);
-        assert(pGtkWidget);
-        gtk_container_remove(m_pContainer, pGtkWidget->getWidget());
-    }
+    GtkContainer* getContainer() { return m_pContainer; }
 
-    virtual void add(weld::Widget* pWidget) override
+    virtual void move(weld::Widget* pWidget, weld::Container* pNewParent) override
     {
         GtkInstanceWidget* pGtkWidget = dynamic_cast<GtkInstanceWidget*>(pWidget);
         assert(pGtkWidget);
-        gtk_container_add(m_pContainer, pGtkWidget->getWidget());
+        GtkInstanceContainer* pNewGtkParent = dynamic_cast<GtkInstanceContainer*>(pNewParent);
+        assert(pNewGtkParent);
+        GtkWidget* pChild = pGtkWidget->getWidget();
+        g_object_ref(pChild);
+        gtk_container_remove(getContainer(), pChild);
+        gtk_container_add(pNewGtkParent->getContainer(), pChild);
+        g_object_unref(pChild);
     }
 };
 
@@ -2917,8 +2938,6 @@ public:
         enable_notify_events();
     }
 
-    using GtkInstanceContainer::remove;
-
     virtual void remove(int pos) override
     {
         disable_notify_events();
@@ -3267,6 +3286,12 @@ public:
     virtual OUString get_label() const override
     {
         return ::get_label(m_pLabel);
+    }
+
+    virtual void set_mnemonic_widget(Widget* pTarget) override
+    {
+        GtkInstanceWidget* pTargetWidget = dynamic_cast<GtkInstanceWidget*>(pTarget);
+        gtk_label_set_mnemonic_widget(m_pLabel, pTargetWidget ? pTargetWidget->getWidget() : nullptr);
     }
 };
 
@@ -3800,8 +3825,6 @@ public:
         gtk_combo_box_text_insert_text(m_pComboBoxText, pos, OUStringToOString(rStr, RTL_TEXTENCODING_UTF8).getStr());
         enable_notify_events();
     }
-
-    using GtkInstanceContainer::remove;
 
     virtual void remove(int pos) override
     {

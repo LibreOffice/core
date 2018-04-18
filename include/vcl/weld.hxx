@@ -63,6 +63,11 @@ public:
     virtual void set_grid_top_attach(int nAttach) = 0;
     virtual int get_grid_top_attach() const = 0;
 
+    virtual void set_hexpand(bool bExpand) = 0;
+    virtual bool get_hexpand() const = 0;
+    virtual void set_vexpand(bool bExpand) = 0;
+    virtual bool get_vexpand() const = 0;
+
     virtual void set_margin_top(int nMargin) = 0;
     virtual void set_margin_bottom(int nMargin) = 0;
 
@@ -83,8 +88,8 @@ public:
 class VCL_DLLPUBLIC Container : virtual public Widget
 {
 public:
-    virtual void remove(weld::Widget* pWidget) = 0;
-    virtual void add(weld::Widget* pWidget) = 0;
+    //remove and add in one go
+    virtual void move(weld::Widget* pWidget, weld::Container* pNewParent) = 0;
 };
 
 class VCL_DLLPUBLIC ScrolledWindow : virtual public Container
@@ -219,7 +224,6 @@ public:
     void append_text(const OUString& rStr) { insert_text(-1, rStr); }
     virtual void insert(int pos, const OUString& rId, const OUString& rStr) = 0;
     void append(const OUString& rId, const OUString& rStr) { insert(-1, rId, rStr); }
-    using Container::remove;
     virtual void remove(int pos) = 0;
     virtual int find_text(const OUString& rStr) const = 0;
     virtual int find_id(const OUString& rId) const = 0;
@@ -269,7 +273,6 @@ public:
     }
     virtual int n_children() const = 0;
     virtual void select(int pos) = 0;
-    using Container::remove;
     virtual void remove(int pos) = 0;
     virtual int find(const OUString& rText) const = 0;
     virtual int find_id(const OUString& rId) const = 0;
@@ -604,6 +607,7 @@ class VCL_DLLPUBLIC Label : virtual public Widget
 public:
     virtual void set_label(const OUString& rText) = 0;
     virtual OUString get_label() const = 0;
+    virtual void set_mnemonic_widget(Widget* pTarget) = 0;
 };
 
 class VCL_DLLPUBLIC TextView : virtual public Container
