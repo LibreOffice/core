@@ -659,6 +659,12 @@ void EditUIObject::execute(const OUString& rAction,
             mxEdit->SetSelection(aSelection);
         }
     }
+    else if (rAction == "CLEAR")
+    {
+        mxEdit->SetText("");
+        mxEdit->UpdateData();
+        bHandled = true;
+    }
     else
     {
         bHandled = false;
