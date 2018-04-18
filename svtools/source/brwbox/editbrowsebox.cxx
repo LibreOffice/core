@@ -26,9 +26,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/settings.hxx>
-#include <svtools/svtresid.hxx>
 
-#include <svtools/strings.hrc>
 #include <bitmaps.hlst>
 
 #include <algorithm>

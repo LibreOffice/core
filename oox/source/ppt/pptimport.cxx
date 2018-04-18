@@ -29,7 +29,6 @@
 #include <vcl/weld.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
-#include <svtools/strings.hrc>
 #include <tools/urlobj.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>

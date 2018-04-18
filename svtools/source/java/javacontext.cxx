@@ -19,7 +19,6 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Type.hxx>
-#include <svtools/svtresid.hxx>
 #include <svtools/javacontext.hxx>
 #include <svtools/javainteractionhandler.hxx>
 

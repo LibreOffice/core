@@ -49,7 +49,6 @@
 #include <comphelper/accessibletexthelper.hxx>
 #include <rtl/ref.hxx>
 
-#include <svtools/strings.hrc>
 #include <vcl/svapp.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <queue>
