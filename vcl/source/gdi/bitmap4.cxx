@@ -21,7 +21,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/BitmapSmoothenFilter.hxx>
-#include <vcl/BitmapConvolutionMatrixFilter.hxx>
+#include <vcl/BitmapSharpenFilter.hxx>
 
 #include <bitmapwriteaccess.hxx>
 
@@ -60,9 +60,8 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
 
         case BmpFilter::Sharpen:
         {
-            const long pSharpenMatrix[] = { -1, -1,  -1, -1, 16, -1, -1, -1,  -1 };
             BitmapEx aBmpEx(*this);
-            bRet = BitmapFilter::Filter(aBmpEx, BitmapConvolutionMatrixFilter(&pSharpenMatrix[0]));
+            bRet = BitmapFilter::Filter(aBmpEx, BitmapSharpenFilter());
             *this = aBmpEx.GetBitmap();
         }
         break;
