@@ -7652,7 +7652,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="StatistikSection">
+                      <object class="sfxlo-OptionalBox" id="StatisticSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -7851,7 +7851,7 @@
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="LangeuageSection">
+                      <object class="sfxlo-OptionalBox" id="LanguageSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
