@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_1e4f46be",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-04-18T23:35:51Z",
+      "side": 1,
+      "message": "please keep lines within the given bounds (less than 70 chars)",
+      "revId": "2dd0aa01596175f7036eb633a21c0e02e9133560",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_fe519263",
+        "filename": "android/source/res/layout/activity_document_browser.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-04-18T23:35:51Z",
+      "side": 1,
+      "message": "does that belong to this patch?",
+      "revId": "2dd0aa01596175f7036eb633a21c0e02e9133560",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
