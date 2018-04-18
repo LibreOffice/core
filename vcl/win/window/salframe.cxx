@@ -5647,7 +5647,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                     if( pWin )
                     {
                         pWin->EnableInput( false, nullptr );
-                        pWin->ImplIncModalCount();  // #106303# support frame based modal count
+                        pWin->IncModalCount();  // #106303# support frame based modal count
                     }
                 }
                 else
@@ -5656,7 +5656,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                     if( pWin )
                     {
                         pWin->EnableInput( true, nullptr );
-                        pWin->ImplDecModalCount();  // #106303# support frame based modal count
+                        pWin->DecModalCount();  // #106303# support frame based modal count
                     }
                 }
             }

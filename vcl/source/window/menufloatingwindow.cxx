@@ -398,7 +398,7 @@ void MenuFloatingWindow::Start()
         return;
     bInExecute = true;
     if (GetParent())
-        GetParent()->ImplIncModalCount();
+        GetParent()->IncModalCount();
 }
 
 void MenuFloatingWindow::End()
@@ -407,7 +407,7 @@ void MenuFloatingWindow::End()
         return;
 
     if (GetParent() && !GetParent()->IsDisposed())
-        GetParent()->ImplDecModalCount();
+        GetParent()->DecModalCount();
 
     // restore focus to previous window if we still have the focus
     VclPtr<vcl::Window> xFocusId(xSaveFocusId);
