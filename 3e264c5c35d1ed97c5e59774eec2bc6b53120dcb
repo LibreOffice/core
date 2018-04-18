@@ -16,6 +16,24 @@
       "revId": "3e264c5c35d1ed97c5e59774eec2bc6b53120dcb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_0a8705b6",
+        "filename": "solenv/bin/modules/installer/windows/upgrade.pm",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-18T11:28:41Z",
+      "side": 1,
+      "message": "Thank you for saying that! I\u0027ve been hitting the my head to make it work, and it all was a thinko in the end! (but at least I know that the problem was absent newlines in the end)",
+      "parentUuid": "9a30ddce_2afda93a",
+      "revId": "3e264c5c35d1ed97c5e59774eec2bc6b53120dcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
