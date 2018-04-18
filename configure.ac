@@ -1542,7 +1542,7 @@ AC_ARG_WITH(galleries,
 AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
-         Possible choices: *breeze, *breeze_dark, *colibre, *elementary, *galaxy, oxygen, *sifr, *sifr_dark, *tango.]),
+         Possible choices: *breeze, *breeze_dark, *colibre, *elementary, oxygen, *sifr, *sifr_dark, *tango.]),
 ,)
 
 libo_FUZZ_ARG_WITH(helppack-integration,
@@ -11213,15 +11213,15 @@ dnl ===================================================================
 AC_MSG_CHECKING([which themes to include])
 # if none given use default subset of available themes
 if test "x$with_theme" = "x" -o "x$with_theme" = "xyes"; then
-    with_theme="breeze breeze_dark colibre elementary galaxy sifr sifr_dark tango"
+    with_theme="breeze breeze_dark colibre elementary sifr sifr_dark tango"
 fi
 
 WITH_THEMES=""
 if test "x$with_theme" != "xno"; then
     for theme in $with_theme; do
         case $theme in
-        breeze|breeze_dark|colibre|elementary|galaxy|oxygen|sifr|sifr_dark|tango) real_theme="$theme" ;;
-        default) real_theme=galaxy ;;
+        breeze|breeze_dark|colibre|elementary|oxygen|sifr|sifr_dark|tango) real_theme="$theme" ;;
+        default) real_theme=colibre ;;
         *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
         esac
         WITH_THEMES=`echo "$WITH_THEMES $real_theme"|tr '\ ' '\n'|sort|uniq|tr '\n' '\ '`
@@ -11229,10 +11229,10 @@ if test "x$with_theme" != "xno"; then
 fi
 AC_MSG_RESULT([$WITH_THEMES])
 AC_SUBST([WITH_THEMES])
-# FIXME: remove this, and the convenience default->galaxy remapping after a crace period
+# FIXME: remove this, and the convenience default->colibre remapping after a crace period
 for theme in $with_theme; do
     case $theme in
-    default) AC_MSG_WARN([--with-theme=default is deprecated and will be removed, use --with-theme=galaxy]) ;;
+    default) AC_MSG_WARN([--with-theme=default is deprecated and will be removed, use --with-theme=colibre]) ;;
     *) ;;
     esac
 done
