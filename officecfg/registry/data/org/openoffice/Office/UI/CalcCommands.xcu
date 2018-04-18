@@ -1029,7 +1029,7 @@
       </node>
       <node oor:name=".uno:ViewRowColumnHeaders" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">C~olumn &amp; Row Headers</value>
+          <value xml:lang="en-US">View Headers</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2041,10 +2041,7 @@
       </node>
       <node oor:name=".uno:ToggleSheetGrid" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Toggle Grid Lines for Current Sheet</value>
-        </prop>
-        <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Grid Lines for Sheet</value>
+          <value xml:lang="en-US">View Grid Lines</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
