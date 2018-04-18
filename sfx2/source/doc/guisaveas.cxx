@@ -63,6 +63,7 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
@@ -593,8 +594,13 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
                     aProps[nProperty].Value >>= aServiceName;
                     if( !aServiceName.isEmpty() )
                     {
+                        uno::Sequence<uno::Any> aDialogArgs(comphelper::InitAnyPropertySequence(
+                        {
+                            {"ParentWindow", uno::Any(SfxStoringHelper::GetModelXWindow(m_xModel))},
+                        }));
+
                         uno::Reference< ui::dialogs::XExecutableDialog > xFilterDialog(
-                                                    comphelper::getProcessServiceFactory()->createInstance( aServiceName ), uno::UNO_QUERY );
+                                                    comphelper::getProcessServiceFactory()->createInstanceWithArguments(aServiceName, aDialogArgs), uno::UNO_QUERY );
                         uno::Reference< beans::XPropertyAccess > xFilterProperties( xFilterDialog, uno::UNO_QUERY );
 
                         if( xFilterDialog.is() && xFilterProperties.is() )
@@ -1809,9 +1815,8 @@ bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XMod
     return aDlg.run() == RET_OK;
 }
 
-vcl::Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XModel >& xModel )
+uno::Reference<awt::XWindow> SfxStoringHelper::GetModelXWindow(const uno::Reference<frame::XModel>& xModel)
 {
-    VclPtr<vcl::Window> pWin;
     try {
         if ( xModel.is() )
         {
@@ -1821,15 +1826,29 @@ vcl::Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XMod
                 uno::Reference< frame::XFrame > xFrame = xController->getFrame();
                 if ( xFrame.is() )
                 {
-                    uno::Reference< awt::XWindow > xWindow = xFrame->getContainerWindow();
-                    if ( xWindow.is() )
-                    {
-                        VCLXWindow* pVCLWindow = VCLXWindow::GetImplementation( xWindow );
-                        if ( pVCLWindow )
-                            pWin = pVCLWindow->GetWindow();
-                    }
+                    return xFrame->getContainerWindow();
                 }
             }
+        }
+    }
+    catch ( const uno::Exception& )
+    {
+    }
+
+    return uno::Reference<awt::XWindow>();
+}
+
+vcl::Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XModel >& xModel )
+{
+    VclPtr<vcl::Window> pWin;
+
+    try {
+        uno::Reference<awt::XWindow> xWindow = GetModelXWindow(xModel);
+        if ( xWindow.is() )
+        {
+            VCLXWindow* pVCLWindow = VCLXWindow::GetImplementation( xWindow );
+            if ( pVCLWindow )
+                pWin = pVCLWindow->GetWindow();
         }
     }
     catch ( const uno::Exception& )
