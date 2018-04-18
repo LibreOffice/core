@@ -21,6 +21,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/BitmapGaussianSeparableBlurFilter.hxx>
+#include <vcl/BitmapSeparableUnsharpenFilter.hxx>
 
 #include <bitmapwriteaccess.hxx>
 
@@ -61,7 +62,9 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
             // Unsharpen Mask for negative values of mnRadius
             else if (pFilterParam->mnRadius < 0.0)
             {
-                bRet = ImplSeparableUnsharpenFilter(pFilterParam->mnRadius);
+                BitmapEx aBmpEx(*this);
+                bRet = BitmapFilter::Filter(aBmpEx, BitmapSeparableUnsharpenFilter(pFilterParam->mnRadius));
+                *this = aBmpEx.GetBitmap();
             }
             else
             {
@@ -1065,54 +1068,6 @@ bool Bitmap::ImplPopArt()
     }
 
     return bRet;
-}
-
-// Separable Unsharpen Mask filter is actually a subtracted blurred
-// image from the original image.
-bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
-    const long  nWidth = GetSizePixel().Width();
-    const long  nHeight = GetSizePixel().Height();
-
-    Bitmap aBlur( *this );
-    BitmapEx aBlurEx(aBlur);
-
-    BitmapFilter::Filter(aBlurEx, BitmapGaussianSeparableBlurFilter(-radius));
-    aBlur = aBlurEx.GetBitmap();
-
-    // Amount of unsharpening effect on image - currently set to a fixed value
-    double aAmount = 2.0;
-
-    Bitmap aResultBitmap( Size( nWidth, nHeight ), 24);
-
-    ScopedReadAccess pReadAccBlur(aBlur);
-    ScopedReadAccess pReadAcc(*this);
-    BitmapScopedWriteAccess pWriteAcc(aResultBitmap);
-
-    BitmapColor aColor, aColorBlur;
-
-    // For all pixels in original image subtract pixels values from blurred image
-    for( long y = 0; y < nHeight; y++ )
-    {
-        Scanline pScanline = pWriteAcc->GetScanline(y);
-        for( long x = 0; x < nWidth; x++ )
-        {
-            aColorBlur = pReadAccBlur->GetColor( y , x );
-            aColor = pReadAcc->GetColor( y , x );
-
-            BitmapColor aResultColor(
-                static_cast<sal_uInt8>(MinMax( aColor.GetRed()   + (aColor.GetRed()   - aColorBlur.GetRed())   * aAmount, 0, 255 )),
-                static_cast<sal_uInt8>(MinMax( aColor.GetGreen() + (aColor.GetGreen() - aColorBlur.GetGreen()) * aAmount, 0, 255 )),
-                static_cast<sal_uInt8>(MinMax( aColor.GetBlue()  + (aColor.GetBlue()  - aColorBlur.GetBlue())  * aAmount, 0, 255 )) );
-
-            pWriteAcc->SetPixelOnData( pScanline, x, aResultColor );
-        }
-    }
-
-    pWriteAcc.reset();
-    pReadAcc.reset();
-    pReadAccBlur.reset();
-    ReassignWithSize(aResultBitmap);
-    return true;
 }
 
 bool Bitmap::ImplDuotoneFilter( const sal_uLong nColorOne, const sal_uLong nColorTwo )
