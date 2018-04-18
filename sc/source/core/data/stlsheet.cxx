@@ -50,7 +50,7 @@
 ScStyleSheet::ScStyleSheet( const OUString&     rName,
                             const ScStyleSheetPool& rPoolP,
                             SfxStyleFamily      eFamily,
-                            sal_uInt16          nMaskP )
+                            SfxStyleSearchBits  nMaskP )
 
     : SfxStyleSheet   ( rName, rPoolP, eFamily, nMaskP )
     , eUsage( UNKNOWN )
@@ -96,7 +96,7 @@ bool ScStyleSheet::SetParent( const OUString& rParentName )
     SfxStyleSheetBase* pStyle = m_pPool->Find( aEffName, nFamily );
     if (!pStyle)
     {
-        std::shared_ptr<SfxStyleSheetIterator> pIter = m_pPool->CreateIterator( nFamily, SFXSTYLEBIT_ALL );
+        std::shared_ptr<SfxStyleSheetIterator> pIter = m_pPool->CreateIterator( nFamily, SfxStyleSearchBits::All );
         pStyle = pIter->First();
         if (pStyle)
             aEffName = pStyle->GetName();

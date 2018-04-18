@@ -31,7 +31,6 @@
 #include <wdocsh.hxx>
 #include <uitool.hxx>
 #include <poolfmt.hxx>
-#include <swstyle.h>
 #include <SwStyleNameMapper.hxx>
 #include <memory>
 
@@ -195,7 +194,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
         // styles   special regions
         // paragraph
     SfxStyleSheetBasePool* pStyleSheetPool = pSh->GetView().GetDocShell()->GetStyleSheetPool();
-    pStyleSheetPool->SetSearchMask(SfxStyleFamily::Para, SWSTYLEBIT_EXTRA);
+    pStyleSheetPool->SetSearchMask(SfxStyleFamily::Para, SfxStyleSearchBits::SwExtra);
     SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
     while(pStyle)
     {

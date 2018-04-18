@@ -24,8 +24,6 @@
 
 #include "scdllapi.h"
 
-#define SCSTYLEBIT_STANDARD     0x0001
-
 class ScStyleSheetPool;
 
 class ScStyleSheet final : public SfxStyleSheet
@@ -61,7 +59,7 @@ private:
                 ScStyleSheet( const OUString&   rName,
                               const ScStyleSheetPool& rPool,
                               SfxStyleFamily    eFamily,
-                              sal_uInt16        nMask );
+                              SfxStyleSearchBits nMask );
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

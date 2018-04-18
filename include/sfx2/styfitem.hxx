@@ -30,8 +30,8 @@
 struct SFX2_DLLPUBLIC SfxFilterTupel
 {
     OUString aName;
-    sal_uInt16 nFlags;
-    SfxFilterTupel(const OUString& rName, sal_uInt16 nArg)
+    SfxStyleSearchBits nFlags;
+    SfxFilterTupel(const OUString& rName, SfxStyleSearchBits nArg)
         : aName(rName)
         , nFlags(nArg)
     {
@@ -48,7 +48,7 @@ class SFX2_DLLPUBLIC SfxStyleFamilyItem
     SfxStyleFilter  aFilterList;
 
 public:
-    SfxStyleFamilyItem(SfxStyleFamily nFamily, const OUString &rName, const Image& rImage, const std::pair<const char*, int>* pStringArray, const std::locale& rLocale);
+    SfxStyleFamilyItem(SfxStyleFamily nFamily, const OUString &rName, const Image& rImage, const std::pair<const char*, SfxStyleSearchBits>* pStringArray, const std::locale& rLocale);
 
     const OUString& GetText() const { return aText; }
     SfxStyleFamily  GetFamily() const { return nFamily; }

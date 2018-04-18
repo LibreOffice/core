@@ -135,7 +135,7 @@ SdStyleSheetPool::~SdStyleSheetPool()
     DBG_ASSERT( mpDoc == nullptr, "sd::SdStyleSheetPool::~SdStyleSheetPool(), dispose me first!" );
 }
 
-SfxStyleSheetBase* SdStyleSheetPool::Create(const OUString& rName, SfxStyleFamily eFamily, sal_uInt16 _nMask )
+SfxStyleSheetBase* SdStyleSheetPool::Create(const OUString& rName, SfxStyleFamily eFamily, SfxStyleSearchBits _nMask )
 {
     return new SdStyleSheet(rName, *this, eFamily, _nMask);
 }
@@ -180,7 +180,7 @@ void SdStyleSheetPool::CreateOutlineSheetList (const OUString& rLayoutName, std:
 
 void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool bCheck /*= sal_False*/ )
 {
-    const sal_uInt16 nUsedMask = SFXSTYLEBIT_ALL & ~SFXSTYLEBIT_USERDEF;
+    const SfxStyleSearchBits nUsedMask = SfxStyleSearchBits::All & ~SfxStyleSearchBits::UserDefined;
 
     bool bCreated = false;
 
@@ -840,7 +840,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     SfxStyleSheetBase* pSheet = nullptr;
     SfxStyleSheetBase* pParent = nullptr;
 
-    sal_uInt16 nUsedMask = SFXSTYLEBIT_USED;
+    SfxStyleSearchBits nUsedMask = SfxStyleSearchBits::Used;
 
     aName = SdResId(STR_PSEUDOSHEET_TITLE);
     if( (pSheet = Find(aName, SfxStyleFamily::Pseudo)) == nullptr )

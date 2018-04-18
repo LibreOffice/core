@@ -64,7 +64,7 @@ class SfxManageStyleSheetPage final : public SfxTabPage
     OUString aName;
     OUString aFollow;
     OUString aParent;
-    sal_uInt16 nFlags;
+    SfxStyleSearchBits nFlags;
 
 friend class SfxStyleDialog;
 

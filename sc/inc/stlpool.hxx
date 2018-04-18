@@ -54,7 +54,7 @@ public:
     ScStyleSheet*       FindCaseIns( const OUString& rName, SfxStyleFamily eFam );
 
     virtual SfxStyleSheetBase& Make( const OUString&, SfxStyleFamily eFam,
-                                     sal_uInt16 nMask = SFXSTYLEBIT_ALL) override;
+                                     SfxStyleSearchBits nMask = SfxStyleSearchBits::All) override;
 
     void setAllStandard();
 
@@ -65,7 +65,7 @@ protected:
 
     virtual SfxStyleSheetBase* Create( const OUString&  rName,
                                        SfxStyleFamily   eFamily,
-                                       sal_uInt16       nMask) override;
+                                       SfxStyleSearchBits     nMask) override;
     virtual SfxStyleSheetBase* Create( const SfxStyleSheetBase& rStyle ) override;
 
 private:

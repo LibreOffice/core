@@ -2403,7 +2403,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
         SfxStyleSheetBase*      pStyle      = nullptr;
         bool                    bDoFill     = false;
 
-        pStyleSheetPool->SetSearchMask( eFamily, SFXSTYLEBIT_USED );
+        pStyleSheetPool->SetSearchMask( eFamily, SfxStyleSearchBits::Used );
 
         // Check whether fill is necessary
         pStyle = pStyleSheetPool->First();
@@ -2619,7 +2619,7 @@ void SvxStyleToolBoxControl::StateChanged(
     switch ( eState )
     {
         case SfxItemState::DEFAULT:
-            eTri = static_cast<const SfxTemplateItem*>(pState)->GetValue()
+            eTri = static_cast<const SfxTemplateItem*>(pState)->GetValue() != SfxStyleSearchBits::Auto
                         ? TRISTATE_TRUE
                         : TRISTATE_FALSE;
             break;

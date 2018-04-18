@@ -32,7 +32,7 @@ SfxTemplateItem::SfxTemplateItem
 (
     sal_uInt16 nWhichId,      // Slot-ID
     const OUString& rStyle    // Name of the current Styles
-) : SfxFlagItem( nWhichId, SFXSTYLEBIT_ALL ),
+) : SfxFlagItem( nWhichId, static_cast<sal_uInt16>(SfxStyleSearchBits::All) ),
     aStyle( rStyle )
 {
 }
@@ -56,7 +56,7 @@ bool SfxTemplateItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     css::frame::status::Template aTemplate;
 
-    aTemplate.Value = GetValue();
+    aTemplate.Value = static_cast<sal_uInt16>(GetValue());
     aTemplate.StyleName = aStyle;
     rVal <<= aTemplate;
 
@@ -70,7 +70,7 @@ bool SfxTemplateItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId
 
     if ( rVal >>= aTemplate )
     {
-        SetValue( sal::static_int_cast< sal_uInt16 >( aTemplate.Value ) );
+        SetValue( static_cast<SfxStyleSearchBits>(aTemplate.Value) );
         aStyle = aTemplate.StyleName;
         return true;
     }

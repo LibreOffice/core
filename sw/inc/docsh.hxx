@@ -122,7 +122,7 @@ class SW_DLLPUBLIC SwDocShell
         const OUString &rName,
         const OUString& rParent,
         const SfxStyleFamily nFamily,
-        sal_uInt16 nMask,
+        SfxStyleSearchBits nMask,
         const bool bNew,
         const OString& sPageId,
         SwWrtShell* pActShell,
@@ -138,7 +138,7 @@ class SW_DLLPUBLIC SwDocShell
     SAL_DLLPRIVATE SfxStyleFamily        DoWaterCan( const OUString &rName, SfxStyleFamily nFamily);
     SAL_DLLPRIVATE void                  UpdateStyle(const OUString &rName, SfxStyleFamily nFamily, SwWrtShell* pShell);
     SAL_DLLPRIVATE void                  MakeByExample(const OUString &rName,
-                                               SfxStyleFamily nFamily, sal_uInt16 nMask, SwWrtShell* pShell);
+                                               SfxStyleFamily nFamily, SfxStyleSearchBits nMask, SwWrtShell* pShell);
 
     SAL_DLLPRIVATE void                  SubInitNew();   ///< for InitNew and HtmlSourceMode.
 

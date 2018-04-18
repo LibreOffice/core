@@ -485,7 +485,7 @@ class IdleCalcTextWidthScope
     MapMode maOldMapMode;
     sal_uInt64 mnStartTime;
     ScStyleSheetPool* mpStylePool;
-    sal_uInt16 mnOldSearchMask;
+    SfxStyleSearchBits mnOldSearchMask;
     SfxStyleFamily meOldFamily;
     bool mbNeedMore;
     bool mbProgress;
