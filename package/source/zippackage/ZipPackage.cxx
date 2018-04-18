@@ -1287,7 +1287,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             // for encrypted streams
             RandomPool aRandomPool;
 
-            sal_Int32 const nPBKDF2IterationCount = 100000;
+            sal_Int32 const nPBKDF2IterationCount = 1000;
 
             // call saveContents ( it will recursively save sub-directories
             m_xRootFolder->saveContents("", aManList, aZipOut, GetEncryptionKey(), bIsGpgEncrypt ? 0 : nPBKDF2IterationCount, aRandomPool.get());
