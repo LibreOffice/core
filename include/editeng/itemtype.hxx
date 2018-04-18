@@ -31,7 +31,6 @@ class IntlWrapper;
 
 static const sal_Unicode cpDelim[] = { ',' , ' ', '\0' };
 
-EDITENG_DLLPUBLIC OUString GetSvxString(const char* pId);
 EDITENG_DLLPUBLIC OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const IntlWrapper * pIntl );
 OUString GetColorString( const Color& rCol );
 EDITENG_DLLPUBLIC const char* GetMetricId(MapUnit eUnit);

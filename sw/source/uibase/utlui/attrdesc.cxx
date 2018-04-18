@@ -24,6 +24,7 @@
 #include <vcl/GraphicObject.hxx>
 
 #include <editeng/itemtype.hxx>
+#include <editeng/eerdll.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <fmtanchr.hxx>
@@ -236,7 +237,7 @@ bool SwFormatFrameSize::GetPresentation
     else
     {
         rText = rText + ::GetMetricText( GetWidth(), eCoreUnit, ePresUnit, &rIntl ) +
-            " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
+            " " + ::EditResId( ::GetMetricId( ePresUnit ) );
     }
     if ( ATT_VAR_SIZE != GetHeightSizeType() )
     {
@@ -251,7 +252,7 @@ bool SwFormatFrameSize::GetPresentation
         else
         {
             rText = ::GetMetricText( GetHeight(), eCoreUnit, ePresUnit, &rIntl ) +
-                    " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
+                    " " + EditResId( ::GetMetricId( ePresUnit ) );
         }
     }
     return true;
@@ -351,7 +352,7 @@ bool SwFormatVertOrient::GetPresentation
         {
             rText = rText + SwResId( STR_POS_Y ) + " " +
                     ::GetMetricText( GetPos(), eCoreUnit, ePresUnit, &rIntl ) +
-                    " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
+                    " " + EditResId( ::GetMetricId( ePresUnit ) );
         }
         break;
         case text::VertOrientation::TOP:
@@ -397,7 +398,7 @@ bool SwFormatHoriOrient::GetPresentation
         {
             rText = rText + SwResId( STR_POS_X ) + " " +
                     ::GetMetricText( GetPos(), eCoreUnit, ePresUnit, &rIntl ) +
-                    " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
+                    " " + EditResId( ::GetMetricId( ePresUnit ) );
         }
         break;
         case text::HoriOrientation::RIGHT:
