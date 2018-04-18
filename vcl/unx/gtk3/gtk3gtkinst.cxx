@@ -2629,6 +2629,55 @@ public:
     }
 };
 
+class GtkInstanceScale : public GtkInstanceWidget, public virtual weld::Scale
+{
+private:
+    GtkScale* m_pScale;
+    gulong m_nValueChangedSignalId;
+
+    static void signalValueChanged(GtkScale*, gpointer widget)
+    {
+        GtkInstanceScale* pThis = static_cast<GtkInstanceScale*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_value_changed();
+    }
+
+public:
+    GtkInstanceScale(GtkScale* pScale, bool bTakeOwnership)
+        : GtkInstanceWidget(GTK_WIDGET(pScale), bTakeOwnership)
+        , m_pScale(pScale)
+        , m_nValueChangedSignalId(g_signal_connect(m_pScale, "value-changed", G_CALLBACK(signalValueChanged), this))
+    {
+    }
+
+    virtual void disable_notify_events() override
+    {
+        g_signal_handler_block(m_pScale, m_nValueChangedSignalId);
+        GtkInstanceWidget::disable_notify_events();
+    }
+
+    virtual void enable_notify_events() override
+    {
+        GtkInstanceWidget::enable_notify_events();
+        g_signal_handler_unblock(m_pScale, m_nValueChangedSignalId);
+    }
+
+    virtual void set_value(int value) override
+    {
+        gtk_range_set_value(GTK_RANGE(m_pScale), value);
+    }
+
+    virtual int get_value() const override
+    {
+        return gtk_range_get_value(GTK_RANGE(m_pScale));
+    }
+
+    virtual ~GtkInstanceScale() override
+    {
+        g_signal_handler_disconnect(m_pScale, m_nValueChangedSignalId);
+    }
+};
+
 class GtkInstanceEntry : public GtkInstanceWidget, public virtual weld::Entry
 {
 private:
@@ -4363,6 +4412,15 @@ public:
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pCheckButton));
         return new GtkInstanceCheckButton(pCheckButton, bTakeOwnership);
+    }
+
+    virtual weld::Scale* weld_scale(const OString &id, bool bTakeOwnership) override
+    {
+        GtkScale* pScale = GTK_SCALE(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pScale)
+            return nullptr;
+        auto_add_parentless_widgets_to_container(GTK_WIDGET(pScale));
+        return new GtkInstanceScale(pScale, bTakeOwnership);
     }
 
     virtual weld::Entry* weld_entry(const OString &id, bool bTakeOwnership) override

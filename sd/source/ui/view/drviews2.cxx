@@ -1351,10 +1351,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 if( pObj && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
                 {
                     SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
-                    ScopedVclPtrInstance< CompressGraphicsDialog > dialog( GetParentWindow(), pGraphicObj, GetViewFrame()->GetBindings() );
-                    if ( dialog->Execute() == RET_OK )
+                    CompressGraphicsDialog dialog(GetFrameWeld(), pGraphicObj, GetViewFrame()->GetBindings() );
+                    if (dialog.run() == RET_OK)
                     {
-                        SdrGrafObj* pNewObject = dialog->GetCompressedSdrGrafObj();
+                        SdrGrafObj* pNewObject = dialog.GetCompressedSdrGrafObj();
                         SdrPageView* pPageView = mpDrawView->GetSdrPageView();
                         OUString aUndoString = mpDrawView->GetDescriptionOfMarkedObjects();
                         aUndoString += " Compress";

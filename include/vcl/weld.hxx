@@ -389,6 +389,20 @@ class VCL_DLLPUBLIC RadioButton : virtual public ToggleButton
 {
 };
 
+class VCL_DLLPUBLIC Scale : virtual public Widget
+{
+protected:
+    Link<Scale&, void> m_aValueChangedHdl;
+    Link<Scale&, void> m_aOutputHdl;
+
+    void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
+
+public:
+    virtual void set_value(int value) = 0;
+    virtual int get_value() const = 0;
+    void connect_value_changed(const Link<Scale&, void>& rLink) { m_aValueChangedHdl = rLink; }
+};
+
 class VCL_DLLPUBLIC Entry : virtual public Widget
 {
 private:
@@ -724,6 +738,7 @@ public:
     virtual TextView* weld_text_view(const OString& id, bool bTakeOwnership = false) = 0;
     virtual Expander* weld_expander(const OString& id, bool bTakeOwnership = false) = 0;
     virtual Entry* weld_entry(const OString& id, bool bTakeOwnership = false) = 0;
+    virtual Scale* weld_scale(const OString& id, bool bTakeOwnership = false) = 0;
     virtual DrawingArea* weld_drawing_area(const OString& id, const a11yref& rA11yImpl = nullptr,
                                            FactoryFunction pUITestFactoryFunction = nullptr,
                                            void* pUserData = nullptr, bool bTakeOwnership = false)
