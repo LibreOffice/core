@@ -46,20 +46,13 @@ ScDeleteContentsDlg::ScDeleteContentsDlg(weld::Window* pParent, InsertDeleteFlag
     }
 
     m_xBtnDelAll->set_active( ScDeleteContentsDlg::bPreviousAllCheck );
-    m_xBtnDelStrings->set_active( IS_SET( InsertDeleteFlags::STRING,
-                                   ScDeleteContentsDlg::nPreviousChecks ) );
-    m_xBtnDelNumbers->set_active( IS_SET( InsertDeleteFlags::VALUE,
-                                   ScDeleteContentsDlg::nPreviousChecks ) );
-    m_xBtnDelDateTime->set_active( IS_SET( InsertDeleteFlags::DATETIME,
-                                   ScDeleteContentsDlg::nPreviousChecks ) );
-    m_xBtnDelFormulas->set_active( IS_SET( InsertDeleteFlags::FORMULA,
-                                   ScDeleteContentsDlg::nPreviousChecks ) );
-    m_xBtnDelNotes->set_active( IS_SET( InsertDeleteFlags::NOTE,
-                                   ScDeleteContentsDlg::nPreviousChecks ) );
-    m_xBtnDelAttrs->set_active( IS_SET( InsertDeleteFlags::ATTRIB,
-                                   ScDeleteContentsDlg::nPreviousChecks ) );
-    m_xBtnDelObjects->set_active( IS_SET( InsertDeleteFlags::OBJECTS,
-                                   ScDeleteContentsDlg::nPreviousChecks ) );
+    m_xBtnDelStrings->set_active( bool(InsertDeleteFlags::STRING & ScDeleteContentsDlg::nPreviousChecks) );
+    m_xBtnDelNumbers->set_active( bool(InsertDeleteFlags::VALUE & ScDeleteContentsDlg::nPreviousChecks) );
+    m_xBtnDelDateTime->set_active( bool(InsertDeleteFlags::DATETIME & ScDeleteContentsDlg::nPreviousChecks) );
+    m_xBtnDelFormulas->set_active( bool(InsertDeleteFlags::FORMULA & ScDeleteContentsDlg::nPreviousChecks) );
+    m_xBtnDelNotes->set_active( bool(InsertDeleteFlags::NOTE & ScDeleteContentsDlg::nPreviousChecks) );
+    m_xBtnDelAttrs->set_active( bool(InsertDeleteFlags::ATTRIB & ScDeleteContentsDlg::nPreviousChecks) );
+    m_xBtnDelObjects->set_active( bool(InsertDeleteFlags::OBJECTS & ScDeleteContentsDlg::nPreviousChecks) );
 
     DisableChecks( m_xBtnDelAll->get_active() );
 

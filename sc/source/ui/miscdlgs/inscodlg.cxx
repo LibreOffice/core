@@ -76,20 +76,13 @@ ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
     }
 
     mpBtnInsAll->Check     ( ScInsertContentsDlg::bPreviousAllCheck );
-    mpBtnInsStrings->Check ( IS_SET( InsertDeleteFlags::STRING,
-                                   ScInsertContentsDlg::nPreviousChecks ) );
-    mpBtnInsNumbers->Check ( IS_SET( InsertDeleteFlags::VALUE,
-                                   ScInsertContentsDlg::nPreviousChecks ) );
-    mpBtnInsDateTime->Check( IS_SET( InsertDeleteFlags::DATETIME,
-                                   ScInsertContentsDlg::nPreviousChecks ) );
-    mpBtnInsFormulas->Check( IS_SET( InsertDeleteFlags::FORMULA,
-                                   ScInsertContentsDlg::nPreviousChecks ) );
-    mpBtnInsNotes->Check   ( IS_SET( InsertDeleteFlags::NOTE,
-                                   ScInsertContentsDlg::nPreviousChecks ) );
-    mpBtnInsAttrs->Check   ( IS_SET( InsertDeleteFlags::ATTRIB,
-                                   ScInsertContentsDlg::nPreviousChecks ) );
-    mpBtnInsObjects->Check ( IS_SET( InsertDeleteFlags::OBJECTS,
-                                   ScInsertContentsDlg::nPreviousChecks ) );
+    mpBtnInsStrings->Check ( bool(InsertDeleteFlags::STRING & ScInsertContentsDlg::nPreviousChecks) );
+    mpBtnInsNumbers->Check ( bool(InsertDeleteFlags::VALUE & ScInsertContentsDlg::nPreviousChecks) );
+    mpBtnInsDateTime->Check( bool(InsertDeleteFlags::DATETIME & ScInsertContentsDlg::nPreviousChecks) );
+    mpBtnInsFormulas->Check( bool(InsertDeleteFlags::FORMULA & ScInsertContentsDlg::nPreviousChecks) );
+    mpBtnInsNotes->Check   ( bool(InsertDeleteFlags::NOTE & ScInsertContentsDlg::nPreviousChecks) );
+    mpBtnInsAttrs->Check   ( bool(InsertDeleteFlags::ATTRIB & ScInsertContentsDlg::nPreviousChecks) );
+    mpBtnInsObjects->Check ( bool(InsertDeleteFlags::OBJECTS & ScInsertContentsDlg::nPreviousChecks) );
 
     switch( ScInsertContentsDlg::nPreviousFormulaChecks )
     {

@@ -276,9 +276,6 @@ namespace o3tl
 #define DELETEZ(pPtr) { delete pPtr; pPtr = 0; }
 #endif
 
-                                    // is bit set in set?
-#define IS_SET(bit,set)(((set)&(bit))==(bit))
-
 enum CellType
     {
         CELLTYPE_NONE,
