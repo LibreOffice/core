@@ -82,6 +82,7 @@
 #include <printfun.hxx>
 #include <cbutton.hxx>
 #include <sc.hrc>
+#include <helpids.h>
 #include <globstr.hrc>
 #include <strings.hrc>
 #include <editutil.hxx>

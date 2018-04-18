@@ -39,6 +39,7 @@
 #include <tabvwsh.hxx>
 #include <document.hxx>
 #include <sc.hrc>
+#include <helpids.h>
 #include <inputwin.hxx>
 #include <scresid.hxx>
 #include <printfun.hxx>

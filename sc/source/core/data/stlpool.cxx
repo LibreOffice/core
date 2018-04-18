@@ -45,6 +45,7 @@
 #include <vcl/settings.hxx>
 
 #include <sc.hrc>
+#include <helpids.h>
 #include <attrib.hxx>
 #include <global.hxx>
 #include <globstr.hrc>

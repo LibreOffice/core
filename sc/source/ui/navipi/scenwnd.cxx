@@ -30,6 +30,7 @@
 #include <sc.hrc>
 #include <strings.hrc>
 #include <globstr.hrc>
+#include <helpids.h>
 
 // class ScScenarioWindow ------------------------------------------------
 

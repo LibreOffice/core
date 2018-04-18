@@ -42,7 +42,7 @@
 
 #include <globstr.hrc>
 #include <sc.hrc>
-
+#include <helpids.h>
 
 #define TWO_CM      1134
 #define HFDIST_CM   142
