@@ -690,18 +690,19 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     // us)
 
     // first determine which of all the items are relevant for the data source (depends on the connection url)
-    OUString eType = getDatasourceType(_rSource);
-    std::vector< sal_Int32> aDetailIds;
-    ODriversSettings::getSupportedIndirectSettings(eType, getORB(), aDetailIds);
+    const OUString eType = getDatasourceType(_rSource);
+    const ::connectivity::DriversConfig aDriverConfig(getORB());
+    const ::comphelper::NamedValueCollection& aProperties = aDriverConfig.getProperties(eType);
 
     // collect the translated property values for the relevant items
     PropertyValueSet aRelevantSettings;
     MapInt2String::const_iterator aTranslation;
-    for (auto const& detailId : aDetailIds)
+    for (ItemID detailId = DSID_FIRST_ITEM_ID ; detailId <= DSID_LAST_ITEM_ID; ++detailId)
     {
         const SfxPoolItem* pCurrent = _rSource.GetItem(static_cast<sal_uInt16>(detailId));
         aTranslation = m_aIndirectPropTranslator.find(detailId);
-        if ( pCurrent && (m_aIndirectPropTranslator.end() != aTranslation) )
+        if ( pCurrent && (m_aIndirectPropTranslator.end() != aTranslation) &&
+             aProperties.has(aTranslation->second) )
         {
             if ( aTranslation->second == INFO_CHARSET )
             {
@@ -773,8 +774,6 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
             ::comphelper::removeElementAt(_rInfo, removeIndex);
     }
 
-    ::connectivity::DriversConfig aDriverConfig(getORB());
-    const ::comphelper::NamedValueCollection& aProperties = aDriverConfig.getProperties(eType);
     Sequence< Any> aTypeSettings;
     aTypeSettings = aProperties.getOrDefault("TypeInfoSettings",aTypeSettings);
     // here we have a special entry for types from oracle
