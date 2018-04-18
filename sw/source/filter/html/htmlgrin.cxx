@@ -620,6 +620,20 @@ IMAGE_SETEVENT:
     bool bSetScaleImageMap = false;
     sal_uInt8 nPrcWidth = 0, nPrcHeight = 0;
 
+    if (!nWidth || !nHeight)
+    {
+        GraphicDescriptor aDescriptor(aGraphicURL);
+        if (aDescriptor.Detect(/*bExtendedInfo=*/true))
+        {
+            // Try to use size info from the image header before defaulting to
+            // HTML_DFLT_IMG_WIDTH/HEIGHT.
+            aTwipSz = Application::GetDefaultDevice()->PixelToLogic(aDescriptor.GetSizePixel(),
+                                                                    MapMode(MapUnit::MapTwip));
+            nWidth = aTwipSz.getWidth();
+            nHeight = aTwipSz.getHeight();
+        }
+    }
+
     if( !nWidth || !nHeight )
     {
         // When the graphic is in a table, it will be requested immediately,
