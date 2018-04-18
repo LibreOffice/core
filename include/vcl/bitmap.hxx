@@ -658,8 +658,6 @@ public:
     SAL_DLLPRIVATE bool     ImplDitherFloyd();
     SAL_DLLPRIVATE bool     ImplDitherFloyd16();
 
-    SAL_DLLPRIVATE bool     ImplConvolute3( const long* pMatrix );
-
     SAL_DLLPRIVATE bool     ImplMedianFilter();
     SAL_DLLPRIVATE bool     ImplSobelGrey();
     SAL_DLLPRIVATE bool     ImplEmbossGrey( const BmpFilterParam* pFilterParam );
