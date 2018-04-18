@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_2afda93a",
+        "filename": "solenv/bin/modules/installer/windows/upgrade.pm",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-18T11:25:00Z",
+      "side": 1,
+      "message": "why does it matter to the 32-bit installer if the 64-bit runtime is present?",
+      "revId": "3e264c5c35d1ed97c5e59774eec2bc6b53120dcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
