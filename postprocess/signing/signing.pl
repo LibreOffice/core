@@ -41,6 +41,7 @@ my @args        = ();
 my @files_to_sign = ();
 
 #### main #####
+sleep(120);
 $myname = script_id();
 if ( $#ARGV < 2 ) {
     usage();
