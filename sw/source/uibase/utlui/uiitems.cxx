@@ -28,6 +28,8 @@
 #include <unomid.h>
 #include <numrule.hxx>
 
+#include <editeng/eerdll.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -66,7 +68,7 @@ bool SwPageFootnoteInfoItem::GetPresentation
     {
         rText = SwResId( STR_MAX_FTN_HEIGHT ) + " " +
                 ::GetMetricText( nHght, eCoreUnit, ePresUnit, &rIntl ) + " " +
-                ::GetSvxString( ::GetMetricId( ePresUnit ) );
+                EditResId( ::GetMetricId( ePresUnit ) );
     }
     return true;
 }

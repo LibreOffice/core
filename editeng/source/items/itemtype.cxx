@@ -134,11 +134,6 @@ OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const In
     return sRet.makeStringAndClear();
 }
 
-OUString GetSvxString(const char* pId)
-{
-    return EditResId(pId);
-}
-
 OUString GetColorString( const Color& rCol )
 {
     if (rCol == COL_AUTO)
