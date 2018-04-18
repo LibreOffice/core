@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,desktop_branding,$(SRCDIR)/icon-themes/galaxy))
+$(eval $(call gb_Package_Package,desktop_branding,$(SRCDIR)/icon-themes/colibre))
 
 $(eval $(call gb_Package_add_files,desktop_branding,$(LIBO_ETC_FOLDER),\
     $(foreach image,$(filter $(BRAND_INTRO_IMAGES),$(DEFAULT_BRAND_IMAGES)),\
