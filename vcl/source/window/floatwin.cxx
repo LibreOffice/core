@@ -445,10 +445,13 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
 
     if (bLOKActive && pLOKTwipsPos)
     {
-        if (pW->IsMapModeEnabled())
-            *pLOKTwipsPos = pW->PixelToLogic(aPos, MapMode(MapUnit::MapTwip));
-        else
-            *pLOKTwipsPos = pW->LogicToLogic(aPos, pW->GetMapMode(), MapMode(MapUnit::MapTwip));
+        // if we use pW->LogicToLogic(aPos, pW->GetMapMode(), MapMode(MapUnit::MapTwip)),
+        // when map mode is not enabled, we gets a 20 twips per pixel conversion
+        // since LogicToLogic uses a fixed 72 dpi value, instead of a correctly
+        // computed output device dpi or at least the most commonly used 96 dpi
+        // value; and anyway the following is what we already do in
+        // ScGridWindow::LogicInvalidate when map mode is not enabled.
+        *pLOKTwipsPos = pW->PixelToLogic(aPos, MapMode(MapUnit::MapTwip));
     }
 
     // caller expects coordinates relative to top-level win
