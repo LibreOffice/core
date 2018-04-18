@@ -1169,7 +1169,7 @@ void Dialog::ImplSetModalInputMode( bool bModal )
             // #115933# disable the whole frame hierarchy, useful if our parent
             // is a modeless dialog
             mpDialogParent = pParent->mpWindowImpl->mpFrameWindow;
-            mpDialogParent->ImplIncModalCount();
+            mpDialogParent->IncModalCount();
         }
     }
     else
@@ -1179,7 +1179,7 @@ void Dialog::ImplSetModalInputMode( bool bModal )
             // #115933# re-enable the whole frame hierarchy again (see above)
             // note that code in getfocus assures that we do not accidentally enable
             // windows that were disabled before
-            mpDialogParent->ImplDecModalCount();
+            mpDialogParent->DecModalCount();
         }
 
         // Enable the prev Modal Dialog

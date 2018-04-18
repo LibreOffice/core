@@ -603,8 +603,8 @@ public:
     SAL_DLLPRIVATE void                 ImplCallResize();
     SAL_DLLPRIVATE void                 ImplCallMove();
 
-    SAL_DLLPRIVATE void                 ImplIncModalCount();
-    SAL_DLLPRIVATE void                 ImplDecModalCount();
+                   void                 IncModalCount();
+                   void                 DecModalCount();
 
     SAL_DLLPRIVATE static void          ImplCalcSymbolRect( tools::Rectangle& rRect );
 

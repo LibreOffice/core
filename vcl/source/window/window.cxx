@@ -3518,7 +3518,7 @@ bool Window::IsInModalMode() const
     return (mpWindowImpl->mpFrameWindow->mpWindowImpl->mpFrameData->mnModalMode != 0);
 }
 
-void Window::ImplIncModalCount()
+void Window::IncModalCount()
 {
     vcl::Window* pFrameWindow = mpWindowImpl->mpFrameWindow;
     vcl::Window* pParent = pFrameWindow;
@@ -3532,7 +3532,7 @@ void Window::ImplIncModalCount()
         pFrameWindow = pParent ? pParent->mpWindowImpl->mpFrameWindow.get() : nullptr;
     }
 }
-void Window::ImplDecModalCount()
+void Window::DecModalCount()
 {
     vcl::Window* pFrameWindow = mpWindowImpl->mpFrameWindow;
     vcl::Window* pParent = pFrameWindow;

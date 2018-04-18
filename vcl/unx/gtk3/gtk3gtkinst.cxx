@@ -1947,9 +1947,16 @@ public:
     {
         sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
         int ret;
+        GtkWindow* pParent = gtk_window_get_transient_for(GTK_WINDOW(m_pDialog));
+        GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pParent);
+        vcl::Window* pFrameWindow = pFrame ? pFrame->GetWindow() : nullptr;
         while (true)
         {
+            if (pFrameWindow)
+                pFrameWindow->IncModalCount();
             ret = gtk_dialog_run(m_pDialog);
+            if (pFrameWindow)
+                pFrameWindow->DecModalCount();
             if (ret == GTK_RESPONSE_HELP)
             {
                 help();
