@@ -75,7 +75,7 @@ void ScStyleSheetPool::SetDocument( ScDocument* pDocument )
 }
 
 SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
-                                           SfxStyleFamily eFam, sal_uInt16 mask)
+                                           SfxStyleFamily eFam, SfxStyleSearchBits mask)
 {
     //  When updating styles from a template, Office 5.1 sometimes created
     //  files with multiple default styles.
@@ -100,7 +100,7 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
 
 SfxStyleSheetBase* ScStyleSheetPool::Create( const OUString&   rName,
                                              SfxStyleFamily  eFamily,
-                                             sal_uInt16          nMaskP )
+                                             SfxStyleSearchBits nMaskP )
 {
     ScStyleSheet* pSheet = new ScStyleSheet( rName, *this, eFamily, nMaskP );
     if ( eFamily == SfxStyleFamily::Para && ScGlobal::GetRscString(STR_STYLENAME_STANDARD) != rName )
@@ -119,8 +119,8 @@ void ScStyleSheetPool::Remove( SfxStyleSheetBase* pStyle )
 {
     if ( pStyle )
     {
-        OSL_ENSURE( IS_SET( SFXSTYLEBIT_USERDEF, pStyle->GetMask() ),
-                    "SFXSTYLEBIT_USERDEF not set!" );
+        OSL_ENSURE( IS_SET( SfxStyleSearchBits::UserDefined, pStyle->GetMask() ),
+                    "SfxStyleSearchBits::UserDefined not set!" );
 
         static_cast<ScDocumentPool&>(rPool).StyleDeleted(static_cast<ScStyleSheet*>(pStyle));
         SfxStyleSheetPool::Remove(pStyle);
@@ -237,7 +237,7 @@ void ScStyleSheetPool::CreateStandardStyles()
 
     // 1. Standard
 
-    pSheet = static_cast<ScStyleSheet*>( &Make( aStrStandard, SfxStyleFamily::Para, SCSTYLEBIT_STANDARD ) );
+    pSheet = static_cast<ScStyleSheet*>( &Make( aStrStandard, SfxStyleFamily::Para, SfxStyleSearchBits::ScStandard ) );
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_STD );
 
     //  if default fonts for the document's languages are different from the pool default,
@@ -273,7 +273,7 @@ void ScStyleSheetPool::CreateStandardStyles()
 
     pSheet = static_cast<ScStyleSheet*>( &Make( aStrStandard,
                                     SfxStyleFamily::Page,
-                                    SCSTYLEBIT_STANDARD ) );
+                                    SfxStyleSearchBits::ScStandard ) );
 
     pSet = &pSheet->GetItemSet();
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_PAGE_STD );
@@ -314,7 +314,7 @@ void ScStyleSheetPool::CreateStandardStyles()
 
     pSheet = static_cast<ScStyleSheet*>( &Make( SCSTR( STR_STYLENAME_REPORT ),
                                     SfxStyleFamily::Page,
-                                    SCSTYLEBIT_STANDARD ) );
+                                    SfxStyleSearchBits::ScStandard ) );
     pSet = &pSheet->GetItemSet();
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_PAGE_REP );
 
@@ -438,7 +438,7 @@ void ScStyleSheetPool::setAllStandard()
     SfxStyleSheetBase* pSheet = First();
     while (pSheet)
     {
-        pSheet->SetMask(SCSTYLEBIT_STANDARD);
+        pSheet->SetMask(SfxStyleSearchBits::ScStandard);
         pSheet = Next();
     }
 }

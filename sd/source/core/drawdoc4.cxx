@@ -130,7 +130,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Default style
 
-    sal_uInt16 nMask = SFXSTYLEBIT_AUTO;
+    SfxStyleSearchBits nMask = SfxStyleSearchBits::Auto;
 
     OUString aName(aStdName);
     pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
@@ -492,7 +492,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
 static Any implMakeSolidCellStyle( SdStyleSheetPool* pSSPool, const OUString& rName, const OUString& rParent, const Color& rColor )
 {
-    SfxStyleSheetBase* pSheet = &(pSSPool->Make(rName, SfxStyleFamily::Frame, SFXSTYLEBIT_AUTO));
+    SfxStyleSheetBase* pSheet = &(pSSPool->Make(rName, SfxStyleFamily::Frame, SfxStyleSearchBits::Auto));
     pSheet->SetParent(rParent);
     SfxItemSet* pISet = &pSheet->GetItemSet();
     pISet->Put(XFillStyleItem(drawing::FillStyle_SOLID));
@@ -537,7 +537,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     OUString aDefaultCellStyleName( "default" );
 
-    pSheet = &(pSSPool->Make(aDefaultCellStyleName, SfxStyleFamily::Frame, SFXSTYLEBIT_AUTO));
+    pSheet = &(pSSPool->Make(aDefaultCellStyleName, SfxStyleFamily::Frame, SfxStyleSearchBits::Auto));
     pSheet->SetHelpId( OUString(), HID_SD_CELL_STYLE_DEFAULT );
     SfxItemSet& rISet = pSheet->GetItemSet();
 

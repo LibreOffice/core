@@ -84,7 +84,6 @@ public:
 
     void                    Reset();
 
-    void                    SetMask(sal_uInt16 nMsk)            { nMask = nMsk;     }
     void                    SetFamily(SfxStyleFamily eFam)  { nFamily = eFam;   }
 
     bool                    IsPhysical() const              { return bPhysical; }
@@ -176,7 +175,7 @@ class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
 
 public:
     SwStyleSheetIterator( SwDocStyleSheetPool* pBase,
-                          SfxStyleFamily eFam, sal_uInt16 n );
+                          SfxStyleFamily eFam, SfxStyleSearchBits n );
     virtual ~SwStyleSheetIterator() override;
 
     virtual sal_uInt16 Count() override;
@@ -196,7 +195,7 @@ class SwDocStyleSheetPool : public SfxStyleSheetBasePool
     SwDoc&              rDoc;
     bool                bOrganizer : 1;     ///< Organizer
 
-    virtual SfxStyleSheetBase* Create( const OUString&, SfxStyleFamily, sal_uInt16 nMask) override;
+    virtual SfxStyleSheetBase* Create( const OUString&, SfxStyleFamily, SfxStyleSearchBits nMask) override;
     virtual SfxStyleSheetBase* Create( const SfxStyleSheetBase& ) override;
 
     using SfxStyleSheetBasePool::Find;
@@ -205,10 +204,10 @@ public:
     SwDocStyleSheetPool( SwDoc&, bool bOrganizer );
 
     virtual SfxStyleSheetBase& Make(const OUString&, SfxStyleFamily,
-            sal_uInt16 nMask = SFXSTYLEBIT_ALL) override;
+            SfxStyleSearchBits nMask = SfxStyleSearchBits::All) override;
 
     virtual SfxStyleSheetBase* Find( const OUString&, SfxStyleFamily eFam,
-                                    sal_uInt16 n=SFXSTYLEBIT_ALL ) override;
+                                    SfxStyleSearchBits n=SfxStyleSearchBits::All ) override;
 
     virtual bool SetParent( SfxStyleFamily eFam, const OUString &rStyle,
                             const OUString &rParent ) override;
@@ -217,7 +216,7 @@ public:
 
     bool    IsOrganizerMode() const         { return bOrganizer; }
 
-    virtual std::shared_ptr<SfxStyleSheetIterator> CreateIterator( SfxStyleFamily, sal_uInt16 nMask ) override;
+    virtual std::shared_ptr<SfxStyleSheetIterator> CreateIterator( SfxStyleFamily, SfxStyleSearchBits nMask ) override;
 
     SwDoc& GetDoc() const { return rDoc; }
 

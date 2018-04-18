@@ -107,8 +107,7 @@ SwCondCollPage::SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet)
             for (size_t i = 0; i < rFilterList.size(); ++i)
             {
                 m_pFilterLB->InsertEntry(rFilterList[i].aName);
-                sal_uInt16* pFilter = new sal_uInt16(rFilterList[i].nFlags);
-                m_pFilterLB->SetEntryData(i, pFilter);
+                m_pFilterLB->SetEntryData(i, reinterpret_cast<void*>(sal_uInt16(rFilterList[i].nFlags)));
             }
             break;
         }
@@ -127,9 +126,6 @@ SwCondCollPage::~SwCondCollPage()
 
 void SwCondCollPage::dispose()
 {
-    for(sal_Int32 i = 0; i < m_pFilterLB->GetEntryCount(); ++i)
-        delete static_cast<sal_uInt16*>(m_pFilterLB->GetEntryData(i));
-
     m_pConditionCB.clear();
     m_pContextFT.clear();
     m_pUsedFT.clear();
@@ -282,7 +278,7 @@ void SwCondCollPage::SelectHdl(void const * pBox)
     {
         m_pStyleLB->Clear();
         const sal_Int32 nSelPos = static_cast<ListBox const *>(pBox)->GetSelectedEntryPos();
-        const sal_uInt16 nSearchFlags = *static_cast<sal_uInt16*>(m_pFilterLB->GetEntryData(nSelPos));
+        const SfxStyleSearchBits nSearchFlags = static_cast<SfxStyleSearchBits>(reinterpret_cast<sal_IntPtr>(m_pFilterLB->GetEntryData(nSelPos)));
         SfxStyleSheetBasePool* pPool = m_rSh.GetView().GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SfxStyleFamily::Para, nSearchFlags);
         const SfxStyleSheetBase* pBase = pPool->First();

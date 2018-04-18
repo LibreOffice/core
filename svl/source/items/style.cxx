@@ -100,7 +100,7 @@ public:
 };
 
 
-SfxStyleSheetBase::SfxStyleSheetBase( const OUString& rName, SfxStyleSheetBasePool* p, SfxStyleFamily eFam, sal_uInt16 mask )
+SfxStyleSheetBase::SfxStyleSheetBase( const OUString& rName, SfxStyleSheetBasePool* p, SfxStyleFamily eFam, SfxStyleSearchBits mask )
     : m_pPool( p )
     , nFamily( eFam )
     , aName( rName )
@@ -171,7 +171,7 @@ bool SfxStyleSheetBase::SetName(const OUString& rName, bool bReIndexNow)
             return false;
 
         SfxStyleFamily eTmpFam = m_pPool->GetSearchFamily();
-        sal_uInt16 nTmpMask = m_pPool->GetSearchMask();
+        SfxStyleSearchBits nTmpMask = m_pPool->GetSearchMask();
 
         m_pPool->SetSearchMask(nFamily);
 
@@ -357,7 +357,7 @@ SfxStyleFamily SfxStyleSheetIterator::GetSearchFamily() const
 
 inline bool SfxStyleSheetIterator::IsTrivialSearch() const
 {
-    return (( nMask & SFXSTYLEBIT_ALL_VISIBLE ) == SFXSTYLEBIT_ALL_VISIBLE) &&
+    return (( nMask & SfxStyleSearchBits::AllVisible ) == SfxStyleSearchBits::AllVisible) &&
         (GetSearchFamily() == SfxStyleFamily::All);
 }
 
@@ -376,14 +376,14 @@ struct DoesStyleMatchStyleSheetPredicate final : public svl::StyleSheetPredicate
 
         bool bUsed = mIterator->SearchUsed() && styleSheet.IsUsed( );
 
-        bool bSearchHidden = ( mIterator->GetSearchMask() & SFXSTYLEBIT_HIDDEN );
+        bool bSearchHidden( mIterator->GetSearchMask() & SfxStyleSearchBits::Hidden );
         bool bMatchVisibility = !( !bSearchHidden && styleSheet.IsHidden() && !bUsed );
-        bool bOnlyHidden = mIterator->GetSearchMask( ) == SFXSTYLEBIT_HIDDEN && styleSheet.IsHidden( );
+        bool bOnlyHidden = mIterator->GetSearchMask( ) == SfxStyleSearchBits::Hidden && styleSheet.IsHidden( );
 
         bool bMatches = bMatchFamily && bMatchVisibility
-            && (( styleSheet.GetMask() & ( mIterator->GetSearchMask() & ~SFXSTYLEBIT_USED )) ||
+            && (( styleSheet.GetMask() & ( mIterator->GetSearchMask() & ~SfxStyleSearchBits::Used )) ||
                 bUsed || bOnlyHidden ||
-                ( mIterator->GetSearchMask() & SFXSTYLEBIT_ALL_VISIBLE ) == SFXSTYLEBIT_ALL_VISIBLE );
+                ( mIterator->GetSearchMask() & SfxStyleSearchBits::AllVisible ) == SfxStyleSearchBits::AllVisible );
         return bMatches;
     }
 
@@ -393,18 +393,18 @@ struct DoesStyleMatchStyleSheetPredicate final : public svl::StyleSheetPredicate
 }
 
 SfxStyleSheetIterator::SfxStyleSheetIterator(SfxStyleSheetBasePool *pBase,
-                                             SfxStyleFamily eFam, sal_uInt16 n)
+                                             SfxStyleFamily eFam, SfxStyleSearchBits n)
     : pCurrentStyle(nullptr)
     , nCurrentPosition(0)
 {
     pBasePool=pBase;
     nSearchFamily=eFam;
     bSearchUsed=false;
-        if( (( n & SFXSTYLEBIT_ALL_VISIBLE ) != SFXSTYLEBIT_ALL_VISIBLE )
-                && ((n & SFXSTYLEBIT_USED) == SFXSTYLEBIT_USED))
+        if( (( n & SfxStyleSearchBits::AllVisible ) != SfxStyleSearchBits::AllVisible )
+                && ((n & SfxStyleSearchBits::Used) == SfxStyleSearchBits::Used))
     {
         bSearchUsed = true;
-        n &= ~SFXSTYLEBIT_USED;
+        n &= ~SfxStyleSearchBits::Used;
     }
     nMask=n;
 }
@@ -420,7 +420,7 @@ sal_uInt16 SfxStyleSheetIterator::Count()
     {
         n = static_cast<sal_uInt16>(pBasePool->pImpl->mxIndexedStyleSheets->GetNumberOfStyleSheets());
     }
-    else if(nMask == SFXSTYLEBIT_ALL)
+    else if(nMask == SfxStyleSearchBits::All)
     {
         n = static_cast<sal_uInt16>(pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetPositionsByFamily(nSearchFamily).size());
     }
@@ -440,7 +440,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::operator[](sal_uInt16 nIdx)
         retval = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(nIdx).get();
         nCurrentPosition = nIdx;
     }
-    else if(nMask == SFXSTYLEBIT_ALL)
+    else if(nMask == SfxStyleSearchBits::All)
     {
         rtl::Reference< SfxStyleSheetBase > ref =
         pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(
@@ -494,7 +494,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Next()
             retval = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(nCurrentPosition).get();
         }
     }
-    else if(nMask == SFXSTYLEBIT_ALL)
+    else if(nMask == SfxStyleSearchBits::All)
     {
         unsigned newPosition = nCurrentPosition +1;
         const std::vector<unsigned>& familyVector =
@@ -539,12 +539,12 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Find(const OUString& rStr)
     return pCurrentStyle;
 }
 
-sal_uInt16 SfxStyleSheetIterator::GetSearchMask() const
+SfxStyleSearchBits SfxStyleSheetIterator::GetSearchMask() const
 {
-    sal_uInt16 mask = nMask;
+    SfxStyleSearchBits mask = nMask;
 
     if ( bSearchUsed )
-        mask |= SFXSTYLEBIT_USED;
+        mask |= SfxStyleSearchBits::Used;
     return mask;
 }
 
@@ -563,7 +563,7 @@ SfxStyleSheetBasePool::SfxStyleSheetBasePool( SfxItemPool& r ) :
     pImpl(new SfxStyleSheetBasePool_Impl),
     rPool(r),
     nSearchFamily(SfxStyleFamily::Para),
-    nMask(SFXSTYLEBIT_ALL)
+    nMask(SfxStyleSearchBits::All)
 {
 #ifdef DBG_UTIL
     aDbgStyleSheetReferences.mnPools++;
@@ -597,7 +597,7 @@ SfxStyleSheetBasePool::~SfxStyleSheetBasePool()
 
 bool SfxStyleSheetBasePool::SetParent(SfxStyleFamily eFam, const OUString& rStyle, const OUString& rParent)
 {
-    SfxStyleSheetIterator aIter(this,eFam,SFXSTYLEBIT_ALL);
+    SfxStyleSheetIterator aIter(this,eFam,SfxStyleSearchBits::All);
     SfxStyleSheetBase *pStyle = aIter.Find(rStyle);
     OSL_ENSURE(pStyle, "Template not found. Writer with solar <2541?");
     if(pStyle)
@@ -607,7 +607,7 @@ bool SfxStyleSheetBasePool::SetParent(SfxStyleFamily eFam, const OUString& rStyl
 }
 
 
-void SfxStyleSheetBasePool::SetSearchMask(SfxStyleFamily eFam, sal_uInt16 n)
+void SfxStyleSheetBasePool::SetSearchMask(SfxStyleFamily eFam, SfxStyleSearchBits n)
 {
     nSearchFamily = eFam; nMask = n;
 }
@@ -616,7 +616,7 @@ void SfxStyleSheetBasePool::SetSearchMask(SfxStyleFamily eFam, sal_uInt16 n)
 std::shared_ptr<SfxStyleSheetIterator> SfxStyleSheetBasePool::CreateIterator
 (
  SfxStyleFamily eFam,
- sal_uInt16 mask
+ SfxStyleSearchBits mask
 )
 {
     return std::make_shared<SfxStyleSheetIterator>(this,eFam,mask);
@@ -626,7 +626,7 @@ SfxStyleSheetBase* SfxStyleSheetBasePool::Create
 (
     const OUString& rName,
     SfxStyleFamily eFam,
-    sal_uInt16 mask
+    SfxStyleSearchBits mask
 )
 {
     return new SfxStyleSheetBase( rName, this, eFam, mask );
@@ -637,7 +637,7 @@ SfxStyleSheetBase* SfxStyleSheetBasePool::Create( const SfxStyleSheetBase& r )
     return new SfxStyleSheetBase( r );
 }
 
-SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const OUString& rName, SfxStyleFamily eFam, sal_uInt16 mask)
+SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const OUString& rName, SfxStyleFamily eFam, SfxStyleSearchBits mask)
 {
     OSL_ENSURE( eFam != SfxStyleFamily::All, "svl::SfxStyleSheetBasePool::Make(), FamilyAll is not a allowed Familie" );
 
@@ -717,7 +717,7 @@ SfxStyleSheetBase *SfxStyleSheetBasePool::operator[](sal_uInt16 nIdx)
 
 SfxStyleSheetBase* SfxStyleSheetBasePool::Find(const OUString& rName,
                                                SfxStyleFamily eFam,
-                                               sal_uInt16 mask)
+                                               SfxStyleSearchBits mask)
 {
     SfxStyleSheetIterator aIter(this,eFam,mask);
     return aIter.Find(rName);
@@ -819,7 +819,7 @@ void SfxStyleSheetBasePool::ChangeParent(const OUString& rOld,
                                          const OUString& rNew,
                                          bool bVirtual)
 {
-    const sal_uInt16 nTmpMask = GetSearchMask();
+    const SfxStyleSearchBits nTmpMask = GetSearchMask();
     SetSearchMask(GetSearchFamily());
     for( SfxStyleSheetBase* p = First(); p; p = Next() )
     {
@@ -841,7 +841,7 @@ void SfxStyleSheetBase::Load( SvStream&, sal_uInt16 )
 SfxStyleSheet::SfxStyleSheet(const OUString &rName,
                              const SfxStyleSheetBasePool& r_Pool,
                              SfxStyleFamily eFam,
-                             sal_uInt16 mask )
+                             SfxStyleSearchBits mask )
     : SfxStyleSheetBase(rName, const_cast< SfxStyleSheetBasePool* >( &r_Pool ), eFam, mask)
 {
 }
@@ -906,13 +906,13 @@ SfxStyleSheetPool::SfxStyleSheetPool( SfxItemPool const& rSet)
 }
 
 SfxStyleSheetBase* SfxStyleSheetPool::Create( const OUString& rName,
-                                              SfxStyleFamily eFam, sal_uInt16 mask )
+                                              SfxStyleFamily eFam, SfxStyleSearchBits mask )
 {
     return new SfxStyleSheet( rName, *this, eFam, mask );
 }
 
-SfxUnoStyleSheet::SfxUnoStyleSheet( const OUString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, sal_uInt16 _nMaske )
-: cppu::ImplInheritanceHelper<SfxStyleSheet, css::style::XStyle, css::lang::XUnoTunnel>(_rName, _rPool, _eFamily, _nMaske)
+SfxUnoStyleSheet::SfxUnoStyleSheet( const OUString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, SfxStyleSearchBits _nMask )
+: cppu::ImplInheritanceHelper<SfxStyleSheet, css::style::XStyle, css::lang::XUnoTunnel>(_rName, _rPool, _eFamily, _nMask)
 {
 }
 

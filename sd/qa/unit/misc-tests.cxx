@@ -309,11 +309,11 @@ void SdMiscTest::testTdf44774()
     SfxStyleSheetBasePool* pSSPool = xDocShRef->GetStyleSheetPool();
 
     // Create a new style with an empty name, like what happens in UI when creating a new style
-    SfxStyleSheetBase& rStyleA = pSSPool->Make("", SfxStyleFamily::Para, SFXSTYLEBIT_USERDEF);
+    SfxStyleSheetBase& rStyleA = pSSPool->Make("", SfxStyleFamily::Para, SfxStyleSearchBits::UserDefined);
     // Assign a new name, which does not yet set its ApiName
     rStyleA.SetName("StyleA");
     // Create another style
-    SfxStyleSheetBase& rStyleB = pSSPool->Make("StyleB", SfxStyleFamily::Para, SFXSTYLEBIT_USERDEF);
+    SfxStyleSheetBase& rStyleB = pSSPool->Make("StyleB", SfxStyleFamily::Para, SfxStyleSearchBits::UserDefined);
     // ... and set its parent to the first one
     rStyleB.SetParent("StyleA");
 

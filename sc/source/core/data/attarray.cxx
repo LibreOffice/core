@@ -1811,7 +1811,7 @@ void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBo
                     pDocument->GetStyleSheetPool()->
                         Find( ScGlobal::GetRscString(STR_STYLENAME_STANDARD),
                               SfxStyleFamily::Para,
-                              SFXSTYLEBIT_AUTO | SCSTYLEBIT_STANDARD ) ) );
+                              SfxStyleSearchBits::Auto | SfxStyleSearchBits::ScStandard ) ) );
                 mvData[nPos].pPattern = static_cast<const ScPatternAttr*>(
                                             &pDocument->GetPool()->Put(*pNewPattern));
                 pNewPattern.reset();
