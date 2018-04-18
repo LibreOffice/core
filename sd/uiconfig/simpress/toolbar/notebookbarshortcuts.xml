@@ -12,5 +12,6 @@
   <toolbar:toolbaritem xlink:href=".uno:Save"/>
   <toolbar:toolbaritem xlink:href=".uno:Undo"/>
   <toolbar:toolbaritem xlink:href=".uno:Redo"/>
+  <toolbar:toolbaritem xlink:href=".uno:Presentation"/>
   <toolbar:toolbaritem xlink:href=".uno:Menubar"/>
 </toolbar:toolbar>
