@@ -24,7 +24,6 @@
 #include <svx/svxids.hrc>
 
 #include <svx/svxcommands.h>
-#include "helpids.h"
 
 // areas
 

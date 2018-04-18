@@ -36,6 +36,7 @@
 #include <styledlg.hxx>
 #include <scuitphfedit.hxx>
 #include <memory>
+#include <helpids.h>
 
 // class ScHFPage
 

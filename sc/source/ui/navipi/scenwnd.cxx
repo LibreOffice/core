@@ -28,6 +28,7 @@
 #include <navipi.hxx>
 #include <sc.hrc>
 #include <globstr.hrc>
+#include <helpids.h>
 
 // class ScScenarioWindow ------------------------------------------------
 

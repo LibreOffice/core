@@ -112,6 +112,7 @@ using namespace ::com::sun::star;
 #include <documentlinkmgr.hxx>
 #include <memory>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
+#include <helpids.h>
 
 void ScDocShell::ReloadAllLinks()
 {

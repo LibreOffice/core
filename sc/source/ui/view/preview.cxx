@@ -48,6 +48,7 @@
 #include <markdata.hxx>
 #include <globstr.hrc>
 #include <sc.hrc>
+#include <helpids.h>
 #include <AccessibleDocumentPagePreview.hxx>
 #include <vcl/lineinfo.hxx>
 #include <svx/algitem.hxx>

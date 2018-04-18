@@ -37,6 +37,7 @@
 
 #include <tabvwsh.hxx>
 #include <sc.hrc>
+#include <helpids.h>
 #include <docsh.hxx>
 #include <document.hxx>
 #include <shtabdlg.hxx>
