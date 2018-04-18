@@ -189,6 +189,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Link to E~xternal Data...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:Hyphenate" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -362,6 +365,9 @@
       <node oor:name=".uno:TextToColumns" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Te~xt to Columns...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:DataConsolidate" oor:op="replace">
@@ -1551,6 +1557,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Recalculate</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:Protect" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1579,6 +1588,9 @@
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Refresh</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:DeletePivotTable" oor:op="replace">
@@ -1619,6 +1631,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Strea~ms...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:DataStreamsPlay" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1640,6 +1655,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Data Provider...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:DataProviderRefresh" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1649,6 +1667,9 @@
       <node oor:name=".uno:ManageXMLSource" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~XML Source...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:DataSort" oor:op="replace">
@@ -1711,6 +1732,9 @@
       <node oor:name=".uno:DataFilterHideAutoFilter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Hide AutoFilter</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:SortDescending" oor:op="replace">

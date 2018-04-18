@@ -627,6 +627,12 @@ cmd/sc_fillcolor.png cmd/sc_formatarea.png
 # Notebookbar
 cmd/lc_headerandfooter.png cmd/lc_editheaderandfooter.png
 cmd/sc_headerandfooter.png cmd/sc_editheaderandfooter.png
+cmd/lc_recalcpivottable.png cmd/lc_calculate.png
+cmd/sc_recalcpivottable.png cmd/sc_calculate.png
+cmd/lc_dataproviderrefresh.png cmd/lc_calculate.png
+cmd/sc_dataproviderrefresh.png cmd/sc_calculate.png
+cmd/lc_datafilterhideautofilter.png cmd/lc_removefiltersort.png
+cmd/sc_datafilterhideautofilter.png cmd/sc_removefiltersort.png
 
 # Ok
 cmd/lc_yes.png cmd/lc_ok.png
