@@ -351,7 +351,7 @@ HtmlExport::HtmlExport(
         mpDoc(pExpDoc),
         mpDocSh( pDocShell ),
         meEC(),
-        meMode( PUBLISH_SINGLE_DOCUMENT ),
+        meMode( PUBLISH_HTML ),
         mbContentsPage(false),
         mnButtonThema(-1),
         mnWidthPixel( PUB_MEDRES_WIDTH ),
