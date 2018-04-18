@@ -320,6 +320,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/bitmappaint \
     vcl/source/bitmap/BitmapGaussianSeparableBlurFilter \
     vcl/source/bitmap/BitmapSeparableUnsharpenFilter \
+    vcl/source/bitmap/BitmapSmoothenFilter \
 	vcl/source/bitmap/BitmapFastScaleFilter \
     vcl/source/bitmap/BitmapScaleSuperFilter \
     vcl/source/bitmap/BitmapScaleConvolutionFilter \
