@@ -258,6 +258,7 @@ $(call gb_UIConfig_get_imagelist_target,$(1)) : $(call gb_UIImageListTarget_get_
 $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_UIImageListTarget_get_clean_target,$(2))
 
 $(call gb_UIConfig_get_a11yerrors_target,$(1)) : UIFILES += $(SRCDIR)/$(2).ui
+$(call gb_UIConfig_get_a11yerrors_target,$(1)) : $(SRCDIR)/$(2).ui
 
 endef
 
