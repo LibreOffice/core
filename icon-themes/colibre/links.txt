@@ -624,6 +624,10 @@ cmd/sc_styleapply.png cmd/sc_formatarea.png
 cmd/sc_fillstyle.png cmd/sc_formatarea.png
 cmd/sc_fillcolor.png cmd/sc_formatarea.png
 
+# Notebookbar
+cmd/lc_headerandfooter.png cmd/lc_editheaderandfooter.png
+cmd/sc_headerandfooter.png cmd/sc_editheaderandfooter.png
+
 # Ok
 cmd/lc_yes.png cmd/lc_ok.png
 cmd/lc_apply.png cmd/lc_ok.png
