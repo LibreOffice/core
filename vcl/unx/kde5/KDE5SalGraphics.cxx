@@ -70,16 +70,14 @@ QRect region2QRect( const tools::Rectangle& rControlRegion )
     return QRect(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.GetWidth(), rControlRegion.GetHeight());
 }
 
-KDE5SalGraphics::KDE5SalGraphics( KDE5SalFrame *pFrame, QWidget *pWindow )
-   : SvpSalGraphics(),
-   m_pWindow( pWindow ),
-   m_pFrame( pFrame )
+KDE5SalGraphics::KDE5SalGraphics()
+   : SvpSalGraphics()
 {
 }
 
 bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart part )
 {
-    switch (type)
+    /*switch (type)
     {
         case ControlType::Pushbutton:
         case ControlType::Radiobutton:
@@ -112,7 +110,7 @@ bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart pa
 
         default:
             break;
-    }
+    }*/
 
     return false;
 }
@@ -209,7 +207,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
                                         const ImplControlValue& value,
                                         const OUString& )
 {
-    bool nativeSupport = IsNativeControlSupported( type, part );
+    /*bool nativeSupport = IsNativeControlSupported( type, part );
     if( ! nativeSupport ) {
         assert( ! nativeSupport && "drawNativeControl called without native support!" );
         return false;
@@ -603,8 +601,8 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
         returnVal = false;
     }
 
-    delete localClipRegion;
-    return returnVal;
+    delete localClipRegion;*/
+    return false;
 }
 
 bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
@@ -615,7 +613,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
 {
     bool retVal = false;
 
-    QRect boundingRect = region2QRect( controlRegion );
+    /*QRect boundingRect = region2QRect( controlRegion );
     QRect contentRect = boundingRect;
     QStyleOptionComplex styleOption;
 
@@ -910,7 +908,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
         Point aPoint( contentRect.x(), contentRect.y() );
         Size  aSize( contentRect.width(), contentRect.height() );
         nativeContentRegion = tools::Rectangle( aPoint, aSize );
-    }
+    }*/
 
     return retVal;
 }
@@ -924,7 +922,7 @@ bool KDE5SalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart
                                            const tools::Rectangle& rControlRegion, const Point& rPos,
                                            bool& rIsInside )
 {
-    if ( nType == ControlType::Scrollbar )
+    /*if ( nType == ControlType::Scrollbar )
     {
         if( nPart != ControlPart::ButtonUp && nPart != ControlPart::ButtonDown
             && nPart != ControlPart::ButtonLeft && nPart != ControlPart::ButtonRight )
@@ -959,8 +957,8 @@ bool KDE5SalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart
         else // DOWN, RIGHT
             rIsInside = ( control == QStyle::SC_ScrollBarAddLine );
         return TRUE;
-    }
-    return FALSE;
+    }*/
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

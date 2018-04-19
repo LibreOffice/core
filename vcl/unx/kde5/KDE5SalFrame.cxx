@@ -49,6 +49,7 @@
 
 KDE5SalFrame::KDE5SalFrame( KDE5SalFrame* pParent, SalFrameStyleFlags nState, bool bUseCairo )
     :Qt5Frame( pParent, nState, bUseCairo )
+    ,m_bGraphicsInUse(false)
 {
 }
 
@@ -309,6 +310,29 @@ void KDE5SalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetDarkShadowColor(toColor(pal.color(QPalette::Inactive, QPalette::WindowText)));
 
     rSettings.SetStyleSettings( style );
+}
+
+SalGraphics* KDE5SalFrame::AcquireGraphics()
+{
+    if (m_bGraphicsInUse)
+        return nullptr;
+
+    m_bGraphicsInUse = true;
+
+    if ( !m_pKDE5Graphics.get() )
+    {
+        m_pKDE5Graphics.reset( new KDE5SalGraphics());
+        Qt5Frame::InitSvpSalGraphics( m_pKDE5Graphics.get() );
+    }
+
+    return m_pKDE5Graphics.get();
+}
+
+void KDE5SalFrame::ReleaseGraphics( SalGraphics* pSalGraph )
+{
+    (void)pSalGraph;
+    assert( pSalGraph == m_pKDE5Graphics.get() );
+    m_bGraphicsInUse = false;
 }
 
 void KDE5SalFrame::updateGraphics( bool bClear )
