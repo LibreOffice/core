@@ -662,7 +662,6 @@ public:
     SAL_DLLPRIVATE bool     ImplSolarize( const BmpFilterParam* pFilterParam );
     SAL_DLLPRIVATE bool     ImplSepia( const BmpFilterParam* pFilterParam );
     SAL_DLLPRIVATE bool     ImplMosaic( const BmpFilterParam* pFilterParam );
-    SAL_DLLPRIVATE bool     ImplPopArt();
     SAL_DLLPRIVATE bool     ImplDuotoneFilter( const sal_uLong nColorOne,  sal_uLong nColorTwo );
 
 public:
