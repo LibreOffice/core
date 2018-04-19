@@ -1606,8 +1606,8 @@ private:
     SwFlyFrameFormat *ConvertDrawTextToFly( SdrObject* &rpObject,
         SdrObject* &rpOurNewObject, SvxMSDffImportRec const * pRecord,
         RndStdIds eAnchor, WW8_FSPA const *pF, SfxItemSet &rFlySet );
-    SwFrameFormat* MungeTextIntoDrawBox(SdrObject* pTrueObject,
-        SvxMSDffImportRec *pRecord, long nGrafAnchorCp, SwFrameFormat *pRetFrameFormat);
+    SwFrameFormat* MungeTextIntoDrawBox(SvxMSDffImportRec *pRecord,
+        long nGrafAnchorCp, SwFrameFormat *pRetFrameFormat);
 
     void GrafikCtor();
     void GrafikDtor();

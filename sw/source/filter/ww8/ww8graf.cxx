@@ -2759,7 +2759,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                     pRecord = it->get();
                     if (pRecord->pObj && pRecord->aTextId.nTxBxS)
                     { // #i52825# pRetFrameFormat can be NULL
-                        pRetFrameFormat = MungeTextIntoDrawBox(pRecord->pObj,
+                        pRetFrameFormat = MungeTextIntoDrawBox(
                             pRecord, nGrafAnchorCp, pRetFrameFormat);
                     }
                 }
@@ -2796,9 +2796,11 @@ SwFrameFormat *SwWW8ImplReader::AddAutoAnchor(SwFrameFormat *pFormat)
     return pFormat;
 }
 
-SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
-    SvxMSDffImportRec *pRecord, long nGrafAnchorCp, SwFrameFormat* pRetFrameFormat)
+SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SvxMSDffImportRec *pRecord,
+    long nGrafAnchorCp, SwFrameFormat* pRetFrameFormat)
 {
+    SdrObject* pTrueObject = pRecord->pObj;
+
     SdrTextObj* pSdrTextObj;
 
     // check for group object (e.g. two parentheses)
