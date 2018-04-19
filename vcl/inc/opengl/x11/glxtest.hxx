@@ -18,6 +18,8 @@ VCL_DLLPUBLIC pid_t* getGlxPid();
 
 bool fire_glxtest_process();
 
+void reap_glxtest_process();
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
