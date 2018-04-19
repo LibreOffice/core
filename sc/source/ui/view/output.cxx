@@ -657,13 +657,22 @@ void ScOutputData::SetCellRotations()
                         // Needed for CellInfo internal decisions (bg fill, ...)
                         pInfo->nRotateDir = nDir;
 
-                        // add rotation info to Array information
-                        const long nAttrRotate(pPattern->GetRotateVal(pCondSet));
-                        const SvxRotateMode eRotMode(pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue());
-                        const double fOrient((bLayoutRTL ? -1.0 : 1.0) * nAttrRotate * F_PI18000); // 1/100th degrees -> [0..2PI]
-                        svx::frame::Array& rArray = mrTabInfo.maArray;
+                        // create target coordinates
+                        const SCCOL nTargetX(nX - nVisX1 + 1);
+                        const SCROW nTargetY(nY - nVisY1 + 1);
 
-                        rArray.SetCellRotation(nX+1, nY+1, eRotMode, fOrient);
+                        // Check for values - below in SetCellRotation these will
+                        // be converted to size_t and thus may not be negative
+                        if(nTargetX >= 0 && nTargetY >= 0)
+                        {
+                            // add rotation info to Array information
+                            const long nAttrRotate(pPattern->GetRotateVal(pCondSet));
+                            const SvxRotateMode eRotMode(pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue());
+                            const double fOrient((bLayoutRTL ? -1.0 : 1.0) * nAttrRotate * F_PI18000); // 1/100th degrees -> [0..2PI]
+                            svx::frame::Array& rArray = mrTabInfo.maArray;
+
+                            rArray.SetCellRotation(nTargetX, nTargetY, eRotMode, fOrient);
+                        }
                     }
                 }
             }
