@@ -1380,6 +1380,11 @@ sal_Int32 ListBox::GetSeparatorPos() const
     return mpImplLB->GetSeparatorPos();
 }
 
+void ListBox::AddSeparator( sal_Int32 n )
+{
+    mpImplLB->AddSeparator( n );
+}
+
 sal_uInt16 ListBox::GetDisplayLineCount() const
 {
     return mpImplLB->GetDisplayLineCount();
