@@ -1021,12 +1021,22 @@ void ImpSdrPdfImport::ImportForm(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
 {
     SAL_WARN("sd.filter", "Got page object FORM: " << nPageObjectIndex);
 
+    // Get the form matrix to perform correct translation/scaling of the form sub-objects.
+    const Matrix aOldMatrix = mCurMatrix;
+
+    double a, b, c, d, e, f;
+    FPDFFormObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
+    mCurMatrix = Matrix(a, b, c, d, e, f);
+
     const int nCount = FPDFFormObj_CountSubObjects(pPageObject);
     for (int nIndex = 0; nIndex < nCount; ++nIndex)
     {
         FPDF_PAGEOBJECT pFormObject = FPDFFormObj_GetSubObject(pPageObject, nIndex);
         ImportPdfObject(pFormObject, -1);
     }
+
+    // Restore the old one.
+    mCurMatrix = aOldMatrix;
 }
 
 void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex)
@@ -1051,6 +1061,16 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
 
     const Rectangle aRect = PointsToLogic(left, right, top, bottom);
 
+    double a, b, c, d, e, f;
+    FPDFTextObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
+    Matrix aTextMatrix(a, b, c, d, e, f);
+    aTextMatrix.Concatinate(mCurMatrix);
+    SAL_WARN("sd.filter", "Got font scale matrix (" << a << ", " << b << ", " << c << ", " << d
+                                                    << ", " << e << ", " << f << ')');
+    Point aPos = PointsToLogic(e, f);
+    SAL_WARN("sd.filter", "Got TEXT origin: " << aPos);
+    SAL_WARN("sd.filter", "Got TEXT Bounds: " << aRect);
+
     const int nChars = FPDFTextObj_CountChars(pPageObject);
     std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nChars + 1]); // + terminating null
 
@@ -1064,14 +1084,6 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
 
     OUString sText(pText.get(), nActualChars);
     SAL_WARN("sd.filter", "Got Text (" << nChars << "): [" << sText << "].");
-
-    double a, b, c, d, e, f;
-    FPDFTextObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
-    SAL_WARN("sd.filter", "Got font scale matrix (" << a << ", " << b << ", " << c << ", " << d
-                                                    << ", " << e << ", " << f << ')');
-    Point aPos = PointsToLogic(e, f);
-    SAL_WARN("sd.filter", "Got TEXT origin: " << aPos);
-    SAL_WARN("sd.filter", "Got TEXT Bounds: " << aRect);
 
     const double dFontSize = FPDFTextObj_GetFontSize(pPageObject);
     double dFontSizeH = fabs(sqrt2(a, c) * dFontSize);
@@ -1297,6 +1309,8 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
 
     double a, b, c, d, e, f;
     FPDFPath_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
+    Matrix aPathMatrix(a, b, c, d, e, f);
+    aPathMatrix.Concatinate(mCurMatrix);
 
     basegfx::B2DPolygon aPoly;
     std::vector<basegfx::B2DPoint> aBezier;
@@ -1307,19 +1321,19 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
         FPDF_PATHSEGMENT pPathSegment = FPDFPath_GetPathSegment(pPageObject, nSegmentIndex);
         if (pPathSegment != nullptr)
         {
-            float x, y;
-            if (!FPDFPathSegment_GetPoint(pPathSegment, &x, &y))
+            float fx, fy;
+            if (!FPDFPathSegment_GetPoint(pPathSegment, &fx, &fy))
             {
                 SAL_WARN("sd.filter", "Failed to get PDF path segement point");
                 continue;
             }
 
+            double x = fx;
+            double y = fy;
             SAL_WARN("sd.filter", "Got point (" << x << ", " << y << ") matrix (" << a << ", " << b
                                                 << ", " << c << ", " << d << ", " << e << ", " << f
                                                 << ')');
-
-            x = a * x + c * y + e;
-            y = b * x + d * y + f;
+            aPathMatrix.Transform(x, y);
 
             const bool bClose = FPDFPathSegment_GetClose(pPathSegment);
             if (bClose)

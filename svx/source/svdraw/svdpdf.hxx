@@ -46,6 +46,69 @@ typedef void* FPDF_PAGEOBJECT;
 // Helper Class to import PDF
 class ImpSdrPdfImport final
 {
+    class Matrix
+    {
+    public:
+        Matrix()
+            : Matrix(1, 0, 0, 1, 0, 0)
+        {
+        }
+
+        Matrix(const Matrix& other)
+            : Matrix(other.ma, other.mb, other.mc, other.md, other.me, other.mf)
+        {
+        }
+
+        Matrix(double a, double b, double c, double d, double e, double f)
+            : ma(a)
+            , mb(b)
+            , mc(c)
+            , md(d)
+            , me(e)
+            , mf(f)
+        {
+        }
+
+        const Matrix& operator=(const Matrix& other)
+        {
+            ma = other.ma;
+            mb = other.mb;
+            mc = other.mc;
+            md = other.md;
+            me = other.me;
+            mf = other.mf;
+            return *this;
+        }
+
+        double a() const { return ma; }
+        double b() const { return mb; }
+        double c() const { return mc; }
+        double d() const { return md; }
+        double e() const { return me; }
+        double f() const { return mf; }
+
+        /// Mutliply this * other.
+        void Concatinate(const Matrix& other)
+        {
+            ma = ma * other.ma + mb * other.mc;
+            mb = ma * other.mb + mb * other.md;
+            mc = mc * other.ma + md * other.mc;
+            md = mc * other.mb + md * other.md;
+            me = me * other.ma + mf * other.mc + other.me;
+            mf = me * other.mb + mf * other.md + other.mf;
+        }
+
+        /// Transform the point (x, y) by this Matrix.
+        void Transform(double& x, double& y)
+        {
+            x = ma * x + mc * y + me;
+            y = mb * x + md * y + mf;
+        }
+
+    private:
+        double ma, mb, mc, md, me, mf;
+    };
+
     ::std::vector<SdrObject*> maTmpList;
     ScopedVclPtr<VirtualDevice> mpVD;
     Rectangle maScaleRect;
@@ -87,6 +150,8 @@ class ImpSdrPdfImport final
     int mnPageCount;
     double mdPageWidthPts;
     double mdPageHeightPts;
+    /// The current transformation matrix, typically used with Form objects.
+    Matrix mCurMatrix;
 
     /// Correct the vertical coordinate to start at the top.
     /// PDF coordinate system has orign at the bottom right.
