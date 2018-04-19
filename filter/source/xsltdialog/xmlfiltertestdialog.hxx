@@ -23,28 +23,24 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <svl/poolitem.hxx>
 
 class filter_info_impl;
 
-class XMLFilterTestDialog : public ModalDialog
+class XMLFilterTestDialog : public weld::GenericDialogController
 {
 public:
-    XMLFilterTestDialog(vcl::Window* pParent,
+    XMLFilterTestDialog(weld::Window* pParent,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext);
     virtual ~XMLFilterTestDialog() override;
-    virtual void dispose() override;
 
     void test( const filter_info_impl& rFilterInfo );
 
     void updateCurrentDocumentButtonState( css::uno::Reference< css::lang::XComponent > const * pRef = nullptr );
 
 private:
-    DECL_LINK(ClickHdl_Impl, Button *, void );
+    DECL_LINK(ClickHdl_Impl, weld::Button&, void);
 
     void onExportBrowse();
     void onExportCurrentDocument();
@@ -64,27 +60,23 @@ private:
 
     OUString m_sImportRecentFile;
     OUString m_sExportRecentFile;
-
-    VclPtr<VclContainer> m_pExport;
-    VclPtr<FixedText>  m_pFTExportXSLTFile;
-    VclPtr<PushButton> m_pPBExportBrowse;
-    VclPtr<PushButton> m_pPBCurrentDocument;
-    VclPtr<FixedText>  m_pFTNameOfCurrentFile;
-
-    VclPtr<VclContainer> m_pImport;
-    VclPtr<FixedText>  m_pFTImportXSLTFile;
-    VclPtr<FixedText>  m_pFTImportTemplate;
-    VclPtr<FixedText>  m_pFTImportTemplateFile;
-    VclPtr<CheckBox>   m_pCBXDisplaySource;
-    VclPtr<PushButton> m_pPBImportBrowse;
-    VclPtr<PushButton> m_pPBRecentFile;
-    VclPtr<FixedText>  m_pFTNameOfRecentFile;
-    VclPtr<CloseButton> m_pPBClose;
-
-    filter_info_impl* m_pFilterInfo;
-
+    filter_info_impl* m_xFilterInfo;
     OUString m_sDialogTitle;
 
+    std::unique_ptr<weld::Widget> m_xExport;
+    std::unique_ptr<weld::Label>  m_xFTExportXSLTFile;
+    std::unique_ptr<weld::Button> m_xPBExportBrowse;
+    std::unique_ptr<weld::Button> m_xPBCurrentDocument;
+    std::unique_ptr<weld::Label>  m_xFTNameOfCurrentFile;
+    std::unique_ptr<weld::Widget> m_xImport;
+    std::unique_ptr<weld::Label>  m_xFTImportXSLTFile;
+    std::unique_ptr<weld::Label>  m_xFTImportTemplate;
+    std::unique_ptr<weld::Label>  m_xFTImportTemplateFile;
+    std::unique_ptr<weld::CheckButton>   m_xCBXDisplaySource;
+    std::unique_ptr<weld::Button> m_xPBImportBrowse;
+    std::unique_ptr<weld::Button> m_xPBRecentFile;
+    std::unique_ptr<weld::Label>  m_xFTNameOfRecentFile;
+    std::unique_ptr<weld::Button> m_xPBClose;
 };
 
 #endif
