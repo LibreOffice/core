@@ -42,6 +42,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <limits>
+#include <algorithm>
 
 #define MULTILINE_ENTRY_DRAW_FLAGS ( DrawTextFlags::WordBreak | DrawTextFlags::MultiLine | DrawTextFlags::VCenter )
 
@@ -491,7 +492,6 @@ ImplListBoxWindow::ImplListBoxWindow( vcl::Window* pParent, WinBits nWinStyle ) 
 
     mnCurrentPos            = LISTBOX_ENTRY_NOTFOUND;
     mnTrackingSaveSelection = LISTBOX_ENTRY_NOTFOUND;
-    mnSeparatorPos          = LISTBOX_ENTRY_NOTFOUND;
     meProminentType         = ProminentEntry::TOP;
 
     SetLineColor();
@@ -1731,6 +1731,14 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
     }
 }
 
+/**
+ * Checks if the given vector vec contains number n
+ */
+bool in(const sal_Int32 &n, const std::vector<sal_Int32> &vec)
+{
+    return std::find(std::begin(vec), std::end(vec), n) != std::end(vec);
+}
+
 void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 nPos, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos)
 {
     const ImplEntryType* pEntry = mpEntryList->GetEntryPtr(nPos);
@@ -1825,13 +1833,14 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         }
     }
 
-    if ((mnSeparatorPos != LISTBOX_ENTRY_NOTFOUND) &&
-        ((nPos == mnSeparatorPos) || (nPos == mnSeparatorPos + 1)))
+    if ( maSeparators.size() &&
+        ( in(nPos, maSeparators) || in(nPos-1, maSeparators) ) )
     {
+
         Color aOldLineColor(rRenderContext.GetLineColor());
         rRenderContext.SetLineColor((GetBackground().GetColor() != COL_LIGHTGRAY) ? COL_LIGHTGRAY : COL_GRAY);
         Point aStartPos(0, nY);
-        if (nPos == mnSeparatorPos)
+        if (in(nPos, maSeparators))
             aStartPos.AdjustY(pEntry->mnHeight - 1 );
         Point aEndPos(aStartPos);
         aEndPos.setX( GetOutputSizePixel().Width() );
@@ -2009,6 +2018,24 @@ void ImplListBoxWindow::ScrollHorz( long n )
             ImplShowFocusRect();
         maScrollHdl.Call( this );
     }
+}
+
+void ImplListBoxWindow::SetSeparatorPos( sal_Int32 n )
+{
+    maSeparators.clear();
+
+    if ( n != LISTBOX_ENTRY_NOTFOUND )
+    {
+        maSeparators.push_back(n);
+    }
+}
+
+sal_Int32 ImplListBoxWindow::GetSeparatorPos() const
+{
+    if (maSeparators.size())
+        return maSeparators.front();
+    else
+        return LISTBOX_ENTRY_NOTFOUND;
 }
 
 Size ImplListBoxWindow::CalcSize(sal_Int32 nMaxLines) const
