@@ -344,7 +344,6 @@ SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel)
     // #i25616#
     mbLineIsOutsideGeometry = true;
     mbInsidePaint = false;
-    mbIsPreview = false;
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = false;
@@ -372,7 +371,6 @@ SdrGrafObj::SdrGrafObj(
     // #i25616#
     mbLineIsOutsideGeometry = true;
     mbInsidePaint = false;
-    mbIsPreview = false;
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = false;
@@ -399,7 +397,6 @@ SdrGrafObj::SdrGrafObj(
     // #i25616#
     mbLineIsOutsideGeometry = true;
     mbInsidePaint = false;
-    mbIsPreview = false;
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = false;
@@ -415,7 +412,6 @@ void SdrGrafObj::SetGraphicObject(const GraphicObject& rGraphicObject)
     mpGraphicObject.reset(new GraphicObject(rGraphicObject));
     mpReplacementGraphicObject.reset();
     mpGraphicObject->SetUserData();
-    mbIsPreview = false;
     SetChanged();
     BroadcastObjectChange();
     onGraphicChanged();
@@ -454,7 +450,6 @@ void SdrGrafObj::NbcSetGraphic(const Graphic& rGraphic)
     mpGraphicObject->SetGraphic(rGraphic);
     mpReplacementGraphicObject.reset();
     mpGraphicObject->SetUserData();
-    mbIsPreview = false;
     onGraphicChanged();
 }
 
@@ -568,8 +563,6 @@ const Size& SdrGrafObj::GetGrafPrefSize() const
 
 void SdrGrafObj::SetGrafStreamURL( const OUString& rGraphicStreamURL )
 {
-    mbIsPreview = false;
-
     if( rGraphicStreamURL.isEmpty() )
     {
         mpGraphicObject->SetUserData();

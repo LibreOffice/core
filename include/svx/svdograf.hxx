@@ -104,7 +104,6 @@ private:
 
     // #i25616#
     bool mbInsidePaint:1;
-    bool mbIsPreview:1;
 
     bool mbIsSignatureLine;
     OUString maSignatureLineId;
