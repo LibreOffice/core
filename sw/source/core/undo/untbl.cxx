@@ -1891,7 +1891,6 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
                  rTable.SetColWidth( *pBox, nSetColType, nAbsDiff,
                                     nRelDiff, &pUndo );
                 break;
-            case TableChgWidthHeightType::RowTop:
             case TableChgWidthHeightType::RowBottom:
             case TableChgWidthHeightType::CellTop:
             case TableChgWidthHeightType::CellBottom:

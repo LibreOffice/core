@@ -3968,7 +3968,6 @@ bool SwDoc::SetColRowWidthHeight( SwTableBox& rCurrentBox, TableChgWidthHeightTy
                                 bUndo ? &pUndo : nullptr );
         }
         break;
-    case TableChgWidthHeightType::RowTop:
     case TableChgWidthHeightType::RowBottom:
     case TableChgWidthHeightType::CellTop:
     case TableChgWidthHeightType::CellBottom:

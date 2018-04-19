@@ -34,13 +34,11 @@ enum class GraphicManagerDrawFlags
     CACHED                  = 0x01,
     SMOOTHSCALE             = 0x02,
     USE_DRAWMODE_SETTINGS   = 0x04,
-    SUBSTITUTE              = 0x08,
-    NO_SUBSTITUTE           = 0x10,
     STANDARD                = (CACHED|SMOOTHSCALE),
 };
 namespace o3tl
 {
-    template<> struct typed_flags<GraphicManagerDrawFlags> : is_typed_flags<GraphicManagerDrawFlags, 0x1f> {};
+    template<> struct typed_flags<GraphicManagerDrawFlags> : is_typed_flags<GraphicManagerDrawFlags, 0x07> {};
 }
 
 // AutoSwap defines
