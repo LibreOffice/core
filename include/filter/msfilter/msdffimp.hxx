@@ -262,16 +262,18 @@ private:
     SvxMSDffImportRec &operator=(const SvxMSDffImportRec&) = delete;
 };
 
-/** list of all SvxMSDffImportRec instances of/for a group */
-typedef std::set<std::unique_ptr<SvxMSDffImportRec>,
-        comphelper::UniquePtrValueLess<SvxMSDffImportRec>> MSDffImportRecords;
-
 /** block of parameters for import/export for a single call of
     ImportObjAtCurrentStreamPos() */
-struct MSFILTER_DLLPUBLIC SvxMSDffImportData
+class MSFILTER_DLLPUBLIC SvxMSDffImportData
 {
+private:
+    /** list of all SvxMSDffImportRec instances of/for a group */
+    typedef std::set<std::unique_ptr<SvxMSDffImportRec>,
+            comphelper::UniquePtrValueLess<SvxMSDffImportRec>> MSDffImportRecords;
     MSDffImportRecords  m_Records;  ///< Shape pointer, Shape ids and private data
-    tools::Rectangle           aParentRect;///< Rectangle of the surrounding groups,
+    std::map<const SdrObject*, SvxMSDffImportRec*> m_ObjToRecMap;
+public:
+    tools::Rectangle    aParentRect;///< Rectangle of the surrounding groups,
                                     ///< which might have been provided externally
 
     explicit SvxMSDffImportData(const tools::Rectangle& rParentRect);
@@ -279,6 +281,9 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportData
     SvxMSDffImportData( SvxMSDffImportData const & ) = delete; // MSVC2015 workaround
     ~SvxMSDffImportData();
     bool empty() const { return m_Records.empty(); }
+    void insert(SvxMSDffImportRec* pImpRec);
+    void unmap(const SdrObject* pObj) { m_ObjToRecMap.erase(pObj); }
+    SvxMSDffImportRec* front() { return m_Records.begin()->get(); }
     size_t size() const { return m_Records.size(); }
     SvxMSDffImportRec* find(const SdrObject* pObj);
     MSDffImportRecords::const_iterator begin() const { return m_Records.begin();  }
