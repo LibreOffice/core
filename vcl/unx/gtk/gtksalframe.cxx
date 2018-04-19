@@ -3560,7 +3560,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
 
         pango_attr_iterator_range (iter, &start, &end);
         if (end == G_MAXINT)
-            end = pText ? strlen (pText) : 0;
+            end = pText ? g_utf8_strlen(pText, -1) : 0;
         if (end == start)
             continue;
 
