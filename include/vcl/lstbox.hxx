@@ -202,8 +202,21 @@ public:
     sal_Int32           GetSavedValue() const { return mnSaveValue; }
     bool                IsValueChangedFromSaved() const { return mnSaveValue != GetSelectedEntryPos(); }
 
+    /**
+     * Removes existing separators, and sets the position of the
+     * one and only separator.
+     */
     void                SetSeparatorPos( sal_Int32 n );
+    /**
+     * Gets the position of the separator which was added first.
+     * Returns LISTBOX_ENTRY_NOTFOUND if there is no separator.
+     */
     sal_Int32           GetSeparatorPos() const;
+
+    /**
+     * Adds a new separator at the given position n.
+     */
+    void                AddSeparator( sal_Int32 n );
 
     bool                IsTravelSelect() const;
     bool                IsInDropDown() const;

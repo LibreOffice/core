@@ -24,6 +24,7 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/quickselectionengine.hxx>
 
+#include <set>
 #include <vector>
 #include <memory>
 
@@ -182,7 +183,7 @@ private:
     sal_Int32       mnCurrentPos;    ///< Position (Focus)
     sal_Int32       mnTrackingSaveSelection; ///< Selection before Tracking();
 
-    sal_Int32       mnSeparatorPos; ///< Separator
+    std::set< sal_Int32 > maSeparators; ///< Separator positions
 
     sal_Int32       mnUserDrawEntry;
 
@@ -289,8 +290,25 @@ public:
     void            AllowGrabFocus( bool b )        { mbGrabFocus = b; }
     bool            IsGrabFocusAllowed() const      { return mbGrabFocus; }
 
-    void            SetSeparatorPos( sal_Int32  n )     { mnSeparatorPos = n; }
-    sal_Int32       GetSeparatorPos() const         { return mnSeparatorPos; }
+    /**
+     * Removes existing separators, and sets the position of the
+     * one and only separator.
+     */
+    void            SetSeparatorPos( sal_Int32  n );
+    /**
+     * Gets the position of the separator which was added first.
+     * Returns LISTBOX_ENTRY_NOTFOUND if there is no separator.
+     */
+    sal_Int32       GetSeparatorPos() const;
+
+    /**
+     * Adds a new separator at the given position n.
+     */
+    void            AddSeparator( sal_Int32 n )     { maSeparators.insert( n ); }
+    /**
+     * Checks if the given number n is an element of the separator positions set.
+     */
+    bool            isSeparator( const sal_Int32 &n ) const;
 
     void            SetTravelSelect( bool bTravelSelect ) { mbTravelSelect = bTravelSelect; }
     bool            IsTravelSelect() const          { return mbTravelSelect; }
@@ -409,8 +427,21 @@ public:
     bool            ProcessKeyInput( const KeyEvent& rKEvt )    { return maLBWindow->ProcessKeyInput( rKEvt ); }
     bool            HandleWheelAsCursorTravel( const CommandEvent& rCEvt );
 
+    /**
+     * Removes existing separators, and sets the position of the
+     * one and only separator.
+     */
     void            SetSeparatorPos( sal_Int32  n )     { maLBWindow->SetSeparatorPos( n ); }
+    /**
+     * Gets the position of the separator which was added first.
+     * Returns LISTBOX_ENTRY_NOTFOUND if there is no separator.
+     */
     sal_Int32       GetSeparatorPos() const         { return maLBWindow->GetSeparatorPos(); }
+
+    /**
+     * Adds a new separator at the given position n.
+     */
+    void            AddSeparator( sal_Int32 n )     { maLBWindow->AddSeparator( n ); }
 
     void            SetTopEntry( sal_Int32  nTop )      { maLBWindow->SetTopEntry( nTop ); }
     sal_Int32       GetTopEntry() const             { return maLBWindow->GetTopEntry(); }
