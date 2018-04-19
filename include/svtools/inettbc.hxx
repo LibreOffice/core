@@ -97,6 +97,7 @@ class SVT_DLLPUBLIC URLBox
     friend class SvtURLBox_Impl;
 
     Idle                            aChangedIdle;
+    OUString                        aBaseURL;
     rtl::Reference< MatchContext_Impl > pCtx;
     std::unique_ptr<SvtURLBox_Impl> pImpl;
 
@@ -117,9 +118,13 @@ public:
     void                            Clear() { m_xWidget->clear(); }
     void connect_entry_activate(const Link<weld::ComboBoxText&, void>& rLink) { m_xWidget->connect_entry_activate(rLink); }
     void                            append_text(const OUString& rStr) { m_xWidget->append_text(rStr); }
+    OUString                        get_active_text() const { return m_xWidget->get_active_text(); }
     void                            EnableAutocomplete() { m_xWidget->set_entry_completion(true); }
 
+    void                            SetBaseURL( const OUString& rURL );
     OUString                        GetURL();
+
+    weld::Widget*                   getWidget() { return m_xWidget.get(); }
 
     static OUString                 ParseSmart( const OUString& aText, const OUString& aBaseURL );
 };

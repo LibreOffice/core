@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="flt">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="XmlFilterTabPageTransformation">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -21,10 +20,10 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">1</property>
             <property name="label" translatable="yes" context="xmlfiltertabpagetransformation|label2">_DocType:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">doc</property>
+            <property name="xalign">1</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -36,6 +35,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
+            <property name="activates_default">True</property>
             <property name="width_chars">32</property>
           </object>
           <packing>
@@ -47,10 +47,10 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">1</property>
             <property name="label" translatable="yes" context="xmlfiltertabpagetransformation|label4">_XSLT for export:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">xsltexport</property>
+            <property name="xalign">1</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -74,10 +74,10 @@
           <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">1</property>
             <property name="label" translatable="yes" context="xmlfiltertabpagetransformation|label5">XSLT _for import:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">xsltimport</property>
+            <property name="xalign">1</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -101,10 +101,10 @@
           <object class="GtkLabel" id="label6">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">1</property>
             <property name="label" translatable="yes" context="xmlfiltertabpagetransformation|label6">Template for _import:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">tempimport</property>
+            <property name="xalign">1</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -124,23 +124,33 @@
           </packing>
         </child>
         <child>
-          <object class="svtlo-SvtURLBox" id="tempimport">
+          <object class="GtkComboBoxText" id="xsltexport">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="max_width_chars">2</property>
+            <property name="has_entry">True</property>
+            <child internal-child="entry">
+              <object class="GtkEntry">
+                <property name="can_focus">True</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">3</property>
+            <property name="top_attach">1</property>
           </packing>
         </child>
         <child>
-          <object class="svtlo-SvtURLBox" id="xsltimport">
+          <object class="GtkComboBoxText" id="xsltimport">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="max_width_chars">2</property>
+            <property name="has_entry">True</property>
+            <child internal-child="entry">
+              <object class="GtkEntry">
+                <property name="can_focus">True</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -148,15 +158,20 @@
           </packing>
         </child>
         <child>
-          <object class="svtlo-SvtURLBox" id="xsltexport">
+          <object class="GtkComboBoxText" id="tempimport">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="max_width_chars">2</property>
+            <property name="has_entry">True</property>
+            <child internal-child="entry">
+              <object class="GtkEntry">
+                <property name="can_focus">True</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
+            <property name="top_attach">3</property>
           </packing>
         </child>
         <child>

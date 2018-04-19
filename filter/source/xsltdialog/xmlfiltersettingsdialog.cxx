@@ -236,11 +236,11 @@ void XMLFilterSettingsDialog::onNew()
     aTempInfo.maDocumentService = "com.sun.star.text.TextDocument";
 
     // execute XML Filter Dialog
-    ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, mxContext, &aTempInfo );
-    if ( aDlg->Execute() == RET_OK )
+    XMLFilterTabDialog aDlg(GetFrameWeld(), mxContext, &aTempInfo);
+    if (aDlg.run() == RET_OK)
     {
         // insert the new filter
-        insertOrEdit( aDlg->getNewFilterInfo() );
+        insertOrEdit( aDlg.getNewFilterInfo() );
     }
 }
 
@@ -255,10 +255,10 @@ void XMLFilterSettingsDialog::onEdit()
         filter_info_impl* pOldInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
 
         // execute XML Filter Dialog
-        ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, mxContext, pOldInfo );
-        if ( aDlg->Execute() == RET_OK )
+        XMLFilterTabDialog aDlg(GetFrameWeld(), mxContext, pOldInfo);
+        if (aDlg.run() == RET_OK)
         {
-            filter_info_impl* pNewInfo = aDlg->getNewFilterInfo();
+            filter_info_impl* pNewInfo = aDlg.getNewFilterInfo();
 
             if( !(*pOldInfo == *pNewInfo) )
             {

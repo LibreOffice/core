@@ -23,37 +23,27 @@
 #include "xmlfiltertabpagebasic.hxx"
 #include "xmlfiltersettingsdialog.hxx"
 
-XMLFilterTabPageBasic::XMLFilterTabPageBasic(vcl::Window* pParent)
-    : TabPage(pParent, "XmlFilterTabPageGeneral", "filter/ui/xmlfiltertabpagegeneral.ui")
+XMLFilterTabPageBasic::XMLFilterTabPageBasic(weld::Widget* pPage)
+    : m_xBuilder(Application::CreateBuilder(pPage, "filter/ui/xmlfiltertabpagegeneral.ui"))
+    , m_xContainer(m_xBuilder->weld_widget("XmlFilterTabPageGeneral"))
+    , m_xEDFilterName(m_xBuilder->weld_entry("filtername"))
+    , m_xCBApplication(m_xBuilder->weld_combo_box_text("application"))
+    , m_xEDInterfaceName(m_xBuilder->weld_entry("interfacename"))
+    , m_xEDExtension(m_xBuilder->weld_entry("extension"))
+    , m_xEDDescription(m_xBuilder->weld_text_view("description"))
 {
-    get(m_pEDFilterName,   "filtername");
-    get(m_pCBApplication,  "application");
-    get(m_pEDInterfaceName,"interfacename");
-    get(m_pEDExtension,    "extension");
-    get(m_pEDDescription,  "description");
-    m_pEDDescription->set_height_request(m_pEDDescription->GetTextHeight() * 4);
+    m_xEDDescription->set_size_request(-1, m_xEDDescription->get_height_rows(4));
 
     std::vector< application_info_impl* >& rInfos = getApplicationInfos();
     for (auto const& info : rInfos)
     {
         OUString aEntry( info->maDocumentUIName );
-        m_pCBApplication->InsertEntry( aEntry );
+        m_xCBApplication->append_text( aEntry );
     }
 }
 
 XMLFilterTabPageBasic::~XMLFilterTabPageBasic()
 {
-    disposeOnce();
-}
-
-void XMLFilterTabPageBasic::dispose()
-{
-    m_pEDFilterName.clear();
-    m_pCBApplication.clear();
-    m_pEDInterfaceName.clear();
-    m_pEDExtension.clear();
-    m_pEDDescription.clear();
-    TabPage::dispose();
 }
 
 static OUString checkExtensions( const OUString& rExtensions )
@@ -86,19 +76,19 @@ void XMLFilterTabPageBasic::FillInfo( filter_info_impl* pInfo )
 {
     if( pInfo )
     {
-        if( !m_pEDFilterName->GetText().isEmpty() )
-            pInfo->maFilterName = m_pEDFilterName->GetText();
+        if( !m_xEDFilterName->get_text().isEmpty() )
+            pInfo->maFilterName = m_xEDFilterName->get_text();
 
-        if( !m_pCBApplication->GetText().isEmpty() )
-            pInfo->maDocumentService = m_pCBApplication->GetText();
+        if( !m_xCBApplication->get_active_text().isEmpty() )
+            pInfo->maDocumentService = m_xCBApplication->get_active_text();
 
-        if( !m_pEDInterfaceName->GetText().isEmpty() )
-            pInfo->maInterfaceName = m_pEDInterfaceName->GetText();
+        if( !m_xEDInterfaceName->get_text().isEmpty() )
+            pInfo->maInterfaceName = m_xEDInterfaceName->get_text();
 
-        if( !m_pEDExtension->GetText().isEmpty() )
-            pInfo->maExtension = checkExtensions( m_pEDExtension->GetText() );
+        if( !m_xEDExtension->get_text().isEmpty() )
+            pInfo->maExtension = checkExtensions( m_xEDExtension->get_text() );
 
-        pInfo->maComment = string_encode( m_pEDDescription->GetText() );
+        pInfo->maComment = string_encode( m_xEDDescription->get_text() );
 
         if( !pInfo->maDocumentService.isEmpty() )
         {
@@ -121,18 +111,18 @@ void XMLFilterTabPageBasic::SetInfo(const filter_info_impl* pInfo)
 {
     if( pInfo )
     {
-        m_pEDFilterName->SetText( string_decode(pInfo->maFilterName) );
+        m_xEDFilterName->set_text( string_decode(pInfo->maFilterName) );
         /*
         if( pInfo->maDocumentService.getLength() )
-            maCBApplication.SetText( getApplicationUIName( pInfo->maDocumentService ) );
+            maCBApplication.set_text( getApplicationUIName( pInfo->maDocumentService ) );
         */
         if( !pInfo->maExportService.isEmpty() )
-            m_pCBApplication->SetText( getApplicationUIName( pInfo->maExportService ) );
+            m_xCBApplication->set_entry_text( getApplicationUIName( pInfo->maExportService ) );
         else
-            m_pCBApplication->SetText( getApplicationUIName( pInfo->maImportService ) );
-        m_pEDInterfaceName->SetText( string_decode(pInfo->maInterfaceName) );
-        m_pEDExtension->SetText( pInfo->maExtension );
-        m_pEDDescription->SetText( string_decode( pInfo->maComment ) );
+            m_xCBApplication->set_entry_text( getApplicationUIName( pInfo->maImportService ) );
+        m_xEDInterfaceName->set_text( string_decode(pInfo->maInterfaceName) );
+        m_xEDExtension->set_text( pInfo->maExtension );
+        m_xEDDescription->set_text( string_decode( pInfo->maComment ) );
     }
 }
 
