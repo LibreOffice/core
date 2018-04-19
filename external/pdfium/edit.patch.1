@@ -199,7 +199,7 @@ index 0d7ba56..37bdf99 100644
  FPDFImageObj_GetImageDataDecoded(FPDF_PAGEOBJECT image_object,
                                   void* buffer,
 diff --git a/fpdfsdk/fpdfeditpage.cpp b/fpdfsdk/fpdfeditpage.cpp
-index ca2cf3f..8ecab60 100644
+index ca2cf3f..832a9ae 100644
 --- a/fpdfsdk/fpdfeditpage.cpp
 +++ b/fpdfsdk/fpdfeditpage.cpp
 @@ -11,12 +11,14 @@
@@ -217,7 +217,7 @@ index ca2cf3f..8ecab60 100644
  #include "core/fpdfapi/page/cpdf_shadingobject.h"
  #include "core/fpdfapi/parser/cpdf_array.h"
  #include "core/fpdfapi/parser/cpdf_document.h"
-@@ -363,3 +365,187 @@ FPDFPageObj_GetBounds(FPDF_PAGEOBJECT pageObject,
+@@ -363,3 +365,212 @@ FPDFPageObj_GetBounds(FPDF_PAGEOBJECT pageObject,
    *top = bbox.top;
    return true;
  }
@@ -405,6 +405,31 @@ index ca2cf3f..8ecab60 100644
 +
 +  return nullptr;
 +}
++
++FPDF_EXPORT void FPDF_CALLCONV
++FPDFFormObj_GetMatrix(FPDF_PAGEOBJECT form_object,
++                      double* a,
++                      double* b,
++                      double* c,
++                      double* d,
++                      double* e,
++                      double* f)
++{
++  if (!form_object || !a || !b || !c || !d || !e || !f)
++    return;
++
++  CPDF_FormObject* pFrmObj = CPDFFormObjectFromFPDFPageObject(form_object);
++  if (pFrmObj)
++  {
++    const CFX_Matrix& matrix = pFrmObj->form_matrix();
++    *a = matrix.a;
++    *b = matrix.b;
++    *c = matrix.c;
++    *d = matrix.d;
++    *e = matrix.e;
++    *f = matrix.f;
++  }
++}
 diff --git a/fpdfsdk/fpdfeditpath.cpp b/fpdfsdk/fpdfeditpath.cpp
 index a291987..0202284 100644
 --- a/fpdfsdk/fpdfeditpath.cpp
@@ -562,7 +587,7 @@ index 77c2315..b61f447 100644
  
  CPDF_PageObject* CPDFPageObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object);
 diff --git a/public/fpdf_edit.h b/public/fpdf_edit.h
-index 54735a3..1b933bb 100644
+index 54735a3..2e7e2e7 100644
 --- a/public/fpdf_edit.h
 +++ b/public/fpdf_edit.h
 @@ -520,6 +520,15 @@ FPDFPath_GetStrokeColor(FPDF_PAGEOBJECT path,
@@ -618,7 +643,7 @@ index 54735a3..1b933bb 100644
  // Create a new text object using one of the standard PDF fonts.
  //
  // document   - handle to the document.
-@@ -761,6 +800,94 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
+@@ -761,6 +800,112 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
                            FPDF_FONT font,
                            float font_size);
  
@@ -709,6 +734,24 @@ index 54735a3..1b933bb 100644
 +// The handle of the page object. Null for failed.
 +FPDF_EXPORT FPDF_PAGEOBJECT FPDF_CALLCONV
 +FPDFFormObj_GetSubObject(FPDF_PAGEOBJECT form_object, int index);
++
++// Get the matrix of a particular form object.
++//
++// form_object - Handle of form object
++//   a            - Pointer to a double value receiving coefficient "a" of the matrix.
++//   b            - Pointer to a double value receiving coefficient "b" of the matrix.
++//   c            - Pointer to a double value receiving coefficient "c" of the matrix.
++//   d            - Pointer to a double value receiving coefficient "d" of the matrix.
++//   e            - Pointer to a double value receiving coefficient "e" of the matrix.
++//   f            - Pointer to a double value receiving coefficient "f" of the matrix.
++FPDF_EXPORT void FPDF_CALLCONV
++FPDFFormObj_GetMatrix(FPDF_PAGEOBJECT form_object,
++                      double* a,
++                      double* b,
++                      double* c,
++                      double* d,
++                      double* e,
++                      double* f);
 +
  #ifdef __cplusplus
  }  // extern "C"
