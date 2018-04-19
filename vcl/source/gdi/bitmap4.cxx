@@ -24,6 +24,9 @@
 #include <vcl/BitmapSharpenFilter.hxx>
 #include <vcl/BitmapMedianFilter.hxx>
 #include <vcl/BitmapSobelGreyFilter.hxx>
+#include <vcl/BitmapSolarizeFilter.hxx>
+#include <vcl/BitmapSepiaFilter.hxx>
+#include <vcl/BitmapMosaicFilter.hxx>
 #include <vcl/BitmapPopArtFilter.hxx>
 
 #include <bitmapwriteaccess.hxx>
@@ -78,15 +81,28 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
         break;
 
         case BmpFilter::Solarize:
-            bRet = ImplSolarize( pFilterParam );
+        {
+            BitmapEx aBmpEx(*this);
+            bRet = BitmapFilter::Filter(aBmpEx, BitmapSolarizeFilter(pFilterParam->mcSolarGreyThreshold));
+            *this = aBmpEx.GetBitmap();
+        }
         break;
 
         case BmpFilter::Sepia:
-            bRet = ImplSepia( pFilterParam );
+        {
+            BitmapEx aBmpEx(*this);
+            bRet = BitmapFilter::Filter(aBmpEx, BitmapSepiaFilter(pFilterParam->mnSepiaPercent));
+            *this = aBmpEx.GetBitmap();
+        }
         break;
 
         case BmpFilter::Mosaic:
-            bRet = ImplMosaic( pFilterParam );
+        {
+            BitmapEx aBmpEx(*this);
+            bRet = BitmapFilter::Filter(aBmpEx, BitmapMosaicFilter(pFilterParam->maMosaicTileSize.mnTileWidth,
+                                                                   pFilterParam->maMosaicTileSize.mnTileHeight));
+            *this = aBmpEx.GetBitmap();
+        }
         break;
 
         case BmpFilter::EmbossGrey:
@@ -222,312 +238,6 @@ bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam )
             }
         }
     }
-
-    return bRet;
-}
-
-bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam )
-{
-    bool                bRet = false;
-    BitmapScopedWriteAccess pWriteAcc(*this);
-
-    if( pWriteAcc )
-    {
-        const sal_uInt8 cThreshold = ( pFilterParam && pFilterParam->meFilter == BmpFilter::Solarize ) ?
-                                pFilterParam->mcSolarGreyThreshold : 128;
-
-        if( pWriteAcc->HasPalette() )
-        {
-            const BitmapPalette& rPal = pWriteAcc->GetPalette();
-
-            for( sal_uInt16 i = 0, nCount = rPal.GetEntryCount(); i < nCount; i++ )
-            {
-                if( rPal[ i ].GetLuminance() >= cThreshold )
-                {
-                    BitmapColor aCol( rPal[ i ] );
-                    pWriteAcc->SetPaletteColor( i, aCol.Invert() );
-                }
-            }
-        }
-        else
-        {
-            BitmapColor aCol;
-            const long  nWidth = pWriteAcc->Width();
-            const long  nHeight = pWriteAcc->Height();
-
-            for( long nY = 0; nY < nHeight ; nY++ )
-            {
-                Scanline pScanline = pWriteAcc->GetScanline(nY);
-                for( long nX = 0; nX < nWidth; nX++ )
-                {
-                    aCol = pWriteAcc->GetPixelFromData( pScanline, nX );
-
-                    if( aCol.GetLuminance() >= cThreshold )
-                        pWriteAcc->SetPixelOnData( pScanline, nX, aCol.Invert() );
-                }
-            }
-        }
-
-        pWriteAcc.reset();
-        bRet = true;
-    }
-
-    return bRet;
-}
-
-bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam )
-{
-    ScopedReadAccess    pReadAcc(*this);
-    bool                bRet = false;
-
-    if( pReadAcc )
-    {
-        long            nSepiaPercent = ( pFilterParam && pFilterParam->meFilter == BmpFilter::Sepia ) ?
-                                        pFilterParam->mnSepiaPercent : 10;
-        const long      nSepia = 10000 - 100 * SAL_BOUND( nSepiaPercent, 0, 100 );
-        BitmapPalette   aSepiaPal( 256 );
-
-        for( sal_uInt16 i = 0; i < 256; i++ )
-        {
-            BitmapColor&    rCol = aSepiaPal[ i ];
-            const sal_uInt8 cSepiaValue = static_cast<sal_uInt8>( nSepia * i / 10000 );
-
-            rCol.SetRed( static_cast<sal_uInt8>(i) );
-            rCol.SetGreen( cSepiaValue );
-            rCol.SetBlue( cSepiaValue );
-        }
-
-        Bitmap              aNewBmp( GetSizePixel(), 8, &aSepiaPal );
-        BitmapScopedWriteAccess pWriteAcc(aNewBmp);
-
-        if( pWriteAcc )
-        {
-            BitmapColor aCol( sal_uInt8(0) );
-            const long  nWidth = pWriteAcc->Width();
-            const long  nHeight = pWriteAcc->Height();
-
-            if( pReadAcc->HasPalette() )
-            {
-                const sal_uInt16             nPalCount = pReadAcc->GetPaletteEntryCount();
-                std::unique_ptr<sal_uInt8[]> pIndexMap( new sal_uInt8[ nPalCount ] );
-                for( sal_uInt16 i = 0; i < nPalCount; i++ )
-                    pIndexMap[ i ] = pReadAcc->GetPaletteColor( i ).GetLuminance();
-
-                for( long nY = 0; nY < nHeight ; nY++ )
-                {
-                    Scanline pScanline = pWriteAcc->GetScanline(nY);
-                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                    for( long nX = 0; nX < nWidth; nX++ )
-                    {
-                        aCol.SetIndex( pIndexMap[ pReadAcc->GetIndexFromData( pScanlineRead, nX ) ] );
-                        pWriteAcc->SetPixelOnData( pScanline, nX, aCol );
-                    }
-                }
-            }
-            else
-            {
-                for( long nY = 0; nY < nHeight ; nY++ )
-                {
-                    Scanline pScanline = pWriteAcc->GetScanline(nY);
-                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                    for( long nX = 0; nX < nWidth; nX++ )
-                    {
-                        aCol.SetIndex( pReadAcc->GetPixelFromData( pScanlineRead, nX ).GetLuminance() );
-                        pWriteAcc->SetPixelOnData( pScanline, nX, aCol );
-                    }
-                }
-            }
-
-            pWriteAcc.reset();
-            bRet = true;
-        }
-
-        pReadAcc.reset();
-
-        if( bRet )
-        {
-            const MapMode   aMap( maPrefMapMode );
-            const Size      aSize( maPrefSize );
-
-            *this = aNewBmp;
-
-            maPrefMapMode = aMap;
-            maPrefSize = aSize;
-        }
-    }
-
-    return bRet;
-}
-
-bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam )
-{
-    sal_uLong               nTileWidth = ( pFilterParam && pFilterParam->meFilter == BmpFilter::Mosaic ) ?
-                                     pFilterParam->maMosaicTileSize.mnTileWidth : 4;
-    sal_uLong               nTileHeight = ( pFilterParam && pFilterParam->meFilter == BmpFilter::Mosaic ) ?
-                                      pFilterParam->maMosaicTileSize.mnTileHeight : 4;
-    bool                bRet = false;
-
-    if( !nTileWidth )
-        nTileWidth = 1;
-
-    if( !nTileHeight )
-        nTileHeight = 1;
-
-    if( nTileWidth > 1 || nTileHeight > 1 )
-    {
-        Bitmap*             pNewBmp;
-        BitmapReadAccess*   pReadAcc;
-        BitmapWriteAccess*  pWriteAcc;
-
-        if( GetBitCount() > 8 )
-        {
-            pNewBmp = nullptr;
-            pReadAcc = pWriteAcc = AcquireWriteAccess();
-        }
-        else
-        {
-            pNewBmp = new Bitmap( GetSizePixel(), 24 );
-            pReadAcc = AcquireReadAccess();
-            pWriteAcc = pNewBmp->AcquireWriteAccess();
-        }
-
-        bool bConditionsMet = false;
-        long nWidth(0);
-        long nHeight(0);
-        if (pReadAcc && pWriteAcc)
-        {
-            nWidth = pReadAcc->Width();
-            nHeight = pReadAcc->Height();
-            bConditionsMet = (nWidth > 0 && nHeight > 0);
-        }
-
-        if (bConditionsMet)
-        {
-            BitmapColor aCol;
-            long        nX, nY, nX1, nX2, nY1, nY2, nSumR, nSumG, nSumB;
-            double      fArea_1;
-
-            nY1 = 0; nY2 = nTileHeight - 1;
-
-            if( nY2 >= nHeight )
-                nY2 = nHeight - 1;
-
-            do
-            {
-                nX1 = 0; nX2 = nTileWidth - 1;
-
-                if( nX2 >= nWidth )
-                    nX2 = nWidth - 1;
-
-                fArea_1 = 1.0 / ( ( nX2 - nX1 + 1 ) * ( nY2 - nY1 + 1 ) );
-
-                if( !pNewBmp )
-                {
-                    do
-                    {
-                        for( nY = nY1, nSumR = nSumG = nSumB = 0; nY <= nY2; nY++ )
-                        {
-                            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                            for( nX = nX1; nX <= nX2; nX++ )
-                            {
-                                aCol = pReadAcc->GetPixelFromData( pScanlineRead, nX );
-                                nSumR += aCol.GetRed();
-                                nSumG += aCol.GetGreen();
-                                nSumB += aCol.GetBlue();
-                            }
-                        }
-
-                        aCol.SetRed( static_cast<sal_uInt8>( nSumR * fArea_1 ) );
-                        aCol.SetGreen( static_cast<sal_uInt8>( nSumG * fArea_1 ) );
-                        aCol.SetBlue( static_cast<sal_uInt8>( nSumB * fArea_1 ) );
-
-                        for( nY = nY1; nY <= nY2; nY++ )
-                        {
-                            Scanline pScanline = pWriteAcc->GetScanline(nY);
-                            for( nX = nX1; nX <= nX2; nX++ )
-                                pWriteAcc->SetPixelOnData( pScanline, nX, aCol );
-                        }
-
-                        nX1 += nTileWidth; nX2 += nTileWidth;
-
-                        if( nX2 >= nWidth )
-                        {
-                            nX2 = nWidth - 1;
-                            fArea_1 = 1.0 / ( ( nX2 - nX1 + 1 ) * ( nY2 - nY1 + 1 ) );
-                        }
-                    }
-                    while( nX1 < nWidth );
-                }
-                else
-                {
-                    do
-                    {
-                        for( nY = nY1, nSumR = nSumG = nSumB = 0; nY <= nY2; nY++ )
-                        {
-                            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                            for( nX = nX1; nX <= nX2; nX++ )
-                            {
-                                const BitmapColor& rCol = pReadAcc->GetPaletteColor( pReadAcc->GetIndexFromData( pScanlineRead, nX ) );
-                                nSumR += rCol.GetRed();
-                                nSumG += rCol.GetGreen();
-                                nSumB += rCol.GetBlue();
-                            }
-                        }
-
-                        aCol.SetRed( static_cast<sal_uInt8>( nSumR * fArea_1 ) );
-                        aCol.SetGreen( static_cast<sal_uInt8>( nSumG * fArea_1 ) );
-                        aCol.SetBlue( static_cast<sal_uInt8>( nSumB * fArea_1 ) );
-
-                        for( nY = nY1; nY <= nY2; nY++ )
-                        {
-                            Scanline pScanline = pWriteAcc->GetScanline(nY);
-                            for( nX = nX1; nX <= nX2; nX++ )
-                                pWriteAcc->SetPixelOnData( pScanline, nX, aCol );
-                        }
-
-                        nX1 += nTileWidth; nX2 += nTileWidth;
-
-                        if( nX2 >= nWidth )
-                        {
-                            nX2 = nWidth - 1;
-                            fArea_1 = 1.0 / ( ( nX2 - nX1 + 1 ) * ( nY2 - nY1 + 1 ) );
-                        }
-                    }
-                    while( nX1 < nWidth );
-                }
-
-                nY1 += nTileHeight; nY2 += nTileHeight;
-
-                if( nY2 >= nHeight )
-                    nY2 = nHeight - 1;
-            }
-            while( nY1 < nHeight );
-
-            bRet = true;
-        }
-
-        ReleaseAccess( pReadAcc );
-
-        if( pNewBmp )
-        {
-            Bitmap::ReleaseAccess( pWriteAcc );
-
-            if( bRet )
-            {
-                const MapMode   aMap( maPrefMapMode );
-                const Size      aSize( maPrefSize );
-
-                *this = *pNewBmp;
-
-                maPrefMapMode = aMap;
-                maPrefSize = aSize;
-            }
-
-            delete pNewBmp;
-        }
-    }
-    else
-        bRet = true;
 
     return bRet;
 }
