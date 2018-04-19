@@ -905,6 +905,13 @@ void XMLStyleOASISTContext::Characters( const OUString& )
     // element content only:
 }
 
+void XMLStyleOASISTContext::ExportContent()
+{
+    if( m_xPropContext.is() )
+        m_xPropContext->Export();
+    XMLPersElemContentTContext::ExportContent();
+}
+
 bool XMLStyleOASISTContext::IsPersistent() const
 {
     return m_bPersistent;

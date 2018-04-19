@@ -54,6 +54,8 @@ public:
     virtual void EndElement() override;
     virtual void Characters( const OUString& rChars ) override;
 
+    virtual void ExportContent() override;
+
     virtual bool IsPersistent() const override;
 
     static XMLTransformerActions *CreateTransformerActions( sal_uInt16 nType );

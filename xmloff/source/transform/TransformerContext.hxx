@@ -91,6 +91,9 @@ public:
 
     // Export the whole element. By default, nothing is done here
     virtual void Export();
+
+    // Export the element content. By default, nothing is done here
+    virtual void ExportContent();
 };
 
 
