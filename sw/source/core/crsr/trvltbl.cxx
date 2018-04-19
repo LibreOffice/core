@@ -590,6 +590,7 @@ bool GotoNextTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
             continue;
         }
 
+        if( pTableNd )  // should never be nullptr
         {
             if( &fnPosTable == &fnMoveForward ) // at the beginning?
             {
