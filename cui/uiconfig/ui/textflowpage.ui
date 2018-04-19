@@ -215,6 +215,9 @@
                     <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <accessibility>
+                      <relation type="label-for" target="comboPageStyle"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -258,6 +261,9 @@
                     <property name="inconsistent">True</property>
                     <property name="justify">right</property>
                     <property name="xalign">1</property>
+                    <accessibility>
+                      <relation type="label-for" target="spinPageNumber"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -408,6 +414,9 @@
                     <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <accessibility>
+                      <relation type="label-for" target="spinOrphan"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -424,6 +433,9 @@
                     <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <accessibility>
+                      <relation type="label-for" target="spinWidow"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
