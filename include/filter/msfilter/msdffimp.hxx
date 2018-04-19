@@ -268,7 +268,7 @@ typedef std::set<std::unique_ptr<SvxMSDffImportRec>,
 
 /** block of parameters for import/export for a single call of
     ImportObjAtCurrentStreamPos() */
-struct SvxMSDffImportData
+struct MSFILTER_DLLPUBLIC SvxMSDffImportData
 {
     MSDffImportRecords  m_Records;  ///< Shape pointer, Shape ids and private data
     tools::Rectangle           aParentRect;///< Rectangle of the surrounding groups,
