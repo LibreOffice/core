@@ -24,8 +24,8 @@
 
 #undef Status
 
-#include <unx/saldisp.hxx>
 #include <qt5/Qt5Frame.hxx>
+#include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
 
 #include "KDE5SalGraphics.hxx"
@@ -48,12 +48,14 @@ class KDE5SalFrame : public Qt5Frame
         };
 
         GraphicsHolder m_aGraphics[ nMaxGraphics ];
-
-        QWidget* m_pWindow;
+        std::unique_ptr<KDE5SalGraphics> m_pKDE5Graphics;
+        bool m_bGraphicsInUse;
 
     public:
         KDE5SalFrame( KDE5SalFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo );
 
+        virtual SalGraphics* AcquireGraphics() override;
+        virtual void ReleaseGraphics( SalGraphics *pGraphics ) override;
         void updateGraphics( bool bClear );
         virtual void UpdateSettings( AllSettings& rSettings ) override;
 
