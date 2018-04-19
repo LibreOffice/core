@@ -322,7 +322,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 }
 
                 // LibreOfficeKit wants to handle changes by index, so always allow here.
-                if (bDisable && !comphelper::LibreOfficeKit::isActive())
+                if (bDisable)
                     rSet.DisableItem(nWhich);
                 if (comphelper::LibreOfficeKit::isActive())
                 {

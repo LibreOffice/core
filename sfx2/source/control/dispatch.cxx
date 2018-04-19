@@ -312,22 +312,6 @@ bool SfxDispatcher::IsAppDispatcher() const
     return !xImp->pFrame;
 }
 
-/// Decides if the request is FASTCALL or not, depending on arguments.
-bool lcl_IsConditionalFastCall(SfxRequest &rReq)
-{
-    sal_uInt16 nId = rReq.GetSlot();
-    bool bRet = false;
-
-    if (nId == SID_UNDO || nId == SID_REDO)
-    {
-        const SfxItemSet* pArgs = rReq.GetArgs();
-        if (pArgs && pArgs->HasItem(SID_REPAIRPACKAGE))
-            bRet = true;
-    }
-
-    return bRet;
-}
-
 /** Helper function to check whether a slot can be executed and
     check the execution itself
 */
@@ -336,7 +320,7 @@ void SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
     SFX_STACK(SfxDispatcher::Call_Impl);
 
     // The slot may be called (meaning enabled)
-    if ( rSlot.IsMode(SfxSlotMode::FASTCALL) || rShell.CanExecuteSlot_Impl(rSlot) || lcl_IsConditionalFastCall(rReq))
+    if ( rSlot.IsMode(SfxSlotMode::FASTCALL) || rShell.CanExecuteSlot_Impl(rSlot) || rShell.IsConditionalFastCall(rReq))
     {
         if ( GetFrame() )
         {
