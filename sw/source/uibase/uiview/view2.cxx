@@ -116,6 +116,7 @@
 #include <dbconfig.hxx>
 #include <dbmgr.hxx>
 #include <reffld.hxx>
+#include <comphelper/lok.hxx>
 
 #include <PostItMgr.hxx>
 
@@ -1214,6 +1215,20 @@ void SwView::Execute(SfxRequest &rReq)
     }
     if(!bIgnore)
         rReq.Done();
+}
+
+bool SwView::IsConditionalFastCall( const SfxRequest &rReq )
+{
+    sal_uInt16 nId = rReq.GetSlot();
+    bool bRet = false;
+
+    if (nId == FN_REDLINE_ACCEPT_DIRECT || nId == FN_REDLINE_REJECT_DIRECT)
+    {
+        if (comphelper::LibreOfficeKit::isActive())
+            bRet = true;
+    }
+    return bRet || SfxShell::IsConditionalFastCall(rReq);
+
 }
 
 /// invalidate page numbering field
