@@ -19,31 +19,37 @@ include/filter/msfilter/dffpropset.hxx:35
 include/o3tl/vector_pool.hxx:93
     o3tl::detail::struct_from_value::type nextFree
     -1
+include/sfx2/charwin.hxx:105
+    SvxCharViewControl maHasInsert
+    1
 include/svtools/svparser.hxx:74
     SvParser::TokenStackType nTokenValue
     0
 include/svtools/svparser.hxx:75
     SvParser::TokenStackType bTokenHasValue
     0
-include/vcl/filter/pdfdocument.hxx:173
+include/svx/svdograf.hxx:107
+    SdrGrafObj mbIsPreview
+    0
+include/vcl/filter/pdfdocument.hxx:174
     vcl::filter::PDFNameElement m_nLength
     0
-include/vcl/pdfwriter.hxx:549
+include/vcl/pdfwriter.hxx:548
     vcl::PDFWriter::PDFSignContext m_pDerEncoded
     0
-include/vcl/pdfwriter.hxx:551
+include/vcl/pdfwriter.hxx:550
     vcl::PDFWriter::PDFSignContext m_nDerEncoded
     0
-include/vcl/pdfwriter.hxx:553
+include/vcl/pdfwriter.hxx:552
     vcl::PDFWriter::PDFSignContext m_pByteRange1
     0
-include/vcl/pdfwriter.hxx:555
+include/vcl/pdfwriter.hxx:554
     vcl::PDFWriter::PDFSignContext m_nByteRange1
     0
-include/vcl/pdfwriter.hxx:557
+include/vcl/pdfwriter.hxx:556
     vcl::PDFWriter::PDFSignContext m_pByteRange2
     0
-include/vcl/pdfwriter.hxx:559
+include/vcl/pdfwriter.hxx:558
     vcl::PDFWriter::PDFSignContext m_nByteRange2
     0
 libreofficekit/source/gtk/lokdocview.cxx:84
@@ -67,22 +73,16 @@ sc/inc/compiler.hxx:108
 sc/qa/unit/ucalc.hxx:41
     Test::RangeNameDef mnIndex
     1
-sc/source/filter/inc/xcl97rec.hxx:272
-    ExcBof8_Base nLowestBiffVer
-    6
-sc/source/filter/inc/xechart.hxx:859
-    XclExpChDropBar mnBarDist
-    100
 sd/inc/sdpptwrp.hxx:42
     SdPPTFilter pBas
     0
-sd/source/filter/html/htmlex.hxx:114
+sd/source/filter/html/htmlex.hxx:112
     HtmlExport mbAutoSlide
     1
-sfx2/source/appl/lnkbase2.cxx:76
+sfx2/source/appl/lnkbase2.cxx:77
     sfx2::ImplBaseLinkData::tDDEType pItem
     0
-sfx2/source/appl/lnkbase2.cxx:81
+sfx2/source/appl/lnkbase2.cxx:82
     sfx2::ImplBaseLinkData::(anonymous) DDEType
     0
 sfx2/source/doc/doctemplates.cxx:136
@@ -103,7 +103,7 @@ soltools/mkdepend/def.h:132
 stoc/source/inspect/introspection.cxx:1530
     (anonymous namespace)::Cache::Data hits
     1
-sw/inc/hints.hxx:189
+sw/inc/hints.hxx:188
     SwAttrSetChg m_bDelSet
     0
 sw/inc/pagepreviewlayout.hxx:49
@@ -112,9 +112,6 @@ sw/inc/pagepreviewlayout.hxx:49
 sw/source/core/inc/frmtool.hxx:260
     SwBorderAttrs m_bBorderDist
     1
-sw/source/core/inc/UndoNumbering.hxx:33
-    SwUndoInsNum nSttSet
-    18446744073709551615
 sw/source/core/inc/UndoSort.hxx:38
     SwSortUndoElement::(anonymous union)::(anonymous) nKenn
     4294967295
@@ -127,19 +124,16 @@ sw/source/filter/html/htmlcss1.cxx:78
 sw/source/filter/html/htmlcss1.cxx:79
     SwCSS1ItemIds nFormatKeep
     109
-sw/source/filter/html/svxcss1.hxx:200
+sw/source/filter/html/svxcss1.hxx:201
     SvxCSS1Parser nMinFixLineSpace
     141
-sw/source/filter/html/svxcss1.hxx:203
-    SvxCSS1Parser nScriptFlags
-    7
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk
     0
-sw/source/filter/ww8/ww8par.hxx:651
+sw/source/filter/ww8/ww8par.hxx:655
     WW8FormulaControl mfUnknown
     0
-sw/source/filter/ww8/ww8par.hxx:660
+sw/source/filter/ww8/ww8par.hxx:664
     WW8FormulaControl mhpsCheckBox
     20
 vcl/inc/salprn.hxx:41
@@ -175,43 +169,43 @@ vcl/source/filter/jpeg/transupp.h:131
 vcl/source/font/font.cxx:539
     (anonymous namespace)::WeightSearchEntry weight
     5
-vcl/source/gdi/dibtools.cxx:49
+vcl/source/gdi/dibtools.cxx:50
     (anonymous namespace)::CIEXYZ aXyzX
     0
-vcl/source/gdi/dibtools.cxx:50
+vcl/source/gdi/dibtools.cxx:51
     (anonymous namespace)::CIEXYZ aXyzY
     0
-vcl/source/gdi/dibtools.cxx:51
+vcl/source/gdi/dibtools.cxx:52
     (anonymous namespace)::CIEXYZ aXyzZ
     0
-vcl/source/gdi/dibtools.cxx:104
+vcl/source/gdi/dibtools.cxx:105
     (anonymous namespace)::DIBV5Header nV5RedMask
     0
-vcl/source/gdi/dibtools.cxx:105
+vcl/source/gdi/dibtools.cxx:106
     (anonymous namespace)::DIBV5Header nV5GreenMask
     0
-vcl/source/gdi/dibtools.cxx:106
+vcl/source/gdi/dibtools.cxx:107
     (anonymous namespace)::DIBV5Header nV5BlueMask
     0
-vcl/source/gdi/dibtools.cxx:107
+vcl/source/gdi/dibtools.cxx:108
     (anonymous namespace)::DIBV5Header nV5AlphaMask
     0
-vcl/source/gdi/dibtools.cxx:110
+vcl/source/gdi/dibtools.cxx:111
     (anonymous namespace)::DIBV5Header nV5GammaRed
     0
-vcl/source/gdi/dibtools.cxx:111
+vcl/source/gdi/dibtools.cxx:112
     (anonymous namespace)::DIBV5Header nV5GammaGreen
     0
-vcl/source/gdi/dibtools.cxx:112
+vcl/source/gdi/dibtools.cxx:113
     (anonymous namespace)::DIBV5Header nV5GammaBlue
     0
-vcl/source/gdi/dibtools.cxx:114
+vcl/source/gdi/dibtools.cxx:115
     (anonymous namespace)::DIBV5Header nV5ProfileData
     0
-vcl/source/gdi/dibtools.cxx:115
+vcl/source/gdi/dibtools.cxx:116
     (anonymous namespace)::DIBV5Header nV5ProfileSize
     0
-vcl/source/gdi/dibtools.cxx:116
+vcl/source/gdi/dibtools.cxx:117
     (anonymous namespace)::DIBV5Header nV5Reserved
     0
 vcl/source/gdi/pdfwriter_impl.hxx:698

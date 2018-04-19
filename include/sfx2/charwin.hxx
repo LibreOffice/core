@@ -102,7 +102,6 @@ private:
     long            mnY;
     Point           maPosition;
     vcl::Font       maFont;
-    bool            maHasInsert;
 
     Link<SvxCharViewControl*, void> maMouseClickHdl;
 };
