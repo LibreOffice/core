@@ -312,6 +312,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/graphic/UnoGraphicTransformer \
     vcl/source/bitmap/bitmap \
     vcl/source/bitmap/bitmapfilter \
+    vcl/source/bitmap/BitmapSobelGreyFilter \
     vcl/source/bitmap/BitmapConvolutionMatrixFilter \
     vcl/source/bitmap/BitmapMedianFilter \
     vcl/source/bitmap/BitmapInterpolateScaleFilter \
