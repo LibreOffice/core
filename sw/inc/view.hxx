@@ -488,6 +488,8 @@ public:
     void            ExecSearch(SfxRequest&);
     void            ExecViewOptions(SfxRequest &);
 
+    virtual bool    IsConditionalFastCall( const SfxRequest &rReq ) override;
+
     void            StateViewOptions(SfxItemSet &);
     void            StateSearch(SfxItemSet &);
     void            GetState(SfxItemSet&);
