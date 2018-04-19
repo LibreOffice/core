@@ -20,7 +20,6 @@
 #pragma once
 
 #include <memory>
-#include <cairo.h>
 
 #undef Status
 
@@ -36,18 +35,6 @@ class KDE5SalGraphics;
 class KDE5SalFrame : public Qt5Frame
 {
     private:
-        static const int nMaxGraphics = 2;
-
-        struct GraphicsHolder
-        {
-            std::unique_ptr<KDE5SalGraphics> pGraphics;
-            bool bInUse;
-            cairo_surface_t* pSurface;
-
-            GraphicsHolder() : bInUse( false ), pSurface(nullptr) {}
-        };
-
-        GraphicsHolder m_aGraphics[ nMaxGraphics ];
         std::unique_ptr<KDE5SalGraphics> m_pKDE5Graphics;
         bool m_bGraphicsInUse;
 
@@ -56,7 +43,6 @@ class KDE5SalFrame : public Qt5Frame
 
         virtual SalGraphics* AcquireGraphics() override;
         virtual void ReleaseGraphics( SalGraphics *pGraphics ) override;
-        void updateGraphics( bool bClear );
         virtual void UpdateSettings( AllSettings& rSettings ) override;
 
         virtual void DrawMenuBar() override { return; }
@@ -68,8 +54,6 @@ class KDE5SalFrame : public Qt5Frame
         virtual KeyIndicatorState GetIndicatorState() override { return KeyIndicatorState(); }
 
         virtual void SetScreenNumber( unsigned int ) override { return; }
-
-        cairo_t* getCairoContext() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

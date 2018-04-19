@@ -335,28 +335,4 @@ void KDE5SalFrame::ReleaseGraphics( SalGraphics* pSalGraph )
     m_bGraphicsInUse = false;
 }
 
-void KDE5SalFrame::updateGraphics( bool bClear )
-{
-    vcl::Window* pWindow = GetWindow();
-    for( int i = 0; i < nMaxGraphics; i++ )
-    {
-        /*if( m_aGraphics[i].bInUse )
-            m_aGraphics[i].pGraphics->SetDrawable( aDrawable, GetScreenNumber() );*/
-    }
-}
-
-cairo_t* KDE5SalFrame::getCairoContext() const
-{
-    for( int i = 0; i < nMaxGraphics; i++ )
-    {
-        if( ! m_aGraphics[i].bInUse )
-        {
-            cairo_t* cr = cairo_create( m_aGraphics[i].pSurface );
-            assert(cr);
-            return cr;
-        }
-    }
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
