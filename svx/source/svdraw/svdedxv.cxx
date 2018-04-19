@@ -1495,7 +1495,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                 if(pTEObj->IsInserted() && bDelObj && pTEObj->GetObjInventor()==SdrInventor::Default && !bDontDeleteReally)
                 {
                     SdrObjKind eIdent=static_cast<SdrObjKind>(pTEObj->GetObjIdentifier());
-                    if(eIdent==OBJ_TEXT || eIdent==OBJ_TEXTEXT)
+                    if(eIdent==OBJ_TEXT)
                     {
                         pDelUndo= GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pTEObj);
                     }
@@ -2505,7 +2505,6 @@ bool SdrObjEditView::SupportsFormatPaintbrush( SdrInventor nObjectInventor, sal_
         case OBJ_SPLNLINE:
         case OBJ_SPLNFILL:
         case OBJ_TEXT:
-        case OBJ_TEXTEXT:
         case OBJ_TITLETEXT:
         case OBJ_OUTLINETEXT:
         case OBJ_GRAF:

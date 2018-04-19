@@ -84,7 +84,7 @@ SdrRectObj::SdrRectObj(
 :   SdrTextObj(rSdrModel, eNewTextKind),
     mpXPoly(nullptr)
 {
-    DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
+    DBG_ASSERT(eTextKind==OBJ_TEXT ||
                eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
                "SdrRectObj::SdrRectObj(SdrObjKind) can only be applied to text frames.");
     bClosedObj=true;
@@ -97,7 +97,7 @@ SdrRectObj::SdrRectObj(
 :   SdrTextObj(rSdrModel, eNewTextKind, rRect),
     mpXPoly(nullptr)
 {
-    DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
+    DBG_ASSERT(eTextKind==OBJ_TEXT ||
                eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
                "SdrRectObj::SdrRectObj(SdrObjKind,...) can only be applied to text frames.");
     bClosedObj=true;
