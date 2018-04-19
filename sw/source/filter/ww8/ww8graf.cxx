@@ -2753,10 +2753,9 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             */
             if (!aData.empty())
             {
-                for (MSDffImportRecords::const_iterator it = aData.begin();
-                        it != aData.end(); ++it)
+                for (const auto& it : aData)
                 {
-                    pRecord = it->get();
+                    pRecord = it.get();
                     if (pRecord->pObj && pRecord->aTextId.nTxBxS)
                     { // #i52825# pRetFrameFormat can be NULL
                         pRetFrameFormat = MungeTextIntoDrawBox(
