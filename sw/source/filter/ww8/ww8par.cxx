@@ -1040,7 +1040,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
         {
             // Complement Import Record List
             pImpRec->pObj = pObj;
-            rImportData.m_Records.insert(std::unique_ptr<SvxMSDffImportRec>(pImpRec));
+            rImportData.insert(pImpRec);
 
             // Complement entry in Z Order List with a pointer to this Object
             // Only store objects which are not deep inside the tree

@@ -5031,12 +5031,16 @@ void SvxMSDffManager::GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt
 
 SvxMSDffImportRec* SvxMSDffImportData::find(const SdrObject* pObj)
 {
-    for (const auto& it : *this)
-    {
-        if (it->pObj == pObj)
-            return it.get();
-    }
+    auto it = m_ObjToRecMap.find(pObj);
+    if (it != m_ObjToRecMap.end())
+        return it->second;
     return nullptr;
+}
+
+void SvxMSDffImportData::insert(SvxMSDffImportRec* pImpRec)
+{
+    m_ObjToRecMap[pImpRec->pObj] = pImpRec;
+    m_Records.insert(std::unique_ptr<SvxMSDffImportRec>(pImpRec));
 }
 
 void SvxMSDffManager::NotifyFreeObj(void* pData, SdrObject* pObj)
@@ -5051,7 +5055,10 @@ void SvxMSDffManager::NotifyFreeObj(void* pData, SdrObject* pObj)
 
     SvxMSDffImportData& rImportData = *static_cast<SvxMSDffImportData*>(pData);
     if (SvxMSDffImportRec* pRecord = rImportData.find(pObj))
+    {
+        rImportData.unmap(pObj);
         pRecord->pObj = nullptr;
+    }
 }
 
 void SvxMSDffManager::FreeObj(void* pData, SdrObject* pObj)
@@ -5544,7 +5551,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             if( pOrgObj )
             {
                 pImpRec->pObj = pOrgObj;
-                rImportData.m_Records.insert(std::unique_ptr<SvxMSDffImportRec>(pImpRec));
+                rImportData.insert(pImpRec);
                 bDeleteImpRec = false;
                 if (pImpRec == pTextImpRec)
                     bDeleteTextImpRec = false;
@@ -5555,7 +5562,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 // Modify ShapeId (must be unique)
                 pImpRec->nShapeId |= 0x8000000;
                 pTextImpRec->pObj = pTextObj;
-                rImportData.m_Records.insert(std::unique_ptr<SvxMSDffImportRec>(pTextImpRec));
+                rImportData.insert(pTextImpRec);
                 bDeleteTextImpRec = false;
                 if (pTextImpRec == pImpRec)
                     bDeleteImpRec = false;
