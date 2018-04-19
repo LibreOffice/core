@@ -36,7 +36,7 @@ class KDE5SalFrame;
 class KDE5SalGraphics : public SvpSalGraphics
 {
 public:
-    KDE5SalGraphics( KDE5SalFrame *pFrame, QWidget *pWindow);
+    KDE5SalGraphics();
     virtual bool IsNativeControlSupported( ControlType, ControlPart ) override;
 
     virtual bool hitTestNativeControl( ControlType, ControlPart,
@@ -48,10 +48,6 @@ public:
     virtual bool getNativeControlRegion( ControlType, ControlPart, const tools::Rectangle&,
                                          ControlState, const ImplControlValue&,
                                          const OUString&, tools::Rectangle&, tools::Rectangle& ) override;
-
-private:
-    QWidget *m_pWindow;
-    KDE5SalFrame *m_pFrame;
 
     std::unique_ptr<QImage> m_image;
     QRect lastPopupRect;
