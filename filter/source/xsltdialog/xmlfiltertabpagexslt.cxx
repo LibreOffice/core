@@ -30,56 +30,41 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( vcl::Window* pParent) :
-    TabPage( pParent, "XmlFilterTabPageTransformation", "filter/ui/xmlfiltertabpagetransformation.ui" ),
-
-    sInstPath( "$(prog)/" )
+XMLFilterTabPageXSLT::XMLFilterTabPageXSLT(weld::Widget* pPage, weld::Dialog* pDialog)
+    : sInstPath( "$(prog)/" )
+    , m_pDialog(pDialog)
+    , m_xBuilder(Application::CreateBuilder(pPage, "filter/ui/xmlfiltertabpagetransformation.ui"))
+    , m_xContainer(m_xBuilder->weld_widget("XmlFilterTabPageTransformation"))
+    , m_xEDDocType(m_xBuilder->weld_entry("doc"))
+    , m_xEDExportXSLT(new URLBox(m_xBuilder->weld_combo_box_text("xsltexport")))
+    , m_xPBExprotXSLT(m_xBuilder->weld_button("browseexport"))
+    , m_xEDImportXSLT(new URLBox(m_xBuilder->weld_combo_box_text("xsltimport")))
+    , m_xPBImportXSLT(m_xBuilder->weld_button("browseimport"))
+    , m_xEDImportTemplate(new URLBox(m_xBuilder->weld_combo_box_text("tempimport")))
+    , m_xPBImportTemplate(m_xBuilder->weld_button("browsetemp"))
+    , m_xCBNeedsXSLT2(m_xBuilder->weld_check_button("filtercb"))
 {
-    get(m_pEDDocType,"doc");
-    get(m_pEDExportXSLT,"xsltexport");
-    get(m_pPBExprotXSLT,"browseexport");
-    get(m_pEDImportXSLT,"xsltimport");
-    get(m_pPBImportXSLT,"browseimport");
-    get(m_pEDImportTemplate,"tempimport");
-    get(m_pPBImportTemplate,"browsetemp");
-    get(m_pCBNeedsXSLT2,"filtercb");
-
-
     SvtPathOptions aOptions;
     sInstPath = aOptions.SubstituteVariable( sInstPath );
 
-    m_pPBExprotXSLT->SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
-    m_pPBImportXSLT->SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
-    m_pPBImportTemplate->SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
+    m_xPBExprotXSLT->connect_clicked( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
+    m_xPBImportXSLT->connect_clicked( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
+    m_xPBImportTemplate->connect_clicked( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
 }
 
 XMLFilterTabPageXSLT::~XMLFilterTabPageXSLT()
 {
-    disposeOnce();
-}
-
-void XMLFilterTabPageXSLT::dispose()
-{
-    m_pEDDocType.clear();
-    m_pEDExportXSLT.clear();
-    m_pPBExprotXSLT.clear();
-    m_pEDImportXSLT.clear();
-    m_pPBImportXSLT.clear();
-    m_pEDImportTemplate.clear();
-    m_pPBImportTemplate.clear();
-    m_pCBNeedsXSLT2.clear();
-    TabPage::dispose();
 }
 
 void XMLFilterTabPageXSLT::FillInfo( filter_info_impl* pInfo )
 {
     if( pInfo )
     {
-        pInfo->maDocType = m_pEDDocType->GetText();
-        pInfo->maExportXSLT = GetURL( m_pEDExportXSLT );
-        pInfo->maImportXSLT = GetURL( m_pEDImportXSLT );
-        pInfo->maImportTemplate = GetURL( m_pEDImportTemplate );
-        pInfo->mbNeedsXSLT2 = m_pCBNeedsXSLT2->IsChecked();
+        pInfo->maDocType = m_xEDDocType->get_text();
+        pInfo->maExportXSLT = GetURL(*m_xEDExportXSLT);
+        pInfo->maImportXSLT = GetURL(*m_xEDImportXSLT);
+        pInfo->maImportTemplate = GetURL(*m_xEDImportTemplate);
+        pInfo->mbNeedsXSLT2 = m_xCBNeedsXSLT2->get_active();
     }
 }
 
@@ -87,16 +72,16 @@ void XMLFilterTabPageXSLT::SetInfo(const filter_info_impl* pInfo)
 {
     if( pInfo )
     {
-        m_pEDDocType->SetText( pInfo->maDocType );
+        m_xEDDocType->set_text( pInfo->maDocType );
 
-        SetURL( m_pEDExportXSLT, pInfo->maExportXSLT );
-        SetURL( m_pEDImportXSLT, pInfo->maImportXSLT );
-        SetURL( m_pEDImportTemplate, pInfo->maImportTemplate );
-        m_pCBNeedsXSLT2->Check( pInfo->mbNeedsXSLT2 );
+        SetURL( *m_xEDExportXSLT, pInfo->maExportXSLT );
+        SetURL( *m_xEDImportXSLT, pInfo->maImportXSLT );
+        SetURL( *m_xEDImportTemplate, pInfo->maImportTemplate );
+        m_xCBNeedsXSLT2->set_active(pInfo->mbNeedsXSLT2);
     }
 }
 
-void XMLFilterTabPageXSLT::SetURL( SvtURLBox* rURLBox, const OUString& rURL )
+void XMLFilterTabPageXSLT::SetURL( URLBox& rURLBox, const OUString& rURL )
 {
     OUString aPath;
 
@@ -104,15 +89,15 @@ void XMLFilterTabPageXSLT::SetURL( SvtURLBox* rURLBox, const OUString& rURL )
     {
         osl::FileBase::getSystemPathFromFileURL( rURL, aPath );
 
-        rURLBox->SetBaseURL( rURL );
-        rURLBox->SetText( aPath );
+        rURLBox.SetBaseURL( rURL );
+        rURLBox.SetText( aPath );
     }
     else if( rURL.matchIgnoreAsciiCase( "http://" ) ||
              rURL.matchIgnoreAsciiCase( "https://" ) ||
              rURL.matchIgnoreAsciiCase( "ftp://" ) )
     {
-        rURLBox->SetBaseURL( rURL );
-        rURLBox->SetText( rURL );
+        rURLBox.SetBaseURL( rURL );
+        rURLBox.SetText( rURL );
     }
     else if( !rURL.isEmpty() )
     {
@@ -120,20 +105,20 @@ void XMLFilterTabPageXSLT::SetURL( SvtURLBox* rURLBox, const OUString& rURL )
         aURL = URIHelper::SmartRel2Abs( INetURLObject(sInstPath), aURL, Link<OUString *, bool>(), false );
         osl::FileBase::getSystemPathFromFileURL( aURL, aPath );
 
-        rURLBox->SetBaseURL( aURL );
-        rURLBox->SetText( aPath );
+        rURLBox.SetBaseURL( aURL );
+        rURLBox.SetText( aPath );
     }
     else
     {
-        rURLBox->SetBaseURL( sInstPath );
-        rURLBox->SetText( "" );
+        rURLBox.SetBaseURL( sInstPath );
+        rURLBox.SetText( "" );
     }
 }
 
-OUString XMLFilterTabPageXSLT::GetURL( SvtURLBox const * rURLBox )
+OUString XMLFilterTabPageXSLT::GetURL(const URLBox& rURLBox)
 {
     OUString aURL;
-    OUString aStrPath ( rURLBox->GetText() );
+    OUString aStrPath(rURLBox.get_active_text());
     if( aStrPath.matchIgnoreAsciiCase( "http://" ) ||
         aStrPath.matchIgnoreAsciiCase( "https://" ) ||
         aStrPath.matchIgnoreAsciiCase( "ftp://" ) )
@@ -148,35 +133,33 @@ OUString XMLFilterTabPageXSLT::GetURL( SvtURLBox const * rURLBox )
     return aURL;
 }
 
-IMPL_LINK ( XMLFilterTabPageXSLT, ClickBrowseHdl_Impl, Button *, pButton, void )
+IMPL_LINK ( XMLFilterTabPageXSLT, ClickBrowseHdl_Impl, weld::Button&, rButton, void )
 {
-    SvtURLBox* pURLBox;
+    URLBox* pURLBox;
 
-    if( pButton == m_pPBExprotXSLT )
+    if( &rButton == m_xPBExprotXSLT.get() )
     {
-        pURLBox = m_pEDExportXSLT;
+        pURLBox = m_xEDExportXSLT.get();
     }
-    else if( pButton == m_pPBImportXSLT )
+    else if( &rButton == m_xPBImportXSLT.get() )
     {
-        pURLBox = m_pEDImportXSLT;
+        pURLBox = m_xEDImportXSLT.get();
     }
     else
     {
-        pURLBox = m_pEDImportTemplate;
+        pURLBox = m_xEDImportTemplate.get();
     }
 
     // Open Fileopen-Dialog
-       ::sfx2::FileDialogHelper aDlg(
-        css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-        FileDialogFlags::NONE, GetFrameWeld());
+    ::sfx2::FileDialogHelper aDlg(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+                                  FileDialogFlags::NONE, m_pDialog);
 
-    aDlg.SetDisplayDirectory( GetURL( pURLBox ) );
+    aDlg.SetDisplayDirectory(GetURL(*pURLBox));
 
-    if ( aDlg.Execute() == ERRCODE_NONE )
+    if (aDlg.Execute() == ERRCODE_NONE)
     {
-        OUString aURL( aDlg.GetPath() );
-
-        SetURL( pURLBox, aURL );
+        OUString aURL(aDlg.GetPath());
+        SetURL(*pURLBox, aURL);
     }
 }
 

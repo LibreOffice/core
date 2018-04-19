@@ -492,6 +492,7 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
 MatchContext_Impl::MatchContext_Impl(URLBox* pBoxP, const OUString& rText)
     : Thread( "MatchContext_Impl" )
     , aLink( LINK( this, MatchContext_Impl, Select_Impl ) )
+    , aBaseURL( pBoxP->aBaseURL )
     , aText( rText )
     , pBox( pBoxP )
     , bOnlyDirectories( false )
@@ -2161,7 +2162,7 @@ OUString URLBox::GetURL()
 
     if ( aObj.GetProtocol() == INetProtocol::NotValid )
     {
-        OUString aName = ParseSmart( aText, OUString() );
+        OUString aName = ParseSmart( aText, aBaseURL );
         aObj.SetURL(aName);
         OUString aURL( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
         if ( aURL.isEmpty() )
@@ -2197,6 +2198,17 @@ OUString URLBox::GetURL()
     }
 
     return aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+}
+
+void URLBox::SetBaseURL( const OUString& rURL )
+{
+    ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
+
+    // Reset match lists
+    pImpl->aCompletions.clear();
+    pImpl->aURLs.clear();
+
+    aBaseURL = rURL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

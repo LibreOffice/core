@@ -20,46 +20,40 @@
 #define INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERTABPAGEXSLT_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <sfx2/tabdlg.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/combobox.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/inettbc.hxx>
 
 namespace vcl { class Window; }
 class filter_info_impl;
 
-class XMLFilterTabPageXSLT : public TabPage
+class XMLFilterTabPageXSLT
 {
+private:
+    void SetURL(URLBox& rURLBox, const OUString& rURL);
+    static OUString GetURL(const URLBox& rURLBox);
+
+    OUString sInstPath;
+
 public:
-    explicit XMLFilterTabPageXSLT(vcl::Window* pParent);
-    virtual ~XMLFilterTabPageXSLT() override;
-    virtual void dispose() override;
+    explicit XMLFilterTabPageXSLT(weld::Widget* pPage, weld::Dialog* pDialog);
+    ~XMLFilterTabPageXSLT();
 
     void FillInfo( filter_info_impl* pInfo );
     void SetInfo(const filter_info_impl* pInfo);
 
-    DECL_LINK( ClickBrowseHdl_Impl, Button *, void );
+    DECL_LINK( ClickBrowseHdl_Impl, weld::Button&, void );
 
-
-    VclPtr<Edit>            m_pEDDocType;
-
-    VclPtr<SvtURLBox>       m_pEDExportXSLT;
-    VclPtr<PushButton>      m_pPBExprotXSLT;
-
-    VclPtr<SvtURLBox>       m_pEDImportXSLT;
-    VclPtr<PushButton>      m_pPBImportXSLT;
-
-    VclPtr<SvtURLBox>       m_pEDImportTemplate;
-    VclPtr<PushButton>      m_pPBImportTemplate;
-
-    VclPtr<CheckBox>        m_pCBNeedsXSLT2;
-
-private:
-    void SetURL( SvtURLBox *rURLBox, const OUString& rURL );
-    static OUString GetURL( SvtURLBox const * rURLBox );
-
-    OUString sInstPath;
+    weld::Dialog*                  m_pDialog;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Widget>  m_xContainer;
+    std::unique_ptr<weld::Entry>   m_xEDDocType;
+    std::unique_ptr<URLBox>        m_xEDExportXSLT;
+    std::unique_ptr<weld::Button>  m_xPBExprotXSLT;
+    std::unique_ptr<URLBox>        m_xEDImportXSLT;
+    std::unique_ptr<weld::Button>  m_xPBImportXSLT;
+    std::unique_ptr<URLBox>        m_xEDImportTemplate;
+    std::unique_ptr<weld::Button>  m_xPBImportTemplate;
+    std::unique_ptr<weld::CheckButton> m_xCBNeedsXSLT2;
 };
 
 #endif

@@ -20,22 +20,17 @@
 #define INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERTABDIALOG_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <vcl/tabctrl.hxx>
-#include <vcl/tabdlg.hxx>
-#include <vcl/button.hxx>
-
-namespace vcl { class Window; }
+#include <vcl/weld.hxx>
 
 class filter_info_impl;
 class XMLFilterTabPageBasic;
 class XMLFilterTabPageXSLT;
 
-class XMLFilterTabDialog: public TabDialog
+class XMLFilterTabDialog : public weld::GenericDialogController
 {
 public:
-    XMLFilterTabDialog(vcl::Window *pParent, const css::uno::Reference< css::uno::XComponentContext >& rxContext, const filter_info_impl* pInfo);
+    XMLFilterTabDialog(weld::Window *pParent, const css::uno::Reference< css::uno::XComponentContext >& rxContext, const filter_info_impl* pInfo);
     virtual ~XMLFilterTabDialog() override;
-    virtual void dispose() override;
 
     bool onOk();
 
@@ -44,20 +39,16 @@ public:
 private:
     css::uno::Reference< css::uno::XComponentContext > mxContext;
 
-    DECL_STATIC_LINK( XMLFilterTabDialog, ActivatePageHdl, TabControl*, void );
-    DECL_LINK(OkHdl, Button*, void);
+    DECL_LINK(OkHdl, weld::Button&, void);
 
     const filter_info_impl* mpOldInfo;
     filter_info_impl* mpNewInfo;
 
-    VclPtr<TabControl>     m_pTabCtrl;
-    VclPtr<OKButton>       m_pOKBtn;
+    std::unique_ptr<weld::Notebook>     m_xTabCtrl;
+    std::unique_ptr<weld::Button>       m_xOKBtn;
 
-    sal_Int16 m_nBasicPageId;
-    sal_Int16 m_nXSLTPageId;
-
-    VclPtr<XMLFilterTabPageBasic>  mpBasicPage;
-    VclPtr<XMLFilterTabPageXSLT> mpXSLTPage;
+    std::unique_ptr<XMLFilterTabPageBasic>  mpBasicPage;
+    std::unique_ptr<XMLFilterTabPageXSLT> mpXSLTPage;
 };
 
 

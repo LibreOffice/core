@@ -19,30 +19,26 @@
 #ifndef INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERTABPAGEBASIC_HXX
 #define INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERTABPAGEBASIC_HXX
 
-#include <sfx2/tabdlg.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/combobox.hxx>
-#include <svtools/svmedit.hxx>
+#include <vcl/weld.hxx>
 
-namespace vcl { class Window; }
 class filter_info_impl;
 
-class XMLFilterTabPageBasic : public TabPage
+class XMLFilterTabPageBasic
 {
 public:
-    explicit XMLFilterTabPageBasic(vcl::Window* pParent);
-    virtual ~XMLFilterTabPageBasic() override;
-    virtual void dispose() override;
+    explicit XMLFilterTabPageBasic(weld::Widget* pPage);
+    ~XMLFilterTabPageBasic();
 
     void FillInfo( filter_info_impl* pInfo );
     void SetInfo(const filter_info_impl* pInfo);
 
-    VclPtr<Edit>              m_pEDFilterName;
-    VclPtr<ComboBox>          m_pCBApplication;
-    VclPtr<Edit>              m_pEDInterfaceName;
-    VclPtr<Edit>              m_pEDExtension;
-    VclPtr<VclMultiLineEdit>  m_pEDDescription;
+    std::unique_ptr<weld::Builder>      m_xBuilder;
+    std::unique_ptr<weld::Widget>       m_xContainer;
+    std::unique_ptr<weld::Entry>        m_xEDFilterName;
+    std::unique_ptr<weld::ComboBoxText> m_xCBApplication;
+    std::unique_ptr<weld::Entry>        m_xEDInterfaceName;
+    std::unique_ptr<weld::Entry>        m_xEDExtension;
+    std::unique_ptr<weld::TextView>     m_xEDDescription;
 };
 
 #endif
