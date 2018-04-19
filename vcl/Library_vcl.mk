@@ -313,6 +313,9 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/bitmap \
     vcl/source/bitmap/bitmapfilter \
     vcl/source/bitmap/BitmapSobelGreyFilter \
+    vcl/source/bitmap/BitmapSolarizeFilter \
+    vcl/source/bitmap/BitmapSepiaFilter \
+    vcl/source/bitmap/BitmapMosaicFilter \
     vcl/source/bitmap/BitmapPopArtFilter \
     vcl/source/bitmap/BitmapConvolutionMatrixFilter \
     vcl/source/bitmap/BitmapMedianFilter \
