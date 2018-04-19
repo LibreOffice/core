@@ -2212,9 +2212,6 @@ void SwFEShell::SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 
         // deleting the cells.
         switch( eTypePos )
         {
-        case TableChgWidthHeightType::RowTop:
-            lcl_GoTableRow( this, true );
-            break;
         case TableChgWidthHeightType::RowBottom:
             lcl_GoTableRow( this, false );
             break;
@@ -2256,7 +2253,6 @@ void SwFEShell::SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 
                 break;
 
         case TableChgWidthHeightType::CellTop:
-        case TableChgWidthHeightType::RowTop:
                 lcl_GoTableRow( this, true );
                 break;
 

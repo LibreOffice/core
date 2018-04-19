@@ -201,8 +201,7 @@ struct CR_SetLineHeight
         : pTableNd( pTNd ), pUndo( nullptr ),
         nMaxSpace( 0 ), nMaxHeight( 0 )
     {
-        bTop = TableChgWidthHeightType::RowTop == extractPosition( eType ) ||
-               TableChgWidthHeightType::CellTop == extractPosition( eType );
+        bTop = TableChgWidthHeightType::CellTop == extractPosition( eType );
         bBigger = bool(eType & TableChgWidthHeightType::BiggerMode );
         if( eType & TableChgWidthHeightType::InsertDeleteMode )
             bBigger = !bBigger;
@@ -4118,8 +4117,7 @@ bool SwTable::SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eTy
     SwTableSortBoxes aTmpLst;       // for Undo
     bool bBigger,
         bRet = false,
-        bTop = TableChgWidthHeightType::RowTop == extractPosition( eType ) ||
-               TableChgWidthHeightType::CellTop == extractPosition( eType ),
+        bTop = TableChgWidthHeightType::CellTop == extractPosition( eType ),
         bInsDel = bool(eType & TableChgWidthHeightType::InsertDeleteMode );
     sal_uInt16 nBaseLinePos = GetTabLines().GetPos( pBaseLine );
     sal_uLong nBoxIdx = rCurrentBox.GetSttIdx();
@@ -4150,7 +4148,6 @@ bool SwTable::SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eTy
         pBaseLine = pLine;
         SAL_FALLTHROUGH;
 
-    case TableChgWidthHeightType::RowTop:
     case TableChgWidthHeightType::RowBottom:
         {
             if( bInsDel && !bBigger )       // By how much does it get higher?

@@ -26,7 +26,6 @@ enum class TableChgWidthHeightType : sal_uInt16
 {
     ColLeft      = 0,
     ColRight     = 1,
-    RowTop       = 2,
     RowBottom    = 3,
     CellLeft     = 4,
     CellRight    = 5,
