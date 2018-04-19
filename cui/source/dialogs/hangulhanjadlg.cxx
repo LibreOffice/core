@@ -1750,9 +1750,7 @@ namespace svx
         m_aDeletePB->SetClickHdl( LINK( this, HangulHanjaEditDictDialog, DeletePBPushHdl ) );
         m_aDeletePB->Enable( false );
 
-    #if( MAXNUM_SUGGESTIONS <= 4 )
-        #error number of suggestions should not under-run the value of 5
-    #endif
+        static_assert(MAXNUM_SUGGESTIONS > 5, "number of suggestions should not under-run the value of 5");
 
         Link<ScrollBar*,void>  aScrLk( LINK( this, HangulHanjaEditDictDialog, ScrollHdl ) );
         m_aScrollSB->SetScrollHdl( aScrLk );
