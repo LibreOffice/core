@@ -205,6 +205,9 @@ public:
     void                SetSeparatorPos( sal_Int32 n );
     sal_Int32           GetSeparatorPos() const;
 
+    void                        AddSeparator( sal_Int32 n );
+    std::vector< sal_Int32 >    GetSeparators() const;
+
     bool                IsTravelSelect() const;
     bool                IsInDropDown() const;
     void                ToggleDropDown();

@@ -144,6 +144,9 @@ void CommandCategoryListBox::Init(
             SetEntryData( nEntryPos, m_aGroupInfo.back().get() );
         }
 
+        // Separate "All commands" from other categories
+        AddSeparator(0);
+
         // Add the actual categories
         for (sal_Int32 i = 0; i < nGroupsLength; ++i)
         {
@@ -170,7 +173,7 @@ void CommandCategoryListBox::Init(
 
         // Separate regular commands from styles and macros
         if (nEntryPos)
-            SetSeparatorPos(nEntryPos);
+            AddSeparator(nEntryPos);
 
         // Add macros category
         OUString sMacros( CuiResId(RID_SVXSTR_MACROS) );

@@ -23,6 +23,7 @@
 #include <vcl/button.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/quickselectionengine.hxx>
+#include <vcl/lstbox.hxx> //TODO:Remove before push
 
 #include <vector>
 #include <memory>
@@ -183,6 +184,7 @@ private:
     sal_Int32       mnTrackingSaveSelection; ///< Selection before Tracking();
 
     sal_Int32       mnSeparatorPos; ///< Separator
+    std::vector< sal_Int32 > maSeparators; ///< Separator positions
 
     sal_Int32       mnUserDrawEntry;
 
@@ -289,8 +291,25 @@ public:
     void            AllowGrabFocus( bool b )        { mbGrabFocus = b; }
     bool            IsGrabFocusAllowed() const      { return mbGrabFocus; }
 
-    void            SetSeparatorPos( sal_Int32  n )     { mnSeparatorPos = n; }
-    sal_Int32       GetSeparatorPos() const         { return mnSeparatorPos; }
+    void            SetSeparatorPos( sal_Int32  n )
+    {
+        maSeparators.clear();
+
+        if ( n != LISTBOX_ENTRY_NOTFOUND )
+        {
+            maSeparators.push_back(n);
+            //maSeparators.push_back(1);
+        }
+    }
+    sal_Int32       GetSeparatorPos() const
+    {
+        if (maSeparators.size())
+            return maSeparators.front();
+        else return LISTBOX_ENTRY_NOTFOUND;
+    }
+
+    void            AddSeparator( sal_Int32 n )     { maSeparators.push_back( n ); }
+    std::vector< sal_Int32 > GetSeparators() const  { return maSeparators; };
 
     void            SetTravelSelect( bool bTravelSelect ) { mbTravelSelect = bTravelSelect; }
     bool            IsTravelSelect() const          { return mbTravelSelect; }
@@ -411,6 +430,9 @@ public:
 
     void            SetSeparatorPos( sal_Int32  n )     { maLBWindow->SetSeparatorPos( n ); }
     sal_Int32       GetSeparatorPos() const         { return maLBWindow->GetSeparatorPos(); }
+
+    void            AddSeparator( sal_Int32 n )     { maLBWindow->AddSeparator( n ); }
+    std::vector< sal_Int32 > GetSeparators() const  { return maLBWindow->GetSeparators(); }
 
     void            SetTopEntry( sal_Int32  nTop )      { maLBWindow->SetTopEntry( nTop ); }
     sal_Int32       GetTopEntry() const             { return maLBWindow->GetTopEntry(); }

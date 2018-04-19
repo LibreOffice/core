@@ -42,6 +42,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <limits>
+#include <algorithm>
 
 #define MULTILINE_ENTRY_DRAW_FLAGS ( DrawTextFlags::WordBreak | DrawTextFlags::MultiLine | DrawTextFlags::VCenter )
 
@@ -491,7 +492,7 @@ ImplListBoxWindow::ImplListBoxWindow( vcl::Window* pParent, WinBits nWinStyle ) 
 
     mnCurrentPos            = LISTBOX_ENTRY_NOTFOUND;
     mnTrackingSaveSelection = LISTBOX_ENTRY_NOTFOUND;
-    mnSeparatorPos          = LISTBOX_ENTRY_NOTFOUND;
+    //mnSeparatorPos          = LISTBOX_ENTRY_NOTFOUND;
     meProminentType         = ProminentEntry::TOP;
 
     SetLineColor();
@@ -1731,6 +1732,19 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
     }
 }
 
+/**
+ * Checks if the given vector vec contains number n
+ */
+bool in(const sal_Int32 &n, const std::vector<sal_Int32> &vec)
+{
+    auto result = std::find(std::begin(vec), std::end(vec), n);
+
+    if (result != std::end(vec))
+        return true;
+    else
+        return false;
+}
+
 void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 nPos, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos)
 {
     const ImplEntryType* pEntry = mpEntryList->GetEntryPtr(nPos);
@@ -1825,13 +1839,14 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         }
     }
 
-    if ((mnSeparatorPos != LISTBOX_ENTRY_NOTFOUND) &&
-        ((nPos == mnSeparatorPos) || (nPos == mnSeparatorPos + 1)))
+    if ( maSeparators.size() &&
+        ( in(nPos, maSeparators) || in(nPos-1, maSeparators) ) )
     {
+
         Color aOldLineColor(rRenderContext.GetLineColor());
         rRenderContext.SetLineColor((GetBackground().GetColor() != COL_LIGHTGRAY) ? COL_LIGHTGRAY : COL_GRAY);
         Point aStartPos(0, nY);
-        if (nPos == mnSeparatorPos)
+        if (in(nPos, maSeparators))
             aStartPos.AdjustY(pEntry->mnHeight - 1 );
         Point aEndPos(aStartPos);
         aEndPos.setX( GetOutputSizePixel().Width() );
