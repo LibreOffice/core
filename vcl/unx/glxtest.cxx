@@ -26,7 +26,9 @@
 #include "stdint.h"
 #include <string.h>
 
-#include "opengl/x11/glxtest.hxx"
+#include <sys/wait.h>
+
+#include <opengl/x11/glxtest.hxx>
 
 #ifdef __SUNPRO_CC
 #include <stdio.h>
@@ -34,6 +36,8 @@
 
 #include "X11/Xlib.h"
 #include "X11/Xutil.h"
+
+#include <sal/log.hxx>
 
 // stuff from glx.h
 typedef struct __GLXcontextRec *GLXContext;
@@ -272,4 +276,16 @@ bool fire_glxtest_process()
   pid_t* glxtest_pid = getGlxPid();
   *glxtest_pid = pid;
   return true;
+}
+
+void reap_glxtest_process() {
+    pid_t * pid = getGlxPid();
+    if (*pid != 0) {
+        // Use WNOHANG, as it is probably better to have a (rather harmless) zombie child process
+        // hanging around for the duration of the calling process, than to potentially block the
+        // calling process here:
+        pid_t e = waitpid(*pid, nullptr, WNOHANG);
+        SAL_INFO_IF(
+            e <= 0, "vcl.opengl", "waiting for glxtest process " << *pid << " failed with " << e);
+    }
 }
