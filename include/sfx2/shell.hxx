@@ -488,6 +488,14 @@ public:
 
     /**
 
+        This method determines whether we need to execute without checking
+        the disabled state of the slot. This is used for dynamic conditions
+        while you can use SfxSlotMode::FASTCALL for a specific slotid in general.
+        */
+    virtual bool IsConditionalFastCall( const SfxRequest &rReq );
+
+    /**
+
         This method controls the activation of SfxShell instance. First, by calling
         the virtual method <SfxShell::Activate(sal_Bool)> which gives the subclass the
         opportunity to respond to the event.
