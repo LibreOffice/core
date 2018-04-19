@@ -42,6 +42,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <limits>
+#include <algorithm>
 
 #define MULTILINE_ENTRY_DRAW_FLAGS ( DrawTextFlags::WordBreak | DrawTextFlags::MultiLine | DrawTextFlags::VCenter )
 
@@ -491,7 +492,6 @@ ImplListBoxWindow::ImplListBoxWindow( vcl::Window* pParent, WinBits nWinStyle ) 
 
     mnCurrentPos            = LISTBOX_ENTRY_NOTFOUND;
     mnTrackingSaveSelection = LISTBOX_ENTRY_NOTFOUND;
-    mnSeparatorPos          = LISTBOX_ENTRY_NOTFOUND;
     meProminentType         = ProminentEntry::TOP;
 
     SetLineColor();
@@ -1825,13 +1825,12 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         }
     }
 
-    if ((mnSeparatorPos != LISTBOX_ENTRY_NOTFOUND) &&
-        ((nPos == mnSeparatorPos) || (nPos == mnSeparatorPos + 1)))
+    if ( !maSeparators.empty() && ( isSeparator(nPos) || isSeparator(nPos-1) ) )
     {
         Color aOldLineColor(rRenderContext.GetLineColor());
         rRenderContext.SetLineColor((GetBackground().GetColor() != COL_LIGHTGRAY) ? COL_LIGHTGRAY : COL_GRAY);
         Point aStartPos(0, nY);
-        if (nPos == mnSeparatorPos)
+        if (isSeparator(nPos))
             aStartPos.AdjustY(pEntry->mnHeight - 1 );
         Point aEndPos(aStartPos);
         aEndPos.setX( GetOutputSizePixel().Width() );
@@ -2009,6 +2008,29 @@ void ImplListBoxWindow::ScrollHorz( long n )
             ImplShowFocusRect();
         maScrollHdl.Call( this );
     }
+}
+
+void ImplListBoxWindow::SetSeparatorPos( sal_Int32 n )
+{
+    maSeparators.clear();
+
+    if ( n != LISTBOX_ENTRY_NOTFOUND )
+    {
+        maSeparators.insert( n );
+    }
+}
+
+sal_Int32 ImplListBoxWindow::GetSeparatorPos() const
+{
+    if (!maSeparators.empty())
+        return *(maSeparators.begin());
+    else
+        return LISTBOX_ENTRY_NOTFOUND;
+}
+
+bool ImplListBoxWindow::isSeparator( const sal_Int32 &n) const
+{
+    return maSeparators.find(n) != maSeparators.end();
 }
 
 Size ImplListBoxWindow::CalcSize(sal_Int32 nMaxLines) const
