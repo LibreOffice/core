@@ -400,6 +400,21 @@ bool SfxShell::CanExecuteSlot_Impl( const SfxSlot &rSlot )
     return aSet.GetItemState(nId) != SfxItemState::DISABLED;
 }
 
+bool SfxShell::IsConditionalFastCall( const SfxRequest &rReq )
+{
+    sal_uInt16 nId = rReq.GetSlot();
+    bool bRet = false;
+
+    if (nId == SID_UNDO || nId == SID_REDO)
+    {
+        const SfxItemSet* pArgs = rReq.GetArgs();
+        if (pArgs && pArgs->HasItem(SID_REPAIRPACKAGE))
+            bRet = true;
+    }
+    return bRet;
+}
+
+
 void ShellCall_Impl( void* pObj, void* pArg )
 {
     static_cast<SfxShell*>(pObj)->ExecuteSlot( *static_cast<SfxRequest*>(pArg) );
