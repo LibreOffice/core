@@ -140,6 +140,18 @@ void Qt5Frame::TriggerPaintEvent(QRect aRect)
     CallCallback(SalEvent::Paint, &aPaintEvt);
 }
 
+void Qt5Frame::InitSvpSalGraphics( SvpSalGraphics* pSvpSalGraphics )
+{
+    int width = m_pQWidget->size().width();
+    int height = m_pQWidget->size().height();
+    m_pSvpGraphics = pSvpSalGraphics;
+    m_pSurface.reset(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height));
+    m_pSvpGraphics->setSurface(m_pSurface.get(), basegfx::B2IVector(width, height));
+    cairo_surface_set_user_data(m_pSurface.get(), SvpSalGraphics::getDamageKey(),
+                                &m_aDamageHandler, nullptr);
+    TriggerPaintEvent();
+}
+
 SalGraphics* Qt5Frame::AcquireGraphics()
 {
     if (m_bGraphicsInUse)
@@ -149,18 +161,12 @@ SalGraphics* Qt5Frame::AcquireGraphics()
 
     if (m_bUseCairo)
     {
-        if (!m_pSvpGraphics.get())
+        if (!m_pOurSvpGraphics.get())
         {
-            int width = m_pQWidget->size().width();
-            int height = m_pQWidget->size().height();
-            m_pSvpGraphics.reset(new SvpSalGraphics());
-            m_pSurface.reset(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height));
-            m_pSvpGraphics->setSurface(m_pSurface.get(), basegfx::B2IVector(width, height));
-            cairo_surface_set_user_data(m_pSurface.get(), SvpSalGraphics::getDamageKey(),
-                                        &m_aDamageHandler, nullptr);
-            TriggerPaintEvent();
+            m_pOurSvpGraphics.reset( new SvpSalGraphics() );
+            InitSvpSalGraphics( m_pOurSvpGraphics.get() );
         }
-        return m_pSvpGraphics.get();
+        return m_pOurSvpGraphics.get();
     }
     else
     {
@@ -179,7 +185,7 @@ void Qt5Frame::ReleaseGraphics(SalGraphics* pSalGraph)
 {
     (void)pSalGraph;
     if (m_bUseCairo)
-        assert(pSalGraph == m_pSvpGraphics.get());
+        assert(pSalGraph == m_pOurSvpGraphics.get());
     else
         assert(pSalGraph == m_pQt5Graphics.get());
     m_bGraphicsInUse = false;
