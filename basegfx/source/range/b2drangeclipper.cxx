@@ -35,7 +35,12 @@
 
 #include <o3tl/vector_pool.hxx>
 #include <boost/bind.hpp>
-#include <boost/utility.hpp>
+#include <boost/version.hpp>
+#if BOOST_VERSION < 106700
+# include <boost/utility.hpp>
+#else
+# include <boost/next_prior.hpp>
+#endif
 
 #include <algorithm>
 #include <deque>
