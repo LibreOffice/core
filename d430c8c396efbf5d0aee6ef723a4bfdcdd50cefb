@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_a1e7ffe2",
+        "filename": "vcl/source/gdi/impgraph.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1500,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-04-19T12:07:04Z",
+      "side": 1,
+      "message": "Leftover debug printf. :-)",
+      "revId": "d430c8c396efbf5d0aee6ef723a4bfdcdd50cefb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
