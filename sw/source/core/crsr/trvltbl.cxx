@@ -590,40 +590,42 @@ bool GotoNextTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
             continue;
         }
 
-        if( pTableNd )  // should never be nullptr
-        {
-            if( &fnPosTable == &fnMoveForward ) // at the beginning?
-            {
-                if( !lcl_FindNextCell( aIdx, bInReadOnly ))
-                {
-                    // skip table
-                    aIdx.Assign( *pTableNd->EndOfSectionNode(), + 1 );
-                    continue;
-                }
-            }
-            else
-            {
-                aIdx = *aIdx.GetNode().EndOfSectionNode();
-                // check protected cells
-                if( !lcl_FindNextCell( aIdx, bInReadOnly ))
-                {
-                    // skip table
-                    aIdx.Assign( *pTableNd->EndOfSectionNode(), + 1 );
-                    continue;
-                }
-            }
+        assert( pTableNd );  // coverity, should never be nullptr
 
-            SwTextNode* pTextNode = aIdx.GetNode().GetTextNode();
-            if ( pTextNode )
+        if( &fnPosTable == &fnMoveForward ) // at the beginning?
+        {
+            if( !lcl_FindNextCell( aIdx, bInReadOnly ))
             {
-                rCurrentCursor.GetPoint()->nNode = *pTextNode;
-                rCurrentCursor.GetPoint()->nContent.Assign( pTextNode, &fnPosTable == &fnMoveBackward ?
-                                                      pTextNode->Len() :
-                                                      0 );
+                // skip table
+                aIdx.Assign( *pTableNd->EndOfSectionNode(), + 1 );
+                continue;
             }
-            return true;
         }
+        else
+        {
+            aIdx = *aIdx.GetNode().EndOfSectionNode();
+            // check protected cells
+            if( !lcl_FindNextCell( aIdx, bInReadOnly ))
+            {
+                // skip table
+                aIdx.Assign( *pTableNd->EndOfSectionNode(), + 1 );
+                continue;
+            }
+        }
+
+        SwTextNode* pTextNode = aIdx.GetNode().GetTextNode();
+        if ( pTextNode )
+        {
+            rCurrentCursor.GetPoint()->nNode = *pTextNode;
+            rCurrentCursor.GetPoint()->nContent.Assign( pTextNode, &fnPosTable == &fnMoveBackward ?
+                                                  pTextNode->Len() :
+                                                  0 );
+        }
+        return true;
+
     } while( true );
+
+    // the flow is such that it is not possible to get there
 
     return false;
 }
