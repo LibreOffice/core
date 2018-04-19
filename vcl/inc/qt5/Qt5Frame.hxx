@@ -44,7 +44,11 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public SalFrame
     std::unique_ptr<QImage> m_pQImage;
     std::unique_ptr<Qt5Graphics> m_pQt5Graphics;
     UniqueCairoSurface m_pSurface;
-    std::unique_ptr<SvpSalGraphics> m_pSvpGraphics;
+    std::unique_ptr<SvpSalGraphics> m_pOurSvpGraphics;
+    // in base class, this ptr is the same as m_pOurSvpGraphic
+    // in derived class, it can point to a derivative
+    // of SvpSalGraphics (which the derived class then owns)
+    SvpSalGraphics* m_pSvpGraphics;
     DamageHandler m_aDamageHandler;
 
     bool m_bGraphicsInUse;
@@ -81,6 +85,7 @@ public:
     void Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
                 sal_Int32 nExtentsHeight) const;
 
+    virtual void InitSvpSalGraphics( SvpSalGraphics* pSvpSalGraphics );
     virtual SalGraphics* AcquireGraphics() override;
     virtual void ReleaseGraphics(SalGraphics* pGraphics) override;
 
