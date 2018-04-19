@@ -221,7 +221,7 @@ bool SfxErrorHandler::GetErrorString(ErrCode lErrId, OUString &rStr) const
 
     for (const ErrMsgCode* pItem = pIds; pItem->second; ++pItem)
     {
-        if (pItem->second == lErrId.StripWarningAndDynamic())
+        if (pItem->second.StripWarningAndDynamic() == lErrId.StripWarningAndDynamic())
         {
             rStr = rStr.replaceAll("$(ERROR)", Translate::get(pItem->first, aResLocale));
             bRet = true;
