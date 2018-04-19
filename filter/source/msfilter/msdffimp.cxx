@@ -472,7 +472,6 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                             case OBJ_RECT :
                             case OBJ_TEXT :
                             case OBJ_PAGE :
-                            case OBJ_TEXTEXT :
                             case OBJ_TITLETEXT :
                             case OBJ_OUTLINETEXT :
                             {

@@ -205,7 +205,6 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SC (const sal_uInt
         case OBJ_TITLETEXT:
         case OBJ_OUTLINETEXT:
         case OBJ_TEXT:
-        case OBJ_TEXTEXT:
         case OBJ_MEASURE:
         case OBJ_RECT:
         case OBJ_CIRC:
@@ -272,7 +271,6 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SD (
         case OBJ_TITLETEXT:
         case OBJ_OUTLINETEXT:
         case OBJ_TEXT:
-        case OBJ_TEXTEXT:
             return EnumContext::Context::TextObject;
 
         case OBJ_GRAF:
@@ -468,7 +466,6 @@ bool SelectionAnalyzer::IsTextObjType (const sal_uInt16 nType)
     switch(nType)
     {
         case OBJ_TEXT:
-        case OBJ_TEXTEXT:
         case OBJ_TITLETEXT:
         case OBJ_OUTLINETEXT:
             return true;

@@ -124,7 +124,6 @@ enum SdrObjKind {
     OBJ_SPLNLINE   =14,  /// natural cubic Spline                  (ni)
     OBJ_SPLNFILL   =15,  /// periodic cubic Spline                 (ni)
     OBJ_TEXT       =16,  /// text object
-    OBJ_TEXTEXT    =17,  /// text extension frame                  (ni)
     OBJ_TITLETEXT  =20,  /// TitleText, special text object for StarDraw
     OBJ_OUTLINETEXT=21,  /// OutlineText, special text object for StarDraw
     OBJ_GRAF       =22,  /// foreign graphic (StarView Graphic)

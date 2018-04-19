@@ -195,7 +195,6 @@ protected:
 
     // Possible values for eTextKind are:
     //     OBJ_TEXT         regular text frame
-    //     OBJ_TEXTEXT      text continuation frame
     //     OBJ_TITLETEXT    TitleText for presentations
     //     OBJ_OUTLINETEXT  OutlineText for presentations
     // eTextKind only has meaning when bTextFrame=sal_True, since otherwise

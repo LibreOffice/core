@@ -3105,7 +3105,6 @@ SdrObject* SdrObjFactory::MakeNewObject(
             }
             break;
             case OBJ_TEXT:
-            case OBJ_TEXTEXT:
             case OBJ_TITLETEXT:
             case OBJ_OUTLINETEXT:
             {
