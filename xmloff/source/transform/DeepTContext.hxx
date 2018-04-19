@@ -66,7 +66,7 @@ public:
         return !m_aChildContexts.empty();
     }
 
-    void ExportContent();
+    virtual void ExportContent() override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_DEEPTCONTEXT_HXX

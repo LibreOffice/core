@@ -84,7 +84,7 @@ public:
 
     virtual bool IsPersistent() const override;
     virtual void Export() override;
-    void ExportContent();
+    virtual void ExportContent() override;
 
     const OUString& GetExportQName() const { return m_aElemQName; }
 
