@@ -24,6 +24,7 @@
 #include <vcl/BitmapSharpenFilter.hxx>
 #include <vcl/BitmapMedianFilter.hxx>
 #include <vcl/BitmapSobelGreyFilter.hxx>
+#include <vcl/BitmapPopArtFilter.hxx>
 
 #include <bitmapwriteaccess.hxx>
 
@@ -93,7 +94,11 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
         break;
 
         case BmpFilter::PopArt:
-            bRet = ImplPopArt();
+        {
+            BitmapEx aBmpEx(*this);
+            bRet = BitmapFilter::Filter(aBmpEx, BitmapPopArtFilter());
+            *this = aBmpEx.GetBitmap();
+        }
         break;
 
         case BmpFilter::DuoTone:
@@ -523,91 +528,6 @@ bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam )
     }
     else
         bRet = true;
-
-    return bRet;
-}
-
-
-struct PopArtEntry
-{
-    sal_uInt32  mnIndex;
-    sal_uInt32  mnCount;
-};
-
-extern "C" int ImplPopArtCmpFnc( const void* p1, const void* p2 )
-{
-    int nRet;
-
-    if( static_cast<PopArtEntry const *>(p1)->mnCount < static_cast<PopArtEntry const *>(p2)->mnCount )
-        nRet = 1;
-    else if( static_cast<PopArtEntry const *>(p1)->mnCount == static_cast<PopArtEntry const *>(p2)->mnCount )
-        nRet = 0;
-    else
-        nRet = -1;
-
-    return nRet;
-}
-
-bool Bitmap::ImplPopArt()
-{
-    /* note: GetBitCount() after that is no more than 8 */
-    bool bRet = ( GetBitCount() <= 8 ) || Convert( BmpConversion::N8BitColors );
-
-    if( bRet )
-    {
-        bRet = false;
-
-        BitmapScopedWriteAccess pWriteAcc(*this);
-
-        if( pWriteAcc )
-        {
-            const long      nWidth = pWriteAcc->Width();
-            const long      nHeight = pWriteAcc->Height();
-            const int       nEntryCount = 1 << pWriteAcc->GetBitCount();
-            int n;
-            PopArtEntry*    pPopArtTable = new PopArtEntry[ nEntryCount ];
-
-            for( n = 0; n < nEntryCount; n++ )
-            {
-                PopArtEntry& rEntry = pPopArtTable[ n ];
-                rEntry.mnIndex = static_cast<sal_uInt16>(n);
-                rEntry.mnCount = 0;
-            }
-
-            // get pixel count for each palette entry
-            for( long nY = 0; nY < nHeight ; nY++ )
-            {
-                Scanline pScanline = pWriteAcc->GetScanline(nY);
-                for( long nX = 0; nX < nWidth; nX++ )
-                    pPopArtTable[ pWriteAcc->GetIndexFromData( pScanline, nX ) ].mnCount++;
-            }
-
-            // sort table
-            qsort( pPopArtTable, nEntryCount, sizeof( PopArtEntry ), ImplPopArtCmpFnc );
-
-            // get last used entry
-            sal_uLong nFirstEntry;
-            sal_uLong nLastEntry = 0;
-
-            for( n = 0; n < nEntryCount; n++ )
-                if( pPopArtTable[ n ].mnCount )
-                    nLastEntry = n;
-
-            // rotate palette (one entry)
-            const BitmapColor aFirstCol( pWriteAcc->GetPaletteColor( sal::static_int_cast<sal_uInt16>(pPopArtTable[ 0 ].mnIndex) ) );
-            for( nFirstEntry = 0; nFirstEntry < nLastEntry; nFirstEntry++ )
-            {
-                pWriteAcc->SetPaletteColor( sal::static_int_cast<sal_uInt16>(pPopArtTable[ nFirstEntry ].mnIndex),
-                                            pWriteAcc->GetPaletteColor( sal::static_int_cast<sal_uInt16>(pPopArtTable[ nFirstEntry + 1 ].mnIndex) ) );
-            }
-            pWriteAcc->SetPaletteColor( sal::static_int_cast<sal_uInt16>(pPopArtTable[ nLastEntry ].mnIndex), aFirstCol );
-
-            // cleanup
-            delete[] pPopArtTable;
-            pWriteAcc.reset();
-            bRet = true;
-        }
-    }
 
     return bRet;
 }
