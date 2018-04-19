@@ -25,6 +25,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/weld.hxx>
 #include <svx/checklbx.hxx>
 #include <editeng/hangulhanja.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -225,25 +226,22 @@ namespace svx
         void                AddDict( const OUString& _rName, bool _bChecked );
     };
 
-
-    class HangulHanjaNewDictDialog : public ModalDialog
+    class HangulHanjaNewDictDialog : public weld::GenericDialogController
     {
     private:
-        VclPtr<Edit> m_pDictNameED;
-        VclPtr<OKButton> m_pOkBtn;
-
         bool m_bEntered;
 
-        DECL_LINK( OKHdl, Button*, void );
-        DECL_LINK( ModifyHdl, Edit&, void );
+        std::unique_ptr<weld::Button> m_xOkBtn;
+        std::unique_ptr<weld::Entry> m_xDictNameED;
+
+        DECL_LINK(OKHdl, weld::Button&, void);
+        DECL_LINK(ModifyHdl, weld::Entry&, void);
     public:
-        HangulHanjaNewDictDialog( vcl::Window* _pParent );
+        HangulHanjaNewDictDialog(weld::Window* pParent);
         virtual ~HangulHanjaNewDictDialog() override;
-        virtual void dispose() override;
 
         bool GetName( OUString& _rRetName ) const;
     };
-
 
     class SuggestionList;
 

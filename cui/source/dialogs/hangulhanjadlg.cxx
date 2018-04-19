@@ -1025,9 +1025,9 @@ namespace svx
     IMPL_LINK_NOARG(HangulHanjaOptionsDialog, NewDictHdl, Button*, void)
     {
         OUString                    aName;
-        ScopedVclPtrInstance< HangulHanjaNewDictDialog > aNewDlg(this);
-        aNewDlg->Execute();
-        if( aNewDlg->GetName( aName ) )
+        HangulHanjaNewDictDialog aNewDlg(GetFrameWeld());
+        aNewDlg.run();
+        if (aNewDlg.GetName(aName))
         {
             if( m_xConversionDictionaryList.is() )
             {
@@ -1176,51 +1176,42 @@ namespace svx
         pEntry->SetUserData( new OUString( _rName ) );
     }
 
-    IMPL_LINK_NOARG(HangulHanjaNewDictDialog, OKHdl, Button*, void)
+    IMPL_LINK_NOARG(HangulHanjaNewDictDialog, OKHdl, weld::Button&, void)
     {
-        OUString  aName(comphelper::string::stripEnd(m_pDictNameED->GetText(), ' '));
+        OUString  aName(comphelper::string::stripEnd(m_xDictNameED->get_text(), ' '));
 
         m_bEntered = !aName.isEmpty();
-        if( m_bEntered )
-            m_pDictNameED->SetText( aName );     // do this in case of trailing chars have been deleted
+        if (m_bEntered)
+            m_xDictNameED->set_text(aName);     // do this in case of trailing chars have been deleted
 
-        EndDialog( RET_OK );
+        m_xDialog->response(RET_OK);
     }
 
-    IMPL_LINK_NOARG(HangulHanjaNewDictDialog, ModifyHdl, Edit&, void)
+    IMPL_LINK_NOARG(HangulHanjaNewDictDialog, ModifyHdl, weld::Entry&, void)
     {
-        OUString aName(comphelper::string::stripEnd(m_pDictNameED->GetText(), ' '));
+        OUString aName(comphelper::string::stripEnd(m_xDictNameED->get_text(), ' '));
 
-        m_pOkBtn->Enable( !aName.isEmpty() );
+        m_xOkBtn->set_sensitive(!aName.isEmpty());
     }
 
-    HangulHanjaNewDictDialog::HangulHanjaNewDictDialog(vcl::Window* pParent)
-        : ModalDialog(pParent, "HangulHanjaAddDialog", "cui/ui/hangulhanjaadddialog.ui")
+    HangulHanjaNewDictDialog::HangulHanjaNewDictDialog(weld::Window* pParent)
+        : GenericDialogController(pParent, "cui/ui/hangulhanjaadddialog.ui", "HangulHanjaAddDialog")
         , m_bEntered(false)
+        , m_xOkBtn(m_xBuilder->weld_button("ok"))
+        , m_xDictNameED(m_xBuilder->weld_entry("entry"))
     {
-        get(m_pOkBtn, "ok");
-        get(m_pDictNameED, "entry");
-
-        m_pOkBtn->SetClickHdl( LINK( this, HangulHanjaNewDictDialog, OKHdl ) );
-        m_pDictNameED->SetModifyHdl( LINK( this, HangulHanjaNewDictDialog, ModifyHdl ) );
+        m_xOkBtn->connect_clicked( LINK( this, HangulHanjaNewDictDialog, OKHdl ) );
+        m_xDictNameED->connect_changed( LINK( this, HangulHanjaNewDictDialog, ModifyHdl ) );
     }
 
     HangulHanjaNewDictDialog::~HangulHanjaNewDictDialog()
     {
-        disposeOnce();
-    }
-
-    void HangulHanjaNewDictDialog::dispose()
-    {
-        m_pDictNameED.clear();
-        m_pOkBtn.clear();
-        ModalDialog::dispose();
     }
 
     bool HangulHanjaNewDictDialog::GetName( OUString& _rRetName ) const
     {
         if( m_bEntered )
-            _rRetName = comphelper::string::stripEnd(m_pDictNameED->GetText(), ' ');
+            _rRetName = comphelper::string::stripEnd(m_xDictNameED->get_text(), ' ');
 
         return m_bEntered;
     }
