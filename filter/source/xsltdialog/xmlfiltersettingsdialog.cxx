@@ -759,8 +759,8 @@ void XMLFilterSettingsDialog::onTest()
     {
         filter_info_impl* pInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
 
-        ScopedVclPtrInstance< XMLFilterTestDialog > aDlg(this, mxContext);
-        aDlg->test( *pInfo );
+        XMLFilterTestDialog aDlg(GetFrameWeld(), mxContext);
+        aDlg.test( *pInfo );
     }
 }
 
