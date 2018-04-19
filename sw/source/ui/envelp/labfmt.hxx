@@ -22,6 +22,8 @@
 #include "swuilabimp.hxx"
 #include <labimg.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld.hxx>
+
 class SwLabFormatPage;
 
 class SwLabPreview : public vcl::Window
@@ -108,28 +110,30 @@ public:
     SwLabDlg* GetParentSwLabDlg() {return static_cast<SwLabDlg*>(GetParentDialog());}
 };
 
-class SwSaveLabelDlg : public ModalDialog
+class SwSaveLabelDlg : public weld::GenericDialogController
 {
-    VclPtr<ComboBox>   m_pMakeCB;
-    VclPtr<Edit>       m_pTypeED;
-    VclPtr<OKButton>   m_pOKPB;
-
     bool        bSuccess;
     VclPtr<SwLabFormatPage>   pLabPage;
     SwLabRec&       rLabRec;
 
-    DECL_LINK(OkHdl, Button*, void);
-    DECL_LINK(ModifyHdl, Edit&, void);
+    std::unique_ptr<weld::ComboBoxText> m_xMakeCB;
+    std::unique_ptr<weld::Entry>        m_xTypeED;
+    std::unique_ptr<weld::Button>       m_xOKPB;
+
+    DECL_LINK(OkHdl, weld::Button&, void);
+    DECL_LINK(ModifyEntryHdl, weld::Entry&, void);
+    DECL_LINK(ModifyComboHdl, weld::ComboBoxText&, void);
+
+    void Modify();
 
 public:
     SwSaveLabelDlg(SwLabFormatPage* pParent, SwLabRec& rRec);
     virtual ~SwSaveLabelDlg() override;
-    virtual void dispose() override;
 
     void SetLabel(const OUString& rMake, const OUString& rType)
     {
-        m_pMakeCB->SetText(rMake);
-        m_pTypeED->SetText(rType);
+        m_xMakeCB->set_entry_text(rMake);
+        m_xTypeED->set_text(rType);
     }
     bool GetLabel(SwLabItem& rItem);
 };

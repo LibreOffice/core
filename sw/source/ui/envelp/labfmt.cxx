@@ -574,10 +574,10 @@ IMPL_LINK_NOARG(SwLabFormatPage, SaveHdl, Button*, void)
     aRec.m_nPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
     aRec.m_nPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
     aRec.m_bCont = aItem.m_bCont;
-    ScopedVclPtrInstance< SwSaveLabelDlg > pSaveDlg(this, aRec);
-    pSaveDlg->SetLabel(aItem.m_aLstMake, aItem.m_aLstType);
-    pSaveDlg->Execute();
-    if(pSaveDlg->GetLabel(aItem))
+    SwSaveLabelDlg aSaveDlg(this, aRec);
+    aSaveDlg.SetLabel(aItem.m_aLstMake, aItem.m_aLstType);
+    aSaveDlg.run();
+    if (aSaveDlg.GetLabel(aItem))
     {
         bModified = false;
         const std::vector<OUString>& rMan = GetParentSwLabDlg()->GetLabelsConfig().GetManufacturers();
@@ -592,60 +592,47 @@ IMPL_LINK_NOARG(SwLabFormatPage, SaveHdl, Button*, void)
 }
 
 SwSaveLabelDlg::SwSaveLabelDlg(SwLabFormatPage* pParent, SwLabRec& rRec)
-    : ModalDialog(pParent, "SaveLabelDialog",
-        "modules/swriter/ui/savelabeldialog.ui")
+    : GenericDialogController(pParent->GetFrameWeld(), "modules/swriter/ui/savelabeldialog.ui", "SaveLabelDialog")
     , bSuccess(false)
     , pLabPage(pParent)
     , rLabRec(rRec)
+    , m_xMakeCB(m_xBuilder->weld_combo_box_text("brand"))
+    , m_xTypeED(m_xBuilder->weld_entry("type"))
+    , m_xOKPB(m_xBuilder->weld_button("ok"))
 {
-    get(m_pMakeCB, "brand");
-    get(m_pTypeED, "type");
-    get(m_pOKPB, "ok");
-
-    m_pOKPB->SetClickHdl(LINK(this, SwSaveLabelDlg, OkHdl));
-    Link<Edit&,void> aLk(LINK(this, SwSaveLabelDlg, ModifyHdl));
-    m_pMakeCB->SetModifyHdl(aLk);
-    m_pTypeED->SetModifyHdl(aLk);
+    m_xOKPB->connect_clicked(LINK(this, SwSaveLabelDlg, OkHdl));
+    m_xMakeCB->connect_changed(LINK(this, SwSaveLabelDlg, ModifyComboHdl));
+    m_xTypeED->connect_changed(LINK(this, SwSaveLabelDlg, ModifyEntryHdl));
 
     SwLabelConfig& rCfg = pLabPage->GetParentSwLabDlg()->GetLabelsConfig();
     const std::vector<OUString>& rMan = rCfg.GetManufacturers();
     for (const auto & i : rMan)
     {
-        m_pMakeCB->InsertEntry(i);
+        m_xMakeCB->append_text(i);
     }
 }
 
 SwSaveLabelDlg::~SwSaveLabelDlg()
 {
-    disposeOnce();
 }
 
-void SwSaveLabelDlg::dispose()
-{
-    m_pMakeCB.clear();
-    m_pTypeED.clear();
-    m_pOKPB.clear();
-    pLabPage.clear();
-    ModalDialog::dispose();
-}
-
-IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl, Button*, void)
+IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl, weld::Button&, void)
 {
     SwLabelConfig& rCfg = pLabPage->GetParentSwLabDlg()->GetLabelsConfig();
-    OUString sMake(m_pMakeCB->GetText());
-    OUString sType(m_pTypeED->GetText());
+    OUString sMake(m_xMakeCB->get_active_text());
+    OUString sType(m_xTypeED->get_text());
     if(rCfg.HasLabel(sMake, sType))
     {
         if ( rCfg.IsPredefinedLabel(sMake, sType) )
         {
             SAL_WARN( "sw.envelp", "label is predefined and cannot be overwritten" );
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/cannotsavelabeldialog.ui"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xDialog.get(), "modules/swriter/ui/cannotsavelabeldialog.ui"));
             std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("CannotSaveLabelDialog"));
             xBox->run();
             return;
         }
 
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/querysavelabeldialog.ui"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xDialog.get(), "modules/swriter/ui/querysavelabeldialog.ui"));
         std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QuerySaveLabelDialog"));
         xQuery->set_primary_text(xQuery->get_primary_text().
             replaceAll("%1", sMake).replaceAll("%2", sType));
@@ -658,20 +645,30 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl, Button*, void)
     rLabRec.m_aType = sType;
     rCfg.SaveLabel(sMake, sType, rLabRec);
     bSuccess = true;
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(SwSaveLabelDlg, ModifyHdl, Edit&, void)
+void SwSaveLabelDlg::Modify()
 {
-    m_pOKPB->Enable(!m_pMakeCB->GetText().isEmpty() && !m_pTypeED->GetText().isEmpty());
+    m_xOKPB->set_sensitive(!m_xMakeCB->get_active_text().isEmpty() && !m_xTypeED->get_text().isEmpty());
+}
+
+IMPL_LINK_NOARG(SwSaveLabelDlg, ModifyComboHdl, weld::ComboBoxText&, void)
+{
+    Modify();
+}
+
+IMPL_LINK_NOARG(SwSaveLabelDlg, ModifyEntryHdl, weld::Entry&, void)
+{
+    Modify();
 }
 
 bool SwSaveLabelDlg::GetLabel(SwLabItem& rItem)
 {
     if(bSuccess)
     {
-        rItem.m_aMake = m_pMakeCB->GetText();
-        rItem.m_aType = m_pTypeED->GetText();
+        rItem.m_aMake = m_xMakeCB->get_active_text();
+        rItem.m_aType = m_xTypeED->get_text();
         rItem.m_lHDist  = rLabRec.m_nHDist;
         rItem.m_lVDist  = rLabRec.m_nVDist;
         rItem.m_lWidth  = rLabRec.m_nWidth;
