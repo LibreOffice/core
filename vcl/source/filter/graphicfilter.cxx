@@ -1572,6 +1572,7 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream)
             nGraphicContentSize = nStreamLength;
             pGraphicContent.reset(new sal_uInt8[nGraphicContentSize]);
 
+            rIStream.Seek(nStreamBegin);
             rIStream.ReadBytes(pGraphicContent.get(), nStreamLength);
 
             if (!rIStream.GetError())
