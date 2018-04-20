@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_b411fbae",
+        "filename": "cui/source/dialogs/hangulhanjadlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1753,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-04-20T07:40:37Z",
+      "side": 1,
+      "message": "\u003e\u003d 5 ?",
+      "revId": "32778ad663f9f96816366aaaea2131273ce01d18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
