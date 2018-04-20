@@ -125,6 +125,7 @@ public:
     void            SetNotifyHdl( const Link<Animation*,void>& rLink ) { maNotifyLink = rLink; }
     const Link<Animation*,void>& GetNotifyHdl() const { return maNotifyLink; }
 
+    std::vector< std::unique_ptr<AnimationBitmap> >& GetAnimationFrames() { return maList; }
     size_t          Count() const { return maList.size(); }
     bool            Insert( const AnimationBitmap& rAnimationBitmap );
     const AnimationBitmap&
@@ -149,10 +150,6 @@ public:
                         short nChannelBPercent,
                         double fGamma = 1.0,
                         bool bInvert = false );
-
-    bool            Filter(
-                        BmpFilter eFilter,
-                        const BmpFilterParam* pFilterParam = nullptr );
 
     friend VCL_DLLPUBLIC SvStream& ReadAnimation( SvStream& rIStream, Animation& rAnimation );
     friend VCL_DLLPUBLIC SvStream& WriteAnimation( SvStream& rOStream, const Animation& rAnimation );
