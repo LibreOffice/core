@@ -37,7 +37,8 @@ public:
     virtual void set_sensitive(bool sensitive) = 0;
     virtual bool get_sensitive() const = 0;
     virtual void set_visible(bool visible) = 0;
-    virtual bool get_visible() const = 0;
+    virtual bool get_visible() const = 0; //if this widget visibility is true
+    virtual bool is_visible() const = 0; //if this widget visibility and all parents is true
     virtual void grab_focus() = 0;
     virtual bool has_focus() const = 0;
     virtual void show() = 0;
@@ -155,6 +156,8 @@ public:
 
     void connect_help(const Link<Widget&, bool>& rLink) { m_aHelpRequestHdl = rLink; }
 
+    virtual SystemEnvData get_system_data() const = 0;
+
     virtual void resize_to_request() = 0;
 };
 
@@ -189,6 +192,7 @@ public:
         = 0;
     virtual void set_default_response(int response) = 0;
     virtual Button* get_widget_for_response(int response) = 0;
+    virtual Container* weld_content_area() = 0;
 };
 
 class VCL_DLLPUBLIC MessageDialog : virtual public Dialog

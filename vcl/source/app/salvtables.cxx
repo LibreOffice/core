@@ -37,6 +37,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/slider.hxx>
+#include <vcl/sysdata.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/unowrap.hxx>
@@ -213,6 +214,11 @@ public:
     virtual bool get_visible() const override
     {
         return m_xWidget->IsVisible();
+    }
+
+    virtual bool is_visible() const override
+    {
+        return m_xWidget->IsReallyVisible();
     }
 
     virtual void grab_focus() override
@@ -562,6 +568,11 @@ public:
         return true;
     }
 
+    virtual SystemEnvData get_system_data() const override
+    {
+        return *m_xWindow->GetSystemData();
+    }
+
     virtual ~SalInstanceWindow() override
     {
         clear_child_help(m_xWindow);
@@ -621,6 +632,11 @@ public:
     virtual void set_default_response(int nResponse) override
     {
         m_xDialog->set_default_response(nResponse);
+    }
+
+    virtual Container* weld_content_area() override
+    {
+        return new SalInstanceContainer(m_xDialog->get_content_area(), false);
     }
 };
 

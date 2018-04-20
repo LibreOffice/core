@@ -51,6 +51,7 @@ namespace vcl {
     class PrintDialog;
 }
 
+namespace weld { class Window; }
 
 enum class PrinterSupport
 {
@@ -291,8 +292,8 @@ public:
     bool                        SetJobSetup( const JobSetup& rSetup );
     const JobSetup&             GetJobSetup() const { return maJobSetup; }
 
-    bool                        Setup( vcl::Window* pWindow,
-                                       PrinterSetupMode eMode = PrinterSetupMode::DocumentGlobal );
+    bool                        Setup(weld::Window* pWindow,
+                                      PrinterSetupMode eMode = PrinterSetupMode::DocumentGlobal);
     bool                        SetPrinterProps( const Printer* pPrinter );
 
     /** SetPrinterOptions is used internally only now
@@ -559,7 +560,7 @@ public:
     SAL_DLLPRIVATE    void              pushPropertiesToPrinter();
     SAL_DLLPRIVATE    void              resetPaperToLastConfigured();
     VCL_PLUGIN_PUBLIC void              setJobState( css::view::PrintableState );
-    SAL_DLLPRIVATE    void              setupPrinter( vcl::Window* i_pDlgParent );
+    SAL_DLLPRIVATE    void              setupPrinter( weld::Window* i_pDlgParent );
 
     SAL_DLLPRIVATE    int               getPageCountProtected() const;
     SAL_DLLPRIVATE    css::uno::Sequence< css::beans::PropertyValue >

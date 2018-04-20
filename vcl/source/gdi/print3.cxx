@@ -796,7 +796,7 @@ void PrinterController::resetPrinterOptions( bool i_bFileOutput )
     mpImplData->mxPrinter->SetPrinterOptions( aOpt );
 }
 
-void PrinterController::setupPrinter( vcl::Window* i_pParent )
+void PrinterController::setupPrinter( weld::Window* i_pParent )
 {
     bool bRet = false;
 
