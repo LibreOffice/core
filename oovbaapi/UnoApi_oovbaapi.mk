@@ -219,6 +219,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,ooo/vba/dao,\
 $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,ooo/vba/excel,\
     Constants \
 	XApplication \
+	XApplicationOutgoing \
 	XAxes \
 	XAxis \
 	XAxisTitle \
