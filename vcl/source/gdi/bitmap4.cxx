@@ -25,6 +25,7 @@
 #include <vcl/BitmapMedianFilter.hxx>
 #include <vcl/BitmapSobelGreyFilter.hxx>
 #include <vcl/BitmapSolarizeFilter.hxx>
+#include <vcl/BitmapSepiaFilter.hxx>
 #include <vcl/BitmapPopArtFilter.hxx>
 
 #include <bitmapwriteaccess.hxx>
@@ -87,7 +88,11 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
         break;
 
         case BmpFilter::Sepia:
-            bRet = ImplSepia( pFilterParam );
+        {
+            BitmapEx aBmpEx(*this);
+            bRet = BitmapFilter::Filter(aBmpEx, BitmapSepiaFilter(pFilterParam->mnSepiaPercent));
+            *this = aBmpEx.GetBitmap();
+        }
         break;
 
         case BmpFilter::Mosaic:
@@ -225,90 +230,6 @@ bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam )
                 maPrefMapMode = aMap;
                 maPrefSize = aSize;
             }
-        }
-    }
-
-    return bRet;
-}
-
-bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam )
-{
-    ScopedReadAccess    pReadAcc(*this);
-    bool                bRet = false;
-
-    if( pReadAcc )
-    {
-        long            nSepiaPercent = ( pFilterParam && pFilterParam->meFilter == BmpFilter::Sepia ) ?
-                                        pFilterParam->mnSepiaPercent : 10;
-        const long      nSepia = 10000 - 100 * SAL_BOUND( nSepiaPercent, 0, 100 );
-        BitmapPalette   aSepiaPal( 256 );
-
-        for( sal_uInt16 i = 0; i < 256; i++ )
-        {
-            BitmapColor&    rCol = aSepiaPal[ i ];
-            const sal_uInt8 cSepiaValue = static_cast<sal_uInt8>( nSepia * i / 10000 );
-
-            rCol.SetRed( static_cast<sal_uInt8>(i) );
-            rCol.SetGreen( cSepiaValue );
-            rCol.SetBlue( cSepiaValue );
-        }
-
-        Bitmap              aNewBmp( GetSizePixel(), 8, &aSepiaPal );
-        BitmapScopedWriteAccess pWriteAcc(aNewBmp);
-
-        if( pWriteAcc )
-        {
-            BitmapColor aCol( sal_uInt8(0) );
-            const long  nWidth = pWriteAcc->Width();
-            const long  nHeight = pWriteAcc->Height();
-
-            if( pReadAcc->HasPalette() )
-            {
-                const sal_uInt16             nPalCount = pReadAcc->GetPaletteEntryCount();
-                std::unique_ptr<sal_uInt8[]> pIndexMap( new sal_uInt8[ nPalCount ] );
-                for( sal_uInt16 i = 0; i < nPalCount; i++ )
-                    pIndexMap[ i ] = pReadAcc->GetPaletteColor( i ).GetLuminance();
-
-                for( long nY = 0; nY < nHeight ; nY++ )
-                {
-                    Scanline pScanline = pWriteAcc->GetScanline(nY);
-                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                    for( long nX = 0; nX < nWidth; nX++ )
-                    {
-                        aCol.SetIndex( pIndexMap[ pReadAcc->GetIndexFromData( pScanlineRead, nX ) ] );
-                        pWriteAcc->SetPixelOnData( pScanline, nX, aCol );
-                    }
-                }
-            }
-            else
-            {
-                for( long nY = 0; nY < nHeight ; nY++ )
-                {
-                    Scanline pScanline = pWriteAcc->GetScanline(nY);
-                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                    for( long nX = 0; nX < nWidth; nX++ )
-                    {
-                        aCol.SetIndex( pReadAcc->GetPixelFromData( pScanlineRead, nX ).GetLuminance() );
-                        pWriteAcc->SetPixelOnData( pScanline, nX, aCol );
-                    }
-                }
-            }
-
-            pWriteAcc.reset();
-            bRet = true;
-        }
-
-        pReadAcc.reset();
-
-        if( bRet )
-        {
-            const MapMode   aMap( maPrefMapMode );
-            const Size      aSize( maPrefSize );
-
-            *this = aNewBmp;
-
-            maPrefMapMode = aMap;
-            maPrefSize = aSize;
         }
     }
 
