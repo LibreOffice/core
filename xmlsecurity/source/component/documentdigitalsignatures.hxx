@@ -86,6 +86,10 @@ public:
 
     // XDocumentDigitalSignatures
     sal_Bool SAL_CALL signDocumentContent( const css::uno::Reference< css::embed::XStorage >& xStorage, const css::uno::Reference< css::io::XStream >& xSignStream ) override;
+    sal_Bool SAL_CALL signDocumentContentWithCertificate(
+        const css::uno::Reference<css::embed::XStorage>& Storage,
+        const css::uno::Reference<css::io::XStream>& xSignStream,
+        const css::uno::Reference<css::security::XCertificate>& xCertificate) override;
     css::uno::Sequence< css::security::DocumentSignatureInformation > SAL_CALL verifyDocumentContentSignatures( const css::uno::Reference< css::embed::XStorage >& xStorage, const css::uno::Reference< css::io::XInputStream >& xSignInStream ) override;
     void SAL_CALL showDocumentContentSignatures( const css::uno::Reference< css::embed::XStorage >& xStorage, const css::uno::Reference< css::io::XInputStream >& xSignInStream ) override;
     OUString SAL_CALL getDocumentContentSignatureDefaultStreamName(  ) override;

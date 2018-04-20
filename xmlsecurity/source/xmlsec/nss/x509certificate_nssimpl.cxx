@@ -28,6 +28,7 @@
 
 #include <sal/config.h>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include "x509certificate_nssimpl.hxx"
 
@@ -491,5 +492,20 @@ sal_Int32 SAL_CALL X509Certificate_NssImpl::getCertificateUsage(  )
 
     return usage;
 }
+
+/* XServiceInfo */
+OUString SAL_CALL X509Certificate_NssImpl::getImplementationName()
+{
+    return OUString("com.sun.star.xml.security.gpg.XCertificate_NssImpl");
+}
+
+/* XServiceInfo */
+sal_Bool SAL_CALL X509Certificate_NssImpl::supportsService(const OUString& serviceName)
+{
+    return cppu::supportsService(this, serviceName);
+}
+
+/* XServiceInfo */
+Sequence<OUString> SAL_CALL X509Certificate_NssImpl::getSupportedServiceNames() { return { OUString() }; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

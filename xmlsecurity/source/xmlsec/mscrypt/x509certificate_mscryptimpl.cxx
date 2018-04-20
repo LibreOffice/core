@@ -22,6 +22,7 @@
 #include <sal/config.h>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/windowserrorstring.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "x509certificate_mscryptimpl.hxx"
 #include <certificateextension_xmlsecimpl.hxx>
 #include "sanextension_mscryptimpl.hxx"
@@ -646,6 +647,24 @@ sal_Int32 SAL_CALL X509Certificate_MSCryptImpl::getCertificateUsage(  )
     }
 
     return usage;
+}
+
+/* XServiceInfo */
+OUString SAL_CALL X509Certificate_MSCryptImpl::getImplementationName()
+{
+    return OUString("com.sun.star.xml.security.gpg.XCertificate_MsCryptImpl");
+}
+
+/* XServiceInfo */
+sal_Bool SAL_CALL X509Certificate_MSCryptImpl::supportsService(const OUString& serviceName)
+{
+    return cppu::supportsService(this, serviceName);
+}
+
+/* XServiceInfo */
+Sequence<OUString> SAL_CALL X509Certificate_MSCryptImpl::getSupportedServiceNames()
+{
+    return { OUString() };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

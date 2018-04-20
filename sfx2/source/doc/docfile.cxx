@@ -66,6 +66,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/XCertificate.hpp>
 #include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/fileutil.hxx>
@@ -135,6 +136,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::security;
 
 namespace {
 
@@ -3573,7 +3575,8 @@ void SfxMedium::CreateTempFileNoCopy()
     CloseStorage();
 }
 
-bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFVersion, bool bHasValidDocumentSignature )
+bool SfxMedium::SignContents_Impl(const Reference<XCertificate> xCert, bool bScriptingContent,
+                                  const OUString& aODFVersion, bool bHasValidDocumentSignature)
 {
     bool bChanges = false;
 
@@ -3661,7 +3664,15 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
                         if (GetFilter() && GetFilter()->IsOwnFormat())
                             xStream.set(xMetaInf->openStreamElement(xSigner->getDocumentContentSignatureDefaultStreamName(), embed::ElementModes::READWRITE), uno::UNO_SET_THROW);
 
-                        if ( xSigner->signDocumentContent( GetZipStorageToSign_Impl(), xStream ) )
+                        bool bSuccess = false;
+                        if (xCert.is())
+                            bSuccess = xSigner->signDocumentContentWithCertificate(
+                                GetZipStorageToSign_Impl(), xStream, xCert);
+                        else
+                            bSuccess = xSigner->signDocumentContent(GetZipStorageToSign_Impl(),
+                                                                    xStream);
+
+                        if (bSuccess)
                         {
                             uno::Reference< embed::XTransactedObject > xTransact( xMetaInf, uno::UNO_QUERY_THROW );
                             xTransact->commit();
@@ -3677,8 +3688,21 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
                     {
                         // OOXML.
                         uno::Reference<io::XStream> xStream;
-                        // We need read-write to be able to add the signature relation.
-                        if (xSigner->signDocumentContent(GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream))
+
+                        bool bSuccess = false;
+                        if (xCert.is())
+                        {
+                            bSuccess = xSigner->signDocumentContentWithCertificate(
+                                GetZipStorageToSign_Impl(), xStream, xCert);
+                        }
+                        else
+                        {
+                            // We need read-write to be able to add the signature relation.
+                            bSuccess =xSigner->signDocumentContent(
+                                GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream);
+                        }
+
+                        if (bSuccess)
                         {
                             uno::Reference<embed::XTransactedObject> xTransact(xWriteableZipStor, uno::UNO_QUERY_THROW);
                             xTransact->commit();

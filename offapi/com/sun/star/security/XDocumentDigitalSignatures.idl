@@ -46,6 +46,17 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
     boolean signDocumentContent( [in] ::com::sun::star::embed::XStorage xStorage,
                                  [in] ::com::sun::star::io::XStream xSignStream);
 
+    /** Signs the content of the document including text and pictures
+        using the given XCertificate
+
+       Macros will not be signed.
+
+       @since LibreOffice 6.1
+     */
+    boolean signDocumentContentWithCertificate( [in] ::com::sun::star::embed::XStorage xStorage,
+                                                [in] ::com::sun::star::io::XStream xSignStream,
+                                                [in] ::com::sun::star::security::XCertificate xCertificate);
+
     /** checks for digital signatures and their status.
 
         <p>Only document content will be checked.</p>

@@ -13,6 +13,7 @@
 
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/security/KeyUsage.hpp>
 #include <officecfg/Office/Common.hxx>
@@ -245,5 +246,20 @@ const GpgME::Key* CertificateImpl::getCertificate() const
 {
     return &m_pKey;
 }
+
+/* XServiceInfo */
+OUString SAL_CALL CertificateImpl::getImplementationName()
+{
+    return OUString("com.sun.star.xml.security.gpg.XCertificate_GpgImpl");
+}
+
+/* XServiceInfo */
+sal_Bool SAL_CALL CertificateImpl::supportsService(const OUString& serviceName)
+{
+    return cppu::supportsService(this, serviceName);
+}
+
+/* XServiceInfo */
+Sequence<OUString> SAL_CALL CertificateImpl::getSupportedServiceNames() { return { OUString() }; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

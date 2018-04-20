@@ -359,6 +359,7 @@ public:
     // xmlsec05, check with SFX team
     SignatureState              GetDocumentSignatureState();
     void                        SignDocumentContent();
+    void                        SignDocumentContent(css::uno::Reference<css::security::XCertificate> xCert);
     SignatureState              GetScriptingSignatureState();
     void                        SignScriptingContent();
     DECL_LINK(SignDocumentHandler, Button*, void);
@@ -741,7 +742,10 @@ public:
             const css::uno::Reference< css::security::XDocumentDigitalSignatures >& xSigner
                 = css::uno::Reference< css::security::XDocumentDigitalSignatures >() );
 
-    SAL_DLLPRIVATE void ImplSign( bool bScriptingContent = false );
+    SAL_DLLPRIVATE void
+    ImplSign(const css::uno::Reference<css::security::XCertificate> xCert,
+             bool bScriptingContent = false);
+
     SAL_DLLPRIVATE bool QuerySaveSizeExceededModules_Impl( const css::uno::Reference< css::task::XInteractionHandler >& xHandler );
     SAL_DLLPRIVATE bool QueryAllowExoticFormat_Impl( const css::uno::Reference< css::task::XInteractionHandler >& xHandler,
                                                      const OUString& rURL,

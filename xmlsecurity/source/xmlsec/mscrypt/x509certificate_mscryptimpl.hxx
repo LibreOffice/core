@@ -37,6 +37,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/SecurityException.hpp>
 #include <com/sun/star/security/CertificateKind.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
@@ -44,7 +45,8 @@
 
 class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
     css::security::XCertificate ,
-    css::lang::XUnoTunnel > , public xmlsecurity::Certificate
+    css::lang::XUnoTunnel,
+    css::lang::XServiceInfo > , public xmlsecurity::Certificate
 {
     private:
         const CERT_CONTEXT* m_pCertContext ;
@@ -90,6 +92,11 @@ class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
         const CERT_CONTEXT* getMswcryCert() const ;
         /// @throws css::uno::RuntimeException
         void setRawCert( css::uno::Sequence< sal_Int8 > const & rawCert ) ;
+
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_X509CERTIFICATE_MSCRYPTIMPL_HXX
