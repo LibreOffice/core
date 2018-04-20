@@ -15,10 +15,12 @@
 #include <strings.hrc>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <comphelper/xmltools.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/weld.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -137,40 +139,57 @@ void SignSignatureLineDialog::ValidateFields()
 
 void SignSignatureLineDialog::Apply()
 {
-    // Read svg and replace placeholder texts
-    OUString aSvgImage(getSignatureImage());
-    aSvgImage = aSvgImage.replaceAll("[SIGNER_NAME]", getCDataString(m_aSuggestedSignerName));
-    aSvgImage = aSvgImage.replaceAll("[SIGNER_TITLE]", getCDataString(m_aSuggestedSignerTitle));
-
-    aSvgImage = aSvgImage.replaceAll("[SIGNATURE]", getCDataString(m_xEditName->get_text()));
-    OUString aIssuerLine = CuiResId(RID_SVXSTR_SIGNATURELINE_SIGNED_BY)
-                               .replaceFirst("%1", m_xSelectedCertifate->getIssuerName());
-    aSvgImage = aSvgImage.replaceAll("[SIGNED_BY]", getCDataString(aIssuerLine));
-    aSvgImage = aSvgImage.replaceAll("[INVALID_SIGNATURE]", "");
-
-    OUString aDate;
-    if (m_bShowSignDate)
+    if (!m_xSelectedCertifate.is())
     {
-        const SvtSysLocale aSysLocale;
-        const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
-        Date aDateTime(Date::SYSTEM);
-        aDate = rLocaleData.getDate(aDateTime);
+        SAL_WARN("cui.dialogs", "No certificate selected!");
     }
-    aSvgImage = aSvgImage.replaceAll("[DATE]", aDate);
 
-    // Insert/Update graphic
-    SvMemoryStream aSvgStream(4096, 4096);
-    aSvgStream.WriteOString(OUStringToOString(aSvgImage, RTL_TEXTENCODING_UTF8));
-    Reference<XInputStream> xInputStream(new utl::OSeekableInputStreamWrapper(aSvgStream));
-    Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
-    Reference<XGraphicProvider> xProvider = css::graphic::GraphicProvider::create(xContext);
+    SfxObjectShell* pShell = SfxObjectShell::Current();
+    pShell->SignDocumentContent(m_xSelectedCertifate);
 
-    Sequence<PropertyValue> aMediaProperties(1);
-    aMediaProperties[0].Name = "InputStream";
-    aMediaProperties[0].Value <<= xInputStream;
-    Reference<XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
+    bool bSuccess = false; // TODO
 
-    m_xShapeProperties->setPropertyValue("Graphic", Any(xGraphic));
+    if (bSuccess)
+    {
+        // Read svg and replace placeholder texts
+        OUString aSvgImage(getSignatureImage());
+        aSvgImage = aSvgImage.replaceAll("[SIGNER_NAME]", getCDataString(m_aSuggestedSignerName));
+        aSvgImage = aSvgImage.replaceAll("[SIGNER_TITLE]", getCDataString(m_aSuggestedSignerTitle));
+
+        aSvgImage = aSvgImage.replaceAll("[SIGNATURE]", getCDataString(m_xEditName->get_text()));
+        OUString aIssuerLine = CuiResId(RID_SVXSTR_SIGNATURELINE_SIGNED_BY)
+                                   .replaceFirst("%1", m_xSelectedCertifate->getIssuerName());
+        aSvgImage = aSvgImage.replaceAll("[SIGNED_BY]", getCDataString(aIssuerLine));
+        aSvgImage = aSvgImage.replaceAll("[INVALID_SIGNATURE]", "");
+
+        OUString aDate;
+        if (m_bShowSignDate)
+        {
+            const SvtSysLocale aSysLocale;
+            const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
+            Date aDateTime(Date::SYSTEM);
+            aDate = rLocaleData.getDate(aDateTime);
+        }
+        aSvgImage = aSvgImage.replaceAll("[DATE]", aDate);
+
+        // Insert/Update graphic
+        SvMemoryStream aSvgStream(4096, 4096);
+        aSvgStream.WriteOString(OUStringToOString(aSvgImage, RTL_TEXTENCODING_UTF8));
+        Reference<XInputStream> xInputStream(new utl::OSeekableInputStreamWrapper(aSvgStream));
+        Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
+        Reference<XGraphicProvider> xProvider = css::graphic::GraphicProvider::create(xContext);
+
+        Sequence<PropertyValue> aMediaProperties(1);
+        aMediaProperties[0].Name = "InputStream";
+        aMediaProperties[0].Value <<= xInputStream;
+        Reference<XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
+
+        m_xShapeProperties->setPropertyValue("Graphic", Any(xGraphic));
+    }
+    else
+    {
+        // TODO: Show error dialog
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
