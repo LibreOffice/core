@@ -128,10 +128,8 @@ class MatchContext_Impl: public salhelper::Thread
     std::vector<OUString>           aCompletions;
     std::vector<OUString>           aURLs;
     svtools::AsynchronLink          aLink;
-    OUString                        aBaseURL;
     OUString                        aText;
     URLBox*                         pBox;
-    bool                            bOnlyDirectories;
 
     osl::Mutex mutex_;
     bool stopped_;
@@ -492,10 +490,8 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
 MatchContext_Impl::MatchContext_Impl(URLBox* pBoxP, const OUString& rText)
     : Thread( "MatchContext_Impl" )
     , aLink( LINK( this, MatchContext_Impl, Select_Impl ) )
-    , aBaseURL( pBoxP->aBaseURL )
     , aText( rText )
     , pBox( pBoxP )
-    , bOnlyDirectories( false )
     , stopped_(false)
     , commandId_(0)
 {
@@ -703,8 +699,6 @@ void MatchContext_Impl::ReadFolder( const OUString& rURL,
         {
             uno::Reference< XDynamicResultSet > xDynResultSet;
             ResultSetInclude eInclude = INCLUDE_FOLDERS_AND_DOCUMENTS;
-            if ( bOnlyDirectories )
-                eInclude = INCLUDE_FOLDERS_ONLY;
 
             xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
 
@@ -1150,8 +1144,8 @@ void MatchContext_Impl::doExecute()
 
     OUString aMatch;
     INetProtocol eProt = INetURLObject::CompareProtocolScheme( aText );
-    INetProtocol eBaseProt = INetURLObject::CompareProtocolScheme( aBaseURL );
-    if ( aBaseURL.isEmpty() )
+    INetProtocol eBaseProt = INetURLObject::CompareProtocolScheme( pBox->aBaseURL );
+    if ( pBox->aBaseURL.isEmpty() )
         eBaseProt = INetURLObject::CompareProtocolScheme( SvtPathOptions().GetWorkPath() );
     INetProtocol eSmartProt = INetProtocol::NotValid;
 
@@ -1164,7 +1158,7 @@ void MatchContext_Impl::doExecute()
         if( schedule() )
         {
             if ( eProt == INetProtocol::NotValid )
-                aMatch = SvtURLBox::ParseSmart( aText, aBaseURL );
+                aMatch = SvtURLBox::ParseSmart( aText, pBox->aBaseURL );
             else
                 aMatch = aText;
             if ( !aMatch.isEmpty() )
@@ -1261,10 +1255,6 @@ void MatchContext_Impl::doExecute()
             }
         }
     }
-
-    if ( bOnlyDirectories )
-        // don't scan history picklist if only directories are allowed, picklist contains only files
-        return;
 
     bool bFull = false;
 

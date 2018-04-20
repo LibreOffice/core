@@ -393,7 +393,6 @@ class VCL_DLLPUBLIC Scale : virtual public Widget
 {
 protected:
     Link<Scale&, void> m_aValueChangedHdl;
-    Link<Scale&, void> m_aOutputHdl;
 
     void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
 
