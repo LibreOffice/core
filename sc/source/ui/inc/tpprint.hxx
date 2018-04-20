@@ -21,19 +21,17 @@
 #define INCLUDED_SC_SOURCE_UI_INC_TPPRINT_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/fixed.hxx>
 
 class ScTpPrintOptions : public SfxTabPage
 {
     friend class VclPtr<ScTpPrintOptions>;
-    VclPtr<CheckBox>       m_pSkipEmptyPagesCB;
-    VclPtr<CheckBox>       m_pSelectedSheetsCB;
-    VclPtr<CheckBox>       m_pForceBreaksCB;
+    std::unique_ptr<weld::CheckButton>       m_xSkipEmptyPagesCB;
+    std::unique_ptr<weld::CheckButton>       m_xSelectedSheetsCB;
+    std::unique_ptr<weld::CheckButton>       m_xForceBreaksCB;
 
-            ScTpPrintOptions( vcl::Window* pParent, const SfxItemSet& rCoreSet );
+    ScTpPrintOptions(TabPageParent pPage, const SfxItemSet& rCoreSet);
 public:
     virtual ~ScTpPrintOptions() override;
-    virtual void dispose() override;
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rCoreSet );
     virtual bool        FillItemSet( SfxItemSet* rCoreSet ) override;
     virtual void        Reset( const SfxItemSet* rCoreSet ) override;

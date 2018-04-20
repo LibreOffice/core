@@ -254,54 +254,36 @@ void SwMMResultSaveDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-SwMMResultPrintDialog::SwMMResultPrintDialog()
-    : SfxModalDialog(nullptr, "MMResultPrintDialog", "modules/swriter/ui/mmresultprintdialog.ui")
-    , m_pTempPrinter(nullptr)
+SwMMResultPrintDialog::SwMMResultPrintDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "modules/swriter/ui/mmresultprintdialog.ui", "MMResultPrintDialog")
+    , m_xPrinterFT(m_xBuilder->weld_label("printerft"))
+    , m_xPrinterLB(m_xBuilder->weld_combo_box_text("printers"))
+    , m_xPrinterSettingsPB(m_xBuilder->weld_button("printersettings"))
+    , m_xPrintAllRB(m_xBuilder->weld_radio_button("printallrb"))
+    , m_xFromRB(m_xBuilder->weld_radio_button("fromrb"))
+    , m_xFromNF(m_xBuilder->weld_spin_button("from"))
+    , m_xToFT(m_xBuilder->weld_label("toft"))
+    , m_xToNF(m_xBuilder->weld_spin_button("to"))
+    , m_xOKButton(m_xBuilder->weld_button("ok"))
 {
-    get(m_pPrinterFT, "printerft");
-    get(m_pPrinterLB, "printers");
-    m_pPrinterLB->SetStyle(m_pPrinterLB->GetStyle() | WB_SORT);
-    get(m_pPrinterSettingsPB, "printersettings");
-    get(m_pPrintAllRB, "printallrb");
-    get(m_pFromRB, "fromrb");
-    get(m_pFromNF, "from-nospin");
-    get(m_pToFT, "toft");
-    get(m_pToNF, "to-nospin");
-    get(m_pOKButton, "ok");
+    m_xPrinterLB->make_sorted();
 
-    m_pPrinterLB->SetSelectHdl(LINK(this, SwMMResultPrintDialog, PrinterChangeHdl_Impl));
-    m_pPrinterSettingsPB->SetClickHdl(LINK(this, SwMMResultPrintDialog, PrinterSetupHdl_Impl));
+    m_xPrinterLB->connect_changed(LINK(this, SwMMResultPrintDialog, PrinterChangeHdl_Impl));
+    m_xPrinterSettingsPB->connect_clicked(LINK(this, SwMMResultPrintDialog, PrinterSetupHdl_Impl));
 
-    Link<Button*,void> aLink = LINK(this, SwMMResultPrintDialog, DocumentSelectionHdl_Impl);
-    m_pPrintAllRB->SetClickHdl(aLink);
-    m_pFromRB->SetClickHdl(aLink);
+    Link<weld::ToggleButton&,void> aLink = LINK(this, SwMMResultPrintDialog, DocumentSelectionHdl_Impl);
+    m_xPrintAllRB->connect_toggled(aLink);
+    m_xFromRB->connect_toggled(aLink);
     // m_pPrintAllRB is the default, so disable m_pFromNF and m_pToNF initially.
-    aLink.Call(m_pPrintAllRB);
+    aLink.Call(*m_xPrintAllRB);
 
-    m_pOKButton->SetClickHdl(LINK(this, SwMMResultPrintDialog, PrintHdl_Impl));
+    m_xOKButton->connect_clicked(LINK(this, SwMMResultPrintDialog, PrintHdl_Impl));
 
     FillInPrinterSettings();
 }
 
 SwMMResultPrintDialog::~SwMMResultPrintDialog()
 {
-    disposeOnce();
-}
-
-void SwMMResultPrintDialog::dispose()
-{
-    m_pPrinterFT.clear();
-    m_pPrinterLB.clear();
-    m_pPrinterSettingsPB.clear();
-    m_pPrintAllRB.clear();
-    m_pFromRB.clear();
-    m_pFromNF.clear();
-    m_pToFT.clear();
-    m_pToNF.clear();
-    m_pOKButton.clear();
-    m_pTempPrinter.clear();
-
-    SfxModalDialog::dispose();
 }
 
 SwMMResultEmailDialog::SwMMResultEmailDialog()
@@ -375,33 +357,30 @@ void SwMMResultPrintDialog::FillInPrinterSettings()
     const std::vector<OUString>& rPrinters = Printer::GetPrinterQueues();
     unsigned int nCount = rPrinters.size();
     bool bMergePrinterExists = false;
-    if ( nCount )
-    {
-        for( unsigned int i = 0; i < nCount; i++ )
-        {
-            m_pPrinterLB->InsertEntry( rPrinters[i] );
-            if( !bMergePrinterExists && rPrinters[i] == xConfigItem->GetSelectedPrinter() )
-                bMergePrinterExists = true;
-        }
 
+    for (unsigned int i = 0; i < nCount; ++i)
+    {
+        m_xPrinterLB->append_text( rPrinters[i] );
+        if( !bMergePrinterExists && rPrinters[i] == xConfigItem->GetSelectedPrinter() )
+            bMergePrinterExists = true;
     }
 
     assert(xConfigItem);
     if(!bMergePrinterExists)
     {
         SfxPrinter* pPrinter = pView->GetWrtShell().getIDocumentDeviceAccess().getPrinter( true );
-        m_pPrinterLB->SelectEntry(pPrinter->GetName());
+        m_xPrinterLB->set_active(pPrinter->GetName());
     }
     else
     {
-        m_pPrinterLB->SelectEntry(xConfigItem->GetSelectedPrinter());
+        m_xPrinterLB->set_active(xConfigItem->GetSelectedPrinter());
     }
 
     sal_Int32 count = xConfigItem->GetMergedDocumentCount();
-    m_pToNF->SetValue(count);
-    m_pToNF->SetMax(count);
+    m_xToNF->set_value(count);
+    m_xToNF->set_max(count);
 
-    m_pPrinterLB->SelectEntry(xConfigItem->GetSelectedPrinter());
+    m_xPrinterLB->set_active(xConfigItem->GetSelectedPrinter());
 }
 
 void SwMMResultEmailDialog::FillInEmailSettings()
@@ -469,12 +448,12 @@ IMPL_LINK(SwMMResultSaveDialog, DocumentSelectionHdl_Impl, Button*, pButton, voi
     m_pToNF->Enable(bEnableFromTo);
 }
 
-IMPL_LINK(SwMMResultPrintDialog, DocumentSelectionHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwMMResultPrintDialog, DocumentSelectionHdl_Impl, weld::ToggleButton&, rButton, void)
 {
-    bool bEnableFromTo = pButton == m_pFromRB;
-    m_pFromNF->Enable(bEnableFromTo);
-    m_pToFT->Enable(bEnableFromTo);
-    m_pToNF->Enable(bEnableFromTo);
+    bool bEnableFromTo = &rButton == m_xFromRB.get();
+    m_xFromNF->set_sensitive(bEnableFromTo);
+    m_xToFT->set_sensitive(bEnableFromTo);
+    m_xToNF->set_sensitive(bEnableFromTo);
 }
 
 IMPL_LINK(SwMMResultEmailDialog, DocumentSelectionHdl_Impl, Button*, pButton, void)
@@ -748,14 +727,14 @@ IMPL_LINK(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void)
     endDialog(pButton);
 }
 
-IMPL_LINK(SwMMResultPrintDialog, PrinterChangeHdl_Impl, ListBox&, rBox, void)
+IMPL_LINK(SwMMResultPrintDialog, PrinterChangeHdl_Impl, weld::ComboBoxText&, rBox, void)
 {
     SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
-    if (rBox.GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND)
+    if (rBox.get_active() != -1)
     {
-        const QueueInfo* pInfo = Printer::GetQueueInfo( rBox.GetSelectedEntry(), false );
+        const QueueInfo* pInfo = Printer::GetQueueInfo( rBox.get_active_text(), false );
 
         if( pInfo )
         {
@@ -776,15 +755,15 @@ IMPL_LINK(SwMMResultPrintDialog, PrinterChangeHdl_Impl, ListBox&, rBox, void)
         else if( ! m_pTempPrinter )
             m_pTempPrinter = VclPtr<Printer>::Create();
 
-        m_pPrinterSettingsPB->Enable( m_pTempPrinter->HasSupport( PrinterSupport::SetupDialog ) );
+        m_xPrinterSettingsPB->set_sensitive(m_pTempPrinter->HasSupport(PrinterSupport::SetupDialog));
     }
     else
-        m_pPrinterSettingsPB->Disable();
+        m_xPrinterSettingsPB->set_sensitive(false);
 
-    xConfigItem->SetSelectedPrinter(rBox.GetSelectedEntry());
+    xConfigItem->SetSelectedPrinter(rBox.get_active_text());
 }
 
-IMPL_LINK(SwMMResultPrintDialog, PrintHdl_Impl, Button*, pButton, void)
+IMPL_LINK_NOARG(SwMMResultPrintDialog, PrintHdl_Impl, weld::Button&, void)
 {
     SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
@@ -799,15 +778,15 @@ IMPL_LINK(SwMMResultPrintDialog, PrintHdl_Impl, Button*, pButton, void)
     sal_uInt32 nEnd = 0;
     sal_uInt32 documentCount = xConfigItem->GetMergedDocumentCount();
 
-    if(m_pPrintAllRB->IsChecked())
+    if (m_xPrintAllRB->get_active())
     {
         nBegin = 0;
         nEnd = documentCount;
     }
     else
     {
-        nBegin  = static_cast< sal_Int32 >(m_pFromNF->GetValue() - 1);
-        nEnd    = static_cast< sal_Int32 >(m_pToNF->GetValue());
+        nBegin  = m_xFromNF->get_value() - 1;
+        nEnd    = m_xToNF->get_value();
         if(nEnd > documentCount)
             nEnd = documentCount;
     }
@@ -838,15 +817,15 @@ IMPL_LINK(SwMMResultPrintDialog, PrintHdl_Impl, Button*, pButton, void)
     pTargetView->ExecPrint( aProps, false, true );
     SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwMailMergeEnd, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), pObjSh));
 
-    endDialog(pButton);
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK(SwMMResultPrintDialog, PrinterSetupHdl_Impl, Button*, pButton, void)
+IMPL_LINK_NOARG(SwMMResultPrintDialog, PrinterSetupHdl_Impl, weld::Button&, void)
 {
-    if( !m_pTempPrinter )
-        PrinterChangeHdl_Impl(*m_pPrinterLB);
-    if(m_pTempPrinter)
-        m_pTempPrinter->Setup(pButton);
+    if (!m_pTempPrinter)
+        PrinterChangeHdl_Impl(*m_xPrinterLB);
+    if (m_pTempPrinter)
+        m_pTempPrinter->Setup(m_xDialog.get());
 }
 
 IMPL_LINK(SwMMResultEmailDialog, SendTypeHdl_Impl, ListBox&, rBox, void)
