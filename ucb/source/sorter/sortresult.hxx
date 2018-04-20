@@ -52,37 +52,37 @@ class   PropertyChangeListeners_Impl;
 
 class SortedEntryList
 {
-    std::deque < SortListData* > maData;
+    std::deque < std::unique_ptr<SortListData> > maData;
 
 public:
-                         SortedEntryList(){}
-                        ~SortedEntryList(){ Clear(); }
+                        SortedEntryList();
+                        ~SortedEntryList();
 
     sal_uInt32          Count() const { return static_cast<sal_uInt32>(maData.size()); }
 
     void                Clear();
-    void                Insert( SortListData *pEntry, sal_IntPtr nPos );
-    SortListData*       Remove( sal_IntPtr nPos );
+    void                Insert( std::unique_ptr<SortListData> pEntry, sal_IntPtr nPos );
+    std::unique_ptr<SortListData> Remove( sal_IntPtr nPos );
     SortListData*       GetData( sal_IntPtr nPos );
+    void                Move( sal_IntPtr nOldPos, sal_IntPtr nNewPos );
 
-    sal_IntPtr                operator [] ( sal_IntPtr nPos ) const;
+    sal_IntPtr          operator [] ( sal_IntPtr nPos ) const;
 };
 
 
 class EventList
 {
-    std::deque < css::ucb::ListAction* > maData;
+    std::deque < std::unique_ptr<css::ucb::ListAction> > maData;
 
 public:
                      EventList(){}
-                    ~EventList(){ Clear(); }
 
     sal_uInt32      Count() { return static_cast<sal_uInt32>(maData.size()); }
 
     void            AddEvent( sal_IntPtr nType, sal_IntPtr nPos );
-    void            Insert( css::ucb::ListAction *pAction ) { maData.push_back( pAction ); }
+    void            Insert( std::unique_ptr<css::ucb::ListAction> pAction ) { maData.push_back( std::move(pAction) ); }
     void            Clear();
-    css::ucb::ListAction*     GetAction( sal_IntPtr nIndex ) { return maData[ nIndex ]; }
+    css::ucb::ListAction*     GetAction( sal_IntPtr nIndex ) { return maData[ nIndex ].get(); }
 };
 
 

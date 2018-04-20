@@ -307,13 +307,13 @@ void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
                         aWelcome.Old = mxTwo.get();
                         aWelcome.New = mxOne.get();
 
-                        ListAction *pWelcomeAction = new ListAction;
+                        std::unique_ptr<ListAction> pWelcomeAction(new ListAction);
                         pWelcomeAction->ActionInfo <<= aWelcome;
                         pWelcomeAction->Position = 0;
                         pWelcomeAction->Count = 0;
                         pWelcomeAction->ListActionType = ListActionType::WELCOME;
 
-                        maActions.Insert( pWelcomeAction );
+                        maActions.Insert( std::move(pWelcomeAction) );
                     }
                     else
                     {
@@ -483,22 +483,17 @@ SortedDynamicResultSetFactory::createSortedDynamicResultSet(
 
 void EventList::Clear()
 {
-    for (ListAction* p : maData)
-    {
-        delete p;
-    }
-
     maData.clear();
 }
 
 void EventList::AddEvent( sal_IntPtr nType, sal_IntPtr nPos )
 {
-    ListAction *pAction = new ListAction;
+    std::unique_ptr<ListAction> pAction(new ListAction);
     pAction->Position = nPos;
     pAction->Count = 1;
     pAction->ListActionType = nType;
 
-    Insert( pAction );
+    Insert( std::move(pAction) );
 }
 
 // SortedDynamicResultSetListener
