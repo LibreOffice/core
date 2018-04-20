@@ -1248,7 +1248,7 @@ void SortedResultSet::CopyData( SortedResultSet *pSource )
 
     for ( i=1; i<nCount; i++ )
     {
-        maS2O.Insert( new SortListData( rSrcS2O[ i ] ), i );
+        maS2O.Insert( std::unique_ptr<SortListData>(new SortListData( rSrcS2O[ i ] )), i );
         m_O2S.push_back(pSource->m_O2S[i]);
     }
 
@@ -1269,8 +1269,7 @@ void SortedResultSet::Initialize(
 {
     BuildSortInfo( mxOriginal, xSortInfo, xCompFactory );
     // Insert dummy at pos 0
-    SortListData *pData = new SortListData( 0 );
-    maS2O.Insert( pData, 0 );
+    maS2O.Insert( std::unique_ptr<SortListData>(new SortListData( 0 )), 0 );
 
     sal_IntPtr nIndex = 1;
 
@@ -1280,10 +1279,10 @@ void SortedResultSet::Initialize(
     try {
         while ( mxOriginal->absolute( nIndex ) )
         {
-            pData       = new SortListData( nIndex );
-            sal_IntPtr nPos   = FindPos( pData, 1, nIndex-1 );
+            std::unique_ptr<SortListData> pData(new SortListData( nIndex ));
+            sal_IntPtr nPos   = FindPos( pData.get(), 1, nIndex-1 );
 
-            maS2O.Insert( pData, nPos );
+            maS2O.Insert( std::move(pData), nPos );
 
             nIndex++;
         }
@@ -1354,13 +1353,12 @@ void SortedResultSet::CheckProperties( sal_IntPtr nOldCount, bool bWasFinal )
 void SortedResultSet::InsertNew( sal_IntPtr nPos, sal_IntPtr nCount )
 {
     // for all entries in the msS20-list, which are >= nPos, increase by nCount
-    SortListData    *pData;
     sal_IntPtr      i, nEnd;
 
     nEnd = maS2O.Count();
     for ( i=1; i<=nEnd; i++ )
     {
-        pData = maS2O.GetData( i );
+        SortListData *pData = maS2O.GetData( i );
         if ( pData->mnCurPos >= nPos )
         {
             pData->mnCurPos += nCount;
@@ -1372,9 +1370,9 @@ void SortedResultSet::InsertNew( sal_IntPtr nPos, sal_IntPtr nCount )
     for ( i=0; i<nCount; i++ )
     {
         nEnd += 1;
-        pData = new SortListData( nEnd );
+        std::unique_ptr<SortListData> pData(new SortListData( nEnd ));
 
-        maS2O.Insert( pData, nEnd );    // Insert( Value, Position )
+        maS2O.Insert( std::move(pData), nEnd );    // Insert( Value, Position )
         m_O2S.insert(m_O2S.begin() + nPos + i, nEnd);
     }
 
@@ -1414,10 +1412,9 @@ void SortedResultSet::Remove( sal_IntPtr nPos, sal_IntPtr nCount, EventList *pEv
             }
         }
 
-        SortListData *pData = maS2O.Remove( nSortPos );
+        std::unique_ptr<SortListData> pData = maS2O.Remove( nSortPos );
         if ( pData->mbModified )
-            m_ModList.erase(std::find(m_ModList.begin(), m_ModList.end(), pData));
-        delete pData;
+            m_ModList.erase(std::find(m_ModList.begin(), m_ModList.end(), pData.get()));
 
         // generate remove Event, but not for new entries
         if ( nSortPos <= nOldLastSort )
@@ -1586,7 +1583,6 @@ void SortedResultSet::ResortModified( EventList* pList )
 {
     sal_IntPtr nCompare, nCurPos, nNewPos;
     sal_IntPtr nStart, nEnd, nOffset, nVal;
-    ListAction *pAction;
 
     try {
         for (size_t i = 0; i < m_ModList.size(); ++i)
@@ -1616,8 +1612,7 @@ void SortedResultSet::ResortModified( EventList* pList )
                 if ( nNewPos != nCurPos )
                 {
                     // correct the lists!
-                    maS2O.Remove( static_cast<sal_uInt32>(nCurPos) );
-                    maS2O.Insert( pData, nNewPos );
+                    maS2O.Move( static_cast<sal_uInt32>(nCurPos), nNewPos );
                     for (size_t j = 1; j < m_O2S.size(); ++j)
                     {
                         nVal = m_O2S[j];
@@ -1630,12 +1625,12 @@ void SortedResultSet::ResortModified( EventList* pList )
 
                     m_O2S[pData->mnCurPos] = nNewPos;
 
-                    pAction = new ListAction;
+                    std::unique_ptr<ListAction> pAction(new ListAction);
                     pAction->Position = nCurPos;
                     pAction->Count = 1;
                     pAction->ListActionType = ListActionType::MOVED;
                     pAction->ActionInfo <<= nNewPos-nCurPos;
-                    pList->Insert( pAction );
+                    pList->Insert( std::move(pAction) );
                 }
                 pList->AddEvent( ListActionType::PROPERTIES_CHANGED, nNewPos );
             }
@@ -1661,8 +1656,7 @@ void SortedResultSet::ResortNew( EventList* pList )
             nNewPos = FindPos( pData, 1, mnLastSort );
             if ( nNewPos != i )
             {
-                maS2O.Remove( static_cast<sal_uInt32>(i) );
-                maS2O.Insert( pData, nNewPos );
+                maS2O.Move( static_cast<sal_uInt32>(i), nNewPos );
                 for (size_t j=1; j< m_O2S.size(); ++j)
                 {
                     nVal = m_O2S[j];
@@ -1692,38 +1686,44 @@ SortListData::SortListData( sal_IntPtr nPos )
     mnOldPos = nPos;
 };
 
+SortedEntryList::SortedEntryList()
+{
+}
+
+SortedEntryList::~SortedEntryList()
+{
+}
 
 void SortedEntryList::Clear()
 {
-    for (SortListData* p : maData)
-    {
-        delete p;
-    }
-
     maData.clear();
 }
 
 
-void SortedEntryList::Insert( SortListData *pEntry, sal_IntPtr nPos )
+void SortedEntryList::Insert( std::unique_ptr<SortListData> pEntry, sal_IntPtr nPos )
 {
     if ( nPos < static_cast<sal_IntPtr>(maData.size()) )
-        maData.insert( maData.begin() + nPos, pEntry );
+        maData.insert( maData.begin() + nPos, std::move(pEntry) );
     else
-        maData.push_back( pEntry );
+        maData.push_back( std::move(pEntry) );
 }
 
-
-SortListData* SortedEntryList::Remove( sal_IntPtr nPos )
+void SortedEntryList::Move( sal_IntPtr nOldPos, sal_IntPtr nNewPos )
 {
-    SortListData *pData;
+    auto p = std::move(maData[nOldPos]);
+    maData.erase( maData.begin() + nOldPos );
+    maData.insert(maData.begin() + nNewPos, std::move(p));
+}
+
+std::unique_ptr<SortListData> SortedEntryList::Remove( sal_IntPtr nPos )
+{
+    std::unique_ptr<SortListData> pData;
 
     if ( nPos < static_cast<sal_IntPtr>(maData.size()) )
     {
-        pData = maData[ nPos ];
+        pData = std::move(maData[ nPos ]);
         maData.erase( maData.begin() + nPos );
     }
-    else
-        pData = nullptr;
 
     return pData;
 }
@@ -1734,7 +1734,7 @@ SortListData* SortedEntryList::GetData( sal_IntPtr nPos )
     SortListData *pData;
 
     if ( nPos < static_cast<sal_IntPtr>(maData.size()) )
-        pData = maData[ nPos ];
+        pData = maData[ nPos ].get();
     else
         pData = nullptr;
 
@@ -1747,7 +1747,7 @@ sal_IntPtr SortedEntryList::operator [] ( sal_IntPtr nPos ) const
     SortListData *pData;
 
     if ( nPos < static_cast<sal_IntPtr>(maData.size()) )
-        pData = maData[ nPos ];
+        pData = maData[ nPos ].get();
     else
         pData = nullptr;
 
