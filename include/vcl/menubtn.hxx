@@ -22,6 +22,7 @@
 
 #include <vcl/button.hxx>
 #include <vcl/dllapi.h>
+#include <memory>
 
 class FloatingWindow;
 class Timer;
@@ -34,7 +35,7 @@ class VCL_DLLPUBLIC MenuButton : public PushButton
 private:
     friend class VclBuilder;
 
-    Timer*          mpMenuTimer;
+    std::unique_ptr<Timer> mpMenuTimer;
     VclPtr<PopupMenu> mpMenu;
     VclPtr<Window>  mpFloatingWindow;
     sal_uInt16      mnCurItemId;
