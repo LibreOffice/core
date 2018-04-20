@@ -1422,6 +1422,14 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108714, "tdf108714.docx")
     CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, breakType);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testImageLazyRead, "image-lazy-read.docx")
+{
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
+    Graphic aGraphic(xGraphic);
+    // This failed, import loaded the graphic, it wasn't lazy-read.
+    CPPUNIT_ASSERT(!aGraphic.isAvailable());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf108995, "xml_space.docx")
 {
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());

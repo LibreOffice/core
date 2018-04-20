@@ -238,11 +238,13 @@ Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStrea
     Reference< XGraphic > xGraphic;
     if( rxInStrm.is() && mxGraphicProvider.is() ) try
     {
-        Sequence< PropertyValue > aArgs( 1 );
+        Sequence< PropertyValue > aArgs( 2 );
         aArgs[ 0 ].Name = "InputStream";
         aArgs[ 0 ].Value <<= rxInStrm;
+        aArgs[ 1 ].Name = "LazyRead";
+        aArgs[ 1 ].Value <<= true;
 
-        if ( pExtHeader && pExtHeader->mapMode > 0 )
+        if ( pExtHeader )
         {
             aArgs.realloc( aArgs.getLength() + 1 );
             Sequence< PropertyValue > aFilterData( 3 );
@@ -252,8 +254,8 @@ Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStrea
             aFilterData[ 1 ].Value <<= pExtHeader->yExt;
             aFilterData[ 2 ].Name = "ExternalMapMode";
             aFilterData[ 2 ].Value <<= pExtHeader->mapMode;
-            aArgs[ 1 ].Name = "FilterData";
-            aArgs[ 1 ].Value <<= aFilterData;
+            aArgs[ 2 ].Name = "FilterData";
+            aArgs[ 2 ].Value <<= aFilterData;
         }
 
         xGraphic = mxGraphicProvider->queryGraphic( aArgs );
@@ -339,6 +341,11 @@ Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStr
         EmbeddedGraphicMap::const_iterator aIt = maEmbeddedGraphics.find( rStreamName );
         if( aIt == maEmbeddedGraphics.end() )
         {
+            // TODO make lazy-load work for EMF as well.
+            WmfExternal aHeader;
+            if (rStreamName.endsWith(".emf") && !pExtHeader)
+                pExtHeader = &aHeader;
+
             xGraphic = importGraphic(mxStorage->openInputStream(rStreamName), pExtHeader);
             if( xGraphic.is() )
                 maEmbeddedGraphics[ rStreamName ] = xGraphic;

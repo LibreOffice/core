@@ -262,6 +262,7 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
 
             bool bScanFailure = false;
             bool bScanFinished = false;
+            MapMode aMap;
 
             while (!bScanFailure && !bScanFinished && rStm.good())
             {
@@ -331,7 +332,6 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
                                             // setting the logical size
                                             if ( nUnits && nHorizontalResolution && nVerticalResolution )
                                             {
-                                                MapMode aMap;
                                                 aMap.SetMapUnit( nUnits == 1 ? MapUnit::MapInch : MapUnit::MapCM );
                                                 aMap.SetScaleX( Fraction( 1, nHorizontalResolution ) );
                                                 aMap.SetScaleY( Fraction( 1, nVerticalResolution ) );
@@ -379,6 +379,13 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
                                     aPixSize.setWidth( nSamplesPerLine );
                                     nBitsPerPixel = ( nNumberOfImageComponents == 3 ? 24 : nNumberOfImageComponents == 1 ? 8 : 0 );
                                     nPlanes = 1;
+
+                                    if (aMap.GetMapUnit() != MapUnit::MapPixel)
+                                        // We already know the DPI, but the
+                                        // pixel size arrived later, so do the
+                                        // conversion again.
+                                        aLogSize = OutputDevice::LogicToLogic(
+                                            aPixSize, aMap, MapMode(MapUnit::Map100thMM));
 
                                     bScanFinished = true;
                                 }
