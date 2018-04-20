@@ -34,18 +34,13 @@
    reference count will be one.  Operations on a non-null handle are not
    multi-thread&ndash;safe.</p>
 
+   The type reader works directly on the given buffer, which must remain
+   available unmodified until the type reader is destroyed
+
    @param buffer the binary blob representing the type; must point to at least
    <code>length</code> bytes, and need only be byte-aligned
 
    @param length the size in bytes of the binary blob representing the type
-
-   @param copy if true, the type reader creates an internal copy of the given
-   buffer, and the given buffer is not accessed after this function returns; if
-   false, the type reader works directly on the given buffer, which must remain
-   available unmodified until the type reader is destroyed
-
-   @param maxVersion the maximum binary blob version the client is prepared to
-   handle; must not be negative
 
    @param result an out-parameter obtaining a handle on the type reader; must
    not be null; if the given binary blob is malformed, or of a version larger
@@ -57,8 +52,8 @@
    @since UDK 3.2.0
  */
 REG_DLLPUBLIC bool typereg_reader_create(
-    void const * buffer, sal_uInt32 length, bool copy,
-    typereg_Version maxVersion, void ** result);
+    void const * buffer, sal_uInt32 length,
+    void ** result);
 
 /**
    Increments the reference count of a type reader.

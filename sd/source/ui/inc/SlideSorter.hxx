@@ -234,7 +234,6 @@ private:
         ScrollBarBox* pScrollBarBox);
     SlideSorter (
         ViewShellBase& rBase,
-        ViewShell* pViewShell,
         vcl::Window& rParentWindow);
 
     void Init();

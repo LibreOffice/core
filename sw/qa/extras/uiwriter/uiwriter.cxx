@@ -3612,9 +3612,9 @@ void SwUiWriterTest::testUndoDelAsCharTdf107512()
     frameSet.Put(anchor);
     GraphicObject grf;
     pShell->SttEndDoc(true);
-    CPPUNIT_ASSERT(rIDCO.InsertGraphicObject(*pShell->GetCursor(), grf, &frameSet, &grfSet, nullptr));
+    CPPUNIT_ASSERT(rIDCO.InsertGraphicObject(*pShell->GetCursor(), grf, &frameSet, &grfSet));
     pShell->SttEndDoc(false);
-    CPPUNIT_ASSERT(rIDCO.InsertGraphicObject(*pShell->GetCursor(), grf, &frameSet, &grfSet, nullptr));
+    CPPUNIT_ASSERT(rIDCO.InsertGraphicObject(*pShell->GetCursor(), grf, &frameSet, &grfSet));
     CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
     SvxCharHiddenItem hidden(true, RES_CHRATR_HIDDEN);
     pShell->SelectText(1, 4);
@@ -3763,7 +3763,7 @@ void SwUiWriterTest::testUndoDelAsChar()
     SwFormatAnchor anchor(RndStdIds::FLY_AS_CHAR);
     frameSet.Put(anchor);
     GraphicObject grf;
-    CPPUNIT_ASSERT(rIDCO.InsertGraphicObject(*pShell->GetCursor(), grf, &frameSet, &grfSet, nullptr));
+    CPPUNIT_ASSERT(rIDCO.InsertGraphicObject(*pShell->GetCursor(), grf, &frameSet, &grfSet));
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
     pShell->SetMark();
     pShell->Left(1, CRSR_SKIP_CHARS);

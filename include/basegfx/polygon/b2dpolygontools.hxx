@@ -448,8 +448,7 @@ namespace basegfx
 
         /// converters for css::drawing::PointSequence
         BASEGFX_DLLPUBLIC B2DPolygon UnoPointSequenceToB2DPolygon(
-            const css::drawing::PointSequence& rPointSequenceSource,
-            bool bCheckClosed = true);
+            const css::drawing::PointSequence& rPointSequenceSource);
         BASEGFX_DLLPUBLIC void B2DPolygonToUnoPointSequence(
             const B2DPolygon& rPolygon,
             css::drawing::PointSequence& rPointSequenceRetval);
@@ -459,8 +458,7 @@ namespace basegfx
          */
         B2DPolygon UnoPolygonBezierCoordsToB2DPolygon(
             const css::drawing::PointSequence& rPointSequenceSource,
-            const css::drawing::FlagSequence& rFlagSequenceSource,
-            bool bCheckClosed);
+            const css::drawing::FlagSequence& rFlagSequenceSource);
         void B2DPolygonToUnoPolygonBezierCoords(
             const B2DPolygon& rPolyPolygon,
             css::drawing::PointSequence& rPointSequenceRetval,

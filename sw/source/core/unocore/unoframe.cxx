@@ -1571,7 +1571,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     throw uno::RuntimeException();
                 }
                 SwPaM aGrfPaM(*pGrfNode);
-                pFormat->GetDoc()->getIDocumentContentOperations().ReRead(aGrfPaM, sGrfName, sFltName, nullptr, nullptr);
+                pFormat->GetDoc()->getIDocumentContentOperations().ReRead(aGrfPaM, sGrfName, sFltName, nullptr);
             }
         }
         else if (FN_UNO_GRAPHIC == pEntry->nWID)
@@ -1591,7 +1591,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     }
                     SwPaM aGrfPaM(*pGrfNode);
                     Graphic aGraphic( xGraphic );
-                    pFormat->GetDoc()->getIDocumentContentOperations().ReRead( aGrfPaM, OUString(), OUString(), &aGraphic, nullptr );
+                    pFormat->GetDoc()->getIDocumentContentOperations().ReRead( aGrfPaM, OUString(), OUString(), &aGraphic );
                 }
             }
         }

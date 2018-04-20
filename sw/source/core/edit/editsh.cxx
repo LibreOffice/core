@@ -291,7 +291,7 @@ void SwEditShell::ReRead( const OUString& rGrfName, const OUString& rFltName,
                     const Graphic* pGraphic )
 {
     StartAllAction();
-    mxDoc->getIDocumentContentOperations().ReRead( *GetCursor(), rGrfName, rFltName, pGraphic, nullptr );
+    mxDoc->getIDocumentContentOperations().ReRead( *GetCursor(), rGrfName, rFltName, pGraphic );
     EndAllAction();
 }
 

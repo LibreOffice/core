@@ -2640,11 +2640,9 @@ SwFlyFrameFormat* DocumentContentOperationsManager::InsertGraphic(
 SwFlyFrameFormat* DocumentContentOperationsManager::InsertGraphicObject(
         const SwPaM &rRg, const GraphicObject& rGrfObj,
                             const SfxItemSet* pFlyAttrSet,
-                            const SfxItemSet* pGrfAttrSet,
-                            SwFrameFormat* pFrameFormat )
+                            const SfxItemSet* pGrfAttrSet )
 {
-    if( !pFrameFormat )
-        pFrameFormat = m_rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_GRAPHIC );
+    SwFrameFormat* pFrameFormat = m_rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_GRAPHIC );
     SwGrfNode* pSwGrfNode = SwNodes::MakeGrfNode(
                             SwNodeIndex( m_rDoc.GetNodes().GetEndOfAutotext() ),
                             rGrfObj, m_rDoc.GetDfltGrfFormatColl() );
@@ -2694,8 +2692,7 @@ SwFlyFrameFormat* DocumentContentOperationsManager::InsertOLE(const SwPaM &rRg, 
 }
 
 void DocumentContentOperationsManager::ReRead( SwPaM& rPam, const OUString& rGrfName,
-                    const OUString& rFltName, const Graphic* pGraphic,
-                    const GraphicObject* pGrafObj )
+                    const OUString& rFltName, const Graphic* pGraphic )
 {
     SwGrfNode *pGrfNd;
     if( ( !rPam.HasMark()
@@ -2712,7 +2709,7 @@ void DocumentContentOperationsManager::ReRead( SwPaM& rPam, const OUString& rGrf
                                                 GetMirrorGrf().GetValue() )
             pGrfNd->SetAttr( SwMirrorGrf() );
 
-        pGrfNd->ReRead( rGrfName, rFltName, pGraphic, pGrafObj );
+        pGrfNd->ReRead( rGrfName, rFltName, pGraphic, /*pGrafObj*/nullptr );
         m_rDoc.getIDocumentState().SetModified();
     }
 }
