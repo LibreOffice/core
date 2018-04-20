@@ -21,6 +21,7 @@ public:
     BitmapSepiaFilter(double nSepiaPercent)
         : mnSepiaPercent(nSepiaPercent)
     {
+        assert(nSepiaPercent <= 100);
     }
 
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) override;
