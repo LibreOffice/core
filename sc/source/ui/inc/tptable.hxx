@@ -30,7 +30,7 @@ class ScTablePage : public SfxTabPage
     friend class VclPtr<ScTablePage>;
     static const sal_uInt16 pPageTableRanges[];
 public:
-    static  VclPtr<SfxTabPage> Create          ( vcl::Window*           pParent,
+    static  VclPtr<SfxTabPage> Create          ( TabPageParent pParent,
                                           const SfxItemSet* rCoreSet );
     static  const sal_uInt16* GetRanges () { return pPageTableRanges; }
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;

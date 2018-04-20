@@ -372,10 +372,10 @@ DeactivateRC SdTPAction::DeactivatePage( SfxItemSet* pPageSet )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SdTPAction::Create( vcl::Window* pWindow,
+VclPtr<SfxTabPage> SdTPAction::Create( TabPageParent pWindow,
                                        const SfxItemSet& rAttrs )
 {
-    return VclPtr<SdTPAction>::Create( pWindow, rAttrs );
+    return VclPtr<SdTPAction>::Create( pWindow.pParent, rAttrs );
 }
 
 void SdTPAction::UpdateTree()

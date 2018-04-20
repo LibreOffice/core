@@ -458,10 +458,10 @@ bool SwFieldDokInfPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-VclPtr<SfxTabPage> SwFieldDokInfPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SwFieldDokInfPage::Create( TabPageParent pParent,
                                             const SfxItemSet *const pAttrSet)
 {
-    return VclPtr<SwFieldDokInfPage>::Create( pParent, pAttrSet );
+    return VclPtr<SwFieldDokInfPage>::Create( pParent.pParent, pAttrSet );
 }
 
 sal_uInt16 SwFieldDokInfPage::GetGroup()

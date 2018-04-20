@@ -61,9 +61,9 @@ void PolarOptionsTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> PolarOptionsTabPage::Create( vcl::Window* pWindow,const SfxItemSet* rOutAttrs )
+VclPtr<SfxTabPage> PolarOptionsTabPage::Create( TabPageParent pWindow,const SfxItemSet* rOutAttrs )
 {
-    return VclPtr<PolarOptionsTabPage>::Create( pWindow, *rOutAttrs );
+    return VclPtr<PolarOptionsTabPage>::Create( pWindow.pParent, *rOutAttrs );
 }
 
 bool PolarOptionsTabPage::FillItemSet( SfxItemSet* rOutAttrs )
