@@ -55,9 +55,6 @@ UndoTextAPIChanged::UndoTextAPIChanged(SdrModel& rModel, TextApiObject* pTextObj
 , mpOldText( pTextObj->CreateText() )
 , mxTextObj( pTextObj )
 {
-#if defined __clang__ && defined _MSC_VER // workaround clang-cl ABI bug PR25641
-    css::uno::Sequence<css::beans::PropertyState> dummy; (void) dummy;
-#endif
 }
 
 void UndoTextAPIChanged::Undo()
