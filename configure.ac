@@ -4701,13 +4701,11 @@ fi
 AC_SUBST(DO_FETCH_TARBALLS)
 
 AC_MSG_CHECKING([whether to build help])
-HELP_COMMON_ONLY=FALSE
 if test -n "$with_help" -a "$with_help" != "no" -a $_os != iOS -a $_os != Android; then
     BUILD_TYPE="$BUILD_TYPE HELP"
     GIT_NEEDED_SUBMODULES="helpcontent2 $GIT_NEEDED_SUBMODULES"
     case "$with_help" in
     "common")
-        HELP_COMMON_ONLY=TRUE
         AC_MSG_RESULT([common only])
         ;;
     "html")
@@ -4728,7 +4726,6 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST([ENABLE_HTMLHELP])
-AC_SUBST(HELP_COMMON_ONLY)
 AC_SUBST([HELP_ONLINE])
 
 dnl Test whether to include MySpell dictionaries
