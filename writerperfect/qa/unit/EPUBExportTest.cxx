@@ -30,11 +30,12 @@ using namespace ::com::sun::star;
 
 namespace
 {
-
 char const DATA_DIRECTORY[] = "/writerperfect/qa/unit/data/writer/epubexport/";
 
 /// Tests the EPUB export filter.
-class EPUBExportTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
+class EPUBExportTest : public test::BootstrapFixture,
+                       public unotest::MacrosTest,
+                       public XmlTestTools
 {
     uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
@@ -46,14 +47,15 @@ class EPUBExportTest : public test::BootstrapFixture, public unotest::MacrosTest
 public:
     void setUp() override;
     void tearDown() override;
-    void registerNamespaces(xmlXPathContextPtr &pXmlXpathCtx) override;
-    void createDoc(const OUString &rFile, const uno::Sequence<beans::PropertyValue> &rFilterData);
+    void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
+    void createDoc(const OUString& rFile, const uno::Sequence<beans::PropertyValue>& rFilterData);
     /// Returns an XML representation of the stream named rName in the exported package.
-    xmlDocPtr parseExport(const OUString &rName);
+    xmlDocPtr parseExport(const OUString& rName);
     /// Parses a CSS representation of the stream named rName and returns it.
-    std::map< OUString, std::vector<OUString> > parseCss(const OUString &rName);
+    std::map<OUString, std::vector<OUString>> parseCss(const OUString& rName);
     /// Looks up a key of a class in rCss.
-    static OUString getCss(std::map< OUString, std::vector<OUString> > &rCss, const OUString &rClass, const OUString &rKey);
+    static OUString getCss(std::map<OUString, std::vector<OUString>>& rCss, const OUString& rClass,
+                           const OUString& rKey);
     void testOutlineLevel();
     void testMimetype();
     void testEPUB2();
@@ -175,7 +177,7 @@ void EPUBExportTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-void EPUBExportTest::registerNamespaces(xmlXPathContextPtr &pXmlXpathCtx)
+void EPUBExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("dc"), BAD_CAST("http://purl.org/dc/elements/1.1/"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("opf"), BAD_CAST("http://www.idpf.org/2007/opf"));
@@ -183,7 +185,8 @@ void EPUBExportTest::registerNamespaces(xmlXPathContextPtr &pXmlXpathCtx)
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("svg"), BAD_CAST("http://www.w3.org/2000/svg"));
 }
 
-void EPUBExportTest::createDoc(const OUString &rFile, const uno::Sequence<beans::PropertyValue> &rFilterData)
+void EPUBExportTest::createDoc(const OUString& rFile,
+                               const uno::Sequence<beans::PropertyValue>& rFilterData)
 {
     // Import the bugdoc and export as EPUB.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFile;
@@ -199,19 +202,20 @@ void EPUBExportTest::createDoc(const OUString &rFile, const uno::Sequence<beans:
     else
         aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-    mxZipFile = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, maTempFile.GetURL());
+    mxZipFile
+        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, maTempFile.GetURL());
 }
 
-xmlDocPtr EPUBExportTest::parseExport(const OUString &rName)
+xmlDocPtr EPUBExportTest::parseExport(const OUString& rName)
 {
     uno::Reference<io::XInputStream> xInputStream(mxZipFile->getByName(rName), uno::UNO_QUERY);
     std::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
     return parseXmlStream(pStream.get());
 }
 
-std::map< OUString, std::vector<OUString> > EPUBExportTest::parseCss(const OUString &rName)
+std::map<OUString, std::vector<OUString>> EPUBExportTest::parseCss(const OUString& rName)
 {
-    std::map< OUString, std::vector<OUString> > aRet;
+    std::map<OUString, std::vector<OUString>> aRet;
 
     uno::Reference<io::XInputStream> xInputStream(mxZipFile->getByName(rName), uno::UNO_QUERY);
     std::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
@@ -232,14 +236,15 @@ std::map< OUString, std::vector<OUString> > EPUBExportTest::parseCss(const OUStr
     return aRet;
 }
 
-OUString EPUBExportTest::getCss(std::map< OUString, std::vector<OUString> > &rCss, const OUString &rClass, const OUString &rKey)
+OUString EPUBExportTest::getCss(std::map<OUString, std::vector<OUString>>& rCss,
+                                const OUString& rClass, const OUString& rKey)
 {
     OUString aRet;
 
     auto it = rCss.find(rClass);
     CPPUNIT_ASSERT(it != rCss.end());
 
-    for (const auto &rKeyValue : it->second)
+    for (const auto& rKeyValue : it->second)
     {
         OUString aKeyValue = rKeyValue.trim();
         std::vector<OUString> aTokens = comphelper::string::split(aKeyValue, ':');
@@ -279,7 +284,8 @@ void EPUBExportTest::testMimetype()
     OString aExpected("application/epub+zip");
     CPPUNIT_ASSERT(aMemoryStream.GetSize() > static_cast<sal_uInt64>(38 + aExpected.getLength()));
 
-    OString aActual(static_cast<const char *>(aMemoryStream.GetBuffer()) + 38, aExpected.getLength());
+    OString aActual(static_cast<const char*>(aMemoryStream.GetBuffer()) + 38,
+                    aExpected.getLength());
     // This failed: actual data was some garbage, not the uncompressed mime type.
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
@@ -288,10 +294,12 @@ void EPUBExportTest::testMimetype()
     assertXPath(mpXmlDoc, "/opf:package", "version", "3.0");
 
     // This was just "libepubgen/x.y.z", i.e. the LO version was missing.
-    OUString aGenerator = getXPath(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@name='generator']", "content");
+    OUString aGenerator
+        = getXPath(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@name='generator']", "content");
     CPPUNIT_ASSERT(aGenerator.startsWith(utl::DocInfoHelper::GetGeneratorString()));
 
-    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponentContext->getServiceManager(), uno::UNO_QUERY);
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponentContext->getServiceManager(),
+                                                    uno::UNO_QUERY);
     const OUString aServiceName("com.sun.star.comp.Writer.EPUBExportFilter");
     uno::Reference<document::XFilter> xFilter(xMSF->createInstance(aServiceName), uno::UNO_QUERY);
     // Should result in no errors.
@@ -305,10 +313,8 @@ void EPUBExportTest::testMimetype()
 void EPUBExportTest::testEPUB2()
 {
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-    {
-        // Explicitly request EPUB2.
-        {"EPUBVersion", uno::makeAny(static_cast<sal_Int32>(20))}
-    }));
+        { // Explicitly request EPUB2.
+          { "EPUBVersion", uno::makeAny(static_cast<sal_Int32>(20)) } }));
     createDoc("hello.fodt", aFilterData);
 
     mpXmlDoc = parseExport("OEBPS/content.opf");
@@ -319,15 +325,15 @@ void EPUBExportTest::testEPUB2()
 void EPUBExportTest::testEPUBFixedLayout()
 {
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-    {
-        // Explicitly request fixed layout.
-        {"EPUBLayoutMethod", uno::makeAny(static_cast<sal_Int32>(libepubgen::EPUB_LAYOUT_METHOD_FIXED))}
-    }));
+        { // Explicitly request fixed layout.
+          { "EPUBLayoutMethod",
+            uno::makeAny(static_cast<sal_Int32>(libepubgen::EPUB_LAYOUT_METHOD_FIXED)) } }));
     createDoc("hello.fodt", aFilterData);
 
     mpXmlDoc = parseExport("OEBPS/content.opf");
     // This was missing, EPUBLayoutMethod filter option was ignored and we always emitted reflowable layout.
-    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='rendition:layout']", "pre-paginated");
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='rendition:layout']",
+                       "pre-paginated");
 }
 
 void EPUBExportTest::testEPUBFixedLayoutOption()
@@ -338,16 +344,16 @@ void EPUBExportTest::testEPUBFixedLayoutOption()
 
     // This failed, fixed layout was only working via the FilterData map.
     mpXmlDoc = parseExport("OEBPS/content.opf");
-    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='rendition:layout']", "pre-paginated");
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='rendition:layout']",
+                       "pre-paginated");
 }
 
 void EPUBExportTest::testEPUBFixedLayoutImplicitBreak()
 {
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-    {
-        // Explicitly request fixed layout.
-        {"EPUBLayoutMethod", uno::makeAny(static_cast<sal_Int32>(libepubgen::EPUB_LAYOUT_METHOD_FIXED))}
-    }));
+        { // Explicitly request fixed layout.
+          { "EPUBLayoutMethod",
+            uno::makeAny(static_cast<sal_Int32>(libepubgen::EPUB_LAYOUT_METHOD_FIXED)) } }));
     createDoc("fxl-2page.fodt", aFilterData);
 
     CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/sections/section0001.xhtml"));
@@ -366,10 +372,9 @@ void EPUBExportTest::testEPUBFixedLayoutImplicitBreak()
 void EPUBExportTest::testPageBreakSplit()
 {
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-    {
-        // Explicitly request split on page break (instead of on heading).
-        {"EPUBSplitMethod", uno::makeAny(static_cast<sal_Int32>(libepubgen::EPUB_SPLIT_METHOD_PAGE_BREAK))}
-    }));
+        { // Explicitly request split on page break (instead of on heading).
+          { "EPUBSplitMethod",
+            uno::makeAny(static_cast<sal_Int32>(libepubgen::EPUB_SPLIT_METHOD_PAGE_BREAK)) } }));
     createDoc("2pages.fodt", aFilterData);
 
     // Make sure that the output is split into two.
@@ -410,11 +415,14 @@ void EPUBExportTest::testMeta()
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:creator", "A U Thor");
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:title", "Title");
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:language", "hu");
-    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='dcterms:modified']", "2017-09-27T09:51:19Z");
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='dcterms:modified']",
+                       "2017-09-27T09:51:19Z");
 
     // Make sure that cover image next to the source document is picked up.
-    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']", "properties", "cover-image");
-    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']", "media-type", "image/png");
+    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']",
+                "properties", "cover-image");
+    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']",
+                "media-type", "image/png");
     CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/images/image0001.png"));
 }
 
@@ -424,48 +432,50 @@ void EPUBExportTest::testMetaXMP()
     mpXmlDoc = parseExport("OEBPS/content.opf");
 
     // These were the libepubgen default values, metadata from a matching .xmp file was not picked up.
-    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:identifier", "deadbeef-e394-4cd6-9b83-7172794612e5");
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:identifier",
+                       "deadbeef-e394-4cd6-9b83-7172794612e5");
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:title", "unknown title from xmp");
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:creator", "unknown author from xmp");
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:language", "nl");
-    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='dcterms:modified']", "2016-11-20T17:16:07Z");
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='dcterms:modified']",
+                       "2016-11-20T17:16:07Z");
 }
 
 void EPUBExportTest::testMetaAPI()
 {
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-    {
-        {"RVNGIdentifier", uno::makeAny(OUString("deadc0de-e394-4cd6-9b83-7172794612e5"))},
-        {"RVNGTitle", uno::makeAny(OUString("unknown title from api"))},
-        {"RVNGInitialCreator", uno::makeAny(OUString("unknown author from api"))},
-        {"RVNGLanguage", uno::makeAny(OUString("hu"))},
-        {"RVNGDate", uno::makeAny(OUString("2015-11-20T17:16:07Z"))}
-    }));
+        { { "RVNGIdentifier", uno::makeAny(OUString("deadc0de-e394-4cd6-9b83-7172794612e5")) },
+          { "RVNGTitle", uno::makeAny(OUString("unknown title from api")) },
+          { "RVNGInitialCreator", uno::makeAny(OUString("unknown author from api")) },
+          { "RVNGLanguage", uno::makeAny(OUString("hu")) },
+          { "RVNGDate", uno::makeAny(OUString("2015-11-20T17:16:07Z")) } }));
     createDoc("meta-xmp.fodt", aFilterData);
     mpXmlDoc = parseExport("OEBPS/content.opf");
 
     // These were values from XMP (deadbeef, etc.), not from API.
-    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:identifier", "deadc0de-e394-4cd6-9b83-7172794612e5");
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:identifier",
+                       "deadc0de-e394-4cd6-9b83-7172794612e5");
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:title", "unknown title from api");
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:creator", "unknown author from api");
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:language", "hu");
-    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='dcterms:modified']", "2015-11-20T17:16:07Z");
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='dcterms:modified']",
+                       "2015-11-20T17:16:07Z");
 }
 
 void EPUBExportTest::testCoverImage()
 {
     OUString aCoverURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "meta.cover-image.png";
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-    {
-        {"RVNGCoverImage", uno::makeAny(aCoverURL)}
-    }));
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "RVNGCoverImage", uno::makeAny(aCoverURL) } }));
     createDoc("hello.fodt", aFilterData);
     mpXmlDoc = parseExport("OEBPS/content.opf");
 
     // Make sure that the explicitly set cover image is used.
     // This failed, as the image was not part of the package.
-    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']", "properties", "cover-image");
-    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']", "media-type", "image/png");
+    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']",
+                "properties", "cover-image");
+    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='images/image0001.png']",
+                "media-type", "image/png");
     CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/images/image0001.png"));
 }
 
@@ -502,13 +512,14 @@ void EPUBExportTest::testNamedStyleInheritance()
 
     // Find the CSS rule for the blue text.
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
-    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    std::map<OUString, std::vector<OUString>> aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
     OUString aBlue = getXPath(mpXmlDoc, "//xhtml:p[2]/xhtml:span[2]", "class");
 
     CPPUNIT_ASSERT_EQUAL(OUString("#0000ff"), EPUBExportTest::getCss(aCssDoc, aBlue, "color"));
     // This failed, the span only had the properties from its style, but not
     // from the style's parent(s).
-    CPPUNIT_ASSERT_EQUAL(OUString("'Liberation Mono'"), EPUBExportTest::getCss(aCssDoc, aBlue, "font-family"));
+    CPPUNIT_ASSERT_EQUAL(OUString("'Liberation Mono'"),
+                         EPUBExportTest::getCss(aCssDoc, aBlue, "font-family"));
 }
 
 void EPUBExportTest::testNestedSpan()
@@ -517,7 +528,7 @@ void EPUBExportTest::testNestedSpan()
 
     // Check textural content of nested span.
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
-    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    std::map<OUString, std::vector<OUString>> aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
     // This crashed, span had no content.
     assertXPathContent(mpXmlDoc, "//xhtml:p/xhtml:span[2]", "red");
 
@@ -525,7 +536,8 @@ void EPUBExportTest::testNestedSpan()
     OUString aRed = getXPath(mpXmlDoc, "//xhtml:p/xhtml:span[2]", "class");
     // This failed, direct formatting on top of named style was lost.
     CPPUNIT_ASSERT_EQUAL(OUString("#ff0000"), EPUBExportTest::getCss(aCssDoc, aRed, "color"));
-    CPPUNIT_ASSERT_EQUAL(OUString("'Liberation Mono'"), EPUBExportTest::getCss(aCssDoc, aRed, "font-family"));
+    CPPUNIT_ASSERT_EQUAL(OUString("'Liberation Mono'"),
+                         EPUBExportTest::getCss(aCssDoc, aRed, "font-family"));
 }
 
 void EPUBExportTest::testLineBreak()
@@ -549,7 +561,10 @@ void EPUBExportTest::testEscape()
     // Make sure escaping happens only once.
     assertXPathContent(mpXmlDoc, "//xhtml:p[1]/xhtml:span[2]", "a&b");
     // This was also lost.
-    assertXPathContent(mpXmlDoc, "//xhtml:p[1]/xhtml:span[3]", OUString::fromUtf8("\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0 "));
+    assertXPathContent(
+        mpXmlDoc, "//xhtml:p[1]/xhtml:span[3]",
+        OUString::fromUtf8("\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2"
+                           "\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0 "));
 }
 
 void EPUBExportTest::testParaCharProps()
@@ -557,10 +572,11 @@ void EPUBExportTest::testParaCharProps()
     createDoc("para-char-props.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
-    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    std::map<OUString, std::vector<OUString>> aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
     // Check formatting of the middle span.
     OUString aMiddle = getXPath(mpXmlDoc, "//xhtml:p/xhtml:span[2]", "class");
-    CPPUNIT_ASSERT_EQUAL(OUString("italic"), EPUBExportTest::getCss(aCssDoc, aMiddle, "font-style"));
+    CPPUNIT_ASSERT_EQUAL(OUString("italic"),
+                         EPUBExportTest::getCss(aCssDoc, aMiddle, "font-style"));
     // Direct para formatting was lost, only direct char formatting was
     // written, so this failed.
     CPPUNIT_ASSERT_EQUAL(OUString("bold"), EPUBExportTest::getCss(aCssDoc, aMiddle, "font-weight"));
@@ -599,11 +615,12 @@ void EPUBExportTest::testImageBorder()
     createDoc("image-border.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
-    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    std::map<OUString, std::vector<OUString>> aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
 
     OUString aClass = getXPath(mpXmlDoc, "//xhtml:img", "class");
     // This failed, image had no border.
-    CPPUNIT_ASSERT_EQUAL(OUString("0.99pt dashed #ed1c24"), EPUBExportTest::getCss(aCssDoc, aClass, "border"));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.99pt dashed #ed1c24"),
+                         EPUBExportTest::getCss(aCssDoc, aClass, "border"));
 }
 
 void EPUBExportTest::testImageNospan()
@@ -637,11 +654,13 @@ void EPUBExportTest::testTableCellBorder()
     createDoc("table-cell-border.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
-    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    std::map<OUString, std::vector<OUString>> aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
 
-    OUString aClass = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[1]", "class");
+    OUString aClass
+        = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[1]", "class");
     // This failed, cell border wasn't exported.
-    CPPUNIT_ASSERT_EQUAL(OUString("0.05pt solid #000000"), EPUBExportTest::getCss(aCssDoc, aClass, "border-left"));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.05pt solid #000000"),
+                         EPUBExportTest::getCss(aCssDoc, aClass, "border-left"));
 }
 
 void EPUBExportTest::testTableCellWidth()
@@ -649,13 +668,18 @@ void EPUBExportTest::testTableCellWidth()
     createDoc("table-cell-width.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
-    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
-    OUString aClass1 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[1]", "class");
-    OUString aClass2 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[2]", "class");
-    OUString aClass3 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[3]", "class");
+    std::map<OUString, std::vector<OUString>> aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    OUString aClass1
+        = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[1]", "class");
+    OUString aClass2
+        = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[2]", "class");
+    OUString aClass3
+        = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[3]", "class");
     // These failed, all widths were 0.
-    CPPUNIT_ASSERT_GREATER(EPUBExportTest::getCss(aCssDoc, aClass2, "width").toDouble(), EPUBExportTest::getCss(aCssDoc, aClass1, "width").toDouble());
-    CPPUNIT_ASSERT_GREATER(EPUBExportTest::getCss(aCssDoc, aClass3, "width").toDouble(), EPUBExportTest::getCss(aCssDoc, aClass1, "width").toDouble());
+    CPPUNIT_ASSERT_GREATER(EPUBExportTest::getCss(aCssDoc, aClass2, "width").toDouble(),
+                           EPUBExportTest::getCss(aCssDoc, aClass1, "width").toDouble());
+    CPPUNIT_ASSERT_GREATER(EPUBExportTest::getCss(aCssDoc, aClass3, "width").toDouble(),
+                           EPUBExportTest::getCss(aCssDoc, aClass1, "width").toDouble());
 }
 
 void EPUBExportTest::testTableRowHeight()
@@ -663,11 +687,12 @@ void EPUBExportTest::testTableRowHeight()
     createDoc("table-row-height.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
-    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    std::map<OUString, std::vector<OUString>> aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
     OUString aClass1 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]", "class");
     OUString aClass2 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[2]", "class");
     // These failed, both heights were 0.
-    CPPUNIT_ASSERT_GREATER(EPUBExportTest::getCss(aCssDoc, aClass2, "height").toDouble(), EPUBExportTest::getCss(aCssDoc, aClass1, "height").toDouble());
+    CPPUNIT_ASSERT_GREATER(EPUBExportTest::getCss(aCssDoc, aClass2, "height").toDouble(),
+                           EPUBExportTest::getCss(aCssDoc, aClass1, "height").toDouble());
 }
 
 void EPUBExportTest::testLink()
@@ -704,7 +729,7 @@ void EPUBExportTest::testLinkNamedCharFormat()
     createDoc("link-namedcharformat.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
-    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    std::map<OUString, std::vector<OUString>> aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
     // This failed, there was no span inside the hyperlink.
     assertXPathContent(mpXmlDoc, "//xhtml:p/xhtml:a/xhtml:span", "http://libreoffice.org");
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:a", "href", "http://libreoffice.org/");
@@ -718,7 +743,7 @@ void EPUBExportTest::testTableWidth()
     createDoc("table-width.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
-    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    std::map<OUString, std::vector<OUString>> aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
 
     OUString aClass = getXPath(mpXmlDoc, "//xhtml:table", "class");
     // This failed, relative total width of table was lost.
@@ -730,7 +755,7 @@ void EPUBExportTest::testTextBox()
     createDoc("text-box.fodt", {});
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
-    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    std::map<OUString, std::vector<OUString>> aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
 
     // This failed, image with caption was lost.
     assertXPath(mpXmlDoc, "//xhtml:img", "class", "frame1");
@@ -752,18 +777,22 @@ void EPUBExportTest::testFontEmbedding()
 
     // Make sure that the params of defineEmbeddedFont() are all handled.
     // librevenge:name
-    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    std::map<OUString, std::vector<OUString>> aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
     // 'SketchFlow Print' or ''SketchFlow Print1'
-    CPPUNIT_ASSERT(EPUBExportTest::getCss(aCssDoc, "font-face", "font-family").startsWith("'SketchFlow Print"));
+    CPPUNIT_ASSERT(EPUBExportTest::getCss(aCssDoc, "font-face", "font-family")
+                       .startsWith("'SketchFlow Print"));
     // librevenge:mime-type
     mpXmlDoc = parseExport("OEBPS/content.opf");
-    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='fonts/font0001.otf']", "media-type", "application/vnd.ms-opentype");
+    assertXPath(mpXmlDoc, "/opf:package/opf:manifest/opf:item[@href='fonts/font0001.otf']",
+                "media-type", "application/vnd.ms-opentype");
     // office:binary-data
     CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/fonts/font0001.otf"));
     // librevenge:font-style
-    CPPUNIT_ASSERT_EQUAL(OUString("normal"), EPUBExportTest::getCss(aCssDoc, "font-face", "font-style"));
+    CPPUNIT_ASSERT_EQUAL(OUString("normal"),
+                         EPUBExportTest::getCss(aCssDoc, "font-face", "font-style"));
     // librevenge:font-weight
-    CPPUNIT_ASSERT_EQUAL(OUString("normal"), EPUBExportTest::getCss(aCssDoc, "font-face", "font-weight"));
+    CPPUNIT_ASSERT_EQUAL(OUString("normal"),
+                         EPUBExportTest::getCss(aCssDoc, "font-face", "font-weight"));
 #endif
 }
 
@@ -822,10 +851,8 @@ void EPUBExportTest::testPopupAPI()
 {
     // Make sure that the popup works with data from a media directory.
     OUString aMediaDir = m_directories.getURLFromSrc(DATA_DIRECTORY) + "popup";
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-    {
-        {"RVNGMediaDir", uno::makeAny(aMediaDir)}
-    }));
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "RVNGMediaDir", uno::makeAny(aMediaDir) } }));
     createDoc("popup-api.odt", aFilterData);
 
     // We have a non-empty anchor image.
@@ -842,15 +869,15 @@ void EPUBExportTest::testPopupAPI()
 void EPUBExportTest::testPageSize()
 {
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-    {
-        {"EPUBLayoutMethod", uno::makeAny(static_cast<sal_Int32>(libepubgen::EPUB_LAYOUT_METHOD_FIXED))}
-    }));
+        { { "EPUBLayoutMethod",
+            uno::makeAny(static_cast<sal_Int32>(libepubgen::EPUB_LAYOUT_METHOD_FIXED)) } }));
     createDoc("hello.fodt", aFilterData);
 
     // This failed, viewport was empty, so page size was lost.
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     // 21,59cm x 27.94cm (letter).
-    assertXPath(mpXmlDoc, "/xhtml:html/xhtml:head/xhtml:meta[@name='viewport']", "content", "width=816, height=1056");
+    assertXPath(mpXmlDoc, "/xhtml:html/xhtml:head/xhtml:meta[@name='viewport']", "content",
+                "width=816, height=1056");
 
     xmlFreeDoc(mpXmlDoc);
     mpXmlDoc = parseExport("OEBPS/images/image0001.svg");
@@ -862,13 +889,13 @@ void EPUBExportTest::testPageSize()
 void EPUBExportTest::testSVG()
 {
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-    {
-        {"EPUBLayoutMethod", uno::makeAny(static_cast<sal_Int32>(libepubgen::EPUB_LAYOUT_METHOD_FIXED))}
-    }));
+        { { "EPUBLayoutMethod",
+            uno::makeAny(static_cast<sal_Int32>(libepubgen::EPUB_LAYOUT_METHOD_FIXED)) } }));
     createDoc("hello.fodt", aFilterData);
 
     CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/images/image0001.svg"));
-    uno::Reference<io::XInputStream> xInputStream(mxZipFile->getByName("OEBPS/images/image0001.svg"), uno::UNO_QUERY);
+    uno::Reference<io::XInputStream> xInputStream(
+        mxZipFile->getByName("OEBPS/images/image0001.svg"), uno::UNO_QUERY);
     std::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
 
     SvMemoryStream aMemoryStream;
@@ -878,7 +905,7 @@ void EPUBExportTest::testSVG()
 
     // This failed, there was a '<!DOCTYPE' line between the xml and the svg
     // one, causing a validation error.
-    OString aActual(static_cast<const char *>(aMemoryStream.GetBuffer()), aExpected.getLength());
+    OString aActual(static_cast<const char*>(aMemoryStream.GetBuffer()), aExpected.getLength());
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     // This failed, we used the xlink attribute namespace, but we did not
@@ -887,25 +914,26 @@ void EPUBExportTest::testSVG()
     assertXPathNSDef(mpXmlDoc, "/svg:svg", "xlink", "http://www.w3.org/1999/xlink");
 }
 
-
 void EPUBExportTest::testTdf115623SingleWritingMode()
 {
     // Simple page that has single writing mode should work.
     createDoc("tdf115623-single-writing-mode.odt", {});
-    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    std::map<OUString, std::vector<OUString>> aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     OUString aClass = getXPath(mpXmlDoc, "//xhtml:body", "class");
-    CPPUNIT_ASSERT_EQUAL(OUString("vertical-rl"), EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
+    CPPUNIT_ASSERT_EQUAL(OUString("vertical-rl"),
+                         EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
 }
 
 void EPUBExportTest::testTdf115623SplitByChapter()
 {
     createDoc("tdf115623-split-by-chapter.odt", {});
-    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    std::map<OUString, std::vector<OUString>> aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
     {
         mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
         OUString aClass = getXPath(mpXmlDoc, "//xhtml:body", "class");
-        CPPUNIT_ASSERT_EQUAL(OUString("vertical-rl"), EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
+        CPPUNIT_ASSERT_EQUAL(OUString("vertical-rl"),
+                             EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
         xmlFreeDoc(mpXmlDoc);
         mpXmlDoc = nullptr;
     }
@@ -913,31 +941,33 @@ void EPUBExportTest::testTdf115623SplitByChapter()
     {
         mpXmlDoc = parseExport("OEBPS/sections/section0002.xhtml");
         OUString aClass = getXPath(mpXmlDoc, "//xhtml:body", "class");
-        CPPUNIT_ASSERT_EQUAL(OUString("vertical-rl"), EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
+        CPPUNIT_ASSERT_EQUAL(OUString("vertical-rl"),
+                             EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
     }
 }
 
 void EPUBExportTest::testTdf115623ManyPageSpans()
 {
     createDoc("tdf115623-many-pagespans.odt", {});
-    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    std::map<OUString, std::vector<OUString>> aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
     // Two pages should have different writing modes.
     {
         mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
         OUString aClass = getXPath(mpXmlDoc, "//xhtml:body", "class");
-        CPPUNIT_ASSERT_EQUAL(OUString("vertical-rl"), EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
+        CPPUNIT_ASSERT_EQUAL(OUString("vertical-rl"),
+                             EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
         xmlFreeDoc(mpXmlDoc);
         mpXmlDoc = nullptr;
     }
     {
         mpXmlDoc = parseExport("OEBPS/sections/section0002.xhtml");
         OUString aClass = getXPath(mpXmlDoc, "//xhtml:body", "class");
-        CPPUNIT_ASSERT_EQUAL(OUString("horizontal-tb"), EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
+        CPPUNIT_ASSERT_EQUAL(OUString("horizontal-tb"),
+                             EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
     }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
-
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -16,19 +16,20 @@ namespace writerperfect
 {
 namespace exp
 {
-
 /// Handler for <office:text>.
 class XMLBodyContentContext : public XMLImportContext
 {
 public:
-    XMLBodyContentContext(XMLImport &rImport);
+    XMLBodyContentContext(XMLImport& rImport);
 
-    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/) override;
-    void SAL_CALL endElement(const OUString &rName) override;
+    rtl::Reference<XMLImportContext> CreateChildContext(
+        const OUString& rName,
+        const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/) override;
+    void SAL_CALL endElement(const OUString& rName) override;
 };
 
 /// Context factory for body text, section, table cell, etc.
-rtl::Reference<XMLImportContext> CreateTextChildContext(XMLImport &rImport, const OUString &rName);
+rtl::Reference<XMLImportContext> CreateTextChildContext(XMLImport& rImport, const OUString& rName);
 
 } // namespace exp
 } // namespace writerperfect

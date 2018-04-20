@@ -31,25 +31,26 @@
 
 #include "WordPerfectImportFilter.hxx"
 
-using com::sun::star::uno::Sequence;
-using com::sun::star::uno::Reference;
-using com::sun::star::uno::Any;
-using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::XInterface;
-using com::sun::star::uno::Exception;
-using com::sun::star::uno::RuntimeException;
-using com::sun::star::uno::XComponentContext;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::document::XExtendedFilterDetection;
+using com::sun::star::uno::Any;
+using com::sun::star::uno::Exception;
+using com::sun::star::uno::Reference;
+using com::sun::star::uno::RuntimeException;
+using com::sun::star::uno::Sequence;
+using com::sun::star::uno::UNO_QUERY;
+using com::sun::star::uno::XComponentContext;
+using com::sun::star::uno::XInterface;
 
-using com::sun::star::io::XInputStream;
 using com::sun::star::document::XImporter;
+using com::sun::star::io::XInputStream;
 using com::sun::star::xml::sax::XDocumentHandler;
 
 using writerperfect::DocumentHandler;
 using writerperfect::WPXSvInputStream;
 
-static bool handleEmbeddedWPGObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
+static bool handleEmbeddedWPGObject(const librevenge::RVNGBinaryData& data,
+                                    OdfDocumentHandler* pHandler, const OdfStreamType streamType)
 {
     OdgGenerator exporter;
     exporter.addDocumentHandler(pHandler, streamType);
@@ -62,7 +63,8 @@ static bool handleEmbeddedWPGObject(const librevenge::RVNGBinaryData &data, OdfD
     return libwpg::WPGraphics::parse(data.getDataStream(), &exporter, fileFormat);
 }
 
-static bool handleEmbeddedWPGImage(const librevenge::RVNGBinaryData &input, librevenge::RVNGBinaryData &output)
+static bool handleEmbeddedWPGImage(const librevenge::RVNGBinaryData& input,
+                                   librevenge::RVNGBinaryData& output)
 {
     libwpg::WPGFileFormat fileFormat = libwpg::WPG_AUTODETECT;
 
@@ -81,16 +83,16 @@ static bool handleEmbeddedWPGImage(const librevenge::RVNGBinaryData &input, libr
     assert(1 == svgOutput.size());
 
     output.clear();
-    output.append(reinterpret_cast<const unsigned char *>(svgOutput[0].cstr()), svgOutput[0].size());
+    output.append(reinterpret_cast<const unsigned char*>(svgOutput[0].cstr()), svgOutput[0].size());
     return true;
 }
 
-bool WordPerfectImportFilter::importImpl(const Sequence< css::beans::PropertyValue > &aDescriptor)
+bool WordPerfectImportFilter::importImpl(const Sequence<css::beans::PropertyValue>& aDescriptor)
 {
     sal_Int32 nLength = aDescriptor.getLength();
-    const PropertyValue *pValue = aDescriptor.getConstArray();
-    Reference < XInputStream > xInputStream;
-    for (sal_Int32 i = 0 ; i < nLength; i++)
+    const PropertyValue* pValue = aDescriptor.getConstArray();
+    Reference<XInputStream> xInputStream;
+    for (sal_Int32 i = 0; i < nLength; i++)
     {
         if (pValue[i].Name == "InputStream")
             pValue[i].Value >>= xInputStream;
@@ -118,7 +120,8 @@ bool WordPerfectImportFilter::importImpl(const Sequence< css::beans::PropertyVal
                 return false;
             OUString aPasswd = aPasswdDlg.GetPassword();
             aUtf8Passwd = OUStringToOString(aPasswd, RTL_TEXTENCODING_UTF8);
-            if (libwpd::WPD_PASSWORD_MATCH_OK == libwpd::WPDocument::verifyPassword(&input, aUtf8Passwd.getStr()))
+            if (libwpd::WPD_PASSWORD_MATCH_OK
+                == libwpd::WPDocument::verifyPassword(&input, aUtf8Passwd.getStr()))
                 break;
             else
                 unsuccessfulAttempts++;
@@ -128,13 +131,13 @@ bool WordPerfectImportFilter::importImpl(const Sequence< css::beans::PropertyVal
     }
 
     // An XML import service: what we push sax messages to.
-    Reference < XDocumentHandler > xInternalHandler(
+    Reference<XDocumentHandler> xInternalHandler(
         mxContext->getServiceManager()->createInstanceWithContext(
             "com.sun.star.comp.Writer.XMLOasisImporter", mxContext),
         css::uno::UNO_QUERY_THROW);
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to.
-    Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
+    Reference<XImporter> xImporter(xInternalHandler, UNO_QUERY);
     xImporter->setTargetDocument(mxDoc);
 
     // OO Document Handler: abstract class to handle document SAX messages, concrete implementation here
@@ -145,36 +148,38 @@ bool WordPerfectImportFilter::importImpl(const Sequence< css::beans::PropertyVal
     collector.addDocumentHandler(&aHandler, ODF_FLAT_XML);
     collector.registerEmbeddedObjectHandler("image/x-wpg", &handleEmbeddedWPGObject);
     collector.registerEmbeddedImageHandler("image/x-wpg", &handleEmbeddedWPGImage);
-    return libwpd::WPD_OK == libwpd::WPDocument::parse(&input, &collector, aUtf8Passwd.isEmpty() ? nullptr : aUtf8Passwd.getStr());
+    return libwpd::WPD_OK
+           == libwpd::WPDocument::parse(&input, &collector,
+                                        aUtf8Passwd.isEmpty() ? nullptr : aUtf8Passwd.getStr());
 }
 
-sal_Bool SAL_CALL WordPerfectImportFilter::filter(const Sequence< css::beans::PropertyValue > &aDescriptor)
+sal_Bool SAL_CALL
+WordPerfectImportFilter::filter(const Sequence<css::beans::PropertyValue>& aDescriptor)
 {
     return importImpl(aDescriptor);
 }
-void SAL_CALL WordPerfectImportFilter::cancel()
-{
-}
+void SAL_CALL WordPerfectImportFilter::cancel() {}
 
 // XImporter
-void SAL_CALL WordPerfectImportFilter::setTargetDocument(const Reference< css::lang::XComponent > &xDoc)
+void SAL_CALL
+WordPerfectImportFilter::setTargetDocument(const Reference<css::lang::XComponent>& xDoc)
 {
     mxDoc = xDoc;
 }
 
 // XExtendedFilterDetection
-OUString SAL_CALL WordPerfectImportFilter::detect(Sequence< PropertyValue > &Descriptor)
+OUString SAL_CALL WordPerfectImportFilter::detect(Sequence<PropertyValue>& Descriptor)
 {
     libwpd::WPDConfidence confidence = libwpd::WPD_CONFIDENCE_NONE;
     OUString sTypeName;
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
-    const PropertyValue *pValue = Descriptor.getConstArray();
-    Reference < XInputStream > xInputStream;
-    for (sal_Int32 i = 0 ; i < nLength; i++)
+    const PropertyValue* pValue = Descriptor.getConstArray();
+    Reference<XInputStream> xInputStream;
+    for (sal_Int32 i = 0; i < nLength; i++)
     {
         if (pValue[i].Name == "TypeName")
-            location=i;
+            location = i;
         else if (pValue[i].Name == "InputStream")
             pValue[i].Value >>= xInputStream;
     }
@@ -186,28 +191,26 @@ OUString SAL_CALL WordPerfectImportFilter::detect(Sequence< PropertyValue > &Des
 
     confidence = libwpd::WPDocument::isFileFormatSupported(&input);
 
-    if (confidence == libwpd::WPD_CONFIDENCE_EXCELLENT || confidence == libwpd::WPD_CONFIDENCE_SUPPORTED_ENCRYPTION)
+    if (confidence == libwpd::WPD_CONFIDENCE_EXCELLENT
+        || confidence == libwpd::WPD_CONFIDENCE_SUPPORTED_ENCRYPTION)
         sTypeName = "writer_WordPerfect_Document";
 
     if (!sTypeName.isEmpty())
     {
         if (location == nLength)
         {
-            Descriptor.realloc(nLength+1);
+            Descriptor.realloc(nLength + 1);
             Descriptor[location].Name = "TypeName";
         }
 
-        Descriptor[location].Value <<=sTypeName;
+        Descriptor[location].Value <<= sTypeName;
     }
 
     return sTypeName;
 }
 
-
 // XInitialization
-void SAL_CALL WordPerfectImportFilter::initialize(const Sequence< Any > &/*aArguments*/)
-{
-}
+void SAL_CALL WordPerfectImportFilter::initialize(const Sequence<Any>& /*aArguments*/) {}
 
 // XServiceInfo
 OUString SAL_CALL WordPerfectImportFilter::getImplementationName()
@@ -215,26 +218,23 @@ OUString SAL_CALL WordPerfectImportFilter::getImplementationName()
     return OUString("com.sun.star.comp.Writer.WordPerfectImportFilter");
 }
 
-sal_Bool SAL_CALL WordPerfectImportFilter::supportsService(const OUString &rServiceName)
+sal_Bool SAL_CALL WordPerfectImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL WordPerfectImportFilter::getSupportedServiceNames()
+Sequence<OUString> SAL_CALL WordPerfectImportFilter::getSupportedServiceNames()
 {
-    Sequence < OUString > aRet(2);
-    OUString *pArray = aRet.getArray();
-    pArray[0] =  "com.sun.star.document.ImportFilter";
-    pArray[1] =  "com.sun.star.document.ExtendedTypeDetection";
+    Sequence<OUString> aRet(2);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = "com.sun.star.document.ImportFilter";
+    pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
     return aRet;
 }
 
-
-extern "C"
-SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_WordPerfectImportFilter_get_implementation(
-    css::uno::XComponentContext *const context,
-    const css::uno::Sequence<css::uno::Any> &)
+    css::uno::XComponentContext* const context, const css::uno::Sequence<css::uno::Any>&)
 {
     return cppu::acquire(new WordPerfectImportFilter(context));
 }

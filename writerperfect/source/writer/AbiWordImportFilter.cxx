@@ -15,17 +15,18 @@
 
 #include "AbiWordImportFilter.hxx"
 
-using com::sun::star::uno::Sequence;
 using com::sun::star::uno::RuntimeException;
+using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool AbiWordImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, OdtGenerator &rGenerator, utl::MediaDescriptor &)
+bool AbiWordImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
+                                           OdtGenerator& rGenerator, utl::MediaDescriptor&)
 {
     return libabw::AbiDocument::parse(&rInput, &rGenerator);
 }
 
-bool AbiWordImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
+bool AbiWordImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUString& rTypeName)
 {
     if (libabw::AbiDocument::isFileFormatSupported(&rInput))
     {
@@ -42,25 +43,23 @@ OUString SAL_CALL AbiWordImportFilter::getImplementationName()
     return OUString("com.sun.star.comp.Writer.AbiWordImportFilter");
 }
 
-sal_Bool SAL_CALL AbiWordImportFilter::supportsService(const OUString &rServiceName)
+sal_Bool SAL_CALL AbiWordImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL AbiWordImportFilter::getSupportedServiceNames()
+Sequence<OUString> SAL_CALL AbiWordImportFilter::getSupportedServiceNames()
 {
-    Sequence < OUString > aRet(2);
-    OUString *pArray = aRet.getArray();
-    pArray[0] =  "com.sun.star.document.ImportFilter";
-    pArray[1] =  "com.sun.star.document.ExtendedTypeDetection";
+    Sequence<OUString> aRet(2);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = "com.sun.star.document.ImportFilter";
+    pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
     return aRet;
 }
 
-extern "C"
-SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_AbiWordImportFilter_get_implementation(
-    css::uno::XComponentContext *const context,
-    const css::uno::Sequence<css::uno::Any> &)
+    css::uno::XComponentContext* const context, const css::uno::Sequence<css::uno::Any>&)
 {
     return cppu::acquire(new AbiWordImportFilter(context));
 }

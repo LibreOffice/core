@@ -7,10 +7,7 @@
 
 #include <unotools/resmgr.hxx>
 
-inline OUString WpResId(const char *pId)
-{
-    return Translate::get(pId, Translate::Create("wpt"));
-}
+inline OUString WpResId(const char* pId) { return Translate::get(pId, Translate::Create("wpt")); }
 
 #endif
 

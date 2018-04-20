@@ -14,16 +14,13 @@
 
 namespace writerperfect
 {
-
-template<>
-struct DocumentHandlerFor<OdtGenerator>
+template <> struct DocumentHandlerFor<OdtGenerator>
 {
     static const rtl::OUString name()
     {
         return rtl::OUString("com.sun.star.comp.Writer.XMLOasisImporter");
     }
 };
-
 }
 
 #endif

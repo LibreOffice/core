@@ -17,24 +17,24 @@ namespace writerperfect
 {
 namespace exp
 {
-
 /// Handler for <dc:title>.
 class XMLDcTitleContext : public XMLImportContext
 {
 public:
-    XMLDcTitleContext(XMLImport &rImport, XMLMetaDocumentContext &rMeta);
+    XMLDcTitleContext(XMLImport& rImport, XMLMetaDocumentContext& rMeta);
 
-    void SAL_CALL characters(const OUString &rChars) override;
+    void SAL_CALL characters(const OUString& rChars) override;
 
-    XMLMetaDocumentContext &mrMeta;
+    XMLMetaDocumentContext& mrMeta;
 };
 
-XMLDcTitleContext::XMLDcTitleContext(XMLImport &rImport, XMLMetaDocumentContext &rMeta)
-    : XMLImportContext(rImport), mrMeta(rMeta)
+XMLDcTitleContext::XMLDcTitleContext(XMLImport& rImport, XMLMetaDocumentContext& rMeta)
+    : XMLImportContext(rImport)
+    , mrMeta(rMeta)
 {
 }
 
-void XMLDcTitleContext::characters(const OUString &rChars)
+void XMLDcTitleContext::characters(const OUString& rChars)
 {
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
     if (!mrMeta.m_aPropertyList["dc:title"])
@@ -45,19 +45,20 @@ void XMLDcTitleContext::characters(const OUString &rChars)
 class XMLDcLanguageContext : public XMLImportContext
 {
 public:
-    XMLDcLanguageContext(XMLImport &rImport, XMLMetaDocumentContext &rMeta);
+    XMLDcLanguageContext(XMLImport& rImport, XMLMetaDocumentContext& rMeta);
 
-    void SAL_CALL characters(const OUString &rChars) override;
+    void SAL_CALL characters(const OUString& rChars) override;
 
-    XMLMetaDocumentContext &mrMeta;
+    XMLMetaDocumentContext& mrMeta;
 };
 
-XMLDcLanguageContext::XMLDcLanguageContext(XMLImport &rImport, XMLMetaDocumentContext &rMeta)
-    : XMLImportContext(rImport), mrMeta(rMeta)
+XMLDcLanguageContext::XMLDcLanguageContext(XMLImport& rImport, XMLMetaDocumentContext& rMeta)
+    : XMLImportContext(rImport)
+    , mrMeta(rMeta)
 {
 }
 
-void XMLDcLanguageContext::characters(const OUString &rChars)
+void XMLDcLanguageContext::characters(const OUString& rChars)
 {
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
     if (!mrMeta.m_aPropertyList["dc:language"])
@@ -68,19 +69,20 @@ void XMLDcLanguageContext::characters(const OUString &rChars)
 class XMLDcDateContext : public XMLImportContext
 {
 public:
-    XMLDcDateContext(XMLImport &rImport, XMLMetaDocumentContext &rMeta);
+    XMLDcDateContext(XMLImport& rImport, XMLMetaDocumentContext& rMeta);
 
-    void SAL_CALL characters(const OUString &rChars) override;
+    void SAL_CALL characters(const OUString& rChars) override;
 
-    XMLMetaDocumentContext &mrMeta;
+    XMLMetaDocumentContext& mrMeta;
 };
 
-XMLDcDateContext::XMLDcDateContext(XMLImport &rImport, XMLMetaDocumentContext &rMeta)
-    : XMLImportContext(rImport), mrMeta(rMeta)
+XMLDcDateContext::XMLDcDateContext(XMLImport& rImport, XMLMetaDocumentContext& rMeta)
+    : XMLImportContext(rImport)
+    , mrMeta(rMeta)
 {
 }
 
-void XMLDcDateContext::characters(const OUString &rChars)
+void XMLDcDateContext::characters(const OUString& rChars)
 {
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
     if (!mrMeta.m_aPropertyList["dc:date"])
@@ -91,19 +93,20 @@ void XMLDcDateContext::characters(const OUString &rChars)
 class XMLMetaGeneratorContext : public XMLImportContext
 {
 public:
-    XMLMetaGeneratorContext(XMLImport &rImport, XMLMetaDocumentContext &rMeta);
+    XMLMetaGeneratorContext(XMLImport& rImport, XMLMetaDocumentContext& rMeta);
 
-    void SAL_CALL characters(const OUString &rChars) override;
+    void SAL_CALL characters(const OUString& rChars) override;
 
-    XMLMetaDocumentContext &mrMeta;
+    XMLMetaDocumentContext& mrMeta;
 };
 
-XMLMetaGeneratorContext::XMLMetaGeneratorContext(XMLImport &rImport, XMLMetaDocumentContext &rMeta)
-    : XMLImportContext(rImport), mrMeta(rMeta)
+XMLMetaGeneratorContext::XMLMetaGeneratorContext(XMLImport& rImport, XMLMetaDocumentContext& rMeta)
+    : XMLImportContext(rImport)
+    , mrMeta(rMeta)
 {
 }
 
-void XMLMetaGeneratorContext::characters(const OUString &rChars)
+void XMLMetaGeneratorContext::characters(const OUString& rChars)
 {
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
     mrMeta.m_aPropertyList.insert("meta:generator", librevenge::RVNGString(sCharU8.getStr()));
@@ -113,26 +116,29 @@ void XMLMetaGeneratorContext::characters(const OUString &rChars)
 class XMLMetaInitialCreatorContext : public XMLImportContext
 {
 public:
-    XMLMetaInitialCreatorContext(XMLImport &rImport, XMLMetaDocumentContext &rMeta);
+    XMLMetaInitialCreatorContext(XMLImport& rImport, XMLMetaDocumentContext& rMeta);
 
-    void SAL_CALL characters(const OUString &rChars) override;
+    void SAL_CALL characters(const OUString& rChars) override;
 
-    XMLMetaDocumentContext &mrMeta;
+    XMLMetaDocumentContext& mrMeta;
 };
 
-XMLMetaInitialCreatorContext::XMLMetaInitialCreatorContext(XMLImport &rImport, XMLMetaDocumentContext &rMeta)
-    : XMLImportContext(rImport), mrMeta(rMeta)
+XMLMetaInitialCreatorContext::XMLMetaInitialCreatorContext(XMLImport& rImport,
+                                                           XMLMetaDocumentContext& rMeta)
+    : XMLImportContext(rImport)
+    , mrMeta(rMeta)
 {
 }
 
-void XMLMetaInitialCreatorContext::characters(const OUString &rChars)
+void XMLMetaInitialCreatorContext::characters(const OUString& rChars)
 {
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
     if (!mrMeta.m_aPropertyList["meta:initial-creator"])
-        mrMeta.m_aPropertyList.insert("meta:initial-creator", librevenge::RVNGString(sCharU8.getStr()));
+        mrMeta.m_aPropertyList.insert("meta:initial-creator",
+                                      librevenge::RVNGString(sCharU8.getStr()));
 }
 
-XMLMetaDocumentContext::XMLMetaDocumentContext(XMLImport &rImport)
+XMLMetaDocumentContext::XMLMetaDocumentContext(XMLImport& rImport)
     : XMLImportContext(rImport)
 {
     librevenge::RVNGPropertyList::Iter it(mrImport.GetMetaData());
@@ -141,7 +147,8 @@ XMLMetaDocumentContext::XMLMetaDocumentContext(XMLImport &rImport)
     m_aPropertyList.insert("librevenge:cover-images", mrImport.GetCoverImages());
 }
 
-rtl::Reference<XMLImportContext> XMLMetaDocumentContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLMetaDocumentContext::CreateChildContext(
+    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "dc:title")
         return new XMLDcTitleContext(mrImport, *this);
@@ -156,25 +163,22 @@ rtl::Reference<XMLImportContext> XMLMetaDocumentContext::CreateChildContext(cons
     return nullptr;
 }
 
-void XMLMetaDocumentContext::endElement(const OUString &/*rName*/)
+void XMLMetaDocumentContext::endElement(const OUString& /*rName*/)
 {
     mrImport.GetGenerator().setDocumentMetaData(m_aPropertyList);
 }
 
-XMPParser::XMPParser(librevenge::RVNGPropertyList &rMetaData)
+XMPParser::XMPParser(librevenge::RVNGPropertyList& rMetaData)
     : mrMetaData(rMetaData)
 {
 }
 
 XMPParser::~XMPParser() = default;
 
-void XMPParser::startDocument()
-{
-}
+void XMPParser::startDocument() {}
 
 void XMPParser::endDocument()
 {
-
     if (!mrMetaData["dc:identifier"] && !m_aIdentifier.isEmpty())
         mrMetaData.insert("dc:identifier", m_aIdentifier.toUtf8().getStr());
     if (!mrMetaData["dc:title"] && !m_aTitle.isEmpty())
@@ -187,7 +191,8 @@ void XMPParser::endDocument()
         mrMetaData.insert("dc:date", m_aDate.toUtf8().getStr());
 }
 
-void XMPParser::startElement(const OUString &rName, const uno::Reference<xml::sax::XAttributeList> &/*xAttribs*/)
+void XMPParser::startElement(const OUString& rName,
+                             const uno::Reference<xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "dc:identifier")
         m_bInIdentifier = true;
@@ -212,7 +217,7 @@ void XMPParser::startElement(const OUString &rName, const uno::Reference<xml::sa
     }
 }
 
-void XMPParser::endElement(const OUString &rName)
+void XMPParser::endElement(const OUString& rName)
 {
     if (rName == "dc:identifier")
         m_bInIdentifier = false;
@@ -237,7 +242,7 @@ void XMPParser::endElement(const OUString &rName)
     }
 }
 
-void XMPParser::characters(const OUString &rChars)
+void XMPParser::characters(const OUString& rChars)
 {
     if (m_bInIdentifier)
         m_aIdentifier += rChars;
@@ -251,17 +256,11 @@ void XMPParser::characters(const OUString &rChars)
         m_aDate += rChars;
 }
 
-void XMPParser::ignorableWhitespace(const OUString &/*rWhitespace*/)
-{
-}
+void XMPParser::ignorableWhitespace(const OUString& /*rWhitespace*/) {}
 
-void XMPParser::processingInstruction(const OUString &/*rTarget*/, const OUString &/*rData*/)
-{
-}
+void XMPParser::processingInstruction(const OUString& /*rTarget*/, const OUString& /*rData*/) {}
 
-void XMPParser::setDocumentLocator(const uno::Reference<xml::sax::XLocator> &/*xLocator*/)
-{
-}
+void XMPParser::setDocumentLocator(const uno::Reference<xml::sax::XLocator>& /*xLocator*/) {}
 
 } // namespace exp
 } // namespace writerperfect

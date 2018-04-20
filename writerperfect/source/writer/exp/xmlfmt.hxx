@@ -23,7 +23,6 @@ namespace writerperfect
 {
 namespace exp
 {
-
 /// Handler for <office:automatic-styles>/<office:styles>.
 class XMLStylesContext : public XMLImportContext
 {
@@ -33,38 +32,43 @@ public:
         StyleType_NONE,
         StyleType_AUTOMATIC
     };
-    XMLStylesContext(XMLImport &rImport, StyleType eType);
+    XMLStylesContext(XMLImport& rImport, StyleType eType);
 
-    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    rtl::Reference<XMLImportContext>
+    CreateChildContext(const OUString& rName,
+                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
-    std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentParagraphStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentTextStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentCellStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentColumnStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentRowStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentTableStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentGraphicStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentPageLayouts();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentMasterStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetCurrentParagraphStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetCurrentTextStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetCurrentCellStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetCurrentColumnStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetCurrentRowStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetCurrentTableStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetCurrentGraphicStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetCurrentPageLayouts();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetCurrentMasterStyles();
+
 private:
-    std::map<OUString, librevenge::RVNGPropertyList> &m_rParagraphStyles;
-    std::map<OUString, librevenge::RVNGPropertyList> &m_rTextStyles;
-    std::map<OUString, librevenge::RVNGPropertyList> &m_rCellStyles;
-    std::map<OUString, librevenge::RVNGPropertyList> &m_rColumnStyles;
-    std::map<OUString, librevenge::RVNGPropertyList> &m_rRowStyles;
-    std::map<OUString, librevenge::RVNGPropertyList> &m_rTableStyles;
-    std::map<OUString, librevenge::RVNGPropertyList> &m_rGraphicStyles;
-    std::map<OUString, librevenge::RVNGPropertyList> &m_rPageLayouts;
-    std::map<OUString, librevenge::RVNGPropertyList> &m_rMasterStyles;
+    std::map<OUString, librevenge::RVNGPropertyList>& m_rParagraphStyles;
+    std::map<OUString, librevenge::RVNGPropertyList>& m_rTextStyles;
+    std::map<OUString, librevenge::RVNGPropertyList>& m_rCellStyles;
+    std::map<OUString, librevenge::RVNGPropertyList>& m_rColumnStyles;
+    std::map<OUString, librevenge::RVNGPropertyList>& m_rRowStyles;
+    std::map<OUString, librevenge::RVNGPropertyList>& m_rTableStyles;
+    std::map<OUString, librevenge::RVNGPropertyList>& m_rGraphicStyles;
+    std::map<OUString, librevenge::RVNGPropertyList>& m_rPageLayouts;
+    std::map<OUString, librevenge::RVNGPropertyList>& m_rMasterStyles;
 };
 
 /// Handler for <office:font-face-decls>.
 class XMLFontFaceDeclsContext : public XMLImportContext
 {
 public:
-    XMLFontFaceDeclsContext(XMLImport &rImport);
+    XMLFontFaceDeclsContext(XMLImport& rImport);
 
-    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    rtl::Reference<XMLImportContext>
+    CreateChildContext(const OUString& rName,
+                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 };
 
 } // namespace exp

@@ -23,20 +23,26 @@ using namespace com::sun::star;
 
 namespace writerperfect
 {
-
-EPUBPackage::EPUBPackage(uno::Reference<uno::XComponentContext> xContext, const uno::Sequence<beans::PropertyValue> &rDescriptor)
+EPUBPackage::EPUBPackage(uno::Reference<uno::XComponentContext> xContext,
+                         const uno::Sequence<beans::PropertyValue>& rDescriptor)
     : mxContext(std::move(xContext))
 {
     // Extract the output stream from the descriptor.
     utl::MediaDescriptor aMediaDesc(rDescriptor);
-    auto xStream = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STREAMFOROUTPUT(), uno::Reference<io::XStream>());
+    auto xStream = aMediaDesc.getUnpackedValueOrDefault(
+        utl::MediaDescriptor::PROP_STREAMFOROUTPUT(), uno::Reference<io::XStream>());
     const sal_Int32 nOpenMode = embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE;
-    mxStorage.set(comphelper::OStorageHelper::GetStorageOfFormatFromStream(ZIP_STORAGE_FORMAT_STRING, xStream, nOpenMode, mxContext), uno::UNO_QUERY);
+    mxStorage.set(comphelper::OStorageHelper::GetStorageOfFormatFromStream(
+                      ZIP_STORAGE_FORMAT_STRING, xStream, nOpenMode, mxContext),
+                  uno::UNO_QUERY);
 
     // The zipped content represents an EPUB Publication.
-    mxOutputStream.set(mxStorage->openStreamElementByHierarchicalName("mimetype", embed::ElementModes::READWRITE), uno::UNO_QUERY);
+    mxOutputStream.set(
+        mxStorage->openStreamElementByHierarchicalName("mimetype", embed::ElementModes::READWRITE),
+        uno::UNO_QUERY);
     const OString aMimeType("application/epub+zip");
-    uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8 *>(aMimeType.getStr()), aMimeType.getLength());
+    uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aMimeType.getStr()),
+                                  aMimeType.getLength());
     mxOutputStream->writeBytes(aData);
     uno::Reference<embed::XTransactedObject> xTransactedObject(mxOutputStream, uno::UNO_QUERY);
     xTransactedObject->commit();
@@ -53,19 +59,21 @@ EPUBPackage::~EPUBPackage()
     xTransactedObject->commit();
 }
 
-void EPUBPackage::openXMLFile(const char *pName)
+void EPUBPackage::openXMLFile(const char* pName)
 {
     assert(pName);
     assert(!mxOutputStream.is());
     assert(!mxOutputWriter.is());
 
-    mxOutputStream.set(mxStorage->openStreamElementByHierarchicalName(OUString::fromUtf8(pName), embed::ElementModes::READWRITE), uno::UNO_QUERY);
+    mxOutputStream.set(mxStorage->openStreamElementByHierarchicalName(
+                           OUString::fromUtf8(pName), embed::ElementModes::READWRITE),
+                       uno::UNO_QUERY);
     mxOutputWriter = xml::sax::Writer::create(mxContext);
     mxOutputWriter->setOutputStream(mxOutputStream);
     mxOutputWriter->startDocument();
 }
 
-void EPUBPackage::openElement(const char *pName, const librevenge::RVNGPropertyList &rAttributes)
+void EPUBPackage::openElement(const char* pName, const librevenge::RVNGPropertyList& rAttributes)
 {
     assert(mxOutputWriter.is());
 
@@ -73,19 +81,21 @@ void EPUBPackage::openElement(const char *pName, const librevenge::RVNGPropertyL
 
     librevenge::RVNGPropertyList::Iter it(rAttributes);
     for (it.rewind(); it.next();)
-        pAttributeList->AddAttribute(OUString::fromUtf8(it.key()), OUString::fromUtf8(it()->getStr().cstr()));
+        pAttributeList->AddAttribute(OUString::fromUtf8(it.key()),
+                                     OUString::fromUtf8(it()->getStr().cstr()));
 
-    mxOutputWriter->startElement(OUString::fromUtf8(pName), uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+    mxOutputWriter->startElement(OUString::fromUtf8(pName),
+                                 uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
 }
 
-void EPUBPackage::closeElement(const char *pName)
+void EPUBPackage::closeElement(const char* pName)
 {
     assert(mxOutputWriter.is());
 
     mxOutputWriter->endElement(OUString::fromUtf8(pName));
 }
 
-void EPUBPackage::insertCharacters(const librevenge::RVNGString &rCharacters)
+void EPUBPackage::insertCharacters(const librevenge::RVNGString& rCharacters)
 {
     mxOutputWriter->characters(OUString::fromUtf8(rCharacters.cstr()));
 }
@@ -103,15 +113,18 @@ void EPUBPackage::closeXMLFile()
     mxOutputStream.clear();
 }
 
-void EPUBPackage::openCSSFile(const char *pName)
+void EPUBPackage::openCSSFile(const char* pName)
 {
     assert(pName);
     assert(!mxOutputStream.is());
 
-    mxOutputStream.set(mxStorage->openStreamElementByHierarchicalName(OUString::fromUtf8(pName), embed::ElementModes::READWRITE), uno::UNO_QUERY);
+    mxOutputStream.set(mxStorage->openStreamElementByHierarchicalName(
+                           OUString::fromUtf8(pName), embed::ElementModes::READWRITE),
+                       uno::UNO_QUERY);
 }
 
-void EPUBPackage::insertRule(const librevenge::RVNGString &rSelector, const librevenge::RVNGPropertyList &rProperties)
+void EPUBPackage::insertRule(const librevenge::RVNGString& rSelector,
+                             const librevenge::RVNGPropertyList& rProperties)
 {
     assert(mxOutputStream.is());
 
@@ -130,7 +143,8 @@ void EPUBPackage::insertRule(const librevenge::RVNGString &rSelector, const libr
 
     aStream << "}\n";
     std::string aString = aStream.str();
-    uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8 *>(aString.c_str()), aString.size());
+    uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aString.c_str()),
+                                  aString.size());
     mxOutputStream->writeBytes(aData);
 }
 
@@ -143,22 +157,25 @@ void EPUBPackage::closeCSSFile()
     mxOutputStream.clear();
 }
 
-void EPUBPackage::openBinaryFile(const char *pName)
+void EPUBPackage::openBinaryFile(const char* pName)
 {
     assert(pName);
     assert(!mxOutputStream.is());
 
-    mxOutputStream.set(mxStorage->openStreamElementByHierarchicalName(OUString::fromUtf8(pName), embed::ElementModes::READWRITE), uno::UNO_QUERY);
+    mxOutputStream.set(mxStorage->openStreamElementByHierarchicalName(
+                           OUString::fromUtf8(pName), embed::ElementModes::READWRITE),
+                       uno::UNO_QUERY);
 }
 
-void EPUBPackage::insertBinaryData(const librevenge::RVNGBinaryData &rData)
+void EPUBPackage::insertBinaryData(const librevenge::RVNGBinaryData& rData)
 {
     assert(mxOutputStream.is());
 
     if (rData.empty())
         return;
 
-    uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8 *>(rData.getDataBuffer()), rData.size());
+    uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(rData.getDataBuffer()),
+                                  rData.size());
     mxOutputStream->writeBytes(aData);
 }
 
@@ -171,12 +188,12 @@ void EPUBPackage::closeBinaryFile()
     mxOutputStream.clear();
 }
 
-void EPUBPackage::openTextFile(const char *pName)
+void EPUBPackage::openTextFile(const char* pName)
 {
     SAL_WARN("writerperfect", "EPUBPackage::openTextFile, " << pName << ": implement me");
 }
 
-void EPUBPackage::insertText(const librevenge::RVNGString &/*rCharacters*/)
+void EPUBPackage::insertText(const librevenge::RVNGString& /*rCharacters*/)
 {
     SAL_WARN("writerperfect", "EPUBPackage::insertText: implement me");
 }

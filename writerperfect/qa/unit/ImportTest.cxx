@@ -23,7 +23,6 @@
 
 namespace
 {
-
 namespace beans = css::beans;
 namespace container = css::container;
 namespace document = css::document;
@@ -48,11 +47,11 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    WpftLoader createCalcLoader(const rtl::OUString &rFile) const;
+    WpftLoader createCalcLoader(const rtl::OUString& rFile) const;
 
-    WpftLoader createLoader(const rtl::OUString &rUrl, const rtl::OUString &rFactoryUrl) const;
+    WpftLoader createLoader(const rtl::OUString& rUrl, const rtl::OUString& rFactoryUrl) const;
 
-    rtl::OUString makeUrl(const rtl::OUString &rFile) const;
+    rtl::OUString makeUrl(const rtl::OUString& rFile) const;
 
 private:
     uno::Reference<lang::XMultiServiceFactory> m_xFilterFactory;
@@ -86,12 +85,13 @@ void ImportTest::testWK3WithFM3()
 #endif
 }
 
-WpftLoader ImportTest::createCalcLoader(const rtl::OUString &rFile) const
+WpftLoader ImportTest::createCalcLoader(const rtl::OUString& rFile) const
 {
     return createLoader(makeUrl(rFile), "private:factory/scalc");
 }
 
-WpftLoader ImportTest::createLoader(const rtl::OUString &rUrl, const rtl::OUString &rFactoryUrl) const
+WpftLoader ImportTest::createLoader(const rtl::OUString& rUrl,
+                                    const rtl::OUString& rFactoryUrl) const
 {
     utl::MediaDescriptor aDesc;
     aDesc[utl::MediaDescriptor::PROP_URL()] <<= rUrl;
@@ -99,18 +99,18 @@ WpftLoader ImportTest::createLoader(const rtl::OUString &rUrl, const rtl::OUStri
     uno::Sequence<beans::PropertyValue> lDesc(aDesc.getAsConstPropertyValueList());
     const rtl::OUString sType = m_xTypeDetection->queryTypeByDescriptor(lDesc, true);
     CPPUNIT_ASSERT(!sType.isEmpty());
-    const uno::Reference<document::XFilter> xFilter(m_xFilterFactory->createInstance(sType), UNO_QUERY);
+    const uno::Reference<document::XFilter> xFilter(m_xFilterFactory->createInstance(sType),
+                                                    UNO_QUERY);
     CPPUNIT_ASSERT(xFilter.is());
     return WpftLoader(rUrl, xFilter, rFactoryUrl, m_xDesktop, m_xTypeMap, m_xContext);
 }
 
-rtl::OUString ImportTest::makeUrl(const rtl::OUString &rFile) const
+rtl::OUString ImportTest::makeUrl(const rtl::OUString& rFile) const
 {
-    return const_cast<ImportTest *>(this)->m_directories.getURLFromSrc("/" TEST_DIR "/" + rFile);
+    return const_cast<ImportTest*>(this)->m_directories.getURLFromSrc("/" TEST_DIR "/" + rFile);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ImportTest);
-
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

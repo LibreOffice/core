@@ -17,13 +17,13 @@ namespace writerperfect
 {
 namespace exp
 {
-
-XMLTextListContext::XMLTextListContext(XMLImport &rImport)
+XMLTextListContext::XMLTextListContext(XMLImport& rImport)
     : XMLImportContext(rImport)
 {
 }
 
-rtl::Reference<XMLImportContext> XMLTextListContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLTextListContext::CreateChildContext(
+    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "text:list-item")
         return new XMLTextListItemContext(mrImport);

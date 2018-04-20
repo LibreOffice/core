@@ -49,22 +49,22 @@ namespace uno = com::sun::star::uno;
 
 namespace writerperfect
 {
-
 namespace
 {
-
-uno::Reference<io::XInputStream> findStream(ucbhelper::Content &rContent, const rtl::OUString &rName)
+uno::Reference<io::XInputStream> findStream(ucbhelper::Content& rContent,
+                                            const rtl::OUString& rName)
 {
     uno::Reference<io::XInputStream> xInputStream;
 
-    uno::Sequence<OUString> lPropNames { "Title" };
+    uno::Sequence<OUString> lPropNames{ "Title" };
     try
     {
         const uno::Reference<sdbc::XResultSet> xResultSet(
             rContent.createCursor(lPropNames, ucbhelper::INCLUDE_DOCUMENTS_ONLY));
         if (xResultSet->first())
         {
-            const uno::Reference<ucb::XContentAccess> xContentAccess(xResultSet, uno::UNO_QUERY_THROW);
+            const uno::Reference<ucb::XContentAccess> xContentAccess(xResultSet,
+                                                                     uno::UNO_QUERY_THROW);
             const uno::Reference<sdbc::XRow> xRow(xResultSet, uno::UNO_QUERY_THROW);
             do
             {
@@ -72,57 +72,56 @@ uno::Reference<io::XInputStream> findStream(ucbhelper::Content &rContent, const 
                 if (aTitle == rName)
                 {
                     const uno::Reference<ucb::XContent> xSubContent(xContentAccess->queryContent());
-                    ucbhelper::Content aSubContent(xSubContent, uno::Reference<ucb::XCommandEnvironment>(), comphelper::getProcessComponentContext());
+                    ucbhelper::Content aSubContent(xSubContent,
+                                                   uno::Reference<ucb::XCommandEnvironment>(),
+                                                   comphelper::getProcessComponentContext());
                     xInputStream = aSubContent.openStream();
                     break;
                 }
-            }
-            while (xResultSet->next());
+            } while (xResultSet->next());
         }
     }
-    catch (const uno::RuntimeException &)
+    catch (const uno::RuntimeException&)
     {
         // ignore
     }
-    catch (const uno::Exception &)
+    catch (const uno::Exception&)
     {
         // ignore
     }
 
     return xInputStream;
 }
-
 }
 
 struct DirectoryStream::Impl
 {
-    explicit Impl(const uno::Reference<ucb::XContent> &rxContent);
+    explicit Impl(const uno::Reference<ucb::XContent>& rxContent);
 
     uno::Reference<ucb::XContent> xContent;
 };
 
-DirectoryStream::Impl::Impl(const uno::Reference<ucb::XContent> &rxContent)
+DirectoryStream::Impl::Impl(const uno::Reference<ucb::XContent>& rxContent)
     : xContent(rxContent)
 {
 }
 
-DirectoryStream::DirectoryStream(const css::uno::Reference<css::ucb::XContent> &xContent)
+DirectoryStream::DirectoryStream(const css::uno::Reference<css::ucb::XContent>& xContent)
     : m_pImpl(isDirectory(xContent) ? new Impl(xContent) : nullptr)
 {
 }
 
-DirectoryStream::~DirectoryStream()
-{
-}
+DirectoryStream::~DirectoryStream() {}
 
-bool DirectoryStream::isDirectory(const css::uno::Reference<css::ucb::XContent> &xContent)
+bool DirectoryStream::isDirectory(const css::uno::Reference<css::ucb::XContent>& xContent)
 {
     try
     {
         if (!xContent.is())
             return false;
 
-        ucbhelper::Content aContent(xContent, uno::Reference<ucb::XCommandEnvironment>(), comphelper::getProcessComponentContext());
+        ucbhelper::Content aContent(xContent, uno::Reference<ucb::XCommandEnvironment>(),
+                                    comphelper::getProcessComponentContext());
         return aContent.isFolder();
     }
     catch (...)
@@ -131,7 +130,8 @@ bool DirectoryStream::isDirectory(const css::uno::Reference<css::ucb::XContent> 
     }
 }
 
-std::unique_ptr<DirectoryStream> DirectoryStream::createForParent(const css::uno::Reference<css::ucb::XContent> &xContent)
+std::unique_ptr<DirectoryStream>
+DirectoryStream::createForParent(const css::uno::Reference<css::ucb::XContent>& xContent)
 {
     try
     {
@@ -167,10 +167,7 @@ const css::uno::Reference<css::ucb::XContent> DirectoryStream::getContent() cons
     return m_pImpl->xContent;
 }
 
-bool DirectoryStream::isStructured()
-{
-    return m_pImpl != nullptr;
-}
+bool DirectoryStream::isStructured() { return m_pImpl != nullptr; }
 
 unsigned DirectoryStream::subStreamCount()
 {
@@ -178,58 +175,50 @@ unsigned DirectoryStream::subStreamCount()
     return 0;
 }
 
-const char *DirectoryStream::subStreamName(unsigned /* id */)
+const char* DirectoryStream::subStreamName(unsigned /* id */)
 {
     // TODO: implement me
     return nullptr;
 }
 
-bool DirectoryStream::existsSubStream(const char * /* name */)
+bool DirectoryStream::existsSubStream(const char* /* name */)
 {
     // TODO: implement me
     return false;
 }
 
-librevenge::RVNGInputStream *DirectoryStream::getSubStreamByName(const char *const pName)
+librevenge::RVNGInputStream* DirectoryStream::getSubStreamByName(const char* const pName)
 {
     if (!m_pImpl)
         return nullptr;
 
-    ucbhelper::Content aContent(m_pImpl->xContent, uno::Reference<ucb::XCommandEnvironment>(), comphelper::getProcessComponentContext());
-    const uno::Reference<io::XInputStream> xInputStream(findStream(aContent, rtl::OUString::createFromAscii(pName)));
+    ucbhelper::Content aContent(m_pImpl->xContent, uno::Reference<ucb::XCommandEnvironment>(),
+                                comphelper::getProcessComponentContext());
+    const uno::Reference<io::XInputStream> xInputStream(
+        findStream(aContent, rtl::OUString::createFromAscii(pName)));
     if (xInputStream.is())
         return new WPXSvInputStream(xInputStream);
 
     return nullptr;
 }
 
-librevenge::RVNGInputStream *DirectoryStream::getSubStreamById(unsigned /* id */)
+librevenge::RVNGInputStream* DirectoryStream::getSubStreamById(unsigned /* id */)
 {
     // TODO: implement me
     return nullptr;
 }
 
-const unsigned char *DirectoryStream::read(unsigned long, unsigned long &nNumBytesRead)
+const unsigned char* DirectoryStream::read(unsigned long, unsigned long& nNumBytesRead)
 {
     nNumBytesRead = 0;
     return nullptr;
 }
 
-int DirectoryStream::seek(long, librevenge::RVNG_SEEK_TYPE)
-{
-    return -1;
-}
+int DirectoryStream::seek(long, librevenge::RVNG_SEEK_TYPE) { return -1; }
 
-long DirectoryStream::tell()
-{
-    return 0;
-}
+long DirectoryStream::tell() { return 0; }
 
-bool DirectoryStream::isEnd()
-{
-    return true;
-}
-
+bool DirectoryStream::isEnd() { return true; }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,7 +33,6 @@ using writerperfect::DirectoryStream;
 
 namespace
 {
-
 class DirectoryStreamTest : public test::BootstrapFixture
 {
 public:
@@ -72,7 +71,8 @@ DirectoryStreamTest::DirectoryStreamTest()
 
     m_xDir = Content(m_directories.getURLFromSrc(g_aDirPath), xCmdEnv, xContext).get();
     m_xFile = Content(m_directories.getURLFromSrc(g_aNondirPath), xCmdEnv, xContext).get();
-    m_xNonexistent = Content(m_directories.getURLFromSrc(g_aNonexistentPath), xCmdEnv, xContext).get();
+    m_xNonexistent
+        = Content(m_directories.getURLFromSrc(g_aNonexistentPath), xCmdEnv, xContext).get();
 }
 
 void DirectoryStreamTest::testConstruction()
@@ -102,7 +102,7 @@ void DirectoryStreamTest::testDetection()
     CPPUNIT_ASSERT(!DirectoryStream::isDirectory(m_xNonexistent));
 }
 
-void lcl_testDataOperations(RVNGInputStream &rStream)
+void lcl_testDataOperations(RVNGInputStream& rStream)
 {
     CPPUNIT_ASSERT(rStream.isEnd());
     CPPUNIT_ASSERT_EQUAL(0L, rStream.tell());
@@ -125,7 +125,7 @@ void DirectoryStreamTest::testDataOperations()
     lcl_testDataOperations(aFile);
 }
 
-void lcl_testStructuredOperations(RVNGInputStream &rStream)
+void lcl_testStructuredOperations(RVNGInputStream& rStream)
 {
     CPPUNIT_ASSERT(rStream.isStructured());
     unique_ptr<RVNGInputStream> pSubstream(rStream.getSubStreamByName("mimetype"));
@@ -145,7 +145,6 @@ void DirectoryStreamTest::testStructuredOperations()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DirectoryStreamTest);
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

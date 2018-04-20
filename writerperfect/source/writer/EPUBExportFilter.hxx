@@ -27,12 +27,9 @@ struct FixedLayoutPage;
 }
 
 /// EPUB export XFilter implementation.
-class EPUBExportFilter : public cppu::WeakImplHelper
-    <
-    css::document::XFilter,
-    css::document::XExporter,
-    css::lang::XServiceInfo
-    >
+class EPUBExportFilter
+    : public cppu::WeakImplHelper<css::document::XFilter, css::document::XExporter,
+                                  css::lang::XServiceInfo>
 {
     css::uno::Reference<css::uno::XComponentContext> mxContext;
     css::uno::Reference<css::lang::XComponent> mxSourceDocument;
@@ -41,15 +38,17 @@ public:
     EPUBExportFilter(css::uno::Reference<css::uno::XComponentContext> xContext);
 
     // XFilter
-    sal_Bool SAL_CALL filter(const css::uno::Sequence<css::beans::PropertyValue> &rDescriptor) override;
+    sal_Bool SAL_CALL
+    filter(const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor) override;
     void SAL_CALL cancel() override;
 
     // XExporter
-    void SAL_CALL setSourceDocument(const css::uno::Reference<css::lang::XComponent> &xDocument) override;
+    void SAL_CALL
+    setSourceDocument(const css::uno::Reference<css::lang::XComponent>& xDocument) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService(const OUString &rServiceName) override;
+    sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     /// Gives the default EPUB version.
@@ -61,7 +60,7 @@ public:
 
 private:
     /// Create page metafiles in case of fixed layout.
-    void CreateMetafiles(std::vector<exp::FixedLayoutPage> &rPageMetafiles);
+    void CreateMetafiles(std::vector<exp::FixedLayoutPage>& rPageMetafiles);
 };
 
 } // namespace writerperfect

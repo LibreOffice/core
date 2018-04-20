@@ -16,19 +16,23 @@
 
 #include "MWAWPresentationImportFilter.hxx"
 
-using com::sun::star::uno::Sequence;
-using com::sun::star::uno::XInterface;
 using com::sun::star::uno::RuntimeException;
+using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
+using com::sun::star::uno::XInterface;
 
-static bool handleEmbeddedMWAWGraphicObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
+static bool handleEmbeddedMWAWGraphicObject(const librevenge::RVNGBinaryData& data,
+                                            OdfDocumentHandler* pHandler,
+                                            const OdfStreamType streamType)
 {
     OdgGenerator exporter;
     exporter.addDocumentHandler(pHandler, streamType);
     return MWAWDocument::decodeGraphic(data, &exporter);
 }
 
-static bool handleEmbeddedMWAWSpreadsheetObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
+static bool handleEmbeddedMWAWSpreadsheetObject(const librevenge::RVNGBinaryData& data,
+                                                OdfDocumentHandler* pHandler,
+                                                const OdfStreamType streamType)
 {
     OdsGenerator exporter;
     exporter.registerEmbeddedObjectHandler("image/mwaw-odg", &handleEmbeddedMWAWGraphicObject);
@@ -36,18 +40,21 @@ static bool handleEmbeddedMWAWSpreadsheetObject(const librevenge::RVNGBinaryData
     return MWAWDocument::decodeSpreadsheet(data, &exporter);
 }
 
-bool MWAWPresentationImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, OdpGenerator &rGenerator, utl::MediaDescriptor &)
+bool MWAWPresentationImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
+                                                    OdpGenerator& rGenerator, utl::MediaDescriptor&)
 {
     return MWAWDocument::MWAW_R_OK == MWAWDocument::parse(&rInput, &rGenerator);
 }
 
-bool MWAWPresentationImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
+bool MWAWPresentationImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput,
+                                                  OUString& rTypeName)
 {
     rTypeName.clear();
 
     MWAWDocument::Type docType = MWAWDocument::MWAW_T_UNKNOWN;
     MWAWDocument::Kind docKind = MWAWDocument::MWAW_K_UNKNOWN;
-    const MWAWDocument::Confidence confidence = MWAWDocument::isFileFormatSupported(&rInput, docType, docKind);
+    const MWAWDocument::Confidence confidence
+        = MWAWDocument::isFileFormatSupported(&rInput, docType, docKind);
 
     if (confidence == MWAWDocument::MWAW_C_EXCELLENT)
     {
@@ -55,15 +62,15 @@ bool MWAWPresentationImportFilter::doDetectFormat(librevenge::RVNGInputStream &r
         {
             switch (docType)
             {
-            case MWAWDocument::MWAW_T_CLARISWORKS:
-                rTypeName = "impress_ClarisWorks";
-                break;
-            case MWAWDocument::MWAW_T_RESERVED8:
-                rTypeName = "impress_PowerPoint3";
-                break;
-            default:
-                rTypeName = "MWAW_Presentation";
-                break;
+                case MWAWDocument::MWAW_T_CLARISWORKS:
+                    rTypeName = "impress_ClarisWorks";
+                    break;
+                case MWAWDocument::MWAW_T_RESERVED8:
+                    rTypeName = "impress_PowerPoint3";
+                    break;
+                default:
+                    rTypeName = "MWAW_Presentation";
+                    break;
             }
         }
     }
@@ -71,10 +78,11 @@ bool MWAWPresentationImportFilter::doDetectFormat(librevenge::RVNGInputStream &r
     return !rTypeName.isEmpty();
 }
 
-void MWAWPresentationImportFilter::doRegisterHandlers(OdpGenerator &rGenerator)
+void MWAWPresentationImportFilter::doRegisterHandlers(OdpGenerator& rGenerator)
 {
     rGenerator.registerEmbeddedObjectHandler("image/mwaw-odg", &handleEmbeddedMWAWGraphicObject);
-    rGenerator.registerEmbeddedObjectHandler("image/mwaw-ods", &handleEmbeddedMWAWSpreadsheetObject);
+    rGenerator.registerEmbeddedObjectHandler("image/mwaw-ods",
+                                             &handleEmbeddedMWAWSpreadsheetObject);
 }
 
 // XServiceInfo
@@ -82,24 +90,22 @@ OUString SAL_CALL MWAWPresentationImportFilter::getImplementationName()
 {
     return OUString("com.sun.star.comp.Impress.MWAWPresentationImportFilter");
 }
-sal_Bool SAL_CALL MWAWPresentationImportFilter::supportsService(const OUString &rServiceName)
+sal_Bool SAL_CALL MWAWPresentationImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
-Sequence< OUString > SAL_CALL MWAWPresentationImportFilter::getSupportedServiceNames()
+Sequence<OUString> SAL_CALL MWAWPresentationImportFilter::getSupportedServiceNames()
 {
-    Sequence < OUString > aRet(2);
-    OUString *pArray = aRet.getArray();
-    pArray[0] =  "com.sun.star.document.ImportFilter";
-    pArray[1] =  "com.sun.star.document.ExtendedTypeDetection";
+    Sequence<OUString> aRet(2);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = "com.sun.star.document.ImportFilter";
+    pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
     return aRet;
 }
 
-extern "C"
-SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Impress_MWAWPresentationImportFilter_get_implementation(
-    css::uno::XComponentContext *const context,
-    const css::uno::Sequence<css::uno::Any> &)
+    css::uno::XComponentContext* const context, const css::uno::Sequence<css::uno::Any>&)
 {
     return cppu::acquire(new MWAWPresentationImportFilter(context));
 }

@@ -33,16 +33,12 @@ using namespace com::sun::star;
 
 namespace writerperfect
 {
-
 EPUBExportFilter::EPUBExportFilter(uno::Reference<uno::XComponentContext> xContext)
     : mxContext(std::move(xContext))
 {
 }
 
-sal_Int32 EPUBExportFilter::GetDefaultVersion()
-{
-    return 30;
-}
+sal_Int32 EPUBExportFilter::GetDefaultVersion() { return 30; }
 
 sal_Int32 EPUBExportFilter::GetDefaultSplitMethod()
 {
@@ -54,7 +50,7 @@ sal_Int32 EPUBExportFilter::GetDefaultLayoutMethod()
     return libepubgen::EPUB_LAYOUT_METHOD_REFLOWABLE;
 }
 
-sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDescriptor)
+sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
     sal_Int32 nVersion = EPUBExportFilter::GetDefaultVersion();
     sal_Int32 nSplitMethod = EPUBExportFilter::GetDefaultSplitMethod();
@@ -98,20 +94,24 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
     if (nLayoutMethod == libepubgen::EPUB_LAYOUT_METHOD_FIXED)
         CreateMetafiles(aPageMetafiles);
 
-    uno::Reference<xml::sax::XDocumentHandler> xExportHandler(new exp::XMLImport(mxContext, aGenerator, aSourceURL, rDescriptor, aPageMetafiles));
+    uno::Reference<xml::sax::XDocumentHandler> xExportHandler(
+        new exp::XMLImport(mxContext, aGenerator, aSourceURL, rDescriptor, aPageMetafiles));
 
-    uno::Reference<lang::XInitialization> xInitialization(mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.Writer.XMLOasisExporter", mxContext), uno::UNO_QUERY);
+    uno::Reference<lang::XInitialization> xInitialization(
+        mxContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.comp.Writer.XMLOasisExporter", mxContext),
+        uno::UNO_QUERY);
 
     // A subset of parameters are passed in as a property set.
-    comphelper::PropertyMapEntry const aInfoMap[] =
-    {
-        {OUString("BaseURI"), 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
-        {OUString(), 0, uno::Type(), 0, 0}
-    };
-    uno::Reference<beans::XPropertySet> xInfoSet(comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
+    comphelper::PropertyMapEntry const aInfoMap[]
+        = { { OUString("BaseURI"), 0, cppu::UnoType<OUString>::get(),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+            { OUString(), 0, uno::Type(), 0, 0 } };
+    uno::Reference<beans::XPropertySet> xInfoSet(
+        comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
     xInfoSet->setPropertyValue("BaseURI", uno::makeAny(aSourceURL));
 
-    xInitialization->initialize({uno::makeAny(xExportHandler), uno::makeAny(xInfoSet)});
+    xInitialization->initialize({ uno::makeAny(xExportHandler), uno::makeAny(xInfoSet) });
     uno::Reference<document::XExporter> xExporter(xInitialization, uno::UNO_QUERY);
     xExporter->setSourceDocument(mxSourceDocument);
     uno::Reference<document::XFilter> xFilter(xInitialization, uno::UNO_QUERY);
@@ -119,18 +119,20 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
     return xFilter->filter(rDescriptor);
 }
 
-void EPUBExportFilter::CreateMetafiles(std::vector<exp::FixedLayoutPage> &rPageMetafiles)
+void EPUBExportFilter::CreateMetafiles(std::vector<exp::FixedLayoutPage>& rPageMetafiles)
 {
     DocumentToGraphicRenderer aRenderer(mxSourceDocument, /*bSelectionOnly=*/false);
     uno::Reference<frame::XModel> xModel(mxSourceDocument, uno::UNO_QUERY);
     if (!xModel.is())
         return;
 
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
     if (!xTextViewCursorSupplier.is())
         return;
 
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
+                                              uno::UNO_QUERY);
     if (!xCursor.is())
         return;
 
@@ -141,9 +143,11 @@ void EPUBExportFilter::CreateMetafiles(std::vector<exp::FixedLayoutPage> &rPageM
         Size aDocumentSizePixel = aRenderer.getDocumentSizeInPixels(nPage);
         Size aLogic = aRenderer.getDocumentSizeIn100mm(nPage);
         // Get the CSS pixel size of the page (mm100 -> pixel using 96 DPI, independent from system DPI).
-        Size aCss(static_cast<double>(aLogic.getWidth()) / 26.4583, static_cast<double>(aLogic.getHeight()) / 26.4583);
-        Graphic aGraphic = aRenderer.renderToGraphic(nPage, aDocumentSizePixel, aCss, COL_WHITE, /*bExtOutDevData=*/true);
-        auto &rGDIMetaFile = const_cast<GDIMetaFile &>(aGraphic.GetGDIMetaFile());
+        Size aCss(static_cast<double>(aLogic.getWidth()) / 26.4583,
+                  static_cast<double>(aLogic.getHeight()) / 26.4583);
+        Graphic aGraphic = aRenderer.renderToGraphic(nPage, aDocumentSizePixel, aCss, COL_WHITE,
+                                                     /*bExtOutDevData=*/true);
+        auto& rGDIMetaFile = const_cast<GDIMetaFile&>(aGraphic.GetGDIMetaFile());
 
         // Set preferred map unit and size on the metafile, so the SVG size
         // will be correct in MM.
@@ -154,7 +158,8 @@ void EPUBExportFilter::CreateMetafiles(std::vector<exp::FixedLayoutPage> &rPageM
 
         SvMemoryStream aMemoryStream;
         rGDIMetaFile.Write(aMemoryStream);
-        uno::Sequence<sal_Int8> aSequence(static_cast<const sal_Int8 *>(aMemoryStream.GetData()), aMemoryStream.Tell());
+        uno::Sequence<sal_Int8> aSequence(static_cast<const sal_Int8*>(aMemoryStream.GetData()),
+                                          aMemoryStream.Tell());
 
         exp::FixedLayoutPage aPage;
         aPage.aMetafile = aSequence;
@@ -164,11 +169,9 @@ void EPUBExportFilter::CreateMetafiles(std::vector<exp::FixedLayoutPage> &rPageM
     }
 }
 
-void EPUBExportFilter::cancel()
-{
-}
+void EPUBExportFilter::cancel() {}
 
-void EPUBExportFilter::setSourceDocument(const uno::Reference<lang::XComponent> &xDocument)
+void EPUBExportFilter::setSourceDocument(const uno::Reference<lang::XComponent>& xDocument)
 {
     mxSourceDocument = xDocument;
 }
@@ -178,21 +181,20 @@ OUString EPUBExportFilter::getImplementationName()
     return OUString("com.sun.star.comp.Writer.EPUBExportFilter");
 }
 
-sal_Bool EPUBExportFilter::supportsService(const OUString &rServiceName)
+sal_Bool EPUBExportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> EPUBExportFilter::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet =
-    {
-        OUString("com.sun.star.document.ExportFilter")
-    };
+    uno::Sequence<OUString> aRet = { OUString("com.sun.star.document.ExportFilter") };
     return aRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface *com_sun_star_comp_Writer_EPUBExportFilter_get_implementation(uno::XComponentContext *pContext, uno::Sequence<uno::Any> const &/*rSeq*/)
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Writer_EPUBExportFilter_get_implementation(
+    uno::XComponentContext* pContext, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new EPUBExportFilter(pContext));
 }

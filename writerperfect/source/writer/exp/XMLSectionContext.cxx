@@ -18,23 +18,25 @@ namespace writerperfect
 {
 namespace exp
 {
-
-XMLSectionContext::XMLSectionContext(XMLImport &rImport)
+XMLSectionContext::XMLSectionContext(XMLImport& rImport)
     : XMLImportContext(rImport)
 {
 }
 
-rtl::Reference<XMLImportContext> XMLSectionContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLSectionContext::CreateChildContext(
+    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     return CreateTextChildContext(mrImport, rName);
 }
 
-void XMLSectionContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+void XMLSectionContext::startElement(
+    const OUString& /*rName*/,
+    const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     mrImport.GetGenerator().openSection(librevenge::RVNGPropertyList());
 }
 
-void XMLSectionContext::endElement(const OUString &/*rName*/)
+void XMLSectionContext::endElement(const OUString& /*rName*/)
 {
     mrImport.GetGenerator().closeSection();
 }

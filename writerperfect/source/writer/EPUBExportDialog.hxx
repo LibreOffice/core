@@ -19,24 +19,25 @@ class SequenceAsHashMap;
 
 namespace writerperfect
 {
-
 /// EPUB export options dialog.
 class EPUBExportDialog : public weld::GenericDialogController
 {
 public:
-    EPUBExportDialog(weld::Window *pParent, comphelper::SequenceAsHashMap &rFilterData, css::uno::Reference<css::uno::XComponentContext> xContext, css::uno::Reference<css::lang::XComponent> xDocument);
+    EPUBExportDialog(weld::Window* pParent, comphelper::SequenceAsHashMap& rFilterData,
+                     css::uno::Reference<css::uno::XComponentContext> xContext,
+                     css::uno::Reference<css::lang::XComponent> xDocument);
     ~EPUBExportDialog() override;
 
 private:
-    DECL_LINK(VersionSelectHdl, weld::ComboBoxText &, void);
-    DECL_LINK(SplitSelectHdl, weld::ComboBoxText &, void);
-    DECL_LINK(LayoutSelectHdl, weld::ComboBoxText &, void);
-    DECL_LINK(CoverClickHdl, weld::Button &, void);
-    DECL_LINK(MediaClickHdl, weld::Button &, void);
-    DECL_LINK(OKClickHdl, weld::Button &, void);
+    DECL_LINK(VersionSelectHdl, weld::ComboBoxText&, void);
+    DECL_LINK(SplitSelectHdl, weld::ComboBoxText&, void);
+    DECL_LINK(LayoutSelectHdl, weld::ComboBoxText&, void);
+    DECL_LINK(CoverClickHdl, weld::Button&, void);
+    DECL_LINK(MediaClickHdl, weld::Button&, void);
+    DECL_LINK(OKClickHdl, weld::Button&, void);
 
     css::uno::Reference<css::uno::XComponentContext> m_xContext;
-    comphelper::SequenceAsHashMap &m_rFilterData;
+    comphelper::SequenceAsHashMap& m_rFilterData;
     css::uno::Reference<css::lang::XComponent> m_xSourceDocument;
 
     std::unique_ptr<weld::ComboBoxText> m_xVersion;

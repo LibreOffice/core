@@ -14,19 +14,23 @@
 
 #include "StarOfficeDrawImportFilter.hxx"
 
-using com::sun::star::uno::Sequence;
-using com::sun::star::uno::XInterface;
 using com::sun::star::uno::RuntimeException;
+using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
+using com::sun::star::uno::XInterface;
 
-static bool handleEmbeddedSTOFFGraphicObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
+static bool handleEmbeddedSTOFFGraphicObject(const librevenge::RVNGBinaryData& data,
+                                             OdfDocumentHandler* pHandler,
+                                             const OdfStreamType streamType)
 {
     OdgGenerator exporter;
     exporter.addDocumentHandler(pHandler, streamType);
     return STOFFDocument::decodeGraphic(data, &exporter);
 }
 
-static bool handleEmbeddedSTOFFSpreadsheetObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
+static bool handleEmbeddedSTOFFSpreadsheetObject(const librevenge::RVNGBinaryData& data,
+                                                 OdfDocumentHandler* pHandler,
+                                                 const OdfStreamType streamType)
 {
     OdsGenerator exporter;
     exporter.registerEmbeddedObjectHandler("image/stoff-odg", &handleEmbeddedSTOFFGraphicObject);
@@ -34,37 +38,42 @@ static bool handleEmbeddedSTOFFSpreadsheetObject(const librevenge::RVNGBinaryDat
     return STOFFDocument::decodeSpreadsheet(data, &exporter);
 }
 
-bool StarOfficeDrawImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, OdgGenerator &rGenerator, utl::MediaDescriptor &)
+bool StarOfficeDrawImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
+                                                  OdgGenerator& rGenerator, utl::MediaDescriptor&)
 {
     return STOFFDocument::STOFF_R_OK == STOFFDocument::parse(&rInput, &rGenerator);
 }
 
-bool StarOfficeDrawImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
+bool StarOfficeDrawImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput,
+                                                OUString& rTypeName)
 {
     rTypeName.clear();
 
     STOFFDocument::Kind docKind = STOFFDocument::STOFF_K_UNKNOWN;
-    const STOFFDocument::Confidence confidence = STOFFDocument::isFileFormatSupported(&rInput, docKind);
+    const STOFFDocument::Confidence confidence
+        = STOFFDocument::isFileFormatSupported(&rInput, docKind);
 
-    if (confidence == STOFFDocument::STOFF_C_EXCELLENT || confidence == STOFFDocument::STOFF_C_SUPPORTED_ENCRYPTION)
+    if (confidence == STOFFDocument::STOFF_C_EXCELLENT
+        || confidence == STOFFDocument::STOFF_C_SUPPORTED_ENCRYPTION)
     {
         switch (docKind)
         {
-        case STOFFDocument::STOFF_K_DRAW:
-            rTypeName = "StarOffice_Drawing";
-            break;
-        default:
-            break;
+            case STOFFDocument::STOFF_K_DRAW:
+                rTypeName = "StarOffice_Drawing";
+                break;
+            default:
+                break;
         }
     }
 
     return !rTypeName.isEmpty();
 }
 
-void StarOfficeDrawImportFilter::doRegisterHandlers(OdgGenerator &rGenerator)
+void StarOfficeDrawImportFilter::doRegisterHandlers(OdgGenerator& rGenerator)
 {
     rGenerator.registerEmbeddedObjectHandler("image/stoff-odg", &handleEmbeddedSTOFFGraphicObject);
-    rGenerator.registerEmbeddedObjectHandler("image/stoff-ods", &handleEmbeddedSTOFFSpreadsheetObject);
+    rGenerator.registerEmbeddedObjectHandler("image/stoff-ods",
+                                             &handleEmbeddedSTOFFSpreadsheetObject);
 }
 
 // XServiceInfo
@@ -73,21 +82,20 @@ OUString SAL_CALL StarOfficeDrawImportFilter::getImplementationName()
     return OUString("org.libreoffice.comp.Draw.StarOfficeDrawImportFilter");
 }
 
-sal_Bool SAL_CALL StarOfficeDrawImportFilter::supportsService(const OUString &rServiceName)
+sal_Bool SAL_CALL StarOfficeDrawImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL StarOfficeDrawImportFilter::getSupportedServiceNames()
+Sequence<OUString> SAL_CALL StarOfficeDrawImportFilter::getSupportedServiceNames()
 {
-    return Sequence< OUString > {"com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection"};
+    return Sequence<OUString>{ "com.sun.star.document.ImportFilter",
+                               "com.sun.star.document.ExtendedTypeDetection" };
 }
 
-extern "C"
-SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_libreoffice_comp_Draw_StarOfficeDrawImportFilter_get_implementation(
-    css::uno::XComponentContext *const context,
-    const css::uno::Sequence<css::uno::Any> &)
+    css::uno::XComponentContext* const context, const css::uno::Sequence<css::uno::Any>&)
 {
     return cppu::acquire(new StarOfficeDrawImportFilter(context));
 }

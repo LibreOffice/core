@@ -25,43 +25,44 @@
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
-class WordPerfectImportFilter : public cppu::WeakImplHelper
-    <
-    css::document::XFilter,
-    css::document::XImporter,
-    css::document::XExtendedFilterDetection,
-    css::lang::XInitialization,
-    css::lang::XServiceInfo
-    >
+class WordPerfectImportFilter
+    : public cppu::WeakImplHelper<css::document::XFilter, css::document::XImporter,
+                                  css::document::XExtendedFilterDetection,
+                                  css::lang::XInitialization, css::lang::XServiceInfo>
 {
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
-    css::uno::Reference< css::lang::XComponent > mxDoc;
+    css::uno::Reference<css::uno::XComponentContext> mxContext;
+    css::uno::Reference<css::lang::XComponent> mxDoc;
 
     /// @throws css::uno::RuntimeException
-    bool importImpl(const css::uno::Sequence< css::beans::PropertyValue > &aDescriptor);
+    bool importImpl(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor);
 
 public:
-    explicit WordPerfectImportFilter(const css::uno::Reference< css::uno::XComponentContext > &rxContext)
-        : mxContext(rxContext) {}
+    explicit WordPerfectImportFilter(
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+        : mxContext(rxContext)
+    {
+    }
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter(const css::uno::Sequence< css::beans::PropertyValue > &aDescriptor) override;
+    virtual sal_Bool SAL_CALL
+    filter(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor) override;
     virtual void SAL_CALL cancel() override;
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument(const css::uno::Reference< css::lang::XComponent > &xDoc) override;
+    virtual void SAL_CALL
+    setTargetDocument(const css::uno::Reference<css::lang::XComponent>& xDoc) override;
 
     //XExtendedFilterDetection
-    virtual OUString SAL_CALL detect(css::uno::Sequence< css::beans::PropertyValue > &Descriptor) override;
+    virtual OUString SAL_CALL
+    detect(css::uno::Sequence<css::beans::PropertyValue>& Descriptor) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > &aArguments) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aArguments) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString &ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 #endif

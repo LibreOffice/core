@@ -19,69 +19,76 @@ namespace writerperfect
 {
 namespace exp
 {
-
-XMLStylesContext::XMLStylesContext(XMLImport &rImport, StyleType eType)
-    : XMLImportContext(rImport),
-      m_rParagraphStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticParagraphStyles() : mrImport.GetParagraphStyles()),
-      m_rTextStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticTextStyles() : mrImport.GetTextStyles()),
-      m_rCellStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticCellStyles() : mrImport.GetCellStyles()),
-      m_rColumnStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticColumnStyles() : mrImport.GetColumnStyles()),
-      m_rRowStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticRowStyles() : mrImport.GetRowStyles()),
-      m_rTableStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticTableStyles() : mrImport.GetTableStyles()),
-      m_rGraphicStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticGraphicStyles() : mrImport.GetGraphicStyles()),
-      m_rPageLayouts(mrImport.GetPageLayouts()),
-      m_rMasterStyles(mrImport.GetMasterStyles())
+XMLStylesContext::XMLStylesContext(XMLImport& rImport, StyleType eType)
+    : XMLImportContext(rImport)
+    , m_rParagraphStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticParagraphStyles()
+                                                      : mrImport.GetParagraphStyles())
+    , m_rTextStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticTextStyles()
+                                                 : mrImport.GetTextStyles())
+    , m_rCellStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticCellStyles()
+                                                 : mrImport.GetCellStyles())
+    , m_rColumnStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticColumnStyles()
+                                                   : mrImport.GetColumnStyles())
+    , m_rRowStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticRowStyles()
+                                                : mrImport.GetRowStyles())
+    , m_rTableStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticTableStyles()
+                                                  : mrImport.GetTableStyles())
+    , m_rGraphicStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticGraphicStyles()
+                                                    : mrImport.GetGraphicStyles())
+    , m_rPageLayouts(mrImport.GetPageLayouts())
+    , m_rMasterStyles(mrImport.GetMasterStyles())
 {
 }
 
-rtl::Reference<XMLImportContext> XMLStylesContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLStylesContext::CreateChildContext(
+    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "style:style" || rName == "style:page-layout" || rName == "style:master-page")
         return new XMLStyleContext(mrImport, *this);
     return nullptr;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentParagraphStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLStylesContext::GetCurrentParagraphStyles()
 {
     return m_rParagraphStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentTextStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLStylesContext::GetCurrentTextStyles()
 {
     return m_rTextStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentCellStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLStylesContext::GetCurrentCellStyles()
 {
     return m_rCellStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentColumnStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLStylesContext::GetCurrentColumnStyles()
 {
     return m_rColumnStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentRowStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLStylesContext::GetCurrentRowStyles()
 {
     return m_rRowStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentTableStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLStylesContext::GetCurrentTableStyles()
 {
     return m_rTableStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentGraphicStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLStylesContext::GetCurrentGraphicStyles()
 {
     return m_rGraphicStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentPageLayouts()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLStylesContext::GetCurrentPageLayouts()
 {
     return m_rPageLayouts;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentMasterStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLStylesContext::GetCurrentMasterStyles()
 {
     return m_rMasterStyles;
 }
@@ -90,10 +97,14 @@ std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentMa
 class XMLFontFaceContext : public XMLImportContext
 {
 public:
-    XMLFontFaceContext(XMLImport &rImport);
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    XMLFontFaceContext(XMLImport& rImport);
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
-    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    rtl::Reference<XMLImportContext>
+    CreateChildContext(const OUString& rName,
+                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
     OUString maName;
 };
@@ -102,23 +113,29 @@ public:
 class XMLFontFaceSrcContext : public XMLImportContext
 {
 public:
-    XMLFontFaceSrcContext(XMLImport &rImport, XMLFontFaceContext &rFontFace);
+    XMLFontFaceSrcContext(XMLImport& rImport, XMLFontFaceContext& rFontFace);
 
-    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    rtl::Reference<XMLImportContext>
+    CreateChildContext(const OUString& rName,
+                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
 private:
-    XMLFontFaceContext &mrFontFace;
+    XMLFontFaceContext& mrFontFace;
 };
 
 /// Handler for <svg:font-face-uri>.
 class XMLFontFaceUriContext : public XMLImportContext
 {
 public:
-    XMLFontFaceUriContext(XMLImport &rImport, XMLFontFaceContext const &rFontFace);
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
-    void SAL_CALL endElement(const OUString &rName) override;
+    XMLFontFaceUriContext(XMLImport& rImport, XMLFontFaceContext const& rFontFace);
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+    void SAL_CALL endElement(const OUString& rName) override;
 
-    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    rtl::Reference<XMLImportContext>
+    CreateChildContext(const OUString& rName,
+                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
     librevenge::RVNGPropertyList maPropertyList;
 
@@ -130,25 +147,29 @@ private:
 class XMLFontFaceFormatContext : public XMLImportContext
 {
 public:
-    XMLFontFaceFormatContext(XMLImport &rImport, XMLFontFaceUriContext &rFontFaceUri);
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    XMLFontFaceFormatContext(XMLImport& rImport, XMLFontFaceUriContext& rFontFaceUri);
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
 private:
-    XMLFontFaceUriContext &mrFontFaceUri;
+    XMLFontFaceUriContext& mrFontFaceUri;
 };
 
-XMLFontFaceFormatContext::XMLFontFaceFormatContext(XMLImport &rImport, XMLFontFaceUriContext &rFontFaceUri)
+XMLFontFaceFormatContext::XMLFontFaceFormatContext(XMLImport& rImport,
+                                                   XMLFontFaceUriContext& rFontFaceUri)
     : XMLImportContext(rImport)
     , mrFontFaceUri(rFontFaceUri)
 {
 }
 
-void XMLFontFaceFormatContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+void XMLFontFaceFormatContext::startElement(
+    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString &rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
+        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
+        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
         if (rAttributeName == "svg:string")
         {
             OString aAttributeValueU8 = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
@@ -157,19 +178,21 @@ void XMLFontFaceFormatContext::startElement(const OUString &/*rName*/, const css
     }
 }
 
-XMLFontFaceUriContext::XMLFontFaceUriContext(XMLImport &rImport, XMLFontFaceContext const &rFontFace)
+XMLFontFaceUriContext::XMLFontFaceUriContext(XMLImport& rImport,
+                                             XMLFontFaceContext const& rFontFace)
     : XMLImportContext(rImport)
 {
     OString aNameU8 = OUStringToOString(rFontFace.maName, RTL_TEXTENCODING_UTF8);
     maPropertyList.insert("librevenge:name", aNameU8.getStr());
 }
 
-void XMLFontFaceUriContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+void XMLFontFaceUriContext::startElement(
+    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString &rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
+        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
+        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
         if (rAttributeName == "loext:font-style")
         {
             OString aAttributeValueU8 = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
@@ -183,14 +206,15 @@ void XMLFontFaceUriContext::startElement(const OUString &/*rName*/, const css::u
     }
 }
 
-void XMLFontFaceUriContext::endElement(const OUString &/*rName*/)
+void XMLFontFaceUriContext::endElement(const OUString& /*rName*/)
 {
     if (mxBinaryData.is())
         maPropertyList.insert("office:binary-data", mxBinaryData->getBinaryData());
     mrImport.GetGenerator().defineEmbeddedFont(maPropertyList);
 }
 
-rtl::Reference<XMLImportContext> XMLFontFaceUriContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLFontFaceUriContext::CreateChildContext(
+    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "office:binary-data")
     {
@@ -204,13 +228,14 @@ rtl::Reference<XMLImportContext> XMLFontFaceUriContext::CreateChildContext(const
     return nullptr;
 }
 
-XMLFontFaceSrcContext::XMLFontFaceSrcContext(XMLImport &rImport, XMLFontFaceContext &rFontFace)
+XMLFontFaceSrcContext::XMLFontFaceSrcContext(XMLImport& rImport, XMLFontFaceContext& rFontFace)
     : XMLImportContext(rImport)
     , mrFontFace(rFontFace)
 {
 }
 
-rtl::Reference<XMLImportContext> XMLFontFaceSrcContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLFontFaceSrcContext::CreateChildContext(
+    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "svg:font-face-uri")
         return new XMLFontFaceUriContext(mrImport, mrFontFace);
@@ -218,23 +243,25 @@ rtl::Reference<XMLImportContext> XMLFontFaceSrcContext::CreateChildContext(const
     return nullptr;
 }
 
-XMLFontFaceContext::XMLFontFaceContext(XMLImport &rImport)
+XMLFontFaceContext::XMLFontFaceContext(XMLImport& rImport)
     : XMLImportContext(rImport)
 {
 }
 
-void XMLFontFaceContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+void XMLFontFaceContext::startElement(
+    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString &rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
+        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
+        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
         if (rAttributeName == "style:name")
             maName = rAttributeValue;
     }
 }
 
-rtl::Reference<XMLImportContext> XMLFontFaceContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLFontFaceContext::CreateChildContext(
+    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "svg:font-face-src")
         return new XMLFontFaceSrcContext(mrImport, *this);
@@ -242,12 +269,13 @@ rtl::Reference<XMLImportContext> XMLFontFaceContext::CreateChildContext(const OU
     return nullptr;
 }
 
-XMLFontFaceDeclsContext::XMLFontFaceDeclsContext(XMLImport &rImport)
+XMLFontFaceDeclsContext::XMLFontFaceDeclsContext(XMLImport& rImport)
     : XMLImportContext(rImport)
 {
 }
 
-rtl::Reference<XMLImportContext> XMLFontFaceDeclsContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLFontFaceDeclsContext::CreateChildContext(
+    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "style:font-face")
         return new XMLFontFaceContext(mrImport);

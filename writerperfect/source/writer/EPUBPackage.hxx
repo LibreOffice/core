@@ -20,7 +20,6 @@
 
 namespace writerperfect
 {
-
 /// The epub package has direct access to the resulting ZIP file.
 class EPUBPackage : public libepubgen::EPUBPackage
 {
@@ -30,34 +29,36 @@ class EPUBPackage : public libepubgen::EPUBPackage
     css::uno::Reference<css::xml::sax::XWriter> mxOutputWriter;
 
 public:
-    explicit EPUBPackage(css::uno::Reference<css::uno::XComponentContext> xContext, const css::uno::Sequence<css::beans::PropertyValue> &rDescriptor);
+    explicit EPUBPackage(css::uno::Reference<css::uno::XComponentContext> xContext,
+                         const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor);
 
     ~EPUBPackage() override;
 
-    void openXMLFile(const char *pName) override;
+    void openXMLFile(const char* pName) override;
 
-    void openElement(const char *pName, const librevenge::RVNGPropertyList &rAttributes) override;
-    void closeElement(const char *pName) override;
+    void openElement(const char* pName, const librevenge::RVNGPropertyList& rAttributes) override;
+    void closeElement(const char* pName) override;
 
-    void insertCharacters(const librevenge::RVNGString &rCharacters) override;
+    void insertCharacters(const librevenge::RVNGString& rCharacters) override;
 
     void closeXMLFile() override;
 
-    void openCSSFile(const char *pName) override;
+    void openCSSFile(const char* pName) override;
 
-    void insertRule(const librevenge::RVNGString &rSelector, const librevenge::RVNGPropertyList &rProperties) override;
+    void insertRule(const librevenge::RVNGString& rSelector,
+                    const librevenge::RVNGPropertyList& rProperties) override;
 
     void closeCSSFile() override;
 
-    void openBinaryFile(const char *pName) override;
+    void openBinaryFile(const char* pName) override;
 
-    void insertBinaryData(const librevenge::RVNGBinaryData &rData) override;
+    void insertBinaryData(const librevenge::RVNGBinaryData& rData) override;
 
     void closeBinaryFile() override;
 
-    void openTextFile(const char *pName) override;
+    void openTextFile(const char* pName) override;
 
-    void insertText(const librevenge::RVNGString &rCharacters) override;
+    void insertText(const librevenge::RVNGString& rCharacters) override;
 
     void insertLineBreak() override;
 

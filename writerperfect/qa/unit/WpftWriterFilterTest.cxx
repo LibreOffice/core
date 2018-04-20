@@ -11,7 +11,6 @@
 
 namespace
 {
-
 class WpftWriterFilterTest : public writerperfect::test::WpftFilterTestBase
 {
 public:
@@ -31,43 +30,44 @@ WpftWriterFilterTest::WpftWriterFilterTest()
 
 void WpftWriterFilterTest::test()
 {
-    const writerperfect::test::WpftOptionalMap_t aEBookOptional
-    {
-        {"FictionBook2.fb2.zip", REQUIRE_EBOOK_VERSION(0, 1, 1)},
+    const writerperfect::test::WpftOptionalMap_t aEBookOptional{
+        { "FictionBook2.fb2.zip", REQUIRE_EBOOK_VERSION(0, 1, 1) },
     };
-    const writerperfect::test::WpftOptionalMap_t aEtonyekOptional
-    {
-        {"Pages_4.pages", REQUIRE_ETONYEK_VERSION(0, 1, 2)},
+    const writerperfect::test::WpftOptionalMap_t aEtonyekOptional{
+        { "Pages_4.pages", REQUIRE_ETONYEK_VERSION(0, 1, 2) },
     };
-    const writerperfect::test::WpftOptionalMap_t aMWAWOptional
-    {
-        {"MaxWrite_1.hqx", REQUIRE_MWAW_VERSION(0, 3, 8)},
-        {"MouseWrite_1.hqx", REQUIRE_MWAW_VERSION(0, 3, 8)},
-        {"RagTime_2.1.hqx", REQUIRE_MWAW_VERSION(0, 3, 2)},
-        {"RagTime_3.2.hqx", REQUIRE_MWAW_VERSION(0, 3, 2)},
-        {"RagTime_5.5.rag", REQUIRE_MWAW_VERSION(0, 3, 6)},
+    const writerperfect::test::WpftOptionalMap_t aMWAWOptional{
+        { "MaxWrite_1.hqx", REQUIRE_MWAW_VERSION(0, 3, 8) },
+        { "MouseWrite_1.hqx", REQUIRE_MWAW_VERSION(0, 3, 8) },
+        { "RagTime_2.1.hqx", REQUIRE_MWAW_VERSION(0, 3, 2) },
+        { "RagTime_3.2.hqx", REQUIRE_MWAW_VERSION(0, 3, 2) },
+        { "RagTime_5.5.rag", REQUIRE_MWAW_VERSION(0, 3, 6) },
     };
-    const writerperfect::test::WpftOptionalMap_t aStarOfficeOptional
-    {
-        {"Writer_3.1.sdw", REQUIRE_STAROFFICE_VERSION(0, 0, 2)},
+    const writerperfect::test::WpftOptionalMap_t aStarOfficeOptional{
+        { "Writer_3.1.sdw", REQUIRE_STAROFFICE_VERSION(0, 0, 2) },
     };
-    const writerperfect::test::WpftOptionalMap_t aWpsOptional
-    {
-        {"Word_5.0_DOS.doc", REQUIRE_WPS_VERSION(0, 4, 3)},
-        {"Write_3.1.wri", REQUIRE_WPS_VERSION(0, 4, 2)},
+    const writerperfect::test::WpftOptionalMap_t aWpsOptional{
+        { "Word_5.0_DOS.doc", REQUIRE_WPS_VERSION(0, 4, 3) },
+        { "Write_3.1.wri", REQUIRE_WPS_VERSION(0, 4, 2) },
     };
 
-    doTest("com.sun.star.comp.Writer.AbiWordImportFilter", "/writerperfect/qa/unit/data/writer/libabw/");
-    doTest("org.libreoffice.comp.Writer.EBookImportFilter", "/writerperfect/qa/unit/data/writer/libe-book/", aEBookOptional);
-    doTest("com.sun.star.comp.Writer.MSWorksImportFilter", "/writerperfect/qa/unit/data/writer/libwps/", aWpsOptional);
-    doTest("com.sun.star.comp.Writer.MWAWImportFilter", "/writerperfect/qa/unit/data/writer/libmwaw/", aMWAWOptional);
-    doTest("org.libreoffice.comp.Writer.PagesImportFilter", "/writerperfect/qa/unit/data/writer/libetonyek/", aEtonyekOptional);
-    doTest("org.libreoffice.comp.Writer.StarOfficeWriterImportFilter", "/writerperfect/qa/unit/data/writer/libstaroffice/", aStarOfficeOptional);
-    doTest("com.sun.star.comp.Writer.WordPerfectImportFilter", "/writerperfect/qa/unit/data/writer/libwpd/");
+    doTest("com.sun.star.comp.Writer.AbiWordImportFilter",
+           "/writerperfect/qa/unit/data/writer/libabw/");
+    doTest("org.libreoffice.comp.Writer.EBookImportFilter",
+           "/writerperfect/qa/unit/data/writer/libe-book/", aEBookOptional);
+    doTest("com.sun.star.comp.Writer.MSWorksImportFilter",
+           "/writerperfect/qa/unit/data/writer/libwps/", aWpsOptional);
+    doTest("com.sun.star.comp.Writer.MWAWImportFilter",
+           "/writerperfect/qa/unit/data/writer/libmwaw/", aMWAWOptional);
+    doTest("org.libreoffice.comp.Writer.PagesImportFilter",
+           "/writerperfect/qa/unit/data/writer/libetonyek/", aEtonyekOptional);
+    doTest("org.libreoffice.comp.Writer.StarOfficeWriterImportFilter",
+           "/writerperfect/qa/unit/data/writer/libstaroffice/", aStarOfficeOptional);
+    doTest("com.sun.star.comp.Writer.WordPerfectImportFilter",
+           "/writerperfect/qa/unit/data/writer/libwpd/");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WpftWriterFilterTest);
-
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
