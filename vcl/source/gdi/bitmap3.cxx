@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <math.h>
-#include <stdlib.h>
-
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/BitmapConverter.hxx>
 #include <config_features.h>
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
@@ -43,7 +41,10 @@
 
 #include <memory>
 
-bool Bitmap::Convert( BmpConversion eConversion )
+#include <math.h>
+#include <stdlib.h>
+
+bool Bitmap::Convert(BmpConversion eConversion)
 {
     // try to convert in backend
     if (mxSalBmp)
@@ -56,80 +57,15 @@ bool Bitmap::Convert( BmpConversion eConversion )
             if (xImpBmp->Create(*mxSalBmp) && xImpBmp->ConvertToGreyscale())
             {
                 ImplSetSalBitmap(xImpBmp);
-                SAL_INFO( "vcl.opengl", "Ref count: " << mxSalBmp.use_count() );
+                SAL_INFO("vcl.opengl", "Ref count: " << mxSalBmp.use_count());
                 return true;
             }
         }
     }
 
-    const sal_uInt16 nBitCount = GetBitCount ();
-    bool bRet = false;
-
-    switch( eConversion )
-    {
-        case BmpConversion::N1BitThreshold:
-            bRet = MakeMonochrome(128);
-        break;
-
-        case BmpConversion::N4BitGreys:
-            bRet = ImplMakeGreyscales( 16 );
-        break;
-
-        case BmpConversion::N4BitColors:
-        {
-            if( nBitCount < 4 )
-                bRet = ImplConvertUp( 4 );
-            else if( nBitCount > 4 )
-                bRet = ImplConvertDown( 4 );
-            else
-                bRet = true;
-        }
-        break;
-
-        case BmpConversion::N8BitGreys:
-            bRet = ImplMakeGreyscales( 256 );
-        break;
-
-        case BmpConversion::N8BitColors:
-        {
-            if( nBitCount < 8 )
-                bRet = ImplConvertUp( 8 );
-            else if( nBitCount > 8 )
-                bRet = ImplConvertDown( 8 );
-            else
-                bRet = true;
-        }
-        break;
-
-        case BmpConversion::N8BitTrans:
-        {
-            Color aTrans( BMP_COL_TRANS );
-
-            if( nBitCount < 8 )
-                bRet = ImplConvertUp( 8, &aTrans );
-            else
-                bRet = ImplConvertDown( 8, &aTrans );
-        }
-        break;
-
-        case BmpConversion::N24Bit:
-        {
-            if( nBitCount < 24 )
-                bRet = ImplConvertUp( 24 );
-            else
-                bRet = true;
-        }
-        break;
-
-        case BmpConversion::Ghosted:
-            bRet = ImplConvertGhosted();
-        break;
-
-        default:
-            OSL_FAIL( "Bitmap::Convert(): Unsupported conversion" );
-        break;
-    }
-
+    BitmapEx aBitmapEx(*this);
+    bool bRet = BitmapFilter::Filter(aBitmapEx, BitmapConverter(eConversion));
+    *this = aBitmapEx.GetBitmap();
     return bRet;
 }
 
