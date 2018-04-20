@@ -91,7 +91,6 @@ private:
 public:
     SdrObjList(SdrPage* pNewPage = nullptr);
     virtual ~SdrObjList();
-    SdrObjList* CloneSdrObjList(SdrModel* pNewModel = nullptr) const;
 
     void CopyObjects(const SdrObjList& rSrcList, SdrModel* pNewModel = nullptr);
     /// clean up everything (without Undo)

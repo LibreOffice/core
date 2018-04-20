@@ -47,7 +47,6 @@ class SvFileObject : public sfx2::SvLinkSource
     bool bClearMedium : 1;
     bool bStateChangeCalled : 1;
 
-    bool GetGraphic_Impl( Graphic&, SvStream* pStream );
     bool LoadFile_Impl();
     void SendStateChg_Impl( sfx2::LinkManager::LinkState nState );
 

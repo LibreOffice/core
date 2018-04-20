@@ -107,8 +107,6 @@ public:
 
     Size            CalcWindowSizePixel();
 
-    void            SetLinkedField(VclPtr<NumericField> const & pField);
-
     void            SetSlideHdl( const Link<Slider*,void>& rLink ) { maSlideHdl = rLink; }
     void            SetEndSlideHdl( const Link<Slider*,void>& rLink ) { maEndSlideHdl = rLink; }
 };

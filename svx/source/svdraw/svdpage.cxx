@@ -89,13 +89,6 @@ SdrObjList::~SdrObjList()
     Clear(); // delete contents of container
 }
 
-SdrObjList* SdrObjList::CloneSdrObjList(SdrModel* pNewModelel) const
-{
-    SdrObjList* pObjList = new SdrObjList();
-    pObjList->copyDataFromSdrObjList(*this, pNewModelel);
-    return pObjList;
-}
-
 void SdrObjList::copyDataFromSdrObjList(const SdrObjList& rSrcList, SdrModel* pNewModelel)
 {
     // this function is only supposed to be called once, right after construction

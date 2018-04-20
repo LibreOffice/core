@@ -68,49 +68,9 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
                SwAttrSet const * pAutoAttr );
 
     void InsertLink( const OUString& rGrfName, const OUString& rFltName );
-    bool ImportGraphic( SvStream& rStrm );
 
     DECL_LINK( SwapGraphic, const GraphicObject*, SvStream* );
     DECL_STATIC_LINK( SwGrfNode, SwapReplacement, const GraphicObject*, SvStream* );
-
-    /** helper method to determine stream for the embedded graphic.
-
-        Important note: caller of this method has to handle the thrown exceptions
-        Storage, which should contain the stream of the embedded graphic, is
-        provided via parameter. Otherwise the returned stream will be closed
-        after the method returns, because its parent stream is closed and deleted.
-        Proposed name of embedded graphic stream is also provided by parameter.
-
-        @author OD
-
-        @param _refPics
-        input parameter - reference to storage, which should contain the
-        embedded graphic stream.
-
-        @param rStrmName
-        input parameter - proposed name of the embedded graphic stream.
-
-        @return SvStream*
-        new created stream of the embedded graphic, which has to be destroyed
-        after its usage. Could be NULL, if the stream isn't found.
-    */
-    SvStream* GetStreamForEmbedGrf(
-            const css::uno::Reference< css::embed::XStorage >& _refPics,
-            const OUString& rStreamName ) const;
-
-    /** helper method to get a substorage of the document storage for readonly access.
-
-        A substorage with the specified name will be opened readonly. If the provided
-        name is empty the root storage will be returned.
-
-        @param _aStgName
-        input parameter - name of substorage. Can be empty.
-
-        @return XStorage
-        reference to substorage or the root storage
-    */
-    css::uno::Reference< css::embed::XStorage > GetDocSubstorageOrRoot(
-                                                const OUString& aStgName ) const;
 
     /// allow reaction on change of content of GraphicObject, so always call
     /// when GraphicObject content changes
@@ -170,9 +130,6 @@ private:
 
 public:
     bool HasEmbeddedStreamName() const { return maGrfObj.HasUserData(); }
-
-    /// Is this node selected by any shell?
-    bool IsSelected() const;
 
     /// Communicate to graphic that node is in Undo-range.
     virtual bool SavePersistentData() override;

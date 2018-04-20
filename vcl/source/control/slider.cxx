@@ -812,15 +812,6 @@ void Slider::Resize()
     Invalidate(InvalidateFlags::NoChildren | InvalidateFlags::NoErase);
 }
 
-void Slider::SetLinkedField(VclPtr<NumericField> const & pField)
-{
-    if (mpLinkedField)
-        mpLinkedField->SetModifyHdl(Link<Edit&,void>());
-    mpLinkedField = pField;
-    if (mpLinkedField)
-        mpLinkedField->SetModifyHdl(LINK(this, Slider, LinkedFieldModifyHdl));
-}
-
 IMPL_LINK_NOARG(Slider, LinkedFieldModifyHdl, Edit&, void)
 {
     if (mpLinkedField)

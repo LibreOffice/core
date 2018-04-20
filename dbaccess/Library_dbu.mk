@@ -132,7 +132,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/dlg/dlgattr \
     dbaccess/source/ui/dlg/dlgsave \
     dbaccess/source/ui/dlg/dlgsize \
-    dbaccess/source/ui/dlg/DriverSettings \
     dbaccess/source/ui/dlg/dsselect \
     dbaccess/source/ui/dlg/finteraction \
     dbaccess/source/ui/dlg/generalpage \

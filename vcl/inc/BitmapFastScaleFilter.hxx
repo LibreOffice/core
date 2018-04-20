@@ -23,11 +23,6 @@ public:
     {
     }
 
-    explicit BitmapFastScaleFilter(Size aSize)
-        : maSize(aSize)
-    {
-    }
-
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) override;
 
 private:

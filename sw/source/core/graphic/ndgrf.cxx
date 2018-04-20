@@ -458,24 +458,6 @@ Size SwGrfNode::GetTwipSize() const
     return nGrfSize;
 }
 
-bool SwGrfNode::ImportGraphic( SvStream& rStrm )
-{
-    Graphic aGraphic;
-    const OUString aURL(maGrfObj.GetUserData());
-
-    if(!GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURL, rStrm))
-    {
-        delete mpReplacementGraphic;
-        mpReplacementGraphic = nullptr;
-
-        maGrfObj.SetGraphic( aGraphic );
-        onGraphicChanged();
-        return true;
-    }
-
-    return false;
-}
-
 /**
  * @return true if ReRead or reading successful,
  *         false if not loaded
@@ -745,80 +727,6 @@ void SwGrfNode::ScaleImageMap()
     }
 }
 
-/** helper method to get a substorage of the document storage for readonly access.
-
-    OD, MAV 2005-08-17 #i53025#
-    A substorage with the specified name will be opened readonly. If the provided
-    name is empty the root storage will be returned.
-*/
-uno::Reference< embed::XStorage > SwGrfNode::GetDocSubstorageOrRoot( const OUString& aStgName ) const
-{
-    uno::Reference < embed::XStorage > refStor =
-        const_cast<SwGrfNode*>(this)->GetDoc()->GetDocStorage();
-    OSL_ENSURE( refStor.is(), "No storage in Doc" );
-
-    if ( !aStgName.isEmpty() )
-    {
-        if( refStor.is() )
-            return refStor->openStorageElement( aStgName, embed::ElementModes::READ );
-    }
-
-    return refStor;
-}
-
-/** helper method to determine stream for the embedded graphic.
-
-    OD 2005-05-04 #i48434#
-    Important note: caller of this method has to handle the thrown exceptions
-    OD, MAV 2005-08-17 #i53025#
-    Storage, which should contain the stream of the embedded graphic, is
-    provided via parameter. Otherwise the returned stream will be closed
-    after the method returns, because its parent stream is closed and deleted.
-    Proposed name of embedded graphic stream is also provided by parameter.
-*/
-SvStream* SwGrfNode::GetStreamForEmbedGrf(
-            const uno::Reference< embed::XStorage >& _refPics,
-            const OUString& rStreamName ) const
-{
-    SvStream* pStrm( nullptr );
-
-    if( _refPics.is() && !rStreamName.isEmpty() )
-    {
-        OUString sStreamName(rStreamName);
-        // If stream doesn't exist in the storage, try access the graphic file by
-        // re-generating its name.
-        // A save action can have changed the filename of the embedded graphic,
-        // because a changed unique ID of the graphic is calculated.
-        // --> recursive calls of <GetUniqueID()> have to be avoided.
-        // Thus, use local static boolean to assure this.
-        if ( !_refPics->hasByName( sStreamName ) ||
-             !_refPics->isStreamElement( sStreamName ) )
-        {
-            if ( GetGrfObj().GetType() != GraphicType::NONE )
-            {
-                const sal_Int32 nExtPos = sStreamName.indexOf('.');
-                const OUString aExtStr = (nExtPos>=0) ? sStreamName.copy( nExtPos ) : OUString();
-                sStreamName = OStringToOUString(GetGrfObj().GetUniqueID(),
-                    RTL_TEXTENCODING_ASCII_US) + aExtStr;
-            }
-        }
-
-        // assure that graphic file exist in the storage.
-        if ( _refPics->hasByName( sStreamName ) &&
-             _refPics->isStreamElement( sStreamName ) )
-        {
-            uno::Reference < io::XStream > refStrm = _refPics->openStreamElement( sStreamName, embed::ElementModes::READ );
-            pStrm = utl::UcbStreamHelper::CreateStream( refStrm );
-        }
-        else
-        {
-            OSL_FAIL( "<SwGrfNode::GetStreamForEmbedGrf(..)> - embedded graphic file not found!" );
-        }
-    }
-
-    return pStrm;
-}
-
 SwContentNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 {
     // copy formats into the other document
@@ -919,26 +827,6 @@ bool SwGrfNode::IsTransparent() const
 {
     return maGrfObj.IsTransparent() ||
         GetSwAttrSet().GetTransparencyGrf().GetValue() != 0;
-}
-
-bool SwGrfNode::IsSelected() const
-{
-    bool bRet = false;
-    const SwEditShell* pESh = GetDoc()->GetEditShell();
-    if( pESh )
-    {
-        const SwNode* pN = this;
-        for(const SwViewShell& rCurrentShell : pESh->GetRingContainer())
-        {
-            if( dynamic_cast<const SwEditShell*>( &rCurrentShell) != nullptr && pN == &static_cast<const SwCursorShell*>(&rCurrentShell)
-                                ->GetCursor()->GetPoint()->nNode.GetNode() )
-            {
-                bRet = true;
-                break;
-            }
-        }
-    }
-    return bRet;
 }
 
 void SwGrfNode::TriggerAsyncRetrieveInputStream()

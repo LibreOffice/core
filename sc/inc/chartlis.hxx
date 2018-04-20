@@ -104,8 +104,6 @@ public:
 
     void            UpdateChartIntersecting( const ScRange& rRange );
 
-    void            UpdateSeriesRanges();
-
     ExternalRefListener* GetExtRefListener();
     void            SetUpdateQueue();
 

@@ -281,69 +281,6 @@ void TextEncodingBox::FillFromTextEncodingTable(
 }
 
 
-void TextEncodingBox::FillFromDbTextEncodingMap(
-        bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags )
-{
-#if !HAVE_FEATURE_DBCONNECTIVITY
-    (void)bExcludeImportSubsets;
-    (void)nExcludeInfoFlags;
-#else
-    rtl_TextEncodingInfo aInfo;
-    aInfo.StructSize = sizeof(rtl_TextEncodingInfo);
-    ::std::vector< rtl_TextEncoding > aEncs;
-    sal_Int32 nCount = svxform::charset_helper::getSupportedTextEncodings( aEncs );
-    for ( sal_Int32 j=0; j<nCount; j++ )
-    {
-        bool bInsert = true;
-        rtl_TextEncoding nEnc = rtl_TextEncoding( aEncs[j] );
-        if ( nExcludeInfoFlags )
-        {
-            if ( !rtl_getTextEncodingInfo( nEnc, &aInfo ) )
-                bInsert = false;
-            else
-            {
-                if ( (aInfo.Flags & nExcludeInfoFlags) == 0 )
-                {
-                    if ( (nExcludeInfoFlags & RTL_TEXTENCODING_INFO_UNICODE) &&
-                            ((nEnc == RTL_TEXTENCODING_UCS2) ||
-                            nEnc == RTL_TEXTENCODING_UCS4) )
-                        bInsert = false;    // InfoFlags don't work for Unicode :-(
-                }
-                else
-                    bInsert = false;
-            }
-        }
-        if ( bInsert )
-        {
-            if ( bExcludeImportSubsets )
-            {
-                switch ( nEnc )
-                {
-                    // subsets of RTL_TEXTENCODING_GB_18030
-                    case RTL_TEXTENCODING_GB_2312 :
-                    case RTL_TEXTENCODING_GBK :
-                    case RTL_TEXTENCODING_MS_936 :
-                        bInsert = false;
-                    break;
-                }
-            }
-            // CharsetMap offers a RTL_TEXTENCODING_DONTKNOW for internal use,
-            // makes no sense here and would result in an empty string as list
-            // entry.
-            if ( bInsert && nEnc != RTL_TEXTENCODING_DONTKNOW )
-                InsertTextEncoding( nEnc );
-        }
-    }
-#endif
-}
-
-void TextEncodingBox::FillWithMimeAndSelectBest()
-{
-    FillFromTextEncodingTable( false, 0xffffffff, RTL_TEXTENCODING_INFO_MIME );
-    rtl_TextEncoding nEnc = SvtSysLocale::GetBestMimeEncoding();
-    SelectTextEncoding( nEnc );
-}
-
 void TextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
             const OUString& rEntry )
 {
