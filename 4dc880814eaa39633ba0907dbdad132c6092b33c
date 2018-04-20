@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_b4b57bce",
+        "filename": "include/vcl/BitmapConverter.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-04-20T06:56:48Z",
+      "side": 1,
+      "message": "I thought I suggested to use the enum here directly... and to create the instance inside Convert method instead of asking the user to do it from outside.",
+      "revId": "4dc880814eaa39633ba0907dbdad132c6092b33c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
