@@ -511,7 +511,7 @@ ErrCode call(
     case SbxBOOL:
     case SbxBYTE:
         iRetVal =
-            proc_i(*reinterpret_cast<double *>(&stack[0*8]),
+            proc_i(*reinterpret_cast<double *>(&stack[0]),
                    *reinterpret_cast<double *>(&stack[1*8]),
                    *reinterpret_cast<double *>(&stack[2*8]),
                    *reinterpret_cast<double *>(&stack[3*8]),
@@ -535,7 +535,7 @@ ErrCode call(
     case SbxSINGLE:
     case SbxDOUBLE:
         dRetVal =
-            proc_d(*reinterpret_cast<double *>(&stack[0*8]),
+            proc_d(*reinterpret_cast<double *>(&stack[0]),
                    *reinterpret_cast<double *>(&stack[1*8]),
                    *reinterpret_cast<double *>(&stack[2*8]),
                    *reinterpret_cast<double *>(&stack[3*8]),
