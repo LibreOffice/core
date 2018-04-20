@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ww8import, \
     sal \
     test \
     unotest \
+    vcl \
     sfx \
     sw \
 	utl \

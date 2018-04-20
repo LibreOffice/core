@@ -355,9 +355,6 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
         }
     }
 
-    if (bLazyRead && aFilterData.hasElements())
-        bLazyRead = false;
-
     SolarMutexGuard g;
 
     if( xIStm.is() )
@@ -396,7 +393,10 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
             aExtHeader.mapMode = nExtMapMode;
             WmfExternal *pExtHeader = nullptr;
             if ( nExtMapMode > 0 )
+            {
                 pExtHeader = &aExtHeader;
+                bLazyRead = false;
+            }
 
             ErrCode error = ERRCODE_NONE;
             if (bLazyRead)

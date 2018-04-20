@@ -6545,7 +6545,14 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
         else
         {   // and unleash our filter
             GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-            nRes = rGF.ImportGraphic( rData, "", *pGrStream );
+            Graphic aGraphic = rGF.ImportUnloadedGraphic(*pGrStream);
+            if (aGraphic)
+            {
+                rData = aGraphic;
+                nRes = ERRCODE_NONE;
+            }
+            else
+                nRes = rGF.ImportGraphic( rData, "", *pGrStream );
 
             // SJ: I40472, sometimes the aspect ratio (aMtfSize100) does not match and we get scaling problems,
             // then it is better to use the prefsize that is stored within the metafile. Bug #72846# for what the
