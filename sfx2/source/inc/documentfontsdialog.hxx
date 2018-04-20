@@ -31,7 +31,7 @@ public:
     SfxDocumentFontsPage( vcl::Window* parent, const SfxItemSet& set );
     virtual ~SfxDocumentFontsPage() override;
     virtual void dispose() override;
-    static VclPtr<SfxTabPage> Create( vcl::Window* parent, const SfxItemSet* set );
+    static VclPtr<SfxTabPage> Create(TabPageParent parent, const SfxItemSet* set);
 protected:
     virtual bool FillItemSet( SfxItemSet* set ) override;
     virtual void Reset( const SfxItemSet* set ) override;

@@ -106,7 +106,7 @@ public:
     virtual ~SvxSingleNumPickTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -139,7 +139,7 @@ public:
     virtual ~SvxBulletPickTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -181,7 +181,7 @@ public:
     virtual ~SvxNumPickTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -226,7 +226,7 @@ public:
         virtual ~SvxBitmapPickTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -335,7 +335,7 @@ public:
         virtual ~SvxNumOptionsTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -434,7 +434,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet);
 
     void                SetMetric(FieldUnit eSet);

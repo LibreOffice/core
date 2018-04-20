@@ -263,10 +263,10 @@ bool SwFieldDBPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-VclPtr<SfxTabPage> SwFieldDBPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SwFieldDBPage::Create( TabPageParent pParent,
                                         const SfxItemSet *const pAttrSet )
 {
-    return VclPtr<SwFieldDBPage>::Create( pParent, pAttrSet );
+    return VclPtr<SwFieldDBPage>::Create( pParent.pParent, pAttrSet );
 }
 
 sal_uInt16 SwFieldDBPage::GetGroup()

@@ -214,7 +214,7 @@ protected:
 
 public:
     SfxDocumentPage( vcl::Window* pParent, const SfxItemSet& );
-    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
 
     void                EnableUseUserData();
 };
@@ -239,7 +239,7 @@ protected:
 
 public:
     SfxDocumentDescPage( vcl::Window* pParent, const SfxItemSet& );
-    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
 };
 
 // class SfxDocumentInfoDialog -------------------------------------------
@@ -515,7 +515,7 @@ protected:
 
 public:
     SfxCustomPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
-    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
 };
 
 struct CmisValue : public VclBuilderContainer
@@ -637,7 +637,7 @@ public:
     virtual ~SfxCmisPropertiesPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
     virtual void SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation) override;
     virtual void SetSizePixel(const Size& rAllocation) override;
     virtual void SetPosPixel(const Point& rAllocPos) override;

@@ -411,10 +411,10 @@ void SvxBorderTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxBorderTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SvxBorderTabPage::Create( TabPageParent pParent,
                                              const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxBorderTabPage>::Create( pParent, *rAttrSet );
+    return VclPtr<SvxBorderTabPage>::Create( pParent.pParent, *rAttrSet );
 }
 
 void SvxBorderTabPage::ResetFrameLine_Impl( svx::FrameBorderType eBorder, const SvxBorderLine* pCoreLine, bool bValid )

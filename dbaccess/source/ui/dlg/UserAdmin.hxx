@@ -60,7 +60,7 @@ class OUserAdmin final : public OGenericAdministrationPage
 
     OUserAdmin( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
 public:
-    static  VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet );
+    static  VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* _rAttrSet );
 
     virtual ~OUserAdmin() override;
     virtual void dispose() override;

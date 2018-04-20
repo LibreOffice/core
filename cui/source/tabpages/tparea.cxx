@@ -131,16 +131,18 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
 
     SetExchangeSupport();
 
+    TabPageParent aFillTab(m_pFillTab);
+
     // Calculate optimal size of all pages..
-    m_pFillTabPage.disposeAndReset(SvxColorTabPage::Create(m_pFillTab, &m_rXFSet));
+    m_pFillTabPage.disposeAndReset(SvxColorTabPage::Create(aFillTab, &m_rXFSet));
     Size aSize = m_pFillTabPage->GetOptimalSize();
-    m_pFillTabPage.disposeAndReset(SvxGradientTabPage::Create(m_pFillTab, &m_rXFSet));
+    m_pFillTabPage.disposeAndReset(SvxGradientTabPage::Create(aFillTab, &m_rXFSet));
     lclExtendSize(aSize, m_pFillTabPage->GetOptimalSize());
-    m_pFillTabPage.disposeAndReset(SvxBitmapTabPage::Create(m_pFillTab, &m_rXFSet));
+    m_pFillTabPage.disposeAndReset(SvxBitmapTabPage::Create(aFillTab, &m_rXFSet));
     lclExtendSize(aSize, m_pFillTabPage->GetOptimalSize());
-    m_pFillTabPage.disposeAndReset(SvxHatchTabPage::Create(m_pFillTab, &m_rXFSet));
+    m_pFillTabPage.disposeAndReset(SvxHatchTabPage::Create(aFillTab, &m_rXFSet));
     lclExtendSize(aSize, m_pFillTabPage->GetOptimalSize());
-    m_pFillTabPage.disposeAndReset(SvxPatternTabPage::Create(m_pFillTab, &m_rXFSet));
+    m_pFillTabPage.disposeAndReset(SvxPatternTabPage::Create(aFillTab, &m_rXFSet));
     lclExtendSize(aSize, m_pFillTabPage->GetOptimalSize());
     m_pFillTabPage.disposeAndClear();
 
@@ -333,10 +335,10 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
     }
 }
 
-VclPtr<SfxTabPage> SvxAreaTabPage::Create( vcl::Window* pWindow,
+VclPtr<SfxTabPage> SvxAreaTabPage::Create( TabPageParent pWindow,
                                            const SfxItemSet* rAttrs )
 {
-    return VclPtr<SvxAreaTabPage>::Create( pWindow, *rAttrs );
+    return VclPtr<SvxAreaTabPage>::Create( pWindow.pParent, *rAttrs );
 }
 
 namespace {

@@ -85,7 +85,7 @@ public:
     virtual ~SwFormatTablePage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
@@ -136,7 +136,7 @@ public:
     virtual ~SwTableColumnPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
@@ -186,7 +186,7 @@ public:
     SwTextFlowPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SwTextFlowPage() override;
     virtual void dispose() override;
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 

@@ -534,10 +534,10 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet* /*rAttrSet*/ )
 }
 
 
-VclPtr<SfxTabPage> SfxManageStyleSheetPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SfxManageStyleSheetPage::Create( TabPageParent pParent,
                                                     const SfxItemSet *rAttrSet )
 {
-    return VclPtr<SfxManageStyleSheetPage>::Create( pParent, *rAttrSet );
+    return VclPtr<SfxManageStyleSheetPage>::Create( pParent.pParent, *rAttrSet );
 }
 
 

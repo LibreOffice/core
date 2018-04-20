@@ -52,28 +52,27 @@ void SetFontStyle(const OUString &rStyleName, vcl::Font &rFont);
 
 class SmPrintOptionsTabPage : public SfxTabPage
 {
-    VclPtr<CheckBox>       m_pTitle;
-    VclPtr<CheckBox>       m_pText;
-    VclPtr<CheckBox>       m_pFrame;
-    VclPtr<RadioButton>    m_pSizeNormal;
-    VclPtr<RadioButton>    m_pSizeScaled;
-    VclPtr<RadioButton>    m_pSizeZoomed;
-    VclPtr<MetricField>    m_pZoom;
-    VclPtr<CheckBox>       m_pNoRightSpaces;
-    VclPtr<CheckBox>       m_pSaveOnlyUsedSymbols;
-    VclPtr<CheckBox>       m_pAutoCloseBrackets;
+    std::unique_ptr<weld::CheckButton>      m_xTitle;
+    std::unique_ptr<weld::CheckButton>      m_xText;
+    std::unique_ptr<weld::CheckButton>      m_xFrame;
+    std::unique_ptr<weld::RadioButton>      m_xSizeNormal;
+    std::unique_ptr<weld::RadioButton>      m_xSizeScaled;
+    std::unique_ptr<weld::RadioButton>      m_xSizeZoomed;
+    std::unique_ptr<weld::MetricSpinButton> m_xZoom;
+    std::unique_ptr<weld::CheckButton>      m_xNoRightSpaces;
+    std::unique_ptr<weld::CheckButton>      m_xSaveOnlyUsedSymbols;
+    std::unique_ptr<weld::CheckButton>      m_xAutoCloseBrackets;
 
-    DECL_LINK(SizeButtonClickHdl, Button *, void);
+    DECL_LINK(SizeButtonClickHdl, weld::ToggleButton&, void);
 
     virtual bool    FillItemSet(SfxItemSet* rSet) override;
     virtual void    Reset(const SfxItemSet* rSet) override;
 
 public:
-    static VclPtr<SfxTabPage> Create(vcl::Window *pWindow, const SfxItemSet &rSet);
+    static VclPtr<SfxTabPage> Create(TabPageParent pWindow, const SfxItemSet &rSet);
 
-    SmPrintOptionsTabPage(vcl::Window *pParent, const SfxItemSet &rOptions);
+    SmPrintOptionsTabPage(TabPageParent pPage, const SfxItemSet &rOptions);
     virtual ~SmPrintOptionsTabPage() override;
-    virtual void dispose() override;
 };
 
 /**************************************************************************/

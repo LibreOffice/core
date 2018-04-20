@@ -230,10 +230,10 @@ void SvxSingleNumPickTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxSingleNumPickTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SvxSingleNumPickTabPage::Create( TabPageParent pParent,
                                                     const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxSingleNumPickTabPage>::Create(pParent, *rAttrSet);
+    return VclPtr<SvxSingleNumPickTabPage>::Create(pParent.pParent, *rAttrSet);
 }
 
 bool  SvxSingleNumPickTabPage::FillItemSet( SfxItemSet* rSet )
@@ -396,10 +396,10 @@ void SvxBulletPickTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxBulletPickTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SvxBulletPickTabPage::Create( TabPageParent pParent,
                                                  const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxBulletPickTabPage>::Create(pParent, *rAttrSet);
+    return VclPtr<SvxBulletPickTabPage>::Create(pParent.pParent, *rAttrSet);
 }
 
 bool  SvxBulletPickTabPage::FillItemSet( SfxItemSet* rSet )
@@ -595,10 +595,10 @@ void SvxNumPickTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxNumPickTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SvxNumPickTabPage::Create( TabPageParent pParent,
                                               const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxNumPickTabPage>::Create(pParent, *rAttrSet);
+    return VclPtr<SvxNumPickTabPage>::Create(pParent.pParent, *rAttrSet);
 }
 
 bool  SvxNumPickTabPage::FillItemSet( SfxItemSet* rSet )
@@ -847,10 +847,10 @@ void SvxBitmapPickTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxBitmapPickTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SvxBitmapPickTabPage::Create( TabPageParent pParent,
                                                  const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxBitmapPickTabPage>::Create(pParent, *rAttrSet);
+    return VclPtr<SvxBitmapPickTabPage>::Create(pParent.pParent, *rAttrSet);
 }
 
 void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
@@ -1242,10 +1242,10 @@ void SvxNumOptionsTabPage::SetMetric(FieldUnit eMetric)
     m_pHeightMF->SetUnit( eMetric );
 }
 
-VclPtr<SfxTabPage> SvxNumOptionsTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SvxNumOptionsTabPage::Create( TabPageParent pParent,
                                                  const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxNumOptionsTabPage>::Create(pParent, *rAttrSet);
+    return VclPtr<SvxNumOptionsTabPage>::Create(pParent.pParent, *rAttrSet);
 };
 
 void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
@@ -3114,10 +3114,10 @@ void SvxNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
     m_pIndentAtMF->Show( bLabelAlignmentPosAndSpaceModeActive );
 }
 
-VclPtr<SfxTabPage> SvxNumPositionTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SvxNumPositionTabPage::Create( TabPageParent pParent,
                                                   const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxNumPositionTabPage>::Create(pParent, *rAttrSet);
+    return VclPtr<SvxNumPositionTabPage>::Create(pParent.pParent, *rAttrSet);
 }
 
 void    SvxNumPositionTabPage::SetMetric(FieldUnit eMetric)

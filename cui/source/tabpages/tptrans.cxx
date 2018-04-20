@@ -289,9 +289,9 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(vcl::Window* pParent, const SfxIt
     SetExchangeSupport();
 }
 
-VclPtr<SfxTabPage> SvxTransparenceTabPage::Create(vcl::Window* pWindow, const SfxItemSet* rAttrs)
+VclPtr<SfxTabPage> SvxTransparenceTabPage::Create(TabPageParent pWindow, const SfxItemSet* rAttrs)
 {
-    return VclPtr<SvxTransparenceTabPage>::Create(pWindow, *rAttrs);
+    return VclPtr<SvxTransparenceTabPage>::Create(pWindow.pParent, *rAttrs);
 }
 
 bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)

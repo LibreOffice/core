@@ -164,6 +164,17 @@ SfxTabPage::SfxTabPage(vcl::Window *pParent, const OString& rID, const OUString&
 {
 }
 
+SfxTabPage::SfxTabPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet *rAttrSet)
+    : TabPage(Application::GetDefDialogParent()) //just drag this along hidden in this scenario
+    , pSet                ( rAttrSet )
+    , bHasExchangeSupport ( false )
+    , pImpl               ( new TabPageImpl )
+    , m_xBuilder(pParent.pPage ? Application::CreateBuilder(pParent.pPage, rUIXMLDescription)
+                               : Application::CreateInterimBuilder(pParent.pParent, rUIXMLDescription))
+    , m_xContainer(m_xBuilder->weld_container(rID))
+{
+}
+
 SfxTabPage::~SfxTabPage()
 {
     disposeOnce();
@@ -172,6 +183,8 @@ SfxTabPage::~SfxTabPage()
 void SfxTabPage::dispose()
 {
     pImpl.reset();
+    m_xContainer.reset();
+    m_xBuilder.reset();
     TabPage::dispose();
 }
 
@@ -1107,7 +1120,7 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
     if ( !pTabPage )
     {
         if ( m_pSet )
-            pTabPage = (pDataObject->fnCreatePage)( pTabCtrl, m_pSet );
+            pTabPage = (pDataObject->fnCreatePage)( static_cast<vcl::Window*>(pTabCtrl), m_pSet );
         else
             pTabPage = (pDataObject->fnCreatePage)
                             ( pTabCtrl, CreateInputItemSet( nId ) );

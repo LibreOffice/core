@@ -1260,7 +1260,7 @@ bool SmViewShell::HasPrintOptionsPage() const
     return true;
 }
 
-VclPtr<SfxTabPage> SmViewShell::CreatePrintOptionsPage(vcl::Window *pParent,
+VclPtr<SfxTabPage> SmViewShell::CreatePrintOptionsPage(TabPageParent pParent,
                                                        const SfxItemSet &rOptions)
 {
     return SmPrintOptionsTabPage::Create(pParent, rOptions);

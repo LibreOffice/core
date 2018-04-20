@@ -147,9 +147,9 @@ DeactivateRC SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwCondCollPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwCondCollPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwCondCollPage>::Create(pParent, *rSet);
+    return VclPtr<SwCondCollPage>::Create(pParent.pParent, *rSet);
 }
 
 bool SwCondCollPage::FillItemSet(SfxItemSet *rSet)

@@ -415,9 +415,9 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl, Button*, void)
 }
 
 
-VclPtr<SfxTabPage> SfxSecurityPage::Create( vcl::Window * pParent, const SfxItemSet * rItemSet )
+VclPtr<SfxTabPage> SfxSecurityPage::Create( TabPageParent pParent, const SfxItemSet * rItemSet )
 {
-    return VclPtr<SfxSecurityPage>::Create( pParent, *rItemSet );
+    return VclPtr<SfxSecurityPage>::Create( pParent.pParent, *rItemSet );
 }
 
 

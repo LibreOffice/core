@@ -199,10 +199,10 @@ void SwContentOptPage::dispose()
 }
 
 
-VclPtr<SfxTabPage> SwContentOptPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SwContentOptPage::Create( TabPageParent pParent,
                                              const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwContentOptPage>::Create(pParent, *rAttrSet);
+    return VclPtr<SwContentOptPage>::Create(pParent.pParent, *rAttrSet);
 }
 
 static void lcl_SelectMetricLB(ListBox* rMetric, sal_uInt16 nSID, const SfxItemSet& rSet)
@@ -305,115 +305,83 @@ IMPL_LINK(SwContentOptPage, VertRulerHdl, Button*, pBox, void)
 }
 
 // TabPage Printer additional settings
-SwAddPrinterTabPage::SwAddPrinterTabPage(vcl::Window* pParent,
+SwAddPrinterTabPage::SwAddPrinterTabPage(TabPageParent pParent,
     const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "PrintOptionsPage",
-        "modules/swriter/ui/printoptionspage.ui", &rCoreSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/printoptionspage.ui", "PrintOptionsPage", &rCoreSet)
     , sNone(SwResId(SW_STR_NONE))
     , bAttrModified(false)
     , bPreview(false)
+    , m_xGrfCB(m_xBuilder->weld_check_button("graphics"))
+    , m_xCtrlFieldCB(m_xBuilder->weld_check_button("formcontrols"))
+    , m_xBackgroundCB(m_xBuilder->weld_check_button("background"))
+    , m_xBlackFontCB(m_xBuilder->weld_check_button("inblack"))
+    , m_xPrintHiddenTextCB(m_xBuilder->weld_check_button("hiddentext"))
+    , m_xPrintTextPlaceholderCB(m_xBuilder->weld_check_button("textplaceholder"))
+    , m_xPagesFrame(m_xBuilder->weld_widget("pagesframe"))
+    , m_xLeftPageCB(m_xBuilder->weld_check_button("leftpages"))
+    , m_xRightPageCB(m_xBuilder->weld_check_button("rightpages"))
+    , m_xProspectCB(m_xBuilder->weld_check_button("brochure"))
+    , m_xProspectCB_RTL(m_xBuilder->weld_check_button("rtl"))
+    , m_xCommentsFrame(m_xBuilder->weld_widget("commentsframe"))
+    , m_xNoRB(m_xBuilder->weld_radio_button("none"))
+    , m_xOnlyRB(m_xBuilder->weld_radio_button("only"))
+    , m_xEndRB(m_xBuilder->weld_radio_button("end"))
+    , m_xEndPageRB(m_xBuilder->weld_radio_button("endpage"))
+    , m_xInMarginsRB(m_xBuilder->weld_radio_button("inmargins"))
+    , m_xPrintEmptyPagesCB(m_xBuilder->weld_check_button("blankpages"))
+    , m_xPaperFromSetupCB(m_xBuilder->weld_check_button("papertray"))
+    , m_xFaxLB(m_xBuilder->weld_combo_box_text("fax"))
 {
-    get(m_pGrfCB, "graphics");
-    get(m_pCtrlFieldCB, "formcontrols");
-    get(m_pBackgroundCB, "background");
-    get(m_pBlackFontCB, "inblack");
-    get(m_pPrintHiddenTextCB, "hiddentext");
-    get(m_pPrintTextPlaceholderCB, "textplaceholder");
-
-    get(m_pPagesFrame, "pagesframe");
-    get(m_pLeftPageCB, "leftpages");
-    get(m_pRightPageCB, "rightpages");
-    get(m_pProspectCB, "brochure");
-    get(m_pProspectCB_RTL, "rtl");
-
-    get(m_pCommentsFrame, "commentsframe");
-    get(m_pNoRB, "none");
-    get(m_pOnlyRB, "only");
-    get(m_pEndRB, "end");
-    get(m_pEndPageRB, "endpage");
-    get(m_pInMarginsRB, "inmargins");
-    get(m_pPrintEmptyPagesCB, "blankpages");
-    get(m_pPaperFromSetupCB, "papertray");
-    get(m_pFaxLB, "fax");
-
-    Link<Button*,void> aLk = LINK( this, SwAddPrinterTabPage, AutoClickHdl);
-    m_pGrfCB->SetClickHdl( aLk );
-    m_pRightPageCB->SetClickHdl( aLk );
-    m_pLeftPageCB->SetClickHdl( aLk );
-    m_pCtrlFieldCB->SetClickHdl( aLk );
-    m_pBackgroundCB->SetClickHdl( aLk );
-    m_pBlackFontCB->SetClickHdl( aLk );
-    m_pPrintHiddenTextCB->SetClickHdl( aLk );
-    m_pPrintTextPlaceholderCB->SetClickHdl( aLk );
-    m_pProspectCB->SetClickHdl( aLk );
-    m_pProspectCB_RTL->SetClickHdl( aLk );
-    m_pPaperFromSetupCB->SetClickHdl( aLk );
-    m_pPrintEmptyPagesCB->SetClickHdl( aLk );
-    m_pEndPageRB->SetClickHdl( aLk );
-    m_pInMarginsRB->SetClickHdl( aLk );
-    m_pEndRB->SetClickHdl( aLk );
-    m_pOnlyRB->SetClickHdl( aLk );
-    m_pNoRB->SetClickHdl( aLk );
-    m_pFaxLB->SetSelectHdl( LINK( this, SwAddPrinterTabPage, SelectHdl ) );
+    Link<weld::ToggleButton&,void> aLk = LINK( this, SwAddPrinterTabPage, AutoClickHdl);
+    m_xGrfCB->connect_toggled( aLk );
+    m_xRightPageCB->connect_toggled( aLk );
+    m_xLeftPageCB->connect_toggled( aLk );
+    m_xCtrlFieldCB->connect_toggled( aLk );
+    m_xBackgroundCB->connect_toggled( aLk );
+    m_xBlackFontCB->connect_toggled( aLk );
+    m_xPrintHiddenTextCB->connect_toggled( aLk );
+    m_xPrintTextPlaceholderCB->connect_toggled( aLk );
+    m_xProspectCB->connect_toggled( aLk );
+    m_xProspectCB_RTL->connect_toggled( aLk );
+    m_xPaperFromSetupCB->connect_toggled( aLk );
+    m_xPrintEmptyPagesCB->connect_toggled( aLk );
+    m_xEndPageRB->connect_toggled( aLk );
+    m_xInMarginsRB->connect_toggled( aLk );
+    m_xEndRB->connect_toggled( aLk );
+    m_xOnlyRB->connect_toggled( aLk );
+    m_xNoRB->connect_toggled( aLk );
+    m_xFaxLB->connect_changed( LINK( this, SwAddPrinterTabPage, SelectHdl ) );
 
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rCoreSet.GetItemState(SID_HTML_MODE, false, &pItem )
         && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON)
     {
-        m_pLeftPageCB->Hide();
-        m_pRightPageCB->Hide();
-        m_pPrintHiddenTextCB->Hide();
-        m_pPrintTextPlaceholderCB->Hide();
-
-        // hide m_pPrintEmptyPagesCB
-        m_pPrintEmptyPagesCB->Hide();
+        m_xLeftPageCB->hide();
+        m_xRightPageCB->hide();
+        m_xPrintHiddenTextCB->hide();
+        m_xPrintTextPlaceholderCB->hide();
+        m_xPrintEmptyPagesCB->hide();
     }
-    m_pProspectCB_RTL->Disable();
+    m_xProspectCB_RTL->set_sensitive(false);
     SvtCTLOptions aCTLOptions;
-    m_pProspectCB_RTL->Show(aCTLOptions.IsCTLFontEnabled());
+    m_xProspectCB_RTL->show(aCTLOptions.IsCTLFontEnabled());
 }
 
 SwAddPrinterTabPage::~SwAddPrinterTabPage()
 {
-    disposeOnce();
-}
-
-void SwAddPrinterTabPage::dispose()
-{
-    m_pGrfCB.clear();
-    m_pCtrlFieldCB.clear();
-    m_pBackgroundCB.clear();
-    m_pBlackFontCB.clear();
-    m_pPrintHiddenTextCB.clear();
-    m_pPrintTextPlaceholderCB.clear();
-    m_pPagesFrame.clear();
-    m_pLeftPageCB.clear();
-    m_pRightPageCB.clear();
-    m_pProspectCB.clear();
-    m_pProspectCB_RTL.clear();
-    m_pCommentsFrame.clear();
-    m_pNoRB.clear();
-    m_pOnlyRB.clear();
-    m_pEndRB.clear();
-    m_pEndPageRB.clear();
-    m_pInMarginsRB.clear();
-    m_pPrintEmptyPagesCB.clear();
-    m_pPaperFromSetupCB.clear();
-    m_pFaxLB.clear();
-    SfxTabPage::dispose();
 }
 
 void SwAddPrinterTabPage::SetPreview(bool bPrev)
 {
     bPreview = bPrev;
-    m_pCommentsFrame->Enable(!bPreview);
-    m_pPagesFrame->Enable(!bPreview);
+    m_xCommentsFrame->set_sensitive(!bPreview);
+    m_xPagesFrame->set_sensitive(!bPreview);
 }
 
-VclPtr<SfxTabPage> SwAddPrinterTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SwAddPrinterTabPage::Create( TabPageParent pParent,
                                                 const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwAddPrinterTabPage>::Create( pParent, *rAttrSet );
+    return VclPtr<SwAddPrinterTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
@@ -421,36 +389,36 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
     if ( bAttrModified )
     {
         SwAddPrinterItem aAddPrinterAttr;
-        aAddPrinterAttr.m_bPrintGraphic   = m_pGrfCB->IsChecked();
-        aAddPrinterAttr.m_bPrintTable     = true; // always enabled since CWS printerpullgpages /*aTabCB.IsChecked();*/
-        aAddPrinterAttr.m_bPrintDraw      = m_pGrfCB->IsChecked(); // UI merged with m_pGrfCB in CWS printerpullgpages
-        aAddPrinterAttr.m_bPrintControl   = m_pCtrlFieldCB->IsChecked();
-        aAddPrinterAttr.m_bPrintPageBackground = m_pBackgroundCB->IsChecked();
-        aAddPrinterAttr.m_bPrintBlackFont = m_pBlackFontCB->IsChecked();
-        aAddPrinterAttr.m_bPrintHiddenText = m_pPrintHiddenTextCB->IsChecked();
-        aAddPrinterAttr.m_bPrintTextPlaceholder = m_pPrintTextPlaceholderCB->IsChecked();
+        aAddPrinterAttr.m_bPrintGraphic   = m_xGrfCB->get_active();
+        aAddPrinterAttr.m_bPrintTable     = true; // always enabled since CWS printerpullgpages /*m_xTabCB->get_active();*/
+        aAddPrinterAttr.m_bPrintDraw      = m_xGrfCB->get_active(); // UI merged with m_xGrfCB in CWS printerpullgpages
+        aAddPrinterAttr.m_bPrintControl   = m_xCtrlFieldCB->get_active();
+        aAddPrinterAttr.m_bPrintPageBackground = m_xBackgroundCB->get_active();
+        aAddPrinterAttr.m_bPrintBlackFont = m_xBlackFontCB->get_active();
+        aAddPrinterAttr.m_bPrintHiddenText = m_xPrintHiddenTextCB->get_active();
+        aAddPrinterAttr.m_bPrintTextPlaceholder = m_xPrintTextPlaceholderCB->get_active();
 
-        aAddPrinterAttr.m_bPrintLeftPages     = m_pLeftPageCB->IsChecked();
-        aAddPrinterAttr.m_bPrintRightPages    = m_pRightPageCB->IsChecked();
-        aAddPrinterAttr.m_bPrintReverse       = false; // handled by vcl itself since CWS printerpullpages /*aReverseCB.IsChecked()*/;
-        aAddPrinterAttr.m_bPrintProspect      = m_pProspectCB->IsChecked();
-        aAddPrinterAttr.m_bPrintProspectRTL   = m_pProspectCB_RTL->IsChecked();
-        aAddPrinterAttr.m_bPaperFromSetup     = m_pPaperFromSetupCB->IsChecked();
-        aAddPrinterAttr.m_bPrintEmptyPages    = m_pPrintEmptyPagesCB->IsChecked();
-        aAddPrinterAttr.m_bPrintSingleJobs    = true; // handled by vcl in new print dialog since CWS printerpullpages /*aSingleJobsCB.IsChecked()*/;
+        aAddPrinterAttr.m_bPrintLeftPages     = m_xLeftPageCB->get_active();
+        aAddPrinterAttr.m_bPrintRightPages    = m_xRightPageCB->get_active();
+        aAddPrinterAttr.m_bPrintReverse       = false; // handled by vcl itself since CWS printerpullpages /*m_xReverseCB->get_active()*/;
+        aAddPrinterAttr.m_bPrintProspect      = m_xProspectCB->get_active();
+        aAddPrinterAttr.m_bPrintProspectRTL   = m_xProspectCB_RTL->get_active();
+        aAddPrinterAttr.m_bPaperFromSetup     = m_xPaperFromSetupCB->get_active();
+        aAddPrinterAttr.m_bPrintEmptyPages    = m_xPrintEmptyPagesCB->get_active();
+        aAddPrinterAttr.m_bPrintSingleJobs    = true; // handled by vcl in new print dialog since CWS printerpullpages /*m_xSingleJobsCB->get_active()*/;
 
-        if (m_pNoRB->IsChecked())  aAddPrinterAttr.m_nPrintPostIts =
+        if (m_xNoRB->get_active())  aAddPrinterAttr.m_nPrintPostIts =
                                                         SwPostItMode::NONE;
-        if (m_pOnlyRB->IsChecked()) aAddPrinterAttr.m_nPrintPostIts =
+        if (m_xOnlyRB->get_active()) aAddPrinterAttr.m_nPrintPostIts =
                                                         SwPostItMode::Only;
-        if (m_pEndRB->IsChecked()) aAddPrinterAttr.m_nPrintPostIts =
+        if (m_xEndRB->get_active()) aAddPrinterAttr.m_nPrintPostIts =
                                                         SwPostItMode::EndDoc;
-        if (m_pEndPageRB->IsChecked()) aAddPrinterAttr.m_nPrintPostIts =
+        if (m_xEndPageRB->get_active()) aAddPrinterAttr.m_nPrintPostIts =
                                                         SwPostItMode::EndPage;
-        if (m_pInMarginsRB->IsChecked()) aAddPrinterAttr.m_nPrintPostIts =
+        if (m_xInMarginsRB->get_active()) aAddPrinterAttr.m_nPrintPostIts =
                                                         SwPostItMode::InMargins;
 
-        const OUString sFax = m_pFaxLB->GetSelectedEntry();
+        const OUString sFax = m_xFaxLB->get_active_text();
         aAddPrinterAttr.m_sFaxName = sNone == sFax ? aEmptyOUStr : sFax;
         rCoreSet->Put(aAddPrinterAttr);
     }
@@ -465,63 +433,63 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_ADDPRINTER , false,
                                     reinterpret_cast<const SfxPoolItem**>(&pAddPrinterAttr) ))
     {
-        m_pGrfCB->Check(pAddPrinterAttr->m_bPrintGraphic || pAddPrinterAttr->m_bPrintDraw);
-        m_pCtrlFieldCB->Check(       pAddPrinterAttr->m_bPrintControl);
-        m_pBackgroundCB->Check(    pAddPrinterAttr->m_bPrintPageBackground);
-        m_pBlackFontCB->Check(     pAddPrinterAttr->m_bPrintBlackFont);
-        m_pPrintHiddenTextCB->Check( pAddPrinterAttr->m_bPrintHiddenText);
-        m_pPrintTextPlaceholderCB->Check(pAddPrinterAttr->m_bPrintTextPlaceholder);
-        m_pLeftPageCB->Check(      pAddPrinterAttr->m_bPrintLeftPages);
-        m_pRightPageCB->Check(     pAddPrinterAttr->m_bPrintRightPages);
-        m_pPaperFromSetupCB->Check(pAddPrinterAttr->m_bPaperFromSetup);
-        m_pPrintEmptyPagesCB->Check(pAddPrinterAttr->m_bPrintEmptyPages);
-        m_pProspectCB->Check(      pAddPrinterAttr->m_bPrintProspect);
-        m_pProspectCB_RTL->Check(      pAddPrinterAttr->m_bPrintProspectRTL);
+        m_xGrfCB->set_active(pAddPrinterAttr->m_bPrintGraphic || pAddPrinterAttr->m_bPrintDraw);
+        m_xCtrlFieldCB->set_active(       pAddPrinterAttr->m_bPrintControl);
+        m_xBackgroundCB->set_active(    pAddPrinterAttr->m_bPrintPageBackground);
+        m_xBlackFontCB->set_active(     pAddPrinterAttr->m_bPrintBlackFont);
+        m_xPrintHiddenTextCB->set_active( pAddPrinterAttr->m_bPrintHiddenText);
+        m_xPrintTextPlaceholderCB->set_active(pAddPrinterAttr->m_bPrintTextPlaceholder);
+        m_xLeftPageCB->set_active(      pAddPrinterAttr->m_bPrintLeftPages);
+        m_xRightPageCB->set_active(     pAddPrinterAttr->m_bPrintRightPages);
+        m_xPaperFromSetupCB->set_active(pAddPrinterAttr->m_bPaperFromSetup);
+        m_xPrintEmptyPagesCB->set_active(pAddPrinterAttr->m_bPrintEmptyPages);
+        m_xProspectCB->set_active(      pAddPrinterAttr->m_bPrintProspect);
+        m_xProspectCB_RTL->set_active(      pAddPrinterAttr->m_bPrintProspectRTL);
 
-        m_pNoRB->Check (pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::NONE ) ;
-        m_pOnlyRB->Check (pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::Only ) ;
-        m_pEndRB->Check (pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::EndDoc ) ;
-        m_pEndPageRB->Check (pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::EndPage ) ;
-        m_pInMarginsRB->Check (pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::InMargins ) ;
-        m_pFaxLB->SelectEntry( pAddPrinterAttr->m_sFaxName );
+        m_xNoRB->set_active(pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::NONE ) ;
+        m_xOnlyRB->set_active(pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::Only ) ;
+        m_xEndRB->set_active(pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::EndDoc ) ;
+        m_xEndPageRB->set_active(pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::EndPage ) ;
+        m_xInMarginsRB->set_active(pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::InMargins ) ;
+        m_xFaxLB->set_active( pAddPrinterAttr->m_sFaxName );
     }
-    if (m_pProspectCB->IsChecked())
+    if (m_xProspectCB->get_active())
     {
-        m_pProspectCB_RTL->Enable();
-        m_pNoRB->Enable( false );
-        m_pOnlyRB->Enable( false );
-        m_pEndRB->Enable( false );
-        m_pEndPageRB->Enable( false );
+        m_xProspectCB_RTL->set_sensitive(true);
+        m_xNoRB->set_sensitive( false );
+        m_xOnlyRB->set_sensitive( false );
+        m_xEndRB->set_sensitive( false );
+        m_xEndPageRB->set_sensitive( false );
     }
     else
-        m_pProspectCB_RTL->Enable( false );
+        m_xProspectCB_RTL->set_sensitive( false );
 }
 
-IMPL_LINK_NOARG(SwAddPrinterTabPage, AutoClickHdl, Button*, void)
+IMPL_LINK_NOARG(SwAddPrinterTabPage, AutoClickHdl, weld::ToggleButton&, void)
 {
     bAttrModified = true;
-    bool bIsProspect = m_pProspectCB->IsChecked();
+    bool bIsProspect = m_xProspectCB->get_active();
     if (!bIsProspect)
-        m_pProspectCB_RTL->Check( false );
-    m_pProspectCB_RTL->Enable( bIsProspect );
-    m_pNoRB->Enable( !bIsProspect );
-    m_pOnlyRB->Enable( !bIsProspect );
-    m_pEndRB->Enable( !bIsProspect );
-    m_pEndPageRB->Enable( !bIsProspect );
-    m_pInMarginsRB->Enable( !bIsProspect );
+        m_xProspectCB_RTL->set_active( false );
+    m_xProspectCB_RTL->set_sensitive( bIsProspect );
+    m_xNoRB->set_sensitive( !bIsProspect );
+    m_xOnlyRB->set_sensitive( !bIsProspect );
+    m_xEndRB->set_sensitive( !bIsProspect );
+    m_xEndPageRB->set_sensitive( !bIsProspect );
+    m_xInMarginsRB->set_sensitive( !bIsProspect );
 }
 
 void  SwAddPrinterTabPage::SetFax( const std::vector<OUString>& rFaxLst )
 {
-    m_pFaxLB->InsertEntry(sNone);
+    m_xFaxLB->append_text(sNone);
     for(const auto & i : rFaxLst)
     {
-        m_pFaxLB->InsertEntry(i);
+        m_xFaxLB->append_text(i);
     }
-    m_pFaxLB->SelectEntryPos(0);
+    m_xFaxLB->set_active(0);
 }
 
-IMPL_LINK_NOARG(SwAddPrinterTabPage, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwAddPrinterTabPage, SelectHdl, weld::ComboBoxText&, void)
 {
     bAttrModified=true;
 }
@@ -638,10 +606,10 @@ void SwStdFontTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwStdFontTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SwStdFontTabPage::Create( TabPageParent pParent,
                                              const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwStdFontTabPage>::Create(pParent, *rAttrSet);
+    return VclPtr<SwStdFontTabPage>::Create(pParent.pParent, *rAttrSet);
 }
 
 static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
@@ -1149,10 +1117,10 @@ void SwTableOptionsTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwTableOptionsTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SwTableOptionsTabPage::Create( TabPageParent pParent,
                                                   const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwTableOptionsTabPage>::Create(pParent, *rAttrSet);
+    return VclPtr<SwTableOptionsTabPage>::Create(pParent.pParent, *rAttrSet);
 }
 
 bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -1415,9 +1383,9 @@ void SwShdwCursorOptionsTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwShdwCursorOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SwShdwCursorOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SwShdwCursorOptionsTabPage>::Create( pParent, *rSet );
+    return VclPtr<SwShdwCursorOptionsTabPage>::Create( pParent.pParent, *rSet );
 }
 
 void SwShdwCursorOptionsTabPage::PageCreated( const SfxAllItemSet& aSet )
@@ -1821,9 +1789,9 @@ void SwRedlineOptionsTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwRedlineOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwRedlineOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwRedlineOptionsTabPage>::Create( pParent, *rSet );
+    return VclPtr<SwRedlineOptionsTabPage>::Create( pParent.pParent, *rSet );
 }
 
 bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -2225,9 +2193,9 @@ void SwCompareOptionsTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwCompareOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SwCompareOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwCompareOptionsTabPage>::Create( pParent, *rAttrSet );
+    return VclPtr<SwCompareOptionsTabPage>::Create( pParent.pParent, *rAttrSet );
 }
 
 bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -2375,10 +2343,10 @@ void SwTestTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwTestTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SwTestTabPage::Create( TabPageParent pParent,
                                           const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwTestTabPage>::Create(pParent, *rAttrSet);
+    return VclPtr<SwTestTabPage>::Create(pParent.pParent, *rAttrSet);
 }
 
 bool    SwTestTabPage::FillItemSet( SfxItemSet* rCoreSet )

@@ -50,7 +50,7 @@ namespace offapp
         ConnectionPoolOptionsPage(vcl::Window* _pParent, const SfxItemSet& _rAttrSet);
         virtual ~ConnectionPoolOptionsPage() override;
         virtual void dispose() override;
-        static VclPtr<SfxTabPage>  Create(vcl::Window* _pParent, const SfxItemSet* _rAttrSet);
+        static VclPtr<SfxTabPage>  Create(TabPageParent _pParent, const SfxItemSet* _rAttrSet);
 
     private:
         virtual bool        EventNotify( NotifyEvent& _rNEvt ) override;

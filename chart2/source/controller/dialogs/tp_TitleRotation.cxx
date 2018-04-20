@@ -72,16 +72,16 @@ void SchAlignmentTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SchAlignmentTabPage::Create(vcl::Window* pParent,
+VclPtr<SfxTabPage> SchAlignmentTabPage::Create(TabPageParent pParent,
                                                const SfxItemSet* rInAttrs)
 {
-    return VclPtr<SchAlignmentTabPage>::Create(pParent, *rInAttrs);
+    return VclPtr<SchAlignmentTabPage>::Create(pParent.pParent, *rInAttrs);
 }
 
-VclPtr<SfxTabPage> SchAlignmentTabPage::CreateWithoutRotation(vcl::Window* pParent,
+VclPtr<SfxTabPage> SchAlignmentTabPage::CreateWithoutRotation(TabPageParent pParent,
                                                               const SfxItemSet* rInAttrs)
 {
-    return VclPtr<SchAlignmentTabPage>::Create(pParent, *rInAttrs, false);
+    return VclPtr<SchAlignmentTabPage>::Create(pParent.pParent, *rInAttrs, false);
 }
 
 bool SchAlignmentTabPage::FillItemSet(SfxItemSet* rOutAttrs)

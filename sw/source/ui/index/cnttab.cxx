@@ -1302,9 +1302,9 @@ DeactivateRC SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwTOXSelectTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwTOXSelectTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwTOXSelectTabPage>::Create(pParent, *rAttrSet);
+    return VclPtr<SwTOXSelectTabPage>::Create(pParent.pParent, *rAttrSet);
 }
 
 IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl, ListBox&, rBox, void)
@@ -2247,9 +2247,9 @@ DeactivateRC SwTOXEntryTabPage::DeactivatePage( SfxItemSet* /*pSet*/)
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwTOXEntryTabPage::Create( vcl::Window* pParent,     const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwTOXEntryTabPage::Create( TabPageParent pParent,     const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwTOXEntryTabPage>::Create(pParent, *rAttrSet);
+    return VclPtr<SwTOXEntryTabPage>::Create(pParent.pParent, *rAttrSet);
 }
 
 IMPL_LINK_NOARG(SwTOXEntryTabPage, EditStyleHdl, Button*, void)
@@ -3760,10 +3760,10 @@ DeactivateRC SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwTOXStylesTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SwTOXStylesTabPage::Create( TabPageParent pParent,
                                                const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwTOXStylesTabPage>::Create(pParent, *rAttrSet);
+    return VclPtr<SwTOXStylesTabPage>::Create(pParent.pParent, *rAttrSet);
 }
 
 IMPL_LINK_NOARG(SwTOXStylesTabPage, EditStyleHdl, Button *, void)

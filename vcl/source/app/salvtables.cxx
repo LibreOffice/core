@@ -2043,6 +2043,11 @@ weld::Builder* SalInstance::CreateBuilder(weld::Widget* pParent, const OUString&
     return new SalInstanceBuilder(pParentWidget, rUIRoot, rUIFile);
 }
 
+weld::Builder* SalInstance::CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile)
+{
+    return new SalInstanceBuilder(pParent, rUIRoot, rUIFile);
+}
+
 weld::MessageDialog* SalInstance::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType, VclButtonsType eButtonsType, const OUString& rPrimaryMessage)
 {
     SalInstanceWidget* pParentInstance = dynamic_cast<SalInstanceWidget*>(pParent);

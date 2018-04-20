@@ -72,7 +72,7 @@ public:
     virtual ~SvxGeneralTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

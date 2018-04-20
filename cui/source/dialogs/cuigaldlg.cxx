@@ -701,9 +701,9 @@ bool TPGalleryThemeGeneral::FillItemSet( SfxItemSet* /*rSet*/ )
     return true;
 }
 
-VclPtr<SfxTabPage> TPGalleryThemeGeneral::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> TPGalleryThemeGeneral::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<TPGalleryThemeGeneral>::Create( pParent, *rSet );
+    return VclPtr<TPGalleryThemeGeneral>::Create( pParent.pParent, *rSet );
 }
 
 
@@ -796,9 +796,9 @@ void TPGalleryThemeProperties::dispose()
 }
 
 
-VclPtr<SfxTabPage> TPGalleryThemeProperties::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> TPGalleryThemeProperties::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<TPGalleryThemeProperties>::Create( pParent, *rSet );
+    return VclPtr<TPGalleryThemeProperties>::Create( pParent.pParent, *rSet );
 }
 
 

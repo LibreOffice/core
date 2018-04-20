@@ -389,10 +389,10 @@ void SvxConnectionPage::Construct()
 |*
 \************************************************************************/
 
-VclPtr<SfxTabPage> SvxConnectionPage::Create( vcl::Window* pWindow,
+VclPtr<SfxTabPage> SvxConnectionPage::Create( TabPageParent pWindow,
                                               const SfxItemSet* rAttrs )
 {
-    return VclPtr<SvxConnectionPage>::Create( pWindow, *rAttrs );
+    return VclPtr<SvxConnectionPage>::Create( pWindow.pParent, *rAttrs );
 }
 
 IMPL_LINK( SvxConnectionPage, ChangeAttrListBoxHdl_Impl, ListBox&, r, void )

@@ -48,10 +48,10 @@ void SchLayoutTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SchLayoutTabPage::Create(vcl::Window* pWindow,
+VclPtr<SfxTabPage> SchLayoutTabPage::Create(TabPageParent pWindow,
                                             const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<SchLayoutTabPage>::Create(pWindow, *rOutAttrs);
+    return VclPtr<SchLayoutTabPage>::Create(pWindow.pParent, *rOutAttrs);
 }
 
 bool SchLayoutTabPage::FillItemSet(SfxItemSet* rOutAttrs)

@@ -297,10 +297,10 @@ void SvxHatchTabPage::Reset( const SfxItemSet* rSet )
 }
 
 
-VclPtr<SfxTabPage> SvxHatchTabPage::Create( vcl::Window* pWindow,
+VclPtr<SfxTabPage> SvxHatchTabPage::Create( TabPageParent pWindow,
                                             const SfxItemSet* rSet )
 {
-    return VclPtr<SvxHatchTabPage>::Create( pWindow, *rSet );
+    return VclPtr<SvxHatchTabPage>::Create( pWindow.pParent, *rSet );
 }
 
 IMPL_LINK( SvxHatchTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox, void )

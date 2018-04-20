@@ -177,10 +177,10 @@ void DbRegistrationOptionsPage::dispose()
 }
 
 
-VclPtr<SfxTabPage> DbRegistrationOptionsPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> DbRegistrationOptionsPage::Create( TabPageParent pParent,
                                     const SfxItemSet* rAttrSet )
 {
-    return VclPtr<DbRegistrationOptionsPage>::Create( pParent, *rAttrSet );
+    return VclPtr<DbRegistrationOptionsPage>::Create( pParent.pParent, *rAttrSet );
 }
 
 

@@ -247,7 +247,7 @@ public:
     virtual                     ~ImpPDFTabGeneralPage() override;
 
     virtual void                dispose() override;
-    static VclPtr<SfxTabPage>   Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     void                        GetFilterConfigItem(ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem(ImpPDFTabDialog* paParent);
@@ -287,7 +287,7 @@ public:
     virtual                     ~ImpPDFTabOpnFtrPage() override;
 
     virtual void                dispose() override;
-    static VclPtr<SfxTabPage>   Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
@@ -320,7 +320,7 @@ public:
     virtual                     ~ImpPDFTabViewerPage() override;
 
     virtual void                dispose() override;
-    static VclPtr<SfxTabPage>   Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
@@ -374,7 +374,7 @@ public:
     virtual                     ~ImpPDFTabSecurityPage() override;
 
     virtual void                dispose() override;
-    static VclPtr<SfxTabPage>   Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
@@ -405,7 +405,7 @@ public:
     virtual                     ~ImpPDFTabLinksPage() override;
 
     virtual void                dispose() override;
-    static VclPtr<SfxTabPage>   Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
@@ -434,7 +434,7 @@ public:
     virtual                     ~ImpPDFTabSigningPage() override;
 
     virtual void                dispose() override;
-    static VclPtr<SfxTabPage>   Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );

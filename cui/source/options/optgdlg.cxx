@@ -327,9 +327,9 @@ void OfaMiscTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> OfaMiscTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> OfaMiscTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<OfaMiscTabPage>::Create( pParent, *rAttrSet );
+    return VclPtr<OfaMiscTabPage>::Create( pParent.pParent, *rAttrSet );
 }
 
 bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
@@ -736,9 +736,9 @@ IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled, CheckBox&, void )
 }
 #endif
 
-VclPtr<SfxTabPage> OfaViewTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> OfaViewTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<OfaViewTabPage>::Create(pParent, *rAttrSet);
+    return VclPtr<OfaViewTabPage>::Create(pParent.pParent, *rAttrSet);
 }
 
 bool OfaViewTabPage::FillItemSet( SfxItemSet* )
@@ -1298,9 +1298,9 @@ void OfaLanguagesTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> OfaLanguagesTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> OfaLanguagesTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<OfaLanguagesTabPage>::Create(pParent, *rAttrSet);
+    return VclPtr<OfaLanguagesTabPage>::Create(pParent.pParent, *rAttrSet);
 }
 
 static void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBoolItems[], sal_uInt16 nCount)

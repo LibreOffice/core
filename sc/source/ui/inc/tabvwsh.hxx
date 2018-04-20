@@ -318,7 +318,7 @@ public:
                                           SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL ) override;
 
     virtual bool            HasPrintOptionsPage() const override;
-    virtual VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions ) override;
+    virtual VclPtr<SfxTabPage> CreatePrintOptionsPage( TabPageParent pParent, const SfxItemSet &rOptions ) override;
 
     void            ConnectObject( const SdrOle2Obj* pObj );
     void            ActivateObject( SdrOle2Obj* pObj, long nVerb );

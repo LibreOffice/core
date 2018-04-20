@@ -739,10 +739,10 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
 }
 
 
-VclPtr<SfxTabPage> ImpPDFTabGeneralPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> ImpPDFTabGeneralPage::Create( TabPageParent pParent,
                                                  const SfxItemSet* rAttrSet)
 {
-    return VclPtr<ImpPDFTabGeneralPage>::Create( pParent, *rAttrSet );
+    return VclPtr<ImpPDFTabGeneralPage>::Create( pParent.pParent, *rAttrSet );
 }
 
 
@@ -935,10 +935,10 @@ void ImpPDFTabOpnFtrPage::dispose()
 }
 
 
-VclPtr<SfxTabPage> ImpPDFTabOpnFtrPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> ImpPDFTabOpnFtrPage::Create( TabPageParent pParent,
                                                 const SfxItemSet* rAttrSet)
 {
-    return VclPtr<ImpPDFTabOpnFtrPage>::Create( pParent, *rAttrSet );
+    return VclPtr<ImpPDFTabOpnFtrPage>::Create( pParent.pParent, *rAttrSet );
 }
 
 
@@ -1120,10 +1120,10 @@ IMPL_LINK_NOARG( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, RadioButton&, void )
 }
 
 
-VclPtr<SfxTabPage> ImpPDFTabViewerPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> ImpPDFTabViewerPage::Create( TabPageParent pParent,
                                                 const SfxItemSet* rAttrSet)
 {
-    return VclPtr<ImpPDFTabViewerPage>::Create( pParent, *rAttrSet );
+    return VclPtr<ImpPDFTabViewerPage>::Create( pParent.pParent, *rAttrSet );
 }
 
 
@@ -1240,10 +1240,10 @@ void ImpPDFTabSecurityPage::dispose()
 }
 
 
-VclPtr<SfxTabPage> ImpPDFTabSecurityPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> ImpPDFTabSecurityPage::Create( TabPageParent pParent,
                                                   const SfxItemSet* rAttrSet)
 {
-    return VclPtr<ImpPDFTabSecurityPage>::Create( pParent, *rAttrSet );
+    return VclPtr<ImpPDFTabSecurityPage>::Create( pParent.pParent, *rAttrSet );
 }
 
 
@@ -1471,10 +1471,10 @@ void ImpPDFTabLinksPage::dispose()
 }
 
 
-VclPtr<SfxTabPage> ImpPDFTabLinksPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> ImpPDFTabLinksPage::Create( TabPageParent pParent,
                                                const SfxItemSet* rAttrSet)
 {
-    return VclPtr<ImpPDFTabLinksPage>::Create( pParent, *rAttrSet );
+    return VclPtr<ImpPDFTabLinksPage>::Create( pParent.pParent, *rAttrSet );
 }
 
 
@@ -1735,10 +1735,10 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertClear, Button*, void )
 }
 
 
-VclPtr<SfxTabPage> ImpPDFTabSigningPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> ImpPDFTabSigningPage::Create( TabPageParent pParent,
                                                  const SfxItemSet* rAttrSet)
 {
-    return VclPtr<ImpPDFTabSigningPage>::Create( pParent, *rAttrSet );
+    return VclPtr<ImpPDFTabSigningPage>::Create( pParent.pParent, *rAttrSet );
 }
 
 

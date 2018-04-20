@@ -64,7 +64,7 @@ public:
     virtual ~SwLabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
@@ -116,7 +116,7 @@ class SwVisitingCardPage : public SfxTabPage
 public:
     SwVisitingCardPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
-    static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
@@ -155,7 +155,7 @@ public:
     virtual ~SwPrivateDataPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
@@ -192,7 +192,7 @@ public:
     virtual ~SwBusinessDataPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;

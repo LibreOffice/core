@@ -634,9 +634,9 @@ void SfxDocumentDescPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SfxDocumentDescPage::Create(vcl::Window *pParent, const SfxItemSet *rItemSet)
+VclPtr<SfxTabPage> SfxDocumentDescPage::Create(TabPageParent pParent, const SfxItemSet *rItemSet)
 {
-     return VclPtr<SfxDocumentDescPage>::Create(pParent, *rItemSet);
+     return VclPtr<SfxDocumentDescPage>::Create(pParent.pParent, *rItemSet);
 }
 
 bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
@@ -930,9 +930,9 @@ void SfxDocumentPage::ImplCheckPasswordState()
     m_pChangePassBtn->Disable();
 }
 
-VclPtr<SfxTabPage> SfxDocumentPage::Create( vcl::Window* pParent, const SfxItemSet* rItemSet )
+VclPtr<SfxTabPage> SfxDocumentPage::Create( TabPageParent pParent, const SfxItemSet* rItemSet )
 {
-     return VclPtr<SfxDocumentPage>::Create( pParent, *rItemSet );
+     return VclPtr<SfxDocumentPage>::Create( pParent.pParent, *rItemSet );
 }
 
 void SfxDocumentPage::EnableUseUserData()
@@ -2221,9 +2221,9 @@ DeactivateRC SfxCustomPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
     return nRet;
 }
 
-VclPtr<SfxTabPage> SfxCustomPropertiesPage::Create( vcl::Window* pParent, const SfxItemSet* rItemSet )
+VclPtr<SfxTabPage> SfxCustomPropertiesPage::Create( TabPageParent pParent, const SfxItemSet* rItemSet )
 {
-    return VclPtr<SfxCustomPropertiesPage>::Create( pParent, *rItemSet );
+    return VclPtr<SfxCustomPropertiesPage>::Create( pParent.pParent, *rItemSet );
 }
 
 CmisValue::CmisValue( vcl::Window* pParent, const OUString& aStr )
@@ -2717,9 +2717,9 @@ DeactivateRC SfxCmisPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SfxCmisPropertiesPage::Create( vcl::Window* pParent, const SfxItemSet* rItemSet )
+VclPtr<SfxTabPage> SfxCmisPropertiesPage::Create( TabPageParent pParent, const SfxItemSet* rItemSet )
 {
-    return VclPtr<SfxCmisPropertiesPage>::Create( pParent, *rItemSet );
+    return VclPtr<SfxCmisPropertiesPage>::Create( pParent.pParent, *rItemSet );
 }
 
 void SfxCmisPropertiesPage::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)

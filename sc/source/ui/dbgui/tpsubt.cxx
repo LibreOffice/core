@@ -392,22 +392,22 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, SvTreeListBox*, pLb, void )
 
 // Derived Group TabPages:
 
-VclPtr<SfxTabPage> ScTpSubTotalGroup1::Create( vcl::Window*         pParent,
+VclPtr<SfxTabPage> ScTpSubTotalGroup1::Create( TabPageParent pParent,
                                                  const SfxItemSet*  rArgSet )
 {
-    return VclPtr<ScTpSubTotalGroup1>::Create( pParent, *rArgSet );
+    return VclPtr<ScTpSubTotalGroup1>::Create( pParent.pParent, *rArgSet );
 }
 
-VclPtr<SfxTabPage> ScTpSubTotalGroup2::Create( vcl::Window*          pParent,
+VclPtr<SfxTabPage> ScTpSubTotalGroup2::Create( TabPageParent pParent,
                                        const SfxItemSet*    rArgSet )
 {
-    return VclPtr<ScTpSubTotalGroup2>::Create( pParent, *rArgSet );
+    return VclPtr<ScTpSubTotalGroup2>::Create( pParent.pParent, *rArgSet );
 }
 
-VclPtr<SfxTabPage> ScTpSubTotalGroup3::Create( vcl::Window*          pParent,
+VclPtr<SfxTabPage> ScTpSubTotalGroup3::Create( TabPageParent pParent,
                                        const SfxItemSet*    rArgSet )
 {
-    return VclPtr<ScTpSubTotalGroup3>::Create( pParent, *rArgSet );
+    return VclPtr<ScTpSubTotalGroup3>::Create( pParent.pParent, *rArgSet );
 }
 
 ScTpSubTotalGroup1::ScTpSubTotalGroup1( vcl::Window* pParent, const SfxItemSet& rArgSet ) :
@@ -497,10 +497,10 @@ void ScTpSubTotalOptions::Init()
     FillUserSortListBox();
 }
 
-VclPtr<SfxTabPage> ScTpSubTotalOptions::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> ScTpSubTotalOptions::Create( TabPageParent pParent,
                                                 const SfxItemSet* rArgSet )
 {
-    return VclPtr<ScTpSubTotalOptions>::Create( pParent, *rArgSet );
+    return VclPtr<ScTpSubTotalOptions>::Create( pParent.pParent, *rArgSet );
 }
 
 void ScTpSubTotalOptions::Reset( const SfxItemSet* /* rArgSet */ )

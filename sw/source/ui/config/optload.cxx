@@ -168,10 +168,10 @@ void SwLoadOptPage::dispose()
 }
 
 
-VclPtr<SfxTabPage> SwLoadOptPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SwLoadOptPage::Create( TabPageParent pParent,
                                           const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwLoadOptPage>::Create(pParent, *rAttrSet );
+    return VclPtr<SwLoadOptPage>::Create(pParent.pParent, *rAttrSet );
 }
 
 IMPL_LINK_NOARG(SwLoadOptPage, StandardizedPageCountCheckHdl, Button*, void)
@@ -584,10 +584,10 @@ void SwCaptionOptPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwCaptionOptPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SwCaptionOptPage::Create( TabPageParent pParent,
                                              const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwCaptionOptPage>::Create( pParent, *rAttrSet );
+    return VclPtr<SwCaptionOptPage>::Create( pParent.pParent, *rAttrSet );
 }
 
 bool SwCaptionOptPage::FillItemSet( SfxItemSet* )

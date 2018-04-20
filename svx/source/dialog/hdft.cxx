@@ -112,17 +112,15 @@ namespace svx {
     }
 }
 
-VclPtr<SfxTabPage> SvxHeaderPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxHeaderPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SvxHeaderPage>::Create( pParent, *rSet );
+    return VclPtr<SvxHeaderPage>::Create( pParent.pParent, *rSet );
 }
 
-
-VclPtr<SfxTabPage> SvxFooterPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxFooterPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SvxFooterPage>::Create( pParent, *rSet );
+    return VclPtr<SvxFooterPage>::Create( pParent.pParent, *rSet );
 }
-
 
 SvxHeaderPage::SvxHeaderPage( vcl::Window* pParent, const SfxItemSet& rAttr ) :
 
@@ -131,14 +129,12 @@ SvxHeaderPage::SvxHeaderPage( vcl::Window* pParent, const SfxItemSet& rAttr ) :
 {
 }
 
-
 SvxFooterPage::SvxFooterPage( vcl::Window* pParent, const SfxItemSet& rAttr ) :
 
     SvxHFPage( pParent, rAttr, SID_ATTR_PAGE_FOOTERSET )
 
 {
 }
-
 
 SvxHFPage::SvxHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId ) :
     SfxTabPage(pParent, "HFFormatPage", "svx/ui/headfootformatpage.ui", &rSet),

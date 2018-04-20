@@ -1033,7 +1033,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         pPageInfo->m_pPage.disposeAndReset( ::CreateGeneralTabPage(pPageInfo->m_nPageId, pTabBox, *pGroupInfo->m_pInItemSet ) );
 
         if(!pPageInfo->m_pPage && pGroupInfo->m_pModule)
-            pPageInfo->m_pPage.disposeAndReset( pGroupInfo->m_pModule->CreateTabPage(pPageInfo->m_nPageId, pTabBox, *pGroupInfo->m_pInItemSet) );
+            pPageInfo->m_pPage.disposeAndReset( pGroupInfo->m_pModule->CreateTabPage(pPageInfo->m_nPageId, TabPageParent(pTabBox), *pGroupInfo->m_pInItemSet) );
 
         DBG_ASSERT( pPageInfo->m_pPage, "tabpage could not created");
         if ( pPageInfo->m_pPage )

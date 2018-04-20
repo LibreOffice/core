@@ -1476,10 +1476,10 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 }
 
 
-VclPtr<SfxTabPage> SvxLineTabPage::Create( vcl::Window* pWindow,
+VclPtr<SfxTabPage> SvxLineTabPage::Create( TabPageParent pWindow,
                                            const SfxItemSet* rAttrs )
 {
-    return VclPtr<SvxLineTabPage>::Create( pWindow, *rAttrs );
+    return VclPtr<SvxLineTabPage>::Create( pWindow.pParent, *rAttrs );
 }
 
 IMPL_LINK( SvxLineTabPage, ChangePreviewListBoxHdl_Impl, SvxColorListBox&, rListBox, void )

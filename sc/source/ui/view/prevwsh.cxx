@@ -516,7 +516,7 @@ bool ScPreviewShell::HasPrintOptionsPage() const
     return true;
 }
 
-VclPtr<SfxTabPage> ScPreviewShell::CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions )
+VclPtr<SfxTabPage> ScPreviewShell::CreatePrintOptionsPage( TabPageParent pParent, const SfxItemSet &rOptions )
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");

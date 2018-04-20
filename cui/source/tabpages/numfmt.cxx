@@ -372,10 +372,10 @@ void SvxNumberFormatTabPage::Init_Impl()
     m_pLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
 }
 
-VclPtr<SfxTabPage> SvxNumberFormatTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SvxNumberFormatTabPage::Create( TabPageParent pParent,
                                                    const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxNumberFormatTabPage>::Create( pParent, *rAttrSet );
+    return VclPtr<SvxNumberFormatTabPage>::Create( pParent.pParent, *rAttrSet );
 }
 
 

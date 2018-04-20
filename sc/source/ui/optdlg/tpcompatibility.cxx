@@ -31,9 +31,9 @@ void ScTpCompatOptions::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> ScTpCompatOptions::Create(vcl::Window *pParent, const SfxItemSet *rCoreAttrs)
+VclPtr<SfxTabPage> ScTpCompatOptions::Create(TabPageParent pParent, const SfxItemSet *rCoreAttrs)
 {
-    return VclPtr<ScTpCompatOptions>::Create(pParent, *rCoreAttrs);
+    return VclPtr<ScTpCompatOptions>::Create(pParent.pParent, *rCoreAttrs);
 }
 
 bool ScTpCompatOptions::FillItemSet(SfxItemSet *rCoreAttrs)

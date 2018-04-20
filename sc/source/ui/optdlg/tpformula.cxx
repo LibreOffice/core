@@ -228,9 +228,9 @@ IMPL_LINK( ScTpFormulaOptions, SepEditOnFocusHdl, Control&, rControl, void )
     OnFocusSeparatorInput(static_cast<Edit*>(&rControl));
 }
 
-VclPtr<SfxTabPage> ScTpFormulaOptions::Create(vcl::Window* pParent, const SfxItemSet* rCoreSet)
+VclPtr<SfxTabPage> ScTpFormulaOptions::Create(TabPageParent pParent, const SfxItemSet* rCoreSet)
 {
-    return VclPtr<ScTpFormulaOptions>::Create(pParent, *rCoreSet);
+    return VclPtr<ScTpFormulaOptions>::Create(pParent.pParent, *rCoreSet);
 }
 
 bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)

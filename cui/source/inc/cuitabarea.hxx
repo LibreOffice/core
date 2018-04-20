@@ -195,7 +195,7 @@ public:
     virtual ~SvxTransparenceTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(vcl::Window*, const SfxItemSet*);
+    static VclPtr<SfxTabPage> Create(TabPageParent, const SfxItemSet*);
     static const sal_uInt16* GetRanges() { return pTransparenceRanges; }
 
     virtual bool FillItemSet(SfxItemSet*) override;
@@ -263,7 +263,7 @@ public:
     virtual ~SvxAreaTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pAreaRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
@@ -324,7 +324,7 @@ public:
     virtual ~SvxShadowTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pShadowRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
@@ -402,7 +402,7 @@ public:
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 
@@ -473,7 +473,7 @@ public:
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 
@@ -557,7 +557,7 @@ public:
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
@@ -615,7 +615,7 @@ public:
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 
@@ -734,7 +734,7 @@ public:
 
     void    Construct();
 
-    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
+    static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 

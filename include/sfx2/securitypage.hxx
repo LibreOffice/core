@@ -36,8 +36,8 @@ protected:
     virtual void            Reset( const SfxItemSet* ) override;
 
 public:
-    SfxSecurityPage( vcl::Window* pParent, const SfxItemSet& );
-    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
+    SfxSecurityPage(vcl::Window* pParent, const SfxItemSet&);
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet*);
 };
 
 

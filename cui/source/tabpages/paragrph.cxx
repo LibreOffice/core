@@ -196,9 +196,9 @@ IMPL_LINK_NOARG(SvxStdParagraphTabPage, ELRLoseFocusHdl, Control&, void)
         m_pRightIndent->SetEmptyFieldValue();
 }
 
-VclPtr<SfxTabPage> SvxStdParagraphTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxStdParagraphTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxStdParagraphTabPage>::Create( pParent, *rSet );
+    return VclPtr<SvxStdParagraphTabPage>::Create( pParent.pParent, *rSet );
 }
 
 bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
@@ -1112,9 +1112,9 @@ DeactivateRC SvxParaAlignTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SvxParaAlignTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxParaAlignTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SvxParaAlignTabPage>::Create(pParent, *rSet);
+    return VclPtr<SvxParaAlignTabPage>::Create(pParent.pParent, *rSet);
 }
 
 bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
@@ -1390,10 +1390,10 @@ void SvxParaAlignTabPage::PageCreated (const SfxAllItemSet& aSet)
             EnableJustifyExt();
 }
 
-VclPtr<SfxTabPage> SvxExtParagraphTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SvxExtParagraphTabPage::Create( TabPageParent pParent,
                                             const SfxItemSet* rSet )
 {
-    return VclPtr<SvxExtParagraphTabPage>::Create( pParent, *rSet );
+    return VclPtr<SvxExtParagraphTabPage>::Create( pParent.pParent, *rSet );
 }
 
 bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
@@ -2267,9 +2267,9 @@ void SvxAsianTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxAsianTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxAsianTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SvxAsianTabPage>::Create(pParent, *rSet);
+    return VclPtr<SvxAsianTabPage>::Create(pParent.pParent, *rSet);
 }
 
 const sal_uInt16*     SvxAsianTabPage::GetRanges()

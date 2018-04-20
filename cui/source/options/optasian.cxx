@@ -163,9 +163,9 @@ void SvxAsianLayoutPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxAsianLayoutPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxAsianLayoutPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxAsianLayoutPage>::Create(pParent, *rAttrSet);
+    return VclPtr<SvxAsianLayoutPage>::Create(pParent.pParent, *rAttrSet);
 }
 
 bool SvxAsianLayoutPage::FillItemSet( SfxItemSet* )

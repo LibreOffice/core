@@ -272,10 +272,10 @@ void SvxGradientTabPage::Reset( const SfxItemSet* )
 }
 
 
-VclPtr<SfxTabPage> SvxGradientTabPage::Create( vcl::Window* pWindow,
+VclPtr<SfxTabPage> SvxGradientTabPage::Create( TabPageParent pWindow,
                                                const SfxItemSet* rOutAttrs )
 {
-    return VclPtr<SvxGradientTabPage>::Create( pWindow, *rOutAttrs );
+    return VclPtr<SvxGradientTabPage>::Create( pWindow.pParent, *rOutAttrs );
 }
 
 IMPL_LINK( SvxGradientTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox, void )

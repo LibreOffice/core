@@ -28,6 +28,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/weld.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -39,7 +40,23 @@ class SfxViewFrame;
 class SfxTabPage;
 class SfxBindings;
 
-typedef VclPtr<SfxTabPage> (*CreateTabPage)(vcl::Window *pParent, const SfxItemSet *rAttrSet);
+struct TabPageParent
+{
+    TabPageParent(vcl::Window* _pParent)
+        : pParent(_pParent)
+        , pPage(nullptr)
+    {
+    }
+    TabPageParent(weld::Window* _pPage)
+        : pParent(nullptr)
+        , pPage(_pPage)
+    {
+    }
+    VclPtr<vcl::Window> pParent;
+    weld::Widget* pPage;
+};
+
+typedef VclPtr<SfxTabPage> (*CreateTabPage)(TabPageParent pParent, const SfxItemSet *rAttrSet);
 typedef const sal_uInt16*     (*GetTabPageRanges)(); // provides international Which-value
 struct TabPageImpl;
 
@@ -234,7 +251,12 @@ private:
     std::unique_ptr< TabPageImpl >        pImpl;
 
 protected:
-    SfxTabPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet *rAttrSet);
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xContainer;
+
+protected:
+    SfxTabPage(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet *rAttrSet);
+    SfxTabPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet *rAttrSet);
 
     sal_uInt16          GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const
                             { return pSet->GetPool()->GetWhich( nSlot, bDeep ); }

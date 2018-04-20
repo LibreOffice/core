@@ -41,9 +41,9 @@ ErrorBarsTabPage::ErrorBarsTabPage( vcl::Window* pParent, const SfxItemSet& rInA
 }
 
 VclPtr<SfxTabPage> ErrorBarsTabPage::Create(
-    vcl::Window* pParent, const SfxItemSet* rOutAttrs )
+    TabPageParent pParent, const SfxItemSet* rOutAttrs )
 {
-    return VclPtr<ErrorBarsTabPage>::Create( pParent, *rOutAttrs );
+    return VclPtr<ErrorBarsTabPage>::Create( pParent.pParent, *rOutAttrs );
 }
 
 bool ErrorBarsTabPage::FillItemSet( SfxItemSet* rOutAttrs )

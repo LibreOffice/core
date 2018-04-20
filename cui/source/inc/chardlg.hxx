@@ -150,7 +150,7 @@ public:
                         virtual ~SvxCharNamePage() override;
     virtual void        dispose() override;
 
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pNameRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
@@ -238,7 +238,7 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pEffectsRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
@@ -315,7 +315,7 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges() { return pPositionRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
@@ -360,7 +360,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
     static const sal_uInt16*  GetRanges() { return pTwoLinesRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;

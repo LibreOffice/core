@@ -38,7 +38,7 @@ SwNumFormatDlg::SwNumFormatDlg(vcl::Window* pParent, const SfxItemSet& rSet)
 
     if ( fnCreatePage )
     {
-        VclPtr<SfxTabPage> pNewPage = (*fnCreatePage)( get_content_area(), &rSet );
+        VclPtr<SfxTabPage> pNewPage = (*fnCreatePage)( TabPageParent(get_content_area()), &rSet );
         SfxAllItemSet aSet(*(rSet.GetPool()));
         aSet.Put ( SvxNumberInfoItem( pNewPage->GetItemSet().Get( SID_ATTR_NUMBERFORMAT_INFO ) ));
         pNewPage->PageCreated(aSet);

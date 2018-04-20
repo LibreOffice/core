@@ -252,10 +252,10 @@ void SvxPatternTabPage::Reset( const SfxItemSet*  )
 }
 
 
-VclPtr<SfxTabPage> SvxPatternTabPage::Create( vcl::Window* pWindow,
+VclPtr<SfxTabPage> SvxPatternTabPage::Create( TabPageParent pWindow,
                                              const SfxItemSet* rSet )
 {
-    return VclPtr<SvxPatternTabPage>::Create( pWindow, *rSet );
+    return VclPtr<SvxPatternTabPage>::Create( pWindow.pParent, *rSet );
 }
 
 

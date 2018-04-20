@@ -58,7 +58,7 @@ namespace dbaui
     public:
         virtual ~OConnectionTabPage() override;
         virtual void dispose() override;
-        static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet );
+        static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* _rAttrSet );
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
 
         virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;

@@ -831,9 +831,9 @@ ScRightHeaderEditPage::ScRightHeaderEditPage( vcl::Window* pParent, const SfxIte
                     true )
     {}
 
-VclPtr<SfxTabPage> ScRightHeaderEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
+VclPtr<SfxTabPage> ScRightHeaderEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
 {
-    return VclPtr<ScRightHeaderEditPage>::Create( pParent, *rCoreSet );
+    return VclPtr<ScRightHeaderEditPage>::Create( pParent.pParent, *rCoreSet );
 }
 
 // class ScLeftHeaderEditPage
@@ -845,9 +845,9 @@ ScLeftHeaderEditPage::ScLeftHeaderEditPage( vcl::Window* pParent, const SfxItemS
                     true )
     {}
 
-VclPtr<SfxTabPage> ScLeftHeaderEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
+VclPtr<SfxTabPage> ScLeftHeaderEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
 {
-    return VclPtr<ScLeftHeaderEditPage>::Create( pParent, *rCoreSet );
+    return VclPtr<ScLeftHeaderEditPage>::Create( pParent.pParent, *rCoreSet );
 }
 
 // class ScRightFooterEditPage
@@ -859,9 +859,9 @@ ScRightFooterEditPage::ScRightFooterEditPage( vcl::Window* pParent, const SfxIte
                     false )
     {}
 
-VclPtr<SfxTabPage> ScRightFooterEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
+VclPtr<SfxTabPage> ScRightFooterEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
 {
-    return VclPtr<ScRightFooterEditPage>::Create( pParent, *rCoreSet );
+    return VclPtr<ScRightFooterEditPage>::Create( pParent.pParent, *rCoreSet );
 }
 
 // class ScLeftFooterEditPage
@@ -873,9 +873,9 @@ ScLeftFooterEditPage::ScLeftFooterEditPage( vcl::Window* pParent, const SfxItemS
                     false )
     {}
 
-VclPtr<SfxTabPage> ScLeftFooterEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
+VclPtr<SfxTabPage> ScLeftFooterEditPage::Create( TabPageParent pParent, const SfxItemSet* rCoreSet )
 {
-    return VclPtr<ScLeftFooterEditPage>::Create( pParent, *rCoreSet );
+    return VclPtr<ScLeftFooterEditPage>::Create( pParent.pParent, *rCoreSet );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

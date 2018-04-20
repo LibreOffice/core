@@ -62,7 +62,7 @@ class ScHeaderPage : public ScHFPage
 {
     friend class VclPtr<ScHeaderPage>;
 public:
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
 private:
@@ -73,7 +73,7 @@ class ScFooterPage : public ScHFPage
 {
     friend class VclPtr<ScFooterPage>;
 public:
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
 private:

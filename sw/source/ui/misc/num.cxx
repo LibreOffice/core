@@ -542,10 +542,10 @@ void SwNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
     m_pIndentAtMF->Show( bLabelAlignmentPosAndSpaceModeActive );
 }
 
-VclPtr<SfxTabPage> SwNumPositionTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SwNumPositionTabPage::Create( TabPageParent pParent,
                                                  const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwNumPositionTabPage>::Create(pParent, *rAttrSet);
+    return VclPtr<SwNumPositionTabPage>::Create(pParent.pParent, *rAttrSet);
 }
 
 void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)

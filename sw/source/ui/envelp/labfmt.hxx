@@ -99,7 +99,7 @@ public:
     virtual ~SwLabFormatPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
