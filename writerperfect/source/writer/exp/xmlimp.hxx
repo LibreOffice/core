@@ -29,7 +29,6 @@ namespace writerperfect
 {
 namespace exp
 {
-
 class XMLImportContext;
 
 /// Contains info about a fixed-layout page.
@@ -54,13 +53,10 @@ enum class PopupState
 };
 
 /// ODT export feeds this class to make librevenge calls.
-class XMLImport : public cppu::WeakImplHelper
-    <
-    css::xml::sax::XDocumentHandler
-    >
+class XMLImport : public cppu::WeakImplHelper<css::xml::sax::XDocumentHandler>
 {
-    librevenge::RVNGTextInterface &mrGenerator;
-    std::stack< rtl::Reference<XMLImportContext> > maContexts;
+    librevenge::RVNGTextInterface& mrGenerator;
+    std::stack<rtl::Reference<XMLImportContext>> maContexts;
     std::map<OUString, librevenge::RVNGPropertyList> maAutomaticTextStyles;
     std::map<OUString, librevenge::RVNGPropertyList> maTextStyles;
     std::map<OUString, librevenge::RVNGPropertyList> maAutomaticParagraphStyles;
@@ -80,59 +76,61 @@ class XMLImport : public cppu::WeakImplHelper
     librevenge::RVNGPropertyListVector maCoverImages;
     /// Author, date, etc -- overwrites what would be from the document out of the box.
     librevenge::RVNGPropertyList maMetaData;
-    const css::uno::Reference<css::uno::XComponentContext> &mxContext;
+    const css::uno::Reference<css::uno::XComponentContext>& mxContext;
     css::uno::Reference<css::uri::XUriReferenceFactory> mxUriReferenceFactory;
     OUString maMediaDir;
     bool mbIsInPageSpan;
-    const std::vector<FixedLayoutPage> &mrPageMetafiles;
+    const std::vector<FixedLayoutPage>& mrPageMetafiles;
 
 public:
-    XMLImport(const css::uno::Reference<css::uno::XComponentContext> &xContext, librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const css::uno::Sequence<css::beans::PropertyValue> &rDescriptor, const std::vector<FixedLayoutPage> &rPageMetafiles);
+    XMLImport(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+              librevenge::RVNGTextInterface& rGenerator, const OUString& rURL,
+              const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor,
+              const std::vector<FixedLayoutPage>& rPageMetafiles);
 
-    rtl::Reference<XMLImportContext> CreateContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs);
+    rtl::Reference<XMLImportContext>
+    CreateContext(const OUString& rName,
+                  const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs);
 
-    librevenge::RVNGTextInterface &GetGenerator() const;
-    std::map<OUString, librevenge::RVNGPropertyList> &GetAutomaticTextStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetAutomaticParagraphStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetAutomaticCellStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetAutomaticColumnStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetAutomaticRowStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetAutomaticTableStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetAutomaticGraphicStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetTextStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetParagraphStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetCellStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetColumnStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetRowStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetTableStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetGraphicStyles();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetPageLayouts();
-    std::map<OUString, librevenge::RVNGPropertyList> &GetMasterStyles();
-    const librevenge::RVNGPropertyListVector &GetCoverImages();
-    const librevenge::RVNGPropertyList &GetMetaData();
-    PopupState FillPopupData(const OUString &rURL, librevenge::RVNGPropertyList &rPropList);
-    const std::vector<FixedLayoutPage> &GetPageMetafiles() const;
-    const css::uno::Reference<css::uno::XComponentContext> &GetComponentContext() const;
+    librevenge::RVNGTextInterface& GetGenerator() const;
+    std::map<OUString, librevenge::RVNGPropertyList>& GetAutomaticTextStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetAutomaticParagraphStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetAutomaticCellStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetAutomaticColumnStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetAutomaticRowStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetAutomaticTableStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetAutomaticGraphicStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetTextStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetParagraphStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetCellStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetColumnStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetRowStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetTableStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetGraphicStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetPageLayouts();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetMasterStyles();
+    const librevenge::RVNGPropertyListVector& GetCoverImages();
+    const librevenge::RVNGPropertyList& GetMetaData();
+    PopupState FillPopupData(const OUString& rURL, librevenge::RVNGPropertyList& rPropList);
+    const std::vector<FixedLayoutPage>& GetPageMetafiles() const;
+    const css::uno::Reference<css::uno::XComponentContext>& GetComponentContext() const;
 
-    bool GetIsInPageSpan() const
-    {
-        return mbIsInPageSpan;
-    }
-    void SetIsInPageSpan(bool bSet)
-    {
-        mbIsInPageSpan = bSet;
-    }
-    void HandlePageSpan(const librevenge::RVNGPropertyList &rPropertyList);
+    bool GetIsInPageSpan() const { return mbIsInPageSpan; }
+    void SetIsInPageSpan(bool bSet) { mbIsInPageSpan = bSet; }
+    void HandlePageSpan(const librevenge::RVNGPropertyList& rPropertyList);
 
     // XDocumentHandler
     void SAL_CALL startDocument() override;
     void SAL_CALL endDocument() override;
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
-    void SAL_CALL endElement(const OUString &rName) override;
-    void SAL_CALL characters(const OUString &rChars) override;
-    void SAL_CALL ignorableWhitespace(const OUString &rWhitespaces) override;
-    void SAL_CALL processingInstruction(const OUString &rTarget, const OUString &rData) override;
-    void SAL_CALL setDocumentLocator(const css::uno::Reference<css::xml::sax::XLocator> &xLocator) override;
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+    void SAL_CALL endElement(const OUString& rName) override;
+    void SAL_CALL characters(const OUString& rChars) override;
+    void SAL_CALL ignorableWhitespace(const OUString& rWhitespaces) override;
+    void SAL_CALL processingInstruction(const OUString& rTarget, const OUString& rData) override;
+    void SAL_CALL
+    setDocumentLocator(const css::uno::Reference<css::xml::sax::XLocator>& xLocator) override;
 };
 
 } // namespace exp

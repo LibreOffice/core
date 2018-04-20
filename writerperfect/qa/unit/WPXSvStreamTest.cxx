@@ -45,7 +45,6 @@ using writerperfect::WPXSvInputStream;
 
 namespace
 {
-
 class WPXSvStreamTest : public test::BootstrapFixture
 {
 public:
@@ -73,7 +72,8 @@ shared_ptr<RVNGInputStream> lcl_createStream()
 {
     using comphelper::SequenceInputStream;
 
-    const css::uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8 *>(aText), sizeof aText);
+    const css::uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aText),
+                                             sizeof aText);
     const uno::Reference<io::XInputStream> xInputStream(new SequenceInputStream(aData));
 
     shared_ptr<RVNGInputStream> pInputStream;
@@ -83,22 +83,25 @@ shared_ptr<RVNGInputStream> lcl_createStream()
     return pInputStream;
 }
 
-const shared_ptr<RVNGInputStream> lcl_createStreamForURL(const rtl::OUString &rURL)
+const shared_ptr<RVNGInputStream> lcl_createStreamForURL(const rtl::OUString& rURL)
 {
     using uno::Reference;
     using uno::UNO_QUERY_THROW;
 
-    const Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext(), UNO_QUERY_THROW);
+    const Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
+                                                     UNO_QUERY_THROW);
     const Reference<ucb::XSimpleFileAccess> xFileAccess(
-        xContext->getServiceManager()->createInstanceWithContext("com.sun.star.ucb.SimpleFileAccess", xContext),
+        xContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.ucb.SimpleFileAccess", xContext),
         UNO_QUERY_THROW);
-    const Reference<io::XInputStream> xInputStream(xFileAccess->openFileRead(rURL), UNO_QUERY_THROW);
+    const Reference<io::XInputStream> xInputStream(xFileAccess->openFileRead(rURL),
+                                                   UNO_QUERY_THROW);
 
     const shared_ptr<RVNGInputStream> pInput(new WPXSvInputStream(xInputStream));
     return pInput;
 }
 
-void lcl_testSubStreams(const shared_ptr<RVNGInputStream> &pInput)
+void lcl_testSubStreams(const shared_ptr<RVNGInputStream>& pInput)
 {
     shared_ptr<RVNGInputStream> pSubStream;
 
@@ -122,9 +125,9 @@ void WPXSvStreamTest::testRead()
     const unsigned long nLen = sizeof aText;
 
     unsigned long nReadBytes = 0;
-    const unsigned char *pData = nullptr;
-    const unsigned char *const pTextOrig = reinterpret_cast<const unsigned char *>(aText);
-    const unsigned char *pText = pTextOrig;
+    const unsigned char* pData = nullptr;
+    const unsigned char* const pTextOrig = reinterpret_cast<const unsigned char*>(aText);
+    const unsigned char* pText = pTextOrig;
 
     // reading by small pieces
     pData = pInput->read(1UL, nReadBytes);
@@ -174,7 +177,7 @@ void WPXSvStreamTest::testRead()
     pData = pInput->read(0UL, nReadBytes);
     CPPUNIT_ASSERT_EQUAL(0UL, nReadBytes);
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
-    CPPUNIT_ASSERT_EQUAL(pData, static_cast<const unsigned char *>(nullptr));
+    CPPUNIT_ASSERT_EQUAL(pData, static_cast<const unsigned char*>(nullptr));
     CPPUNIT_ASSERT(!pInput->isEnd());
 }
 
@@ -293,7 +296,8 @@ void WPXSvStreamTest::testStructured()
 {
     // OLE2
     {
-        const shared_ptr<RVNGInputStream> pInput(lcl_createStreamForURL(m_directories.getURLFromSrc(aOLEFile)));
+        const shared_ptr<RVNGInputStream> pInput(
+            lcl_createStreamForURL(m_directories.getURLFromSrc(aOLEFile)));
         assert(bool(pInput));
 
         CPPUNIT_ASSERT(pInput->isStructured());
@@ -314,7 +318,8 @@ void WPXSvStreamTest::testStructured()
 
     // Zip
     {
-        const shared_ptr<RVNGInputStream> pInput(lcl_createStreamForURL(m_directories.getURLFromSrc(aZipFile)));
+        const shared_ptr<RVNGInputStream> pInput(
+            lcl_createStreamForURL(m_directories.getURLFromSrc(aZipFile)));
         assert(bool(pInput));
 
         CPPUNIT_ASSERT(pInput->isStructured());
@@ -347,7 +352,6 @@ void WPXSvStreamTest::testStructured()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WPXSvStreamTest);
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

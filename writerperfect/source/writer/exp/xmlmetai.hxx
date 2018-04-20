@@ -18,28 +18,26 @@ namespace writerperfect
 {
 namespace exp
 {
-
 /// Handler for <office:meta>.
 class XMLMetaDocumentContext : public XMLImportContext
 {
 public:
-    XMLMetaDocumentContext(XMLImport &rImport);
+    XMLMetaDocumentContext(XMLImport& rImport);
 
-    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    rtl::Reference<XMLImportContext>
+    CreateChildContext(const OUString& rName,
+                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
-    void SAL_CALL endElement(const OUString &rName) override;
+    void SAL_CALL endElement(const OUString& rName) override;
 
     librevenge::RVNGPropertyList m_aPropertyList;
 };
 
 /// Parses an XMP file.
-class XMPParser: public cppu::WeakImplHelper
-    <
-    css::xml::sax::XDocumentHandler
-    >
+class XMPParser : public cppu::WeakImplHelper<css::xml::sax::XDocumentHandler>
 {
 public:
-    explicit XMPParser(librevenge::RVNGPropertyList &rMetaData);
+    explicit XMPParser(librevenge::RVNGPropertyList& rMetaData);
     ~XMPParser() override;
 
     // XDocumentHandler
@@ -47,20 +45,23 @@ public:
 
     void SAL_CALL endDocument() override;
 
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
-    void SAL_CALL endElement(const OUString &rName) override;
+    void SAL_CALL endElement(const OUString& rName) override;
 
-    void SAL_CALL characters(const OUString &rChars) override;
+    void SAL_CALL characters(const OUString& rChars) override;
 
-    void SAL_CALL ignorableWhitespace(const OUString &aWhitespaces) override;
+    void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) override;
 
-    void SAL_CALL processingInstruction(const OUString &aTarget, const OUString &aData) override;
+    void SAL_CALL processingInstruction(const OUString& aTarget, const OUString& aData) override;
 
-    void SAL_CALL setDocumentLocator(const css::uno::Reference<css::xml::sax::XLocator> &xLocator) override;
+    void SAL_CALL
+    setDocumentLocator(const css::uno::Reference<css::xml::sax::XLocator>& xLocator) override;
 
 private:
-    librevenge::RVNGPropertyList &mrMetaData;
+    librevenge::RVNGPropertyList& mrMetaData;
     bool m_bInIdentifier = false;
     OUString m_aIdentifier;
     bool m_bInTitle = false;

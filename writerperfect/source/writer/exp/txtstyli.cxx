@@ -17,26 +17,29 @@ namespace writerperfect
 {
 namespace exp
 {
-
 /// Handler for <style:paragraph-properties>.
 class XMLParagraphPropertiesContext : public XMLImportContext
 {
 public:
-    XMLParagraphPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle);
+    XMLParagraphPropertiesContext(XMLImport& rImport, XMLStyleContext& rStyle);
 
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
 private:
-    XMLStyleContext &mrStyle;
+    XMLStyleContext& mrStyle;
 };
 
-XMLParagraphPropertiesContext::XMLParagraphPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle)
+XMLParagraphPropertiesContext::XMLParagraphPropertiesContext(XMLImport& rImport,
+                                                             XMLStyleContext& rStyle)
     : XMLImportContext(rImport)
     , mrStyle(rStyle)
 {
 }
 
-void XMLParagraphPropertiesContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+void XMLParagraphPropertiesContext::startElement(
+    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
@@ -50,21 +53,24 @@ void XMLParagraphPropertiesContext::startElement(const OUString &/*rName*/, cons
 class XMLTextPropertiesContext : public XMLImportContext
 {
 public:
-    XMLTextPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle);
+    XMLTextPropertiesContext(XMLImport& rImport, XMLStyleContext& rStyle);
 
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
 private:
-    XMLStyleContext &mrStyle;
+    XMLStyleContext& mrStyle;
 };
 
-XMLTextPropertiesContext::XMLTextPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle)
+XMLTextPropertiesContext::XMLTextPropertiesContext(XMLImport& rImport, XMLStyleContext& rStyle)
     : XMLImportContext(rImport)
     , mrStyle(rStyle)
 {
 }
 
-void XMLTextPropertiesContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+void XMLTextPropertiesContext::startElement(
+    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
@@ -78,21 +84,25 @@ void XMLTextPropertiesContext::startElement(const OUString &/*rName*/, const css
 class XMLGraphicPropertiesContext : public XMLImportContext
 {
 public:
-    XMLGraphicPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle);
+    XMLGraphicPropertiesContext(XMLImport& rImport, XMLStyleContext& rStyle);
 
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
 private:
-    XMLStyleContext &mrStyle;
+    XMLStyleContext& mrStyle;
 };
 
-XMLGraphicPropertiesContext::XMLGraphicPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle)
+XMLGraphicPropertiesContext::XMLGraphicPropertiesContext(XMLImport& rImport,
+                                                         XMLStyleContext& rStyle)
     : XMLImportContext(rImport)
     , mrStyle(rStyle)
 {
 }
 
-void XMLGraphicPropertiesContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+void XMLGraphicPropertiesContext::startElement(
+    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
@@ -106,21 +116,25 @@ void XMLGraphicPropertiesContext::startElement(const OUString &/*rName*/, const 
 class XMLPageLayoutPropertiesContext : public XMLImportContext
 {
 public:
-    XMLPageLayoutPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle);
+    XMLPageLayoutPropertiesContext(XMLImport& rImport, XMLStyleContext& rStyle);
 
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
 private:
-    XMLStyleContext &mrStyle;
+    XMLStyleContext& mrStyle;
 };
 
-XMLPageLayoutPropertiesContext::XMLPageLayoutPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle)
+XMLPageLayoutPropertiesContext::XMLPageLayoutPropertiesContext(XMLImport& rImport,
+                                                               XMLStyleContext& rStyle)
     : XMLImportContext(rImport)
     , mrStyle(rStyle)
 {
 }
 
-void XMLPageLayoutPropertiesContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+void XMLPageLayoutPropertiesContext::startElement(
+    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
@@ -138,21 +152,24 @@ void XMLPageLayoutPropertiesContext::startElement(const OUString &/*rName*/, con
 class XMLTablePropertiesContext : public XMLImportContext
 {
 public:
-    XMLTablePropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle);
+    XMLTablePropertiesContext(XMLImport& rImport, XMLStyleContext& rStyle);
 
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
 private:
-    XMLStyleContext &mrStyle;
+    XMLStyleContext& mrStyle;
 };
 
-XMLTablePropertiesContext::XMLTablePropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle)
+XMLTablePropertiesContext::XMLTablePropertiesContext(XMLImport& rImport, XMLStyleContext& rStyle)
     : XMLImportContext(rImport)
     , mrStyle(rStyle)
 {
 }
 
-void XMLTablePropertiesContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+void XMLTablePropertiesContext::startElement(
+    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
@@ -160,7 +177,8 @@ void XMLTablePropertiesContext::startElement(const OUString &/*rName*/, const cs
         OString sValue = OUStringToOString(xAttribs->getValueByIndex(i), RTL_TEXTENCODING_UTF8);
         if (sName == "style:rel-width")
             // Make sure this is passed through as a string, and not parsed as a double.
-            mrStyle.GetTablePropertyList().insert(sName.getStr(), librevenge::RVNGPropertyFactory::newStringProp(sValue.getStr()));
+            mrStyle.GetTablePropertyList().insert(
+                sName.getStr(), librevenge::RVNGPropertyFactory::newStringProp(sValue.getStr()));
         else
             mrStyle.GetTablePropertyList().insert(sName.getStr(), sValue.getStr());
     }
@@ -170,21 +188,25 @@ void XMLTablePropertiesContext::startElement(const OUString &/*rName*/, const cs
 class XMLTableRowPropertiesContext : public XMLImportContext
 {
 public:
-    XMLTableRowPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle);
+    XMLTableRowPropertiesContext(XMLImport& rImport, XMLStyleContext& rStyle);
 
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
 private:
-    XMLStyleContext &mrStyle;
+    XMLStyleContext& mrStyle;
 };
 
-XMLTableRowPropertiesContext::XMLTableRowPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle)
+XMLTableRowPropertiesContext::XMLTableRowPropertiesContext(XMLImport& rImport,
+                                                           XMLStyleContext& rStyle)
     : XMLImportContext(rImport)
     , mrStyle(rStyle)
 {
 }
 
-void XMLTableRowPropertiesContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+void XMLTableRowPropertiesContext::startElement(
+    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
@@ -198,21 +220,25 @@ void XMLTableRowPropertiesContext::startElement(const OUString &/*rName*/, const
 class XMLTableColumnPropertiesContext : public XMLImportContext
 {
 public:
-    XMLTableColumnPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle);
+    XMLTableColumnPropertiesContext(XMLImport& rImport, XMLStyleContext& rStyle);
 
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
 private:
-    XMLStyleContext &mrStyle;
+    XMLStyleContext& mrStyle;
 };
 
-XMLTableColumnPropertiesContext::XMLTableColumnPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle)
+XMLTableColumnPropertiesContext::XMLTableColumnPropertiesContext(XMLImport& rImport,
+                                                                 XMLStyleContext& rStyle)
     : XMLImportContext(rImport)
     , mrStyle(rStyle)
 {
 }
 
-void XMLTableColumnPropertiesContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+void XMLTableColumnPropertiesContext::startElement(
+    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
@@ -226,21 +252,25 @@ void XMLTableColumnPropertiesContext::startElement(const OUString &/*rName*/, co
 class XMLTableCellPropertiesContext : public XMLImportContext
 {
 public:
-    XMLTableCellPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle);
+    XMLTableCellPropertiesContext(XMLImport& rImport, XMLStyleContext& rStyle);
 
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
 private:
-    XMLStyleContext &mrStyle;
+    XMLStyleContext& mrStyle;
 };
 
-XMLTableCellPropertiesContext::XMLTableCellPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle)
+XMLTableCellPropertiesContext::XMLTableCellPropertiesContext(XMLImport& rImport,
+                                                             XMLStyleContext& rStyle)
     : XMLImportContext(rImport)
     , mrStyle(rStyle)
 {
 }
 
-void XMLTableCellPropertiesContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+void XMLTableCellPropertiesContext::startElement(
+    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
@@ -250,13 +280,14 @@ void XMLTableCellPropertiesContext::startElement(const OUString &/*rName*/, cons
     }
 }
 
-XMLStyleContext::XMLStyleContext(XMLImport &rImport, XMLStylesContext &rStyles)
-    : XMLImportContext(rImport),
-      m_rStyles(rStyles)
+XMLStyleContext::XMLStyleContext(XMLImport& rImport, XMLStylesContext& rStyles)
+    : XMLImportContext(rImport)
+    , m_rStyles(rStyles)
 {
 }
 
-rtl::Reference<XMLImportContext> XMLStyleContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLStyleContext::CreateChildContext(
+    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "style:paragraph-properties")
         return new XMLParagraphPropertiesContext(mrImport, *this);
@@ -277,12 +308,13 @@ rtl::Reference<XMLImportContext> XMLStyleContext::CreateChildContext(const OUStr
     return nullptr;
 }
 
-void XMLStyleContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+void XMLStyleContext::startElement(
+    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString &rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
+        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
+        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
         if (rAttributeName == "style:name")
             m_aName = rAttributeValue;
         else if (rAttributeName == "style:family")
@@ -300,7 +332,7 @@ void XMLStyleContext::startElement(const OUString &/*rName*/, const css::uno::Re
     }
 }
 
-void XMLStyleContext::endElement(const OUString &rName)
+void XMLStyleContext::endElement(const OUString& rName)
 {
     if (m_aName.isEmpty())
         return;
@@ -325,47 +357,38 @@ void XMLStyleContext::endElement(const OUString &rName)
         m_rStyles.GetCurrentMasterStyles()[m_aName] = m_aMasterPagePropertyList;
 }
 
-librevenge::RVNGPropertyList &XMLStyleContext::GetTextPropertyList()
-{
-    return m_aTextPropertyList;
-}
+librevenge::RVNGPropertyList& XMLStyleContext::GetTextPropertyList() { return m_aTextPropertyList; }
 
-librevenge::RVNGPropertyList &XMLStyleContext::GetParagraphPropertyList()
+librevenge::RVNGPropertyList& XMLStyleContext::GetParagraphPropertyList()
 {
     return m_aParagraphPropertyList;
 }
 
-librevenge::RVNGPropertyList &XMLStyleContext::GetCellPropertyList()
-{
-    return m_aCellPropertyList;
-}
+librevenge::RVNGPropertyList& XMLStyleContext::GetCellPropertyList() { return m_aCellPropertyList; }
 
-librevenge::RVNGPropertyList &XMLStyleContext::GetColumnPropertyList()
+librevenge::RVNGPropertyList& XMLStyleContext::GetColumnPropertyList()
 {
     return m_aColumnPropertyList;
 }
 
-librevenge::RVNGPropertyList &XMLStyleContext::GetRowPropertyList()
-{
-    return m_aRowPropertyList;
-}
+librevenge::RVNGPropertyList& XMLStyleContext::GetRowPropertyList() { return m_aRowPropertyList; }
 
-librevenge::RVNGPropertyList &XMLStyleContext::GetTablePropertyList()
+librevenge::RVNGPropertyList& XMLStyleContext::GetTablePropertyList()
 {
     return m_aTablePropertyList;
 }
 
-librevenge::RVNGPropertyList &XMLStyleContext::GetGraphicPropertyList()
+librevenge::RVNGPropertyList& XMLStyleContext::GetGraphicPropertyList()
 {
     return m_aGraphicPropertyList;
 }
 
-librevenge::RVNGPropertyList &XMLStyleContext::GetPageLayoutPropertyList()
+librevenge::RVNGPropertyList& XMLStyleContext::GetPageLayoutPropertyList()
 {
     return m_aPageLayoutPropertyList;
 }
 
-librevenge::RVNGPropertyList &XMLStyleContext::GetMasterPagePropertyList()
+librevenge::RVNGPropertyList& XMLStyleContext::GetMasterPagePropertyList()
 {
     return m_aMasterPagePropertyList;
 }

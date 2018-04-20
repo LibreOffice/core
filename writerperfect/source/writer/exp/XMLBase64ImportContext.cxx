@@ -17,22 +17,24 @@ namespace writerperfect
 {
 namespace exp
 {
-
-XMLBase64ImportContext::XMLBase64ImportContext(XMLImport &rImport)
+XMLBase64ImportContext::XMLBase64ImportContext(XMLImport& rImport)
     : XMLImportContext(rImport)
 {
 }
 
-void XMLBase64ImportContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+void XMLBase64ImportContext::startElement(
+    const OUString& /*rName*/,
+    const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
 }
 
-void XMLBase64ImportContext::endElement(const OUString &/*rName*/)
+void XMLBase64ImportContext::endElement(const OUString& /*rName*/)
 {
-    m_aBinaryData.append(static_cast<const unsigned char *>(m_aStream.GetBuffer()), m_aStream.GetSize());
+    m_aBinaryData.append(static_cast<const unsigned char*>(m_aStream.GetBuffer()),
+                         m_aStream.GetSize());
 }
 
-void XMLBase64ImportContext::characters(const OUString &rChars)
+void XMLBase64ImportContext::characters(const OUString& rChars)
 {
     OUString aTrimmedChars(rChars.trim());
 
@@ -56,7 +58,7 @@ void XMLBase64ImportContext::characters(const OUString &rChars)
     }
 }
 
-const librevenge::RVNGBinaryData &XMLBase64ImportContext::getBinaryData() const
+const librevenge::RVNGBinaryData& XMLBase64ImportContext::getBinaryData() const
 {
     return m_aBinaryData;
 }

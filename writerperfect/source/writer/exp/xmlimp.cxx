@@ -36,18 +36,16 @@ namespace writerperfect
 {
 namespace exp
 {
-
 namespace
 {
 /// Looks up mime type for a given image extension.
-OUString GetMimeType(const OUString &rExtension)
+OUString GetMimeType(const OUString& rExtension)
 {
-    static const std::unordered_map<OUString, OUString> vMimeTypes =
-    {
-        {"gif", "image/gif"},
-        {"jpg", "image/jpeg"},
-        {"png", "image/png"},
-        {"svg", "image/svg+xml"},
+    static const std::unordered_map<OUString, OUString> vMimeTypes = {
+        { "gif", "image/gif" },
+        { "jpg", "image/jpeg" },
+        { "png", "image/png" },
+        { "svg", "image/svg+xml" },
     };
 
     auto it = vMimeTypes.find(rExtension);
@@ -55,7 +53,8 @@ OUString GetMimeType(const OUString &rExtension)
 }
 
 /// Determines the base directory for cover images, XMP metadata, popup images.
-OUString FindMediaDir(const OUString &rDocumentBaseURL, const uno::Sequence<beans::PropertyValue> &rFilterData)
+OUString FindMediaDir(const OUString& rDocumentBaseURL,
+                      const uno::Sequence<beans::PropertyValue>& rFilterData)
 {
     OUString aMediaDir;
 
@@ -78,7 +77,7 @@ OUString FindMediaDir(const OUString &rDocumentBaseURL, const uno::Sequence<bean
     {
         aMediaDir = rtl::Uri::convertRelToAbs(rDocumentBaseURL, aURL.GetBase()) + "/";
     }
-    catch (const rtl::MalformedUriException &)
+    catch (const rtl::MalformedUriException&)
     {
         DBG_UNHANDLED_EXCEPTION("writerperfect");
     }
@@ -86,7 +85,8 @@ OUString FindMediaDir(const OUString &rDocumentBaseURL, const uno::Sequence<bean
 }
 
 /// Picks up a cover image from the base directory.
-OUString FindCoverImage(const OUString &rDocumentBaseURL, OUString &rMimeType, const uno::Sequence<beans::PropertyValue> &rFilterData)
+OUString FindCoverImage(const OUString& rDocumentBaseURL, OUString& rMimeType,
+                        const uno::Sequence<beans::PropertyValue>& rFilterData)
 {
     OUString aRet;
 
@@ -111,16 +111,11 @@ OUString FindCoverImage(const OUString &rDocumentBaseURL, OUString &rMimeType, c
     if (rDocumentBaseURL.isEmpty())
         return aRet;
 
-    static const std::initializer_list<OUStringLiteral> vExtensions =
-    {
-        "gif",
-        "jpg",
-        "png",
-        "svg"
-    };
+    static const std::initializer_list<OUStringLiteral> vExtensions
+        = { "gif", "jpg", "png", "svg" };
 
     OUString aMediaDir = FindMediaDir(rDocumentBaseURL, rFilterData);
-    for (const auto &rExtension : vExtensions)
+    for (const auto& rExtension : vExtensions)
     {
         aRet = aMediaDir + "cover." + rExtension;
         if (!aRet.isEmpty())
@@ -141,7 +136,10 @@ OUString FindCoverImage(const OUString &rDocumentBaseURL, OUString &rMimeType, c
 }
 
 /// Picks up XMP metadata from the base directory.
-void FindXMPMetadata(const uno::Reference<uno::XComponentContext> &xContext, const OUString &rDocumentBaseURL, const uno::Sequence<beans::PropertyValue> &rFilterData, librevenge::RVNGPropertyList &rMetaData)
+void FindXMPMetadata(const uno::Reference<uno::XComponentContext>& xContext,
+                     const OUString& rDocumentBaseURL,
+                     const uno::Sequence<beans::PropertyValue>& rFilterData,
+                     librevenge::RVNGPropertyList& rMetaData)
 {
     // See if filter data contains metadata explicitly.
     OUString aValue;
@@ -200,7 +198,7 @@ void FindXMPMetadata(const uno::Reference<uno::XComponentContext> &xContext, con
     {
         xParser->parseStream(aInputSource);
     }
-    catch (const uno::Exception &)
+    catch (const uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("writerperfect", "parseStream() failed");
         return;
@@ -212,17 +210,21 @@ void FindXMPMetadata(const uno::Reference<uno::XComponentContext> &xContext, con
 class XMLBodyContext : public XMLImportContext
 {
 public:
-    XMLBodyContext(XMLImport &rImport);
+    XMLBodyContext(XMLImport& rImport);
 
-    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const uno::Reference<xml::sax::XAttributeList> &/*xAttribs*/) override;
+    rtl::Reference<XMLImportContext>
+    CreateChildContext(const OUString& rName,
+                       const uno::Reference<xml::sax::XAttributeList>& /*xAttribs*/) override;
 };
 
-XMLBodyContext::XMLBodyContext(XMLImport &rImport)
+XMLBodyContext::XMLBodyContext(XMLImport& rImport)
     : XMLImportContext(rImport)
 {
 }
 
-rtl::Reference<XMLImportContext> XMLBodyContext::CreateChildContext(const OUString &rName, const uno::Reference<xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext>
+XMLBodyContext::CreateChildContext(const OUString& rName,
+                                   const uno::Reference<xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "office:text")
         return new XMLBodyContentContext(mrImport);
@@ -233,20 +235,23 @@ rtl::Reference<XMLImportContext> XMLBodyContext::CreateChildContext(const OUStri
 class XMLOfficeDocContext : public XMLImportContext
 {
 public:
-    XMLOfficeDocContext(XMLImport &rImport);
+    XMLOfficeDocContext(XMLImport& rImport);
 
-    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const uno::Reference<xml::sax::XAttributeList> &/*xAttribs*/) override;
+    rtl::Reference<XMLImportContext>
+    CreateChildContext(const OUString& rName,
+                       const uno::Reference<xml::sax::XAttributeList>& /*xAttribs*/) override;
 
     // Handles metafile for a single page.
-    void HandleFixedLayoutPage(const FixedLayoutPage &rPage, bool bFirst);
+    void HandleFixedLayoutPage(const FixedLayoutPage& rPage, bool bFirst);
 };
 
-XMLOfficeDocContext::XMLOfficeDocContext(XMLImport &rImport)
+XMLOfficeDocContext::XMLOfficeDocContext(XMLImport& rImport)
     : XMLImportContext(rImport)
 {
 }
 
-rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const OUString &rName, const uno::Reference<xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(
+    const OUString& rName, const uno::Reference<xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "office:meta")
         return new XMLMetaDocumentContext(mrImport);
@@ -266,7 +271,7 @@ rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const O
         // Ignore text from doc model in the fixed layout case, instead
         // insert the page metafiles.
         bool bFirst = true;
-        for (const auto &rPage : mrImport.GetPageMetafiles())
+        for (const auto& rPage : mrImport.GetPageMetafiles())
         {
             HandleFixedLayoutPage(rPage, bFirst);
             if (bFirst)
@@ -276,18 +281,19 @@ rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const O
     return nullptr;
 }
 
-void XMLOfficeDocContext::HandleFixedLayoutPage(const FixedLayoutPage &rPage, bool bFirst)
+void XMLOfficeDocContext::HandleFixedLayoutPage(const FixedLayoutPage& rPage, bool bFirst)
 {
     uno::Reference<uno::XComponentContext> xCtx = mrImport.GetComponentContext();
     uno::Reference<xml::sax::XWriter> xSaxWriter = xml::sax::Writer::create(xCtx);
     if (!xSaxWriter.is())
         return;
 
-    uno::Sequence<uno::Any> aArguments =
-    {
-        uno::makeAny<uno::Sequence<beans::PropertyValue>>({comphelper::makePropertyValue("DTDString", false)})
-    };
-    uno::Reference<svg::XSVGWriter> xSVGWriter(xCtx->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.svg.SVGWriter", aArguments, xCtx), uno::UNO_QUERY);
+    uno::Sequence<uno::Any> aArguments = { uno::makeAny<uno::Sequence<beans::PropertyValue>>(
+        { comphelper::makePropertyValue("DTDString", false) }) };
+    uno::Reference<svg::XSVGWriter> xSVGWriter(
+        xCtx->getServiceManager()->createInstanceWithArgumentsAndContext(
+            "com.sun.star.svg.SVGWriter", aArguments, xCtx),
+        uno::UNO_QUERY);
     if (!xSVGWriter.is())
         return;
 
@@ -310,7 +316,7 @@ void XMLOfficeDocContext::HandleFixedLayoutPage(const FixedLayoutPage &rPage, bo
     {
         // Name of chapters starting on this page.
         librevenge::RVNGPropertyListVector aChapterNames;
-        for (const auto &rName : rPage.aChapterNames)
+        for (const auto& rName : rPage.aChapterNames)
         {
             librevenge::RVNGPropertyList aChapter;
             aChapter.insert("librevenge:name", rName.toUtf8().getStr());
@@ -329,18 +335,22 @@ void XMLOfficeDocContext::HandleFixedLayoutPage(const FixedLayoutPage &rPage, bo
     librevenge::RVNGPropertyList aImageProperties;
     aImageProperties.insert("librevenge:mime-type", "image/svg+xml");
     librevenge::RVNGBinaryData aBinaryData;
-    aBinaryData.append(static_cast<const unsigned char *>(aMemoryStream.GetBuffer()), aMemoryStream.GetSize());
+    aBinaryData.append(static_cast<const unsigned char*>(aMemoryStream.GetBuffer()),
+                       aMemoryStream.GetSize());
     aImageProperties.insert("office:binary-data", aBinaryData);
     mrImport.GetGenerator().insertBinaryObject(aImageProperties);
     mrImport.GetGenerator().closeParagraph();
     mrImport.GetGenerator().closePageSpan();
 }
 
-XMLImport::XMLImport(const uno::Reference<uno::XComponentContext> &xContext, librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const uno::Sequence<beans::PropertyValue> &rDescriptor, const std::vector<FixedLayoutPage> &rPageMetafiles)
-    : mrGenerator(rGenerator),
-      mxContext(xContext),
-      mbIsInPageSpan(false),
-      mrPageMetafiles(rPageMetafiles)
+XMLImport::XMLImport(const uno::Reference<uno::XComponentContext>& xContext,
+                     librevenge::RVNGTextInterface& rGenerator, const OUString& rURL,
+                     const uno::Sequence<beans::PropertyValue>& rDescriptor,
+                     const std::vector<FixedLayoutPage>& rPageMetafiles)
+    : mrGenerator(rGenerator)
+    , mxContext(xContext)
+    , mbIsInPageSpan(false)
+    , mrPageMetafiles(rPageMetafiles)
 {
     uno::Sequence<beans::PropertyValue> aFilterData;
     for (sal_Int32 i = 0; i < rDescriptor.getLength(); ++i)
@@ -362,7 +372,8 @@ XMLImport::XMLImport(const uno::Reference<uno::XComponentContext> &xContext, lib
         SvFileStream aStream(aCoverImage, StreamMode::READ);
         SvMemoryStream aMemoryStream;
         aMemoryStream.WriteStream(aStream);
-        aBinaryData.append(static_cast<const unsigned char *>(aMemoryStream.GetBuffer()), aMemoryStream.GetSize());
+        aBinaryData.append(static_cast<const unsigned char*>(aMemoryStream.GetBuffer()),
+                           aMemoryStream.GetSize());
         librevenge::RVNGPropertyList aCoverImageProperties;
         aCoverImageProperties.insert("office:binary-data", aBinaryData);
         aCoverImageProperties.insert("librevenge:mime-type", aMimeType.toUtf8().getStr());
@@ -374,34 +385,28 @@ XMLImport::XMLImport(const uno::Reference<uno::XComponentContext> &xContext, lib
     mxUriReferenceFactory = uri::UriReferenceFactory::create(mxContext);
 }
 
-const librevenge::RVNGPropertyListVector &XMLImport::GetCoverImages()
-{
-    return maCoverImages;
-}
+const librevenge::RVNGPropertyListVector& XMLImport::GetCoverImages() { return maCoverImages; }
 
-const librevenge::RVNGPropertyList &XMLImport::GetMetaData()
-{
-    return maMetaData;
-}
+const librevenge::RVNGPropertyList& XMLImport::GetMetaData() { return maMetaData; }
 
 namespace
 {
 /// Finds out if a file URL exists.
-bool FileURLExists(const OUString &rURL)
+bool FileURLExists(const OUString& rURL)
 {
     SvFileStream aStream(rURL, StreamMode::READ);
     return aStream.IsOpen();
 }
 }
 
-PopupState XMLImport::FillPopupData(const OUString &rURL, librevenge::RVNGPropertyList &rPropList)
+PopupState XMLImport::FillPopupData(const OUString& rURL, librevenge::RVNGPropertyList& rPropList)
 {
     uno::Reference<uri::XUriReference> xUriRef;
     try
     {
         xUriRef = mxUriReferenceFactory->parse(rURL);
     }
-    catch (const uno::Exception &)
+    catch (const uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("writerperfect", "XUriReference::parse() failed");
     }
@@ -428,7 +433,8 @@ PopupState XMLImport::FillPopupData(const OUString &rURL, librevenge::RVNGProper
     librevenge::RVNGBinaryData aBinaryData;
     SvMemoryStream aMemoryStream;
     aMemoryStream.WriteStream(aStream);
-    aBinaryData.append(static_cast<const unsigned char *>(aMemoryStream.GetBuffer()), aMemoryStream.GetSize());
+    aBinaryData.append(static_cast<const unsigned char*>(aMemoryStream.GetBuffer()),
+                       aMemoryStream.GetSize());
     rPropList.insert("office:binary-data", aBinaryData);
 
     INetURLObject aAbsURL(aAbs);
@@ -438,119 +444,107 @@ PopupState XMLImport::FillPopupData(const OUString &rURL, librevenge::RVNGProper
     return PopupState::Consumed;
 }
 
-const std::vector<FixedLayoutPage> &XMLImport::GetPageMetafiles() const
-{
-    return mrPageMetafiles;
-}
+const std::vector<FixedLayoutPage>& XMLImport::GetPageMetafiles() const { return mrPageMetafiles; }
 
-const uno::Reference<uno::XComponentContext> &XMLImport::GetComponentContext() const
+const uno::Reference<uno::XComponentContext>& XMLImport::GetComponentContext() const
 {
     return mxContext;
 }
 
-rtl::Reference<XMLImportContext> XMLImport::CreateContext(const OUString &rName, const uno::Reference<xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext>
+XMLImport::CreateContext(const OUString& rName,
+                         const uno::Reference<xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "office:document")
         return new XMLOfficeDocContext(*this);
     return nullptr;
 }
 
-librevenge::RVNGTextInterface &XMLImport::GetGenerator() const
-{
-    return mrGenerator;
-}
+librevenge::RVNGTextInterface& XMLImport::GetGenerator() const { return mrGenerator; }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetAutomaticTextStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetAutomaticTextStyles()
 {
     return maAutomaticTextStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetAutomaticParagraphStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetAutomaticParagraphStyles()
 {
     return maAutomaticParagraphStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetAutomaticCellStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetAutomaticCellStyles()
 {
     return maAutomaticCellStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetAutomaticColumnStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetAutomaticColumnStyles()
 {
     return maAutomaticColumnStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetAutomaticRowStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetAutomaticRowStyles()
 {
     return maAutomaticRowStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetAutomaticTableStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetAutomaticTableStyles()
 {
     return maAutomaticTableStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetAutomaticGraphicStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetAutomaticGraphicStyles()
 {
     return maAutomaticGraphicStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetTextStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetTextStyles()
 {
     return maTextStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetParagraphStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetParagraphStyles()
 {
     return maParagraphStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetCellStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetCellStyles()
 {
     return maCellStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetColumnStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetColumnStyles()
 {
     return maColumnStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetRowStyles()
-{
-    return maRowStyles;
-}
+std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetRowStyles() { return maRowStyles; }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetTableStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetTableStyles()
 {
     return maTableStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetGraphicStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetGraphicStyles()
 {
     return maGraphicStyles;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetPageLayouts()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetPageLayouts()
 {
     return maPageLayouts;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetMasterStyles()
+std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetMasterStyles()
 {
     return maMasterStyles;
 }
 
-void XMLImport::startDocument()
-{
-    mrGenerator.startDocument(librevenge::RVNGPropertyList());
-}
+void XMLImport::startDocument() { mrGenerator.startDocument(librevenge::RVNGPropertyList()); }
 
-void XMLImport::endDocument()
-{
-    mrGenerator.endDocument();
-}
+void XMLImport::endDocument() { mrGenerator.endDocument(); }
 
-void XMLImport::startElement(const OUString &rName, const uno::Reference<xml::sax::XAttributeList> &xAttribs)
+void XMLImport::startElement(const OUString& rName,
+                             const uno::Reference<xml::sax::XAttributeList>& xAttribs)
 {
     rtl::Reference<XMLImportContext> xContext;
     if (!maContexts.empty())
@@ -567,7 +561,7 @@ void XMLImport::startElement(const OUString &rName, const uno::Reference<xml::sa
     maContexts.push(xContext);
 }
 
-void XMLImport::endElement(const OUString &rName)
+void XMLImport::endElement(const OUString& rName)
 {
     if (maContexts.empty())
         return;
@@ -578,46 +572,42 @@ void XMLImport::endElement(const OUString &rName)
     maContexts.pop();
 }
 
-void XMLImport::characters(const OUString &rChars)
+void XMLImport::characters(const OUString& rChars)
 {
     if (maContexts.top().is())
         maContexts.top()->characters(rChars);
 }
 
-void XMLImport::ignorableWhitespace(const OUString &/*rWhitespaces*/)
-{
-}
+void XMLImport::ignorableWhitespace(const OUString& /*rWhitespaces*/) {}
 
-void XMLImport::processingInstruction(const OUString &/*rTarget*/, const OUString &/*rData*/)
-{
-}
+void XMLImport::processingInstruction(const OUString& /*rTarget*/, const OUString& /*rData*/) {}
 
-void XMLImport::setDocumentLocator(const uno::Reference<xml::sax::XLocator> &/*xLocator*/)
-{
-}
+void XMLImport::setDocumentLocator(const uno::Reference<xml::sax::XLocator>& /*xLocator*/) {}
 
-void XMLImport::HandlePageSpan(const librevenge::RVNGPropertyList &rPropertyList)
+void XMLImport::HandlePageSpan(const librevenge::RVNGPropertyList& rPropertyList)
 {
     OUString sMasterPageName;
     OUString sLayoutName;
 
     if (rPropertyList["style:master-page-name"])
-        sMasterPageName = OStringToOUString(rPropertyList["style:master-page-name"]->getStr().cstr(), RTL_TEXTENCODING_UTF8);
+        sMasterPageName = OStringToOUString(
+            rPropertyList["style:master-page-name"]->getStr().cstr(), RTL_TEXTENCODING_UTF8);
     else if (!GetIsInPageSpan())
         sMasterPageName = "Standard";
 
     if (sMasterPageName.getLength())
     {
-        librevenge::RVNGPropertyList &rMasterPage = GetMasterStyles()[sMasterPageName];
+        librevenge::RVNGPropertyList& rMasterPage = GetMasterStyles()[sMasterPageName];
         if (rMasterPage["style:page-layout-name"])
         {
-            sLayoutName = OStringToOUString(rMasterPage["style:page-layout-name"]->getStr().cstr(), RTL_TEXTENCODING_UTF8);
+            sLayoutName = OStringToOUString(rMasterPage["style:page-layout-name"]->getStr().cstr(),
+                                            RTL_TEXTENCODING_UTF8);
         }
     }
 
     if (sLayoutName.getLength())
     {
-        librevenge::RVNGPropertyList &rPageLayout = GetPageLayouts()[sLayoutName];
+        librevenge::RVNGPropertyList& rPageLayout = GetPageLayouts()[sLayoutName];
 
         if (GetIsInPageSpan())
             GetGenerator().closePageSpan();

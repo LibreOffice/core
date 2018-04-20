@@ -14,55 +14,64 @@
 
 #include "StarOfficeCalcImportFilter.hxx"
 
-using com::sun::star::uno::Sequence;
-using com::sun::star::uno::XInterface;
 using com::sun::star::uno::RuntimeException;
+using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
+using com::sun::star::uno::XInterface;
 
-static bool handleEmbeddedSTOFFGraphicObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
+static bool handleEmbeddedSTOFFGraphicObject(const librevenge::RVNGBinaryData& data,
+                                             OdfDocumentHandler* pHandler,
+                                             const OdfStreamType streamType)
 {
     OdgGenerator exporter;
     exporter.addDocumentHandler(pHandler, streamType);
     return STOFFDocument::decodeGraphic(data, &exporter);
 }
 
-static bool handleEmbeddedSTOFFSpreadsheetObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
+static bool handleEmbeddedSTOFFSpreadsheetObject(const librevenge::RVNGBinaryData& data,
+                                                 OdfDocumentHandler* pHandler,
+                                                 const OdfStreamType streamType)
 {
     OdsGenerator exporter;
     exporter.addDocumentHandler(pHandler, streamType);
     return STOFFDocument::decodeSpreadsheet(data, &exporter);
 }
 
-bool StarOfficeCalcImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, OdsGenerator &rGenerator, utl::MediaDescriptor &)
+bool StarOfficeCalcImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
+                                                  OdsGenerator& rGenerator, utl::MediaDescriptor&)
 {
     return STOFFDocument::STOFF_R_OK == STOFFDocument::parse(&rInput, &rGenerator);
 }
 
-bool StarOfficeCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
+bool StarOfficeCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput,
+                                                OUString& rTypeName)
 {
     rTypeName.clear();
     STOFFDocument::Kind docKind = STOFFDocument::STOFF_K_UNKNOWN;
-    const STOFFDocument::Confidence confidence = STOFFDocument::isFileFormatSupported(&rInput, docKind);
-    if (confidence == STOFFDocument::STOFF_C_EXCELLENT || confidence == STOFFDocument::STOFF_C_SUPPORTED_ENCRYPTION)
+    const STOFFDocument::Confidence confidence
+        = STOFFDocument::isFileFormatSupported(&rInput, docKind);
+    if (confidence == STOFFDocument::STOFF_C_EXCELLENT
+        || confidence == STOFFDocument::STOFF_C_SUPPORTED_ENCRYPTION)
     {
         switch (docKind)
         {
-        case STOFFDocument::STOFF_K_DATABASE:
-        case STOFFDocument::STOFF_K_SPREADSHEET:
-            rTypeName = "StarOffice_Spreadsheet";
-            break;
-        default:
-            break;
+            case STOFFDocument::STOFF_K_DATABASE:
+            case STOFFDocument::STOFF_K_SPREADSHEET:
+                rTypeName = "StarOffice_Spreadsheet";
+                break;
+            default:
+                break;
         }
     }
 
     return !rTypeName.isEmpty();
 }
 
-void StarOfficeCalcImportFilter::doRegisterHandlers(OdsGenerator &rGenerator)
+void StarOfficeCalcImportFilter::doRegisterHandlers(OdsGenerator& rGenerator)
 {
     rGenerator.registerEmbeddedObjectHandler("image/stoff-odg", &handleEmbeddedSTOFFGraphicObject);
-    rGenerator.registerEmbeddedObjectHandler("image/stoff-ods", &handleEmbeddedSTOFFSpreadsheetObject);
+    rGenerator.registerEmbeddedObjectHandler("image/stoff-ods",
+                                             &handleEmbeddedSTOFFSpreadsheetObject);
 }
 
 // XServiceInfo
@@ -71,21 +80,20 @@ OUString SAL_CALL StarOfficeCalcImportFilter::getImplementationName()
     return OUString("org.libreoffice.comp.Calc.StarOfficeCalcImportFilter");
 }
 
-sal_Bool SAL_CALL StarOfficeCalcImportFilter::supportsService(const OUString &rServiceName)
+sal_Bool SAL_CALL StarOfficeCalcImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL StarOfficeCalcImportFilter::getSupportedServiceNames()
+Sequence<OUString> SAL_CALL StarOfficeCalcImportFilter::getSupportedServiceNames()
 {
-    return Sequence< OUString > {"com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection"};
+    return Sequence<OUString>{ "com.sun.star.document.ImportFilter",
+                               "com.sun.star.document.ExtendedTypeDetection" };
 }
 
-extern "C"
-SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_libreoffice_comp_Calc_StarOfficeCalcImportFilter_get_implementation(
-    css::uno::XComponentContext *const context,
-    const css::uno::Sequence<css::uno::Any> &)
+    css::uno::XComponentContext* const context, const css::uno::Sequence<css::uno::Any>&)
 {
     return cppu::acquire(new StarOfficeCalcImportFilter(context));
 }

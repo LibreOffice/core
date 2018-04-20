@@ -22,12 +22,13 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool ZMFImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, OdgGenerator &rGenerator, utl::MediaDescriptor &)
+bool ZMFImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
+                                       OdgGenerator& rGenerator, utl::MediaDescriptor&)
 {
     return libzmf::ZMFDocument::parse(&rInput, &rGenerator);
 }
 
-bool ZMFImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
+bool ZMFImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUString& rTypeName)
 {
     if (libzmf::ZMFDocument::isSupported(&rInput))
     {
@@ -44,21 +45,20 @@ OUString SAL_CALL ZMFImportFilter::getImplementationName()
     return OUString("org.libreoffice.comp.Draw.ZMFImportFilter");
 }
 
-sal_Bool SAL_CALL ZMFImportFilter::supportsService(const OUString &rServiceName)
+sal_Bool SAL_CALL ZMFImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL ZMFImportFilter::getSupportedServiceNames()
+Sequence<OUString> SAL_CALL ZMFImportFilter::getSupportedServiceNames()
 {
-    return Sequence< OUString > {"com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection"};
+    return Sequence<OUString>{ "com.sun.star.document.ImportFilter",
+                               "com.sun.star.document.ExtendedTypeDetection" };
 }
 
-extern "C"
-SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_libreoffice_comp_Draw_ZMFImportFilter_get_implementation(
-    css::uno::XComponentContext *const context,
-    const css::uno::Sequence<css::uno::Any> &)
+    css::uno::XComponentContext* const context, const css::uno::Sequence<css::uno::Any>&)
 {
     return cppu::acquire(new ZMFImportFilter(context));
 }

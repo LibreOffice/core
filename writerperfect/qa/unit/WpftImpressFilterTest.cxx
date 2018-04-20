@@ -11,7 +11,6 @@
 
 namespace
 {
-
 class WpftImpressFilterTest : public writerperfect::test::WpftFilterTestBase
 {
 public:
@@ -31,31 +30,30 @@ WpftImpressFilterTest::WpftImpressFilterTest()
 
 void WpftImpressFilterTest::test()
 {
-    const writerperfect::test::WpftOptionalMap_t aEtonyekOptional
-    {
-        {"v2.zip", REQUIRE_ETONYEK_VERSION(0, 1, 1)},
-        {"v3.zip", REQUIRE_ETONYEK_VERSION(0, 1, 1)},
-        {"v6.zip", REQUIRE_ETONYEK_VERSION(0, 1, 4)},
+    const writerperfect::test::WpftOptionalMap_t aEtonyekOptional{
+        { "v2.zip", REQUIRE_ETONYEK_VERSION(0, 1, 1) },
+        { "v3.zip", REQUIRE_ETONYEK_VERSION(0, 1, 1) },
+        { "v6.zip", REQUIRE_ETONYEK_VERSION(0, 1, 4) },
     };
-    const writerperfect::test::WpftOptionalMap_t aMWAWOptional
-    {
-        {"ClarisWorks_6.0.cwk", REQUIRE_MWAW_VERSION(0, 3, 3)},
-        {"PowerPoint_Mac_1", REQUIRE_MWAW_VERSION(0, 3, 9)},
-        {"PowerPoint_Mac_2", REQUIRE_MWAW_VERSION(0, 3, 9)},
-        {"PowerPoint_Mac_3", REQUIRE_MWAW_VERSION(0, 3, 9)},
-        {"PowerPoint_Mac_4.ppt", REQUIRE_MWAW_VERSION(0, 3, 10)},
-        {"PowerPoint_2.ppt", REQUIRE_MWAW_VERSION(0, 3, 10)},
-        {"PowerPoint_3.ppt", REQUIRE_MWAW_VERSION(0, 3, 9)},
-        {"PowerPoint_4.ppt", REQUIRE_MWAW_VERSION(0, 3, 10)},
-        {"PowerPoint_7.ppt", REQUIRE_MWAW_VERSION(0, 3, 11)},
+    const writerperfect::test::WpftOptionalMap_t aMWAWOptional{
+        { "ClarisWorks_6.0.cwk", REQUIRE_MWAW_VERSION(0, 3, 3) },
+        { "PowerPoint_Mac_1", REQUIRE_MWAW_VERSION(0, 3, 9) },
+        { "PowerPoint_Mac_2", REQUIRE_MWAW_VERSION(0, 3, 9) },
+        { "PowerPoint_Mac_3", REQUIRE_MWAW_VERSION(0, 3, 9) },
+        { "PowerPoint_Mac_4.ppt", REQUIRE_MWAW_VERSION(0, 3, 10) },
+        { "PowerPoint_2.ppt", REQUIRE_MWAW_VERSION(0, 3, 10) },
+        { "PowerPoint_3.ppt", REQUIRE_MWAW_VERSION(0, 3, 9) },
+        { "PowerPoint_4.ppt", REQUIRE_MWAW_VERSION(0, 3, 10) },
+        { "PowerPoint_7.ppt", REQUIRE_MWAW_VERSION(0, 3, 11) },
     };
 
-    doTest("org.libreoffice.comp.Impress.KeynoteImportFilter", "/writerperfect/qa/unit/data/impress/libetonyek/", aEtonyekOptional);
-    doTest("com.sun.star.comp.Impress.MWAWPresentationImportFilter", "/writerperfect/qa/unit/data/impress/libmwaw/", aMWAWOptional);
+    doTest("org.libreoffice.comp.Impress.KeynoteImportFilter",
+           "/writerperfect/qa/unit/data/impress/libetonyek/", aEtonyekOptional);
+    doTest("com.sun.star.comp.Impress.MWAWPresentationImportFilter",
+           "/writerperfect/qa/unit/data/impress/libmwaw/", aMWAWOptional);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WpftImpressFilterTest);
-
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

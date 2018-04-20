@@ -18,19 +18,22 @@ namespace writerperfect
 {
 namespace exp
 {
-
 class XMLBase64ImportContext;
 
 /// Handler for <draw:frame>.
 class XMLTextFrameContext : public XMLImportContext
 {
 public:
-    XMLTextFrameContext(XMLImport &rImport);
+    XMLTextFrameContext(XMLImport& rImport);
 
-    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    rtl::Reference<XMLImportContext>
+    CreateChildContext(const OUString& rName,
+                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
-    void SAL_CALL endElement(const OUString &rName) override;
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+    void SAL_CALL endElement(const OUString& rName) override;
 };
 
 } // namespace exp

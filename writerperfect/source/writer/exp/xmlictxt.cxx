@@ -17,46 +17,39 @@ namespace writerperfect
 {
 namespace exp
 {
-
-XMLImportContext::XMLImportContext(XMLImport &rImport)
+XMLImportContext::XMLImportContext(XMLImport& rImport)
     : mrImport(rImport)
 {
 }
 
-rtl::Reference<XMLImportContext> XMLImportContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+rtl::Reference<XMLImportContext> XMLImportContext::CreateChildContext(
+    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     return mrImport.CreateContext(rName, xAttribs);
 }
 
-void XMLImportContext::startDocument()
+void XMLImportContext::startDocument() {}
+
+void XMLImportContext::endDocument() {}
+
+void XMLImportContext::startElement(
+    const OUString& /*rName*/,
+    const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
 }
 
-void XMLImportContext::endDocument()
+void XMLImportContext::endElement(const OUString& /*rName*/) {}
+
+void XMLImportContext::characters(const OUString& /*rChars*/) {}
+
+void XMLImportContext::ignorableWhitespace(const OUString& /*rWhitespaces*/) {}
+
+void XMLImportContext::processingInstruction(const OUString& /*rTarget*/, const OUString& /*rData*/)
 {
 }
 
-void XMLImportContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
-{
-}
-
-void XMLImportContext::endElement(const OUString &/*rName*/)
-{
-}
-
-void XMLImportContext::characters(const OUString &/*rChars*/)
-{
-}
-
-void XMLImportContext::ignorableWhitespace(const OUString &/*rWhitespaces*/)
-{
-}
-
-void XMLImportContext::processingInstruction(const OUString &/*rTarget*/, const OUString &/*rData*/)
-{
-}
-
-void XMLImportContext::setDocumentLocator(const css::uno::Reference<css::xml::sax::XLocator> &/*xLocator*/)
+void XMLImportContext::setDocumentLocator(
+    const css::uno::Reference<css::xml::sax::XLocator>& /*xLocator*/)
 {
 }
 

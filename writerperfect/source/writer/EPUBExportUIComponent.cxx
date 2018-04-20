@@ -21,7 +21,6 @@ using namespace com::sun::star;
 
 namespace writerperfect
 {
-
 EPUBExportUIComponent::EPUBExportUIComponent(uno::Reference<uno::XComponentContext> xContext)
     : mxContext(std::move(xContext))
 {
@@ -33,7 +32,8 @@ uno::Sequence<beans::PropertyValue> EPUBExportUIComponent::getPropertyValues()
     return maMediaDescriptor.getAsConstPropertyValueList();
 }
 
-void EPUBExportUIComponent::setPropertyValues(const uno::Sequence<beans::PropertyValue> &rProperties)
+void EPUBExportUIComponent::setPropertyValues(
+    const uno::Sequence<beans::PropertyValue>& rProperties)
 {
     maMediaDescriptor.clear();
     maMediaDescriptor << rProperties;
@@ -54,23 +54,18 @@ OUString EPUBExportUIComponent::getImplementationName()
     return OUString("com.sun.star.comp.Writer.EPUBExportUIComponent");
 }
 
-sal_Bool EPUBExportUIComponent::supportsService(const OUString &rServiceName)
+sal_Bool EPUBExportUIComponent::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> EPUBExportUIComponent::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet =
-    {
-        OUString("com.sun.star.ui.dialogs.FilterOptionsDialog")
-    };
+    uno::Sequence<OUString> aRet = { OUString("com.sun.star.ui.dialogs.FilterOptionsDialog") };
     return aRet;
 }
 
-void EPUBExportUIComponent::setTitle(const OUString &/*rTitle*/)
-{
-}
+void EPUBExportUIComponent::setTitle(const OUString& /*rTitle*/) {}
 
 void SAL_CALL EPUBExportUIComponent::initialize(const uno::Sequence<uno::Any>& rArguments)
 {
@@ -83,18 +78,22 @@ sal_Int16 EPUBExportUIComponent::execute()
 {
     SolarMutexGuard aGuard;
 
-    EPUBExportDialog aDialog(Application::GetFrameWeld(mxDialogParent), maFilterData, mxContext, mxSourceDocument);
+    EPUBExportDialog aDialog(Application::GetFrameWeld(mxDialogParent), maFilterData, mxContext,
+                             mxSourceDocument);
     if (aDialog.run() == RET_OK)
         return ui::dialogs::ExecutableDialogResults::OK;
     return ui::dialogs::ExecutableDialogResults::CANCEL;
 }
 
-void SAL_CALL EPUBExportUIComponent::setSourceDocument(const css::uno::Reference<css::lang::XComponent> &xDocument)
+void SAL_CALL EPUBExportUIComponent::setSourceDocument(
+    const css::uno::Reference<css::lang::XComponent>& xDocument)
 {
     mxSourceDocument = xDocument;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface *com_sun_star_comp_Writer_EPUBExportUIComponent_get_implementation(uno::XComponentContext *pCtx, uno::Sequence<uno::Any> const &/*rSeq*/)
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Writer_EPUBExportUIComponent_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new EPUBExportUIComponent(pCtx));
 }

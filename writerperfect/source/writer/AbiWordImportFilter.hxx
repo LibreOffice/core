@@ -23,17 +23,20 @@
 class AbiWordImportFilter : public writerperfect::ImportFilter<OdtGenerator>
 {
 public:
-    explicit AbiWordImportFilter(const css::uno::Reference< css::uno::XComponentContext > &rxContext)
-        : writerperfect::ImportFilter<OdtGenerator>(rxContext) {}
+    explicit AbiWordImportFilter(const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+        : writerperfect::ImportFilter<OdtGenerator>(rxContext)
+    {
+    }
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString &ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
-    virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName) override;
-    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdtGenerator &rGenerator, utl::MediaDescriptor &) override;
+    virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput, OUString& rTypeName) override;
+    virtual bool doImportDocument(librevenge::RVNGInputStream& rInput, OdtGenerator& rGenerator,
+                                  utl::MediaDescriptor&) override;
 };
 
 #endif

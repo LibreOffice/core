@@ -22,18 +22,21 @@
 class NumbersImportFilter : public writerperfect::ImportFilter<OdsGenerator>
 {
 public:
-    explicit NumbersImportFilter(const css::uno::Reference< css::uno::XComponentContext > &rxContext)
-        : writerperfect::ImportFilter<OdsGenerator>(rxContext) {}
+    explicit NumbersImportFilter(const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+        : writerperfect::ImportFilter<OdsGenerator>(rxContext)
+    {
+    }
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString &ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
-    virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName) override;
-    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdsGenerator &rGenerator, utl::MediaDescriptor &) override;
-    virtual void doRegisterHandlers(OdsGenerator &rGenerator) override;
+    virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput, OUString& rTypeName) override;
+    virtual bool doImportDocument(librevenge::RVNGInputStream& rInput, OdsGenerator& rGenerator,
+                                  utl::MediaDescriptor&) override;
+    virtual void doRegisterHandlers(OdsGenerator& rGenerator) override;
 };
 
 #endif

@@ -27,34 +27,39 @@
 
 namespace
 {
-
 namespace uno = css::uno;
 
 class PresentationImportFilter : public writerperfect::ImportFilter<OdpGenerator>
 {
 public:
-    explicit PresentationImportFilter(const uno::Reference< uno::XComponentContext > &rxContext)
-        : writerperfect::ImportFilter<OdpGenerator>(rxContext) {}
+    explicit PresentationImportFilter(const uno::Reference<uno::XComponentContext>& rxContext)
+        : writerperfect::ImportFilter<OdpGenerator>(rxContext)
+    {
+    }
 
     // XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString &ServiceName) override;
-    virtual uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) override;
+    virtual uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
-    virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, rtl::OUString &rTypeName) override;
-    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdpGenerator &rGenerator, utl::MediaDescriptor &rDescriptor) override;
+    virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput,
+                                rtl::OUString& rTypeName) override;
+    virtual bool doImportDocument(librevenge::RVNGInputStream& rInput, OdpGenerator& rGenerator,
+                                  utl::MediaDescriptor& rDescriptor) override;
 
-    static void generate(librevenge::RVNGPresentationInterface &rDocument);
+    static void generate(librevenge::RVNGPresentationInterface& rDocument);
 };
 
-bool PresentationImportFilter::doImportDocument(librevenge::RVNGInputStream &, OdpGenerator &rGenerator, utl::MediaDescriptor &)
+bool PresentationImportFilter::doImportDocument(librevenge::RVNGInputStream&,
+                                                OdpGenerator& rGenerator, utl::MediaDescriptor&)
 {
     PresentationImportFilter::generate(rGenerator);
     return true;
 }
 
-bool PresentationImportFilter::doDetectFormat(librevenge::RVNGInputStream &, rtl::OUString &rTypeName)
+bool PresentationImportFilter::doDetectFormat(librevenge::RVNGInputStream&,
+                                              rtl::OUString& rTypeName)
 {
     rTypeName = "WpftDummyPresentation";
     return true;
@@ -66,17 +71,17 @@ rtl::OUString SAL_CALL PresentationImportFilter::getImplementationName()
     return OUString("org.libreoffice.comp.Wpft.QA.PresentationImportFilter");
 }
 
-sal_Bool SAL_CALL PresentationImportFilter::supportsService(const rtl::OUString &rServiceName)
+sal_Bool SAL_CALL PresentationImportFilter::supportsService(const rtl::OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL PresentationImportFilter::getSupportedServiceNames()
+uno::Sequence<rtl::OUString> SAL_CALL PresentationImportFilter::getSupportedServiceNames()
 {
-    return {"com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection"};
+    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
 }
 
-void PresentationImportFilter::generate(librevenge::RVNGPresentationInterface &rDocument)
+void PresentationImportFilter::generate(librevenge::RVNGPresentationInterface& rDocument)
 {
     using namespace librevenge;
 
@@ -100,12 +105,10 @@ void PresentationImportFilter::generate(librevenge::RVNGPresentationInterface &r
     rDocument.endSlide();
     rDocument.endDocument();
 }
-
 }
 
 namespace
 {
-
 class PresentationImportTest : public writerperfect::test::WpftFilterFixture
 {
 public:
@@ -120,8 +123,9 @@ void PresentationImportTest::test()
 {
     using namespace css;
 
-    rtl::Reference<PresentationImportFilter> xFilter {new PresentationImportFilter(m_xContext)};
-    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter.get(), "private:factory/simpress", m_xDesktop, m_xContext);
+    rtl::Reference<PresentationImportFilter> xFilter{ new PresentationImportFilter(m_xContext) };
+    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter.get(),
+                                            "private:factory/simpress", m_xDesktop, m_xContext);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(aLoader.getDocument(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
@@ -142,13 +146,13 @@ void PresentationImportTest::test()
     uno::Reference<drawing::XShapeDescriptor> xShapeDesc;
     CPPUNIT_ASSERT(aShape >>= xShapeDesc);
     CPPUNIT_ASSERT(xShapeDesc.is());
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString("com.sun.star.drawing.TextShape"), xShapeDesc->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("com.sun.star.drawing.TextShape"),
+                         xShapeDesc->getShapeType());
     uno::Reference<text::XText> xText(xShapeDesc, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("My hovercraft is full of eels."), xText->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PresentationImportTest);
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

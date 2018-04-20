@@ -21,8 +21,7 @@ namespace writerperfect
 {
 namespace test
 {
-
-WpftFilterTestBase::WpftFilterTestBase(const rtl::OUString &rFactoryURL)
+WpftFilterTestBase::WpftFilterTestBase(const rtl::OUString& rFactoryURL)
     : ::test::FiltersTest()
     , WpftFilterFixture()
     , m_aFactoryURL(rFactoryURL)
@@ -30,10 +29,9 @@ WpftFilterTestBase::WpftFilterTestBase(const rtl::OUString &rFactoryURL)
 {
 }
 
-bool WpftFilterTestBase::load(const OUString &, const OUString &rURL, const OUString &,
+bool WpftFilterTestBase::load(const OUString&, const OUString& rURL, const OUString&,
                               SfxFilterFlags, SotClipboardFormatId, unsigned int)
 {
-
     if (m_pOptionalMap)
     {
         // first check if this test file is supported by the used version of the library
@@ -47,20 +45,20 @@ bool WpftFilterTestBase::load(const OUString &, const OUString &rURL, const OUSt
     return aLoader.getDocument().is();
 }
 
-void WpftFilterTestBase::doTest(const rtl::OUString &rFilter, const rtl::OUString &rPath)
+void WpftFilterTestBase::doTest(const rtl::OUString& rFilter, const rtl::OUString& rPath)
 {
     m_xFilter.set(m_xFactory->createInstanceWithContext(rFilter, m_xContext), uno::UNO_QUERY_THROW);
     testDir(OUString(), m_directories.getURLFromSrc(rPath));
 }
 
-void WpftFilterTestBase::doTest(const rtl::OUString &rFilter, const rtl::OUString &rPath, const WpftOptionalMap_t &rOptionalMap)
+void WpftFilterTestBase::doTest(const rtl::OUString& rFilter, const rtl::OUString& rPath,
+                                const WpftOptionalMap_t& rOptionalMap)
 {
     m_xFilter.set(m_xFactory->createInstanceWithContext(rFilter, m_xContext), uno::UNO_QUERY_THROW);
     m_pOptionalMap = &rOptionalMap;
     testDir(OUString(), m_directories.getURLFromSrc(rPath));
     m_pOptionalMap = nullptr;
 }
-
 }
 }
 

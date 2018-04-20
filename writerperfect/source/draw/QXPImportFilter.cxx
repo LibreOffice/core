@@ -22,12 +22,13 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool QXPImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, OdgGenerator &rGenerator, utl::MediaDescriptor &)
+bool QXPImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
+                                       OdgGenerator& rGenerator, utl::MediaDescriptor&)
 {
     return libqxp::QXPDocument::parse(&rInput, &rGenerator) == libqxp::QXPDocument::RESULT_OK;
 }
 
-bool QXPImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
+bool QXPImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUString& rTypeName)
 {
     if (libqxp::QXPDocument::isSupported(&rInput))
     {
@@ -44,21 +45,20 @@ OUString SAL_CALL QXPImportFilter::getImplementationName()
     return OUString("org.libreoffice.comp.Draw.QXPImportFilter");
 }
 
-sal_Bool SAL_CALL QXPImportFilter::supportsService(const OUString &rServiceName)
+sal_Bool SAL_CALL QXPImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL QXPImportFilter::getSupportedServiceNames()
+Sequence<OUString> SAL_CALL QXPImportFilter::getSupportedServiceNames()
 {
-    return Sequence< OUString > {"com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection"};
+    return Sequence<OUString>{ "com.sun.star.document.ImportFilter",
+                               "com.sun.star.document.ExtendedTypeDetection" };
 }
 
-extern "C"
-SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_libreoffice_comp_Draw_QXPImportFilter_get_implementation(
-    css::uno::XComponentContext *const context,
-    const css::uno::Sequence<css::uno::Any> &)
+    css::uno::XComponentContext* const context, const css::uno::Sequence<css::uno::Any>&)
 {
     return cppu::acquire(new QXPImportFilter(context));
 }

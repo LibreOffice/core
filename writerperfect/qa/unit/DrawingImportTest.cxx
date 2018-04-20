@@ -27,34 +27,38 @@
 
 namespace
 {
-
 namespace uno = css::uno;
 
 class DrawingImportFilter : public writerperfect::ImportFilter<OdgGenerator>
 {
 public:
-    explicit DrawingImportFilter(const uno::Reference< uno::XComponentContext > &rxContext)
-        : writerperfect::ImportFilter<OdgGenerator>(rxContext) {}
+    explicit DrawingImportFilter(const uno::Reference<uno::XComponentContext>& rxContext)
+        : writerperfect::ImportFilter<OdgGenerator>(rxContext)
+    {
+    }
 
     // XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString &ServiceName) override;
-    virtual uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) override;
+    virtual uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
-    virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, rtl::OUString &rTypeName) override;
-    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdgGenerator &rGenerator, utl::MediaDescriptor &rDescriptor) override;
+    virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput,
+                                rtl::OUString& rTypeName) override;
+    virtual bool doImportDocument(librevenge::RVNGInputStream& rInput, OdgGenerator& rGenerator,
+                                  utl::MediaDescriptor& rDescriptor) override;
 
-    static void generate(librevenge::RVNGDrawingInterface &rDocument);
+    static void generate(librevenge::RVNGDrawingInterface& rDocument);
 };
 
-bool DrawingImportFilter::doImportDocument(librevenge::RVNGInputStream &, OdgGenerator &rGenerator, utl::MediaDescriptor &)
+bool DrawingImportFilter::doImportDocument(librevenge::RVNGInputStream&, OdgGenerator& rGenerator,
+                                           utl::MediaDescriptor&)
 {
     DrawingImportFilter::generate(rGenerator);
     return true;
 }
 
-bool DrawingImportFilter::doDetectFormat(librevenge::RVNGInputStream &, rtl::OUString &rTypeName)
+bool DrawingImportFilter::doDetectFormat(librevenge::RVNGInputStream&, rtl::OUString& rTypeName)
 {
     rTypeName = "WpftDummyDrawing";
     return true;
@@ -66,17 +70,17 @@ rtl::OUString SAL_CALL DrawingImportFilter::getImplementationName()
     return OUString("org.libreoffice.comp.Wpft.QA.DrawingImportFilter");
 }
 
-sal_Bool SAL_CALL DrawingImportFilter::supportsService(const rtl::OUString &rServiceName)
+sal_Bool SAL_CALL DrawingImportFilter::supportsService(const rtl::OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL DrawingImportFilter::getSupportedServiceNames()
+uno::Sequence<rtl::OUString> SAL_CALL DrawingImportFilter::getSupportedServiceNames()
 {
-    return {"com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection"};
+    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
 }
 
-void DrawingImportFilter::generate(librevenge::RVNGDrawingInterface &rDocument)
+void DrawingImportFilter::generate(librevenge::RVNGDrawingInterface& rDocument)
 {
     using namespace librevenge;
 
@@ -100,12 +104,10 @@ void DrawingImportFilter::generate(librevenge::RVNGDrawingInterface &rDocument)
     rDocument.endPage();
     rDocument.endDocument();
 }
-
 }
 
 namespace
 {
-
 class DrawingImportTest : public writerperfect::test::WpftFilterFixture
 {
 public:
@@ -120,8 +122,9 @@ void DrawingImportTest::test()
 {
     using namespace css;
 
-    rtl::Reference<DrawingImportFilter> xFilter {new DrawingImportFilter(m_xContext)};
-    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter.get(), "private:factory/sdraw", m_xDesktop, m_xContext);
+    rtl::Reference<DrawingImportFilter> xFilter{ new DrawingImportFilter(m_xContext) };
+    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter.get(),
+                                            "private:factory/sdraw", m_xDesktop, m_xContext);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(aLoader.getDocument(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
@@ -142,13 +145,13 @@ void DrawingImportTest::test()
     uno::Reference<drawing::XShapeDescriptor> xShapeDesc;
     CPPUNIT_ASSERT(aShape >>= xShapeDesc);
     CPPUNIT_ASSERT(xShapeDesc.is());
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString("com.sun.star.drawing.TextShape"), xShapeDesc->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("com.sun.star.drawing.TextShape"),
+                         xShapeDesc->getShapeType());
     uno::Reference<text::XText> xText(xShapeDesc, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("My hovercraft is full of eels."), xText->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DrawingImportTest);
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

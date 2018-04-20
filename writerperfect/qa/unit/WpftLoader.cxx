@@ -42,15 +42,12 @@ namespace writerperfect
 {
 namespace test
 {
-
-WpftLoader::WpftLoader(
-    const rtl::OUString &rURL,
-    const css::uno::Reference<css::document::XFilter> &rxFilter,
-    const rtl::OUString &rFactoryURL,
-    const css::uno::Reference<css::frame::XDesktop2> &rxDesktop,
-    const css::uno::Reference<css::container::XNameAccess> &rxTypeMap,
-    const css::uno::Reference<css::uno::XComponentContext> &rxContext
-)
+WpftLoader::WpftLoader(const rtl::OUString& rURL,
+                       const css::uno::Reference<css::document::XFilter>& rxFilter,
+                       const rtl::OUString& rFactoryURL,
+                       const css::uno::Reference<css::frame::XDesktop2>& rxDesktop,
+                       const css::uno::Reference<css::container::XNameAccess>& rxTypeMap,
+                       const css::uno::Reference<css::uno::XComponentContext>& rxContext)
     : m_aURL(rURL)
     , m_aFactoryURL(rFactoryURL)
     , m_xFilter(rxFilter)
@@ -62,13 +59,11 @@ WpftLoader::WpftLoader(
         impl_dispose();
 }
 
-WpftLoader::WpftLoader(
-    const css::uno::Reference<css::io::XInputStream> &rxInputStream,
-    const css::uno::Reference<css::document::XFilter> &rxFilter,
-    const rtl::OUString &rFactoryURL,
-    const css::uno::Reference<css::frame::XDesktop2> &rxDesktop,
-    const css::uno::Reference<css::uno::XComponentContext> &rxContext
-)
+WpftLoader::WpftLoader(const css::uno::Reference<css::io::XInputStream>& rxInputStream,
+                       const css::uno::Reference<css::document::XFilter>& rxFilter,
+                       const rtl::OUString& rFactoryURL,
+                       const css::uno::Reference<css::frame::XDesktop2>& rxDesktop,
+                       const css::uno::Reference<css::uno::XComponentContext>& rxContext)
     : m_xInputStream(rxInputStream)
     , m_aFactoryURL(rFactoryURL)
     , m_xFilter(rxFilter)
@@ -90,17 +85,14 @@ WpftLoader::~WpftLoader()
     }
 }
 
-const css::uno::Reference<css::lang::XComponent> &WpftLoader::getDocument() const
-{
-    return m_xDoc;
-}
+const css::uno::Reference<css::lang::XComponent>& WpftLoader::getDocument() const { return m_xDoc; }
 
 bool WpftLoader::impl_load()
 {
     // create an empty frame
-    m_xDoc.set(
-        m_xDesktop->loadComponentFromURL(m_aFactoryURL, "_blank", 0, uno::Sequence<beans::PropertyValue>()),
-        uno::UNO_QUERY_THROW);
+    m_xDoc.set(m_xDesktop->loadComponentFromURL(m_aFactoryURL, "_blank", 0,
+                                                uno::Sequence<beans::PropertyValue>()),
+               uno::UNO_QUERY_THROW);
 
     // Find the model and frame. We need them later.
     m_xFrame.set(m_xDoc, uno::UNO_QUERY);
@@ -143,14 +135,16 @@ bool WpftLoader::impl_load()
         }
         else
         {
-            ucbhelper::Content aContent(m_aURL, uno::Reference<ucb::XCommandEnvironment>(), m_xContext);
+            ucbhelper::Content aContent(m_aURL, uno::Reference<ucb::XCommandEnvironment>(),
+                                        m_xContext);
             aDescriptor[1].Name = "InputStream";
             aDescriptor[1].Value <<= aContent.openStream();
             aDescriptor[2].Name = "UCBContent";
             aDescriptor[2].Value <<= aContent.get();
         }
 
-        const uno::Reference<document::XExtendedFilterDetection> xDetector(m_xFilter, uno::UNO_QUERY_THROW);
+        const uno::Reference<document::XExtendedFilterDetection> xDetector(m_xFilter,
+                                                                           uno::UNO_QUERY_THROW);
 
         const rtl::OUString aTypeName(xDetector->detect(aDescriptor));
         if (aTypeName.isEmpty())
@@ -164,7 +158,7 @@ bool WpftLoader::impl_load()
         xModel->unlockControllers();
         return bLoaded;
     }
-    catch (const uno::Exception &)
+    catch (const uno::Exception&)
     {
         // ignore
     }
@@ -184,7 +178,8 @@ void WpftLoader::impl_dispose()
     m_xFrame.clear();
 }
 
-void WpftLoader::impl_detectFilterName(uno::Sequence<beans::PropertyValue> &rDescriptor, const rtl::OUString &rTypeName)
+void WpftLoader::impl_detectFilterName(uno::Sequence<beans::PropertyValue>& rDescriptor,
+                                       const rtl::OUString& rTypeName)
 {
     const sal_Int32 nDescriptorLen = rDescriptor.getLength();
 
@@ -212,7 +207,6 @@ void WpftLoader::impl_detectFilterName(uno::Sequence<beans::PropertyValue> &rDes
 
     throw container::NoSuchElementException();
 }
-
 }
 }
 

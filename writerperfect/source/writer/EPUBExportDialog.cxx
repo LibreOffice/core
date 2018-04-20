@@ -31,15 +31,15 @@ sal_Int32 VersionToPosition(sal_Int32 nVersion)
 
     switch (nVersion)
     {
-    case 30:
-        nPosition = 0;
-        break;
-    case 20:
-        nPosition = 1;
-        break;
-    default:
-        assert(false);
-        break;
+        case 30:
+            nPosition = 0;
+            break;
+        case 20:
+            nPosition = 1;
+            break;
+        default:
+            assert(false);
+            break;
     }
 
     return nPosition;
@@ -52,15 +52,15 @@ sal_Int32 PositionToVersion(sal_Int32 nPosition)
 
     switch (nPosition)
     {
-    case 0:
-        nVersion = 30;
-        break;
-    case 1:
-        nVersion = 20;
-        break;
-    default:
-        assert(false);
-        break;
+        case 0:
+            nVersion = 30;
+            break;
+        case 1:
+            nVersion = 20;
+            break;
+        default:
+            assert(false);
+            break;
     }
 
     return nVersion;
@@ -69,8 +69,10 @@ sal_Int32 PositionToVersion(sal_Int32 nPosition)
 
 namespace writerperfect
 {
-
-EPUBExportDialog::EPUBExportDialog(weld::Window *pParent, comphelper::SequenceAsHashMap &rFilterData, uno::Reference<uno::XComponentContext> xContext, css::uno::Reference<css::lang::XComponent> xDocument)
+EPUBExportDialog::EPUBExportDialog(weld::Window* pParent,
+                                   comphelper::SequenceAsHashMap& rFilterData,
+                                   uno::Reference<uno::XComponentContext> xContext,
+                                   css::uno::Reference<css::lang::XComponent> xDocument)
     : GenericDialogController(pParent, "writerperfect/ui/exportepub.ui", "EpubDialog")
     , m_xContext(std::move(xContext))
     , m_rFilterData(rFilterData)
@@ -158,19 +160,19 @@ EPUBExportDialog::EPUBExportDialog(weld::Window *pParent, comphelper::SequenceAs
     m_xOKButton->connect_clicked(LINK(this, EPUBExportDialog, OKClickHdl));
 }
 
-IMPL_LINK_NOARG(EPUBExportDialog, VersionSelectHdl, weld::ComboBoxText &, void)
+IMPL_LINK_NOARG(EPUBExportDialog, VersionSelectHdl, weld::ComboBoxText&, void)
 {
     m_rFilterData["EPUBVersion"] <<= PositionToVersion(m_xVersion->get_active());
 }
 
-IMPL_LINK_NOARG(EPUBExportDialog, SplitSelectHdl, weld::ComboBoxText &, void)
+IMPL_LINK_NOARG(EPUBExportDialog, SplitSelectHdl, weld::ComboBoxText&, void)
 {
     // No conversion, 1:1 mapping between entry positions and
     // libepubgen::EPUBSplitMethod.
     m_rFilterData["EPUBSplitMethod"] <<= static_cast<sal_Int32>(m_xSplit->get_active());
 }
 
-IMPL_LINK_NOARG(EPUBExportDialog, LayoutSelectHdl, weld::ComboBoxText &, void)
+IMPL_LINK_NOARG(EPUBExportDialog, LayoutSelectHdl, weld::ComboBoxText&, void)
 {
     // No conversion, 1:1 mapping between entry positions and
     // libepubgen::EPUBLayoutMethod.
@@ -178,7 +180,7 @@ IMPL_LINK_NOARG(EPUBExportDialog, LayoutSelectHdl, weld::ComboBoxText &, void)
     m_xSplit->set_sensitive(m_xLayout->get_active() != libepubgen::EPUB_LAYOUT_METHOD_FIXED);
 }
 
-IMPL_LINK_NOARG(EPUBExportDialog, CoverClickHdl, weld::Button &, void)
+IMPL_LINK_NOARG(EPUBExportDialog, CoverClickHdl, weld::Button&, void)
 {
     SvxOpenGraphicDialog aDlg("Import", m_xDialog.get());
     aDlg.EnableLink(false);
@@ -186,16 +188,17 @@ IMPL_LINK_NOARG(EPUBExportDialog, CoverClickHdl, weld::Button &, void)
         m_xCoverPath->set_text(aDlg.GetPath());
 }
 
-IMPL_LINK_NOARG(EPUBExportDialog, MediaClickHdl, weld::Button &, void)
+IMPL_LINK_NOARG(EPUBExportDialog, MediaClickHdl, weld::Button&, void)
 {
-    uno::Reference<ui::dialogs::XFolderPicker2> xFolderPicker = ui::dialogs::FolderPicker::create(m_xContext);
+    uno::Reference<ui::dialogs::XFolderPicker2> xFolderPicker
+        = ui::dialogs::FolderPicker::create(m_xContext);
     if (xFolderPicker->execute() != ui::dialogs::ExecutableDialogResults::OK)
         return;
 
     m_xMediaDir->set_text(xFolderPicker->getDirectory());
 }
 
-IMPL_LINK_NOARG(EPUBExportDialog, OKClickHdl, weld::Button &, void)
+IMPL_LINK_NOARG(EPUBExportDialog, OKClickHdl, weld::Button&, void)
 {
     // General
     if (!m_xCoverPath->get_text().isEmpty())
@@ -218,9 +221,7 @@ IMPL_LINK_NOARG(EPUBExportDialog, OKClickHdl, weld::Button &, void)
     m_xDialog->response(RET_OK);
 }
 
-EPUBExportDialog::~EPUBExportDialog()
-{
-}
+EPUBExportDialog::~EPUBExportDialog() {}
 
 } // namespace writerperfect
 

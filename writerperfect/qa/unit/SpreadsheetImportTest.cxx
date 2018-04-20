@@ -26,34 +26,38 @@
 
 namespace
 {
-
 namespace uno = css::uno;
 
 class SpreadsheetImportFilter : public writerperfect::ImportFilter<OdsGenerator>
 {
 public:
-    explicit SpreadsheetImportFilter(const uno::Reference< uno::XComponentContext > &rxContext)
-        : writerperfect::ImportFilter<OdsGenerator>(rxContext) {}
+    explicit SpreadsheetImportFilter(const uno::Reference<uno::XComponentContext>& rxContext)
+        : writerperfect::ImportFilter<OdsGenerator>(rxContext)
+    {
+    }
 
     // XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString &ServiceName) override;
-    virtual uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) override;
+    virtual uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
-    virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, rtl::OUString &rTypeName) override;
-    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdsGenerator &rGenerator, utl::MediaDescriptor &rDescriptor) override;
+    virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput,
+                                rtl::OUString& rTypeName) override;
+    virtual bool doImportDocument(librevenge::RVNGInputStream& rInput, OdsGenerator& rGenerator,
+                                  utl::MediaDescriptor& rDescriptor) override;
 
-    static void generate(librevenge::RVNGSpreadsheetInterface &rDocument);
+    static void generate(librevenge::RVNGSpreadsheetInterface& rDocument);
 };
 
-bool SpreadsheetImportFilter::doImportDocument(librevenge::RVNGInputStream &, OdsGenerator &rGenerator, utl::MediaDescriptor &)
+bool SpreadsheetImportFilter::doImportDocument(librevenge::RVNGInputStream&,
+                                               OdsGenerator& rGenerator, utl::MediaDescriptor&)
 {
     SpreadsheetImportFilter::generate(rGenerator);
     return true;
 }
 
-bool SpreadsheetImportFilter::doDetectFormat(librevenge::RVNGInputStream &, rtl::OUString &rTypeName)
+bool SpreadsheetImportFilter::doDetectFormat(librevenge::RVNGInputStream&, rtl::OUString& rTypeName)
 {
     rTypeName = "WpftDummySpreadsheet";
     return true;
@@ -65,17 +69,17 @@ rtl::OUString SAL_CALL SpreadsheetImportFilter::getImplementationName()
     return OUString("org.libreoffice.comp.Wpft.QA.SpreadsheetImportFilter");
 }
 
-sal_Bool SAL_CALL SpreadsheetImportFilter::supportsService(const rtl::OUString &rServiceName)
+sal_Bool SAL_CALL SpreadsheetImportFilter::supportsService(const rtl::OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL SpreadsheetImportFilter::getSupportedServiceNames()
+uno::Sequence<rtl::OUString> SAL_CALL SpreadsheetImportFilter::getSupportedServiceNames()
 {
-    return {"com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection"};
+    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
 }
 
-void SpreadsheetImportFilter::generate(librevenge::RVNGSpreadsheetInterface &rDocument)
+void SpreadsheetImportFilter::generate(librevenge::RVNGSpreadsheetInterface& rDocument)
 {
     using namespace librevenge;
 
@@ -95,12 +99,10 @@ void SpreadsheetImportFilter::generate(librevenge::RVNGSpreadsheetInterface &rDo
     rDocument.closePageSpan();
     rDocument.endDocument();
 }
-
 }
 
 namespace
 {
-
 class SpreadsheetImportTest : public writerperfect::test::WpftFilterFixture
 {
 public:
@@ -115,8 +117,9 @@ void SpreadsheetImportTest::test()
 {
     using namespace css;
 
-    rtl::Reference<SpreadsheetImportFilter> xFilter {new SpreadsheetImportFilter(m_xContext)};
-    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter.get(), "private:factory/scalc", m_xDesktop, m_xContext);
+    rtl::Reference<SpreadsheetImportFilter> xFilter{ new SpreadsheetImportFilter(m_xContext) };
+    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter.get(),
+                                            "private:factory/scalc", m_xDesktop, m_xContext);
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(aLoader.getDocument(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
@@ -131,7 +134,6 @@ void SpreadsheetImportTest::test()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SpreadsheetImportTest);
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

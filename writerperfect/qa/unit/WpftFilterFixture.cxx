@@ -21,7 +21,6 @@ namespace writerperfect
 {
 namespace test
 {
-
 void WpftFilterFixture::setUp()
 {
     ::test::BootstrapFixture::setUp();
@@ -33,7 +32,6 @@ void WpftFilterFixture::setUp()
         uno::UNO_QUERY_THROW);
     m_xTypeMap.set(m_xTypeDetection, uno::UNO_QUERY_THROW);
 }
-
 }
 }
 

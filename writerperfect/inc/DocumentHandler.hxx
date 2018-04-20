@@ -47,21 +47,19 @@ class XDocumentHandler;
 
 namespace writerperfect
 {
-
-class WRITERPERFECT_DLLPUBLIC DocumentHandler: public OdfDocumentHandler
+class WRITERPERFECT_DLLPUBLIC DocumentHandler : public OdfDocumentHandler
 {
 public:
-    DocumentHandler(css::uno::Reference < css::xml::sax::XDocumentHandler > const &xHandler);
+    DocumentHandler(css::uno::Reference<css::xml::sax::XDocumentHandler> const& xHandler);
     void startDocument() override;
     void endDocument() override;
-    void startElement(const char *psName, const librevenge::RVNGPropertyList &xPropList) override;
-    void endElement(const char *psName) override;
-    void characters(const librevenge::RVNGString &sCharacters) override;
+    void startElement(const char* psName, const librevenge::RVNGPropertyList& xPropList) override;
+    void endElement(const char* psName) override;
+    void characters(const librevenge::RVNGString& sCharacters) override;
 
 private:
-    css::uno::Reference < css::xml::sax::XDocumentHandler > mxHandler;
+    css::uno::Reference<css::xml::sax::XDocumentHandler> mxHandler;
 };
-
 }
 
 #endif // INCLUDED_WRITERPERFECT_DOCUMENTHANDLER_HXX

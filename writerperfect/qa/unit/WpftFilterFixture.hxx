@@ -21,25 +21,27 @@
 
 #include <test/bootstrapfixture.hxx>
 
-#define REQUIRE_VERSION(major, minor, micro, req_major, req_minor, req_micro) \
-    (major) > (req_major) || \
-    ((major) == (req_major) && \
-        ((minor) > (req_minor) \
-         || ((minor) == (req_minor) && ((micro) >= (req_micro)))))
+#define REQUIRE_VERSION(major, minor, micro, req_major, req_minor, req_micro)                      \
+    (major) > (req_major)                                                                          \
+        || ((major) == (req_major)                                                                 \
+            && ((minor) > (req_minor) || ((minor) == (req_minor) && ((micro) >= (req_micro)))))
 
-#define REQUIRE_EBOOK_VERSION(major, minor, micro) \
-    REQUIRE_VERSION(EBOOK_VERSION_MAJOR, EBOOK_VERSION_MINOR, EBOOK_VERSION_MICRO, major, minor, micro)
+#define REQUIRE_EBOOK_VERSION(major, minor, micro)                                                 \
+    REQUIRE_VERSION(EBOOK_VERSION_MAJOR, EBOOK_VERSION_MINOR, EBOOK_VERSION_MICRO, major, minor,   \
+                    micro)
 
-#define REQUIRE_ETONYEK_VERSION(major, minor, micro) \
-    REQUIRE_VERSION(ETONYEK_VERSION_MAJOR, ETONYEK_VERSION_MINOR, ETONYEK_VERSION_MICRO, major, minor, micro)
+#define REQUIRE_ETONYEK_VERSION(major, minor, micro)                                               \
+    REQUIRE_VERSION(ETONYEK_VERSION_MAJOR, ETONYEK_VERSION_MINOR, ETONYEK_VERSION_MICRO, major,    \
+                    minor, micro)
 
-#define REQUIRE_MWAW_VERSION(major, minor, micro) \
+#define REQUIRE_MWAW_VERSION(major, minor, micro)                                                  \
     REQUIRE_VERSION(MWAW_VERSION_MAJOR, MWAW_VERSION_MINOR, MWAW_VERSION_MICRO, major, minor, micro)
 
-#define REQUIRE_STAROFFICE_VERSION(major, minor, micro) \
-    REQUIRE_VERSION(STAROFFICE_VERSION_MAJOR, STAROFFICE_VERSION_MINOR, STAROFFICE_VERSION_MICRO, major, minor, micro)
+#define REQUIRE_STAROFFICE_VERSION(major, minor, micro)                                            \
+    REQUIRE_VERSION(STAROFFICE_VERSION_MAJOR, STAROFFICE_VERSION_MINOR, STAROFFICE_VERSION_MICRO,  \
+                    major, minor, micro)
 
-#define REQUIRE_WPS_VERSION(major, minor, micro) \
+#define REQUIRE_WPS_VERSION(major, minor, micro)                                                   \
     REQUIRE_VERSION(WPS_VERSION_MAJOR, WPS_VERSION_MINOR, WPS_VERSION_MICRO, major, minor, micro)
 
 namespace com
@@ -68,7 +70,6 @@ namespace writerperfect
 {
 namespace test
 {
-
 class WPFTQAHELPER_DLLPUBLIC WpftFilterFixture : public ::test::BootstrapFixture
 {
 public:
@@ -79,7 +80,6 @@ protected:
     css::uno::Reference<css::document::XTypeDetection> m_xTypeDetection;
     css::uno::Reference<css::container::XNameAccess> m_xTypeMap;
 };
-
 }
 }
 

@@ -25,34 +25,38 @@
 
 namespace
 {
-
 namespace uno = css::uno;
 
 class TextImportFilter : public writerperfect::ImportFilter<OdtGenerator>
 {
 public:
-    explicit TextImportFilter(const uno::Reference< uno::XComponentContext > &rxContext)
-        : writerperfect::ImportFilter<OdtGenerator>(rxContext) {}
+    explicit TextImportFilter(const uno::Reference<uno::XComponentContext>& rxContext)
+        : writerperfect::ImportFilter<OdtGenerator>(rxContext)
+    {
+    }
 
     // XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString &ServiceName) override;
-    virtual uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) override;
+    virtual uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
-    virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, rtl::OUString &rTypeName) override;
-    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdtGenerator &rGenerator, utl::MediaDescriptor &rDescriptor) override;
+    virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput,
+                                rtl::OUString& rTypeName) override;
+    virtual bool doImportDocument(librevenge::RVNGInputStream& rInput, OdtGenerator& rGenerator,
+                                  utl::MediaDescriptor& rDescriptor) override;
 
-    static void generate(librevenge::RVNGTextInterface &rDocument);
+    static void generate(librevenge::RVNGTextInterface& rDocument);
 };
 
-bool TextImportFilter::doImportDocument(librevenge::RVNGInputStream &, OdtGenerator &rGenerator, utl::MediaDescriptor &)
+bool TextImportFilter::doImportDocument(librevenge::RVNGInputStream&, OdtGenerator& rGenerator,
+                                        utl::MediaDescriptor&)
 {
     TextImportFilter::generate(rGenerator);
     return true;
 }
 
-bool TextImportFilter::doDetectFormat(librevenge::RVNGInputStream &, rtl::OUString &rTypeName)
+bool TextImportFilter::doDetectFormat(librevenge::RVNGInputStream&, rtl::OUString& rTypeName)
 {
     rTypeName = "WpftDummyText";
     return true;
@@ -64,17 +68,17 @@ rtl::OUString SAL_CALL TextImportFilter::getImplementationName()
     return OUString("org.libreoffice.comp.Wpft.QA.TextImportFilter");
 }
 
-sal_Bool SAL_CALL TextImportFilter::supportsService(const rtl::OUString &rServiceName)
+sal_Bool SAL_CALL TextImportFilter::supportsService(const rtl::OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL TextImportFilter::getSupportedServiceNames()
+uno::Sequence<rtl::OUString> SAL_CALL TextImportFilter::getSupportedServiceNames()
 {
-    return {"com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection"};
+    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
 }
 
-void TextImportFilter::generate(librevenge::RVNGTextInterface &rDocument)
+void TextImportFilter::generate(librevenge::RVNGTextInterface& rDocument)
 {
     using namespace librevenge;
 
@@ -88,12 +92,10 @@ void TextImportFilter::generate(librevenge::RVNGTextInterface &rDocument)
     rDocument.closePageSpan();
     rDocument.endDocument();
 }
-
 }
 
 namespace
 {
-
 class TextImportTest : public writerperfect::test::WpftFilterFixture
 {
 public:
@@ -108,8 +110,9 @@ void TextImportTest::test()
 {
     using namespace css;
 
-    rtl::Reference<TextImportFilter> xFilter {new TextImportFilter(m_xContext)};
-    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter.get(), "private:factory/swriter", m_xDesktop, m_xContext);
+    rtl::Reference<TextImportFilter> xFilter{ new TextImportFilter(m_xContext) };
+    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter.get(),
+                                            "private:factory/swriter", m_xDesktop, m_xContext);
 
     uno::Reference<text::XTextDocument> xDoc(aLoader.getDocument(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
@@ -118,7 +121,8 @@ void TextImportTest::test()
     uno::Reference<container::XEnumeration> xParas = xParaAccess->createEnumeration();
     CPPUNIT_ASSERT(xParas.is());
     CPPUNIT_ASSERT(xParas->hasMoreElements());
-    uno::Reference<container::XEnumerationAccess> xPortionsAccess(xParas->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xPortionsAccess(xParas->nextElement(),
+                                                                  uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPortionsAccess.is());
     uno::Reference<container::XEnumeration> xPortions = xPortionsAccess->createEnumeration();
     CPPUNIT_ASSERT(xPortions.is());
@@ -136,7 +140,6 @@ void TextImportTest::test()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TextImportTest);
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,12 +22,13 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool PageMakerImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, OdgGenerator &rGenerator, utl::MediaDescriptor &)
+bool PageMakerImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
+                                             OdgGenerator& rGenerator, utl::MediaDescriptor&)
 {
     return libpagemaker::PMDocument::parse(&rInput, &rGenerator);
 }
 
-bool PageMakerImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
+bool PageMakerImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUString& rTypeName)
 {
     if (libpagemaker::PMDocument::isSupported(&rInput))
     {
@@ -44,25 +45,23 @@ OUString SAL_CALL PageMakerImportFilter::getImplementationName()
     return OUString("org.libreoffice.comp.Draw.PageMakerImportFilter");
 }
 
-sal_Bool SAL_CALL PageMakerImportFilter::supportsService(const OUString &rServiceName)
+sal_Bool SAL_CALL PageMakerImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL PageMakerImportFilter::getSupportedServiceNames()
+Sequence<OUString> SAL_CALL PageMakerImportFilter::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet(2);
-    OUString *pArray = aRet.getArray();
+    Sequence<OUString> aRet(2);
+    OUString* pArray = aRet.getArray();
     pArray[0] = "com.sun.star.document.ImportFilter";
     pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
     return aRet;
 }
 
-extern "C"
-SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_libreoffice_comp_Draw_PageMakerImportFilter_get_implementation(
-    css::uno::XComponentContext *const context,
-    const css::uno::Sequence<css::uno::Any> &)
+    css::uno::XComponentContext* const context, const css::uno::Sequence<css::uno::Any>&)
 {
     return cppu::acquire(new PageMakerImportFilter(context));
 }

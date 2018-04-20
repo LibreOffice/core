@@ -23,38 +23,35 @@
 
 namespace writerperfect
 {
-
 /// EPUB export UI component implementation.
-class EPUBExportUIComponent : public cppu::WeakImplHelper
-    <
-    css::beans::XPropertyAccess,
-    css::lang::XInitialization,
-    css::lang::XServiceInfo,
-    css::ui::dialogs::XExecutableDialog,
-    css::document::XExporter
-    >
+class EPUBExportUIComponent
+    : public cppu::WeakImplHelper<css::beans::XPropertyAccess, css::lang::XInitialization,
+                                  css::lang::XServiceInfo, css::ui::dialogs::XExecutableDialog,
+                                  css::document::XExporter>
 {
 public:
     EPUBExportUIComponent(css::uno::Reference<css::uno::XComponentContext> xContext);
 
     // XPropertyAccess
     css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getPropertyValues() override;
-    void SAL_CALL setPropertyValues(const css::uno::Sequence<css::beans::PropertyValue> &rProperties) override;
+    void SAL_CALL
+    setPropertyValues(const css::uno::Sequence<css::beans::PropertyValue>& rProperties) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService(const OUString &rServiceName) override;
+    sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XExecutableDialog
-    void SAL_CALL setTitle(const OUString &rTitle) override;
+    void SAL_CALL setTitle(const OUString& rTitle) override;
     sal_Int16 SAL_CALL execute() override;
 
     // XExporter
-    void SAL_CALL setSourceDocument(const css::uno::Reference<css::lang::XComponent> &xDocument) override;
+    void SAL_CALL
+    setSourceDocument(const css::uno::Reference<css::lang::XComponent>& xDocument) override;
 
     // XInitialization
-    void SAL_CALL   initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+    void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
 private:
     /// The full set of property values.

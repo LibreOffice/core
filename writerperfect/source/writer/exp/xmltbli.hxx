@@ -18,17 +18,20 @@ namespace writerperfect
 {
 namespace exp
 {
-
 /// Handler for <table:table>.
 class XMLTableContext : public XMLImportContext
 {
 public:
-    XMLTableContext(XMLImport &rImport);
+    XMLTableContext(XMLImport& rImport);
 
-    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    rtl::Reference<XMLImportContext>
+    CreateChildContext(const OUString& rName,
+                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
-    void SAL_CALL endElement(const OUString &rName) override;
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+    void SAL_CALL endElement(const OUString& rName) override;
 
 private:
     bool m_bTableOpened = false;

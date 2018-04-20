@@ -10,17 +10,14 @@
 
 namespace writerperfect
 {
-
 /** Definition of XML import service used with a Generator.
 
     This template must be specialized for every libodfgen generator.
   */
-template<class Generator>
-struct DocumentHandlerFor
+template <class Generator> struct DocumentHandlerFor
 {
     // static const rtl::OUString name();
 };
-
 }
 
 #endif // INCLUDED_WRITERPERFECT_INC_WRITERPERFECT_DOCUMENTHANDLERFOR_HXX

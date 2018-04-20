@@ -48,12 +48,13 @@ using writerperfect::WPXSvInputStream;
 namespace beans = com::sun::star::beans;
 namespace ucb = com::sun::star::ucb;
 
-bool KeynoteImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, OdpGenerator &rGenerator, utl::MediaDescriptor &)
+bool KeynoteImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
+                                           OdpGenerator& rGenerator, utl::MediaDescriptor&)
 {
     return libetonyek::EtonyekDocument::parse(&rInput, &rGenerator);
 }
 
-bool KeynoteImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
+bool KeynoteImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUString& rTypeName)
 {
     if (libetonyek::EtonyekDocument::isSupported(&rInput))
     {
@@ -65,7 +66,8 @@ bool KeynoteImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OU
 }
 
 // XExtendedFilterDetection
-OUString SAL_CALL KeynoteImportFilter::detect(css::uno::Sequence< css::beans::PropertyValue > &Descriptor)
+OUString SAL_CALL
+KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descriptor)
 {
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 nNewLength = nLength + 2;
@@ -74,14 +76,14 @@ OUString SAL_CALL KeynoteImportFilter::detect(css::uno::Sequence< css::beans::Pr
     sal_Int32 nUCBContentLocation = -1;
     bool bIsPackage = false;
     bool bUCBContentChanged = false;
-    const beans::PropertyValue *pValue = Descriptor.getConstArray();
-    Reference < XInputStream > xInputStream;
-    Reference < ucb::XContent > xContent;
-    Sequence < beans::NamedValue > lComponentDataNV;
-    Sequence < beans::PropertyValue > lComponentDataPV;
+    const beans::PropertyValue* pValue = Descriptor.getConstArray();
+    Reference<XInputStream> xInputStream;
+    Reference<ucb::XContent> xContent;
+    Sequence<beans::NamedValue> lComponentDataNV;
+    Sequence<beans::PropertyValue> lComponentDataPV;
     bool bComponentDataNV = true;
 
-    for (sal_Int32 i = 0 ; i < nLength; i++)
+    for (sal_Int32 i = 0; i < nLength; i++)
     {
         if (pValue[i].Name == "TypeName")
         {
@@ -112,7 +114,7 @@ OUString SAL_CALL KeynoteImportFilter::detect(css::uno::Sequence< css::beans::Pr
     if (!xInputStream.is())
         return OUString();
 
-    shared_ptr< librevenge::RVNGInputStream > input(new WPXSvInputStream(xInputStream));
+    shared_ptr<librevenge::RVNGInputStream> input(new WPXSvInputStream(xInputStream));
 
     /* Apple Keynote documents come in two variants:
      * * actual files (zip), only produced by Keynote 5 (at least with
@@ -129,8 +131,7 @@ OUString SAL_CALL KeynoteImportFilter::detect(css::uno::Sequence< css::beans::Pr
      */
     if (xContent.is())
     {
-        ucbhelper::Content aContent(xContent,
-                                    utl::UCBContentHelper::getDefaultCommandEnvironment(),
+        ucbhelper::Content aContent(xContent, utl::UCBContentHelper::getDefaultCommandEnvironment(),
                                     comphelper::getProcessComponentContext());
         try
         {
@@ -147,20 +148,24 @@ OUString SAL_CALL KeynoteImportFilter::detect(css::uno::Sequence< css::beans::Pr
     }
 
     libetonyek::EtonyekDocument::Type type = libetonyek::EtonyekDocument::TYPE_UNKNOWN;
-    const libetonyek::EtonyekDocument::Confidence confidence = libetonyek::EtonyekDocument::isSupported(input.get(), &type);
-    if ((libetonyek::EtonyekDocument::CONFIDENCE_NONE == confidence) || (libetonyek::EtonyekDocument::TYPE_KEYNOTE != type))
+    const libetonyek::EtonyekDocument::Confidence confidence
+        = libetonyek::EtonyekDocument::isSupported(input.get(), &type);
+    if ((libetonyek::EtonyekDocument::CONFIDENCE_NONE == confidence)
+        || (libetonyek::EtonyekDocument::TYPE_KEYNOTE != type))
         return OUString();
 
     if (confidence == libetonyek::EtonyekDocument::CONFIDENCE_SUPPORTED_PART)
     {
-        if (bIsPackage)   // we passed a directory stream, but the filter claims it's APXL file?
+        if (bIsPackage) // we passed a directory stream, but the filter claims it's APXL file?
             return OUString();
 
-        const std::shared_ptr<writerperfect::DirectoryStream> pDir = writerperfect::DirectoryStream::createForParent(xContent);
+        const std::shared_ptr<writerperfect::DirectoryStream> pDir
+            = writerperfect::DirectoryStream::createForParent(xContent);
         input = pDir;
         if (bool(input))
         {
-            if (libetonyek::EtonyekDocument::CONFIDENCE_EXCELLENT == libetonyek::EtonyekDocument::isSupported(input.get()))
+            if (libetonyek::EtonyekDocument::CONFIDENCE_EXCELLENT
+                == libetonyek::EtonyekDocument::isSupported(input.get()))
             {
                 xContent = pDir->getContent();
                 bUCBContentChanged = true;
@@ -237,25 +242,23 @@ OUString SAL_CALL KeynoteImportFilter::getImplementationName()
     return OUString("org.libreoffice.comp.Impress.KeynoteImportFilter");
 }
 
-sal_Bool SAL_CALL KeynoteImportFilter::supportsService(const OUString &rServiceName)
+sal_Bool SAL_CALL KeynoteImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL KeynoteImportFilter::getSupportedServiceNames()
+Sequence<OUString> SAL_CALL KeynoteImportFilter::getSupportedServiceNames()
 {
-    Sequence < OUString > aRet(2);
-    OUString *pArray = aRet.getArray();
+    Sequence<OUString> aRet(2);
+    OUString* pArray = aRet.getArray();
     pArray[0] = "com.sun.star.document.ImportFilter";
     pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
     return aRet;
 }
 
-extern "C"
-SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_libreoffice_comp_Impress_KeynoteImportFilter_get_implementation(
-    css::uno::XComponentContext *const context,
-    const css::uno::Sequence<css::uno::Any> &)
+    css::uno::XComponentContext* const context, const css::uno::Sequence<css::uno::Any>&)
 {
     return cppu::acquire(new KeynoteImportFilter(context));
 }

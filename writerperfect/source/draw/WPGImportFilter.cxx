@@ -27,12 +27,13 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool WPGImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, OdgGenerator &rGenerator, utl::MediaDescriptor &)
+bool WPGImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
+                                       OdgGenerator& rGenerator, utl::MediaDescriptor&)
 {
     return libwpg::WPGraphics::parse(&rInput, &rGenerator);
 }
 
-bool WPGImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
+bool WPGImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUString& rTypeName)
 {
     if (libwpg::WPGraphics::isSupported(&rInput))
     {
@@ -49,25 +50,23 @@ OUString SAL_CALL WPGImportFilter::getImplementationName()
     return OUString("com.sun.star.comp.Draw.WPGImportFilter");
 }
 
-sal_Bool SAL_CALL WPGImportFilter::supportsService(const OUString &rServiceName)
+sal_Bool SAL_CALL WPGImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL WPGImportFilter::getSupportedServiceNames()
+Sequence<OUString> SAL_CALL WPGImportFilter::getSupportedServiceNames()
 {
-    Sequence < OUString > aRet(2);
-    OUString *pArray = aRet.getArray();
-    pArray[0] =  "com.sun.star.document.ImportFilter";
-    pArray[1] =  "com.sun.star.document.ExtendedTypeDetection";
+    Sequence<OUString> aRet(2);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = "com.sun.star.document.ImportFilter";
+    pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
     return aRet;
 }
 
-extern "C"
-SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Draw_WPGImportFilter_get_implementation(
-    css::uno::XComponentContext *const context,
-    const css::uno::Sequence<css::uno::Any> &)
+    css::uno::XComponentContext* const context, const css::uno::Sequence<css::uno::Any>&)
 {
     return cppu::acquire(new WPGImportFilter(context));
 }

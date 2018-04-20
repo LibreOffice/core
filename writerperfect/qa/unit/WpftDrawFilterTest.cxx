@@ -11,7 +11,6 @@
 
 namespace
 {
-
 class WpftDrawFilterTest : public writerperfect::test::WpftFilterTestBase
 {
 public:
@@ -31,39 +30,43 @@ WpftDrawFilterTest::WpftDrawFilterTest()
 
 void WpftDrawFilterTest::test()
 {
-    const writerperfect::test::WpftOptionalMap_t aMWAWOptional
-    {
-        {"ClarisDraw.hqx", REQUIRE_MWAW_VERSION(0, 3, 5)},
-        {"CricketDraw_1.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 8)},
-        {"CricketDraw_1.1.hqx", REQUIRE_MWAW_VERSION(0, 3, 8)},
-        {"FreeHand_1.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 8)},
-        {"FreeHand_2.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 8)},
-        {"MacDraft_1.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 5)},
-        {"MacDraft_5.5.drw", REQUIRE_MWAW_VERSION(0, 3, 6)},
-        {"MacDraw_0.hqx", REQUIRE_MWAW_VERSION(0, 3, 2)},
-        {"MacDraw_1.hqx", REQUIRE_MWAW_VERSION(0, 3, 2)},
-        {"MacDraw_II.hqx", REQUIRE_MWAW_VERSION(0, 3, 3)},
-        {"MacDraw_Pro_1.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 4)},
+    const writerperfect::test::WpftOptionalMap_t aMWAWOptional{
+        { "ClarisDraw.hqx", REQUIRE_MWAW_VERSION(0, 3, 5) },
+        { "CricketDraw_1.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 8) },
+        { "CricketDraw_1.1.hqx", REQUIRE_MWAW_VERSION(0, 3, 8) },
+        { "FreeHand_1.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 8) },
+        { "FreeHand_2.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 8) },
+        { "MacDraft_1.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 5) },
+        { "MacDraft_5.5.drw", REQUIRE_MWAW_VERSION(0, 3, 6) },
+        { "MacDraw_0.hqx", REQUIRE_MWAW_VERSION(0, 3, 2) },
+        { "MacDraw_1.hqx", REQUIRE_MWAW_VERSION(0, 3, 2) },
+        { "MacDraw_II.hqx", REQUIRE_MWAW_VERSION(0, 3, 3) },
+        { "MacDraw_Pro_1.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 4) },
     };
-    const writerperfect::test::WpftOptionalMap_t aStarOfficeOptional
-    {
-        {"Draw_3.1.sda", REQUIRE_STAROFFICE_VERSION(0, 0, 1)},
+    const writerperfect::test::WpftOptionalMap_t aStarOfficeOptional{
+        { "Draw_3.1.sda", REQUIRE_STAROFFICE_VERSION(0, 0, 1) },
     };
 
     doTest("com.sun.star.comp.Draw.CDRImportFilter", "/writerperfect/qa/unit/data/draw/libcdr/");
-    doTest("com.sun.star.comp.Draw.CMXImportFilter", "/writerperfect/qa/unit/data/draw/libcdr-cmx/");
-    doTest("com.sun.star.comp.Draw.FreehandImportFilter", "/writerperfect/qa/unit/data/draw/libfreehand/");
-    doTest("com.sun.star.comp.Draw.MSPUBImportFilter", "/writerperfect/qa/unit/data/draw/libmspub/");
-    doTest("com.sun.star.comp.Draw.MWAWDrawImportFilter", "/writerperfect/qa/unit/data/draw/libmwaw/", aMWAWOptional);
-    doTest("com.sun.star.comp.Draw.VisioImportFilter", "/writerperfect/qa/unit/data/draw/libvisio/");
+    doTest("com.sun.star.comp.Draw.CMXImportFilter",
+           "/writerperfect/qa/unit/data/draw/libcdr-cmx/");
+    doTest("com.sun.star.comp.Draw.FreehandImportFilter",
+           "/writerperfect/qa/unit/data/draw/libfreehand/");
+    doTest("com.sun.star.comp.Draw.MSPUBImportFilter",
+           "/writerperfect/qa/unit/data/draw/libmspub/");
+    doTest("com.sun.star.comp.Draw.MWAWDrawImportFilter",
+           "/writerperfect/qa/unit/data/draw/libmwaw/", aMWAWOptional);
+    doTest("com.sun.star.comp.Draw.VisioImportFilter",
+           "/writerperfect/qa/unit/data/draw/libvisio/");
     doTest("com.sun.star.comp.Draw.WPGImportFilter", "/writerperfect/qa/unit/data/draw/libwpg/");
-    doTest("org.libreoffice.comp.Draw.PageMakerImportFilter", "/writerperfect/qa/unit/data/draw/libpagemaker/");
-    doTest("org.libreoffice.comp.Draw.StarOfficeDrawImportFilter", "/writerperfect/qa/unit/data/draw/libstaroffice/", aStarOfficeOptional);
+    doTest("org.libreoffice.comp.Draw.PageMakerImportFilter",
+           "/writerperfect/qa/unit/data/draw/libpagemaker/");
+    doTest("org.libreoffice.comp.Draw.StarOfficeDrawImportFilter",
+           "/writerperfect/qa/unit/data/draw/libstaroffice/", aStarOfficeOptional);
     doTest("org.libreoffice.comp.Draw.ZMFImportFilter", "/writerperfect/qa/unit/data/draw/libzmf/");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WpftDrawFilterTest);
-
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

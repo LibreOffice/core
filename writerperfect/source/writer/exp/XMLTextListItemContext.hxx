@@ -16,14 +16,15 @@ namespace writerperfect
 {
 namespace exp
 {
-
 /// Handler for <text:list-item>.
 class XMLTextListItemContext : public XMLImportContext
 {
 public:
-    XMLTextListItemContext(XMLImport &rImport);
+    XMLTextListItemContext(XMLImport& rImport);
 
-    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    rtl::Reference<XMLImportContext>
+    CreateChildContext(const OUString& rName,
+                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 };
 
 } // namespace exp

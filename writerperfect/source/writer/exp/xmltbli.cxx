@@ -19,19 +19,22 @@ namespace writerperfect
 {
 namespace exp
 {
-
 /// Handler for <table:table-row>.
 class XMLTableRowContext : public XMLImportContext
 {
 public:
-    XMLTableRowContext(XMLImport &rImport);
+    XMLTableRowContext(XMLImport& rImport);
 
-    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    rtl::Reference<XMLImportContext>
+    CreateChildContext(const OUString& rName,
+                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
     int GetColumn() const;
     void SetColumn(int nColumn);
 
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
-    void SAL_CALL endElement(const OUString &rName) override;
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+    void SAL_CALL endElement(const OUString& rName) override;
 
 private:
     int m_nColumn = 0;
@@ -41,38 +44,45 @@ private:
 class XMLTableCellContext : public XMLImportContext
 {
 public:
-    XMLTableCellContext(XMLImport &rImport, XMLTableRowContext &rRow);
+    XMLTableCellContext(XMLImport& rImport, XMLTableRowContext& rRow);
 
-    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    rtl::Reference<XMLImportContext>
+    CreateChildContext(const OUString& rName,
+                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
-    void SAL_CALL endElement(const OUString &rName) override;
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+    void SAL_CALL endElement(const OUString& rName) override;
 
 private:
-    XMLTableRowContext &m_rRow;
+    XMLTableRowContext& m_rRow;
 };
 
-XMLTableCellContext::XMLTableCellContext(XMLImport &rImport, XMLTableRowContext &rRow)
-    : XMLImportContext(rImport),
-      m_rRow(rRow)
+XMLTableCellContext::XMLTableCellContext(XMLImport& rImport, XMLTableRowContext& rRow)
+    : XMLImportContext(rImport)
+    , m_rRow(rRow)
 {
 }
 
-rtl::Reference<XMLImportContext> XMLTableCellContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLTableCellContext::CreateChildContext(
+    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     return CreateTextChildContext(mrImport, rName);
 }
 
-void XMLTableCellContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+void XMLTableCellContext::startElement(
+    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     librevenge::RVNGPropertyList aPropertyList;
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString &rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
+        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
+        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
 
         if (rAttributeName == "table:style-name")
-            FillStyles(rAttributeValue, mrImport.GetAutomaticCellStyles(), mrImport.GetCellStyles(), aPropertyList);
+            FillStyles(rAttributeValue, mrImport.GetAutomaticCellStyles(), mrImport.GetCellStyles(),
+                       aPropertyList);
         else
         {
             OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
@@ -85,7 +95,7 @@ void XMLTableCellContext::startElement(const OUString &/*rName*/, const css::uno
     m_rRow.SetColumn(m_rRow.GetColumn() + 1);
 }
 
-void XMLTableCellContext::endElement(const OUString &/*rName*/)
+void XMLTableCellContext::endElement(const OUString& /*rName*/)
 {
     mrImport.GetGenerator().closeTableCell();
 }
@@ -94,40 +104,46 @@ void XMLTableCellContext::endElement(const OUString &/*rName*/)
 class XMLTableColumnContext : public XMLImportContext
 {
 public:
-    XMLTableColumnContext(XMLImport &rImport, librevenge::RVNGPropertyListVector &rColumns);
+    XMLTableColumnContext(XMLImport& rImport, librevenge::RVNGPropertyListVector& rColumns);
 
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
 private:
-    librevenge::RVNGPropertyListVector &m_rColumns;
+    librevenge::RVNGPropertyListVector& m_rColumns;
 };
 
-XMLTableColumnContext::XMLTableColumnContext(XMLImport &rImport, librevenge::RVNGPropertyListVector &rColumns)
-    : XMLImportContext(rImport),
-      m_rColumns(rColumns)
+XMLTableColumnContext::XMLTableColumnContext(XMLImport& rImport,
+                                             librevenge::RVNGPropertyListVector& rColumns)
+    : XMLImportContext(rImport)
+    , m_rColumns(rColumns)
 {
 }
 
-void XMLTableColumnContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+void XMLTableColumnContext::startElement(
+    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     librevenge::RVNGPropertyList aPropertyList;
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString &rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
+        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
+        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
 
         if (rAttributeName == "table:style-name")
-            FillStyles(rAttributeValue, mrImport.GetAutomaticColumnStyles(), mrImport.GetColumnStyles(), aPropertyList);
+            FillStyles(rAttributeValue, mrImport.GetAutomaticColumnStyles(),
+                       mrImport.GetColumnStyles(), aPropertyList);
     }
     m_rColumns.append(aPropertyList);
 }
 
-XMLTableRowContext::XMLTableRowContext(XMLImport &rImport)
+XMLTableRowContext::XMLTableRowContext(XMLImport& rImport)
     : XMLImportContext(rImport)
 {
 }
 
-rtl::Reference<XMLImportContext> XMLTableRowContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLTableRowContext::CreateChildContext(
+    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "table:table-cell")
         return new XMLTableCellContext(mrImport, *this);
@@ -141,41 +157,38 @@ rtl::Reference<XMLImportContext> XMLTableRowContext::CreateChildContext(const OU
     return nullptr;
 }
 
-void XMLTableRowContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+void XMLTableRowContext::startElement(
+    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     librevenge::RVNGPropertyList aPropertyList;
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString &rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
+        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
+        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
 
         if (rAttributeName == "table:style-name")
-            FillStyles(rAttributeValue, mrImport.GetAutomaticRowStyles(), mrImport.GetRowStyles(), aPropertyList);
+            FillStyles(rAttributeValue, mrImport.GetAutomaticRowStyles(), mrImport.GetRowStyles(),
+                       aPropertyList);
     }
     mrImport.GetGenerator().openTableRow(aPropertyList);
 }
 
-void XMLTableRowContext::endElement(const OUString &/*rName*/)
+void XMLTableRowContext::endElement(const OUString& /*rName*/)
 {
     mrImport.GetGenerator().closeTableRow();
 }
 
-int XMLTableRowContext::GetColumn() const
-{
-    return m_nColumn;
-}
+int XMLTableRowContext::GetColumn() const { return m_nColumn; }
 
-void XMLTableRowContext::SetColumn(int nColumn)
-{
-    m_nColumn = nColumn;
-}
+void XMLTableRowContext::SetColumn(int nColumn) { m_nColumn = nColumn; }
 
-XMLTableContext::XMLTableContext(XMLImport &rImport)
+XMLTableContext::XMLTableContext(XMLImport& rImport)
     : XMLImportContext(rImport)
 {
 }
 
-rtl::Reference<XMLImportContext> XMLTableContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLTableContext::CreateChildContext(
+    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "table:table-column")
         // Make sure columns are parsed before we open the table.
@@ -197,16 +210,18 @@ rtl::Reference<XMLImportContext> XMLTableContext::CreateChildContext(const OUStr
     return nullptr;
 }
 
-void XMLTableContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+void XMLTableContext::startElement(
+    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString &rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
+        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
+        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
 
         if (rAttributeName == "table:style-name")
         {
-            FillStyles(rAttributeValue, mrImport.GetAutomaticTableStyles(), mrImport.GetTableStyles(), m_aPropertyList);
+            FillStyles(rAttributeValue, mrImport.GetAutomaticTableStyles(),
+                       mrImport.GetTableStyles(), m_aPropertyList);
             mrImport.HandlePageSpan(m_aPropertyList);
         }
         else
@@ -218,7 +233,7 @@ void XMLTableContext::startElement(const OUString &/*rName*/, const css::uno::Re
     }
 }
 
-void XMLTableContext::endElement(const OUString &/*rName*/)
+void XMLTableContext::endElement(const OUString& /*rName*/)
 {
     mrImport.GetGenerator().closeTable();
 }

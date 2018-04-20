@@ -22,35 +22,32 @@
 
 namespace writerperfect
 {
-
 class WRITERPERFECT_DLLPUBLIC WPFTEncodingDialog : public ModalDialog
 {
 public:
-    WPFTEncodingDialog(const OUString &title, const OUString &defEncoding);
+    WPFTEncodingDialog(const OUString& title, const OUString& defEncoding);
 
     virtual ~WPFTEncodingDialog() override;
 
     OUString GetEncoding() const;
-    bool hasUserCalledCancel() const
-    {
-        return m_userHasCancelled;
-    }
+    bool hasUserCalledCancel() const { return m_userHasCancelled; }
+
 private:
     VclPtr<ListBox> m_pLbCharset;
-    VclPtr<OKButton>           m_pBtnOk;
-    VclPtr<CancelButton>           m_pBtnCancel;
+    VclPtr<OKButton> m_pBtnOk;
+    VclPtr<CancelButton> m_pBtnCancel;
 
     bool m_userHasCancelled;
+
 private:
-    DECL_LINK(DoubleClickHdl, ListBox &, void);
-    DECL_LINK(CancelHdl, Button *, void);
+    DECL_LINK(DoubleClickHdl, ListBox&, void);
+    DECL_LINK(CancelHdl, Button*, void);
 
     void dispose() override;
 
-    WPFTEncodingDialog(WPFTEncodingDialog const &) = delete;
-    WPFTEncodingDialog &operator=(WPFTEncodingDialog const &) = delete;
+    WPFTEncodingDialog(WPFTEncodingDialog const&) = delete;
+    WPFTEncodingDialog& operator=(WPFTEncodingDialog const&) = delete;
 };
-
 }
 
 #endif
