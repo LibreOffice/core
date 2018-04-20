@@ -781,7 +781,7 @@ bool GalleryTheme::GetGraphic(sal_uInt32 nPos, Graphic& rGraphic)
             case SgaObjKind::Inet:
             {
                 OUString aFilterDummy;
-                bRet = ( GalleryGraphicImport( aURL, rGraphic, aFilterDummy, /*bProgress*/false ) != GalleryGraphicImportRet::IMPORT_NONE );
+                bRet = ( GalleryGraphicImport( aURL, rGraphic, aFilterDummy ) != GalleryGraphicImportRet::IMPORT_NONE );
             }
             break;
 

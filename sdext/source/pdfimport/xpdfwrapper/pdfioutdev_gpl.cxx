@@ -204,7 +204,7 @@ bool ExtractJpegData(Stream* str, OutputBuffer& outBuf)
     }
 }
 
-void writeJpeg_( OutputBuffer& o_rOutputBuf, Stream* str, bool bWithLinefeed )
+void writeJpeg_( OutputBuffer& o_rOutputBuf, Stream* str )
 {
     // dump JPEG file as-is
 #if POPPLER_CHECK_VERSION(0, 17, 3)
@@ -218,13 +218,12 @@ void writeJpeg_( OutputBuffer& o_rOutputBuf, Stream* str, bool bWithLinefeed )
     ExtractJpegData(str, o_rOutputBuf);
 
     printf( " JPEG %d", static_cast<int>(o_rOutputBuf.size()) );
-    if( bWithLinefeed )
-        printf("\n");
+    printf("\n");
 
     str->close();
 }
 
-void writePbm_(OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, bool bWithLinefeed, bool bInvert )
+void writePbm_(OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, bool bInvert )
 {
     // write as PBM (char by char, to avoid stdlib lineend messing)
     o_rOutputBuf.clear();
@@ -243,8 +242,7 @@ void writePbm_(OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, b
     const int size = height * ((width + 7) / 8);
 
     printf( " PBM %d", size + header_size );
-    if( bWithLinefeed )
-        printf("\n");
+    printf("\n");
 
     // trim buffer to exact header length
     o_rOutputBuf.resize(header_size);
@@ -271,8 +269,7 @@ void writePpm_( OutputBuffer&     o_rOutputBuf,
                 Stream*           str,
                 int               width,
                 int               height,
-                GfxImageColorMap* colorMap,
-                bool              bWithLinefeed )
+                GfxImageColorMap* colorMap )
 {
     // write as PPM (char by char, to avoid stdlib lineend messing)
     o_rOutputBuf.clear();
@@ -295,8 +292,7 @@ void writePpm_( OutputBuffer&     o_rOutputBuf,
     const int size = width*height*3 + header_size;
 
     printf( " PPM %d", size );
-    if( bWithLinefeed )
-        printf("\n");
+    printf("\n");
 
     // trim buffer to exact header size
     o_rOutputBuf.resize(header_size);
@@ -333,8 +329,7 @@ void writePng_( OutputBuffer&     o_rOutputBuf,
                 int               height,
                 GfxRGB const &    zeroColor,
                 GfxRGB const &    oneColor,
-                bool              bIsMask,
-                bool              bWithLinefeed )
+                bool              bIsMask )
 {
     o_rOutputBuf.clear();
 
@@ -342,8 +337,7 @@ void writePng_( OutputBuffer&     o_rOutputBuf,
     PngHelper::createPng( o_rOutputBuf, str, width, height, zeroColor, oneColor, bIsMask );
 
     printf( " PNG %d", static_cast<int>(o_rOutputBuf.size()) );
-    if( bWithLinefeed )
-        printf("\n");
+    printf("\n");
 }
 
 void writePng_( OutputBuffer& o_rOutputBuf,
@@ -380,9 +374,9 @@ void writePng_( OutputBuffer& o_rOutputBuf,
 void writeMask_( OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, bool bInvert )
 {
     if( str->getKind() == strDCT )
-        writeJpeg_(o_rOutputBuf, str, true/*bWithLinefeed*/);
+        writeJpeg_(o_rOutputBuf, str);
     else
-        writePbm_(o_rOutputBuf, str, width, height, true/*bWithLinefeed*/, bInvert );
+        writePbm_(o_rOutputBuf, str, width, height, bInvert );
 }
 
 void writeImage_( OutputBuffer&     o_rOutputBuf,
@@ -396,7 +390,7 @@ void writeImage_( OutputBuffer&     o_rOutputBuf,
         (colorMap->getNumPixelComps() == 1 ||
          colorMap->getNumPixelComps() == 3) )
     {
-        writeJpeg_(o_rOutputBuf, str, true/*bWithLinefeed*/);
+        writeJpeg_(o_rOutputBuf, str);
     }
     else if (colorMap->getNumPixelComps() == 1 &&
              colorMap->getBits() == 1)
@@ -412,10 +406,10 @@ void writeImage_( OutputBuffer&     o_rOutputBuf,
             nIndex = 1;
             colorMap->getRGB( &nIndex, &oneColor );
         }
-        writePng_( o_rOutputBuf, str, width, height, zeroColor, oneColor, false, true/*bWithLinefeed*/ );
+        writePng_( o_rOutputBuf, str, width, height, zeroColor, oneColor, false);
     }
     else
-        writePpm_( o_rOutputBuf, str, width, height, colorMap, true/*bWithLinefeed*/ );
+        writePpm_( o_rOutputBuf, str, width, height, colorMap );
 }
 
 // forwarders
@@ -956,9 +950,9 @@ void PDFOutDev::drawImageMask(GfxState* pState, Object*, Stream* str,
         GfxRGB zeroColor = { dblToCol( 0.0 ), dblToCol( 0.0 ), dblToCol( 0.0 ) };
         pState->getFillColorSpace()->getRGB( pState->getFillColor(), &zeroColor );
         if( invert )
-            writePng_( aBuf, str, width, height, oneColor, zeroColor, true, true );
+            writePng_( aBuf, str, width, height, oneColor, zeroColor, true );
         else
-            writePng_( aBuf, str, width, height, zeroColor, oneColor, true, true );
+            writePng_( aBuf, str, width, height, zeroColor, oneColor, true );
     }
     else
         writeMaskLF(aBuf, str, width, height, invert);

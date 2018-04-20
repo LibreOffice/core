@@ -162,11 +162,11 @@ public:
     virtual SwFlyFrameFormat* InsertGraphicObject(
         const SwPaM& rRg, const GraphicObject& rGrfObj,
         const SfxItemSet* pFlyAttrSet,
-        const SfxItemSet* pGrfAttrSet, SwFrameFormat*) = 0;
+        const SfxItemSet* pGrfAttrSet) = 0;
 
     /** Transpose graphic (with undo)
      */
-    virtual void ReRead(SwPaM&, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic, const GraphicObject* pGrfObj) = 0;
+    virtual void ReRead(SwPaM&, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic) = 0;
 
     /** Insert a DrawObject. The object must be already registered
         in DrawModel.

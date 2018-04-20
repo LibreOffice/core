@@ -228,7 +228,7 @@ bool    SwGlossaries::RenameGroupDoc(
         return false;
     }
 
-    if (!SWUnoHelper::UCB_CopyFile(sOldFileURL, sNewFileURL, true ))
+    if (!SWUnoHelper::UCB_MoveFile(sOldFileURL, sNewFileURL ))
         return false;
 
     RemoveFileFromList( rOldGroup );

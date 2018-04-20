@@ -992,7 +992,7 @@ void SAL_CALL rtl_arena_free (
     }
 }
 
-void rtl_arena_foreach (rtl_arena_type *arena, ArenaForeachFn foreachFn, void *user_data)
+void rtl_arena_foreach (rtl_arena_type *arena, ArenaForeachFn foreachFn)
 {
     // quantum caches
     if ((arena->m_qcache_max > 0) && (arena->m_qcache_ptr != nullptr))
@@ -1002,7 +1002,7 @@ void rtl_arena_foreach (rtl_arena_type *arena, ArenaForeachFn foreachFn, void *u
         {
             if (arena->m_qcache_ptr[i - 1] != nullptr)
                 rtl_cache_foreach (arena->m_qcache_ptr[i - 1],
-                                   foreachFn, user_data);
+                                   foreachFn, nullptr);
         }
     }
 
@@ -1013,7 +1013,7 @@ void rtl_arena_foreach (rtl_arena_type *arena, ArenaForeachFn foreachFn, void *u
              segment != nullptr; segment = segment->m_fnext)
         {
             foreachFn(reinterpret_cast<void *>(segment->m_addr),
-                      segment->m_size, user_data);
+                      segment->m_size, nullptr);
         }
     }
 }

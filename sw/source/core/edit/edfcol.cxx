@@ -2023,7 +2023,7 @@ bool SwEditShell::IsCursorInParagraphMetadataField() const
     return false;
 }
 
-bool SwEditShell::RemoveParagraphMetadataFieldAtCursor(const bool bBackspaceNotDel)
+bool SwEditShell::RemoveParagraphMetadataFieldAtCursor()
 {
     if (GetCursor() && GetCursor()->Start())
     {
@@ -2034,10 +2034,7 @@ bool SwEditShell::RemoveParagraphMetadataFieldAtCursor(const bool bBackspaceNotD
         {
             // Try moving the cursor to see if we're _facing_ a metafield or not,
             // as opposed to being within one.
-            if (bBackspaceNotDel)
-                index--; // Backspace moves left
-            else
-                index++; // Delete moves right
+            index--; // Backspace moves left
 
             xField = lcl_GetParagraphMetadataFieldAtIndex(GetDoc()->GetDocShell(), pNode, index);
         }

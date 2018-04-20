@@ -30,7 +30,6 @@ private:
     OUString m_aOldPasswdErrStr;
     OUString m_aRepeatPasswdErrStr;
     Link<SvxPasswordDialog*,bool> m_aCheckPasswordHdl;
-    bool m_bEmpty;
 
     std::unique_ptr<weld::Label> m_xOldFL;
     std::unique_ptr<weld::Label> m_xOldPasswdFT;
@@ -43,7 +42,7 @@ private:
     DECL_LINK(EditModifyHdl, weld::Entry&, void);
 
 public:
-    SvxPasswordDialog(weld::Window* pParent, bool bAllowEmptyPasswords, bool bDisableOldPassword);
+    SvxPasswordDialog(weld::Window* pParent, bool bDisableOldPassword);
     virtual ~SvxPasswordDialog() override;
 
     OUString        GetOldPassword() const { return m_xOldPasswdED->get_text(); }

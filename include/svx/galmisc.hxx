@@ -81,7 +81,7 @@ class FmFormModel;
 class ImageMap;
 class Gallery;
 
-GalleryGraphicImportRet  GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, OUString& rFilterName, bool bShowProgress = false );
+GalleryGraphicImportRet  GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, OUString& rFilterName );
 bool                GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel );
 bool                CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap );
 SVX_DLLPUBLIC OUString

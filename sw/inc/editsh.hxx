@@ -388,7 +388,7 @@ public:
     /// Removes the paragraph metadata field at the current cursor, if any.
     /// Returns true iff a paragraph metadata field was removed.
     /// Currently there are two variants: signature and classification.
-    bool RemoveParagraphMetadataFieldAtCursor(const bool bBackspaceNotDel);
+    bool RemoveParagraphMetadataFieldAtCursor();
 
     void Insert2(SwField const &, const bool bForceExpandHints);
 
