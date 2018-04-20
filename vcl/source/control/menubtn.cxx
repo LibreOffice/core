@@ -96,7 +96,7 @@ MenuButton::~MenuButton()
 
 void MenuButton::dispose()
 {
-    delete mpMenuTimer;
+    mpMenuTimer.reset();
     mpFloatingWindow.clear();
     mpMenu.clear();
     PushButton::dispose();
@@ -124,7 +124,7 @@ void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
         {
             if ( !mpMenuTimer )
             {
-                mpMenuTimer = new Timer("MenuTimer");
+                mpMenuTimer.reset(new Timer("MenuTimer"));
                 mpMenuTimer->SetInvokeHandler( LINK( this, MenuButton, ImplMenuTimeoutHdl ) );
             }
 
