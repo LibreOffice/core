@@ -332,20 +332,6 @@ public:
                             bool bInvert = false,
                             bool msoBrightness = false );
 
-    /** Apply specified filter to the bitmap
-
-        @param eFilter
-        The filter algorithm to apply
-
-        @param pFilterParam
-        Various parameter for the different bitmap filter algorithms
-
-        @return true, if the operation was completed successfully.
-     */
-    bool                Filter(
-                            BmpFilter eFilter,
-                            const BmpFilterParam* pFilterParam = nullptr );
-
     /** Get transparency at given position
 
         @param nX
