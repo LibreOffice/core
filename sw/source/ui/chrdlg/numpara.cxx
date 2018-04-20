@@ -122,10 +122,10 @@ void SwParagraphNumTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwParagraphNumTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SwParagraphNumTabPage::Create( TabPageParent pParent,
                                                   const SfxItemSet* rSet )
 {
-    return VclPtr<SwParagraphNumTabPage>::Create(pParent, *rSet);
+    return VclPtr<SwParagraphNumTabPage>::Create(pParent.pParent, *rSet);
 }
 
 bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )

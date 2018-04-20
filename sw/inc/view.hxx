@@ -618,7 +618,7 @@ public:
     // methods for printing
     SAL_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( bool bCreate = false ) override;
     SAL_DLLPRIVATE virtual bool  HasPrintOptionsPage() const override;
-    SAL_DLLPRIVATE virtual VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window* pParent,
+    SAL_DLLPRIVATE virtual VclPtr<SfxTabPage> CreatePrintOptionsPage( TabPageParent pParent,
                                                     const SfxItemSet& rSet) override;
     static SvxSearchItem* GetSearchItem() { return m_pSrchItem; }
     /// See SfxViewShell::getPart().
@@ -646,7 +646,7 @@ inline const SwDocShell *SwView::GetDocShell() const
     return const_cast<SwView*>(this)->GetDocShell();
 }
 
-VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent,
+VclPtr<SfxTabPage> CreatePrintOptionsPage( TabPageParent pParent,
                                            const SfxItemSet &rOptions,
                                            bool bPreview);
 

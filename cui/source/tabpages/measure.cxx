@@ -609,10 +609,10 @@ void SvxMeasurePage::Construct()
     m_pCtlPreview->Invalidate();
 }
 
-VclPtr<SfxTabPage> SvxMeasurePage::Create( vcl::Window* pWindow,
+VclPtr<SfxTabPage> SvxMeasurePage::Create( TabPageParent pWindow,
                                            const SfxItemSet* rAttrs )
 {
-    return VclPtr<SvxMeasurePage>::Create( pWindow, *rAttrs );
+    return VclPtr<SvxMeasurePage>::Create( pWindow.pParent, *rAttrs );
 }
 
 void SvxMeasurePage::PointChanged( vcl::Window* pWindow, RectPoint /*eRP*/ )

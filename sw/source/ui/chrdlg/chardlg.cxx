@@ -295,10 +295,10 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
     return bModified;
 }
 
-VclPtr<SfxTabPage> SwCharURLPage::Create(  vcl::Window* pParent,
+VclPtr<SfxTabPage> SwCharURLPage::Create(  TabPageParent pParent,
                                            const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwCharURLPage>::Create( pParent, *rAttrSet );
+    return VclPtr<SwCharURLPage>::Create( pParent.pParent, *rAttrSet );
 }
 
 IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl, Button*, void)

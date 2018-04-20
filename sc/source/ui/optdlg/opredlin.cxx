@@ -65,9 +65,9 @@ void ScRedlineOptionsTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> ScRedlineOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> ScRedlineOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<ScRedlineOptionsTabPage>::Create( pParent, *rSet );
+    return VclPtr<ScRedlineOptionsTabPage>::Create( pParent.pParent, *rSet );
 }
 
 bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet* /* rSet */ )

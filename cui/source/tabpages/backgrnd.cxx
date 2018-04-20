@@ -427,9 +427,9 @@ void SvxBackgroundTabPage::dispose()
     SvxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxBackgroundTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxBackgroundTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxBackgroundTabPage>::Create( pParent, *rAttrSet );
+    return VclPtr<SvxBackgroundTabPage>::Create( pParent.pParent, *rAttrSet );
 }
 
 void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
@@ -1549,10 +1549,10 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
     return true;
 }
 
-VclPtr<SfxTabPage> SvxBkgTabPage::Create( vcl::Window* pWindow,
+VclPtr<SfxTabPage> SvxBkgTabPage::Create( TabPageParent pWindow,
                                            const SfxItemSet* rAttrs )
 {
-    return VclPtr<SvxBkgTabPage>::Create( pWindow, *rAttrs );
+    return VclPtr<SvxBkgTabPage>::Create( pWindow.pParent, *rAttrs );
 }
 
 void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
