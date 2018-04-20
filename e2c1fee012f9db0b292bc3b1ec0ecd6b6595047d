@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_b7873d0e",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-04-20T13:56:45Z",
+      "side": 1,
+      "message": "I\u0027m confused... what is this new code here? What I would expect is only reduce in the code here and no new code that wasn\u0027t here before.",
+      "range": {
+        "startLine": 46,
+        "startChar": 8,
+        "endLine": 46,
+        "endChar": 13
+      },
+      "revId": "e2c1fee012f9db0b292bc3b1ec0ecd6b6595047d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
