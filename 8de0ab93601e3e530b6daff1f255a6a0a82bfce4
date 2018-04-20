@@ -22,6 +22,30 @@
       "revId": "8de0ab93601e3e530b6daff1f255a6a0a82bfce4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_94995771",
+        "filename": "vcl/source/graphic/GraphicObject2.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2018-04-20T06:44:51Z",
+      "side": 0,
+      "message": "I didn\u0027t. Gerrit seems to have done this.",
+      "parentUuid": "9a30ddce_f479b330",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 2
+      },
+      "revId": "8de0ab93601e3e530b6daff1f255a6a0a82bfce4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
