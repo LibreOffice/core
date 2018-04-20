@@ -65,7 +65,7 @@ BitmapEx GalleryResGetBitmapEx(const OUString &rId)
 }
 
 GalleryGraphicImportRet GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
-                             OUString& rFilterName, bool bShowProgress )
+                             OUString& rFilterName )
 {
     GalleryGraphicImportRet  nRet = GalleryGraphicImportRet::IMPORT_NONE;
     SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
@@ -77,7 +77,6 @@ GalleryGraphicImportRet GalleryGraphicImport( const INetURLObject& rURL, Graphic
     if( pIStm )
     {
         GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
-        std::unique_ptr<GalleryProgress> pProgress(bShowProgress ? new GalleryProgress( &rGraphicFilter ) : nullptr);
         sal_uInt16              nFormat;
 
         if( !rGraphicFilter.ImportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), *pIStm, GRFILTER_FORMAT_DONTKNOW, &nFormat ) )

@@ -599,7 +599,7 @@ namespace basegfx
 
             for(;pPointSequence != pPointSeqEnd; pPointSequence++)
             {
-                const B2DPolygon aNewPolygon = UnoPointSequenceToB2DPolygon(*pPointSequence, true/*bCheckClosed*/);
+                const B2DPolygon aNewPolygon = UnoPointSequenceToB2DPolygon(*pPointSequence);
                 aRetval.append(aNewPolygon);
             }
 
@@ -650,8 +650,7 @@ namespace basegfx
                 {
                     const B2DPolygon aNewPolygon(UnoPolygonBezierCoordsToB2DPolygon(
                         *pPointSequence,
-                        *pFlagSequence,
-                        true/*bCheckClosed*/));
+                        *pFlagSequence));
 
                     pPointSequence++;
                     pFlagSequence++;

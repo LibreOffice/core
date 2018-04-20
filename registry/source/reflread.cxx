@@ -1183,8 +1183,8 @@ typereg_Version TypeRegistryEntry::getVersion() const {
 **************************************************************************/
 
 bool TYPEREG_CALLTYPE typereg_reader_create(
-    void const * buffer, sal_uInt32 length, bool copy,
-    typereg_Version maxVersion, void ** result)
+    void const * buffer, sal_uInt32 length,
+    void ** result)
 {
     if (length < OFFSET_CP || length > SAL_MAX_UINT32) {
         *result = nullptr;
@@ -1195,7 +1195,7 @@ bool TYPEREG_CALLTYPE typereg_reader_create(
         try {
             entry.reset(
                 new TypeRegistryEntry(
-                    static_cast< sal_uInt8 const * >(buffer), length, copy));
+                    static_cast< sal_uInt8 const * >(buffer), length, false/*copy*/));
         } catch (std::bad_alloc &) {
             return false;
         }
@@ -1204,7 +1204,7 @@ bool TYPEREG_CALLTYPE typereg_reader_create(
             return true;
         }
         typereg_Version version = entry->getVersion();
-        if (version < TYPEREG_VERSION_0 || version > maxVersion) {
+        if (version < TYPEREG_VERSION_0 || version > TYPEREG_VERSION_1) {
             *result = nullptr;
             return true;
         }
@@ -1219,7 +1219,7 @@ bool TYPEREG_CALLTYPE typereg_reader_create(
 static TypeReaderImpl TYPEREG_CALLTYPE createEntry(const sal_uInt8* buffer, sal_uInt32 len)
 {
     void * handle;
-    typereg_reader_create(buffer, len, false/*copyBuffer*/, TYPEREG_VERSION_1, &handle);
+    typereg_reader_create(buffer, len, &handle);
     return handle;
 }
 

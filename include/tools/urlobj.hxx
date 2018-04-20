@@ -866,11 +866,11 @@ public:
     static void appendUCS4Escape(OUStringBuffer & rTheText, sal_uInt32 nUCS4);
 
     static void appendUCS4(OUStringBuffer & rTheText, sal_uInt32 nUCS4,
-                           EscapeType eEscapeType, bool bOctets, Part ePart,
+                           EscapeType eEscapeType, Part ePart,
                            rtl_TextEncoding eCharset, bool bKeepVisibleEscapes);
 
     static sal_uInt32 getUTF32(sal_Unicode const *& rBegin,
-                               sal_Unicode const * pEnd, bool bOctets,
+                               sal_Unicode const * pEnd,
                                EncodeMechanism eMechanism,
                                rtl_TextEncoding eCharset,
                                EscapeType & rEscapeType);

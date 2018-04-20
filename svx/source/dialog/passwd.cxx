@@ -57,23 +57,14 @@ IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SvxPasswordDialog, EditModifyHdl, weld::Entry&, void)
 {
-    if (!m_bEmpty)
-    {
-        OUString aPasswd = comphelper::string::strip(m_xRepeatPasswdED->get_text(), ' ');
-        if (aPasswd.isEmpty() && m_xOKBtn->get_sensitive())
-            m_xOKBtn->set_sensitive(false);
-        else if (!aPasswd.isEmpty() && !m_xOKBtn->get_sensitive())
-            m_xOKBtn->set_sensitive(true);
-    }
-    else if (!m_xOKBtn->get_sensitive())
+    if (!m_xOKBtn->get_sensitive())
         m_xOKBtn->set_sensitive(true);
 }
 
-SvxPasswordDialog::SvxPasswordDialog(weld::Window* pParent, bool bAllowEmptyPasswords, bool bDisableOldPassword)
+SvxPasswordDialog::SvxPasswordDialog(weld::Window* pParent, bool bDisableOldPassword)
     : GenericDialogController(pParent, "svx/ui/passwd.ui", "PasswordDialog")
     , m_aOldPasswdErrStr(SvxResId(RID_SVXSTR_ERR_OLD_PASSWD))
     , m_aRepeatPasswdErrStr(SvxResId(RID_SVXSTR_ERR_REPEAT_PASSWD ))
-    , m_bEmpty(bAllowEmptyPasswords)
     , m_xOldFL(m_xBuilder->weld_label("oldpass"))
     , m_xOldPasswdFT(m_xBuilder->weld_label("oldpassL"))
     , m_xOldPasswdED(m_xBuilder->weld_entry("oldpassEntry"))

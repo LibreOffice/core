@@ -58,7 +58,7 @@ public:
      */
     Reader(void const * buffer, sal_uInt32 length)
     {
-        if (!typereg_reader_create(buffer, length, false/*copy*/, TYPEREG_VERSION_1, &m_handle))
+        if (!typereg_reader_create(buffer, length, &m_handle))
         {
             throw std::bad_alloc();
         }

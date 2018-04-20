@@ -861,7 +861,7 @@ namespace basegfx
             }
         }
 
-        B2DPolyPolygon addPointsAtCutsAndTouches(const B2DPolyPolygon& rCandidate, bool bSelfIntersections)
+        B2DPolyPolygon addPointsAtCutsAndTouches(const B2DPolyPolygon& rCandidate)
         {
             const sal_uInt32 nCount(rCandidate.count());
 
@@ -871,16 +871,8 @@ namespace basegfx
 
                 if(nCount == 1)
                 {
-                    if(bSelfIntersections)
-                    {
-                        // remove self intersections
-                        aRetval.append(addPointsAtCutsAndTouches(rCandidate.getB2DPolygon(0)));
-                    }
-                    else
-                    {
-                        // copy source
-                        aRetval = rCandidate;
-                    }
+                    // remove self intersections
+                    aRetval.append(addPointsAtCutsAndTouches(rCandidate.getB2DPolygon(0)));
                 }
                 else
                 {
@@ -890,16 +882,8 @@ namespace basegfx
 
                     for(a = 0; a < nCount; a++)
                     {
-                        if(bSelfIntersections)
-                        {
-                            // use polygons with solved self intersections
-                            pTempData[a].setPolygon(addPointsAtCutsAndTouches(rCandidate.getB2DPolygon(a)));
-                        }
-                        else
-                        {
-                            // copy given polygons
-                            pTempData[a].setPolygon(rCandidate.getB2DPolygon(a));
-                        }
+                        // use polygons with solved self intersections
+                        pTempData[a].setPolygon(addPointsAtCutsAndTouches(rCandidate.getB2DPolygon(a)));
                     }
 
                     // now cuts and touches between the polygons
