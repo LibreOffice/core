@@ -21,19 +21,8 @@
 
 #include <com/sun/star/beans/XExactName.idl>
 #include <com/sun/star/script/XInvocation.idl>
-#include <ooo/vba/XHelperInterface.idl>
-#include <ooo/vba/XAssistant.idl>
-#include <ooo/vba/XFileDialog.idl>
 
 module ooo {  module vba {  module excel {
-
-interface XRange;
-interface XWorkbook;
-interface XWorkbooks;
-interface XWorksheets;
-interface XWorksheetFunction;
-interface XWindow;
-interface XWorksheet;
 
 interface XApplication
 {
