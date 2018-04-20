@@ -1844,7 +1844,7 @@ static void lcl_PutFactorialElements( ::std::vector< double >& cn, double fLower
 
     @see fdo#71722
     @see tdf#102948, make Calc function ODFF1.2-compliant
-
+    @see tdf#117041, implement note at bottom of ODFF1.2 par.6.18.37
  */
 void ScInterpreter::ScHypGeomDist( int nMinParamCount )
 {
@@ -1858,23 +1858,21 @@ void ScInterpreter::ScHypGeomDist( int nMinParamCount )
     double n = ::rtl::math::approxFloor(GetDouble());
     double x = ::rtl::math::approxFloor(GetDouble());
 
-    if( (x < 0.0) || (n < x) || (M < x) || (N < n) || (N < M) || (x < n - N + M) )
+    if ( (x < 0.0) || (n < x) || (N < n) || (N < M) || (M < 0.0) )
     {
         PushIllegalArgument();
         return;
     }
 
-    if ( bCumulative )
+    double fVal = 0.0;
+
+    for ( int i = ( bCumulative ? 0 : x ); i <= x && nGlobalError == FormulaError::NONE; i++ )
     {
-        double fVal = 0.0;
-
-        for ( int i = 0; i <= x && nGlobalError == FormulaError::NONE; i++ )
-            fVal += GetHypGeomDist( i, n, M, N );
-
-        PushDouble( fVal );
+        if ( (i >= n - N + M)  || (i >= M) )
+            fVal +=  GetHypGeomDist( i, n, M, N );
     }
-    else
-        PushDouble( GetHypGeomDist( x, n, M, N ) );
+
+    PushDouble( fVal );
 }
 
 /** Calculates a value of the hypergeometric distribution.
