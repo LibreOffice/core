@@ -659,7 +659,6 @@ public:
     SAL_DLLPRIVATE bool     ImplDitherFloyd16();
 
     SAL_DLLPRIVATE bool     ImplEmbossGrey( const BmpFilterParam* pFilterParam );
-    SAL_DLLPRIVATE bool     ImplMosaic( const BmpFilterParam* pFilterParam );
     SAL_DLLPRIVATE bool     ImplDuotoneFilter( const sal_uLong nColorOne,  sal_uLong nColorTwo );
 
 public:
