@@ -625,27 +625,6 @@ void Animation::Adjust( short nLuminancePercent, short nContrastPercent,
     }
 }
 
-bool Animation::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
-{
-    SAL_WARN_IF( IsInAnimation(), "vcl", "Animation modified while it is animated" );
-
-    bool bRet;
-
-    if( !IsInAnimation() && !maList.empty() )
-    {
-        bRet = true;
-
-        for( size_t i = 0, n = maList.size(); ( i < n ) && bRet; ++i )
-            bRet = maList[ i ]->aBmpEx.Filter( eFilter, pFilterParam );
-
-        (void)maBitmapEx.Filter(eFilter, pFilterParam);
-    }
-    else
-        bRet = false;
-
-    return bRet;
-}
-
 SvStream& WriteAnimation( SvStream& rOStm, const Animation& rAnimation )
 {
     const sal_uInt16 nCount = rAnimation.Count();
