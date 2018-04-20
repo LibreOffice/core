@@ -51,7 +51,7 @@ ScDeleteContentsDlg::ScDeleteContentsDlg(weld::Window* pParent, InsertDeleteFlag
     m_xBtnDelDateTime->set_active( bool(InsertDeleteFlags::DATETIME & ScDeleteContentsDlg::nPreviousChecks) );
     m_xBtnDelFormulas->set_active( bool(InsertDeleteFlags::FORMULA & ScDeleteContentsDlg::nPreviousChecks) );
     m_xBtnDelNotes->set_active( bool(InsertDeleteFlags::NOTE & ScDeleteContentsDlg::nPreviousChecks) );
-    m_xBtnDelAttrs->set_active( bool(InsertDeleteFlags::ATTRIB & ScDeleteContentsDlg::nPreviousChecks) );
+    m_xBtnDelAttrs->set_active( (InsertDeleteFlags::ATTRIB & ScDeleteContentsDlg::nPreviousChecks) == InsertDeleteFlags::ATTRIB );
     m_xBtnDelObjects->set_active( bool(InsertDeleteFlags::OBJECTS & ScDeleteContentsDlg::nPreviousChecks) );
 
     DisableChecks( m_xBtnDelAll->get_active() );
