@@ -56,7 +56,7 @@ class CachedContentResultSet
                                          m_pResult;
         css::uno::Reference< css::ucb::XContentIdentifierMapping >
                                          m_xContentIdentifierMapping;
-        css::uno::Sequence< sal_Bool >*  m_pMappedReminder;
+        std::unique_ptr<css::uno::Sequence< sal_Bool >>  m_pMappedReminder;
 
     private:
         /// @throws css::sdbc::SQLException
