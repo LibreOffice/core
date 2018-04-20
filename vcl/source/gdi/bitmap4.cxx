@@ -30,19 +30,12 @@
 #include <vcl/BitmapEmbossGreyFilter.hxx>
 #include <vcl/BitmapSepiaFilter.hxx>
 #include <vcl/BitmapPopArtFilter.hxx>
+#include <vcl/BitmapDuoToneFilter.hxx>
 
 #include <bitmapwriteaccess.hxx>
 
 #include <memory>
 #include <stdlib.h>
-
-static inline sal_uInt8 lcl_getDuotoneColorComponent( sal_uInt8 base, sal_uInt16 color1, sal_uInt16 color2 )
-{
-    color2 = color2*base/0xFF;
-    color1 = color1*(0xFF-base)/0xFF;
-
-    return static_cast<sal_uInt8>(color1+color2);
-}
 
 bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
 {
@@ -126,7 +119,12 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
         break;
 
         case BmpFilter::DuoTone:
-            bRet = ImplDuotoneFilter( pFilterParam->mnProgressStart, pFilterParam->mnProgressEnd );
+        {
+            BitmapEx aBmpEx(*this);
+            bRet = BitmapFilter::Filter(aBmpEx, BitmapDuoToneFilter(pFilterParam->mnProgressStart,
+                                                                    pFilterParam->mnProgressEnd));
+            *this = aBmpEx.GetBitmap();
+        }
         break;
 
         default:
@@ -135,37 +133,6 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
     }
 
     return bRet;
-}
-
-bool Bitmap::ImplDuotoneFilter( const sal_uLong nColorOne, const sal_uLong nColorTwo )
-{
-    const long  nWidth = GetSizePixel().Width();
-    const long  nHeight = GetSizePixel().Height();
-
-    Bitmap aResultBitmap( GetSizePixel(), 24);
-    ScopedReadAccess pReadAcc(*this);
-    BitmapScopedWriteAccess pWriteAcc(aResultBitmap);
-    const BitmapColor aColorOne( static_cast< sal_uInt8 >( nColorOne >> 16 ), static_cast< sal_uInt8 >( nColorOne >> 8 ), static_cast< sal_uInt8 >( nColorOne ) );
-    const BitmapColor aColorTwo( static_cast< sal_uInt8 >( nColorTwo >> 16 ), static_cast< sal_uInt8 >( nColorTwo >> 8 ), static_cast< sal_uInt8 >( nColorTwo ) );
-
-    for( long x = 0; x < nWidth; x++ )
-    {
-        for( long y = 0; y < nHeight; y++ )
-        {
-            BitmapColor aColor = pReadAcc->GetColor( y, x );
-            sal_uInt8 luminance = aColor.GetLuminance();
-            BitmapColor aResultColor(
-                    lcl_getDuotoneColorComponent( luminance, aColorOne.GetRed(), aColorTwo.GetRed() ) ,
-                    lcl_getDuotoneColorComponent( luminance, aColorOne.GetGreen(), aColorTwo.GetGreen() ) ,
-                    lcl_getDuotoneColorComponent( luminance, aColorOne.GetBlue(), aColorTwo.GetBlue() ) );
-            pWriteAcc->SetPixel( y, x, aResultColor );
-        }
-    }
-
-    pWriteAcc.reset();
-    pReadAcc.reset();
-    ReassignWithSize(aResultBitmap);
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
