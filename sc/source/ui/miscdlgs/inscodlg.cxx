@@ -81,7 +81,7 @@ ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
     mpBtnInsDateTime->Check( bool(InsertDeleteFlags::DATETIME & ScInsertContentsDlg::nPreviousChecks) );
     mpBtnInsFormulas->Check( bool(InsertDeleteFlags::FORMULA & ScInsertContentsDlg::nPreviousChecks) );
     mpBtnInsNotes->Check   ( bool(InsertDeleteFlags::NOTE & ScInsertContentsDlg::nPreviousChecks) );
-    mpBtnInsAttrs->Check   ( bool(InsertDeleteFlags::ATTRIB & ScInsertContentsDlg::nPreviousChecks) );
+    mpBtnInsAttrs->Check   ( (InsertDeleteFlags::ATTRIB & ScInsertContentsDlg::nPreviousChecks) == InsertDeleteFlags::ATTRIB );
     mpBtnInsObjects->Check ( bool(InsertDeleteFlags::OBJECTS & ScInsertContentsDlg::nPreviousChecks) );
 
     switch( ScInsertContentsDlg::nPreviousFormulaChecks )
