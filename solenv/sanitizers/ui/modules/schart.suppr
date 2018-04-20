@@ -4,3 +4,4 @@ chart2/uiconfig/ui/tp_DataSource.ui://GtkButton[@id='IMB_RANGE_MAIN'] button-no-
 chart2/uiconfig/ui/tp_DataSource.ui://GtkLabel[@id='FT_DATALABELS'] orphan-label
 chart2/uiconfig/ui/tp_DataSource.ui://GtkButton[@id='IMB_RANGE_CAT'] button-no-label
 chart2/uiconfig/ui/tp_ErrorBars.ui://GtkRadioButton[@id='RB_FUNCTION'] button-no-label
+chart2/uiconfig/ui/sidebarelements.ui://GtkCheckButton[@id='checkbutton_legend'] button-no-label
