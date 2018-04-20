@@ -246,8 +246,7 @@ bool CachedContentResultSet::CCRS_Cache
 void CachedContentResultSet::CCRS_Cache
     ::clearMappedReminder()
 {
-    delete m_pMappedReminder;
-    m_pMappedReminder = nullptr;
+    m_pMappedReminder.reset();
 }
 
 Sequence< sal_Bool >* CachedContentResultSet::CCRS_Cache
@@ -256,11 +255,10 @@ Sequence< sal_Bool >* CachedContentResultSet::CCRS_Cache
     if( !m_pMappedReminder )
     {
         sal_Int32 nCount = m_pResult->Rows.getLength();
-        m_pMappedReminder = new Sequence< sal_Bool >( nCount );
-        for( ;nCount; nCount-- )
-            (*m_pMappedReminder)[nCount] = false;
+        m_pMappedReminder.reset(new Sequence< sal_Bool >( nCount ));
+        std::fill(m_pMappedReminder->begin(), m_pMappedReminder->end(), false);
     }
-    return m_pMappedReminder;
+    return m_pMappedReminder.get();
 }
 
 const Any& CachedContentResultSet::CCRS_Cache
