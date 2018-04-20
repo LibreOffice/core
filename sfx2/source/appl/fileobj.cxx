@@ -194,47 +194,6 @@ bool SvFileObject::LoadFile_Impl()
 }
 
 
-bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
-{
-    GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-
-    const sal_uInt16 nFilter = !sFilter.isEmpty() && rGF.GetImportFormatCount()
-                            ? rGF.GetImportFormatNumber( sFilter )
-                            : GRFILTER_FORMAT_DONTKNOW;
-
-    ErrCode nRes;
-
-    // To avoid that a native link is created
-    if( !rGrf.IsGfxLink() &&
-        !rGrf.GetContext() )
-        rGrf.SetGfxLink( GfxLink() );
-
-    if( !pStream )
-        nRes = xMed.is() ? ERRCODE_GRFILTER_OPENERROR
-                         : rGF.ImportGraphic( rGrf, INetURLObject(sFileNm),
-                            nFilter );
-    else
-    {
-        pStream->Seek( STREAM_SEEK_TO_BEGIN );
-
-        // #i123042# for e.g. SVG the path is needed, see same TaskID in svx for more info
-        nRes = rGF.ImportGraphic( rGrf, sFileNm, *pStream, nFilter );
-    }
-
-    if( pStream && ERRCODE_IO_PENDING == pStream->GetError() )
-        pStream->ResetError();
-
-    if( nRes )
-    {
-        if( xMed.is() && !pStream )
-            SAL_WARN( "sfx.appl", "Graphic error [" << nRes << "] - [" << xMed->GetPhysicalName() << "] URL[" << sFileNm << "]" );
-        else
-            SAL_WARN( "sfx.appl", "Graphic error [" << nRes << "] - [" << sFileNm << "]" );
-    }
-
-    return ERRCODE_NONE == nRes;
-}
-
 /** detect the filter of the given file
 
     @param _rURL

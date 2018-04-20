@@ -71,17 +71,6 @@ namespace sdr
         {
         }
 
-        void ViewContactOfGraphic::flushGraphicObjects()
-        {
-            // #i102380# The graphic is swapped out. To let that have an effect, it is necessary to
-            // delete copies of the GraphicObject which are not swapped out and have no SwapHandler set
-            // (this is what happens when the GraphicObject gets copied to a SdrGrafPrimitive2D). This
-            // is best achieved for the VC by clearing the local decomposition cache. It would be possible
-            // to also do this for the VOC cache, but that VOCs exist exactly express that the object
-            // gets visualised, so this would be wrong.
-            flushViewIndependentPrimitive2DSequence();
-        }
-
         drawinglayer::primitive2d::Primitive2DContainer ViewContactOfGraphic::createVIP2DSForPresObj(
             const basegfx::B2DHomMatrix& rObjectMatrix,
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute& rAttribute) const

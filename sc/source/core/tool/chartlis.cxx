@@ -331,13 +331,6 @@ void ScChartListener::UpdateChartIntersecting( const ScRange& rRange )
     }
 }
 
-void ScChartListener::UpdateSeriesRanges()
-{
-    ScRangeListRef pRangeList(new ScRangeList);
-    ScRefTokenHelper::getRangeListFromTokens(*pRangeList, *mpTokens, ScAddress());
-    mpDoc->SetChartRangeList(GetName(), pRangeList);
-}
-
 ScChartListener::ExternalRefListener* ScChartListener::GetExtRefListener()
 {
     if (!mpExtRefListener.get())

@@ -48,8 +48,6 @@ class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
 
     virtual ~OReportPage() override;
 
-    OReportModel& getOReportModelFromOReportPage() const { return rModel; }
-
 protected:
     virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;
 public:

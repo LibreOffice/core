@@ -62,9 +62,6 @@ namespace sdr
             explicit ViewContactOfGraphic(SdrGrafObj& rGrafObj);
             virtual ~ViewContactOfGraphic() override;
 
-            // #i102380#
-            void flushGraphicObjects();
-
             // helpers for visualisation state
             bool visualisationUsesPresObj() const;
             bool visualisationUsesDraft() const;

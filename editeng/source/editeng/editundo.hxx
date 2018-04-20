@@ -261,7 +261,6 @@ public:
     virtual ~EditUndoTransliteration() override;
 
     void                SetText( const OUString& rText ) { aText = rText; }
-    void                SetText( EditTextObject* pObj ) { pTxtObj.reset( pObj ); }
     void                SetText( std::unique_ptr<EditTextObject> pObj ) { pTxtObj = std::move( pObj ); }
     void                SetNewSelection( const ESelection& rSel ) { aNewESel = rSel; }
 

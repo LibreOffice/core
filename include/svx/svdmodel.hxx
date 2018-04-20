@@ -299,7 +299,6 @@ public:
     void                 RefDeviceChanged(); // not yet implemented
     // default font height in logical units
     void                 SetDefaultFontHeight(sal_Int32 nVal);
-    sal_Int32            GetDefaultFontHeight() const           { return mnDefTextHgt; }
     // default tabulator width for the EditEngine
     void                 SetDefaultTabulator(sal_uInt16 nVal);
     sal_uInt16           GetDefaultTabulator() const            { return nDefaultTabulator; }
