@@ -44,10 +44,8 @@ class SvFileObject : public sfx2::SvLinkSource
     bool bWaitForData : 1;
     bool bInNewData : 1;
     bool bDataReady : 1;
-    bool bNativFormat : 1;
     bool bClearMedium : 1;
     bool bStateChangeCalled : 1;
-    bool bInCallDownload : 1;
 
     bool GetGraphic_Impl( Graphic&, SvStream* pStream );
     bool LoadFile_Impl();

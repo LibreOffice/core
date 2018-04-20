@@ -56,10 +56,8 @@ SvFileObject::SvFileObject()
     , bWaitForData(false)
     , bInNewData(false)
     , bDataReady(false)
-    , bNativFormat(false)
     , bClearMedium(false)
     , bStateChangeCalled(false)
-    , bInCallDownload(false)
 {
 }
 
@@ -175,9 +173,7 @@ bool SvFileObject::LoadFile_Impl()
         bWaitForData = true;
 
         tools::SvRef<SfxMedium> xTmpMed = xMed;
-        bInCallDownload = true;
         xMed->Download( LINK( this, SvFileObject, LoadGrfReady_Impl ) );
-        bInCallDownload = false;
 
         bClearMedium = !xMed.is();
         if( bClearMedium )
@@ -210,7 +206,7 @@ bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
 
     // To avoid that a native link is created
     if( !rGrf.IsGfxLink() &&
-        !rGrf.GetContext() && !bNativFormat )
+        !rGrf.GetContext() )
         rGrf.SetGfxLink( GfxLink() );
 
     if( !pStream )
@@ -370,7 +366,6 @@ IMPL_LINK_NOARG( SvFileObject, LoadGrfReady_Impl, void*, void )
     // When we come form here there it can not be an error no more.
     bLoadError = false;
     bWaitForData = false;
-    bInCallDownload = false;
 
     if( !bInNewData && !bDataReady )
     {
