@@ -146,7 +146,15 @@ ifeq ($(gb_DEBUGLEVEL),2)
 gb_COMPILEROPTFLAGS := -O0
 gb_COMPILEROPT1FLAGS := -O0
 else
+# Clang versions 3.6.x and 3.7.x generate bad DWARF CFI for stack unwinding
+# on 32-bit Intel when compiling with -Os optimization.  See
+# <https://llvm.org/bugs/show_bug.cgi?id=24792>
+# Work around this by using "-O2 -fno-unroll-loops" instead.
+ifeq ($(COM)$(CPUNAME)$(shell expr $(CCNUMVER) '>=' 000300060000 '&' $(CCNUMVER) '<' 000300080000),CLANGINTEL1)
+gb_COMPILEROPTFLAGS := -O2 -fno-unroll-loops
+else
 gb_COMPILEROPTFLAGS := -Os
+endif
 gb_COMPILEROPT1FLAGS := -O1
 endif
 

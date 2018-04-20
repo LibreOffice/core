@@ -33,7 +33,15 @@ ARCH_FLAGS*=-mtune=pentiumpro
 
 # Compiler flags for enabling optimizations
 .IF "$(PRODUCT)"!=""
+# Clang versions 3.6.x and 3.7.x generate bad DWARF CFI for stack unwinding
+# on 32-bit Intel when compiling with -Os optimization.  See
+# <https://llvm.org/bugs/show_bug.cgi?id=24792>
+# Work around this by using "-O2 -fno-unroll-loops" instead.
+.IF "$(COM)"=="CLANG" && "$(CCNUMVER)">="000300060000" && "$(CCNUMVER)"<="000300079999"
+CFLAGSOPT=-O2 -fno-unroll-loops -fno-strict-aliasing	# optimizing for products
+.ELSE
 CFLAGSOPT=-Os -fno-strict-aliasing		# optimizing for products
+.ENDIF
 .ELSE 	# "$(PRODUCT)"!=""
 CFLAGSOPT= 					# no optimizing for non products
 .ENDIF	# "$(PRODUCT)"!=""
