@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_b49e5b54",
+        "filename": "include/vcl/BitmapMedianColorQuantizationFilter.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-04-20T06:35:48Z",
+      "side": 1,
+      "message": "this is needed only in cxx",
+      "range": {
+        "startLine": 18,
+        "startChar": 8,
+        "endLine": 18,
+        "endChar": 13
+      },
+      "revId": "0f6e8cb078b6617f6200656e28786d15bbf31cd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
