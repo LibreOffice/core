@@ -3292,9 +3292,9 @@ bool WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangT
             // Menu key    - this key is used to display context menu
             // AltGr key   - probably it has no sense
             rKeyCode = vcl::KeyCode( ImplSalGetKeyCode( vkeycode ),
-                (shiftstate & 0x01) ? true : false,     // shift
-                (shiftstate & 0x02) ? true : false,     // ctrl
-                (shiftstate & 0x04) ? true : false,     // alt
+                (shiftstate & 0x01) != 0,     // shift
+                (shiftstate & 0x02) != 0,     // ctrl
+                (shiftstate & 0x04) != 0,     // alt
                 false );
             bRet = true;
         }
@@ -3552,7 +3552,7 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                     aKeyEvt.mnCode &= ~(KEY_MOD1 | KEY_MOD2);
                 }
 
-                bIgnoreCharMsg = bCharPeek ? true : false;
+                bIgnoreCharMsg = bCharPeek;
                 bool nRet = pFrame->CallCallback( nEvent, &aKeyEvt );
                 // independent part only reacts on keyup but Windows does not send
                 // keyup for VK_HANJA
@@ -4483,9 +4483,9 @@ static LRESULT ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
         COLORREF clrPrevText, clrPrevBkgnd;
         HFONT hfntOld;
         HBRUSH hbrOld;
-        bool    fChecked = (pDI->itemState & ODS_CHECKED) ? true : false;
-        bool    fSelected = (pDI->itemState & ODS_SELECTED) ? true : false;
-        bool    fDisabled = (pDI->itemState & (ODS_DISABLED | ODS_GRAYED)) ? true : false;
+        bool    fChecked = (pDI->itemState & ODS_CHECKED);
+        bool    fSelected = (pDI->itemState & ODS_SELECTED);
+        bool    fDisabled = (pDI->itemState & (ODS_DISABLED | ODS_GRAYED));
 
         // Set the appropriate foreground and background colors.
         RECT aRect = pDI->rcItem;
