@@ -8,10 +8,11 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_BITMAPFILTER_HXX
-#define INCLUDED_VCL_INC_BITMAPFILTER_HXX
+#ifndef INCLUDED_VCL_BITMAPFILTER_HXX
+#define INCLUDED_VCL_BITMAPFILTER_HXX
 
 #include <vcl/bitmapex.hxx>
+#include <vcl/animate.hxx>
 
 class VCL_DLLPUBLIC BitmapFilter
 {
@@ -22,6 +23,7 @@ public:
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) = 0;
 
     static bool Filter(BitmapEx& rBmpEx, BitmapFilter&& rFilter);
+    static bool Filter(Animation& rBmpEx, BitmapFilter&& rFilter);
 };
 
 #endif
