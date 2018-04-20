@@ -24,6 +24,7 @@
 #include <vcl/BitmapSharpenFilter.hxx>
 #include <vcl/BitmapMedianFilter.hxx>
 #include <vcl/BitmapSobelGreyFilter.hxx>
+#include <vcl/BitmapSolarizeFilter.hxx>
 #include <vcl/BitmapPopArtFilter.hxx>
 
 #include <bitmapwriteaccess.hxx>
@@ -78,7 +79,11 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
         break;
 
         case BmpFilter::Solarize:
-            bRet = ImplSolarize( pFilterParam );
+        {
+            BitmapEx aBmpEx(*this);
+            bRet = BitmapFilter::Filter(aBmpEx, BitmapSolarizeFilter(pFilterParam->mcSolarGreyThreshold));
+            *this = aBmpEx.GetBitmap();
+        }
         break;
 
         case BmpFilter::Sepia:
@@ -221,55 +226,6 @@ bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam )
                 maPrefSize = aSize;
             }
         }
-    }
-
-    return bRet;
-}
-
-bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam )
-{
-    bool                bRet = false;
-    BitmapScopedWriteAccess pWriteAcc(*this);
-
-    if( pWriteAcc )
-    {
-        const sal_uInt8 cThreshold = ( pFilterParam && pFilterParam->meFilter == BmpFilter::Solarize ) ?
-                                pFilterParam->mcSolarGreyThreshold : 128;
-
-        if( pWriteAcc->HasPalette() )
-        {
-            const BitmapPalette& rPal = pWriteAcc->GetPalette();
-
-            for( sal_uInt16 i = 0, nCount = rPal.GetEntryCount(); i < nCount; i++ )
-            {
-                if( rPal[ i ].GetLuminance() >= cThreshold )
-                {
-                    BitmapColor aCol( rPal[ i ] );
-                    pWriteAcc->SetPaletteColor( i, aCol.Invert() );
-                }
-            }
-        }
-        else
-        {
-            BitmapColor aCol;
-            const long  nWidth = pWriteAcc->Width();
-            const long  nHeight = pWriteAcc->Height();
-
-            for( long nY = 0; nY < nHeight ; nY++ )
-            {
-                Scanline pScanline = pWriteAcc->GetScanline(nY);
-                for( long nX = 0; nX < nWidth; nX++ )
-                {
-                    aCol = pWriteAcc->GetPixelFromData( pScanline, nX );
-
-                    if( aCol.GetLuminance() >= cThreshold )
-                        pWriteAcc->SetPixelOnData( pScanline, nX, aCol.Invert() );
-                }
-            }
-        }
-
-        pWriteAcc.reset();
-        bRet = true;
     }
 
     return bRet;
