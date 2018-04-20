@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_77a065f5",
+        "filename": "vcl/source/control/imp_listbox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1739,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-20T12:55:29Z",
+      "side": 1,
+      "message": "you can shorten this:\n\nreturn std::find(...) !\u003d std::end(...);",
+      "revId": "5790b9f8b7766f7e617d28f9180b832a14c76b09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
