@@ -60,7 +60,7 @@ public:
     virtual SalGraphics*            AcquireGraphics() = 0;
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) = 0;
 
-    virtual bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) = 0;
+    virtual bool                    Setup(weld::Window* pFrame, ImplJobSetup* pSetupData) = 0;
     // This function set the driver data and
     // set the new indepen data in pSetupData
     virtual bool                    SetPrinterData( ImplJobSetup* pSetupData ) = 0;

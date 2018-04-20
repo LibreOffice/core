@@ -1139,10 +1139,10 @@ void SwAbstractDialogFactory_Impl::ExecuteMMResultSaveDialog()
     pDialog->Execute();
 }
 
-void SwAbstractDialogFactory_Impl::ExecuteMMResultPrintDialog()
+void SwAbstractDialogFactory_Impl::ExecuteMMResultPrintDialog(weld::Window* pParent)
 {
-    ScopedVclPtrInstance<SwMMResultPrintDialog> pDialog;
-    pDialog->Execute();
+    SwMMResultPrintDialog aDialog(pParent);
+    aDialog.run();
 }
 
 void SwAbstractDialogFactory_Impl::ExecuteMMResultEmailDialog()

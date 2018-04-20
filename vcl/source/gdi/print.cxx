@@ -1043,7 +1043,7 @@ bool Printer::SetJobSetup( const JobSetup& rSetup )
     return false;
 }
 
-bool Printer::Setup( vcl::Window* pWindow, PrinterSetupMode eMode )
+bool Printer::Setup(weld::Window* pWindow, PrinterSetupMode eMode)
 {
     if ( IsDisplayPrinter() )
         return false;
@@ -1056,18 +1056,19 @@ bool Printer::Setup( vcl::Window* pWindow, PrinterSetupMode eMode )
     rData.SetPrinterSetupMode( eMode );
     // TODO: orig page size
 
-    SalFrame* pFrame;
-    if ( !pWindow )
-        pWindow = ImplGetDefaultWindow();
+    if (!pWindow)
+    {
+        vcl::Window* pDefWin = ImplGetDefaultWindow();
+        pWindow = pDefWin ? pDefWin->GetFrameWeld() : nullptr;
+    }
     if( !pWindow )
         return false;
 
-    pFrame = pWindow->ImplGetFrame();
     ReleaseGraphics();
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mnModalMode++;
     nImplSysDialog++;
-    bool bSetup = mpInfoPrinter->Setup( pFrame, &rData );
+    bool bSetup = mpInfoPrinter->Setup(pWindow, &rData);
     pSVData->maAppData.mnModalMode--;
     nImplSysDialog--;
     if ( bSetup )

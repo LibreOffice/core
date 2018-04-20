@@ -25,6 +25,7 @@
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/prgsbar.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svtools/simptabl.hxx>
@@ -68,35 +69,30 @@ public:
 };
 
 /// Dialog implementing the printing of the result document.
-class SwMMResultPrintDialog : public SfxModalDialog
+class SwMMResultPrintDialog : public weld::GenericDialogController
 {
-    VclPtr<FixedText>      m_pPrinterFT;
-    VclPtr<ListBox>        m_pPrinterLB;
-    VclPtr<PushButton>     m_pPrinterSettingsPB;
-
-    VclPtr<RadioButton>    m_pPrintAllRB;
-
-    VclPtr<RadioButton>    m_pFromRB;
-    VclPtr<NumericField>   m_pFromNF;
-    VclPtr<FixedText>      m_pToFT;
-    VclPtr<NumericField>   m_pToNF;
-
-    VclPtr<Button>         m_pOKButton;
-
     VclPtr<Printer>        m_pTempPrinter;
 
-    DECL_LINK(PrinterChangeHdl_Impl, ListBox&,void );
-    DECL_LINK(PrintHdl_Impl, Button*, void);
-    DECL_LINK(PrinterSetupHdl_Impl, Button*, void );
-    DECL_LINK(DocumentSelectionHdl_Impl, Button*, void);
+    std::unique_ptr<weld::Label>        m_xPrinterFT;
+    std::unique_ptr<weld::ComboBoxText> m_xPrinterLB;
+    std::unique_ptr<weld::Button>       m_xPrinterSettingsPB;
+    std::unique_ptr<weld::RadioButton>  m_xPrintAllRB;
+    std::unique_ptr<weld::RadioButton>  m_xFromRB;
+    std::unique_ptr<weld::SpinButton>   m_xFromNF;
+    std::unique_ptr<weld::Label>        m_xToFT;
+    std::unique_ptr<weld::SpinButton>   m_xToNF;
+    std::unique_ptr<weld::Button>       m_xOKButton;
+
+    DECL_LINK(PrinterChangeHdl_Impl, weld::ComboBoxText&, void );
+    DECL_LINK(PrintHdl_Impl, weld::Button&, void);
+    DECL_LINK(PrinterSetupHdl_Impl, weld::Button&, void );
+    DECL_LINK(DocumentSelectionHdl_Impl, weld::ToggleButton&, void);
 
     void FillInPrinterSettings();
 
 public:
-    SwMMResultPrintDialog();
+    SwMMResultPrintDialog(weld::Window* pParent);
     virtual ~SwMMResultPrintDialog() override;
-
-    virtual void dispose() override;
 };
 
 /// Dialog implementing the sending as email of the result document.

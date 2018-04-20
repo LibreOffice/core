@@ -816,7 +816,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
             switch (nWhich)
             {
                 case FN_MAILMERGE_SAVE_DOCUMENTS: pFact->ExecuteMMResultSaveDialog(); break;
-                case FN_MAILMERGE_PRINT_DOCUMENTS: pFact->ExecuteMMResultPrintDialog(); break;
+                case FN_MAILMERGE_PRINT_DOCUMENTS: pFact->ExecuteMMResultPrintDialog(rReq.GetFrameWeld()); break;
                 case FN_MAILMERGE_EMAIL_DOCUMENTS: pFact->ExecuteMMResultEmailDialog(); break;
             }
         }

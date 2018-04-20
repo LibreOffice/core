@@ -190,50 +190,38 @@ void SfxPrinter::SetOptions( const SfxItemSet &rNewOptions )
 }
 
 
-SfxPrintOptionsDialog::SfxPrintOptionsDialog(vcl::Window *pParent,
-                                              SfxViewShell *pViewShell,
-                                              const SfxItemSet *pSet)
-
-    : ModalDialog(pParent, "PrinterOptionsDialog",
-        "sfx/ui/printeroptionsdialog.ui")
+SfxPrintOptionsDialog::SfxPrintOptionsDialog(weld::Window *pParent,
+                                             SfxViewShell *pViewShell,
+                                             const SfxItemSet *pSet)
+    : GenericDialogController(pParent, "sfx/ui/printeroptionsdialog.ui", "PrinterOptionsDialog")
     , pDlgImpl(new SfxPrintOptDlg_Impl)
     , pViewSh(pViewShell)
     , pOptions(pSet->Clone())
+    , m_xHelpBtn(m_xBuilder->weld_widget("help"))
+    , m_xContainer(m_xDialog->weld_content_area())
 {
-    VclContainer *pVBox = get_content_area();
-
     // Insert TabPage
-    pPage.reset(pViewSh->CreatePrintOptionsPage(pVBox, *pOptions));
+    pPage.reset(pViewSh->CreatePrintOptionsPage(m_xContainer.get(), *pOptions));
     DBG_ASSERT( pPage, "CreatePrintOptions != SFX_VIEW_HAS_PRINTOPTIONS" );
     if( pPage )
     {
         pPage->Reset( pOptions.get() );
-        SetHelpId( pPage->GetHelpId() );
-        pPage->Show();
+        m_xDialog->set_help_id(pPage->GetHelpId());
     }
 }
 
 
 SfxPrintOptionsDialog::~SfxPrintOptionsDialog()
 {
-    disposeOnce();
-}
-
-void SfxPrintOptionsDialog::dispose()
-{
-    pDlgImpl.reset();
     pPage.disposeAndClear();
-    pOptions.reset();
-    ModalDialog::dispose();
 }
 
-
-short SfxPrintOptionsDialog::Execute()
+short SfxPrintOptionsDialog::execute()
 {
     if( ! pPage )
         return RET_CANCEL;
 
-    short nRet = ModalDialog::Execute();
+    short nRet = m_xDialog->run();
     if ( nRet == RET_OK )
         pPage->FillItemSet( pOptions.get() );
     else
@@ -241,24 +229,15 @@ short SfxPrintOptionsDialog::Execute()
     return nRet;
 }
 
-
-bool SfxPrintOptionsDialog::EventNotify( NotifyEvent& rNEvt )
+IMPL_LINK_NOARG(SfxPrintOptionsDialog, HelpRequestHdl, weld::Widget&, bool)
 {
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        if ( rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_F1 && pDlgImpl->mbHelpDisabled )
-            return true; // help disabled -> <F1> does nothing
-    }
-
-    return ModalDialog::EventNotify( rNEvt );
+    return !pDlgImpl->mbHelpDisabled;
 }
-
 
 void SfxPrintOptionsDialog::DisableHelp()
 {
     pDlgImpl->mbHelpDisabled = true;
-
-    get<HelpButton>("help")->Disable();
+    m_xHelpBtn->set_sensitive(false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

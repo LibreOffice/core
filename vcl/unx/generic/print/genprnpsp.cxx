@@ -524,7 +524,7 @@ void PspSalInfoPrinter::ReleaseGraphics( SalGraphics* pGraphics )
     }
 }
 
-bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
+bool PspSalInfoPrinter::Setup( weld::Window* pFrame, ImplJobSetup* pJobSetup )
 {
     if( ! pFrame || ! pJobSetup )
         return false;
@@ -540,7 +540,7 @@ bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
     aInfo.m_bPapersizeFromSetup = pJobSetup->GetPapersizeFromSetup();
     aInfo.meSetupMode = pJobSetup->GetPrinterSetupMode();
 
-    if (SetupPrinterDriver(pFrame->GetFrameWeld(), aInfo))
+    if (SetupPrinterDriver(pFrame, aInfo))
     {
         aInfo.resolveDefaultBackend();
         rtl_freeMemory( const_cast<sal_uInt8*>(pJobSetup->GetDriverData()) );

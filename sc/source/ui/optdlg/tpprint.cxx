@@ -26,34 +26,22 @@
 #include <scmod.hxx>
 #include <sc.hrc>
 
-ScTpPrintOptions::ScTpPrintOptions( vcl::Window*           pParent,
+ScTpPrintOptions::ScTpPrintOptions( TabPageParent pPage,
                                     const SfxItemSet& rCoreAttrs )
-    :   SfxTabPage      ( pParent,
-                          "optCalcPrintPage",
-                          "modules/scalc/ui/optdlg.ui",
-                          &rCoreAttrs )
+    : SfxTabPage(pPage, "modules/scalc/ui/optdlg.ui", "optCalcPrintPage", &rCoreAttrs )
+    , m_xSkipEmptyPagesCB(m_xBuilder->weld_check_button("suppressCB"))
+    , m_xSelectedSheetsCB(m_xBuilder->weld_check_button("printCB"))
+    , m_xForceBreaksCB(m_xBuilder->weld_check_button("forceBreaksCB"))
 {
-    get( m_pSkipEmptyPagesCB , "suppressCB" );
-    get( m_pSelectedSheetsCB , "printCB" );
-    get( m_pForceBreaksCB, "forceBreaksCB" );
 }
 
 ScTpPrintOptions::~ScTpPrintOptions()
 {
-    disposeOnce();
 }
 
-void ScTpPrintOptions::dispose()
+VclPtr<SfxTabPage> ScTpPrintOptions::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    m_pSkipEmptyPagesCB.clear();
-    m_pSelectedSheetsCB.clear();
-    m_pForceBreaksCB.clear();
-    SfxTabPage::dispose();
-}
-
-VclPtr<SfxTabPage> ScTpPrintOptions::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
-{
-    return VclPtr<ScTpPrintOptions>::Create( pParent.pParent, *rAttrSet );
+    return VclPtr<ScTpPrintOptions>::Create(pParent, *rAttrSet);
 }
 
 DeactivateRC ScTpPrintOptions::DeactivatePage( SfxItemSet* pSetP )
@@ -80,38 +68,38 @@ void ScTpPrintOptions::Reset( const SfxItemSet* rCoreSet )
     if ( SfxItemState::SET == rCoreSet->GetItemState( SID_PRINT_SELECTEDSHEET, false , &pItem ) )
     {
         bool bChecked = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-        m_pSelectedSheetsCB->Check( bChecked );
+        m_xSelectedSheetsCB->set_active( bChecked );
     }
     else
     {
-        m_pSelectedSheetsCB->Check( !aOptions.GetAllSheets() );
+        m_xSelectedSheetsCB->set_active( !aOptions.GetAllSheets() );
     }
 
-    m_pSkipEmptyPagesCB->Check( aOptions.GetSkipEmpty() );
-    m_pSkipEmptyPagesCB->SaveValue();
-    m_pSelectedSheetsCB->SaveValue();
-    m_pForceBreaksCB->Check( aOptions.GetForceBreaks() );
-    m_pForceBreaksCB->SaveValue();
+    m_xSkipEmptyPagesCB->set_active( aOptions.GetSkipEmpty() );
+    m_xSkipEmptyPagesCB->save_state();
+    m_xSelectedSheetsCB->save_state();
+    m_xForceBreaksCB->set_active( aOptions.GetForceBreaks() );
+    m_xForceBreaksCB->save_state();
 }
 
 bool ScTpPrintOptions::FillItemSet( SfxItemSet* rCoreAttrs )
 {
     rCoreAttrs->ClearItem( SID_PRINT_SELECTEDSHEET );
 
-    bool bSkipEmptyChanged = m_pSkipEmptyPagesCB->IsValueChangedFromSaved();
-    bool bSelectedSheetsChanged = m_pSelectedSheetsCB->IsValueChangedFromSaved();
-    bool bForceBreaksChanged = m_pForceBreaksCB->IsValueChangedFromSaved();
+    bool bSkipEmptyChanged = m_xSkipEmptyPagesCB->get_state_changed_from_saved();
+    bool bSelectedSheetsChanged = m_xSelectedSheetsCB->get_state_changed_from_saved();
+    bool bForceBreaksChanged = m_xForceBreaksCB->get_state_changed_from_saved();
 
     if ( bSkipEmptyChanged || bSelectedSheetsChanged || bForceBreaksChanged )
     {
         ScPrintOptions aOpt;
-        aOpt.SetSkipEmpty( m_pSkipEmptyPagesCB->IsChecked() );
-        aOpt.SetAllSheets( !m_pSelectedSheetsCB->IsChecked() );
-        aOpt.SetForceBreaks( m_pForceBreaksCB->IsChecked() );
+        aOpt.SetSkipEmpty( m_xSkipEmptyPagesCB->get_active() );
+        aOpt.SetAllSheets( !m_xSelectedSheetsCB->get_active() );
+        aOpt.SetForceBreaks( m_xForceBreaksCB->get_active() );
         rCoreAttrs->Put( ScTpPrintItem( aOpt ) );
         if ( bSelectedSheetsChanged )
         {
-            rCoreAttrs->Put( SfxBoolItem( SID_PRINT_SELECTEDSHEET, m_pSelectedSheetsCB->IsChecked() ) );
+            rCoreAttrs->Put( SfxBoolItem( SID_PRINT_SELECTEDSHEET, m_xSelectedSheetsCB->get_active() ) );
         }
         return true;
     }
