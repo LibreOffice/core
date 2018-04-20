@@ -16,6 +16,24 @@
       "revId": "5790b9f8b7766f7e617d28f9180b832a14c76b09",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_d7af51e1",
+        "filename": "vcl/source/control/imp_listbox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1739,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-04-20T13:01:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a30ddce_77a065f5",
+      "revId": "5790b9f8b7766f7e617d28f9180b832a14c76b09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
