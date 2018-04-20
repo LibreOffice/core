@@ -1706,10 +1706,10 @@ bool SwPagePreview::HasPrintOptionsPage() const
     return true;
 }
 
-VclPtr<SfxTabPage> SwPagePreview::CreatePrintOptionsPage( TabPageParent pParent,
+VclPtr<SfxTabPage> SwPagePreview::CreatePrintOptionsPage( weld::Container* pPage,
                                                           const SfxItemSet &rOptions )
 {
-    return ::CreatePrintOptionsPage( TabPageParent(pParent.pParent), rOptions, !m_bNormalPrint );
+    return ::CreatePrintOptionsPage(pPage, rOptions, !m_bNormalPrint);
 }
 
 void SwPagePreviewWin::SetViewShell( SwViewShell* pShell )

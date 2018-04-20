@@ -68,7 +68,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
 
     virtual SalGraphics*        AcquireGraphics() override;
     virtual void                ReleaseGraphics( SalGraphics* i_pGraphics ) override;
-    virtual bool                Setup( SalFrame* i_pFrame, ImplJobSetup* i_pSetupData ) override;
+    virtual bool                Setup( weld::Window* i_pFrame, ImplJobSetup* i_pSetupData ) override;
     virtual bool                SetPrinterData( ImplJobSetup* pSetupData ) override;
     virtual bool                SetData( JobSetFlags i_nFlags, ImplJobSetup* i_pSetupData ) override;
     virtual void                GetPageInfo( const ImplJobSetup* i_pSetupData,

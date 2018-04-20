@@ -1226,6 +1226,11 @@ public:
         return gtk_widget_get_visible(m_pWidget);
     }
 
+    virtual bool is_visible() const override
+    {
+        return gtk_widget_is_visible(m_pWidget);
+    }
+
     virtual void grab_focus() override
     {
         gtk_widget_grab_focus(m_pWidget);
@@ -1805,6 +1810,12 @@ public:
         return ret;
     }
 
+    virtual SystemEnvData get_system_data() const override
+    {
+        assert(false && "nothing should call this impl, yet anyway, if ever");
+        return SystemEnvData();
+    }
+
     virtual ~GtkInstanceWindow() override
     {
         if (m_xWindow.is())
@@ -2024,6 +2035,11 @@ public:
     }
 
     virtual weld::Button* get_widget_for_response(int nResponse) override;
+
+    virtual Container* weld_content_area() override
+    {
+        return new GtkInstanceContainer(GTK_CONTAINER(gtk_dialog_get_content_area(m_pDialog)), false);
+    }
 
     virtual ~GtkInstanceDialog() override
     {

@@ -47,13 +47,13 @@ struct TabPageParent
         , pPage(nullptr)
     {
     }
-    TabPageParent(weld::Window* _pPage)
+    TabPageParent(weld::Container* _pPage)
         : pParent(nullptr)
         , pPage(_pPage)
     {
     }
     VclPtr<vcl::Window> pParent;
-    weld::Widget* pPage;
+    weld::Container* pPage;
 };
 
 typedef VclPtr<SfxTabPage> (*CreateTabPage)(TabPageParent pParent, const SfxItemSet *rAttrSet);

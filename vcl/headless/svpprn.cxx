@@ -267,7 +267,7 @@ GenPspGraphics *SvpSalInstance::CreatePrintGraphics()
     return new GenPspGraphics();
 }
 
-bool SvpSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )
+bool SvpSalInfoPrinter::Setup( weld::Window*, ImplJobSetup* )
 {
     return false;
 }

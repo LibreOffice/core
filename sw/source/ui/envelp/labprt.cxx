@@ -87,10 +87,9 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton, void )
         if (!pPrinter)
             pPrinter = VclPtr<Printer>::Create();
 
-        VclPtrInstance< PrinterSetupDialog > pDlg(this);
-        pDlg->SetPrinter(pPrinter);
-        pDlg->Execute();
-        pDlg.disposeAndClear();
+        PrinterSetupDialog aDlg(GetFrameWeld());
+        aDlg.SetPrinter(pPrinter);
+        aDlg.execute();
         GrabFocus();
         m_pPrinterInfo->SetText(pPrinter->GetName());
         return;
