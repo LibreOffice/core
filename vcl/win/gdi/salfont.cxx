@@ -863,13 +863,13 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const * i_pFont, float& o_
     }
     else if( -aLogFont.lfHeight >= +aLogFont.lfWidth )
     {
-        o_rFontScale = -aLogFont.lfHeight / (float)MAXFONTHEIGHT;
+        o_rFontScale = -aLogFont.lfHeight / float(MAXFONTHEIGHT);
         aLogFont.lfHeight = -MAXFONTHEIGHT;
         aLogFont.lfWidth = FRound( aLogFont.lfWidth / o_rFontScale );
     }
     else // #i95867# also limit font widths
     {
-        o_rFontScale = +aLogFont.lfWidth / (float)MAXFONTHEIGHT;
+        o_rFontScale = +aLogFont.lfWidth / float(MAXFONTHEIGHT);
         aLogFont.lfWidth = +MAXFONTHEIGHT;
         aLogFont.lfHeight = FRound( aLogFont.lfHeight / o_rFontScale );
     }
