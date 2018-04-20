@@ -23,17 +23,14 @@
 
 struct ImplMoreButtonData
 {
-    std::vector< VclPtr<vcl::Window> >*  mpItemList;
     OUString                             maMoreText;
     OUString                             maLessText;
 };
 
 void MoreButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
-    mpMBData     = new ImplMoreButtonData;
+    mpMBData.reset(new ImplMoreButtonData);
     mbState      = false;
-
-    mpMBData->mpItemList = nullptr;
 
     PushButton::ImplInit( pParent, nStyle );
 
@@ -80,8 +77,7 @@ MoreButton::~MoreButton()
 
 void MoreButton::dispose()
 {
-    delete mpMBData->mpItemList;
-    delete mpMBData;
+    mpMBData.reset();
     PushButton::dispose();
 }
 
@@ -98,13 +94,6 @@ void MoreButton::Click()
     // Update the windows according to the status
     if ( mbState )
     {
-        // Show window
-        if ( mpMBData->mpItemList ) {
-            for (VclPtr<Window> & i : *mpMBData->mpItemList) {
-                i->Show();
-            }
-        }
-
         // Adapt dialogbox
         Point aPos( pParent->GetPosPixel() );
         tools::Rectangle aDeskRect( pParent->ImplGetFrameWindow()->GetDesktopRectPixel() );
@@ -127,13 +116,6 @@ void MoreButton::Click()
         // Adapt Dialogbox
         aSize.AdjustHeight( -nDeltaPixel );
         pParent->SetSizePixel( aSize );
-
-        // Hide window(s) again
-        if ( mpMBData->mpItemList ) {
-            for (VclPtr<Window> & i : *mpMBData->mpItemList) {
-                i->Hide();
-            }
-        }
     }
     // Call Click handler here, so that we can initialize the Controls
     PushButton::Click();

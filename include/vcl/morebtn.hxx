@@ -24,13 +24,14 @@
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
 #include <vcl/button.hxx>
+#include <memory>
 
 struct ImplMoreButtonData;
 
 
 class VCL_DLLPUBLIC MoreButton : public PushButton
 {
-    ImplMoreButtonData* mpMBData;
+    std::unique_ptr<ImplMoreButtonData> mpMBData;
     bool                mbState;
 
                         MoreButton( const MoreButton & ) = delete;
