@@ -96,6 +96,15 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
     boolean signPackage( [in] ::com::sun::star::embed::XStorage Storage,
                          [in] ::com::sun::star::io::XStream xSignStream);
 
+    /** Signs the full Package, which means everything in the storage except the content of META-INF,
+     *  using the given XCertificate.
+     *
+     * @since LibreOffice 6.1
+     */
+    boolean signPackageWithCertificate( [in] ::com::sun::star::embed::XStorage Storage,
+                                        [in] ::com::sun::star::io::XStream xSignStream,
+                                        [in] ::com::sun::star::security::XCertificate xCertificate);
+
     /** checks for digital signatures and their status.
 
         <p>Only Package content will be checked.</p>

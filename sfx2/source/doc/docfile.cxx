@@ -3715,6 +3715,7 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
                                                      embed::ElementModes::READWRITE ),
                         uno::UNO_SET_THROW );
 
+                    // TODO: signScriptingContent pass XCertificate
                     if ( xSigner->signScriptingContent( GetZipStorageToSign_Impl(), xStream ) )
                     {
                         // remove the document signature if any

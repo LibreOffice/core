@@ -15,10 +15,12 @@
 #include <strings.hrc>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <comphelper/xmltools.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/weld.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -119,6 +121,19 @@ IMPL_LINK_NOARG(SignSignatureLineDialog, chooseCertificate, weld::Button&, void)
     OUString aDescription;
     Reference<XCertificate> xSignCertificate = xSigner->chooseSigningCertificate(aDescription);
 
+    /* DocumentSignatureManager aManager(comphelper::getProcessComponentContext(), DocumentSignatureMode::Package);
+    aManager.init();
+    aManager.mxStore = xStorage;
+    aManager.maSignatureHelper.SetStorage(xStorage, "1.2"); */
+
+    // Then add a signature document.
+    /* uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager);
+    if (!xCertificate.is())
+        return;
+    OUString aDescription("SigningTest::testDescription");
+    sal_Int32 nSecurityId;
+    aManager.add(xCertificate, mxSecurityContext, aDescription, nSecurityId, false); */
+
     if (xSignCertificate.is())
     {
         m_xSelectedCertifate = xSignCertificate;
@@ -137,40 +152,58 @@ void SignSignatureLineDialog::ValidateFields()
 
 void SignSignatureLineDialog::Apply()
 {
-    // Read svg and replace placeholder texts
-    OUString aSvgImage(getSignatureImage());
-    aSvgImage = aSvgImage.replaceAll("[SIGNER_NAME]", getCDataString(m_aSuggestedSignerName));
-    aSvgImage = aSvgImage.replaceAll("[SIGNER_TITLE]", getCDataString(m_aSuggestedSignerTitle));
+    Reference<XDocumentDigitalSignatures> xSigner(DocumentDigitalSignatures::createWithVersion(
+        comphelper::getProcessComponentContext(), "1.2"));
 
-    aSvgImage = aSvgImage.replaceAll("[SIGNATURE]", getCDataString(m_xEditName->get_text()));
-    OUString aIssuerLine = CuiResId(RID_SVXSTR_SIGNATURELINE_SIGNED_BY)
-                               .replaceFirst("%1", m_xSelectedCertifate->getIssuerName());
-    aSvgImage = aSvgImage.replaceAll("[SIGNED_BY]", getCDataString(aIssuerLine));
-    aSvgImage = aSvgImage.replaceAll("[INVALID_SIGNATURE]", "");
+    Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
+        ZIP_STORAGE_FORMAT_STRING, m_xModel->getURL(), embed::ElementModes::READWRITE);
+    SAL_WARN_IF(!xStorage.is(), "oox.vml", "No xStorage!");
+    bool bSuccess = xSigner->signPackageWithCertificate(xStorage, uno::Reference<io::XStream>(),
+                                                        m_xSelectedCertifate);
 
-    OUString aDate;
-    if (m_bShowSignDate)
+    //xSigner->verifyPackageSignatures(xStorage, uno::Reference<io::XInputStream>());
+
+    if (false) //(bSuccess)
     {
-        const SvtSysLocale aSysLocale;
-        const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
-        Date aDateTime(Date::SYSTEM);
-        aDate = rLocaleData.getDate(aDateTime);
+        // Read svg and replace placeholder texts
+        OUString aSvgImage(getSignatureImage());
+        aSvgImage = aSvgImage.replaceAll("[SIGNER_NAME]", getCDataString(m_aSuggestedSignerName));
+        aSvgImage = aSvgImage.replaceAll("[SIGNER_TITLE]", getCDataString(m_aSuggestedSignerTitle));
+
+        aSvgImage = aSvgImage.replaceAll("[SIGNATURE]", getCDataString(m_xEditName->get_text()));
+        OUString aIssuerLine = CuiResId(RID_SVXSTR_SIGNATURELINE_SIGNED_BY)
+                                   .replaceFirst("%1", m_xSelectedCertifate->getIssuerName());
+        aSvgImage = aSvgImage.replaceAll("[SIGNED_BY]", getCDataString(aIssuerLine));
+        aSvgImage = aSvgImage.replaceAll("[INVALID_SIGNATURE]", "");
+
+        OUString aDate;
+        if (m_bShowSignDate)
+        {
+            const SvtSysLocale aSysLocale;
+            const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
+            Date aDateTime(Date::SYSTEM);
+            aDate = rLocaleData.getDate(aDateTime);
+        }
+        aSvgImage = aSvgImage.replaceAll("[DATE]", aDate);
+
+        // Insert/Update graphic
+        SvMemoryStream aSvgStream(4096, 4096);
+        aSvgStream.WriteOString(OUStringToOString(aSvgImage, RTL_TEXTENCODING_UTF8));
+        Reference<XInputStream> xInputStream(new utl::OSeekableInputStreamWrapper(aSvgStream));
+        Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
+        Reference<XGraphicProvider> xProvider = css::graphic::GraphicProvider::create(xContext);
+
+        Sequence<PropertyValue> aMediaProperties(1);
+        aMediaProperties[0].Name = "InputStream";
+        aMediaProperties[0].Value <<= xInputStream;
+        Reference<XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
+
+        m_xShapeProperties->setPropertyValue("Graphic", Any(xGraphic));
     }
-    aSvgImage = aSvgImage.replaceAll("[DATE]", aDate);
-
-    // Insert/Update graphic
-    SvMemoryStream aSvgStream(4096, 4096);
-    aSvgStream.WriteOString(OUStringToOString(aSvgImage, RTL_TEXTENCODING_UTF8));
-    Reference<XInputStream> xInputStream(new utl::OSeekableInputStreamWrapper(aSvgStream));
-    Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
-    Reference<XGraphicProvider> xProvider = css::graphic::GraphicProvider::create(xContext);
-
-    Sequence<PropertyValue> aMediaProperties(1);
-    aMediaProperties[0].Name = "InputStream";
-    aMediaProperties[0].Value <<= xInputStream;
-    Reference<XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
-
-    m_xShapeProperties->setPropertyValue("Graphic", Any(xGraphic));
+    else
+    {
+        // TODO: Show error dialog
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

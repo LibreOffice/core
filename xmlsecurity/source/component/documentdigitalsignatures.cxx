@@ -123,6 +123,10 @@ public:
     sal_Bool SAL_CALL
     signPackage(const css::uno::Reference<css::embed::XStorage>& Storage,
                 const css::uno::Reference<css::io::XStream>& xSignStream) override;
+    sal_Bool SAL_CALL
+    signPackageWithCertificate(const css::uno::Reference<css::embed::XStorage>& Storage,
+                               const css::uno::Reference<css::io::XStream>& xSignStream,
+                               const css::uno::Reference<css::security::XCertificate>& xCertificate) override;
     css::uno::Sequence<css::security::DocumentSignatureInformation>
         SAL_CALL verifyPackageSignatures(
             const css::uno::Reference<css::embed::XStorage>& Storage,
@@ -275,6 +279,37 @@ sal_Bool DocumentDigitalSignatures::signPackage(
 {
     OSL_ENSURE(!m_sODFVersion.isEmpty(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
     return ImplViewSignatures( rxStorage, xSignStream, DocumentSignatureMode::Package, false );
+}
+
+sal_Bool DocumentDigitalSignatures::signPackageWithCertificate(const Reference<css::embed::XStorage>& rxStorage,
+                                                const Reference<css::io::XStream>& xSignStream,
+                                                const Reference<css::security::XCertificate>& xCertificate)
+{
+    OSL_ENSURE(!m_sODFVersion.isEmpty(),
+               "DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
+
+    DocumentSignatureManager aSignatureManager(mxCtx, DocumentSignatureMode::Content);
+    aSignatureManager.mxStore = rxStorage;
+    aSignatureManager.maSignatureHelper.SetStorage(rxStorage, "1.2");
+
+    if (!aSignatureManager.init())
+        return false;
+
+    sal_Int32 nSecurityId;
+    OUString aDescription("hallo");
+
+    aSignatureManager.add(xCertificate, aSignatureManager.getGpgSecurityContext(),
+                                         aDescription, nSecurityId, true);
+
+
+    //aSignatureManager.read(/*bUseTempStream=*/true);
+    //std::vector<SignatureInformation>& rInformations = aSignatureManager.maCurrentSignatureInformations;
+    //aSignatureManager.write(false);
+
+    uno::Reference< embed::XTransactedObject > xTrans( rxStorage, uno::UNO_QUERY );
+    xTrans->commit();
+    return true;
+
 }
 
 Sequence< css::security::DocumentSignatureInformation >
