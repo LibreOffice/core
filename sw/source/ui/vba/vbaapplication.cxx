@@ -305,12 +305,6 @@ SwVbaApplication::getIID()
     return OUString("{82154421-0FBF-11d4-8313-005004526AB4}");
 }
 
-uno::Reference< frame::XModel >
-SwVbaApplication::getCurrentDocument()
-{
-    return getCurrentWordDoc( mxContext );
-}
-
 // XConnectable
 
 OUString SAL_CALL
@@ -337,8 +331,6 @@ SwVbaApplication::FindConnectionPoint()
     return xCP;
 }
 
-// XHelperInterface
-
 OUString
 SwVbaApplication::getServiceImplName()
 {
@@ -357,9 +349,10 @@ SwVbaApplication::getServiceNames()
     return aServiceNames;
 }
 
-SwVbaApplicationOutgoingConnectionPoint::SwVbaApplicationOutgoingConnectionPoint( SwVbaApplication* pApp ) :
-    mpApp(pApp)
+uno::Reference< frame::XModel >
+SwVbaApplication::getCurrentDocument()
 {
+    return getCurrentWordDoc( mxContext );
 }
 
 // XSinkCaller
@@ -375,6 +368,11 @@ SwVbaApplication::CallSinks( const OUString& Method, uno::Sequence< uno::Any >& 
 }
 
 // SwVbaApplicationOutgoingConnectionPoint
+
+SwVbaApplicationOutgoingConnectionPoint::SwVbaApplicationOutgoingConnectionPoint( SwVbaApplication* pApp ) :
+    mpApp(pApp)
+{
+}
 
 // XConnectionPoint
 sal_uInt32 SAL_CALL
