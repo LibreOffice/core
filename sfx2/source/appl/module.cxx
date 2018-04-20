@@ -188,7 +188,7 @@ SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
     return pImpl->pFactArr.get();
 }
 
-VclPtr<SfxTabPage> SfxModule::CreateTabPage( sal_uInt16, vcl::Window*, const SfxItemSet& )
+VclPtr<SfxTabPage> SfxModule::CreateTabPage(sal_uInt16, TabPageParent, const SfxItemSet&)
 {
     return VclPtr<SfxTabPage>();
 }

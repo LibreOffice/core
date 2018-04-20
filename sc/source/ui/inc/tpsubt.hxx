@@ -85,7 +85,7 @@ class ScTpSubTotalGroup1 final : public ScTpSubTotalGroup
 public:
     virtual ~ScTpSubTotalGroup1() override;
 
-    static  VclPtr<SfxTabPage> Create      ( vcl::Window*               pParent,
+    static  VclPtr<SfxTabPage> Create      ( TabPageParent pParent,
             const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
@@ -100,7 +100,7 @@ class ScTpSubTotalGroup2 final : public ScTpSubTotalGroup
 public:
     virtual ~ScTpSubTotalGroup2() override;
 
-    static  VclPtr<SfxTabPage> Create      ( vcl::Window*               pParent,
+    static  VclPtr<SfxTabPage> Create      ( TabPageParent pParent,
             const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
@@ -115,7 +115,7 @@ class ScTpSubTotalGroup3 final : public ScTpSubTotalGroup
 public:
     virtual ~ScTpSubTotalGroup3() override;
 
-    static  VclPtr<SfxTabPage> Create      ( vcl::Window*               pParent,
+    static  VclPtr<SfxTabPage> Create      ( TabPageParent pParent,
             const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
@@ -126,7 +126,7 @@ class ScTpSubTotalOptions final : public SfxTabPage
 public:
     virtual ~ScTpSubTotalOptions() override;
     virtual void        dispose() override;
-    static VclPtr<SfxTabPage>  Create      ( vcl::Window*               pParent,
+    static VclPtr<SfxTabPage>  Create      ( TabPageParent pParent,
             const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;

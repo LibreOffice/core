@@ -270,9 +270,9 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet* )
 }
 
 
-VclPtr<SfxTabPage> SvxLineEndDefTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SvxLineEndDefTabPage::Create( TabPageParent pWindow, const SfxItemSet* rSet )
 {
-    return VclPtr<SvxLineEndDefTabPage>::Create( pWindow, *rSet );
+    return VclPtr<SvxLineEndDefTabPage>::Create( pWindow.pParent, *rSet );
 }
 
 

@@ -37,7 +37,7 @@ public:
             SdTpOptionsSnap( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
             virtual ~SdTpOptionsSnap() override;
 
-    static  VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
+    static  VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 
@@ -59,7 +59,7 @@ public:
             virtual ~SdTpOptionsContents() override;
     virtual void dispose() override;
 
-    static  VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
+    static  VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 };
@@ -133,7 +133,7 @@ public:
             virtual ~SdTpOptionsMisc() override;
     virtual void dispose() override;
 
-    static  VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
+    static  VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
 

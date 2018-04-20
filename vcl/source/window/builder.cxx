@@ -130,6 +130,11 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
     return ImplGetSVData()->mpDefInst->CreateBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile);
 }
 
+weld::Builder* Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile)
+{
+    return ImplGetSVData()->mpDefInst->CreateInterimBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile);
+}
+
 weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
                                                       VclButtonsType eButtonType, const OUString& rPrimaryMessage)
 {

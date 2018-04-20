@@ -21,14 +21,11 @@
 #include <sfx2/tabdlg.hxx>
 
 #include <vcl/group.hxx>
-
 #include <vcl/button.hxx>
-
 #include <vcl/lstbox.hxx>
-
 #include <vcl/field.hxx>
-
 #include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/fntctrl.hxx>
@@ -70,7 +67,7 @@ public:
 
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
@@ -79,44 +76,42 @@ public:
 // TabPage printer settings additions
 class SwAddPrinterTabPage : public SfxTabPage
 {
-    VclPtr<CheckBox>       m_pGrfCB;
-    VclPtr<CheckBox>       m_pCtrlFieldCB;
-    VclPtr<CheckBox>       m_pBackgroundCB;
-    VclPtr<CheckBox>       m_pBlackFontCB;
-    VclPtr<CheckBox>       m_pPrintHiddenTextCB;
-    VclPtr<CheckBox>       m_pPrintTextPlaceholderCB;
-
-    VclPtr<VclFrame>       m_pPagesFrame;
-    VclPtr<CheckBox>       m_pLeftPageCB;
-    VclPtr<CheckBox>       m_pRightPageCB;
-    VclPtr<CheckBox>       m_pProspectCB;
-    VclPtr<CheckBox>       m_pProspectCB_RTL;
-
-    VclPtr<VclFrame>       m_pCommentsFrame;
-    VclPtr<RadioButton>    m_pNoRB;
-    VclPtr<RadioButton>    m_pOnlyRB;
-    VclPtr<RadioButton>    m_pEndRB;
-    VclPtr<RadioButton>    m_pEndPageRB;
-    VclPtr<RadioButton>    m_pInMarginsRB;
-
-    VclPtr<CheckBox>       m_pPrintEmptyPagesCB;
-    VclPtr<CheckBox>       m_pPaperFromSetupCB;
-    VclPtr<ListBox>        m_pFaxLB;
-
     OUString sNone;
-
     bool bAttrModified;
     bool bPreview;
 
-    DECL_LINK(AutoClickHdl, Button*, void);
-    DECL_LINK(SelectHdl, ListBox&, void);
+    std::unique_ptr<weld::CheckButton>  m_xGrfCB;
+    std::unique_ptr<weld::CheckButton>  m_xCtrlFieldCB;
+    std::unique_ptr<weld::CheckButton>  m_xBackgroundCB;
+    std::unique_ptr<weld::CheckButton>  m_xBlackFontCB;
+    std::unique_ptr<weld::CheckButton>  m_xPrintHiddenTextCB;
+    std::unique_ptr<weld::CheckButton>  m_xPrintTextPlaceholderCB;
+
+    std::unique_ptr<weld::Widget>       m_xPagesFrame;
+    std::unique_ptr<weld::CheckButton>  m_xLeftPageCB;
+    std::unique_ptr<weld::CheckButton>  m_xRightPageCB;
+    std::unique_ptr<weld::CheckButton>  m_xProspectCB;
+    std::unique_ptr<weld::CheckButton>  m_xProspectCB_RTL;
+
+    std::unique_ptr<weld::Widget>       m_xCommentsFrame;
+    std::unique_ptr<weld::RadioButton>  m_xNoRB;
+    std::unique_ptr<weld::RadioButton>  m_xOnlyRB;
+    std::unique_ptr<weld::RadioButton>  m_xEndRB;
+    std::unique_ptr<weld::RadioButton>  m_xEndPageRB;
+    std::unique_ptr<weld::RadioButton>  m_xInMarginsRB;
+
+    std::unique_ptr<weld::CheckButton>  m_xPrintEmptyPagesCB;
+    std::unique_ptr<weld::CheckButton>  m_xPaperFromSetupCB;
+    std::unique_ptr<weld::ComboBoxText> m_xFaxLB;
+
+    DECL_LINK(AutoClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(SelectHdl, weld::ComboBoxText&, void);
 
 public:
-    SwAddPrinterTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    SwAddPrinterTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwAddPrinterTabPage() override;
-    virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
@@ -185,7 +180,7 @@ class SwStdFontTabPage : public SfxTabPage
     virtual void dispose() override;
 
 public:
-    static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
@@ -224,7 +219,7 @@ public:
     virtual ~SwTableOptionsTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
@@ -268,7 +263,7 @@ public:
     virtual ~SwShdwCursorOptionsTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet( SfxItemSet* rSet ) override;
     virtual void Reset( const SfxItemSet* rSet ) override;
@@ -343,7 +338,7 @@ public:
     virtual ~SwRedlineOptionsTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet( SfxItemSet* rSet ) override;
     virtual void Reset( const SfxItemSet* rSet ) override;
@@ -360,7 +355,7 @@ public:
     virtual ~SwTestTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
     virtual bool FillItemSet( SfxItemSet* rSet ) override;
     virtual void Reset( const SfxItemSet* rSet ) override;
@@ -403,7 +398,7 @@ public:
     virtual ~SwCompareOptionsTabPage() override;
     virtual void dispose() override;
 
-    static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet );
 
     virtual bool FillItemSet( SfxItemSet* rSet ) override;
     virtual void Reset( const SfxItemSet* rSet ) override;

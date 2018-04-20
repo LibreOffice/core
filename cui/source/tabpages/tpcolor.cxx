@@ -308,10 +308,10 @@ void SvxColorTabPage::Reset( const SfxItemSet* rSet )
 }
 
 
-VclPtr<SfxTabPage> SvxColorTabPage::Create( vcl::Window* pWindow,
+VclPtr<SfxTabPage> SvxColorTabPage::Create( TabPageParent pWindow,
                                             const SfxItemSet* rOutAttrs )
 {
-    return VclPtr<SvxColorTabPage>::Create( pWindow, *rOutAttrs );
+    return VclPtr<SvxColorTabPage>::Create( pWindow.pParent, *rOutAttrs );
 }
 
 // is called when the content of the MtrFields is changed for color values
