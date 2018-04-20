@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_34ab4b76",
+        "filename": "vcl/Library_vcl.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-04-20T06:38:20Z",
+      "side": 1,
+      "message": "What did I say about formatting changes?... separate commit",
+      "revId": "e9c0640d3a8500f6cc8f80f9bfaaea9495009713",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
