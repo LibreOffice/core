@@ -2618,8 +2618,13 @@ if test "$_os" != "WINNT"; then
         if test "$enable_icecream" = "yes"; then
             if test -d "/usr/lib/icecc/bin"; then
                 GCC_HOME="/usr/lib/icecc/"
-            else
+            elif test -d "/usr/libexec/icecc/bin"; then
+                GCC_HOME="/usr/libexec/icecc/"
+            elif test -d "/opt/icecream/bin"; then
                 GCC_HOME="/opt/icecream/"
+            else
+                AC_MSG_ERROR([Could not figure out the location of icecream GCC wrappers, manually use --with-gcc-home])
+
             fi
         else
             GCC_HOME=`which gcc | $SED -e s,/bin/gcc,,`
