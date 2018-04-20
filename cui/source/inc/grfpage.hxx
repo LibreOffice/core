@@ -109,7 +109,7 @@ class SvxGrfCropPage : public SfxTabPage
 
     Size            GetGrfOrigSize( const Graphic& ) const;
 public:
-    static VclPtr<SfxTabPage> Create( vcl::Window *pParent, const SfxItemSet *rSet );
+    static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet *rSet );
 
     virtual bool FillItemSet( SfxItemSet *rSet ) override;
     virtual void Reset( const SfxItemSet *rSet ) override;

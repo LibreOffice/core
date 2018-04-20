@@ -617,10 +617,10 @@ DeactivateRC SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
     return DeactivateRC::LeavePage;
 }
 
-VclPtr<SfxTabPage> SwDropCapsPage::Create(vcl::Window *pParent,
+VclPtr<SfxTabPage> SwDropCapsPage::Create(TabPageParent pParent,
                                           const SfxItemSet *rSet)
 {
-    return VclPtr<SwDropCapsPage>::Create(pParent, *rSet);
+    return VclPtr<SwDropCapsPage>::Create(pParent.pParent, *rSet);
 }
 
 bool  SwDropCapsPage::FillItemSet(SfxItemSet *rSet)

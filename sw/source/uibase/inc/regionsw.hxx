@@ -185,7 +185,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
 
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet);
 };
 
@@ -228,7 +228,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
 
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet);
 };
 
@@ -247,7 +247,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
 
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet);
 
     void    SetWrtShell(SwWrtShell const & rSh);

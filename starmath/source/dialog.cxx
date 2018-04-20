@@ -151,99 +151,78 @@ void SetFontStyle(const OUString &rStyleName, vcl::Font &rFont)
     rFont.SetWeight((nIndex & 0x2) ? WEIGHT_BOLD : WEIGHT_NORMAL);
 }
 
-IMPL_LINK_NOARG( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *, void )
+IMPL_LINK_NOARG(SmPrintOptionsTabPage, SizeButtonClickHdl, weld::ToggleButton&, void)
 {
-    m_pZoom->Enable(m_pSizeZoomed->IsChecked());
+    m_xZoom->set_sensitive(m_xSizeZoomed->get_active());
 }
 
-SmPrintOptionsTabPage::SmPrintOptionsTabPage(vcl::Window* pParent, const SfxItemSet& rOptions)
-    : SfxTabPage(pParent, "SmathSettings", "modules/smath/ui/smathsettings.ui", &rOptions)
+SmPrintOptionsTabPage::SmPrintOptionsTabPage(TabPageParent pPage, const SfxItemSet& rOptions)
+    : SfxTabPage(pPage, "modules/smath/ui/smathsettings.ui", "SmathSettings", &rOptions)
+    , m_xTitle(m_xBuilder->weld_check_button("title"))
+    , m_xText(m_xBuilder->weld_check_button("text"))
+    , m_xFrame(m_xBuilder->weld_check_button("frame"))
+    , m_xSizeNormal(m_xBuilder->weld_radio_button("sizenormal"))
+    , m_xSizeScaled(m_xBuilder->weld_radio_button("sizescaled"))
+    , m_xSizeZoomed(m_xBuilder->weld_radio_button("sizezoomed"))
+    , m_xZoom(m_xBuilder->weld_metric_spin_button("zoom", FUNIT_PERCENT))
+    , m_xNoRightSpaces(m_xBuilder->weld_check_button("norightspaces"))
+    , m_xSaveOnlyUsedSymbols(m_xBuilder->weld_check_button("saveonlyusedsymbols"))
+    , m_xAutoCloseBrackets(m_xBuilder->weld_check_button("autoclosebrackets"))
 {
-    get( m_pTitle,               "title");
-    get( m_pText,                "text");
-    get( m_pFrame,               "frame");
-    get( m_pSizeNormal,          "sizenormal");
-    get( m_pSizeScaled,          "sizescaled");
-    get( m_pSizeZoomed,          "sizezoomed");
-    get( m_pZoom,                "zoom");
-    get( m_pNoRightSpaces,       "norightspaces");
-    get( m_pSaveOnlyUsedSymbols, "saveonlyusedsymbols");
-    get( m_pAutoCloseBrackets,   "autoclosebrackets");
-
-    m_pSizeNormal->SetClickHdl(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
-    m_pSizeScaled->SetClickHdl(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
-    m_pSizeZoomed->SetClickHdl(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
+    m_xSizeNormal->connect_toggled(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
+    m_xSizeScaled->connect_toggled(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
+    m_xSizeZoomed->connect_toggled(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
 
     Reset(&rOptions);
 }
 
 SmPrintOptionsTabPage::~SmPrintOptionsTabPage()
 {
-    disposeOnce();
 }
-
-void SmPrintOptionsTabPage::dispose()
-{
-    m_pTitle.clear();
-    m_pText.clear();
-    m_pFrame.clear();
-    m_pSizeNormal.clear();
-    m_pSizeScaled.clear();
-    m_pSizeZoomed.clear();
-    m_pZoom.clear();
-    m_pNoRightSpaces.clear();
-    m_pSaveOnlyUsedSymbols.clear();
-    m_pAutoCloseBrackets.clear();
-    SfxTabPage::dispose();
-}
-
 
 bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)
 {
     sal_uInt16  nPrintSize;
-    if (m_pSizeNormal->IsChecked())
+    if (m_xSizeNormal->get_active())
         nPrintSize = PRINT_SIZE_NORMAL;
-    else if (m_pSizeScaled->IsChecked())
+    else if (m_xSizeScaled->get_active())
         nPrintSize = PRINT_SIZE_SCALED;
     else
         nPrintSize = PRINT_SIZE_ZOOMED;
 
     rSet->Put(SfxUInt16Item(GetWhich(SID_PRINTSIZE), nPrintSize));
-    rSet->Put(SfxUInt16Item(GetWhich(SID_PRINTZOOM), sal::static_int_cast<sal_uInt16>(m_pZoom->GetValue())));
-    rSet->Put(SfxBoolItem(GetWhich(SID_PRINTTITLE), m_pTitle->IsChecked()));
-    rSet->Put(SfxBoolItem(GetWhich(SID_PRINTTEXT), m_pText->IsChecked()));
-    rSet->Put(SfxBoolItem(GetWhich(SID_PRINTFRAME), m_pFrame->IsChecked()));
-    rSet->Put(SfxBoolItem(GetWhich(SID_NO_RIGHT_SPACES), m_pNoRightSpaces->IsChecked()));
-    rSet->Put(SfxBoolItem(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS), m_pSaveOnlyUsedSymbols->IsChecked()));
-    rSet->Put(SfxBoolItem(GetWhich(SID_AUTO_CLOSE_BRACKETS), m_pAutoCloseBrackets->IsChecked()));
+    rSet->Put(SfxUInt16Item(GetWhich(SID_PRINTZOOM), sal::static_int_cast<sal_uInt16>(m_xZoom->get_value(FUNIT_PERCENT))));
+    rSet->Put(SfxBoolItem(GetWhich(SID_PRINTTITLE), m_xTitle->get_active()));
+    rSet->Put(SfxBoolItem(GetWhich(SID_PRINTTEXT), m_xText->get_active()));
+    rSet->Put(SfxBoolItem(GetWhich(SID_PRINTFRAME), m_xFrame->get_active()));
+    rSet->Put(SfxBoolItem(GetWhich(SID_NO_RIGHT_SPACES), m_xNoRightSpaces->get_active()));
+    rSet->Put(SfxBoolItem(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS), m_xSaveOnlyUsedSymbols->get_active()));
+    rSet->Put(SfxBoolItem(GetWhich(SID_AUTO_CLOSE_BRACKETS), m_xAutoCloseBrackets->get_active()));
 
     return true;
 }
-
 
 void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
 {
     SmPrintSize ePrintSize = static_cast<SmPrintSize>(static_cast<const SfxUInt16Item &>(rSet->Get(GetWhich(SID_PRINTSIZE))).GetValue());
 
-    m_pSizeNormal->Check(ePrintSize == PRINT_SIZE_NORMAL);
-    m_pSizeScaled->Check(ePrintSize == PRINT_SIZE_SCALED);
-    m_pSizeZoomed->Check(ePrintSize == PRINT_SIZE_ZOOMED);
+    m_xSizeNormal->set_active(ePrintSize == PRINT_SIZE_NORMAL);
+    m_xSizeScaled->set_active(ePrintSize == PRINT_SIZE_SCALED);
+    m_xSizeZoomed->set_active(ePrintSize == PRINT_SIZE_ZOOMED);
 
-    m_pZoom->Enable(m_pSizeZoomed->IsChecked());
+    m_xZoom->set_sensitive(m_xSizeZoomed->get_active());
 
-    m_pZoom->SetValue(static_cast<const SfxUInt16Item &>(rSet->Get(GetWhich(SID_PRINTZOOM))).GetValue());
+    m_xZoom->set_value(static_cast<const SfxUInt16Item &>(rSet->Get(GetWhich(SID_PRINTZOOM))).GetValue(), FUNIT_PERCENT);
 
-    m_pTitle->Check(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_PRINTTITLE))).GetValue());
-    m_pText->Check(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_PRINTTEXT))).GetValue());
-    m_pFrame->Check(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_PRINTFRAME))).GetValue());
-    m_pNoRightSpaces->Check(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_NO_RIGHT_SPACES))).GetValue());
-    m_pSaveOnlyUsedSymbols->Check(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS))).GetValue());
-    m_pAutoCloseBrackets->Check(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_AUTO_CLOSE_BRACKETS))).GetValue());
+    m_xTitle->set_active(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_PRINTTITLE))).GetValue());
+    m_xNoRightSpaces->set_active(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_NO_RIGHT_SPACES))).GetValue());
+    m_xSaveOnlyUsedSymbols->set_active(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS))).GetValue());
+    m_xAutoCloseBrackets->set_active(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_AUTO_CLOSE_BRACKETS))).GetValue());
 }
 
-VclPtr<SfxTabPage> SmPrintOptionsTabPage::Create(vcl::Window* pWindow, const SfxItemSet& rSet)
+VclPtr<SfxTabPage> SmPrintOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet& rSet)
 {
-    return VclPtr<SmPrintOptionsTabPage>::Create(pWindow, rSet).get();
+    return VclPtr<SmPrintOptionsTabPage>::Create(pParent, rSet).get();
 }
 
 void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
