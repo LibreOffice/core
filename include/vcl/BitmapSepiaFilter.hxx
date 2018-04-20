@@ -19,8 +19,12 @@ class VCL_DLLPUBLIC BitmapSepiaFilter : public BitmapFilter
 {
 public:
     BitmapSepiaFilter(double nSepiaPercent)
-        : mnSepiaPercent(nSepiaPercent)
     {
+        // clamp value to 100%
+        if (nSepiaPercent <= 100)
+            mnSepiaPercent = nSepiaPercent;
+        else
+            mnSepiaPercent = 100;
     }
 
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) override;
