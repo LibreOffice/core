@@ -208,7 +208,7 @@ void CContentReader::characters( const std::wstring& character )
 {
     if ( character.length() > 0 && !HasOnlySpaces( character ) )
     {
-        addChunk( getLocale( getCurrentContentStyle() ), ::std::wstring( character ) );
+        addChunk( getLocale( getCurrentContentStyle() ), character );
 
         ITag* pTagBuilder = m_TagBuilderStack.top();
         pTagBuilder->addCharacters( character );
