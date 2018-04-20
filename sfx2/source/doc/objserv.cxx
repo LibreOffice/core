@@ -33,6 +33,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
@@ -111,6 +112,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::security;
 using namespace ::com::sun::star::task;
 
 #define ShellClass_SfxObjectShell
@@ -1359,7 +1361,8 @@ SignatureState SfxObjectShell::ImplGetSignatureState( bool bScriptingContent )
     return *pState;
 }
 
-void SfxObjectShell::ImplSign( bool bScriptingContent )
+void SfxObjectShell::ImplSign(Reference<XCertificate> xCert,
+                              bool bScriptingContent)
 {
     // Check if it is stored in OASIS format...
     if  (   GetMedium()
@@ -1480,21 +1483,18 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
     {
         GetMedium()->CloseAndRelease();
 
-        // We sign only ODF1.2, that means that if this point has been reached,
-        // the ODF1.2 signing process should be used.
-        // This code still might be called to show the signature of ODF1.1 document.
-        bool bSigned = GetMedium()->SignContents_Impl(
-            bScriptingContent,
-            aODFVersion,
-            pImpl->nDocumentSignatureState == SignatureState::OK
+        bool bHasValidSignatures = pImpl->nDocumentSignatureState == SignatureState::OK
             || pImpl->nDocumentSignatureState == SignatureState::NOTVALIDATED
-            || pImpl->nDocumentSignatureState == SignatureState::PARTIAL_OK);
+            || pImpl->nDocumentSignatureState == SignatureState::PARTIAL_OK;
+
+        bool bSignSuccess = GetMedium()->SignContents_Impl(
+            xCert, bScriptingContent, aODFVersion, bHasValidSignatures);
 
         pImpl->m_bSavingForSigning = true;
         DoSaveCompleted( GetMedium() );
         pImpl->m_bSavingForSigning = false;
 
-        if ( bSigned )
+        if ( bSignSuccess )
         {
             if ( bScriptingContent )
             {
@@ -1523,7 +1523,12 @@ SignatureState SfxObjectShell::GetDocumentSignatureState()
 
 void SfxObjectShell::SignDocumentContent()
 {
-    ImplSign();
+    ImplSign(Reference<XCertificate>());
+}
+
+void SfxObjectShell::SignDocumentContent(const Reference<XCertificate> xCert)
+{
+    ImplSign(xCert);
 }
 
 SignatureState SfxObjectShell::GetScriptingSignatureState()
@@ -1533,7 +1538,7 @@ SignatureState SfxObjectShell::GetScriptingSignatureState()
 
 void SfxObjectShell::SignScriptingContent()
 {
-    ImplSign( true );
+    ImplSign( Reference<XCertificate>(), true );
 }
 
 namespace

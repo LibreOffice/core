@@ -48,9 +48,12 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 
 using namespace css;
 using namespace css::uno;
+using namespace css::lang;
+using namespace css::xml::crypto;
 
 class DocumentDigitalSignatures
     : public cppu::WeakImplHelper<css::security::XDocumentDigitalSignatures,
@@ -101,6 +104,10 @@ public:
     sal_Bool SAL_CALL
     signDocumentContent(const css::uno::Reference<css::embed::XStorage>& xStorage,
                         const css::uno::Reference<css::io::XStream>& xSignStream) override;
+    sal_Bool SAL_CALL signDocumentContentWithCertificate(
+        const css::uno::Reference<css::embed::XStorage>& Storage,
+        const css::uno::Reference<css::io::XStream>& xSignStream,
+        const css::uno::Reference<css::security::XCertificate>& xCertificate) override;
     css::uno::Sequence<css::security::DocumentSignatureInformation>
         SAL_CALL verifyDocumentContentSignatures(
             const css::uno::Reference<css::embed::XStorage>& xStorage,
@@ -213,6 +220,51 @@ sal_Bool DocumentDigitalSignatures::signDocumentContent(
 {
     OSL_ENSURE(!m_sODFVersion.isEmpty(), "DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
     return ImplViewSignatures( rxStorage, xSignStream, DocumentSignatureMode::Content, false );
+}
+
+sal_Bool DocumentDigitalSignatures::signDocumentContentWithCertificate(
+    const Reference<css::embed::XStorage>& rxStorage,
+    const Reference<css::io::XStream>& xSignStream,
+    const Reference<css::security::XCertificate>& xCertificate)
+{
+    OSL_ENSURE(!m_sODFVersion.isEmpty(),
+               "DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
+
+    DocumentSignatureManager aSignatureManager(mxCtx, DocumentSignatureMode::Content);
+
+    if (!aSignatureManager.init())
+        return false;
+
+    aSignatureManager.mxStore = rxStorage;
+    aSignatureManager.maSignatureHelper.SetStorage(rxStorage, m_sODFVersion);
+    aSignatureManager.mxSignatureStream = xSignStream;
+
+    Reference<XXMLSecurityContext> xSecurityContext;
+    Reference<XServiceInfo> xServiceInfo(xCertificate, UNO_QUERY);
+    if (xServiceInfo->getImplementationName()
+        == "com.sun.star.xml.security.gpg.XCertificate_GpgImpl")
+        xSecurityContext = aSignatureManager.getGpgSecurityContext();
+    else
+        xSecurityContext = aSignatureManager.getSecurityContext();
+
+    sal_Int32 nSecurityId;
+    OUString aDescription("");
+    bool bSuccess
+        = aSignatureManager.add(xCertificate, xSecurityContext, aDescription, nSecurityId, true);
+    if (!bSuccess)
+        return false;
+
+    // Need to have this to verify the signature
+    aSignatureManager.read(/*bUseTempStream=*/true, /*bCacheLastSignature=*/false);
+    aSignatureManager.write(true);
+
+    if (rxStorage.is() && !xSignStream.is())
+    {
+        uno::Reference<embed::XTransactedObject> xTrans(rxStorage, uno::UNO_QUERY);
+        xTrans->commit();
+    }
+
+    return true;
 }
 
 Sequence< css::security::DocumentSignatureInformation >
