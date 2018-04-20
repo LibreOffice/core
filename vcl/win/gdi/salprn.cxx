@@ -348,7 +348,7 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter const * pPrinter,
 }
 
 static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSetup* pSetupData,
-                                   bool bIn, WinSalFrame* pVisibleDlgParent )
+                                   bool bIn, weld::Window* pVisibleDlgParent )
 {
     HANDLE hPrn;
     LPWSTR pPrinterNameW = const_cast<LPWSTR>(o3tl::toW(pPrinter->maDeviceName.getStr()));
@@ -392,7 +392,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
     // check if the dialog should be shown
     if ( pVisibleDlgParent )
     {
-        hWnd = pVisibleDlgParent->mhWnd;
+        hWnd = pVisibleDlgParent->get_system_data().hWnd;
         nMode |= DM_IN_PROMPT;
     }
 
@@ -1164,9 +1164,9 @@ void WinSalInfoPrinter::ReleaseGraphics( SalGraphics* )
     mbGraphics = FALSE;
 }
 
-bool WinSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pSetupData )
+bool WinSalInfoPrinter::Setup(weld::Window* pFrame, ImplJobSetup* pSetupData)
 {
-    if ( ImplUpdateSalJobSetup( this, pSetupData, true, static_cast<WinSalFrame*>(pFrame) ) )
+    if ( ImplUpdateSalJobSetup(this, pSetupData, true, pFrame))
     {
         ImplDevModeToJobSetup( this, pSetupData, JobSetFlags::ALL );
         return ImplUpdateSalPrnIC( this, pSetupData );

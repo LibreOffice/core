@@ -115,10 +115,9 @@ IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn, void )
         // Call printer setup
         if (pPrt)
         {
-            VclPtrInstance< PrinterSetupDialog > pDlg(this);
-            pDlg->SetPrinter(pPrt);
-            pDlg->Execute();
-            pDlg.reset();
+            PrinterSetupDialog aDlg(GetFrameWeld());
+            aDlg.SetPrinter(pPrt);
+            aDlg.execute();
             GrabFocus();
             m_pPrinterInfo->SetText(pPrt->GetName());
         }

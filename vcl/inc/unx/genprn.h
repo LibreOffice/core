@@ -40,7 +40,7 @@ public:
     // override all pure virtual methods
     virtual SalGraphics*            AcquireGraphics() override;
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) override;
-    virtual bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) override;
+    virtual bool                    Setup( weld::Window* pFrame, ImplJobSetup* pSetupData ) override;
     virtual bool                    SetPrinterData( ImplJobSetup* pSetupData ) override;
     virtual bool                    SetData( JobSetFlags nFlags, ImplJobSetup* pSetupData ) override;
     virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,

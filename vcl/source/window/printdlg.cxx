@@ -1720,7 +1720,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton, void )
     {
         if( pButton == maJobPage.mpSetupButton )
         {
-            maPController->setupPrinter( this );
+            maPController->setupPrinter(GetFrameWeld());
 
             // tdf#63905 don't use cache: page size may change
             preparePreview();

@@ -30,7 +30,7 @@
 class SvpSalInfoPrinter : public PspSalInfoPrinter
 {
 public:
-    virtual bool Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) override;
+    virtual bool Setup( weld::Window* pFrame, ImplJobSetup* pSetupData ) override;
 };
 
 class SvpSalPrinter : public PspSalPrinter

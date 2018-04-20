@@ -499,7 +499,7 @@ public:
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;
 
     virtual void ExecuteMMResultSaveDialog() = 0;
-    virtual void ExecuteMMResultPrintDialog() = 0;
+    virtual void ExecuteMMResultPrintDialog(weld::Window* pParent) = 0;
     virtual void ExecuteMMResultEmailDialog() = 0;
 
 protected:

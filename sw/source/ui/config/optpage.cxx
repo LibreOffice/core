@@ -451,7 +451,11 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
         m_xEndRB->set_active(pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::EndDoc ) ;
         m_xEndPageRB->set_active(pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::EndPage ) ;
         m_xInMarginsRB->set_active(pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::InMargins ) ;
-        m_xFaxLB->set_active( pAddPrinterAttr->m_sFaxName );
+        auto nFound = m_xFaxLB->find_text(pAddPrinterAttr->m_sFaxName);
+        if (nFound != -1)
+            m_xFaxLB->set_active(nFound);
+        else
+            m_xFaxLB->set_active(0);
     }
     if (m_xProspectCB->get_active())
     {
