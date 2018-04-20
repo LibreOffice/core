@@ -1024,6 +1024,8 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             case SID_SIGNATURE:
             {
                 SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this);
+                if (!rSet.HasItem(SID_SIGNATURE))
+                    rSet.Put( SfxUInt16Item( SID_SIGNATURE, static_cast<sal_uInt16>(GetDocumentSignatureState()) ) );
                 if ( pFrame )
                 {
                     SignatureState eState = GetDocumentSignatureState();
@@ -1057,11 +1059,10 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     default:
                         break;
                     }
-
-                    if ( pFrame->HasInfoBarWithID("signature") )
+                    if ( pFrame->HasInfoBarWithID("signature") && !rSet.HasItem(SID_SIGNATURE))
                         pFrame->RemoveInfoBar("signature");
 
-                    if ( eState != SignatureState::NOSIGNATURES )
+                    if ( eState != SignatureState::NOSIGNATURES && !rSet.HasItem(SID_SIGNATURE))
                     {
                         auto pInfoBar = pFrame->AppendInfoBar("signature", sMessage, aInfoBarType);
                         if (pInfoBar == nullptr)
@@ -1075,7 +1076,6 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
                 }
 
-                rSet.Put( SfxUInt16Item( SID_SIGNATURE, static_cast<sal_uInt16>(GetDocumentSignatureState()) ) );
                 break;
             }
             case SID_MACRO_SIGNATURE:
