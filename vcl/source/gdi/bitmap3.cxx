@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <math.h>
-#include <stdlib.h>
-
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/BitmapConverter.hxx>
 #include <config_features.h>
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
@@ -43,36 +41,37 @@
 
 #include <memory>
 
-#define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
+#include <math.h>
+#include <stdlib.h>
 
 #define CALC_ERRORS                                                             \
-                        nTemp = p1T[nX++] >> 12;                              \
-                        nBErr = MinMax( nTemp, 0, 255 );                        \
-                        nBErr = nBErr - FloydIndexMap[ nBC = FloydMap[nBErr] ]; \
-                        nTemp = p1T[nX++] >> 12;                              \
-                        nGErr = MinMax( nTemp, 0, 255 );                        \
-                        nGErr = nGErr - FloydIndexMap[ nGC = FloydMap[nGErr] ]; \
-                        nTemp = p1T[nX] >> 12;                                \
-                        nRErr = MinMax( nTemp, 0, 255 );                        \
-                        nRErr = nRErr - FloydIndexMap[ nRC = FloydMap[nRErr] ];
+nTemp = p1T[nX++] >> 12;                              \
+nBErr = MinMax( nTemp, 0, 255 );                        \
+nBErr = nBErr - FloydIndexMap[ nBC = FloydMap[nBErr] ]; \
+nTemp = p1T[nX++] >> 12;                              \
+nGErr = MinMax( nTemp, 0, 255 );                        \
+nGErr = nGErr - FloydIndexMap[ nGC = FloydMap[nGErr] ]; \
+nTemp = p1T[nX] >> 12;                                \
+nRErr = MinMax( nTemp, 0, 255 );                        \
+nRErr = nRErr - FloydIndexMap[ nRC = FloydMap[nRErr] ];
 
 #define CALC_TABLES3                                        \
-                        p2T[nX++] += FloydError3[nBErr];    \
-                        p2T[nX++] += FloydError3[nGErr];    \
-                        p2T[nX++] += FloydError3[nRErr];
+p2T[nX++] += FloydError3[nBErr];    \
+p2T[nX++] += FloydError3[nGErr];    \
+p2T[nX++] += FloydError3[nRErr];
 
 #define CALC_TABLES5                                        \
-                        p2T[nX++] += FloydError5[nBErr];    \
-                        p2T[nX++] += FloydError5[nGErr];    \
-                        p2T[nX++] += FloydError5[nRErr];
+p2T[nX++] += FloydError5[nBErr];    \
+p2T[nX++] += FloydError5[nGErr];    \
+p2T[nX++] += FloydError5[nRErr];
 
 #define CALC_TABLES7                                        \
-                        p1T[++nX] += FloydError7[nBErr];    \
-                        p2T[nX++] += FloydError1[nBErr];    \
-                        p1T[nX] += FloydError7[nGErr];      \
-                        p2T[nX++] += FloydError1[nGErr];    \
-                        p1T[nX] += FloydError7[nRErr];      \
-                        p2T[nX] += FloydError1[nRErr];
+p1T[++nX] += FloydError7[nBErr];    \
+p2T[nX++] += FloydError1[nBErr];    \
+p1T[nX] += FloydError7[nGErr];      \
+p2T[nX++] += FloydError1[nGErr];    \
+p1T[nX] += FloydError7[nRErr];      \
+p2T[nX] += FloydError1[nRErr];
 
 const extern sal_uLong nVCLRLut[ 6 ] = { 16, 17, 18, 19, 20, 21 };
 const extern sal_uLong nVCLGLut[ 6 ] = { 0, 6, 12, 18, 24, 30 };
@@ -80,44 +79,44 @@ const extern sal_uLong nVCLBLut[ 6 ] = { 0, 36, 72, 108, 144, 180 };
 
 const extern sal_uLong nVCLDitherLut[ 256 ] =
 {
-       0, 49152, 12288, 61440,  3072, 52224, 15360, 64512,   768, 49920, 13056,
-   62208,  3840, 52992, 16128, 65280, 32768, 16384, 45056, 28672, 35840, 19456,
-   48128, 31744, 33536, 17152, 45824, 29440, 36608, 20224, 48896, 32512, 8192,
-   57344,  4096, 53248, 11264, 60416,  7168, 56320,  8960, 58112,  4864, 54016,
-   12032, 61184,  7936, 57088, 40960, 24576, 36864, 20480, 44032, 27648, 39936,
-   23552, 41728, 25344, 37632, 21248, 44800, 28416, 40704, 24320, 2048, 51200,
-   14336, 63488,  1024, 50176, 13312, 62464,  2816, 51968, 15104, 64256,  1792,
-   50944, 14080, 63232, 34816, 18432, 47104, 30720, 33792, 17408, 46080, 29696,
-   35584, 19200, 47872, 31488, 34560, 18176, 46848, 30464, 10240, 59392,  6144,
-   55296,  9216, 58368,  5120, 54272, 11008, 60160,  6912, 56064,  9984, 59136,
+    0, 49152, 12288, 61440,  3072, 52224, 15360, 64512,   768, 49920, 13056,
+    62208,  3840, 52992, 16128, 65280, 32768, 16384, 45056, 28672, 35840, 19456,
+    48128, 31744, 33536, 17152, 45824, 29440, 36608, 20224, 48896, 32512, 8192,
+    57344,  4096, 53248, 11264, 60416,  7168, 56320,  8960, 58112,  4864, 54016,
+    12032, 61184,  7936, 57088, 40960, 24576, 36864, 20480, 44032, 27648, 39936,
+    23552, 41728, 25344, 37632, 21248, 44800, 28416, 40704, 24320, 2048, 51200,
+    14336, 63488,  1024, 50176, 13312, 62464,  2816, 51968, 15104, 64256,  1792,
+    50944, 14080, 63232, 34816, 18432, 47104, 30720, 33792, 17408, 46080, 29696,
+    35584, 19200, 47872, 31488, 34560, 18176, 46848, 30464, 10240, 59392,  6144,
+    55296,  9216, 58368,  5120, 54272, 11008, 60160,  6912, 56064,  9984, 59136,
     5888, 55040, 43008, 26624, 38912, 22528, 41984, 25600, 37888, 21504, 43776,
-   27392, 39680, 23296, 42752, 26368, 38656, 22272,   512, 49664, 12800, 61952,
+    27392, 39680, 23296, 42752, 26368, 38656, 22272,   512, 49664, 12800, 61952,
     3584, 52736, 15872, 65024,   256, 49408, 12544, 61696,  3328, 52480, 15616,
-   64768, 33280, 16896, 45568, 29184, 36352, 19968, 48640, 32256, 33024, 16640,
-   45312, 28928, 36096, 19712, 48384, 32000,  8704, 57856,  4608, 53760, 11776,
-   60928,  7680, 56832,  8448, 57600,  4352, 53504, 11520, 60672,  7424, 56576,
-   41472, 25088, 37376, 20992, 44544, 28160, 40448, 24064, 41216, 24832, 37120,
-   20736, 44288, 27904, 40192, 23808,  2560, 51712, 14848, 64000,  1536, 50688,
-   13824, 62976,  2304, 51456, 14592, 63744,  1280, 50432, 13568, 62720, 35328,
-   18944, 47616, 31232, 34304, 17920, 46592, 30208, 35072, 18688, 47360, 30976,
-   34048, 17664, 46336, 29952, 10752, 59904,  6656, 55808,  9728, 58880,  5632,
-   54784, 10496, 59648,  6400, 55552,  9472, 58624,  5376, 54528, 43520, 27136,
-   39424, 23040, 42496, 26112, 38400, 22016, 43264, 26880, 39168, 22784, 42240,
-   25856, 38144, 21760
+    64768, 33280, 16896, 45568, 29184, 36352, 19968, 48640, 32256, 33024, 16640,
+    45312, 28928, 36096, 19712, 48384, 32000,  8704, 57856,  4608, 53760, 11776,
+    60928,  7680, 56832,  8448, 57600,  4352, 53504, 11520, 60672,  7424, 56576,
+    41472, 25088, 37376, 20992, 44544, 28160, 40448, 24064, 41216, 24832, 37120,
+    20736, 44288, 27904, 40192, 23808,  2560, 51712, 14848, 64000,  1536, 50688,
+    13824, 62976,  2304, 51456, 14592, 63744,  1280, 50432, 13568, 62720, 35328,
+    18944, 47616, 31232, 34304, 17920, 46592, 30208, 35072, 18688, 47360, 30976,
+    34048, 17664, 46336, 29952, 10752, 59904,  6656, 55808,  9728, 58880,  5632,
+    54784, 10496, 59648,  6400, 55552,  9472, 58624,  5376, 54528, 43520, 27136,
+    39424, 23040, 42496, 26112, 38400, 22016, 43264, 26880, 39168, 22784, 42240,
+    25856, 38144, 21760
 };
 
 const extern sal_uLong nVCLLut[ 256 ] =
 {
-         0,  1286,  2572,  3858,  5144,  6430,  7716,  9002,
-     10288, 11574, 12860, 14146, 15432, 16718, 18004, 19290,
-     20576, 21862, 23148, 24434, 25720, 27006, 28292, 29578,
-     30864, 32150, 33436, 34722, 36008, 37294, 38580, 39866,
-     41152, 42438, 43724, 45010, 46296, 47582, 48868, 50154,
-     51440, 52726, 54012, 55298, 56584, 57870, 59156, 60442,
-     61728, 63014, 64300, 65586, 66872, 68158, 69444, 70730,
-     72016, 73302, 74588, 75874, 77160, 78446, 79732, 81018,
-     82304, 83590, 84876, 86162, 87448, 88734, 90020, 91306,
-     92592, 93878, 95164, 96450, 97736, 99022,100308,101594,
+    0,  1286,  2572,  3858,  5144,  6430,  7716,  9002,
+    10288, 11574, 12860, 14146, 15432, 16718, 18004, 19290,
+    20576, 21862, 23148, 24434, 25720, 27006, 28292, 29578,
+    30864, 32150, 33436, 34722, 36008, 37294, 38580, 39866,
+    41152, 42438, 43724, 45010, 46296, 47582, 48868, 50154,
+    51440, 52726, 54012, 55298, 56584, 57870, 59156, 60442,
+    61728, 63014, 64300, 65586, 66872, 68158, 69444, 70730,
+    72016, 73302, 74588, 75874, 77160, 78446, 79732, 81018,
+    82304, 83590, 84876, 86162, 87448, 88734, 90020, 91306,
+    92592, 93878, 95164, 96450, 97736, 99022,100308,101594,
     102880,104166,105452,106738,108024,109310,110596,111882,
     113168,114454,115740,117026,118312,119598,120884,122170,
     123456,124742,126028,127314,128600,129886,131172,132458,
@@ -220,7 +219,7 @@ const long FloydIndexMap[6] =
     -30,  21, 72, 123, 174, 225
 };
 
-bool Bitmap::Convert( BmpConversion eConversion )
+bool Bitmap::Convert(BmpConversion eConversion)
 {
     // try to convert in backend
     if (mxSalBmp)
@@ -233,80 +232,15 @@ bool Bitmap::Convert( BmpConversion eConversion )
             if (xImpBmp->Create(*mxSalBmp) && xImpBmp->ConvertToGreyscale())
             {
                 ImplSetSalBitmap(xImpBmp);
-                SAL_INFO( "vcl.opengl", "Ref count: " << mxSalBmp.use_count() );
+                SAL_INFO("vcl.opengl", "Ref count: " << mxSalBmp.use_count());
                 return true;
             }
         }
     }
 
-    const sal_uInt16 nBitCount = GetBitCount ();
-    bool bRet = false;
-
-    switch( eConversion )
-    {
-        case BmpConversion::N1BitThreshold:
-            bRet = MakeMonochrome(128);
-        break;
-
-        case BmpConversion::N4BitGreys:
-            bRet = ImplMakeGreyscales( 16 );
-        break;
-
-        case BmpConversion::N4BitColors:
-        {
-            if( nBitCount < 4 )
-                bRet = ImplConvertUp( 4 );
-            else if( nBitCount > 4 )
-                bRet = ImplConvertDown( 4 );
-            else
-                bRet = true;
-        }
-        break;
-
-        case BmpConversion::N8BitGreys:
-            bRet = ImplMakeGreyscales( 256 );
-        break;
-
-        case BmpConversion::N8BitColors:
-        {
-            if( nBitCount < 8 )
-                bRet = ImplConvertUp( 8 );
-            else if( nBitCount > 8 )
-                bRet = ImplConvertDown( 8 );
-            else
-                bRet = true;
-        }
-        break;
-
-        case BmpConversion::N8BitTrans:
-        {
-            Color aTrans( BMP_COL_TRANS );
-
-            if( nBitCount < 8 )
-                bRet = ImplConvertUp( 8, &aTrans );
-            else
-                bRet = ImplConvertDown( 8, &aTrans );
-        }
-        break;
-
-        case BmpConversion::N24Bit:
-        {
-            if( nBitCount < 24 )
-                bRet = ImplConvertUp( 24 );
-            else
-                bRet = true;
-        }
-        break;
-
-        case BmpConversion::Ghosted:
-            bRet = ImplConvertGhosted();
-        break;
-
-        default:
-            OSL_FAIL( "Bitmap::Convert(): Unsupported conversion" );
-        break;
-    }
-
+    BitmapEx aBitmapEx(*this);
+    bool bRet = BitmapFilter::Filter(aBitmapEx, BitmapConverter(eConversion));
+    *this = aBitmapEx.GetBitmap();
     return bRet;
 }
 

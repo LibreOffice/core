@@ -29,6 +29,9 @@
 #include <vcl/scopedbitmapaccess.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+#define GAMMA(_def_cVal, _def_InvGamma)                                                            \
+    (static_cast<sal_uInt8>(MinMax(FRound(pow(_def_cVal / 255.0, _def_InvGamma) * 255.0), 0, 255)))
+
 class Color;
 
 enum class BmpMirrorFlags
