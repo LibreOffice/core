@@ -89,94 +89,6 @@ enum class BmpCombine
     Or, And
 };
 
-enum class BmpFilter
-{
-    Smooth = 0,
-    Sharpen = 1,
-    RemoveNoise = 2,
-    SobelGrey = 3,
-    EmbossGrey = 4,
-    Solarize = 5,
-    Sepia = 6,
-    Mosaic = 7,
-    PopArt = 8,
-    DuoTone = 9,
-
-    Unknown = 65535
-};
-
-class VCL_DLLPUBLIC BmpFilterParam
-{
-public:
-
-    BmpFilterParam( sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
-        meFilter( BmpFilter::Unknown ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ) {}
-
-    BmpFilterParam( sal_uInt8 cSolarGreyThreshold, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
-        meFilter( BmpFilter::Solarize ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ),
-        mcSolarGreyThreshold( cSolarGreyThreshold ) {}
-
-    BmpFilterParam( double nRadius, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
-        meFilter( BmpFilter::Smooth ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ),
-        mnRadius( nRadius ) {}
-
-    BmpFilterParam( sal_uInt16 nSepiaPercent, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
-        meFilter( BmpFilter::Sepia ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ),
-        mnSepiaPercent( nSepiaPercent )
-        {
-            assert(nSepiaPercent<=100);
-        }
-
-    BmpFilterParam( const Size& rMosaicTileSize, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
-        meFilter( BmpFilter::Mosaic ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd )
-        {
-            maMosaicTileSize.mnTileWidth = rMosaicTileSize.Width();
-            maMosaicTileSize.mnTileHeight= rMosaicTileSize.Height();
-        }
-    BmpFilterParam( sal_uInt16 nEmbossAzimuthAngle100, sal_uInt16 nEmbossElevationAngle100,
-                    sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
-        meFilter( BmpFilter::EmbossGrey ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd )
-        {
-            maEmbossAngles.mnAzimuthAngle100 = nEmbossAzimuthAngle100;
-            maEmbossAngles.mnElevationAngle100 = nEmbossElevationAngle100;
-        }
-
-private:
-    friend class ::Bitmap;
-    friend class BitmapEx;
-    friend class Animation;
-
-private:
-    BmpFilter       meFilter;
-    sal_uLong       mnProgressStart;
-    sal_uLong       mnProgressEnd;
-
-public:
-    struct MosaicTileSize
-    {
-        sal_uLong   mnTileWidth;
-        sal_uLong   mnTileHeight;
-    };
-
-    struct EmbossAngles
-    {
-        sal_uInt16  mnAzimuthAngle100;
-        sal_uInt16  mnElevationAngle100;
-    };
-
-private:
-    union
-    {
-        sal_uInt16  mnSepiaPercent;
-        sal_uInt8   mcSolarGreyThreshold;
-        double      mnRadius;
-
-        MosaicTileSize maMosaicTileSize;
-        EmbossAngles maEmbossAngles;
-    };
-
-};
-
 class   BitmapInfoAccess;
 class   BitmapReadAccess;
 class   BitmapWriteAccess;
@@ -625,20 +537,6 @@ public:
                                 double fGamma = 1.0,
                                 bool bInvert = false,
                                 bool msoBrightness = false );
-
-    /** Apply specified filter to the bitmap
-
-        @param eFilter
-        The filter algorithm to apply
-
-        @param pFilterParam
-        Various parameter for the different bitmap filter algorithms
-
-        @return true, if the operation was completed successfully.
-     */
-    bool                    Filter(
-                                BmpFilter eFilter,
-                                const BmpFilterParam* pFilterParam = nullptr );
 
 public:
     /** ReassignWithSize and recalculate bitmap.

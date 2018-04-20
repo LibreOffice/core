@@ -604,11 +604,6 @@ bool BitmapEx::Adjust( short nLuminancePercent, short nContrastPercent,
                                         fGamma, bInvert, msoBrightness );
 }
 
-bool BitmapEx::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
-{
-    return !!maBitmap && maBitmap.Filter( eFilter, pFilterParam );
-}
-
 void BitmapEx::Draw( OutputDevice* pOutDev, const Point& rDestPt ) const
 {
     pOutDev->DrawBitmapEx( rDestPt, *this );

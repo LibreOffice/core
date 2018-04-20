@@ -32,6 +32,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/BitmapEmbossGreyFilter.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/image.hxx>
 #include <vcl/gdimtf.hxx>
@@ -127,7 +128,11 @@ void setupMethodStubs( functor_vector_type& res )
 
     const Bitmap      aBitmap( aIntro.GetBitmap() );
     Bitmap            aBitmapBW( aBitmap );
-    aBitmapBW.Filter( BmpFilter::EmbossGrey );
+
+    BitmapEx aTmpBmpEx(aBitmapBW);
+    BitmapFilter::Filter(aTmpBmpEx, BitmapEmbossGreyFilter(0, 0));
+    aBitmapBW = aTmpBmpEx.GetBitmap();
+
     Bitmap      aBitmapAlien( Size( 100, 100 ), 8 );
     aBitmapAlien.Erase( COL_RED );
 #endif

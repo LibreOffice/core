@@ -248,7 +248,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/animate \
     vcl/source/gdi/base14 \
     vcl/source/gdi/bitmap3 \
-    vcl/source/gdi/bitmap4 \
     vcl/source/gdi/bitmapex \
     vcl/source/gdi/bmpacc2 \
     vcl/source/gdi/bmpacc3 \

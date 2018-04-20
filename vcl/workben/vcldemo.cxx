@@ -45,6 +45,7 @@
 #include <vcl/help.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/ImageTree.hxx>
+#include <vcl/BitmapEmbossGreyFilter.hxx>
 #include <bitmapwriteaccess.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
@@ -144,7 +145,10 @@ public:
             Application::Abort("Failed to load intro image");
 
         maIntroBW = maIntro.GetBitmap();
-        maIntroBW.Filter(BmpFilter::EmbossGrey);
+
+        BitmapEx aTmpBmpEx(maIntroBW);
+        BitmapFilter::Filter(aTmpBmpEx, BitmapEmbossGreyFilter(0, 0));
+        maIntroBW = aTmpBmpEx.GetBitmap();
 
         InitRenderers();
         mnSegmentsY = rtl::math::round(std::sqrt(maRenderers.size()), 0,
