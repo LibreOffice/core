@@ -265,9 +265,9 @@ IMPL_LINK_NOARG(ScaleTabPage, SelectAxisTypeHdl, ListBox&, void)
     SetNumFormat();
 }
 
-VclPtr<SfxTabPage> ScaleTabPage::Create(vcl::Window* pWindow,const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> ScaleTabPage::Create(TabPageParent pWindow,const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<ScaleTabPage>::Create(pWindow, *rOutAttrs);
+    return VclPtr<ScaleTabPage>::Create(pWindow.pParent, *rOutAttrs);
 }
 
 bool ScaleTabPage::FillItemSet(SfxItemSet* rOutAttrs)

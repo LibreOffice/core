@@ -730,9 +730,9 @@ void SvxSwPosSizeTabPage::setOptimalRelWidth()
     m_pHoriLB->Clear();
 }
 
-VclPtr<SfxTabPage> SvxSwPosSizeTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxSwPosSizeTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SvxSwPosSizeTabPage>::Create(pParent, *rSet);
+    return VclPtr<SvxSwPosSizeTabPage>::Create(pParent.pParent, *rSet);
 }
 
 const sal_uInt16* SvxSwPosSizeTabPage::GetRanges()

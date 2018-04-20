@@ -470,10 +470,10 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
 |*
 \************************************************************************/
 
-VclPtr<SfxTabPage> SvxTextAnimationPage::Create( vcl::Window* pWindow,
+VclPtr<SfxTabPage> SvxTextAnimationPage::Create( TabPageParent pWindow,
                                                  const SfxItemSet* rAttrs )
 {
-    return VclPtr<SvxTextAnimationPage>::Create( pWindow, *rAttrs );
+    return VclPtr<SvxTextAnimationPage>::Create( pWindow.pParent, *rAttrs );
 }
 
 IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl, ListBox&, void)

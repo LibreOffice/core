@@ -50,7 +50,7 @@ public:
             const SfxItemSet&   rArgSet );
     virtual ~ScTabPageSortFields() override;
     virtual void        dispose() override;
-    static  VclPtr<SfxTabPage> Create      ( vcl::Window*               pParent,
+    static  VclPtr<SfxTabPage> Create      ( TabPageParent               pParent,
                                       const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
@@ -110,7 +110,7 @@ public:
 
 #undef SfxTabPage
 #define SfxTabPage ::SfxTabPage
-    static  VclPtr<SfxTabPage> Create      ( vcl::Window*               pParent,
+    static  VclPtr<SfxTabPage> Create      ( TabPageParent               pParent,
                                       const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;

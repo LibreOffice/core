@@ -897,7 +897,7 @@ sal_uInt16 SfxViewShell::SetPrinter( SfxPrinter* /*pNewPrinter*/, SfxPrinterChan
 
 VclPtr<SfxTabPage> SfxViewShell::CreatePrintOptionsPage
 (
-    vcl::Window*             /*pParent*/,
+    TabPageParent       /*pParent*/,
     const SfxItemSet&   /*rOptions*/
 )
 {

@@ -70,7 +70,7 @@ public:
 
     void    Construct();
 
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rInAttrs );
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rInAttrs );
     virtual bool        FillItemSet( SfxItemSet* rOutAttrs ) override;
     virtual void        Reset( const SfxItemSet* rInAttrs ) override;
 };

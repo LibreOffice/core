@@ -331,9 +331,9 @@ namespace offapp
         SfxTabPage::dispose();
     }
 
-    VclPtr<SfxTabPage> ConnectionPoolOptionsPage::Create(vcl::Window* _pParent, const SfxItemSet* _rAttrSet)
+    VclPtr<SfxTabPage> ConnectionPoolOptionsPage::Create(TabPageParent _pParent, const SfxItemSet* _rAttrSet)
     {
-        return VclPtr<ConnectionPoolOptionsPage>::Create(_pParent, *_rAttrSet);
+        return VclPtr<ConnectionPoolOptionsPage>::Create(_pParent.pParent, *_rAttrSet);
     }
 
     void ConnectionPoolOptionsPage::implInitControls(const SfxItemSet& _rSet)

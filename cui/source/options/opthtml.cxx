@@ -88,10 +88,10 @@ void OfaHtmlTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> OfaHtmlTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> OfaHtmlTabPage::Create( TabPageParent pParent,
                                            const SfxItemSet* rAttrSet )
 {
-    return VclPtr<OfaHtmlTabPage>::Create(pParent, *rAttrSet);
+    return VclPtr<OfaHtmlTabPage>::Create(pParent.pParent, *rAttrSet);
 }
 
 bool OfaHtmlTabPage::FillItemSet( SfxItemSet* )
