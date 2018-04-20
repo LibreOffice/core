@@ -304,6 +304,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 
     uno::Sequence< ::beans::PropertyValue > aFilterData;
 
+    bool bLazyRead = false;
     for( sal_Int32 i = 0; ( i < rMediaProperties.getLength() ) && !pIStm && !xRet.is(); ++i )
     {
         const OUString   aName( rMediaProperties[ i ].Name );
@@ -327,6 +328,8 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
         {
             aValue >>= aFilterData;
         }
+        else if (aName == "LazyRead")
+            aValue >>= bLazyRead;
     }
 
     // Check for the goal width and height if they are defined
@@ -351,6 +354,9 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
             aValue >>= nExtMapMode;
         }
     }
+
+    if (bLazyRead && aFilterData.hasElements())
+        bLazyRead = false;
 
     SolarMutexGuard g;
 
@@ -392,8 +398,17 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
             if ( nExtMapMode > 0 )
                 pExtHeader = &aExtHeader;
 
-            ErrCode error = rFilter.ImportGraphic( aVCLGraphic, aPath, *pIStm,
-                GRFILTER_FORMAT_DONTKNOW, nullptr, GraphicFilterImportFlags::NONE, pExtHeader );
+            ErrCode error = ERRCODE_NONE;
+            if (bLazyRead)
+            {
+                Graphic aGraphic = rFilter.ImportUnloadedGraphic(*pIStm);
+                if (aGraphic)
+                    aVCLGraphic = aGraphic;
+            }
+            if (!aVCLGraphic)
+                error = rFilter.ImportGraphic(aVCLGraphic, aPath, *pIStm, GRFILTER_FORMAT_DONTKNOW,
+                                              nullptr, GraphicFilterImportFlags::NONE, pExtHeader);
+
             if( (error == ERRCODE_NONE ) &&
                 ( aVCLGraphic.GetType() != GraphicType::NONE ) )
             {

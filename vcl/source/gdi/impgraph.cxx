@@ -523,8 +523,20 @@ void ImpGraphic::ImplSetPrepared()
     GraphicDescriptor aDescriptor(aMemoryStream, nullptr);
     if (aDescriptor.Detect(true))
     {
-        maSwapInfo.maPrefSize = aDescriptor.GetSizePixel();
-        maSwapInfo.maPrefMapMode = MapMode(MapUnit::MapPixel);
+        // If we have logic size, work with that, as later pixel -> logic
+        // conversion will work with the output device DPI, not the graphic
+        // DPI.
+        Size aLogSize = aDescriptor.GetSize_100TH_MM();
+        if (aLogSize.getWidth() && aLogSize.getHeight())
+        {
+            maSwapInfo.maPrefSize = aLogSize;
+            maSwapInfo.maPrefMapMode = MapMode(MapUnit::Map100thMM);
+        }
+        else
+        {
+            maSwapInfo.maPrefSize = aDescriptor.GetSizePixel();
+            maSwapInfo.maPrefMapMode = MapMode(MapUnit::MapPixel);
+        }
     }
     maSwapInfo.mnAnimationLoopCount = 0;
     maSwapInfo.mbIsAnimated = false;
