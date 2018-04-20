@@ -101,6 +101,10 @@ public:
     sal_Bool SAL_CALL
     signDocumentContent(const css::uno::Reference<css::embed::XStorage>& xStorage,
                         const css::uno::Reference<css::io::XStream>& xSignStream) override;
+    sal_Bool SAL_CALL signDocumentContentWithCertificate(
+        const css::uno::Reference<css::embed::XStorage>& Storage,
+        const css::uno::Reference<css::io::XStream>& xSignStream,
+        const css::uno::Reference<css::security::XCertificate>& xCertificate) override;
     css::uno::Sequence<css::security::DocumentSignatureInformation>
         SAL_CALL verifyDocumentContentSignatures(
             const css::uno::Reference<css::embed::XStorage>& xStorage,
@@ -112,6 +116,10 @@ public:
     sal_Bool SAL_CALL
     signScriptingContent(const css::uno::Reference<css::embed::XStorage>& xStorage,
                          const css::uno::Reference<css::io::XStream>& xSignStream) override;
+    sal_Bool SAL_CALL signScriptingContentWithCertificate(
+        const css::uno::Reference<css::embed::XStorage>& Storage,
+        const css::uno::Reference<css::io::XStream>& xSignStream,
+        const css::uno::Reference<css::security::XCertificate>& xCertificate) override;
     css::uno::Sequence<css::security::DocumentSignatureInformation>
         SAL_CALL verifyScriptingContentSignatures(
             const css::uno::Reference<css::embed::XStorage>& xStorage,
@@ -215,6 +223,38 @@ sal_Bool DocumentDigitalSignatures::signDocumentContent(
     return ImplViewSignatures( rxStorage, xSignStream, DocumentSignatureMode::Content, false );
 }
 
+sal_Bool DocumentDigitalSignatures::signDocumentContentWithCertificate(const Reference<css::embed::XStorage>& rxStorage,
+                                                const Reference<css::io::XStream>& xSignStream,
+                                                const Reference<css::security::XCertificate>& xCertificate)
+{
+    OSL_ENSURE(!m_sODFVersion.isEmpty(),
+               "DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
+
+    DocumentSignatureManager aSignatureManager(mxCtx, DocumentSignatureMode::Content);
+    aSignatureManager.mxStore = rxStorage;
+    aSignatureManager.maSignatureHelper.SetStorage(rxStorage, m_sODFVersion);
+
+    if (!aSignatureManager.init())
+        return false;
+
+    sal_Int32 nSecurityId;
+    OUString aDescription("hallo");
+
+    // TODO: Get matching security context
+    aSignatureManager.add(xCertificate, aSignatureManager.getGpgSecurityContext(),
+                                         aDescription, nSecurityId, true);
+
+
+    //aSignatureManager.read(/*bUseTempStream=*/true);
+    //std::vector<SignatureInformation>& rInformations = aSignatureManager.maCurrentSignatureInformations;
+    aSignatureManager.write(true);
+
+    uno::Reference< embed::XTransactedObject > xTrans( rxStorage, uno::UNO_QUERY );
+    xTrans->commit();
+    return true;
+
+}
+
 Sequence< css::security::DocumentSignatureInformation >
 DocumentDigitalSignatures::verifyDocumentContentSignatures(
     const Reference< css::embed::XStorage >& rxStorage,
@@ -244,6 +284,38 @@ sal_Bool DocumentDigitalSignatures::signScriptingContent(
     OSL_ENSURE(!m_sODFVersion.isEmpty(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
     OSL_ENSURE(m_nArgumentsCount == 2, "DocumentDigitalSignatures: Service was not initialized properly");
     return ImplViewSignatures( rxStorage, xSignStream, DocumentSignatureMode::Macros, false );
+}
+
+sal_Bool DocumentDigitalSignatures::signScriptingContentWithCertificate(const Reference<css::embed::XStorage>& rxStorage,
+                                                const Reference<css::io::XStream>& xSignStream,
+                                                const Reference<css::security::XCertificate>& xCertificate)
+{
+    OSL_ENSURE(!m_sODFVersion.isEmpty(),
+               "DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
+
+    DocumentSignatureManager aSignatureManager(mxCtx, DocumentSignatureMode::Macros);
+    aSignatureManager.mxStore = rxStorage;
+    aSignatureManager.maSignatureHelper.SetStorage(rxStorage, m_sODFVersion);
+
+    if (!aSignatureManager.init())
+        return false;
+
+    sal_Int32 nSecurityId;
+    OUString aDescription("hallo");
+
+    // TODO: Get matching security context
+    aSignatureManager.add(xCertificate, aSignatureManager.getGpgSecurityContext(),
+                                         aDescription, nSecurityId, true);
+
+
+    //aSignatureManager.read(/*bUseTempStream=*/true);
+    //std::vector<SignatureInformation>& rInformations = aSignatureManager.maCurrentSignatureInformations;
+    //aSignatureManager.write(false);
+
+    /* uno::Reference< embed::XTransactedObject > xTrans( rxStorage, uno::UNO_QUERY );
+    xTrans->commit(); */
+    return true;
+
 }
 
 Sequence< css::security::DocumentSignatureInformation >
