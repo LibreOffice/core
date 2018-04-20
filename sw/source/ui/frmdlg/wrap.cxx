@@ -143,9 +143,9 @@ void SwWrapTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwWrapTabPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
+VclPtr<SfxTabPage> SwWrapTabPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwWrapTabPage>::Create(pParent, *rSet);
+    return VclPtr<SwWrapTabPage>::Create(pParent.pParent, *rSet);
 }
 
 void SwWrapTabPage::Reset(const SfxItemSet *rSet)

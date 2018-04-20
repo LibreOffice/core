@@ -54,7 +54,7 @@ public:
     virtual void dispose() override;
 
     OfaHtmlTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
+    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
                                        const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
