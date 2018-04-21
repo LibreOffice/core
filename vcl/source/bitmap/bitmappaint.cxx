@@ -1106,43 +1106,4 @@ bool Bitmap::CombineSimple(const Bitmap& rMask, BmpCombine eCombine)
     return bRet;
 }
 
-// TODO: Have a look at OutputDevice::ImplDrawAlpha() for some
-// optimizations. Might even consolidate the code here and there.
-bool Bitmap::Blend(const AlphaMask& rAlpha, const Color& rBackgroundColor)
-{
-    // Convert to a truecolor bitmap, if we're a paletted one. There's room for tradeoff decision here,
-    // maybe later for an overload (or a flag)
-    if (GetBitCount() <= 8)
-        Convert(BmpConversion::N24Bit);
-
-    AlphaMask::ScopedReadAccess pAlphaAcc(const_cast<AlphaMask&>(rAlpha));
-
-    BitmapScopedWriteAccess pAcc(*this);
-    bool bRet = false;
-
-    if (pAlphaAcc && pAcc)
-    {
-        const long nWidth = std::min(pAlphaAcc->Width(), pAcc->Width());
-        const long nHeight = std::min(pAlphaAcc->Height(), pAcc->Height());
-
-        for (long nY = 0; nY < nHeight; ++nY)
-        {
-            Scanline pScanline = pAcc->GetScanline(nY);
-            Scanline pScanlineAlpha = pAlphaAcc->GetScanline(nY);
-            for (long nX = 0; nX < nWidth; ++nX)
-            {
-                pAcc->SetPixelOnData(
-                    pScanline, nX,
-                    pAcc->GetPixelFromData(pScanline, nX)
-                        .Merge(rBackgroundColor,
-                               255 - pAlphaAcc->GetIndexFromData(pScanlineAlpha, nX)));
-            }
-        }
-
-        bRet = true;
-    }
-
-    return bRet;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

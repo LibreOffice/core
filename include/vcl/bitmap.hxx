@@ -371,26 +371,6 @@ public:
                                 const Bitmap& rMask,
                                 BmpCombine eCombine );
 
-    /** Alpha-blend the given bitmap against a specified uniform
-          background color.
-
-        @attention This method might convert paletted bitmaps to
-        truecolor, to be able to represent every necessary color. Note
-        that during alpha blending, lots of colors not originally
-        included in the bitmap can be generated.
-
-        @param rAlpha
-        Alpha mask to blend with
-
-        @param rBackgroundColor
-        Background color to use for every pixel during alpha blending
-
-        @return true, if blending was successful, false otherwise
-     */
-    bool                    Blend(
-                                const AlphaMask& rAlpha,
-                                const Color& rBackgroundColor );
-
     /** Fill the entire bitmap with the given color
 
         @param rFillColor

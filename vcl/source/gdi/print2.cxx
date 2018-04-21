@@ -17,15 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <functional>
-#include <algorithm>
-#include <utility>
-#include <list>
-#include <vector>
-
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-
 
 #include <vcl/virdev.hxx>
 #include <vcl/metaact.hxx>
@@ -35,8 +28,16 @@
 #include <vcl/bitmapaccess.hxx>
 
 #include <print.h>
+#include <BitmapBlendFilter.hxx>
 
 #include "pdfwriter_impl.hxx"
+
+#include <BitmapBlendFilter.hxx>
+#include <functional>
+#include <algorithm>
+#include <utility>
+#include <list>
+#include <vector>
 
 #define MAX_TILE_WIDTH  1024
 #define MAX_TILE_HEIGHT 1024
@@ -243,7 +244,9 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
         {
             // blend with alpha channel
             aBmp.Convert(BmpConversion::N24Bit);
-            aBmp.Blend(aBmpEx.GetAlpha(), aBgColor);
+            BitmapEx aTmpBmpEx(aBmp);
+            BitmapFilter::Filter(aTmpBmpEx, BitmapBlendFilter(aTmpBmpEx.GetAlpha(), aBgColor));
+            aBmp = aBmpEx.GetBitmap();
         }
 
         // add corresponding action
