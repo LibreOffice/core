@@ -1,9 +1,15 @@
+basic/source/inc/token.hxx:110
+    SbiTokenizer bKeywords
+    1
 chart2/source/model/main/DataPoint.hxx:107
     chart::DataPoint m_bNoParentPropAllowed
     0
 chart2/source/view/inc/GL3DRenderer.hxx:161
     chart::opengl3D::TextInfoBatch batchNum
     512
+connectivity/source/inc/dbase/DIndexIter.hxx:37
+    connectivity::dbase::OIndexIterator m_pOperand
+    0
 include/basic/sbxvar.hxx:70
     SbxValues::(anonymous) pData
     0
@@ -19,18 +25,30 @@ include/filter/msfilter/dffpropset.hxx:35
 include/o3tl/vector_pool.hxx:93
     o3tl::detail::struct_from_value::type nextFree
     -1
-include/sfx2/charwin.hxx:105
-    SvxCharViewControl maHasInsert
+include/oox/dump/dumperbase.hxx:1661
+    oox::dump::RecordObjectBase mbBinaryOnly
+    0
+include/oox/ole/axcontrol.hxx:427
+    oox::ole::ComCtlModelBase mbCommonPart
     1
+include/oox/ole/axcontrol.hxx:428
+    oox::ole::ComCtlModelBase mbComplexPart
+    1
+include/svtools/HtmlWriter.hxx:29
+    HtmlWriter mbContentWritten
+    0
 include/svtools/svparser.hxx:74
     SvParser::TokenStackType nTokenValue
     0
 include/svtools/svparser.hxx:75
     SvParser::TokenStackType bTokenHasValue
     0
-include/svx/svdograf.hxx:107
-    SdrGrafObj mbIsPreview
+include/svx/svdviter.hxx:73
+    SdrViewIter mbNoMasterPage
     0
+include/tools/config.hxx:36
+    Config mnLockCount
+    1
 include/vcl/filter/pdfdocument.hxx:174
     vcl::filter::PDFNameElement m_nLength
     0
@@ -136,6 +154,15 @@ sw/source/filter/ww8/ww8par.hxx:655
 sw/source/filter/ww8/ww8par.hxx:664
     WW8FormulaControl mhpsCheckBox
     20
+sw/source/uibase/inc/envlop.hxx:66
+    SwEnvDlg pAddresseeSet
+    0
+sw/source/uibase/inc/envlop.hxx:67
+    SwEnvDlg pSenderSet
+    0
+unotools/source/config/saveopt.cxx:77
+    SvtSaveOptions_Impl bROUserAutoSave
+    0
 vcl/inc/salprn.hxx:41
     SalPrinterQueueInfo mnStatus
     0
@@ -156,6 +183,9 @@ vcl/inc/svdata.hxx:285
     0
 vcl/inc/svdata.hxx:287
     ImplSVNWFData mbProgressNeedsErase
+    0
+vcl/source/control/morebtn.cxx:26
+    ImplMoreButtonData mpItemList
     0
 vcl/source/filter/jpeg/transupp.h:128
     (anonymous) perfect

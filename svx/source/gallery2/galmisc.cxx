@@ -380,7 +380,6 @@ GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, sal_uInt32 nObje
     meObjectKind( mpTheme->GetObjectKind( nObjectPos ) ),
     mnObjectPos( nObjectPos ),
     mpGraphicObject( nullptr ),
-    mpImageMap( nullptr ),
     mpURL( nullptr )
 {
 
@@ -496,11 +495,6 @@ bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, cons
     {
         bRet = ( mxModelStream.is() && SetObject( mxModelStream.get(), 0, rFlavor ) );
     }
-    else if( ( SotClipboardFormatId::SVIM == nFormat ) && mpImageMap )
-    {
-        // TODO/MBA: do we need a BaseURL here?!
-        bRet = SetImageMap( *mpImageMap );
-    }
     else if( ( SotClipboardFormatId::SIMPLE_FILE == nFormat ) && mpURL )
     {
         bRet = SetString( mpURL->GetMainURL( INetURLObject::DecodeMechanism::NONE ), rFlavor );
@@ -552,8 +546,6 @@ void GalleryTransferable::ObjectReleased()
     mxModelStream.clear();
     delete mpGraphicObject;
     mpGraphicObject = nullptr;
-    delete mpImageMap;
-    mpImageMap = nullptr;
     delete mpURL;
     mpURL = nullptr;
 }

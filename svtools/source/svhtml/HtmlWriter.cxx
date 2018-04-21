@@ -14,7 +14,6 @@
 HtmlWriter::HtmlWriter(SvStream& rStream, const OString& rNamespace) :
     mrStream(rStream),
     mbElementOpen(false),
-    mbContentWritten(false),
     mbCharactersWritten(false),
     mbPrettyPrint(true)
 {
@@ -38,9 +37,8 @@ void HtmlWriter::start(const OString& aElement)
     if (mbElementOpen)
     {
         mrStream.WriteChar('>');
-        if (!mbContentWritten && mbPrettyPrint)
+        if (mbPrettyPrint)
             mrStream.WriteChar('\n');
-        mbContentWritten = false;
     }
     maElementStack.push_back(aElement);
 
@@ -92,7 +90,7 @@ void HtmlWriter::end()
     }
     else
     {
-        if (!mbContentWritten && mbPrettyPrint)
+        if (mbPrettyPrint)
         {
             for(size_t i = 0; i < maElementStack.size() - 1; i++)
             {
@@ -107,7 +105,6 @@ void HtmlWriter::end()
     }
     maElementStack.pop_back();
     mbElementOpen = false;
-    mbContentWritten = false;
     mbCharactersWritten = false;
 }
 

@@ -26,7 +26,6 @@ private:
     SvStream& mrStream;
 
     bool mbElementOpen;
-    bool mbContentWritten;
     bool mbCharactersWritten;
     bool mbPrettyPrint;
     /// XML namespace, in case of XHTML.

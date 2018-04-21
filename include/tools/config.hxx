@@ -33,7 +33,6 @@ private:
     ImplConfigData*     mpData;
     ImplGroupData*      mpActGroup;
     sal_uInt32          mnDataUpdateId;
-    sal_uInt16          mnLockCount;
 
     TOOLS_DLLPRIVATE bool           ImplUpdateConfig() const;
     TOOLS_DLLPRIVATE ImplGroupData* ImplGetGroup() const;

@@ -40,7 +40,6 @@ SdrViewIter::SdrViewIter(const SdrPage* pPage)
     mpPage = pPage;
     mpModel = pPage ? &pPage->getSdrModelFromSdrPage() : nullptr;
     mpObject = nullptr;
-    mbNoMasterPage = false;
     ImpInitVars();
 }
 
@@ -50,7 +49,6 @@ SdrViewIter::SdrViewIter(const SdrObject* pObject)
     mpObject = pObject;
     mpModel = pObject ? &pObject->getSdrModelFromSdrObject() : nullptr;
     mpPage = pObject ? pObject->GetPage() : nullptr;
-    mbNoMasterPage = false;
 
     if(!mpModel || !mpPage)
     {
@@ -86,7 +84,7 @@ bool SdrViewIter::ImpCheckPageView(SdrPageView const * pPV) const
             return true;
         }
     }
-    else if(!mbNoMasterPage && bMaster && (!mpObject || !mpObject->IsNotVisibleAsMaster()))
+    else if(bMaster && (!mpObject || !mpObject->IsNotVisibleAsMaster()))
     {
         if(pPg->TRG_HasMasterPage())
         {
