@@ -370,7 +370,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
     bool bOkay = true;
     long nMid = ( nMin + nMax ) / 2;
 
-    SwBoxSelection* pRet = new SwBoxSelection();
+    std::unique_ptr<SwBoxSelection> pRet(new SwBoxSelection());
     std::vector< std::pair< SwTableBox*, long > > aNewWidthVector;
     size_t nCheckBottom = nBottom;
     long nLeftSpan = 0;
@@ -560,11 +560,11 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
             --nRightSpanCnt;
         pRet->push_back(aBoxes);
     }
-    pRet->mnMergeWidth = nMax - nMin;
     if( nCheckBottom > nBottom )
         bOkay = false;
     if( bOkay )
     {
+        pRet->mnMergeWidth = nMax - nMin;
         for (auto const& newWidth : aNewWidthVector)
         {
             SwFrameFormat* pFormat = newWidth.first->ClaimFrameFormat();
@@ -573,11 +573,9 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
         }
     }
     else
-    {
-        delete pRet;
-        pRet = nullptr;
-    }
-    return pRet;
+        pRet.reset();
+
+    return pRet.release();
 }
 
 /** lcl_InvalidateCellFrame(..) invalidates all layout representations of a given cell
