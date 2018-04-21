@@ -84,37 +84,34 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
             xGraphicHelper = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Write );
             xGraphicResolver = xGraphicHelper.get();
 
+            uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
+
+            // doc export
+            uno::Reference< io::XActiveDataSource > xDocSrc( xWriter, uno::UNO_QUERY );
+            xDocSrc->setOutputStream( xOut );
+
+            uno::Sequence< uno::Any > aArgs( xObjectResolver.is() ? 3 : 2 );
+            aArgs[0] <<= xHandler;
+            aArgs[1] <<= xGraphicResolver;
+            if( xObjectResolver.is() )
+                aArgs[2] <<= xObjectResolver;
+
+            uno::Reference< document::XFilter > xFilter( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii( pExportService ), aArgs, xContext ), uno::UNO_QUERY );
+            if( !xFilter.is() )
+            {
+                OSL_FAIL( "com.sun.star.comp.Draw.XMLExporter service missing" );
+                bDocRet = false;
+            }
+
             if( bDocRet )
             {
-                uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
-
-                // doc export
-                uno::Reference< io::XActiveDataSource > xDocSrc( xWriter, uno::UNO_QUERY );
-                xDocSrc->setOutputStream( xOut );
-
-                uno::Sequence< uno::Any > aArgs( xObjectResolver.is() ? 3 : 2 );
-                aArgs[0] <<= xHandler;
-                aArgs[1] <<= xGraphicResolver;
-                if( xObjectResolver.is() )
-                    aArgs[2] <<= xObjectResolver;
-
-                uno::Reference< document::XFilter > xFilter( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii( pExportService ), aArgs, xContext ), uno::UNO_QUERY );
-                if( !xFilter.is() )
+                uno::Reference< document::XExporter > xExporter( xFilter, uno::UNO_QUERY );
+                if( xExporter.is() )
                 {
-                    OSL_FAIL( "com.sun.star.comp.Draw.XMLExporter service missing" );
-                    bDocRet = false;
-                }
+                    xExporter->setSourceDocument( xSourceDoc );
 
-                if( bDocRet )
-                {
-                    uno::Reference< document::XExporter > xExporter( xFilter, uno::UNO_QUERY );
-                    if( xExporter.is() )
-                    {
-                        xExporter->setSourceDocument( xSourceDoc );
-
-                        uno::Sequence< beans::PropertyValue > aDescriptor( 0 );
-                        bDocRet = xFilter->filter( aDescriptor );
-                    }
+                    uno::Sequence< beans::PropertyValue > aDescriptor( 0 );
+                    bDocRet = xFilter->filter( aDescriptor );
                 }
             }
         }

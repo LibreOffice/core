@@ -486,10 +486,9 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
         else if ( bHasGrid && pGrid->IsSnapToChars() && ! pGridKernPortion && ! pMulti && ! pPor->InTabGrp() )
         {
             // insert a grid kerning portion
-            if ( ! pGridKernPortion )
-                pGridKernPortion = pPor->IsKernPortion() ?
-                                   static_cast<SwKernPortion*>(pPor) :
-                                   new SwKernPortion( *m_pCurr );
+            pGridKernPortion = pPor->IsKernPortion() ?
+                               static_cast<SwKernPortion*>(pPor) :
+                               new SwKernPortion( *m_pCurr );
 
             // if we have a new GridKernPortion, we initially calculate
             // its size so that its ends on the grid

@@ -2266,29 +2266,26 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
         sal_uInt32 nColorIndex(0);
 
         // #i37011# remove invisible objects
-        if(!vObjectList.empty())
+        std::vector< std::pair< SdrPathObj*, double> > vNewList;
+
+        for ( std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
         {
-            std::vector< std::pair< SdrPathObj*, double> > vTempList;
+            SdrPathObj* pObj(rCandidate.first);
+            const drawing::LineStyle eLineStyle(pObj->GetMergedItem(XATTR_LINESTYLE).GetValue());
+            const drawing::FillStyle eFillStyle(pObj->GetMergedItem(XATTR_FILLSTYLE).GetValue());
 
-            for ( std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
+            // #i40600# if bLineGeometryNeededOnly is set, linestyle does not matter
+            if(!bLineGeometryNeededOnly && (drawing::LineStyle_NONE == eLineStyle) && (drawing::FillStyle_NONE == eFillStyle))
             {
-                SdrPathObj* pObj(rCandidate.first);
-                const drawing::LineStyle eLineStyle(pObj->GetMergedItem(XATTR_LINESTYLE).GetValue());
-                const drawing::FillStyle eFillStyle(pObj->GetMergedItem(XATTR_FILLSTYLE).GetValue());
-
-                // #i40600# if bLineGeometryNeededOnly is set, linestyle does not matter
-                if(!bLineGeometryNeededOnly && (drawing::LineStyle_NONE == eLineStyle) && (drawing::FillStyle_NONE == eFillStyle))
-                {
-                    delete pObj;
-                }
-                else
-                {
-                    vTempList.push_back(rCandidate);
-                }
+                delete pObj;
             }
-
-            vObjectList = vTempList;
+            else
+            {
+                vNewList.push_back(rCandidate);
+            }
         }
+
+        vObjectList = vNewList;
 
         if(1 == vObjectList.size())
         {

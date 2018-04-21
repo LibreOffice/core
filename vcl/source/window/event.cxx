@@ -629,11 +629,9 @@ void Window::ImplCallFocusChangeActivate( vcl::Window* pNewOverlapWindow,
     }
     if ( bCallActivate && ! pNewOverlapWindow->mpWindowImpl->mbActive )
     {
-        if( ! pNewOverlapWindow->mpWindowImpl->mbActive )
-        {
-            pNewOverlapWindow->mpWindowImpl->mbActive = true;
-            pNewOverlapWindow->Activate();
-        }
+        pNewOverlapWindow->mpWindowImpl->mbActive = true;
+        pNewOverlapWindow->Activate();
+
         if ( pNewRealWindow != pNewOverlapWindow )
         {
             if( ! pNewRealWindow->mpWindowImpl->mbActive )

@@ -1894,9 +1894,7 @@ bool SVGFilter::implCreateObjects()
                 }
             }
 #endif
-
-            if( xDrawPage.is() )
-                implCreateObjectsFromShapes( xDrawPage, xDrawPage );
+            implCreateObjectsFromShapes( xDrawPage, xDrawPage );
         }
     }
     return true;

@@ -1250,7 +1250,7 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
                 pSubPop4->CheckItem( 405, SwEditShell::IsTOXBaseReadonly(*pBase));
                 pSubPop4->InsertItem(501, m_aContextStrings[IDX_STR_DELETE_ENTRY]);
             }
-            else if(ContentTypeId::TABLE == nContentType && !bReadonly)
+            else if(ContentTypeId::TABLE == nContentType)
             {
                 bSubPop4 = true;
                 pSubPop4->InsertItem(403, m_aContextStrings[IDX_STR_EDIT_ENTRY]);
@@ -1262,7 +1262,7 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
                 pSubPop4->EnableItem(404, bProt );
                 pSubPop4->InsertItem(501, m_aContextStrings[IDX_STR_DELETE_ENTRY]);
             }
-            else if(bEditable || bDeletable)
+            else
             {
 
                 if(bEditable && bDeletable)
