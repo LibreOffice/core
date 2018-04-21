@@ -196,9 +196,9 @@ void OP_NamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     // POST: don't save for invalid coordinates
     sal_uInt16              nColSt, nRowSt, nColEnd, nRowEnd;
 
-    sal_Char cPuffer[ 16+1 ];
-    r.ReadBytes(cPuffer, 16);
-    cPuffer[ 16 ] = 0;
+    sal_Char cBuffer[ 16+1 ];
+    r.ReadBytes(cBuffer, 16);
+    cBuffer[ 16 ] = 0;
 
     r.ReadUInt16( nColSt ).ReadUInt16( nRowSt ).ReadUInt16( nColEnd ).ReadUInt16( nRowEnd );
 
@@ -212,14 +212,14 @@ void OP_NamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
             pRange = new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt),
                     static_cast<SCCOL> (nColEnd), static_cast<SCROW> (nRowEnd) );
 
-        sal_Char cBuf[sizeof(cPuffer)+1];
-        if( rtl::isAsciiDigit( static_cast<unsigned char>(*cPuffer) ) )
+        sal_Char cBuf[sizeof(cBuffer)+1];
+        if( rtl::isAsciiDigit( static_cast<unsigned char>(*cBuffer) ) )
         {  // first char in name is a number -> prepend 'A'
             cBuf[0] = 'A';
-            strcpy( cBuf + 1, cPuffer );       // #100211# - checked
+            strcpy( cBuf + 1, cBuffer );       // #100211# - checked
         }
         else
-            strcpy( cBuf, cPuffer );           // #100211# - checked
+            strcpy( cBuf, cBuffer );           // #100211# - checked
 
         OUString      aTmp( cBuf, strlen(cBuf), rContext.pLotusRoot->eCharsetQ );
 
@@ -235,9 +235,9 @@ void OP_SymphNamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     sal_uInt16              nColSt, nRowSt, nColEnd, nRowEnd;
     sal_uInt8               nType;
 
-    sal_Char cPuffer[ 16+1 ];
-    r.ReadBytes(cPuffer, 16);
-    cPuffer[ 16 ] = 0;
+    sal_Char cBuffer[ 16+1 ];
+    r.ReadBytes(cBuffer, 16);
+    cBuffer[ 16 ] = 0;
 
     r.ReadUInt16( nColSt ).ReadUInt16( nRowSt ).ReadUInt16( nColEnd ).ReadUInt16( nRowEnd ).ReadUChar( nType );
 
@@ -251,14 +251,14 @@ void OP_SymphNamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
             pRange = new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt),
                     static_cast<SCCOL> (nColEnd), static_cast<SCROW> (nRowEnd) );
 
-        sal_Char cBuf[sizeof(cPuffer)+1];
-        if( rtl::isAsciiDigit( static_cast<unsigned char>(*cPuffer) ) )
+        sal_Char cBuf[sizeof(cBuffer)+1];
+        if( rtl::isAsciiDigit( static_cast<unsigned char>(*cBuffer) ) )
         {  // first char in name is a number -> prepend 'A'
             cBuf[0] = 'A';
-            strcpy( cBuf + 1, cPuffer );       // #100211# - checked
+            strcpy( cBuf + 1, cBuffer );       // #100211# - checked
         }
         else
-            strcpy( cBuf, cPuffer );           // #100211# - checked
+            strcpy( cBuf, cBuffer );           // #100211# - checked
 
         OUString  aTmp( cBuf, strlen(cBuf), rContext.pLotusRoot->eCharsetQ );
         aTmp = ScfTools::ConvertToScDefinedName( aTmp );
