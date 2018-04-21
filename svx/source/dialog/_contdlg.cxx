@@ -28,9 +28,7 @@
 #include <svtools/miscopt.hxx>
 #include <unotools/localedatawrapper.hxx>
 
-#include <svx/dialmgr.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <svx/contdlg.hxx>
 #include "contimp.hxx"

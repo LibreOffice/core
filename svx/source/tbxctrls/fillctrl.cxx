@@ -26,7 +26,6 @@
 #include <rtl/ustring.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolbox.hxx>
-#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 
 #define TMP_STR_BEGIN   "["
@@ -37,7 +36,6 @@
 #include <svx/xtable.hxx>
 #include <svx/fillctrl.hxx>
 #include <svx/itemwin.hxx>
-#include <svx/dialmgr.hxx>
 #include <memory>
 #include <o3tl/make_unique.hxx>
 

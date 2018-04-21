@@ -39,7 +39,6 @@
 #include <sal/macros.h>
 #include <sfx2/request.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/layout.hxx>
 #include <vcl/wrkwin.hxx>

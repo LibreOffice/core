@@ -56,7 +56,6 @@
 #include <sfx2/objsh.hxx>
 
 #include <svx/svxids.hrc>
-#include <svx/dialmgr.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
 

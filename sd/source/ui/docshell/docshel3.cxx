@@ -27,7 +27,6 @@
 
 #include <svx/ofaitem.hxx>
 #include <svx/svxerr.hxx>
-#include <svx/dialmgr.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/langtab.hxx>

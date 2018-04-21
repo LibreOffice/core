@@ -26,8 +26,6 @@
 
 #include <fmobj.hxx>
 
-#include <svx/dialmgr.hxx>
-
 #include <fmpgeimp.hxx>
 
 #include <sfx2/objsh.hxx>

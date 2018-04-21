@@ -61,7 +61,6 @@
 #include <tools/diagnose_ex.h>
 #include <svx/svdpage.hxx>
 #include <svx/fmmodel.hxx>
-#include <svx/dialmgr.hxx>
 #include <fmshimp.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/objitem.hxx>
@@ -75,7 +74,6 @@
 #include <formtoolbars.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <svx/strings.hrc>
 
 #include <svx/sdrobjectfilter.hxx>
 

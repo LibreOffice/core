@@ -32,14 +32,11 @@
 #include <vcl/bitmapaccess.hxx>
 
 #include <svx/sxekitm.hxx>
-#include <svx/strings.hrc>
-#include <svdglob.hxx>
 
 #include <svx/svdmodel.hxx>
 #include "gradtrns.hxx"
 #include <svx/xflgrit.hxx>
 #include <svx/svdundo.hxx>
-#include <svx/dialmgr.hxx>
 #include <svx/xflftrit.hxx>
 
 #include <svx/svdopath.hxx>

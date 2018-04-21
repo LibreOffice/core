@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <svx/rulritem.hxx>
 #include <tools/mapunit.hxx>
