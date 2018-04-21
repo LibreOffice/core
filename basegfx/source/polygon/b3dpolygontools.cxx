@@ -147,10 +147,7 @@ namespace basegfx
 
                                 aSnippet.append(interpolate(aCurrentPoint, aNextPoint, fDotDashMovingLength / fEdgeLength));
 
-                                if(bHandleLine)
-                                {
-                                    pLineTarget->append(aSnippet);
-                                }
+                                pLineTarget->append(aSnippet);
 
                                 aSnippet.clear();
                             }

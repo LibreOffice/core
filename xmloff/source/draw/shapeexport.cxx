@@ -1823,19 +1823,17 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
         if( nFound & Found::MACRO )
         {
             SvXMLElementExport aEventsElemt(mrExport, XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS, true, true);
-            if ( nFound & Found::MACRO )
-            {
-                mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE, mrExport.GetNamespaceMap().GetQNameByKey(
-                         XML_NAMESPACE_OOO, GetXMLToken(XML_SCRIPT) ) );
-                OUString aEventQName(
-                    mrExport.GetNamespaceMap().GetQNameByKey(
-                            XML_NAMESPACE_DOM, "click" ) );
-                mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, aEventQName );
-                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aStrMacro );
-                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, "simple" );
 
-                SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SCRIPT, XML_EVENT_LISTENER, true, true);
-            }
+            mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE, mrExport.GetNamespaceMap().GetQNameByKey(
+                     XML_NAMESPACE_OOO, GetXMLToken(XML_SCRIPT) ) );
+            OUString aEventQName(
+                mrExport.GetNamespaceMap().GetQNameByKey(
+                        XML_NAMESPACE_DOM, "click" ) );
+            mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, aEventQName );
+            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aStrMacro );
+            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, "simple" );
+
+            SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SCRIPT, XML_EVENT_LISTENER, true, true);
         }
     }
 }

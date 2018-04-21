@@ -370,8 +370,7 @@ sal_Int32 StgStrm::scanBuildPageChainCache()
     // see if an  already counted page is re-visited
     while( nBgn >= 0 && !bError )
     {
-        if( nBgn >= 0 )
-            m_aPagesCache.push_back(nBgn);
+        m_aPagesCache.push_back(nBgn);
         nBgn = m_pFat->GetNextPage( nBgn );
 
         //returned second is false if it already exists

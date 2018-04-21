@@ -1044,7 +1044,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
             SdrEdgeObj* pEdgeObj = dynamic_cast< SdrEdgeObj* >( pObj );
             if ( pEdgeObj )
                 bPossibleGeomChange = true;
-            else if( bUndo )
+            else
                 vConnectorUndoActions = CreateConnectorUndo( *pObj );
 
             AddUndoActions( vConnectorUndoActions );

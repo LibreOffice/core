@@ -510,8 +510,7 @@ void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
             {
                 if ( m_pExternalImages && !m_aImageList.pExternalImageList )
                 {
-                    if ( !m_aImageList.pExternalImageList )
-                        m_aImageList.pExternalImageList.reset( m_pExternalImages );
+                    m_aImageList.pExternalImageList.reset( m_pExternalImages );
                 }
 
                 m_bExternalImagesStartFound = false;
