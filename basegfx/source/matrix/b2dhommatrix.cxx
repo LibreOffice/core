@@ -31,24 +31,13 @@ namespace basegfx
     {
     };
 
-    B2DHomMatrix::B2DHomMatrix()
-        : mpImpl() // identity
-    {
-    }
+    B2DHomMatrix::B2DHomMatrix() = default;
 
-    B2DHomMatrix::B2DHomMatrix(const B2DHomMatrix& rMat) :
-        mpImpl(rMat.mpImpl)
-    {
-    }
+    B2DHomMatrix::B2DHomMatrix(const B2DHomMatrix&) = default;
 
-    B2DHomMatrix::B2DHomMatrix(B2DHomMatrix&& rMat) :
-        mpImpl(std::move(rMat.mpImpl))
-    {
-    }
+    B2DHomMatrix::B2DHomMatrix(B2DHomMatrix&&) = default;
 
-    B2DHomMatrix::~B2DHomMatrix()
-    {
-    }
+    B2DHomMatrix::~B2DHomMatrix() = default;
 
     B2DHomMatrix::B2DHomMatrix(double f_0x0, double f_0x1, double f_0x2, double f_1x0, double f_1x1, double f_1x2)
         :   mpImpl() // identity
@@ -61,17 +50,9 @@ namespace basegfx
         mpImpl->set(1, 2, f_1x2);
     }
 
-    B2DHomMatrix& B2DHomMatrix::operator=(const B2DHomMatrix& rMat)
-    {
-        mpImpl = rMat.mpImpl;
-        return *this;
-    }
+    B2DHomMatrix& B2DHomMatrix::operator=(const B2DHomMatrix&) = default;
 
-    B2DHomMatrix& B2DHomMatrix::operator=(B2DHomMatrix&& rMat)
-    {
-        mpImpl = std::move(rMat.mpImpl);
-        return *this;
-    }
+    B2DHomMatrix& B2DHomMatrix::operator=(B2DHomMatrix&&) = default;
 
     double B2DHomMatrix::get(sal_uInt16 nRow, sal_uInt16 nColumn) const
     {

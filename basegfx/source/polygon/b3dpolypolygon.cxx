@@ -196,36 +196,20 @@ namespace basegfx
     {
     }
 
-    B3DPolyPolygon::B3DPolyPolygon(const B3DPolyPolygon& rPolyPolygon) :
-        mpPolyPolygon(rPolyPolygon.mpPolyPolygon)
-    {
-    }
+    B3DPolyPolygon::B3DPolyPolygon(const B3DPolyPolygon&) = default;
 
-    B3DPolyPolygon::B3DPolyPolygon(B3DPolyPolygon&& rPolyPolygon) :
-        mpPolyPolygon(std::move(rPolyPolygon.mpPolyPolygon))
-    {
-    }
+    B3DPolyPolygon::B3DPolyPolygon(B3DPolyPolygon&&) = default;
 
     B3DPolyPolygon::B3DPolyPolygon(const B3DPolygon& rPolygon) :
         mpPolyPolygon( ImplB3DPolyPolygon(rPolygon) )
     {
     }
 
-    B3DPolyPolygon::~B3DPolyPolygon()
-    {
-    }
+    B3DPolyPolygon::~B3DPolyPolygon() = default;
 
-    B3DPolyPolygon& B3DPolyPolygon::operator=(const B3DPolyPolygon& rPolyPolygon)
-    {
-        mpPolyPolygon = rPolyPolygon.mpPolyPolygon;
-        return *this;
-    }
+    B3DPolyPolygon& B3DPolyPolygon::operator=(const B3DPolyPolygon&) = default;
 
-    B3DPolyPolygon& B3DPolyPolygon::operator=(B3DPolyPolygon&& rPolyPolygon)
-    {
-        mpPolyPolygon = std::move(rPolyPolygon.mpPolyPolygon);
-        return *this;
-    }
+    B3DPolyPolygon& B3DPolyPolygon::operator=(B3DPolyPolygon&&) = default;
 
     bool B3DPolyPolygon::operator==(const B3DPolyPolygon& rPolyPolygon) const
     {

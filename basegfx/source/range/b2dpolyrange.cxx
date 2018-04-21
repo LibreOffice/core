@@ -100,22 +100,13 @@ namespace basegfx
         std::vector<B2VectorOrientation> maOrient;
     };
 
-    B2DPolyRange::B2DPolyRange() :
-        mpImpl()
-    {}
+    B2DPolyRange::B2DPolyRange() = default;
 
-    B2DPolyRange::~B2DPolyRange()
-    {}
+    B2DPolyRange::~B2DPolyRange() = default;
 
-    B2DPolyRange::B2DPolyRange( const B2DPolyRange& rRange ) :
-        mpImpl( rRange.mpImpl )
-    {}
+    B2DPolyRange::B2DPolyRange( const B2DPolyRange& ) = default;
 
-    B2DPolyRange& B2DPolyRange::operator=( const B2DPolyRange& rRange )
-    {
-        mpImpl = rRange.mpImpl;
-        return *this;
-    }
+    B2DPolyRange& B2DPolyRange::operator=( const B2DPolyRange& ) = default;
 
     bool B2DPolyRange::operator==(const B2DPolyRange& rRange) const
     {
