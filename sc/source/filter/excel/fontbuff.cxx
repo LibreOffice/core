@@ -50,9 +50,6 @@ void LotusFontBuffer::Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet )
     if( pCurrent->pHeight )
         rItemSet.Put( *pCurrent->pHeight );
 
-    if( pCurrent->pColor )
-        rItemSet.Put( *pCurrent->pColor );
-
     if( nIndex & 0x08 )
     {
         SvxWeightItem aWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT );

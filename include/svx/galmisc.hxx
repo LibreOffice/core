@@ -144,7 +144,6 @@ using TransferableHelper::CopyToClipboard;
     sal_uInt32                      mnObjectPos;
     tools::SvRef<SotStorageStream>             mxModelStream;
     GraphicObject*                  mpGraphicObject;
-    ImageMap*                       mpImageMap;
     INetURLObject*                  mpURL;
 
                                     GalleryTransferable( GalleryTheme* pTheme, sal_uInt32 nObjectPos, bool bLazy );

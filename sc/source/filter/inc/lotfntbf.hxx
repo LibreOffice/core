@@ -35,14 +35,12 @@ private:
         OUString*           pTmpName;
         SvxFontItem*        pFont;
         SvxFontHeightItem*  pHeight;
-        SvxColorItem*       pColor;
-        sal_Int32               nType;      // < 0 -> undefiniert
+        sal_Int32           nType;      // < 0 -> undefined
         ENTRY()
                             {
                                 pTmpName = nullptr;
                                 pFont = nullptr;
                                 pHeight = nullptr;
-                                pColor = nullptr;
                                 nType = -1;
                             }
         ~ENTRY()
@@ -53,8 +51,6 @@ private:
                                     delete pFont;
                                 if( pHeight )
                                     delete pHeight;
-                                if( pColor )
-                                    delete pColor;
                             }
         void         TmpName( const OUString &rNew )
                             {

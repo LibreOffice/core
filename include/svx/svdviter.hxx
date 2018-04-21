@@ -70,8 +70,6 @@ class SVX_DLLPUBLIC SdrViewIter
 
     size_t                                              mnListenerNum;
 
-    bool                                                mbNoMasterPage : 1;
-
 private:
     SVX_DLLPRIVATE void          ImpInitVars();
     SVX_DLLPRIVATE SdrView*      ImpFindView();

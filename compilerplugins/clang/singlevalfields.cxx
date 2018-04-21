@@ -307,8 +307,8 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
                 bPotentiallyAssignedTo = true;
                 break;
             }
-            child = parent;
-            parent = getParentStmt(parent);
+            // cannot be assigned to anymore
+            break;
         }
         else if (isa<CallExpr>(parent))
         {
