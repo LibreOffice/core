@@ -753,7 +753,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                         continue;
                 }
 
-                long nGlyphFlags = 0;
+                int nGlyphFlags = 0;
                 if (bRightToLeft)
                     nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
 
@@ -767,7 +767,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                     nGlyphFlags |= GlyphItem::IS_DIACRITIC;
 
                 if (u_isUWhiteSpace(aChar))
-                     nGlyphFlags |= GlyphItem::IS_SPACING;
+                    nGlyphFlags |= GlyphItem::IS_SPACING;
 
                 if (aSubRun.maScript == HB_SCRIPT_ARABIC &&
                     HB_DIRECTION_IS_BACKWARD(aSubRun.maDirection) &&
