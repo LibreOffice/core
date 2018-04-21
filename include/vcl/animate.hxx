@@ -142,14 +142,6 @@ public:
 
     bool            Invert();
     void            Mirror( BmpMirrorFlags nMirrorFlags );
-    void            Adjust(
-                        short nLuminancePercent,
-                        short nContrastPercent,
-                        short nChannelRPercent,
-                        short nChannelGPercent,
-                        short nChannelBPercent,
-                        double fGamma = 1.0,
-                        bool bInvert = false );
 
     friend VCL_DLLPUBLIC SvStream& ReadAnimation( SvStream& rIStream, Animation& rAnimation );
     friend VCL_DLLPUBLIC SvStream& WriteAnimation( SvStream& rOStream, const Animation& rAnimation );
