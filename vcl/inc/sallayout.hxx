@@ -267,19 +267,6 @@ struct GlyphItem
     int     mnFallbackLevel;
 
 public:
-            GlyphItem( int nCharPos, sal_GlyphId aGlyphId, const Point& rLinearPos,
-                long nFlags, int nOrigWidth )
-            :   mnFlags(nFlags)
-            ,   mnCharPos(nCharPos)
-            ,   mnCharCount(1)
-            ,   mnOrigWidth(nOrigWidth)
-            ,   mnNewWidth(nOrigWidth)
-            ,   mnXOffset(0)
-            ,   maGlyphId(aGlyphId)
-            ,   maLinearPos(rLinearPos)
-            ,   mnFallbackLevel(0)
-            { }
-
             GlyphItem(int nCharPos, int nCharCount, sal_GlyphId aGlyphId, const Point& rLinearPos,
                 long nFlags, int nOrigWidth, int nXOffset )
             :   mnFlags(nFlags)
