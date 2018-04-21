@@ -975,7 +975,7 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
             int const nFlags = GlyphItem::IS_IN_CLUSTER | GlyphItem::IS_RTL_GLYPH;
             while (nCopies--)
             {
-                GlyphItem aKashida(nCharPos, nKashidaIndex, aPos, nFlags, nKashidaWidth);
+                GlyphItem aKashida(nCharPos, 0, nKashidaIndex, aPos, nFlags, nKashidaWidth, 0);
                 pGlyphIter = m_GlyphItems.insert(pGlyphIter, aKashida);
                 aPos.AdjustX(nKashidaWidth );
                 aPos.AdjustX( -nOverlap );
