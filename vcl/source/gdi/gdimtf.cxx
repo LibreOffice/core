@@ -18,11 +18,12 @@
  */
 
 #include <rtl/crc.h>
-#include <cstdlib>
-#include <memory>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/fract.hxx>
+#include <comphelper/fileformat.h>
+#include <basegfx/polygon/b2dpolygon.hxx>
+
 #include <vcl/metaact.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
@@ -31,12 +32,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graphictools.hxx>
-#include <comphelper/fileformat.h>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/BitmapColorAdjustFilter.hxx>
 
 #include <svmconverter.hxx>
-
 #include <salbmp.hxx>
 #include <salinst.hxx>
 #include <svdata.hxx>
@@ -51,6 +50,9 @@
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
+
+#include <cstdlib>
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -1719,9 +1721,9 @@ BitmapEx GDIMetaFile::ImplBmpAdjustFnc( const BitmapEx& rBmpEx, const void* pBmp
     const ImplBmpAdjustParam*   p = static_cast<const ImplBmpAdjustParam*>(pBmpParam);
     BitmapEx                    aRet( rBmpEx );
 
-    aRet.Adjust( p->nLuminancePercent, p->nContrastPercent,
+    BitmapFilter::Filter(aRet, BitmapColorAdjustFilter(p->nLuminancePercent, p->nContrastPercent,
                  p->nChannelRPercent, p->nChannelGPercent, p->nChannelBPercent,
-                 p->fGamma, p->bInvert );
+                 p->fGamma, p->bInvert));
 
     return aRet;
 }
