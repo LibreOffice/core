@@ -695,6 +695,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 int32_t nGlyphIndex = pHbGlyphInfos[i].codepoint;
                 int32_t nCharPos = pHbGlyphInfos[i].cluster;
                 int32_t nCharCount = 0;
+                bool bInCluster = false;
 
                 // Find the number of characters that make up this glyph.
                 if (!bRightToLeft)
@@ -702,7 +703,10 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                     // If the cluster is the same as previous glyph, then this
                     // already consumed, skip.
                     if (i > 0 && pHbGlyphInfos[i].cluster == pHbGlyphInfos[i - 1].cluster)
+                    {
                         nCharCount = 0;
+                        bInCluster = true;
+                    }
                     else
                     {
                         // Find the next glyph with a different cluster, or the
@@ -722,7 +726,10 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                     // If the cluster is the same as previous glyph, then this
                     // will be consumed later, skip.
                     if (i < nRunGlyphCount - 1 && pHbGlyphInfos[i].cluster == pHbGlyphInfos[i + 1].cluster)
+                    {
                         nCharCount = 0;
+                        bInCluster = true;
+                    }
                     else
                     {
                         // Find the previous glyph with a different cluster, or
@@ -745,10 +752,6 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                     if (SalLayoutFlags::ForFallback & rArgs.mnFlags)
                         continue;
                 }
-
-                bool bInCluster = false;
-                if (i > 0 && pHbGlyphInfos[i].cluster == pHbGlyphInfos[i - 1].cluster)
-                    bInCluster = true;
 
                 long nGlyphFlags = 0;
                 if (bRightToLeft)
