@@ -19,9 +19,6 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
-
-#include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/fract.hxx>
@@ -29,16 +26,21 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/configmgr.hxx>
+#include <officecfg/Office/Common.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/GraphicLoader.hxx>
+#include <vcl/BitmapColorAdjustFilter.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+
 #include <memory>
+#include <algorithm>
 
 
 using namespace css;
@@ -167,9 +169,9 @@ void lclImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, GraphicAdjustmen
 
     if( ( nAdjustmentFlags & GraphicAdjustmentFlags::COLORS ) && aAttr.IsAdjusted() )
     {
-        rBmpEx.Adjust( aAttr.GetLuminance(), aAttr.GetContrast(),
+        BitmapFilter::Filter(rBmpEx, BitmapColorAdjustFilter(aAttr.GetLuminance(), aAttr.GetContrast(),
                        aAttr.GetChannelR(), aAttr.GetChannelG(), aAttr.GetChannelB(),
-                       aAttr.GetGamma(), aAttr.IsInvert() );
+                       aAttr.GetGamma(), aAttr.IsInvert()));
     }
 
     if( ( nAdjustmentFlags & GraphicAdjustmentFlags::MIRROR ) && aAttr.IsMirrored() )
@@ -269,9 +271,9 @@ void lclImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr, GraphicAdju
 
     if( ( nAdjustmentFlags & GraphicAdjustmentFlags::COLORS ) && aAttr.IsAdjusted() )
     {
-        rAnimation.Adjust( aAttr.GetLuminance(), aAttr.GetContrast(),
+        BitmapFilter::Filter(rAnimation, BitmapColorAdjustFilter(aAttr.GetLuminance(), aAttr.GetContrast(),
                            aAttr.GetChannelR(), aAttr.GetChannelG(), aAttr.GetChannelB(),
-                           aAttr.GetGamma(), aAttr.IsInvert() );
+                           aAttr.GetGamma(), aAttr.IsInvert()));
     }
 
     if( ( nAdjustmentFlags & GraphicAdjustmentFlags::MIRROR ) && aAttr.IsMirrored() )

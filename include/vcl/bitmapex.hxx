@@ -338,7 +338,7 @@ public:
                             short nChannelBPercent,
                             double fGamma = 1.0,
                             bool bInvert = false,
-                            bool msoBrightness = false );
+                            bool msoBrightness = false ) = delete;
 
     /** Get transparency at given position
 
