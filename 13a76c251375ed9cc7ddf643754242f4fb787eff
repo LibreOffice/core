@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_b2110baf",
+        "filename": "offapi/com/sun/star/graphic/GraphicObject.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-21T07:01:52Z",
+      "side": 0,
+      "message": "it might be safer to mark this unsupported and throw an exception, rather than removing it, which will make extensions fail to load with some kind of linking error",
+      "revId": "13a76c251375ed9cc7ddf643754242f4fb787eff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
