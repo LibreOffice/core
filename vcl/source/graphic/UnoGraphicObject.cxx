@@ -48,7 +48,6 @@ public:
      // XGraphicObject
     virtual uno::Reference<graphic::XGraphic> SAL_CALL getGraphic() override;
     virtual void SAL_CALL setGraphic(uno::Reference<graphic::XGraphic> const & rxGraphic) override;
-    OUString SAL_CALL getUniqueID() override;
 
     virtual OUString SAL_CALL getImplementationName() override
     {
@@ -88,13 +87,6 @@ void SAL_CALL GraphicObjectImpl::setGraphic(uno::Reference<graphic::XGraphic> co
         throw uno::RuntimeException();
     Graphic aGraphic(rxGraphic);
     mpGraphicObject->SetGraphic(aGraphic);
-}
-
-OUString SAL_CALL GraphicObjectImpl::getUniqueID()
-{
-    // not supported anymore so return empty string for now
-    osl::MutexGuard aGuard(m_aMutex);
-    return OUString();
 }
 
 } // end anonymous namespace
