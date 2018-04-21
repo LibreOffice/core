@@ -29,6 +29,8 @@
 #include <vcl/scopedbitmapaccess.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+#define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
+
 class Color;
 
 enum class BmpMirrorFlags
@@ -497,46 +499,6 @@ public:
                                 GDIMetaFile& rMtf,
                                 sal_uInt8 cReduce,
                                 const Link<long,void>* pProgress );
-
-    /** Change various global color characteristics
-
-        @param nLuminancePercent
-        Percent of luminance change, valid range [-100,100]. Values outside this range are clipped to the valid range.
-
-        @param nContrastPercent
-        Percent of contrast change, valid range [-100,100]. Values outside this range are clipped to the valid range.
-
-        @param nChannelRPercent
-        Percent of red channel change, valid range [-100,100]. Values outside this range are clipped to the valid range.
-
-        @param nChannelGPercent
-        Percent of green channel change, valid range [-100,100]. Values outside this range are clipped to the valid range.
-
-        @param nChannelBPercent
-        Percent of blue channel change, valid range [-100,100]. Values outside this range are clipped to the valid range.
-
-        @param fGamma
-        Exponent of the gamma function applied to the bitmap. The
-        value 1.0 results in no change, the valid range is
-        (0.0,10.0]. Values outside this range are regarded as 1.0.
-
-        @param bInvert
-        If true, invert the channel values with the logical 'not' operator
-
-        @param msoBrightness
-        Use the same formula for brightness as used by MSOffice.
-
-        @return true, if the operation was completed successfully.
-     */
-    bool                    Adjust(
-                                short nLuminancePercent,
-                                short nContrastPercent = 0,
-                                short nChannelRPercent = 0,
-                                short nChannelGPercent = 0,
-                                short nChannelBPercent = 0,
-                                double fGamma = 1.0,
-                                bool bInvert = false,
-                                bool msoBrightness = false );
 
 public:
     /** ReassignWithSize and recalculate bitmap.

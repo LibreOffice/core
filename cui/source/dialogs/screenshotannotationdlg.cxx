@@ -39,6 +39,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/button.hxx>
+#include <vcl/BitmapColorAdjustFilter.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 
 using namespace com::sun::star;
@@ -235,7 +236,9 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
 
         // to make clear that maParentDialogBitmap is a background image, adjust
         // luminance a bit for maDimmedDialogBitmap - other methods may be applied
-        maDimmedDialogBitmap.Adjust(-15);
+        BitmapEx aDimmedDialogBmpEx(maDimmedDialogBitmap);
+        BitmapFilter::Filter(aDimmedDialogBmpEx, BitmapColorAdjustFilter(-15));
+        maDimmedDialogBitmap = aDimmedDialogBmpEx.GetBitmap();
 
         // init paint buffering VirtualDevice
         mpVirtualBufferDevice = VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::BITMASK);
