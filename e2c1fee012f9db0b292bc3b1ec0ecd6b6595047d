@@ -22,6 +22,30 @@
       "revId": "e2c1fee012f9db0b292bc3b1ec0ecd6b6595047d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_72f31374",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2018-04-21T08:31:46Z",
+      "side": 1,
+      "message": "Yeah, sorry - came about because of https://gerrit.libreoffice.org/#/c/52902/\n\nI was so confused from the buildbot failing that it caused this line to appear.\n\nEventually I abandoned the change and submitted a new one, which is why this got here.",
+      "parentUuid": "9a30ddce_b7873d0e",
+      "range": {
+        "startLine": 46,
+        "startChar": 8,
+        "endLine": 46,
+        "endChar": 13
+      },
+      "revId": "e2c1fee012f9db0b292bc3b1ec0ecd6b6595047d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
