@@ -358,14 +358,6 @@ OUString ImpGetResStr(const char* pResID)
     return SvxResId(pResID);
 }
 
-namespace sdr
-{
-    OUString GetResourceString(const char* pResID)
-    {
-        return ImpGetResStr(pResID);
-    }
-}
-
 bool SearchOutlinerItems(const SfxItemSet& rSet, bool bInklDefaults, bool* pbOnlyEE)
 {
     bool bHas=false;
