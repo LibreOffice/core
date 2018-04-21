@@ -103,8 +103,6 @@
 #include <limits>
 #include <memory>
 
-#define GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
-
 extern "C" void createRegistryInfo_FormComponentPropertyHandler()
 {
     ::pcr::FormComponentPropertyHandler::registerImplementation();
@@ -319,9 +317,7 @@ namespace pcr
         if ( PROPERTY_ID_IMAGE_URL == nPropId && ( _rValue >>= xGrfObj ) )
         {
             DBG_ASSERT( xGrfObj.is(), "FormComponentPropertyHandler::setPropertyValue() xGrfObj is invalid");
-            OUString sObjectID(  GRAPHOBJ_URLPREFIX  );
-            sObjectID = sObjectID + xGrfObj->getUniqueID();
-            m_xComponent->setPropertyValue( _rPropertyName, uno::makeAny( sObjectID ) );
+            m_xComponent->setPropertyValue(PROPERTY_GRAPHIC, uno::makeAny(xGrfObj->getGraphic()));
         }
         else if ( PROPERTY_ID_FONT == nPropId )
         {
@@ -2726,7 +2722,7 @@ namespace pcr
 
         OUString sCurValue;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_IMAGE_URL ) >>= sCurValue );
-        if ( !sCurValue.isEmpty() && !sCurValue.startsWith(GRAPHOBJ_URLPREFIX) )
+        if (!sCurValue.isEmpty())
         {
             aFileDlg.SetDisplayDirectory( sCurValue );
             // TODO: need to set the display directory _and_ the default name
@@ -2743,11 +2739,10 @@ namespace pcr
             if ( !bIsLink )
             {
                 Graphic aGraphic;
-                aFileDlg.GetGraphic( aGraphic );
+                aFileDlg.GetGraphic(aGraphic);
 
                 Reference< graphic::XGraphicObject > xGrfObj = graphic::GraphicObject::create( m_xContext );
                 xGrfObj->setGraphic( aGraphic.GetXGraphic() );
-
 
                 _out_rNewValue <<= xGrfObj;
 

@@ -73,6 +73,7 @@ namespace pcr
     #define PROPERTY_SUBMIT_METHOD          "SubmitMethod"
     #define PROPERTY_SUBMIT_ENCODING        "SubmitEncoding"
     #define PROPERTY_IMAGE_URL              "ImageURL"
+    #define PROPERTY_GRAPHIC                "Graphic"
     #define PROPERTY_EMPTY_IS_NULL          "ConvertEmptyToNull"
     #define PROPERTY_LISTSOURCETYPE         "ListSourceType"
     #define PROPERTY_LISTSOURCE             "ListSource"
