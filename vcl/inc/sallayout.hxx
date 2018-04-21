@@ -249,7 +249,7 @@ private:
     bool            mbIncomplete;
 };
 
-typedef sal_uInt32 sal_GlyphId;
+typedef sal_uInt16 sal_GlyphId;
 
 struct GlyphItem
 {
