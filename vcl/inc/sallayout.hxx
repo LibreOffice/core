@@ -32,8 +32,6 @@
 #include <vcl/vclenum.hxx> // for typedef sal_UCS4
 #include <vcl/devicecoordinate.hxx>
 
-#include "salglyphid.hxx"
-
 #define MAX_FALLBACK 16
 
 
@@ -250,6 +248,8 @@ private:
     int             mnLevel;
     bool            mbIncomplete;
 };
+
+typedef sal_uInt32 sal_GlyphId;
 
 struct GlyphItem
 {

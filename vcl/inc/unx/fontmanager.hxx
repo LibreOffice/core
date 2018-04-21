@@ -25,7 +25,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/vclenum.hxx>
 #include <com/sun/star/lang/Locale.hpp>
-#include <salglyphid.hxx>
+#include <sallayout.hxx>
 #include <unx/fc_fontoptions.hxx>
 
 #include <list>
