@@ -33,10 +33,8 @@
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 
-#include <svx/strings.hrc>
 #include <svx/dlgctrl.hxx>
 
-#include <svx/dialmgr.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 
 #include <unotools/accessiblerelationsethelper.hxx>

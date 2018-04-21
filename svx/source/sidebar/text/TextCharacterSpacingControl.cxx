@@ -18,8 +18,6 @@
  */
 #include <sfx2/bindings.hxx>
 #include "TextCharacterSpacingControl.hxx"
-#include <svx/strings.hrc>
-#include <svx/dialmgr.hxx>
 #include <unotools/viewoptions.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/kernitem.hxx>

@@ -27,7 +27,6 @@
 #include <editeng/editeng.hxx>
 #include <svx/svdovirt.hxx>
 #include <svx/fmmodel.hxx>
-#include <svx/dialmgr.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>

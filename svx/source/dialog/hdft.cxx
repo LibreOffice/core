@@ -24,7 +24,6 @@
 #include <vcl/graph.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>
-#include <svx/strings.hrc>
 
 #include <svl/intitem.hxx>
 
@@ -32,7 +31,6 @@
 #include <svx/pageitem.hxx>
 
 #include <svx/dlgutil.hxx>
-#include <svx/dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
 
 #include <editeng/brushitem.hxx>

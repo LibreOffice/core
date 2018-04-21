@@ -19,7 +19,6 @@
 
 #include <svx/svxerr.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/strings.hrc>
 #include <rtl/instance.hxx>
 #include <svxerr.hrc>
 

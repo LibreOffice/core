@@ -36,7 +36,6 @@
 #include <svx/svxids.hrc>
 #include <tbxform.hxx>
 
-#include <svx/dialmgr.hxx>
 #include <tabwin.hxx>
 #include <fmexpl.hxx>
 #include <filtnav.hxx>

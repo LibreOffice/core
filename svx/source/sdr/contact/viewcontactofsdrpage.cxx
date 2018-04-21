@@ -36,8 +36,6 @@
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/settings.hxx>
-#include <svx/strings.hrc>
-#include <svdglob.hxx>
 #include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <bitmaps.hlst>

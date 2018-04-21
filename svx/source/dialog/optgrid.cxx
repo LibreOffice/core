@@ -22,9 +22,7 @@
 #include <svl/intitem.hxx>
 
 #include <svx/svxids.hrc>
-#include <svx/dialmgr.hxx>
 #include <svx/optgrid.hxx>
-#include <svx/strings.hrc>
 #include <svx/dlgutil.hxx>
 
 // local functions

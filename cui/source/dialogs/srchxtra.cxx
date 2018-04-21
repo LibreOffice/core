@@ -22,7 +22,6 @@
 #include <svl/whiter.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/svxitems.hrc>
-#include <svx/dialmgr.hxx>
 #include <svx/strarray.hxx>
 #include <editeng/flstitem.hxx>
 #include <chardlg.hxx>

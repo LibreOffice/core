@@ -10,8 +10,6 @@
 
 #include <svx/ClassificationDialog.hxx>
 #include <svx/ClassificationCommon.hxx>
-#include <svx/strings.hrc>
-#include <svx/dialmgr.hxx>
 
 #include <editeng/flditem.hxx>
 #include <editeng/eeitem.hxx>

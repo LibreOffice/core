@@ -18,8 +18,6 @@
  */
 
 
-#include <svx/dialmgr.hxx>
-#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <svx/verttexttbxctrl.hxx>
 #include <svl/languageoptions.hxx>

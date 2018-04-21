@@ -24,7 +24,6 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/wldcrd.hxx>
-#include <svx/dialmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/textsearch.hxx>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>

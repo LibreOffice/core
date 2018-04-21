@@ -26,7 +26,6 @@
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <vcl/builderfactory.hxx>
 #include <editeng/numitem.hxx>
-#include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/strarray.hxx>
 

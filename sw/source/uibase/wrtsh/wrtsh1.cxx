@@ -87,7 +87,6 @@
 #include <editeng/acorrcfg.hxx>
 #include <IMark.hxx>
 #include <sfx2/bindings.hxx>
-#include <svx/dialmgr.hxx>
 
 // -> #111827#
 #include <SwRewriter.hxx>

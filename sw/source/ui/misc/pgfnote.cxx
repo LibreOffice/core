@@ -20,7 +20,6 @@
 #include <cmdid.h>
 #include <fmtfsize.hxx>
 #include <hintids.hxx>
-#include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>

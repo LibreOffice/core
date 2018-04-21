@@ -22,8 +22,6 @@
 #include <vcl/virdev.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/docfile.hxx>
-#include <svx/strings.hrc>
-#include <svx/dialmgr.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xbtmpit.hxx>

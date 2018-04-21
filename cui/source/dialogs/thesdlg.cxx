@@ -32,7 +32,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
 #include <svx/dlgutil.hxx>
-#include <svx/dialmgr.hxx>
 #include <svx/svxerr.hxx>
 #include <editeng/unolingu.hxx>
 #include <svx/langbox.hxx>

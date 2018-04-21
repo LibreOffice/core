@@ -27,11 +27,7 @@
 #include <svx/ucsubset.hxx>
 #include <unordered_map>
 
-
-#include <svx/strings.hrc>
-
 #include <svx/searchcharmap.hxx>
-#include <svx/dialmgr.hxx>
 #include <svx/svxdlg.hxx>
 
 #include <charmapacc.hxx>

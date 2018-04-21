@@ -19,8 +19,6 @@
 
 #include <svl/rectitem.hxx>
 
-
-#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 
 #include <svx/ruler.hxx>

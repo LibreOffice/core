@@ -20,8 +20,6 @@
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
 #include <svx/checklbx.hxx>
-#include <svx/dialmgr.hxx>
-#include <svx/strings.hrc>
 #include <vcl/builderfactory.hxx>
 
 SvxCheckListBox::SvxCheckListBox( vcl::Window* pParent, WinBits nWinStyle ) :

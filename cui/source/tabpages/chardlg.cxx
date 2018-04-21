@@ -27,7 +27,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svtools/unitconv.hxx>
 #include <svl/languageoptions.hxx>

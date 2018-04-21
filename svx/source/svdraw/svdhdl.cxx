@@ -33,8 +33,6 @@
 
 #include <svx/sxekitm.hxx>
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
-
 #include <svx/svdmodel.hxx>
 #include "gradtrns.hxx"
 #include <svx/xflgrit.hxx>

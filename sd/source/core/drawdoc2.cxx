@@ -39,7 +39,6 @@
 #include <sfx2/linkmgr.hxx>
 #include <editeng/editdata.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/dialmgr.hxx>
 
 #include <editeng/outliner.hxx>
 #include <svx/svditer.hxx>

@@ -19,7 +19,6 @@
 
 #include <GalleryControl.hxx>
 
-#include <svx/strings.hrc>
 #include <svx/galmisc.hxx>
 #include <svx/gallery1.hxx>
 #include "galbrws1.hxx"

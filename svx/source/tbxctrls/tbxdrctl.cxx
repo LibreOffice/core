@@ -26,8 +26,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/toolbox.hxx>
 
-#include <svx/dialmgr.hxx>
-#include <svx/strings.hrc>
 #include <svx/tbxctl.hxx>
 #include <svx/tbxcolor.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>

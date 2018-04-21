@@ -27,8 +27,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/zoomslideritem.hxx>
-#include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
 #include <set>
 #include <docsh.hxx>
 #include <stlpool.hxx>

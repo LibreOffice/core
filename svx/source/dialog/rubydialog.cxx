@@ -22,8 +22,6 @@
 
 #include <o3tl/any.hxx>
 #include <svx/rubydialog.hxx>
-#include <svx/dialmgr.hxx>
-#include <svx/strings.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
