@@ -201,11 +201,6 @@ public:
 
 SVX_DLLPUBLIC SdrGlobalData & GetSdrGlobalData();
 
-namespace sdr
-{
-    SVX_DLLPUBLIC OUString GetResourceString(const char* pResID);
-}
-
 
 // #i101872# isolated GetTextEditBackgroundColor for tooling
 class SdrObjEditView;

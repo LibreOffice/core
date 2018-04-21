@@ -76,8 +76,8 @@
 #include <drawdoc.hxx>
 #include <app.hrc>
 
-#include <svx/svdetc.hxx>
 #include <svx/strings.hrc>
+#include <svx/dialmgr.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -2211,9 +2211,9 @@ sal_uInt32 CustomAnimationPane::fillAnimationLB( bool bHasText )
     {
         OUString sMotionPathLabel( SdResId( STR_CUSTOMANIMATION_USERPATH ) );
         mpLBAnimation->InsertCategory( sMotionPathLabel );
-        mnCurvePathPos = mpLBAnimation->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulCOMBLINE) );
-        mnPolygonPathPos = mpLBAnimation->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulPOLY) );
-        mnFreeformPathPos = mpLBAnimation->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulFREELINE) );
+        mnCurvePathPos = mpLBAnimation->InsertEntry( SvxResId(STR_ObjNameSingulCOMBLINE) );
+        mnPolygonPathPos = mpLBAnimation->InsertEntry( SvxResId(STR_ObjNameSingulPOLY) );
+        mnFreeformPathPos = mpLBAnimation->InsertEntry( SvxResId(STR_ObjNameSingulFREELINE) );
     }
 
     while(aCategoryIter != aCategoryEnd)
