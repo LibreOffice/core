@@ -286,7 +286,8 @@ public:
         IS_DIACRITIC  = 0x004,
         IS_VERTICAL   = 0x008,
         IS_SPACING    = 0x010,
-        ALLOW_KASHIDA = 0x020
+        ALLOW_KASHIDA = 0x020,
+        IS_DROPPED    = 0x040
     };
 
     bool    IsClusterStart() const  { return ((mnFlags & IS_IN_CLUSTER) == 0); }
@@ -295,6 +296,7 @@ public:
     bool    IsVertical() const      { return ((mnFlags & IS_VERTICAL) != 0); }
     bool    IsSpacing() const       { return ((mnFlags & IS_SPACING) != 0); }
     bool    AllowKashida() const    { return ((mnFlags & ALLOW_KASHIDA) != 0); }
+    bool    IsDropped() const       { return ((mnFlags & IS_DROPPED) != 0); }
 };
 
 class VCL_PLUGIN_PUBLIC GenericSalLayout : public SalLayout
