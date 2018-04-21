@@ -292,46 +292,6 @@ public:
                             const Color* pReplaceColors,
                             sal_uLong nColorCount );
 
-    /** Change various global color characteristics
-
-        @param nLuminancePercent
-        Percent of luminance change, valid range [-100,100]. Values outside this range are clipped to the valid range.
-
-        @param nContrastPercent
-        Percent of contrast change, valid range [-100,100]. Values outside this range are clipped to the valid range.
-
-        @param nChannelRPercent
-        Percent of red channel change, valid range [-100,100]. Values outside this range are clipped to the valid range.
-
-        @param nChannelGPercent
-        Percent of green channel change, valid range [-100,100]. Values outside this range are clipped to the valid range.
-
-        @param nChannelBPercent
-        Percent of blue channel change, valid range [-100,100]. Values outside this range are clipped to the valid range.
-
-        @param fGamma
-        Exponent of the gamma function applied to the bitmap. The
-        value 1.0 results in no change, the valid range is
-        (0.0,10.0]. Values outside this range are regarded as 1.0.
-
-        @param bInvert
-        If true, invert the channel values with the logical 'not' operator
-
-        @param msoBrightness
-        Use the same formula for brightness as used by MSOffice.
-
-        @return true, if the operation was completed successfully.
-     */
-    bool                Adjust(
-                            short nLuminancePercent,
-                            short nContrastPercent,
-                            short nChannelRPercent,
-                            short nChannelGPercent,
-                            short nChannelBPercent,
-                            double fGamma = 1.0,
-                            bool bInvert = false,
-                            bool msoBrightness = false );
-
     /** Get transparency at given position
 
         @param nX

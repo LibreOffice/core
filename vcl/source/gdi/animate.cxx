@@ -596,35 +596,6 @@ void Animation::Mirror( BmpMirrorFlags nMirrorFlags )
     }
 }
 
-void Animation::Adjust( short nLuminancePercent, short nContrastPercent,
-             short nChannelRPercent, short nChannelGPercent, short nChannelBPercent,
-             double fGamma, bool bInvert )
-{
-    SAL_WARN_IF( IsInAnimation(), "vcl", "Animation modified while it is animated" );
-
-    bool bRet;
-
-    if( !IsInAnimation() && !maList.empty() )
-    {
-        bRet = true;
-
-        for( size_t i = 0, n = maList.size(); ( i < n ) && bRet; ++i )
-        {
-            bRet = maList[ i ]->aBmpEx.Adjust( nLuminancePercent,
-                                               nContrastPercent,
-                                               nChannelRPercent,
-                                               nChannelGPercent,
-                                               nChannelBPercent,
-                                               fGamma, bInvert
-                                             );
-        }
-
-        maBitmapEx.Adjust( nLuminancePercent, nContrastPercent,
-                           nChannelRPercent, nChannelGPercent, nChannelBPercent,
-                           fGamma, bInvert );
-    }
-}
-
 SvStream& WriteAnimation( SvStream& rOStm, const Animation& rAnimation )
 {
     const sal_uInt16 nCount = rAnimation.Count();
