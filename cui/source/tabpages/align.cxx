@@ -22,6 +22,7 @@
 #include <editeng/svxenum.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
+#include <svx/dialmgr.hxx>
 #include <bitmaps.hlst>
 #include <svx/rotmodit.hxx>
 
@@ -211,10 +212,9 @@ AlignmentTabPage::AlignmentTabPage( vcl::Window* pParent, const SfxItemSet& rCor
     // Asian vertical mode
     m_pCbAsianMode->Show( SvtCJKOptions().IsVerticalTextEnabled() );
 
-    std::locale loc(Translate::Create("svx"));
-    m_pLbFrameDir->InsertEntryValue( Translate::get( RID_SVXSTR_FRAMEDIR_LTR, loc ), SvxFrameDirection::Horizontal_LR_TB );
-    m_pLbFrameDir->InsertEntryValue( Translate::get( RID_SVXSTR_FRAMEDIR_RTL, loc ), SvxFrameDirection::Horizontal_RL_TB );
-    m_pLbFrameDir->InsertEntryValue( Translate::get( RID_SVXSTR_FRAMEDIR_SUPER, loc ), SvxFrameDirection::Environment );
+    m_pLbFrameDir->InsertEntryValue( SvxResId( RID_SVXSTR_FRAMEDIR_LTR ), SvxFrameDirection::Horizontal_LR_TB );
+    m_pLbFrameDir->InsertEntryValue( SvxResId( RID_SVXSTR_FRAMEDIR_RTL ), SvxFrameDirection::Horizontal_RL_TB );
+    m_pLbFrameDir->InsertEntryValue( SvxResId( RID_SVXSTR_FRAMEDIR_SUPER ), SvxFrameDirection::Environment );
 
     // This page needs ExchangeSupport.
     SetExchangeSupport();
