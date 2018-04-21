@@ -1414,31 +1414,15 @@ namespace basegfx
     {
     }
 
-    B3DPolygon::B3DPolygon(const B3DPolygon& rPolygon) :
-        mpPolygon(rPolygon.mpPolygon)
-    {
-    }
+    B3DPolygon::B3DPolygon(const B3DPolygon&) = default;
 
-    B3DPolygon::B3DPolygon(B3DPolygon&& rPolygon) :
-        mpPolygon(std::move(rPolygon.mpPolygon))
-    {
-    }
+    B3DPolygon::B3DPolygon(B3DPolygon&&) = default;
 
-    B3DPolygon::~B3DPolygon()
-    {
-    }
+    B3DPolygon::~B3DPolygon() = default;
 
-    B3DPolygon& B3DPolygon::operator=(const B3DPolygon& rPolygon)
-    {
-        mpPolygon = rPolygon.mpPolygon;
-        return *this;
-    }
+    B3DPolygon& B3DPolygon::operator=(const B3DPolygon&) = default;
 
-    B3DPolygon& B3DPolygon::operator=(B3DPolygon&& rPolygon)
-    {
-        mpPolygon = std::move(rPolygon.mpPolygon);
-        return *this;
-    }
+    B3DPolygon& B3DPolygon::operator=(B3DPolygon&&) = default;
 
     bool B3DPolygon::operator==(const B3DPolygon& rPolygon) const
     {

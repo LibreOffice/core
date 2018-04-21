@@ -43,8 +43,8 @@ namespace basegfx
 
     public:
         B2DHomMatrix();
-        B2DHomMatrix(const B2DHomMatrix& rMat);
-        B2DHomMatrix(B2DHomMatrix&& rMat);
+        B2DHomMatrix(const B2DHomMatrix&);
+        B2DHomMatrix(B2DHomMatrix&&);
         ~B2DHomMatrix();
 
         /** constructor to allow setting all needed values for a 3x2 matrix at once. The
@@ -96,8 +96,8 @@ namespace basegfx
         B2DHomMatrix& operator*=(const B2DHomMatrix& rMat);
 
         // assignment operator
-        B2DHomMatrix& operator=(const B2DHomMatrix& rMat);
-        B2DHomMatrix& operator=(B2DHomMatrix&& rMat);
+        B2DHomMatrix& operator=(const B2DHomMatrix&);
+        B2DHomMatrix& operator=(B2DHomMatrix&&);
 
         // Help routine to decompose given homogen 3x3 matrix to components. A correction of
         // the components is done to avoid inaccuracies.

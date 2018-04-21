@@ -41,12 +41,12 @@ namespace basegfx
 
     public:
         B2DCubicBezier();
-        B2DCubicBezier(const B2DCubicBezier& rBezier);
+        B2DCubicBezier(const B2DCubicBezier&);
         B2DCubicBezier(const B2DPoint& rStart, const B2DPoint& rControlPointA, const B2DPoint& rControlPointB, const B2DPoint& rEnd);
         ~B2DCubicBezier();
 
         // assignment operator
-        B2DCubicBezier& operator=(const B2DCubicBezier& rBezier);
+        B2DCubicBezier& operator=(const B2DCubicBezier&);
 
         // compare operators
         bool operator==(const B2DCubicBezier& rBezier) const;
