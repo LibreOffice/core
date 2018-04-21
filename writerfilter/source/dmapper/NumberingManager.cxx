@@ -218,7 +218,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
     {
         if (IgnoreForCharStyle(aValIter->Name))
             continue;
-        else
+        else if ( aValIter->Name != "CharInteropGrabBag" && aValIter->Name != "ParaInteropGrabBag" )
             rProperties.emplace_back(aValIter->Name, 0, aValIter->Value, beans::PropertyState_DIRECT_VALUE);
     }
 
