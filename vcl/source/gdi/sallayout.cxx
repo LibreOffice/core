@@ -47,7 +47,6 @@
 // Glyph Flags
 #define GF_FONTMASK  0xF0000000
 #define GF_FONTSHIFT 28
-#define GF_DROPPED   0xFFFFFFFF
 
 
 std::ostream &operator <<(std::ostream& s, ImplLayoutArgs const &rArgs)
@@ -1003,19 +1002,19 @@ void GenericSalLayout::DropGlyph( int nStart )
 
     std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.begin();
     pGlyphIter += nStart;
-    pGlyphIter->maGlyphId = GF_DROPPED;
     pGlyphIter->mnCharPos = -1;
+    pGlyphIter->mnFlags |= GlyphItem::IS_DROPPED;
 }
 
 void GenericSalLayout::Simplify( bool bIsBase )
 {
-    const sal_GlyphId nDropMarker = bIsBase ? GF_DROPPED : 0;
-
     // remove dropped glyphs inplace
     size_t j = 0;
     for(size_t i = 0; i < m_GlyphItems.size(); i++ )
     {
-        if( m_GlyphItems[i].maGlyphId == nDropMarker )
+        if (bIsBase && m_GlyphItems[i].IsDropped())
+            continue;
+        if (!bIsBase && m_GlyphItems[i].maGlyphId == 0)
             continue;
 
         if( i != j )
