@@ -90,8 +90,7 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
     if( bOnlyIntntl )
     {
         ImpGetIntntlSep( cIntntlDecSep, cIntntlGrpSep, cIntntlDecSepAlt );
-        if( bOnlyIntntl )
-            cNonIntntlDecSep = cIntntlDecSep;
+        cNonIntntlDecSep = cIntntlDecSep;
         // Ensure that the decimal separator alternative is really one.
         if (cIntntlDecSepAlt && cIntntlDecSepAlt == cNonIntntlDecSep)
             cIntntlDecSepAlt = 0;

@@ -1146,30 +1146,28 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS, short nLen)
             WW8_TCellVer6 const * pTc = reinterpret_cast<WW8_TCellVer6 const *>(pT);
             for (int i = 0; i < nColsToRead; i++, ++pCurrentTC,++pTc)
             {
-                if( i < nColsToRead )
-                {               // TC from file ?
-                    sal_uInt8 aBits1 = pTc->aBits1Ver6;
-                    pCurrentTC->bFirstMerged = sal_uInt8( ( aBits1 & 0x01 ) != 0 );
-                    pCurrentTC->bMerged = sal_uInt8( ( aBits1 & 0x02 ) != 0 );
-                    pCurrentTC->rgbrc[ WW8_TOP ]
-                        = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_TOP ] ));
-                    pCurrentTC->rgbrc[ WW8_LEFT ]
-                        = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_LEFT ] ));
-                    pCurrentTC->rgbrc[ WW8_BOT ]
-                        = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_BOT ] ));
-                    pCurrentTC->rgbrc[ WW8_RIGHT ]
+                // TC from file ?
+                sal_uInt8 aBits1 = pTc->aBits1Ver6;
+                pCurrentTC->bFirstMerged = sal_uInt8( ( aBits1 & 0x01 ) != 0 );
+                pCurrentTC->bMerged = sal_uInt8( ( aBits1 & 0x02 ) != 0 );
+                pCurrentTC->rgbrc[ WW8_TOP ]
+                    = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_TOP ] ));
+                pCurrentTC->rgbrc[ WW8_LEFT ]
+                    = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_LEFT ] ));
+                pCurrentTC->rgbrc[ WW8_BOT ]
+                    = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_BOT ] ));
+                pCurrentTC->rgbrc[ WW8_RIGHT ]
+                    = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_RIGHT ] ));
+                if(    ( pCurrentTC->bMerged )
+                        && ( i > 0             ) )
+                {
+                    // Cell merged -> remember
+                    //bWWMergedVer6[i] = true;
+                    pTCs[i-1].rgbrc[ WW8_RIGHT ]
                         = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_RIGHT ] ));
-                    if(    ( pCurrentTC->bMerged )
-                            && ( i > 0             ) )
-                    {
-                        // Cell merged -> remember
-                        //bWWMergedVer6[i] = true;
-                        pTCs[i-1].rgbrc[ WW8_RIGHT ]
-                            = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_RIGHT ] ));
-                            // apply right border to previous cell
-                            // bExist must not be set to false, because WW
-                            // does not count this cells in text boxes....
-                    }
+                        // apply right border to previous cell
+                        // bExist must not be set to false, because WW
+                        // does not count this cells in text boxes....
                 }
             }
         }

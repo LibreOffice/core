@@ -736,8 +736,7 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
     {
         // get properties of filter
         uno::Sequence< beans::PropertyValue > aFilterProps;
-        if ( !aFilterName.isEmpty() )
-            m_pOwner->GetFilterConfiguration()->getByName( aFilterName ) >>= aFilterProps;
+        m_pOwner->GetFilterConfiguration()->getByName( aFilterName ) >>= aFilterProps;
 
         aFiltPropsHM = ::comphelper::SequenceAsHashMap( aFilterProps );
         nFiltFlags = static_cast<SfxFilterFlags>(aFiltPropsHM.getUnpackedValueOrDefault("Flags", sal_Int32(0) ));

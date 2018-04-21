@@ -177,17 +177,15 @@ void SwMailMergeGreetingsPage::UpdatePreview()
                 try
                 {
                     bFemale = xColumn->getString() == sFemaleValue;
-                    if( !bNoValue )
+
+                    //no last name value marks the greeting also as neutral
+                    const OUString sLastNameColumn =
+                        m_rConfigItem.GetAssignedColumn(MM_PART_LASTNAME);
+                    if ( xColAccess->hasByName(sLastNameColumn) )
                     {
-                        //no last name value marks the greeting also as neutral
-                        const OUString sLastNameColumn =
-                            m_rConfigItem.GetAssignedColumn(MM_PART_LASTNAME);
-                        if ( xColAccess->hasByName(sLastNameColumn) )
-                        {
-                            aCol = xColAccess->getByName(sLastNameColumn);
-                            aCol >>= xColumn;
-                            bNoValue = xColumn->getString().isEmpty();
-                        }
+                        aCol = xColAccess->getByName(sLastNameColumn);
+                        aCol >>= xColumn;
+                        bNoValue = xColumn->getString().isEmpty();
                     }
                 }
                 catch (const sdbc::SQLException&)

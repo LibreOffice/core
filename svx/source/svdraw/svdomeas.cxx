@@ -164,8 +164,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
                 if(eMeasureUnit == FUNIT_NONE)
                     eMeasureUnit = eModUIUnit;
 
-                if(bShowUnit)
-                    aStr = SdrModel::GetUnitString(eMeasureUnit);
+                aStr = SdrModel::GetUnitString(eMeasureUnit);
             }
 
             break;
