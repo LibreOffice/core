@@ -21,7 +21,6 @@
 #include <svx/svdomeas.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/measctrl.hxx>
-#include <svx/dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>

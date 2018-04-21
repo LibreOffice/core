@@ -27,11 +27,9 @@
 #include <svx/svdocirc.hxx>
 #include <svx/xtextit.hxx>
 
-#include <svx/dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 
 #include <svx/svxids.hrc>
-#include <svx/strings.hrc>
 #include <bitmaps.hlst>
 #include <svx/fontwork.hxx>
 #include <editeng/outlobj.hxx>

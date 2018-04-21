@@ -23,7 +23,6 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/unolingu.hxx>
 #include <svtools/langtab.hxx>
-#include <svx/dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <vcl/builderfactory.hxx>
 

@@ -22,7 +22,6 @@
 
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
-#include <svx/dialmgr.hxx>
 
 #include <app.hrc>
 #include <svl/aeitem.hxx>

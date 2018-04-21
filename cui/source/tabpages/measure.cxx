@@ -24,7 +24,6 @@
 #include <sfx2/request.hxx>
 #include <vcl/settings.hxx>
 
-#include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dlgutil.hxx>
 #include <svx/measctrl.hxx>
