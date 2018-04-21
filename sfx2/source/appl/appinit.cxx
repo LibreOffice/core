@@ -158,7 +158,7 @@ extern "C" bool GetSpecialCharsForEdit( vcl::Window const * i_pParent, const vcl
 
 #endif
 
-OUString GetSpecialCharsForEdit(vcl::Window* pParent, const vcl::Font& rFont)
+OUString SfxGetSpecialCharsForEdit(vcl::Window* pParent, const vcl::Font& rFont)
 {
     static bool bDetermineFunction = false;
     static PFunc_getSpecialCharsForEdit pfunc_getSpecialCharsForEdit = nullptr;
@@ -250,7 +250,7 @@ void SfxApplication::Initialize_Impl()
     {
         SolarMutexGuard aGuard;
         // Set special characters callback on vcl edit control
-        Edit::SetGetSpecialCharsFunction(&GetSpecialCharsForEdit);
+        Edit::SetGetSpecialCharsFunction(&SfxGetSpecialCharsForEdit);
     }
 }
 
