@@ -17,9 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/types.h>
 #include <osl/file.hxx>
 #include <tools/stream.hxx>
 #include <unotools/resmgr.hxx>
+
 #include <vcl/settings.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/graph.hxx>
@@ -28,9 +30,9 @@
 #include <vcl/image.hxx>
 #include <vcl/imagerepository.hxx>
 #include <vcl/ImageTree.hxx>
-#include <sal/types.h>
-#include <image.h>
+#include <vcl/BitmapColorAdjustFilter.hxx>
 
+#include <image.h>
 #include <BitmapDisabledImageFilter.hxx>
 #include <BitmapColorizeFilter.hxx>
 
@@ -169,9 +171,9 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
             {
                 if (aTempBitmapEx.IsTransparent())
                 {
-                    Bitmap aAlphaBmp(aTempBitmapEx.GetAlpha().GetBitmap());
-                    aAlphaBmp.Adjust(50);
-                    aTempBitmapEx = BitmapEx(aTempBitmapEx.GetBitmap(), AlphaMask(aAlphaBmp));
+                    BitmapEx aAlphaBmpEx(aTempBitmapEx.GetAlpha().GetBitmap());
+                    BitmapFilter::Filter(aAlphaBmpEx, BitmapColorAdjustFilter(50));
+                    aTempBitmapEx = BitmapEx(aTempBitmapEx.GetBitmap(), AlphaMask(aAlphaBmpEx.GetBitmap()));
                 }
                 else
                 {
