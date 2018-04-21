@@ -242,7 +242,7 @@ public:
     //     - circle object angle: nothing
     //     - line keeps while Dragging the angle and is only stretched/ contracted
     // Default value for Ortho is off. persistent.
-    void SetOrtho(bool bOn) { bOrtho=bOn; } // unvollstaendig
+    void SetOrtho(bool bOn) { bOrtho=bOn; } // incomplete
     bool IsOrtho() const { return bOrtho; }
 
     // BigOrtho is only relevant if Ortho is switched on.
