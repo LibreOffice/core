@@ -170,41 +170,22 @@ public:
 namespace basegfx
 {
 
-    B2DPolyPolygon::B2DPolyPolygon()
-        : mpPolyPolygon()
-    {
-    }
+    B2DPolyPolygon::B2DPolyPolygon() = default;
 
-    B2DPolyPolygon::B2DPolyPolygon(const B2DPolyPolygon& rPolyPolygon) :
-        mpPolyPolygon(rPolyPolygon.mpPolyPolygon)
-    {
-    }
+    B2DPolyPolygon::B2DPolyPolygon(const B2DPolyPolygon&) = default;
 
-    B2DPolyPolygon::B2DPolyPolygon(B2DPolyPolygon&& rPolyPolygon) :
-        mpPolyPolygon(std::move(rPolyPolygon.mpPolyPolygon))
-    {
-    }
+    B2DPolyPolygon::B2DPolyPolygon(B2DPolyPolygon&&) = default;
 
     B2DPolyPolygon::B2DPolyPolygon(const B2DPolygon& rPolygon) :
         mpPolyPolygon( ImplB2DPolyPolygon(rPolygon) )
     {
     }
 
-    B2DPolyPolygon::~B2DPolyPolygon()
-    {
-    }
+    B2DPolyPolygon::~B2DPolyPolygon() = default;
 
-    B2DPolyPolygon& B2DPolyPolygon::operator=(const B2DPolyPolygon& rPolyPolygon)
-    {
-        mpPolyPolygon = rPolyPolygon.mpPolyPolygon;
-        return *this;
-    }
+    B2DPolyPolygon& B2DPolyPolygon::operator=(const B2DPolyPolygon&) = default;
 
-    B2DPolyPolygon& B2DPolyPolygon::operator=(B2DPolyPolygon&& rPolyPolygon)
-    {
-        mpPolyPolygon = std::move(rPolyPolygon.mpPolyPolygon);
-        return *this;
-    }
+    B2DPolyPolygon& B2DPolyPolygon::operator=(B2DPolyPolygon&&) = default;
 
     void B2DPolyPolygon::makeUnique()
     {

@@ -1104,9 +1104,7 @@ public:
 
 namespace basegfx
 {
-    B2DPolygon::B2DPolygon()
-        : mpPolygon()
-    {}
+    B2DPolygon::B2DPolygon() = default;
 
     B2DPolygon::B2DPolygon(std::initializer_list<basegfx::B2DPoint> aPoints)
         : mpPolygon()
@@ -1117,13 +1115,9 @@ namespace basegfx
         }
     }
 
-    B2DPolygon::B2DPolygon(const B2DPolygon& rPolygon)
-    :   mpPolygon(rPolygon.mpPolygon)
-    {}
+    B2DPolygon::B2DPolygon(const B2DPolygon&) = default;
 
-    B2DPolygon::B2DPolygon(B2DPolygon&& rPolygon)
-    :   mpPolygon(std::move(rPolygon.mpPolygon))
-    {}
+    B2DPolygon::B2DPolygon(B2DPolygon&&) = default;
 
     B2DPolygon::B2DPolygon(const B2DPolygon& rPolygon, sal_uInt32 nIndex, sal_uInt32 nCount)
     :   mpPolygon(ImplB2DPolygon(*rPolygon.mpPolygon, nIndex, nCount))
@@ -1133,21 +1127,11 @@ namespace basegfx
         OSL_ENSURE(nIndex + nCount <= rPolygon.mpPolygon->count(), "B2DPolygon constructor outside range (!)");
     }
 
-    B2DPolygon::~B2DPolygon()
-    {
-    }
+    B2DPolygon::~B2DPolygon() = default;
 
-    B2DPolygon& B2DPolygon::operator=(const B2DPolygon& rPolygon)
-    {
-        mpPolygon = rPolygon.mpPolygon;
-        return *this;
-    }
+    B2DPolygon& B2DPolygon::operator=(const B2DPolygon&) = default;
 
-    B2DPolygon& B2DPolygon::operator=(B2DPolygon&& rPolygon)
-    {
-        mpPolygon = std::move(rPolygon.mpPolygon);
-        return *this;
-    }
+    B2DPolygon& B2DPolygon::operator=(B2DPolygon&&) = default;
 
     void B2DPolygon::makeUnique()
     {
