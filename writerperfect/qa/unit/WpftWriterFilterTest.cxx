@@ -35,6 +35,7 @@ void WpftWriterFilterTest::test()
     };
     const writerperfect::test::WpftOptionalMap_t aEtonyekOptional{
         { "Pages_4.pages", REQUIRE_ETONYEK_VERSION(0, 1, 2) },
+        { "Pages_5.pages", REQUIRE_ETONYEK_VERSION(0, 1, 8) },
     };
     const writerperfect::test::WpftOptionalMap_t aMWAWOptional{
         { "MaxWrite_1.hqx", REQUIRE_MWAW_VERSION(0, 3, 8) },
