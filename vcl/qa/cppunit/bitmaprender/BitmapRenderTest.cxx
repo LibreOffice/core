@@ -62,7 +62,7 @@ void BitmapRenderTest::testTdf104141()
     BitmapEx aBitmap = aGraphic.GetBitmapEx();
     pVDev->DrawBitmapEx(Point(20, 20), aBitmap);
 
-    // Check drawing resuts: ensure that it contains transparent (green) pixels
+    // Check drawing results: ensure that it contains transparent (green) pixels
 #if !defined MACOSX //TODO: on Mac colors are drifted, so exact compare fails
     CPPUNIT_ASSERT_EQUAL(COL_GREEN, pVDev->GetPixel(Point(21, 21)));
 #endif
