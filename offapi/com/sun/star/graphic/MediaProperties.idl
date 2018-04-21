@@ -42,15 +42,10 @@ published service MediaProperties
         <p>In addition to the normal protocols like file:// or http://
         you can use private URLs as follows to get access to graphics
         lying inside the graphicrepository system within an Office context:
-
         <ul>
             <li><code>private:graphicrepository/<em>&lt;path_in_repository&gt;</em></code></li>
         </ul>
-And additionally, GraphicObject scheme URLs like
-            <ul> <li>vnd.sun.star.GraphicObject:10000000000001940000012FB99807BD</li> </ul>
-              can be used to access graphics held by the GraphicCache implementation.
         </p>
-</p>
     */
     [optional, property ] string URL;
 
