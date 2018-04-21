@@ -24,7 +24,7 @@
 #include <tools/gen.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-#include "salglyphid.hxx"
+#include "sallayout.hxx"
 
 namespace vcl { struct TrueTypeFont; }         ///< SFT's idea of a TTF font
 

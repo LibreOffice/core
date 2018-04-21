@@ -111,7 +111,6 @@
 #include <salframe.hxx>
 #include <salgdi.hxx>
 #include <salgdiimpl.hxx>
-#include <salglyphid.hxx>
 #include <salhelper/linkhelper.hxx>
 #include <salhelper/thread.hxx>
 #include <salimestatus.hxx>
