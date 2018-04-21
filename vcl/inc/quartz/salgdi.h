@@ -53,8 +53,6 @@ class CoreTextStyle;
 class XorEmulation;
 class CommonSalLayout;
 
-typedef sal_uInt32 sal_GlyphId;
-
 // CoreText-specific physically available font face
 class CoreTextFontFace : public PhysicalFontFace
 {
