@@ -40,7 +40,6 @@
 #include <svl/itempool.hxx>
 #include <sfx2/docfile.hxx>
 #include <avmedia/mediawindow.hxx>
-#include <svx/dialmgr.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdograf.hxx>
 #include <svx/fmpage.hxx>

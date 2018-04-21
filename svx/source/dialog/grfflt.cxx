@@ -22,9 +22,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 
-#include <svx/dialmgr.hxx>
 #include <svx/grfflt.hxx>
-#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <svx/svxdlg.hxx>
 #include <memory>

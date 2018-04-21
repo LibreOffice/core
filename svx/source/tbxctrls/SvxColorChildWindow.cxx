@@ -20,9 +20,7 @@
 #include <svx/SvxColorChildWindow.hxx>
 #include <sfx2/dockwin.hxx>
 #include <svx/svxids.hrc>
-#include <svx/strings.hrc>
 #include <svx/colrctrl.hxx>
-#include <svx/dialmgr.hxx>
 
 SFX_IMPL_DOCKINGWINDOW_WITHID( SvxColorChildWindow, SID_COLOR_CONTROL )
 

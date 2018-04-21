@@ -58,7 +58,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
-#include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
 #include <algorithm>

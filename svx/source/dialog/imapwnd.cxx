@@ -26,8 +26,6 @@
 #include <svl/urlbmk.hxx>
 
 #include <svx/xoutbmp.hxx>
-#include <svx/dialmgr.hxx>
-#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include "imapwnd.hxx"
 #include <svx/svdpage.hxx>

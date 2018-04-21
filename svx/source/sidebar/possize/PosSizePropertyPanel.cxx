@@ -20,9 +20,7 @@
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include "PosSizePropertyPanel.hxx"
 #include <svx/sidebar/SidebarDialControl.hxx>
-#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
-#include <svx/dialmgr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>

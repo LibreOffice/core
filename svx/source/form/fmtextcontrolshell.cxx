@@ -23,7 +23,6 @@
 #include <fmtextcontrolfeature.hxx>
 #include <fmtextcontrolshell.hxx>
 #include <editeng/crossedoutitem.hxx>
-#include <svx/dialmgr.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/fmglob.hxx>

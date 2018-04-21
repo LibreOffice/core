@@ -31,8 +31,6 @@
 #include <unotools/charclass.hxx>
 
 #include <editeng/unolingu.hxx>
-#include <svx/dialmgr.hxx>
-#include <svx/strings.hrc>
 #include <svx/ctredlin.hxx>
 
 #define WRITER_DATE     2

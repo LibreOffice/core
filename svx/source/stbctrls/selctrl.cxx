@@ -25,8 +25,6 @@
 #include <tools/urlobj.hxx>
 
 #include <svx/selctrl.hxx>
-#include <svx/dialmgr.hxx>
-#include <svx/strings.hrc>
 
 #include "stbctrls.h"
 #include <bitmaps.hlst>
