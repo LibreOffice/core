@@ -28,6 +28,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapDuoToneFilter.hxx>
+#include <vcl/BitmapColorAdjustFilter.hxx>
 
 #include <com/sun/star/text/GraphicCrop.hpp>
 
@@ -137,7 +138,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::applyBrightness
     ::Graphic aReturnGraphic;
 
     BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
-    aBitmapEx.Adjust(nBrightness, nContrast, 0, 0, 0, 0, false, mso);
+    BitmapFilter::Filter(aBitmapEx, BitmapColorAdjustFilter(nBrightness, nContrast, 0, 0, 0, 0, false, mso));
     aReturnGraphic = ::Graphic(aBitmapEx);
     aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
     return aReturnGraphic.GetXGraphic();

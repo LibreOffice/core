@@ -595,15 +595,6 @@ void BitmapEx::Replace( const Color* pSearchColors, const Color* pReplaceColors,
         maBitmap.Replace( pSearchColors, pReplaceColors, nColorCount, /*pTols*/nullptr );
 }
 
-bool BitmapEx::Adjust( short nLuminancePercent, short nContrastPercent,
-                       short nChannelRPercent, short nChannelGPercent, short nChannelBPercent,
-                       double fGamma, bool bInvert, bool msoBrightness )
-{
-    return !!maBitmap && maBitmap.Adjust( nLuminancePercent, nContrastPercent,
-                                        nChannelRPercent, nChannelGPercent, nChannelBPercent,
-                                        fGamma, bInvert, msoBrightness );
-}
-
 void BitmapEx::Draw( OutputDevice* pOutDev, const Point& rDestPt ) const
 {
     pOutDev->DrawBitmapEx( rDestPt, *this );

@@ -52,6 +52,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <rtl/strbuf.hxx>
+#include <vcl/BitmapColorAdjustFilter.hxx>
 #include <math.h>
 
 using namespace ::com::sun::star;
@@ -2213,13 +2214,13 @@ void EnhancedCustomShape2d::AdaptObjColor(
             {
                 if ( nColorCount || 0.0 != dBrightness )
                 {
-                    Bitmap aBitmap(rObj.GetMergedItem(XATTR_FILLBITMAP).GetGraphicObject().GetGraphic().GetBitmapEx().GetBitmap());
+                    BitmapEx aBitmapEx(rObj.GetMergedItem(XATTR_FILLBITMAP).GetGraphicObject().GetGraphic().GetBitmapEx().GetBitmap());
 
-                    aBitmap.Adjust(
+                    BitmapFilter::Filter(aBitmapEx, BitmapColorAdjustFilter(
                         static_cast< short > ( GetLuminanceChange(
-                            std::min(nColorIndex, nColorCount-1))));
+                            std::min(nColorIndex, nColorCount-1)))));
 
-                    rObj.SetMergedItem(XFillBitmapItem(OUString(), Graphic(aBitmap)));
+                    rObj.SetMergedItem(XFillBitmapItem(OUString(), Graphic(aBitmapEx.GetBitmap())));
                 }
 
                 break;
