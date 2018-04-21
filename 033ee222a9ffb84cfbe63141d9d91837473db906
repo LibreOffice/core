@@ -16,6 +16,24 @@
       "revId": "033ee222a9ffb84cfbe63141d9d91837473db906",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_f209c332",
+        "filename": "sw/source/core/table/swnewtable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-21T12:20:40Z",
+      "side": 1,
+      "message": "You are absolutely right. I don\u0027t think this patch is OK without this",
+      "parentUuid": "9a30ddce_721dd372",
+      "revId": "033ee222a9ffb84cfbe63141d9d91837473db906",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
