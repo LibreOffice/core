@@ -62,9 +62,12 @@ void BitmapRenderTest::testTdf104141()
     BitmapEx aBitmap = aGraphic.GetBitmapEx();
     pVDev->DrawBitmapEx(Point(20, 20), aBitmap);
 
-    // Check drawing resuts: ensure that it contains transparent (green) pixels
+    // Check drawing resuts: ensure that it contains transparent
+    // (greenish) pixels
 #if !defined MACOSX //TODO: on Mac colors are drifted, so exact compare fails
-    CPPUNIT_ASSERT_EQUAL(COL_GREEN, pVDev->GetPixel(Point(21, 21)));
+    const Color aColor = pVDev->GetPixel(Point(21, 21));
+    CPPUNIT_ASSERT(aColor.GetGreen() > 10 * aColor.GetRed()
+                   && aColor.GetGreen() > 10 * aColor.GetBlue());
 #endif
 }
 
@@ -84,9 +87,13 @@ void BitmapRenderTest::testTdf113918()
     BitmapEx aBitmap = aGraphic.GetBitmapEx();
     pVDev->DrawBitmapEx(Point(0, 0), aBitmap);
 
-    // Ensure that image is drawn with gray color from palette
+    // Ensure that image is drawn with white background color from palette
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(21, 21)));
-    CPPUNIT_ASSERT_EQUAL(Color(0x979797), pVDev->GetPixel(Point(1298, 1368)));
+
+    // Ensure that image is drawn with gray text color from palette
+    const Color aColor = pVDev->GetPixel(Point(1298, 1368));
+    CPPUNIT_ASSERT(aColor.GetGreen() == aColor.GetRed() && aColor.GetGreen() == aColor.GetBlue());
+    CPPUNIT_ASSERT(aColor.GetGreen() > 100);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BitmapRenderTest);
