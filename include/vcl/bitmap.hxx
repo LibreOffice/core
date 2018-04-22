@@ -74,11 +74,6 @@ enum class BmpConversion
     Ghosted
 };
 
-enum class BmpCombine
-{
-    Or, And
-};
-
 class   BitmapInfoAccess;
 class   BitmapReadAccess;
 class   BitmapWriteAccess;
@@ -247,20 +242,6 @@ public:
                                 const tools::Rectangle& rRectDst,
                                 const tools::Rectangle& rRectSrc,
                                 const Bitmap* pBmpSrc );
-
-    /** Perform boolean operations with another bitmap
-
-        @param rMask
-        The mask bitmap in the selected combine operation
-
-        @param eCombine
-        The combine operation to perform on the bitmap
-
-        @return true, if the operation was completed successfully.
-     */
-    bool                    CombineSimple(
-                                const Bitmap& rMask,
-                                BmpCombine eCombine );
 
     /** Alpha-blend the given bitmap against a specified uniform
           background color.

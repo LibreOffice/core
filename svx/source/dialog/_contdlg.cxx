@@ -43,6 +43,7 @@
 #include <vcl/virdev.hxx>
 #include "dlgunit.hxx"
 #include <vcl/weld.hxx>
+#include <vcl/BitmapCombinationFilter.hxx>
 
 SFX_IMPL_FLOATINGWINDOW_WITHID( SvxContourDlgChildWindow, SID_CONTOUR_DLG );
 
@@ -694,10 +695,14 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
             Bitmap      aBmp( aGraphic.GetBitmap() );
             const long  nTol = static_cast<long>(m_pMtfTolerance->GetValue() * 255L / 100L);
 
-            aMask = aBmp.CreateMask( rColor, nTol );
+            aMask = aBmp.CreateMask(rColor, nTol);
+            BitmapEx aMaskEx(aMask);
 
-            if( aGraphic.IsTransparent() )
-                aMask.CombineSimple( aGraphic.GetBitmapEx().GetMask(), BmpCombine::Or );
+            if (aGraphic.IsTransparent())
+            {
+                BitmapFilter::Filter(aMaskEx, BitmapCombinationFilter(aGraphic.GetBitmapEx().GetMask(), BmpCombine::Or));
+                aMask = aMaskEx.GetBitmap();
+            }
 
             if( !!aMask )
             {
@@ -708,7 +713,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
 
                 aRedoGraphic = Graphic();
                 aUndoGraphic = aGraphic;
-                aGraphic = Graphic( BitmapEx( aBmp, aMask ) );
+                aGraphic = Graphic(BitmapEx(aBmp, aMask));
                 mnGrfChanged++;
 
                 bNewContour = (xQBox->run() == RET_YES);

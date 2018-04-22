@@ -29,6 +29,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapDuoToneFilter.hxx>
 #include <vcl/BitmapColorAdjustFilter.hxx>
+#include <vcl/BitmapCombinationFilter.hxx>
 
 #include <com/sun/star/text/GraphicCrop.hpp>
 
@@ -78,11 +79,11 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
         {
             if (nAlphaTo == sal::static_int_cast< sal_Int8 >(0xff))
             {
-                Bitmap aMask(aBitmapEx.GetMask());
+                BitmapEx aMaskBmpEx(aBitmapEx.GetMask());
                 Bitmap aMask2(aBitmap.CreateMask(aColorFrom, nTolerance));
-                aMask.CombineSimple(aMask2, BmpCombine::Or);
+                BitmapFilter::Filter(aMaskBmpEx, BitmapCombinationFilter(aMask2, BmpCombine::Or));
                 aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
-                aReturnGraphic = ::Graphic(BitmapEx(aBitmap, aMask));
+                aReturnGraphic = ::Graphic(BitmapEx(aBitmap, aMaskBmpEx.GetBitmap()));
             }
             else
             {
