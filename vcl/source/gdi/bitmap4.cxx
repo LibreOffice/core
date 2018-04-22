@@ -28,7 +28,6 @@
 #include <vcl/BitmapSepiaFilter.hxx>
 #include <vcl/BitmapMosaicFilter.hxx>
 #include <vcl/BitmapEmbossGreyFilter.hxx>
-#include <vcl/BitmapSepiaFilter.hxx>
 #include <vcl/BitmapPopArtFilter.hxx>
 #include <vcl/BitmapDuoToneFilter.hxx>
 
