@@ -162,20 +162,6 @@ public:
      */
     bool                    Convert( BmpConversion eConversion );
 
-
-    /** Convert to 2 color bitmap.
-
-        Converts to a 2 color indexed bitmap - note that we don't change to black and white
-        monochrome, but we pick the closest color to black and white in the bitmap.
-
-        @param cThreshold
-        Luminance value that determines whether the colour should be black (or closest
-        color to black) or white (or closest color to white).
-
-        @return true conversion to monochrome bitmap was successful
-    */
-    bool                    MakeMonochrome(sal_uInt8 cThreshold);
-
     /** Crop the bitmap
 
         @param rRectPixel

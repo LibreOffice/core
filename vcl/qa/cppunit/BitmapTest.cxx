@@ -25,6 +25,7 @@
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
 #endif
+#include <vcl/BitmapMonochromeFilter.hxx>
 
 #include <BitmapSymmetryCheck.hxx>
 #include <bitmapwriteaccess.hxx>
@@ -211,7 +212,9 @@ void BitmapTest::testMonochrome()
 {
     Bitmap aBmp = createTestBitmap();
 
-    aBmp.MakeMonochrome(63);
+    BitmapEx aBmpEx(aBmp);
+    BitmapFilter::Filter(aBmpEx, BitmapMonochromeFilter(63));
+    aBmp = aBmpEx.GetBitmap();
     BitmapReadAccess aBmpReadAccess(aBmp);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Black pixel wrong monochrome value", BitmapColor(COL_BLACK),
