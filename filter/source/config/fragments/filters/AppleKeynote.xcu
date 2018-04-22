@@ -15,7 +15,7 @@
         <value>org.libreoffice.comp.Impress.KeynoteImportFilter</value>
     </prop>
     <prop oor:name="UIName">
-        <value xml:lang="en-US">Apple Keynote 5</value>
+        <value xml:lang="en-US">Apple Keynote</value>
     </prop>
     <prop oor:name="FileFormatVersion">
         <value>0</value>

@@ -15,7 +15,7 @@
         <value>org.libreoffice.comp.Writer.PagesImportFilter</value>
     </prop>
     <prop oor:name="UIName">
-        <value xml:lang="en-US">Apple Pages 4</value>
+        <value xml:lang="en-US">Apple Pages</value>
     </prop>
     <prop oor:name="FileFormatVersion">
         <value>0</value>
