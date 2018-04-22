@@ -32,6 +32,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
 #include <vcl/window.hxx>
+#include <vcl/BitmapMonochromeFilter.hxx>
 
 #include <bmpfast.hxx>
 #include <salgdi.hxx>
@@ -327,9 +328,9 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                     // DRAWMODE_BLACK/WHITEBITMAP requires monochrome
                     // output, having alpha-induced grey levels is not
                     // acceptable.
-                    Bitmap aMask( aBmpEx.GetAlpha().GetBitmap() );
-                    aMask.MakeMonochrome(129);
-                    aBmpEx = BitmapEx( aColorBmp, aMask );
+                    BitmapEx aMaskEx(aBmpEx.GetAlpha().GetBitmap());
+                    BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(129));
+                    aBmpEx = BitmapEx(aColorBmp, aMaskEx.GetBitmap());
                 }
                 else
                 {

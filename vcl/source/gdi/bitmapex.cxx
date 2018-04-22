@@ -34,6 +34,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/BitmapMonochromeFilter.hxx>
 
 // BitmapEx::Create
 #include <salbmp.hxx>
@@ -125,7 +126,9 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
     if( !!maMask && maMask.GetBitCount() != 1 )
     {
         SAL_WARN( "vcl", "BitmapEx: forced mask to monochrome");
-        maMask.MakeMonochrome(255);
+        BitmapEx aMaskEx(maMask);
+        BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(255));
+        maMask = aMaskEx.GetBitmap();
     }
 
     if (!!maBitmap && !!maMask && maBitmap.GetSizePixel() != maMask.GetSizePixel())
@@ -249,8 +252,13 @@ Bitmap BitmapEx::GetMask() const
 {
     Bitmap aRet( maMask );
 
-    if( IsAlpha() )
-        aRet.MakeMonochrome(255);
+    if (IsAlpha())
+    {
+
+        BitmapEx aMaskEx(aRet);
+        BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(255));
+        aRet = aMaskEx.GetBitmap();
+    }
 
     return aRet;
 }

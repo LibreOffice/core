@@ -311,6 +311,13 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/graphic/UnoGraphicTransformer \
     vcl/source/bitmap/bitmap \
     vcl/source/bitmap/bitmapfilter \
+    vcl/source/bitmap/BitmapMonochromeFilter \
+    vcl/source/bitmap/BitmapSmoothenFilter \
+    vcl/source/bitmap/BitmapLightenFilter \
+    vcl/source/bitmap/BitmapDisabledImageFilter \
+    vcl/source/bitmap/BitmapColorizeFilter \
+    vcl/source/bitmap/bitmappaint \
+    vcl/source/bitmap/BitmapGaussianSeparableBlurFilter \
     vcl/source/bitmap/BitmapSobelGreyFilter \
     vcl/source/bitmap/BitmapSolarizeFilter \
     vcl/source/bitmap/BitmapSepiaFilter \
@@ -321,13 +328,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/BitmapConvolutionMatrixFilter \
     vcl/source/bitmap/BitmapMedianFilter \
     vcl/source/bitmap/BitmapInterpolateScaleFilter \
-    vcl/source/bitmap/BitmapLightenFilter \
-    vcl/source/bitmap/BitmapDisabledImageFilter \
-    vcl/source/bitmap/BitmapColorizeFilter \
-    vcl/source/bitmap/bitmappaint \
-    vcl/source/bitmap/BitmapGaussianSeparableBlurFilter \
     vcl/source/bitmap/BitmapSeparableUnsharpenFilter \
-    vcl/source/bitmap/BitmapSmoothenFilter \
 	vcl/source/bitmap/BitmapFastScaleFilter \
     vcl/source/bitmap/BitmapScaleSuperFilter \
     vcl/source/bitmap/BitmapScaleConvolutionFilter \
