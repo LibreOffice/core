@@ -81,7 +81,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
 
     // Get data sink ...
     tools::SvRef<SotStorageStream> xDocStream;
-    uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
+    uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
     rtl::Reference<SvXMLGraphicHelper> xGraphicHelper ;
     uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     rtl::Reference<SvXMLEmbeddedObjectHelper> xObjectHelper;
@@ -89,7 +89,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     OSL_ENSURE( xStg.is(), "Where is my storage?" );
     xGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                                                  SvXMLGraphicHelperMode::Write );
-    xGraphicResolver = xGraphicHelper.get();
+    xGraphicStorageHandler = xGraphicHelper.get();
 
     SfxObjectShell *pPersist = m_pDoc->GetPersist();
     if( pPersist )
@@ -228,7 +228,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     if( xStatusIndicator.is() )
         *pArgs++ <<= xStatusIndicator;
 
-    if( xGraphicResolver.is() )
+    if( xGraphicStorageHandler.is() )
         nArgs++;
     if( xObjectResolver.is() )
         nArgs++;
@@ -236,8 +236,8 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     Sequence < Any > aFilterArgs( nArgs );
     pArgs = aFilterArgs.getArray();
     *pArgs++ <<= xInfoSet;
-    if( xGraphicResolver.is() )
-        *pArgs++ <<= xGraphicResolver;
+    if( xGraphicStorageHandler.is() )
+        *pArgs++ <<= xGraphicStorageHandler;
     if( xObjectResolver.is() )
         *pArgs++ <<= xObjectResolver;
     if( xStatusIndicator.is() )
@@ -392,7 +392,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     if( xGraphicHelper )
         xGraphicHelper->dispose();
     xGraphicHelper.clear();
-    xGraphicResolver = nullptr;
+    xGraphicStorageHandler = nullptr;
 
     if( xObjectHelper )
         xObjectHelper->dispose();

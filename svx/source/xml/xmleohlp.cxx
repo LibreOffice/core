@@ -551,7 +551,6 @@ rtl::Reference<SvXMLEmbeddedObjectHelper> SvXMLEmbeddedObjectHelper::Create(
     return pThis;
 }
 
-// XGraphicObjectResolver: alien objects!
 OUString SAL_CALL SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL(const OUString& rURL)
 {
     MutexGuard          aGuard( maMutex );

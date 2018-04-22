@@ -30,7 +30,7 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/resource/StringResourceWithStorage.hpp>
 #include <com/sun/star/resource/StringResourceWithLocation.hpp>
-#include <com/sun/star/document/GraphicObjectResolver.hpp>
+#include <com/sun/star/document/GraphicStorageHandler.hpp>
 #include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <dlgcont.hxx>
 #include <comphelper/fileformat.h>
@@ -242,10 +242,8 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
                     if (!vxGraphicList.empty())
                     {
                         // Export the images to the storage
-                        Reference<document::XGraphicObjectResolver> xGraphicResolver;
-                        xGraphicResolver.set(document::GraphicObjectResolver::createWithStorage(mxContext, xStorage));
                         Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
-                        xGraphicStorageHandler.set(xGraphicResolver, uno::UNO_QUERY);
+                        xGraphicStorageHandler.set(document::GraphicStorageHandler::createWithStorage(mxContext, xStorage));
                         if (xGraphicStorageHandler.is())
                         {
                             for (uno::Reference<graphic::XGraphic> const & rxGraphic : vxGraphicList)

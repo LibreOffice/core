@@ -32,7 +32,8 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
-#include <com/sun/star/document/GraphicObjectResolver.hpp>
+#include <com/sun/star/document/XGraphicStorageHandler.hpp>
+#include <com/sun/star/document/GraphicStorageHandler.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -60,8 +61,6 @@
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/DialogProvider.hpp>
-#include <com/sun/star/document/XGraphicObjectResolver.hpp>
-#include <com/sun/star/document/XGraphicStorageHandler.hpp>
 
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/enumhelper.hxx>
@@ -383,10 +382,8 @@ void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibrar
     if (!vxGraphicList.empty())
     {
         // Export the images to the storage
-        uno::Reference<document::XGraphicObjectResolver> xGraphicResolver;
-        xGraphicResolver.set(GraphicObjectResolver::createWithStorage(rxContext, xTmpPic));
         uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
-        xGraphicStorageHandler.set(xGraphicResolver, uno::UNO_QUERY);
+        xGraphicStorageHandler.set(GraphicStorageHandler::createWithStorage(rxContext, xTmpPic));
         if (xGraphicStorageHandler.is())
         {
             for (uno::Reference<graphic::XGraphic> const & rxGraphic : vxGraphicList)
