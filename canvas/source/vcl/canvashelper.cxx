@@ -46,6 +46,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/window.hxx>
+#include <vcl/BitmapMonochromeFilter.hxx>
 
 #include <canvas/canvastools.hxx>
 
@@ -720,8 +721,9 @@ namespace vclcanvas
                     if( aBmpEx.IsAlpha() )
                     {
                         Bitmap aMask( aBmpEx.GetAlpha().GetBitmap() );
-                        aMask.MakeMonochrome(253);
-                        aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMask );
+                        BitmapEx aMaskEx(aMask);
+                        BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(253));
+                        aMask = aMaskEx.GetBitmap();
                     }
                     else if( aBmpEx.IsTransparent() )
                     {
