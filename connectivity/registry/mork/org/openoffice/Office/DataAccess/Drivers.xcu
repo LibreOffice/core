@@ -23,7 +23,7 @@
         <value>com.sun.star.comp.sdbc.MorkDriver</value>
       </prop>
       <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
-        <value xml:lang="en-US">Thunderbird/Icedove Address Book</value>
+        <value xml:lang="en-US">Thunderbird Address Book</value>
       </prop>
       <node oor:name="Features">
         <node oor:name="EscapeDateTime" oor:op="replace">

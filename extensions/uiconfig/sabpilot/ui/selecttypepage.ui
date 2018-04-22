@@ -80,7 +80,7 @@ This wizard helps you create the data source.</property>
         </child>
         <child>
           <object class="GtkRadioButton" id="firefox">
-            <property name="label" translatable="yes" context="selecttypepage|firefox">Firefox/Iceweasel</property>
+            <property name="label" translatable="yes" context="selecttypepage|firefox">Firefox</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -96,7 +96,7 @@ This wizard helps you create the data source.</property>
         </child>
         <child>
           <object class="GtkRadioButton" id="thunderbird">
-            <property name="label" translatable="yes" context="selecttypepage|thunderbird">Thunderbird/Icedove</property>
+            <property name="label" translatable="yes" context="selecttypepage|thunderbird">Thunderbird</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
