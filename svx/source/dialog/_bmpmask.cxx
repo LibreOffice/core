@@ -22,6 +22,7 @@
 #include <vcl/field.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/BitmapCombinationFilter.hxx>
 #include <svtools/valueset.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
@@ -629,12 +630,12 @@ BitmapEx SvxBmpMask::ImpMaskTransparent( const BitmapEx& rBitmapEx, const Color&
     EnterWait();
 
     BitmapEx    aBmpEx;
-    Bitmap      aMask( rBitmapEx.GetBitmap().CreateMask( rColor, nTol ) );
+    BitmapEx    aMask( rBitmapEx.GetBitmap().CreateMask( rColor, nTol ) );
 
     if( rBitmapEx.IsTransparent() )
-        aMask.CombineSimple( rBitmapEx.GetMask(), BmpCombine::Or );
+        BitmapFilter::Filter(aMask, BitmapCombinationFilter(rBitmapEx.GetMask(), BmpCombine::Or));
 
-    aBmpEx = BitmapEx( rBitmapEx.GetBitmap(), aMask );
+    aBmpEx = BitmapEx(rBitmapEx.GetBitmap(), aMask.GetBitmap());
     LeaveWait();
 
     return aBmpEx;
