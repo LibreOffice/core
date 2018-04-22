@@ -58,7 +58,7 @@ ModalDialog RID_SCDLG_RETYPEPASS
 
         WordBreak = TRUE ;
 
-        Text [ en-US ] = "The document you are about to export has one or more protected items with password that cannot be exported.  Please re-type your password to be able to export your document." ;
+        Text [ en-US ] = "The document you are about to export has one or more protected items with password that cannot be exported. Please re-type your password to be able to export your document." ;
     };
 
     FixedLine FL_DOCUMENT
