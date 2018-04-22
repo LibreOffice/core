@@ -512,7 +512,7 @@
         </prop>
       </node>
       <node oor:name=".uno:CurrentConditionalFormatDialog" oor:op="replace">
-        <prop oor:name="ContextLabel" oor:type="xs:string">
+        <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Conditional Formatting...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
