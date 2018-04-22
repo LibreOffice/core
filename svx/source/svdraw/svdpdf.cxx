@@ -1313,17 +1313,19 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int nPageObjectIn
 
 void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex)
 {
-    SAL_WARN("sd.filter", "Got page object PATH: " << nPageObjectIndex);
-
     double a, b, c, d, e, f;
     FPDFPath_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
     Matrix aPathMatrix(a, b, c, d, e, f);
     aPathMatrix.Concatinate(mCurMatrix);
 
+    basegfx::B2DPolyPolygon aPolyPoly;
     basegfx::B2DPolygon aPoly;
     std::vector<basegfx::B2DPoint> aBezier;
 
     const int nSegments = FPDFPath_CountSegments(pPageObject);
+    SAL_WARN("sd.filter",
+             "Got page object PATH: " << nPageObjectIndex << " with " << nSegments << " segments.");
+
     for (int nSegmentIndex = 0; nSegmentIndex < nSegments; ++nSegmentIndex)
     {
         FPDF_PATHSEGMENT pPathSegment = FPDFPath_GetPathSegment(pPageObject, nSegmentIndex);
@@ -1338,16 +1340,16 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
 
             double x = fx;
             double y = fy;
-            SAL_WARN("sd.filter", "Got point (" << x << ", " << y << ") matrix (" << a << ", " << b
-                                                << ", " << c << ", " << d << ", " << e << ", " << f
-                                                << ')');
             aPathMatrix.Transform(x, y);
-
             const bool bClose = FPDFPathSegment_GetClose(pPathSegment);
             if (bClose)
                 aPoly.setClosed(bClose); // TODO: Review
-            SAL_WARN("sd.filter",
-                     "Point corrected (" << x << ", " << y << "): " << (bClose ? "CLOSE" : "OPEN"));
+
+            SAL_WARN("sd.filter", "Got " << (bClose ? "CLOSE" : "OPEN") << " point (" << fx << ", "
+                                         << fy << ") matrix (" << a << ", " << b << ", " << c
+                                         << ", " << d << ", " << e << ", " << f << ") -> (" << x
+                                         << ", " << y << ")");
+
             Point aPoint = PointsToLogic(x, y);
             x = aPoint.X();
             y = aPoint.Y();
@@ -1372,6 +1374,13 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
 
                 case FPDF_SEGMENT_MOVETO:
                     SAL_WARN("sd.filter", "Got MoveTo Segment.");
+                    // New Poly.
+                    if (aPoly.count() > 0)
+                    {
+                        aPolyPoly.append(aPoly, 1);
+                        aPoly.clear();
+                    }
+
                     aPoly.append(basegfx::B2DPoint(x, y));
                     break;
 
@@ -1389,9 +1398,15 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
         aBezier.clear();
     }
 
+    if (aPoly.count() > 0)
+    {
+        aPolyPoly.append(aPoly, 1);
+        aPoly.clear();
+    }
+
     const basegfx::B2DHomMatrix aTransform(
         basegfx::tools::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
-    aPoly.transform(aTransform);
+    aPolyPoly.transform(aTransform);
 
     float fWidth = 1;
     FPDFPath_GetStrokeWidth(pPageObject, &fWidth);
@@ -1421,7 +1436,7 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
 
     // if(!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(basegfx::B2DPolyPolygon(aSource)))
 
-    SdrPathObj* pPath = new SdrPathObj(OBJ_POLY, basegfx::B2DPolyPolygon(aPoly));
+    SdrPathObj* pPath = new SdrPathObj(OBJ_POLY, aPolyPoly);
     SetAttributes(pPath);
     InsertObj(pPath, false);
 }
