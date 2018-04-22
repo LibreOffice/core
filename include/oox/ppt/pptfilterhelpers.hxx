@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_PPT_PPTFILTERHELPERS_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <oox/dllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -82,6 +83,8 @@ namespace oox { namespace ppt {
     OOX_DLLPUBLIC void fixMainSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
 
     OOX_DLLPUBLIC void fixInteractiveSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+
+    OOX_DLLPUBLIC void normalizeKeyTimes( css::uno::Sequence< double >& aKeyTimes );
 } }
 
 #endif

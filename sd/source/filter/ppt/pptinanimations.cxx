@@ -55,6 +55,7 @@
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #include <comphelper/processfactory.hxx>
 #include <oox/helper/addtosequence.hxx>
+#include <oox/ppt/pptfilterhelpers.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
@@ -2489,7 +2490,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
         }
         dump( "\"" );
 #endif
-
+        oox::ppt::normalizeKeyTimes( aKeyTimes );
         xAnim->setKeyTimes( aKeyTimes );
         xAnim->setValues( aValues );
         xAnim->setFormula( aFormula );
