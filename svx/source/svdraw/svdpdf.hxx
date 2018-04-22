@@ -42,6 +42,7 @@ class SdrObject;
 class SvdProgressInfo;
 typedef void* FPDF_DOCUMENT;
 typedef void* FPDF_PAGEOBJECT;
+typedef void* FPDF_TEXTPAGE;
 
 // Helper Class to import PDF
 class ImpSdrPdfImport final
@@ -86,7 +87,6 @@ class ImpSdrPdfImport final
         double d() const { return md; }
         double e() const { return me; }
         double f() const { return mf; }
-
         /// Mutliply this * other.
         void Concatinate(const Matrix& other)
         {
@@ -156,7 +156,6 @@ class ImpSdrPdfImport final
     /// Correct the vertical coordinate to start at the top.
     /// PDF coordinate system has orign at the bottom right.
     double correctVertOrigin(double offsetPts) const { return mdPageHeightPts - offsetPts; }
-
     /// Convert PDF points to logic (twips).
     Rectangle PointsToLogic(double left, double right, double top, double bottom) const;
     Point PointsToLogic(double x, double y) const;
@@ -165,11 +164,12 @@ class ImpSdrPdfImport final
     void checkClip();
     bool isClip() const;
 
-    void ImportPdfObject(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex);
-    void ImportForm(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex);
+    void ImportPdfObject(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTextPage,
+                         int nPageObjectIndex);
+    void ImportForm(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTextPage, int nPageObjectIndex);
     void ImportImage(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex);
     void ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex);
-    void ImportText(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex);
+    void ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTextPage, int nPageObjectIndex);
     void ImportText(const Point& rPos, const Size& rSize, const OUString& rStr);
 
     void SetupPageScale(const double dPageWidth, const double dPageHeight);
@@ -193,7 +193,6 @@ public:
     ~ImpSdrPdfImport();
 
     int GetPageCount() const { return mnPageCount; }
-
     size_t DoImport(SdrObjList& rDestList, size_t nInsPos, int nPageNumber,
                     SvdProgressInfo* pProgrInfo = nullptr);
 };
