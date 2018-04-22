@@ -688,10 +688,10 @@ void SwXMLImport::startDocument()
     if ( pDrawModel )
         pDrawModel->setLock(true);
 
-    if( !GetGraphicResolver().is() )
+    if (!GetGraphicStorageHandler().is())
     {
-        m_xGraphicResolver = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Read );
-        SetGraphicResolver( m_xGraphicResolver.get() );
+        m_xGraphicStorageHandler = SvXMLGraphicHelper::Create(SvXMLGraphicHelperMode::Read);
+        SetGraphicStorageHandler(m_xGraphicStorageHandler.get());
     }
 
     if( !GetEmbeddedResolver().is() )
@@ -717,9 +717,10 @@ void SwXMLImport::endDocument()
     // this method will modify the document directly -> lock SolarMutex
     SolarMutexGuard aGuard;
 
-    if( m_xGraphicResolver )
-        m_xGraphicResolver->dispose();
-    m_xGraphicResolver.clear();
+    if (m_xGraphicStorageHandler)
+        m_xGraphicStorageHandler->dispose();
+    m_xGraphicStorageHandler.clear();
+
     if( m_xEmbeddedResolver )
         m_xEmbeddedResolver->dispose();
     m_xEmbeddedResolver.clear();

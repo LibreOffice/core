@@ -139,7 +139,7 @@ SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
     const OUString& rFileName,
     const uno::Reference<xml::sax::XDocumentHandler> & rHandler,
     const uno::Reference<container::XNameContainer >& xTable,
-    uno::Reference<document::XGraphicObjectResolver > const & xGrfResolver )
+    uno::Reference<document::XGraphicStorageHandler> const & xGraphicStorageHandler)
 :   SvXMLExport(rContext, "", rFileName, rHandler, nullptr, FUNIT_100TH_MM, SvXMLExportFlags::NONE),
     mxTable( xTable )
 {
@@ -149,7 +149,7 @@ SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
     GetNamespaceMap_().Add( GetXMLToken(XML_NP_DRAW), GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
     GetNamespaceMap_().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
     GetNamespaceMap_().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG),  XML_NAMESPACE_SVG );
-    SetGraphicResolver( xGrfResolver );
+    SetGraphicStorageHandler(xGraphicStorageHandler);
 }
 
 SvxXMLXTableExportComponent::~SvxXMLXTableExportComponent()
@@ -218,7 +218,7 @@ bool SvxXMLXTableExportComponent::save(
         uno::Reference < io::XStream > xStream;
         uno::Reference < io::XOutputStream > xOut;
         uno::Reference<embed::XStorage > xSubStorage;
-        uno::Reference< XGraphicObjectResolver > xGrfResolver;
+        uno::Reference<XGraphicStorageHandler> xGraphicStorageHandler;
 
         uno::Reference<xml::sax::XDocumentHandler> xHandler( xWriter, uno::UNO_QUERY );
 
@@ -279,11 +279,11 @@ bool SvxXMLXTableExportComponent::save(
         uno::Reference<io::XActiveDataSource> xMetaSrc( xWriter, uno::UNO_QUERY );
         xMetaSrc->setOutputStream( xOut );
         if( xGraphicHelper.is() )
-            xGrfResolver = xGraphicHelper.get();
+            xGraphicStorageHandler = xGraphicHelper.get();
 
         // Finally do the export
         const OUString aName;
-        rtl::Reference< SvxXMLXTableExportComponent > xExporter( new SvxXMLXTableExportComponent( xContext, aName, xHandler, xTable, xGrfResolver ) );
+        rtl::Reference< SvxXMLXTableExportComponent > xExporter( new SvxXMLXTableExportComponent( xContext, aName, xHandler, xTable, xGraphicStorageHandler ) );
         bRet = xExporter->exportTable();
 
         if( xGraphicHelper )

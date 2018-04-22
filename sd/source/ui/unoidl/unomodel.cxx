@@ -75,7 +75,7 @@
 #include <unotools/saveopt.hxx>
 #include <xmloff/autolayout.hxx>
 
-// Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+// Support creation of GraphicStorageHandler and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <DrawDocShell.hxx>
@@ -940,13 +940,13 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
         return svx::NamespaceMap_createInstance( aWhichIds, &mpDoc->GetItemPool() );
     }
 
-    // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
-    if( aServiceSpecifier == "com.sun.star.document.ExportGraphicObjectResolver" )
+    // Support creation of GraphicStorageHandler and EmbeddedObjectResolver
+    if (aServiceSpecifier == "com.sun.star.document.ExportGraphicStorageHandler")
     {
         return static_cast<cppu::OWeakObject *>(new SvXMLGraphicHelper( SvXMLGraphicHelperMode::Write ));
     }
 
-    if( aServiceSpecifier == "com.sun.star.document.ImportGraphicObjectResolver" )
+    if (aServiceSpecifier == "com.sun.star.document.ImportGraphicStorageHandler")
     {
         return static_cast<cppu::OWeakObject *>(new SvXMLGraphicHelper( SvXMLGraphicHelperMode::Read ));
     }
@@ -1135,9 +1135,9 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
     aSNS[i++] = sUNO_Service_ImageMapPolygonObject;
     aSNS[i++] = "com.sun.star.xml.NamespaceMap";
 
-    // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
-    aSNS[i++] = "com.sun.star.document.ExportGraphicObjectResolver";
-    aSNS[i++] = "com.sun.star.document.ImportGraphicObjectResolver";
+    // Support creation of GraphicStorageHandler and EmbeddedObjectResolver
+    aSNS[i++] = "com.sun.star.document.ExportGraphicStorageHandler";
+    aSNS[i++] = "com.sun.star.document.ImportGraphicStorageHandler";
     aSNS[i++] = "com.sun.star.document.ExportEmbeddedObjectResolver";
     aSNS[i++] = "com.sun.star.document.ImportEmbeddedObjectResolver";
     aSNS[i++] = "com.sun.star.drawing.TableShape";

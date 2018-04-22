@@ -26,7 +26,6 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
-#include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <o3tl/any.hxx>
 
