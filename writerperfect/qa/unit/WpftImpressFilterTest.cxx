@@ -32,9 +32,9 @@ void WpftImpressFilterTest::test()
 {
     const writerperfect::test::WpftOptionalMap_t aEtonyekOptional{
         { "Keynote_1.key", REQUIRE_ETONYEK_VERSION(0, 1, 8) },
-        { "v2.zip", REQUIRE_ETONYEK_VERSION(0, 1, 1) },
-        { "v3.zip", REQUIRE_ETONYEK_VERSION(0, 1, 1) },
-        { "v6.zip", REQUIRE_ETONYEK_VERSION(0, 1, 4) },
+        { "Keynote_2.key", REQUIRE_ETONYEK_VERSION(0, 1, 1) },
+        { "Keynote_3.key", REQUIRE_ETONYEK_VERSION(0, 1, 1) },
+        { "Keynote_6.key", REQUIRE_ETONYEK_VERSION(0, 1, 4) },
     };
     const writerperfect::test::WpftOptionalMap_t aMWAWOptional{
         { "ClarisWorks_6.0.cwk", REQUIRE_MWAW_VERSION(0, 3, 3) },
