@@ -2125,6 +2125,7 @@ static void ImplHandleSalSettings( SalEvent nEvent )
         if ( nType != DataChangedEventType::NONE )
         {
             DataChangedEvent aDCEvt( nType );
+            Application::ImplCallEventListenersApplicationDataChanged(&aDCEvt);
             Application::NotifyAllWindows( aDCEvt );
         }
     }
