@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_68096495",
+        "filename": "sc/uiconfig/scalc/ui/notebookbar.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 7854,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-04-22T10:03:32Z",
+      "side": 1,
+      "message": "Can this typo be solved instead of reintroduced? (Same with “Statistik”)",
+      "range": {
+        "startLine": 7854,
+        "startChar": 60,
+        "endLine": 7854,
+        "endChar": 76
+      },
+      "revId": "1751dd94b564fdf5694a34bc781d1354d410735c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
