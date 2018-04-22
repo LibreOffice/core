@@ -867,7 +867,7 @@ void GenericSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) co
         int n = aGlyphItem.mnCharPos;
         int nCurrIdx = 2 * (n - mnMinCharPos);
         // tdf#86399 if this is not the start of a cluster, don't overwrite the caret bounds of the cluster start
-        if (!aGlyphItem.IsClusterStart() && pCaretXArray[nCurrIdx] != -1)
+        if (aGlyphItem.IsInCluster() && pCaretXArray[nCurrIdx] != -1)
             continue;
         if (!aGlyphItem.IsRTLGlyph() )
         {
