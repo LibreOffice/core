@@ -25,11 +25,13 @@ REM ============================================================================
 &apos;								PropValuesToStr rewritten and addition of StrToPropValues
 &apos;								Bug corrected on date values
 &apos;								Addition of support of 2-dimensional arrays
+&apos;								Support of empty arrays to allow JSON conversions
 &apos;**********************************************************************
 
 Option Explicit
 
 Private Const cstHEADER = &quot;### PROPERTYVALUES ###&quot;
+Private Const cstEMPTYARRAY = &quot;### EMPTY ARRAY ###&quot;
 
 REM =======================================================================================================================
 Public Function _MakePropertyValue(ByVal Optional psName As String, Optional pvValue As Variant) As com.sun.star.beans.PropertyValue
@@ -38,14 +40,26 @@ Public Function _MakePropertyValue(ByVal Optional psName As String, Optional pvV
 Dim oPropertyValue As New com.sun.star.beans.PropertyValue
 
 	If Not IsMissing(psName) Then oPropertyValue.Name = psName
-	If Not IsMissing(pvValue) Then 
-		&apos;	Date BASIC variables give error. Change them to strings
-		If VarType(pvValue) = vbDate Then oPropertyValue.Value = Utils._CStr(pvValue, False) Else oPropertyValue.Value = pvValue
-	End If
+	If Not IsMissing(pvValue) Then oPropertyValue.Value = _CheckPropertyValue(pvValue)
 	_MakePropertyValue() = oPropertyValue
 	
 End Function	&apos;	_MakePropertyValue V1.3.0
 
+REM =======================================================================================================================
+Public Function _CheckPropertyValue(ByRef pvValue As Variant) As Variant
+&apos;	Date BASIC variables give error. Change them to strings
+&apos;	Empty arrays should be replaced by cstEMPTYARRAY
+
+	If VarType(pvValue) = vbDate Then
+		_CheckPropertyValue = Utils._CStr(pvValue, False)
+	ElseIf IsArray(pvValue) Then
+		If UBound(pvValue, 1) &lt; LBound(pvValue, 1) Then _CheckPropertyValue = cstEMPTYARRAY Else _CheckPropertyValue = pvValue
+	Else
+		_CheckPropertyValue = pvValue
+	End If
+
+End Function	&apos;	_CheckPropertyValue
+	
 REM =======================================================================================================================
 Public Function _NumPropertyValues(ByRef pvPropertyValuesArray As Variant) As Integer
 &apos; Return the number of PropertyValue&apos;s in an array.
@@ -101,7 +115,9 @@ Dim iPropIndex As Integer, vProp As Variant, vValue As Variant, vMatrix As Varia
 	If iPropIndex &gt;= 0 Then
 		vProp = pvPropertyValuesArray(iPropIndex)	&apos; access array subscript
 		vValue = vProp.Value						&apos; get the value from the PropertyValue
-		If IsArray(vValue) Then
+		If VarType(vValue) = vbString Then
+			If vValue = cstEMPTYARRAY Then _GetPropertyValue() = Array() Else _GetPropertyValue() = vValue
+		ElseIf IsArray(vValue) Then
 			If IsArray(vValue(0)) Then				&apos; Array of arrays
 				vMatrix = Array()
 				ReDim vMatrix(0 To UBound(vValue), 0 To UBound(vValue(0)))
@@ -120,7 +136,7 @@ Dim iPropIndex As Integer, vProp As Variant, vValue As Variant, vMatrix As Varia
 	Else
 		If IsMissing(pvDefaultValue) Then pvDefaultValue = Null
 		_GetPropertyValue() = pvDefaultValue
-   EndIf
+	EndIf
 
 End Function	&apos;	_GetPropertyValue V1.3.0
 
@@ -134,7 +150,7 @@ Dim iPropIndex As Integer, vProp As Variant, iNumProperties As Integer
 	If iPropIndex &gt;= 0 Then
 	&apos;	Found, the PropertyValue is already in the array. Just modify its value.
 		vProp = pvPropertyValuesArray(iPropIndex)	&apos; access array subscript
-		vProp.Value = pvValue						&apos; set the property value.
+		vProp.Value = _CheckPropertyValue(pvValue)	&apos; set the property value.
 		pvPropertyValuesArray(iPropIndex) = vProp	&apos; put it back into array
 	Else
 	&apos;	Not found, the array contains no PropertyValue with this name. Append new element to array.

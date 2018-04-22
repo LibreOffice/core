@@ -18,6 +18,7 @@ Private	_Type					As String				&apos;	Must be FORM
 Private	_Name					As String
 Private _ParentType				As String
 Private _ParentComponent		As Object
+Private _MainForm				As String
 Private _DocEntry				As Integer
 Private _DbEntry				As Integer
 Private _ButtonsGroup()			As Variant

@@ -200,7 +200,7 @@ REM ----------------------------------------------------------------------------
 Public Function _OptionGroup(ByVal pvGroupName As Variant _
 					, ByVal psParentType As String _
 					, poComponent As Object _
-					, poDatabaseForm As Object _
+					, poParent As Object _
 					) As Variant
 &apos;	Return either an error or an object of type OPTIONGROUP based on its name
 
@@ -213,24 +213,48 @@ Public Function _OptionGroup(ByVal pvGroupName As Variant _
 Dim ogGroup As Variant, i As Integer, j As Integer, bFound As Boolean
 Dim vOptionButtons() As Variant, sGroupName As String
 Dim lXY() As Long, iIndex() As Integer		&apos;	Two indexes X-Y coordinates
-Dim oView As Object
+Dim oView As Object, oDatabaseForm As Object, vControls As Variant
 
 Const cstPixels = 10							&apos;	Tolerance on coordinates when drawed approximately
+
 	bFound = False
-	For i = 0 To poDatabaseForm.GroupCount - 1		&apos;	Does a group with the right name exist ?
-		poDatabaseForm.getGroup(i, vOptionButtons, sGroupName)
-		If UCase(sGroupName) = UCase(Utils._Trim(pvGroupName)) Then
-			bFound = True
-			Exit For
-		End If
-	Next i
+	Select Case psParentType
+		Case CTLPARENTISFORM
+			&apos;poParent is a forms collection, find the appropriate database form
+			For i = 0 To poParent.Count - 1
+				Set oDatabaseForm = poParent.getByIndex(i)
+				If Not IsNull(oDatabaseForm) Then
+					For j = 0 To oDatabaseForm.GroupCount - 1		&apos;	Does a group with the right name exist ?
+						oDatabaseForm.getGroup(j, vOptionButtons, sGroupName)
+						If UCase(sGroupName) = UCase(Utils._Trim(pvGroupName)) Then
+							bFound = True
+							Exit For
+						End If
+					Next j
+					If bFound Then Exit For
+				End If
+				If bFound Then Exit For
+			Next i
+		Case CTLPARENTISSUBFORM
+			&apos;poParent is already a database form
+			Set oDatabaseForm = poParent
+			For j = 0 To oDatabaseForm.GroupCount - 1		&apos;	Does a group with the right name exist ?
+				oDatabaseForm.getGroup(j, vOptionButtons, sGroupName)
+				If UCase(sGroupName) = UCase(Utils._Trim(pvGroupName)) Then
+					bFound = True
+					Exit For
+				End If
+			Next j
+	End Select
 
 	If bFound Then
+
 		ogGroup = New Optiongroup
 		ogGroup._Name = sGroupName
 		ogGroup._ButtonsGroup = vOptionButtons
 		ogGroup._Count = UBound(vOptionButtons) + 1
 		ogGroup._ParentType = psParentType
+		ogGroup._MainForm = oDatabaseForm.Name
 		Set ogGroup._ParentComponent = poComponent
 
 		ReDim lXY(1, ogGroup._Count - 1)

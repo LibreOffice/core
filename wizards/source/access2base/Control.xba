@@ -21,6 +21,7 @@ Private	_ParentType				As String				&apos;	One of CTLPARENTISxxxx constants
 Private	_Shortcut				As String
 Private	_Name					As String
 Private _FormComponent			As Object				&apos;	com.sun.star.text.TextDocument
+Private _MainForm				As String				&apos;	To be propagated to all subcontrols
 Private _DocEntry				As Integer				&apos;	Doc- and DbContainer entries in Root structure
 Private _DbEntry				As Integer
 Private	_ControlType			As Integer
@@ -41,6 +42,7 @@ Private Sub Class_Initialize()
 	_Shortcut			= &quot;&quot;
 	_Name				= &quot;&quot;
 	Set _FormComponent	= Nothing
+	_MainForm = &quot;&quot;
 	_DocEntry			= -1
 	_DbEntry			= -1
 	_ThisProperties		= Array()
@@ -795,27 +797,30 @@ Dim j As Integer, oView As Object
 			If bFound Then ocControl._Name = sControls(i) Else Goto Trace_NotFound
 	End Select
 
-	ocControl._Shortcut = sParentShortcut &amp; &quot;!&quot; &amp; Utils._Surround(ocControl._Name)
-	Set ocControl.ControlModel = ControlModel.getByName(ocControl._Name)
-	ocControl._ImplementationName = ocControl.ControlModel.ColumnServiceName	&apos;	getImplementationName aborts for subcontrols !?
-	ocControl._FormComponent = ParentComponent
-	If Utils._hasUNOProperty(ocControl.ControlModel, &quot;ClassId&quot;) Then ocControl._ClassId = ocControl.ControlModel.ClassId
-	&apos;	Complex bypass to find View of grid subcontrols !
-	If Not IsNull(ControlView) Then		&apos;	Anticipate absence of ControlView in grid controls when edit mode
-		For i = 0 to ControlView.getCount() - 1
-			Set oView = ControlView.GetByIndex(i)
-			If Not IsNull(oView) Then
-				If oView.getModel.Name = ocControl._Name Then
-					Set ocControl.ControlView = oView
-					Exit For
+	With ocControl
+		._Shortcut = sParentShortcut &amp; &quot;!&quot; &amp; Utils._Surround(._Name)
+		Set .ControlModel = ControlModel.getByName(._Name)
+		._ImplementationName = .ControlModel.ColumnServiceName	&apos;	getImplementationName aborts for subcontrols !?
+		._FormComponent = ParentComponent
+		._MainForm = _MainForm
+		If Utils._hasUNOProperty(.ControlModel, &quot;ClassId&quot;) Then ._ClassId = .ControlModel.ClassId
+		&apos;	Complex bypass to find View of grid subcontrols !
+		If Not IsNull(ControlView) Then		&apos;	Anticipate absence of ControlView in grid controls when edit mode
+			For i = 0 to ControlView.getCount() - 1
+				Set oView = ControlView.GetByIndex(i)
+				If Not IsNull(oView) Then
+					If oView.getModel.Name = ._Name Then
+						Set .ControlView = oView
+						Exit For
+					End If
 				End If
-			End If
-		Next i
-	End If
+			Next i
+		End If
 
-	ocControl._Initialize()
-	ocControl._DocEntry = _DocEntry
-	ocControl._DbEntry = _DbEntry
+		._Initialize()
+		._DocEntry = _DocEntry
+		._DbEntry = _DbEntry
+	End With
 	Set Controls = ocControl
 	
 Exit_Function:
@@ -1509,6 +1514,7 @@ Dim oControlEvents As Object, sEventName As String
 				Set .DatabaseForm = ControlModel
 				._Name = _Name
 				._Shortcut = _Shortcut &amp; &quot;.Form&quot;
+				._MainForm = _MainForm
 				.ParentComponent = _FormComponent
 				._DocEntry = _DocEntry
 				._DbEntry = _DbEntry

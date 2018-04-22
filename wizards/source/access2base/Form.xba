@@ -19,11 +19,13 @@ Private	_Shortcut				As String
 Private	_Name					As String
 Private _DocEntry				As Integer				&apos;	Doc- and DbContainer entries in Root structure
 Private _DbEntry				As Integer
+Private _MainForms				As Variant
 Private	_IsLoaded				As Boolean
 Private	_OpenArgs				As Variant
 Private _OrderBy				As String
 Public	Component				As Object				&apos;	com.sun.star.text.TextDocument
 Public	ContainerWindow			As Object				&apos;	(No name)
+Public	FormsCollection			As Object				&apos;	com.sun.star.form.OFormsCollection
 Public	DatabaseForm			As Object				&apos;	com.sun.star.form.component.DataForm and com.sun.star.sdb.ResultSet (a.o.)
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -35,11 +37,13 @@ Private Sub Class_Initialize()
 	_Name = &quot;&quot;
 	_DocEntry = -1
 	_DbEntry = -1
+	_MainForms = Array()
 	_IsLoaded = False
 	_OpenArgs = &quot;&quot;
 	_OrderBy = &quot;&quot;
 	Set Component = Nothing
 	Set ContainerWindow = Nothing
+	Set FormsCollection = Nothing
 	Set DatabaseForm = Nothing
 End Sub		&apos;	Constructor
 
@@ -377,7 +381,7 @@ Dim ogGroup As Object
 	If IsMissing(pvGroupName) Then Call _TraceArguments()
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	
-	Set ogGroup = _OptionGroup(pvGroupName, CTLPARENTISFORM, Component, DatabaseForm)
+	Set ogGroup = _OptionGroup(pvGroupName, CTLPARENTISFORM, Component, FormsCollection)
 	If Not IsNull(ogGroup) Then
 		ogGroup._DocEntry = _DocEntry
 		ogGroup._DbEntry = _DbEntry
@@ -482,16 +486,20 @@ Public Function Controls(Optional ByVal pvIndex As Variant) As Variant
 If _ErrorHandler() Then On Local Error Goto Error_Function
 	Utils._SetCalledSub(&quot;Form.Controls&quot;)
 
-Dim ocControl As Variant, sParentShortcut As String, iControlCount As Integer
+Dim ocControl As Variant, iControlCount As Integer
 Dim oCounter As Variant, sControls() As Variant, i As Integer, bFound As Boolean, sIndex As String
-Dim j As Integer
+Dim j As Integer, iCount As Integer, sName As String, iAddCount As Integer
+Dim oDatabaseForm As Object, iCtlCount As Integer
 
 	Set ocControl = Nothing
 	If Not IsLoaded Then Goto Trace_Error_NotOpen
-	Set ocControl = New Control
-	ocControl._ParentType = CTLPARENTISFORM
-	sParentShortcut = _Shortcut
-	If IsNull(DatabaseForm) Then iControlCount = 0 Else iControlCount = DatabaseForm.getCount()
+	&apos;Count number of controls thru the forms collection
+	iControlCount = 0
+	iCount = FormsCollection.Count
+	For i = 0 To iCount - 1
+		If i = 0 Then Set oDatabaseForm = DatabaseForm Else Set oDatabaseForm = FormsCollection.getByIndex(i)
+		If Not IsNull(oDatabaseForm) Then iControlCount = iControlCount + oDatabaseForm.getCount()
+	Next i
 	
 	If IsMissing(pvIndex) Then					&apos;	No argument, return Collection pseudo-object
 		Set oCounter = New Collect
@@ -507,36 +515,62 @@ Dim j As Integer
 				
 	&apos;	Start building the ocControl object
 	&apos;	Determine exact name
-	sControls() = DatabaseForm.getElementNames()
-	
+
+	sName = &quot;&quot;
 	Select Case VarType(pvIndex)
 		Case vbInteger, vbLong, vbSingle, vbDouble, vbCurrency, vbBigint, vbDecimal
 			If pvIndex &lt; 0 Or pvIndex &gt; iControlCount - 1 Then Goto Trace_Error_Index
-			ocControl._Name = sControls(pvIndex)
-		Case vbString			&apos;	Check control name validity (non case sensitive)
-			bFound = False
-			sIndex = UCase(Utils._Trim(pvIndex))
-			For i = 0 To iControlCount - 1
-				If UCase(sControls(i)) = sIndex Then
-					bFound = True
-					Exit For
+			iAddCount = 0
+			For i = 0 To iCount - 1
+				If i = 0 Then Set oDatabaseForm = DatabaseForm Else Set oDatabaseForm = FormsCollection.getByIndex(i)
+				If Not IsNull(oDatabaseForm) Then
+					iCtlCount = oDatabaseForm.getCount()
+					If pvIndex &gt;= iAddCount And pvIndex &lt;= iAddcount + iCtlCount - 1 Then
+						sName = oDatabaseForm.ElementNames(pvIndex - iAddCount)
+						Exit For
+					End If
+					iAddCount = iAddcount +iCtlCount
 				End If
 			Next i
-			If bFound Then ocControl._Name = sControls(i) Else Goto Trace_NotFound
+		Case vbString			&apos;	Check control name validity (non case sensitive)
+			sIndex = UCase(Utils._Trim(pvIndex))
+			bFound = False
+			For i = 0 To iCount - 1
+				If i = 0 Then Set oDatabaseForm = DatabaseForm Else Set oDatabaseForm = FormsCollection.getByIndex(i)
+				If Not IsNull(oDatabaseForm) Then
+					sControls() = oDatabaseForm.getElementNames()
+					For j = 0 To UBound(sControls)
+						If UCase(sControls(j)) = sIndex Then
+							sName = sControls(j)
+							bFound = True
+							Exit For
+						End If
+					Next j
+					If bFound Then Exit For
+				End If
+			Next i
+			If Not bFound Then Goto Trace_NotFound
 	End Select
 
-	ocControl._Shortcut = sParentShortcut &amp; &quot;!&quot; &amp; Utils._Surround(ocControl._Name)
-	Set ocControl.ControlModel = DatabaseForm.getByName(ocControl._Name)
-	ocControl._ImplementationName = ocControl.ControlModel.getImplementationName()
-	ocControl._FormComponent = Component
-	If Utils._hasUNOProperty(ocControl.ControlModel, &quot;ClassId&quot;) Then ocControl._ClassId = ocControl.ControlModel.ClassId
-	If ocControl._ClassId &gt; 0 And ocControl._ClassId &lt;&gt; acHiddenControl Then
-		Set ocControl.ControlView = Component.CurrentController.getControl(ocControl.ControlModel)
-	End If
+	&apos;Initialize a new Control object
+	Set ocControl = New Control
+	With ocControl
+		._ParentType = CTLPARENTISFORM
+		._Name = sName
+		._Shortcut = _Shortcut &amp; &quot;!&quot; &amp; Utils._Surround(sName)
+		If IsNull(oDatabaseForm) Then ._MainForm = &quot;&quot; Else ._MainForm = oDatabaseForm.Name
+		Set .ControlModel = oDatabaseForm.getByName(sName)
+		._ImplementationName = .ControlModel.getImplementationName()
+		._FormComponent = Component
+		If Utils._hasUNOProperty(.ControlModel, &quot;ClassId&quot;) Then ._ClassId = .ControlModel.ClassId
+		If ._ClassId &gt; 0 And ._ClassId &lt;&gt; acHiddenControl Then
+			Set .ControlView = Component.CurrentController.getControl(.ControlModel)
+		End If
 
-	ocControl._Initialize()
-	ocControl._DocEntry = _DocEntry
-	ocControl._DbEntry = _DbEntry
+		._Initialize()
+		._DocEntry = _DocEntry
+		._DbEntry = _DbEntry
+	End With
 	Set Controls = ocControl
 	
 Exit_Function:
@@ -736,6 +770,7 @@ REM ----------------------------------------------------------------------------
 REM --- PRIVATE FUNCTIONS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
+REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _GetListener(ByVal psProperty As String) As String
 &apos;	Return the X...Listener corresponding with the property in argument
 
@@ -766,7 +801,7 @@ REM ----------------------------------------------------------------------------
 Public Sub _Initialize(psName As String)
 &apos;	Set pointers to UNO objects
 
-Dim oDoc As Object, oFormsCollection As Object, oDatabase As Object
+Dim oDoc As Object, oDatabase As Object
 	If _ErrorHandler() Then On Local Error Goto Trace_Error
 	_Name = psName
 	_Shortcut = &quot;Forms!&quot; &amp; Utils._Surround(psName)
@@ -776,17 +811,14 @@ Dim oDoc As Object, oFormsCollection As Object, oDatabase As Object
 			Case DBCONNECTBASE
 				If Not IsNull(Component.CurrentController) Then		&apos;	A form opened then closed afterwards keeps a Component attribute
 					Set ContainerWindow = Component.CurrentController.Frame.ContainerWindow
-					Set oFormsCollection = Component.getDrawPage.Forms
-					If oFormsCollection.Count = 0 Then
+					Set FormsCollection = Component.getDrawPage.Forms
+					If FormsCollection.Count = 0 Then
 						Set DatabaseForm = Nothing
-					ElseIf oFormsCollection.hasByName(&quot;MainForm&quot;) Then
-						Set DatabaseForm = oFormsCollection.getByName(&quot;MainForm&quot;)
-					ElseIf oFormsCollection.hasByName(&quot;Form&quot;) Then
-						Set DatabaseForm = oFormsCollection.getByName(&quot;Form&quot;)
-					ElseIf oFormsCollection.hasByName(_Name) Then
-						Set DatabaseForm = oFormsCollection.getByName(_Name)
 					Else
-						Goto Trace_Internal_Error
+						&apos;Only first member of the collection can be reached with A2B
+						&apos;Compliant with MSAccess which has 1 datasource by form, while LO might have many
+						_MainForms = FormsCollection.ElementNames()
+						Set DatabaseForm = FormsCollection.getByIndex(0)
 					End If
 				End If
 			Case DBCONNECTFORM
