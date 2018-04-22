@@ -27,6 +27,9 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapDuoToneFilter.hxx>
+#include <vcl/BitmapCombinationFilter.hxx>
+
 #include <com/sun/star/text/GraphicCrop.hpp>
 
 using namespace com::sun::star;
@@ -75,11 +78,11 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
         {
             if (nAlphaTo == sal::static_int_cast< sal_Int8 >(0xff))
             {
-                Bitmap aMask(aBitmapEx.GetMask());
+                BitmapEx aMaskBmpEx(aBitmapEx.GetMask());
                 Bitmap aMask2(aBitmap.CreateMask(aColorFrom, nTolerance));
-                aMask.CombineSimple(aMask2, BmpCombine::Or);
+                BitmapFilter::Filter(aMaskBmpEx, BitmapCombinationFilter(aMask2, BmpCombine::Or));
                 aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
-                aReturnGraphic = ::Graphic(BitmapEx(aBitmap, aMask));
+                aReturnGraphic = ::Graphic(BitmapEx(aBitmap, aMaskBmpEx.GetBitmap()));
             }
             else
             {
@@ -118,8 +121,11 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::applyDuotone(
     BitmapEx    aBitmapEx( aGraphic.GetBitmapEx() );
     AlphaMask   aMask( aBitmapEx.GetAlpha() );
     Bitmap      aBitmap( aBitmapEx.GetBitmap() );
-    BmpFilterParam aFilter( static_cast<sal_uLong>(nColorOne), static_cast<sal_uLong>(nColorTwo) );
-    aBitmap.Filter( BmpFilter::DuoTone, &aFilter );
+
+    BitmapEx    aTmpBmpEx(aBitmap);
+    BitmapFilter::Filter(aTmpBmpEx, BitmapDuoToneFilter(static_cast<sal_uLong>(nColorOne), static_cast<sal_uLong>(nColorTwo)));
+    aBitmap = aTmpBmpEx.GetBitmap();
+
     aReturnGraphic = ::Graphic( BitmapEx( aBitmap, aMask ) );
     aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
     return aReturnGraphic.GetXGraphic();

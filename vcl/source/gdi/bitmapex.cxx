@@ -34,6 +34,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/BitmapCombinationFilter.hxx>
 
 // BitmapEx::Create
 #include <salbmp.hxx>
@@ -1443,10 +1444,11 @@ void BitmapEx::GetSplitData( std::vector<sal_uInt8>& rvColorData, std::vector<sa
 
 void BitmapEx::CombineMaskOr(Color maskColor, sal_uInt8 nTol)
 {
-    Bitmap aNewMask = maBitmap.CreateMask( maskColor, nTol );
-    if ( IsTransparent() )
-         aNewMask.CombineSimple( maMask, BmpCombine::Or );
-    maMask = aNewMask;
+    BitmapEx aNewMask(maBitmap.CreateMask(maskColor, nTol));
+    if (IsTransparent())
+        BitmapFilter::Filter(aNewMask, BitmapCombinationFilter(maMask, BmpCombine::Or));
+
+    maMask = aNewMask.GetBitmap();
     meTransparent = TransparentType::Bitmap;
 }
 

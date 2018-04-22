@@ -8,32 +8,32 @@
  *
  */
 
-#include <vcl/BitmapTools.hxx>
-
+#include <tools/diagnose_ex.h>
+#include <tools/fract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
-#include <vcl/canvastools.hxx>
-
-#include <com/sun/star/graphic/SvgTools.hpp>
-#include <com/sun/star/graphic/Primitive2DTools.hpp>
-
+#include <unotools/resmgr.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
-#include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
-
-#include <unotools/resmgr.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/canvastools.hxx>
+#include <vcl/BitmapTools.hxx>
+#include <vcl/BitmapCombinationFilter.hxx>
+
+#include <bitmapwriteaccess.hxx>
+
+#include <com/sun/star/graphic/SvgTools.hpp>
+#include <com/sun/star/graphic/Primitive2DTools.hpp>
+#include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
+
 #if ENABLE_CAIRO_CANVAS
 #include <cairo.h>
 #endif
-#include <tools/diagnose_ex.h>
-#include <tools/fract.hxx>
-#include <bitmapwriteaccess.hxx>
 
 using namespace css;
 
@@ -612,18 +612,14 @@ void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const BitmapEx& rBi
         else
         {
             // need to blend in Mask quality (1Bit)
-            Bitmap aMask(aVDevMask.CreateMask(COL_WHITE));
+            BitmapEx aMaskBmpEx(aVDevMask.CreateMask(COL_WHITE));
 
-            if ( rBitmap.GetTransparentColor() == COL_WHITE )
-            {
-                aMask.CombineSimple( rBitmap.GetMask(), BmpCombine::Or );
-            }
+            if (rBitmap.GetTransparentColor() == COL_WHITE)
+                BitmapFilter::Filter(aMaskBmpEx, BitmapCombinationFilter(rBitmap.GetMask(), BmpCombine::Or));
             else
-            {
-                aMask.CombineSimple( rBitmap.GetMask(), BmpCombine::And );
-            }
+                BitmapFilter::Filter(aMaskBmpEx, BitmapCombinationFilter(rBitmap.GetMask(), BmpCombine::And));
 
-            aBmpEx = BitmapEx( rBitmap.GetBitmap(), aMask );
+            aBmpEx = BitmapEx(rBitmap.GetBitmap(), aMaskBmpEx.GetBitmap());
         }
     }
     else
