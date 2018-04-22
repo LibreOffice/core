@@ -27,7 +27,6 @@
 #include <vcl/BitmapSolarizeFilter.hxx>
 #include <vcl/BitmapSepiaFilter.hxx>
 #include <vcl/BitmapMosaicFilter.hxx>
-#include <vcl/BitmapSepiaFilter.hxx>
 #include <vcl/BitmapPopArtFilter.hxx>
 
 #include <bitmapwriteaccess.hxx>
