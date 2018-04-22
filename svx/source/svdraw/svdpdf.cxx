@@ -222,12 +222,17 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
                                               << ", height: " << dPageHeight);
         SetupPageScale(dPageWidth, dPageHeight);
 
+        // Load the page text to extract it when we get text elements.
+        FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage);
+
         const int nPageObjectCount = FPDFPage_CountObject(pPdfPage);
         for (int nPageObjectIndex = 0; nPageObjectIndex < nPageObjectCount; ++nPageObjectIndex)
         {
             FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage, nPageObjectIndex);
-            ImportPdfObject(pPageObject, nPageObjectIndex);
+            ImportPdfObject(pPageObject, pTextPage, nPageObjectIndex);
         }
+
+        FPDFText_ClosePage(pTextPage);
 
 #if 0
         // Now do the text.
@@ -986,8 +991,8 @@ void ImpSdrPdfImport::checkClip()
 }
 
 bool ImpSdrPdfImport::isClip() const { return !maClip.getB2DRange().isEmpty(); }
-
-void ImpSdrPdfImport::ImportPdfObject(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex)
+void ImpSdrPdfImport::ImportPdfObject(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTextPage,
+                                      int nPageObjectIndex)
 {
     if (pPageObject == nullptr)
         return;
@@ -996,7 +1001,7 @@ void ImpSdrPdfImport::ImportPdfObject(FPDF_PAGEOBJECT pPageObject, int nPageObje
     switch (nPageObjectType)
     {
         case FPDF_PAGEOBJ_TEXT:
-            ImportText(pPageObject, nPageObjectIndex);
+            ImportText(pPageObject, pTextPage, nPageObjectIndex);
             break;
         case FPDF_PAGEOBJ_PATH:
             ImportPath(pPageObject, nPageObjectIndex);
@@ -1008,7 +1013,7 @@ void ImpSdrPdfImport::ImportPdfObject(FPDF_PAGEOBJECT pPageObject, int nPageObje
             SAL_WARN("sd.filter", "Got page object SHADING: " << nPageObjectIndex);
             break;
         case FPDF_PAGEOBJ_FORM:
-            ImportForm(pPageObject, nPageObjectIndex);
+            ImportForm(pPageObject, pTextPage, nPageObjectIndex);
             break;
         default:
             SAL_WARN("sd.filter", "Unknown PDF page object #" << nPageObjectIndex
@@ -1017,7 +1022,8 @@ void ImpSdrPdfImport::ImportPdfObject(FPDF_PAGEOBJECT pPageObject, int nPageObje
     }
 }
 
-void ImpSdrPdfImport::ImportForm(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex)
+void ImpSdrPdfImport::ImportForm(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTextPage,
+                                 int nPageObjectIndex)
 {
     SAL_WARN("sd.filter", "Got page object FORM: " << nPageObjectIndex);
 
@@ -1032,14 +1038,15 @@ void ImpSdrPdfImport::ImportForm(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
     for (int nIndex = 0; nIndex < nCount; ++nIndex)
     {
         FPDF_PAGEOBJECT pFormObject = FPDFFormObj_GetSubObject(pPageObject, nIndex);
-        ImportPdfObject(pFormObject, -1);
+        ImportPdfObject(pFormObject, pTextPage, -1);
     }
 
     // Restore the old one.
     mCurMatrix = aOldMatrix;
 }
 
-void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex)
+void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTextPage,
+                                 int nPageObjectIndex)
 {
     SAL_WARN("sd.filter", "Got page object TEXT: " << nPageObjectIndex);
     float left;
@@ -1071,14 +1078,15 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
     SAL_WARN("sd.filter", "Got TEXT origin: " << aPos);
     SAL_WARN("sd.filter", "Got TEXT Bounds: " << aRect);
 
-    const int nChars = FPDFTextObj_CountChars(pPageObject);
+    const int nChars = FPDFTextObj_CountChars(pPageObject) * 2;
     std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nChars + 1]); // + terminating null
 
     unsigned short* pShortText = reinterpret_cast<unsigned short*>(pText.get());
-    const int nActualChars = FPDFTextObj_GetText(pPageObject, 0, nChars, pShortText);
+    const int nActualChars
+        = FPDFTextObj_GetTextProcessed(pPageObject, pTextPage, 0, nChars, pShortText);
     if (nActualChars <= 0)
     {
-        SAL_WARN("sd.filter", "Got not TEXT");
+        SAL_WARN("sd.filter", "Got no TEXT");
         return;
     }
 
