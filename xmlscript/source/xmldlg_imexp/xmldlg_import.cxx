@@ -53,7 +53,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/document/XGraphicObjectResolver.hpp>
+#include <com/sun/star/document/GraphicStorageHandler.hpp>
 #include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -853,16 +853,15 @@ bool ImportContext::importGraphicOrImageProperty(
 
         uno::Reference<graphic::XGraphic> xGraphic;
 
-        uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
         if ( xDocStorage.is() )
         {
             uno::Sequence< Any > aArgs( 1 );
             aArgs[ 0 ] <<= xDocStorage->getDocumentStorage();
-            xGraphicResolver.set(
-                _pImport->getComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext( "com.sun.star.comp.Svx.GraphicImportHelper" , aArgs, _pImport->getComponentContext() ),
-                UNO_QUERY );
+
             uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
-            xGraphicStorageHandler.set(xGraphicResolver, uno::UNO_QUERY);
+            xGraphicStorageHandler.set(document::GraphicStorageHandler::createWithStorage(
+                    _pImport->getComponentContext(),
+                    xDocStorage->getDocumentStorage()));
             if (xGraphicStorageHandler.is())
             {
                 try

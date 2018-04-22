@@ -128,7 +128,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/document,\
 	DocumentRevisionListPersistence \
 	IndexedPropertyValues \
 	FilterConfigRefresh \
-	GraphicObjectResolver \
+	GraphicStorageHandler \
 	NamedPropertyValues \
 	OleEmbeddedServerRegistration \
 	OOXMLDocumentPropertiesImporter \

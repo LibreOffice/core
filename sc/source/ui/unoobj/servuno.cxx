@@ -48,7 +48,7 @@
 #include <tokenuno.hxx>
 #include <PivotTableDataProvider.hxx>
 
-// Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+// Support creation of GraphicStorageHandler and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <sfx2/docfile.hxx>
@@ -283,9 +283,9 @@ const ProvNamesId_Type aProvNamesId[] =
     { "com.sun.star.image.ImageMapCircleObject",        Type::IMAP_CIRC },
     { "com.sun.star.image.ImageMapPolygonObject",       Type::IMAP_POLY },
 
-    // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
-    { "com.sun.star.document.ExportGraphicObjectResolver",  Type::EXPORT_GOR },
-    { "com.sun.star.document.ImportGraphicObjectResolver",  Type::IMPORT_GOR },
+    // Support creation of GraphicStorageHandler and EmbeddedObjectResolver
+    { "com.sun.star.document.ExportGraphicStorageHandler",  Type::EXPORT_GRAPHIC_STORAGE_HANDLER },
+    { "com.sun.star.document.ImportGraphicStorageHandler",  Type::IMPORT_GRAPHIC_STORAGE_HANDLER },
     { "com.sun.star.document.ExportEmbeddedObjectResolver", Type::EXPORT_EOR },
     { "com.sun.star.document.ImportEmbeddedObjectResolver", Type::IMPORT_EOR },
 
@@ -500,11 +500,11 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             xRet.set(SvUnoImageMapPolygonObject_createInstance( ScShapeObj::GetSupportedMacroItems() ));
             break;
 
-        // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
-        case Type::EXPORT_GOR:
+        // Support creation of GraphicStorageHandler and EmbeddedObjectResolver
+        case Type::EXPORT_GRAPHIC_STORAGE_HANDLER:
             xRet.set(static_cast<cppu::OWeakObject *>(new SvXMLGraphicHelper( SvXMLGraphicHelperMode::Write )));
             break;
-        case Type::IMPORT_GOR:
+        case Type::IMPORT_GRAPHIC_STORAGE_HANDLER:
             xRet.set(static_cast<cppu::OWeakObject *>(new SvXMLGraphicHelper( SvXMLGraphicHelperMode::Read )));
             break;
         case Type::EXPORT_EOR:
