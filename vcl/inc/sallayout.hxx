@@ -290,7 +290,7 @@ public:
         IS_DROPPED    = 0x040
     };
 
-    bool    IsClusterStart() const  { return ((mnFlags & IS_IN_CLUSTER) == 0); }
+    bool    IsInCluster() const     { return ((mnFlags & IS_IN_CLUSTER) != 0); }
     bool    IsRTLGlyph() const      { return ((mnFlags & IS_RTL_GLYPH) != 0); }
     bool    IsDiacritic() const     { return ((mnFlags & IS_DIACRITIC) != 0); }
     bool    IsVertical() const      { return ((mnFlags & IS_VERTICAL) != 0); }
