@@ -229,26 +229,6 @@ public:
                                 const tools::Rectangle& rRectSrc,
                                 const Bitmap* pBmpSrc );
 
-    /** Alpha-blend the given bitmap against a specified uniform
-          background color.
-
-        @attention This method might convert paletted bitmaps to
-        truecolor, to be able to represent every necessary color. Note
-        that during alpha blending, lots of colors not originally
-        included in the bitmap can be generated.
-
-        @param rAlpha
-        Alpha mask to blend with
-
-        @param rBackgroundColor
-        Background color to use for every pixel during alpha blending
-
-        @return true, if blending was successful, false otherwise
-     */
-    bool                    Blend(
-                                const AlphaMask& rAlpha,
-                                const Color& rBackgroundColor );
-
     /** Fill the entire bitmap with the given color
 
         @param rFillColor
@@ -458,14 +438,6 @@ public:
     SAL_DLLPRIVATE void     ImplSetSalBitmap( const std::shared_ptr<SalBitmap>& xImpBmp );
 
     SAL_DLLPRIVATE bool     ImplMakeGreyscales( sal_uInt16 nGreyscales );
-    SAL_DLLPRIVATE bool     ImplReduceSimple( sal_uInt16 nColorCount );
-    SAL_DLLPRIVATE bool     ImplReducePopular( sal_uInt16 nColorCount );
-    SAL_DLLPRIVATE bool     ImplReduceMedian( sal_uInt16 nColorCount );
-    SAL_DLLPRIVATE void     ImplMedianCut(
-                                sal_uLong* pColBuf,
-                                BitmapPalette& rPal,
-                                long nR1, long nR2, long nG1, long nG2, long nB1, long nB2,
-                                long nColors, long nPixels, long& rIndex );
 
 public:
 
