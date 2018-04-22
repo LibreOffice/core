@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_a3b53fce",
+        "filename": "accessibility/source/standard/vclxaccessibletoolbox.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-22T20:02:33Z",
+      "side": 1,
+      "message": "you\u0027re changing behaviour here and throwing when pToolBox is nullptr?",
+      "revId": "be80f0873db6a624baf81b43f357ec58bf38e2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_c3ca334f",
+        "filename": "accessibility/source/standard/vclxaccessibletoolbox.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-22T20:02:33Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "be80f0873db6a624baf81b43f357ec58bf38e2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_e3c73743",
+        "filename": "accessibility/source/standard/vclxaccessibletoolbox.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-22T20:02:33Z",
+      "side": 1,
+      "message": "you\u0027ve changed the logic of this method - it is now returning the \u003cnSelectedChildIndex\u003e child, counting througj all the children, instead of only counting through the currently selected children",
+      "revId": "be80f0873db6a624baf81b43f357ec58bf38e2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
