@@ -599,8 +599,9 @@ OUString AccessibleControlShape::CreateAccessibleName()
     ensureControlModelAccess();
 
     OUString sName;
-    if ( getAccessibleRole() != AccessibleRole::SHAPE
-        && getAccessibleRole() != AccessibleRole::RADIO_BUTTON  )
+    sal_Int16 aAccessibleRole = getAccessibleRole();
+    if ( aAccessibleRole != AccessibleRole::SHAPE
+        && aAccessibleRole != AccessibleRole::RADIO_BUTTON  )
     {
         AccessibleControlShape* pCtlAccShape = GetLabeledByControlShape();
         if(pCtlAccShape)
