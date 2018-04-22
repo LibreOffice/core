@@ -201,12 +201,13 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         break;
         case VclEventId::WindowActivate:
         {
+            sal_Int16 aAccessibleRole = getAccessibleRole();
             // avoid notification if a child frame is already active
             // only one frame may be active at a given time
             if ( !pAccWindow->HasActiveChildFrame() &&
-                 ( getAccessibleRole() == accessibility::AccessibleRole::FRAME ||
-                   getAccessibleRole() == accessibility::AccessibleRole::ALERT ||
-                   getAccessibleRole() == accessibility::AccessibleRole::DIALOG ) )  // #i18891#
+                 ( aAccessibleRole == accessibility::AccessibleRole::FRAME ||
+                   aAccessibleRole == accessibility::AccessibleRole::ALERT ||
+                   aAccessibleRole == accessibility::AccessibleRole::DIALOG ) )  // #i18891#
             {
                 aNewValue <<= accessibility::AccessibleStateType::ACTIVE;
                 NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
@@ -215,9 +216,10 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         break;
         case VclEventId::WindowDeactivate:
         {
-            if ( getAccessibleRole() == accessibility::AccessibleRole::FRAME ||
-                 getAccessibleRole() == accessibility::AccessibleRole::ALERT ||
-                 getAccessibleRole() == accessibility::AccessibleRole::DIALOG )  // #i18891#
+            sal_Int16 aAccessibleRole = getAccessibleRole();
+            if ( aAccessibleRole == accessibility::AccessibleRole::FRAME ||
+                 aAccessibleRole == accessibility::AccessibleRole::ALERT ||
+                 aAccessibleRole == accessibility::AccessibleRole::DIALOG )  // #i18891#
             {
                 aOldValue <<= accessibility::AccessibleStateType::ACTIVE;
                 NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
