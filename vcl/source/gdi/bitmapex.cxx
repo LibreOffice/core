@@ -1436,14 +1436,4 @@ void BitmapEx::GetSplitData( std::vector<sal_uInt8>& rvColorData, std::vector<sa
     }
 }
 
-void BitmapEx::CombineMaskOr(Color maskColor, sal_uInt8 nTol)
-{
-    BitmapEx aNewMask(maBitmap.CreateMask(maskColor, nTol));
-    if (IsTransparent())
-        BitmapFilter::Filter(aNewMask, BitmapCombinationFilter(maMask, BmpCombine::Or));
-
-    maMask = aNewMask.GetBitmap();
-    meTransparent = TransparentType::Bitmap;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
