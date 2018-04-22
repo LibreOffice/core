@@ -806,6 +806,21 @@ RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell_Printto_Command
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
+RegistryItem gid_Regitem_CalcApplication
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "Calc.Application\CLSID";
+    Value = "{82154425-0FBF-11d4-8313-005004526AB4}";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Clsid__82154425_0FBF_11d4_8313_005004526AB4__Localserver32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "CLSID\{82154425-0FBF-11d4-8313-005004526AB4}\LocalServer32";
+    Value = "<progpath>\program\soffice.exe --nodefault --nologo";
+End
+
 // .fods
 
 RegistryItem gid_Regitem__Fods
