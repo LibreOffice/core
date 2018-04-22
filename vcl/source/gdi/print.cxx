@@ -1718,6 +1718,7 @@ void Printer::updatePrinters()
             if( pApp )
             {
                 DataChangedEvent aDCEvt( DataChangedEventType::PRINTER );
+                Application::ImplCallEventListenersApplicationDataChanged(&aDCEvt);
                 Application::NotifyAllWindows( aDCEvt );
             }
         }
