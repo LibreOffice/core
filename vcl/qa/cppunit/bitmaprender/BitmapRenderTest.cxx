@@ -62,7 +62,7 @@ void BitmapRenderTest::testTdf104141()
     BitmapEx aBitmap = aGraphic.GetBitmapEx();
     pVDev->DrawBitmapEx(Point(20, 20), aBitmap);
 
-    // Check drawing resuts: ensure that it contains transparent
+    // Check drawing results: ensure that it contains transparent
     // (greenish) pixels
 #if !defined MACOSX //TODO: on Mac colors are drifted, so exact compare fails
     const Color aColor = pVDev->GetPixel(Point(21, 21));
