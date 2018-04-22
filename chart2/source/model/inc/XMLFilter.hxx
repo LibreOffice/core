@@ -44,7 +44,7 @@ namespace xml { namespace sax
 }}
 namespace document
 {
-    class XGraphicObjectResolver;
+    class XGraphicStorageHandler;
 }
 }}}
 
@@ -105,7 +105,7 @@ private:
         const css::uno::Reference< css::embed::XStorage > & xStorage,
         const css::uno::Reference< css::xml::sax::XParser > & xParser,
         const css::uno::Reference< css::lang::XMultiComponentFactory > & xFactory,
-        const css::uno::Reference< css::document::XGraphicObjectResolver > & xGraphicObjectResolver,
+        const css::uno::Reference<css::document::XGraphicStorageHandler> & xGraphicStorageHandler,
         css::uno::Reference< css::beans::XPropertySet > const & xPropSet );
 
     /// @return a warning code, or 0 for successful operation

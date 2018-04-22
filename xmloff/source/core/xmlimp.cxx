@@ -529,20 +529,20 @@ void SAL_CALL SvXMLImport::setNamespaceHandler( const uno::Reference< xml::sax::
 void SAL_CALL SvXMLImport::startDocument()
 {
     SAL_INFO( "xmloff.core", "{ SvXMLImport::startDocument" );
-    if( !mxGraphicResolver.is() || !mxEmbeddedResolver.is() )
+    if (!mxGraphicStorageHandler.is() || !mxEmbeddedResolver.is())
     {
         Reference< lang::XMultiServiceFactory > xFactory( mxModel,  UNO_QUERY );
         if( xFactory.is() )
         {
             try
             {
-                if( !mxGraphicResolver.is() )
+                if (!mxGraphicStorageHandler.is())
                 {
                     // #99870# Import... instead of Export...
-                    mxGraphicResolver.set(
-                        xFactory->createInstance("com.sun.star.document.ImportGraphicObjectResolver"),
+                    mxGraphicStorageHandler.set(
+                        xFactory->createInstance("com.sun.star.document.ImportGraphicStorageHandler"),
                         UNO_QUERY);
-                    mpImpl->mbOwnGraphicResolver = mxGraphicResolver.is();
+                    mpImpl->mbOwnGraphicResolver = mxGraphicStorageHandler.is();
                 }
 
                 if( !mxEmbeddedResolver.is() )
@@ -630,7 +630,7 @@ void SAL_CALL SvXMLImport::endDocument()
 
     if( mpImpl->mbOwnGraphicResolver )
     {
-        Reference< lang::XComponent > xComp( mxGraphicResolver, UNO_QUERY );
+        Reference<lang::XComponent> xComp(mxGraphicStorageHandler, UNO_QUERY);
         xComp->dispose();
     }
 
@@ -1037,10 +1037,9 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
         if( xTmpStatusIndicator.is() )
             mxStatusIndicator = xTmpStatusIndicator;
 
-        uno::Reference<document::XGraphicObjectResolver> xTmpGraphicResolver(
-            xValue, UNO_QUERY );
-        if( xTmpGraphicResolver.is() )
-            mxGraphicResolver = xTmpGraphicResolver;
+        uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler(xValue, UNO_QUERY);
+        if (xGraphicStorageHandler.is())
+            mxGraphicStorageHandler = xGraphicStorageHandler;
 
         uno::Reference<document::XEmbeddedObjectResolver> xTmpObjectResolver(
             xValue, UNO_QUERY );
@@ -1361,13 +1360,12 @@ bool SvXMLImport::IsPackageURL( const OUString& rURL ) const
 uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicByURL(OUString const & rURL)
 {
     uno::Reference<graphic::XGraphic> xGraphic;
-    uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler(mxGraphicResolver, uno::UNO_QUERY);
 
-    if (xGraphicStorageHandler.is())
+    if (mxGraphicStorageHandler.is())
     {
         if (IsPackageURL(rURL))
         {
-            xGraphic = xGraphicStorageHandler->loadGraphic(rURL);
+            xGraphic = mxGraphicStorageHandler->loadGraphic(rURL);
         }
         else
         {
@@ -1384,11 +1382,10 @@ uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicByURL(OUString const &
 uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicFromBase64(uno::Reference<io::XOutputStream> const & rxOutputStream)
 {
     uno::Reference<graphic::XGraphic> xGraphic;
-    uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler(mxGraphicResolver, uno::UNO_QUERY);
 
-    if (xGraphicStorageHandler.is())
+    if (mxGraphicStorageHandler.is())
     {
-        xGraphic = xGraphicStorageHandler->loadGraphicFromOutputStream(rxOutputStream);
+        xGraphic = mxGraphicStorageHandler->loadGraphicFromOutputStream(rxOutputStream);
     }
 
     return xGraphic;
@@ -1397,7 +1394,7 @@ uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicFromBase64(uno::Refere
 Reference< XOutputStream > SvXMLImport::GetStreamForGraphicObjectURLFromBase64()
 {
     Reference< XOutputStream > xOStm;
-    Reference< document::XBinaryStreamResolver > xStmResolver( mxGraphicResolver, UNO_QUERY );
+    Reference< document::XBinaryStreamResolver > xStmResolver(mxGraphicStorageHandler, UNO_QUERY);
 
     if( xStmResolver.is() )
         xOStm = xStmResolver->createOutputStream();

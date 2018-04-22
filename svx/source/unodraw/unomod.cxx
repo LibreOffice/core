@@ -180,7 +180,7 @@ css::uno::Reference<css::uno::XInterface> create(
             return uno::Reference< uno::XInterface >( static_cast<drawing::XShape*>(SvxDrawPage::CreateShapeByTypeAndInventor( nT, nI, nullptr, nullptr, referer )) );
         }
     }
-    else if ( rServiceSpecifier == "com.sun.star.document.ImportGraphicObjectResolver" )
+    else if (rServiceSpecifier == "com.sun.star.document.ImportGraphicStorageHandler")
     {
         rtl::Reference<SvXMLGraphicHelper> pGraphicHelper = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Read );
         uno::Reference< uno::XInterface> xRet( static_cast< ::cppu::OWeakObject* >( pGraphicHelper.get() ) );
