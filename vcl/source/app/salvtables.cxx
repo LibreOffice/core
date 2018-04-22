@@ -183,8 +183,8 @@ class SalInstanceWidget : public virtual weld::Widget
 private:
     VclPtr<vcl::Window> m_xWidget;
 
-    DECL_LINK(FocusInHdl, Control&, void);
-    DECL_LINK(FocusOutHdl, Control&, void);
+    DECL_LINK(FocusInListener, VclWindowEvent&, void);
+    DECL_LINK(FocusOutListener, VclWindowEvent&, void);
 
     bool m_bTakeOwnership;
 
@@ -340,14 +340,14 @@ public:
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
     {
         assert(!m_aFocusInHdl.IsSet());
-        dynamic_cast<Control&>(*m_xWidget).SetGetFocusHdl(LINK(this, SalInstanceWidget, FocusInHdl));
+        m_xWidget->AddEventListener(LINK( this, SalInstanceWidget, FocusInListener));
         m_aFocusInHdl = rLink;
     }
 
     virtual void connect_focus_out(const Link<Widget&, void>& rLink) override
     {
         assert(!m_aFocusOutHdl.IsSet());
-        dynamic_cast<Control&>(*m_xWidget).SetLoseFocusHdl(LINK(this, SalInstanceWidget, FocusOutHdl));
+        m_xWidget->AddEventListener(LINK( this, SalInstanceWidget, FocusOutListener));
         m_aFocusOutHdl = rLink;
     }
 
@@ -366,9 +366,9 @@ public:
     virtual ~SalInstanceWidget() override
     {
         if (m_aFocusInHdl.IsSet())
-           dynamic_cast<Control&>(*m_xWidget).SetGetFocusHdl(Link<Control&,void>());
+            m_xWidget->RemoveEventListener(LINK( this, SalInstanceWidget, FocusInListener));
         if (m_aFocusOutHdl.IsSet())
-            dynamic_cast<Control&>(*m_xWidget).SetLoseFocusHdl(Link<Control&,void>());
+            m_xWidget->RemoveEventListener(LINK( this, SalInstanceWidget, FocusOutListener));
         if (m_bTakeOwnership)
             m_xWidget.disposeAndClear();
     }
@@ -384,14 +384,16 @@ public:
     }
 };
 
-IMPL_LINK_NOARG(SalInstanceWidget, FocusInHdl, Control&, void)
+IMPL_LINK(SalInstanceWidget, FocusInListener, VclWindowEvent&, rEvent, void)
 {
-    signal_focus_in();
+    if (rEvent.GetId() == VclEventId::WindowGetFocus || rEvent.GetId() == VclEventId::WindowActivate)
+        signal_focus_in();
 }
 
-IMPL_LINK_NOARG(SalInstanceWidget, FocusOutHdl, Control&, void)
+IMPL_LINK(SalInstanceWidget, FocusOutListener, VclWindowEvent&, rEvent, void)
 {
-    signal_focus_out();
+    if (rEvent.GetId() == VclEventId::WindowLoseFocus || rEvent.GetId() == VclEventId::WindowDeactivate)
+        signal_focus_out();
 }
 
 class SalInstanceMenu : public weld::Menu
