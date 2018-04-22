@@ -191,6 +191,25 @@ namespace oox { namespace ppt {
         }
     }
 
+    void normalizeKeyTimes( css::uno::Sequence< double >& aKeyTimes )
+    {
+        // key times are expected to be a sequence of 0, ..., x (<= 1)
+        // PPTs exported by Impress and roundtripped by PP sometimes have key times in 1, ..., -1 sequence
+        // normalize to 0, ..., 1
+        const size_t nLength = static_cast<size_t>( aKeyTimes.getLength() );
+        if( nLength < 2 )
+            return;
+
+        double* pKeyTimes = aKeyTimes.getArray();
+        if( (pKeyTimes[0] == 0. && pKeyTimes[nLength - 1] <= 1.) || pKeyTimes[nLength - 1] - pKeyTimes[0] == 0 )
+            return;
+
+        for( size_t nPos = 0; nPos < nLength; ++nPos )
+        {
+            pKeyTimes[nPos] = (pKeyTimes[nPos] - pKeyTimes[0]) / (pKeyTimes[nLength - 1] - pKeyTimes[0]);
+        }
+    }
+
     void TimeNode::addNode( const XmlFilterBase& rFilter, const Reference< XAnimationNode >& rxNode, const SlidePersistPtr & pSlide )
     {
         try {
@@ -353,7 +372,10 @@ namespace oox { namespace ppt {
                         {
                             Sequence<double> aKeyTimes;
                             if( aValue >>= aKeyTimes )
+                            {
+                                normalizeKeyTimes(aKeyTimes);
                                 xAnimate->setKeyTimes(aKeyTimes);
+                            }
                             else
                             {
                                 SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
