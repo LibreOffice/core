@@ -147,6 +147,56 @@ index 0a01ae0..6947e3a 100644
    if (bPattern) {
      DrawTextPathWithPattern(textobj, pObj2Device, pFont, font_size,
                              &text_matrix, bFill, bStroke);
+diff --git a/core/fpdftext/cpdf_textpage.cpp b/core/fpdftext/cpdf_textpage.cpp
+index e712549..a7973f7 100644
+--- a/core/fpdftext/cpdf_textpage.cpp
++++ b/core/fpdftext/cpdf_textpage.cpp
+@@ -1490,3 +1490,32 @@ bool CPDF_TextPage::IsRectIntersect(const CFX_FloatRect& rect1,
+   rect.Intersect(rect2);
+   return !rect.IsEmpty();
+ }
++
++WideString CPDF_TextPage::GetTextObjectText(CPDF_TextObject* pTextObj)
++{
++  if (!m_bIsParsed)
++    return WideString();
++
++  float posy = 0;
++  bool IsContainPreChar = false;
++  bool IsAddLineFeed = false;
++  WideString strText;
++  for (const auto& charinfo : m_CharList) {
++    if (charinfo.m_pTextObj == pTextObj) {
++      IsContainPreChar = true;
++      IsAddLineFeed = false;
++      if (charinfo.m_Unicode)
++        strText += charinfo.m_Unicode;
++    } else if (charinfo.m_Unicode == 32) {
++      if (IsContainPreChar && charinfo.m_Unicode) {
++        strText += charinfo.m_Unicode;
++        IsContainPreChar = false;
++        IsAddLineFeed = false;
++      }
++    } else {
++      IsContainPreChar = false;
++      IsAddLineFeed = true;
++    }
++  }
++  return strText;
++}
+diff --git a/core/fpdftext/cpdf_textpage.h b/core/fpdftext/cpdf_textpage.h
+index c87ab00..e5a1ba8 100644
+--- a/core/fpdftext/cpdf_textpage.h
++++ b/core/fpdftext/cpdf_textpage.h
+@@ -110,6 +110,8 @@ class CPDF_TextPage {
+   WideString GetPageText(int start, int count) const;
+   WideString GetAllPageText() const { return GetPageText(0, CountChars()); }
+ 
++  WideString GetTextObjectText(CPDF_TextObject* pTextObj);
++
+   int CountRects(int start, int nCount);
+   bool GetRect(int rectIndex, CFX_FloatRect* pRect) const;
+ 
 diff --git a/core/fxge/cfx_pathdata.cpp b/core/fxge/cfx_pathdata.cpp
 index 4ac5cf6..4286de4 100644
 --- a/core/fxge/cfx_pathdata.cpp
@@ -199,7 +249,7 @@ index 0d7ba56..37bdf99 100644
  FPDFImageObj_GetImageDataDecoded(FPDF_PAGEOBJECT image_object,
                                   void* buffer,
 diff --git a/fpdfsdk/fpdfeditpage.cpp b/fpdfsdk/fpdfeditpage.cpp
-index ca2cf3f..832a9ae 100644
+index ca2cf3f..2162625 100644
 --- a/fpdfsdk/fpdfeditpage.cpp
 +++ b/fpdfsdk/fpdfeditpage.cpp
 @@ -11,12 +11,14 @@
@@ -217,7 +267,15 @@ index ca2cf3f..832a9ae 100644
  #include "core/fpdfapi/page/cpdf_shadingobject.h"
  #include "core/fpdfapi/parser/cpdf_array.h"
  #include "core/fpdfapi/parser/cpdf_document.h"
-@@ -363,3 +365,212 @@ FPDFPageObj_GetBounds(FPDF_PAGEOBJECT pageObject,
+@@ -24,6 +26,7 @@
+ #include "core/fpdfapi/parser/cpdf_string.h"
+ #include "core/fpdfdoc/cpdf_annot.h"
+ #include "core/fpdfdoc/cpdf_annotlist.h"
++#include "core/fpdftext/cpdf_textpage.h"
+ #include "fpdfsdk/fsdk_define.h"
+ #include "public/fpdf_formfill.h"
+ #include "third_party/base/logging.h"
+@@ -363,3 +366,252 @@ FPDFPageObj_GetBounds(FPDF_PAGEOBJECT pageObject,
    *top = bbox.top;
    return true;
  }
@@ -321,6 +379,46 @@ index ca2cf3f..832a9ae 100644
 +  ByteString byte_str = str.UTF16LE_Encode();
 +  size_t byte_str_len = byte_str.GetLength();
 +  int ret_count = byte_str_len / sizeof(unsigned short);
++
++  ASSERT(ret_count <= char_count + 1);  // +1 to account for the NUL terminator.
++  memcpy(result, byte_str.GetBuffer(byte_str_len), byte_str_len);
++  return ret_count;
++}
++
++FPDF_EXPORT int FPDF_CALLCONV
++FPDFTextObj_GetTextProcessed(FPDF_PAGEOBJECT text_object,
++                             FPDF_TEXTPAGE page,
++                             int char_start,
++                             int char_count,
++                             unsigned short* result)
++{
++  if (!page || !text_object || char_start < 0 || char_count < 0 || !result)
++    return 0;
++
++  CPDF_TextObject* pTxtObj = CPDFTextObjectFromFPDFPageObject(text_object);
++  CPDF_TextPage* textpage = CPDFTextPageFromFPDFTextPage(page);
++  int char_available = textpage->CountChars() - char_start;
++  if (char_available <= 0)
++    return 0;
++
++  char_count = std::min(char_count, char_available);
++  if (char_count == 0) {
++    // Writing out "", which has a character count of 1 due to the NUL.
++    *result = '\0';
++    return 1;
++  }
++
++  WideString str = textpage->GetTextObjectText(pTxtObj);
++
++  if (str.GetLength() > static_cast<size_t>(char_count))
++    str = str.Left(static_cast<size_t>(char_count));
++
++  // UFT16LE_Encode doesn't handle surrogate pairs properly, so it is expected
++  // the number of items to stay the same.
++  ByteString byte_str = str.UTF16LE_Encode();
++  size_t byte_str_len = byte_str.GetLength();
++  constexpr size_t kBytesPerCharacter = sizeof(unsigned short);
++  int ret_count = byte_str_len / kBytesPerCharacter;
 +
 +  ASSERT(ret_count <= char_count + 1);  // +1 to account for the NUL terminator.
 +  memcpy(result, byte_str.GetBuffer(byte_str_len), byte_str_len);
@@ -509,10 +607,21 @@ index a291987..0202284 100644
    auto* pPathPoint = FXPathPointFromFPDFPathSegment(segment);
    if (!pPathPoint || !x || !y)
 diff --git a/fpdfsdk/fpdftext.cpp b/fpdfsdk/fpdftext.cpp
-index 68bf4f8..e073b20 100644
+index 68bf4f8..1cac9c7 100644
 --- a/fpdfsdk/fpdftext.cpp
 +++ b/fpdfsdk/fpdftext.cpp
-@@ -105,6 +105,28 @@ FPDF_EXPORT double FPDF_CALLCONV FPDFText_GetFontSize(FPDF_TEXTPAGE text_page,
+@@ -31,10 +31,6 @@ namespace {
+ 
+ constexpr size_t kBytesPerCharacter = sizeof(unsigned short);
+ 
+-CPDF_TextPage* CPDFTextPageFromFPDFTextPage(FPDF_TEXTPAGE text_page) {
+-  return static_cast<CPDF_TextPage*>(text_page);
+-}
+-
+ CPDF_TextPageFind* CPDFTextPageFindFromFPDFSchHandle(FPDF_SCHHANDLE handle) {
+   return static_cast<CPDF_TextPageFind*>(handle);
+ }
+@@ -105,6 +101,28 @@ FPDF_EXPORT double FPDF_CALLCONV FPDFText_GetFontSize(FPDF_TEXTPAGE text_page,
    return charinfo.m_FontSize;
  }
  
@@ -542,13 +651,17 @@ index 68bf4f8..e073b20 100644
                                                          int index,
                                                          double* left,
 diff --git a/fpdfsdk/fpdfview.cpp b/fpdfsdk/fpdfview.cpp
-index e890aa0..b62283f 100644
+index e890aa0..09d2345 100644
 --- a/fpdfsdk/fpdfview.cpp
 +++ b/fpdfsdk/fpdfview.cpp
-@@ -336,6 +336,16 @@ CPDF_Page* CPDFPageFromFPDFPage(FPDF_PAGE page) {
+@@ -336,6 +336,20 @@ CPDF_Page* CPDFPageFromFPDFPage(FPDF_PAGE page) {
  #endif  // PDF_ENABLE_XFA
  }
  
++CPDF_TextPage* CPDFTextPageFromFPDFTextPage(FPDF_TEXTPAGE text_page) {
++  return static_cast<CPDF_TextPage*>(text_page);
++}
++
 +CPDF_TextObject* CPDFTextObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object) {
 +  auto* obj = CPDFPageObjectFromFPDFPageObject(page_object);
 +  return obj ? obj->AsText() : nullptr;
@@ -563,22 +676,25 @@ index e890aa0..b62283f 100644
    auto* obj = CPDFPageObjectFromFPDFPageObject(page_object);
    return obj ? obj->AsPath() : nullptr;
 diff --git a/fpdfsdk/fsdk_define.h b/fpdfsdk/fsdk_define.h
-index 77c2315..b61f447 100644
+index 77c2315..e9a309a 100644
 --- a/fpdfsdk/fsdk_define.h
 +++ b/fpdfsdk/fsdk_define.h
-@@ -25,6 +25,8 @@ class CPDF_Annot;
+@@ -25,6 +25,9 @@ class CPDF_Annot;
  class CPDF_Page;
  class CPDF_PageObject;
  class CPDF_PageRenderContext;
 +class CPDF_TextObject;
++class CPDF_TextPage;
 +class CPDF_FormObject;
  class CPDF_PathObject;
  class CPDF_Stream;
  class IFSDK_PAUSE_Adapter;
-@@ -65,6 +67,10 @@ FPDF_DOCUMENT FPDFDocumentFromCPDFDocument(CPDF_Document* doc);
+@@ -65,6 +68,12 @@ FPDF_DOCUMENT FPDFDocumentFromCPDFDocument(CPDF_Document* doc);
  
  CPDF_Page* CPDFPageFromFPDFPage(FPDF_PAGE page);
  
++CPDF_TextPage* CPDFTextPageFromFPDFTextPage(FPDF_TEXTPAGE text_page);
++
 +CPDF_TextObject* CPDFTextObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object);
 +
 +CPDF_FormObject* CPDFFormObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object);
@@ -587,7 +703,7 @@ index 77c2315..b61f447 100644
  
  CPDF_PageObject* CPDFPageObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object);
 diff --git a/public/fpdf_edit.h b/public/fpdf_edit.h
-index 54735a3..2e7e2e7 100644
+index 54735a3..4d81aac 100644
 --- a/public/fpdf_edit.h
 +++ b/public/fpdf_edit.h
 @@ -520,6 +520,15 @@ FPDFPath_GetStrokeColor(FPDF_PAGEOBJECT path,
@@ -643,7 +759,7 @@ index 54735a3..2e7e2e7 100644
  // Create a new text object using one of the standard PDF fonts.
  //
  // document   - handle to the document.
-@@ -761,6 +800,112 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
+@@ -761,6 +800,125 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
                            FPDF_FONT font,
                            float font_size);
  
@@ -701,6 +817,19 @@ index 54735a3..2e7e2e7 100644
 +                    int char_start,
 +                    int char_count,
 +                    unsigned short* result);
++
++// Get the processed text of a text object.
++//
++// text_object - Handle of text object returned by FPDFPageObj_NewTextObj
++//               or FPDFPageObj_NewTextObjEx.
++// Return Value:
++// The number of characters (not bytes) written in result.
++FPDF_EXPORT int FPDF_CALLCONV
++FPDFTextObj_GetTextProcessed(FPDF_PAGEOBJECT text_object,
++                             FPDF_TEXTPAGE page,
++                             int char_start,
++                             int char_count,
++                             unsigned short* result);
 +
 +// Get the stroke RGBA of a text. Range of values: 0 - 255.
 +//
