@@ -15,7 +15,7 @@
         <value>org.libreoffice.comp.Calc.NumbersImportFilter</value>
     </prop>
     <prop oor:name="UIName">
-        <value xml:lang="en-US">Apple Numbers 2</value>
+        <value xml:lang="en-US">Apple Numbers</value>
     </prop>
     <prop oor:name="FileFormatVersion">
         <value>0</value>
