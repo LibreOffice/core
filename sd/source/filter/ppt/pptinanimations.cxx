@@ -2391,15 +2391,17 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
         OUString aFormula;
 
         pIter = pAtom->findFirstChildAtom(DFF_msofbtAnimKeyTime);
-        int nKeyTime;
         sal_Int32 nTemp;
-        for( nKeyTime = 0; (nKeyTime < nKeyTimes) && pIter; nKeyTime++ )
+        bool bToNormalize = false;
+        for( int nKeyTime = 0; (nKeyTime < nKeyTimes) && pIter; nKeyTime++ )
         {
             if( pIter->seekToContent() )
             {
                 mrStCtrl.ReadInt32( nTemp );
                 double fTemp = (double)nTemp / 1000.0;
                 aKeyTimes[nKeyTime] = fTemp;
+                if( fTemp == -1 )
+                    bToNormalize = true;
 
                 const Atom* pValue = Atom::findNextChildAtom(pIter);
                 if( pValue && pValue->getType() == DFF_msofbtAnimAttributeValue )
@@ -2496,7 +2498,14 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
         }
         dump( "\"" );
 #endif
-
+        if( bToNormalize && nKeyTimes >= 2 )
+        {
+            // if TimeAnimationValueList contains time -1000, key points must be evenly distributed between 0 and 1 ([MS-PPT] 2.8.31)
+            for( int nKeyTime = 0; nKeyTime < nKeyTimes; ++nKeyTime )
+            {
+                aKeyTimes[nKeyTime] = static_cast<double>(nKeyTime) / static_cast<double>(nKeyTimes - 1);
+            }
+        }
         xAnim->setKeyTimes( aKeyTimes );
         xAnim->setValues( aValues );
         xAnim->setFormula( aFormula );

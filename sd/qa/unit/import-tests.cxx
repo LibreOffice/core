@@ -173,6 +173,7 @@ public:
     void testTdf115394();
     void testTdf115394PPT();
     void testTdf115639();
+    void testTdf116899();
     void testTdf116266();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
@@ -252,6 +253,7 @@ public:
     CPPUNIT_TEST(testTdf115394);
     CPPUNIT_TEST(testTdf115394PPT);
     CPPUNIT_TEST(testTdf115639);
+    CPPUNIT_TEST(testTdf116899);
     CPPUNIT_TEST(testTdf116266);
 
     CPPUNIT_TEST_SUITE_END();
@@ -2468,6 +2470,29 @@ void SdImportTest::testTdf115639()
         CPPUNIT_ASSERT( !pDoc->IsHoriAlignIgnoreTrailingWhitespace() );
         xDocShRef->DoClose();
     }
+}
+
+void SdImportTest::testTdf116899()
+{
+    // This is a PPT created in Impress and roundtripped in PP, the key times become [1, -1] in PP,
+    //  a time of -1 (-1000) in PPT means key times have to be distributed evenly between 0 and 1
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/ppt/tdf116899.ppt"), PPT);
+
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage(
+        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    uno::Reference< animations::XAnimationNodeSupplier > xAnimNodeSupplier(
+        xPage, uno::UNO_QUERY_THROW );
+    uno::Reference< animations::XAnimationNode > xRootNode(
+        xAnimNodeSupplier->getAnimationNode() );
+    std::vector< uno::Reference< animations::XAnimationNode > > aAnimVector;
+    anim::create_deep_vector(xRootNode, aAnimVector);
+    uno::Reference< animations::XAnimate > xNode(
+        aAnimVector[8], uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of key times in the animation node isn't 2.", xNode->getKeyTimes().getLength(), static_cast<sal_Int32>(2) );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "First key time in the animation node isn't 0, key times aren't normalized.", 0., xNode->getKeyTimes()[0] );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Second key time in the animation node isn't 1, key times aren't normalized.", 1., xNode->getKeyTimes()[1] );
 }
 
 void SdImportTest::testTdf116266()
