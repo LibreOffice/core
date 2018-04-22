@@ -26,21 +26,39 @@
 #include "callnk.hxx"
 #include <pamtyp.hxx>
 #include <section.hxx>
+#include <svx/srchdlg.hxx>
 
 bool GotoPrevRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegion,
                         bool bInReadOnly )
 {
+    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
     SwNodeIndex aIdx( rCurrentCursor.GetPoint()->nNode );
     SwSectionNode* pNd = aIdx.GetNode().FindSectionNode();
     if( pNd )
         aIdx.Assign( *pNd, - 1 );
 
+    SwNodeIndex aOldIdx = aIdx;
+    sal_uLong nLastNd = rCurrentCursor.GetDoc()->GetNodes().Count() - 1;
     do {
         while( aIdx.GetIndex() &&
             nullptr == ( pNd = aIdx.GetNode().StartOfSectionNode()->GetSectionNode()) )
+        {
             --aIdx;
+            if ( aIdx == aOldIdx )
+            {
+                SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
+                return false;
+            }
+        }
 
-        if( pNd ) // is there another section node?
+        if ( !aIdx.GetIndex() )
+        {
+            SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::StartWrapped );
+            aIdx = nLastNd;
+            continue;
+        }
+
+        assert( pNd );  // coverity, should never be nullptr
         {
             if( pNd->GetSection().IsHiddenFlag() ||
                 ( !bInReadOnly &&
@@ -48,6 +66,7 @@ bool GotoPrevRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegi
             {
                 // skip protected or hidden ones
                 aIdx.Assign( *pNd, - 1 );
+                continue;
             }
             else if( &fnPosRegion == &fnMoveForward )
             {
@@ -76,25 +95,43 @@ bool GotoPrevRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegi
             rCurrentCursor.GetPoint()->nNode = aIdx;
             return true;
         }
-    } while( pNd );
+    } while( true );
+
+    // the flow is such that it is not possible to get here
     return false;
 }
 
 bool GotoNextRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegion,
                         bool bInReadOnly )
 {
+    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
     SwNodeIndex aIdx( rCurrentCursor.GetPoint()->nNode );
     SwSectionNode* pNd = aIdx.GetNode().FindSectionNode();
     if( pNd )
         aIdx.Assign( *pNd->EndOfSectionNode(), - 1 );
 
+    SwNodeIndex aOldIdx = aIdx;
     sal_uLong nEndCount = aIdx.GetNode().GetNodes().Count()-1;
     do {
         while( aIdx.GetIndex() < nEndCount &&
                 nullptr == ( pNd = aIdx.GetNode().GetSectionNode()) )
+        {
             ++aIdx;
+            if ( aIdx == aOldIdx )
+            {
+                SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
+                return false;
+            }
+        }
 
-        if( pNd ) // is there another section node?
+        if ( aIdx.GetIndex() == nEndCount )
+        {
+            SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
+            aIdx = 0;
+            continue;
+        }
+
+        assert( pNd );  // coverity, should never be nullptr
         {
             if( pNd->GetSection().IsHiddenFlag() ||
                 ( !bInReadOnly &&
@@ -102,6 +139,7 @@ bool GotoNextRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegi
             {
                 // skip protected or hidden ones
                 aIdx.Assign( *pNd->EndOfSectionNode(), +1 );
+                continue;
             }
             else if( &fnPosRegion == &fnMoveForward )
             {
@@ -130,7 +168,9 @@ bool GotoNextRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegi
             rCurrentCursor.GetPoint()->nNode = aIdx;
             return true;
         }
-    } while( pNd );
+    } while( true );
+
+    // the flow is such that it is not possible to get here
     return false;
 }
 
