@@ -1410,11 +1410,24 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
 
     float fWidth = 1;
     FPDFPath_GetStrokeWidth(pPageObject, &fWidth);
-    SAL_WARN("sd.filter", "Path Stroke Width: " << fWidth);
-    const double dWidth = fabs(sqrt2(a, c) * fWidth);
-    SAL_WARN("sd.filter", "Path Stroke Width scaled: " << dWidth);
+    const double dWidth = 0.5 * fabs(sqrt2(mCurMatrix.a(), mCurMatrix.c()) * fWidth);
     mnLineWidth = lcl_ToLogic(lcl_PointToPixel(dWidth));
     mnLineWidth /= 2;
+    SAL_WARN("sd.filter", "Path Stroke Width: " << fWidth << ",  scaled: " << dWidth
+                                                << ", Logical: " << mnLineWidth);
+
+    int nFillMode = FPDF_FILLMODE_ALTERNATE;
+    FPDF_BOOL bStroke = true;
+    if (FPDFPath_GetDrawMode(pPageObject, &nFillMode, &bStroke))
+    {
+        SAL_WARN("sd.filter", "Got PATH FillMode: " << nFillMode << ", Storke: " << bStroke);
+        if (nFillMode == FPDF_FILLMODE_ALTERNATE)
+            mpVD->SetDrawMode(DrawModeFlags::Default);
+        else if (nFillMode == FPDF_FILLMODE_WINDING)
+            mpVD->SetDrawMode(DrawModeFlags::Default);
+        else
+            mpVD->SetDrawMode(DrawModeFlags::NoFill);
+    }
 
     unsigned int nR;
     unsigned int nG;
@@ -1424,15 +1437,15 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
     SAL_WARN("sd.filter", "Got PATH fill color: " << nR << ", " << nG << ", " << nB << ", " << nA);
     mpVD->SetFillColor(Color(nR, nG, nB));
 
-    FPDFPath_GetStrokeColor(pPageObject, &nR, &nG, &nB, &nA);
-    SAL_WARN("sd.filter",
-             "Got PATH stroke color: " << nR << ", " << nG << ", " << nB << ", " << nA);
-    mpVD->SetLineColor(Color(nR, nG, nB));
-
-    // int nFillMode = 0; // No fill.
-    // bool bStroke = false;
-    // FPDFPath_GetDrawMode(pPageObject, &nFillMode, &bStroke);
-    // mpVD->Setstroke(Color(r, g, b));
+    if (bStroke)
+    {
+        FPDFPath_GetStrokeColor(pPageObject, &nR, &nG, &nB, &nA);
+        SAL_WARN("sd.filter",
+                 "Got PATH stroke color: " << nR << ", " << nG << ", " << nB << ", " << nA);
+        mpVD->SetLineColor(Color(nR, nG, nB));
+    }
+    else
+        mpVD->SetLineColor(COL_TRANSPARENT);
 
     // if(!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(basegfx::B2DPolyPolygon(aSource)))
 
