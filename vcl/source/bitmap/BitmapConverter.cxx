@@ -11,6 +11,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapConverter.hxx>
+#include <vcl/BitmapMonochromeFilter.hxx>
 
 #include <bitmapwriteaccess.hxx>
 #include <impoctree.hxx>
@@ -25,8 +26,12 @@ BitmapEx BitmapConverter::execute(BitmapEx const& rBitmapEx)
     switch (meConversion)
     {
         case BmpConversion::N1BitThreshold:
-            bRet = aBitmap.MakeMonochrome(128);
-            break;
+        {
+            BitmapEx aBitmapEx(aBitmap);
+            bRet = BitmapFilter::Filter(aBitmapEx, BitmapMonochromeFilter(128));
+            aBitmap = aBitmapEx.GetBitmap();
+        }
+        break;
 
         case BmpConversion::N4BitGreys:
             bRet = MakeGreyscales(aBitmap, 16);
