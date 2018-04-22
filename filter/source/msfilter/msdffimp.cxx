@@ -44,6 +44,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/BitmapColorAdjustFilter.hxx>
+#include <vcl/BitmapCombinationFilter.hxx>
 #include "viscache.hxx"
 
 // SvxItem-Mapping. Is needed to successfully include the SvxItem-Header
@@ -3823,8 +3824,17 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                 if ( aGraf.GetType() == GraphicType::Bitmap )
                 {
                     BitmapEx aBitmapEx( aGraf.GetBitmapEx() );
-                    aBitmapEx.CombineMaskOr( MSO_CLR_ToColor( nTransColor, DFF_Prop_pictureTransparent ), 9 );
-                    aGraf = aBitmapEx;
+                    Bitmap aNewMask( aBitmapEx.GetBitmap() );
+                    aNewMask = aNewMask.CreateMask( MSO_CLR_ToColor( nTransColor, DFF_Prop_pictureTransparent ), 9 );
+                    if ( aBitmapEx.IsTransparent() )
+                    {
+                        BitmapEx aNewMaskEx(aNewMask);
+                        BitmapFilter::Filter(aNewMaskEx, BitmapCombinationFilter(aBitmapEx.GetMask(), BmpCombine::Or ));
+                        aNewMask = aNewMaskEx.GetBitmap();
+                    }
+
+                    BitmapEx aNewBmpEx(aBitmapEx.GetBitmap(), aNewMask);
+                    aGraf = aNewBmpEx;
                 }
             }
 
