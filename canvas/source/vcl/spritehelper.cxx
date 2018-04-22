@@ -36,6 +36,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/BitmapMonochromeFilter.hxx>
 
 #include <canvas/canvastools.hxx>
 
@@ -153,7 +154,9 @@ namespace vclcanvas
                     {
                         OSL_FAIL("CanvasCustomSprite::redraw(): Mask bitmap is not "
                                    "monochrome (performance!)");
-                        aMask.MakeMonochrome(255);
+                        BitmapEx aMaskEx(aMask);
+                        BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(255));
+                        aMask = aMaskEx.GetBitmap();
                     }
 #endif
 
