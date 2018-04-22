@@ -38,6 +38,7 @@
 #include <outdev.h>
 #include <PhysicalFontCollection.hxx>
 #include <print.h>
+#include <BitmapBlendFilter.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -209,9 +210,10 @@ void Printer::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
         // #107169# For true alpha bitmaps, no longer masking the
         // bitmap, but perform a full alpha blend against a white
         // background here.
-        Bitmap aBmp( rBmpEx.GetBitmap() );
-        aBmp.Blend( rBmpEx.GetAlpha(), COL_WHITE );
-        DrawBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmp );
+        BitmapEx aTmpBmpEx(rBmpEx);
+        BitmapFilter::Filter(aTmpBmpEx, BitmapBlendFilter(rBmpEx.GetAlpha(), COL_WHITE));
+        Bitmap aBmp(aTmpBmpEx.GetBitmap());
+        DrawBitmap(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmp);
     }
     else
     {
