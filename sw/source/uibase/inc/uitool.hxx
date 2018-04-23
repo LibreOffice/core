@@ -40,6 +40,7 @@ class SfxViewFrame;
 
 // switch a metric
 SW_DLLPUBLIC void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit);
+SW_DLLPUBLIC void SetMetric(weld::MetricSpinButton& rCtrl, FieldUnit eUnit);
 
 // fill BoxInfo attribute
 SW_DLLPUBLIC void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh);
