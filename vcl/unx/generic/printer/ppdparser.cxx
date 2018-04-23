@@ -259,8 +259,8 @@ private:
     PPDDecompressStream(const PPDDecompressStream&) = delete;
     PPDDecompressStream& operator=(const PPDDecompressStream&) = delete;
 
-    SvFileStream*       mpFileStream;
-    SvMemoryStream*     mpMemStream;
+    std::unique_ptr<SvFileStream>   mpFileStream;
+    std::unique_ptr<SvMemoryStream> mpMemStream;
     OUString       maFileName;
 
 public:
@@ -291,7 +291,7 @@ void PPDDecompressStream::Open( const OUString& i_rFile )
 {
     Close();
 
-    mpFileStream = new SvFileStream( i_rFile, StreamMode::READ );
+    mpFileStream.reset( new SvFileStream( i_rFile, StreamMode::READ ) );
     maFileName = mpFileStream->GetFileName();
 
     if( ! mpFileStream->IsOpen() )
@@ -309,7 +309,7 @@ void PPDDecompressStream::Open( const OUString& i_rFile )
         && static_cast<unsigned char>(aLine[1]) == 0x8b /* check for gzip */ )
     {
         // so let's try to decompress the stream
-        mpMemStream = new SvMemoryStream( 4096, 4096 );
+        mpMemStream.reset( new SvMemoryStream( 4096, 4096 ) );
         ZCodec aCodec;
         aCodec.BeginCompression( ZCODEC_DEFAULT_COMPRESSION, false, true );
         long nComp = aCodec.Decompress( *mpFileStream, *mpMemStream );
@@ -317,15 +317,13 @@ void PPDDecompressStream::Open( const OUString& i_rFile )
         if( nComp < 0 )
         {
             // decompression failed, must be an uncompressed stream after all
-            delete mpMemStream;
-            mpMemStream = nullptr;
+            mpMemStream.reset();
             mpFileStream->Seek( 0 );
         }
         else
         {
             // compression successful, can get rid of file stream
-            delete mpFileStream;
-            mpFileStream = nullptr;
+            mpFileStream.reset();
             mpMemStream->Seek( 0 );
         }
     }
@@ -333,10 +331,8 @@ void PPDDecompressStream::Open( const OUString& i_rFile )
 
 void PPDDecompressStream::Close()
 {
-    delete mpMemStream;
-    mpMemStream = nullptr;
-    delete mpFileStream;
-    mpFileStream = nullptr;
+    mpMemStream.reset();
+    mpFileStream.reset();
 }
 
 bool PPDDecompressStream::IsOpen() const
