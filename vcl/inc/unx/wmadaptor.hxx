@@ -160,7 +160,7 @@ public:
     /*
      *  creates a valid WMAdaptor instance for the SalDisplay
      */
-    static WMAdaptor* createWMAdaptor( SalDisplay* );
+    static std::unique_ptr<WMAdaptor> createWMAdaptor( SalDisplay* );
 
     /*
      *  may return an empty string if the window manager could

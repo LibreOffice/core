@@ -280,7 +280,7 @@ protected:
     KeySym          nCtrlKeySym_;       // first control modifier
     KeySym          nMod1KeySym_;       // first mod1 modifier
 
-    vcl_sal::WMAdaptor* m_pWMAdaptor;
+    std::unique_ptr<vcl_sal::WMAdaptor> m_pWMAdaptor;
 
     bool            m_bXinerama;
     std::vector< tools::Rectangle > m_aXineramaScreens;
@@ -367,7 +367,7 @@ public:
     SalI18N_KeyboardExtension*  GetKbdExtension() const { return mpKbdExtension; }
     void            SetKbdExtension(SalI18N_KeyboardExtension *pKbdExtension)
     { mpKbdExtension = pKbdExtension; }
-    ::vcl_sal::WMAdaptor* getWMAdaptor() const { return m_pWMAdaptor; }
+    ::vcl_sal::WMAdaptor* getWMAdaptor() const { return m_pWMAdaptor.get(); }
     bool            IsXinerama() const { return m_bXinerama; }
     const std::vector< tools::Rectangle >& GetXineramaScreens() const { return m_aXineramaScreens; }
     ::Window        GetRootWindow( SalX11Screen nXScreen ) const
