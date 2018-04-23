@@ -69,6 +69,7 @@ struct SwDBFormatData
 };
 
 namespace weld {
+    class ComboBoxText;
     class Window;
 }
 
@@ -313,11 +314,17 @@ public:
 
     /// Fill listbox with all table names of a database.
     bool            GetTableNames(ListBox* pListBox, const OUString& rDBName );
+    bool            GetTableNames(weld::ComboBoxText& rBox, const OUString& rDBName);
 
     /// Fill listbox with all column names of a database table.
     void            GetColumnNames(ListBox* pListBox,
                             const OUString& rDBName, const OUString& rTableName);
+    void            GetColumnNames(weld::ComboBoxText& rBox,
+                            const OUString& rDBName, const OUString& rTableName);
     static void GetColumnNames(ListBox* pListBox,
+                            css::uno::Reference< css::sdbc::XConnection> const & xConnection,
+                            const OUString& rTableName);
+    static void GetColumnNames(weld::ComboBoxText& rBox,
                             css::uno::Reference< css::sdbc::XConnection> const & xConnection,
                             const OUString& rTableName);
 

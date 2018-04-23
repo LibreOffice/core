@@ -634,6 +634,7 @@ public:
     virtual OUString get_text() const = 0;
     virtual void select_region(int nStartPos, int nEndPos) = 0;
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;
+    virtual void replace_selection(const OUString& rText) = 0;
     virtual void set_editable(bool bEditable) = 0;
     int get_height_rows(int nRows) const
     {
