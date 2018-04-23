@@ -3396,6 +3396,18 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                     SkipClosingPar();
                     bUsed = true;
                 }
+                else if (pTopView && rKEvt.GetKeyCode().GetFunction() == KeyFuncType::PASTE)
+                {
+                    if (pTopView->PostKeyEvent(rKEvt))
+                    {
+                        // Not using pTableView->Paste() here, for multiline text
+                        // to get flattened to a single line, as treated by the
+                        // input field. So just sync with the input field contents:
+                        OUString aText = pTopView->GetEditEngine()->GetText();
+                        mpEditEngine->SetText(aText);
+                        bUsed = true;
+                    }
+                }
                 else
                 {
                     if (pTableView)

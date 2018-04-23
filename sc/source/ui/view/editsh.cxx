@@ -217,9 +217,18 @@ void ScEditShell::Execute( SfxRequest& rReq )
             break;
 
         case SID_PASTE:
-            pTableView->PasteSpecial();
             if (pTopView)
+            {
                 pTopView->Paste();
+                // Not using pTableView->Paste() here, for multiline text
+                // to get flattened to a single line, as treated by the
+                // input field. So just sync with the input field contents:
+                OUString aText = pTopView->GetEditEngine()->GetText();
+                auto pTableEngine = static_cast<ScEditEngineDefaulter*>(pTableView->GetEditEngine());
+                pTableEngine->SetText(aText);
+            }
+            else
+                pTableView->PasteSpecial();
             break;
 
         case SID_DELETE:
