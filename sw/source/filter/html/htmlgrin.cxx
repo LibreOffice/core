@@ -480,8 +480,25 @@ IMAGE_SETEVENT:
         std::unique_ptr<SvMemoryStream> const pStream(aGraphicURL.getData());
         if (pStream)
         {
-            if (ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, "", *pStream))
+            GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+            aGraphic = rFilter.ImportUnloadedGraphic(*pStream);
+            if (aGraphic)
+            {
                 sGrfNm.clear();
+
+                if (!bHeightProvided || !bWidthProvided)
+                {
+                    Size aPrefSize = aGraphic.GetPrefSize();
+                    nWidth = aPrefSize.getWidth();
+                    nHeight = aPrefSize.getHeight();
+                }
+            }
+
+            if (!sGrfNm.isEmpty())
+            {
+                if (ERRCODE_NONE == rFilter.ImportGraphic(aGraphic, "", *pStream))
+                    sGrfNm.clear();
+            }
         }
     }
     else if (m_sBaseURL.isEmpty() || !aGraphicData.isEmpty())
@@ -497,7 +514,7 @@ IMAGE_SETEVENT:
         aGraphic.SetDefaultType();
     }
 
-    if (!bHeightProvided || !bWidthProvided)
+    if (!nHeight || !nWidth)
     {
         Size aPixelSize = aGraphic.GetSizePixel(Application::GetDefaultDevice());
         if (!bWidthProvided)
