@@ -63,7 +63,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
-#include <com/sun/star/document/GraphicObjectResolver.hpp>
+#include <com/sun/star/document/GraphicStorageHandler.hpp>
 #include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
@@ -731,10 +731,8 @@ void ElementDescriptor::readImageOrGraphicAttr(OUString const & rAttrName)
             if ( xDocStorage.is() )
             {
                 Reference<XComponentContext> xContext = ::comphelper::getProcessComponentContext();
-                uno::Reference<document::XGraphicObjectResolver> xGraphicResolver;
-                xGraphicResolver.set(document::GraphicObjectResolver::createWithStorage(xContext, xDocStorage->getDocumentStorage()));
                 uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
-                xGraphicStorageHandler.set(xGraphicResolver, uno::UNO_QUERY);
+                xGraphicStorageHandler.set(document::GraphicStorageHandler::createWithStorage(xContext, xDocStorage->getDocumentStorage()));
                 if (xGraphicStorageHandler.is())
                 {
                     sURL = xGraphicStorageHandler->saveGraphic(xGraphic);

@@ -101,15 +101,15 @@ enum eServiceType
     SERVICE_NAME_MARKER_TABLE,
 
     SERVICE_NAME_NAMESPACE_MAP,
-    SERVICE_NAME_EXPORT_GRAPHIC_RESOLVER,
-    SERVICE_NAME_IMPORT_GRAPHIC_RESOLVER
+    SERVICE_NAME_EXPORT_GRAPHIC_STORAGE_RESOLVER,
+    SERVICE_NAME_IMPORT_GRAPHIC_STORAGE_RESOLVER
 };
 
 typedef std::map< OUString, enum eServiceType > tServiceNameMap;
 
 tServiceNameMap & lcl_getStaticServiceNameMap()
 {
-    static tServiceNameMap aServiceNameMap{
+    static tServiceNameMap aServiceNameMap {
         {"com.sun.star.chart.AreaDiagram",                    SERVICE_NAME_AREA_DIAGRAM},
         {"com.sun.star.chart.BarDiagram",                     SERVICE_NAME_BAR_DIAGRAM},
         {"com.sun.star.chart.DonutDiagram",                   SERVICE_NAME_DONUT_DIAGRAM},
@@ -130,8 +130,9 @@ tServiceNameMap & lcl_getStaticServiceNameMap()
         {"com.sun.star.drawing.MarkerTable",                  SERVICE_NAME_MARKER_TABLE},
 
         {"com.sun.star.xml.NamespaceMap",                     SERVICE_NAME_NAMESPACE_MAP},
-        {"com.sun.star.document.ExportGraphicObjectResolver", SERVICE_NAME_EXPORT_GRAPHIC_RESOLVER},
-        {"com.sun.star.document.ImportGraphicObjectResolver", SERVICE_NAME_IMPORT_GRAPHIC_RESOLVER}};
+        {"com.sun.star.document.ExportGraphicStoreageHandler", SERVICE_NAME_EXPORT_GRAPHIC_STORAGE_RESOLVER},
+        {"com.sun.star.document.ImportGraphicStoreageHandler", SERVICE_NAME_IMPORT_GRAPHIC_STORAGE_RESOLVER}
+    };
 
     return aServiceNameMap;
 }
@@ -1192,9 +1193,9 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
 
             case SERVICE_NAME_NAMESPACE_MAP:
                 break;
-            case SERVICE_NAME_EXPORT_GRAPHIC_RESOLVER:
+            case SERVICE_NAME_EXPORT_GRAPHIC_STORAGE_RESOLVER:
                 break;
-            case SERVICE_NAME_IMPORT_GRAPHIC_RESOLVER:
+            case SERVICE_NAME_IMPORT_GRAPHIC_STORAGE_RESOLVER:
                 break;
         }
 
