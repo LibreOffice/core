@@ -24,7 +24,6 @@
 
 class SalYieldMutex;
 class SalFrame;
-class KDE5XLib;
 
 class KDE5SalInstance : public Qt5Instance
 {
@@ -39,10 +38,6 @@ public:
                               css::uno::XComponentContext >& ) override;
 
     virtual bool IsMainThread() const override;
-    void SetLib( KDE5XLib *pXLib ) { m_pXLib = pXLib; }
-
-private:
-    KDE5XLib *m_pXLib;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

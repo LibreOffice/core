@@ -32,7 +32,6 @@
 #undef Region
 
 #include "KDE5SalFrame.hxx"
-#include "KDE5XLib.hxx"
 #include "KDE5SalGraphics.hxx"
 
 #include <tools/color.hxx>

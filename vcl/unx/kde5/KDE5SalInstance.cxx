@@ -29,7 +29,6 @@
 
 #include "KDE5SalInstance.hxx"
 #include "KDE5SalFrame.hxx"
-#include "KDE5XLib.hxx"
 #include "KDE5SalDisplay.hxx"
 
 using namespace com::sun::star;
@@ -50,12 +49,7 @@ SalFrame* KDE5SalInstance::CreateFrame( SalFrame *pParent, SalFrameStyleFlags nS
 uno::Reference< ui::dialogs::XFilePicker2 > KDE5SalInstance::createFilePicker(
     const uno::Reference< uno::XComponentContext >& xMSF )
 {
-    /*KDEXLib* kdeXLib = static_cast<KDEXLib*>( mpXLib );
-    if (kdeXLib->allowKdeDialogs())
-        return uno::Reference< ui::dialogs::XFilePicker2 >(
-            kdeXLib->createFilePicker(xMSF) );
-    else*/
-        return SalInstance::createFilePicker( xMSF );
+    return SalInstance::createFilePicker( xMSF );
 }
 
 bool KDE5SalInstance::IsMainThread() const
