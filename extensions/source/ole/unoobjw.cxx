@@ -1253,15 +1253,8 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
 void InterfaceOleWrapper::convertDispparamsArgs(DISPID id,
     unsigned short /*wFlags*/, DISPPARAMS* pdispparams, Sequence<Any>& rSeq)
 {
-    HRESULT hr= S_OK;
-    sal_Int32 countArgs= pdispparams->cArgs;
-    if( countArgs == 0)
-        return;
-
-    rSeq.realloc( countArgs);
-    Any*    pParams = rSeq.getArray();
-
-    Any anyParam;
+    HRESULT hr = S_OK;
+    const int countArgs = pdispparams->cArgs;
 
     //Get type information for the current call
     InvocationInfo info;
@@ -1270,17 +1263,42 @@ void InterfaceOleWrapper::convertDispparamsArgs(DISPID id,
                   "[automation bridge]InterfaceOleWrapper::convertDispparamsArgs \n"
                   "Could not obtain type information for current call.");
 
-    for (int i = 0; i < countArgs; i++)
+    // We accept less or even more parameters (on certain conditions) than expected. So size rSeq
+    // according to the number of expected parameters.
+    const int expectedArgs = info.aParamTypes.getLength();
+    rSeq.realloc( expectedArgs );
+    Any* pParams = rSeq.getArray();
+
+    Any anyParam;
+
+    for (int i = 0; i < std::max(countArgs, expectedArgs); i++)
     {
-        if (info.eMemberType == MemberType_METHOD &&
-            info.aParamModes[ countArgs - i -1 ]  == ParamMode_OUT)
+        // Ignore too many parameters if they are VT_EMPTY anyway
+        if ( i < countArgs && i >= expectedArgs && pdispparams->rgvarg[i].vt == VT_EMPTY )
             continue;
 
-         if(convertValueObject( & pdispparams->rgvarg[i], anyParam))
-         { //a param is a ValueObject and could be converted
-            pParams[countArgs - (i + 1)] = anyParam;
-             continue;
-         }
+        // But otherwise too many parameters is an error
+        if ( i < countArgs && i >= expectedArgs )
+            throw BridgeRuntimeError( "[automation bridge] Too many parameters" );
+
+        if (info.eMemberType == MemberType_METHOD &&
+            info.aParamModes[ expectedArgs - i - 1 ] == ParamMode_OUT)
+            continue;
+
+        if (i < countArgs)
+        {
+            if(convertValueObject( & pdispparams->rgvarg[i], anyParam))
+            { //a param is a ValueObject and could be converted
+                pParams[ expectedArgs - i - 1 ] = anyParam;
+                continue;
+            }
+        }
+        else
+        {
+            // A missing arg. Let's hope it is de facto optional (there is no way in UNO IDL to mark
+            // a parameter as optional). The corresponding slot in pParams is already a void Any.
+            continue;
+        }
 
         // If the param is an out, in/out parameter in
         // JScript (Array object, with value at index 0) then we
@@ -1293,7 +1311,7 @@ void InterfaceOleWrapper::convertDispparamsArgs(DISPID id,
         // To find them out we use typeinformation of the function being called.
         if( pdispparams->rgvarg[i].vt == VT_DISPATCH )
         {
-            if( info.eMemberType == MemberType_METHOD && info.aParamModes[ countArgs - i -1 ]  == ParamMode_INOUT)
+            if( info.eMemberType == MemberType_METHOD && info.aParamModes[ expectedArgs - i - 1 ] == ParamMode_INOUT)
             {
                 // INOUT-param
                 // Index ( property) "0" contains the actual IN-param. The object is a JScript
@@ -1318,17 +1336,17 @@ void InterfaceOleWrapper::convertDispparamsArgs(DISPID id,
         }
 
         if( varParam.vt == VT_EMPTY) // then it was no in/out parameter
-                 varParam= pdispparams->rgvarg[i];
+            varParam= pdispparams->rgvarg[i];
 
         if(info.eMemberType == MemberType_METHOD)
             variantToAny( & varParam, anyParam,
-                           info.aParamTypes[ countArgs - i - 1]);
+                           info.aParamTypes[ expectedArgs - i - 1 ]);
         else if(info.eMemberType == MemberType_PROPERTY)
             variantToAny( & varParam, anyParam, info.aType);
         else
             OSL_ASSERT(false);
 
-        pParams[countArgs - (i + 1)]= anyParam;
+        pParams[ expectedArgs - i - 1 ]= anyParam;
     }// end for / iterating over all parameters
 }
 
@@ -1747,17 +1765,6 @@ STDMETHODIMP InterfaceOleWrapper::Invoke(DISPID dispidMember,
                         Sequence<Any> params;
 
                         convertDispparamsArgs(dispidMember, wFlags, pdispparams , params );
-
-                        // Pass missing (hopefully optional) parameters as Any().
-                        InvocationInfo aInvocationInfo;
-                        getInvocationInfoForCall(dispidMember, aInvocationInfo);
-                        if (pdispparams->cArgs < (UINT)aInvocationInfo.aParamTypes.getLength())
-                        {
-                            params.realloc(aInvocationInfo.aParamTypes.getLength());
-                            Any* pParams = params.getArray();
-                            for (int i = pdispparams->cArgs; i < aInvocationInfo.aParamTypes.getLength(); ++i)
-                                pParams[i] = Any();
-                        }
 
                         ret= doInvoke(pdispparams, pvarResult,
                                       pexcepinfo, puArgErr, d.name, params);
@@ -2261,6 +2268,99 @@ Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
     SAL_WARN("extensions.olebridge", "Sink::Call: Uknown method '" << Method << "'");
 }
 
+class CXEnumConnections : public IEnumConnections,
+                          public CComObjectRoot
+{
+public:
+    CXEnumConnections()
+    {
+    }
+
+    ~CXEnumConnections()
+    {
+    }
+
+    BEGIN_COM_MAP(CXEnumConnections)
+        COM_INTERFACE_ENTRY(IEnumConnections)
+    END_COM_MAP()
+
+    DECLARE_NOT_AGGREGATABLE(CXEnumConnections)
+
+    void Init(std::vector<IUnknown*>& rUnknowns, std::vector<DWORD>& rCookies)
+    {
+        SAL_INFO("extensions.olebridge", this << "@CXEnumConnections::Init");
+        SAL_WARN_IF(rUnknowns.size() != rCookies.size(), "extensions.olebridge", "Vectors of different size");
+        mvUnknowns = rUnknowns;
+        mvCookies = rCookies;
+        mnIndex = 0;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE Next(ULONG cConnections,
+                                           LPCONNECTDATA rgcd,
+                                           ULONG *pcFetched) override
+    {
+        if (!rgcd)
+        {
+            SAL_INFO("extensions.olebridge", this << "@CXEnumConnections::Next(" << cConnections << "): E_POINTER");
+            return E_POINTER;
+        }
+
+        if (pcFetched && cConnections != 1)
+        {
+            SAL_INFO("extensions.olebridge", this << "@CXEnumConnections::Next(" << cConnections << "): E_INVALIDARG");
+            return E_POINTER;
+        }
+
+        ULONG nFetched = 0;
+        while (nFetched < cConnections && mnIndex < mvUnknowns.size())
+        {
+            rgcd[nFetched].pUnk = mvUnknowns[mnIndex];
+            rgcd[nFetched].pUnk->AddRef();
+            rgcd[nFetched].dwCookie = mvCookies[mnIndex];
+            ++nFetched;
+            ++mnIndex;
+        }
+        if (nFetched != cConnections)
+        {
+            SAL_INFO("extensions.olebridge", this << "@CXEnumConnections::Next(" << cConnections << "): S_FALSE");
+            if (pcFetched)
+                *pcFetched = nFetched;
+            return S_FALSE;
+        }
+        SAL_INFO("extensions.olebridge", this << "@CXEnumConnections::Next(" << cConnections << "): S_OK");
+        if (pcFetched)
+            *pcFetched = nFetched;
+
+        return S_OK;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE Skip(ULONG cConnections) override
+    {
+        SAL_INFO("extensions.olebridge", this << "@CXEnumConnections::Skip(" << cConnections << "): E_NOTIMPL");
+
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE Reset() override
+    {
+        SAL_INFO("extensions.olebridge", this << "@CXEnumConnections::Reset: E_NOTIMPL");
+
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE Clone(IEnumConnections** /* ppEnum */) override
+    {
+        SAL_INFO("extensions.olebridge", this << "@CXEnumConnections::Clone: E_NOTIMPL");
+
+        return E_NOTIMPL;
+    }
+
+private:
+    std::vector<IUnknown*> mvUnknowns;
+    std::vector<DWORD> mvCookies;
+    ULONG mnIndex;
+};
+
 class CXConnectionPoint : public IConnectionPoint,
                           public CComObjectRoot
 {
@@ -2350,16 +2450,39 @@ public:
 
     virtual HRESULT STDMETHODCALLTYPE EnumConnections(IEnumConnections **ppEnum) override
     {
-        (void) ppEnum;
-        SAL_WARN("extensions.olebridge", this << "@CXConnectionPoint::EnumConnections: E_NOTIMPL");
-        return E_NOTIMPL;
+        HRESULT nResult;
+
+        SAL_INFO("extensions.olebridge", this << "@CXConnectionPoint::EnumConnections...");
+
+        if (!ppEnum)
+        {
+            SAL_INFO("extensions.olebridge", "..." << this << "@CXConnectionPoint::EnumConnections: E_POINTER");
+            return E_POINTER;
+        }
+
+        CComObject<CXEnumConnections>* pEnumConnections;
+
+        nResult = CComObject<CXEnumConnections>::CreateInstance(&pEnumConnections);
+        if (FAILED(nResult))
+        {
+            SAL_INFO("extensions.olebridge", "..." << this << "@CXConnectionPoint::EnumConnections: " << WindowsErrorStringFromHRESULT(nResult));
+            return nResult;
+        }
+
+        pEnumConnections->AddRef();
+
+        pEnumConnections->Init(mvISinks, mvCookies);
+        *ppEnum = pEnumConnections;
+
+        SAL_INFO("extensions.olebridge", "..." << this << "@CXConnectionPoint::EnumConnections: S_OK");
+
+        return S_OK;
     }
 
-private:
     InterfaceOleWrapper* mpInterfaceOleWrapper;
     std::vector<IUnknown*> mvISinks;
     std::vector<Reference<ooo::vba::XSink>> mvXSinks;
-    std::vector<sal_uInt32> mvCookies;
+    std::vector<DWORD> mvCookies;
     Reference<XMultiServiceFactory> mxMSF;
     Reference<ooo::vba::XConnectionPoint> mxCP;
     ooo::vba::TypeAndIID maTypeAndIID;
