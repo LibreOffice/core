@@ -4219,7 +4219,7 @@ private:
             if (m_pStringReplace != nullptr) {
                 set_label(pButton, (*m_pStringReplace)(get_label(pButton)));
             }
-            if (gtk_button_get_use_underline(pButton))
+            if (gtk_button_get_use_underline(pButton) && !gtk_button_get_use_stock(pButton))
                 m_aMnemonicButtons.push_back(pButton);
         }
         else if (GTK_IS_LABEL(pWidget))
