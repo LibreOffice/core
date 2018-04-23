@@ -952,8 +952,9 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
     $(if $(filter OPENCL,$(BUILD_TYPE)),sc_opencl_runtimetest) \
     $(if $(and $(filter WNT,$(OS)), $(filter X86_64,$(CPUNAME))),twain_dsm) \
 	$(if $(ENABLE_HTMLHELP),\
-		helpcontent2_html \
-		helpcontent2_html_generated \
+		helpcontent2_html_dynamic \
+		helpcontent2_html_lang \
+		helpcontent2_html_lang_generated \
 		helpcontent2_html_media \
 		helpcontent2_html_static \
 	) \
