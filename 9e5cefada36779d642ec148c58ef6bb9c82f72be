@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_d2059ac2",
+        "filename": "sc/uiconfig/scalc/ui/notebookbar.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 7854,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-23T18:28:41Z",
+      "side": 1,
+      "message": "Nitpick: it would had been nice if this followed the surroundings and simply restored the previous name (which was erroneously changed with the interim commit) in CamelCase, i.e. LanguageSection, instead of all lowercase, which is also used in other .ui files that use this sfxlo-OptionalBox.",
+      "revId": "9e5cefada36779d642ec148c58ef6bb9c82f72be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
