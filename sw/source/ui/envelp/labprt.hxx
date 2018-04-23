@@ -32,18 +32,17 @@ class SwLabPrtPage : public SfxTabPage
 {
     VclPtr<Printer>      pPrinter; // for the shaft setting - unfortunately
 
-    VclPtr<RadioButton>  m_pPageButton;
-    VclPtr<RadioButton>  m_pSingleButton;
-    VclPtr<VclContainer> m_pSingleGrid;
-    VclPtr<VclContainer> m_pPrinterFrame;
-    VclPtr<NumericField> m_pColField;
-    VclPtr<NumericField> m_pRowField;
-    VclPtr<CheckBox>     m_pSynchronCB;
+    std::unique_ptr<weld::RadioButton>  m_xPageButton;
+    std::unique_ptr<weld::RadioButton>  m_xSingleButton;
+    std::unique_ptr<weld::Widget> m_xSingleGrid;
+    std::unique_ptr<weld::Widget> m_xPrinterFrame;
+    std::unique_ptr<weld::SpinButton> m_xColField;
+    std::unique_ptr<weld::SpinButton> m_xRowField;
+    std::unique_ptr<weld::CheckButton>  m_xSynchronCB;
+    std::unique_ptr<weld::Label>  m_xPrinterInfo;
+    std::unique_ptr<weld::Button> m_xPrtSetup;
 
-    VclPtr<FixedText>    m_pPrinterInfo;
-    VclPtr<PushButton>   m_pPrtSetup;
-
-    DECL_LINK( CountHdl, Button *, void );
+    DECL_LINK( CountHdl, weld::Button&, void );
 
     SwLabDlg* GetParentSwLabDlg() {return static_cast<SwLabDlg*>(GetTabDialog());}
 
@@ -51,7 +50,7 @@ class SwLabPrtPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
-    SwLabPrtPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    SwLabPrtPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwLabPrtPage() override;
     virtual void dispose() override;
 
