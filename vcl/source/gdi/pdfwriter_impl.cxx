@@ -6452,6 +6452,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         const std::vector<PDFWriterImpl::PDFGlyph>& rGlyphs,
         OStringBuffer& rLine,
         const Point& rAlignOffset,
+        bool bFirst,
         double fAngle,
         double fXScale,
         double fSkew,
@@ -6491,7 +6492,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         // the textline matrix relative to what was set before
         // making use of that would drive us into rounding issues
         Matrix3 aMat;
-        if( nRun == 0 && fAngle == 0.0 && fXScale == 1.0 && fSkew == 0.0 )
+        if( bFirst && nRun == 0 && fAngle == 0.0 && fXScale == 1.0 && fSkew == 0.0 )
         {
             m_aPages.back().appendPoint( aCurPos, rLine );
             rLine.append( " Td " );
@@ -6575,6 +6576,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     aCodeUnits.reserve(nMaxGlyphs);
     std::vector<sal_Int32> aCodeUnitsPerGlyph;
     aCodeUnits.reserve(nMaxGlyphs);
+    std::vector<bool> aUseActualText;
+    aUseActualText.reserve(nMaxGlyphs);
     bool bVertical = m_aCurrentPDFState.m_aFont.IsVertical();
     int nGlyphs;
     int nIndex = 0;
@@ -6694,6 +6697,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     }
 
     FontMetric aRefDevFontMetric = m_pReferenceDevice->GetFontMetric();
+    const PhysicalFontFace* pDevFont = m_pReferenceDevice->mpFontInstance->maFontSelData.mpFontData;
+    std::vector<std::pair<const PhysicalFontFace*, sal_GlyphId>> aToUnicodes;
 
     // collect the glyphs into a single array
     std::vector< PDFGlyph > aGlyphs;
@@ -6704,17 +6709,62 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     {
         aCodeUnits.clear();
         aCodeUnitsPerGlyph.clear();
+        aUseActualText.clear();
         for( int i = 0; i < nGlyphs; i++ )
         {
-            // try to handle ligatures and such
+            // tdf#66597, tdf#115117
+            //
+            // Here is how we embed textual content in PDF files, to allow for
+            // better text extraction for complex and typography-rich text.
+            //
+            // * If there is many to one or many to many mapping, use an
+            //   ActualText span embedding the original string, since ToUnicode
+            //   can’t handle these.
+            // * If the one glyph is used for several Unicode code points, also
+            //   use ActualText since ToUnicode can map each glyph in the font
+            //   only once.
+            // * Limit ActualText to single cluster at a time, since using it
+            //   for whole words or sentences breaks text selection and
+            //   highlighting in PDF viewers (there will be no way to tell
+            //   which glyphs belong to which characters).
+            // * Keep generating (now) redundant ToUnicode entries for
+            //   compatibility with old tools not supporting ActualText.
             int nStart = pGlyphs[i]->mnCharPos;
             int nChars = pGlyphs[i]->mnCharCount;
-            if (nChars < 0)
-                nChars = 0;
+            assert(nChars >= 0);
+
+            aUseActualText[i] = false;
+
+            // If this is a start of complex cluster, use ActualText.
+            if (pGlyphs[i]->IsClusterStart())
+                aUseActualText[i] = true;
+
+            // Or part of a complex cluster, will be handled by the ActualText
+            // of its cluster start.
+            if (pGlyphs[i]->IsInCluster())
+                assert(nChars == 0);
+
+            // A glyph can’t have more than one ToUnicode entry, use ActualText
+            // instead.
+            if (nChars)
+            {
+                const PhysicalFontFace* pFont = pFallbackFonts[i] ? pFallbackFonts[i] : pDevFont;
+                const auto& aPair = std::pair<const PhysicalFontFace*, sal_GlyphId>(pFont, pGlyphs[i]->maGlyphId);
+                const auto& aIt = std::find(aToUnicodes.cbegin(), aToUnicodes.cend(), aPair);
+                if (aIt != aToUnicodes.cend())
+                {
+                    aUseActualText[i] = true;
+                    nChars = 0;
+                }
+                else if (nChars)
+                    aToUnicodes.push_back(aPair);
+            }
 
             aCodeUnitsPerGlyph.push_back(nChars);
             for( int n = 0; n < nChars; n++ )
                 aCodeUnits.push_back( rText[ nStart + n ] );
+
+            assert(nChars || aUseActualText[i] || pGlyphs[i]->IsInCluster());
         }
 
         registerGlyphs( nGlyphs, pGlyphs, pGlyphWidths, aCodeUnits.data(), aCodeUnitsPerGlyph.data(), pMappedGlyphs, pMappedFontObjects, pFallbackFonts );
@@ -6731,12 +6781,24 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                 aPos.setY( aPos.Y() / ( rLayout.GetUnitsPerPixel()) );
                 aGNGlyphPos = rLayout.GetDrawPosition(aPos);
             }
+
+            OUString aActualText;
+            if (aUseActualText[i])
+                aActualText = rText.copy(pGlyphs[i]->mnCharPos, pGlyphs[i]->mnCharCount);
+
+            int nCharPos = -1;
+            if (aUseActualText[i] || pGlyphs[i]->IsInCluster())
+                nCharPos = pGlyphs[i]->mnCharPos;
+
             aGlyphs.emplace_back( aGNGlyphPos,
                                          pGlyphWidths[i],
                                          pGlyphs[i]->maGlyphId,
                                          pMappedFontObjects[i],
                                          pMappedGlyphs[i],
-                                         pGlyphs[i]->IsVertical() );
+                                         pGlyphs[i]->IsVertical(),
+                                         pGlyphs[i]->IsRTLGlyph(),
+                                         nCharPos,
+                                         aActualText);
         }
     }
 
@@ -6789,10 +6851,36 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     */
     if( ! aGlyphs.empty() )
     {
-        if( bVertical )
-            drawVerticalGlyphs( aGlyphs, aLine, aAlignOffset, aRotScale, fAngle, fXScale, fSkew, nFontHeight );
-        else
-            drawHorizontalGlyphs( aGlyphs, aLine, aAlignOffset, fAngle, fXScale, fSkew, nFontHeight, nPixelFontHeight );
+        size_t nStart = 0;
+        size_t nEnd = 0;
+        while (nStart < aGlyphs.size())
+        {
+            while (aGlyphs[nEnd].m_nCharPos == aGlyphs[nStart].m_nCharPos && nEnd < aGlyphs.size())
+                nEnd++;
+
+            std::vector<PDFGlyph> aRun(aGlyphs.begin() + nStart, aGlyphs.begin() + nEnd);
+
+            OUString* pActualText = &aRun.front().m_aActualText;
+            if (aRun.front().m_bRTL)
+                pActualText = &aRun.back().m_aActualText;
+
+            if (!pActualText->isEmpty())
+            {
+                aLine.append( "/Span<</ActualText<" );
+                PDFWriter::AppendUnicodeTextString(*pActualText, aLine);
+                aLine.append( ">>>\nBDC\n" );
+            }
+
+            if (bVertical)
+                drawVerticalGlyphs(aRun, aLine, aAlignOffset, aRotScale, fAngle, fXScale, fSkew, nFontHeight);
+            else
+                drawHorizontalGlyphs(aRun, aLine, aAlignOffset, nStart == 0, fAngle, fXScale, fSkew, nFontHeight, nPixelFontHeight);
+
+            if (!pActualText->isEmpty())
+                aLine.append( "EMC\n" );
+
+            nStart = nEnd;
+        }
     }
 
     // end textobject
