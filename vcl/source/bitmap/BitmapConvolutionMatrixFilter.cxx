@@ -14,6 +14,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapConvolutionMatrixFilter.hxx>
+#include <vcl/BitmapSharpenFilter.hxx>
 
 #include <bitmapwriteaccess.hxx>
 
@@ -53,7 +54,7 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx)
             // create LUT of products of matrix value and possible color component values
             for (nY = 0; nY < 9; nY++)
             {
-                for (nX = nTmp = 0, nMatrixVal = mpMatrix[nY]; nX < 256; nX++, nTmp += nMatrixVal)
+                for (nX = nTmp = 0, nMatrixVal = mrMatrix[nY]; nX < 256; nX++, nTmp += nMatrixVal)
                 {
                     pKoeff[nY][nX] = nTmp;
                 }
@@ -196,4 +197,10 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx)
     return BitmapEx();
 }
 
+static const long g_SharpenMatrix[] = { -1, -1, -1, -1, 16, -1, -1, -1, -1 };
+
+BitmapSharpenFilter::BitmapSharpenFilter()
+    : BitmapConvolutionMatrixFilter(g_SharpenMatrix)
+{
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,11 +16,7 @@
 class VCL_DLLPUBLIC BitmapSharpenFilter : public BitmapConvolutionMatrixFilter
 {
 public:
-    BitmapSharpenFilter()
-    {
-        const long pSharpenMatrix[] = { -1, -1, -1, -1, 16, -1, -1, -1, -1 };
-        mpMatrix = &pSharpenMatrix[0];
-    }
+    BitmapSharpenFilter();
 };
 
 #endif
