@@ -54,6 +54,10 @@ DEFINE_GUID(OID_ServiceManager, 0x82154420, 0xfbf, 0x11d4, 0x83, 0x13, 0x0, 0x50
 // {82154421-0FBF-11d4-8313-005004526AB4}
 DEFINE_GUID(OID_LibreOfficeWriterApplication, 0x82154421, 0xfbf, 0x11d4, 0x83, 0x13, 0x0, 0x50, 0x4, 0x52, 0x6a, 0xb4);
 
+// For Calc
+// {82154425-0FBF-11d4-8313-005004526AB4}
+DEFINE_GUID(OID_LibreOfficeCalcApplication, 0x82154425, 0xfbf, 0x11d4, 0x83, 0x13, 0x0, 0x50, 0x4, 0x52, 0x6a, 0xb4);
+
 OneInstanceOleWrapper::OneInstanceOleWrapper(  const Reference<XMultiServiceFactory>& smgr,
                                                std::function<const Reference<XInterface>()> xInstFunction )
     : m_refCount(0)
@@ -488,6 +492,18 @@ OleServer::OleServer( const Reference<XMultiServiceFactory>& smgr):
                                 return xApplication;
                             },
                             &OID_LibreOfficeWriterApplication );
+
+    (void) provideInstance( [&]
+                            {
+                                // Ditto for sc
+                                static const Reference<XInterface> xCalcGlobals = m_smgr->createInstance("ooo.vba.excel.Globals");
+                                const Reference<ooo::vba::XHelperInterface> xHelperInterface(xCalcGlobals, UNO_QUERY);
+                                Any aApplication = xHelperInterface->Application();
+                                Reference<XInterface> xApplication;
+                                aApplication >>= xApplication;
+                                return xApplication;
+                            },
+                            &OID_LibreOfficeCalcApplication );
 }
 
 OleServer::~OleServer()

@@ -30,6 +30,8 @@ interface XApplication
     interface ::com::sun::star::beans::XExactName;
     interface ::com::sun::star::script::XInvocation;
 
+    interface XConnectable;
+
 //  interface ::ooo::vba::XHelperInterface;
 
     [attribute, readonly] any Selection;

@@ -2288,4 +2288,15 @@ SfxStyleFamilies* ScModule::CreateStyleFamilies()
     return pStyleFamilies;
 }
 
+void ScModule::RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller)
+{
+    mxAutomationApplicationEventsCaller = xCaller;
+}
+
+void ScModule::CallAutomationApplicationEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments)
+{
+    if (mxAutomationApplicationEventsCaller.is())
+        mxAutomationApplicationEventsCaller->CallSinks(Method, Arguments);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
