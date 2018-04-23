@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/salgtype.hxx>
 #include <vcl/outdev.hxx>
+#include <memory>
 
 
 class SalVirtualDevice;
@@ -43,7 +44,7 @@ public:
                           };
 
 private:
-    SalVirtualDevice*   mpVirDev;
+    std::unique_ptr<SalVirtualDevice> mpVirDev;
     VclPtr<VirtualDevice>  mpPrev;
     VclPtr<VirtualDevice>  mpNext;
     sal_uInt16          mnBitCount;
