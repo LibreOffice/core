@@ -158,7 +158,7 @@ static HTMLOptionEnum<sal_uInt16> aHTMLSpacerTypeTable[] =
 
 HTMLReader::HTMLReader()
 {
-    bTmplBrowseMode = true;
+    m_bTemplateBrowseMode = true;
 }
 
 OUString HTMLReader::GetTemplateName(SwDoc& rDoc) const
@@ -189,11 +189,11 @@ OUString HTMLReader::GetTemplateName(SwDoc& rDoc) const
 
 bool HTMLReader::SetStrmStgPtr()
 {
-    OSL_ENSURE( pMedium, "Where is the medium??" );
+    OSL_ENSURE( m_pMedium, "Where is the medium??" );
 
-    if( pMedium->IsRemote() || !pMedium->IsStorage() )
+    if( m_pMedium->IsRemote() || !m_pMedium->IsStorage() )
     {
-        pStrm = pMedium->GetInStream();
+        m_pStream = m_pMedium->GetInStream();
         return true;
     }
     return false;
@@ -203,13 +203,13 @@ bool HTMLReader::SetStrmStgPtr()
 // Call for the general Reader-Interface
 ErrCode HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, const OUString & rName )
 {
-    if( !pStrm )
+    if( !m_pStream )
     {
-        OSL_ENSURE( pStrm, "HTML-Read without stream" );
+        OSL_ENSURE( m_pStream, "HTML-Read without stream" );
         return ERR_SWG_READ_ERROR;
     }
 
-    if( !bInsertMode )
+    if( !m_bInsertMode )
     {
         Reader::ResetFrameFormats( rDoc );
 
@@ -225,15 +225,15 @@ ErrCode HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, co
     // so nobody steals the document!
     rtl::Reference<SwDoc> aHoldRef(&rDoc);
     ErrCode nRet = ERRCODE_NONE;
-    tools::SvRef<SwHTMLParser> xParser = new SwHTMLParser( &rDoc, rPam, *pStrm,
-                                            rName, rBaseURL, !bInsertMode, pMedium,
+    tools::SvRef<SwHTMLParser> xParser = new SwHTMLParser( &rDoc, rPam, *m_pStream,
+                                            rName, rBaseURL, !m_bInsertMode, m_pMedium,
                                             IsReadUTF8(),
-                                            bIgnoreHTMLComments );
+                                            m_bIgnoreHTMLComments );
 
     SvParserState eState = xParser->CallParser();
 
     if( SvParserState::Pending == eState )
-        pStrm->ResetError();
+        m_pStream->ResetError();
     else if( SvParserState::Accepted != eState )
     {
         const OUString sErr(OUString::number(static_cast<sal_Int32>(xParser->GetLineNr()))
@@ -5607,7 +5607,7 @@ bool TestImportHTML(SvStream &rStream)
 {
     FontCacheGuard aFontCacheGuard;
     std::unique_ptr<Reader> xReader(new HTMLReader);
-    xReader->pStrm = &rStream;
+    xReader->m_pStream = &rStream;
 
     SwGlobals::ensure();
 

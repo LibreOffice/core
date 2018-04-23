@@ -66,14 +66,14 @@ ErrCode SwReader::Read( const Reader& rOptions )
 {
     // copy variables
     Reader* po = const_cast<Reader*>(&rOptions);
-    po->pStrm = pStrm;
-    po->pStg  = pStg;
-    po->xStg  = xStg;
-    po->bInsertMode = nullptr != pCursor;
-    po->bSkipImages = mbSkipImages;
+    po->m_pStream = pStrm;
+    po->m_pStorage  = pStg;
+    po->m_xStorage  = xStg;
+    po->m_bInsertMode = nullptr != pCursor;
+    po->m_bSkipImages = mbSkipImages;
 
     // if a Medium is selected, get its Stream
-    if( nullptr != (po->pMedium = pMedium ) &&
+    if( nullptr != (po->m_pMedium = pMedium ) &&
         !po->SetStrmStgPtr() )
     {
         po->SetReadUTF8( false );
@@ -119,7 +119,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
     if( bSaveUndo )
     {
         // the reading of the page template cannot be undone!
-        bReadPageDescs = po->aOpt.IsPageDescs();
+        bReadPageDescs = po->m_aOption.IsPageDescs();
         if( bReadPageDescs )
         {
             bSaveUndo = false;
@@ -141,7 +141,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
     // Array of FlyFormats
     SwFrameFormatsV aFlyFrameArr;
     // only read templates? then ignore multi selection!
-    bool bFormatsOnly = po->aOpt.IsFormatsOnly();
+    bool bFormatsOnly = po->m_aOption.IsFormatsOnly();
 
     while( true )
     {
@@ -429,12 +429,12 @@ SwReader::SwReader( const uno::Reference < embed::XStorage > &rStg, const OUStri
 }
 
 Reader::Reader()
-  : aDStamp( Date::EMPTY ),
-    aTStamp( tools::Time::EMPTY ),
-    aChkDateTime( DateTime::EMPTY ),
-    pStrm(nullptr), pMedium(nullptr), bInsertMode(false),
-    bTmplBrowseMode(false), bReadUTF8(false), bBlockMode(false), bOrganizerMode(false),
-    bHasAskTemplateName(false), bIgnoreHTMLComments(false), bSkipImages(false)
+  : m_aDateStamp( Date::EMPTY ),
+    m_aTimeStamp( tools::Time::EMPTY ),
+    m_aCheckDateTime( DateTime::EMPTY ),
+    m_pStream(nullptr), m_pMedium(nullptr), m_bInsertMode(false),
+    m_bTemplateBrowseMode(false), m_bReadUTF8(false), m_bBlockMode(false), m_bOrganizerMode(false),
+    m_bHasAskTemplateName(false), m_bIgnoreHTMLComments(false), m_bSkipImages(false)
 {
 }
 
@@ -450,40 +450,40 @@ OUString Reader::GetTemplateName(SwDoc& /*rDoc*/) const
 // load the Filter template, set and release
 SwDoc* Reader::GetTemplateDoc(SwDoc& rDoc)
 {
-    if( !bHasAskTemplateName )
+    if( !m_bHasAskTemplateName )
     {
         SetTemplateName( GetTemplateName(rDoc) );
-        bHasAskTemplateName = true;
+        m_bHasAskTemplateName = true;
     }
 
-    if( aTemplateNm.isEmpty() )
+    if( m_aTemplateName.isEmpty() )
         ClearTemplate();
     else
     {
-        INetURLObject aTDir( aTemplateNm );
+        INetURLObject aTDir( m_aTemplateName );
         const OUString aFileName = aTDir.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         OSL_ENSURE( !aTDir.HasError(), "No absolute path for template name!" );
         DateTime aCurrDateTime( DateTime::SYSTEM );
         bool bLoad = false;
 
         // if the template is already loaded, check once-a-minute if it has changed
-        if( !mxTemplate.is() || aCurrDateTime >= aChkDateTime )
+        if( !mxTemplate.is() || aCurrDateTime >= m_aCheckDateTime )
         {
             Date aTstDate( Date::EMPTY );
             tools::Time aTstTime( tools::Time::EMPTY );
             if( FStatHelper::GetModifiedDateTimeOfFile(
                             aTDir.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                             &aTstDate, &aTstTime ) &&
-                ( !mxTemplate.is() || aDStamp != aTstDate || aTStamp != aTstTime ))
+                ( !mxTemplate.is() || m_aDateStamp != aTstDate || m_aTimeStamp != aTstTime ))
             {
                 bLoad = true;
-                aDStamp = aTstDate;
-                aTStamp = aTstTime;
+                m_aDateStamp = aTstDate;
+                m_aTimeStamp = aTstTime;
             }
 
             // only one minute later check if it has changed
-            aChkDateTime = aCurrDateTime;
-            aChkDateTime += tools::Time( 0, 1 );
+            m_aCheckDateTime = aCurrDateTime;
+            m_aCheckDateTime += tools::Time( 0, 1 );
         }
 
         if (bLoad)
@@ -506,7 +506,7 @@ SwDoc* Reader::GetTemplateDoc(SwDoc& rDoc)
                     mxTemplate->SetOle2Link( Link<bool,void>() );
                     // always FALSE
                     mxTemplate->GetIDocumentUndoRedo().DoUndo( false );
-                    mxTemplate->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bTmplBrowseMode );
+                    mxTemplate->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, m_bTemplateBrowseMode );
                     mxTemplate->RemoveAllFormatLanguageDependencies();
 
                     ReadXML->SetOrganizerMode( true );
@@ -518,7 +518,7 @@ SwDoc* Reader::GetTemplateDoc(SwDoc& rDoc)
             }
         }
 
-        OSL_ENSURE( !mxTemplate.is() || FStatHelper::IsDocument( aFileName ) || aTemplateNm=="$$Dummy$$",
+        OSL_ENSURE( !mxTemplate.is() || FStatHelper::IsDocument( aFileName ) || m_aTemplateName=="$$Dummy$$",
                 "TemplatePtr but no template exist!" );
     }
 
@@ -548,10 +548,10 @@ void Reader::ClearTemplate()
 
 void Reader::SetTemplateName( const OUString& rDir )
 {
-    if( !rDir.isEmpty() && aTemplateNm != rDir )
+    if( !rDir.isEmpty() && m_aTemplateName != rDir )
     {
         ClearTemplate();
-        aTemplateNm = rDir;
+        m_aTemplateName = rDir;
     }
 }
 
@@ -559,38 +559,38 @@ void Reader::MakeHTMLDummyTemplateDoc()
 {
     ClearTemplate();
     mxTemplate = new SwDoc;
-    mxTemplate->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bTmplBrowseMode );
+    mxTemplate->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, m_bTemplateBrowseMode );
     mxTemplate->getIDocumentDeviceAccess().getPrinter( true );
     mxTemplate->RemoveAllFormatLanguageDependencies();
-    aChkDateTime = Date( 1, 1, 2300 );  // year 2300 should be sufficient
-    aTemplateNm = "$$Dummy$$";
+    m_aCheckDateTime = Date( 1, 1, 2300 );  // year 2300 should be sufficient
+    m_aTemplateName = "$$Dummy$$";
 }
 
 // Users that do not need to open these Streams / Storages,
 // have to override this method
 bool Reader::SetStrmStgPtr()
 {
-    OSL_ENSURE( pMedium, "Where is the Media??" );
+    OSL_ENSURE( m_pMedium, "Where is the Media??" );
 
-    if( pMedium->IsStorage() )
+    if( m_pMedium->IsStorage() )
     {
         if( SW_STORAGE_READER & GetReaderType() )
         {
-            xStg = pMedium->GetStorage();
+            m_xStorage = m_pMedium->GetStorage();
             return true;
         }
     }
     else
     {
-        pStrm = pMedium->GetInStream();
-        if ( pStrm && SotStorage::IsStorageFile(pStrm) && (SW_STORAGE_READER & GetReaderType()) )
+        m_pStream = m_pMedium->GetInStream();
+        if ( m_pStream && SotStorage::IsStorageFile(m_pStream) && (SW_STORAGE_READER & GetReaderType()) )
         {
-            pStg = new SotStorage( *pStrm );
-            pStrm = nullptr;
+            m_pStorage = new SotStorage( *m_pStream );
+            m_pStream = nullptr;
         }
         else if ( !(SW_STREAM_READER & GetReaderType()) )
         {
-            pStrm = nullptr;
+            m_pStream = nullptr;
             return false;
         }
 
@@ -641,13 +641,13 @@ bool SwReader::HasGlossaries( const Reader& rOptions )
 {
     // copy variables
     Reader* po = const_cast<Reader*>(&rOptions);
-    po->pStrm = pStrm;
-    po->pStg  = pStg;
-    po->bInsertMode = false;
+    po->m_pStream = pStrm;
+    po->m_pStorage  = pStg;
+    po->m_bInsertMode = false;
 
     // if a Medium is selected, get its Stream
     bool bRet = false;
-    if( !( nullptr != (po->pMedium = pMedium ) && !po->SetStrmStgPtr() ))
+    if( !( nullptr != (po->m_pMedium = pMedium ) && !po->SetStrmStgPtr() ))
         bRet = po->HasGlossaries();
     return bRet;
 }
@@ -657,13 +657,13 @@ bool SwReader::ReadGlossaries( const Reader& rOptions,
 {
     // copy variables
     Reader* po = const_cast<Reader*>(&rOptions);
-    po->pStrm = pStrm;
-    po->pStg  = pStg;
-    po->bInsertMode = false;
+    po->m_pStream = pStrm;
+    po->m_pStorage  = pStg;
+    po->m_bInsertMode = false;
 
     // if a Medium is selected, get its Stream
     bool bRet = false;
-    if( !( nullptr != (po->pMedium = pMedium ) && !po->SetStrmStgPtr() ))
+    if( !( nullptr != (po->m_pMedium = pMedium ) && !po->SetStrmStgPtr() ))
         bRet = po->ReadGlossaries( rBlocks, bSaveRelFiles );
     return bRet;
 }

@@ -6195,7 +6195,7 @@ bool TestImportDOC(SvStream &rStream, const OUString &rFltName)
     std::unique_ptr<Reader> xReader(ImportDOC());
 
     tools::SvRef<SotStorage> xStorage;
-    xReader->pStrm = &rStream;
+    xReader->m_pStream = &rStream;
     if (rFltName != "WW6")
     {
         try
@@ -6208,7 +6208,7 @@ bool TestImportDOC(SvStream &rStream, const OUString &rFltName)
         {
             return false;
         }
-        xReader->pStg = xStorage.get();
+        xReader->m_pStorage = xStorage.get();
     }
     xReader->SetFltName(rFltName);
 
@@ -6246,8 +6246,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWW2(SvStream &rStream)
 ErrCode WW8Reader::OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uInt16& rBuffSize )
 {
     ErrCode nRet = ERR_SWG_READ_ERROR;
-    OSL_ENSURE( pStg.get(), "Where is my Storage?" );
-    rRef = pStg->OpenSotStream( "WordDocument", StreamMode::READ | StreamMode::SHARE_DENYALL);
+    OSL_ENSURE( m_pStorage.get(), "Where is my Storage?" );
+    rRef = m_pStorage->OpenSotStream( "WordDocument", StreamMode::READ | StreamMode::SHARE_DENYALL);
 
     if( rRef.is() )
     {
@@ -6267,10 +6267,10 @@ ErrCode WW8Reader::OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uIn
 ErrCode WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, const OUString & /* FileName */)
 {
     sal_uInt16 nOldBuffSize = 32768;
-    bool bNew = !bInsertMode; // New Doc (no inserting)
+    bool bNew = !m_bInsertMode; // New Doc (no inserting)
 
     tools::SvRef<SotStorageStream> refStrm; // So that no one else can steal the Stream
-    SvStream* pIn = pStrm;
+    SvStream* pIn = m_pStream;
 
     ErrCode nRet = ERRCODE_NONE;
     sal_uInt8 nVersion = 8;
@@ -6278,7 +6278,7 @@ ErrCode WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, cons
     const OUString sFltName = GetFltName();
     if ( sFltName=="WW6" )
     {
-        if (pStrm)
+        if (m_pStream)
             nVersion = 6;
         else
         {
@@ -6293,7 +6293,7 @@ ErrCode WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, cons
         else if ( sFltName=="CWW7" )
             nVersion = 7;
 
-        if( pStg.is() )
+        if( m_pStorage.is() )
         {
             nRet = OpenMainStream( refStrm, nOldBuffSize );
             pIn = refStrm.get();
@@ -6307,8 +6307,8 @@ ErrCode WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, cons
 
     if( !nRet )
     {
-        std::unique_ptr<SwWW8ImplReader> pRdr(new SwWW8ImplReader(nVersion, pStg.get(), pIn, rDoc,
-            rBaseURL, bNew, bSkipImages, *rPaM.GetPoint()));
+        std::unique_ptr<SwWW8ImplReader> pRdr(new SwWW8ImplReader(nVersion, m_pStorage.get(), pIn, rDoc,
+            rBaseURL, bNew, m_bSkipImages, *rPaM.GetPoint()));
         if (bNew)
         {
             // Remove Frame and offsets from Frame Template
@@ -6361,7 +6361,7 @@ bool WW8Reader::ReadGlossaries(SwTextBlocks& rBlocks, bool bSaveRelFiles) const
     tools::SvRef<SotStorageStream> refStrm;
     if (!pThis->OpenMainStream(refStrm, nOldBuffSize))
     {
-        WW8Glossary aGloss( refStrm, 8, pStg.get() );
+        WW8Glossary aGloss( refStrm, 8, m_pStorage.get() );
         bRet = aGloss.Load( rBlocks, bSaveRelFiles );
     }
     return bRet;

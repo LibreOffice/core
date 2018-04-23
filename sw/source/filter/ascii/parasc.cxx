@@ -77,19 +77,19 @@ public:
 // Call for the general reader interface
 ErrCode AsciiReader::Read( SwDoc &rDoc, const OUString&, SwPaM &rPam, const OUString & )
 {
-    if( !pStrm )
+    if( !m_pStream )
     {
         OSL_ENSURE( false, "ASCII read without a stream" );
         return ERR_SWG_READ_ERROR;
     }
 
-    SwASCIIParser* pParser = new SwASCIIParser( &rDoc, rPam, *pStrm,
-                                        !bInsertMode, aOpt.GetASCIIOpts() );
+    SwASCIIParser* pParser = new SwASCIIParser( &rDoc, rPam, *m_pStream,
+                                        !m_bInsertMode, m_aOption.GetASCIIOpts() );
     ErrCode nRet = pParser->CallParser();
 
     delete pParser;
     // after Read reset the options
-    aOpt.ResetASCIIOpts();
+    m_aOption.ResetASCIIOpts();
     return nRet;
 }
 
