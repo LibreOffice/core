@@ -27,7 +27,7 @@
 
 class VCL_DLLPUBLIC SvpSalBitmap : public SalBitmap
 {
-    BitmapBuffer*   mpDIB;
+    std::unique_ptr<BitmapBuffer> mpDIB;
 public:
     SvpSalBitmap() : mpDIB(nullptr) {}
     virtual ~SvpSalBitmap() override;
@@ -44,10 +44,10 @@ public:
     virtual bool            Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
                                     Size& rSize,
                                     bool bMask = false ) override;
-    void                    Create(BitmapBuffer *pBuf);
+    void                    Create(std::unique_ptr<BitmapBuffer> pBuf);
     const BitmapBuffer*     GetBuffer() const
     {
-        return mpDIB;
+        return mpDIB.get();
     }
     virtual void            Destroy() final override;
     virtual Size            GetSize() const override;
