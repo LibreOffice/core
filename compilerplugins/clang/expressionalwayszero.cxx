@@ -75,13 +75,8 @@ bool ExpressionAlwaysZero::VisitBinaryOperator( BinaryOperator const * binaryOpe
     if (binaryOperator->getLocStart().isMacroID())
         return true;
 
-    bool bAndOperator = false;
     auto op = binaryOperator->getOpcode();
-    if (op == BO_And || op == BO_AndAssign || op == BO_LAnd)
-        bAndOperator = true;
-    else if (op == BO_Mul || op == BO_MulAssign)
-        ; // ok
-    else
+    if (!(op == BO_And || op == BO_AndAssign || op == BO_LAnd))
         return true;
 
     auto lhsValue = getExprValue(binaryOperator->getLHS());
@@ -90,9 +85,7 @@ bool ExpressionAlwaysZero::VisitBinaryOperator( BinaryOperator const * binaryOpe
         ; // ok
     else if (rhsValue && rhsValue->getExtValue() == 0)
         ; // ok
-    else if (bAndOperator && lhsValue && rhsValue && (lhsValue->getExtValue() & rhsValue->getExtValue()) == 0)
-        ; // ok
-    else if (!bAndOperator && lhsValue && rhsValue && (lhsValue->getExtValue() * rhsValue->getExtValue()) == 0)
+    else if (lhsValue && rhsValue && (lhsValue->getExtValue() & rhsValue->getExtValue()) == 0)
         ; // ok
     else
         return true;
@@ -112,13 +105,8 @@ bool ExpressionAlwaysZero::VisitCXXOperatorCallExpr( CXXOperatorCallExpr const *
     if (cxxOperatorCallExpr->getLocStart().isMacroID())
         return true;
 
-    bool bAndOperator = false;
     auto op = cxxOperatorCallExpr->getOperator();
-    if ( op == OO_Amp || op == OO_AmpEqual || op == OO_AmpAmp)
-        bAndOperator = true;
-    else if (op == OO_Star || op == OO_StarEqual)
-        ; // ok
-    else
+    if ( !(op == OO_Amp || op == OO_AmpEqual || op == OO_AmpAmp))
         return true;
 
     if (cxxOperatorCallExpr->getNumArgs() != 2)
@@ -129,9 +117,7 @@ bool ExpressionAlwaysZero::VisitCXXOperatorCallExpr( CXXOperatorCallExpr const *
         ; // ok
     else if (rhsValue && rhsValue->getExtValue() == 0)
         ; // ok
-    else if (bAndOperator && lhsValue && rhsValue && (lhsValue->getExtValue() & rhsValue->getExtValue()) == 0)
-        ; // ok
-    else if (!bAndOperator && lhsValue && rhsValue && (lhsValue->getExtValue() * rhsValue->getExtValue()) == 0)
+    else if (lhsValue && rhsValue && (lhsValue->getExtValue() & rhsValue->getExtValue()) == 0)
         ; // ok
     else
         return true;
