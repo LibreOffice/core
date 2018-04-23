@@ -72,7 +72,7 @@ public:
 class TETextPortionList
 {
 private:
-    std::vector<TETextPortion*> maPortions;
+    std::vector<std::unique_ptr<TETextPortion>> maPortions;
 
 public:
     static constexpr auto npos = std::numeric_limits<std::size_t>::max();
@@ -81,16 +81,16 @@ public:
     ~TETextPortionList();
 
     TETextPortion* operator[]( std::size_t nPos );
-    std::vector<TETextPortion*>::iterator begin();
-    std::vector<TETextPortion*>::const_iterator begin() const;
-    std::vector<TETextPortion*>::iterator end();
-    std::vector<TETextPortion*>::const_iterator end() const;
+    std::vector<std::unique_ptr<TETextPortion>>::iterator begin();
+    std::vector<std::unique_ptr<TETextPortion>>::const_iterator begin() const;
+    std::vector<std::unique_ptr<TETextPortion>>::iterator end();
+    std::vector<std::unique_ptr<TETextPortion>>::const_iterator end() const;
     bool empty() const;
     std::size_t size() const;
-    std::vector<TETextPortion*>::iterator erase( const std::vector<TETextPortion*>::iterator& aIter );
-    std::vector<TETextPortion*>::iterator insert( const std::vector<TETextPortion*>::iterator& aIter,
-                                                  TETextPortion* pTP );
-    void push_back( TETextPortion* pTP );
+    std::vector<std::unique_ptr<TETextPortion>>::iterator erase( const std::vector<std::unique_ptr<TETextPortion>>::iterator& aIter );
+    std::vector<std::unique_ptr<TETextPortion>>::iterator insert( const std::vector<std::unique_ptr<TETextPortion>>::iterator& aIter,
+                                                  std::unique_ptr<TETextPortion> pTP );
+    void push_back( std::unique_ptr<TETextPortion> pTP );
 
     void    Reset();
     std::size_t FindPortion( sal_Int32 nCharPos, sal_Int32& rPortionStart, bool bPreferStartingPortion = false );

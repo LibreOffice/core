@@ -1612,9 +1612,9 @@ void TextEngine::CreateAndInsertEmptyLine( sal_uInt32 nPara )
 
     bool bLineBreak = !pNode->GetText().isEmpty();
 
-    TETextPortion* pDummyPortion = new TETextPortion( 0 );
+    std::unique_ptr<TETextPortion> pDummyPortion(new TETextPortion( 0 ));
     pDummyPortion->GetWidth() = 0;
-    pTEParaPortion->GetTextPortions().push_back( pDummyPortion );
+    pTEParaPortion->GetTextPortions().push_back( std::move(pDummyPortion) );
 
     if ( bLineBreak )
     {
@@ -1704,8 +1704,8 @@ std::size_t TextEngine::SplitTextPortion( sal_uInt32 nPara, sal_Int32 nPos )
 
     const sal_Int32 nOverlapp = nTmpPos - nPos;
     pTextPortion->GetLen() -= nOverlapp;
-    TETextPortion* pNewPortion = new TETextPortion( nOverlapp );
-    pTEParaPortion->GetTextPortions().insert( pTEParaPortion->GetTextPortions().begin() + nSplitPortion + 1, pNewPortion );
+    std::unique_ptr<TETextPortion> pNewPortion( new TETextPortion( nOverlapp ) );
+    pTEParaPortion->GetTextPortions().insert( pTEParaPortion->GetTextPortions().begin() + nSplitPortion + 1, std::move(pNewPortion) );
     pTextPortion->GetWidth() = CalcTextWidth( nPara, nPos-pTextPortion->GetLen(), pTextPortion->GetLen() );
 
     return nSplitPortion;
@@ -1797,8 +1797,8 @@ void TextEngine::CreateTextPortions( sal_uInt32 nPara, sal_Int32 nStartPos )
         std::set<sal_Int32>::iterator nextIt = aPositionsIt;
         for ( ++nextIt; nextIt != aPositions.end(); ++aPositionsIt, ++nextIt )
         {
-            TETextPortion* pNew = new TETextPortion( *nextIt - *aPositionsIt );
-            pTEParaPortion->GetTextPortions().push_back( pNew );
+            std::unique_ptr<TETextPortion> pNew( new TETextPortion( *nextIt - *aPositionsIt ) );
+            pTEParaPortion->GetTextPortions().push_back( std::move(pNew) );
         }
     }
     OSL_ENSURE(pTEParaPortion->GetTextPortions().size(), "CreateTextPortions: No Portions?!");
@@ -1835,8 +1835,8 @@ void TextEngine::RecalcTextPortion( sal_uInt32 nPara, sal_Int32 nStartPos, sal_I
             }
             else
             {
-                TETextPortion* pNewPortion = new TETextPortion( nNewChars );
-                pTEParaPortion->GetTextPortions().insert( pTEParaPortion->GetTextPortions().begin() + nNewPortionPos, pNewPortion );
+                std::unique_ptr<TETextPortion> pNewPortion(new TETextPortion( nNewChars ));
+                pTEParaPortion->GetTextPortions().insert( pTEParaPortion->GetTextPortions().begin() + nNewPortionPos, std::move(pNewPortion) );
             }
         }
         else
@@ -2112,7 +2112,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
         {
             // check if deleting across Portion border
             sal_Int32 nPos = 0;
-            for ( const auto pTP : pTEParaPortion->GetTextPortions() )
+            for ( const auto & pTP : pTEParaPortion->GetTextPortions() )
             {
                 // there must be no Start/End in the deleted region
                 nPos += pTP->GetLen();
