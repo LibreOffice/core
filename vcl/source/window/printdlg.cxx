@@ -798,7 +798,7 @@ PrintDialog::~PrintDialog()
 
 void PrintDialog::dispose()
 {
-    delete mpCustomOptionsUIBuilder;
+    mpCustomOptionsUIBuilder.reset();
     mpTabCtrl.clear();
     mpPreviewWindow.clear();
     mpPageEdit.clear();
@@ -908,8 +908,7 @@ void PrintDialog::setupOptionalUI()
 
             vcl::Window *pCustom = get<vcl::Window>("customcontents");
 
-            delete mpCustomOptionsUIBuilder;
-            mpCustomOptionsUIBuilder = new VclBuilder(pCustom, getUIRootDir(), sOptionsUIFile);
+            mpCustomOptionsUIBuilder.reset(new VclBuilder(pCustom, getUIRootDir(), sOptionsUIFile));
             vcl::Window *pWindow = mpCustomOptionsUIBuilder->get_widget_root();
             pWindow->Show();
             continue;
