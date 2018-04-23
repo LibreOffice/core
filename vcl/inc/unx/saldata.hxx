@@ -56,7 +56,7 @@ class VCLPLUG_GEN_PUBLIC X11SalData : public GenericUnixSalData
     XIOErrorHandler m_aOrigXIOErrorHandler;
 
 protected:
-    SalXLib      *pXLib_;
+    std::unique_ptr<SalXLib>  pXLib_;
 
 public:
              X11SalData( GenericUnixSalDataType t, SalInstance *pInstance );
@@ -70,7 +70,7 @@ public:
 
     void                    DeleteDisplay(); // for shutdown
 
-    SalXLib*        GetLib() const { return pXLib_; }
+    SalXLib*                GetLib() const { return pXLib_.get(); }
 
     static void             Timeout();
 
