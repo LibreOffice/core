@@ -97,8 +97,8 @@ void DrawArrow(vcl::RenderContext& rRenderContext, const Point &rP1, const Point
 
 }
 
-SwLabPreview::SwLabPreview(vcl::Window* pParent)
-    : Window(pParent, 0)
+SwLabPreview::SwLabPreview(weld::DrawingArea* pWidget)
+    : m_xDrawingArea(pWidget)
     , m_aGrayColor(COL_LIGHTGRAY)
     , m_aHDistStr(SwResId(STR_HDIST))
     , m_aVDistStr(SwResId(STR_VDIST))
@@ -109,42 +109,33 @@ SwLabPreview::SwLabPreview(vcl::Window* pParent)
     , m_aColsStr(SwResId(STR_COLS))
     , m_aRowsStr(SwResId(STR_ROWS))
 {
-    SetMapMode(MapMode(MapUnit::MapPixel));
+    pWidget->set_size_request(pWidget->get_approximate_digit_width() * 54,
+                              pWidget->get_text_height() * 15);
 
-    // FIXME RenderContext
+    m_xDrawingArea->connect_size_allocate(LINK(this, SwLabPreview, DoResize));
+    m_xDrawingArea->connect_draw(LINK(this, SwLabPreview, DoPaint));
 
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    const Color& rWinColor = rStyleSettings.GetWindowColor();
-    SetBackground(Wallpaper(rWinColor));
-
-    vcl::Font aFont = GetFont();
-    aFont.SetTransparent(true);
-    aFont.SetWeight(WEIGHT_NORMAL);
-    SetFont(aFont);
-
-    m_lHDistWidth  = GetTextWidth(m_aHDistStr );
-    m_lVDistWidth  = GetTextWidth(m_aVDistStr );
-    m_lHeightWidth = GetTextWidth(m_aHeightStr);
-    m_lLeftWidth   = GetTextWidth(m_aLeftStr  );
-    m_lUpperWidth  = GetTextWidth(m_aUpperStr );
-    m_lColsWidth   = GetTextWidth(m_aColsStr  );
-    m_lXHeight = GetTextHeight();
-    m_lXWidth  = GetTextWidth(OUString('X'));
+    m_lHDistWidth  = pWidget->get_pixel_size(m_aHDistStr).Width();
+    m_lVDistWidth  = pWidget->get_pixel_size(m_aVDistStr).Width();
+    m_lHeightWidth = pWidget->get_pixel_size(m_aHeightStr).Width();
+    m_lLeftWidth   = pWidget->get_pixel_size(m_aLeftStr).Width();
+    m_lUpperWidth  = pWidget->get_pixel_size(m_aUpperStr).Width();
+    m_lColsWidth   = pWidget->get_pixel_size(m_aColsStr).Width();
+    m_lXHeight = pWidget->get_text_height();
+    m_lXWidth  = pWidget->get_pixel_size(OUString('X')).Width();
 }
 
-Size SwLabPreview::GetOptimalSize() const
+IMPL_LINK(SwLabPreview, DoResize, const Size&, rSize, void)
 {
-    return LogicToPixel(Size(146 , 161), MapMode(MapUnit::MapAppFont));
+    m_aSize = rSize;
 }
 
-VCL_BUILDER_FACTORY(SwLabPreview)
-
-void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+IMPL_LINK(SwLabPreview, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
 {
-    const Size aSz(GetOutputSizePixel());
+    vcl::RenderContext& rRenderContext = aPayload.first;
 
-    const long lOutWPix = aSz.Width ();
-    const long lOutHPix = aSz.Height();
+    const long lOutWPix = m_aSize.Width();
+    const long lOutHPix = m_aSize.Height();
 
     // Scale factor
     const double fxpix = double(lOutWPix - (2 * (m_lLeftWidth + 15))) / double(lOutWPix);
@@ -283,70 +274,57 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 void SwLabPreview::UpdateItem(const SwLabItem& rItem)
 {
     m_aItem = rItem;
-    Invalidate();
+    m_xDrawingArea->queue_draw();
 }
 
-SwLabFormatPage::SwLabFormatPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "LabelFormatPage",
-        "modules/swriter/ui/labelformatpage.ui", &rSet)
+SwLabFormatPage::SwLabFormatPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/labelformatpage.ui", "LabelFormatPage", &rSet)
     , aPreviewIdle("SwLabFormatPage Preview")
-    , bModified(false)
     , aItem(static_cast<const SwLabItem&>( rSet.Get(FN_LABEL) ))
+    , bModified(false)
+    , m_xMakeFI(m_xBuilder->weld_label("make"))
+    , m_xTypeFI(m_xBuilder->weld_label("type"))
+    , m_xPreview(new SwLabPreview(m_xBuilder->weld_drawing_area("preview")))
+    , m_xHDistField(m_xBuilder->weld_metric_spin_button("hori", FUNIT_CM))
+    , m_xVDistField(m_xBuilder->weld_metric_spin_button("vert", FUNIT_CM))
+    , m_xWidthField(m_xBuilder->weld_metric_spin_button("width", FUNIT_CM))
+    , m_xHeightField(m_xBuilder->weld_metric_spin_button("height", FUNIT_CM))
+    , m_xLeftField(m_xBuilder->weld_metric_spin_button("left", FUNIT_CM))
+    , m_xUpperField(m_xBuilder->weld_metric_spin_button("top", FUNIT_CM))
+    , m_xColsField(m_xBuilder->weld_spin_button("cols"))
+    , m_xRowsField(m_xBuilder->weld_spin_button("rows"))
+    , m_xPWidthField(m_xBuilder->weld_metric_spin_button("pagewidth", FUNIT_CM))
+    , m_xPHeightField(m_xBuilder->weld_metric_spin_button("pageheight", FUNIT_CM))
+    , m_xSavePB(m_xBuilder->weld_button("save"))
 {
     SetExchangeSupport();
 
-    get(m_pMakeFI, "make");
-    get(m_pTypeFI, "type");
-    get(m_pPreview, "preview");
-    get(m_pHDistField, "hori");
-    get(m_pVDistField, "vert");
-    get(m_pWidthField, "width");
-    get(m_pHeightField, "height");
-    get(m_pLeftField, "left");
-    get(m_pUpperField, "top");
-    get(m_pColsField, "cols");
-    get(m_pRowsField, "rows");
-    get(m_pPWidthField, "pagewidth");
-    get(m_pPHeightField, "pageheight");
-    get(m_pSavePB, "save");
-
     // Metrics
     FieldUnit aMetric = ::GetDfltMetric(false);
-    SetMetric(*m_pHDistField, aMetric);
-    SetMetric(*m_pVDistField , aMetric);
-    SetMetric(*m_pWidthField , aMetric);
-    SetMetric(*m_pHeightField, aMetric);
-    SetMetric(*m_pLeftField  , aMetric);
-    SetMetric(*m_pUpperField , aMetric);
-    SetMetric(*m_pPWidthField , aMetric);
-    SetMetric(*m_pPHeightField, aMetric);
+    SetMetric(*m_xHDistField, aMetric);
+    SetMetric(*m_xVDistField , aMetric);
+    SetMetric(*m_xWidthField , aMetric);
+    SetMetric(*m_xHeightField, aMetric);
+    SetMetric(*m_xLeftField  , aMetric);
+    SetMetric(*m_xUpperField , aMetric);
+    SetMetric(*m_xPWidthField , aMetric);
+    SetMetric(*m_xPHeightField, aMetric);
 
     // Install handlers
-    Link<Edit&,void> aLk = LINK(this, SwLabFormatPage, ModifyHdl);
-    m_pHDistField->SetModifyHdl( aLk );
-    m_pVDistField->SetModifyHdl( aLk );
-    m_pWidthField->SetModifyHdl( aLk );
-    m_pHeightField->SetModifyHdl( aLk );
-    m_pLeftField->SetModifyHdl( aLk );
-    m_pUpperField->SetModifyHdl( aLk );
-    m_pColsField->SetModifyHdl( aLk );
-    m_pRowsField->SetModifyHdl( aLk );
-    m_pPWidthField->SetModifyHdl( aLk );
-    m_pPHeightField->SetModifyHdl( aLk );
+    Link<weld::MetricSpinButton&,void> aLk = LINK(this, SwLabFormatPage, MetricModifyHdl);
+    m_xHDistField->connect_value_changed( aLk );
+    m_xVDistField->connect_value_changed( aLk );
+    m_xWidthField->connect_value_changed( aLk );
+    m_xHeightField->connect_value_changed( aLk );
+    m_xLeftField->connect_value_changed( aLk );
+    m_xUpperField->connect_value_changed( aLk );
+    m_xPWidthField->connect_value_changed( aLk );
+    m_xPHeightField->connect_value_changed( aLk );
 
-    Link<Control&,void> aLk2 = LINK(this, SwLabFormatPage, LoseFocusHdl);
-    m_pHDistField->SetLoseFocusHdl( aLk2 );
-    m_pVDistField->SetLoseFocusHdl( aLk2 );
-    m_pWidthField->SetLoseFocusHdl( aLk2 );
-    m_pHeightField->SetLoseFocusHdl( aLk2 );
-    m_pLeftField->SetLoseFocusHdl( aLk2 );
-    m_pUpperField->SetLoseFocusHdl( aLk2 );
-    m_pColsField->SetLoseFocusHdl( aLk2 );
-    m_pRowsField->SetLoseFocusHdl( aLk2 );
-    m_pPWidthField->SetLoseFocusHdl( aLk2 );
-    m_pPHeightField->SetLoseFocusHdl( aLk2 );
+    m_xColsField->connect_value_changed(LINK(this, SwLabFormatPage, ModifyHdl));
+    m_xRowsField->connect_value_changed(LINK(this, SwLabFormatPage, ModifyHdl));
 
-    m_pSavePB->SetClickHdl( LINK (this, SwLabFormatPage, SaveHdl));
+    m_xSavePB->connect_clicked( LINK (this, SwLabFormatPage, SaveHdl));
     // Set timer
     aPreviewIdle.SetPriority(TaskPriority::LOWEST);
     aPreviewIdle.SetInvokeHandler(LINK(this, SwLabFormatPage, PreviewHdl));
@@ -354,31 +332,16 @@ SwLabFormatPage::SwLabFormatPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SwLabFormatPage::~SwLabFormatPage()
 {
-    disposeOnce();
 }
-
-void SwLabFormatPage::dispose()
-{
-    m_pMakeFI.clear();
-    m_pTypeFI.clear();
-    m_pPreview.clear();
-    m_pHDistField.clear();
-    m_pVDistField.clear();
-    m_pWidthField.clear();
-    m_pHeightField.clear();
-    m_pLeftField.clear();
-    m_pUpperField.clear();
-    m_pColsField.clear();
-    m_pRowsField.clear();
-    m_pPWidthField.clear();
-    m_pPHeightField.clear();
-    m_pSavePB.clear();
-    SfxTabPage::dispose();
-}
-
 
 // Modify-handler of MetricFields. start preview timer
-IMPL_LINK_NOARG(SwLabFormatPage, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwLabFormatPage, MetricModifyHdl, weld::MetricSpinButton&, void)
+{
+    bModified = true;
+    aPreviewIdle.Start();
+}
+
+IMPL_LINK_NOARG(SwLabFormatPage, ModifyHdl, weld::SpinButton&, void)
 {
     bModified = true;
     aPreviewIdle.Start();
@@ -390,14 +353,7 @@ IMPL_LINK_NOARG(SwLabFormatPage, PreviewHdl, Timer *, void)
     aPreviewIdle.Stop();
     ChangeMinMax();
     FillItem( aItem );
-    m_pPreview->UpdateItem( aItem );
-}
-
-// LoseFocus-Handler: Update on change
-IMPL_LINK( SwLabFormatPage, LoseFocusHdl, Control&, rControl, void )
-{
-    if (static_cast<Edit*>( &rControl)->IsModified())
-        PreviewHdl(nullptr);
+    m_xPreview->UpdateItem( aItem );
 }
 
 void SwLabFormatPage::ChangeMinMax()
@@ -407,81 +363,42 @@ void SwLabFormatPage::ChangeMinMax()
 
     // Min and Max
 
-    int nCols   = m_pColsField->GetValue(),
-        nRows   = m_pRowsField->GetValue();
-    long lLeft   = static_cast< long >(GETFLDVAL(*m_pLeftField )),
-         lUpper  = static_cast< long >(GETFLDVAL(*m_pUpperField)),
-         lHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField)),
-         lVDist  = static_cast< long >(GETFLDVAL(*m_pVDistField)),
-         lWidth  = static_cast< long >(GETFLDVAL(*m_pWidthField)),
-         lHeight = static_cast< long >(GETFLDVAL(*m_pHeightField)),
+    int nCols   = m_xColsField->get_value(),
+        nRows   = m_xRowsField->get_value();
+    long lLeft   = static_cast< long >(getfldval(*m_xLeftField )),
+         lUpper  = static_cast< long >(getfldval(*m_xUpperField)),
+         lHDist  = static_cast< long >(getfldval(*m_xHDistField)),
+         lVDist  = static_cast< long >(getfldval(*m_xVDistField)),
+         lWidth  = static_cast< long >(getfldval(*m_xWidthField)),
+         lHeight = static_cast< long >(getfldval(*m_xHeightField)),
          lMinPWidth  = lLeft  + (nCols - 1) * lHDist + lWidth,
          lMinPHeight = lUpper + (nRows - 1) * lVDist + lHeight;
 
-    m_pHDistField->SetMin(nMinSize, FUNIT_CM);
-    m_pVDistField->SetMin(nMinSize, FUNIT_CM);
+    m_xHDistField->set_min(nMinSize, FUNIT_CM);
+    m_xVDistField->set_min(nMinSize, FUNIT_CM);
 
-    m_pHDistField->SetMax(long(100) * ((lMax - lLeft ) / std::max(1L, static_cast<long>(nCols))), FUNIT_TWIP);
-    m_pVDistField->SetMax(long(100) * ((lMax - lUpper) / std::max(1L, static_cast<long>(nRows))), FUNIT_TWIP);
+    m_xHDistField->set_max(long(100) * ((lMax - lLeft ) / std::max(1L, static_cast<long>(nCols))), FUNIT_TWIP);
+    m_xVDistField->set_max(long(100) * ((lMax - lUpper) / std::max(1L, static_cast<long>(nRows))), FUNIT_TWIP);
 
-    m_pWidthField->SetMin(nMinSize, FUNIT_CM);
-    m_pHeightField->SetMin(nMinSize, FUNIT_CM);
+    m_xWidthField->set_min(nMinSize, FUNIT_CM);
+    m_xHeightField->set_min(nMinSize, FUNIT_CM);
 
-    m_pWidthField->SetMax(long(100) * lHDist, FUNIT_TWIP);
-    m_pHeightField->SetMax(long(100) * lVDist, FUNIT_TWIP);
+    m_xWidthField->set_max(long(100) * lHDist, FUNIT_TWIP);
+    m_xHeightField->set_max(long(100) * lVDist, FUNIT_TWIP);
 
-    m_pLeftField->SetMax(long(100) * (lMax - nCols * lHDist), FUNIT_TWIP);
-    m_pUpperField->SetMax(long(100) * (lMax - nRows * lVDist), FUNIT_TWIP);
+    m_xLeftField->set_max(long(100) * (lMax - nCols * lHDist), FUNIT_TWIP);
+    m_xUpperField->set_max(long(100) * (lMax - nRows * lVDist), FUNIT_TWIP);
 
-    m_pColsField->SetMin( 1 );
-    m_pRowsField->SetMin( 1 );
+    m_xColsField->set_range(1, (lMax - lLeft ) / std::max(1L, lHDist));
+    m_xRowsField->set_range(1, (lMax - lUpper) / std::max(1L, lVDist));
 
-    m_pColsField->SetMax((lMax - lLeft ) / std::max(1L, lHDist));
-    m_pRowsField->SetMax((lMax - lUpper) / std::max(1L, lVDist));
-    m_pPWidthField->SetMin( long(100) * lMinPWidth,  FUNIT_TWIP );
-    m_pPHeightField->SetMin( long(100) * lMinPHeight, FUNIT_TWIP );
-
-    m_pPWidthField->SetMax( long(100) * lMax, FUNIT_TWIP);
-    m_pPHeightField->SetMax( long(100) * lMax, FUNIT_TWIP);
-    // First and Last
-
-    m_pHDistField->SetFirst(m_pHDistField->GetMin());
-    m_pVDistField->SetFirst(m_pVDistField->GetMin());
-
-    m_pHDistField->SetLast (m_pHDistField->GetMax());
-    m_pVDistField->SetLast (m_pVDistField->GetMax());
-
-    m_pWidthField->SetFirst(m_pWidthField->GetMin());
-    m_pHeightField->SetFirst(m_pHeightField->GetMin());
-
-    m_pWidthField->SetLast (m_pWidthField->GetMax());
-    m_pHeightField->SetLast (m_pHeightField->GetMax());
-
-    m_pLeftField->SetLast (m_pLeftField->GetMax());
-    m_pUpperField->SetLast (m_pUpperField->GetMax());
-
-    m_pColsField->SetLast (m_pColsField->GetMax());
-    m_pRowsField->SetLast (m_pRowsField->GetMax());
-    m_pPWidthField->SetFirst(m_pPWidthField->GetMin());
-    m_pPHeightField->SetFirst(m_pPHeightField->GetMin());
-
-    m_pPWidthField->SetLast (m_pPWidthField->GetMax());
-    m_pPHeightField->SetLast (m_pPHeightField->GetMax());
-    m_pHDistField->Reformat();
-    m_pVDistField->Reformat();
-    m_pWidthField->Reformat();
-    m_pHeightField->Reformat();
-    m_pLeftField->Reformat();
-    m_pUpperField->Reformat();
-    m_pColsField->Reformat();
-    m_pRowsField->Reformat();
-    m_pPWidthField->Reformat();
-    m_pPHeightField->Reformat();
+    m_xPWidthField->set_range(long(100) * lMinPWidth, long(100) * lMax, FUNIT_TWIP);
+    m_xPHeightField->set_range(long(100) * lMinPHeight, long(100) * lMax, FUNIT_TWIP);
 }
 
 VclPtr<SfxTabPage> SwLabFormatPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwLabFormatPage>::Create(pParent.pParent, *rSet);
+    return VclPtr<SwLabFormatPage>::Create(pParent, *rSet);
 }
 
 void SwLabFormatPage::ActivatePage(const SfxItemSet& rSet)
@@ -506,16 +423,16 @@ void SwLabFormatPage::FillItem(SwLabItem& rItem)
     rItem.m_aMake = rItem.m_aType = SwResId(STR_CUSTOM_LABEL);
 
     SwLabRec& rRec = *GetParentSwLabDlg()->Recs()[0];
-    rItem.m_lHDist  = rRec.m_nHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField ));
-    rItem.m_lVDist  = rRec.m_nVDist  = static_cast< long >(GETFLDVAL(*m_pVDistField ));
-    rItem.m_lWidth  = rRec.m_nWidth  = static_cast< long >(GETFLDVAL(*m_pWidthField ));
-    rItem.m_lHeight = rRec.m_nHeight = static_cast< long >(GETFLDVAL(*m_pHeightField));
-    rItem.m_lLeft   = rRec.m_nLeft   = static_cast< long >(GETFLDVAL(*m_pLeftField  ));
-    rItem.m_lUpper  = rRec.m_nUpper  = static_cast< long >(GETFLDVAL(*m_pUpperField ));
-    rItem.m_nCols   = rRec.m_nCols   = static_cast< sal_Int32 >(m_pColsField->GetValue());
-    rItem.m_nRows   = rRec.m_nRows   = static_cast< sal_Int32 >(m_pRowsField->GetValue());
-    rItem.m_lPWidth  = rRec.m_nPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
-    rItem.m_lPHeight = rRec.m_nPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
+    rItem.m_lHDist  = rRec.m_nHDist  = static_cast< long >(getfldval(*m_xHDistField ));
+    rItem.m_lVDist  = rRec.m_nVDist  = static_cast< long >(getfldval(*m_xVDistField ));
+    rItem.m_lWidth  = rRec.m_nWidth  = static_cast< long >(getfldval(*m_xWidthField ));
+    rItem.m_lHeight = rRec.m_nHeight = static_cast< long >(getfldval(*m_xHeightField));
+    rItem.m_lLeft   = rRec.m_nLeft   = static_cast< long >(getfldval(*m_xLeftField  ));
+    rItem.m_lUpper  = rRec.m_nUpper  = static_cast< long >(getfldval(*m_xUpperField ));
+    rItem.m_nCols   = rRec.m_nCols   = static_cast< sal_Int32 >(m_xColsField->get_value());
+    rItem.m_nRows   = rRec.m_nRows   = static_cast< sal_Int32 >(m_xRowsField->get_value());
+    rItem.m_lPWidth  = rRec.m_nPWidth  = static_cast< long >(getfldval(*m_xPWidthField ));
+    rItem.m_lPHeight = rRec.m_nPHeight = static_cast< long >(getfldval(*m_xPHeightField));
 
 }
 
@@ -532,49 +449,49 @@ void SwLabFormatPage::Reset(const SfxItemSet* )
     // Initialise fields
     GetParentSwLabDlg()->GetLabItem(aItem);
 
-    m_pHDistField->SetMax(100 * aItem.m_lHDist , FUNIT_TWIP);
-    m_pVDistField->SetMax(100 * aItem.m_lVDist , FUNIT_TWIP);
-    m_pWidthField->SetMax(100 * aItem.m_lWidth , FUNIT_TWIP);
-    m_pHeightField->SetMax(100 * aItem.m_lHeight, FUNIT_TWIP);
-    m_pLeftField->SetMax(100 * aItem.m_lLeft  , FUNIT_TWIP);
-    m_pUpperField->SetMax(100 * aItem.m_lUpper , FUNIT_TWIP);
-    m_pPWidthField->SetMax(100 * aItem.m_lPWidth , FUNIT_TWIP);
-    m_pPHeightField->SetMax(100 * aItem.m_lPHeight, FUNIT_TWIP);
+    m_xHDistField->set_max(100 * aItem.m_lHDist , FUNIT_TWIP);
+    m_xVDistField->set_max(100 * aItem.m_lVDist , FUNIT_TWIP);
+    m_xWidthField->set_max(100 * aItem.m_lWidth , FUNIT_TWIP);
+    m_xHeightField->set_max(100 * aItem.m_lHeight, FUNIT_TWIP);
+    m_xLeftField->set_max(100 * aItem.m_lLeft  , FUNIT_TWIP);
+    m_xUpperField->set_max(100 * aItem.m_lUpper , FUNIT_TWIP);
+    m_xPWidthField->set_max(100 * aItem.m_lPWidth , FUNIT_TWIP);
+    m_xPHeightField->set_max(100 * aItem.m_lPHeight, FUNIT_TWIP);
 
-    SETFLDVAL(*m_pHDistField, aItem.m_lHDist );
-    SETFLDVAL(*m_pVDistField , aItem.m_lVDist );
-    SETFLDVAL(*m_pWidthField , aItem.m_lWidth );
-    SETFLDVAL(*m_pHeightField, aItem.m_lHeight);
-    SETFLDVAL(*m_pLeftField  , aItem.m_lLeft  );
-    SETFLDVAL(*m_pUpperField , aItem.m_lUpper );
-    SETFLDVAL(*m_pPWidthField , aItem.m_lPWidth );
-    SETFLDVAL(*m_pPHeightField, aItem.m_lPHeight);
+    setfldval(*m_xHDistField, aItem.m_lHDist );
+    setfldval(*m_xVDistField , aItem.m_lVDist );
+    setfldval(*m_xWidthField , aItem.m_lWidth );
+    setfldval(*m_xHeightField, aItem.m_lHeight);
+    setfldval(*m_xLeftField  , aItem.m_lLeft  );
+    setfldval(*m_xUpperField , aItem.m_lUpper );
+    setfldval(*m_xPWidthField , aItem.m_lPWidth );
+    setfldval(*m_xPHeightField, aItem.m_lPHeight);
 
-    m_pColsField->SetMax(aItem.m_nCols);
-    m_pRowsField->SetMax(aItem.m_nRows);
+    m_xColsField->set_max(aItem.m_nCols);
+    m_xRowsField->set_max(aItem.m_nRows);
 
-    m_pColsField->SetValue(aItem.m_nCols);
-    m_pRowsField->SetValue(aItem.m_nRows);
-    m_pMakeFI->SetText(aItem.m_aMake);
-    m_pTypeFI->SetText(aItem.m_aType);
+    m_xColsField->set_value(aItem.m_nCols);
+    m_xRowsField->set_value(aItem.m_nRows);
+    m_xMakeFI->set_label(aItem.m_aMake);
+    m_xTypeFI->set_label(aItem.m_aType);
     PreviewHdl(nullptr);
 }
 
-IMPL_LINK_NOARG(SwLabFormatPage, SaveHdl, Button*, void)
+IMPL_LINK_NOARG(SwLabFormatPage, SaveHdl, weld::Button&, void)
 {
     SwLabRec aRec;
-    aRec.m_nHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField));
-    aRec.m_nVDist  = static_cast< long >(GETFLDVAL(*m_pVDistField ));
-    aRec.m_nWidth  = static_cast< long >(GETFLDVAL(*m_pWidthField ));
-    aRec.m_nHeight = static_cast< long >(GETFLDVAL(*m_pHeightField));
-    aRec.m_nLeft   = static_cast< long >(GETFLDVAL(*m_pLeftField  ));
-    aRec.m_nUpper  = static_cast< long >(GETFLDVAL(*m_pUpperField ));
-    aRec.m_nCols   = static_cast< sal_Int32 >(m_pColsField->GetValue());
-    aRec.m_nRows   = static_cast< sal_Int32 >(m_pRowsField->GetValue());
-    aRec.m_nPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
-    aRec.m_nPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
+    aRec.m_nHDist  = static_cast< long >(getfldval(*m_xHDistField));
+    aRec.m_nVDist  = static_cast< long >(getfldval(*m_xVDistField ));
+    aRec.m_nWidth  = static_cast< long >(getfldval(*m_xWidthField ));
+    aRec.m_nHeight = static_cast< long >(getfldval(*m_xHeightField));
+    aRec.m_nLeft   = static_cast< long >(getfldval(*m_xLeftField  ));
+    aRec.m_nUpper  = static_cast< long >(getfldval(*m_xUpperField ));
+    aRec.m_nCols   = static_cast< sal_Int32 >(m_xColsField->get_value());
+    aRec.m_nRows   = static_cast< sal_Int32 >(m_xRowsField->get_value());
+    aRec.m_nPWidth  = static_cast< long >(getfldval(*m_xPWidthField ));
+    aRec.m_nPHeight = static_cast< long >(getfldval(*m_xPHeightField));
     aRec.m_bCont = aItem.m_bCont;
-    SwSaveLabelDlg aSaveDlg(this, aRec);
+    SwSaveLabelDlg aSaveDlg(GetParentSwLabDlg(), aRec);
     aSaveDlg.SetLabel(aItem.m_aLstMake, aItem.m_aLstType);
     aSaveDlg.run();
     if (aSaveDlg.GetLabel(aItem))
@@ -586,15 +503,15 @@ IMPL_LINK_NOARG(SwLabFormatPage, SaveHdl, Button*, void)
         {
             rMakes = rMan;
         }
-        m_pMakeFI->SetText(aItem.m_aMake);
-        m_pTypeFI->SetText(aItem.m_aType);
+        m_xMakeFI->set_label(aItem.m_aMake);
+        m_xTypeFI->set_label(aItem.m_aType);
     }
 }
 
-SwSaveLabelDlg::SwSaveLabelDlg(SwLabFormatPage* pParent, SwLabRec& rRec)
+SwSaveLabelDlg::SwSaveLabelDlg(SwLabDlg* pParent, SwLabRec& rRec)
     : GenericDialogController(pParent->GetFrameWeld(), "modules/swriter/ui/savelabeldialog.ui", "SaveLabelDialog")
     , bSuccess(false)
-    , pLabPage(pParent)
+    , m_pLabDialog(pParent)
     , rLabRec(rRec)
     , m_xMakeCB(m_xBuilder->weld_combo_box_text("brand"))
     , m_xTypeED(m_xBuilder->weld_entry("type"))
@@ -604,7 +521,7 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFormatPage* pParent, SwLabRec& rRec)
     m_xMakeCB->connect_changed(LINK(this, SwSaveLabelDlg, ModifyComboHdl));
     m_xTypeED->connect_changed(LINK(this, SwSaveLabelDlg, ModifyEntryHdl));
 
-    SwLabelConfig& rCfg = pLabPage->GetParentSwLabDlg()->GetLabelsConfig();
+    SwLabelConfig& rCfg = m_pLabDialog->GetLabelsConfig();
     const std::vector<OUString>& rMan = rCfg.GetManufacturers();
     for (const auto & i : rMan)
     {
@@ -618,7 +535,7 @@ SwSaveLabelDlg::~SwSaveLabelDlg()
 
 IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl, weld::Button&, void)
 {
-    SwLabelConfig& rCfg = pLabPage->GetParentSwLabDlg()->GetLabelsConfig();
+    SwLabelConfig& rCfg = m_pLabDialog->GetLabelsConfig();
     OUString sMake(m_xMakeCB->get_active_text());
     OUString sType(m_xTypeED->get_text());
     if(rCfg.HasLabel(sMake, sType))
