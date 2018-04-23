@@ -321,8 +321,7 @@ void SalDisplay::doDestruct()
 {
     GenericUnixSalData *pData = GetGenericUnixSalData();
 
-    delete m_pWMAdaptor;
-    m_pWMAdaptor = nullptr;
+    m_pWMAdaptor.reset();
     X11SalBitmap::ImplDestroyCache();
     X11SalGraphics::releaseGlyphPeer();
 

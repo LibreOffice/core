@@ -172,16 +172,15 @@ static int compareProtocol( const void* pLeft, const void* pRight )
 }
 }
 
-WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
+std::unique_ptr<WMAdaptor> WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
 {
-    WMAdaptor*          pAdaptor    = nullptr;
+    std::unique_ptr<WMAdaptor> pAdaptor;
 
     // try a NetWM
-    pAdaptor = new NetWMAdaptor( pSalDisplay );
+    pAdaptor.reset(new NetWMAdaptor( pSalDisplay ));
     if( ! pAdaptor->isValid() )
     {
-        delete pAdaptor;
-        pAdaptor = nullptr;
+        pAdaptor.reset();
     }
 #if OSL_DEBUG_LEVEL > 1
     else
@@ -191,11 +190,10 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
     // try a GnomeWM
     if( ! pAdaptor )
     {
-        pAdaptor = new GnomeWMAdaptor( pSalDisplay );
+        pAdaptor.reset(new GnomeWMAdaptor( pSalDisplay ));
         if( ! pAdaptor->isValid() )
         {
-            delete pAdaptor;
-            pAdaptor = nullptr;
+            pAdaptor.reset();
         }
 #if OSL_DEBUG_LEVEL > 1
         else
@@ -204,7 +202,7 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
     }
 
     if( ! pAdaptor )
-        pAdaptor = new WMAdaptor( pSalDisplay );
+        pAdaptor.reset(new WMAdaptor( pSalDisplay ));
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf(stderr, "Window Manager's name is \"%s\"\n",
