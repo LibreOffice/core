@@ -36,8 +36,8 @@ class TextWindow : public vcl::Window
 {
 private:
     VclPtr<Edit>    mxParent;
-    ExtTextEngine*  mpExtTextEngine;
-    TextView*       mpExtTextView;
+    std::unique_ptr<ExtTextEngine> mpExtTextEngine;
+    std::unique_ptr<TextView> mpExtTextView;
 
     bool            mbInMBDown;
     bool            mbFocusSelectionHide;
@@ -50,8 +50,8 @@ public:
     virtual         ~TextWindow() override;
     virtual void    dispose() override;
 
-    ExtTextEngine*  GetTextEngine() const { return mpExtTextEngine; }
-    TextView*       GetTextView() const { return mpExtTextView; }
+    ExtTextEngine*  GetTextEngine() const { return mpExtTextEngine.get(); }
+    TextView*       GetTextView() const { return mpExtTextView.get(); }
 
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
