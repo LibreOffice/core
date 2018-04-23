@@ -50,7 +50,7 @@ class ListBox;
 class VCL_DLLPUBLIC TabControl : public Control
 {
 protected:
-    ImplTabCtrlData*    mpTabCtrlData;
+    std::unique_ptr<ImplTabCtrlData> mpTabCtrlData;
     long                mnLastWidth;
     long                mnLastHeight;
     long                mnMaxPageWidth;
