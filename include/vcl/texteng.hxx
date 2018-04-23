@@ -205,7 +205,7 @@ class VCL_DLLPUBLIC TextEngine : public SfxBroadcaster
     Range               GetInvalidYOffsets( sal_uInt32 nPortion );
 
     // for Undo/Redo
-    void                InsertContent( TextNode* pNode, sal_uInt32 nPara );
+    void                InsertContent( std::unique_ptr<TextNode> pNode, sal_uInt32 nPara );
     TextPaM             SplitContent( sal_uInt32 nNode, sal_Int32 nSepPos );
     TextPaM             ConnectContents( sal_uInt32 nLeftNode );
 
