@@ -52,8 +52,6 @@ public:
     virtual void    ActivatePage();
     virtual void    DeactivatePage();
 
-    OString         GetConfigId() const;
-
     //To-Do, consider inheriting from VclContainer
     virtual void    SetPosSizePixel(const Point& rNewPos, const Size& rNewSize) override;
     virtual void    SetPosPixel(const Point& rNewPos) override;
