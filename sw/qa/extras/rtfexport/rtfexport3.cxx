@@ -101,6 +101,14 @@ DECLARE_RTFEXPORT_TEST(testTdf115180, "tdf115180.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("First cell width", sal_Int32(218), cell2Width);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf116841, "tdf116841.rtf")
+{
+    // This was 0, left margin was ignored as we assumed the default is already
+    // fine for us.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270),
+                         getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
