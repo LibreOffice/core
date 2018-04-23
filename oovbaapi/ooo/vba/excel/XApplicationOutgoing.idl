@@ -25,6 +25,8 @@ module ooo {  module vba {  module excel {
 
 interface XApplicationOutgoing : XInterfaceWithIID
 {
+    void WorkbookOpen([in] any Wb);
+    void WorkbookBeforeClose([in] any Wb, [out] any Cancel);
 };
 
 }; }; };

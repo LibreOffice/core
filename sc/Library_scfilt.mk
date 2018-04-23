@@ -21,7 +21,11 @@ $(eval $(call gb_Library_set_include,scfilt,\
 
 $(eval $(call gb_Library_set_precompiled_header,scfilt,$(SRCDIR)/sc/inc/pch/precompiled_scfilt))
 
-$(eval $(call gb_Library_use_sdk_api,scfilt))
+$(eval $(call gb_Library_use_api,scfilt,\
+	udkapi \
+	offapi \
+	oovbaapi \
+))
 
 $(eval $(call gb_Library_use_custom_headers,scfilt,\
 	oox/generated \

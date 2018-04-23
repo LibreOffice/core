@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAAPPLICATION_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAAPPLICATION_HXX
 
+#include <vector>
+
+#include <ooo/vba/XSink.hpp>
+#include <ooo/vba/XSinkCaller.hpp>
 #include <ooo/vba/excel/XWorksheetFunction.hpp>
 #include <ooo/vba/excel/XApplication.hpp>
 #include <ooo/vba/excel/XFileDialog.hpp>
@@ -28,7 +32,7 @@
 #include <vbahelper/vbaapplicationbase.hxx>
 #include <cppuhelper/implbase.hxx>
 
-typedef cppu::ImplInheritanceHelper< VbaApplicationBase, ov::excel::XApplication > ScVbaApplication_BASE;
+typedef cppu::ImplInheritanceHelper< VbaApplicationBase, ov::excel::XApplication, ov::XSinkCaller > ScVbaApplication_BASE;
 
 struct ScVbaAppSettings;
 
@@ -45,6 +49,8 @@ private:
     /// @throws css::uno::RuntimeException
     OUString getOfficePath( const OUString& sPath );
 
+    std::vector<css::uno::Reference< ooo::vba::XSink >> mvSinks;
+
 protected:
     virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() override;
 
@@ -54,6 +60,9 @@ public:
 
     /** Returns true, if VBA document events are enabled. */
     static bool getDocumentEventsEnabled();
+
+    sal_uInt32 AddSink( const css::uno::Reference< ooo::vba::XSink >& xSink );
+    void RemoveSink( sal_uInt32 nNumber );
 
     // XExactName
     virtual OUString SAL_CALL getExactName( const OUString& aApproximateName ) override;
@@ -136,9 +145,21 @@ public:
     virtual css::uno::Any SAL_CALL MenuBars( const css::uno::Any& aIndex ) override;
     virtual css::uno::Any SAL_CALL Caller( const css::uno::Any& aIndex ) override;
     virtual void SAL_CALL Undo() override;
+
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
+
+    // XInterfaceWithIID
+    virtual OUString SAL_CALL getIID() override;
+
+    // XConnectable
+    virtual OUString SAL_CALL GetIIDForClassItselfNotCoclass() override;
+    virtual ov::TypeAndIID SAL_CALL GetConnectionPoint() override;
+    virtual css::uno::Reference<ov::XConnectionPoint> SAL_CALL FindConnectionPoint() override;
+
+    // XSinkCaller
+    virtual void SAL_CALL CallSinks( const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments ) override;
 };
 #endif // INCLUDED_SC_SOURCE_UI_VBA_VBAAPPLICATION_HXX
 

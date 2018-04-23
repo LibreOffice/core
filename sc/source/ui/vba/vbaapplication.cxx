@@ -30,6 +30,7 @@
 #include <com/sun/star/util/PathSettings.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <ooo/vba/XExecutableDialog.hpp>
+#include <ooo/vba/excel/XApplicationOutgoing.hpp>
 #include <ooo/vba/excel/XlCalculation.hpp>
 #include <ooo/vba/excel/XlMousePointer.hpp>
 #include <ooo/vba/office/MsoShapeType.hpp>
@@ -127,6 +128,41 @@ ScVbaAppSettings::ScVbaAppSettings() :
 }
 
 struct ScVbaStaticAppSettings : public ::rtl::Static< ScVbaAppSettings, ScVbaStaticAppSettings > {};
+
+class ScVbaApplicationOutgoingConnectionPoint : public cppu::WeakImplHelper<XConnectionPoint>
+{
+private:
+    ScVbaApplication* mpApp;
+
+public:
+    ScVbaApplicationOutgoingConnectionPoint( ScVbaApplication* pApp );
+
+    // XConnectionPoint
+    sal_uInt32 SAL_CALL Advise(const uno::Reference< XSink >& Sink ) override;
+    void SAL_CALL Unadvise( sal_uInt32 Cookie ) override;
+};
+
+sal_uInt32
+ScVbaApplication::AddSink( const uno::Reference< XSink >& xSink )
+{
+    {
+        SolarMutexGuard aGuard;
+        ScDLL::Init();
+    }
+    // No harm in potentially calling this several times
+    SC_MOD()->RegisterAutomationApplicationEventsCaller( uno::Reference< XSinkCaller >(this) );
+    mvSinks.push_back(xSink);
+    return mvSinks.size();;
+}
+
+void
+ScVbaApplication::RemoveSink( sal_uInt32 nNumber )
+{
+    if (nNumber < 1 || nNumber > mvSinks.size())
+        return;
+
+    mvSinks[nNumber-1] = uno::Reference< XSink >();
+}
 
 ScVbaApplication::ScVbaApplication( const uno::Reference<uno::XComponentContext >& xContext ) :
     ScVbaApplication_BASE( xContext ),
@@ -1383,6 +1419,52 @@ void SAL_CALL ScVbaApplication::Undo()
         dispatchExecute( pViewShell, SID_UNDO );
 }
 
+// XInterfaceWithIID
+
+OUString SAL_CALL
+ScVbaApplication::getIID()
+{
+    return OUString("{82154425-0FBF-11d4-8313-005004526AB4}");
+}
+
+// XConnectable
+
+OUString SAL_CALL
+ScVbaApplication::GetIIDForClassItselfNotCoclass()
+{
+    return OUString("{82154426-0FBF-11D4-8313-005004526AB4}");
+}
+
+TypeAndIID SAL_CALL
+ScVbaApplication::GetConnectionPoint()
+{
+    TypeAndIID aResult =
+        { excel::XApplicationOutgoing::static_type(),
+          "{82154427-0FBF-11D4-8313-005004526AB4}"
+        };
+
+    return aResult;
+}
+
+uno::Reference<XConnectionPoint> SAL_CALL
+ScVbaApplication::FindConnectionPoint()
+{
+    uno::Reference<XConnectionPoint> xCP(new ScVbaApplicationOutgoingConnectionPoint(this));
+    return xCP;
+}
+
+// XSinkCaller
+
+void SAL_CALL
+ScVbaApplication::CallSinks( const OUString& Method, uno::Sequence< uno::Any >& Arguments )
+{
+    for (auto& i : mvSinks)
+    {
+        if (i.is())
+            i->Call(Method, Arguments);
+    }
+}
+
 OUString
 ScVbaApplication::getServiceImplName()
 {
@@ -1409,6 +1491,26 @@ sdecl::ServiceDecl const serviceDecl(
     serviceImpl,
     "ScVbaApplication",
     "ooo.vba.excel.Application" );
+}
+
+// ScVbaApplicationOutgoingConnectionPoint
+
+ScVbaApplicationOutgoingConnectionPoint::ScVbaApplicationOutgoingConnectionPoint( ScVbaApplication* pApp ) :
+    mpApp(pApp)
+{
+}
+
+// XConnectionPoint
+sal_uInt32 SAL_CALL
+ScVbaApplicationOutgoingConnectionPoint::Advise( const uno::Reference< XSink >& Sink )
+{
+    return mpApp->AddSink(Sink);
+}
+
+void SAL_CALL
+ScVbaApplicationOutgoingConnectionPoint::Unadvise( sal_uInt32 Cookie )
+{
+    mpApp->RemoveSink( Cookie );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

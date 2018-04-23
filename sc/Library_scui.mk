@@ -28,7 +28,11 @@ $(eval $(call gb_Library_use_custom_headers,scui,\
     officecfg/registry \
 ))
 
-$(eval $(call gb_Library_use_sdk_api,scui))
+$(eval $(call gb_Library_use_api,scui,\
+	udkapi \
+	offapi \
+	oovbaapi \
+))
 
 $(eval $(call gb_Library_use_externals,scui,\
 	boost_headers \

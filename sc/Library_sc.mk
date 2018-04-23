@@ -33,7 +33,11 @@ $(eval $(call gb_Library_use_custom_headers,sc,\
     officecfg/registry \
 ))
 
-$(eval $(call gb_Library_use_sdk_api,sc))
+$(eval $(call gb_Library_use_api,sc,\
+	udkapi \
+	offapi \
+	oovbaapi \
+))
 
 $(eval $(call gb_Library_use_externals,sc,\
     boost_headers \
