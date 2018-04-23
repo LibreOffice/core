@@ -28,7 +28,7 @@ BitmapEx BitmapSmoothenFilter::execute(BitmapEx const& rBitmapEx)
         bRet = BitmapFilter::Filter(aBitmapEx, BitmapSeparableUnsharpenFilter(mfRadius));
 
     if (bRet)
-        return BitmapEx(rBitmapEx);
+        return rBitmapEx;
 
     return BitmapEx();
 }
