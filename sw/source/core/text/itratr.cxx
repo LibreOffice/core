@@ -159,7 +159,7 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
     {
         m_pRedline->Clear( m_pFont );
         if( !bParaFont )
-            m_nChgCnt = m_nChgCnt + m_pRedline->Seek( *m_pFont, 0, USHRT_MAX );
+            m_nChgCnt = m_nChgCnt + m_pRedline->Seek(*m_pFont, 0, COMPLETE_STRING);
         else
             m_pRedline->Reset();
     }
