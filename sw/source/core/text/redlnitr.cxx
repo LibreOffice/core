@@ -153,34 +153,38 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
 // The Redline-Iterator
 // The following information/states exist in RedlineIterator:
 //
-// nFirst is the first index of RedlineTable, which overlaps with the paragraph.
+// m_nFirst is the first index of RedlineTable, which overlaps with the paragraph.
 //
-// nAct is the currently active (if bOn is set) or the next possible index.
-// nStart and nEnd give you the borders of the object within the paragraph.
+// m_nAct is the currently active (if m_bOn is set) or the next possible index.
+// m_nStart and m_nEnd give you the borders of the object within the paragraph.
 //
-// If bOn is set, the font has been manipulated according to it.
+// If m_bOn is set, the font has been manipulated according to it.
 //
-// If nAct is set to COMPLETE_STRING (via Reset()), then currently no
-// Redline is active, nStart and nEnd are invalid.
+// If m_nAct is set to COMPLETE_STRING (via Reset()), then currently no
+// Redline is active, m_nStart and m_nEnd are invalid.
 SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
-                            SwAttrHandler& rAH, sal_Int32 nRed, bool bShw,
+                            SwAttrHandler& rAH, sal_Int32 nRed, bool bShow,
                             const std::vector<ExtTextInputAttr> *pArr,
                             sal_Int32 nExtStart )
-    : rDoc( *rTextNd.GetDoc() ), rAttrHandler( rAH ),
-      nNdIdx( rTextNd.GetIndex() ), nFirst( nRed ),
-      nAct( COMPLETE_STRING ), bOn( false ), bShow( bShw )
+    : m_rDoc( *rTextNd.GetDoc() )
+    , m_rAttrHandler( rAH )
+    , m_nNdIdx( rTextNd.GetIndex() )
+    , m_nFirst( nRed )
+    , m_nAct( COMPLETE_STRING )
+    , m_bOn( false )
+    , m_bShow( bShow )
 {
     if( pArr )
-        pExt = new SwExtend( *pArr, nExtStart );
+        m_pExt = new SwExtend( *pArr, nExtStart );
     else
-        pExt = nullptr;
+        m_pExt = nullptr;
     Seek (rFnt, 0, COMPLETE_STRING);
 }
 
 SwRedlineItr::~SwRedlineItr() COVERITY_NOEXCEPT_FALSE
 {
     Clear( nullptr );
-    delete pExt;
+    delete m_pExt;
 }
 
 // The return value of SwRedlineItr::Seek tells you if the current font
@@ -191,72 +195,72 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
     if( ExtOn() )
         return 0; // Abbreviation: if we're within an ExtendTextInputs
                   // there can't be other changes of attributes (not even by redlining)
-    if( bShow )
+    if (m_bShow)
     {
-        if( bOn )
+        if (m_bOn)
         {
-            if( nNew >= nEnd )
+            if (nNew >= m_nEnd)
             {
                 --nRet;
                 Clear_( &rFnt );    // We go behind the current section
-                ++nAct;             // and check the next one
+                ++m_nAct;             // and check the next one
             }
-            else if( nNew < nStart )
+            else if (nNew < m_nStart)
             {
                 --nRet;
                 Clear_( &rFnt );    // We go in front of the current section
-                if( nAct > nFirst )
-                    nAct = nFirst;  // the test has to run from the beginning
+                if (m_nAct > m_nFirst)
+                    m_nAct = m_nFirst;  // the test has to run from the beginning
                 else
                     return nRet + EnterExtend( rFnt, nNew ); // There's none prior to us
             }
             else
                 return nRet + EnterExtend( rFnt, nNew ); // We stayed in the same section
         }
-        if( COMPLETE_STRING == nAct || nOld > nNew )
-            nAct = nFirst;
+        if (COMPLETE_STRING == m_nAct || nOld > nNew)
+            m_nAct = m_nFirst;
 
-        nStart = COMPLETE_STRING;
-        nEnd = COMPLETE_STRING;
+        m_nStart = COMPLETE_STRING;
+        m_nEnd = COMPLETE_STRING;
 
-        for( ; nAct < static_cast<sal_Int32>(rDoc.getIDocumentRedlineAccess().GetRedlineTable().size()) ; ++nAct )
+        for ( ; m_nAct < static_cast<sal_Int32>(m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size()) ; ++m_nAct)
         {
-            rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
+            m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nAct ]->CalcStartEnd(m_nNdIdx, m_nStart, m_nEnd);
 
-            if( nNew < nEnd )
+            if (nNew < m_nEnd)
             {
-                if( nNew >= nStart ) // only possible candidate
+                if (nNew >= m_nStart) // only possible candidate
                 {
-                    bOn = true;
-                    const SwRangeRedline *pRed = rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nAct ];
+                    m_bOn = true;
+                    const SwRangeRedline *pRed = m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nAct ];
 
-                    if (pSet)
-                        pSet->ClearItem();
+                    if (m_pSet)
+                        m_pSet->ClearItem();
                     else
                     {
                         SwAttrPool& rPool =
-                            const_cast<SwDoc&>(rDoc).GetAttrPool();
-                        pSet = o3tl::make_unique<SfxItemSet>(rPool, svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1>{});
+                            const_cast<SwDoc&>(m_rDoc).GetAttrPool();
+                        m_pSet = o3tl::make_unique<SfxItemSet>(rPool, svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1>{});
                     }
 
                     if( 1 < pRed->GetStackCount() )
                         FillHints( pRed->GetAuthor( 1 ), pRed->GetType( 1 ) );
                     FillHints( pRed->GetAuthor(), pRed->GetType() );
 
-                    SfxWhichIter aIter( *pSet );
+                    SfxWhichIter aIter( *m_pSet );
                     sal_uInt16 nWhich = aIter.FirstWhich();
                     while( nWhich )
                     {
                         const SfxPoolItem* pItem;
                         if( ( nWhich < RES_CHRATR_END ) &&
-                            ( SfxItemState::SET == pSet->GetItemState( nWhich, true, &pItem ) ) )
+                            ( SfxItemState::SET == m_pSet->GetItemState( nWhich, true, &pItem ) ) )
                         {
                             SwTextAttr* pAttr = MakeRedlineTextAttr(
-                                const_cast<SwDoc&>(rDoc),
+                                const_cast<SwDoc&>(m_rDoc),
                                 *const_cast<SfxPoolItem*>(pItem) );
                             pAttr->SetPriorityAttr( true );
                             m_Hints.push_back(pAttr);
-                            rAttrHandler.PushAndChg( *pAttr, rFnt );
+                            m_rAttrHandler.PushAndChg( *pAttr, rFnt );
                         }
                         nWhich = aIter.NextWhich();
                     }
@@ -265,8 +269,8 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
                 }
                 break;
             }
-            nStart = COMPLETE_STRING;
-            nEnd = COMPLETE_STRING;
+            m_nStart = COMPLETE_STRING;
+            m_nEnd = COMPLETE_STRING;
         }
     }
     return nRet + EnterExtend( rFnt, nNew );
@@ -277,14 +281,14 @@ void SwRedlineItr::FillHints( std::size_t nAuthor, RedlineType_t eType )
     switch ( eType )
     {
         case nsRedlineType_t::REDLINE_INSERT:
-            SW_MOD()->GetInsertAuthorAttr(nAuthor, *pSet);
+            SW_MOD()->GetInsertAuthorAttr(nAuthor, *m_pSet);
             break;
         case nsRedlineType_t::REDLINE_DELETE:
-            SW_MOD()->GetDeletedAuthorAttr(nAuthor, *pSet);
+            SW_MOD()->GetDeletedAuthorAttr(nAuthor, *m_pSet);
             break;
         case nsRedlineType_t::REDLINE_FORMAT:
         case nsRedlineType_t::REDLINE_FMTCOLL:
-            SW_MOD()->GetFormatAuthorAttr(nAuthor, *pSet);
+            SW_MOD()->GetFormatAuthorAttr(nAuthor, *m_pSet);
             break;
         default:
             break;
@@ -295,34 +299,34 @@ void SwRedlineItr::ChangeTextAttr( SwFont* pFnt, SwTextAttr const &rHt, bool bCh
 {
     OSL_ENSURE( IsOn(), "SwRedlineItr::ChangeTextAttr: Off?" );
 
-    if( !bShow && !pExt )
+    if (!m_bShow && !m_pExt)
         return;
 
     if( bChg )
     {
-        if ( pExt && pExt->IsOn() )
-            rAttrHandler.PushAndChg( rHt, *pExt->GetFont() );
+        if (m_pExt && m_pExt->IsOn())
+            m_rAttrHandler.PushAndChg( rHt, *m_pExt->GetFont() );
         else
-            rAttrHandler.PushAndChg( rHt, *pFnt );
+            m_rAttrHandler.PushAndChg( rHt, *pFnt );
     }
     else
     {
-        OSL_ENSURE( ! pExt || ! pExt->IsOn(), "Pop of attribute during opened extension" );
-        rAttrHandler.PopAndChg( rHt, *pFnt );
+        OSL_ENSURE( ! m_pExt || ! m_pExt->IsOn(), "Pop of attribute during opened extension" );
+        m_rAttrHandler.PopAndChg( rHt, *pFnt );
     }
 }
 
 void SwRedlineItr::Clear_( SwFont* pFnt )
 {
-    OSL_ENSURE( bOn, "SwRedlineItr::Clear: Off?" );
-    bOn = false;
+    OSL_ENSURE( m_bOn, "SwRedlineItr::Clear: Off?" );
+    m_bOn = false;
     for (auto const& hint : m_Hints)
     {
         if( pFnt )
-            rAttrHandler.PopAndChg( *hint, *pFnt );
+            m_rAttrHandler.PopAndChg( *hint, *pFnt );
         else
-            rAttrHandler.Pop( *hint );
-        SwTextAttr::Destroy(hint, const_cast<SwDoc&>(rDoc).GetAttrPool() );
+            m_rAttrHandler.Pop( *hint );
+        SwTextAttr::Destroy(hint, const_cast<SwDoc&>(m_rDoc).GetAttrPool() );
     }
     m_Hints.clear();
 }
@@ -330,20 +334,20 @@ void SwRedlineItr::Clear_( SwFont* pFnt )
 sal_Int32 SwRedlineItr::GetNextRedln_( sal_Int32 nNext )
 {
     nNext = NextExtend( nNext );
-    if( !bShow || COMPLETE_STRING == nFirst )
+    if (!m_bShow || COMPLETE_STRING == m_nFirst)
         return nNext;
-    if( COMPLETE_STRING == nAct )
+    if (COMPLETE_STRING == m_nAct)
     {
-        nAct = nFirst;
-        rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
+        m_nAct = m_nFirst;
+        m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nAct ]->CalcStartEnd(m_nNdIdx, m_nStart, m_nEnd);
     }
-    if( bOn || !nStart )
+    if (m_bOn || !m_nStart)
     {
-        if( nEnd < nNext )
-            nNext = nEnd;
+        if (m_nEnd < nNext)
+            nNext = m_nEnd;
     }
-    else if( nStart < nNext )
-        nNext = nStart;
+    else if (m_nStart < nNext)
+        nNext = m_nStart;
     return nNext;
 }
 
@@ -364,30 +368,30 @@ bool SwRedlineItr::ChkSpecialUnderline_() const
 
 bool SwRedlineItr::CheckLine( sal_Int32 nChkStart, sal_Int32 nChkEnd )
 {
-    if( nFirst == COMPLETE_STRING )
+    if (m_nFirst == COMPLETE_STRING)
         return false;
     if( nChkEnd == nChkStart ) // empty lines look one char further
         ++nChkEnd;
-    sal_Int32 nOldStart = nStart;
-    sal_Int32 nOldEnd = nEnd;
-    sal_Int32 nOldAct = nAct;
+    sal_Int32 nOldStart = m_nStart;
+    sal_Int32 nOldEnd = m_nEnd;
+    sal_Int32 nOldAct = m_nAct;
     bool bRet = false;
 
-    for( nAct = nFirst; nAct < static_cast<sal_Int32>(rDoc.getIDocumentRedlineAccess().GetRedlineTable().size()) ; ++nAct )
+    for (m_nAct = m_nFirst; m_nAct < static_cast<sal_Int32>(m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size()) ; ++m_nAct)
     {
-        rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
-        if( nChkEnd < nStart )
+        m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nAct ]->CalcStartEnd( m_nNdIdx, m_nStart, m_nEnd );
+        if (nChkEnd < m_nStart)
             break;
-        if( nChkStart <= nEnd && ( nChkEnd > nStart || COMPLETE_STRING == nEnd ) )
+        if (nChkStart <= m_nEnd && (nChkEnd > m_nStart || COMPLETE_STRING == m_nEnd))
         {
             bRet = true;
             break;
         }
     }
 
-    nStart = nOldStart;
-    nEnd = nOldEnd;
-    nAct = nOldAct;
+    m_nStart = nOldStart;
+    m_nEnd = nOldEnd;
+    m_nAct = nOldAct;
     return bRet;
 }
 
