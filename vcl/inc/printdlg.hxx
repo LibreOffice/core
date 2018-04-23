@@ -168,7 +168,7 @@ namespace vcl
             void storeToSettings();
         };
 
-        VclBuilder*                             mpCustomOptionsUIBuilder;
+        std::unique_ptr<VclBuilder>             mpCustomOptionsUIBuilder;
 
         std::shared_ptr<PrinterController>      maPController;
         VclPtr<TabControl>                      mpTabCtrl;
