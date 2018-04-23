@@ -88,7 +88,7 @@ public:
 private:
     void cacheLocalizedFontNames(const FcChar8 *origfontname, const FcChar8 *bestfontname, const std::vector< lang_and_element > &lang_and_elements);
 
-    LanguageTag* m_pLanguageTag;
+    std::unique_ptr<LanguageTag> m_pLanguageTag;
 };
 
 FontCfgWrapper::FontCfgWrapper()
@@ -354,7 +354,7 @@ FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern const * pPattern,
             {
                 rtl_Locale* pLoc = nullptr;
                 osl_getProcessLocale(&pLoc);
-                m_pLanguageTag = new LanguageTag(*pLoc);
+                m_pLanguageTag.reset( new LanguageTag(*pLoc) );
             }
             *element = bestname(lang_and_elements, *m_pLanguageTag);
 
@@ -376,8 +376,7 @@ void FontCfgWrapper::clear()
         FcFontSetDestroy( m_pOutlineSet );
         m_pOutlineSet = nullptr;
     }
-    delete m_pLanguageTag;
-    m_pLanguageTag = nullptr;
+    m_pLanguageTag.reset();
 }
 
 /*
