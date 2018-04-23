@@ -1085,6 +1085,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">R~efresh Range</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:FocusCellAddress" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1613,18 +1616,18 @@
       </node>
       <node oor:name=".uno:DefineDBName" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Define Data Range...</value>
-        </prop>
-        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Define Range...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:SelectDB" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Select Data ~Range...</value>
-        </prop>
-        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Select ~Range...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:DataStreams" oor:op="replace">
