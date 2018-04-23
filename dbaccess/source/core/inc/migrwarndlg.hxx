@@ -11,7 +11,7 @@
 
 #include <vcl/weld.hxx>
 
-namespace dbaui
+namespace dbaccess
 {
 class MigrationWarnDialog : public weld::MessageDialogController
 {
