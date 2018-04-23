@@ -181,14 +181,6 @@ void TabPage::DeactivatePage()
 {
 }
 
-OString TabPage::GetConfigId() const
-{
-    OString sId(GetHelpId());
-    if (sId.isEmpty() && isLayoutEnabled(this))
-        sId = GetWindow(GetWindowType::FirstChild)->GetHelpId();
-    return sId;
-}
-
 Size TabPage::GetOptimalSize() const
 {
     if (isLayoutEnabled(this))

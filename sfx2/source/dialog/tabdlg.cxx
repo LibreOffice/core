@@ -312,6 +312,13 @@ SfxTabDialog* SfxTabPage::GetTabDialog() const
     return dynamic_cast<SfxTabDialog*>(GetParentDialog());
 }
 
+OString SfxTabPage::GetConfigId() const
+{
+    OString sId(GetHelpId());
+    if (sId.isEmpty() && isLayoutEnabled(this))
+        sId = GetWindow(GetWindowType::FirstChild)->GetHelpId();
+    return sId;
+}
 
 SfxTabDialog::SfxTabDialog
 

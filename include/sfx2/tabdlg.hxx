@@ -302,6 +302,8 @@ public:
 
     void SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame);
     css::uno::Reference< css::frame::XFrame > GetFrame();
+
+    OString         GetConfigId() const;
 };
 
 #endif
