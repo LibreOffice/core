@@ -584,10 +584,11 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
                         relativeWidth = pRecord->isHorizontalRule ? 1000 : 0;
                     if( relativeWidth != 0 )
                     {
+                        const sal_Int16 nScale = aPic.dxaGoal ? aPic.dxaGoal : 1000;
                         aPic.mx = msword_cast<sal_uInt16>(
                             m_aSectionManager.GetPageWidth() -
                             m_aSectionManager.GetPageRight() -
-                            m_aSectionManager.GetPageLeft()) * relativeWidth / aPic.dxaGoal;
+                            m_aSectionManager.GetPageLeft()) * relativeWidth / nScale;
                         aPD = WW8PicDesc( aPic );
                         // This SetSnapRect() call adjusts the size of the
                         // object itself, no idea why it's this call (or even
