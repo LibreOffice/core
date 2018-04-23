@@ -225,148 +225,129 @@ Printer *SwLabDlg::GetPrt()
         return nullptr;
 }
 
-SwLabPage::SwLabPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "CardMediumPage",
-        "modules/swriter/ui/cardmediumpage.ui", &rSet)
+SwLabPage::SwLabPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/cardmediumpage.ui", "CardMediumPage", &rSet)
     , pDBManager(nullptr)
     , aItem(static_cast<const SwLabItem&>(rSet.Get(FN_LABEL)))
+    , m_xAddressFrame(m_xBuilder->weld_widget("addressframe"))
+    , m_xAddrBox(m_xBuilder->weld_check_button("address"))
+    , m_xWritingEdit(m_xBuilder->weld_text_view("textview"))
+    , m_xDatabaseLB(m_xBuilder->weld_combo_box_text("database"))
+    , m_xTableLB(m_xBuilder->weld_combo_box_text("table"))
+    , m_xInsertBT(m_xBuilder->weld_button("insert"))
+    , m_xDBFieldLB(m_xBuilder->weld_combo_box_text("field"))
+    , m_xContButton(m_xBuilder->weld_radio_button("continuous"))
+    , m_xSheetButton(m_xBuilder->weld_radio_button("sheet"))
+    , m_xMakeBox(m_xBuilder->weld_combo_box_text("brand"))
+    , m_xTypeBox(m_xBuilder->weld_combo_box_text("type"))
+    , m_xHiddenSortTypeBox(m_xBuilder->weld_combo_box_text("hiddentype"))
+    , m_xFormatInfo(m_xBuilder->weld_label("formatinfo"))
 {
-    WaitObject aWait( pParent );
+    WaitObject aWait(pParent.pParent);
 
-    get(m_pAddressFrame, "addressframe");
-    get(m_pAddrBox, "address");
-    get(m_pWritingEdit, "textview");
-    m_pWritingEdit->set_height_request(m_pWritingEdit->GetTextHeight() * 10);
-    m_pWritingEdit->set_width_request(m_pWritingEdit->approximate_char_width() * 25);
-    get(m_pDatabaseLB, "database");
-    get(m_pTableLB, "table");
-    get(m_pInsertBT, "insert");
-    get(m_pDBFieldLB, "field");
-    get(m_pContButton, "continuous");
-    get(m_pSheetButton, "sheet");
-    get(m_pMakeBox, "brand");
-    get(m_pTypeBox, "type");
-    get(m_pFormatInfo, "formatinfo");
-    get(m_pHiddenSortTypeBox, "hiddentype");
-    m_pHiddenSortTypeBox->SetStyle(m_pHiddenSortTypeBox->GetStyle() | WB_SORT);
+    m_xWritingEdit->set_size_request(m_xWritingEdit->get_approximate_digit_width() * 30,
+                                     m_xWritingEdit->get_height_rows(10));
+    m_xHiddenSortTypeBox->make_sorted();
 
-    long nListBoxWidth = approximate_char_width() * 30;
-    m_pTableLB->set_width_request(nListBoxWidth);
-    m_pDatabaseLB->set_width_request(nListBoxWidth);
-    m_pDBFieldLB->set_width_request(nListBoxWidth);
+    long nListBoxWidth = m_xWritingEdit->get_approximate_digit_width() * 25;
+    m_xTableLB->set_size_request(nListBoxWidth, -1);
+    m_xDatabaseLB->set_size_request(nListBoxWidth, -1);
+    m_xDBFieldLB->set_size_request(nListBoxWidth, -1);
 
     SetExchangeSupport();
 
     // Install handlers
-    m_pAddrBox->SetClickHdl (LINK(this, SwLabPage, AddrHdl         ));
-    m_pDatabaseLB->SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
-    m_pTableLB->SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
-    m_pDBFieldLB->SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
-    m_pInsertBT->SetClickHdl (LINK(this, SwLabPage, FieldHdl        ));
+    m_xAddrBox->connect_toggled(LINK(this, SwLabPage, AddrHdl));
+    m_xDatabaseLB->connect_changed(LINK(this, SwLabPage, DatabaseHdl));
+    m_xTableLB->connect_changed(LINK(this, SwLabPage, DatabaseHdl));
+    m_xDBFieldLB->connect_changed(LINK(this, SwLabPage, DatabaseHdl));
+    m_xInsertBT->connect_clicked(LINK(this, SwLabPage, FieldHdl));
     // Disable insert button first,
-    // it'll be enabled if m_pDatabaseLB, m_pTableLB and m_pInsertBT are filled
-    m_pInsertBT->Disable();
-    m_pContButton->SetClickHdl (LINK(this, SwLabPage, PageHdl         ));
-    m_pSheetButton->SetClickHdl (LINK(this, SwLabPage, PageHdl         ));
-    m_pMakeBox->SetSelectHdl(LINK(this, SwLabPage, MakeHdl         ));
-    m_pTypeBox->SetSelectHdl(LINK(this, SwLabPage, TypeHdl         ));
+    // it'll be enabled if m_xDatabaseLB, m_pTableLB and m_pInsertBT are filled
+    m_xInsertBT->set_sensitive(false);
+    m_xContButton->connect_toggled(LINK(this, SwLabPage, PageHdl));
+    m_xSheetButton->connect_toggled(LINK(this, SwLabPage, PageHdl));
+    m_xMakeBox->connect_changed(LINK(this, SwLabPage, MakeHdl));
+    m_xTypeBox->connect_changed(LINK(this, SwLabPage, TypeHdl));
 
     InitDatabaseBox();
 }
 
 SwLabPage::~SwLabPage()
 {
-    disposeOnce();
-}
-
-void SwLabPage::dispose()
-{
-    m_pAddressFrame.clear();
-    m_pAddrBox.clear();
-    m_pWritingEdit.clear();
-    m_pDatabaseLB.clear();
-    m_pTableLB.clear();
-    m_pInsertBT.clear();
-    m_pDBFieldLB.clear();
-    m_pContButton.clear();
-    m_pSheetButton.clear();
-    m_pMakeBox.clear();
-    m_pTypeBox.clear();
-    m_pHiddenSortTypeBox.clear();
-    m_pFormatInfo.clear();
-    SfxTabPage::dispose();
 }
 
 void SwLabPage::SetToBusinessCard()
 {
-    SetHelpId(HID_BUSINESS_FMT_PAGE);
-    m_pContButton->SetHelpId(HID_BUSINESS_FMT_PAGE_CONT);
-    m_pSheetButton->SetHelpId(HID_BUSINESS_FMT_PAGE_SHEET);
-    m_pMakeBox->SetHelpId(HID_BUSINESS_FMT_PAGE_BRAND);
-    m_pTypeBox->SetHelpId(HID_BUSINESS_FMT_PAGE_TYPE);
-    m_pAddressFrame->Hide();
+    m_xContainer->set_help_id(HID_BUSINESS_FMT_PAGE);
+    m_xContButton->set_help_id(HID_BUSINESS_FMT_PAGE_CONT);
+    m_xSheetButton->set_help_id(HID_BUSINESS_FMT_PAGE_SHEET);
+    m_xMakeBox->set_help_id(HID_BUSINESS_FMT_PAGE_BRAND);
+    m_xTypeBox->set_help_id(HID_BUSINESS_FMT_PAGE_TYPE);
+    m_xAddressFrame->hide();
 };
 
-IMPL_LINK_NOARG(SwLabPage, AddrHdl, Button*, void)
+IMPL_LINK_NOARG(SwLabPage, AddrHdl, weld::ToggleButton&, void)
 {
     OUString aWriting;
 
-    if ( m_pAddrBox->IsChecked() )
+    if (m_xAddrBox->get_active())
         aWriting = convertLineEnd(MakeSender(), GetSystemLineEnd());
 
-    m_pWritingEdit->SetText( aWriting );
-    m_pWritingEdit->GrabFocus();
+    m_xWritingEdit->set_text(aWriting);
+    m_xWritingEdit->grab_focus();
 }
 
-IMPL_LINK( SwLabPage, DatabaseHdl, ListBox&, rListBox, void )
+IMPL_LINK( SwLabPage, DatabaseHdl, weld::ComboBoxText&, rListBox, void )
 {
-    sActDBName = m_pDatabaseLB->GetSelectedEntry();
+    sActDBName = m_xDatabaseLB->get_active_text();
 
     WaitObject aObj( GetParentSwLabDlg() );
 
-    if (&rListBox == m_pDatabaseLB)
-        GetDBManager()->GetTableNames(m_pTableLB, sActDBName);
+    if (&rListBox == m_xDatabaseLB.get())
+        GetDBManager()->GetTableNames(*m_xTableLB, sActDBName);
 
-    if (&rListBox == m_pDatabaseLB || &rListBox == m_pTableLB)
-        GetDBManager()->GetColumnNames(m_pDBFieldLB, sActDBName, m_pTableLB->GetSelectedEntry());
+    if (&rListBox == m_xDatabaseLB.get() || &rListBox == m_xTableLB.get())
+        GetDBManager()->GetColumnNames(*m_xDBFieldLB, sActDBName, m_xTableLB->get_active_text());
 
-    if (!m_pDatabaseLB->GetSelectedEntry().isEmpty() && !m_pTableLB->GetSelectedEntry().isEmpty()
-            && !m_pDBFieldLB->GetSelectedEntry().isEmpty())
-        m_pInsertBT->Enable(true);
+    if (!m_xDatabaseLB->get_active_text().isEmpty() && !m_xTableLB->get_active_text().isEmpty()
+            && !m_xDBFieldLB->get_active_text().isEmpty())
+        m_xInsertBT->set_sensitive(true);
     else
-        m_pInsertBT->Enable(false);
+        m_xInsertBT->set_sensitive(false);
 }
 
-IMPL_LINK_NOARG(SwLabPage, FieldHdl, Button*, void)
+IMPL_LINK_NOARG(SwLabPage, FieldHdl, weld::Button&, void)
 {
-    OUString aStr("<" + m_pDatabaseLB->GetSelectedEntry() + "." +
-                  m_pTableLB->GetSelectedEntry() + "." +
-                  (m_pTableLB->GetSelectedEntryData() == nullptr ? OUString("0") : OUString("1")) + "." +
-                  m_pDBFieldLB->GetSelectedEntry() + ">");
-    m_pWritingEdit->ReplaceSelected(aStr);
-    Selection aSel = m_pWritingEdit->GetSelection();
-    m_pWritingEdit->GrabFocus();
-    m_pWritingEdit->SetSelection(aSel);
+    OUString aStr("<" + m_xDatabaseLB->get_active_text() + "." +
+                  m_xTableLB->get_active_text() + "." +
+                  m_xTableLB->get_active_id() + "." +
+                  m_xDBFieldLB->get_active_text() + ">");
+    m_xWritingEdit->replace_selection(aStr);
+    int nStartPos, nEndPos;
+    m_xWritingEdit->get_selection_bounds(nStartPos, nEndPos);
+    m_xWritingEdit->grab_focus();
+    m_xWritingEdit->select_region(nStartPos, nEndPos);
 }
 
-IMPL_LINK_NOARG(SwLabPage, PageHdl, Button*, void)
+IMPL_LINK_NOARG(SwLabPage, PageHdl, weld::ToggleButton&, void)
 {
-    m_pMakeBox->GetSelectHdl().Call(*m_pMakeBox);
+    MakeHdl(*m_xMakeBox);
 }
 
-IMPL_LINK_NOARG(SwLabPage, MakeHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwLabPage, MakeHdl, weld::ComboBoxText&, void)
 {
     WaitObject aWait( GetParentSwLabDlg() );
 
-    m_pTypeBox->Clear();
-    m_pHiddenSortTypeBox->Clear();
+    m_xTypeBox->clear();
+    m_xHiddenSortTypeBox->clear();
     GetParentSwLabDlg()->TypeIds().clear();
 
-    const OUString aMake = m_pMakeBox->GetSelectedEntry();
+    const OUString aMake = m_xMakeBox->get_active_text();
     GetParentSwLabDlg()->ReplaceGroup( aMake );
     aItem.m_aLstMake = aMake;
 
-    const bool   bCont    = m_pContButton->IsChecked();
+    const bool   bCont    = m_xContButton->get_active();
     const size_t nCount   = GetParentSwLabDlg()->Recs().size();
     size_t nLstType = 0;
 
@@ -379,14 +360,14 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl, ListBox&, void)
         if (GetParentSwLabDlg()->Recs()[i]->m_aType == sCustom)
         {
             bInsert = true;
-            m_pTypeBox->InsertEntry(aType );
+            m_xTypeBox->append_text(aType );
         }
         else if (GetParentSwLabDlg()->Recs()[i]->m_bCont == bCont)
         {
-            if ( m_pHiddenSortTypeBox->GetEntryPos(aType) == LISTBOX_ENTRY_NOTFOUND )
+            if (m_xHiddenSortTypeBox->find_text(aType) == -1)
             {
                 bInsert = true;
-                m_pHiddenSortTypeBox->InsertEntry( aType );
+                m_xHiddenSortTypeBox->append_text( aType );
             }
         }
         if(bInsert)
@@ -396,21 +377,21 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl, ListBox&, void)
                 nLstType = GetParentSwLabDlg()->TypeIds().size();
         }
     }
-    for(sal_Int32 nEntry = 0; nEntry < m_pHiddenSortTypeBox->GetEntryCount(); ++nEntry)
+    for (int nEntry = 0; nEntry < m_xHiddenSortTypeBox->get_count(); ++nEntry)
     {
-        m_pTypeBox->InsertEntry(m_pHiddenSortTypeBox->GetEntry(nEntry));
+        m_xTypeBox->append_text(m_xHiddenSortTypeBox->get_text(nEntry));
     }
     if (nLstType)
-        m_pTypeBox->SelectEntry(aItem.m_aLstType);
+        m_xTypeBox->set_active(aItem.m_aLstType);
     else
-        m_pTypeBox->SelectEntryPos(0);
-    m_pTypeBox->GetSelectHdl().Call(*m_pTypeBox);
+        m_xTypeBox->set_active(0);
+    TypeHdl(*m_xTypeBox);
 }
 
-IMPL_LINK_NOARG(SwLabPage, TypeHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwLabPage, TypeHdl, weld::ComboBoxText&, void)
 {
     DisplayFormat();
-    aItem.m_aType = m_pTypeBox->GetSelectedEntry();
+    aItem.m_aType = m_xTypeBox->get_active_text();
 }
 
 void SwLabPage::DisplayFormat()
@@ -435,41 +416,41 @@ void SwLabPage::DisplayFormat()
            " x " + aField->GetText() +
            " (" + OUString::number( pRec->m_nCols ) +
            " x " + OUString::number( pRec->m_nRows ) + ")";
-    m_pFormatInfo->SetText(aText);
+    m_xFormatInfo->set_label(aText);
 }
 
 SwLabRec* SwLabPage::GetSelectedEntryPos()
 {
-    OUString sSelEntry(m_pTypeBox->GetSelectedEntry());
+    OUString sSelEntry(m_xTypeBox->get_active_text());
 
-    return GetParentSwLabDlg()->GetRecord(sSelEntry, m_pContButton->IsChecked());
+    return GetParentSwLabDlg()->GetRecord(sSelEntry, m_xContButton->get_active());
 }
 
 void SwLabPage::InitDatabaseBox()
 {
     if( GetDBManager() )
     {
-        m_pDatabaseLB->Clear();
+        m_xDatabaseLB->clear();
         css::uno::Sequence<OUString> aDataNames = SwDBManager::GetExistingDatabaseNames();
         const OUString* pDataNames = aDataNames.getConstArray();
         for (long i = 0; i < aDataNames.getLength(); i++)
-            m_pDatabaseLB->InsertEntry(pDataNames[i]);
+            m_xDatabaseLB->append_text(pDataNames[i]);
         OUString sDBName = sActDBName.getToken( 0, DB_DELIM );
         OUString sTableName = sActDBName.getToken( 1, DB_DELIM );
-        m_pDatabaseLB->SelectEntry(sDBName);
-        if( !sDBName.isEmpty() && GetDBManager()->GetTableNames(m_pTableLB, sDBName))
+        m_xDatabaseLB->set_active(sDBName);
+        if( !sDBName.isEmpty() && GetDBManager()->GetTableNames(*m_xTableLB, sDBName))
         {
-            m_pTableLB->SelectEntry(sTableName);
-            GetDBManager()->GetColumnNames(m_pDBFieldLB, sActDBName, sTableName);
+            m_xTableLB->set_active(sTableName);
+            GetDBManager()->GetColumnNames(*m_xDBFieldLB, sActDBName, sTableName);
         }
         else
-            m_pDBFieldLB->Clear();
+            m_xDBFieldLB->clear();
     }
 }
 
 VclPtr<SfxTabPage> SwLabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwLabPage>::Create(pParent.pParent, *rSet);
+    return VclPtr<SwLabPage>::Create(pParent, *rSet);
 }
 
 void SwLabPage::ActivatePage(const SfxItemSet& rSet)
@@ -487,18 +468,18 @@ DeactivateRC SwLabPage::DeactivatePage(SfxItemSet* _pSet)
 
 void SwLabPage::FillItem(SwLabItem& rItem)
 {
-    rItem.m_bAddr    = m_pAddrBox->IsChecked();
-    rItem.m_aWriting = m_pWritingEdit->GetText();
-    rItem.m_bCont    = m_pContButton->IsChecked();
-    rItem.m_aMake    = m_pMakeBox->GetSelectedEntry();
-    rItem.m_aType    = m_pTypeBox->GetSelectedEntry();
+    rItem.m_bAddr    = m_xAddrBox->get_active();
+    rItem.m_aWriting = m_xWritingEdit->get_text();
+    rItem.m_bCont    = m_xContButton->get_active();
+    rItem.m_aMake    = m_xMakeBox->get_active_text();
+    rItem.m_aType    = m_xTypeBox->get_active_text();
     rItem.m_sDBName  = sActDBName;
 
     SwLabRec* pRec = GetSelectedEntryPos();
     pRec->FillItem( rItem );
 
-    rItem.m_aLstMake = m_pMakeBox->GetSelectedEntry();
-    rItem.m_aLstType = m_pTypeBox->GetSelectedEntry();
+    rItem.m_aLstMake = m_xMakeBox->get_active_text();
+    rItem.m_aLstType = m_xTypeBox->get_active_text();
 }
 
 bool SwLabPage::FillItemSet(SfxItemSet* rSet)
@@ -511,7 +492,7 @@ bool SwLabPage::FillItemSet(SfxItemSet* rSet)
 
 void SwLabPage::Reset(const SfxItemSet* rSet)
 {
-    m_pMakeBox->Clear();
+    m_xMakeBox->clear();
 
     size_t nLstGroup = 0;
 
@@ -519,52 +500,52 @@ void SwLabPage::Reset(const SfxItemSet* rSet)
     for(size_t i = 0; i < nCount; ++i)
     {
         OUString& rStr = GetParentSwLabDlg()->Makes()[i];
-        m_pMakeBox->InsertEntry( rStr );
+        m_xMakeBox->append_text(rStr);
 
         if ( rStr == aItem.m_aLstMake)
             nLstGroup = i;
     }
 
-    m_pMakeBox->SelectEntryPos( nLstGroup );
-    m_pMakeBox->GetSelectHdl().Call(*m_pMakeBox);
+    m_xMakeBox->set_active( nLstGroup );
+    MakeHdl(*m_xMakeBox);
 
     aItem = static_cast<const SwLabItem&>( rSet->Get(FN_LABEL));
     OUString sDBName  = aItem.m_sDBName;
 
     OUString aWriting(convertLineEnd(aItem.m_aWriting, GetSystemLineEnd()));
 
-    m_pAddrBox->Check( aItem.m_bAddr );
-    m_pWritingEdit->SetText    ( aWriting );
+    m_xAddrBox->set_active( aItem.m_bAddr );
+    m_xWritingEdit->set_text( aWriting );
 
     for(std::vector<OUString>::const_iterator i = GetParentSwLabDlg()->Makes().begin(); i != GetParentSwLabDlg()->Makes().end(); ++i)
     {
-        if(m_pMakeBox->GetEntryPos(*i) == LISTBOX_ENTRY_NOTFOUND)
-            m_pMakeBox->InsertEntry(*i);
+        if (m_xMakeBox->find_text(*i) == -1)
+            m_xMakeBox->append_text(*i);
     }
 
-    m_pMakeBox->SelectEntry( aItem.m_aMake );
+    m_xMakeBox->set_active(aItem.m_aMake);
     //save the current type
     OUString sType(aItem.m_aType);
-    m_pMakeBox->GetSelectHdl().Call(*m_pMakeBox);
+    MakeHdl(*m_xMakeBox);
     aItem.m_aType = sType;
     //#102806# a newly added make may not be in the type ListBox already
-    if (m_pTypeBox->GetEntryPos(aItem.m_aType) == LISTBOX_ENTRY_NOTFOUND && !aItem.m_aMake.isEmpty())
+    if (m_xTypeBox->find_text(aItem.m_aType) == -1 && !aItem.m_aMake.isEmpty())
         GetParentSwLabDlg()->UpdateGroup( aItem.m_aMake );
-    if (m_pTypeBox->GetEntryPos(aItem.m_aType) != LISTBOX_ENTRY_NOTFOUND)
+    if (m_xTypeBox->find_text(aItem.m_aType) != -1)
     {
-        m_pTypeBox->SelectEntry(aItem.m_aType);
-        m_pTypeBox->GetSelectHdl().Call(*m_pTypeBox);
+        m_xTypeBox->set_active(aItem.m_aType);
+        TypeHdl(*m_xTypeBox);
     }
-    if (m_pDatabaseLB->GetEntryPos(sDBName) != LISTBOX_ENTRY_NOTFOUND)
+    if (m_xDatabaseLB->find_text(sDBName) != -1)
     {
-        m_pDatabaseLB->SelectEntry(sDBName);
-        m_pDatabaseLB->GetSelectHdl().Call(*m_pDatabaseLB);
+        m_xDatabaseLB->set_active(sDBName);
+        DatabaseHdl(*m_xDatabaseLB);
     }
 
     if (aItem.m_bCont)
-        m_pContButton->Check();
+        m_xContButton->set_active(true);
     else
-        m_pSheetButton->Check();
+        m_xSheetButton->set_active(true);
 }
 
 SwPrivateDataPage::SwPrivateDataPage(vcl::Window* pParent, const SfxItemSet& rSet)

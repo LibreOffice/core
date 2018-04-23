@@ -29,28 +29,26 @@ class SwLabPage : public SfxTabPage
     OUString      sActDBName;
     SwLabItem     aItem;
 
-    VclPtr<VclContainer> m_pAddressFrame;
+    std::unique_ptr<weld::Widget> m_xAddressFrame;
+    std::unique_ptr<weld::CheckButton> m_xAddrBox;
+    std::unique_ptr<weld::TextView> m_xWritingEdit;
+    std::unique_ptr<weld::ComboBoxText> m_xDatabaseLB;
+    std::unique_ptr<weld::ComboBoxText> m_xTableLB;
+    std::unique_ptr<weld::Button> m_xInsertBT;
+    std::unique_ptr<weld::ComboBoxText> m_xDBFieldLB;
+    std::unique_ptr<weld::RadioButton> m_xContButton;
+    std::unique_ptr<weld::RadioButton> m_xSheetButton;
+    std::unique_ptr<weld::ComboBoxText> m_xMakeBox;
+    std::unique_ptr<weld::ComboBoxText> m_xTypeBox;
+    std::unique_ptr<weld::ComboBoxText> m_xHiddenSortTypeBox;
+    std::unique_ptr<weld::Label> m_xFormatInfo;
 
-    VclPtr<CheckBox>         m_pAddrBox;
-    VclPtr<VclMultiLineEdit> m_pWritingEdit;
-    VclPtr<ListBox>          m_pDatabaseLB;
-    VclPtr<ListBox>          m_pTableLB;
-    VclPtr<PushButton>       m_pInsertBT;
-    VclPtr<ListBox>          m_pDBFieldLB;
-
-    VclPtr<RadioButton>      m_pContButton;
-    VclPtr<RadioButton>      m_pSheetButton;
-    VclPtr<ListBox>          m_pMakeBox;
-    VclPtr<ListBox>          m_pTypeBox;
-    VclPtr<ListBox>          m_pHiddenSortTypeBox;
-    VclPtr<FixedText>        m_pFormatInfo;
-
-    DECL_LINK(AddrHdl, Button*, void);
-    DECL_LINK(DatabaseHdl, ListBox&, void );
-    DECL_LINK(FieldHdl, Button *, void);
-    DECL_LINK(PageHdl, Button *, void);
-    DECL_LINK(MakeHdl, ListBox&, void);
-    DECL_LINK(TypeHdl, ListBox&, void);
+    DECL_LINK(AddrHdl, weld::ToggleButton&, void);
+    DECL_LINK(DatabaseHdl, weld::ComboBoxText&, void );
+    DECL_LINK(FieldHdl, weld::Button&, void);
+    DECL_LINK(PageHdl, weld::ToggleButton&, void);
+    DECL_LINK(MakeHdl, weld::ComboBoxText&, void);
+    DECL_LINK(TypeHdl, weld::ComboBoxText&, void);
 
     void DisplayFormat  ();
     SwLabRec* GetSelectedEntryPos();
@@ -59,10 +57,9 @@ class SwLabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
-    SwLabPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    SwLabPage(TabPageParent pParent, const SfxItemSet& rSet);
 
     virtual ~SwLabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
 

@@ -1467,6 +1467,11 @@ public:
         m_xTextView->SetText(rText);
     }
 
+    virtual void replace_selection(const OUString& rText) override
+    {
+        m_xTextView->ReplaceSelected(rText);
+    }
+
     virtual OUString get_text() const override
     {
         return m_xTextView->GetText();

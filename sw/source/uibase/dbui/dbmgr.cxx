@@ -752,6 +752,47 @@ bool SwDBManager::GetTableNames(ListBox* pListBox, const OUString& rDBName)
     return bRet;
 }
 
+bool SwDBManager::GetTableNames(weld::ComboBoxText& rBox, const OUString& rDBName)
+{
+    bool bRet = false;
+    OUString sOldTableName(rBox.get_active_text());
+    rBox.clear();
+    SwDSParam* pParam = FindDSConnection(rDBName, false);
+    uno::Reference< sdbc::XConnection> xConnection;
+    if (pParam && pParam->xConnection.is())
+        xConnection = pParam->xConnection;
+    else
+    {
+        if ( !rDBName.isEmpty() )
+            xConnection = RegisterConnection( rDBName );
+    }
+    if (xConnection.is())
+    {
+        uno::Reference<sdbcx::XTablesSupplier> xTSupplier(xConnection, uno::UNO_QUERY);
+        if(xTSupplier.is())
+        {
+            uno::Reference<container::XNameAccess> xTables = xTSupplier->getTables();
+            uno::Sequence<OUString> aTables = xTables->getElementNames();
+            const OUString* pTables = aTables.getConstArray();
+            for (sal_Int32 i = 0; i < aTables.getLength(); ++i)
+                rBox.append("0", pTables[i]);
+        }
+        uno::Reference<sdb::XQueriesSupplier> xQSupplier(xConnection, uno::UNO_QUERY);
+        if(xQSupplier.is())
+        {
+            uno::Reference<container::XNameAccess> xQueries = xQSupplier->getQueries();
+            uno::Sequence<OUString> aQueries = xQueries->getElementNames();
+            const OUString* pQueries = aQueries.getConstArray();
+            for (sal_Int32 i = 0; i < aQueries.getLength(); i++)
+                rBox.append("1", pQueries[i]);
+        }
+        if (!sOldTableName.isEmpty())
+            rBox.set_active(sOldTableName);
+        bRet = true;
+    }
+    return bRet;
+}
+
 // fill Listbox with column names of a database
 void SwDBManager::GetColumnNames(ListBox* pListBox,
                              const OUString& rDBName, const OUString& rTableName)
@@ -771,6 +812,24 @@ void SwDBManager::GetColumnNames(ListBox* pListBox,
     GetColumnNames(pListBox, xConnection, rTableName);
 }
 
+void SwDBManager::GetColumnNames(weld::ComboBoxText& rBox,
+                             const OUString& rDBName, const OUString& rTableName)
+{
+    SwDBData aData;
+    aData.sDataSource = rDBName;
+    aData.sCommand = rTableName;
+    aData.nCommandType = -1;
+    SwDSParam* pParam = FindDSData(aData, false);
+    uno::Reference< sdbc::XConnection> xConnection;
+    if(pParam && pParam->xConnection.is())
+        xConnection = pParam->xConnection;
+    else
+    {
+        xConnection = RegisterConnection( rDBName );
+    }
+    GetColumnNames(rBox, xConnection, rTableName);
+}
+
 void SwDBManager::GetColumnNames(ListBox* pListBox,
         uno::Reference< sdbc::XConnection> const & xConnection,
         const OUString& rTableName)
@@ -785,6 +844,25 @@ void SwDBManager::GetColumnNames(ListBox* pListBox,
         for(int nCol = 0; nCol < aColNames.getLength(); nCol++)
         {
             pListBox->InsertEntry(pColNames[nCol]);
+        }
+        ::comphelper::disposeComponent( xColsSupp );
+    }
+}
+
+void SwDBManager::GetColumnNames(weld::ComboBoxText& rBox,
+        uno::Reference< sdbc::XConnection> const & xConnection,
+        const OUString& rTableName)
+{
+    rBox.clear();
+    uno::Reference< sdbcx::XColumnsSupplier> xColsSupp = SwDBManager::GetColumnSupplier(xConnection, rTableName);
+    if(xColsSupp.is())
+    {
+        uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
+        const uno::Sequence<OUString> aColNames = xCols->getElementNames();
+        const OUString* pColNames = aColNames.getConstArray();
+        for (sal_Int32 nCol = 0; nCol < aColNames.getLength(); ++nCol)
+        {
+            rBox.append_text(pColNames[nCol]);
         }
         ::comphelper::disposeComponent( xColsSupp );
     }
