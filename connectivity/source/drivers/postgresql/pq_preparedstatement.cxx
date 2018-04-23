@@ -57,7 +57,6 @@
 
 #include <connectivity/dbconversion.hxx>
 
-using osl::Mutex;
 using osl::MutexGuard;
 
 
@@ -90,47 +89,38 @@ namespace pq_sdbc_driver
 {
 static ::cppu::IPropertyArrayHelper & getPreparedStatementPropertyArrayHelper()
 {
-    static ::cppu::IPropertyArrayHelper *pArrayHelper;
-    if( ! pArrayHelper )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pArrayHelper )
-        {
-            static Property aTable[] =
-                {
-                    Property(
-                        "CursorName", 0,
-                        ::cppu::UnoType<OUString>::get() , 0 ),
-                    Property(
-                        "EscapeProcessing", 1,
-                        cppu::UnoType<bool>::get() , 0 ),
-                    Property(
-                        "FetchDirection", 2,
-                        ::cppu::UnoType<sal_Int32>::get() , 0 ),
-                    Property(
-                        "FetchSize", 3,
-                        ::cppu::UnoType<sal_Int32>::get() , 0 ),
-                    Property(
-                        "MaxFieldSize", 4,
-                        ::cppu::UnoType<sal_Int32>::get() , 0 ),
-                    Property(
-                        "MaxRows", 5,
-                        ::cppu::UnoType<sal_Int32>::get() , 0 ),
-                    Property(
-                        "QueryTimeOut", 6,
-                        ::cppu::UnoType<sal_Int32>::get() , 0 ),
-                    Property(
-                        "ResultSetConcurrency", 7,
-                        ::cppu::UnoType<sal_Int32>::get() , 0 ),
-                    Property(
-                        "ResultSetType", 8,
-                        ::cppu::UnoType<sal_Int32>::get() , 0 )
-                };
-            static_assert( SAL_N_ELEMENTS(aTable) == PREPARED_STATEMENT_SIZE, "wrong number of elements" );
-            static ::cppu::OPropertyArrayHelper arrayHelper( aTable, PREPARED_STATEMENT_SIZE, true );
-            pArrayHelper = &arrayHelper;
-        }
-    }
+    static ::cppu::OPropertyArrayHelper arrayHelper(
+        Sequence<Property>{
+            Property(
+                "CursorName", 0,
+                ::cppu::UnoType<OUString>::get() , 0 ),
+            Property(
+                "EscapeProcessing", 1,
+                cppu::UnoType<bool>::get() , 0 ),
+            Property(
+                "FetchDirection", 2,
+                ::cppu::UnoType<sal_Int32>::get() , 0 ),
+            Property(
+                "FetchSize", 3,
+                ::cppu::UnoType<sal_Int32>::get() , 0 ),
+            Property(
+                "MaxFieldSize", 4,
+                ::cppu::UnoType<sal_Int32>::get() , 0 ),
+            Property(
+                "MaxRows", 5,
+                ::cppu::UnoType<sal_Int32>::get() , 0 ),
+            Property(
+                "QueryTimeOut", 6,
+                ::cppu::UnoType<sal_Int32>::get() , 0 ),
+            Property(
+                "ResultSetConcurrency", 7,
+                ::cppu::UnoType<sal_Int32>::get() , 0 ),
+            Property(
+                "ResultSetType", 8,
+                ::cppu::UnoType<sal_Int32>::get() , 0 )},
+        true );
+    static ::cppu::IPropertyArrayHelper *pArrayHelper = &arrayHelper;
+
     return *pArrayHelper;
 }
 
@@ -239,20 +229,12 @@ Any PreparedStatement::queryInterface( const Type & rType )
 
 Sequence< Type > PreparedStatement::getTypes()
 {
-    static Sequence< Type > *pCollection;
-    if( ! pCollection )
-    {
-        MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        if( !pCollection )
-        {
-            static Sequence< Type > collection(
-                ::comphelper::concatSequences(
-                    OPropertySetHelper::getTypes(),
-                    PreparedStatement_BASE::getTypes()));
-            pCollection = &collection;
-        }
-    }
-    return *pCollection;
+    static Sequence< Type > collection(
+        ::comphelper::concatSequences(
+            OPropertySetHelper::getTypes(),
+            PreparedStatement_BASE::getTypes()));
+
+    return collection;
 }
 
 Sequence< sal_Int8> PreparedStatement::getImplementationId()
