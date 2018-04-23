@@ -48,6 +48,7 @@ use installer::scpzipfiles;
 use installer::scriptitems;
 use installer::setupscript;
 use installer::simplepackage;
+use installer::splitdbg qw(splitdbg_libraries);
 use installer::strip qw(strip_libraries);
 use installer::systemactions;
 use installer::windows::assembly;
@@ -1041,6 +1042,7 @@ sub run {
                     strip_libraries($filesinpackage, $languagestringref);
                 }
 
+
                 if ( $installer::globals::simple ) {
                     installer::worker::install_simple($onepackagename, $$languagestringref, $dirsinpackage, $filesinpackage, $linksinpackage, $unixlinksinpackage);
                 }
@@ -1052,16 +1054,37 @@ sub run {
                     # Example for a link: l 000 root sys /usr/bin/linkname filename
                     # The source field specifies the file to link to
 
+                    # check if we have to create a debug info package
+                    my $dbg = 0;
+                    my $debugfilelist;
+                    if ( !($installer::globals::strip) )
+                    {
+                        $debugfilelist = splitdbg_libraries($filesinpackage, $languagestringref);
+                        if ( $#{$debugfilelist} > -1 )
+                        {
+                            $dbg = 1;
+                        }
+                    }
+
                     my $epmfilename = "epm_" . $onepackagename . ".lst";
+                    my $dbgepmfilename = "epm_" . $onepackagename . ".debug.lst";
 
                     installer::logger::print_message( "... creating epm list file $epmfilename ... \n" );
+                    if ($dbg)
+                    {
+                        installer::logger::print_message( "... creating epm list file $dbgepmfilename ... \n" );
+                    }
 
                     my $completeepmfilename = $listfiledir . $installer::globals::separator . $epmfilename;
+                    my $completedbgepmfilename = $listfiledir . $installer::globals::separator . $dbgepmfilename;
+
 
                     my @epmfile = ();
+                    my @dbgepmfile = ();
 
                     my $epmheaderref = installer::epmfile::create_epm_header($allvariableshashref, $filesinproductlanguageresolvedarrayref, $languagesarrayref, $onepackage);
                     installer::epmfile::adding_header_to_epm_file(\@epmfile, $epmheaderref);
+                    my $dbgepmheaderref;
 
                     # adding directories, files and links into epm file
 
@@ -1089,6 +1112,17 @@ sub run {
                     installer::epmfile::resolve_path_in_epm_list_before_packaging(\@epmfile, $completeepmfilename, "SOLSUREPACKAGEPREFIX", $allvariableshashref->{'SOLSUREPACKAGEPREFIX'});
                     installer::epmfile::resolve_path_in_epm_list_before_packaging(\@epmfile, $completeepmfilename, "UREPACKAGEPREFIX", $allvariableshashref->{'UREPACKAGEPREFIX'});
                     installer::files::save_file($completeepmfilename ,\@epmfile);
+
+                    if ($dbg)
+                    {
+                        $onepackage->{'packagename'} .= "-debuginfo";
+                        $onepackage->{'description'} .= " (debug info)";
+                        $dbgepmheaderref = installer::epmfile::create_epm_header($allvariableshashref, $filesinproductlanguageresolvedarrayref, $languagesarrayref, $onepackage);
+                        installer::epmfile::adding_header_to_epm_file(\@dbgepmfile, $dbgepmheaderref);
+                        installer::epmfile::put_directories_into_epmfile($dirsinpackage, \@dbgepmfile, $allvariableshashref, $packagerootpath);
+                        installer::epmfile::put_files_into_dbgepmfile($debugfilelist, \@dbgepmfile );
+                        installer::files::save_file($completedbgepmfilename ,\@dbgepmfile);
+                    }
 
                     {
                         # changing into the "install" directory to create installation sets
@@ -1132,9 +1166,18 @@ sub run {
                                 # Install: rpm -i --prefix=/opt/special --nodeps so8m35.rpm
 
                                 installer::epmfile::create_new_directory_structure($newepmdir);
-                                $installer::globals::postprocess_specialepm = 1;
 
-                                # solaris patch not needed anymore
+                                # package the debug info if required
+
+                                if ($dbg)
+                                {
+                                    installer::epmfile::call_epm($epmexecutable, $completedbgepmfilename, $packagename . "-debuginfo", $includepatharrayref);
+                                    my $newdbgepmdir = installer::epmfile::prepare_packages($loggingdir, $packagename . "-debuginfo", $staticpath, $relocatablepath, $onepackage, $allvariableshashref, $debugfilelist, $languagestringref);
+                                    installer::epmfile::create_packages_without_epm($newdbgepmdir, $packagename . "-debuginfo", $includepatharrayref, $allvariableshashref, $languagestringref);
+                                    installer::epmfile::remove_temporary_epm_files($newdbgepmdir, $loggingdir, $packagename . "-debuginfo");
+                                    installer::epmfile::create_new_directory_structure($newdbgepmdir);
+                                }
+                                $installer::globals::postprocess_specialepm = 1;
                             }
                         }
 
@@ -1156,7 +1199,11 @@ sub run {
                                        installer::logger::print_message( "... starting unpatched epm ... \n" );
                                 }
 
-                                if ( $installer::globals::call_epm ) { installer::epmfile::call_epm($epmexecutable, $completeepmfilename, $packagename, $includepatharrayref); }
+                                installer::epmfile::call_epm($epmexecutable, $completeepmfilename, $packagename, $includepatharrayref);
+                                if ($dbg)
+                                {
+                                    installer::epmfile::call_epm($epmexecutable, $completedbgepmfilename, $packagename . "-debuginfo", $includepatharrayref);
+                                }
 
                                 if (($installer::globals::isrpmbuild) || ($installer::globals::issolarispkgbuild) || ($installer::globals::debian))
                                 {
