@@ -70,7 +70,7 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY,
     return hBitmap;
 }
 
-SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
+std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
                                                        long &nDX, long &nDY,
                                                        DeviceFormat eFormat,
                                                        const SystemGraphicsData* pData )
@@ -135,7 +135,7 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
 
         pVDev->setGraphics(pVirGraphics);
 
-        return pVDev;
+        return std::unique_ptr<SalVirtualDevice>(pVDev);
     }
     else
     {

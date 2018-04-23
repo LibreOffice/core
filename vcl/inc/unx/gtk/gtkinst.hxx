@@ -204,7 +204,8 @@ public:
     virtual void                DestroyMenuItem( SalMenuItem* pItem ) override;
     virtual SalTimer*           CreateSalTimer() override;
     virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
-    virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics*,
+    virtual std::unique_ptr<SalVirtualDevice>
+                                CreateVirtualDevice( SalGraphics*,
                                                      long &nDX, long &nDY,
                                                      DeviceFormat eFormat,
                                                      const SystemGraphicsData* = nullptr ) override;

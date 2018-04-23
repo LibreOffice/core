@@ -321,7 +321,7 @@ void GtkYieldMutex::ThreadsLeave()
     }
 }
 
-SalVirtualDevice* GtkInstance::CreateVirtualDevice( SalGraphics *pG,
+std::unique_ptr<SalVirtualDevice> GtkInstance::CreateVirtualDevice( SalGraphics *pG,
                                                     long &nDX, long &nDY,
                                                     DeviceFormat eFormat,
                                                     const SystemGraphicsData *pGd )
@@ -331,7 +331,7 @@ SalVirtualDevice* GtkInstance::CreateVirtualDevice( SalGraphics *pG,
     (void) pGd;
     SvpSalGraphics *pSvpSalGraphics = dynamic_cast<SvpSalGraphics*>(pG);
     assert(pSvpSalGraphics);
-    SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice(eFormat, pSvpSalGraphics->getSurface());
+    std::unique_ptr<SalVirtualDevice> pNew(new SvpSalVirtualDevice(eFormat, pSvpSalGraphics->getSurface()));
     pNew->SetSize( nDX, nDY );
     return pNew;
 #else

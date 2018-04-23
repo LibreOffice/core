@@ -139,7 +139,8 @@ public:
     // nDX and nDY in Pixel
     // nBitCount: 0 == Default(=as window) / 1 == Mono
     // pData allows for using a system dependent graphics or device context
-    virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
+    virtual std::unique_ptr<SalVirtualDevice>
+                            CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long &nDX, long &nDY,
                                                      DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr ) override;
 

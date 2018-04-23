@@ -58,10 +58,11 @@ public:
     virtual void                DestroyObject( SalObject* pObject ) override;
 
     /// Gtk vclplug needs to pass GtkSalGraphics to X11SalVirtualDevice, so create it, and pass as pNewGraphics.
-    static SalVirtualDevice* CreateX11VirtualDevice(SalGraphics const * pGraphics, long &nDX, long &nDY,
+    static std::unique_ptr<SalVirtualDevice> CreateX11VirtualDevice(SalGraphics const * pGraphics, long &nDX, long &nDY,
             DeviceFormat eFormat, const SystemGraphicsData* pData, X11SalGraphics* pNewGraphics);
 
-    virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
+    virtual std::unique_ptr<SalVirtualDevice>
+                                CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long &nDX, long &nDY,
                                                      DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr ) override;
     virtual void                PostPrintersChanged() override;
