@@ -9,13 +9,15 @@
 -->
 <menu:menupopup xmlns:menu="http://openoffice.org/2001/menu">
   <menu:menuitem menu:id=".uno:AddDirect"/>
-  <menu:menuitem menu:id=".uno:Open"/>
   <menu:menuitem menu:id=".uno:RecentFileList"/>
-  <menu:menuitem menu:id=".uno:Save"/>
-  <menu:menuitem menu:id=".uno:Undo"/>
-  <menu:menuitem menu:id=".uno:Redo"/>
-  <menu:menuitem menu:id=".uno:Print"/>
-  <menu:menuitem menu:id=".uno:Menubar"/>
-  <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
   <menu:menuitem menu:id=".uno:CloseDoc"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:ToolbarMode"/>
+  <menu:menuitem menu:id=".uno:AvailableToolbars"/>
+  <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:HelpIndex"/>
+  <menu:menuitem menu:id=".uno:Donation"/>
+  <menu:menuitem menu:id=".uno:About"/>
+  <menu:menuseparator/>
 </menu:menupopup>

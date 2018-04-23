@@ -10,6 +10,7 @@
 <menu:menupopup xmlns:menu="http://openoffice.org/2001/menu">
   <menu:menuitem menu:id=".uno:AddDirect"/>
   <menu:menuitem menu:id=".uno:RecentFileList"/>
+  <menu:menuitem menu:id=".uno:CloseDoc"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ToolbarMode"/>
   <menu:menuitem menu:id=".uno:AvailableToolbars"/>
@@ -19,5 +20,4 @@
   <menu:menuitem menu:id=".uno:Donation"/>
   <menu:menuitem menu:id=".uno:About"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:CloseDoc"/>
 </menu:menupopup>
