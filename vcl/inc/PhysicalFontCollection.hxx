@@ -75,7 +75,7 @@ private:
     ImplPreMatchFontSubstitution* mpPreMatchHook;       // device specific prematch substitution
     ImplGlyphFallbackFontSubstitution* mpFallbackHook;  // device specific glyph fallback substitution
 
-    mutable PhysicalFontFamily**  mpFallbackList;
+    mutable std::unique_ptr<std::array<PhysicalFontFamily*,MAX_GLYPHFALLBACK>>  mpFallbackList;
     mutable int             mnFallbackCount;
 
     void                    ImplInitMatchData() const;
