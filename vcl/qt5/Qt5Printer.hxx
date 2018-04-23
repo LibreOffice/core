@@ -27,7 +27,7 @@ class ImplJobSetup;
 class Qt5InfoPrinter : public PspSalInfoPrinter
 {
 public:
-    virtual bool Setup(SalFrame* pFrame, ImplJobSetup* pSetupData) override;
+    virtual bool Setup(weld::Window* pFrame, ImplJobSetup* pSetupData) override;
 };
 
 class Qt5Printer : public PspSalPrinter
