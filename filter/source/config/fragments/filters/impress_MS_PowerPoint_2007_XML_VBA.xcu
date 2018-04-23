@@ -25,6 +25,6 @@
     <prop oor:name="TemplateName"/>
     <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
     <prop oor:name="UIName">
-        <value xml:lang="en-US">Microsoft PowerPoint 2007-2013 XML VBA</value>
+        <value xml:lang="en-US">Microsoft PowerPoint OOXML VBA</value>
     </prop>
 </node>
