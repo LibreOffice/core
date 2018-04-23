@@ -51,7 +51,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Reader* ImportDOCX()
 
 ErrCode SwDOCXReader::Read(SwDoc& rDoc, const OUString& /* rBaseURL */, SwPaM& rPam, const OUString& /* FileName */ )
 {
-    if (!pMedium->GetInStream())
+    if (!m_pMedium->GetInStream())
         return ERR_SWG_READ_ERROR;
 
     // We want to work in an empty paragraph.
@@ -69,7 +69,7 @@ ErrCode SwDOCXReader::Read(SwDoc& rDoc, const OUString& /* rBaseURL */, SwPaM& r
     xImporter->setTargetDocument(xDstDoc);
 
     const uno::Reference<text::XTextRange> xInsertTextRange = SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), nullptr);
-    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pMedium->GetInStream()));
+    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*m_pMedium->GetInStream()));
 
     //SetLoading hack because the document properties will be re-initted
     //by the xml filter and during the init, while its considered uninitialized,
@@ -129,7 +129,7 @@ bool SwDOCXReader::ReadGlossaries( SwTextBlocks& rBlocks, bool /* bSaveRelFiles 
         uno::Reference<lang::XComponent> xDstDoc( xDocSh->GetModel(), uno::UNO_QUERY_THROW );
         xImporter->setTargetDocument( xDstDoc );
 
-        uno::Reference<io::XStream> xStream( new utl::OStreamWrapper( *pMedium->GetInStream() ) );
+        uno::Reference<io::XStream> xStream( new utl::OStreamWrapper( *m_pMedium->GetInStream() ) );
 
         uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
                 { "InputStream", uno::Any(xStream) },
