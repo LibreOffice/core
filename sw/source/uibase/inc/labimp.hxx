@@ -31,6 +31,16 @@
 #define GETFLDVAL(rField)         (rField).Denormalize((rField).GetValue(FUNIT_TWIP))
 #define SETFLDVAL(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FUNIT_TWIP)
 
+inline int getfldval(weld::MetricSpinButton& rField)
+{
+    return rField.denormalize(rField.get_value(FUNIT_TWIP));
+}
+
+inline void setfldval(weld::MetricSpinButton& rField, int lValue)
+{
+    rField.set_value(rField.normalize(lValue), FUNIT_TWIP);
+}
+
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_LABIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
