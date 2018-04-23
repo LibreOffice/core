@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_ef15599b",
+        "filename": "vcl/source/bitmap/BitmapConvolutionMatrixFilter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-04-23T10:44:02Z",
+      "side": 1,
+      "message": "BitmapSharpenFilter doesn\u0027t belong into this file...",
+      "revId": "6122f6266c61db851d7595aeb824502172b509b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
