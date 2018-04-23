@@ -224,6 +224,14 @@ DECLARE_HTMLIMPORT_TEST(testImageWidthAuto, "image-width-auto.html")
     CPPUNIT_ASSERT_EQUAL(Size(1835, 560), rSize.GetSize());
 }
 
+DECLARE_HTMLIMPORT_TEST(testImageLazyRead, "image-lazy-read.html")
+{
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
+    Graphic aGraphic(xGraphic);
+    // This failed, import loaded the graphic, it wasn't lazy-read.
+    CPPUNIT_ASSERT(!aGraphic.isAvailable());
+}
+
 DECLARE_HTMLIMPORT_TEST(testChangedby, "meta-changedby.html")
 {
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
