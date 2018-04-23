@@ -70,9 +70,9 @@ private:
     BitmapReadAccess* mpMaskAccess;
     ZCodec mpZCodec;
 
-    sal_uInt8* mpDeflateInBuf;         // as big as the size of a scanline + alphachannel + 1
-    sal_uInt8* mpPreviousScan;         // as big as mpDeflateInBuf
-    sal_uInt8* mpCurrentScan;
+    std::unique_ptr<sal_uInt8[]> mpDeflateInBuf;         // as big as the size of a scanline + alphachannel + 1
+    std::unique_ptr<sal_uInt8[]> mpPreviousScan;         // as big as mpDeflateInBuf
+    std::unique_ptr<sal_uInt8[]> mpCurrentScan;
     sal_uLong mnDeflateInSize;
 
     sal_uLong mnWidth;
@@ -379,12 +379,12 @@ void PNGWriterImpl::ImplWriteIDAT()
 
     mnDeflateInSize = mnBBP * mnWidth + 1;
 
-    mpDeflateInBuf = new sal_uInt8[mnDeflateInSize];
+    mpDeflateInBuf.reset(new sal_uInt8[mnDeflateInSize]);
 
     if (mnFilterType) // using filter type 4 we need memory for the scanline 3 times
     {
-        mpPreviousScan = new sal_uInt8[mnDeflateInSize];
-        mpCurrentScan = new sal_uInt8[mnDeflateInSize];
+        mpPreviousScan.reset(new sal_uInt8[mnDeflateInSize]);
+        mpCurrentScan.reset(new sal_uInt8[mnDeflateInSize]);
         ImplClearFirstScanline();
     }
     mpZCodec.BeginCompression(mnCompLevel, true);
@@ -394,7 +394,7 @@ void PNGWriterImpl::ImplWriteIDAT()
     {
         for (sal_uLong nY = 0; nY < mnHeight; nY++)
         {
-            mpZCodec.Write(aOStm, mpDeflateInBuf, ImplGetFilter(nY));
+            mpZCodec.Write(aOStm, mpDeflateInBuf.get(), ImplGetFilter(nY));
         }
     }
     else
@@ -403,13 +403,13 @@ void PNGWriterImpl::ImplWriteIDAT()
         sal_uLong nY;
         for (nY = 0; nY < mnHeight; nY += 8) // pass 1
         {
-            mpZCodec.Write(aOStm, mpDeflateInBuf, ImplGetFilter(nY, 0, 8));
+            mpZCodec.Write(aOStm, mpDeflateInBuf.get(), ImplGetFilter(nY, 0, 8));
         }
         ImplClearFirstScanline();
 
         for (nY = 0; nY < mnHeight; nY += 8) // pass 2
         {
-            mpZCodec.Write(aOStm, mpDeflateInBuf, ImplGetFilter(nY, 4, 8));
+            mpZCodec.Write(aOStm, mpDeflateInBuf.get(), ImplGetFilter(nY, 4, 8));
         }
         ImplClearFirstScanline();
 
@@ -417,14 +417,14 @@ void PNGWriterImpl::ImplWriteIDAT()
         {
             for (nY = 4; nY < mnHeight; nY += 8)
             {
-                mpZCodec.Write(aOStm, mpDeflateInBuf, ImplGetFilter(nY, 0, 4));
+                mpZCodec.Write(aOStm, mpDeflateInBuf.get(), ImplGetFilter(nY, 0, 4));
             }
             ImplClearFirstScanline();
         }
 
         for (nY = 0; nY < mnHeight; nY += 4) // pass 4
         {
-            mpZCodec.Write(aOStm, mpDeflateInBuf, ImplGetFilter(nY, 2, 4));
+            mpZCodec.Write(aOStm, mpDeflateInBuf.get(), ImplGetFilter(nY, 2, 4));
         }
         ImplClearFirstScanline();
 
@@ -432,14 +432,14 @@ void PNGWriterImpl::ImplWriteIDAT()
         {
             for (nY = 2; nY < mnHeight; nY += 4)
             {
-                mpZCodec.Write(aOStm, mpDeflateInBuf, ImplGetFilter(nY, 0, 2));
+                mpZCodec.Write(aOStm, mpDeflateInBuf.get(), ImplGetFilter(nY, 0, 2));
             }
             ImplClearFirstScanline();
         }
 
         for (nY = 0; nY < mnHeight; nY += 2) // pass 6
         {
-            mpZCodec.Write(aOStm, mpDeflateInBuf, ImplGetFilter(nY, 1, 2));
+            mpZCodec.Write(aOStm, mpDeflateInBuf.get(), ImplGetFilter(nY, 1, 2));
         }
         ImplClearFirstScanline();
 
@@ -447,7 +447,7 @@ void PNGWriterImpl::ImplWriteIDAT()
         {
             for (nY = 1; nY < mnHeight; nY += 2)
             {
-                mpZCodec.Write(aOStm, mpDeflateInBuf, ImplGetFilter (nY));
+                mpZCodec.Write(aOStm, mpDeflateInBuf.get(), ImplGetFilter (nY));
             }
         }
     }
@@ -456,10 +456,10 @@ void PNGWriterImpl::ImplWriteIDAT()
 
     if (mnFilterType) // using filter type 4 we need memory for the scanline 3 times
     {
-        delete[] mpCurrentScan;
-        delete[] mpPreviousScan;
+        mpCurrentScan.reset();
+        mpPreviousScan.reset();
     }
-    delete[] mpDeflateInBuf;
+    mpDeflateInBuf.reset();
 
     sal_uInt32 nIDATSize = aOStm.Tell();
     sal_uInt32 nBytes, nBytesToWrite = nIDATSize;
@@ -481,9 +481,9 @@ sal_uLong PNGWriterImpl::ImplGetFilter (sal_uLong nY, sal_uLong nXStart, sal_uLo
     sal_uInt8* pDest;
 
     if (mnFilterType)
-        pDest = mpCurrentScan;
+        pDest = mpCurrentScan.get();
     else
-        pDest = mpDeflateInBuf;
+        pDest = mpDeflateInBuf.get();
 
     if (nXStart < mnWidth)
     {
@@ -596,20 +596,20 @@ sal_uLong PNGWriterImpl::ImplGetFilter (sal_uLong nY, sal_uLong nXStart, sal_uLo
     // filter type4 ( PAETH ) will be used only for 24bit graphics
     if (mnFilterType)
     {
-        mnDeflateInSize = pDest - mpCurrentScan;
-        pDest = mpDeflateInBuf;
+        mnDeflateInSize = pDest - mpCurrentScan.get();
+        pDest = mpDeflateInBuf.get();
         *pDest++ = 4; // filter type
 
-        sal_uInt8* p1 = mpCurrentScan + 1; // Current Pixel
+        sal_uInt8* p1 = mpCurrentScan.get() + 1; // Current Pixel
         sal_uInt8* p2 = p1 - mnBBP;        // left pixel
-        sal_uInt8* p3 = mpPreviousScan;    // upper pixel
+        sal_uInt8* p3 = mpPreviousScan.get();    // upper pixel
         sal_uInt8* p4 = p3 - mnBBP;        // upperleft Pixel;
 
-        while (pDest < mpDeflateInBuf + mnDeflateInSize)
+        while (pDest < mpDeflateInBuf.get() + mnDeflateInSize)
         {
             sal_uLong nb = *p3++;
             sal_uLong na, nc;
-            if (p2 >= mpCurrentScan + 1)
+            if (p2 >= mpCurrentScan.get() + 1)
             {
                 na = *p2;
                 nc = *p4;
@@ -648,7 +648,7 @@ sal_uLong PNGWriterImpl::ImplGetFilter (sal_uLong nY, sal_uLong nXStart, sal_uLo
     }
     else
     {
-        mnDeflateInSize = pDest - mpDeflateInBuf;
+        mnDeflateInSize = pDest - mpDeflateInBuf.get();
     }
     return mnDeflateInSize;
 }
@@ -656,7 +656,7 @@ sal_uLong PNGWriterImpl::ImplGetFilter (sal_uLong nY, sal_uLong nXStart, sal_uLo
 void PNGWriterImpl::ImplClearFirstScanline()
 {
     if (mnFilterType)
-        memset(mpPreviousScan, 0, mnDeflateInSize);
+        memset(mpPreviousScan.get(), 0, mnDeflateInSize);
 }
 
 void PNGWriterImpl::ImplOpenChunk (sal_uLong nChunkType)
