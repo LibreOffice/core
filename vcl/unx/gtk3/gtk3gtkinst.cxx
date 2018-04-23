@@ -3401,6 +3401,14 @@ public:
         return sRet;
     }
 
+    virtual void replace_selection(const OUString& rText) override
+    {
+        GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
+        gtk_text_buffer_delete_selection(pBuffer, false, gtk_text_view_get_editable(m_pTextView));
+        OString sText(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
+        gtk_text_buffer_insert_at_cursor(pBuffer, sText.getStr(), sText.getLength());
+    }
+
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) override
     {
         GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
