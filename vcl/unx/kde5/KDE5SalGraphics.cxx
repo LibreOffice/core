@@ -90,7 +90,7 @@ bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart pa
 {
     switch (type)
     {
-        /*case ControlType::Pushbutton:*/
+        case ControlType::Pushbutton:
         case ControlType::Radiobutton:
         case ControlType::Checkbox:
         /*case ControlType::Tooltip:
@@ -274,13 +274,13 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
     QRegion* localClipRegion = nullptr;
 
-    /*if (type == ControlType::Pushbutton)
+    if (type == ControlType::Pushbutton)
     {
         QStyleOptionButton option;
         draw( QStyle::CE_PushButton, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
     }
-    else if (type == ControlType::Menubar)
+    /*else if (type == ControlType::Menubar)
     {
         if (part == ControlPart::MenuItem)
         {
@@ -473,7 +473,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
         draw( QStyle::PE_IndicatorBranch, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
     }*/
-    if (type == ControlType::Checkbox)
+    else if (type == ControlType::Checkbox)
     {
         QStyleOptionButton option;
         draw( QStyle::CE_CheckBox, &option, m_image.get(),
@@ -638,7 +638,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
 
     switch ( type )
     {
-        /*// Metrics of the push button
+        // Metrics of the push button
         case ControlType::Pushbutton:
             if (part == ControlPart::Entire)
             {
@@ -653,7 +653,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
                 }
             }
             break;
-        case ControlType::Editbox:
+        /*case ControlType::Editbox:
         case ControlType::MultilineEditbox:
         {
             QStyleOptionFrameV3 fo;
