@@ -6405,7 +6405,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="slideshowb:MenuSlideShow">
-                            <property name="label" translatable="yes" context="notebookbar_groupedbar_full|slideshowb">_Slide Show</property>
+                            <property name="label" translatable="yes" context="notebookbar|slideshowb">_Slide Show</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
@@ -7028,7 +7028,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="reviewR:MenuReview">
-                            <property name="label" translatable="yes" context="notebookbar_groupedbar_full|reviewb">_Review</property>
+                            <property name="label" translatable="yes" context="notebookbar|reviewb">_Review</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>

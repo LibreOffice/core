@@ -2135,7 +2135,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="filetab:MenuFile">
-                            <property name="label" translatable="yes" context="notebookbar_compact|fileb">_File</property>
+                            <property name="label" translatable="yes" context="notebookbar|fileb">_File</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -2154,7 +2154,7 @@
                         </child>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="helpb:MenuHelp">
-                            <property name="label" translatable="yes" context="notebookbar_compact|fileb">_Help</property>
+                            <property name="label" translatable="yes" context="notebookbar|fileb">_Help</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
