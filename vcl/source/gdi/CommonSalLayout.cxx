@@ -717,7 +717,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                             nNextCharPos = pHbGlyphInfos[j++].cluster;
 
                         if (nNextCharPos == nCharPos)
-                            nNextCharPos = rArgs.mnEndCharPos;
+                            nNextCharPos = nEndRunPos;
                         nCharCount = nNextCharPos - nCharPos;
                     }
                 }
@@ -740,7 +740,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                             nNextCharPos = pHbGlyphInfos[j--].cluster;
 
                         if (nNextCharPos == nCharPos)
-                            nNextCharPos = rArgs.mnEndCharPos;
+                            nNextCharPos = nEndRunPos;
                         nCharCount = nNextCharPos - nCharPos;
                     }
                 }
