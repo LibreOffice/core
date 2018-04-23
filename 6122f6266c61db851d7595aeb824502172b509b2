@@ -16,6 +16,24 @@
       "revId": "6122f6266c61db851d7595aeb824502172b509b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_2f1051a8",
+        "filename": "vcl/source/bitmap/BitmapConvolutionMatrixFilter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-23T10:46:42Z",
+      "side": 1,
+      "message": "didn\u0027t seem useful to create a file for 6 lines of code.",
+      "parentUuid": "9a30ddce_ef15599b",
+      "revId": "6122f6266c61db851d7595aeb824502172b509b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
