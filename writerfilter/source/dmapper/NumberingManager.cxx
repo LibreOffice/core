@@ -305,6 +305,11 @@ uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults
         else if (rReadId == PROP_FIRST_LINE_INDENT && bDefaults)
             // Writer default is -360 twips, Word default seems to be 0.
             aNumberingProperties.emplace_back("FirstLineIndent", 0, uno::makeAny(static_cast<sal_Int32>(0)), beans::PropertyState_DIRECT_VALUE);
+        else if (rReadId == PROP_INDENT_AT && bDefaults)
+            // Writer default is 720 twips, Word default seems to be 0.
+            aNumberingProperties.emplace_back("IndentAt", 0,
+                                              uno::makeAny(static_cast<sal_Int32>(0)),
+                                              beans::PropertyState_DIRECT_VALUE);
     }
 
     boost::optional<PropertyMap::Property> aPropFont = getProperty(PROP_CHAR_FONT_NAME);
