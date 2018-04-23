@@ -27,35 +27,31 @@
 
 #include <cmdid.h>
 
-SwLabPrtPage::SwLabPrtPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "LabelOptionsPage",
-        "modules/swriter/ui/labeloptionspage.ui", &rSet)
+SwLabPrtPage::SwLabPrtPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/labeloptionspage.ui", "LabelOptionsPage", &rSet)
     , pPrinter(nullptr)
+    , m_xPageButton(m_xBuilder->weld_radio_button("entirepage"))
+    , m_xSingleButton(m_xBuilder->weld_radio_button("singlelabel"))
+    , m_xSingleGrid(m_xBuilder->weld_widget("singlegrid"))
+    , m_xPrinterFrame(m_xBuilder->weld_widget("printerframe"))
+    , m_xColField(m_xBuilder->weld_spin_button("cols"))
+    , m_xRowField(m_xBuilder->weld_spin_button("rows"))
+    , m_xSynchronCB(m_xBuilder->weld_check_button("synchronize"))
+    , m_xPrinterInfo(m_xBuilder->weld_label("printername"))
+    , m_xPrtSetup(m_xBuilder->weld_button("setup"))
 {
-    get(m_pPageButton, "entirepage");
-    get(m_pSingleButton, "singlelabel");
-    get(m_pSingleGrid, "singlegrid");
-    get(m_pColField, "cols");
-    get(m_pRowField, "rows");
-    get(m_pSynchronCB, "synchronize");
-    get(m_pPrinterFrame, "printerframe");
-    get(m_pPrinterInfo, "printername");
-    get(m_pPrtSetup, "setup");
     SetExchangeSupport();
 
     // Install handlers
-    Link<Button*,void> aLk = LINK(this, SwLabPrtPage, CountHdl);
-    m_pPageButton->SetClickHdl( aLk );
-    m_pSingleButton->SetClickHdl( aLk );
-
-    m_pPrtSetup->SetClickHdl( aLk );
+    Link<weld::Button&,void> aLk = LINK(this, SwLabPrtPage, CountHdl);
+    m_xPageButton->connect_clicked( aLk );
+    m_xSingleButton->connect_clicked( aLk );
+    m_xPrtSetup->connect_clicked( aLk );
 
     SvtCommandOptions aCmdOpts;
-    if ( aCmdOpts.Lookup(
-             SvtCommandOptions::CMDOPTION_DISABLED,
-             "Print" ) )
+    if (aCmdOpts.Lookup(SvtCommandOptions::CMDOPTION_DISABLED, "Print"))
     {
-        m_pPrinterFrame->Hide();
+        m_xPrinterFrame->hide();
     }
 }
 
@@ -67,21 +63,12 @@ SwLabPrtPage::~SwLabPrtPage()
 void SwLabPrtPage::dispose()
 {
     pPrinter.disposeAndClear();
-    m_pPageButton.clear();
-    m_pSingleButton.clear();
-    m_pSingleGrid.clear();
-    m_pPrinterFrame.clear();
-    m_pColField.clear();
-    m_pRowField.clear();
-    m_pSynchronCB.clear();
-    m_pPrinterInfo.clear();
-    m_pPrtSetup.clear();
     SfxTabPage::dispose();
 }
 
-IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton, void )
+IMPL_LINK( SwLabPrtPage, CountHdl, weld::Button&, rButton, void )
 {
-    if (pButton == m_pPrtSetup)
+    if (&rButton == m_xPrtSetup.get())
     {
         // Call printer setup
         if (!pPrinter)
@@ -90,24 +77,24 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton, void )
         PrinterSetupDialog aDlg(GetFrameWeld());
         aDlg.SetPrinter(pPrinter);
         aDlg.execute();
-        GrabFocus();
-        m_pPrinterInfo->SetText(pPrinter->GetName());
+        rButton.grab_focus();
+        m_xPrinterInfo->set_label(pPrinter->GetName());
         return;
     }
-    const bool bEnable = pButton == m_pSingleButton;
-    m_pSingleGrid->Enable(bEnable);
-    m_pSynchronCB->Enable(!bEnable);
+    const bool bEnable = &rButton == m_xSingleButton.get();
+    m_xSingleGrid->set_sensitive(bEnable);
+    m_xSynchronCB->set_sensitive(!bEnable);
 
-    OSL_ENSURE(!bEnable || pButton == m_pPageButton, "NewButton?" );
+    OSL_ENSURE(!bEnable || &rButton == m_xPageButton.get(), "NewButton?" );
     if ( bEnable )
     {
-        m_pColField->GrabFocus();
+        m_xColField->grab_focus();
     }
 }
 
 VclPtr<SfxTabPage> SwLabPrtPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwLabPrtPage>::Create( pParent.pParent, *rSet );
+    return VclPtr<SwLabPrtPage>::Create(pParent, *rSet );
 }
 
 void SwLabPrtPage::ActivatePage( const SfxItemSet& rSet )
@@ -125,10 +112,10 @@ DeactivateRC SwLabPrtPage::DeactivatePage(SfxItemSet* _pSet)
 
 void SwLabPrtPage::FillItem(SwLabItem& rItem)
 {
-    rItem.m_bPage = m_pPageButton->IsChecked();
-    rItem.m_nCol = static_cast<sal_Int32>(m_pColField->GetValue());
-    rItem.m_nRow = static_cast<sal_Int32>(m_pRowField->GetValue());
-    rItem.m_bSynchron = m_pSynchronCB->IsChecked() && m_pSynchronCB->IsEnabled();
+    rItem.m_bPage = m_xPageButton->get_active();
+    rItem.m_nCol = m_xColField->get_value();
+    rItem.m_nRow = m_xRowField->get_value();
+    rItem.m_bSynchron = m_xSynchronCB->get_active() && m_xSynchronCB->get_sensitive();
 }
 
 bool SwLabPrtPage::FillItemSet(SfxItemSet* rSet)
@@ -146,35 +133,32 @@ void SwLabPrtPage::Reset(const SfxItemSet* )
     SwLabItem aItem;
     GetParentSwLabDlg()->GetLabItem(aItem);
 
-    m_pColField->SetValue   (aItem.m_nCol);
-    m_pRowField->SetValue   (aItem.m_nRow);
+    m_xColField->set_value(aItem.m_nCol);
+    m_xRowField->set_value(aItem.m_nRow);
 
     if (aItem.m_bPage)
     {
-        m_pPageButton->Check();
-        m_pPageButton->GetClickHdl().Call(m_pPageButton);
+        m_xPageButton->set_active(true);
+        CountHdl(*m_xPageButton);
     }
     else
     {
-        m_pSingleButton->GetClickHdl().Call(m_pSingleButton);
-        m_pSingleButton->Check();
+        CountHdl(*m_xSingleButton);
+        m_xSingleButton->set_active(true);
     }
 
     if (pPrinter)
     {
         // show printer
-        m_pPrinterInfo->SetText(pPrinter->GetName());
+        m_xPrinterInfo->set_label(pPrinter->GetName());
     }
     else
-        m_pPrinterInfo->SetText(Printer::GetDefaultPrinterName());
+        m_xPrinterInfo->set_label(Printer::GetDefaultPrinterName());
 
-    m_pColField->SetMax(aItem.m_nCols);
-    m_pRowField->SetMax(aItem.m_nRows);
+    m_xColField->set_max(aItem.m_nCols);
+    m_xRowField->set_max(aItem.m_nRows);
 
-    m_pColField->SetLast(m_pColField->GetMax());
-    m_pRowField->SetLast(m_pRowField->GetMax());
-
-    m_pSynchronCB->Check(aItem.m_bSynchron);
+    m_xSynchronCB->set_active(aItem.m_bSynchron);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
