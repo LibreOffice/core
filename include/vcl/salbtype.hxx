@@ -29,6 +29,7 @@
 #include <vcl/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <vector>
+#include <memory>
 
 typedef sal_uInt8*        Scanline;
 typedef const sal_uInt8*  ConstScanline;
@@ -344,7 +345,7 @@ enum class BitmapAccessMode
     Write
 };
 
-VCL_DLLPUBLIC BitmapBuffer* StretchAndConvert(
+VCL_DLLPUBLIC std::unique_ptr<BitmapBuffer> StretchAndConvert(
     const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
     ScanlineFormat nDstBitmapFormat, const BitmapPalette* pDstPal = nullptr, const ColorMask* pDstMask = nullptr );
 

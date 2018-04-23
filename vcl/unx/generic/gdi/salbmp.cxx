@@ -119,7 +119,7 @@ namespace
 }
 #endif
 
-BitmapBuffer* X11SalBitmap::ImplCreateDIB(
+std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
     const Size& rSize,
     sal_uInt16 nBitCount,
     const BitmapPalette& rPal)
@@ -133,14 +133,14 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
         , "Unsupported BitCount!"
     );
 
-    BitmapBuffer* pDIB = nullptr;
+    std::unique_ptr<BitmapBuffer> pDIB;
 
     if( !rSize.Width() || !rSize.Height() )
         return nullptr;
 
     try
     {
-        pDIB = new BitmapBuffer;
+        pDIB.reset(new BitmapBuffer);
     }
     catch (const std::bad_alloc&)
     {
@@ -198,14 +198,12 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
     if (bFail)
     {
         SAL_WARN("vcl.gdi", "checked multiply failed");
-        delete pDIB;
         return nullptr;
     }
     pDIB->mnScanlineSize = AlignedWidth4Bytes(nScanlineBase);
     if (pDIB->mnScanlineSize < nScanlineBase/8)
     {
         SAL_WARN("vcl.gdi", "scanline calculation wraparound");
-        delete pDIB;
         return nullptr;
     }
     pDIB->mnBitCount = nBitCount;
@@ -221,19 +219,18 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
         pDIB->mpBits = new sal_uInt8[ pDIB->mnScanlineSize * pDIB->mnHeight ];
 #if defined HAVE_VALGRIND_HEADERS
         if (RUNNING_ON_VALGRIND)
-            blankExtraSpace(pDIB);
+            blankExtraSpace(pDIB.get());
 #endif
     }
     catch (const std::bad_alloc&)
     {
-        delete pDIB;
-        pDIB = nullptr;
+        return nullptr;
     }
 
     return pDIB;
 }
 
-BitmapBuffer* X11SalBitmap::ImplCreateDIB(
+std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
     Drawable aDrawable,
     SalX11Screen nScreen,
     long nDrawableDepth,
@@ -243,7 +240,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
     long nHeight,
     bool bGrey
 ) {
-    BitmapBuffer* pDIB = nullptr;
+    std::unique_ptr<BitmapBuffer> pDIB;
 
     if( aDrawable && nWidth && nHeight && nDrawableDepth )
     {
@@ -438,7 +435,7 @@ XImage* X11SalBitmap::ImplCreateXImage(
 
         if( pImage )
         {
-            BitmapBuffer*   pDstBuf;
+            std::unique_ptr<BitmapBuffer> pDstBuf;
             ScanlineFormat       nDstFormat = ScanlineFormat::TopDown;
             std::unique_ptr<BitmapPalette> xPal;
             std::unique_ptr<ColorMask> xMask;
@@ -563,7 +560,7 @@ XImage* X11SalBitmap::ImplCreateXImage(
             {
 #if defined HAVE_VALGRIND_HEADERS
                 if (RUNNING_ON_VALGRIND)
-                    blankExtraSpace(pDstBuf);
+                    blankExtraSpace(pDstBuf.get());
 #endif
                 // set data in buffer as data member in pImage
                 pImage->data = reinterpret_cast<char*>(pDstBuf->mpBits);
@@ -574,8 +571,7 @@ XImage* X11SalBitmap::ImplCreateXImage(
                 pImage = nullptr;
             }
 
-            // destroy buffer; doesn't destroy allocated data in buffer
-            delete pDstBuf;
+            // note that pDstBuf it deleted here, but that doesn't destroy allocated data in buffer
         }
     }
 
@@ -728,20 +724,19 @@ bool X11SalBitmap::Create( const SalBitmap& rSSalBmp )
     if( rSalBmp.mpDIB )
     {
         // TODO: reference counting...
-        mpDIB = new BitmapBuffer( *rSalBmp.mpDIB );
+        mpDIB.reset(new BitmapBuffer( *rSalBmp.mpDIB ));
         // TODO: get rid of this when BitmapBuffer gets copy constructor
         try
         {
             mpDIB->mpBits = new sal_uInt8[ mpDIB->mnScanlineSize * mpDIB->mnHeight ];
 #if defined HAVE_VALGRIND_HEADERS
             if (RUNNING_ON_VALGRIND)
-                blankExtraSpace(mpDIB);
+                blankExtraSpace(mpDIB.get());
 #endif
         }
         catch (const std::bad_alloc&)
         {
-            delete mpDIB;
-            mpDIB = nullptr;
+            mpDIB.reset();
         }
 
         if( mpDIB )
@@ -811,8 +806,7 @@ void X11SalBitmap::Destroy()
     if( mpDIB )
     {
         delete[] mpDIB->mpBits;
-        delete mpDIB;
-        mpDIB = nullptr;
+        mpDIB.reset();
     }
 
     if( mpDDB )
@@ -872,7 +866,7 @@ BitmapBuffer* X11SalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
                 );
     }
 
-    return mpDIB;
+    return mpDIB.get();
 }
 
 void X11SalBitmap::ReleaseBuffer( BitmapBuffer*, BitmapAccessMode nMode )
