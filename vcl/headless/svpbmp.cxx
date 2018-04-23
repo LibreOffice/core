@@ -38,7 +38,7 @@ SvpSalBitmap::~SvpSalBitmap()
     Destroy();
 }
 
-BitmapBuffer* ImplCreateDIB(
+std::unique_ptr<BitmapBuffer> ImplCreateDIB(
     const Size& rSize,
     sal_uInt16 nBitCount,
     const BitmapPalette& rPal)
@@ -56,11 +56,11 @@ BitmapBuffer* ImplCreateDIB(
     if (!rSize.Width() || !rSize.Height())
         return nullptr;
 
-    BitmapBuffer* pDIB = nullptr;
+    std::unique_ptr<BitmapBuffer> pDIB;
 
     try
     {
-        pDIB = new BitmapBuffer;
+        pDIB.reset(new BitmapBuffer);
     }
     catch (const std::bad_alloc&)
     {
@@ -115,14 +115,12 @@ BitmapBuffer* ImplCreateDIB(
     if (bFail)
     {
         SAL_WARN("vcl.gdi", "checked multiply failed");
-        delete pDIB;
         return nullptr;
     }
     pDIB->mnScanlineSize = AlignedWidth4Bytes(nScanlineBase);
     if (pDIB->mnScanlineSize < nScanlineBase/8)
     {
         SAL_WARN("vcl.gdi", "scanline calculation wraparound");
-        delete pDIB;
         return nullptr;
     }
     pDIB->mnBitCount = nBitCount;
@@ -138,7 +136,6 @@ BitmapBuffer* ImplCreateDIB(
     SAL_WARN_IF(bFail, "vcl.gdi", "checked multiply failed");
     if (bFail || size > SAL_MAX_INT32/2)
     {
-        delete pDIB;
         return nullptr;
     }
 
@@ -148,8 +145,7 @@ BitmapBuffer* ImplCreateDIB(
 #ifdef __SANITIZE_ADDRESS__
         if (!pDIB->mpBits)
         {   // can only happen with ASAN allocator_may_return_null=1
-            delete pDIB;
-            pDIB = nullptr;
+            pDIB.reset();
         }
         else
 #endif
@@ -159,17 +155,16 @@ BitmapBuffer* ImplCreateDIB(
     }
     catch (const std::bad_alloc&)
     {
-        delete pDIB;
-        pDIB = nullptr;
+        pDIB.reset();
     }
 
     return pDIB;
 }
 
-void SvpSalBitmap::Create(BitmapBuffer *pBuf)
+void SvpSalBitmap::Create(std::unique_ptr<BitmapBuffer> pBuf)
 {
     Destroy();
-    mpDIB = pBuf;
+    mpDIB = std::move(pBuf);
 }
 
 bool SvpSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal)
@@ -188,13 +183,12 @@ bool SvpSalBitmap::Create(const SalBitmap& rBmp)
     if (rSalBmp.mpDIB)
     {
         // TODO: reference counting...
-        mpDIB = new BitmapBuffer( *rSalBmp.mpDIB );
+        mpDIB.reset(new BitmapBuffer( *rSalBmp.mpDIB ));
 
         const size_t size = mpDIB->mnScanlineSize * mpDIB->mnHeight;
         if (size > SAL_MAX_INT32/2)
         {
-            delete mpDIB;
-            mpDIB = nullptr;
+            mpDIB.reset();
             return false;
         }
 
@@ -206,8 +200,7 @@ bool SvpSalBitmap::Create(const SalBitmap& rBmp)
         }
         catch (const std::bad_alloc&)
         {
-            delete mpDIB;
-            mpDIB = nullptr;
+            mpDIB.reset();
         }
     }
 
@@ -236,8 +229,7 @@ void SvpSalBitmap::Destroy()
     if (mpDIB)
     {
         delete[] mpDIB->mpBits;
-        delete mpDIB;
-        mpDIB = nullptr;
+        mpDIB.reset();
     }
 }
 
@@ -268,7 +260,7 @@ sal_uInt16 SvpSalBitmap::GetBitCount() const
 
 BitmapBuffer* SvpSalBitmap::AcquireBuffer(BitmapAccessMode)
 {
-    return mpDIB;
+    return mpDIB.get();
 }
 
 void SvpSalBitmap::ReleaseBuffer(BitmapBuffer*, BitmapAccessMode nMode)

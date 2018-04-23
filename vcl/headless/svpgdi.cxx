@@ -134,7 +134,7 @@ namespace
         }
     }
 
-    BitmapBuffer* FastConvert24BitRgbTo32BitCairo(const BitmapBuffer* pSrc)
+    std::unique_ptr<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer* pSrc)
     {
         if (pSrc == nullptr)
             return nullptr;
@@ -142,7 +142,7 @@ namespace
         assert(pSrc->mnFormat == SVP_24BIT_FORMAT);
         const long nWidth = pSrc->mnWidth;
         const long nHeight = pSrc->mnHeight;
-        BitmapBuffer* pDst = new BitmapBuffer;
+        std::unique_ptr<BitmapBuffer> pDst(new BitmapBuffer);
         pDst->mnFormat = (ScanlineFormat::N32BitTcArgb | ScanlineFormat::TopDown);
         pDst->mnWidth = nWidth;
         pDst->mnHeight = nHeight;
@@ -156,7 +156,6 @@ namespace
         {
             SAL_WARN("vcl.gdi", "checked multiply failed");
             pDst->mpBits = nullptr;
-            delete pDst;
             return nullptr;
         }
 
@@ -165,7 +164,6 @@ namespace
         {
             SAL_WARN("vcl.gdi", "scanline calculation wraparound");
             pDst->mpBits = nullptr;
-            delete pDst;
             return nullptr;
         }
 
@@ -177,7 +175,6 @@ namespace
         {
             // memory exception, clean up
             pDst->mpBits = nullptr;
-            delete pDst;
             return nullptr;
         }
 
@@ -242,10 +239,10 @@ namespace
                 const BitmapBuffer* pSrc = rSrcBmp.GetBuffer();
                 const SalTwoRect aTwoRect = { 0, 0, pSrc->mnWidth, pSrc->mnHeight,
                                               0, 0, pSrc->mnWidth, pSrc->mnHeight };
-                BitmapBuffer* pTmp = (pSrc->mnFormat == SVP_24BIT_FORMAT
+                std::unique_ptr<BitmapBuffer> pTmp = (pSrc->mnFormat == SVP_24BIT_FORMAT
                                    ? FastConvert24BitRgbTo32BitCairo(pSrc)
                                    : StretchAndConvert(*pSrc, aTwoRect, SVP_CAIRO_FORMAT));
-                aTmpBmp.Create(pTmp);
+                aTmpBmp.Create(std::move(pTmp));
 
                 assert(aTmpBmp.GetBitCount() == 32);
                 source = SvpSalGraphics::createCairoSurface(aTmpBmp.GetBuffer());

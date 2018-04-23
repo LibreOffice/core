@@ -266,7 +266,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
     }
 
     BitmapBuffer* pRGB = pSalRGB->AcquireBuffer(BitmapAccessMode::Read);
-    BitmapBuffer* pExtraRGB = nullptr;
+    std::unique_ptr<BitmapBuffer> pExtraRGB;
 
     if(pRGB && ScanlineFormat::N24BitTcBgr != (pRGB->mnFormat & ~ScanlineFormat::TopDown))
     {
@@ -278,7 +278,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
             ScanlineFormat::N24BitTcBgr);
 
         pSalRGB->ReleaseBuffer(pRGB, BitmapAccessMode::Write);
-        pRGB = pExtraRGB;
+        pRGB = pExtraRGB.get();
     }
 
     if(pRGB
@@ -322,9 +322,9 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
     if(pExtraRGB)
     {
         // #i123478# shockingly, BitmapBuffer does not free the memory it is controlling
-        // in its destructor, this *has to be done handish*. Doing it here now
+        // in its destructor, this *has to be done by hand*. Doing it here now
         delete[] pExtraRGB->mpBits;
-        delete pExtraRGB;
+        pExtraRGB.reset();
     }
     else
     {
@@ -354,7 +354,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
     }
 
     BitmapBuffer* pRGB = pSalRGB->AcquireBuffer(BitmapAccessMode::Read);
-    BitmapBuffer* pExtraRGB = nullptr;
+    std::unique_ptr<BitmapBuffer> pExtraRGB;
 
     if(pRGB && ScanlineFormat::N24BitTcBgr != (pRGB->mnFormat & ~ScanlineFormat::TopDown))
     {
@@ -366,7 +366,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
             ScanlineFormat::N24BitTcBgr);
 
         pSalRGB->ReleaseBuffer(pRGB, BitmapAccessMode::Read);
-        pRGB = pExtraRGB;
+        pRGB = pExtraRGB.get();
     }
 
     WinSalBitmap* pSalA = const_cast< WinSalBitmap* >(&rAlphaSource);
@@ -381,7 +381,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
     }
 
     BitmapBuffer* pA = pSalA->AcquireBuffer(BitmapAccessMode::Read);
-    BitmapBuffer* pExtraA = nullptr;
+    std::unique_ptr<BitmapBuffer> pExtraA;
 
     if(pA && ScanlineFormat::N8BitPal != (pA->mnFormat & ~ScanlineFormat::TopDown))
     {
@@ -396,7 +396,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
             &rTargetPalette);
 
         pSalA->ReleaseBuffer(pA, BitmapAccessMode::Read);
-        pA = pExtraA;
+        pA = pExtraA.get();
     }
 
     if(pRGB
@@ -458,7 +458,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
         // #i123478# shockingly, BitmapBuffer does not free the memory it is controlling
         // in its destructor, this *has to be done handish*. Doing it here now
         delete[] pExtraA->mpBits;
-        delete pExtraA;
+        pExtraA.reset();
     }
     else
     {
@@ -473,9 +473,9 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
     if(pExtraRGB)
     {
         // #i123478# shockingly, BitmapBuffer does not free the memory it is controlling
-        // in its destructor, this *has to be done handish*. Doing it here now
+        // in its destructor, this *has to be done by hand*. Doing it here now
         delete[] pExtraRGB->mpBits;
-        delete pExtraRGB;
+        pExtraRGB.reset();
     }
     else
     {
