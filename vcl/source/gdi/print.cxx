@@ -586,17 +586,8 @@ void Printer::ImplReleaseFonts()
         mpFontInstance = nullptr;
     }
 
-    if ( mpDeviceFontList )
-    {
-        delete mpDeviceFontList;
-        mpDeviceFontList = nullptr;
-    }
-
-    if ( mpDeviceFontSizeList )
-    {
-        delete mpDeviceFontSizeList;
-        mpDeviceFontSizeList = nullptr;
-    }
+    mpDeviceFontList.reset();
+    mpDeviceFontSizeList.reset();
 }
 
 void Printer::ReleaseGraphics( bool bRelease )
@@ -960,16 +951,8 @@ void Printer::dispose()
             mpFontInstance->Release();
             mpFontInstance = nullptr;
         }
-        if ( mpDeviceFontList )
-        {
-            delete mpDeviceFontList;
-            mpDeviceFontList = nullptr;
-        }
-        if ( mpDeviceFontSizeList )
-        {
-            delete mpDeviceFontSizeList;
-            mpDeviceFontSizeList = nullptr;
-        }
+        mpDeviceFontList.reset();
+        mpDeviceFontSizeList.reset();
         delete mpFontCache;
         mpFontCache = nullptr;
         // font list deleted by OutputDevice dtor
@@ -1109,16 +1092,8 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
                 mpFontInstance->Release();
                 mpFontInstance = nullptr;
             }
-            if ( mpDeviceFontList )
-            {
-                delete mpDeviceFontList;
-                mpDeviceFontList = nullptr;
-            }
-            if ( mpDeviceFontSizeList )
-            {
-                delete mpDeviceFontSizeList;
-                mpDeviceFontSizeList = nullptr;
-            }
+            mpDeviceFontList.reset();
+            mpDeviceFontSizeList.reset();
             // clean up font list
             delete mpFontCache;
             delete mpFontCollection;
@@ -1152,16 +1127,8 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
                 mpFontInstance->Release();
                 mpFontInstance = nullptr;
             }
-            if ( mpDeviceFontList )
-            {
-                delete mpDeviceFontList;
-                mpDeviceFontList = nullptr;
-            }
-            if ( mpDeviceFontSizeList )
-            {
-                delete mpDeviceFontSizeList;
-                mpDeviceFontSizeList = nullptr;
-            }
+            mpDeviceFontList.reset();
+            mpDeviceFontSizeList.reset();
             delete mpFontCache;
             delete mpFontCollection;
             mpFontCache = nullptr;

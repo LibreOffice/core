@@ -621,17 +621,8 @@ void OutputDevice::ImplReleaseFonts()
         mpFontInstance = nullptr;
     }
 
-    if ( mpDeviceFontList )
-    {
-        delete mpDeviceFontList;
-        mpDeviceFontList = nullptr;
-    }
-
-    if ( mpDeviceFontSizeList )
-    {
-        delete mpDeviceFontSizeList;
-        mpDeviceFontSizeList = nullptr;
-    }
+    mpDeviceFontList.reset();
+    mpDeviceFontSizeList.reset();
 }
 
 

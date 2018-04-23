@@ -894,9 +894,9 @@ PhysicalFontCollection* PhysicalFontCollection::Clone() const
     return pClonedCollection;
 }
 
-ImplDeviceFontList* PhysicalFontCollection::GetDeviceFontList() const
+std::unique_ptr<ImplDeviceFontList> PhysicalFontCollection::GetDeviceFontList() const
 {
-    ImplDeviceFontList* pDeviceFontList = new ImplDeviceFontList;
+    std::unique_ptr<ImplDeviceFontList> pDeviceFontList(new ImplDeviceFontList);
 
     for (auto const& family : maPhysicalFontFamilies)
     {
@@ -907,9 +907,9 @@ ImplDeviceFontList* PhysicalFontCollection::GetDeviceFontList() const
     return pDeviceFontList;
 }
 
-ImplDeviceFontSizeList* PhysicalFontCollection::GetDeviceFontSizeList( const OUString& rFontName ) const
+std::unique_ptr<ImplDeviceFontSizeList> PhysicalFontCollection::GetDeviceFontSizeList( const OUString& rFontName ) const
 {
-    ImplDeviceFontSizeList* pDeviceFontSizeList = new ImplDeviceFontSizeList;
+    std::unique_ptr<ImplDeviceFontSizeList> pDeviceFontSizeList(new ImplDeviceFontSizeList);
 
     PhysicalFontFamily* pFontFamily = FindFontFamily( rFontName );
     if( pFontFamily != nullptr )
