@@ -53,7 +53,7 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
 {
     bool bDocRet = xOut.is();
 
-    Reference< document::XGraphicObjectResolver > xGraphicResolver;
+    uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
     rtl::Reference<SvXMLGraphicHelper> xGraphicHelper;
 
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
@@ -82,7 +82,7 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
             }
 
             xGraphicHelper = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Write );
-            xGraphicResolver = xGraphicHelper.get();
+            xGraphicStorageHandler = xGraphicHelper.get();
 
             uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
 
@@ -92,7 +92,7 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
 
             uno::Sequence< uno::Any > aArgs( xObjectResolver.is() ? 3 : 2 );
             aArgs[0] <<= xHandler;
-            aArgs[1] <<= xGraphicResolver;
+            aArgs[1] <<= xGraphicStorageHandler;
             if( xObjectResolver.is() )
                 aArgs[2] <<= xObjectResolver;
 
@@ -125,7 +125,7 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
     if( xGraphicHelper )
         xGraphicHelper->dispose();
     xGraphicHelper.clear();
-    xGraphicResolver = nullptr;
+    xGraphicStorageHandler = nullptr;
 
     if( xObjectHelper.is() )
         xObjectHelper->dispose();
@@ -150,7 +150,7 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
 {
     bool bRet = true;
 
-    Reference< document::XGraphicObjectResolver > xGraphicResolver;
+    uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
     rtl::Reference<SvXMLGraphicHelper> xGraphicHelper;
 
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
@@ -175,7 +175,7 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
 
 
         xGraphicHelper = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Read );
-        xGraphicResolver = xGraphicHelper.get();
+        xGraphicStorageHandler = xGraphicHelper.get();
 
         ::comphelper::IEmbeddedHelper *pPersist = pModel->GetPersist();
         if( pPersist )
@@ -197,7 +197,7 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
         // prepare filter arguments
         Sequence<Any> aFilterArgs( 2 );
         Any *pArgs = aFilterArgs.getArray();
-        *pArgs++ <<= xGraphicResolver;
+        *pArgs++ <<= xGraphicStorageHandler;
         *pArgs++ <<= xObjectResolver;
 
         // get filter
@@ -233,7 +233,7 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
     if( xGraphicHelper )
         xGraphicHelper->dispose();
     xGraphicHelper.clear();
-    xGraphicResolver = nullptr;
+    xGraphicStorageHandler = nullptr;
 
     if( xObjectHelper.is() )
         xObjectHelper->dispose();
