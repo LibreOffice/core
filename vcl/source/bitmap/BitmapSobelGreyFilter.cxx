@@ -37,11 +37,11 @@ BitmapEx BitmapSobelGreyFilter::execute(BitmapEx const& rBitmapEx)
                 BitmapColor aGrey(sal_uInt8(0));
                 const long nWidth = pWriteAcc->Width();
                 const long nHeight = pWriteAcc->Height();
-                const long nMask111 = -1, nMask121 = 0, nMask131 = 1;
-                const long nMask211 = -2, nMask221 = 0, nMask231 = 2;
-                const long nMask311 = -1, nMask321 = 0, nMask331 = 1;
+                const long nMask111 = -1, /* nMask121 = 0, */ nMask131 = 1;
+                const long nMask211 = -2, /* nMask221 = 0, */ nMask231 = 2;
+                const long nMask311 = -1, /* nMask321 = 0, */ nMask331 = 1;
                 const long nMask112 = 1, nMask122 = 2, nMask132 = 1;
-                const long nMask212 = 0, nMask222 = 0, nMask232 = 0;
+                // const long /* nMask212 = 0, */ /* nMask222 = 0, */ /* nMask232 = 0 */;
                 const long nMask312 = -1, nMask322 = -2, nMask332 = -1;
                 long nGrey11, nGrey12, nGrey13;
                 long nGrey21, nGrey22, nGrey23;
@@ -89,25 +89,25 @@ BitmapEx BitmapSobelGreyFilter::execute(BitmapEx const& rBitmapEx)
                         nSum1 += nMask111 * nGrey11;
                         nSum2 += nMask112 * nGrey11;
 
-                        nSum1 += nMask121 * nGrey12;
+                        // nSum1 += nMask121 * nGrey12;
                         nSum2 += nMask122 * nGrey12;
 
                         nSum1 += nMask131 * nGrey13;
                         nSum2 += nMask132 * nGrey13;
 
                         nSum1 += nMask211 * nGrey21;
-                        nSum2 += nMask212 * nGrey21;
+                        // nSum2 += nMask212 * nGrey21;
 
-                        nSum1 += nMask221 * nGrey22;
-                        nSum2 += nMask222 * nGrey22;
+                        // nSum1 += nMask221 * nGrey22;
+                        // nSum2 += nMask222 * nGrey22;
 
                         nSum1 += nMask231 * nGrey23;
-                        nSum2 += nMask232 * nGrey23;
+                        // nSum2 += nMask232 * nGrey23;
 
                         nSum1 += nMask311 * nGrey31;
                         nSum2 += nMask312 * nGrey31;
 
-                        nSum1 += nMask321 * nGrey32;
+                        // nSum1 += nMask321 * nGrey32;
                         nSum2 += nMask322 * nGrey32;
 
                         nSum1 += nMask331 * nGrey33;
