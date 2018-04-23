@@ -29,6 +29,7 @@
 #include <OAuthenticationContinuation.hxx>
 
 #include <hsqlimport.hxx>
+#include <migrwarndlg.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -574,11 +575,6 @@ void ODatabaseSource::disposing()
     m_pImpl.clear();
 }
 
-OUString SAL_CALL ODatabaseSource::getConnectionUrl()
-{
-    return m_pImpl->m_sConnectURL;
-}
-
 Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString& _rUid, const OUString& _rPwd)
 {
     Reference< XConnection > xReturn;
@@ -588,8 +584,20 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
     OUString sMigrEnvVal;
     osl_getEnvironment(OUString("DBACCESS_HSQL_MIGRATION").pData,
             &sMigrEnvVal.pData);
-    bool bNeedMigration =  m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb" &&
-            (m_bMigationNeeded || !sMigrEnvVal.isEmpty());
+    bool bNeedMigration = false;
+    if(m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
+    {
+        OUString sSalUseVclplugin;
+        osl_getEnvironment(OUString("SAL_USE_VCLPLUGIN").pData,
+                &sSalUseVclplugin.pData);
+        if(!sMigrEnvVal.isEmpty() || sSalUseVclplugin == "svp")
+            bNeedMigration = true;
+        else
+        {
+            MigrationWarnDialog aWarnDlg{nullptr};
+            bNeedMigration = aWarnDlg.run() == RET_OK;
+        }
+    }
     if(bNeedMigration)
         m_pImpl->m_sConnectURL = "sdbc:embedded:firebird";
 
