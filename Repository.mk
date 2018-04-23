@@ -1106,6 +1106,17 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 		$(if $(WITH_DOCREPAIR_FONTS),fonts_lumanosimo,) \
 		$(if $(WITH_DOCREPAIR_FONTS),fonts_lunasima,) \
 	) \
+	$(call gb_Helper_optional,NOTO_FONT,\
+		fonts_notomore \
+		fonts_notosansjp \
+		fonts_notosanskr \
+		fonts_notosanssc \
+		fonts_notosanstc \
+		fonts_notoserifjp \
+		fonts_notoserifkr \
+		fonts_notoserifsc \
+		fonts_notoseriftc \
+	) \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo_images,\

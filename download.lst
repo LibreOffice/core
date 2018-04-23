@@ -232,6 +232,51 @@ FONT_NOTO_SANS_LISU_TARBALL := NotoSansLisu-v2.102.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+FONT_NOTO_MORE_SHA256SUM := 837b4a9352fce32ad7f298fbf155af1da5b6f3f8dbd995eb63fdd8e82117e4ae
+FONT_NOTO_MORE_TARBALL := Noto-hinted.zip
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+FONT_NOTO_SANS_JP_SHA256SUM := 6886c5526628c08f1e21a84f4658ab3daf6d0233de8dc54526ccf9f40bfab18e
+export FONT_NOTO_SANS_JP_TARBALL := NotoSansJP.zip
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+FONT_NOTO_SANS_KR_SHA256SUM := 5147b755c29f16f82b706b1c7ff7982894fccbebcf99e6c5fb0d48c315604b98
+FONT_NOTO_SANS_KR_TARBALL := NotoSansKR.zip
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+FONT_NOTO_SANS_SC_SHA256SUM := bee1af8c0722cfb3eb1b2fa91a7f3dc011dca231c25c8fcd9d9d544699ababf9
+FONT_NOTO_SANS_SC_TARBALL := NotoSansSC.zip
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+FONT_NOTO_SANS_TC_SHA256SUM := ec9e8a4156593e1b3ff7cff843989f43f114f96eff0b5db9691ef3c2bdefb73e
+FONT_NOTO_SANS_TC_TARBALL := NotoSansTC.zip
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+FONT_NOTO_SERIF_JP_SHA256SUM := 362438901cb871bf84b01ff4734c668dab57b4905f39e5ec76d8b68a7a7b5fa8
+FONT_NOTO_SERIF_JP_TARBALL := NotoSerifJP.zip
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+FONT_NOTO_SERIF_KR_SHA256SUM := 3c0d276fb05aaefbbca808b4f8c7b1520b4b4e7c0be46296d6e8a5e42f559f5c
+FONT_NOTO_SERIF_KR_TARBALL := NotoSerifKR.zip
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+FONT_NOTO_SERIF_SC_SHA256SUM := 00ed5970680a82453619ac5952c5631ea138372bbb0f864d156d91a0fd9c8279
+FONT_NOTO_SERIF_SC_TARBALL := NotoSerifSC.zip
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+FONT_NOTO_SERIF_TC_SHA256SUM := c33e04199f6d69056a6de0ebc5522dbe36e02f145208c71c9a4c803841151ad2
+FONT_NOTO_SERIF_TC_TARBALL := NotoSerifTC.zip
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 FONT_CULMUS_SHA256SUM := 6daed104481007752a76905000e71c0093c591c8ef3017d1b18222c277fc52e3
 FONT_CULMUS_TARBALL := culmus-0.140.tar.gz
 # three static lines

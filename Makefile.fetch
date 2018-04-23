@@ -247,6 +247,17 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,ODFVALIDATOR,ODFVALIDATOR_JAR) \
 		$(call fetch_Optional,OFFICEOTRON,OFFICEOTRON_JAR) \
 	,$(call fetch_Download_item,https://dev-www.libreoffice.org/extern,$(item)))
+	$(foreach item, \
+		$(call fetch_Optional,NOTO_FONT,FONT_NOTO_MORE_TARBALL) \
+		$(call fetch_Optional,NOTO_FONT,FONT_NOTO_SANS_JP_TARBALL) \
+		$(call fetch_Optional,NOTO_FONT,FONT_NOTO_SANS_KR_TARBALL) \
+		$(call fetch_Optional,NOTO_FONT,FONT_NOTO_SANS_SC_TARBALL) \
+		$(call fetch_Optional,NOTO_FONT,FONT_NOTO_SANS_TC_TARBALL) \
+		$(call fetch_Optional,NOTO_FONT,FONT_NOTO_SERIF_JP_TARBALL) \
+		$(call fetch_Optional,NOTO_FONT,FONT_NOTO_SERIF_KR_TARBALL) \
+		$(call fetch_Optional,NOTO_FONT,FONT_NOTO_SERIF_SC_TARBALL) \
+		$(call fetch_Optional,NOTO_FONT,FONT_NOTO_SERIF_TC_TARBALL) \
+	,$(call fetch_Download_item,https://noto-website-2.storage.googleapis.com/pkgs,$(item)))
 	@mkdir -p $(dir $@) && touch $@
 	@mkdir -p $(dir $@)/Executable
 
