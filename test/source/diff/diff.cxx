@@ -357,8 +357,36 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
 
     // unequal number of attributes
 #ifdef CPPUNIT_ASSERT
-    CPPUNIT_ASSERT(!attr1);
-    CPPUNIT_ASSERT(!attr2);
+    std::stringstream failStream("Unequal number of attributes ");
+
+    bool bAttr1 = attr1;
+    if (bAttr1)
+    {
+        failStream << "Attr1: ";
+        while (attr1 != nullptr)
+        {
+            xmlChar* val1 = xmlGetProp(node1, attr1->name);
+            failStream << BAD_CAST(attr1->name) << "=" << BAD_CAST(val1) << ", ";
+            xmlFree(val1);
+            attr1 = attr1->next;
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE(failStream.str(), !bAttr1);
+
+    bool bAttr2 = attr2;
+    if (bAttr2)
+    {
+        failStream << "Attr2: ";
+
+        while (attr2 != nullptr)
+        {
+            xmlChar* val2 = xmlGetProp(node2, attr2->name);
+            failStream << BAD_CAST(attr2->name) << "=" << BAD_CAST(val2) << ", ";
+            xmlFree(val2);
+            attr2 = attr2->next;
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE(failStream.str(), !bAttr2);
 #else
     if (attr1 || attr2)
         return false;
