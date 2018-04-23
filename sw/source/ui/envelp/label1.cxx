@@ -272,21 +272,6 @@ SwLabPage::SwLabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pTypeBox->SetSelectHdl(LINK(this, SwLabPage, TypeHdl         ));
 
     InitDatabaseBox();
-
-    size_t nLstGroup = 0;
-
-    const size_t nCount = GetParentSwLabDlg()->Makes().size();
-    for(size_t i = 0; i < nCount; ++i)
-    {
-        OUString& rStr = GetParentSwLabDlg()->Makes()[i];
-        m_pMakeBox->InsertEntry( rStr );
-
-        if ( rStr == aItem.m_aLstMake)
-            nLstGroup = i;
-    }
-
-    m_pMakeBox->SelectEntryPos( nLstGroup );
-    m_pMakeBox->GetSelectHdl().Call(*m_pMakeBox);
 }
 
 SwLabPage::~SwLabPage()
@@ -526,6 +511,23 @@ bool SwLabPage::FillItemSet(SfxItemSet* rSet)
 
 void SwLabPage::Reset(const SfxItemSet* rSet)
 {
+    m_pMakeBox->Clear();
+
+    size_t nLstGroup = 0;
+
+    const size_t nCount = GetParentSwLabDlg()->Makes().size();
+    for(size_t i = 0; i < nCount; ++i)
+    {
+        OUString& rStr = GetParentSwLabDlg()->Makes()[i];
+        m_pMakeBox->InsertEntry( rStr );
+
+        if ( rStr == aItem.m_aLstMake)
+            nLstGroup = i;
+    }
+
+    m_pMakeBox->SelectEntryPos( nLstGroup );
+    m_pMakeBox->GetSelectHdl().Call(*m_pMakeBox);
+
     aItem = static_cast<const SwLabItem&>( rSet->Get(FN_LABEL));
     OUString sDBName  = aItem.m_sDBName;
 
