@@ -25,6 +25,7 @@
 #include <stringconstants.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/string.hxx>
+#include <svtools/miscopt.hxx>
 
 namespace dbaccess
 {
@@ -295,7 +296,14 @@ OUString ODsnTypeCollection::getEmbeddedDatabase() const
         }
     }
     if ( sEmbeddedDatabaseURL.isEmpty() )
-        sEmbeddedDatabaseURL = "sdbc:embedded:hsqldb";
+    {
+        SvtMiscOptions aMiscOptions;
+        if( aMiscOptions.IsExperimentalMode() )
+            sEmbeddedDatabaseURL = "sdbc:embedded:firebird";
+        else
+            sEmbeddedDatabaseURL = "sdbc:embedded:hsqldb";
+
+    }
 
     return sEmbeddedDatabaseURL;
 }
