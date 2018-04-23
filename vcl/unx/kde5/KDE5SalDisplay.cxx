@@ -24,8 +24,6 @@
 #undef Bool
 #endif
 
-#include "KDE5XLib.hxx"
-
 #include <assert.h>
 
 SalKDE5Display* SalKDE5Display::selfptr = nullptr;
@@ -41,7 +39,6 @@ SalKDE5Display::SalKDE5Display( Display* pDisp )
 SalKDE5Display::~SalKDE5Display()
 {
     // in case never a frame opened
-    static_cast<KDE5XLib*>(GetXLib())->doStartup();
     // clean up own members
     doDestruct();
     selfptr = nullptr;

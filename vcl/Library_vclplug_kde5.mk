@@ -85,12 +85,10 @@ $(eval $(call gb_Library_add_libs,vclplug_kde5,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_kde5,\
-    vcl/unx/kde5/KDE5Data \
     vcl/unx/kde5/KDE5SalDisplay \
     vcl/unx/kde5/KDE5SalFrame \
     vcl/unx/kde5/KDE5SalGraphics \
     vcl/unx/kde5/KDE5SalInstance \
-    vcl/unx/kde5/KDE5XLib \
     vcl/unx/kde5/VCLKDE5Application \
 ))
 
