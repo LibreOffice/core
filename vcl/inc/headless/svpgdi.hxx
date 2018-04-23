@@ -213,6 +213,8 @@ public:
     virtual void            drawBitmap( const SalTwoRect& rPosAry,
                                         const SalBitmap& rSalBitmap ) override;
     virtual void            drawBitmap( const SalTwoRect& rPosAry,
+                                        BitmapBuffer* pBuffer );
+    virtual void            drawBitmap( const SalTwoRect& rPosAry,
                                         const SalBitmap& rSalBitmap,
                                         const SalBitmap& rTransparentBitmap ) override;
     virtual void            drawMask( const SalTwoRect& rPosAry,
