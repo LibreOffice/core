@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
 	external/libetonyek/ubsan.patch \
 	external/libetonyek/rpath.patch \
 	external/libetonyek/warnings.patch \
+	external/libetonyek/initial-creator.patch.1 \
 ))
 
 ifneq ($(OS),MACOSX)
