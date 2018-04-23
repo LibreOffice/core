@@ -87,13 +87,13 @@ public:
     void                InsertText( sal_Int32 nPos, sal_Unicode c );
     void                RemoveText( sal_Int32 nPos, sal_Int32 nChars );
 
-    TextNode*           Split( sal_Int32 nPos );
+    std::unique_ptr<TextNode> Split( sal_Int32 nPos );
     void                Append( const TextNode& rNode );
 };
 
 class TextDoc
 {
-    std::vector<TextNode*>  maTextNodes;
+    std::vector<std::unique_ptr<TextNode>>  maTextNodes;
     sal_uInt16              mnLeftMargin;
 
     void                DestroyTextNodes();
@@ -104,8 +104,8 @@ public:
 
     void                Clear();
 
-    std::vector<TextNode*>&       GetNodes()              { return maTextNodes; }
-    const std::vector<TextNode*>& GetNodes() const        { return maTextNodes; }
+    std::vector<std::unique_ptr<TextNode>>&       GetNodes()              { return maTextNodes; }
+    const std::vector<std::unique_ptr<TextNode>>& GetNodes() const        { return maTextNodes; }
 
     void                RemoveChars( const TextPaM& rPaM, sal_Int32 nChars );
     TextPaM             InsertText( const TextPaM& rPaM, sal_Unicode c );
