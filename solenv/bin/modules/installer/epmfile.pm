@@ -199,6 +199,26 @@ sub put_files_into_epmfile
     }
 }
 
+sub put_files_into_dbgepmfile
+{
+    my ($filesinproductarrayref, $epmfileref) = @_;
+
+    for ( my $i = 0; $i <= $#{$filesinproductarrayref}; $i++ )
+    {
+        my $onefile = ${$filesinproductarrayref}[$i];
+
+        my $unixrights = $onefile->{'UnixRights'};
+        my $destination = $onefile->{'destination'} . ".dbg";
+        my $sourcepath = $onefile->{'sourcepath'} . ".dbg";
+        my $filetype = "f";
+        my $group = "root";
+
+        my $line = "$filetype $unixrights root $group $destination $sourcepath\n";
+
+        push(@{$epmfileref}, $line);
+    }
+}
+
 sub put_links_into_epmfile
 {
     my ($linksinproductarrayref, $epmfileref) = @_;

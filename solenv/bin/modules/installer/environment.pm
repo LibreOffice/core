@@ -123,8 +123,7 @@ sub set_global_environment_variables
     if ( $ENV{'RPM'} ) { $installer::globals::rpm = $ENV{'RPM'}; }
     if ( $ENV{'DONTCOMPRESS'} ) { $installer::globals::solarisdontcompress = 1; }
     if ( $ENV{'IGNORE_ERROR_IN_LOGFILE'} ) { $installer::globals::ignore_error_in_logfile = 1; }
-    if (( $ENV{'ENABLE_STRIP'} ) && ( $ENV{'ENABLE_STRIP'} ne '' )) { $installer::globals::strip = 1; }
-    if (( $ENV{'DISABLE_STRIP'} ) && ( $ENV{'DISABLE_STRIP'} ne '' )) { $installer::globals::strip = 0; }
+    if (!( $ENV{'ENABLE_SYMBOLS_FOR'} ) || !( $ENV{'ENABLE_SYMBOLS_FOR'} ne '' )) { $installer::globals::strip = 1; } # it is 0 by default
 
     if ( $installer::globals::localinstalldir ) { $installer::globals::localinstalldirset = 1; }
     # Special handling, if LOCALINSTALLDIR contains "~" in the path
