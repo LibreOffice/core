@@ -167,7 +167,7 @@ gb_UIConfig_gla11y_PARAMETERS += --enable-type missing-labelled-by
 # These are often buttons with only an image
 gb_UIConfig_gla11y_PARAMETERS += --enable-type button-no-label
 # These are often doubtful
-#gb_UIConfig_gla11y_PARAMETERS += --enable-type duplicate-mnemonic --enable-type labelled-by-and-mnemonic
+gb_UIConfig_gla11y_PARAMETERS += --enable-type duplicate-mnemonic --enable-type labelled-by-and-mnemonic
 
 # For now, disable warning about widgets without a label by default, to enable warnings for classes progressively
 # To be uncommented progressively
