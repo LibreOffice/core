@@ -71,10 +71,10 @@ class VCL_DLLPUBLIC Edit : public Control, public vcl::unohelper::DragAndDropCli
 {
 private:
     VclPtr<Edit>        mpSubEdit;
-    Timer*              mpUpdateDataTimer;
+    std::unique_ptr<Timer> mpUpdateDataTimer;
     TextFilter*         mpFilterText;
-    DDInfo*             mpDDInfo;
-    Impl_IMEInfos*      mpIMEInfos;
+    std::unique_ptr<DDInfo> mpDDInfo;
+    std::unique_ptr<Impl_IMEInfos> mpIMEInfos;
     OUStringBuffer      maText;
     OUString            maPlaceholderText;
     OUString            maSaveValue;
