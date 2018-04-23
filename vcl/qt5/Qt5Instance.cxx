@@ -84,21 +84,22 @@ SalObject* Qt5Instance::CreateObject(SalFrame* pParent, SystemWindowData*, bool 
 
 void Qt5Instance::DestroyObject(SalObject* pObject) { delete pObject; }
 
-SalVirtualDevice* Qt5Instance::CreateVirtualDevice(SalGraphics* pGraphics, long& nDX, long& nDY,
-                                                   DeviceFormat eFormat,
-                                                   const SystemGraphicsData* /* pData */)
+std::unique_ptr<SalVirtualDevice>
+Qt5Instance::CreateVirtualDevice(SalGraphics* pGraphics, long& nDX, long& nDY, DeviceFormat eFormat,
+                                 const SystemGraphicsData* /* pData */)
 {
     if (m_bUseCairo)
     {
         SvpSalGraphics* pSvpSalGraphics = dynamic_cast<SvpSalGraphics*>(pGraphics);
         assert(pSvpSalGraphics);
-        SvpSalVirtualDevice* pVD = new SvpSalVirtualDevice(eFormat, pSvpSalGraphics->getSurface());
+        std::unique_ptr<SalVirtualDevice> pVD(
+            new SvpSalVirtualDevice(eFormat, pSvpSalGraphics->getSurface()));
         pVD->SetSize(nDX, nDY);
         return pVD;
     }
     else
     {
-        Qt5VirtualDevice* pVD = new Qt5VirtualDevice(eFormat, 1);
+        std::unique_ptr<SalVirtualDevice>(new Qt5VirtualDevice(eFormat, 1));
         pVD->SetSize(nDX, nDY);
         return pVD;
     }
