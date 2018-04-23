@@ -29,6 +29,8 @@
 #include "KDE5SalFrame.hxx"
 #include "KDE5SalInstance.hxx"
 
+#include <qt5/Qt5Tools.hxx>
+#include <salbmp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/decoview.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -60,6 +62,15 @@ QStyle::State vclStateValue2StateFlag( ControlState nControlState,
     return nState;
 }
 
+void QImage2BitmapBuffer( QImage* pImg, BitmapBuffer* pBuf )
+{
+    pBuf->mnWidth = pImg->width();
+    pBuf->mnHeight = pImg->height();
+    pBuf->mnBitCount = getFormatBits( pImg->format() );
+    pBuf->mpBits = pImg->bits();
+    pBuf->mnScanlineSize = pImg->bytesPerLine();
+}
+
 /**
  Convert tools::Rectangle to QRect.
  @param rControlRegion The tools::Rectangle to convert.
@@ -77,17 +88,17 @@ KDE5SalGraphics::KDE5SalGraphics()
 
 bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart part )
 {
-    /*switch (type)
+    switch (type)
     {
-        case ControlType::Pushbutton:
-        case ControlType::Radiobutton:
+        /*case ControlType::Pushbutton:
+        case ControlType::Radiobutton:*/
         case ControlType::Checkbox:
-        case ControlType::Tooltip:
+        /*case ControlType::Tooltip:
         case ControlType::Progress:
-        case ControlType::ListNode:
+        case ControlType::ListNode:*/
             return (part == ControlPart::Entire);
 
-        case ControlType::Menubar:
+        /*case ControlType::Menubar:
         case ControlType::MenuPopup:
         case ControlType::Editbox:
         case ControlType::MultilineEditbox:
@@ -106,11 +117,11 @@ bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart pa
             return (part == ControlPart::Entire || part == ControlPart::HasBackgroundTexture);
 
         case ControlType::Slider:
-            return (part == ControlPart::TrackHorzArea || part == ControlPart::TrackVertArea);
+            return (part == ControlPart::TrackHorzArea || part == ControlPart::TrackVertArea);*/
 
         default:
             break;
-    }*/
+    }
 
     return false;
 }
@@ -207,7 +218,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
                                         const ImplControlValue& value,
                                         const OUString& )
 {
-    /*bool nativeSupport = IsNativeControlSupported( type, part );
+    bool nativeSupport = IsNativeControlSupported( type, part );
     if( ! nativeSupport ) {
         assert( ! nativeSupport && "drawNativeControl called without native support!" );
         return false;
@@ -263,7 +274,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
     QRegion* localClipRegion = nullptr;
 
-    if (type == ControlType::Pushbutton)
+    /*if (type == ControlType::Pushbutton)
     {
         QStyleOptionButton option;
         draw( QStyle::CE_PushButton, &option, m_image.get(),
@@ -461,14 +472,15 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
         draw( QStyle::PE_IndicatorBranch, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
-    }
-    else if (type == ControlType::Checkbox)
+    }*/
+    if (type == ControlType::Checkbox)
     {
         QStyleOptionButton option;
         draw( QStyle::CE_CheckBox, &option, m_image.get(),
                vclStateValue2StateFlag(nControlState, value) );
+        //m_image->save("/tmp/checkbox.png");
     }
-    else if (type == ControlType::Scrollbar)
+    /*else if (type == ControlType::Scrollbar)
     {
         if ((part == ControlPart::DrawBackgroundVert) || (part == ControlPart::DrawBackgroundHorz))
         {
@@ -595,14 +607,21 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
         draw( QStyle::CE_ProgressBar, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
-    }
+    }*/
     else
     {
         returnVal = false;
     }
 
-    delete localClipRegion;*/
-    return false;
+    BitmapBuffer *pBuffer = new BitmapBuffer;
+    QImage2BitmapBuffer( m_image.get(), pBuffer );
+    SalTwoRect aTR( 0, 0, m_image.get()->width(), m_image.get()->height(),
+                    rControlRegion.getX(), rControlRegion.getY(),
+                    rControlRegion.GetWidth(), rControlRegion.GetHeight() );
+    drawBitmap( aTR, pBuffer );
+
+    delete localClipRegion;
+    return returnVal;
 }
 
 bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
@@ -613,13 +632,13 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
 {
     bool retVal = false;
 
-    /*QRect boundingRect = region2QRect( controlRegion );
+    QRect boundingRect = region2QRect( controlRegion );
     QRect contentRect = boundingRect;
     QStyleOptionComplex styleOption;
 
     switch ( type )
     {
-        // Metrics of the push button
+        /*// Metrics of the push button
         case ControlType::Pushbutton:
             if (part == ControlPart::Entire)
             {
@@ -657,7 +676,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
             }
             retVal = true;
             break;
-        }
+        }*/
         case ControlType::Checkbox:
             if (part == ControlPart::Entire)
             {
@@ -680,7 +699,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
                 retVal = true;
             }
             break;
-        case ControlType::Combobox:
+        /*case ControlType::Combobox:
         case ControlType::Listbox:
         {
             QStyleOptionComboBox cbo;
@@ -893,7 +912,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
                 retVal = true;
             }
             break;
-        }
+        }*/
         default:
             break;
     }
@@ -908,7 +927,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
         Point aPoint( contentRect.x(), contentRect.y() );
         Size  aSize( contentRect.width(), contentRect.height() );
         nativeContentRegion = tools::Rectangle( aPoint, aSize );
-    }*/
+    }
 
     return retVal;
 }
