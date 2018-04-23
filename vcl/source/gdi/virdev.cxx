@@ -198,8 +198,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
 }
 
 VirtualDevice::VirtualDevice(DeviceFormat eFormat)
-:   mpVirDev( nullptr ),
-    meRefDevMode( RefDevMode::NONE ),
+:   meRefDevMode( RefDevMode::NONE ),
     mbForceZeroExtleadBug( false )
 {
     SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
@@ -208,8 +207,7 @@ VirtualDevice::VirtualDevice(DeviceFormat eFormat)
 }
 
 VirtualDevice::VirtualDevice(const OutputDevice& rCompDev, DeviceFormat eFormat)
-    : mpVirDev( nullptr ),
-    meRefDevMode( RefDevMode::NONE ),
+    : meRefDevMode( RefDevMode::NONE ),
     mbForceZeroExtleadBug( false )
 {
     SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
@@ -218,8 +216,7 @@ VirtualDevice::VirtualDevice(const OutputDevice& rCompDev, DeviceFormat eFormat)
 }
 
 VirtualDevice::VirtualDevice(const OutputDevice& rCompDev, DeviceFormat eFormat, DeviceFormat eAlphaFormat)
-    : mpVirDev( nullptr )
-    , meRefDevMode( RefDevMode::NONE )
+    : meRefDevMode( RefDevMode::NONE )
     , mbForceZeroExtleadBug( false )
 {
     SAL_INFO( "vcl.virdev",
@@ -233,8 +230,7 @@ VirtualDevice::VirtualDevice(const OutputDevice& rCompDev, DeviceFormat eFormat,
 
 VirtualDevice::VirtualDevice(const SystemGraphicsData *pData, const Size &rSize,
                              DeviceFormat eFormat)
-:   mpVirDev( nullptr ),
-    meRefDevMode( RefDevMode::NONE ),
+:   meRefDevMode( RefDevMode::NONE ),
     mbForceZeroExtleadBug( false )
 {
     SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
@@ -257,7 +253,7 @@ void VirtualDevice::dispose()
 
     ReleaseGraphics();
 
-    delete mpVirDev;
+    mpVirDev.reset();
 
     // remove this VirtualDevice from the double-linked global list
     if( mpPrev )
@@ -316,7 +312,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
     }
     else
     {
-        SalVirtualDevice*   pNewVirDev;
+        std::unique_ptr<SalVirtualDevice> pNewVirDev;
         ImplSVData*         pSVData = ImplGetSVData();
 
         // we need a graphics
@@ -346,8 +342,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
                 pGraphics->CopyBits( aPosAry, mpGraphics, this, this );
                 pNewVirDev->ReleaseGraphics( pGraphics );
                 ReleaseGraphics();
-                delete mpVirDev;
-                mpVirDev = pNewVirDev;
+                mpVirDev = std::move(pNewVirDev);
                 mnOutWidth  = rNewSize.Width();
                 mnOutHeight = rNewSize.Height();
                 bRet = true;
@@ -355,7 +350,6 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
             else
             {
                 bRet = false;
-                delete pNewVirDev;
             }
         }
         else
