@@ -482,17 +482,7 @@ IMAGE_SETEVENT:
         {
             GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
             aGraphic = rFilter.ImportUnloadedGraphic(*pStream);
-            if (aGraphic)
-            {
                 sGrfNm.clear();
-
-                if (!bHeightProvided || !bWidthProvided)
-                {
-                    Size aPrefSize = aGraphic.GetPrefSize();
-                    nWidth = aPrefSize.getWidth();
-                    nHeight = aPrefSize.getHeight();
-                }
-            }
 
             if (!sGrfNm.isEmpty())
             {
