@@ -150,7 +150,7 @@ TextUndoDelPara::~TextUndoDelPara()
 
 void TextUndoDelPara::Undo()
 {
-    GetTextEngine()->InsertContent( mpNode, mnPara );
+    GetTextEngine()->InsertContent( std::unique_ptr<TextNode>(mpNode), mnPara );
     mbDelObject = false;    // belongs again to the engine
 
     if ( GetView() )
@@ -163,19 +163,20 @@ void TextUndoDelPara::Undo()
 void TextUndoDelPara::Redo()
 {
     // pNode is not valid anymore in case an Undo joined paragraphs
-    mpNode = GetDoc()->GetNodes()[ mnPara ];
+    mpNode = GetDoc()->GetNodes()[ mnPara ].get();
 
     GetTEParaPortions()->Remove( mnPara );
 
     // do not delete Node because of Undo!
-    GetDoc()->GetNodes().erase( ::std::find( GetDoc()->GetNodes().begin(), GetDoc()->GetNodes().end(), mpNode ) );
+    GetDoc()->GetNodes().erase( ::std::find_if( GetDoc()->GetNodes().begin(), GetDoc()->GetNodes().end(),
+                                                [&] (std::unique_ptr<TextNode> const & p) { return p.get() == mpNode; } ) );
     GetTextEngine()->ImpParagraphRemoved( mnPara );
 
     mbDelObject = true; // belongs again to the Undo
 
     const sal_uInt32 nParas = static_cast<sal_uInt32>(GetDoc()->GetNodes().size());
     const sal_uInt32 n = mnPara < nParas ? mnPara : nParas-1;
-    TextNode* pN = GetDoc()->GetNodes()[ n ];
+    TextNode* pN = GetDoc()->GetNodes()[ n ].get();
     TextPaM aPaM( n, pN->GetText().getLength() );
     SetSelection( aPaM );
 }
