@@ -188,7 +188,7 @@ InterfaceOleWrapper::~InterfaceOleWrapper()
 
 STDMETHODIMP InterfaceOleWrapper::QueryInterface(REFIID riid, LPVOID FAR * ppv)
 {
-    SAL_INFO("extensions.olebridge", "InterfaceOleWrapper@" << this << "::QueryInterface " << riid);
+    SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::QueryInterface(" << riid << ")");
 
     HRESULT ret= S_OK;
 
@@ -283,7 +283,7 @@ STDMETHODIMP  InterfaceOleWrapper::getOriginalUnoStruct( Any * pStruct)
 
 STDMETHODIMP InterfaceOleWrapper::GetTypeInfoCount( unsigned int *pctinfo )
 {
-    SAL_INFO("extensions.olebridge", "InterfaceOleWrapper@" << this << "::GetTypeInfoCount()");
+    SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::GetTypeInfoCount");
 
     if (!pctinfo)
         return E_POINTER;
@@ -392,7 +392,7 @@ public:
               const OUString& sImplementationName,
               Reference<XMultiServiceFactory> xMSF)
     {
-        SAL_INFO("extensions.olebridge", "CXTypeLib::Init() this=" << this << " for " << sImplementationName);
+        SAL_INFO("extensions.olebridge", this << "@CXTypeLib::Init for " << sImplementationName);
         mxOrigin = xOrigin;
         msImplementationName = sImplementationName;
         mxMSF = xMSF;
@@ -400,7 +400,7 @@ public:
 
     virtual UINT STDMETHODCALLTYPE GetTypeInfoCount() override
     {
-        SAL_WARN("extensions.olebridge", "CXTypeLib@" << this << "::GetTypeInfoCount()");
+        SAL_WARN("extensions.olebridge", this << "@CXTypeLib::GetTypeInfoCount");
         return 1;
     }
 
@@ -409,7 +409,7 @@ public:
     {
         (void) index;
         (void) ppTInfo;
-        SAL_WARN("extensions.olebridge", "CXTypeLib@" << this << "::GetTypeInfo: NOTIMPL");
+        SAL_WARN("extensions.olebridge", this << "@CXTypeLib::GetTypeInfo: E_NOTIMPL");
         return E_NOTIMPL;
     }
 
@@ -418,14 +418,14 @@ public:
     {
         (void) index;
         (void) pTKind;
-        SAL_WARN("extensions.olebridge", "CXTypeLib@" << this << "::GetTypeInfoType: NOTIMPL");
+        SAL_WARN("extensions.olebridge", this << "@CXTypeLib::GetTypeInfoType: E_NOTIMPL");
         return E_NOTIMPL;
     }
 
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfoOfGuid(REFGUID guid,
                                                         ITypeInfo **ppTInfo) override
     {
-        SAL_INFO("extensions.olebridge", "CXTypeLib@" << this << "::GetTypeInfoOfGuid(" << guid << ")");
+        SAL_INFO("extensions.olebridge", this << "@CXTypeLib::GetTypeInfoOfGuid(" << guid << ")");
         if (!ppTInfo)
             return E_POINTER;
 
@@ -489,14 +489,14 @@ public:
     virtual HRESULT STDMETHODCALLTYPE GetLibAttr(TLIBATTR **ppTLibAttr) override
     {
         (void) ppTLibAttr;
-        SAL_WARN("extensions.olebridge", "CXTypeLib@" << this << "::GetLibAttr: NOTIMPL");
+        SAL_WARN("extensions.olebridge", this << "@CXTypeLib::GetLibAttr: E_NOTIMPL");
         return E_NOTIMPL;
     }
 
     virtual HRESULT STDMETHODCALLTYPE GetTypeComp(ITypeComp **ppTComp) override
     {
         (void) ppTComp;
-        SAL_WARN("extensions.olebridge", "CXTypeLib@" << this << "::GetTypeComp: NOTIMPL");
+        SAL_WARN("extensions.olebridge", this << "@CXTypeLib::GetTypeComp: E_NOTIMPL");
         return E_NOTIMPL;
     }
 
@@ -511,7 +511,7 @@ public:
         (void) pBstrDocString;
         (void) pdwHelpContext;
         (void) pBstrHelpFile;
-        SAL_WARN("extensions.olebridge", "CXTypeLib@" << this << "::GetDocumentation: NOTIMPL");
+        SAL_WARN("extensions.olebridge", this << "@CXTypeLib::GetDocumentation: E_NOTIMPL");
         return E_NOTIMPL;
     }
 
@@ -522,7 +522,7 @@ public:
         (void) szNameBuf;
         (void) lHashVal;
         (void) pfName;
-        SAL_WARN("extensions.olebridge", "CXTypeLib@" << this << "::IsName: NOTIMPL");
+        SAL_WARN("extensions.olebridge", this << "@CXTypeLib:IsName: E_NOTIMPL");
         return E_NOTIMPL;
     }
 
@@ -537,14 +537,14 @@ public:
         (void) ppTInfo;
         (void) rgMemId;
         (void) pcFound;
-        SAL_WARN("extensions.olebridge", "CXTypeLib@" << this << "::FindName: NOTIMPL");
+        SAL_WARN("extensions.olebridge", this << "@CXTypeLib::FindName: E_NOTIMPL");
         return E_NOTIMPL;
     }
 
     virtual void STDMETHODCALLTYPE ReleaseTLibAttr(TLIBATTR *pTLibAttr) override
     {
         (void) pTLibAttr;
-        SAL_WARN("extensions.olebridge", "CXTypeLib@" << this << "::ReleaseTLibAttr: NOTIMPL");
+        SAL_WARN("extensions.olebridge", this << "@CXTypeLib::ReleaseTLibAttr: E_NOTIMPL");
     }
 
 private:
@@ -558,7 +558,7 @@ void CXTypeInfo::InitForCoclass(Reference<XInterface> xOrigin,
                                 const IID& rIID,
                                 Reference<XMultiServiceFactory> xMSF)
 {
-    SAL_INFO("extensions.olebridge", "CXTypeInfo::InitForCoclass() this=" << this << " for " << rIID << " (" << sImplementationName << ")");
+    SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::InitForCoclass(" << sImplementationName << "," << rIID << ")");
     meKind = Kind::COCLASS;
     mxOrigin = xOrigin;
     msImplementationName = sImplementationName;
@@ -571,7 +571,7 @@ void CXTypeInfo::InitForClassItself(Reference<XInterface> xOrigin,
                                     const IID& rIID,
                                     Reference<XMultiServiceFactory> xMSF)
 {
-    SAL_INFO("extensions.olebridge", "CXTypeInfo::InitForClassItself() this=" << this << " for " << rIID << " (" << sImplementationName << ")");
+    SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::InitForClassItself(" << sImplementationName << "," << rIID << ")");
     meKind = Kind::MAIN;
     mxOrigin = xOrigin;
     msImplementationName = sImplementationName;
@@ -585,7 +585,7 @@ void CXTypeInfo::InitForOutgoing(Reference<XInterface> xOrigin,
                                  Reference<XMultiServiceFactory> xMSF,
                                  Type aType)
 {
-    SAL_INFO("extensions.olebridge", "CXTypeInfo::InitForOutgoing() this=" << this << " for " << rIID << " (" << sInterfaceName << ")");
+    SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::InitForOutgoing(" << sInterfaceName << "," << rIID << ")");
     meKind = Kind::OUTGOING;
     mxOrigin = xOrigin;
     msInterfaceName = sInterfaceName;
@@ -596,7 +596,7 @@ void CXTypeInfo::InitForOutgoing(Reference<XInterface> xOrigin,
 
 HRESULT STDMETHODCALLTYPE CXTypeInfo::GetTypeAttr(TYPEATTR **ppTypeAttr)
 {
-    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetTypeAttr()");
+    SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::GetTypeAttr");
 
     if (!ppTypeAttr)
         return E_POINTER;
@@ -667,7 +667,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetTypeAttr(TYPEATTR **ppTypeAttr)
     pTypeAttr->wMinorVerNum = 0;
     pTypeAttr->idldescType.wIDLFlags = IDLFLAG_NONE;
 
-    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetTypeAttr(): " << pTypeAttr);
+    SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::GetTypeAttr: " << pTypeAttr);
 
     *ppTypeAttr = pTypeAttr;
 
@@ -677,7 +677,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetTypeAttr(TYPEATTR **ppTypeAttr)
 HRESULT STDMETHODCALLTYPE CXTypeInfo::GetTypeComp(ITypeComp **ppTComp)
 {
     (void) ppTComp;
-    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::GetTypeComp: NOTIMPL");
+    SAL_WARN("extensions.olebridge", this << "@CXTypeInfo::GetTypeComp: E_NOTIMPL");
     return E_NOTIMPL;
 }
 
@@ -742,7 +742,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetFuncDesc(UINT index,
         (*ppFuncDesc)->cScodes = 0;
         (*ppFuncDesc)->wFuncFlags = FUNCFLAG_FRESTRICTED;
 
-        SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetFuncDesc(" << index << "): S_OK: " << *ppFuncDesc);
+        SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::GetFuncDesc(" << index << "): S_OK: " << *ppFuncDesc);
 
         return S_OK;
     }
@@ -776,7 +776,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetFuncDesc(UINT index,
     (*ppFuncDesc)->elemdescFunc.tdesc.vt = VT_VOID; // ???
     (*ppFuncDesc)->wFuncFlags = 0;
 
-    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetFuncDesc(" << index << "): S_OK: " << *ppFuncDesc);
+    SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::GetFuncDesc(" << index << "): S_OK: " << *ppFuncDesc);
 
     return S_OK;
 }
@@ -786,7 +786,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetVarDesc(UINT index,
 {
     (void) index;
     (void) ppVarDesc;
-    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::GetVarDesc: NOTIMPL");
+    SAL_WARN("extensions.olebridge", this << "@CXTypeInfo::GetVarDesc: E_NOTIMPL");
     return E_NOTIMPL;
 }
 
@@ -795,7 +795,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetNames(MEMBERID memid,
                                                UINT cMaxNames,
                                                UINT *pcNames)
 {
-    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetNames(" << memid << ")");
+    SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::GetNames(" << memid << ")");
     assert(meKind != Kind::COCLASS);
 
     if (!rgBstrNames)
@@ -830,7 +830,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetNames(MEMBERID memid,
     if (memid > aMethods.getLength() - 3)
         return E_INVALIDARG;
 
-    SAL_INFO("extensions.olebridge", "...CXTypeInfo@" << this << "::GetNames(" << memid << "): " << aMethods[memid + 2]->getName());
+    SAL_INFO("extensions.olebridge", "..." << this << "@CXTypeInfo::GetNames(" << memid << "): " << aMethods[memid + 2]->getName());
     rgBstrNames[0] = SysAllocString((LPOLESTR) aMethods[memid + 2]->getName().pData->buffer);
     *pcNames = 1;
 
@@ -840,7 +840,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetNames(MEMBERID memid,
 HRESULT STDMETHODCALLTYPE CXTypeInfo::GetRefTypeOfImplType(UINT index,
                                                            HREFTYPE *pRefType)
 {
-    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetRefTypeOfImplType(" << index << ")");
+    SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::GetRefTypeOfImplType(" << index << ")");
 
     if (!pRefType)
         return E_POINTER;
@@ -855,7 +855,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetRefTypeOfImplType(UINT index,
 HRESULT STDMETHODCALLTYPE CXTypeInfo::GetImplTypeFlags(UINT index,
                                                        INT *pImplTypeFlags)
 {
-    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetImplTypeFlags(" << index << ")");
+    SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::GetImplTypeFlags(" << index << ")");
 
     if (!pImplTypeFlags)
         return E_POINTER;
@@ -878,7 +878,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetIDsOfNames(LPOLESTR *rgszNames,
     (void) rgszNames;
     (void) cNames;
     (void) pMemId;
-    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::GetIDsOfNames: NOTIMPL");
+    SAL_WARN("extensions.olebridge", this << "@CXTypeInfo::GetIDsOfNames: E_NOTIMPL");
     return E_NOTIMPL;
 }
 
@@ -897,7 +897,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::Invoke(PVOID pvInstance,
     (void) pVarResult;
     (void) pExcepInfo;
     (void) puArgErr;
-    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::Invoke: NOTIMPL");
+    SAL_WARN("extensions.olebridge", this << "@CXTypeInfo::Invoke: E_NOTIMPL");
     return E_NOTIMPL;
 }
 
@@ -907,7 +907,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetDocumentation(MEMBERID memid,
                                                        DWORD *pdwHelpContext,
                                                        BSTR *pBstrHelpFile)
 {
-    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetDocumentation(" << memid << ")");
+    SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::GetDocumentation(" << memid << ")");
     if (pBstrName)
     {
         if (memid == MEMBERID_NIL)
@@ -945,14 +945,14 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetDllEntry(MEMBERID memid,
     (void) pBstrDllName;
     (void) pBstrName;
     (void) pwOrdinal;
-    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::GetDllEntry: NOTIMPL");
+    SAL_WARN("extensions.olebridge", this << "@CXTypeInfo::GetDllEntry: E_NOTIMPL");
     return E_NOTIMPL;
 }
 
 HRESULT STDMETHODCALLTYPE CXTypeInfo::GetRefTypeInfo(HREFTYPE hRefType,
                                                      ITypeInfo **ppTInfo)
 {
-    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetRefTypeInfo(" << hRefType << ")");
+    SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::GetRefTypeInfo(" << hRefType << ")");
 
     if (!ppTInfo)
         return E_POINTER;
@@ -994,7 +994,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::AddressOfMember(MEMBERID memid,
     (void) memid;
     (void) invKind;
     (void) ppv;
-    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::AddressOfMember: NOTIMPL");
+    SAL_WARN("extensions.olebridge", this << "@CXTypeInfo::AddressOfMember: E_NOTIMPL");
     return E_NOTIMPL;
 }
 
@@ -1005,7 +1005,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::CreateInstance(IUnknown *pUnkOuter,
     (void) pUnkOuter;
     (void) riid;
     (void) ppvObj;
-    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::CreateInstance: NOTIMPL");
+    SAL_WARN("extensions.olebridge", this << "@CXTypeInfo::CreateInstance: E_NOTIMPL");
     return E_NOTIMPL;
 }
 
@@ -1014,7 +1014,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetMops(MEMBERID memid,
 {
     (void) memid;
     (void) pBstrMops;
-    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::GetMops: NOTIMPL");
+    SAL_WARN("extensions.olebridge", this << "@CXTypeInfo::GetMops: E_NOTIMPL");
     return E_NOTIMPL;
 }
 
@@ -1024,7 +1024,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetMops(MEMBERID memid,
 HRESULT STDMETHODCALLTYPE CXTypeInfo::GetContainingTypeLib(ITypeLib **ppTLib,
                                                            UINT *pIndex)
 {
-    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetContainingTypeLib");
+    SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::GetContainingTypeLib");
 
     if (!ppTLib || !pIndex)
         return E_POINTER;
@@ -1048,14 +1048,14 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetContainingTypeLib(ITypeLib **ppTLib,
 
 void STDMETHODCALLTYPE CXTypeInfo::ReleaseTypeAttr(TYPEATTR *pTypeAttr)
 {
-    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::ReleaseTypeAttr(" << pTypeAttr << ")");
+    SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::ReleaseTypeAttr(" << pTypeAttr << ")");
 
     delete pTypeAttr;
 }
 
 void STDMETHODCALLTYPE CXTypeInfo::ReleaseFuncDesc(FUNCDESC *pFuncDesc)
 {
-    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::ReleaseFuncDesc(" << pFuncDesc << ")");
+    SAL_WARN("extensions.olebridge", this << "@CXTypeInfo::ReleaseFuncDesc(" << pFuncDesc << ")");
 
     delete pFuncDesc;
 }
@@ -1063,12 +1063,12 @@ void STDMETHODCALLTYPE CXTypeInfo::ReleaseFuncDesc(FUNCDESC *pFuncDesc)
 void STDMETHODCALLTYPE CXTypeInfo::ReleaseVarDesc(VARDESC *pVarDesc)
 {
     (void) pVarDesc;
-    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::ReleaseVarDesc: NOTIMPL");
+    SAL_WARN("extensions.olebridge", this << "@CXTypeInfo::ReleaseVarDesc: E_NOTIMPL");
 }
 
 STDMETHODIMP InterfaceOleWrapper::GetTypeInfo(unsigned int iTInfo, LCID, ITypeInfo ** ppTInfo)
 {
-    SAL_INFO("extensions.olebridge", "InterfaceOleWrapper@" << this << "::GetTypeInfo(" << iTInfo << ")");
+    SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::GetTypeInfo(" << iTInfo << ")");
 
     if (!ppTInfo)
         return E_POINTER;
@@ -1108,7 +1108,7 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
                                                 LCID /*lcid*/,
                                                 DISPID * rgdispid )
 {
-    SAL_INFO("extensions.olebridge", "InterfaceOleWrapper@" << this << "::GetIDsOfNames("
+    SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::GetIDsOfNames("
              << OUString(o3tl::toU(rgszNames[0]))
              << (cNames > 1 ? "...!" : "") << "," << cNames << ")");
 
@@ -1442,7 +1442,7 @@ void SAL_CALL InterfaceOleWrapper::initialize( const Sequence< Any >& aArguments
         if (xServiceInfo.is())
             m_sImplementationName = xServiceInfo->getImplementationName();
 
-        SAL_INFO("extensions.olebridge", "InterfaceOleWrapper@" << this << "::initialize for "
+        SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::initialize for "
                  << (m_sImplementationName.isEmpty()?"an unknown implementation":m_sImplementationName));
         break;
     }
@@ -1718,7 +1718,7 @@ STDMETHODIMP InterfaceOleWrapper::Invoke(DISPID dispidMember,
                                          EXCEPINFO * pexcepinfo,
                                          unsigned int * puArgErr )
 {
-    SAL_INFO("extensions.olebridge", "InterfaceOleWrapper@" << this << "::Invoke(" << dispidMember << ")");
+    SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::Invoke(" << dispidMember << ")");
 
     comphelper::ProfileZone aZone("COM Bridge");
     HRESULT ret = S_OK;
@@ -2276,7 +2276,7 @@ public:
               Reference<XMultiServiceFactory>& xMSF,
               ooo::vba::TypeAndIID aTypeAndIID)
     {
-        SAL_INFO("extensions.olebridge", "CXConnectionPoint::Init() this=" << this << " for " << pInterfaceOleWrapper->getImplementationName());
+        SAL_INFO("extensions.olebridge", this << "@CXConnectionPoint::Init for " << pInterfaceOleWrapper->getImplementationName());
 
         IUnknown *pUnknown;
         if (SUCCEEDED(QueryInterface(IID_IUnknown, (void **)&pUnknown)))
@@ -2293,7 +2293,7 @@ public:
 
     virtual HRESULT STDMETHODCALLTYPE GetConnectionInterface(IID *pIID) override
     {
-        SAL_WARN("extensions.olebridge", "CXConnectionPoint@" << this << "::GetConnectionInterface(" << *pIID << "): NOTIMPL");
+        SAL_WARN("extensions.olebridge", this << "@CXConnectionPoint::GetConnectionInterface(" << *pIID << "): E_NOTIMPL");
 
         // FIXME: Needed?
 
@@ -2303,7 +2303,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE GetConnectionPointContainer(IConnectionPointContainer **ppCPC) override
     {
         (void) ppCPC;
-        SAL_WARN("extensions.olebridge", "CXConnectionPoint@" << this << "::GetConnectionInterface: NOTIMPL");
+        SAL_WARN("extensions.olebridge", this << "@CXConnectionPoint::GetConnectionInterface: E_NOTIMPL");
 
         // FIXME: Needed?
 
@@ -2313,7 +2313,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE Advise(IUnknown *pUnkSink,
                                              DWORD *pdwCookie) override
     {
-        SAL_INFO("extensions.olebridge", "CXConnectionPoint@" << this << "::Advise(" << pUnkSink << ")");
+        SAL_INFO("extensions.olebridge", this << "@CXConnectionPoint::Advise(" << pUnkSink << ")");
 
         if (!pdwCookie)
             return E_POINTER;
@@ -2334,7 +2334,7 @@ public:
 
     virtual HRESULT STDMETHODCALLTYPE Unadvise(DWORD dwCookie) override
     {
-        SAL_INFO("extensions.olebridge", "CXConnectionPoint@" << this << "::Unadvise(" << dwCookie << ")");
+        SAL_INFO("extensions.olebridge", this << "@CXConnectionPoint::Unadvise(" << dwCookie << ")");
 
         if (dwCookie == 0 || dwCookie > mvISinks.size())
             return E_POINTER;
@@ -2351,7 +2351,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE EnumConnections(IEnumConnections **ppEnum) override
     {
         (void) ppEnum;
-        SAL_WARN("extensions.olebridge", "CXConnectionPoint@" << this << "::EnumConnections: NOTIMPL");
+        SAL_WARN("extensions.olebridge", this << "@CXConnectionPoint::EnumConnections: E_NOTIMPL");
         return E_NOTIMPL;
     }
 
@@ -2588,7 +2588,7 @@ STDMETHODIMP InterfaceOleWrapper::GetNameSpaceParent(
 HRESULT STDMETHODCALLTYPE InterfaceOleWrapper::GetClassInfo (
     /* [out] */ ITypeInfo **ppTI)
 {
-    SAL_INFO("extensions.olebridge", "InterfaceOleWrapper@" << this << "::GetClassInfo");
+    SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::GetClassInfo");
 
     if (!ppTI)
         return E_POINTER;
@@ -2624,7 +2624,7 @@ HRESULT STDMETHODCALLTYPE InterfaceOleWrapper::EnumConnectionPoints(
     /* [out] */ IEnumConnectionPoints **ppEnum)
 {
     (void) ppEnum;
-    SAL_INFO("extensions.olebridge", "InterfaceOleWrapper@" << this << "::EnumConnectionPoints");
+    SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::EnumConnectionPoints");
     return ResultFromScode(E_NOTIMPL);
 }
 
@@ -2632,7 +2632,7 @@ HRESULT STDMETHODCALLTYPE InterfaceOleWrapper::FindConnectionPoint(
     /* [in] */ REFIID riid,
     /* [out] */ IConnectionPoint **ppCP)
 {
-    SAL_INFO("extensions.olebridge", "InterfaceOleWrapper@" << this << "::FindConnectionPoint " << riid);
+    SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::FindConnectionPoint(" << riid << ")");
 
     if (!ppCP)
         return E_POINTER;
