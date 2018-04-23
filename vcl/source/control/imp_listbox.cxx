@@ -461,7 +461,7 @@ ImplListBoxWindow::ImplListBoxWindow( vcl::Window* pParent, WinBits nWinStyle ) 
     Control( pParent, 0 ),
     maQuickSelectionEngine( *this )
 {
-    mpEntryList         = new ImplEntryList( this );
+    mpEntryList.reset(new ImplEntryList( this ));
 
     mnTop               = 0;
     mnLeft              = 0;
@@ -508,7 +508,7 @@ ImplListBoxWindow::~ImplListBoxWindow()
 
 void ImplListBoxWindow::dispose()
 {
-    delete mpEntryList;
+    mpEntryList.reset();
     Control::dispose();
 }
 
