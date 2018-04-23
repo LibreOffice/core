@@ -52,6 +52,7 @@ struct TabPageImpl
 {
     bool                        mbStandard;
     sfx::ItemConnectionArray    maItemConn;
+    VclPtr<SfxTabDialog>        mxDialog;
     css::uno::Reference< css::frame::XFrame > mxFrame;
 
     TabPageImpl() : mbStandard( false ) {}
@@ -307,13 +308,20 @@ void SfxTabPage::AddItemConnection( sfx::ItemConnectionBase* pConnection )
     pImpl->maItemConn.AddConnection( pConnection );
 }
 
+void SfxTabPage::SetTabDialog(SfxTabDialog* pDialog)
+{
+    pImpl->mxDialog = pDialog;
+}
+
 SfxTabDialog* SfxTabPage::GetTabDialog() const
 {
-    return dynamic_cast<SfxTabDialog*>(GetParentDialog());
+    return pImpl->mxDialog;
 }
 
 OString SfxTabPage::GetConfigId() const
 {
+    if (m_xContainer)
+        return m_xContainer->get_help_id();
     OString sId(GetHelpId());
     if (sId.isEmpty() && isLayoutEnabled(this))
         sId = GetWindow(GetWindowType::FirstChild)->GetHelpId();
@@ -1127,12 +1135,12 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
     if ( !pTabPage )
     {
         if ( m_pSet )
-            pTabPage = (pDataObject->fnCreatePage)( static_cast<vcl::Window*>(pTabCtrl), m_pSet );
+            pTabPage = (pDataObject->fnCreatePage)(static_cast<vcl::Window*>(pTabCtrl), m_pSet);
         else
-            pTabPage = (pDataObject->fnCreatePage)
-                            ( pTabCtrl, CreateInputItemSet( nId ) );
+            pTabPage = (pDataObject->fnCreatePage)(pTabCtrl, CreateInputItemSet(nId));
         DBG_ASSERT( nullptr == pDataObject->pTabPage, "create TabPage more than once" );
         pDataObject->pTabPage = pTabPage;
+        pTabPage->SetTabDialog(this);
 
         OUString sConfigId = OStringToOUString(pTabPage->GetConfigId(), RTL_TEXTENCODING_UTF8);
         if (sConfigId.isEmpty())
