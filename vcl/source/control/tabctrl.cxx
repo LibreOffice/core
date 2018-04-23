@@ -98,7 +98,7 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbFormat                    = true;
     mbRestoreHelpId             = false;
     mbSmallInvalidate           = false;
-    mpTabCtrlData               = new ImplTabCtrlData;
+    mpTabCtrlData.reset(new ImplTabCtrlData);
     mpTabCtrlData->mpListBox    = nullptr;
 
     ImplInitSettings( true );
@@ -198,8 +198,7 @@ void TabControl::dispose()
     // delete TabCtrl data
     if (mpTabCtrlData)
         mpTabCtrlData->mpListBox.disposeAndClear();
-    delete mpTabCtrlData;
-    mpTabCtrlData = nullptr;
+    mpTabCtrlData.reset();
     Control::dispose();
 }
 
