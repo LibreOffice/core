@@ -4885,16 +4885,24 @@ if test -z "$enable_symbols"; then
 fi
 if test "$enable_symbols" = yes; then
     ENABLE_SYMBOLS_FOR=all
+    ENABLE_STRIP=
+    DISABLE_STRIP=1
     AC_MSG_RESULT([yes])
 elif test "$enable_symbols" = no; then
     ENABLE_SYMBOLS_FOR=
+    ENABLE_STRIP=1
+    DISABLE_STRIP=
     AC_MSG_RESULT([no])
 else
     # Selective debuginfo.
     ENABLE_SYMBOLS_FOR="$enable_symbols"
+    ENABLE_STRIP=
+    DISABLE_STRIP=1
     AC_MSG_RESULT([for "$enable_symbols"])
 fi
 AC_SUBST(ENABLE_SYMBOLS_FOR)
+AC_SUBST(ENABLE_STRIP)
+AC_SUBST(DISABLE_STRIP)
 
 if test -n "$with_android_ndk" -a \( -n "$ENABLE_SYMBOLS" -o -n "$ENABLE_DEBUG" -o -n "$ENABLE_DBGUTIL" \) -a "$ENABLE_DEBUGINFO_FOR" = "all"; then
     # Building on Android with full symbols: without enough memory the linker never finishes currently.
