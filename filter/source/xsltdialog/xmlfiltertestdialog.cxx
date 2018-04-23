@@ -22,7 +22,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/document/XGraphicObjectResolver.hpp>
+#include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -460,13 +460,13 @@ void XMLFilterTestDialog::doExport( const Reference< XComponent >& xComp )
                     Reference< XMultiServiceFactory > xDocFac( xComp, UNO_QUERY );
 
                     Reference< XEmbeddedObjectResolver > xObjectResolver;
-                    Reference< XGraphicObjectResolver > xGrfResolver;
+                    Reference<XGraphicStorageHandler> xGraphicStorageHandler;
 
                     if( xDocFac.is() )
                     {
                         try
                         {
-                            xGrfResolver.set( xDocFac->createInstance("com.sun.star.document.ExportGraphicObjectResolver"), UNO_QUERY );
+                            xGraphicStorageHandler.set(xDocFac->createInstance("com.sun.star.document.ExportGraphicStorageHandler"), UNO_QUERY);
                             xObjectResolver.set( xDocFac->createInstance("com.sun.star.document.ExportEmbeddedObjectResolver"), UNO_QUERY );
                         }
                         catch( const Exception& )
@@ -474,10 +474,13 @@ void XMLFilterTestDialog::doExport( const Reference< XComponent >& xComp )
                         }
                     }
 
-                    Sequence< Any > aArgs( 1 + ( xGrfResolver.is() ? 1 : 0 ) + ( xObjectResolver.is() ? 1 : 0 ) );
+                    Sequence< Any > aArgs( 1 + ( xGraphicStorageHandler.is() ? 1 : 0 ) + ( xObjectResolver.is() ? 1 : 0 ) );
                     Any* pArgs = aArgs.getArray();
-                    if( xGrfResolver.is() )         *pArgs++ <<= xGrfResolver;
-                    if( xObjectResolver.is() )      *pArgs++ <<= xObjectResolver;
+                    if (xGraphicStorageHandler.is())
+                        *pArgs++ <<= xGraphicStorageHandler;
+
+                    if  (xObjectResolver.is())
+                        *pArgs++ <<= xObjectResolver;
 
     //              *pArgs++ <<= xInfoSet;
                     *pArgs   <<= xHandler;

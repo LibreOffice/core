@@ -59,12 +59,12 @@
   <implementation name="com.sun.star.comp.Svx.GraphicExportHelper"
       constructor="com_sun_star_comp_Svx_GraphicExportHelper_get_implementation">
     <service name="com.sun.star.document.BinaryStreamResolver"/>
-    <service name="com.sun.star.document.GraphicObjectResolver"/>
+    <service name="com.sun.star.document.GraphicStorageHandler"/>
   </implementation>
   <implementation name="com.sun.star.comp.Svx.GraphicImportHelper"
       constructor="com_sun_star_comp_Svx_GraphicImportHelper_get_implementation">
     <service name="com.sun.star.document.BinaryStreamResolver"/>
-    <service name="com.sun.star.document.GraphicObjectResolver"/>
+    <service name="com.sun.star.document.GraphicStorageHandler"/>
   </implementation>
   <implementation name="com.sun.star.comp.graphic.PrimitiveFactory2D"
       constructor="com_sun_star_comp_graphic_PrimitiveFactory2D_get_implementation">
