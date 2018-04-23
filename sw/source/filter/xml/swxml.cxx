@@ -484,7 +484,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     uno::Reference< uno::XComponentContext > xContext =
             comphelper::getProcessComponentContext();
 
-    uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
+    uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
     rtl::Reference<SvXMLGraphicHelper> xGraphicHelper;
     uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     rtl::Reference<SvXMLEmbeddedObjectHelper> xObjectHelper;
@@ -501,7 +501,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
 
     xGraphicHelper = SvXMLGraphicHelper::Create( xStorage,
                                                  SvXMLGraphicHelperMode::Read );
-    xGraphicResolver = xGraphicHelper.get();
+    xGraphicStorageHandler = xGraphicHelper.get();
     SfxObjectShell *pPersist = rDoc.GetPersist();
     if( pPersist )
     {
@@ -658,7 +658,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     // prepare filter arguments, WARNING: the order is important!
     Sequence<Any> aFilterArgs{  Any(xInfoSet),
                                 Any(xStatusIndicator),
-                                Any(xGraphicResolver),
+                                Any(xGraphicStorageHandler),
                                 Any(xObjectResolver),
                                 Any(aLateInitSettings) };
 
@@ -906,7 +906,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     if( xGraphicHelper )
         xGraphicHelper->dispose();
     xGraphicHelper.clear();
-    xGraphicResolver = nullptr;
+    xGraphicStorageHandler = nullptr;
     if( xObjectHelper )
         xObjectHelper->dispose();
     xObjectHelper.clear();

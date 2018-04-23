@@ -42,7 +42,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XGraphicObjectResolver.hpp>
+#include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -177,7 +177,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
     css::uno::Reference< css::xml::sax::XLocator > mxLocator;
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::util::XNumberFormatsSupplier > mxNumberFormatsSupplier;
-    css::uno::Reference< css::document::XGraphicObjectResolver > mxGraphicResolver;
+    css::uno::Reference< css::document::XGraphicStorageHandler > mxGraphicStorageHandler;
     css::uno::Reference< css::document::XEmbeddedObjectResolver > mxEmbeddedResolver;
     css::uno::Reference< css::beans::XPropertySet > mxImportInfo;
 
@@ -271,9 +271,11 @@ protected:
     const css::uno::Reference< css::document::XEmbeddedObjectResolver >& GetEmbeddedResolver() const { return mxEmbeddedResolver; }
     inline void SetEmbeddedResolver( css::uno::Reference< css::document::XEmbeddedObjectResolver > const & _xEmbeddedResolver );
 
-    const css::uno::Reference< css::document::XGraphicObjectResolver >& GetGraphicResolver() const { return mxGraphicResolver; }
-    void SetGraphicResolver( css::uno::Reference< css::document::XGraphicObjectResolver > const & _xGraphicResolver );
-
+    const css::uno::Reference<css::document::XGraphicStorageHandler> & GetGraphicStorageHandler() const
+    {
+        return mxGraphicStorageHandler;
+    }
+    void SetGraphicStorageHandler(css::uno::Reference<css::document::XGraphicStorageHandler> const & rxGraphicStorageHandler);
 
     void CreateNumberFormatsSupplier_();
     void CreateDataStylesImport_();
@@ -617,10 +619,10 @@ inline void SvXMLImport::SetEmbeddedResolver(
     mxEmbeddedResolver = _xEmbeddedResolver;
 }
 
-inline void SvXMLImport::SetGraphicResolver(
-    css::uno::Reference< css::document::XGraphicObjectResolver > const & _xGraphicResolver )
+inline void SvXMLImport::SetGraphicStorageHandler(
+    css::uno::Reference<css::document::XGraphicStorageHandler> const & rxGraphicStorageHandler)
 {
-    mxGraphicResolver = _xGraphicResolver;
+    mxGraphicStorageHandler = rxGraphicStorageHandler;
 }
 
 inline css::uno::Reference< css::util::XNumberFormatsSupplier > & SvXMLImport::GetNumberFormatsSupplier()
