@@ -23,6 +23,7 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
+#include <memory>
 
 class AutoTimer;
 
@@ -47,7 +48,7 @@ private:
     tools::Rectangle       maPage2Rect;
     tools::Rectangle       maThumbRect;
     tools::Rectangle       maTrackRect;
-    ImplScrollBarData* mpData;
+    std::unique_ptr<ImplScrollBarData> mpData;
     long            mnStartPos;
     long            mnMouseOff;
     long            mnThumbPixRange;
