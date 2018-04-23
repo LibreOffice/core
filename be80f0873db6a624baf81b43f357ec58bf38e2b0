@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_8f213dfe",
+        "filename": "accessibility/source/standard/vclxaccessibletoolbox.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2018-04-23T11:00:52Z",
+      "side": 1,
+      "message": "It shouldn\u0027t change the behavior. If ptToolbox is nullptr, getAccessibleChildCount is 0 and the condition always true.",
+      "parentUuid": "9a30ddce_a3b53fce",
+      "revId": "be80f0873db6a624baf81b43f357ec58bf38e2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_c3ca334f",
         "filename": "accessibility/source/standard/vclxaccessibletoolbox.cxx",
         "patchSetId": 6
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_af1c41c2",
+        "filename": "accessibility/source/standard/vclxaccessibletoolbox.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2018-04-23T11:00:52Z",
+      "side": 1,
+      "message": "Same logic here",
+      "parentUuid": "9a30ddce_c3ca334f",
+      "revId": "be80f0873db6a624baf81b43f357ec58bf38e2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_e3c73743",
         "filename": "accessibility/source/standard/vclxaccessibletoolbox.cxx",
         "patchSetId": 6
@@ -47,6 +83,24 @@
       "writtenOn": "2018-04-22T20:02:33Z",
       "side": 1,
       "message": "you\u0027ve changed the logic of this method - it is now returning the \u003cnSelectedChildIndex\u003e child, counting througj all the children, instead of only counting through the currently selected children",
+      "revId": "be80f0873db6a624baf81b43f357ec58bf38e2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_0f846dd2",
+        "filename": "accessibility/source/standard/vclxaccessibletoolbox.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2018-04-23T11:00:52Z",
+      "side": 1,
+      "message": "nSelectedChildIndex is always 0 here. Only one element can be selected in this component. I always return the first element selected.",
+      "parentUuid": "9a30ddce_e3c73743",
       "revId": "be80f0873db6a624baf81b43f357ec58bf38e2b0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
