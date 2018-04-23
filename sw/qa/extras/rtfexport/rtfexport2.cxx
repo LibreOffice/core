@@ -1068,10 +1068,11 @@ DECLARE_RTFEXPORT_TEST(testN825305, "n825305.rtf")
 
 DECLARE_RTFEXPORT_TEST(testTdf106953, "tdf106953.rtf")
 {
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270),
+                         getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
     auto xRules = getProperty<uno::Reference<container::XIndexAccess>>(
         getStyles("NumberingStyles")->getByName("WWNum1"), "NumberingRules");
     comphelper::SequenceAsHashMap aRule(xRules->getByIndex(0));
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), aRule["IndentAt"].get<sal_Int32>());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aRule["FirstLineIndent"].get<sal_Int32>());
 }
 
