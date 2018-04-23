@@ -165,7 +165,7 @@ public:
 class ImplListBoxWindow : public Control, public vcl::ISearchableStringList
 {
 private:
-    ImplEntryList*  mpEntryList;     ///< EntryList
+    std::unique_ptr<ImplEntryList> mpEntryList;     ///< EntryList
     tools::Rectangle       maFocusRect;
 
     Size            maUserItemSize;
@@ -255,7 +255,7 @@ public:
     virtual         ~ImplListBoxWindow() override;
     virtual void    dispose() override;
 
-    ImplEntryList*  GetEntryList() const { return mpEntryList; }
+    ImplEntryList*  GetEntryList() const { return mpEntryList.get(); }
 
     sal_Int32       InsertEntry( sal_Int32  nPos, ImplEntryType* pNewEntry );
     void            RemoveEntry( sal_Int32  nPos );
