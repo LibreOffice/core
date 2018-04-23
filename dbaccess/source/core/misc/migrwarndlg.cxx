@@ -9,7 +9,7 @@
 
 #include <migrwarndlg.hxx>
 
-namespace dbaui
+namespace dbaccess
 {
 MigrationWarnDialog::MigrationWarnDialog(weld::Window* pParent)
     : MessageDialogController(pParent, "dbaccess/ui/migrwarndlg.ui", "MigrationWarnDialog")
