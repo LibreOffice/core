@@ -3400,9 +3400,15 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                 {
                     if (pTableView)
                     {
+                        EVControlBits nControl = pTableView->GetControlWord();
+                        if (pTopView)
+                            pTableView->SetControlWord(nControl | EVControlBits::SINGLELINEPASTE);
+
                         vcl::Window* pFrameWin = pActiveViewSh ? pActiveViewSh->GetFrameWin() : nullptr;
                         if ( pTableView->PostKeyEvent( rKEvt, pFrameWin ) )
                             bUsed = true;
+
+                        pTableView->SetControlWord(nControl);
                     }
                     if (pTopView)
                         if ( pTopView->PostKeyEvent( rKEvt ) )

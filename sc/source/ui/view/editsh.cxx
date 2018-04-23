@@ -217,10 +217,18 @@ void ScEditShell::Execute( SfxRequest& rReq )
             break;
 
         case SID_PASTE:
-            pTableView->PasteSpecial();
+        {
+            EVControlBits nControl = pTableView->GetControlWord();
             if (pTopView)
+            {
                 pTopView->Paste();
-            break;
+                pTableView->SetControlWord(nControl | EVControlBits::SINGLELINEPASTE);
+            }
+
+            pTableView->PasteSpecial();
+            pTableView->SetControlWord(nControl);
+        }
+        break;
 
         case SID_DELETE:
             pTableView->DeleteSelected();
