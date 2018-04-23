@@ -101,19 +101,19 @@ bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart pa
         /*case ControlType::Menubar:
         case ControlType::MenuPopup:
         case ControlType::Editbox:
-        case ControlType::MultilineEditbox:
+        case ControlType::MultilineEditbox:*/
         case ControlType::Combobox:
-        case ControlType::Toolbar:
+        /*case ControlType::Toolbar:
         case ControlType::Frame:
         case ControlType::Scrollbar:
         case ControlType::WindowBackground:
-        case ControlType::Fixedline:
+        case ControlType::Fixedline:*/
             return true;
 
         case ControlType::Listbox:
             return (part == ControlPart::Entire || part == ControlPart::HasBackgroundTexture);
 
-        case ControlType::Spinbox:
+        /*case ControlType::Spinbox:
             return (part == ControlPart::Entire || part == ControlPart::HasBackgroundTexture);
 
         case ControlType::Slider:
@@ -426,7 +426,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
     {
         lcl_drawFrame( QStyle::PE_FrameLineEdit, m_image.get(),
                        vclStateValue2StateFlag(nControlState, value));
-    }
+    }*/
     else if (type == ControlType::Combobox)
     {
         QStyleOptionComboBox option;
@@ -462,7 +462,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
                 break;
         }
     }
-    else if (type == ControlType::ListNode)
+    /*else if (type == ControlType::ListNode)
     {
         QStyleOption option;
         option.state = QStyle::State_Item | QStyle::State_Children;
@@ -699,7 +699,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
                 retVal = true;
             }
             break;
-        /*case ControlType::Combobox:
+        case ControlType::Combobox:
         case ControlType::Listbox:
         {
             QStyleOptionComboBox cbo;
@@ -712,7 +712,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
                 case ControlPart::Entire:
                 {
                     // find out the minimum size that should be used
-                    // assume contents is a text ling
+                    // assume contents is a text line
                     int nHeight = QApplication::fontMetrics().height();
                     QSize aContentSize( contentRect.width(), nHeight );
                     QSize aMinSize = QApplication::style()->
@@ -742,7 +742,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
             }
             break;
         }
-        case ControlType::Spinbox:
+        /*case ControlType::Spinbox:
         {
             QStyleOptionSpinBox sbo;
             sbo.frame = true;
