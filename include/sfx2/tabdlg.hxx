@@ -266,6 +266,7 @@ protected:
         return static_cast<const T*>(GetOldItem(rSet, sal_uInt16(nSlot), bDeep));
     }
     SfxTabDialog*       GetTabDialog() const;
+    void                SetTabDialog(SfxTabDialog* pDialog);
 
     void                AddItemConnection( sfx::ItemConnectionBase* pConnection );
 
