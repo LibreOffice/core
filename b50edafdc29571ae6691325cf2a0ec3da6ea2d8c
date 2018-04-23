@@ -16,6 +16,24 @@
       "revId": "b50edafdc29571ae6691325cf2a0ec3da6ea2d8c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_8f777d39",
+        "filename": "external/firebird/firebird-vs2017.patch.1",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-23T09:48:14Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "9a30ddce_4f96654d",
+      "revId": "b50edafdc29571ae6691325cf2a0ec3da6ea2d8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
