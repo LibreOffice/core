@@ -34,11 +34,6 @@
  */
 published interface XDataSource: com::sun::star::uno::XInterface
 {
-    /** indicates whether database migration is needed or not.
-    */
-    [attribute] boolean MigrationNeeded;
-
-    string getConnectionUrl();
 
     /** attempts to establish a database connection.
         @param user
