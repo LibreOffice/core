@@ -40,7 +40,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
-#include <migrwarndlg.hxx>
 
 namespace dbaui
 {
@@ -112,12 +111,6 @@ namespace dbaui
         catch(Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("dbaccess");
-        }
-
-        if(_xDataSource->getConnectionUrl().startsWithIgnoreAsciiCase("sdbc:embedded:hsqldb"))
-        {
-            MigrationWarnDialog aWarnDlg{m_pErrorMessageParent->GetFrameWeld()};
-            _xDataSource->setMigrationNeeded(aWarnDlg.run() == RET_OK);
         }
 
         // try to connect
