@@ -1093,7 +1093,7 @@ void ToolBox::ImplInitToolBoxData()
 {
     // initialize variables
     ImplGetWindowImpl()->mbToolBox  = true;
-    mpData = new ImplToolBoxPrivateData;
+    mpData.reset(new ImplToolBoxPrivateData);
     mpFloatWin        = nullptr;
     mnDX              = 0;
     mnDY              = 0;
@@ -1147,7 +1147,7 @@ void ToolBox::ImplInitToolBoxData()
     mpStatusListener  = new VclStatusListener<ToolBox>(this, ".uno:ImageOrientation");
     mpStatusListener->startListening();
 
-    mpIdle = new Idle("vcl::ToolBox maIdle update");
+    mpIdle.reset(new Idle("vcl::ToolBox maIdle update"));
     mpIdle->SetPriority( TaskPriority::RESIZE );
     mpIdle->SetInvokeHandler( LINK( this, ToolBox, ImplUpdateHdl ) );
 
@@ -1355,8 +1355,7 @@ void ToolBox::dispose()
     mpFloatWin = nullptr;
 
     // delete private data
-    delete mpData;
-    mpData = nullptr;
+    mpData.reset();
 
     ImplSVData* pSVData = ImplGetSVData();
     delete pSVData->maCtrlData.mpTBDragMgr;
@@ -1367,8 +1366,7 @@ void ToolBox::dispose()
 
     mpFloatWin.clear();
 
-    delete mpIdle;
-    mpIdle = nullptr;
+    mpIdle.reset();
 
     DockingWindow::dispose();
 }
