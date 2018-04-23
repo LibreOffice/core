@@ -85,8 +85,7 @@ void PhysicalFontCollection::SetFallbackHook( ImplGlyphFallbackFontSubstitution*
 void PhysicalFontCollection::Clear()
 {
     // remove fallback lists
-    delete[] mpFallbackList;
-    mpFallbackList = nullptr;
+    mpFallbackList.reset();
     mnFallbackCount = -1;
 
     // clear all entries in the device font list
@@ -134,7 +133,7 @@ void PhysicalFontCollection::ImplInitGenericGlyphFallback() const
     bool bHasEudc = false;
     int nMaxLevel = 0;
     int nBestQuality = 0;
-    PhysicalFontFamily** pFallbackList = nullptr;
+    std::unique_ptr<std::array<PhysicalFontFamily*,MAX_GLYPHFALLBACK>> pFallbackList;
 
     for( const char** ppNames = &aGlyphFallbackList[0];; ++ppNames )
     {
@@ -165,16 +164,16 @@ void PhysicalFontCollection::ImplInitGenericGlyphFallback() const
             nBestQuality = pFallbackFont->GetMinQuality();
             // store available glyph fallback fonts
             if( !pFallbackList )
-                pFallbackList = new PhysicalFontFamily*[ MAX_GLYPHFALLBACK ];
+                pFallbackList.reset(new std::array<PhysicalFontFamily*,MAX_GLYPHFALLBACK>);
 
-            pFallbackList[ nMaxLevel ] = pFallbackFont;
+            (*pFallbackList)[ nMaxLevel ] = pFallbackFont;
             if( !bHasEudc && !nMaxLevel )
                 bHasEudc = !strncmp( *ppNames, "eudc", 5 );
         }
     }
 
     mnFallbackCount = nMaxLevel;
-    mpFallbackList  = pFallbackList;
+    mpFallbackList  = std::move(pFallbackList);
 }
 
 PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( FontSelectPattern& rFontSelData,
@@ -272,7 +271,7 @@ PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( FontSelectPatt
 
         // TODO: adjust nFallbackLevel by number of levels resolved by the fallback hook
         if( nFallbackLevel < mnFallbackCount )
-            pFallbackData = mpFallbackList[ nFallbackLevel ];
+            pFallbackData = (*mpFallbackList)[ nFallbackLevel ];
     }
 
     return pFallbackData;
