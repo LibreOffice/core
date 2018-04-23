@@ -483,7 +483,7 @@ void Printer::ImplInitData()
     mpInfoPrinter       = nullptr;
     mpPrinter           = nullptr;
     mpDisplayDev        = nullptr;
-    mpPrinterOptions    = new PrinterOptions;
+    mpPrinterOptions.reset(new PrinterOptions);
 
     // Add printer to the list
     ImplSVData* pSVData = ImplGetSVData();
@@ -934,8 +934,7 @@ void Printer::dispose()
     SAL_WARN_IF( IsPrinting(), "vcl.gdi", "Printer::~Printer() - Job is printing" );
     SAL_WARN_IF( IsJobActive(), "vcl.gdi", "Printer::~Printer() - Job is active" );
 
-    delete mpPrinterOptions;
-    mpPrinterOptions = nullptr;
+    mpPrinterOptions.reset();
 
     ReleaseGraphics();
     if ( mpInfoPrinter )

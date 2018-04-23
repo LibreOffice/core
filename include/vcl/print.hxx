@@ -186,7 +186,7 @@ private:
     VclPtr<Printer>             mpPrev;
     VclPtr<Printer>             mpNext;
     VclPtr<VirtualDevice>       mpDisplayDev;
-    PrinterOptions*             mpPrinterOptions;
+    std::unique_ptr<PrinterOptions> mpPrinterOptions;
     OUString                    maPrinterName;
     OUString                    maDriver;
     OUString                    maPrintFile;
