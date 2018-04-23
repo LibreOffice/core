@@ -79,7 +79,7 @@ $(call instsetoo_native_msitemplates,$(1))
 $(call gb_Helper_print_on_error, \
 cd $(dir $@) \
 $(foreach pkgformat,$(5),\
-&& $(if $(filter-out archive,$(pkgformat)),ENABLE_STRIP=1) $(PERL) -w $< \
+&& $(PERL) -w $< \
 	-f $(BUILDDIR)/instsetoo_native/util/openoffice.lst \
 	-l $(subst $(WHITESPACE),$(COMMA),$(strip $(2))) \
 	-p $(PRODUCTNAME_no_spaces)$(3) \
