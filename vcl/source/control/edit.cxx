@@ -227,9 +227,7 @@ Edit::~Edit()
 void Edit::dispose()
 {
     mpUIBuilder.reset();
-
-    delete mpDDInfo;
-    mpDDInfo = nullptr;
+    mpDDInfo.reset();
 
     vcl::Cursor* pCursor = GetCursor();
     if ( pCursor )
@@ -238,11 +236,8 @@ void Edit::dispose()
         delete pCursor;
     }
 
-    delete mpIMEInfos;
-    mpIMEInfos = nullptr;
-
-    delete mpUpdateDataTimer;
-    mpUpdateDataTimer = nullptr;
+    mpIMEInfos.reset();
+    mpUpdateDataTimer.reset();
 
     if ( mxDnDListener.is() )
     {
@@ -2039,16 +2034,14 @@ void Edit::Command( const CommandEvent& rCEvt )
     else if ( rCEvt.GetCommand() == CommandEventId::StartExtTextInput )
     {
         DeleteSelected();
-        delete mpIMEInfos;
         sal_Int32 nPos = static_cast<sal_Int32>(maSelection.Max());
-        mpIMEInfos = new Impl_IMEInfos( nPos, OUString(maText.getStr() + nPos ) );
+        mpIMEInfos.reset(new Impl_IMEInfos( nPos, OUString(maText.getStr() + nPos ) ));
         mpIMEInfos->bWasCursorOverwrite = !IsInsertMode();
     }
     else if ( rCEvt.GetCommand() == CommandEventId::EndExtTextInput )
     {
         bool bInsertMode = !mpIMEInfos->bWasCursorOverwrite;
-        delete mpIMEInfos;
-        mpIMEInfos = nullptr;
+        mpIMEInfos.reset();
 
         SetInsertMode(bInsertMode);
         ImplModified();
@@ -2390,7 +2383,7 @@ void Edit::EnableUpdateData( sal_uLong nTimeout )
     {
         if ( !mpUpdateDataTimer )
         {
-            mpUpdateDataTimer = new Timer("UpdateDataTimer");
+            mpUpdateDataTimer.reset(new Timer("UpdateDataTimer"));
             mpUpdateDataTimer->SetInvokeHandler( LINK( this, Edit, ImplUpdateDataHdl ) );
             mpUpdateDataTimer->SetDebugName( "vcl::Edit mpUpdateDataTimer" );
         }
@@ -2401,8 +2394,7 @@ void Edit::EnableUpdateData( sal_uLong nTimeout )
 
 void Edit::DisableUpdateData()
 {
-    delete mpUpdateDataTimer;
-    mpUpdateDataTimer = nullptr;
+    mpUpdateDataTimer.reset();
 }
 
 void Edit::SetEchoChar( sal_Unicode c )
@@ -2830,7 +2822,7 @@ void Edit::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent
         if ( (nCharPos >= aSel.Min()) && (nCharPos < aSel.Max()) )
         {
             if ( !mpDDInfo )
-                mpDDInfo = new DDInfo;
+                mpDDInfo.reset(new DDInfo);
 
             mpDDInfo->bStarterOfDD = true;
             mpDDInfo->aDndStartSel = aSel;
@@ -2872,8 +2864,7 @@ void Edit::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& rDSDE
     }
 
     ImplHideDDCursor();
-    delete mpDDInfo;
-    mpDDInfo = nullptr;
+    mpDDInfo.reset();
 }
 
 // css::datatransfer::dnd::XDropTargetListener
@@ -2916,8 +2907,7 @@ void Edit::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE )
 
         if ( !mpDDInfo->bStarterOfDD )
         {
-            delete mpDDInfo;
-            mpDDInfo = nullptr;
+            mpDDInfo.reset();
         }
     }
 
@@ -2928,7 +2918,7 @@ void Edit::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& rD
 {
     if ( !mpDDInfo )
     {
-        mpDDInfo = new DDInfo;
+        mpDDInfo.reset(new DDInfo);
     }
     // search for string data type
     const Sequence< css::datatransfer::DataFlavor >& rFlavors( rDTDE.SupportedDataFlavors );
