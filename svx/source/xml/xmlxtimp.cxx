@@ -18,7 +18,7 @@
  */
 
 #include <tools/urlobj.hxx>
-#include <com/sun/star/document/XGraphicObjectResolver.hpp>
+#include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
@@ -296,11 +296,11 @@ void SvxXMLTableImportContext::importBitmap( const uno::Reference< XAttributeLis
 SvxXMLXTableImport::SvxXMLXTableImport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,
     const uno::Reference< XNameContainer > & rTable,
-    uno::Reference< XGraphicObjectResolver > const & xGrfResolver )
+    uno::Reference<XGraphicStorageHandler> const & xGraphicStorageHandler)
 :   SvXMLImport(rContext, "", SvXMLImportFlags::NONE),
     mrTable( rTable )
 {
-    SetGraphicResolver( xGrfResolver );
+    SetGraphicStorageHandler(xGraphicStorageHandler);
 
     GetNamespaceMap().Add( "__ooo", GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
     GetNamespaceMap().Add( "__office", GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
@@ -394,9 +394,9 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
                 *bOptLoadedFromStorage = true;
         }
 
-        uno::Reference< XGraphicObjectResolver > xGrfResolver;
+        uno::Reference<XGraphicStorageHandler> xGraphicStorageHandler;
         if (xGraphicHelper.is())
-            xGrfResolver = xGraphicHelper.get();
+            xGraphicStorageHandler = xGraphicHelper.get();
 
         try
         {
@@ -407,7 +407,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
         {
         }
 
-        uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTableImport( xContext, xTable, xGrfResolver ) );
+        uno::Reference<XDocumentHandler> xHandler(new SvxXMLXTableImport(xContext, xTable, xGraphicStorageHandler));
         xParser->setDocumentHandler( xHandler );
         xParser->parseStream( aParserInput );
 

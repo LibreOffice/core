@@ -561,8 +561,7 @@ void splitUserDataFromURL(OUString const & rWholeURL, OUString & rJustURL, OUStr
 // XGraphicObjectResolver
 OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& /*rURL*/ )
 {
-    osl::MutexGuard aGuard( maMutex );
-    return OUString();
+    throw uno::RuntimeException("XGraphicObjectResolver has been removed in LibreOffice 6.1");
 }
 
 // XGraphicStorageHandler

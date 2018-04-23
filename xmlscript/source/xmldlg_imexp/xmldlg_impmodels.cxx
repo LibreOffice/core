@@ -27,7 +27,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
-#include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 
 #include <sal/log.hxx>
