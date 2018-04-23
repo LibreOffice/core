@@ -60,25 +60,25 @@ TETextPortionList::~TETextPortionList()
 
 TETextPortion* TETextPortionList::operator[]( std::size_t nPos )
 {
-    return maPortions[ nPos ];
+    return maPortions[ nPos ].get();
 }
 
-std::vector<TETextPortion*>::iterator TETextPortionList::begin()
+std::vector<std::unique_ptr<TETextPortion>>::iterator TETextPortionList::begin()
 {
     return maPortions.begin();
 }
 
-std::vector<TETextPortion*>::const_iterator TETextPortionList::begin() const
+std::vector<std::unique_ptr<TETextPortion>>::const_iterator TETextPortionList::begin() const
 {
     return maPortions.begin();
 }
 
-std::vector<TETextPortion*>::iterator TETextPortionList::end()
+std::vector<std::unique_ptr<TETextPortion>>::iterator TETextPortionList::end()
 {
     return maPortions.end();
 }
 
-std::vector<TETextPortion*>::const_iterator TETextPortionList::end() const
+std::vector<std::unique_ptr<TETextPortion>>::const_iterator TETextPortionList::end() const
 {
     return maPortions.end();
 }
@@ -93,34 +93,30 @@ std::size_t TETextPortionList::size() const
     return maPortions.size();
 }
 
-std::vector<TETextPortion*>::iterator TETextPortionList::erase( const std::vector<TETextPortion*>::iterator& aIter )
+std::vector<std::unique_ptr<TETextPortion>>::iterator TETextPortionList::erase( const std::vector<std::unique_ptr<TETextPortion>>::iterator& aIter )
 {
     return maPortions.erase( aIter );
 }
 
-std::vector<TETextPortion*>::iterator TETextPortionList::insert( const std::vector<TETextPortion*>::iterator& aIter,
-                                                                 TETextPortion* pTP )
+std::vector<std::unique_ptr<TETextPortion>>::iterator TETextPortionList::insert( const std::vector<std::unique_ptr<TETextPortion>>::iterator& aIter,
+                                                                 std::unique_ptr<TETextPortion> pTP )
 {
-    return maPortions.insert( aIter, pTP );
+    return maPortions.insert( aIter, std::move(pTP) );
 }
 
-void TETextPortionList::push_back( TETextPortion* pTP )
+void TETextPortionList::push_back( std::unique_ptr<TETextPortion> pTP )
 {
-    maPortions.push_back( pTP );
+    maPortions.push_back( std::move(pTP) );
 }
 
 void TETextPortionList::Reset()
 {
-    for ( auto pTP : maPortions )
-        delete pTP;
     maPortions.clear();
 }
 
 void TETextPortionList::DeleteFromPortion( std::size_t nDelFrom )
 {
     SAL_WARN_IF( ( nDelFrom >= maPortions.size() ) && ( (nDelFrom != 0) || (maPortions.size() != 0) ), "vcl", "DeleteFromPortion: Out of range" );
-    for ( auto it = maPortions.begin() + nDelFrom; it != maPortions.end(); ++it )
-        delete *it;
     maPortions.erase( maPortions.begin() + nDelFrom, maPortions.end() );
 }
 
@@ -130,7 +126,7 @@ std::size_t TETextPortionList::FindPortion( sal_Int32 nCharPos, sal_Int32& nPort
     sal_Int32 nTmpPos = 0;
     for ( std::size_t nPortion = 0; nPortion < maPortions.size(); nPortion++ )
     {
-        TETextPortion* pPortion = maPortions[ nPortion ];
+        TETextPortion* pPortion = maPortions[ nPortion ].get();
         nTmpPos += pPortion->GetLen();
         if ( nTmpPos >= nCharPos )
         {
