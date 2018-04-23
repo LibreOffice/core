@@ -75,9 +75,7 @@ int OutputDevice::GetDevFontCount() const
 
         if (!mpDeviceFontList->Count())
         {
-            delete mpDeviceFontList;
-            mpDeviceFontList = nullptr;
-
+            mpDeviceFontList.reset();
             return 0;
         }
     }
@@ -92,7 +90,7 @@ bool OutputDevice::IsFontAvailable( const OUString& rFontName ) const
 
 int OutputDevice::GetDevFontSizeCount( const vcl::Font& rFont ) const
 {
-    delete mpDeviceFontSizeList;
+    mpDeviceFontSizeList.reset();
 
     ImplInitFontList();
     mpDeviceFontSizeList = mpFontCollection->GetDeviceFontSizeList( rFont.GetFamilyName() );
@@ -488,16 +486,8 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
 
     if ( bNewFontLists )
     {
-        if ( mpDeviceFontList )
-        {
-            delete mpDeviceFontList;
-            mpDeviceFontList = nullptr;
-        }
-        if ( mpDeviceFontSizeList )
-        {
-            delete mpDeviceFontSizeList;
-            mpDeviceFontSizeList = nullptr;
-        }
+        mpDeviceFontList.reset();
+        mpDeviceFontSizeList.reset();
 
         // release all physically selected fonts on this device
         if( AcquireGraphics() )

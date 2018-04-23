@@ -498,16 +498,8 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
         mpFontInstance->Release();
         mpFontInstance = nullptr;
     }
-    if ( mpDeviceFontList )
-    {
-        delete mpDeviceFontList;
-        mpDeviceFontList = nullptr;
-    }
-    if ( mpDeviceFontSizeList )
-    {
-        delete mpDeviceFontSizeList;
-        mpDeviceFontSizeList = nullptr;
-    }
+    mpDeviceFontList.reset();
+    mpDeviceFontSizeList.reset();
 
     // preserve global font lists
     ImplSVData* pSVData = ImplGetSVData();
