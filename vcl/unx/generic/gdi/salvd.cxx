@@ -35,18 +35,18 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <opengl/x11/salvd.hxx>
 
-SalVirtualDevice* X11SalInstance::CreateX11VirtualDevice(SalGraphics const * pGraphics,
+std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateX11VirtualDevice(SalGraphics const * pGraphics,
         long &nDX, long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData,
         X11SalGraphics* pNewGraphics)
 {
     assert(pNewGraphics);
     if (OpenGLHelper::isVCLOpenGLEnabled())
-        return new X11OpenGLSalVirtualDevice( pGraphics, nDX, nDY, pData, pNewGraphics );
+        return std::unique_ptr<SalVirtualDevice>(new X11OpenGLSalVirtualDevice( pGraphics, nDX, nDY, pData, pNewGraphics ));
     else
-        return new X11SalVirtualDevice(pGraphics, nDX, nDY, eFormat, pData, pNewGraphics);
+        return std::unique_ptr<SalVirtualDevice>(new X11SalVirtualDevice(pGraphics, nDX, nDY, eFormat, pData, pNewGraphics));
 }
 
-SalVirtualDevice* X11SalInstance::CreateVirtualDevice(SalGraphics* pGraphics,
+std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateVirtualDevice(SalGraphics* pGraphics,
         long &nDX, long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData)
 {
     return CreateX11VirtualDevice(pGraphics, nDX, nDY, eFormat, pData, new X11SalGraphics());
