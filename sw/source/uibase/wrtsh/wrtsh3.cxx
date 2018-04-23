@@ -25,6 +25,7 @@
 #include <svx/svdview.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
+#include <svx/srchdlg.hxx>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <sfx2/htmlmode.hxx>
@@ -140,12 +141,44 @@ void SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark )
 
 bool SwWrtShell::GoNextBookmark()
 {
-    return MoveBookMark( BOOKMARK_NEXT );
+    if ( !getIDocumentMarkAccess()->getBookmarksCount() )
+    {
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
+        return false;
+    }
+    LockView( true );
+    bool bRet = MoveBookMark( BOOKMARK_NEXT );
+    if ( !bRet )
+    {
+        MoveBookMark( BOOKMARK_INDEX, getIDocumentMarkAccess()->getBookmarksBegin()->get() );
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
+    }
+    else
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+    LockView( false );
+    ShowCursor();
+    return true;
 }
 
 bool SwWrtShell::GoPrevBookmark()
 {
-    return MoveBookMark( BOOKMARK_PREV );
+    if ( !getIDocumentMarkAccess()->getBookmarksCount() )
+    {
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
+        return false;
+    }
+    LockView( true );
+    bool bRet = MoveBookMark( BOOKMARK_PREV );
+    if ( !bRet )
+    {
+        MoveBookMark( BOOKMARK_INDEX, ( getIDocumentMarkAccess()->getBookmarksEnd() - 1 )->get() );
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::StartWrapped );
+    }
+    else
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+    LockView( false );
+    ShowCursor();
+    return true;
 }
 
 void SwWrtShell::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
