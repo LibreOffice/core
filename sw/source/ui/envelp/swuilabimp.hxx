@@ -72,7 +72,7 @@ public:
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
 
-    SwLabDlg* GetParentSwLabDlg() {return static_cast<SwLabDlg*>(GetParentDialog());}
+    SwLabDlg* GetParentSwLabDlg() {return static_cast<SwLabDlg*>(GetTabDialog());}
 
     void    SetToBusinessCard();
 
