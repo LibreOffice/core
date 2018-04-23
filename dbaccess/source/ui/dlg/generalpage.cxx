@@ -586,9 +586,9 @@ namespace dbaui
 
     OUString OGeneralPageWizard::getDatasourceName(const SfxItemSet& _rSet)
     {
-        // Sets jdbc as the default selected database on startup.
+        // Sets firebird as the default selected database on startup.
         if (m_pRB_CreateDatabase->IsChecked() )
-            return m_pCollection->getTypeDisplayName( "jdbc:" );
+            return m_pCollection->getTypeDisplayName( "sdbc:embedded:firebird" );
 
         return OGeneralPage::getDatasourceName( _rSet );
     }
