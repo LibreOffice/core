@@ -63,8 +63,8 @@ public:
 
     // misc utilities
     PhysicalFontCollection* Clone() const;
-    ImplDeviceFontList*     GetDeviceFontList() const;
-    ImplDeviceFontSizeList* GetDeviceFontSizeList( const OUString& rFontName ) const;
+    std::unique_ptr<ImplDeviceFontList> GetDeviceFontList() const;
+    std::unique_ptr<ImplDeviceFontSizeList> GetDeviceFontSizeList( const OUString& rFontName ) const;
 
 private:
     mutable bool            mbMatchData;    // true if matching attributes are initialized
