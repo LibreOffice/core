@@ -115,7 +115,7 @@ ScrollBar::~ScrollBar()
 
 void ScrollBar::dispose()
 {
-    delete mpData; mpData = nullptr;
+    mpData.reset();
     Control::dispose();
 }
 
@@ -1137,7 +1137,7 @@ void ScrollBar::GetFocus()
 {
     if( !mpData )
     {
-        mpData = new ImplScrollBarData;
+        mpData.reset(new ImplScrollBarData);
         mpData->maTimer.SetInvokeHandler( LINK( this, ScrollBar, ImplAutoTimerHdl ) );
         mpData->maTimer.SetDebugName( "vcl::ScrollBar mpData->maTimer" );
         mpData->mbHide = false;
