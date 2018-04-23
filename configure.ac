@@ -2053,6 +2053,11 @@ libo_FUZZ_ARG_WITH(fonts,
          known to be available on the system then you should use this option.]),
 ,)
 
+AC_ARG_ENABLE(noto-font,
+    AS_HELP_STRING([--enable-noto-font],
+        [Add more Google Noto fonts.]),
+,)
+
 AC_ARG_WITH(epm,
     AS_HELP_STRING([--with-epm],
         [Decides which epm to use. Default is to use the one from the system if
@@ -13241,6 +13246,19 @@ else
 fi
 AC_SUBST(WITH_FONTS)
 
+dnl Test whether to include more Google Noto fonts
+dnl ===================================================================
+AC_MSG_CHECKING([whether to include more Google Noto fonts])
+if test "$enable_noto_font" = "" -o "$enable_noto_font" = "no" -o "$with_fonts" = "no"; then
+    AC_MSG_RESULT([no])
+    WITH_NOTO_FONT=
+else
+    AC_MSG_RESULT([yes])
+    WITH_NOTO_FONT=TRUE
+    BUILD_TYPE="$BUILD_TYPE NOTO_FONT"
+    SCPDEFS="$SCPDEFS -DWITH_NOTO_FONT"
+fi
+AC_SUBST(WITH_NOTO_FONT)
 
 dnl ===================================================================
 dnl Test whether to enable online update service
