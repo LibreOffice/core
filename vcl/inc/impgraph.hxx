@@ -27,6 +27,7 @@ struct ImpSwapInfo
 {
     MapMode     maPrefMapMode;
     Size        maPrefSize;
+    Size        maSizePixel;
 
     bool mbIsAnimated;
     bool mbIsEPS;
@@ -154,6 +155,8 @@ private:
     const BitmapEx&     ImplGetBitmapExRef() const;
     Animation           ImplGetAnimation() const;
     const GDIMetaFile&  ImplGetGDIMetaFile() const;
+
+    Size                ImplGetSizePixel() const;
 
     Size                ImplGetPrefSize() const;
     void                ImplSetPrefSize( const Size& rPrefSize );

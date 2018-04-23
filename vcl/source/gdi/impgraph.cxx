@@ -537,6 +537,8 @@ void ImpGraphic::ImplSetPrepared()
             maSwapInfo.maPrefSize = aDescriptor.GetSizePixel();
             maSwapInfo.maPrefMapMode = MapMode(MapUnit::MapPixel);
         }
+
+        maSwapInfo.maSizePixel = aDescriptor.GetSizePixel();
     }
     maSwapInfo.mnAnimationLoopCount = 0;
     maSwapInfo.mbIsAnimated = false;
@@ -866,6 +868,18 @@ const GDIMetaFile& ImpGraphic::ImplGetGDIMetaFile() const
     }
 
     return maMetaFile;
+}
+
+Size ImpGraphic::ImplGetSizePixel() const
+{
+    Size aSize;
+
+    if (ImplIsSwapOut())
+        aSize = maSwapInfo.maSizePixel;
+    else
+        aSize = ImplGetBitmapEx(GraphicConversionParameters()).GetSizePixel();
+
+    return aSize;
 }
 
 Size ImpGraphic::ImplGetPrefSize() const
