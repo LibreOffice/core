@@ -263,23 +263,15 @@ void Table::alterColumnByIndex(
 
 Sequence<Type > Table::getTypes()
 {
-    static cppu::OTypeCollection *pCollection;
-    if( ! pCollection )
-    {
-        MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        if( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
-                cppu::UnoType<css::sdbcx::XIndexesSupplier>::get(),
-                cppu::UnoType<css::sdbcx::XKeysSupplier>::get(),
-                cppu::UnoType<css::sdbcx::XColumnsSupplier>::get(),
-                cppu::UnoType<css::sdbcx::XRename>::get(),
-                cppu::UnoType<css::sdbcx::XAlterTable>::get(),
-                ReflectionBase::getTypes());
-            pCollection = &collection;
-        }
-    }
-    return pCollection->getTypes();
+    static cppu::OTypeCollection collection(
+        cppu::UnoType<css::sdbcx::XIndexesSupplier>::get(),
+        cppu::UnoType<css::sdbcx::XKeysSupplier>::get(),
+        cppu::UnoType<css::sdbcx::XColumnsSupplier>::get(),
+        cppu::UnoType<css::sdbcx::XRename>::get(),
+        cppu::UnoType<css::sdbcx::XAlterTable>::get(),
+        ReflectionBase::getTypes());
+
+    return collection.getTypes();
 }
 
 Sequence< sal_Int8> Table::getImplementationId()
@@ -368,21 +360,13 @@ Reference< XIndexAccess > TableDescriptor::getKeys(  )
 
 Sequence<Type > TableDescriptor::getTypes()
 {
-    static cppu::OTypeCollection *pCollection;
-    if( ! pCollection )
-    {
-        MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        if( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
-                cppu::UnoType<css::sdbcx::XIndexesSupplier>::get(),
-                cppu::UnoType<css::sdbcx::XKeysSupplier>::get(),
-                cppu::UnoType<css::sdbcx::XColumnsSupplier>::get(),
-                ReflectionBase::getTypes());
-            pCollection = &collection;
-        }
-    }
-    return pCollection->getTypes();
+    static cppu::OTypeCollection collection(
+        cppu::UnoType<css::sdbcx::XIndexesSupplier>::get(),
+        cppu::UnoType<css::sdbcx::XKeysSupplier>::get(),
+        cppu::UnoType<css::sdbcx::XColumnsSupplier>::get(),
+        ReflectionBase::getTypes());
+
+    return collection.getTypes();
 }
 
 Sequence< sal_Int8> TableDescriptor::getImplementationId()

@@ -84,44 +84,34 @@ namespace pq_sdbc_driver
 {
 static ::cppu::IPropertyArrayHelper & getResultSetPropertyArrayHelper()
 {
-    static ::cppu::IPropertyArrayHelper *pArrayHelper;
-    if( ! pArrayHelper )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pArrayHelper )
-        {
-            static Property aTable[] =
-                {
-                    // LEM TODO: this needs to be kept in sync with other, e.g. pq_statics.css:508
-                    // Should really share!
-                    // At least use for the handles the #define'd values in .hxx file...
-                    Property(
-                        "CursorName", 0,
-                        ::cppu::UnoType<OUString>::get() , 0 ),
-                    Property(
-                        "EscapeProcessing", 1,
-                        cppu::UnoType<bool>::get() , 0 ),
-                    Property(
-                        "FetchDirection", 2,
-                        ::cppu::UnoType<sal_Int32>::get() , 0 ),
-                    Property(
-                        "FetchSize", 3,
-                        ::cppu::UnoType<sal_Int32>::get() , 0 ),
-                    Property(
-                        "IsBookmarkable", 4,
-                        cppu::UnoType<bool>::get() , 0 ),
-                    Property(
-                        "ResultSetConcurrency", 5,
-                        ::cppu::UnoType<sal_Int32>::get() , 0 ),
-                    Property(
-                        "ResultSetType", 6,
-                        ::cppu::UnoType<sal_Int32>::get() , 0 )
-                };
-            static_assert( SAL_N_ELEMENTS(aTable) == BASERESULTSET_SIZE, "wrong number of elements" );
-            static ::cppu::OPropertyArrayHelper arrayHelper( aTable, BASERESULTSET_SIZE, true );
-            pArrayHelper = &arrayHelper;
-        }
-    }
+    // LEM TODO: this needs to be kept in sync with other, e.g. pq_statics.css:508
+    // Should really share!
+    // At least use for the handles the #define'd values in .hxx file...
+    static ::cppu::OPropertyArrayHelper arrayHelper(
+        Sequence<Property>{
+            Property(
+                "CursorName", 0,
+                ::cppu::UnoType<OUString>::get() , 0 ),
+            Property(
+                "EscapeProcessing", 1,
+                cppu::UnoType<bool>::get() , 0 ),
+            Property(
+                "FetchDirection", 2,
+                ::cppu::UnoType<sal_Int32>::get() , 0 ),
+            Property(
+                "FetchSize", 3,
+                ::cppu::UnoType<sal_Int32>::get() , 0 ),
+            Property(
+                "IsBookmarkable", 4,
+                cppu::UnoType<bool>::get() , 0 ),
+            Property(
+                "ResultSetConcurrency", 5,
+                ::cppu::UnoType<sal_Int32>::get() , 0 ),
+            Property(
+                "ResultSetType", 6,
+                ::cppu::UnoType<sal_Int32>::get() , 0 )},
+        true );
+    static ::cppu::IPropertyArrayHelper *pArrayHelper = &arrayHelper;
     return *pArrayHelper;
 }
 
@@ -176,20 +166,11 @@ Any BaseResultSet::queryInterface( const Type & rType )
 
 Sequence<Type > BaseResultSet::getTypes()
 {
-    static Sequence< Type > *pCollection;
-    if( ! pCollection )
-    {
-        MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        if( !pCollection )
-        {
-            static Sequence< Type > collection(
-                ::comphelper::concatSequences(
-                    OPropertySetHelper::getTypes(),
-                    BaseResultSet_BASE::getTypes()));
-            pCollection = &collection;
-        }
-    }
-    return *pCollection;
+    static Sequence< Type > collection(
+        ::comphelper::concatSequences(
+            OPropertySetHelper::getTypes(),
+            BaseResultSet_BASE::getTypes()));
+    return collection;
 }
 
 Sequence< sal_Int8> BaseResultSet::getImplementationId()

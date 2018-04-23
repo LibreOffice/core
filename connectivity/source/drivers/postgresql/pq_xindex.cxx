@@ -46,9 +46,6 @@
 #include "pq_tools.hxx"
 #include "pq_statics.hxx"
 
-using osl::MutexGuard;
-using osl::Mutex;
-
 using com::sun::star::container::XNameAccess;
 
 using com::sun::star::uno::Reference;
@@ -103,19 +100,11 @@ Reference< XNameAccess > Index::getColumns(  )
 
 Sequence<Type > Index::getTypes()
 {
-    static cppu::OTypeCollection *pCollection;
-    if( ! pCollection )
-    {
-        MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        if( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
-                cppu::UnoType<css::sdbcx::XColumnsSupplier>::get(),
-                ReflectionBase::getTypes());
-            pCollection = &collection;
-        }
-    }
-    return pCollection->getTypes();
+    static cppu::OTypeCollection collection(
+        cppu::UnoType<css::sdbcx::XColumnsSupplier>::get(),
+        ReflectionBase::getTypes());
+
+    return collection.getTypes();
 }
 
 Sequence< sal_Int8> Index::getImplementationId()
@@ -175,19 +164,11 @@ Reference< XNameAccess > IndexDescriptor::getColumns(  )
 
 Sequence<Type > IndexDescriptor::getTypes()
 {
-    static cppu::OTypeCollection *pCollection;
-    if( ! pCollection )
-    {
-        MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        if( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
-                cppu::UnoType<css::sdbcx::XColumnsSupplier>::get(),
-                ReflectionBase::getTypes());
-            pCollection = &collection;
-        }
-    }
-    return pCollection->getTypes();
+    static cppu::OTypeCollection collection(
+        cppu::UnoType<css::sdbcx::XColumnsSupplier>::get(),
+        ReflectionBase::getTypes());
+
+    return collection.getTypes();
 }
 
 Sequence< sal_Int8> IndexDescriptor::getImplementationId()

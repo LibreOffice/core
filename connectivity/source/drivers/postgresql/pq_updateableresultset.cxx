@@ -147,20 +147,12 @@ css::uno::Any  UpdateableResultSet::queryInterface(
 
 css::uno::Sequence< css::uno::Type > UpdateableResultSet::getTypes()
 {
-    static cppu::OTypeCollection *pCollection;
-    if( ! pCollection )
-    {
-        MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        if( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
-                cppu::UnoType<XResultSetUpdate>::get(),
-                cppu::UnoType<XRowUpdate>::get(),
-                SequenceResultSet::getTypes());
-            pCollection = &collection;
-        }
-    }
-    return pCollection->getTypes();
+    static cppu::OTypeCollection collection(
+        cppu::UnoType<XResultSetUpdate>::get(),
+        cppu::UnoType<XRowUpdate>::get(),
+        SequenceResultSet::getTypes());
+
+    return collection.getTypes();
 
 }
 
