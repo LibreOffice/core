@@ -179,7 +179,7 @@ BitmapEx BitmapMosaicFilter::execute(BitmapEx const& rBitmapEx)
     }
 
     if (bRet)
-        return BitmapEx(rBitmapEx);
+        return rBitmapEx;
 
     return BitmapEx();
 }
