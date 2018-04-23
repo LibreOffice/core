@@ -90,8 +90,8 @@ bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart pa
 {
     switch (type)
     {
-        /*case ControlType::Pushbutton:
-        case ControlType::Radiobutton:*/
+        /*case ControlType::Pushbutton:*/
+        case ControlType::Radiobutton:
         case ControlType::Checkbox:
         /*case ControlType::Tooltip:
         case ControlType::Progress:
@@ -544,14 +544,14 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
         draw( QStyle::CC_SpinBox, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
-    }
+    }*/
     else if (type == ControlType::Radiobutton)
     {
         QStyleOptionButton option;
         draw( QStyle::CE_RadioButton, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
     }
-    else if (type == ControlType::Tooltip)
+    /*else if (type == ControlType::Tooltip)
     {
         QStyleOption option;
         draw( QStyle::PE_PanelTipLabel, &option, m_image.get(),
@@ -828,7 +828,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
                 retVal = true;
             }
             break;
-        }
+        }*/
         case ControlType::Radiobutton:
         {
             const int h = QApplication::style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight);
@@ -846,7 +846,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
             retVal = true;
             break;
         }
-        case ControlType::Slider:
+        /* case ControlType::Slider:
         {
             const int w = QApplication::style()->pixelMetric(QStyle::PM_SliderLength);
             if( part == ControlPart::ThumbHorz )
