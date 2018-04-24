@@ -311,26 +311,26 @@ BrowseEvent BrowserDataWin::CreateBrowseEvent( const Point& rPosPixel )
     long nColX = 0;
     size_t nCol;
     for ( nCol = 0;
-          nCol < pBox->pCols.size() && nColX < GetSizePixel().Width();
+          nCol < pBox->mvCols.size() && nColX < GetSizePixel().Width();
           ++nCol )
-        if ( pBox->pCols[ nCol ]->IsFrozen() || nCol >= pBox->nFirstCol )
+        if ( pBox->mvCols[ nCol ]->IsFrozen() || nCol >= pBox->nFirstCol )
         {
-            nColX += pBox->pCols[ nCol ]->Width();
+            nColX += pBox->mvCols[ nCol ]->Width();
             if ( nMouseX < nColX )
                 break;
         }
     sal_uInt16 nColId = BROWSER_INVALIDID;
-    if ( nCol < pBox->pCols.size() )
-        nColId = pBox->pCols[ nCol ]->GetId();
+    if ( nCol < pBox->mvCols.size() )
+        nColId = pBox->mvCols[ nCol ]->GetId();
 
     // compute the field rectangle and field relative MouseEvent
     tools::Rectangle aFieldRect;
-    if ( nCol < pBox->pCols.size() )
+    if ( nCol < pBox->mvCols.size() )
     {
-        nColX -= pBox->pCols[ nCol ]->Width();
+        nColX -= pBox->mvCols[ nCol ]->Width();
         aFieldRect = tools::Rectangle(
             Point( nColX, nRelRow * pBox->GetDataRowHeight() ),
-            Size( pBox->pCols[ nCol ]->Width(),
+            Size( pBox->mvCols[ nCol ]->Width(),
                   pBox->GetDataRowHeight() ) );
     }
 
