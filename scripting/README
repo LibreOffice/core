@@ -34,6 +34,10 @@ C++ implementation of the LanguageScriptProvider UNO service for Basic
 C++ implementation of the DialogProvider UNO service used for loading
 UNO dialogs from various languages
 
+- source/pyprov
+
+LanguageScriptProvider for Python
+
 - java/com/sun/star/script/framework/provider
 
 Implementation of an abstract base class ScriptProvider which provides
@@ -62,7 +66,3 @@ Example scripts in BeanShell, JavaScript, Java and Python
 - java/org/openoffice/*
 
 Support for developing scripts in IDEs such as NetBeans.
-
-- source/pyprov
-
-LanguageScriptProvider for Python
