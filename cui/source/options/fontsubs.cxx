@@ -66,8 +66,8 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( vcl::Window* pParent,
     m_pCheckLB->SetStyle(m_pCheckLB->GetStyle()|WB_HSCROLL|WB_VSCROLL);
     m_pCheckLB->SetSelectionMode(SelectionMode::Multiple);
     m_pCheckLB->SortByCol(2);
-    long aStaticTabs[] = { 4, 0, 0, 0, 0 };
-    m_pCheckLB->SvSimpleTable::SetTabs(&aStaticTabs[0]);
+    long aStaticTabs[] = { 0, 0, 0, 0 };
+    m_pCheckLB->SvSimpleTable::SetTabs(SAL_N_ELEMENTS(aStaticTabs), aStaticTabs);
 
     OUString sHeader1(get<FixedText>("always")->GetText());
     OUString sHeader2(get<FixedText>("screenonly")->GetText());
@@ -421,11 +421,8 @@ void SvxFontSubstCheckListBox::setColSizes()
     nMax = std::max( nMax, nMin );
     const long nDoubleMax = 2*nMax;
     const long nRest = GetSizePixel().Width() - nDoubleMax;
-    long aStaticTabs[] = { 4, 0, 0, 0, 0 };
-    aStaticTabs[2] = nMax;
-    aStaticTabs[3] = nDoubleMax;
-    aStaticTabs[4] = nDoubleMax + nRest/2;
-    SvSimpleTable::SetTabs(aStaticTabs, MapUnit::MapPixel);
+    long aStaticTabs[] = { 0, nMax, nDoubleMax, nDoubleMax + nRest/2 };
+    SvSimpleTable::SetTabs(SAL_N_ELEMENTS(aStaticTabs), aStaticTabs, MapUnit::MapPixel);
 }
 
 void SvxFontSubstCheckListBox::Resize()

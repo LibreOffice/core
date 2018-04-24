@@ -443,12 +443,12 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( vcl::Window* pParent,
     m_pCheckLB->SetSelectHdl(LINK(this, OfaSwAutoFmtOptionsPage, SelectHdl));
     m_pCheckLB->SetDoubleClickHdl(LINK(this, OfaSwAutoFmtOptionsPage, DoubleClickEditHdl));
 
-    static long aStaticTabs[]=
+    static long const aStaticTabs[]=
     {
-        3, 0, 20, 40
+        0, 20, 40
     };
 
-    m_pCheckLB->SvSimpleTable::SetTabs(aStaticTabs);
+    m_pCheckLB->SvSimpleTable::SetTabs(SAL_N_ELEMENTS(aStaticTabs), aStaticTabs);
     OUString sHeader = get<vcl::Window>("m")->GetText() + "\t"
                      + get<vcl::Window>("t")->GetText() + "\t";
     m_pCheckLB->InsertHeaderEntry(sHeader, HEADERBAR_APPEND,
@@ -884,8 +884,8 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( vcl::Window* pParent,
     pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
     pCharClass = new CharClass( aLanguageTag );
 
-    static long aTabs[] = { 2 /* Tab-Count */, 1, 61 };
-    m_pReplaceTLB->SetTabs( &aTabs[0] );
+    static long const aTabs[] = { 1, 61 };
+    m_pReplaceTLB->SetTabs( SAL_N_ELEMENTS(aTabs), aTabs );
 
     m_pReplaceTLB->SetStyle( m_pReplaceTLB->GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN );
     m_pReplaceTLB->SetSelectHdl( LINK(this, OfaAutocorrReplacePage, SelectHdl) );
@@ -1842,14 +1842,14 @@ OfaQuoteTabPage::OfaQuoteTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     if ( bShowSWOptions )
     {
-        static long aStaticTabs[]=
+        static long const aStaticTabs[]=
         {
-            3, 0, 20, 40
+            0, 20, 40
         };
 
         m_pSwCheckLB->SetStyle(m_pSwCheckLB->GetStyle() | WB_HSCROLL| WB_VSCROLL);
 
-        m_pSwCheckLB->SvSimpleTable::SetTabs(aStaticTabs);
+        m_pSwCheckLB->SvSimpleTable::SetTabs(SAL_N_ELEMENTS(aStaticTabs), aStaticTabs);
         OUString sHeader = get<vcl::Window>("m")->GetText() + "\t" + get<vcl::Window>("t")->GetText() + "\t";
         m_pSwCheckLB->InsertHeaderEntry( sHeader, HEADERBAR_APPEND,
                         HeaderBarItemBits::CENTER | HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED);

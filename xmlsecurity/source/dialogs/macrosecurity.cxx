@@ -348,8 +348,8 @@ public:
         if (isInitialLayout(this))
         {
             const long nControlWidth = GetSizePixel().Width();
-            long aTabLocs[] = { 3, 0, 35*nControlWidth/100, 70*nControlWidth/100 };
-            SvSimpleTable::SetTabs(aTabLocs, MapUnit::MapPixel);
+            long aTabLocs[] = { 0, 35*nControlWidth/100, 70*nControlWidth/100 };
+            SvSimpleTable::SetTabs(SAL_N_ELEMENTS(aTabLocs), aTabLocs, MapUnit::MapPixel);
         }
     }
 };
@@ -368,8 +368,8 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(vcl::Window* _pPare
 
     SvSimpleTableContainer *pCertificates = get<SvSimpleTableContainer>("certificates");
     m_pTrustCertLB.reset(VclPtr<TrustCertLB>::Create(*pCertificates));
-    static long aTabs[] = { 3, 0, 0, 0 };
-    m_pTrustCertLB->SetTabs( aTabs );
+    static long aTabs[] = { 0, 0, 0 };
+    m_pTrustCertLB->SetTabs( SAL_N_ELEMENTS(aTabs), aTabs );
 
     m_pTrustCertLB->InsertHeaderEntry(get<FixedText>("to")->GetText() + "\t"
         +  get<FixedText>("by")->GetText() + "\t" + get<FixedText>("date")->GetText());

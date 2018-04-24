@@ -2887,8 +2887,8 @@ namespace svxform
         pNamespacesListContainer->set_height_request(aControlSize.Height());
         m_pNamespacesList = VclPtr<SvSimpleTable>::Create(*pNamespacesListContainer, 0);
 
-        static long aStaticTabs[]= { 3, 0, 35, 200 };
-        m_pNamespacesList->SvSimpleTable::SetTabs( aStaticTabs );
+        static long aTabPositions[]= { 0, 35, 200 };
+        m_pNamespacesList->SvSimpleTable::SetTabs( SAL_N_ELEMENTS(aTabPositions), aTabPositions );
         OUString sHeader = get<FixedText>("prefix")->GetText();
         sHeader += "\t";
         sHeader += get<FixedText>("url")->GetText();

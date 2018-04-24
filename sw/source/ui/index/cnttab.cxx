@@ -611,14 +611,11 @@ void SwIndexTreeLB::setColSizes()
     nWidth /= 14;
     nWidth--;
 
-    long nTabs_Impl[MAXLEVEL+2];
-
-    nTabs_Impl[0] = MAXLEVEL+1;
-    nTabs_Impl[1] = 3 * nWidth;
-
+    long nTabs[MAXLEVEL+1];
+    nTabs[0] = 3 * nWidth;
     for(sal_uInt16 i = 1; i <= MAXLEVEL; ++i)
-        nTabs_Impl[i+1] = nTabs_Impl[i] + nWidth;
-    SvSimpleTable::SetTabs(&nTabs_Impl[0], MapUnit::MapPixel);
+        nTabs[i] = nTabs[i-1] + nWidth;
+    SvSimpleTable::SetTabs(SAL_N_ELEMENTS(nTabs), nTabs, MapUnit::MapPixel);
 }
 
 class SwAddStylesDlg_Impl : public SfxModalDialog

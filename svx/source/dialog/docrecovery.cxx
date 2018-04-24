@@ -860,8 +860,8 @@ RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
     pFileListLBContainer->set_height_request(aSize.Height());
     m_pFileListLB = VclPtr<RecovDocList>::Create(*pFileListLBContainer);
 
-    static long nTabs[] = { 2, 0, 40*RECOV_CONTROLWIDTH/100 };
-    m_pFileListLB->SetTabs( &nTabs[0] );
+    static long aTabPositions[] = { 0, 40*RECOV_CONTROLWIDTH/100 };
+    m_pFileListLB->SetTabs( SAL_N_ELEMENTS(aTabPositions), aTabPositions );
     m_pFileListLB->InsertHeaderEntry(get<FixedText>("nameft")->GetText() + "\t" + get<FixedText>("statusft")->GetText());
 
     PluginProgress* pProgress   = new PluginProgress(m_pProgrParent, pCore->getComponentContext());

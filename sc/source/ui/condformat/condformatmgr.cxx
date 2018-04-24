@@ -95,9 +95,9 @@ void ScCondFormatManagerWindow::setColSizes()
     HeaderBar &rBar = GetTheHeaderBar();
     if (rBar.GetItemCount() < 2)
         return;
-    long aStaticTabs[]= { 2, 0, 0 };
-    aStaticTabs[2] = rBar.GetSizePixel().Width() / 2;
-    SvSimpleTable::SetTabs(aStaticTabs, MapUnit::MapPixel);
+    long aStaticTabs[]= { 0, 0 };
+    aStaticTabs[1] = rBar.GetSizePixel().Width() / 2;
+    SvSimpleTable::SetTabs(SAL_N_ELEMENTS(aStaticTabs), aStaticTabs, MapUnit::MapPixel);
 }
 
 ScCondFormatManagerDlg::ScCondFormatManagerDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList):

@@ -80,13 +80,8 @@ void SwAddressTable::setColSizes()
     long nWidth = rHB.GetSizePixel().Width();
     nWidth /= 2;
 
-    long nTabs_Impl[3];
-
-    nTabs_Impl[0] = 2;
-    nTabs_Impl[1] = 0;
-    nTabs_Impl[2] = nWidth;
-
-    SvSimpleTable::SetTabs(&nTabs_Impl[0], MapUnit::MapPixel);
+    long nTabs[2] = { 0, nWidth };
+    SvSimpleTable::SetTabs(SAL_N_ELEMENTS(nTabs), nTabs, MapUnit::MapPixel);
 }
 
 SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
@@ -105,8 +100,8 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
     pHeaderTreeContainer->set_width_request(aSize.Width());
     pHeaderTreeContainer->set_height_request(aSize.Height());
     m_pTable = VclPtr<SwAddressTable>::Create(*pHeaderTreeContainer);
-    long const aStaticTabs[]= { 2, 0, 0 };
-    m_pTable->SetTabs( aStaticTabs );
+    long const aStaticTabs[]= { 0, 0 };
+    m_pTable->SetTabs( SAL_N_ELEMENTS(aStaticTabs), aStaticTabs );
     m_pTable->InsertHeaderItem(1, m_sName );
     m_pTable->InsertHeaderItem(2, m_sType );
 

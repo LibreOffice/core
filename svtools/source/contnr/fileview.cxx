@@ -487,15 +487,15 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
     HeaderBarItemBits nBits = ( HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE );
     if (nFlags & FileViewFlags::SHOW_ONLYTITLE)
     {
-        long pTabs[] = { 2, 20, 600 };
-        SetTabs(&pTabs[0], MapUnit::MapPixel);
+        long aTabPositions[] = { 20, 600 };
+        SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions, MapUnit::MapPixel);
 
         mpHeaderBar->InsertItem(COLUMN_TITLE, SvtResId(STR_SVT_FILEVIEW_COLUMN_TITLE), 600, nBits | HeaderBarItemBits::UPARROW);
     }
     else
     {
-        long pTabs[] = { 5, 20, 180, 320, 400, 600 };
-        SetTabs(&pTabs[0], MapUnit::MapPixel);
+        long aTabPositions[] = { 20, 180, 320, 400, 600 };
+        SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions, MapUnit::MapPixel);
         SetTabJustify(2, AdjustRight); // column "Size"
 
         mpHeaderBar->InsertItem(COLUMN_TITLE, SvtResId(STR_SVT_FILEVIEW_COLUMN_TITLE), 180, nBits | HeaderBarItemBits::UPARROW);

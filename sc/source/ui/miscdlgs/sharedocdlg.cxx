@@ -60,9 +60,8 @@ public:
         long nWebSiteWidth = std::max(
             12 + rBar.GetTextWidth(rBar.GetItemText(1)),
             GetSizePixel().Width() - nAccessedWidth);
-        long aStaticTabs[]= { 2, 0, 0 };
-        aStaticTabs[2] = nWebSiteWidth;
-        SvSimpleTable::SetTabs(aStaticTabs, MapUnit::MapPixel);
+        long aStaticTabs[]= { 0, nWebSiteWidth };
+        SvSimpleTable::SetTabs(SAL_N_ELEMENTS(aStaticTabs), aStaticTabs, MapUnit::MapPixel);
     }
 };
 
@@ -93,8 +92,8 @@ ScShareDocumentDlg::ScShareDocumentDlg( vcl::Window* pParent, ScViewData* pViewD
     m_pCbShare->SetToggleHdl( LINK( this, ScShareDocumentDlg, ToggleHandle ) );
     m_pFtWarning->Enable( bIsDocShared );
 
-    long const nTabs[] = { 2, 0, 0 };
-    m_pLbUsers->SetTabs( nTabs );
+    long const nTabs[] = { 0, 0 };
+    m_pLbUsers->SetTabs( SAL_N_ELEMENTS(nTabs), nTabs );
 
     OUString aHeader(get<FixedText>("name")->GetText());
     aHeader += "\t";

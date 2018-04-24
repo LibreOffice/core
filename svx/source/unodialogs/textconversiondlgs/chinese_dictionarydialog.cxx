@@ -367,8 +367,8 @@ void DictionaryList::setColSizes()
     long nPos3 = nWidth - nWidth3;
     long nRemainder = nWidth - (nWidth1 + nWidth2 + nWidth3);
 
-    long aStaticTabs[] = { 3, 0, nWidth1 + (nRemainder/2), nPos3 };
-    SvSimpleTable::SetTabs(aStaticTabs, MapUnit::MapPixel);
+    long aTabPositions[] = { 0, nWidth1 + (nRemainder/2), nPos3 };
+    SvSimpleTable::SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions, MapUnit::MapPixel);
 }
 
 void DictionaryList::Resize()
@@ -410,8 +410,8 @@ void DictionaryList::init(const Reference< linguistic2::XConversionDictionary>& 
     rHeaderBar.InsertItem( 2, aColumn2, nWidth2, nBits );
     rHeaderBar.InsertItem( 3, aColumn3, nWidth3, nBits );
 
-    long pTabs[] = { 3, 0, nWidth1, nWidth1 + nWidth2 };
-    SetTabs( &pTabs[0], MapUnit::MapPixel );
+    long aTabPositions[] = { 0, nWidth1, nWidth1 + nWidth2 };
+    SetTabs( SAL_N_ELEMENTS(aTabPositions), aTabPositions, MapUnit::MapPixel );
 }
 
 void ChineseDictionaryDialog::initDictionaryControl(DictionaryList *pList,
