@@ -32,15 +32,26 @@ private:
     // root element's position of data for each table
     std::map<OUString, std::vector<sal_Int32>> m_Indexes;
 
+    SqlStatementVector m_sCreateStatements;
+    SqlStatementVector m_sAlterStatements;
+
 public:
     explicit SchemaParser(css::uno::Reference<css::embed::XStorage>& rStorage);
 
     /**
      * Parses table definitions contained by a file called "script" in storage.
-     *
+     */
+    void parseSchema();
+
+    /**
      * @return A vector of schema definition SQL strings in Firebird dialect.
      */
-    SqlStatementVector parseSchema();
+    const SqlStatementVector& getCreateStatements() { return m_sCreateStatements; }
+
+    /**
+     * @return A vector of alter SQL strings in Firebird dialect.
+     */
+    const SqlStatementVector& getAlterStatements() { return m_sAlterStatements; }
 
     /**
      * Returns the column types of a table. It should not be called before

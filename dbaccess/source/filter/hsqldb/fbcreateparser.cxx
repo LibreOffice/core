@@ -164,14 +164,6 @@ OUString FbCreateStmtParser::compose() const
             sSql.append(",");
     }
 
-    // foreign keys
-    const std::vector<OUString>& sForeignParts = getForeignParts();
-    for (const auto& sPart : sForeignParts)
-    {
-        sSql.append(",");
-        sSql.append(sPart);
-    }
-
     sSql.append(")"); // end of column declaration
     return sSql.makeStringAndClear();
 }
