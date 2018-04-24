@@ -844,7 +844,6 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const * i_pFont, HFONT& o_
     g_BoundRectCache.clear();
 
     HFONT hNewFont = nullptr;
-
     HDC hdcScreen = nullptr;
     if( mbVirDev )
         // only required for virtual devices, see below for details
@@ -908,6 +907,12 @@ void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel
     }
 
     assert(pFont->mpFontData);
+
+    // If the font hasn't actually changed, return. This makes the g_BoundRectCache cache much
+    // more effective.
+    if (mpWinFontEntry[nFallbackLevel] == reinterpret_cast<WinFontInstance*>(pFont->mpFontInstance))
+        return;
+
     if (mpWinFontEntry[nFallbackLevel])
     {
         GetWinFontEntry(nFallbackLevel)->Release();
