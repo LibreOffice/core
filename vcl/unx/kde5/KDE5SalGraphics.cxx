@@ -85,7 +85,7 @@ bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart pa
         case ControlType::Checkbox:
         /*case ControlType::Tooltip:*/
         case ControlType::Progress:
-        /*case ControlType::ListNode:*/
+        case ControlType::ListNode:
             return (part == ControlPart::Entire);
 
         case ControlType::Menubar:
@@ -439,7 +439,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
                 break;
         }
     }
-    /*else if (type == ControlType::ListNode)
+    else if (type == ControlType::ListNode)
     {
         QStyleOption option;
         option.state = QStyle::State_Item | QStyle::State_Children;
@@ -449,7 +449,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
         draw( QStyle::PE_IndicatorBranch, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
-    }*/
+    }
     else if (type == ControlType::Checkbox)
     {
         QStyleOptionButton option;
