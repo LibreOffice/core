@@ -418,7 +418,7 @@ void AquaSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
     std::vector<CGPoint> aGlyphPos;
     std::vector<bool> aGlyphOrientation;
     int nStart = 0;
-    while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
+    while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
         CGPoint aGCPos = CGPointMake(aPos.X(), -aPos.Y());
 
