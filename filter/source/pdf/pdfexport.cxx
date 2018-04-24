@@ -562,7 +562,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             {
             default:
             case 0:
-                aContext.Version    = vcl::PDFWriter::PDFVersion::PDF_1_4;
+                aContext.Version    = vcl::PDFWriter::PDFVersion::PDF_1_5;
                 break;
             case 1:
                 aContext.Version    = vcl::PDFWriter::PDFVersion::PDF_A_1;
