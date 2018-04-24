@@ -156,6 +156,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/MsWrdStruct \
 	UnpackedTarball/libmwaw/src/lib/MsWrdText \
 	UnpackedTarball/libmwaw/src/lib/MsWrdTextStyles \
+	UnpackedTarball/libmwaw/src/lib/MultiplanParser \
 	UnpackedTarball/libmwaw/src/lib/NisusWrtGraph \
 	UnpackedTarball/libmwaw/src/lib/NisusWrtParser \
 	UnpackedTarball/libmwaw/src/lib/NisusWrtStruct \
@@ -185,6 +186,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/StyleParser \
 	UnpackedTarball/libmwaw/src/lib/SuperPaintParser \
 	UnpackedTarball/libmwaw/src/lib/TeachTxtParser \
+	UnpackedTarball/libmwaw/src/lib/WingzGraph \
 	UnpackedTarball/libmwaw/src/lib/WingzParser \
 	UnpackedTarball/libmwaw/src/lib/WriteNowEntry \
 	UnpackedTarball/libmwaw/src/lib/WriteNowParser \
