@@ -17,6 +17,9 @@
 #include <time.h>
 #include <random>
 #include <stdexcept>
+#if defined HAVE_VALGRIND_HEADERS
+#include <valgrind/memcheck.h>
+#endif
 
 // this is nothing but a simple wrapper around
 // the std::random generators
@@ -40,6 +43,12 @@ struct RandomNumberGenerator
     RandomNumberGenerator()
     {
         bool bRepeatable = (getenv("SAL_RAND_REPEATABLE") != nullptr);
+        // valgrind on some platforms (e.g.Ubuntu16.04) does not support the new Intel RDRAND instructions,
+        // which leads to "Illegal Opcode" errors, so just turn off randomness.
+#if defined HAVE_VALGRIND_HEADERS
+        if (RUNNING_ON_VALGRIND)
+            bRepeatable = true;
+#endif
         if (bRepeatable)
         {
             global_rng.seed(42);
