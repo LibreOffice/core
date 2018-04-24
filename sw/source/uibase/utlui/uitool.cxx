@@ -96,14 +96,6 @@ void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit)
     rCtrl.SetMax(nMax, FUNIT_TWIP);
 }
 
-void SetMetric(weld::MetricSpinButton& rCtrl, FieldUnit eUnit)
-{
-    int nMin, nMax;
-    rCtrl.get_range(nMin, nMax, FUNIT_TWIP);
-    rCtrl.set_unit(eUnit);
-    rCtrl.set_range(nMin, nMax, FUNIT_TWIP);
-}
-
 // Set boxinfo attribute
 
 void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh)
