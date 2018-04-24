@@ -5182,7 +5182,7 @@
             <constraints>
               <enumeration oor:value="0">
                 <info>
-                  <desc>PDF 1.4 (default selection).</desc>
+                  <desc>PDF 1.5 (default selection).</desc>
                 </info>
               </enumeration>
               <enumeration oor:value="1">

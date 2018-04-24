@@ -607,7 +607,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
     switch( paParent->mnPDFTypeSelection )
     {
     default:
-    case 0: mpCbPDFA1b->Check( false ); // PDF 1.4
+    case 0: mpCbPDFA1b->Check( false ); // PDF 1.5
         break;
     case 1: mpCbPDFA1b->Check(); // PDF/A-1a
         break;

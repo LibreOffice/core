@@ -144,7 +144,7 @@ bool isCompatible(SvStream& rInStream, sal_uInt64 nPos, sal_uInt64 nSize)
 
     sal_Int32 nMajor = OString(aFirstBytes[5]).toInt32();
     sal_Int32 nMinor = OString(aFirstBytes[7]).toInt32();
-    return !(nMajor > 1 || (nMajor == 1 && nMinor > 4));
+    return !(nMajor > 1 || (nMajor == 1 && nMinor > 5));
 }
 
 /// Takes care of transparently downgrading the version of the PDF stream in
@@ -159,7 +159,7 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream, sal_uInt64 n
         rOutStream.WriteStream(rInStream, nSize);
     else
     {
-        // Downconvert to PDF-1.4.
+        // Downconvert to PDF-1.5.
         FPDF_LIBRARY_CONFIG aConfig;
         aConfig.version = 2;
         aConfig.m_pUserFontPaths = nullptr;
@@ -178,8 +178,8 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream, sal_uInt64 n
             return false;
 
         CompatibleWriter aWriter;
-        // 14 means PDF-1.4.
-        if (!FPDF_SaveWithVersion(pPdfDocument, &aWriter, 0, 14))
+        // 15 means PDF-1.5.
+        if (!FPDF_SaveWithVersion(pPdfDocument, &aWriter, 0, 15))
             return false;
 
         FPDF_CloseDocument(pPdfDocument);
