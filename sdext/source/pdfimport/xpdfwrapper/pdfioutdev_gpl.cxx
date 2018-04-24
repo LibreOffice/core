@@ -451,6 +451,9 @@ int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, GfxState* state ) 
     FontAttributes aNewFont;
     int nSize = 0;
 
+#if POPPLER_CHECK_VERSION(0, 64, 0)
+    const
+#endif
     GooString* pFamily = gfxFont->getName();
     if( pFamily )
     {
@@ -748,6 +751,9 @@ void PDFOutDev::updateFont(GfxState *state)
         FontAttributes aFont;
         int nEmbedSize=0;
 
+#if POPPLER_CHECK_VERSION(0, 64, 0)
+        const
+#endif
         Ref* pID = gfxFont->getID();
         // TODO(Q3): Portability problem
         long long fontID = (long long)pID->gen << 32 | (long long)pID->num;
@@ -931,7 +937,11 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
     printf( "\n" );
 }
 
+#if POPPLER_CHECK_VERSION(0, 64, 0)
+void PDFOutDev::drawString(GfxState*, const GooString* /*s*/)
+#else
 void PDFOutDev::drawString(GfxState*, GooString* /*s*/)
+#endif
 {
     // TODO(F3): NYI
 }
