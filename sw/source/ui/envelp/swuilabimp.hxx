@@ -119,32 +119,27 @@ public:
 
 class SwBusinessDataPage : public SfxTabPage
 {
-    VclPtr<Edit> m_pCompanyED;
-    VclPtr<Edit> m_pCompanyExtED;
-    VclPtr<Edit> m_pSloganED;
-
-    VclPtr<Edit> m_pStreetED;
-    VclPtr<Edit> m_pZipED;
-    VclPtr<Edit> m_pCityED;
-    VclPtr<Edit> m_pCountryED;
-    VclPtr<Edit> m_pStateED;
-
-    VclPtr<Edit> m_pPositionED;
-
-    VclPtr<Edit> m_pPhoneED;
-    VclPtr<Edit> m_pMobilePhoneED;
-    VclPtr<Edit> m_pFaxED;
-
-    VclPtr<Edit> m_pHomePageED;
-    VclPtr<Edit> m_pMailED;
+    std::unique_ptr<weld::Entry> m_xCompanyED;
+    std::unique_ptr<weld::Entry> m_xCompanyExtED;
+    std::unique_ptr<weld::Entry> m_xSloganED;
+    std::unique_ptr<weld::Entry> m_xStreetED;
+    std::unique_ptr<weld::Entry> m_xZipED;
+    std::unique_ptr<weld::Entry> m_xCityED;
+    std::unique_ptr<weld::Entry> m_xCountryED;
+    std::unique_ptr<weld::Entry> m_xStateED;
+    std::unique_ptr<weld::Entry> m_xPositionED;
+    std::unique_ptr<weld::Entry> m_xPhoneED;
+    std::unique_ptr<weld::Entry> m_xMobilePhoneED;
+    std::unique_ptr<weld::Entry> m_xFaxED;
+    std::unique_ptr<weld::Entry> m_xHomePageED;
+    std::unique_ptr<weld::Entry> m_xMailED;
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
 public:
-    SwBusinessDataPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    SwBusinessDataPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwBusinessDataPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
 
