@@ -1,0 +1,117 @@
+From 16c4e93af6d5eb9d021a671c54af664edc120df9 Mon Sep 17 00:00:00 2001
+From: Mark Hung <marklh9@gmail.com>
+Date: Mon, 23 Apr 2018 01:24:48 +0800
+Subject: [PATCH] Enclose <span> with <ruby> if text:ruby-text is set.
+
+---
+ src/lib/EPUBHTMLGenerator.cpp      | 22 ++++++++++++++++++++++
+ src/test/EPUBTextGeneratorTest.cpp | 25 +++++++++++++++++++++++++
+ 2 files changed, 47 insertions(+)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 0080816..a4467a9 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -397,6 +397,7 @@ struct EPUBHTMLGeneratorImpl
+     , m_linkPropertiesStack()
+     , m_paragraphAttributesStack()
+     , m_spanAttributesStack()
++    , m_rubyText()
+     , m_stylesMethod(stylesMethod)
+     , m_layoutMethod(layoutMethod)
+     , m_actualSink()
+@@ -500,6 +501,9 @@ struct EPUBHTMLGeneratorImpl
+   std::stack<RVNGPropertyList> m_paragraphAttributesStack;
+   std::stack<RVNGPropertyList> m_spanAttributesStack;
+ 
++  /// This is set when the span has ruby text and should be wrapped in <ruby></ruby>.
++  std::string m_rubyText;
++
+   EPUBStylesMethod m_stylesMethod;
+   EPUBLayoutMethod m_layoutMethod;
+ 
+@@ -743,6 +747,14 @@ void EPUBHTMLGenerator::openSpan(const RVNGPropertyList &propList)
+     attrs.insert("style", m_impl->m_spanManager.getStyle(propList, false).c_str());
+     break;
+   }
++
++  const librevenge::RVNGProperty *rubyText = propList["text:ruby-text"];
++  if (rubyText)
++  {
++    m_impl->m_rubyText = rubyText->getStr().cstr();
++    m_impl->output(false).openElement("ruby", attrs);
++  }
++
+   m_impl->output(false).openElement("span", attrs);
+ 
+   librevenge::RVNGPropertyList::Iter i(attrs);
+@@ -761,6 +773,16 @@ void EPUBHTMLGenerator::closeSpan()
+     m_impl->m_spanAttributesStack.pop();
+ 
+   m_impl->output().closeElement("span");
++
++  if (m_impl->m_rubyText.length())
++  {
++    m_impl->output().openElement("rt");
++    m_impl->output().insertCharacters(m_impl->m_rubyText.c_str());
++    m_impl->output().closeElement("rt");
++    m_impl->output().closeElement("ruby");
++    m_impl->m_hasText = true;
++    m_impl->m_rubyText.clear();
++  }
+ }
+ 
+ void EPUBHTMLGenerator::openLink(const RVNGPropertyList &propList)
+diff --git a/src/test/EPUBTextGeneratorTest.cpp b/src/test/EPUBTextGeneratorTest.cpp
+index f03824f..61c7cac 100644
+--- a/src/test/EPUBTextGeneratorTest.cpp
++++ b/src/test/EPUBTextGeneratorTest.cpp
+@@ -240,6 +240,7 @@ private:
+   CPPUNIT_TEST(testSplitOnHeadingInPageSpan);
+   CPPUNIT_TEST(testSplitOnSizeInPageSpan);
+   CPPUNIT_TEST(testManyWritingModes);
++  CPPUNIT_TEST(testRubyElements);
+   CPPUNIT_TEST_SUITE_END();
+ 
+ private:
+@@ -284,6 +285,7 @@ private:
+   void testSplitOnHeadingInPageSpan();
+   void testSplitOnSizeInPageSpan();
+   void testManyWritingModes();
++  void testRubyElements();
+ 
+   /// Asserts that exactly one xpath exists in buffer, and its content equals content.
+   void assertXPathContent(xmlBufferPtr buffer, const std::string &xpath, const std::string &content);
+@@ -1507,6 +1509,29 @@ void EPUBTextGeneratorTest::testManyWritingModes()
+   assertXPath(package.m_streams["OEBPS/sections/section0002.xhtml"], "//xhtml:body", "class", "body1");
+ }
+ 
++void EPUBTextGeneratorTest::testRubyElements()
++{
++  StringEPUBPackage package;
++  libepubgen::EPUBTextGenerator generator(&package);
++  generator.startDocument(librevenge::RVNGPropertyList());
++  generator.openParagraph(librevenge::RVNGPropertyList());
++  {
++    librevenge::RVNGPropertyList span;
++    span.insert("text:ruby-text", "ruby text");
++    generator.openSpan(span);
++    generator.insertText("base text");
++    generator.closeSpan();
++  }
++  generator.closeParagraph();
++  generator.endDocument();
++
++  // Expects: <ruby><span>base text</span><rt>ruby text</rt></ruby>
++  CPPUNIT_ASSERT_XPATH(package.m_streams["OEBPS/sections/section0001.xhtml"], "//xhtml:ruby", 1);
++  CPPUNIT_ASSERT_XPATH_CONTENT(package.m_streams["OEBPS/sections/section0001.xhtml"], "//xhtml:ruby/xhtml:rt", "ruby text");
++  CPPUNIT_ASSERT_XPATH_CONTENT(package.m_streams["OEBPS/sections/section0001.xhtml"], "//xhtml:ruby/xhtml:span", "base text");
++}
++
++
+ CPPUNIT_TEST_SUITE_REGISTRATION(EPUBTextGeneratorTest);
+ 
+ }
+-- 
+2.14.1
+
