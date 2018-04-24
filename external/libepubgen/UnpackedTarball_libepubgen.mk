@@ -16,6 +16,8 @@ epubgen_patches += 0001-Support-writing-mode-for-reflowable-layout-method.patch.
 epubgen_patches += 0002-Always-keep-page-properties-when-splitting-the-HTML-.patch.1
 # Backport of <https://sourceforge.net/p/libepubgen/code/ci/1f602fcaa74fc9dbc6457019d11c602ff4040a4e/>.
 epubgen_patches += 0003-Ensure-page-properties-in-the-page-span-works.patch.1
+# Backport of <https://sourceforge.net/p/libepubgen/code/ci/aa254c9e6f2d1ecfa2512111746a77c05ba9717f/>
+epubgen_patches += 0001-Enclose-span-with-ruby-if-text-ruby-text-is-set.patch.1
 
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
