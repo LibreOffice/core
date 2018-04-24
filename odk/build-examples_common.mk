@@ -1,7 +1,3 @@
-$(eval $(call gb_CustomTarget_CustomTarget,$(testname)))
-
-.PHONY: $(call gb_CustomTarget_get_target,$(testname))
-
 $(call gb_CustomTarget_get_target,$(testname)): \
 	$(call gb_CustomTarget_get_workdir,$(testname))/setsdkenv
 ifneq ($(gb_SUPPRESS_TESTS),)

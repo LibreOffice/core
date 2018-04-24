@@ -9,6 +9,8 @@
 
 testname=odk/build-examples_java
 
+$(eval $(call gb_CustomTarget_CustomTarget,$(testname)))
+  
 my_example_dirs = \
     DevelopersGuide/BasicAndDialogs/CreatingDialogs \
     DevelopersGuide/Charts \
@@ -53,12 +55,13 @@ my_example_dirs = \
     java/Text \
     java/ToDo \
 
-
 #    java/ConverterServlet \
 #    java/EmbedDocument/Container1 \
 #    java/EmbedDocument/EmbeddedObject \
 #    java/NotesAccess \
 #    java/Storage \
+
+.PHONY: $(call gb_CustomTarget_get_target,$(testname))
 
 include $(SRCDIR)/odk/build-examples_common.mk
 
