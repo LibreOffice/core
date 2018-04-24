@@ -27,8 +27,6 @@
 #include "swregion.hxx"
 
 class SwCursorShell;
-class SwShellCursor;
-class SwTextInputField;
 class SfxViewShell;
 
 // From here classes/methods for non-text cursor.

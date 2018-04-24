@@ -30,7 +30,6 @@
 #include <boost/optional.hpp>
 
 class SwHistory;
-class SwIndex;
 class SwPaM;
 struct SwPosition;
 class SwDoc;

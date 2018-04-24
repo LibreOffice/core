@@ -23,7 +23,6 @@
 struct SwPosition;
 class SwTextNode;
 class SwGrammarMarkUp;
-class SwDoc;
 
 /** Organizer of the contact between SwTextNodes and grammar checker
 */

@@ -27,8 +27,6 @@
 #include <memory>
 #include "swdllapi.h"
 
-struct SwPosition;
-
 namespace sw { namespace mark
 {
     enum class InsertMode

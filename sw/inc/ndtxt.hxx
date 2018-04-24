@@ -37,7 +37,6 @@
 class SfxHint;
 class SwNumRule;
 class SwNodeNum;
-class SwList;
 class SvxLRSpaceItem;
 
 namespace utl {
@@ -48,7 +47,6 @@ namespace vcl
 class Font;
 }
 
-class SwTextFormatColl;
 class SwContentFrame;
 class SwTextField;
 class SwTextInputField;
@@ -59,8 +57,6 @@ struct SwConversionArgs;
 class SwInterHyphInfo;
 class SwWrongList;
 class SwGrammarMarkUp;
-class OutputDevice;
-class SwScriptInfo;
 struct SwDocStat;
 struct SwParaIdleData_Impl;
 

@@ -34,7 +34,6 @@ class SwField;
 class SwMsgPoolItem;
 class DateTime;
 class SetGetExpField;
-struct SwHash;
 class SwNode;
 enum class SwFieldIds : sal_uInt16;
 template <class T> class SwHashTable;

@@ -33,7 +33,6 @@
 
 
 class SfxItemSet;
-class SwView;
 
 class SW_DLLPUBLIC SwRedlineExtraData
 {

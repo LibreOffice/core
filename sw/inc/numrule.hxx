@@ -38,7 +38,6 @@ class SwNodeNum;
 namespace vcl { class Font; }
 class SvxBrushItem;
 class SfxGrabBagItem;
-class SvxNumRule;
 class SwDoc;
 class SwFormatVertOrient;
 class SwTextNode;
@@ -89,7 +88,6 @@ public:
     bool IsItemize() const; // #i29560#
 };
 
-class SwPaM;
 enum SwNumRuleType { OUTLINE_RULE = 0, NUM_RULE = 1, RULE_END = 2 };
 class SW_DLLPUBLIC SwNumRule
 {

@@ -20,10 +20,6 @@
 #ifndef INCLUDED_SW_INC_IDOCUMENTCHARTDATAPROVIDERACCESS_HXX
 #define INCLUDED_SW_INC_IDOCUMENTCHARTDATAPROVIDERACCESS_HXX
 
-namespace com { namespace sun { namespace star { namespace frame {
-    class XModel;
-}}}}
-
 class SwTable;
 class SwChartDataProvider;
 class SwChartLockController_Helper;

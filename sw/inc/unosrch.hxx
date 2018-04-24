@@ -26,7 +26,6 @@
 #include <rtl/ustring.hxx>
 
 class SfxItemPropertySet;
-class SwXTextDocument;
 class SwSearchProperties_Impl;
 class SfxItemSet;
 

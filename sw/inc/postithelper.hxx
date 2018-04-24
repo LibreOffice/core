@@ -30,7 +30,6 @@ class SwRootFrame;
 class SwPostItMgr;
 class SwEditWin;
 class SwFrame;
-class SvxLanguageItem;
 namespace sw { namespace annotation {
     class SwAnnotationWin;
 } }

@@ -28,10 +28,8 @@ class OutputDevice;
 class SwTable;
 class SwNode;
 class SwNodes;
-class SwContentNode;
 class SwPageFrame;
 class SwFrame;
-class SwTextNode;
 class SwHistory;
 
 // Base class for all Message-Hints:

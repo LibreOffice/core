@@ -26,8 +26,6 @@
 #include "format.hxx"
 #include "cellfml.hxx"
 
-namespace rtl { class OUString; }
-
 /** The number formatter's default locale's @ Text format.
     Not necessarily system locale, but the locale the formatter was constructed
     with. For this SvNumberFormatter::IsTextFormat() always returns true.

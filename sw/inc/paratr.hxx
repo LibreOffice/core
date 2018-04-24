@@ -39,7 +39,6 @@
 #include <editeng/paravertalignitem.hxx>
 #include <editeng/pgrditem.hxx>
 
-class SwCharFormat;
 class IntlWrapper;
 
 #define DROP_WHOLEWORD ((sal_uInt16)0x0001)

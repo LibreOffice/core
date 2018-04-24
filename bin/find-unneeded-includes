@@ -145,8 +145,15 @@ def processIWYUOutput(iwyuOutput, moduleRules):
                     toRemove.append("%s:%s: %s" % (currentFileName, lineno, include))
                 continue
 
+            match = re.match("- (.*);  // lines (.*)-.*", line)
+            if match:
+                fwdDecl = match.group(1)
+                lineno = match.group(2)
+                if not ignoreRemoval(fwdDecl, toAdd, currentFileName, moduleRules):
+                    toRemove.append("%s:%s: %s" % (currentFileName, lineno, fwdDecl))
+
     for remove in toRemove:
-        print("ERROR: %s: remove not needed include" % remove)
+        print("ERROR: %s: remove not needed include / forward declaration" % remove)
     return len(toRemove)
 
 

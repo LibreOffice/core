@@ -24,7 +24,6 @@
 class SwFrame;
 class SwContentNode;
 class SwTextNode;
-class ToxTextGeneratorTest;
 
 enum SwChapterFormat
 {

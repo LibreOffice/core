@@ -34,12 +34,9 @@ class SwCursor;
 class SwTableCursor;
 class SwFrame;
 class SwTabFrame;
-class SwTableBox;
-class SwTableLine;
 class SwLayoutFrame;
 class SwPaM;
 class SwNode;
-class SwTable;
 class SwUndoTableMerge;
 class SwCellFrame;
 

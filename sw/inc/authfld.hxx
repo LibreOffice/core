@@ -54,7 +54,6 @@ struct SwTOXSortKey
         bSortAscending(true){}
 };
 
-class SwAuthorityField;
 typedef std::vector<SwTOXSortKey> SortKeyArr;
 typedef std::vector<std::unique_ptr<SwAuthEntry>> SwAuthDataArr;
 

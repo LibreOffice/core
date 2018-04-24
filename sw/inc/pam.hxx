@@ -32,8 +32,6 @@ class SwFormat;
 class SfxPoolItem;
 class SfxItemSet;
 class SwDoc;
-class SwNode;
-class SwContentNode;
 class SwPaM;
 class Point;
 namespace i18nutil {

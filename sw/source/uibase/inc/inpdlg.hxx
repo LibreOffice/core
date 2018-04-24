@@ -24,6 +24,7 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/vclmedit.hxx>
+#include <vcl/weld.hxx>
 
 class SwInputField;
 class SwSetExpField;

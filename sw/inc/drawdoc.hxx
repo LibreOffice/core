@@ -22,7 +22,6 @@
 #include <svx/fmmodel.hxx>
 
 class SwDoc;
-class SwDocShell;
 
 class SwDrawModel : public FmFormModel
 {

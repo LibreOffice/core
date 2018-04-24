@@ -36,12 +36,9 @@ class SwContentNode;
 class SwDoc;
 class SwForm;
 struct SwFormToken;
-class SwPageDesc;
-class SwRootFrame;
 class SwTextAttr;
 class SwTextNode;
 struct SwTOXSortTabBase;
-class SvxTabStop;
 class ToxTextGeneratorTest;
 
 namespace sw {

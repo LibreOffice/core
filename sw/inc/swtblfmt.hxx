@@ -21,8 +21,6 @@
 
 #include "frmfmt.hxx"
 
-class SwDoc;
-
 class SW_DLLPUBLIC SwTableFormat final : public SwFrameFormat
 {
     friend class SwDoc;

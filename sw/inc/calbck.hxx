@@ -29,9 +29,7 @@
 #include <vector>
 #include <memory>
 
-
 class SwModify;
-class SwPtrMsgPoolItem;
 
 /*
     SwModify and SwClient cooperate in propagating attribute changes.
@@ -56,10 +54,6 @@ class SwPtrMsgPoolItem;
     relationships that basically should be used only for Modify/Notify callbacks.
     This is still subject to refactoring.
  */
-
-class SwModify;
-class SwClient;
-template<typename E, typename S> class SwIterator;
 
 namespace sw
 {
@@ -320,8 +314,6 @@ namespace sw
             WriterListener* Sync() { return m_pCurrent = m_pPosition; }
     };
 }
-
-class SwPageDesc;
 
 template< typename TElementType, typename TSource > class SwIterator final : private sw::ClientIteratorBase
 {

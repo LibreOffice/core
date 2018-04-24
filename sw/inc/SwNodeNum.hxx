@@ -25,7 +25,6 @@
 class SwTextNode;
 struct SwPosition;
 class SwNumRule;
-class SwNumFormat;
 
 class SW_DLLPUBLIC SwNodeNum : public SwNumberTreeNode
 {

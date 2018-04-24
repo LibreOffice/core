@@ -26,7 +26,6 @@
 #include "frmfmt.hxx"
 
 class IntlWrapper;
-class SwFormat;
 
  /** Header, for PageFormats
  Client of FrameFormat describing the header. */

@@ -43,10 +43,8 @@ class SwTextPainter;
 class SwEditShell;
 class StringRangeEnumerator;
 class SwTextNode;
-class SwNumRule;
 class SwTable;
 class SwNumberTreeNode;
-class SvxLanguageItem;
 
 /*
  * Mapping of OOo elements to tagged pdf elements:

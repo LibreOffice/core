@@ -46,7 +46,7 @@ class SW_DLLPUBLIC SwOLEObj
     // eventually buffered data if it is a chart OLE
     drawinglayer::primitive2d::Primitive2DContainer     m_aPrimitive2DSequence;
     basegfx::B2DRange                                   m_aRange;
-    class DeflateData*                                  m_pDeflateData;
+    DeflateData*                                  m_pDeflateData;
 
     SwOLEObj( const SwOLEObj& rObj ) = delete;
 

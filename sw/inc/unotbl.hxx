@@ -44,6 +44,7 @@ class SwTable;
 class SwTableBox;
 class SwTableLine;
 class SwTableCursor;
+class SfxItemPropertySet;
 
 typedef
 cppu::WeakImplHelper

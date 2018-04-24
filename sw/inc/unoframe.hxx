@@ -26,7 +26,6 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 
 #include <cppuhelper/implbase.hxx>
@@ -40,6 +39,8 @@
 class SdrObject;
 class SwDoc;
 class SwFormat;
+class SfxItemPropertySet;
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 class BaseFrameProperties_Impl;
 class SwXFrame : public cppu::WeakImplHelper

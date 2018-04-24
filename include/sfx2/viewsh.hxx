@@ -115,6 +115,7 @@ namespace o3tl
 */
 
 
+class SfxViewFactory;
 #define SFX_DECL_VIEWFACTORY(Class) \
 private: \
     static SfxViewFactory *pFactory; \

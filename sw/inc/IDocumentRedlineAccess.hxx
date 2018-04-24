@@ -34,8 +34,6 @@
 class SwRangeRedline;
 class SwTableRowRedline;
 class SwTableCellRedline;
-class SwRedlineTable;
-class SwExtraRedlineTable;
 class SwPaM;
 struct SwPosition;
 class SwStartNode;
