@@ -148,6 +148,89 @@ void XMLSpanContext::characters(const OUString& rChars)
     mrImport.GetGenerator().closeSpan();
 }
 
+/// Handler for <text:ruby>.
+class XMLRubyContext : public XMLImportContext
+{
+public:
+    XMLRubyContext(XMLImport& rImport, const librevenge::RVNGPropertyList& rPropertyList);
+
+    rtl::Reference<XMLImportContext>
+    CreateChildContext(const OUString& rName,
+                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+
+    void SAL_CALL endElement(const OUString& rName) override;
+
+    OUString m_sRubyText;
+    OUString m_sRubyBase;
+
+private:
+    librevenge::RVNGPropertyList m_aPropertyList;
+};
+
+/// Handler for <text:ruby-text>.
+class XMLRubyTextContext : public XMLImportContext
+{
+public:
+    XMLRubyTextContext(XMLImport& rImport, XMLRubyContext& rParent)
+        : XMLImportContext(rImport)
+        , m_rParent(rParent)
+    {
+    }
+
+    void SAL_CALL characters(const OUString& rChars) override { m_rParent.m_sRubyText = rChars; }
+
+private:
+    XMLRubyContext& m_rParent;
+};
+
+/// Handler for <text:ruby-base>.
+class XMLRubyBaseContext : public XMLImportContext
+{
+public:
+    XMLRubyBaseContext(XMLImport& rImport, XMLRubyContext& rParent)
+        : XMLImportContext(rImport)
+        , m_rParent(rParent)
+    {
+    }
+
+    void SAL_CALL characters(const OUString& rChars) override { m_rParent.m_sRubyBase += rChars; }
+
+private:
+    XMLRubyContext& m_rParent;
+};
+
+XMLRubyContext::XMLRubyContext(XMLImport& rImport,
+                               const librevenge::RVNGPropertyList& rPropertyList)
+    : XMLImportContext(rImport)
+    , m_sRubyText()
+{
+    // Inherit properties from parent.
+    librevenge::RVNGPropertyList::Iter itProp(rPropertyList);
+    for (itProp.rewind(); itProp.next();)
+        m_aPropertyList.insert(itProp.key(), itProp()->clone());
+}
+
+rtl::Reference<XMLImportContext> XMLRubyContext::CreateChildContext(
+    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+{
+    if (rName == "text:ruby-base")
+        return new XMLRubyBaseContext(mrImport, *this);
+    if (rName == "text:ruby-text")
+        return new XMLRubyTextContext(mrImport, *this);
+    return nullptr;
+}
+
+void XMLRubyContext::endElement(const OUString& /*rName*/)
+{
+    OString sRubyText = OUStringToOString(m_sRubyText, RTL_TEXTENCODING_UTF8);
+    OString sRubyBase = OUStringToOString(m_sRubyBase, RTL_TEXTENCODING_UTF8);
+    if (sRubyText.getLength())
+        m_aPropertyList.insert("text:ruby-text", sRubyText.getStr());
+    mrImport.GetGenerator().openSpan(m_aPropertyList);
+    mrImport.GetGenerator().insertText(sRubyBase.getStr());
+    mrImport.GetGenerator().closeSpan();
+}
+
 /// Base class for contexts that represent a single character only.
 class XMLCharContext : public XMLImportContext
 {
@@ -426,6 +509,8 @@ rtl::Reference<XMLImportContext> XMLParaContext::CreateChildContext(
         return new XMLHyperlinkContext(mrImport, m_aTextPropertyList);
     if (rName == "draw:a")
         return new XMLTextFrameHyperlinkContext(mrImport, m_aTextPropertyList);
+    if (rName == "text:ruby")
+        return new XMLRubyContext(mrImport, m_aTextPropertyList);
     return CreateParagraphOrSpanChildContext(mrImport, rName, m_aTextPropertyList);
 }
 

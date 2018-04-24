@@ -103,6 +103,7 @@ public:
     void testTdf115623SingleWritingMode();
     void testTdf115623SplitByChapter();
     void testTdf115623ManyPageSpans();
+    void testSimpleRuby();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -152,6 +153,7 @@ public:
     CPPUNIT_TEST(testTdf115623SingleWritingMode);
     CPPUNIT_TEST(testTdf115623SplitByChapter);
     CPPUNIT_TEST(testTdf115623ManyPageSpans);
+    CPPUNIT_TEST(testSimpleRuby);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -965,6 +967,14 @@ void EPUBExportTest::testTdf115623ManyPageSpans()
         CPPUNIT_ASSERT_EQUAL(OUString("horizontal-tb"),
                              EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
     }
+}
+
+void EPUBExportTest::testSimpleRuby()
+{
+    createDoc("simple-ruby.odt", {});
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    assertXPathContent(mpXmlDoc, "//xhtml:body/xhtml:p/xhtml:ruby/xhtml:span", "base text");
+    assertXPathContent(mpXmlDoc, "//xhtml:body/xhtml:p/xhtml:ruby/xhtml:rt", "ruby text");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
