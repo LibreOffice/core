@@ -34,7 +34,7 @@ namespace {
 // Last element of Key becomes prop, first part is the path and optionally nodes,
 // when the node has oor:op attribute.
 // Values can be the following: Value (string), Type (string, optional),
-// Final (dword, optional), External (dword, optional)
+// Final (dword, optional), External (dword, optional), ExternalBackend (string, optional)
 //
 // For example the following registry setting:
 // [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice\org.openoffice.UserProfile\Data\o]
@@ -79,9 +79,10 @@ namespace {
 //
 // External (component data) example:
 // [HKEY_CURRENT_USER\Software\Policies\LibreOffice\org.openoffice.UserProfile\Data\o]
-// "Value"="com.sun.star.configuration.backend.LdapUserProfileBe company"
+// "Value"="company"
 // "Final"=dword:00000001
 // "External"=dword:00000001
+// "ExternalBackend"="com.sun.star.configuration.backend.LdapUserProfileBe"
 // becomes the following in configuration:
 // <item oor:path="/org.openoffice.UserProfile/Data">
 //     <prop oor:name="o" oor:finalized="true">
@@ -137,6 +138,7 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
             bool bExternal = false;
             OUString aValue;
             OUString aType;
+            OUString aExternalBackend;
 
             for(DWORD i = 0; i < nValues; ++i)
             {
@@ -159,10 +161,19 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                     if (*reinterpret_cast<DWORD*>(pValue.get()) == 1)
                         bExternal = true;
                 }
+                else if (!wcscmp(pValueName.get(), L"ExternalBackend"))
+                    aExternalBackend = o3tl::toU(pValue.get());
             }
-            // type and external are mutually exclusive
             if (bExternal)
+            {
+                // type and external are mutually exclusive
                 aType.clear();
+
+                // Prepend backend, like in
+                // "com.sun.star.configuration.backend.LdapUserProfileBe company"
+                if (!aExternalBackend.isEmpty())
+                    aValue = aExternalBackend + " " + aValue;
+            }
 
             sal_Int32 aLastSeparator = aKeyName.lastIndexOf('\\');
             OUString aPathAndNodes = aKeyName.copy(0, aLastSeparator);
