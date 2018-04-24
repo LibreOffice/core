@@ -69,11 +69,7 @@ static void ImplCalendarSelectDate( IntDateSet* pTable, const Date& rDate, bool 
 
 void Calendar::ImplInit( WinBits nWinStyle )
 {
-    mpSelectTable           = new IntDateSet;
-    mpOldSelectTable        = nullptr;
-    mpStandardColor         = nullptr;
-    mpSaturdayColor         = nullptr;
-    mpSundayColor           = nullptr;
+    mpSelectTable.reset(new IntDateSet);
     mnDayCount              = 0;
     mnWinStyle              = nWinStyle;
     mnFirstYear             = 0;
@@ -107,7 +103,7 @@ void Calendar::ImplInit( WinBits nWinStyle )
     }
 
     SetFirstDate( maCurDate );
-    ImplCalendarSelectDate( mpSelectTable, maCurDate, true );
+    ImplCalendarSelectDate( mpSelectTable.get(), maCurDate, true );
 
     // Sonstige Strings erzeugen
     maDayText = SvtResId(STR_SVT_CALENDAR_DAY);
@@ -164,12 +160,8 @@ Calendar::~Calendar()
 
 void Calendar::dispose()
 {
-    delete mpStandardColor;
-    delete mpSaturdayColor;
-    delete mpSundayColor;
-
-    delete mpSelectTable;
-    delete mpOldSelectTable;
+    mpSelectTable.reset();
+    mpOldSelectTable.reset();
     Control::dispose();
 }
 
@@ -544,10 +536,9 @@ void Calendar::ImplDrawSpin(vcl::RenderContext& rRenderContext )
 void Calendar::ImplDrawDate(vcl::RenderContext& rRenderContext,
                             long nX, long nY,
                             sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear,
-                            DayOfWeek eDayOfWeek,
                             bool bOther, sal_Int32 nToday )
 {
-    Color* pTextColor = nullptr;
+    Color const * pTextColor = nullptr;
     const OUString& rDay = maDayTexts[nDay - 1];
     tools::Rectangle aDateRect(nX, nY, nX + mnDayWidth - 1, nY + mnDayHeight - 1);
 
@@ -571,15 +562,6 @@ void Calendar::ImplDrawDate(vcl::RenderContext& rRenderContext,
         pTextColor = &maSelColor;
     else if (bOther)
         pTextColor = &maOtherColor;
-    else
-    {
-        if (eDayOfWeek == SATURDAY)
-            pTextColor = mpSaturdayColor;
-        else if (eDayOfWeek == SUNDAY)
-            pTextColor = mpSundayColor;
-        if (!pTextColor)
-            pTextColor = mpStandardColor;
-    }
 
     if (bFocus)
         HideFocus();
@@ -756,14 +738,13 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
                     nDeltaX = nDayX + (nDay * mnDayWidth);
                     ImplDrawDate(rRenderContext, nDeltaX, nDayY, nDay + aTempDate.GetDay(),
                                  aTempDate.GetMonth(), aTempDate.GetYear(),
-                                 static_cast<DayOfWeek>((nDay + static_cast<sal_uInt16>(eStartDay)) % 7), true, nToday);
+                                 true, nToday);
                 }
             }
             for (nDay = 1; nDay <= nDaysInMonth; nDay++)
             {
                 nDeltaX = nDayX + (nDayIndex * mnDayWidth);
                 ImplDrawDate(rRenderContext, nDeltaX, nDayY, nDay, nMonth, nYear,
-                             static_cast<DayOfWeek>((nDayIndex + static_cast<sal_uInt16>(eStartDay)) % 7),
                              false, nToday);
                 if (nDayIndex == 6)
                 {
@@ -785,7 +766,6 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
                     nDeltaX = nDayX + (nDayIndex * mnDayWidth);
                     ImplDrawDate(rRenderContext, nDeltaX, nDayY, nDay,
                                  aTempDate.GetMonth(), aTempDate.GetYear(),
-                                 static_cast<DayOfWeek>((nDayIndex + static_cast<sal_uInt16>(eStartDay)) % 7),
                                  true, nToday);
                     if (nDayIndex == 6)
                     {
@@ -822,7 +802,7 @@ void Calendar::ImplUpdateDate( const Date& rDate )
 
 void Calendar::ImplUpdateSelection( IntDateSet* pOld )
 {
-    IntDateSet*  pNew = mpSelectTable;
+    IntDateSet*  pNew = mpSelectTable.get();
 
     for (auto const& nKey : *pOld)
     {
@@ -860,8 +840,8 @@ void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
     if ( aTempDate != maCurDate )
     {
         maCurDate = aTempDate;
-        ImplCalendarSelectDate( mpSelectTable, aOldDate, false );
-        ImplCalendarSelectDate( mpSelectTable, maCurDate, true );
+        ImplCalendarSelectDate( mpSelectTable.get(), aOldDate, false );
+        ImplCalendarSelectDate( mpSelectTable.get(), maCurDate, true );
     }
 
     bool bNewSel = *pOldSel != *mpSelectTable;
@@ -1048,8 +1028,7 @@ void Calendar::ImplEndTracking( bool bCancel )
     if ( !bSelection && (mnWinStyle & WB_TABSTOP) && !bCancel )
         GrabFocus();
 
-    delete mpOldSelectTable;
-    mpOldSelectTable = nullptr;
+    mpOldSelectTable.reset();
 }
 
 IMPL_LINK_NOARG( Calendar, ScrollHdl, Timer*, void )
@@ -1091,9 +1070,8 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
                 {
                     if ( (rMEvt.GetClicks() != 2) || !(nHitTest & CALENDAR_HITTEST_DAY) )
                     {
-                        delete mpOldSelectTable;
                         maOldCurDate = maCurDate;
-                        mpOldSelectTable = new IntDateSet( *mpSelectTable );
+                        mpOldSelectTable.reset(new IntDateSet( *mpSelectTable ));
 
                         if ( !mbSelection )
                         {
@@ -1359,8 +1337,8 @@ void Calendar::SetCurDate( const Date& rNewDate )
     maCurDate       = rNewDate;
     maAnchorDate    = maCurDate;
 
-    ImplCalendarSelectDate( mpSelectTable, aOldDate, false );
-    ImplCalendarSelectDate( mpSelectTable, maCurDate, true );
+    ImplCalendarSelectDate( mpSelectTable.get(), aOldDate, false );
+    ImplCalendarSelectDate( mpSelectTable.get(), maCurDate, true );
 
     // shift actual date in the visible area
     if ( mbFormat || (maCurDate < GetFirstMonth()) )
@@ -1553,9 +1531,8 @@ tools::Rectangle Calendar::GetDateRect( const Date& rDate ) const
 
 void Calendar::StartSelection()
 {
-    delete mpOldSelectTable;
     maOldCurDate = maCurDate;
-    mpOldSelectTable = new IntDateSet( *mpSelectTable );
+    mpOldSelectTable.reset(new IntDateSet( *mpSelectTable ));
 
     mbSelection = true;
 }
