@@ -766,6 +766,7 @@ namespace accessibility
             {
                 for( sal_Int32 nCurrPara=0; nCurrPara<nParas; ++nCurrPara )
                 {
+                    mnLastVisibleChild = nCurrPara;
                     // child not yet created?
                     ::accessibility::AccessibleParaManager::WeakChild aChild( maParaManager.GetChild(nCurrPara) );
                     if( aChild.second.Width == 0 &&
@@ -777,8 +778,6 @@ namespace accessibility
                     }
                 }
             }
-
-            mnLastVisibleChild = nParas - 1;
         }
         catch( const uno::Exception& )
         {
