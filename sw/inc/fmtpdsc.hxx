@@ -27,11 +27,7 @@
 #include <boost/optional.hpp>
 #include "pagedesc.hxx"
 
-class SwPageDesc;
-class SwHistory;
-class SwPaM;
 class IntlWrapper;
-class SwEndNoteInfo;
 
 /** Pagedescriptor
  Client of SwPageDesc that is "described" by the attribute. */

@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <cppuhelper/implbase2.hxx>
@@ -39,6 +38,7 @@ class SwDocShell;
 class SwNumRule;
 class SwNumFormat;
 class SfxItemPropertySet;
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
 
 class SwXFootnoteProperties : public cppu::WeakAggImplHelper2
 <

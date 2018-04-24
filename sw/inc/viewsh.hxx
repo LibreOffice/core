@@ -28,7 +28,6 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/lazydelete.hxx>
-#include <vcl/weld.hxx>
 
 namespace com { namespace sun { namespace star { namespace accessibility {
            class XAccessible; } } } }
@@ -72,6 +71,7 @@ namespace vcl
 {
     typedef OutputDevice RenderContext;
 }
+namespace weld { class Dialog; }
 
 // Define for flags needed in ctor or layers below.
 // Currently the Preview flag is needed for DrawPage.

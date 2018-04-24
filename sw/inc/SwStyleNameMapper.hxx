@@ -71,8 +71,6 @@
  * " (user)", we simply remove it.
  */
 
-struct SwTableEntry;
-
 typedef std::unordered_map<OUString, sal_uInt16> NameToIdHash;
 
 class SwStyleNameMapper final

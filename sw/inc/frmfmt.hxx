@@ -34,11 +34,8 @@ class Graphic;
 class ImageMap;
 class IMapObject;
 class SwRect;
-class SwContact;
 class SdrObject;
 class SwRootFrame;
-class SwFlyDrawContact;
-class SdrModel;
 
 namespace sw
 {

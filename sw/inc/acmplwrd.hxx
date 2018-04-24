@@ -29,7 +29,6 @@
 
 class SwDoc;
 class SwAutoCompleteWord_Impl;
-class SwAutoCompleteClient;
 class SwAutoCompleteString;
 
 typedef std::deque<SwAutoCompleteString*> SwAutoCompleteStringPtrDeque;

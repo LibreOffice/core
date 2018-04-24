@@ -48,6 +48,7 @@
 
 #include <basegfx/utils/zoomtools.hxx>
 #include <comphelper/lok.hxx>
+#include <vcl/weld.hxx>
 
 // The SetVisArea of the DocShell must not be called from InnerResizePixel.
 // But our adjustments must take place.

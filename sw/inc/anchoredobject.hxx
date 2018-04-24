@@ -29,7 +29,6 @@ class SwLayoutFrame;
 class SwTextFrame;
 
 class SwPageFrame;
-class SwObjPositioningInProgress;
 
 class SwFrameFormat;
 class SwFormatAnchor;

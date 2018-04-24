@@ -35,10 +35,6 @@
 class SwStartNode;
 class SwFormat;
 class Color;
-class SwFrameFormat;
-class SwTableFormat;
-class SwTableLineFormat;
-class SwTableBoxFormat;
 class SwHTMLTableLayout;
 class SwTableLine;
 class SwTableBox;

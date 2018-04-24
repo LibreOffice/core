@@ -31,7 +31,6 @@
 #include <vector>
 #include <memory>
 
-class SwModuleOptions;
 class InsCaptionOpt;
 
 // text format for the sending of messages ------------------------------

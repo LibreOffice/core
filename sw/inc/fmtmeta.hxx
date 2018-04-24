@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SW_INC_FMTMETA_HXX
 #define INCLUDED_SW_INC_FMTMETA_HXX
 
+#include "calbck.hxx"
+
 #include <cppuhelper/weakref.hxx>
 
 #include <svl/poolitem.hxx>
@@ -79,6 +81,7 @@ class SwTextMeta;
 class SwXMeta;
 class SwXMetaField;
 class SwTextNode;
+class SwDoc;
 namespace sw {
     class Meta;
     class MetaFieldManager;

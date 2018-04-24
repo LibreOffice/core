@@ -26,7 +26,6 @@
 class SwRect;
 class Size;
 class SwViewShell;
-class SwDoc;
 class SwDocShell;
 
 extern void ScrollMDI(SwViewShell const * pVwSh, const SwRect &, sal_uInt16 nRangeX, sal_uInt16 nRangeY);

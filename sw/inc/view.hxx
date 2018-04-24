@@ -66,7 +66,6 @@ enum class SotExchangeDest;
 class SwCursorShell;
 enum class SvxSearchCmd;
 enum class SelectionType : sal_Int32;
-class SfxViewFactory;
 
 namespace com{ namespace sun { namespace star {
     namespace view{ class XSelectionSupplier; }

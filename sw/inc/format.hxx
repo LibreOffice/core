@@ -32,6 +32,7 @@ class IDocumentFieldsAccess;
 class IDocumentChartDataProviderAccess;
 class SwDoc;
 class SfxGrabBagItem;
+class SwTextGridItem;
 
 namespace drawinglayer { namespace attribute {
     class SdrAllFillAttributesHelper;

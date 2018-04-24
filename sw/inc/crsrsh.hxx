@@ -43,19 +43,8 @@
 class SfxItemSet;
 class SfxPoolItem;
 class SwContentFrame;
-class SwCursorShell;
-class SwCursor;
-class SwField;
-class SwFieldType;
-class SwFormat;
 class SwFormatField;
-class SwNodeIndex;
-class SwPaM;
-class SwShellCursor;
-class SwShellTableCursor;
-class SwTableNode;
 class SwTextFormatColl;
-class SwVisibleCursor;
 class SwTextINetFormat;
 class SwFormatINetFormat;
 class SwTextAttr;
@@ -63,10 +52,8 @@ class SwTableBox;
 class SwTOXMark;
 class SwRangeRedline;
 class SwBlockCursor;
-class SwContentNode;
 class SwPostItField;
 class SwTextField;
-struct SwPosition;
 
 namespace i18nutil {
     struct SearchOptions2;

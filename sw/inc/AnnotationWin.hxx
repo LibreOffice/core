@@ -41,6 +41,7 @@ class SwView;
 class Edit;
 class MenuButton;
 class SwFrame;
+class SvxLanguageItem;
 
 namespace sw { namespace overlay {
     class OverlayRanges;

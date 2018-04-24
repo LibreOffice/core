@@ -23,7 +23,6 @@
 #include <vcl/weld.hxx>
 
 class SwView;
-class SwWrtShell;
 
 class SwGotoPageDlg : public weld::GenericDialogController
 {

@@ -39,7 +39,6 @@
 
 #include "unobaseclass.hxx"
 
-struct SwPosition;
 class SwPaM;
 class SwUnoCursor;
 class SwStartNode;

@@ -26,7 +26,6 @@
 #include <vector>
 #include <memory>
 
-class SwDoc;
 class SwAttrPool;
 namespace sw{ class DocumentStylePoolManager; }
 

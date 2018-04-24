@@ -27,9 +27,6 @@
 #include "ring.hxx"
 #include "ndarr.hxx"
 
-class SwNode;
-class SwNodes;
-
 /// Marks a node in the document model.
 class SW_DLLPUBLIC SwNodeIndex final : public sw::Ring<SwNodeIndex>
 {

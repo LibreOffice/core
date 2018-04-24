@@ -39,19 +39,15 @@
 
 class OutputDevice;
 class SwWrtShell;
-class SwDoc;
 class SwView;
 class SwPostItField;
 class SwFormatField;
-class SwField;
 class SfxBroadcaster;
 class SfxHint;
 class SwEditWin;
 class Color;
-class SfxItemPool;
 class SfxItemSet;
 class SvxSearchItem;
-class SvxLanguageItem;
 namespace sw { namespace annotation {
     class SwAnnotationWin;
 }}
@@ -62,7 +58,6 @@ class SwSidebarItem;
 class SwFrame;
 namespace vcl { class Window; }
 struct ImplSVEvent;
-class OutlinerSearchable;
 class OutlinerParaObject;
 namespace i18nutil { struct SearchOptions2; }
 

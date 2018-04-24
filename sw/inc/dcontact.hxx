@@ -30,20 +30,17 @@
 #include "calbck.hxx"
 #include "anchoreddrawobject.hxx"
 
-class SfxPoolItem;
-class SwFrameFormat;
-class SwFlyFrameFormat;
 class SwFlyFrame;
 class SwFrame;
 class SwPageFrame;
 class SwVirtFlyDrawObj;
-class SwFormatAnchor;
 class SwFlyDrawObj;
 class SwRect;
 class SwDrawContact;
 struct SwPosition;
 class SwIndex;
 class SdrTextObj;
+class SwContact;
 
 /** The other way round: Search format for given object.
  If object is a SwVirtFlyDrawObj the format will be obtained from it.
@@ -311,7 +308,6 @@ bool CheckControlLayer( const SdrObject *pObj );
 
 /** ContactObject for connection of formats as representatives of draw objects
  in SwClient and the objects themselves in Drawing (SDrObjUserCall). */
-class NestedUserCallHdl;
 
 class SwDrawContact final : public SwContact
 {

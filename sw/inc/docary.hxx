@@ -40,19 +40,11 @@
 
 class SwRangeRedline;
 class SwExtraRedline;
-class SwUnoCursor;
 class SwOLENode;
 class SwTable;
 class SwTableLine;
 class SwTableBox;
 struct SwPosition;
-class SwContentNode;
-class SwTextNode;
-
-namespace com { namespace sun { namespace star { namespace i18n {
-    struct ForbiddenCharacters;    ///< comes from the I18N UNO interface
-}}}}
-
 
 /** provides some methods for generic operations on lists that contain SwFormat* subclasses. */
 class SwFormatsBase

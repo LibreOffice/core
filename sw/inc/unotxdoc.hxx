@@ -45,17 +45,13 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/util/XReplaceable.hpp>
-#include <com/sun/star/util/XReplaceDescriptor.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/XLinkUpdate.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
@@ -84,6 +80,10 @@ class SwPrintData;
 class SwRenderData;
 class SwViewShell;
 class SfxItemPropertySet;
+namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
+namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XReplaceDescriptor; } } } }
 
 typedef cppu::WeakImplHelper
 <
