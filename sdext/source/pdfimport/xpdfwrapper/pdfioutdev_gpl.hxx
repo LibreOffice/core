@@ -222,7 +222,11 @@ namespace pdfi
                               double dx, double dy,
                               double originX, double originY,
                               CharCode code, int nBytes, Unicode *u, int uLen) override;
+#if POPPLER_CHECK_VERSION(0, 64, 0)
+        virtual void drawString(GfxState *state, const GooString *s) override;
+#else
         virtual void drawString(GfxState *state, GooString *s) override;
+#endif
         virtual void endTextObject(GfxState *state) override;
 
         //----- image drawing
