@@ -232,10 +232,11 @@ void ScXMLConditionalFormatContext::EndElement()
     for (size_t nFormatEntryIx = 0; nFormatEntryIx < pFormat->size(); ++nFormatEntryIx)
     {
         auto pFormatEntry = pFormat->GetEntry(nFormatEntryIx);
-        auto pCondFormatEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
+        auto pCondFormatEntry = dynamic_cast<const ScCondFormatEntry*>(pFormatEntry);
 
-        if (pCondFormatEntry->GetOperation() != SC_COND_EQUAL &&
-            pCondFormatEntry->GetOperation() != SC_COND_DIRECT)
+        if (pCondFormatEntry == nullptr ||
+            (pCondFormatEntry->GetOperation() != SC_COND_EQUAL &&
+             pCondFormatEntry->GetOperation() != SC_COND_DIRECT))
         {
             bEligibleForCache = false;
             break;
