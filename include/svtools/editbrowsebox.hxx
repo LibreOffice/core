@@ -452,7 +452,7 @@ namespace svt
 
         class BrowserMouseEventPtr
         {
-            BrowserMouseEvent* pEvent;
+            std::unique_ptr<BrowserMouseEvent> pEvent;
             bool               bDown;
 
         public:
@@ -461,11 +461,10 @@ namespace svt
                 , bDown(false)
             {
             }
-            ~BrowserMouseEventPtr(){Clear();}
 
             bool Is() const {return pEvent != nullptr;}
             bool IsDown() const {return bDown;}
-            const BrowserMouseEvent* operator->() const {return pEvent;}
+            const BrowserMouseEvent* operator->() const {return pEvent.get();}
 
             SVT_DLLPUBLIC void Clear();
             void Set(const BrowserMouseEvent* pEvt, bool bIsDown);
