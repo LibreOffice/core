@@ -291,7 +291,9 @@ void HsqlImporter::importHsqlDatabase()
     assert(m_xStorage);
 
     SchemaParser parser(m_xStorage);
-    SqlStatementVector statements = parser.parseSchema();
+    parser.parseSchema();
+
+    auto statements = parser.getCreateStatements();
 
     if (statements.size() < 1)
     {
@@ -311,6 +313,13 @@ void HsqlImporter::importHsqlDatabase()
     {
         std::vector<ColumnDefinition> aColTypes = parser.getTableColumnTypes(tableIndex.first);
         parseTableRows(tableIndex.second, aColTypes, tableIndex.first);
+    }
+
+    // alter stmts
+    for (const auto& sSql : parser.getAlterStatements())
+    {
+        Reference<XStatement> statement = m_rConnection->createStatement();
+        statement->executeQuery(sSql);
     }
 }
 }
