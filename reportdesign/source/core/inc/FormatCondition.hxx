@@ -49,6 +49,22 @@ namespace reportdesign
         OFormatCondition(const OFormatCondition&) = delete;
         OFormatCondition& operator=(const OFormatCondition&) = delete;
 
+        // internally, we store PROPERTY_PARAADJUST as css::style::ParagraphAdjust, but externally the property is visible as a sal_Int16
+        void set(  const OUString& _sProperty
+                   ,sal_Int16 Value
+                   ,css::style::ParagraphAdjust& _member)
+        {
+            BoundListeners l;
+            {
+                ::osl::MutexGuard aGuard(m_aMutex);
+                if ( static_cast<sal_Int16>(_member) != Value )
+                {
+                    prepareSet(_sProperty, css::uno::makeAny(static_cast<sal_Int16>(_member)), css::uno::makeAny(Value), &l);
+                    _member = static_cast<css::style::ParagraphAdjust>(Value);
+                }
+            }
+            l.notify();
+        }
         template <typename T> void set(  const OUString& _sProperty
                                         ,const T& Value
                                         ,T& _member)
@@ -56,8 +72,11 @@ namespace reportdesign
             BoundListeners l;
             {
                 ::osl::MutexGuard aGuard(m_aMutex);
-                prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(Value), &l);
-                _member = Value;
+                if ( _member != Value )
+                {
+                    prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(Value), &l);
+                    _member = Value;
+                }
             }
             l.notify();
         }
@@ -68,8 +87,11 @@ namespace reportdesign
             BoundListeners l;
             {
                 ::osl::MutexGuard aGuard(m_aMutex);
-                prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(Value), &l);
-                _member = Value;
+                if ( _member != Value )
+                {
+                    prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(Value), &l);
+                    _member = Value;
+                }
             }
             l.notify();
         }
