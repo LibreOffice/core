@@ -177,6 +177,7 @@ private:
     RGNDATA*                mpClipRgnData;      // ClipRegion-Data
     RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
     int                     mnPenWidth;         // line width
+    const PhysicalFontFace* mpCurrentPhysicalFontFace; // the font face currently selected into the DC
 
     LogicalFontInstance* GetWinFontEntry(int nFallbackLevel);
 
