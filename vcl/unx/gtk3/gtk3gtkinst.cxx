@@ -2453,6 +2453,18 @@ public:
         return gtk_notebook_get_n_pages(m_pNotebook);
     }
 
+    virtual OUString get_tab_label_text(const OString& rIdent) const override
+    {
+        gint nPage = get_page_number(rIdent);
+        const gchar* pStr = gtk_notebook_get_tab_label_text(m_pNotebook, gtk_notebook_get_nth_page(m_pNotebook, nPage));
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
+    virtual void remove_page(const OString& rIdent) override
+    {
+        gtk_notebook_remove_page(m_pNotebook, get_page_number(rIdent));
+    }
+
     virtual ~GtkInstanceNotebook() override
     {
         g_signal_handler_disconnect(m_pNotebook, m_nSignalId);

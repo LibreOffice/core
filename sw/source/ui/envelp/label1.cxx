@@ -75,11 +75,11 @@ void SwLabDlg::ReplaceGroup_( const OUString &rMake )
     aLstGroup = rMake;
 }
 
-void SwLabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
+void SwLabDlg::PageCreated(const OString &rId, SfxTabPage &rPage)
 {
-    if (nId == m_nLabelId)
+    if (rId == "labels")
     {
-        if(m_bLabel)
+        if (m_bLabel)
         {
             static_cast<SwLabPage*>(&rPage)->SetDBManager(pDBManager);
             static_cast<SwLabPage*>(&rPage)->InitDatabaseBox();
@@ -87,43 +87,21 @@ void SwLabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
         else
             static_cast<SwLabPage*>(&rPage)->SetToBusinessCard();
     }
-    else if (nId == m_nOptionsId)
+    else if (rId == "options")
         pPrtPage = static_cast<SwLabPrtPage*>(&rPage);
 }
 
-SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
+SwLabDlg::SwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
                                 SwDBManager* pDBManager_, bool bLabel)
-    : SfxTabDialog(pParent, "LabelDialog",
-        "modules/swriter/ui/labeldialog.ui", &rSet)
+    : SfxTabDialogController(pParent, "modules/swriter/ui/labeldialog.ui", "LabelDialog", &rSet)
     , pDBManager(pDBManager_)
     , pPrtPage(nullptr)
     , aTypeIds(50, 10)
     , m_pRecs(new SwLabRecs)
     , m_bLabel(bLabel)
-    , m_nOptionsId(0)
-    , m_nLabelId(0)
 {
-    WaitObject aWait( pParent );
+    weld::WaitObject aWait(pParent);
 
-    AddTabPage("format", SwLabFormatPage::Create, nullptr);
-    m_nOptionsId = AddTabPage("options", SwLabPrtPage::Create, nullptr);
-    m_sBusinessCardDlg = SwResId(STR_BUSINESS_CARDS);
-
-    if (m_bLabel)
-    {
-        RemoveTabPage("business");
-        RemoveTabPage("private");
-        RemoveTabPage("medium");
-        m_nLabelId = AddTabPage("labels", SwLabPage::Create, nullptr);
-    }
-    else
-    {
-        RemoveTabPage("labels");
-        m_nLabelId = AddTabPage("medium", SwLabPage::Create, nullptr);
-        AddTabPage("business", SwBusinessDataPage::Create, nullptr );
-        AddTabPage("private", SwPrivateDataPage::Create, nullptr);
-        SetText(m_sBusinessCardDlg);
-    }
     // Read user label from writer.cfg
     SwLabItem aItem(static_cast<const SwLabItem&>(rSet.Get( FN_LABEL )));
     std::unique_ptr<SwLabRec> pRec(new SwLabRec);
@@ -159,18 +137,33 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
 
     if (m_pExampleSet)
         m_pExampleSet->Put(aItem);
+
+    AddTabPage("format", SwLabFormatPage::Create, nullptr);
+    AddTabPage("options", SwLabPrtPage::Create, nullptr);
+    m_sBusinessCardDlg = SwResId(STR_BUSINESS_CARDS);
+
+    if (m_bLabel)
+    {
+        RemoveTabPage("business");
+        RemoveTabPage("private");
+        RemoveTabPage("medium");
+        AddTabPage("labels", SwLabPage::Create, nullptr);
+    }
+    else
+    {
+        RemoveTabPage("labels");
+        AddTabPage("medium", SwLabPage::Create, nullptr);
+        AddTabPage("business", SwBusinessDataPage::Create, nullptr );
+        AddTabPage("private", SwPrivateDataPage::Create, nullptr);
+        m_xDialog->set_title(m_sBusinessCardDlg);
+    }
+
+    pParent->set_busy_cursor(false);
 }
 
 SwLabDlg::~SwLabDlg()
 {
-    disposeOnce();
-}
-
-void SwLabDlg::dispose()
-{
     delete m_pRecs;
-    pPrtPage.clear();
-    SfxTabDialog::dispose();
 }
 
 void SwLabDlg::GetLabItem(SwLabItem &rItem)
@@ -267,6 +260,9 @@ SwLabPage::SwLabPage(TabPageParent pParent, const SfxItemSet& rSet)
     m_xInsertBT->set_sensitive(false);
     m_xContButton->connect_toggled(LINK(this, SwLabPage, PageHdl));
     m_xSheetButton->connect_toggled(LINK(this, SwLabPage, PageHdl));
+    auto nMaxWidth = m_xMakeBox->get_approximate_digit_width() * 32;
+    m_xMakeBox->set_size_request(nMaxWidth, -1);
+    m_xTypeBox->set_size_request(nMaxWidth, -1);
     m_xMakeBox->connect_changed(LINK(this, SwLabPage, MakeHdl));
     m_xTypeBox->connect_changed(LINK(this, SwLabPage, TypeHdl));
 
@@ -302,7 +298,7 @@ IMPL_LINK( SwLabPage, DatabaseHdl, weld::ComboBoxText&, rListBox, void )
 {
     sActDBName = m_xDatabaseLB->get_active_text();
 
-    WaitObject aObj( GetParentSwLabDlg() );
+    weld::WaitObject aObj(GetParentSwLabDlg()->getDialog());
 
     if (&rListBox == m_xDatabaseLB.get())
         GetDBManager()->GetTableNames(*m_xTableLB, sActDBName);
@@ -337,7 +333,7 @@ IMPL_LINK_NOARG(SwLabPage, PageHdl, weld::ToggleButton&, void)
 
 IMPL_LINK_NOARG(SwLabPage, MakeHdl, weld::ComboBoxText&, void)
 {
-    WaitObject aWait( GetParentSwLabDlg() );
+    weld::WaitObject aWait(GetParentSwLabDlg()->getDialog());
 
     m_xTypeBox->clear();
     m_xHiddenSortTypeBox->clear();
@@ -595,7 +591,7 @@ DeactivateRC SwPrivateDataPage::DeactivatePage(SfxItemSet* _pSet)
 
 bool SwPrivateDataPage::FillItemSet(SfxItemSet* rSet)
 {
-    SwLabItem aItem = static_cast<const SwLabItem&>( GetTabDialog()->GetExampleSet()->Get(FN_LABEL) );
+    SwLabItem aItem = static_cast<const SwLabItem&>(GetDialogController()->GetExampleSet()->Get(FN_LABEL));
     aItem.m_aPrivFirstName = m_xFirstNameED->get_text();
     aItem.m_aPrivName      = m_xNameED->get_text();
     aItem.m_aPrivShortCut  = m_xShortCutED->get_text();
@@ -685,7 +681,7 @@ DeactivateRC SwBusinessDataPage::DeactivatePage(SfxItemSet* _pSet)
 
 bool SwBusinessDataPage::FillItemSet(SfxItemSet* rSet)
 {
-    SwLabItem aItem = static_cast<const SwLabItem&>( GetTabDialog()->GetExampleSet()->Get(FN_LABEL) );
+    SwLabItem aItem = static_cast<const SwLabItem&>(GetDialogController()->GetExampleSet()->Get(FN_LABEL));
 
     aItem.m_aCompCompany   = m_xCompanyED->get_text();
     aItem.m_aCompCompanyExt= m_xCompanyExtED->get_text();
