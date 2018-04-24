@@ -94,9 +94,9 @@ bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart pa
         case ControlType::MultilineEditbox:
         case ControlType::Combobox:
         case ControlType::Toolbar:
-        /*case ControlType::Frame:
-        case ControlType::Scrollbar:
-        case ControlType::WindowBackground:*/
+        case ControlType::Frame:
+        /*case ControlType::Scrollbar:*/
+        case ControlType::WindowBackground:
         case ControlType::Fixedline:
             return true;
 
@@ -533,7 +533,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
         QStyleOption option;
         draw( QStyle::PE_PanelTipLabel, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
-    }
+    }*/
     else if (type == ControlType::Frame)
     {
         lcl_drawFrame( QStyle::PE_Frame, m_image.get(),
@@ -545,7 +545,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
     else if (type == ControlType::WindowBackground)
     {
         // Nothing to do - see "Default image color" switch ^^
-    }*/
+    }
     else if (type == ControlType::Fixedline)
     {
         QStyleOptionMenuItem option;
@@ -791,7 +791,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
             }
             break;
         }
-        /*case ControlType::Frame:
+        case ControlType::Frame:
         {
             if( part == ControlPart::Border )
             {
@@ -805,7 +805,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
                 retVal = true;
             }
             break;
-        }*/
+        }
         case ControlType::Radiobutton:
         {
             const int h = QApplication::style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight);
