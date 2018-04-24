@@ -3023,7 +3023,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
 
     pDlg.disposeAndReset(pFact->CreateScSubTotalDlg(pTabViewShell->GetDialogParent(), &aArgSet));
     assert(pDlg); // "Dialog create fail
-    pDlg->SetCurPageId(1);
+    pDlg->SetCurPageId("1stgroup");
 
     short bResult = pDlg->Execute();
 
