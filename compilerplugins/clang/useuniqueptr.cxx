@@ -58,6 +58,7 @@ private:
     void CheckLoopDelete(const CXXMethodDecl*, const Stmt* );
     void CheckLoopDelete(const CXXMethodDecl*, const CXXDeleteExpr* );
     void CheckDeleteExpr(const CXXMethodDecl*, const CXXDeleteExpr*);
+    void CheckParenExpr(const CXXMethodDecl*, const ParenExpr*);
     void CheckDeleteExpr(const CXXMethodDecl*, const CXXDeleteExpr*,
         const MemberExpr*, StringRef message);
 };
@@ -101,6 +102,12 @@ void UseUniquePtr::CheckForSimpleDelete(const CXXMethodDecl* methodDecl, const C
             CheckDeleteExpr(methodDecl, deleteExpr);
             continue;
         }
+        auto parenExpr = dyn_cast<ParenExpr>(*i);
+        if (parenExpr)
+        {
+            CheckParenExpr(methodDecl, parenExpr);
+            continue;
+        }
         // Check for conditional deletes like:
         //     if (m_pField != nullptr) delete m_pField;
         auto ifStmt = dyn_cast<IfStmt>(*i);
@@ -132,6 +139,13 @@ void UseUniquePtr::CheckForSimpleDelete(const CXXMethodDecl* methodDecl, const C
             continue;
         }
 
+        parenExpr = dyn_cast<ParenExpr>(ifStmt->getThen());
+        if (parenExpr)
+        {
+            CheckParenExpr(methodDecl, parenExpr);
+            continue;
+        }
+
         auto ifThenCompoundStmt = dyn_cast<CompoundStmt>(ifStmt->getThen());
         if (!ifThenCompoundStmt)
             continue;
@@ -140,6 +154,9 @@ void UseUniquePtr::CheckForSimpleDelete(const CXXMethodDecl* methodDecl, const C
             auto ifDeleteExpr = dyn_cast<CXXDeleteExpr>(*j);
             if (ifDeleteExpr)
                 CheckDeleteExpr(methodDecl, ifDeleteExpr);
+            ParenExpr const * parenExpr = dyn_cast<ParenExpr>(*i);
+            if (parenExpr)
+                CheckParenExpr(methodDecl, parenExpr);
         }
     }
 }
@@ -157,6 +174,20 @@ void UseUniquePtr::CheckDeleteExpr(const CXXMethodDecl* methodDecl, const CXXDel
         return;
     CheckDeleteExpr(methodDecl, deleteExpr, memberExpr,
         "unconditional call to delete on a member, should be using std::unique_ptr");
+}
+
+/**
+ * Look for DELETEZ expressions.
+ */
+void UseUniquePtr::CheckParenExpr(const CXXMethodDecl* methodDecl, const ParenExpr* parenExpr)
+{
+    auto binaryOp = dyn_cast<BinaryOperator>(parenExpr->getSubExpr());
+    if (!binaryOp || binaryOp->getOpcode() != BO_Comma)
+        return;
+    auto deleteExpr = dyn_cast<CXXDeleteExpr>(binaryOp->getLHS());
+    if (!deleteExpr)
+        return;
+    CheckDeleteExpr(methodDecl, deleteExpr);
 }
 
 /**
