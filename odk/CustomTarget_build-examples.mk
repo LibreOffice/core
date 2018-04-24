@@ -31,6 +31,6 @@ my_example_dirs = \
 #    cpp/custompanel \
 
 
-include odk/build-examples_common.mk
+include $(SRCDIR)/odk/build-examples_common.mk
 
 # vim: set noet sw=4 ts=4:
