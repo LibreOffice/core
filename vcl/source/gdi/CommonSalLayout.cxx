@@ -696,6 +696,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 int32_t nCharPos = pHbGlyphInfos[i].cluster;
                 int32_t nCharCount = 0;
                 bool bInCluster = false;
+                bool bClusterStart = false;
 
                 // Find the number of characters that make up this glyph.
                 if (!bRightToLeft)
@@ -719,6 +720,9 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                         if (nNextCharPos == nCharPos)
                             nNextCharPos = nEndRunPos;
                         nCharCount = nNextCharPos - nCharPos;
+                        if ((i == 0 || pHbGlyphInfos[i].cluster != pHbGlyphInfos[i - 1].cluster) &&
+                            (i > nRunGlyphCount - 1 && pHbGlyphInfos[i].cluster == pHbGlyphInfos[i + 1].cluster))
+                            bClusterStart = true;
                     }
                 }
                 else
@@ -742,6 +746,9 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                         if (nNextCharPos == nCharPos)
                             nNextCharPos = nEndRunPos;
                         nCharCount = nNextCharPos - nCharPos;
+                        if ((i == nRunGlyphCount - 1 || pHbGlyphInfos[i].cluster != pHbGlyphInfos[i + 1].cluster) &&
+                            (i > 0 && pHbGlyphInfos[i].cluster == pHbGlyphInfos[i - 1].cluster))
+                            bClusterStart = true;
                     }
                 }
 
@@ -756,6 +763,9 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 int nGlyphFlags = 0;
                 if (bRightToLeft)
                     nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
+
+                if (bClusterStart)
+                    nGlyphFlags |= GlyphItem::IS_CLUSTER_START;
 
                 if (bInCluster)
                     nGlyphFlags |= GlyphItem::IS_IN_CLUSTER;
