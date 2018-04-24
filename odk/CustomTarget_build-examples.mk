@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CustomTarget_CustomTarget,odk/build-examples))
+testname=odk/build-examples
 
 my_example_dirs = \
     CLI/CSharp/Spreadsheet \
@@ -31,105 +31,6 @@ my_example_dirs = \
 #    cpp/custompanel \
 
 
-ifeq ($(ENABLE_JAVA),TRUE)
-my_example_dirs += \
-    DevelopersGuide/BasicAndDialogs/CreatingDialogs \
-    DevelopersGuide/Charts \
-    DevelopersGuide/Components/Addons/JobsAddon \
-    DevelopersGuide/Components/Addons/ProtocolHandlerAddon_java \
-    DevelopersGuide/Components/JavaComponent \
-    DevelopersGuide/Components/SimpleLicense \
-    DevelopersGuide/Components/Thumbs \
-    DevelopersGuide/Components/dialogcomponent \
-    DevelopersGuide/Config \
-    DevelopersGuide/Database \
-    DevelopersGuide/Drawing \
-    DevelopersGuide/FirstSteps \
-    DevelopersGuide/Forms \
-    DevelopersGuide/GUI \
-    DevelopersGuide/OfficeBean \
-    DevelopersGuide/OfficeDev \
-    DevelopersGuide/OfficeDev/Clipboard \
-    DevelopersGuide/OfficeDev/DesktopEnvironment \
-    DevelopersGuide/OfficeDev/DisableCommands \
-    DevelopersGuide/OfficeDev/FilterDevelopment/AsciiFilter \
-    DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilterDetection \
-    DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_java \
-    DevelopersGuide/OfficeDev/Linguistic \
-    DevelopersGuide/OfficeDev/PathSettings \
-    DevelopersGuide/OfficeDev/PathSubstitution \
-    DevelopersGuide/OfficeDev/TerminationTest \
-    DevelopersGuide/ProfUNO/InterprocessConn \
-    DevelopersGuide/ProfUNO/Lifetime \
-    DevelopersGuide/ProfUNO/SimpleBootstrap_java \
-    DevelopersGuide/ScriptingFramework/SayHello \
-    DevelopersGuide/ScriptingFramework/ScriptSelector \
-    DevelopersGuide/Spreadsheet \
-    DevelopersGuide/Text \
-    DevelopersGuide/UCB \
-    java/DocumentHandling \
-    java/Drawing \
-    java/Inspector \
-    java/MinimalComponent \
-    java/PropertySet \
-    java/Spreadsheet \
-    java/Text \
-    java/ToDo \
-
-endif
-
-#    java/ConverterServlet \
-#    java/EmbedDocument/Container1 \
-#    java/EmbedDocument/EmbeddedObject \
-#    java/NotesAccess \
-#    java/Storage \
-
-
-.PHONY: $(call gb_CustomTarget_get_target,odk/build-examples)
-
-$(call gb_CustomTarget_get_target,odk/build-examples): \
-        $(call gb_CustomTarget_get_workdir,odk/build-examples)/setsdkenv
-ifneq ($(gb_SUPPRESS_TESTS),)
-	@true
-else
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CHK,1)
-	rm -fr $(call gb_CustomTarget_get_workdir,odk/build-examples)/{out,user}
-ifeq (MACOSX,$(OS))
-	$(eval ODK_BUILD_SHELL := $(shell $(gb_MKTEMP)))
-	cp /bin/sh "$(ODK_BUILD_SHELL)"
-	chmod 0700 "$(ODK_BUILD_SHELL)"
-endif
-	(saved_library_path=$${$(gb_Helper_LIBRARY_PATH_VAR)} && . $< \
-        $(if $(filter MACOSX,$(OS)),, \
-            && $(gb_Helper_LIBRARY_PATH_VAR)=$$saved_library_path) \
-        && export \
-            UserInstallation=$(call gb_Helper_make_url,$(call gb_CustomTarget_get_workdir,odk/build-examples)/user) \
-        $(foreach my_dir,$(my_example_dirs), \
-            && (cd $(INSTDIR)/$(SDKDIRNAME)/examples/$(my_dir) \
-                && printf 'yes\n' | LC_ALL=C make \
-                    $(if $(filter MACOSX,$(OS)), SHELL=$(ODK_BUILD_SHELL), )))) \
-            >$(call gb_CustomTarget_get_workdir,odk/build-examples)/log 2>&1 \
-        || (RET=$$? \
-            $(if $(filter MACOSX,$(OS)), && rm -f $(ODK_BUILD_SHELL) , ) \
-            && cat $(call gb_CustomTarget_get_workdir,odk/build-examples)/log \
-            && exit $$RET)
-ifeq (MACOSX,$(OS))
-	-rm -f $(ODK_BUILD_SHELL)
-endif
-endif
-
-$(call gb_CustomTarget_get_workdir,odk/build-examples)/setsdkenv: \
-        $(SRCDIR)/odk/config/setsdkenv_unix.sh.in \
-        $(BUILDDIR)/config_$(gb_Side).mk | \
-        $(call gb_CustomTarget_get_workdir,odk/build-examples)/.dir
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
-	sed -e 's!@OO_SDK_NAME@!sdk!' \
-        -e 's!@OO_SDK_HOME@!$(INSTDIR)/$(SDKDIRNAME)!' \
-        -e 's!@OFFICE_HOME@!$(INSTROOTBASE)!' -e 's!@OO_SDK_MAKE_HOME@!!' \
-        -e 's!@OO_SDK_ZIP_HOME@!!' -e 's!@OO_SDK_CAT_HOME@!!' \
-        -e 's!@OO_SDK_SED_HOME@!!' -e 's!@OO_SDK_CPP_HOME@!!' \
-        -e 's!@OO_SDK_JAVA_HOME@!$(JAVA_HOME)!' \
-        -e 's!@OO_SDK_OUTPUT_DIR@!$(call gb_CustomTarget_get_workdir,odk/build-examples)/out!' \
-        -e 's!@SDK_AUTO_DEPLOYMENT@!YES!' $< > $@
+include odk/build-examples_common.mk
 
 # vim: set noet sw=4 ts=4:

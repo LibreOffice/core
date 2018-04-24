@@ -58,6 +58,9 @@ $(eval $(call gb_Module_add_check_targets,odk,\
 ifneq ($(filter $(OS),LINUX MACOSX),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,odk, \
     CustomTarget_build-examples \
+    $(if $(ENABLE_JAVA),\
+        CustomTarget_build-examples_java \
+    ) \
 ))
 endif
 
