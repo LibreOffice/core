@@ -641,7 +641,7 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics,
     Point aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
-    while (GetNextGlyphs(1, &pGlyph, aPos, nStart))
+    while (GetNextGlyph(&pGlyph, aPos, nStart))
     {
         // get outline of individual glyph, ignoring "empty" glyphs
         bool bSuccess = rSalGraphics.GetGlyphOutline(*pGlyph, aGlyphOutline);
@@ -673,7 +673,7 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, tools::Rectangle& rRect
     Point aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
-    while (GetNextGlyphs(1, &pGlyph, aPos, nStart))
+    while (GetNextGlyph(&pGlyph, aPos, nStart))
     {
         // get bounding rectangle of individual glyph
         if (rSalGraphics.GetGlyphBoundRect(*pGlyph, aRectangle))
@@ -903,9 +903,9 @@ sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoor
     return -1;
 }
 
-int GenericSalLayout::GetNextGlyphs(int nLen, const GlyphItem** pGlyphs,
+bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
                                     Point& rPos, int& nStart,
-                                    const PhysicalFontFace** /*pFallbackFonts*/) const
+                                    const PhysicalFontFace** /*pFallbackFont*/) const
 {
     std::vector<GlyphItem>::const_iterator pGlyphIter = m_GlyphItems.begin();
     std::vector<GlyphItem>::const_iterator pGlyphIterEnd = m_GlyphItems.end();
@@ -921,53 +921,23 @@ int GenericSalLayout::GetNextGlyphs(int nLen, const GlyphItem** pGlyphs,
 
     // return zero if no more glyph found
     if( nStart >= static_cast<int>(m_GlyphItems.size()) )
-        return 0;
+        return false;
 
     if( pGlyphIter == pGlyphIterEnd )
-        return 0;
+        return false;
+
+    // update return data with glyph info
+    *pGlyph = &(*pGlyphIter);
+    ++nStart;
 
     // calculate absolute position in pixel units
     Point aRelativePos = pGlyphIter->maLinearPos;
-
-    // find more glyphs which can be merged into one drawing instruction
-    int nCount = 0;
-    long nYPos = pGlyphIter->maLinearPos.Y();
-    for(;;)
-    {
-        // update return data with glyph info
-        ++nCount;
-        *(pGlyphs++) = &(*pGlyphIter);
-
-        // break at end of glyph list
-        if( ++nStart >= static_cast<int>(m_GlyphItems.size()) )
-            break;
-        // break when enough glyphs
-        if( nCount >= nLen )
-            break;
-
-        long nGlyphAdvance = pGlyphIter[1].maLinearPos.X() - pGlyphIter->maLinearPos.X();
-        // stop when next x-position is unexpected
-        if( pGlyphIter->mnOrigWidth != nGlyphAdvance )
-            break;
-
-        // advance to next glyph
-        ++pGlyphIter;
-
-        // stop when next y-position is unexpected
-        if( nYPos != pGlyphIter->maLinearPos.Y() )
-            break;
-
-        // stop when no longer in string
-        int n = pGlyphIter->mnCharPos;
-        if( (n < mnMinCharPos) || (mnEndCharPos <= n) )
-            break;
-    }
 
     aRelativePos.setX( aRelativePos.X() / ( mnUnitsPerPixel) );
     aRelativePos.setY( aRelativePos.Y() / ( mnUnitsPerPixel) );
     rPos = GetDrawPosition( aRelativePos );
 
-    return nCount;
+    return true;
 }
 
 void GenericSalLayout::MoveGlyph( int nStart, long nNewXPos )
@@ -1157,7 +1127,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     int nStartOld[ MAX_FALLBACK ];
     int nStartNew[ MAX_FALLBACK ];
     const GlyphItem* pGlyphs[MAX_FALLBACK];
-    int nValid[ MAX_FALLBACK ] = {0};
+    bool bValid[MAX_FALLBACK] = { false };
 
     Point aPos;
     int nLevel = 0, n;
@@ -1182,9 +1152,9 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
         // prepare merging components
         nStartNew[ nLevel ] = nStartOld[ nLevel ] = 0;
-        nValid[nLevel] = mpLayouts[n]->GetNextGlyphs(1, &pGlyphs[nLevel], aPos, nStartNew[nLevel]);
+        bValid[nLevel] = mpLayouts[n]->GetNextGlyph(&pGlyphs[nLevel], aPos, nStartNew[nLevel]);
 
-        if( (n > 0) && !nValid[ nLevel ] )
+        if( (n > 0) && !bValid[ nLevel ] )
         {
             // an empty fallback layout can be released
             mpLayouts[n].reset();
@@ -1212,7 +1182,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     int nFirstValid = -1;
     for( n = 0; n < nLevel; ++n )
     {
-        if(nValid[n] > 0)
+        if(bValid[n])
         {
             nFirstValid = n;
             break;
@@ -1228,11 +1198,11 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         rArgs.mnEndCharPos : rArgs.mnMinCharPos - 1;
     int nRunVisibleEndChar = pGlyphs[nFirstValid]->mnCharPos;
     // merge the fallback levels
-    while( nValid[nFirstValid] && (nLevel > 0))
+    while( bValid[nFirstValid] && (nLevel > 0))
     {
         // find best fallback level
         for( n = 0; n < nLevel; ++n )
-            if( nValid[n] && !maFallbackRuns[n].PosIsInAnyRun( nActiveCharPos ) )
+            if( bValid[n] && !maFallbackRuns[n].PosIsInAnyRun( nActiveCharPos ) )
                 // fallback level n wins when it requested no further fallback
                 break;
         int nFBLevel = n;
@@ -1261,9 +1231,9 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             {
                 mpLayouts[0]->DropGlyph( nStartOld[0] );
                 nStartOld[0] = nStartNew[0];
-                nValid[nFirstValid] = mpLayouts[0]->GetNextGlyphs(1, &pGlyphs[nFirstValid], aPos, nStartNew[0]);
+                bValid[nFirstValid] = mpLayouts[0]->GetNextGlyph(&pGlyphs[nFirstValid], aPos, nStartNew[0]);
 
-                if( !nValid[nFirstValid] )
+                if( !bValid[nFirstValid] )
                    break;
             }
         }
@@ -1278,9 +1248,9 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             // proceed to next glyph
             nStartOld[n] = nStartNew[n];
             int nOrigCharPos = pGlyphs[n]->mnCharPos;
-            nValid[n] = mpLayouts[n]->GetNextGlyphs(1, &pGlyphs[n], aPos, nStartNew[n]);
+            bValid[n] = mpLayouts[n]->GetNextGlyph(&pGlyphs[n], aPos, nStartNew[n]);
             // break after last glyph of active layout
-            if( !nValid[n] )
+            if( !bValid[n] )
             {
                 // performance optimization (when a fallback layout is no longer needed)
                 if( n >= nLevel-1 )
@@ -1543,14 +1513,10 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) cons
     }
 }
 
-int MultiSalLayout::GetNextGlyphs(int nLen, const GlyphItem** pGlyphs,
+bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
                                   Point& rPos, int& nStart,
-                                  const PhysicalFontFace** pFallbackFonts) const
+                                  const PhysicalFontFace** pFallbackFont) const
 {
-    // for multi-level fallback only single glyphs should be used
-    if( mnLevel > 1 && nLen > 1 )
-        nLen = 1;
-
     // NOTE: nStart is tagged with current font index
     int nLevel = static_cast<unsigned>(nStart) >> GF_FONTSHIFT;
     nStart &= ~GF_FONTMASK;
@@ -1558,29 +1524,23 @@ int MultiSalLayout::GetNextGlyphs(int nLen, const GlyphItem** pGlyphs,
     {
         SalLayout& rLayout = *mpLayouts[ nLevel ];
         rLayout.InitFont();
-        int nRetVal = rLayout.GetNextGlyphs(nLen, pGlyphs, rPos, nStart);
-        if( nRetVal )
+        if (rLayout.GetNextGlyph(pGlyph, rPos, nStart))
         {
             int nFontTag = nLevel << GF_FONTSHIFT;
             nStart |= nFontTag;
-            for( int i = 0; i < nRetVal; ++i )
-            {
-                // FIXME: This cast is ugly!
-                const_cast<GlyphItem*>(pGlyphs[i])->mnFallbackLevel = nLevel;
-                if( pFallbackFonts )
-                {
-                    pFallbackFonts[ i ] =  mpFallbackFonts[ nLevel ];
-                }
-            }
+            // FIXME: This cast is ugly!
+            const_cast<GlyphItem*>(*pGlyph)->mnFallbackLevel = nLevel;
+            if (pFallbackFont)
+                *pFallbackFont = mpFallbackFonts[nLevel];
             rPos += maDrawBase;
             rPos += maDrawOffset;
-            return nRetVal;
+            return true;
         }
     }
 
     // #111016# reset to base level font when done
     mpLayouts[0]->InitFont();
-    return 0;
+    return false;
 }
 
 bool MultiSalLayout::GetOutline( SalGraphics& rGraphics,

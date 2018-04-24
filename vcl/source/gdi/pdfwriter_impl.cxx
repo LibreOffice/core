@@ -6673,7 +6673,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     aGlyphs.reserve( nMaxGlyphs );
     // first get all the glyphs and register them; coordinates still in Pixel
     Point aPos;
-    while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nIndex, &pFallbackFont))
+    while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex, &pFallbackFont))
     {
         const auto* pFont = pFallbackFont ? pFallbackFont : pDevFont;
 
@@ -6791,7 +6791,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
             Point aStartPt;
             sal_Int32 nWidth = 0;
             nIndex = 0;
-            while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nIndex))
+            while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex))
             {
                 if (!pGlyph->IsSpacing())
                 {
@@ -6886,7 +6886,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         aOffset.AdjustY(m_pReferenceDevice->mpFontInstance->mxFontMetric->GetAscent() );
 
     nIndex = 0;
-    while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nIndex))
+    while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex))
     {
         if (pGlyph->IsSpacing())
         {

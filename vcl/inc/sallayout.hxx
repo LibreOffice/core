@@ -173,8 +173,8 @@ public:
     virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
 
     // methods using glyph indexing
-    virtual int     GetNextGlyphs(int nLen, const GlyphItem** pGlyphs, Point& rPos, int&,
-                                  const PhysicalFontFace** pFallbackFonts = nullptr) const = 0;
+    virtual bool    GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int&,
+                                 const PhysicalFontFace** pFallbackFont = nullptr) const = 0;
     virtual bool    GetOutline( SalGraphics&, basegfx::B2DPolyPolygonVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, tools::Rectangle& ) const;
 
@@ -214,8 +214,8 @@ public:
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const override;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const override;
-    virtual int     GetNextGlyphs(int nLen, const GlyphItem** pGlyphs, Point& rPos, int&,
-                                  const PhysicalFontFace** pFallbackFonts = nullptr) const override;
+    virtual bool    GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int&,
+                                 const PhysicalFontFace** pFallbackFont = nullptr) const override;
     virtual bool    GetOutline( SalGraphics&, basegfx::B2DPolyPolygonVector& ) const override;
     virtual bool    IsKashidaPosValid(int nCharPos) const override;
 
@@ -316,8 +316,8 @@ public:
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const override;
 
     // used by display layers
-    virtual int     GetNextGlyphs(int nLen, const GlyphItem** pGlyphs, Point& rPos, int&,
-                                  const PhysicalFontFace** pFallbackFonts = nullptr) const override;
+    virtual bool    GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int&,
+                                 const PhysicalFontFace** pFallbackFont = nullptr) const override;
 
 protected:
                     GenericSalLayout();
