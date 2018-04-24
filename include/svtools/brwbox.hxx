@@ -39,7 +39,6 @@ class BrowserColumn;
 class BrowserDataWin;
 class MultiSelection;
 class BrowserHeader;
-typedef ::std::vector< BrowserColumn* > BrowserColumns;
 
 namespace svt {
     class BrowseBoxImpl;
@@ -239,13 +238,13 @@ private:
     TriState        bHideCursor;    // hide cursor (frame)
     Range           aSelRange;      // for selection expansion
 
-    BrowserColumns pCols;           // array of column-descriptions
+    ::std::vector< std::unique_ptr<BrowserColumn> > mvCols; // array of column-descriptions
     union
     {
         MultiSelection* pSel;       // selected rows for multi-selection
         long            nSel;       // selected row for single-selection
     }               uRow;
-    MultiSelection* pColSel;        // selected column-ids
+    std::unique_ptr<MultiSelection> pColSel; // selected column-ids
 
     // fdo#83943, detect if making the cursor position visible is impossible to achieve
     struct CursorMoveAttempt
@@ -487,7 +486,7 @@ public:
     long            FirstSelectedRow();
     long            LastSelectedRow();
     long            NextSelectedRow();
-    const MultiSelection* GetColumnSelection() const { return pColSel; }
+    const MultiSelection* GetColumnSelection() const { return pColSel.get(); }
     const MultiSelection* GetSelection() const
                     { return bMultiSelection ? uRow.pSel : nullptr; }
 
