@@ -78,7 +78,6 @@ class SFX2_DLLPUBLIC SfxTabDialog : public TabDialog
 {
 private:
 friend class SfxTabPage;
-friend class SfxTabDialogController;
 friend class SfxTabDialogUIObject;
 
     VclPtr<VclBox>     m_pBox;
