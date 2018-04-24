@@ -1801,8 +1801,8 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         case PDFWriter::PDFVersion::PDF_1_2: aBuffer.append( "1.2" );break;
         case PDFWriter::PDFVersion::PDF_1_3: aBuffer.append( "1.3" );break;
         case PDFWriter::PDFVersion::PDF_A_1:
-        default:
         case PDFWriter::PDFVersion::PDF_1_4: aBuffer.append( "1.4" );break;
+        default:
         case PDFWriter::PDFVersion::PDF_1_5: aBuffer.append( "1.5" );break;
     }
     // append something binary as comment (suggested in PDF Reference)
