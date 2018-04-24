@@ -131,6 +131,8 @@ public:
     virtual OString get_current_page_ident() const = 0;
     virtual void set_current_page(int nPage) = 0;
     virtual void set_current_page(const OString& rIdent) = 0;
+    virtual void remove_page(const OString& rIdent) = 0;
+    virtual OUString get_tab_label_text(const OString& rIdent) const = 0;
     virtual int get_n_pages() const = 0;
     virtual weld::Container* get_page(const OString& rIdent) const = 0;
 
@@ -753,14 +755,12 @@ public:
 
 class VCL_DLLPUBLIC DialogController
 {
-private:
+public:
     virtual Dialog* getDialog() = 0;
     const Dialog* getConstDialog() const
     {
         return const_cast<DialogController*>(this)->getDialog();
     }
-
-public:
     short run() { return getDialog()->run(); }
     static bool runAsync(const std::shared_ptr<DialogController>& rController,
                          const std::function<void(sal_Int32)>&);
@@ -774,9 +774,6 @@ public:
 
 class VCL_DLLPUBLIC GenericDialogController : public DialogController
 {
-private:
-    virtual Dialog* getDialog() override;
-
 protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::shared_ptr<weld::Dialog> m_xDialog;
@@ -784,14 +781,12 @@ protected:
 public:
     GenericDialogController(weld::Widget* pParent, const OUString& rUIFile,
                             const OString& rDialogId);
+    virtual Dialog* getDialog() override;
     virtual ~GenericDialogController() COVERITY_NOEXCEPT_FALSE override;
 };
 
 class VCL_DLLPUBLIC MessageDialogController : public DialogController
 {
-private:
-    virtual Dialog* getDialog() override;
-
 protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::MessageDialog> m_xDialog;
@@ -802,6 +797,7 @@ protected:
 public:
     MessageDialogController(weld::Widget* pParent, const OUString& rUIFile,
                             const OString& rDialogId, const OString& rRelocateId = OString());
+    virtual Dialog* getDialog() override;
     virtual ~MessageDialogController() override;
     void set_primary_text(const OUString& rText) { m_xDialog->set_primary_text(rText); }
     OUString get_primary_text() const { return m_xDialog->get_primary_text(); }
