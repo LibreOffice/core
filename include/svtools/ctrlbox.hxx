@@ -283,7 +283,7 @@ inline void LineListBox::SetNone( const OUString& sNone )
 class SVT_DLLPUBLIC FontNameBox : public ComboBox
 {
 private:
-    ImplFontList*   mpFontList;
+    std::unique_ptr<ImplFontList> mpFontList;
     bool            mbWYSIWYG;
     OUString        maFontMRUEntriesFile;
 
