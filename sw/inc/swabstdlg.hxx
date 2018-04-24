@@ -275,8 +275,8 @@ class AbstractSwLabDlg  : public SfxAbstractTabDialog
 protected:
     virtual ~AbstractSwLabDlg() override = default;
 public:
-     virtual const OUString& GetBusinessCardStr() const = 0;
-     virtual Printer *GetPrt() =0;
+    virtual const OUString& GetBusinessCardStr() const = 0;
+    virtual Printer *GetPrt() =0;
 };
 
 class AbstractSwSelGlossaryDlg : public VclAbstractDialog
@@ -390,7 +390,7 @@ public:
         SwField* pField, bool bPrevButton, bool bNextButton) = 0;
     virtual VclPtr<SfxAbstractTabDialog> CreateSwEnvDlg ( vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert ) = 0;
 
-    virtual VclPtr<AbstractSwLabDlg> CreateSwLabDlg(const SfxItemSet& rSet,
+    virtual VclPtr<AbstractSwLabDlg> CreateSwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
                                                      SwDBManager* pDBManager, bool bLabel) = 0;
 
     virtual SwLabDlgMethod GetSwLabDlgStaticMethod () =0;

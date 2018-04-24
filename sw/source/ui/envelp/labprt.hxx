@@ -44,7 +44,7 @@ class SwLabPrtPage : public SfxTabPage
 
     DECL_LINK( CountHdl, weld::Button&, void );
 
-    SwLabDlg* GetParentSwLabDlg() {return static_cast<SwLabDlg*>(GetTabDialog());}
+    SwLabDlg* GetParentSwLabDlg() {return static_cast<SwLabDlg*>(GetDialogController());}
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
