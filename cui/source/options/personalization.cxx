@@ -252,6 +252,8 @@ void SelectPersonaDialog::AddPersonaSetting( OUString const & rPersonaSetting )
 
 void SelectPersonaDialog::ClearSearchResults()
 {
+    // for VCL to be able to destroy bitmaps
+    SolarMutexGuard aGuard;
     m_vPersonaSettings.clear();
     m_aSelectedPersona.clear();
     for(VclPtr<PushButton> & nIndex : m_vResultList)
@@ -776,14 +778,14 @@ void SearchAndParseThread::execute()
                 continue;
             }
             INetURLObject aURLObj( sPreviewFile );
+            // for VCL to be able to create bitmaps / do visual changes in the thread
+            SolarMutexGuard aGuard;
             aFilter.ImportGraphic( aGraphic, aURLObj );
             Bitmap aBmp = aGraphic.GetBitmap();
 
             if( !m_bExecute )
                 return;
 
-            // for VCL to be able to do visual changes in the thread
-            SolarMutexGuard aGuard;
             m_pPersonaDialog->SetImages( Image( aBmp ), nIndex++ );
             m_pPersonaDialog->setOptimalLayoutSize();
             m_pPersonaDialog->AddPersonaSetting( aPersonaSetting );
