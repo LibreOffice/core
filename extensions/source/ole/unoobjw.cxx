@@ -1253,8 +1253,35 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
 void InterfaceOleWrapper::convertDispparamsArgs(DISPID id,
     unsigned short /*wFlags*/, DISPPARAMS* pdispparams, Sequence<Any>& rSeq)
 {
+    // Parameters come in in reverse order in pdispparams. There might be less parameters than
+    // expected. In that case, assume they are "optional" (but can't be marked as such in UNO IDL),
+    // and fill in the rest with empty Anys. There might also be more than expected. In that case,
+    // assume the oovbaapi UNO IDL hasn't kept up with added optional parameters in MSO, and just
+    // ignore the extra ones, as long as they are empty.
+
+    // An example: incoming parameters: <12, 13, "foo/bar.tem">
+    //
+    // Expected paramters: (string filename, int something, int somethingElse, Any whatever, Any
+    // whateverElse)
+    //
+    // Here the existing incoming parameters are placed in reverse order in the first three outgoing
+    // parameters, and the rest of the outgoing paramters are kept as empty Anys.
+    //
+    // Another example: incoming parameters: <EMPTY, TRUE>
+    //
+    // Expected parameters: (bool flag)
+    //
+    // Here the TRUE is passed as the sole outgoing parameter, and the incoming EMPTY is ignored.
+    //
+    // Still an example: incoming parameters: <"foo.doc", TRUE>
+    //
+    // Expected parameters: (bool flag)
+    //
+    // This throws an error as the incoming string parameter presumably should do something important,
+    // but there is no corresponding outgoing parameter.
+
     HRESULT hr = S_OK;
-    const int countArgs = pdispparams->cArgs;
+    const int countIncomingArgs = pdispparams->cArgs;
 
     //Get type information for the current call
     InvocationInfo info;
@@ -1263,33 +1290,39 @@ void InterfaceOleWrapper::convertDispparamsArgs(DISPID id,
                   "[automation bridge]InterfaceOleWrapper::convertDispparamsArgs \n"
                   "Could not obtain type information for current call.");
 
-    // We accept less or even more parameters (on certain conditions) than expected. So size rSeq
-    // according to the number of expected parameters.
-    const int expectedArgs = info.aParamTypes.getLength();
+    // Size rSeq according to the number of expected parameters.
+    const int expectedArgs = info.aParamTypes.getLength() + (info.eMemberType == MemberType_PROPERTY ? 1 : 0);
     rSeq.realloc( expectedArgs );
     Any* pParams = rSeq.getArray();
 
     Any anyParam;
 
-    for (int i = 0; i < std::max(countArgs, expectedArgs); i++)
+    int outgoingArgIndex = 0;
+
+    // Go through incoming parameters in reverse order, i.e. in the order as declared in IDL
+    for (int i = std::max(countIncomingArgs, expectedArgs) - 1; i >= 0; i--)
     {
         // Ignore too many parameters if they are VT_EMPTY anyway
-        if ( i < countArgs && i >= expectedArgs && pdispparams->rgvarg[i].vt == VT_EMPTY )
+        if ( outgoingArgIndex >= expectedArgs && pdispparams->rgvarg[i].vt == VT_EMPTY )
             continue;
 
         // But otherwise too many parameters is an error
-        if ( i < countArgs && i >= expectedArgs )
+        if ( outgoingArgIndex >= expectedArgs )
             throw BridgeRuntimeError( "[automation bridge] Too many parameters" );
 
         if (info.eMemberType == MemberType_METHOD &&
-            info.aParamModes[ expectedArgs - i - 1 ] == ParamMode_OUT)
+            info.aParamModes[ outgoingArgIndex ] == ParamMode_OUT)
+        {
+            outgoingArgIndex++;
             continue;
+        }
 
-        if (i < countArgs)
+        if (i < countIncomingArgs)
         {
             if(convertValueObject( & pdispparams->rgvarg[i], anyParam))
             { //a param is a ValueObject and could be converted
-                pParams[ expectedArgs - i - 1 ] = anyParam;
+                pParams[ outgoingArgIndex ] = anyParam;
+                outgoingArgIndex++;
                 continue;
             }
         }
@@ -1297,6 +1330,7 @@ void InterfaceOleWrapper::convertDispparamsArgs(DISPID id,
         {
             // A missing arg. Let's hope it is de facto optional (there is no way in UNO IDL to mark
             // a parameter as optional). The corresponding slot in pParams is already a void Any.
+            // Here we don't increase outgoingArgIndex!
             continue;
         }
 
@@ -1309,9 +1343,13 @@ void InterfaceOleWrapper::convertDispparamsArgs(DISPID id,
 
         // Check for JScript out and in/out paramsobjects (VT_DISPATCH).
         // To find them out we use typeinformation of the function being called.
+
+        // No idea how this stuff, originally written for JScript, works for other Automation
+        // clients.
+
         if( pdispparams->rgvarg[i].vt == VT_DISPATCH )
         {
-            if( info.eMemberType == MemberType_METHOD && info.aParamModes[ expectedArgs - i - 1 ] == ParamMode_INOUT)
+            if( info.eMemberType == MemberType_METHOD && info.aParamModes[ outgoingArgIndex ] == ParamMode_INOUT)
             {
                 // INOUT-param
                 // Index ( property) "0" contains the actual IN-param. The object is a JScript
@@ -1340,13 +1378,15 @@ void InterfaceOleWrapper::convertDispparamsArgs(DISPID id,
 
         if(info.eMemberType == MemberType_METHOD)
             variantToAny( & varParam, anyParam,
-                           info.aParamTypes[ expectedArgs - i - 1 ]);
+                           info.aParamTypes[ outgoingArgIndex ]);
         else if(info.eMemberType == MemberType_PROPERTY)
             variantToAny( & varParam, anyParam, info.aType);
         else
             OSL_ASSERT(false);
 
-        pParams[ expectedArgs - i - 1 ]= anyParam;
+        if (outgoingArgIndex < expectedArgs)
+            pParams[ outgoingArgIndex ]= anyParam;
+        outgoingArgIndex++;
     }// end for / iterating over all parameters
 }
 
