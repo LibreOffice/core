@@ -669,7 +669,6 @@ void LineListBox::DataChanged( const DataChangedEvent& rDCEvt )
 FontNameBox::FontNameBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
-    mpFontList = nullptr;
     mbWYSIWYG = false;
     InitFontMRUEntriesFile();
 }
@@ -759,8 +758,7 @@ void FontNameBox::InitFontMRUEntriesFile()
 
 void FontNameBox::ImplDestroyFontList()
 {
-    delete mpFontList;
-    mpFontList = nullptr;
+    mpFontList.reset();
 }
 
 void FontNameBox::Fill( const FontList* pList )
@@ -772,7 +770,7 @@ void FontNameBox::Fill( const FontList* pList )
     Clear();
 
     ImplDestroyFontList();
-    mpFontList = new ImplFontList;
+    mpFontList.reset(new ImplFontList);
 
     // insert fonts
     sal_uInt16 nFontCount = pList->GetFontNameCount();
