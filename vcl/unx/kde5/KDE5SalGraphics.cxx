@@ -93,8 +93,8 @@ bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart pa
         case ControlType::Editbox:
         case ControlType::MultilineEditbox:
         case ControlType::Combobox:
-        /*case ControlType::Toolbar:
-        case ControlType::Frame:
+        case ControlType::Toolbar:
+        /*case ControlType::Frame:
         case ControlType::Scrollbar:
         case ControlType::WindowBackground:*/
         case ControlType::Fixedline:
@@ -377,7 +377,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
         draw( QStyle::CE_ToolBar, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
     }
-    /*else if ( (type == ControlType::Toolbar)
+    else if ( (type == ControlType::Toolbar)
             && (part == ControlPart::ThumbVert || part == ControlPart::ThumbHorz) )
     {   // reduce paint area only to the handle area
         const int handleExtend = QApplication::style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
@@ -398,7 +398,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
         draw( QStyle::PE_IndicatorToolBarHandle, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value), rect );
-    }*/
+    }
     else if (type == ControlType::Editbox || type == ControlType::MultilineEditbox)
     {
         lcl_drawFrame( QStyle::PE_FrameLineEdit, m_image.get(),
@@ -840,7 +840,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
             }
             break;
         }
-        /*case ControlType::Toolbar:
+        case ControlType::Toolbar:
         {
             const int nWorH = QApplication::style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
             if( part == ControlPart::ThumbHorz )
@@ -857,7 +857,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
             }
             break;
         }
-        case ControlType::Scrollbar:
+        /*case ControlType::Scrollbar:
         {
             // core can't handle 3-button scrollbars well, so we fix that in hitTestNativeControl(),
             // for the rest also provide the track area (i.e. area not taken by buttons)
