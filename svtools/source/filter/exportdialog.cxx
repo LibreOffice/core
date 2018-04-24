@@ -182,7 +182,7 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( bool bUpdateC
 
     FilterConfigItem* pFilterOptions;
     if ( bUpdateConfig )
-         pFilterOptions = mpFilterOptionsItem;
+         pFilterOptions = mpFilterOptionsItem.get();
     else
     {
         uno::Sequence< beans::PropertyValue > aFilterData( mpFilterOptionsItem->GetFilterData() );
@@ -647,9 +647,9 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     maExt = maExt.toAsciiUpperCase();
 
     OUString  aFilterConfigPath( "Office.Common/Filter/Graphic/Export/" );
-    mpOptionsItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
+    mpOptionsItem.reset(new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData ));
     aFilterConfigPath += maExt;
-    mpFilterOptionsItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
+    mpFilterOptionsItem.reset(new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData ));
 
     mnInitialResolutionUnit = mbIsPixelFormat
         ? mpOptionsItem->ReadInt32("PixelExportUnit", UNIT_DEFAULT)
@@ -1011,8 +1011,8 @@ ExportDialog::~ExportDialog()
 void ExportDialog::dispose()
 {
     mpTempStream.reset();
-    delete mpFilterOptionsItem;
-    delete mpOptionsItem;
+    mpFilterOptionsItem.reset();
+    mpOptionsItem.reset();
     mpMfSizeX.clear();
     mpLbSizeX.clear();
     mpMfSizeY.clear();

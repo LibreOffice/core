@@ -111,8 +111,8 @@ private:
     OUString            ms8BitColorPalette;
     OUString            ms24BitColor;
 
-    FilterConfigItem*   mpOptionsItem;
-    FilterConfigItem*   mpFilterOptionsItem;
+    std::unique_ptr<FilterConfigItem> mpOptionsItem;
+    std::unique_ptr<FilterConfigItem> mpFilterOptionsItem;
 
     OUString            maExt;
     sal_Int16           mnFormat;
