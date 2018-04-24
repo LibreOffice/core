@@ -291,7 +291,7 @@ protected:
     virtual sal_uLong Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos = TREELIST_APPEND );
 
     // In-place editing
-    SvInplaceEdit2*  pEdCtrl;
+    std::unique_ptr<SvInplaceEdit2>  pEdCtrl;
     void            EditText( const OUString&, const tools::Rectangle&,const Selection&);
     void            CancelTextEditing();
     bool            EditingCanceled() const;
