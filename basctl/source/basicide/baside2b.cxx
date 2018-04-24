@@ -1598,12 +1598,8 @@ WatchWindow::WatchWindow (Layout* pParent)
     aHeaderBar->InsertItem( ITEM_ID_VALUE, IDEResId(RID_STR_WATCHVALUE), nValueTabWidth );
     aHeaderBar->InsertItem( ITEM_ID_TYPE, IDEResId(RID_STR_WATCHTYPE), nTypeTabWidth );
 
-    long tabs[ 4 ];
-    tabs[ 0 ] = 3; // two tabs
-    tabs[ 1 ] = 0;
-    tabs[ 2 ] = nVarTabWidth;
-    tabs[ 3 ] = nVarTabWidth + nValueTabWidth;
-    aTreeListBox->SvHeaderTabListBox::SetTabs( tabs, MapUnit::MapPixel );
+    long aTabPositions[] = { 0, nVarTabWidth, nVarTabWidth + nValueTabWidth };
+    aTreeListBox->SvHeaderTabListBox::SetTabs( SAL_N_ELEMENTS(aTabPositions), aTabPositions, MapUnit::MapPixel );
     aTreeListBox->InitHeaderBar( aHeaderBar.get() );
 
     aTreeListBox->SetNodeDefaultImages( );

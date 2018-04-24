@@ -188,8 +188,8 @@ SvxMultiPathDialog::SvxMultiPathDialog(vcl::Window* pParent)
     pRadioLBContainer->set_height_request(aSize.Height());
     m_pRadioLB = VclPtr<svx::SvxRadioButtonListBox>::Create(*pRadioLBContainer, 0);
 
-    static long aStaticTabs[]= { 2, 0, 12 };
-    m_pRadioLB->SvSimpleTable::SetTabs( aStaticTabs );
+    static long aStaticTabs[]= { 0, 12 };
+    m_pRadioLB->SvSimpleTable::SetTabs( SAL_N_ELEMENTS(aStaticTabs), aStaticTabs );
     OUString sHeader(get<FixedText>("pathlist")->GetText());
     m_pRadioLB->SetQuickHelpText( sHeader );
     sHeader = "\t" + sHeader;

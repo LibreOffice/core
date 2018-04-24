@@ -401,8 +401,8 @@ ScConflictsDlg::ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScD
 
     SetMinOutputSizePixel( maDialogSize );
 
-    long const nTabs[] = { 3, 10, 216, 266 };
-    m_pLbConflicts->SetTabs( nTabs );
+    long const nTabs[] = { 10, 216, 266 };
+    m_pLbConflicts->SetTabs( SAL_N_ELEMENTS(nTabs), nTabs );
 
     OUString aTab('\t');
     OUString aHeader( maStrTitleConflict );

@@ -92,9 +92,8 @@ void PasswordTable::setColWidths()
     long nWebSiteWidth = std::max(
         12 + rBar.GetTextWidth(rBar.GetItemText(1)),
         GetSizePixel().Width() - nUserNameWidth);
-    long aStaticTabs[]= { 2, 0, 0 };
-    aStaticTabs[2] = nWebSiteWidth;
-    SvSimpleTable::SetTabs(aStaticTabs, MapUnit::MapPixel);
+    long aStaticTabs[]= { 0, nWebSiteWidth };
+    SvSimpleTable::SetTabs(SAL_N_ELEMENTS(aStaticTabs), aStaticTabs, MapUnit::MapPixel);
 }
 
 // class WebConnectionInfoDialog -----------------------------------------
@@ -111,8 +110,8 @@ WebConnectionInfoDialog::WebConnectionInfoDialog(vcl::Window* pParent)
     SvSimpleTableContainer *pPasswordsLBContainer = get<SvSimpleTableContainer>("logins");
     m_pPasswordsLB = VclPtr<PasswordTable>::Create(*pPasswordsLBContainer, 0);
 
-    long const aStaticTabs[]= { 2, 0, 0 };
-    m_pPasswordsLB->SetTabs( aStaticTabs );
+    long const aStaticTabs[]= { 0, 0 };
+    m_pPasswordsLB->SetTabs( SAL_N_ELEMENTS(aStaticTabs), aStaticTabs );
     m_pPasswordsLB->InsertHeaderItem( 1, get<FixedText>("website")->GetText(),
         HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::UPARROW );
     m_pPasswordsLB->InsertHeaderItem( 2, get<FixedText>("username")->GetText(),

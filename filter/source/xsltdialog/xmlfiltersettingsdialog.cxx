@@ -1331,8 +1331,8 @@ void SvxPathControl::Resize()
         long nFirstColumnWidth = aWidths[1];
         m_pHeaderBar->SetItemSize(ITEMID_NAME, nFirstColumnWidth);
         m_pHeaderBar->SetItemSize(ITEMID_TYPE, 0xFFFF);
-        long nTabs[] = {2, 0, nFirstColumnWidth};
-        m_pFocusCtrl->SetTabs(&nTabs[0], MapUnit::MapPixel);
+        long nTabs[] = {0, nFirstColumnWidth};
+        m_pFocusCtrl->SetTabs(SAL_N_ELEMENTS(nTabs), nTabs, MapUnit::MapPixel);
     }
 }
 
@@ -1389,10 +1389,10 @@ XMLFilterListBox::XMLFilterListBox(Window* pParent, SvxPathControl* pPathControl
     m_pHeaderBar->InsertItem( ITEMID_TYPE, aStr2, nTabSize,
                             HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
 
-    static long nTabs[] = {2, 0, nTabSize };
+    static long nTabs[] = {0, nTabSize };
 
     SetSelectionMode( SelectionMode::Multiple );
-    SetTabs( &nTabs[0], MapUnit::MapPixel );
+    SetTabs( SAL_N_ELEMENTS(nTabs), nTabs, MapUnit::MapPixel );
     SetScrolledHdl( LINK( this, XMLFilterListBox, TabBoxScrollHdl_Impl ) );
     SetHighlightRange();
     Show();

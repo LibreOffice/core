@@ -349,9 +349,9 @@ void SwInsertBookmarkDlg::dispose()
 BookmarkTable::BookmarkTable(SvSimpleTableContainer& rParent) :
     SvSimpleTable(rParent, 0)
 {
-    static long nTabs[] = {3, 0, 40, 150};
+    static long nTabs[] = {0, 40, 150};
 
-    SetTabs(nTabs, MapUnit::MapPixel);
+    SetTabs(SAL_N_ELEMENTS(nTabs), nTabs, MapUnit::MapPixel);
     SetSelectionMode(SelectionMode::Multiple);
     InsertHeaderEntry(SwResId(STR_PAGE));
     InsertHeaderEntry(SwResId(STR_BOOKMARK_NAME));

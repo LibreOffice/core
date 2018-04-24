@@ -140,7 +140,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, cons
                             LogicToPixel( aSz, MapMode( MapUnit::MapAppFont ) ).Width(),
                             HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
 
-    static long aTabs[] = {3, 0, TAB_WIDTH1, TAB_WIDTH1 + TAB_WIDTH2 };
+    static long aTabs[] = {0, TAB_WIDTH1, TAB_WIDTH1 + TAB_WIDTH2 };
     Size aHeadSize = rBar.GetSizePixel();
 
     m_pPathBox->SetStyle( m_pPathBox->GetStyle()|nBits );
@@ -149,7 +149,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, cons
     m_pPathBox->SetSelectionMode( SelectionMode::Single );
     m_pPathBox->SetPosSizePixel( Point( 0, aHeadSize.Height() ),
                                Size( aBoxSize.Width(), aBoxSize.Height() - aHeadSize.Height() ) );
-    m_pPathBox->SvSimpleTable::SetTabs( aTabs );
+    m_pPathBox->SvSimpleTable::SetTabs( SAL_N_ELEMENTS(aTabs), aTabs );
     m_pPathBox->SetHighlightRange();
 
     m_pPathBox->SetHelpId( HID_DBPATH_CTL_PATH );

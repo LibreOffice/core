@@ -113,24 +113,19 @@ void SvTabListBox::dispose()
     SvTreeListBox::dispose();
 }
 
-void SvTabListBox::SetTabs(const long* pTabs, MapUnit eMapUnit)
+void SvTabListBox::SetTabs(sal_uInt16 nTabs, long const pTabPositions[], MapUnit eMapUnit)
 {
-    DBG_ASSERT(pTabs,"SetTabs:NULL-Ptr");
-    if( !pTabs )
-        return;
-
     delete [] pTabList;
-    sal_uInt16 nCount = static_cast<sal_uInt16>(*pTabs);
+    sal_uInt16 nCount = nTabs;
     pTabList = new SvLBoxTab[ nCount ];
     nTabCount = nCount;
 
     MapMode aMMSource( eMapUnit );
     MapMode aMMDest( MapUnit::MapPixel );
 
-    pTabs++;
-    for( sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++, pTabs++ )
+    for( sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++, pTabPositions++ )
     {
-        Size aSize( *pTabs, 0 );
+        Size aSize( *pTabPositions, 0 );
         aSize = LogicToLogic( aSize, &aMMSource, &aMMDest );
         long nNewTab = aSize.Width();
         pTabList[nIdx].SetPos( nNewTab );

@@ -79,7 +79,7 @@ public:
 
 // attention, this array is indexed directly (0, 1, ...) in the code
 static long nTabs[] =
-    {   4, // Number of Tabs
+    {
         0, 77, 144, 209
     };
 
@@ -110,13 +110,13 @@ SvBaseLinksDlg::SvBaseLinksDlg( vcl::Window * pParent, LinkManager* pMgr, bool b
     get(m_pPbBreakLink, "BREAK_LINK");
 
     m_pTbLinks->SetSelectionMode( SelectionMode::Multiple );
-    m_pTbLinks->SetTabs( &nTabs[0] );
+    m_pTbLinks->SetTabs( SAL_N_ELEMENTS(nTabs), nTabs );
     FixedText *pFtFiles = get<FixedText>("FILES");
-    pFtFiles->set_width_request(LogicToPixel(Size(nTabs[2] - nTabs[1] - 2, 0), MapMode(MapUnit::MapAppFont)).Width());
+    pFtFiles->set_width_request(LogicToPixel(Size(nTabs[1] - nTabs[0] - 2, 0), MapMode(MapUnit::MapAppFont)).Width());
     FixedText *pFtLinks = get<FixedText>("LINKS");
-    pFtLinks->set_width_request(LogicToPixel(Size(nTabs[3] - nTabs[2] - 2, 0), MapMode(MapUnit::MapAppFont)).Width());
+    pFtLinks->set_width_request(LogicToPixel(Size(nTabs[2] - nTabs[1] - 2, 0), MapMode(MapUnit::MapAppFont)).Width());
     FixedText *pFtTypes = get<FixedText>("TYPE");
-    pFtTypes->set_width_request(LogicToPixel(Size(nTabs[4] - nTabs[3] - 2, 0), MapMode(MapUnit::MapAppFont)).Width());
+    pFtTypes->set_width_request(LogicToPixel(Size(nTabs[3] - nTabs[2] - 2, 0), MapMode(MapUnit::MapAppFont)).Width());
     m_pTbLinks->Resize();  // OS: hack for correct selection
 
     // UpdateTimer for DDE-/Grf-links, which are waited for

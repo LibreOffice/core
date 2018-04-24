@@ -162,8 +162,8 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet
 
     m_pCheckLB = VclPtr<MSFltrSimpleTable>::Create(*m_pCheckLBContainer);
 
-    static long aStaticTabs[] = { 3, 0, 20, 40 };
-    m_pCheckLB->SvSimpleTable::SetTabs( aStaticTabs );
+    static long aStaticTabs[] = { 0, 20, 40 };
+    m_pCheckLB->SvSimpleTable::SetTabs( SAL_N_ELEMENTS(aStaticTabs), aStaticTabs );
 
     OUString sHeader = sHeader1 + "\t" + sHeader2 + "\t";
     m_pCheckLB->InsertHeaderEntry( sHeader, HEADERBAR_APPEND,

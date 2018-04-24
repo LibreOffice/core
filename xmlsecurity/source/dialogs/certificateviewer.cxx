@@ -249,8 +249,8 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
 
     constexpr int DLGS_WIDTH = 287;
     constexpr int CS_LB_WIDTH = (DLGS_WIDTH - RSC_SP_DLG_INNERBORDER_RIGHT) - RSC_SP_DLG_INNERBORDER_LEFT;
-    static long nTabs[] = { 2, 0, 30*CS_LB_WIDTH/100 };
-    m_pElementsLB->SetTabs( &nTabs[ 0 ] );
+    static long nTabs[] = { 0, 30*CS_LB_WIDTH/100 };
+    m_pElementsLB->SetTabs( SAL_N_ELEMENTS(nTabs), nTabs );
     m_pElementsLB->InsertHeaderEntry( XsResId( STR_HEADERBAR ) );
 
     // fill list box

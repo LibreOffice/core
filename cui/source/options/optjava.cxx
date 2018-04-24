@@ -94,11 +94,11 @@ public:
             std::max(GetSizePixel().Width() - (nCheckWidth + nVersionWidth + nFeatureWidth),
             6 + std::max(rBar.GetTextWidth(rBar.GetItemText(2)),
             GetTextWidth("Sun Microsystems Inc.")));
-        long aStaticTabs[]= { 4, 0, 0, 0, 0, 0 };
-        aStaticTabs[2] = nCheckWidth;
-        aStaticTabs[3] = aStaticTabs[2] + nVendorWidth;
-        aStaticTabs[4] = aStaticTabs[3] + nVersionWidth;
-        SvSimpleTable::SetTabs(aStaticTabs, MapUnit::MapPixel);
+        long aStaticTabs[]= { 0, 0, 0, 0 };
+        aStaticTabs[1] = nCheckWidth;
+        aStaticTabs[2] = aStaticTabs[1] + nVendorWidth;
+        aStaticTabs[3] = aStaticTabs[2] + nVersionWidth;
+        SvSimpleTable::SetTabs(SAL_N_ELEMENTS(aStaticTabs), aStaticTabs, MapUnit::MapPixel);
     }
     virtual void Resize() override
     {
@@ -137,9 +137,8 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
     pJavaListContainer->set_height_request(aControlSize.Height());
     m_pJavaList = VclPtr<SvxJavaListBox>::Create(*pJavaListContainer, m_sAccessibilityText);
 
-    long const aStaticTabs[]= { 4, 0, 0, 0, 0 };
-
-    m_pJavaList->SvSimpleTable::SetTabs( aStaticTabs );
+    long const aStaticTabs[]= { 0, 0, 0, 0 };
+    m_pJavaList->SvSimpleTable::SetTabs( SAL_N_ELEMENTS(aStaticTabs), aStaticTabs );
 
     OUString sHeader ( "\t" + get<FixedText>("vendor")->GetText() +
         "\t" + get<FixedText>("version")->GetText() +
