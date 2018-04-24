@@ -88,16 +88,16 @@ bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart pa
         /*case ControlType::ListNode:*/
             return (part == ControlPart::Entire);
 
-        /*case ControlType::Menubar:
-        case ControlType::MenuPopup:*/
+        case ControlType::Menubar:
+        case ControlType::MenuPopup:
         case ControlType::Editbox:
         case ControlType::MultilineEditbox:
         case ControlType::Combobox:
         /*case ControlType::Toolbar:
         case ControlType::Frame:
         case ControlType::Scrollbar:
-        case ControlType::WindowBackground:
-        case ControlType::Fixedline:*/
+        case ControlType::WindowBackground:*/
+        case ControlType::Fixedline:
             return true;
 
         case ControlType::Listbox:
@@ -257,7 +257,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
         draw( QStyle::CE_PushButton, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
     }
-    /*else if (type == ControlType::Menubar)
+    else if (type == ControlType::Menubar)
     {
         if (part == ControlPart::MenuItem)
         {
@@ -377,7 +377,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
         draw( QStyle::CE_ToolBar, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
     }
-    else if ( (type == ControlType::Toolbar)
+    /*else if ( (type == ControlType::Toolbar)
             && (part == ControlPart::ThumbVert || part == ControlPart::ThumbHorz) )
     {   // reduce paint area only to the handle area
         const int handleExtend = QApplication::style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
@@ -545,7 +545,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
     else if (type == ControlType::WindowBackground)
     {
         // Nothing to do - see "Default image color" switch ^^
-    }
+    }*/
     else if (type == ControlType::Fixedline)
     {
         QStyleOptionMenuItem option;
@@ -554,7 +554,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
         draw( QStyle::CE_MenuItem, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
-    }*/
+    }
     else if (type == ControlType::Slider && (part == ControlPart::TrackHorzArea || part == ControlPart::TrackVertArea))
     {
         OSL_ASSERT( value.getType() == ControlType::Slider );
@@ -768,7 +768,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
             }
             break;
         }
-        /*case ControlType::MenuPopup:
+        case ControlType::MenuPopup:
         {
             int h, w;
             switch ( part ) {
@@ -791,7 +791,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
             }
             break;
         }
-        case ControlType::Frame:
+        /*case ControlType::Frame:
         {
             if( part == ControlPart::Border )
             {
