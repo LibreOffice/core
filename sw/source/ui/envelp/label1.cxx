@@ -548,63 +548,37 @@ void SwLabPage::Reset(const SfxItemSet* rSet)
         m_xSheetButton->set_active(true);
 }
 
-SwPrivateDataPage::SwPrivateDataPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "PrivateUserPage",
-        "modules/swriter/ui/privateuserpage.ui", &rSet)
+SwPrivateDataPage::SwPrivateDataPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/privateuserpage.ui", "PrivateUserPage", &rSet)
+    , m_xFirstNameED(m_xBuilder->weld_entry("firstname"))
+    , m_xNameED(m_xBuilder->weld_entry("lastname"))
+    , m_xShortCutED(m_xBuilder->weld_entry("shortname"))
+    , m_xFirstName2ED(m_xBuilder->weld_entry("firstname2"))
+    , m_xName2ED(m_xBuilder->weld_entry("lastname2"))
+    , m_xShortCut2ED(m_xBuilder->weld_entry("shortname2"))
+    , m_xStreetED(m_xBuilder->weld_entry("street"))
+    , m_xZipED(m_xBuilder->weld_entry("izip"))
+    , m_xCityED(m_xBuilder->weld_entry("icity"))
+    , m_xCountryED(m_xBuilder->weld_entry("country"))
+    , m_xStateED(m_xBuilder->weld_entry("state"))
+    , m_xTitleED(m_xBuilder->weld_entry("title"))
+    , m_xProfessionED(m_xBuilder->weld_entry("job"))
+    , m_xPhoneED(m_xBuilder->weld_entry("phone"))
+    , m_xMobilePhoneED(m_xBuilder->weld_entry("mobile"))
+    , m_xFaxED(m_xBuilder->weld_entry("fax"))
+    , m_xHomePageED(m_xBuilder->weld_entry("url"))
+    , m_xMailED(m_xBuilder->weld_entry("email"))
 {
-    get(m_pFirstNameED, "firstname");
-    get(m_pNameED, "lastname");
-    get(m_pShortCutED, "shortname");
-    get(m_pFirstName2ED, "firstname2");
-    get(m_pName2ED, "lastname2");
-    get(m_pShortCut2ED, "shortname2");
-    get(m_pStreetED, "street");
-    get(m_pZipED, "izip");
-    get(m_pCityED, "icity");
-    get(m_pCountryED, "country");
-    get(m_pStateED, "state");
-    get(m_pTitleED, "title");
-    get(m_pProfessionED, "job");
-    get(m_pPhoneED, "phone");
-    get(m_pMobilePhoneED, "mobile");
-    get(m_pFaxED, "fax");
-    get(m_pHomePageED, "url");
-    get(m_pMailED, "email");
-
     SetExchangeSupport();
 }
 
 SwPrivateDataPage::~SwPrivateDataPage()
 {
-    disposeOnce();
-}
-
-void SwPrivateDataPage::dispose()
-{
-    m_pFirstNameED.clear();
-    m_pNameED.clear();
-    m_pShortCutED.clear();
-    m_pFirstName2ED.clear();
-    m_pName2ED.clear();
-    m_pShortCut2ED.clear();
-    m_pStreetED.clear();
-    m_pZipED.clear();
-    m_pCityED.clear();
-    m_pCountryED.clear();
-    m_pStateED.clear();
-    m_pTitleED.clear();
-    m_pProfessionED.clear();
-    m_pPhoneED.clear();
-    m_pMobilePhoneED.clear();
-    m_pFaxED.clear();
-    m_pHomePageED.clear();
-    m_pMailED.clear();
-    SfxTabPage::dispose();
 }
 
 VclPtr<SfxTabPage> SwPrivateDataPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwPrivateDataPage>::Create(pParent.pParent, *rSet);
+    return VclPtr<SwPrivateDataPage>::Create(pParent, *rSet);
 }
 
 void SwPrivateDataPage::ActivatePage(const SfxItemSet& rSet)
@@ -621,26 +595,25 @@ DeactivateRC SwPrivateDataPage::DeactivatePage(SfxItemSet* _pSet)
 
 bool SwPrivateDataPage::FillItemSet(SfxItemSet* rSet)
 {
-
     SwLabItem aItem = static_cast<const SwLabItem&>( GetTabDialog()->GetExampleSet()->Get(FN_LABEL) );
-    aItem.m_aPrivFirstName = m_pFirstNameED->GetText();
-    aItem.m_aPrivName      = m_pNameED->GetText(  );
-    aItem.m_aPrivShortCut  = m_pShortCutED->GetText(  );
-    aItem.m_aPrivFirstName2 = m_pFirstName2ED->GetText();
-    aItem.m_aPrivName2     = m_pName2ED->GetText(  );
-    aItem.m_aPrivShortCut2 = m_pShortCut2ED->GetText(  );
-    aItem.m_aPrivStreet    = m_pStreetED->GetText(  );
-    aItem.m_aPrivZip       = m_pZipED->GetText(  );
-    aItem.m_aPrivCity      = m_pCityED->GetText(  );
-    aItem.m_aPrivCountry   = m_pCountryED->GetText(  );
-    aItem.m_aPrivState     = m_pStateED->GetText(  );
-    aItem.m_aPrivTitle     = m_pTitleED->GetText(  );
-    aItem.m_aPrivProfession= m_pProfessionED->GetText(   );
-    aItem.m_aPrivPhone     = m_pPhoneED->GetText(  );
-    aItem.m_aPrivMobile    = m_pMobilePhoneED->GetText(  );
-    aItem.m_aPrivFax       = m_pFaxED->GetText(  );
-    aItem.m_aPrivWWW       = m_pHomePageED->GetText(  );
-    aItem.m_aPrivMail      = m_pMailED->GetText(  );
+    aItem.m_aPrivFirstName = m_xFirstNameED->get_text();
+    aItem.m_aPrivName      = m_xNameED->get_text();
+    aItem.m_aPrivShortCut  = m_xShortCutED->get_text();
+    aItem.m_aPrivFirstName2 = m_xFirstName2ED->get_text();
+    aItem.m_aPrivName2     = m_xName2ED->get_text();
+    aItem.m_aPrivShortCut2 = m_xShortCut2ED->get_text();
+    aItem.m_aPrivStreet    = m_xStreetED->get_text();
+    aItem.m_aPrivZip       = m_xZipED->get_text();
+    aItem.m_aPrivCity      = m_xCityED->get_text();
+    aItem.m_aPrivCountry   = m_xCountryED->get_text();
+    aItem.m_aPrivState     = m_xStateED->get_text();
+    aItem.m_aPrivTitle     = m_xTitleED->get_text();
+    aItem.m_aPrivProfession= m_xProfessionED->get_text();
+    aItem.m_aPrivPhone     = m_xPhoneED->get_text();
+    aItem.m_aPrivMobile    = m_xMobilePhoneED->get_text();
+    aItem.m_aPrivFax       = m_xFaxED->get_text();
+    aItem.m_aPrivWWW       = m_xHomePageED->get_text();
+    aItem.m_aPrivMail      = m_xMailED->get_text();
 
     rSet->Put(aItem);
     return true;
@@ -649,24 +622,24 @@ bool SwPrivateDataPage::FillItemSet(SfxItemSet* rSet)
 void SwPrivateDataPage::Reset(const SfxItemSet* rSet)
 {
     const SwLabItem& aItem = static_cast<const SwLabItem&>( rSet->Get(FN_LABEL) );
-    m_pFirstNameED->SetText(aItem.m_aPrivFirstName);
-    m_pNameED->SetText(aItem.m_aPrivName);
-    m_pShortCutED->SetText(aItem.m_aPrivShortCut);
-    m_pFirstName2ED->SetText(aItem.m_aPrivFirstName2);
-    m_pName2ED->SetText(aItem.m_aPrivName2);
-    m_pShortCut2ED->SetText(aItem.m_aPrivShortCut2);
-    m_pStreetED->SetText(aItem.m_aPrivStreet);
-    m_pZipED->SetText(aItem.m_aPrivZip);
-    m_pCityED->SetText(aItem.m_aPrivCity);
-    m_pCountryED->SetText(aItem.m_aPrivCountry);
-    m_pStateED->SetText(aItem.m_aPrivState);
-    m_pTitleED->SetText(aItem.m_aPrivTitle);
-    m_pProfessionED->SetText(aItem.m_aPrivProfession);
-    m_pPhoneED->SetText(aItem.m_aPrivPhone);
-    m_pMobilePhoneED->SetText(aItem.m_aPrivMobile);
-    m_pFaxED->SetText(aItem.m_aPrivFax);
-    m_pHomePageED->SetText(aItem.m_aPrivWWW);
-    m_pMailED->SetText(aItem.m_aPrivMail);
+    m_xFirstNameED->set_text(aItem.m_aPrivFirstName);
+    m_xNameED->set_text(aItem.m_aPrivName);
+    m_xShortCutED->set_text(aItem.m_aPrivShortCut);
+    m_xFirstName2ED->set_text(aItem.m_aPrivFirstName2);
+    m_xName2ED->set_text(aItem.m_aPrivName2);
+    m_xShortCut2ED->set_text(aItem.m_aPrivShortCut2);
+    m_xStreetED->set_text(aItem.m_aPrivStreet);
+    m_xZipED->set_text(aItem.m_aPrivZip);
+    m_xCityED->set_text(aItem.m_aPrivCity);
+    m_xCountryED->set_text(aItem.m_aPrivCountry);
+    m_xStateED->set_text(aItem.m_aPrivState);
+    m_xTitleED->set_text(aItem.m_aPrivTitle);
+    m_xProfessionED->set_text(aItem.m_aPrivProfession);
+    m_xPhoneED->set_text(aItem.m_aPrivPhone);
+    m_xMobilePhoneED->set_text(aItem.m_aPrivMobile);
+    m_xFaxED->set_text(aItem.m_aPrivFax);
+    m_xHomePageED->set_text(aItem.m_aPrivWWW);
+    m_xMailED->set_text(aItem.m_aPrivMail);
 }
 
 SwBusinessDataPage::SwBusinessDataPage(TabPageParent pParent, const SfxItemSet& rSet)
