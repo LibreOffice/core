@@ -83,9 +83,9 @@ bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart pa
         case ControlType::Pushbutton:
         case ControlType::Radiobutton:
         case ControlType::Checkbox:
-        /*case ControlType::Tooltip:
+        /*case ControlType::Tooltip:*/
         case ControlType::Progress:
-        case ControlType::ListNode:*/
+        /*case ControlType::ListNode:*/
             return (part == ControlPart::Entire);
 
         /*case ControlType::Menubar:
@@ -573,7 +573,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
         draw( QStyle::CC_Slider, &option, m_image.get(), vclStateValue2StateFlag(nControlState, value) );
     }
-    /*else if( type == ControlType::Progress && part == ControlPart::Entire )
+    else if( type == ControlType::Progress && part == ControlPart::Entire )
     {
         QStyleOptionProgressBarV2 option;
         option.minimum = 0;
@@ -584,7 +584,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
         draw( QStyle::CE_ProgressBar, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
-    }*/
+    }
     else
     {
         returnVal = false;
