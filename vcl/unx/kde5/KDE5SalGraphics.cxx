@@ -113,11 +113,11 @@ bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart pa
         case ControlType::Listbox:
             return (part == ControlPart::Entire || part == ControlPart::HasBackgroundTexture);
 
-        /*case ControlType::Spinbox:
+        case ControlType::Spinbox:
             return (part == ControlPart::Entire || part == ControlPart::HasBackgroundTexture);
 
         case ControlType::Slider:
-            return (part == ControlPart::TrackHorzArea || part == ControlPart::TrackVertArea);*/
+            return (part == ControlPart::TrackHorzArea || part == ControlPart::TrackVertArea);
 
         default:
             break;
@@ -505,7 +505,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
         {
             returnVal = false;
         }
-    }
+    }*/
     else if (type == ControlType::Spinbox)
     {
         QStyleOptionSpinBox option;
@@ -531,7 +531,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
         draw( QStyle::CC_SpinBox, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
-    }*/
+    }
     else if (type == ControlType::Radiobutton)
     {
         QStyleOptionButton option;
@@ -564,7 +564,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
         draw( QStyle::CE_MenuItem, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
-    }
+    }*/
     else if (type == ControlType::Slider && (part == ControlPart::TrackHorzArea || part == ControlPart::TrackVertArea))
     {
         OSL_ASSERT( value.getType() == ControlType::Slider );
@@ -583,7 +583,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
         draw( QStyle::CC_Slider, &option, m_image.get(), vclStateValue2StateFlag(nControlState, value) );
     }
-    else if( type == ControlType::Progress && part == ControlPart::Entire )
+    /*else if( type == ControlType::Progress && part == ControlPart::Entire )
     {
         QStyleOptionProgressBarV2 option;
         option.minimum = 0;
@@ -729,7 +729,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
             }
             break;
         }
-        /*case ControlType::Spinbox:
+        case ControlType::Spinbox:
         {
             QStyleOptionSpinBox sbo;
             sbo.frame = true;
@@ -778,7 +778,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
             }
             break;
         }
-        case ControlType::MenuPopup:
+        /*case ControlType::MenuPopup:
         {
             int h, w;
             switch ( part ) {
@@ -833,7 +833,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
             retVal = true;
             break;
         }
-        /* case ControlType::Slider:
+        case ControlType::Slider:
         {
             const int w = QApplication::style()->pixelMetric(QStyle::PM_SliderLength);
             if( part == ControlPart::ThumbHorz )
@@ -850,7 +850,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
             }
             break;
         }
-        case ControlType::Toolbar:
+        /*case ControlType::Toolbar:
         {
             const int nWorH = QApplication::style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
             if( part == ControlPart::ThumbHorz )
