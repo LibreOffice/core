@@ -139,7 +139,11 @@ short AbstractDropDownFieldDialog_Impl::Execute()
     return m_xDlg->execute();
 }
 
-IMPL_ABSTDLG_BASE(AbstractSwLabDlg_Impl);
+short AbstractSwLabDlg_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
+
 IMPL_ABSTDLG_BASE(AbstractSwSelGlossaryDlg_Impl);
 short AbstractSwAutoFormatDlg_Impl::Execute()
 {
@@ -291,37 +295,37 @@ bool AbstractDropDownFieldDialog_Impl::NextButtonPressed() const
 
 void AbstractSwLabDlg_Impl::SetCurPageId( const OString &rName )
 {
-    pDlg->SetCurPageId( rName );
+    m_xDlg->SetCurPageId( rName );
 }
 
 const SfxItemSet* AbstractSwLabDlg_Impl::GetOutputItemSet() const
 {
-    return pDlg->GetOutputItemSet();
+    return m_xDlg->GetOutputItemSet();
 }
 
 const sal_uInt16* AbstractSwLabDlg_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
-    return pDlg->GetInputRanges( pItem );
+    return m_xDlg->GetInputRanges( pItem );
 }
 
 void AbstractSwLabDlg_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
-     pDlg->SetInputSet( pInSet );
+     m_xDlg->SetInputSet( pInSet );
 }
 
 void AbstractSwLabDlg_Impl::SetText( const OUString& rStr )
 {
-    pDlg->SetText( rStr );
+    m_xDlg->set_title(rStr);
 }
 
 const OUString& AbstractSwLabDlg_Impl::GetBusinessCardStr() const
 {
-    return pDlg->GetBusinessCardStr();
+    return m_xDlg->GetBusinessCardStr();
 }
 
 Printer * AbstractSwLabDlg_Impl::GetPrt()
 {
-    return pDlg->GetPrt();
+    return m_xDlg->GetPrt();
 }
 
 void AbstractSwSelGlossaryDlg_Impl::InsertGlos(const OUString &rRegion, const OUString &rGlosName)
@@ -762,11 +766,10 @@ VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwEnvDlg ( vcl:
     return VclPtr<AbstractTabDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractSwLabDlg> SwAbstractDialogFactory_Impl::CreateSwLabDlg(const SfxItemSet& rSet,
+VclPtr<AbstractSwLabDlg> SwAbstractDialogFactory_Impl::CreateSwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
                                                      SwDBManager* pDBManager, bool bLabel)
 {
-    VclPtr<SwLabDlg> pDlg = VclPtr<SwLabDlg>::Create(nullptr, rSet, pDBManager, bLabel);
-    return VclPtr<AbstractSwLabDlg_Impl>::Create(pDlg);
+    return VclPtr<AbstractSwLabDlg_Impl>::Create(new SwLabDlg(pParent, rSet, pDBManager, bLabel));
 }
 
 SwLabDlgMethod SwAbstractDialogFactory_Impl::GetSwLabDlgStaticMethod ()
