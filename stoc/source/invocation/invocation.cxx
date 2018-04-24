@@ -482,7 +482,7 @@ Any Invocation_Impl::getValue( const OUString& PropertyName )
         if (_xDirect.is())
             return _xDirect->getValue( PropertyName );
     }
-    catch (RuntimeException &)
+    catch (UnknownPropertyException &)
     {
         if (!mbFromOLE)
             throw;
@@ -518,75 +518,83 @@ Any Invocation_Impl::getValue( const OUString& PropertyName )
 
 void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
 {
-    if (_xDirect.is())
-        _xDirect->setValue( PropertyName, Value );
-    else
+    try
     {
-        try
+        if (_xDirect.is())
         {
-            // Properties
-            if( _xIntrospectionAccess.is() && _xPropertySet.is()
-                && _xIntrospectionAccess->hasProperty(
-                    PropertyName, PropertyConcept::ALL ^ PropertyConcept::DANGEROUS ) )
-            {
-                Property aProp = _xIntrospectionAccess->getProperty(
-                    PropertyName, PropertyConcept::ALL ^ PropertyConcept::DANGEROUS );
-                Reference < XIdlClass > r = TypeToIdlClass( aProp.Type, xCoreReflection );
-                if( r->isAssignableFrom( TypeToIdlClass( Value.getValueType(), xCoreReflection ) ) )
-                    _xPropertySet->setPropertyValue( PropertyName, Value );
-                else if( xTypeConverter.is() )
-                    _xPropertySet->setPropertyValue(
-                        PropertyName, xTypeConverter->convertTo( Value, aProp.Type ) );
-                else
-                    throw RuntimeException( "no type converter service!" );
-            }
-            // NameContainer
-            else if( _xNameContainer.is() )
-            {
-                // Note: This misfeature deliberately not adapted to apply to objects which
-                // have XNameReplace but not XNameContainer
-                Any aConv;
-                Reference < XIdlClass > r =
-                    TypeToIdlClass( _xNameContainer->getElementType(), xCoreReflection );
-                if( r->isAssignableFrom(TypeToIdlClass( Value.getValueType(), xCoreReflection ) ) )
-                    aConv = Value;
-                else if( xTypeConverter.is() )
-                    aConv = xTypeConverter->convertTo( Value, _xNameContainer->getElementType() );
-                else
-                    throw RuntimeException( "no type converter service!" );
-
-                // Replace if present, otherwise insert
-                if (_xNameContainer->hasByName( PropertyName ))
-                    _xNameContainer->replaceByName( PropertyName, aConv );
-                else
-                    _xNameContainer->insertByName( PropertyName, aConv );
-            }
+            _xDirect->setValue( PropertyName, Value );
+            return;
+        }
+    }
+    catch (UnknownPropertyException &)
+    {
+        if (!mbFromOLE)
+            throw;
+    }
+    try
+    {
+        // Properties
+        if( _xIntrospectionAccess.is() && _xPropertySet.is()
+            && _xIntrospectionAccess->hasProperty(
+                PropertyName, PropertyConcept::ALL ^ PropertyConcept::DANGEROUS ) )
+        {
+            Property aProp = _xIntrospectionAccess->getProperty(
+                PropertyName, PropertyConcept::ALL ^ PropertyConcept::DANGEROUS );
+            Reference < XIdlClass > r = TypeToIdlClass( aProp.Type, xCoreReflection );
+            if( r->isAssignableFrom( TypeToIdlClass( Value.getValueType(), xCoreReflection ) ) )
+                _xPropertySet->setPropertyValue( PropertyName, Value );
+            else if( xTypeConverter.is() )
+                _xPropertySet->setPropertyValue(
+                    PropertyName, xTypeConverter->convertTo( Value, aProp.Type ) );
             else
-                throw UnknownPropertyException( "no introspection nor name container!" );
+                throw RuntimeException( "no type converter service!" );
         }
-        catch (UnknownPropertyException &)
+        // NameContainer
+        else if( _xNameContainer.is() )
         {
-            throw;
+            // Note: This misfeature deliberately not adapted to apply to objects which
+            // have XNameReplace but not XNameContainer
+            Any aConv;
+            Reference < XIdlClass > r =
+                TypeToIdlClass( _xNameContainer->getElementType(), xCoreReflection );
+            if( r->isAssignableFrom(TypeToIdlClass( Value.getValueType(), xCoreReflection ) ) )
+                aConv = Value;
+            else if( xTypeConverter.is() )
+                aConv = xTypeConverter->convertTo( Value, _xNameContainer->getElementType() );
+            else
+                throw RuntimeException( "no type converter service!" );
+
+            // Replace if present, otherwise insert
+            if (_xNameContainer->hasByName( PropertyName ))
+                _xNameContainer->replaceByName( PropertyName, aConv );
+            else
+                _xNameContainer->insertByName( PropertyName, aConv );
         }
-        catch (CannotConvertException &)
-        {
-            throw;
-        }
-        catch (InvocationTargetException &)
-        {
-            throw;
-        }
-        catch (RuntimeException &)
-        {
-            throw;
-        }
-        catch (const Exception & exc)
-        {
-            css::uno::Any anyEx = cppu::getCaughtException();
-            throw InvocationTargetException(
-                "exception occurred in setValue(): " + exc.Message,
-                Reference< XInterface >(), anyEx );
-        }
+        else
+            throw UnknownPropertyException( "no introspection nor name container!" );
+    }
+    catch (UnknownPropertyException &)
+    {
+        throw;
+    }
+    catch (CannotConvertException &)
+    {
+        throw;
+    }
+    catch (InvocationTargetException &)
+    {
+        throw;
+    }
+    catch (RuntimeException &)
+    {
+        throw;
+    }
+    catch (const Exception & exc)
+    {
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw InvocationTargetException(
+            "exception occurred in setValue(): " + exc.Message,
+            Reference< XInterface >(), anyEx );
     }
 }
 
