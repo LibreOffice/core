@@ -169,7 +169,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
     SwAbstractDialogFactory* pDialogFactory = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pDialogFactory, "SwAbstractDialogFactory fail!");
 
-    ScopedVclPtr<AbstractSwLabDlg> pDlg(pDialogFactory->CreateSwLabDlg(aSet,
+    ScopedVclPtr<AbstractSwLabDlg> pDlg(pDialogFactory->CreateSwLabDlg(rReq.GetFrameWeld(), aSet,
 #if HAVE_FEATURE_DBCONNECTIVITY
                                                                             pDBManager.get(),
 #else
