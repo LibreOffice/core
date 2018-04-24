@@ -34,8 +34,8 @@ Graphic loadFromURL(OUString const& rURL, sal_Int16 nExtWidth, sal_Int16 nExtHei
 
     Graphic aGraphic;
 
-    std::unique_ptr<SvStream> pInputStream;
-    pInputStream.reset(utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ));
+    std::unique_ptr<SvStream> pInputStream
+        = utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ);
 
     if (pInputStream)
     {
