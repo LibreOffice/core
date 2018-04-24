@@ -181,7 +181,7 @@ void Ruler::ImplInit( WinBits nWinBits )
     mbAutoWinWidth  = true;                 // EditWinWidth == RulerWidth
     mbActive        = true;                 // Is ruler active
     mnUpdateFlags   = 0;                    // What needs to be updated
-    mpData          = mpSaveData;           // Pointer to normal data
+    mpData          = mpSaveData.get();     // Pointer to normal data
     meExtraType     = RulerExtra::DontKnow; // What is in extra field
     meDragType      = RulerType::DontKnow;  // Which element is dragged
 
@@ -257,10 +257,8 @@ void Ruler::dispose()
 {
     if ( mnUpdateEvtId )
         Application::RemoveUserEvent( mnUpdateEvtId );
-    delete mpSaveData;
-    mpSaveData = nullptr;
-    delete mpDragData;
-    mpDragData = nullptr;
+    mpSaveData.reset();
+    mpDragData.reset();
     mxAccContext.clear();
     Window::dispose();
 }
@@ -1758,7 +1756,7 @@ bool Ruler::ImplStartDrag( RulerSelection const * pHitTest, sal_uInt16 nModifier
     mnDragSize      = pHitTest->mnDragSize;
     mnDragModifier  = nModifier;
     *mpDragData     = *mpSaveData;
-    mpData          = mpDragData;
+    mpData          = mpDragData.get();
 
     // call handler
     if (StartDrag())
@@ -1778,7 +1776,7 @@ bool Ruler::ImplStartDrag( RulerSelection const * pHitTest, sal_uInt16 nModifier
         mnDragAryPos    = 0;
         mnDragSize      = RulerDragSize::Move;
         mnDragModifier  = 0;
-        mpData          = mpSaveData;
+        mpData          = mpSaveData.get();
     }
 
     return false;
@@ -1867,7 +1865,7 @@ void Ruler::ImplEndDrag()
     else
         *mpSaveData = *mpDragData;
 
-    mpData = mpSaveData;
+    mpData = mpSaveData.get();
     mbDrag = false;
 
     // call handler
