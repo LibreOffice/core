@@ -121,11 +121,11 @@ namespace svt { namespace table
         VclPtr<ScrollBar>       m_pHScroll;
         VclPtr<ScrollBarBox>    m_pScrollCorner;
         //selection engine - for determining selection range, e.g. single, multiple
-        SelectionEngine*        m_pSelEngine;
+        std::unique_ptr<SelectionEngine> m_pSelEngine;
         //vector which contains the selected rows
         std::vector<RowPos>     m_aSelectedRows;
         //part of selection engine
-        TableFunctionSet*       m_pTableFunctionSet;
+        std::unique_ptr<TableFunctionSet> m_pTableFunctionSet;
         //part of selection engine
         RowPos                  m_nAnchor;
         bool                    m_bUpdatingColWidths;

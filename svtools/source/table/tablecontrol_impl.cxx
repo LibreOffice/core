@@ -230,14 +230,13 @@ namespace svt { namespace table
         ,m_pVScroll             ( nullptr                          )
         ,m_pHScroll             ( nullptr                          )
         ,m_pScrollCorner        ( nullptr                          )
-        ,m_pSelEngine           (                               )
         ,m_aSelectedRows        (                               )
         ,m_pTableFunctionSet    ( new TableFunctionSet( this  ) )
         ,m_nAnchor              ( -1                            )
         ,m_bUpdatingColWidths   ( false                         )
         ,m_pAccessibleTable     ( nullptr                          )
     {
-        m_pSelEngine = new SelectionEngine( m_pDataWindow.get(), m_pTableFunctionSet );
+        m_pSelEngine.reset( new SelectionEngine( m_pDataWindow.get(), m_pTableFunctionSet.get() ) );
         m_pSelEngine->SetSelectionMode(SelectionMode::Single);
         m_pDataWindow->SetPosPixel( Point( 0, 0 ) );
         m_pDataWindow->Show();
@@ -249,8 +248,8 @@ namespace svt { namespace table
         m_pHScroll.disposeAndClear();
         m_pScrollCorner.disposeAndClear();
         m_pDataWindow.disposeAndClear();
-        DELETEZ( m_pTableFunctionSet );
-        DELETEZ( m_pSelEngine );
+        m_pTableFunctionSet.reset();
+        m_pSelEngine.reset();
     }
 
     void TableControl_Impl::setModel( const PTableModel& _pModel )
@@ -2147,7 +2146,7 @@ namespace svt { namespace table
 
     SelectionEngine* TableControl_Impl::getSelEngine()
     {
-        return m_pSelEngine;
+        return m_pSelEngine.get();
     }
 
     bool TableControl_Impl::isRowSelected( RowPos i_row ) const
