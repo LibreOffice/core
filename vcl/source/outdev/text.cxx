@@ -2340,7 +2340,7 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
     Point aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
-    while (pLayout->GetNextGlyphs(1, &pGlyph, aPos, nStart))
+    while (pLayout->GetNextGlyph(&pGlyph, aPos, nStart))
     {
         SystemGlyphData aSystemGlyph;
         aSystemGlyph.index = pGlyph->maGlyphId;

@@ -162,7 +162,7 @@ void CairoTextRender::DrawTextLayout(const CommonSalLayout& rLayout)
     Point aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
-    while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
+    while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
         cairo_glyph_t aGlyph;
         aGlyph.index = pGlyph->maGlyphId;

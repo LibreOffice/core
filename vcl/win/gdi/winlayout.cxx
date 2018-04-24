@@ -274,7 +274,7 @@ bool ExTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
     int nStart = 0;
     Point aPos(0, 0);
     const GlyphItem* pGlyph;
-    while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
+    while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
         WORD glyphWStr[] = { pGlyph->maGlyphId };
         if (hAltFont && pGlyph->IsVertical() == bUseAltFont)
@@ -351,7 +351,7 @@ bool WinSalGraphics::CacheGlyphs(const CommonSalLayout& rLayout)
     int nStart = 0;
     Point aPos(0, 0);
     const GlyphItem* pGlyph;
-    while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
+    while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
         if (!rFont.GetGlyphCache().IsGlyphCached(pGlyph->maGlyphId))
         {
@@ -382,7 +382,7 @@ bool WinSalGraphics::DrawCachedGlyphs(const CommonSalLayout& rLayout)
     int nStart = 0;
     Point aPos(0, 0);
     const GlyphItem* pGlyph;
-    while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
+    while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
         OpenGLGlyphDrawElement& rElement(rFont.GetGlyphCache().GetDrawElement(pGlyph->maGlyphId));
         OpenGLTexture& rTexture = rElement.maTexture;

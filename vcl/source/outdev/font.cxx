@@ -1258,7 +1258,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     tools::Rectangle aRectangle;
     const GlyphItem* pGlyph;
     int nStart = 0;
-    while (rSalLayout.GetNextGlyphs(1, &pGlyph, aOutPoint, nStart))
+    while (rSalLayout.GetNextGlyph(&pGlyph, aOutPoint, nStart))
     {
         if (!mpGraphics->GetGlyphBoundRect(*pGlyph, aRectangle ) )
             continue;
