@@ -262,7 +262,13 @@ getCurrentExcelDoc( const uno::Reference< uno::XComponentContext >& xContext )
     }
     catch (const uno::Exception&)
     {
-        xModel = getThisExcelDoc( xContext );
+        try
+        {
+            xModel = getThisExcelDoc( xContext );
+        }
+        catch (const uno::Exception&)
+        {
+        }
     }
     return xModel;
 }
