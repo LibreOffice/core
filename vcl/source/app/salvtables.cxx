@@ -810,9 +810,19 @@ public:
         m_xNotebook->SetCurPageId(m_xNotebook->GetPageId(rIdent));
     }
 
+    virtual void remove_page(const OString& rIdent) override
+    {
+        m_xNotebook->RemovePage(m_xNotebook->GetPageId(rIdent));
+    }
+
     virtual int get_n_pages() const override
     {
         return m_xNotebook->GetPageCount();
+    }
+
+    virtual OUString get_tab_label_text(const OString& rIdent) const override
+    {
+        return m_xNotebook->GetPageText(m_xNotebook->GetPageId(rIdent));
     }
 
     virtual ~SalInstanceNotebook() override
