@@ -27,6 +27,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/field.hxx>
+#include <memory>
 #include <set>
 
 class MouseEvent;
@@ -124,8 +125,8 @@ typedef std::set<sal_Int32> IntDateSet;
 
 class SVT_DLLPUBLIC Calendar final : public Control
 {
-    IntDateSet*     mpSelectTable;
-    IntDateSet*     mpOldSelectTable;
+    std::unique_ptr<IntDateSet> mpSelectTable;
+    std::unique_ptr<IntDateSet> mpOldSelectTable;
     OUString        maDayTexts[31];
     OUString        maDayText;
     OUString        maWeekText;
@@ -144,9 +145,6 @@ class SVT_DLLPUBLIC Calendar final : public Control
     Date            maDropDate;
     Color           maSelColor;
     Color           maOtherColor;
-    Color*          mpStandardColor;
-    Color*          mpSaturdayColor;
-    Color*          mpSundayColor;
     sal_Int32       mnDayCount;
     long            mnDaysOffX;
     long            mnWeekDayOffY;
@@ -188,7 +186,6 @@ class SVT_DLLPUBLIC Calendar final : public Control
     SVT_DLLPRIVATE void         ImplDrawSpin(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE void         ImplDrawDate(vcl::RenderContext& rRenderContext, long nX, long nY,
                                              sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear,
-                                             DayOfWeek eDayOfWeek,
                                              bool bOther, sal_Int32 nToday);
     SVT_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE void         ImplUpdateDate( const Date& rDate );
