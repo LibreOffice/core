@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svtools/unitconv.hxx>
 #include <tools/poly.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
@@ -153,6 +154,7 @@ IMPL_LINK(SwLabPreview, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
     rRenderContext.SetFont(aFont);
 
     rRenderContext.SetBackground(Wallpaper(rWinColor));
+    rRenderContext.Erase();
 
     rRenderContext.SetLineColor(rWinColor);
     rRenderContext.SetFillColor(m_aGrayColor);
@@ -301,14 +303,14 @@ SwLabFormatPage::SwLabFormatPage(TabPageParent pParent, const SfxItemSet& rSet)
 
     // Metrics
     FieldUnit aMetric = ::GetDfltMetric(false);
-    SetMetric(*m_xHDistField, aMetric);
-    SetMetric(*m_xVDistField , aMetric);
-    SetMetric(*m_xWidthField , aMetric);
-    SetMetric(*m_xHeightField, aMetric);
-    SetMetric(*m_xLeftField  , aMetric);
-    SetMetric(*m_xUpperField , aMetric);
-    SetMetric(*m_xPWidthField , aMetric);
-    SetMetric(*m_xPHeightField, aMetric);
+    ::SetFieldUnit(*m_xHDistField, aMetric);
+    ::SetFieldUnit(*m_xVDistField , aMetric);
+    ::SetFieldUnit(*m_xWidthField , aMetric);
+    ::SetFieldUnit(*m_xHeightField, aMetric);
+    ::SetFieldUnit(*m_xLeftField  , aMetric);
+    ::SetFieldUnit(*m_xUpperField , aMetric);
+    ::SetFieldUnit(*m_xPWidthField , aMetric);
+    ::SetFieldUnit(*m_xPHeightField, aMetric);
 
     // Install handlers
     Link<weld::MetricSpinButton&,void> aLk = LINK(this, SwLabFormatPage, MetricModifyHdl);
@@ -509,7 +511,7 @@ IMPL_LINK_NOARG(SwLabFormatPage, SaveHdl, weld::Button&, void)
 }
 
 SwSaveLabelDlg::SwSaveLabelDlg(SwLabDlg* pParent, SwLabRec& rRec)
-    : GenericDialogController(pParent->GetFrameWeld(), "modules/swriter/ui/savelabeldialog.ui", "SaveLabelDialog")
+    : GenericDialogController(pParent->getDialog(), "modules/swriter/ui/savelabeldialog.ui", "SaveLabelDialog")
     , bSuccess(false)
     , m_pLabDialog(pParent)
     , rLabRec(rRec)
