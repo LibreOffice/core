@@ -595,7 +595,7 @@ static struct
     const sal_Char* mpFormName;
     sal_uInt16 mnFormNameLen;
 }
-SvxShapeControlPropertyMapping[] =
+const SvxShapeControlPropertyMapping[] =
 {
     // Warning: The first entry must be FontSlant because the any needs to be converted
     { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_EDIT_CHAR_POSTURE), RTL_CONSTASCII_STRINGPARAM("FontSlant")  }, //  const sal_Int16 => css::awt::FontSlant
@@ -654,7 +654,7 @@ namespace
         sal_Int16                nFormValue;
     };
 
-    EnumConversionMap aMapAdjustToAlign[] =
+    EnumConversionMap const aMapAdjustToAlign[] =
     {
         // note that order matters:
         // lcl_convertTextAlignmentToParaAdjustment and lcl_convertParaAdjustmentToTextAlignment search this map from the _beginning_
