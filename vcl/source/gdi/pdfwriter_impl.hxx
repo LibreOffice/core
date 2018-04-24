@@ -328,6 +328,7 @@ public:
             m_CodeUnits.push_back(i_cCode);
         }
         sal_Int32 countCodes() const { return m_CodeUnits.size(); }
+        const std::vector<sal_Ucs>& codes() const { return m_CodeUnits; }
         sal_Ucs getCode( sal_Int32 i_nIndex ) const
         {
             sal_Ucs nRet = 0;
@@ -817,7 +818,7 @@ i12626
     void appendLiteralStringEncrypt( OStringBuffer const & rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
 
     /* creates fonts and subsets that will be emitted later */
-    void registerGlyphs(int nGlyphs, const GlyphItem** pGlyphs, sal_Int32* pGlpyhWidths, sal_Ucs* pCodeUnits, sal_Int32 const * pCodeUnitsPerGlyph, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, const PhysicalFontFace* pFallbackFonts[]);
+    void registerGlyph(const GlyphItem* pGlyph, sal_Int32& pGlpyhWidth, const std::vector<sal_Ucs>& rCodeUnits, sal_uInt8& nMappedGlyph, sal_Int32& nMappedFontObject, const PhysicalFontFace* pFallbackFonts);
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
