@@ -99,9 +99,9 @@ bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart pa
             return (part == ControlPart::Entire);
 
         /*case ControlType::Menubar:
-        case ControlType::MenuPopup:
+        case ControlType::MenuPopup:*/
         case ControlType::Editbox:
-        case ControlType::MultilineEditbox:*/
+        case ControlType::MultilineEditbox:
         case ControlType::Combobox:
         /*case ControlType::Toolbar:
         case ControlType::Frame:
@@ -159,23 +159,10 @@ namespace
     void lcl_drawFrame( QStyle::PrimitiveElement element, QImage* image, QStyle::State const & state,
                         QStyle::PixelMetric eLineMetric = QStyle::PM_DefaultFrameWidth )
     {
-    #if ( QT_VERSION >= QT_VERSION_CHECK( 4, 5, 0 ) )
-        QStyleOptionFrameV3 option;
+        QStyleOptionFrame option;
         option.frameShape = QFrame::StyledPanel;
         option.state = QStyle::State_Sunken;
         option.lineWidth = QApplication::style()->pixelMetric( eLineMetric );
-    #else
-        QStyleOptionFrame option;
-
-        QFrame aFrame( nullptr );
-        aFrame.setFrameRect( QRect(0, 0, image->width(), image->height()) );
-        aFrame.setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
-        aFrame.ensurePolished();
-
-        option.initFrom( &aFrame );
-        option.lineWidth = aFrame.lineWidth();
-        option.midLineWidth = aFrame.midLineWidth();
-    #endif
         draw(element, &option, image, state);
     }
 }
@@ -421,12 +408,12 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
         draw( QStyle::PE_IndicatorToolBarHandle, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value), rect );
-    }
+    }*/
     else if (type == ControlType::Editbox || type == ControlType::MultilineEditbox)
     {
         lcl_drawFrame( QStyle::PE_FrameLineEdit, m_image.get(),
                        vclStateValue2StateFlag(nControlState, value));
-    }*/
+    }
     else if (type == ControlType::Combobox)
     {
         QStyleOptionComboBox option;
@@ -653,10 +640,10 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
                 }
             }
             break;
-        /*case ControlType::Editbox:
+        case ControlType::Editbox:
         case ControlType::MultilineEditbox:
         {
-            QStyleOptionFrameV3 fo;
+            QStyleOptionFrame fo;
             fo.frameShape = QFrame::StyledPanel;
             fo.state = QStyle::State_Sunken;
             fo.lineWidth = QApplication::style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
@@ -676,7 +663,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
             }
             retVal = true;
             break;
-        }*/
+        }
         case ControlType::Checkbox:
             if (part == ControlPart::Entire)
             {
