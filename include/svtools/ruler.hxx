@@ -626,9 +626,9 @@ private:
     long            mnStartDragPos;
     long            mnDragPos;
     ImplSVEvent *   mnUpdateEvtId;
-    ImplRulerData*  mpSaveData;
+    std::unique_ptr<ImplRulerData>  mpSaveData;
     ImplRulerData*  mpData;
-    ImplRulerData*  mpDragData;
+    std::unique_ptr<ImplRulerData>  mpDragData;
     tools::Rectangle       maExtraRect;
     WinBits         mnWinStyle;
     sal_uInt16      mnUnitIndex;
