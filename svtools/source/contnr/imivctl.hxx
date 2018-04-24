@@ -173,7 +173,7 @@ class SvxIconChoiceCtrl_Impl
     long                    nMaxVirtWidth;  // max. width aVirtOutputSize for ALIGN_TOP
     long                    nMaxVirtHeight; // max. height aVirtOutputSize for ALIGN_LEFT
     std::unique_ptr<SvxIconChoiceCtrlEntryList_impl> pZOrderList;
-    SvxIconChoiceCtrlColumnInfoMap* m_pColumns;
+    std::unique_ptr<SvxIconChoiceCtrlColumnInfoMap> m_pColumns;
     VclPtr<IcnViewEdit_Impl>   pEdit;
     WinBits                 nWinBits;
     long                    nMaxBoundHeight;            // height of highest BoundRects
