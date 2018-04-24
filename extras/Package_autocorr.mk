@@ -16,6 +16,7 @@ $(eval $(call gb_Package_add_files,extras_autocorr,$(LIBO_SHARE_FOLDER)/autocorr
 	acor_ca-ES.dat \
 	acor_da-DK.dat \
 	acor_de.dat \
+	acor_el-GR.dat \
 	acor_en-AU.dat \
 	acor_en-GB.dat \
 	acor_en-US.dat \
