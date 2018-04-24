@@ -570,7 +570,7 @@ void GenPspGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
     const GlyphItem* pGlyph;
     Point aPos;
     int nStart = 0;
-    while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
+    while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
         sal_Int32 nAdvance = pGlyph->mnNewWidth / rLayout.GetUnitsPerPixel();
         m_pPrinterGfx->DrawGlyph(aPos, *pGlyph, nAdvance);

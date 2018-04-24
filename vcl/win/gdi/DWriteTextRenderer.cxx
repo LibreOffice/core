@@ -294,7 +294,7 @@ bool D2DWriteTextOutRenderer::performRender(CommonSalLayout const & rLayout, Sal
         int nStart = 0;
         Point aPos(0, 0);
         const GlyphItem* pGlyph;
-        while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
+        while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
         {
             UINT16 glyphIndices[] = { pGlyph->maGlyphId };
             FLOAT glyphAdvances[] = { pGlyph->mnNewWidth };
