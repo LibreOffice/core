@@ -44,10 +44,7 @@ using namespace linguistic;
 
 // static ----------------------------------------------------------------
 
-static long nStaticTabs[]=
-{
-    2,10,71,120
-};
+static const long nStaticTabs[] = { 10, 71 };
 
 // static function -------------------------------------------------------
 
@@ -220,7 +217,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
         aDics = LinguMgr::GetDictionaryList()->getDictionaries();
 
     pWordsLB->SetSelectHdl(LINK(this, SvxEditDictionaryDialog, SelectHdl));
-    pWordsLB->SetTabs(nStaticTabs);
+    pWordsLB->SetTabs(SAL_N_ELEMENTS(nStaticTabs), nStaticTabs);
 
     //! we use an algorithm of our own to insert elements sorted
     pWordsLB->SetStyle(pWordsLB->GetStyle()|/*WB_SORT|*/WB_HSCROLL|WB_CLIPCHILDREN);
@@ -483,9 +480,10 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
         pReplaceFT->SetText(CuiResId(RID_SVXSTR_OPT_GRAMMAR_BY));
     }
 
+    sal_uInt16 nTabsCount;
     if(bIsNegative || !bLangNone)
     {
-        nStaticTabs[0]=2;
+        nTabsCount=2;
 
         // make controls for replacement text active
         if(!pReplaceFT->IsVisible())
@@ -499,7 +497,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
     }
     else
     {
-        nStaticTabs[0]=1;
+        nTabsCount=1;
 
         // deactivate controls for replacement text
         if(pReplaceFT->IsVisible())
@@ -513,7 +511,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
 
     }
 
-    pWordsLB->SetTabs(nStaticTabs);
+    pWordsLB->SetTabs(nTabsCount, nStaticTabs);
     pWordsLB->Clear();
 
     Sequence< Reference< XDictionaryEntry >  > aEntries( xDic->getEntries() );

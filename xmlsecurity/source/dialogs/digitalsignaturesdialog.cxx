@@ -141,8 +141,8 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 
     m_pSignaturesLB = VclPtr<SvSimpleTable>::Create(*pSignatures);
     // Give the first column 6 percent, try to distribute the rest equally.
-    static long aTabs[] = { 6, 0, 6*nControlWidth/100, 25*nControlWidth/100, 44*nControlWidth/100, 62*nControlWidth/100, 81*nControlWidth/100 };
-    m_pSignaturesLB->SetTabs(aTabs);
+    static long aTabs[] = { 0, 6*nControlWidth/100, 25*nControlWidth/100, 44*nControlWidth/100, 62*nControlWidth/100, 81*nControlWidth/100 };
+    m_pSignaturesLB->SetTabs(SAL_N_ELEMENTS(aTabs), aTabs);
 
     m_pSignaturesLB->InsertHeaderEntry("\t" + get<FixedText>("signed")->GetText() + "\t"
                + get<FixedText>("issued")->GetText() + "\t" + get<FixedText>("date")->GetText() + "\t"

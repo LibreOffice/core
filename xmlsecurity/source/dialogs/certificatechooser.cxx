@@ -56,8 +56,8 @@ CertificateChooser::CertificateChooser(vcl::Window* _pParent,
     pSignatures->set_height_request(aControlSize.Height());
 
     m_pCertLB = VclPtr<SvSimpleTable>::Create(*pSignatures);
-    static long nTabs[] = { 5, 0, 20*nControlWidth/100, 50*nControlWidth/100, 60*nControlWidth/100, 70*nControlWidth/100  };
-    m_pCertLB->SetTabs( &nTabs[0] );
+    static long nTabs[] = { 0, 20*nControlWidth/100, 50*nControlWidth/100, 60*nControlWidth/100, 70*nControlWidth/100  };
+    m_pCertLB->SetTabs( SAL_N_ELEMENTS(nTabs), nTabs );
     m_pCertLB->InsertHeaderEntry(get<FixedText>("issuedto")->GetText() + "\t" + get<FixedText>("issuedby")->GetText()
         + "\t" + get<FixedText>("type")->GetText() + "\t" + get<FixedText>("expiration")->GetText()
         + "\t" + get<FixedText>("usage")->GetText());

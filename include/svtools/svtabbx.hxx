@@ -65,7 +65,7 @@ public:
     SvTabListBox( vcl::Window* pParent, WinBits );
     virtual ~SvTabListBox() override;
     virtual void dispose() override;
-    void            SetTabs(const long* pTabs, MapUnit = MapUnit::MapAppFont);
+    void            SetTabs(sal_uInt16 nTabs, long const pTabPositions[], MapUnit = MapUnit::MapAppFont);
     sal_uInt16      TabCount() const { return nTabCount; }
     using SvTreeListBox::GetTab;
     long            GetTab( sal_uInt16 nTab ) const;

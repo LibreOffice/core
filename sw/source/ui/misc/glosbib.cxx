@@ -63,12 +63,9 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(vcl::Window * pParent,
     m_pGroupTLB->set_width_request(nWidth);
     m_pGroupTLB->set_height_request(GetTextHeight() * 10);
 
-    long nTabs[] =
-    {   2, // Number of Tabs
-        0, nAppFontUnits
-    };
+    long nTabs[] = {  0, nAppFontUnits };
 
-    m_pGroupTLB->SetTabs( &nTabs[0] );
+    m_pGroupTLB->SetTabs( SAL_N_ELEMENTS(nTabs), nTabs );
     m_pGroupTLB->SetSelectHdl(LINK(this, SwGlossaryGroupDlg, SelectHdl));
     m_pGroupTLB->GetModel()->SetSortMode(SortAscending);
     m_pNewPB->SetClickHdl(LINK(this, SwGlossaryGroupDlg, NewHdl));

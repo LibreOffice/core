@@ -165,21 +165,19 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxI
     m_pPrefBox->InsertHeaderEntry(get<FixedText>("type")->GetText());
     m_pPrefBox->InsertHeaderEntry(get<FixedText>("value")->GetText());
 
-    long aTabs[] = {4,0,0,0,0};
-
     float fWidth = approximate_char_width();
 
-    aTabs[1] = 0;
-    aTabs[2] = aTabs[1] + fWidth * 65;
-    aTabs[3] = aTabs[2] + fWidth * 20;
-    aTabs[4] = aTabs[3] + fWidth * 8;
+    long aTabs[] = {0,0,0,0};
+    aTabs[1] = fWidth * 65;
+    aTabs[2] = aTabs[1] + fWidth * 20;
+    aTabs[3] = aTabs[2] + fWidth * 8;
 
     m_options.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
     m_options.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
     m_options.searchFlag |= (util::SearchFlags::REG_NOT_BEGINOFLINE |
                                         util::SearchFlags::REG_NOT_ENDOFLINE);
 
-    m_pPrefBox->SetTabs(aTabs, MapUnit::MapPixel);
+    m_pPrefBox->SetTabs(SAL_N_ELEMENTS(aTabs), aTabs, MapUnit::MapPixel);
     m_pPrefBox->SetAlternatingRowColors( true );
 }
 

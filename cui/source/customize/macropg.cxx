@@ -65,9 +65,8 @@ SvxMacroTabPage_Impl::SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet )
 }
 
 // attention, this array is indexed directly (0, 1, ...) in the code
-static long nTabs[] =
+static const long nTabs[] =
 {
-    2, // Number of Tabs
     0, 90
 };
 
@@ -698,8 +697,8 @@ void SvxMacroTabPage_::InitAndSetHandler( const Reference< container::XNameRepla
     rListBox.SetSelectHdl( LINK( this, SvxMacroTabPage_, SelectEvent_Impl ));
 
     rListBox.SetSelectionMode( SelectionMode::Single );
-    rListBox.SetTabs( &nTabs[0] );
-    Size aSize( nTabs[ 2 ], 0 );
+    rListBox.SetTabs( SAL_N_ELEMENTS(nTabs), nTabs );
+    Size aSize( nTabs[ 1 ], 0 );
     rHeaderBar.InsertItem( ITEMID_EVENT, mpImpl->sStrEvent, LogicToPixel( aSize, MapMode( MapUnit::MapAppFont ) ).Width() );
     aSize.setWidth( 1764 );        // don't know what, so 42^2 is best to use...
     rHeaderBar.InsertItem( ITMEID_ASSMACRO, mpImpl->sAssignedMacro, LogicToPixel( aSize, MapMode( MapUnit::MapAppFont ) ).Width() );

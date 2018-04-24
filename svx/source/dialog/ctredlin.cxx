@@ -431,8 +431,8 @@ void SvxTPView::dispose()
 
 void SvxTPView::InsertWriterHeader()
 {
-    const long pTabs[] = { 4 /* Length of rest of the array */, 10, 20, 70, 120 };
-    m_pViewData->SetTabs(pTabs);
+    const long aTabPositions[] = { 10, 20, 70, 120 };
+    m_pViewData->SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions);
 
     OUString aStrTab('\t');
     OUString aString = get<FixedText>("action")->GetText()
@@ -448,8 +448,8 @@ void SvxTPView::InsertWriterHeader()
 
 void SvxTPView::InsertCalcHeader()
 {
-    const long pTabs[] = { 5 /* Length of rest of the array */, 10, 65, 120, 170, 220 };
-    m_pViewData->SetTabs(pTabs);
+    const long aTabPositions[] = { 10, 65, 120, 170, 220 };
+    m_pViewData->SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions);
 
     OUString aStrTab('\t');
     OUString aString = get<FixedText>("action")->GetText()

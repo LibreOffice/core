@@ -38,8 +38,8 @@ SearchResultsDlg::SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParen
     pContainer->set_height_request(aControlSize.Height());
 
     mpList = VclPtr<SvSimpleTable>::Create(*pContainer);
-    long nTabs[] = {3, 0, 40, 60};
-    mpList->SetTabs(&nTabs[0]);
+    long nTabs[] = {0, 40, 60};
+    mpList->SetTabs(SAL_N_ELEMENTS(nTabs), nTabs);
     mpList->InsertHeaderEntry(ScResId(STR_SHEET) + "\t" + ScResId(STR_CELL) + "\t" + ScResId(STR_CONTENT));
     mpList->SetSelectHdl( LINK(this, SearchResultsDlg, ListSelectHdl) );
 }

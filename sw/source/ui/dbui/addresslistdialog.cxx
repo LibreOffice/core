@@ -155,9 +155,9 @@ void SwAddrSourceLB::setColSizes()
 
     long nWidth = rHB.GetSizePixel().Width();
 
-    long nTabs[] = { 2, 0, nWidth/2 };
+    long nTabs[] = { 0, nWidth/2 };
 
-    SvSimpleTable::SetTabs(&nTabs[0], MapUnit::MapPixel);
+    SvSimpleTable::SetTabs(SAL_N_ELEMENTS(nTabs), nTabs, MapUnit::MapPixel);
 }
 
 SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
