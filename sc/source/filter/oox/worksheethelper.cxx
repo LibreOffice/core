@@ -770,6 +770,13 @@ void WorksheetGlobals::setColumnModel( const ColumnModel& rModel )
         // checkCol(). Cater for this oddity.
         if (nLastCol == mrMaxApiPos.Col() + 1)
             --nLastCol;
+        // Excel may add a column range for the remaining columns (with
+        // <cols><col .../></cols>), even if not used or only used to grey out
+        // columns in page break view. Don't let that trigger overflow warning,
+        // so check for the last possible column. If there really is content in
+        // the range that should be caught anyway.
+        else if (nLastCol == getAddressConverter().getMaxXlsAddress().Col())
+            nLastCol = mrMaxApiPos.Col();
         else if( !getAddressConverter().checkCol( nLastCol, true ) )
             nLastCol = mrMaxApiPos.Col();
         // try to find entry in column model map that is able to merge with the passed model
