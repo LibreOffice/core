@@ -322,13 +322,13 @@ protected:
 
 public:
 
-    ::std::vector< SortingData_Impl* >  maContent;
+    ::std::vector< std::unique_ptr<SortingData_Impl> >  maContent;
     ::osl::Mutex                        maMutex;
 
     VclPtr<SvTreeListBox>               mpCurView;
     VclPtr<ViewTabListBox_Impl>         mpView;
     VclPtr<IconView>                    mpIconView;
-    NameTranslator_Impl*    mpNameTrans;
+    std::unique_ptr<NameTranslator_Impl> mpNameTrans;
     sal_uInt16              mnSortColumn;
     bool                    mbAscending     : 1;
     bool                    mbOnlyFolder    : 1;
@@ -1439,7 +1439,6 @@ SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommand
     ,m_eAsyncActionResult       ( ::svt::EnumerationResult::ERROR )
     ,m_bRunningAsyncAction      ( false )
     ,m_bAsyncActionCancelled    ( false )
-    ,mpNameTrans                ( nullptr )
     ,mnSortColumn               ( COLUMN_TITLE )
     ,mbAscending                ( true )
     ,mbOnlyFolder               ( bOnlyFolder )
@@ -1474,13 +1473,8 @@ void SvtFileView_Impl::Clear()
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    for (auto const& elem : maContent)
-        delete elem;
-
     maContent.clear();
-
-    if( mpNameTrans )
-        DELETEZ( mpNameTrans );
+    mpNameTrans.reset();
 }
 
 
@@ -1513,7 +1507,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
 
     OSL_ENSURE( !m_xContentEnumerator.is(), "SvtFileView_Impl::GetFolderContent_Impl: still running another enumeration!" );
     m_xContentEnumerator.set(new ::svt::FileViewContentEnumerator(
-        mpView->GetCommandEnvironment(), maContent, maMutex, mbReplaceNames ? mpNameTrans : nullptr));
+        mpView->GetCommandEnvironment(), maContent, maMutex, mbReplaceNames ? mpNameTrans.get() : nullptr));
         // TODO: should we cache and re-use this thread?
 
     if ( !pAsyncDescriptor )
@@ -1643,7 +1637,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 
 
     // do the filtering
-    ::std::vector< SortingData_Impl* >::iterator aContentLoop = maContent.begin();
+    auto aContentLoop = maContent.begin();
     OUString sCompareString;
     do
     {
@@ -1667,7 +1661,6 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
             if( bDelete )
             {
                 // none of the filters did match
-                delete *aContentLoop;
                 aContentLoop = maContent.erase(aContentLoop);
             }
             else
@@ -1936,7 +1929,7 @@ static const CollatorWrapper*   pCollatorWrapper = nullptr;
 
 /* this function returns true, if aOne is less then aTwo
 */
-bool CompareSortingData_Impl( SortingData_Impl* const aOne, SortingData_Impl const * aTwo )
+bool CompareSortingData_Impl( std::unique_ptr<SortingData_Impl> const & aOne, std::unique_ptr<SortingData_Impl> const & aTwo )
 {
     DBG_ASSERT( pCollatorWrapper, "*CompareSortingData_Impl(): Can't work this way!" );
 
@@ -2032,7 +2025,7 @@ void SvtFileView_Impl::EntryRemoved( const OUString& rURL )
     ::osl::MutexGuard aGuard( maMutex );
 
     maContent.erase(std::find_if(maContent.begin(), maContent.end(),
-                     [&](const SortingData_Impl* data) { return data->maTargetURL == rURL; }));
+                     [&](const std::unique_ptr<SortingData_Impl> & data) { return data->maTargetURL == rURL; }));
 }
 
 
@@ -2042,7 +2035,7 @@ void SvtFileView_Impl::EntryRenamed( OUString& rURL,
     ::osl::MutexGuard aGuard( maMutex );
 
     auto aFoundElem = std::find_if(maContent.begin(), maContent.end(),
-                     [&](const SortingData_Impl* data) { return data->maTargetURL == rURL; });
+                     [&](const std::unique_ptr<SortingData_Impl> & data) { return data->maTargetURL == rURL; });
     if (aFoundElem != maContent.end())
     {
         (*aFoundElem)->SetNewTitle( rTitle );
@@ -2066,7 +2059,7 @@ OUString SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString&
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    SortingData_Impl* pData = new SortingData_Impl;
+    std::unique_ptr<SortingData_Impl> pData(new SortingData_Impl);
 
     pData->SetNewTitle( rTitle );
     pData->maSize        = 0;
@@ -2095,7 +2088,7 @@ OUString SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString&
             + rLocaleData.getTime( pData->maModDate );
 
     pData->maDisplayText = aValue;
-    maContent.push_back( pData );
+    maContent.push_back( std::move(pData) );
 
     return aValue;
 }
@@ -2106,7 +2099,7 @@ sal_uLong SvtFileView_Impl::GetEntryPos( const OUString& rURL )
     ::osl::MutexGuard aGuard( maMutex );
 
     auto aFoundElem = std::find_if(maContent.begin(), maContent.end(),
-          [&](const SortingData_Impl* data) { return data->maTargetURL == rURL; });
+          [&](const std::unique_ptr<SortingData_Impl> & data) { return data->maTargetURL == rURL; });
     return aFoundElem != maContent.end()?std::distance(maContent.begin(), aFoundElem):0;
 }
 
@@ -2146,7 +2139,7 @@ bool SvtFileView_Impl::SearchNextEntry( sal_uInt32& nIndex, const OUString& rTit
     sal_uInt32 nStart = nIndex;
     while ( nIndex < nEnd )
     {
-        SortingData_Impl* pData = maContent[ nIndex ];
+        SortingData_Impl* pData = maContent[ nIndex ].get();
         if ( pData->GetLowerTitle().startsWith( rTitle ) )
             return true;
         ++nIndex;
@@ -2157,7 +2150,7 @@ bool SvtFileView_Impl::SearchNextEntry( sal_uInt32& nIndex, const OUString& rTit
         nIndex = 0;
         while ( nIndex < nEnd && nIndex <= nStart )
         {
-            SortingData_Impl* pData = maContent[ nIndex ];
+            SortingData_Impl* pData = maContent[ nIndex ].get();
             if ( pData->GetLowerTitle().startsWith( rTitle ) )
                 return true;
             ++nIndex;
@@ -2175,7 +2168,7 @@ void SvtFileView_Impl::SetActualFolder( const INetURLObject& rActualFolder )
         if( mpNameTrans )
             mpNameTrans->SetActualFolder( rActualFolder );
         else
-            mpNameTrans = new NameTranslator_Impl( rActualFolder );
+            mpNameTrans.reset(new NameTranslator_Impl( rActualFolder ));
     }
 }
 

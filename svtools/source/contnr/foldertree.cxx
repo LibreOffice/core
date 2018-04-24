@@ -53,7 +53,7 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
             GetModel()->Remove(pChild);
         }
 
-        ::std::vector< SortingData_Impl* > aContent;
+        ::std::vector< std::unique_ptr<SortingData_Impl> > aContent;
 
         ::rtl::Reference< ::svt::FileViewContentEnumerator >
             xContentEnumerator(new FileViewContentEnumerator(
@@ -66,7 +66,7 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
 
         if ( EnumerationResult::SUCCESS == eResult )
         {
-            for(SortingData_Impl* i : aContent)
+            for(auto & i : aContent)
             {
                 if( i->mbIsFolder )
                 {
