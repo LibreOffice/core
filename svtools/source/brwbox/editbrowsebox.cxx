@@ -82,25 +82,25 @@ namespace svt
 
     void EditBrowseBox::BrowserMouseEventPtr::Clear()
     {
-        DELETEZ(pEvent);
+        pEvent.reset();
     }
 
     void EditBrowseBox::BrowserMouseEventPtr::Set(const BrowserMouseEvent* pEvt, bool bIsDown)
     {
-        if (pEvt == pEvent)
+        if (pEvt == pEvent.get())
         {
             bDown = bIsDown;
             return;
         }
-        Clear();
+        pEvent.reset();
         if (pEvt)
         {
-            pEvent = new BrowserMouseEvent(pEvt->GetWindow(),
+            pEvent.reset(new BrowserMouseEvent(pEvt->GetWindow(),
                                            *pEvt,
                                            pEvt->GetRow(),
                                            pEvt->GetColumn(),
                                            pEvt->GetColumnId(),
-                                           pEvt->GetRect());
+                                           pEvt->GetRect()));
             bDown = bIsDown;
         }
     }
