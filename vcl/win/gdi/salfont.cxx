@@ -57,10 +57,22 @@
 
 using namespace vcl;
 
+using BoundRectCacheKey = std::pair<PhysicalFontFace const *,sal_GlyphId>;
+namespace std
+{
+    template<> struct hash<BoundRectCacheKey>
+    {
+        std::size_t operator()(const BoundRectCacheKey & key ) const
+        {
+            return std::hash<PhysicalFontFace const *>()(key.first)
+                ^  std::hash<sal_GlyphId>()(key.second);
+        }
+    };
+};
 // GetGlyphOutlineW() seems to be a little slow, and doesn't seem to do it's own caching (tested on Windows10).
 // TODO include the font as part of the cache key, then we won't need to clear it on font change
 // The cache limit is set by the rough number of characters needed to read your average Asian newspaper.
-static o3tl::lru_map<sal_GlyphId, tools::Rectangle> g_BoundRectCache(3000);
+static o3tl::lru_map<BoundRectCacheKey, tools::Rectangle> g_BoundRectCache(3000);
 
 inline FIXED FixedFromDouble( double d )
 {
@@ -840,11 +852,9 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
 
 HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const * i_pFont, HFONT& o_rOldFont)
 {
-    // clear the cache on font change
-    g_BoundRectCache.clear();
+    mpCurrentPhysicalFontFace = i_pFont->mpFontData;
 
     HFONT hNewFont = nullptr;
-
     HDC hdcScreen = nullptr;
     if( mbVirDev )
         // only required for virtual devices, see below for details
@@ -1334,7 +1344,7 @@ void WinSalGraphics::ClearDevFontCache()
 
 bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
-    auto it = g_BoundRectCache.find(rGlyph.maGlyphId);
+    auto it = g_BoundRectCache.find({mpCurrentPhysicalFontFace,rGlyph.maGlyphId});
     if (it != g_BoundRectCache.end())
     {
         rRect = it->second;
@@ -1363,7 +1373,7 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle
     rRect.AdjustRight(1);
     rRect.AdjustBottom(1);
 
-    g_BoundRectCache.insert({rGlyph.maGlyphId, rRect});
+    g_BoundRectCache.insert({{mpCurrentPhysicalFontFace,rGlyph.maGlyphId}, rRect});
     return true;
 }
 
