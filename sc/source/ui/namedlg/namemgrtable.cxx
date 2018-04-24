@@ -43,8 +43,8 @@ ScRangeManagerTable::ScRangeManagerTable(SvSimpleTableContainer& rParent,
     , maPos( rPos )
     , mpInitListener(nullptr)
 {
-    static long aStaticTabs[] = {3, 0, 0, 0 };
-    SetTabs( &aStaticTabs[0], MapUnit::MapPixel );
+    static long aStaticTabs[] = { 0, 0, 0 };
+    SetTabs( SAL_N_ELEMENTS(aStaticTabs), aStaticTabs, MapUnit::MapPixel );
 
     OUString aNameStr(ScGlobal::GetRscString(STR_HEADER_NAME));
     OUString aRangeStr(ScGlobal::GetRscString(STR_HEADER_RANGE_OR_EXPR));
@@ -98,8 +98,8 @@ void ScRangeManagerTable::setColWidths()
     rHeaderBar.SetItemSize( ITEMID_NAME, nTabSize);
     rHeaderBar.SetItemSize( ITEMID_RANGE, nTabSize);
     rHeaderBar.SetItemSize( ITEMID_SCOPE, nTabSize);
-    static long aStaticTabs[] = {3, 0, nTabSize, 2*nTabSize };
-    SetTabs( &aStaticTabs[0], MapUnit::MapPixel );
+    static long aStaticTabs[] = {0, nTabSize, 2*nTabSize };
+    SetTabs( SAL_N_ELEMENTS(aStaticTabs), aStaticTabs, MapUnit::MapPixel );
     HeaderEndDragHdl(nullptr);
 }
 

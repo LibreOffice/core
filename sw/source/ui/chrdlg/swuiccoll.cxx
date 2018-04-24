@@ -46,7 +46,7 @@ const sal_uInt16 SwCondCollPage::m_aPageRg[] = {
 
 // Warning! This table is indicated directly in code (0, 1, ...)
 static long nTabs[] =
-    {   2, // Number of Tabs
+    {
         0, 100
     };
 
@@ -92,7 +92,7 @@ SwCondCollPage::SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
     m_pTbLinks->SetStyle(m_pTbLinks->GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
     m_pTbLinks->SetSelectionMode( SelectionMode::Single );
-    m_pTbLinks->SetTabs( &nTabs[0] );
+    m_pTbLinks->SetTabs( SAL_N_ELEMENTS(nTabs), nTabs );
     m_pTbLinks->Resize();  // OS: Hack for the right selection
     m_pTbLinks->SetSpaceBetweenEntries( 0 );
 

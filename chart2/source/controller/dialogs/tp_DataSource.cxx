@@ -126,7 +126,7 @@ OUString lcl_GetSequenceNameForLabel( ::chart::SeriesEntry const * pEntry )
 }
 
 static long lcl_pRoleListBoxTabs[] =
-    {   3,        // Number of Tabs
+    {
         0, 0, 75
     };
 
@@ -257,7 +257,7 @@ DataSourceTabPage::DataSourceTabPage(
     m_pBTN_DOWN->SetText( OUString( cBlackDownPointingTriangle ));
 
     // init controls
-    m_pLB_ROLE->SetTabs( lcl_pRoleListBoxTabs );
+    m_pLB_ROLE->SetTabs( SAL_N_ELEMENTS(lcl_pRoleListBoxTabs), lcl_pRoleListBoxTabs );
     m_pLB_ROLE->Show();
 
     updateControlsFromDialogModel();

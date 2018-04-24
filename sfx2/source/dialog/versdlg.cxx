@@ -171,10 +171,8 @@ void SfxVersionsTabListBox_Impl::setColSizes()
         }
     }
 
-    long aStaticTabs[] = { 3, 0, 0, 0 };
-    aStaticTabs[2] = nMax;
-    aStaticTabs[3] = nMax + nMaxAuthorWidth;
-    SvSimpleTable::SetTabs(aStaticTabs, MapUnit::MapPixel);
+    long aTabPositions[] = { 0, nMax, nMax + nMaxAuthorWidth };
+    SvSimpleTable::SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions, MapUnit::MapPixel);
 }
 
 SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, bool bIsSaveVersionOnClose )
@@ -215,10 +213,8 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, bool bIsSaveVersion
     m_pVersionBox->SetStyle( m_pVersionBox->GetStyle() | WB_HSCROLL | WB_CLIPCHILDREN );
     m_pVersionBox->SetSelectionMode( SelectionMode::Single );
 
-    long nTabs_Impl[] = { 3, 0, 0, 0 };
-
-
-    m_pVersionBox->SvSimpleTable::SetTabs(&nTabs_Impl[0]);
+    long aTabPositions[] = { 0, 0, 0 };
+    m_pVersionBox->SvSimpleTable::SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions);
     OUString sHeader1(get<FixedText>("datetime")->GetText());
     OUString sHeader2(get<FixedText>("savedby")->GetText());
     OUString sHeader3(get<FixedText>("comments")->GetText());
@@ -517,9 +513,8 @@ SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame )
     m_pVersionBox->SetStyle( m_pVersionBox->GetStyle() | WB_HSCROLL | WB_CLIPCHILDREN );
     m_pVersionBox->SetSelectionMode( SelectionMode::Single );
 
-    long nTabs_Impl[] = { 3, 0, 0, 0 };
-
-    m_pVersionBox->SvSimpleTable::SetTabs(&nTabs_Impl[0]);
+    long aTabPositions[] = { 0, 0, 0 };
+    m_pVersionBox->SvSimpleTable::SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions);
     OUString sHeader1(get<FixedText>("datetime")->GetText());
     OUString sHeader2(get<FixedText>("savedby")->GetText());
     OUString sHeader3(get<FixedText>("comments")->GetText());
