@@ -231,7 +231,7 @@ sal_Int16 SAL_CALL clazz::getParaAdjust() \
  \
 void SAL_CALL clazz::setParaAdjust( sal_Int16 _align ) \
 { \
-    set(PROPERTY_PARAADJUST,static_cast<css::style::ParagraphAdjust>(_align),varName.nAlign); \
+    set(PROPERTY_PARAADJUST,_align,varName.nAlign); \
 } \
  \
 awt::FontDescriptor SAL_CALL clazz::getFontDescriptor() \
