@@ -71,16 +71,6 @@ void QImage2BitmapBuffer( QImage* pImg, BitmapBuffer* pBuf )
     pBuf->mnScanlineSize = pImg->bytesPerLine();
 }
 
-/**
- Convert tools::Rectangle to QRect.
- @param rControlRegion The tools::Rectangle to convert.
- @return The matching QRect
-*/
-QRect region2QRect( const tools::Rectangle& rControlRegion )
-{
-    return QRect(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.GetWidth(), rControlRegion.GetHeight());
-}
-
 KDE5SalGraphics::KDE5SalGraphics()
    : SvpSalGraphics()
 {
@@ -216,7 +206,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
     bool returnVal = true;
 
-    QRect widgetRect = region2QRect(rControlRegion);
+    QRect widgetRect = toQRect(rControlRegion);
 
     //if no image, or resized, make a new image
     if (!m_image || m_image->size() != widgetRect.size())
@@ -342,7 +332,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
             // is painted after menuitem highlight, otherwise there would be a grey area
             assert( value.getType() == ControlType::MenuPopup );
             const MenupopupValue* menuVal = static_cast<const MenupopupValue*>(&value);
-            QRect menuItemRect( region2QRect( menuVal->maItemRect ));
+            QRect menuItemRect( toQRect( menuVal->maItemRect ));
             QRect rect( menuItemRect.topLeft() - widgetRect.topLeft(),
                 widgetRect.size().expandedTo( menuItemRect.size()));
             // checkboxes are always displayed next to images in menus, so are never centered
@@ -619,7 +609,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
 {
     bool retVal = false;
 
-    QRect boundingRect = region2QRect( controlRegion );
+    QRect boundingRect = toQRect( controlRegion );
     QRect contentRect = boundingRect;
     QStyleOptionComplex styleOption;
 
@@ -938,7 +928,7 @@ bool KDE5SalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart
         }
         rIsInside = FALSE;
         bool bHorizontal = ( nPart == ControlPart::ButtonLeft || nPart == ControlPart::ButtonRight );
-        QRect rect = region2QRect( rControlRegion );
+        QRect rect = toQRect( rControlRegion );
         QPoint pos( rPos.X(), rPos.Y());
         // Adjust coordinates to make the widget appear to be at (0,0), i.e. make
         // widget and screen coordinates the same. QStyle functions should use screen
