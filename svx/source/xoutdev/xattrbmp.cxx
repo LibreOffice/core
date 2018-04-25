@@ -38,6 +38,7 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/GraphicLoader.hxx>
 #include <vcl/dibtools.hxx>
 
 #include <libxml/xmlwriter.h>
@@ -262,8 +263,8 @@ bool XFillBitmapItem::QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId) const
         aInternalName = GetName();
     }
 
-    if( nMemberId == MID_BITMAP ||
-        nMemberId == 0  )
+    if (nMemberId == MID_BITMAP ||
+        nMemberId == 0)
     {
         xBmp.set(GetGraphicObject().GetGraphic().GetXGraphic(), uno::UNO_QUERY);
     }
@@ -294,9 +295,11 @@ bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     nMemberId &= ~CONVERT_TWIPS;
 
     OUString aName;
+    OUString aURL;
     css::uno::Reference< css::awt::XBitmap > xBmp;
     css::uno::Reference< css::graphic::XGraphic > xGraphic;
 
+    bool bSetURL    = false;
     bool bSetName   = false;
     bool bSetBitmap = false;
 
@@ -304,9 +307,21 @@ bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
         bSetName = (rVal >>= aName);
     else if( nMemberId == MID_BITMAP )
     {
-        bSetBitmap = (rVal >>= xBmp);
-        if ( !bSetBitmap )
-            bSetBitmap = (rVal >>= xGraphic );
+        if (rVal.has<OUString>())
+        {
+            bSetURL = true;
+            aURL = rVal.get<OUString>();
+        }
+        else if (rVal.has<uno::Reference<awt::XBitmap>>())
+        {
+            bSetBitmap = true;
+            xBmp = rVal.get<uno::Reference<awt::XBitmap>>();
+        }
+        else if (rVal.has<uno::Reference<graphic::XGraphic>>())
+        {
+            bSetBitmap = true;
+            xGraphic = rVal.get<uno::Reference<graphic::XGraphic>>();
+        }
     }
     else
     {
@@ -320,6 +335,8 @@ bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
                     bSetName = (aPropSeq[n].Value >>= aName);
                 else if ( aPropSeq[n].Name == "Bitmap" )
                     bSetBitmap = (aPropSeq[n].Value >>= xBmp);
+                else if ( aPropSeq[n].Name == "FillBitmapURL" )
+                    bSetURL = (aPropSeq[n].Value >>= aURL);
             }
         }
     }
@@ -328,7 +345,15 @@ bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     {
         SetName( aName );
     }
-    if( bSetBitmap )
+    if (bSetURL && !aURL.isEmpty())
+    {
+        Graphic aGraphic = vcl::graphic::loadFromURL(aURL);
+        if (aGraphic)
+        {
+            maGraphicObject.SetGraphic(aGraphic.GetXGraphic());
+        }
+    }
+    else if( bSetBitmap )
     {
         if (xBmp.is())
         {

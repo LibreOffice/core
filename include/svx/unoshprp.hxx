@@ -258,6 +258,7 @@
     FILL_PROPERTIES_DEFAULTS \
     { OUString(UNO_NAME_FILLBACKGROUND),    XATTR_FILLBACKGROUND    , cppu::UnoType<bool>::get(),              0,   0}, \
     { OUString(UNO_NAME_FILLBITMAP),        XATTR_FILLBITMAP        , cppu::UnoType<css::awt::XBitmap>::get()  ,       0,     MID_BITMAP}, \
+    { OUString(UNO_NAME_FILLBITMAPURL),     XATTR_FILLBITMAP        , cppu::UnoType<OUString>::get(),                  0,     MID_BITMAP }, \
     { OUString(UNO_NAME_FILLBITMAPNAME),           XATTR_FILLBITMAP        , ::cppu::UnoType<OUString>::get(), 0, MID_NAME }, \
     { OUString(UNO_NAME_FILLGRADIENTSTEPCOUNT),    XATTR_GRADIENTSTEPCOUNT , ::cppu::UnoType<sal_Int16>::get(), 0, 0}, \
     { OUString(UNO_NAME_FILLGRADIENT),      XATTR_FILLGRADIENT      , ::cppu::UnoType<css::awt::Gradient>::get(),        0,     MID_FILLGRADIENT}, \
