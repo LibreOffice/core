@@ -61,6 +61,7 @@
 #include <ooo/vba/msforms/XCheckBox.hpp>
 #include <osl/interlck.h>
 #include <com/sun/star/uno/genfunc.h>
+#include <comphelper/automationinvokedzone.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>
 #include <comphelper/windowsdebugoutput.hxx>
@@ -188,6 +189,8 @@ InterfaceOleWrapper::~InterfaceOleWrapper()
 
 STDMETHODIMP InterfaceOleWrapper::QueryInterface(REFIID riid, LPVOID FAR * ppv)
 {
+    comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
     SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::QueryInterface(" << riid << ")");
 
     HRESULT ret= S_OK;
@@ -264,6 +267,8 @@ STDMETHODIMP InterfaceOleWrapper::getOriginalUnoObject( Reference<XInterface>* p
 }
 STDMETHODIMP  InterfaceOleWrapper::getOriginalUnoStruct( Any * pStruct)
 {
+    comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
     HRESULT ret= E_FAIL;
     if( !m_xOrigin.is())
     {
@@ -425,6 +430,8 @@ public:
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfoOfGuid(REFGUID guid,
                                                         ITypeInfo **ppTInfo) override
     {
+        comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
         SAL_INFO("extensions.olebridge", this << "@CXTypeLib::GetTypeInfoOfGuid(" << guid << ")");
         if (!ppTInfo)
             return E_POINTER;
@@ -596,6 +603,8 @@ void CXTypeInfo::InitForOutgoing(Reference<XInterface> xOrigin,
 
 HRESULT STDMETHODCALLTYPE CXTypeInfo::GetTypeAttr(TYPEATTR **ppTypeAttr)
 {
+    comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
     SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::GetTypeAttr");
 
     if (!ppTypeAttr)
@@ -684,6 +693,8 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetTypeComp(ITypeComp **ppTComp)
 HRESULT STDMETHODCALLTYPE CXTypeInfo::GetFuncDesc(UINT index,
                                                   FUNCDESC **ppFuncDesc)
 {
+    comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
     if (!ppFuncDesc)
         return E_POINTER;
 
@@ -795,6 +806,8 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetNames(MEMBERID memid,
                                                UINT cMaxNames,
                                                UINT *pcNames)
 {
+    comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
     SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::GetNames(" << memid << ")");
     assert(meKind != Kind::COCLASS);
 
@@ -855,6 +868,8 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetRefTypeOfImplType(UINT index,
 HRESULT STDMETHODCALLTYPE CXTypeInfo::GetImplTypeFlags(UINT index,
                                                        INT *pImplTypeFlags)
 {
+    comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
     SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::GetImplTypeFlags(" << index << ")");
 
     if (!pImplTypeFlags)
@@ -907,7 +922,10 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetDocumentation(MEMBERID memid,
                                                        DWORD *pdwHelpContext,
                                                        BSTR *pBstrHelpFile)
 {
+    comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
     SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::GetDocumentation(" << memid << ")");
+
     if (pBstrName)
     {
         if (memid == MEMBERID_NIL)
@@ -952,6 +970,8 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetDllEntry(MEMBERID memid,
 HRESULT STDMETHODCALLTYPE CXTypeInfo::GetRefTypeInfo(HREFTYPE hRefType,
                                                      ITypeInfo **ppTInfo)
 {
+    comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
     SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::GetRefTypeInfo(" << hRefType << ")");
 
     if (!ppTInfo)
@@ -1024,6 +1044,8 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetMops(MEMBERID memid,
 HRESULT STDMETHODCALLTYPE CXTypeInfo::GetContainingTypeLib(ITypeLib **ppTLib,
                                                            UINT *pIndex)
 {
+    comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
     SAL_INFO("extensions.olebridge", this << "@CXTypeInfo::GetContainingTypeLib");
 
     if (!ppTLib || !pIndex)
@@ -1068,6 +1090,8 @@ void STDMETHODCALLTYPE CXTypeInfo::ReleaseVarDesc(VARDESC *pVarDesc)
 
 STDMETHODIMP InterfaceOleWrapper::GetTypeInfo(unsigned int iTInfo, LCID, ITypeInfo ** ppTInfo)
 {
+    comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
     SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::GetTypeInfo(" << iTInfo << ")");
 
     if (!ppTInfo)
@@ -1108,6 +1132,8 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
                                                 LCID /*lcid*/,
                                                 DISPID * rgdispid )
 {
+    comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
     SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::GetIDsOfNames("
              << OUString(o3tl::toU(rgszNames[0]))
              << (cNames > 1 ? "...!" : "") << "," << cNames << ")");
@@ -1776,6 +1802,8 @@ STDMETHODIMP InterfaceOleWrapper::Invoke(DISPID dispidMember,
                                          EXCEPINFO * pexcepinfo,
                                          unsigned int * puArgErr )
 {
+    comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
     SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::Invoke(" << dispidMember << ")");
 
     comphelper::ProfileZone aZone("COM Bridge");
@@ -2063,6 +2091,8 @@ public:
                                            VARIANT *rgVar,
                                            ULONG *pCeltFetched) override
     {
+        comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
         if (pCeltFetched)
             *pCeltFetched = 0;
 
@@ -2097,6 +2127,8 @@ public:
 
     virtual HRESULT STDMETHODCALLTYPE STDMETHODCALLTYPE Skip(ULONG celt) override
     {
+        comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
         while (celt > 0)
         {
             if (!mxEnumeration->hasMoreElements())
@@ -2339,6 +2371,8 @@ public:
                                            LPCONNECTDATA rgcd,
                                            ULONG *pcFetched) override
     {
+        comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
         if (!rgcd)
         {
             SAL_INFO("extensions.olebridge", this << "@CXEnumConnections::Next(" << cConnections << "): E_POINTER");
@@ -2453,6 +2487,8 @@ public:
     virtual HRESULT STDMETHODCALLTYPE Advise(IUnknown *pUnkSink,
                                              DWORD *pdwCookie) override
     {
+        comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
         SAL_INFO("extensions.olebridge", this << "@CXConnectionPoint::Advise(" << pUnkSink << ")");
 
         if (!pdwCookie)
@@ -2474,6 +2510,8 @@ public:
 
     virtual HRESULT STDMETHODCALLTYPE Unadvise(DWORD dwCookie) override
     {
+        comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
         SAL_INFO("extensions.olebridge", this << "@CXConnectionPoint::Unadvise(" << dwCookie << ")");
 
         if (dwCookie == 0 || dwCookie > mvISinks.size())
@@ -2490,6 +2528,8 @@ public:
 
     virtual HRESULT STDMETHODCALLTYPE EnumConnections(IEnumConnections **ppEnum) override
     {
+        comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
         HRESULT nResult;
 
         SAL_INFO("extensions.olebridge", this << "@CXConnectionPoint::EnumConnections...");
@@ -2751,6 +2791,8 @@ STDMETHODIMP InterfaceOleWrapper::GetNameSpaceParent(
 HRESULT STDMETHODCALLTYPE InterfaceOleWrapper::GetClassInfo (
     /* [out] */ ITypeInfo **ppTI)
 {
+    comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
     SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::GetClassInfo");
 
     if (!ppTI)
@@ -2795,6 +2837,8 @@ HRESULT STDMETHODCALLTYPE InterfaceOleWrapper::FindConnectionPoint(
     /* [in] */ REFIID riid,
     /* [out] */ IConnectionPoint **ppCP)
 {
+    comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
     SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::FindConnectionPoint(" << riid << ")");
 
     if (!ppCP)
@@ -2909,6 +2953,8 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,
                          unsigned int * puArgErr )
 {
+    comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
     HRESULT ret = S_OK;
     try
     {
