@@ -32,7 +32,6 @@
 #include <tools/diagnose_ex.h>
 #include <basic/sbmod.hxx>
 #include <unotools/intlwrapper.hxx>
-#include <comphelper/string.hxx>
 #include <o3tl/make_unique.hxx>
 
 #include <basic/sbuno.hxx>
@@ -778,15 +777,16 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
     if ( !aLibs.isEmpty() )
     {
         INetURLObject aCurStorage( aStorName, INetProtocol::File );
-        sal_Int32 nLibs = comphelper::string::getTokenCount(aLibs, LIB_SEP);
-        for ( sal_Int32 nLib = 0; nLib < nLibs; nLib++ )
-        {
-            OUString aLibInfo(aLibs.getToken(nLib, LIB_SEP));
-            // TODO: Remove == 2
-            DBG_ASSERT( ( comphelper::string::getTokenCount(aLibInfo, LIBINFO_SEP) == 2 ) || ( comphelper::string::getTokenCount(aLibInfo, LIBINFO_SEP) == 3 ), "Invalid Lib-Info!" );
-            OUString aLibName( aLibInfo.getToken( 0, LIBINFO_SEP ) );
-            OUString aLibAbsStorageName( aLibInfo.getToken( 1, LIBINFO_SEP ) );
-            OUString aLibRelStorageName( aLibInfo.getToken( 2, LIBINFO_SEP ) );
+        sal_Int32 nLibPos {0};
+        do {
+            const OUString aLibInfo(aLibs.getToken(0, LIB_SEP, nLibPos));
+            sal_Int32 nInfoPos {0};
+            const OUString aLibName( aLibInfo.getToken( 0, LIBINFO_SEP, nInfoPos ) );
+            DBG_ASSERT( nInfoPos >= 0, "Invalid Lib-Info!" );
+            const OUString aLibAbsStorageName( aLibInfo.getToken( 0, LIBINFO_SEP, nInfoPos ) );
+            // TODO: fail also here if there are no more tokens?
+            const OUString aLibRelStorageName( aLibInfo.getToken( 0, LIBINFO_SEP, nInfoPos ) );
+            DBG_ASSERT( nInfoPos < 0, "Invalid Lib-Info!" );
             INetURLObject aLibAbsStorage( aLibAbsStorageName, INetProtocol::File );
 
             INetURLObject aLibRelStorage( aStorName );
@@ -817,7 +817,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
                 StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD, aStorName, DialogMask::ButtonsOk );
                 aErrors.emplace_back(*pErrInf, BasicErrorReason::STORAGENOTFOUND);
             }
-        }
+        } while (nLibPos>=0);
     }
 }
 
@@ -1562,17 +1562,19 @@ ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, OUStri
 
         OUStringBuffer aBuff;
         OUString sArgs2 = sArgs.makeStringAndClear();
-        sal_Int32 nCount = comphelper::string::getTokenCount(sArgs2, ',');
 
         aBuff.append("(");
-        for (sal_Int32 n = 0; n < nCount; ++n)
+        if (!sArgs2.isEmpty())
         {
-            aBuff.append( "\"" );
-            aBuff.append( sArgs2.getToken(n, ',') );
-            aBuff.append( "\"" );
 
-            if ( n < nCount - 1 )
+            sal_Int32 nPos {0};
+            for (;;)
             {
+                aBuff.append( "\"" );
+                aBuff.append( sArgs2.getToken(0, ',', nPos) );
+                aBuff.append( "\"" );
+                if (nPos<0)
+                    break;
                 aBuff.append( "," );
             }
         }
