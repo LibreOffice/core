@@ -670,19 +670,19 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     return;
                 }
 
+                if ( ( ( mnSubTotalFlags & SubtotalFlags::IgnoreFiltered ) &&
+                     pDok->RowFiltered( aAdr.Row(), aAdr.Tab() ) ) ||
+                     ( ( mnSubTotalFlags & SubtotalFlags::IgnoreHidden ) &&
+                       pDok->RowHidden( aAdr.Row(), aAdr.Tab() ) ) )
+                {
+                    break;
+                }
                 if ( nGlobalError != FormulaError::NONE && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
                      ( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) ) )
                 {
                     nGlobalError = FormulaError::NONE;
                     if ( eFunc == ifCOUNT2 && !( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) )
                         ++nCount;
-                    break;
-                }
-                if ( ( ( mnSubTotalFlags & SubtotalFlags::IgnoreFiltered ) &&
-                     pDok->RowFiltered( aAdr.Row(), aAdr.Tab() ) ) ||
-                     ( ( mnSubTotalFlags & SubtotalFlags::IgnoreHidden ) &&
-                       pDok->RowHidden( aAdr.Row(), aAdr.Tab() ) ) )
-                {
                     break;
                 }
                 ScRefCellValue aCell(*pDok, aAdr);
