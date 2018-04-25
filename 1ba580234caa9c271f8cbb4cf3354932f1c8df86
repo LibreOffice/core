@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_fef1856b",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1616,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-25T21:26:01Z",
+      "side": 1,
+      "message": "This can overflow if there are more parameters than FORMULA_MAXPARAMSII.",
+      "range": {
+        "startLine": 1616,
+        "startChar": 24,
+        "endLine": 1616,
+        "endChar": 50
+      },
+      "revId": "1ba580234caa9c271f8cbb4cf3354932f1c8df86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_3eecfd8e",
+        "filename": "include/formula/FormulaCompiler.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-25T21:26:01Z",
+      "side": 1,
+      "message": "s/has/have/",
+      "range": {
+        "startLine": 44,
+        "startChar": 87,
+        "endLine": 44,
+        "endChar": 90
+      },
+      "revId": "1ba580234caa9c271f8cbb4cf3354932f1c8df86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_9efde93c",
+        "filename": "include/formula/FormulaCompiler.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-25T21:26:01Z",
+      "side": 1,
+      "message": "s/is opcode//",
+      "range": {
+        "startLine": 326,
+        "startChar": 34,
+        "endLine": 326,
+        "endChar": 43
+      },
+      "revId": "1ba580234caa9c271f8cbb4cf3354932f1c8df86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_5e8a91c0",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 5818,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-25T21:26:01Z",
+      "side": 1,
+      "message": "The check if ((*pppToken[0])-\u003eGetType() \u003d\u003d svDoubleRef) should be done before processing *pppToken[2] and if it is not then bail out early.\n\nAlso, as ComputeImplictIntersection() does not modify rBaseRange (thus should be const\u0026), creating a copy here in aBaseRange is unnecessary.",
+      "revId": "1ba580234caa9c271f8cbb4cf3354932f1c8df86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_fe98a51d",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 5828,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-25T21:26:01Z",
+      "side": 1,
+      "message": "rBaseRange is not modified and should be const\u0026",
+      "range": {
+        "startLine": 5828,
+        "startChar": 44,
+        "endLine": 5828,
+        "endChar": 72
+      },
+      "revId": "1ba580234caa9c271f8cbb4cf3354932f1c8df86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
