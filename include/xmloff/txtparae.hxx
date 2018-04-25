@@ -109,7 +109,7 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     bool                        bOpenRuby;
 
     XMLTextListsHelper* mpTextListsHelper;
-    ::std::vector< XMLTextListsHelper* > maTextListsHelperStack;
+    ::std::vector< std::unique_ptr<XMLTextListsHelper> > maTextListsHelperStack;
 
     enum class FrameType { Text, Graphic, Embedded, Shape };
 public:
