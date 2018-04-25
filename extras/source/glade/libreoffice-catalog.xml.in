@@ -422,9 +422,6 @@
     <glade-widget-class title="NUP Preview" name="vcllo-ShowNupOrderWindow"
                         generic-name="NUP Preview" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Envelope Preview" name="swuilo-SwEnvPreview"
-                        generic-name="Envelope Preview" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Frame Preview" name="svxlo-SvxSwFrameExample"
                         generic-name="Frame Preview" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
