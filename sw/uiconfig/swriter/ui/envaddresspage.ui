@@ -337,7 +337,7 @@
           </packing>
         </child>
         <child>
-          <object class="swuilo-SwEnvPreview" id="preview">
+          <object class="GtkDrawingArea" id="preview">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child internal-child="accessible">
