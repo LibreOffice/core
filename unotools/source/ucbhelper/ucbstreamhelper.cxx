@@ -42,11 +42,11 @@ using namespace ::com::sun::star::beans;
 namespace utl
 {
 
-static std::unique_ptr<SvStream> lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMode,
+static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMode,
                                    const Reference < XInteractionHandler >& xInteractionHandler,
                                    bool bEnsureFileExists )
 {
-    std::unique_ptr<SvStream> pStream;
+    SvStream* pStream = nullptr;
     UcbLockBytesRef xLockBytes;
     if ( eOpenMode & StreamMode::WRITE )
     {
@@ -119,7 +119,7 @@ static std::unique_ptr<SvStream> lcl_CreateStream( const OUString& rFileName, St
                                                     eOpenMode, xInteractionHandler );
         if ( xLockBytes.is() )
         {
-            pStream.reset(new SvStream( xLockBytes.get() ));
+            pStream = new SvStream( xLockBytes.get() );
             pStream->SetBufferSize( 4096 );
             pStream->SetError( xLockBytes->GetError() );
         }
@@ -137,7 +137,7 @@ static std::unique_ptr<SvStream> lcl_CreateStream( const OUString& rFileName, St
     return pStream;
 }
 
-std::unique_ptr<SvStream> UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode )
+SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode )
 {
     // related tdf#99312
     // create a specialized interaction handler to manages Web certificates and Web credentials when needed
@@ -149,7 +149,7 @@ std::unique_ptr<SvStream> UcbStreamHelper::CreateStream( const OUString& rFileNa
     return lcl_CreateStream( rFileName, eOpenMode, xIHScoped, true /* bEnsureFileExists */ );
 }
 
-std::unique_ptr<SvStream> UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
+SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
                                          bool bFileExists )
 {
     // related tdf#99312
@@ -162,13 +162,13 @@ std::unique_ptr<SvStream> UcbStreamHelper::CreateStream( const OUString& rFileNa
 }
 
 
-std::unique_ptr<SvStream> UcbStreamHelper::CreateStream( const Reference < XInputStream >& xStream )
+SvStream* UcbStreamHelper::CreateStream( const Reference < XInputStream >& xStream )
 {
-    std::unique_ptr<SvStream> pStream;
+    SvStream* pStream = nullptr;
     UcbLockBytesRef xLockBytes = UcbLockBytes::CreateInputLockBytes( xStream );
     if ( xLockBytes.is() )
     {
-        pStream.reset(new SvStream( xLockBytes.get() ));
+        pStream = new SvStream( xLockBytes.get() );
         pStream->SetBufferSize( 4096 );
         pStream->SetError( xLockBytes->GetError() );
     }
@@ -176,15 +176,15 @@ std::unique_ptr<SvStream> UcbStreamHelper::CreateStream( const Reference < XInpu
     return pStream;
 }
 
-std::unique_ptr<SvStream> UcbStreamHelper::CreateStream( const Reference < XStream >& xStream )
+SvStream* UcbStreamHelper::CreateStream( const Reference < XStream >& xStream )
 {
-    std::unique_ptr<SvStream> pStream;
+    SvStream* pStream = nullptr;
     if ( xStream->getOutputStream().is() )
     {
         UcbLockBytesRef xLockBytes = UcbLockBytes::CreateLockBytes( xStream );
         if ( xLockBytes.is() )
         {
-            pStream.reset(new SvStream( xLockBytes.get() ));
+            pStream = new SvStream( xLockBytes.get() );
             pStream->SetBufferSize( 4096 );
             pStream->SetError( xLockBytes->GetError() );
         }
@@ -195,16 +195,16 @@ std::unique_ptr<SvStream> UcbStreamHelper::CreateStream( const Reference < XStre
     return pStream;
 }
 
-std::unique_ptr<SvStream> UcbStreamHelper::CreateStream( const Reference < XInputStream >& xStream, bool bCloseStream )
+SvStream* UcbStreamHelper::CreateStream( const Reference < XInputStream >& xStream, bool bCloseStream )
 {
-    std::unique_ptr<SvStream> pStream;
+    SvStream* pStream = nullptr;
     UcbLockBytesRef xLockBytes = UcbLockBytes::CreateInputLockBytes( xStream );
     if ( xLockBytes.is() )
     {
         if ( !bCloseStream )
             xLockBytes->setDontClose_Impl();
 
-        pStream.reset(new SvStream( xLockBytes.get() ));
+        pStream = new SvStream( xLockBytes.get() );
         pStream->SetBufferSize( 4096 );
         pStream->SetError( xLockBytes->GetError() );
     }
@@ -212,9 +212,9 @@ std::unique_ptr<SvStream> UcbStreamHelper::CreateStream( const Reference < XInpu
     return pStream;
 };
 
-std::unique_ptr<SvStream> UcbStreamHelper::CreateStream( const Reference < XStream >& xStream, bool bCloseStream )
+SvStream* UcbStreamHelper::CreateStream( const Reference < XStream >& xStream, bool bCloseStream )
 {
-    std::unique_ptr<SvStream> pStream;
+    SvStream* pStream = nullptr;
     if ( xStream->getOutputStream().is() )
     {
         UcbLockBytesRef xLockBytes = UcbLockBytes::CreateLockBytes( xStream );
@@ -223,7 +223,7 @@ std::unique_ptr<SvStream> UcbStreamHelper::CreateStream( const Reference < XStre
             if ( !bCloseStream )
                 xLockBytes->setDontClose_Impl();
 
-            pStream.reset(new SvStream( xLockBytes.get() ));
+            pStream = new SvStream( xLockBytes.get() );
             pStream->SetBufferSize( 4096 );
             pStream->SetError( xLockBytes->GetError() );
         }
