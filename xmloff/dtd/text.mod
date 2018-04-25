@@ -669,7 +669,7 @@
 <!-- Validity constraint: text:footnote and text:endnote elements may not 
 	contain other text:footnote or text:endnote elements, even though the DTD
 	allows this (via the %text; in the foot-/endnote-body).
-	Unfortunatetly, this constraint cannot be easily specified in the DTD.
+	Unfortunately, this constraint cannot be easily specified in the DTD.
 -->
 <!ELEMENT text:footnote (text:footnote-citation, text:footnote-body)>
 <!ATTLIST text:footnote text:id ID #IMPLIED>
