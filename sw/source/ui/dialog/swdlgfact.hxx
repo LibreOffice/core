@@ -215,7 +215,6 @@ public:
 class AbstractTabDialog_Impl : virtual public SfxAbstractTabDialog
 {
     DECL_ABSTDLG_BASE( AbstractTabDialog_Impl,SfxTabDialog )
-    virtual void                SetCurPageId( sal_uInt16 nId ) override;
     virtual void                SetCurPageId( const OString &rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem ) override;
@@ -277,7 +276,6 @@ public:
 class AbstractSwLabDlg_Impl  : public AbstractSwLabDlg
 {
     DECL_ABSTDLG_BASE(AbstractSwLabDlg_Impl,SwLabDlg)
-    virtual void                SetCurPageId( sal_uInt16 nId ) override;
     virtual void                SetCurPageId( const OString &rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem ) override;
@@ -312,7 +310,6 @@ public:
 class AbstractSwFieldDlg_Impl : public AbstractSwFieldDlg
 {
     DECL_ABSTDLG_BASE(AbstractSwFieldDlg_Impl,SwFieldDlg )
-    virtual void                SetCurPageId( sal_uInt16 nId ) override;
     virtual void                SetCurPageId( const OString &rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual const sal_uInt16*   GetInputRanges( const SfxItemPool& pItem ) override;
