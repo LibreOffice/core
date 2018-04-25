@@ -249,8 +249,13 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
     m_plbPosition->SelectEntryPos(MATCHING_ANYWHERE);
 
     // the field listbox
-    for (sal_Int32 i=0; i < comphelper::string::getTokenCount(strVisibleFields, ';'); ++i)
-        m_plbField->InsertEntry(strVisibleFields.getToken(i, ';'));
+    if (!strVisibleFields.isEmpty())
+    {
+        sal_Int32 nPos {0};
+        do {
+            m_plbField->InsertEntry(strVisibleFields.getToken(0, ';', nPos));
+        } while (nPos>=0);
+    }
 
 
     m_pConfig = new FmSearchConfigItem;
@@ -522,14 +527,18 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
         // use the display names if supplied
         DBG_ASSERT(comphelper::string::getTokenCount(fmscContext.sFieldDisplayNames, ';') == comphelper::string::getTokenCount(fmscContext.strUsedFields, ';'),
             "FmSearchDialog::InitContext : invalid context description supplied !");
-        for (sal_Int32 i=0; i < comphelper::string::getTokenCount(fmscContext.sFieldDisplayNames, ';'); ++i)
-            m_plbField->InsertEntry(fmscContext.sFieldDisplayNames.getToken(i, ';'));
+        sal_Int32 nPos {0};
+        do {
+            m_plbField->InsertEntry(fmscContext.sFieldDisplayNames.getToken(0, ';', nPos));
+        } while (nPos>=0);
     }
-    else
+    else if (!fmscContext.strUsedFields.isEmpty())
     {
         // else use the field names
-        for (sal_Int32 i=0; i < comphelper::string::getTokenCount(fmscContext.strUsedFields, ';'); ++i)
-            m_plbField->InsertEntry(fmscContext.strUsedFields.getToken(i, ';'));
+        sal_Int32 nPos {0};
+        do {
+            m_plbField->InsertEntry(fmscContext.strUsedFields.getToken(0, ';', nPos));
+        } while (nPos>=0);
     }
 
     if (nContext < static_cast<sal_Int32>(m_arrContextFields.size()) && !m_arrContextFields[nContext].isEmpty())
