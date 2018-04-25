@@ -83,7 +83,7 @@ bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart pa
         case ControlType::Pushbutton:
         case ControlType::Radiobutton:
         case ControlType::Checkbox:
-        /*case ControlType::Tooltip:*/
+        case ControlType::Tooltip:
         case ControlType::Progress:
         case ControlType::ListNode:
             return (part == ControlPart::Entire);
@@ -528,12 +528,12 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
         draw( QStyle::CE_RadioButton, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
     }
-    /*else if (type == ControlType::Tooltip)
+    else if (type == ControlType::Tooltip)
     {
         QStyleOption option;
         draw( QStyle::PE_PanelTipLabel, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
-    }*/
+    }
     else if (type == ControlType::Frame)
     {
         lcl_drawFrame( QStyle::PE_Frame, m_image.get(),
