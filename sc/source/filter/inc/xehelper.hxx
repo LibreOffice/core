@@ -331,7 +331,7 @@ class EditEngine;
 /** Converts edit engine text objects to an Excel header/footer string.
     @descr  Header/footer content is divided into three parts: Left, center and
     right portion. All formatting information will be encoded in the Excel string
-    using special character seuences. A control sequence starts with the ampersand
+    using special character sequences. A control sequence starts with the ampersand
     character.
 
     Supported control sequences:

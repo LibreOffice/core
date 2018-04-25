@@ -182,7 +182,7 @@
 		text:bibliography-configuration and
 		text:linenumbering-configuration
 	may appear only once!
-	Unfortunatetly, this constraint cannot be easily specified in the DTD.
+	Unfortunately, this constraint cannot be easily specified in the DTD.
 -->
 <!ELEMENT office:styles (%styles;|text:outline-style|
 		text:footnotes-configuration|text:endnotes-configuration|
