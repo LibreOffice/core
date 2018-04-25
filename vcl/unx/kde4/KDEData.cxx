@@ -33,7 +33,7 @@ KDEData::~KDEData()
 
 void KDEData::Init()
 {
-    pXLib_ = new KDEXLib();
+    pXLib_.reset(new KDEXLib());
     pXLib_->Init();
     SetDisplay( SalKDEDisplay::self() );
 }
