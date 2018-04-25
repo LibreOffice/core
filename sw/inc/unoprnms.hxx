@@ -38,6 +38,7 @@
 #define UNO_NAME_GRAPHIC_FILTER "GraphicFilter"
 #define UNO_NAME_GRAPHIC_SIZE "GraphicSize"
 #define UNO_NAME_GRAPHIC_BITMAP "GraphicBitmap"
+#define UNO_NAME_GRAPHIC_URL "GraphicURL"
 #define UNO_NAME_BULLET_ID "BulletId"
 #define UNO_NAME_BULLET_CHAR "BulletChar"
 #define UNO_NAME_BULLET_REL_SIZE "BulletRelSize"
