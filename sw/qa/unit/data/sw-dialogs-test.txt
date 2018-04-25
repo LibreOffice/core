@@ -65,7 +65,6 @@ modules/swriter/ui/businessdatapage.ui
 modules/swriter/ui/cannotsavelabeldialog.ui
 modules/swriter/ui/captiondialog.ui
 modules/swriter/ui/captionoptions.ui
-modules/swriter/ui/cardformatpage.ui
 modules/swriter/ui/cardmediumpage.ui
 modules/swriter/ui/ccdialog.ui
 modules/swriter/ui/characterproperties.ui
