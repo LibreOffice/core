@@ -478,7 +478,7 @@ Any Invocation_Impl::getValue( const OUString& PropertyName )
         if (_xDirect.is())
             return _xDirect->getValue( PropertyName );
     }
-    catch (UnknownPropertyException &)
+    catch (Exception &)
     {
         if (!comphelper::Automation::AutomationInvokedZone::isActive())
             throw;
@@ -522,7 +522,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
             return;
         }
     }
-    catch (UnknownPropertyException &)
+    catch (Exception &)
     {
         if (!comphelper::Automation::AutomationInvokedZone::isActive())
             throw;
