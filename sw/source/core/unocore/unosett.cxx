@@ -59,6 +59,7 @@
 #include <editeng/flstitem.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/GraphicLoader.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/unofdesc.hxx>
@@ -1564,7 +1565,8 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         UNO_NAME_HEADING_STYLE_NAME,            // 24
         // these two are accepted but ignored for some reason
         UNO_NAME_BULLET_REL_SIZE,               // 25
-        UNO_NAME_BULLET_COLOR                   // 26
+        UNO_NAME_BULLET_COLOR,                  // 26
+        UNO_NAME_GRAPHIC_URL                    // 27
     };
 
     enum {
@@ -1998,6 +2000,31 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                 case 25: // BulletRelSize - unsupported - only available in Impress
                 break;
                 case 26: // BulletColor - ignored too
+                break;
+                case 27: // UNO_NAME_GRAPHIC_URL
+                {
+                    assert( !pDocShell );
+                    OUString aURL;
+                    if (pProp->Value >>= aURL)
+                    {
+                        if(!pSetBrush)
+                        {
+                            const SvxBrushItem* pOrigBrush = aFormat.GetBrush();
+                            if(pOrigBrush)
+                            {
+                                pSetBrush = new SvxBrushItem(*pOrigBrush);
+                            }
+                            else
+                                pSetBrush = new SvxBrushItem(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND);
+                        }
+
+                        Graphic aGraphic = vcl::graphic::loadFromURL(aURL);
+                        if (aGraphic)
+                            pSetBrush->SetGraphic(aGraphic);
+                    }
+                    else
+                        bWrongArg = true;
+                }
                 break;
             }
         }
