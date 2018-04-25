@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_a3e61ab2",
+        "filename": "offapi/com/sun/star/drawing/FillProperties.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-25T12:29:03Z",
+      "side": 1,
+      "message": "sheme -\u003e scheme",
+      "revId": "19c0a10030db37f9f58725a40e9be4841162d36e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
