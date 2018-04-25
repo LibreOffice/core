@@ -214,8 +214,9 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         comphelper::string::getTokenCount(sLevel, TOX_STYLE_DELIMITER);
                     uno::Sequence<OUString> aStyles(nStyles);
                     OUString* pArr = aStyles.getArray();
-                    for(sal_Int32 nStyle = 0; nStyle < nStyles; nStyle++)
-                        pArr[nStyle] = sLevel.getToken(nStyle, TOX_STYLE_DELIMITER);
+                    sal_Int32 nPos {0};
+                    for(sal_Int32 nStyle = 0; nStyle < nStyles; ++nStyle)
+                        pArr[nStyle] = sLevel.getToken(0, TOX_STYLE_DELIMITER, nPos);
                     uno::Any aAny(&aStyles, cppu::UnoType<uno::Sequence<OUString>>::get());
                     xAcc->replaceByIndex(i, aAny);
                 }
