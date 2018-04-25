@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_c3c4ee60",
+        "filename": "include/vcl/bitmap.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2018-04-25T10:17:59Z",
+      "side": 1,
+      "message": "will do",
+      "parentUuid": "9a30ddce_43b8fee5",
+      "revId": "5be846b2136cffb0a390a701d94879be93073be8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_23b5caed",
         "filename": "include/vcl/bitmap.hxx",
         "patchSetId": 14
@@ -30,6 +48,30 @@
       "writtenOn": "2018-04-25T10:13:13Z",
       "side": 1,
       "message": "why are these added?",
+      "range": {
+        "startLine": 636,
+        "startChar": 35,
+        "endLine": 639,
+        "endChar": 37
+      },
+      "revId": "5be846b2136cffb0a390a701d94879be93073be8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_a3c9ba7a",
+        "filename": "include/vcl/bitmap.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2018-04-25T10:17:59Z",
+      "side": 1,
+      "message": "argh - bad merge, sorry.",
+      "parentUuid": "9a30ddce_23b5caed",
       "range": {
         "startLine": 636,
         "startChar": 35,
