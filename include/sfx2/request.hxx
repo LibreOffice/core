@@ -72,9 +72,9 @@ public:
     sal_uInt16              GetSlot() const { return nSlot; }
     void                SetSlot(sal_uInt16 nNewSlot) { nSlot = nNewSlot; }
 
-    sal_uInt16              GetModifier() const;
+    sal_uInt16          GetModifier() const;
     void                SetModifier( sal_uInt16 nModi );
-    SAL_DLLPRIVATE void SetInternalArgs_Impl( const SfxAllItemSet& rArgs );
+    void                SetInternalArgs_Impl( const SfxAllItemSet& rArgs );
     SAL_DLLPRIVATE const SfxItemSet* GetInternalArgs_Impl() const;
     const SfxItemSet*   GetArgs() const { return pArgs.get(); }
     void                SetArgs( const SfxAllItemSet& rArgs );
