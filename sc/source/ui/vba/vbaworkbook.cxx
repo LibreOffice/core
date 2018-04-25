@@ -292,6 +292,24 @@ void SAL_CALL ScVbaWorkbook::setPrecisionAsDisplayed( sal_Bool _precisionAsDispl
     rDoc.SetDocOptions( aOpt );
 }
 
+OUString SAL_CALL ScVbaWorkbook::getAuthor()
+{
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS( getModel(), uno::UNO_QUERY );
+    if (!xDPS.is())
+        return OUString("?");
+    uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
+    return xDocProps->getAuthor();
+}
+
+void SAL_CALL ScVbaWorkbook::setAuthor( const OUString& _author )
+{
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS( getModel(), uno::UNO_QUERY );
+    if (!xDPS.is())
+        return;
+    uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
+    xDocProps->setAuthor( _author );
+}
+
 void
 ScVbaWorkbook::SaveCopyAs( const OUString& sFileName )
 {
