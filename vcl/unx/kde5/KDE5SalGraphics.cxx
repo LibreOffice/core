@@ -95,7 +95,7 @@ bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart pa
         case ControlType::Combobox:
         case ControlType::Toolbar:
         case ControlType::Frame:
-        /*case ControlType::Scrollbar:*/
+        case ControlType::Scrollbar:
         case ControlType::WindowBackground:
         case ControlType::Fixedline:
             return true;
@@ -457,7 +457,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
                vclStateValue2StateFlag(nControlState, value) );
         //m_image->save("/tmp/checkbox.png");
     }
-    /*else if (type == ControlType::Scrollbar)
+    else if (type == ControlType::Scrollbar)
     {
         if ((part == ControlPart::DrawBackgroundVert) || (part == ControlPart::DrawBackgroundHorz))
         {
@@ -495,7 +495,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
         {
             returnVal = false;
         }
-    }*/
+    }
     else if (type == ControlType::Spinbox)
     {
         QStyleOptionSpinBox option;
@@ -857,7 +857,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
             }
             break;
         }
-        /*case ControlType::Scrollbar:
+        case ControlType::Scrollbar:
         {
             // core can't handle 3-button scrollbars well, so we fix that in hitTestNativeControl(),
             // for the rest also provide the track area (i.e. area not taken by buttons)
@@ -889,7 +889,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
                 retVal = true;
             }
             break;
-        }*/
+        }
         default:
             break;
     }
@@ -910,7 +910,7 @@ bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part
 }
 
 /** Test whether the position is in the native widget.
-    If the return value is TRUE, bIsInside contains information whether
+    If the return value is true, bIsInside contains information whether
     aPos was or was not inside the native widget specified by the
     nType/nPart combination.
 */
@@ -918,15 +918,15 @@ bool KDE5SalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart
                                            const tools::Rectangle& rControlRegion, const Point& rPos,
                                            bool& rIsInside )
 {
-    /*if ( nType == ControlType::Scrollbar )
+    if ( nType == ControlType::Scrollbar )
     {
         if( nPart != ControlPart::ButtonUp && nPart != ControlPart::ButtonDown
             && nPart != ControlPart::ButtonLeft && nPart != ControlPart::ButtonRight )
         { // we adjust only for buttons (because some scrollbars have 3 buttons,
           // and LO core doesn't handle such scrollbars well)
-            return FALSE;
+            return false;
         }
-        rIsInside = FALSE;
+        rIsInside = false;
         bool bHorizontal = ( nPart == ControlPart::ButtonLeft || nPart == ControlPart::ButtonRight );
         QRect rect = toQRect( rControlRegion );
         QPoint pos( rPos.X(), rPos.Y());
@@ -952,8 +952,8 @@ bool KDE5SalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart
             rIsInside = ( control == QStyle::SC_ScrollBarSubLine );
         else // DOWN, RIGHT
             rIsInside = ( control == QStyle::SC_ScrollBarAddLine );
-        return TRUE;
-    }*/
+        return true;
+    }
     return false;
 }
 
