@@ -1049,14 +1049,14 @@ void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
         m_sOldPath = _rPath;
     m_pPathList->Clear();
     sal_Int32 nIdx = 0;
-    sal_Int32 nCount = comphelper::string::getTokenCount(_rPath, CLASSPATH_DELIMITER);
-    for ( sal_Int32 i = 0; i < nCount; ++i )
+    do
     {
         OUString sToken = _rPath.getToken( 0, CLASSPATH_DELIMITER, nIdx );
         INetURLObject aURL( sToken, FSysStyle::Detect );
         OUString sPath = aURL.getFSysPath( FSysStyle::Detect );
         m_pPathList->InsertEntry( sPath, SvFileInformationManager::GetImage( aURL ) );
     }
+    while (nIdx>=0);
     // select first entry
     m_pPathList->SelectEntryPos(0);
     SelectHdl_Impl( *m_pPathList );
