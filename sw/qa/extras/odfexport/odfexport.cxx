@@ -1942,6 +1942,12 @@ DECLARE_ODFEXPORT_TEST(testBulletAsImage, "BulletAsImage.odt")
             xBitmap = aProperties[i].Value.get<uno::Reference<awt::XBitmap>>();
     }
     CPPUNIT_ASSERT(xBitmap.is());
+
+    Graphic aGraphic(uno::Reference<graphic::XGraphic>(xBitmap, uno::UNO_QUERY));
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT(aGraphic.GetSizeBytes() > sal_uLong(0));
+    CPPUNIT_ASSERT_EQUAL(15L, aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(15L, aGraphic.GetSizePixel().Height());
 }
 
 DECLARE_ODFEXPORT_TEST(testSignatureLineProperties, "signatureline-properties.fodt")
