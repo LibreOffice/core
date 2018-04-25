@@ -76,7 +76,7 @@ if test "z$DESTDIR" != "z" ; then
     echo "Checking for DESTDIR inside installed files..."
     found_destdir=
     for file in `find $DESTDIR -type f` ; do
-	grep -q "$DESTDIR" "$file" && echo "$file: includes the string \"$DESTDIR\"" && found_destdir=1
+	grep -q "$DESTDIR" $file && echo "$file: includes the string \"$DESTDIR\"" && found_destdir=1
     done
     if test "z$found_destdir" != "z" ; then
 	echo "!!!!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!!!"
