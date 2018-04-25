@@ -47,8 +47,7 @@ struct TabListBoxEventData
 class SVT_DLLPUBLIC SvTabListBox : public SvTreeListBox
 {
 private:
-    SvLBoxTab*                  pTabList;
-    sal_uInt16                  nTabCount;
+    std::vector<SvLBoxTab>      mvTabList;
     OUString                    aCurEntry;
 
 protected:
@@ -66,7 +65,7 @@ public:
     virtual ~SvTabListBox() override;
     virtual void dispose() override;
     void            SetTabs(sal_uInt16 nTabs, long const pTabPositions[], MapUnit = MapUnit::MapAppFont);
-    sal_uInt16      TabCount() const { return nTabCount; }
+    sal_uInt16      TabCount() const { return mvTabList.size(); }
     using SvTreeListBox::GetTab;
     long            GetTab( sal_uInt16 nTab ) const;
     void            SetTab( sal_uInt16 nTab, long nValue, MapUnit = MapUnit::MapAppFont );
@@ -108,8 +107,8 @@ public:
 
 inline long SvTabListBox::GetTab( sal_uInt16 nTab ) const
 {
-    DBG_ASSERT( nTab < nTabCount, "GetTabPos:Invalid Tab" );
-    return pTabList[nTab].GetPos();
+    DBG_ASSERT( nTab < mvTabList.size(), "GetTabPos:Invalid Tab" );
+    return mvTabList[nTab].GetPos();
 }
 
 // class SvHeaderTabListBox ---------------------------------------------------

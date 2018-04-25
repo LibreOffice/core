@@ -40,10 +40,10 @@ using namespace ::com::sun::star::accessibility;
 void SvTabListBox::SetTabs()
 {
     SvTreeListBox::SetTabs();
-    if( !nTabCount )
+    if( mvTabList.empty() )
         return;
 
-    DBG_ASSERT(pTabList,"TabList ?");
+    DBG_ASSERT(!mvTabList.empty(),"TabList ?");
 
     // The tree listbox has now inserted its tabs into the list. Now we
     // fluff up the list with additional tabs and adjust the rightmost tab
@@ -66,10 +66,10 @@ void SvTabListBox::SetTabs()
     */
 
     // append all other tabs to the list
-    for( sal_uInt16 nCurTab = 1; nCurTab < nTabCount; nCurTab++ )
+    for( sal_uInt16 nCurTab = 1; nCurTab < sal_uInt16(mvTabList.size()); nCurTab++ )
     {
-        SvLBoxTab* pTab = pTabList+nCurTab;
-        AddTab( pTab->GetPos(), pTab->nFlags );
+        SvLBoxTab& rTab = mvTabList[nCurTab];
+        AddTab( rTab.GetPos(), rTab.nFlags );
     }
 }
 
@@ -80,7 +80,7 @@ void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
 
     sal_Int32 nIndex = 0;
     // TODO: verify if nTabCount is always >0 here!
-    const sal_uInt16 nCount = nTabCount - 1;
+    const sal_uInt16 nCount = mvTabList.size() - 1;
     for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
     {
         const OUString aToken = GetToken(aCurEntry, nIndex);
@@ -90,8 +90,6 @@ void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
 SvTabListBox::SvTabListBox( vcl::Window* pParent, WinBits nBits )
     : SvTreeListBox( pParent, nBits )
 {
-    pTabList = nullptr;
-    nTabCount = 0;
     SetHighlightRange();    // select full width
 }
 
@@ -104,32 +102,24 @@ SvTabListBox::~SvTabListBox()
 
 void SvTabListBox::dispose()
 {
-    // delete array
-    delete [] pTabList;
-#ifdef DBG_UTIL
-    pTabList = nullptr;
-    nTabCount = 0;
-#endif
+    mvTabList.clear();
     SvTreeListBox::dispose();
 }
 
 void SvTabListBox::SetTabs(sal_uInt16 nTabs, long const pTabPositions[], MapUnit eMapUnit)
 {
-    delete [] pTabList;
-    sal_uInt16 nCount = nTabs;
-    pTabList = new SvLBoxTab[ nCount ];
-    nTabCount = nCount;
+    mvTabList.resize(nTabs);
 
     MapMode aMMSource( eMapUnit );
     MapMode aMMDest( MapUnit::MapPixel );
 
-    for( sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++, pTabPositions++ )
+    for( sal_uInt16 nIdx = 0; nIdx < sal_uInt16(mvTabList.size()); nIdx++, pTabPositions++ )
     {
         Size aSize( *pTabPositions, 0 );
         aSize = LogicToLogic( aSize, &aMMSource, &aMMDest );
         long nNewTab = aSize.Width();
-        pTabList[nIdx].SetPos( nNewTab );
-        pTabList[nIdx].nFlags=(SvLBoxTabFlags::ADJUST_LEFT| SvLBoxTabFlags::INV_ALWAYS);
+        mvTabList[nIdx].SetPos( nNewTab );
+        mvTabList[nIdx].nFlags=(SvLBoxTabFlags::ADJUST_LEFT| SvLBoxTabFlags::INV_ALWAYS);
     }
     SvTreeListBox::nTreeFlags |= SvTreeFlags::RECALCTABS;
     if( IsUpdateMode() )
@@ -138,17 +128,16 @@ void SvTabListBox::SetTabs(sal_uInt16 nTabs, long const pTabPositions[], MapUnit
 
 void SvTabListBox::SetTab( sal_uInt16 nTab,long nValue,MapUnit eMapUnit )
 {
-    DBG_ASSERT(nTab<nTabCount,"Invalid Tab-Pos");
-    if( nTab >= nTabCount )
+    DBG_ASSERT(nTab<mvTabList.size(),"Invalid Tab-Pos");
+    if( nTab >= mvTabList.size() )
         return;
 
-    DBG_ASSERT(pTabList,"TabList?");
     MapMode aMMSource( eMapUnit );
     MapMode aMMDest( MapUnit::MapPixel );
     Size aSize( nValue, 0 );
     aSize = LogicToLogic( aSize, &aMMSource, &aMMDest );
     nValue = aSize.Width();
-    pTabList[ nTab ].SetPos( nValue );
+    mvTabList[ nTab ].SetPos( nValue );
     SvTreeListBox::nTreeFlags |= SvTreeFlags::RECALCTABS;
     if( IsUpdateMode() )
         Invalidate();
@@ -454,13 +443,14 @@ SvTreeListEntry* SvTabListBox::GetChildOnPos( SvTreeListEntry* _pParent, sal_uLo
 
 void SvTabListBox::SetTabJustify( sal_uInt16 nTab, SvTabJustify eJustify)
 {
-    if( nTab >= nTabCount )
+    DBG_ASSERT(nTab<mvTabList.size(),"GetTabPos:Invalid Tab");
+    if( nTab >= mvTabList.size() )
         return;
-    SvLBoxTab* pTab = &(pTabList[ nTab ]);
-    SvLBoxTabFlags nFlags = pTab->nFlags;
+    SvLBoxTab& rTab = mvTabList[ nTab ];
+    SvLBoxTabFlags nFlags = rTab.nFlags;
     nFlags &= (~MYTABMASK);
     nFlags |= static_cast<SvLBoxTabFlags>(eJustify);
-    pTab->nFlags = nFlags;
+    rTab.nFlags = nFlags;
     SvTreeListBox::nTreeFlags |= SvTreeFlags::RECALCTABS;
     if( IsUpdateMode() )
         Invalidate();
@@ -471,7 +461,7 @@ long SvTabListBox::GetLogicTab( sal_uInt16 nTab )
     if( SvTreeListBox::nTreeFlags & SvTreeFlags::RECALCTABS )
         SetTabs();
 
-    DBG_ASSERT(nTab<nTabCount,"GetTabPos:Invalid Tab");
+    DBG_ASSERT(nTab<mvTabList.size(),"GetTabPos:Invalid Tab");
     return aTabs[ nTab ]->GetPos();
 }
 
