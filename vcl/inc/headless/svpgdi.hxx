@@ -239,7 +239,6 @@ public:
     cairo_t*                getCairoContext(bool bXorModeAllowed) const;
     void                    releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const basegfx::B2DRange& rExtents) const;
     static cairo_surface_t* createCairoSurface(const BitmapBuffer *pBuffer);
-    double                  getScale() const { return m_fScale; }
     void                    clipRegion(cairo_t* cr);
 };
 
