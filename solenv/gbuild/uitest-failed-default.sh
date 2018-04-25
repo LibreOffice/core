@@ -11,8 +11,11 @@ cat << EOF
 
 Error: a unit test failed:
 
-To rerun just this failed test without all others, run:
+To rerun just this failed test without all others, use:
     make UITest_$2
+
+Or to run just a specific test case method, use:
+    make UITest_$2 UITEST_TEST_NAME="package.ClassName.methodName"
 
 Or to do interactive debugging, put a long sleep in the beginning of the .py
 uitest file, and attach gdb to the running soffice process.
