@@ -387,15 +387,13 @@ UpdateInfoMap getOnlineUpdateInfos(
     return infoMap;
 }
 OUString getHighestVersion(
-    OUString const & userVersion,
     OUString const & sharedVersion,
     OUString const & bundledVersion,
     OUString const & onlineVersion)
 {
-    int index = determineHighestVersion(userVersion, sharedVersion, bundledVersion, onlineVersion);
+    int index = determineHighestVersion(OUString(), sharedVersion, bundledVersion, onlineVersion);
     switch (index)
     {
-    case 0: return userVersion;
     case 1: return sharedVersion;
     case 2: return bundledVersion;
     case 3: return onlineVersion;

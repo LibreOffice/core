@@ -1242,7 +1242,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
 ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
         ScDocument& rDoc, const ScAddress& rPos, std::unique_ptr<SfxItemSet> pItemSet,
         OutlinerParaObject* pOutlinerObj, const tools::Rectangle& rCaptionRect,
-        bool bShown, bool bAlwaysCreateCaption )
+        bool bShown )
 {
     OSL_ENSURE( pItemSet && pOutlinerObj, "ScNoteUtil::CreateNoteFromObjectData - item set and outliner object expected" );
     ScNoteData aNoteData( bShown );
@@ -1264,7 +1264,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
 
     /*  Create the note and insert it into the document. If the note is
         visible, the caption object will be created automatically. */
-    ScPostIt* pNote = new ScPostIt( rDoc, rPos, aNoteData, bAlwaysCreateCaption, 0/*nPostItId*/ );
+    ScPostIt* pNote = new ScPostIt( rDoc, rPos, aNoteData, /*bAlwaysCreateCaption*/false, 0/*nPostItId*/ );
     pNote->AutoStamp();
 
     rDoc.SetNote(rPos, pNote);

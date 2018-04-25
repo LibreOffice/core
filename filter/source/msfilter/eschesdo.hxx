@@ -124,8 +124,7 @@ class ImplEESdrWriter
                             const bool bOOxmlExport = false );  // returns ShapeID
     static void         ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt );
     void                ImplWriteAdditionalText(
-                            ImplEESdrObject& rObj,
-                            const Point& rTextRefPoint );
+                            ImplEESdrObject& rObj );
     sal_uInt32          ImplEnterAdditionalTextGroup(
                             const css::uno::Reference< css::drawing::XShape >& rShape,
                             const tools::Rectangle* pBoundRect );

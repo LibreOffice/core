@@ -71,7 +71,7 @@ struct MenuItemData
         , pSalMenuItem(nullptr)
     {
     }
-    MenuItemData( const OUString& rStr, const Image& rImage )
+    MenuItemData( const OUString& rStr )
         : nId(0)
         , eType(MenuItemType::DONTKNOW)
         , nBits(MenuItemBits::NONE)
@@ -79,7 +79,7 @@ struct MenuItemData
         , aText(rStr)
         , nUserValue(nullptr)
         , aUserValueReleaseFunc(nullptr)
-        , aImage(rImage)
+        , aImage()
         , bChecked(false)
         , bEnabled(false)
         , bVisible(false)

@@ -53,7 +53,7 @@ MenuItemData* MenuItemList::Insert(
     const OString &rIdent
 )
 {
-    MenuItemData* pData     = new MenuItemData( rStr, Image() );
+    MenuItemData* pData     = new MenuItemData( rStr );
     pData->nId              = nId;
     pData->sIdent           = rIdent;
     pData->eType            = eType;

@@ -87,7 +87,7 @@ static void pre_freeStringFn(void *data)
 }
 } // extern "C"
 
-static void mark_static(void *addr, sal_Size /* size */, void *)
+static void mark_static(void *addr, sal_Size /* size */)
 {
     char *inner = static_cast<char*>(addr) + 4;
     rtl_uString *str = reinterpret_cast<rtl_uString *>(inner);
