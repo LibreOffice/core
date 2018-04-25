@@ -20,6 +20,7 @@
 #include <dbmgr.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/print.hxx>
 #include <vcl/settings.hxx>
 
 #include <swwait.hxx>
@@ -43,39 +44,39 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-SwEnvPreview::SwEnvPreview(vcl::Window* pParent, WinBits nStyle)
-    : Window(pParent, nStyle)
+SwEnvPreview::SwEnvPreview(weld::DrawingArea* pDrawingArea)
+    : m_xDrawingArea(pDrawingArea)
+    , m_pDialog(nullptr)
 {
-    SetMapMode(MapMode(MapUnit::MapPixel));
+    m_xDrawingArea->set_size_request(m_xDrawingArea->get_approximate_digit_width() * 20,
+                                     m_xDrawingArea->get_text_height() * 8);
+    m_xDrawingArea->connect_size_allocate(LINK(this, SwEnvPreview, DoResize));
+    m_xDrawingArea->connect_draw(LINK(this, SwEnvPreview, DoPaint));
 }
 
-Size SwEnvPreview::GetOptimalSize() const
+IMPL_LINK(SwEnvPreview, DoResize, const Size&, rSize, void)
 {
-    return LogicToPixel(Size(84 , 63), MapMode(MapUnit::MapAppFont));
+    m_aSize = rSize;
 }
 
-VCL_BUILDER_FACTORY_ARGS(SwEnvPreview, 0)
-
-void SwEnvPreview::DataChanged( const DataChangedEvent& rDCEvt )
+IMPL_LINK(SwEnvPreview, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
 {
-    Window::DataChanged( rDCEvt );
-    if (DataChangedEventType::SETTINGS == rDCEvt.GetType())
-        Invalidate();
-}
+    vcl::RenderContext& rRenderContext = aPayload.first;
 
-void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &)
-{
+    //SetMapMode(MapMode(MapUnit::MapPixel));
+
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
-    SetBackground(rRenderContext.GetSettings().GetStyleSettings().GetDialogColor());
+    rRenderContext.SetBackground(rRenderContext.GetSettings().GetStyleSettings().GetDialogColor());
+    rRenderContext.Erase();
 
-    const SwEnvItem& rItem = static_cast<SwEnvDlg*>(GetParentDialog())->aEnvItem;
+    const SwEnvItem& rItem = m_pDialog->aEnvItem;
 
     const long nPageW = std::max(rItem.m_nWidth, rItem.m_nHeight);
     const long nPageH = std::min(rItem.m_nWidth, rItem.m_nHeight);
 
     const double f = 0.8 * std::min(
-        double(GetOutputSizePixel().Width()) / double(nPageW),
-        double(GetOutputSizePixel().Height()) / double(nPageH));
+        double(m_aSize.Width()) / double(nPageW),
+        double(m_aSize.Height()) / double(nPageH));
 
     Color aBack = rSettings.GetWindowColor();
     Color aFront = SwViewOption::GetFontColor();
@@ -88,8 +89,8 @@ void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     // Envelope
     const long nW = static_cast<long>(f * nPageW);
     const long nH = static_cast<long>(f * nPageH);
-    const long nX = (GetOutputSizePixel().Width () - nW) / 2;
-    const long nY = (GetOutputSizePixel().Height() - nH) / 2;
+    const long nX = (m_aSize.Width () - nW) / 2;
+    const long nY = (m_aSize.Height() - nH) / 2;
     rRenderContext.SetFillColor(aBack);
     rRenderContext.DrawRect(tools::Rectangle(Point(nX, nY), Size(nW, nH)));
 
@@ -139,8 +140,8 @@ SwEnvDlg::SwEnvDlg(vcl::Window* pParent, const SfxItemSet& rSet,
         GetUserButton()->SetText(get<PushButton>("modify")->GetText());
     }
 
-    AddTabPage("envelope", SwEnvPage   ::Create, nullptr);
-    AddTabPage("format", SwEnvFormatPage::Create, nullptr);
+    m_nEnvAddressId = AddTabPage("envelope", SwEnvPage   ::Create, nullptr);
+    m_nEnvFormatId = AddTabPage("format", SwEnvFormatPage::Create, nullptr);
     m_nEnvPrintId = AddTabPage("printer", SwEnvPrtPage::Create, nullptr);
 }
 
@@ -162,6 +163,14 @@ void SwEnvDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
     if (nId == m_nEnvPrintId)
     {
         static_cast<SwEnvPrtPage*>(&rPage)->SetPrt(pPrinter);
+    }
+    else if (nId == m_nEnvAddressId)
+    {
+        static_cast<SwEnvPage*>(&rPage)->Init(this);
+    }
+    else if (nId == m_nEnvFormatId)
+    {
+        static_cast<SwEnvFormatPage*>(&rPage)->Init(this);
     }
 }
 
@@ -186,44 +195,47 @@ short SwEnvDlg::Ok()
     return nRet;
 }
 
-SwEnvPage::SwEnvPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "EnvAddressPage",
-        "modules/swriter/ui/envaddresspage.ui", &rSet)
+SwEnvPage::SwEnvPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/envaddresspage.ui", "EnvAddressPage", &rSet)
+    , m_pDialog(nullptr)
+    , m_pSh(nullptr)
+    , m_xAddrEdit(m_xBuilder->weld_text_view("addredit"))
+    , m_xDatabaseLB(m_xBuilder->weld_combo_box_text("database"))
+    , m_xTableLB(m_xBuilder->weld_combo_box_text("table"))
+    , m_xDBFieldLB(m_xBuilder->weld_combo_box_text("field"))
+    , m_xInsertBT(m_xBuilder->weld_button("insert"))
+    , m_xSenderBox(m_xBuilder->weld_check_button("sender"))
+    , m_xSenderEdit(m_xBuilder->weld_text_view("senderedit"))
+    , m_xPreview(new SwEnvPreview(m_xBuilder->weld_drawing_area("preview")))
 {
-    get(m_pAddrEdit, "addredit");
-    get(m_pDatabaseLB, "database");
-    get(m_pTableLB, "table");
-    get(m_pDBFieldLB, "field");
-    get(m_pInsertBT, "insert");
-    get(m_pSenderBox, "sender");
-    get(m_pSenderEdit, "senderedit");
-    get(m_pPreview, "preview");
+    auto nTextBoxHeight(m_xAddrEdit->get_height_rows(10));
+    auto nTextBoxWidth(m_xAddrEdit->get_approximate_digit_width() * 20);
 
-    long nTextBoxHeight(m_pAddrEdit->GetTextHeight() * 10);
-    long nTextBoxWidth(m_pAddrEdit->approximate_char_width() * 25);
+    m_xAddrEdit->set_size_request(nTextBoxWidth, nTextBoxHeight);
+    m_xSenderEdit->set_size_request(nTextBoxWidth, nTextBoxHeight);
 
-    m_pAddrEdit->set_height_request(nTextBoxHeight);
-    m_pAddrEdit->set_width_request(nTextBoxWidth);
-    m_pSenderEdit->set_height_request(nTextBoxHeight);
-    m_pSenderEdit->set_width_request(nTextBoxWidth);
-
-    long nListBoxWidth = approximate_char_width() * 30;
-    m_pTableLB->set_width_request(nListBoxWidth);
-    m_pDatabaseLB->set_width_request(nListBoxWidth);
-    m_pDBFieldLB->set_width_request(nListBoxWidth);
+    auto nListBoxWidth = m_xTableLB->get_approximate_digit_width() * 25;
+    m_xTableLB->set_size_request(nListBoxWidth, -1);
+    m_xDatabaseLB->set_size_request(nListBoxWidth, -1);
+    m_xDBFieldLB->set_size_request(nListBoxWidth, -1);
 
     SetExchangeSupport();
-    pSh = GetParentSwEnvDlg()->pSh;
+}
+
+void SwEnvPage::Init(SwEnvDlg* pDialog)
+{
+    m_pDialog = pDialog;
+    m_pSh = m_pDialog->pSh;
+    m_xPreview->SetDialog(pDialog);
 
     // Install handlers
-    m_pDatabaseLB->SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
-    m_pTableLB->SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
-    m_pInsertBT->SetClickHdl (LINK(this, SwEnvPage, FieldHdl        ));
-    m_pSenderBox->SetClickHdl (LINK(this, SwEnvPage, SenderHdl       ));
-    m_pPreview->SetBorderStyle( WindowBorderStyle::MONO );
+    m_xDatabaseLB->connect_changed(LINK(this, SwEnvPage, DatabaseHdl));
+    m_xTableLB->connect_changed(LINK(this, SwEnvPage, DatabaseHdl));
+    m_xInsertBT->connect_clicked(LINK(this, SwEnvPage, FieldHdl));
+    m_xSenderBox->connect_clicked(LINK(this, SwEnvPage, SenderHdl));
 
-    SwDBData aData = pSh->GetDBData();
-    sActDBName = aData.sDataSource + OUStringLiteral1(DB_DELIM) + aData.sCommand;
+    SwDBData aData = m_pSh->GetDBData();
+    m_sActDBName = aData.sDataSource + OUStringLiteral1(DB_DELIM) + aData.sCommand;
     InitDatabaseBox();
 }
 
@@ -232,91 +244,78 @@ SwEnvPage::~SwEnvPage()
     disposeOnce();
 }
 
-void SwEnvPage::dispose()
+IMPL_LINK( SwEnvPage, DatabaseHdl, weld::ComboBoxText&, rListBox, void )
 {
-    m_pAddrEdit.clear();
-    m_pDatabaseLB.clear();
-    m_pTableLB.clear();
-    m_pDBFieldLB.clear();
-    m_pInsertBT.clear();
-    m_pSenderBox.clear();
-    m_pSenderEdit.clear();
-    m_pPreview.clear();
-    SfxTabPage::dispose();
-}
+    SwWait aWait( *m_pSh->GetView().GetDocShell(), true );
 
-IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox&, rListBox, void )
-{
-    SwWait aWait( *pSh->GetView().GetDocShell(), true );
-
-    if (&rListBox == m_pDatabaseLB)
+    if (&rListBox == m_xDatabaseLB.get())
     {
-        sActDBName = rListBox.GetSelectedEntry();
-        pSh->GetDBManager()->GetTableNames(m_pTableLB, sActDBName);
-        sActDBName += OUStringLiteral1(DB_DELIM);
+        m_sActDBName = rListBox.get_active_text();
+        m_pSh->GetDBManager()->GetTableNames(*m_xTableLB, m_sActDBName);
+        m_sActDBName += OUStringLiteral1(DB_DELIM);
     }
     else
     {
-        sActDBName = comphelper::string::setToken(sActDBName, 1, DB_DELIM, m_pTableLB->GetSelectedEntry());
+        m_sActDBName = comphelper::string::setToken(m_sActDBName, 1, DB_DELIM, m_xTableLB->get_active_text());
     }
-    pSh->GetDBManager()->GetColumnNames(m_pDBFieldLB, m_pDatabaseLB->GetSelectedEntry(),
-                                       m_pTableLB->GetSelectedEntry());
+    m_pSh->GetDBManager()->GetColumnNames(*m_xDBFieldLB, m_xDatabaseLB->get_active_text(),
+                                          m_xTableLB->get_active_text());
 }
 
-IMPL_LINK_NOARG(SwEnvPage, FieldHdl, Button*, void)
+IMPL_LINK_NOARG(SwEnvPage, FieldHdl, weld::Button&, void)
 {
-    OUString aStr("<" + m_pDatabaseLB->GetSelectedEntry() + "." +
-                  m_pTableLB->GetSelectedEntry() + "." +
-                  OUString(m_pTableLB->GetSelectedEntryData() == nullptr ? '0' : '1') + "." +
-                  m_pDBFieldLB->GetSelectedEntry() + ">");
-    m_pAddrEdit->ReplaceSelected(aStr);
-    Selection aSel = m_pAddrEdit->GetSelection();
-    m_pAddrEdit->GrabFocus();
-    m_pAddrEdit->SetSelection(aSel);
+    OUString aStr("<" + m_xDatabaseLB->get_active_text() + "." +
+                  m_xTableLB->get_active_text() + "." +
+                  m_xTableLB->get_active_id() + "." +
+                  m_xDBFieldLB->get_active_text() + ">");
+    m_xAddrEdit->replace_selection(aStr);
+    int nStartPos, nEndPos;
+    m_xAddrEdit->get_selection_bounds(nStartPos, nEndPos);
+    m_xAddrEdit->grab_focus();
+    m_xAddrEdit->select_region(nStartPos, nEndPos);
 }
 
-IMPL_LINK_NOARG(SwEnvPage, SenderHdl, Button*, void)
+IMPL_LINK_NOARG(SwEnvPage, SenderHdl, weld::Button&, void)
 {
-    const bool bEnable = m_pSenderBox->IsChecked();
+    const bool bEnable = m_xSenderBox->get_active();
     GetParentSwEnvDlg()->aEnvItem.m_bSend = bEnable;
-    m_pSenderEdit->Enable(bEnable);
-    if ( bEnable )
+    m_xSenderEdit->set_sensitive(bEnable);
+    if (bEnable)
     {
-        m_pSenderEdit->GrabFocus();
-        if(m_pSenderEdit->GetText().isEmpty())
-            m_pSenderEdit->SetText(MakeSender());
+        m_xSenderEdit->grab_focus();
+        if (m_xSenderEdit->get_text().isEmpty())
+            m_xSenderEdit->set_text(MakeSender());
     }
-    m_pPreview->Invalidate();
+    m_xPreview->queue_draw();
 }
 
 void SwEnvPage::InitDatabaseBox()
 {
-    if (pSh->GetDBManager())
+    if (m_pSh->GetDBManager())
     {
-        m_pDatabaseLB->Clear();
+        m_xDatabaseLB->clear();
         Sequence<OUString> aDataNames = SwDBManager::GetExistingDatabaseNames();
         const OUString* pDataNames = aDataNames.getConstArray();
 
-        for (sal_Int32 i = 0; i < aDataNames.getLength(); i++)
-            m_pDatabaseLB->InsertEntry(pDataNames[i]);
+        for (sal_Int32 i = 0; i < aDataNames.getLength(); ++i)
+            m_xDatabaseLB->append_text(pDataNames[i]);
 
-        OUString sDBName = sActDBName.getToken( 0, DB_DELIM );
-        OUString sTableName = sActDBName.getToken( 1, DB_DELIM );
-        m_pDatabaseLB->SelectEntry(sDBName);
-        if (pSh->GetDBManager()->GetTableNames(m_pTableLB, sDBName))
+        OUString sDBName = m_sActDBName.getToken( 0, DB_DELIM );
+        OUString sTableName = m_sActDBName.getToken( 1, DB_DELIM );
+        m_xDatabaseLB->set_active(sDBName);
+        if (m_pSh->GetDBManager()->GetTableNames(*m_xTableLB, sDBName))
         {
-            m_pTableLB->SelectEntry(sTableName);
-            pSh->GetDBManager()->GetColumnNames(m_pDBFieldLB, sDBName, sTableName);
+            m_xTableLB->append_text(sTableName);
+            m_pSh->GetDBManager()->GetColumnNames(*m_xDBFieldLB, sDBName, sTableName);
         }
         else
-            m_pDBFieldLB->Clear();
-
+            m_xDBFieldLB->clear();
     }
 }
 
 VclPtr<SfxTabPage> SwEnvPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwEnvPage>::Create(pParent.pParent, *rSet);
+    return VclPtr<SwEnvPage>::Create(pParent, *rSet);
 }
 
 void SwEnvPage::ActivatePage(const SfxItemSet& rSet)
@@ -336,9 +335,9 @@ DeactivateRC SwEnvPage::DeactivatePage(SfxItemSet* _pSet)
 
 void SwEnvPage::FillItem(SwEnvItem& rItem)
 {
-    rItem.m_aAddrText = m_pAddrEdit->GetText();
-    rItem.m_bSend     = m_pSenderBox->IsChecked();
-    rItem.m_aSendText = m_pSenderEdit->GetText();
+    rItem.m_aAddrText = m_xAddrEdit->get_text();
+    rItem.m_bSend     = m_xSenderBox->get_active();
+    rItem.m_aSendText = m_xSenderEdit->get_text();
 }
 
 bool SwEnvPage::FillItemSet(SfxItemSet* rSet)
@@ -351,10 +350,10 @@ bool SwEnvPage::FillItemSet(SfxItemSet* rSet)
 void SwEnvPage::Reset(const SfxItemSet* rSet)
 {
     SwEnvItem aItem = static_cast<const SwEnvItem&>( rSet->Get(FN_ENVELOP));
-    m_pAddrEdit->SetText(convertLineEnd(aItem.m_aAddrText, GetSystemLineEnd()));
-    m_pSenderEdit->SetText(convertLineEnd(aItem.m_aSendText, GetSystemLineEnd()));
-    m_pSenderBox->Check  (aItem.m_bSend);
-    m_pSenderBox->GetClickHdl().Call(m_pSenderBox);
+    m_xAddrEdit->set_text(convertLineEnd(aItem.m_aAddrText, GetSystemLineEnd()));
+    m_xSenderEdit->set_text(convertLineEnd(aItem.m_aSendText, GetSystemLineEnd()));
+    m_xSenderBox->set_active(aItem.m_bSend);
+    SenderHdl(*m_xSenderBox);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
