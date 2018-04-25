@@ -287,7 +287,7 @@ void LotusToSc::LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefDa
                     nRow &= 0x1FFF;
                 break;
             default:
-                SAL_WARN( "sc.filter", "*LotusToSc::LotusRelToScRel(): unhandeled case?" );
+                SAL_WARN( "sc.filter", "*LotusToSc::LotusRelToScRel(): unhandled case?" );
         }
     }
     else
@@ -307,7 +307,7 @@ void LotusToSc::LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefDa
                 nRow &= 0x3FFF;
                 break;
             default:
-                SAL_WARN( "sc.filter", "*LotusToSc::LotusRelToScRel(): unhandeled case?" );
+                SAL_WARN( "sc.filter", "*LotusToSc::LotusRelToScRel(): unhandled case?" );
         }
     }
 
