@@ -39,7 +39,7 @@
 #include <svx/svdundo.hxx>
 #include <svx/unopage.hxx>
 #include "shapeimpl.hxx"
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/svdopath.hxx>
@@ -308,7 +308,7 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
 
                     if (bUndoEnabled)
                     {
-                        mpModel->BegUndo(ImpGetResStr(STR_EditDelete),
+                        mpModel->BegUndo(SvxResId(STR_EditDelete),
                             pObj->TakeObjNameSingul(), SdrRepeatFunc::Delete);
 
                         SdrUndoAction * pAction = mpModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj);

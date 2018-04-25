@@ -32,7 +32,7 @@
 #include <tools/helpers.hxx>
 
 #include "svdconv.hxx"
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 
 #include <sdr/contact/viewcontactofsdrcaptionobj.hxx>
@@ -256,7 +256,7 @@ SdrCaptionObj& SdrCaptionObj::operator=(const SdrCaptionObj& rObj)
 
 OUString SdrCaptionObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulCAPTION));
+    OUStringBuffer sName(SvxResId(STR_ObjNameSingulCAPTION));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
@@ -272,7 +272,7 @@ OUString SdrCaptionObj::TakeObjNameSingul() const
 
 OUString SdrCaptionObj::TakeObjNamePlural() const
 {
-    return ImpGetResStr(STR_ObjNamePluralCAPTION);
+    return SvxResId(STR_ObjNamePluralCAPTION);
 }
 
 basegfx::B2DPolyPolygon SdrCaptionObj::TakeXorPoly() const

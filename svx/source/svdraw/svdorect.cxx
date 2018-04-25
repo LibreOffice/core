@@ -34,7 +34,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdopath.hxx>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
@@ -224,7 +224,7 @@ OUString SdrRectObj::TakeObjNameSingul() const
     {
         pResId = bRounded ? STR_ObjNameSingulQUADRND : STR_ObjNameSingulQUAD; // square
     }
-    sName.append(ImpGetResStr(pResId));
+    sName.append(SvxResId(pResId));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
@@ -256,7 +256,7 @@ OUString SdrRectObj::TakeObjNamePlural() const
         pResId = bRounded ? STR_ObjNamePluralQUADRND : STR_ObjNamePluralQUAD; // square
     }
 
-    return ImpGetResStr(pResId);
+    return SvxResId(pResId);
 }
 
 SdrRectObj* SdrRectObj::Clone(SdrModel* pTargetModel) const

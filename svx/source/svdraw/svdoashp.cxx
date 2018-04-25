@@ -46,7 +46,7 @@
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdoedge.hxx>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
@@ -2757,7 +2757,7 @@ SdrObjCustomShape& SdrObjCustomShape::operator=(const SdrObjCustomShape& rObj)
 
 OUString SdrObjCustomShape::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulCUSTOMSHAPE));
+    OUStringBuffer sName(SvxResId(STR_ObjNameSingulCUSTOMSHAPE));
     OUString aNm(GetName());
     if (!aNm.isEmpty())
     {
@@ -2771,7 +2771,7 @@ OUString SdrObjCustomShape::TakeObjNameSingul() const
 
 OUString SdrObjCustomShape::TakeObjNamePlural() const
 {
-    return ImpGetResStr(STR_ObjNamePluralCUSTOMSHAPE);
+    return SvxResId(STR_ObjNamePluralCUSTOMSHAPE);
 }
 
 basegfx::B2DPolyPolygon SdrObjCustomShape::TakeXorPoly() const

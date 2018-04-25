@@ -36,7 +36,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/svdetc.hxx>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdpool.hxx>
 #include <svx/svdmodel.hxx>
@@ -732,17 +732,17 @@ OUString SdrGrafObj::TakeObjNameSingul() const
         {
         case VectorGraphicDataType::Wmf:
         {
-            sName.append(ImpGetResStr(STR_ObjNameSingulGRAFWMF));
+            sName.append(SvxResId(STR_ObjNameSingulGRAFWMF));
             break;
         }
         case VectorGraphicDataType::Emf:
         {
-            sName.append(ImpGetResStr(STR_ObjNameSingulGRAFEMF));
+            sName.append(SvxResId(STR_ObjNameSingulGRAFEMF));
             break;
         }
         default: // case VectorGraphicDataType::Svg:
         {
-            sName.append(ImpGetResStr(STR_ObjNameSingulGRAFSVG));
+            sName.append(SvxResId(STR_ObjNameSingulGRAFSVG));
             break;
         }
         }
@@ -757,20 +757,20 @@ OUString SdrGrafObj::TakeObjNameSingul() const
                                      ( IsLinkedGraphic() ? STR_ObjNameSingulGRAFBMPTRANSLNK : STR_ObjNameSingulGRAFBMPTRANS ) :
                                      ( IsLinkedGraphic() ? STR_ObjNameSingulGRAFBMPLNK : STR_ObjNameSingulGRAFBMP ) );
 
-                sName.append(ImpGetResStr(pId));
+                sName.append(SvxResId(pId));
             }
             break;
 
             case GraphicType::GdiMetafile:
-                sName.append(ImpGetResStr(IsLinkedGraphic() ? STR_ObjNameSingulGRAFMTFLNK : STR_ObjNameSingulGRAFMTF));
+                sName.append(SvxResId(IsLinkedGraphic() ? STR_ObjNameSingulGRAFMTFLNK : STR_ObjNameSingulGRAFMTF));
             break;
 
             case GraphicType::NONE:
-                sName.append(ImpGetResStr(IsLinkedGraphic() ? STR_ObjNameSingulGRAFNONELNK : STR_ObjNameSingulGRAFNONE));
+                sName.append(SvxResId(IsLinkedGraphic() ? STR_ObjNameSingulGRAFNONELNK : STR_ObjNameSingulGRAFNONE));
             break;
 
             default:
-                sName.append(ImpGetResStr(IsLinkedGraphic() ? STR_ObjNameSingulGRAFLNK : STR_ObjNameSingulGRAF));
+                sName.append(SvxResId(IsLinkedGraphic() ? STR_ObjNameSingulGRAFLNK : STR_ObjNameSingulGRAF));
             break;
         }
     }
@@ -802,17 +802,17 @@ OUString SdrGrafObj::TakeObjNamePlural() const
         {
         case VectorGraphicDataType::Wmf:
         {
-            sName.append(ImpGetResStr(STR_ObjNamePluralGRAFWMF));
+            sName.append(SvxResId(STR_ObjNamePluralGRAFWMF));
             break;
         }
         case VectorGraphicDataType::Emf:
         {
-            sName.append(ImpGetResStr(STR_ObjNamePluralGRAFEMF));
+            sName.append(SvxResId(STR_ObjNamePluralGRAFEMF));
             break;
         }
         default: // case VectorGraphicDataType::Svg:
         {
-            sName.append(ImpGetResStr(STR_ObjNamePluralGRAFSVG));
+            sName.append(SvxResId(STR_ObjNamePluralGRAFSVG));
             break;
         }
         }
@@ -827,20 +827,20 @@ OUString SdrGrafObj::TakeObjNamePlural() const
                                      ( IsLinkedGraphic() ? STR_ObjNamePluralGRAFBMPTRANSLNK : STR_ObjNamePluralGRAFBMPTRANS ) :
                                      ( IsLinkedGraphic() ? STR_ObjNamePluralGRAFBMPLNK : STR_ObjNamePluralGRAFBMP ) );
 
-                sName.append(ImpGetResStr(pId));
+                sName.append(SvxResId(pId));
             }
             break;
 
             case GraphicType::GdiMetafile:
-                sName.append(ImpGetResStr(IsLinkedGraphic() ? STR_ObjNamePluralGRAFMTFLNK : STR_ObjNamePluralGRAFMTF));
+                sName.append(SvxResId(IsLinkedGraphic() ? STR_ObjNamePluralGRAFMTFLNK : STR_ObjNamePluralGRAFMTF));
             break;
 
             case GraphicType::NONE:
-                sName.append(ImpGetResStr(IsLinkedGraphic() ? STR_ObjNamePluralGRAFNONELNK : STR_ObjNamePluralGRAFNONE));
+                sName.append(SvxResId(IsLinkedGraphic() ? STR_ObjNamePluralGRAFNONELNK : STR_ObjNamePluralGRAFNONE));
             break;
 
             default:
-                sName.append(ImpGetResStr(IsLinkedGraphic() ? STR_ObjNamePluralGRAFLNK : STR_ObjNamePluralGRAF));
+                sName.append(SvxResId(IsLinkedGraphic() ? STR_ObjNamePluralGRAFLNK : STR_ObjNamePluralGRAF));
             break;
         }
     }

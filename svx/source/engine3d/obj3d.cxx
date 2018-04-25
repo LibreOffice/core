@@ -20,7 +20,7 @@
 #include <o3tl/numeric.hxx>
 
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svdpage.hxx>
@@ -401,7 +401,7 @@ basegfx::B3DPolyPolygon E3dObject::CreateWireframe() const
 // Get the name of the object (singular)
 OUString E3dObject::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulObj3d));
+    OUStringBuffer sName(SvxResId(STR_ObjNameSingulObj3d));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
@@ -417,7 +417,7 @@ OUString E3dObject::TakeObjNameSingul() const
 // Get the name of the object (plural)
 OUString E3dObject::TakeObjNamePlural() const
 {
-    return ImpGetResStr(STR_ObjNamePluralObj3d);
+    return SvxResId(STR_ObjNamePluralObj3d);
 }
 
 E3dObject* E3dObject::Clone(SdrModel* pTargetModel) const

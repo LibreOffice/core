@@ -26,7 +26,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdmodel.hxx>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <editeng/writingmodeitem.hxx>
 #include <svx/sdtfchim.hxx>
@@ -933,22 +933,22 @@ OUString SdrTextObj::TakeObjNameSingul() const
     {
         case OBJ_OUTLINETEXT:
         {
-            aStr = ImpGetResStr(STR_ObjNameSingulOUTLINETEXT);
+            aStr = SvxResId(STR_ObjNameSingulOUTLINETEXT);
             break;
         }
 
         case OBJ_TITLETEXT  :
         {
-            aStr = ImpGetResStr(STR_ObjNameSingulTITLETEXT);
+            aStr = SvxResId(STR_ObjNameSingulTITLETEXT);
             break;
         }
 
         default:
         {
             if(IsLinkedText())
-                aStr = ImpGetResStr(STR_ObjNameSingulTEXTLNK);
+                aStr = SvxResId(STR_ObjNameSingulTEXTLNK);
             else
-                aStr = ImpGetResStr(STR_ObjNameSingulTEXT);
+                aStr = SvxResId(STR_ObjNameSingulTEXT);
             break;
         }
     }
@@ -997,13 +997,13 @@ OUString SdrTextObj::TakeObjNamePlural() const
 {
     OUString sName;
     switch (eTextKind) {
-        case OBJ_OUTLINETEXT: sName=ImpGetResStr(STR_ObjNamePluralOUTLINETEXT); break;
-        case OBJ_TITLETEXT  : sName=ImpGetResStr(STR_ObjNamePluralTITLETEXT);   break;
+        case OBJ_OUTLINETEXT: sName=SvxResId(STR_ObjNamePluralOUTLINETEXT); break;
+        case OBJ_TITLETEXT  : sName=SvxResId(STR_ObjNamePluralTITLETEXT);   break;
         default: {
             if (IsLinkedText()) {
-                sName=ImpGetResStr(STR_ObjNamePluralTEXTLNK);
+                sName=SvxResId(STR_ObjNamePluralTEXTLNK);
             } else {
-                sName=ImpGetResStr(STR_ObjNamePluralTEXT);
+                sName=SvxResId(STR_ObjNamePluralTEXT);
             }
         } break;
     } // switch

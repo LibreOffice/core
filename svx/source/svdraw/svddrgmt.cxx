@@ -32,7 +32,6 @@
 #include <svx/svdmark.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
-#include <svdglob.hxx>
 #include <svx/svddrgv.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/strings.hrc>
@@ -940,8 +939,8 @@ void SdrDragMovHdl::createSdrDragEntries()
 
 void SdrDragMovHdl::TakeSdrDragComment(OUString& rStr) const
 {
-    rStr=ImpGetResStr(STR_DragMethMovHdl);
-    if (getSdrDragView().IsDragWithCopy()) rStr+=ImpGetResStr(STR_EditWithCopy);
+    rStr=SvxResId(STR_DragMethMovHdl);
+    if (getSdrDragView().IsDragWithCopy()) rStr+=SvxResId(STR_EditWithCopy);
 }
 
 bool SdrDragMovHdl::BeginSdrDrag()
@@ -1493,7 +1492,7 @@ void SdrDragMove::TakeSdrDragComment(OUString& rStr) const
     {
         if(!getSdrDragView().IsInsObjPoint() && !getSdrDragView().IsInsGluePoint())
         {
-            rStr += ImpGetResStr(STR_EditWithCopy);
+            rStr += SvxResId(STR_EditWithCopy);
         }
     }
 }
@@ -1774,7 +1773,7 @@ void SdrDragResize::TakeSdrDragComment(OUString& rStr) const
     }
 
     if(getSdrDragView().IsDragWithCopy())
-        rStr += ImpGetResStr(STR_EditWithCopy);
+        rStr += SvxResId(STR_EditWithCopy);
 }
 
 bool SdrDragResize::BeginSdrDrag()
@@ -2081,7 +2080,7 @@ void SdrDragRotate::TakeSdrDragComment(OUString& rStr) const
     rStr += SdrModel::GetAngleString(nTmpAngle) + ")";
 
     if(getSdrDragView().IsDragWithCopy())
-        rStr += ImpGetResStr(STR_EditWithCopy);
+        rStr += SvxResId(STR_EditWithCopy);
 }
 
 bool SdrDragRotate::BeginSdrDrag()
@@ -2222,7 +2221,7 @@ void SdrDragShear::TakeSdrDragComment(OUString& rStr) const
     rStr += SdrModel::GetAngleString(nTmpAngle) + ")";
 
     if(getSdrDragView().IsDragWithCopy())
-        rStr += ImpGetResStr(STR_EditWithCopy);
+        rStr += SvxResId(STR_EditWithCopy);
 }
 
 bool SdrDragShear::BeginSdrDrag()
@@ -2428,7 +2427,7 @@ bool SdrDragShear::EndSdrDrag(bool bCopy)
             ImpTakeDescriptionStr(STR_EditShear,aStr);
 
             if (bCopy)
-                aStr += ImpGetResStr(STR_EditWithCopy);
+                aStr += SvxResId(STR_EditWithCopy);
 
             getSdrDragView().BegUndo(aStr);
         }
@@ -2507,7 +2506,7 @@ void SdrDragMirror::TakeSdrDragComment(OUString& rStr) const
         ImpTakeDescriptionStr(STR_DragMethMirrorFree,rStr);
 
     if (getSdrDragView().IsDragWithCopy())
-        rStr+=ImpGetResStr(STR_EditWithCopy);
+        rStr+=SvxResId(STR_EditWithCopy);
 }
 
 bool SdrDragMirror::BeginSdrDrag()
@@ -2797,7 +2796,7 @@ void SdrDragCrook::TakeSdrDragComment(OUString& rStr) const
     }
 
     if(getSdrDragView().IsDragWithCopy())
-        rStr += ImpGetResStr(STR_EditWithCopy);
+        rStr += SvxResId(STR_EditWithCopy);
 }
 
 // These defines parametrize the created raster
@@ -3322,7 +3321,7 @@ bool SdrDragCrook::EndSdrDrag(bool bCopy)
             ImpTakeDescriptionStr(!bContortion?STR_EditCrook:STR_EditCrookContortion,aStr);
 
             if (bCopy)
-                aStr += ImpGetResStr(STR_EditWithCopy);
+                aStr += SvxResId(STR_EditWithCopy);
 
             getSdrDragView().BegUndo(aStr);
         }
@@ -3408,7 +3407,7 @@ void SdrDragDistort::TakeSdrDragComment(OUString& rStr) const
             + ")";
 
     if(getSdrDragView().IsDragWithCopy())
-        rStr += ImpGetResStr(STR_EditWithCopy);
+        rStr += SvxResId(STR_EditWithCopy);
 }
 
 void SdrDragDistort::createSdrDragEntries()
@@ -3556,7 +3555,7 @@ void SdrDragCrop::TakeSdrDragComment(OUString& rStr) const
             + ")";
 
     if(getSdrDragView().IsDragWithCopy())
-        rStr += ImpGetResStr(STR_EditWithCopy);
+        rStr += SvxResId(STR_EditWithCopy);
 }
 
 bool SdrDragCrop::BeginSdrDrag()

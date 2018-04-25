@@ -19,7 +19,7 @@
 
 
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/extrud3d.hxx>
@@ -129,7 +129,7 @@ void E3dExtrudeObj::SetExtrudePolygon(const basegfx::B2DPolyPolygon &rNew)
 
 OUString E3dExtrudeObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulExtrude3d));
+    OUStringBuffer sName(SvxResId(STR_ObjNameSingulExtrude3d));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
@@ -146,7 +146,7 @@ OUString E3dExtrudeObj::TakeObjNameSingul() const
 
 OUString E3dExtrudeObj::TakeObjNamePlural() const
 {
-    return ImpGetResStr(STR_ObjNamePluralExtrude3d);
+    return SvxResId(STR_ObjNamePluralExtrude3d);
 }
 
 bool E3dExtrudeObj::IsBreakObjPossible()

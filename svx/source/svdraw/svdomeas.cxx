@@ -18,7 +18,7 @@
  */
 
 #include "svdconv.hxx"
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -721,7 +721,7 @@ SdrMeasureObj& SdrMeasureObj::operator=(const SdrMeasureObj& rObj)
 
 OUString SdrMeasureObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulMEASURE));
+    OUStringBuffer sName(SvxResId(STR_ObjNameSingulMEASURE));
 
     OUString aName( GetName() );
     if (!aName.isEmpty())
@@ -737,7 +737,7 @@ OUString SdrMeasureObj::TakeObjNameSingul() const
 
 OUString SdrMeasureObj::TakeObjNamePlural() const
 {
-    return ImpGetResStr(STR_ObjNamePluralMEASURE);
+    return SvxResId(STR_ObjNamePluralMEASURE);
 }
 
 basegfx::B2DPolyPolygon SdrMeasureObj::TakeXorPoly() const

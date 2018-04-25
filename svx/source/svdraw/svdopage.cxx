@@ -19,7 +19,7 @@
 
 
 #include <svx/svdopage.hxx>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
@@ -166,7 +166,7 @@ SdrPageObj& SdrPageObj::operator=(const SdrPageObj& rObj)
 
 OUString SdrPageObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulPAGE));
+    OUStringBuffer sName(SvxResId(STR_ObjNameSingulPAGE));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
@@ -182,7 +182,7 @@ OUString SdrPageObj::TakeObjNameSingul() const
 
 OUString SdrPageObj::TakeObjNamePlural() const
 {
-    return ImpGetResStr(STR_ObjNamePluralPAGE);
+    return SvxResId(STR_ObjNamePluralPAGE);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

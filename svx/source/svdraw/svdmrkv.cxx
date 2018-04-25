@@ -21,7 +21,6 @@
 #include <svx/svdmrkv.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdoedge.hxx>
-#include <svdglob.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
@@ -2079,7 +2078,7 @@ const tools::Rectangle& SdrMarkView::GetMarkedObjRect() const
 
 OUString SdrMarkView::ImpGetDescriptionString(const char* pStrCacheID, ImpGetDescriptionOptions nOpt) const
 {
-    OUString sStr = ImpGetResStr(pStrCacheID);
+    OUString sStr = SvxResId(pStrCacheID);
     const sal_Int32 nPos = sStr.indexOf("%1");
 
     if(nPos != -1)

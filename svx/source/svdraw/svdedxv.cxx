@@ -48,7 +48,7 @@
 #endif
 #include <svx/svddrgv.hxx>
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/textchain.hxx>
 #include <svx/textchaincursor.hxx>
@@ -1462,7 +1462,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             if( bUndo )
             {
                 OUString aObjName(pTEObj->TakeObjNameSingul());
-                BegUndo(ImpGetResStr(STR_UndoObjSetText),aObjName);
+                BegUndo(SvxResId(STR_UndoObjSetText),aObjName);
             }
 
             pTEObj->EndTextEdit(*pTEOutliner);

@@ -30,7 +30,7 @@
 #include <vcl/weld.hxx>
 
 #include <getallcharpropids.hxx>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/svditer.hxx>
 #include <svx/strings.hrc>
 
@@ -177,9 +177,9 @@ void SdrEditView::MoveMarkedObj(const Size& rSiz, bool bCopy)
 
     if( bUndo )
     {
-        OUString aStr(ImpGetResStr(STR_EditMove));
+        OUString aStr(SvxResId(STR_EditMove));
         if (bCopy)
-            aStr += ImpGetResStr(STR_EditWithCopy);
+            aStr += SvxResId(STR_EditWithCopy);
         // needs its own UndoGroup because of its parameters
         BegUndo(aStr,GetDescriptionOfMarkedObjects(),SdrRepeatFunc::Move);
     }
@@ -212,7 +212,7 @@ void SdrEditView::ResizeMarkedObj(const Point& rRef, const Fraction& xFact, cons
     {
         OUString aStr {ImpGetDescriptionString(STR_EditResize)};
         if (bCopy)
-            aStr+=ImpGetResStr(STR_EditWithCopy);
+            aStr+=SvxResId(STR_EditWithCopy);
         BegUndo(aStr);
     }
 
@@ -307,7 +307,7 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, long nAngle, bool bCopy)
     if( bUndo )
     {
         OUString aStr {ImpGetDescriptionString(STR_EditRotate)};
-        if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
+        if (bCopy) aStr+=SvxResId(STR_EditWithCopy);
         BegUndo(aStr);
     }
 
@@ -373,7 +373,7 @@ void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool b
             aStr = ImpGetDescriptionString(STR_EditMirrorDiag);
         else
             aStr = ImpGetDescriptionString(STR_EditMirrorFree);
-        if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
+        if (bCopy) aStr+=SvxResId(STR_EditWithCopy);
         BegUndo(aStr);
     }
 
@@ -465,7 +465,7 @@ void SdrEditView::ShearMarkedObj(const Point& rRef, long nAngle, bool bVShear, b
     {
         OUString aStr {ImpGetDescriptionString(STR_EditShear)};
         if (bCopy)
-            aStr+=ImpGetResStr(STR_EditWithCopy);
+            aStr+=SvxResId(STR_EditWithCopy);
         BegUndo(aStr);
     }
 
@@ -581,7 +581,7 @@ void SdrEditView::CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookM
     {
         OUString aStr {ImpGetDescriptionString(bNoContortion ? STR_EditCrook : STR_EditCrookContortion)};
         if (bCopy)
-            aStr+=ImpGetResStr(STR_EditWithCopy);
+            aStr+=SvxResId(STR_EditWithCopy);
         BegUndo(aStr);
     }
 
@@ -654,7 +654,7 @@ void SdrEditView::DistortMarkedObj(const tools::Rectangle& rRef, const XPolygon&
     {
         OUString aStr {ImpGetDescriptionString(STR_EditDistort)};
         if (bCopy)
-            aStr+=ImpGetResStr(STR_EditWithCopy);
+            aStr+=SvxResId(STR_EditWithCopy);
         BegUndo(aStr);
     }
 
@@ -1578,7 +1578,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     ForcePossibilities();
 
-    BegUndo(ImpGetResStr(STR_EditTransform),GetDescriptionOfMarkedObjects());
+    BegUndo(SvxResId(STR_EditTransform),GetDescriptionOfMarkedObjects());
 
     if (bSetAttr) {
         SetAttrToMarked(aSetAttr,false);

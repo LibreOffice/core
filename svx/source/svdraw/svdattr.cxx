@@ -46,9 +46,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <svdglob.hxx>
 #include <svx/strings.hrc>
-
 #include <svx/dialmgr.hxx>
 #include <svx/sdgcpitm.hxx>
 #include <svx/sdtfchim.hxx>
@@ -694,8 +692,8 @@ SfxPoolItem* SdrOnOffItem::Clone(SfxItemPool* /*pPool*/) const
 OUString SdrOnOffItem::GetValueTextByVal(bool bVal) const
 {
     if (bVal)
-        return ImpGetResStr(STR_ItemValON);
-    return ImpGetResStr(STR_ItemValOFF);
+        return SvxResId(STR_ItemValON);
+    return SvxResId(STR_ItemValOFF);
 }
 
 bool SdrOnOffItem::GetPresentation(SfxItemPresentation ePres,
@@ -720,8 +718,8 @@ SfxPoolItem* SdrYesNoItem::Clone(SfxItemPool* /*pPool*/) const
 OUString SdrYesNoItem::GetValueTextByVal(bool bVal) const
 {
     if (bVal)
-        return ImpGetResStr(STR_ItemValYES);
-    return ImpGetResStr(STR_ItemValNO);
+        return SvxResId(STR_ItemValYES);
+    return SvxResId(STR_ItemValNO);
 }
 
 bool SdrYesNoItem::GetPresentation(SfxItemPresentation ePres,
@@ -896,7 +894,7 @@ OUString SdrCaptionTypeItem::GetValueTextByPos(sal_uInt16 nPos) const
         STR_ItemValCAPTIONTYPE4
     };
     assert(nPos < SAL_N_ELEMENTS(ITEMVALCAPTIONTYPES) && "wrong pos!");
-    return ImpGetResStr(ITEMVALCAPTIONTYPES[nPos]);
+    return SvxResId(ITEMVALCAPTIONTYPES[nPos]);
 }
 
 bool SdrCaptionTypeItem::GetPresentation(SfxItemPresentation ePres,
@@ -926,7 +924,7 @@ OUString SdrCaptionEscDirItem::GetValueTextByPos(sal_uInt16 nPos) const
         STR_ItemValCAPTIONESCBESTFIT
     };
     assert(nPos < SAL_N_ELEMENTS(ITEMVALCAPTIONTYPES) && "wrong pos!");
-    return ImpGetResStr(ITEMVALCAPTIONTYPES[nPos]);
+    return SvxResId(ITEMVALCAPTIONTYPES[nPos]);
 }
 
 bool SdrCaptionEscDirItem::GetPresentation(SfxItemPresentation ePres,
@@ -964,7 +962,7 @@ OUString SdrTextFitToSizeTypeItem::GetValueTextByPos(sal_uInt16 nPos) const
         STR_ItemValFITTOSIZERESIZEAT
     };
     assert(nPos < SAL_N_ELEMENTS(ITEMVALFITTISIZETYPES) && "wrong pos!");
-    return ImpGetResStr(ITEMVALFITTISIZETYPES[nPos]);
+    return SvxResId(ITEMVALFITTISIZETYPES[nPos]);
 }
 
 bool SdrTextFitToSizeTypeItem::GetPresentation(SfxItemPresentation ePres,
@@ -1030,7 +1028,7 @@ OUString SdrTextVertAdjustItem::GetValueTextByPos(sal_uInt16 nPos) const
         STR_ItemValTEXTVADJSTRETCH
     };
     assert(nPos < SAL_N_ELEMENTS(ITEMVALTEXTVADJTYPES) && "wrong pos!");
-    return ImpGetResStr(ITEMVALTEXTVADJTYPES[nPos]);
+    return SvxResId(ITEMVALTEXTVADJTYPES[nPos]);
 }
 
 bool SdrTextVertAdjustItem::GetPresentation(SfxItemPresentation ePres,
@@ -1092,7 +1090,7 @@ OUString SdrTextHorzAdjustItem::GetValueTextByPos(sal_uInt16 nPos) const
         STR_ItemValTEXTHADJSTRETCH
     };
     assert(nPos < SAL_N_ELEMENTS(ITEMVALTEXTHADJTYPES) && "wrong pos!");
-    return ImpGetResStr(ITEMVALTEXTHADJTYPES[nPos]);
+    return SvxResId(ITEMVALTEXTHADJTYPES[nPos]);
 }
 
 bool SdrTextHorzAdjustItem::GetPresentation(SfxItemPresentation ePres,
@@ -1147,7 +1145,7 @@ OUString SdrTextAniKindItem::GetValueTextByPos(sal_uInt16 nPos) const
         STR_ItemValTEXTANI_SLIDE
     };
     assert(nPos < SAL_N_ELEMENTS(ITEMVALTEXTANITYPES) && "wrong pos!");
-    return ImpGetResStr(ITEMVALTEXTANITYPES[nPos]);
+    return SvxResId(ITEMVALTEXTANITYPES[nPos]);
 }
 
 bool SdrTextAniKindItem::GetPresentation(SfxItemPresentation ePres,
@@ -1200,7 +1198,7 @@ OUString SdrTextAniDirectionItem::GetValueTextByPos(sal_uInt16 nPos) const
         STR_ItemValTEXTANI_DOWN
     };
     assert(nPos < SAL_N_ELEMENTS(ITEMVALTEXTANITYPES) && "wrong pos!");
-    return ImpGetResStr(ITEMVALTEXTANITYPES[nPos]);
+    return SvxResId(ITEMVALTEXTANITYPES[nPos]);
 }
 
 bool SdrTextAniDirectionItem::GetPresentation(SfxItemPresentation ePres,
@@ -1369,7 +1367,7 @@ OUString SdrEdgeKindItem::GetValueTextByPos(sal_uInt16 nPos) const
         STR_ItemValEDGE_BEZIER
     };
     assert(nPos < SAL_N_ELEMENTS(ITEMVALEDGES) && "wrong pos!");
-    return ImpGetResStr(ITEMVALEDGES[nPos]);
+    return SvxResId(ITEMVALEDGES[nPos]);
 }
 
 bool SdrEdgeKindItem::GetPresentation(SfxItemPresentation ePres,
@@ -1538,7 +1536,7 @@ OUString SdrMeasureKindItem::GetValueTextByPos(sal_uInt16 nPos) const
         STR_ItemValMEASURE_RADIUS
     };
     assert(nPos < SAL_N_ELEMENTS(ITEMVALMEASURETYPES) && "wrong pos!");
-    return ImpGetResStr(ITEMVALMEASURETYPES[nPos]);
+    return SvxResId(ITEMVALMEASURETYPES[nPos]);
 }
 
 bool SdrMeasureKindItem::GetPresentation(SfxItemPresentation ePres,
@@ -1591,7 +1589,7 @@ OUString SdrMeasureTextHPosItem::GetValueTextByPos(sal_uInt16 nPos) const
         STR_ItemValMEASURE_TEXTRIGHTOUTSID
     };
     assert(nPos < SAL_N_ELEMENTS(ITEMVALMEASURETEXTTYPES) && "wrong pos!");
-    return ImpGetResStr(ITEMVALMEASURETEXTTYPES[nPos]);
+    return SvxResId(ITEMVALMEASURETEXTTYPES[nPos]);
 }
 
 bool SdrMeasureTextHPosItem::GetPresentation(SfxItemPresentation ePres,
@@ -1645,7 +1643,7 @@ OUString SdrMeasureTextVPosItem::GetValueTextByPos(sal_uInt16 nPos) const
         STR_ItemValMEASURETEXT_VERTICALCEN
     };
     assert(nPos < SAL_N_ELEMENTS(ITEMVALMEASURETEXTTYPES) && "wrong pos!");
-    return ImpGetResStr(ITEMVALMEASURETEXTTYPES[nPos]);
+    return SvxResId(ITEMVALMEASURETEXTTYPES[nPos]);
 }
 
 bool SdrMeasureTextVPosItem::GetPresentation(SfxItemPresentation ePres,
@@ -1743,7 +1741,7 @@ OUString SdrCircKindItem::GetValueTextByPos(sal_uInt16 nPos) const
         STR_ItemValCIRC_ARC
     };
     assert(nPos < SAL_N_ELEMENTS(ITEMVALCIRCTYPES) && "wrong pos!");
-    return ImpGetResStr(ITEMVALCIRCTYPES[nPos]);
+    return SvxResId(ITEMVALCIRCTYPES[nPos]);
 }
 
 bool SdrCircKindItem::GetPresentation(SfxItemPresentation ePres,
