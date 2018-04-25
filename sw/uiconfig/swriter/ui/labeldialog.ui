@@ -145,10 +145,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="cards">
+              <object class="GtkLabel" id="private">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="labeldialog|cards">Business Cards</property>
+                <property name="label" translatable="yes" context="labeldialog|private">Private</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -168,10 +168,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="private">
+              <object class="GtkLabel" id="business">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="labeldialog|private">Private</property>
+                <property name="label" translatable="yes" context="labeldialog|business">Business</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -191,10 +191,10 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="business">
+              <object class="GtkLabel" id="format">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="labeldialog|business">Business</property>
+                <property name="label" translatable="yes" context="labeldialog|format">Format</property>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -214,36 +214,13 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="format">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="labeldialog|format">Format</property>
-              </object>
-              <packing>
-                <property name="position">5</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="position">6</property>
-              </packing>
-            </child>
-            <child type="tab">
               <object class="GtkLabel" id="options">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="labeldialog|options">Options</property>
               </object>
               <packing>
-                <property name="position">6</property>
+                <property name="position">5</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>

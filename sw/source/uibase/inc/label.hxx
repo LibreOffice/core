@@ -44,7 +44,6 @@ class SwLabDlg : public SfxTabDialog
     bool       m_bLabel;
     sal_uInt16 m_nOptionsId;
     sal_uInt16 m_nLabelId;
-    sal_uInt16 m_nCardsId;
     void          ReplaceGroup_( const OUString &rMake );
 
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;

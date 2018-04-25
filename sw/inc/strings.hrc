@@ -1328,6 +1328,8 @@
 #define STR_SIGNED_BY                           NC_("STR_SIGNED_BY", "Signed-by")
 #define STR_PARAGRAPH_SIGNATURE                 NC_("STR_PARAGRAPH_SIGNATURE", "Paragraph Signature")
 
+#define STR_BUSINESS_CARDS                      NC_("labeldialog|cards", "Business Cards")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
