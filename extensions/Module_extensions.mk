@@ -74,6 +74,10 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	Library_oleautobridge \
 ))
 
+$(eval $(call gb_Module_add_subsequentcheck_targets,extensions,\
+	CustomTarget_automationtest \
+))
+
 endif # WNT
 
 ifeq ($(OS),MACOSX)
