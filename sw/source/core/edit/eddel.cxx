@@ -112,10 +112,10 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
     rPam.DeleteMark();
 }
 
-long SwEditShell::Delete()
+bool SwEditShell::Delete()
 {
     SET_CURR_SHELL( this );
-    long nRet = 0;
+    bool bRet = false;
     if ( !HasReadonlySel() || CursorInsideInputField() )
     {
         StartAllAction();
@@ -140,14 +140,14 @@ long SwEditShell::Delete()
             GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
         }
         EndAllAction();
-        nRet = 1;
+        bRet = true;
     }
     else
     {
-        nRet = RemoveParagraphMetadataFieldAtCursor() ? 1 : 0;
+        bRet = RemoveParagraphMetadataFieldAtCursor();
     }
 
-    return nRet;
+    return bRet;
 }
 
 bool SwEditShell::Copy( SwEditShell* pDestShell )

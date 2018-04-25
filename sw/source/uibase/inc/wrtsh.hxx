@@ -268,13 +268,13 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void    DelToEndOfLine();
     void    DelToStartOfLine();
     void    DelLine();
-    long    DelLeft();
+    bool    DelLeft();
 
     // also deletes the frame or sets the cursor in the frame when bDelFrame == false
-    long    DelRight();
+    bool    DelRight();
     void    DelToEndOfPara();
     void    DelToStartOfPara();
-    long    DelToEndOfSentence();
+    bool    DelToEndOfSentence();
     void    DelToStartOfSentence();
     void    DelNxtWord();
     void    DelPrvWord();

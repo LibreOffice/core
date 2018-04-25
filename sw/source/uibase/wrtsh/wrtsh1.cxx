@@ -218,7 +218,7 @@ void SwWrtShell::Insert( const OUString &rStr )
 
         StartUndo(SwUndoId::REPLACE, &aRewriter);
         bStarted = true;
-        bDeleted = DelRight() != 0;
+        bDeleted = DelRight();
     }
 
     bCallIns ?

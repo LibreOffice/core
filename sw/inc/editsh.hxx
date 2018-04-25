@@ -172,7 +172,7 @@ public:
 
     /** Delete content of all ranges.
      If whole nodes are selected, these nodes get deleted. */
-    long Delete();
+    bool Delete();
 
     /// Remove a complete paragraph.
     bool DelFullPara();

@@ -2407,8 +2407,8 @@ void SwUiWriterTest::testTdf60967()
     pCursor->Move(fnMoveBackward);
     SwPosition aPosInTable(*(pCursor->GetPoint()));
     //deleting paragraph following table with Ctrl+Shift+Del
-    sal_Int32 val = pWrtShell->DelToEndOfSentence();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), val);
+    bool val = pWrtShell->DelToEndOfSentence();
+    CPPUNIT_ASSERT_EQUAL(true, val);
     //getting the cursor's position just after the paragraph deletion
     SwPosition aPosAfterDel(*(pCursor->GetPoint()));
     //moving cursor forward to check whether there is any node following the table, BTW there should not be any such node
