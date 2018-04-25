@@ -697,7 +697,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         if( bAdditionalText )
         {
             mpEscherEx->EndShape( nShapeType, nShapeID );
-            ImplWriteAdditionalText( rObj, Point() );
+            ImplWriteAdditionalText( rObj );
         }
 
     } while ( false );
@@ -709,8 +709,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
     return nShapeID;
 }
 
-void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
-                                                const Point& rTextRefPoint )
+void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj )
 {
     sal_uInt32 nShapeID = 0;
     sal_uInt16 nShapeType = 0;
@@ -733,8 +732,8 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
 //2do: this does not work right
             double fDist = hypot( rObj.GetRect().GetWidth(),
                                     rObj.GetRect().GetHeight() );
-            rObj.SetRect( tools::Rectangle( rTextRefPoint,
-                            Point( static_cast<sal_Int32>( rTextRefPoint.X() + fDist ), rTextRefPoint.Y() - 1 ) ) );
+            rObj.SetRect( tools::Rectangle( Point(),
+                            Point( static_cast<sal_Int32>( fDist ), -1 ) ) );
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             mpEscherEx->AddShape( ESCHER_ShpInst_TextBox, ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor );

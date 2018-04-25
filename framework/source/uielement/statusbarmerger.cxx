@@ -126,11 +126,10 @@ bool lcl_MergeItems( StatusBar* pStatusbar,
 bool lcl_ReplaceItem( StatusBar* pStatusbar,
                              sal_uInt16 nPos,
                              sal_uInt16& rItemId,
-                            const ::rtl::OUString& rModuleIdentifier,
                              const AddonStatusbarItemContainer& rAddonToolbarItems )
 {
     pStatusbar->RemoveItem( pStatusbar->GetItemId( nPos ) );
-    return lcl_MergeItems( pStatusbar, nPos, 0, rItemId, rModuleIdentifier, rAddonToolbarItems );
+    return lcl_MergeItems( pStatusbar, nPos, 0, rItemId, OUString(), rAddonToolbarItems );
 }
 
 bool lcl_RemoveItems( StatusBar* pStatusbar,
@@ -199,7 +198,7 @@ bool StatusbarMerger::ProcessMergeOperation(
     else if ( rMergeCommand == MERGECOMMAND_ADDBEFORE )
         return lcl_MergeItems( pStatusbar, nPos, 0, rItemId, "", rItems );
     else if ( rMergeCommand == MERGECOMMAND_REPLACE )
-        return lcl_ReplaceItem( pStatusbar, nPos, rItemId, "", rItems );
+        return lcl_ReplaceItem( pStatusbar, nPos, rItemId, rItems );
     else if ( rMergeCommand == MERGECOMMAND_REMOVE )
         return lcl_RemoveItems( pStatusbar, nPos, rMergeCommandParameter );
 

@@ -2775,7 +2775,7 @@ In case of success it returns the registered name, otherwise an empty string.
 Optionally add a prefix to the registered DB name.
 */
 OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference< beans::XPropertySet > *pSettings,
-    const INetURLObject &rURL, const OUString *pPrefix, const OUString *pDestDir, SfxObjectShell* pDocShell)
+    const INetURLObject &rURL, const OUString *pDestDir, SfxObjectShell* pDocShell)
 {
     OUString sExt(rURL.GetExtension());
     uno::Any aTableFilterAny;
@@ -2815,8 +2815,6 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
             INetURLObject::DecodeMechanism::Unambiguous);
         sal_Int32 nExtLen = sExt.getLength();
         sNewName = sNewName.replaceAt(sNewName.getLength() - nExtLen - 1, nExtLen + 1, "");
-        if (pPrefix)
-            sNewName = *pPrefix + sNewName;
 
         //find a unique name if sNewName already exists
         sFind = sNewName;
@@ -2965,7 +2963,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(weld::Window* pParent, SwDocShel
             if( xSettingsDlg->execute() )
                 aSettings.set( uno::Reference < beans::XPropertySet >( xSettingsDlg, uno::UNO_QUERY_THROW ) );
         }
-        sFind = LoadAndRegisterDataSource_Impl( type, DBConnURIType::FLAT == type ? &aSettings : nullptr, aURL, nullptr, nullptr, pDocShell );
+        sFind = LoadAndRegisterDataSource_Impl( type, DBConnURIType::FLAT == type ? &aSettings : nullptr, aURL, nullptr, pDocShell );
 
         m_aUncommitedRegistrations.push_back(std::pair<SwDocShell*, OUString>(pDocShell, sFind));
     }
@@ -2991,7 +2989,7 @@ void SwDBManager::StoreEmbeddedDataSource(const uno::Reference<frame::XStorable>
 
 OUString SwDBManager::LoadAndRegisterDataSource(const OUString &rURI, const OUString *pDestDir)
 {
-    return LoadAndRegisterDataSource_Impl( DBConnURIType::UNKNOWN, nullptr, INetURLObject(rURI), nullptr, pDestDir, nullptr );
+    return LoadAndRegisterDataSource_Impl( DBConnURIType::UNKNOWN, nullptr, INetURLObject(rURI), pDestDir, nullptr );
 }
 
 void SwDBManager::RevokeDataSource(const OUString& rName)

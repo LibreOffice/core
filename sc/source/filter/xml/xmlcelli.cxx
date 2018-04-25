@@ -910,7 +910,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
                 // create cell note with all data from drawing object
                 pNote = ScNoteUtil::CreateNoteFromObjectData( *pDoc, rPos,
                     std::move(xItemSet), xOutlinerObj.release(),
-                    aCaptionRect, mxAnnotationData->mbShown, false );
+                    aCaptionRect, mxAnnotationData->mbShown );
             }
         }
     }

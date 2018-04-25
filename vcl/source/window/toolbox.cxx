@@ -4875,9 +4875,9 @@ static bool ImplIsValidItem( const ImplToolItem* pItem, bool bNotClipped )
     return bValid;
 }
 
-bool ToolBox::ChangeHighlightUpDn( bool bUp, bool bNoCyle )
+bool ToolBox::ChangeHighlightUpDn( bool bUp )
 {
-    return ImplChangeHighlightUpDn(bUp, bNoCyle);
+    return ImplChangeHighlightUpDn(bUp, /*bNoCyle*/ false);
 }
 
 bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )

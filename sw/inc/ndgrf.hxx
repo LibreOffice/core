@@ -120,7 +120,6 @@ public:
        gets replaced by the new one. */
     bool ReRead( const OUString& rGrfName, const OUString& rFltName,
                  const Graphic* pGraphic = nullptr,
-                 const GraphicObject* pGrfObj = nullptr,
                  bool bModify = true );
 private:
     /// Loading of graphic immediately before displaying.

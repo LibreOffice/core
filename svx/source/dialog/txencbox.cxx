@@ -233,33 +233,13 @@ TextEncodingBox::~TextEncodingBox()
 }
 
 void TextEncodingBox::FillFromTextEncodingTable(
-        bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
-        sal_uInt32 nButIncludeInfoFlags )
+        bool bExcludeImportSubsets )
 {
-    rtl_TextEncodingInfo aInfo;
-    aInfo.StructSize = sizeof(rtl_TextEncodingInfo);
     const sal_uInt32 nCount = SAL_N_ELEMENTS(RID_SVXSTR_TEXTENCODING_TABLE);
     for (sal_uInt32 j = 0; j < nCount; ++j)
     {
         bool bInsert = true;
         rtl_TextEncoding nEnc = RID_SVXSTR_TEXTENCODING_TABLE[j].second;
-        if ( nExcludeInfoFlags )
-        {
-            if ( !rtl_getTextEncodingInfo( nEnc, &aInfo ) )
-                bInsert = false;
-            else
-            {
-                if ( (aInfo.Flags & nExcludeInfoFlags) == 0 )
-                {
-                    if ( (nExcludeInfoFlags & RTL_TEXTENCODING_INFO_UNICODE) &&
-                            ((nEnc == RTL_TEXTENCODING_UCS2) ||
-                            nEnc == RTL_TEXTENCODING_UCS4) )
-                        bInsert = false;    // InfoFlags don't work for Unicode :-(
-                }
-                else if ( (aInfo.Flags & nButIncludeInfoFlags) == 0 )
-                    bInsert = false;
-            }
-        }
         if ( bInsert )
         {
             if ( bExcludeImportSubsets )

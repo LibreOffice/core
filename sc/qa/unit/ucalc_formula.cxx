@@ -1020,7 +1020,7 @@ void Test::testFormulaCompiler()
     {
         std::unique_ptr<ScTokenArray> pArray;
         {
-            pArray.reset(compileFormula(m_pDoc, OUString::createFromAscii(aTests[i].pInput), nullptr, aTests[i].eInputGram));
+            pArray.reset(compileFormula(m_pDoc, OUString::createFromAscii(aTests[i].pInput), aTests[i].eInputGram));
             CPPUNIT_ASSERT_MESSAGE("Token array shouldn't be NULL!", pArray.get());
         }
 

@@ -85,7 +85,7 @@ SwGrfNode::SwGrfNode(
         bFrameInPaint = bScaleImageMap = false;
 
     bGraphicArrived = true;
-    ReRead(sURLLink, rFltName, pGraphic, nullptr, false);
+    ReRead(sURLLink, rFltName, pGraphic, false);
 }
 
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
@@ -144,7 +144,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
 
 bool SwGrfNode::ReRead(
     const OUString& rGrfName, const OUString& rFltName,
-    const Graphic* pGraphic, const GraphicObject* pGrfObj,
+    const Graphic* pGraphic,
     bool bNewGrf )
 {
     bool bReadGrf = false;
@@ -152,7 +152,7 @@ bool SwGrfNode::ReRead(
     delete mpReplacementGraphic;
     mpReplacementGraphic = nullptr;
 
-    OSL_ENSURE( pGraphic || pGrfObj || !rGrfName.isEmpty(),
+    OSL_ENSURE( pGraphic || !rGrfName.isEmpty(),
             "GraphicNode without a name, Graphic or GraphicObject" );
 
     // with name
@@ -196,12 +196,6 @@ bool SwGrfNode::ReRead(
             onGraphicChanged();
             bReadGrf = true;
         }
-        else if( pGrfObj )
-        {
-            maGrfObj = *pGrfObj;
-            onGraphicChanged();
-            bReadGrf = true;
-        }
         else
         {
             // reset data of the old graphic so that the correct placeholder is
@@ -232,12 +226,6 @@ bool SwGrfNode::ReRead(
         onGraphicChanged();
         bReadGrf = true;
     }
-    else if( pGrfObj && rGrfName.isEmpty() )
-    {
-        maGrfObj = *pGrfObj;
-        onGraphicChanged();
-        bReadGrf = true;
-    }
     // Was the graphic already loaded?
     else if( !bNewGrf && GraphicType::NONE != maGrfObj.GetType() )
         return true;
@@ -251,14 +239,6 @@ bool SwGrfNode::ReRead(
             if( pGraphic )
             {
                 maGrfObj.SetGraphic( *pGraphic, rGrfName );
-                onGraphicChanged();
-                bReadGrf = true;
-                // create connection without update, as we have the graphic
-                static_cast<SwBaseLink*>( refLink.get() )->Connect();
-            }
-            else if( pGrfObj )
-            {
-                maGrfObj = *pGrfObj;
                 onGraphicChanged();
                 bReadGrf = true;
                 // create connection without update, as we have the graphic

@@ -2709,7 +2709,7 @@ void DocumentContentOperationsManager::ReRead( SwPaM& rPam, const OUString& rGrf
                                                 GetMirrorGrf().GetValue() )
             pGrfNd->SetAttr( SwMirrorGrf() );
 
-        pGrfNd->ReRead( rGrfName, rFltName, pGraphic, /*pGrafObj*/nullptr );
+        pGrfNd->ReRead( rGrfName, rFltName, pGraphic );
         m_rDoc.getIDocumentState().SetModified();
     }
 }
