@@ -7,10 +7,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-testname=odk/build-examples
-
-$(eval $(call gb_CustomTarget_CustomTarget,$(testname)))
-  
 my_example_dirs = \
     CLI/CSharp/Spreadsheet \
     CLI/VB.NET/WriterDemo \
@@ -33,8 +29,6 @@ my_example_dirs = \
 #    cpp/custompanel \
 
 
-.PHONY: $(call gb_CustomTarget_get_target,$(testname))
-
-include $(SRCDIR)/odk/build-examples_common.mk
+$(eval $(call odk_build-examples_test,odk/build-examples))
 
 # vim: set noet sw=4 ts=4:
