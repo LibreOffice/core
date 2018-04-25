@@ -35,6 +35,7 @@
 #define UNO_NAME_FILLHATCH                      "FillHatch"
 #define UNO_NAME_FILLHATCHNAME                  "FillHatchName"
 #define UNO_NAME_FILLBITMAP                     "FillBitmap"
+#define UNO_NAME_FILLBITMAPURL                  "FillBitmapURL"
 #define UNO_NAME_FILLBITMAPNAME                 "FillBitmapName"
 #define UNO_NAME_FILLGRADIENTSTEPCOUNT          "FillGradientStepCount"
 #define UNO_NAME_FILLBACKGROUND                 "FillBackground"
