@@ -22,8 +22,17 @@ typename std::enable_if<
 MinMax(T nVal, long nMin, long nMax)
 {
     assert(nMin <= nMax);
-    return nVal >= nMin
-        ? (nVal <= nMax ? static_cast<long>(nVal) : nMax) : nMin;
+    if (nVal >= nMin)
+    {
+        if (nVal <= nMax)
+            return static_cast<long>(nVal);
+        else
+           return nMax;
+    }
+    else
+    {
+        return nMin;
+    }
 }
 
 template<typename T>
@@ -33,12 +42,24 @@ typename std::enable_if<
 MinMax(T nVal, long nMin, long nMax)
 {
     assert(nMin <= nMax);
-    return nMax < 0
-        ? nMax
-        : ((nMin < 0 || nVal >= static_cast<unsigned long>(nMin))
-           ? (nVal <= static_cast<unsigned long>(nMax)
-              ? static_cast<long>(nVal) : nMax)
-           : nMin);
+    if (nMax < 0)
+    {
+        return nMax;
+    }
+    else
+    {
+        if (nMin < 0 || nVal >= static_cast<unsigned long>(nMin))
+        {
+            if (nVal <= static_cast<unsigned long>(nMax))
+                return static_cast<long>(nVal);
+            else
+                return nMax;
+        }
+        else
+        {
+            return nMin;
+        }
+    }
 }
 
 inline sal_uInt32 AlignedWidth4Bytes(sal_uInt32 nWidthBits)
