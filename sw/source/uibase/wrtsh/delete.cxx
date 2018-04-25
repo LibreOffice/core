@@ -113,9 +113,9 @@ void SwWrtShell::DelLine()
     SetMark();
     SwCursorShell::RightMargin();
 
-    long nRet = Delete();
+    bool bRet = Delete();
     Pop(SwCursorShell::PopMode::DeleteCurrent);
-    if( nRet )
+    if( bRet )
         UpdateAttr();
 }
 
@@ -123,19 +123,19 @@ void SwWrtShell::DelToStartOfLine()
 {
     OpenMark();
     SwCursorShell::LeftMargin();
-    long nRet = Delete();
-    CloseMark( 0 != nRet );
+    bool bRet = Delete();
+    CloseMark( bRet );
 }
 
 void SwWrtShell::DelToEndOfLine()
 {
     OpenMark();
     SwCursorShell::RightMargin();
-    long nRet = Delete();
-    CloseMark( 0 != nRet );
+    bool bRet = Delete();
+    CloseMark( bRet );
 }
 
-long SwWrtShell::DelLeft()
+bool SwWrtShell::DelLeft()
 {
     // If it's a Fly, throw it away
     SelectionType nSelType = GetSelectionType();
@@ -160,7 +160,7 @@ long SwWrtShell::DelLeft()
             GotoNextFly();
         }
 
-        return 1;
+        return true;
     }
 
     // If a selection exists, erase this
@@ -184,7 +184,7 @@ long SwWrtShell::DelLeft()
             }
             else
                 EnterStdMode();
-            return 1;
+            return true;
         }
         else
             EnterStdMode();
@@ -232,7 +232,7 @@ long SwWrtShell::DelLeft()
         {
             // tdf#115132 Restore previous position and we are done
             SwCursorShell::Pop(SwCursorShell::PopMode::DeleteCurrent);
-            return 0;
+            return false;
         }
 
         SwCursorShell::Pop(SwCursorShell::PopMode::DeleteStack);
@@ -252,7 +252,7 @@ long SwWrtShell::DelLeft()
         if (pFm && pFm->GetMarkEnd() == *pCurPos)
         {
             getIDocumentMarkAccess()->deleteMark(pFm);
-            return 1;
+            return true;
         }
 
         OpenMark();
@@ -281,18 +281,18 @@ long SwWrtShell::DelLeft()
             }
         }
     }
-    long nRet = Delete();
-    if( !nRet && bSwap )
+    bool bRet = Delete();
+    if( !bRet && bSwap )
         SwCursorShell::SwapPam();
-    CloseMark( 0 != nRet );
-    return nRet;
+    CloseMark( bRet );
+    return bRet;
 }
 
-long SwWrtShell::DelRight()
+bool SwWrtShell::DelRight()
 {
         // Will be or'ed, if a tableselection exists;
         // will here be implemented on SelectionType::Table
-    long nRet = 0;
+    bool bRet = false;
     SelectionType nSelection = GetSelectionType();
     if(nSelection & SelectionType::TableCell)
         nSelection = SelectionType::Table;
@@ -326,7 +326,7 @@ long SwWrtShell::DelRight()
                 }
                 else
                     EnterStdMode();
-                nRet = 1;
+                bRet = true;
                 break;
             }
             else
@@ -388,15 +388,15 @@ long SwWrtShell::DelRight()
             if (pFm && pFm->GetMarkStart() == *GetCursor()->GetPoint())
             {
                 getIDocumentMarkAccess()->deleteMark(pFm);
-                nRet = 1;
+                bRet = true;
                 break;
             }
         }
 
         OpenMark();
         SwCursorShell::Right(1, CRSR_SKIP_CELLS);
-        nRet = Delete();
-        CloseMark( 0 != nRet );
+        bRet = Delete();
+        CloseMark( bRet );
         break;
 
     case SelectionType::Frame:
@@ -444,11 +444,11 @@ long SwWrtShell::DelRight()
                 GotoNextFly();
             }
         }
-        nRet = 1;
+        bRet = true;
         break;
     default: break;
     }
-    return nRet;
+    return bRet;
 }
 
 void SwWrtShell::DelToEndOfPara()
@@ -462,9 +462,9 @@ void SwWrtShell::DelToEndOfPara()
         Pop(SwCursorShell::PopMode::DeleteCurrent);
         return;
     }
-    long nRet = Delete();
+    bool bRet = Delete();
     Pop(SwCursorShell::PopMode::DeleteCurrent);
-    if( nRet )
+    if( bRet )
         UpdateAttr();
 }
 
@@ -479,9 +479,9 @@ void SwWrtShell::DelToStartOfPara()
         Pop(SwCursorShell::PopMode::DeleteCurrent);
         return;
     }
-    long nRet = Delete();
+    bool bRet = Delete();
     Pop(SwCursorShell::PopMode::DeleteCurrent);
-    if( nRet )
+    if( bRet )
         UpdateAttr();
 }
 
@@ -494,16 +494,16 @@ void SwWrtShell::DelToStartOfSentence()
     if(IsStartOfDoc())
         return;
     OpenMark();
-    long nRet = BwdSentence_() ? Delete() : 0;
-    CloseMark( 0 != nRet );
+    bool bRet = BwdSentence_() && Delete();
+    CloseMark( bRet );
 }
 
-long SwWrtShell::DelToEndOfSentence()
+bool SwWrtShell::DelToEndOfSentence()
 {
     if(IsEndOfDoc())
-        return 0;
+        return false;
     OpenMark();
-    long nRet(0);
+    bool bRet(false);
     // fdo#60967: special case that is documented in help: delete
     // paragraph following table if cursor is at end of last cell in table
     if (IsEndOfTable())
@@ -519,17 +519,17 @@ long SwWrtShell::DelToEndOfSentence()
             }
             if (!IsEndOfDoc()) // do not delete last paragraph in body text
             {
-                nRet = DelFullPara() ? 1 : 0;
+                bRet = DelFullPara();
             }
         }
         Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
     else
     {
-        nRet = FwdSentence_() ? Delete() : 0;
+        bRet = FwdSentence_() && Delete();
     }
-    CloseMark( 0 != nRet );
-    return nRet;
+    CloseMark( bRet );
+    return bRet;
 }
 
 void SwWrtShell::DelNxtWord()
@@ -547,8 +547,8 @@ void SwWrtShell::DelNxtWord()
     else
         EndWrd();
 
-    long nRet = Delete();
-    if( nRet )
+    bool bRet = Delete();
+    if( bRet )
         UpdateAttr();
     else
         SwapPam();
@@ -571,8 +571,8 @@ void SwWrtShell::DelPrvWord()
         else
             SttWrd();
     }
-    long nRet = Delete();
-    if( nRet )
+    bool bRet = Delete();
+    if( bRet )
         UpdateAttr();
     else
         SwapPam();

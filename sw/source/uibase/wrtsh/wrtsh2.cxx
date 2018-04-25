@@ -108,7 +108,7 @@ void SwWrtShell::Insert(SwField const &rField)
         }
         else
         {
-            bDeleted = DelRight() != 0;
+            bDeleted = DelRight();
         }
     }
 
