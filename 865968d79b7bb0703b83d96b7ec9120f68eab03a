@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_e39572e4",
+        "filename": "solenv/gbuild/uitest-failed-default.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-04-25T12:35:43Z",
+      "side": 1,
+      "message": "Is it worse than the how the very same technique is used for junit tests?",
+      "revId": "865968d79b7bb0703b83d96b7ec9120f68eab03a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
