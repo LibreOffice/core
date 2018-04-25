@@ -40,7 +40,7 @@
 #include <svx/svdotable.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
@@ -622,7 +622,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
 
             if( bUndo )
             {
-                rModel.BegUndo( ImpGetResStr(STR_TABLE_INSCOL) );
+                rModel.BegUndo( SvxResId(STR_TABLE_INSCOL) );
                 rModel.AddUndo( rModel.GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
 
                 TableModelRef xThis( this );
@@ -694,7 +694,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
 
             if( bUndo  )
             {
-                rModel.BegUndo( ImpGetResStr(STR_UNDO_COL_DELETE) );
+                rModel.BegUndo( SvxResId(STR_UNDO_COL_DELETE) );
                 rModel.AddUndo( rModel.GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
 
                 TableModelRef xThis( this );
@@ -805,7 +805,7 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
 
             if( bUndo )
             {
-                rModel.BegUndo( ImpGetResStr(STR_TABLE_INSROW) );
+                rModel.BegUndo( SvxResId(STR_TABLE_INSROW) );
                 rModel.AddUndo( rModel.GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
                 TableModelRef xThis( this );
                 rModel.AddUndo( new InsertRowUndo( xThis, nIndex, aNewRows ) );
@@ -862,7 +862,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
 
             if( bUndo )
             {
-                rModel.BegUndo( ImpGetResStr(STR_UNDO_ROW_DELETE) );
+                rModel.BegUndo( SvxResId(STR_UNDO_ROW_DELETE) );
                 rModel.AddUndo( rModel.GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
 
                 TableModelRef xThis( this );

@@ -19,7 +19,7 @@
 
 
 #include <svx/ActionDescriptionProvider.hxx>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 
 OUString ActionDescriptionProvider::createDescription( ActionType eActionType
@@ -59,7 +59,7 @@ OUString ActionDescriptionProvider::createDescription( ActionType eActionType
     if (!pResID)
         return OUString();
 
-    OUString aStr(ImpGetResStr(pResID));
+    OUString aStr(SvxResId(pResID));
     return aStr.replaceAll("%1", rObjectName);
 }
 

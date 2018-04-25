@@ -30,7 +30,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include "svddrgm1.hxx"
 #include <svx/obj3d.hxx>
 #include <svx/svdoashp.hxx>
@@ -633,7 +633,7 @@ bool SdrDragView::ImpBegInsObjPoint(bool bIdxZwang, const Point& rPnt, bool bNew
         mpInsPointUndo = dynamic_cast< SdrUndoGeoObj* >( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mpMarkedObj) );
         DBG_ASSERT( mpInsPointUndo, "svx::SdrDragView::BegInsObjPoint(), could not create correct undo object!" );
 
-        OUString aStr(ImpGetResStr(STR_DragInsertPoint));
+        OUString aStr(SvxResId(STR_DragInsertPoint));
 
         maInsPointUndoStr = aStr.replaceFirst("%1", mpMarkedObj->TakeObjNameSingul() );
 
@@ -730,7 +730,7 @@ bool SdrDragView::BegInsGluePoint(const Point& rPnt)
         UnmarkAllGluePoints();
         mpInsPointUndo= dynamic_cast< SdrUndoGeoObj* >( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj) );
         DBG_ASSERT( mpInsPointUndo, "svx::SdrDragView::BegInsObjPoint(), could not create correct undo object!" );
-        OUString aStr(ImpGetResStr(STR_DragInsertGluePoint));
+        OUString aStr(SvxResId(STR_DragInsertGluePoint));
 
         maInsPointUndoStr = aStr.replaceFirst("%1", pObj->TakeObjNameSingul() );
 

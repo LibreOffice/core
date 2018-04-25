@@ -36,7 +36,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/xoutbmp.hxx>
 #include <vcl/metaact.hxx>
 #include <svl/poolitem.hxx>
@@ -241,7 +241,7 @@ bool SdrExchangeView::Paste(
     const bool bUndo = IsUndoEnabled();
 
     if( bUndo )
-        BegUndo(ImpGetResStr(STR_ExchangePaste));
+        BegUndo(SvxResId(STR_ExchangePaste));
 
     if( mxSelectionController.is() && mxSelectionController->PasteObjModel( rMod ) )
     {

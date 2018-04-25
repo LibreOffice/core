@@ -37,7 +37,7 @@
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdoedge.hxx>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 
 #include <svx/svxids.hrc>
@@ -233,11 +233,11 @@ OUString SdrObjGroup::TakeObjNameSingul() const
 
     if(!maSdrObjList.GetObjCount())
     {
-        sName.append(ImpGetResStr(STR_ObjNameSingulGRUPEMPTY));
+        sName.append(SvxResId(STR_ObjNameSingulGRUPEMPTY));
     }
     else
     {
-        sName.append(ImpGetResStr(STR_ObjNameSingulGRUP));
+        sName.append(SvxResId(STR_ObjNameSingulGRUP));
     }
 
     const OUString aName(GetName());
@@ -257,8 +257,8 @@ OUString SdrObjGroup::TakeObjNameSingul() const
 OUString SdrObjGroup::TakeObjNamePlural() const
 {
     if (maSdrObjList.GetObjCount()==0)
-        return ImpGetResStr(STR_ObjNamePluralGRUPEMPTY);
-    return ImpGetResStr(STR_ObjNamePluralGRUP);
+        return SvxResId(STR_ObjNamePluralGRUPEMPTY);
+    return SvxResId(STR_ObjNamePluralGRUP);
 }
 
 

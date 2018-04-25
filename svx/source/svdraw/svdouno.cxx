@@ -37,7 +37,7 @@
 #include <svx/svdouno.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdmodel.hxx>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdetc.hxx>
 #include <svx/svdview.hxx>
@@ -236,7 +236,7 @@ void SdrUnoObj::SetContextWritingMode( const sal_Int16 _nContextWritingMode )
 
 OUString SdrUnoObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulUno));
+    OUStringBuffer sName(SvxResId(STR_ObjNameSingulUno));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
@@ -252,7 +252,7 @@ OUString SdrUnoObj::TakeObjNameSingul() const
 
 OUString SdrUnoObj::TakeObjNamePlural() const
 {
-    return ImpGetResStr(STR_ObjNamePluralUno);
+    return SvxResId(STR_ObjNamePluralUno);
 }
 
 SdrUnoObj* SdrUnoObj::Clone(SdrModel* pTargetModel) const

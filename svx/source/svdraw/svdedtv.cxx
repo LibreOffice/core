@@ -30,7 +30,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpoev.hxx>
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <rtl/strbuf.hxx>
 #include <svx/svdview.hxx>
@@ -201,7 +201,7 @@ void SdrEditView::DeleteLayer(const OUString& rName)
 
         const bool bUndo = IsUndoEnabled();
         if( bUndo )
-            BegUndo(ImpGetResStr(STR_UndoDelLayer));
+            BegUndo(SvxResId(STR_UndoDelLayer));
 
         bool bMaPg(true);
 
@@ -772,7 +772,7 @@ void SdrEditView::DeleteMarkedObj()
 
     // moved breaking action and undo start outside loop
     BrkAction();
-    BegUndo(ImpGetResStr(STR_EditDelete),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::Delete);
+    BegUndo(SvxResId(STR_EditDelete),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::Delete);
 
     std::vector<SdrObject*> lazyDeleteObjects;
     // remove as long as something is selected. This allows to schedule objects for

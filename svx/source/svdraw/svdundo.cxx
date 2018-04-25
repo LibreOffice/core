@@ -30,7 +30,7 @@
 #include <svx/svdview.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/scene3d.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/outlobj.hxx>
@@ -205,7 +205,7 @@ void SdrUndoGroup::SdrRepeat(SdrView& rView)
 
 OUString SdrUndoGroup::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
-    return aComment.replaceAll("%1", ImpGetResStr(STR_ObjNameSingulPlural));
+    return aComment.replaceAll("%1", SvxResId(STR_ObjNameSingulPlural));
 }
 
 SdrUndoObj::SdrUndoObj(SdrObject& rNewObj)
@@ -216,14 +216,14 @@ SdrUndoObj::SdrUndoObj(SdrObject& rNewObj)
 
 OUString SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, const char* pStrCacheID, bool bRepeat )
 {
-    const OUString rStr {ImpGetResStr(pStrCacheID)};
+    const OUString rStr {SvxResId(pStrCacheID)};
 
     const sal_Int32 nPos = rStr.indexOf("%1");
     if (nPos < 0)
         return rStr;
 
     if (bRepeat)
-        return rStr.replaceAt(nPos, 2, ImpGetResStr(STR_ObjNameSingulPlural));
+        return rStr.replaceAt(nPos, 2, SvxResId(STR_ObjNameSingulPlural));
 
     return rStr.replaceAt(nPos, 2, _rForObject.TakeObjNameSingul());
 }
@@ -1289,7 +1289,7 @@ void SdrUndoNewLayer::Redo()
 
 OUString SdrUndoNewLayer::GetComment() const
 {
-    return ImpGetResStr(STR_UndoNewLayer);
+    return SvxResId(STR_UndoNewLayer);
 }
 
 
@@ -1310,7 +1310,7 @@ void SdrUndoDelLayer::Redo()
 
 OUString SdrUndoDelLayer::GetComment() const
 {
-    return ImpGetResStr(STR_UndoDelLayer);
+    return SvxResId(STR_UndoDelLayer);
 }
 
 
@@ -1330,7 +1330,7 @@ void SdrUndoMoveLayer::Redo()
 
 OUString SdrUndoMoveLayer::GetComment() const
 {
-    return ImpGetResStr(STR_UndoMovLayer);
+    return SvxResId(STR_UndoMovLayer);
 }
 
 
@@ -1392,7 +1392,7 @@ void SdrUndoPage::ImpMovePage(sal_uInt16 nOldNum, sal_uInt16 nNewNum)
 
 void SdrUndoPage::ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr)
 {
-    rStr = ImpGetResStr(pStrCacheID);
+    rStr = SvxResId(pStrCacheID);
 }
 
 

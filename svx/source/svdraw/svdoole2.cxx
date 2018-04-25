@@ -66,7 +66,7 @@
 
 #include <svx/charthelper.hxx>
 #include <svx/svdmodel.hxx>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdetc.hxx>
 #include <svx/svdview.hxx>
@@ -1372,7 +1372,7 @@ sal_uInt16 SdrOle2Obj::GetObjIdentifier() const
 
 OUString SdrOle2Obj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(ImpGetResStr(mpImpl->mbFrame ? STR_ObjNameSingulFrame : STR_ObjNameSingulOLE2));
+    OUStringBuffer sName(SvxResId(mpImpl->mbFrame ? STR_ObjNameSingulFrame : STR_ObjNameSingulOLE2));
 
     const OUString aName(GetName());
 
@@ -1388,7 +1388,7 @@ OUString SdrOle2Obj::TakeObjNameSingul() const
 
 OUString SdrOle2Obj::TakeObjNamePlural() const
 {
-    return ImpGetResStr(mpImpl->mbFrame ? STR_ObjNamePluralFrame : STR_ObjNamePluralOLE2);
+    return SvxResId(mpImpl->mbFrame ? STR_ObjNamePluralFrame : STR_ObjNamePluralOLE2);
 }
 
 SdrOle2Obj* SdrOle2Obj::Clone(SdrModel* pTargetModel) const
