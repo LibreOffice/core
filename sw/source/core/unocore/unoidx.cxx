@@ -1422,21 +1422,18 @@ OUString SAL_CALL SwXDocumentIndex::getName()
 {
     SolarMutexGuard g;
 
-    OUString uRet;
     SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
     if (m_pImpl->m_bIsDescriptor)
     {
-        uRet = m_pImpl->m_pProps->GetTOXBase().GetTOXName();
+        return m_pImpl->m_pProps->GetTOXBase().GetTOXName();
     }
-    else if(pSectionFormat)
-    {
-        uRet = pSectionFormat->GetSection()->GetSectionName();
-    }
-    else
+
+    if(!pSectionFormat)
     {
         throw uno::RuntimeException();
     }
-    return uRet;
+
+    return pSectionFormat->GetSection()->GetSectionName();
 }
 
 void SAL_CALL
@@ -1727,21 +1724,18 @@ SwXDocumentIndexMark::getMarkEntry()
 {
     SolarMutexGuard aGuard;
 
-    OUString sRet;
     SwTOXType *const pType = m_pImpl->GetTOXType();
     if (pType && m_pImpl->m_pTOXMark)
     {
-        sRet = m_pImpl->m_pTOXMark->GetAlternativeText();
+        return m_pImpl->m_pTOXMark->GetAlternativeText();
     }
-    else if (m_pImpl->m_bIsDescriptor)
-    {
-        sRet = m_pImpl->m_sAltText;
-    }
-    else
+
+    if (!m_pImpl->m_bIsDescriptor)
     {
         throw uno::RuntimeException();
     }
-    return sRet;
+
+    return m_pImpl->m_sAltText;
 }
 
 void SAL_CALL
@@ -1932,7 +1926,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     // thus use a space - is this really the ideal solution?
     if (!bMark && rMark.GetAlternativeText().isEmpty())
     {
-        rMark.SetAlternativeText( OUString(' ') );
+        rMark.SetAlternativeText( " " );
     }
 
     const bool bForceExpandHints( !bMark && pTextCursor && pTextCursor->IsAtEndOfMeta() );
