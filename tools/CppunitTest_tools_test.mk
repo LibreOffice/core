@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tools_test, \
     tools/qa/cppunit/test_urlobj \
     tools/qa/cppunit/test_color \
     tools/qa/cppunit/test_rectangle \
+    tools/qa/cppunit/test_minmax \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,tools_test))
