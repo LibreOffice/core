@@ -174,8 +174,8 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtViewOptions : public utl::detail::Op
             @onerror    An assertion is thrown in debug version. Otherwise we do nothing!
         *//*-*****************************************************************************************************/
 
-        sal_Int32 GetPageID(               ) const;
-        void      SetPageID( sal_Int32 nID );
+        OString GetPageID() const;
+        void      SetPageID(const OString& rID);
 
         /*-****************************************************************************************************
             @short      use it to set/get the visual state of a window

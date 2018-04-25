@@ -96,9 +96,9 @@ class SvtViewOptionsBase_Impl final
         css::uno::Sequence< css::beans::NamedValue >    GetUserData             ( const OUString&                                sName    );
         void                                            SetUserData             ( const OUString&                                sName    ,
                                                                                   const css::uno::Sequence< css::beans::NamedValue >&   lData    );
-        sal_Int32                                       GetPageID               ( const OUString&                                sName    );
+        OString                                         GetPageID               ( const OUString&                                sName    );
         void                                            SetPageID               ( const OUString&                                sName    ,
-                                                                                        sal_Int32                                       nID      );
+                                                                                  const OString&                                 sID      );
         State                                           GetVisible              ( const OUString&                                sName    );
         void                                            SetVisible              ( const OUString&                                sName    ,
                                                                                         bool                                        bVisible );
@@ -433,32 +433,31 @@ void SvtViewOptionsBase_Impl::SetUserItem( const OUString& sName  ,
         }
 }
 
-sal_Int32 SvtViewOptionsBase_Impl::GetPageID( const OUString& sName )
+OString SvtViewOptionsBase_Impl::GetPageID( const OUString& sName )
 {
     #ifdef DEBUG_VIEWOPTIONS
     ++m_nReadCount;
     #endif
 
-    sal_Int32 nID = 0;
+    OUString sID;
     try
     {
         css::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(sName, false),
             css::uno::UNO_QUERY);
         if (xNode.is())
-            xNode->getPropertyValue(PROPERTY_PAGEID) >>= nID;
+            xNode->getPropertyValue(PROPERTY_PAGEID) >>= sID;
     }
     catch(const css::uno::Exception& ex)
         {
-            nID = 0;
             SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
         }
 
-    return nID;
+    return sID.toUtf8();
 }
 
 void SvtViewOptionsBase_Impl::SetPageID( const OUString& sName ,
-                                               sal_Int32        nID   )
+                                         const OString& sID )
 {
     #ifdef DEBUG_VIEWOPTIONS
     ++m_nWriteCount;
@@ -469,7 +468,7 @@ void SvtViewOptionsBase_Impl::SetPageID( const OUString& sName ,
         css::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(sName, true),
             css::uno::UNO_QUERY_THROW);
-        xNode->setPropertyValue(PROPERTY_PAGEID, css::uno::makeAny(nID));
+        xNode->setPropertyValue(PROPERTY_PAGEID, css::uno::makeAny(OUString::fromUtf8(sID)));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
     catch(const css::uno::Exception& ex)
@@ -792,7 +791,7 @@ void SvtViewOptions::SetWindowState( const OUString& sState )
 
 //  public method
 
-sal_Int32 SvtViewOptions::GetPageID() const
+OString SvtViewOptions::GetPageID() const
 {
     // Ready for multithreading
     ::osl::MutexGuard aGuard( GetOwnStaticMutex() );
@@ -801,15 +800,15 @@ sal_Int32 SvtViewOptions::GetPageID() const
     // These call isn't allowed for dialogs, tab-pages or windows!
     OSL_ENSURE( !(m_eViewType==EViewType::Dialog||m_eViewType==EViewType::TabPage||m_eViewType==EViewType::Window), "SvtViewOptions::GetPageID()\nCall not allowed for Dialogs, TabPages or Windows! I do nothing!" );
 
-    sal_Int32 nID = 0;
+    OString sID;
     if( m_eViewType == EViewType::TabDialog )
-        nID = m_pDataContainer_TabDialogs->GetPageID( m_sViewName );
-    return nID;
+        sID = m_pDataContainer_TabDialogs->GetPageID( m_sViewName );
+    return sID;
 }
 
 //  public method
 
-void SvtViewOptions::SetPageID( sal_Int32 nID )
+void SvtViewOptions::SetPageID(const OString& rID)
 {
     // Ready for multithreading
     ::osl::MutexGuard aGuard( GetOwnStaticMutex() );
@@ -819,7 +818,7 @@ void SvtViewOptions::SetPageID( sal_Int32 nID )
     OSL_ENSURE( !(m_eViewType==EViewType::Dialog||m_eViewType==EViewType::TabPage||m_eViewType==EViewType::Window), "SvtViewOptions::SetPageID()\nCall not allowed for Dialogs, TabPages or Windows! I do nothing!" );
 
     if( m_eViewType == EViewType::TabDialog )
-        m_pDataContainer_TabDialogs->SetPageID( m_sViewName, nID );
+        m_pDataContainer_TabDialogs->SetPageID(m_sViewName, rID);
 }
 
 //  public method
