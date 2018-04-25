@@ -591,7 +591,7 @@ void SfxTabDialog::Start_Impl()
         SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
 
         // initial TabPage from Program/Help/config
-        nActPage = static_cast<sal_uInt16>(aDlgOpt.GetPageID());
+        nActPage = m_pTabCtrl->GetPageId(aDlgOpt.GetPageID());
 
         if ( USHRT_MAX != m_nAppPageId )
             nActPage = m_nAppPageId;
@@ -775,7 +775,7 @@ void SfxTabDialog::SavePosAndId()
     SvtViewOptions aDlgOpt(EViewType::TabDialog, OStringToOUString(GetHelpId(),RTL_TEXTENCODING_UTF8));
     aDlgOpt.SetWindowState(OStringToOUString(GetWindowState(WindowStateMask::Pos),RTL_TEXTENCODING_ASCII_US));
     // to-do replace with name of page when all pages are converted to .ui
-    aDlgOpt.SetPageID( m_pTabCtrl->GetCurPageId() );
+    aDlgOpt.SetPageID(m_pTabCtrl->GetPageName(m_pTabCtrl->GetCurPageId()));
 }
 
 

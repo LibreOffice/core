@@ -1427,11 +1427,11 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent)
 
     m_pTabCtrl->SetActivatePageHdl( LINK( this, SfxHelpIndexWindow_Impl, ActivatePageHdl ) );
 
-    sal_Int32 nPageId = m_pTabCtrl->GetPageId("index");
+    OString sPageId("index");
     SvtViewOptions aViewOpt( EViewType::TabDialog, CONFIGNAME_INDEXWIN );
     if ( aViewOpt.Exists() )
-        nPageId = aViewOpt.GetPageID();
-    m_pTabCtrl->SetCurPageId( static_cast<sal_uInt16>(nPageId) );
+        sPageId = aViewOpt.GetPageID();
+    m_pTabCtrl->SetCurPageId(m_pTabCtrl->GetPageId(sPageId));
     ActivatePageHdl( m_pTabCtrl );
     m_pActiveLB->SetSelectHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectHdl ) );
 
@@ -1460,7 +1460,7 @@ void SfxHelpIndexWindow_Impl::dispose()
         delete static_cast<OUString*>(m_pActiveLB->GetEntryData(i));
 
     SvtViewOptions aViewOpt( EViewType::TabDialog, CONFIGNAME_INDEXWIN );
-    aViewOpt.SetPageID( static_cast<sal_Int32>(m_pTabCtrl->GetCurPageId()) );
+    aViewOpt.SetPageID(m_pTabCtrl->GetPageName(m_pTabCtrl->GetCurPageId()));
 
     disposeBuilder();
     m_pActiveLB.clear();
