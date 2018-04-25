@@ -1141,6 +1141,7 @@
   <block-list:block block-list:abbreviated-name=":ravnalo:" block-list:name="📏"/>
   <block-list:block block-list:abbreviated-name=":ravno:" block-list:name="♭"/>
   <block-list:block block-list:abbreviated-name=":razmišljanje:" block-list:name="🤔"/>
+  <block-list:block block-list:abbreviated-name=":razmjena:" block-list:name="💱"/>
   <block-list:block block-list:abbreviated-name=":razočaran:" block-list:name="😞"/>
   <block-list:block block-list:abbreviated-name=":razvod:" block-list:name="⚮"/>
   <block-list:block block-list:abbreviated-name=":^r:" block-list:name="ʳ"/>
@@ -1512,7 +1513,6 @@
   <block-list:block block-list:abbreviated-name=":zadnja četvrt:" block-list:name="🌗"/>
   <block-list:block block-list:abbreviated-name=":zalazak sunca:" block-list:name="🌆"/>
   <block-list:block block-list:abbreviated-name=":zamišljen:" block-list:name="😔"/>
-  <block-list:block block-list:abbreviated-name=":zamjena:" block-list:name="💱"/>
   <block-list:block block-list:abbreviated-name=":zapanjen:" block-list:name="😲"/>
   <block-list:block block-list:abbreviated-name=":zap:" block-list:name="⚡"/>
   <block-list:block block-list:abbreviated-name=":žarulja:" block-list:name="💡"/>

@@ -17,7 +17,6 @@
   <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
   <block-list:block block-list:abbreviated-name=":härkä:" block-list:name="🐂"/>
   <block-list:block block-list:abbreviated-name=":kaavio4:" block-list:name="📊"/>
-  <block-list:block block-list:abbreviated-name=":kumarrus:" block-list:name="🙇"/>
   <block-list:block block-list:abbreviated-name=":vaaka:" block-list:name="⚖"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
@@ -561,6 +560,7 @@
   <block-list:block block-list:abbreviated-name=":lahja:" block-list:name="🎁"/>
   <block-list:block block-list:abbreviated-name=":lahja sydän:" block-list:name="💝"/>
   <block-list:block block-list:abbreviated-name=":lähtevä lokero:" block-list:name="📤"/>
+  <block-list:block block-list:abbreviated-name=":lähtö:" block-list:name="🛫"/>
   <block-list:block block-list:abbreviated-name=":laiva2:" block-list:name="🛳"/>
   <block-list:block block-list:abbreviated-name=":laiva:" block-list:name="🚢"/>
   <block-list:block block-list:abbreviated-name=":lambda:" block-list:name="λ"/>
@@ -835,6 +835,7 @@
   <block-list:block block-list:abbreviated-name=":pettynyt:" block-list:name="😞"/>
   <block-list:block block-list:abbreviated-name=":pettynyt helpottunut:" block-list:name="😥"/>
   <block-list:block block-list:abbreviated-name=":piano:" block-list:name="🎹"/>
+  <block-list:block block-list:abbreviated-name=":pidot:" block-list:name="🕃"/>
   <block-list:block block-list:abbreviated-name=":pienempi neliö2:" block-list:name="◾"/>
   <block-list:block block-list:abbreviated-name=":pienempi neliö:" block-list:name="◽"/>
   <block-list:block block-list:abbreviated-name=":pienenevä kuunsirppi:" block-list:name="🌘"/>
@@ -968,6 +969,7 @@
   <block-list:block block-list:abbreviated-name=":S2:" block-list:name="⇓"/>
   <block-list:block block-list:abbreviated-name=":säädin:" block-list:name="🎛"/>
   <block-list:block block-list:abbreviated-name=":saapas:" block-list:name="👢"/>
+  <block-list:block block-list:abbreviated-name=":saapuminen:" block-list:name="🛬"/>
   <block-list:block block-list:abbreviated-name=":saari:" block-list:name="🏝"/>
   <block-list:block block-list:abbreviated-name=":sade2:" block-list:name="⛆"/>
   <block-list:block block-list:abbreviated-name=":sade:" block-list:name="☔"/>
@@ -1079,6 +1081,7 @@
   <block-list:block block-list:abbreviated-name=":sydänkoristelu:" block-list:name="💟"/>
   <block-list:block block-list:abbreviated-name=":sykloni:" block-list:name="🌀"/>
   <block-list:block block-list:abbreviated-name=":syntymäpäivä:" block-list:name="🎂"/>
+  <block-list:block block-list:abbreviated-name=":syvä kumarrus:" block-list:name="🙇"/>
   <block-list:block block-list:abbreviated-name=":tähti2:" block-list:name="☆"/>
   <block-list:block block-list:abbreviated-name=":tähti3:" block-list:name="🌟"/>
   <block-list:block block-list:abbreviated-name=":tähti4:" block-list:name="🌠"/>

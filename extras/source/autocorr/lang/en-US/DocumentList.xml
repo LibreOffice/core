@@ -822,6 +822,8 @@
   <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
   <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
   <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+  <block-list:block block-list:abbreviated-name=":o:" block-list:name="⭕"/>
+  <block-list:block block-list:abbreviated-name=":schwa:" block-list:name="ə"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":100:" block-list:name="💯"/>
@@ -1811,7 +1813,6 @@
   <block-list:block block-list:abbreviated-name=":NW:" block-list:name="↖"/>
   <block-list:block block-list:abbreviated-name=":^o:" block-list:name="ᵒ"/>
   <block-list:block block-list:abbreviated-name=":_o:" block-list:name="ₒ"/>
-  <block-list:block block-list:abbreviated-name=":o:" block-list:name="⭕"/>
   <block-list:block block-list:abbreviated-name=":^O:" block-list:name="ᴼ"/>
   <block-list:block block-list:abbreviated-name=":ocean:" block-list:name="🌊"/>
   <block-list:block block-list:abbreviated-name=":octopus:" block-list:name="🐙"/>
@@ -2046,7 +2047,6 @@
   <block-list:block block-list:abbreviated-name=":scarf:" block-list:name="🧣"/>
   <block-list:block block-list:abbreviated-name=":school:" block-list:name="🏫"/>
   <block-list:block block-list:abbreviated-name=":school satchel:" block-list:name="🎒"/>
-  <block-list:block block-list:abbreviated-name=":schwa:" block-list:name="ə"/>
   <block-list:block block-list:abbreviated-name=":scissors2:" block-list:name="✄"/>
   <block-list:block block-list:abbreviated-name=":scissors3:" block-list:name="✁"/>
   <block-list:block block-list:abbreviated-name=":scissors4:" block-list:name="✃"/>

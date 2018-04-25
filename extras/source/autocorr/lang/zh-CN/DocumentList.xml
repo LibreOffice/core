@@ -851,62 +851,43 @@
   <block-list:block block-list:abbreviated-name=":x2:" block-list:name="❌"/>
   <block-list:block block-list:abbreviated-name=":xi:" block-list:name="ξ"/>
   <block-list:block block-list:abbreviated-name=":zeta:" block-list:name="ζ"/>
+  <block-list:block block-list:abbreviated-name=":angry:" block-list:name="😠"/>
+  <block-list:block block-list:abbreviated-name=":dizzy face:" block-list:name="😵"/>
+  <block-list:block block-list:abbreviated-name=":flushed:" block-list:name="😳"/>
+  <block-list:block block-list:abbreviated-name=":person frowning:" block-list:name="🙍"/>
+  <block-list:block block-list:abbreviated-name=":扩音器:" block-list:name="🕫"/>
+  <block-list:block block-list:abbreviated-name=":链接:" block-list:name="🔗"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":100分:" block-list:name="💯"/>
-  <block-list:block block-list:abbreviated-name=":10.30:" block-list:name="🕥"/>
-  <block-list:block block-list:abbreviated-name=":10 h:" block-list:name="🕙"/>
-  <block-list:block block-list:abbreviated-name=":11.30:" block-list:name="🕦"/>
-  <block-list:block block-list:abbreviated-name=":11 h:" block-list:name="🕚"/>
-  <block-list:block block-list:abbreviated-name=":12.30:" block-list:name="🕧"/>
   <block-list:block block-list:abbreviated-name=":1/2:" block-list:name="½"/>
-  <block-list:block block-list:abbreviated-name=":12 h:" block-list:name="🕛"/>
-  <block-list:block block-list:abbreviated-name=":1.30:" block-list:name="🕜"/>
   <block-list:block block-list:abbreviated-name=":1/3:" block-list:name="⅓"/>
   <block-list:block block-list:abbreviated-name=":1/4:" block-list:name="¼"/>
   <block-list:block block-list:abbreviated-name=":1/8:" block-list:name="⅛"/>
   <block-list:block block-list:abbreviated-name=":18禁:" block-list:name="🔞"/>
   <block-list:block block-list:abbreviated-name=":_1:" block-list:name="₁"/>
   <block-list:block block-list:abbreviated-name=":^1:" block-list:name="¹"/>
-  <block-list:block block-list:abbreviated-name=":1 h:" block-list:name="🕐"/>
-  <block-list:block block-list:abbreviated-name=":2.30:" block-list:name="🕝"/>
   <block-list:block block-list:abbreviated-name=":2/3:" block-list:name="⅔"/>
   <block-list:block block-list:abbreviated-name=":_2:" block-list:name="₂"/>
   <block-list:block block-list:abbreviated-name=":^2:" block-list:name="²"/>
-  <block-list:block block-list:abbreviated-name=":2 h:" block-list:name="🕑"/>
-  <block-list:block block-list:abbreviated-name=":3.30:" block-list:name="🕞"/>
   <block-list:block block-list:abbreviated-name=":3/4:" block-list:name="¾"/>
   <block-list:block block-list:abbreviated-name=":3/8:" block-list:name="⅜"/>
   <block-list:block block-list:abbreviated-name=":_3:" block-list:name="₃"/>
   <block-list:block block-list:abbreviated-name=":^3:" block-list:name="³"/>
-  <block-list:block block-list:abbreviated-name=":3 h:" block-list:name="🕒"/>
-  <block-list:block block-list:abbreviated-name=":4.30:" block-list:name="🕟"/>
   <block-list:block block-list:abbreviated-name=":_4:" block-list:name="₄"/>
   <block-list:block block-list:abbreviated-name=":^4:" block-list:name="⁴"/>
-  <block-list:block block-list:abbreviated-name=":4 h:" block-list:name="🕓"/>
-  <block-list:block block-list:abbreviated-name=":5.30:" block-list:name="🕠"/>
   <block-list:block block-list:abbreviated-name=":5/8:" block-list:name="⅝"/>
   <block-list:block block-list:abbreviated-name=":_5:" block-list:name="₅"/>
   <block-list:block block-list:abbreviated-name=":^5:" block-list:name="⁵"/>
-  <block-list:block block-list:abbreviated-name=":5 h:" block-list:name="🕔"/>
-  <block-list:block block-list:abbreviated-name=":6.30:" block-list:name="🕡"/>
   <block-list:block block-list:abbreviated-name=":_6:" block-list:name="₆"/>
   <block-list:block block-list:abbreviated-name=":^6:" block-list:name="⁶"/>
-  <block-list:block block-list:abbreviated-name=":6 h:" block-list:name="🕕"/>
-  <block-list:block block-list:abbreviated-name=":7.30:" block-list:name="🕢"/>
   <block-list:block block-list:abbreviated-name=":7/8:" block-list:name="⅞"/>
   <block-list:block block-list:abbreviated-name=":_7:" block-list:name="₇"/>
   <block-list:block block-list:abbreviated-name=":^7:" block-list:name="⁷"/>
-  <block-list:block block-list:abbreviated-name=":7 h:" block-list:name="🕖"/>
-  <block-list:block block-list:abbreviated-name=":8.30:" block-list:name="🕣"/>
   <block-list:block block-list:abbreviated-name=":_8:" block-list:name="₈"/>
   <block-list:block block-list:abbreviated-name=":^8:" block-list:name="⁸"/>
-  <block-list:block block-list:abbreviated-name=":8 h:" block-list:name="🕗"/>
-  <block-list:block block-list:abbreviated-name=":9.30:" block-list:name="🕤"/>
   <block-list:block block-list:abbreviated-name=":_9:" block-list:name="₉"/>
   <block-list:block block-list:abbreviated-name=":^9:" block-list:name="⁹"/>
-  <block-list:block block-list:abbreviated-name=":9 h:" block-list:name="🕘"/>
-  <block-list:block block-list:abbreviated-name=":abc:" block-list:name="🔤"/>
   <block-list:block block-list:abbreviated-name=":^a:" block-list:name="ᵃ"/>
   <block-list:block block-list:abbreviated-name=":_a:" block-list:name="ₐ"/>
   <block-list:block block-list:abbreviated-name=":^A:" block-list:name="ᴬ"/>
@@ -915,9 +896,6 @@
   <block-list:block block-list:abbreviated-name=":^alpha:" block-list:name="ᵅ"/>
   <block-list:block block-list:abbreviated-name=":ambulance:" block-list:name="🚑"/>
   <block-list:block block-list:abbreviated-name=":angle2:" block-list:name="∡"/>
-  <block-list:block block-list:abbreviated-name=":angry:" block-list:name="😠"/>
-  <block-list:block block-list:abbreviated-name=":anguished:" block-list:name="😧"/>
-  <block-list:block block-list:abbreviated-name=":astonished:" block-list:name="😲"/>
   <block-list:block block-list:abbreviated-name=":baby2:" block-list:name="🚼"/>
   <block-list:block block-list:abbreviated-name=":baggage:" block-list:name="🛄"/>
   <block-list:block block-list:abbreviated-name=":bath:" block-list:name="🛀"/>
@@ -943,34 +921,21 @@
   <block-list:block block-list:abbreviated-name=":--:" block-list:name="–"/>
   <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
   <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
-  <block-list:block block-list:abbreviated-name=":brightness2:" block-list:name="🔆"/>
-  <block-list:block block-list:abbreviated-name=":brightness:" block-list:name="🔅"/>
   <block-list:block block-list:abbreviated-name=":bus2:" block-list:name="🚍"/>
   <block-list:block block-list:abbreviated-name=":bus:" block-list:name="🚌"/>
   <block-list:block block-list:abbreviated-name=":busstop:" block-list:name="🚏"/>
-  <block-list:block block-list:abbreviated-name=":calling:" block-list:name="📲"/>
-  <block-list:block block-list:abbreviated-name=":camera:" block-list:name="📷"/>
   <block-list:block block-list:abbreviated-name=":car2:" block-list:name="🚘"/>
   <block-list:block block-list:abbreviated-name=":car3:" block-list:name="🚙"/>
   <block-list:block block-list:abbreviated-name=":car:" block-list:name="🚗"/>
   <block-list:block block-list:abbreviated-name=":^c:" block-list:name="ᶜ"/>
-  <block-list:block block-list:abbreviated-name=":celebration:" block-list:name="🙌"/>
   <block-list:block block-list:abbreviated-name=":^chi:" block-list:name="ᵡ"/>
   <block-list:block block-list:abbreviated-name=":_chi:" block-list:name="ᵪ"/>
-  <block-list:block block-list:abbreviated-name=":cold sweat:" block-list:name="😰"/>
-  <block-list:block block-list:abbreviated-name=":confounded:" block-list:name="😖"/>
-  <block-list:block block-list:abbreviated-name=":confused:" block-list:name="😕"/>
   <block-list:block block-list:abbreviated-name=":construction:" block-list:name="🚧"/>
-  <block-list:block block-list:abbreviated-name=":cry:" block-list:name="😢"/>
-  <block-list:block block-list:abbreviated-name=":crying cat:" block-list:name="😿"/>
   <block-list:block block-list:abbreviated-name=":customs:" block-list:name="🛃"/>
   <block-list:block block-list:abbreviated-name=":^d:" block-list:name="ᵈ"/>
   <block-list:block block-list:abbreviated-name=":^D:" block-list:name="ᴰ"/>
   <block-list:block block-list:abbreviated-name=":^delta:" block-list:name="ᵟ"/>
-  <block-list:block block-list:abbreviated-name=":disappointed:" block-list:name="😞"/>
-  <block-list:block block-list:abbreviated-name=":disappointed relieved:" block-list:name="😥"/>
   <block-list:block block-list:abbreviated-name=":divides:" block-list:name="∣"/>
-  <block-list:block block-list:abbreviated-name=":dizzy face:" block-list:name="😵"/>
   <block-list:block block-list:abbreviated-name=":do not litter:" block-list:name="🚯"/>
   <block-list:block block-list:abbreviated-name=":door:" block-list:name="🚪"/>
   <block-list:block block-list:abbreviated-name=":down2:" block-list:name="👇"/>
@@ -979,33 +944,19 @@
   <block-list:block block-list:abbreviated-name=":^e:" block-list:name="ᵉ"/>
   <block-list:block block-list:abbreviated-name=":_e:" block-list:name="ₑ"/>
   <block-list:block block-list:abbreviated-name=":^E:" block-list:name="ᴱ"/>
-  <block-list:block block-list:abbreviated-name=":e-mail:" block-list:name="📧"/>
   <block-list:block block-list:abbreviated-name=":end of proof:" block-list:name="∎"/>
   <block-list:block block-list:abbreviated-name=":^epsilon:" block-list:name="ᵋ"/>
   <block-list:block block-list:abbreviated-name=":EW2:" block-list:name="⇔"/>
-  <block-list:block block-list:abbreviated-name=":expressionless:" block-list:name="😑"/>
-  <block-list:block block-list:abbreviated-name=":fax:" block-list:name="📠"/>
   <block-list:block block-list:abbreviated-name=":^f:" block-list:name="ᶠ"/>
-  <block-list:block block-list:abbreviated-name=":fearful:" block-list:name="😨"/>
   <block-list:block block-list:abbreviated-name=":fire engine:" block-list:name="🚒"/>
-  <block-list:block block-list:abbreviated-name=":flushed:" block-list:name="😳"/>
-  <block-list:block block-list:abbreviated-name=":frowning:" block-list:name="😦"/>
   <block-list:block block-list:abbreviated-name=":^gamma:" block-list:name="ᵞ"/>
   <block-list:block block-list:abbreviated-name=":_gamma:" block-list:name="ᵧ"/>
   <block-list:block block-list:abbreviated-name=":^g:" block-list:name="ᵍ"/>
   <block-list:block block-list:abbreviated-name=":^G:" block-list:name="ᴳ"/>
-  <block-list:block block-list:abbreviated-name=":grimacing:" block-list:name="😬"/>
-  <block-list:block block-list:abbreviated-name=":grin:" block-list:name="😁"/>
-  <block-list:block block-list:abbreviated-name=":happiness:" block-list:name="🙋"/>
   <block-list:block block-list:abbreviated-name=":^h:" block-list:name="ʰ"/>
   <block-list:block block-list:abbreviated-name=":_h:" block-list:name="ₕ"/>
   <block-list:block block-list:abbreviated-name=":^H:" block-list:name="ᴴ"/>
-  <block-list:block block-list:abbreviated-name=":hear no evil:" block-list:name="🙉"/>
-  <block-list:block block-list:abbreviated-name=":heart eyes:" block-list:name="😍"/>
-  <block-list:block block-list:abbreviated-name=":heart eyes cat:" block-list:name="😻"/>
   <block-list:block block-list:abbreviated-name=":helicopter:" block-list:name="🚁"/>
-  <block-list:block block-list:abbreviated-name=":horn:" block-list:name="📯"/>
-  <block-list:block block-list:abbreviated-name=":hushed:" block-list:name="😯"/>
   <block-list:block block-list:abbreviated-name=":^i:" block-list:name="ⁱ"/>
   <block-list:block block-list:abbreviated-name=":_i:" block-list:name="ᵢ"/>
   <block-list:block block-list:abbreviated-name=":^I:" block-list:name="ᴵ"/>
@@ -1016,16 +967,10 @@
   <block-list:block block-list:abbreviated-name=":^J:" block-list:name="ᴶ"/>
   <block-list:block block-list:abbreviated-name=":J:" block-list:name="🂫"/>
   <block-list:block block-list:abbreviated-name=":Joker:" block-list:name="🃏"/>
-  <block-list:block block-list:abbreviated-name=":joy cat:" block-list:name="😹"/>
   <block-list:block block-list:abbreviated-name=":^k:" block-list:name="ᵏ"/>
   <block-list:block block-list:abbreviated-name=":_k:" block-list:name="ₖ"/>
   <block-list:block block-list:abbreviated-name=":^K:" block-list:name="ᴷ"/>
   <block-list:block block-list:abbreviated-name=":K:" block-list:name="🂮"/>
-  <block-list:block block-list:abbreviated-name=":kiss2:" block-list:name="😘"/>
-  <block-list:block block-list:abbreviated-name=":kiss3:" block-list:name="😙"/>
-  <block-list:block block-list:abbreviated-name=":kiss4:" block-list:name="😚"/>
-  <block-list:block block-list:abbreviated-name=":kissing:" block-list:name="😗"/>
-  <block-list:block block-list:abbreviated-name=":kissing cat:" block-list:name="😽"/>
   <block-list:block block-list:abbreviated-name=":^l:" block-list:name="ˡ"/>
   <block-list:block block-list:abbreviated-name=":_l:" block-list:name="ₗ"/>
   <block-list:block block-list:abbreviated-name=":^L:" block-list:name="ᴸ"/>
@@ -1034,40 +979,24 @@
   <block-list:block block-list:abbreviated-name=":light rail:" block-list:name="🚈"/>
   <block-list:block block-list:abbreviated-name=":litter:" block-list:name="🚮"/>
   <block-list:block block-list:abbreviated-name=":lorry:" block-list:name="🚛"/>
-  <block-list:block block-list:abbreviated-name=":loudspeaker:" block-list:name="📢"/>
-  <block-list:block block-list:abbreviated-name=":mailbox2:" block-list:name="📫"/>
-  <block-list:block block-list:abbreviated-name=":mailbox3:" block-list:name="📬"/>
-  <block-list:block block-list:abbreviated-name=":mailbox4:" block-list:name="📭"/>
-  <block-list:block block-list:abbreviated-name=":mailbox:" block-list:name="📪"/>
-  <block-list:block block-list:abbreviated-name=":mask:" block-list:name="😷"/>
   <block-list:block block-list:abbreviated-name=":^m:" block-list:name="ᵐ"/>
   <block-list:block block-list:abbreviated-name=":_m:" block-list:name="ₘ"/>
   <block-list:block block-list:abbreviated-name=":^M:" block-list:name="ᴹ"/>
-  <block-list:block block-list:abbreviated-name=":mega:" block-list:name="📣"/>
-  <block-list:block block-list:abbreviated-name=":memo:" block-list:name="📝"/>
   <block-list:block block-list:abbreviated-name=":mens:" block-list:name="🚹"/>
   <block-list:block block-list:abbreviated-name=":metro:" block-list:name="🚇"/>
   <block-list:block block-list:abbreviated-name=":minibus:" block-list:name="🚐"/>
-  <block-list:block block-list:abbreviated-name=":mobile:" block-list:name="📱"/>
-  <block-list:block block-list:abbreviated-name=":mobile phone off:" block-list:name="📴"/>
   <block-list:block block-list:abbreviated-name=":monorail:" block-list:name="🚝"/>
   <block-list:block block-list:abbreviated-name=":mountain cableway:" block-list:name="🚠"/>
   <block-list:block block-list:abbreviated-name=":mountain railway:" block-list:name="🚞"/>
   <block-list:block block-list:abbreviated-name=":N2:" block-list:name="⇑"/>
-  <block-list:block block-list:abbreviated-name=":name:" block-list:name="📛"/>
   <block-list:block block-list:abbreviated-name=":^n:" block-list:name="ⁿ"/>
   <block-list:block block-list:abbreviated-name=":_n:" block-list:name="ₙ"/>
   <block-list:block block-list:abbreviated-name=":^N:" block-list:name="ᴺ"/>
   <block-list:block block-list:abbreviated-name=":NE2:" block-list:name="⇗"/>
   <block-list:block block-list:abbreviated-name=":NE:" block-list:name="↗"/>
-  <block-list:block block-list:abbreviated-name=":neutral face:" block-list:name="😐"/>
-  <block-list:block block-list:abbreviated-name=":newspaper:" block-list:name="📰"/>
   <block-list:block block-list:abbreviated-name=":ni:" block-list:name="∋"/>
   <block-list:block block-list:abbreviated-name=":no bicycles:" block-list:name="🚳"/>
   <block-list:block block-list:abbreviated-name=":no entry sign:" block-list:name="🚫"/>
-  <block-list:block block-list:abbreviated-name=":no good:" block-list:name="🙅"/>
-  <block-list:block block-list:abbreviated-name=":no mobile:" block-list:name="📵"/>
-  <block-list:block block-list:abbreviated-name=":no mouth:" block-list:name="😶"/>
   <block-list:block block-list:abbreviated-name=":non-potable water:" block-list:name="🚱"/>
   <block-list:block block-list:abbreviated-name=":no pedestrians:" block-list:name="🚷"/>
   <block-list:block block-list:abbreviated-name=":no smoking:" block-list:name="🚭"/>
@@ -1083,92 +1012,55 @@
   <block-list:block block-list:abbreviated-name=":_o:" block-list:name="ₒ"/>
   <block-list:block block-list:abbreviated-name=":^O:" block-list:name="ᴼ"/>
   <block-list:block block-list:abbreviated-name=":OK2:" block-list:name="🖏"/>
-  <block-list:block block-list:abbreviated-name=":ok3:" block-list:name="🙆"/>
   <block-list:block block-list:abbreviated-name=":OK:" block-list:name="👌"/>
-  <block-list:block block-list:abbreviated-name=":open mouth:" block-list:name="😮"/>
-  <block-list:block block-list:abbreviated-name=":package:" block-list:name="📦"/>
-  <block-list:block block-list:abbreviated-name=":pager:" block-list:name="📟"/>
   <block-list:block block-list:abbreviated-name=":parallel:" block-list:name="∥"/>
   <block-list:block block-list:abbreviated-name=":passport:" block-list:name="🛂"/>
   <block-list:block block-list:abbreviated-name=":^p:" block-list:name="ᵖ"/>
   <block-list:block block-list:abbreviated-name=":_p:" block-list:name="ₚ"/>
   <block-list:block block-list:abbreviated-name=":^P:" block-list:name="ᴾ"/>
-  <block-list:block block-list:abbreviated-name=":pensive:" block-list:name="😔"/>
-  <block-list:block block-list:abbreviated-name=":persevere:" block-list:name="😣"/>
-  <block-list:block block-list:abbreviated-name=":person frowning:" block-list:name="🙍"/>
-  <block-list:block block-list:abbreviated-name=":person pouting:" block-list:name="🙎"/>
   <block-list:block block-list:abbreviated-name=":^phi:" block-list:name="ᵠ"/>
   <block-list:block block-list:abbreviated-name=":_phi:" block-list:name="ᵩ"/>
   <block-list:block block-list:abbreviated-name=":^Phi:" block-list:name="ᶲ"/>
   <block-list:block block-list:abbreviated-name=":police car2:" block-list:name="🚔"/>
   <block-list:block block-list:abbreviated-name=":police car:" block-list:name="🚓"/>
-  <block-list:block block-list:abbreviated-name=":postbox:" block-list:name="📮"/>
   <block-list:block block-list:abbreviated-name=":potable water:" block-list:name="🚰"/>
-  <block-list:block block-list:abbreviated-name=":pouting cat:" block-list:name="😾"/>
-  <block-list:block block-list:abbreviated-name=":pray:" block-list:name="🙏"/>
   <block-list:block block-list:abbreviated-name=":product:" block-list:name="∏"/>
   <block-list:block block-list:abbreviated-name=":Q:" block-list:name="🂭"/>
-  <block-list:block block-list:abbreviated-name=":radio:" block-list:name="📻"/>
-  <block-list:block block-list:abbreviated-name=":rage:" block-list:name="😡"/>
   <block-list:block block-list:abbreviated-name=":railway car:" block-list:name="🚃"/>
   <block-list:block block-list:abbreviated-name=":^r:" block-list:name="ʳ"/>
   <block-list:block block-list:abbreviated-name=":_r:" block-list:name="ᵣ"/>
   <block-list:block block-list:abbreviated-name=":^R:" block-list:name="ᴿ"/>
-  <block-list:block block-list:abbreviated-name=":receiver:" block-list:name="📞"/>
-  <block-list:block block-list:abbreviated-name=":relieved:" block-list:name="😌"/>
   <block-list:block block-list:abbreviated-name=":restroom:" block-list:name="🚻"/>
   <block-list:block block-list:abbreviated-name=":_rho:" block-list:name="ᵨ"/>
   <block-list:block block-list:abbreviated-name=":right2:" block-list:name="👉"/>
-  <block-list:block block-list:abbreviated-name=":rocket:" block-list:name="🚀"/>
   <block-list:block block-list:abbreviated-name=":rotating light:" block-list:name="🚨"/>
   <block-list:block block-list:abbreviated-name=":rowboat:" block-list:name="🚣"/>
   <block-list:block block-list:abbreviated-name=":S2:" block-list:name="⇓"/>
   <block-list:block block-list:abbreviated-name=":^s:" block-list:name="ˢ"/>
   <block-list:block block-list:abbreviated-name=":_s:" block-list:name="ₛ"/>
-  <block-list:block block-list:abbreviated-name=":scream:" block-list:name="😱"/>
-  <block-list:block block-list:abbreviated-name=":scream cat:" block-list:name="🙀"/>
-  <block-list:block block-list:abbreviated-name=":scroll:" block-list:name="📜"/>
   <block-list:block block-list:abbreviated-name=":SE2:" block-list:name="⇘"/>
   <block-list:block block-list:abbreviated-name=":SE:" block-list:name="↘"/>
-  <block-list:block block-list:abbreviated-name=":see no evil:" block-list:name="🙈"/>
   <block-list:block block-list:abbreviated-name=":ship:" block-list:name="🚢"/>
   <block-list:block block-list:abbreviated-name=":shower:" block-list:name="🚿"/>
-  <block-list:block block-list:abbreviated-name=":signal strength:" block-list:name="📶"/>
-  <block-list:block block-list:abbreviated-name=":sleeping:" block-list:name="😴"/>
-  <block-list:block block-list:abbreviated-name=":sleepy:" block-list:name="😪"/>
   <block-list:block block-list:abbreviated-name=":small in:" block-list:name="∊"/>
   <block-list:block block-list:abbreviated-name=":small ni:" block-list:name="∍"/>
   <block-list:block block-list:abbreviated-name=":small square2:" block-list:name="▪"/>
   <block-list:block block-list:abbreviated-name=":small square:" block-list:name="▫"/>
-  <block-list:block block-list:abbreviated-name=":smile:" block-list:name="😄"/>
-  <block-list:block block-list:abbreviated-name=":smile cat:" block-list:name="😸"/>
-  <block-list:block block-list:abbreviated-name=":smiley:" block-list:name="😃"/>
-  <block-list:block block-list:abbreviated-name=":smiley cat:" block-list:name="😺"/>
-  <block-list:block block-list:abbreviated-name=":smirk:" block-list:name="😏"/>
-  <block-list:block block-list:abbreviated-name=":smirk cat:" block-list:name="😼"/>
   <block-list:block block-list:abbreviated-name=":smoking:" block-list:name="🚬"/>
-  <block-list:block block-list:abbreviated-name=":sob:" block-list:name="😭"/>
-  <block-list:block block-list:abbreviated-name=":speak no evil:" block-list:name="🙊"/>
   <block-list:block block-list:abbreviated-name=":speedboat:" block-list:name="🚤"/>
   <block-list:block block-list:abbreviated-name=":station:" block-list:name="🚉"/>
-  <block-list:block block-list:abbreviated-name=":statue:" block-list:name="🗿"/>
   <block-list:block block-list:abbreviated-name=":sum:" block-list:name="∑"/>
   <block-list:block block-list:abbreviated-name=":suspension railway:" block-list:name="🚟"/>
   <block-list:block block-list:abbreviated-name=":SW2:" block-list:name="⇙"/>
   <block-list:block block-list:abbreviated-name=":SW:" block-list:name="↙"/>
-  <block-list:block block-list:abbreviated-name=":sweat:" block-list:name="😓"/>
   <block-list:block block-list:abbreviated-name=":taxi2:" block-list:name="🚖"/>
   <block-list:block block-list:abbreviated-name=":taxi:" block-list:name="🚕"/>
   <block-list:block block-list:abbreviated-name=":^t:" block-list:name="ᵗ"/>
   <block-list:block block-list:abbreviated-name=":_t:" block-list:name="ₜ"/>
   <block-list:block block-list:abbreviated-name=":^T:" block-list:name="ᵀ"/>
   <block-list:block block-list:abbreviated-name=":^theta:" block-list:name="ᶿ"/>
-  <block-list:block block-list:abbreviated-name=":tired face:" block-list:name="😫"/>
   <block-list:block block-list:abbreviated-name=":toilet2:" block-list:name="🚾"/>
   <block-list:block block-list:abbreviated-name=":toilet:" block-list:name="🚽"/>
-  <block-list:block block-list:abbreviated-name=":tongue2:" block-list:name="😛"/>
-  <block-list:block block-list:abbreviated-name=":tongue3:" block-list:name="😜"/>
-  <block-list:block block-list:abbreviated-name=":tongue4:" block-list:name="😝"/>
   <block-list:block block-list:abbreviated-name=":tractor:" block-list:name="🚜"/>
   <block-list:block block-list:abbreviated-name=":traffic light2:" block-list:name="🚦"/>
   <block-list:block block-list:abbreviated-name=":traffic light:" block-list:name="🚥"/>
@@ -1177,41 +1069,38 @@
   <block-list:block block-list:abbreviated-name=":train:" block-list:name="🚆"/>
   <block-list:block block-list:abbreviated-name=":tram2:" block-list:name="🚋"/>
   <block-list:block block-list:abbreviated-name=":tram:" block-list:name="🚊"/>
-  <block-list:block block-list:abbreviated-name=":tray2:" block-list:name="📥"/>
-  <block-list:block block-list:abbreviated-name=":tray:" block-list:name="📤"/>
   <block-list:block block-list:abbreviated-name=":triangular flag:" block-list:name="🚩"/>
-  <block-list:block block-list:abbreviated-name=":triumph:" block-list:name="😤"/>
   <block-list:block block-list:abbreviated-name=":trolleybus:" block-list:name="🚎"/>
   <block-list:block block-list:abbreviated-name=":truck2:" block-list:name="🚚"/>
-  <block-list:block block-list:abbreviated-name=":tv:" block-list:name="📺"/>
   <block-list:block block-list:abbreviated-name=":^u:" block-list:name="ᵘ"/>
   <block-list:block block-list:abbreviated-name=":_u:" block-list:name="ᵤ"/>
   <block-list:block block-list:abbreviated-name=":^U:" block-list:name="ᵁ"/>
-  <block-list:block block-list:abbreviated-name=":unamused:" block-list:name="😒"/>
   <block-list:block block-list:abbreviated-name=":union:" block-list:name="∪"/>
   <block-list:block block-list:abbreviated-name=":up2:" block-list:name="👆"/>
   <block-list:block block-list:abbreviated-name=":^v:" block-list:name="ᵛ"/>
   <block-list:block block-list:abbreviated-name=":_v:" block-list:name="ᵥ"/>
   <block-list:block block-list:abbreviated-name=":^V:" block-list:name="ⱽ"/>
-  <block-list:block block-list:abbreviated-name=":vhs:" block-list:name="📼"/>
-  <block-list:block block-list:abbreviated-name=":vibration mode:" block-list:name="📳"/>
-  <block-list:block block-list:abbreviated-name=":video camera:" block-list:name="📹"/>
   <block-list:block block-list:abbreviated-name=":W2:" block-list:name="⇐"/>
   <block-list:block block-list:abbreviated-name=":walking:" block-list:name="🚶"/>
   <block-list:block block-list:abbreviated-name=":^w:" block-list:name="ʷ"/>
   <block-list:block block-list:abbreviated-name=":^W:" block-list:name="ᵂ"/>
-  <block-list:block block-list:abbreviated-name=":weary:" block-list:name="😩"/>
   <block-list:block block-list:abbreviated-name=":womens:" block-list:name="🚺"/>
-  <block-list:block block-list:abbreviated-name=":worried:" block-list:name="😟"/>
   <block-list:block block-list:abbreviated-name=":x4:" block-list:name="🗶"/>
   <block-list:block block-list:abbreviated-name=":^x:" block-list:name="ˣ"/>
   <block-list:block block-list:abbreviated-name=":_x:" block-list:name="ₓ"/>
   <block-list:block block-list:abbreviated-name=":^y:" block-list:name="ʸ"/>
   <block-list:block block-list:abbreviated-name=":^z:" block-list:name="ᶻ"/>
+  <block-list:block block-list:abbreviated-name=":一点半:" block-list:name="🕜"/>
+  <block-list:block block-list:abbreviated-name=":一点钟:" block-list:name="🕐"/>
   <block-list:block block-list:abbreviated-name=":七夕竹树:" block-list:name="🎋"/>
+  <block-list:block block-list:abbreviated-name=":七点半:" block-list:name="🕢"/>
+  <block-list:block block-list:abbreviated-name=":七点钟:" block-list:name="🕖"/>
   <block-list:block block-list:abbreviated-name=":万分号:" block-list:name="‱"/>
   <block-list:block block-list:abbreviated-name=":万圣节:" block-list:name="🎃"/>
+  <block-list:block block-list:abbreviated-name=":三叉戟:" block-list:name="🔱"/>
   <block-list:block block-list:abbreviated-name=":三明治:" block-list:name="🥪"/>
+  <block-list:block block-list:abbreviated-name=":三点半:" block-list:name="🕞"/>
+  <block-list:block block-list:abbreviated-name=":三点钟:" block-list:name="🕒"/>
   <block-list:block block-list:abbreviated-name=":三角形 3:" block-list:name="🛆"/>
   <block-list:block block-list:abbreviated-name=":三角形项目符号:" block-list:name="‣"/>
   <block-list:block block-list:abbreviated-name=":三角旗 2:" block-list:name="🏱"/>
@@ -1233,23 +1122,32 @@
   <block-list:block block-list:abbreviated-name=":不准盗版:" block-list:name="🕲"/>
   <block-list:block block-list:abbreviated-name=":不响铃:" block-list:name="🔕"/>
   <block-list:block block-list:abbreviated-name=":不属于:" block-list:name="∉"/>
+  <block-list:block block-list:abbreviated-name=":不感兴趣:" block-list:name="😒"/>
   <block-list:block block-list:abbreviated-name=":不等于:" block-list:name="≠"/>
   <block-list:block block-list:abbreviated-name=":与:" block-list:name="∧"/>
   <block-list:block block-list:abbreviated-name=":东:" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name=":东京塔:" block-list:name="🗼"/>
   <block-list:block block-list:abbreviated-name=":东西:" block-list:name="↔"/>
   <block-list:block block-list:abbreviated-name=":丝带 2:" block-list:name="🎀"/>
   <block-list:block block-list:abbreviated-name=":丝带:" block-list:name="🎗"/>
   <block-list:block block-list:abbreviated-name=":两个八分音符:" block-list:name="♫"/>
+  <block-list:block block-list:abbreviated-name=":两点半:" block-list:name="🕝"/>
+  <block-list:block block-list:abbreviated-name=":两点钟:" block-list:name="🕑"/>
   <block-list:block block-list:abbreviated-name=":两颗爱心:" block-list:name="💕"/>
   <block-list:block block-list:abbreviated-name=":中型实心正方形:" block-list:name="◼"/>
   <block-list:block block-list:abbreviated-name=":中型星号:" block-list:name="⭐"/>
   <block-list:block block-list:abbreviated-name=":中型空心正方形:" block-list:name="◻"/>
+  <block-list:block block-list:abbreviated-name=":中性表情:" block-list:name="😐"/>
+  <block-list:block block-list:abbreviated-name=":中音量:" block-list:name="🔉"/>
+  <block-list:block block-list:abbreviated-name=":举双手庆祝:" block-list:name="🙌"/>
   <block-list:block block-list:abbreviated-name=":举重者:" block-list:name="🏋"/>
   <block-list:block block-list:abbreviated-name=":乌贼:" block-list:name="🦑"/>
   <block-list:block block-list:abbreviated-name=":乌龟:" block-list:name="🐢"/>
   <block-list:block block-list:abbreviated-name=":乐谱:" block-list:name="🎼"/>
   <block-list:block block-list:abbreviated-name=":乒乓球:" block-list:name="🏓"/>
   <block-list:block block-list:abbreviated-name=":乘号:" block-list:name="×"/>
+  <block-list:block block-list:abbreviated-name=":九点半:" block-list:name="🕤"/>
+  <block-list:block block-list:abbreviated-name=":九点钟:" block-list:name="🕘"/>
   <block-list:block block-list:abbreviated-name=":书写之手:" block-list:name="✍"/>
   <block-list:block block-list:abbreviated-name=":书包:" block-list:name="🎒"/>
   <block-list:block block-list:abbreviated-name=":书签2:" block-list:name="🔖"/>
@@ -1262,11 +1160,14 @@
   <block-list:block block-list:abbreviated-name=":二重积分:" block-list:name="∬"/>
   <block-list:block block-list:abbreviated-name=":亏凸月:" block-list:name="🌖"/>
   <block-list:block block-list:abbreviated-name=":云:" block-list:name="☁"/>
+  <block-list:block block-list:abbreviated-name=":五点半:" block-list:name="🕠"/>
+  <block-list:block block-list:abbreviated-name=":五点钟:" block-list:name="🕔"/>
   <block-list:block block-list:abbreviated-name=":五角星:" block-list:name="⛤"/>
   <block-list:block block-list:abbreviated-name=":五边形 2:" block-list:name="⬟"/>
   <block-list:block block-list:abbreviated-name=":五边形:" block-list:name="⬠"/>
   <block-list:block block-list:abbreviated-name=":五重积分:" block-list:name="∰"/>
   <block-list:block block-list:abbreviated-name=":交叉的剑:" block-list:name="⚔"/>
+  <block-list:block block-list:abbreviated-name=":亲亲:" block-list:name="😗"/>
   <block-list:block block-list:abbreviated-name=":人鱼:" block-list:name="🧜"/>
   <block-list:block block-list:abbreviated-name=":仓鼠:" block-list:name="🐹"/>
   <block-list:block block-list:abbreviated-name=":仙人掌:" block-list:name="🌵"/>
@@ -1276,8 +1177,11 @@
   <block-list:block block-list:abbreviated-name=":伊朗国徽:" block-list:name="☫"/>
   <block-list:block block-list:abbreviated-name=":会话气泡:" block-list:name="💬"/>
   <block-list:block block-list:abbreviated-name=":伞:" block-list:name="☂"/>
+  <block-list:block block-list:abbreviated-name=":传声筒:" block-list:name="📣"/>
   <block-list:block block-list:abbreviated-name=":传真机 2:" block-list:name="🖷"/>
+  <block-list:block block-list:abbreviated-name=":传真机:" block-list:name="📠"/>
   <block-list:block block-list:abbreviated-name=":伽玛:" block-list:name="Γ"/>
+  <block-list:block block-list:abbreviated-name=":低音量:" block-list:name="🔈"/>
   <block-list:block block-list:abbreviated-name=":体操:" block-list:name="🤸"/>
   <block-list:block block-list:abbreviated-name=":体育馆:" block-list:name="🏟"/>
   <block-list:block block-list:abbreviated-name=":依塔:" block-list:name="Η"/>
@@ -1289,8 +1193,6 @@
   <block-list:block block-list:abbreviated-name=":信封 4:" block-list:name="🖆"/>
   <block-list:block block-list:abbreviated-name=":信封 5:" block-list:name="🖄"/>
   <block-list:block block-list:abbreviated-name=":信封 6:" block-list:name="🖅"/>
-  <block-list:block block-list:abbreviated-name=":信封7:" block-list:name="📨"/>
-  <block-list:block block-list:abbreviated-name=":信封8:" block-list:name="📩"/>
   <block-list:block block-list:abbreviated-name=":信封:" block-list:name="✉"/>
   <block-list:block block-list:abbreviated-name=":信息 2:" block-list:name="💁"/>
   <block-list:block block-list:abbreviated-name=":信息 3:" block-list:name="🛈"/>
@@ -1319,14 +1221,20 @@
   <block-list:block block-list:abbreviated-name=":八分休止符:" block-list:name="𝄾"/>
   <block-list:block block-list:abbreviated-name=":八分音符:" block-list:name="♪"/>
   <block-list:block block-list:abbreviated-name=":八月十五夜:" block-list:name="🎑"/>
+  <block-list:block block-list:abbreviated-name=":八点半:" block-list:name="🕣"/>
+  <block-list:block block-list:abbreviated-name=":八点钟:" block-list:name="🕗"/>
   <block-list:block block-list:abbreviated-name=":公主:" block-list:name="👸"/>
   <block-list:block block-list:abbreviated-name=":公园:" block-list:name="🏞"/>
   <block-list:block block-list:abbreviated-name=":公文包:" block-list:name="💼"/>
   <block-list:block block-list:abbreviated-name=":公羊:" block-list:name="🐏"/>
   <block-list:block block-list:abbreviated-name=":公鸡:" block-list:name="🐓"/>
+  <block-list:block block-list:abbreviated-name=":六点半:" block-list:name="🕡"/>
+  <block-list:block block-list:abbreviated-name=":六点钟:" block-list:name="🕕"/>
   <block-list:block block-list:abbreviated-name=":六边形 2:" block-list:name="⬢"/>
   <block-list:block block-list:abbreviated-name=":六边形:" block-list:name="⬡"/>
   <block-list:block block-list:abbreviated-name=":关东煮:" block-list:name="🍢"/>
+  <block-list:block block-list:abbreviated-name=":关闭的信箱（发件标志放倒）:" block-list:name="📪"/>
+  <block-list:block block-list:abbreviated-name=":关闭的信箱（发件标志竖起）:" block-list:name="📫"/>
   <block-list:block block-list:abbreviated-name=":兴奋:" block-list:name="🤩"/>
   <block-list:block block-list:abbreviated-name=":再生纸:" block-list:name="♼"/>
   <block-list:block block-list:abbreviated-name=":冥王星:" block-list:name="♇"/>
@@ -1335,15 +1243,15 @@
   <block-list:block block-list:abbreviated-name=":冰球 2:" block-list:name="🏑"/>
   <block-list:block block-list:abbreviated-name=":冰球:" block-list:name="🏒"/>
   <block-list:block block-list:abbreviated-name=":冲浪者:" block-list:name="🏄"/>
+  <block-list:block block-list:abbreviated-name=":冷汗:" block-list:name="😓"/>
+  <block-list:block block-list:abbreviated-name=":冷汗担忧:" block-list:name="😰"/>
   <block-list:block block-list:abbreviated-name=":凉鞋:" block-list:name="👡"/>
   <block-list:block block-list:abbreviated-name=":减:" block-list:name="−"/>
   <block-list:block block-list:abbreviated-name=":减加:" block-list:name="∓"/>
   <block-list:block block-list:abbreviated-name=":凯乐符号:" block-list:name="☧"/>
   <block-list:block block-list:abbreviated-name=":凯尔特十字架:" block-list:name="🕈"/>
   <block-list:block block-list:abbreviated-name=":出发:" block-list:name="🛫"/>
-  <block-list:block block-list:abbreviated-name=":刀:" block-list:name="🔪"/>
   <block-list:block block-list:abbreviated-name=":刀子 2:" block-list:name="🗡"/>
-  <block-list:block block-list:abbreviated-name=":初学者:" block-list:name="🔰"/>
   <block-list:block block-list:abbreviated-name=":刨冰:" block-list:name="🍧"/>
   <block-list:block block-list:abbreviated-name=":刺猬:" block-list:name="🦔"/>
   <block-list:block block-list:abbreviated-name=":剑标:" block-list:name="†"/>
@@ -1359,16 +1267,23 @@
   <block-list:block block-list:abbreviated-name=":加油机:" block-list:name="⛽"/>
   <block-list:block block-list:abbreviated-name=":勺子:" block-list:name="🥄"/>
   <block-list:block block-list:abbreviated-name=":包头巾:" block-list:name="👳"/>
+  <block-list:block block-list:abbreviated-name=":包裹:" block-list:name="📦"/>
   <block-list:block block-list:abbreviated-name=":北:" block-list:name="↑"/>
   <block-list:block block-list:abbreviated-name=":医院:" block-list:name="🏥"/>
+  <block-list:block block-list:abbreviated-name=":十一点半:" block-list:name="🕦"/>
+  <block-list:block block-list:abbreviated-name=":十一点钟:" block-list:name="🕚"/>
+  <block-list:block block-list:abbreviated-name=":十二点半:" block-list:name="🕧"/>
+  <block-list:block block-list:abbreviated-name=":十二点钟:" block-list:name="🕛"/>
   <block-list:block block-list:abbreviated-name=":十六分音符:" block-list:name="♬"/>
+  <block-list:block block-list:abbreviated-name=":十点半:" block-list:name="🕥"/>
+  <block-list:block block-list:abbreviated-name=":十点钟:" block-list:name="🕙"/>
   <block-list:block block-list:abbreviated-name=":千分号:" block-list:name="‰"/>
   <block-list:block block-list:abbreviated-name=":升华锅:" block-list:name="⚗"/>
   <block-list:block block-list:abbreviated-name=":升号:" block-list:name="♯"/>
   <block-list:block block-list:abbreviated-name=":半身像:" block-list:name="👤"/>
   <block-list:block block-list:abbreviated-name=":单板滑雪者:" block-list:name="🏂"/>
   <block-list:block block-list:abbreviated-name=":单片镜:" block-list:name="🧐"/>
-  <block-list:block block-list:abbreviated-name=":单选按钮:" block-list:name="🔘"/>
+  <block-list:block block-list:abbreviated-name=":单选框:" block-list:name="🔘"/>
   <block-list:block block-list:abbreviated-name=":南:" block-list:name="↓"/>
   <block-list:block block-list:abbreviated-name=":博物馆:" block-list:name="🏛"/>
   <block-list:block block-list:abbreviated-name=":卡片索引:" block-list:name="📇"/>
@@ -1376,16 +1291,23 @@
   <block-list:block block-list:abbreviated-name=":卢比:" block-list:name="₹"/>
   <block-list:block block-list:abbreviated-name=":卫兵:" block-list:name="💂"/>
   <block-list:block block-list:abbreviated-name=":卫星:" block-list:name="🛰"/>
+  <block-list:block block-list:abbreviated-name=":卷轴:" block-list:name="📜"/>
   <block-list:block block-list:abbreviated-name=":卷饼:" block-list:name="🌯"/>
+  <block-list:block block-list:abbreviated-name=":厌倦:" block-list:name="😩"/>
+  <block-list:block block-list:abbreviated-name=":厌倦尖叫的猫脸:" block-list:name="🙀"/>
+  <block-list:block block-list:abbreviated-name=":厌恶:" block-list:name="😖"/>
   <block-list:block block-list:abbreviated-name=":原子:" block-list:name="⚛"/>
+  <block-list:block block-list:abbreviated-name=":厨刀:" block-list:name="🔪"/>
   <block-list:block block-list:abbreviated-name=":叉号 2:" block-list:name="✖"/>
   <block-list:block block-list:abbreviated-name=":叉号 3:" block-list:name="❎"/>
   <block-list:block block-list:abbreviated-name=":双人半身像:" block-list:name="👥"/>
   <block-list:block block-list:abbreviated-name=":双剑标:" block-list:name="‡"/>
   <block-list:block block-list:abbreviated-name=":双叹号:" block-list:name="‼"/>
   <block-list:block block-list:abbreviated-name=":双子座:" block-list:name="♊"/>
+  <block-list:block block-list:abbreviated-name=":双手合十:" block-list:name="🙏"/>
   <block-list:block block-list:abbreviated-name=":双蛇杖:" block-list:name="☤"/>
   <block-list:block block-list:abbreviated-name=":双鱼座:" block-list:name="♓"/>
+  <block-list:block block-list:abbreviated-name=":发件箱:" block-list:name="📤"/>
   <block-list:block block-list:abbreviated-name=":取消:" block-list:name="🗙"/>
   <block-list:block block-list:abbreviated-name=":可爱:" block-list:name="💠"/>
   <block-list:block block-list:abbreviated-name=":台球:" block-list:name="🎱"/>
@@ -1409,6 +1331,8 @@
   <block-list:block block-list:abbreviated-name=":合字fl:" block-list:name="ﬂ"/>
   <block-list:block block-list:abbreviated-name=":合成器:" block-list:name="🎘"/>
   <block-list:block block-list:abbreviated-name=":吉它:" block-list:name="🎸"/>
+  <block-list:block block-list:abbreviated-name=":同意的手势:" block-list:name="🙆"/>
+  <block-list:block block-list:abbreviated-name=":吐舌头:" block-list:name="😛"/>
   <block-list:block block-list:abbreviated-name=":向日葵:" block-list:name="🌻"/>
   <block-list:block block-list:abbreviated-name=":否定:" block-list:name="👎"/>
   <block-list:block block-list:abbreviated-name=":否定符号:" block-list:name="¬"/>
@@ -1416,13 +1340,14 @@
   <block-list:block block-list:abbreviated-name=":吻:" block-list:name="💏"/>
   <block-list:block block-list:abbreviated-name=":呆子:" block-list:name="🤓"/>
   <block-list:block block-list:abbreviated-name=":呕吐:" block-list:name="🤮"/>
-  <block-list:block block-list:abbreviated-name=":呲牙:" block-list:name="😀"/>
   <block-list:block block-list:abbreviated-name=":呼叫:" block-list:name="🤙"/>
   <block-list:block block-list:abbreviated-name=":和平符号:" block-list:name="☮"/>
   <block-list:block block-list:abbreviated-name=":和服:" block-list:name="👘"/>
   <block-list:block block-list:abbreviated-name=":咖啡:" block-list:name="☕"/>
   <block-list:block block-list:abbreviated-name=":咖喱:" block-list:name="🍛"/>
   <block-list:block block-list:abbreviated-name=":响铃:" block-list:name="🔔"/>
+  <block-list:block block-list:abbreviated-name=":哭泣:" block-list:name="😢"/>
+  <block-list:block block-list:abbreviated-name=":哭泣的猫脸:" block-list:name="😿"/>
   <block-list:block block-list:abbreviated-name=":唇印:" block-list:name="💋"/>
   <block-list:block block-list:abbreviated-name=":唇膏:" block-list:name="💄"/>
   <block-list:block block-list:abbreviated-name=":唱片:" block-list:name="⏺"/>
@@ -1433,6 +1358,8 @@
   <block-list:block block-list:abbreviated-name=":啤酒 2:" block-list:name="🍻"/>
   <block-list:block block-list:abbreviated-name=":啤酒:" block-list:name="🍺"/>
   <block-list:block block-list:abbreviated-name=":喀帕:" block-list:name="Κ"/>
+  <block-list:block block-list:abbreviated-name=":喜极而泣:" block-list:name="😂"/>
+  <block-list:block block-list:abbreviated-name=":喜极而泣的猫脸:" block-list:name="😹"/>
   <block-list:block block-list:abbreviated-name=":喷泉:" block-list:name="⛲"/>
   <block-list:block block-list:abbreviated-name=":嘘:" block-list:name="🤫"/>
   <block-list:block block-list:abbreviated-name=":嘴:" block-list:name="👄"/>
@@ -1442,10 +1369,13 @@
   <block-list:block block-list:abbreviated-name=":四分休止符:" block-list:name="𝄽"/>
   <block-list:block block-list:abbreviated-name=":四分音符:" block-list:name="♩"/>
   <block-list:block block-list:abbreviated-name=":四次方根:" block-list:name="∜"/>
+  <block-list:block block-list:abbreviated-name=":四点半:" block-list:name="🕟"/>
+  <block-list:block block-list:abbreviated-name=":四点钟:" block-list:name="🕓"/>
   <block-list:block block-list:abbreviated-name=":四重积分:" block-list:name="∮"/>
   <block-list:block block-list:abbreviated-name=":回形针 2:" block-list:name="🖇"/>
   <block-list:block block-list:abbreviated-name=":回形针:" block-list:name="📎"/>
   <block-list:block block-list:abbreviated-name=":团子:" block-list:name="🍡"/>
+  <block-list:block block-list:abbreviated-name=":困倦:" block-list:name="😪"/>
   <block-list:block block-list:abbreviated-name=":围巾:" block-list:name="🧣"/>
   <block-list:block block-list:abbreviated-name=":图片:" block-list:name="🖼"/>
   <block-list:block block-list:abbreviated-name=":图表 2:" block-list:name="📉"/>
@@ -1472,14 +1402,14 @@
   <block-list:block block-list:abbreviated-name=":地瓜:" block-list:name="🍠"/>
   <block-list:block block-list:abbreviated-name=":地精:" block-list:name="👺"/>
   <block-list:block block-list:abbreviated-name=":场记板:" block-list:name="🎬"/>
+  <block-list:block block-list:abbreviated-name=":坚韧不屈:" block-list:name="😣"/>
   <block-list:block block-list:abbreviated-name=":城堡 2:" block-list:name="🏯"/>
   <block-list:block block-list:abbreviated-name=":城堡:" block-list:name="🏰"/>
   <block-list:block block-list:abbreviated-name=":城市:" block-list:name="🏙"/>
   <block-list:block block-list:abbreviated-name=":培根:" block-list:name="🥓"/>
-  <block-list:block block-list:abbreviated-name=":塔:" block-list:name="🗼"/>
   <block-list:block block-list:abbreviated-name=":墨盒:" block-list:name="🖭"/>
-  <block-list:block block-list:abbreviated-name=":声音:" block-list:name="🔉"/>
   <block-list:block block-list:abbreviated-name=":处女座:" block-list:name="♍"/>
+  <block-list:block block-list:abbreviated-name=":备忘录:" block-list:name="📝"/>
   <block-list:block block-list:abbreviated-name=":复选框6:" block-list:name="🗵"/>
   <block-list:block block-list:abbreviated-name=":复选框:" block-list:name="☐"/>
   <block-list:block block-list:abbreviated-name=":外卖:" block-list:name="🥡"/>
@@ -1494,9 +1424,9 @@
   <block-list:block block-list:abbreviated-name=":夜晚:" block-list:name="🌃"/>
   <block-list:block block-list:abbreviated-name=":大于或等于:" block-list:name="≥"/>
   <block-list:block block-list:abbreviated-name=":大卫之星:" block-list:name="✡"/>
+  <block-list:block block-list:abbreviated-name=":大哭:" block-list:name="😭"/>
   <block-list:block block-list:abbreviated-name=":大圆 2:" block-list:name="⬤"/>
   <block-list:block block-list:abbreviated-name=":大圆:" block-list:name="◯"/>
-  <block-list:block block-list:abbreviated-name=":大声:" block-list:name="🔊"/>
   <block-list:block block-list:abbreviated-name=":大头钉:" block-list:name="🖈"/>
   <block-list:block block-list:abbreviated-name=":大正方形 2:" block-list:name="⬛"/>
   <block-list:block block-list:abbreviated-name=":大正方形:" block-list:name="⬜"/>
@@ -1515,13 +1445,15 @@
   <block-list:block block-list:abbreviated-name=":太初之母性力量:" block-list:name="☬"/>
   <block-list:block block-list:abbreviated-name=":太阳 2:" block-list:name="☼"/>
   <block-list:block block-list:abbreviated-name=":太阳:" block-list:name="🌞"/>
-  <block-list:block block-list:abbreviated-name=":太阳镜2:" block-list:name="😎"/>
   <block-list:block block-list:abbreviated-name=":太阳镜:" block-list:name="🕶"/>
   <block-list:block block-list:abbreviated-name=":夫妻 2:" block-list:name="👬"/>
   <block-list:block block-list:abbreviated-name=":夫妻 3:" block-list:name="👭"/>
   <block-list:block block-list:abbreviated-name=":夫妻 4:" block-list:name="💑"/>
   <block-list:block block-list:abbreviated-name=":夫妻:" block-list:name="👫"/>
+  <block-list:block block-list:abbreviated-name=":失望:" block-list:name="😞"/>
+  <block-list:block block-list:abbreviated-name=":失望但释然:" block-list:name="😥"/>
   <block-list:block block-list:abbreviated-name=":头:" block-list:name="🗣"/>
+  <block-list:block block-list:abbreviated-name=":头上有光环的笑脸:" block-list:name="😇"/>
   <block-list:block block-list:abbreviated-name=":头戴式耳机:" block-list:name="🎧"/>
   <block-list:block block-list:abbreviated-name=":头盔:" block-list:name="⛑"/>
   <block-list:block block-list:abbreviated-name=":头脑:" block-list:name="🧠"/>
@@ -1540,6 +1472,7 @@
   <block-list:block block-list:abbreviated-name=":奶酪:" block-list:name="🧀"/>
   <block-list:block block-list:abbreviated-name=":奶黄:" block-list:name="🍮"/>
   <block-list:block block-list:abbreviated-name=":好运:" block-list:name="🤞"/>
+  <block-list:block block-list:abbreviated-name=":姓名牌:" block-list:name="📛"/>
   <block-list:block block-list:abbreviated-name=":婚姻:" block-list:name="⚭"/>
   <block-list:block block-list:abbreviated-name=":婚礼:" block-list:name="💒"/>
   <block-list:block block-list:abbreviated-name=":婴儿 3:" block-list:name="🤱"/>
@@ -1551,6 +1484,7 @@
   <block-list:block block-list:abbreviated-name=":存在量词:" block-list:name="∃"/>
   <block-list:block block-list:abbreviated-name=":学校:" block-list:name="🏫"/>
   <block-list:block block-list:abbreviated-name=":宇普西龙:" block-list:name="Υ"/>
+  <block-list:block block-list:abbreviated-name=":安静下来:" block-list:name="😯"/>
   <block-list:block block-list:abbreviated-name=":定时器:" block-list:name="⏲"/>
   <block-list:block block-list:abbreviated-name=":宝石:" block-list:name="💎"/>
   <block-list:block block-list:abbreviated-name=":实心三角形:" block-list:name="▲"/>
@@ -1569,6 +1503,7 @@
   <block-list:block block-list:abbreviated-name=":对勾4:" block-list:name="🗴"/>
   <block-list:block block-list:abbreviated-name=":对勾5:" block-list:name="🗸"/>
   <block-list:block block-list:abbreviated-name=":对勾:" block-list:name="✓"/>
+  <block-list:block block-list:abbreviated-name=":寻呼机:" block-list:name="📟"/>
   <block-list:block block-list:abbreviated-name=":寿司:" block-list:name="🍣"/>
   <block-list:block block-list:abbreviated-name=":射手座:" block-list:name="♐"/>
   <block-list:block block-list:abbreviated-name=":小丑:" block-list:name="🤡"/>
@@ -1605,6 +1540,8 @@
   <block-list:block block-list:abbreviated-name=":希腊十字架:" block-list:name="✚"/>
   <block-list:block block-list:abbreviated-name=":帐本:" block-list:name="📒"/>
   <block-list:block block-list:abbreviated-name=":帐篷:" block-list:name="⛺"/>
+  <block-list:block block-list:abbreviated-name=":带下箭头的信封:" block-list:name="📩"/>
+  <block-list:block block-list:abbreviated-name=":带有右箭头的手机:" block-list:name="📲"/>
   <block-list:block block-list:abbreviated-name=":帽子 2:" block-list:name="👲"/>
   <block-list:block block-list:abbreviated-name=":帽子:" block-list:name="👒"/>
   <block-list:block block-list:abbreviated-name=":平方根:" block-list:name="√"/>
@@ -1613,8 +1550,14 @@
   <block-list:block block-list:abbreviated-name=":废纸篓:" block-list:name="🗑"/>
   <block-list:block block-list:abbreviated-name=":度:" block-list:name="°"/>
   <block-list:block block-list:abbreviated-name=":座椅:" block-list:name="💺"/>
+  <block-list:block block-list:abbreviated-name=":开口弯眼笑:" block-list:name="😄"/>
+  <block-list:block block-list:abbreviated-name=":开口笑:" block-list:name="😃"/>
   <block-list:block block-list:abbreviated-name=":弓箭:" block-list:name="🏹"/>
+  <block-list:block block-list:abbreviated-name=":张口惊讶:" block-list:name="😮"/>
+  <block-list:block block-list:abbreviated-name=":张口皱眉:" block-list:name="😦"/>
+  <block-list:block block-list:abbreviated-name=":张口笑的猫脸:" block-list:name="😺"/>
   <block-list:block block-list:abbreviated-name=":张开的手:" block-list:name="👐"/>
+  <block-list:block block-list:abbreviated-name=":录像带:" block-list:name="📼"/>
   <block-list:block block-list:abbreviated-name=":彗星:" block-list:name="☄"/>
   <block-list:block block-list:abbreviated-name=":彩虹:" block-list:name="🌈"/>
   <block-list:block block-list:abbreviated-name=":循环 2:" block-list:name="➿"/>
@@ -1626,19 +1569,31 @@
   <block-list:block block-list:abbreviated-name=":微笑的小鬼:" block-list:name="😈"/>
   <block-list:block block-list:abbreviated-name=":德尔塔:" block-list:name="Δ"/>
   <block-list:block block-list:abbreviated-name=":心形:" block-list:name="❤"/>
+  <block-list:block block-list:abbreviated-name=":心花怒放的猫脸:" block-list:name="😻"/>
+  <block-list:block block-list:abbreviated-name=":心花怒放脸:" block-list:name="😍"/>
   <block-list:block block-list:abbreviated-name=":心跳:" block-list:name="💓"/>
+  <block-list:block block-list:abbreviated-name=":忧伤:" block-list:name="😔"/>
   <block-list:block block-list:abbreviated-name=":怀孕:" block-list:name="🤰"/>
   <block-list:block block-list:abbreviated-name=":思考:" block-list:name="🤔"/>
   <block-list:block block-list:abbreviated-name=":思考气泡:" block-list:name="💭"/>
+  <block-list:block block-list:abbreviated-name=":恐惧:" block-list:name="😨"/>
+  <block-list:block block-list:abbreviated-name=":恐惧尖叫:" block-list:name="😱"/>
   <block-list:block block-list:abbreviated-name=":恐龙 2:" block-list:name="🦖"/>
   <block-list:block block-list:abbreviated-name=":恐龙:" block-list:name="🦕"/>
   <block-list:block block-list:abbreviated-name=":恶心想吐:" block-list:name="🤢"/>
+  <block-list:block block-list:abbreviated-name=":悲痛:" block-list:name="😧"/>
   <block-list:block block-list:abbreviated-name=":情书:" block-list:name="💌"/>
+  <block-list:block block-list:abbreviated-name=":惊讶:" block-list:name="😲"/>
   <block-list:block block-list:abbreviated-name=":意大利面:" block-list:name="🍝"/>
   <block-list:block block-list:abbreviated-name=":愤怒:" block-list:name="💢"/>
   <block-list:block block-list:abbreviated-name=":成人:" block-list:name="🧑"/>
+  <block-list:block block-list:abbreviated-name=":我不听的猴脸:" block-list:name="🙉"/>
+  <block-list:block block-list:abbreviated-name=":我不看的猴脸:" block-list:name="🙈"/>
+  <block-list:block block-list:abbreviated-name=":我不说的猴脸:" block-list:name="🙊"/>
   <block-list:block block-list:abbreviated-name=":戒指:" block-list:name="💍"/>
   <block-list:block block-list:abbreviated-name=":或:" block-list:name="∨"/>
+  <block-list:block block-list:abbreviated-name=":戴口罩:" block-list:name="😷"/>
+  <block-list:block block-list:abbreviated-name=":戴太阳镜的笑脸:" block-list:name="😎"/>
   <block-list:block block-list:abbreviated-name=":房子 2:" block-list:name="🏡"/>
   <block-list:block block-list:abbreviated-name=":房子 3:" block-list:name="🏚"/>
   <block-list:block block-list:abbreviated-name=":房子:" block-list:name="🏠"/>
@@ -1652,7 +1607,12 @@
   <block-list:block block-list:abbreviated-name=":手推车:" block-list:name="🛒"/>
   <block-list:block block-list:abbreviated-name=":手提包:" block-list:name="👛"/>
   <block-list:block block-list:abbreviated-name=":手机 2:" block-list:name="🖁"/>
+  <block-list:block block-list:abbreviated-name=":手机:" block-list:name="📱"/>
+  <block-list:block block-list:abbreviated-name=":手机信号:" block-list:name="📶"/>
+  <block-list:block block-list:abbreviated-name=":手机关机:" block-list:name="📴"/>
   <block-list:block block-list:abbreviated-name=":手枪:" block-list:name="🔫"/>
+  <block-list:block block-list:abbreviated-name=":手柄向右的放大镜:" block-list:name="🔍"/>
+  <block-list:block block-list:abbreviated-name=":手柄向左的放大镜:" block-list:name="🔎"/>
   <block-list:block block-list:abbreviated-name=":手球:" block-list:name="🤾"/>
   <block-list:block block-list:abbreviated-name=":手电筒:" block-list:name="🔦"/>
   <block-list:block block-list:abbreviated-name=":手表:" block-list:name="⌚"/>
@@ -1660,15 +1620,20 @@
   <block-list:block block-list:abbreviated-name=":打印机 2:" block-list:name="🖶"/>
   <block-list:block block-list:abbreviated-name=":打印机:" block-list:name="🖨"/>
   <block-list:block block-list:abbreviated-name=":打喷嚏:" block-list:name="🤧"/>
+  <block-list:block block-list:abbreviated-name=":打开的信箱（发件标志放倒）:" block-list:name="📭"/>
+  <block-list:block block-list:abbreviated-name=":打开的信箱（发件标志竖起）:" block-list:name="📬"/>
+  <block-list:block block-list:abbreviated-name=":打开的锁:" block-list:name="🔓"/>
   <block-list:block block-list:abbreviated-name=":打滑的汽车:" block-list:name="⛐"/>
   <block-list:block block-list:abbreviated-name=":扩音器 2:" block-list:name="🕬"/>
-  <block-list:block block-list:abbreviated-name=":扩音器:" block-list:name="🕫"/>
-  <block-list:block block-list:abbreviated-name=":扬声器:" block-list:name="🔈"/>
+  <block-list:block block-list:abbreviated-name=":扩音器:" block-list:name="📢"/>
+  <block-list:block block-list:abbreviated-name=":扮鬼脸:" block-list:name="😬"/>
   <block-list:block block-list:abbreviated-name=":扳手:" block-list:name="🔧"/>
   <block-list:block block-list:abbreviated-name=":投影仪:" block-list:name="📽"/>
   <block-list:block block-list:abbreviated-name=":报纸 2:" block-list:name="🗞"/>
+  <block-list:block block-list:abbreviated-name=":报纸:" block-list:name="📰"/>
   <block-list:block block-list:abbreviated-name=":披萨饼:" block-list:name="🍕"/>
   <block-list:block block-list:abbreviated-name=":抵达:" block-list:name="🛬"/>
+  <block-list:block block-list:abbreviated-name=":担忧:" block-list:name="😟"/>
   <block-list:block block-list:abbreviated-name=":拉丁十字架 2:" block-list:name="🕆"/>
   <block-list:block block-list:abbreviated-name=":拉丁十字架 3:" block-list:name="🕇"/>
   <block-list:block block-list:abbreviated-name=":拉丁十字架:" block-list:name="✝"/>
@@ -1685,8 +1650,7 @@
   <block-list:block block-list:abbreviated-name=":拳头 4:" block-list:name="🤜"/>
   <block-list:block block-list:abbreviated-name=":拳头:" block-list:name="✊"/>
   <block-list:block block-list:abbreviated-name=":按摩:" block-list:name="💆"/>
-  <block-list:block block-list:abbreviated-name=":按钮2:" block-list:name="🔲"/>
-  <block-list:block block-list:abbreviated-name=":按钮:" block-list:name="🔳"/>
+  <block-list:block block-list:abbreviated-name=":挤眼吐舌头:" block-list:name="😜"/>
   <block-list:block block-list:abbreviated-name=":挥手:" block-list:name="👋"/>
   <block-list:block block-list:abbreviated-name=":捂脸:" block-list:name="🤦"/>
   <block-list:block block-list:abbreviated-name=":捧腹大笑:" block-list:name="🤣"/>
@@ -1698,13 +1662,18 @@
   <block-list:block block-list:abbreviated-name=":控制:" block-list:name="🎛"/>
   <block-list:block block-list:abbreviated-name=":插头:" block-list:name="🔌"/>
   <block-list:block block-list:abbreviated-name=":握手:" block-list:name="🤝"/>
+  <block-list:block block-list:abbreviated-name=":摄像机:" block-list:name="📹"/>
   <block-list:block block-list:abbreviated-name=":摔跤:" block-list:name="🤼"/>
   <block-list:block block-list:abbreviated-name=":摩天轮:" block-list:name="🎡"/>
   <block-list:block block-list:abbreviated-name=":摩托艇:" block-list:name="🛥"/>
   <block-list:block block-list:abbreviated-name=":摩托车:" block-list:name="🏍"/>
   <block-list:block block-list:abbreviated-name=":摩羯座:" block-list:name="♑"/>
-  <block-list:block block-list:abbreviated-name=":放大镜2:" block-list:name="🔎"/>
-  <block-list:block block-list:abbreviated-name=":放大镜:" block-list:name="🔍"/>
+  <block-list:block block-list:abbreviated-name=":摩艾石像:" block-list:name="🗿"/>
+  <block-list:block block-list:abbreviated-name=":撅嘴:" block-list:name="🙎"/>
+  <block-list:block block-list:abbreviated-name=":撅嘴生气的猫脸:" block-list:name="😾"/>
+  <block-list:block block-list:abbreviated-name=":收件箱:" block-list:name="📥"/>
+  <block-list:block block-list:abbreviated-name=":收到的信封:" block-list:name="📨"/>
+  <block-list:block block-list:abbreviated-name=":收音机:" block-list:name="📻"/>
   <block-list:block block-list:abbreviated-name=":教堂:" block-list:name="⛪"/>
   <block-list:block block-list:abbreviated-name=":文件夹 2:" block-list:name="📂"/>
   <block-list:block block-list:abbreviated-name=":文件夹 3:" block-list:name="🗀"/>
@@ -1733,8 +1702,8 @@
   <block-list:block block-list:abbreviated-name=":旗子:" block-list:name="🎌"/>
   <block-list:block block-list:abbreviated-name=":旗帜 3:" block-list:name="⚑"/>
   <block-list:block block-list:abbreviated-name=":旗帜 4:" block-list:name="⚐"/>
+  <block-list:block block-list:abbreviated-name=":无口表情:" block-list:name="😶"/>
   <block-list:block block-list:abbreviated-name=":无穷:" block-list:name="∞"/>
-  <block-list:block block-list:abbreviated-name=":无辜:" block-list:name="😇"/>
   <block-list:block block-list:abbreviated-name=":无酸纸:" block-list:name="♾"/>
   <block-list:block block-list:abbreviated-name=":日:" block-list:name="☉"/>
   <block-list:block block-list:abbreviated-name=":日元 2:" block-list:name="💴"/>
@@ -1745,6 +1714,7 @@
   <block-list:block block-list:abbreviated-name=":日历 3:" block-list:name="🗓"/>
   <block-list:block block-list:abbreviated-name=":日历:" block-list:name="📅"/>
   <block-list:block block-list:abbreviated-name=":日本:" block-list:name="🗾"/>
+  <block-list:block block-list:abbreviated-name=":日本新手驾驶标志:" block-list:name="🔰"/>
   <block-list:block block-list:abbreviated-name=":日本清酒:" block-list:name="🍶"/>
   <block-list:block block-list:abbreviated-name=":日落 3:" block-list:name="🌇"/>
   <block-list:block block-list:abbreviated-name=":日落:" block-list:name="🌆"/>
@@ -1756,6 +1726,7 @@
   <block-list:block block-list:abbreviated-name=":普赛:" block-list:name="Ψ"/>
   <block-list:block block-list:abbreviated-name=":晴朗:" block-list:name="☀"/>
   <block-list:block block-list:abbreviated-name=":暂停:" block-list:name="⏸"/>
+  <block-list:block block-list:abbreviated-name=":暴怒:" block-list:name="😡"/>
   <block-list:block block-list:abbreviated-name=":暴风雨 2:" block-list:name="☈"/>
   <block-list:block block-list:abbreviated-name=":暴风雨:" block-list:name="🌧"/>
   <block-list:block block-list:abbreviated-name=":曲奇饼:" block-list:name="🍪"/>
@@ -1804,7 +1775,6 @@
   <block-list:block block-list:abbreviated-name=":橄榄球:" block-list:name="🏉"/>
   <block-list:block block-list:abbreviated-name=":橘子:" block-list:name="🍊"/>
   <block-list:block block-list:abbreviated-name=":橙色爱心:" block-list:name="🧡"/>
-  <block-list:block block-list:abbreviated-name=":欣喜:" block-list:name="😂"/>
   <block-list:block block-list:abbreviated-name=":欧元 2:" block-list:name="💶"/>
   <block-list:block block-list:abbreviated-name=":欧元:" block-list:name="€"/>
   <block-list:block block-list:abbreviated-name=":欧米伽:" block-list:name="Ω"/>
@@ -1827,6 +1797,7 @@
   <block-list:block block-list:abbreviated-name=":汉堡:" block-list:name="🍔"/>
   <block-list:block block-list:abbreviated-name=":汗滴:" block-list:name="💦"/>
   <block-list:block block-list:abbreviated-name=":汽车 4:" block-list:name="🏎"/>
+  <block-list:block block-list:abbreviated-name=":沉睡:" block-list:name="😴"/>
   <block-list:block block-list:abbreviated-name=":沙发:" block-list:name="🛋"/>
   <block-list:block block-list:abbreviated-name=":沙拉:" block-list:name="🥗"/>
   <block-list:block block-list:abbreviated-name=":沙漏 2:" block-list:name="⏳"/>
@@ -1878,6 +1849,7 @@
   <block-list:block block-list:abbreviated-name=":满月:" block-list:name="🌕"/>
   <block-list:block block-list:abbreviated-name=":火:" block-list:name="🔥"/>
   <block-list:block block-list:abbreviated-name=":火山:" block-list:name="🌋"/>
+  <block-list:block block-list:abbreviated-name=":火箭:" block-list:name="🚀"/>
   <block-list:block block-list:abbreviated-name=":火花:" block-list:name="✨"/>
   <block-list:block block-list:abbreviated-name=":火车头 2:" block-list:name="🛲"/>
   <block-list:block block-list:abbreviated-name=":火车头:" block-list:name="🚂"/>
@@ -1890,6 +1862,7 @@
   <block-list:block block-list:abbreviated-name=":热狗:" block-list:name="🌭"/>
   <block-list:block block-list:abbreviated-name=":焰火:" block-list:name="🎆"/>
   <block-list:block block-list:abbreviated-name=":煎饼:" block-list:name="🥞"/>
+  <block-list:block block-list:abbreviated-name=":照相机:" block-list:name="📷"/>
   <block-list:block block-list:abbreviated-name=":熊:" block-list:name="🐻"/>
   <block-list:block block-list:abbreviated-name=":爆炸:" block-list:name="💥"/>
   <block-list:block block-list:abbreviated-name=":爆米花:" block-list:name="🍿"/>
@@ -1945,18 +1918,22 @@
   <block-list:block block-list:abbreviated-name=":生日:" block-list:name="🎂"/>
   <block-list:block block-list:abbreviated-name=":生物危害:" block-list:name="☣"/>
   <block-list:block block-list:abbreviated-name=":电子游戏:" block-list:name="🎮"/>
+  <block-list:block block-list:abbreviated-name=":电子邮件:" block-list:name="📧"/>
   <block-list:block block-list:abbreviated-name=":电影摄像机:" block-list:name="🎥"/>
   <block-list:block block-list:abbreviated-name=":电影院:" block-list:name="🎦"/>
   <block-list:block block-list:abbreviated-name=":电池:" block-list:name="🔋"/>
   <block-list:block block-list:abbreviated-name=":电脑:" block-list:name="🖳"/>
+  <block-list:block block-list:abbreviated-name=":电视机:" block-list:name="📺"/>
   <block-list:block block-list:abbreviated-name=":电话 2:" block-list:name="☏"/>
   <block-list:block block-list:abbreviated-name=":电话 3:" block-list:name="🕾"/>
   <block-list:block block-list:abbreviated-name=":电话 4:" block-list:name="🕿"/>
   <block-list:block block-list:abbreviated-name=":电话:" block-list:name="☎"/>
+  <block-list:block block-list:abbreviated-name=":电话听筒:" block-list:name="📞"/>
   <block-list:block block-list:abbreviated-name=":男人:" block-list:name="👨"/>
   <block-list:block block-list:abbreviated-name=":男孩:" block-list:name="👦"/>
   <block-list:block block-list:abbreviated-name=":男性:" block-list:name="♂"/>
   <block-list:block block-list:abbreviated-name=":画笔:" block-list:name="🖌"/>
+  <block-list:block block-list:abbreviated-name=":疲倦:" block-list:name="😫"/>
   <block-list:block block-list:abbreviated-name=":疾走:" block-list:name="💨"/>
   <block-list:block block-list:abbreviated-name=":登山者:" block-list:name="🧗"/>
   <block-list:block block-list:abbreviated-name=":白棋兵:" block-list:name="♙"/>
@@ -1966,6 +1943,7 @@
   <block-list:block block-list:abbreviated-name=":白棋车:" block-list:name="♖"/>
   <block-list:block block-list:abbreviated-name=":白棋马:" block-list:name="♘"/>
   <block-list:block block-list:abbreviated-name=":白羊座:" block-list:name="♈"/>
+  <block-list:block block-list:abbreviated-name=":白色方形按钮:" block-list:name="🔳"/>
   <block-list:block block-list:abbreviated-name=":白花:" block-list:name="💮"/>
   <block-list:block block-list:abbreviated-name=":百合花饰:" block-list:name="⚜"/>
   <block-list:block block-list:abbreviated-name=":皮肤 1:" block-list:name="🏻"/>
@@ -1997,6 +1975,7 @@
   <block-list:block block-list:abbreviated-name=":礼物:" block-list:name="🎁"/>
   <block-list:block block-list:abbreviated-name=":礼物爱心:" block-list:name="💝"/>
   <block-list:block block-list:abbreviated-name=":禁止:" block-list:name="🛇"/>
+  <block-list:block block-list:abbreviated-name=":禁止使用手机:" block-list:name="📵"/>
   <block-list:block block-list:abbreviated-name=":禁止进入:" block-list:name="⛔"/>
   <block-list:block block-list:abbreviated-name=":离婚:" block-list:name="⚮"/>
   <block-list:block block-list:abbreviated-name=":秒表:" block-list:name="⏱"/>
@@ -2026,6 +2005,8 @@
   <block-list:block block-list:abbreviated-name=":章节符号:" block-list:name="§"/>
   <block-list:block block-list:abbreviated-name=":章鱼:" block-list:name="🐙"/>
   <block-list:block block-list:abbreviated-name=":竹子:" block-list:name="🎍"/>
+  <block-list:block block-list:abbreviated-name=":笑弯眼的猫脸:" block-list:name="😸"/>
+  <block-list:block block-list:abbreviated-name=":笑脸亲亲:" block-list:name="😙"/>
   <block-list:block block-list:abbreviated-name=":笔记 3:" block-list:name="🎝"/>
   <block-list:block block-list:abbreviated-name=":笔记 4:" block-list:name="🎜"/>
   <block-list:block block-list:abbreviated-name=":笔记本 2:" block-list:name="📔"/>
@@ -2085,6 +2066,7 @@
   <block-list:block block-list:abbreviated-name=":自动取款机:" block-list:name="🏧"/>
   <block-list:block block-list:abbreviated-name=":自拍:" block-list:name="🤳"/>
   <block-list:block block-list:abbreviated-name=":自由女神像:" block-list:name="🗽"/>
+  <block-list:block block-list:abbreviated-name=":自鸣得意:" block-list:name="😏"/>
   <block-list:block block-list:abbreviated-name=":舌头:" block-list:name="👅"/>
   <block-list:block block-list:abbreviated-name=":舞者2:" block-list:name="🕺"/>
   <block-list:block block-list:abbreviated-name=":舞者:" block-list:name="💃"/>
@@ -2100,6 +2082,7 @@
   <block-list:block block-list:abbreviated-name=":花椰菜:" block-list:name="🥦"/>
   <block-list:block block-list:abbreviated-name=":花生:" block-list:name="🥜"/>
   <block-list:block block-list:abbreviated-name=":苜蓿:" block-list:name="🍀"/>
+  <block-list:block block-list:abbreviated-name=":苦笑的猫脸:" block-list:name="😼"/>
   <block-list:block block-list:abbreviated-name=":英镑 2:" block-list:name="💷"/>
   <block-list:block block-list:abbreviated-name=":英镑:" block-list:name="£"/>
   <block-list:block block-list:abbreviated-name=":苹果:" block-list:name="🍎"/>
@@ -2150,7 +2133,6 @@
   <block-list:block block-list:abbreviated-name=":角:" block-list:name="∠"/>
   <block-list:block block-list:abbreviated-name=":角分符号:" block-list:name="′"/>
   <block-list:block block-list:abbreviated-name=":角秒符号:" block-list:name="″"/>
-  <block-list:block block-list:abbreviated-name=":解锁:" block-list:name="🔓"/>
   <block-list:block block-list:abbreviated-name=":警告:" block-list:name="⚠"/>
   <block-list:block block-list:abbreviated-name=":警察:" block-list:name="👮"/>
   <block-list:block block-list:abbreviated-name=":警示:" block-list:name="☡"/>
@@ -2159,7 +2141,10 @@
   <block-list:block block-list:abbreviated-name=":计算机:" block-list:name="💻"/>
   <block-list:block block-list:abbreviated-name=":记事本:" block-list:name="🗒"/>
   <block-list:block block-list:abbreviated-name=":诅咒:" block-list:name="🤬"/>
+  <block-list:block block-list:abbreviated-name=":说不的手势:" block-list:name="🙅"/>
+  <block-list:block block-list:abbreviated-name=":调低亮度:" block-list:name="🔅"/>
   <block-list:block block-list:abbreviated-name=":调制解调器:" block-list:name="🖀"/>
+  <block-list:block block-list:abbreviated-name=":调高亮度:" block-list:name="🔆"/>
   <block-list:block block-list:abbreviated-name=":谢克尔:" block-list:name="₪"/>
   <block-list:block block-list:abbreviated-name=":谱号:" block-list:name="𝄞"/>
   <block-list:block block-list:abbreviated-name=":豹:" block-list:name="🐆"/>
@@ -2179,19 +2164,24 @@
   <block-list:block block-list:abbreviated-name=":软盘 4:" block-list:name="🖪"/>
   <block-list:block block-list:abbreviated-name=":软盘:" block-list:name="💾"/>
   <block-list:block block-list:abbreviated-name=":辐射:" block-list:name="☢"/>
+  <block-list:block block-list:abbreviated-name=":输入拉丁字母:" block-list:name="🔤"/>
   <block-list:block block-list:abbreviated-name=":过山车:" block-list:name="🎢"/>
   <block-list:block block-list:abbreviated-name=":还原号:" block-list:name="♮"/>
   <block-list:block block-list:abbreviated-name=":远大于:" block-list:name="≫"/>
   <block-list:block block-list:abbreviated-name=":远小于:" block-list:name="≪"/>
   <block-list:block block-list:abbreviated-name=":迷你光盘:" block-list:name="💽"/>
+  <block-list:block block-list:abbreviated-name=":迷惑:" block-list:name="😕"/>
   <block-list:block block-list:abbreviated-name=":选定状态的复选框 2:" block-list:name="☒"/>
   <block-list:block block-list:abbreviated-name=":选定状态的复选框:" block-list:name="☑"/>
   <block-list:block block-list:abbreviated-name=":选框 4:" block-list:name="🗷"/>
   <block-list:block block-list:abbreviated-name=":选框5:" block-list:name="🗹"/>
   <block-list:block block-list:abbreviated-name=":选票:" block-list:name="🗳"/>
+  <block-list:block block-list:abbreviated-name=":邮号:" block-list:name="📯"/>
   <block-list:block block-list:abbreviated-name=":邮局 2:" block-list:name="🏣"/>
   <block-list:block block-list:abbreviated-name=":邮局:" block-list:name="🏤"/>
+  <block-list:block block-list:abbreviated-name=":邮筒:" block-list:name="📮"/>
   <block-list:block block-list:abbreviated-name=":郁金香:" block-list:name="🌷"/>
+  <block-list:block block-list:abbreviated-name=":释然:" block-list:name="😌"/>
   <block-list:block block-list:abbreviated-name=":里拉:" block-list:name="₤"/>
   <block-list:block block-list:abbreviated-name=":重升号:" block-list:name="𝄪"/>
   <block-list:block block-list:abbreviated-name=":重叠:" block-list:name="🗗"/>
@@ -2222,10 +2212,9 @@
   <block-list:block block-list:abbreviated-name=":银:" block-list:name="🥈"/>
   <block-list:block block-list:abbreviated-name=":银河:" block-list:name="🌌"/>
   <block-list:block block-list:abbreviated-name=":银行:" block-list:name="🏦"/>
-  <block-list:block block-list:abbreviated-name=":链接:" block-list:name="🔗"/>
-  <block-list:block block-list:abbreviated-name=":锁2:" block-list:name="🔏"/>
-  <block-list:block block-list:abbreviated-name=":锁3:" block-list:name="🔐"/>
   <block-list:block block-list:abbreviated-name=":锁:" block-list:name="🔒"/>
+  <block-list:block block-list:abbreviated-name=":锁和钢笔:" block-list:name="🔏"/>
+  <block-list:block block-list:abbreviated-name=":锁和钥匙:" block-list:name="🔐"/>
   <block-list:block block-list:abbreviated-name=":锁链:" block-list:name="⛓"/>
   <block-list:block block-list:abbreviated-name=":锚:" block-list:name="⚓"/>
   <block-list:block block-list:abbreviated-name=":锤子:" block-list:name="🔨"/>
@@ -2243,6 +2232,9 @@
   <block-list:block block-list:abbreviated-name=":闪电 3:" block-list:name="☇"/>
   <block-list:block block-list:abbreviated-name=":闪电:" block-list:name="🌩"/>
   <block-list:block block-list:abbreviated-name=":闪耀爱心:" block-list:name="💖"/>
+  <block-list:block block-list:abbreviated-name=":闭眼亲亲:" block-list:name="😚"/>
+  <block-list:block block-list:abbreviated-name=":闭眼亲吻的猫脸:" block-list:name="😽"/>
+  <block-list:block block-list:abbreviated-name=":闭眼吐舌头:" block-list:name="😝"/>
   <block-list:block block-list:abbreviated-name=":问号 2:" block-list:name="❔"/>
   <block-list:block block-list:abbreviated-name=":问号:" block-list:name="❓"/>
   <block-list:block block-list:abbreviated-name=":间隔号:" block-list:name="·"/>
@@ -2261,14 +2253,18 @@
   <block-list:block block-list:abbreviated-name=":雪橇:" block-list:name="🛷"/>
   <block-list:block block-list:abbreviated-name=":雪花:" block-list:name="❄"/>
   <block-list:block block-list:abbreviated-name=":雾:" block-list:name="🌫"/>
+  <block-list:block block-list:abbreviated-name=":震动模式:" block-list:name="📳"/>
   <block-list:block block-list:abbreviated-name=":震惊:" block-list:name="🤯"/>
   <block-list:block block-list:abbreviated-name=":露营:" block-list:name="🏕"/>
+  <block-list:block block-list:abbreviated-name=":露齿弯眼笑:" block-list:name="😁"/>
+  <block-list:block block-list:abbreviated-name=":露齿笑:" block-list:name="😀"/>
   <block-list:block block-list:abbreviated-name=":青蛙:" block-list:name="🐸"/>
   <block-list:block block-list:abbreviated-name=":静音:" block-list:name="🔇"/>
   <block-list:block block-list:abbreviated-name=":非子集:" block-list:name="⊄"/>
   <block-list:block block-list:abbreviated-name=":非超集:" block-list:name="⊅"/>
   <block-list:block block-list:abbreviated-name=":面包 2:" block-list:name="🥖"/>
   <block-list:block block-list:abbreviated-name=":面包:" block-list:name="🍞"/>
+  <block-list:block block-list:abbreviated-name=":面无表情:" block-list:name="😑"/>
   <block-list:block block-list:abbreviated-name=":靴子:" block-list:name="👢"/>
   <block-list:block block-list:abbreviated-name=":鞋子 2:" block-list:name="👟"/>
   <block-list:block block-list:abbreviated-name=":鞋子 3:" block-list:name="👠"/>
@@ -2284,6 +2280,7 @@
   <block-list:block block-list:abbreviated-name=":风:" block-list:name="🌬"/>
   <block-list:block block-list:abbreviated-name=":风铃:" block-list:name="🎐"/>
   <block-list:block block-list:abbreviated-name=":飓风:" block-list:name="🌀"/>
+  <block-list:block block-list:abbreviated-name=":飞吻:" block-list:name="😘"/>
   <block-list:block block-list:abbreviated-name=":飞机 2:" block-list:name="🛩"/>
   <block-list:block block-list:abbreviated-name=":飞机 3:" block-list:name="🛧"/>
   <block-list:block block-list:abbreviated-name=":飞机 4:" block-list:name="🛨"/>
@@ -2320,18 +2317,19 @@
   <block-list:block block-list:abbreviated-name=":骰子6:" block-list:name="⚅"/>
   <block-list:block block-list:abbreviated-name=":骰子:" block-list:name="🎲"/>
   <block-list:block block-list:abbreviated-name=":骷髅:" block-list:name="💀"/>
+  <block-list:block block-list:abbreviated-name=":高兴举手:" block-list:name="🙋"/>
   <block-list:block block-list:abbreviated-name=":高压电:" block-list:name="⚡"/>
   <block-list:block block-list:abbreviated-name=":高尔夫 2:" block-list:name="⛳"/>
   <block-list:block block-list:abbreviated-name=":高尔夫:" block-list:name="🏌"/>
   <block-list:block block-list:abbreviated-name=":高山 2:" block-list:name="🏔"/>
   <block-list:block block-list:abbreviated-name=":高速公路:" block-list:name="🛣"/>
+  <block-list:block block-list:abbreviated-name=":高音量:" block-list:name="🔊"/>
   <block-list:block block-list:abbreviated-name=":高顶礼帽:" block-list:name="🎩"/>
   <block-list:block block-list:abbreviated-name=":鬼:" block-list:name="👻"/>
   <block-list:block block-list:abbreviated-name=":魔法师:" block-list:name="🧙"/>
   <block-list:block block-list:abbreviated-name=":鱼 2:" block-list:name="🐠"/>
   <block-list:block block-list:abbreviated-name=":鱼 3:" block-list:name="🐡"/>
   <block-list:block block-list:abbreviated-name=":鱼:" block-list:name="🐟"/>
-  <block-list:block block-list:abbreviated-name=":鱼叉:" block-list:name="🔱"/>
   <block-list:block block-list:abbreviated-name=":鱼饼:" block-list:name="🍥"/>
   <block-list:block block-list:abbreviated-name=":鲜花 2:" block-list:name="🥀"/>
   <block-list:block block-list:abbreviated-name=":鲜花:" block-list:name="⚘"/>
@@ -2359,12 +2357,14 @@
   <block-list:block block-list:abbreviated-name=":黑棋车:" block-list:name="♜"/>
   <block-list:block block-list:abbreviated-name=":黑棋马:" block-list:name="♞"/>
   <block-list:block block-list:abbreviated-name=":黑白方格旗:" block-list:name="🏁"/>
+  <block-list:block block-list:abbreviated-name=":黑色方形按钮:" block-list:name="🔲"/>
   <block-list:block block-list:abbreviated-name=":黑色爱心:" block-list:name="🖤"/>
   <block-list:block block-list:abbreviated-name=":鼓 2:" block-list:name="🥁"/>
   <block-list:block block-list:abbreviated-name=":鼠标 3:" block-list:name="🖱"/>
   <block-list:block block-list:abbreviated-name=":鼠标 4:" block-list:name="🖰"/>
   <block-list:block block-list:abbreviated-name=":鼠标 5:" block-list:name="🖯"/>
   <block-list:block block-list:abbreviated-name=":鼻子:" block-list:name="👃"/>
+  <block-list:block block-list:abbreviated-name=":鼻子喷气（获胜）:" block-list:name="😤"/>
   <block-list:block block-list:abbreviated-name=":齿轮:" block-list:name="⚙"/>
   <block-list:block block-list:abbreviated-name=":龙 2:" block-list:name="🐲"/>
   <block-list:block block-list:abbreviated-name=":龙:" block-list:name="🐉"/>

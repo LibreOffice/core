@@ -1334,7 +1334,6 @@
   <block-list:block block-list:abbreviated-name=":fair:" block-list:name="🎡"/>
   <block-list:block block-list:abbreviated-name=":fairy:" block-list:name="🧚"/>
   <block-list:block block-list:abbreviated-name=":family:" block-list:name="👪"/>
-  <block-list:block block-list:abbreviated-name=":Farsi:" block-list:name="☫"/>
   <block-list:block block-list:abbreviated-name=":fax2:" block-list:name="🖷"/>
   <block-list:block block-list:abbreviated-name=":fax:" block-list:name="📠"/>
   <block-list:block block-list:abbreviated-name=":^f:" block-list:name="ᶠ"/>
@@ -2389,4 +2388,5 @@
   <block-list:block block-list:abbreviated-name=":zipper:" block-list:name="🤐"/>
   <block-list:block block-list:abbreviated-name=":zombie:" block-list:name="🧟"/>
   <block-list:block block-list:abbreviated-name=":zzz:" block-list:name="💤"/>
+  <block-list:block block-list:abbreviated-name=":ペルシア語:" block-list:name="☫"/>
 </block-list:block-list>

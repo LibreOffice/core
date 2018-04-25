@@ -926,6 +926,7 @@
   <block-list:block block-list:abbreviated-name=":cuarto menguante:" block-list:name="🌗"/>
   <block-list:block block-list:abbreviated-name=":cuchillo2:" block-list:name="🗡"/>
   <block-list:block block-list:abbreviated-name=":cuchillo:" block-list:name="🔪"/>
+  <block-list:block block-list:abbreviated-name=":cuenco:" block-list:name="🥣"/>
   <block-list:block block-list:abbreviated-name=":cultivo:" block-list:name="🌾"/>
   <block-list:block block-list:abbreviated-name=":cumpleaños:" block-list:name="🎂"/>
   <block-list:block block-list:abbreviated-name=":curlin:" block-list:name="🥌"/>
@@ -1279,6 +1280,7 @@
   <block-list:block block-list:abbreviated-name=":llamada:" block-list:name="📲"/>
   <block-list:block block-list:abbreviated-name=":llave:" block-list:name="🔑"/>
   <block-list:block block-list:abbreviated-name=":llave inglesa:" block-list:name="🔧"/>
+  <block-list:block block-list:abbreviated-name=":llegada:" block-list:name="🛬"/>
   <block-list:block block-list:abbreviated-name=":llorando:" block-list:name="😢"/>
   <block-list:block block-list:abbreviated-name=":lluvia2:" block-list:name="⛆"/>
   <block-list:block block-list:abbreviated-name=":lluvia:" block-list:name="☔"/>
@@ -1335,6 +1337,7 @@
   <block-list:block block-list:abbreviated-name=":memorando:" block-list:name="📝"/>
   <block-list:block block-list:abbreviated-name=":menguante cóncava:" block-list:name="🌘"/>
   <block-list:block block-list:abbreviated-name=":menguante gibosa:" block-list:name="🌖"/>
+  <block-list:block block-list:abbreviated-name=":menorá:" block-list:name="🕎"/>
   <block-list:block block-list:abbreviated-name=":menor de edad:" block-list:name="🔞"/>
   <block-list:block block-list:abbreviated-name=":mentiroso:" block-list:name="🤥"/>
   <block-list:block block-list:abbreviated-name=":mercurio:" block-list:name="☿"/>
@@ -1363,6 +1366,7 @@
   <block-list:block block-list:abbreviated-name=":montaña:" block-list:name="⛰"/>
   <block-list:block block-list:abbreviated-name=":montaña rusa:" block-list:name="🎢"/>
   <block-list:block block-list:abbreviated-name=":motocicleta:" block-list:name="🏍"/>
+  <block-list:block block-list:abbreviated-name=":móvil2:" block-list:name="🖁"/>
   <block-list:block block-list:abbreviated-name=":móvil:" block-list:name="📱"/>
   <block-list:block block-list:abbreviated-name=":mueca:" block-list:name="😬"/>
   <block-list:block block-list:abbreviated-name=":mujer:" block-list:name="👩"/>
@@ -1478,6 +1482,7 @@
   <block-list:block block-list:abbreviated-name=":paralelo:" block-list:name="∥"/>
   <block-list:block block-list:abbreviated-name=":paralelogramo2:" block-list:name="▰"/>
   <block-list:block block-list:abbreviated-name=":paralelogramo:" block-list:name="▱"/>
+  <block-list:block block-list:abbreviated-name=":para llevar:" block-list:name="🥡"/>
   <block-list:block block-list:abbreviated-name=":para todos:" block-list:name="∀"/>
   <block-list:block block-list:abbreviated-name=":parcial:" block-list:name="∂"/>
   <block-list:block block-list:abbreviated-name=":pareja2:" block-list:name="👬"/>
