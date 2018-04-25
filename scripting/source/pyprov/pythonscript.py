@@ -869,10 +869,8 @@ class PythonScript( unohelper.Base, XScript ):
     def __init__( self, func, mod, args ):
         self.func = func
         self.mod = mod
-        if (args != '' and args is not None):
-            self.args = tuple([x.strip() for x in args.split(",")])
-        else:
-            self.args = None
+        self.args = args
+
     def invoke(self, args, out, outindex ):
         log.debug( "PythonScript.invoke " + str( args ) )
         try:
@@ -986,19 +984,23 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
     def getType( self ):
         return self.dirBrowseNode.getType()
 
-    # retrieve function args in parenthesis
+    # retreive function args in parenthesis
     def getFunctionArguments(self, func_signature):
-        nOpenParenthesis = func_signature.find( "(")
+        nOpenParenthesis = func_signature.find( "(" )
         if -1 == nOpenParenthesis:
             function_name = func_signature
-            arguments = ''
+            arguments = None
         else:
             function_name = func_signature[0:nOpenParenthesis]
-            leading = func_signature[nOpenParenthesis+1:len(func_signature)]
-            nCloseParenthesis = leading.find( ")")
+            arg_part = func_signature[nOpenParenthesis+1:len(func_signature)]
+            nCloseParenthesis = arg_part.find( ")" )
             if -1 == nCloseParenthesis:
                 raise IllegalArgumentException( "PythonLoader: mismatch parenthesis " + func_signature, self, 0 )
-            arguments = leading[0:nCloseParenthesis]
+            arguments = arg_part[0:nCloseParenthesis].strip()
+            if arguments == "":
+                arguments = None
+            else:
+                arguments = tuple([x.strip().strip('"') for x in arguments.split(",")])
         return function_name, arguments
 
     def getScript( self, scriptUri ):
@@ -1011,7 +1013,7 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
             fileUri = storageUri[0:storageUri.find( "$" )]
             funcName = storageUri[storageUri.find( "$" )+1:len(storageUri)]
 
-            # retrieve arguments in parenthesis
+            # retreive arguments in parenthesis
             funcName, funcArgs = self.getFunctionArguments(funcName)
             log.debug( " getScript : parsed funcname " + str(funcName) )
             log.debug( " getScript : func args " + str(funcArgs) )
