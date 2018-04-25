@@ -76,7 +76,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <rtl/ustring.h>
-#include <comphelper/string.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
@@ -993,8 +992,12 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, Button*, void)
 
     OUString aUserImageURL = aFileDialog.GetPath();
 
-    sal_Int32 nSub = comphelper::string::getTokenCount( aUserImageURL, '/');
-    OUString aFileName = aUserImageURL.getToken( nSub-1 , SEARCHFILENAME_DELIMITER );
+    OUString aFileName;
+    const sal_Int32 nPos {aUserImageURL.lastIndexOf(SEARCHFILENAME_DELIMITER)+1};
+    if (nPos<=0)
+        aFileName = aUserImageURL;
+    else if (nPos<aUserImageURL.getLength())
+        aFileName = aUserImageURL.copy(nPos);
 
     OUString aUserGalleryURL = aPathToken + "/" + aFileName;
     INetURLObject aURL( aUserImageURL );
