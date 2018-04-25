@@ -46,7 +46,7 @@
           <desc>Includes information (position,size, and states) about the used vcl window.</desc>
         </info>
       </prop>
-      <prop oor:name="PageID" oor:type="xs:int">
+      <prop oor:name="PageID" oor:type="xs:string">
         <info>
           <desc>Represents the number of an active tab page inside a dialog.</desc>
         </info>

@@ -1377,11 +1377,11 @@ namespace svxform
 
         // init tabcontrol
         m_pTabCtrl->Show();
-        sal_Int32 nPageId = m_pTabCtrl->GetPageId("instance");
+        OString sPageId("instance");
         SvtViewOptions aViewOpt( EViewType::TabDialog, CFGNAME_DATANAVIGATOR );
         if ( aViewOpt.Exists() )
         {
-            nPageId = aViewOpt.GetPageID();
+            sPageId = aViewOpt.GetPageID();
             aViewOpt.GetUserItem(CFGNAME_SHOWDETAILS) >>= m_bShowDetails;
         }
 
@@ -1390,7 +1390,7 @@ namespace svxform
         pMenu->SetItemBits(nInstancesDetailsId, MenuItemBits::CHECKABLE );
         pMenu->CheckItem(nInstancesDetailsId, m_bShowDetails );
 
-        m_pTabCtrl->SetCurPageId( static_cast< sal_uInt16 >( nPageId ) );
+        m_pTabCtrl->SetCurPageId(m_pTabCtrl->GetPageId(sPageId));
         ActivatePageHdl(m_pTabCtrl);
 
         // get our frame
@@ -1416,7 +1416,7 @@ namespace svxform
     void DataNavigatorWindow::dispose()
     {
         SvtViewOptions aViewOpt( EViewType::TabDialog, CFGNAME_DATANAVIGATOR );
-        aViewOpt.SetPageID( static_cast< sal_Int32 >( m_pTabCtrl->GetCurPageId() ) );
+        aViewOpt.SetPageID(m_pTabCtrl->GetPageName(m_pTabCtrl->GetCurPageId()));
         aViewOpt.SetUserItem(CFGNAME_SHOWDETAILS, Any(m_bShowDetails));
 
         m_pInstPage.disposeAndClear();
