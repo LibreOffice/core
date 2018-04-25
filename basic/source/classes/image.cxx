@@ -29,12 +29,10 @@
 
 SbiImage::SbiImage()
 {
-    pStringOff = nullptr;
     pStrings   = nullptr;
     pCode      = nullptr;
     pLegacyPCode = nullptr;
     nFlags     = SbiImageFlags::NONE;
-    nStrings   = 0;
     nStringSize= 0;
     nCodeSize  = 0;
     nLegacyCodeSize  =
@@ -54,15 +52,13 @@ SbiImage::~SbiImage()
 
 void SbiImage::Clear()
 {
-    delete[] pStringOff;
+    mvStringOffsets.clear();
     delete[] pStrings;
     delete[] pCode;
     ReleaseLegacyBuffer();
-    pStringOff = nullptr;
     pStrings   = nullptr;
     pCode      = nullptr;
     nFlags     = SbiImageFlags::NONE;
-    nStrings   = 0;
     nStringSize= 0;
     nLegacyCodeSize  = 0;
     nCodeSize  = 0;
@@ -205,11 +201,10 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     nCount = nMaxStrings;
                 }
                 MakeStrings( nCount );
-                short i;
-                for( i = 0; i < nStrings && SbiGood( r ); i++ )
+                for( size_t i = 0; i < mvStringOffsets.size() && SbiGood( r ); i++ )
                 {
                     r.ReadUInt32( nOff );
-                    pStringOff[ i ] = static_cast<sal_uInt16>(nOff);
+                    mvStringOffsets[ i ] = static_cast<sal_uInt16>(nOff);
                 }
                 r.ReadUInt32( nLen );
                 if( SbiGood( r ) )
@@ -220,9 +215,9 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
 
                     std::unique_ptr<char[]> pByteStrings(new char[ nLen ]);
                     r.ReadBytes(pByteStrings.get(), nStringSize);
-                    for( short j = 0; j < nStrings; j++ )
+                    for( size_t j = 0; j < mvStringOffsets.size(); j++ )
                     {
-                        sal_uInt16 nOff2 = static_cast<sal_uInt16>(pStringOff[ j ]);
+                        sal_uInt16 nOff2 = static_cast<sal_uInt16>(mvStringOffsets[ j ]);
                         OUString aStr( pByteStrings.get() + nOff2, strlen(pByteStrings.get() + nOff2), eCharSet );
                         memcpy( pStrings + nOff2, aStr.getStr(), (aStr.getLength() + 1) * sizeof( sal_Unicode ) );
                     }
@@ -424,22 +419,20 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         SbiCloseRecord( r, nPos );
     }
     // String-Pool?
-    if( nStrings )
+    if( !mvStringOffsets.empty() )
     {
-        nPos = SbiOpenRecord( r, FileOffset::StringPool, nStrings );
+        nPos = SbiOpenRecord( r, FileOffset::StringPool, mvStringOffsets.size() );
         // For every String:
         //  sal_uInt32 Offset of the Strings in the Stringblock
-        short i;
-
-        for( i = 0; i < nStrings && SbiGood( r ); i++ )
+        for( size_t i = 0; i < mvStringOffsets.size() && SbiGood( r ); i++ )
         {
-            r.WriteUInt32( pStringOff[ i ] );
+            r.WriteUInt32( mvStringOffsets[ i ] );
         }
         // Then the String-Block
         std::unique_ptr<char[]> pByteStrings(new char[ nStringSize ]);
-        for( i = 0; i < nStrings; i++ )
+        for( size_t i = 0; i < mvStringOffsets.size(); i++ )
         {
-            sal_uInt16 nOff = static_cast<sal_uInt16>(pStringOff[ i ]);
+            sal_uInt16 nOff = static_cast<sal_uInt16>(mvStringOffsets[ i ]);
             OString aStr(OUStringToOString(OUString(pStrings + nOff), eCharSet));
             memcpy( pByteStrings.get() + nOff, aStr.getStr(), (aStr.getLength() + 1) * sizeof( char ) );
         }
@@ -538,14 +531,12 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
 
 void SbiImage::MakeStrings( short nSize )
 {
-    nStrings = 0;
     nStringIdx = 0;
     nStringOff = 0;
     nStringSize = 1024;
     pStrings = new sal_Unicode[ nStringSize ];
-    pStringOff = new sal_uInt32[ nSize ];
-    nStrings = nSize;
-    memset( pStringOff, 0, nSize * sizeof( sal_uInt32 ) );
+    mvStringOffsets.resize(nSize);
+    memset( mvStringOffsets.data(), 0, nSize * sizeof( sal_uInt32 ) );
     memset( pStrings, 0, nStringSize * sizeof( sal_Unicode ) );
 }
 
@@ -553,7 +544,7 @@ void SbiImage::MakeStrings( short nSize )
 // growing in 1K-Steps
 void SbiImage::AddString( const OUString& r )
 {
-    if( nStringIdx >= nStrings )
+    if( nStringIdx >= short(mvStringOffsets.size()) )
     {
         bError = true;
     }
@@ -577,11 +568,11 @@ void SbiImage::AddString( const OUString& r )
         }
         if( !bError )
         {
-            pStringOff[ nStringIdx++ ] = nStringOff;
+            mvStringOffsets[ nStringIdx++ ] = nStringOff;
             memcpy( pStrings + nStringOff, r.getStr(), len * sizeof( sal_Unicode ) );
             nStringOff = nStringOff + len;
             // Last String? The update the size of the buffer
-            if( nStringIdx >= nStrings )
+            if( nStringIdx >= short(mvStringOffsets.size()) )
             {
                 nStringSize = nStringOff;
             }
@@ -622,15 +613,15 @@ void SbiImage::AddEnum(SbxObject* pObject) // Register enum type
 // Note: IDs start with 1
 OUString SbiImage::GetString( short nId ) const
 {
-    if( nId && nId <= nStrings )
+    if( nId && nId <= short(mvStringOffsets.size()) )
     {
-        sal_uInt32 nOff = pStringOff[ nId - 1 ];
+        sal_uInt32 nOff = mvStringOffsets[ nId - 1 ];
         sal_Unicode* pStr = pStrings + nOff;
 
         // #i42467: Special treatment for vbNullChar
         if( *pStr == 0 )
         {
-            sal_uInt32 nNextOff = (nId < nStrings) ? pStringOff[ nId ] : nStringOff;
+            sal_uInt32 nNextOff = (nId < short(mvStringOffsets.size())) ? mvStringOffsets[ nId ] : nStringOff;
             sal_uInt32 nLen = nNextOff - nOff - 1;
             if( nLen == 1 )
             {
