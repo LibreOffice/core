@@ -29,6 +29,7 @@
 #include "oleobjw.hxx"
 
 #include <com/sun/star/script/CannotConvertException.hpp>
+#include <comphelper/automationinvokedzone.hxx>
 #include <comphelper/windowsdebugoutput.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -139,6 +140,8 @@ STDMETHODIMP OneInstanceOleWrapper::CreateInstance(IUnknown FAR* punkOuter,
                                                    REFIID riid,
                                                    void FAR* FAR* ppv)
 {
+    comphelper::Automation::AutomationInvokedZone aAutomationActive;
+
     SAL_INFO("extensions.olebridge", "OneInstanceOleWrapper::CreateInstance(" << riid << ")");
 
     HRESULT ret = ResultFromScode(E_UNEXPECTED);
