@@ -25,8 +25,8 @@ PlacesListBox_Impl::PlacesListBox_Impl( PlacesListBox* pParent, const OUString& 
     mpHeaderBar = VclPtr<HeaderBar>::Create( pParent, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
     mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), Size( 600, 16 ) );
 
-    long aTabs[] = { 20, 600 };
-    SetTabs( SAL_N_ELEMENTS(aTabs), aTabs, MapUnit::MapPixel );
+    long aTabPositions[] = { 20, 600 };
+    SetTabs( SAL_N_ELEMENTS(aTabPositions), aTabPositions, MapUnit::MapPixel );
     mpHeaderBar->InsertItem( COLUMN_NAME, rTitle, 600, HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
 
     Size aHeadSize = mpHeaderBar->GetSizePixel();
