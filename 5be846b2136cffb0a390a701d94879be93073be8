@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_43b8fee5",
+        "filename": "include/vcl/bitmap.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-04-25T10:13:13Z",
+      "side": 1,
+      "message": "you could add a CommonBitmapAlgorithms.hxx file for such things... and make them constexpr functions not #define",
+      "revId": "5be846b2136cffb0a390a701d94879be93073be8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_23b5caed",
+        "filename": "include/vcl/bitmap.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-04-25T10:13:13Z",
+      "side": 1,
+      "message": "why are these added?",
+      "range": {
+        "startLine": 636,
+        "startChar": 35,
+        "endLine": 639,
+        "endChar": 37
+      },
+      "revId": "5be846b2136cffb0a390a701d94879be93073be8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
