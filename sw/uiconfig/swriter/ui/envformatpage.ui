@@ -1,10 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.4 -->
 <interface domain="sw">
-  <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.18"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="lower">5</property>
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment4">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment5">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment6">
+    <property name="lower">5</property>
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkMenu" id="editmenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="character">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="envformatpage|character">C_haracter...</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="paragraph">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="envformatpage|paragraph">P_aragraph...</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+  </object>
   <object class="GtkGrid" id="EnvFormatPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="row_spacing">12</property>
     <child>
@@ -44,31 +98,29 @@
                             <property name="row_spacing">6</property>
                             <property name="column_spacing">12</property>
                             <child>
-                              <object class="GtkSpinButton" id="leftaddr:0.00cm">
+                              <object class="GtkSpinButton" id="leftaddr">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment1</property>
                                 <property name="digits">2</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="topaddr:0.00cm">
+                              <object class="GtkSpinButton" id="topaddr">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="adjustment">adjustment1</property>
+                                <property name="activates_default">True</property>
+                                <property name="adjustment">adjustment3</property>
                                 <property name="digits">2</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -81,10 +133,10 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="margin_left">12</property>
-                                    <property name="xalign">0</property>
                                     <property name="label" translatable="yes" context="envformatpage|label5">from left</property>
                                     <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">leftaddr:0.00cm</property>
+                                    <property name="mnemonic_widget">leftaddr</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -96,8 +148,6 @@
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -110,10 +160,10 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="margin_left">12</property>
-                                    <property name="xalign">0</property>
                                     <property name="label" translatable="yes" context="envformatpage|label6">from top</property>
                                     <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">topaddr:0.00cm</property>
+                                    <property name="mnemonic_widget">topaddr</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -125,16 +175,12 @@
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -147,44 +193,36 @@
                               <object class="GtkLabel" id="label7">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes" context="envformatpage|label7">Format</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">addredit:editmenu</property>
+                                <property name="mnemonic_widget">addredit</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton" id="addredit:editmenu">
+                              <object class="GtkMenuButton" id="addredit">
                                 <property name="label" translatable="yes" context="envformatpage|addredit">Edit</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="popup">editmenu</property>
+                                <child>
+                                  <placeholder/>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
                             </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                       </object>
@@ -216,8 +254,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -259,31 +295,29 @@
                             <property name="row_spacing">6</property>
                             <property name="column_spacing">12</property>
                             <child>
-                              <object class="GtkSpinButton" id="leftsender:0.00cm">
+                              <object class="GtkSpinButton" id="leftsender">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="adjustment">adjustment1</property>
+                                <property name="activates_default">True</property>
+                                <property name="adjustment">adjustment4</property>
                                 <property name="digits">2</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="topsender:0.00cm">
+                              <object class="GtkSpinButton" id="topsender">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="adjustment">adjustment1</property>
+                                <property name="activates_default">True</property>
+                                <property name="adjustment">adjustment5</property>
                                 <property name="digits">2</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -296,10 +330,10 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="margin_left">12</property>
-                                    <property name="xalign">0</property>
                                     <property name="label" translatable="yes" context="envformatpage|label8">from left</property>
                                     <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">leftsender:0.00cm</property>
+                                    <property name="mnemonic_widget">leftsender</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -311,8 +345,6 @@
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -325,10 +357,10 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="margin_left">12</property>
-                                    <property name="xalign">0</property>
                                     <property name="label" translatable="yes" context="envformatpage|label9">from top</property>
                                     <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">topsender:0.00cm</property>
+                                    <property name="mnemonic_widget">topsender</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -340,16 +372,12 @@
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -362,44 +390,36 @@
                               <object class="GtkLabel" id="label10">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes" context="envformatpage|label10">Format</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">senderedit:editmenu</property>
+                                <property name="mnemonic_widget">senderedit</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton" id="senderedit:editmenu">
+                              <object class="GtkMenuButton" id="senderedit">
                                 <property name="label" translatable="yes" context="envformatpage|senderedit">Edit</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="popup">editmenu</property>
+                                <child>
+                                  <placeholder/>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
                             </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                       </object>
@@ -431,8 +451,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">1</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -466,104 +484,90 @@
                       <object class="GtkLabel" id="label12">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="envformatpage|label12">F_ormat</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">format</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="label13">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="envformatpage|label13">_Width</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">width:0.00cm</property>
+                        <property name="mnemonic_widget">width</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="label14">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="envformatpage|label14">_Height</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">height:0.00cm</property>
+                        <property name="mnemonic_widget">height</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="width:0.00cm">
+                      <object class="GtkSpinButton" id="width">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="height:0.00cm">
+                      <object class="GtkSpinButton" id="height">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
-                        <property name="adjustment">adjustment2</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment6</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkComboBoxText" id="format">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="entry_text_column">0</property>
-                        <property name="id_column">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="swuilo-SwEnvPreview" id="preview">
+                  <object class="GtkDrawingArea" id="preview">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child internal-child="accessible">
@@ -575,8 +579,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -597,50 +599,17 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">2</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
-    </child>
-  </object>
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment2">
-    <property name="lower">5</property>
-    <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkMenu" id="editmenu">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="character">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="envformatpage|character">C_haracter...</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="paragraph">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="envformatpage|paragraph">P_aragraph...</property>
-        <property name="use_underline">True</property>
-      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
-      <widget name="leftaddr:0.00cm"/>
-      <widget name="topaddr:0.00cm"/>
-      <widget name="leftsender:0.00cm"/>
-      <widget name="topsender:0.00cm"/>
-      <widget name="width:0.00cm"/>
-      <widget name="height:0.00cm"/>
+      <widget name="leftaddr"/>
+      <widget name="topaddr"/>
+      <widget name="leftsender"/>
+      <widget name="topsender"/>
+      <widget name="width"/>
+      <widget name="height"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
