@@ -102,27 +102,23 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
     , m_bLabel(bLabel)
     , m_nOptionsId(0)
     , m_nLabelId(0)
-    , m_nCardsId(0)
 {
     WaitObject aWait( pParent );
 
     AddTabPage("format", SwLabFormatPage::Create, nullptr);
     m_nOptionsId = AddTabPage("options", SwLabPrtPage::Create, nullptr);
-    m_nCardsId = AddTabPage("cards", SwVisitingCardPage::Create, nullptr);
-    m_sBusinessCardDlg = GetPageText(m_nCardsId);
+    m_sBusinessCardDlg = SwResId(STR_BUSINESS_CARDS);
 
     if (m_bLabel)
     {
         RemoveTabPage("business");
         RemoveTabPage("private");
-        RemoveTabPage("cards");
         RemoveTabPage("medium");
         m_nLabelId = AddTabPage("labels", SwLabPage::Create, nullptr);
     }
     else
     {
         RemoveTabPage("labels");
-        RemoveTabPage("cards");
         m_nLabelId = AddTabPage("medium", SwLabPage::Create, nullptr);
         AddTabPage("business", SwBusinessDataPage::Create, nullptr );
         AddTabPage("private", SwPrivateDataPage::Create, nullptr);
