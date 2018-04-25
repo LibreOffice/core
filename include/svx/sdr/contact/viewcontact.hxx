@@ -79,9 +79,6 @@ protected:
     // asserted there
     virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const;
 
-    // method for flushing View Independent Primitive2DContainer for VOC implementations
-    void flushViewIndependentPrimitive2DSequence() { mxViewIndependentPrimitive2DSequence.clear(); }
-
     // basic constructor. Since this is a base class only, it shall
     // never be called directly
     ViewContact();

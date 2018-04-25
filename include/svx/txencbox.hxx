@@ -118,8 +118,6 @@ public:
                             bool bExcludeImportSubsets
                             );
 
-    void                InsertTextEncoding( const rtl_TextEncoding nEnc );
-
     void                InsertTextEncoding( const rtl_TextEncoding nEnc,
                             const OUString& rEntry );
 

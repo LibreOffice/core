@@ -54,7 +54,6 @@ private:
     void                        HandleSubToolBarEvent( const VclWindowEvent& rVclWindowEvent );
     void                        ReleaseSubToolBox( ToolBox* _pSubToolBox );
     sal_Int32                   implGetAccessibleChildCount();
-    sal_Int32                   implGetSelectedAccessibleChildCount();
 
     virtual ~VCLXAccessibleToolBox() override;
 
