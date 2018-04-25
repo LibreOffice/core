@@ -3740,7 +3740,7 @@ private:
         if (m_bPopupActive != bIsShown)
         {
             m_bPopupActive = bIsShown;
-            //restore focus to the entry view the popup is gone, which
+            //restore focus to the entry view when the popup is gone, which
             //is what the vcl case does, to ease the transition a little
             gtk_widget_grab_focus(m_pWidget);
         }
@@ -3830,6 +3830,13 @@ public:
         , m_nChangedSignalId(g_signal_connect(m_pComboBoxText, "changed", G_CALLBACK(signalChanged), this))
         , m_nPopupShownSignalId(g_signal_connect(m_pComboBoxText, "notify::popup-shown", G_CALLBACK(signalPopupShown), this))
     {
+        // this bit isn't great, I really want to be able to ellipse the text in the comboboxtext itself and let
+        // the popup menu render them in full, in the interim allow the text to wrap in both cases
+        GList* cells = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(m_pComboBoxText));
+        GtkCellRenderer* cell = static_cast<GtkCellRenderer*>(cells->data);
+        g_object_set(G_OBJECT(cell), "wrap-width", 3, nullptr);
+        g_list_free(cells);
+
         if (GtkEntry* pEntry = get_entry())
         {
             setup_completion(pEntry);
@@ -3856,6 +3863,17 @@ public:
         OString aId(OUStringToOString(rStr, RTL_TEXTENCODING_UTF8));
         gtk_combo_box_set_active_id(GTK_COMBO_BOX(m_pComboBoxText), aId.getStr());
         enable_notify_events();
+    }
+
+    virtual void set_size_request(int nWidth, int nHeight) override
+    {
+        // tweak the cell render to get a narrower size to stick
+        GList* cells = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(m_pComboBoxText));
+        GtkCellRenderer* cell = static_cast<GtkCellRenderer*>(cells->data);
+        gtk_cell_renderer_set_fixed_size(cell, nWidth, -1);
+        g_list_free(cells);
+
+        gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
 
     virtual void set_active(int pos) override
