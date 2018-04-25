@@ -9,7 +9,7 @@
 
 # UITest class
 
-gb_UITest_UNITTESTFAILED ?= $(GBUILDDIR)/platform/unittest-failed-default.sh
+gb_UITest_UNITTESTFAILED ?= $(GBUILDDIR)/uitest-failed-default.sh
 
 ifeq ($(SYSTEM_PYTHON),)
 gb_UITest_EXECUTABLE := $(gb_Python_INSTALLED_EXECUTABLE)
