@@ -19,6 +19,7 @@
 
 #include <vcl/print.hxx>
 #include <svtools/prnsetup.hxx>
+#include <svtools/unitconv.hxx>
 
 #include <swtypes.hxx>
 #include <cmdid.h>
@@ -28,42 +29,49 @@
 
 #include <bitmaps.hlst>
 
-SwEnvPrtPage::SwEnvPrtPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "EnvPrinterPage",
-        "modules/swriter/ui/envprinterpage.ui", &rSet)
-    , pPrt(nullptr)
+SwEnvPrtPage::SwEnvPrtPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/envprinterpage.ui", "EnvPrinterPage", &rSet)
+    , m_xUpper(m_xBuilder->weld_widget("upper"))
+    , m_xLower(m_xBuilder->weld_widget("lower"))
+    , m_xTopButton(m_xBuilder->weld_radio_button("top"))
+    , m_xBottomButton(m_xBuilder->weld_radio_button("bottom"))
+    , m_xRightField(m_xBuilder->weld_metric_spin_button("right", FUNIT_CM))
+    , m_xDownField(m_xBuilder->weld_metric_spin_button("down", FUNIT_CM))
+    , m_xPrinterInfo(m_xBuilder->weld_label("printername"))
+    , m_xPrtSetup(m_xBuilder->weld_button("setup"))
+    , m_aIdsL { std::unique_ptr<weld::RadioButton>(m_xBuilder->weld_radio_button("horileftl")),
+                std::unique_ptr<weld::RadioButton>(m_xBuilder->weld_radio_button("horicenterl")),
+                std::unique_ptr<weld::RadioButton>(m_xBuilder->weld_radio_button("horirightl")),
+                std::unique_ptr<weld::RadioButton>(m_xBuilder->weld_radio_button("vertleftl")),
+                std::unique_ptr<weld::RadioButton>(m_xBuilder->weld_radio_button("vertcenterl")),
+                std::unique_ptr<weld::RadioButton>(m_xBuilder->weld_radio_button("vertrightl")) }
+    , m_aIdsU { std::unique_ptr<weld::RadioButton>(m_xBuilder->weld_radio_button("horileftu")),
+                std::unique_ptr<weld::RadioButton>(m_xBuilder->weld_radio_button("horicenteru")),
+                std::unique_ptr<weld::RadioButton>(m_xBuilder->weld_radio_button("horirightu")),
+                std::unique_ptr<weld::RadioButton>(m_xBuilder->weld_radio_button("vertleftu")),
+                std::unique_ptr<weld::RadioButton>(m_xBuilder->weld_radio_button("vertcenteru")),
+                std::unique_ptr<weld::RadioButton>(m_xBuilder->weld_radio_button("vertrightu")) }
 {
-    get(m_pAlignBox, "alignbox");
-    get(m_pTopButton, "top");
-    get(m_pBottomButton, "bottom");
-    get(m_pRightField, "right");
-    get(m_pDownField, "down");
-    get(m_pPrinterInfo, "printername");
-    get(m_pPrtSetup, "setup");
     SetExchangeSupport();
 
     // Metrics
     FieldUnit eUnit = ::GetDfltMetric(false);
-    SetMetric(*m_pRightField, eUnit);
-    SetMetric(*m_pDownField, eUnit);
+    ::SetFieldUnit(*m_xRightField, eUnit);
+    ::SetFieldUnit(*m_xDownField, eUnit);
 
     // Install handlers
-    m_pTopButton->SetClickHdl(LINK(this, SwEnvPrtPage, ClickHdl));
-    m_pBottomButton->SetClickHdl(LINK(this, SwEnvPrtPage, ClickHdl));
+    m_xTopButton->connect_toggled(LINK(this, SwEnvPrtPage, ClickHdl));
+    m_xBottomButton->connect_toggled(LINK(this, SwEnvPrtPage, ClickHdl));
 
-    m_pPrtSetup->SetClickHdl(LINK(this, SwEnvPrtPage, ButtonHdl));
+    m_xPrtSetup->connect_clicked(LINK(this, SwEnvPrtPage, ButtonHdl));
+
+    for (auto& a : m_aIdsL)
+        a->connect_toggled(LINK(this, SwEnvPrtPage, LowerHdl));
+    for (auto& a : m_aIdsU)
+        a->connect_toggled(LINK(this, SwEnvPrtPage, UpperHdl));
 
     // Bitmaps
-    m_pBottomButton->GetClickHdl().Call(m_pBottomButton);
-
-    // ToolBox
-    m_pAlignBox->SetClickHdl(LINK(this, SwEnvPrtPage, AlignHdl));
-    m_aIds[ENV_HOR_LEFT] = m_pAlignBox->GetItemId("horileft");
-    m_aIds[ENV_HOR_CNTR] = m_pAlignBox->GetItemId("horicenter");
-    m_aIds[ENV_HOR_RGHT] = m_pAlignBox->GetItemId("horiright");
-    m_aIds[ENV_VER_LEFT] = m_pAlignBox->GetItemId("vertleft");
-    m_aIds[ENV_VER_CNTR] = m_pAlignBox->GetItemId("vertcenter");
-    m_aIds[ENV_VER_RGHT] = m_pAlignBox->GetItemId("vertright");
+    ClickHdl(*m_xBottomButton);
 }
 
 SwEnvPrtPage::~SwEnvPrtPage()
@@ -71,84 +79,63 @@ SwEnvPrtPage::~SwEnvPrtPage()
     disposeOnce();
 }
 
-void SwEnvPrtPage::dispose()
+IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl, weld::ToggleButton&, void)
 {
-    m_pAlignBox.clear();
-    m_pTopButton.clear();
-    m_pBottomButton.clear();
-    m_pRightField.clear();
-    m_pDownField.clear();
-    m_pPrinterInfo.clear();
-    m_pPrtSetup.clear();
-    pPrt.clear();
-    SfxTabPage::dispose();
+    // Envelope from bottom, otherwise Envelope from top
+    const bool bLowerActive = m_xBottomButton->get_active();
+    m_xUpper->show(!bLowerActive);
+    m_xLower->show(bLowerActive);
 }
 
-IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl, Button*, void)
+IMPL_LINK(SwEnvPrtPage, LowerHdl, weld::ToggleButton&, rButton, void)
 {
-    if (m_pBottomButton->IsChecked())
+    for (int i = ENV_HOR_LEFT; i <= ENV_VER_RGHT; ++i)
     {
-        // Envelope from bottom
-        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_LEFT], Image(BitmapEx(BMP_HOR_LEFT_LOWER)));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_CNTR], Image(BitmapEx(BMP_HOR_CNTR_LOWER)));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_RGHT], Image(BitmapEx(BMP_HOR_RGHT_LOWER)));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_LEFT], Image(BitmapEx(BMP_VER_LEFT_LOWER)));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_CNTR], Image(BitmapEx(BMP_VER_CNTR_LOWER)));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_RGHT], Image(BitmapEx(BMP_VER_RGHT_LOWER)));
-    }
-    else
-    {
-        // Envelope from top
-        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_LEFT], Image(BitmapEx(BMP_HOR_LEFT_UPPER)));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_CNTR], Image(BitmapEx(BMP_HOR_CNTR_UPPER)));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_RGHT], Image(BitmapEx(BMP_HOR_RGHT_UPPER)));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_LEFT], Image(BitmapEx(BMP_VER_LEFT_UPPER)));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_CNTR], Image(BitmapEx(BMP_VER_CNTR_UPPER)));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_RGHT], Image(BitmapEx(BMP_VER_RGHT_UPPER)));
-    }
-}
-
-IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn, void )
-{
-    if (pBtn == m_pPrtSetup)
-    {
-        // Call printer setup
-        if (pPrt)
+        if (&rButton == m_aIdsL[i].get())
         {
-            PrinterSetupDialog aDlg(GetFrameWeld());
-            aDlg.SetPrinter(pPrt);
-            aDlg.execute();
-            GrabFocus();
-            m_pPrinterInfo->SetText(pPrt->GetName());
+            m_aIdsU[i]->set_active(m_aIdsL[i]->get_active());
+            break;
         }
     }
 }
 
-IMPL_LINK_NOARG(SwEnvPrtPage, AlignHdl, ToolBox *, void)
+IMPL_LINK(SwEnvPrtPage, UpperHdl, weld::ToggleButton&, rButton, void)
 {
-    if (m_pAlignBox->GetCurItemId())
+    for (int i = ENV_HOR_LEFT; i <= ENV_VER_RGHT; ++i)
     {
-        for (int i = ENV_HOR_LEFT; i <= ENV_VER_RGHT; ++i)
-            m_pAlignBox->CheckItem(m_aIds[i], false);
-        m_pAlignBox->CheckItem(m_pAlignBox->GetCurItemId());
+        if (&rButton == m_aIdsU[i].get())
+        {
+            m_aIdsL[i]->set_active(m_aIdsU[i]->get_active());
+            break;
+        }
     }
-    else
+}
+
+IMPL_LINK(SwEnvPrtPage, ButtonHdl, weld::Button&, rBtn, void)
+{
+    if (&rBtn == m_xPrtSetup.get())
     {
-        // GetCurItemId() == 0 is possible!
-        const SwEnvItem& rItem = static_cast<const SwEnvItem&>( GetItemSet().Get(FN_ENVELOP) );
-        m_pAlignBox->CheckItem(m_aIds[rItem.m_eAlign]);
+        // Call printer setup
+        if (m_xPrt)
+        {
+            PrinterSetupDialog aDlg(GetTabDialog()->GetFrameWeld());
+            aDlg.SetPrinter(m_xPrt);
+            aDlg.execute();
+            rBtn.grab_focus();
+            m_xPrinterInfo->set_label(m_xPrt->GetName());
+        }
     }
 }
 
 VclPtr<SfxTabPage> SwEnvPrtPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SwEnvPrtPage>::Create(pParent.pParent, *rSet);
+    return VclPtr<SwEnvPrtPage>::Create(pParent, *rSet);
 }
 
 void SwEnvPrtPage::ActivatePage(const SfxItemSet&)
 {
-    if (pPrt)
-        m_pPrinterInfo->SetText(pPrt->GetName());
+    if (m_xPrt)
+        m_xPrinterInfo->set_label(m_xPrt->GetName());
 }
 
 DeactivateRC SwEnvPrtPage::DeactivatePage(SfxItemSet* _pSet)
@@ -163,7 +150,8 @@ void SwEnvPrtPage::FillItem(SwEnvItem& rItem)
     int nOrient = 0;
     for (int i = ENV_HOR_LEFT; i <= ENV_VER_RGHT; ++i)
     {
-        if (m_pAlignBox->IsItemChecked(m_aIds[i]))
+        assert(m_aIdsL[i]->get_active() == m_aIdsU[i]->get_active());
+        if (m_aIdsL[i]->get_active())
         {
             nOrient = i;
             break;
@@ -171,9 +159,9 @@ void SwEnvPrtPage::FillItem(SwEnvItem& rItem)
     }
 
     rItem.m_eAlign          = static_cast<SwEnvAlign>(nOrient);
-    rItem.m_bPrintFromAbove = m_pTopButton->IsChecked();
-    rItem.m_nShiftRight     = static_cast< sal_Int32 >(GetFieldVal(*m_pRightField));
-    rItem.m_nShiftDown      = static_cast< sal_Int32 >(GetFieldVal(*m_pDownField ));
+    rItem.m_bPrintFromAbove = m_xTopButton->get_active();
+    rItem.m_nShiftRight     = getfieldval(*m_xRightField);
+    rItem.m_nShiftDown      = getfieldval(*m_xDownField);
 }
 
 bool SwEnvPrtPage::FillItemSet(SfxItemSet* rSet)
@@ -187,18 +175,19 @@ void SwEnvPrtPage::Reset(const SfxItemSet* rSet)
 {
     // Read item
     const SwEnvItem& rItem = static_cast<const SwEnvItem&>( rSet->Get(FN_ENVELOP) );
-    m_pAlignBox->CheckItem(m_aIds[rItem.m_eAlign]);
+    m_aIdsL[rItem.m_eAlign]->set_active(true);
+    m_aIdsU[rItem.m_eAlign]->set_active(true);
 
     if (rItem.m_bPrintFromAbove)
-        m_pTopButton->Check();
+        m_xTopButton->set_active(true);
     else
-        m_pBottomButton->Check();
+        m_xBottomButton->set_active(true);
 
-    SetFieldVal(*m_pRightField, rItem.m_nShiftRight);
-    SetFieldVal(*m_pDownField , rItem.m_nShiftDown );
+    setfieldval(*m_xRightField, rItem.m_nShiftRight);
+    setfieldval(*m_xDownField , rItem.m_nShiftDown );
 
     ActivatePage(*rSet);
-    ClickHdl(m_pTopButton);
+    ClickHdl(*m_xTopButton);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
