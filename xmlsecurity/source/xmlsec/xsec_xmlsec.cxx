@@ -22,8 +22,6 @@
 
 #include <cppuhelper/factory.hxx>
 
-#include "xsec_xmlsec.hxx"
-
 #include <config_gpgme.h>
 #if HAVE_FEATURE_GPGME
 # include <gpg/xmlsignature_gpgimpl.hxx>
@@ -37,7 +35,7 @@ using namespace ::com::sun::star::lang;
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void* xsec_xmlsec_component_getFactory( const sal_Char* pImplName , void* pServiceManager , void* pRegistryKey )
+SAL_DLLPUBLIC_EXPORT void* xsec_xmlsec_component_getFactory( const sal_Char* pImplName , void* pServiceManager , void* /*pRegistryKey*/ )
 {
     void* pRet = nullptr;
     Reference< XInterface > xFactory ;
@@ -58,16 +56,6 @@ SAL_DLLPUBLIC_EXPORT void* xsec_xmlsec_component_getFactory( const sal_Char* pIm
     if( xFactory.is() ) {
         xFactory->acquire() ;
         pRet = xFactory.get() ;
-    } else {
-        pRet = nss_component_getFactory( pImplName, pServiceManager, pRegistryKey ) ;
-        if( pRet != nullptr )
-            return pRet ;
-
-#if defined( XMLSEC_CRYPTO_MSCRYPTO )
-        pRet = mscrypt_component_getFactory( pImplName, pServiceManager, pRegistryKey ) ;
-        if( pRet != nullptr )
-            return pRet ;
-#endif
     }
 
     return pRet ;

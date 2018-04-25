@@ -59,8 +59,6 @@ namespace cssl = css::lang;
 
 using namespace com::sun::star;
 
-#define IMPLEMENTATION_NAME "com.sun.star.xml.security.bridge.xmlsec.NSSInitializer_NssImpl"
-
 #define ROOT_CERTS "Root Certs for OpenOffice.org"
 
 extern "C" void nsscrypto_finalize();
@@ -463,27 +461,10 @@ css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL ONSSInitializer
     return xResult;
 }
 
-OUString ONSSInitializer_getImplementationName ()
-{
-
-    return OUString ( IMPLEMENTATION_NAME );
-}
-
-cssu::Sequence< OUString > ONSSInitializer_getSupportedServiceNames(  )
-{
-    cssu::Sequence<OUString> aRet { NSS_SERVICE_NAME };
-    return aRet;
-}
-
-cssu::Reference< cssu::XInterface > ONSSInitializer_createInstance( const cssu::Reference< cssl::XMultiServiceFactory > & rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(new ONSSInitializer( comphelper::getComponentContext(rSMgr) ));
-}
-
 /* XServiceInfo */
 OUString SAL_CALL ONSSInitializer::getImplementationName()
 {
-    return ONSSInitializer_getImplementationName();
+    return OUString("com.sun.star.xml.crypto.NSSInitializer");
 }
 
 sal_Bool SAL_CALL ONSSInitializer::supportsService( const OUString& rServiceName )
@@ -493,7 +474,17 @@ sal_Bool SAL_CALL ONSSInitializer::supportsService( const OUString& rServiceName
 
 cssu::Sequence< OUString > SAL_CALL ONSSInitializer::getSupportedServiceNames(  )
 {
-    return ONSSInitializer_getSupportedServiceNames();
+    cssu::Sequence<OUString> aRet { NSS_SERVICE_NAME };
+    return aRet;
 }
+
+#ifndef XMLSEC_CRYPTO_NSS
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_xml_crypto_NSSInitializer_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new ONSSInitializer(pCtx));
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

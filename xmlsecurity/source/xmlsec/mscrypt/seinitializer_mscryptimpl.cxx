@@ -30,12 +30,12 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
-namespace cssu = com::sun::star::uno;
+using namespace com::sun::star;
 namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
 
 SEInitializer_MSCryptImpl::SEInitializer_MSCryptImpl(
-    const cssu::Reference< cssu::XComponentContext > &rxContext)
+    const uno::Reference< uno::XComponentContext > &rxContext)
     :mxContext( rxContext )
 {
 }
@@ -45,7 +45,7 @@ SEInitializer_MSCryptImpl::~SEInitializer_MSCryptImpl()
 }
 
 /* XSEInitializer */
-cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
+uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     SEInitializer_MSCryptImpl::createSecurityContext(
     const OUString& sCertDB )
 {
@@ -74,10 +74,10 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
 
     try {
         /* Build Security Environment */
-        cssu::Reference< cssxc::XSecurityEnvironment > xSecEnv = cssxc::SecurityEnvironment::create( mxContext );
+        uno::Reference< cssxc::XSecurityEnvironment > xSecEnv = cssxc::SecurityEnvironment::create( mxContext );
 
         /* Setup key slot and certDb */
-        cssu::Reference< cssl::XUnoTunnel > xSecEnvTunnel( xSecEnv, cssu::UNO_QUERY_THROW );
+        uno::Reference< cssl::XUnoTunnel > xSecEnvTunnel( xSecEnv, uno::UNO_QUERY_THROW );
         SecurityEnvironment_MSCryptImpl* pSecEnv = reinterpret_cast<SecurityEnvironment_MSCryptImpl*>(xSecEnvTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ));
         if( pSecEnv == nullptr )
         {
@@ -101,12 +101,12 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         }
 
         /* Build XML Security Context */
-        cssu::Reference< cssxc::XXMLSecurityContext > xSecCtx = cssxc::XMLSecurityContext::create( mxContext );
+        uno::Reference< cssxc::XXMLSecurityContext > xSecCtx = cssxc::XMLSecurityContext::create( mxContext );
 
         xSecCtx->setDefaultSecurityEnvironmentIndex(xSecCtx->addSecurityEnvironment( xSecEnv )) ;
         return xSecCtx;
     }
-    catch( cssu::Exception& )
+    catch( uno::Exception& )
     {
         if( n_hStoreHandle != nullptr )
         {
@@ -118,15 +118,15 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     }
 }
 
-void SAL_CALL SEInitializer_MSCryptImpl::freeSecurityContext( const cssu::Reference< cssxc::XXMLSecurityContext >&)
+void SAL_CALL SEInitializer_MSCryptImpl::freeSecurityContext( const uno::Reference< cssxc::XXMLSecurityContext >&)
 {
     /*
-    cssu::Reference< cssxc::XSecurityEnvironment > xSecEnv
+    uno::Reference< cssxc::XSecurityEnvironment > xSecEnv
         = securityContext->getSecurityEnvironment();
 
     if( xSecEnv.is() )
     {
-        cssu::Reference< cssl::XUnoTunnel > xEnvTunnel( xSecEnv , cssu::UNO_QUERY ) ;
+        uno::Reference< cssl::XUnoTunnel > xEnvTunnel( xSecEnv , uno::UNO_QUERY ) ;
         if( xEnvTunnel.is() )
         {
             SecurityEnvironment_MSCryptImpl* pSecEnv = ( SecurityEnvironment_MSCryptImpl* )xEnvTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ) ;
@@ -147,26 +147,10 @@ void SAL_CALL SEInitializer_MSCryptImpl::freeSecurityContext( const cssu::Refere
     xmlSecMSCryptoAppShutdown() ;
 }
 
-OUString SEInitializer_MSCryptImpl_getImplementationName()
-{
-    return OUString( "com.sun.star.xml.security.bridge.xmlsec.SEInitializer_MSCryptImpl" );
-}
-
-cssu::Sequence< OUString > SEInitializer_MSCryptImpl_getSupportedServiceNames()
-{
-    cssu::Sequence<OUString> aRet { "com.sun.star.xml.crypto.SEInitializer" };
-    return aRet;
-}
-
-cssu::Reference< cssu::XInterface > SEInitializer_MSCryptImpl_createInstance( const cssu::Reference< cssl::XMultiServiceFactory > & rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(new SEInitializer_MSCryptImpl( comphelper::getComponentContext(rSMgr) ));
-}
-
 /* XServiceInfo */
 OUString SAL_CALL SEInitializer_MSCryptImpl::getImplementationName()
 {
-    return SEInitializer_MSCryptImpl_getImplementationName();
+    return OUString("com.sun.star.xml.crypto.SEInitializer");
 }
 
 sal_Bool SAL_CALL SEInitializer_MSCryptImpl::supportsService( const OUString& rServiceName )
@@ -174,9 +158,17 @@ sal_Bool SAL_CALL SEInitializer_MSCryptImpl::supportsService( const OUString& rS
     return cppu::supportsService( this, rServiceName );
 }
 
-cssu::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl::getSupportedServiceNames()
 {
-    return SEInitializer_MSCryptImpl_getSupportedServiceNames();
+    uno::Sequence<OUString> aRet { "com.sun.star.xml.crypto.SEInitializer" };
+    return aRet;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_xml_crypto_SEInitializer_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new SEInitializer_MSCryptImpl(pCtx));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

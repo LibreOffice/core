@@ -73,7 +73,6 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/nss/ciphercontext \
 	xmlsecurity/source/xmlsec/nss/digestcontext \
 	xmlsecurity/source/xmlsec/nss/nssinitializer \
-	xmlsecurity/source/xmlsec/nss/xsec_nss \
 ))
 
 ifeq ($(ENABLE_GPGMEPP),TRUE)
@@ -113,7 +112,6 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/mscrypt/x509certificate_mscryptimpl \
 	xmlsecurity/source/xmlsec/mscrypt/xmlsecuritycontext_mscryptimpl \
 	xmlsecurity/source/xmlsec/mscrypt/xmlsignature_mscryptimpl \
-	xmlsecurity/source/xmlsec/mscrypt/xsec_mscrypt \
 ))
 
 else
