@@ -278,17 +278,25 @@ static void showDocument( const char* pBaseName )
 
 namespace
 {
-    Reference<XFrame> GetRequestFrame(const SfxRequest& rReq)
+    const SfxPoolItem* GetSfxUnoFrameItem(const SfxItemSet* pArgs)
     {
-        const SfxItemSet* pArgs = rReq.GetInternalArgs_Impl();
         const SfxPoolItem* pItem = nullptr;
-        Reference <XFrame> xFrame;
         if (pArgs && pArgs->GetItemState(SID_FILLFRAME, false, &pItem) == SfxItemState::SET)
         {
             OSL_ENSURE( dynamic_cast< const SfxUnoFrameItem *>( pItem ) !=  nullptr, "SfxApplication::OfaExec_Impl: XFrames are to be transported via SfxUnoFrameItem by now!" );
-            xFrame = static_cast< const SfxUnoFrameItem*>( pItem )->GetFrame();
         }
-        return xFrame;
+        return pItem;
+    }
+
+    Reference<XFrame> GetRequestFrame(const SfxRequest& rReq)
+    {
+        const SfxItemSet* pArgs = rReq.GetInternalArgs_Impl();
+        const SfxPoolItem* pItem = GetSfxUnoFrameItem(pArgs);
+        if (!pItem)
+            pItem = GetSfxUnoFrameItem(rReq.GetArgs());
+        if (!pItem)
+            return Reference<XFrame>();
+        return static_cast<const SfxUnoFrameItem*>(pItem)->GetFrame();
     }
 
     vcl::Window* getFrameWindow(const Reference<XFrame>& rFrame)
