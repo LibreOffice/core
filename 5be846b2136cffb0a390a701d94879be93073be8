@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_031c4676",
+        "filename": "include/vcl/bitmap.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2018-04-25T14:10:55Z",
+      "side": 1,
+      "message": "Changing this to a constexpr has proven surprisingly tricky. I\u0027m going to move it to the header as is for now, will work on turning into a constexpr later - hope this is OK.\n\nI think it\u0027s the MinMax function causing the issues. I have submitted a unit test and made the function easier to read in some seperate patches.",
+      "parentUuid": "9a30ddce_c3c4ee60",
+      "revId": "5be846b2136cffb0a390a701d94879be93073be8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_23b5caed",
         "filename": "include/vcl/bitmap.hxx",
         "patchSetId": 14
