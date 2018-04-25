@@ -472,12 +472,10 @@ bool checkFormulaPositions(
 }
 
 ScTokenArray* compileFormula(
-    ScDocument* pDoc, const OUString& rFormula, const ScAddress* pPos,
+    ScDocument* pDoc, const OUString& rFormula,
     formula::FormulaGrammar::Grammar eGram )
 {
     ScAddress aPos(0,0,0);
-    if (pPos)
-        aPos = *pPos;
     ScCompiler aComp(pDoc, aPos, eGram);
     return aComp.CompileString(rFormula);
 }

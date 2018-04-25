@@ -26,7 +26,7 @@ InsertDeleteFlags ScDeleteContentsDlg::nPreviousChecks   = (InsertDeleteFlags::D
                                                  InsertDeleteFlags::NOTE     | InsertDeleteFlags::FORMULA |
                                                  InsertDeleteFlags::VALUE);
 
-ScDeleteContentsDlg::ScDeleteContentsDlg(weld::Window* pParent, InsertDeleteFlags nCheckDefaults)
+ScDeleteContentsDlg::ScDeleteContentsDlg(weld::Window* pParent)
     : GenericDialogController(pParent, "modules/scalc/ui/deletecontents.ui", "DeleteContentsDialog")
     , m_bObjectsDisabled(false)
     , m_xBtnDelAll(m_xBuilder->weld_check_button("deleteall"))
@@ -39,12 +39,6 @@ ScDeleteContentsDlg::ScDeleteContentsDlg(weld::Window* pParent, InsertDeleteFlag
     , m_xBtnDelObjects(m_xBuilder->weld_check_button("objects"))
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
 {
-    if ( nCheckDefaults != InsertDeleteFlags::NONE )
-    {
-        ScDeleteContentsDlg::nPreviousChecks = nCheckDefaults;
-        ScDeleteContentsDlg::bPreviousAllCheck = false;
-    }
-
     m_xBtnDelAll->set_active( ScDeleteContentsDlg::bPreviousAllCheck );
     m_xBtnDelStrings->set_active( bool(InsertDeleteFlags::STRING & ScDeleteContentsDlg::nPreviousChecks) );
     m_xBtnDelNumbers->set_active( bool(InsertDeleteFlags::VALUE & ScDeleteContentsDlg::nPreviousChecks) );

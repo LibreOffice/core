@@ -1109,15 +1109,15 @@ public:
     sal_uInt32      m_offset_SUPERTYPES;
 
     TypeRegistryEntry(
-        const sal_uInt8* buffer, sal_uInt32 len, bool copyBuffer);
+        const sal_uInt8* buffer, sal_uInt32 len);
         // throws std::bad_alloc
 
     typereg_Version getVersion() const;
 };
 
 TypeRegistryEntry::TypeRegistryEntry(
-    const sal_uInt8* buffer, sal_uInt32 len, bool copyBuffer):
-    BlopObject(buffer, len, copyBuffer), m_refCount(1), m_nSuperTypes(0),
+    const sal_uInt8* buffer, sal_uInt32 len):
+    BlopObject(buffer, len, /*copyBuffer*/false), m_refCount(1), m_nSuperTypes(0),
     m_offset_SUPERTYPES(0)
 {
     std::size_t const entrySize = sizeof(sal_uInt16);
@@ -1195,7 +1195,7 @@ bool TYPEREG_CALLTYPE typereg_reader_create(
         try {
             entry.reset(
                 new TypeRegistryEntry(
-                    static_cast< sal_uInt8 const * >(buffer), length, false/*copy*/));
+                    static_cast< sal_uInt8 const * >(buffer), length));
         } catch (std::bad_alloc &) {
             return false;
         }

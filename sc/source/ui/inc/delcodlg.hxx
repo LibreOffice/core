@@ -45,7 +45,7 @@ private:
     DECL_LINK( DelAllHdl, weld::Button&, void );
 
 public:
-    ScDeleteContentsDlg(weld::Window* pParent, InsertDeleteFlags nCheckDefaults );
+    ScDeleteContentsDlg(weld::Window* pParent);
     virtual ~ScDeleteContentsDlg() override;
     void    DisableObjects();
 

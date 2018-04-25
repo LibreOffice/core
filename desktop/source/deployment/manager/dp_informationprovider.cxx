@@ -237,10 +237,10 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
         OUString updateVersionShared;
         if (sourceUser != dp_misc::UPDATE_SOURCE_NONE)
             updateVersionUser = dp_misc::getHighestVersion(
-                OUString(), sVersionShared, sVersionBundled, sOnlineVersion);
+                sVersionShared, sVersionBundled, sOnlineVersion);
         if (sourceShared  != dp_misc::UPDATE_SOURCE_NONE)
             updateVersionShared = dp_misc::getHighestVersion(
-                OUString(), OUString(), sVersionBundled, sOnlineVersion);
+                OUString(), sVersionBundled, sOnlineVersion);
         OUString updateVersion;
         if (dp_misc::compareVersions(updateVersionUser, updateVersionShared) == dp_misc::GREATER)
             updateVersion = updateVersionUser;

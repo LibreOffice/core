@@ -1826,8 +1826,7 @@ void XclImpNoteObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
             rSdrObj.GetMergedItemSet().Clone(),             // new object on heap expected
             new OutlinerParaObject( *pOutlinerObj ),        // new object on heap expected
             rSdrObj.GetLogicRect(),
-            ::get_flag( mnNoteFlags, EXC_NOTE_VISIBLE ),
-            false );
+            ::get_flag( mnNoteFlags, EXC_NOTE_VISIBLE ) );
     }
 }
 

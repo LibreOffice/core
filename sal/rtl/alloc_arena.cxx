@@ -1002,7 +1002,7 @@ void rtl_arena_foreach (rtl_arena_type *arena, ArenaForeachFn foreachFn)
         {
             if (arena->m_qcache_ptr[i - 1] != nullptr)
                 rtl_cache_foreach (arena->m_qcache_ptr[i - 1],
-                                   foreachFn, nullptr);
+                                   foreachFn);
         }
     }
 
@@ -1013,7 +1013,7 @@ void rtl_arena_foreach (rtl_arena_type *arena, ArenaForeachFn foreachFn)
              segment != nullptr; segment = segment->m_fnext)
         {
             foreachFn(reinterpret_cast<void *>(segment->m_addr),
-                      segment->m_size, nullptr);
+                      segment->m_size);
         }
     }
 }

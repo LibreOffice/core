@@ -92,9 +92,8 @@ OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt 
     return aTemplate.makeStringAndClear();
 }
 
-bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
-                                 sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,
-                                 bool bCurrency )
+bool ImplCurrencyGetValue( const OUString& rStr, BigInt& rValue,
+                                 sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper )
 {
     OUString aStr = rStr;
     OUStringBuffer aStr1;
@@ -123,13 +122,28 @@ bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
         aStr1 = aStr;
 
     // Negative?
-    if ( bCurrency )
+    if ( (aStr[ 0 ] == '(') && (aStr[ aStr.getLength()-1 ] == ')') )
+        bNegative = true;
+    if ( !bNegative )
     {
-        if ( (aStr[ 0 ] == '(') && (aStr[ aStr.getLength()-1 ] == ')') )
-            bNegative = true;
-        if ( !bNegative )
+        for (sal_Int32 i=0; i < aStr.getLength(); i++ )
         {
-            for (sal_Int32 i=0; i < aStr.getLength(); i++ )
+            if ( (aStr[ i ] >= '0') && (aStr[ i ] <= '9') )
+                break;
+            else if ( aStr[ i ] == '-' )
+            {
+                bNegative = true;
+                break;
+            }
+        }
+    }
+    if ( !bNegative && !aStr.isEmpty() )
+    {
+        sal_uInt16 nFormat = rLocaleDataWrapper.getCurrNegativeFormat();
+        if ( (nFormat == 3) || (nFormat == 6)  ||
+             (nFormat == 7) || (nFormat == 10) )
+        {
+            for (sal_Int32 i = aStr.getLength()-1; i > 0; i++ )
             {
                 if ( (aStr[ i ] >= '0') && (aStr[ i ] <= '9') )
                     break;
@@ -140,29 +154,6 @@ bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
                 }
             }
         }
-        if ( !bNegative && bCurrency && !aStr.isEmpty() )
-        {
-            sal_uInt16 nFormat = rLocaleDataWrapper.getCurrNegativeFormat();
-            if ( (nFormat == 3) || (nFormat == 6)  ||
-                 (nFormat == 7) || (nFormat == 10) )
-            {
-                for (sal_Int32 i = aStr.getLength()-1; i > 0; i++ )
-                {
-                    if ( (aStr[ i ] >= '0') && (aStr[ i ] <= '9') )
-                        break;
-                    else if ( aStr[ i ] == '-' )
-                    {
-                        bNegative = true;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    else
-    {
-        if ( aStr1[ 0 ] == '-' )
-            bNegative = true;
     }
 
     // delete unwanted characters
@@ -223,7 +214,7 @@ bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
 inline bool ImplLongCurrencyGetValue( const OUString& rStr, BigInt& rValue,
                                       sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper )
 {
-    return ImplNumericGetValue( rStr, rValue, nDecDigits, rLocaleDataWrapper, true );
+    return ImplCurrencyGetValue( rStr, rValue, nDecDigits, rLocaleDataWrapper );
 }
 
 bool ImplLongCurrencyReformat( const OUString& rStr, BigInt const & nMin, BigInt const & nMax,
@@ -232,7 +223,7 @@ bool ImplLongCurrencyReformat( const OUString& rStr, BigInt const & nMin, BigInt
                                LongCurrencyFormatter const & rFormatter )
 {
     BigInt nValue;
-    if ( !ImplNumericGetValue( rStr, nValue, nDecDigits, rLocaleDataWrapper, true ) )
+    if ( !ImplCurrencyGetValue( rStr, nValue, nDecDigits, rLocaleDataWrapper ) )
         return true;
     else
     {

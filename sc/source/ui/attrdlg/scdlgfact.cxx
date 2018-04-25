@@ -704,7 +704,7 @@ VclPtr<AbstractScDataFormDlg> ScAbstractDialogFactory_Impl::CreateScDataFormDlg(
 
 VclPtr<AbstractScDeleteContentsDlg> ScAbstractDialogFactory_Impl::CreateScDeleteContentsDlg(weld::Window* pParent)
 {
-    return VclPtr<AbstractScDeleteContentsDlg_Impl>::Create(new ScDeleteContentsDlg(pParent, InsertDeleteFlags::NONE));
+    return VclPtr<AbstractScDeleteContentsDlg_Impl>::Create(new ScDeleteContentsDlg(pParent));
 }
 
 VclPtr<AbstractScFillSeriesDlg> ScAbstractDialogFactory_Impl::CreateScFillSeriesDlg( vcl::Window*       pParent,

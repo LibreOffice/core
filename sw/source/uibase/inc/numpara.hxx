@@ -61,7 +61,7 @@ class SwParagraphNumTabPage final : public SfxTabPage
 
     static const sal_uInt16 aPageRg[];
 
-    static bool ExecuteEditNumStyle_Impl( sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
+    static bool ExecuteEditNumStyle_Impl( sal_uInt16 nId, const OUString& rStr,
                           SfxStyleFamily nFamily );
 
 public:
