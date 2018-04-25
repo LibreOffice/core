@@ -139,11 +139,6 @@ short AbstractScLinkedAreaDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-void ScAbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
-{
-    pDlg->SetCurPageId( nId );
-}
-
 void ScAbstractTabDialog_Impl::SetCurPageId( const OString& rName )
 {
     pDlg->SetCurPageId( rName );

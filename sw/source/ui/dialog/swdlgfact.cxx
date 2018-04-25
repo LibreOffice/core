@@ -182,11 +182,6 @@ IMPL_ABSTDLG_BASE(AbstractInsertSectionTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractIndexMarkFloatDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractAuthMarkFloatDlg_Impl);
 
-void AbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
-{
-    pDlg->SetCurPageId( nId );
-}
-
 void AbstractTabDialog_Impl::SetCurPageId( const OString &rName )
 {
     pDlg->SetCurPageId( rName );
@@ -294,11 +289,6 @@ bool AbstractDropDownFieldDialog_Impl::NextButtonPressed() const
     return m_xDlg->NextButtonPressed();
 }
 
-void AbstractSwLabDlg_Impl::SetCurPageId( sal_uInt16 nId )
-{
-    pDlg->SetCurPageId( nId );
-}
-
 void AbstractSwLabDlg_Impl::SetCurPageId( const OString &rName )
 {
     pDlg->SetCurPageId( rName );
@@ -352,11 +342,6 @@ void AbstractSwSelGlossaryDlg_Impl::SelectEntryPos(sal_Int32 nIdx)
 SwTableAutoFormat* AbstractSwAutoFormatDlg_Impl::FillAutoFormatOfIndex() const
 {
     return m_xDlg->FillAutoFormatOfIndex();
-}
-
-void AbstractSwFieldDlg_Impl::SetCurPageId( sal_uInt16 nId )
-{
-    pDlg->SetCurPageId( nId );
 }
 
 void AbstractSwFieldDlg_Impl::SetCurPageId( const OString &rName )
