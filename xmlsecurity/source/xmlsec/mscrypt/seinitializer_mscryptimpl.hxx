@@ -69,16 +69,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
-/// @throws css::uno::RuntimeException
-OUString SEInitializer_MSCryptImpl_getImplementationName();
-
-/// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SEInitializer_MSCryptImpl_getSupportedServiceNames(  );
-
-/// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface >
-SEInitializer_MSCryptImpl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
