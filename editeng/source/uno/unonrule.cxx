@@ -27,6 +27,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/GraphicLoader.hxx>
 
 #include <editeng/brushitem.hxx>
 #include <editeng/unoprnms.hxx>
@@ -352,10 +353,24 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
                 continue;
             }
         }
+        else if ( rPropName == "GraphicURL" )
+        {
+            OUString aURL;
+            if (aVal >>= aURL)
+            {
+                Graphic aGraphic = vcl::graphic::loadFromURL(aURL);
+                if (aGraphic)
+                {
+                    SvxBrushItem aBrushItem(aGraphic, GPOS_AREA, SID_ATTR_BRUSH);
+                    aFmt.SetGraphicBrush(&aBrushItem);
+                }
+                continue;
+            }
+        }
         else if ( rPropName == "GraphicBitmap" )
         {
             uno::Reference<awt::XBitmap> xBitmap;
-            if(aVal >>= xBitmap)
+            if (aVal >>= xBitmap)
             {
                 uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
                 Graphic aGraphic(xGraphic);
