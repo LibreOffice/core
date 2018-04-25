@@ -81,49 +81,6 @@ public:
     SwDBManager* GetDBManager() const { return pDBManager; }
 };
 
-class SwOneExampleFrame;
-class SwVisitingCardPage : public SfxTabPage
-{
-    VclPtr<SvTreeListBox>  m_pAutoTextLB;
-    VclPtr<ListBox>        m_pAutoTextGroupLB;
-    VclPtr<vcl::Window>    m_pExampleWIN;
-
-    SwLabItem       aLabItem;
-
-    SwOneExampleFrame*  pExampleFrame;
-    css::uno::Reference< css::text::XAutoTextContainer2 > m_xAutoText;
-
-    DECL_LINK( AutoTextSelectTreeListBoxHdl, SvTreeListBox*, void );
-    DECL_LINK( AutoTextSelectHdl, ListBox&, void );
-    DECL_LINK( FrameControlInitializedHdl, SwOneExampleFrame&, void );
-
-    void            InitFrameControl();
-    void            UpdateFields();
-
-    void            ClearUserData();
-
-    using SfxTabPage::SetUserData;
-    void            SetUserData( sal_uInt32 nCnt,
-                                    const OUString* pNames,
-                                    const OUString* pValues );
-
-    virtual ~SwVisitingCardPage() override;
-    virtual void dispose() override;
-
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
-public:
-    SwVisitingCardPage(vcl::Window* pParent, const SfxItemSet& rSet);
-
-    static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
-
-    virtual void ActivatePage(const SfxItemSet& rSet) override;
-    virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
-    virtual bool FillItemSet(SfxItemSet* rSet) override;
-    virtual void Reset(const SfxItemSet* rSet) override;
-};
-
 class SwPrivateDataPage : public SfxTabPage
 {
     VclPtr<Edit> m_pFirstNameED;

@@ -105,7 +105,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/cannotsavelabeldialog \
 	sw/uiconfig/swriter/ui/captiondialog \
 	sw/uiconfig/swriter/ui/captionoptions \
-	sw/uiconfig/swriter/ui/cardformatpage \
 	sw/uiconfig/swriter/ui/cardmediumpage \
 	sw/uiconfig/swriter/ui/ccdialog \
 	sw/uiconfig/swriter/ui/characterproperties \
