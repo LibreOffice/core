@@ -26,7 +26,7 @@
 #include <cell.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 
 
 using namespace ::com::sun::star::uno;
@@ -246,7 +246,7 @@ void SAL_CALL CellCursor::merge(  )
     const bool bUndo(mxTable->getSdrTableObj()->IsInserted() && rModel.IsUndoEnabled());
 
     if( bUndo )
-        rModel.BegUndo( ImpGetResStr(STR_TABLE_MERGE) );
+        rModel.BegUndo( SvxResId(STR_TABLE_MERGE) );
 
     try
     {
@@ -506,7 +506,7 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows )
     const bool bUndo(mxTable->getSdrTableObj()->IsInserted() && rModel.IsUndoEnabled());
 
     if( bUndo )
-        rModel.BegUndo( ImpGetResStr(STR_TABLE_SPLIT) );
+        rModel.BegUndo( SvxResId(STR_TABLE_SPLIT) );
 
     try
     {

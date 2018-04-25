@@ -18,7 +18,7 @@
  */
 
 #include "svddrgm1.hxx"
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -1638,7 +1638,7 @@ SdrEdgeObj& SdrEdgeObj::operator=(const SdrEdgeObj& rObj)
 
 OUString SdrEdgeObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulEDGE));
+    OUStringBuffer sName(SvxResId(STR_ObjNameSingulEDGE));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
@@ -1653,7 +1653,7 @@ OUString SdrEdgeObj::TakeObjNameSingul() const
 
 OUString SdrEdgeObj::TakeObjNamePlural() const
 {
-    return ImpGetResStr(STR_ObjNamePluralEDGE);
+    return SvxResId(STR_ObjNamePluralEDGE);
 }
 
 basegfx::B2DPolyPolygon SdrEdgeObj::TakeXorPoly() const

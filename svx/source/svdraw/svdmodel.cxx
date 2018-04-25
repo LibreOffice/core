@@ -61,7 +61,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdoole2.hxx>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svdoutlinercache.hxx>
 
@@ -1439,7 +1439,7 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
         bUndo = false;
 
     if( bUndo )
-        BegUndo(ImpGetResStr(STR_UndoMergeModel));
+        BegUndo(SvxResId(STR_UndoMergeModel));
 
     sal_uInt16 nPageCnt=GetPageCount();
     sal_uInt16 nMaxPage=nPageCnt;
@@ -1527,7 +1527,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
         bUndo = false;
 
     if (bUndo)
-        BegUndo(ImpGetResStr(STR_UndoMergeModel));
+        BegUndo(SvxResId(STR_UndoMergeModel));
 
     sal_uInt16 nSrcPageCnt=rSourceModel.GetPageCount();
     sal_uInt16 nSrcMasterPageCnt=rSourceModel.GetMasterPageCount();

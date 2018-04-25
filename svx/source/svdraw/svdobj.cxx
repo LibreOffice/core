@@ -57,7 +57,6 @@
 #include <vector>
 
 #include <svx/shapepropertynotifier.hxx>
-#include <svdglob.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/xlinjoit.hxx>
 
@@ -93,6 +92,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/strings.hrc>
+#include <svx/dialmgr.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
@@ -991,7 +991,7 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
 
 OUString SdrObject::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulNONE));
+    OUStringBuffer sName(SvxResId(STR_ObjNameSingulNONE));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
@@ -1006,12 +1006,12 @@ OUString SdrObject::TakeObjNameSingul() const
 
 OUString SdrObject::TakeObjNamePlural() const
 {
-    return ImpGetResStr(STR_ObjNamePluralNONE);
+    return SvxResId(STR_ObjNamePluralNONE);
 }
 
 void SdrObject::ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr) const
 {
-    rStr = ImpGetResStr(pStrCacheID);
+    rStr = SvxResId(pStrCacheID);
     sal_Int32 nPos = rStr.indexOf("%1");
     if (nPos >= 0)
     {

@@ -28,7 +28,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include "svdfmtf.hxx"
 #include <svx/svdetc.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -67,7 +67,7 @@ void SdrEditView::MovMarkedToTop()
         const bool bUndo = IsUndoEnabled();
 
         if( bUndo )
-            BegUndo(ImpGetResStr(STR_EditMovToTop),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::MoveToTop);
+            BegUndo(SvxResId(STR_EditMovToTop),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::MoveToTop);
 
         SortMarkedObjects();
         for (size_t nm=0; nm<nCount; ++nm)
@@ -154,7 +154,7 @@ void SdrEditView::MovMarkedToBtm()
         const bool bUndo = IsUndoEnabled();
 
         if( bUndo )
-            BegUndo(ImpGetResStr(STR_EditMovToBtm),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::MoveToBottom);
+            BegUndo(SvxResId(STR_EditMovToBtm),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::MoveToBottom);
 
         SortMarkedObjects();
         for (size_t nm=0; nm<nCount; ++nm)
@@ -249,7 +249,7 @@ void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
 
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
-        BegUndo(ImpGetResStr(STR_EditPutToTop),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::PutToTop);
+        BegUndo(SvxResId(STR_EditPutToTop),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::PutToTop);
 
     SortMarkedObjects();
 
@@ -351,7 +351,7 @@ void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
     const bool bUndo = IsUndoEnabled();
 
     if( bUndo )
-        BegUndo(ImpGetResStr(STR_EditPutToBtm),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::PutToBottom);
+        BegUndo(SvxResId(STR_EditPutToBtm),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::PutToBottom);
 
     SortMarkedObjects();
     if (pRefObj!=nullptr)
@@ -432,7 +432,7 @@ void SdrEditView::ReverseOrderOfMarked()
 
         bool bUndo = IsUndoEnabled();
         if( bUndo )
-            BegUndo(ImpGetResStr(STR_EditRevOrder),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::ReverseOrder);
+            BegUndo(SvxResId(STR_EditRevOrder),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::ReverseOrder);
 
         size_t a=0;
         do {
@@ -977,7 +977,7 @@ void SdrEditView::DistributeMarkedObjects()
                 }
 
                 // UNDO-Comment and end of UNDO
-                mpModel->SetUndoComment(ImpGetResStr(STR_DistributeMarkedObjects));
+                mpModel->SetUndoComment(SvxResId(STR_DistributeMarkedObjects));
 
                 if( bUndo )
                     EndUndo();
@@ -1146,21 +1146,21 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
         case SdrMergeMode::Merge:
         {
             SetUndoComment(
-                ImpGetResStr(STR_EditMergeMergePoly),
+                SvxResId(STR_EditMergeMergePoly),
                 aRemove.GetMarkDescription());
             break;
         }
         case SdrMergeMode::Subtract:
         {
             SetUndoComment(
-                ImpGetResStr(STR_EditMergeSubstractPoly),
+                SvxResId(STR_EditMergeSubstractPoly),
                 aRemove.GetMarkDescription());
             break;
         }
         case SdrMergeMode::Intersect:
         {
             SetUndoComment(
-                ImpGetResStr(STR_EditMergeIntersectPoly),
+                SvxResId(STR_EditMergeIntersectPoly),
                 aRemove.GetMarkDescription());
             break;
         }
@@ -1218,7 +1218,7 @@ void SdrEditView::EqualizeMarkedObjects(bool bWidth)
     }
 
     SetUndoComment(
-        ImpGetResStr(bWidth ? STR_EqualizeWidthMarkedObjects : STR_EqualizeHeightMarkedObjects),
+        SvxResId(bWidth ? STR_EqualizeWidthMarkedObjects : STR_EqualizeHeightMarkedObjects),
         rMarkList.GetMarkDescription());
 
     if (bUndo)
@@ -1387,7 +1387,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
     // build an UndoComment from the objects actually used
     aRemoveMerker.ForceSort(); // important for remove (see below)
     if( bUndo )
-        SetUndoComment(ImpGetResStr(bNoPolyPoly?STR_EditCombine_OnePoly:STR_EditCombine_PolyPoly),aRemoveMerker.GetMarkDescription());
+        SetUndoComment(SvxResId(bNoPolyPoly?STR_EditCombine_OnePoly:STR_EditCombine_PolyPoly),aRemoveMerker.GetMarkDescription());
 
     // remove objects actually used from the list
     DeleteMarkedList(aRemoveMerker);
@@ -1705,7 +1705,7 @@ void SdrEditView::DismantleMarkedObjects(bool bMakeLines)
     if( bUndo )
     {
         // construct UndoComment from objects actually used
-        SetUndoComment(ImpGetResStr(bMakeLines?STR_EditDismantle_Lines:STR_EditDismantle_Polys),aRemoveMerker.GetMarkDescription());
+        SetUndoComment(SvxResId(bMakeLines?STR_EditDismantle_Lines:STR_EditDismantle_Polys),aRemoveMerker.GetMarkDescription());
         // remove objects actually used from the list
         EndUndo();
     }
@@ -1724,7 +1724,7 @@ void SdrEditView::GroupMarked()
         const bool bUndo = IsUndoEnabled();
         if( bUndo )
         {
-            BegUndo(ImpGetResStr(STR_EditGroup),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::Group);
+            BegUndo(SvxResId(STR_EditGroup),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::Group);
 
             for(size_t nm = GetMarkedObjectCount(); nm>0; )
             {
@@ -1896,8 +1896,8 @@ void SdrEditView::UnGroupMarked()
     if (nCount!=0)
     {
         if (!bNameOk)
-            aName=ImpGetResStr(STR_ObjNamePluralGRUP); // Use the term "Group Objects," if different objects are grouped.
-        SetUndoComment(ImpGetResStr(STR_EditUngroup),aName);
+            aName=SvxResId(STR_ObjNamePluralGRUP); // Use the term "Group Objects," if different objects are grouped.
+        SetUndoComment(SvxResId(STR_EditUngroup),aName);
     }
 
     if( bUndo )
@@ -1949,18 +1949,18 @@ void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
             else
                 pDscrID = STR_EditConvToContours;
 
-            BegUndo(ImpGetResStr(pDscrID), GetDescriptionOfMarkedObjects());
+            BegUndo(SvxResId(pDscrID), GetDescriptionOfMarkedObjects());
         }
         else
         {
             if (bPath) {
                 if (nMarkCount==1) pDscrID=STR_EditConvToCurve;
                 else pDscrID=STR_EditConvToCurves;
-                BegUndo(ImpGetResStr(pDscrID),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::ConvertToPath);
+                BegUndo(SvxResId(pDscrID),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::ConvertToPath);
             } else {
                 if (nMarkCount==1) pDscrID=STR_EditConvToPoly;
                 else pDscrID=STR_EditConvToPolys;
-                BegUndo(ImpGetResStr(pDscrID),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::ConvertToPoly);
+                BegUndo(SvxResId(pDscrID),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::ConvertToPoly);
             }
         }
         for (size_t nm=nMarkCount; nm>0;) {
@@ -2127,7 +2127,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
 
     if( bUndo )
     {
-        SetUndoComment(ImpGetResStr(STR_EditImportMtf),aForTheDescription.GetMarkDescription());
+        SetUndoComment(SvxResId(STR_EditImportMtf),aForTheDescription.GetMarkDescription());
         EndUndo();
     }
 }

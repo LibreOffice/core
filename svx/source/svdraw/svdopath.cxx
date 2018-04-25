@@ -31,7 +31,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdview.hxx>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 
 #include <svx/xlnwtit.hxx>
@@ -995,7 +995,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
             aStr = aTmp;
 
             // delete %O
-            OUString aStr2(ImpGetResStr(STR_EditDelete));
+            OUString aStr2(SvxResId(STR_EditDelete));
 
             // UNICODE: delete point of ...
             aStr2 = aStr2.replaceFirst("%1", aStr);
@@ -1879,7 +1879,7 @@ OUString SdrPathObj::TakeObjNameSingul() const
             }
         }
 
-        sName.append(ImpGetResStr(pId));
+        sName.append(SvxResId(pId));
     }
     else if(OBJ_PLIN == meKind || OBJ_POLY == meKind)
     {
@@ -1897,7 +1897,7 @@ OUString SdrPathObj::TakeObjNameSingul() const
                 pId = STR_ObjNameSingulPLIN;
             }
 
-            sName.append(ImpGetResStr(pId));
+            sName.append(SvxResId(pId));
         }
         else
         {
@@ -1919,7 +1919,7 @@ OUString SdrPathObj::TakeObjNameSingul() const
                 pId = STR_ObjNameSingulPLIN_PointCount;
             }
 
-            OUString sTemp(ImpGetResStr(pId));
+            OUString sTemp(SvxResId(pId));
             // #i96537#
             sName.append(sTemp.replaceFirst("%2", OUString::number(nPointCount)));
         }
@@ -1928,12 +1928,12 @@ OUString SdrPathObj::TakeObjNameSingul() const
     {
         switch (meKind)
         {
-            case OBJ_PATHLINE: sName.append(ImpGetResStr(STR_ObjNameSingulPATHLINE)); break;
-            case OBJ_FREELINE: sName.append(ImpGetResStr(STR_ObjNameSingulFREELINE)); break;
-            case OBJ_SPLNLINE: sName.append(ImpGetResStr(STR_ObjNameSingulNATSPLN)); break;
-            case OBJ_PATHFILL: sName.append(ImpGetResStr(STR_ObjNameSingulPATHFILL)); break;
-            case OBJ_FREEFILL: sName.append(ImpGetResStr(STR_ObjNameSingulFREEFILL)); break;
-            case OBJ_SPLNFILL: sName.append(ImpGetResStr(STR_ObjNameSingulPERSPLN)); break;
+            case OBJ_PATHLINE: sName.append(SvxResId(STR_ObjNameSingulPATHLINE)); break;
+            case OBJ_FREELINE: sName.append(SvxResId(STR_ObjNameSingulFREELINE)); break;
+            case OBJ_SPLNLINE: sName.append(SvxResId(STR_ObjNameSingulNATSPLN)); break;
+            case OBJ_PATHFILL: sName.append(SvxResId(STR_ObjNameSingulPATHFILL)); break;
+            case OBJ_FREEFILL: sName.append(SvxResId(STR_ObjNameSingulFREEFILL)); break;
+            case OBJ_SPLNFILL: sName.append(SvxResId(STR_ObjNameSingulPERSPLN)); break;
             default: break;
         }
     }
@@ -1955,15 +1955,15 @@ OUString SdrPathObj::TakeObjNamePlural() const
     OUString sName;
     switch(meKind)
     {
-        case OBJ_LINE    : sName=ImpGetResStr(STR_ObjNamePluralLINE    ); break;
-        case OBJ_PLIN    : sName=ImpGetResStr(STR_ObjNamePluralPLIN    ); break;
-        case OBJ_POLY    : sName=ImpGetResStr(STR_ObjNamePluralPOLY    ); break;
-        case OBJ_PATHLINE: sName=ImpGetResStr(STR_ObjNamePluralPATHLINE); break;
-        case OBJ_FREELINE: sName=ImpGetResStr(STR_ObjNamePluralFREELINE); break;
-        case OBJ_SPLNLINE: sName=ImpGetResStr(STR_ObjNamePluralNATSPLN); break;
-        case OBJ_PATHFILL: sName=ImpGetResStr(STR_ObjNamePluralPATHFILL); break;
-        case OBJ_FREEFILL: sName=ImpGetResStr(STR_ObjNamePluralFREEFILL); break;
-        case OBJ_SPLNFILL: sName=ImpGetResStr(STR_ObjNamePluralPERSPLN); break;
+        case OBJ_LINE    : sName=SvxResId(STR_ObjNamePluralLINE    ); break;
+        case OBJ_PLIN    : sName=SvxResId(STR_ObjNamePluralPLIN    ); break;
+        case OBJ_POLY    : sName=SvxResId(STR_ObjNamePluralPOLY    ); break;
+        case OBJ_PATHLINE: sName=SvxResId(STR_ObjNamePluralPATHLINE); break;
+        case OBJ_FREELINE: sName=SvxResId(STR_ObjNamePluralFREELINE); break;
+        case OBJ_SPLNLINE: sName=SvxResId(STR_ObjNamePluralNATSPLN); break;
+        case OBJ_PATHFILL: sName=SvxResId(STR_ObjNamePluralPATHFILL); break;
+        case OBJ_FREEFILL: sName=SvxResId(STR_ObjNamePluralFREEFILL); break;
+        case OBJ_SPLNFILL: sName=SvxResId(STR_ObjNamePluralPERSPLN); break;
         default: break;
     }
     return sName;

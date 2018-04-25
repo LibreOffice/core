@@ -21,7 +21,7 @@
 #include <editeng/outlobj.hxx>
 
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdmrkv.hxx>
 #include <svx/svdedxv.hxx>
@@ -1177,7 +1177,7 @@ OUString SdrView::GetStatusText()
         if(aStr.isEmpty())
         {
             aName = pCurrentCreate->TakeObjNameSingul();
-            aStr = ImpGetResStr(STR_ViewCreateObj);
+            aStr = SvxResId(STR_ViewCreateObj);
         }
     }
     else if (mpCurrentSdrDragMethod)
@@ -1201,36 +1201,36 @@ OUString SdrView::GetStatusText()
     {
         if(AreObjectsMarked())
         {
-            aStr = ImpGetResStr(STR_ViewMarkMoreObjs);
+            aStr = SvxResId(STR_ViewMarkMoreObjs);
         }
         else
         {
-            aStr = ImpGetResStr(STR_ViewMarkObjs);
+            aStr = SvxResId(STR_ViewMarkObjs);
         }
     }
     else if(IsMarkPoints())
     {
         if(HasMarkedPoints())
         {
-            aStr = ImpGetResStr(STR_ViewMarkMorePoints);
+            aStr = SvxResId(STR_ViewMarkMorePoints);
         }
         else
         {
-            aStr = ImpGetResStr(STR_ViewMarkPoints);
+            aStr = SvxResId(STR_ViewMarkPoints);
         }
     } else if (IsMarkGluePoints())
     {
         if(HasMarkedGluePoints())
         {
-            aStr = ImpGetResStr(STR_ViewMarkMoreGluePoints);
+            aStr = SvxResId(STR_ViewMarkMoreGluePoints);
         }
         else
         {
-            aStr = ImpGetResStr(STR_ViewMarkGluePoints);
+            aStr = SvxResId(STR_ViewMarkGluePoints);
         }
     }
     else if (IsTextEdit() && pTextEditOutlinerView!=nullptr) {
-        aStr=ImpGetResStr(STR_ViewTextEdit); // "TextEdit - Row y, Column x";
+        aStr=SvxResId(STR_ViewTextEdit); // "TextEdit - Row y, Column x";
         ESelection aSel(pTextEditOutlinerView->GetSelection());
         long nPar=aSel.nEndPara,nLin=0,nCol=aSel.nEndPos;
         if (aSel.nEndPara>0) {

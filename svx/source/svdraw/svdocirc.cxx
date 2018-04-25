@@ -26,7 +26,7 @@
 #include <math.h>
 #include <svl/style.hxx>
 
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 
 #include <sdr/contact/viewcontactofsdrcircobj.hxx>
@@ -311,7 +311,7 @@ OUString SdrCircObj::TakeObjNameSingul() const
             default: break;
         }
     }
-    OUStringBuffer sName(ImpGetResStr(pID));
+    OUStringBuffer sName(SvxResId(pID));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
@@ -345,7 +345,7 @@ OUString SdrCircObj::TakeObjNamePlural() const
             default: break;
         }
     }
-    return ImpGetResStr(pID);
+    return SvxResId(pID);
 }
 
 SdrCircObj* SdrCircObj::Clone(SdrModel* pTargetModel) const

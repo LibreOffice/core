@@ -34,7 +34,7 @@
 #include <vcl/svapp.hxx>
 
 #include <svx/svdmodel.hxx>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <avmedia/mediawindow.hxx>
@@ -122,7 +122,7 @@ sal_uInt16 SdrMediaObj::GetObjIdentifier() const
 
 OUString SdrMediaObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulMEDIA));
+    OUStringBuffer sName(SvxResId(STR_ObjNameSingulMEDIA));
 
     OUString aName(GetName());
 
@@ -139,7 +139,7 @@ OUString SdrMediaObj::TakeObjNameSingul() const
 
 OUString SdrMediaObj::TakeObjNamePlural() const
 {
-    return ImpGetResStr(STR_ObjNamePluralMEDIA);
+    return SvxResId(STR_ObjNamePluralMEDIA);
 }
 
 SdrMediaObj* SdrMediaObj::Clone(SdrModel* pTargetModel) const

@@ -25,7 +25,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/svdtrans.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -197,7 +197,7 @@ void SdrPolyEditView::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
 
         const bool bUndo = IsUndoEnabled();
         if( bUndo )
-            BegUndo(ImpGetResStr(STR_EditSetPointsSmooth), GetDescriptionOfMarkedPoints());
+            BegUndo(SvxResId(STR_EditSetPointsSmooth), GetDescriptionOfMarkedPoints());
         const size_t nMarkCount(GetMarkedObjectCount());
 
         for(size_t nMarkNum(nMarkCount); nMarkNum > 0;)
@@ -231,7 +231,7 @@ void SdrPolyEditView::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
 
         const bool bUndo = IsUndoEnabled();
         if( bUndo )
-            BegUndo(ImpGetResStr(STR_EditSetSegmentsKind), GetDescriptionOfMarkedPoints());
+            BegUndo(SvxResId(STR_EditSetSegmentsKind), GetDescriptionOfMarkedPoints());
         const size_t nMarkCount(GetMarkedObjectCount());
 
         for(size_t nMarkNum=nMarkCount; nMarkNum > 0;)
@@ -297,7 +297,7 @@ void SdrPolyEditView::DeleteMarkedPoints()
         if( bUndo )
         {
             // Description
-            BegUndo(ImpGetResStr(STR_EditDelete),GetDescriptionOfMarkedPoints(),SdrRepeatFunc::Delete);
+            BegUndo(SvxResId(STR_EditDelete),GetDescriptionOfMarkedPoints(),SdrRepeatFunc::Delete);
         }
 
         for (size_t nMarkNum=nMarkCount; nMarkNum>0;)
@@ -348,7 +348,7 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
 
         const bool bUndo = IsUndoEnabled();
         if( bUndo )
-            BegUndo(ImpGetResStr(STR_EditRipUp), GetDescriptionOfMarkedPoints());
+            BegUndo(SvxResId(STR_EditRipUp), GetDescriptionOfMarkedPoints());
 
         for(size_t nMarkNum = nMarkCount; nMarkNum > 0;)
         {
@@ -612,7 +612,7 @@ static void ImpMove(Point& rPt, Point* pC1, Point* pC2, const void* p1, const vo
 void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz)
 {
     ForceUndirtyMrkPnt();
-    OUString aStr(ImpGetResStr(STR_EditMove));
+    OUString aStr(SvxResId(STR_EditMove));
     BegUndo(aStr,GetDescriptionOfMarkedPoints(),SdrRepeatFunc::Move);
     ImpTransformMarkedPoints(ImpMove,&rSiz);
     EndUndo();
@@ -629,7 +629,7 @@ static void ImpResize(Point& rPt, Point* pC1, Point* pC2, const void* p1, const 
 void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     ForceUndirtyMrkPnt();
-    OUString aStr(ImpGetResStr(STR_EditResize));
+    OUString aStr(SvxResId(STR_EditResize));
     BegUndo(aStr,GetDescriptionOfMarkedPoints(),SdrRepeatFunc::Resize);
     ImpTransformMarkedPoints(ImpResize,&rRef,&xFact,&yFact);
     EndUndo();
@@ -646,7 +646,7 @@ static void ImpRotate(Point& rPt, Point* pC1, Point* pC2, const void* p1, const 
 void SdrPolyEditView::RotateMarkedPoints(const Point& rRef, long nAngle)
 {
     ForceUndirtyMrkPnt();
-    OUString aStr(ImpGetResStr(STR_EditResize));
+    OUString aStr(SvxResId(STR_EditResize));
     BegUndo(aStr,GetDescriptionOfMarkedPoints(),SdrRepeatFunc::Rotate);
     double nSin=sin(nAngle*nPi180);
     double nCos=cos(nAngle*nPi180);

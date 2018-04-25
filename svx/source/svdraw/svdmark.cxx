@@ -30,7 +30,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 
 
 #include <svx/obj3d.hxx>
@@ -458,7 +458,7 @@ const OUString& SdrMarkList::GetMarkDescription() const
 
         if(!nCount)
         {
-            const_cast<SdrMarkList*>(this)->maMarkName = ImpGetResStr(STR_ObjNameNoObj);
+            const_cast<SdrMarkList*>(this)->maMarkName = SvxResId(STR_ObjNameNoObj);
         }
         else if(1 == nCount)
         {
@@ -483,7 +483,7 @@ const OUString& SdrMarkList::GetMarkDescription() const
 
                 if(!bEq)
                 {
-                    aNam = ImpGetResStr(STR_ObjNamePlural);
+                    aNam = SvxResId(STR_ObjNamePlural);
                 }
             }
 
@@ -581,7 +581,7 @@ const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
 
             if(!bEq)
             {
-                aNam = ImpGetResStr(STR_ObjNamePlural);
+                aNam = SvxResId(STR_ObjNamePlural);
             }
 
             aNam = OUString::number( nMarkPtObjCnt ) + " " + aNam;
@@ -591,11 +591,11 @@ const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
 
         if(1 == nMarkPtCnt)
         {
-            aStr1 = ImpGetResStr(bGlue ? STR_ViewMarkedGluePoint : STR_ViewMarkedPoint);
+            aStr1 = SvxResId(bGlue ? STR_ViewMarkedGluePoint : STR_ViewMarkedPoint);
         }
         else
         {
-            aStr1 = ImpGetResStr(bGlue ? STR_ViewMarkedGluePoints : STR_ViewMarkedPoints);
+            aStr1 = SvxResId(bGlue ? STR_ViewMarkedGluePoints : STR_ViewMarkedPoints);
             aStr1 = aStr1.replaceFirst("%2", OUString::number( nMarkPtCnt ));
         }
 

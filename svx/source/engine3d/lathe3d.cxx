@@ -19,7 +19,7 @@
 
 
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <tools/poly.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/globl3d.hxx>
@@ -157,7 +157,7 @@ void E3dLatheObj::SetPolyPoly2D(const basegfx::B2DPolyPolygon& rNew)
 
 OUString E3dLatheObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulLathe3d));
+    OUStringBuffer sName(SvxResId(STR_ObjNameSingulLathe3d));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
@@ -174,7 +174,7 @@ OUString E3dLatheObj::TakeObjNameSingul() const
 
 OUString E3dLatheObj::TakeObjNamePlural() const
 {
-    return ImpGetResStr(STR_ObjNamePluralLathe3d);
+    return SvxResId(STR_ObjNamePluralLathe3d);
 }
 
 bool E3dLatheObj::IsBreakObjPossible()

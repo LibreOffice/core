@@ -19,7 +19,7 @@
 
 
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/globl3d.hxx>
@@ -128,7 +128,7 @@ void E3dSphereObj::SetSize(const basegfx::B3DVector& rNew)
 
 OUString E3dSphereObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulSphere3d));
+    OUStringBuffer sName(SvxResId(STR_ObjNameSingulSphere3d));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
@@ -145,7 +145,7 @@ OUString E3dSphereObj::TakeObjNameSingul() const
 
 OUString E3dSphereObj::TakeObjNamePlural() const
 {
-    return ImpGetResStr(STR_ObjNamePluralSphere3d);
+    return SvxResId(STR_ObjNamePluralSphere3d);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -51,7 +51,7 @@
 #include <svx/sdr/table/tabledesign.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/xflhtit.hxx>
@@ -1625,7 +1625,7 @@ EEAnchorMode SdrTableObj::GetOutlinerViewAnchorMode() const
 
 OUString SdrTableObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulTable));
+    OUStringBuffer sName(SvxResId(STR_ObjNameSingulTable));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
@@ -1642,7 +1642,7 @@ OUString SdrTableObj::TakeObjNameSingul() const
 
 OUString SdrTableObj::TakeObjNamePlural() const
 {
-    return ImpGetResStr(STR_ObjNamePluralTable);
+    return SvxResId(STR_ObjNamePluralTable);
 }
 
 

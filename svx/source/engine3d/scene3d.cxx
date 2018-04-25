@@ -19,7 +19,7 @@
 
 
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/svditer.hxx>
 
 #include <stdlib.h>
@@ -555,7 +555,7 @@ void E3dScene::RotateScene (const Point& rRef, double sn, double cs)
 
 OUString E3dScene::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulScene3d));
+    OUStringBuffer sName(SvxResId(STR_ObjNameSingulScene3d));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
@@ -570,7 +570,7 @@ OUString E3dScene::TakeObjNameSingul() const
 
 OUString E3dScene::TakeObjNamePlural() const
 {
-    return ImpGetResStr(STR_ObjNamePluralScene3d);
+    return SvxResId(STR_ObjNamePluralScene3d);
 }
 
 // The NbcRotate routine overrides the one of the SdrObject. The idea is

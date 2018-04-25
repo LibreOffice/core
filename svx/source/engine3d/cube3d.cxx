@@ -19,7 +19,7 @@
 
 
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/cube3d.hxx>
 #include <svx/globl3d.hxx>
 #include <basegfx/point/b3dpoint.hxx>
@@ -129,7 +129,7 @@ void E3dCubeObj::SetPosIsCenter(bool bNew)
 
 OUString E3dCubeObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulCube3d));
+    OUStringBuffer sName(SvxResId(STR_ObjNameSingulCube3d));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
@@ -146,7 +146,7 @@ OUString E3dCubeObj::TakeObjNameSingul() const
 
 OUString E3dCubeObj::TakeObjNamePlural() const
 {
-    return ImpGetResStr(STR_ObjNamePluralCube3d);
+    return SvxResId(STR_ObjNamePluralCube3d);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

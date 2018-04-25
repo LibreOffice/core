@@ -60,7 +60,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/lineitem.hxx>
 #include <svx/strings.hrc>
-#include <svdglob.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/svdpage.hxx>
 #include "tableundo.hxx"
 #include "tablelayouter.hxx"
@@ -565,7 +565,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
 
         if( bUndo )
         {
-            rModel.BegUndo( ImpGetResStr(STR_TABLE_INSCOL) );
+            rModel.BegUndo( SvxResId(STR_TABLE_INSCOL) );
             rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(rTableObj));
         }
 
@@ -674,7 +674,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
 
         if( bUndo )
         {
-            rModel.BegUndo( ImpGetResStr(STR_TABLE_INSROW ) );
+            rModel.BegUndo( SvxResId(STR_TABLE_INSROW ) );
             rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(rTableObj));
         }
 
@@ -1059,7 +1059,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
 
             if( bUndo )
             {
-                rModel.BegUndo(ImpGetResStr(STR_TABLE_STYLE));
+                rModel.BegUndo(SvxResId(STR_TABLE_STYLE));
                 rModel.AddUndo(new TableStyleUndo(rTableObj));
             }
 
@@ -1153,7 +1153,7 @@ void SvxTableController::SetTableStyleSettings( const SfxItemSet* pArgs )
 
     if( bUndo )
     {
-        rModel.BegUndo( ImpGetResStr(STR_TABLE_STYLE_SETTINGS) );
+        rModel.BegUndo( SvxResId(STR_TABLE_STYLE_SETTINGS) );
         rModel.AddUndo(new TableStyleUndo(rTableObj));
     }
 
@@ -1176,7 +1176,7 @@ void SvxTableController::SetVertical( sal_uInt16 nSId )
 
     if (bUndo)
     {
-        rModel.BegUndo(ImpGetResStr(STR_TABLE_NUMFORMAT));
+        rModel.BegUndo(SvxResId(STR_TABLE_NUMFORMAT));
         rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoAttrObject(rTableObj));
     }
 
@@ -1268,7 +1268,7 @@ void SvxTableController::SplitMarkedCells()
 
         if( bUndo )
         {
-            rModel.BegUndo( ImpGetResStr(STR_TABLE_SPLIT) );
+            rModel.BegUndo( SvxResId(STR_TABLE_SPLIT) );
             rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(rTableObj));
         }
 
@@ -1302,7 +1302,7 @@ void SvxTableController::DistributeColumns()
 
     if( bUndo )
     {
-        rModel.BegUndo( ImpGetResStr(STR_TABLE_DISTRIBUTE_COLUMNS) );
+        rModel.BegUndo( SvxResId(STR_TABLE_DISTRIBUTE_COLUMNS) );
         rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(rTableObj));
     }
 
@@ -1325,7 +1325,7 @@ void SvxTableController::DistributeRows()
 
     if( bUndo )
     {
-        rModel.BegUndo( ImpGetResStr(STR_TABLE_DISTRIBUTE_ROWS) );
+        rModel.BegUndo( SvxResId(STR_TABLE_DISTRIBUTE_ROWS) );
         rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(rTableObj));
     }
 
@@ -1352,7 +1352,7 @@ bool SvxTableController::DeleteMarked()
     const bool bUndo(rModel.IsUndoEnabled());
 
     if (bUndo)
-        rModel.BegUndo(ImpGetResStr(STR_TABLE_DELETE_CELL_CONTENTS));
+        rModel.BegUndo(SvxResId(STR_TABLE_DELETE_CELL_CONTENTS));
 
     CellPos aStart, aEnd;
     getSelectedCells( aStart, aEnd );
@@ -1815,7 +1815,7 @@ void SvxTableController::MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, s
 
             if( bUndo )
             {
-                rModel.BegUndo( ImpGetResStr(STR_TABLE_MERGE) );
+                rModel.BegUndo( SvxResId(STR_TABLE_MERGE) );
                 rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(rTableObj));
             }
 
@@ -2539,7 +2539,7 @@ void SvxTableController::SetAttrToSelectedCells(const SfxItemSet& rAttr, bool bR
     const bool bUndo(rModel.IsUndoEnabled());
 
     if( bUndo )
-        rModel.BegUndo( ImpGetResStr(STR_TABLE_NUMFORMAT) );
+        rModel.BegUndo( SvxResId(STR_TABLE_NUMFORMAT) );
 
     CellPos aStart, aEnd;
     getSelectedCells( aStart, aEnd );
@@ -2740,7 +2740,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
     const bool bUndo(rModel.IsUndoEnabled());
 
     if( bUndo )
-        rModel.BegUndo(ImpGetResStr(STR_TABLE_NUMFORMAT));
+        rModel.BegUndo(SvxResId(STR_TABLE_NUMFORMAT));
 
     CellPos aStart, aEnd;
     getSelectedCells( aStart, aEnd );
