@@ -3844,18 +3844,17 @@ void XMLTextParagraphExport::PreventExportOfControlsInMuteSections(
 
 void XMLTextParagraphExport::PushNewTextListsHelper()
 {
-    mpTextListsHelper = new XMLTextListsHelper();
-    maTextListsHelperStack.push_back( mpTextListsHelper );
+    maTextListsHelperStack.emplace_back( new XMLTextListsHelper() );
+    mpTextListsHelper = maTextListsHelperStack.back().get();
 }
 
 void XMLTextParagraphExport::PopTextListsHelper()
 {
-    delete mpTextListsHelper;
     mpTextListsHelper = nullptr;
     maTextListsHelperStack.pop_back();
     if ( !maTextListsHelperStack.empty() )
     {
-        mpTextListsHelper = maTextListsHelperStack.back();
+        mpTextListsHelper = maTextListsHelperStack.back().get();
     }
 }
 
