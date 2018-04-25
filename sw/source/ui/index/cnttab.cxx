@@ -670,15 +670,14 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(vcl::Window* pParent,
     m_pHeaderTree->GetModel()->SetSortMode(SortAscending);
     for (sal_uInt16 i = 0; i < MAXLEVEL; ++i)
     {
-        OUString sStyles(rStringArr[i]);
-        for(sal_Int32 nToken = 0;
-            nToken < comphelper::string::getTokenCount(sStyles, TOX_STYLE_DELIMITER);
-            ++nToken)
-        {
-            const OUString sTmp(sStyles.getToken(nToken, TOX_STYLE_DELIMITER));
-            SvTreeListEntry* pEntry = m_pHeaderTree->InsertEntry(sTmp);
+        const OUString &rStyles{rStringArr[i]};
+        if (rStyles.isEmpty())
+            continue;
+        sal_Int32 nPos {0};
+        do {
+            SvTreeListEntry* pEntry = m_pHeaderTree->InsertEntry(rStyles.getToken(0, TOX_STYLE_DELIMITER, nPos));
             pEntry->SetUserData(reinterpret_cast<void*>(i));
-        }
+        } while (nPos>=0);
     }
     // now the other styles
 
