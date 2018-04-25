@@ -39,6 +39,7 @@ void WpftCalcFilterTest::test()
     const writerperfect::test::WpftOptionalMap_t aWpsOptional{
         { "Lotus123_3.123", REQUIRE_WPS_VERSION(0, 4, 5) },
         { "Lotus123_98.123", REQUIRE_WPS_VERSION(0, 4, 6) },
+        { "Multiplan_3", REQUIRE_WPS_VERSION(0, 4, 9) },
         { "QuattroPro.wb1", REQUIRE_WPS_VERSION(0, 4, 8) },
     };
 

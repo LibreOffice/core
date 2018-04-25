@@ -403,6 +403,11 @@ bool MSWorksCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput
             rTypeName = "calc_WPS_QPro_Document";
             return true;
         }
+        if (creator == libwps::WPS_RESERVED_2)
+        {
+            rTypeName = "calc_MS_Multiplan";
+            return true;
+        }
     }
 
     return false;

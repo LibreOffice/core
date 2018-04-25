@@ -493,6 +493,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,f
 	MWAW_Database \
 	MWAW_Spreadsheet \
 	StarOffice_Spreadsheet \
+	calc_MS_Multiplan \
 ))
 
 $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.xcu,filter/source/config/fragments/filters,\
@@ -537,6 +538,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.x
 	MWAW_Database \
 	MWAW_Spreadsheet \
 	StarOffice_Spreadsheet \
+	MS_Multiplan \
 ))
 
 # fcfg_draw
