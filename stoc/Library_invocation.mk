@@ -16,6 +16,7 @@ $(eval $(call gb_Library_use_udk_api,invocation))
 $(eval $(call gb_Library_use_libraries,invocation,\
     cppu \
     cppuhelper \
+    comphelper \
     sal \
 ))
 
