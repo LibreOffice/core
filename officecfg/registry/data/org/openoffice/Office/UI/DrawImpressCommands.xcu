@@ -43,6 +43,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Rename Page</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:RenameSlide" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -859,6 +862,9 @@
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Insert Snap Guide...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:ShowRuler" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1665,6 +1671,9 @@
       <node oor:name=".uno:MasterLayouts" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Master Elements...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:MasterLayoutsNotes" oor:op="replace">
