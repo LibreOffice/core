@@ -89,11 +89,6 @@ bool AbstractSdCustomShowDlg_Impl::IsCustomShow() const
     return pDlg->IsCustomShow();
 }
 
-void SdAbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
-{
-    pDlg->SetCurPageId( nId );
-}
-
 void SdAbstractTabDialog_Impl::SetCurPageId( const OString& rName )
 {
     pDlg->SetCurPageId( rName );
@@ -120,11 +115,6 @@ void SdAbstractTabDialog_Impl::SetText( const OUString& rStr )
     pDlg->SetText( rStr );
 }
 
-void AbstractBulletDialog_Impl::SetCurPageId( sal_uInt16 nId )
-{
-    static_cast< ::sd::OutlineBulletDlg*>(pDlg.get())->SetCurPageId( nId );
-}
-
 void AbstractBulletDialog_Impl::SetCurPageId( const OString& rName )
 {
     static_cast< ::sd::OutlineBulletDlg*>(pDlg.get())->SetCurPageId( rName );
@@ -148,11 +138,6 @@ void AbstractBulletDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 void AbstractBulletDialog_Impl::SetText( const OUString& rStr )
 {
     static_cast< ::sd::OutlineBulletDlg*>(pDlg.get())->SetText( rStr );
-}
-
-void SdPresLayoutTemplateDlg_Impl::SetCurPageId( sal_uInt16 nId )
-{
-    pDlg->SetCurPageId( nId );
 }
 
 void SdPresLayoutTemplateDlg_Impl::SetCurPageId( const OString& rName )

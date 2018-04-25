@@ -250,12 +250,6 @@ IMPL_LINK( VclAbstractDialog2_Impl, EndDialogHdl, Dialog&, rDlg, void )
     m_aEndDlgHdl = Link<Dialog&,void>();
 }
 
-
-void CuiAbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
-{
-    pDlg->SetCurPageId( nId );
-}
-
 void CuiAbstractTabDialog_Impl::SetCurPageId( const OString& rName )
 {
     pDlg->SetCurPageId( rName );
@@ -538,11 +532,6 @@ bool AbstractSvxSearchSimilarityDialog_Impl::IsRelaxed()
 }
 
 // AbstractSvxTransformTabDialog implementations just forwards everything to the dialog
-void AbstractSvxTransformTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
-{
-    pDlg->SetCurPageId( nId );
-}
-
 void AbstractSvxTransformTabDialog_Impl::SetCurPageId( const OString& rName )
 {
     pDlg->SetCurPageId( rName );
@@ -573,11 +562,6 @@ void AbstractSvxTransformTabDialog_Impl::SetValidateFramePosLink( const Link<Svx
 }
 
 // AbstractSvxCaptionDialog implementations just forwards everything to the dialog
-void AbstractSvxCaptionDialog_Impl::SetCurPageId( sal_uInt16 nId )
-{
-    pDlg->SetCurPageId( nId );
-}
-
 void AbstractSvxCaptionDialog_Impl::SetCurPageId( const OString& rName )
 {
     pDlg->SetCurPageId( rName );
@@ -755,11 +739,6 @@ Graphic AbstractGraphicFilterDialog_Impl::GetFilteredGraphic( const Graphic& rGr
 }
 
 // AbstractSvxAreaTabDialog implementations just forwards everything to the dialog
-void AbstractSvxAreaTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
-{
-    pDlg->SetCurPageId( nId );
-}
-
 void AbstractSvxAreaTabDialog_Impl::SetCurPageId( const OString& rName )
 {
     pDlg->SetCurPageId( rName );
