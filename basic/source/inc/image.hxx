@@ -46,13 +46,12 @@ class SbiImage {
 
     SbxArrayRef    rTypes;          // User defined types
     SbxArrayRef    rEnums;          // Enum types
-    sal_uInt32*    pStringOff;      // StringId-Offsets
+    std::vector<sal_uInt32>  mvStringOffsets; // StringId-Offsets
     sal_Unicode*   pStrings;        // StringPool
     char*          pCode;           // Code-Image
     char*          pLegacyPCode;        // Code-Image
     bool           bError;
     SbiImageFlags  nFlags;
-    short          nStrings;
     sal_uInt32     nStringSize;
     sal_uInt32     nCodeSize;
     sal_uInt16     nLegacyCodeSize;
