@@ -7,6 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+include $(SRCDIR)/odk/build-examples_common.mk
+
 $(eval $(call gb_Module_Module,odk))
 
 $(eval $(call gb_Module_add_targets,odk,\
