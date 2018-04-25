@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_de05a1c2",
+        "filename": "vcl/source/bitmap/BitmapFastScaleFilter.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-25T17:09:31Z",
+      "side": 1,
+      "message": "where does this chunk of code come from? I don\u0027t see it in the original? and this maSize field is never set to anything useful",
+      "revId": "d246aa574571409046619254292698184c2545a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
