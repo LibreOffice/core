@@ -75,8 +75,12 @@ public:
     void testTdf115117_1a();
     /// Test writing ToUnicode CMAP for RTL ligatures.
     void testTdf115117_2();
-    /// Text extracting RTL text with ligatures.
+    /// Test extracting RTL text with ligatures.
     void testTdf115117_2a();
+    /// Test writing ToUnicode CMAP for doubly encoded glyphs.
+    void testTdf66597_1();
+    /// Test writing ActualText for many to one glyph to Unicode mapping.
+    void testTdf66597_2();
 #endif
 #endif
 
@@ -101,6 +105,8 @@ public:
     CPPUNIT_TEST(testTdf115117_1a);
     CPPUNIT_TEST(testTdf115117_2);
     CPPUNIT_TEST(testTdf115117_2a);
+    CPPUNIT_TEST(testTdf66597_1);
+    CPPUNIT_TEST(testTdf66597_2);
 #endif
 #endif
     CPPUNIT_TEST_SUITE_END();
@@ -975,6 +981,194 @@ void PdfExportTest::testTdf115117_2a()
         aChars[i] = FPDFText_GetUnicode(pPdfTextPage, i);
     OUString aActualText(aChars.data(), aChars.size());
     CPPUNIT_ASSERT_EQUAL(aExpectedText, aActualText);
+}
+
+// This requires Amiri font, if it is missing the test will fail.
+void PdfExportTest::testTdf66597_1()
+{
+    // FIXME: Fallback font is used on Windows for some reason.
+#if !defined _WIN32
+    vcl::filter::PDFDocument aDocument;
+    load("tdf66597-1.odt", aDocument);
+
+    {
+        // Get access to ToUnicode of the first font
+        vcl::filter::PDFObjectElement* pToUnicode = nullptr;
+        for (const auto& aElement : aDocument.GetElements())
+        {
+            auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+            if (!pObject)
+                continue;
+            auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"));
+            if (pType && pType->GetValue() == "Font")
+            {
+                auto pName = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("BaseFont"));
+                auto aName = pName->GetValue().copy(7); // skip the subset id
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected font name", OString("Amiri-Regular"), aName);
+
+                auto pToUnicodeRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObject->Lookup("ToUnicode"));
+                CPPUNIT_ASSERT(pToUnicodeRef);
+                pToUnicode = pToUnicodeRef->LookupObject();
+                break;
+            }
+        }
+
+        CPPUNIT_ASSERT(pToUnicode);
+        auto pStream = pToUnicode->GetStream();
+        CPPUNIT_ASSERT(pStream);
+        SvMemoryStream aObjectStream;
+        ZCodec aZCodec;
+        aZCodec.BeginCompression();
+        pStream->GetMemory().Seek(0);
+        aZCodec.Decompress(pStream->GetMemory(), aObjectStream);
+        CPPUNIT_ASSERT(aZCodec.EndCompression());
+        aObjectStream.Seek(0);
+        // The <01> is glyph id, <0020> is code point.
+        // The document has three characters <space><nbspace><space>, but the font
+        // reuses the same glyph for space and nbspace so we should have a single
+        // CMAP entry for the space, and nbspace will be handled with ActualText
+        // (tested above).
+        std::string aCmap("1 beginbfchar\n"
+                          "<01> <0020>\n"
+                          "endbfchar");
+        std::string aData(static_cast<const char*>(aObjectStream.GetData()), aObjectStream.GetSize());
+        auto nPos = aData.find(aCmap);
+        CPPUNIT_ASSERT(nPos != std::string::npos);
+    }
+
+    {
+        auto aPages = aDocument.GetPages();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+        // Get page contents and stream.
+        auto pContents = aPages[0]->LookupObject("Contents");
+        CPPUNIT_ASSERT(pContents);
+        auto pStream = pContents->GetStream();
+        CPPUNIT_ASSERT(pStream);
+        auto& rObjectStream = pStream->GetMemory();
+
+        // Uncompress the stream.
+        SvMemoryStream aUncompressed;
+        ZCodec aZCodec;
+        aZCodec.BeginCompression();
+        rObjectStream.Seek(0);
+        aZCodec.Decompress(rObjectStream, aUncompressed);
+        CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+        // Make sure the expected ActualText is present.
+        std::string aData(static_cast<const char*>(aUncompressed.GetData()), aUncompressed.GetSize());
+
+        std::string aActualText("/Span<</ActualText<");
+        size_t nCount = 0;
+        size_t nPos = 0;
+        while ((nPos = aData.find(aActualText, nPos)) != std::string::npos)
+        {
+            nCount++;
+            nPos += aActualText.length();
+        }
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("The should be one ActualText entry!", static_cast<size_t>(1), nCount);
+
+        aActualText = "/Span<</ActualText<FEFF00A0>>>";
+        nPos = aData.find(aActualText);
+        CPPUNIT_ASSERT_MESSAGE("ActualText not found!", nPos != std::string::npos);
+    }
+#endif
+}
+
+// This requires Reem Kufi font, if it is missing the test will fail.
+void PdfExportTest::testTdf66597_2()
+{
+    // FIXME: Fallback font is used on Windows for some reason.
+#if !defined _WIN32
+    vcl::filter::PDFDocument aDocument;
+    load("tdf66597-2.odt", aDocument);
+
+    {
+        // Get access to ToUnicode of the first font
+        vcl::filter::PDFObjectElement* pToUnicode = nullptr;
+        for (const auto& aElement : aDocument.GetElements())
+        {
+            auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+            if (!pObject)
+                continue;
+            auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"));
+            if (pType && pType->GetValue() == "Font")
+            {
+                auto pName = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("BaseFont"));
+                auto aName = pName->GetValue().copy(7); // skip the subset id
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected font name", OString("ReemKufi-Regular"), aName);
+
+                auto pToUnicodeRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObject->Lookup("ToUnicode"));
+                CPPUNIT_ASSERT(pToUnicodeRef);
+                pToUnicode = pToUnicodeRef->LookupObject();
+                break;
+            }
+        }
+
+        CPPUNIT_ASSERT(pToUnicode);
+        auto pStream = pToUnicode->GetStream();
+        CPPUNIT_ASSERT(pStream);
+        SvMemoryStream aObjectStream;
+        ZCodec aZCodec;
+        aZCodec.BeginCompression();
+        pStream->GetMemory().Seek(0);
+        aZCodec.Decompress(pStream->GetMemory(), aObjectStream);
+        CPPUNIT_ASSERT(aZCodec.EndCompression());
+        aObjectStream.Seek(0);
+        std::string aCmap("8 beginbfchar\n"
+                          "<02> <0632>\n"
+                          "<03> <0020>\n"
+                          "<04> <0648>\n"
+                          "<05> <0647>\n"
+                          "<06> <062F>\n"
+                          "<08> <062C>\n"
+                          "<09> <0628>\n"
+                          "<0B> <0623>\n"
+                          "endbfchar");
+        std::string aData(static_cast<const char*>(aObjectStream.GetData()), aObjectStream.GetSize());
+        auto nPos = aData.find(aCmap);
+        CPPUNIT_ASSERT(nPos != std::string::npos);
+    }
+
+    {
+        auto aPages = aDocument.GetPages();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+        // Get page contents and stream.
+        auto pContents = aPages[0]->LookupObject("Contents");
+        CPPUNIT_ASSERT(pContents);
+        auto pStream = pContents->GetStream();
+        CPPUNIT_ASSERT(pStream);
+        auto& rObjectStream = pStream->GetMemory();
+
+        // Uncompress the stream.
+        SvMemoryStream aUncompressed;
+        ZCodec aZCodec;
+        aZCodec.BeginCompression();
+        rObjectStream.Seek(0);
+        aZCodec.Decompress(rObjectStream, aUncompressed);
+        CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+        // Make sure the expected ActualText is present.
+        std::string aData(static_cast<const char*>(aUncompressed.GetData()), aUncompressed.GetSize());
+
+        std::vector<std::string> aCodes({ "0632", "062C", "0628", "0623" });
+        std::string aActualText("/Span<</ActualText<");
+        size_t nCount = 0;
+        size_t nPos = 0;
+        while ((nPos = aData.find(aActualText, nPos)) != std::string::npos)
+        {
+            nCount++;
+            nPos += aActualText.length();
+        }
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of ActualText entries does not match!", aCodes.size(), nCount);
+
+        for (const auto& aCode : aCodes)
+        {
+            aActualText = "/Span<</ActualText<FEFF" + aCode + ">>>";
+            nPos = aData.find(aActualText);
+            CPPUNIT_ASSERT_MESSAGE("ActualText not found for " + aCode, nPos != std::string::npos);
+        }
+    }
+#endif
 }
 #endif
 #endif
