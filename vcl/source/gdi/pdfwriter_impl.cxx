@@ -6431,6 +6431,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         const std::vector<PDFWriterImpl::PDFGlyph>& rGlyphs,
         OStringBuffer& rLine,
         const Point& rAlignOffset,
+        bool bFirst,
         double fAngle,
         double fXScale,
         double fSkew,
@@ -6470,7 +6471,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         // the textline matrix relative to what was set before
         // making use of that would drive us into rounding issues
         Matrix3 aMat;
-        if( nRun == 0 && fAngle == 0.0 && fXScale == 1.0 && fSkew == 0.0 )
+        if( bFirst && nRun == 0 && fAngle == 0.0 && fXScale == 1.0 && fSkew == 0.0 )
         {
             m_aPages.back().appendPoint( aCurPos, rLine );
             rLine.append( " Td " );
@@ -6679,14 +6680,55 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         aCodeUnits.clear();
 
-        // try to handle ligatures and such
-        int nStart = pGlyph->mnCharPos;
-        int nChars = pGlyph->mnCharCount;
-        if (nChars < 0)
-            nChars = 0;
+        // tdf#66597, tdf#115117
+        //
+        // Here is how we embed textual content in PDF files, to allow for
+        // better text extraction for complex and typography-rich text.
+        //
+        // * If there is many to one or many to many mapping, use an
+        //   ActualText span embedding the original string, since ToUnicode
+        //   can’t handle these.
+        // * If the one glyph is used for several Unicode code points, also
+        //   use ActualText since ToUnicode can map each glyph in the font
+        //   only once.
+        // * Limit ActualText to single cluster at a time, since using it
+        //   for whole words or sentences breaks text selection and
+        //   highlighting in PDF viewers (there will be no way to tell
+        //   which glyphs belong to which characters).
+        // * Keep generating (now) redundant ToUnicode entries for
+        //   compatibility with old tools not supporting ActualText.
 
-        for (int n = 0; n < nChars; n++)
-            aCodeUnits.push_back(rText[nStart + n]);
+        assert(pGlyph->mnCharCount >= 0);
+        for (int n = 0; n < pGlyph->mnCharCount; n++)
+            aCodeUnits.push_back(rText[pGlyph->mnCharPos + n]);
+
+        bool bUseActualText = false;
+
+        // If this is a start of complex cluster, use ActualText.
+        if (pGlyph->IsClusterStart())
+            bUseActualText = true;
+
+        // Or part of a complex cluster, will be handled by the ActualText
+        // of its cluster start.
+        if (pGlyph->IsInCluster())
+            assert(aCodeUnits.empty());
+
+        // A glyph can’t have more than one ToUnicode entry, use ActualText
+        // instead.
+        if (!aCodeUnits.empty() && !bUseActualText)
+        {
+            for (const auto& rSubset : m_aSubsets[pFont].m_aSubsets)
+            {
+                const auto& it = rSubset.m_aMapping.find(pGlyph->maGlyphId);
+                if (it != rSubset.m_aMapping.cend() && it->second.codes() != aCodeUnits)
+                {
+                    bUseActualText = true;
+                    aCodeUnits.clear();
+                }
+            }
+        }
+
+        assert(!aCodeUnits.empty() || bUseActualText || pGlyph->IsInCluster());
 
         sal_uInt8 nMappedGlyph;
         sal_Int32 nMappedFontObject;
@@ -6703,12 +6745,19 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                                                          pGraphics);
         }
 
+        int nCharPos = -1;
+        if (bUseActualText || pGlyph->IsInCluster())
+            nCharPos = pGlyph->mnCharPos;
+
         aGlyphs.emplace_back(aPos,
                              nGlyphWidth,
                              pGlyph->maGlyphId,
                              nMappedFontObject,
                              nMappedGlyph,
-                             pGlyph->IsVertical());
+                             pGlyph->IsVertical(),
+                             pGlyph->IsRTLGlyph(),
+                             nCharPos,
+                             pGlyph->mnCharCount);
     }
 
     // Avoid fill color when map mode is in pixels, the below code assumes
@@ -6760,10 +6809,49 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     */
     if( ! aGlyphs.empty() )
     {
-        if( bVertical )
-            drawVerticalGlyphs( aGlyphs, aLine, aAlignOffset, aRotScale, fAngle, fXScale, fSkew, nFontHeight );
-        else
-            drawHorizontalGlyphs( aGlyphs, aLine, aAlignOffset, fAngle, fXScale, fSkew, nFontHeight, nPixelFontHeight );
+        size_t nStart = 0;
+        size_t nEnd = 0;
+        while (nStart < aGlyphs.size())
+        {
+            while (nEnd < aGlyphs.size() && aGlyphs[nEnd].m_nCharPos == aGlyphs[nStart].m_nCharPos)
+                nEnd++;
+
+            std::vector<PDFGlyph> aRun(aGlyphs.begin() + nStart, aGlyphs.begin() + nEnd);
+
+            int nCharPos, nCharCount;
+            if (!aRun.front().m_bRTL)
+            {
+                nCharPos = aRun.front().m_nCharPos;
+                nCharCount = aRun.front().m_nCharCount;
+            }
+            else
+            {
+                nCharPos = aRun.back().m_nCharPos;
+                nCharCount = aRun.back().m_nCharCount;
+            }
+
+            if (nCharPos >= 0 && nCharCount)
+            {
+                aLine.append("/Span<</ActualText<FEFF");
+                for (int i = 0; i < nCharCount; i++)
+                {
+                    sal_Unicode aChar = rText[nCharPos + i];
+                    appendHex(static_cast<sal_Int8>(aChar >> 8), aLine);
+                    appendHex(static_cast<sal_Int8>(aChar & 255), aLine);
+                }
+                aLine.append( ">>>\nBDC\n" );
+            }
+
+            if (bVertical)
+                drawVerticalGlyphs(aRun, aLine, aAlignOffset, aRotScale, fAngle, fXScale, fSkew, nFontHeight);
+            else
+                drawHorizontalGlyphs(aRun, aLine, aAlignOffset, nStart == 0, fAngle, fXScale, fSkew, nFontHeight, nPixelFontHeight);
+
+            if (nCharPos >= 0 && nCharCount)
+                aLine.append( "EMC\n" );
+
+            nStart = nEnd;
+        }
     }
 
     // end textobject
