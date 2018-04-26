@@ -9,11 +9,7 @@
 
 $(eval $(call gb_Library_Library,xsec_xmlsec))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_set_componentfile,xsec_xmlsec,xmlsecurity/util/xsec_xmlsec.windows))
-else
 $(eval $(call gb_Library_set_componentfile,xsec_xmlsec,xmlsecurity/util/xsec_xmlsec))
-endif
 
 $(eval $(call gb_Library_set_include,xsec_xmlsec,\
 	$$(INCLUDE) \
