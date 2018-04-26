@@ -111,6 +111,7 @@
 #include <ndgrf.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/GraphicLoader.hxx>
 #include <sfx2/printer.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <editeng/xmlcnitm.hxx>
@@ -1595,11 +1596,28 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 }
             }
         }
-        else if (FN_UNO_REPLACEMENT_GRAPHIC == pEntry->nWID)
+        else if (FN_UNO_REPLACEMENT_GRAPHIC == pEntry->nWID || FN_UNO_REPLACEMENT_GRAPHIC_URL == pEntry->nWID)
         {
-            uno::Reference<graphic::XGraphic> xGraphic;
-            aValue >>= xGraphic;
-            if (xGraphic.is())
+            Graphic aGraphic;
+            if (aValue.has<OUString>())
+            {
+                OUString aURL = aValue.get<OUString>();
+                if (!aURL.isEmpty())
+                {
+                    aGraphic = vcl::graphic::loadFromURL(aURL);
+                }
+            }
+            else if (aValue.has<uno::Reference<graphic::XGraphic>>())
+            {
+                uno::Reference<graphic::XGraphic> xGraphic;
+                xGraphic = aValue.get<uno::Reference<graphic::XGraphic>>();
+                if (xGraphic.is())
+                {
+                    aGraphic = Graphic(xGraphic);
+                }
+            }
+
+            if (aGraphic)
             {
                 const ::SwFormatContent* pCnt = &pFormat->GetContent();
                 if ( pCnt->GetContentIdx() && pDoc->GetNodes()[ pCnt->GetContentIdx()->GetIndex() + 1 ] )
@@ -1609,7 +1627,6 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     if ( pOleNode )
                     {
                         svt::EmbeddedObjectRef &rEmbeddedObject = pOleNode->GetOLEObj().GetObject();
-                        Graphic aGraphic(xGraphic);
                         rEmbeddedObject.SetGraphic(aGraphic, OUString() );
                     }
                 }
