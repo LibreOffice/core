@@ -241,7 +241,7 @@ void SwEnvFormatPage::Edit(const OString& rIdent, bool bSender)
         bSender ? RES_POOLCOLL_SENDADRESS : RES_POOLCOLL_JAKETADRESS));
     OSL_ENSURE(pColl, "Text collection missing");
 
-    if (rIdent == "character")
+    if (rIdent.startsWith("character"))
     {
         SfxItemSet *pCollSet = GetCollItemSet(pColl, bSender);
 
@@ -253,7 +253,8 @@ void SwEnvFormatPage::Edit(const OString& rIdent, bool bSender)
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
         const OUString sFormatStr = pColl->GetName();
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, SwCharDlgMode::Env, &sFormatStr));
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(nullptr /*TODO*/, pSh->GetView(), aTmpSet, SwCharDlgMode::Env, &sFormatStr));
+        //ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, SwCharDlgMode::Env, &sFormatStr));
         OSL_ENSURE(pDlg, "Dialog creation failed!");
         if (pDlg->Execute() == RET_OK)
         {
@@ -262,7 +263,7 @@ void SwEnvFormatPage::Edit(const OString& rIdent, bool bSender)
             pCollSet->Put(aOutputSet);
         }
     }
-    else if (rIdent == "paragraph")
+    else if (rIdent.startsWith("paragraph"))
     {
         SfxItemSet *pCollSet = GetCollItemSet(pColl, bSender);
 
@@ -290,7 +291,8 @@ void SwEnvFormatPage::Edit(const OString& rIdent, bool bSender)
         ::PrepareBoxInfo( aTmpSet, *pSh );
 
         const OUString sFormatStr = pColl->GetName();
-        VclPtrInstance< SwParaDlg > pDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &sFormatStr);
+        VclPtrInstance< SwParaDlg > pDlg(nullptr /*TODO*/, pSh->GetView(), aTmpSet, DLG_ENVELOP, &sFormatStr);
+        //VclPtrInstance< SwParaDlg > pDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &sFormatStr);
 
         if ( pDlg->Execute() == RET_OK )
         {

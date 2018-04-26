@@ -232,6 +232,7 @@ protected:
 private:
     std::unique_ptr<weld::Button> m_xOKBtn;
     std::unique_ptr<weld::Button> m_xApplyBtn;
+    std::unique_ptr<weld::Button> m_xUserBtn;
     std::unique_ptr<weld::Button> m_xCancelBtn;
     std::unique_ptr<weld::Button> m_xResetBtn;
 
@@ -282,6 +283,9 @@ public:
     const sal_uInt16*   GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return m_pOutSet.get(); }
+
+    const weld::Button* GetUserButton() const { return m_xUserBtn.get(); }
+    weld::Button*       GetUserButton() { return m_xUserBtn.get(); }
 
     short               execute();
 
