@@ -209,7 +209,7 @@ namespace slideshow
             }
             catch( uno::Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("slideshow");
             }
 #endif
             if( pClip )

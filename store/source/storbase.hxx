@@ -554,7 +554,7 @@ protected:
 
     /** Construction.
      */
-    explicit OStorePageObject (std::shared_ptr<PageData> const & rxPage = std::shared_ptr<PageData>())
+    explicit OStorePageObject (std::shared_ptr<PageData> const & rxPage)
         : m_xPage (rxPage), m_bDirty (false)
     {}
 

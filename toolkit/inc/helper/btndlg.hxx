@@ -58,7 +58,7 @@ public:
 
     void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
 
-    void                AddButton( StandardButtonType eType, sal_uInt16 nId, ButtonDialogFlags nBtnFlags = ButtonDialogFlags::NONE, long nSepPixel = 0 );
+    void                AddButton( StandardButtonType eType, sal_uInt16 nId, ButtonDialogFlags nBtnFlags, long nSepPixel = 0 );
     void                RemoveButton( sal_uInt16 nId );
 
 protected:

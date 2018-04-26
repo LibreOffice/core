@@ -240,7 +240,7 @@ public:
 
     SvxCSS1Parser( SfxItemPool& rPool,
                     const OUString& rBaseURL,
-                   sal_uInt16 *pWhichIds, sal_uInt16 nWhichIds=0 );
+                   sal_uInt16 *pWhichIds, sal_uInt16 nWhichIds );
     virtual ~SvxCSS1Parser() override;
 
     bool IsIgnoreFontFamily() const { return bIgnoreFontFamily; }

@@ -67,7 +67,7 @@ public:
                                     const OUString& rTarget, const OUString& rIntName,
                                     SvxLinkInsertMode eTyp,
                                     HyperDialogEvent nEvents,
-                                    SvxMacroTableDtor const *pMacroTbl =nullptr );
+                                    SvxMacroTableDtor const *pMacroTbl );
 
     inline SvxHyperlinkItem& operator=( const SvxHyperlinkItem &rItem );
 

@@ -193,7 +193,7 @@ MacabDriver::MacabDriver(
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("connectivity.macab");
     }
     osl_atomic_decrement( &m_refCount );
 }

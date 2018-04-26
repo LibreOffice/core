@@ -111,7 +111,7 @@ class SW_DLLPUBLIC SwDocShell
     /// Make DocInfo known to the Doc.
     SAL_DLLPRIVATE virtual VclPtr<SfxDocumentInfoDialog> CreateDocumentInfoDialog(const SfxItemSet &) override;
     /// OLE-stuff
-    SAL_DLLPRIVATE virtual void          Draw( OutputDevice*, const JobSetup&, sal_uInt16 = ASPECT_CONTENT) override;
+    SAL_DLLPRIVATE virtual void          Draw( OutputDevice*, const JobSetup&, sal_uInt16 nAspect) override;
 
     /// Methods for StyleSheets
 

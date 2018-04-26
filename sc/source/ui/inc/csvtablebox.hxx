@@ -101,7 +101,7 @@ public:
     /** Fills all cells of all lines with the passed texts (Unicode strings). */
     void                        SetUniStrings(
                                     const OUString* pTextLines, const OUString& rSepChars,
-                                    sal_Unicode cTextSep, bool bMergeSep, bool bRemoveSpace = false );
+                                    sal_Unicode cTextSep, bool bMergeSep, bool bRemoveSpace );
 
     // column settings --------------------------------------------------------
 public:

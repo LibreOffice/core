@@ -36,9 +36,8 @@ private:
     MessageDialog(vcl::Window* pParent, WinBits nStyle);
 
 public:
-    MessageDialog(vcl::Window* pParent, const OUString& rMessage,
-                  VclMessageType eMessageType = VclMessageType::Error,
-                  VclButtonsType eButtonsType = VclButtonsType::Ok);
+    MessageDialog(vcl::Window* pParent, const OUString& rMessage, VclMessageType eMessageType,
+                  VclButtonsType eButtonsType);
     MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
     virtual bool set_property(const OString& rKey, const OUString& rValue) override;
     OUString const& get_primary_text() const;

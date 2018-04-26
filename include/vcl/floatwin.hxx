@@ -149,7 +149,7 @@ public:
     FloatWinTitleType GetTitleType() const { return mnTitle; }
 
     void            StartPopupMode( const tools::Rectangle& rRect, FloatWinPopupFlags nFlags );
-    void            StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags = FloatWinPopupFlags::NONE  );
+    void            StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags  );
     void            EndPopupMode( FloatWinPopupEndFlags nFlags = FloatWinPopupEndFlags::NONE );
     void            AddPopupModeWindow( vcl::Window* pWindow );
     FloatWinPopupFlags GetPopupModeFlags() const { return mnPopupModeFlags; }

@@ -414,7 +414,7 @@ public:
      *      stack
      *  @return <true> if there was one on the stack, <false> otherwise
      */
-    bool Pop(PopMode = PopMode::DeleteStack);
+    bool Pop(PopMode);
     /*
      * Combine 2 Cursors.
      * Delete the topmost from the stack and move its Mark into the current.
