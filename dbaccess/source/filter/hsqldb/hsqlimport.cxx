@@ -229,23 +229,24 @@ void HsqlImporter::insertRow(const RowVector& xRows, const OUString& sTableName,
 }
 
 void HsqlImporter::processTree(HsqlBinaryNode& rNode, HsqlRowInputStream& rStream,
-                               const ColumnTypeVector& rColTypes, const OUString& sTableName)
+                               const ColumnTypeVector& rColTypes, const OUString& sTableName,
+                               sal_Int32 nIndexCount)
 {
     rNode.readChildren(rStream);
     sal_Int32 nNext = rNode.getLeft();
     if (nNext > 0)
     {
         HsqlBinaryNode aLeft{ nNext };
-        processTree(aLeft, rStream, rColTypes, sTableName);
+        processTree(aLeft, rStream, rColTypes, sTableName, nIndexCount);
     }
-    std::vector<Any> row = rNode.readRow(rStream, rColTypes);
+    std::vector<Any> row = rNode.readRow(rStream, rColTypes, nIndexCount);
     insertRow(row, sTableName, rColTypes);
 
     nNext = rNode.getRight();
     if (nNext > 0)
     {
         HsqlBinaryNode aRight{ nNext };
-        processTree(aRight, rStream, rColTypes, sTableName);
+        processTree(aRight, rStream, rColTypes, sTableName, nIndexCount);
     }
 }
 
@@ -278,11 +279,12 @@ void HsqlImporter::parseTableRows(const IndexVector& rIndexes,
     Reference<XInputStream> xInput = xStream->getInputStream();
     rowInput.setInputStream(xInput);
 
-    for (const auto& rIndex : rIndexes)
+    if (rIndexes.size() > 0)
     {
-        HsqlBinaryNode aNode{ rIndex };
-        processTree(aNode, rowInput, rColTypes, sTableName);
+        HsqlBinaryNode aPrimaryNode{ rIndexes.at(0) };
+        processTree(aPrimaryNode, rowInput, rColTypes, sTableName, rIndexes.size());
     }
+
     xInput->closeInput();
 }
 

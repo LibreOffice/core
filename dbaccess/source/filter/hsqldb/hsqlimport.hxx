@@ -29,7 +29,8 @@ protected:
     void insertRow(const std::vector<css::uno::Any>& xRows, const OUString& sTable,
                    const std::vector<ColumnDefinition>& rColTypes);
     void processTree(HsqlBinaryNode& rNode, HsqlRowInputStream& rStream,
-                     const std::vector<ColumnDefinition>& rColTypes, const OUString& sTableName);
+                     const std::vector<ColumnDefinition>& rColTypes, const OUString& sTableName,
+                     sal_Int32 nIndexCount);
     void parseTableRows(const std::vector<sal_Int32>& rIndexes,
                         const std::vector<ColumnDefinition>& rColTypes, const OUString& sTableName);
 
