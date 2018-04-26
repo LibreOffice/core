@@ -1464,6 +1464,7 @@ SfxTabDialogController::SfxTabDialogController
     , m_xTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
     , m_xApplyBtn(m_xBuilder->weld_button("apply"))
+    , m_xUserBtn(m_xBuilder->weld_button("user"))
     , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
     , m_xResetBtn(m_xBuilder->weld_button("reset"))
     , m_pSet(pItemSet ? new SfxItemSet(*pItemSet) : nullptr)

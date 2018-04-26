@@ -65,7 +65,7 @@ public:
     void queue_draw() { m_xDrawingArea->queue_draw(); }
 };
 
-class SwEnvDlg : public SfxTabDialog
+class SwEnvDlg : public SfxTabDialogController
 {
 friend class SwEnvPage;
 friend class SwEnvFormatPage;
@@ -77,17 +77,15 @@ friend class SwEnvPreview;
     VclPtr<Printer> pPrinter;
     SfxItemSet      *pAddresseeSet;
     SfxItemSet      *pSenderSet;
-    sal_uInt16      m_nEnvPrintId;
-    sal_uInt16      m_nEnvAddressId;
-    sal_uInt16      m_nEnvFormatId;
 
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    std::unique_ptr<weld::Button> m_xModify;
+
+    virtual void    PageCreated(const OString& rId, SfxTabPage &rPage) override;
     virtual short   Ok() override;
 
 public:
-    SwEnvDlg(vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert);
+    SwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert);
     virtual ~SwEnvDlg() override;
-    virtual void dispose() override;
 };
 
 class SwEnvPage : public SfxTabPage

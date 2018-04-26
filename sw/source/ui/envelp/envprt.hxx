@@ -50,7 +50,7 @@ class SwEnvPrtPage : public SfxTabPage
     DECL_LINK(AlignHdl, weld::ToggleButton&, void);
     DECL_LINK(ButtonHdl, weld::Button&, void );
 
-    SwEnvDlg* GetParentSwEnvDlg() {return static_cast<SwEnvDlg*>(GetTabDialog()); }
+    SwEnvDlg* GetParentSwEnvDlg() {return static_cast<SwEnvDlg*>(GetDialogController()); }
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
