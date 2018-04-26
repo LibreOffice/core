@@ -63,8 +63,6 @@ IMPL_LINK(SwEnvPreview, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
 {
     vcl::RenderContext& rRenderContext = aPayload.first;
 
-    //SetMapMode(MapMode(MapUnit::MapPixel));
-
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
     rRenderContext.SetBackground(rRenderContext.GetSettings().GetStyleSettings().GetDialogColor());
     rRenderContext.Erase();
@@ -124,51 +122,43 @@ IMPL_LINK(SwEnvPreview, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
     rRenderContext.DrawRect(tools::Rectangle(Point(nStmpX, nStmpY), Size(nStmpW, nStmpH)));
 }
 
-SwEnvDlg::SwEnvDlg(vcl::Window* pParent, const SfxItemSet& rSet,
+SwEnvDlg::SwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet,
                     SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert)
-    : SfxTabDialog(pParent, "EnvDialog",
-        "modules/swriter/ui/envdialog.ui", &rSet)
+    : SfxTabDialogController(pParent, "modules/swriter/ui/envdialog.ui", "EnvDialog", &rSet)
     , aEnvItem(static_cast<const SwEnvItem&>( rSet.Get(FN_ENVELOP)))
     , pSh(pWrtSh)
     , pPrinter(pPrt)
     , pAddresseeSet(nullptr)
     , pSenderSet(nullptr)
-    , m_nEnvPrintId(0)
+    , m_xModify(m_xBuilder->weld_button("modify"))
 {
     if (!bInsert)
     {
-        GetUserButton()->SetText(get<PushButton>("modify")->GetText());
+        GetUserButton()->set_label(m_xModify->get_label());
     }
 
-    m_nEnvAddressId = AddTabPage("envelope", SwEnvPage   ::Create, nullptr);
-    m_nEnvFormatId = AddTabPage("format", SwEnvFormatPage::Create, nullptr);
-    m_nEnvPrintId = AddTabPage("printer", SwEnvPrtPage::Create, nullptr);
+    AddTabPage("envelope", SwEnvPage::Create, nullptr);
+    AddTabPage("format", SwEnvFormatPage::Create, nullptr);
+    AddTabPage("printer", SwEnvPrtPage::Create, nullptr);
 }
 
 SwEnvDlg::~SwEnvDlg()
 {
-    disposeOnce();
-}
-
-void SwEnvDlg::dispose()
-{
     delete pAddresseeSet;
     delete pSenderSet;
-    pPrinter.clear();
-    SfxTabDialog::dispose();
 }
 
-void SwEnvDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
+void SwEnvDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
-    if (nId == m_nEnvPrintId)
+    if (rId == "printer")
     {
         static_cast<SwEnvPrtPage*>(&rPage)->SetPrt(pPrinter);
     }
-    else if (nId == m_nEnvAddressId)
+    else if (rId == "envelope")
     {
         static_cast<SwEnvPage*>(&rPage)->Init(this);
     }
-    else if (nId == m_nEnvFormatId)
+    else if (rId == "format")
     {
         static_cast<SwEnvFormatPage*>(&rPage)->Init(this);
     }
@@ -176,7 +166,7 @@ void SwEnvDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 
 short SwEnvDlg::Ok()
 {
-    short nRet = SfxTabDialog::Ok();
+    short nRet = SfxTabDialogController::Ok();
 
     if (nRet == RET_OK || nRet == RET_USER)
     {
@@ -209,7 +199,7 @@ SwEnvPage::SwEnvPage(TabPageParent pParent, const SfxItemSet& rSet)
     , m_xPreview(new SwEnvPreview(m_xBuilder->weld_drawing_area("preview")))
 {
     auto nTextBoxHeight(m_xAddrEdit->get_height_rows(10));
-    auto nTextBoxWidth(m_xAddrEdit->get_approximate_digit_width() * 20);
+    auto nTextBoxWidth(m_xAddrEdit->get_approximate_digit_width() * 25);
 
     m_xAddrEdit->set_size_request(nTextBoxWidth, nTextBoxHeight);
     m_xSenderEdit->set_size_request(nTextBoxWidth, nTextBoxHeight);

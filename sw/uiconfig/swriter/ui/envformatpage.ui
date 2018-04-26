@@ -34,22 +34,42 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkMenu" id="editmenu">
+  <object class="GtkMenu" id="editmenu1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="character">
+      <object class="GtkMenuItem" id="character1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="envformatpage|character">C_haracter...</property>
+        <property name="label" translatable="yes" context="envformatpage|character1">C_haracter...</property>
         <property name="use_underline">True</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="paragraph">
+      <object class="GtkMenuItem" id="paragraph1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="envformatpage|paragraph">P_aragraph...</property>
+        <property name="label" translatable="yes" context="envformatpage|paragraph1">P_aragraph...</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkMenu" id="editmenu2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="character2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="envformatpage|character2">C_haracter...</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="paragraph2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="envformatpage|paragraph2">P_aragraph...</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -209,7 +229,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="popup">editmenu</property>
+                                <property name="popup">editmenu1</property>
                                 <child>
                                   <placeholder/>
                                 </child>
@@ -406,7 +426,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="popup">editmenu</property>
+                                <property name="popup">editmenu2</property>
                                 <child>
                                   <placeholder/>
                                 </child>
