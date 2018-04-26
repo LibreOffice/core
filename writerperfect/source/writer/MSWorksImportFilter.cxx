@@ -98,23 +98,23 @@ bool MSWorksImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OU
 
     if ((kind == libwps::WPS_TEXT) && (confidence == libwps::WPS_CONFIDENCE_EXCELLENT))
     {
-        if (creator == libwps::WPS_MSWORKS)
+        switch (creator)
         {
-            rTypeName = "writer_MS_Works_Document";
+            case libwps::WPS_MSWORKS:
+                rTypeName = "writer_MS_Works_Document";
+                break;
+            case libwps::WPS_RESERVED_0:
+                rTypeName = "writer_MS_Write";
+                break;
+            case libwps::WPS_RESERVED_1:
+                rTypeName = "writer_DosWord";
+                break;
+            default:
+                break;
         }
-        else if (creator == libwps::WPS_RESERVED_0)
-        {
-            rTypeName = "writer_MS_Write";
-        }
-        else
-        {
-            rTypeName = "writer_DosWord";
-        }
-
-        return true;
     }
 
-    return false;
+    return !rTypeName.isEmpty();
 }
 
 void MSWorksImportFilter::doRegisterHandlers(OdtGenerator& rGenerator)

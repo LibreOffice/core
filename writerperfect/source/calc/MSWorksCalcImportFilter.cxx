@@ -388,29 +388,27 @@ bool MSWorksCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput
     if ((kind == libwps::WPS_SPREADSHEET || kind == libwps::WPS_DATABASE)
         && confidence != libwps::WPS_CONFIDENCE_NONE)
     {
-        if (creator == libwps::WPS_MSWORKS)
+        switch (creator)
         {
-            rTypeName = "calc_MS_Works_Document";
-            return true;
-        }
-        if (creator == libwps::WPS_LOTUS || creator == libwps::WPS_SYMPHONY)
-        {
-            rTypeName = "calc_WPS_Lotus_Document";
-            return true;
-        }
-        if (creator == libwps::WPS_QUATTRO_PRO)
-        {
-            rTypeName = "calc_WPS_QPro_Document";
-            return true;
-        }
-        if (creator == libwps::WPS_RESERVED_2)
-        {
-            rTypeName = "calc_MS_Multiplan";
-            return true;
+            case libwps::WPS_MSWORKS:
+                rTypeName = "calc_MS_Works_Document";
+                break;
+            case libwps::WPS_LOTUS:
+            case libwps::WPS_SYMPHONY:
+                rTypeName = "calc_WPS_Lotus_Document";
+                break;
+            case libwps::WPS_QUATTRO_PRO:
+                rTypeName = "calc_WPS_QPro_Document";
+                break;
+            case libwps::WPS_RESERVED_2:
+                rTypeName = "calc_MS_Multiplan";
+                break;
+            default:
+                break;
         }
     }
 
-    return false;
+    return !rTypeName.isEmpty();
 }
 
 void MSWorksCalcImportFilter::doRegisterHandlers(OdsGenerator&) {}
