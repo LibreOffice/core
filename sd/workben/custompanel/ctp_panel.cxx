@@ -84,7 +84,7 @@ namespace sd { namespace colortoolpanel
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("sd");
             }
             return NULL;
         }
@@ -114,7 +114,7 @@ namespace sd { namespace colortoolpanel
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("sd");
         }
         osl_atomic_increment( &m_refCount );
         if ( xParentWindow.is() )
@@ -182,7 +182,7 @@ namespace sd { namespace colortoolpanel
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("sd");
         }
     }
 
@@ -205,7 +205,7 @@ namespace sd { namespace colortoolpanel
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("sd");
         }
         m_xWindow.clear();
     }

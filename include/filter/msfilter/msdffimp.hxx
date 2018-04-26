@@ -600,7 +600,7 @@ public:
                      SvStream* pStData,
                      SdrModel* pSdrModel_,
                      long      nApplicationScale,
-                     Color     mnDefaultColor_      =  COL_DEFAULT,
+                     Color     mnDefaultColor_,
                      SvStream* pStData2_            =  nullptr,
                      bool bSkipImages               =  false );
 

@@ -593,7 +593,7 @@ private:
     SAL_DLLPRIVATE void  LeaveExtSel() { m_bSelWrd = m_bSelLn = false;}
 
     SAL_DLLPRIVATE bool  GoStart(bool KeepArea, bool *,
-            bool bSelect = false, bool bDontMoveRegion = false);
+            bool bSelect, bool bDontMoveRegion = false);
     SAL_DLLPRIVATE bool  GoEnd(bool KeepArea = false, const bool * = nullptr);
 
     enum BookMarkMove

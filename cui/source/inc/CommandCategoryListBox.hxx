@@ -53,7 +53,7 @@ public:
                     const css::uno::Sequence< css::frame::DispatchInformation >& xCommands,
                     const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox,
                     const OUString& filterTerm,
-                    SaveInData *pCurrentSaveInData = nullptr );
+                    SaveInData *pCurrentSaveInData );
     OUString    MapCommand2UIName(const OUString& sCommand);
 
     /**
@@ -62,14 +62,14 @@ public:
         the commands in the selected category.
     */
     void categorySelected(  const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox,
-                            const OUString& filterTerm = OUString(), SaveInData* pCurrentSaveInData = nullptr );
+                            const OUString& filterTerm, SaveInData* pCurrentSaveInData = nullptr );
 
     void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 
     // Adds children of the given macro group to the functions list
     void addChildren(
         SvTreeListEntry* parentEntry, const css::uno::Reference<com::sun::star::script::browse::XBrowseNode> &parentNode,
-        const VclPtr<SfxConfigFunctionListBox> &pFunctionListBox, const OUString &filterTerm , SaveInData *pCurrentSaveInData = nullptr );
+        const VclPtr<SfxConfigFunctionListBox> &pFunctionListBox, const OUString &filterTerm , SaveInData *pCurrentSaveInData );
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_COMMANDCATEGORYLISTBOX_HXX

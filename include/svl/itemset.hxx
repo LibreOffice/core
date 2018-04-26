@@ -201,7 +201,7 @@ public:
                                      bool bInvalidAsDefault = true );
     void                        PutExtended( const SfxItemSet&,
                                              SfxItemState eDontCareAs,
-                                             SfxItemState eDefaultAs = SfxItemState::UNKNOWN );
+                                             SfxItemState eDefaultAs );
 
     bool                        Set( const SfxItemSet&, bool bDeep = true );
 

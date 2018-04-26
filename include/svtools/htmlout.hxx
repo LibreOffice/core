@@ -72,7 +72,7 @@ struct HTMLOutFuncs
                                    bool bOutStarBasic,
                                    const sal_Char *pDelim,
                                    const sal_Char *pIndentArea,
-                                   const sal_Char *pIndentMap = nullptr,
+                                   const sal_Char *pIndentMap,
                                    rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                                    OUString *pNonConvertableChars = nullptr );
     SVT_DLLPUBLIC static SvStream& FlushToAscii( SvStream&, HTMLOutContext& rContext );

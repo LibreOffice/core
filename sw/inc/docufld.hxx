@@ -308,7 +308,7 @@ public:
                      bool   bConditional,
                      const OUString& rCond,
                      const OUString& rText,
-                     bool   bHidden  = false,
+                     bool   bHidden,
                      sal_uInt16 nSubType = TYP_HIDDENTXTFLD);
 
     SwHiddenTextField( SwHiddenTextFieldType*,

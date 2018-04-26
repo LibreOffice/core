@@ -107,7 +107,7 @@ public:
     static bool  IsFormatSupported( SotClipboardFormatId nFormat );
     static const sal_Unicode* ScanNextFieldFromString( const sal_Unicode* p,
             OUString& rField, sal_Unicode cStr, const sal_Unicode* pSeps,
-            bool bMergeSeps, bool& rbIsQuoted, bool& rbOverflowCell, bool bRemoveSpace = false );
+            bool bMergeSeps, bool& rbIsQuoted, bool& rbOverflowCell, bool bRemoveSpace );
     static  void    WriteUnicodeOrByteString( SvStream& rStrm, const OUString& rString, bool bZero = false );
     static  void    WriteUnicodeOrByteEndl( SvStream& rStrm );
 
