@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef __com_sun_star_text_TextTable_idl__
 #define __com_sun_star_text_TextTable_idl__
 
@@ -35,11 +36,9 @@
 #include <com/sun/star/util/XSortable.idl>
 #include <com/sun/star/sheet/XCellRangeData.idl>
 #include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
+#include <com/sun/star/graphic/XGraphic.idl>
 
-
-
- module com {  module sun {  module star {  module text {
-
+module com {  module sun {  module star {  module text {
 
 /** is a table of text cells which is anchored to a surrounding text.
 
@@ -192,9 +191,22 @@ published service TextTable
     [property] com::sun::star::util::Color BackColor;
 
     /** contains the URL for the background graphic.
+
+        @deprecated as of LibreOffice 6.1 - use BackGraphic instead
+
+        Note the new behaviour since it this was deprecated:
+        This property can only be set and only external URLs are
+        supported (no more vnd.sun.star.GraphicObject scheme). When an
+        URL is set, then it will load the graphic and set the BackGraphic
+        property.
      */
     [property] string BackGraphicURL;
 
+    /** contains the graphic for the background.
+
+        @since LibreOffice 6.1
+     */
+    [property] com::sun::star::graphic::XGraphic BackGraphic;
 
     /** contains the name of the file filter for the background graphic.
      */

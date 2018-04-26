@@ -51,6 +51,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <tools/diagnose_ex.h>
 #include "PropertyMapHelper.hxx"
+#include <set>
 
 using namespace com::sun::star;
 
@@ -1459,10 +1460,18 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 uno::Reference< beans::XPropertySet > pageProperties( m_bTitlePage ? m_aFirstPageStyle : m_aFollowPageStyle );
                 uno::Reference< beans::XPropertySetInfo > pagePropertiesInfo( pageProperties->getPropertySetInfo() );
                 uno::Sequence< beans::Property > propertyList( pagePropertiesInfo->getProperties() );
+                // Ignore write-only properties.
+                static const std::set<OUString> aBlacklist
+                    = { "FooterBackGraphicURL", "BackGraphicURL", "HeaderBackGraphicURL" };
                 for ( int i = 0; i < propertyList.getLength(); ++i )
                 {
                     if ( (propertyList[i].Attributes & beans::PropertyAttribute::READONLY) == 0 )
-                        evenOddStyle->setPropertyValue( propertyList[i].Name, pageProperties->getPropertyValue( propertyList[i].Name ) );
+                    {
+                        if (aBlacklist.find(propertyList[i].Name) == aBlacklist.end())
+                            evenOddStyle->setPropertyValue(
+                                propertyList[i].Name,
+                                pageProperties->getPropertyValue(propertyList[i].Name));
+                    }
                 }
                 evenOddStyle->setPropertyValue( "FollowStyle", uno::makeAny( *pageStyle ) );
                 rDM_Impl.GetPageStyles()->insertByName( evenOddStyleName, uno::makeAny( evenOddStyle ) );
