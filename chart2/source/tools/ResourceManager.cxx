@@ -19,6 +19,7 @@
 
 #include "ResourceManager.hxx"
 
+#include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
 
 namespace chart
@@ -27,11 +28,12 @@ namespace chart
 ResMgr & ResourceManager::getResourceManager()
 {
     // not threadsafe
-    static ResMgr * pResourceManager = nullptr;
-    if( ! pResourceManager )
-        pResourceManager = ResMgr::CreateResMgr("chartcontroller");
+    static std::unique_ptr<ResMgr> pResourceManager;
+    const LanguageTag& rLocale = Application::GetSettings().GetUILanguageTag();
+    if( ! pResourceManager || pResourceManager->GetLocale() != rLocale )
+        pResourceManager.reset( ResMgr::CreateResMgr("chartcontroller", rLocale) );
     OSL_ASSERT( pResourceManager );
-    return *pResourceManager;
+    return *pResourceManager.get();
 }
 
 } //  namespace chart
