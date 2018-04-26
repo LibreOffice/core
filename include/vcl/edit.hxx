@@ -93,7 +93,8 @@ private:
                         mbClickedInSelection:1,
                         mbIsSubEdit:1,
                         mbActivePopup:1,
-                        mbForceControlBackground:1;
+                        mbForceControlBackground:1,
+                        mbPassword;
     Link<Edit&,void>    maModifyHdl;
     Link<Edit&,void>    maUpdateDataHdl;
     Link<Edit&,void>    maAutocompleteHdl;
@@ -275,6 +276,9 @@ public:
     static Size GetMinimumEditSize();
 
     void SetForceControlBackground(bool b) { mbForceControlBackground = b; }
+
+    void SetPassword(bool b)  { mbPassword = b; }
+    bool IsPassword() const { return mbPassword; }
 };
 
 #endif // INCLUDED_VCL_EDIT_HXX

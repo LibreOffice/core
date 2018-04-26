@@ -206,11 +206,9 @@ bool Edit::set_property(const OString &rKey, const OUString &rValue)
     }
     else if (rKey == "visibility")
     {
-        WinBits nBits = GetStyle();
-        nBits &= ~WB_PASSWORD;
+        mbPassword = false;
         if (!toBool(rValue))
-            nBits |= WB_PASSWORD;
-        SetStyle(nBits);
+            mbPassword = true;
     }
     else if (rKey == "placeholder-text")
         SetPlaceholderText(rValue);
@@ -281,6 +279,7 @@ void Edit::ImplInitEditData()
     mbActivePopup           = false;
     mbIsSubEdit             = false;
     mbForceControlBackground = false;
+    mbPassword              = false;
     mpDDInfo                = nullptr;
     mpIMEInfos              = nullptr;
     mcEchoChar              = 0;
@@ -431,7 +430,7 @@ long Edit::ImplGetExtraYOffset() const
 
 OUString Edit::ImplGetText() const
 {
-    if ( mcEchoChar || (GetStyle() & WB_PASSWORD) )
+    if ( mcEchoChar || mbPassword )
     {
         sal_Unicode cEchoChar;
         if ( mcEchoChar )
@@ -1406,7 +1405,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
         {
             case KeyFuncType::CUT:
             {
-                if ( !mbReadOnly && maSelection.Len() && !(GetStyle() & WB_PASSWORD) )
+                if ( !mbReadOnly && maSelection.Len() && !mbPassword )
                 {
                     Cut();
                     ImplModified();
@@ -1417,7 +1416,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
 
             case KeyFuncType::COPY:
             {
-                if ( !(GetStyle() & WB_PASSWORD) )
+                if ( !mbPassword )
                 {
                     Copy();
                     bDone = true;
@@ -2564,7 +2563,7 @@ OUString Edit::GetSelected() const
 
 void Edit::Cut()
 {
-    if ( !(GetStyle() & WB_PASSWORD ) )
+    if ( !mbPassword )
     {
         Copy();
         ReplaceSelected( OUString() );
@@ -2573,7 +2572,7 @@ void Edit::Cut()
 
 void Edit::Copy()
 {
-    if ( !(GetStyle() & WB_PASSWORD ) )
+    if ( !mbPassword )
     {
         css::uno::Reference<css::datatransfer::clipboard::XClipboard> aClipboard(GetClipboard());
         ImplCopy( aClipboard );
@@ -2811,7 +2810,7 @@ void Edit::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent
     SolarMutexGuard aVclGuard;
 
     if ( !IsTracking() && maSelection.Len() &&
-         !(GetStyle() & WB_PASSWORD) && (!mpDDInfo || !mpDDInfo->bStarterOfDD) ) // no repeated D&D
+         !mbPassword && (!mpDDInfo || !mpDDInfo->bStarterOfDD) ) // no repeated D&D
     {
         Selection aSel( maSelection );
         aSel.Justify();
