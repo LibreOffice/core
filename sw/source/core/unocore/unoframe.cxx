@@ -1575,14 +1575,31 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 pFormat->GetDoc()->getIDocumentContentOperations().ReRead(aGrfPaM, sGrfName, sFltName, nullptr);
             }
         }
-        else if (FN_UNO_GRAPHIC == pEntry->nWID)
+        else if (FN_UNO_GRAPHIC == pEntry->nWID || FN_UNO_GRAPHIC_URL == pEntry->nWID)
         {
-            uno::Reference< graphic::XGraphic > xGraphic;
-            aValue >>= xGraphic;
-            if(xGraphic.is())
+            Graphic aGraphic;
+            if (aValue.has<OUString>())
+            {
+                OUString aURL = aValue.get<OUString>();
+                if (!aURL.isEmpty())
+                {
+                    aGraphic = vcl::graphic::loadFromURL(aURL);
+                }
+            }
+            else if (aValue.has<uno::Reference<graphic::XGraphic>>())
+            {
+                uno::Reference<graphic::XGraphic> xGraphic;
+                xGraphic = aValue.get<uno::Reference<graphic::XGraphic>>();
+                if (xGraphic.is())
+                {
+                    aGraphic = Graphic(xGraphic);
+                }
+            }
+
+            if (aGraphic)
             {
                 const ::SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
-                if(pIdx)
+                if (pIdx)
                 {
                     SwNodeIndex aIdx(*pIdx, 1);
                     SwGrfNode* pGrfNode = aIdx.GetNode().GetGrfNode();
@@ -1591,8 +1608,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                         throw uno::RuntimeException();
                     }
                     SwPaM aGrfPaM(*pGrfNode);
-                    Graphic aGraphic( xGraphic );
-                    pFormat->GetDoc()->getIDocumentContentOperations().ReRead( aGrfPaM, OUString(), OUString(), &aGraphic );
+                    pFormat->GetDoc()->getIDocumentContentOperations().ReRead(aGrfPaM, OUString(), OUString(), &aGraphic);
                 }
             }
         }
@@ -2030,6 +2046,10 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             SwDoc::GetGrfNms( *static_cast<SwFlyFrameFormat*>(pFormat), nullptr, &sFltName );
                 aAny <<= sFltName;
         }
+        else if( FN_UNO_GRAPHIC_URL == pEntry->nWID )
+        {
+            throw uno::RuntimeException("Getting from this property is not unsupported");
+        }
         else if( FN_UNO_GRAPHIC == pEntry->nWID )
         {
             const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
@@ -2311,7 +2331,8 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
                 pEntry->nWID == FN_PARAM_LINK_DISPLAY_NAME||
                 FN_UNO_FRAME_STYLE_NAME == pEntry->nWID||
                 FN_UNO_GRAPHIC == pEntry->nWID||
-                FN_UNO_GRAPHIC_FILTER     == pEntry->nWID||
+                FN_UNO_GRAPHIC_URL == pEntry->nWID||
+                FN_UNO_GRAPHIC_FILTER == pEntry->nWID||
                 FN_UNO_ACTUAL_SIZE == pEntry->nWID||
                 FN_UNO_ALTERNATIVE_TEXT == pEntry->nWID)
             {
