@@ -1950,7 +1950,7 @@ SwUnoCursorHelper::GetPropertyStates(
 
                     pStates[i] = ( pSetParent->Count() )
                         ? rPropSet.getPropertyState( *pEntry, *pSetParent )
-                        : beans::PropertyState_DEFAULT_VALUE;
+                        : beans::PropertyState_DIRECT_VALUE;
                 }
             }
         }
