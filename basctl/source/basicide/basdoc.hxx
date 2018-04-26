@@ -35,7 +35,7 @@ class DocShell: public SfxObjectShell
 
 protected:
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,
-                          sal_uInt16 nAspect = ASPECT_CONTENT ) override;
+                          sal_uInt16 nAspect ) override;
     virtual void    FillClass( SvGlobalName * pClassName,
                                SotClipboardFormatId * pFormat,
                                OUString * pAppName,

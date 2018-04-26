@@ -320,7 +320,7 @@ public:
                                 const MapMode& rDestMap,
                                 const GraphicAttr& rAttr
                             ) const;
-    Graphic                 GetTransformedGraphic( const GraphicAttr* pAttr = nullptr ) const; // TODO: Change to Impl
+    Graphic                 GetTransformedGraphic( const GraphicAttr* pAttr ) const; // TODO: Change to Impl
 
     void                    SetAttr( const GraphicAttr& rAttr );
     const GraphicAttr&      GetAttr() const { return maAttr; }

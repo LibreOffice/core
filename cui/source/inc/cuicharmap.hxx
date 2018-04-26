@@ -136,7 +136,7 @@ private:
     void selectCharByCode(Radix radix);
 
 public:
-    SvxCharacterMap(weld::Window* pParent, const SfxItemSet* pSet=nullptr, const bool bInsert=true);
+    SvxCharacterMap(weld::Window* pParent, const SfxItemSet* pSet, const bool bInsert=true);
     short execute();
 
     void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }

@@ -31,7 +31,7 @@
 
 TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException,
         const char* currentFunction, const char* fileAndLineNo,
-        const char* area = nullptr, const char* explanatory = nullptr);
+        const char* area, const char* explanatory = nullptr);
 
 //getCaughtException throws exceptions in never-going-to-happen situations which
 //floods coverity with warnings

@@ -548,7 +548,7 @@ public:
     virtual VclPtr<AbstractScImportOptionsDlg> CreateScImportOptionsDlg ( bool                    bAscii,
                                                                     const ScImportOptions*  pOptions,
                                                                     const OUString*         pStrTitle,
-                                                                    bool                    bOnlyDbtoolsEncodings = false,
+                                                                    bool                    bOnlyDbtoolsEncodings,
                                                                     bool                    bImport = true ) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateScAttrDlg( vcl::Window*          pParent,
                                                     const SfxItemSet* pCellAttrs ) override;

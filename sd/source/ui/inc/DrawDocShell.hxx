@@ -93,7 +93,7 @@ public:
     virtual bool            SaveAs( SfxMedium &rMedium  ) override;
 
     virtual ::tools::Rectangle       GetVisArea(sal_uInt16 nAspect) const override;
-    virtual void            Draw(OutputDevice*, const JobSetup& rSetup, sal_uInt16 nAspect = ASPECT_CONTENT) override;
+    virtual void            Draw(OutputDevice*, const JobSetup& rSetup, sal_uInt16 nAspect) override;
     virtual ::svl::IUndoManager*
                             GetUndoManager() override;
     virtual Printer*        GetDocumentPrinter() override;
