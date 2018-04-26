@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart/ChartSymbolType.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <vcl/GraphicLoader.hxx>
 
 #include <editeng/unoprnms.hxx>
 #include <vcl/graph.hxx>
@@ -56,6 +57,16 @@ public:
 
     explicit WrappedSymbolTypeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
                                        tSeriesOrDiagramPropertyType ePropertyType);
+};
+
+class WrappedSymbolBitmapURLProperty : public WrappedSeriesOrDiagramProperty<OUString>
+{
+public:
+    virtual OUString getValueFromSeries(const Reference<beans::XPropertySet>& xSeriesPropertySet) const override;
+    virtual void setValueToSeries(const Reference<beans::XPropertySet> & xSeriesPropertySet, OUString const & xNewGraphicURL) const override;
+
+    explicit WrappedSymbolBitmapURLProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
+                                            tSeriesOrDiagramPropertyType ePropertyType);
 };
 
 class WrappedSymbolBitmapProperty : public WrappedSeriesOrDiagramProperty<uno::Reference<graphic::XGraphic>>
@@ -96,6 +107,7 @@ enum
 {
     //symbol properties
     PROP_CHART_SYMBOL_TYPE = FAST_PROPERTY_ID_START_CHART_SYMBOL_PROP,
+    PROP_CHART_SYMBOL_BITMAP_URL,
     PROP_CHART_SYMBOL_BITMAP,
     PROP_CHART_SYMBOL_SIZE,
     PROP_CHART_SYMBOL_AND_LINES
@@ -151,6 +163,7 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
                                     , tSeriesOrDiagramPropertyType ePropertyType )
 {
     rList.push_back( new WrappedSymbolTypeProperty( spChart2ModelContact, ePropertyType ) );
+    rList.push_back( new WrappedSymbolBitmapURLProperty( spChart2ModelContact, ePropertyType ) );
     rList.push_back( new WrappedSymbolBitmapProperty( spChart2ModelContact, ePropertyType ) );
     rList.push_back( new WrappedSymbolSizeProperty( spChart2ModelContact, ePropertyType  ) );
     rList.push_back( new WrappedSymbolAndLinesProperty( spChart2ModelContact, ePropertyType  ) );
@@ -163,6 +176,12 @@ void WrappedSymbolProperties::addProperties( std::vector< Property > & rOutPrope
     rOutProperties.emplace_back( "SymbolType",
                   PROP_CHART_SYMBOL_TYPE,
                   cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back( "SymbolBitmapURL",
+                  PROP_CHART_SYMBOL_BITMAP_URL,
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
@@ -276,6 +295,38 @@ beans::PropertyState WrappedSymbolTypeProperty::getPropertyState( const Referenc
             return beans::PropertyState_DIRECT_VALUE;
     }
     return WrappedProperty::getPropertyState( xInnerPropertyState );
+}
+
+WrappedSymbolBitmapURLProperty::WrappedSymbolBitmapURLProperty(
+    const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
+    tSeriesOrDiagramPropertyType ePropertyType )
+        : WrappedSeriesOrDiagramProperty<OUString>("SymbolBitmapURL",
+            uno::Any(OUString()), spChart2ModelContact, ePropertyType)
+{
+}
+
+OUString WrappedSymbolBitmapURLProperty::getValueFromSeries(const Reference< beans::XPropertySet >& /*xSeriesPropertySet*/) const
+{
+    return OUString();
+}
+
+void WrappedSymbolBitmapURLProperty::setValueToSeries(
+    const Reference< beans::XPropertySet >& xSeriesPropertySet,
+    OUString const & xNewGraphicURL) const
+{
+    if (!xSeriesPropertySet.is())
+        return;
+
+    chart2::Symbol aSymbol;
+    if (xSeriesPropertySet->getPropertyValue("Symbol") >>= aSymbol)
+    {
+        if (!xNewGraphicURL.isEmpty())
+        {
+            Graphic aGraphic = vcl::graphic::loadFromURL(xNewGraphicURL);
+            aSymbol.Graphic.set(aGraphic.GetXGraphic());
+            xSeriesPropertySet->setPropertyValue("Symbol", uno::Any(aSymbol));
+        }
+    }
 }
 
 WrappedSymbolBitmapProperty::WrappedSymbolBitmapProperty(
