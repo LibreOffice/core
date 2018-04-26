@@ -10,7 +10,7 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_reem,font_reem))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_reem,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
-	ReemKufi-Regular.ttf \
+	ttf/ReemKufi-Regular.ttf \
 ))
 
 # vim: set noet sw=4 ts=4:
