@@ -288,7 +288,7 @@ public:
         @param nDitherFlags
         The algorithm to be used for dithering
      */
-    bool                    Dither( BmpDitherFlags nDitherFlags = BmpDitherFlags::Matrix );
+    bool                    Dither( BmpDitherFlags nDitherFlags );
 
     /** Crop the bitmap
 

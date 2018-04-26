@@ -2386,7 +2386,7 @@ public:
     std::pair<bool,bool> compareByValue(
         const ScRefCellValue& rCell, SCCOL nCol, SCROW nRow,
         const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
-        const ScInterpreterContext* pContext = nullptr)
+        const ScInterpreterContext* pContext)
     {
         bool bOk = false;
         bool bTestEqual = false;
@@ -2474,7 +2474,7 @@ public:
 
     std::pair<bool,bool> compareByString(
         ScRefCellValue& rCell, SCROW nRow, const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
-        const ScInterpreterContext* pContext = nullptr)
+        const ScInterpreterContext* pContext)
     {
         bool bOk = false;
         bool bTestEqual = false;

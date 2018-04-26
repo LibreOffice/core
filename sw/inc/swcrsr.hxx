@@ -120,12 +120,12 @@ public:
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
                 FindRanges,
-                const SwTextFormatColl* pReplFormat = nullptr );
+                const SwTextFormatColl* pReplFormat );
     sal_uLong Find( const SfxItemSet& rSet, bool bNoCollections,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
                 FindRanges,
-                const i18nutil::SearchOptions2* pSearchOpt = nullptr,
+                const i18nutil::SearchOptions2* pSearchOpt,
                 const SfxItemSet* rReplSet = nullptr );
 
     // UI versions

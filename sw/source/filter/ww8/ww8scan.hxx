@@ -1533,7 +1533,7 @@ public:
     sal_uInt16 m_nFib_actual; // 0x05bc #i56856#
 
     WW8Fib(SvStream& rStrm, sal_uInt8 nWantedVersion,sal_uInt32 nOffset=0);
-    explicit WW8Fib(sal_uInt8 nVersion = 6, bool bDot = false);
+    explicit WW8Fib(sal_uInt8 nVersion, bool bDot = false);
 
     void WriteHeader(SvStream& rStrm);
     void Write(SvStream& rStrm);

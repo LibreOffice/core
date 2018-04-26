@@ -83,7 +83,7 @@ friend class SdrEditView;
 
 protected:
     void RecalcRects();
-    void copyDataFromSdrObjList(const SdrObjList& rSrcList, SdrModel* pNewModel = nullptr);
+    void copyDataFromSdrObjList(const SdrObjList& rSrcList, SdrModel* pNewModel);
 
 private:
     /// simple ActionChildInserted forwarder to have it on a central place

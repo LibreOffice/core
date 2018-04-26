@@ -51,7 +51,7 @@ public:
                 const SfxItemSet& rCoreSet,
                 bool bNewFrame,
                 const OUString& sResType,
-                bool bFormat     = false,
+                bool bFormat,
                 const OString& sDefPage = OString(),
                 const OUString* pFormatStr  = nullptr);
 
