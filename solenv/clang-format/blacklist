@@ -14175,7 +14175,6 @@ svx/inc/sdr/properties/pageproperties.hxx
 svx/inc/sdr/properties/rectangleproperties.hxx
 svx/inc/sdr/properties/textproperties.hxx
 svx/inc/strings.hxx
-svx/inc/svdglob.hxx
 svx/inc/svdibrow.hxx
 svx/inc/sxallitm.hxx
 svx/inc/sxcikitm.hxx
