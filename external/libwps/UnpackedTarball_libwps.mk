@@ -35,4 +35,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,libwps, \
 endif
 endif
 
+$(eval $(call gb_UnpackedTarball_add_patches,libwps,\
+	external/libwps/0001-avoid-name-clash-with-MultiplanParser-from-libmwaw.patch.1 \
+))
+
 # vim: set noet sw=4 ts=4:

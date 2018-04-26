@@ -1,0 +1,56 @@
+From 9181ad021cf1c200bc80edb9f5a6df5b780be046 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Thu, 26 Apr 2018 14:24:55 +0200
+Subject: [PATCH] avoid name clash with MultiplanParser from libmwaw
+
+---
+ src/lib/Multiplan.cpp | 5 ++++-
+ src/lib/Multiplan.h   | 5 +++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/src/lib/Multiplan.cpp b/src/lib/Multiplan.cpp
+index 278f699..26ceca3 100644
+--- a/src/lib/Multiplan.cpp
++++ b/src/lib/Multiplan.cpp
+@@ -44,7 +44,8 @@
+ 
+ #include "Multiplan.h"
+ 
+-using namespace libwps;
++namespace libwps
++{
+ 
+ //! Internal: namespace to define internal class of MultiplanParser
+ namespace MultiplanParserInternal
+@@ -2912,4 +2913,6 @@ RVNGInputStreamPtr MultiplanParser::decodeStream(RVNGInputStreamPtr input)
+ 	return res;
+ }
+ 
++}
++
+ /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
+diff --git a/src/lib/Multiplan.h b/src/lib/Multiplan.h
+index 87e0565..83c83f2 100644
+--- a/src/lib/Multiplan.h
++++ b/src/lib/Multiplan.h
+@@ -34,6 +34,9 @@
+ 
+ #include "WKSParser.h"
+ 
++namespace libwps
++{
++
+ namespace MultiplanParserInternal
+ {
+ struct State;
+@@ -127,5 +130,7 @@ protected:
+ 	std::shared_ptr<MultiplanParserInternal::State> m_state;
+ };
+ 
++}
++
+ #endif /* WPS4_H */
+ /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
+-- 
+2.14.3
+
