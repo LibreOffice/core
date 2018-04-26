@@ -123,6 +123,16 @@ published service LineDiagram
     /** determines the number of sampling points of a spline
      */
     [optional, property] long SplineResolution;
+
+    /** Set this property to a graphic object which is then used as
+        symbol for all series.
+
+        @since LibreOffice 6.1
+
+        @deprecated - added for backwards compatibility
+        @see ChartSymbolType
+     */
+    [optional, property] com::sun::star::graphic::XGraphic SymbolBitmap;
 };
 
 

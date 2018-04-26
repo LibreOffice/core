@@ -15,7 +15,6 @@
 "ChXDataPoint";"com::sun::star::chart::Chart3DBarProperties#optional";"SolidType"
 "ChXDataPoint";"com::sun::star::chart::ChartDataPointProperties";"DataCaption"
 "ChXDataPoint";"com::sun::star::chart::ChartDataPointProperties";"SymbolType#optional"
-"ChXDataPoint";"com::sun::star::chart::ChartDataPointProperties";"SymbolBitmapURL#optional"
 "ChXDataPoint";"com::sun::star::drawing::FillProperties";"FillStyle"
 "ChXDataPoint";"com::sun::star::drawing::FillProperties";"FillColor"
 "ChXDataPoint";"com::sun::star::drawing::FillProperties";"FillTransparence"

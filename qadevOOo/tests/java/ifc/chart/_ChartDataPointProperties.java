@@ -102,7 +102,27 @@ public class _ChartDataPointProperties extends MultiPropertyTest {
             throw new StatusException("Exception while set property value", e);
         }
 
-        testProperty("SymbolBitmapURL", URLTester);
+        try {
+            oObj.setPropertyValue(
+                "SymbolBitmapURL",
+                utils.getFullTestURL("space-metal.jpg") );
+        } catch(com.sun.star.lang.WrappedTargetException e) {
+            log.println("Exception while set property value");
+            e.printStackTrace(log);
+            throw new StatusException("Exception while set property value", e);
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
+            log.println("Exception while set property value");
+            e.printStackTrace(log);
+            throw new StatusException("Exception while set property value", e);
+        } catch(com.sun.star.beans.PropertyVetoException e) {
+            log.println("Exception while set property value");
+            e.printStackTrace(log);
+            throw new StatusException("Exception while set property value", e);
+        } catch(com.sun.star.beans.UnknownPropertyException e) {
+            log.println("Exception while set property value");
+            e.printStackTrace(log);
+            throw new StatusException("Exception while set property value", e);
+        }
     }
 }
 

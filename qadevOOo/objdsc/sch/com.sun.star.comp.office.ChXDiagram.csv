@@ -61,7 +61,6 @@
 "ChXDiagram";"com::sun::star::drawing::XShape";"setSize()"
 "ChXDiagram";"com::sun::star::chart::LineDiagram";"SymbolType"
 "ChXDiagram";"com::sun::star::chart::LineDiagram";"SymbolSize#optional"
-"ChXDiagram";"com::sun::star::chart::LineDiagram";"SymbolBitmapURL#optional"
 "ChXDiagram";"com::sun::star::chart::LineDiagram";"Lines"
 "ChXDiagram";"com::sun::star::chart::LineDiagram";"SplineType"
 "ChXDiagram";"com::sun::star::chart::LineDiagram";"SplineOrder#optional"
