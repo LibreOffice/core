@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef __com_sun_star_text_CellProperties_idl__
 #define __com_sun_star_text_CellProperties_idl__
 
@@ -26,11 +27,9 @@
 #include <com/sun/star/table/BorderLine.idl>
 #include <com/sun/star/container/XNameContainer.idl>
 #include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
+#include <com/sun/star/graphic/XGraphic.idl>
 
-
-
- module com {  module sun {  module star {  module text {
-
+module com {  module sun {  module star {  module text {
 
 /** service that holds all cell properties of a text table cell in a text document.
 
@@ -58,8 +57,22 @@ published service CellProperties
     [property] com::sun::star::util::Color BackColor;
 
     /** contains the URL to the background graphic.
+
+        @deprecated as of LibreOffice 6.1 - use BackGraphic instead
+
+        Note the new behaviour since it this was deprecated:
+        This property can only be set and only external URLs are
+        supported (no more vnd.sun.star.GraphicObject scheme). When an
+        URL is set, then it will load the graphic and set the BackGraphic
+        property.
      */
     [property] string BackGraphicURL;
+
+    /** contains the graphic object that is displayed as background graphic.
+
+        @since LibreOffice 6.1
+     */
+    [property] com::sun::star::graphic::XGraphic BackGraphic;
 
     /** contains the name of the graphic filter of the background graphic.
      */
