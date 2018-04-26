@@ -365,13 +365,13 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     SwTextFormatColl *pBodyColl = getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE ),
                  *pHeadColl = pBodyColl;
 
-    bool bDfltBorders = 0 != ( rInsTableOpts.mnInsMode & tabopts::DEFAULT_BORDER );
+    bool bDfltBorders( rInsTableOpts.mnInsMode & SwInsertTableFlags::DefaultBorder );
 
-    if( (rInsTableOpts.mnInsMode & tabopts::HEADLINE) && (1 != nRows || !bDfltBorders) )
+    if( (rInsTableOpts.mnInsMode & SwInsertTableFlags::Headline) && (1 != nRows || !bDfltBorders) )
         pHeadColl = getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE_HDLN );
 
     const sal_uInt16 nRowsToRepeat =
-            tabopts::HEADLINE == (rInsTableOpts.mnInsMode & tabopts::HEADLINE) ?
+            SwInsertTableFlags::Headline == (rInsTableOpts.mnInsMode & SwInsertTableFlags::Headline) ?
             rInsTableOpts.mnRowsToRepeat :
             0;
 
@@ -434,7 +434,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
         nWidth *= nCols; // to avoid rounding problems
     }
     pTableFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, nWidth ));
-    if( !(rInsTableOpts.mnInsMode & tabopts::SPLIT_LAYOUT) )
+    if( !(rInsTableOpts.mnInsMode & SwInsertTableFlags::SplitLayout) )
         pTableFormat->SetFormatAttr( SwFormatLayoutSplit( false ));
 
     // Move the hard PageDesc/PageBreak Attributes if needed
@@ -702,7 +702,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     pLineFormat->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ));
     // The Table's SSize is USHRT_MAX
     pTableFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, USHRT_MAX ));
-    if( !(rInsTableOpts.mnInsMode & tabopts::SPLIT_LAYOUT) )
+    if( !(rInsTableOpts.mnInsMode & SwInsertTableFlags::SplitLayout) )
         pTableFormat->SetFormatAttr( SwFormatLayoutSplit( false ));
 
     /* If the first node in the selection is a context node and if it
@@ -732,7 +732,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     SwTable& rNdTable = pTableNd->GetTable();
 
     const sal_uInt16 nRowsToRepeat =
-            tabopts::HEADLINE == (rInsTableOpts.mnInsMode & tabopts::HEADLINE) ?
+            SwInsertTableFlags::Headline == (rInsTableOpts.mnInsMode & SwInsertTableFlags::Headline) ?
             rInsTableOpts.mnRowsToRepeat :
             0;
     rNdTable.SetRowsToRepeat(nRowsToRepeat);
@@ -752,7 +752,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     pTableFormat->SetFormatAttr( SwFormatHoriOrient( 0, eAdjust ) );
     rNdTable.RegisterToFormat(*pTableFormat);
 
-    if( pTAFormat || ( rInsTableOpts.mnInsMode & tabopts::DEFAULT_BORDER) )
+    if( pTAFormat || ( rInsTableOpts.mnInsMode & SwInsertTableFlags::DefaultBorder) )
     {
         sal_uInt8 nBoxArrLen = pTAFormat ? 16 : 4;
         std::unique_ptr< DfltBoxAttrList_t > aBoxFormatArr1;

@@ -823,13 +823,13 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             if( nSlot == FN_CONVERT_TEXT_TO_TABLE ||
                 ( nSlot == FN_CONVERT_TEXT_TABLE && nullptr == rSh.GetTableFormat() ))
                 bToTable = true;
-            SwInsertTableOptions aInsTableOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
+            SwInsertTableOptions aInsTableOpts( SwInsertTableFlags::All, 1 );
             SwTableAutoFormat const* pTAFormat = nullptr;
             std::unique_ptr<SwTableAutoFormatTable> pAutoFormatTable;
             bool bDeleteFormat = true;
             if(pArgs && SfxItemState::SET == pArgs->GetItemState( FN_PARAM_1, true, &pItem))
             {
-                aInsTableOpts.mnInsMode = 0;
+                aInsTableOpts.mnInsMode = SwInsertTableFlags::NONE;
                 // Delimiter
                 OUString sDelim = static_cast< const SfxStringItem* >(pItem)->GetValue();
                 if(!sDelim.isEmpty())
@@ -856,7 +856,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 //WithHeader
                 if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_3, true, &pItem) &&
                             static_cast< const SfxBoolItem* >(pItem)->GetValue())
-                    aInsTableOpts.mnInsMode |= tabopts::HEADLINE;
+                    aInsTableOpts.mnInsMode |= SwInsertTableFlags::Headline;
                 // RepeatHeaderLines
                 if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_4, true, &pItem))
                    aInsTableOpts.mnRowsToRepeat =
@@ -864,11 +864,11 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 //WithBorder
                 if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_5, true, &pItem) &&
                     static_cast< const SfxBoolItem* >(pItem)->GetValue())
-                    aInsTableOpts.mnInsMode |= tabopts::DEFAULT_BORDER;
+                    aInsTableOpts.mnInsMode |= SwInsertTableFlags::DefaultBorder;
                 //DontSplitTable
                 if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_6, true, &pItem) &&
                     !static_cast< const SfxBoolItem* >(pItem)->GetValue() )
-                    aInsTableOpts.mnInsMode |= tabopts::SPLIT_LAYOUT;
+                    aInsTableOpts.mnInsMode |= SwInsertTableFlags::SplitLayout;
             }
             else
             {
@@ -899,10 +899,10 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     {
                         if(pTAFormat)
                             aReq.AppendItem( SfxStringItem( FN_PARAM_2, pTAFormat->GetName()));
-                        aReq.AppendItem( SfxBoolItem ( FN_PARAM_3, 0 != (aInsTableOpts.mnInsMode & tabopts::HEADLINE)));
+                        aReq.AppendItem( SfxBoolItem ( FN_PARAM_3, bool(aInsTableOpts.mnInsMode & SwInsertTableFlags::Headline)));
                         aReq.AppendItem( SfxInt16Item( FN_PARAM_4, static_cast<short>(aInsTableOpts.mnRowsToRepeat) ));
-                        aReq.AppendItem( SfxBoolItem ( FN_PARAM_5, 0 != (aInsTableOpts.mnInsMode & tabopts::DEFAULT_BORDER) ));
-                        aReq.AppendItem( SfxBoolItem ( FN_PARAM_6, !(aInsTableOpts.mnInsMode & tabopts::SPLIT_LAYOUT)));
+                        aReq.AppendItem( SfxBoolItem ( FN_PARAM_5, bool(aInsTableOpts.mnInsMode & SwInsertTableFlags::DefaultBorder) ));
+                        aReq.AppendItem( SfxBoolItem ( FN_PARAM_6, !(aInsTableOpts.mnInsMode & SwInsertTableFlags::SplitLayout)));
                     }
                     aReq.Done();
                 }
@@ -2626,7 +2626,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
         {
             sal_uInt16 nCols = 0;
             sal_uInt16 nRows = 0;
-            SwInsertTableOptions aInsTableOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
+            SwInsertTableOptions aInsTableOpts( SwInsertTableFlags::All, 1 );
             OUString aTableName;
             OUString aAutoName;
             SwTableAutoFormat* pTAFormat = nullptr;
@@ -2664,7 +2664,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 }
 
                 if ( pFlags )
-                    aInsTableOpts.mnInsMode = static_cast<sal_uInt16>(pFlags->GetValue());
+                    aInsTableOpts.mnInsMode = static_cast<SwInsertTableFlags>(pFlags->GetValue());
                 else
                 {
                     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();

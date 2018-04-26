@@ -587,7 +587,7 @@ SwInsertConfig::SwInsertConfig(bool bWeb) :
     pOLEMiscOpt(nullptr),
     bInsWithCaption( false ),
     bCaptionOrderNumberingFirst( false ),
-    aInsTableOpts(0,0),
+    aInsTableOpts(SwInsertTableFlags::NONE,0),
     bIsWeb(bWeb)
 {
     aGlobalNames[GLOB_NAME_CALC   ] = SvGlobalName(SO3_SC_CLASSID);
@@ -656,16 +656,16 @@ void SwInsertConfig::ImplCommit()
         switch(nProp)
         {
             case INS_PROP_TABLE_HEADER:
-                pValues[nProp] <<= 0 != (aInsTableOpts.mnInsMode & tabopts::HEADLINE);
+                pValues[nProp] <<= bool(aInsTableOpts.mnInsMode & SwInsertTableFlags::Headline);
             break;//"Table/Header",
             case INS_PROP_TABLE_REPEATHEADER:
                 pValues[nProp] <<= aInsTableOpts.mnRowsToRepeat > 0;
             break;//"Table/RepeatHeader",
             case INS_PROP_TABLE_BORDER:
-                pValues[nProp] <<= 0 != (aInsTableOpts.mnInsMode & tabopts::DEFAULT_BORDER );
+                pValues[nProp] <<= bool(aInsTableOpts.mnInsMode & SwInsertTableFlags::DefaultBorder);
             break;//"Table/Border",
             case INS_PROP_TABLE_SPLIT:
-                pValues[nProp] <<= 0 != (aInsTableOpts.mnInsMode & tabopts::SPLIT_LAYOUT);
+                pValues[nProp] <<= bool(aInsTableOpts.mnInsMode & SwInsertTableFlags::SplitLayout);
             break;//"Table/Split",
             case INS_PROP_CAP_AUTOMATIC:
                 pValues[nProp] <<= bInsWithCaption;
@@ -890,7 +890,7 @@ void SwInsertConfig::Load()
     else if (!bIsWeb)
         return;
 
-    sal_uInt16 nInsTableFlags = 0;
+    SwInsertTableFlags nInsTableFlags = SwInsertTableFlags::NONE;
     for (sal_Int32 nProp = 0; nProp < aNames.getLength(); ++nProp)
     {
         if (pValues[nProp].hasValue())
@@ -901,7 +901,7 @@ void SwInsertConfig::Load()
                 case INS_PROP_TABLE_HEADER:
                 {
                     if(bBool)
-                        nInsTableFlags|= tabopts::HEADLINE;
+                        nInsTableFlags |= SwInsertTableFlags::Headline;
                 }
                 break;//"Table/Header",
                 case INS_PROP_TABLE_REPEATHEADER:
@@ -913,13 +913,13 @@ void SwInsertConfig::Load()
                 case INS_PROP_TABLE_BORDER:
                 {
                     if(bBool)
-                        nInsTableFlags|= tabopts::DEFAULT_BORDER;
+                        nInsTableFlags |= SwInsertTableFlags::DefaultBorder;
                 }
                 break;//"Table/Border",
                 case INS_PROP_TABLE_SPLIT:
                 {
                     if(bBool)
-                        nInsTableFlags|= tabopts::SPLIT_LAYOUT;
+                        nInsTableFlags |= SwInsertTableFlags::SplitLayout;
                 }
                 break;//"Table/Split",
                 case INS_PROP_CAP_AUTOMATIC:

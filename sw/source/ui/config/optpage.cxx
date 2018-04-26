@@ -1171,19 +1171,19 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
         bRet = true;
     }
 
-    SwInsertTableOptions aInsOpts( 0, 0 );
+    SwInsertTableOptions aInsOpts( SwInsertTableFlags::NONE, 0 );
 
     if (m_pHeaderCB->IsChecked())
-        aInsOpts.mnInsMode |= tabopts::HEADLINE;
+        aInsOpts.mnInsMode |= SwInsertTableFlags::Headline;
 
     if (m_pRepeatHeaderCB->IsEnabled() )
         aInsOpts.mnRowsToRepeat = m_pRepeatHeaderCB->IsChecked()? 1 : 0;
 
     if (!m_pDontSplitCB->IsChecked())
-        aInsOpts.mnInsMode |= tabopts::SPLIT_LAYOUT;
+        aInsOpts.mnInsMode |= SwInsertTableFlags::SplitLayout;
 
     if (m_pBorderCB->IsChecked())
-        aInsOpts.mnInsMode |= tabopts::DEFAULT_BORDER;
+        aInsOpts.mnInsMode |= SwInsertTableFlags::DefaultBorder;
 
     if (m_pHeaderCB->IsValueChangedFromSaved() ||
         m_pRepeatHeaderCB->IsValueChangedFromSaved() ||
@@ -1252,12 +1252,12 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
     }
 
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTableFlags(m_bHTMLMode);
-    const sal_uInt16 nInsTableFlags = aInsOpts.mnInsMode;
+    const SwInsertTableFlags nInsTableFlags = aInsOpts.mnInsMode;
 
-    m_pHeaderCB->Check(0 != (nInsTableFlags & tabopts::HEADLINE));
+    m_pHeaderCB->Check(bool(nInsTableFlags & SwInsertTableFlags::Headline));
     m_pRepeatHeaderCB->Check((!m_bHTMLMode) && (aInsOpts.mnRowsToRepeat > 0));
-    m_pDontSplitCB->Check(!(nInsTableFlags & tabopts::SPLIT_LAYOUT));
-    m_pBorderCB->Check(0 != (nInsTableFlags & tabopts::DEFAULT_BORDER));
+    m_pDontSplitCB->Check(!(nInsTableFlags & SwInsertTableFlags::SplitLayout));
+    m_pBorderCB->Check(bool(nInsTableFlags & SwInsertTableFlags::DefaultBorder));
 
     m_pNumFormattingCB->Check(pModOpt->IsInsTableFormatNum(m_bHTMLMode));
     m_pNumFormatFormattingCB->Check(pModOpt->IsInsTableChangeNumFormat(m_bHTMLMode));

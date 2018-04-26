@@ -20,22 +20,27 @@
 #define INCLUDED_SW_INC_ITABENUM_HXX
 
 #include <sal/types.h>
+#include <o3tl/typed_flags_set.hxx>
 
-namespace tabopts
+enum class SwInsertTableFlags
 {
-    const sal_uInt16 DEFAULT_BORDER     = 0x01;
-    const sal_uInt16 HEADLINE           = 0x02;
-    const sal_uInt16 SPLIT_LAYOUT       = 0x08;
-    const sal_uInt16 HEADLINE_NO_BORDER = HEADLINE | SPLIT_LAYOUT;
-    const sal_uInt16 ALL_TBL_INS_ATTR   = DEFAULT_BORDER | HEADLINE | SPLIT_LAYOUT;
+    NONE               = 0x00,
+    DefaultBorder      = 0x01,
+    Headline           = 0x02,
+    SplitLayout        = 0x08,
+    HeadlineNoBorder   = Headline | SplitLayout,
+    All   = DefaultBorder | Headline | SplitLayout
+};
+namespace o3tl {
+    template<> struct typed_flags<SwInsertTableFlags> : is_typed_flags<SwInsertTableFlags, 0x0b> {};
 }
 
 struct SwInsertTableOptions
 {
-    sal_uInt16 mnInsMode;
+    SwInsertTableFlags mnInsMode;
     sal_uInt16 mnRowsToRepeat;
 
-    SwInsertTableOptions( sal_uInt16 nInsMode, sal_uInt16 nRowsToRepeat ) :
+    SwInsertTableOptions( SwInsertTableFlags nInsMode, sal_uInt16 nRowsToRepeat ) :
         mnInsMode( nInsMode ), mnRowsToRepeat( nRowsToRepeat ) {};
 };
 

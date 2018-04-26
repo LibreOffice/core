@@ -2061,7 +2061,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     }
 
     SwTable* pNewTable = const_cast<SwTable*>(pInsDoc->InsertTable(
-            SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ),
+            SwInsertTableOptions( SwInsertTableFlags::HeadlineNoBorder, 1 ),
             rPos, 1, 1, GetFrameFormat()->GetHoriOrient().GetHoriOrient(),
             nullptr, nullptr, false, IsNewModel() ));
     if( !pNewTable )

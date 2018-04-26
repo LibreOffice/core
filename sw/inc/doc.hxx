@@ -1123,7 +1123,7 @@ public:
        propagation.
        false: do not propagate
     */
-    const SwTable* InsertTable( const SwInsertTableOptions& rInsTableOpts,  // HEADLINE_NO_BORDER
+    const SwTable* InsertTable( const SwInsertTableOptions& rInsTableOpts,  // HeadlineNoBorder
                                 const SwPosition& rPos, sal_uInt16 nRows,
                                 sal_uInt16 nCols, short eAdjust,
                                 const SwTableAutoFormat* pTAFormat = nullptr,
@@ -1136,7 +1136,7 @@ public:
     inline const SwTableNode* IsIdxInTable( const SwNodeIndex& rIdx ) const;
 
     // Create a balanced table out of the selected range.
-    const SwTable* TextToTable( const SwInsertTableOptions& rInsTableOpts, // HEADLINE_NO_BORDER,
+    const SwTable* TextToTable( const SwInsertTableOptions& rInsTableOpts, // HeadlineNoBorder,
                                 const SwPaM& rRange, sal_Unicode cCh,
                                 short eAdjust,
                                 const SwTableAutoFormat* );

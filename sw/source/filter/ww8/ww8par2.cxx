@@ -2389,7 +2389,7 @@ void WW8TabDesc::CreateSwTable()
     // The number of rows is the count of bands because (identically)
     // rows of a band can be duplicated easy.
     m_pTable = m_pIo->m_rDoc.InsertTable(
-            SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 0 ),
+            SwInsertTableOptions( SwInsertTableFlags::HeadlineNoBorder, 0 ),
             *m_xTmpPos, m_nBands, m_nDefaultSwCols, m_eOri );
 
     OSL_ENSURE(m_pTable && m_pTable->GetFrameFormat(), "insert table failed");

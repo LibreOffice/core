@@ -666,7 +666,7 @@ bool SwAutoFormat::DoTable()
         DelEmptyLine();
         SwNodeIndex aIdx( m_aDelPam.GetPoint()->nNode );
         m_aDelPam.Move( fnMoveForward );
-        m_pDoc->InsertTable( SwInsertTableOptions( tabopts::ALL_TBL_INS_ATTR , 1 ),
+        m_pDoc->InsertTable( SwInsertTableOptions( SwInsertTableFlags::All , 1 ),
                            *m_aDelPam.GetPoint(), 1, nColCnt, eHori,
                            nullptr, &aPosArr );
         m_aDelPam.GetPoint()->nNode = aIdx;

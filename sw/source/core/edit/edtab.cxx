@@ -225,7 +225,7 @@ void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTableOpts,
         GetDoc()->getIDocumentContentOperations().SplitNode( *pPos, false );
     }
 
-    const SwInsertTableOptions aInsTableOpts( rInsTableOpts.mnInsMode | tabopts::DEFAULT_BORDER,
+    const SwInsertTableOptions aInsTableOpts( rInsTableOpts.mnInsMode | SwInsertTableFlags::DefaultBorder,
                                             rInsTableOpts.mnRowsToRepeat );
     SwTable* pTable = const_cast<SwTable*>(GetDoc()->InsertTable( aInsTableOpts, *pPos,
                                                      nRows, nCols, css::text::HoriOrientation::FULL ));
