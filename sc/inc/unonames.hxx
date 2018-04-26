@@ -405,6 +405,7 @@
 #define SC_UNO_PAGE_BACKTRANS       "BackTransparent"
 #define SC_UNO_PAGE_GRAPHICFILT     "BackGraphicFilter"
 #define SC_UNO_PAGE_GRAPHICLOC      "BackGraphicLocation"
+#define SC_UNO_PAGE_GRAPHICURL      "BackGraphicURL"
 #define SC_UNO_PAGE_GRAPHIC         "BackGraphic"
 #define SC_UNO_PAGE_LEFTBORDER      SC_UNONAME_LEFTBORDER
 #define SC_UNO_PAGE_RIGHTBORDER     SC_UNONAME_RIGHTBORDER
@@ -452,6 +453,7 @@
 #define SC_UNO_PAGE_HDRGRFFILT      "HeaderBackGraphicFilter"
 #define SC_UNO_PAGE_HDRGRFLOC       "HeaderBackGraphicLocation"
 #define SC_UNO_PAGE_HDRGRF          "HeaderBackGraphic"
+#define SC_UNO_PAGE_HDRGRFURL       "HeaderBackGraphicURL"
 #define SC_UNO_PAGE_HDRLEFTBOR      "HeaderLeftBorder"
 #define SC_UNO_PAGE_HDRRIGHTBOR     "HeaderRightBorder"
 #define SC_UNO_PAGE_HDRBOTTBOR      "HeaderBottomBorder"
@@ -474,6 +476,7 @@
 #define SC_UNO_PAGE_FTRGRFFILT      "FooterBackGraphicFilter"
 #define SC_UNO_PAGE_FTRGRFLOC       "FooterBackGraphicLocation"
 #define SC_UNO_PAGE_FTRGRF          "FooterBackGraphic"
+#define SC_UNO_PAGE_FTRGRFURL       "FooterBackGraphicURL"
 #define SC_UNO_PAGE_FTRLEFTBOR      "FooterLeftBorder"
 #define SC_UNO_PAGE_FTRRIGHTBOR     "FooterRightBorder"
 #define SC_UNO_PAGE_FTRBOTTBOR      "FooterBottomBorder"

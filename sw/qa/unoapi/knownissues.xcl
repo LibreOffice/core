@@ -63,6 +63,7 @@ sw.SwXTextPortion::com::sun::star::beans::XPropertySet
 sw.SwXTextRange::com::sun::star::beans::XPropertySet
 sw.SwXTextViewCursor::com::sun::star::beans::XPropertySet
 sw.SwXTextCursor::com::sun::star::beans::XPropertySet
+sw.SwXTextCursor::com::sun::star::beans::XMultiPropertyStates
 
 ### i85585 ###
 sw.SwXTextSection::com::sun::star::text::TextSection
@@ -101,6 +102,7 @@ sw.SwXTextCursor::com::sun::star::document::XDocumentInsertable
 ### i85595 ###
 sw.ParagraphStyle::com::sun::star::beans::XMultiPropertySet
 sw.ParagraphStyle::com::sun::star::beans::XPropertySet
+sw.ParagraphStyle::com::sun::star::beans::XMultiPropertyStates
 
 ### i85596 ###
 sw.SwXFieldMaster::com::sun::star::text::TextFieldMaster
@@ -126,6 +128,8 @@ sw.SwAccessibleDocumentPageView::com::sun::star::accessibility::XAccessibleEvent
 ### i87978 ###
 sw.DocumentSettings::com::sun::star::beans::XPropertySet
 sw.ConditionalParagraphStyle::com::sun::star::beans::XPropertySet
+sw.ConditionalParagraphStyle::com::sun::star::beans::XMultiPropertySet
+sw.ConditionalParagraphStyle::com::sun::star::beans::XMultiPropertyStates
 
 ### i88242 ###
 sw.SwXTextDocument::com::sun::star::view::XPrintable
@@ -168,6 +172,8 @@ sw.SwXTextDocument::com::sun::star::document::XEventBroadcaster
 
 ### i111186 ###
 sw.PageStyle::com::sun::star::beans::XPropertySet
+sw.PageStyle::com::sun::star::beans::XMultiPropertySet
+sw.PageStyle::com::sun::star::beans::XMultiPropertyStates
 
 ### i111218 ###
 sw.SwAccessibleParagraphView::com::sun::star::accessibility::XAccessibleEventBroadcaster
