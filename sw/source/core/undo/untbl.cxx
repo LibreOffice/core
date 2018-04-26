@@ -2284,7 +2284,7 @@ public:
     RedlineFlagsInternGuard(
         SwDoc& rDoc,                      // change mode of this document
         RedlineFlags eNewRedlineFlags,    // new redline mode
-        RedlineFlags eRedlineFlagsMask = RedlineFlags::On | RedlineFlags::Ignore /*change only bits set in this mask*/);
+        RedlineFlags eRedlineFlagsMask   /*change only bits set in this mask*/);
 
     ~RedlineFlagsInternGuard();
 };

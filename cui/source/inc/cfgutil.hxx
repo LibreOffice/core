@@ -201,7 +201,7 @@ public:
     SvxScriptSelectorDialog (
         vcl::Window* pParent,
         bool bShowSlots,
-        const css::uno::Reference< css::frame::XFrame >& xFrame = nullptr
+        const css::uno::Reference< css::frame::XFrame >& xFrame
     );
     virtual ~SvxScriptSelectorDialog() override;
     virtual void dispose() override;

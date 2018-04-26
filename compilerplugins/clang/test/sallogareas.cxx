@@ -45,14 +45,6 @@ int main()
     {
         DBG_UNHANDLED_EXCEPTION("xmloff");
     }
-    try
-    {
-        func1();
-    }
-    catch (std::exception const&)
-    {
-        DBG_UNHANDLED_EXCEPTION(); // expected-error {{missing log area [loplugin:sallogareas]}}
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

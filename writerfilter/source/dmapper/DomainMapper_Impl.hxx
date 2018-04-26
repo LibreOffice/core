@@ -877,7 +877,7 @@ public:
     /// If the current paragraph has a numbering style associated, this method returns its character style (part of the numbering rules)
     css::uno::Reference<css::beans::XPropertySet> GetCurrentNumberingCharStyle();
     /// If the current paragraph has a numbering style associated, this method returns its numbering rules
-    css::uno::Reference<css::container::XIndexAccess> GetCurrentNumberingRules(sal_Int32* pListLevel = nullptr);
+    css::uno::Reference<css::container::XIndexAccess> GetCurrentNumberingRules(sal_Int32* pListLevel);
 
     /**
      Used for attributes/sprms which cannot be evaluated immediately (e.g. they depend

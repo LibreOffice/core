@@ -45,7 +45,7 @@ public:
 
     virtual void PopupModeEnd() override;
 
-    void hideSeparators(bool bHide = true);
+    void hideSeparators(bool bHide);
 
     void dispose() override;
 };

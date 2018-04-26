@@ -630,7 +630,7 @@ public:
                             const JobSetup & rSetup,
                             sal_uInt16 nAspect = ASPECT_CONTENT );
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,
-                          sal_uInt16 nAspect = ASPECT_CONTENT ) = 0;
+                          sal_uInt16 nAspect ) = 0;
 
 
     virtual void    FillClass( SvGlobalName * pClassName,

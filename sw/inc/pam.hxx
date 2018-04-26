@@ -185,13 +185,13 @@ public:
                 bool bSearchInNotes,
                 utl::TextSearch& rSText,
                 SwMoveFnCollection const & fnMove,
-                const SwPaM *pPam =nullptr, bool bInReadOnly = false);
+                const SwPaM *pPam, bool bInReadOnly = false);
     bool Find(  const SwFormat& rFormat,
                 SwMoveFnCollection const & fnMove,
-                const SwPaM *pPam =nullptr, bool bInReadOnly = false);
+                const SwPaM *pPam, bool bInReadOnly = false);
     bool Find(  const SfxPoolItem& rAttr, bool bValue,
                 SwMoveFnCollection const & fnMove,
-                const SwPaM *pPam =nullptr, bool bInReadOnly = false );
+                const SwPaM *pPam, bool bInReadOnly = false );
     bool Find(  const SfxItemSet& rAttr, bool bNoColls,
                 SwMoveFnCollection const & fnMove,
                 const SwPaM *pPam, bool bInReadOnly, bool bMoveFirst );
