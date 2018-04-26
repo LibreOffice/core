@@ -31,10 +31,9 @@
 #include <com/sun/star/style/BreakType.idl>
 #include <com/sun/star/container/XNameContainer.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/graphic/XGraphic.idl>
 
-
- module com {  module sun {  module star {  module style {
-
+module com {  module sun {  module star {  module style {
 
 /** describes the style of paragraphs.
  */
@@ -63,9 +62,16 @@ published service ParagraphProperties
 
 
     /** contains the value of a link for the background graphic of a paragraph.
+
+        @deprecated as of LibreOffice 6.1 - use ParaBackGraphic instead
+
+        Note the new behaviour since it this was deprecated:
+        This property can only be set and only external URLs are
+        supported (no more vnd.sun.star.GraphicObject scheme). When an
+        URL is set, then it will load the graphic and set the ParaBackGraphic
+        property.
      */
     [optional, property] string ParaBackGraphicURL;
-
 
     /** contains the name of the graphic filter for the background graphic of a paragraph.
      */
@@ -379,6 +385,12 @@ published service ParagraphProperties
             <p>Values [1..10] indicates that the paragraph belongs to the corresponding outline level.</p>
          */
         [optional, property] short OutlineLevel;
+
+        /** contains the graphic for the background of a paragraph.
+
+            @since LibreOffice 6.1
+         */
+        [optional, property] com::sun::star::graphic::XGraphic ParaBackGraphic;
 };
 
 
