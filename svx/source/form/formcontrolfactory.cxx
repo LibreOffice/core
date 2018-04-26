@@ -296,6 +296,7 @@ namespace svxform
             "ParaBackColor",
             "ParaBackTransparent",
             "ParaBackGraphic",
+            "ParaBackGraphicURL",
             "ParaBackGraphicFilter",
             "ParaBackGraphicLocation",
             "ParaLastLineAdjust",
