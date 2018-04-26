@@ -53,6 +53,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,staroffice,\
 	UnpackedTarball/libstaroffice/src/lib/STOFFInputStream \
 	UnpackedTarball/libstaroffice/src/lib/STOFFList \
 	UnpackedTarball/libstaroffice/src/lib/STOFFListener \
+	UnpackedTarball/libstaroffice/src/lib/STOFFMathToMMLConverter \
 	UnpackedTarball/libstaroffice/src/lib/STOFFOLEParser \
 	UnpackedTarball/libstaroffice/src/lib/STOFFPageSpan \
 	UnpackedTarball/libstaroffice/src/lib/STOFFParagraph \
@@ -92,6 +93,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,staroffice,\
 	UnpackedTarball/libstaroffice/src/lib/StarObject \
 	UnpackedTarball/libstaroffice/src/lib/StarObjectChart \
 	UnpackedTarball/libstaroffice/src/lib/StarObjectDraw \
+	UnpackedTarball/libstaroffice/src/lib/StarObjectMath \
 	UnpackedTarball/libstaroffice/src/lib/StarObjectModel \
 	UnpackedTarball/libstaroffice/src/lib/StarObjectNumericRuler \
 	UnpackedTarball/libstaroffice/src/lib/StarObjectPageStyle \
