@@ -1426,6 +1426,10 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
         {
             //don't call InputChanged for CommandEventId::Swipe
         }
+        else if ( nCommand == CommandEventId::LongPress )
+        {
+            //don't call InputChanged for CommandEventId::LongPress
+        }
         else if ( nCommand == CommandEventId::ModKeyChange )
         {
             //pass alt press/release to parent impl
