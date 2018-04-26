@@ -27,6 +27,7 @@
 #include <glib.h>
 #include <osl/module.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
 #include "shutdownicon.hxx"
 
@@ -224,7 +225,7 @@ static void populate_menu( GtkWidget *pMenu )
         add_item (pMenuShell, MATH_URL, nullptr,
                   SV_ICON_ID_FORMULA, G_CALLBACK( open_url_cb ));
 
-    OUString aULabel = ShutdownIcon::GetResString(STR_QUICKSTART_FROMTEMPLATE);
+    OUString aULabel = SfxResId(STR_QUICKSTART_FROMTEMPLATE);
     add_item (pMenuShell, "dummy", &aULabel,
               SV_ICON_ID_TEMPLATE, G_CALLBACK( open_template_cb ));
 
@@ -235,7 +236,7 @@ static void populate_menu( GtkWidget *pMenu )
 
     pOpenMenuItem = add_image_menu_item
         (pMenuShell, GTK_STOCK_OPEN,
-         ShutdownIcon::GetResString(STR_QUICKSTART_FILEOPEN),
+         SfxResId(STR_QUICKSTART_FILEOPEN),
          G_CALLBACK( open_file_cb ));
 
 
@@ -244,7 +245,7 @@ static void populate_menu( GtkWidget *pMenu )
 
     pDisableMenuItem = add_image_menu_item
         ( pMenuShell, GTK_STOCK_CLOSE,
-          ShutdownIcon::GetResString(STR_QUICKSTART_PRELAUNCH_UNX),
+          SfxResId(STR_QUICKSTART_PRELAUNCH_UNX),
           G_CALLBACK( systray_disable_cb ) );
 
     pMenuItem = gtk_separator_menu_item_new();
@@ -252,7 +253,7 @@ static void populate_menu( GtkWidget *pMenu )
 
     pExitMenuItem = add_image_menu_item
         ( pMenuShell, GTK_STOCK_QUIT,
-          ShutdownIcon::GetResString(STR_QUICKSTART_EXIT),
+          SfxResId(STR_QUICKSTART_EXIT),
           G_CALLBACK( exit_quickstarter_cb ) );
 
     gtk_widget_show_all( pMenu );
@@ -324,7 +325,7 @@ void plugin_init_sys_tray()
     ShutdownIcon *pShutdownIcon = ShutdownIcon::getInstance();
 
     aLabel = OUStringToOString (
-            ShutdownIcon::GetResString(STR_QUICKSTART_TIP),
+            SfxResId(STR_QUICKSTART_TIP),
             RTL_TEXTENCODING_UTF8 );
 
     pTrayIcon = gtk_status_icon_new_from_icon_name ("libreoffice-startcenter");
