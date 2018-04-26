@@ -300,11 +300,6 @@ void ShutdownIcon::FromTemplate()
     }
 }
 
-OUString ShutdownIcon::GetResString(const char* id)
-{
-    return SfxResId(id);
-}
-
 OUString ShutdownIcon::GetUrlDescription( const OUString& aUrl )
 {
     ::SolarMutexGuard aGuard;
