@@ -211,6 +211,12 @@ DECLARE_RTFIMPORT_TEST(testN695479, "n695479.rtf")
     CPPUNIT_ASSERT(bDrawFound);
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf117246, "tdf117246.rtf")
+{
+    // This was 2, all but the last \page was lost.
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo42465, "fdo42465.rtf")
 {
     CPPUNIT_ASSERT_EQUAL(3, getLength());
