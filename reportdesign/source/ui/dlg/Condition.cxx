@@ -128,7 +128,7 @@ Condition::Condition( vcl::Window* _pParent, IConditionalFormatAction& _rAction,
     get(m_pAddCondition, "addButton");
     get(m_pRemoveCondition, "removeButton");
 
-    m_pActions->SetStyle(m_pActions->GetStyle()|WB_LINESPACING);
+    m_pActions->SetLineSpacing(true);
     m_pCondLHS->GrabFocus();
 
     m_pConditionType->SetSelectHdl( LINK( this, Condition, OnTypeSelected ) );

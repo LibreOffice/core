@@ -373,7 +373,7 @@ void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext)
         }
     }
 
-    if (mnWinStyle & WB_LINESPACING)
+    if (mbLineSpacing)
     {
         if (mbHorz)
         {
@@ -691,7 +691,7 @@ Size ToolBox::ImplCalcSize( ImplToolItems::size_type nCalcLines, sal_uInt16 nCal
             else
                 aSize.setHeight( nCalcLines * mnMaxItemHeight );
 
-            if ( mnWinStyle & WB_LINESPACING )
+            if ( mbLineSpacing )
                 aSize.AdjustHeight((nCalcLines-1)*TB_LINESPACING );
 
             if ( mnWinStyle & WB_BORDER )
@@ -709,7 +709,7 @@ Size ToolBox::ImplCalcSize( ImplToolItems::size_type nCalcLines, sal_uInt16 nCal
         {
             aSize.setWidth( nCalcLines * mnMaxItemWidth );
 
-            if ( mnWinStyle & WB_LINESPACING )
+            if ( mbLineSpacing )
                 aSize.AdjustWidth((nCalcLines-1)*TB_LINESPACING );
 
             if ( mnWinStyle & WB_BORDER )
@@ -882,7 +882,7 @@ ToolBox::ImplToolItems::size_type ToolBox::ImplCalcLines( long nToolSize ) const
     if ( mnWinStyle & WB_BORDER )
         nToolSize -= TB_BORDER_OFFSET2*2;
 
-    if ( mnWinStyle & WB_LINESPACING )
+    if ( mbLineSpacing )
     {
         nLineHeight += TB_LINESPACING;
         nToolSize += TB_LINESPACING;
@@ -1133,6 +1133,7 @@ void ToolBox::ImplInitToolBoxData()
     mbIsKeyEvent = false;
     mbChangingHighlight = false;
     mbImagesMirrored  = false;
+    mbLineSpacing     = false;
     meButtonType      = ButtonType::SYMBOLONLY;
     meAlign           = WindowAlign::Top;
     meDockAlign       = WindowAlign::Top;
@@ -1875,7 +1876,7 @@ Size ToolBox::ImplGetOptimalFloatingSize()
 
     aSz.setHeight( nBorderY + nLineHeight * nLines );
     // line space when more than one line
-    if ( mnWinStyle & WB_LINESPACING )
+    if ( mbLineSpacing )
         aSz.AdjustHeight((nLines-1)*TB_LINESPACING );
 
     aSz.setWidth( nBorderX + maxX );
@@ -2210,7 +2211,7 @@ void ToolBox::ImplFormat( bool bResize )
                         if ( mbHorz )
                         {
                             nX = nLeft;
-                            if ( mnWinStyle & WB_LINESPACING )
+                            if ( mbLineSpacing )
                                 nY += nLineSize+TB_LINESPACING;
                             else
                                 nY += nLineSize;
@@ -2218,7 +2219,7 @@ void ToolBox::ImplFormat( bool bResize )
                         else
                         {
                             nY = nTop;
-                            if ( mnWinStyle & WB_LINESPACING )
+                            if ( mbLineSpacing )
                                 nX += nLineSize+TB_LINESPACING;
                             else
                                 nX += nLineSize;

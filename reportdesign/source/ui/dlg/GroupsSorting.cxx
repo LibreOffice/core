@@ -845,7 +845,7 @@ OGroupsSortingDialog::OGroupsSortingDialog(vcl::Window* _pParent, bool _bReadOnl
 
     m_pHelpWindow->SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
 
-    m_pToolBox->SetStyle(m_pToolBox->GetStyle()|WB_LINESPACING);
+    m_pToolBox->SetLineSpacing(true);
     m_pToolBox->SetSelectHdl(LINK(this, OGroupsSortingDialog, OnFormatAction));
 
     checkButtons(0);
