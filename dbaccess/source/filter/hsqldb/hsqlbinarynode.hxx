@@ -57,7 +57,8 @@ public:
      * @param rInput input stream where the row should be read from.
      */
     std::vector<css::uno::Any> readRow(HsqlRowInputStream& rInput,
-                                       const std::vector<ColumnDefinition>& aColTypes);
+                                       const std::vector<ColumnDefinition>& aColTypes,
+                                       sal_Int32 nIndexCount);
 };
 }
 
