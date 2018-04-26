@@ -933,8 +933,8 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         // Standard is handled already in applyDefaults().
                         if (sConvertedStyleName != "Standard")
                         {
-                            StyleSheetTable_Impl::SetPropertiesToDefault(xStyle);
-
+                            if (sConvertedStyleName != "Text body")
+                                StyleSheetTable_Impl::SetPropertiesToDefault(xStyle);
                             // resolve import conflicts with built-in styles (only if normal style has been defined)
                             if( m_pImpl->m_bHasImportedDefaultParaStyle
                                 && pEntry->sBaseStyleIdentifier.isEmpty()
