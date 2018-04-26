@@ -38,6 +38,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <vcl/GraphicLoader.hxx>
 
 #include <svx/svdpool.hxx>
 
@@ -1363,6 +1364,21 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
         break;
     }
 
+    case OWN_ATTR_GRAPHIC_URL:
+    {
+        OUString aURL;
+        if (rValue >>= aURL)
+        {
+            Graphic aGraphic = vcl::graphic::loadFromURL(aURL);
+            if (aGraphic)
+            {
+                static_cast<SdrGrafObj*>(GetSdrObject())->SetGraphic(aGraphic);
+                bOk = true;
+            }
+        }
+        break;
+    }
+
     case OWN_ATTR_VALUE_GRAPHIC:
     {
         Reference< graphic::XGraphic > xGraphic( rValue, uno::UNO_QUERY );
@@ -1528,6 +1544,12 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
         const OUString  aStreamURL( static_cast<SdrGrafObj*>( GetSdrObject() )->GetGrafStreamURL() );
         if( !aStreamURL.isEmpty() )
             rValue <<= aStreamURL;
+        break;
+    }
+
+    case OWN_ATTR_GRAPHIC_URL:
+    {
+        throw uno::RuntimeException("Getting from this property is not unsupported");
         break;
     }
 
