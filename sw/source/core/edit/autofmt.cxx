@@ -1802,9 +1802,9 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
 void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
 {
     SvxAutoCorrect* pATst = SvxAutoCorrCfg::Get().GetAutoCorrect();
-    long aSvxFlags = pATst->GetFlags( );
-    bool bReplaceQuote = ( aSvxFlags & ChgQuotes ) > 0;
-    bool bReplaceSglQuote = ( aSvxFlags & ChgSglQuotes ) > 0;
+    ACFlags aSvxFlags = pATst->GetFlags( );
+    bool bReplaceQuote( aSvxFlags & ACFlags::ChgQuotes );
+    bool bReplaceSglQuote( aSvxFlags & ACFlags::ChgSglQuotes );
 
     if( m_aFlags.bAFormatByInput ||
         (!m_aFlags.bAutoCorrect && !bReplaceQuote && !bReplaceSglQuote &&

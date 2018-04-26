@@ -507,7 +507,7 @@ void Test::testAutocorrect()
         bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.SetAutoCorrFlag(ChgQuotes, true);
+        aAutoCorrect.SetAutoCorrFlag(ACFlags::ChgQuotes, true);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
         fprintf(stderr, "text is %x\n", aFoo.getResult()[aFoo.getResult().getLength() - 1]);
 

@@ -2366,10 +2366,10 @@ KEYINPUT_CHECKTABLE:
                 const bool bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
                 if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || rSh.IsNbspRunNext() ) &&
                         pACfg->IsAutoFormatByInput() &&
-                    (( pACorr->IsAutoCorrFlag( ChgWeightUnderl ) &&
+                    (( pACorr->IsAutoCorrFlag( ACFlags::ChgWeightUnderl ) &&
                         ( '*' == aCh || '_' == aCh ) ) ||
-                     ( pACorr->IsAutoCorrFlag( ChgQuotes ) && ('\"' == aCh ))||
-                     ( pACorr->IsAutoCorrFlag( ChgSglQuotes ) && ( '\'' == aCh))))
+                     ( pACorr->IsAutoCorrFlag( ACFlags::ChgQuotes ) && ('\"' == aCh ))||
+                     ( pACorr->IsAutoCorrFlag( ACFlags::ChgSglQuotes ) && ( '\'' == aCh))))
                 {
                     FlushInBuffer();
                     rSh.AutoCorrect( *pACorr, aCh );
@@ -2378,10 +2378,10 @@ KEYINPUT_CHECKTABLE:
                 }
                 else if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || rSh.IsNbspRunNext() ) &&
                         pACfg->IsAutoFormatByInput() &&
-                    pACorr->IsAutoCorrFlag( CapitalStartSentence | CapitalStartWord |
-                                            ChgOrdinalNumber | AddNonBrkSpace |
-                                            ChgToEnEmDash | SetINetAttr |
-                                            Autocorrect ) &&
+                    pACorr->IsAutoCorrFlag( ACFlags::CapitalStartSentence | ACFlags::CapitalStartWord |
+                                            ACFlags::ChgOrdinalNumber | ACFlags::AddNonBrkSpace |
+                                            ACFlags::ChgToEnEmDash | ACFlags::SetINetAttr |
+                                            ACFlags::Autocorrect ) &&
                     '\"' != aCh && '\'' != aCh && '*' != aCh && '_' != aCh
                     )
                 {
@@ -2412,10 +2412,10 @@ KEYINPUT_CHECKTABLE:
         case SwKeyState::CheckAutoCorrect:
         {
             if( pACorr && pACfg->IsAutoFormatByInput() &&
-                pACorr->IsAutoCorrFlag( CapitalStartSentence | CapitalStartWord |
-                                        ChgOrdinalNumber |
-                                        ChgToEnEmDash | SetINetAttr |
-                                        Autocorrect ) &&
+                pACorr->IsAutoCorrFlag( ACFlags::CapitalStartSentence | ACFlags::CapitalStartWord |
+                                        ACFlags::ChgOrdinalNumber |
+                                        ACFlags::ChgToEnEmDash | ACFlags::SetINetAttr |
+                                        ACFlags::Autocorrect ) &&
                 !rSh.HasReadonlySel() )
             {
                 FlushInBuffer();
@@ -5293,8 +5293,8 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
                     SvxAutoCorrect* pACorr = rACfg.GetAutoCorrect();
                     if(pACorr &&
-                        (( pACorr->IsAutoCorrFlag( ChgQuotes ) && ('\"' == aCh ))||
-                        ( pACorr->IsAutoCorrFlag( ChgSglQuotes ) && ( '\'' == aCh))))
+                        (( pACorr->IsAutoCorrFlag( ACFlags::ChgQuotes ) && ('\"' == aCh ))||
+                        ( pACorr->IsAutoCorrFlag( ACFlags::ChgSglQuotes ) && ( '\'' == aCh))))
                     {
                         rSh.DelLeft();
                         rSh.AutoCorrect( *pACorr, aCh );

@@ -23,6 +23,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/typed_flags_set.hxx>
 #include <tools/ref.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/time.hxx>
@@ -54,24 +55,30 @@ class SvStringsISortDtor
 };
 
 // Auto correct flags
-const long CapitalStartSentence = 0x00000001;   // Capital letters at the beginning of a sentence
-const long CapitalStartWord = 0x00000002;   // not two Capital letters at the beginning of a word
-const long AddNonBrkSpace   = 0x00000004;   // Add non breaking space before :;?!%
-const long ChgOrdinalNumber = 0x00000008;   // Ordinal-Number 1st, 2nd,..
-const long ChgToEnEmDash    = 0x00000010;   // - -> Endash/Emdash
-const long ChgWeightUnderl  = 0x00000020;   // * -> Bold, _ -> Underscore
-const long SetINetAttr      = 0x00000040;   // Set INetAttribut
-const long Autocorrect      = 0x00000080;   // Call AutoCorrect
-const long ChgQuotes        = 0x00000100;   // replace double quotes
-const long SaveWordCplSttLst= 0x00000200;   // Save Auto correction of Capital letter at beginning of sentence.
-const long SaveWordWrdSttLst= 0x00000400;   // Save Auto correction of 2 Capital letter at beginning of word.
-const long IgnoreDoubleSpace= 0x00000800;   // Ignore 2 Spaces
-const long ChgSglQuotes     = 0x00001000;   // Replace simple quotes
-const long CorrectCapsLock  = 0x00002000;   // Correct accidental use of cAPS LOCK key
+enum class ACFlags : sal_uInt32 {
+    NONE                 = 0x00000000,
+    CapitalStartSentence = 0x00000001,   // Capital letters at the beginning of a sentence
+    CapitalStartWord     = 0x00000002,   // not two Capital letters at the beginning of a word
+    AddNonBrkSpace       = 0x00000004,   // Add non breaking space before :,?!%
+    ChgOrdinalNumber     = 0x00000008,   // Ordinal-Number 1st, 2nd,..
+    ChgToEnEmDash        = 0x00000010,   // - -> Endash/Emdash
+    ChgWeightUnderl      = 0x00000020,   // * -> Bold, _ -> Underscore
+    SetINetAttr          = 0x00000040,   // Set INetAttribut
+    Autocorrect          = 0x00000080,   // Call AutoCorrect
+    ChgQuotes            = 0x00000100,   // replace double quotes
+    SaveWordCplSttLst    = 0x00000200,   // Save Auto correction of Capital letter at beginning of sentence.
+    SaveWordWrdSttLst    = 0x00000400,   // Save Auto correction of 2 Capital letter at beginning of word.
+    IgnoreDoubleSpace    = 0x00000800,   // Ignore 2 Spaces
+    ChgSglQuotes         = 0x00001000,   // Replace simple quotes
+    CorrectCapsLock      = 0x00002000,   // Correct accidental use of cAPS LOCK key
 
-const long ChgWordLstLoad   = 0x20000000;   // Replacement list loaded
-const long CplSttLstLoad    = 0x40000000;   // Exception list for Capital letters Start loaded
-const long WrdSttLstLoad    = 0x80000000;   // Exception list for Word Start loaded
+    ChgWordLstLoad       = 0x20000000,   // Replacement list loaded
+    CplSttLstLoad        = 0x40000000,   // Exception list for Capital letters Start loaded
+    WrdSttLstLoad        = 0x80000000,   // Exception list for Word Start loaded
+};
+namespace o3tl {
+    template<> struct typed_flags<ACFlags> : is_typed_flags<ACFlags, 0xe0003fff> {};
+}
 
 // TODO: handle code points > U+FFFF and check users of this class
 
@@ -107,7 +114,7 @@ public:
     //  - FnCapitalStartWord
     //  - FnCapitalStartSentence
     // As an option, the words can then be inserted into the exception lists.
-    virtual void SaveCpltSttWord( sal_uLong nFlag, sal_Int32 nPos,
+    virtual void SaveCpltSttWord( ACFlags nFlag, sal_Int32 nPos,
                                     const OUString& rExceptWord,
                                     sal_Unicode cChar );
 
@@ -170,7 +177,7 @@ class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists
     std::unique_ptr<SvxAutocorrWordList> pAutocorr_List;
     SvxAutoCorrect&         rAutoCorrect;
 
-    long nFlags;
+    ACFlags nFlags;
 
     bool IsFileChanged_Imp();
     void LoadXMLExceptList_Imp( std::unique_ptr<SvStringsISortDtor>& rpLst,
@@ -235,7 +242,7 @@ class EDITENG_DLLPUBLIC SvxAutoCorrect
 
     LanguageType eCharClassLang;
 
-    long nFlags;
+    ACFlags nFlags;
     sal_Unicode cStartDQuote, cEndDQuote, cStartSQuote, cEndSQuote,
                 cEmDash, cEnDash;
 
@@ -323,11 +330,11 @@ public:
                                 bool bUnlocalized = false ) const;
 
     // Query/Set the current settings of AutoCorrect
-    long GetFlags() const                       { return nFlags; }
+    ACFlags GetFlags() const                { return nFlags; }
     SvxSwAutoFormatFlags&   GetSwFlags()    { return aSwFlags;}
-    bool IsAutoCorrFlag( long nFlag ) const
-                                { return (nFlags & nFlag) != 0; }
-    void SetAutoCorrFlag( long nFlag, bool bOn = true );
+    bool IsAutoCorrFlag( ACFlags nFlag ) const
+                                { return bool(nFlags & nFlag); }
+    void SetAutoCorrFlag( ACFlags nFlag, bool bOn = true );
 
     // Load, Set, Get - the replacement list
     SvxAutocorrWordList* LoadAutocorrWordList( LanguageType eLang )
@@ -397,7 +404,7 @@ public:
                             sal_Int32 nSttPos, sal_Int32 nEndPos,
                             LanguageType eLang );
 
-    static long         GetDefaultFlags();
+    static ACFlags  GetDefaultFlags();
 
 // returns sal_True for characters where the function
 // 'SvxAutoCorrect::AutoCorrect' should be called.

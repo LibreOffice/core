@@ -161,7 +161,9 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SvxAutoCorrect* pACorr = rACfg.GetAutoCorrect();
             if( pACorr && rACfg.IsAutoFormatByInput()
                 && pACorr->IsAutoCorrFlag(
-                    CapitalStartSentence | CapitalStartWord | AddNonBrkSpace | ChgOrdinalNumber | ChgToEnEmDash | SetINetAttr | Autocorrect ) )
+                    ACFlags::CapitalStartSentence | ACFlags::CapitalStartWord |
+                    ACFlags::AddNonBrkSpace | ACFlags::ChgOrdinalNumber |
+                    ACFlags::ChgToEnEmDash | ACFlags::SetINetAttr | ACFlags::Autocorrect ) )
             {
                 rSh.AutoCorrect( *pACorr, cIns );
             }
