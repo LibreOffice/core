@@ -50,15 +50,28 @@ published service GraphicObjectShape
     service com::sun::star::drawing::RotationDescriptor;
 
     /** This is an url to the source bitmap for this graphic shape.
+
+        @deprecated as of LibreOffice 6.1 - use Graphic instead
+
+        Note the new behaviour since it was deprecated:
+        This property can only be set and only external URLs are
+        supported (no more vnd.sun.star.GraphicObject scheme). When a
+        URL is set, then it will load the image and set the Graphic
+        property.
     */
     [property] string GraphicURL;
+
+    /** This is the graphic that represents this graphic shape
+    */
+    [property] com::sun::star::graphic::XGraphic Graphic;
 
     /** This is an url to the stream ("in document" or linked graphic) for this graphic shape.
     */
     [property] string GraphicStreamURL;
 
-    /** Deprecated. Use graphic property instead!
-        This is the bitmap that represents this graphic shape.
+    /** This is the bitmap that represents this graphic shape.
+
+         @deprecated Use graphic property instead!
     */
     [optional, property] com::sun::star::awt::XBitmap GraphicObjectFillBitmap;
 
@@ -106,10 +119,6 @@ published service GraphicObjectShape
         @see com::sun::star::image::ImageMap
     */
     [optional, property] com::sun::star::container::XIndexContainer ImageMap;
-
-    /** This is the graphic that represents this graphic shape
-    */
-    [optional, property] com::sun::star::graphic::XGraphic Graphic;
 
     /// Whether this shape is actually a signature line.
     [optional, property] boolean IsSignatureLine;
