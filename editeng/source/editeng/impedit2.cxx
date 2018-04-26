@@ -2512,7 +2512,7 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
         // #i78661 allow application to turn off capitalization of
         // start sentence explicitly.
         // (This is done by setting IsFirstWordCapitalization to sal_False.)
-        bool bOldCapitalStartSentence = pAutoCorrect->IsAutoCorrFlag( CapitalStartSentence );
+        bool bOldCapitalStartSentence = pAutoCorrect->IsAutoCorrFlag( ACFlags::CapitalStartSentence );
         if (!IsFirstWordCapitalization())
         {
             ESelection aESel( CreateESel(aSel) );
@@ -2543,7 +2543,7 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
                     aSel.Max().GetIndex() <= aSecondWordSel.Min().GetIndex();
 
             if (bIsFirstWordInFirstPara)
-                pAutoCorrect->SetAutoCorrFlag( CapitalStartSentence, IsFirstWordCapitalization() );
+                pAutoCorrect->SetAutoCorrFlag( ACFlags::CapitalStartSentence, IsFirstWordCapitalization() );
         }
 
         ContentNode* pNode = aSel.Max().GetNode();
@@ -2557,7 +2557,7 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
 
         // #i78661 since the SvxAutoCorrect object used here is
         // shared we need to reset the value to its original state.
-        pAutoCorrect->SetAutoCorrFlag( CapitalStartSentence, bOldCapitalStartSentence );
+        pAutoCorrect->SetAutoCorrFlag( ACFlags::CapitalStartSentence, bOldCapitalStartSentence );
     }
     return aSel.Max();
 }

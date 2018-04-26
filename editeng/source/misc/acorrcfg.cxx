@@ -129,7 +129,7 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
-        long nFlags = 0;        // default all off
+        ACFlags nFlags = ACFlags::NONE;        // default all off
         sal_Int32 nTemp = 0;
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
@@ -139,51 +139,51 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
                 {
                     case  0:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            nFlags |= SaveWordCplSttLst;
+                            nFlags |= ACFlags::SaveWordCplSttLst;
                     break;//"Exceptions/TwoCapitalsAtStart",
                     case  1:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            nFlags |= SaveWordWrdSttLst;
+                            nFlags |= ACFlags::SaveWordWrdSttLst;
                     break;//"Exceptions/CapitalAtStartSentence",
                     case  2:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            nFlags |= Autocorrect;
+                            nFlags |= ACFlags::Autocorrect;
                     break;//"UseReplacementTable",
                     case  3:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            nFlags |= CapitalStartWord;
+                            nFlags |= ACFlags::CapitalStartWord;
                     break;//"TwoCapitalsAtStart",
                     case  4:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            nFlags |= CapitalStartSentence;
+                            nFlags |= ACFlags::CapitalStartSentence;
                     break;//"CapitalAtStartSentence",
                     case  5:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            nFlags |= ChgWeightUnderl;
+                            nFlags |= ACFlags::ChgWeightUnderl;
                     break;//"ChangeUnderlineWeight",
                     case  6:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            nFlags |= SetINetAttr;
+                            nFlags |= ACFlags::SetINetAttr;
                     break;//"SetInetAttribute",
                     case  7:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            nFlags |= ChgOrdinalNumber;
+                            nFlags |= ACFlags::ChgOrdinalNumber;
                     break;//"ChangeOrdinalNumber",
                     case 8:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                             nFlags |= AddNonBrkSpace;
+                             nFlags |= ACFlags::AddNonBrkSpace;
                     break;//"AddNonBreakingSpace"
                     case  9:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            nFlags |= ChgToEnEmDash;
+                            nFlags |= ACFlags::ChgToEnEmDash;
                     break;//"ChangeDash",
                     case 10:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            nFlags |= IgnoreDoubleSpace;
+                            nFlags |= ACFlags::IgnoreDoubleSpace;
                     break;//"RemoveDoubleSpaces",
                     case 11:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            nFlags |= ChgSglQuotes;
+                            nFlags |= ACFlags::ChgSglQuotes;
                     break;//"ReplaceSingleQuote",
                     case 12:
                         pValues[nProp] >>= nTemp;
@@ -197,7 +197,7 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
                     break;//"SingleQuoteAtEnd",
                     case 14:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            nFlags |= ChgQuotes;
+                            nFlags |= ACFlags::ChgQuotes;
                     break;//"ReplaceDoubleQuote",
                     case 15:
                         pValues[nProp] >>= nTemp;
@@ -211,14 +211,14 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
                     break;//"DoubleQuoteAtEnd"
                     case 17:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            nFlags |= CorrectCapsLock;
+                            nFlags |= ACFlags::CorrectCapsLock;
                     break;//"CorrectAccidentalCapsLock"
                 }
             }
         }
-        if( nFlags )
+        if( nFlags != ACFlags::NONE )
             rParent.pAutoCorrect->SetAutoCorrFlag( nFlags );
-        rParent.pAutoCorrect->SetAutoCorrFlag( ( 0xffff & ~nFlags ), false );
+        rParent.pAutoCorrect->SetAutoCorrFlag( ( static_cast<ACFlags>(0x3fff) & ~nFlags ), false );
 
     }
 }
@@ -235,38 +235,38 @@ SvxBaseAutoCorrCfg::~SvxBaseAutoCorrCfg()
 
 void SvxBaseAutoCorrCfg::ImplCommit()
 {
-    const long nFlags = rParent.pAutoCorrect->GetFlags();
+    const ACFlags nFlags = rParent.pAutoCorrect->GetFlags();
     PutProperties(
         GetPropertyNames(),
-        {css::uno::Any((nFlags & SaveWordCplSttLst) != 0),
+        {css::uno::Any(bool(nFlags & ACFlags::SaveWordCplSttLst)),
             // "Exceptions/TwoCapitalsAtStart"
-         css::uno::Any((nFlags & SaveWordWrdSttLst) != 0),
+         css::uno::Any(bool(nFlags & ACFlags::SaveWordWrdSttLst)),
             // "Exceptions/CapitalAtStartSentence"
-         css::uno::Any((nFlags & Autocorrect) != 0), // "UseReplacementTable"
-         css::uno::Any((nFlags & CapitalStartWord) != 0),
+         css::uno::Any(bool(nFlags & ACFlags::Autocorrect)), // "UseReplacementTable"
+         css::uno::Any(bool(nFlags & ACFlags::CapitalStartWord)),
             // "TwoCapitalsAtStart"
-         css::uno::Any((nFlags & CapitalStartSentence) != 0),
+         css::uno::Any(bool(nFlags & ACFlags::CapitalStartSentence)),
             // "CapitalAtStartSentence"
-         css::uno::Any((nFlags & ChgWeightUnderl) != 0),
+         css::uno::Any(bool(nFlags & ACFlags::ChgWeightUnderl)),
             // "ChangeUnderlineWeight"
-         css::uno::Any((nFlags & SetINetAttr) != 0), // "SetInetAttribute"
-         css::uno::Any((nFlags & ChgOrdinalNumber) != 0),
+         css::uno::Any(bool(nFlags & ACFlags::SetINetAttr)), // "SetInetAttribute"
+         css::uno::Any(bool(nFlags & ACFlags::ChgOrdinalNumber)),
             // "ChangeOrdinalNumber"
-         css::uno::Any((nFlags & AddNonBrkSpace) != 0), // "AddNonBreakingSpace"
-         css::uno::Any((nFlags & ChgToEnEmDash) != 0), // "ChangeDash"
-         css::uno::Any((nFlags & IgnoreDoubleSpace) != 0),
+         css::uno::Any(bool(nFlags & ACFlags::AddNonBrkSpace)), // "AddNonBreakingSpace"
+         css::uno::Any(bool(nFlags & ACFlags::ChgToEnEmDash)), // "ChangeDash"
+         css::uno::Any(bool(nFlags & ACFlags::IgnoreDoubleSpace)),
             // "RemoveDoubleSpaces"
-         css::uno::Any((nFlags & ChgSglQuotes) != 0), // "ReplaceSingleQuote"
+         css::uno::Any(bool(nFlags & ACFlags::ChgSglQuotes)), // "ReplaceSingleQuote"
          css::uno::Any(sal_Int32(rParent.pAutoCorrect->GetStartSingleQuote())),
             // "SingleQuoteAtStart"
          css::uno::Any(sal_Int32(rParent.pAutoCorrect->GetEndSingleQuote())),
             // "SingleQuoteAtEnd"
-         css::uno::Any((nFlags & ChgQuotes) != 0), // "ReplaceDoubleQuote"
+         css::uno::Any(bool(nFlags & ACFlags::ChgQuotes)), // "ReplaceDoubleQuote"
          css::uno::Any(sal_Int32(rParent.pAutoCorrect->GetStartDoubleQuote())),
             // "DoubleQuoteAtStart"
          css::uno::Any(sal_Int32(rParent.pAutoCorrect->GetEndDoubleQuote())),
             // "DoubleQuoteAtEnd"
-         css::uno::Any((nFlags & CorrectCapsLock) != 0)});
+        css::uno::Any(bool(nFlags & ACFlags::CorrectCapsLock))});
             // "CorrectAccidentalCapsLock"
 }
 

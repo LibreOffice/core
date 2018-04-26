@@ -83,7 +83,7 @@ public:
     //  - FnCapitalStartWord and
     //  - FnCapitalStartSentence.
     // Afterwards the words can be added into exception list if needed.
-    virtual void SaveCpltSttWord( sal_uLong nFlag, sal_Int32 nPos,
+    virtual void SaveCpltSttWord( ACFlags nFlag, sal_Int32 nPos,
                                     const OUString& rExceptWord, sal_Unicode cChar ) override;
     virtual LanguageType GetLanguage( sal_Int32 nPos ) const override;
 };
@@ -91,14 +91,15 @@ public:
 class SwAutoCorrExceptWord
 {
     OUString m_sWord;
-    sal_uLong m_nFlags, m_nNode;
+    ACFlags m_nFlags;
+    sal_uLong m_nNode;
     sal_Int32 m_nContent;
     sal_Unicode m_cChar;
     LanguageType m_eLanguage;
     bool m_bDeleted;
 
 public:
-    SwAutoCorrExceptWord(sal_uLong nAFlags, sal_uLong nNd, sal_Int32 nContent,
+    SwAutoCorrExceptWord(ACFlags nAFlags, sal_uLong nNd, sal_Int32 nContent,
                          const OUString& rWord, sal_Unicode cChr,
                          LanguageType eLang)
         : m_sWord(rWord), m_nFlags(nAFlags), m_nNode(nNd), m_nContent(nContent),
