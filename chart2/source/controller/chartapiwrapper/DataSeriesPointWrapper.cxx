@@ -591,7 +591,7 @@ beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const OU
     beans::PropertyState aState( beans::PropertyState_DIRECT_VALUE );
     try
     {
-        if (rPropertyName == "SymbolBitmap")
+        if (rPropertyName == "SymbolBitmap" || rPropertyName == "SymbolBitmapURL")
         {
             uno::Any aAny = WrappedPropertySet::getPropertyValue("SymbolType");
             sal_Int32 nVal = css::chart::ChartSymbolType::NONE;

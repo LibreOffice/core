@@ -15,7 +15,6 @@
 "ChXDataRow";"com::sun::star::chart::Chart3DBarProperties#optional";"SolidType"
 "ChXDataRow";"com::sun::star::chart::ChartDataPointProperties";"DataCaption"
 "ChXDataRow";"com::sun::star::chart::ChartDataPointProperties";"SymbolType#optional"
-"ChXDataRow";"com::sun::star::chart::ChartDataPointProperties";"SymbolBitmapURL#optional"
 "ChXDataRow";"com::sun::star::drawing::FillProperties#optional";"FillStyle"
 "ChXDataRow";"com::sun::star::drawing::FillProperties#optional";"FillColor"
 "ChXDataRow";"com::sun::star::drawing::FillProperties#optional";"FillTransparence"

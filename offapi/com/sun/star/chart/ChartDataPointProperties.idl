@@ -124,6 +124,8 @@ published service ChartDataPointProperties
         <p>When you query this value you get an internal URL of the
         embedded graphic.</p>
 
+        @deprecated as of Libreoffice 6.1
+
         @see ChartSymbolType
      */
     [optional, property] string SymbolBitmapURL;
@@ -139,6 +141,16 @@ published service ChartDataPointProperties
         @since LibreOffice 5.1
      */
     [optional, property] boolean TextWordWrap;
+
+    /** In charts that support symbols, you can set this property to
+        a graphic object.  This graphic is then used as symbol for each
+        data point.
+
+        @since LibreOffice 6.1
+
+        @see ChartSymbolType
+     */
+    [optional, property] com::sun::star::graphic::XGraphic SymbolBitmap;
 };
 
 
