@@ -418,12 +418,12 @@ void SwExtend::ActualizeFont( SwFont &rFnt, ExtTextInputAttr nAttr )
 short SwExtend::Enter(SwFont& rFnt, sal_Int32 nNew)
 {
     OSL_ENSURE( !Inside(), "SwExtend: Enter without Leave" );
-    OSL_ENSURE( !pFnt, "SwExtend: Enter with Font" );
-    nPos = nNew;
+    OSL_ENSURE( !m_pFont, "SwExtend: Enter with Font" );
+    m_nPos = nNew;
     if( Inside() )
     {
-        pFnt.reset( new SwFont( rFnt ) );
-        ActualizeFont( rFnt, rArr[ nPos - nStart ] );
+        m_pFont.reset( new SwFont(rFnt) );
+        ActualizeFont( rFnt, m_rArr[m_nPos - m_nStart] );
         return 1;
     }
     return 0;
@@ -432,21 +432,21 @@ short SwExtend::Enter(SwFont& rFnt, sal_Int32 nNew)
 bool SwExtend::Leave_(SwFont& rFnt, sal_Int32 nNew)
 {
     OSL_ENSURE( Inside(), "SwExtend: Leave without Enter" );
-    const ExtTextInputAttr nOldAttr = rArr[ nPos - nStart ];
-    nPos = nNew;
+    const ExtTextInputAttr nOldAttr = m_rArr[m_nPos - m_nStart];
+    m_nPos = nNew;
     if( Inside() )
     {   // We stayed within the ExtendText-section
-        const ExtTextInputAttr nAttr = rArr[ nPos - nStart ];
+        const ExtTextInputAttr nAttr = m_rArr[m_nPos - m_nStart];
         if( nOldAttr != nAttr ) // Is there an (inner) change of attributes?
         {
-            rFnt = *pFnt;
+            rFnt = *m_pFont;
             ActualizeFont( rFnt, nAttr );
         }
     }
     else
     {
-        rFnt = *pFnt;
-        pFnt.reset();
+        rFnt = *m_pFont;
+        m_pFont.reset();
         return true;
     }
     return false;
@@ -454,18 +454,18 @@ bool SwExtend::Leave_(SwFont& rFnt, sal_Int32 nNew)
 
 sal_Int32 SwExtend::Next( sal_Int32 nNext )
 {
-    if( nPos < nStart )
+    if (m_nPos < m_nStart)
     {
-        if( nNext > nStart )
-            nNext = nStart;
+        if (nNext > m_nStart)
+            nNext = m_nStart;
     }
-    else if( nPos < nEnd )
+    else if (m_nPos < m_nEnd)
     {
-        sal_Int32 nIdx = nPos - nStart;
-        const ExtTextInputAttr nAttr = rArr[ nIdx ];
-        while( static_cast<size_t>(++nIdx) < rArr.size() && nAttr == rArr[ nIdx ] )
+        sal_Int32 nIdx = m_nPos - m_nStart;
+        const ExtTextInputAttr nAttr = m_rArr[ nIdx ];
+        while (static_cast<size_t>(++nIdx) < m_rArr.size() && nAttr == m_rArr[nIdx])
             ; //nothing
-        nIdx = nIdx + nStart;
+        nIdx = nIdx + m_nStart;
         if( nNext > nIdx )
             nNext = nIdx;
     }
