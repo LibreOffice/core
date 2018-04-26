@@ -183,6 +183,9 @@ DECLARE_OOXMLEXPORT_TEST(testTextBoxPictureFill, "textbox_picturefill.docx")
     CPPUNIT_ASSERT(xGraphic.is());
     Graphic aGraphic(xGraphic);
     CPPUNIT_ASSERT(aGraphic);
+    CPPUNIT_ASSERT(aGraphic.GetSizeBytes() > 0L);
+    CPPUNIT_ASSERT_EQUAL(447L, aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(528L, aGraphic.GetSizePixel().Height());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFDO73034, "FDO73034.docx")
