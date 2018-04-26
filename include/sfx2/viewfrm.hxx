@@ -173,6 +173,8 @@ public:
                                     const OUString& sMessage,
                                     InfoBarType aInfoBarType);
     void              RemoveInfoBar(const OUString& sId);
+    void              UpdateInfoBar(const OUString& sId,
+                               const OUString& sMessage, InfoBarType eType);
     bool              HasInfoBarWithID(const OUString& sId);
 
     SAL_DLLPRIVATE void GetDocNumber_Impl();
