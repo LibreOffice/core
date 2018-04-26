@@ -3314,6 +3314,11 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= ( aColor.GetTransparency() == 0xff );
         break;
 
+        case MID_GRAPHIC_URL:
+        {
+            throw uno::RuntimeException("Getting from this property is not unsupported");
+        }
+        break;
         case MID_GRAPHIC:
         {
             uno::Reference<graphic::XGraphic> xGraphic;
@@ -3396,13 +3401,24 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             aColor.SetTransparency( Any2Bool( rVal ) ? 0xff : 0 );
         break;
 
+        case MID_GRAPHIC_URL:
         case MID_GRAPHIC:
         {
-            if (rVal.getValueType() == cppu::UnoType<graphic::XGraphic>::get())
+            Graphic aGraphic;
+
+            if (rVal.getValueType() == ::cppu::UnoType<OUString>::get())
+            {
+                OUString aURL = rVal.get<OUString>();
+                aGraphic = vcl::graphic::loadFromURL(aURL);
+            }
+            else if (rVal.getValueType() == cppu::UnoType<graphic::XGraphic>::get())
             {
                 auto xGraphic = rVal.get<uno::Reference<graphic::XGraphic>>();
+                aGraphic = Graphic(xGraphic);
+            }
 
-                Graphic aGraphic(xGraphic);
+            if (aGraphic)
+            {
                 maStrLink.clear();
 
                 std::unique_ptr<GraphicObject> xOldGrfObj(std::move(xGraphicObject));
