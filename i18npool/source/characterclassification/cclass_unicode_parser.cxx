@@ -410,18 +410,16 @@ void cclass_Unicode::initParserTable( const Locale& rLocale, sal_Int32 startChar
     setupInternational( rLocale );
     // Memory of pTable is reused.
     if ( !pTable )
-        pTable = new ParserFlags[nDefCnt];
-    memcpy( pTable, pDefaultParserTable, sizeof(ParserFlags) * nDefCnt );
+        pTable.reset(new ParserFlags[nDefCnt]);
+    memcpy( pTable.get(), pDefaultParserTable, sizeof(ParserFlags) * nDefCnt );
     // Start and cont tables only need reallocation if different length.
     if ( pStart && userDefinedCharactersStart.getLength() != aStartChars.getLength() )
     {
-        delete [] pStart;
-        pStart = nullptr;
+        pStart.reset();
     }
     if ( pCont && userDefinedCharactersCont.getLength() != aContChars.getLength() )
     {
-        delete [] pCont;
-        pCont = nullptr;
+        pCont.reset();
     }
     nStartTypes = startCharTokenType;
     nContTypes = contCharTokenType;
@@ -515,7 +513,7 @@ void cclass_Unicode::initParserTable( const Locale& rLocale, sal_Int32 startChar
     if ( nLen )
     {
         if ( !pStart )
-            pStart = new ParserFlags[ nLen ];
+            pStart.reset(new ParserFlags[ nLen ]);
         const sal_Unicode* p = aStartChars.getStr();
         for ( sal_Int32 j=0; j<nLen; j++, p++ )
         {
@@ -529,7 +527,7 @@ void cclass_Unicode::initParserTable( const Locale& rLocale, sal_Int32 startChar
     if ( nLen )
     {
         if ( !pCont )
-            pCont = new ParserFlags[ nLen ];
+            pCont.reset(new ParserFlags[ nLen ]);
         const sal_Unicode* p = aContChars.getStr();
         for ( sal_Int32 j=0; j<nLen; j++ )
         {
@@ -543,12 +541,9 @@ void cclass_Unicode::initParserTable( const Locale& rLocale, sal_Int32 startChar
 
 void cclass_Unicode::destroyParserTable()
 {
-    if ( pCont )
-        delete [] pCont;
-    if ( pStart )
-        delete [] pStart;
-    if ( pTable )
-        delete [] pTable;
+    pCont.reset();
+    pStart.reset();
+    pTable.reset();
 }
 
 
