@@ -886,6 +886,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetEmbeddedPropertyMap
         { OUString(UNO_NAME_CLSID),                FN_UNO_CLSID, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { OUString(UNO_NAME_STREAM_NAME),           FN_UNO_STREAM_NAME, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { OUString(UNO_NAME_MODEL), FN_UNO_MODEL, cppu::UnoType<css::frame::XModel>::get(), PropertyAttribute::READONLY|PropertyAttribute::MAYBEVOID, 0},
+        { OUString(UNO_NAME_GRAPHIC_URL), FN_UNO_REPLACEMENT_GRAPHIC_URL, cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0 },
         { OUString(UNO_NAME_GRAPHIC), FN_UNO_REPLACEMENT_GRAPHIC, cppu::UnoType<css::graphic::XGraphic>::get(), PropertyAttribute::MAYBEVOID, 0 },
         { OUString(UNO_NAME_COMPONENT),FN_UNO_COMPONENT, cppu::UnoType<css::lang::XComponent>::get(), PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_EMBEDDED_OBJECT),FN_EMBEDDED_OBJECT, cppu::UnoType<css::embed::XEmbeddedObject>::get(), PROPERTY_NONE, 0},
