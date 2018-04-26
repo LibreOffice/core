@@ -131,9 +131,9 @@ private:
     css::uno::Reference < css::i18n::XNativeNumberSupplier > xNatNumSup;
     OUString             aStartChars;
     OUString             aContChars;
-    ParserFlags*         pTable;
-    ParserFlags*         pStart;
-    ParserFlags*         pCont;
+    std::unique_ptr<ParserFlags[]> pTable;
+    std::unique_ptr<ParserFlags[]> pStart;
+    std::unique_ptr<ParserFlags[]> pCont;
     sal_Int32            nStartTypes;
     sal_Int32            nContTypes;
     ScanState            eState;
