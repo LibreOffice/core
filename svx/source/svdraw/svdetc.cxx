@@ -25,7 +25,6 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdtrans.hxx>
-#include <svdglob.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdviter.hxx>
 #include <svx/svdview.hxx>
@@ -351,11 +350,6 @@ std::vector<Link<SdrObjCreatorParams, SdrObject*>>& ImpGetUserMakeObjHdl()
 {
     SdrGlobalData& rGlobalData=GetSdrGlobalData();
     return rGlobalData.aUserMakeObjHdl;
-}
-
-OUString ImpGetResStr(const char* pResID)
-{
-    return SvxResId(pResID);
 }
 
 bool SearchOutlinerItems(const SfxItemSet& rSet, bool bInklDefaults, bool* pbOnlyEE)
