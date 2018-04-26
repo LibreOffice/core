@@ -172,19 +172,13 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
        WinBits nMessageStyle = WB_LEFT|WB_VCENTER) :
     Window(pParent, 0),
     m_sId(sId),
+    m_eType(ibType),
     m_pImage(VclPtr<FixedImage>::Create(this, nMessageStyle)),
     m_pMessage(VclPtr<FixedText>::Create(this, nMessageStyle)),
     m_pCloseBtn(VclPtr<SfxCloseButton>::Create(this)),
     m_aActionBtns()
 {
-    basegfx::BColor aBackgroundColor;
-    basegfx::BColor aForegroundColor;
-    basegfx::BColor aMessageColor;
-    GetInfoBarColors(ibType,aBackgroundColor,aForegroundColor,aMessageColor);
-    static_cast<SfxCloseButton*>(m_pCloseBtn.get())->setBackgroundColor(aBackgroundColor);
-    static_cast<SfxCloseButton*>(m_pCloseBtn.get())->setForegroundColor(aForegroundColor);
-    m_pMessage->SetControlForeground(Color(aMessageColor));
-
+    SetForeAndBackgroundColors(m_eType);
     float fScaleFactor = GetDPIScaleFactor();
     long nWidth = pParent->GetSizePixel().getWidth();
     SetPosSizePixel(Point(0, 0), Size(nWidth, INFO_BAR_BASE_HEIGHT * fScaleFactor));
@@ -214,6 +208,16 @@ void SfxInfoBarWindow::addButton(PushButton* pButton) {
 SfxInfoBarWindow::~SfxInfoBarWindow()
 {
     disposeOnce();
+}
+
+void SfxInfoBarWindow::SetForeAndBackgroundColors(InfoBarType eType)
+{
+    basegfx::BColor aMessageColor;
+    GetInfoBarColors(eType,m_aBackgroundColor,m_aForegroundColor,aMessageColor);
+
+    static_cast<SfxCloseButton*>(m_pCloseBtn.get())->setBackgroundColor(m_aBackgroundColor);
+    static_cast<SfxCloseButton*>(m_pCloseBtn.get())->setForegroundColor(m_aForegroundColor);
+    m_pMessage->SetControlForeground(Color(aMessageColor));
 }
 
 void SfxInfoBarWindow::dispose()
@@ -293,6 +297,20 @@ void SfxInfoBarWindow::Resize()
 
     m_pMessage->SetPosSizePixel(aMessagePosition, aMessageSize);
 
+}
+
+void SfxInfoBarWindow::Update( const OUString &sNewMessage, InfoBarType eType )
+{
+    if (m_eType != eType)
+    {
+        m_eType = eType;
+        SetForeAndBackgroundColors(m_eType);
+        m_pImage->SetImage(Image(BitmapEx(GetInfoBarIconName(eType))));
+    }
+
+    m_pMessage->SetText( sNewMessage );
+    Resize();
+    Invalidate();
 }
 
 IMPL_LINK_NOARG(SfxInfoBarWindow, CloseHandler, Button*, void)

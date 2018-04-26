@@ -1058,21 +1058,28 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                         break;
                     }
 
-                    if ( pFrame->HasInfoBarWithID("signature") )
-                        pFrame->RemoveInfoBar("signature");
-
-                    if ( eState != SignatureState::NOSIGNATURES )
+                    // new info bar
+                    if ( !pFrame->HasInfoBarWithID("signature") )
                     {
-                        auto pInfoBar = pFrame->AppendInfoBar("signature", sMessage, aInfoBarType);
-                        if (pInfoBar == nullptr)
-                            return;
-                        VclPtrInstance<PushButton> xBtn(&(pFrame->GetWindow()));
-                        xBtn->SetText(SfxResId(STR_SIGNATURE_SHOW));
-                        xBtn->SetSizePixel(xBtn->GetOptimalSize());
-                        xBtn->SetClickHdl(LINK(this, SfxObjectShell, SignDocumentHandler));
-                        pInfoBar->addButton(xBtn);
+                        if ( !sMessage.isEmpty() )
+                        {
+                            auto pInfoBar = pFrame->AppendInfoBar("signature", sMessage, aInfoBarType);
+                            if (pInfoBar == nullptr)
+                                return;
+                            VclPtrInstance<PushButton> xBtn(&(pFrame->GetWindow()));
+                            xBtn->SetText(SfxResId(STR_SIGNATURE_SHOW));
+                            xBtn->SetSizePixel(xBtn->GetOptimalSize());
+                            xBtn->SetClickHdl(LINK(this, SfxObjectShell, SignDocumentHandler));
+                            pInfoBar->addButton(xBtn);
+                        }
                     }
-
+                    else // info bar exists already
+                    {
+                        if ( eState == SignatureState::NOSIGNATURES )
+                            pFrame->RemoveInfoBar("signature");
+                        else
+                            pFrame->UpdateInfoBar("signature", sMessage, aInfoBarType);
+                    }
                 }
 
                 rSet.Put( SfxUInt16Item( SID_SIGNATURE, static_cast<sal_uInt16>(GetDocumentSignatureState()) ) );
