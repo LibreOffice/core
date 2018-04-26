@@ -149,9 +149,10 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
                 VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xParentWindow );
                 if ( pWindow )
                 {
-                    sal_uLong nStyles = WB_LINESPACING | WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
+                    sal_uLong nStyles = WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
 
                     pToolBar = VclPtr<ToolBox>::Create( pWindow, nStyles );
+                    pToolBar->SetLineSpacing(true);
                     pToolBarManager = new ToolBarManager( m_xContext, xFrame, m_aResourceURL, pToolBar );
                     m_xToolBarManager.set( static_cast< OWeakObject *>( pToolBarManager ), UNO_QUERY );
                     pToolBar->WillUsePopupMode( bPopupMode );

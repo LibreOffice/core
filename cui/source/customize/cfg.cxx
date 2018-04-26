@@ -2910,7 +2910,8 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     aTbSize = pTbSymbol->LogicToPixel(Size(160, 80), MapMode(MapUnit::MapAppFont));
     pTbSymbol->set_width_request(aTbSize.Width());
     pTbSymbol->set_height_request(aTbSize.Height());
-    pTbSymbol->SetStyle(pTbSymbol->GetStyle() | WB_SCROLL | WB_LINESPACING);
+    pTbSymbol->SetStyle(pTbSymbol->GetStyle() | WB_SCROLL);
+    pTbSymbol->SetLineSpacing(true);
 
     typedef std::unordered_map< OUString, bool > ImageInfo;
 

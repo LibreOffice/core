@@ -208,7 +208,6 @@ WinBits const WB_SIMPLEMODE =           0x20000000;
 WinBits const WB_SCALE =                0x08000000;
 
 // Window-Bits for ToolBox
-WinBits const WB_LINESPACING =          0x01000000;
 WinBits const WB_SCROLL =               0x02000000;
 
 // Window-Bits for SplitWindow

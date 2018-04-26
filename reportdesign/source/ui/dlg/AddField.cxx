@@ -167,7 +167,7 @@ OAddFieldWindow::OAddFieldWindow(vcl::Window* pParent ,const uno::Reference< bea
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
     SetMinOutputSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
 
-    m_aActions->SetStyle(m_aActions->GetStyle()|WB_LINESPACING);
+    m_aActions->SetLineSpacing(true);
     m_aActions->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
 
     m_aActions->SetSelectHdl(LINK(this, OAddFieldWindow, OnSortAction));

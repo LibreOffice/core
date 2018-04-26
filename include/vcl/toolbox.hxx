@@ -147,7 +147,8 @@ private:
                         mbDragging:1,
                         mbIsKeyEvent:1,
                         mbChangingHighlight:1,
-                        mbImagesMirrored:1;
+                        mbImagesMirrored:1,
+                        mbLineSpacing:1;
     WindowAlign         meAlign;
     WindowAlign         meDockAlign;
     ButtonType          meButtonType;
@@ -518,6 +519,8 @@ public:
     void statusChanged(const css::frame::FeatureStateEvent& rEvent);
 
     void SetToolBoxTextPosition( ToolBoxTextPosition ePosition );
+
+    void SetLineSpacing(bool b) { mbLineSpacing = b; }
 };
 
 inline void ToolBox::CheckItem( sal_uInt16 nItemId, bool bCheck )
