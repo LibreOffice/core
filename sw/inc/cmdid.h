@@ -566,7 +566,7 @@
 #define FN_UNO_PARA_STYLE_CONDITIONS        (FN_EXTRA2 + 100)
 #define FN_UNO_GRAPHIC                      (FN_EXTRA2 + 101)
 
-// #define free                             (FN_EXTRA2 + 102)
+#define FN_UNO_REPLACEMENT_GRAPHIC_URL      (FN_EXTRA2 + 102)
 #define FN_UNO_CELL_ROW_SPAN                (FN_EXTRA2 + 103)
 #define FN_UNO_TABLE_BORDER_DISTANCES       (FN_EXTRA2 + 104)
 #define FN_SPELL_GRAMMAR_DIALOG             (FN_EXTRA2 + 105)
