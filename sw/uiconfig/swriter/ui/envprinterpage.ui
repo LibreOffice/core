@@ -111,7 +111,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="down:0.00cm1">
+                  <object class="GtkSpinButton" id="down:0.00cm">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment1</property>
