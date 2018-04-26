@@ -7881,7 +7881,7 @@ libo_CHECK_SYSTEM_MODULE([libqxp],[QXP],[libqxp-0.0])
 libo_CHECK_SYSTEM_MODULE([libzmf],[ZMF],[libzmf-0.0])
 
 libo_CHECK_SYSTEM_MODULE([libstaroffice],[STAROFFICE],[libstaroffice-0.0])
-libo_PKG_VERSION([STAROFFICE], [libstaroffice-0.0], [0.0.4])
+libo_PKG_VERSION([STAROFFICE], [libstaroffice-0.0], [0.0.6])
 
 dnl ===================================================================
 dnl Check for system lcms2

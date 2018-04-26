@@ -308,10 +308,10 @@
                     "dest-filename": "external/tarballs/librevenge-0.0.4.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libstaroffice-0.0.5.tar.xz",
-                    "sha256": "315507add58068aa6d5c437e7c2a6fd1abe684515915152c6cf338fc588da982",
+                    "url": "https://dev-www.libreoffice.org/src/libstaroffice-0.0.6.tar.xz",
+                    "sha256": "6b00e1ed8194e6072be4441025d1b888e39365727ed5b23e0e8c92c4009d1ec4",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libstaroffice-0.0.5.tar.xz"
+                    "dest-filename": "external/tarballs/libstaroffice-0.0.6.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/ltm-1.0.zip",
