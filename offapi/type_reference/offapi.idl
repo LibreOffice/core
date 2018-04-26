@@ -5604,6 +5604,7 @@ module com {
      service ::com::sun::star::drawing::ShadowProperties;
      service ::com::sun::star::drawing::RotationDescriptor;
      [property] string GraphicURL;
+     [property] ::com::sun::star::graphic::XGraphic Graphic;
      [property] string GraphicStreamURL;
      [property, optional] ::com::sun::star::awt::XBitmap GraphicObjectFillBitmap;
      [property] short AdjustLuminance;
@@ -5615,7 +5616,6 @@ module com {
      [property] short Transparency;
      [property] ::com::sun::star::drawing::ColorMode GraphicColorMode;
      [property, optional] ::com::sun::star::container::XIndexContainer ImageMap;
-     [property, optional] ::com::sun::star::graphic::XGraphic Graphic;
     };
     /** @deprecated */ published interface XShapeGroup {
      interface ::com::sun::star::drawing::XShape;
@@ -13394,6 +13394,7 @@ module com {
      [property] string BulletFontName;
      [property] string GraphicURL;
      [property] short StartWith;
+     [property] ::com::sun::star::graphic::XGraphic Graphic;
     };
     published service NumberingRule {
      service ::com::sun::star::style::NumberingAlignment;
@@ -14959,6 +14960,7 @@ module com {
      [property] boolean HoriMirroredOnOddPages;
      [property] boolean VertMirrored;
      [property] string GraphicURL;
+     [property] ::com::sun::star::graphic::XGraphic Graphic;
      [property] string GraphicFilter;
      [property] ::com::sun::star::awt::Size ActualSize;
      [property] short AdjustLuminance;
@@ -14970,7 +14972,6 @@ module com {
      [property] boolean GraphicIsInverted;
      [property] short Transparency;
      [property] ::com::sun::star::drawing::ColorMode GraphicColorMode;
-     [property, optional] ::com::sun::star::graphic::XGraphic Graphic;
     };
     published service TextGraphicObjects {
      interface ::com::sun::star::container::XNameAccess;
