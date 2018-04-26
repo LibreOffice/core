@@ -30,6 +30,7 @@ import java.net.Socket;
 import java.net.ServerSocket;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 
 import com.sun.star.awt.XToolkitExperimental;
 import com.sun.star.beans.XPropertySet;
@@ -577,16 +578,19 @@ public class utils {
      * @param props The instance of XPropertySet
      * @param includePropertyAttribute Properties without these attributes are filtered and will not be returned.
      * @param excludePropertyAttribute Properties with these attributes are filtered and will not be returned.
+     * @param array of string names of properties that will be skipped
      * @return A String array with all property names.
      * @see com.sun.star.beans.XPropertySet
      * @see com.sun.star.beans.Property
      * @see com.sun.star.beans.PropertyAttribute
      */
     public static String[] getFilteredPropertyNames(XPropertySet props, short includePropertyAttribute,
-        short excludePropertyAttribute) {
+        short excludePropertyAttribute, String[] skipList) {
         Property[] the_props = props.getPropertySetInfo().getProperties();
         ArrayList<String> l = new ArrayList<String>();
         for (int i = 0; i < the_props.length; i++) {
+            if (Arrays.asList(skipList).contains(the_props[i].Name))
+                continue;
             boolean exclude = ((the_props[i].Attributes & excludePropertyAttribute) != 0);
             boolean include = (includePropertyAttribute == 0) ||
                 ((the_props[i].Attributes & includePropertyAttribute) != 0);

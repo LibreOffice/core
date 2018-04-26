@@ -126,8 +126,14 @@ public class PageStyle extends TestCase {
         XPropertySet xStyleProp = UnoRuntime.queryInterface(XPropertySet.class, oMyStyle);
 
         short exclude = PropertyAttribute.READONLY;
-        String[] names = utils.getFilteredPropertyNames(xStyleProp, (short)0, exclude);
+
+        String[] skipPropetiesNamed = {
+            "BackGraphicURL", "HeaderBackGraphicURL", "FooterBackGraphicURL"
+        };
+
+        String[] names = utils.getFilteredPropertyNames(xStyleProp, (short)0, exclude, skipPropetiesNamed);
         tEnv.addObjRelation("PropertyNames", names);
+        tEnv.addObjRelation("SkipProperties", skipPropetiesNamed);
 
         return tEnv;
     }

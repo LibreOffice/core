@@ -19,8 +19,10 @@
 package ifc.beans;
 
 import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.Arrays;
 
 import lib.MultiMethodTest;
 import lib.Status;
@@ -132,17 +134,30 @@ public class _XMultiPropertySet extends MultiMethodTest {
         boolean bResult = true;
 
         Property[] properties = propertySetInfo.getProperties();
-        String[] allnames = new String[properties.length];
+
+        ArrayList<String> allFilteredNames = new ArrayList<String>();
+        ArrayList<Property> allFilteredProperties = new ArrayList<Property>();
+
+        String[] skipNames = (String[]) tEnv.getObjRelation("SkipProperties");
+
         for (int i = 0; i < properties.length; i++) {
-            allnames[i] = properties[i].Name;
+            if (skipNames == null || !Arrays.asList(skipNames).contains(properties[i].Name))
+            {
+                allFilteredNames.add(properties[i].Name);
+                allFilteredProperties.add(properties[i]);
+            }
         }
 
-        values = oObj.getPropertyValues(allnames);
+        String[] arrayAllFilteredNames = allFilteredNames.toArray(new String[allFilteredNames.size()]);
+
+        values = oObj.getPropertyValues(arrayAllFilteredNames);
 
         bResult &= values!=null;
         tRes.tested("getPropertyValues()", bResult) ;
 
-        getPropsToTest(properties);
+        Property[] arrayFilteredProperties = allFilteredProperties.toArray(new Property[allFilteredProperties.size()]);
+
+        getPropsToTest(arrayFilteredProperties);
     }
 
     /**
@@ -346,5 +361,3 @@ public class _XMultiPropertySet extends MultiMethodTest {
         disposeEnvironment();
     }
 }
-
-

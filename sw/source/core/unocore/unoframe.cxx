@@ -211,11 +211,13 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     const ::uno::Any* pGrLoc = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_POSITION, pGrLoc );
     const ::uno::Any* pGraphic = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC, pGraphic     );
     const ::uno::Any* pGrFilter = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_FILTER, pGrFilter     );
+    const ::uno::Any* pGraphicURL = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_URL, pGraphicURL );
     const ::uno::Any* pGrTranparency = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENCY, pGrTranparency     );
     const bool bSvxBrushItemPropertiesUsed(
         pCol ||
         pTrans ||
         pGraphic ||
+        pGraphicURL ||
         pGrFilter ||
         pGrLoc ||
         pGrTranparency ||
@@ -258,9 +260,9 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     const uno::Any* pOwnAttrFillBmpItem = nullptr; GetProperty(OWN_ATTR_FILLBMP_MODE, 0, pOwnAttrFillBmpItem);
 
     // tdf#91140: ignore SOLID fill style for determining if fill style is used
-    // but there is a GraphicURL
+    // but there is a Graphic
     const bool bFillStyleUsed(pXFillStyleItem && pXFillStyleItem->hasValue() &&
-        (pXFillStyleItem->get<drawing::FillStyle>() != drawing::FillStyle_SOLID || !pGraphic));
+        (pXFillStyleItem->get<drawing::FillStyle>() != drawing::FillStyle_SOLID || (!pGraphic || !pGraphicURL) ));
     SAL_INFO_IF(pXFillStyleItem && pXFillStyleItem->hasValue() && !bFillStyleUsed,
             "sw.uno", "FillBaseProperties: ignoring invalid FillStyle");
     const bool bXFillStyleItemUsed(
@@ -323,6 +325,11 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         if (pGraphic)
         {
             bRet &= static_cast<SfxPoolItem&>(aBrush).PutValue(*pGraphic, MID_GRAPHIC);
+        }
+
+        if (pGraphicURL)
+        {
+            bRet &= static_cast<SfxPoolItem&>(aBrush).PutValue(*pGraphicURL, MID_GRAPHIC_URL);
         }
 
         if(pGrFilter)

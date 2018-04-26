@@ -137,8 +137,10 @@ public class CharacterStyle extends TestCase {
 
         XPropertySet xStyleProp = UnoRuntime.queryInterface(XPropertySet.class, oMyStyle);
 
+        String[] skipPropetiesNamed = {};
+
         short exclude = PropertyAttribute.READONLY;
-        tEnv.addObjRelation("PropertyNames",utils.getFilteredPropertyNames(xStyleProp, (short)0, exclude));
+        tEnv.addObjRelation("PropertyNames",utils.getFilteredPropertyNames(xStyleProp, (short)0, exclude, skipPropetiesNamed));
 
         return tEnv;
     }

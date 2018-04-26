@@ -19,6 +19,7 @@ package mod._sw;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -171,7 +172,12 @@ public class SwXTextCursor extends TestCase {
 
         XPropertySet xCursorProp = UnoRuntime.queryInterface(
                                            XPropertySet.class, oObj);
-        tEnv.addObjRelation("PropertyNames", getPropertyNames(xCursorProp));
+
+        String[] skipNames = { "ParaBackGraphicURL" };
+        String[] propertyNames = getPropertyNames(xCursorProp, skipNames);
+
+        tEnv.addObjRelation("PropertyNames", propertyNames);
+        tEnv.addObjRelation("SkipProperties", propertyNames);
 
         //Adding relation for util.XSortable
         final XParagraphCursor paragrCursor = UnoRuntime.queryInterface(
@@ -285,14 +291,13 @@ public class SwXTextCursor extends TestCase {
         return tEnv;
     } // finish method getTestEnvironment
 
-    public String[] getPropertyNames(XPropertySet props) {
+    public String[] getPropertyNames(XPropertySet props, String[] skipList) {
         Property[] the_props = props.getPropertySetInfo().getProperties();
         ArrayList<String> names = new ArrayList<String>();
 
         for (int i = 0; i < the_props.length; i++) {
             boolean isWritable = ((the_props[i].Attributes & PropertyAttribute.READONLY) == 0);
-
-            if (isWritable) {
+            if (isWritable && !Arrays.asList(skipList).contains(the_props[i].Name)) {
                 names.add(the_props[i].Name);
             }
         }
