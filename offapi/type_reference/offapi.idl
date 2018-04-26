@@ -3643,6 +3643,7 @@ module com {
      [property, maybevoid, optional] boolean ParaIsConnectBorder;
      [property, optional] string ListId;
      [property, optional] short OutlineLevel;
+     [property, optional] ::com::sun::star::graphic::XGraphic ParaBackGraphic;
     };
    };
    module util {
@@ -13136,6 +13137,7 @@ module com {
     published service PageProperties {
      [property] ::com::sun::star::util::Color BackColor;
      [property] string BackGraphicURL;
+     [property] ::com::sun::star::graphic::XGraphic BackGraphic;
      [property] string BackGraphicFilter;
      [property] ::com::sun::star::style::GraphicLocation BackGraphicLocation;
      [property] boolean BackTransparent;
@@ -13165,6 +13167,7 @@ module com {
      [property] ::com::sun::star::container::XNameContainer UserDefinedAttributes;
      [property, maybevoid] ::com::sun::star::util::Color HeaderBackColor;
      [property, maybevoid] string HeaderBackGraphicURL;
+     [property, maybevoid] ::com::sun::star::graphic::XGraphic HeaderBackGraphic;
      [property, maybevoid] string HeaderBackGraphicFilter;
      [property, maybevoid] ::com::sun::star::style::GraphicLocation HeaderBackGraphicLocation;
      [property, maybevoid] long HeaderLeftMargin;
@@ -13190,6 +13193,7 @@ module com {
      [property, maybevoid, optional] ::com::sun::star::text::XText HeaderTextRight;
      [property, maybevoid] ::com::sun::star::util::Color FooterBackColor;
      [property, maybevoid] string FooterBackGraphicURL;
+     [property, maybevoid] ::com::sun::star::graphic::XGraphic FooterBackGraphic;
      [property, maybevoid] string FooterBackGraphicFilter;
      [property, maybevoid] ::com::sun::star::style::GraphicLocation FooterBackGraphicLocation;
      [property, maybevoid] long FooterLeftMargin;
@@ -13839,6 +13843,7 @@ module com {
      [property] ::com::sun::star::text::XTextFrame AnchorFrame;
      [property] ::com::sun::star::util::Color BackColor;
      [property] string BackGraphicURL;
+     [property] ::com::sun::star::graphic::XGraphic BackGraphic;
      [property] string BackGraphicFilter;
      [property] ::com::sun::star::style::GraphicLocation BackGraphicLocation;
      [property] ::com::sun::star::table::BorderLine LeftBorder;
@@ -13927,6 +13932,7 @@ module com {
      [property, optional] string ParaStyleSeparator;
      [property] ::com::sun::star::text::XTextColumns TextColumns;
      [property] string BackGraphicURL;
+     [property] ::com::sun::star::graphic::XGraphic BackGraphic;
      [property] string BackGraphicFilter;
      [property] ::com::sun::star::style::GraphicLocation BackGraphicLocation;
      [property] ::com::sun::star::util::Color BackColor;
@@ -14017,6 +14023,7 @@ module com {
      [property] string CellName;
      [property] ::com::sun::star::util::Color BackColor;
      [property] string BackGraphicURL;
+     [property] ::com::sun::star::graphic::XGraphic BackGraphic;
      [property] string BackGraphicFilter;
      [property] ::com::sun::star::style::GraphicLocation BackGraphicLocation;
      [property] long NumberFormat;
@@ -14047,6 +14054,7 @@ module com {
      [property] string BackGraphicFilter;
      [property] ::com::sun::star::style::GraphicLocation BackGraphicLocation;
      [property] string BackGraphicURL;
+     [property] ::com::sun::star::graphic::XGraphic BackGraphic;
      [property] boolean BackTransparent;
      [property] boolean ChartColumnAsLabel;
      [property] boolean ChartRowAsLabel;
@@ -14633,6 +14641,7 @@ module com {
      [property] short TableColumnRelativeSum;
      [property] ::com::sun::star::util::Color BackColor;
      [property] string BackGraphicURL;
+     [property] ::com::sun::star::graphic::XGraphic BackGraphic;
      [property] string BackGraphicFilter;
      [property] ::com::sun::star::style::GraphicLocation BackGraphicLocation;
      [property, optional] boolean CollapsingBorders;
@@ -15044,6 +15053,7 @@ module com {
      [property] string DDECommandFile;
      [property] string DDECommandElement;
      [property] string BackGraphicURL;
+     [property] ::com::sun::star::graphic::XGraphic BackGraphic;
      [property] string BackGraphicFilter;
      [property] ::com::sun::star::style::GraphicLocation BackGraphicLocation;
      [property] boolean FootnoteIsCollectAtTextEnd;
@@ -15118,6 +15128,7 @@ module com {
      [property] ::com::sun::star::util::Color BackColor;
      [property] boolean BackTransparent;
      [property] string BackGraphicURL;
+     [property] ::com::sun::star::graphic::XGraphic BackGraphic;
      [property] string BackGraphicFilter;
      [property] ::com::sun::star::style::GraphicLocation BackGraphicLocation;
      [property] sequence< ::com::sun::star::text::TableColumnSeparator > TableColumnSeparators;
