@@ -36,25 +36,29 @@ class SwAttrHandler;
 
 class SwExtend
 {
-    std::unique_ptr<SwFont> pFnt;
-    const std::vector<ExtTextInputAttr> &rArr;
-    sal_Int32 nStart;
-    sal_Int32 nPos;
-    sal_Int32 nEnd;
+    std::unique_ptr<SwFont> m_pFont;
+    const std::vector<ExtTextInputAttr> &m_rArr;
+    sal_Int32 m_nStart;
+    sal_Int32 m_nPos;
+    sal_Int32 m_nEnd;
     bool Leave_( SwFont& rFnt, sal_Int32 nNew );
-    bool Inside() const { return ( nPos >= nStart && nPos < nEnd ); }
+    bool Inside() const { return (m_nPos >= m_nStart && m_nPos < m_nEnd); }
     static void ActualizeFont( SwFont &rFnt, ExtTextInputAttr nAttr );
 public:
-    SwExtend( const std::vector<ExtTextInputAttr> &rA, sal_Int32 nSt ) : rArr( rA ),
-        nStart( nSt ), nPos( COMPLETE_STRING ), nEnd( nStart + rA.size() ) {}
-    bool IsOn() const { return pFnt != nullptr; }
-    void Reset() { pFnt.reset(); nPos = COMPLETE_STRING; }
+    SwExtend(const std::vector<ExtTextInputAttr> &rArr, sal_Int32 const nStart)
+        : m_rArr(rArr)
+        , m_nStart(nStart)
+        , m_nPos(COMPLETE_STRING)
+        , m_nEnd(m_nStart + rArr.size())
+    {}
+    bool IsOn() const { return m_pFont != nullptr; }
+    void Reset() { m_pFont.reset(); m_nPos = COMPLETE_STRING; }
     bool Leave( SwFont& rFnt, sal_Int32 nNew )
-        { return pFnt && Leave_( rFnt, nNew ); }
+        { return m_pFont && Leave_( rFnt, nNew ); }
     short Enter( SwFont& rFnt, sal_Int32 nNew );
     sal_Int32 Next( sal_Int32 nNext );
-    SwFont* GetFont()  { return pFnt.get(); }
-    void UpdateFont( SwFont &rFnt ) { ActualizeFont( rFnt, rArr[ nPos - nStart ] ); }
+    SwFont* GetFont() { return m_pFont.get(); }
+    void UpdateFont(SwFont &rFont) { ActualizeFont(rFont, m_rArr[m_nPos - m_nStart]); }
 };
 
 class SwRedlineItr
