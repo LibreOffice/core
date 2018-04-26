@@ -3073,6 +3073,15 @@ RTFError RTFDocumentImpl::popState()
         // don't do it again in the outer state later.
         m_aStates.top().nTableRowWidthAfter = 0;
 
+    if (m_nResetBreakOnSectBreak != RTF_invalid && !m_aStates.empty())
+    {
+        // Section break type created for \page still has an effect in the
+        // outer state as well.
+        RTFValue::Pointer_t pType = aState.aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_type);
+        if (pType)
+            m_aStates.top().aSectionSprms.set(NS_ooxml::LN_EG_SectPrContents_type, pType);
+    }
+
     return RTFError::OK;
 }
 
