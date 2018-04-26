@@ -165,6 +165,7 @@
 #define UNO_NAME_GRAPHOBJ_GRAFSTREAMURL         "GraphicStreamURL"
 #define UNO_NAME_GRAPHOBJ_URLPKGPREFIX          "vnd.sun.star.Package:"
 #define UNO_NAME_GRAPHOBJ_GRAPHIC               "Graphic"
+#define UNO_NAME_GRAPHOBJ_GRAPHIC_URL           "GraphicURL"
 #define UNO_NAME_GRAPHOBJ_IS_SIGNATURELINE      "IsSignatureLine"
 #define UNO_NAME_GRAPHOBJ_SIGNATURELINE_ID      "SignatureLineId"
 #define UNO_NAME_GRAPHOBJ_SIGNATURELINE_SUGGESTED_SIGNER_NAME "SignatureLineSuggestedSignerName"
