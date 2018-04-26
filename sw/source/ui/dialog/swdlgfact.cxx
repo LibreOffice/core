@@ -127,6 +127,10 @@ short AbstractMultiTOXMarkDlg_Impl::Execute()
 {
     return m_xDlg->execute();
 }
+short AbstractTabController_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
 short AbstractSwConvertTableDlg_Impl::Execute()
 {
@@ -210,6 +214,32 @@ void AbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 void AbstractTabDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
+}
+
+void AbstractTabController_Impl::SetCurPageId( const OString &rName )
+{
+    m_xDlg->SetCurPageId( rName );
+}
+
+const SfxItemSet* AbstractTabController_Impl::GetOutputItemSet() const
+{
+    return m_xDlg->GetOutputItemSet();
+}
+
+const sal_uInt16* AbstractTabController_Impl::GetInputRanges(const SfxItemPool& pItem )
+{
+    return m_xDlg->GetInputRanges( pItem );
+}
+
+void AbstractTabController_Impl::SetInputSet( const SfxItemSet* pInSet )
+{
+     m_xDlg->SetInputSet( pInSet );
+}
+
+//From class Window.
+void AbstractTabController_Impl::SetText( const OUString& rStr )
+{
+    m_xDlg->set_title(rStr);
 }
 
 IMPL_LINK_NOARG(AbstractApplyTabDialog_Impl, ApplyHdl, Button*, void)
@@ -758,12 +788,11 @@ VclPtr<AbstractDropDownFieldDialog> SwAbstractDialogFactory_Impl::CreateDropDown
     return VclPtr<AbstractDropDownFieldDialog_Impl>::Create(new sw::DropDownFieldDialog(pParent, rSh, pField, bPrevButton, bNextButton));
 }
 
-VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwEnvDlg ( vcl::Window* pParent, const SfxItemSet& rSet,
+VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet,
                                                                  SwWrtShell* pWrtSh, Printer* pPrt,
-                                                                 bool bInsert )
+                                                                 bool bInsert)
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<SwEnvDlg>::Create( pParent, rSet, pWrtSh,pPrt, bInsert  );
-    return VclPtr<AbstractTabDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractTabController_Impl>::Create(new SwEnvDlg(pParent, rSet, pWrtSh,pPrt, bInsert));
 }
 
 VclPtr<AbstractSwLabDlg> SwAbstractDialogFactory_Impl::CreateSwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,

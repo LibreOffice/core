@@ -53,7 +53,7 @@ class SwEnvPreview
 {
 private:
     std::unique_ptr<weld::DrawingArea> m_xDrawingArea;
-    VclPtr<SwEnvDlg> m_pDialog;
+    SwEnvDlg* m_pDialog;
     Size m_aSize;
 
     DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
@@ -65,7 +65,7 @@ public:
     void queue_draw() { m_xDrawingArea->queue_draw(); }
 };
 
-class SwEnvDlg : public SfxTabDialog
+class SwEnvDlg : public SfxTabDialogController
 {
 friend class SwEnvPage;
 friend class SwEnvFormatPage;
@@ -77,22 +77,20 @@ friend class SwEnvPreview;
     VclPtr<Printer> pPrinter;
     SfxItemSet      *pAddresseeSet;
     SfxItemSet      *pSenderSet;
-    sal_uInt16      m_nEnvPrintId;
-    sal_uInt16      m_nEnvAddressId;
-    sal_uInt16      m_nEnvFormatId;
 
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    std::unique_ptr<weld::Button> m_xModify;
+
+    virtual void    PageCreated(const OString& rId, SfxTabPage &rPage) override;
     virtual short   Ok() override;
 
 public:
-    SwEnvDlg(vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert);
+    SwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert);
     virtual ~SwEnvDlg() override;
-    virtual void dispose() override;
 };
 
 class SwEnvPage : public SfxTabPage
 {
-    VclPtr<SwEnvDlg> m_pDialog;
+    SwEnvDlg* m_pDialog;
     SwWrtShell*   m_pSh;
     OUString      m_sActDBName;
 
@@ -128,11 +126,6 @@ public:
             void FillItem(SwEnvItem& rItem);
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
-    virtual void dispose() override
-    {
-        m_pDialog.clear();
-        SfxTabPage::dispose();
-    }
 };
 
 #endif
