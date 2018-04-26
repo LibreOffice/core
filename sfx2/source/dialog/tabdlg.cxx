@@ -1464,6 +1464,7 @@ SfxTabDialogController::SfxTabDialogController
     , m_xTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
     , m_xApplyBtn(m_xBuilder->weld_button("apply"))
+    , m_xUserBtn(m_xBuilder->weld_button("user"))
     , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
     , m_xResetBtn(m_xBuilder->weld_button("reset"))
     , m_pSet(pItemSet ? new SfxItemSet(*pItemSet) : nullptr)
@@ -1487,6 +1488,9 @@ void SfxTabDialogController::Init_Impl(bool /*bFmtFlag*/)
     m_xTabCtrl->connect_leave_page(LINK(this, SfxTabDialogController, DeactivatePageHdl));
     m_xResetBtn->set_help_id(HID_TABDLG_RESET_BTN);
 
+    if (m_xUserBtn)
+        m_xUserBtn->connect_clicked(LINK(this, SfxTabDialogController, UserHdl));
+
     if (m_pSet)
     {
         m_pExampleSet = new SfxItemSet(*m_pSet);
@@ -1507,6 +1511,28 @@ IMPL_LINK_NOARG(SfxTabDialogController, OkHdl, weld::Button&, void)
 {
     if (PrepareLeaveCurrentPage())
         m_xDialog->response(Ok());
+}
+
+IMPL_LINK_NOARG(SfxTabDialogController, UserHdl, weld::Button&, void)
+
+/*  [Description]
+
+    Handler of the User-Buttons
+    This calls the current page <SfxTabPage::DeactivatePage(SfxItemSet *)>.
+    returns this <DeactivateRC::LeavePage> and  <SfxTabDialog::Ok()> is called.
+    Then the Dialog is ended with the Return value <SfxTabDialog::Ok()>
+*/
+
+{
+    if (PrepareLeaveCurrentPage())
+    {
+        short nRet = Ok();
+        if (RET_OK == nRet)
+            nRet = RET_USER;
+        else
+            nRet = RET_USER_CANCEL;
+        m_xDialog->response(nRet);
+    }
 }
 
 IMPL_LINK_NOARG(SfxTabDialogController, CancelHdl, weld::Button&, void)

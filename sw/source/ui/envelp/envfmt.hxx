@@ -26,7 +26,7 @@ class SwTextFormatColl;
 
 class SwEnvFormatPage : public SfxTabPage
 {
-    VclPtr<SwEnvDlg> m_pDialog;
+    SwEnvDlg* m_pDialog;
     std::vector<sal_uInt16>  m_aIDs;
 
     std::unique_ptr<weld::MetricSpinButton>  m_xAddrLeftField;
@@ -59,11 +59,6 @@ class SwEnvFormatPage : public SfxTabPage
 public:
     SwEnvFormatPage(TabPageParent pParent, const SfxItemSet& rSet);
     void Init(SwEnvDlg* pDialog);
-    virtual void dispose() override
-    {
-        m_pDialog.clear();
-        SfxTabPage::dispose();
-    }
     virtual ~SwEnvFormatPage() override;
 
     static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rSet);
