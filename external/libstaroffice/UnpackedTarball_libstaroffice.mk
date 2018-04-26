@@ -37,8 +37,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,libstaroffice, \
 ))
 endif
 
-$(eval $(call gb_UnpackedTarball_add_patches,libstaroffice, \
-	external/libstaroffice/0001-fix-null-ptr-deref.-if-decryption-failed.patch.1 \
+$(eval $(call gb_UnpackedTarball_add_patches,libstaroffice,\
+	external/libstaroffice/0001-add-missing-include-for-std-max.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
