@@ -50,10 +50,13 @@ class SFX2_DLLPUBLIC SfxInfoBarWindow : public vcl::Window
 {
     private:
         OUString                           m_sId;
+        InfoBarType m_eType;
         VclPtr<FixedImage>        m_pImage;
         VclPtr<FixedText>           m_pMessage;
         VclPtr<Button>                m_pCloseBtn;
         std::vector< VclPtr<PushButton> >  m_aActionBtns;
+
+        void SetForeAndBackgroundColors( InfoBarType eType );
 
     public:
         SfxInfoBarWindow( vcl::Window* parent, const OUString& sId,
@@ -66,6 +69,7 @@ class SFX2_DLLPUBLIC SfxInfoBarWindow : public vcl::Window
         const OUString& getId() const { return m_sId; }
         virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
         virtual void Resize( ) override;
+        void Update( const OUString& sNewMessage, InfoBarType eType );
         basegfx::BColor                m_aBackgroundColor;
         basegfx::BColor                m_aForegroundColor;
 

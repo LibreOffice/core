@@ -3095,6 +3095,27 @@ VclPtr<SfxInfoBarWindow> SfxViewFrame::AppendInfoBar(const OUString& sId,
     return pInfoBar;
 }
 
+void SfxViewFrame::UpdateInfoBar( const OUString& sId,
+                           const OUString& sMessage,
+                           InfoBarType eType )
+{
+    const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
+
+    // Make sure the InfoBar container is visible
+    if (!HasChildWindow(nId))
+        ToggleChildWindow(nId);
+
+    SfxChildWindow* pChild = GetChildWindow(nId);
+    if (pChild)
+    {
+        SfxInfoBarContainerWindow* pInfoBarContainer = static_cast<SfxInfoBarContainerWindow*>(pChild->GetWindow());
+        auto pInfoBar = pInfoBarContainer->getInfoBar(sId);
+
+        if (pInfoBar)
+             pInfoBar->Update(sMessage, eType);
+    }
+}
+
 void SfxViewFrame::RemoveInfoBar( const OUString& sId )
 {
     const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
