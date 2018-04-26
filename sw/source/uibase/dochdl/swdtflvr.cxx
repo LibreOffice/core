@@ -2183,7 +2183,7 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
                 }
 
                 rWrtShell.InsertDDETable(
-                    SwInsertTableOptions( tabopts::SPLIT_LAYOUT, 1 ), // TODO MULTIHEADER
+                    SwInsertTableOptions( SwInsertTableFlags::SplitLayout, 1 ), // TODO MULTIHEADER
                     pDDETyp, nRows, nCols );
             }
             else if( 1 < comphelper::string::getTokenCount(aExpand, '\n') )

@@ -1532,7 +1532,7 @@ void SwDocTest::testFormulas()
     SwPosition aPos(aIdx);
 
     const SwTable *pTable = m_pDoc->InsertTable(
-        SwInsertTableOptions(tabopts::HEADLINE_NO_BORDER, 0), aPos, 1, 3, 0);
+        SwInsertTableOptions(SwInsertTableFlags::HeadlineNoBorder, 0), aPos, 1, 3, 0);
     SwTableNode* pTableNode = pTable->GetTableNode();
     SwTableFormulaTest aFormula("<\x12-1,0>+<Table1.A1>", pTableNode);
 

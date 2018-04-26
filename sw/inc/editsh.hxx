@@ -709,11 +709,11 @@ public:
     /// For Inserting SoftHyphen. Position is offset within the syllabificated word.
     static void InsertSoftHyph( const sal_Int32 nHyphPos );
 
-    const SwTable& InsertTable( const SwInsertTableOptions& rInsTableOpts,  ///< ALL_TBL_INS_ATTR
+    const SwTable& InsertTable( const SwInsertTableOptions& rInsTableOpts,  ///< All
                                 sal_uInt16 nRows, sal_uInt16 nCols,
                                 const SwTableAutoFormat* pTAFormat = nullptr );
 
-    void InsertDDETable( const SwInsertTableOptions& rInsTableOpts,  ///< HEADLINE_NO_BORDER
+    void InsertDDETable( const SwInsertTableOptions& rInsTableOpts,  ///< HeadlineNoBorder
                          SwDDEFieldType* pDDEType,
                          sal_uInt16 nRows, sal_uInt16 nCols  );
 
@@ -721,7 +721,7 @@ public:
     void SetTableName( SwFrameFormat& rTableFormat, const OUString &rNewName );
 
     SwFrameFormat *GetTableFormat();
-    bool TextToTable( const SwInsertTableOptions& rInsTableOpts,  ///< ALL_TBL_INS_ATTR
+    bool TextToTable( const SwInsertTableOptions& rInsTableOpts,  ///< All
                       sal_Unicode cCh,
                       const SwTableAutoFormat* pTAFormat = nullptr );
     bool TableToText( sal_Unicode cCh );

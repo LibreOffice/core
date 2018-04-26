@@ -3441,7 +3441,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 OSL_ENSURE( !m_pPam->GetPoint()->nContent.GetIndex(),
                         "The paragraph after the table is not empty!" );
                 const SwTable* pSwTable = m_xDoc->InsertTable(
-                        SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ),
+                        SwInsertTableOptions( SwInsertTableFlags::HeadlineNoBorder, 1 ),
                         *m_pPam->GetPoint(), 1, 1, text::HoriOrientation::LEFT );
                 SwFrameFormat *pFrameFormat = pSwTable ? pSwTable->GetFrameFormat() : nullptr;
 

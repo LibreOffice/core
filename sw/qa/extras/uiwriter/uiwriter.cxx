@@ -710,7 +710,7 @@ void SwUiWriterTest::testTdf67238()
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     //insert a 3X3 table in the newly created document
-    SwInsertTableOptions TableOpt(tabopts::DEFAULT_BORDER, 0);
+    SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
     const SwTable& rTable = pWrtShell->InsertTable(TableOpt, 3, 3);
     //checking for the rows and columns
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
@@ -1854,7 +1854,7 @@ void SwUiWriterTest::testDeleteTableRedlines()
 {
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwInsertTableOptions TableOpt(tabopts::DEFAULT_BORDER, 0);
+    SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
     const SwTable& rTable = pWrtShell->InsertTable(TableOpt, 1, 3);
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
@@ -2399,7 +2399,7 @@ void SwUiWriterTest::testTdf60967()
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     pWrtShell->ChangeHeaderOrFooter("Default Style", true, true, true);
     //Inserting table
-    SwInsertTableOptions TableOpt(tabopts::DEFAULT_BORDER, 0);
+    SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
     pWrtShell->InsertTable(TableOpt, 2, 2);
     //getting the cursor's position just after the table insert
     SwPosition aPosAfterTable(*(pCursor->GetPoint()));
@@ -3072,7 +3072,7 @@ void SwUiWriterTest::testTdf80663()
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     //Inserting 2x2 Table
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
-    SwInsertTableOptions TableOpt(tabopts::DEFAULT_BORDER, 0);
+    SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
     pWrtShell->InsertTable(TableOpt, 2, 2);
     //Checking for the number of rows and columns
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
@@ -3159,7 +3159,7 @@ void SwUiWriterTest::testTdf57197()
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     //Inserting 1x1 Table
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
-    SwInsertTableOptions TableOpt(tabopts::DEFAULT_BORDER, 0);
+    SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
     pWrtShell->InsertTable(TableOpt, 1, 1);
     //Checking for the number of rows and columns
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
@@ -3515,7 +3515,7 @@ void SwUiWriterTest::testTableBackgroundColor()
 {
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwInsertTableOptions TableOpt(tabopts::DEFAULT_BORDER, 0);
+    SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
     pWrtShell->InsertTable(TableOpt, 3, 3); //Inserting Table
     //Checking Rows and Columns of Inserted Table
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
@@ -6057,7 +6057,7 @@ void SwUiWriterTest::testTdf115132()
     pWrtShell->SplitNode();
     pWrtShell->SttDoc();
     // Create a table at the start of document body
-    SwInsertTableOptions TableOpt(tabopts::DEFAULT_BORDER, 0);
+    SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
     const SwTable* pTable = &pWrtShell->InsertTable(TableOpt, 2, 3);
     const SwTableFormat* pFormat = pTable->GetFrameFormat();
     CPPUNIT_ASSERT(pFormat);

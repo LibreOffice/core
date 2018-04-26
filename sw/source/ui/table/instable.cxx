@@ -31,19 +31,19 @@ void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rC
                                 SwInsertTableOptions& rInsTableOpts, OUString& rAutoName,
                                 SwTableAutoFormat *& prTAFormat )
 {
-    sal_uInt16 nInsMode = 0;
+    SwInsertTableFlags nInsMode = SwInsertTableFlags::NONE;
     rName = m_xNameEdit->get_text();
     rRow = m_xRowNF->get_value();
     rCol = m_xColNF->get_value();
 
     if (m_xHeaderCB->get_active())
-        nInsMode |= tabopts::HEADLINE;
+        nInsMode |= SwInsertTableFlags::Headline;
     if (m_xRepeatHeaderCB->get_sensitive() && m_xRepeatHeaderCB->get_active())
         rInsTableOpts.mnRowsToRepeat = m_xRepeatHeaderNF->get_value();
     else
         rInsTableOpts.mnRowsToRepeat = 0;
     if (!m_xDontSplitCB->get_active())
-        nInsMode |= tabopts::SPLIT_LAYOUT;
+        nInsMode |= SwInsertTableFlags::SplitLayout;
     if( pTAutoFormat )
     {
         prTAFormat = new SwTableAutoFormat( *pTAutoFormat );
@@ -97,14 +97,14 @@ SwInsTableDlg::SwInsTableDlg(SwView& rView)
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTableFlags(bHTMLMode);
-    sal_uInt16 nInsTableFlags = aInsOpts.mnInsMode;
+    SwInsertTableFlags nInsTableFlags = aInsOpts.mnInsMode;
 
-    m_xHeaderCB->set_active(0 != (nInsTableFlags & tabopts::HEADLINE));
+    m_xHeaderCB->set_active(bool(nInsTableFlags & SwInsertTableFlags::Headline));
     m_xRepeatHeaderCB->set_active(aInsOpts.mnRowsToRepeat > 0);
     if (bHTMLMode)
         m_xDontSplitCB->hide();
     else
-        m_xDontSplitCB->set_active(0 == (nInsTableFlags & tabopts::SPLIT_LAYOUT));
+        m_xDontSplitCB->set_active(!(nInsTableFlags & SwInsertTableFlags::SplitLayout));
 
     m_xRepeatHeaderNF->connect_value_changed( LINK( this, SwInsTableDlg, ModifyRepeatHeaderNF_Hdl ) );
     m_xHeaderCB->connect_toggled( LINK( this, SwInsTableDlg, CheckBoxHdl ) );
