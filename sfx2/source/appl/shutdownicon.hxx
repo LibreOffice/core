@@ -111,7 +111,6 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         /// @throws css::uno::Exception
         void init();
 
-        static OUString GetResString(const char* id);
         static OUString GetUrlDescription( const OUString& aUrl );
 
         void SetVeto( bool bVeto )  { m_bVeto = bVeto;}
