@@ -531,9 +531,9 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case FN_FORMAT_COLUMN :
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact && "Dialog creation failed!");
+        OSL_ENSURE(pFact, "Dialog creation failed!");
         VclPtr<VclAbstractDialog> pColDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_COLUMN));
-        assert(pColDlg && "Dialog creation failed!");
+        OSL_ENSURE(pColDlg, "Dialog creation failed!");
         pColDlg->StartExecuteAsync([](sal_Int32 /*nResult*/){});
     }
     break;
