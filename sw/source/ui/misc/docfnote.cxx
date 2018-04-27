@@ -64,77 +64,49 @@ IMPL_LINK( SwFootNoteOptionDlg, OkHdl, Button *, pBtn, void )
     aOldOkHdl.Call( pBtn );
 }
 
-SwEndNoteOptionPage::SwEndNoteOptionPage(vcl::Window *pParent, bool bEN,
+SwEndNoteOptionPage::SwEndNoteOptionPage(TabPageParent pParent, bool bEN,
     const SfxItemSet &rSet)
     : SfxTabPage(pParent,
-        bEN ? OString("EndnotePage") : OString("FootnotePage"),
         bEN ? OUString("modules/swriter/ui/endnotepage.ui") : OUString("modules/swriter/ui/footnotepage.ui"),
+        bEN ? OString("EndnotePage") : OString("FootnotePage"),
         &rSet)
-    , m_pNumCountBox(nullptr)
-    , m_pPosFT(nullptr)
-    , m_pPosPageBox(nullptr)
-    , m_pPosChapterBox(nullptr)
-    , m_pContEdit(nullptr)
-    , m_pContFromEdit(nullptr)
     , pSh(nullptr)
     , bPosDoc(false)
     , bEndNote(bEN)
+    , m_xNumViewBox(new NumberingTypeListBox(m_xBuilder->weld_combo_box_text("numberinglb")))
+    , m_xOffsetLbl(m_xBuilder->weld_label("offset"))
+    , m_xOffsetField(m_xBuilder->weld_spin_button("offsetnf"))
+    , m_xNumCountBox(m_xBuilder->weld_combo_box_text("countinglb"))
+    , m_xPrefixED(m_xBuilder->weld_entry("prefix"))
+    , m_xSuffixED(m_xBuilder->weld_entry("suffix"))
+    , m_xPosFT(m_xBuilder->weld_label("pos"))
+    , m_xPosPageBox(m_xBuilder->weld_radio_button("pospagecb"))
+    , m_xPosChapterBox(m_xBuilder->weld_radio_button("posdoccb"))
+    , m_xStylesContainer(m_xBuilder->weld_combo_box_text("allstyles"))
+    , m_xParaTemplBox(m_xBuilder->weld_combo_box_text("parastylelb"))
+    , m_xPageTemplLbl(m_xBuilder->weld_label("pagestyleft"))
+    , m_xPageTemplBox(m_xBuilder->weld_combo_box_text("pagestylelb"))
+    , m_xFootnoteCharAnchorTemplBox(m_xBuilder->weld_combo_box_text("charanchorstylelb"))
+    , m_xFootnoteCharTextTemplBox(m_xBuilder->weld_combo_box_text("charstylelb"))
+    , m_xContEdit(m_xBuilder->weld_entry("conted"))
+    , m_xContFromEdit(m_xBuilder->weld_entry("contfromed"))
 {
-    get(m_pNumViewBox, "numberinglb");
-    get(m_pOffsetLbl, "offset");
-    get(m_pOffsetField, "offsetnf");
-    get(m_pPrefixED, "prefix");
-    get(m_pSuffixED, "suffix");
-
+    m_xNumViewBox->Reload(SwInsertNumTypes::Extended);
     if (!bEndNote)
     {
-        get(m_pNumCountBox, "countinglb");
-        m_pNumCountBox->SetSelectHdl(LINK(this, SwEndNoteOptionPage, NumCountHdl));
-        aNumDoc = m_pNumCountBox->GetEntry(FTNNUM_DOC);
-        aNumPage = m_pNumCountBox->GetEntry(FTNNUM_PAGE);
-        aNumChapter = m_pNumCountBox->GetEntry(FTNNUM_CHAPTER);
-        get(m_pPosPageBox, "pospagecb");
-        m_pPosPageBox->SetClickHdl(LINK(this, SwEndNoteOptionPage, PosPageHdl));
-        get(m_pPosChapterBox, "posdoccb");
-        m_pPosChapterBox->SetClickHdl(LINK(this, SwEndNoteOptionPage, PosChapterHdl));
-        get(m_pPosFT, "pos");
-        get(m_pContEdit, "conted");
-        get(m_pContFromEdit, "contfromed");
+        m_xNumCountBox->connect_changed(LINK(this, SwEndNoteOptionPage, NumCountHdl));
+        aNumDoc = m_xNumCountBox->get_text(FTNNUM_DOC);
+        aNumPage = m_xNumCountBox->get_text(FTNNUM_PAGE);
+        aNumChapter = m_xNumCountBox->get_text(FTNNUM_CHAPTER);
+        m_xPosPageBox->connect_clicked(LINK(this, SwEndNoteOptionPage, PosPageHdl));
+        m_xPosChapterBox->connect_clicked(LINK(this, SwEndNoteOptionPage, PosChapterHdl));
     }
 
-    get(m_pStylesContainer, "allstyles");
-    get(m_pParaTemplBox, "parastylelb");
-    get(m_pPageTemplLbl, "pagestyleft");
-    get(m_pPageTemplBox, "pagestylelb");
-    get(m_pFootnoteCharAnchorTemplBox, "charanchorstylelb");
-    get(m_pFootnoteCharTextTemplBox, "charstylelb");
 }
 
 SwEndNoteOptionPage::~SwEndNoteOptionPage()
 {
     disposeOnce();
-}
-
-void SwEndNoteOptionPage::dispose()
-{
-    m_pNumViewBox.clear();
-    m_pOffsetLbl.clear();
-    m_pOffsetField.clear();
-    m_pNumCountBox.clear();
-    m_pPrefixED.clear();
-    m_pSuffixED.clear();
-    m_pPosFT.clear();
-    m_pPosPageBox.clear();
-    m_pPosChapterBox.clear();
-    m_pStylesContainer.clear();
-    m_pParaTemplBox.clear();
-    m_pPageTemplLbl.clear();
-    m_pPageTemplBox.clear();
-    m_pFootnoteCharAnchorTemplBox.clear();
-    m_pFootnoteCharTextTemplBox.clear();
-    m_pContEdit.clear();
-    m_pContFromEdit.clear();
-    SfxTabPage::dispose();
 }
 
 void SwEndNoteOptionPage::Reset( const SfxItemSet* )
@@ -144,7 +116,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
     SfxObjectShell * pDocSh = SfxObjectShell::Current();
 
     if (dynamic_cast<SwWebDocShell*>( pDocSh) )
-        m_pStylesContainer->Hide();
+        m_xStylesContainer->hide();
 
     if ( bEndNote )
     {
@@ -156,20 +128,20 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
         // set position (page, chapter)
         if ( rInf.ePos == FTNPOS_PAGE )
         {
-            m_pPosPageBox->Check();
-            m_pPageTemplLbl->Enable(false);
-            m_pPageTemplBox->Enable(false);
+            m_xPosPageBox->set_active(true);
+            m_xPageTemplLbl->set_sensitive(false);
+            m_xPageTemplBox->set_sensitive(false);
         }
         else
         {
-            m_pPosChapterBox->Check();
-            m_pNumCountBox->RemoveEntry(aNumPage);
-            m_pNumCountBox->RemoveEntry(aNumChapter);
+            m_xPosChapterBox->set_active(true);
+            m_xNumCountBox->remove_text(aNumPage);
+            m_xNumCountBox->remove_text(aNumChapter);
             bPosDoc = true;
         }
             // reference tests
-        m_pContEdit->SetText(rInf.aQuoVadis);
-        m_pContFromEdit->SetText(rInf.aErgoSum);
+        m_xContEdit->set_text(rInf.aQuoVadis);
+        m_xContFromEdit->set_text(rInf.aErgoSum);
 
             // collected
         SelectNumbering(rInf.eNum);
@@ -177,19 +149,19 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
 
         // numbering
         // art
-    m_pNumViewBox->SelectNumberingType( pInf->aFormat.GetNumberingType());
-    m_pOffsetField->SetValue(pInf->nFootnoteOffset + 1);
-    m_pPrefixED->SetText(pInf->GetPrefix().replaceAll("\t", "\\t")); // fdo#65666
-    m_pSuffixED->SetText(pInf->GetSuffix().replaceAll("\t", "\\t"));
+    m_xNumViewBox->SelectNumberingType( pInf->aFormat.GetNumberingType());
+    m_xOffsetField->set_value(pInf->nFootnoteOffset + 1);
+    m_xPrefixED->set_text(pInf->GetPrefix().replaceAll("\t", "\\t")); // fdo#65666
+    m_xSuffixED->set_text(pInf->GetSuffix().replaceAll("\t", "\\t"));
 
     const SwCharFormat* pCharFormat = pInf->GetCharFormat(
                         *pSh->GetView().GetDocShell()->GetDoc());
-    m_pFootnoteCharTextTemplBox->SelectEntry(pCharFormat->GetName());
-    m_pFootnoteCharTextTemplBox->SaveValue();
+    m_xFootnoteCharTextTemplBox->set_active_text(pCharFormat->GetName());
+    m_xFootnoteCharTextTemplBox->save_value();
 
     pCharFormat = pInf->GetAnchorCharFormat( *pSh->GetDoc() );
-    m_pFootnoteCharAnchorTemplBox->SelectEntry( pCharFormat->GetName() );
-    m_pFootnoteCharAnchorTemplBox->SaveValue();
+    m_xFootnoteCharAnchorTemplBox->set_active_text( pCharFormat->GetName() );
+    m_xFootnoteCharAnchorTemplBox->save_value();
 
         // styles   special regions
         // paragraph
@@ -198,50 +170,50 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
     SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
     while(pStyle)
     {
-        m_pParaTemplBox->InsertEntry(pStyle->GetName());
+        m_xParaTemplBox->append_text(pStyle->GetName());
         pStyle = pStyleSheetPool->Next();
     }
 
     OUString sStr;
     SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(bEndNote ? RES_POOLCOLL_ENDNOTE
                            : RES_POOLCOLL_FOOTNOTE), sStr );
-    if(LISTBOX_ENTRY_NOTFOUND == m_pParaTemplBox->GetEntryPos( sStr ) )
-        m_pParaTemplBox->InsertEntry( sStr );
+    if (m_xParaTemplBox->find_text(sStr) == -1)
+        m_xParaTemplBox->append_text(sStr);
 
     SwTextFormatColl* pColl = pInf->GetFootnoteTextColl();
     if( !pColl )
-        m_pParaTemplBox->SelectEntry( sStr );      // Default
+        m_xParaTemplBox->set_active_text(sStr);      // Default
     else
     {
         OSL_ENSURE(!pColl->IsDefault(), "default style for footnotes is wrong");
-        const sal_Int32 nPos = m_pParaTemplBox->GetEntryPos(pColl->GetName());
-        if( LISTBOX_ENTRY_NOTFOUND != nPos )
-            m_pParaTemplBox->SelectEntryPos( nPos );
+        const int nPos = m_xParaTemplBox->find_text(pColl->GetName());
+        if (nPos != -1)
+            m_xParaTemplBox->set_active( nPos );
         else
         {
-            m_pParaTemplBox->InsertEntry(pColl->GetName());
-            m_pParaTemplBox->SelectEntry(pColl->GetName());
+            m_xParaTemplBox->append_text(pColl->GetName());
+            m_xParaTemplBox->set_active_text(pColl->GetName());
         }
     }
 
     // page
-    for( sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i )
-        m_pPageTemplBox->InsertEntry(SwStyleNameMapper::GetUIName( i, OUString() ));
+    for (sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
+        m_xPageTemplBox->append_text(SwStyleNameMapper::GetUIName(i, OUString()));
 
     const size_t nCount = pSh->GetPageDescCnt();
     for(size_t i = 0; i < nCount; ++i)
     {
         const SwPageDesc &rPageDesc = pSh->GetPageDesc(i);
-        if(LISTBOX_ENTRY_NOTFOUND == m_pPageTemplBox->GetEntryPos(rPageDesc.GetName()))
-            m_pPageTemplBox->InsertEntry(rPageDesc.GetName());
+        if (m_xPageTemplBox->find_text(rPageDesc.GetName()) == -1)
+            m_xPageTemplBox->append_text(rPageDesc.GetName());
     }
 
-    m_pPageTemplBox->SelectEntry( pInf->GetPageDesc( *pSh->GetDoc() )->GetName());
+    m_xPageTemplBox->set_active_text(pInf->GetPageDesc(*pSh->GetDoc())->GetName());
 }
 
 VclPtr<SfxTabPage> SwEndNoteOptionPage::Create( TabPageParent pParent, const SfxItemSet *rSet )
 {
-    return VclPtr<SwEndNoteOptionPage>::Create( pParent.pParent, true, *rSet );
+    return VclPtr<SwEndNoteOptionPage>::Create(pParent, true, *rSet);
 }
 
 // Different kinds of numbering; because the Listbox has varying numbers of
@@ -263,13 +235,13 @@ void SwEndNoteOptionPage::SelectNumbering(SwFootnoteNum const eNum)
         default:
             assert(false);
     }
-    m_pNumCountBox->SelectEntry(sSelect);
-    NumCountHdl(*m_pNumCountBox);
+    m_xNumCountBox->set_active_text(sSelect);
+    NumCountHdl(*m_xNumCountBox);
 }
 
 SwFootnoteNum SwEndNoteOptionPage::GetNumbering() const
 {
-    const sal_Int32 nPos = m_pNumCountBox->GetSelectedEntryPos();
+    const int nPos = m_xNumCountBox->get_active();
     return static_cast<SwFootnoteNum>((bPosDoc) ? nPos + 2 : nPos);
 }
 
@@ -277,55 +249,55 @@ void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
 {
     pSh = &rShell;
     // collect character templates
-    m_pFootnoteCharTextTemplBox->Clear();
-    m_pFootnoteCharAnchorTemplBox->Clear();
-    ::FillCharStyleListBox(*m_pFootnoteCharTextTemplBox,
+    m_xFootnoteCharTextTemplBox->clear();
+    m_xFootnoteCharAnchorTemplBox->clear();
+    ::FillCharStyleListBox(*m_xFootnoteCharTextTemplBox,
                         pSh->GetView().GetDocShell());
 
-    ::FillCharStyleListBox(*m_pFootnoteCharAnchorTemplBox,
+    ::FillCharStyleListBox(*m_xFootnoteCharAnchorTemplBox,
                         pSh->GetView().GetDocShell());
 }
 
 // Handler behind the button to collect the footnote at the page. In this case
 // all kinds of numbering can be used.
-IMPL_LINK_NOARG(SwEndNoteOptionPage, PosPageHdl, Button*, void)
+IMPL_LINK_NOARG(SwEndNoteOptionPage, PosPageHdl, weld::Button&, void)
 {
     const SwFootnoteNum eNum = GetNumbering();
     bPosDoc = false;
-    if(LISTBOX_ENTRY_NOTFOUND == m_pNumCountBox->GetEntryPos(aNumPage))
+    if (m_xNumCountBox->find_text(aNumPage) == -1)
     {
-        m_pNumCountBox->InsertEntry(aNumPage, FTNNUM_PAGE);
-        m_pNumCountBox->InsertEntry(aNumChapter, FTNNUM_CHAPTER);
+        m_xNumCountBox->insert_text(FTNNUM_PAGE, aNumPage);
+        m_xNumCountBox->insert_text(FTNNUM_CHAPTER, aNumChapter);
         SelectNumbering(eNum);
     }
-    m_pPageTemplLbl->Enable(false);
-    m_pPageTemplBox->Enable(false);
+    m_xPageTemplLbl->set_sensitive(false);
+    m_xPageTemplBox->set_sensitive(false);
 }
 
-IMPL_LINK_NOARG(SwEndNoteOptionPage, NumCountHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwEndNoteOptionPage, NumCountHdl, weld::ComboBoxText&, void)
 {
     bool bEnable = true;
-    if( m_pNumCountBox->GetEntryCount() - 1 != m_pNumCountBox->GetSelectedEntryPos() )
+    if (m_xNumCountBox->get_count() - 1 != m_xNumCountBox->get_active())
     {
         bEnable = false;
-        m_pOffsetField->SetValue(1);
+        m_xOffsetField->set_value(1);
     }
-    m_pOffsetLbl->Enable(bEnable);
-    m_pOffsetField->Enable(bEnable);
+    m_xOffsetLbl->set_sensitive(bEnable);
+    m_xOffsetField->set_sensitive(bEnable);
 }
 
 // Handler behind the button to collect the footnote at the chapter or end of
 // the document. In this case no pagewise numbering can be used.
-IMPL_LINK_NOARG(SwEndNoteOptionPage, PosChapterHdl, Button*, void)
+IMPL_LINK_NOARG(SwEndNoteOptionPage, PosChapterHdl, weld::Button&, void)
 {
     if ( !bPosDoc )
         SelectNumbering(FTNNUM_DOC);
 
     bPosDoc = true;
-    m_pNumCountBox->RemoveEntry(aNumPage);
-    m_pNumCountBox->RemoveEntry(aNumChapter);
-    m_pPageTemplLbl->Enable();
-    m_pPageTemplBox->Enable();
+    m_xNumCountBox->remove_text(aNumPage);
+    m_xNumCountBox->remove_text(aNumChapter);
+    m_xPageTemplLbl->set_sensitive(true);
+    m_xPageTemplBox->set_sensitive(true);
 }
 
 static SwCharFormat* lcl_GetCharFormat( SwWrtShell* pSh, const OUString& rCharFormatName )
@@ -357,21 +329,21 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
 {
     std::unique_ptr<SwEndNoteInfo> pInf(bEndNote ? new SwEndNoteInfo() : new SwFootnoteInfo());
 
-    pInf->nFootnoteOffset = static_cast< sal_uInt16 >(m_pOffsetField->GetValue() -1);
-    pInf->aFormat.SetNumberingType(m_pNumViewBox->GetSelectedNumberingType() );
-    pInf->SetPrefix(m_pPrefixED->GetText().replaceAll("\\t", "\t"));
-    pInf->SetSuffix(m_pSuffixED->GetText().replaceAll("\\t", "\t"));
+    pInf->nFootnoteOffset = m_xOffsetField->get_value() - 1;
+    pInf->aFormat.SetNumberingType(m_xNumViewBox->GetSelectedNumberingType() );
+    pInf->SetPrefix(m_xPrefixED->get_text().replaceAll("\\t", "\t"));
+    pInf->SetSuffix(m_xSuffixED->get_text().replaceAll("\\t", "\t"));
 
     pInf->SetCharFormat( lcl_GetCharFormat( pSh,
-                        m_pFootnoteCharTextTemplBox->GetSelectedEntry() ) );
+                        m_xFootnoteCharTextTemplBox->get_active_text() ) );
     pInf->SetAnchorCharFormat( lcl_GetCharFormat( pSh,
-                        m_pFootnoteCharAnchorTemplBox->GetSelectedEntry() ) );
+                        m_xFootnoteCharAnchorTemplBox->get_active_text() ) );
 
     // paragraph template
-    sal_Int32 nPos = m_pParaTemplBox->GetSelectedEntryPos();
-    if(LISTBOX_ENTRY_NOTFOUND != nPos)
+    int nPos = m_xParaTemplBox->get_active();
+    if (nPos != -1)
     {
-        const OUString aFormatName( m_pParaTemplBox->GetSelectedEntry() );
+        const OUString aFormatName( m_xParaTemplBox->get_active_text() );
         SwTextFormatColl *pColl = pSh->GetParaStyle(aFormatName, SwWrtShell::GETSTYLE_CREATEANY);
         OSL_ENSURE(pColl, "paragraph style not found");
         pInf->SetFootnoteTextColl(*pColl);
@@ -379,7 +351,7 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
 
     // page template
     pInf->ChgPageDesc( pSh->FindPageDescByName(
-                                m_pPageTemplBox->GetSelectedEntry(), true ) );
+                                m_xPageTemplBox->get_active_text(), true ) );
 
     if ( bEndNote )
     {
@@ -389,18 +361,18 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
     else
     {
         SwFootnoteInfo *pI = static_cast<SwFootnoteInfo*>(pInf.get());
-        pI->ePos = m_pPosPageBox->IsChecked() ? FTNPOS_PAGE : FTNPOS_CHAPTER;
+        pI->ePos = m_xPosPageBox->get_active() ? FTNPOS_PAGE : FTNPOS_CHAPTER;
         pI->eNum = GetNumbering();
-        pI->aQuoVadis = m_pContEdit->GetText();
-        pI->aErgoSum = m_pContFromEdit->GetText();
+        pI->aQuoVadis = m_xContEdit->get_text();
+        pI->aErgoSum = m_xContFromEdit->get_text();
         if ( !(*pI == pSh->GetFootnoteInfo()) )
             pSh->SetFootnoteInfo( *pI );
     }
     return true;
 }
 
-SwFootNoteOptionPage::SwFootNoteOptionPage( vcl::Window *pParent, const SfxItemSet &rSet ) :
-    SwEndNoteOptionPage( pParent, false, rSet )
+SwFootNoteOptionPage::SwFootNoteOptionPage(TabPageParent pParent, const SfxItemSet &rSet)
+    : SwEndNoteOptionPage(pParent, false, rSet)
 {
 }
 
@@ -410,7 +382,7 @@ SwFootNoteOptionPage::~SwFootNoteOptionPage()
 
 VclPtr<SfxTabPage> SwFootNoteOptionPage::Create(TabPageParent pParent, const SfxItemSet *rSet )
 {
-    return VclPtr<SwFootNoteOptionPage>::Create( pParent.pParent, *rSet );
+    return VclPtr<SwFootNoteOptionPage>::Create(pParent, *rSet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

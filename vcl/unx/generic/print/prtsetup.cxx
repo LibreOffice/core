@@ -64,7 +64,7 @@ void RTSDialog::insertAllPPDValues(weld::ComboBoxText& rBox, const PPDParser* pP
             rBox.set_active(nPos);
     }
     else
-        rBox.set_active(m_aInvalidString);
+        rBox.set_active_text(m_aInvalidString);
 }
 
 /*

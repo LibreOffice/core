@@ -292,7 +292,7 @@ void SwEnvPage::InitDatabaseBox()
 
         OUString sDBName = m_sActDBName.getToken( 0, DB_DELIM );
         OUString sTableName = m_sActDBName.getToken( 1, DB_DELIM );
-        m_xDatabaseLB->set_active(sDBName);
+        m_xDatabaseLB->set_active_text(sDBName);
         if (m_pSh->GetDBManager()->GetTableNames(*m_xTableLB, sDBName))
         {
             m_xTableLB->append_text(sTableName);

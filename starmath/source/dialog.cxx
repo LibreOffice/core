@@ -1713,7 +1713,7 @@ IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl, SvxShowCharSet*, void)
     {
         const Subset* pSubset = m_xSubsetMap->GetSubsetByUnicode(cChar);
         if (pSubset)
-            m_xFontsSubsetLB->set_active(pSubset->GetName());
+            m_xFontsSubsetLB->set_active_text(pSubset->GetName());
         else
             m_xFontsSubsetLB->set_active(-1);
     }

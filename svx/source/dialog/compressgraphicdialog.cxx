@@ -89,7 +89,7 @@ void CompressGraphicsDialog::Initialize()
     m_xBtnCalculate.reset(m_xBuilder->weld_button("calculate"));
     m_xInterpolationCombo.reset(m_xBuilder->weld_combo_box_text("interpolation-method-combo"));
 
-    m_xInterpolationCombo->set_active("Lanczos");
+    m_xInterpolationCombo->set_active_text("Lanczos");
 
     m_xInterpolationCombo->connect_changed(LINK(this, CompressGraphicsDialog, NewInterpolationModifiedHdl));
 

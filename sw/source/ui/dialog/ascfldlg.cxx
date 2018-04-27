@@ -217,7 +217,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
                 aOpt.SetFontName(aTmpFont.GetFamilyName());
             }
 
-            m_xFontLB->set_active(aOpt.GetFontName());
+            m_xFontLB->set_active_text(aOpt.GetFontName());
 
             if( bDelPrinter )
                 pPrt.disposeAndClear();
