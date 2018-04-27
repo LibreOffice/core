@@ -44,13 +44,83 @@
 
 using namespace ::com::sun::star;
 
-void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame const * pFrame )
+std::unique_ptr<sw::MergedPara>
+CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode)
+{
+    IDocumentRedlineAccess const& rIDRA = rTextNode.getIDocumentRedlineAccess();
+    if (!rFrame.getRootFrame()->IsHideRedlines())
+    {
+        return nullptr;
+    }
+    bool bHaveRedlines(false);
+    std::vector<sw::Extent> extents;
+    OUStringBuffer mergedText;
+    SwTextNode const* pParaPropsNode(nullptr);
+    SwTextNode * pNode(&rTextNode);
+    sal_Int32 nLastEnd(0);
+    for (auto i = rIDRA.GetRedlinePos(rTextNode, USHRT_MAX);
+         i < rIDRA.GetRedlineTable().size(); ++i)
+    {
+        SwRangeRedline const*const pRed = rIDRA.GetRedlineTable()[i];
+
+        if (pNode->GetIndex() < pRed->Start()->nNode.GetIndex())
+            break;
+
+        if (pRed->GetType() != nsRedlineType_t::REDLINE_DELETE)
+            continue;
+
+        SwPosition const*const pStart(pRed->Start());
+        SwPosition const*const pEnd(pRed->End());
+        assert(*pStart != *pEnd); // empty delete allowed if shown ???
+        bHaveRedlines = true;
+        if (pStart->nContent != nLastEnd) // not 0 so we eliminate adjacent deletes
+        {
+            extents.emplace_back(pNode, nLastEnd, pStart->nContent.GetIndex());
+            mergedText.append(pNode->GetText().copy(nLastEnd, pStart->nContent.GetIndex() - nLastEnd));
+        }
+        if (&pEnd->nNode.GetNode() != pNode)
+        {
+            pNode = pEnd->nNode.GetNode().GetTextNode();
+            assert(pNode);
+        }
+        nLastEnd = pEnd->nContent.GetIndex();
+    }
+    if (!bHaveRedlines)
+    {
+        return nullptr;
+    }
+    if (nLastEnd != pNode->Len())
+    {
+        extents.emplace_back(pNode, nLastEnd, pNode->Len());
+        mergedText.append(pNode->GetText().copy(nLastEnd, pNode->Len() - nLastEnd));
+    }
+    if (extents.empty()) // there was no text anywhere
+    {
+        assert(mergedText.isEmpty());
+        pParaPropsNode = &rTextNode; // if every node is empty, the first one wins
+    }
+    else
+    {
+        assert(!mergedText.isEmpty());
+        pParaPropsNode = extents.begin()->pNode; // para props from first node that isn't empty
+    }
+    return o3tl::make_unique<sw::MergedPara>(std::move(extents),
+            mergedText.makeStringAndClear(), pParaPropsNode, &rTextNode);
+}
+
+void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
+        SwScriptInfo & rScriptInfo, SwTextFrame *const pFrame)
 {
     // during HTML-Import it can happen, that no layout exists
     SwRootFrame* pRootFrame = rTextNode.getIDocumentLayoutAccess().GetCurrentLayout();
     m_pViewShell = pRootFrame ? pRootFrame->GetCurrShell() : nullptr;
 
-    m_pScriptInfo = &rScrInf;
+    m_pScriptInfo = &rScriptInfo;
+
+    if (pFrame)
+    {
+        pFrame->GetPara()->SetMergedPara(CheckParaRedlineMerge(*pFrame, rTextNode));
+    }
 
     // attribute array
     m_pHints = rTextNode.GetpSwpHints();
@@ -83,6 +153,7 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
 
     m_aMagicNo[SwFontScript::Latin] = m_aMagicNo[SwFontScript::CJK] = m_aMagicNo[SwFontScript::CTL] = nullptr;
 
+    // TODO must init m_pRedline before this
     // determine script changes if not already done for current paragraph
     assert(m_pScriptInfo);
     if ( m_pScriptInfo->GetInvalidityA() != COMPLETE_STRING )
