@@ -59,7 +59,12 @@ private:
     sal_uInt8 m_nPropFont;
     o3tl::enumarray<SwFontScript, const void*> m_aMagicNo;
     o3tl::enumarray<SwFontScript, sal_uInt16> m_aFontIdx;
+    /// input: the current text node
     const SwTextNode* m_pTextNode;
+    /// the 1st one, for reset
+    const SwTextNode* m_pFirstTextNode;
+    /// from view (text frame) index to current node index
+    sal_Int32 m_nCurrentIndexOffset;
 
     void SeekFwd( const sal_Int32 nPos );
     void SetFnt( SwFont* pNew ) { m_pFont = pNew; }
@@ -81,6 +86,8 @@ protected:
         , m_nPosition(0)
         , m_nPropFont(0)
         , m_pTextNode(pTextNode)
+        , m_pFirstTextNode(pTextNode)
+        , m_nCurrentIndexOffset(0)
         {
             m_aMagicNo[SwFontScript::Latin] = m_aMagicNo[SwFontScript::CJK] = m_aMagicNo[SwFontScript::CTL] = nullptr;
         }
@@ -91,6 +98,8 @@ public:
     /// SwTextFrame in certain special cases via this ctor here
     SwAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf )
         : m_pViewShell(nullptr), m_pFont(nullptr), m_pHints(nullptr), m_pScriptInfo(nullptr), m_pLastOut(nullptr), m_nChgCnt(0), m_pRedline(nullptr),m_nPropFont(0), m_pTextNode(&rTextNode)
+        , m_pFirstTextNode(&rTextNode)
+        , m_nCurrentIndexOffset(0)
         { CtorInitAttrIter( rTextNode, rScrInf ); }
 
     virtual ~SwAttrIter();

@@ -80,7 +80,6 @@ class SwRedlineItr
     bool ChkSpecialUnderline_() const;
     void FillHints( std::size_t nAuthor, RedlineType_t eType );
     short Seek_( SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld );
-    sal_Int32 GetNextRedln_( sal_Int32 nNext );
     short EnterExtend( SwFont& rFnt, sal_Int32 nNew ) {
         if (m_pExt) return m_pExt->Enter( rFnt, nNew );
         return 0;
@@ -94,6 +93,7 @@ public:
         sal_Int32 nRedlPos, bool bShw, const std::vector<ExtTextInputAttr> *pArr = nullptr,
         sal_Int32 nExtStart = COMPLETE_STRING );
     ~SwRedlineItr() COVERITY_NOEXCEPT_FALSE;
+    SwRedlineTable::size_type GetAct() const { return m_nAct; }
     bool IsOn() const { return m_bOn || (m_pExt && m_pExt->IsOn()); }
     void Clear( SwFont* pFnt ) { if (m_bOn) Clear_( pFnt ); }
     void ChangeTextAttr( SwFont* pFnt, SwTextAttr const &rHt, bool bChg );
@@ -105,10 +105,7 @@ public:
         if (m_nAct != m_nFirst) m_nAct = SwRedlineTable::npos;
         if (m_pExt) m_pExt->Reset();
     }
-    sal_Int32 GetNextRedln( sal_Int32 nNext ) {
-        if (m_bShow || m_pExt) return GetNextRedln_( nNext );
-        return nNext;
-    }
+    std::pair<sal_Int32, SwRangeRedline const*> GetNextRedln(sal_Int32 nNext, SwTextNode const* pNode, SwRedlineTable::size_type & rAct);
     bool ChkSpecialUnderline() const
         { return IsOn() && ChkSpecialUnderline_(); }
     bool CheckLine( sal_Int32 nChkStart, sal_Int32 nChkEnd );
