@@ -1491,6 +1491,7 @@
         </info>
         <prop oor:name="TotalCacheSize" oor:type="xs:int" oor:nillable="false">
           <info>
+            <deprecated>Not used anymore</deprecated>
             <desc>Specifies the maximum cache size for all graphical display
             objects.</desc>
             <label>Total Image Cache Size</label>
@@ -1499,6 +1500,7 @@
         </prop>
         <prop oor:name="ObjectCacheSize" oor:type="xs:int" oor:nillable="false">
           <info>
+            <deprecated>Not used anymore</deprecated>
             <desc>Specifies the maximum cache size for a single graphic display
             object.</desc>
             <label>Image Object Cache Size</label>
@@ -1507,11 +1509,30 @@
         </prop>
         <prop oor:name="ObjectReleaseTime" oor:type="xs:int" oor:nillable="false">
           <info>
+            <deprecated>Not used anymore</deprecated>
             <desc>Specifies the time in seconds after which a cached object is
             freed from the cache.</desc>
             <label>Image Object Release Timeout</label>
           </info>
           <value>600</value>
+        </prop>
+        <prop oor:name="GraphicMemoryLimit" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Specifies the allowed cumulated memory that the
+            graphic objects can occupy before they start to get swapped
+            to the disk to save memory.</desc>
+            <label>Graphic Memory Limit Size</label>
+          </info>
+          <value>300000000</value>
+        </prop>
+        <prop oor:name="GraphicAllowedIdleTime" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Specifies the time in seconds when the graphic object
+            can be idle (time since it was last used) before it is
+            considered to be swapped to the disk to save memory.</desc>
+            <label>Graphic Allowed Idle Time</label>
+          </info>
+          <value>10</value>
         </prop>
       </group>
     </group>
