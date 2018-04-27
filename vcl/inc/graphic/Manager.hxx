@@ -36,7 +36,8 @@ class Manager final
 {
 private:
     std::unordered_set<ImpGraphic*> m_pImpGraphicList;
-    sal_Int64 mnTotalCacheSize;
+    std::chrono::seconds mnAllowedIdleTime;
+    sal_Int64 mnMemoryLimit;
     sal_Int64 mnUsedSize;
     Timer maSwapOutTimer;
 
