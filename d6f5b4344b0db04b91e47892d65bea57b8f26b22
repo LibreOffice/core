@@ -34,6 +34,24 @@
       "revId": "d6f5b4344b0db04b91e47892d65bea57b8f26b22",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_5b80de46",
+        "filename": "sw/source/core/layout/pagechg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-04-27T13:35:01Z",
+      "side": 1,
+      "message": "Ah, I see. So if the exception is caught without leaking, I guess then that\u0027s fair enough.",
+      "parentUuid": "9a30ddce_1b866665",
+      "revId": "d6f5b4344b0db04b91e47892d65bea57b8f26b22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
