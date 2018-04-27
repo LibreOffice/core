@@ -1170,8 +1170,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         return;
     }
 
-    bool const bDeleteForbidden(IsDeleteForbidden());
-    ForbidDelete();
+    auto xDeleteGuard = o3tl::make_unique<SwFrameDeleteGuard>(this);
     LockJoin();
     long nFormatCount = 0;
     // - loop prevention
@@ -1835,8 +1834,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     delete pSaveFootnote;
 
     UnlockJoin();
-    if (!bDeleteForbidden)
-        AllowDelete();
+    xDeleteGuard.reset();
     if ( bMovedFwd || bMovedBwd )
         pNotify->SetInvaKeep();
     if ( bMovedFwd )
