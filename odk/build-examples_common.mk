@@ -7,7 +7,7 @@ $(call gb_CustomTarget_get_target,$(1)): \
 ifneq ($(gb_SUPPRESS_TESTS),)
 	@true
 else
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$(1)),$(true),CHK,1)
+	$$(call gb_Output_announce,$(subst $(WORKDIR)/,,$(1)),$(true),CHK,1)
 	rm -fr $(call gb_CustomTarget_get_workdir,$(1))/{out,user}
 ifeq (MACOSX,$(OS))
 	$(eval ODK_BUILD_SHELL := $(shell $(gb_MKTEMP)))
@@ -37,7 +37,7 @@ $(call gb_CustomTarget_get_workdir,$(1))/setsdkenv: \
 	$(SRCDIR)/odk/config/setsdkenv_unix.sh.in \
 	$(BUILDDIR)/config_$(gb_Side).mk | \
 	$(call gb_CustomTarget_get_workdir,$(1))/.dir
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$(1)),$(true),SED,1)
+	$$(call gb_Output_announce,$(subst $(WORKDIR)/,,$(1)),$(true),SED,1)
 	sed -e 's!@OO_SDK_NAME@!sdk!' \
 	-e 's!@OO_SDK_HOME@!$(INSTDIR)/$(SDKDIRNAME)!' \
 	-e 's!@OFFICE_HOME@!$(INSTROOTBASE)!' -e 's!@OO_SDK_MAKE_HOME@!!' \
