@@ -400,24 +400,57 @@ void SwRedlineItr::Clear_( SwFont* pFnt )
     m_Hints.clear();
 }
 
-sal_Int32 SwRedlineItr::GetNextRedln_( sal_Int32 nNext )
+// TODO this must be ITERABLE pass in members as parameter
+std::pair<sal_Int32, SwRangeRedline const*>
+SwRedlineItr::GetNextRedln(sal_Int32 nNext, SwTextNode const*const pNode, SwRedlineTable::size_type & rAct)
 {
+    sal_Int32 nStart(m_nStart);
+    sal_Int32 nEnd(m_nEnd);
     nNext = NextExtend( nNext );
     if (!m_bShow || SwRedlineTable::npos == m_nFirst)
-        return nNext;
-    if (SwRedlineTable::npos == m_nAct)
+        return std::make_pair(nNext, nullptr);
+    if (SwRedlineTable::npos == rAct)
     {
-        m_nAct = m_nFirst;
-        m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nAct ]->CalcStartEnd(m_nNdIdx, m_nStart, m_nEnd);
+        rAct = m_nFirst; // TODO???
+        m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct]->CalcStartEnd(pNode->GetIndex(), nStart, nEnd);
     }
-    if (m_bOn || !m_nStart)
+    if (rAct != m_nAct)
     {
-        if (m_nEnd < nNext)
-            nNext = m_nEnd;
+        m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct]->CalcStartEnd(pNode->GetIndex(), nStart, nEnd);
     }
-    else if (m_nStart < nNext)
-        nNext = m_nStart;
-    return nNext;
+    if (m_bOn || !nStart)
+    {
+        if (nEnd < nNext)
+            nNext = nEnd;
+    }
+    else if (nStart <= nNext)
+    {
+        nNext = nStart;
+        if (!m_bShow)
+        {
+            SwRangeRedline const* pRedline = m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct];
+            if (pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE)
+            {
+                ++rAct;
+                while (rAct < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size())
+                {
+                    SwRangeRedline *const pNext = m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct];
+                    if (pRedline->End() < pNext->Start())
+                    {
+                        break; // done for now
+                    }
+                    else if (pNext->Start() == pRedline->End() && pNext->GetType() == nsRedlineType_t::REDLINE_DELETE)
+                    {
+                        // consecutive delete - continue
+                        pRedline = pNext;
+                    }
+                    ++rAct;
+                }
+                return std::make_pair(nNext, pRedline);
+            }
+        }
+    }
+    return std::make_pair(nNext, nullptr);
 }
 
 bool SwRedlineItr::ChkSpecialUnderline_() const
