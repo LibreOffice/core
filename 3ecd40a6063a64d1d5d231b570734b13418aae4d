@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_5bce1eb5",
+        "filename": "i18npool/source/defaultnumberingprovider/defaultnumberingprovider.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-27T15:08:12Z",
+      "side": 1,
+      "message": "i18nlangtag/mslangid.hxx shouldn\u0027t be needed, is it? Include i18nlangtag/lang.h instead (which is already in i18nlangtag/languagetag.hxx though).",
+      "range": {
+        "startLine": 36,
+        "startChar": 10,
+        "endLine": 36,
+        "endChar": 34
+      },
+      "revId": "3ecd40a6063a64d1d5d231b570734b13418aae4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_7bc5a28c",
+        "filename": "i18npool/source/defaultnumberingprovider/defaultnumberingprovider.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-27T15:08:12Z",
+      "side": 1,
+      "message": "LANGUAGE_NONE means explicitly no language assigned (ISO code [zxx]), use LANGUAGE_DONTKNOW instead for a \"not specified\" state.",
+      "range": {
+        "startLine": 598,
+        "startChar": 49,
+        "endLine": 598,
+        "endChar": 62
+      },
+      "revId": "3ecd40a6063a64d1d5d231b570734b13418aae4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_7b4cc242",
+        "filename": "i18npool/source/defaultnumberingprovider/defaultnumberingprovider.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-27T15:08:12Z",
+      "side": 1,
+      "message": "Please never concatenate Locale.Language and Locale.Country. If it is not a locale / language tag representable by just two ISO codes then by convention Locale.Language contains \"qlt\" and the full tag is in Language.Variant, see include/i18nlangtag/languagetag.hxx description for LanguageTag::getLocale()\n\nIf you need the string representation of a language tag then best use LanguageTag::getBcp47(), or here LanguageTag::convertToBcp47(nLangType)",
+      "range": {
+        "startLine": 661,
+        "startChar": 35,
+        "endLine": 661,
+        "endChar": 77
+      },
+      "revId": "3ecd40a6063a64d1d5d231b570734b13418aae4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_9b47b61c",
+        "filename": "include/editeng/numitem.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-27T15:08:12Z",
+      "side": 1,
+      "message": "Include include/i18nlangtag/lang.h instead, mslangid.hxx is almost never needed.",
+      "revId": "3ecd40a6063a64d1d5d231b570734b13418aae4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_bb563ad0",
+        "filename": "svx/inc/numberingtype.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-27T15:08:12Z",
+      "side": 1,
+      "message": "Please add a comma before the ellipsis to be congruent with the other cases, so\n\n \"1st, 2nd, 3rd, ...\"",
+      "revId": "3ecd40a6063a64d1d5d231b570734b13418aae4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_db512eda",
+        "filename": "sw/inc/numrule.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-27T15:08:12Z",
+      "side": 1,
+      "message": "i18nlangtag/lang.h",
+      "range": {
+        "startLine": 25,
+        "startChar": 10,
+        "endLine": 25,
+        "endChar": 34
+      },
+      "revId": "3ecd40a6063a64d1d5d231b570734b13418aae4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
