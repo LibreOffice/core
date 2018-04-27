@@ -191,7 +191,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
         if ( xInputStream.is() )
             pInStream.reset(utl::UcbStreamHelper::CreateStream( xInputStream ));
 
-        ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg( aPrivDatName, pInStream.get(), SC_IMPORTFILE));
+        ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(nullptr, aPrivDatName, pInStream.get(), SC_IMPORTFILE));
         OSL_ENSURE(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )
         {
