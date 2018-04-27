@@ -102,15 +102,9 @@ $(eval $(call gb_CppunitTest_use_components,sc_pivottable_filters_test,\
     xmlsecurity/util/xmlsecurity \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_CppunitTest_use_components,sc_pivottable_filters_test,\
-    xmlsecurity/util/xsec_xmlsec.windows \
-))
-else
 $(eval $(call gb_CppunitTest_use_components,sc_pivottable_filters_test,\
     xmlsecurity/util/xsec_xmlsec \
 ))
-endif
 
 $(eval $(call gb_CppunitTest_use_custom_headers,sc_pivottable_filters_test,\
 	officecfg/registry \
