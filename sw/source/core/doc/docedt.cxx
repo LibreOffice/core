@@ -348,7 +348,7 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
         if( bJoinPrev )
         {
             // We do not need to handle xmlids in this case, because
-            // it is only invoked if one paragraph is completely empty
+            // it is only invoked if one paragraph is/becomes completely empty
             // (see sw_GetJoinFlags)
             {
                 // If PageBreaks are deleted/set, it must not be added to the Undo history!
@@ -360,8 +360,9 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 // PageDesc, etc. we also have to change SwUndoDelete.
                 // There, we copy the AUTO PageBreak from the GetMarkNode!
 
-                /* The GetMarkNode */
-                if( ( pTextNd = aIdx.GetNode().GetTextNode())->HasSwAttrSet() )
+                /* The MarkNode */
+                pTextNd = aIdx.GetNode().GetTextNode();
+                if (pTextNd->HasSwAttrSet())
                 {
                     const SfxPoolItem* pItem;
                     if( SfxItemState::SET == pTextNd->GetpSwAttrSet()->GetItemState(
