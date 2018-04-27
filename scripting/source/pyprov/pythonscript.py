@@ -984,7 +984,7 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
     def getType( self ):
         return self.dirBrowseNode.getType()
 
-    # retreive function args in parenthesis
+    # retrieve function args in parenthesis
     def getFunctionArguments(self, func_signature):
         nOpenParenthesis = func_signature.find( "(" )
         if -1 == nOpenParenthesis:
@@ -1013,7 +1013,7 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
             fileUri = storageUri[0:storageUri.find( "$" )]
             funcName = storageUri[storageUri.find( "$" )+1:len(storageUri)]
 
-            # retreive arguments in parenthesis
+            # retrieve arguments in parenthesis
             funcName, funcArgs = self.getFunctionArguments(funcName)
             log.debug( " getScript : parsed funcname " + str(funcName) )
             log.debug( " getScript : func args " + str(funcArgs) )
