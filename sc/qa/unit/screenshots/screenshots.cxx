@@ -244,7 +244,7 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
 
         case 13: // "modules/scalc/ui/textimportcsv.ui"
         {
-            pReturnDialog = mpFact->CreateScImportAsciiDlg(OUString(), mpStream.get(), SC_PASTETEXT);
+            pReturnDialog = mpFact->CreateScImportAsciiDlg(nullptr, OUString(), mpStream.get(), SC_PASTETEXT);
             break;
         }
         case 14: // "modules/scalc/ui/formatcellsdialog.ui"

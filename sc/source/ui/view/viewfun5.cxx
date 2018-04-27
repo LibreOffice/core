@@ -44,6 +44,7 @@
 #include <svtools/transfer.hxx>
 #include <vcl/graph.hxx>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
@@ -56,6 +57,8 @@
 #include "dbdata.hxx"
 #include "sc.hrc"
 #include "filter.hxx"
+#include "globstr.hrc"
+#include "global.hxx"
 #include "scextopt.hxx"
 #include "tabvwsh.hxx"
 #include "compiler.hxx"
@@ -293,10 +296,11 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
         else
         {
             ScAddress aCellPos( nPosX, nPosY, GetViewData().GetTabNo() );
-            ScImportExport aObj( GetViewData().GetDocument(), aCellPos );
-            aObj.SetOverwriting( true );
+            std::shared_ptr<ScImportExport> pObj(new ScImportExport(GetViewData().GetDocument(), aCellPos));
+            pObj->SetOverwriting( true );
 
-            OUString aStr;
+
+            std::shared_ptr<OUString> pStrBuffer(new OUString());
             tools::SvRef<SotStorageStream> xStream;
             if ( aDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream.Is() )
             {
@@ -314,7 +318,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                         ScAsciiOptions aOptions;
                         aOptions.SetLanguage(pDlg->GetLanguageType());
                         aOptions.SetDetectSpecialNumber(pDlg->IsDateConversionSet());
-                        aObj.SetExtOptions(aOptions);
+                        pObj->SetExtOptions(aOptions);
                     }
                     else
                     {
@@ -323,46 +327,63 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     }
                 }
                 if(!bRet)
-                    bRet = aObj.ImportStream( *xStream, OUString(), nFormatId );
+                    bRet = pObj->ImportStream( *xStream, OUString(), nFormatId );
                 // mba: clipboard always must contain absolute URLs (could be from alien source)
             }
-            else if (nFormatId == SotClipboardFormatId::STRING && aDataHelper.GetString( nFormatId, aStr ))
+
+            else if (nFormatId == SotClipboardFormatId::STRING && aDataHelper.GetString( nFormatId, *pStrBuffer ))
             {
                 // Do CSV dialog if more than one line.
-                sal_Int32 nDelim = aStr.indexOf('\n');
-                if (nDelim >= 0 && nDelim != aStr.getLength () - 1)
+                sal_Int32 nDelim = pStrBuffer->indexOf('\n');
+                if (nDelim >= 0 && nDelim != pStrBuffer->getLength () - 1)
                 {
-                    ScImportStringStream aStrm( aStr);
-                    ScAbstractDialogFactory* pFact =
-                        ScAbstractDialogFactory::Create();
-                    ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(
-                        pFact->CreateScImportAsciiDlg( OUString(), &aStrm, SC_PASTETEXT));
+                    vcl::Window* pParent = comphelper::LibreOfficeKit::isActive() ? GetActiveWin() : nullptr;
 
-                    if (pDlg->Execute() == RET_OK)
-                    {
-                        ScAsciiOptions aOptions;
-                        pDlg->GetOptions( aOptions );
-                        pDlg->SaveParameters();
-                        aObj.SetExtOptions( aOptions );
+                    std::shared_ptr<ScImportStringStream> pStrm(new ScImportStringStream(*pStrBuffer));
 
-                        bRet = aObj.ImportString( aStr, nFormatId );
+                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                    VclPtr<AbstractScImportAsciiDlg> pDlg(
+                        pFact->CreateScImportAsciiDlg(pParent, OUString(), pStrm.get(), SC_PASTETEXT));
 
-                        // TODO: what if (aObj.IsOverflow())
-                        // Content was partially pasted, which can be undone by
-                        // the user though.
-                        if (aObj.IsOverflow())
-                            bRet = false;
-                    }
-                    else
-                        bRet = true;
-                        // Yes, no failure, don't raise a "couldn't paste"
-                        // dialog if user cancelled.
+                    bAllowDialogs = bAllowDialogs && !SC_MOD()->IsInExecuteDrop();
+
+                    pDlg->StartExecuteAsync([this, pDlg, pDoc, pStrm, nFormatId, pStrBuffer, pObj, bAllowDialogs](sal_Int32 nResult){
+                        bool bShowErrorDialog = bAllowDialogs;
+                        if (RET_OK == nResult)
+                        {
+                            ScAsciiOptions aOptions;
+                            pDlg->GetOptions( aOptions );
+                            pDlg->SaveParameters();
+                            pObj->SetExtOptions( aOptions );
+                            pObj->ImportString( *pStrBuffer, nFormatId );
+
+                            // TODO: what if (aObj.IsOverflow())
+                            // Content was partially pasted, which can be undone by
+                            // the user though.
+                            bShowErrorDialog = bShowErrorDialog && pObj->IsOverflow();
+                        }
+                        else
+                        {
+                            bShowErrorDialog = false;
+                            // Yes, no failure, don't raise a "couldn't paste"
+                            // dialog if user cancelled.
+                        }
+
+                        InvalidateAttribs();
+                        GetViewData().UpdateInputHandler();
+
+                        pDoc->SetPastingDrawFromOtherDoc( false );
+
+                        if (bShowErrorDialog)
+                            ErrorMessage(STR_PASTE_ERROR);
+                    });
+                    return true;
                 }
                 else
-                    bRet = aObj.ImportString( aStr, nFormatId );
+                    bRet = pObj->ImportString( *pStrBuffer, nFormatId );
             }
-            else if (nFormatId != SotClipboardFormatId::STRING && aDataHelper.GetString( nFormatId, aStr ))
-                bRet = aObj.ImportString( aStr, nFormatId );
+            else if (nFormatId != SotClipboardFormatId::STRING && aDataHelper.GetString( nFormatId, *pStrBuffer ))
+                bRet = pObj->ImportString( *pStrBuffer, nFormatId );
 
             InvalidateAttribs();
             GetViewData().UpdateInputHandler();
