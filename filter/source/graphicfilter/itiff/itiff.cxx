@@ -967,11 +967,11 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                         }
                     }
                     const long nBlack = nSamp[ 3 ];
-                    nRed = static_cast<sal_uInt8>(std::max( 0L, 255L - ( ( static_cast<sal_Int32>(nSamp[ 0 ]) + nBlack - ( static_cast<sal_Int32>(nMinSampleValue) << 1 ) ) *
+                    nRed = static_cast<sal_uInt8>(std::max( 0L, 255L - ( ( static_cast<sal_Int32>(nSamp[ 0 ]) + nBlack - static_cast<sal_Int32>(nMinSampleValue << 1U ) ) *
                                 255L/static_cast<sal_Int32>(nMaxSampleValue-nMinSampleValue) ) ));
-                    nGreen = static_cast<sal_uInt8>(std::max( 0L, 255L - ( ( static_cast<sal_Int32>(nSamp[ 1 ]) + nBlack - ( static_cast<sal_Int32>(nMinSampleValue) << 1 ) ) *
+                    nGreen = static_cast<sal_uInt8>(std::max( 0L, 255L - ( ( static_cast<sal_Int32>(nSamp[ 1 ]) + nBlack - static_cast<sal_Int32>(nMinSampleValue << 1U ) ) *
                                 255L/static_cast<sal_Int32>(nMaxSampleValue-nMinSampleValue) ) ));
-                    nBlue = static_cast<sal_uInt8>(std::max( 0L, 255L - ( ( static_cast<sal_Int32>(nSamp[ 2 ]) + nBlack - ( static_cast<sal_Int32>(nMinSampleValue) << 1 ) ) *
+                    nBlue = static_cast<sal_uInt8>(std::max( 0L, 255L - ( ( static_cast<sal_Int32>(nSamp[ 2 ]) + nBlack - static_cast<sal_Int32>(nMinSampleValue << 1U ) ) *
                                 255L/static_cast<sal_Int32>(nMaxSampleValue-nMinSampleValue) ) ));
                     SetPixel(nY, nx, Color(static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue)));
                 }
