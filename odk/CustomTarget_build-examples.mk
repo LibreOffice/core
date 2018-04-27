@@ -29,6 +29,6 @@ my_example_dirs = \
 #    cpp/custompanel \
 
 
-$(eval $(call odk_build-examples_test,odk/build-examples))
+$(eval $(call odk_build-examples_test,odk/build-examples,$(my_example_dirs)))
 
 # vim: set noet sw=4 ts=4:
