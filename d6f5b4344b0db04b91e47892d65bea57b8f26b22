@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_bb4c7a71",
+        "filename": "sw/source/core/layout/pagechg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-04-27T13:01:13Z",
+      "side": 1,
+      "message": "Who will catch this exception?\n\nI\u0027m a bit worried about throwing here, since the layout generally doesn\u0027t use exceptions, and I assume this means that most of the layout code is not exception safe. You still fail to lay out if you just don\u0027t remove the page when it\u0027s \"delete forbidden\" flag is set?",
+      "revId": "d6f5b4344b0db04b91e47892d65bea57b8f26b22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
