@@ -23,6 +23,7 @@
 #include <tools/mempool.hxx>
 #include "cntfrm.hxx"
 #include <ndtxt.hxx>
+#include "TextFrameIndex.hxx"
 
 class SwCharRange;
 class SwTextNode;
@@ -376,6 +377,11 @@ public:
     inline const SwParaPortion *GetPara() const;
     inline bool HasPara() const;
     bool HasPara_() const;
+
+    /// map position in potentially merged text frame to SwPosition
+    std::pair<SwTextNode*, sal_Int32> MapViewToModel(TextFrameIndex nIndex) const;
+    SwPosition MapViewToModelPos(TextFrameIndex nIndex) const;
+    TextFrameIndex MapModelToViewPos(SwPosition const& rPos) const;
 
     // If there are any hanging punctuation portions in the margin
     // the offset will be returned.
