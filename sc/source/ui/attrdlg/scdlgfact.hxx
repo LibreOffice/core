@@ -418,7 +418,8 @@ class ScAbstractDialogFactory_Impl : public ScAbstractDialogFactory
 public:
     virtual ~ScAbstractDialogFactory_Impl() {}
 
-    virtual VclPtr<AbstractScImportAsciiDlg> CreateScImportAsciiDlg( const OUString& aDatName,
+    virtual VclPtr<AbstractScImportAsciiDlg> CreateScImportAsciiDlg(vcl::Window* pParent,
+                                                                    const OUString& aDatName,
                                                                     SvStream* pInStream,
                                                                     ScImportAsciiCall eCall) override;
 
