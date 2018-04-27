@@ -276,6 +276,9 @@ public:
     void                            SetButtonRolloverTextColor( const Color& rColor );
     const Color&                    GetButtonRolloverTextColor() const;
 
+    void                            SetButtonPressedRolloverTextColor( const Color& rColor );
+    const Color&                    GetButtonPressedRolloverTextColor() const;
+
     void                            SetRadioCheckTextColor( const Color& rColor );
     const Color&                    GetRadioCheckTextColor() const;
 

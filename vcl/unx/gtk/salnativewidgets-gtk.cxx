@@ -3815,6 +3815,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     // mouse over text colors
     aTextColor = getColor( pStyle->fg[ GTK_STATE_PRELIGHT ] );
     aStyleSet.SetButtonRolloverTextColor( aTextColor );
+    aStyleSet.SetButtonPressedRolloverTextColor( aTextColor );
     aStyleSet.SetFieldRolloverTextColor( aTextColor );
 
     // background colors

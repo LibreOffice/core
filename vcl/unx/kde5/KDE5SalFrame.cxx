@@ -231,6 +231,7 @@ void KDE5SalFrame::UpdateSettings( AllSettings& rSettings )
     // Buttons
     style.SetButtonTextColor( aButn );
     style.SetButtonRolloverTextColor( aButn );
+    style.SetButtonPressedRolloverTextColor( aButn );
 
     // Tabs
     style.SetTabTextColor( aButn );
