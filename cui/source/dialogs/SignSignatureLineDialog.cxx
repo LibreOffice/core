@@ -84,7 +84,7 @@ SignSignatureLineDialog::SignSignatureLineDialog(weld::Widget* pParent, Referenc
     m_xShapeProperties->getPropertyValue("SignatureLineSigningInstructions")
         >>= aSigningInstructions;
     m_xShapeProperties->getPropertyValue("SignatureLineShowSignDate") >>= m_bShowSignDate;
-    bool bCanAddComment;
+    bool bCanAddComment(false);
     m_xShapeProperties->getPropertyValue("SignatureLineCanAddComment") >>= bCanAddComment;
 
     if (aSigningInstructions.isEmpty())
