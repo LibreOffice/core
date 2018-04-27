@@ -67,7 +67,7 @@ private:
 protected:
     void Chg( SwTextAttr const *pHt );
     void Rst( SwTextAttr const *pHt );
-    void CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame const * pFrame = nullptr );
+    void CtorInitAttrIter(SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame * pFrame = nullptr);
     explicit SwAttrIter(SwTextNode const * pTextNode)
         : m_pViewShell(nullptr)
         , m_pFont(nullptr)
@@ -86,7 +86,9 @@ protected:
         }
 
 public:
-    // Constructor, destructor
+    /// All subclasses of this always have a SwTextFrame passed to the
+    /// constructor, but SwAttrIter itself may be created without a
+    /// SwTextFrame in certain special cases via this ctor here
     SwAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf )
         : m_pViewShell(nullptr), m_pFont(nullptr), m_pHints(nullptr), m_pScriptInfo(nullptr), m_pLastOut(nullptr), m_nChgCnt(0), m_pRedline(nullptr),m_nPropFont(0), m_pTextNode(&rTextNode)
         { CtorInitAttrIter( rTextNode, rScrInf ); }
