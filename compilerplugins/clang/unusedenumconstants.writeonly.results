@@ -4586,8 +4586,6 @@ include/vcl/window.hxx:373
     enum DrawFlags NoSelection
 include/vcl/window.hxx:374
     enum DrawFlags NoBackground
-include/vcl/window.hxx:375
-    enum DrawFlags NoRollover
 include/vcl/window.hxx:386
     enum DialogControlFlags Return
 include/vcl/window.hxx:387
