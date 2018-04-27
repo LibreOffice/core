@@ -103,7 +103,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_macros_test,\
 	uui/util/uui \
 	vcl/vcl.common \
 	xmloff/util/xo \
-	xmlsecurity/util/$(if $(filter WNT,$(OS)),xsec_xmlsec.windows,xsec_xmlsec) \
+	xmlsecurity/util/xsec_xmlsec \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_macros_test))

@@ -112,7 +112,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	xmlscript/util/xmlscript \
 	$(if $(ENABLE_NSS), \
 		xmlsecurity/util/xmlsecurity \
-		xmlsecurity/util/xsec_xmlsec$(if $(filter WNT,$(OS)),.windows)) \
+		xmlsecurity/util/xsec_xmlsec) \
 	$(if $(ENABLE_COINMP), \
 		sccomp/source/solver/coinmpsolver \
 	) \
