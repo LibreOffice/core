@@ -369,18 +369,18 @@ void SwMMResultPrintDialog::FillInPrinterSettings()
     if(!bMergePrinterExists)
     {
         SfxPrinter* pPrinter = pView->GetWrtShell().getIDocumentDeviceAccess().getPrinter( true );
-        m_xPrinterLB->set_active(pPrinter->GetName());
+        m_xPrinterLB->set_active_text(pPrinter->GetName());
     }
     else
     {
-        m_xPrinterLB->set_active(xConfigItem->GetSelectedPrinter());
+        m_xPrinterLB->set_active_text(xConfigItem->GetSelectedPrinter());
     }
 
     sal_Int32 count = xConfigItem->GetMergedDocumentCount();
     m_xToNF->set_value(count);
     m_xToNF->set_max(count);
 
-    m_xPrinterLB->set_active(xConfigItem->GetSelectedPrinter());
+    m_xPrinterLB->set_active_text(xConfigItem->GetSelectedPrinter());
 }
 
 void SwMMResultEmailDialog::FillInEmailSettings()

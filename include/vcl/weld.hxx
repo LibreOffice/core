@@ -231,6 +231,7 @@ public:
     virtual void insert(int pos, const OUString& rId, const OUString& rStr) = 0;
     void append(const OUString& rId, const OUString& rStr) { insert(-1, rId, rStr); }
     virtual void remove(int pos) = 0;
+    void remove_text(const OUString& rText) { remove(find_text(rText)); }
     virtual int find_text(const OUString& rStr) const = 0;
     virtual int find_id(const OUString& rId) const = 0;
     virtual int get_count() const = 0;
@@ -241,7 +242,7 @@ public:
 
     void connect_changed(const Link<ComboBoxText&, void>& rLink) { m_aChangeHdl = rLink; }
 
-    void set_active(const OUString& rStr) { set_active(find_text(rStr)); }
+    void set_active_text(const OUString& rStr) { set_active(find_text(rStr)); }
 
     virtual void set_entry_text(const OUString& rStr) = 0;
     virtual void select_entry_region(int nStartPos, int nEndPos) = 0;

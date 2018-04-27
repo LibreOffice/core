@@ -34,7 +34,7 @@ void ImplFillPrnDlgListBox( const Printer* pPrinter,
     {
         for( unsigned int i = 0; i < nCount; i++ )
             pBox->append_text( rPrinters[i] );
-        pBox->set_active( pPrinter->GetName() );
+        pBox->set_active_text(pPrinter->GetName());
     }
 
     pBox->set_sensitive(nCount != 0);

@@ -115,7 +115,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(const SwView& rVw)
         if (!sStyleName.isEmpty())
         {
             m_xCharStyleLB->append_text(sStyleName);
-            m_xCharStyleLB->set_active(sStyleName);
+            m_xCharStyleLB->set_active_text(sStyleName);
         }
     }
 
