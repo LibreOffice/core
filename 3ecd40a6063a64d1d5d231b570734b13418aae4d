@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_dbc4ce60",
+        "filename": "i18npool/source/defaultnumberingprovider/defaultnumberingprovider.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-27T16:27:18Z",
+      "side": 1,
+      "message": "Or rather initialize with LANGUAGE_SYSTEM so the default system locale is used if the \"Language\" property is not specified.",
+      "parentUuid": "9a30ddce_7bc5a28c",
+      "range": {
+        "startLine": 598,
+        "startChar": 49,
+        "endLine": 598,
+        "endChar": 62
+      },
+      "revId": "3ecd40a6063a64d1d5d231b570734b13418aae4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_7b4cc242",
         "filename": "i18npool/source/defaultnumberingprovider/defaultnumberingprovider.cxx",
         "patchSetId": 4
@@ -59,6 +83,30 @@
       "writtenOn": "2018-04-27T15:08:12Z",
       "side": 1,
       "message": "Please never concatenate Locale.Language and Locale.Country. If it is not a locale / language tag representable by just two ISO codes then by convention Locale.Language contains \"qlt\" and the full tag is in Language.Variant, see include/i18nlangtag/languagetag.hxx description for LanguageTag::getLocale()\n\nIf you need the string representation of a language tag then best use LanguageTag::getBcp47(), or here LanguageTag::convertToBcp47(nLangType)",
+      "range": {
+        "startLine": 661,
+        "startChar": 35,
+        "endLine": 661,
+        "endChar": 77
+      },
+      "revId": "3ecd40a6063a64d1d5d231b570734b13418aae4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_9bca566d",
+        "filename": "i18npool/source/defaultnumberingprovider/defaultnumberingprovider.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-27T16:27:18Z",
+      "side": 1,
+      "message": "Is the country even needed? If language+script is sufficient then use LanguageTag(nLangType).getLanguageAndScript()",
+      "parentUuid": "9a30ddce_7b4cc242",
       "range": {
         "startLine": 661,
         "startChar": 35,
