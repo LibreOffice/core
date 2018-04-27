@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_9b36d6e5",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1489,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-27T12:50:12Z",
+      "side": 1,
+      "message": "the group is not deprecated, since you added new options?",
+      "revId": "159327306bbbcb3608587df1ec6287248e7fd759",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_db304eeb",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1495,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-27T12:50:12Z",
+      "side": 1,
+      "message": "this seems to be doing the same thing as the new GraphicMemoryLimit option, why not just retain this option and not create a new one?",
+      "revId": "159327306bbbcb3608587df1ec6287248e7fd759",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_fb4d1273",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1511,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-27T12:50:12Z",
+      "side": 1,
+      "message": "this option now seems to be unused (as of current master), and seems to be describe the same thing as GraphicAllowedIdleTime, why not just re-use it, and maybe update it\u0027s description?",
+      "revId": "159327306bbbcb3608587df1ec6287248e7fd759",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
