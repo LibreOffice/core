@@ -171,6 +171,15 @@ bool OpenGLSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapP
     mnBits = nBits;
     mnWidth = rSize.Width();
     mnHeight = rSize.Height();
+
+    // Limit size to what GL allows, so later glTexImage2D() won't fail.
+    GLint nMaxTextureSize;
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &nMaxTextureSize);
+    if (mnWidth > nMaxTextureSize)
+        mnWidth = nMaxTextureSize;
+    if (mnHeight > nMaxTextureSize)
+        mnHeight = nMaxTextureSize;
+
     return false;
 }
 
