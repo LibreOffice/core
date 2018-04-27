@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_3bcb2aa7",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1489,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-04-27T15:07:09Z",
+      "side": 1,
+      "message": "Ups, good catch.",
+      "parentUuid": "9a30ddce_9b36d6e5",
+      "revId": "159327306bbbcb3608587df1ec6287248e7fd759",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_db304eeb",
         "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_5b453e15",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1495,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-04-27T15:07:09Z",
+      "side": 1,
+      "message": "This were the popular setting to \"improve performance\". I want a clean state and not use the value that some user might have set, also there are articles / how-tos / AOO forums out there, where users might find and modify this values according to what is written there. I would rather that if this is the case, such change would not have any effect.\n\nAnyway - the property is very similar, but in the end it is not completely the same. For example - there is no cache, so it wouldn\u0027t be named correctly.",
+      "parentUuid": "9a30ddce_db304eeb",
+      "revId": "159327306bbbcb3608587df1ec6287248e7fd759",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_fb4d1273",
         "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2018-04-27T12:50:12Z",
       "side": 1,
       "message": "this option now seems to be unused (as of current master), and seems to be describe the same thing as GraphicAllowedIdleTime, why not just re-use it, and maybe update it\u0027s description?",
+      "revId": "159327306bbbcb3608587df1ec6287248e7fd759",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_1b62e6ad",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1511,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-04-27T15:07:09Z",
+      "side": 1,
+      "message": "This one should be deprecated, not the group.\n\n\"Cached object freed from cache\" - there is no cache. \n\nThe big problem here is 600 default where the new value is 10 which is even more problematic than the \"TotalCacheSize\" if users assume old values.",
+      "parentUuid": "9a30ddce_fb4d1273",
       "revId": "159327306bbbcb3608587df1ec6287248e7fd759",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
