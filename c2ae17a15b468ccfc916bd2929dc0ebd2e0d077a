@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_f87998fd",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 5863,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-27T09:45:31Z",
+      "side": 1,
+      "message": "What is missing here is limiting the reference to MAXCOL and MAXROW, which is specific to SUMIF and AVERAGEIF how Excel does it, see implementation in ScInterpreter::IterateParametersIf(). Otherwise for example \u003dSUMIF(A1:A6,\"c\",B1048573) results in #REF!",
+      "revId": "c2ae17a15b468ccfc916bd2929dc0ebd2e0d077a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_d81cd4c3",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 5864,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-27T09:45:31Z",
+      "side": 1,
+      "message": "The sheet reference is not to be changed.",
+      "revId": "c2ae17a15b468ccfc916bd2929dc0ebd2e0d077a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
