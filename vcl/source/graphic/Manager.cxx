@@ -30,14 +30,19 @@ namespace graphic
 {
 namespace
 {
-void setTotalCacheSizeFromConfigIfPossible(sal_Int64& nTotalCacheSize)
+void setupConfigurationValuesIfPossible(sal_Int64& rMemoryLimit,
+                                        std::chrono::seconds& rAllowedIdleTime)
 {
     if (utl::ConfigManager::IsFuzzing())
         return;
 
     try
     {
-        nTotalCacheSize = officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::get();
+        using officecfg::Office::Common::Cache;
+
+        rMemoryLimit = Cache::GraphicManager::GraphicMemoryLimit::get();
+        rAllowedIdleTime
+            = std::chrono::seconds(Cache::GraphicManager::GraphicAllowedIdleTime::get());
     }
     catch (...)
     {
@@ -52,11 +57,12 @@ Manager& Manager::get()
 }
 
 Manager::Manager()
-    : mnTotalCacheSize(50000000)
+    : mnAllowedIdleTime(10)
+    , mnMemoryLimit(300000000)
     , mnUsedSize(0)
     , maSwapOutTimer("graphic::Manager maSwapOutTimer")
 {
-    setTotalCacheSizeFromConfigIfPossible(mnTotalCacheSize);
+    setupConfigurationValuesIfPossible(mnMemoryLimit, mnAllowedIdleTime);
 
     maSwapOutTimer.SetInvokeHandler(LINK(this, Manager, SwapOutTimerHandler));
     maSwapOutTimer.SetTimeout(10000);
@@ -68,7 +74,7 @@ void Manager::reduceGraphicMemory()
 {
     for (ImpGraphic* pEachImpGraphic : m_pImpGraphicList)
     {
-        if (mnUsedSize < mnTotalCacheSize * 0.7)
+        if (mnUsedSize < mnMemoryLimit * 0.7)
             return;
 
         sal_Int64 nCurrentGraphicSize = getGraphicSizeBytes(pEachImpGraphic);
@@ -79,8 +85,8 @@ void Manager::reduceGraphicMemory()
                 auto aCurrent = std::chrono::high_resolution_clock::now();
                 auto aDeltaTime = aCurrent - pEachImpGraphic->maLastUsed;
                 auto aSeconds = std::chrono::duration_cast<std::chrono::seconds>(aDeltaTime);
-                double nSeconds = aSeconds.count();
-                if (nSeconds > 10)
+
+                if (aSeconds > mnAllowedIdleTime)
                     pEachImpGraphic->ImplSwapOut();
             }
         }
@@ -105,7 +111,7 @@ void Manager::registerGraphic(std::shared_ptr<ImpGraphic>& pImpGraphic,
                               OUString const& /*rsContext*/)
 {
     // make some space first
-    if (mnUsedSize > mnTotalCacheSize)
+    if (mnUsedSize > mnMemoryLimit)
         reduceGraphicMemory();
 
     // Insert and update the used size (bytes)
