@@ -2028,6 +2028,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->m_xCtrlStck = std::move(mxOldStck);
 
     pRdr->m_xRedlineStack->closeall(*pRdr->m_pPaM->GetPoint());
+    pRdr->m_aFrameRedlines.emplace(std::move(pRdr->m_xRedlineStack));
     pRdr->m_xRedlineStack = std::move(mxOldRedlines);
 
     pRdr->DeleteAnchorStack();
@@ -5298,6 +5299,8 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     // are updated
     m_aExtraneousParas.delete_all_from_doc();
     m_xRedlineStack->closeall(*m_pPaM->GetPoint());
+    while (!m_aFrameRedlines.empty())
+        m_aFrameRedlines.pop();
     m_xRedlineStack.reset();
 
     // For i120928,achieve the graphics from the special bookmark with is for graphic bullet
