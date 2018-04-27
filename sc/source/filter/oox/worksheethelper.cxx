@@ -770,6 +770,13 @@ void WorksheetGlobals::setColumnModel( const ColumnModel& rModel )
         // checkCol(). Cater for this oddity.
         if (nLastCol == mrMaxApiPos.Col() + 1)
             --nLastCol;
+        // This is totally fouled up. If we saved 1025 and the file is saved
+        // with Excel again, it increments the value to 1026.
+        /* TODO: we may have to completely ignore the very last
+         * <cols><col ... max=...></cols> value and use checkCol(...,false) on
+         * that, if it turns out that Excel stores arbitrary columns. */
+        else if (nLastCol == mrMaxApiPos.Col() + 2)
+            nLastCol -= 2;
         // Excel may add a column range for the remaining columns (with
         // <cols><col .../></cols>), even if not used or only used to grey out
         // columns in page break view. Don't let that trigger overflow warning,
