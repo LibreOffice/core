@@ -907,52 +907,76 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
     size_t i = 0;
     while (i < m_GlyphItems.size())
     {
+        // Accumulate the width difference for all characters corresponding to
+        // this glyph.
         int nCharPos = m_GlyphItems[i].mnCharPos - mnMinCharPos;
-        DeviceCoordinate nDiff = pNewCharWidths[nCharPos] - pOldCharWidths[nCharPos];
+        DeviceCoordinate nDiff = 0;
+        for (int j = 0; j < m_GlyphItems[i].mnCharCount; j++)
+            nDiff += pNewCharWidths[nCharPos + j] - pOldCharWidths[nCharPos + j];
 
-        // Adjust the width of the first glyph in the cluster.
-        m_GlyphItems[i].mnNewWidth += nDiff;
-
-        // Apply the X position of all glyphs in the cluster.
-        size_t j = i;
-        while (j < m_GlyphItems.size())
+        if (!m_GlyphItems[i].IsRTLGlyph())
         {
-            if (m_GlyphItems[j].mnCharPos != m_GlyphItems[i].mnCharPos)
-                break;
-            m_GlyphItems[j].maLinearPos.AdjustX(nDelta );
-            // For RTL, put all DX adjustment space to the left of the glyph.
-            if (m_GlyphItems[i].IsRTLGlyph())
-                m_GlyphItems[j].maLinearPos.AdjustX(nDiff );
-            ++j;
-        }
+            // Adjust the width and position of the first (leftmost) glyph in
+            // the cluster.
+            m_GlyphItems[i].mnNewWidth += nDiff;
+            m_GlyphItems[i].maLinearPos.AdjustX(nDelta);
 
-        // Id this glyph is Kashida-justifiable, then mark this as a Kashida
-        // position. Since this must be a RTL glyph, we mark the last glyph in
-        // the cluster not the first as this would be the base glyph.
-        // nDiff > 1 to ignore rounding errors.
-        if (bKashidaJustify && m_GlyphItems[i].AllowKashida() && nDiff > 1)
-        {
-            pKashidas[j - 1] = nDiff;
-            // Move any non-spacing marks attached to this cluster as well.
-            // Looping backward because this is RTL glyph.
-            if (i > 0)
+            // Adjust the position of the rest of the glyphs in the cluster.
+            while (++i < m_GlyphItems.size())
             {
-                auto pGlyph = m_GlyphItems.begin() + i - 1;
-                while (pGlyph != m_GlyphItems.begin() && pGlyph->IsDiacritic())
-                {
-                    pGlyph->maLinearPos.AdjustX(nDiff );
-                    --pGlyph;
-                }
+                if (!m_GlyphItems[i].IsInCluster())
+                    break;
+                m_GlyphItems[i].maLinearPos.AdjustX(nDelta);
             }
         }
+        else if (m_GlyphItems[i].IsInCluster())
+        {
+            // RTL glyph in the middle of the cluster, will be handled in the
+            // loop below.
+            i++;
+        }
+        else
+        {
+            // Adjust the width and position of the first (rightmost) glyph in
+            // the cluster.
+            // For RTL, we put all the adjustment to the left of the glyph.
+            m_GlyphItems[i].mnNewWidth += nDiff;
+            m_GlyphItems[i].maLinearPos.AdjustX(nDelta + nDiff);
 
+            // Adjust the X position of all glyphs in the cluster.
+            size_t j = i;
+            while (j-- > 0)
+            {
+                if (!m_GlyphItems[j].IsInCluster())
+                    break;
+                m_GlyphItems[j].maLinearPos.AdjustX(nDelta + nDiff);
+            }
+
+            // If this glyph is Kashida-justifiable, then mark this as a
+            // Kashida position. Since this must be a RTL glyph, we mark the
+            // last glyph in the cluster not the first as this would be the
+            // base glyph.
+            if (bKashidaJustify && m_GlyphItems[i].AllowKashida() &&
+                nDiff > m_GlyphItems[i].mnCharCount) // Rounding errors, 1 pixel per character!
+            {
+                pKashidas[i] = nDiff;
+                // Move any non-spacing marks attached to this cluster as well.
+                // Looping backward because this is RTL glyph.
+                while (j > 0)
+                {
+                    if (!m_GlyphItems[j].IsDiacritic())
+                        break;
+                    m_GlyphItems[j--].maLinearPos.AdjustX(nDiff);
+                }
+            }
+            i++;
+        }
 
         // Increment the delta, the loop above makes sure we do so only once
         // for every character (cluster) not for every glyph (otherwise we
         // would apply it multiple times for each glyphs belonging to the same
         // character which is wrong since DX adjustments are character based).
         nDelta += nDiff;
-        i = j;
     }
 
     // Insert Kashida glyphs.
@@ -1005,14 +1029,14 @@ bool CommonSalLayout::IsKashidaPosValid(int nCharPos) const
     {
         if (pIter->mnCharPos == nCharPos)
         {
-            // The position is the first glyphs, this would happen if we
+            // The position is the first glyph, this would happen if we
             // changed the text styling in the middle of a word. Since we don’t
             // do ligatures across layout engine instances, this can’t be a
             // ligature so it should be fine.
             if (pIter == m_GlyphItems.begin())
                 return true;
 
-            // If the character was not supported by this layout, return false
+            // If the character is not supported by this layout, return false
             // so that fallback layouts would be checked for it.
             if (pIter->maGlyphId == 0)
                 break;
