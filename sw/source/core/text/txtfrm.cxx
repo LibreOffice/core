@@ -434,6 +434,80 @@ SwTextFrame::~SwTextFrame()
 {
 }
 
+std::pair<SwTextNode*, sal_Int32>
+SwTextFrame::MapViewToModel(TextFrameIndex const i_nIndex) const
+{
+    sal_Int32 nIndex(i_nIndex);
+    assert(GetPara());
+    sw::MergedPara const*const pMerged(GetPara()->GetMergedPara());
+    if (pMerged)
+    {
+        for (auto const& e : pMerged->extents)
+        {
+            if (nIndex < (e.nEnd - e.nStart))
+            {
+                return std::make_pair(e.pNode, e.nStart + nIndex);
+            }
+            nIndex = nIndex - (e.nEnd - e.nStart);
+        }
+        assert(nIndex == 0 && "view index out of bounds");
+        return std::make_pair(pMerged->pFirstNode, 0);
+    }
+    else
+    {
+        return std::make_pair(static_cast<SwTextNode*>(const_cast<SwModify*>(
+                    SwFrame::GetDep())), sal_Int32(nIndex));
+    }
+}
+
+SwPosition SwTextFrame::MapViewToModelPos(TextFrameIndex const nIndex) const
+{
+    std::pair<SwTextNode*, sal_Int32> const ret(MapViewToModel(nIndex));
+    return SwPosition(*ret.first, ret.second);
+}
+
+TextFrameIndex SwTextFrame::MapModelToViewPos(SwPosition const& rPos) const
+{
+    sal_Int32 nRet(0);
+    SwTextNode const*const pNode(rPos.nNode.GetNode().GetTextNode());
+    sal_Int32 const nIndex(rPos.nContent.GetIndex());
+    assert(GetPara());
+    sw::MergedPara const*const pMerged(GetPara()->GetMergedPara());
+    if (pMerged)
+    {
+        bool bFoundNode(false);
+        for (auto const& e : pMerged->extents)
+        {
+            if (e.pNode == pNode)
+            {
+                if (e.nStart <= nIndex && nIndex <= e.nEnd)
+                {
+                    return TextFrameIndex(nRet + (nIndex - e.nStart));
+                }
+                else if (e.nEnd < nIndex)
+                {
+                    // in gap before this extent => map to 0 here TODO???
+                    return TextFrameIndex(nRet);
+                }
+                bFoundNode = true;
+            }
+            else if (bFoundNode)
+            {
+                // must be in a gap at the end of the node
+                assert(nIndex <= pNode->Len());
+                return TextFrameIndex(nRet);
+            }
+            nRet += e.nEnd - e.nStart;
+        }
+        assert(!"text node not found");
+    }
+    else
+    {
+        assert(static_cast<SwTextNode*>(const_cast<SwModify*>(SwFrame::GetDep())) == pNode);
+        return TextFrameIndex(nIndex);
+    }
+}
+
 const OUString& SwTextFrame::GetText() const
 {
     return GetTextNode()->GetText();
