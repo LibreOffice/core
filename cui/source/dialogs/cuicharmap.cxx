@@ -432,7 +432,7 @@ void SvxCharacterMap::init()
     }
 
     if (bFound)
-        m_xFontLB->set_active(aDefStr);
+        m_xFontLB->set_active_text(aDefStr);
     else if (m_xFontLB->get_count() )
         m_xFontLB->set_active(0);
     FontSelectHdl(*m_xFontLB);
@@ -559,7 +559,7 @@ void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
     if (m_xFontLB->find_text(aTmp.GetFamilyName()) == -1)
         return;
 
-    m_xFontLB->set_active(aTmp.GetFamilyName());
+    m_xFontLB->set_active_text(aTmp.GetFamilyName());
     aFont = aTmp;
     FontSelectHdl(*m_xFontLB);
 }
@@ -708,7 +708,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, weld::ComboBoxText&, void)
         if( pSubsetMap )
             curSubset = pSubsetMap->GetSubsetByUnicode( m_xSearchSet->GetSelectCharacter() );
         if( curSubset )
-            m_xSubsetLB->set_active(curSubset->GetName());
+            m_xSubsetLB->set_active_text(curSubset->GetName());
         else
             m_xSubsetLB->set_active(-1);
 
@@ -947,7 +947,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
         if( pSubsetMap )
             pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
         if( pSubset )
-            m_xSubsetLB->set_active(pSubset->GetName());
+            m_xSubsetLB->set_active_text(pSubset->GetName());
         else
             m_xSubsetLB->set_active(-1);
     }
@@ -1006,7 +1006,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchCharHighlightHdl, SvxShowCharSet*, void)
         if( pSubsetMap )
             pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
         if( pSubset )
-            m_xSubsetLB->set_active(pSubset->GetName());
+            m_xSubsetLB->set_active_text(pSubset->GetName());
         else
             m_xSubsetLB->set_active(-1);
     }
@@ -1063,7 +1063,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharPreSelectHdl, SvxShowCharSet*, void)
         setFavButtonState(OUString(&cChar, 1), aFont.GetFamilyName());
         const Subset* pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
         if( pSubset )
-            m_xSubsetLB->set_active(pSubset->GetName());
+            m_xSubsetLB->set_active_text(pSubset->GetName());
     }
 
     m_xOKBtn->set_sensitive(true);
@@ -1079,7 +1079,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchCharPreSelectHdl, SvxShowCharSet*, void)
         setFavButtonState(OUString(&cChar, 1), aFont.GetFamilyName());
         const Subset* pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
         if( pSubset )
-            m_xSubsetLB->set_active(pSubset->GetName());
+            m_xSubsetLB->set_active_text(pSubset->GetName());
     }
 
     m_xOKBtn->set_sensitive(true);

@@ -20,10 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_MISC_IMPFNOTE_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
+#include <vcl/weld.hxx>
 #include <numberingtypelistbox.hxx>
 
 enum SwFootnoteNum : unsigned;
@@ -31,28 +28,6 @@ class SwWrtShell;
 
 class SwEndNoteOptionPage : public SfxTabPage
 {
-    VclPtr<SwNumberingTypeListBox> m_pNumViewBox;
-    VclPtr<FixedText> m_pOffsetLbl;
-    VclPtr<NumericField> m_pOffsetField;
-    VclPtr<ListBox> m_pNumCountBox;
-    VclPtr<Edit> m_pPrefixED;
-    VclPtr<Edit> m_pSuffixED;
-    VclPtr<FixedText> m_pPosFT;
-    VclPtr<RadioButton> m_pPosPageBox;
-    VclPtr<RadioButton> m_pPosChapterBox;
-
-    VclPtr<VclContainer> m_pStylesContainer;
-
-    VclPtr<ListBox> m_pParaTemplBox;
-    VclPtr<FixedText> m_pPageTemplLbl;
-    VclPtr<ListBox> m_pPageTemplBox;
-
-    VclPtr<ListBox> m_pFootnoteCharAnchorTemplBox;
-    VclPtr<ListBox> m_pFootnoteCharTextTemplBox;
-
-    VclPtr<Edit> m_pContEdit;
-    VclPtr<Edit> m_pContFromEdit;
-
     OUString aNumDoc;
     OUString aNumPage;
     OUString aNumChapter;
@@ -60,18 +35,34 @@ class SwEndNoteOptionPage : public SfxTabPage
     bool    bPosDoc;
     bool    bEndNote;
 
+    std::unique_ptr<NumberingTypeListBox> m_xNumViewBox;
+    std::unique_ptr<weld::Label> m_xOffsetLbl;
+    std::unique_ptr<weld::SpinButton> m_xOffsetField;
+    std::unique_ptr<weld::ComboBoxText> m_xNumCountBox;
+    std::unique_ptr<weld::Entry> m_xPrefixED;
+    std::unique_ptr<weld::Entry> m_xSuffixED;
+    std::unique_ptr<weld::Label> m_xPosFT;
+    std::unique_ptr<weld::RadioButton> m_xPosPageBox;
+    std::unique_ptr<weld::RadioButton> m_xPosChapterBox;
+    std::unique_ptr<weld::Widget> m_xStylesContainer;
+    std::unique_ptr<weld::ComboBoxText> m_xParaTemplBox;
+    std::unique_ptr<weld::Label> m_xPageTemplLbl;
+    std::unique_ptr<weld::ComboBoxText> m_xPageTemplBox;
+    std::unique_ptr<weld::ComboBoxText> m_xFootnoteCharAnchorTemplBox;
+    std::unique_ptr<weld::ComboBoxText> m_xFootnoteCharTextTemplBox;
+    std::unique_ptr<weld::Entry> m_xContEdit;
+    std::unique_ptr<weld::Entry> m_xContFromEdit;
+
     inline void SelectNumbering(SwFootnoteNum eNum);
     SwFootnoteNum GetNumbering() const;
 
-    DECL_LINK(PosPageHdl, Button*, void);
-    DECL_LINK(PosChapterHdl, Button*, void);
-    DECL_LINK(NumCountHdl, ListBox&, void);
+    DECL_LINK(PosPageHdl, weld::Button&, void);
+    DECL_LINK(PosChapterHdl, weld::Button&, void);
+    DECL_LINK(NumCountHdl, weld::ComboBoxText&, void);
 
 public:
-    SwEndNoteOptionPage( vcl::Window *pParent, bool bEndNote,
-                         const SfxItemSet &rSet );
+    SwEndNoteOptionPage(TabPageParent pParent, bool bEndNote, const SfxItemSet &rSet);
     virtual ~SwEndNoteOptionPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
     virtual bool FillItemSet(SfxItemSet *rSet) override;
@@ -83,7 +74,7 @@ public:
 class SwFootNoteOptionPage : public SwEndNoteOptionPage
 {
     friend class VclPtr<SwFootNoteOptionPage>;
-    SwFootNoteOptionPage( vcl::Window *pParent, const SfxItemSet &rSet );
+    SwFootNoteOptionPage(TabPageParent pParent, const SfxItemSet &rSet );
     virtual ~SwFootNoteOptionPage() override;
 
 public:

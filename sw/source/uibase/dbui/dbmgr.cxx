@@ -787,7 +787,7 @@ bool SwDBManager::GetTableNames(weld::ComboBoxText& rBox, const OUString& rDBNam
                 rBox.append("1", pQueries[i]);
         }
         if (!sOldTableName.isEmpty())
-            rBox.set_active(sOldTableName);
+            rBox.set_active_text(sOldTableName);
         bRet = true;
     }
     return bRet;

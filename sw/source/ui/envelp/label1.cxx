@@ -378,7 +378,7 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl, weld::ComboBoxText&, void)
         m_xTypeBox->append_text(m_xHiddenSortTypeBox->get_text(nEntry));
     }
     if (nLstType)
-        m_xTypeBox->set_active(aItem.m_aLstType);
+        m_xTypeBox->set_active_text(aItem.m_aLstType);
     else
         m_xTypeBox->set_active(0);
     TypeHdl(*m_xTypeBox);
@@ -433,10 +433,10 @@ void SwLabPage::InitDatabaseBox()
             m_xDatabaseLB->append_text(pDataNames[i]);
         OUString sDBName = sActDBName.getToken( 0, DB_DELIM );
         OUString sTableName = sActDBName.getToken( 1, DB_DELIM );
-        m_xDatabaseLB->set_active(sDBName);
+        m_xDatabaseLB->set_active_text(sDBName);
         if( !sDBName.isEmpty() && GetDBManager()->GetTableNames(*m_xTableLB, sDBName))
         {
-            m_xTableLB->set_active(sTableName);
+            m_xTableLB->set_active_text(sTableName);
             GetDBManager()->GetColumnNames(*m_xDBFieldLB, sActDBName, sTableName);
         }
         else
@@ -519,7 +519,7 @@ void SwLabPage::Reset(const SfxItemSet* rSet)
             m_xMakeBox->append_text(*i);
     }
 
-    m_xMakeBox->set_active(aItem.m_aMake);
+    m_xMakeBox->set_active_text(aItem.m_aMake);
     //save the current type
     OUString sType(aItem.m_aType);
     MakeHdl(*m_xMakeBox);
@@ -529,12 +529,12 @@ void SwLabPage::Reset(const SfxItemSet* rSet)
         GetParentSwLabDlg()->UpdateGroup( aItem.m_aMake );
     if (m_xTypeBox->find_text(aItem.m_aType) != -1)
     {
-        m_xTypeBox->set_active(aItem.m_aType);
+        m_xTypeBox->set_active_text(aItem.m_aType);
         TypeHdl(*m_xTypeBox);
     }
     if (m_xDatabaseLB->find_text(sDBName) != -1)
     {
-        m_xDatabaseLB->set_active(sDBName);
+        m_xDatabaseLB->set_active_text(sDBName);
         DatabaseHdl(*m_xDatabaseLB);
     }
 

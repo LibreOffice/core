@@ -1642,7 +1642,7 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, weld::ComboBoxText&, rBox, v
                 if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField)
                     continue;
                 if(AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField)
-                    m_xTypeListBox->set_active(
+                    m_xTypeListBox->set_active_text(
                                 pEntry->GetAuthorField(aCurInfo.nToxField));
                 else
                     pEdits[i]->set_text(
