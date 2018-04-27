@@ -2437,7 +2437,7 @@ void lcl_createGroupsData(
                 aGroupData += "\"index\": \"" + OUString::number(nIndex) + "\", ";
                 aGroupData += "\"startPos\": \"" + OUString::number(rGroupStartPositions[nLevel]) + "\", ";
                 aGroupData += "\"endPos\": \"" + OUString::number(nTotalTwips) + "\", ";
-                aGroupData += "\"hidden\": \"" + OUString::number(bGroupHidden) + "\" }";
+                aGroupData += "\"hidden\": \"" + OUString::number(static_cast<unsigned int>(bGroupHidden)) + "\" }";
 
                 rGroupsBuffer += aGroupData;
 
