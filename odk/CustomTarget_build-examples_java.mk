@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-my_example_dirs = \
+my_example_dirs_java = \
     DevelopersGuide/BasicAndDialogs/CreatingDialogs \
     DevelopersGuide/Charts \
     DevelopersGuide/Components/Addons/JobsAddon \
@@ -57,6 +57,6 @@ my_example_dirs = \
 #    java/NotesAccess \
 #    java/Storage \
 
-$(eval $(call odk_build-examples_test,odk/build-examples_java))
+$(eval $(call odk_build-examples_test,odk/build-examples_java,$(my_example_dirs_java)))
 
 # vim: set noet sw=4 ts=4:

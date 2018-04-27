@@ -19,7 +19,7 @@ endif
 	    && $(gb_Helper_LIBRARY_PATH_VAR)=$$saved_library_path) \
 	&& export \
 	    UserInstallation=$(call gb_Helper_make_url,$(call gb_CustomTarget_get_workdir,$(1))/user) \
-	$(foreach my_dir,$(my_example_dirs), \
+	$(foreach my_dir,$(2), \
 	    && (cd $(INSTDIR)/$(SDKDIRNAME)/examples/$(my_dir) \
 		&& printf 'yes\n' | LC_ALL=C make \
 		    $(if $(filter MACOSX,$(OS)), SHELL=$(ODK_BUILD_SHELL), )))) \
