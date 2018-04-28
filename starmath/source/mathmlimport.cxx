@@ -516,7 +516,7 @@ void SmXMLImport::endDocument()
             if (aText.isEmpty())  //If we picked up no annotation text
             {
                 // Get text from imported formula
-                pTree->CreateTextFromNode(aText);
+                //pTree->CreateTextFromNode(aText);
                 aText = comphelper::string::stripEnd(aText, ' ');
             }
 

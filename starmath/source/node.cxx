@@ -251,16 +251,16 @@ void SmNode::Move(const Point& rPosition)
     ForEachNonNull(this, [&rPosition](SmNode *pNode){pNode->Move(rPosition);});
 }
 
-void SmNode::CreateTextFromNode(OUString &rText)
+void SmNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     auto nSize = GetNumSubNodes();
     if (nSize > 1)
-        rText += "{";
+        rText.append("{");
     ForEachNonNull(this, [&rText](SmNode *pNode){pNode->CreateTextFromNode(rText);});
     if (nSize > 1)
     {
-        rText = comphelper::string::stripEnd(rText, ' ');
-        rText += "} ";
+        rText.stripEnd(' ');
+        rText.append("} ");
     }
 }
 
@@ -454,11 +454,11 @@ void SmGraphicNode::GetAccessibleText( OUStringBuffer &rText ) const
     rText.append(GetToken().aText);
 }
 
-void SmExpressionNode::CreateTextFromNode(OUString &rText)
+void SmExpressionNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     size_t nSize = GetNumSubNodes();
     if (nSize > 1)
-        rText += "{";
+        rText.append("{");
     for (size_t i = 0; i < nSize; ++i)
     {
         SmNode *pNode = GetSubNode(i);
@@ -467,16 +467,16 @@ void SmExpressionNode::CreateTextFromNode(OUString &rText)
             pNode->CreateTextFromNode(rText);
             //Just a bit of foo to make unary +asd -asd +-asd -+asd look nice
             if (pNode->GetType() == SmNodeType::Math)
-                if ((nSize != 2) ||
-                    ( !rText.endsWith("+") && !rText.endsWith("-") ))
-                    rText += " ";
+                if ((nSize != 2) || rText.isEmpty() ||
+                    (rText[rText.getLength() - 1] != '+' && rText[rText.getLength() - 1] != '-') )
+                    rText.append(" ");
         }
     }
 
     if (nSize > 1)
     {
-        rText = comphelper::string::stripEnd(rText, ' ');
-        rText += "} ";
+        rText.stripEnd(' ');
+        rText.append("} ");
     }
 }
 
@@ -754,24 +754,24 @@ void SmRootNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-void SmRootNode::CreateTextFromNode(OUString &rText)
+void SmRootNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     SmNode *pExtra = GetSubNode(0);
     if (pExtra)
     {
-        rText += "nroot ";
+        rText.append("nroot ");
         pExtra->CreateTextFromNode(rText);
     }
     else
-        rText += "sqrt ";
+        rText.append("sqrt ");
 
     if (!pExtra && GetSubNode(2)->GetNumSubNodes() > 1)
-        rText += "{ ";
+        rText.append("{ ");
 
     GetSubNode(2)->CreateTextFromNode(rText);
 
     if (!pExtra && GetSubNode(2)->GetNumSubNodes() > 1)
-        rText += "} ";
+        rText.append("} ");
 }
 
 /**************************************************************************/
@@ -873,15 +873,14 @@ void SmBinVerNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     ExtendBy(*pDenom, RectCopyMBL::None).ExtendBy(*pLine, RectCopyMBL::None, pLine->GetCenterY());
 }
 
-void SmBinVerNode::CreateTextFromNode(OUString &rText)
+void SmBinVerNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     SmNode *pNum   = GetSubNode(0),
            *pDenom = GetSubNode(2);
     pNum->CreateTextFromNode(rText);
-    rText += "over ";
+    rText.append("over ");
     pDenom->CreateTextFromNode(rText);
 }
-
 
 const SmNode * SmBinVerNode::GetLeftMost() const
 {
@@ -1250,41 +1249,41 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     }
 }
 
-void SmSubSupNode::CreateTextFromNode(OUString &rText)
+void SmSubSupNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     SmNode *pNode;
     GetSubNode(0)->CreateTextFromNode(rText);
 
     if (nullptr != (pNode = GetSubNode(LSUB+1)))
     {
-        rText += "lsub ";
+        rText.append("lsub ");
         pNode->CreateTextFromNode(rText);
     }
     if (nullptr != (pNode = GetSubNode(LSUP+1)))
     {
-        rText += "lsup ";
+        rText.append("lsup ");
         pNode->CreateTextFromNode(rText);
     }
     if (nullptr != (pNode = GetSubNode(CSUB+1)))
     {
-        rText += "csub ";
+        rText.append("csub ");
         pNode->CreateTextFromNode(rText);
     }
     if (nullptr != (pNode = GetSubNode(CSUP+1)))
     {
-        rText += "csup ";
+        rText.append("csup ");
         pNode->CreateTextFromNode(rText);
     }
     if (nullptr != (pNode = GetSubNode(RSUB+1)))
     {
-        rText = comphelper::string::stripEnd(rText, ' ');
-        rText += "_";
+        rText.stripEnd(' ');
+        rText.append("_");
         pNode->CreateTextFromNode(rText);
     }
     if (nullptr != (pNode = GetSubNode(RSUP+1)))
     {
-        rText = comphelper::string::stripEnd(rText, ' ');
-        rText += "^";
+        rText.stripEnd(' ');
+        rText.append("^");
         pNode->CreateTextFromNode(rText);
     }
 }
@@ -1292,55 +1291,56 @@ void SmSubSupNode::CreateTextFromNode(OUString &rText)
 
 /**************************************************************************/
 
-void SmBraceNode::CreateTextFromNode(OUString &rText)
+void SmBraceNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     if (GetScaleMode() == SmScaleMode::Height)
-        rText += "left ";
+        rText.append("left ");
     {
-        OUString aStr;
-        OpeningBrace()->CreateTextFromNode(aStr);
+        OUStringBuffer aStrBuf;
+        OpeningBrace()->CreateTextFromNode(aStrBuf);
+        OUString aStr = aStrBuf.makeStringAndClear();
         aStr = comphelper::string::strip(aStr, ' ');
         aStr = comphelper::string::stripStart(aStr, '\\');
         if (!aStr.isEmpty())
         {
             if (aStr == "divides")
-                rText += "lline";
+                rText.append("lline");
             else if (aStr == "parallel")
-                rText += "ldline";
+                rText.append("ldline");
             else if (aStr == "<")
-                rText += "langle";
+                rText.append("langle");
             else
-                rText += aStr;
-            rText += " ";
+                rText.append(aStr);
+            rText.append(" ");
         }
         else
-            rText += "none ";
+            rText.append("none ");
     }
     Body()->CreateTextFromNode(rText);
     if (GetScaleMode() == SmScaleMode::Height)
-        rText += "right ";
+        rText.append("right ");
     {
-        OUString aStr;
-        ClosingBrace()->CreateTextFromNode(aStr);
+        OUStringBuffer aStrBuf;
+        ClosingBrace()->CreateTextFromNode(aStrBuf);
+        OUString aStr = aStrBuf.makeStringAndClear();
         aStr = comphelper::string::strip(aStr, ' ');
         aStr = comphelper::string::stripStart(aStr, '\\');
         if (!aStr.isEmpty())
         {
             if (aStr == "divides")
-                rText += "rline";
+                rText.append("rline");
             else if (aStr == "parallel")
-                rText += "rdline";
+                rText.append("rdline");
             else if (aStr == ">")
-                rText += "rangle";
+                rText.append("rangle");
             else
-                rText += aStr;
-            rText += " ";
+                rText.append(aStr);
+            rText.append(" ");
         }
         else
-            rText += "none ";
+            rText.append("none ");
     }
-    rText += " ";
-
+    rText.append(" ");
 }
 
 void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
@@ -1709,126 +1709,126 @@ void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     ExtendBy(*pAttr, RectCopyMBL::This, true);
 }
 
-void SmFontNode::CreateTextFromNode(OUString &rText)
+void SmFontNode::CreateTextFromNode(OUStringBuffer &rText)
 {
-    rText += "{";
+    rText.append("{");
 
     switch (GetToken().eType)
     {
         case TBOLD:
-            rText += "bold ";
+            rText.append("bold ");
             break;
         case TNBOLD:
-            rText += "nbold ";
+            rText.append("nbold ");
             break;
         case TITALIC:
-            rText += "italic ";
+            rText.append("italic ");
             break;
         case TNITALIC:
-            rText += "nitalic ";
+            rText.append("nitalic ");
             break;
         case TPHANTOM:
-            rText += "phantom ";
+            rText.append("phantom ");
             break;
         case TSIZE:
             {
-                rText += "size ";
+                rText.append("size ");
                 switch (meSizeType)
                 {
                     case FontSizeType::PLUS:
-                        rText += "+";
+                        rText.append("+");
                         break;
                     case FontSizeType::MINUS:
-                        rText += "-";
+                        rText.append("-");
                         break;
                     case FontSizeType::MULTIPLY:
-                        rText += "*";
+                        rText.append("*");
                         break;
                     case FontSizeType::DIVIDE:
-                        rText += "/";
+                        rText.append("/");
                         break;
                     case FontSizeType::ABSOLUT:
                     default:
                         break;
                 }
-                rText += ::rtl::math::doubleToUString(
+                rText.append(::rtl::math::doubleToUString(
                             static_cast<double>(maFontSize),
                             rtl_math_StringFormat_Automatic,
-                            rtl_math_DecimalPlaces_Max, '.', true);
-                rText += " ";
+                            rtl_math_DecimalPlaces_Max, '.', true));
+                rText.append(" ");
             }
             break;
         case TBLACK:
-            rText += "color black ";
+            rText.append("color black ");
             break;
         case TWHITE:
-            rText += "color white ";
+            rText.append("color white ");
             break;
         case TRED:
-            rText += "color red ";
+            rText.append("color red ");
             break;
         case TGREEN:
-            rText += "color green ";
+            rText.append("color green ");
             break;
         case TBLUE:
-            rText += "color blue ";
+            rText.append("color blue ");
             break;
         case TCYAN:
-            rText += "color cyan ";
+            rText.append("color cyan ");
             break;
         case TMAGENTA:
-            rText += "color magenta ";
+            rText.append("color magenta ");
             break;
         case TYELLOW:
-            rText += "color yellow ";
+            rText.append("color yellow ");
             break;
         case TTEAL:
-            rText += "color teal ";
+            rText.append("color teal ");
             break;
         case TSILVER:
-            rText += "color silver ";
+            rText.append("color silver ");
             break;
         case TGRAY:
-            rText += "color gray ";
+            rText.append("color gray ");
             break;
         case TMAROON:
-            rText += "color maroon ";
+            rText.append("color maroon ");
             break;
         case TPURPLE:
-            rText += "color purple ";
+            rText.append("color purple ");
             break;
         case TLIME:
-            rText += "color lime ";
+            rText.append("color lime ");
             break;
         case TOLIVE:
-            rText += "color olive ";
+            rText.append("color olive ");
             break;
         case TNAVY:
-            rText += "color navy ";
+            rText.append("color navy ");
             break;
         case TAQUA:
-            rText += "color aqua ";
+            rText.append("color aqua ");
             break;
         case TFUCHSIA:
-            rText += "color fuchsia ";
+            rText.append("color fuchsia ");
             break;
         case TSANS:
-            rText += "font sans ";
+            rText.append("font sans ");
             break;
         case TSERIF:
-            rText += "font serif ";
+            rText.append("font serif ");
             break;
         case TFIXED:
-            rText += "font fixed ";
+            rText.append("font fixed ");
             break;
         default:
             break;
     }
-    if(GetNumSubNodes() > 1)
+    if (GetNumSubNodes() > 1)
         GetSubNode(1)->CreateTextFromNode(rText);
 
-    rText = comphelper::string::stripEnd(rText, ' ');
-    rText += "} ";
+    rText.stripEnd(' ');
+    rText.append("} ");
 }
 
 void SmFontNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth)
@@ -2091,12 +2091,12 @@ void SmTextNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmRect::operator = (SmRect(aTmpDev, &rFormat, maText, GetFont().GetBorderWidth()));
 }
 
-void SmTextNode::CreateTextFromNode(OUString &rText)
+void SmTextNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     bool bQuoted=false;
     if (GetToken().eType == TTEXT)
     {
-        rText += "\"";
+        rText.append("\"");
         bQuoted=true;
     }
     else
@@ -2120,23 +2120,22 @@ void SmTextNode::CreateTextFromNode(OUString &rText)
         if ((GetToken().eType == TIDENT) && (GetFontDesc() == FNT_FUNCTION))
         {
             //Search for existing functions and remove extraneous keyword
-            rText += "func ";
+            rText.append("func ");
         }
         else if (bQuoted)
-            rText += "italic ";
+            rText.append("italic ");
 
         if (bQuoted)
-            rText += "\"";
+            rText.append("\"");
 
     }
 
-    rText += GetToken().aText;
+    rText.append(GetToken().aText);
 
     if (bQuoted)
-        rText += "\"";
-    rText += " ";
+        rText.append("\"");
+    rText.append(" ");
 }
-
 
 void SmTextNode::GetAccessibleText( OUStringBuffer &rText ) const
 {
@@ -2209,9 +2208,9 @@ sal_Unicode SmTextNode::ConvertSymbolToUnicode(sal_Unicode nIn)
 
 /**************************************************************************/
 
-void SmMatrixNode::CreateTextFromNode(OUString &rText)
+void SmMatrixNode::CreateTextFromNode(OUStringBuffer &rText)
 {
-    rText += "matrix {";
+    rText.append("matrix {");
     for (size_t i = 0;  i < mnNumRows; ++i)
     {
         for (size_t j = 0;  j < mnNumCols; ++j)
@@ -2220,15 +2219,14 @@ void SmMatrixNode::CreateTextFromNode(OUString &rText)
             if (pNode)
                 pNode->CreateTextFromNode(rText);
             if (j != mnNumCols - 1U)
-                rText += "# ";
+                rText.append("# ");
         }
         if (i != mnNumRows - 1U)
-            rText += "## ";
+            rText.append("## ");
     }
-    rText = comphelper::string::stripEnd(rText, ' ');
-    rText += "} ";
+    rText.stripEnd(' ');
+    rText.append("} ");
 }
-
 
 void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
@@ -2447,7 +2445,7 @@ void SmMathSymbolNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmRect::operator = (SmRect(aTmpDev, &rFormat, rText, GetFont().GetBorderWidth()));
 }
 
-void SmMathSymbolNode::CreateTextFromNode(OUString &rText)
+void SmMathSymbolNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     OUString sStr;
     sal_Unicode cChar = GetToken().cMathChar;
@@ -2455,99 +2453,99 @@ void SmMathSymbolNode::CreateTextFromNode(OUString &rText)
         sStr = "intd ";
     else
         MathType::LookupChar(cChar, sStr, 3);
-    rText += sStr;
+    rText.append(sStr);
 }
 
-void SmRectangleNode::CreateTextFromNode(OUString &rText)
+void SmRectangleNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     switch (GetToken().eType)
     {
     case TUNDERLINE:
-        rText += "underline ";
+        rText.append("underline ");
         break;
     case TOVERLINE:
-        rText += "overline ";
+        rText.append("overline ");
         break;
     case TOVERSTRIKE:
-        rText += "overstrike ";
+        rText.append("overstrike ");
         break;
     default:
         break;
     }
 }
 
-void SmAttributNode::CreateTextFromNode(OUString &rText)
+void SmAttributNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     SmNode *pNode;
     assert(GetNumSubNodes() == 2);
-    rText += "{";
+    rText.append("{");
     sal_Unicode nLast=0;
     if (nullptr != (pNode = Attribute()))
     {
-        OUString aStr;
+        OUStringBuffer aStr;
         pNode->CreateTextFromNode(aStr);
         if (aStr.getLength() > 1)
-            rText += aStr;
+            rText.append(aStr);
         else
         {
             nLast = aStr[0];
             switch (nLast)
             {
             case MS_BAR: // MACRON
-                rText += "overline ";
+                rText.append("overline ");
                 break;
             case MS_DOT: // DOT ABOVE
-                rText += "dot ";
+                rText.append("dot ");
                 break;
             case 0x2dc: // SMALL TILDE
-                rText += "widetilde ";
+                rText.append("widetilde ");
                 break;
             case MS_DDOT: // DIAERESIS
-                rText += "ddot ";
+                rText.append("ddot ");
                 break;
             case 0xE082:
                 break;
             case 0xE09B:
             case MS_DDDOT: // COMBINING THREE DOTS ABOVE
-                rText += "dddot ";
+                rText.append("dddot ");
                 break;
             case MS_ACUTE: // ACUTE ACCENT
             case MS_COMBACUTE: // COMBINING ACUTE ACCENT
-                rText += "acute ";
+                rText.append("acute ");
                 break;
             case MS_GRAVE: // GRAVE ACCENT
             case MS_COMBGRAVE: // COMBINING GRAVE ACCENT
-                rText += "grave ";
+                rText.append("grave ");
                 break;
             case MS_CHECK: // CARON
             case MS_COMBCHECK: // COMBINING CARON
-                rText += "check ";
+                rText.append("check ");
                 break;
             case MS_BREVE: // BREVE
             case MS_COMBBREVE: // COMBINING BREVE
-                rText += "breve ";
+                rText.append("breve ");
                 break;
             case MS_CIRCLE: // RING ABOVE
             case MS_COMBCIRCLE: // COMBINING RING ABOVE
-                rText += "circle ";
+                rText.append("circle ");
                 break;
             case MS_RIGHTARROW: // RIGHTWARDS ARROW
             case MS_VEC: // COMBINING RIGHT ARROW ABOVE
-                rText += "vec ";
+                rText.append("vec ");
                 break;
             case MS_TILDE: // TILDE
             case MS_COMBTILDE: // COMBINING TILDE
-                rText += "tilde ";
+                rText.append("tilde ");
                 break;
             case MS_HAT: // CIRCUMFLEX ACCENT
             case MS_COMBHAT: // COMBINING CIRCUMFLEX ACCENT
-                rText += "hat ";
+                rText.append("hat ");
                 break;
             case MS_COMBBAR: // COMBINING MACRON
-                rText += "bar ";
+                rText.append("bar ");
                 break;
             default:
-                rText += OUStringLiteral1( nLast );
+                rText.append(OUStringLiteral1(nLast));
                 break;
             }
         }
@@ -2556,12 +2554,12 @@ void SmAttributNode::CreateTextFromNode(OUString &rText)
     if (nullptr != (pNode = Body()))
         pNode->CreateTextFromNode(rText);
 
-    rText = comphelper::string::stripEnd(rText, ' ');
+    rText.stripEnd(' ');
 
     if (nLast == 0xE082)
-        rText += " overbrace {}";
+        rText.append(" overbrace {}");
 
-    rText += "} ";
+    rText.append("} ");
 }
 
 /**************************************************************************/
@@ -2777,17 +2775,17 @@ void SmBlankNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SetWidth(nSpace);
 }
 
-void SmBlankNode::CreateTextFromNode(OUString &rText)
+void SmBlankNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     if (mnNum <= 0)
         return;
     sal_uInt16 nWide = mnNum / 4;
     sal_uInt16 nNarrow = mnNum % 4;
     for (sal_uInt16 i = 0; i < nWide; i++)
-        rText += "~";
+        rText.append("~");
     for (sal_uInt16 i = 0; i < nNarrow; i++)
-        rText += "`";
-    rText += " ";
+        rText.append("`");
+    rText.append(" ");
 }
 
 
