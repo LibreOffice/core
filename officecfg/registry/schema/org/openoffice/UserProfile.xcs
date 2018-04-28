@@ -221,5 +221,100 @@
         <value>true</value>
       </prop>
     </group>
+    <group oor:name="WinUserInfoCache">
+      <info>
+        <desc>Contains user information cached from Active Directory.</desc>
+      </info>
+      <prop oor:name="isSet" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Is the cache data set</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="o" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the name of the user's company.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="givenname" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the first name of the user.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="sn" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the last name of the user.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="initials" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the user's initials.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="street" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the street where the use lives.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="l" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the city where the user lives.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="st" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the state where the user lives.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="postalcode" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the user's ZIP-code.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="c" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the country where the user lives.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="title" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the user's title.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="homephone" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the user's private telephone number.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="telephonenumber" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the user's telephone number at work.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="facsimiletelephonenumber" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the user's fax number.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="mail" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the user's e-mail address.</desc>
+        </info>
+        <value/>
+      </prop>
+    </group>
   </component>
 </oor:component-schema>
