@@ -3482,7 +3482,6 @@ void SwContentTree::GotoContent(SwContent* pCnt)
                             pDrawView->MarkObj( pTemp, pPV );
                             m_pActiveShell->EnterStdMode();
                             bSel = true;
-                            break;
                         }
                     }
                 }
