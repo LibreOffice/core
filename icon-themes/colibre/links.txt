@@ -1281,8 +1281,6 @@ sd/res/nv06.png cmd/sc_lastrecord.png
 sd/res/nv08.png cmd/sc_copy.png
 sd/res/nv09.png cmd/sc_insertbookmark.png
 sd/res/nv010.png cmd/sc_inserthyperlink.png
-sd/res/sf01.png cmd/sc_showfmexplorer.png
-sd/res/sf02.png cmd/sc_pagedialog.png
 sd/res/graphic.png cmd/sc_graphic.png
 
 sd/res/breakplayingblue_16.png cmd/sc_mediapause.png
