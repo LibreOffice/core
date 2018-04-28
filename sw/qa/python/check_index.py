@@ -15,92 +15,107 @@ from com.sun.star.util import XRefreshListener
 
 
 class RefreshListener(XRefreshListener, unohelper.Base):
-
     def __init__(self):
-        self.m_bDisposed = False
-        self.m_bRefreshed = False
+        self.m_refreshed = False
+        self.m_disposed = False
 
+    # Gets called when index is disposed
     def disposing(self, event):
-        self.m_bDisposed = True
+        self.m_disposed = True
 
+    # Gets callled when index is refreshed
     def refreshed(self, event):
-        self.m_bRefreshed = True
-
-    def assertRefreshed(self):
-        assert(self.m_bRefreshed)
-        self.m_bRefreshed = False
+        self.m_refreshed = True
 
 
 class CheckIndex(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
-        cls._xDoc = cls._uno.openEmptyWriterDoc()
 
     @classmethod
     def tearDownClass(cls):
         cls._uno.tearDown()
 
-    def test_check_index(self):
-        xDoc = self.__class__._xDoc
-        xIndex = xDoc.createInstance("com.sun.star.text.ContentIndex")
-        xBodyText = xDoc.getText()
-        xCursor = xBodyText.createTextCursor()
-        xIndex.setPropertyValue("CreateFromOutline", True)
-        xBodyText.insertTextContent(xCursor, xIndex, True)
+    # Gets called every time a new test is run
+    def setUp(self):
+        """
+        Every test should run with a new Instance of an Index and
+        Refresh Listener
+        So we need to reload the text of the document and initialize
+        the corresponding Cursor
+        """
+        self.xDoc = self.__class__._uno.openEmptyWriterDoc()
+        self.xIndex = self.xDoc.createInstance(
+            "com.sun.star.text.ContentIndex")
+        self.xBodyText = self.xDoc.getText()
+        self.xCursor = self.xBodyText.createTextCursor()
+        self.xIndex.setPropertyValue("CreateFromOutline", True)
+        self.xBodyText.insertTextContent(self.xCursor, self.xIndex, True)
+        # Create Refresh Listener and bind it to the Index
+        self.listener = RefreshListener()
+        self.xIndex.addRefreshListener(self.listener)
 
-    # register listener
-        listener = RefreshListener()
-        xIndex.addRefreshListener(listener)
-        self.assertFalse(listener.m_bRefreshed)
-        xIndex.refresh()
-        listener.assertRefreshed()
+    def tearDown(self):
+        """
+        Dispose Index and Document and check if the index was
+        deleted while the tests
+        """
+        self.assertFalse(self.listener.m_disposed,
+                         "Unexpected disporue of the Refresh Listener!")
+        self.xIndex.dispose()
+        self.assertTrue(self.listener.m_disposed,
+                        "Could not dispose Refresh Listener")
+        self.xDoc.dispose()
 
-    # insert some heading
-        xCursor.gotoEnd(False)
-        xBodyText.insertControlCharacter(xCursor, PARAGRAPH_BREAK, False)
-        xCursor.gotoEnd(False)
-        test_string = "a heading"
-        xCursor.setString(test_string)
-        xCursor.gotoStartOfParagraph(True)
-        xCursor.setPropertyValue("ParaStyleName", "Heading 1")
+    def insert_heading(self, text):
+        """
+        Insert a Heading at the end of the document
+        """
+        self.xCursor.gotoEnd(False)
+        self.xBodyText.insertControlCharacter(self.xCursor,
+                                              PARAGRAPH_BREAK, False)
+        self.xCursor.gotoEnd(False)
+        self.xCursor.setString(text)
+        self.xCursor.gotoStartOfParagraph(True)
+        self.xCursor.setPropertyValue("ParaStyleName", "Heading 1")
 
-    # hope text is in last paragraph...
-        xIndex.refresh()
-        listener.assertRefreshed()
-        xCursor.gotoRange(xIndex.getAnchor().getEnd(), False)
-        xCursor.gotoStartOfParagraph(True)
-        text = xCursor.getString()
-    # check if we got text with 'test_string'
-        assert(text.find(test_string) >= 0)
+    def test_index_refresh(self):
+        """
+        Try to insert a heading at the index, refresh the index and
+        retrive the heading again
+        """
+        heading = "The best test heading you have seen in your entire life"
+        self.insert_heading(heading)
+        self.xIndex.refresh()
+        self.assertTrue(self.listener.m_refreshed, "Failed to refresh index!")
+        self.listener.m_refreshed = False
+        self.xCursor.gotoRange(self.xIndex.getAnchor().getEnd(), False)
+        self.xCursor.gotoStartOfParagraph(True)
+        # Get String at current position and search for the heading
+        text = self.xCursor.getString()
+        self.assertGreaterEqual(text.find(heading), 0,
+                                "Failed to insert heading at index "
+                                "and retrive it again!")
 
-    # insert some more heading
-        xCursor.gotoEnd(False)
-        xBodyText.insertControlCharacter(xCursor, PARAGRAPH_BREAK, False)
-        xCursor.gotoEnd(False)
-        test_string = "yet another heading"
-        xCursor.setString(test_string)
-        xCursor.gotoStartOfParagraph(True)
-        xCursor.setPropertyValue("ParaStyleName", "Heading 1")
-
-    # try again with update
-        xIndex.update()
-        listener.assertRefreshed()
-        xCursor.gotoRange(xIndex.getAnchor().getEnd(), False)
-        xCursor.gotoStartOfParagraph(True)
-        text = xCursor.getString()
-    # check if we got text with 'test_string'
-        assert(text.find(test_string) >= 0)
-
-    # dispose must call the listener
-        assert(not listener.m_bDisposed)
-        xIndex.dispose()
-        assert(listener.m_bDisposed)
-
-    # close the document
-        xDoc.dispose()
+    def test_index_update(self):
+        """
+        Try to insert a heading at the index, update the index
+        and retrive the heading again
+        """
+        heading = "Heading to test the index update"
+        self.insert_heading(heading)
+        self.xIndex.update()
+        self.assertTrue(self.listener.m_refreshed, "Failed to update index!")
+        self.listener.m_refreshed = False
+        self.xCursor.gotoRange(self.xIndex.getAnchor().getEnd(), False)
+        self.xCursor.gotoStartOfParagraph(True)
+        # Get String at current position and search for the heading
+        text = self.xCursor.getString()
+        self.assertGreaterEqual(text.find(heading), 0,
+                                "Failed to insert a heading at Index and "
+                                "retrive it again!")
 
 
 if __name__ == "__main__":
