@@ -55,44 +55,28 @@
 
 using namespace ::com::sun::star;
 
-class SwNumNamesDlg : public ModalDialog
+class SwNumNamesDlg : public weld::GenericDialogController
 {
-    VclPtr<Edit>     m_pFormEdit;
-    VclPtr<ListBox>  m_pFormBox;
-    VclPtr<OKButton> m_pOKBtn;
+    std::unique_ptr<weld::Entry> m_xFormEdit;
+    std::unique_ptr<weld::TreeView> m_xFormBox;
+    std::unique_ptr<weld::Button> m_xOKBtn;
 
-    DECL_LINK( ModifyHdl, Edit&, void );
-    DECL_LINK( SelectHdl, ListBox&, void );
-    DECL_LINK( DoubleClickHdl, ListBox&, void );
+    DECL_LINK( ModifyHdl, weld::Entry&, void );
+    DECL_LINK( SelectHdl, weld::TreeView&, void );
+    DECL_LINK( DoubleClickHdl, weld::TreeView&, void );
 
 public:
-    explicit SwNumNamesDlg(vcl::Window *pParent);
-    virtual ~SwNumNamesDlg() override;
-    virtual void dispose() override;
+    explicit SwNumNamesDlg(weld::Window *pParent);
     void SetUserNames(const OUString *pList[]);
-    OUString GetName() const { return m_pFormEdit->GetText(); }
-    sal_Int32 GetCurEntryPos() const { return m_pFormBox->GetSelectedEntryPos(); }
+    OUString GetName() const { return m_xFormEdit->get_text(); }
+    int GetCurEntryPos() const { return m_xFormBox->get_selected_index(); }
 };
 
-SwNumNamesDlg::~SwNumNamesDlg()
-{
-    disposeOnce();
-}
-
-void SwNumNamesDlg::dispose()
-{
-    m_pFormEdit.clear();
-    m_pFormBox.clear();
-    m_pOKBtn.clear();
-    ModalDialog::dispose();
-}
-
-
 // remember selected entry
-IMPL_LINK( SwNumNamesDlg, SelectHdl, ListBox&, rBox, void )
+IMPL_LINK( SwNumNamesDlg, SelectHdl, weld::TreeView&, rBox, void )
 {
-    m_pFormEdit->SetText(rBox.GetSelectedEntry());
-    m_pFormEdit->SetSelection(Selection(0, SELECTION_MAX));
+    m_xFormEdit->set_text(rBox.get_selected());
+    m_xFormEdit->select_region(0, -1);
 }
 
 /** set user defined names
@@ -106,40 +90,41 @@ void SwNumNamesDlg::SetUserNames(const OUString *pList[])
     {
         if(pList[i])
         {
-            m_pFormBox->RemoveEntry(i);
-            m_pFormBox->InsertEntry(*pList[i], i);
+            m_xFormBox->remove(i);
+            m_xFormBox->insert_text(*pList[i], i);
             if (i == nSelect && nSelect < SwChapterNumRules::nMaxRules)
                 nSelect++;
         }
     }
-    m_pFormBox->SelectEntryPos(nSelect);
-    SelectHdl(*m_pFormBox);
+    m_xFormBox->select(nSelect);
+    SelectHdl(*m_xFormBox);
 }
 
 // unlock OK-Button when text is in Edit
-IMPL_LINK( SwNumNamesDlg, ModifyHdl, Edit&, rBox, void )
+IMPL_LINK( SwNumNamesDlg, ModifyHdl, weld::Entry&, rBox, void )
 {
-    m_pOKBtn->Enable(!rBox.GetText().isEmpty());
+    m_xOKBtn->set_sensitive(!rBox.get_text().isEmpty());
 }
 
 // DoubleClickHdl
-IMPL_LINK_NOARG(SwNumNamesDlg, DoubleClickHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwNumNamesDlg, DoubleClickHdl, weld::TreeView&, void)
 {
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
-SwNumNamesDlg::SwNumNamesDlg(vcl::Window *pParent)
-    : ModalDialog(pParent, "NumberingNameDialog",
-        "modules/swriter/ui/numberingnamedialog.ui")
+SwNumNamesDlg::SwNumNamesDlg(weld::Window *pParent)
+    : weld::GenericDialogController(pParent,
+            "modules/swriter/ui/numberingnamedialog.ui",
+            "NumberingNameDialog")
+    , m_xFormEdit(m_xBuilder->weld_entry("entry"))
+    , m_xFormBox(m_xBuilder->weld_tree_view("form"))
+    , m_xOKBtn(m_xBuilder->weld_button("ok"))
 {
-    get(m_pFormEdit, "entry");
-    get(m_pFormBox, "form");
-    m_pFormBox->SetDropDownLineCount(5);
-    get(m_pOKBtn, "ok");
-    m_pFormEdit->SetModifyHdl(LINK(this, SwNumNamesDlg, ModifyHdl));
-    m_pFormBox->SetSelectHdl(LINK(this, SwNumNamesDlg, SelectHdl));
-    m_pFormBox->SetDoubleClickHdl(LINK(this, SwNumNamesDlg, DoubleClickHdl));
-    SelectHdl(*m_pFormBox);
+    m_xFormEdit->connect_changed(LINK(this, SwNumNamesDlg, ModifyHdl));
+    m_xFormBox->connect_changed(LINK(this, SwNumNamesDlg, SelectHdl));
+    m_xFormBox->connect_row_activated(LINK(this, SwNumNamesDlg, DoubleClickHdl));
+    m_xFormBox->set_size_request(-1, m_xFormBox->get_height_rows(9));
+    SelectHdl(*m_xFormBox);
 }
 
 static sal_uInt16 lcl_BitToLevel(sal_uInt16 nActLevel)
@@ -276,7 +261,7 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu, bool )
         nLevelNo = 9;
     else if (sIdent == "saveas")
     {
-        VclPtrInstance< SwNumNamesDlg > pDlg(this);
+        SwNumNamesDlg aDlg(GetFrameWeld());
         const OUString *aStrArr[SwChapterNumRules::nMaxRules];
         for(sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i)
         {
@@ -286,13 +271,13 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu, bool )
             else
                 aStrArr[i] = nullptr;
         }
-        pDlg->SetUserNames(aStrArr);
-        if(RET_OK == pDlg->Execute())
+        aDlg.SetUserNames(aStrArr);
+        if (aDlg.run() == RET_OK)
         {
-            const OUString aName(pDlg->GetName());
+            const OUString aName(aDlg.GetName());
             pChapterNumRules->ApplyNumRules( SwNumRulesWithName(
-                    *xNumRule, aName ), pDlg->GetCurEntryPos() );
-            pMenu->SetItemText(pMenu->GetItemId(pDlg->GetCurEntryPos()), aName);
+                    *xNumRule, aName ), aDlg.GetCurEntryPos() );
+            pMenu->SetItemText(pMenu->GetItemId(aDlg.GetCurEntryPos()), aName);
         }
         return false;
     }
