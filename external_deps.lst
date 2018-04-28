@@ -190,8 +190,8 @@ if (SOLAR_JAVA == TRUE)
 if (SOLAR_JAVA == TRUE)
     MD5 = 980143f96b3f6ce45d2e4947da21a5e9
     name = stax-src-1.2.0.zip
-    URL1 = http://dist.codehaus.org/stax/distributions/stax-src-1.2.0.zip
-    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
+    URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
+    URL2 = http://maven.ibiblio.org/maven/stax/jars/stax-src-1.2.0.zip
 
 if (ENABLE_MEDIAWIKI == YES)
     MD5 = a7983f859eafb2677d7ff386a023bc40
