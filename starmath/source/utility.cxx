@@ -120,30 +120,27 @@ void SmFontPickList::WriteTo(SmFontDialog& rDialog) const
 
 /**************************************************************************/
 
-VCL_BUILDER_FACTORY_ARGS(SmFontPickListBox, WB_DROPDOWN)
-
-SmFontPickListBox::SmFontPickListBox (vcl::Window* pParent, WinBits nBits) :
-    SmFontPickList(4),
-    ListBox(pParent, nBits)
+SmFontPickListBox::SmFontPickListBox(weld::ComboBoxText* pWidget)
+    : SmFontPickList(4)
+    , m_xWidget(pWidget)
 {
-    SetSelectHdl(LINK(this, SmFontPickListBox, SelectHdl));
+    m_xWidget->connect_changed(LINK(this, SmFontPickListBox, SelectHdl));
 }
 
-IMPL_LINK_NOARG( SmFontPickListBox, SelectHdl, ListBox&, void )
+IMPL_LINK_NOARG(SmFontPickListBox, SelectHdl, weld::ComboBoxText&, void)
 {
     OUString aString;
 
-    const sal_Int32 nPos = GetSelectedEntryPos();
-
+    const int nPos = m_xWidget->get_active();
     if (nPos != 0)
     {
         SmFontPickList::Insert(Get(nPos));
-        aString = GetEntry(nPos);
-        RemoveEntry(nPos);
-        InsertEntry(aString, 0);
+        aString = m_xWidget->get_text(nPos);
+        m_xWidget->remove(nPos);
+        m_xWidget->insert_text(0, aString);
     }
 
-    SelectEntryPos(0);
+    m_xWidget->set_active(0);
 }
 
 SmFontPickListBox& SmFontPickListBox::operator=(const SmFontPickList& rList)
@@ -151,10 +148,10 @@ SmFontPickListBox& SmFontPickListBox::operator=(const SmFontPickList& rList)
     *static_cast<SmFontPickList *>(this) = rList;
 
     for (decltype(aFontVec)::size_type nPos = 0; nPos < aFontVec.size(); nPos++)
-        InsertEntry(lcl_GetStringItem(aFontVec[nPos]), nPos);
+        m_xWidget->insert_text(nPos, lcl_GetStringItem(aFontVec[nPos]));
 
     if (!aFontVec.empty())
-        SelectEntry(lcl_GetStringItem(aFontVec.front()));
+        m_xWidget->set_active_text(lcl_GetStringItem(aFontVec.front()));
 
     return *this;
 }
@@ -163,14 +160,16 @@ void SmFontPickListBox::Insert(const vcl::Font &rFont)
 {
     SmFontPickList::Insert(rFont);
 
-    RemoveEntry(lcl_GetStringItem(aFontVec.front()));
-    InsertEntry(lcl_GetStringItem(aFontVec.front()), 0);
-    SelectEntry(lcl_GetStringItem(aFontVec.front()));
+    OUString aEntry(lcl_GetStringItem(aFontVec.front()));
+    int nPos = m_xWidget->find_text(aEntry);
+    if (nPos != -1)
+        m_xWidget->remove(nPos);
+    m_xWidget->insert_text(0, aEntry);
+    m_xWidget->set_active(0);
 
-    while (GetEntryCount() > nMaxItems)
-        RemoveEntry(GetEntryCount() - 1);
+    while (m_xWidget->get_count() > nMaxItems)
+        m_xWidget->remove(m_xWidget->get_count() - 1);
 }
-
 
 bool IsItalic( const vcl::Font &rFont )
 {
@@ -240,6 +239,5 @@ SmFace & operator *= (SmFace &rFace, const Fraction &rFrac)
                        long(rFaceSize.Height() * rFrac)));
     return rFace;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

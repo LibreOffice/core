@@ -26,6 +26,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include <tools/fract.hxx>
 #include <deque>
 
@@ -133,17 +134,17 @@ public:
 //  SmFontPickListBox
 
 
-class SmFontPickListBox final : public SmFontPickList, public ListBox
+class SmFontPickListBox final : public SmFontPickList
 {
-    DECL_LINK(SelectHdl, ListBox&, void);
+private:
+    std::unique_ptr<weld::ComboBoxText> m_xWidget;
+
+    DECL_LINK(SelectHdl, weld::ComboBoxText&, void);
 
 public:
-    SmFontPickListBox(vcl::Window* pParent, WinBits nBits);
-
+    SmFontPickListBox(weld::ComboBoxText* pWidget);
     SmFontPickListBox& operator = (const SmFontPickList& rList);
-
     virtual void    Insert(const vcl::Font &rFont) override;
-    using   Window::Update;
 };
 
 #endif
