@@ -132,6 +132,8 @@ sal_Int32 lcl_getDataTypeFromHsql(const OUString& sTypeName)
         return DataType::TIMESTAMP;
     else if (sTypeName == "DOUBLE")
         return DataType::DOUBLE;
+    else if (sTypeName == "REAL")
+        return DataType::REAL;
 
     assert(false);
     return -1;

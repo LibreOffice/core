@@ -69,6 +69,7 @@ OUString lcl_DataTypetoFbTypeName(sal_Int32 eType)
         case DataType::TIMESTAMP:
             return OUString("TIMESTAMP");
         case DataType::DOUBLE:
+        case DataType::REAL:
             return OUString("DOUBLE PRECISION");
         default:
             assert(false);
