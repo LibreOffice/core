@@ -21,5 +21,8 @@ $(eval $(call gb_Package_Package,officecfg_misc,$(SRCDIR)/officecfg))
 
 $(eval $(call gb_Package_add_file,officecfg_misc,$(LIBO_SHARE_FOLDER)/registry/oo-ldap.xcd.sample,registry/schema/oo-ldap.xcd.sample))
 $(eval $(call gb_Package_add_file,officecfg_misc,$(LIBO_SHARE_FOLDER)/registry/oo-ad-ldap.xcd.sample,registry/schema/oo-ad-ldap.xcd.sample))
+ifeq ($(OS),WNT)
+$(eval $(call gb_Package_add_file,officecfg_misc,$(LIBO_SHARE_FOLDER)/registry/oo-winuser.xcd.sample,registry/schema/oo-winuser.xcd.sample))
+endif
 
 # vim: set noet sw=4 ts=4:
