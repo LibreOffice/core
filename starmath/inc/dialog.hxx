@@ -144,27 +144,26 @@ public:
 
 /**************************************************************************/
 
-class SmFontTypeDialog : public ModalDialog
+class SmFontTypeDialog : public weld::GenericDialogController
 {
-    VclPtr<SmFontPickListBox> m_pVariableFont;
-    VclPtr<SmFontPickListBox> m_pFunctionFont;
-    VclPtr<SmFontPickListBox> m_pNumberFont;
-    VclPtr<SmFontPickListBox> m_pTextFont;
-    VclPtr<SmFontPickListBox> m_pSerifFont;
-    VclPtr<SmFontPickListBox> m_pSansFont;
-    VclPtr<SmFontPickListBox> m_pFixedFont;
-    VclPtr<MenuButton> m_pMenuButton;
-    VclPtr<PushButton> m_pDefaultButton;
-
     VclPtr<OutputDevice> pFontListDev;
 
-    DECL_LINK(MenuSelectHdl, Menu *, bool);
-    DECL_LINK(DefaultButtonClickHdl, Button *, void);
+    std::unique_ptr<SmFontPickListBox> m_xVariableFont;
+    std::unique_ptr<SmFontPickListBox> m_xFunctionFont;
+    std::unique_ptr<SmFontPickListBox> m_xNumberFont;
+    std::unique_ptr<SmFontPickListBox> m_xTextFont;
+    std::unique_ptr<SmFontPickListBox> m_xSerifFont;
+    std::unique_ptr<SmFontPickListBox> m_xSansFont;
+    std::unique_ptr<SmFontPickListBox> m_xFixedFont;
+    std::unique_ptr<weld::MenuButton> m_xMenuButton;
+    std::unique_ptr<weld::Button> m_xDefaultButton;
+
+    DECL_LINK(MenuSelectHdl, const OString&, void);
+    DECL_LINK(DefaultButtonClickHdl, weld::Button&, void);
 
 public:
-    SmFontTypeDialog(vcl::Window *pParent, OutputDevice *pFntListDevice);
+    SmFontTypeDialog(weld::Window* pParent, OutputDevice *pFntListDevice);
     virtual ~SmFontTypeDialog() override;
-    virtual void dispose() override;
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) const;

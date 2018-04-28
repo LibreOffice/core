@@ -1,8 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="sm">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkMenu" id="menu1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="variables">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="fonttypedialog|menuitem1">_Variables</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="functions">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="fonttypedialog|menuitem2">_Functions</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="numbers">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="fonttypedialog|menuitem3">_Numbers</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="text">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="fonttypedialog|menuitem4">_Text</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="serif">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="fonttypedialog|menuitem5">_Serif</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="sansserif">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="fonttypedialog|menuitem6">S_ans-serif</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="fixedwidth">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="fonttypedialog|menuitem7">Fixe_d-width</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+  </object>
   <object class="GtkDialog" id="FontsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -20,12 +79,17 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="modify:menu1">
+              <object class="GtkMenuButton" id="modify">
                 <property name="label" translatable="yes" context="fonttypedialog|modify">_Modify</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <property name="popup">menu1</property>
+                <property name="use_popover">False</property>
+                <child>
+                  <placeholder/>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -197,7 +261,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="smlo-SmFontPickListBox" id="variableCB">
+                          <object class="GtkComboBoxText" id="variableCB">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
@@ -208,7 +272,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="smlo-SmFontPickListBox" id="functionCB">
+                          <object class="GtkComboBoxText" id="functionCB">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
@@ -219,7 +283,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="smlo-SmFontPickListBox" id="numberCB">
+                          <object class="GtkComboBoxText" id="numberCB">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
@@ -230,7 +294,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="smlo-SmFontPickListBox" id="textCB">
+                          <object class="GtkComboBoxText" id="textCB">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
@@ -333,7 +397,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="smlo-SmFontPickListBox" id="serifCB">
+                          <object class="GtkComboBoxText" id="serifCB">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
@@ -344,7 +408,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="smlo-SmFontPickListBox" id="sansCB">
+                          <object class="GtkComboBoxText" id="sansCB">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
@@ -355,7 +419,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="smlo-SmFontPickListBox" id="fixedCB">
+                          <object class="GtkComboBoxText" id="fixedCB">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
@@ -396,12 +460,13 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">modify:menu1</action-widget>
       <action-widget response="-11">help</action-widget>
-      <action-widget response="0">default</action-widget>
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
@@ -413,65 +478,5 @@
       <widget name="label6"/>
       <widget name="label7"/>
     </widgets>
-  </object>
-  <object class="GtkMenu" id="menu1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="menuitem1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="fonttypedialog|menuitem1">_Variables</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="menuitem2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="fonttypedialog|menuitem2">_Functions</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="menuitem3">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="fonttypedialog|menuitem3">_Numbers</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="menuitem4">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="fonttypedialog|menuitem4">_Text</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="menuitem5">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="fonttypedialog|menuitem5">_Serif</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="menuitem6">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="fonttypedialog|menuitem6">S_ans-serif</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="menuitem7">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="fonttypedialog|menuitem7">Fixe_d-width</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
   </object>
 </interface>

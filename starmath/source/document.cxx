@@ -928,15 +928,15 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 pDev = &SM_MOD()->GetDefaultVirtualDev();
             OSL_ENSURE (pDev, "device for font list missing" );
 
-            VclPtrInstance< SmFontTypeDialog > xFontTypeDialog( nullptr, pDev );
+            SmFontTypeDialog aFontTypeDialog(rReq.GetFrameWeld(), pDev);
 
             SmFormat aOldFormat  = GetFormat();
-            xFontTypeDialog->ReadFrom( aOldFormat );
-            if (xFontTypeDialog->Execute() == RET_OK)
+            aFontTypeDialog.ReadFrom( aOldFormat );
+            if (aFontTypeDialog.run() == RET_OK)
             {
                 SmFormat aNewFormat( aOldFormat );
 
-                xFontTypeDialog->WriteTo(aNewFormat);
+                aFontTypeDialog.WriteTo(aNewFormat);
                 ::svl::IUndoManager *pTmpUndoMgr = GetUndoManager();
                 if (pTmpUndoMgr)
                     pTmpUndoMgr->AddUndoAction(
