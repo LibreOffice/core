@@ -68,7 +68,11 @@ struct AllocatorTraits
     {
         n = std::max(n, std::size_t(1));
 #if OSL_DEBUG_LEVEL > 0
+# ifdef NEED_ALIGN16
+        n += 2*sizeof(signature_type);
+# else
         n += sizeof(signature_type);
+# endif
 #endif  /* OSL_DEBUG_LEVEL  */
         return n;
     }
@@ -77,7 +81,11 @@ struct AllocatorTraits
     {
 #if OSL_DEBUG_LEVEL > 0
         memcpy (p, m_signature, sizeof(signature_type));
+# ifdef NEED_ALIGN16
+        p = static_cast<char*>(p) + 2*sizeof(signature_type);
+# else
         p = static_cast<char*>(p) + sizeof(signature_type);
+# endif
 #endif  /* OSL_DEBUG_LEVEL */
         return p;
     }
@@ -85,7 +93,11 @@ struct AllocatorTraits
     void* fini (void * p) const SAL_THROW(())
     {
 #if OSL_DEBUG_LEVEL > 0
+# ifdef NEED_ALIGN16
+        p = static_cast<char*>(p) - 2*sizeof(signature_type);
+# else
         p = static_cast<char*>(p) - sizeof(signature_type);
+# endif
         if (memcmp (p, m_signature, sizeof(signature_type)) != 0)
         {
             OSL_ENSURE(0, "operator delete mismatch");

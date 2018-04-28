@@ -894,7 +894,13 @@ rtl_cache_activate (
         if (objalign == 0)
         {
             /* determine default alignment */
+#ifdef NEED_ALIGN16
+            if (objsize >= RTL_MEMORY_ALIGNMENT_16)
+                objalign = RTL_MEMORY_ALIGNMENT_16;
+            else if (objsize >= RTL_MEMORY_ALIGNMENT_8)
+#else
             if (objsize >= RTL_MEMORY_ALIGNMENT_8)
+#endif
                 objalign = RTL_MEMORY_ALIGNMENT_8;
             else
                 objalign = RTL_MEMORY_ALIGNMENT_4;

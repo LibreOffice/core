@@ -57,7 +57,7 @@ gb_COMPILERDEFS := \
 	-D$(COM) \
 	-DCPPU_ENV=$(COMNAME) \
 
-gb_CPUDEFS := -D$(CPUNAME)
+gb_CPUDEFS := -D$(ALIGN) -D$(CPUNAME)
 ifeq ($(CPUNAME),SPARC)
 gb_CPUDEFS += -D__sparcv8plus
 endif

@@ -75,8 +75,13 @@ static rtl_cache_type * g_alloc_caches[RTL_MEMORY_CACHED_SIZES] =
     0,
 };
 
+#ifdef NEED_ALIGN16
+#define RTL_MEMALIGN       16
+#define RTL_MEMALIGN_SHIFT 4
+#else
 #define RTL_MEMALIGN       8
 #define RTL_MEMALIGN_SHIFT 3
+#endif
 
 static rtl_cache_type * g_alloc_table[RTL_MEMORY_CACHED_LIMIT >> RTL_MEMALIGN_SHIFT] =
 {

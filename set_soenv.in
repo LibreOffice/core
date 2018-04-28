@@ -74,7 +74,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG,
      $BUILD_SOSL_RELEASE, $RSC_ONCE );
 #
 # Platform dependent constant values.
-my ( $BIG_SVX, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
+my ( $BIG_SVX, $ALIGN, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
       $GVER, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR,
       $DYNAMIC_CRT, $SET_EXCEPTIONS, $use_shl_versions, $CDPATHx, $JRELIBDIR,
       $JRETOOLKITDIR, $JRETHREADDIR,
@@ -850,6 +850,14 @@ else {
 	print "For $platform.\n";
 	exit 1;
 }
+
+if ( $CPUNAME eq "X86_64") {
+   $ALIGN = "NEED_ALIGN16";
+}
+else {
+   $ALIGN = "NEED_ALIGN8";
+}
+
 print "done\n";
 
 #
@@ -1727,6 +1735,7 @@ ToFile( "CCVER",             "@CCVER@",          "e" );
 ToFile( "CXX_X64_BINARY",    $CXX_X64_BINARY,    "e" );
 ToFile( "LINK_X64_BINARY",   $LINK_X64_BINARY,   "e" );
 ToFile( "LIBMGR_X64_BINARY", $LIBMGR_X64_BINARY, "e" );
+ToFile( "ALIGN",             $ALIGN,             "e" );
 ToFile( "CPU",               $CPU,               "e" );
 ToFile( "CPUNAME",           $CPUNAME,           "e" );
 ToFile( "CVER",              $CVER,              "e" );

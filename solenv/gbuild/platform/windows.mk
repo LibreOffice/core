@@ -63,7 +63,7 @@ gb_COMPILERDEFS := \
 	-DFULL_DESK \
 	-DM1500 \
 
-gb_CPUDEFS := -D$(CPUNAME)
+gb_CPUDEFS := -D$(ALIGN) -D$(CPUNAME)
 ifeq ($(CPUNAME),INTEL)
 gb_CPUDEFS += -D_X86_=1
 endif

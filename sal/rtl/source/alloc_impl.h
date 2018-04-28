@@ -45,6 +45,12 @@ extern "C" {
 #define RTL_MEMORY_ALIGNMENT_8 sizeof(void*)
 #endif /* SAL_TYPES_ALIGNMENT8 */
 
+#if defined(SAL_TYPES_ALIGNMENT16) && SAL_TYPES_ALIGNMENT16 > 1
+#define RTL_MEMORY_ALIGNMENT_16 SAL_TYPES_ALIGNMENT16
+#else
+#define RTL_MEMORY_ALIGNMENT_16 16
+#endif /* SAL_TYPES_ALIGNMENT16 */
+
 #if 0  /* @@@ */
 #define RTL_MEMORY_ALIGNMENT_1 8
 #define RTL_MEMORY_ALIGNMENT_2 (sizeof(void*) * 2)
