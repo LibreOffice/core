@@ -79,8 +79,10 @@ public:
     void testTdf115117_2a();
     /// Test writing ToUnicode CMAP for doubly encoded glyphs.
     void testTdf66597_1();
-    /// Test writing ActualText for many to one glyph to Unicode mapping.
+    /// Test writing ActualText for RTL many to one glyph to Unicode mapping.
     void testTdf66597_2();
+    /// Test writing ActualText for LTR many to one glyph to Unicode mapping.
+    void testTdf66597_3();
 #endif
 #endif
 
@@ -107,6 +109,7 @@ public:
     CPPUNIT_TEST(testTdf115117_2a);
     CPPUNIT_TEST(testTdf66597_1);
     CPPUNIT_TEST(testTdf66597_2);
+    CPPUNIT_TEST(testTdf66597_3);
 #endif
 #endif
     CPPUNIT_TEST_SUITE_END();
@@ -1169,6 +1172,86 @@ void PdfExportTest::testTdf66597_2()
         }
     }
 #endif
+}
+
+// This requires Gentium Basic font, if it is missing the test will fail.
+void PdfExportTest::testTdf66597_3()
+{
+    vcl::filter::PDFDocument aDocument;
+    load("tdf66597-3.odt", aDocument);
+
+    {
+        // Get access to ToUnicode of the first font
+        vcl::filter::PDFObjectElement* pToUnicode = nullptr;
+        for (const auto& aElement : aDocument.GetElements())
+        {
+            auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+            if (!pObject)
+                continue;
+            auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"));
+            if (pType && pType->GetValue() == "Font")
+            {
+                auto pName = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("BaseFont"));
+                auto aName = pName->GetValue().copy(7); // skip the subset id
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected font name", OString("GentiumBasic"), aName);
+
+                auto pToUnicodeRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObject->Lookup("ToUnicode"));
+                CPPUNIT_ASSERT(pToUnicodeRef);
+                pToUnicode = pToUnicodeRef->LookupObject();
+                break;
+            }
+        }
+
+        CPPUNIT_ASSERT(pToUnicode);
+        auto pStream = pToUnicode->GetStream();
+        CPPUNIT_ASSERT(pStream);
+        SvMemoryStream aObjectStream;
+        ZCodec aZCodec;
+        aZCodec.BeginCompression();
+        pStream->GetMemory().Seek(0);
+        aZCodec.Decompress(pStream->GetMemory(), aObjectStream);
+        CPPUNIT_ASSERT(aZCodec.EndCompression());
+        aObjectStream.Seek(0);
+        std::string aCmap("2 beginbfchar\n"
+                          "<01> <1ECB0331030B>\n"
+                          "<05> <0020>\n"
+                          "endbfchar");
+        std::string aData(static_cast<const char*>(aObjectStream.GetData()), aObjectStream.GetSize());
+        auto nPos = aData.find(aCmap);
+        CPPUNIT_ASSERT(nPos != std::string::npos);
+    }
+
+    {
+        auto aPages = aDocument.GetPages();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+        // Get page contents and stream.
+        auto pContents = aPages[0]->LookupObject("Contents");
+        CPPUNIT_ASSERT(pContents);
+        auto pStream = pContents->GetStream();
+        CPPUNIT_ASSERT(pStream);
+        auto& rObjectStream = pStream->GetMemory();
+
+        // Uncompress the stream.
+        SvMemoryStream aUncompressed;
+        ZCodec aZCodec;
+        aZCodec.BeginCompression();
+        rObjectStream.Seek(0);
+        aZCodec.Decompress(rObjectStream, aUncompressed);
+        CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+        // Make sure the expected ActualText is present.
+        std::string aData(static_cast<const char*>(aUncompressed.GetData()), aUncompressed.GetSize());
+
+        std::string aActualText("/Span<</ActualText<FEFF1ECB0331030B>>>");
+        size_t nCount = 0;
+        size_t nPos = 0;
+        while ((nPos = aData.find(aActualText, nPos)) != std::string::npos)
+        {
+            nCount++;
+            nPos += aActualText.length();
+        }
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of ActualText entries does not match!", static_cast<size_t>(4), nCount);
+    }
 }
 #endif
 #endif

@@ -721,7 +721,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                             nNextCharPos = nEndRunPos;
                         nCharCount = nNextCharPos - nCharPos;
                         if ((i == 0 || pHbGlyphInfos[i].cluster != pHbGlyphInfos[i - 1].cluster) &&
-                            (i > nRunGlyphCount - 1 && pHbGlyphInfos[i].cluster == pHbGlyphInfos[i + 1].cluster))
+                            (i < nRunGlyphCount - 1 && pHbGlyphInfos[i].cluster == pHbGlyphInfos[i + 1].cluster))
                             bClusterStart = true;
                     }
                 }
