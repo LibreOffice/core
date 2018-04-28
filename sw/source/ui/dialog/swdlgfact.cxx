@@ -776,10 +776,9 @@ VclPtr<AbstractSwInsertDBColAutoPilot> SwAbstractDialogFactory_Impl::CreateSwIns
     return VclPtr<AbstractSwInsertDBColAutoPilot_Impl>::Create( pDlg );
 }
 
-VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rSh)
+VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rSh)
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<SwFootNoteOptionDlg>::Create( pParent, rSh );
-    return VclPtr<AbstractTabDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractTabController_Impl>::Create(new SwFootNoteOptionDlg(pParent, rSh));
 }
 
 VclPtr<AbstractDropDownFieldDialog> SwAbstractDialogFactory_Impl::CreateDropDownFieldDialog(weld::Window *pParent,

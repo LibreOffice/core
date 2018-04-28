@@ -564,7 +564,7 @@ public:
         css::uno::Reference< css::sdbc::XDataSource> rxSource,
         css::uno::Reference<css::sdbcx::XColumnsSupplier> xColSupp,
         const SwDBData& rData) override;
-    virtual VclPtr<SfxAbstractTabDialog> CreateSwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rSh) override;
+    virtual VclPtr<SfxAbstractTabDialog> CreateSwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rSh) override;
 
     virtual VclPtr<AbstractDropDownFieldDialog> CreateDropDownFieldDialog(weld::Window* pParent, SwWrtShell &rSh,
         SwField* pField, bool bPrevButton, bool bNextButton) override;

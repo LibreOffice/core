@@ -23,20 +23,17 @@
 
 class SwWrtShell;
 
-class SwFootNoteOptionDlg :public SfxTabDialog
+class SwFootNoteOptionDlg : public SfxTabDialogController
 {
     SwWrtShell &rSh;
-    Link<Button*, void> aOldOkHdl;
+    Link<weld::Button&, void> aOldOkHdl;
 
-    sal_uInt16 m_nFootNoteId;
-    sal_uInt16 m_nEndNoteId;
+    virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
 
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
-
-    DECL_LINK( OkHdl, Button *, void );
+    DECL_LINK(OkHdl, weld::Button&, void);
 
 public:
-    SwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rSh );
+    SwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rSh);
 };
 
 #endif

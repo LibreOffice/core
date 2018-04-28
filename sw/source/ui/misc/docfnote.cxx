@@ -34,34 +34,33 @@
 #include <SwStyleNameMapper.hxx>
 #include <memory>
 
-SwFootNoteOptionDlg::SwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rS)
-    : SfxTabDialog(pParent, "FootEndnoteDialog", "modules/swriter/ui/footendnotedialog.ui")
+SwFootNoteOptionDlg::SwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rS)
+    : SfxTabDialogController(pParent, "modules/swriter/ui/footendnotedialog.ui", "FootEndnoteDialog")
     , rSh( rS )
 {
     RemoveResetButton();
 
-    aOldOkHdl = GetOKButton().GetClickHdl();
-    GetOKButton().SetClickHdl( LINK( this, SwFootNoteOptionDlg, OkHdl ) );
+    GetOKButton().connect_clicked(LINK(this, SwFootNoteOptionDlg, OkHdl));
 
-    m_nFootNoteId = AddTabPage( "footnotes", SwFootNoteOptionPage::Create, nullptr );
-    m_nEndNoteId = AddTabPage( "endnotes",  SwEndNoteOptionPage::Create, nullptr );
+    AddTabPage("footnotes", SwFootNoteOptionPage::Create, nullptr);
+    AddTabPage("endnotes",  SwEndNoteOptionPage::Create, nullptr);
 }
 
-void SwFootNoteOptionDlg::PageCreated( sal_uInt16 /*nId*/, SfxTabPage &rPage )
+void SwFootNoteOptionDlg::PageCreated(const OString& /*rId*/, SfxTabPage &rPage)
 {
-    static_cast<SwEndNoteOptionPage&>(rPage).SetShell( rSh );
+    static_cast<SwEndNoteOptionPage&>(rPage).SetShell(rSh);
 }
 
-IMPL_LINK( SwFootNoteOptionDlg, OkHdl, Button *, pBtn, void )
+IMPL_LINK(SwFootNoteOptionDlg, OkHdl, weld::Button&, rBtn, void)
 {
     SfxItemSet aDummySet(rSh.GetAttrPool(), svl::Items<1, 1>{} );
-    SfxTabPage *pPage = GetTabPage( m_nFootNoteId );
+    SfxTabPage *pPage = GetTabPage("footnotes");
     if ( pPage )
         pPage->FillItemSet( &aDummySet );
-    pPage = GetTabPage( m_nEndNoteId );
+    pPage = GetTabPage("endnotes");
     if ( pPage )
         pPage->FillItemSet( &aDummySet );
-    aOldOkHdl.Call( pBtn );
+    SfxTabDialogController::OkHdl(rBtn);
 }
 
 SwEndNoteOptionPage::SwEndNoteOptionPage(TabPageParent pParent, bool bEN,
@@ -82,7 +81,7 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(TabPageParent pParent, bool bEN,
     , m_xPosFT(m_xBuilder->weld_label("pos"))
     , m_xPosPageBox(m_xBuilder->weld_radio_button("pospagecb"))
     , m_xPosChapterBox(m_xBuilder->weld_radio_button("posdoccb"))
-    , m_xStylesContainer(m_xBuilder->weld_combo_box_text("allstyles"))
+    , m_xStylesContainer(m_xBuilder->weld_widget("allstyles"))
     , m_xParaTemplBox(m_xBuilder->weld_combo_box_text("parastylelb"))
     , m_xPageTemplLbl(m_xBuilder->weld_label("pagestyleft"))
     , m_xPageTemplBox(m_xBuilder->weld_combo_box_text("pagestylelb"))
