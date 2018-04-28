@@ -229,6 +229,11 @@ class SFX2_DLLPUBLIC SfxTabDialogController : public weld::GenericDialogControll
 {
 protected:
     std::unique_ptr<weld::Notebook> m_xTabCtrl;
+
+    DECL_LINK(OkHdl, weld::Button&, void);
+    DECL_LINK(ResetHdl, weld::Button&, void);
+    DECL_LINK(UserHdl, weld::Button&, void);
+    DECL_LINK(CancelHdl, weld::Button&, void);
 private:
     std::unique_ptr<weld::Button> m_xOKBtn;
     std::unique_ptr<weld::Button> m_xApplyBtn;
@@ -244,10 +249,6 @@ private:
 
     DECL_DLLPRIVATE_LINK(ActivatePageHdl, const OString&, void);
     DECL_DLLPRIVATE_LINK(DeactivatePageHdl, const OString&, bool);
-    DECL_DLLPRIVATE_LINK(OkHdl, weld::Button&, void);
-    DECL_DLLPRIVATE_LINK(ResetHdl, weld::Button&, void);
-    DECL_DLLPRIVATE_LINK(UserHdl, weld::Button&, void);
-    DECL_DLLPRIVATE_LINK(CancelHdl, weld::Button&, void);
     SAL_DLLPRIVATE void Init_Impl(bool bFmtFlag);
 
 protected:
@@ -257,6 +258,7 @@ protected:
 
     SfxItemSet*     m_pExampleSet;
     SfxItemSet*     GetInputSetImpl();
+    SfxTabPage*     GetTabPage(const OString& rPageId) const;
 
     /** prepare to leave the current page. Calls the DeactivatePage method of the current page, (if necessary),
         handles the item sets to copy.
@@ -285,8 +287,12 @@ public:
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return m_pOutSet.get(); }
 
+    const weld::Button& GetOKButton() const { return *m_xOKBtn; }
+    weld::Button&       GetOKButton() { return *m_xOKBtn; }
+
     const weld::Button* GetUserButton() const { return m_xUserBtn.get(); }
     weld::Button*       GetUserButton() { return m_xUserBtn.get(); }
+    void                RemoveResetButton();
 
     short               execute();
 

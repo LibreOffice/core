@@ -384,7 +384,7 @@ public:
         css::uno::Reference< css::sdbc::XDataSource> rxSource,
         css::uno::Reference<css::sdbcx::XColumnsSupplier> xColSupp,
         const SwDBData& rData) = 0;
-    virtual VclPtr<SfxAbstractTabDialog> CreateSwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rSh) = 0;
+    virtual VclPtr<SfxAbstractTabDialog> CreateSwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rSh) = 0;
 
     virtual VclPtr<AbstractDropDownFieldDialog> CreateDropDownFieldDialog(weld::Window* pParent, SwWrtShell &rSh,
         SwField* pField, bool bPrevButton, bool bNextButton) = 0;

@@ -2057,4 +2057,24 @@ SfxItemSet* SfxTabDialogController::GetInputSetImpl()
     return m_pSet;
 }
 
+void SfxTabDialogController::RemoveResetButton()
+{
+    m_xResetBtn->hide();
+    m_pImpl->bHideResetBtn = true;
+}
+
+SfxTabPage* SfxTabDialogController::GetTabPage(const OString& rPageId) const
+
+/*  [Description]
+
+    Return TabPage with the specified Id.
+*/
+
+{
+    Data_Impl* pDataObject = Find(m_pImpl->aData, rPageId);
+    if (pDataObject)
+        return pDataObject->pTabPage;
+    return nullptr;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
