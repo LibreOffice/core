@@ -17,6 +17,7 @@ ifneq ($(filter-out IOS ANDROID,$(OS)),)
 $(eval $(call gb_Module_add_targets,extensions,\
 	Library_abp \
 	Library_ldapbe2 \
+	$(if $(filter WNT,$(OS)),Library_WinUserInfoBe) \
 	Library_log \
 	Library_scn \
 	UIConfig_sabpilot \
