@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <cerrno>
-
 #if defined(_WIN32)
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
@@ -29,7 +27,6 @@
 #include <mmsystem.h>
 #elif defined UNX
 #include <unistd.h>
-#include <limits.h>
 #include <math.h>
 #include <sys/time.h>
 #endif
@@ -44,6 +41,8 @@
 #include <sal/log.hxx>
 #include <tools/time.hxx>
 #include <osl/diagnose.h>
+
+#include <systemdatetime.hxx>
 
 #if defined(__sun) && defined(__GNUC__)
 extern long altzone;
@@ -97,52 +96,8 @@ namespace tools {
 
 Time::Time( TimeInitSystem )
 {
-#if defined(_WIN32)
-    SYSTEMTIME aDateTime;
-    GetLocalTime( &aDateTime );
-
-    // construct time
-    nTime = aDateTime.wHour         * hourMask +
-            aDateTime.wMinute       * minMask +
-            aDateTime.wSecond       * secMask +
-            aDateTime.wMilliseconds * 1000000;
-#else
-    // determine time
-    struct timespec tsTime;
-#if defined( __MACH__ )
-    // OS X does not have clock_gettime, use clock_get_time
-    clock_serv_t cclock;
-    mach_timespec_t mts;
-    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
-    clock_get_time(cclock, &mts);
-    mach_port_deallocate(mach_task_self(), cclock);
-    tsTime.tv_sec  = mts.tv_sec;
-    tsTime.tv_nsec = mts.tv_nsec;
-#else
-    // CLOCK_REALTIME should be supported
-    // on any modern Unix, but be extra cautious
-    if (clock_gettime(CLOCK_REALTIME, &tsTime) != 0)
-    {
-        struct timeval tvTime;
-        OSL_VERIFY( gettimeofday(&tvTime, nullptr) != 0 );
-        tsTime.tv_sec  = tvTime.tv_sec;
-        tsTime.tv_nsec = tvTime.tv_usec * 1000;
-    }
-#endif // __MACH__
-
-    // construct time
-    struct tm aTime;
-    time_t nTmpTime = tsTime.tv_sec;
-    if ( localtime_r( &nTmpTime, &aTime ) )
-    {
-        nTime = aTime.tm_hour * hourMask +
-                aTime.tm_min  * minMask +
-                aTime.tm_sec  * secMask +
-                tsTime.tv_nsec;
-    }
-    else
+    if ( !GetSystemDateTime( nullptr, &nTime ) )
         nTime = 0;
-#endif // WNT
 }
 
 Time::Time( const tools::Time& rTime )
