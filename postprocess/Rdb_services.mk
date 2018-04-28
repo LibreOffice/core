@@ -300,6 +300,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(ENABLE_HEADLESS),,desktop/source/splash/spl) \
 	extensions/source/abpilot/abp \
 	extensions/source/config/ldap/ldapbe2 \
+	$(if $(filter WNT,$(OS)),\
+		extensions/source/config/WinUserInfo/WinUserInfoBe \
+	) \
 	extensions/source/logging/log \
 	extensions/source/scanner/scn \
 	extensions/source/update/feed/updatefeed \
