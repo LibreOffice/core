@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_aee8ba11",
+        "filename": "editeng/source/items/numitem.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-28T12:53:39Z",
+      "side": 1,
+      "message": "As mentioned elsewhere, I think this Language attribute is unnecessary and rLocale is sufficient.\n\nFor callers that in document context use the SvxNumberType::GetNumStr( sal_Int32 nNo ) above, which obtains the current work (system) locale, that may have been even wrong and they should use this function here instead and pass the text context locale. To force the system locale still the other (then unmodified) GetNumStr() above can be used, or Application::GetSettings().GetLanguageTag().getLocale(), or LanguageTag::convertToLocale(LANGUAGE_SYSTEM) (which resolves the same).",
+      "revId": "f45392718c5aa75ed943765ce7e42b8d2dee6add",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_2ef4caf0",
+        "filename": "i18npool/source/defaultnumberingprovider/defaultnumberingprovider.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-28T12:53:39Z",
+      "side": 1,
+      "message": "It\u0027s unclear to me why this property is needed at all instead of using the aLocale that is already passed as parameter to the function. This makes handling a tad confusing.. See other comments about that.",
+      "revId": "f45392718c5aa75ed943765ce7e42b8d2dee6add",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_4ef73ef5",
+        "filename": "include/editeng/numitem.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-28T12:53:39Z",
+      "side": 1,
+      "message": "Two locales (rLocale and nLang) is confusing. Why?\n\nAnd is LANGUAGE_SYSTEM really the default that is wanted here?\n\nI think this extra locale is unnecessary (and might even be wrong), see other comments.",
+      "revId": "f45392718c5aa75ed943765ce7e42b8d2dee6add",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_0eed4625",
+        "filename": "lingucomponent/source/numbertext/numbertext.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-28T12:53:39Z",
+      "side": 1,
+      "message": "I overlooked this in my previous review, similar to what I said there about concatenating Language and Country this can yield unexpected results. Rather construct a LanguageTag and obtain language and country from it,like this\n\n LanguageTag aLanguageTag( rLocale);\n OUString aCode( aLanguageTag.getLanguage());\n OUString aCountry( aLanguageTag.getCountry());\n if (!aCountry.isEmpty())\n     aCode +\u003d \"-\" + aCountry;\n\nHowever, this ignores the script tag, which for some language tags is necessary as languages can be written in different scripts. Doesn\u0027t NumberText handle that? If it would then it should be getLanguageAndScript() instead of getLanguage().",
+      "range": {
+        "startLine": 140,
+        "startChar": 26,
+        "endLine": 140,
+        "endChar": 66
+      },
+      "revId": "f45392718c5aa75ed943765ce7e42b8d2dee6add",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_6edec26e",
+        "filename": "offapi/com/sun/star/linguistic2/NumberText.idl",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-28T12:53:39Z",
+      "side": 1,
+      "message": "Please add a\n\n @since LibreOffice 6.1\n\nhere.",
+      "revId": "f45392718c5aa75ed943765ce7e42b8d2dee6add",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_aebfdaf9",
+        "filename": "sw/source/core/doc/number.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-28T12:53:39Z",
+      "side": 1,
+      "message": "Convert the LanguageType here\n\n css::lang::Locale aLocale( LanguageTag::convertToLocale(nLang));",
+      "revId": "f45392718c5aa75ed943765ce7e42b8d2dee6add",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_8ec0567e",
+        "filename": "sw/source/core/doc/number.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-28T12:53:39Z",
+      "side": 1,
+      "message": "... and pass that aLocale here.",
+      "range": {
+        "startLine": 677,
+        "startChar": 69,
+        "endLine": 677,
+        "endChar": 74
+      },
+      "revId": "f45392718c5aa75ed943765ce7e42b8d2dee6add",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
