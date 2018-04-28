@@ -221,5 +221,16 @@
         <value>true</value>
       </prop>
     </group>
+    <group oor:name="WinUserInfo">
+      <info>
+        <desc>Contains user information cached from Active Directory.</desc>
+      </info>
+      <prop oor:name="Cache" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Cache data.</desc>
+        </info>
+        <value/>
+      </prop>
+    </group>
   </component>
 </oor:component-schema>
