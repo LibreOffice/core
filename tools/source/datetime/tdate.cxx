@@ -16,18 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#if defined(_WIN32)
-#if !defined WIN32_LEAN_AND_MEAN
-# define WIN32_LEAN_AND_MEAN
-#endif
-#include <windows.h>
-#else
-#include <time.h>
-#endif
-
 #include <tools/date.hxx>
 #include <sal/log.hxx>
+
+#include <systemdatetime.hxx>
 
 static const sal_uInt16 aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
                                              31, 31, 30, 31, 30, 31 };
@@ -212,29 +204,8 @@ static Date lcl_DaysToDate( sal_Int32 nDays )
 
 Date::Date( DateInitSystem )
 {
-#if defined(_WIN32)
-    SYSTEMTIME aDateTime;
-    GetLocalTime( &aDateTime );
-
-    // Combine to date
-    setDateFromDMY( aDateTime.wDay, aDateTime.wMonth, aDateTime.wYear );
-#else
-    time_t     nTmpTime;
-    struct tm aTime;
-
-    // get current time
-    nTmpTime = time( nullptr );
-
-    // compute date
-    if ( localtime_r( &nTmpTime, &aTime ) )
-    {
-        setDateFromDMY( static_cast<sal_uInt16>(aTime.tm_mday),
-            static_cast<sal_uInt16>(aTime.tm_mon+1),
-            static_cast<sal_uInt16>(aTime.tm_year+1900) );
-    }
-    else
+    if ( !GetSystemDateTime( &mnDate, nullptr ) )
         setDateFromDMY( 1, 1, 1900 );
-#endif
 }
 
 Date::Date( const css::util::DateTime& rDateTime )

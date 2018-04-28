@@ -19,6 +19,23 @@
 #include <tools/datetime.hxx>
 #include <rtl/math.hxx>
 
+#include <systemdatetime.hxx>
+
+DateTime::DateTime(DateTimeInitSystem)
+    : Date( Date::EMPTY )
+    , Time( Time::EMPTY )
+{
+    sal_Int32 nD = 0;
+    sal_Int64 nT = 0;
+    if ( GetSystemDateTime( &nD, &nT ) )
+    {
+        Date::operator=( Date( nD ) );
+        SetTime( nT );
+    }
+    else
+        Date::operator=( Date( 1, 1, 1900 ) ); // Time::nTime is already 0
+}
+
 DateTime::DateTime( const css::util::DateTime& rDateTime )
   : Date( rDateTime.Day, rDateTime.Month, rDateTime.Year ),
     Time( rDateTime.Hours, rDateTime.Minutes, rDateTime.Seconds, rDateTime.NanoSeconds )
