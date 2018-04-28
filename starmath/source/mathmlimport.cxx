@@ -515,9 +515,11 @@ void SmXMLImport::endDocument()
             pDocShell->SetFormulaTree(static_cast<SmTableNode *>(pTree));
             if (aText.isEmpty())  //If we picked up no annotation text
             {
+                OUStringBuffer aStrBuf;
                 // Get text from imported formula
-                pTree->CreateTextFromNode(aText);
-                aText = comphelper::string::stripEnd(aText, ' ');
+                pTree->CreateTextFromNode(aStrBuf);
+                aStrBuf.stripEnd(' ');
+                aText = aStrBuf.makeStringAndClear();
             }
 
             // Convert symbol names
