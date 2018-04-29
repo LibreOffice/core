@@ -2936,21 +2936,67 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
 {
     SdPage& rHandoutMaster = *rModel.GetMasterSdPage( 0, PageKind::Handout );
 
+    static const sal_uInt16 aOffsets[5][9] =
+    {
+        { 0, 1, 2, 3, 4, 5, 6, 7, 8 }, // AUTOLAYOUT_HANDOUT9, Portrait, Horizontal order
+        { 0, 2, 4, 1, 3, 5, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT3, Landscape, Vertical
+        { 0, 2, 1, 3, 0, 0, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT4, Landscape, Vertical
+        { 0, 3, 1, 4, 2, 5, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT4, Portrait, Vertical
+        { 0, 3, 6, 1, 4, 7, 2, 5, 8 }, // AUTOLAYOUT_HANDOUT9, Landscape, Vertical
+    };
+
+    const sal_uInt16* pOffsets = aOffsets[0];
+
+    Size aArea = rHandoutMaster.GetSize();
+    const bool bLandscape = aArea.Width() > aArea.Height();
+
     if( eLayout == AUTOLAYOUT_NONE )
     {
         // use layout from handout master
         SdrObjListIter aShapeIter (rHandoutMaster);
-        while (aShapeIter.IsMore())
+
+        std::vector< ::tools::Rectangle > vSlidesAreas;
+        while ( aShapeIter.IsMore() )
         {
-            SdrPageObj* pPageObj = dynamic_cast<SdrPageObj*>(aShapeIter.Next());
+            SdrPageObj* pPageObj = dynamic_cast<SdrPageObj*>( aShapeIter.Next() );
+            // get slide rectangles
             if (pPageObj)
-                rAreas.push_back( pPageObj->GetCurrentBoundRect() );
+                vSlidesAreas.push_back( pPageObj->GetCurrentBoundRect() );
+        }
+
+        if ( !bHorizontal || vSlidesAreas.size() < 4 )
+        { // top to bottom, then right
+            rAreas.swap( vSlidesAreas );
+        }
+        else
+        { // left to right, then down
+            switch ( vSlidesAreas.size() )
+            {
+                case 4:
+                    pOffsets = aOffsets[2];
+                    break;
+
+                default:
+                    SAL_FALLTHROUGH;
+                case 6:
+                    pOffsets = aOffsets[ bLandscape ? 3 : 1 ];
+                    break;
+
+                case 9:
+                    pOffsets = aOffsets[4];
+                    break;
+            }
+
+            rAreas.resize( static_cast<size_t>(vSlidesAreas.size()) );
+
+            for( const tools::Rectangle& rRect : vSlidesAreas )
+            {
+                rAreas[*pOffsets++] = rRect;
+            }
         }
     }
     else
     {
-        Size    aArea = rHandoutMaster.GetSize();
-
         const long nGapW = 1000; // gap is 1cm
         const long nGapH = 1000;
 
@@ -2970,18 +3016,6 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
         aArea.AdjustWidth( -(nGapW * 2 + nLeftBorder + nRightBorder) );
         aArea.AdjustHeight( -(nGapH * 2 + nTopBorder + nBottomBorder) );
 
-        const bool bLandscape = aArea.Width() > aArea.Height();
-
-        static const sal_uInt16 aOffsets[5][9] =
-        {
-            { 0, 1, 2, 3, 4, 5, 6, 7, 8 }, // AUTOLAYOUT_HANDOUT9, Portrait, Horizontal order
-            { 0, 2, 4, 1, 3, 5, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT3, Landscape, Vertical
-            { 0, 2, 1, 3, 0, 0, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT4, Landscape, Vertical
-            { 0, 3, 1, 4, 2, 5, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT4, Portrait, Vertical
-            { 0, 3, 6, 1, 4, 7, 2, 5, 8 }, // AUTOLAYOUT_HANDOUT9, Landscape, Vertical
-        };
-
-        const sal_uInt16* pOffsets = aOffsets[0];
         sal_uInt16  nColCnt = 0, nRowCnt = 0;
         switch ( eLayout )
         {
