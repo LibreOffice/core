@@ -75,8 +75,6 @@
 
 #define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
 
-using comphelper::string::getTokenCount;
-
 typedef ::std::vector< GraphicFilter* > FilterList_impl;
 static FilterList_impl* pFilterHdlList = nullptr;
 
@@ -1597,11 +1595,16 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream)
     {
         ImpFilterLibCacheEntry* pFilter = nullptr;
 
-        // find first filter in filter paths
-        sal_Int32 i, nTokenCount = getTokenCount(aFilterPath, ';');
-        ImpFilterLibCache &rCache = Cache::get();
-        for( i = 0; ( i < nTokenCount ) && ( pFilter == nullptr ); i++ )
-            pFilter = rCache.GetFilter(aFilterPath.getToken(i, ';'), aFilterName, aExternalFilterName);
+        if (!aFilterPath.isEmpty())
+        {
+            // find first filter in filter paths
+            ImpFilterLibCache &rCache = Cache::get();
+            sal_Int32 nIdx{0};
+            do {
+                pFilter = rCache.GetFilter(aFilterPath.getToken(0, ';', nIdx), aFilterName, aExternalFilterName);
+            } while (nIdx>=0 && pFilter==nullptr);
+        }
+
         if( !pFilter )
             nStatus = ERRCODE_GRFILTER_FILTERERROR;
         else
@@ -2426,11 +2429,10 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
         }
         else
         {
-            sal_Int32 i, nTokenCount = getTokenCount(aFilterPath, ';');
-            for ( i = 0; i < nTokenCount; i++ )
-            {
+            sal_Int32 nIdx{0};
+            do {
 #ifndef DISABLE_DYNLOADING
-                OUString aPhysicalName( ImpCreateFullFilterPath( aFilterPath.getToken(i, ';'), aFilterName ) );
+                OUString aPhysicalName( ImpCreateFullFilterPath( aFilterPath.getToken(0, ';', nIdx), aFilterName ) );
                 osl::Module aLibrary( aPhysicalName );
 
                 PFilterCall pFunc = nullptr;
@@ -2442,6 +2444,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("etiGraphicExport"));
                  // Execute dialog in DLL
  #else
+                --nIdx; // Just one iteration
                 PFilterCall pFunc = NULL;
                 if (aFilterName == "egi")
                     pFunc = egiGraphicExport;
@@ -2458,7 +2461,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                 }
                 else
                     nStatus = ERRCODE_GRFILTER_FILTERERROR;
-            }
+            } while (nIdx>=0);
         }
     }
     if( nStatus != ERRCODE_NONE )
