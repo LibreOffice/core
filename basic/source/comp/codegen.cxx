@@ -350,7 +350,7 @@ void SbiCodeGen::Save()
         }
     }
     // The code
-    p->AddCode( aCode.GetBuffer(), aCode.GetSize() );
+    p->AddCode( std::unique_ptr<char[]>(aCode.GetBuffer()), aCode.GetSize() );
 
     // The global StringPool. 0 is not occupied.
     SbiStringPool* pPool = &pParser->aGblStrings;
