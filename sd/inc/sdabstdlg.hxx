@@ -187,7 +187,7 @@ public:
     virtual VclPtr<AbstractSdSnapLineDlg>      CreateSdSnapLineDlg(vcl::Window* pParent, const SfxItemSet& rInAttrs, ::sd::View* pView) = 0;
     virtual VclPtr<AbstractSdInsertLayerDlg>   CreateSdInsertLayerDlg(vcl::Window* pParent, const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr) = 0;
     virtual VclPtr<AbstractSdInsertPagesObjsDlg> CreateSdInsertPagesObjsDlg(vcl::Window* pParent, const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName) = 0;
-    virtual VclPtr<AbstractMorphDlg>           CreateMorphDlg(vcl::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2) = 0;
+    virtual VclPtr<AbstractMorphDlg>           CreateMorphDlg(weld::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2) = 0;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdOutlineBulletTabDlg(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView) = 0;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdParagraphTabDlg(vcl::Window* pWindow, const SfxItemSet* pAttr) = 0;
     virtual VclPtr<AbstractSdStartPresDlg>     CreateSdStartPresentationDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs,

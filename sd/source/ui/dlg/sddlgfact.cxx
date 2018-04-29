@@ -55,7 +55,12 @@ IMPL_ABSTDLG_BASE(AbstractSdModifyFieldDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdSnapLineDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdInsertLayerDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdInsertPagesObjsDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractMorphDlg_Impl);
+
+short AbstractMorphDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractSdStartPresDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdPresLayoutDlg_Impl);
 IMPL_ABSTDLG_BASE(SdAbstractSfxDialog_Impl);
@@ -237,22 +242,22 @@ bool AbstractSdInsertPagesObjsDlg_Impl::IsRemoveUnnessesaryMasterPages() const
 
 void AbstractMorphDlg_Impl::SaveSettings() const
 {
-    pDlg->SaveSettings();
+    m_xDlg->SaveSettings();
 }
 
 sal_uInt16 AbstractMorphDlg_Impl::GetFadeSteps() const
 {
-    return pDlg->GetFadeSteps();
+    return m_xDlg->GetFadeSteps();
 }
 
 bool AbstractMorphDlg_Impl::IsAttributeFade() const
 {
-    return pDlg->IsAttributeFade();
+    return m_xDlg->IsAttributeFade();
 }
 
 bool AbstractMorphDlg_Impl::IsOrientationFade() const
 {
-    return pDlg->IsOrientationFade();
+    return m_xDlg->IsOrientationFade();
 }
 
 void AbstractSdStartPresDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
@@ -339,9 +344,9 @@ VclPtr<AbstractSdInsertPagesObjsDlg> SdAbstractDialogFactory_Impl::CreateSdInser
     return VclPtr<AbstractSdInsertPagesObjsDlg_Impl>::Create( VclPtr<SdInsertPagesObjsDlg>::Create( pParent, pDoc, pSfxMedium, rFileName ) );
 }
 
-VclPtr<AbstractMorphDlg> SdAbstractDialogFactory_Impl::CreateMorphDlg( vcl::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2)
+VclPtr<AbstractMorphDlg> SdAbstractDialogFactory_Impl::CreateMorphDlg(weld::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2)
 {
-    return VclPtr<AbstractMorphDlg_Impl>::Create( VclPtr<::sd::MorphDlg>::Create( pParent, pObj1, pObj2 ) );
+    return VclPtr<AbstractMorphDlg_Impl>::Create(new ::sd::MorphDlg(pParent, pObj1, pObj2));
 }
 
 VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdOutlineBulletTabDlg(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView )

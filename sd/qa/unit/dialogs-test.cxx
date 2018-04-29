@@ -402,8 +402,9 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             SdrObject* pSdrObj = pSdPage->GetObj(0);
             // using one SdrObject is okay, none crashes
             CPPUNIT_ASSERT(pSdrObj);
+            auto const parent = Application::GetDefDialogParent();
             pRetval = getSdAbstractDialogFactory()->CreateMorphDlg(
-                Application::GetDefDialogParent(),
+                parent == nullptr ? nullptr : parent->GetFrameWeld(),
                 pSdrObj,
                 pSdrObj);
             break;

@@ -171,7 +171,14 @@ class AbstractSdInsertPagesObjsDlg_Impl : public AbstractSdInsertPagesObjsDlg
 
 class AbstractMorphDlg_Impl : public AbstractMorphDlg
 {
-    DECL_ABSTDLG_BASE(AbstractMorphDlg_Impl,::sd::MorphDlg)
+private:
+    std::unique_ptr<sd::MorphDlg> m_xDlg;
+public:
+    AbstractMorphDlg_Impl(::sd::MorphDlg* pDlg)
+        : m_xDlg(pDlg)
+    {
+    }
+    virtual short   Execute() override;
     virtual void            SaveSettings() const override;
     virtual sal_uInt16      GetFadeSteps() const override;
     virtual bool            IsAttributeFade() const override ;
@@ -234,7 +241,7 @@ public:
     virtual VclPtr<AbstractSdSnapLineDlg>      CreateSdSnapLineDlg(vcl::Window* pParent, const SfxItemSet& rInAttrs, ::sd::View* pView) override;
     virtual VclPtr<AbstractSdInsertLayerDlg>   CreateSdInsertLayerDlg(vcl::Window* pParent, const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr) override;
     virtual VclPtr<AbstractSdInsertPagesObjsDlg> CreateSdInsertPagesObjsDlg(vcl::Window* pParent, const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName ) override;
-    virtual VclPtr<AbstractMorphDlg>           CreateMorphDlg(vcl::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2) override;
+    virtual VclPtr<AbstractMorphDlg>           CreateMorphDlg(weld::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdOutlineBulletTabDlg(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdParagraphTabDlg(vcl::Window* pParent, const SfxItemSet* pAttr) override;
     virtual VclPtr<AbstractSdStartPresDlg>     CreateSdStartPresentationDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs,
