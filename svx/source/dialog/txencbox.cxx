@@ -240,23 +240,20 @@ void TextEncodingBox::FillFromTextEncodingTable(
     {
         bool bInsert = true;
         rtl_TextEncoding nEnc = RID_SVXSTR_TEXTENCODING_TABLE[j].second;
-        if ( bInsert )
+        if ( bExcludeImportSubsets )
         {
-            if ( bExcludeImportSubsets )
+            switch ( nEnc )
             {
-                switch ( nEnc )
-                {
-                    // subsets of RTL_TEXTENCODING_GB_18030
-                    case RTL_TEXTENCODING_GB_2312 :
-                    case RTL_TEXTENCODING_GBK :
-                    case RTL_TEXTENCODING_MS_936 :
-                        bInsert = false;
-                    break;
-                }
+                // subsets of RTL_TEXTENCODING_GB_18030
+                case RTL_TEXTENCODING_GB_2312 :
+                case RTL_TEXTENCODING_GBK :
+                case RTL_TEXTENCODING_MS_936 :
+                    bInsert = false;
+                break;
             }
-            if ( bInsert )
-                InsertTextEncoding(nEnc, SvxResId(RID_SVXSTR_TEXTENCODING_TABLE[j].first));
         }
+        if ( bInsert )
+            InsertTextEncoding(nEnc, SvxResId(RID_SVXSTR_TEXTENCODING_TABLE[j].first));
     }
 }
 
