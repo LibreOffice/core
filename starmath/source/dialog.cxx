@@ -1397,7 +1397,7 @@ SmSymbolDialog::SmSymbolDialog(vcl::Window *pParent, OutputDevice *pFntListDevic
     get(m_pSymbolSets, "symbolset");
     m_pSymbolSets->SetStyle(m_pSymbolSets->GetStyle()|WB_SORT);
     get(m_pSymbolName, "symbolname");
-    get(m_pGetBtn, "insert");
+    get(m_pGetBtn, "ok");
     get(m_pEditBtn, "edit");
     get(m_pSymbolSetDisplay, "symbolsetdisplay");
     get(m_pSymbolDisplay, "preview");
