@@ -139,7 +139,7 @@ public class CustomizeView extends    JPanel
             return;
 
         // be listener for click events
-        // They will toogle the UI controls.
+        // They will toggle the UI controls.
         ClickListener aMenuBarHandler   = new ClickListener(FEATUREURL_MENUBAR  ,FEATUREPROP_MENUBAR  ,xFrame);
         ClickListener aToolBarHandler   = new ClickListener(FEATUREURL_TOOLBAR  ,FEATUREPROP_TOOLBAR  ,xFrame);
         ClickListener aObjectBarHandler = new ClickListener(FEATUREURL_OBJECTBAR,FEATUREPROP_OBJECTBAR,xFrame);
@@ -165,7 +165,7 @@ public class CustomizeView extends    JPanel
     /*
      * react for click events of the used check boxes
      * We use our internal set dispatch objects to
-     * call it. This calls toogle the menu/object- or toolbar.
+     * call it. This calls toggle the menu/object- or toolbar.
      * Note: Because we are listener status events too - hopefully
      * we get a notification, if toggling was successfully or not.
      * We use this information to update our check boxes again.
@@ -175,7 +175,7 @@ public class CustomizeView extends    JPanel
     private class ClickListener implements ActionListener,
                                    com.sun.star.lang.XEventListener
     {
-        /// URL, to toogle the requested UI item
+        /// URL, to toggle the requested UI item
         private final String m_sURL;
         /// name of the property which must be used in combination with the URL
         private final String m_sProp;
@@ -208,7 +208,7 @@ public class CustomizeView extends    JPanel
          *
          * @param aEvent
          *          describes the check box and its state
-         *          we can use to toogle the requested office
+         *          we can use to toggle the requested office
          *          resource.
          */
         public void actionPerformed(ActionEvent aEvent)
