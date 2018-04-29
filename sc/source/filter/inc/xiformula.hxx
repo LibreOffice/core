@@ -44,7 +44,7 @@ public:
 
     /**
      * Creates a formula token array from the Excel token array.  Note that
-     * the caller must create a copy of the token array instance returend by
+     * the caller must create a copy of the token array instance returned by
      * this function if the caller needs to persistently store the array,
      * because the pointer points to an array instance on the stack.
      */

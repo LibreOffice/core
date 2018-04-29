@@ -47,17 +47,17 @@ public:
     long   GetI() const;
         // Returns the integer value of the group which was read earlier with Read().
         // This read must have returned a group code for datatype Integer.
-        // If not 0 is returend
+        // If not 0 is returned
 
     double GetF() const;
         // Returns the floating point value of the group which was read earlier with Read().
         // This read must have returned a group code for datatype Floatingpoint.
-        // If not 0 is returend
+        // If not 0 is returned
 
     const OString& GetS() const;
         // Returns the string of the group which was read earlier with Read().
         // This read must have returned a group code for datatype String.
-        // If not NULL is returend
+        // If not NULL is returned
 
     sal_uInt64 remainingSize() const;
 private:
