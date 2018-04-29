@@ -75,6 +75,8 @@
 
 #define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
 
+using comphelper::string::getTokenCount;
+
 typedef ::std::vector< GraphicFilter* > FilterList_impl;
 static FilterList_impl* pFilterHdlList = nullptr;
 
