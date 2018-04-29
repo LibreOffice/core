@@ -41,7 +41,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <comphelper/string.hxx>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 
@@ -705,16 +704,23 @@ namespace
 
 bool lcl_matchFilter( const rtl::OUString& rFilter, const rtl::OUString& rExt )
 {
-    const int nCount = comphelper::string::getTokenCount( rFilter, ';' );
+    const sal_Int32 nBegin = rFilter.indexOf(rExt);
 
-    for ( int n = 0; n != nCount; ++n )
-    {
-        const rtl::OUString aToken = rFilter.getToken( n, ';' );
-        if ( aToken == rExt )
-            return true;
-    }
+    if (nBegin<0) // not found
+        return false;
 
-    return false;
+    const sal_Unicode cSep{';'};
+
+    // Check if the found occurrence is an exact match: left side
+    if (nBegin>0 && rFilter[nBegin-1]!=cSep)
+        return false;
+
+    // Check if the found occurrence is an exact match: right side
+    const sal_Int32 nEnd = nBegin + rExt.getLength();
+    if (nEnd<rFilter.getLength() && rFilter[nEnd]!=cSep)
+        return false;
+
+    return true;
 }
 
 }
