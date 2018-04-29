@@ -127,7 +127,7 @@ OUString ODsnTypeCollection::getPrefix(const OUString& _sURL) const
 bool ODsnTypeCollection::hasDriver( const sal_Char* _pAsciiPattern ) const
 {
     OUString sPrefix( getPrefix( OUString::createFromAscii( _pAsciiPattern ) ) );
-    return ( sPrefix.getLength() > 0 );
+    return !sPrefix.isEmpty();
 }
 
 bool ODsnTypeCollection::isConnectionUrlRequired(const OUString& _sURL) const
@@ -143,7 +143,7 @@ bool ODsnTypeCollection::isConnectionUrlRequired(const OUString& _sURL) const
             sOldPattern = dsnPrefix;
         }
     }
-    return sRet.getLength() > 0 && sRet[sRet.getLength()-1] == '*';
+    return !sRet.isEmpty() && sRet[sRet.getLength()-1] == '*';
 }
 
 OUString ODsnTypeCollection::getMediaType(const OUString& _sURL) const
@@ -174,7 +174,7 @@ OUString ODsnTypeCollection::getDatasourcePrefixFromMediaType(const OUString& _s
         }
     }
 
-    if ( !sURL.getLength() && sFallbackURL.getLength() )
+    if ( sURL.isEmpty() && !sFallbackURL.isEmpty() )
         sURL = sFallbackURL;
 
     sURL = comphelper::string::stripEnd(sURL, '*');
@@ -202,12 +202,12 @@ void ODsnTypeCollection::extractHostNamePort(const OUString& _rDsn,OUString& _sD
     {
         lcl_extractHostAndPort(sUrl,_rsHostname,_nPortNumber);
         const sal_Int32 nUrlTokens {comphelper::string::getTokenCount(sUrl, ':')};
-        if ( !_rsHostname.getLength() && nUrlTokens == 2 )
+        if ( _rsHostname.isEmpty() && nUrlTokens == 2 )
         {
             _nPortNumber = -1;
             _rsHostname = sUrl.getToken(0,':');
         }
-        if ( _rsHostname.getLength() )
+        if ( !_rsHostname.isEmpty() )
             _rsHostname = _rsHostname.getToken(comphelper::string::getTokenCount(_rsHostname, '@') - 1, '@');
         _sDatabaseName = sUrl.getToken(nUrlTokens - 1, ':');
     }
@@ -221,7 +221,7 @@ void ODsnTypeCollection::extractHostNamePort(const OUString& _rDsn,OUString& _sD
         lcl_extractHostAndPort(sUrl,_rsHostname,_nPortNumber);
 
         const sal_Int32 nUrlTokens {comphelper::string::getTokenCount(sUrl, '/')};
-        if ( _nPortNumber == -1 && !_rsHostname.getLength() && nUrlTokens == 2 )
+        if ( _nPortNumber == -1 && _rsHostname.isEmpty() && nUrlTokens == 2 )
             _rsHostname = sUrl.getToken(0,'/');
         _sDatabaseName = sUrl.getToken(nUrlTokens - 1, '/');
     }
