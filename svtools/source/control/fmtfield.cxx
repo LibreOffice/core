@@ -484,7 +484,7 @@ void FormattedField::ImplSetTextImpl(const OUString& rNew, Selection const * pNe
         sal_Int32 nCurrentLen = GetText().getLength();
 
         if ((nNewLen > nCurrentLen) && (aSel.Max() == nCurrentLen))
-        {   // new new text is longer and the cursor is behind the last char
+        {   // new text is longer and the cursor is behind the last char
             if (aSel.Min() == 0)
             {   // the whole text was selected -> select the new text on the whole, too
                 aSel.Max() = nNewLen;

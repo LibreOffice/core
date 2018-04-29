@@ -425,7 +425,7 @@ void SdrObject::SetPage(SdrPage* pNewPage)
     pPage = pNewPage;
 
     // TTTT Possibility here to add a warning for the future -> SdrModel
-    // of SdrObject (this) and SdrPage it it added to *have* to have the
+    // of SdrObject (this) and SdrPage. It is added to *have* the
     // same SdrModel
     // if(nullptr != pPage)
     // {

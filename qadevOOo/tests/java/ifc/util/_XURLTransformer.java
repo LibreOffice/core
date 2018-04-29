@@ -61,7 +61,7 @@ public class _XURLTransformer extends MultiMethodTest {
      * passed and assembled. Then incomplete URL (only
      * <code>Server</code> field is set) is passed. <p>
      * Has <b> OK </b> status if in the first case <code>true</code>
-     * retruned and <code>Complete</code> field is set and in the
+     * returned and <code>Complete</code> field is set and in the
      * second case <code>false</code> is returned. <p>
      */
     public void _assemble(){
@@ -133,7 +133,7 @@ public class _XURLTransformer extends MultiMethodTest {
      * to proper URL) is passed and parsed. Then incomplete URL (only
      * <code>Server</code> field is set) is passed. <p>
      * Has <b> OK </b> status if in the first case <code>true</code>
-     * retruned and all URL fields are set to proper values and in the
+     * returned and all URL fields are set to proper values and in the
      * second case <code>false</code> is returned. <p>
      */
     public void _parseStrict() {

@@ -51,7 +51,7 @@ public class _XDocumentIndex extends MultiMethodTest {
 
     /**
      * Test calls the method. <p>
-     * Has <b> OK </b> status if the retruned service name
+     * Has <b> OK </b> status if the returned service name
      * is equal to 'com.sun.star.text.DocumentIndex'.
      */
     public void _getServiceName() {
