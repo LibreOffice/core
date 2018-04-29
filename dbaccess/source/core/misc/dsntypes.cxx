@@ -41,8 +41,9 @@ namespace dbaccess
         {
             if ( comphelper::string::getTokenCount(_sUrl, ':') >= 2 )
             {
-                _sHostname      = _sUrl.getToken(0,':');
-                _nPortNumber    = _sUrl.getToken(1,':').toInt32();
+                sal_Int32 nPos {0};
+                _sHostname   = _sUrl.getToken(0, ':', nPos);
+                _nPortNumber = _sUrl.getToken(0, ':', nPos).toInt32();
             }
         }
     }
@@ -200,14 +201,15 @@ void ODsnTypeCollection::extractHostNamePort(const OUString& _rDsn,OUString& _sD
     if ( _rDsn.startsWithIgnoreAsciiCase("jdbc:oracle:thin:") )
     {
         lcl_extractHostAndPort(sUrl,_rsHostname,_nPortNumber);
-        if ( !_rsHostname.getLength() && comphelper::string::getTokenCount(sUrl, ':') == 2 )
+        const sal_Int32 nUrlTokens {comphelper::string::getTokenCount(sUrl, ':')};
+        if ( !_rsHostname.getLength() && nUrlTokens == 2 )
         {
             _nPortNumber = -1;
             _rsHostname = sUrl.getToken(0,':');
         }
         if ( _rsHostname.getLength() )
             _rsHostname = _rsHostname.getToken(comphelper::string::getTokenCount(_rsHostname, '@') - 1, '@');
-        _sDatabaseName = sUrl.getToken(comphelper::string::getTokenCount(sUrl, ':') - 1, ':');
+        _sDatabaseName = sUrl.getToken(nUrlTokens - 1, ':');
     }
     else if ( _rDsn.startsWithIgnoreAsciiCase("sdbc:address:ldap:") )
     {
@@ -218,9 +220,10 @@ void ODsnTypeCollection::extractHostNamePort(const OUString& _rDsn,OUString& _sD
     {
         lcl_extractHostAndPort(sUrl,_rsHostname,_nPortNumber);
 
-        if ( _nPortNumber == -1 && !_rsHostname.getLength() && comphelper::string::getTokenCount(sUrl, '/') == 2 )
+        const sal_Int32 nUrlTokens {comphelper::string::getTokenCount(sUrl, '/')};
+        if ( _nPortNumber == -1 && !_rsHostname.getLength() && nUrlTokens == 2 )
             _rsHostname = sUrl.getToken(0,'/');
-        _sDatabaseName = sUrl.getToken(comphelper::string::getTokenCount(sUrl, '/') - 1, '/');
+        _sDatabaseName = sUrl.getToken(nUrlTokens - 1, '/');
     }
     else if ( _rDsn.startsWithIgnoreAsciiCase("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=")
            || _rDsn.startsWithIgnoreAsciiCase("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=") )
