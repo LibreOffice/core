@@ -102,7 +102,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
             SwDocShell::Factory().GetFilterContainer() );
     //save the current document into a temporary file
     {
-        //temp file needs it's own block
+        //temp file needs its own block
         //creating with extension is not supported by a static method :-(
         OUString const sExt(
             comphelper::string::stripStart(pSfxFlt->GetDefaultExtension(),'*'));
