@@ -310,7 +310,7 @@ public class _XTransliteration extends MultiMethodTest {
     /**
      * Performs tesing of two substrings. Also testing of opposite
      * substrings order performed.
-     * @return <code>true</code> if substrings are equal and retruned
+     * @return <code>true</code> if substrings are equal and returned
      * value is 0 for both orders,
      * if substrings are different and expected value
      * returned for direct order and opposite value returned for
@@ -392,7 +392,7 @@ public class _XTransliteration extends MultiMethodTest {
      * Performs tesing of two strings. If the expected value is not 0
      * (i.e. strings are not equal), then also testing of opposite
      * strings order performed.
-     * @return <code>true</code> if strings are equal and retruned
+     * @return <code>true</code> if strings are equal and returned
      * value is 0, if strings are different and expected value
      * returned for direct order and opposite value returned for
      * opposite order.
