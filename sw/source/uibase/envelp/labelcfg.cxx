@@ -23,7 +23,6 @@
 #include <swtypes.hxx>
 #include <labelcfg.hxx>
 #include <labimp.hxx>
-#include <comphelper/string.hxx>
 #include <rtl/bootstrap.hxx>
 #include <unotools/configpaths.hxx>
 #include <xmlreader/xmlreader.hxx>
@@ -183,12 +182,13 @@ static std::unique_ptr<SwLabRec> lcl_CreateSwLabRec(const OUString& rType, const
     pNewRec->m_aType = rType;
     //all values are contained as colon-separated 1/100 mm values
     //except for the continuous flag ('C'/'S') and nCols, nRows (sal_Int32)
-    sal_uInt16 nTokenCount = comphelper::string::getTokenCount(rMeasure, ';');
-    for(sal_uInt16 i = 0; i < nTokenCount; i++)
+    sal_Int32 nTok{0};
+    sal_Int32 nIdx{rMeasure.isEmpty() ? -1 : 0};
+    while (nIdx>=0)
     {
-        OUString sToken(rMeasure.getToken(i, ';' ));
+        const OUString sToken(rMeasure.getToken(0, ';', nIdx));
         int nVal = sToken.toInt32();
-        switch(i)
+        switch(nTok++)
         {
             case  0 : pNewRec->m_bCont = sToken[0] == 'C'; break;
             case  1 : pNewRec->m_nHDist    = convertMm100ToTwip(nVal);  break;
