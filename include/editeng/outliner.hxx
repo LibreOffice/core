@@ -248,7 +248,7 @@ public:
 
     void        CreateSelectionList (std::vector<Paragraph*> &aSelList) ;
 
-    // Retruns the number of selected paragraphs
+    // Returns the number of selected paragraphs
     sal_Int32   Select( Paragraph const * pParagraph, bool bSelect = true);
 
     OUString    GetSelected() const;
