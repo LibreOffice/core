@@ -27,7 +27,7 @@ void FunctionDescription::testFunctionDescriptionProperties()
     uno::Sequence<beans::PropertyValue> aFunctionDescription(init());
 
     std::vector<OUString> names;
-    // Only test the the get/read operation of the values, because set/write operation doesn't
+    // Only test the get/read operation of the values, because set/write operation doesn't
     // make any sense. It doesn't trigger any changes.
     // See discussion: nabble.documentfoundation.org/Testing-UNO-API-service-properties-td4236286.html.
     for (auto& value : aFunctionDescription)

@@ -464,7 +464,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
                     {
                         pMouseDownWin->ImplGetFrameData()->mbStartDragCalled  = true;
 
-                        // Check if drag source provides it's own recognizer
+                        // Check if drag source provides its own recognizer
                         if( pMouseDownWin->ImplGetFrameData()->mbInternalDragGestureRecognizer )
                         {
                             // query DropTarget from child window

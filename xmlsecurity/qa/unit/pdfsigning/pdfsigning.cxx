@@ -223,7 +223,7 @@ bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL,
     if (bSignSuccessful)
         verify(rOutURL, nOriginalSignatureCount + 1, /*rExpectedSubFilter=*/OString());
 
-    // May return false if NSS failed to parse it's own profile or Windows has no valid certificates installed.
+    // May return false if NSS failed to parse its own profile or Windows has no valid certificates installed.
     return bSignSuccessful;
 }
 

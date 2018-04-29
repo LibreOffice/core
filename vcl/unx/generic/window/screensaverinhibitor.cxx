@@ -263,7 +263,7 @@ void ScreenSaverInhibitor::inhibitMSM( bool bInhibit, const char* appname, const
 /**
  * Disable screensavers using the XSetScreenSaver/XGetScreenSaver API.
  *
- * Worth noting: xscreensaver explicitly ignores this and does it's own
+ * Worth noting: xscreensaver explicitly ignores this and does its own
  * timeout handling.
  */
 void ScreenSaverInhibitor::inhibitXScreenSaver( bool bInhibit, Display* pDisplay )

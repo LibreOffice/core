@@ -100,7 +100,7 @@ namespace basegfx
         */
         BASEGFX_DLLPUBLIC B2DPolyPolygon createNonzeroConform(const B2DPolyPolygon& rCandidate);
 
-        // For convenience: The four basic operations OR, XOR, AND and DIFF for
+        // For convenience: the four basic operations OR, XOR, AND and DIFF for
         // two PolyPolygons. These are combinations of the above methods. To not be forced
         // to do evtl. already done preparations twice, You have to do the operations Yourself.
 

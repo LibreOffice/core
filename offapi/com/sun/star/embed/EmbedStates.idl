@@ -59,7 +59,7 @@ published constants EmbedStates
         window.
 
         <p>
-        The object is activated and has it's own window in the container's
+        The object is activated and has its own window in the container's
         window that allows object to process mouse events and control own
         rendering.
         </p>

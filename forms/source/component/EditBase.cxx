@@ -139,7 +139,7 @@ void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
     writeHelpTextCompatibly(_rxOutStream);
     // (that's potentially bad : at the time I added the above line we had two derived classes : OEditModel and
     // OFormattedModel. The first one does not have an own version handling, so it can't write the help text itself,
-    // the second one does it's own writing (reading) after calling our method, so normally we shouldn't write any
+    // the second one does its own writing (reading) after calling our method, so normally we shouldn't write any
     // additional members as this is not compatible to older office versions.
     // We decided to place the writing of the help text here as it seems the less worse alternative. There is no delivered
     // office version including formatted controls (and thus the OFormattedModel), and the OFormattedModel::read seems

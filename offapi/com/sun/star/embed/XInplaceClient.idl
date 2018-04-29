@@ -75,7 +75,7 @@ interface XInplaceClient: com::sun::star::uno::XInterface
         UI-deactivated.
 
         <p>
-        After this notification the container can restore it's own UI and take focus.
+        After this notification the container can restore its own UI and take focus.
         </p>
 
         @throws com::sun::star::embed::WrongStateException

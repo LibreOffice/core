@@ -476,11 +476,11 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
         pPrinter->Push( PushFlags::MAPMODE );
         if ( SfxObjectCreateMode::EMBEDDED == rDocShell.GetCreateMode() )
         {
-            // if it is an embedded object (without it's own printer)
+            // if it is an embedded object (without its own printer)
             // we change the MapMode temporarily.
             //!If it is a document with its own printer the MapMode should
             //!be set correct (once) elsewhere(!), in order to avoid numerous
-            //!superfluous pushing and poping of the MapMode when using
+            //!superfluous pushing and popping of the MapMode when using
             //!this class.
 
             const MapUnit eOld = pPrinter->GetMapMode().GetMapUnit();
@@ -501,11 +501,11 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
         pRefDev->Push( PushFlags::MAPMODE );
         if ( SfxObjectCreateMode::EMBEDDED == rDocShell.GetCreateMode() )
         {
-            // if it is an embedded object (without it's own printer)
+            // if it is an embedded object (without its own printer)
             // we change the MapMode temporarily.
             //!If it is a document with its own printer the MapMode should
             //!be set correct (once) elsewhere(!), in order to avoid numerous
-            //!superfluous pushing and poping of the MapMode when using
+            //!superfluous pushing and popping of the MapMode when using
             //!this class.
 
             const MapUnit eOld = pRefDev->GetMapMode().GetMapUnit();
