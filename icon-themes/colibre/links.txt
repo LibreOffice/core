@@ -1501,6 +1501,8 @@ svx/res/symphony/rotate_left.png cmd/sc_rotateleft.png
 svx/res/symphony/rotate_right.png cmd/sc_rotateright.png
 svx/res/symphony/sch_backgroundcolor.png cmd/sc_backgroundcolor.png
 svx/res/symphony/spacing3.png cmd/sc_spacepara1.png
+svx/res/symphony/last_custom_common_grey.png cmd/last_custom_common_grey.png
+svx/res/symphony/last_custom_common.png cmd/last_custom_common.png
 
 # sw
 # ==============================================
