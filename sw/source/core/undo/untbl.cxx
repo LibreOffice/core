@@ -68,6 +68,10 @@
 #include <utility>
 #include <vector>
 #include <o3tl/make_unique.hxx>
+
+#include <docsh.hxx>
+#include <wrtsh.hxx>
+
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
 #else
@@ -301,6 +305,8 @@ void SwUndoInsTable::RedoImpl(::sw::UndoRedoContext & rContext)
     const SwTable* pTable = rDoc.InsertTable( aInsTableOpts, aPos, nRows, nCols,
                                             nAdjust,
                                             pAutoFormat, pColWidth );
+    rDoc.GetDocShell()->GetWrtShell()->MoveTable( GotoPrevTable, fnTableStart );
+
     static_cast<SwFrameFormat*>(pTable->GetFrameFormat())->SetName( sTableNm );
     SwTableNode* pTableNode = rDoc.GetNodes()[nSttNode]->GetTableNode();
 
