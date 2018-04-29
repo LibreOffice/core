@@ -20,36 +20,27 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_MORPHDLG_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_MORPHDLG_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/group.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 
 class SdrObject;
 
 namespace sd {
 
-class MorphDlg
-    : public ModalDialog
+class MorphDlg : public weld::GenericDialogController
 {
 public:
-    MorphDlg (
-        vcl::Window* pParent,
-        const SdrObject* pObj1,
-        const SdrObject* pObj2);
+    MorphDlg(weld::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2);
     virtual ~MorphDlg() override;
-    virtual void dispose() override;
 
     void            SaveSettings() const;
-    sal_uInt16      GetFadeSteps() const { return static_cast<sal_uInt16>(m_pMtfSteps->GetValue()); }
-    bool            IsAttributeFade() const { return m_pCbxAttributes->IsChecked(); }
-    bool            IsOrientationFade() const { return m_pCbxOrientation->IsChecked(); }
+    sal_uInt16      GetFadeSteps() const { return static_cast<sal_uInt16>(m_xMtfSteps->get_value()); }
+    bool            IsAttributeFade() const { return m_xCbxAttributes->get_active(); }
+    bool            IsOrientationFade() const { return m_xCbxOrientation->get_active(); }
 
 private:
-    VclPtr<NumericField>   m_pMtfSteps;
-    VclPtr<CheckBox>       m_pCbxAttributes;
-    VclPtr<CheckBox>       m_pCbxOrientation;
+    std::unique_ptr<weld::SpinButton> m_xMtfSteps;
+    std::unique_ptr<weld::CheckButton> m_xCbxAttributes;
+    std::unique_ptr<weld::CheckButton> m_xCbxOrientation;
 
     void            LoadSettings();
 };
