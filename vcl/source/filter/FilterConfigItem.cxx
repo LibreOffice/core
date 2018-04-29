@@ -21,7 +21,6 @@
 
 #include <unotools/configmgr.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -44,20 +43,14 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory > const & rXCfgP
     bool bAvailable = !rTree.isEmpty();
     if ( bAvailable )
     {
-        using comphelper::string::getTokenCount;
-
-        sal_Int32 nTokenCount = getTokenCount(rTree, '/');
-        sal_Int32 i = 0;
-
+        sal_Int32 nIdx{0};
         if ( rTree[0] == '/' )
-            ++i;
-        if ( rTree.endsWith("/") )
-            --nTokenCount;
+            ++nIdx;
 
         // creation arguments: nodepath
         PropertyValue aPathArgument;
         aPathArgument.Name = "nodepath";
-        aPathArgument.Value <<= rTree.getToken(i++, '/');
+        aPathArgument.Value <<= rTree.getToken(0, '/', nIdx);
 
         Sequence< Any > aArguments( 1 );
         aArguments[ 0 ] <<= aPathArgument;
@@ -75,7 +68,7 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory > const & rXCfgP
         }
         if ( xReadAccess.is() )
         {
-            for ( ; bAvailable && ( i < nTokenCount ); i++ )
+            while (bAvailable && nIdx>=0 )
             {
                 Reference< XHierarchicalNameAccess > xHierarchicalNameAccess
                     ( xReadAccess, UNO_QUERY );
@@ -84,7 +77,7 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory > const & rXCfgP
                     bAvailable = false;
                 else
                 {
-                    OUString aNode( rTree.getToken(i, '/') );
+                    const OUString aNode( rTree.getToken(0, '/', nIdx) );
                     if ( !xHierarchicalNameAccess->hasByHierarchicalName( aNode ) )
                         bAvailable = false;
                     else
