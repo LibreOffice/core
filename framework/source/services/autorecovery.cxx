@@ -937,7 +937,7 @@ private:
                 b) We must create our own progress e.g. for an AutoSave
                 c) Sometimes our application filters don't use the progress
                    provided by the MediaDescriptor. They use the Frame every time to create
-                   it's own progress. So we implemented a HACK for these and now we set
+                   its own progress. So we implemented a HACK for these and now we set
                    an InterceptedProgress there for the time WE use this frame for loading/storing documents .-)
 
         @param  xNewFrame
@@ -4102,7 +4102,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
 
     // HACK
     // An external provided progress (most given by the CrashSave/Recovery dialog)
-    // must be preferred. But we know that some application filters query it's own progress instance
+    // must be preferred. But we know that some application filters query its own progress instance
     // at the frame method Frame::createStatusIndicator().
     // So we use a two step mechanism:
     // 1) we set the progress inside the MediaDescriptor, which will be provided to the filter

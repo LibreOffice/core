@@ -141,7 +141,7 @@ namespace xmloff
     protected:
         /** can be used to handle properties where the attribute default and the property default differ.
             <p>In such case, if the property had the attribute default upon writing, nothing is read, so upon reading,
-            the property is still at it's own default (which is not the attribute default).<p/>
+            the property is still at its own default (which is not the attribute default).<p/>
             <p>This method, if told the attribute and the property, and the (implied) attribute default, sets the
             property value as if the attribute was encountered.</p>
             @see encounteredAttribute

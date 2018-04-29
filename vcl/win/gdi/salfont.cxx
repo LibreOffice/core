@@ -57,7 +57,7 @@
 
 using namespace vcl;
 
-// GetGlyphOutlineW() seems to be a little slow, and doesn't seem to do it's own caching (tested on Windows10).
+// GetGlyphOutlineW() seems to be a little slow, and doesn't seem to do its own caching (tested on Windows10).
 // TODO include the font as part of the cache key, then we won't need to clear it on font change
 // The cache limit is set by the rough number of characters needed to read your average Asian newspaper.
 static o3tl::lru_map<sal_GlyphId, tools::Rectangle> g_BoundRectCache(3000);

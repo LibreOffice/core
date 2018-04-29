@@ -33,7 +33,7 @@ class SwPageDesc;
 
 // This header looks harmless, but includes still quite
 // inconspicuous one or the other! On the other hand this class
-// is rarely needed. Therefore it's own header.
+// is rarely needed. Therefore its own header.
 
 class SwCSS1Parser : public SvxCSS1Parser
 {

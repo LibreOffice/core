@@ -43,7 +43,7 @@ protected:
     oslProcess m_process;
     oslFileHandle m_inputWrite;
     oslFileHandle m_outputRead;
-    // simple multiplexing: every command gets it's own ID that can be used to
+    // simple multiplexing: every command gets its own ID that can be used to
     // read the corresponding response
     uint64_t m_msgId = 1;
     std::mutex m_mutex;

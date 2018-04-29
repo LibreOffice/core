@@ -85,7 +85,7 @@ static const OUString STRING_SEPARATOR("----------------------------------------
 
 /** native implementation of the file picker on Vista and upcoming windows versions.
  *  This dialog uses COM internally. Further it marshall every request so it will
- *  be executed within it's own STA thread !
+ *  be executed within its own STA thread !
  */
 
 class VistaFilePickerImpl : private ::cppu::BaseMutex

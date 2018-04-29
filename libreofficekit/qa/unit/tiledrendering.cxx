@@ -48,7 +48,7 @@ OUString getFileURLFromSystemPath(OUString const & path)
 }
 
 // We specifically don't use the usual BootStrapFixture, as LOK does
-// all it's own setup and bootstrapping, and should be usable in a
+// all its own setup and bootstrapping, and should be usable in a
 // raw C++ program.
 class TiledRenderingTest : public ::CppUnit::TestFixture
 {
