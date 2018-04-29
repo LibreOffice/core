@@ -2935,160 +2935,147 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
 {
     SdPage& rHandoutMaster = *rModel.GetMasterSdPage( 0, PageKind::Handout );
 
-    if( eLayout == AUTOLAYOUT_NONE )
+    Size    aArea = rHandoutMaster.GetSize();
+
+    const long nGapW = 1000; // gap is 1cm
+    const long nGapH = 1000;
+
+    long nLeftBorder = rHandoutMaster.GetLeftBorder();
+    long nRightBorder = rHandoutMaster.GetRightBorder();
+    long nTopBorder = rHandoutMaster.GetUpperBorder();
+    long nBottomBorder = rHandoutMaster.GetLowerBorder();
+
+    const long nHeaderFooterHeight = static_cast< long >( (aArea.Height() - nTopBorder - nLeftBorder) * 0.05  );
+
+    nTopBorder += nHeaderFooterHeight;
+    nBottomBorder += nHeaderFooterHeight;
+
+    long nX = nGapW + nLeftBorder;
+    long nY = nGapH + nTopBorder;
+
+    aArea.AdjustWidth( -(nGapW * 2 + nLeftBorder + nRightBorder) );
+    aArea.AdjustHeight( -(nGapH * 2 + nTopBorder + nBottomBorder) );
+
+    const bool bLandscape = aArea.Width() > aArea.Height();
+
+    static const sal_uInt16 aOffsets[5][9] =
     {
-        // use layout from handout master
-        SdrObjListIter aShapeIter (rHandoutMaster);
-        while (aShapeIter.IsMore())
-        {
-            SdrPageObj* pPageObj = dynamic_cast<SdrPageObj*>(aShapeIter.Next());
-            if (pPageObj)
-                rAreas.push_back( pPageObj->GetCurrentBoundRect() );
-        }
-    }
-    else
+        { 0, 1, 2, 3, 4, 5, 6, 7, 8 }, // AUTOLAYOUT_HANDOUT9, Portrait, Horizontal order
+        { 0, 2, 4, 1, 3, 5, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT3, Landscape, Vertical
+        { 0, 2, 1, 3, 0, 0, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT4, Landscape, Vertical
+        { 0, 3, 1, 4, 2, 5, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT4, Portrait, Vertical
+        { 0, 3, 6, 1, 4, 7, 2, 5, 8 }, // AUTOLAYOUT_HANDOUT9, Landscape, Vertical
+    };
+
+    const sal_uInt16* pOffsets = aOffsets[0];
+    sal_uInt16  nColCnt = 0, nRowCnt = 0;
+    switch ( eLayout )
     {
-        Size    aArea = rHandoutMaster.GetSize();
+        case AUTOLAYOUT_HANDOUT1:
+            nColCnt = 1; nRowCnt = 1;
+            break;
 
-        const long nGapW = 1000; // gap is 1cm
-        const long nGapH = 1000;
-
-        long nLeftBorder = rHandoutMaster.GetLeftBorder();
-        long nRightBorder = rHandoutMaster.GetRightBorder();
-        long nTopBorder = rHandoutMaster.GetUpperBorder();
-        long nBottomBorder = rHandoutMaster.GetLowerBorder();
-
-        const long nHeaderFooterHeight = static_cast< long >( (aArea.Height() - nTopBorder - nLeftBorder) * 0.05  );
-
-        nTopBorder += nHeaderFooterHeight;
-        nBottomBorder += nHeaderFooterHeight;
-
-        long nX = nGapW + nLeftBorder;
-        long nY = nGapH + nTopBorder;
-
-        aArea.AdjustWidth( -(nGapW * 2 + nLeftBorder + nRightBorder) );
-        aArea.AdjustHeight( -(nGapH * 2 + nTopBorder + nBottomBorder) );
-
-        const bool bLandscape = aArea.Width() > aArea.Height();
-
-        static const sal_uInt16 aOffsets[5][9] =
-        {
-            { 0, 1, 2, 3, 4, 5, 6, 7, 8 }, // AUTOLAYOUT_HANDOUT9, Portrait, Horizontal order
-            { 0, 2, 4, 1, 3, 5, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT3, Landscape, Vertical
-            { 0, 2, 1, 3, 0, 0, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT4, Landscape, Vertical
-            { 0, 3, 1, 4, 2, 5, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT4, Portrait, Vertical
-            { 0, 3, 6, 1, 4, 7, 2, 5, 8 }, // AUTOLAYOUT_HANDOUT9, Landscape, Vertical
-        };
-
-        const sal_uInt16* pOffsets = aOffsets[0];
-        sal_uInt16  nColCnt = 0, nRowCnt = 0;
-        switch ( eLayout )
-        {
-            case AUTOLAYOUT_HANDOUT1:
-                nColCnt = 1; nRowCnt = 1;
-                break;
-
-            case AUTOLAYOUT_HANDOUT2:
-                if( bLandscape )
-                {
-                    nColCnt = 2; nRowCnt = 1;
-                }
-                else
-                {
-                    nColCnt = 1; nRowCnt = 2;
-                }
-                break;
-
-            case AUTOLAYOUT_HANDOUT3:
-                if( bLandscape )
-                {
-                    nColCnt = 3; nRowCnt = 2;
-                }
-                else
-                {
-                    nColCnt = 2; nRowCnt = 3;
-                }
-                pOffsets = aOffsets[ bLandscape ? 1 : 0 ];
-                break;
-
-            case AUTOLAYOUT_HANDOUT4:
-                nColCnt = 2; nRowCnt = 2;
-                pOffsets = aOffsets[ bHorizontal ? 0 : 2 ];
-                break;
-
-            case AUTOLAYOUT_HANDOUT6:
-                if( bLandscape )
-                {
-                    nColCnt = 3; nRowCnt = 2;
-                }
-                else
-                {
-                    nColCnt = 2; nRowCnt = 3;
-                }
-                if( !bHorizontal )
-                    pOffsets = aOffsets[ bLandscape ? 1 : 3 ];
-                break;
-
-            default:
-            case AUTOLAYOUT_HANDOUT9:
-                nColCnt = 3; nRowCnt = 3;
-
-                if( !bHorizontal )
-                    pOffsets = aOffsets[4];
-                break;
-        }
-
-        rAreas.resize(static_cast<size_t>(nColCnt) * nRowCnt);
-
-        Size aPartArea, aSize;
-        aPartArea.setWidth( (aArea.Width()  - ((nColCnt-1) * nGapW) ) / nColCnt );
-        aPartArea.setHeight( (aArea.Height() - ((nRowCnt-1) * nGapH) ) / nRowCnt );
-
-        SdrPage* pFirstPage = rModel.GetMasterSdPage(0, PageKind::Standard);
-        if (pFirstPage && pFirstPage->GetWidth() && pFirstPage->GetHeight())
-        {
-            // scale actual size into handout rect
-            double fScale = static_cast<double>(aPartArea.Width()) / static_cast<double>(pFirstPage->GetWidth());
-
-            aSize.setHeight( static_cast<long>(fScale * pFirstPage->GetHeight() ) );
-            if( aSize.Height() > aPartArea.Height() )
+        case AUTOLAYOUT_HANDOUT2:
+            if( bLandscape )
             {
-                fScale = static_cast<double>(aPartArea.Height()) / static_cast<double>(pFirstPage->GetHeight());
-                aSize.setHeight( aPartArea.Height() );
-                aSize.setWidth( static_cast<long>(fScale * pFirstPage->GetWidth()) );
+                nColCnt = 2; nRowCnt = 1;
             }
             else
             {
-                aSize.setWidth( aPartArea.Width() );
+                nColCnt = 1; nRowCnt = 2;
             }
+            break;
 
-            nX += (aPartArea.Width() - aSize.Width()) / 2;
-            nY += (aPartArea.Height()- aSize.Height())/ 2;
+        case AUTOLAYOUT_HANDOUT3:
+            if( bLandscape )
+            {
+                nColCnt = 3; nRowCnt = 2;
+            }
+            else
+            {
+                nColCnt = 2; nRowCnt = 3;
+            }
+            pOffsets = aOffsets[ bLandscape ? 1 : 0 ];
+            break;
+
+        case AUTOLAYOUT_HANDOUT4:
+            nColCnt = 2; nRowCnt = 2;
+            pOffsets = aOffsets[ bHorizontal ? 0 : 2 ];
+            break;
+
+        case AUTOLAYOUT_NONE:
+        case AUTOLAYOUT_HANDOUT6:
+            if( bLandscape )
+            {
+                nColCnt = 3; nRowCnt = 2;
+            }
+            else
+            {
+                nColCnt = 2; nRowCnt = 3;
+            }
+            if( !bHorizontal )
+                pOffsets = aOffsets[ bLandscape ? 1 : 3 ];
+            break;
+
+        default:
+        case AUTOLAYOUT_HANDOUT9:
+            nColCnt = 3; nRowCnt = 3;
+
+            if( !bHorizontal )
+                pOffsets = aOffsets[4];
+            break;
+    }
+
+    rAreas.resize(static_cast<size_t>(nColCnt) * nRowCnt);
+
+    Size aPartArea, aSize;
+    aPartArea.setWidth( (aArea.Width()  - ((nColCnt-1) * nGapW) ) / nColCnt );
+    aPartArea.setHeight( (aArea.Height() - ((nRowCnt-1) * nGapH) ) / nRowCnt );
+
+    SdrPage* pFirstPage = rModel.GetMasterSdPage(0, PageKind::Standard);
+    if (pFirstPage && pFirstPage->GetWidth() && pFirstPage->GetHeight())
+    {
+        // scale actual size into handout rect
+        double fScale = static_cast<double>(aPartArea.Width()) / static_cast<double>(pFirstPage->GetWidth());
+
+        aSize.setHeight( static_cast<long>(fScale * pFirstPage->GetHeight() ) );
+        if( aSize.Height() > aPartArea.Height() )
+        {
+            fScale = static_cast<double>(aPartArea.Height()) / static_cast<double>(pFirstPage->GetHeight());
+            aSize.setHeight( aPartArea.Height() );
+            aSize.setWidth( static_cast<long>(fScale * pFirstPage->GetWidth()) );
         }
         else
         {
-            aSize = aPartArea;
+            aSize.setWidth( aPartArea.Width() );
         }
 
-        Point aPos( nX, nY );
+        nX += (aPartArea.Width() - aSize.Width()) / 2;
+        nY += (aPartArea.Height()- aSize.Height())/ 2;
+    }
+    else
+    {
+        aSize = aPartArea;
+    }
 
-        const bool bRTL = rModel.GetDefaultWritingMode() == css::text::WritingMode_RL_TB;
+    Point aPos( nX, nY );
 
-        const long nOffsetX = (aPartArea.Width() + nGapW) * (bRTL ? -1 : 1);
-        const long nOffsetY = aPartArea.Height() + nGapH;
-        const long nStartX = bRTL ? nOffsetX*(1 - nColCnt) + nX : nX;
+    const bool bRTL = rModel.GetDefaultWritingMode() == css::text::WritingMode_RL_TB;
 
-        for(sal_uInt16 nRow = 0; nRow < nRowCnt; nRow++)
+    const long nOffsetX = (aPartArea.Width() + nGapW) * (bRTL ? -1 : 1);
+    const long nOffsetY = aPartArea.Height() + nGapH;
+    const long nStartX = bRTL ? nOffsetX*(1 - nColCnt) + nX : nX;
+
+    for(sal_uInt16 nRow = 0; nRow < nRowCnt; nRow++)
+    {
+        aPos.setX( nStartX );
+        for(sal_uInt16 nCol = 0; nCol < nColCnt; nCol++)
         {
-            aPos.setX( nStartX );
-            for(sal_uInt16 nCol = 0; nCol < nColCnt; nCol++)
-            {
-                rAreas[*pOffsets++] = ::tools::Rectangle(aPos, aSize);
-                aPos.AdjustX(nOffsetX );
-            }
-
-            aPos.AdjustY(nOffsetY );
+            rAreas[*pOffsets++] = ::tools::Rectangle(aPos, aSize);
+            aPos.AdjustX(nOffsetX );
         }
+
+        aPos.AdjustY(nOffsetY );
     }
 }
 
