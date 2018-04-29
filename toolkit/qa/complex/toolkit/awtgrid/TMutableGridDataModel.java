@@ -119,7 +119,7 @@ public class TMutableGridDataModel
                 :   ( row == insertionPos )
                     ?   inbetweenRow
                     :   m_rowValues[ row - 1 ];
-            assertArrayEquals( "row number " + row + " has wrong content content after inserting a row",
+            assertArrayEquals( "row number " + row + " has wrong content after inserting a row",
                     expectedRowData, actualRowData );
 
             final Object actualHeading = m_dataModel.getRowHeading(row);
@@ -188,7 +188,7 @@ public class TMutableGridDataModel
                 :   ( row >= insertionPos ) && ( row < insertionPos + insertedRowCount )
                     ?   rowData[ row - insertionPos ]
                     :   m_rowValues[ row - insertedRowCount ];
-            assertArrayEquals( "row number " + row + " has wrong content content after inserting multiple rows",
+            assertArrayEquals( "row number " + row + " has wrong content after inserting multiple rows",
                     expectedRowData, actualRowData );
 
             final Object actualHeading = m_dataModel.getRowHeading(row);
