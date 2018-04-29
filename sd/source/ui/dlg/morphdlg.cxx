@@ -33,14 +33,12 @@ using namespace com::sun::star;
 
 namespace sd {
 
-MorphDlg::MorphDlg( vcl::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2 )
-    : ModalDialog(pParent, "CrossFadeDialog",
-        "modules/sdraw/ui/crossfadedialog.ui")
+MorphDlg::MorphDlg(weld::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2 )
+    : GenericDialogController(pParent, "modules/sdraw/ui/crossfadedialog.ui", "CrossFadeDialog")
+    , m_xMtfSteps(m_xBuilder->weld_spin_button("increments"))
+    , m_xCbxAttributes(m_xBuilder->weld_check_button("attributes"))
+    , m_xCbxOrientation(m_xBuilder->weld_check_button("orientation"))
 {
-    get(m_pMtfSteps, "increments");
-    get(m_pCbxAttributes, "attributes");
-    get(m_pCbxOrientation, "orientation");
-
     LoadSettings();
 
     SfxItemPool &   rPool = pObj1->GetObjectItemPool();
@@ -58,21 +56,12 @@ MorphDlg::MorphDlg( vcl::Window* pParent, const SdrObject* pObj1, const SdrObjec
     if ( ( ( eLineStyle1 == drawing::LineStyle_NONE ) || ( eLineStyle2 == drawing::LineStyle_NONE ) ) &&
          ( ( eFillStyle1 != drawing::FillStyle_SOLID ) || ( eFillStyle2 != drawing::FillStyle_SOLID ) ) )
     {
-        m_pCbxAttributes->Disable();
+        m_xCbxAttributes->set_sensitive(false);
     }
 }
 
 MorphDlg::~MorphDlg()
 {
-    disposeOnce();
-}
-
-void MorphDlg::dispose()
-{
-    m_pMtfSteps.clear();
-    m_pCbxAttributes.clear();
-    m_pCbxOrientation.clear();
-    ModalDialog::dispose();
 }
 
 void MorphDlg::LoadSettings()
@@ -94,9 +83,9 @@ void MorphDlg::LoadSettings()
         bOrient = bAttrib = true;
     }
 
-    m_pMtfSteps->SetValue( nSteps );
-    m_pCbxOrientation->Check( bOrient );
-    m_pCbxAttributes->Check( bAttrib );
+    m_xMtfSteps->set_value(nSteps);
+    m_xCbxOrientation->set_active(bOrient);
+    m_xCbxAttributes->set_active(bAttrib);
 }
 
 void MorphDlg::SaveSettings() const
@@ -108,9 +97,9 @@ void MorphDlg::SaveSettings() const
     {
         SdIOCompat aCompat( *xOStm, StreamMode::WRITE, 1 );
 
-        xOStm->WriteUInt16( m_pMtfSteps->GetValue() )
-              .WriteBool( m_pCbxOrientation->IsChecked() )
-              .WriteBool( m_pCbxAttributes->IsChecked() );
+        xOStm->WriteUInt16( m_xMtfSteps->get_value() )
+              .WriteBool( m_xCbxOrientation->get_active() )
+              .WriteBool( m_xCbxAttributes->get_active() );
     }
 }
 
