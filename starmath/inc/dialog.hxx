@@ -258,91 +258,70 @@ public:
 
 /**************************************************************************/
 
-class SmShowSymbolSetWindow : public Control
+class SmShowSymbolSet
 {
-    VclPtr<ScrollBar>  m_pVScrollBar;
+    Size m_aSize;
+    Size m_aOldSize;
     SymbolPtrVec_t aSymbolSet;
-    Link<SmShowSymbolSetWindow&,void> aSelectHdlLink;
-    Link<SmShowSymbolSetWindow&,void> aDblClickHdlLink;
+    Link<SmShowSymbolSet&,void> aSelectHdlLink;
+    Link<SmShowSymbolSet&,void> aDblClickHdlLink;
     long        nLen;
     long        nRows, nColumns;
     long        nXOffset, nYOffset;
     sal_uInt16  nSelectSymbol;
+    std::unique_ptr<weld::DrawingArea> m_xDrawingArea;
+    std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;
 
     void SetScrollBarRange();
     Point OffsetPoint(const Point &rPoint) const;
 
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
-    virtual void    MouseButtonDown(const MouseEvent& rMEvt) override;
-    virtual void    KeyInput(const KeyEvent& rKEvt) override;
-    virtual void    Resize() override;
-    virtual Size    GetOptimalSize() const override;
+    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
+    DECL_LINK(DoMouseButtonDown, const MouseEvent& rMEvt, void);
+    DECL_LINK(DoKeyDown, const KeyEvent& rKEvt, bool);
+    DECL_LINK(DoResize, const Size& rSize, void);
+    DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
 
-    DECL_LINK( ScrollHdl, ScrollBar*, void );
 public:
-    SmShowSymbolSetWindow(vcl::Window *pParent, WinBits nStyle);
-    virtual ~SmShowSymbolSetWindow() override;
-    virtual void dispose() override;
-    void setScrollbar(ScrollBar *pVScrollBar);
-    void calccols();
+    SmShowSymbolSet(weld::DrawingArea* pDrawingArea, weld::ScrolledWindow* pScrolledWindow);
+    void calccols(vcl::RenderContext& rRenderContext);
     void    SelectSymbol(sal_uInt16 nSymbol);
     sal_uInt16  GetSelectSymbol() const { return nSelectSymbol; }
     void SetSymbolSet(const SymbolPtrVec_t& rSymbolSet);
-    void SetSelectHdl(const Link<SmShowSymbolSetWindow&,void>& rLink) { aSelectHdlLink = rLink; }
-    void SetDblClickHdl(const Link<SmShowSymbolSetWindow&,void>& rLink) { aDblClickHdlLink = rLink; }
+    void SetSelectHdl(const Link<SmShowSymbolSet&,void>& rLink) { aSelectHdlLink = rLink; }
+    void SetDblClickHdl(const Link<SmShowSymbolSet&,void>& rLink) { aDblClickHdlLink = rLink; }
 };
 
-class SmShowSymbolSet : public VclHBox
+class SmShowSymbol
 {
-    VclPtr<SmShowSymbolSetWindow> aSymbolWindow;
-    VclPtr<ScrollBar>             aVScrollBar;
+private:
+    Size m_aSize;
+    vcl::Font m_aFont;
+    OUString m_aText;
+    std::unique_ptr<weld::DrawingArea> m_xDrawingArea;
 
-public:
-    SmShowSymbolSet(vcl::Window *pParent);
-    virtual ~SmShowSymbolSet() override;
-    virtual void dispose() override;
-
-    void    SetSymbolSet(const SymbolPtrVec_t& rSymbolSet) { aSymbolWindow->SetSymbolSet(rSymbolSet); }
-
-    void    SelectSymbol(sal_uInt16 nSymbol) { aSymbolWindow->SelectSymbol(nSymbol); }
-    sal_uInt16  GetSelectSymbol() const { return aSymbolWindow->GetSelectSymbol(); }
-
-    void SetSelectHdl(const Link<SmShowSymbolSetWindow&,void>& rLink) { aSymbolWindow->SetSelectHdl(rLink); }
-    void SetDblClickHdl(const Link<SmShowSymbolSetWindow&,void>& rLink) { aSymbolWindow->SetDblClickHdl(rLink); }
-};
-
-
-class SmShowSymbol : public Control
-{
     Link<SmShowSymbol&,void> aDblClickHdlLink;
 
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
-    virtual void    ApplySettings(vcl::RenderContext& rRenderContext) override;
-    virtual void    MouseButtonDown(const MouseEvent& rMEvt) override;
-    virtual void    Resize() override;
+    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
+    DECL_LINK(DoMouseButtonDown, const MouseEvent& rMEvt, void);
+    DECL_LINK(DoResize, const Size& rSize, void);
 
     void setFontSize(vcl::Font &rFont) const;
 
 public:
-    SmShowSymbol(vcl::Window *pParent, WinBits nStyle)
-        : Control(pParent, nStyle)
-    {
-    }
+    SmShowSymbol(weld::DrawingArea* pDrawingArea);
+
+    void SetText(const OUString& rText) { m_aText = rText; }
+    const OUString& GetText() const { return m_aText; }
+
+    void SetFont(const vcl::Font& rFont) { m_aFont = rFont; }
+    const vcl::Font& GetFont() const { return m_aFont; }
 
     void    SetSymbol(const SmSym *pSymbol);
     void    SetDblClickHdl(const Link<SmShowSymbol&,void> &rLink) { aDblClickHdlLink = rLink; }
 };
 
-
-class SmSymbolDialog : public ModalDialog
+class SmSymbolDialog : public weld::GenericDialogController
 {
-    VclPtr<ListBox>         m_pSymbolSets;
-    VclPtr<SmShowSymbolSet> m_pSymbolSetDisplay;
-    VclPtr<FixedText>       m_pSymbolName;
-    VclPtr<SmShowSymbol>    m_pSymbolDisplay;
-    VclPtr<PushButton>      m_pGetBtn;
-    VclPtr<PushButton>      m_pEditBtn;
-
     SmViewShell        &rViewSh;
     SmSymbolManager    &rSymbolMgr;
 
@@ -351,29 +330,32 @@ class SmSymbolDialog : public ModalDialog
 
     VclPtr<OutputDevice> pFontListDev;
 
-    DECL_LINK(SymbolSetChangeHdl, ListBox&, void);
-    DECL_LINK(SymbolChangeHdl, SmShowSymbolSetWindow&, void);
+    std::unique_ptr<weld::ComboBoxText> m_xSymbolSets;
+    std::unique_ptr<SmShowSymbolSet> m_xSymbolSetDisplay;
+    std::unique_ptr<weld::Label> m_xSymbolName;
+    std::unique_ptr<SmShowSymbol> m_xSymbolDisplay;
+    std::unique_ptr<weld::Button> m_xGetBtn;
+    std::unique_ptr<weld::Button> m_xEditBtn;
+
+    DECL_LINK(SymbolSetChangeHdl, weld::ComboBoxText&, void);
+    DECL_LINK(SymbolChangeHdl, SmShowSymbolSet&, void);
     DECL_LINK(SymbolDblClickHdl, SmShowSymbol&, void);
-    DECL_LINK(SymbolDblClickHdl2, SmShowSymbolSetWindow&, void);
-    DECL_LINK(EditClickHdl, Button*, void);
-    DECL_LINK(GetClickHdl, Button*, void);
+    DECL_LINK(SymbolDblClickHdl2, SmShowSymbolSet&, void);
+    DECL_LINK(EditClickHdl, weld::Button&, void);
+    DECL_LINK(GetClickHdl, weld::Button&, void);
     void SymbolDblClickHdl();
 
     void            FillSymbolSets();
     const SmSym    *GetSymbol() const;
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-
 public:
-    SmSymbolDialog(vcl::Window * pParent, OutputDevice *pFntListDevice,
+    SmSymbolDialog(weld::Window* pParent, OutputDevice *pFntListDevice,
             SmSymbolManager &rSymbolMgr, SmViewShell &rViewShell);
     virtual ~SmSymbolDialog() override;
-    virtual void dispose() override;
 
     bool    SelectSymbolSet(const OUString &rSymbolSetName);
     void    SelectSymbol(sal_uInt16 nSymbolPos);
 };
-
 
 class SmShowChar
 {
