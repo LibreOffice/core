@@ -47,9 +47,9 @@ class SbiImage {
     SbxArrayRef    rTypes;          // User defined types
     SbxArrayRef    rEnums;          // Enum types
     std::vector<sal_uInt32>  mvStringOffsets; // StringId-Offsets
-    sal_Unicode*   pStrings;        // StringPool
-    char*          pCode;           // Code-Image
-    char*          pLegacyPCode;        // Code-Image
+    std::unique_ptr<sal_Unicode[]> pStrings;        // StringPool
+    std::unique_ptr<char[]>        pCode;           // Code-Image
+    std::unique_ptr<char[]>        pLegacyPCode;        // Code-Image
     bool           bError;
     SbiImageFlags  nFlags;
     sal_uInt32     nStringSize;
@@ -63,7 +63,7 @@ class SbiImage {
                                     // routines for the compiler:
     void MakeStrings( short );      // establish StringPool
     void AddString( const OUString& );
-    void AddCode( char*, sal_uInt32 );
+    void AddCode( std::unique_ptr<char[]>, sal_uInt32 );
     void AddType(SbxObject const *);
     void AddEnum(SbxObject *);
 
@@ -83,7 +83,7 @@ public:
     bool Save( SvStream&, sal_uInt32 = B_CURVERSION );
     bool IsError()                  { return bError;    }
 
-    const char* GetCode() const     { return pCode;     }
+    const char* GetCode() const     { return pCode.get();     }
     sal_uInt32  GetCodeSize() const { return nCodeSize; }
     sal_uInt16  GetBase() const     { return nDimBase;  }
     OUString    GetString( short nId ) const;
