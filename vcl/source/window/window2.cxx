@@ -1604,6 +1604,14 @@ bool Window::set_property(const OString &rKey, const OUString &rValue)
         if (toBool(rValue))
             GrabFocus();
     }
+    else if (rKey == "can-focus")
+    {
+        WinBits nBits = GetStyle();
+        nBits &= ~WB_TABSTOP;
+        if (toBool(rValue))
+            nBits |= WB_TABSTOP;
+        SetStyle(nBits);
+    }
     else
     {
         SAL_INFO("vcl.layout", "unhandled property: " << rKey);
