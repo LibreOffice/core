@@ -839,14 +839,20 @@ sal_Int32 VCLXAccessibleToolBox::getSelectedAccessibleChildCount(  )
     OExternalLockGuard aGuard( this );
 
     sal_Int32 nRet = 0;
-    for ( sal_Int32 i = 0, nCount = implGetAccessibleChildCount(); i < nCount; i++ )
+    VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
+    if (pToolBox)
     {
-        if ( isAccessibleChildSelected( i ) )
+        sal_uInt16 nHighlightItemId = pToolBox->GetHighlightItemId();
+        for ( size_t i = 0, nCount = pToolBox->GetItemCount(); i < nCount; i++ )
         {
-            nRet = 1;
-            break; // a toolbox can only have (n)one selected child
+            if ( nHighlightItemId == pToolBox->GetItemId( i ) )
+            {
+                nRet = 1;
+                break; // a toolbox can only have (n)one selected child
+            }
         }
     }
+
     return nRet;
 }
 
@@ -857,14 +863,20 @@ Reference< XAccessible > VCLXAccessibleToolBox::getSelectedAccessibleChild( sal_
         throw IndexOutOfBoundsException();
 
     Reference< XAccessible > xChild;
-    for ( sal_Int32 i = 0, nCount = implGetAccessibleChildCount(); i < nCount; i++ )
+    VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
+    if (pToolBox)
     {
-        if ( isAccessibleChildSelected( i ) )
+        sal_uInt16 nHighlightItemId = pToolBox->GetHighlightItemId();
+        for ( sal_Int32 i = 0, nCount = pToolBox->GetItemCount(); i < nCount; i++ )
         {
-            xChild = getAccessibleChild( i );
-            break;
+            if ( nHighlightItemId == pToolBox->GetItemId( i ) )
+            {
+                xChild = getAccessibleChild( i );
+                break;
+            }
         }
     }
+
     if (!xChild)
         throw IndexOutOfBoundsException();
 
