@@ -242,12 +242,9 @@ void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
     {
         mrSidebarWin.SwitchToFieldPos();
     }
-    else if ( nKey == KEY_INSERT )
+    else if ( rKeyCode.GetFullCode() == KEY_INSERT )
     {
-        if ( !rKeyCode.IsMod1() && !rKeyCode.IsMod2() )
-        {
-            mrSidebarWin.ToggleInsMode();
-        }
+        mrSidebarWin.ToggleInsMode();
     }
     else
     {
