@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <comphelper/string.hxx>
 #include <o3tl/any.hxx>
 #include <tools/stream.hxx>
 #include <sfx2/app.hxx>
@@ -50,13 +49,14 @@ OUString MakeSender()
 {
     SvtUserOptions& rUserOpt = SW_MOD()->GetUserOptions();
 
+    const OUString sSenderToken(SwResId(STR_SENDER_TOKENS));
+    if (sSenderToken.isEmpty())
+        return OUString();
+
     OUString sRet;
-    OUString sSenderToken(SwResId(STR_SENDER_TOKENS));
-    sal_Int32 nTokenCount = comphelper::string::getTokenCount(sSenderToken, ';');
     sal_Int32 nSttPos = 0;
     bool bLastLength = true;
-    for( sal_Int32 i = 0; i < nTokenCount; i++ )
-    {
+    do {
         OUString sToken = sSenderToken.getToken( 0, ';', nSttPos );
         if (sToken == "COMPANY")
         {
@@ -86,7 +86,7 @@ OUString MakeSender()
             sRet += rUserOpt.GetState();
         else if (!sToken.isEmpty()) //spaces
             sRet += sToken;
-    }
+    } while (nSttPos>=0);
     return sRet;
 }
 
