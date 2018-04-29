@@ -1020,7 +1020,7 @@ void SwTable::FindSuperfluousRows_( SwSelBoxes& rBoxes,
     }
 }
 
-/** SwTableBox::FindStartOfRowSpan(..) retruns the "master" cell, the cell which
+/** SwTableBox::FindStartOfRowSpan(..) returns the "master" cell, the cell which
     overlaps the given cell, it maybe the cell itself.
 */
 
@@ -1301,7 +1301,7 @@ static void lcl_SophisticatedFillLineIndices( SwLineOffsetArray &rArr,
 typedef std::set< SwTwips > SwSplitLines;
 
 /** lcl_CalculateSplitLineHeights(..) delivers all y-positions where table rows have
-    to be splitted to fulfill the requested "split same height"
+    to be split to fulfill the requested "split same height"
 */
 
 static sal_uInt16 lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLines &rNew,

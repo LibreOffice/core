@@ -113,7 +113,7 @@ sal_False is a selection to the right or down
 --------------------------------------------------------------------------
 
 If the DateRange area changes and we want to take over the selection, we
-should only do this is if IsScrollDateRangeChanged() retruns sal_True.
+should only do this is if IsScrollDateRangeChanged() returns sal_True.
 This method returns sal_True if the area change was triggered by using the
 ScrollButtons and sal_False if it was triggered by Resize(), other method
 calls or by ending a selection.

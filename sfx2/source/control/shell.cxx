@@ -326,7 +326,7 @@ void SfxShell::DoDeactivate_Impl( SfxViewFrame const *pFrame, bool bMDI )
             << " bMDI " << (bMDI ? "MDI" : ""));
 
     // Only when it comes from a Frame
-    // (not when for instance by poping BASIC-IDE from AppDisp)
+    // (not when for instance by popping BASIC-IDE from AppDisp)
     if ( bMDI && pImpl->pFrame == pFrame )
     {
         // deliver

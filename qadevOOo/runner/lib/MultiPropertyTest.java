@@ -434,7 +434,7 @@ public class MultiPropertyTest extends MultiMethodTest
 
         /**
          * Overridden method of <code>PropertyTester</code> which
-         * retruns new value from two values specified.
+         * returns new value from two values specified.
          *
          * @return The second value if old value is equal to the first
          * one, the first value otherwise.

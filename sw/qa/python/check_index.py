@@ -23,7 +23,7 @@ class RefreshListener(XRefreshListener, unohelper.Base):
     def disposing(self, event):
         self.m_disposed = True
 
-    # Gets callled when index is refreshed
+    # Gets called when index is refreshed
     def refreshed(self, event):
         self.m_refreshed = True
 
@@ -63,7 +63,7 @@ class CheckIndex(unittest.TestCase):
         deleted while the tests
         """
         self.assertFalse(self.listener.m_disposed,
-                         "Unexpected disporue of the Refresh Listener!")
+                         "Unexpected disparue of the Refresh Listener!")
         self.xIndex.dispose()
         self.assertTrue(self.listener.m_disposed,
                         "Could not dispose Refresh Listener")
@@ -84,7 +84,7 @@ class CheckIndex(unittest.TestCase):
     def test_index_refresh(self):
         """
         Try to insert a heading at the index, refresh the index and
-        retrive the heading again
+        retrieve the heading again
         """
         heading = "The best test heading you have seen in your entire life"
         self.insert_heading(heading)
@@ -97,12 +97,12 @@ class CheckIndex(unittest.TestCase):
         text = self.xCursor.getString()
         self.assertGreaterEqual(text.find(heading), 0,
                                 "Failed to insert heading at index "
-                                "and retrive it again!")
+                                "and retrieve it again!")
 
     def test_index_update(self):
         """
         Try to insert a heading at the index, update the index
-        and retrive the heading again
+        and retrieve the heading again
         """
         heading = "Heading to test the index update"
         self.insert_heading(heading)
@@ -115,7 +115,7 @@ class CheckIndex(unittest.TestCase):
         text = self.xCursor.getString()
         self.assertGreaterEqual(text.find(heading), 0,
                                 "Failed to insert a heading at Index and "
-                                "retrive it again!")
+                                "retrieve it again!")
 
 
 if __name__ == "__main__":
