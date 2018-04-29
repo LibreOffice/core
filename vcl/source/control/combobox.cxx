@@ -89,14 +89,15 @@ struct ComboBox::Impl
 
 static void lcl_GetSelectedEntries( ::std::set< sal_Int32 >& rSelectedPos, const OUString& rText, sal_Unicode cTokenSep, const ImplEntryList* pEntryList )
 {
-    for (sal_Int32 n = comphelper::string::getTokenCount(rText, cTokenSep); n;)
-    {
-        OUString aToken = rText.getToken( --n, cTokenSep );
-        aToken = comphelper::string::strip(aToken, ' ');
-        sal_Int32 nPos = pEntryList->FindEntry( aToken );
+    if (rText.isEmpty())
+        return;
+
+    sal_Int32 nIdx{0};
+    do {
+        const sal_Int32 nPos = pEntryList->FindEntry(comphelper::string::strip(rText.getToken(0, cTokenSep, nIdx), ' '));
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
             rSelectedPos.insert( nPos );
-    }
+    } while (nIdx>=0);
 }
 
 ComboBox::ComboBox(vcl::Window *const pParent, WinBits const nStyle)
