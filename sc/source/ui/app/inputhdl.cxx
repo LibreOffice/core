@@ -3411,8 +3411,12 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                         pTableView->SetControlWord(nControl);
                     }
                     if (pTopView)
-                        if ( pTopView->PostKeyEvent( rKEvt ) )
+                    {
+                        if ( bUsed && rKEvt.GetKeyCode().GetFunction() == KeyFuncType::CUT )
+                            pTopView->DeleteSelected();
+                        else if ( pTopView->PostKeyEvent( rKEvt ) )
                             bUsed = true;
+                    }
                 }
 
                 // AutoInput:
