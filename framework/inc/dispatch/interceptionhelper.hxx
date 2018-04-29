@@ -129,7 +129,7 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper<
 
     private:
 
-        /** @short reference to the frame, which uses this instance to implement it's own interception.
+        /** @short reference to the frame, which uses this instance to implement its own interception.
 
             @descr We hold a weak reference only, to make disposing operations easy. */
         css::uno::WeakReference< css::frame::XFrame > m_xOwnerWeak;
@@ -148,7 +148,7 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper<
         /** @short creates a new interception helper instance.
 
             @param xOwner
-                    points to the frame, which use this instances to support it's own interception interfaces.
+                    points to the frame, which use this instances to support its own interception interfaces.
 
             @param xSlave
                     an outside creates dispatch provider, which has to be used here as lowest slave "interceptor".

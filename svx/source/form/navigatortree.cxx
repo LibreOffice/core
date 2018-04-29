@@ -781,7 +781,7 @@ namespace svxform
 
         // conditions to disallow the drop
         // 0) the root entry is part of the list (can't DnD the root!)
-        // 1) one of the draged entries is to be dropped onto it's own parent
+        // 1) one of the draged entries is to be dropped onto its own parent
         // 2) -               "       - is to be dropped onto itself
         // 3) -               "       - is a Form and to be dropped onto one of its descendants
         // 4) one of the entries is a control and to be dropped onto the root

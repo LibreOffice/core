@@ -172,7 +172,7 @@ public class _XCellCursor extends MultiMethodTest {
      * movement. <p>
      */
     public void _gotoEnd(){
-        //gotoEnd gets it's own cursor to see a change
+        //gotoEnd gets its own cursor to see a change
         XSpreadsheet oSheet = (XSpreadsheet) tEnv.getObjRelation("SHEET");
         XCellRange testRange = oSheet.getCellRangeByName("$A$1:$g$7") ;
         XSheetCellRange testSheetRange = UnoRuntime.queryInterface(XSheetCellRange.class,testRange);

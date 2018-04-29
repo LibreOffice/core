@@ -532,7 +532,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
         if( pPor->IsDropPortion() )
             MergeCharacterBorder(*static_cast<SwDropPortion*>(pPor));
 
-        // the multi-portion has it's own format function
+        // the multi-portion has its own format function
         if( pPor->IsMultiPortion() && ( !pMulti || pMulti->IsBidi() ) )
             bFull = BuildMultiPortion( rInf, *static_cast<SwMultiPortion*>(pPor) );
         else

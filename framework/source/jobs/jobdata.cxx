@@ -216,7 +216,7 @@ void JobData::setEvent( const OUString& sEvent ,
     @short      set the new job specific arguments
     @descr      If a job finish his work, it can give us a new list of arguments (which
                 will not interpreted by us). We write it back to the configuration only
-                (if this job has it's own configuration!).
+                (if this job has its own configuration!).
                 So a job can have persistent data without implementing anything
                 or define own config areas for that.
 

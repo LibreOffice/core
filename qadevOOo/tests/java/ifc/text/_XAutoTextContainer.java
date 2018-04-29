@@ -35,7 +35,7 @@ import com.sun.star.text.XAutoTextGroup;
  */
 public class _XAutoTextContainer  extends MultiMethodTest {
     public XAutoTextContainer oObj = null;
-    // every Thread must insert it's own AutoTextContainer:
+    // every Thread must insert its own AutoTextContainer:
     public String Name = "";
 
     /**

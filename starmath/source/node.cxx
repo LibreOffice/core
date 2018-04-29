@@ -2069,7 +2069,7 @@ void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, i
     if (IsBold( GetFont() ))
         Attributes() |= FontAttribute::Bold;
 
-    // special handling for ':' where it is a token on it's own and is likely
+    // special handling for ':' where it is a token on its own and is likely
     // to be used for mathematical notations. (E.g. a:b = 2:3)
     // In that case it should not be displayed in italic.
     if (GetToken().aText.getLength() == 1 && GetToken().aText[0] == ':')

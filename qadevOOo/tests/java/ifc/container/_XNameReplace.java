@@ -55,7 +55,7 @@ import com.sun.star.uno.UnoRuntime;
 * taken instance. If there is no such relation, it initialize with 1.
 * <p>
 * In one of the last steps the replaced object will be compared with the old
-* object. For that it is necessary that every thread replace it's own object.
+* object. For that it is necessary that every thread replace its own object.
 * INSTANCEn are n Objectrelations so that every thread can insert its own
 * object. n depends on the variable THRCNT which and comes from API.INI
 * Some Object-Container can't replace the first that comes belong. So in
