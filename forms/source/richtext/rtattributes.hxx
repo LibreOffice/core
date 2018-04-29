@@ -106,19 +106,8 @@ namespace frm
 
     inline bool AttributeState::operator==( const AttributeState& _rRHS )
     {
-        if ( eSimpleState != _rRHS.eSimpleState )
-            return false;
-
-        if ( pItemHandleItem && !_rRHS.pItemHandleItem )
-            return false;
-
-        if ( !pItemHandleItem && _rRHS.pItemHandleItem )
-            return false;
-
-        if ( !pItemHandleItem && !_rRHS.pItemHandleItem )
-            return true;
-
-        return pItemHandleItem == _rRHS.pItemHandleItem;
+        return (eSimpleState == _rRHS.eSimpleState) &&
+               (pItemHandleItem == _rRHS.pItemHandleItem);
     }
 
     class IMultiAttributeDispatcher
