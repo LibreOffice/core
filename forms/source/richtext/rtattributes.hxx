@@ -115,10 +115,10 @@ namespace frm
         if ( !pItemHandleItem && _rRHS.pItemHandleItem )
             return false;
 
-        if ( !pItemHandleItem && !_rRHS.pItemHandleItem )
+        if ( pItemHandleItem == _rRHS.pItemHandleItem )
             return true;
 
-        return pItemHandleItem == _rRHS.pItemHandleItem;
+        return *pItemHandleItem == *_rRHS.pItemHandleItem;
     }
 
     class IMultiAttributeDispatcher
