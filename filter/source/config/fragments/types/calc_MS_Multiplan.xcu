@@ -12,7 +12,7 @@
         <value>org.libreoffice.comp.Calc.MSWorksCalcImportFilter</value>
     </prop>
     <prop oor:name="Extensions">
-        <value/>
+        <value>*</value>
     </prop>
     <prop oor:name="Preferred">
         <value>true</value>
