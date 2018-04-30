@@ -3913,7 +3913,7 @@ OUString SwDoc::GetUniqueTableName() const
         return newName;
     }
 
-    ResId aId( STR_TABLE_DEFNAME, *pSwResMgr );
+    ResId aId( STR_TABLE_DEFNAME, GetSwResMgr() );
     const OUString aName( aId );
 
     const size_t nFlagSize = ( mpTableFrameFormatTable->size() / 8 ) + 2;

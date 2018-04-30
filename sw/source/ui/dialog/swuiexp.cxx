@@ -53,8 +53,6 @@ namespace swui
     {
         if ( !pFactory )
             pFactory = new SwAbstractDialogFactory_Impl;
-        if ( !pSwResMgr)
-            SwDialogsResMgr::GetResMgr();
         return pFactory;
     }
 }

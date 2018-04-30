@@ -154,10 +154,10 @@ enum RndStdIds
     RND_DRAW_OBJECT     // A draw-Object! For the SwDoc-interface only!
 };
 
-extern ResMgr* pSwResMgr;
-    // defined in sw/source/uibase/app/swmodule.cxx for the sw library and in
-    // sw/source/ui/dialog/swdialmgr.cxx for the swui library
-#define SW_RES(i)       ResId(i,*pSwResMgr)
+// defined in sw/source/uibase/app/swmodule.cxx for the sw library and in
+SW_DLLPUBLIC ResMgr &GetSwResMgr();
+
+#define SW_RES(i)       ResId(i,GetSwResMgr())
 #define SW_RESSTR(i)    SW_RES(i).toString()
 
 css::uno::Reference< css::linguistic2::XSpellChecker1 > GetSpellChecker();
