@@ -7789,7 +7789,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                         aUnicodes.push_back(rText.GetChar(sal::static_int_cast<xub_StrLen>(start + n)));
                 }
                 else
-                    aUnicodes.push_back( rText[ pCharPosAry[i] ] );
+                    aUnicodes.push_back( rText.GetChar(sal::static_int_cast<xub_StrLen>(pCharPosAry[i])));
                 // #i36691# hack that is needed because currently the pGlyphs[]
                 // argument is ignored for embeddable fonts and so the layout
                 // engine's glyph work is ignored (i.e. char mirroring)
