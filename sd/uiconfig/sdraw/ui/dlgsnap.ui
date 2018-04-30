@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -17,22 +17,25 @@
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sd/res/hlppoint.png</property>
+    <property name="icon_name">sd/res/hlppoint.png</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sd/res/hlplvert.png</property>
+    <property name="icon_name">sd/res/hlplvert.png</property>
   </object>
   <object class="GtkImage" id="image3">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sd/res/hlplhorz.png</property>
+    <property name="icon_name">sd/res/hlplhorz.png</property>
   </object>
   <object class="GtkDialog" id="SnapObjectDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="dlgsnap|SnapObjectDialog">New Snap Object</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -44,10 +47,26 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
+              <object class="GtkButton" id="delete">
+                <property name="label">gtk-delete</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <property name="image_position">bottom</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
@@ -55,7 +74,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -69,7 +88,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -82,22 +101,6 @@
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
                 <property name="image_position">top</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-                <property name="secondary">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="delete">
-                <property name="label">gtk-delete</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <property name="image_position">bottom</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -138,9 +141,10 @@
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
-                          <object class="GtkSpinButton" id="x:0.00cm">
+                          <object class="GtkSpinButton" id="x">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="digits">2</property>
                           </object>
@@ -150,9 +154,10 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="y:0.00cm">
+                          <object class="GtkSpinButton" id="y">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                             <property name="adjustment">adjustment2</property>
                             <property name="digits">2</property>
                           </object>
@@ -167,7 +172,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="dlgsnap|xlabel">_X:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">x:0.00cm</property>
+                            <property name="mnemonic_widget">x</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -180,7 +185,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="dlgsnap|ylabel">_Y:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">y:0.00cm</property>
+                            <property name="mnemonic_widget">y</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -235,9 +240,9 @@
                             <property name="image">image1</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="always_show_image">True</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">vert</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -254,8 +259,9 @@
                             <property name="image">image2</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="always_show_image">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">horz</property>
+                            <property name="group">point</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -272,6 +278,7 @@
                             <property name="image">image3</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="always_show_image">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">point</property>
                           </object>
@@ -312,10 +319,13 @@
       </object>
     </child>
     <action-widgets>
+      <action-widget response="0">delete</action-widget>
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
-      <action-widget response="0">delete</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>
