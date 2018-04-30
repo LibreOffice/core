@@ -206,7 +206,13 @@ class AbstractScFillSeriesDlg_Impl:public AbstractScFillSeriesDlg
 
 class AbstractScGroupDlg_Impl :  public AbstractScGroupDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScGroupDlg_Impl, ScGroupDlg)
+    std::unique_ptr<ScGroupDlg> m_xDlg;
+public:
+    explicit AbstractScGroupDlg_Impl(ScGroupDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual bool GetColsChecked() const override;
 };
 
@@ -469,8 +475,7 @@ public:
                                                             double          fStep,
                                                             double          fMax,
                                                             sal_uInt16       nPossDir) override;
-    virtual VclPtr<AbstractScGroupDlg> CreateAbstractScGroupDlg( vcl::Window* pParent,
-                                                            bool bUnGroup = false) override;
+    virtual VclPtr<AbstractScGroupDlg> CreateAbstractScGroupDlg(weld::Window* pParent, bool bUnGroup = false) override;
 
     virtual VclPtr<AbstractScInsertCellDlg> CreateScInsertCellDlg(weld::Window* pParent,
                                                                   bool bDisallowCellMove) override;
