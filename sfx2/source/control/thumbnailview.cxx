@@ -69,7 +69,7 @@ void ThumbnailView::dispose()
         xComponent->dispose ();
 
     mpScrBar.disposeAndClear();
-    delete mpItemAttrs;
+    mpItemAttrs.reset();
 
     ImplDeleteItems();
     Control::dispose();
@@ -354,7 +354,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
             }
 
             pItem->setDrawArea(::tools::Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
-            pItem->calculateItemsPosition(mnThumbnailHeight,mnDisplayHeight,mnItemPadding,mpItemAttrs->nMaxTextLength,mpItemAttrs);
+            pItem->calculateItemsPosition(mnThumbnailHeight,mnDisplayHeight,mnItemPadding,mpItemAttrs->nMaxTextLength,mpItemAttrs.get());
 
             if ( !((nCurCount+1) % mnCols) )
             {
@@ -851,7 +851,7 @@ void ThumbnailView::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rec
 
         if (pItem->isVisible())
         {
-            pItem->Paint(pProcessor.get(), mpItemAttrs);
+            pItem->Paint(pProcessor.get(), mpItemAttrs.get());
         }
     }
 
