@@ -182,7 +182,7 @@ IMPL_LINK( SfxNewFileDialog, RegionSelect, weld::TreeView&, rBox, void )
     const sal_uInt16 nCount = m_aTemplates.GetRegionCount() ? m_aTemplates.GetCount(nRegion): 0;
     m_xTemplateLb->freeze();
     m_xTemplateLb->clear();
-    OUString aSel = m_xRegionLb->get_selected();
+    OUString aSel = m_xRegionLb->get_selected_text();
     sal_Int32 nc = aSel.indexOf('(');
     if (nc != -1 && nc != 0)
         aSel = aSel.replaceAt(nc-1, 1, "");
@@ -227,7 +227,7 @@ sal_uInt16  SfxNewFileDialog::GetSelectedTemplatePos() const
     int nEntry = m_xTemplateLb->get_selected_index();
     if (nEntry == -1)
         return 0;
-    OUString aSel = m_xRegionLb->get_selected();
+    OUString aSel = m_xRegionLb->get_selected_text();
     sal_Int32 nc = aSel.indexOf('(');
     if (nc != -1 && nc != 0)
         aSel = aSel.replaceAt(nc-1, 1, "");
