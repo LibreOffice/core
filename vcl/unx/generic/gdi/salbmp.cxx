@@ -94,11 +94,7 @@ void X11SalBitmap::ImplDestroyCache()
 
 void X11SalBitmap::ImplRemovedFromCache()
 {
-    if( mpDDB )
-    {
-        delete mpDDB;
-        mpDDB = nullptr;
-    }
+    mpDDB.reset();
 }
 
 #if defined HAVE_VALGRIND_HEADERS
@@ -590,7 +586,7 @@ bool X11SalBitmap::ImplCreateFromDrawable(
     Destroy();
 
     if( aDrawable && nWidth && nHeight && nDrawableDepth )
-        mpDDB = new ImplSalDDB( aDrawable, nScreen, nDrawableDepth, nX, nY, nWidth, nHeight );
+        mpDDB.reset(new ImplSalDDB( aDrawable, nScreen, nDrawableDepth, nX, nY, nWidth, nHeight ));
 
     return( mpDDB != nullptr );
 }
@@ -618,8 +614,7 @@ ImplSalDDB* X11SalBitmap::ImplGetDDB(
                                                                         mbGrey );
             }
 
-            delete mpDDB;
-            const_cast<X11SalBitmap*>(this)->mpDDB = nullptr;
+            mpDDB.reset();
         }
 
         if( mpCache )
@@ -681,7 +676,7 @@ ImplSalDDB* X11SalBitmap::ImplGetDDB(
 
         if( pImage )
         {
-            const_cast<X11SalBitmap*>(this)->mpDDB = new ImplSalDDB( pImage, aDrawable, nXScreen, aTwoRect );
+            mpDDB.reset(new ImplSalDDB( pImage, aDrawable, nXScreen, aTwoRect ));
             delete[] pImage->data;
             pImage->data = nullptr;
             XDestroyImage( pImage );
@@ -691,7 +686,7 @@ ImplSalDDB* X11SalBitmap::ImplGetDDB(
         }
     }
 
-    return mpDDB;
+    return mpDDB.get();
 }
 
 void X11SalBitmap::ImplDraw(
@@ -809,11 +804,7 @@ void X11SalBitmap::Destroy()
         mpDIB.reset();
     }
 
-    if( mpDDB )
-    {
-        delete mpDDB;
-        mpDDB = nullptr;
-    }
+    mpDDB.reset();
 
     if( mpCache )
         mpCache->ImplRemove( this );
@@ -873,11 +864,7 @@ void X11SalBitmap::ReleaseBuffer( BitmapBuffer*, BitmapAccessMode nMode )
 {
     if( nMode == BitmapAccessMode::Write )
     {
-        if( mpDDB )
-        {
-            delete mpDDB;
-            mpDDB = nullptr;
-        }
+        mpDDB.reset();
 
         if( mpCache )
             mpCache->ImplRemove( this );

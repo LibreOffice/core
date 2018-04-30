@@ -318,7 +318,7 @@ protected:
     SalVirtualDevice*               m_pVDev;  // the SalVirtualDevice which created this Graphics or NULL
 
     const SalColormap*              m_pColormap;
-    SalColormap*                    m_pDeleteColormap;
+    std::unique_ptr<SalColormap>    m_pDeleteColormap;
     Drawable                        hDrawable_;     // use
     SalX11Screen                    m_nXScreen;
     mutable XRenderPictFormat*      m_pXRenderFormat;
