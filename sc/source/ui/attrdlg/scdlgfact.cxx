@@ -132,7 +132,17 @@ IMPL_ABSTDLG_BASE(AbstractScDPNumGroupDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDPDateGroupDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDPShowDetailDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScNewScenarioDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl);
+
+short AbstractScShowTabDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+bool AbstractScShowTabDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 IMPL_ABSTDLG_BASE(AbstractScSortWarningDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScTabBgColorDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl);
@@ -575,29 +585,24 @@ void AbstractScNewScenarioDlg_Impl::GetScenarioData(
 
 void AbstractScShowTabDlg_Impl::Insert( const OUString& rString, bool bSelected )
 {
-    pDlg->Insert( rString, bSelected);
-}
-
-sal_Int32 AbstractScShowTabDlg_Impl::GetSelectedEntryCount() const
-{
-    return pDlg->GetSelectedEntryCount();
+    m_xDlg->Insert(rString, bSelected);
 }
 
 void    AbstractScShowTabDlg_Impl::SetDescription(
                 const OUString& rTitle, const OUString& rFixedText,
                 const OString& sDlgHelpId, const OString& sLbHelpId )
 {
-    pDlg->SetDescription( rTitle, rFixedText, sDlgHelpId, sLbHelpId );
+    m_xDlg->SetDescription( rTitle, rFixedText, sDlgHelpId, sLbHelpId );
 }
 
-sal_Int32 AbstractScShowTabDlg_Impl::GetSelectedEntryPos(sal_Int32 nPos) const
+std::vector<sal_Int32> AbstractScShowTabDlg_Impl::GetSelectedRows() const
 {
-    return pDlg->GetSelectedEntryPos( nPos);
+    return m_xDlg->GetSelectedRows();
 }
 
-OUString AbstractScShowTabDlg_Impl::GetSelectedEntry(sal_Int32 nPos) const
+OUString AbstractScShowTabDlg_Impl::GetEntry(sal_Int32 nPos) const
 {
-    return pDlg->GetSelectedEntry(nPos);
+    return m_xDlg->GetEntry(nPos);
 }
 
 short AbstractScStringInputDlg_Impl::Execute()
@@ -850,10 +855,9 @@ VclPtr<AbstractScNewScenarioDlg> ScAbstractDialogFactory_Impl::CreateScNewScenar
     return VclPtr<AbstractScNewScenarioDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractScShowTabDlg> ScAbstractDialogFactory_Impl::CreateScShowTabDlg(vcl::Window* pParent)
+VclPtr<AbstractScShowTabDlg> ScAbstractDialogFactory_Impl::CreateScShowTabDlg(weld::Window* pParent)
 {
-    VclPtr<ScShowTabDlg> pDlg = VclPtr<ScShowTabDlg>::Create( pParent);
-    return VclPtr<AbstractScShowTabDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScShowTabDlg_Impl>::Create(new ScShowTabDlg(pParent));
 }
 
 VclPtr<AbstractScStringInputDlg> ScAbstractDialogFactory_Impl::CreateScStringInputDlg(weld::Window* pParent,

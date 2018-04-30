@@ -265,7 +265,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl, weld::Button&, void)
 {
     OUString aMessage = m_aStrDelMsg;
     aMessage += "\n\n";
-    aMessage += m_xLbFormat->get_selected();
+    aMessage += m_xLbFormat->get_selected_text();
     aMessage += "\n";
 
     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(), VclMessageType::Question,
@@ -303,7 +303,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl, weld::Button&, void)
     bool bOk = false;
     while( !bOk )
     {
-        SwStringInputDlg aDlg(m_xDialog.get(), m_aStrRenameTitle, m_aStrLabel, m_xLbFormat->get_selected());
+        SwStringInputDlg aDlg(m_xDialog.get(), m_aStrRenameTitle, m_aStrLabel, m_xLbFormat->get_selected_text());
         if (aDlg.run() == RET_OK)
         {
             bool bFormatRenamed = false;

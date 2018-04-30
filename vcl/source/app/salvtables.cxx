@@ -1260,17 +1260,14 @@ public:
             m_xTreeView->SelectEntryPos(pos);
     }
 
-    virtual OUString get_selected() const override
+    virtual std::vector<int> get_selected_rows() const override
     {
-        return m_xTreeView->GetSelectedEntry();
-    }
+        std::vector<int> aRows;
 
-    virtual std::vector<OUString> get_selected_rows() const override
-    {
-        std::vector<OUString> aRows;
-
-        for (sal_Int32 i = 0; i < m_xTreeView->GetSelectedEntryCount(); ++i)
-            aRows.push_back(m_xTreeView->GetSelectedEntry(i));
+        sal_Int32 nCount = m_xTreeView->GetSelectedEntryCount();
+        aRows.reserve(nCount);
+        for (sal_Int32 i = 0; i < nCount; ++i)
+            aRows.push_back(m_xTreeView->GetSelectedEntryPos(i));
 
         return aRows;
     }

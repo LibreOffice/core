@@ -20,35 +20,30 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_SHTABDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_SHTABDLG_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 
-class ScShowTabDlg : public ModalDialog
+class ScShowTabDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<VclFrame> m_pFrame;
-    VclPtr<ListBox> m_pLb;
+    std::unique_ptr<weld::Frame> m_xFrame;
+    std::unique_ptr<weld::TreeView> m_xLb;
 
-    DECL_LINK( DblClkHdl, ListBox&, void );
+    DECL_LINK( DblClkHdl, weld::TreeView&, void );
 
 public:
-    ScShowTabDlg( vcl::Window* pParent );
+    ScShowTabDlg(weld::Window* pParent);
     virtual ~ScShowTabDlg() override;
-    virtual void dispose() override;
 
     /** Sets dialog title, fixed text for listbox and help IDs. */
     void    SetDescription(
                 const OUString& rTitle, const OUString& rFixedText,
                 const OString& nDlgHelpId, const OString& nLbHelpId );
 
-    /** Inserts a string into the ListBox. */
+    /** Inserts a string into the weld::TreeView. */
     void    Insert( const OUString& rString, bool bSelected );
 
-    sal_Int32 GetSelectedEntryCount() const;
-    OUString    GetSelectedEntry(sal_Int32 nPos) const;
-    sal_Int32 GetSelectedEntryPos(sal_Int32 nPos) const;
+    std::vector<sal_Int32> GetSelectedRows() const;
+    OUString GetEntry(sal_Int32 nPos) const;
 };
 
 #endif

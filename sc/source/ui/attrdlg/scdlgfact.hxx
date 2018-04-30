@@ -375,12 +375,19 @@ class AbstractScNewScenarioDlg_Impl : public AbstractScNewScenarioDlg
 
 class AbstractScShowTabDlg_Impl : public AbstractScShowTabDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl,ScShowTabDlg)
-    virtual void    Insert( const OUString& rString, bool bSelected ) override;
-    virtual sal_Int32 GetSelectedEntryCount() const override;
-    virtual void SetDescription(const OUString& rTitle, const OUString& rFixedText, const OString& sDlgHelpId, const OString& sLbHelpId ) override;
-    virtual OUString  GetSelectedEntry(sal_Int32 nPos) const override;
-    virtual sal_Int32 GetSelectedEntryPos(sal_Int32 nPos) const override;
+protected:
+    std::shared_ptr<ScShowTabDlg> m_xDlg;
+public:
+    explicit AbstractScShowTabDlg_Impl(ScShowTabDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
+    virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
+    virtual void Insert( const OUString& rString, bool bSelected ) override;
+    virtual void SetDescription(const OUString& rTitle, const OUString& rFixedText, const OString& sDlgHelpId, const OString& sLbHelpId) override;
+    virtual OUString GetEntry(sal_Int32 nPos) const override;
+    virtual std::vector<sal_Int32> GetSelectedRows() const override;
 };
 
 class AbstractScSortWarningDlg_Impl : public AbstractScSortWarningDlg
@@ -542,7 +549,7 @@ public:
 
     virtual VclPtr<AbstractScNewScenarioDlg> CreateScNewScenarioDlg ( vcl::Window* pParent, const OUString& rName,
                                                                 bool bEdit, bool bSheetProtected ) override;
-    virtual VclPtr<AbstractScShowTabDlg> CreateScShowTabDlg(vcl::Window* pParent) override;
+    virtual VclPtr<AbstractScShowTabDlg> CreateScShowTabDlg(weld::Window* pParent) override;
 
     virtual VclPtr<AbstractScStringInputDlg> CreateScStringInputDlg(weld::Window* pParent,
                                                                     const OUString& rTitle,
