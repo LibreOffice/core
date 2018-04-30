@@ -12,7 +12,7 @@
         <value>IMPORT ALIEN 3RDPARTYFILTER PREFERRED</value>
     </prop>
     <prop oor:name="FilterService">
-        <value>org.libreoffice.comp.Calc.MSWorksCalcImportFilter</value>
+        <value>com.sun.star.comp.Calc.MSWorksCalcImportFilter</value>
     </prop>
     <prop oor:name="UIName">
         <value xml:lang="en-US">Microsoft Multiplan</value>

@@ -9,11 +9,10 @@
 
 <node oor:name="calc_MS_Multiplan" oor:op="replace">
     <prop oor:name="DetectService">
-        <value>org.libreoffice.comp.Calc.MSWorksCalcImportFilter</value>
+        <value>com.sun.star.comp.Calc.MSWorksCalcImportFilter</value>
     </prop>
-    <prop oor:name="Extensions">
-        <value>*</value>
-    </prop>
+    <prop oor:name="Extensions"/>
+    <prop oor:name="URLPattern"/>
     <prop oor:name="Preferred">
         <value>true</value>
     </prop>

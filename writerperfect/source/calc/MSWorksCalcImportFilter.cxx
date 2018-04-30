@@ -210,9 +210,14 @@ bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream& rInp
             title = WpResId(STR_ENCODING_DIALOG_TITLE_SYMPHONY);
             encoding = "CP437";
         }
-        else
+        else if (creator == libwps::WPS_QUATTRO_PRO)
         {
             title = WpResId(STR_ENCODING_DIALOG_TITLE_QUATTROPRO);
+            encoding = "CP437";
+        }
+        else
+        {
+            title = WpResId(STR_ENCODING_DIALOG_TITLE_MSMULTIPLAN);
             encoding = "CP437";
         }
         try
