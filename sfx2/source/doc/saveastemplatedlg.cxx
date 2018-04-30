@@ -97,7 +97,7 @@ IMPL_LINK_NOARG(SfxSaveAsTemplateDialog, SelectCategoryHdl, weld::TreeView&, voi
     }
     else
     {
-        msSelectedCategory = m_xLBCategory->get_selected();
+        msSelectedCategory = m_xLBCategory->get_selected_text();
         m_xOKButton->set_sensitive(!msTemplateName.isEmpty());
     }
 }

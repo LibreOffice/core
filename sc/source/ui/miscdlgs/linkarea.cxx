@@ -153,7 +153,7 @@ void ScLinkedAreaDlg::InitFromOldLink( const OUString& rFile, const OUString& rF
     for ( sal_Int32 i=0; i<nRangeCount; i++ )
     {
         OUString aRange = rSource.getToken(i,';');
-        m_xLbRanges->select(aRange);
+        m_xLbRanges->select_text(aRange);
     }
 
     bool bDoRefresh = (nRefresh != 0);
@@ -304,7 +304,7 @@ OUString ScLinkedAreaDlg::GetOptions()
 OUString ScLinkedAreaDlg::GetSource()
 {
     OUStringBuffer aBuf;
-    std::vector<OUString> aSelection = m_xLbRanges->get_selected_rows();
+    std::vector<OUString> aSelection = m_xLbRanges->get_selected_rows_text();
     for (size_t i = 0; i < aSelection.size(); ++i)
     {
         if (i > 0)
