@@ -75,7 +75,7 @@ public:
 // remember selected entry
 IMPL_LINK( SwNumNamesDlg, SelectHdl, weld::TreeView&, rBox, void )
 {
-    m_xFormEdit->set_text(rBox.get_selected());
+    m_xFormEdit->set_text(rBox.get_selected_text());
     m_xFormEdit->select_region(0, -1);
 }
 

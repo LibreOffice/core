@@ -1364,7 +1364,7 @@ IMPL_LINK_NOARG(SfxTemplateCategoryDialog, SelectCategoryHdl, weld::TreeView&, v
     }
     else
     {
-        msSelectedCategory = mxLBCategory->get_selected();
+        msSelectedCategory = mxLBCategory->get_selected_text();
         mxNewCategoryEdit->set_sensitive(false);
         mxOKButton->set_sensitive(true);
     }
