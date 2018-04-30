@@ -701,7 +701,7 @@ unsigned int GraphiteLayout::ScanFwdForChar(int &findChar, bool fallback) const
 
 void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDeltaWidth)
 {
-    bool bRtl(mnLayoutFlags & SalLayoutFlags::BiDiRtl);
+    bool bRtl(mnLayoutFlags & SAL_LAYOUT_BIDI_RTL);
     int startChar = args.mnMinCharPos < mnMinCharPos ? mnMinCharPos : args.mnMinCharPos;
     int endChar = args.mnEndCharPos >= mnEndCharPos ? mnEndCharPos - 1 : args.mnEndCharPos;
     unsigned int startGi = ScanFwdForChar(startChar, !bRtl);
