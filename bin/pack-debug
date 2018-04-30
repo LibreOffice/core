@@ -245,6 +245,7 @@ do
  then
 	echo ================ $i ================
 	TARGET_NAME=$INSTALLDIRNAME"$(echo $(basename $i) | awk '
+	/epm_gid_Module_Optional_Firebird.lst/{print"basis6.0-firebird"}
 	/epm_gid_Module_Optional_Gnome.lst/{print"basis6.0-gnome-integration"}
 	/epm_gid_Module_Optional_Grfflt.lst/{print"basis6.0-graphicfilter"}
 	/epm_gid_Module_Optional_Kde.lst/{print"basis6.0-kde-integration"}
