@@ -153,6 +153,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     std::shared_ptr<SfxRequest> pReq = std::make_shared<SfxRequest>(rReq);
                     pDlg->StartExecuteAsync([this, pDlg, pReq](sal_Int32 nResult){
+                        fprintf(stderr, "got a result\n");
                         std::vector<OUString> sTables;
                         if (RET_OK == nResult)
                         {
@@ -166,7 +167,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             ShowTable( sTables );
                             pReq->Done();
                         }
+                        pDlg->disposeOnce();
                     });
+                    fprintf(stderr, "finished launch\n");
                     rReq.Ignore();
                 }
             }
