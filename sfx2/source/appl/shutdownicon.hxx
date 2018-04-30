@@ -33,6 +33,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <sfx2/dllapi.h>
 #include <tools/link.hxx>
+#include <memory>
 
 extern "C" {
 
@@ -67,7 +68,7 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         bool                    m_bVeto;
         bool                    m_bListenForTermination;
         bool                    m_bSystemDialogs;
-        sfx2::FileDialogHelper* m_pFileDlg;
+        std::unique_ptr<sfx2::FileDialogHelper> m_pFileDlg;
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         static ShutdownIcon *pShutdownIcon; // one instance
