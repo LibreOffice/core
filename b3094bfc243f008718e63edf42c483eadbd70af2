@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_4c42e611",
+        "filename": "sw/source/core/undo/untbl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-04-30T08:44:56Z",
+      "side": 1,
+      "message": "using shell methods to move the cursor from inside Undo looks quite inappropriate, particularly since the shell cursor can be at any location in the document now, so where do you expect to end up?\n\ncould you create a new cursor either a SwPam or via CreateNewShellCursor and move that one wherever you want?",
+      "revId": "b3094bfc243f008718e63edf42c483eadbd70af2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
