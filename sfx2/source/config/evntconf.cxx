@@ -50,21 +50,18 @@ using namespace com::sun::star;
 
 SfxEventNamesList& SfxEventNamesList::operator=( const SfxEventNamesList& rTbl )
 {
-    DelDtor();
+    aEventNamesList.clear();
     for ( size_t i = 0, n = rTbl.size(); i < n; ++i )
     {
         SfxEventName* pTmp = rTbl.at( i );
-        SfxEventName* pNew = new SfxEventName( *pTmp );
-        aEventNamesList.push_back( pNew );
+        std::unique_ptr<SfxEventName> pNew(new SfxEventName( *pTmp ));
+        aEventNamesList.push_back( std::move(pNew) );
     }
     return *this;
 }
 
-void SfxEventNamesList::DelDtor()
+SfxEventNamesList::~SfxEventNamesList()
 {
-    for (SfxEventName* i : aEventNamesList)
-        delete i;
-    aEventNamesList.clear();
 }
 
 bool SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
@@ -114,7 +111,7 @@ sal_uInt16 SfxEventNamesItem::GetVersion( sal_uInt16 ) const
 
 void SfxEventNamesItem::AddEvent( const OUString& rName, const OUString& rUIName, SvMacroItemId nID )
 {
-    aEventsList.push_back( new SfxEventName( nID, rName, !rUIName.isEmpty() ? rUIName : rName ) );
+    aEventsList.push_back( std::unique_ptr<SfxEventName>(new SfxEventName( nID, rName, !rUIName.isEmpty() ? rUIName : rName )) );
 }
 
 
