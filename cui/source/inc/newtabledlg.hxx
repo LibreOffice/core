@@ -19,24 +19,19 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_NEWTABLEDLG_HXX
 #define INCLUDED_CUI_SOURCE_INC_NEWTABLEDLG_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/button.hxx>
-
 #include <svx/stddlg.hxx>
 #include <svx/svxdlg.hxx>
+#include <vcl/weld.hxx>
 
-class SvxNewTableDialog : public SvxAbstractNewTableDialog
+class SvxNewTableDialog : public SvxAbstractNewTableDialog, public weld::GenericDialogController
 {
 private:
-    VclPtr<ModalDialog>  m_pDialog;
-    VclPtr<NumericField> mpNumColumns;
-    VclPtr<NumericField> mpNumRows;
+    std::unique_ptr<weld::SpinButton> mxNumColumns;
+    std::unique_ptr<weld::SpinButton> mxNumRows;
 
 public:
-    SvxNewTableDialog();
+    SvxNewTableDialog(weld::Window* pParent);
     virtual ~SvxNewTableDialog() override;
-    virtual void dispose() override;
 
     virtual short Execute() override;
 
