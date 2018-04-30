@@ -14,6 +14,8 @@ NSS_MD5SUM := e55ee06b22687df68fafc6a30c0554b2
 export NSS_TARBALL := nss-3.29.5-with-nspr-4.13.1.tar.gz
 ZLIB_MD5SUM := 85adef240c5f370b308da8c938951a68
 export ZLIB_TARBALL := zlib-1.2.11.tar.xz
+OPENSSL_MD5SUM := 44279b8557c3247cbe324e2322ecd114
+export OPENSSL_TARBALL := openssl-1.0.2o.tar.gz
 
 export AFMS_TARBALL := 1756c4fa6c616ae15973c104cd8cb256-Adobe-Core35_AFMs-314.tar.gz
 export APACHE_COMMONS_CODEC_TARBALL := 2e482c7567908d334785ce7d69ddfff7-commons-codec-1.6-src.tar.gz
@@ -77,7 +79,6 @@ export MYTHES_TARBALL := 46e92b68e31e858512b680b3b61dc4c1-mythes-1.2.3.tar.gz
 export NEON_TARBALL := ff369e69ef0f0143beb5626164e87ae2-neon-0.29.5.tar.gz
 export ODFGEN_TARBALL := 8473296c671b6e3dd8197f4145e0854b-libodfgen-0.0.2.tar.bz2
 export OPENLDAP_TARBALL := 804c6cb5698db30b75ad0ff1c25baefd-openldap-2.4.31.tgz
-export OPENSSL_TARBALL := 66bf6f10f060d561929de96f9dfe5b8c-openssl-1.0.1e.tar.gz
 export ORCUS_TARBALL := ea2acaf140ae40a87a952caa75184f4d-liborcus-0.5.1.tar.bz2
 export PIXMAN_TARBALL := c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2
 export PNG_MD5SUM := 6652e428d1d3fc3c6cb1362159b1cf3b
