@@ -76,6 +76,7 @@
 
 LwpCellLayout::LwpCellLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpMiddleLayout(objHdr, pStrm)
+    , m_bConvertCell(false)
     , crowid(0)
     , ccolid(0)
     , cType(LDT_NONE)
@@ -893,11 +894,11 @@ rtl::Reference<XFCell> LwpHiddenCellLayout::ConvertCell(LwpObjectID aTableID, sa
         LwpCellLayout *pDefault = dynamic_cast<LwpCellLayout *>(pTable->GetDefaultCellStyle().obj().get());
         if (pDefault)
         {
-            xXFCell = pDefault->ConvertCell(aTableID, nRow, nCol);
+            xXFCell = pDefault->DoConvertCell(aTableID, nRow, nCol);
         }
         else
         {
-            xXFCell = pConnCell->ConvertCell(aTableID, nRow, nCol);
+            xXFCell = pConnCell->DoConvertCell(aTableID, nRow, nCol);
         }
         xXFCell->SetColumnSpaned(pConnCell->GetNumcols());
     }

@@ -221,7 +221,7 @@ void LwpRowLayout::ConvertRow(rtl::Reference<XFTable> const & pXFTable,sal_uInt8
         {
             sal_uInt8 nColID = m_ConnCellList[nMarkConnCell]->GetColID()
                     +m_ConnCellList[nMarkConnCell]->GetNumcols()-1;
-            xXFCell = m_ConnCellList[nMarkConnCell]->ConvertCell(
+            xXFCell = m_ConnCellList[nMarkConnCell]->DoConvertCell(
                 pTable->GetObjectID(),
                 crowid+m_ConnCellList[nMarkConnCell]->GetNumrows()-1,
                 m_ConnCellList[nMarkConnCell]->GetColID());
@@ -391,7 +391,7 @@ void LwpRowLayout::ConvertCommonRow(rtl::Reference<XFTable> const & pXFTable, sa
                     nCellEndCol = i+pConnCell->GetNumcols()-1;
                     i = nCellEndCol;
                 }
-                xCell = pCellLayout->ConvertCell(pTable->GetObjectID(),crowid,i);
+                xCell = pCellLayout->DoConvertCell(pTable->GetObjectID(),crowid,i);
                 break;
             }
             rCellID = pCellLayout->GetNext();
@@ -404,7 +404,7 @@ void LwpRowLayout::ConvertCommonRow(rtl::Reference<XFTable> const & pXFTable, sa
             LwpCellLayout * pDefaultCell = pTableLayout->GetDefaultCellLayout();
             if (pDefaultCell)
             {
-                xCell = pDefaultCell->ConvertCell(
+                xCell = pDefaultCell->DoConvertCell(
                     pTable->GetObjectID(),crowid, i);
             }
             else
