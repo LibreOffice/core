@@ -20,21 +20,18 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_GROUPDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_GROUPDLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 
-class ScGroupDlg : public ModalDialog
+class ScGroupDlg : public weld::GenericDialogController
 {
 public:
-    ScGroupDlg(vcl::Window* pParent, bool bUnGroup, bool bRows);
+    ScGroupDlg(weld::Window* pParent, bool bUnGroup, bool bRows);
     virtual ~ScGroupDlg() override;
-    virtual void dispose() override;
     bool GetColsChecked() const;
 
 private:
-    VclPtr<RadioButton> m_pBtnRows;
-    VclPtr<RadioButton> m_pBtnCols;
+    std::unique_ptr<weld::RadioButton> m_xBtnRows;
+    std::unique_ptr<weld::RadioButton> m_xBtnCols;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_GROUPDLG_HXX

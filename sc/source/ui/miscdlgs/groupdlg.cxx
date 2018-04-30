@@ -21,41 +21,32 @@
 
 #include <groupdlg.hxx>
 
-ScGroupDlg::ScGroupDlg(vcl::Window* pParent, bool bUngroup, bool bRows)
-    : ModalDialog(pParent,
-        bUngroup ?
-            OUString("UngroupDialog") :
-            OUString("GroupDialog"),
+ScGroupDlg::ScGroupDlg(weld::Window* pParent, bool bUngroup, bool bRows)
+    : GenericDialogController(pParent,
         bUngroup ?
             OUString("modules/scalc/ui/ungroupdialog.ui") :
-            OUString("modules/scalc/ui/groupdialog.ui"))
+            OUString("modules/scalc/ui/groupdialog.ui")
+    ,
+        bUngroup ?
+            OString("UngroupDialog") :
+            OString("GroupDialog"))
+    , m_xBtnRows(m_xBuilder->weld_radio_button("rows"))
+    , m_xBtnCols(m_xBuilder->weld_radio_button("cols"))
 {
-    get(m_pBtnRows, "rows");
-    get(m_pBtnCols, "cols");
-
-    if ( bRows )
-        m_pBtnRows->Check();
+    if (bRows)
+        m_xBtnRows->set_active(true);
     else
-        m_pBtnCols->Check();
-
-    m_pBtnRows->GrabFocus();
+        m_xBtnCols->set_active(true);
+    m_xBtnRows->grab_focus();
 }
 
 ScGroupDlg::~ScGroupDlg()
 {
-    disposeOnce();
-}
-
-void ScGroupDlg::dispose()
-{
-    m_pBtnRows.clear();
-    m_pBtnCols.clear();
-    ModalDialog::dispose();
 }
 
 bool ScGroupDlg::GetColsChecked() const
 {
-    return m_pBtnCols->IsChecked();
+    return m_xBtnCols->get_active();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

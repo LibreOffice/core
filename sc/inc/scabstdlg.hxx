@@ -440,8 +440,7 @@ public:
                                                             double          fMax,
                                                             sal_uInt16          nPossDir) = 0;
 
-    virtual VclPtr<AbstractScGroupDlg> CreateAbstractScGroupDlg( vcl::Window* pParent,
-                                                            bool bUnGroup = false ) = 0;
+    virtual VclPtr<AbstractScGroupDlg> CreateAbstractScGroupDlg(weld::Window* pParent, bool bUnGroup = false) = 0;
 
     virtual VclPtr<AbstractScInsertCellDlg> CreateScInsertCellDlg(weld::Window* pParent,
                                                              bool bDisallowCellMove) = 0;
