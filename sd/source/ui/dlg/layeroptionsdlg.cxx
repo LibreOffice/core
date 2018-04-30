@@ -18,60 +18,46 @@
  */
 
 #include <svl/itemset.hxx>
-#include <vcl/layout.hxx>
 
 #include <sdattr.hxx>
 #include <layeroptionsdlg.hxx>
 
-SdInsertLayerDlg::SdInsertLayerDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs,
-    bool bDeletable, const OUString& rStr )
-    : ModalDialog(pWindow, "InsertLayerDialog", "modules/sdraw/ui/insertlayer.ui")
+SdInsertLayerDlg::SdInsertLayerDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs,
+    bool bDeletable, const OUString& rStr)
+    : GenericDialogController(pWindow, "modules/sdraw/ui/insertlayer.ui", "InsertLayerDialog")
     , mrOutAttrs(rInAttrs)
+    , m_xEdtName(m_xBuilder->weld_entry("name"))
+    , m_xEdtTitle(m_xBuilder->weld_entry("title"))
+    , m_xEdtDesc(m_xBuilder->weld_text_view("textview"))
+    , m_xCbxVisible(m_xBuilder->weld_check_button("visible"))
+    , m_xCbxPrintable(m_xBuilder->weld_check_button("printable"))
+    , m_xCbxLocked(m_xBuilder->weld_check_button("locked"))
+    , m_xNameFrame(m_xBuilder->weld_widget("nameframe"))
 {
-    SetText(rStr);
+    m_xDialog->set_title(rStr);
 
-    get(m_pEdtName, "name");
-    get(m_pEdtTitle, "title");
-    get(m_pEdtDesc, "textview");
-    get(m_pCbxVisible, "visible");
-    get(m_pCbxPrintable, "printable");
-    get(m_pCbxLocked, "locked");
-
-    m_pEdtName->SetText( static_cast<const SfxStringItem&>( mrOutAttrs.Get( ATTR_LAYER_NAME ) ).GetValue() );
-    m_pEdtTitle->SetText( static_cast<const SfxStringItem&>( mrOutAttrs.Get( ATTR_LAYER_TITLE ) ).GetValue() );
-    m_pEdtDesc->SetText( static_cast<const SfxStringItem&>( mrOutAttrs.Get( ATTR_LAYER_DESC ) ).GetValue() );
-    m_pEdtDesc->set_height_request(4 * m_pEdtDesc->GetTextHeight());
-    m_pCbxVisible->Check( static_cast<const SfxBoolItem&>( mrOutAttrs.Get( ATTR_LAYER_VISIBLE ) ).GetValue() );
-    m_pCbxPrintable->Check( static_cast<const SfxBoolItem&>( mrOutAttrs.Get( ATTR_LAYER_PRINTABLE ) ).GetValue() );
-    m_pCbxLocked->Check( static_cast<const SfxBoolItem&>( mrOutAttrs.Get( ATTR_LAYER_LOCKED ) ).GetValue() );
-
-    get<VclContainer>("nameframe")->Enable(bDeletable);
+    m_xEdtName->set_text( static_cast<const SfxStringItem&>( mrOutAttrs.Get( ATTR_LAYER_NAME ) ).GetValue() );
+    m_xEdtTitle->set_text( static_cast<const SfxStringItem&>( mrOutAttrs.Get( ATTR_LAYER_TITLE ) ).GetValue() );
+    m_xEdtDesc->set_text( static_cast<const SfxStringItem&>( mrOutAttrs.Get( ATTR_LAYER_DESC ) ).GetValue() );
+    m_xEdtDesc->set_size_request(-1, m_xEdtDesc->get_height_rows(4));
+    m_xCbxVisible->set_active( static_cast<const SfxBoolItem&>( mrOutAttrs.Get( ATTR_LAYER_VISIBLE ) ).GetValue() );
+    m_xCbxPrintable->set_active( static_cast<const SfxBoolItem&>( mrOutAttrs.Get( ATTR_LAYER_PRINTABLE ) ).GetValue() );
+    m_xCbxLocked->set_active( static_cast<const SfxBoolItem&>( mrOutAttrs.Get( ATTR_LAYER_LOCKED ) ).GetValue() );
+    m_xNameFrame->set_sensitive(bDeletable);
 }
 
 SdInsertLayerDlg::~SdInsertLayerDlg()
 {
-    disposeOnce();
-}
-
-void SdInsertLayerDlg::dispose()
-{
-    m_pEdtName.clear();
-    m_pEdtTitle.clear();
-    m_pEdtDesc.clear();
-    m_pCbxVisible.clear();
-    m_pCbxPrintable.clear();
-    m_pCbxLocked.clear();
-    ModalDialog::dispose();
 }
 
 void SdInsertLayerDlg::GetAttr( SfxItemSet& rAttrs )
 {
-    rAttrs.Put( makeSdAttrLayerName( m_pEdtName->GetText() ) );
-    rAttrs.Put( makeSdAttrLayerTitle( m_pEdtTitle->GetText() ) );
-    rAttrs.Put( makeSdAttrLayerDesc( m_pEdtDesc->GetText() ) );
-    rAttrs.Put( makeSdAttrLayerVisible( m_pCbxVisible->IsChecked() ) );
-    rAttrs.Put( makeSdAttrLayerPrintable( m_pCbxPrintable->IsChecked() ) );
-    rAttrs.Put( makeSdAttrLayerLocked( m_pCbxLocked->IsChecked() ) );
+    rAttrs.Put( makeSdAttrLayerName( m_xEdtName->get_text() ) );
+    rAttrs.Put( makeSdAttrLayerTitle( m_xEdtTitle->get_text() ) );
+    rAttrs.Put( makeSdAttrLayerDesc( m_xEdtDesc->get_text() ) );
+    rAttrs.Put( makeSdAttrLayerVisible( m_xCbxVisible->get_active() ) );
+    rAttrs.Put( makeSdAttrLayerPrintable( m_xCbxPrintable->get_active() ) );
+    rAttrs.Put( makeSdAttrLayerLocked( m_xCbxLocked->get_active() ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

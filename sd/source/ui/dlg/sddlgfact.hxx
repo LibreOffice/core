@@ -154,7 +154,14 @@ class AbstractSdSnapLineDlg_Impl : public AbstractSdSnapLineDlg
 class SdInsertLayerDlg;
 class AbstractSdInsertLayerDlg_Impl : public AbstractSdInsertLayerDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSdInsertLayerDlg_Impl,SdInsertLayerDlg)
+private:
+    std::unique_ptr<SdInsertLayerDlg> m_xDlg;
+public:
+    AbstractSdInsertLayerDlg_Impl(SdInsertLayerDlg* pDlg)
+        : m_xDlg(pDlg)
+    {
+    }
+    virtual short   Execute() override;
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) override ;
     //from class Window
     virtual void    SetHelpId( const OString& rHelpId ) override ;
@@ -239,7 +246,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdTabPageDialog(vcl::Window* pWindow, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, bool bAreaPage) override;
     virtual VclPtr<AbstractSdModifyFieldDlg>   CreateSdModifyFieldDlg( vcl::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet ) override;
     virtual VclPtr<AbstractSdSnapLineDlg>      CreateSdSnapLineDlg(vcl::Window* pParent, const SfxItemSet& rInAttrs, ::sd::View* pView) override;
-    virtual VclPtr<AbstractSdInsertLayerDlg>   CreateSdInsertLayerDlg(vcl::Window* pParent, const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr) override;
+    virtual VclPtr<AbstractSdInsertLayerDlg>   CreateSdInsertLayerDlg(weld::Window* pParent, const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr) override;
     virtual VclPtr<AbstractSdInsertPagesObjsDlg> CreateSdInsertPagesObjsDlg(vcl::Window* pParent, const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName ) override;
     virtual VclPtr<AbstractMorphDlg>           CreateMorphDlg(weld::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdOutlineBulletTabDlg(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView) override;
