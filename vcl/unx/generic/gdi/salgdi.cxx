@@ -132,8 +132,8 @@ void X11SalGraphics::freeResources()
     }
     if( m_pDeleteColormap )
     {
-        delete m_pDeleteColormap;
-        m_pColormap = m_pDeleteColormap = nullptr;
+        m_pDeleteColormap.reset();
+        m_pColormap = nullptr;
     }
     if( m_aXRenderPicture )
     {
