@@ -99,7 +99,7 @@ Qt5Instance::CreateVirtualDevice(SalGraphics* pGraphics, long& nDX, long& nDY, D
     }
     else
     {
-        std::unique_ptr<SalVirtualDevice>(new Qt5VirtualDevice(eFormat, 1));
+        std::unique_ptr<SalVirtualDevice> pVD(new Qt5VirtualDevice(eFormat, 1));
         pVD->SetSize(nDX, nDY);
         return pVD;
     }
