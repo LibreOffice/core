@@ -10,11 +10,12 @@
 #ifndef INCLUDED_SFX2_TEMPLATELOCALVIEW_HXX
 #define INCLUDED_SFX2_TEMPLATELOCALVIEW_HXX
 
-#include <set>
-#include <functional>
 #include <vcl/menu.hxx>
 #include <sfx2/thumbnailview.hxx>
 #include <sfx2/templateproperties.hxx>
+#include <functional>
+#include <memory>
+#include <set>
 
 //template thumbnail item defines
 #define TEMPLATE_ITEM_MAX_WIDTH 160
@@ -188,8 +189,8 @@ protected:
     Link<ThumbnailViewItem*,void> maDeleteTemplateHdl;
     Link<ThumbnailViewItem*,void> maDefaultTemplateHdl;
 
-    SfxDocumentTemplates *mpDocTemplates;
-    std::vector<TemplateContainerItem* > maRegions;
+    std::unique_ptr<SfxDocumentTemplates> mpDocTemplates;
+    std::vector<std::unique_ptr<TemplateContainerItem> > maRegions;
     std::vector<TemplateItemProperties > maAllTemplates;
 };
 
