@@ -27,6 +27,7 @@
 #include <sfx2/event.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/macitem.hxx>
+#include <memory>
 #include <vector>
 
 class SfxObjectShell;
@@ -49,21 +50,20 @@ struct SFX2_DLLPUBLIC SfxEventName
 class SFX2_DLLPUBLIC SfxEventNamesList
 {
 private:
-    ::std::vector< SfxEventName* > aEventNamesList;
-    void DelDtor();
+    ::std::vector< std::unique_ptr<SfxEventName> > aEventNamesList;
 
 public:
     SfxEventNamesList() {}
     SfxEventNamesList( const SfxEventNamesList &rCpy ) { *this = rCpy; }
-    ~SfxEventNamesList() { DelDtor(); }
+    ~SfxEventNamesList();
     SfxEventNamesList& operator=( const SfxEventNamesList &rCpy );
 
     size_t size() const { return aEventNamesList.size(); };
 
     SfxEventName* at( size_t Index ) const
-        { return Index < aEventNamesList.size() ? aEventNamesList[ Index ] : nullptr; }
+        { return Index < aEventNamesList.size() ? aEventNamesList[ Index ].get() : nullptr; }
 
-    void push_back( SfxEventName* Item ) { aEventNamesList.push_back( Item ); }
+    void push_back( std::unique_ptr<SfxEventName> Item ) { aEventNamesList.push_back( std::move(Item) ); }
 };
 
 class SFX2_DLLPUBLIC SfxEventNamesItem : public SfxPoolItem
