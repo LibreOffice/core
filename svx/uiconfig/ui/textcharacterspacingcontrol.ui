@@ -11,7 +11,7 @@
   <object class="GtkImage" id="image_spacing_1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/symphony/spacing_very tight.png</property>
+    <property name="pixbuf">svx/res/symphony/spacing_very_tight.png</property>
   </object>
   <object class="GtkImage" id="image_spacing_115">
     <property name="visible">True</property>
@@ -41,7 +41,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="xalign">0</property>
-    <property name="pixbuf">svx/res/symphony/spacing_very loose.png</property>
+    <property name="pixbuf">svx/res/symphony/spacing_very_loose.png</property>
     <property name="icon_size">1</property>
   </object>
   <object class="GtkImage" id="image_spacing_4">
