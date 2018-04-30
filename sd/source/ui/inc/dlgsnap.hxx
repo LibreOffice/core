@@ -20,14 +20,10 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_DLGSNAP_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_DLGSNAP_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/group.hxx>
-#include <vcl/layout.hxx>
 #include <tools/fract.hxx>
-#include <vcl/dialog.hxx>
 #include <sdenumdef.hxx>
+#include <vcl/weld.hxx>
+
 /************************************************************************/
 
 class SfxItemSet;
@@ -38,34 +34,34 @@ namespace sd {
 /**
  * dialog to adjust snap- lines and points
  */
-class SdSnapLineDlg : public ModalDialog
+class SdSnapLineDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<FixedText>          m_pFtX;
-    VclPtr<MetricField>        m_pMtrFldX;
-    VclPtr<FixedText>          m_pFtY;
-    VclPtr<MetricField>        m_pMtrFldY;
-    VclPtr<VclContainer>       m_pRadioGroup;
-    VclPtr<RadioButton>        m_pRbPoint;
-    VclPtr<RadioButton>        m_pRbVert;
-    VclPtr<RadioButton>        m_pRbHorz;
-    VclPtr<PushButton>         m_pBtnDelete;
-    long                nXValue;
-    long                nYValue;
+    int                 nXValue;
+    int                 nYValue;
     FieldUnit           eUIUnit;
     Fraction            aUIScale;
 
-    DECL_LINK( ClickHdl, Button *, void );
+    std::unique_ptr<weld::Label> m_xFtX;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldX;
+    std::unique_ptr<weld::Label> m_xFtY;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldY;
+    std::unique_ptr<weld::Widget> m_xRadioGroup;
+    std::unique_ptr<weld::RadioButton> m_xRbPoint;
+    std::unique_ptr<weld::RadioButton> m_xRbVert;
+    std::unique_ptr<weld::RadioButton> m_xRbHorz;
+    std::unique_ptr<weld::Button> m_xBtnDelete;
+
+    DECL_LINK(ClickHdl, weld::Button&, void);
 
 public:
-    SdSnapLineDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View const * pView);
+    SdSnapLineDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View const * pView);
     virtual ~SdSnapLineDlg() override;
-    virtual void dispose() override;
 
     void GetAttr(SfxItemSet& rOutAttrs);
 
     void HideRadioGroup();
-    void HideDeleteBtn() { m_pBtnDelete->Hide(); }
+    void HideDeleteBtn() { m_xBtnDelete->hide(); }
     void SetInputFields(bool bEnableX, bool bEnableY);
 };
 
