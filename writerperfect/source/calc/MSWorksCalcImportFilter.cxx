@@ -195,31 +195,35 @@ bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream& rInp
     if (needEncoding)
     {
         OUString title, encoding;
-        if (creator == libwps::WPS_MSWORKS)
+        switch (creator)
         {
-            title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWORKS);
-            encoding = "CP850";
+            case libwps::WPS_MSWORKS:
+                title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWORKS);
+                encoding = "CP850";
+                break;
+            case libwps::WPS_LOTUS:
+                title = WpResId(STR_ENCODING_DIALOG_TITLE_LOTUS);
+                encoding = "CP437";
+                break;
+            case libwps::WPS_SYMPHONY:
+                title = WpResId(STR_ENCODING_DIALOG_TITLE_SYMPHONY);
+                encoding = "CP437";
+                break;
+            case libwps::WPS_QUATTRO_PRO:
+                title = WpResId(STR_ENCODING_DIALOG_TITLE_QUATTROPRO);
+                encoding = "CP437";
+                break;
+            case libwps::WPS_RESERVED_2:
+                title = WpResId(STR_ENCODING_DIALOG_TITLE_MSMULTIPLAN);
+                encoding = "CP437";
+                break;
+            default:
+                SAL_INFO("writerperfect", "unexpected creator: " << creator);
+                title = WpResId(STR_ENCODING_DIALOG_TITLE);
+                encoding = "CP437";
+                break;
         }
-        else if (creator == libwps::WPS_LOTUS)
-        {
-            title = WpResId(STR_ENCODING_DIALOG_TITLE_LOTUS);
-            encoding = "CP437";
-        }
-        else if (creator == libwps::WPS_SYMPHONY)
-        {
-            title = WpResId(STR_ENCODING_DIALOG_TITLE_SYMPHONY);
-            encoding = "CP437";
-        }
-        else if (creator == libwps::WPS_QUATTRO_PRO)
-        {
-            title = WpResId(STR_ENCODING_DIALOG_TITLE_QUATTROPRO);
-            encoding = "CP437";
-        }
-        else
-        {
-            title = WpResId(STR_ENCODING_DIALOG_TITLE_MSMULTIPLAN);
-            encoding = "CP437";
-        }
+
         try
         {
             const ScopedVclPtrInstance<writerperfect::WPFTEncodingDialog> pDlg(title, encoding);
