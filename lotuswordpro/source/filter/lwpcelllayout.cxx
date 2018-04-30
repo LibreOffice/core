@@ -74,8 +74,19 @@
 #include <xfilter/xfcellstyle.hxx>
 #include <xfilter/xfcolstyle.hxx>
 
+rtl::Reference<XFCell> LwpCellLayout::DoConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uInt16 nCol)
+{
+    if (m_bConvertCell)
+        throw std::runtime_error("recursion in page divisions");
+    m_bConvertCell = true;
+    rtl::Reference<XFCell> aRet = ConvertCell(aTableID, nRow, nCol);
+    m_bConvertCell = false;
+    return aRet;
+}
+
 LwpCellLayout::LwpCellLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpMiddleLayout(objHdr, pStrm)
+    , m_bConvertCell(false)
     , crowid(0)
     , ccolid(0)
     , cType(LDT_NONE)
@@ -890,11 +901,11 @@ rtl::Reference<XFCell> LwpHiddenCellLayout::ConvertCell(LwpObjectID aTableID, sa
         LwpCellLayout *pDefault = dynamic_cast<LwpCellLayout *>(pTable->GetDefaultCellStyle().obj().get());
         if (pDefault)
         {
-            xXFCell = pDefault->ConvertCell(aTableID, nRow, nCol);
+            xXFCell = pDefault->DoConvertCell(aTableID, nRow, nCol);
         }
         else
         {
-            xXFCell = pConnCell->ConvertCell(aTableID, nRow, nCol);
+            xXFCell = pConnCell->DoConvertCell(aTableID, nRow, nCol);
         }
         xXFCell->SetColumnSpaned(pConnCell->GetNumcols());
     }
