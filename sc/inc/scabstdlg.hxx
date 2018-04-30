@@ -345,11 +345,10 @@ class AbstractScShowTabDlg : public VclAbstractDialog
 protected:
     virtual             ~AbstractScShowTabDlg() override = default;
 public:
-    virtual void    Insert( const OUString& rString, bool bSelected ) = 0;
-    virtual sal_Int32 GetSelectedEntryCount() const = 0;
+    virtual void Insert( const OUString& rString, bool bSelected ) = 0;
     virtual void SetDescription(const OUString& rTitle, const OUString& rFixedText, const OString& nDlgHelpId, const OString& nLbHelpId ) = 0;
-    virtual OUString  GetSelectedEntry(sal_Int32 nPos) const = 0;
-    virtual sal_Int32 GetSelectedEntryPos(sal_Int32 nPos) const = 0;
+    virtual std::vector<sal_Int32> GetSelectedRows() const = 0;
+    virtual OUString GetEntry(sal_Int32 nPos) const = 0;
 };
 
 class AbstractScSortWarningDlg : public VclAbstractDialog
@@ -500,7 +499,7 @@ public:
 
     virtual VclPtr<AbstractScNewScenarioDlg> CreateScNewScenarioDlg ( vcl::Window* pParent, const OUString& rName,
                                                                 bool bEdit, bool bSheetProtected ) = 0;
-    virtual VclPtr<AbstractScShowTabDlg> CreateScShowTabDlg(vcl::Window* pParent) = 0;
+    virtual VclPtr<AbstractScShowTabDlg> CreateScShowTabDlg(weld::Window* pParent) = 0;
 
     virtual VclPtr<AbstractScStringInputDlg> CreateScStringInputDlg(weld::Window* pParent,
                                                                     const OUString& rTitle,

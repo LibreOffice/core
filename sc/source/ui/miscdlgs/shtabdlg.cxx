@@ -21,65 +21,51 @@
 
 #include <shtabdlg.hxx>
 
-ScShowTabDlg::ScShowTabDlg(vcl::Window* pParent)
-    : ModalDialog(pParent, "ShowSheetDialog", "modules/scalc/ui/showsheetdialog.ui")
+ScShowTabDlg::ScShowTabDlg(weld::Window* pParent)
+    : GenericDialogController(pParent, "modules/scalc/ui/showsheetdialog.ui", "ShowSheetDialog")
+    , m_xFrame(m_xBuilder->weld_frame("frame"))
+    , m_xLb(m_xBuilder->weld_tree_view("treeview"))
 {
-    get(m_pFrame, "frame");
-    get(m_pLb, "treeview");
-
-    m_pLb->Clear();
-    m_pLb->EnableMultiSelection(true);
-    m_pLb->set_height_request(m_pLb->GetTextHeight() * 10);
-    m_pLb->SetDoubleClickHdl( LINK( this, ScShowTabDlg, DblClkHdl ) );
+    m_xLb->set_selection_mode(true);
+    m_xLb->set_size_request(-1, m_xLb->get_height_rows(10));
+    m_xLb->connect_row_activated(LINK(this, ScShowTabDlg, DblClkHdl));
 }
 
 ScShowTabDlg::~ScShowTabDlg()
 {
-    disposeOnce();
-}
-
-void ScShowTabDlg::dispose()
-{
-    m_pFrame.clear();
-    m_pLb.clear();
-    ModalDialog::dispose();
 }
 
 void ScShowTabDlg::SetDescription(
         const OUString& rTitle, const OUString& rFixedText,
         const OString& rDlgHelpId, const OString& sLbHelpId )
 {
-    SetText(rTitle);
-    m_pFrame->set_label(rFixedText);
-    SetHelpId( rDlgHelpId );
-    m_pLb->SetHelpId( sLbHelpId );
+    m_xDialog->set_title(rTitle);
+    m_xFrame->set_label(rFixedText);
+    m_xDialog->set_help_id(rDlgHelpId);
+    m_xLb->set_help_id(sLbHelpId);
 }
 
-void ScShowTabDlg::Insert( const OUString& rString, bool bSelected )
+void ScShowTabDlg::Insert(const OUString& rString, bool bSelected)
 {
-    m_pLb->InsertEntry( rString );
-    if( bSelected )
-        m_pLb->SelectEntryPos( m_pLb->GetEntryCount() - 1 );
+    m_xLb->append_text(rString);
+    if (bSelected)
+        m_xLb->select(m_xLb->n_children() - 1);
 }
 
-sal_Int32 ScShowTabDlg::GetSelectedEntryCount() const
+std::vector<sal_Int32> ScShowTabDlg::GetSelectedRows() const
 {
-    return m_pLb->GetSelectedEntryCount();
+    auto aTmp = m_xLb->get_selected_rows();
+    return std::vector<sal_Int32>(aTmp.begin(), aTmp.end());
 }
 
-OUString ScShowTabDlg::GetSelectedEntry(sal_Int32 nPos) const
+OUString ScShowTabDlg::GetEntry(sal_Int32 nIndex) const
 {
-    return m_pLb->GetSelectedEntry(nPos);
+    return m_xLb->get(nIndex);
 }
 
-sal_Int32 ScShowTabDlg::GetSelectedEntryPos(sal_Int32 nPos) const
+IMPL_LINK_NOARG(ScShowTabDlg, DblClkHdl, weld::TreeView&, void)
 {
-    return m_pLb->GetSelectedEntryPos(nPos);
-}
-
-IMPL_LINK_NOARG(ScShowTabDlg, DblClkHdl, ListBox&, void)
-{
-    EndDialog( RET_OK );
+    m_xDialog->response(RET_OK);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
