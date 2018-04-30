@@ -124,7 +124,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         if( (nColumns == 0) || (nRows == 0) )
         {
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            ScopedVclPtr<SvxAbstractNewTableDialog> pDlg( pFact ? pFact->CreateSvxNewTableDialog() : nullptr);
+            ScopedVclPtr<SvxAbstractNewTableDialog> pDlg( pFact ? pFact->CreateSvxNewTableDialog(rReq.GetFrameWeld()) : nullptr);
 
             if( !pDlg.get() || (pDlg->Execute() != RET_OK) )
                 break;
