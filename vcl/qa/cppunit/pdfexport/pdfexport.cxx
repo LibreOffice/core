@@ -68,7 +68,7 @@ public:
     void testTdf99680();
     void testTdf99680_2();
     void testTdf108963();
-#if !TEST_FONTS_MISSING
+#if HAVE_MORE_FONTS
     /// Test writing ToUnicode CMAP for LTR ligatures.
     void testTdf115117_1();
     /// Text extracting LTR text with ligatures.
@@ -102,7 +102,7 @@ public:
     CPPUNIT_TEST(testTdf99680);
     CPPUNIT_TEST(testTdf99680_2);
     CPPUNIT_TEST(testTdf108963);
-#if !TEST_FONTS_MISSING
+#if HAVE_MORE_FONTS
     CPPUNIT_TEST(testTdf115117_1);
     CPPUNIT_TEST(testTdf115117_1a);
     CPPUNIT_TEST(testTdf115117_2);
@@ -788,7 +788,7 @@ void PdfExportTest::testTdf108963()
     CPPUNIT_ASSERT_EQUAL(1, nYellowPathCount);
 }
 
-#if !TEST_FONTS_MISSING
+#if HAVE_MORE_FONTS
 // This requires Carlito font, if it is missing the test will most likely
 // fail.
 void PdfExportTest::testTdf115117_1()
