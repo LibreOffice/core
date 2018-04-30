@@ -322,7 +322,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
     if( !nResId )
         return GetTextCollFromPool( RES_POOLCOLL_STANDARD );
 
-    ResId aResId( nResId + nId, *pSwResMgr );
+    ResId aResId( nResId + nId, GetSwResMgr() );
     OUString aNm( aResId );
 
     // A Set for all to-be-set Attributes
@@ -1145,7 +1145,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
                 return pNewFormat;
             }
 
-    ResId aResId( nRCId + nId, *pSwResMgr );
+    ResId aResId( nRCId + nId, GetSwResMgr() );
     OUString aNm( aResId );
     SwAttrSet aSet( m_rDoc.GetAttrPool(), pWhichRange );
 
@@ -1392,7 +1392,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
 
     SwPageDesc* pNewPgDsc = nullptr;
     {
-        const ResId aResId( sal_uInt32(RC_POOLPAGEDESC_BEGIN + nId - RES_POOLPAGE_BEGIN), *pSwResMgr );
+        const ResId aResId( sal_uInt32(RC_POOLPAGEDESC_BEGIN + nId - RES_POOLPAGE_BEGIN), GetSwResMgr() );
         const OUString aNm( aResId );
         const bool bIsModified = m_rDoc.getIDocumentState().IsModified();
 
@@ -1565,7 +1565,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
         nId = RES_POOLNUMRULE_BEGIN;
     }
 
-    ResId aResId( sal_uInt32(RC_POOLNUMRULE_BEGIN + nId - RES_POOLNUMRULE_BEGIN), *pSwResMgr );
+    ResId aResId( sal_uInt32(RC_POOLNUMRULE_BEGIN + nId - RES_POOLNUMRULE_BEGIN), GetSwResMgr() );
     OUString aNm( aResId );
 
     SwCharFormat *pNumCFormat = nullptr, *pBullCFormat = nullptr;

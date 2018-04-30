@@ -20,6 +20,7 @@
 #include <numeric>
 #include <tuple>
 
+#include <swtypes.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <tools/resmgr.hxx>
 #include <poolfmt.hxx>
@@ -29,7 +30,6 @@
 #include <stdlib.h>
 #endif
 
-extern ResMgr* pSwResMgr;
 // Initialise UI names to 0
 std::vector<OUString> *SwStyleNameMapper::s_pTextUINameArray = nullptr,
                 *SwStyleNameMapper::s_pListsUINameArray = nullptr,
@@ -349,7 +349,7 @@ lcl_NewUINameArray(sal_uInt16 nStt, sal_uInt16 const nEnd)
     pNameArray->reserve(nEnd - nStt);
     while( nStt < nEnd )
     {
-        const ResId aRId( nStt, *pSwResMgr );
+        const ResId aRId( nStt, GetSwResMgr() );
         pNameArray->push_back(OUString(aRId));
         ++nStt;
     }

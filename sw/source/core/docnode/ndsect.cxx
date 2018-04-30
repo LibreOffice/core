@@ -1359,7 +1359,7 @@ OUString SwDoc::GetUniqueSectionName( const OUString* pChkStr ) const
         return newName;
     }
 
-    const OUString aName( ResId( STR_REGION_DEFNAME, *pSwResMgr ) );
+    const OUString aName( ResId( STR_REGION_DEFNAME, GetSwResMgr() ) );
 
     SwSectionFormats::size_type nNum = 0;
     const SwSectionFormats::size_type nFlagSize = ( mpSectionFormatTable->size() / 8 ) + 2;

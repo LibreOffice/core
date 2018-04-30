@@ -284,11 +284,11 @@ void ShellResource::GetAutoFormatNameLst_() const
 }
 
 ImpAutoFormatNameListLoader::ImpAutoFormatNameListLoader( std::vector<OUString>& rLst )
-    : Resource( ResId(RID_SHELLRES_AUTOFMTSTRS, *pSwResMgr) )
+    : Resource( ResId(RID_SHELLRES_AUTOFMTSTRS, GetSwResMgr()) )
 {
     for( sal_uInt16 n = 0; n < STR_AUTOFMTREDL_END; ++n )
     {
-        OUString p(ResId(n + 1, *pSwResMgr));
+        OUString p(ResId(n + 1, GetSwResMgr()));
         if(STR_AUTOFMTREDL_TYPO == n)
         {
 #ifdef _WIN32

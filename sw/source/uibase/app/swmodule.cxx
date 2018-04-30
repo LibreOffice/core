@@ -125,7 +125,6 @@
 
 #include <app.hrc>
 #include <svx/xmlsecctrl.hxx>
-ResMgr *pSwResMgr = nullptr;
 bool     g_bNoInterrupt     = false;
 
 #include <sfx2/app.hxx>
@@ -137,6 +136,17 @@ bool     g_bNoInterrupt     = false;
 #include "swdllimpl.hxx"
 
 using namespace com::sun::star;
+
+ResMgr & GetSwResMgr()
+{
+    // not threadsafe
+    static std::unique_ptr<ResMgr> pResourceManager;
+    const LanguageTag& rLocale = Application::GetSettings().GetUILanguageTag();
+    if( ! pResourceManager || pResourceManager->GetLocale() != rLocale )
+        pResourceManager.reset( ResMgr::CreateResMgr("sw", rLocale) );
+    OSL_ASSERT( pResourceManager );
+    return *pResourceManager.get();
+}
 
 
 using namespace ::com::sun::star;
@@ -169,12 +179,11 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     m_pXSelection( nullptr )
 {
     SetName( "StarWriter" );
-    pSwResMgr = GetResMgr();
     SvxErrorHandler::ensure();
     m_pErrorHandler = new SfxErrorHandler( RID_SW_ERRHDL,
                                      ERRCODE_AREA_SW,
                                      ERRCODE_AREA_SW_END,
-                                     pSwResMgr );
+                                     &GetSwResMgr() );
 
     m_pModuleConfig = new SwModuleOptions;
 
