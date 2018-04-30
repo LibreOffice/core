@@ -558,6 +558,24 @@ DECLARE_OOXMLEXPORT_TEST(testEffectExtent, "effect-extent.docx")
         assertXPath(pXmlDoc, "//wp:effectExtent", "l", "114300");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testEffectExtentInline, "effect-extent-inline.docx")
+{
+    // The problem was that in case there was inline picture, we
+    // wrote a <wp:effectExtent> full or zeros.
+    if (xmlDocPtr pXmlDocument = parseExport("word/document.xml")) {
+        sal_Int32 aLeftExt = getXPath(pXmlDocument, "//wp:effectExtent", "l").toInt32();
+        sal_Int32 aRightExt = getXPath(pXmlDocument, "//wp:effectExtent", "r").toInt32();
+        sal_Int32 aTopExt = getXPath(pXmlDocument, "//wp:effectExtent", "t").toInt32();
+        sal_Int32 aBottomExt = getXPath(pXmlDocument, "//wp:effectExtent", "b").toInt32();
+
+        // certain degree of error is tolerated due to rounding in unit conversions
+        CPPUNIT_ASSERT(abs(609600 - aLeftExt) < 1000);
+        CPPUNIT_ASSERT(abs(590550 - aRightExt) < 1000);
+        CPPUNIT_ASSERT(abs(590550 - aTopExt) < 1000);
+        CPPUNIT_ASSERT(abs(571500 - aBottomExt) < 1000);
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testEm, "em.docx")
 {
     // Test all possible <w:em> arguments.
