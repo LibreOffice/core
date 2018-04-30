@@ -55,8 +55,6 @@ std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateVirtualDevice(SalGraphic
 void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
                            bool bDeleteColormap )
 {
-    SalColormap *pOrigDeleteColormap = m_pDeleteColormap;
-
     SalDisplay *pDisplay  = pDevice->GetDisplay();
     m_nXScreen = pDevice->GetXScreenNumber();
 
@@ -67,15 +65,15 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
     {
         m_pColormap = pColormap;
         if( bDeleteColormap )
-            m_pDeleteColormap = pColormap;
+            m_pDeleteColormap.reset(pColormap);
     }
     else if( nDeviceDepth == nVisualDepth )
         m_pColormap = &pDisplay->GetColormap( m_nXScreen );
     else if( nDeviceDepth == 1 )
-        m_pColormap = m_pDeleteColormap = new SalColormap();
-
-    if (m_pDeleteColormap != pOrigDeleteColormap)
-        delete pOrigDeleteColormap;
+    {
+        m_pDeleteColormap.reset(new SalColormap());
+        m_pColormap = m_pDeleteColormap.get();
+    }
 
     m_pVDev      = pDevice;
     m_pFrame     = nullptr;

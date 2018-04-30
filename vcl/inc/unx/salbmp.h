@@ -71,7 +71,7 @@ public:
 private:
 
     std::unique_ptr<BitmapBuffer> mpDIB;
-    ImplSalDDB*     mpDDB;
+    mutable std::unique_ptr<ImplSalDDB> mpDDB;
     bool            mbGrey;
 
 public:
