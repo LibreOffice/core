@@ -12,8 +12,9 @@
 
 #include <sfx2/dllapi.h>
 
-#include <vector>
 #include <functional>
+#include <memory>
+#include <vector>
 
 #include <sfx2/thumbnailviewitem.hxx>
 #include <vcl/ctrl.hxx>
@@ -317,7 +318,7 @@ protected:
     double mfHighlightTransparence; ///< Transparence of the highlight.
 
     Link<const ThumbnailViewItem*, void> maItemStateHdl;
-    ThumbnailItemAttributes* mpItemAttrs;
+    std::unique_ptr<ThumbnailItemAttributes> mpItemAttrs;
 
     std::function<bool (const ThumbnailViewItem*)> maFilterFunc;
 };
