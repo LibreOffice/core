@@ -86,6 +86,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,LIBLANGTAG,LANGTAGREG_TARBALL) \
 		$(call fetch_Optional,MSPUB,MSPUB_TARBALL) \
 		$(call fetch_Optional,MWAW,MWAW_TARBALL) \
+		$(call fetch_Optional,OPENSSL,OPENSSL_TARBALL) \
 		$(call fetch_Optional,ODFGEN,ODFGEN_TARBALL) \
 		$(call fetch_Optional,PYTHON,PYTHON_TARBALL) \
 		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
@@ -154,7 +155,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,NSS,$(NSS_TARBALL)) \
 		$(NUMBERTEXT_EXTENSION_PACK) \
 		$(call fetch_Optional,OPENLDAP,$(OPENLDAP_TARBALL)) \
-		$(call fetch_Optional,OPENSSL,$(OPENSSL_TARBALL)) \
 		$(call fetch_Optional,ORCUS,$(ORCUS_TARBALL)) \
 		$(call fetch_Optional,CAIRO,$(PIXMAN_TARBALL)) \
 		$(call fetch_Optional,LIBPNG,$(PNG_TARBALL)) \
