@@ -352,8 +352,9 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             SfxItemSet aNewAttr(pDrawDoc->GetItemPool(), svl::Items<ATTR_SNAPLINE_START, ATTR_SNAPLINE_END>{});
             aNewAttr.Put(SfxInt32Item(ATTR_SNAPLINE_X, 0));
             aNewAttr.Put(SfxInt32Item(ATTR_SNAPLINE_Y, 0));
+            auto const parent = getViewShell()->GetActiveWindow();
             pRetval = getSdAbstractDialogFactory()->CreateSdSnapLineDlg(
-                getViewShell()->GetActiveWindow(),
+                parent == nullptr ? nullptr : parent->GetFrameWeld(),
                 aNewAttr,
                 getDrawView());
             break;

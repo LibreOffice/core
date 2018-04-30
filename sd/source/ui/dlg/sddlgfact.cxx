@@ -52,7 +52,11 @@ IMPL_ABSTDLG_BASE(AbstractSdCustomShowDlg_Impl);
 IMPL_ABSTDLG_BASE(SdAbstractTabDialog_Impl);
 IMPL_ABSTDLG_BASE(SdPresLayoutTemplateDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdModifyFieldDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractSdSnapLineDlg_Impl);
+
+short AbstractSdSnapLineDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractSdInsertLayerDlg_Impl::Execute()
 {
@@ -197,27 +201,27 @@ SfxItemSet AbstractSdModifyFieldDlg_Impl::GetItemSet()
 
 void AbstractSdSnapLineDlg_Impl::GetAttr(SfxItemSet& rOutAttrs)
 {
-    pDlg->GetAttr(rOutAttrs);
+    m_xDlg->GetAttr(rOutAttrs);
 }
 
 void AbstractSdSnapLineDlg_Impl::HideRadioGroup()
 {
-    pDlg->HideRadioGroup();
+    m_xDlg->HideRadioGroup();
 }
 
 void AbstractSdSnapLineDlg_Impl::HideDeleteBtn()
 {
-    pDlg->HideDeleteBtn();
+    m_xDlg->HideDeleteBtn();
 }
 
 void AbstractSdSnapLineDlg_Impl::SetInputFields(bool bEnableX, bool bEnableY)
 {
-    pDlg->SetInputFields(bEnableX, bEnableY);
+    m_xDlg->SetInputFields(bEnableX, bEnableY);
 }
 
 void AbstractSdSnapLineDlg_Impl::SetText( const OUString& rStr )
 {
-    pDlg->SetText( rStr );
+    m_xDlg->set_title(rStr);
 }
 
 void AbstractSdInsertLayerDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
@@ -334,9 +338,9 @@ VclPtr<AbstractSdModifyFieldDlg> SdAbstractDialogFactory_Impl::CreateSdModifyFie
     return VclPtr<AbstractSdModifyFieldDlg_Impl>::Create( VclPtr<SdModifyFieldDlg>::Create( pParent, pInField, rSet ) );
 }
 
-VclPtr<AbstractSdSnapLineDlg> SdAbstractDialogFactory_Impl::CreateSdSnapLineDlg( vcl::Window* pParent, const SfxItemSet& rInAttrs, ::sd::View* pView)
+VclPtr<AbstractSdSnapLineDlg> SdAbstractDialogFactory_Impl::CreateSdSnapLineDlg(weld::Window* pParent, const SfxItemSet& rInAttrs, ::sd::View* pView)
 {
-    return VclPtr<AbstractSdSnapLineDlg_Impl>::Create( VclPtr<SdSnapLineDlg>::Create( pParent, rInAttrs, pView ) );
+    return VclPtr<AbstractSdSnapLineDlg_Impl>::Create(new SdSnapLineDlg(pParent, rInAttrs, pView));
 }
 
 VclPtr<AbstractSdInsertLayerDlg> SdAbstractDialogFactory_Impl::CreateSdInsertLayerDlg(weld::Window* pParent, const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr)
