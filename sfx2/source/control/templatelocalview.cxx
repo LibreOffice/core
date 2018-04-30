@@ -103,24 +103,17 @@ TemplateLocalView::~TemplateLocalView()
 
 void TemplateLocalView::dispose()
 {
-    for ( TemplateContainerItem* pRegion : maRegions)
-        delete pRegion;
-
     maRegions.clear();
 
     maAllTemplates.clear();
 
-    delete mpDocTemplates;
+    mpDocTemplates.reset();
     ThumbnailView::dispose();
 }
 
 void TemplateLocalView::Populate ()
 {
-    for (TemplateContainerItem* pRegion : maRegions)
-        delete pRegion;
-
     maRegions.clear();
-
     maAllTemplates.clear();
 
     sal_uInt16 nCount = mpDocTemplates->GetRegionCount();
@@ -128,7 +121,7 @@ void TemplateLocalView::Populate ()
     {
         OUString aRegionName(mpDocTemplates->GetFullRegionName(i));
 
-        TemplateContainerItem* pItem = new TemplateContainerItem( i+1 );
+        std::unique_ptr<TemplateContainerItem> pItem(new TemplateContainerItem( i+1 ));
         pItem->mnRegionId = i;
         pItem->maTitle = aRegionName;
 
@@ -154,7 +147,7 @@ void TemplateLocalView::Populate ()
             maAllTemplates.push_back(aProperties);
         }
 
-        maRegions.push_back(pItem);
+        maRegions.push_back(std::move(pItem));
     }
 }
 
@@ -169,11 +162,11 @@ void TemplateLocalView::reload ()
     {
         sal_uInt16 nRegionId = mnCurRegionId - 1;   //Is offset by 1
 
-        for (TemplateContainerItem* pRegion : maRegions)
+        for (auto const & pRegion : maRegions)
         {
             if (pRegion->mnRegionId == nRegionId)
             {
-                showRegion(pRegion);
+                showRegion(pRegion.get());
                 break;
             }
         }
@@ -207,11 +200,11 @@ void TemplateLocalView::showRegion(TemplateContainerItem const *pItem)
 
 void TemplateLocalView::showRegion(const OUString &rName)
 {
-    for (TemplateContainerItem* pRegion : maRegions)
+    for (auto const & pRegion : maRegions)
     {
         if (pRegion->maTitle == rName)
         {
-            showRegion(pRegion);
+            showRegion(pRegion.get());
             break;
         }
     }
@@ -219,9 +212,9 @@ void TemplateLocalView::showRegion(const OUString &rName)
 
 TemplateContainerItem* TemplateLocalView::getRegion(OUString const & rName)
 {
-    for (TemplateContainerItem* pRegion : maRegions)
+    for (auto const & pRegion : maRegions)
         if (pRegion->maTitle == rName)
-            return pRegion;
+            return pRegion.get();
 
     return nullptr;
 }
@@ -308,7 +301,7 @@ sal_uInt16 TemplateLocalView::getRegionId(size_t pos) const
 
 sal_uInt16 TemplateLocalView::getRegionId(OUString const & sRegion) const
 {
-    for (TemplateContainerItem* pRegion : maRegions)
+    for (auto const & pRegion : maRegions)
     {
         if (pRegion->maTitle == sRegion)
             return pRegion->mnId;
@@ -324,7 +317,7 @@ OUString TemplateLocalView::getRegionName(const sal_uInt16 nRegionId) const
 
 OUString TemplateLocalView::getRegionItemName(const sal_uInt16 nItemId) const
 {
-    for (const TemplateContainerItem* pRegion : maRegions)
+    for (auto const & pRegion : maRegions)
     {
         if (pRegion->mnId == nItemId)
             return pRegion->maTitle;
@@ -351,7 +344,7 @@ TemplateLocalView::getFilteredItems(const std::function<bool (const TemplateItem
 
     if (mnCurRegionId)
     {
-        TemplateContainerItem *pFolderItem = maRegions[mnCurRegionId-1];
+        TemplateContainerItem *pFolderItem = maRegions[mnCurRegionId-1].get();
 
         for (TemplateItemProperties & rItemProps : pFolderItem->maTemplates)
         {
@@ -361,7 +354,7 @@ TemplateLocalView::getFilteredItems(const std::function<bool (const TemplateItem
     }
     else
     {
-        for (const TemplateContainerItem* pFolderItem : maRegions)
+        for (auto const & pFolderItem : maRegions)
         {
             for (const TemplateItemProperties & rItemProps : pFolderItem->maTemplates)
             {
@@ -383,11 +376,11 @@ sal_uInt16 TemplateLocalView::createRegion(const OUString &rName)
         return 0;
 
     // Insert to the region cache list and to the thumbnail item list
-    TemplateContainerItem* pItem = new TemplateContainerItem( nItemId );
+    std::unique_ptr<TemplateContainerItem> pItem(new TemplateContainerItem( nItemId ));
     pItem->mnRegionId = nRegionId;
     pItem->maTitle = rName;
 
-    maRegions.push_back(pItem);
+    maRegions.push_back(std::move(pItem));
 
     return pItem->mnId;
 }
@@ -409,7 +402,7 @@ bool TemplateLocalView::removeRegion(const sal_uInt16 nItemId)
     sal_uInt16 nRegionId = USHRT_MAX;
 
     // Remove from the region cache list
-    for (std::vector<TemplateContainerItem*>::iterator pRegionIt = maRegions.begin(); pRegionIt != maRegions.end();)
+    for (auto pRegionIt = maRegions.begin(); pRegionIt != maRegions.end();)
     {
         if ( (*pRegionIt)->mnId == nItemId )
         {
@@ -418,7 +411,6 @@ bool TemplateLocalView::removeRegion(const sal_uInt16 nItemId)
 
             nRegionId = (*pRegionIt)->mnRegionId;
 
-            delete *pRegionIt;
             pRegionIt = maRegions.erase(pRegionIt);
         }
         else
@@ -446,11 +438,11 @@ bool TemplateLocalView::removeRegion(const sal_uInt16 nItemId)
 
 bool TemplateLocalView::removeTemplate (const sal_uInt16 nItemId, const sal_uInt16 nSrcItemId)
 {
-    for (TemplateContainerItem* pRegion : maRegions)
+    for (auto const & pRegion : maRegions)
     {
         if (pRegion->mnId == nSrcItemId)
         {
-            TemplateContainerItem *pItem = pRegion;
+            TemplateContainerItem *pItem = pRegion.get();
             std::vector<TemplateItemProperties>::iterator pIter;
             for (pIter = pItem->maTemplates.begin(); pIter != pItem->maTemplates.end(); ++pIter)
             {
@@ -489,12 +481,12 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
     TemplateContainerItem *pTarget = nullptr;
     TemplateContainerItem *pSrc = nullptr;
 
-    for (TemplateContainerItem* pRegion : maRegions)
+    for (auto const & pRegion : maRegions)
     {
         if (pRegion->mnId == nTargetItem)
-            pTarget = pRegion;
+            pTarget = pRegion.get();
         else if (pRegion->mnId == nSrcItem)
-            pSrc = pRegion;
+            pSrc = pRegion.get();
     }
 
     if (pTarget && pSrc)
@@ -576,10 +568,10 @@ void TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
     TemplateContainerItem *pTarget = nullptr;
     TemplateContainerItem *pSrc = nullptr;
 
-    for (TemplateContainerItem* pRegion : maRegions)
+    for (auto const & pRegion : maRegions)
     {
         if (pRegion->mnId == nTargetItem)
-            pTarget = pRegion;
+            pTarget = pRegion.get();
     }
 
     if (pTarget)
@@ -596,10 +588,10 @@ void TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
             const TemplateViewItem *pViewItem = static_cast<const TemplateViewItem*>(*aSelIter);
             sal_uInt16 nSrcRegionId = pViewItem->mnRegionId;
 
-            for (TemplateContainerItem* pRegion : maRegions)
+            for (auto const & pRegion : maRegions)
             {
                 if (pRegion->mnRegionId == nSrcRegionId)
-                    pSrc = pRegion;
+                    pSrc = pRegion.get();
             }
 
             if(pSrc)
@@ -725,7 +717,7 @@ bool TemplateLocalView::copyFrom (TemplateContainerItem *pItem, const OUString &
 
 bool TemplateLocalView::exportTo(const sal_uInt16 nItemId, const sal_uInt16 nRegionItemId, const OUString &rName)
 {
-    for (TemplateContainerItem* pRegItem : maRegions)
+    for (auto const & pRegItem : maRegions)
     {
         if (pRegItem->mnId == nRegionItemId)
         {
