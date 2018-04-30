@@ -127,7 +127,6 @@ private:
     DECL_LINK(RecentClearAllClickHdl, SvxCharView*, void);
     DECL_LINK(FavClearAllClickHdl, SvxCharView*, void);
     DECL_LINK(InsertClickHdl, weld::Button&, void);
-    DECL_STATIC_LINK(SvxCharacterMap, LoseFocusHdl, weld::Widget&, void);
     DECL_LINK(FavSelectHdl, weld::Button&, void);
     DECL_LINK(SearchUpdateHdl, weld::Entry&, void);
     DECL_LINK(SearchFieldGetFocusHdl, weld::Widget&, void);

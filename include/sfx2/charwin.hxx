@@ -45,6 +45,8 @@ private:
     DECL_LINK(DoResize, const Size& rSize, void);
     DECL_LINK(DoMouseButtonDown, const MouseEvent&, void);
     DECL_LINK(DoKeyDown, const KeyEvent&, bool);
+    DECL_LINK(DoGetFocus, weld::Widget&, void);
+    DECL_LINK(DoLoseFocus, weld::Widget&, void);
 public:
     SvxCharView(weld::Builder& rBuilder, const OString& rId, const VclPtr<VirtualDevice>& rVirDev);
 

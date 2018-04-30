@@ -39,6 +39,8 @@ SvxCharView::SvxCharView(weld::Builder& rBuilder, const OString& rId, const VclP
     mxDrawingArea->connect_draw(LINK(this, SvxCharView, DoPaint));
     mxDrawingArea->connect_mouse_press(LINK(this, SvxCharView, DoMouseButtonDown));
     mxDrawingArea->connect_key_press(LINK(this, SvxCharView, DoKeyDown));
+    mxDrawingArea->connect_focus_in(LINK(this, SvxCharView, DoGetFocus));
+    mxDrawingArea->connect_focus_out(LINK(this, SvxCharView, DoLoseFocus));
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     vcl::Font aFont = rStyleSettings.GetLabelFont();
@@ -49,6 +51,16 @@ SvxCharView::SvxCharView(weld::Builder& rBuilder, const OString& rId, const VclP
     mxDrawingArea->set_size_request(mxVirDev->approximate_digit_width() * 2,
                                     mxVirDev->GetTextHeight());
     mxVirDev->Pop();
+}
+
+IMPL_LINK_NOARG(SvxCharView, DoGetFocus, weld::Widget&, void)
+{
+    mxDrawingArea->queue_draw();
+}
+
+IMPL_LINK_NOARG(SvxCharView, DoLoseFocus, weld::Widget&, void)
+{
+    mxDrawingArea->queue_draw();
 }
 
 IMPL_LINK(SvxCharView, DoMouseButtonDown, const MouseEvent&, rMEvt, void)
