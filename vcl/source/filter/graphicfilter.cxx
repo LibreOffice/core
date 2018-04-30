@@ -22,7 +22,6 @@
 #include <o3tl/make_unique.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <comphelper/threadpool.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -74,8 +73,6 @@
 #include "graphicfilter_internal.hxx"
 
 #define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
-
-using comphelper::string::getTokenCount;
 
 typedef ::std::vector< GraphicFilter* > FilterList_impl;
 static FilterList_impl* pFilterHdlList = nullptr;
@@ -2011,11 +2008,16 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
     {
         ImpFilterLibCacheEntry* pFilter = nullptr;
 
-        // find first filter in filter paths
-        sal_Int32 i, nTokenCount = getTokenCount(aFilterPath, ';');
-        ImpFilterLibCache &rCache = Cache::get();
-        for( i = 0; ( i < nTokenCount ) && ( pFilter == nullptr ); i++ )
-            pFilter = rCache.GetFilter(aFilterPath.getToken(i, ';'), aFilterName, aExternalFilterName);
+        if (!aFilterPath.isEmpty())
+        {
+            // find first filter in filter paths
+            ImpFilterLibCache &rCache = Cache::get();
+            sal_Int32 nIdx{0};
+            do {
+                pFilter = rCache.GetFilter(aFilterPath.getToken(0, ';', nIdx), aFilterName, aExternalFilterName);
+            } while (nIdx>=0 && pFilter==nullptr);
+        }
+
         if( !pFilter )
             nStatus = ERRCODE_GRFILTER_FILTERERROR;
         else
