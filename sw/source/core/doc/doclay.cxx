@@ -1282,7 +1282,7 @@ static OUString lcl_GetUniqueFlyName(const SwDoc* pDoc, sal_uInt16 nDefStrId, RE
         return newName;
     }
 
-    ResId aId( nDefStrId, *pSwResMgr );
+    ResId aId( nDefStrId, GetSwResMgr() );
     OUString aName( aId );
     sal_Int32 nNmLen = aName.getLength();
 
@@ -1413,9 +1413,9 @@ void SwDoc::SetAllUniqueFlyNames()
 {
     sal_Int32 n, nFlyNum = 0, nGrfNum = 0, nOLENum = 0;
 
-    ResId nFrameId( STR_FRAME_DEFNAME, *pSwResMgr ),
-          nGrfId( STR_GRAPHIC_DEFNAME, *pSwResMgr ),
-          nOLEId( STR_OBJECT_DEFNAME, *pSwResMgr );
+    ResId nFrameId( STR_FRAME_DEFNAME, GetSwResMgr() ),
+          nGrfId( STR_GRAPHIC_DEFNAME, GetSwResMgr() ),
+          nOLEId( STR_OBJECT_DEFNAME, GetSwResMgr() );
     const OUString sFlyNm( nFrameId );
     const OUString sGrfNm( nGrfId );
     const OUString sOLENm( nOLEId );

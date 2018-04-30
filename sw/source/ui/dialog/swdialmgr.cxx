@@ -18,22 +18,12 @@
  */
 
 #include "dialmgr.hxx"
+#include <swtypes.hxx>
 #include <tools/resmgr.hxx>
 
-#ifndef DISABLE_DYNLOADING
-ResMgr* pSwResMgr=nullptr;
-#else
-static ResMgr *pSwResMgr;
-#endif
-
-ResMgr* SwDialogsResMgr::GetResMgr()
+ResMgr *SwDialogsResMgr::GetResMgr()
 {
-    if ( !pSwResMgr )
-    {
-        pSwResMgr = ResMgr::CreateResMgr( "sw" );
-    }
-
-    return pSwResMgr;
+    return &GetSwResMgr();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
