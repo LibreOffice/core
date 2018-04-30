@@ -200,9 +200,7 @@ public:
     virtual VclPtr<AbstractSdVectorizeDlg>     CreateSdVectorizeDlg( vcl::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell ) = 0;
     virtual VclPtr<AbstractSdPublishingDlg>    CreateSdPublishingDlg( vcl::Window* pWindow, DocumentType eDocType) = 0;
 
-    virtual VclPtr<VclAbstractDialog>          CreateMasterLayoutDialog( vcl::Window* pParent,
-                                                                  SdDrawDocument* pDoc,
-                                                                  SdPage* ) = 0;
+    virtual VclPtr<VclAbstractDialog>          CreateMasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pDoc, SdPage*) = 0;
 
     virtual VclPtr<AbstractHeaderFooterDialog> CreateHeaderFooterDialog( sd::ViewShell* pViewShell,
                                                                   vcl::Window* pParent,

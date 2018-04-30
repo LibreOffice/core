@@ -19,10 +19,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_MASTERLAYOUTDLG_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_MASTERLAYOUTDLG_HXX
 
-#include <vcl/dialog.hxx>
-
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 
 #include <sdpage.hxx>
 
@@ -31,17 +28,17 @@ class SdDrawDocument;
 namespace sd
 {
 
-class MasterLayoutDialog : public ModalDialog
+class MasterLayoutDialog : public weld::GenericDialogController
 {
 private:
     SdDrawDocument* mpDoc;
     SdPage*         mpCurrentPage;
 
-    VclPtr<CheckBox>       mpCBDate;
-    VclPtr<CheckBox>       mpCBPageNumber;
-    VclPtr<CheckBox>       mpCBSlideNumber;
-    VclPtr<CheckBox>       mpCBHeader;
-    VclPtr<CheckBox>       mpCBFooter;
+    std::unique_ptr<weld::CheckButton> mxCBDate;
+    std::unique_ptr<weld::CheckButton> mxCBPageNumber;
+    std::unique_ptr<weld::CheckButton> mxCBSlideNumber;
+    std::unique_ptr<weld::CheckButton> mxCBHeader;
+    std::unique_ptr<weld::CheckButton> mxCBFooter;
 
     bool            mbOldHeader;
     bool            mbOldFooter;
@@ -53,11 +50,10 @@ private:
     void create( PresObjKind eKind );
 
 public:
-    MasterLayoutDialog( vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage );
+    MasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage);
     virtual ~MasterLayoutDialog() override;
-    virtual void dispose() override;
 
-    virtual short Execute() override;
+    short execute();
 };
 
 }
