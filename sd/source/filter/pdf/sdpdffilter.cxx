@@ -126,7 +126,6 @@ bool SdPdfFilter::Import()
         aGraphic.setPdfData(pPdfData);
         aGraphic.setPageNumber(nPageNumber);
         aGraphic.SetGfxLink(aGfxLink);
-        aGraphic.setOriginURL(aFileName);
 
         // Create the page and insert the Graphic.
         SdPage* pPage = mrDocument.GetSdPage(nPageNumber++, PageKind::Standard);
