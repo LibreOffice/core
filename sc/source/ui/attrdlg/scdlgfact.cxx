@@ -111,7 +111,12 @@ short AbstractScInsertCellDlg_Impl::Execute()
 IMPL_ABSTDLG_BASE(AbstractScInsertContentsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScInsertTableDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScSelEntryDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScMetricInputDlg_Impl);
+
+short AbstractScMetricInputDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractScMoveTableDlg_Impl);
 
 short AbstractScNameCreateDlg_Impl::Execute()
@@ -461,9 +466,9 @@ ScConditionalFormat* AbstractScCondFormatManagerDlg_Impl::GetCondFormatSelected(
     return pDlg->GetCondFormatSelected();
 }
 
-long AbstractScMetricInputDlg_Impl::GetInputValue() const
+int AbstractScMetricInputDlg_Impl::GetInputValue() const
 {
-    return pDlg->GetInputValue();
+    return m_xDlg->GetInputValue();
 }
 
 sal_uInt16 AbstractScMoveTableDlg_Impl::GetSelectedDocument() const
@@ -762,7 +767,7 @@ VclPtr<AbstractScLinkedAreaDlg> ScAbstractDialogFactory_Impl::CreateScLinkedArea
     return VclPtr<AbstractScLinkedAreaDlg_Impl>::Create(new ScLinkedAreaDlg(pParent));
 }
 
-VclPtr<AbstractScMetricInputDlg> ScAbstractDialogFactory_Impl::CreateScMetricInputDlg (  vcl::Window*      pParent,
+VclPtr<AbstractScMetricInputDlg> ScAbstractDialogFactory_Impl::CreateScMetricInputDlg(weld::Window* pParent,
                                                                 const OString& sDialogName,
                                                                 long            nCurrent,
                                                                 long            nDefault,
@@ -771,9 +776,8 @@ VclPtr<AbstractScMetricInputDlg> ScAbstractDialogFactory_Impl::CreateScMetricInp
                                                                 long            nMaximum ,
                                                                 long            nMinimum )
 {
-    VclPtr<ScMetricInputDlg> pDlg = VclPtr<ScMetricInputDlg>::Create(pParent, sDialogName, nCurrent ,nDefault, eFUnit,
-        nDecimals, nMaximum , nMinimum , 1, 100);
-    return VclPtr<AbstractScMetricInputDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScMetricInputDlg_Impl>::Create(new ScMetricInputDlg(pParent, sDialogName, nCurrent ,nDefault, eFUnit,
+        nDecimals, nMaximum , nMinimum));
 }
 
 VclPtr<AbstractScMoveTableDlg> ScAbstractDialogFactory_Impl::CreateScMoveTableDlg(vcl::Window* pParent,

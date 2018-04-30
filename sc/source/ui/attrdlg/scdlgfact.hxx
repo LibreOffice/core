@@ -284,8 +284,14 @@ public:
 
 class AbstractScMetricInputDlg_Impl : public AbstractScMetricInputDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScMetricInputDlg_Impl, ScMetricInputDlg)
-    virtual long GetInputValue() const override;
+    std::unique_ptr<ScMetricInputDlg> m_xDlg;
+public:
+    explicit AbstractScMetricInputDlg_Impl(ScMetricInputDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
+    virtual int GetInputValue() const override;
 };
 
 class AbstractScMoveTableDlg_Impl : public AbstractScMoveTableDlg
@@ -491,7 +497,7 @@ public:
 
     virtual VclPtr<AbstractScLinkedAreaDlg> CreateScLinkedAreaDlg(weld::Window* pParent) override;
 
-    virtual VclPtr<AbstractScMetricInputDlg> CreateScMetricInputDlg (  vcl::Window*        pParent,
+    virtual VclPtr<AbstractScMetricInputDlg> CreateScMetricInputDlg(weld::Window* pParent,
                                                                 const OString&  sDialogName,
                                                                 long            nCurrent,
                                                                 long            nDefault,

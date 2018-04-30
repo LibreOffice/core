@@ -21,60 +21,51 @@
 
 #include <mtrindlg.hxx>
 
-ScMetricInputDlg::ScMetricInputDlg( vcl::Window*         pParent,
+ScMetricInputDlg::ScMetricInputDlg( weld::Window*         pParent,
                                     const OString&  sDialogName,
                                     long            nCurrent,
                                     long            nDefault,
                                     FieldUnit       eFUnit,
                                     sal_uInt16      nDecimals,
                                     long            nMaximum,
-                                    long            nMinimum,
-                                    long            nFirst,
-                                    long            nLast )
+                                    long            nMinimum)
 
-    :   ModalDialog(pParent, OStringToOUString(sDialogName, RTL_TEXTENCODING_UTF8),
-            OStringToOUString("modules/scalc/ui/" +
-                sDialogName.toAsciiLowerCase() + ".ui", RTL_TEXTENCODING_UTF8))
+    : GenericDialogController(pParent, OStringToOUString("modules/scalc/ui/" +
+        sDialogName.toAsciiLowerCase() + ".ui", RTL_TEXTENCODING_UTF8), sDialogName)
+    , m_xEdValue(m_xBuilder->weld_metric_spin_button("value", FUNIT_CM))
+    , m_xBtnDefVal(m_xBuilder->weld_check_button("default"))
 {
-    get(m_pEdValue, "value");
-    get(m_pBtnDefVal, "default");
+    m_xBtnDefVal->connect_clicked(LINK(this, ScMetricInputDlg, SetDefValHdl));
+    m_xEdValue->connect_value_changed(LINK( this, ScMetricInputDlg, ModifyHdl));
 
-    m_pBtnDefVal->SetClickHdl ( LINK( this, ScMetricInputDlg, SetDefValHdl ) );
-    m_pEdValue->SetModifyHdl( LINK( this, ScMetricInputDlg, ModifyHdl    ) );
+    m_xEdValue->set_unit(eFUnit);
+    m_xEdValue->set_digits(nDecimals);
+    m_xEdValue->set_range(m_xEdValue->normalize(nMinimum),
+                          m_xEdValue->normalize(nMaximum), FUNIT_TWIP);
 
-    m_pEdValue->SetUnit            ( eFUnit );
-    m_pEdValue->SetDecimalDigits   ( nDecimals );
-    m_pEdValue->SetMax             ( m_pEdValue->Normalize( nMaximum ), FUNIT_TWIP );
-    m_pEdValue->SetMin             ( m_pEdValue->Normalize( nMinimum ), FUNIT_TWIP );
-    m_pEdValue->SetLast            ( m_pEdValue->Normalize( nLast ),    FUNIT_TWIP );
-    m_pEdValue->SetFirst           ( m_pEdValue->Normalize( nFirst ),   FUNIT_TWIP );
-    m_pEdValue->SetSpinSize        ( m_pEdValue->Normalize( 1 ) / 10 );
-    m_pEdValue->SetValue           ( m_pEdValue->Normalize( nDefault ), FUNIT_TWIP );
-    nDefaultValue = sal::static_int_cast<long>( m_pEdValue->GetValue() );
-    m_pEdValue->SetValue           ( m_pEdValue->Normalize( nCurrent ), FUNIT_TWIP );
-    nCurrentValue = sal::static_int_cast<long>( m_pEdValue->GetValue() );
-    m_pBtnDefVal->Check( nCurrentValue == nDefaultValue );
+    int nMin(0), nMax(0);
+    m_xEdValue->get_range(nMin, nMax, FUNIT_TWIP);
+
+    auto nIncrement = m_xEdValue->normalize(1);
+    m_xEdValue->set_increments(nIncrement / 10, nIncrement, FUNIT_NONE);
+    m_xEdValue->set_value(m_xEdValue->normalize(nDefault), FUNIT_TWIP);
+    nDefaultValue = m_xEdValue->get_value(FUNIT_NONE);
+    m_xEdValue->set_value(m_xEdValue->normalize(nCurrent), FUNIT_TWIP);
+    nCurrentValue = m_xEdValue->get_value(FUNIT_NONE);
+    m_xBtnDefVal->set_active(nCurrentValue == nDefaultValue);
 }
 
 ScMetricInputDlg::~ScMetricInputDlg()
 {
-    disposeOnce();
 }
 
-void ScMetricInputDlg::dispose()
-{
-    m_pEdValue.clear();
-    m_pBtnDefVal.clear();
-    ModalDialog::dispose();
-}
-
-long ScMetricInputDlg::GetInputValue() const
+int ScMetricInputDlg::GetInputValue() const
 {
 /*
     with decimal digits
 
-    double  nVal    = m_pEdValue->GetValue( eUnit );
-    sal_uInt16  nDecs   = m_pEdValue->GetDecimalDigits();
+    double  nVal    = m_xEdValue->GetValue( eUnit );
+    sal_uInt16  nDecs   = m_xEdValue->GetDecimalDigits();
     double  nFactor = 0.0;
 
     // static long ImpPower10( sal_uInt16 nDecs )
@@ -89,25 +80,25 @@ long ScMetricInputDlg::GetInputValue() const
 */
     // first cut off the decimal digits - not that great...
 
-    return sal::static_int_cast<long>( m_pEdValue->Denormalize( m_pEdValue->GetValue( FUNIT_TWIP ) ) );
+    return m_xEdValue->denormalize(m_xEdValue->get_value(FUNIT_TWIP));
 }
 
 // Handler:
 
-IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl, Button*, void)
+IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl, weld::Button&, void)
 {
-    if ( m_pBtnDefVal->IsChecked() )
+    if (m_xBtnDefVal->get_active())
     {
-        nCurrentValue = sal::static_int_cast<long>( m_pEdValue->GetValue() );
-        m_pEdValue->SetValue( nDefaultValue );
+        nCurrentValue = m_xEdValue->get_value(FUNIT_NONE);
+        m_xEdValue->set_value(nDefaultValue, FUNIT_NONE);
     }
     else
-        m_pEdValue->SetValue( nCurrentValue );
+        m_xEdValue->set_value(nCurrentValue, FUNIT_NONE);
 }
 
-IMPL_LINK_NOARG(ScMetricInputDlg, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(ScMetricInputDlg, ModifyHdl, weld::MetricSpinButton&, void)
 {
-    m_pBtnDefVal->Check( nDefaultValue == m_pEdValue->GetValue() );
+    m_xBtnDefVal->set_active(nDefaultValue == m_xEdValue->get_value(FUNIT_NONE));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
