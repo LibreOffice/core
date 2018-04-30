@@ -266,7 +266,6 @@ protected:
     Link<TreeView&, void> m_aRowActivatedHdl;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
-
     void signal_row_activated() { m_aRowActivatedHdl.Call(*this); }
 
 public:
@@ -278,19 +277,9 @@ public:
     {
         insert(-1, rId, rStr, rImage);
     }
+
     virtual int n_children() const = 0;
-    virtual void select(int pos) = 0;
-    virtual void remove(int pos) = 0;
-    virtual int find(const OUString& rText) const = 0;
-    virtual int find_id(const OUString& rId) const = 0;
-    virtual void set_top_entry(int pos) = 0;
     virtual void clear() = 0;
-    virtual OUString get_selected() const = 0;
-    virtual std::vector<OUString> get_selected_rows() const = 0;
-    OUString get_selected_id() const { return get_id(get_selected_index()); }
-    virtual int get_selected_index() const = 0;
-    virtual OUString get(int pos) const = 0;
-    virtual OUString get_id(int pos) const = 0;
     virtual int get_height_rows(int nRows) const = 0;
 
     virtual void freeze() = 0;
@@ -300,13 +289,36 @@ public:
     virtual int count_selected_rows() const = 0;
 
     void connect_changed(const Link<TreeView&, void>& rLink) { m_aChangeHdl = rLink; }
-
     void connect_row_activated(const Link<TreeView&, void>& rLink) { m_aRowActivatedHdl = rLink; }
 
-    void select(const OUString& rText) { select(find(rText)); }
-    void select_id(const OUString& rId) { select(find_id(rId)); }
+    //by index
+    virtual int get_selected_index() const = 0;
+    virtual void select(int pos) = 0;
+    virtual void remove(int pos) = 0;
+    virtual void set_top_entry(int pos) = 0;
+    virtual std::vector<int> get_selected_rows() const = 0;
 
-    void remove(const OUString& rText) { remove(find(rText)); }
+    //by text
+    virtual OUString get(int pos) const = 0;
+    virtual int find(const OUString& rText) const = 0;
+    OUString get_selected_text() const { return get(get_selected_index()); }
+    void select_text(const OUString& rText) { select(find(rText)); }
+    void remove_text(const OUString& rText) { remove(find(rText)); }
+    std::vector<OUString> get_selected_rows_text() const
+    {
+        std::vector<int> aRows(get_selected_rows());
+        std::vector<OUString> aRet;
+        aRet.reserve(aRows.size());
+        for (auto a : aRows)
+            aRet.push_back(get(a));
+        return aRet;
+    }
+
+    //by id
+    virtual OUString get_id(int pos) const = 0;
+    virtual int find_id(const OUString& rId) const = 0;
+    OUString get_selected_id() const { return get_id(get_selected_index()); }
+    void select_id(const OUString& rId) { select(find_id(rId)); }
 };
 
 class VCL_DLLPUBLIC Button : virtual public Container

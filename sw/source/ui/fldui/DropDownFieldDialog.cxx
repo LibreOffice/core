@@ -70,7 +70,7 @@ sw::DropDownFieldDialog::DropDownFieldDialog(weld::Window *pParent, SwWrtShell &
         const OUString* pArray = aItems.getConstArray();
         for (sal_Int32 i = 0; i < aItems.getLength(); ++i)
             m_xListItemsLB->append_text(pArray[i]);
-        m_xListItemsLB->select(m_pDropField->GetSelectedItem());
+        m_xListItemsLB->select_text(m_pDropField->GetSelectedItem());
     }
 
     bool bEnable = !m_rSh.IsCursorReadonly();
@@ -87,7 +87,7 @@ void sw::DropDownFieldDialog::Apply()
 {
     if (m_pDropField)
     {
-        OUString sSelect = m_xListItemsLB->get_selected();
+        OUString sSelect = m_xListItemsLB->get_selected_text();
         if (m_pDropField->GetPar1() != sSelect)
         {
             m_rSh.StartAllAction();
