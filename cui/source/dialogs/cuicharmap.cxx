@@ -485,12 +485,10 @@ void SvxCharacterMap::init()
         m_xRecentCharView[i]->setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
         m_xRecentCharView[i]->setClearClickHdl(LINK(this,SvxCharacterMap, RecentClearClickHdl));
         m_xRecentCharView[i]->setClearAllClickHdl(LINK(this,SvxCharacterMap, RecentClearAllClickHdl));
-        m_xRecentCharView[i]->connect_focus_out(LINK(this,SvxCharacterMap, LoseFocusHdl));
         m_xFavCharView[i]->SetHasInsert(m_bHasInsert);
         m_xFavCharView[i]->setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
         m_xFavCharView[i]->setClearClickHdl(LINK(this,SvxCharacterMap, FavClearClickHdl));
         m_xFavCharView[i]->setClearAllClickHdl(LINK(this,SvxCharacterMap, FavClearAllClickHdl));
-        m_xFavCharView[i]->connect_focus_out(LINK(this,SvxCharacterMap, LoseFocusHdl));
     }
 
     setCharName(90);
@@ -899,11 +897,6 @@ IMPL_LINK_NOARG(SvxCharacterMap, InsertClickHdl, weld::Button&, void)
 {
    insertCharToDoc(m_xShowChar->GetText());
    m_xDialog->response(RET_OK);
-}
-
-IMPL_STATIC_LINK(SvxCharacterMap, LoseFocusHdl, weld::Widget&, rItem, void)
-{
-    dynamic_cast<weld::DrawingArea&>(rItem).queue_draw();
 }
 
 IMPL_LINK_NOARG(SvxCharacterMap, FavSelectHdl, weld::Button&, void)
