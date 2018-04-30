@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_4c6f46c5",
+        "filename": "forms/source/richtext/rtattributes.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-30T06:21:24Z",
+      "side": 1,
+      "message": "judging by the code pattern, I strongly suspect that the original code is slightly broken, and that the original last line was meant to be:\n   return *pItemHandleItem \u003d\u003d *_rRHS.pItemHandleItem;",
+      "revId": "0cecf766d25ed12c01f522d0bbc0cdc52fd666f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
