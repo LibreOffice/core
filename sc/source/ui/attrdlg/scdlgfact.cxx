@@ -97,7 +97,11 @@ short AbstractScDeleteContentsDlg_Impl::Execute()
 }
 
 IMPL_ABSTDLG_BASE(AbstractScFillSeriesDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScGroupDlg_Impl);
+
+short AbstractScGroupDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractScInsertCellDlg_Impl::Execute()
 {
@@ -307,7 +311,7 @@ void    AbstractScFillSeriesDlg_Impl::SetEdStartValEnabled(bool bFlag)
 
 bool AbstractScGroupDlg_Impl::GetColsChecked() const
 {
-    return pDlg->GetColsChecked();
+    return m_xDlg->GetColsChecked();
 }
 
 InsCellCmd  AbstractScInsertCellDlg_Impl::GetInsCellCmd() const
@@ -721,11 +725,9 @@ VclPtr<AbstractScFillSeriesDlg> ScAbstractDialogFactory_Impl::CreateScFillSeries
     return VclPtr<AbstractScFillSeriesDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractScGroupDlg> ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg( vcl::Window* pParent,
-                                                            bool bUnGroup )
+VclPtr<AbstractScGroupDlg> ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg(weld::Window* pParent, bool bUnGroup)
 {
-    VclPtr<ScGroupDlg> pDlg = VclPtr<ScGroupDlg>::Create( pParent, bUnGroup, true/*bRows*/);
-    return VclPtr<AbstractScGroupDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScGroupDlg_Impl>::Create(new ScGroupDlg(pParent, bUnGroup, true/*bRows*/));
 }
 
 VclPtr<AbstractScInsertCellDlg> ScAbstractDialogFactory_Impl::CreateScInsertCellDlg(weld::Window* pParent,
