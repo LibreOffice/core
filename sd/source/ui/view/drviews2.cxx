@@ -1798,7 +1798,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 aNewAttr.Put( makeSdAttrLayerThisPage() );
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(GetActiveWindow(), aNewAttr, true, SdResId(STR_INSERTLAYER)) : nullptr);
+                vcl::Window* pWin = GetActiveWindow();
+                ScopedVclPtr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(pWin ? pWin->GetFrameWeld() : nullptr, aNewAttr, true, SdResId(STR_INSERTLAYER)) : nullptr);
                 if( pDlg )
                 {
                     pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_INSERTLAYER )->GetCommand() );
@@ -1965,7 +1966,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 aNewAttr.Put( makeSdAttrLayerThisPage() );
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(GetActiveWindow(), aNewAttr, bDelete, SdResId(STR_MODIFYLAYER)) : nullptr);
+                vcl::Window* pWin = GetActiveWindow();
+                ScopedVclPtr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(pWin ? pWin->GetFrameWeld() : nullptr, aNewAttr, bDelete, SdResId(STR_MODIFYLAYER)) : nullptr);
                 if( pDlg )
                 {
                     pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_MODIFYLAYER )->GetCommand() );

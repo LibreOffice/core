@@ -372,8 +372,9 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             aNewAttr.Put(makeSdAttrLayerPrintable());
             aNewAttr.Put(makeSdAttrLayerLocked());
             aNewAttr.Put(makeSdAttrLayerThisPage());
+            auto const parent = getViewShell()->GetActiveWindow();
             pRetval = getSdAbstractDialogFactory()->CreateSdInsertLayerDlg(
-                getViewShell()->GetActiveWindow(),
+                parent == nullptr ? nullptr : parent->GetFrameWeld(),
                 aNewAttr,
                 true, // alternative: false
                 SdResId(STR_INSERTLAYER) /* alternative: STR_MODIFYLAYER */);
