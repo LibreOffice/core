@@ -945,8 +945,9 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
 
             // Adjust the X position of all glyphs in the cluster.
             size_t j = i;
-            while (j-- > 0)
+            while (j > 0)
             {
+                --j;
                 if (!m_GlyphItems[j].IsInCluster())
                     break;
                 m_GlyphItems[j].maLinearPos.AdjustX(nDelta + nDiff);
