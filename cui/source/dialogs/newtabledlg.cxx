@@ -19,11 +19,11 @@
 
 #include <newtabledlg.hxx>
 
-SvxNewTableDialog::SvxNewTableDialog()
-    : m_pDialog( VclPtr<ModalDialog>::Create( nullptr, "NewTableDialog", "cui/ui/newtabledialog.ui" ) )
+SvxNewTableDialog::SvxNewTableDialog(weld::Window* pWindow)
+    : GenericDialogController(pWindow, "cui/ui/newtabledialog.ui", "NewTableDialog")
+    , mxNumColumns(m_xBuilder->weld_spin_button("columns"))
+    , mxNumRows(m_xBuilder->weld_spin_button("rows"))
 {
-    m_pDialog->get(mpNumRows, "rows");
-    m_pDialog->get(mpNumColumns, "columns");
 }
 
 SvxNewTableDialog::~SvxNewTableDialog()
@@ -31,27 +31,19 @@ SvxNewTableDialog::~SvxNewTableDialog()
     disposeOnce();
 }
 
-void SvxNewTableDialog::dispose()
-{
-    mpNumColumns.clear();
-    mpNumRows.clear();
-    m_pDialog.disposeAndClear();
-    SvxAbstractNewTableDialog::dispose();
-}
-
 short SvxNewTableDialog::Execute()
 {
-    return m_pDialog->Execute();
+    return m_xDialog->run();
 }
 
 sal_Int32 SvxNewTableDialog::getRows() const
 {
-    return sal::static_int_cast< sal_Int32 >( mpNumRows->GetValue() );
+    return sal::static_int_cast< sal_Int32 >( mxNumRows->get_value() );
 }
 
 sal_Int32 SvxNewTableDialog::getColumns() const
 {
-    return sal::static_int_cast< sal_Int32 >( mpNumColumns->GetValue() );
+    return sal::static_int_cast< sal_Int32 >( mxNumColumns->get_value() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
