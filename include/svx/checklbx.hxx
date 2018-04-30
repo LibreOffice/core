@@ -28,6 +28,7 @@
 #include <tools/wintypes.hxx>
 #include <vcl/event.hxx>
 #include <vcl/window.hxx>
+#include <memory>
 
 class Image;
 class SvLBoxButtonData;
@@ -40,7 +41,7 @@ class SVX_DLLPUBLIC SvxCheckListBox : public SvTreeListBox
     using Window::GetText;
 
 private:
-    SvLBoxButtonData*   pCheckButton;
+    std::unique_ptr<SvLBoxButtonData> pCheckButton;
 
     SVX_DLLPRIVATE void             Init_Impl();
 

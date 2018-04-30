@@ -44,14 +44,14 @@ SvxCheckListBox::~SvxCheckListBox()
 
 void SvxCheckListBox::dispose()
 {
-    delete pCheckButton;
+    pCheckButton.reset();
     SvTreeListBox::dispose();
 }
 
 void SvxCheckListBox::Init_Impl()
 {
-    pCheckButton = new SvLBoxButtonData( this );
-    EnableCheckButton( pCheckButton );
+    pCheckButton.reset(new SvLBoxButtonData( this ));
+    EnableCheckButton( pCheckButton.get() );
 }
 
 void SvxCheckListBox::InsertEntry( const OUString& rStr, sal_uLong nPos,
