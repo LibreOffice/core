@@ -563,8 +563,9 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             CPPUNIT_ASSERT(pDrawDoc);
             SdPage* pSdPage = pDrawDoc->GetSdPage(0, PageKind::Standard);
             CPPUNIT_ASSERT(pSdPage);
+            auto const parent = Application::GetDefDialogParent();
             pRetval = getSdAbstractDialogFactory()->CreateMasterLayoutDialog(
-                Application::GetDefDialogParent(),
+                parent == nullptr ? nullptr : parent->GetFrameWeld(),
                 pDrawDoc,
                 pSdPage);
             break;

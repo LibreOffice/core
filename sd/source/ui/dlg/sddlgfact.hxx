@@ -53,14 +53,24 @@ namespace sd {
     class MorphDlg;
     class CopyDlg;
     class BreakDlg;
+    class HeaderFooterDialog;
+    class MasterLayoutDialog;
     class OutlineBulletDlg;
-        class HeaderFooterDialog;
 }
 
 class Dialog;
 class SdVclAbstractDialog_Impl : public VclAbstractDialog
 {
     DECL_ABSTDLG_BASE(SdVclAbstractDialog_Impl,Dialog)
+};
+
+class AbstractMasterLayoutDialog_Impl : public VclAbstractDialog
+{
+private:
+    std::unique_ptr<sd::MasterLayoutDialog> m_xDlg;
+public:
+    AbstractMasterLayoutDialog_Impl(::sd::MasterLayoutDialog* pDlg);
+    virtual short Execute() override;
 };
 
 class AbstractBreakDlg_Impl : public VclAbstractDialog
@@ -239,9 +249,7 @@ public:
 
     virtual VclPtr<VclAbstractDialog>          CreateSdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pDoc) override;
 
-    virtual VclPtr<VclAbstractDialog>          CreateMasterLayoutDialog( vcl::Window* pParent,
-                                                                  SdDrawDocument* pDoc,
-                                                                  SdPage* ) override;
+    virtual VclPtr<VclAbstractDialog>          CreateMasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pDoc, SdPage*) override;
 
     virtual VclPtr<AbstractHeaderFooterDialog> CreateHeaderFooterDialog( sd::ViewShell* pViewShell,
                                                                   vcl::Window* pParent,

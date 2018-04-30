@@ -74,6 +74,16 @@ short AbstractBreakDlg_Impl::Execute()
     return m_xDlg->execute();
 }
 
+AbstractMasterLayoutDialog_Impl::AbstractMasterLayoutDialog_Impl(::sd::MasterLayoutDialog* pDlg)
+    : m_xDlg(pDlg)
+{
+}
+
+short AbstractMasterLayoutDialog_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
+
 void AbstractCopyDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
 {
     pDlg->GetAttr( rOutAttrs );
@@ -406,10 +416,9 @@ CreateTabPage SdAbstractDialogFactory_Impl::GetSdOptionsSnapTabPageCreatorFunc()
     return SdTpOptionsSnap::Create;
 }
 
-VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateMasterLayoutDialog( vcl::Window* pParent,
-    SdDrawDocument* pDoc, SdPage* pCurrentPage )
+VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateMasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage)
 {
-  return VclPtr<SdVclAbstractDialog_Impl>::Create( VclPtr<::sd::MasterLayoutDialog>::Create( pParent, pDoc, pCurrentPage ));
+  return VclPtr<AbstractMasterLayoutDialog_Impl>::Create(new ::sd::MasterLayoutDialog(pParent, pDoc, pCurrentPage));
 }
 
 VclPtr<AbstractHeaderFooterDialog> SdAbstractDialogFactory_Impl::CreateHeaderFooterDialog( sd::ViewShell* pViewShell,

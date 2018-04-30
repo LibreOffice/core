@@ -315,7 +315,8 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             if (pFact)
             {
-                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateMasterLayoutDialog( GetActiveWindow(), GetDoc(), pPage ));
+                vcl::Window* pWin = GetActiveWindow();
+                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateMasterLayoutDialog(pWin ? pWin->GetFrameWeld() : nullptr, GetDoc(), pPage));
                 pDlg->Execute();
                 Invalidate();
             }
