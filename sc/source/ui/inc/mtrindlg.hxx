@@ -20,37 +20,31 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_MTRINDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_MTRINDLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/field.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 
-class ScMetricInputDlg : public ModalDialog
+class ScMetricInputDlg : public weld::GenericDialogController
 {
 public:
-    ScMetricInputDlg( vcl::Window*   pParent,
+    ScMetricInputDlg( weld::Window*   pParent,
                       const OString& sDialogName,
                       long           nCurrent,
                       long           nDefault,
                       FieldUnit      eFUnit,
                       sal_uInt16     nDecimals,
                       long           nMaximum,
-                      long           nMinimum,
-                      long           nFirst,
-                      long           nLast );
+                      long           nMinimum);
     virtual ~ScMetricInputDlg() override;
-    virtual void dispose() override;
 
-    long GetInputValue() const;
+    int GetInputValue() const;
 
 private:
-    VclPtr<MetricField>    m_pEdValue;
-    VclPtr<CheckBox>       m_pBtnDefVal;
-    long            nDefaultValue;
-    long            nCurrentValue;
+    std::unique_ptr<weld::MetricSpinButton> m_xEdValue;
+    std::unique_ptr<weld::CheckButton> m_xBtnDefVal;
+    int nDefaultValue;
+    int nCurrentValue;
 
-    DECL_LINK(SetDefValHdl, Button*, void);
-    DECL_LINK(ModifyHdl, Edit&, void);
+    DECL_LINK(SetDefValHdl, weld::Button&, void);
+    DECL_LINK(ModifyHdl, weld::MetricSpinButton&, void);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_MTRINDLG_HXX

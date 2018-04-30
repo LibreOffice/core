@@ -241,9 +241,9 @@ public:
 class AbstractScMetricInputDlg : public VclAbstractDialog
 {
 protected:
-    virtual             ~AbstractScMetricInputDlg() override = default;
+    virtual ~AbstractScMetricInputDlg() override = default;
 public:
-    virtual long GetInputValue() const = 0;
+    virtual int GetInputValue() const = 0;
 };
 
 class AbstractScMoveTableDlg : public VclAbstractDialog
@@ -455,7 +455,7 @@ public:
                                                           const std::vector<OUString> &rEntryList ) = 0;
     virtual VclPtr<AbstractScLinkedAreaDlg> CreateScLinkedAreaDlg(weld::Window* pParent) = 0;
 
-    virtual VclPtr<AbstractScMetricInputDlg> CreateScMetricInputDlg ( vcl::Window*        pParent,
+    virtual VclPtr<AbstractScMetricInputDlg> CreateScMetricInputDlg(weld::Window* pParent,
                                                                 const OString&  sDialogName,
                                                                 long            nCurrent,
                                                                 long            nDefault,
