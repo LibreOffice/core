@@ -233,11 +233,7 @@ basegfx::B2DPolyPolygon E3dScene::TakeXorPoly() const
 
 void E3dScene::ImpCleanup3DDepthMapper()
 {
-    if(mp3DDepthRemapper)
-    {
-        delete mp3DDepthRemapper;
-        mp3DDepthRemapper = nullptr;
-    }
+    mp3DDepthRemapper.reset();
 }
 
 sal_uInt32 E3dScene::RemapOrdNum(sal_uInt32 nNewOrdNum) const
@@ -248,7 +244,7 @@ sal_uInt32 E3dScene::RemapOrdNum(sal_uInt32 nNewOrdNum) const
 
         if(nObjCount > 1)
         {
-            const_cast<E3dScene*>(this)->mp3DDepthRemapper = new Imp3DDepthRemapper(*this);
+            mp3DDepthRemapper.reset(new Imp3DDepthRemapper(*this));
         }
     }
 

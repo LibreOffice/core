@@ -24,6 +24,7 @@
 #include <tools/b3dtrans.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/obj3d.hxx>
+#include <memory>
 
 namespace sdr { namespace properties {
     class BaseProperties;
@@ -70,7 +71,7 @@ protected:
     B3dCamera                   aCameraSet;
     Camera3D                    aCamera;
 
-    Imp3DDepthRemapper*         mp3DDepthRemapper;
+    mutable std::unique_ptr<Imp3DDepthRemapper> mp3DDepthRemapper;
 
     // Flag to determine if only selected objects should be drawn
     bool                        bDrawOnlySelected       : 1;
