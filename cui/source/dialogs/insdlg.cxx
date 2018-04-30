@@ -183,7 +183,7 @@ short SvInsertOleDlg::execute()
         if ( bCreateNew )
         {
             // create and insert new embedded object
-            OUString aServerName = m_xLbObjecttype->get_selected();
+            OUString aServerName = m_xLbObjecttype->get_selected_text();
             const SvObjectServer* pS = m_pServers->Get( aServerName );
             if ( pS )
             {

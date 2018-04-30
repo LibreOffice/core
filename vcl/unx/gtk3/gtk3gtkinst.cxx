@@ -1944,6 +1944,7 @@ private:
 
         hide();
         m_aFunc(GtkToVcl(ret));
+        m_aFunc = nullptr;
         m_xDialogController.reset();
     }
 public:
@@ -3103,34 +3104,16 @@ public:
         enable_notify_events();
     }
 
-    virtual OUString get_selected() const override
+    virtual std::vector<int> get_selected_rows() const override
     {
-        assert(gtk_tree_selection_get_mode(gtk_tree_view_get_selection(m_pTreeView)) == GTK_SELECTION_SINGLE);
-
-        OUString sRet;
-        GtkTreeIter iter;
-        GtkTreeModel* pModel;
-        if (gtk_tree_selection_get_selected(gtk_tree_view_get_selection(m_pTreeView), &pModel, &iter))
-        {
-            gchar *pStr = nullptr;
-            gtk_tree_model_get(pModel, &iter, 0, &pStr, -1);
-            sRet = OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
-            g_free(pStr);
-        }
-        return sRet;
-    }
-
-    virtual std::vector<OUString> get_selected_rows() const override
-    {
-        std::vector<OUString> aRows;
+        std::vector<int> aRows;
 
         GtkTreeModel* pModel;
         GList* pList = gtk_tree_selection_get_selected_rows(gtk_tree_view_get_selection(m_pTreeView), &pModel);
         for (GList* pItem = g_list_first(pList); pItem; pItem = g_list_next(pItem))
         {
             GtkTreePath* path = static_cast<GtkTreePath*>(pItem->data);
-            int nRow = gtk_tree_path_get_indices(path)[0];
-            aRows.push_back(get(nRow));
+            aRows.push_back(gtk_tree_path_get_indices(path)[0]);
         }
         g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
 
