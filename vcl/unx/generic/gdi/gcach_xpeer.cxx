@@ -61,28 +61,23 @@ namespace
     struct GlyphCacheHolder
     {
     private:
-        X11GlyphCache* m_pX11GlyphCache;
+        std::unique_ptr<X11GlyphCache> m_pX11GlyphCache;
 
         GlyphCacheHolder(const GlyphCacheHolder&) = delete;
         GlyphCacheHolder& operator=(const GlyphCacheHolder&) = delete;
 
     public:
         GlyphCacheHolder()
+            : m_pX11GlyphCache(new X11GlyphCache)
         {
-            m_pX11GlyphCache = new X11GlyphCache;
         }
         void release()
         {
-            delete m_pX11GlyphCache;
-            m_pX11GlyphCache = nullptr;
+            m_pX11GlyphCache.reset();
         }
         X11GlyphCache& getGlyphCache()
         {
             return *m_pX11GlyphCache;
-        }
-        ~GlyphCacheHolder()
-        {
-            release();
         }
     };
 
