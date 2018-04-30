@@ -22,32 +22,28 @@
 
 #include <sddllapi.h>
 
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/vclmedit.hxx>
+#include <vcl/weld.hxx>
 
 class SfxItemSet;
 
-class SD_DLLPUBLIC SdInsertLayerDlg : public ModalDialog
+class SD_DLLPUBLIC SdInsertLayerDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<Edit>               m_pEdtName;
-    VclPtr<Edit>               m_pEdtTitle;
-    VclPtr<VclMultiLineEdit>   m_pEdtDesc;
-    VclPtr<CheckBox>           m_pCbxVisible;
-    VclPtr<CheckBox>           m_pCbxPrintable;
-    VclPtr<CheckBox>           m_pCbxLocked;
-
     const SfxItemSet&   mrOutAttrs;
+
+    std::unique_ptr<weld::Entry> m_xEdtName;
+    std::unique_ptr<weld::Entry> m_xEdtTitle;
+    std::unique_ptr<weld::TextView> m_xEdtDesc;
+    std::unique_ptr<weld::CheckButton> m_xCbxVisible;
+    std::unique_ptr<weld::CheckButton> m_xCbxPrintable;
+    std::unique_ptr<weld::CheckButton> m_xCbxLocked;
+    std::unique_ptr<weld::Widget> m_xNameFrame;
 
 public:
 
-    SdInsertLayerDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs,
-        bool bDeletable, const OUString& rStr );
+    SdInsertLayerDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs,
+        bool bDeletable, const OUString& rStr);
     virtual ~SdInsertLayerDlg() override;
-    virtual void dispose() override;
 
     void                GetAttr( SfxItemSet& rOutAttrs );
 };

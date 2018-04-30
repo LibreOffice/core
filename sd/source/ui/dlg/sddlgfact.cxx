@@ -53,7 +53,12 @@ IMPL_ABSTDLG_BASE(SdAbstractTabDialog_Impl);
 IMPL_ABSTDLG_BASE(SdPresLayoutTemplateDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdModifyFieldDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdSnapLineDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractSdInsertLayerDlg_Impl);
+
+short AbstractSdInsertLayerDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractSdInsertPagesObjsDlg_Impl);
 
 short AbstractMorphDlg_Impl::Execute()
@@ -217,12 +222,12 @@ void AbstractSdSnapLineDlg_Impl::SetText( const OUString& rStr )
 
 void AbstractSdInsertLayerDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
 {
-    pDlg->GetAttr( rOutAttrs );
+    m_xDlg->GetAttr(rOutAttrs);
 }
 
 void AbstractSdInsertLayerDlg_Impl::SetHelpId( const OString& rHelpId )
 {
-    pDlg->SetHelpId( rHelpId );
+    m_xDlg->set_help_id(rHelpId);
 }
 
 std::vector<OUString> AbstractSdInsertPagesObjsDlg_Impl::GetList(const sal_uInt16 nType)
@@ -334,9 +339,9 @@ VclPtr<AbstractSdSnapLineDlg> SdAbstractDialogFactory_Impl::CreateSdSnapLineDlg(
     return VclPtr<AbstractSdSnapLineDlg_Impl>::Create( VclPtr<SdSnapLineDlg>::Create( pParent, rInAttrs, pView ) );
 }
 
-VclPtr<AbstractSdInsertLayerDlg> SdAbstractDialogFactory_Impl::CreateSdInsertLayerDlg( vcl::Window* pParent, const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr )
+VclPtr<AbstractSdInsertLayerDlg> SdAbstractDialogFactory_Impl::CreateSdInsertLayerDlg(weld::Window* pParent, const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr)
 {
-    return VclPtr<AbstractSdInsertLayerDlg_Impl>::Create( VclPtr<SdInsertLayerDlg>::Create( pParent, rInAttrs, bDeletable, aStr ) );
+    return VclPtr<AbstractSdInsertLayerDlg_Impl>::Create(new SdInsertLayerDlg(pParent, rInAttrs, bDeletable, aStr));
 }
 
 VclPtr<AbstractSdInsertPagesObjsDlg> SdAbstractDialogFactory_Impl::CreateSdInsertPagesObjsDlg( vcl::Window* pParent, const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName )
