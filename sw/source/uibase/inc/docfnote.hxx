@@ -26,7 +26,6 @@ class SwWrtShell;
 class SwFootNoteOptionDlg : public SfxTabDialogController
 {
     SwWrtShell &rSh;
-    Link<weld::Button&, void> aOldOkHdl;
 
     virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
 
