@@ -1361,7 +1361,7 @@ void LwpTableLayout::ConvertDefaultRow(rtl::Reference<XFTable> const & pXFTable,
         rtl::Reference<XFCell> xCell;
         if (m_pDefaultCellLayout)
         {
-            xCell = m_pDefaultCellLayout->ConvertCell(
+            xCell = m_pDefaultCellLayout->DoConvertCell(
                 GetTable()->GetObjectID(),nRowID,j+nStartCol);
         }
         else
