@@ -329,13 +329,11 @@ public:
     ControlType    m_nType;
     ControlState   m_nState;
     tools::Rectangle      m_pixmapRect;
-    GdkX11Pixmap*  m_pixmap;
-    GdkX11Pixmap*  m_mask;
+    std::unique_ptr<GdkX11Pixmap> m_pixmap;
+    std::unique_ptr<GdkX11Pixmap> m_mask;
 
-    NWPixmapCacheData() : m_nType(ControlType::Generic), m_nState(ControlState::NONE), m_pixmap(nullptr), m_mask(nullptr) {}
-    ~NWPixmapCacheData()
-        { SetPixmap( nullptr, nullptr ); };
-    void SetPixmap( GdkX11Pixmap* pPixmap, GdkX11Pixmap* pMask );
+    NWPixmapCacheData() : m_nType(ControlType::Generic), m_nState(ControlState::NONE) {}
+    void SetPixmap( std::unique_ptr<GdkX11Pixmap> pPixmap, std::unique_ptr<GdkX11Pixmap> pMask );
 };
 
 class NWPixmapCache
@@ -353,7 +351,7 @@ public:
     int GetSize() const { return m_size; }
 
     bool Find( ControlType aType, ControlState aState, const tools::Rectangle& r_pixmapRect, GdkX11Pixmap** pPixmap, GdkX11Pixmap** pMask );
-    void Fill( ControlType aType, ControlState aState, const tools::Rectangle& r_pixmapRect, GdkX11Pixmap* pPixmap, GdkX11Pixmap* pMask );
+    void Fill( ControlType aType, ControlState aState, const tools::Rectangle& r_pixmapRect, std::unique_ptr<GdkX11Pixmap> pPixmap, std::unique_ptr<GdkX11Pixmap> pMask );
 
     void ThemeChanged();
 };
@@ -370,13 +368,10 @@ public:
 
 // --- implementation ---
 
-void NWPixmapCacheData::SetPixmap( GdkX11Pixmap* pPixmap, GdkX11Pixmap* pMask )
+void NWPixmapCacheData::SetPixmap( std::unique_ptr<GdkX11Pixmap> pPixmap, std::unique_ptr<GdkX11Pixmap> pMask )
 {
-    delete m_pixmap;
-    delete m_mask;
-
-    m_pixmap = pPixmap;
-    m_mask = pMask;
+    m_pixmap = std::move(pPixmap);
+    m_mask = std::move(pMask);
 }
 
 NWPixmapCache::NWPixmapCache( SalX11Screen nScreen )
@@ -412,15 +407,17 @@ bool  NWPixmapCache::Find( ControlType aType, ControlState aState, const tools::
             pData[i].m_pixmapRect.GetHeight() == r_pixmapRect.GetHeight() &&
             pData[i].m_pixmap != nullptr )
         {
-            *pPixmap = pData[i].m_pixmap;
-            *pMask = pData[i].m_mask;
+            *pPixmap = pData[i].m_pixmap.get();
+            *pMask = pData[i].m_mask.get();
             return true;
         }
     }
     return false;
 }
 
-void NWPixmapCache::Fill( ControlType aType, ControlState aState, const tools::Rectangle& r_pixmapRect, GdkX11Pixmap* pPixmap, GdkX11Pixmap* pMask )
+void NWPixmapCache::Fill( ControlType aType, ControlState aState, const tools::Rectangle& r_pixmapRect,
+                         std::unique_ptr<GdkX11Pixmap> pPixmap,
+                         std::unique_ptr<GdkX11Pixmap> pMask )
 {
     if( !(aState & ControlState::CACHING_ALLOWED) )
         return;
@@ -430,7 +427,7 @@ void NWPixmapCache::Fill( ControlType aType, ControlState aState, const tools::R
     pData[m_idx].m_nType = aType;
     pData[m_idx].m_nState = aState;
     pData[m_idx].m_pixmapRect = r_pixmapRect;
-    pData[m_idx].SetPixmap( pPixmap, pMask );
+    pData[m_idx].SetPixmap( std::move(pPixmap), std::move(pMask) );
 }
 
 void NWPixmapCacheList::AddCache( NWPixmapCache* pCache )
@@ -2805,9 +2802,9 @@ bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType,
 
     // cache data
     if( nType == ControlType::TabItem )
-        aCacheItems.Fill( nType, nState, pixmapRect, pixmap, mask );
+        aCacheItems.Fill( nType, nState, pixmapRect, std::unique_ptr<GdkX11Pixmap>(pixmap), std::unique_ptr<GdkX11Pixmap>(mask) );
     else
-        aCachePage.Fill( nType, nState, pixmapRect, pixmap, mask );
+        aCachePage.Fill( nType, nState, pixmapRect, std::unique_ptr<GdkX11Pixmap>(pixmap), std::unique_ptr<GdkX11Pixmap>(mask) );
 
     return true;
 }
