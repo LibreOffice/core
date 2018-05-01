@@ -251,6 +251,17 @@ private:
 
 typedef sal_uInt16 sal_GlyphId;
 
+
+namespace vcl {
+
+struct ColorGlyph
+{
+    sal_GlyphId mnGlyphId;
+    uint32_t    mnColor;
+};
+
+}
+
 struct GlyphItem
 {
     int     mnFlags;
@@ -266,9 +277,11 @@ struct GlyphItem
 
     int     mnFallbackLevel;
 
+    std::vector<vcl::ColorGlyph> maColorLayers;
+
 public:
             GlyphItem(int nCharPos, int nCharCount, sal_GlyphId aGlyphId, const Point& rLinearPos,
-                long nFlags, int nOrigWidth, int nXOffset )
+                long nFlags, int nOrigWidth, int nXOffset, std::vector<vcl::ColorGlyph> aColorLayers=std::vector<vcl::ColorGlyph>())
             :   mnFlags(nFlags)
             ,   mnCharPos(nCharPos)
             ,   mnCharCount(nCharCount)
@@ -278,6 +291,7 @@ public:
             ,   maGlyphId(aGlyphId)
             ,   maLinearPos(rLinearPos)
             ,   mnFallbackLevel(0)
+            ,   maColorLayers(aColorLayers)
             { }
 
     enum {

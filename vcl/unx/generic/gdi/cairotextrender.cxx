@@ -157,8 +157,10 @@ void CairoTextRender::DrawTextLayout(const CommonSalLayout& rLayout)
 
     std::vector<cairo_glyph_t> cairo_glyphs;
     std::vector<int> glyph_extrarotation;
+    std::vector<std::vector<vcl::ColorGlyph>> color_layers;
     cairo_glyphs.reserve( 256 );
 
+    bool bHasGlyphColor = false;
     Point aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
@@ -174,6 +176,10 @@ void CairoTextRender::DrawTextLayout(const CommonSalLayout& rLayout)
             glyph_extrarotation.push_back(1);
         else
             glyph_extrarotation.push_back(0);
+
+        if (!pGlyph->maColorLayers.empty())
+            bHasGlyphColor = true;
+        color_layers.push_back(pGlyph->maColorLayers);
     }
 
     if (cairo_glyphs.empty())
@@ -297,7 +303,40 @@ void CairoTextRender::DrawTextLayout(const CommonSalLayout& rLayout)
         }
 
         cairo_set_font_matrix(cr, &m);
-        cairo_show_glyphs(cr, &cairo_glyphs[nStartIndex], nLen);
+        if (SAL_LIKELY(!bHasGlyphColor))
+            cairo_show_glyphs(cr, &cairo_glyphs[nStartIndex], nLen);
+        else
+        {
+            for (size_t i = 0; i < nLen; i++)
+            {
+                const auto& layers = color_layers[nStartIndex + i];
+                if (layers.empty())
+                {
+                    cairo_show_glyphs(cr, &cairo_glyphs[nStartIndex + i], 1);
+                }
+                else
+                {
+                    for (const auto& layer : layers)
+                    {
+                        cairo_set_source_rgba(cr,
+                            ((layer.mnColor >> 8) & 0xFF)/255.0,
+                            ((layer.mnColor >> 16) & 0xFF)/255.0,
+                            ((layer.mnColor >> 24) & 0xFF)/255.0,
+                            (layer.mnColor & 0xFF)/255.0);
+
+                        cairo_glyph_t g;
+                        g.index = layer.mnGlyphId;
+                        g.x = cairo_glyphs[nStartIndex + i].x;
+                        g.y = cairo_glyphs[nStartIndex + i].y;
+                        cairo_show_glyphs(cr, &g, 1);
+                    }
+                    cairo_set_source_rgb(cr,
+                        mnTextColor.GetRed()/255.0,
+                        mnTextColor.GetGreen()/255.0,
+                        mnTextColor.GetBlue()/255.0);
+                }
+            }
+        }
 
 #if OSL_DEBUG_LEVEL > 2
         //draw origin

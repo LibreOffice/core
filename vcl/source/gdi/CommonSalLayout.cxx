@@ -553,6 +553,27 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 
     ParseFeatures(mrFontSelData.maTargetName);
 
+    std::vector<hb_ot_color_t> aColorPalette;
+    if (hb_ot_color_has_cpal_data(pHbFace) && hb_ot_color_has_colr_data(pHbFace))
+    {
+        uint32_t nColors = hb_ot_color_get_palette_colors (pHbFace, 0, 0, nullptr, nullptr);
+        if (nColors)
+        {
+            for (uint32_t i = 0; i < nColors; i++)
+            {
+                uint32_t nCount = 1;
+                hb_ot_color_t aColor;
+                hb_ot_color_get_palette_colors (pHbFace, 0, i, &nCount, &aColor);
+                if (!nCount)
+                {
+                    aColorPalette.clear();
+                    break;
+                }
+                aColorPalette.push_back(aColor);
+            }
+        }
+    }
+
     double nXScale = 0;
     double nYScale = 0;
     getScale(&nXScale, &nYScale);
@@ -814,9 +835,32 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 nXOffset = std::lround(nXOffset * nXScale);
                 nYOffset = std::lround(nYOffset * nYScale);
 
+                std::vector<vcl::ColorGlyph> aColorLayers;
+                if (!aColorPalette.empty())
+                {
+                    uint32_t nLayers = hb_ot_color_get_color_layers (pHbFace, nGlyphIndex, 0, nullptr, nullptr, nullptr);
+                    if (nLayers)
+                    {
+                        for (uint32_t nLayer = 0; nLayer < nLayers; nLayer++)
+                        {
+                            hb_codepoint_t nLayerGlyphId;
+                            uint32_t nLayerColorId;
+                            uint32_t nCount = 1;
+                            hb_ot_color_get_color_layers (pHbFace, nGlyphIndex, nLayer, &nCount, &nLayerGlyphId, &nLayerColorId);
+                            if (nCount)
+                            {
+                                uint32_t nColor = 0xFF;
+                                if (nLayerColorId != 0xFFFF)
+                                    nColor = aColorPalette[nLayerColorId];
+                                aColorLayers.push_back({ static_cast<sal_GlyphId>(nLayerGlyphId), nColor });
+                            }
+                        }
+                    }
+                }
+
                 Point aNewPos(aCurrPos.X() + nXOffset, aCurrPos.Y() + nYOffset);
                 const GlyphItem aGI(nCharPos, nCharCount, nGlyphIndex, aNewPos, nGlyphFlags,
-                                    nAdvance, nXOffset);
+                                    nAdvance, nXOffset, aColorLayers);
                 AppendGlyph(aGI);
 
                 aCurrPos.AdjustX(nAdvance );
