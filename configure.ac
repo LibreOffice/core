@@ -11297,9 +11297,6 @@ else
         else
             test_font_map 'Calibri' 'Carlito'
             test_font_map 'DejaVuSans' 'DejaVuSans'
-            # FIXME. Doesn't work...
-            #test_font_map 'GentiumBasic' 'GentiumBasic'
-            test_font_map 'Amiri' 'Amiri'
             if test ${TEST_FONTS_MISSING} -eq 1
             then
                 AC_MSG_WARN([Unknown font mappings - unit tests disabled.])
