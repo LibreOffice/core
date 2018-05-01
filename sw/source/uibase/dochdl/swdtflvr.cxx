@@ -2142,9 +2142,7 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
             // When data comes from a spreadsheet, we add a DDE-table
             if( ( rData.HasFormat( SotClipboardFormatId::SYLK ) ||
                   rData.HasFormat( SotClipboardFormatId::SYLK_BIGCAPS ) ) &&
-                !aExpand.isEmpty() &&
-                 ( 1 < nNewlines ||
-                       comphelper::string::getTokenCount(aExpand, '\t') ) )
+                !aExpand.isEmpty() )
             {
                 const sal_Int32 nRows = nNewlines ? nNewlines-1 : 0;
                 const sal_Int32 nCols = comphelper::string::getTokenCount(aExpand.getToken(0, '\n'), '\t');
