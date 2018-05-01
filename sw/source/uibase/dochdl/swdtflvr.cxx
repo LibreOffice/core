@@ -2102,15 +2102,13 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
     const ::utl::TransliterationWrapper& rColl = ::GetAppCmpStrIgnore();
 
     do {
-        aName = aApp;
-        aName += OUString::number( i );
+        aName = aApp + OUString::number( i );
         for( j = INIT_FLDTYPES; j < nSize; j++ )
         {
             pTyp = rWrtShell.GetFieldType( j );
             if( SwFieldIds::Dde == pTyp->Which() )
             {
-                OUString sTmp( static_cast<SwDDEFieldType*>(pTyp)->GetCmd() );
-                if( rColl.isEqual( sTmp, aCmd ) &&
+                if( rColl.isEqual( static_cast<SwDDEFieldType*>(pTyp)->GetCmd(), aCmd ) &&
                     SfxLinkUpdateMode::ALWAYS == static_cast<SwDDEFieldType*>(pTyp)->GetType() )
                 {
                     aName = pTyp->GetName();
@@ -2147,12 +2145,10 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
                  ( 1 < comphelper::string::getTokenCount(aExpand, '\n') ||
                        comphelper::string::getTokenCount(aExpand, '\t') ) )
             {
-                OUString sTmp( aExpand );
-                sal_Int32 nRows = comphelper::string::getTokenCount(sTmp, '\n');
+                sal_Int32 nRows = comphelper::string::getTokenCount(aExpand, '\n');
                 if( nRows )
                     --nRows;
-                sTmp = sTmp.getToken( 0, '\n' );
-                sal_Int32 nCols = comphelper::string::getTokenCount(sTmp, '\t');
+                sal_Int32 nCols = comphelper::string::getTokenCount(aExpand.getToken(0, '\n'), '\t');
 
                 // don't try to insert tables that are too large for writer
                 if (nRows > SAL_MAX_UINT16 || nCols > SAL_MAX_UINT16)
@@ -2787,14 +2783,9 @@ bool SwTransferable::CheckForURLOrLNKFile( TransferableDataHelper& rData,
     }
     else
     {
-        sal_Int32 nLen = rFileName.getLength();
-        if( 4 < nLen && '.' == rFileName[ nLen - 4 ])
+        if( rFileName.getLength()>4 && rFileName.endsWithIgnoreAsciiCase(".url") )
         {
-            OUString sExt( rFileName.copy( nLen - 3 ));
-            if( sExt.equalsIgnoreAsciiCase( "url" ))
-            {
-                OSL_ENSURE( false, "how do we read today .URL - Files?" );
-            }
+            OSL_ENSURE( false, "how do we read today .URL - Files?" );
         }
     }
     return bIsURLFile;
