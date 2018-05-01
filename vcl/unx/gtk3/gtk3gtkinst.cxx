@@ -3037,7 +3037,7 @@ public:
         enable_notify_events();
     }
 
-    virtual int find(const OUString& rText) const override
+    virtual int find_text(const OUString& rText) const override
     {
         Search aSearch(rText, 0);
         gtk_tree_model_foreach(GTK_TREE_MODEL(m_pListStore), foreach_find, &aSearch);
@@ -3120,7 +3120,7 @@ public:
         return aRows;
     }
 
-    virtual OUString get(int pos) const override
+    virtual OUString get_text(int pos) const override
     {
         return get(pos, 0);
     }
@@ -4040,6 +4040,16 @@ public:
         g_signal_handler_unblock(m_pComboBoxText, m_nChangedSignalId);
         if (GtkEntry* pEntry = get_entry())
             g_signal_handler_unblock(pEntry, m_nEntryActivateSignalId);
+    }
+
+    virtual void freeze() override
+    {
+        //do nothing for now
+    }
+
+    virtual void thaw() override
+    {
+        //do nothing for now
     }
 
     virtual ~GtkInstanceComboBoxText() override

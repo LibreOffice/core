@@ -115,7 +115,7 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl, weld::Button&, void)
         OUString sInsPath;
         osl::FileBase::getSystemPathFromFileURL(aURL, sInsPath);
 
-        if (m_xPathLB->find(sInsPath) != -1)
+        if (m_xPathLB->find_text(sInsPath) != -1)
         {
             OUString sMsg( CuiResId( RID_MULTIPATH_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sInsPath );

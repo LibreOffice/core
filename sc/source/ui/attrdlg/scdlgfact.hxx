@@ -296,7 +296,13 @@ public:
 
 class AbstractScMoveTableDlg_Impl : public AbstractScMoveTableDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScMoveTableDlg_Impl, ScMoveTableDlg)
+    std::unique_ptr<ScMoveTableDlg> m_xDlg;
+public:
+    explicit AbstractScMoveTableDlg_Impl(ScMoveTableDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual sal_uInt16  GetSelectedDocument     () const override;
     virtual sal_uInt16  GetSelectedTable        () const override;
     virtual bool    GetCopyTable            () const override;
@@ -513,7 +519,7 @@ public:
                                                                 long            nMaximum,
                                                                 long            nMinimum  = 0 ) override;
 
-    virtual VclPtr<AbstractScMoveTableDlg> CreateScMoveTableDlg(vcl::Window * pParent,
+    virtual VclPtr<AbstractScMoveTableDlg> CreateScMoveTableDlg(weld::Window * pParent,
         const OUString& rDefault) override;
 
     virtual VclPtr<AbstractScNameCreateDlg> CreateScNameCreateDlg(weld::Window * pParent,

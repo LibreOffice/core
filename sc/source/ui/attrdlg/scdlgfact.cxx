@@ -117,7 +117,10 @@ short AbstractScMetricInputDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractScMoveTableDlg_Impl);
+short AbstractScMoveTableDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractScNameCreateDlg_Impl::Execute()
 {
@@ -483,37 +486,37 @@ int AbstractScMetricInputDlg_Impl::GetInputValue() const
 
 sal_uInt16 AbstractScMoveTableDlg_Impl::GetSelectedDocument() const
 {
-    return pDlg->GetSelectedDocument();
+    return m_xDlg->GetSelectedDocument();
 }
 
 sal_uInt16  AbstractScMoveTableDlg_Impl::GetSelectedTable() const
 {
-    return pDlg->GetSelectedTable();
+    return m_xDlg->GetSelectedTable();
 }
 
 bool AbstractScMoveTableDlg_Impl::GetCopyTable() const
 {
-    return pDlg->GetCopyTable();
+    return m_xDlg->GetCopyTable();
 }
 
 bool AbstractScMoveTableDlg_Impl::GetRenameTable() const
 {
-    return pDlg->GetRenameTable();
+    return m_xDlg->GetRenameTable();
 }
 
 void AbstractScMoveTableDlg_Impl::GetTabNameString( OUString& rString ) const
 {
-    pDlg->GetTabNameString( rString );
+    m_xDlg->GetTabNameString( rString );
 }
 
 void    AbstractScMoveTableDlg_Impl::SetForceCopyTable()
 {
-    return pDlg->SetForceCopyTable();
+    return m_xDlg->SetForceCopyTable();
 }
 
 void    AbstractScMoveTableDlg_Impl::EnableRenameTable(bool bFlag)
 {
-    return pDlg->EnableRenameTable( bFlag);
+    return m_xDlg->EnableRenameTable( bFlag);
 }
 
 CreateNameFlags AbstractScNameCreateDlg_Impl::GetFlags() const
@@ -785,11 +788,10 @@ VclPtr<AbstractScMetricInputDlg> ScAbstractDialogFactory_Impl::CreateScMetricInp
         nDecimals, nMaximum , nMinimum));
 }
 
-VclPtr<AbstractScMoveTableDlg> ScAbstractDialogFactory_Impl::CreateScMoveTableDlg(vcl::Window* pParent,
+VclPtr<AbstractScMoveTableDlg> ScAbstractDialogFactory_Impl::CreateScMoveTableDlg(weld::Window* pParent,
     const OUString& rDefault)
 {
-    VclPtr<ScMoveTableDlg> pDlg = VclPtr<ScMoveTableDlg>::Create( pParent, rDefault );
-    return VclPtr<AbstractScMoveTableDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScMoveTableDlg_Impl>::Create(new ScMoveTableDlg(pParent, rDefault));
 }
 
 VclPtr<AbstractScNameCreateDlg> ScAbstractDialogFactory_Impl::CreateScNameCreateDlg(weld::Window * pParent, CreateNameFlags nFlags)

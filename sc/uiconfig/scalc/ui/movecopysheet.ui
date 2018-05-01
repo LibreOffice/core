@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="MoveCopySheetDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -96,7 +104,6 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">copy</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -179,11 +186,11 @@
                           <object class="GtkLabel" id="toDocumentLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">0</property>
                             <property name="label" translatable="yes" context="movecopysheet|toDocumentLabel">To _document</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">toDocument</property>
+                            <property name="xalign">0</property>
+                            <property name="yalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -225,10 +232,10 @@
                           <object class="GtkLabel" id="insertBeforeLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="movecopysheet|insertBeforeLabel">_Insert before</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">insertBefore:before</property>
+                            <property name="mnemonic_widget">insertBefore</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -244,13 +251,28 @@
                             <property name="vexpand">True</property>
                             <property name="shadow_type">in</property>
                             <child>
-                              <object class="GtkTreeView" id="insertBefore:before">
+                              <object class="GtkTreeView" id="insertBefore">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
+                                <property name="model">liststore1</property>
+                                <property name="headers_visible">False</property>
+                                <property name="headers_clickable">False</property>
+                                <property name="search_column">0</property>
+                                <property name="show_expanders">False</property>
                                 <child internal-child="selection">
-                                  <object class="GtkTreeSelection" id="treeview-selection"/>
+                                  <object class="GtkTreeSelection" id="treeview-selection1"/>
+                                </child>
+                                <child>
+                                  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
                                 </child>
                               </object>
                             </child>
@@ -316,6 +338,7 @@
                           <object class="GtkEntry" id="newName">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -342,9 +365,9 @@
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="valign">start</property>
+                            <property name="label" translatable="yes" context="movecopysheet|warnunused">This name is already used.</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
-                            <property name="label" translatable="yes" context="movecopysheet|warnunused">This name is already used.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -357,9 +380,9 @@
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="valign">start</property>
+                            <property name="label" translatable="yes" context="movecopysheet|warnempty">Name is empty.</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
-                            <property name="label" translatable="yes" context="movecopysheet|warnempty">Name is empty.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -372,9 +395,9 @@
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="valign">start</property>
+                            <property name="label" translatable="yes" context="movecopysheet|warninvalid">Name contains one or more invalid characters.</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
-                            <property name="label" translatable="yes" context="movecopysheet|warninvalid">Name contains one or more invalid characters.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -420,5 +443,8 @@
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>

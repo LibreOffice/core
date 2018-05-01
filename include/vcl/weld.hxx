@@ -249,6 +249,9 @@ public:
     virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void set_entry_completion(bool bEnable) = 0;
 
+    virtual void freeze() = 0;
+    virtual void thaw() = 0;
+
     void connect_entry_activate(const Link<ComboBoxText&, void>& rLink)
     {
         m_aEntryActivateHdl = rLink;
@@ -299,18 +302,18 @@ public:
     virtual std::vector<int> get_selected_rows() const = 0;
 
     //by text
-    virtual OUString get(int pos) const = 0;
-    virtual int find(const OUString& rText) const = 0;
-    OUString get_selected_text() const { return get(get_selected_index()); }
-    void select_text(const OUString& rText) { select(find(rText)); }
-    void remove_text(const OUString& rText) { remove(find(rText)); }
+    virtual OUString get_text(int pos) const = 0;
+    virtual int find_text(const OUString& rText) const = 0;
+    OUString get_selected_text() const { return get_text(get_selected_index()); }
+    void select_text(const OUString& rText) { select(find_text(rText)); }
+    void remove_text(const OUString& rText) { remove(find_text(rText)); }
     std::vector<OUString> get_selected_rows_text() const
     {
         std::vector<int> aRows(get_selected_rows());
         std::vector<OUString> aRet;
         aRet.reserve(aRows.size());
         for (auto a : aRows)
-            aRet.push_back(get(a));
+            aRet.push_back(get_text(a));
         return aRet;
     }
 
