@@ -2519,6 +2519,18 @@ public:
         m_aClickHdl = Link<Button&, void>();
     }
 
+    virtual void disable_notify_events() override
+    {
+        g_signal_handler_block(m_pButton, m_nSignalId);
+        GtkInstanceContainer::disable_notify_events();
+    }
+
+    virtual void enable_notify_events() override
+    {
+        GtkInstanceContainer::enable_notify_events();
+        g_signal_handler_unblock(m_pButton, m_nSignalId);
+    }
+
     virtual ~GtkInstanceButton() override
     {
         g_object_steal_data(G_OBJECT(m_pButton), "g-lo-GtkInstanceButton");
