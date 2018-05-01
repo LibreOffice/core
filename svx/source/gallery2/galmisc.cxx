@@ -403,7 +403,7 @@ void GalleryTransferable::InitData( bool bLazy )
                     Graphic aGraphic;
 
                     if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
-                        mpGraphicObject = new GraphicObject( aGraphic );
+                        mpGraphicObject.reset(new GraphicObject( aGraphic ));
                 }
 
                 if( !mxModelStream.is() )
@@ -427,12 +427,11 @@ void GalleryTransferable::InitData( bool bLazy )
         {
             if( !mpURL )
             {
-                mpURL = new INetURLObject;
+                mpURL.reset(new INetURLObject);
 
                 if( !mpTheme->GetURL( mnObjectPos, *mpURL ) )
                 {
-                    delete mpURL;
-                    mpURL = nullptr;
+                    mpURL.reset();
                 }
             }
 
@@ -441,7 +440,7 @@ void GalleryTransferable::InitData( bool bLazy )
                 Graphic aGraphic;
 
                 if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
-                    mpGraphicObject = new GraphicObject( aGraphic );
+                    mpGraphicObject.reset(new GraphicObject( aGraphic ));
             }
         }
         break;
@@ -544,10 +543,8 @@ void GalleryTransferable::DragFinished( sal_Int8 nDropAction )
 void GalleryTransferable::ObjectReleased()
 {
     mxModelStream.clear();
-    delete mpGraphicObject;
-    mpGraphicObject = nullptr;
-    delete mpURL;
-    mpURL = nullptr;
+    mpGraphicObject.reset();
+    mpURL.reset();
 }
 
 void GalleryTransferable::StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions )
