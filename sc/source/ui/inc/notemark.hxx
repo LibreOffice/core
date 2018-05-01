@@ -32,24 +32,24 @@ class ScDrawView;
 class ScNoteMarker
 {
 private:
-    VclPtr<vcl::Window>     pWindow;
-    VclPtr<vcl::Window>     pRightWin;
-    VclPtr<vcl::Window>     pBottomWin;
-    VclPtr<vcl::Window>     pDiagWin;
-    ScDocument* pDoc;
-    ScAddress   aDocPos;
-    OUString    aUserText;
-    tools::Rectangle   aVisRect;
-    Timer       aTimer;
-    MapMode     aMapMode;
-    bool        bLeft;
-    bool        bByKeyboard;
+    VclPtr<vcl::Window>     m_pWindow;
+    VclPtr<vcl::Window>     m_pRightWin;
+    VclPtr<vcl::Window>     m_pBottomWin;
+    VclPtr<vcl::Window>     m_pDiagWin;
+    ScDocument* m_pDoc;
+    ScAddress   m_aDocPos;
+    OUString    m_aUserText;
+    tools::Rectangle   m_aVisRect;
+    Timer       m_aTimer;
+    MapMode     m_aMapMode;
+    bool        m_bLeft;
+    bool        m_bByKeyboard;
 
-    tools::Rectangle       aRect;
-    ScDrawView*     pDrawView;
-    SdrModel*       pModel;
-    ScCaptionPtr    mxObject;
-    bool            bVisible;
+    tools::Rectangle       m_aRect;
+    ScDrawView*     m_pDrawView;
+    SdrModel*       m_pModel;
+    ScCaptionPtr    m_xObject;
+    bool            m_bVisible;
     DECL_LINK( TimeHdl, Timer*, void );
 
 public:
@@ -61,8 +61,8 @@ public:
     void        Draw();
     void        InvalidateWin();
 
-    const ScAddress& GetDocPos() const       { return aDocPos; }
-    bool        IsByKeyboard() const    { return bByKeyboard; }
+    const ScAddress& GetDocPos() const       { return m_aDocPos; }
+    bool        IsByKeyboard() const    { return m_bByKeyboard; }
 };
 
 #endif

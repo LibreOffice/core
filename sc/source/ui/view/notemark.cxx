@@ -38,85 +38,86 @@
 ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window* pBottom, vcl::Window* pDiagonal,
                             ScDocument* pD, const ScAddress& aPos, const OUString& rUser,
                             const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard, ScDrawView *pDrawViewP) :
-    pWindow( pWin ),
-    pRightWin( pRight ),
-    pBottomWin( pBottom ),
-    pDiagWin( pDiagonal ),
-    pDoc( pD ),
-    aDocPos( aPos ),
-    aUserText( rUser ),
-    aMapMode( rMap ),
-    bLeft( bLeftEdge ),
-    bByKeyboard( bKeyboard ),
-    pDrawView ( pDrawViewP ),
-    pModel( nullptr ),
-    bVisible( false )
+    m_pWindow( pWin ),
+    m_pRightWin( pRight ),
+    m_pBottomWin( pBottom ),
+    m_pDiagWin( pDiagonal ),
+    m_pDoc( pD ),
+    m_aDocPos( aPos ),
+    m_aUserText( rUser ),
+    m_aMapMode( rMap ),
+    m_bLeft( bLeftEdge ),
+    m_bByKeyboard( bKeyboard ),
+    m_pDrawView ( pDrawViewP ),
+    m_pModel( nullptr ),
+    m_bVisible( false )
 {
-    Size aSizePixel = pWindow->GetOutputSizePixel();
-    if( pRightWin )
-        aSizePixel.AdjustWidth(pRightWin->GetOutputSizePixel().Width() );
-    if( pBottomWin )
-        aSizePixel.AdjustHeight(pBottomWin->GetOutputSizePixel().Height() );
+    Size aSizePixel = m_pWindow->GetOutputSizePixel();
+    if( m_pRightWin )
+        aSizePixel.AdjustWidth(m_pRightWin->GetOutputSizePixel().Width() );
+    if( m_pBottomWin )
+        aSizePixel.AdjustHeight(m_pBottomWin->GetOutputSizePixel().Height() );
     tools::Rectangle aVisPixel( Point( 0, 0 ), aSizePixel );
-    aVisRect = pWindow->PixelToLogic( aVisPixel, aMapMode );
+    m_aVisRect = m_pWindow->PixelToLogic( aVisPixel, m_aMapMode );
 
-    aTimer.SetInvokeHandler( LINK( this, ScNoteMarker, TimeHdl ) );
-    aTimer.SetTimeout( bForce ? SC_NOTEMARK_SHORT : SC_NOTEMARK_TIME );
-    aTimer.Start();
+    m_aTimer.SetInvokeHandler( LINK( this, ScNoteMarker, TimeHdl ) );
+    m_aTimer.SetTimeout( bForce ? SC_NOTEMARK_SHORT : SC_NOTEMARK_TIME );
+    m_aTimer.Start();
 }
 
 ScNoteMarker::~ScNoteMarker()
 {
-    if (pModel)
-        mxObject.release();     // deleting pModel also deletes the SdrCaptionObj
+    if (m_pModel)
+        m_xObject.release();     // deleting pModel also deletes the SdrCaptionObj
 
     InvalidateWin();
 
-    delete pModel;
+    delete m_pModel;
 }
 
 IMPL_LINK_NOARG(ScNoteMarker, TimeHdl, Timer *, void)
 {
-    if (!bVisible)
+    if (!m_bVisible)
     {
         SvtPathOptions aPathOpt;
         OUString aPath = aPathOpt.GetPalettePath();
-        pModel = new SdrModel(aPath, nullptr, nullptr, false);
-        pModel->SetScaleUnit(MapUnit::Map100thMM);
-        SfxItemPool& rPool = pModel->GetItemPool();
+        m_pModel = new SdrModel(aPath, nullptr, nullptr, false);
+        m_pModel->SetScaleUnit(MapUnit::Map100thMM);
+        SfxItemPool& rPool = m_pModel->GetItemPool();
         rPool.SetDefaultMetric(MapUnit::Map100thMM);
         rPool.FreezeIdRanges();
 
-        OutputDevice* pPrinter = pDoc->GetRefDevice();
+        OutputDevice* pPrinter = m_pDoc->GetRefDevice();
         if (pPrinter)
         {
             // On the outliner of the draw model also the printer is set as RefDevice,
             // and it should look uniform.
-            Outliner& rOutliner = pModel->GetDrawOutliner();
+            Outliner& rOutliner = m_pModel->GetDrawOutliner();
             rOutliner.SetRefDevice(pPrinter);
         }
 
-        if( SdrPage* pPage = pModel->AllocPage( false ) )
+        if( SdrPage* pPage = m_pModel->AllocPage( false ) )
+
         {
-            mxObject = ScNoteUtil::CreateTempCaption( *pDoc, aDocPos, *pPage, aUserText, aVisRect, bLeft );
-            if( mxObject )
+            m_xObject = ScNoteUtil::CreateTempCaption( *m_pDoc, m_aDocPos, *pPage, m_aUserText, m_aVisRect, m_bLeft );
+            if( m_xObject )
             {
-                if (pDrawView)
-                    pDrawView->SyncForGrid(mxObject.get());
-                aRect = mxObject->GetCurrentBoundRect();
+                if (m_pDrawView)
+                    m_pDrawView->SyncForGrid(m_xObject.get());
+                m_aRect = m_xObject->GetCurrentBoundRect();
 
                 // Need to include grid offset: GetCurrentBoundRect is removing it
                 // but we need to know actual rect position
-                aRect += mxObject->GetGridOffset();
+                m_aRect += m_xObject->GetGridOffset();
 
-                assert(pDrawView && "this ended up with a wrong rectangle");
+                assert(m_pDrawView && "this ended up with a wrong rectangle");
             }
 
             // Insert page so that the model recognise it and also deleted
-            pModel->InsertPage( pPage );
+            m_pModel->InsertPage( pPage );
 
         }
-        bVisible = true;
+        m_bVisible = true;
     }
 
     Draw();
@@ -152,46 +153,46 @@ static MapMode lcl_MoveMapMode( const MapMode& rMap, const Size& rMove )
 
 void ScNoteMarker::Draw()
 {
-    if ( mxObject && bVisible )
+    if ( m_xObject && m_bVisible )
     {
-        lcl_DrawWin( mxObject.get(), pWindow, aMapMode );
+        lcl_DrawWin( m_xObject.get(), m_pWindow, m_aMapMode );
 
-        if ( pRightWin || pBottomWin )
+        if ( m_pRightWin || m_pBottomWin )
         {
-            Size aWinSize = pWindow->PixelToLogic( pWindow->GetOutputSizePixel(), aMapMode );
-            if ( pRightWin )
-                lcl_DrawWin( mxObject.get(), pRightWin,
-                                lcl_MoveMapMode( aMapMode, Size( aWinSize.Width(), 0 ) ) );
-            if ( pBottomWin )
-                lcl_DrawWin( mxObject.get(), pBottomWin,
-                                lcl_MoveMapMode( aMapMode, Size( 0, aWinSize.Height() ) ) );
-            if ( pDiagWin )
-                lcl_DrawWin( mxObject.get(), pDiagWin, lcl_MoveMapMode( aMapMode, aWinSize ) );
+            Size aWinSize = m_pWindow->PixelToLogic( m_pWindow->GetOutputSizePixel(), m_aMapMode );
+            if ( m_pRightWin )
+                lcl_DrawWin( m_xObject.get(), m_pRightWin,
+                                lcl_MoveMapMode( m_aMapMode, Size( aWinSize.Width(), 0 ) ) );
+            if ( m_pBottomWin )
+                lcl_DrawWin( m_xObject.get(), m_pBottomWin,
+                                lcl_MoveMapMode( m_aMapMode, Size( 0, aWinSize.Height() ) ) );
+            if ( m_pDiagWin )
+                lcl_DrawWin( m_xObject.get(), m_pDiagWin, lcl_MoveMapMode( m_aMapMode, aWinSize ) );
         }
     }
 }
 
 void ScNoteMarker::InvalidateWin()
 {
-    if (bVisible)
+    if (m_bVisible)
     {
-        pWindow->Invalidate( OutputDevice::LogicToLogic(aRect, aMapMode, pWindow->GetMapMode()) );
+        m_pWindow->Invalidate( OutputDevice::LogicToLogic(m_aRect, m_aMapMode, m_pWindow->GetMapMode()) );
 
-        if ( pRightWin || pBottomWin )
+        if ( m_pRightWin || m_pBottomWin )
         {
-            Size aWinSize = pWindow->PixelToLogic( pWindow->GetOutputSizePixel(), aMapMode );
-            if ( pRightWin )
-                pRightWin->Invalidate( OutputDevice::LogicToLogic(aRect,
-                                        lcl_MoveMapMode( aMapMode, Size( aWinSize.Width(), 0 ) ),
-                                        pRightWin->GetMapMode()) );
-            if ( pBottomWin )
-                pBottomWin->Invalidate( OutputDevice::LogicToLogic(aRect,
-                                        lcl_MoveMapMode( aMapMode, Size( 0, aWinSize.Height() ) ),
-                                        pBottomWin->GetMapMode()) );
-            if ( pDiagWin )
-                pDiagWin->Invalidate( OutputDevice::LogicToLogic(aRect,
-                                        lcl_MoveMapMode( aMapMode, aWinSize ),
-                                        pDiagWin->GetMapMode()) );
+            Size aWinSize = m_pWindow->PixelToLogic( m_pWindow->GetOutputSizePixel(), m_aMapMode );
+            if ( m_pRightWin )
+                m_pRightWin->Invalidate( OutputDevice::LogicToLogic(m_aRect,
+                                        lcl_MoveMapMode( m_aMapMode, Size( aWinSize.Width(), 0 ) ),
+                                        m_pRightWin->GetMapMode()) );
+            if ( m_pBottomWin )
+                m_pBottomWin->Invalidate( OutputDevice::LogicToLogic(m_aRect,
+                                        lcl_MoveMapMode( m_aMapMode, Size( 0, aWinSize.Height() ) ),
+                                        m_pBottomWin->GetMapMode()) );
+            if ( m_pDiagWin )
+                m_pDiagWin->Invalidate( OutputDevice::LogicToLogic(m_aRect,
+                                        lcl_MoveMapMode( m_aMapMode, aWinSize ),
+                                        m_pDiagWin->GetMapMode()) );
         }
     }
 }
