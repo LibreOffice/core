@@ -126,8 +126,8 @@ sal_Bool CharClass::isAsciiNumeric( const String& rStr )
 {
     if ( !rStr.Len() )
         return sal_False;
-    register const sal_Unicode* p = rStr.GetBuffer();
-    register const sal_Unicode* const pStop = p + rStr.Len();
+    const sal_Unicode* p = rStr.GetBuffer();
+    const sal_Unicode* const pStop = p + rStr.Len();
     do
     {
         if ( !isAsciiDigit( *p ) )
@@ -142,8 +142,8 @@ sal_Bool CharClass::isAsciiAlpha( const String& rStr )
 {
     if ( !rStr.Len() )
         return sal_False;
-    register const sal_Unicode* p = rStr.GetBuffer();
-    register const sal_Unicode* const pStop = p + rStr.Len();
+    const sal_Unicode* p = rStr.GetBuffer();
+    const sal_Unicode* const pStop = p + rStr.Len();
     do
     {
         if ( !isAsciiAlpha( *p ) )
@@ -158,8 +158,8 @@ sal_Bool CharClass::isAsciiAlphaNumeric( const String& rStr )
 {
     if ( !rStr.Len() )
         return sal_False;
-    register const sal_Unicode* p = rStr.GetBuffer();
-    register const sal_Unicode* const pStop = p + rStr.Len();
+    const sal_Unicode* p = rStr.GetBuffer();
+    const sal_Unicode* const pStop = p + rStr.Len();
     do
     {
         if ( !isAsciiAlphaNumeric( *p ) )

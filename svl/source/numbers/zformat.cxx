@@ -1624,9 +1624,9 @@ void SvNumberformat::LoadString( SvStream& rStream, String& rStr )
     else
     {
         sal_Unicode cTarget = NfCurrencyEntry::GetEuroSymbol();
-        register const sal_Char* p = aStr.GetBuffer();
-        register const sal_Char* const pEnd = p + aStr.Len();
-        register sal_Unicode* pUni = rStr.AllocBuffer( aStr.Len() );
+        const sal_Char* p = aStr.GetBuffer();
+        const sal_Char* const pEnd = p + aStr.Len();
+        sal_Unicode* pUni = rStr.AllocBuffer( aStr.Len() );
         while ( p < pEnd )
         {
             if ( *p == cStream )
@@ -3515,7 +3515,7 @@ sal_Bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         xub_StrLen nPoint = sStr.Search( '.' );
         if ( nPoint != STRING_NOTFOUND )
         {
-            register const sal_Unicode* p = sStr.GetBuffer() + nPoint;
+            const sal_Unicode* p = sStr.GetBuffer() + nPoint;
             while ( *++p == '0' )
                 ;
             if ( !*p )
@@ -3566,7 +3566,7 @@ sal_Bool SvNumberformat::ImpGetNumberOutput(double fNumber,
                 {
                     const String& rStr = rInfo.sStrArray[j];
                     const sal_Unicode* p1 = rStr.GetBuffer();
-                    register const sal_Unicode* p = p1 + rStr.Len();
+                    const sal_Unicode* p = p1 + rStr.Len();
                     while ( p1 < p-- )
                     {
                         const sal_Unicode c = *p;
@@ -3735,7 +3735,7 @@ sal_Bool SvNumberformat::ImpNumberFillWithThousands(
             {
                 const String& rStr = rInfo.sStrArray[j];
                 const sal_Unicode* p1 = rStr.GetBuffer();
-                register const sal_Unicode* p = p1 + rStr.Len();
+                const sal_Unicode* p = p1 + rStr.Len();
                 while ( p1 < p-- )
                 {
                     nDigitCount++;
@@ -3858,7 +3858,7 @@ sal_Bool SvNumberformat::ImpNumberFill( String& sStr,       // number string
             {
                 const String& rStr = rInfo.sStrArray[j];
                 const sal_Unicode* p1 = rStr.GetBuffer();
-                register const sal_Unicode* p = p1 + rStr.Len();
+                const sal_Unicode* p = p1 + rStr.Len();
                 while ( p1 < p-- )
                 {
                     if (k > 0)
@@ -3945,7 +3945,7 @@ void SvNumberformat::GetNumForInfo( sal_uInt16 nNumFor, short& rScannedType,
             short nType = rInfo.nTypeArray[i];
             if ( nType == NF_SYMBOLTYPE_DIGIT)
             {
-                register const sal_Unicode* p = rInfo.sStrArray[i].GetBuffer();
+                const sal_Unicode* p = rInfo.sStrArray[i].GetBuffer();
                 while ( *p == '#' )
                     p++;
                 while ( *p++ == '0' )
@@ -4429,7 +4429,7 @@ sal_Bool SvNumberformat::HasStringNegativeSign( const String& rStr )
         return sal_False;
     const sal_Unicode* const pBeg = rStr.GetBuffer();
     const sal_Unicode* const pEnd = pBeg + nLen;
-    register const sal_Unicode* p = pBeg;
+    const sal_Unicode* p = pBeg;
     do
     {   // Anfang
         if ( *p == '-' )
@@ -4501,7 +4501,7 @@ void SvNumberformat::EraseCommentBraces( String& rStr )
 // static
 void SvNumberformat::EraseComment( String& rStr )
 {
-    register const sal_Unicode* p = rStr.GetBuffer();
+    const sal_Unicode* p = rStr.GetBuffer();
     sal_Bool bInString = sal_False;
     sal_Bool bEscaped = sal_False;
     sal_Bool bFound = sal_False;
@@ -4542,9 +4542,9 @@ sal_Bool SvNumberformat::IsInQuote( const String& rStr, xub_StrLen nPos,
     xub_StrLen nLen = rStr.Len();
     if ( nPos >= nLen )
         return sal_False;
-    register const sal_Unicode* p0 = rStr.GetBuffer();
-    register const sal_Unicode* p = p0;
-    register const sal_Unicode* p1 = p0 + nPos;
+    const sal_Unicode* p0 = rStr.GetBuffer();
+    const sal_Unicode* p = p0;
+    const sal_Unicode* p1 = p0 + nPos;
     sal_Bool bQuoted = sal_False;
     while ( p <= p1 )
     {
@@ -4582,9 +4582,9 @@ xub_StrLen SvNumberformat::GetQuoteEnd( const String& rStr, xub_StrLen nPos,
             return nPos;        // schliessendes cQuote
         return STRING_NOTFOUND;
     }
-    register const sal_Unicode* p0 = rStr.GetBuffer();
-    register const sal_Unicode* p = p0 + nPos;
-    register const sal_Unicode* p1 = p0 + nLen;
+    const sal_Unicode* p0 = rStr.GetBuffer();
+    const sal_Unicode* p = p0 + nPos;
+    const sal_Unicode* p1 = p0 + nLen;
     while ( p < p1 )
     {
         if ( *p == cQuote && p > p0 && *(p-1) != cEscIn )

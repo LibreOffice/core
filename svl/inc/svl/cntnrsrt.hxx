@@ -136,7 +136,7 @@ sal_uLong ClassName::GetPos( const Type* pObj ) const                           
                                                                             \
 sal_Bool ClassName::Seek_Entry( const Type* pObj, sal_uLong* pPos ) const           \
 {                                                                           \
-    register sal_uLong nO  = Count(),                                           \
+    sal_uLong nO  = Count(),                                           \
             nM,                                                             \
             nU = 0;                                                         \
     if( nO > 0 )                                                            \

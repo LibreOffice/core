@@ -249,8 +249,8 @@ sal_Bool ImpSvNumberInputScan::NextNumberStringSymbol(
     sal_Bool isNumber = sal_False;
     sal_Unicode cToken;
     ScanState eState = SsStart;
-    register const sal_Unicode* pHere = pStr;
-    register xub_StrLen nChars = 0;
+    const sal_Unicode* pHere = pStr;
+    xub_StrLen nChars = 0;
 
     while ( ((cToken = *pHere) != 0) && eState != SsStop)
     {
@@ -314,7 +314,7 @@ sal_Bool ImpSvNumberInputScan::SkipThousands(
     sal_Bool res = sal_False;
     sal_Unicode cToken;
     const String& rThSep = pFormatter->GetNumThousandSep();
-    register const sal_Unicode* pHere = pStr;
+    const sal_Unicode* pHere = pStr;
     ScanState eState = SsStart;
     xub_StrLen nCounter = 0;                                // counts 3 digits
 
@@ -418,9 +418,9 @@ sal_Bool ImpSvNumberInputScan::StringPtrContainsImpl( const String& rWhat,
 {
     if ( rWhat.Len() == 0 )
         return sal_False;
-    register const sal_Unicode* pWhat = rWhat.GetBuffer();
-    register const sal_Unicode* const pEnd = pWhat + rWhat.Len();
-    register const sal_Unicode* pStr = pString + nPos;
+    const sal_Unicode* pWhat = rWhat.GetBuffer();
+    const sal_Unicode* const pEnd = pWhat + rWhat.Len();
+    const sal_Unicode* pStr = pString + nPos;
     while ( pWhat < pEnd )
     {
         if ( *pWhat != *pStr )
@@ -459,7 +459,7 @@ inline void ImpSvNumberInputScan::SkipBlanks( const String& rString,
 {
     if ( nPos < rString.Len() )
     {
-        register const sal_Unicode* p = rString.GetBuffer() + nPos;
+        const sal_Unicode* p = rString.GetBuffer() + nPos;
         while ( *p == ' ' )
         {
             nPos++;

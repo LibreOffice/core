@@ -486,13 +486,13 @@ public:\
 #define _SV_SEEK_PTR(nm,AE)\
 sal_Bool nm::Seek_Entry( const AE aE, sal_uInt16* pP ) const\
 {\
-    register sal_uInt16 nO  = nm##_SAR::Count(),\
+    sal_uInt16 nO  = nm##_SAR::Count(),\
             nM, \
             nU = 0;\
     if( nO > 0 )\
     {\
         nO--;\
-        register long rCmp = (long)aE;\
+        long rCmp = (long)aE;\
         while( nU <= nO )\
         {\
             nM = nU + ( nO - nU ) / 2;\
@@ -519,7 +519,7 @@ sal_Bool nm::Seek_Entry( const AE aE, sal_uInt16* pP ) const\
 #define _SV_SEEK_PTR_TO_OBJECT( nm,AE )\
 sal_Bool nm::Seek_Entry( const AE aE, sal_uInt16* pP ) const\
 {\
-    register sal_uInt16 nO  = nm##_SAR::Count(),\
+    sal_uInt16 nO  = nm##_SAR::Count(),\
             nM, \
             nU = 0;\
     if( nO > 0 )\
@@ -551,7 +551,7 @@ sal_Bool nm::Seek_Entry( const AE aE, sal_uInt16* pP ) const\
 #define _SV_SEEK_OBJECT( nm,AE )\
 sal_Bool nm::Seek_Entry( const AE & aE, sal_uInt16* pP ) const\
 {\
-    register sal_uInt16 nO  = nm##_SAR::Count(),\
+    sal_uInt16 nO  = nm##_SAR::Count(),\
             nM, \
             nU = 0;\
     if( nO > 0 )\

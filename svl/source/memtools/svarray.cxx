@@ -99,7 +99,7 @@ void SvStringsISort::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
 }
 sal_Bool SvStringsISort::Seek_Entry( const StringPtr aE, sal_uInt16* pP ) const
 {
-    register sal_uInt16 nO  = SvStringsISort_SAR::Count(),
+    sal_uInt16 nO  = SvStringsISort_SAR::Count(),
             nM,
             nU = 0;
     if( nO > 0 )
@@ -146,7 +146,7 @@ void SvStringsISortDtor::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
 }
 sal_Bool SvStringsISortDtor::Seek_Entry( const StringPtr aE, sal_uInt16* pP ) const
 {
-    register sal_uInt16 nO  = SvStringsISortDtor_SAR::Count(),
+    sal_uInt16 nO  = SvStringsISortDtor_SAR::Count(),
             nM,
             nU = 0;
     if( nO > 0 )
@@ -182,7 +182,7 @@ sal_Bool SvStringsISortDtor::Seek_Entry( const StringPtr aE, sal_uInt16* pP ) co
 /* SortArray fuer UShorts */
 sal_Bool SvUShortsSort::Seek_Entry( const sal_uInt16 aE, sal_uInt16* pP ) const
 {
-    register sal_uInt16 nO  = SvUShorts::Count(),
+    sal_uInt16 nO  = SvUShorts::Count(),
             nM,
             nU = 0;
     if( nO > 0 )
@@ -285,7 +285,7 @@ void SvByteStringsISort::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
 }
 sal_Bool SvByteStringsISort::Seek_Entry( const ByteStringPtr aE, sal_uInt16* pP ) const
 {
-    register sal_uInt16 nO  = SvByteStringsISort_SAR::Count(),
+    sal_uInt16 nO  = SvByteStringsISort_SAR::Count(),
             nM,
             nU = 0;
     if( nO > 0 )
@@ -331,7 +331,7 @@ void SvByteStringsISortDtor::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
 }
 sal_Bool SvByteStringsISortDtor::Seek_Entry( const ByteStringPtr aE, sal_uInt16* pP ) const
 {
-    register sal_uInt16 nO  = SvByteStringsISortDtor_SAR::Count(),
+    sal_uInt16 nO  = SvByteStringsISortDtor_SAR::Count(),
             nM,
             nU = 0;
     if( nO > 0 )

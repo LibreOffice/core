@@ -149,7 +149,7 @@ const OClassInfo* OClassInfo::getClassInfo(const sal_Char* pClassName)
     return (pClass);
 }
 
-VOS_CLASSINIT::VOS_CLASSINIT(register OClassInfo* pNewClass)
+VOS_CLASSINIT::VOS_CLASSINIT(OClassInfo* pNewClass)
 {
     VOS_ASSERT(pNewClass != NULL);
 

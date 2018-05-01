@@ -879,7 +879,7 @@ SearchResult TextSearch::ApproxSrchFrwrd( const OUString& searchStr,
 
     OUString aWTemp( searchStr );
 
-    register sal_Int32 nStt, nEnd;
+    sal_Int32 nStt, nEnd;
 
     Boundary aWBnd = xBreak->getWordBoundary( aWTemp, startPos,
             aSrchPara.Locale,
@@ -926,7 +926,7 @@ SearchResult TextSearch::ApproxSrchBkwrd( const OUString& searchStr,
 
     OUString aWTemp( searchStr );
 
-    register sal_Int32 nStt, nEnd;
+    sal_Int32 nStt, nEnd;
 
     Boundary aWBnd = xBreak->getWordBoundary( aWTemp, startPos,
             aSrchPara.Locale,
