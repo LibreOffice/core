@@ -455,7 +455,6 @@ void FormatterBase::ImplSetText( const OUString& rText, Selection const * pNewSe
         if (maOutputHdl.IsSet())
         {
             OUString sText(mpField->GetText());
-            mpField->SetText(OUString());
             if (!maOutputHdl.Call(*mpField))
                 mpField->SetText(sText);
         }
