@@ -368,8 +368,8 @@ extern "C" UINT __stdcall UnpackMSUForInstall(MSIHANDLE hInstall)
                         MsiSetPropertyW(hInstall, L"cleanup_msu", sBinary.c_str()));
 
         {
-            HANDLE hFile = CreateFileW(sBinary.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS,
-                                       FILE_ATTRIBUTE_NORMAL, 0);
+            HANDLE hFile = CreateFileW(sBinary.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS,
+                                       FILE_ATTRIBUTE_NORMAL, nullptr);
             if (hFile == INVALID_HANDLE_VALUE)
                 ThrowLastError("CreateFileW");
             auto aFileHandleGuard(Guard(hFile));
