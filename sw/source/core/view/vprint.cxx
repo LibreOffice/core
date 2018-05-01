@@ -445,7 +445,8 @@ sw_getPage(SwRootFrame const& rLayout, sal_Int32 const nPage)
 bool SwViewShell::PrintOrPDFExport(
     OutputDevice *pOutDev,
     SwPrintData const& rPrintData,
-    sal_Int32 nRenderer     /* the index in the vector of pages to be printed */ )
+    sal_Int32 nRenderer,     /* the index in the vector of pages to be printed */
+    bool bIsPDFExport )
 {
     // CAUTION: Do also always update the printing routines in viewpg.cxx (PrintProspect)!
 
@@ -510,8 +511,7 @@ bool SwViewShell::PrintOrPDFExport(
 
         // save options at draw view:
         SwDrawViewSave aDrawViewSave( pShell->GetDrawView() );
-
-        pShell->PrepareForPrint( rPrintData );
+        pShell->PrepareForPrint( rPrintData, bIsPDFExport );
 
         const sal_Int32 nPage = rPrintData.GetRenderData().GetPagesToPrint()[ nRenderer ];
         OSL_ENSURE( nPage < 0 ||
@@ -683,14 +683,15 @@ SwDrawViewSave::~SwDrawViewSave()
 }
 
 // OD 09.01.2003 #i6467# - method also called for page preview
-void SwViewShell::PrepareForPrint( const SwPrintData &rOptions )
+void SwViewShell::PrepareForPrint( const SwPrintData &rOptions, bool bIsPDFExport )
  {
     mpOpt->SetGraphic  ( rOptions.m_bPrintGraphic );
     mpOpt->SetTable    ( rOptions.m_bPrintTable );
-    mpOpt->SetDraw     ( rOptions.m_bPrintDraw  );
+    mpOpt->SetDraw     ( rOptions.m_bPrintDraw );
     mpOpt->SetControl  ( rOptions.m_bPrintControl );
     mpOpt->SetPageBack ( rOptions.m_bPrintPageBackground );
-    mpOpt->SetBlackFont( rOptions.m_bPrintBlackFont );
+    // Font should not be balck if it's a PDF Export
+    mpOpt->SetBlackFont( rOptions.m_bPrintBlackFont && !bIsPDFExport );
 
     if ( HasDrawView() )
     {
