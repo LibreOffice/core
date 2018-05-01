@@ -32,6 +32,14 @@ public:
         EditingAllowed ///< Font may be embedded for editing document (implies viewing)
     };
 
+    /// Result of addEmbeddedFont operation
+    enum class EmbeddedFontStatus
+    {
+        ViewingAllowed, ///< Font may be embedded for viewing the document (but not editing)
+        EditingAllowed, ///< Font may be embedded for editing document (implies viewing)
+        ErrorAdding ///< An error occurred during loading of the embedded font
+    };
+
     /**
       Returns URL for a font file for the given font, or empty if it does not exist.
     */
@@ -46,7 +54,7 @@ public:
       @param key key to xor the data with, from the start until the key's length (not repeated)
       @param eot whether the data is compressed in Embedded OpenType format
     */
-    static bool addEmbeddedFont( const css::uno::Reference< css::io::XInputStream >& stream,
+    static EmbeddedFontStatus addEmbeddedFont( const css::uno::Reference< css::io::XInputStream >& stream,
         const OUString& fontName, const char* extra,
         std::vector< unsigned char > key, bool eot = false);
 

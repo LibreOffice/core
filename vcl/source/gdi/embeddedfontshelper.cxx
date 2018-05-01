@@ -62,7 +62,7 @@ void EmbeddedFontsHelper::clearTemporaryFontFiles()
     clearDir( path + "fromsystem/" );
 }
 
-bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStream >& stream, const OUString& fontName,
+EmbeddedFontsHelper::EmbeddedFontStatus EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStream >& stream, const OUString& fontName,
     const char* extra, std::vector< unsigned char > key, bool eot )
 {
     OUString fileUrl = EmbeddedFontsHelper::fileUrlForTemporaryFont( fontName, extra );
@@ -72,10 +72,10 @@ bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStrea
         case osl::File::E_None:
             break; // ok
         case osl::File::E_EXIST:
-            return true; // Assume it's already been added correctly.
+            return EmbeddedFontStatus::EditingAllowed; // Assume it's already been added correctly.
         default:
             SAL_WARN( "vcl.fonts", "Cannot open file for temporary font" );
-            return false;
+            return EmbeddedFontStatus::ErrorAdding;
     }
     size_t keyPos = 0;
     std::vector< char > fontData;
@@ -117,7 +117,7 @@ bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStrea
         {
             SAL_WARN( "vcl.fonts", "Failed to uncompress font" );
             osl::File::remove( fileUrl );
-            return false;
+            return EmbeddedFontStatus::ErrorAdding;
         }
         sal_uInt64 writtenTotal = 0;
         while( writtenTotal < uncompressedFontSize )
@@ -127,7 +127,7 @@ bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStrea
             {
                 SAL_WARN( "vcl.fonts", "Error writing temporary font file" );
                 osl::File::remove( fileUrl );
-                return false;
+                return EmbeddedFontStatus::ErrorAdding;
             }
             writtenTotal += written;
         }
@@ -140,7 +140,7 @@ bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStrea
     {
         SAL_WARN( "vcl.fonts", "Writing temporary font file failed" );
         osl::File::remove( fileUrl );
-        return false;
+        return EmbeddedFontStatus::ErrorAdding;
     }
     if( !eot )
     {
@@ -148,15 +148,12 @@ bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStrea
     }
     if( !sufficientFontRights )
     {
-        // It would be actually better to open the document in read-only mode in this case,
-        // warn the user about this, and provide a button to drop the font(s) in order
-        // to switch to editing.
-        SAL_INFO( "vcl.fonts", "Ignoring embedded font that is not usable for editing" );
-        osl::File::remove( fileUrl );
-        return false;
+        // Calling code needs to handle situation now
+        SAL_INFO( "vcl.fonts", "Embedded font that is not usable for editing, enabling but returning false" );
     }
     EmbeddedFontsHelper::activateFont( fontName, fileUrl );
-    return true;
+    return sufficientFontRights ?
+        EmbeddedFontStatus::EditingAllowed : EmbeddedFontStatus::ViewingAllowed;
 }
 
 OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName, const char* extra )

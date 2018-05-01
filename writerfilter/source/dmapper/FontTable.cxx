@@ -36,14 +36,15 @@ struct FontTable_Impl
 {
     std::vector< FontEntry::Pointer_t > aFontEntries;
     FontEntry::Pointer_t pCurrentEntry;
-    FontTable_Impl() {}
+    const DomainMapper_Impl& rDM_Impl;
+    FontTable_Impl(const DomainMapper_Impl& rImpl) : rDM_Impl(rImpl) {}
 };
 
-FontTable::FontTable()
+FontTable::FontTable( const DomainMapper_Impl& rDM_Impl )
 : LoggedProperties("FontTable")
 , LoggedTable("FontTable")
 , LoggedStream("FontTable")
-, m_pImpl( new FontTable_Impl )
+, m_pImpl( new FontTable_Impl(rDM_Impl) )
 {
 }
 
@@ -127,7 +128,8 @@ void FontTable::lcl_sprm(Sprm& rSprm)
                     nSprmId == NS_ooxml::LN_CT_Font_embedRegular ? ""
                     : nSprmId == NS_ooxml::LN_CT_Font_embedBold ? "b"
                     : nSprmId == NS_ooxml::LN_CT_Font_embedItalic ? "i"
-                    : /*NS_ooxml::LN_CT_Font_embedBoldItalic*/ "bi" );
+                    : /*NS_ooxml::LN_CT_Font_embedBoldItalic*/ "bi",
+                    m_pImpl->rDM_Impl);
                 pProperties->resolve( handler );
             }
             break;
@@ -234,10 +236,13 @@ sal_uInt32 FontTable::size()
     return m_pImpl->aFontEntries.size();
 }
 
-EmbeddedFontHandler::EmbeddedFontHandler( const OUString& _fontName, const char* _style )
+EmbeddedFontHandler::EmbeddedFontHandler( const OUString& _fontName,
+                                          const char* _style,
+                                          const DomainMapper_Impl& rImpl )
 : LoggedProperties("EmbeddedFontHandler")
 , fontName( _fontName )
 , style( _style )
+, rDM_Impl( rImpl )
 {
 }
 
@@ -264,7 +269,19 @@ EmbeddedFontHandler::~EmbeddedFontHandler()
             key[ i + 16 ] = val;
         }
     }
-    EmbeddedFontsHelper::addEmbeddedFont( inputStream, fontName, style, key );
+    if( EmbeddedFontsHelper::addEmbeddedFont( inputStream, fontName, style, key )
+        == EmbeddedFontsHelper::EmbeddedFontStatus::ViewingAllowed )
+    {
+#if 0
+        // set document to read-only - sigh, need to somehow tunnel
+        // that via UNO...
+        const SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument*>(rDM_Impl.GetTextDocument().get());
+        if( pTxtDoc )
+        {
+            pTxtDoc->GetDocShell()->SetReadOnlyUI()
+        }
+#endif
+    }
     inputStream->closeInput();
 }
 

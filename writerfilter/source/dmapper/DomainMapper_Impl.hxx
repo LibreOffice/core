@@ -659,7 +659,7 @@ public:
     FontTablePtr const & GetFontTable()
     {
         if(!m_pFontTable)
-            m_pFontTable.reset(new FontTable());
+            m_pFontTable.reset(new FontTable(*this));
          return m_pFontTable;
     }
     StyleSheetTablePtr const & GetStyleSheetTable()

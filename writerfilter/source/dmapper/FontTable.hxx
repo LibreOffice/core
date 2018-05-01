@@ -41,13 +41,15 @@ struct FontEntry
         {}
 };
 
+
+class DomainMapper_Impl;
 class FontTable : public LoggedProperties, public LoggedTable
     /*,public BinaryObj*/, public LoggedStream
 {
     std::unique_ptr<FontTable_Impl> m_pImpl;
 
  public:
-    FontTable();
+    FontTable( const DomainMapper_Impl& rDM_Impl );
     virtual ~FontTable() override;
 
     sal_uInt32          size();
@@ -86,7 +88,9 @@ typedef std::shared_ptr< FontTable >          FontTablePtr;
 class EmbeddedFontHandler : public LoggedProperties
 {
 public:
-    EmbeddedFontHandler( const OUString& fontName, const char* style );
+    EmbeddedFontHandler( const OUString& fontName,
+                         const char* style,
+                         const DomainMapper_Impl& rDM_Impl );
     virtual ~EmbeddedFontHandler() override;
 private:
     virtual void lcl_attribute( Id name, Value& val ) override;
@@ -96,6 +100,7 @@ private:
     OUString id;
     OUString fontKey;
     css::uno::Reference<css::io::XInputStream> inputStream;
+    const DomainMapper_Impl& rDM_Impl;
 };
 
 
