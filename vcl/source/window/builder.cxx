@@ -234,6 +234,8 @@ namespace weld
             aStr += MetricToString(m_eSrcUnit);
         }
 
+        fprintf(stderr, "format %d as %s\n", nValue, OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr());
+
         return aStr;
     }
 

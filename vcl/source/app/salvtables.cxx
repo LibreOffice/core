@@ -1372,9 +1372,9 @@ public:
 
     virtual void set_range(int min, int max) override
     {
+        m_xButton->SetMax(max);
         m_xButton->SetMin(min);
         m_xButton->SetFirst(min);
-        m_xButton->SetMax(max);
         m_xButton->SetLast(max);
     }
 

@@ -377,6 +377,7 @@ void SpinButton::SetRange( const Range& rRange )
 
 void SpinButton::SetValue( long nValue )
 {
+    fprintf(stderr, "SpinButton::SetValue %ld %ld %ld\n", nValue, mnMinRange, mnMaxRange);
     // adjust, if necessary
     if ( nValue > mnMaxRange )
         nValue = mnMaxRange;

@@ -734,6 +734,7 @@ void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
 
 sal_Int64 NumericFormatter::ClipAgainstMinMax(sal_Int64 nValue) const
 {
+    fprintf(stderr, "ClipAgainstMinMax %ld %ld %ld\n", nValue, mnMin, mnMax);
     if (nValue > mnMax)
         nValue = mbWrapOnLimits ? ((nValue - mnMin) % (mnMax + 1)) + mnMin
                                 : mnMax;
@@ -1119,6 +1120,7 @@ static double nonValueDoubleToValueDouble( double nValue )
 sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
                                      FieldUnit eInUnit, FieldUnit eOutUnit )
 {
+    fprintf(stderr, "in %ld %ld %d\n", nValue, mnBaseValue, nDecDigits);
     double nDouble = nonValueDoubleToValueDouble( ConvertDoubleValue(
                 static_cast<double>(nValue), mnBaseValue, nDecDigits, eInUnit, eOutUnit ) );
     sal_Int64 nLong ;
@@ -1131,6 +1133,7 @@ sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, sa
     else
         nLong = static_cast<sal_Int64>( nDouble );
 
+    fprintf(stderr, "out %ld\n", nLong);
     return nLong;
 }
 
