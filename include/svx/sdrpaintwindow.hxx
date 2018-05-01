@@ -23,6 +23,7 @@
 #include <rtl/ref.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svxdllapi.h>
+#include <memory>
 
 class SdrPaintView;
 
@@ -78,7 +79,7 @@ private:
     rtl::Reference< sdr::overlay::OverlayManager >    mxOverlayManager;
 
     // The PreRenderDevice for PreRendering
-    SdrPreRenderDevice*                                 mpPreRenderDevice;
+    std::unique_ptr<SdrPreRenderDevice>               mpPreRenderDevice;
 
     // The RedrawRegion used for rendering
     vcl::Region                                              maRedrawRegion;
@@ -123,7 +124,7 @@ public:
     void PreparePreRenderDevice();
     void DestroyPreRenderDevice();
     void OutputPreRenderDevice(const vcl::Region& rExpandedRegion);
-    SdrPreRenderDevice* GetPreRenderDevice() const { return mpPreRenderDevice; }
+    SdrPreRenderDevice* GetPreRenderDevice() const { return mpPreRenderDevice.get(); }
 
     // RedrawRegion
     const vcl::Region& GetRedrawRegion() const { return maRedrawRegion;}
