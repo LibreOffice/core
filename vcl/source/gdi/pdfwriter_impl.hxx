@@ -587,28 +587,22 @@ public:
     struct PDFGlyph
     {
         Point       m_aPos;
+        const GlyphItem* m_pGlyph;
         sal_Int32   m_nNativeWidth;
-        sal_Int32   m_nGlyphId;
         sal_Int32   m_nMappedFontId;
         sal_uInt8   m_nMappedGlyphId;
-        bool        m_bVertical;
-        bool        m_bRTL;
         int         m_nCharPos;
         int         m_nCharCount;
 
         PDFGlyph( const Point& rPos,
+                  const GlyphItem* pGlyph,
                   sal_Int32 nNativeWidth,
-                  sal_Int32 nGlyphId,
                   sal_Int32 nFontId,
                   sal_uInt8 nMappedGlyphId,
-                  bool bVertical,
-                  bool bRTL,
-                  int nCharPos,
-                  int nCharCount )
-        : m_aPos( rPos ), m_nNativeWidth( nNativeWidth ), m_nGlyphId( nGlyphId ),
+                  int nCharPos )
+        : m_aPos( rPos ), m_pGlyph(pGlyph), m_nNativeWidth( nNativeWidth ),
           m_nMappedFontId( nFontId ), m_nMappedGlyphId( nMappedGlyphId ),
-          m_bVertical(bVertical), m_bRTL(bRTL),
-          m_nCharPos(nCharPos), m_nCharCount(nCharCount)
+          m_nCharPos(nCharPos)
         {}
     };
 
