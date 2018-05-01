@@ -141,7 +141,7 @@ SQLExceptionInfo::SQLExceptionInfo(const ::com::sun::star::sdb::SQLErrorEvent& _
 //------------------------------------------------------------------------------
 SQLExceptionInfo::SQLExceptionInfo(const staruno::Any& _rError)
 {
-    const staruno::Type& aSQLExceptionType = ::getCppuType(reinterpret_cast< ::com::sun::star::sdbc::SQLException*>(NULL));
+    const staruno::Type& aSQLExceptionType = ::getCppuType(static_cast< ::com::sun::star::sdbc::SQLException*>(NULL));
     sal_Bool bValid = isAssignableFrom(aSQLExceptionType, _rError.getValueType());
     if (bValid)
         m_aContent = _rError;
@@ -155,9 +155,9 @@ void SQLExceptionInfo::implDetermineType()
 {
     staruno::Type aContentType = m_aContent.getValueType();
 
-    const Type& aSQLExceptionType = ::getCppuType( reinterpret_cast< SQLException* >( NULL ) );
-    const Type& aSQLWarningType = ::getCppuType( reinterpret_cast< SQLWarning* >( NULL ) );
-    const Type& aSQLContextType  = ::getCppuType( reinterpret_cast< SQLContext* >( NULL ) );
+    const Type& aSQLExceptionType = ::getCppuType( static_cast< SQLException* >( NULL ) );
+    const Type& aSQLWarningType = ::getCppuType( static_cast< SQLWarning* >( NULL ) );
+    const Type& aSQLContextType  = ::getCppuType( static_cast< SQLContext* >( NULL ) );
 
     if ( isAssignableFrom( aSQLContextType, m_aContent.getValueType() ) )
         m_eType = SQL_CONTEXT;

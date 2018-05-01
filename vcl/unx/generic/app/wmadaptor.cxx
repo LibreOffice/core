@@ -2522,7 +2522,7 @@ void WMAdaptor::setPID( X11SalFrame* i_pFrame ) const
 void WMAdaptor::setClientMachine( X11SalFrame* i_pFrame ) const
 {
     rtl::OString aWmClient( rtl::OUStringToOString( GetX11SalData()->GetLocalHostName(), RTL_TEXTENCODING_ASCII_US ) );
-    XTextProperty aClientProp = { (unsigned char*)aWmClient.getStr(), XA_STRING, 8, aWmClient.getLength() };
+    XTextProperty aClientProp = { (unsigned char*)aWmClient.getStr(), XA_STRING, 8, static_cast<unsigned long>(aWmClient.getLength()) };
     XSetWMClientMachine( m_pDisplay, i_pFrame->GetShellWindow(), &aClientProp );
 }
 
