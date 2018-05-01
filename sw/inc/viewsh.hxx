@@ -162,7 +162,7 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
     SAL_DLLPRIVATE bool CheckInvalidForPaint( const SwRect & );  // Direct Paint or rather
                                                                     // trigger an action.
 
-    SAL_DLLPRIVATE void PrepareForPrint( const SwPrintData &rOptions );
+    SAL_DLLPRIVATE void PrepareForPrint( const SwPrintData &rOptions, bool bIsPDFExport = false );
 
     SAL_DLLPRIVATE void ImplApplyViewOptions( const SwViewOption &rOpt );
 
@@ -346,7 +346,8 @@ public:
     // bIsPDFExport == true is: do PDF Export (no printing!)
     bool PrintOrPDFExport( OutputDevice *pOutDev,
             SwPrintData const& rPrintData,
-            sal_Int32 nRenderer /* offset in vector of pages to print */ );
+            sal_Int32 nRenderer, /* offset in vector of pages to print */
+            bool bIsPDFExport );
 
     // Printing of one brochure page.
     void PrintProspect( OutputDevice *pOutDev, const SwPrintData &rPrintData,
