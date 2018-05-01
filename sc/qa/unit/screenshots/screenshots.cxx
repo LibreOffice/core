@@ -236,7 +236,7 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
 
         case 12: // "modules/scalc/ui/movecopysheet.ui"
         {
-            pReturnDialog = mpFact->CreateScMoveTableDlg(mpViewShell->GetDialogParent(), aDefaultSheetName);
+            pReturnDialog = mpFact->CreateScMoveTableDlg(mpViewShell->GetFrameWeld(), aDefaultSheetName);
             break;
         }
 

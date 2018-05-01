@@ -1214,7 +1214,7 @@ public:
         m_xTreeView->RemoveEntry(pos);
     }
 
-    virtual int find(const OUString& rText) const override
+    virtual int find_text(const OUString& rText) const override
     {
         sal_Int32 nRet = m_xTreeView->GetEntryPos(rText);
         if (nRet == LISTBOX_ENTRY_NOTFOUND)
@@ -1272,7 +1272,7 @@ public:
         return aRows;
     }
 
-    virtual OUString get(int pos) const override
+    virtual OUString get_text(int pos) const override
     {
         return m_xTreeView->GetEntry(pos);
     }
@@ -1756,6 +1756,16 @@ public:
     virtual void make_sorted() override
     {
         m_xComboBoxText->SetStyle(m_xComboBoxText->GetStyle() | WB_SORT);
+    }
+
+    virtual void freeze() override
+    {
+        m_xComboBoxText->SetUpdateMode(false);
+    }
+
+    virtual void thaw() override
+    {
+        m_xComboBoxText->SetUpdateMode(true);
     }
 
     virtual ~SalInstanceComboBoxText() override

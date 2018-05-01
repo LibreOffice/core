@@ -463,7 +463,7 @@ public:
                                                                 long            nMaximum,
                                                                 long            nMinimum  = 0 ) = 0;
 
-    virtual VclPtr<AbstractScMoveTableDlg> CreateScMoveTableDlg(vcl::Window * pParent,
+    virtual VclPtr<AbstractScMoveTableDlg> CreateScMoveTableDlg(weld::Window * pParent,
         const OUString& rDefault) = 0;
 
     virtual VclPtr<AbstractScNameCreateDlg> CreateScNameCreateDlg(weld::Window * pParent,

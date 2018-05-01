@@ -25,73 +25,61 @@
 #include <global.hxx>
 #include <globstr.hrc>
 
-ScMoveTableDlg::ScMoveTableDlg(vcl::Window* pParent, const OUString& rDefault)
-
-    :   ModalDialog ( pParent, "MoveCopySheetDialog", "modules/scalc/ui/movecopysheet.ui" ),
-        maDefaultName( rDefault ),
-        mnCurrentDocPos( 0 ),
-        nDocument   ( 0 ),
-        nTable      ( 0 ),
-        bCopyTable  ( false ),
-        bRenameTable( false ),
-        mbEverEdited( false )
+ScMoveTableDlg::ScMoveTableDlg(weld::Window* pParent, const OUString& rDefault)
+    : GenericDialogController(pParent, "modules/scalc/ui/movecopysheet.ui", "MoveCopySheetDialog")
+    , maDefaultName(rDefault)
+    , mnCurrentDocPos(0)
+    , nDocument(0)
+    , nTable(0)
+    , bCopyTable(false)
+    , bRenameTable(false)
+    , mbEverEdited(false)
+    , m_xBtnMove(m_xBuilder->weld_radio_button("move"))
+    , m_xBtnCopy(m_xBuilder->weld_radio_button("copy"))
+    , m_xLbDoc(m_xBuilder->weld_combo_box_text("toDocument"))
+    , m_xLbTable(m_xBuilder->weld_tree_view("insertBefore"))
+    , m_xEdTabName(m_xBuilder->weld_entry("newName"))
+    , m_xFtWarn(m_xBuilder->weld_label("newNameWarn"))
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
+    , m_xUnusedLabel(m_xBuilder->weld_label("warnunused"))
+    , m_xEmptyLabel(m_xBuilder->weld_label("warnempty"))
+    , m_xInvalidLabel(m_xBuilder->weld_label("warninvalid"))
 {
-    get(pBtnMove, "move");
-    get(pBtnCopy, "copy");
-    get(pLbDoc, "toDocument");
+    assert(m_xLbDoc->get_count() == 2);
+    msCurrentDoc = m_xLbDoc->get_text(0);
+    msNewDoc = m_xLbDoc->get_text(1);
+    m_xLbDoc->clear();
+    assert(m_xLbDoc->get_count() == 0);
 
-    assert(pLbDoc->GetEntryCount() == 2);
-    msCurrentDoc = pLbDoc->GetEntry(0);
-    msNewDoc = pLbDoc->GetEntry(1);
-    pLbDoc->Clear();
-    assert(pLbDoc->GetEntryCount() == 0);
+    m_xLbTable->set_size_request(-1, m_xLbTable->get_height_rows(8));
 
-    get(pLbTable, "insertBefore");
-    pLbTable->set_height_request(pLbTable->GetTextHeight() * 8);
-    get(pEdTabName, "newName");
-    get(pFtWarn, "newNameWarn");
-    get(pBtnOk, "ok");
-
-    msStrTabNameUsed = get<FixedText>("warnunused")->GetText();
-    msStrTabNameEmpty = get<FixedText>("warnempty")->GetText();
-    msStrTabNameInvalid = get<FixedText>("warninvalid")->GetText();
+    msStrTabNameUsed = m_xUnusedLabel->get_label();
+    msStrTabNameEmpty = m_xEmptyLabel->get_label();
+    msStrTabNameInvalid = m_xInvalidLabel->get_label();
 
     Init();
 }
 
 ScMoveTableDlg::~ScMoveTableDlg()
 {
-    disposeOnce();
-}
-
-void ScMoveTableDlg::dispose()
-{
-    pBtnMove.clear();
-    pBtnCopy.clear();
-    pLbDoc.clear();
-    pLbTable.clear();
-    pEdTabName.clear();
-    pFtWarn.clear();
-    pBtnOk.clear();
-    ModalDialog::dispose();
 }
 
 void ScMoveTableDlg::GetTabNameString( OUString& rString ) const
 {
-    rString = pEdTabName->GetText();
+    rString = m_xEdTabName->get_text();
 }
 
 void ScMoveTableDlg::SetForceCopyTable()
 {
-    pBtnCopy->Check();
-    pBtnMove->Disable();
-    pBtnCopy->Disable();
+    m_xBtnCopy->set_active(true);
+    m_xBtnMove->set_sensitive(false);
+    m_xBtnCopy->set_sensitive(false);
 }
 
 void ScMoveTableDlg::EnableRenameTable(bool bFlag)
 {
     bRenameTable = bFlag;
-    pEdTabName->Enable(bFlag);
+    m_xEdTabName->set_sensitive(bFlag);
     ResetRenameInput();
 }
 
@@ -106,13 +94,13 @@ void ScMoveTableDlg::ResetRenameInput()
         return;
     }
 
-    if (!pEdTabName->IsEnabled())
+    if (!m_xEdTabName->get_sensitive())
     {
-        pEdTabName->SetText(OUString());
+        m_xEdTabName->set_text(OUString());
         return;
     }
 
-    bool bVal = pBtnCopy->IsChecked();
+    bool bVal = m_xBtnCopy->get_active();
     if (bVal)
     {
         // copy
@@ -121,88 +109,89 @@ void ScMoveTableDlg::ResetRenameInput()
         {
             OUString aStr = maDefaultName;
             pDoc->CreateValidTabName(aStr);
-            pEdTabName->SetText(aStr);
+            m_xEdTabName->set_text(aStr);
         }
         else
-            pEdTabName->SetText(maDefaultName);
+            m_xEdTabName->set_text(maDefaultName);
     }
     else
+    {
         // move
-        pEdTabName->SetText(maDefaultName);
+        m_xEdTabName->set_text(maDefaultName);
+    }
 
     CheckNewTabName();
 }
 
 void ScMoveTableDlg::CheckNewTabName()
 {
-    const OUString aNewName = pEdTabName->GetText();
+    const OUString aNewName = m_xEdTabName->get_text();
     if (aNewName.isEmpty())
     {
         // New sheet name is empty.  This is not good.
-        pFtWarn->Show();
-        pFtWarn->SetControlBackground(COL_YELLOW);
-        pFtWarn->SetText(msStrTabNameEmpty);
-        pBtnOk->Disable();
+        m_xFtWarn->show();
+//TODO        m_xFtWarn->SetControlBackground(COL_YELLOW);
+        m_xFtWarn->set_label(msStrTabNameEmpty);
+        m_xBtnOk->set_sensitive(false);
         return;
     }
 
     if (!ScDocument::ValidTabName(aNewName))
     {
         // New sheet name contains invalid characters.
-        pFtWarn->Show();
-        pFtWarn->SetControlBackground(COL_YELLOW);
-        pFtWarn->SetText(msStrTabNameInvalid);
-        pBtnOk->Disable();
+        m_xFtWarn->show();
+//TODO        m_xFtWarn->SetControlBackground(COL_YELLOW);
+        m_xFtWarn->set_label(msStrTabNameInvalid);
+        m_xBtnOk->set_sensitive(false);
         return;
     }
 
-    bool bMoveInCurrentDoc = pBtnMove->IsChecked() && pLbDoc->GetSelectedEntryPos() == mnCurrentDocPos;
+    bool bMoveInCurrentDoc = m_xBtnMove->get_active() && m_xLbDoc->get_active() == mnCurrentDocPos;
     bool bFound = false;
-    const sal_Int32 nLast = pLbTable->GetEntryCount();
-    for ( sal_Int32 i=0; i<nLast && !bFound; ++i )
+    const int nLast = m_xLbTable->n_children();
+    for (int i = 0; i<nLast && !bFound; ++i)
     {
-        if ( aNewName == pLbTable->GetEntry(i) )
+        if (aNewName == m_xLbTable->get_text(i))
         {
             // Only for move within same document the same name is allowed.
-            if (!bMoveInCurrentDoc || maDefaultName != pEdTabName->GetText())
+            if (!bMoveInCurrentDoc || maDefaultName != m_xEdTabName->get_text())
                 bFound = true;
         }
     }
 
     if ( bFound )
     {
-        pFtWarn->Show();
-        pFtWarn->SetControlBackground(COL_YELLOW);
-        pFtWarn->SetText(msStrTabNameUsed);
-        pBtnOk->Disable();
+        m_xFtWarn->show();
+//TODO        m_xFtWarn->SetControlBackground(COL_YELLOW);
+        m_xFtWarn->set_label(msStrTabNameUsed);
+        m_xBtnOk->set_sensitive(false);
     }
     else
     {
-        pFtWarn->Hide();
-        pFtWarn->SetControlBackground();
-        pFtWarn->SetText(OUString());
-        pBtnOk->Enable();
+        m_xFtWarn->hide();
+//TODO        m_xFtWarn->SetControlBackground();
+        m_xFtWarn->set_label(OUString());
+        m_xBtnOk->set_sensitive(true);
     }
 }
 
 ScDocument* ScMoveTableDlg::GetSelectedDoc()
 {
-    sal_Int32 nPos = pLbDoc->GetSelectedEntryPos();
-    return static_cast<ScDocument*>(pLbDoc->GetEntryData(nPos));
+    return reinterpret_cast<ScDocument*>(m_xLbDoc->get_active_id().toUInt64());
 }
 
 void ScMoveTableDlg::Init()
 {
-    pBtnOk->SetClickHdl   ( LINK( this, ScMoveTableDlg, OkHdl ) );
-    pLbDoc->SetSelectHdl  ( LINK( this, ScMoveTableDlg, SelHdl ) );
-    pBtnCopy->SetToggleHdl( LINK( this, ScMoveTableDlg, CheckBtnHdl ) );
-    pEdTabName->SetModifyHdl( LINK( this, ScMoveTableDlg, CheckNameHdl ) );
-    pBtnMove->Check();
-    pBtnCopy->Check( false );
-    pEdTabName->Enable(false);
-    pFtWarn->Hide();
+    m_xBtnOk->connect_clicked(LINK(this, ScMoveTableDlg, OkHdl));
+    m_xLbDoc->connect_changed(LINK(this, ScMoveTableDlg, SelHdl));
+    m_xBtnCopy->connect_toggled(LINK( this, ScMoveTableDlg, CheckBtnHdl));
+    m_xEdTabName->connect_changed(LINK( this, ScMoveTableDlg, CheckNameHdl));
+    m_xBtnMove->set_active(true);
+    m_xBtnCopy->set_active(false);
+    m_xEdTabName->set_sensitive(false);
+    m_xFtWarn->hide();
     InitDocListBox();
-    SelHdl( *pLbDoc.get() );
+    SelHdl(*m_xLbDoc);
 }
 
 void ScMoveTableDlg::InitDocListBox()
@@ -213,8 +202,8 @@ void ScMoveTableDlg::InitDocListBox()
     sal_uInt16          i       = 0;
     OUString          aEntryName;
 
-    pLbDoc->Clear();
-    pLbDoc->SetUpdateMode( false );
+    m_xLbDoc->clear();
+    m_xLbDoc->freeze();
 
     while ( pSh )
     {
@@ -231,37 +220,36 @@ void ScMoveTableDlg::InitDocListBox()
                 aEntryName += msCurrentDoc;
             }
 
-            pLbDoc->InsertEntry( aEntryName, i );
-            pLbDoc->SetEntryData( i, static_cast<void*>(&pScSh->GetDocument()) );
+            m_xLbDoc->insert(i, OUString::number(reinterpret_cast<sal_uInt64>(&pScSh->GetDocument())), aEntryName);
 
             i++;
         }
         pSh = SfxObjectShell::GetNext( *pSh );
     }
 
-    pLbDoc->SetUpdateMode( true );
-    pLbDoc->InsertEntry(msNewDoc);
-    pLbDoc->SelectEntryPos( nSelPos );
+    m_xLbDoc->thaw();
+    m_xLbDoc->append_text(msNewDoc);
+    m_xLbDoc->set_active(nSelPos);
 }
 
 // Handler:
 
-IMPL_LINK( ScMoveTableDlg, CheckBtnHdl, RadioButton&, rBtn, void )
+IMPL_LINK( ScMoveTableDlg, CheckBtnHdl, weld::ToggleButton&, rBtn, void )
 {
-    if (&rBtn == pBtnCopy)
+    if (&rBtn == m_xBtnCopy.get())
         ResetRenameInput();
 }
 
-IMPL_LINK_NOARG(ScMoveTableDlg, OkHdl, Button*, void)
+IMPL_LINK_NOARG(ScMoveTableDlg, OkHdl, weld::Button&, void)
 {
-    const sal_Int32 nDocSel  = pLbDoc->GetSelectedEntryPos();
-    const sal_Int32 nDocLast = pLbDoc->GetEntryCount()-1;
-    const sal_Int32 nTabSel  = pLbTable->GetSelectedEntryPos();
-    const sal_Int32 nTabLast = pLbTable->GetEntryCount()-1;
+    const sal_Int32 nDocSel  = m_xLbDoc->get_active();
+    const sal_Int32 nDocLast = m_xLbDoc->get_count() - 1;
+    const sal_Int32 nTabSel  = m_xLbTable->get_selected_index();
+    const sal_Int32 nTabLast = m_xLbTable->n_children() - 1;
 
     nDocument   = (nDocSel != nDocLast) ? nDocSel : SC_DOC_NEW;
     nTable      = (nTabSel != nTabLast) ? static_cast<SCTAB>(nTabSel) : SC_TAB_APPEND;
-    bCopyTable  = pBtnCopy->IsChecked();
+    bCopyTable  = m_xBtnCopy->get_active();
 
     if (bCopyTable)
     {
@@ -271,52 +259,46 @@ IMPL_LINK_NOARG(ScMoveTableDlg, OkHdl, Button*, void)
         ScDocument* pDoc = GetSelectedDoc();
         if (pDoc)
             pDoc->CreateValidTabName(aCopyName);
-        if (aCopyName == pEdTabName->GetText())
-            pEdTabName->SetText( OUString() );
+        if (aCopyName == m_xEdTabName->get_text())
+            m_xEdTabName->set_text(OUString());
     }
     else
     {
         // Return an empty string, when the new name is the same as the
         // original name.
-        if (maDefaultName == pEdTabName->GetText())
-            pEdTabName->SetText(OUString());
+        if (maDefaultName == m_xEdTabName->get_text())
+            m_xEdTabName->set_text(OUString());
     }
 
-    EndDialog( RET_OK );
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK( ScMoveTableDlg, SelHdl, ListBox&, rLb, void )
+IMPL_LINK_NOARG(ScMoveTableDlg, SelHdl, weld::ComboBoxText&, void)
 {
-    if ( &rLb == pLbDoc )
-    {
-        ScDocument* pDoc = GetSelectedDoc();
-        OUString aName;
+    ScDocument* pDoc = GetSelectedDoc();
+    OUString aName;
 
-        pLbTable->Clear();
-        pLbTable->SetUpdateMode( false );
-        if ( pDoc )
+    m_xLbTable->clear();
+    m_xLbTable->freeze();
+    if ( pDoc )
+    {
+        SCTAB nLast = pDoc->GetTableCount()-1;
+        for (SCTAB i = 0; i <= nLast; ++i)
         {
-            SCTAB nLast = pDoc->GetTableCount()-1;
-            for ( SCTAB i=0; i<=nLast; i++ )
-            {
-                pDoc->GetName( i, aName );
-                pLbTable->InsertEntry( aName, static_cast<sal_uInt16>(i) );
-            }
+            pDoc->GetName(i, aName);
+            m_xLbTable->append_text(aName);
         }
-        pLbTable->InsertEntry( ScGlobal::GetRscString(STR_MOVE_TO_END) );
-        pLbTable->SetUpdateMode( true );
-        pLbTable->SelectEntryPos( 0 );
-        ResetRenameInput();
     }
+    m_xLbTable->append_text(ScGlobal::GetRscString(STR_MOVE_TO_END));
+    m_xLbTable->thaw();
+    m_xLbTable->select(0);
+    ResetRenameInput();
 }
 
-IMPL_LINK( ScMoveTableDlg, CheckNameHdl, Edit&, rEdt, void )
+IMPL_LINK_NOARG(ScMoveTableDlg, CheckNameHdl, weld::Entry&, void)
 {
-    if ( &rEdt == pEdTabName )
-    {
-        mbEverEdited = true;
-        CheckNewTabName();
-    }
+    mbEverEdited = true;
+    CheckNewTabName();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

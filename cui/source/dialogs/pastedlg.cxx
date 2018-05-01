@@ -153,7 +153,7 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
                     continue;
             }
 
-            if (ObjectLB().find(aName) == -1)
+            if (ObjectLB().find_text(aName) == -1)
             {
                 ObjectLB().append(OUString::number(static_cast<sal_uInt32>(nFormat)), aName, "");
             }
