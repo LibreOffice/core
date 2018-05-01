@@ -572,16 +572,21 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
         uno::Sequence< beans::PropertyValue > aMediaDescriptor( 1 );
         aMediaDescriptor[0].Name = OUString("URL");
         aMediaDescriptor[0].Value <<= OUString( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
-        if ( pDoc && pDoc->GetDocShell() && pDoc->GetDocShell()->GetMedium() )
+
+        if (SfxMedium* pMedium = pDoc && pDoc->GetDocShell() ? pDoc->GetDocShell()->GetMedium() : nullptr)
         {
-            uno::Reference< task::XInteractionHandler > xInteraction =
-                                        pDoc->GetDocShell()->GetMedium()->GetInteractionHandler();
+            uno::Reference< task::XInteractionHandler > xInteraction = pMedium->GetInteractionHandler();
             if ( xInteraction.is() )
             {
                 aMediaDescriptor.realloc( 2 );
                 aMediaDescriptor[1].Name = OUString( "InteractionHandler" );
                 aMediaDescriptor[1].Value <<= xInteraction;
             }
+
+            const sal_Int32 nLen = aMediaDescriptor.getLength() + 1;
+            aMediaDescriptor.realloc(nLen);
+            aMediaDescriptor[nLen - 1].Name = "Referer";
+            aMediaDescriptor[nLen - 1].Value <<= pMedium->GetName();
         }
 
         uno::Reference < embed::XEmbeddedObject > xObj(
