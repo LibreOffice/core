@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_a747fd1b",
+        "filename": "vcl/source/gdi/embeddedfontshelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-05-01T08:22:37Z",
+      "side": 0,
+      "message": "This message does match the reality now.",
+      "revId": "8a2745e1beee722c8c9691c397e493cc1160bedf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
