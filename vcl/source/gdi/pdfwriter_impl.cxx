@@ -6382,7 +6382,7 @@ void PDFWriterImpl::drawVerticalGlyphs(
         double fSkewA = 0.0;
 
         Point aDeltaPos;
-        if (rGlyphs[i].m_bVertical)
+        if (rGlyphs[i].m_pGlyph->IsVertical())
         {
             fDeltaAngle = M_PI/2.0;
             aDeltaPos.setX( m_pReferenceDevice->GetFontMetric().GetAscent() );
@@ -6400,7 +6400,7 @@ void PDFWriterImpl::drawVerticalGlyphs(
             long nOffsetY = rGlyphs[i+1].m_aPos.Y() - rGlyphs[i].m_aPos.Y();
             nXOffset += static_cast<int>(sqrt(double(nOffsetX*nOffsetX + nOffsetY*nOffsetY)));
         }
-        if( ! rGlyphs[i].m_nGlyphId )
+        if( ! rGlyphs[i].m_pGlyph->maGlyphId )
             continue;
 
         aDeltaPos = rRotScale.transform( aDeltaPos );
@@ -6750,14 +6750,11 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
             nCharPos = pGlyph->mnCharPos;
 
         aGlyphs.emplace_back(aPos,
+                             pGlyph,
                              nGlyphWidth,
-                             pGlyph->maGlyphId,
                              nMappedFontObject,
                              nMappedGlyph,
-                             pGlyph->IsVertical(),
-                             pGlyph->IsRTLGlyph(),
-                             nCharPos,
-                             pGlyph->mnCharCount);
+                             nCharPos);
     }
 
     // Avoid fill color when map mode is in pixels, the below code assumes
@@ -6819,15 +6816,15 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
             std::vector<PDFGlyph> aRun(aGlyphs.begin() + nStart, aGlyphs.begin() + nEnd);
 
             int nCharPos, nCharCount;
-            if (!aRun.front().m_bRTL)
+            if (!aRun.front().m_pGlyph->IsRTLGlyph())
             {
                 nCharPos = aRun.front().m_nCharPos;
-                nCharCount = aRun.front().m_nCharCount;
+                nCharCount = aRun.front().m_pGlyph->mnCharCount;
             }
             else
             {
                 nCharPos = aRun.back().m_nCharPos;
-                nCharCount = aRun.back().m_nCharCount;
+                nCharCount = aRun.back().m_pGlyph->mnCharCount;
             }
 
             if (nCharPos >= 0 && nCharCount)
