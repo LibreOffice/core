@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentAMOUNT">
@@ -37,36 +37,6 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-go-up</property>
   </object>
-  <object class="GtkListStore" id="liststoreEFFECT">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name guint1 -->
-      <column type="guint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="textanimtabpage|liststoreEFFECT">No Effect</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="textanimtabpage|liststoreEFFECT">Blink</col>
-        <col id="1">1</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="textanimtabpage|liststoreEFFECT">Scroll Through</col>
-        <col id="1">2</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="textanimtabpage|liststoreEFFECT">Scroll Back and Forth</col>
-        <col id="1">3</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="textanimtabpage|liststoreEFFECT">Scroll In</col>
-        <col id="1">4</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkBox" id="TextAnimation">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -90,10 +60,10 @@
               <object class="GtkLabel" id="FT_EFFECTS">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="textanimtabpage|FT_EFFECTS">E_ffect:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">LB_EFFECT</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -102,11 +72,17 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBox" id="LB_EFFECT">
+              <object class="GtkComboBoxText" id="LB_EFFECT">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">center</property>
-                <property name="model">liststoreEFFECT</property>
+                <items>
+                  <item id="0" translatable="yes" context="textanimtabpage|liststoreEFFECT">No Effect</item>
+                  <item id="1" translatable="yes" context="textanimtabpage|liststoreEFFECT">Blink</item>
+                  <item id="2" translatable="yes" context="textanimtabpage|liststoreEFFECT">Scroll Through</item>
+                  <item id="3" translatable="yes" context="textanimtabpage|liststoreEFFECT">Scroll Back and Forth</item>
+                  <item id="4" translatable="yes" context="textanimtabpage|liststoreEFFECT">Scroll In</item>
+                </items>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -322,8 +298,8 @@
                   <object class="GtkLabel" id="FT_COUNT">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="textanimtabpage|FT_COUNT">Animation cycles:</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -364,6 +340,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
+                        <property name="activates_default">True</property>
                         <accessibility>
                           <relation type="labelled-by" target="TSB_ENDLESS"/>
                         </accessibility>
@@ -385,8 +362,8 @@
                   <object class="GtkLabel" id="FT_AMOUNT">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="textanimtabpage|FT_AMOUNT">Increment:</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -427,6 +404,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
+                        <property name="activates_default">True</property>
                         <accessibility>
                           <relation type="labelled-by" target="TSB_PIXEL"/>
                         </accessibility>
@@ -448,8 +426,8 @@
                   <object class="GtkLabel" id="FT_DELAY">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="textanimtabpage|FT_DELAY">Delay:</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -490,6 +468,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
+                        <property name="activates_default">True</property>
                         <accessibility>
                           <relation type="labelled-by" target="TSB_AUTO"/>
                         </accessibility>
@@ -515,8 +494,8 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
             <property name="label" translatable="yes" context="textanimtabpage|label2">Properties</property>
+            <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
