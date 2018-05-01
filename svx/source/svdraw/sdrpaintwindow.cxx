@@ -292,7 +292,7 @@ void SdrPaintWindow::PreparePreRenderDevice()
     {
         if(!mpPreRenderDevice)
         {
-            mpPreRenderDevice = new SdrPreRenderDevice(*mpOutputDevice.get());
+            mpPreRenderDevice.reset(new SdrPreRenderDevice(*mpOutputDevice));
         }
     }
     else
@@ -308,11 +308,7 @@ void SdrPaintWindow::PreparePreRenderDevice()
 
 void SdrPaintWindow::DestroyPreRenderDevice()
 {
-    if(mpPreRenderDevice)
-    {
-        delete mpPreRenderDevice;
-        mpPreRenderDevice = nullptr;
-    }
+    mpPreRenderDevice.reset();
 }
 
 void SdrPaintWindow::OutputPreRenderDevice(const vcl::Region& rExpandedRegion)
