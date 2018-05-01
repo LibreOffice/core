@@ -27,7 +27,6 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <basic/sberrors.hxx>
-#include <comphelper/string.hxx>
 #include <ooo/vba/word/WdUnits.hpp>
 #include <ooo/vba/word/WdMovementType.hpp>
 #include <ooo/vba/word/WdGoToItem.hpp>
@@ -976,11 +975,12 @@ void SwVbaSelection::GetSelectedCellRange( OUString& sTLName, OUString& sBRName 
     uno::Reference< text::XTextTableCursor > xTextTableCursor( mxModel->getCurrentSelection(), uno::UNO_QUERY );
     if( xTextTableCursor.is() )
     {
-        OUString sRange( xTextTableCursor->getRangeName() );
-        if( comphelper::string::getTokenCount(sRange, ':') > 0 )
+        const OUString sRange( xTextTableCursor->getRangeName() );
+        if (!sRange.isEmpty())
         {
-            sTLName = sRange.getToken(0, ':');
-            sBRName = sRange.getToken(1, ':');
+            sal_Int32 nIdx{0};
+            sTLName = sRange.getToken(0, ':', nIdx);
+            sBRName = sRange.getToken(0, ':', nIdx);
         }
     }
     if( sTLName.isEmpty() )
