@@ -193,7 +193,7 @@ private:
         manager, so it can be used as a master for a "high level" sdb connection.
     */
     css::uno::Reference< css::sdbc::XConnection > buildLowLevelConnection(
-        const OUString& _rUid, const OUString& _rPwd
+        const OUString& _rUid, const OUString& _rPwd, bool bMigrationNeeded = false
         );
 
     css::uno::Reference< css::sdbc::XConnection > buildIsolatedConnection(

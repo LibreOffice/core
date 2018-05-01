@@ -18,9 +18,12 @@
  */
 
 #include <comphelper/string.hxx>
+#include <connectivity/dbtools.hxx>
 #include "createparser.hxx"
 #include "utils.hxx"
+
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/uno/Exception.hpp>
 
 using namespace ::comphelper;
 using namespace css::sdbc;
@@ -137,7 +140,8 @@ sal_Int32 lcl_getDataTypeFromHsql(const OUString& sTypeName)
     else if (sTypeName == "FLOAT")
         return DataType::FLOAT;
 
-    assert(false);
+    ::dbtools::throwSQLException("Unknown data type during HSQLDB migration",
+                                 ::dbtools::StandardSQLState::GENERAL_ERROR, nullptr);
     return -1;
 }
 

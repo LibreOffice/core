@@ -577,30 +577,11 @@ void ODatabaseSource::disposing()
     m_pImpl.clear();
 }
 
-Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString& _rUid, const OUString& _rPwd)
+Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString& _rUid, const OUString& _rPwd, bool bMigrationNeeded)
 {
     Reference< XConnection > xReturn;
 
     Reference< XDriverManager > xManager;
-
-#if ENABLE_FIREBIRD_SDBC
-    bool bNeedMigration = false;
-    if(m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
-    {
-        OUString sMigrEnvVal;
-        osl_getEnvironment(OUString("DBACCESS_HSQL_MIGRATION").pData,
-            &sMigrEnvVal.pData);
-        if(!sMigrEnvVal.isEmpty())
-            bNeedMigration = true;
-        else
-        {
-            MigrationWarnDialog aWarnDlg{nullptr};
-            bNeedMigration = aWarnDlg.run() == RET_OK;
-        }
-        if (bNeedMigration)
-            m_pImpl->m_sConnectURL = "sdbc:embedded:firebird";
-    }
-#endif
 
     try {
         xManager.set( ConnectionPool::create( m_pImpl->m_aContext ), UNO_QUERY_THROW );
@@ -714,13 +695,21 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
     }
 
 #if ENABLE_FIREBIRD_SDBC
-    if( bNeedMigration )
+    if( bMigrationNeeded )
     {
         Reference< css::document::XDocumentSubStorageSupplier> xDocSup(
                 m_pImpl->getDocumentSubStorageSupplier() );
         dbahsql::HsqlImporter importer(xReturn,
                 xDocSup->getDocumentSubStorage("database",ElementModes::READWRITE) );
-        importer.importHsqlDatabase();
+        try
+        {
+            importer.importHsqlDatabase();
+        }
+        catch(SQLException& err)
+        {
+            m_pImpl->m_sConnectURL = "sdbc:embedded:hsqldb";
+            throw std::runtime_error("Migration was not successful");
+        }
     }
 #endif
 
@@ -1146,7 +1135,37 @@ Reference< XConnection > ODatabaseSource::connectWithCompletion( const Reference
 Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const OUString& user, const OUString& password)
 {
     Reference< XConnection > xConn;
-    Reference< XConnection > xSdbcConn = buildLowLevelConnection(user, password);
+
+#if ENABLE_FIREBIRD_SDBC
+    bool bNeedMigration = false;
+    if(m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
+    {
+        OUString sMigrEnvVal;
+        osl_getEnvironment(OUString("DBACCESS_HSQL_MIGRATION").pData,
+            &sMigrEnvVal.pData);
+        if(!sMigrEnvVal.isEmpty())
+            bNeedMigration = true;
+        else
+        {
+            MigrationWarnDialog aWarnDlg{nullptr};
+            bNeedMigration = aWarnDlg.run() == RET_OK;
+        }
+        if (bNeedMigration)
+            m_pImpl->m_sConnectURL = "sdbc:embedded:firebird";
+    }
+#endif
+
+    Reference<XConnection> xSdbcConn;
+    try
+    {
+       xSdbcConn = buildLowLevelConnection(user, password, bNeedMigration);
+    }
+    catch(std::runtime_error& err)
+    {
+        // try this time without migration
+        xSdbcConn = buildLowLevelConnection(user, password, false);
+    }
+
     OSL_ENSURE( xSdbcConn.is(), "ODatabaseSource::buildIsolatedConnection: invalid return value of buildLowLevelConnection!" );
     // buildLowLevelConnection is expected to always succeed
     if ( xSdbcConn.is() )

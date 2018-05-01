@@ -19,16 +19,21 @@
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <osl/file.hxx>
 
 #include "hsqlimport.hxx"
 #include "parseschema.hxx"
@@ -293,35 +298,52 @@ void HsqlImporter::importHsqlDatabase()
     assert(m_xStorage);
 
     SchemaParser parser(m_xStorage);
-    parser.parseSchema();
 
-    auto statements = parser.getCreateStatements();
-
-    if (statements.size() < 1)
+    try
     {
-        SAL_WARN("dbaccess", "dbashql: there is nothing to import");
-        return; // there is nothing to import
+        parser.parseSchema();
+        auto statements = parser.getCreateStatements();
+
+        if (statements.size() < 1)
+        {
+            SAL_WARN("dbaccess", "dbashql: there is nothing to import");
+            return; // there is nothing to import
+        }
+
+        // schema
+        for (auto& sSql : statements)
+        {
+            Reference<XStatement> statement = m_rConnection->createStatement();
+            statement->executeQuery(sSql);
+        }
+
+        // data
+        for (const auto& tableIndex : parser.getTableIndexes())
+        {
+            std::vector<ColumnDefinition> aColTypes = parser.getTableColumnTypes(tableIndex.first);
+            parseTableRows(tableIndex.second, aColTypes, tableIndex.first);
+        }
+
+        // alter stmts
+        for (const auto& sSql : parser.getAlterStatements())
+        {
+            Reference<XStatement> statement = m_rConnection->createStatement();
+            statement->executeQuery(sSql);
+        }
     }
-
-    // schema
-    for (auto& sSql : statements)
+    catch (SQLException& err)
     {
-        Reference<XStatement> statement = m_rConnection->createStatement();
-        statement->executeQuery(sSql);
-    }
+        // clean up Firebird file, if there was one
+        constexpr char FIREBIRD_FBK[] = "firebird.fbk";
+        if (m_xStorage->hasByName(FIREBIRD_FBK))
+        {
+            m_xStorage->removeElement(FIREBIRD_FBK);
 
-    // data
-    for (const auto& tableIndex : parser.getTableIndexes())
-    {
-        std::vector<ColumnDefinition> aColTypes = parser.getTableColumnTypes(tableIndex.first);
-        parseTableRows(tableIndex.second, aColTypes, tableIndex.first);
-    }
-
-    // alter stmts
-    for (const auto& sSql : parser.getAlterStatements())
-    {
-        Reference<XStatement> statement = m_rConnection->createStatement();
-        statement->executeQuery(sSql);
+            Reference<XTransactedObject> xTrans(m_xStorage, UNO_QUERY);
+            if (xTrans.is())
+                xTrans->commit();
+        }
+        throw;
     }
 }
 }
