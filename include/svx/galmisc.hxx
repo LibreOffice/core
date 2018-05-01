@@ -31,6 +31,7 @@
 #include <svx/svxdllapi.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
+#include <memory>
 
 class GalleryTheme;
 class SotStorageStream;
@@ -142,9 +143,9 @@ using TransferableHelper::CopyToClipboard;
     GalleryTheme*                   mpTheme;
     SgaObjKind                      meObjectKind;
     sal_uInt32                      mnObjectPos;
-    tools::SvRef<SotStorageStream>             mxModelStream;
-    GraphicObject*                  mpGraphicObject;
-    INetURLObject*                  mpURL;
+    tools::SvRef<SotStorageStream>  mxModelStream;
+    std::unique_ptr<GraphicObject>  mpGraphicObject;
+    std::unique_ptr<INetURLObject>  mpURL;
 
                                     GalleryTransferable( GalleryTheme* pTheme, sal_uInt32 nObjectPos, bool bLazy );
                                     virtual ~GalleryTransferable() override;
