@@ -25,6 +25,7 @@
 #include <svx/deflt3d.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <svx/svxdllapi.h>
+#include <memory>
 
 /*
  * Forward declarations
@@ -49,7 +50,7 @@ protected:
     E3dDragConstraint           eDragConstraint;
 
     // Migrate selections
-    Impl3DMirrorConstructOverlay*                   mpMirrorOverlay;
+    std::unique_ptr<Impl3DMirrorConstructOverlay> mpMirrorOverlay;
 
     void InitView();
 

@@ -1395,7 +1395,7 @@ void E3dView::Start3DCreation()
 
     // Show mirror polygon IMMEDIATELY
     const SdrHdlList &aHdlList = GetHdlList();
-    mpMirrorOverlay = new Impl3DMirrorConstructOverlay(*this);
+    mpMirrorOverlay.reset(new Impl3DMirrorConstructOverlay(*this));
     mpMirrorOverlay->SetMirrorAxis(aHdlList.GetHdl(SdrHdlKind::Ref1)->GetPos(), aHdlList.GetHdl(SdrHdlKind::Ref2)->GetPos());
 }
 
@@ -1485,11 +1485,7 @@ E3dView::~E3dView ()
 
 void E3dView::ResetCreationActive ()
 {
-    if(mpMirrorOverlay)
-    {
-        delete mpMirrorOverlay;
-        mpMirrorOverlay = nullptr;
-    }
+    mpMirrorOverlay.reset();
 }
 
 void E3dView::InitView ()
