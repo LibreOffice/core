@@ -2138,17 +2138,16 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
     {
         do {            // middle checked loop
 
+            const sal_Int32 nNewlines{comphelper::string::getTokenCount(aExpand, '\n')};
             // When data comes from a spreadsheet, we add a DDE-table
             if( ( rData.HasFormat( SotClipboardFormatId::SYLK ) ||
                   rData.HasFormat( SotClipboardFormatId::SYLK_BIGCAPS ) ) &&
                 !aExpand.isEmpty() &&
-                 ( 1 < comphelper::string::getTokenCount(aExpand, '\n') ||
+                 ( 1 < nNewlines ||
                        comphelper::string::getTokenCount(aExpand, '\t') ) )
             {
-                sal_Int32 nRows = comphelper::string::getTokenCount(aExpand, '\n');
-                if( nRows )
-                    --nRows;
-                sal_Int32 nCols = comphelper::string::getTokenCount(aExpand.getToken(0, '\n'), '\t');
+                const sal_Int32 nRows = nNewlines ? nNewlines-1 : 0;
+                const sal_Int32 nCols = comphelper::string::getTokenCount(aExpand.getToken(0, '\n'), '\t');
 
                 // don't try to insert tables that are too large for writer
                 if (nRows > SAL_MAX_UINT16 || nCols > SAL_MAX_UINT16)
@@ -2182,7 +2181,7 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
                     SwInsertTableOptions( SwInsertTableFlags::SplitLayout, 1 ), // TODO MULTIHEADER
                     pDDETyp, nRows, nCols );
             }
-            else if( 1 < comphelper::string::getTokenCount(aExpand, '\n') )
+            else if( nNewlines > 1 )
             {
                 // multiple paragraphs -> insert a protected section
                 if( rWrtShell.HasSelection() )
