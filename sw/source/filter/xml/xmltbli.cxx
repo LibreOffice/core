@@ -1251,6 +1251,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     m_pRows( new SwXMLTableRows_Impl ),
     m_pTableNode( nullptr ),
     m_pBox1( nullptr ),
+    m_bOwnsBox1( false ),
     m_pSttNd1( nullptr ),
     m_pBoxFormat( nullptr ),
     m_pLineFormat( nullptr ),
@@ -1391,6 +1392,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     m_pRows( new SwXMLTableRows_Impl ),
     m_pTableNode( pTable->m_pTableNode ),
     m_pBox1( nullptr ),
+    m_bOwnsBox1( false ),
     m_pSttNd1( nullptr ),
     m_pBoxFormat( nullptr ),
     m_pLineFormat( nullptr ),
@@ -1408,6 +1410,8 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
 
 SwXMLTableContext::~SwXMLTableContext()
 {
+    if (m_bOwnsBox1)
+        delete m_pBox1;
     delete m_pColumnDefaultCellStyleNames;
     delete m_pSharedBoxFormats;
     delete m_pRows;
@@ -1808,6 +1812,7 @@ SwTableBox *SwXMLTableContext::NewTableBox( const SwStartNode *pStNd,
         pBox = m_pBox1;
         pBox->SetUpper( pUpper );
         m_pBox1 = nullptr;
+        m_bOwnsBox1 = false;
     }
     else
         pBox = new SwTableBox( m_pBoxFormat, *pStNd, pUpper );
@@ -2614,6 +2619,7 @@ void SwXMLTableContext::MakeTable()
         m_pTableNode->GetDoc()->getIDocumentContentOperations().DeleteSection( m_pTableNode );
         m_pTableNode = nullptr;
         m_pBox1 = nullptr;
+        m_bOwnsBox1 = false;
         m_pSttNd1 = nullptr;
         return;
     }
@@ -2732,10 +2738,10 @@ void SwXMLTableContext::MakeTable()
     }
 
     SwTableLine *pLine1 = m_pTableNode->GetTable().GetTabLines()[0U];
-    OSL_ENSURE( m_pBox1 == pLine1->GetTabBoxes()[0U],
-                "Why is box 1 change?" );
+    assert(m_pBox1 == pLine1->GetTabBoxes()[0] && !m_bOwnsBox1 && "Why is box 1 change?");
     m_pBox1->m_pStartNode = m_pSttNd1;
     pLine1->GetTabBoxes().erase( pLine1->GetTabBoxes().begin() );
+    m_bOwnsBox1 = true;
 
     m_pLineFormat = static_cast<SwTableLineFormat*>(pLine1->GetFrameFormat());
     m_pBoxFormat = static_cast<SwTableBoxFormat*>(m_pBox1->GetFrameFormat());

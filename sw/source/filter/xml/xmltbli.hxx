@@ -67,6 +67,7 @@ class SwXMLTableContext : public XMLTextTableContext
 
     SwTableNode         *m_pTableNode;
     SwTableBox          *m_pBox1;
+    bool                 m_bOwnsBox1;
     const SwStartNode   *m_pSttNd1;
 
     SwTableBoxFormat       *m_pBoxFormat;
