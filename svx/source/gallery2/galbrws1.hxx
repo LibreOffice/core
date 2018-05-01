@@ -78,8 +78,8 @@ private:
     VclPtr<GalleryThemeListBox>  mpThemes;
     VclPtr<VclAbstractDialog2>   mpThemePropertiesDialog; // to keep it alive during execution
     Gallery*                mpGallery;
-    ExchangeData*           mpExchangeData;
-    SfxItemSet*             mpThemePropsDlgItemSet;
+    std::unique_ptr<ExchangeData> mpExchangeData;
+    std::unique_ptr<SfxItemSet>   mpThemePropsDlgItemSet;
 
     Image                   aImgNormal;
     Image                   aImgDefault;
