@@ -707,7 +707,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     pCurObjShell = pViewFrame->GetObjectShell();
     pModule = pCurObjShell ? pCurObjShell->GetModule() : nullptr;
     if (pModule)
-        pStyleFamilies = pModule->CreateStyleFamilies();
+        pStyleFamilies = pModule->CreateStyleFamilies().release();
     if (!pStyleFamilies)
         pStyleFamilies = new SfxStyleFamilies;
 

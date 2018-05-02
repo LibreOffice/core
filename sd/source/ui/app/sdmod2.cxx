@@ -809,9 +809,9 @@ VclPtr<SfxTabPage> SdModule::CreateTabPage( sal_uInt16 nId, TabPageParent pParen
     return pRet;
 }
 
-SfxStyleFamilies* SdModule::CreateStyleFamilies()
+std::unique_ptr<SfxStyleFamilies> SdModule::CreateStyleFamilies()
 {
-    SfxStyleFamilies *pStyleFamilies = new SfxStyleFamilies;
+    std::unique_ptr<SfxStyleFamilies> pStyleFamilies(new SfxStyleFamilies);
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
                                                     SdResId(STR_GRAPHICS_STYLE_FAMILY),

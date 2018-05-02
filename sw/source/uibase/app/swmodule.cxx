@@ -398,9 +398,9 @@ void    SwModule::RemoveAttrPool()
     SfxItemPool::Free(m_pAttrPool);
 }
 
-SfxStyleFamilies* SwModule::CreateStyleFamilies()
+std::unique_ptr<SfxStyleFamilies> SwModule::CreateStyleFamilies()
 {
-    SfxStyleFamilies *pStyleFamilies = new SfxStyleFamilies;
+    std::unique_ptr<SfxStyleFamilies> pStyleFamilies(new SfxStyleFamilies);
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
                                                     SwResId(STR_PARAGRAPHSTYLEFAMILY),

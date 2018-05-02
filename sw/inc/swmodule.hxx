@@ -223,7 +223,7 @@ public:
     virtual std::unique_ptr<SfxItemSet> CreateItemSet( sal_uInt16 nId ) override;
     virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet ) override;
     virtual VclPtr<SfxTabPage> CreateTabPage( sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet ) override;
-    virtual SfxStyleFamilies* CreateStyleFamilies() override;
+    virtual std::unique_ptr<SfxStyleFamilies> CreateStyleFamilies() override;
 
     // Pool is created here and set at SfxShell.
     void    InitAttrPool();

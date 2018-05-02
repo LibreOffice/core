@@ -92,7 +92,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
     else
         m_pEditLinkStyleBtn->Enable();
 
-    pFamilies = SfxApplication::GetModule_Impl()->CreateStyleFamilies();
+    pFamilies = SfxApplication::GetModule_Impl()->CreateStyleFamilies().release();
 
     SfxStyleSheetBasePool* pPool = nullptr;
     SfxObjectShell* pDocShell = SfxObjectShell::Current();
