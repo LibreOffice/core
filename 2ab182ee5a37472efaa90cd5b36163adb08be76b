@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_c24a1fc5",
+        "filename": "officecfg/registry/schema/org/openoffice/UserProfile.xcs",
+        "patchSetId": 15
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-02T07:22:43Z",
+      "side": 1,
+      "message": "this looks odd, you explicitly mark the prop as nillable (which would even be the default, so no need to mention it explicitly), but then provide a non-nil default value (the empty string)",
+      "revId": "2ab182ee5a37472efaa90cd5b36163adb08be76b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
