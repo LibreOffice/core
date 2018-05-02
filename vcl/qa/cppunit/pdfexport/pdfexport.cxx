@@ -85,6 +85,7 @@ public:
     void testTdf66597_3();
 #endif
 #endif
+    void testTdf109143();
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
 #if HAVE_FEATURE_PDFIUM
@@ -112,6 +113,7 @@ public:
     CPPUNIT_TEST(testTdf66597_3);
 #endif
 #endif
+    CPPUNIT_TEST(testTdf109143);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -434,6 +436,46 @@ void PdfExportTest::testTdf106206()
     it = std::search(pStart, pEnd, aInvalidImage.getStr(), aInvalidImage.getStr() + aInvalidImage.getLength());
     // This failed, object #0 was referenced.
     CPPUNIT_ASSERT(bool(it == pEnd));
+}
+
+void PdfExportTest::testTdf109143()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf109143.odt";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    // Get access to the only image on the only page.
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+    CPPUNIT_ASSERT(pResources);
+    auto pXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"));
+    CPPUNIT_ASSERT(pXObjects);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pXObjects->GetItems().size());
+    vcl::filter::PDFObjectElement* pXObject = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pXObject);
+
+    // Make sure it's re-compressed.
+    auto pLength = dynamic_cast<vcl::filter::PDFNumberElement*>(pXObject->Lookup("Length"));
+    int nLength = pLength->GetValue();
+    // This failed: cropped TIFF-in-JPEG wasn't re-compressed, so crop was
+    // lost. Size was 59416, now is 11827.
+    CPPUNIT_ASSERT(nLength < 50000);
 }
 
 void PdfExportTest::testTdf106972()
