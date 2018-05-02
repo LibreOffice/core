@@ -108,4 +108,9 @@ $(foreach lang,$(gb_AllLangPackage_LANGS),$(call gb_Package_use_unpacked,$(1)_$(
 
 endef
 
+define gb_AllLangPackage_use_customtarget
+$(foreach lang,$(gb_AllLangPackage_LANGS),$(call gb_Package_use_customtarget,$(1)_$(lang),$(2)))
+
+endef
+
 # vim: set noet sw=4 ts=4:

@@ -4715,6 +4715,7 @@ if test -n "$with_help" -a "$with_help" != "no" -a $_os != iOS -a $_os != Androi
         ;;
     "html")
         ENABLE_HTMLHELP=TRUE
+        SCPDEFS="$SCPDEFS -DWITH_HELP"
         AC_MSG_RESULT([HTML])
         ;;
     "online")
