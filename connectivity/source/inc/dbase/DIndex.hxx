@@ -68,7 +68,7 @@ namespace connectivity
             };
 
         private:
-            SvStream*       m_pFileStream;                  // Stream to read/write the index
+            std::unique_ptr<SvStream> m_pFileStream;        // Stream to read/write the index
             NDXHeader       m_aHeader;
             std::vector<ONDXPage*>
                             m_aCollector;                   // Pool of obsolete pages

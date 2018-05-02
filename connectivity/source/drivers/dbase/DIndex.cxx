@@ -310,11 +310,7 @@ void ODbaseIndex::Release(bool bSave)
 
 void ODbaseIndex::closeImpl()
 {
-    if(m_pFileStream)
-    {
-        delete m_pFileStream;
-        m_pFileStream = nullptr;
-    }
+    m_pFileStream.reset();
 }
 
 ONDXPage* ODbaseIndex::CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent, bool bLoad)
