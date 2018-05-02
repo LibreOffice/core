@@ -326,6 +326,7 @@ void SlideBackground::Update()
         {
             mpFillAttr->Hide();
             mpFillGrad->Hide();
+            mpFillLB->Show();
             const Color aColor = GetColorSetOrDefault();
             mpFillLB->SelectEntry(aColor);
         }
