@@ -468,6 +468,11 @@ static gint
 wrapper_get_index_in_parent( AtkObject *atk_obj )
 {
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
+
+    //if we're a native GtkDrawingArea with custom a11y, use the default toolkit index in parent
+    if (obj->mpOrig)
+        return atk_object_get_index_in_parent(obj->mpOrig);
+
     gint i = -1;
 
     if( obj->mpContext.is() )
@@ -488,6 +493,11 @@ static AtkRelationSet *
 wrapper_ref_relation_set( AtkObject *atk_obj )
 {
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
+
+    //if we're a native GtkDrawingArea with custom a11y, use the default toolkit relation set impl
+    if (obj->mpOrig)
+        return atk_object_ref_relation_set(obj->mpOrig);
+
     AtkRelationSet *pSet = atk_relation_set_new();
 
     if( obj->mpContext.is() )
@@ -797,7 +807,7 @@ atk_object_wrapper_ref( const uno::Reference< accessibility::XAccessible > &rxAc
 
 AtkObject *
 atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessible >& rxAccessible,
-                        AtkObject* parent )
+                        AtkObject* parent, AtkObject* orig )
 {
     g_return_val_if_fail( rxAccessible.get() != nullptr, nullptr );
 
@@ -818,6 +828,7 @@ atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessib
         pWrap->child_about_to_be_removed = nullptr;
 
         pWrap->mpContext = xContext;
+        pWrap->mpOrig = orig;
 
         AtkObject* atk_obj = ATK_OBJECT(pWrap);
         atk_obj->role = mapToAtkRole( xContext->getAccessibleRole() );

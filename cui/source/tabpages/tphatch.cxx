@@ -594,6 +594,10 @@ void SvxHatchTabPage::PointChanged( vcl::Window*, RectPoint )
 {
 }
 
+void SvxHatchTabPage::PointChanged( weld::DrawingArea*, RectPoint )
+{
+}
+
 void SvxHatchTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )

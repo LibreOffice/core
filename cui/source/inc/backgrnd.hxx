@@ -57,6 +57,7 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual void        FillUserData() override;
     virtual void        PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
+    virtual void        PointChanged( weld::DrawingArea* pWindow, RectPoint eRP ) override;
 
     /// Shift-ListBox activation
     void                ShowSelector();

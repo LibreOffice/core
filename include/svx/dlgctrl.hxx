@@ -24,6 +24,7 @@
 #include <svx/svxdllapi.h>
 #include <svx/rectenum.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/weld.hxx>
 #include <svx/xtable.hxx>
 #include <rtl/ref.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -49,7 +50,12 @@ public:
         : SfxTabPage(pParent, rID, rUIXMLDescription, &rAttrSet)
     {
     }
-    virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) = 0;
+    SvxTabPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet &rAttrSet)
+        : SfxTabPage(pParent, rUIXMLDescription, rID, &rAttrSet)
+    {
+    }
+    virtual void PointChanged(vcl::Window* pWindow, RectPoint eRP) = 0;
+    virtual void PointChanged(weld::DrawingArea* pArea, RectPoint eRP) = 0;
 };
 
 /*************************************************************************
@@ -69,6 +75,7 @@ namespace o3tl
 }
 
 class SvxRectCtlAccessibleContext;
+class RectCtlAccessibleContext;
 class SvxPixelCtlAccessible;
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRectCtl : public Control
@@ -139,6 +146,79 @@ public:
 
     bool IsCompletelyDisabled() const { return mbCompleteDisable; }
     void DoCompletelyDisable(bool bNew);
+};
+
+class SAL_WARN_UNUSED SVX_DLLPUBLIC RectCtl
+{
+private:
+    std::unique_ptr<weld::DrawingArea> m_xControl;
+    VclPtr<SvxTabPage> m_pPage;
+
+    SVX_DLLPRIVATE void             InitSettings(vcl::RenderContext& rRenderContext);
+    SVX_DLLPRIVATE void             InitRectBitmap();
+    SVX_DLLPRIVATE BitmapEx&        GetRectBitmap();
+    SVX_DLLPRIVATE void             Resize_Impl();
+
+protected:
+    rtl::Reference<RectCtlAccessibleContext> pAccContext;
+    sal_uInt16 nBorderWidth;
+    sal_uInt16 nRadius;
+    Size m_aSize;
+    Point aPtLT, aPtMT, aPtRT;
+    Point aPtLM, aPtMM, aPtRM;
+    Point aPtLB, aPtMB, aPtRB;
+    Point aPtNew;
+    RectPoint eRP, eDefRP;
+    BitmapEx* pBitmap;
+    CTL_STATE m_nState;
+
+    bool mbCompleteDisable : 1;
+
+    void MarkToResetSettings();
+
+    RectPoint           GetRPFromPoint( Point, bool bRTL = false ) const;
+    const Point&        GetPointFromRP( RectPoint ) const;
+    Point               SetActualRPWithoutInvalidate( RectPoint eNewRP );  // returns the last point
+
+    Point               GetApproxLogPtFromPixPt( const Point& rRoughPixelPoint ) const;
+public:
+    RectCtl(weld::Builder& rBuilder, const OString& rDrawingId, SvxTabPage* pPage,
+            RectPoint eRpt = RectPoint::MM, sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80);
+    void SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder, sal_uInt16 nCircl);
+    ~RectCtl();
+
+    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
+    DECL_LINK(DoResize, const Size& rSize, void);
+    DECL_LINK(DoMouseButtonDown, const MouseEvent&, void);
+    DECL_LINK(DoKeyDown, const KeyEvent&, bool);
+    DECL_LINK(DoGetFocus, weld::Widget&, void);
+    DECL_LINK(DoLoseFocus, weld::Widget&, void);
+    DECL_LINK(MarkToResetSettings, weld::Widget&, void);
+
+    void                Reset();
+    RectPoint           GetActualRP() const { return eRP;}
+    void                SetActualRP( RectPoint eNewRP );
+
+    void                SetState( CTL_STATE nState );
+
+    static const sal_uInt8 NO_CHILDREN = 9;   // returns number of usable radio buttons
+
+    tools::Rectangle           CalculateFocusRectangle() const;
+    tools::Rectangle           CalculateFocusRectangle( RectPoint eRectPoint ) const;
+
+    css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() { return m_xControl->get_accessible_parent(); }
+    css::uno::Reference<css::accessibility::XAccessible> CreateAccessible();
+    a11yrelationset get_accessible_relation_set() { return m_xControl->get_accessible_relation_set(); }
+
+    RectPoint          GetApproxRPFromPixPt( const css::awt::Point& rPixelPoint ) const;
+
+    bool IsCompletelyDisabled() const { return mbCompleteDisable; }
+    void DoCompletelyDisable(bool bNew);
+
+    bool IsVisible() const { return m_xControl->get_visible(); }
+    bool HasFocus() const { return m_xControl->has_focus(); }
+    void GrabFocus() { m_xControl->grab_focus(); }
+    Size GetSize() const { return m_aSize; }
 };
 
 /*************************************************************************

@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/lok.hxx>
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <salframe.hxx>
 #include <salinst.hxx>
 #include <salvd.hxx>
@@ -30,6 +31,7 @@
 #include <salmenu.hxx>
 #include <svdata.hxx>
 #include <messagedialog.hxx>
+#include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
@@ -1604,6 +1606,7 @@ private:
     DECL_LINK(MouseReleaseHdl, const MouseEvent&, void);
     DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
     DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
+    DECL_LINK(StyleUpdatedHdl, VclDrawingArea&, void);
 
 public:
     SalInstanceDrawingArea(VclDrawingArea* pDrawingArea, const a11yref& rAlly,
@@ -1620,6 +1623,7 @@ public:
         m_xDrawingArea->SetMouseReleaseHdl(LINK(this, SalInstanceDrawingArea, MouseReleaseHdl));
         m_xDrawingArea->SetKeyPressHdl(LINK(this, SalInstanceDrawingArea, KeyPressHdl));
         m_xDrawingArea->SetKeyReleaseHdl(LINK(this, SalInstanceDrawingArea, KeyReleaseHdl));
+        m_xDrawingArea->SetStyleUpdatedHdl(LINK(this, SalInstanceDrawingArea, StyleUpdatedHdl));
     }
 
     virtual void queue_draw() override
@@ -1640,8 +1644,32 @@ public:
         return css::uno::Reference<css::accessibility::XAccessible>();
     }
 
+    virtual a11yrelationset get_accessible_relation_set() override
+    {
+        utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
+        css::uno::Reference< css::accessibility::XAccessibleRelationSet > xSet = pRelationSetHelper;
+        vcl::Window* pWindow = m_xDrawingArea.get();
+        if (pWindow)
+        {
+            vcl::Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
+            if (pLabeledBy && pLabeledBy != pWindow)
+            {
+                css::uno::Sequence<css::uno::Reference<css::uno::XInterface>> aSequence { pLabeledBy->GetAccessible() };
+                pRelationSetHelper->AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
+            }
+            vcl::Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
+            if (pMemberOf && pMemberOf != pWindow)
+            {
+                css::uno::Sequence<css::uno::Reference<css::uno::XInterface>> aSequence { pMemberOf->GetAccessible() };
+                pRelationSetHelper->AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
+            }
+        }
+        return xSet;
+    }
+
     virtual ~SalInstanceDrawingArea() override
     {
+        m_xDrawingArea->SetStyleUpdatedHdl(Link<VclDrawingArea&, void>());
         m_xDrawingArea->SetMousePressHdl(Link<const MouseEvent&, void>());
         m_xDrawingArea->SetMouseMoveHdl(Link<const MouseEvent&, void>());
         m_xDrawingArea->SetMouseReleaseHdl(Link<const MouseEvent&, void>());
@@ -1685,6 +1713,11 @@ IMPL_LINK(SalInstanceDrawingArea, KeyPressHdl, const KeyEvent&, rEvent, bool)
 IMPL_LINK(SalInstanceDrawingArea, KeyReleaseHdl, const KeyEvent&, rEvent, bool)
 {
     return m_aKeyReleaseHdl.Call(rEvent);
+}
+
+IMPL_LINK_NOARG(SalInstanceDrawingArea, StyleUpdatedHdl, VclDrawingArea&, void)
+{
+    m_aStyleUpdatedHdl.Call(*this);
 }
 
 //ComboBox and ListBox have similar apis, ComboBoxes in LibreOffice have an edit box and ListBoxes

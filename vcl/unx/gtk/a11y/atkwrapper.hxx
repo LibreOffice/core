@@ -43,6 +43,7 @@ namespace com { namespace sun { namespace star { namespace accessibility {
 struct AtkObjectWrapper
 {
     AtkObject aParent;
+    AtkObject* mpOrig;  //if we're a GtkDrawingArea acting as a custom LibreOffice widget, this is the toolkit default impl
 
     css::uno::Reference<css::accessibility::XAccessible> mpAccessible;
     css::uno::Reference<css::accessibility::XAccessibleContext> mpContext;
@@ -79,7 +80,7 @@ AtkObject *            atk_object_wrapper_ref(
 
 AtkObject *            atk_object_wrapper_new(
     const css::uno::Reference< css::accessibility::XAccessible >& rxAccessible,
-    AtkObject* parent = nullptr );
+    AtkObject* parent = nullptr, AtkObject* orig = nullptr );
 
 void                   atk_object_wrapper_add_child(AtkObjectWrapper* wrapper, AtkObject *child, gint index);
 void                   atk_object_wrapper_remove_child(AtkObjectWrapper* wrapper, AtkObject *child, gint index);
