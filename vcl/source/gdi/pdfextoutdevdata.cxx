@@ -404,13 +404,13 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                             GfxLinkType eType = rGraphic.GetLink().GetType();
                             if ( eType == GfxLinkType::NativeJpg )
                             {
-                                mbGroupIgnoreGDIMtfActions = rOutDevData.HasAdequateCompression(rGraphic);
+                                mbGroupIgnoreGDIMtfActions = rOutDevData.HasAdequateCompression(rGraphic, mParaRects[0], mParaRects[1]);
                                 if ( !mbGroupIgnoreGDIMtfActions )
                                     mCurrentGraphic = rGraphic;
                             }
                             else if ( eType == GfxLinkType::NativePng || eType == GfxLinkType::NativePdf )
                             {
-                                if ( eType == GfxLinkType::NativePdf || rOutDevData.HasAdequateCompression(rGraphic) )
+                                if ( eType == GfxLinkType::NativePdf || rOutDevData.HasAdequateCompression(rGraphic, mParaRects[0], mParaRects[1]) )
                                     mCurrentGraphic = rGraphic;
                             }
                         }
@@ -797,12 +797,18 @@ void PDFExtOutDevData::EndGroup( const Graphic&     rGraphic,
 }
 
 // Avoids expensive de-compression and re-compression of large images.
-bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic ) const
+bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic,
+                                               const tools::Rectangle & rOutputRect,
+                                               const tools::Rectangle & rVisibleOutputRect ) const
 {
     assert(rGraphic.IsLink() &&
            (rGraphic.GetLink().GetType() == GfxLinkType::NativeJpg ||
             rGraphic.GetLink().GetType() == GfxLinkType::NativePng ||
             rGraphic.GetLink().GetType() == GfxLinkType::NativePdf));
+
+    if (rOutputRect != rVisibleOutputRect)
+        // rOutputRect is the crop rectangle, re-compress cropped image.
+        return false;
 
     if (rGraphic.GetLink().GetDataSize() == 0)
         return false;
