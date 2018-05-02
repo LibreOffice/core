@@ -114,27 +114,6 @@ BitmapEx::BitmapEx( const Bitmap& rBmp ) :
 {
 }
 
-BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
-        maBitmap         ( rBmp ),
-        maMask           ( rMask ),
-        maBitmapSize     ( maBitmap.GetSizePixel() ),
-        meTransparent    ( !rMask ? TransparentType::NONE : TransparentType::Bitmap ),
-        mbAlpha          ( false )
-{
-    // Ensure a mask is exactly one bit deep
-    if( !!maMask && maMask.GetBitCount() != 1 )
-    {
-        SAL_WARN( "vcl", "BitmapEx: forced mask to monochrome");
-        maMask.MakeMonochrome(255);
-    }
-
-    if (!!maBitmap && !!maMask && maBitmap.GetSizePixel() != maMask.GetSizePixel())
-    {
-        OSL_ENSURE(false, "Mask size differs from Bitmap size, corrected Mask (!)");
-        maMask.Scale(maBitmap.GetSizePixel());
-    }
-}
-
 BitmapEx::BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask ) :
         maBitmap         ( rBmp ),
         maMask           ( rAlphaMask.ImplGetBitmap() ),

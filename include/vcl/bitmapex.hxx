@@ -49,7 +49,6 @@ public:
                         BitmapEx( const BitmapEx& rBitmapEx );
                         BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize );
                         BitmapEx( const Bitmap& rBmp );
-                        BitmapEx( const Bitmap& rBmp, const Bitmap& rMask );
                         BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask );
                         BitmapEx( const Bitmap& rBmp, const Color& rTransparentColor );
 
