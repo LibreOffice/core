@@ -28,7 +28,7 @@ ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument* pDoc, const Sc
     , mbMatrixFormula(bMatrixFormula)
 {
     // compile already here
-    ScCompiler aComp(mpDoc, maAddr, eGram);
+    ScCompiler aComp(mpDoc, maAddr, eGram, true, bMatrixFormula);
     mpCode.reset(aComp.CompileString(rFormula));
     if(mpCode->GetCodeError() == FormulaError::NONE && mpCode->GetLen())
         aComp.CompileTokenArray();

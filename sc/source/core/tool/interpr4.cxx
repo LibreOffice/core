@@ -65,6 +65,7 @@
 #include <doubleref.hxx>
 #include <queryparam.hxx>
 #include <tokenarray.hxx>
+#include <compiler.hxx>
 
 #include <math.h>
 #include <float.h>
@@ -2004,56 +2005,8 @@ bool ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& r
         return bOk;
     }
 
-    SCCOL nMyCol = aPos.Col();
-    SCROW nMyRow = aPos.Row();
-    SCTAB nMyTab = aPos.Tab();
-    SCCOL nCol = 0;
-    SCROW nRow = 0;
-    SCTAB nTab;
-    nTab = rRange.aStart.Tab();
-    if ( rRange.aStart.Col() <= nMyCol && nMyCol <= rRange.aEnd.Col() )
-    {
-        nRow = rRange.aStart.Row();
-        if ( nRow == rRange.aEnd.Row() )
-        {
-            bOk = true;
-            nCol = nMyCol;
-        }
-        else if ( nTab != nMyTab && nTab == rRange.aEnd.Tab()
-                && rRange.aStart.Row() <= nMyRow && nMyRow <= rRange.aEnd.Row() )
-        {
-            bOk = true;
-            nCol = nMyCol;
-            nRow = nMyRow;
-        }
-    }
-    else if ( rRange.aStart.Row() <= nMyRow && nMyRow <= rRange.aEnd.Row() )
-    {
-        nCol = rRange.aStart.Col();
-        if ( nCol == rRange.aEnd.Col() )
-        {
-            bOk = true;
-            nRow = nMyRow;
-        }
-        else if ( nTab != nMyTab && nTab == rRange.aEnd.Tab()
-                && rRange.aStart.Col() <= nMyCol && nMyCol <= rRange.aEnd.Col() )
-        {
-            bOk = true;
-            nCol = nMyCol;
-            nRow = nMyRow;
-        }
-    }
-    if ( bOk )
-    {
-        if ( nTab == rRange.aEnd.Tab() )
-            ;   // all done
-        else if ( nTab <= nMyTab && nMyTab <= rRange.aEnd.Tab() )
-            nTab = nMyTab;
-        else
-            bOk = false;
-        if ( bOk )
-            rAdr.Set( nCol, nRow, nTab );
-    }
+    bOk = ScCompiler::DoubleRefToPosSingleRefScalarCase(rRange, rAdr, aPos);
+
     if ( !bOk )
         SetError( FormulaError::NoValue );
     return bOk;
