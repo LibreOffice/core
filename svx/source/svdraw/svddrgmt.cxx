@@ -305,20 +305,13 @@ basegfx::B2DRange SdrDragMethod::getCurrentRange() const
 
 void SdrDragMethod::clearSdrDragEntries()
 {
-    for(SdrDragEntry* p : maSdrDragEntries)
-    {
-        delete p;
-    }
-
     maSdrDragEntries.clear();
 }
 
-void SdrDragMethod::addSdrDragEntry(SdrDragEntry* pNew)
+void SdrDragMethod::addSdrDragEntry(std::unique_ptr<SdrDragEntry> pNew)
 {
-    if(pNew)
-    {
-        maSdrDragEntries.push_back(pNew);
-    }
+    assert(pNew);
+    maSdrDragEntries.push_back(std::move(pNew));
 }
 
 void SdrDragMethod::createSdrDragEntries()
@@ -351,7 +344,7 @@ void SdrDragMethod::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, s
 {
     // add full object drag; Clone() at the object has to work
     // for this
-    addSdrDragEntry(new SdrDragEntrySdrObject(rOriginal, rObjectContact, true/*bModify*/));
+    addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntrySdrObject(rOriginal, rObjectContact, true/*bModify*/)));
 }
 
 void SdrDragMethod::createSdrDragEntries_SolidDrag()
@@ -403,7 +396,7 @@ void SdrDragMethod::createSdrDragEntries_SolidDrag()
                                     // when dragging a 50% transparent copy of a filled or not filled object without
                                     // outline, this is normally hard to see. Add extra wireframe in that case. This
                                     // works nice e.g. with text frames etc.
-                                    addSdrDragEntry(new SdrDragEntryPolyPolygon(pCandidate->TakeXorPoly()));
+                                    addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(pCandidate->TakeXorPoly())));
                                 }
                             }
                         }
@@ -457,7 +450,7 @@ void SdrDragMethod::createSdrDragEntries_PolygonDrag()
 
     if(aResult.count())
     {
-        addSdrDragEntry(new SdrDragEntryPolyPolygon(aResult));
+        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(aResult)));
     }
 }
 
@@ -503,7 +496,7 @@ void SdrDragMethod::createSdrDragEntries_PointDrag()
 
     if(!aPositions.empty())
     {
-        addSdrDragEntry(new SdrDragEntryPointGlueDrag(aPositions, true));
+        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPointGlueDrag(aPositions, true)));
     }
 }
 
@@ -545,7 +538,7 @@ void SdrDragMethod::createSdrDragEntries_GlueDrag()
 
     if(!aPositions.empty())
     {
-        addSdrDragEntry(new SdrDragEntryPointGlueDrag(aPositions, false));
+        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPointGlueDrag(aPositions, false)));
     }
 }
 
@@ -690,7 +683,7 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
         // clone, remember edges
         for(auto const & a: maSdrDragEntries)
         {
-            SdrDragEntrySdrObject* pSdrDragEntrySdrObject = dynamic_cast< SdrDragEntrySdrObject*>(a);
+            SdrDragEntrySdrObject* pSdrDragEntrySdrObject = dynamic_cast< SdrDragEntrySdrObject*>(a.get());
 
             if(pSdrDragEntrySdrObject)
             {
@@ -745,22 +738,19 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
         drawinglayer::primitive2d::Primitive2DContainer aResult;
         drawinglayer::primitive2d::Primitive2DContainer aResultTransparent;
 
-        for(SdrDragEntry* pCandidate: maSdrDragEntries)
+        for(auto & pCandidate: maSdrDragEntries)
         {
-            if(pCandidate)
-            {
-                const drawinglayer::primitive2d::Primitive2DContainer aCandidateResult(pCandidate->createPrimitive2DSequenceInCurrentState(*this));
+            const drawinglayer::primitive2d::Primitive2DContainer aCandidateResult(pCandidate->createPrimitive2DSequenceInCurrentState(*this));
 
-                if(!aCandidateResult.empty())
+            if(!aCandidateResult.empty())
+            {
+                if(pCandidate->getAddToTransparent())
                 {
-                    if(pCandidate->getAddToTransparent())
-                    {
-                        aResultTransparent.append(aCandidateResult);
-                    }
-                    else
-                    {
-                        aResult.append(aCandidateResult);
-                    }
+                    aResultTransparent.append(aCandidateResult);
+                }
+                else
+                {
+                    aResult.append(aCandidateResult);
                 }
             }
         }
@@ -1174,7 +1164,7 @@ void SdrDragObjOwn::createSdrDragEntries()
             if(pPV && pPV->PageWindowCount())
             {
                 sdr::contact::ObjectContact& rOC = pPV->GetPageWindow(0)->GetObjectContact();
-                addSdrDragEntry(new SdrDragEntrySdrObject(*mpClone, rOC, false));
+                addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntrySdrObject(*mpClone, rOC, false)));
 
                 // potentially no wireframe needed, full drag works
                 bAddWireframe = false;
@@ -1207,7 +1197,7 @@ void SdrDragObjOwn::createSdrDragEntries()
 
         if(aDragPolyPolygon.count())
         {
-            addSdrDragEntry(new SdrDragEntryPolyPolygon(aDragPolyPolygon));
+            addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(aDragPolyPolygon)));
         }
     }
 }
@@ -1461,7 +1451,7 @@ void SdrDragMove::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr
     // here we want the complete primitive sequence without visible clippings
     rObjectContact.resetViewPort();
 
-    addSdrDragEntry(new SdrDragEntryPrimitive2DSequence(rVOC.getPrimitive2DSequenceHierarchy(aDisplayInfo)));
+    addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPrimitive2DSequence(rVOC.getPrimitive2DSequenceHierarchy(aDisplayInfo))));
 }
 
 void SdrDragMove::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
@@ -2886,7 +2876,7 @@ void SdrDragCrook::createSdrDragEntries()
 
         if(aDragRaster.count())
         {
-            addSdrDragEntry(new SdrDragEntryPolyPolygon(aDragRaster));
+            addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(aDragRaster)));
         }
     }
 
@@ -3419,7 +3409,7 @@ void SdrDragDistort::createSdrDragEntries()
 
         if(aDragRaster.count())
         {
-            addSdrDragEntry(new SdrDragEntryPolyPolygon(aDragRaster));
+            addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(aDragRaster)));
         }
     }
 
