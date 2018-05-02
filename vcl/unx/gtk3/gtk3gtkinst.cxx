@@ -3506,6 +3506,13 @@ private:
 
         cairo_set_source_surface(cr, m_pSurface, 0, 0);
         cairo_paint(cr);
+
+        tools::Rectangle aFocusRect(m_aGetFocusRectHdl.Call(*this));
+        if (!aFocusRect.IsEmpty())
+        {
+            gtk_render_focus(gtk_widget_get_style_context(GTK_WIDGET(m_pDrawingArea)), cr,
+                             aFocusRect.Left(), aFocusRect.Top(), aFocusRect.GetWidth(), aFocusRect.GetHeight());
+        }
     }
     static void signalSizeAllocate(GtkWidget*, GdkRectangle* allocation, gpointer widget)
     {
