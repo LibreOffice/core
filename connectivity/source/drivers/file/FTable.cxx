@@ -155,8 +155,7 @@ void OFileTable::FileClose()
     if (m_pFileStream && m_pFileStream->IsWritable())
         m_pFileStream->Flush();
 
-    delete m_pFileStream;
-    m_pFileStream = nullptr;
+    m_pFileStream.reset();
 
     if (m_pBuffer)
     {
@@ -191,13 +190,12 @@ void OFileTable::dropColumn(sal_Int32 /*_nPos*/)
 }
 
 
-SvStream* OFileTable::createStream_simpleError( const OUString& _rFileName, StreamMode _eOpenMode)
+std::unique_ptr<SvStream> OFileTable::createStream_simpleError( const OUString& _rFileName, StreamMode _eOpenMode)
 {
-    SvStream* pReturn = ::utl::UcbStreamHelper::CreateStream( _rFileName, _eOpenMode, bool(_eOpenMode & StreamMode::NOCREATE));
+    std::unique_ptr<SvStream> pReturn(::utl::UcbStreamHelper::CreateStream( _rFileName, _eOpenMode, bool(_eOpenMode & StreamMode::NOCREATE)));
     if (pReturn && (ERRCODE_NONE != pReturn->GetErrorCode()))
     {
-        delete pReturn;
-        pReturn = nullptr;
+        pReturn.reset();
     }
     return pReturn;
 }

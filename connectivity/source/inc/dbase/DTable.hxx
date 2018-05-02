@@ -107,7 +107,7 @@ namespace connectivity
             std::vector<sal_Int32> m_aRealFieldLengths;
             DBFHeader       m_aHeader;
             DBFMemoHeader   m_aMemoHeader;
-            SvStream*       m_pMemoStream;
+            std::unique_ptr<SvStream> m_pMemoStream;
             rtl_TextEncoding m_eEncoding;
 
             void alterColumn(sal_Int32 index,
