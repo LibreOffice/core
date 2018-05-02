@@ -68,6 +68,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
+#include <svl/itempool.hxx>
 #include <map>
 #include <vector>
 
@@ -3804,17 +3805,23 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
             return false;
         }
 
-        const GraphicObject& rGraphicObject = pObj->GetGraphicObject();
-        const MapMode aMapMode100thmm(MapUnit::Map100thMM);
+        const GraphicObject& rGraphicObject(pObj->GetGraphicObject());
+        // tdf#117145 Usually Writer will go the bExternal path (see above), but more correct for
+        // the future is to use the MapMode from the SdrModel/SfxItemPool if the Writer's current
+        // special handling should be unified to this path in the future. Usually it *should* be
+        // MapUnit::Map100thMM, but better do not mix up Units.
+        // Checked now what SwVirtFlyDrawObj::NbcCrop is doing - it calculates everything forced
+        // to MapUnit::Map100thMM, but extracts/packs Twips to the used SdrGrafCropItem in Writer.
+        const MapMode aMapModePool(pObj->getSdrModelFromSdrObject().GetItemPool().GetMetric(0));
         Size aGraphicSize(rGraphicObject.GetPrefSize());
 
         if(MapUnit::MapPixel == rGraphicObject.GetPrefMapMode().GetMapUnit())
         {
-            aGraphicSize = Application::GetDefaultDevice()->PixelToLogic(aGraphicSize, aMapMode100thmm);
+            aGraphicSize = Application::GetDefaultDevice()->PixelToLogic(aGraphicSize, aMapModePool);
         }
         else
         {
-            aGraphicSize = OutputDevice::LogicToLogic(aGraphicSize, rGraphicObject.GetPrefMapMode(), aMapMode100thmm);
+            aGraphicSize = OutputDevice::LogicToLogic(aGraphicSize, rGraphicObject.GetPrefMapMode(), aMapModePool);
         }
 
         if(0 == aGraphicSize.Width() || 0 == aGraphicSize.Height())

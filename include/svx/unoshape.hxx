@@ -148,9 +148,14 @@ protected:
     void ForceMetricTo100th_mm(Pair& rPoint) const throw();
     void ForceMetricTo100th_mm(Point& rPoint) const throw() { ForceMetricTo100th_mm(rPoint.toPair()); }
     void ForceMetricTo100th_mm(Size& rPoint) const throw() { ForceMetricTo100th_mm(rPoint.toPair()); }
-    // Dimension arrows change size/position on save/reload (#i59051#)
+
+    // version for basegfx::B2DPolyPolygon
     void ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const throw();
     void ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) const throw();
+
+    // tdf#117145 version for basegfx::B2DHomMatrix
+    void ForceMetricToItemPoolMetric(basegfx::B2DHomMatrix& rB2DHomMatrix) const throw();
+    void ForceMetricTo100th_mm(basegfx::B2DHomMatrix& rB2DHomMatrix) const throw();
 
     css::uno::Any GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertySimpleEntry* pMap ) const;
 
