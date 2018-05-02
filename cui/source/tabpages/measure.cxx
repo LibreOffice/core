@@ -619,6 +619,11 @@ void SvxMeasurePage::PointChanged( vcl::Window* pWindow, RectPoint /*eRP*/ )
     ChangeAttrHdl_Impl( pWindow );
 }
 
+void SvxMeasurePage::PointChanged( weld::DrawingArea*, RectPoint /*eRP*/ )
+{
+    ChangeAttrHdl_Impl( m_pCtlPosition );
+}
+
 IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, Button*, p, void )
 {
     if( m_pTsbAutoPosH->GetState() == TRISTATE_TRUE )

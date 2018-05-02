@@ -3485,6 +3485,7 @@ private:
     gulong m_nButtonReleaseSignalId;
     gulong m_nKeyPressSignalId;
     gulong m_nKeyReleaseSignalId;
+    gulong m_nStyleUpdatedSignalId;
 
     static gboolean signalDraw(GtkWidget*, cairo_t* cr, gpointer widget)
     {
@@ -3528,6 +3529,16 @@ private:
         cairo_surface_set_device_scale(m_pSurface, nScale, nScale);
 #endif
         m_aSizeAllocateHdl.Call(Size(nWidth, nHeight));
+    }
+    static void signalStyleUpdated(GtkWidget*, gpointer widget)
+    {
+        GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
+        SolarMutexGuard aGuard;
+        return pThis->signal_style_updated();
+    }
+    void signal_style_updated()
+    {
+        m_aStyleUpdatedHdl.Call(*this);
     }
     static gboolean signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer widget)
     {
@@ -3655,16 +3666,17 @@ public:
         , m_nButtonReleaseSignalId(g_signal_connect(m_pDrawingArea, "button-release-event", G_CALLBACK(signalButton), this))
         , m_nKeyPressSignalId(g_signal_connect(m_pDrawingArea, "key-press-event", G_CALLBACK(signalKey), this))
         , m_nKeyReleaseSignalId(g_signal_connect(m_pDrawingArea,"key-release-event", G_CALLBACK(signalKey), this))
+        , m_nStyleUpdatedSignalId(g_signal_connect(m_pDrawingArea,"style-updated", G_CALLBACK(signalStyleUpdated), this))
     {
         g_object_set_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea", this);
     }
 
-    AtkObject* GetAtkObject()
+    AtkObject* GetAtkObject(AtkObject* pDefaultAccessible)
     {
         if (!m_pAccessible && m_xAccessible.is())
         {
             GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
-            m_pAccessible = atk_object_wrapper_new(m_xAccessible, gtk_widget_get_accessible(pParent));
+            m_pAccessible = atk_object_wrapper_new(m_xAccessible, gtk_widget_get_accessible(pParent), pDefaultAccessible);
         }
         return m_pAccessible;
     }
@@ -3689,6 +3701,14 @@ public:
         return uno::Reference<css::accessibility::XAccessible>();
     }
 
+    virtual a11yrelationset get_accessible_relation_set() override
+    {
+        //get_accessible_relation_set should only be needed for the vcl implementation,
+        //in the gtk impl the native equivalent should negate the need.
+        assert(false && "get_accessible_parent should only be called on a vcl impl");
+        return uno::Reference<css::accessibility::XAccessibleRelationSet>();
+    }
+
     virtual ~GtkInstanceDrawingArea() override
     {
         g_object_steal_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea");
@@ -3696,6 +3716,7 @@ public:
             g_object_unref(m_pAccessible);
         if (m_pSurface)
             cairo_surface_destroy(m_pSurface);
+        g_signal_handler_disconnect(m_pDrawingArea, m_nStyleUpdatedSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nKeyPressSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nKeyReleaseSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nButtonPressSignalId);
@@ -4167,12 +4188,13 @@ AtkObject* (*default_drawing_area_get_accessible)(GtkWidget *widget);
 
 AtkObject* drawing_area_get_accessibity(GtkWidget *pWidget)
 {
+    AtkObject* pDefaultAccessible = default_drawing_area_get_accessible(pWidget);
     void* pData = g_object_get_data(G_OBJECT(pWidget), "g-lo-GtkInstanceDrawingArea");
     GtkInstanceDrawingArea* pDrawingArea = static_cast<GtkInstanceDrawingArea*>(pData);
-    AtkObject *pAtkObj = pDrawingArea ? pDrawingArea->GetAtkObject() : nullptr;
+    AtkObject *pAtkObj = pDrawingArea ? pDrawingArea->GetAtkObject(pDefaultAccessible) : nullptr;
     if (pAtkObj)
         return pAtkObj;
-    return default_drawing_area_get_accessible(pWidget);
+    return pDefaultAccessible;
 }
 
 void ensure_intercept_drawing_area_accessibility()

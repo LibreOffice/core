@@ -841,7 +841,12 @@ DeactivateRC SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-void SvxBackgroundTabPage::PointChanged( vcl::Window* , RectPoint  )
+void SvxBackgroundTabPage::PointChanged( vcl::Window*, RectPoint )
+{
+    // has to be implemented so that position control can work
+}
+
+void SvxBackgroundTabPage::PointChanged( weld::DrawingArea*, RectPoint )
 {
     // has to be implemented so that position control can work
 }
