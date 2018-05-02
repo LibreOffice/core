@@ -82,11 +82,13 @@ bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart pa
     {
         case ControlType::Pushbutton:
         case ControlType::Radiobutton:
-        case ControlType::Checkbox:
         case ControlType::Tooltip:
         case ControlType::Progress:
         case ControlType::ListNode:
             return (part == ControlPart::Entire);
+
+        case ControlType::Checkbox:
+            return (part == ControlPart::Entire) || (part == ControlPart::Focus);
 
         case ControlType::Menubar:
         case ControlType::MenuPopup:
@@ -419,10 +421,18 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if (type == ControlType::Checkbox)
     {
-        QStyleOptionButton option;
-        draw( QStyle::CE_CheckBox, &option, m_image.get(),
+        if (part == ControlPart::Entire)
+        {
+            QStyleOptionButton option;
+            draw( QStyle::CE_CheckBox, &option, m_image.get(),
                vclStateValue2StateFlag(nControlState, value) );
-        //m_image->save("/tmp/checkbox.png");
+        }
+        else if (part == ControlPart::Focus)
+        {
+            QStyleOptionFocusRect option;
+            draw( QStyle::PE_FrameFocusRect, &option, m_image.get(),
+                  vclStateValue2StateFlag(nControlState, value) );
+        }
     }
     else if (type == ControlType::Scrollbar)
     {
