@@ -496,6 +496,12 @@ void SvxShadowTabPage::PointChanged( vcl::Window*, RectPoint )
     ModifyShadowHdl_Impl( *m_pMtrTransparent );
 }
 
+void SvxShadowTabPage::PointChanged( weld::DrawingArea*, RectPoint )
+{
+    // repaint shadow
+    ModifyShadowHdl_Impl( *m_pMtrTransparent );
+}
+
 void SvxShadowTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
     const SvxColorListItem* pColorListItem = aSet.GetItem<SvxColorListItem>(SID_COLOR_TABLE, false);

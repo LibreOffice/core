@@ -79,6 +79,7 @@ public:
     virtual void        Reset( const SfxItemSet * ) override;
 
     virtual void        PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
+    virtual void        PointChanged( weld::DrawingArea* pWindow, RectPoint eRP ) override;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
