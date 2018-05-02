@@ -25,6 +25,7 @@
 #include <vcl/vclmedit.hxx>
 #include <sfx2/styfitem.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <memory>
 
 /* expected:
     SID_TEMPLATE_NAME   :   In: StringItem, Name of Template
@@ -55,7 +56,7 @@ class SfxManageStyleSheetPage final : public SfxTabPage
     VclPtr<FixedText>        m_pDescFt;
 
     SfxStyleSheetBase *pStyle;
-    SfxStyleFamilies *pFamilies;
+    std::unique_ptr<SfxStyleFamilies> pFamilies;
     const SfxStyleFamilyItem *pItem;
     OUString aBuf;
     bool bModified;

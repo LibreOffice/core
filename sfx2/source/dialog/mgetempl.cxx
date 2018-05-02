@@ -92,7 +92,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
     else
         m_pEditLinkStyleBtn->Enable();
 
-    pFamilies = SfxApplication::GetModule_Impl()->CreateStyleFamilies();
+    pFamilies.reset(SfxApplication::GetModule_Impl()->CreateStyleFamilies());
 
     SfxStyleSheetBasePool* pPool = nullptr;
     SfxObjectShell* pDocShell = SfxObjectShell::Current();
@@ -252,7 +252,7 @@ void SfxManageStyleSheetPage::dispose()
 {
     m_pNameRw->SetGetFocusHdl( Link<Control&,void>() );
     m_pNameRw->SetLoseFocusHdl( Link<Control&,void>() );
-    delete pFamilies;
+    pFamilies.reset();
     pItem = nullptr;
     pStyle = nullptr;
     m_pNameRo.clear();
