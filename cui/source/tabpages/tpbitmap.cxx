@@ -835,4 +835,8 @@ void SvxBitmapTabPage::PointChanged( vcl::Window* , RectPoint )
 {
 }
 
+void SvxBitmapTabPage::PointChanged( weld::DrawingArea*, RectPoint )
+{
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

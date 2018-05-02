@@ -40,26 +40,6 @@ class SvxTextAttrPage : public SvxTabPage
 private:
     static const sal_uInt16 pRanges[];
 
-    VclPtr<VclContainer>        m_pDrawingText;
-    VclPtr<VclContainer>        m_pCustomShapeText;
-
-    VclPtr<TriStateBox>         m_pTsbAutoGrowWidth;
-    VclPtr<TriStateBox>         m_pTsbAutoGrowHeight;
-    VclPtr<TriStateBox>         m_pTsbFitToSize;
-    VclPtr<TriStateBox>         m_pTsbContour;
-    VclPtr<TriStateBox>         m_pTsbWordWrapText;
-    VclPtr<TriStateBox>         m_pTsbAutoGrowSize;
-
-    VclPtr<VclFrame>            m_pFlDistance;
-    VclPtr<MetricField>         m_pMtrFldLeft;
-    VclPtr<MetricField>         m_pMtrFldRight;
-    VclPtr<MetricField>         m_pMtrFldTop;
-    VclPtr<MetricField>         m_pMtrFldBottom;
-
-    VclPtr<VclFrame>            m_pFlPosition;
-    VclPtr<SvxRectCtl>          m_pCtlPosition;
-    VclPtr<TriStateBox>         m_pTsbFullWidth;
-
     const SfxItemSet&   rOutAttrs;
     SdrObjKind    m_eObjKind;
 
@@ -70,8 +50,25 @@ private:
     bool                bWordWrapTextEnabled;
     bool                bFitToSizeEnabled;
 
-    DECL_LINK( ClickFullWidthHdl_Impl, Button*, void );
-    DECL_LINK( ClickHdl_Impl, Button*, void );
+    std::unique_ptr<weld::Widget> m_xDrawingText;
+    std::unique_ptr<weld::Widget> m_xCustomShapeText;
+    std::unique_ptr<weld::CheckButton> m_xTsbAutoGrowWidth;
+    std::unique_ptr<weld::CheckButton> m_xTsbAutoGrowHeight;
+    std::unique_ptr<weld::CheckButton> m_xTsbFitToSize;
+    std::unique_ptr<weld::CheckButton> m_xTsbContour;
+    std::unique_ptr<weld::CheckButton> m_xTsbWordWrapText;
+    std::unique_ptr<weld::CheckButton> m_xTsbAutoGrowSize;
+    std::unique_ptr<weld::Frame> m_xFlDistance;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldLeft;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldRight;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldTop;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldBottom;
+    std::unique_ptr<weld::Frame> m_xFlPosition;
+    std::unique_ptr<RectCtl> m_xCtlPosition;
+    std::unique_ptr<weld::CheckButton> m_xTsbFullWidth;
+
+    DECL_LINK(ClickFullWidthHdl_Impl, weld::Button&, void);
+    DECL_LINK(ClickHdl_Impl, weld::Button&, void);
 
     /** Return whether the text direction is from left to right (</sal_True>) or
         top to bottom (</sal_False>).
@@ -80,9 +77,8 @@ private:
 
 public:
 
-    SvxTextAttrPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );
+    SvxTextAttrPage(TabPageParent pWindow, const SfxItemSet& rInAttrs);
     virtual ~SvxTextAttrPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent, const SfxItemSet* );
     static const sal_uInt16*  GetRanges() { return pRanges; }
@@ -91,6 +87,7 @@ public:
     virtual void        Reset( const SfxItemSet * ) override;
 
     virtual void        PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
+    virtual void        PointChanged( weld::DrawingArea* pWindow, RectPoint eRP ) override;
 
     void         Construct();
     void         SetObjKind(SdrObjKind eObjKind) { m_eObjKind = eObjKind; }

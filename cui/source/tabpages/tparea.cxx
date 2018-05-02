@@ -397,6 +397,10 @@ void SvxAreaTabPage::PointChanged( vcl::Window* , RectPoint )
 {
 }
 
+void SvxAreaTabPage::PointChanged( weld::DrawingArea*, RectPoint )
+{
+}
+
 void SvxAreaTabPage::CreatePage( sal_Int32 nId, SfxTabPage* pTab )
 {
     if(nId == SOLID )

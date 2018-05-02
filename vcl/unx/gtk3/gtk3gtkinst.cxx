@@ -3485,6 +3485,7 @@ private:
     gulong m_nButtonReleaseSignalId;
     gulong m_nKeyPressSignalId;
     gulong m_nKeyReleaseSignalId;
+    gulong m_nStyleUpdatedSignalId;
 
     static gboolean signalDraw(GtkWidget*, cairo_t* cr, gpointer widget)
     {
@@ -3528,6 +3529,16 @@ private:
         cairo_surface_set_device_scale(m_pSurface, nScale, nScale);
 #endif
         m_aSizeAllocateHdl.Call(Size(nWidth, nHeight));
+    }
+    static void signalStyleUpdated(GtkWidget*, gpointer widget)
+    {
+        GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
+        SolarMutexGuard aGuard;
+        return pThis->signal_style_updated();
+    }
+    void signal_style_updated()
+    {
+        m_aStyleUpdatedHdl.Call(*this);
     }
     static gboolean signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer widget)
     {
@@ -3655,6 +3666,7 @@ public:
         , m_nButtonReleaseSignalId(g_signal_connect(m_pDrawingArea, "button-release-event", G_CALLBACK(signalButton), this))
         , m_nKeyPressSignalId(g_signal_connect(m_pDrawingArea, "key-press-event", G_CALLBACK(signalKey), this))
         , m_nKeyReleaseSignalId(g_signal_connect(m_pDrawingArea,"key-release-event", G_CALLBACK(signalKey), this))
+        , m_nStyleUpdatedSignalId(g_signal_connect(m_pDrawingArea,"style-updated", G_CALLBACK(signalStyleUpdated), this))
     {
         g_object_set_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea", this);
     }
@@ -3696,6 +3708,7 @@ public:
             g_object_unref(m_pAccessible);
         if (m_pSurface)
             cairo_surface_destroy(m_pSurface);
+        g_signal_handler_disconnect(m_pDrawingArea, m_nStyleUpdatedSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nKeyPressSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nKeyReleaseSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nButtonPressSignalId);

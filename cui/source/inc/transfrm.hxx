@@ -150,6 +150,7 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
+    virtual void PointChanged( weld::DrawingArea* pWindow, RectPoint eRP ) override;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { mpView = pSdrView; }
@@ -208,6 +209,7 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
+    virtual void PointChanged( weld::DrawingArea* pWindow, RectPoint eRP ) override;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
@@ -261,6 +263,7 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
+    virtual void PointChanged( weld::DrawingArea* pWindow, RectPoint eRP ) override;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }

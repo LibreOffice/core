@@ -549,7 +549,6 @@ void SvxPatternTabPage::ChangeColor_Impl()
     m_pCtlPreview->Invalidate();
 }
 
-
 void SvxPatternTabPage::PointChanged( vcl::Window* pWindow, RectPoint )
 {
     if( pWindow == m_pCtlPixel )
@@ -561,6 +560,18 @@ void SvxPatternTabPage::PointChanged( vcl::Window* pWindow, RectPoint )
         m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
         m_pCtlPreview->Invalidate();
     }
+
+    m_pPatternLB->SetNoSelection();
+}
+
+void SvxPatternTabPage::PointChanged( weld::DrawingArea*, RectPoint )
+{
+    m_pBitmapCtl->SetBmpArray( m_pCtlPixel->GetBitmapPixelPtr() );
+
+    // get bitmap and display it
+    m_rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_pBitmapCtl->GetBitmapEx())));
+    m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
+    m_pCtlPreview->Invalidate();
 
     m_pPatternLB->SetNoSelection();
 }

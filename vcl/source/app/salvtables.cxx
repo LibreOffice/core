@@ -1604,6 +1604,7 @@ private:
     DECL_LINK(MouseReleaseHdl, const MouseEvent&, void);
     DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
     DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
+    DECL_LINK(StyleUpdatedHdl, VclDrawingArea&, void);
 
 public:
     SalInstanceDrawingArea(VclDrawingArea* pDrawingArea, const a11yref& rAlly,
@@ -1620,6 +1621,7 @@ public:
         m_xDrawingArea->SetMouseReleaseHdl(LINK(this, SalInstanceDrawingArea, MouseReleaseHdl));
         m_xDrawingArea->SetKeyPressHdl(LINK(this, SalInstanceDrawingArea, KeyPressHdl));
         m_xDrawingArea->SetKeyReleaseHdl(LINK(this, SalInstanceDrawingArea, KeyReleaseHdl));
+        m_xDrawingArea->SetStyleUpdatedHdl(LINK(this, SalInstanceDrawingArea, StyleUpdatedHdl));
     }
 
     virtual void queue_draw() override
@@ -1642,6 +1644,7 @@ public:
 
     virtual ~SalInstanceDrawingArea() override
     {
+        m_xDrawingArea->SetStyleUpdatedHdl(Link<VclDrawingArea&, void>());
         m_xDrawingArea->SetMousePressHdl(Link<const MouseEvent&, void>());
         m_xDrawingArea->SetMouseMoveHdl(Link<const MouseEvent&, void>());
         m_xDrawingArea->SetMouseReleaseHdl(Link<const MouseEvent&, void>());
@@ -1685,6 +1688,11 @@ IMPL_LINK(SalInstanceDrawingArea, KeyPressHdl, const KeyEvent&, rEvent, bool)
 IMPL_LINK(SalInstanceDrawingArea, KeyReleaseHdl, const KeyEvent&, rEvent, bool)
 {
     return m_aKeyReleaseHdl.Call(rEvent);
+}
+
+IMPL_LINK_NOARG(SalInstanceDrawingArea, StyleUpdatedHdl, VclDrawingArea&, void)
+{
+    m_aStyleUpdatedHdl.Call(*this);
 }
 
 //ComboBox and ListBox have similar apis, ComboBoxes in LibreOffice have an edit box and ListBoxes
