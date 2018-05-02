@@ -667,7 +667,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
     {
         //start drag
         sal_uInt16  nDrgLog = static_cast<sal_uInt16>(pChartWindow->PixelToLogic(Size(DRGPIX,0)).Width());
-        SdrDragMethod* pDragMethod = nullptr;
+        std::unique_ptr<SdrDragMethod> pDragMethod;
 
         //change selection to 3D scene if rotate mode
         SdrDragMode eDragMode = pDrawViewWrapper->GetDragMode();
@@ -687,16 +687,16 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
                     else if( eKind==SdrHdlKind::UpperLeft || eKind==SdrHdlKind::UpperRight || eKind==SdrHdlKind::LowerLeft || eKind==SdrHdlKind::LowerRight )
                         eRotationDirection = DragMethod_RotateDiagram::ROTATIONDIRECTION_Z;
                 }
-                pDragMethod = new DragMethod_RotateDiagram( *pDrawViewWrapper, m_aSelection.getSelectedCID(), getModel(), eRotationDirection );
+                pDragMethod.reset(new DragMethod_RotateDiagram( *pDrawViewWrapper, m_aSelection.getSelectedCID(), getModel(), eRotationDirection ));
             }
         }
         else
         {
             OUString aDragMethodServiceName( ObjectIdentifier::getDragMethodServiceName( m_aSelection.getSelectedCID() ) );
             if( aDragMethodServiceName == ObjectIdentifier::getPieSegmentDragMethodServiceName() )
-                pDragMethod = new DragMethod_PieSegment( *pDrawViewWrapper, m_aSelection.getSelectedCID(), getModel() );
+                pDragMethod.reset(new DragMethod_PieSegment( *pDrawViewWrapper, m_aSelection.getSelectedCID(), getModel() ));
         }
-        pDrawViewWrapper->SdrView::BegDragObj(aMPos, nullptr, pHitSelectionHdl, nDrgLog, pDragMethod);
+        pDrawViewWrapper->SdrView::BegDragObj(aMPos, nullptr, pHitSelectionHdl, nDrgLog, std::move(pDragMethod));
     }
 
     impl_SetMousePointer( rMEvt );

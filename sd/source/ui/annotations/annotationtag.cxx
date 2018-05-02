@@ -652,8 +652,8 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void)
 
                             rtl::Reference< AnnotationTag > xTag( this );
 
-                            SdrDragMethod* pDragMethod = new AnnotationDragMove( mrView, xTag );
-                            mrView.BegDragObj(maMouseDownPos, nullptr, pHdl, nDrgLog, pDragMethod );
+                            std::unique_ptr<SdrDragMethod> pDragMethod(new AnnotationDragMove( mrView, xTag ));
+                            mrView.BegDragObj(maMouseDownPos, nullptr, pHdl, nDrgLog, std::move(pDragMethod) );
                         }
                     }
                     break;

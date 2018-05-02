@@ -40,6 +40,7 @@
 #include <svx/fmmodel.hxx>
 #include <svx/fmview.hxx>
 #include <svx/unomodel.hxx>
+#include <svx/svddrgmt.hxx>
 #include "codec.hxx"
 #include <svx/strings.hrc>
 #include <svx/gallery1.hxx>

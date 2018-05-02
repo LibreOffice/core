@@ -34,6 +34,7 @@
 #include <svx/fmview.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/galmisc.hxx>
+#include <svx/svddrgmt.hxx>
 #include <galobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

@@ -39,6 +39,7 @@
 #include <svx/xflclit.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/e3dsceneupdater.hxx>
+#include <svx/svddrgmt.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
 void E3dView::ConvertMarkedToPolyObj()

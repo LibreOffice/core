@@ -19,6 +19,7 @@
 
 #include <fupoor.hxx>
 
+#include <svx/svddrgmt.hxx>
 #include <svx/svxids.hrc>
 #include <svl/aeitem.hxx>
 #include <svx/svdpagv.hxx>

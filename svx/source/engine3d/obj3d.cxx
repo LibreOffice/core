@@ -54,6 +54,8 @@
 #include <vcl/gradient.hxx>
 #include <vcl/metaact.hxx>
 #include <svx/svx3ditems.hxx>
+#include <svx/svddrgmt.hxx>
+
 #include <svl/whiter.hxx>
 #include <svtools/colorcfg.hxx>
 #include <editeng/eeitem.hxx>

@@ -22,6 +22,7 @@
 #include <editeng/outlobj.hxx>
 #include <svx/view3d.hxx>
 #include <svx/scene3d.hxx>
+#include <svx/svddrgmt.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
 

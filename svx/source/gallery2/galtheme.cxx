@@ -49,6 +49,7 @@
 #include <svx/fmview.hxx>
 #include <svx/galmisc.hxx>
 #include <svx/galtheme.hxx>
+#include <svx/svddrgmt.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>

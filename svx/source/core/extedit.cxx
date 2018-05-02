@@ -19,6 +19,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/fmview.hxx>
+#include <svx/svddrgmt.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <salhelper/thread.hxx>

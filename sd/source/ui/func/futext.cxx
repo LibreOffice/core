@@ -21,6 +21,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editerr.hxx>
 #include <svx/dlgutil.hxx>
+#include <svx/svddrgmt.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svxerr.hxx>

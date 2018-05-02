@@ -33,6 +33,7 @@
 #include <svx/svxids.hrc>
 #include <svx/svdpage.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <svx/svddrgmt.hxx>
 
 void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, const tools::Rectangle& /*rOldBoundRect*/ )
 {
