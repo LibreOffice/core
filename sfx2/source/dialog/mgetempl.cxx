@@ -252,7 +252,7 @@ void SfxManageStyleSheetPage::dispose()
 {
     m_pNameRw->SetGetFocusHdl( Link<Control&,void>() );
     m_pNameRw->SetLoseFocusHdl( Link<Control&,void>() );
-    delete pFamilies;
+    pFamilies.reset();
     pItem = nullptr;
     pStyle = nullptr;
     m_pNameRo.clear();
