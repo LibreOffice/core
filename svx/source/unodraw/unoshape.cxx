@@ -471,7 +471,6 @@ void SvxShape::ForceMetricToItemPoolMetric(Pair& rPoint) const throw()
     }
 }
 
-// Reintroduction of fix for issue i59051 (#i108851#)
 void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const throw()
 {
     DBG_TESTSOLARMUTEX();
@@ -500,6 +499,35 @@ void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon
     }
 }
 
+void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DHomMatrix& rB2DHomMatrix) const throw()
+{
+    DBG_TESTSOLARMUTEX();
+    if(HasSdrObject())
+    {
+        MapUnit eMapUnit(GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0));
+        if(eMapUnit != MapUnit::Map100thMM)
+        {
+            switch(eMapUnit)
+            {
+                case MapUnit::MapTwip :
+                {
+                    const double fMMToTWIPS(72.0 / 127.0);
+                    const basegfx::utils::B2DHomMatrixBufferedDecompose aDecomposedTransform(rB2DHomMatrix);
+                    rB2DHomMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+                        aDecomposedTransform.getScale() * fMMToTWIPS,
+                        aDecomposedTransform.getShearX(),
+                        aDecomposedTransform.getRotate(),
+                        aDecomposedTransform.getTranslate() * fMMToTWIPS);
+                    break;
+                }
+                default:
+                {
+                    OSL_FAIL("Missing unit translation to PoolMetric!");
+                }
+            }
+        }
+    }
+}
 
 void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
 {
@@ -527,7 +555,6 @@ void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
     }
 }
 
-// Reintroduction of fix for issue i59051 (#i108851#)
 void SvxShape::ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) const throw()
 {
     DBG_TESTSOLARMUTEX();
@@ -556,6 +583,36 @@ void SvxShape::ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) cons
     }
 }
 
+void SvxShape::ForceMetricTo100th_mm(basegfx::B2DHomMatrix& rB2DHomMatrix) const throw()
+{
+    DBG_TESTSOLARMUTEX();
+    MapUnit eMapUnit = MapUnit::Map100thMM;
+    if(HasSdrObject())
+    {
+        eMapUnit = GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0);
+        if(eMapUnit != MapUnit::Map100thMM)
+        {
+            switch(eMapUnit)
+            {
+                case MapUnit::MapTwip :
+                {
+                    const double fTWIPSToMM(127.0 / 72.0);
+                    const basegfx::utils::B2DHomMatrixBufferedDecompose aDecomposedTransform(rB2DHomMatrix);
+                    rB2DHomMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+                        aDecomposedTransform.getScale() * fTWIPSToMM,
+                        aDecomposedTransform.getShearX(),
+                        aDecomposedTransform.getRotate(),
+                        aDecomposedTransform.getTranslate() * fTWIPSToMM);
+                    break;
+                }
+                default:
+                {
+                    OSL_FAIL("Missing unit translation to 100th mm!");
+                }
+            }
+        }
+    }
+}
 
 void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet,
   SfxItemSet& rSet, const uno::Reference< beans::XPropertySet >& xSet, const SfxItemPropertyMap* pMap )
@@ -2031,6 +2088,10 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
         {
             Point aVclPoint( aPnt.X, aPnt.Y );
 
+            // tdf#117145 metric of SdrModel is app-specific, metric of UNO API is 100thmm
+            // Need to adapt aVclPoint from 100thmm to app-specific
+            ForceMetricToItemPoolMetric(aVclPoint);
+
             // #90763# position is relative to top left, make it absolute
             basegfx::B2DPolyPolygon aNewPolyPolygon;
             basegfx::B2DHomMatrix aNewHomogenMatrix;
@@ -2038,9 +2099,6 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 
             aVclPoint.AdjustX(basegfx::fround(aNewHomogenMatrix.get(0, 2)) );
             aVclPoint.AdjustY(basegfx::fround(aNewHomogenMatrix.get(1, 2)) );
-
-            // #88657# metric of pool maybe twips (writer)
-            ForceMetricToItemPoolMetric(aVclPoint);
 
             // #88491# position relative to anchor
             if( GetSdrObject()->getSdrModelFromSdrObject().IsWriter() )
@@ -2062,6 +2120,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
             basegfx::B2DPolyPolygon aNewPolyPolygon;
             basegfx::B2DHomMatrix aNewHomogenMatrix;
 
+            // tdf#117145 SdrModel data is app-specific
             GetSdrObject()->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
 
             aNewHomogenMatrix.set(0, 0, aMatrix.Line1.Column1);
@@ -2073,6 +2132,10 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
             aNewHomogenMatrix.set(2, 0, aMatrix.Line3.Column1);
             aNewHomogenMatrix.set(2, 1, aMatrix.Line3.Column2);
             aNewHomogenMatrix.set(2, 2, aMatrix.Line3.Column3);
+
+            // tdf#117145 metric of SdrModel is app-specific, metric of UNO API is 100thmm
+            // Need to adapt aNewHomogenMatrix from 100thmm to app-specific
+            ForceMetricToItemPoolMetric(aNewHomogenMatrix);
 
             GetSdrObject()->TRSetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
             return true;
@@ -2474,9 +2537,6 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
             aVclPoint -= GetSdrObject()->GetAnchorPos();
         }
 
-        // #88657# metric of pool maybe twips (writer)
-        ForceMetricTo100th_mm(aVclPoint);
-
         // #90763# pos is absolute, make it relative to top left
         basegfx::B2DPolyPolygon aNewPolyPolygon;
         basegfx::B2DHomMatrix aNewHomogenMatrix;
@@ -2484,6 +2544,10 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 
         aVclPoint.AdjustX( -(basegfx::fround(aNewHomogenMatrix.get(0, 2))) );
         aVclPoint.AdjustY( -(basegfx::fround(aNewHomogenMatrix.get(1, 2))) );
+
+        // tdf#117145 metric of SdrModel is app-specific, metric of UNO API is 100thmm
+        // Need to adapt aVclPoint from app-specific to 100thmm
+        ForceMetricTo100th_mm(aVclPoint);
 
         awt::Point aPnt( aVclPoint.X(), aVclPoint.Y() );
         rValue <<= aPnt;
@@ -2496,6 +2560,10 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
         basegfx::B2DHomMatrix aNewHomogenMatrix;
         GetSdrObject()->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
         drawing::HomogenMatrix3 aMatrix;
+
+        // tdf#117145 metric of SdrModel is app-specific, metric of UNO API is 100thmm
+        // Need to adapt aNewHomogenMatrix from app-specific to 100thmm
+        ForceMetricTo100th_mm(aNewHomogenMatrix);
 
         aMatrix.Line1.Column1 = aNewHomogenMatrix.get(0, 0);
         aMatrix.Line1.Column2 = aNewHomogenMatrix.get(0, 1);

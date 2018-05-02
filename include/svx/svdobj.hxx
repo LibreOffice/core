@@ -970,9 +970,6 @@ protected:
         return static_cast<const T&>(GetObjectItem(sal_uInt16(nWhich)));
     }
 
-    // get MapUnit the object is using
-    MapUnit GetObjectMapUnit() const;
-
     /// Sets a new UNO shape
     ///
     /// The default implementation of this function sets the new UNO

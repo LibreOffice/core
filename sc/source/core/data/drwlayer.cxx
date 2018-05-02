@@ -913,33 +913,17 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
             ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType(*pObj);
             if (aAnchorType == SCA_CELL || aAnchorType == SCA_CELL_RESIZE)
             {
-                double fRotate(0.0);
-                double fShearX(0.0);
-
-                Point aPoint;
-                tools::Rectangle aRect;
-
-                basegfx::B2DTuple aScale;
-                basegfx::B2DTuple aTranslate;
+                // tdf#117145 All that TR*etBaseGeometry does here is to translate
+                // the existing transformation. This can simply be applied to the existing
+                // matrix, no need to decompose as done before. Also doing this from
+                // Calc did not change metrics in any way.
+                const tools::Rectangle aRect(pDoc->GetMMRect(nCol1, nRow1, nCol1 , nRow1, nTab1));
+                const Point aPoint(bNegativePage ? aRect.Right() : aRect.Left(), aRect.Top());
                 basegfx::B2DPolyPolygon aPolyPolygon;
                 basegfx::B2DHomMatrix aOriginalMatrix;
 
-                aRect = pDoc->GetMMRect(nCol1, nRow1, nCol1 , nRow1, nTab1);
-
-                if (bNegativePage)
-                    aPoint.setX( aRect.Right() );
-                else
-                    aPoint.setX( aRect.Left() );
-                aPoint.setY( aRect.Top() );
-
                 pObj->TRGetBaseGeometry(aOriginalMatrix, aPolyPolygon);
-                aOriginalMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
-                aTranslate += ::basegfx::B2DTuple(aPoint.X(), aPoint.Y());
-                aOriginalMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
-                    aScale,
-                    fShearX,
-                    fRotate,
-                    aTranslate);
+                aOriginalMatrix.translate(aPoint.X(), aPoint.Y());
                 pObj->TRSetBaseGeometry(aOriginalMatrix, aPolyPolygon);
             }
 

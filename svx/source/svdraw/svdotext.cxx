@@ -1643,31 +1643,6 @@ bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
         }
     }
 
-    // force MapUnit to 100th mm
-    const MapUnit eMapUnit(GetObjectMapUnit());
-    if(eMapUnit != MapUnit::Map100thMM)
-    {
-        switch(eMapUnit)
-        {
-            case MapUnit::MapTwip :
-            {
-                // position
-                aTranslate.setX(ImplTwipsToMM(aTranslate.getX()));
-                aTranslate.setY(ImplTwipsToMM(aTranslate.getY()));
-
-                // size
-                aScale.setX(ImplTwipsToMM(aScale.getX()));
-                aScale.setY(ImplTwipsToMM(aScale.getY()));
-
-                break;
-            }
-            default:
-            {
-                OSL_FAIL("TRGetBaseGeometry: Missing unit translation to 100th mm!");
-            }
-        }
-    }
-
     // build matrix
     rMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
         aScale,
@@ -1707,31 +1682,6 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     aGeo.RecalcSinCos();
     aGeo.nShearAngle = 0;
     aGeo.RecalcTan();
-
-    // force metric to pool metric
-    const MapUnit eMapUnit(GetObjectMapUnit());
-    if(eMapUnit != MapUnit::Map100thMM)
-    {
-        switch(eMapUnit)
-        {
-            case MapUnit::MapTwip :
-            {
-                // position
-                aTranslate.setX(ImplMMToTwips(aTranslate.getX()));
-                aTranslate.setY(ImplMMToTwips(aTranslate.getY()));
-
-                // size
-                aScale.setX(ImplMMToTwips(aScale.getX()));
-                aScale.setY(ImplMMToTwips(aScale.getY()));
-
-                break;
-            }
-            default:
-            {
-                OSL_FAIL("TRSetBaseGeometry: Missing unit translation to PoolMetric!");
-            }
-        }
-    }
 
     // if anchor is used, make position relative to it
     if( getSdrModelFromSdrObject().IsWriter() )

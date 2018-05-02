@@ -1392,31 +1392,6 @@ bool SdrMeasureObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B
         }
     }
 
-    // force MapUnit to 100th mm
-    MapUnit eMapUnit = getSdrModelFromSdrObject().GetItemPool().GetMetric(0);
-    if(eMapUnit != MapUnit::Map100thMM)
-    {
-        switch(eMapUnit)
-        {
-            case MapUnit::MapTwip :
-            {
-                // position
-                aTranslate.setX(ImplTwipsToMM(aTranslate.getX()));
-                aTranslate.setY(ImplTwipsToMM(aTranslate.getY()));
-
-                // size
-                aScale.setX(ImplTwipsToMM(aScale.getX()));
-                aScale.setY(ImplTwipsToMM(aScale.getY()));
-
-                break;
-            }
-            default:
-            {
-                OSL_FAIL("TRGetBaseGeometry: Missing unit translation to 100th mm!");
-            }
-        }
-    }
-
     // build return value matrix
     rMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(aScale, aTranslate);
 
@@ -1428,29 +1403,6 @@ void SdrMeasureObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
     // use given transformation to derive the two defining points from unit line
     basegfx::B2DPoint aPosA(rMatrix * basegfx::B2DPoint(0.0, 0.0));
     basegfx::B2DPoint aPosB(rMatrix * basegfx::B2DPoint(1.0, 0.0));
-
-    // force metric to pool metric
-    MapUnit eMapUnit = getSdrModelFromSdrObject().GetItemPool().GetMetric(0);
-    if(eMapUnit != MapUnit::Map100thMM)
-    {
-        switch(eMapUnit)
-        {
-            case MapUnit::MapTwip :
-            {
-                // position
-                aPosA.setX(ImplMMToTwips(aPosA.getX()));
-                aPosA.setY(ImplMMToTwips(aPosA.getY()));
-                aPosB.setX(ImplMMToTwips(aPosB.getX()));
-                aPosB.setY(ImplMMToTwips(aPosB.getY()));
-
-                break;
-            }
-            default:
-            {
-                OSL_FAIL("TRSetBaseGeometry: Missing unit translation to PoolMetric!");
-            }
-        }
-    }
 
     if( getSdrModelFromSdrObject().IsWriter() )
     {
