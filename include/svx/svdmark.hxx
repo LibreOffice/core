@@ -25,6 +25,7 @@
 #include <svx/sdrobjectuser.hxx>
 #include <tools/solar.h>
 
+#include <memory>
 #include <set>
 #include <vector>
 
@@ -134,7 +135,7 @@ public:
 
 class SVX_DLLPUBLIC SdrMarkList final
 {
-    std::vector<SdrMark*>                               maList;
+    std::vector<std::unique_ptr<SdrMark>>               maList;
 
     OUString                                            maMarkName;
     OUString                                            maPointName;
