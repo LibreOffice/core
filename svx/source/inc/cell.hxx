@@ -199,7 +199,7 @@ private:
 
     const SvxItemPropertySet* mpPropSet;
 
-    sdr::properties::TextProperties*    mpProperties;
+    std::unique_ptr<sdr::properties::TextProperties> mpProperties;
 
     css::table::CellContentType mnCellContentType;
 
