@@ -1182,45 +1182,36 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject)
     const int nHeight = FPDFBitmap_GetHeight(bitmap.get());
     const int nStride = FPDFBitmap_GetStride(bitmap.get());
     Bitmap aBitmap(Size(nWidth, nHeight), 24);
-    BitmapScopedWriteAccess pWriteAccess(aBitmap.AcquireWriteAccess(), aBitmap);
 
     switch (format)
     {
         case FPDFBitmap_Gray:
-            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth
-                                                        << ", height: " << nHeight
-                                                        << ", stride: " << nStride
-                                                        << ", format: Gray");
+            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth << ", height: " << nHeight
+                                                      << ", stride: " << nStride
+                                                      << ", format: Gray");
             break;
         case FPDFBitmap_BGR:
-            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth
-                                                        << ", height: " << nHeight
-                                                        << ", stride: " << nStride
-                                                        << ", format: BGR");
-            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N24BitTcBgr, nHeight,
-                        nStride);
+            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth << ", height: " << nHeight
+                                                      << ", stride: " << nStride
+                                                      << ", format: BGR");
+            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N24BitTcBgr, nHeight, nStride);
             break;
         case FPDFBitmap_BGRx:
-            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth
-                                                        << ", height: " << nHeight
-                                                        << ", stride: " << nStride
-                                                        << ", format: BGRx");
-            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N32BitTcBgra, nHeight,
-                        nStride);
+            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth << ", height: " << nHeight
+                                                      << ", stride: " << nStride
+                                                      << ", format: BGRx");
+            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N32BitTcBgra, nHeight, nStride);
             break;
         case FPDFBitmap_BGRA:
-            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth
-                                                        << ", height: " << nHeight
-                                                        << ", stride: " << nStride
-                                                        << ", format: BGRA");
-            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N32BitTcBgra, nHeight,
-                        nStride);
+            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth << ", height: " << nHeight
+                                                      << ", stride: " << nStride
+                                                      << ", format: BGRA");
+            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N32BitTcBgra, nHeight, nStride);
             break;
         default:
-            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth
-                                                        << ", height: " << nHeight
-                                                        << ", stride: " << nStride
-                                                        << ", format: " << format);
+            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth << ", height: " << nHeight
+                                                      << ", stride: " << nStride
+                                                      << ", format: " << format);
             break;
     }
 
