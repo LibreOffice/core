@@ -345,16 +345,14 @@ public:
 
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
     {
-        assert(!m_aFocusInHdl.IsSet());
-        m_xWidget->AddEventListener(LINK( this, SalInstanceWidget, FocusInListener));
-        m_aFocusInHdl = rLink;
+        m_xWidget->AddEventListener(LINK(this, SalInstanceWidget, FocusInListener));
+        weld::Widget::connect_focus_in(rLink);
     }
 
     virtual void connect_focus_out(const Link<Widget&, void>& rLink) override
     {
-        assert(!m_aFocusOutHdl.IsSet());
-        m_xWidget->AddEventListener(LINK( this, SalInstanceWidget, FocusOutListener));
-        m_aFocusOutHdl = rLink;
+        m_xWidget->AddEventListener(LINK(this, SalInstanceWidget, FocusOutListener));
+        weld::Widget::connect_focus_out(rLink);
     }
 
     virtual void grab_add() override
@@ -372,9 +370,9 @@ public:
     virtual ~SalInstanceWidget() override
     {
         if (m_aFocusInHdl.IsSet())
-            m_xWidget->RemoveEventListener(LINK( this, SalInstanceWidget, FocusInListener));
+            m_xWidget->RemoveEventListener(LINK(this, SalInstanceWidget, FocusInListener));
         if (m_aFocusOutHdl.IsSet())
-            m_xWidget->RemoveEventListener(LINK( this, SalInstanceWidget, FocusOutListener));
+            m_xWidget->RemoveEventListener(LINK(this, SalInstanceWidget, FocusOutListener));
         if (m_bTakeOwnership)
             m_xWidget.disposeAndClear();
     }
@@ -976,6 +974,60 @@ public:
 IMPL_LINK_NOARG(SalInstanceRadioButton, ToggleHdl, ::RadioButton&, void)
 {
     signal_toggled();
+}
+
+class SalInstanceToggleButton : public SalInstanceButton, public virtual weld::ToggleButton
+{
+private:
+    VclPtr<PushButton> m_xToggleButton;
+
+    DECL_LINK(ToggleListener, VclWindowEvent&, void);
+
+public:
+    SalInstanceToggleButton(PushButton* pButton, bool bTakeOwnership)
+        : SalInstanceButton(pButton, bTakeOwnership)
+        , m_xToggleButton(pButton)
+    {
+    }
+
+    virtual void connect_toggled(const Link<ToggleButton&, void>& rLink) override
+    {
+        assert(!m_aToggleHdl.IsSet());
+        m_xToggleButton->AddEventListener(LINK(this, SalInstanceToggleButton, ToggleListener));
+        weld::ToggleButton::connect_toggled(rLink);
+    }
+
+    virtual void set_active(bool active) override
+    {
+        m_xToggleButton->Check(active);
+    }
+
+    virtual bool get_active() const override
+    {
+        return m_xToggleButton->IsChecked();
+    }
+
+    virtual void set_inconsistent(bool inconsistent) override
+    {
+        m_xToggleButton->SetState(inconsistent ? TRISTATE_INDET : TRISTATE_FALSE);
+    }
+
+    virtual bool get_inconsistent() const override
+    {
+        return m_xToggleButton->GetState() == TRISTATE_INDET;
+    }
+
+    virtual ~SalInstanceToggleButton() override
+    {
+        if (m_aToggleHdl.IsSet())
+            m_xToggleButton->RemoveEventListener(LINK(this, SalInstanceToggleButton, ToggleListener));
+    }
+};
+
+IMPL_LINK(SalInstanceToggleButton, ToggleListener, VclWindowEvent&, rEvent, void)
+{
+    if (rEvent.GetId() == VclEventId::PushbuttonToggle)
+        signal_toggled();
 }
 
 class SalInstanceCheckButton : public SalInstanceButton, public virtual weld::CheckButton
@@ -1988,6 +2040,12 @@ public:
     {
         MenuButton* pButton = m_xBuilder->get<MenuButton>(id);
         return pButton ? new SalInstanceMenuButton(pButton, bTakeOwnership) : nullptr;
+    }
+
+    virtual weld::ToggleButton* weld_toggle_button(const OString &id, bool bTakeOwnership) override
+    {
+        PushButton* pToggleButton = m_xBuilder->get<PushButton>(id);
+        return pToggleButton ? new SalInstanceToggleButton(pToggleButton, bTakeOwnership) : nullptr;
     }
 
     virtual weld::RadioButton* weld_radio_button(const OString &id, bool bTakeOwnership) override
