@@ -194,6 +194,7 @@ public:
     DECL_LINK(DoGetFocus, weld::Widget&, void);
     DECL_LINK(DoLoseFocus, weld::Widget&, void);
     DECL_LINK(MarkToResetSettings, weld::Widget&, void);
+    DECL_LINK(DoFocusRect, weld::Widget&, tools::Rectangle);
 
     void                Reset();
     RectPoint           GetActualRP() const { return eRP;}
