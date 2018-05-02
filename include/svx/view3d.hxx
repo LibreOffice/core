@@ -75,7 +75,7 @@ public:
 
     // Access to the default attributes.
     E3dDefaultAttributes& Get3DDefaultAttributes() { return a3DDefaultAttr; }
-    virtual bool BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl, short nMinMov = -3, SdrDragMethod* pForcedMeth = nullptr) override;
+    virtual bool BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl, short nMinMov = -3, std::unique_ptr<SdrDragMethod> pForcedMeth = nullptr) override;
     virtual void CheckPossibilities() override;
 
     // Get/Set Event

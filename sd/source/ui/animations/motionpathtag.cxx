@@ -23,6 +23,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
+#include <o3tl/make_unique.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 
@@ -471,7 +472,7 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
                     mrView.UnmarkAllPoints();
                     mrView.updateHandles();
 
-                    bool bRet = mrView.BegDragObj(aMDPos, pOut, mrView.GetHdl(nInsPointNum+1), 0, new PathDragObjOwn( mrView ) );
+                    bool bRet = mrView.BegDragObj(aMDPos, pOut, mrView.GetHdl(nInsPointNum+1), 0, o3tl::make_unique<PathDragObjOwn>( mrView ) );
 
                     if (bRet)
                     {
@@ -514,7 +515,7 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
                     const sal_uInt16 nDrgLog = static_cast<sal_uInt16>(pOut->PixelToLogic(Size(DRGPIX,0)).Width());
 
                     rtl::Reference< MotionPathTag > xTag( this );
-                    SdrDragMethod* pDragMethod;
+                    std::unique_ptr<SdrDragMethod> pDragMethod;
 
                     // #i95646# add DragPoly as geometry to each local SdrDragMethod to be able
                     // to create the needed local SdrDragEntry for it in createSdrDragEntries()
@@ -522,19 +523,19 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
 
                     if( (pHdl->GetKind() == SdrHdlKind::Move) || (pHdl->GetKind() == SdrHdlKind::SmartTag) )
                     {
-                        pDragMethod = new PathDragMove( mrView, xTag, aDragPoly );
+                        pDragMethod.reset(new PathDragMove( mrView, xTag, aDragPoly ));
                         pHdl->SetPos( aMDPos );
                     }
                     else if( pHdl->GetKind() == SdrHdlKind::Poly )
                     {
-                        pDragMethod = new PathDragObjOwn( mrView, aDragPoly );
+                        pDragMethod.reset(new PathDragObjOwn( mrView, aDragPoly ));
                     }
                     else
                     {
-                        pDragMethod = new PathDragResize( mrView, xTag, aDragPoly );
+                        pDragMethod.reset(new PathDragResize( mrView, xTag, aDragPoly ));
                     }
 
-                    mrView.BegDragObj(aMDPos, nullptr, pHdl, nDrgLog, pDragMethod );
+                    mrView.BegDragObj(aMDPos, nullptr, pHdl, nDrgLog, std::move(pDragMethod) );
                 }
                 return true;
             }
@@ -706,20 +707,20 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
 
             // start dragging
             rtl::Reference< MotionPathTag > xTag( this );
-            SdrDragMethod* pDragMethod = nullptr;
+            std::unique_ptr<SdrDragMethod> pDragMethod;
             if( (pHdl->GetKind() == SdrHdlKind::Move) || (pHdl->GetKind() == SdrHdlKind::SmartTag) )
             {
-                pDragMethod = new PathDragMove( mrView, xTag );
+                pDragMethod.reset(new PathDragMove( mrView, xTag ));
             }
             else if( pHdl->GetKind() == SdrHdlKind::Poly )
             {
-                pDragMethod = new PathDragObjOwn( mrView );
+                pDragMethod.reset(new PathDragObjOwn( mrView ));
             }
             else if( pHdl->GetKind() != SdrHdlKind::BezierWeight )
             {
-                pDragMethod = new PathDragResize( mrView, xTag );
+                pDragMethod.reset(new PathDragResize( mrView, xTag ));
             }
-            mrView.BegDragObj(aStartPoint, nullptr, pHdl, 0, pDragMethod);
+            mrView.BegDragObj(aStartPoint, nullptr, pHdl, 0, std::move(pDragMethod));
 
             if(mrView.IsDragObj())
             {

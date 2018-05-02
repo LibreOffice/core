@@ -40,6 +40,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <core_resource.hxx>
+#include <svx/svddrgmt.hxx>
 #include <svx/svdundo.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <algorithm>

@@ -23,6 +23,7 @@
 #include <dlged.hxx>
 #include <dlgedview.hxx>
 #include <vcl/seleng.hxx>
+#include <svx/svddrgmt.hxx>
 
 namespace basctl
 {

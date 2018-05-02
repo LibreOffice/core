@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <svx/svddrgmt.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
 #include <svl/ptitem.hxx>

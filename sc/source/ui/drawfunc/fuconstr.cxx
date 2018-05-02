@@ -19,6 +19,7 @@
 
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
+#include <svx/svddrgmt.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdouno.hxx>
 #include <sfx2/dispatch.hxx>

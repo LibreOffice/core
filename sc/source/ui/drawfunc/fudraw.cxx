@@ -19,6 +19,7 @@
 
 #include <editeng/editeng.hxx>
 #include <editeng/outlobj.hxx>
+#include <svx/svddrgmt.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
