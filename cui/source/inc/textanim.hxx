@@ -39,50 +39,49 @@ class SvxTextAnimationPage : public SfxTabPage
 private:
     static const sal_uInt16     pRanges[];
 
-    VclPtr<ListBox>             m_pLbEffect;
-    VclPtr<VclBox>              m_pBoxDirection;
-    VclPtr<PushButton>          m_pBtnUp;
-    VclPtr<PushButton>          m_pBtnLeft;
-    VclPtr<PushButton>          m_pBtnRight;
-    VclPtr<PushButton>          m_pBtnDown;
-
-    VclPtr<VclFrame>            m_pFlProperties;
-    VclPtr<TriStateBox>         m_pTsbStartInside;
-    VclPtr<TriStateBox>         m_pTsbStopInside;
-
-    VclPtr<VclBox>              m_pBoxCount;
-    VclPtr<TriStateBox>         m_pTsbEndless;
-    VclPtr<NumericField>        m_pNumFldCount;
-
-    VclPtr<TriStateBox>         m_pTsbPixel;
-    VclPtr<MetricField>         m_pMtrFldAmount;
-
-    VclPtr<TriStateBox>         m_pTsbAuto;
-    VclPtr<MetricField>         m_pMtrFldDelay;
-
     const SfxItemSet&   rOutAttrs;
     SdrTextAniKind      eAniKind;
     FieldUnit           eFUnit;
     MapUnit             eUnit;
-
-    DECL_LINK( SelectEffectHdl_Impl, ListBox&, void );
-    DECL_LINK( ClickEndlessHdl_Impl, Button*, void );
-    DECL_LINK( ClickAutoHdl_Impl, Button*, void );
-    DECL_LINK( ClickPixelHdl_Impl, Button*, void );
-    DECL_LINK( ClickDirectionHdl_Impl, Button*, void );
-
-    void                SelectDirection( SdrTextAniDirection nValue );
-    sal_uInt16              GetSelectedDirection();
 
     TriState m_aUpState;
     TriState m_aLeftState;
     TriState m_aRightState;
     TriState m_aDownState;
 
+    std::unique_ptr<weld::ComboBoxText> m_xLbEffect;
+    std::unique_ptr<weld::Widget> m_xBoxDirection;
+    std::unique_ptr<weld::ToggleButton> m_xBtnUp;
+    std::unique_ptr<weld::ToggleButton> m_xBtnLeft;
+    std::unique_ptr<weld::ToggleButton> m_xBtnRight;
+    std::unique_ptr<weld::ToggleButton> m_xBtnDown;
+
+    std::unique_ptr<weld::Frame> m_xFlProperties;
+    std::unique_ptr<weld::CheckButton> m_xTsbStartInside;
+    std::unique_ptr<weld::CheckButton> m_xTsbStopInside;
+
+    std::unique_ptr<weld::Widget> m_xBoxCount;
+    std::unique_ptr<weld::CheckButton> m_xTsbEndless;
+    std::unique_ptr<weld::SpinButton> m_xNumFldCount;
+
+    std::unique_ptr<weld::CheckButton> m_xTsbPixel;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldAmount;
+
+    std::unique_ptr<weld::CheckButton> m_xTsbAuto;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldDelay;
+
+    DECL_LINK( SelectEffectHdl_Impl, weld::ComboBoxText&, void );
+    DECL_LINK( ClickEndlessHdl_Impl, weld::Button&, void );
+    DECL_LINK( ClickAutoHdl_Impl, weld::Button&, void );
+    DECL_LINK( ClickPixelHdl_Impl, weld::Button&, void );
+    DECL_LINK( ClickDirectionHdl_Impl, weld::Button&, void );
+
+    void SelectDirection( SdrTextAniDirection nValue );
+    sal_uInt16 GetSelectedDirection();
+
 public:
-    SvxTextAnimationPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );
+    SvxTextAnimationPage(TabPageParent pPage, const SfxItemSet& rInAttrs);
     virtual ~SvxTextAnimationPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pRanges; }

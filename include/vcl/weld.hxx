@@ -75,8 +75,17 @@ public:
     virtual void set_accessible_name(const OUString& rName) = 0;
     virtual OUString get_accessible_name() const = 0;
 
-    virtual void connect_focus_in(const Link<Widget&, void>& rLink) = 0;
-    virtual void connect_focus_out(const Link<Widget&, void>& rLink) = 0;
+    virtual void connect_focus_in(const Link<Widget&, void>& rLink)
+    {
+        assert(!m_aFocusInHdl.IsSet());
+        m_aFocusInHdl = rLink;
+    }
+
+    virtual void connect_focus_out(const Link<Widget&, void>& rLink)
+    {
+        assert(!m_aFocusOutHdl.IsSet());
+        m_aFocusOutHdl = rLink;
+    }
 
     virtual void grab_add() = 0;
     virtual void grab_remove() = 0;
@@ -400,7 +409,7 @@ public:
 
     bool get_state_changed_from_saved() const { return m_eSavedValue != get_state(); }
 
-    void connect_toggled(const Link<ToggleButton&, void>& rLink) { m_aToggleHdl = rLink; }
+    virtual void connect_toggled(const Link<ToggleButton&, void>& rLink) { m_aToggleHdl = rLink; }
 };
 
 class VCL_DLLPUBLIC CheckButton : virtual public ToggleButton
@@ -746,6 +755,7 @@ public:
     virtual ScrolledWindow* weld_scrolled_window(const OString& id, bool bTakeOwnership = false)
         = 0;
     virtual Notebook* weld_notebook(const OString& id, bool bTakeOwnership = false) = 0;
+    virtual ToggleButton* weld_toggle_button(const OString& id, bool bTakeOwnership = false) = 0;
     virtual RadioButton* weld_radio_button(const OString& id, bool bTakeOwnership = false) = 0;
     virtual CheckButton* weld_check_button(const OString& id, bool bTakeOwnership = false) = 0;
     virtual SpinButton* weld_spin_button(const OString& id, bool bTakeOwnership = false) = 0;
