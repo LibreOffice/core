@@ -34,8 +34,7 @@ namespace connectivity
 
         ~OKeyValue();
 
-        static OKeyValue* createKeyValue(sal_Int32 nVal);
-        //  static OKeyValue* createEmptyKeyValue();
+        static std::unique_ptr<OKeyValue> createKeyValue(sal_Int32 nVal);
 
         void pushKey(const ORowSetValueDecoratorRef& _aValueRef)
         {

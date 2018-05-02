@@ -843,8 +843,8 @@ again:
     {
         if (m_pSortIndex)
         {
-            OKeyValue* pKeyValue = GetOrderbyKeyValue( m_aSelectRow );
-            m_pSortIndex->AddKeyValue(pKeyValue);
+            std::unique_ptr<OKeyValue> pKeyValue = GetOrderbyKeyValue( m_aSelectRow );
+            m_pSortIndex->AddKeyValue(std::move(pKeyValue));
         }
         else if (m_pFileSet.is())
         {
