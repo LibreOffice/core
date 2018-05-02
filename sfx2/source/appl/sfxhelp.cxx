@@ -39,7 +39,6 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <com/sun/star/deployment/PackageInformationProvider.hpp>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <svtools/helpopt.hxx>
@@ -83,10 +82,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::system;
-using ::com::sun::star::deployment::PackageInformationProvider;
-using ::com::sun::star::deployment::XPackageInformationProvider;
-
-namespace uno = css::uno ;
 
 class NoHelpErrorBox
 {
@@ -202,78 +197,6 @@ bool impl_hasHTMLHelpInstalled()
     OUString helpRootURL = getHelpRootURL() + "/" + aLocaleStr + "/text";
     bool bOK = impl_checkHelpLocalePath( helpRootURL );
     SAL_INFO( "sfx.appl", "Checking new help (html) installed " << bOK);
-    return bOK;
-}
-
-// Root path of the HTML help extension
-OUString getExtensionHTMLHelpRootURL()
-{
-    static OUString s_instURL;
-    if (!s_instURL.isEmpty())
-        return s_instURL;
-
-    static OUString aLocaleStr;
-
-    if (aLocaleStr.isEmpty())
-    {
-        // detect installed locale
-        aLocaleStr = HelpLocaleString();
-    }
-
-    Reference< XComponentContext > m_xContext( comphelper::getProcessComponentContext() );
-    const Reference< XPackageInformationProvider > xPackageInfo = PackageInformationProvider::get(m_xContext);
-
-    s_instURL = xPackageInfo->getPackageLocation(aLocaleStr + ".help.libreoffice.org");
-
-    return s_instURL;
-}
-
-/// Check if HTML help extension is installed
-/// verify extension installed and correct version
-bool impl_hasHTMLHelpExtensionInstalled()
-{
-    if (comphelper::LibreOfficeKit::isActive())
-        return false;
-
-    static OUString aLocaleStr;
-    static OUString aRootURL;
-    static OUString aVersion;
-
-    if (aLocaleStr.isEmpty())
-    {
-        // detect installed locale
-        aLocaleStr = HelpLocaleString();
-    }
-
-    OUString aIdentifier(aLocaleStr + ".help.libreoffice.org");
-
-    if (aRootURL.isEmpty())
-    {
-        Reference< XComponentContext > m_xContext( comphelper::getProcessComponentContext() );
-        const Reference< XPackageInformationProvider > xPackageInfo = PackageInformationProvider::get(m_xContext);
-        aRootURL = xPackageInfo->getPackageLocation(aIdentifier);
-        if(aRootURL.isEmpty())
-        {
-            return false;
-        }
-        uno::Sequence< uno::Sequence< OUString > > aExtensionList (xPackageInfo->getExtensionList());
-
-        if(aExtensionList.hasElements())
-        {
-            for (long i = aExtensionList.getLength() - 1; i >= 0; i--)
-            {
-                SAL_INFO("sfx.appl", aExtensionList[i][0] + " - " + aExtensionList[i][1]) ;
-                if (aExtensionList[i][0] == aIdentifier)
-                {
-                    aVersion = aExtensionList[i][1];
-                    break;
-                }
-            }
-        }
-    }
-
-    bool bOK(!aRootURL.isEmpty() && (aVersion.startsWith(utl::ConfigManager::getProductVersion())));
-
     return bOK;
 }
 
@@ -767,12 +690,12 @@ static bool impl_showOnlineHelp( const OUString& rURL )
 #define SHTML3 "\"><script type=\"text/javascript\"> window.location.href = \""
 #define SHTML4 "\";</script><title>Help Page Redirection</title></head><body></body></html>"
 
-
-static bool impl_showOfflineHelp( const OUString& rURL, const OUString& rBaseInstallPath)
+static bool impl_showOfflineHelp( const OUString& rURL )
 {
+    OUString aBaseInstallPath = getHelpRootURL();
     OUString const aInternal( "vnd.sun.star.help://"  );
 
-    OUString aHelpLink( rBaseInstallPath + "/index.html?" );
+    OUString aHelpLink( aBaseInstallPath + "/index.html?" );
     aHelpLink += rURL.copy( aInternal.getLength() );
     aHelpLink = aHelpLink.replaceAll("%2F","/").replaceAll("%3A",":");
 
@@ -890,14 +813,10 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
         impl_showOnlineHelp( aHelpURL );
         return true;
     }
-    if ( impl_hasHTMLHelpExtensionInstalled() )
-    {
-        impl_showOfflineHelp( aHelpURL, getExtensionHTMLHelpRootURL() );
-        return true;
-    }
+
     if ( impl_hasHTMLHelpInstalled() )
     {
-        impl_showOfflineHelp(aHelpURL, getHelpRootURL());
+        impl_showOfflineHelp(aHelpURL);
         return true;
     }
 
@@ -1037,16 +956,12 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
         return true;
     }
 
-    if ( impl_hasHTMLHelpExtensionInstalled() )
-    {
-        impl_showOfflineHelp( aHelpURL, getExtensionHTMLHelpRootURL() );
-        return true;
-    }
     if ( impl_hasHTMLHelpInstalled() )
     {
-        impl_showOfflineHelp(aHelpURL, getHelpRootURL());
+        impl_showOfflineHelp(aHelpURL);
         return true;
     }
+
     if ( !impl_hasHelpInstalled() )
     {
         std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWidget, "sfx/ui/helpmanual.ui"));
