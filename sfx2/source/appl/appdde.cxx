@@ -194,18 +194,6 @@ bool ImplDdeService::SysTopicExecute( const OUString* pStr )
 }
 #endif
 
-class SfxDdeTriggerTopic_Impl : public DdeTopic
-{
-#if defined(_WIN32)
-public:
-    SfxDdeTriggerTopic_Impl()
-        : DdeTopic( "TRIGGER" )
-        {}
-
-    virtual bool Execute( const OUString* ) override { return true; }
-#endif
-};
-
 class SfxDdeDocTopic_Impl : public DdeTopic
 {
 #if defined(_WIN32)
@@ -426,11 +414,11 @@ bool SfxApplication::InitializeDde()
     DBG_ASSERT( !pImpl->pDdeService,
                 "Dde can not be initialized multiple times" );
 
-    pImpl->pDdeService = new ImplDdeService( Application::GetAppName() );
+    pImpl->pDdeService.reset(new ImplDdeService( Application::GetAppName() ));
     nError = pImpl->pDdeService->GetError();
     if( !nError )
     {
-        pImpl->pDocTopics = new SfxDdeDocTopics_Impl;
+        pImpl->pDocTopics.reset(new SfxDdeDocTopics_Impl);
 
         // we certainly want to support RTF!
         pImpl->pDdeService->AddFormat( SotClipboardFormatId::RTF );
@@ -442,8 +430,8 @@ bool SfxApplication::InitializeDde()
         OUString aService( SfxDdeServiceName_Impl(
                     aOfficeLockFile.GetMainURL(INetURLObject::DecodeMechanism::ToIUri) ) );
         aService = aService.toAsciiUpperCase();
-        pImpl->pDdeService2 = new ImplDdeService( aService );
-        pImpl->pTriggerTopic = new SfxDdeTriggerTopic_Impl;
+        pImpl->pDdeService2.reset( new ImplDdeService( aService ));
+        pImpl->pTriggerTopic.reset(new SfxDdeTriggerTopic_Impl);
         pImpl->pDdeService2->AddTopic( *pImpl->pTriggerTopic );
     }
 #endif
@@ -452,10 +440,10 @@ bool SfxApplication::InitializeDde()
 
 void SfxAppData_Impl::DeInitDDE()
 {
-    DELETEZ( pTriggerTopic );
-    DELETEZ( pDdeService2 );
-    DELETEZ( pDocTopics );
-    DELETEZ( pDdeService );
+    pTriggerTopic.reset();
+    pDdeService2.reset();
+    pDocTopics.reset();
+    pDdeService.reset();
 }
 
 #if defined(_WIN32)
@@ -514,12 +502,12 @@ void SfxApplication::RemoveDdeTopic( SfxObjectShell const * pSh )
 
 const DdeService* SfxApplication::GetDdeService() const
 {
-    return pImpl->pDdeService;
+    return pImpl->pDdeService.get();
 }
 
 DdeService* SfxApplication::GetDdeService()
 {
-    return pImpl->pDdeService;
+    return pImpl->pDdeService.get();
 }
 
 #if defined(_WIN32)

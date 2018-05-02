@@ -42,6 +42,7 @@
 #include "imestatuswindow.hxx"
 #include <appbaslib.hxx>
 #include <childwinimpl.hxx>
+#include <svl/svdde.hxx>
 
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/basmgr.hxx>
