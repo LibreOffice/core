@@ -39,7 +39,7 @@ friend class ImpItemEdit;
     OUString aWNameMemorized;
     Link<SdrItemBrowserControl&,void> aEntryChangedHdl;
     Link<SdrItemBrowserControl&,void> aSetDirtyHdl;
-    ImpItemListRow* pCurrentChangeEntry;
+    std::unique_ptr<ImpItemListRow> pCurrentChangeEntry;
     long   nLastWhichOfs;
     sal_uInt16 nLastWhich;
     bool bWhichesButNames;
@@ -83,7 +83,7 @@ public:
     */
     virtual OUString  GetCellText(long _nRow, sal_uInt16 _nColId) const override;
 
-    const ImpItemListRow* GetCurrentChangeEntry() const { return pCurrentChangeEntry; }
+    const ImpItemListRow* GetCurrentChangeEntry() const { return pCurrentChangeEntry.get(); }
     OUString GetNewEntryValue() const                 { return pEditControl->GetText(); }
     void SetEntryChangedHdl(const Link<SdrItemBrowserControl&,void>& rLink)    { aEntryChangedHdl=rLink; }
     void SetSetDirtyHdl(const Link<SdrItemBrowserControl&,void>& rLink)        { aSetDirtyHdl=rLink; }
