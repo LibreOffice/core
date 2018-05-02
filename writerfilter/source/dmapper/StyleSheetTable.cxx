@@ -1200,8 +1200,8 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         xPropertySet->setPropertyValue("StyleInteropGrabBag", uno::makeAny(aGrabBag));
                     }
 
-                    // List styles don't support automatic update.
-                    if (pEntry->bAutoRedefine && !bListStyle)
+                    // Only paragraph styles support automatic updates.
+                    if (pEntry->bAutoRedefine && bParaStyle)
                         xPropertySet->setPropertyValue("IsAutoUpdate", uno::makeAny(true));
                 }
                 else if(pEntry->nStyleTypeCode == STYLE_TYPE_TABLE)

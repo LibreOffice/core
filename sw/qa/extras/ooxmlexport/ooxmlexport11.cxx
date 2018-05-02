@@ -369,6 +369,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116985, "tdf116985.docx")
     CPPUNIT_ASSERT(nWidth > 4000);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf116801, "tdf116801.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    // This raised a lang::IndexOutOfBoundsException, table was missing from
+    // the import result.
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("D1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("D1"), xCell->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
