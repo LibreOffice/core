@@ -25,8 +25,8 @@
 #include <QtWidgets/QFrame>
 
 #include <osl/process.h>
-#include <qt5/Qt5Data.hxx>
 
+#include "KDE5SalData.hxx"
 #include "KDE5SalInstance.hxx"
 #include "KDE5SalFrame.hxx"
 #include "KDE5SalDisplay.hxx"
@@ -39,6 +39,8 @@ KDE5SalInstance::KDE5SalInstance(SalYieldMutex* pMutex)
     ImplSVData* pSVData = ImplGetSVData();
     delete pSVData->maAppData.mpToolkitName;
     pSVData->maAppData.mpToolkitName = new OUString("kde5");
+
+    KDE5SalData::initNWF();
 }
 
 SalFrame* KDE5SalInstance::CreateFrame( SalFrame *pParent, SalFrameStyleFlags nState )
@@ -127,7 +129,7 @@ VCLPLUG_KDE5_PUBLIC SalInstance* create_SalInstance()
     KDE5SalInstance* pInstance = new KDE5SalInstance(new SalYieldMutex());
 
     // initialize SalData
-    new Qt5Data(pInstance);
+    new KDE5SalData(pInstance);
 
     pInstance->m_pQApplication.reset(pQApplication);
     pInstance->m_pFakeArgvFreeable.reset(pFakeArgvFreeable);
