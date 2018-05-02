@@ -80,7 +80,6 @@ bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart pa
 {
     switch (type)
     {
-        case ControlType::Pushbutton:
         case ControlType::Tooltip:
         case ControlType::Progress:
         case ControlType::ListNode:
@@ -88,6 +87,7 @@ bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart pa
 
         case ControlType::Radiobutton:
         case ControlType::Checkbox:
+        case ControlType::Pushbutton:
             return (part == ControlPart::Entire) || (part == ControlPart::Focus);
 
         case ControlType::Menubar:
@@ -203,7 +203,10 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
             m_image->fill(QApplication::palette().color(QPalette::ToolTipBase).rgb());
             break;
         case ControlType::Pushbutton:
-            m_image->fill(QApplication::palette().color(QPalette::Button).rgb());
+            if ( nControlState & ControlState::FOCUSED )
+                m_image->fill(QApplication::palette().color(QPalette::Highlight).rgb());
+            else
+                m_image->fill(QApplication::palette().color(QPalette::Button).rgb());
             break;
         case ControlType::Scrollbar:
             if ((part == ControlPart::DrawBackgroundVert)
