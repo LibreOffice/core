@@ -16,6 +16,24 @@
       "revId": "2ab182ee5a37472efaa90cd5b36163adb08be76b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_e21c83c3",
+        "filename": "officecfg/registry/schema/org/openoffice/UserProfile.xcs",
+        "patchSetId": 15
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-02T07:24:21Z",
+      "side": 1,
+      "message": "Thank you - sorry for misunderstanding.",
+      "parentUuid": "9a30ddce_c24a1fc5",
+      "revId": "2ab182ee5a37472efaa90cd5b36163adb08be76b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
