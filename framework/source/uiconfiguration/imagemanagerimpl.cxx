@@ -271,7 +271,7 @@ ImageList* ImageManagerImpl::implts_getUserImageList( vcl::ImageType nImageType 
     if ( !m_pUserImageList[nImageType] )
         implts_loadUserImages( nImageType, m_xUserImageStorage, m_xUserBitmapsStorage );
 
-    return m_pUserImageList[nImageType];
+    return m_pUserImageList[nImageType].get();
 }
 
 void ImageManagerImpl::implts_initialize()
@@ -355,8 +355,7 @@ bool ImageManagerImpl::implts_loadUserImages(
                     }
 
                     // Delete old image list and create a new one from the read bitmap
-                    delete m_pUserImageList[nImageType];
-                    m_pUserImageList[nImageType] = new ImageList();
+                    m_pUserImageList[nImageType].reset(new ImageList());
                     m_pUserImageList[nImageType]->InsertFromHorizontalStrip
                         ( aUserBitmap, aUserImagesVector );
                     return true;
@@ -381,8 +380,7 @@ bool ImageManagerImpl::implts_loadUserImages(
     }
 
     // Destroy old image list - create a new empty one
-    delete m_pUserImageList[nImageType];
-    m_pUserImageList[nImageType] = new ImageList;
+    m_pUserImageList[nImageType].reset(new ImageList);
 
     return true;
 }
@@ -504,9 +502,9 @@ CmdImageList* ImageManagerImpl::implts_getDefaultImageList()
     SolarMutexGuard g;
 
     if ( !m_pDefaultImageList )
-        m_pDefaultImageList = new CmdImageList( m_xContext, m_aModuleIdentifier );
+        m_pDefaultImageList.reset(new CmdImageList( m_xContext, m_aModuleIdentifier ));
 
-    return m_pDefaultImageList;
+    return m_pDefaultImageList.get();
 }
 
 ImageManagerImpl::ImageManagerImpl( const uno::Reference< uno::XComponentContext >& rxContext,::cppu::OWeakObject* pOwner,bool _bUseGlobal ) :
@@ -548,13 +546,11 @@ void ImageManagerImpl::dispose()
         m_bDisposed = true;
 
         // delete user and default image list on dispose
-        for (ImageList*& n : m_pUserImageList)
+        for (auto& n : m_pUserImageList)
         {
-            delete n;
-            n = nullptr;
+            n.reset();
         }
-        delete m_pDefaultImageList;
-        m_pDefaultImageList = nullptr;
+        m_pDefaultImageList.reset();
     }
 
 }
@@ -1234,10 +1230,9 @@ void ImageManagerImpl::clear()
 {
     SolarMutexGuard g;
 
-    for (ImageList* & n : m_pUserImageList)
+    for (auto & n : m_pUserImageList)
     {
-        delete n;
-        n = nullptr;
+        n.reset();
     }
 }
 } // namespace framework
