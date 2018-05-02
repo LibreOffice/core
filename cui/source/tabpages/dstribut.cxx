@@ -102,6 +102,10 @@ void SvxDistributePage::PointChanged(vcl::Window* /*pWindow*/, RectPoint /*eRP*/
 {
 }
 
+void SvxDistributePage::PointChanged(weld::DrawingArea*, RectPoint /*eRP*/)
+{
+}
+
 /*************************************************************************
 |*
 |* read the delivered Item-Set

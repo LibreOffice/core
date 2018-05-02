@@ -487,6 +487,9 @@ void SvxTransparenceTabPage::PointChanged(vcl::Window* , RectPoint )
 {
 }
 
+void SvxTransparenceTabPage::PointChanged(weld::DrawingArea*, RectPoint)
+{
+}
 
 // Preview-Methods
 

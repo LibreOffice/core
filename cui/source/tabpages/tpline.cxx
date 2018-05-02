@@ -1665,11 +1665,13 @@ IMPL_LINK_NOARG(SvxLineTabPage, ChangeTransparentHdl_Impl, Edit&, void)
     m_pCtlPreview->Invalidate();
 }
 
-
 void SvxLineTabPage::PointChanged( vcl::Window*, RectPoint )
 {
 }
 
+void SvxLineTabPage::PointChanged( weld::DrawingArea*, RectPoint )
+{
+}
 
 void SvxLineTabPage::FillUserData()
 {

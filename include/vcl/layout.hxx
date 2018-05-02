@@ -623,6 +623,7 @@ private:
     Link<const MouseEvent&, void> m_aMouseReleaseHdl;
     Link<const KeyEvent&, bool> m_aKeyPressHdl;
     Link<const KeyEvent&, bool> m_aKeyReleaseHdl;
+    Link<VclDrawingArea&, void> m_aStyleUpdatedHdl;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override
     {
@@ -655,21 +656,24 @@ private:
         if (!m_aKeyReleaseHdl.Call(rKEvt))
             Control::KeyUp(rKEvt);
     }
-
     virtual void StateChanged(StateChangedType nType) override
     {
         Control::StateChanged(nType);
         if (nType == StateChangedType::ControlForeground || nType == StateChangedType::ControlBackground)
+        {
+            m_aStyleUpdatedHdl.Call(*this);
             Invalidate();
+        }
     }
-
     virtual void DataChanged(const DataChangedEvent& rDCEvt) override
     {
         Control::DataChanged(rDCEvt);
         if ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
+        {
+            m_aStyleUpdatedHdl.Call(*this);
             Invalidate();
+        }
     }
-
     virtual FactoryFunction GetUITestFactory() const override
     {
         if (m_pFactoryFunction)
@@ -720,6 +724,10 @@ public:
     void SetKeyReleaseHdl(const Link<const KeyEvent&, bool>& rLink)
     {
         m_aKeyReleaseHdl = rLink;
+    }
+    void SetStyleUpdatedHdl(const Link<VclDrawingArea&, void>& rLink)
+    {
+        m_aStyleUpdatedHdl = rLink;
     }
 };
 
