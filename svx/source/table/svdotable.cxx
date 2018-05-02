@@ -191,7 +191,7 @@ public:
     CellRef mxActiveCell;
     TableModelRef mxTable;
     SdrTableObj* mpTableObj;
-    TableLayouter* mpLayouter;
+    std::unique_ptr<TableLayouter> mpLayouter;
     CellPos maEditPos;
     TableStyleSettings maTableStyle;
     Reference< XIndexAccess > mxTableStyle;
@@ -277,7 +277,7 @@ void SdrTableObjImpl::init( SdrTableObj* pTable, sal_Int32 nColumns, sal_Int32 n
     mxTable->init( nColumns, nRows );
     Reference< XModifyListener > xListener( static_cast< css::util::XModifyListener* >(this) );
     mxTable->addModifyListener( xListener );
-    mpLayouter = new TableLayouter( mxTable );
+    mpLayouter.reset(new TableLayouter( mxTable ));
     LayoutTable( mpTableObj->maRect, true, true );
     mpTableObj->maLogicRect = mpTableObj->maRect;
 }
@@ -289,11 +289,7 @@ SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
     {
         disconnectTableStyle();
 
-        if( mpLayouter )
-        {
-            delete mpLayouter;
-            mpLayouter = nullptr;
-        }
+        mpLayouter.reset();
 
         if( mxTable.is() )
         {
@@ -306,7 +302,7 @@ SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
         maTableStyle = rSource.maTableStyle;
 
         mxTable = new TableModel( mpTableObj, rSource.mxTable );
-        mpLayouter = new TableLayouter( mxTable );
+        mpLayouter.reset(new TableLayouter( mxTable ));
         Reference< XModifyListener > xListener( static_cast< css::util::XModifyListener* >(this) );
         mxTable->addModifyListener( xListener );
         mxTableStyle = rSource.mxTableStyle;
@@ -456,11 +452,7 @@ void SdrTableObjImpl::dispose()
     disconnectTableStyle();
     mxTableStyle.clear();
 
-    if( mpLayouter )
-    {
-        delete mpLayouter;
-        mpLayouter = nullptr;
-    }
+    mpLayouter.reset();
 
     if( mxTable.is() )
     {
@@ -638,11 +630,7 @@ void SAL_CALL SdrTableObjImpl::disposing( const css::lang::EventObject& /*Source
 {
     mxActiveCell.clear();
     mxTable.clear();
-    if( mpLayouter )
-    {
-        delete mpLayouter;
-        mpLayouter = nullptr;
-    }
+    mpLayouter.reset();
     mpTableObj = nullptr;
 }
 
