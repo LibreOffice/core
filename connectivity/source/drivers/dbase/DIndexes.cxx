@@ -52,7 +52,7 @@ sdbcx::ObjectType ODbaseIndexes::createObject(const OUString& _rName)
     }
 
     sdbcx::ObjectType xRet;
-    SvStream* pFileStream = ::connectivity::file::OFileTable::createStream_simpleError(sFile, StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
+    std::unique_ptr<SvStream> pFileStream = ::connectivity::file::OFileTable::createStream_simpleError(sFile, StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
     if(pFileStream)
     {
         pFileStream->SetEndian(SvStreamEndian::LITTLE);
@@ -61,7 +61,7 @@ sdbcx::ObjectType ODbaseIndexes::createObject(const OUString& _rName)
 
         pFileStream->Seek(0);
         ReadHeader(*pFileStream, aHeader);
-        delete pFileStream;
+        pFileStream.reset();
 
         ODbaseIndex* pIndex = new ODbaseIndex(m_pTable,aHeader,_rName);
         xRet = pIndex;

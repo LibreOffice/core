@@ -978,8 +978,7 @@ void ODbaseTable::FileClose()
     if (m_pMemoStream && m_pMemoStream->IsWritable())
         m_pMemoStream->Flush();
 
-    delete m_pMemoStream;
-    m_pMemoStream = nullptr;
+    m_pMemoStream.reset();
 
     ODbaseTable_BASE::FileClose();
 }
@@ -1383,8 +1382,7 @@ bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
     (*m_pMemoStream).WriteUInt32( 1 );                  // pointer to the first free block
 
     m_pMemoStream->Flush();
-    delete m_pMemoStream;
-    m_pMemoStream = nullptr;
+    m_pMemoStream.reset();
     return true;
 }
 
