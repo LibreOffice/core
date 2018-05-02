@@ -19,6 +19,8 @@ import json
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as minidom
 import traceback
+import subprocess
+from sys import platform
 
 
 class GbuildLinkTarget:
@@ -828,6 +830,13 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         print('')
 
     @staticmethod
+    def to_long_names(shortnames):
+        if platform == "cygwin":
+            return (subprocess.check_output(["cygpath", "-wal"] + shortnames).decode("utf-8", "strict").rstrip()).split("\n")
+        else:
+            return shortnames
+
+    @staticmethod
     def defs_list(defs):
         defines_list = []
         # List defines
@@ -888,6 +897,10 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                           Label='LocalAppDataPlatform')
 
         ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label='UserMacros')
+        # VS IDE (at least "Peek definition") is allergic to paths like "C:/PROGRA~2/WI3CF2~1/10/Include/10.0.14393.0/um"; see
+        # https://developercommunity.visualstudio.com/content/problem/139659/vc-peek-definition-fails-to-navigate-to-windows-ki.html
+        # We need to convert to long paths here. Do this once, since it's time-consuming operation.
+        include_path_node_text = ';'.join(self.to_long_names(target.include))
         for cfg_name, cfg_targets in self.configurations.items():
             conf_node = ET.SubElement(proj_node, '{%s}PropertyGroup' % ns,
                                       Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (cfg_name, platform))
@@ -908,7 +921,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             nmake_defs_node = ET.SubElement(conf_node, '{%s}NMakePreprocessorDefinitions' % ns)
             nmake_defs_node.text = ';'.join(self.defs_list(target.defs) + ['$(NMakePreprocessorDefinitions)'])
             include_path_node = ET.SubElement(conf_node, '{%s}IncludePath' % ns)
-            include_path_node.text = ';'.join(target.include + ['$(IncludePath)'])
+            include_path_node.text = include_path_node_text
 
         ET.SubElement(proj_node, '{%s}ItemDefinitionGroup' % ns)
 
