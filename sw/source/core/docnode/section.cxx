@@ -1745,7 +1745,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
         }
         break;
     default:
-        ASSERT( !this, "Was ist das fuer ein Link?" )
+        ASSERT( sal_False, "What is this link?" )
     }
 
     switch( eCreateType )

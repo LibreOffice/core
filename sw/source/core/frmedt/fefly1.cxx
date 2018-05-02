@@ -715,7 +715,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
         break;
 
     default:
-        ASSERT( !this, "Was sollte das fuer ein Fly werden?" )
+        ASSERT( sal_False, "What should that be for a Fly?" )
         break;
     }
 
@@ -1094,7 +1094,7 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
         pFly = GetCurrFrm()->FindFlyFrm();
         if ( !pFly )
         {
-            ASSERT( !this, "GetFlyFrmAttr, no Fly selected." );
+            ASSERT( sal_False, "GetFlyFrmAttr, no Fly selected." );
             return sal_False;
         }
     }
@@ -1607,7 +1607,7 @@ void SwFEShell::SetFlyName( const String& rName )
     if( pFly )
         GetDoc()->SetFlyName( *(SwFlyFrmFmt*)pFly->GetFmt(), rName );
     else {
-        ASSERT( !this, "kein FlyFrame selektiert" )
+        ASSERT( sal_False, "SetFlyName, no FlyFrame selected" )
     }
 }
 
@@ -1617,7 +1617,7 @@ const String& SwFEShell::GetFlyName() const
     if( pFly )
         return pFly->GetFmt()->GetName();
 
-    ASSERT( !this, "kein FlyFrame selektiert" )
+    ASSERT( sal_False, "GetFlyName, no FlyFrame selected" )
     return aEmptyStr;
 }
 

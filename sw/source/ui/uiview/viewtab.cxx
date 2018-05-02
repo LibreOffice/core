@@ -1016,7 +1016,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         break;
 
     default:
-        ASSERT( !this, "Falsche SlotId");
+        ASSERT( sal_False, "Wrong SlotId");
     }
     rSh.EndAllAction();
 
@@ -1982,7 +1982,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                         if( nNum > rCols.Count() )
                         {
-                            ASSERT( !this, "es wird auf dem falschen FmtCol gearbeitet!" );
+                            ASSERT( sal_False, "it is working on the wrong FmtCol!" );
                             nNum = rCols.Count();
                         }
 

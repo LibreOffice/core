@@ -313,7 +313,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     case TOX_TABLES       : nPoolId = STR_POOLCOLL_TOX_TABLESH; break;
     case TOX_AUTHORITIES  : nPoolId = STR_POOLCOLL_TOX_AUTHORITIESH;    break;
     default:
-        ASSERT( !this, "ungueltiger TOXTyp");
+        ASSERT( sal_False, "invalid TOXType");
         return ;
     }
 

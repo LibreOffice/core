@@ -3085,14 +3085,14 @@ void XMLTextParagraphExport::_exportTextGraphic(
 
 void XMLTextParagraphExport::_collectTextEmbeddedAutoStyles(const Reference < XPropertySet > & )
 {
-    DBG_ASSERT( !this, "no API implementation avialable" );
+    DBG_ASSERT( sal_False, "no API implementation avialable" );
 }
 
 void XMLTextParagraphExport::_exportTextEmbedded(
         const Reference < XPropertySet > &,
         const Reference < XPropertySetInfo > & )
 {
-    DBG_ASSERT( !this, "no API implementation avialable" );
+    DBG_ASSERT( sal_False, "no API implementation avialable" );
 }
 
 void XMLTextParagraphExport::exportEvents( const Reference < XPropertySet > & rPropSet )

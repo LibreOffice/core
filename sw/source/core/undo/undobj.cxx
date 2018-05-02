@@ -1040,7 +1040,7 @@ SwRedlineSaveData::SwRedlineSaveData(
         break;
 
     default:
-        ASSERT( !this, "keine gueltigen Daten!" )
+        ASSERT( sal_False, "no valid data!" )
     }
 
 #ifdef DBG_UTIL

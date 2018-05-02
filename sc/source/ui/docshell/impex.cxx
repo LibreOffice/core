@@ -335,7 +335,7 @@ sal_Bool ScImportExport::ImportData( SvData& rData )
 sal_Bool ScImportExport::ImportData( const String& /* rMimeType */,
                      const ::com::sun::star::uno::Any & /* rValue */ )
 {
-    DBG_ASSERT( !this, "Implementation is missing" );
+    DBG_ASSERT( sal_False, "Implementation is missing" );
     return sal_False;
 }
 

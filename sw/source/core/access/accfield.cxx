@@ -127,7 +127,7 @@ sal_Int16 SAL_CALL SwAccessibleField::getAccessibleRole (void)
 rtl::OUString SAL_CALL SwAccessibleField::getAccessibleDescription (void)
         throw (::com::sun::star::uno::RuntimeException)
 {
-    ASSERT( !this, "description needs to be overloaded" );
+    ASSERT( sal_False, "description needs to be overloaded" );
     //THROW_RUNTIME_EXCEPTION( XAccessibleContext, "internal error (method must be overloaded)" );
     return rtl::OUString();
 }

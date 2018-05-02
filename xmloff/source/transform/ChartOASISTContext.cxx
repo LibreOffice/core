@@ -123,7 +123,7 @@ void XMLChartOASISTransformerContext::StartElement(
                 }
                 break;
             default:
-                OSL_ENSURE( !this, "unknown action" );
+                OSL_ENSURE( sal_False, "unknown action" );
                 break;
             }
         }

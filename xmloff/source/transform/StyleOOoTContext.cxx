@@ -366,7 +366,7 @@ XMLTypedPropertiesOOoTContext_Impl
                                 RTL_TEXTENCODING_ASCII_US );
         aTmp += ::rtl::OString::valueOf( '>' );
 
-        OSL_ENSURE( !this, aTmp );
+        OSL_ENSURE( sal_False, aTmp );
     }
 #endif
 
@@ -978,7 +978,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             }
             break;
         default:
-            OSL_ENSURE( !this, "unknown action" );
+            OSL_ENSURE( sal_False, "unknown action" );
             break;
         }
     }
@@ -1113,7 +1113,7 @@ XMLTransformerContext *XMLStyleOOoTContext::CreateChildContext(
     {
         if( aPropTypes[m_eFamily][0] == XML_PROP_TYPE_END )
         {
-            OSL_ENSURE( !this, "unexpected properties element" );
+            OSL_ENSURE( sal_False, "unexpected properties element" );
             pContext = m_bPersistent
                             ? XMLPersElemContentTContext::CreateChildContext(
                                     nPrefix, rLocalName, rQName, rAttrList )
@@ -1291,7 +1291,7 @@ void XMLStyleOOoTContext::StartElement(
                 }
                 break;
             default:
-                OSL_ENSURE( !this, "unknown action" );
+                OSL_ENSURE( sal_False, "unknown action" );
                 break;
             }
         }

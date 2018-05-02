@@ -850,7 +850,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 }
                 break;
             default:
-                ASSERT( !this, "unexpected AnchorId." );
+                ASSERT( sal_False, "unexpected AnchorId." );
             }
 
             if ( (FLY_AS_CHAR != _eAnchorType) &&

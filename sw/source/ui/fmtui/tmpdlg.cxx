@@ -356,7 +356,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
         break;
 
         default:
-            ASSERT(!this, "Falsche Familie");
+            ASSERT(sal_False, "Wrong family");
 
     }
 }

@@ -578,7 +578,7 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
                 nOrdNum = pContact->GetMaster()->GetOrdNum();
     }
     else {
-        ASSERT( !this, "was ist das fuer ein Format?" );
+        ASSERT( sal_False, "what is that format?" );
     }
 }
 

@@ -825,7 +825,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                     nFlags |= 0x0400 | nContour;
                     break;
                 default:
-                    ASSERT(!this, "Unsupported surround type for export");
+                    ASSERT(sal_False, "Unsupported surround type for export");
                     break;
             }
             if (pObj && (pObj->GetLayer() == rWrt.pDoc->GetHellId() ||
@@ -2295,7 +2295,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                         }
 #ifdef DBG_UTIL
                         else
-                            ASSERT( !this, "Where is the SDR-Object?" );
+                            ASSERT( sal_False, "Where is the SDR-Object?" );
 #endif
                     }
                     break;
@@ -2977,7 +2977,7 @@ sal_Int32 SwEscherEx::WriteTxtFlyFrame(const DrawObj &rObj, sal_uInt32 nShapeId,
     switch (nDirection)
     {
         default:
-            ASSERT(!this, "unknown direction type");
+            ASSERT(sal_False, "unknown direction type");
         case FRMDIR_HORI_LEFT_TOP:
             nFlow=mso_txflHorzN;
         break;

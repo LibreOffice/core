@@ -388,7 +388,7 @@ void SwRTFParser::SetFlysInDoc()
         // patch from cmc for #i52542#
         if (pSttNd->GetIndex() + 1 == pSttNd->EndOfSectionIndex())
         {
-            ASSERT(!this, "nothing in this frame, not legal");
+            ASSERT(sal_False, "nothing in this frame, not legal");
             delete pFlySave;
             continue;
         }

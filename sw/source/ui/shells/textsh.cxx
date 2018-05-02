@@ -765,7 +765,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     break;
 
     default:
-        ASSERT( !this, "falscher Dispatcher" );
+        ASSERT( sal_False, "wrong dispatcher" );
         return;
     }
 }
@@ -1008,7 +1008,7 @@ void  SwTextShell::ExecDelete(SfxRequest &rReq)
             rSh.DelLine();
             break;
         default:
-            ASSERT(!this, "falscher Dispatcher");
+            ASSERT(sal_False, "wrong dispatcher");
             return;
     }
     rReq.Done();
@@ -1053,7 +1053,7 @@ void SwTextShell::ExecTransliteration( SfxRequest & rReq )
             break;
 
         default:
-            ASSERT(!this, "falscher Dispatcher");
+            ASSERT(sal_False, "wrong dispatcher");
         }
 
         if( nMode )

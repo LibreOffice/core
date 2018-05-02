@@ -405,7 +405,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
 
         if( !pFrmNd && aFrmNdIdx > rNds.GetEndOfExtras().GetIndex() )
         {
-            ASSERT( !this, "ob das so richtig ist ??" );
+            ASSERT( sal_False, "if that is correct ??" );
             aFrmNdIdx = rNds.GetEndOfContent();
             pFrmNd = rNds.GoPrevSection( &aFrmNdIdx, sal_True, sal_False );
             if( pFrmNd && !((SwCntntNode*)pFrmNd)->GetDepends() )
@@ -413,7 +413,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
 
 #ifdef DBG_UTIL
             if( !pFrmNd )
-                ASSERT( !this, "ChgNode() - kein FrameNode gefunden" );
+                ASSERT( sal_False, "ChgNode() - no FrameNode found" );
 #endif
         }
         if( pFrmNd )

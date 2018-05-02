@@ -251,7 +251,7 @@ SbxValue::SbxValue( SbxDataType t, void* p ) : SbxBase()
                 aData.pDecimal->addRef();
             break;
         default:
-            DBG_ASSERT( !this, "Angabe eines Pointers unzulaessig" );
+            DBG_ASSERT( sal_False, "Indication of an invalid pointer" );
             n = SbxNULL;
     }
     else
@@ -1751,7 +1751,7 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             memset (&aData,0,sizeof(aData));
             ResetFlag(SBX_FIXED);
             aData.eType = SbxNULL;
-            DBG_ASSERT( !this, "Nicht unterstuetzer Datentyp geladen" );
+            DBG_ASSERT( sal_False, "Unsupported data type loaded" );
             return sal_False;
     }
     return sal_True;
@@ -1852,7 +1852,7 @@ sal_Bool SbxValue::StoreData( SvStream& r ) const
         case SbxWCHAR:
             break;
         default:
-            DBG_ASSERT( !this, "Speichern eines nicht unterstuetzten Datentyps" );
+            DBG_ASSERT( sal_False, "Save an unsupported data type" );
             return sal_False;
     }
     return sal_True;

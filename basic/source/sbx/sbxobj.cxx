@@ -244,7 +244,7 @@ SbxVariable* SbxObject::Find( const XubString& rName, SbxClassType t )
             case SbxCLASS_METHOD:   pArray = pMethods;  break;
             case SbxCLASS_OBJECT:   pArray = pObjs;     break;
             default:
-                DBG_ASSERT( !this, "Ungueltige SBX-Klasse" );
+                DBG_ASSERT( sal_False, "Invalid SBX class" );
         }
         if( pArray )
             pRes = pArray->Find( rName, t );
@@ -352,7 +352,7 @@ SbxArray* SbxObject::FindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
         case SbxCLASS_METHOD:   pArray = pMethods;  break;
         case SbxCLASS_OBJECT:   pArray = pObjs;     break;
         default:
-            DBG_ASSERT( !this, "Ungueltige SBX-Klasse" );
+            DBG_ASSERT( sal_False, "Invalid SBX class" );
     }
     if( pArray )
     {
@@ -387,7 +387,7 @@ SbxVariable* SbxObject::Make( const XubString& rName, SbxClassType ct, SbxDataTy
         case SbxCLASS_METHOD:   pArray = pMethods;  break;
         case SbxCLASS_OBJECT:   pArray = pObjs;     break;
         default:
-            DBG_ASSERT( !this, "Ungueltige SBX-Klasse" );
+            DBG_ASSERT( sal_False, "Invalid SBX class" );
     }
     if( !pArray )
         return NULL;
@@ -555,7 +555,7 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
             case SbxCLASS_METHOD:   pArray = pMethods;  break;
             case SbxCLASS_OBJECT:   pArray = pObjs;     break;
             default:
-                DBG_ASSERT( !this, "Ungueltige SBX-Klasse" );
+                DBG_ASSERT( sal_False, "Invalid SBX class" );
         }
     }
     if( pArray )
@@ -594,7 +594,7 @@ void SbxObject::VCPtrInsert( SbxVariable* pVar )
             case SbxCLASS_METHOD:   pArray = pMethods;  break;
             case SbxCLASS_OBJECT:   pArray = pObjs;     break;
             default:
-                DBG_ASSERT( !this, "Ungueltige SBX-Klasse" );
+                DBG_ASSERT( sal_False, "Invalid SBX class" );
         }
     }
     if( pArray )
@@ -671,7 +671,7 @@ SbxArray* SbxObject::VCPtrFindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
         case SbxCLASS_METHOD:   pArray = pMethods;  break;
         case SbxCLASS_OBJECT:   pArray = pObjs;     break;
         default:
-            DBG_ASSERT( !this, "Ungueltige SBX-Klasse" );
+            DBG_ASSERT( sal_False, "Invalid SBX class" );
     }
     if( pArray )
     {

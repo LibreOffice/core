@@ -2057,7 +2057,7 @@ String SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 ) const
     case EU_STATE:          nRet = USER_OPT_STATE;          break;
     case EU_FATHERSNAME:    nRet = USER_OPT_FATHERSNAME;    break;
     case EU_APARTMENT:      nRet = USER_OPT_APARTMENT;      break;
-    default:                ASSERT( !this, "Field unknown");
+    default:                ASSERT( sal_False, "Field unknown");
     }
     if( USHRT_MAX != nRet )
     {

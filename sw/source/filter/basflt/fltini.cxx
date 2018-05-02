@@ -260,7 +260,7 @@ sal_uLong Sw3Reader::Read( SwDoc &rDoc, SwPaM &rPam, const String & )
         }
         else
         {
-                ASSERT( !this, "Sw3-Read ohne Storage und/oder IO-System" );
+                ASSERT( sal_False, "Sw3-Read without storage and/or IO system" );
                 nRet = ERR_SWG_READ_ERROR;
         }
         return nRet;
@@ -300,7 +300,7 @@ sal_uInt16 Sw3Reader::GetSectionList( SfxMedium& rMedium,
         }
         else
         {
-                ASSERT( !this, "Sw3-Writer ohne IO-System" )
+                ASSERT( sal_False, "Sw3-Writer without IO-System" )
                 nRet = ERR_SWG_WRITE_ERROR;
     }
     return nRet;

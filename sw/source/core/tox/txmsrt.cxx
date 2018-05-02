@@ -639,7 +639,7 @@ void SwTOXPara::GetText_Impl( String& rTxt, String& ) const
                 rTxt = pFly->GetName();
             else
             {
-                ASSERT( !this, "Grafik/Object ohne Namen" )
+                ASSERT( sal_False, "Graphic/Object without name" )
                 sal_uInt16 nId = nsSwTOXElement::TOX_OLE == eType
                                 ? STR_OBJECT_DEFNAME
                                 : nsSwTOXElement::TOX_GRAPHIC == eType
@@ -804,7 +804,7 @@ void SwTOXTable::GetText_Impl( String& rTxt, String& ) const
     }
     else
     {
-        ASSERT( !this, "Wo ist meine Tabelle geblieben?" )
+        ASSERT( sal_False, "Where was my table?" )
         rTxt = SW_RESSTR( STR_TABLE_DEFNAME );
     }
 }

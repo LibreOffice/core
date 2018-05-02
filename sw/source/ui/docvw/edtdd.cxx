@@ -330,7 +330,7 @@ sal_uInt16 SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppO
         case OBJCNT_URLBUTTON:  nDropDestination = EXCHG_DEST_DOC_URLBUTTON; break;
         case OBJCNT_GROUPOBJ:   nDropDestination = EXCHG_DEST_DOC_GROUPOBJ;     break;
 
-        default: ASSERT( !this, "new ObjectType?" );
+        default: ASSERT( sal_False, "new ObjectType?" );
         }
     }
     if ( !nDropDestination )

@@ -555,7 +555,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     aBox.SetDistance( Max(rCoreBox.GetDistance(),(sal_uInt16)MIN_BORDER_DIST)  );
             }
             else
-                {ASSERT( !this, "Wo ist das Box-Item?" )}
+                {ASSERT( sal_False, "Where is the box item?" )}
 
             //since the drawing layer also supports borders the which id might be a different one
             SvxBoxInfoItem aInfo( SID_ATTR_BORDER_INNER );
@@ -818,7 +818,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                         aInfoBox.Execute();
                         break;
                     }
-                    default: ASSERT( !this, "unbekannter Returnwert MergeTab.");
+                    default: ASSERT( sal_False, "unknown return value MergeTab.");
                 }
         break;
         case FN_TABLE_ADJUST_CELLS:
@@ -892,7 +892,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         break;
         case FN_NUMBER_BULLETS:
         case FN_NUM_BULLET_ON:
-            ASSERT( !this, "Funktion darf zur Zeit nicht gerufen werden." );
+            ASSERT( sal_False, "Function may not be called at the moment." );
         break;
 
         case FN_TABLE_INSERT_COL:
@@ -1235,7 +1235,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         break;
 
         default:
-            ASSERT( !this, "falscher Dispatcher" );
+            ASSERT( sal_False, "wrong dispatcher" );
             return;
     }
     if(bCallDone)

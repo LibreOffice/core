@@ -373,7 +373,7 @@ void SwWW8ImplReader::ReplaceObj(const SdrObject &rReplaceObj,
     }
     else
     {
-        ASSERT( !this, "Impossible!");
+        ASSERT( sal_False, "Impossible!");
     }
 }
 

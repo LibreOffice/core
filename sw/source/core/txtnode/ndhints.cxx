@@ -286,7 +286,7 @@ void SwpHintsArray::DeleteAtPos( const sal_uInt16 nPos )
 #define CHECK_ERR(cond, text) \
         if(!(cond)) \
         { \
-            ASSERT(!this, text); \
+            ASSERT(sal_False, text); \
             DumpHints(m_HintStarts, m_HintEnds); \
             return !(const_cast<SwpHintsArray*>(this))->Resort(); \
         }

@@ -2090,7 +2090,7 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
             break;
 
         default:
-            ASSERT( !this, "was ist das fuer ein SubDocType?" );
+            ASSERT( sal_False, "what is that for a SubDocType?" );
     }
 
     pTxtPos->Append( rWrt.Fc2Cp( rWrt.Strm().Tell() ));

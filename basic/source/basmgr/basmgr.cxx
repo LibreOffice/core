@@ -975,7 +975,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
     // Plausi!
     if( nLibs & 0xF000 )
     {
-        DBG_ASSERT( !this, "BasicManager-Stream defect!" );
+        DBG_ASSERT( sal_False, "BasicManager-Stream defect!" );
         return;
     }
     for ( sal_uInt16 nL = 0; nL < nLibs; nL++ )

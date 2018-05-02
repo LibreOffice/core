@@ -2600,7 +2600,7 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
     }
     else if( !pCrsr && !pBoxFrm )
     {
-        ASSERT( !this, "einer von beiden muss angegeben werden!" );
+        ASSERT( sal_False, "one of them must be indicated!" );
         return ;
     }
 
@@ -2825,7 +2825,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, sal_Bool bCurRowOnly,
     }
     else if( !pCrsr && !pBoxFrm )
     {
-        ASSERT( !this, "einer von beiden muss angegeben werden!" );
+        ASSERT( sal_False, "one of them must be indicated!" );
         return ;
     }
 

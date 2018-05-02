@@ -626,13 +626,13 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
                 }
 #ifdef DBG_UTIL
                 else
-                    ASSERT( !this, "ohne Sw3Reader geht nichts" );
+                    ASSERT( sal_False, "nothing works without Sw3Reader" );
 #endif
             }
             break;
 
         default:
-            ASSERT( !this, "Load: new CreateMode?" );
+            ASSERT( sal_False, "Load: new CreateMode?" );
 
         }
 

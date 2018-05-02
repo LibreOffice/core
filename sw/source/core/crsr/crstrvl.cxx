@@ -1057,7 +1057,7 @@ sal_Bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
 
     if( nSttPos > nEndPos )         // sollte jemand das vertauscht haben?
     {
-        ASSERT( !this, "Start- > Ende-Position im Array" );
+        ASSERT( sal_False, "Start > End Position in the array" );
         sal_uInt16 nTmp = nSttPos;
         nSttPos = nEndPos;
         nEndPos = nTmp;
@@ -1955,7 +1955,7 @@ sal_Bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     GetDoc()->InsertItemSet( *pCurCrsr, aSet, 0 );
                 }
                 else {
-                    ASSERT( !this, "wo ist mein CntntNode?" );
+                    ASSERT( sal_False, "where is my CntntNode?" );
                 }
                 break;
 

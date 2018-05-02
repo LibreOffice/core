@@ -307,7 +307,7 @@ sal_Bool SwOLENode::RestorePersistentData()
         {
             // TODO/LATER: reicht hier nicht ein EmbeddedObjectContainer? Was passiert mit
             // diesem Dokument?
-            ASSERT( !this, "warum wird hier eine DocShell angelegt?" );
+            ASSERT( sal_False, "why is a DocShell created here?" );
             p = new SwDocShell( GetDoc(), SFX_CREATE_MODE_INTERNAL );
             p->DoInitNew( NULL );
         }
@@ -769,7 +769,7 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
         {
             // TODO/LATER: reicht hier nicht ein EmbeddedObjectContainer? Was passiert mit
             // diesem Dokument?
-            ASSERT( !this, "warum wird hier eine DocShell angelegt?" );
+            ASSERT( sal_False, "why is a DocShell created here?" );
             p = new SwDocShell( pDoc, SFX_CREATE_MODE_INTERNAL );
             p->DoInitNew( NULL );
         }

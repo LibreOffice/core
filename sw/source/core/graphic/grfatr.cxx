@@ -106,7 +106,7 @@ sal_Bool SwMirrorGrf::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                    GetValue() == RES_MIRROR_GRAPH_BOTH;
             break;
         default:
-            ASSERT( !this, "unknown MemberId" );
+            ASSERT( sal_False, "unknown MemberId" );
             bRet = sal_False;
     }
     rVal.setValue( &bVal, ::getBooleanCppuType() );
@@ -155,7 +155,7 @@ sal_Bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             }
             break;
         default:
-            ASSERT( !this, "unknown MemberId" );
+            ASSERT( sal_False, "unknown MemberId" );
             bRet = sal_False;
     }
     return bRet;

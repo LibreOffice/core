@@ -2567,7 +2567,7 @@ sal_Bool SwFEShell::SetObjAttr( const SfxItemSet& rSet )
     SET_CURR_SHELL( this );
 
     if ( !rSet.Count() )
-    {   ASSERT( !this, "SetObjAttr, empty set." );
+    {   ASSERT( sal_False, "SetObjAttr, empty set." );
         return sal_False;
     }
 

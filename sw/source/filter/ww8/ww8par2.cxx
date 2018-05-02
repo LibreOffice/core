@@ -1571,7 +1571,7 @@ void WW8TabBandDesc::ProcessSpacing(const sal_uInt8* pParams)
             case 0:
                 break;
             default:
-                ASSERT(!this, "Impossible");
+                ASSERT(sal_False, "Impossible");
                 break;
         }
     }
@@ -2984,7 +2984,7 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 
     if ((sal_uInt16)nAktRow >= pTabLines->Count())
     {
-        ASSERT(!this, "Actual row bigger than expected." );
+        ASSERT(sal_False, "Actual row bigger than expected." );
         if (bPam)
             MoveOutsideTable();
         return false;

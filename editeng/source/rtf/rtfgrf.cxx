@@ -280,7 +280,7 @@ xub_StrLen SvxRTFParser::HexToBin( String& rToken )
             nVal -= 'a' - 10;
         else
         {
-            DBG_ASSERT( !this, "ungueltiger Hex-Wert" );
+            DBG_ASSERT( sal_False, "invalid hex value" );
             bValidData = sal_False;
             break;
         }

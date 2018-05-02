@@ -740,7 +740,7 @@ sal_Int16 SAL_CALL SwAccessibleContext::getAccessibleRole (void)
 OUString SAL_CALL SwAccessibleContext::getAccessibleDescription (void)
         throw (uno::RuntimeException)
 {
-    ASSERT( !this, "description needs to be overloaded" );
+    ASSERT( sal_False, "description needs to be overloaded" );
     THROW_RUNTIME_EXCEPTION( XAccessibleContext, "internal error (method must be overloaded)" );
 }
 
@@ -1057,7 +1057,7 @@ sal_Int32 SAL_CALL SwAccessibleContext::getBackground()
 OUString SAL_CALL SwAccessibleContext::getImplementationName()
         throw( uno::RuntimeException )
 {
-    ASSERT( !this, "implementation name needs to be overloaded" );
+    ASSERT( sal_False, "implementation name needs to be overloaded" );
 
     THROW_RUNTIME_EXCEPTION( lang::XServiceInfo, "implementation name needs to be overloaded" )
 }
@@ -1066,14 +1066,14 @@ sal_Bool SAL_CALL
     SwAccessibleContext::supportsService (const ::rtl::OUString& )
         throw (uno::RuntimeException)
 {
-    ASSERT( !this, "supports service needs to be overloaded" );
+    ASSERT( sal_False, "supports service needs to be overloaded" );
     THROW_RUNTIME_EXCEPTION( lang::XServiceInfo, "supports service needs to be overloaded" )
 }
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleContext::getSupportedServiceNames()
         throw( uno::RuntimeException )
 {
-    ASSERT( !this, "supported services names needs to be overloaded" );
+    ASSERT( sal_False, "supported services names needs to be overloaded" );
     THROW_RUNTIME_EXCEPTION( lang::XServiceInfo, "supported services needs to be overloaded" )
 }
 

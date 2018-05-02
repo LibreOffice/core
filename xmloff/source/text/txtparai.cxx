@@ -2290,7 +2290,7 @@ XMLParaContext::~XMLParaContext()
             // <--
 
             default:
-                DBG_ASSERT( !this, "What's this" );
+                DBG_ASSERT( sal_False, "What's this" );
                 break;
             }
         }

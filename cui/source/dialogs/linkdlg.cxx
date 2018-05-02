@@ -337,7 +337,7 @@ IMPL_LINK( SvBaseLinksDlg, UpdateNowClickHdl, PushButton *, EMPTYARG )
 /*
 IMPL_LINK_INLINE_START( SvBaseLinksDlg, OpenSourceClickHdl, PushButton *, pPushButton )
 {
-    DBG_ASSERT( !this, "Open noch nicht impl." );
+    DBG_ASSERT( sal_False, "Open not yet implemented" );
     return 0;
 }
 IMPL_LINK_INLINE_END( SvBaseLinksDlg, OpenSourceClickHdl, PushButton *, pPushButton )

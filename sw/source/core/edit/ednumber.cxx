@@ -625,7 +625,7 @@ sal_Bool SwEditShell::IsProtectedOutlinePara() const
 #ifdef DBG_UTIL
     else
     {
-        ASSERT(!this, "Cursor not on an outline node" );
+        ASSERT(sal_False, "Cursor not on an outline node" );
     }
 #endif
     return bRet;

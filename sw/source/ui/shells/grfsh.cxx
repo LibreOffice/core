@@ -379,7 +379,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         break;
 
         default:
-            ASSERT(!this, falscher Dispatcher);
+            ASSERT(sal_False, "wrong dispatcher");
             return;
     }
 }
@@ -522,7 +522,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
             break;
 
         default:
-            ASSERT(!this, falscher Dispatcher);
+            ASSERT(sal_False, "wrong dispatcher");
         }
         if( aGrfSet.Count() )
             GetShell().SetAttrSet( aGrfSet );

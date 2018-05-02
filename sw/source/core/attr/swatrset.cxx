@@ -462,7 +462,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
     }
 #ifdef DBG_UTIL
     else
-        ASSERT( !this, "weder Format noch ContentNode - keine Attribute kopiert");
+        ASSERT( sal_False, "neither format nor ContentNode - no attributes copied");
 #endif
 }
 

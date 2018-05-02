@@ -523,7 +523,7 @@ sal_uInt16 SwTextBlocks::Rename( sal_uInt16 n, const String* s, const String* l 
             aLong = *l;
         if( !aNew.Len() )
         {
-            ASSERT( !this, "Kein Kurzname in Rename angegeben" );
+            ASSERT( sal_False, "No short name specified in Rename" );
             nErr = ERR_SWG_INTERNAL_ERROR; return (sal_uInt16) -1;
         }
 
@@ -757,7 +757,7 @@ sal_Bool SwTextBlocks::IsOnlyTextBlock( const String& rShort ) const
         return IsOnlyTextBlock( nIdx );
     }
 
-    ASSERT( !this, "ungueltiger Name" );
+    ASSERT( sal_False, "invalid name" );
     return sal_False;
 }
 

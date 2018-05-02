@@ -1018,7 +1018,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
             }
             break;
         default:
-            ASSERT(!this,
+            ASSERT(sal_False,
            "Some inline export not implemented, remind cmc before we ship :-)");
             break;
     }

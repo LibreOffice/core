@@ -1417,7 +1417,7 @@ sal_Bool SwFldMgr::InsertFld(
 
     default:
         {
-            ASSERT(!this, "Falscher Feldtyp");
+            ASSERT(sal_False, "Wrong field type");
             return sal_False;
         }
     }

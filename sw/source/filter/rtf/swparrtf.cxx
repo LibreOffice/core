@@ -3129,7 +3129,7 @@ void SwRTFParser::ReadSectControls( int nToken )
             case RTF_MARGT:
             case RTF_MARGB:
             case RTF_FACINGP:
-                ASSERT(!this, "why are these tokens found in this section?");
+                ASSERT(sal_False, "why are these tokens found in this section?");
                 ReadDocControls( nToken );
                 break;
             default:
@@ -3918,7 +3918,7 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, sal_uInt16 nPos,
     String aNm( rName );
     if( !aNm.Len() )
     {
-        ASSERT(!this, "not a bug, but I (cmc) want to see an example of this");
+        ASSERT(sal_False, "not a bug, but I (cmc) want to see an example of this");
         if( !nPos )
         {
             pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
@@ -3967,7 +3967,7 @@ SwCharFmt* SwRTFParser::MakeCharFmt(const String& rName, sal_uInt16 nPos,
     String aNm( rName );
     if( !aNm.Len() )
     {
-        ASSERT(!this, "not a bug, but I (cmc) want to see an example of this");
+        ASSERT(sal_False, "not a bug, but I (cmc) want to see an example of this");
         aNm.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "NoName(" ));
         aNm += String::CreateFromInt32( nPos );
         aNm += ')';

@@ -562,7 +562,7 @@ sal_Bool  SwDocStyleSheet::HasFollowSupport() const
         case SFX_STYLE_FAMILY_CHAR :
         case SFX_STYLE_FAMILY_PSEUDO: return sal_False;
         default:
-            ASSERT(!this, "unbekannte Style-Familie");
+            ASSERT(sal_False, "unknown style family");
     }
     return sal_False;
 }
@@ -936,7 +936,7 @@ sal_Bool  SwDocStyleSheet::SetName( const String& rStr)
             break;
 
         default:
-            ASSERT(!this, "unbekannte Style-Familie");
+            ASSERT(sal_False, "unknown style family");
     }
 
     if( bChg )
@@ -982,7 +982,7 @@ sal_Bool   SwDocStyleSheet::SetParent( const String& rStr)
         case SFX_STYLE_FAMILY_PSEUDO:
             break;
         default:
-            ASSERT(!this, "unbekannte Style-Familie");
+            ASSERT(sal_False, "unknown style family");
     }
 
     sal_Bool bRet = sal_False;
@@ -1056,7 +1056,7 @@ sal_Bool   SwDocStyleSheet::SetFollow( const String& rStr)
     case SFX_STYLE_FAMILY_PSEUDO:
         break;
     default:
-        ASSERT(!this, "unbekannte Style-Familie");
+        ASSERT(sal_False, "unknown style family");
     }
 
     return sal_True;
@@ -1143,7 +1143,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
             break;
 
         default:
-            ASSERT(!this, "unbekannte Style-Familie");
+            ASSERT(sal_False, "unknown style family");
     }
     // Member der Basisklasse
     pSet = &aCoreSet;
@@ -1418,7 +1418,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             break;
 
         default:
-            ASSERT(!this, "unbekannte Style-Familie");
+            ASSERT(sal_False, "unknown style family");
     }
 
     if( pFmt && rSet.Count())
@@ -2000,7 +2000,7 @@ sal_Bool  SwDocStyleSheet::IsUsed() const
             return pNumRule ? rDoc.IsUsed( *pNumRule ) : sal_False;
 
     default:
-        ASSERT(!this, "unbekannte Style-Familie");
+        ASSERT(sal_False, "unknown style family");
         return sal_False;
     }
     return rDoc.IsUsed( *pMod );
@@ -2077,7 +2077,7 @@ static String sTemplateHelpFile = String::CreateFromAscii("swrhlppi.hlp");
         break;
 
     default:
-        ASSERT(!this, "unbekannte Style-Familie");
+        ASSERT(sal_False, "unknown style family");
         return 0;
     }
 
@@ -2132,7 +2132,7 @@ void  SwDocStyleSheet::SetHelpId( const String& r, sal_uLong nId )
         break;
 
     default:
-        ASSERT(!this, "unbekannte Style-Familie");
+        ASSERT(sal_False, "unknown style family");
         return ;
     }
     if( pTmpFmt )
@@ -2191,7 +2191,7 @@ SfxStyleSheetBase&   SwDocStyleSheetPool::Make(
 
 SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const SfxStyleSheetBase& /*rOrg*/)
 {
-    ASSERT(!this , "Create im SW-Stylesheet-Pool geht nicht" );
+    ASSERT(sal_False, "Create in the SW style sheet pool is not working" );
     return NULL;
 }
 
@@ -2199,7 +2199,7 @@ SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const SfxStyleSheetBase& /*rOr
 SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const String &,
                                                 SfxStyleFamily, sal_uInt16 )
 {
-    ASSERT( !this, "Create im SW-Stylesheet-Pool geht nicht" );
+    ASSERT( sal_False, "Create in the SW style sheet pool is not working" );
     return NULL;
 }
 
@@ -2361,7 +2361,7 @@ void SwDocStyleSheetPool::Remove( SfxStyleSheetBase* pStyle)
         break;
 
     default:
-        ASSERT(!this, "unbekannte Style-Familie");
+        ASSERT(sal_False, "unknown style family");
         bBroadcast = sal_False;
     }
 
@@ -2397,7 +2397,7 @@ sal_Bool  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
         break;
 
     default:
-        ASSERT(!this, "unbekannte Style-Familie");
+        ASSERT(sal_False, "unknown style family");
     }
 
     sal_Bool bRet = sal_False;
@@ -2487,7 +2487,7 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const String& rName,
             break;
 
         default:
-            ASSERT(!this, "unbekannte Style-Familie");
+            ASSERT(sal_False, "unknown style family");
         }
     }
 
@@ -2942,7 +2942,7 @@ void SwStyleSheetIterator::AppendStyleList(const SvStringsDtor& rList,
                         bUsed = rDoc.IsPoolPageDescUsed( nId );
                         break;
                 default:
-                    ASSERT( !this, "unknown PoolFmt-Id" );
+                    ASSERT( sal_False, "unknown PoolFmt-Id" );
             }
             if ( bUsed )
                 aLst.Append( cType, *rList[i] );

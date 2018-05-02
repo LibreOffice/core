@@ -369,7 +369,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
             }
             if( !aDBColumns.Insert( pNew ))
             {
-                ASSERT( !this, "Spaltenname mehrfach vergeben?" );
+                ASSERT( sal_False, "Assign column name multiple times?" );
                 delete pNew;
             }
         }
@@ -1063,19 +1063,19 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             if( aDBColumns.Seek_Entry( &aSrch, &nFndPos ) )
                 aColFlds.Insert( aDBColumns[ nFndPos ], n );
             else {
-                ASSERT( !this, "Datenbankspalte nicht mehr gefunden" );
+                ASSERT( sal_False, "Database column not found anymore" );
             }
         }
 
         if( nCols != aColFlds.Count() )
         {
-            ASSERT( !this, "nicht alle Datenbankspalten gefunden" );
+            ASSERT( sal_False, "not all database columns found" );
             nCols = aColFlds.Count();
         }
 
         if(!nRows || !nCols)
         {
-            ASSERT( !this, "wrong parameters" );
+            ASSERT( sal_False, "wrong parameters" );
             break;
         }
 

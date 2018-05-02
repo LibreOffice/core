@@ -775,7 +775,7 @@ void SwUndoTxtToTbl::UndoImpl(::sw::UndoRedoContext & rContext)
             if( pBox )
                 ::_DeleteBox( rTbl, pBox, 0, sal_False, sal_False );
             else {
-                ASSERT( !this, "Wo ist die Box geblieben?" );
+                ASSERT( sal_False, "Where was the box?" );
             }
         }
     }
@@ -1009,7 +1009,7 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, sal_Bool bMdfyBox )
     {
         if( !pLn )
         {
-            ASSERT( !this, "Anzahl der Lines hat sich veraendert" );
+            ASSERT( sal_False, "Number of Lines has changed" );
             break;
         }
 
@@ -1209,7 +1209,7 @@ void _SaveLine::RestoreAttr( SwTableLine& rLine, _SaveTable& rSTbl )
     {
         if( !pBx )
         {
-            ASSERT( !this, "Anzahl der Boxen hat sich veraendert" );
+            ASSERT( sal_False, "Number of boxes has changed" );
             break;
         }
         pBx->RestoreAttr( *rLine.GetTabBoxes()[ n ], rSTbl );
@@ -1298,7 +1298,7 @@ void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTbl )
     {
         if( !rBox.GetTabLines().Count() )
         {
-            ASSERT( !this, "Anzahl der Lines hat sich veraendert" );
+            ASSERT( sal_False, "Number of Lines has changed" );
         }
         else
         {
@@ -1307,7 +1307,7 @@ void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTbl )
             {
                 if( !pLn )
                 {
-                    ASSERT( !this, "Anzahl der Lines hat sich veraendert" );
+                    ASSERT( sal_False, "Number of Lines has changed" );
                     break;
                 }
 
@@ -1346,7 +1346,7 @@ void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTbl )
     }
     else
     {
-        ASSERT( !this, "Box nicht mehr am gleichen Node" );
+        ASSERT( sal_False, "Box no longer at the same node" );
     }
 }
 

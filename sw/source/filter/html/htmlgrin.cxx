@@ -1380,7 +1380,7 @@ void SwHTMLParser::StripTrailingPara()
                     SwCntntNode* pNd = pDoc->GetNodes().GoPrevious(&nNewNdIdx);
                     if(!pNd)
                     {
-                        ASSERT(!this, "Hoppla, wo ist mein Vorgaenger-Node");
+                        ASSERT(sal_False, "Oops, where is my predecessor node");
                         return;
                     }
                     {

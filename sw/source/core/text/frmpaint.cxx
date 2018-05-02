@@ -639,7 +639,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             }
             if( !HasPara() )
             {
-                ASSERT( !this, "+SwTxtFrm::Paint: missing format information" );
+                ASSERT( sal_False, "+SwTxtFrm::Paint: missing format information" );
                 return;
             }
         }

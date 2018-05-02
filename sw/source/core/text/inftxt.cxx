@@ -1314,7 +1314,7 @@ void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
         case POR_BLANK:     if ( GetOpt().IsHardBlank())bDraw = sal_True; break;
         default:
             {
-                ASSERT( !this, "SwTxtPaintInfo::DrawViewOpt: don't know how to draw this" );
+                ASSERT( sal_False, "SwTxtPaintInfo::DrawViewOpt: don't know how to draw this" );
                 break;
             }
         }

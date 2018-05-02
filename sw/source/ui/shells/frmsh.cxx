@@ -684,7 +684,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         break;
         // <--
         default:
-            ASSERT( !this, "falscher Dispatcher" );
+            ASSERT( sal_False, "wrong dispatcher" );
             return;
     }
     if ( bUpdateMgr )

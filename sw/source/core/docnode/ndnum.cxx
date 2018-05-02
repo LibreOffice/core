@@ -49,7 +49,7 @@ sal_Bool SwOutlineNodes::Seek_Entry( const SwNodePtr rSrch, sal_uInt16* pFndPos 
                 if( &(*this)[ n-1 ]->GetNodes() !=
                     &(*this)[ n ]->GetNodes() )
                 {
-                    ASSERT( !this, "Node im falschen Outline-Array" );
+                    ASSERT( sal_False, "Node in the wrong outline array" );
                 }
         }
 #endif

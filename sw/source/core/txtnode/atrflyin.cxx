@@ -134,7 +134,7 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
         else
         {
             pPos->nContent.Assign( 0, 0 );
-            ASSERT( !this, "CopyFlyFmt: Was fuer ein Anker?" );
+            ASSERT( sal_False, "CopyFlyFmt: What anchor?" );
         }
     }
 
@@ -223,7 +223,7 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
     SwFrmFmt* pFrmFmt = GetFlyCnt().GetFrmFmt();
     if( RES_DRAWFRMFMT == pFrmFmt->Which() )
     {
-        ASSERT(  !this, "SwTxtFlyCnt::_GetFlyFrm: DrawInCnt-Baustelle!" );
+        ASSERT(  sal_False, "SwTxtFlyCnt::_GetFlyFrm: construction site!" );
         return NULL;
     }
 

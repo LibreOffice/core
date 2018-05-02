@@ -520,7 +520,7 @@ sal_Bool SwHTMLParser::EndSection( sal_Bool bLFStripped )
         return sal_True;
     }
 
-    ASSERT( !this, "Falsche PaM Position Beenden eines Bereichs" );
+    ASSERT( sal_False, "Wrong PaM position ending a range" );
 
     return sal_False;
 }

@@ -97,7 +97,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
 {
     if( !pCntntNode )
     {
-        ASSERT(!this, "DataChanged ohne ContentNode" );
+        ASSERT(sal_False, "DataChanged without ContentNode" );
         return ;
     }
 
@@ -415,7 +415,7 @@ sal_Bool SwBaseLink::SwapIn( sal_Bool bWaitForData, sal_Bool bNativFormat )
 
         if( bWaitForData && !GetObj() )
         {
-            ASSERT( !this, "das SvxFileObject wurde in einem GetData geloescht!" );
+            ASSERT( sal_False, "the SvxFileObject was deleted in a GetData!" );
             bRes = sal_False;
         }
         else if( 0 != ( bRes = aValue.hasValue() ) )
@@ -472,7 +472,7 @@ const SwNode* SwBaseLink::GetAnchor() const
         }
     }
 
-    ASSERT( !this, "GetAnchor nicht ueberlagert" );
+    ASSERT( sal_False, "GetAnchor not superimposed" );
     return 0;
 }
 

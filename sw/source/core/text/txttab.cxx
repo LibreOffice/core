@@ -455,7 +455,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
 
                 break;
             }
-            default: ASSERT( !this, "SwTabPortion::PreFormat: unknown adjustment" );
+            default: ASSERT( sal_False, "SwTabPortion::PreFormat: unknown adjustment" );
         }
     }
 

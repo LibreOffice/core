@@ -226,7 +226,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
                     *pD->GetNodes().GetEndOfContent().StartOfSectionNode(), 1);
                 if( !aIdx.GetNode().IsTxtNode() )
                 {
-                    ASSERT( !this, "wo ist der TextNode?" );
+                    ASSERT( sal_False, "where is the TextNode?" );
                     pD->GetNodes().GoNext( &aIdx );
                 }
                 SwPaM aPamo( aIdx );

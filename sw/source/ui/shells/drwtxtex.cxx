@@ -593,7 +593,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         }
         return;
         default:
-            ASSERT(!this, falscher Dispatcher);
+            ASSERT(sal_False, "wrong dispatcher");
             return;
     }
     if(nEEWhich && pNewAttrs)

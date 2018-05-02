@@ -592,7 +592,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                         else
                         {
                             // mind. ein ASSERT
-                            ASSERT( !this, "die Kettenformel konnte nicht errechnet werden" );
+                            ASSERT( sal_False, "the chain formula could not be calculated" );
                         }
 #endif
                     }
@@ -661,7 +661,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                         else
                         {
                             // mind. ein ASSERT
-                            ASSERT( !this, "die Kettenformel konnte nicht errechnet werden" );
+                            ASSERT( sal_False, "the chain formula could not be calculated" );
                         }
 #endif
                     }
@@ -1362,7 +1362,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         SwTxtFld* pTxtFld = (SwTxtFld*)(*ppSortLst)->GetTxtFld();
         if( !pTxtFld )
         {
-            ASSERT( !this, "was ist es denn nun" );
+            ASSERT( sal_False, "what is it now?" );
             continue;
         }
 
@@ -2631,7 +2631,7 @@ void SwDocUpdtFld::InsertFldType( const SwFieldType& rType )
         sFldName = ((SwSetExpFieldType&)rType).GetName();
         break;
     default:
-        ASSERT( !this, "kein gueltiger FeldTyp" );
+        ASSERT( sal_False, "no valid field type" );
     }
 
     if( sFldName.Len() )

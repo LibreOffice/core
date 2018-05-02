@@ -2627,7 +2627,7 @@ sal_Bool SwRedlineTbl::Insert( SwRedlinePtr& p, sal_Bool bIns )
         bRet = InsertWithValidRanges( p );
     else
     {
-        ASSERT( !this, "Redline: falscher Bereich" );
+        ASSERT( sal_False, "Redline: wrong area" );
     }
     return bRet;
 }
@@ -2644,7 +2644,7 @@ sal_Bool SwRedlineTbl::Insert( SwRedlinePtr& p, sal_uInt16& rP, sal_Bool bIns )
         bRet = InsertWithValidRanges( p, &rP );
     else
     {
-        ASSERT( !this, "Redline: falscher Bereich" );
+        ASSERT( sal_False, "Redline: wrong area" );
     }
     return bRet;
 }
@@ -3714,7 +3714,7 @@ void SwRedline::SetContentIdx( const SwNodeIndex* pIdx )
     }
 #ifdef DBG_UTIL
     else
-        ASSERT( !this, "das ist keine gueltige Operation" );
+        ASSERT( sal_False, "this is not a valid operation" );
 #endif
 }
 

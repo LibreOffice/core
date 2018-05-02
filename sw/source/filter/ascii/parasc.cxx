@@ -83,7 +83,7 @@ sal_uLong AsciiReader::Read( SwDoc &rDoc, const String&, SwPaM &rPam, const Stri
 {
     if( !pStrm )
     {
-        ASSERT( !this, "ASCII-Read ohne Stream" );
+        ASSERT( sal_False, "ASCII-Read without stream" );
         return ERR_SWG_READ_ERROR;
     }
 
@@ -245,7 +245,7 @@ sal_uLong SwASCIIParser::CallParser()
                                     pInsPam->GetCntntNode(), nSttCntnt );
 
                 // !!!!!
-                ASSERT( !this, "Have to change - hard attr. to para. style" );
+                ASSERT( sal_False, "Have to change - hard attr. to para. style" );
                 pDoc->InsertItemSet( *pInsPam, *pItemSet, 0 );
             }
         }

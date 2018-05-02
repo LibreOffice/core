@@ -1213,7 +1213,7 @@ WW8PLCFx& WW8PLCFx_PCD::operator ++( int )
     if (pPcdI)
         (*pPcdI)++;
     else {
-        ASSERT( !this, "pPcdI fehlt");
+        ASSERT( sal_False, "pPcdI is missing");
     }
     return *this;
 }
@@ -1225,7 +1225,7 @@ WW8_FC WW8PLCFx_PCD::AktPieceStartCp2Fc( WW8_CP nCp )
 
     if ( !pPcdI->Get(nCpStart, nCpEnd, pData) )
     {
-        ASSERT( !this, "AktPieceStartCp2Fc() with false Cp found (1)" );
+        ASSERT( sal_False, "AktPieceStartCp2Fc() with false Cp found (1)" );
         return WW8_FC_MAX;
     }
 
@@ -1263,7 +1263,7 @@ WW8_CP WW8PLCFx_PCD::AktPieceStartFc2Cp( WW8_FC nStartPos )
     void* pData;
     if ( !pPcdI->Get( nCpStart, nCpEnd, pData ) )
     {
-        ASSERT( !this, "AktPieceStartFc2Cp() - Fehler" );
+        ASSERT( sal_False, "AktPieceStartFc2Cp() - error" );
         return WW8_CP_MAX;
     }
     bool bIsUnicode = false;
@@ -1519,7 +1519,7 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
             void* pData;
             if( !pPieceIter->Get( nCpStart, nCpEnd, pData ) )
             {   // ausserhalb PLCFfpcd ?
-                ASSERT( !this, "PLCFpcd-WW8Fc2Cp() ging schief" );
+                ASSERT( sal_False, "PLCFpcd-WW8Fc2Cp() went wrong" );
                 break;
             }
             sal_Int32 nFcStart  = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
@@ -1594,7 +1594,7 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
             if( pTestFlag )
                 *pTestFlag = false;
             else {
-                ASSERT( !this, "Falscher CP an WW8Cp2Fc() uebergeben" );
+                ASSERT( sal_False, "Wrong CP passed to WW8Cp2Fc()" );
             }
             return WW8_FC_MAX;
         }
@@ -1605,7 +1605,7 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
             if( pTestFlag )
                 *pTestFlag = false;
             else {
-                ASSERT( !this, "PLCFfpcd-Get ging schief" );
+                ASSERT( sal_False, "PLCFfpcd-Get went wrong" );
             }
             return WW8_FC_MAX;
         }
@@ -1866,7 +1866,7 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
 
             break;
         default:
-            ASSERT( !this, "Es wurde vergessen, nVersion zu kodieren!" );
+            ASSERT( sal_False, "It was forgotten to encode nVersion!" );
             break;
     }
 
@@ -2932,7 +2932,7 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(sal_uInt16 nId,
 //-----------------------------------------
 void WW8PLCFx::GetSprms( WW8PLCFxDesc* p )
 {
-    ASSERT( !this, "Falsches GetSprms gerufen" );
+    ASSERT( sal_False, "Wrong GetSprms called" );
     p->nStartPos = p->nEndPos = WW8_CP_MAX;
     p->pMemPos = 0;
     p->nSprmsLen = 0;
@@ -2942,7 +2942,7 @@ void WW8PLCFx::GetSprms( WW8PLCFxDesc* p )
 
 long WW8PLCFx::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
 {
-    ASSERT( !this, "Falsches GetNoSprms gerufen" );
+    ASSERT( sal_False, "Wrong GetNoSprms called" );
     rStart = rEnd = WW8_CP_MAX;
     rLen = 0;
     return 0;
@@ -3003,7 +3003,7 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
             break;
         default:
             // Programm-Fehler!
-            ASSERT( !this, "Es wurde vergessen, nVersion zu kodieren!" );
+            ASSERT( sal_False, "It was forgotten to encode nVersion!" );
             return false;
     }
 
@@ -3463,7 +3463,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                         {
                             if( !pPieceIter->Get( nCpStart, nCpEnd, pData ) )
                             {
-                                ASSERT( !this, "piece iter broken!" );
+                                ASSERT( sal_False, "PieceIter broken!" );
                                 break;
                             }
                             bIsUnicode = false;
@@ -4279,14 +4279,14 @@ long WW8PLCFx_Book::GetLen() const
 {
     if( nIsEnd )
     {
-        ASSERT( !this, "Falscher Aufruf (1) von PLCF_Book::GetLen()" );
+        ASSERT( sal_False, "Wrong call (1) from PLCF_Book::GetLen()" );
         return 0;
     }
     void * p;
     WW8_CP nStartPos;
     if( !pBook[0]->Get( nStartPos, p ) )
     {
-        ASSERT( !this, "Falscher Aufruf (2) von PLCF_Book::GetLen()" );
+        ASSERT( sal_False, "Wrong call (2) from PLCF_Book::GetLen()" );
         return 0;
     }
     sal_uInt16 nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
@@ -4342,7 +4342,7 @@ String WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex)
                 nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
             else
             {
-                ASSERT( !this, "Bookmark-EndIdx nicht lesbar" );
+                ASSERT( sal_False, "Bookmark EndIdx unreadable" );
                 nEndIdx = i;
             }
 
@@ -4399,7 +4399,7 @@ bool WW8PLCFx_Book::MapName(String& rName)
             nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
         else
         {
-            ASSERT( !this, "Bookmark-EndIdx nicht lesbar" );
+            ASSERT( sal_False, "Bookmark EndIdx unreadable" );
             nEndIdx = i;
         }
         nEndAkt = pBook[1]->GetPos( nEndIdx );
@@ -4854,7 +4854,7 @@ void WW8PLCFMan::GetSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
         pRes->nSprmId = p->pIdStk->top();       // get end position
     else
     {
-        ASSERT( !this, "No Id on the Stack" );
+        ASSERT( sal_False, "No Id on the Stack" );
         pRes->nSprmId = 0;
     }
 }
@@ -5116,7 +5116,7 @@ bool WW8PLCFMan::Get(WW8PLCFManResult* pRes) const
 
     if( nIdx >= nPLCF )
     {
-        ASSERT( !this, "Position not found" );
+        ASSERT( sal_False, "Position not found" );
         return true;
     }
 
@@ -5154,7 +5154,7 @@ sal_uInt16 WW8PLCFMan::GetColl() const
         return  pPap->pPLCFx->GetIstd();
     else
     {
-        ASSERT( !this, "GetColl ohne PLCF_Pap" );
+        ASSERT( sal_False, "GetColl without PLCF_Pap" );
         return 0;
     }
 }
@@ -5399,7 +5399,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
                 nFibMin = 0;            // Programm-Fehler!
                 nFibMax = 0;
                 nFib    = 1;
-                ASSERT( !this, "Es wurde vergessen, nVersion zu kodieren!" );
+                ASSERT( sal_False, "It was forgotten to encode nVersion!" );
                 break;
         }
         if ( (nFib < nFibMin) || (nFib > nFibMax) )
@@ -6332,7 +6332,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
                     }
                     break;
                 default:
-                    ASSERT(!this, "Es wurde vergessen, nVersion zu kodieren!");
+                    ASSERT(sal_False, "It was forgotten to encode nVersion!");
                     break;
             }
         }
@@ -6413,7 +6413,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     // always in ANSI, even if eStructCharSet == CHARSET_MAC !!
     if( rFib.lcbSttbfffn <= 2 )
     {
-        ASSERT( !this, "Fonttabelle kaputt! (rFib.lcbSttbfffn < 2)" );
+        ASSERT( sal_False, "Font table broken! (rFib.lcbSttbfffn < 2)" );
         pFontA = 0;
         nMax = 0;
         return;
@@ -7411,7 +7411,7 @@ sal_uInt16 WW8DopTypography::GetConvertedLang() const
             nLang = LANGUAGE_CHINESE_TRADITIONAL;
             break;
         default:
-            ASSERT(!this, "Unknown MS Asian Typography language, report");
+            ASSERT(sal_False, "Unknown MS Asian Typography language, report");
             nLang = LANGUAGE_CHINESE;
             break;
         case 0:
@@ -7468,7 +7468,7 @@ sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm)
                     nL = static_cast< sal_uInt16 >(SVBT16ToShort( &pSprm[1 + mnDelta] ) + aSprm.nLen - 1);
                     break;
                 default:
-                    ASSERT(!this, "Unknown sprm variant");
+                    ASSERT(sal_False, "Unknown sprm variant");
                     break;
             }
             break;

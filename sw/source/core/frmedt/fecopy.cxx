@@ -545,7 +545,7 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 aNewAnch = pPg->Frm().Pos();
         }
         else {
-            ASSERT( !this, "was fuer ein Anchor ist es denn?" );
+            ASSERT( sal_False, "what kind of anchor is it?" );
         }
 
         if( bRet )

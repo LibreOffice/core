@@ -303,7 +303,7 @@ sal_Bool XMLDropCapPropHdl_Impl::importXML(
            Any&,
         const SvXMLUnitConverter& ) const
 {
-    DBG_ASSERT( !this, "drop caps are an element import property" );
+    DBG_ASSERT( sal_False, "drop caps are an element import property" );
     return sal_False;
 }
 
@@ -312,7 +312,7 @@ sal_Bool XMLDropCapPropHdl_Impl::exportXML(
         const Any&,
         const SvXMLUnitConverter& ) const
 {
-    DBG_ASSERT( !this, "drop caps are an element export property" );
+    DBG_ASSERT( sal_False, "drop caps are an element export property" );
     return sal_False;
 }
 
@@ -731,7 +731,7 @@ sal_Bool XMLTextColumnsPropertyHandler::importXML(
            Any&,
         const SvXMLUnitConverter& ) const
 {
-    DBG_ASSERT( !this, "columns are an element import property" );
+    DBG_ASSERT( sal_False, "columns are an element import property" );
     return sal_False;
 }
 
@@ -740,7 +740,7 @@ sal_Bool XMLTextColumnsPropertyHandler::exportXML(
         const Any&,
         const SvXMLUnitConverter& ) const
 {
-    DBG_ASSERT( !this, "columns are an element export property" );
+    DBG_ASSERT( sal_False, "columns are an element export property" );
     return sal_False;
 }
 
@@ -784,7 +784,7 @@ sal_Bool XMLHoriMirrorPropHdl_Impl::exportXML(
         const Any&,
         const SvXMLUnitConverter& ) const
 {
-    DBG_ASSERT( !this, "HorMirror properyt shouldn't be exported" );
+    DBG_ASSERT( sal_False, "HorMirror property shouldn't be exported" );
 
     return sal_False;
 }

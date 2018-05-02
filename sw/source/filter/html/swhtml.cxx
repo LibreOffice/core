@@ -189,8 +189,8 @@ String HTMLReader::GetTemplateName() const
     if( !bSet )
     {
         sTemplate.Erase();
-        ASSERT( !this,
-            "Die html.vor befindet sich nicht mehr im definierten Directory!");
+        ASSERT( sal_False,
+            "The html.vor is no longer in the defined directory!");
     }
 
     return sTemplate;
@@ -1099,7 +1099,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
                 break;
 
             default:
-                ASSERT( !this, "SwHTMLParser::NextToken: ungueltiges Tag" );
+                ASSERT( sal_False, "SwHTMLParser::NextToken: invalid day" );
                 break;
             }
 
@@ -2670,7 +2670,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                         pAttr->nSttCntnt = 0;
                     else
                     {
-                        ASSERT( !this, "SetAttr: GoNext() failed!" );
+                        ASSERT( sal_False, "SetAttr: GoNext() failed!" );
                         delete pAttr;
                         pAttr = pPrev;
                         continue; // break;
@@ -2698,7 +2698,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                             pAttr->nEndCntnt = pCNd->Len();
                         else
                         {
-                            ASSERT( !this, "SetAttr: GoPrevious() failed!" );
+                            ASSERT( sal_False, "SetAttr: GoPrevious() failed!" );
                             pAttrPam->DeleteMark();
                             delete pAttr;
                             pAttr = pPrev;
@@ -2803,8 +2803,8 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                         pCNd->SetAttr( *pAttr->pItem );
                         break;
                     }
-                    ASSERT( !this,
-                            "LRSpace ueber mehrere Absaetze gesetzt!" );
+                    ASSERT( sal_False,
+                            "LRSpace set over several paragraphs!" );
                     // kein break (hier sollen wir trotzdem nie hinkommen;
                 default:
 
@@ -4101,7 +4101,7 @@ void SwHTMLParser::NewTxtFmtColl( int nToken, sal_uInt16 nColl )
         eMode = AM_SOFTNOSPACE;
         break;
     default:
-        ASSERT( !this, "unbekannte Vorlage" );
+        ASSERT( sal_False, "unknown template" );
         break;
     }
     if( pPam->GetPoint()->nContent.GetIndex() )
@@ -4154,7 +4154,7 @@ void SwHTMLParser::EndTxtFmtColl( int nToken )
         eMode = AM_SOFTNOSPACE;
         break;
     default:
-        ASSERT( !this, "unbekannte Vorlage" );
+        ASSERT( sal_False, "unknown template" );
         break;
     }
     if( pPam->GetPoint()->nContent.GetIndex() )

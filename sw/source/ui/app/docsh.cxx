@@ -1132,7 +1132,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         break;
 
         default:
-            DBG_ASSERT( !this, "Hier darfst Du nicht hinein!" );
+            DBG_ASSERT( sal_False, "You can not go in here!" );
 
         }
         nWhich = aIter.NextWhich();

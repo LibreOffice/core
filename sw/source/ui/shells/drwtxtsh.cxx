@@ -447,7 +447,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
             break;
 
         default:
-            ASSERT(!this, "unexpected slot-id");
+            ASSERT(sal_False, "unexpected slot-id");
         }
     }
 }
@@ -584,7 +584,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             break;
 
         default:
-            ASSERT(!this, "unexpected slot-id");
+            ASSERT(sal_False, "unexpected slot-id");
             return;
     }
 
@@ -744,7 +744,7 @@ void SwDrawTextShell::ExecTransliteration( SfxRequest & rReq )
             break;
 
         default:
-            ASSERT(!this, "falscher Dispatcher");
+            ASSERT(sal_False, "wrong dispatcher");
         }
 
         if( nMode )

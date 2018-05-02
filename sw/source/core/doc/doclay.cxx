@@ -205,8 +205,8 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 #endif
 
     default:
-        ASSERT( !this,
-                "Layoutformat mit ungueltigem Request angefordert." );
+        ASSERT( sal_False,
+                "Layout format requested with invalid request." );
 
     }
     return pFmt;

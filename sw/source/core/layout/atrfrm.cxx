@@ -763,7 +763,7 @@ sal_Bool SwFmtPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             }
             break;
         default:
-            ASSERT( !this, "unknown MemberId" );
+            ASSERT( sal_False, "unknown MemberId" );
             bRet = sal_False;
     }
     return bRet;
@@ -792,7 +792,7 @@ sal_Bool SwFmtPageDesc::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
              * Der Pointer waere aber ueber den Namen nur vom Dokument zu erfragen.
              */
         default:
-            ASSERT( !this, "unknown MemberId" );
+            ASSERT( sal_False, "unknown MemberId" );
             bRet = sal_False;
     }
     return bRet;
@@ -1124,7 +1124,7 @@ sal_Bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     case 0: eAdj = COLADJ_TOP;  break;  //VerticalAlignment_TOP
                     case 1: eAdj = COLADJ_CENTER;break; //VerticalAlignment_MIDDLE
                     case 2: eAdj = COLADJ_BOTTOM;break; //VerticalAlignment_BOTTOM
-                    default: ASSERT( !this, "unknown alignment" ); break;
+                    default: ASSERT( sal_False, "unknown alignment" ); break;
                 }
             }
         }
@@ -1199,7 +1199,7 @@ sal_Bool SwFmtSurround::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
                 break;
         default:
-            ASSERT( !this, "unknown MemberId" );
+            ASSERT( sal_False, "unknown MemberId" );
             bRet = sal_False;
     }
     return bRet;
@@ -1234,7 +1234,7 @@ sal_Bool SwFmtSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             SetOutside( *(sal_Bool*)rVal.getValue() );
             break;
         default:
-            ASSERT( !this, "unknown MemberId" );
+            ASSERT( sal_False, "unknown MemberId" );
             bRet = sal_False;
     }
     return bRet;
@@ -1297,7 +1297,7 @@ sal_Bool SwFmtVertOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) cons
                 rVal <<= (sal_Int32)TWIP_TO_MM100(GetPos());
                 break;
         default:
-            ASSERT( !this, "unknown MemberId" );
+            ASSERT( sal_False, "unknown MemberId" );
             bRet = sal_False;
     }
     return bRet;
@@ -1344,7 +1344,7 @@ sal_Bool SwFmtVertOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         default:
-            ASSERT( !this, "unknown MemberId" );
+            ASSERT( sal_False, "unknown MemberId" );
             bRet = sal_False;
     }
     return bRet;
@@ -1419,7 +1419,7 @@ sal_Bool SwFmtHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) cons
         }
                 break;
         default:
-            ASSERT( !this, "unknown MemberId" );
+            ASSERT( sal_False, "unknown MemberId" );
             bRet = sal_False;
     }
     return bRet;
@@ -1470,7 +1470,7 @@ sal_Bool SwFmtHoriOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 SetPosToggle( *(sal_Bool*)rVal.getValue());
             break;
         default:
-            ASSERT( !this, "unknown MemberId" );
+            ASSERT( sal_False, "unknown MemberId" );
             bRet = sal_False;
     }
     return bRet;
@@ -1611,7 +1611,7 @@ sal_Bool SwFmtAnchor::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
         default:
-            ASSERT( !this, "unknown MemberId" );
+            ASSERT( sal_False, "unknown MemberId" );
             bRet = sal_False;
     }
     return bRet;
@@ -1681,7 +1681,7 @@ sal_Bool SwFmtAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_ANCHOR_ANCHORFRAME:
         //no break here!;
         default:
-            ASSERT( !this, "unknown MemberId" );
+            ASSERT( sal_False, "unknown MemberId" );
             bRet = sal_False;
     }
     return bRet;
@@ -1795,7 +1795,7 @@ sal_Bool SwFmtURL::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
             break;
         default:
-            ASSERT( !this, "unknown MemberId" );
+            ASSERT( sal_False, "unknown MemberId" );
             bRet = sal_False;
     }
     return bRet;
@@ -1848,7 +1848,7 @@ sal_Bool SwFmtURL::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             bIsServerMap = *(sal_Bool*)rVal.getValue();
             break;
         default:
-            ASSERT( !this, "unknown MemberId" );
+            ASSERT( sal_False, "unknown MemberId" );
             bRet = sal_False;
     }
     return bRet;
@@ -2095,7 +2095,7 @@ sal_Bool SwFmtChain::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 aRet = GetNext()->GetName();
             break;
         default:
-            ASSERT( !this, "unknown MemberId" );
+            ASSERT( sal_False, "unknown MemberId" );
             bRet = sal_False;
     }
     rVal <<= OUString(aRet);
@@ -2148,7 +2148,7 @@ sal_Bool SwFmtLineNumber::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) cons
             rVal <<= (sal_Int32)GetStartValue();
             break;
         default:
-            ASSERT( !this, "unknown MemberId" );
+            ASSERT( sal_False, "unknown MemberId" );
             bRet = sal_False;
     }
     return bRet;
@@ -2174,7 +2174,7 @@ sal_Bool SwFmtLineNumber::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         default:
-            ASSERT( !this, "unknown MemberId" );
+            ASSERT( sal_False, "unknown MemberId" );
             bRet = sal_False;
     }
     return bRet;
@@ -2608,7 +2608,7 @@ void SwFrmFmt::DelFrms()
 
 void SwFrmFmt::MakeFrms()
 {
-    ASSERT( !this, "Sorry not implemented." );
+    ASSERT( sal_False, "Sorry not implemented." );
 }
 
 
@@ -2736,7 +2736,7 @@ sal_Bool SwFrmFmt::IsLowerOf( const SwFrmFmt& rFmt ) const
             }
             if( n >= rFmts.Count() )
             {
-                ASSERT( !this, "Fly-Section aber kein Format gefunden" );
+                ASSERT( sal_False, "Fly-Section but no format found" );
                 return sal_False;
             }
         }
@@ -2960,7 +2960,7 @@ void SwFlyFrmFmt::MakeFrms()
                     pFly = new SwFlyInCntFrm( this, pFrm, pFrm );
                     break;
                 default:
-                    ASSERT( !this, "Neuer Ankertyp" )
+                    ASSERT( sal_False, "New anchor type" )
                     break;
                 }
                 pFrm->AppendFly( pFly );

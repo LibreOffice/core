@@ -3869,7 +3869,7 @@ sal_Bool OCX_Frame::Read(SvStorageStream *pS)
 
     if (pBlockFlags[0] & 0x01)
     {
-            DBG_ASSERT(!this, "ARSE");
+            DBG_ASSERT(sal_False, "ARSE");
     }
     if (pBlockFlags[0] & 0x02)
             *pS >> mnBackColor;
@@ -4066,7 +4066,7 @@ sal_Bool OCX_UserForm::Read(SvStorageStream *pS)
 
     if (pBlockFlags[0] & 0x01)
     {
-            DBG_ASSERT(!this, "ARSE");
+            DBG_ASSERT(sal_False, "ARSE");
     }
     if (pBlockFlags[0] & 0x02)
         *pS >> mnBackColor;

@@ -1411,8 +1411,8 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, sal_Bool bBroadcast )
 {
     if( pFmt->ISA( SwTableBoxFmt ) || pFmt->ISA( SwTableLineFmt ))
     {
-        ASSERT( !this, "Format steht nicht mehr im DocArray, "
-                       "kann per delete geloescht werden" );
+        ASSERT( sal_False, "Format is no longer in DocArray, "
+                       "can be deleted by delete" );
         delete pFmt;
     }
     else

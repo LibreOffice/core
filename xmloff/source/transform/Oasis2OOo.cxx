@@ -1438,7 +1438,7 @@ void XMLTabStopOASISTContext_Impl::StartElement(
                 }
                 break;
             default:
-                OSL_ENSURE( !this, "unknown action" );
+                OSL_ENSURE( sal_False, "unknown action" );
                 break;
             }
         }
@@ -1710,7 +1710,7 @@ XMLTransformerContext *Oasis2OOoTransformer::CreateUserDefinedContext(
     case XML_ETACTION_CHART_PLOT_AREA:
         return new XMLChartPlotAreaOASISTContext( *this, rQName );
     default:
-        OSL_ENSURE( !this, "no user defined context found!" );
+        OSL_ENSURE( sal_False, "no user defined context found!" );
         break;
     }
 

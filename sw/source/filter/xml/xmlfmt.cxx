@@ -560,7 +560,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
         pItemSet = new SfxItemSet( rItemPool, aTableBoxSetRange );
         break;
     default:
-        ASSERT( !this,
+        ASSERT( sal_False,
         "SwXMLItemSetStyleContext_Impl::CreateItemSetContext: unknown family" );
         break;
     }

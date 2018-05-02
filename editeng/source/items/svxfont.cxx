@@ -178,7 +178,7 @@ XubString SvxFont::CalcCaseMap( const XubString &rTxt ) const
         }
         default:
         {
-            DBG_ASSERT(!this, "SvxFont::CaseMapTxt: unknown casemap");
+            DBG_ASSERT(sal_False, "SvxFont::CaseMapTxt: unknown casemap");
             break;
         }
     }

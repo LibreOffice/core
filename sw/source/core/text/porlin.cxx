@@ -295,7 +295,7 @@ xub_StrLen SwLinePortion::GetCrsrOfst( const KSHORT nOfst ) const
 
 SwPosSize SwLinePortion::GetTxtSize( const SwTxtSizeInfo & ) const
 {
-    ASSERT( !this, "SwLinePortion::GetTxtSize: don't ask me about sizes, "
+    ASSERT( sal_False, "SwLinePortion::GetTxtSize: don't ask me about sizes, "
                    "I'm only a stupid SwLinePortion" );
     return SwPosSize();
 }

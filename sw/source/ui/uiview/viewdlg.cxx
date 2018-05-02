@@ -79,7 +79,7 @@ void SwView::ExecDlg(SfxRequest &rReq)
         break;
 
         default:
-            ASSERT(!this, falscher Dispatcher);
+            ASSERT(sal_False, "wrong dispatcher");
             return;
     }
 

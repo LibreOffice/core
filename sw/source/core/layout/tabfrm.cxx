@@ -5332,7 +5332,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         if ( !Lower()->IsCntntFrm() && !Lower()->IsSctFrm() && !Lower()->IsTabFrm() )
         {
             //ASSERT fuer HTML-Import!
-            ASSERT( !this, "VAlign an Zelle ohne Inhalt" );
+            ASSERT( sal_False, "VAlign to cell without content" );
             return;
         }
         sal_Bool bVertDir = sal_True;

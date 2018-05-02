@@ -469,7 +469,7 @@ sal_Bool SwXMLTextBlocks::PutMuchEntries( sal_Bool bOn )
     {
         if( bInPutMuchBlocks )
         {
-            ASSERT( !this, "verschachtelte Aufrufe sind nicht erlaubt" );
+            ASSERT( sal_False, "nested calls are not allowed" );
         }
         else if( !IsFileChanged() )
         {

@@ -1847,7 +1847,7 @@ eF_ResT SwWW8ImplReader::Read_F_FileName(WW8FieldDesc*, String &rStr)
                 aReadParam.SkipToNextToken();
                 break;
             default:
-                ASSERT(!this, "unknown option in FileName field");
+                ASSERT(sal_False, "unknown option in FileName field");
                 break;
         }
     }
@@ -3440,7 +3440,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                     }
                     break;
                 default:
-                    ASSERT(!this, "Unhandled toc options!");
+                    ASSERT(sal_False, "Unhandled toc options!");
                     break;
             }
         }
@@ -3448,7 +3448,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     case TOX_USER:
         break;
     default:
-        ASSERT(!this, "Unhandled toc options!");
+        ASSERT(sal_False, "Unhandled toc options!");
         break;
     } // ToxBase fertig
 
@@ -3606,7 +3606,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
                     break;
                 case 'h':
                 case 'm':
-                    ASSERT( !this, "Auswertung fehlt noch - Daten unbekannt" );
+                    ASSERT( sal_False, "Evaluation is still missing - data unknown" );
                 case 's':   //worthless fake anchor option
                     bOptions = true;
                     break;

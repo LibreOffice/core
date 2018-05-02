@@ -843,13 +843,13 @@ XMLCompareOnlyPropHdl::~XMLCompareOnlyPropHdl()
 
 sal_Bool XMLCompareOnlyPropHdl::importXML( const OUString&, Any&, const SvXMLUnitConverter& ) const
 {
-    DBG_ASSERT( !this, "importXML called for compare-only-property" );
+    DBG_ASSERT( sal_False, "importXML called for compare-only-property" );
     return sal_False;
 }
 
 sal_Bool XMLCompareOnlyPropHdl::exportXML( OUString&, const Any&, const SvXMLUnitConverter& ) const
 {
-    DBG_ASSERT( !this, "exportXML called for compare-only-property" );
+    DBG_ASSERT( sal_False, "exportXML called for compare-only-property" );
     return sal_False;
 }
 

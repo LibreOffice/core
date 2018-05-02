@@ -548,7 +548,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
             }
             break;
         default:
-            ASSERT( !this, "Crsr weder in Tabelle noch in Fly." );
+            ASSERT( sal_False, "Crsr neither in table nor in Fly." );
         }
 
         if( nIdx )

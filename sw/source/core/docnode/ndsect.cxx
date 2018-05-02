@@ -163,7 +163,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     if( rRange.HasMark() &&
         0 == ( nRegionRet = IsInsRegionAvailable( rRange, &pPrvNd ) ))
     {
-        ASSERT( !this, "Selection ueber verschiedene Sections" );
+        ASSERT( sal_False, "Selection over different sections" );
         return 0;
     }
 

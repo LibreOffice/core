@@ -608,7 +608,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                     }
                     else
                     {
-                        ASSERT( !this, "Sub tables in HTML import?" )
+                        ASSERT( sal_False, "Sub tables in HTML import?" )
                         SwHTMLTableLayout *pChild = pCnts->GetTable();
                         pChild->AutoLayoutPass1();
                         sal_uLong nMaxTableCnts = pChild->nMax;

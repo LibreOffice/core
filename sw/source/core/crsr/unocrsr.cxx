@@ -55,7 +55,7 @@ SwUnoCrsr::~SwUnoCrsr()
         if( USHRT_MAX != nDelPos )
             rTbl.Remove( nDelPos );
         else {
-            ASSERT( !this, "UNO Cursor nicht mehr im Array" );
+            ASSERT( sal_False, "UNO cursor no longer in the array" );
         }
     }
 

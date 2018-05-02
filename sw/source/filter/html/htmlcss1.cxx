@@ -1320,7 +1320,7 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtFmtColl( sal_uInt16 nTxtColl,
     String sName;
     if( USER_FMT & nTxtColl )       // eine vom Reader angelegte
     {
-        ASSERT( !this, "Wo kommt die Benutzer-Vorlage her?" );
+        ASSERT( sal_False, "Where does the user template come from?" );
         pColl = GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
     }
     else

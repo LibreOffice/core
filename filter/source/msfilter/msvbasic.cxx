@@ -203,16 +203,16 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
             case 0x1:
                 xVBAProject->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
                 bIsUnicode = true;
-                DBG_ASSERT(!this, "unrecognized VBA macro version, report to cmc. Guessing at unicode little endian");
+                DBG_ASSERT(sal_False, "unrecognized VBA macro version, report to cmc. Guessing at unicode little endian");
                 break;
             case 0xe:
                 xVBAProject->SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
                 mbMac = true;
                 bIsUnicode = false;
-                DBG_ASSERT(!this, "unrecognized VBA macro version, report to cmc. Guessing at 8bit big endian");
+                DBG_ASSERT(sal_False, "unrecognized VBA macro version, report to cmc. Guessing at 8bit big endian");
                 break;
             default:
-                DBG_ASSERT(!this, "totally unrecognized VBA macro version, report to cmc");
+                DBG_ASSERT(sal_False, "totally unrecognized VBA macro version, report to cmc");
                 return 0;
         }
     }

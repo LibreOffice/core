@@ -78,19 +78,19 @@ XMLTransformerContext *XMLPersTextTContext_Impl::CreateChildContext(
         const OUString&,
         const Reference< XAttributeList >& )
 {
-    OSL_ENSURE( !this, "illegal call to CreateChildContext" );
+    OSL_ENSURE( sal_False, "illegal call to CreateChildContext" );
     return 0;
 }
 
 void XMLPersTextTContext_Impl::StartElement(
     const Reference< XAttributeList >& )
 {
-    OSL_ENSURE( !this, "illegal call to StartElement" );
+    OSL_ENSURE( sal_False, "illegal call to StartElement" );
 }
 
 void XMLPersTextTContext_Impl::EndElement()
 {
-    OSL_ENSURE( !this, "illegal call to EndElement" );
+    OSL_ENSURE( sal_False, "illegal call to EndElement" );
 }
 
 sal_Bool XMLPersTextTContext_Impl::IsPersistent() const

@@ -520,7 +520,7 @@ void SwTxtFormatter::CalcDropHeight( const MSHORT nLines )
     {
         if( !Next() )
         {
-            ASSERT( !this, "SwTxtFormatter::_CalcDropHeight: left Toulouse" );
+            ASSERT( sal_False, "SwTxtFormatter::_CalcDropHeight: left Toulouse" );
             break;
         }
     }

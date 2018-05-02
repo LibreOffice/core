@@ -105,7 +105,7 @@ void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *p
 
     if( nStart > GetInfo().GetTxt().Len() )
     {
-        ASSERT( !this, "+SwTxtFormatter::CTOR: bad offset" );
+        ASSERT( sal_False, "+SwTxtFormatter::CTOR: bad offset" );
         nStart = GetInfo().GetTxt().Len();
     }
 

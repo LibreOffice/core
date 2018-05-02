@@ -654,7 +654,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         }
         break;
     default:
-        ASSERT( !this, "unknown object type! Base class should have been called!" );
+        ASSERT( sal_False, "unknown object type! Base class should have been called!" );
     }
 
     {

@@ -405,7 +405,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         }
 
         default:
-            DBG_ASSERT(!this, "falscher Dispatcher");
+            DBG_ASSERT(sal_False, "wrong dispatcher");
             return;
     }
     if (pSdrView->GetModel()->IsChanged())

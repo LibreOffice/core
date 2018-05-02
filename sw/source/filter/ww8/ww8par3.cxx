@@ -934,7 +934,7 @@ bool WW8ListManager::ReadLVL(
             break;
          default:
             // undefied value
-            ASSERT( !this, "Value of aLVL.nAlign is not supported" );
+            ASSERT( sal_False, "Value of aLVL.nAlign is not supported" );
             // take default
             eAdj = SVX_ADJUST_LEFT;
             break;
@@ -2318,7 +2318,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
                 nChecked = false;
                 break;
             default:
-                ASSERT(!this, "unknown option, please report to cmc");
+                ASSERT(sal_False, "unknown option, please report to cmc");
                 break;
         }
     }

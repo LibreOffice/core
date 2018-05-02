@@ -578,7 +578,7 @@ void ViewShell::MakeVisible( const SwRect &rRect )
             else
             {
                 //MA: 04. Nov. 94, braucht doch keiner oder??
-                ASSERT( !this, "MakeVisible fuer Drucker wird doch gebraucht?" );
+                ASSERT( sal_False, "MakeVisible for printers is needed?" );
             }
 
 #endif
@@ -1120,7 +1120,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
     if ( bInEndAction )
     {
         //Da Rescheduled doch schon wieder irgendwo einer?
-        ASSERT( !this, "Scroll waehrend einer EndAction." );
+        ASSERT( sal_False, "Scroll during an EndAction." );
     }
 #endif
 

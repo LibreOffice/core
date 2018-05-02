@@ -1117,7 +1117,7 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
             //          -> returne das erste
             if( RES_POOLCHR_BEGIN > nId || nId >= RES_POOLCHR_END )
             {
-                ASSERT( !this, "ungueltige Id" );
+                ASSERT( sal_False, "<SwDoc::GetFmtFromPool(..)> - unknown page pool ID" );
                 nId = RES_POOLCHR_BEGIN;
             }
         }
@@ -1135,7 +1135,7 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
             //          -> returne das erste
             if( RES_POOLFRM_BEGIN > nId || nId >= RES_POOLFRM_END )
             {
-                ASSERT( !this, "ungueltige Id" );
+                ASSERT( sal_False, "<SwDoc::GetFmtFromPool(..)> - unknown page pool ID" );
                 nId = RES_POOLFRM_BEGIN;
             }
         }
@@ -1416,7 +1416,7 @@ bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
     }
     else
     {
-        ASSERT( sal_False, "ungueltige Id" );
+        ASSERT( sal_False, "<SwDoc::IsPoolFmtUsed(..)> - unknown page pool ID" );
         bFnd = sal_False;
     }
 
@@ -1475,7 +1475,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     if( RES_POOLPAGE_BEGIN > nId ||  nId >= RES_POOLPAGE_END )
     {
         // unknown page pool ID
-        ASSERT( !this, "<SwDoc::GetPageDescFromPool(..)> - unknown page pool ID" );
+        ASSERT( sal_False, "<SwDoc::GetPageDescFromPool(..)> - unknown page pool ID" );
         nId = RES_POOLPAGE_BEGIN;
     }
 
@@ -1657,7 +1657,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     // Fehlerfall: unbekannte Poolvorlage
     if( RES_POOLNUMRULE_BEGIN > nId ||  nId >= RES_POOLNUMRULE_END )
     {
-        ASSERT( !this, "ungueltige Id" );
+        ASSERT( sal_False, "<SwDoc::GetNumRuleFromPool(..)> - unknown page pool ID" );
         nId = RES_POOLNUMRULE_BEGIN;
     }
 

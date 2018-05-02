@@ -4918,7 +4918,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
 #ifdef DBG_UTIL
                     default:
-                        ASSERT( !this, "unknown speech command." );
+                        ASSERT( sal_False, "unknown speech command." );
 #endif
                 }
                 if ( nSlotId )
@@ -5218,7 +5218,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         break;
 #ifdef DBG_UTIL
         default:
-            ASSERT( !this, "unknown command." );
+            ASSERT( sal_False, "unknown command." );
 #endif
     }
     if (bCallBase)

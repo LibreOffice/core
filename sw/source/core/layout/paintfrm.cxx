@@ -4090,7 +4090,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             }
             break;
         default:
-            ASSERT( !this, "new ShadowLocation() ?" )
+            ASSERT( sal_False, "new ShadowLocation() ?" )
             break;
     }
 
@@ -5018,7 +5018,7 @@ void SwFtnContFrm::PaintLine( const SwRect& rRect,
         case FTNADJ_LEFT:
             /* do nothing */; break;
         default:
-            ASSERT( !this, "Neues Adjustment fuer Fussnotenlinie?" );
+            ASSERT( sal_False, "New adjustment for footnote line?" );
     }
     SwTwips nLineWidth = rInf.GetLineWidth();
     const SwRect aLineRect = bVert ?
@@ -5066,7 +5066,7 @@ void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFmtCol &rFmtCol,
         case COLADJ_BOTTOM:
             break;
         default:
-            ASSERT( !this, "Neues Adjustment fuer Spaltenlinie?" );
+            ASSERT( sal_False, "New adjustment for column line?" );
     }
 
     if( nTop )

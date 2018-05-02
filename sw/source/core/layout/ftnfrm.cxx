@@ -342,7 +342,7 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
     //soviel Platz wie eben moeglich.
 #ifdef DBG_UTIL
     if ( !GetUpper() || !GetUpper()->IsFtnBossFrm() )
-    {   ASSERT( !this, "Keine FtnBoss." );
+    {   ASSERT( sal_False, "No FtnBoss." );
         return 0;
     }
 #endif
@@ -1110,7 +1110,7 @@ SwFtnContFrm *SwFtnBossFrm::MakeFtnCont()
 
 #ifdef DBG_UTIL
     if ( FindFtnCont() )
-    {   ASSERT( !this, "Fussnotencontainer bereits vorhanden." );
+    {   ASSERT( sal_False, "Footnote container already available." );
         return 0;
     }
 #endif
@@ -1479,7 +1479,7 @@ void SwFtnBossFrm::InsertFtn( SwFtnFrm* pNew )
             //werden.
             pSibling = (SwFtnFrm*)pParent->Lower();
             if ( !pSibling )
-            {   ASSERT( !this, "Keinen Platz fuer Fussnote gefunden.");
+            {   ASSERT( sal_False, "No space for footnote found.");
                 return;
             }
             nCmpPos  = ::lcl_FindFtnPos( pDoc, pSibling->GetAttr() );
@@ -1756,7 +1756,7 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
 
     //Erstmal eine Fussnote und die benoetigten CntntFrms anlegen.
     if ( !pAttr->GetStartNode() )
-    {   ASSERT( !this, "Kein Fussnoteninhalt." );
+    {   ASSERT( sal_False, "No footnote content." );
         return;
     }
 

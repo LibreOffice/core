@@ -267,7 +267,7 @@ namespace sw
                 }
                 else
                 {
-                    ASSERT(!this, "Impossible");
+                    ASSERT(sal_False, "Impossible");
                     meWriterType = eTxtBox;
                 }
                 break;
@@ -282,7 +282,7 @@ namespace sw
                 }
                 else
                 {
-                    ASSERT(!this, "Impossible");
+                    ASSERT(sal_False, "Impossible");
                     meWriterType = eDrawing;
                 }
                 break;

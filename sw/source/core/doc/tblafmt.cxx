@@ -994,7 +994,7 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
 //                  rStream >> nFileVers;
                 if( rStream.Tell() != sal_uLong(nPos + nCnt) )
                 {
-                    ASSERT( !this, "Der Header enthaelt mehr/neuere Daten" );
+                    ASSERT( sal_False, "The header contains more / newer data" );
                     rStream.Seek( nPos + nCnt );
                 }
                 rStream.SetStreamCharSet( (CharSet)nChrSet );

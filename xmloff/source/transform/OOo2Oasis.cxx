@@ -1406,7 +1406,7 @@ void XMLTabStopOOoTContext_Impl::StartElement(
                 }
                 break;
             default:
-                OSL_ENSURE( !this, "unknown action" );
+                OSL_ENSURE( sal_False, "unknown action" );
                 break;
             }
         }
@@ -1486,7 +1486,7 @@ void XMLTrackedChangesOOoTContext_Impl::StartElement(
                 }
                 else
                 {
-                    OSL_ENSURE( !this, "RedineProtectionKey is missing" );
+                    OSL_ENSURE( sal_False, "RedineProtectionKey is missing" );
                 }
             }
             break;
@@ -1619,7 +1619,7 @@ XMLTransformerContext *OOo2OasisTransformer::CreateUserDefinedContext(
     case XML_ETACTION_TABLE:
         return new XMLTableOOoTransformerContext_Impl( *this, rQName );
     default:
-        OSL_ENSURE( !this, "no user defined context found!" );
+        OSL_ENSURE( sal_False, "no user defined context found!" );
     }
 
     // default is copying

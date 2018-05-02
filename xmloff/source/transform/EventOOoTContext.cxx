@@ -211,7 +211,7 @@ void XMLEventOOoTransformerContext::StartElement(
             case XML_ATACTION_COPY:
                 break;
             default:
-                OSL_ENSURE( !this, "unknown action" );
+                OSL_ENSURE( sal_False, "unknown action" );
                 break;
             }
         }

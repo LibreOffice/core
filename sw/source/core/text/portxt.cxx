@@ -549,7 +549,7 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
 
 xub_StrLen SwTxtPortion::GetCrsrOfst( const KSHORT nOfst ) const
 {
-    ASSERT( !this, "SwTxtPortion::GetCrsrOfst: don't use this method!" );
+    ASSERT( sal_False, "SwTxtPortion::GetCrsrOfst: don't use this method!" );
     return SwLinePortion::GetCrsrOfst( nOfst );
 }
 

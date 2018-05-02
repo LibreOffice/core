@@ -341,13 +341,13 @@ sal_uLong Writer::Write( SwPaM& rPam, SfxMedium& rMed, const String* pFileName )
 
 sal_uLong Writer::Write( SwPaM& /*rPam*/, SvStorage&, const String* )
 {
-    ASSERT( !this, "Schreiben in Storages auf einem Stream?" );
+    ASSERT( sal_False, "Write in storage on a stream?" );
     return ERR_SWG_WRITE_ERROR;
 }
 
 sal_uLong Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, const String*, SfxMedium* )
 {
-    ASSERT( !this, "Schreiben in Storages auf einem Stream?" );
+    ASSERT( sal_False, "Write in storage on a stream?" );
     return ERR_SWG_WRITE_ERROR;
 }
 
@@ -577,7 +577,7 @@ sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
 
 sal_uLong StgWriter::WriteStream()
 {
-    ASSERT( !this, "Schreiben in Streams auf einem Storage?" );
+    ASSERT( sal_False, "Write in streams on a storage?" );
     return ERR_SWG_WRITE_ERROR;
 }
 

@@ -631,7 +631,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                         }
                         if( n >= rFmts.Count() )
                         {
-                            ASSERT( !this, "Fly-Section but no format found" );
+                            ASSERT( sal_False, "Fly-Section but no format found" );
                             return NULL;
                         }
                     }

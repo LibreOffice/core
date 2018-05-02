@@ -1318,17 +1318,17 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             break;
 
         case RES_TXTATR_FIELD:
-            ASSERT(!this, "What is a field doing in the control stack,"
+            ASSERT(sal_False, "What is a field doing in the control stack,"
                 "probably should have been in the endstack");
             break;
 
         case RES_TXTATR_ANNOTATION:
-            ASSERT(!this, "What is a annotation doing in the control stack,"
+            ASSERT(sal_False, "What is a annotation doing in the control stack,"
                 "probably should have been in the endstack");
             break;
 
         case RES_TXTATR_INPUTFIELD:
-            ASSERT(!this, "What is a input field doing in the control stack,"
+            ASSERT(sal_False, "What is a input field doing in the control stack,"
                 "probably should have been in the endstack");
             break;
 
@@ -1498,7 +1498,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
             break;
         default:
         case RES_FLTR_BOOKMARK:
-            ASSERT(!this, "EndStck used with non field, not what we want");
+            ASSERT(sal_False, "EndStck used with non field, not what we want");
             SwFltEndStack::SetAttrInDoc(rTmpPos, pEntry);
             break;
     }
@@ -3814,7 +3814,7 @@ void SwWW8ImplReader::DeleteStk(SwFltControlStack* pStck)
     }
     else
     {
-        ASSERT( !this, "WW-Stack bereits geloescht" );
+        ASSERT( sal_False, "WW stack already deleted" );
     }
 }
 
@@ -4824,7 +4824,7 @@ sal_uLong SwWW8ImplReader::SetSubStreams(SvStorageStreamRef &rTableStream,
             break;
         default:
             // Programm-Fehler!
-            ASSERT( !this, "Es wurde vergessen, nVersion zu kodieren!" );
+            ASSERT( sal_False, "It was forgotten to encode nVersion!" );
             nErrRet = ERR_SWG_READ_ERROR;
             break;
     }
@@ -5423,7 +5423,7 @@ sal_uLong SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
             break;
         default:
             nErrRet = ERR_WW8_NO_WW8_FILE_ERR;
-            ASSERT( !this, "Es wurde vergessen, nVersion zu kodieren!" );
+            ASSERT( sal_False, "It was forgotten to encode nVersion!" );
             break;
     }
 
@@ -5459,7 +5459,7 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, cons
             nVersion = 6;
         else
         {
-            ASSERT(!this, "WinWord 95 Reader-Read ohne Stream");
+            ASSERT(sal_False, "WinWord 95 Reader-Read without stream");
             nRet = ERR_SWG_READ_ERROR;
         }
     }
@@ -5477,7 +5477,7 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, cons
         }
         else
         {
-            ASSERT(!this, "WinWord 95/97 Reader-Read ohne Storage");
+            ASSERT(sal_False, "WinWord 95/97 Reader-Read without storage");
             nRet = ERR_SWG_READ_ERROR;
         }
     }

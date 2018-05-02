@@ -1170,7 +1170,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
 
 
         default:
-            ASSERT(!this, falscher Dispatcher);
+            ASSERT(sal_False, "wrong dispatcher");
             return;
     }
     if(!bIgnore)
@@ -1421,8 +1421,8 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                     sStr = pTOX->GetTOXName();
                                 else
                                 {
-                                    ASSERT( !this,
-                                        "was ist das fuer ein Verzeichnis?" );
+                                    ASSERT( sal_False,
+                                        "what is this directory?" );
                                     sStr = pCurrSect->GetSectionName();
                                 }
                             }
@@ -2102,7 +2102,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
         case SID_INSERTDOC:             bInsert = sal_True;     break;
 
         default:
-            ASSERT( !this, "Unbekannte SlotId!" );
+            ASSERT( sal_False, "Unknown SlotId!" );
             bInsert = sal_True;
             nSlotId = SID_INSERTDOC;
             break;

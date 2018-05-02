@@ -862,7 +862,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
     case RES_FRMFMT:
         break;
     default:
-        ASSERT( !this, "Which format is exported here?" );
+        ASSERT( sal_False, "Which format is exported here?" );
         break;
     }
 
@@ -1832,7 +1832,7 @@ WW8_WrPlcFld* WW8Export::CurrentFieldPlc() const
             pFldP = pFldHFTxtBxs;
             break;
         default:
-            ASSERT( !this, "was ist das fuer ein SubDoc-Type?" );
+            ASSERT( sal_False, "What is this SubDoc type?" );
     }
     return pFldP;
 }
