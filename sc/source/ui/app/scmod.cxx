@@ -2271,9 +2271,9 @@ bool ScModule::HasThesaurusLanguage( LanguageType nLang )
     return bHasLang;
 }
 
-SfxStyleFamilies* ScModule::CreateStyleFamilies()
+std::unique_ptr<SfxStyleFamilies> ScModule::CreateStyleFamilies()
 {
-    SfxStyleFamilies *pStyleFamilies = new SfxStyleFamilies;
+    std::unique_ptr<SfxStyleFamilies> pStyleFamilies(new SfxStyleFamilies);
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
                                                     ScResId(STR_STYLE_FAMILY_CELL),
