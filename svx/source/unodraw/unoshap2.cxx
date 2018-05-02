@@ -985,6 +985,11 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const Sfx
 
                 GetSdrObject()->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
                 aNewPolyPolygon = ImplSvxPointSequenceSequenceToB2DPolyPolygon(s);
+
+                // tdf#117145 metric of SdrModel is app-specific, metric of UNO API is 100thmm
+                // Need to adapt aNewPolyPolygon from 100thmm to app-specific
+                ForceMetricToItemPoolMetric(aNewPolyPolygon);
+
                 GetSdrObject()->TRSetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
             }
             return true;
@@ -1089,7 +1094,13 @@ bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const Sfx
         basegfx::B2DHomMatrix aNewHomogenMatrix;
 
         if(HasSdrObject())
+        {
             GetSdrObject()->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+
+            // tdf#117145 metric of SdrModel is app-specific, metric of UNO API is 100thmm
+            // Need to adapt aNewPolyPolygon from app-specific to 100thmm
+            ForceMetricTo100th_mm(aNewPolyPolygon);
+        }
 
         drawing::PointSequenceSequence aRetval(aNewPolyPolygon.count());
         B2DPolyPolygonToSvxPointSequenceSequence(aNewPolyPolygon, aRetval);
@@ -1196,8 +1207,12 @@ bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const OUString& rName, con
                 basegfx::B2DHomMatrix aNewHomogenMatrix;
 
                 GetSdrObject()->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
-                aNewPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon(
-                    *s);
+                aNewPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon(*s);
+
+                // tdf#117145 metric of SdrModel is app-specific, metric of UNO API is 100thmm
+                // Need to adapt aNewPolyPolygon from 100thmm to app-specific
+                ForceMetricToItemPoolMetric(aNewPolyPolygon);
+
                 GetSdrObject()->TRSetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
             }
             return true;
@@ -1232,6 +1247,11 @@ bool SvxShapePolyPolygonBezier::getPropertyValueImpl( const OUString& rName, con
         basegfx::B2DPolyPolygon aNewPolyPolygon;
         basegfx::B2DHomMatrix aNewHomogenMatrix;
         GetSdrObject()->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+
+        // tdf#117145 metric of SdrModel is app-specific, metric of UNO API is 100thmm
+        // Need to adapt aNewPolyPolygon from app-specific to 100thmm
+        ForceMetricTo100th_mm(aNewPolyPolygon);
+
         drawing::PolyPolygonBezierCoords aRetval;
         basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier(aNewPolyPolygon, aRetval);
 

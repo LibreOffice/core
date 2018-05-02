@@ -1917,11 +1917,6 @@ const SfxPoolItem& SdrObject::GetObjectItem(const sal_uInt16 nWhich) const
     return GetObjectItemSet().Get(nWhich);
 }
 
-MapUnit SdrObject::GetObjectMapUnit() const
-{
-    return GetObjectItemPool().GetMetric(0);
-}
-
 const SfxPoolItem& SdrObject::GetMergedItem(const sal_uInt16 nWhich) const
 {
     return GetMergedItemSet().Get(nWhich);
@@ -2872,31 +2867,6 @@ bool SdrObject::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPo
         }
     }
 
-    // force MapUnit to 100th mm
-    const MapUnit eMapUnit(GetObjectMapUnit());
-    if(eMapUnit != MapUnit::Map100thMM)
-    {
-        switch(eMapUnit)
-        {
-            case MapUnit::MapTwip :
-            {
-                // position
-                aTranslate.setX(ImplTwipsToMM(aTranslate.getX()));
-                aTranslate.setY(ImplTwipsToMM(aTranslate.getY()));
-
-                // size
-                aScale.setX(ImplTwipsToMM(aScale.getX()));
-                aScale.setY(ImplTwipsToMM(aScale.getY()));
-
-                break;
-            }
-            default:
-            {
-                OSL_FAIL("TRGetBaseGeometry: Missing unit translation to 100th mm!");
-            }
-        }
-    }
-
     // build matrix
     rMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(aScale, aTranslate);
 
@@ -2920,31 +2890,6 @@ void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const ba
     {
         aScale.setX(fabs(aScale.getX()));
         aScale.setY(fabs(aScale.getY()));
-    }
-
-    // force metric to pool metric
-    const MapUnit eMapUnit(GetObjectMapUnit());
-    if(eMapUnit != MapUnit::Map100thMM)
-    {
-        switch(eMapUnit)
-        {
-            case MapUnit::MapTwip :
-            {
-                // position
-                aTranslate.setX(ImplMMToTwips(aTranslate.getX()));
-                aTranslate.setY(ImplMMToTwips(aTranslate.getY()));
-
-                // size
-                aScale.setX(ImplMMToTwips(aScale.getX()));
-                aScale.setY(ImplMMToTwips(aScale.getY()));
-
-                break;
-            }
-            default:
-            {
-                OSL_FAIL("TRSetBaseGeometry: Missing unit translation to PoolMetric!");
-            }
-        }
     }
 
     // if anchor is used, make position relative to it
