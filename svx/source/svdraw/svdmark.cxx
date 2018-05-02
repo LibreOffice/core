@@ -119,7 +119,7 @@ SdrMark& SdrMark::operator=(const SdrMark& rMark)
     return *this;
 }
 
-static bool ImpSdrMarkListSorter(SdrMark* const& lhs, SdrMark* const& rhs)
+static bool ImpSdrMarkListSorter(std::unique_ptr<SdrMark> const& lhs, std::unique_ptr<SdrMark> const& rhs)
 {
     SdrObject* pObj1 = lhs->GetMarkedSdrObj();
     SdrObject* pObj2 = rhs->GetMarkedSdrObj();
@@ -161,13 +161,11 @@ void SdrMarkList::ImpForceSort()
         // remove invalid
         if(nCount > 0 )
         {
-            for(std::vector<SdrMark*>::iterator it = maList.begin(); it != maList.end(); )
+            for(auto it = maList.begin(); it != maList.end(); )
             {
-                SdrMark* pCurrent = *it;
-                if(pCurrent->GetMarkedSdrObj() == nullptr)
+                if(it->get()->GetMarkedSdrObj() == nullptr)
                 {
                     it = maList.erase( it );
-                    delete pCurrent;
                 }
                 else
                     ++it;
@@ -182,11 +180,11 @@ void SdrMarkList::ImpForceSort()
             // remove duplicates
             if(maList.size() > 1)
             {
-                SdrMark* pCurrent = maList.back();
+                SdrMark* pCurrent = maList.back().get();
                 for (size_t count = maList.size() - 1; count; --count)
                 {
                     size_t i = count - 1;
-                    SdrMark* pCmp = maList[i];
+                    SdrMark* pCmp = maList[i].get();
                     assert(pCurrent->GetMarkedSdrObj());
                     if(pCurrent->GetMarkedSdrObj() == pCmp->GetMarkedSdrObj())
                     {
@@ -199,8 +197,6 @@ void SdrMarkList::ImpForceSort()
 
                         // delete pCmp
                         maList.erase(maList.begin() + i);
-
-                        delete pCmp;
                     }
                     else
                     {
@@ -214,10 +210,6 @@ void SdrMarkList::ImpForceSort()
 
 void SdrMarkList::Clear()
 {
-    for (auto const& elem : maList)
-    {
-        delete elem;
-    }
     maList.clear();
     mbSorted = true; //we're empty, so can be considered sorted
     SetNameDirty();
@@ -230,8 +222,7 @@ SdrMarkList& SdrMarkList::operator=(const SdrMarkList& rLst)
     for(size_t i = 0; i < rLst.GetMarkCount(); ++i)
     {
         SdrMark* pMark = rLst.GetMark(i);
-        SdrMark* pNewMark = new SdrMark(*pMark);
-        maList.push_back(pNewMark);
+        maList.emplace_back(new SdrMark(*pMark));
     }
 
     maMarkName = rLst.maMarkName;
@@ -245,7 +236,7 @@ SdrMarkList& SdrMarkList::operator=(const SdrMarkList& rLst)
 
 SdrMark* SdrMarkList::GetMark(size_t nNum) const
 {
-    return (nNum < maList.size()) ? maList[nNum] : nullptr;
+    return (nNum < maList.size()) ? maList[nNum].get() : nullptr;
 }
 
 size_t SdrMarkList::FindObject(const SdrObject* pObj) const
@@ -283,7 +274,7 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, bool bChkSort)
         if(!bChkSort)
             mbSorted = false;
 
-        maList.push_back(new SdrMark(rMark));
+        maList.emplace_back(new SdrMark(rMark));
     }
     else
     {
@@ -303,8 +294,7 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, bool bChkSort)
         }
         else
         {
-            SdrMark* pCopy = new SdrMark(rMark);
-            maList.push_back(pCopy);
+            maList.emplace_back(new SdrMark(rMark));
 
             // now check if the sort is ok
             const SdrObjList* pLastOL = pLastObj!=nullptr ? pLastObj->getParentOfSdrObject() : nullptr;
@@ -338,7 +328,6 @@ void SdrMarkList::DeleteMark(size_t nNum)
     if(pMark)
     {
         maList.erase(maList.begin() + nNum);
-        delete pMark;
         if (maList.empty())
             mbSorted = true; //we're empty, so can be considered sorted
         SetNameDirty();
@@ -352,10 +341,8 @@ void SdrMarkList::ReplaceMark(const SdrMark& rNewMark, size_t nNum)
 
     if(pMark)
     {
-        delete pMark;
         SetNameDirty();
-        SdrMark* pCopy = new SdrMark(rNewMark);
-        maList[nNum] = pCopy;
+        maList[nNum].reset(new SdrMark(rNewMark));
         mbSorted = false;
     }
 }
@@ -374,7 +361,7 @@ void SdrMarkList::Merge(const SdrMarkList& rSrcList, bool bReverse)
     {
         for(size_t i = 0; i < nCount; ++i)
         {
-            SdrMark* pM = rSrcList.maList[i];
+            SdrMark* pM = rSrcList.maList[i].get();
             InsertEntry(*pM);
         }
     }
@@ -383,7 +370,7 @@ void SdrMarkList::Merge(const SdrMarkList& rSrcList, bool bReverse)
         for(size_t i = nCount; i > 0;)
         {
             --i;
-            SdrMark* pM = rSrcList.maList[i];
+            SdrMark* pM = rSrcList.maList[i].get();
             InsertEntry(*pM);
         }
     }
@@ -393,14 +380,13 @@ bool SdrMarkList::DeletePageView(const SdrPageView& rPV)
 {
     bool bChgd(false);
 
-    for(std::vector<SdrMark*>::iterator it = maList.begin(); it != maList.end(); )
+    for(auto it = maList.begin(); it != maList.end(); )
     {
-        SdrMark* pMark = *it;
+        SdrMark* pMark = it->get();
 
         if(pMark->GetPageView()==&rPV)
         {
             it = maList.erase(it);
-            delete pMark;
             SetNameDirty();
             bChgd = true;
         }
@@ -425,8 +411,7 @@ bool SdrMarkList::InsertPageView(const SdrPageView& rPV)
 
         if(bDoIt)
         {
-            SdrMark* pM = new SdrMark(pObj, const_cast<SdrPageView*>(&rPV));
-            maList.push_back(pM);
+            maList.emplace_back(new SdrMark(pObj, const_cast<SdrPageView*>(&rPV)));
             SetNameDirty();
             bChgd = true;
         }
