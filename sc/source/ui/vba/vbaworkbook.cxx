@@ -201,6 +201,9 @@ ScVbaWorkbook::init()
 {
     if ( !ColorData.getLength() )
         ResetColors();
+    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY );
+    if ( xModel.is() )
+        excel::getDocShell( xModel )->RegisterAutomationWorkbookObject( this );
 }
 
 ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::frame::XModel > const & xModel ) : ScVbaWorkbook_BASE( xParent, xContext, xModel )
