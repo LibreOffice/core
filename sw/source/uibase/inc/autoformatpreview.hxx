@@ -51,22 +51,22 @@ public:
 
 private:
     std::unique_ptr<weld::DrawingArea> mxDrawingArea;
-    SwTableAutoFormat aCurData;
+    SwTableAutoFormat maCurrentData;
     svx::frame::Array maArray; /// Implementation to draw the frame borders.
-    bool bFitWidth;
+    bool mbFitWidth;
     bool mbRTL;
-    Size aPrvSize;
-    long nLabelColWidth;
-    long nDataColWidth1;
-    long nDataColWidth2;
-    long nRowHeight;
-    const OUString aStrJan;
-    const OUString aStrFeb;
-    const OUString aStrMar;
-    const OUString aStrNorth;
-    const OUString aStrMid;
-    const OUString aStrSouth;
-    const OUString aStrSum;
+    Size maPreviousSize;
+    long mnLabelColumnWidth;
+    long mnDataColumnWidth1;
+    long mnDataColumnWidth2;
+    long mnRowHeight;
+    const OUString maStringJan;
+    const OUString maStringFeb;
+    const OUString maStringMar;
+    const OUString maStringNorth;
+    const OUString maStringMid;
+    const OUString maStringSouth;
+    const OUString maStringSum;
     std::unique_ptr<SvNumberFormatter> mxNumFormat;
 
     uno::Reference<i18n::XBreakIterator> m_xBreak;
