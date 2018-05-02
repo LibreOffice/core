@@ -442,11 +442,7 @@ void Cell::dispose()
         mxTable.clear();
     }
 
-    if( mpProperties )
-    {
-        delete mpProperties;
-        mpProperties = nullptr;
-    }
+    mpProperties.reset();
     SetOutlinerParaObject( nullptr );
 }
 
@@ -818,7 +814,7 @@ sdr::properties::TextProperties* Cell::CloneProperties( sdr::properties::TextPro
 
 sdr::properties::TextProperties* Cell::CloneProperties( SdrObject& rNewObj, Cell& rNewCell )
 {
-    return CloneProperties(mpProperties,rNewObj,rNewCell);
+    return CloneProperties(mpProperties.get(),rNewObj,rNewCell);
 }
 
 
@@ -1563,8 +1559,7 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName )
 
 void SAL_CALL Cell::setAllPropertiesToDefault()
 {
-    delete mpProperties;
-    mpProperties = new sdr::properties::CellProperties( static_cast< SdrTableObj& >( GetObject() ), this );
+    mpProperties.reset(new sdr::properties::CellProperties( static_cast< SdrTableObj& >( GetObject() ), this ));
 
     SdrOutliner& rOutliner = GetObject().ImpGetDrawOutliner();
 
