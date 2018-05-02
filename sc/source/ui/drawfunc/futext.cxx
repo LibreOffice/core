@@ -184,7 +184,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 nullptr;
             if (pObj)
             {
-                SdrOutliner* pO = MakeOutliner();
+                std::unique_ptr<SdrOutliner> pO = MakeOutliner();
                 lcl_UpdateHyphenator( *pO, pObj );
 
                 //  vertical flag:
@@ -197,10 +197,11 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 pO->SetVertical( bVertical );
 
                 //!?? the default values are not correct when result is without outliner ???!?
-                if ( pView->SdrBeginTextEdit(pObj, pPV, pWindow, true, pO) )
+                auto pUndoManager = &pO->GetUndoManager();
+                if ( pView->SdrBeginTextEdit(pObj, pPV, pWindow, true, pO.release()) )
                 {
                     // subscribe EditEngine-UndoManager
-                    pViewShell->SetDrawTextUndo( &pO->GetUndoManager() );
+                    pViewShell->SetDrawTextUndo( pUndoManager );
 
                     OutlinerView* pOLV = pView->GetTextEditOutlinerView();
                     if ( pOLV->MouseButtonDown(rMEvt) )
@@ -578,7 +579,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
 
             if ( pObj->HasTextEdit() )
             {
-                SdrOutliner* pO = MakeOutliner();
+                std::unique_ptr<SdrOutliner> pO = MakeOutliner();
                 lcl_UpdateHyphenator( *pO, pObj );
 
                 //  vertical flag:
@@ -592,7 +593,8 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
                 pO->SetVertical( bVertical );
 
                 //!??  without returned Outliner the defaults are not correct ???!?
-                if ( pView->SdrBeginTextEdit(pObj, pPV, pWindow, true, pO) )
+                auto pUndoManager = &pO->GetUndoManager();
+                if ( pView->SdrBeginTextEdit(pObj, pPV, pWindow, true, pO.release()) )
                 {
                     //  Toggle out of paste mode if we are in it, otherwise
                     //  pressing return in this object will instead go to the
@@ -601,7 +603,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
                     pViewShell->UpdateCopySourceOverlay();
 
                     //  EditEngine-UndoManager anmelden
-                    pViewShell->SetDrawTextUndo( &pO->GetUndoManager() );
+                    pViewShell->SetDrawTextUndo( pUndoManager );
 
                     pView->SetEditMode();
 

@@ -397,7 +397,7 @@ namespace sdr
 
             if(!rObj.IsTextEditActive() && !rObj.IsLinkedText())
             {
-                Outliner* pOutliner = SdrMakeOutliner(OutlinerMode::OutlineObject, rObj.getSdrModelFromSdrObject());
+                std::unique_ptr<Outliner> pOutliner = SdrMakeOutliner(OutlinerMode::OutlineObject, rObj.getSdrModelFromSdrObject());
                 const svx::ITextProvider& rTextProvider(getTextProvider());
                 sal_Int32 nText = rTextProvider.getTextCount();
                 while (nText--)
@@ -525,7 +525,6 @@ namespace sdr
 
                     pOutliner->Clear();
                 }
-                delete pOutliner;
             }
         }
 

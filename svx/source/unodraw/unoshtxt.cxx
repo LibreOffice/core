@@ -516,7 +516,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_OUTLINETEXT )
                 nOutlMode = OutlinerMode::OutlineObject;
 
-            mpOutliner = mpModel->createOutliner( nOutlMode );
+            mpOutliner = mpModel->createOutliner( nOutlMode ).release();
 
             // Do the setup after outliner creation, would be useless otherwise
             if( HasView() )

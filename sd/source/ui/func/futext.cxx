@@ -1055,7 +1055,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
                  nSdrObjKind == OBJ_OUTLINETEXT || !mxTextObj->IsEmptyPresObj() ) )
             {
                 // create new outliner (owned by SdrObjEditView)
-                SdrOutliner* pOutl = SdrMakeOutliner(OutlinerMode::OutlineObject, *mpDoc);
+                std::unique_ptr<SdrOutliner> pOutl = SdrMakeOutliner(OutlinerMode::OutlineObject, *mpDoc);
 
                 if (bEmptyOutliner)
                     mpView->SdrEndTextEdit(true);
@@ -1076,7 +1076,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
                         pTextObj->setActiveText( pTextObj->CheckTextHit(aPnt ) );
                     }
 
-                    if (mpView->SdrBeginTextEdit(pTextObj, pPV, mpWindow, true, pOutl) && mxTextObj->GetObjInventor() == SdrInventor::Default)
+                    if (mpView->SdrBeginTextEdit(pTextObj, pPV, mpWindow, true, pOutl.release()) && mxTextObj->GetObjInventor() == SdrInventor::Default)
                     {
                         //tdf#102293 flush overlay before going on to pass clicks down to
                         //the outline view which will want to paint selections

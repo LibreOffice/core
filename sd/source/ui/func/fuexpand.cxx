@@ -190,7 +190,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
                     if( pOutlinerParaObject->GetDepth(0) != -1 )
                     {
-                        SdrOutliner* pTempOutl = SdrMakeOutliner(OutlinerMode::TitleObject, *mpDoc);
+                        std::unique_ptr<SdrOutliner> pTempOutl = SdrMakeOutliner(OutlinerMode::TitleObject, *mpDoc);
 
                         pTempOutl->SetText( *pOutlinerParaObject );
 
@@ -199,7 +199,6 @@ void FuExpandPage::DoExecute( SfxRequest& )
                         pTempOutl->SetDepth( pTempOutl->GetParagraph( 0 ), -1 );
 
                         pOutlinerParaObject = pTempOutl->CreateParaObject();
-                        delete pTempOutl;
                     }
 
                     pTextObj->SetOutlinerParaObject(pOutlinerParaObject);
@@ -218,7 +217,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                         // create structuring text objects
                         OutlinerParaObject* pOPO = pOutl->CreateParaObject(++nParaPos, nChildCount);
 
-                        SdrOutliner* pTempOutl = SdrMakeOutliner(OutlinerMode::OutlineObject, *mpDoc);
+                        std::unique_ptr<SdrOutliner> pTempOutl = SdrMakeOutliner(OutlinerMode::OutlineObject, *mpDoc);
                         pTempOutl->SetText( *pOPO );
 
                         sal_Int32 nParaCount2 = pTempOutl->GetParagraphCount();
@@ -232,7 +231,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
                         delete pOPO;
                         pOPO = pTempOutl->CreateParaObject();
-                        delete pTempOutl;
+                        pTempOutl.reset();
 
                         pOutlineObj->SetOutlinerParaObject( pOPO );
                         pOutlineObj->SetEmptyPresObj(false);

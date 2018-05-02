@@ -30,18 +30,18 @@ SdrOutlinerCache::SdrOutlinerCache( SdrModel* pModel )
 {
 }
 
-SdrOutliner* SdrOutlinerCache::createOutliner( OutlinerMode nOutlinerMode )
+std::unique_ptr<SdrOutliner> SdrOutlinerCache::createOutliner( OutlinerMode nOutlinerMode )
 {
-    SdrOutliner* pOutliner = nullptr;
+    std::unique_ptr<SdrOutliner> pOutliner;
 
     if( (OutlinerMode::OutlineObject == nOutlinerMode) && !maModeOutline.empty() )
     {
-        pOutliner = maModeOutline.back().release();
+        pOutliner = std::move(maModeOutline.back());
         maModeOutline.pop_back();
     }
     else if( (OutlinerMode::TextObject == nOutlinerMode) && !maModeText.empty() )
     {
-        pOutliner = maModeText.back().release();
+        pOutliner = std::move(maModeText.back());
         maModeText.pop_back();
     }
     else
@@ -49,7 +49,7 @@ SdrOutliner* SdrOutlinerCache::createOutliner( OutlinerMode nOutlinerMode )
         pOutliner = SdrMakeOutliner(nOutlinerMode, *mpModel);
         Outliner& aDrawOutliner = mpModel->GetDrawOutliner();
         pOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
-        maActiveOutliners.insert(pOutliner);
+        maActiveOutliners.insert(pOutliner.get());
     }
 
     return pOutliner;
