@@ -170,7 +170,7 @@ private:
     /** helper to listen for configuration changes without ownership cycle problems */
     css::uno::Reference< css::util::XChangesListener > m_xCfgNewListener;
 
-    ::cppu::OPropertyArrayHelper* m_pPropHelp;
+    std::unique_ptr<::cppu::OPropertyArrayHelper> m_pPropHelp;
 
 public:
 
@@ -468,8 +468,7 @@ void SAL_CALL PathSettings::disposing()
     m_xCfgNew.clear();
     m_xCfgNewListener.clear();
 
-    delete m_pPropHelp;
-    m_pPropHelp = nullptr;
+    m_pPropHelp.reset();
 }
 
 css::uno::Any SAL_CALL PathSettings::queryInterface( const css::uno::Type& _rType )
@@ -1099,8 +1098,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
         ++i;
     }
 
-    delete m_pPropHelp;
-    m_pPropHelp = new ::cppu::OPropertyArrayHelper(m_lPropDesc, false); // false => not sorted ... must be done inside helper
+    m_pPropHelp.reset(new ::cppu::OPropertyArrayHelper(m_lPropDesc, false)); // false => not sorted ... must be done inside helper
 
     // <- SAFE
 }
