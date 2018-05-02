@@ -101,11 +101,10 @@ bool CellUndo::Merge( SfxUndoAction *pNextAction )
 
 void CellUndo::setDataToCell( const Data& rData )
 {
-    delete mxCell->mpProperties;
     if( rData.mpProperties )
-        mxCell->mpProperties = Cell::CloneProperties( rData.mpProperties, *mxObjRef.get(), *mxCell.get() );
+        mxCell->mpProperties.reset(Cell::CloneProperties( rData.mpProperties, *mxObjRef.get(), *mxCell.get() ));
     else
-        mxCell->mpProperties = nullptr;
+        mxCell->mpProperties.reset();
 
     if( rData.mpOutlinerParaObject )
         mxCell->SetOutlinerParaObject( new OutlinerParaObject(*rData.mpOutlinerParaObject) );
