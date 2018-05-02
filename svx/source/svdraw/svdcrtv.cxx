@@ -175,11 +175,7 @@ void ImpSdrCreateViewExtraData::HideOverlay()
 
 void SdrCreateView::ImpClearConnectMarker()
 {
-    if(mpCoMaOverlay)
-    {
-        delete mpCoMaOverlay;
-        mpCoMaOverlay = nullptr;
-    }
+    mpCoMaOverlay.reset();
 }
 
 void SdrCreateView::ImpClearVars()
@@ -201,7 +197,6 @@ SdrCreateView::SdrCreateView(
     SdrModel& rSdrModel,
     OutputDevice* pOut)
 :   SdrDragView(rSdrModel, pOut),
-    mpCoMaOverlay(nullptr),
     mpCreateViewExtraData(new ImpSdrCreateViewExtraData())
 {
     ImpClearVars();
@@ -295,7 +290,7 @@ void SdrCreateView::SetConnectMarker(const SdrObjConnection& rCon)
 
         if(!mpCoMaOverlay)
         {
-            mpCoMaOverlay = new ImplConnectMarkerOverlay(*this, *pTargetObject);
+            mpCoMaOverlay.reset(new ImplConnectMarkerOverlay(*this, *pTargetObject));
         }
     }
     else

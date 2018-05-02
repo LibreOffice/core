@@ -22,6 +22,7 @@
 
 #include <svx/svddrgv.hxx>
 #include <svx/svxdllapi.h>
+#include <memory>
 
 class XLineAttrSetItem;
 class XFillAttrSetItem;
@@ -38,7 +39,7 @@ class SVX_DLLPUBLIC SdrCreateView : public SdrDragView
 protected:
     SdrObject*                  pCurrentCreate;   // The currently being created object
     SdrPageView*                pCreatePV;    // Here, the creation is started
-    ImplConnectMarkerOverlay*   mpCoMaOverlay;
+    std::unique_ptr<ImplConnectMarkerOverlay> mpCoMaOverlay;
 
     // for migrating stuff from XOR, use ImpSdrCreateViewExtraData ATM to not need to
     // compile the apps all the time
