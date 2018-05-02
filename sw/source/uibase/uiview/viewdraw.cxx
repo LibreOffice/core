@@ -503,7 +503,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
 {
     SwWrtShell *pSh = &GetWrtShell();
     SdrView *pSdrView = pSh->GetDrawView();
-    SdrOutliner* pOutliner = ::SdrMakeOutliner(OutlinerMode::TextObject, *pSdrView->GetModel());
+    std::unique_ptr<SdrOutliner> pOutliner = ::SdrMakeOutliner(OutlinerMode::TextObject, *pSdrView->GetModel());
     uno::Reference< linguistic2::XSpellChecker1 >  xSpell( ::GetSpellChecker() );
     if (pOutliner)
     {
@@ -511,7 +511,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
         pOutliner->SetSpeller(xSpell);
         uno::Reference<linguistic2::XHyphenator> xHyphenator( ::GetHyphenator() );
         pOutliner->SetHyphenator( xHyphenator );
-        pSh->SetCalcFieldValueHdl(pOutliner);
+        pSh->SetCalcFieldValueHdl(pOutliner.get());
 
         EEControlBits nCntrl = pOutliner->GetControlWord();
         nCntrl |= EEControlBits::ALLOWBIGOBJS;
@@ -562,7 +562,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
     // set in each case, thus it will be correct for all objects
     static_cast<SdrTextObj*>(pToBeActivated)->SetTextEditOffset(aNewTextEditOffset);
 
-    bool bRet(pSdrView->SdrBeginTextEdit( pToBeActivated, pPV, pWin, true, pOutliner, nullptr, false, false, false ));
+    bool bRet(pSdrView->SdrBeginTextEdit( pToBeActivated, pPV, pWin, true, pOutliner.release(), nullptr, false, false, false ));
 
     // #i7672#
     // Since SdrBeginTextEdit actually creates the OutlinerView and thus also

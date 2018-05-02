@@ -543,7 +543,7 @@ public:
 
     void ReformatAllTextObjects();
 
-    SdrOutliner* createOutliner( OutlinerMode nOutlinerMode );
+    std::unique_ptr<SdrOutliner> createOutliner( OutlinerMode nOutlinerMode );
     void disposeOutliner( SdrOutliner* pOutliner );
 
     bool IsWriter() const { return !bMyPool; }

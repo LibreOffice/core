@@ -331,10 +331,10 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
     return bRetval;
 }
 
-SdrOutliner* SdrMakeOutliner(OutlinerMode nOutlinerMode, SdrModel& rModel)
+std::unique_ptr<SdrOutliner> SdrMakeOutliner(OutlinerMode nOutlinerMode, SdrModel& rModel)
 {
     SfxItemPool* pPool = &rModel.GetItemPool();
-    SdrOutliner* pOutl = new SdrOutliner( pPool, nOutlinerMode );
+    std::unique_ptr<SdrOutliner> pOutl(new SdrOutliner( pPool, nOutlinerMode ));
     pOutl->SetEditTextObjectPool( pPool );
     pOutl->SetStyleSheetPool( static_cast<SfxStyleSheetPool*>(rModel.GetStyleSheetPool()));
     pOutl->SetDefTab(rModel.GetDefaultTabulator());

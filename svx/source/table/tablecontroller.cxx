@@ -1907,12 +1907,12 @@ void SvxTableController::EditCell(const CellPos& rPos, vcl::Window* pWindow, Tbl
 
             // create new outliner, owner will be the SdrObjEditView
             SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
-            SdrOutliner* pOutl(SdrMakeOutliner(OutlinerMode::OutlineObject, rModel));
+            std::unique_ptr<SdrOutliner> pOutl(SdrMakeOutliner(OutlinerMode::OutlineObject, rModel));
 
             if (pOutl && rTableObj.IsVerticalWriting())
                 pOutl->SetVertical( true );
 
-            if (mrView.SdrBeginTextEdit(&rTableObj, pPV, pWindow, true, pOutl))
+            if (mrView.SdrBeginTextEdit(&rTableObj, pPV, pWindow, true, pOutl.release()))
             {
                 maCursorLastPos = maCursorFirstPos = rPos;
 

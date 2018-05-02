@@ -24,10 +24,10 @@
 #include <futext.hxx>
 #include <tabvwsh.hxx>
 
-SdrOutliner* FuText::MakeOutliner()
+std::unique_ptr<SdrOutliner> FuText::MakeOutliner()
 {
     ScViewData& rViewData = pViewShell->GetViewData();
-    SdrOutliner* pOutl = SdrMakeOutliner(OutlinerMode::OutlineObject, *pDrDoc);
+    std::unique_ptr<SdrOutliner> pOutl = SdrMakeOutliner(OutlinerMode::OutlineObject, *pDrDoc);
 
     rViewData.UpdateOutlinerFlags(*pOutl);
 

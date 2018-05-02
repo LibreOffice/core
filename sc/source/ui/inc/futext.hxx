@@ -53,7 +53,7 @@ public:
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle) override;
 
 private:
-    SdrOutliner* MakeOutliner();
+    std::unique_ptr<SdrOutliner> MakeOutliner();
 };
 
 #endif
