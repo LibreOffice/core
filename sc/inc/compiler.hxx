@@ -335,24 +335,25 @@ private:
     static void InitCharClassEnglish();
 
 public:
-    ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, const ScInterpreterContext* pContext = nullptr );
+    ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos,
+            bool bComputeII = false, bool bMatrixFlag = false, const ScInterpreterContext* pContext = nullptr );
 
     /** If eGrammar == GRAM_UNSPECIFIED then the grammar of pDocument is used,
         if pDocument==nullptr then GRAM_DEFAULT.
      */
     ScCompiler( ScDocument* pDocument, const ScAddress&,
             formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED,
-            const ScInterpreterContext* pContext = nullptr );
+            bool bComputeII = false, bool bMatrixFlag = false, const ScInterpreterContext* pContext = nullptr );
 
     ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr,
-            const ScInterpreterContext* pContext = nullptr );
+            bool bComputeII = false, bool bMatrixFlag = false, const ScInterpreterContext* pContext = nullptr );
 
     /** If eGrammar == GRAM_UNSPECIFIED then the grammar of pDocument is used,
         if pDocument==nullptr then GRAM_DEFAULT.
      */
     ScCompiler( ScDocument* pDocument, const ScAddress&, ScTokenArray& rArr,
             formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED,
-            const ScInterpreterContext* pContext = nullptr );
+            bool bComputeII = false, bool bMatrixFlag = false, const ScInterpreterContext* pContext = nullptr );
 
     virtual ~ScCompiler() override;
 
@@ -451,6 +452,10 @@ public:
     static bool IsCharFlagAllConventions(
         OUString const & rStr, sal_Int32 nPos, ScCharFlags nFlags );
 
+    /** TODO : Move this to somewhere appropriate. */
+    static bool DoubleRefToPosSingleRefScalarCase(const ScRange& rRange, ScAddress& rAdr,
+                                                  const ScAddress& rFormulaPos);
+
 private:
     // FormulaCompiler
     virtual OUString FindAddInFunction( const OUString& rUpperName, bool bLocalFirst ) const override;
@@ -480,7 +485,8 @@ private:
         { return c < 128 ? pConv->getCharTableFlags(c, cLast) : ScCharFlags::NONE; }
 
     bool IsIIOpCode(OpCode nOpCode) const override;
-    void HandleIIOpCode(OpCode nOpCode, formula::FormulaToken*** pppToken, sal_uInt8 nNumParams) override;
+    void HandleIIOpCode(OpCode nOpCode, formula::ParamClass eClass, formula::FormulaToken*** pppToken, sal_uInt8 nNumParams) override;
+    void ReplaceDoubleRefII(formula::FormulaToken** ppDoubleRefTok);
     bool AdjustSumRangeShape(const ScComplexRefData& rBaseRange, ScComplexRefData& rSumRange);
     void CorrectSumRange(const ScComplexRefData& rBaseRange, ScComplexRefData& rSumRange, formula::FormulaToken** ppSumRangeToken);
 };

@@ -928,7 +928,8 @@ public:
                 ScTokenArray* pNewCode = aComp.CompileString(aFormula);
 
                 // Generate RPN tokens.
-                ScCompiler aComp2(mpDoc, pCell->aPos, *pNewCode);
+                ScCompiler aComp2(mpDoc, pCell->aPos, *pNewCode, formula::FormulaGrammar::GRAM_UNSPECIFIED,
+                                  true, pCell->GetMatrixFlag() != ScMatrixMode::NONE);
                 aComp2.CompileTokenArray();
 
                 pCell->SetCode(pNewCode);

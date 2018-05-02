@@ -562,7 +562,8 @@ void ScFormulaCellGroup::compileCode(
 
     if (mpCode->GetLen() && mpCode->GetCodeError() == FormulaError::NONE && !mpCode->GetCodeLen())
     {
-        ScCompiler aComp(&rDoc, rPos, *mpCode, eGram);
+        bool bMatrixFormula = mpTopCell->GetMatrixFlag() != ScMatrixMode::NONE;
+        ScCompiler aComp(&rDoc, rPos, *mpCode, eGram, true, bMatrixFormula);
         mbSubTotal = aComp.CompileTokenArray();
         mnFormatType = aComp.GetNumFormatType();
     }
@@ -700,7 +701,7 @@ ScFormulaCell::ScFormulaCell(
     // Generate RPN token array.
     if (pCode->GetLen() && pCode->GetCodeError() == FormulaError::NONE && !pCode->GetCodeLen())
     {
-        ScCompiler aComp( pDocument, aPos, *pCode, eTempGrammar);
+        ScCompiler aComp( pDocument, aPos, *pCode, eTempGrammar, true, cMatrixFlag != ScMatrixMode::NONE );
         bSubTotal = aComp.CompileTokenArray();
         nFormatType = aComp.GetNumFormatType();
     }
@@ -747,7 +748,7 @@ ScFormulaCell::ScFormulaCell(
     // RPN array generation
     if( pCode->GetLen() && pCode->GetCodeError() == FormulaError::NONE && !pCode->GetCodeLen() )
     {
-        ScCompiler aComp( pDocument, aPos, *pCode, eTempGrammar);
+        ScCompiler aComp( pDocument, aPos, *pCode, eTempGrammar, true, cMatrixFlag != ScMatrixMode::NONE );
         bSubTotal = aComp.CompileTokenArray();
         nFormatType = aComp.GetNumFormatType();
     }
@@ -993,7 +994,7 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
             }
             else
             {
-                ScCompiler aComp( pDocument, aPos, *pCode, eGrammar, pContext );
+                ScCompiler aComp( pDocument, aPos, *pCode, eGrammar, false, false, pContext );
                 aComp.CreateStringFromTokenArray( rBuffer );
             }
         }
@@ -1004,7 +1005,7 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
     }
     else
     {
-        ScCompiler aComp( pDocument, aPos, *pCode, eGrammar, pContext );
+        ScCompiler aComp( pDocument, aPos, *pCode, eGrammar, false, false, pContext );
         aComp.CreateStringFromTokenArray( rBuffer );
     }
 
@@ -1031,7 +1032,7 @@ OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt, const ScInt
     {
         ScTokenArray aCode;
         aCode.AddToken( FormulaErrorToken( pCode->GetCodeError()));
-        ScCompiler aComp(rCxt, aPos, aCode, pContext);
+        ScCompiler aComp(rCxt, aPos, aCode, false, false, pContext);
         aComp.CreateStringFromTokenArray(aBuf);
         return aBuf.makeStringAndClear();
     }
@@ -1058,7 +1059,7 @@ OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt, const ScInt
             }
             else
             {
-                ScCompiler aComp(rCxt, aPos, *pCode, pContext);
+                ScCompiler aComp(rCxt, aPos, *pCode, false, false, pContext);
                 aComp.CreateStringFromTokenArray(aBuf);
             }
         }
@@ -1069,7 +1070,7 @@ OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt, const ScInt
     }
     else
     {
-        ScCompiler aComp(rCxt, aPos, *pCode, pContext);
+        ScCompiler aComp(rCxt, aPos, *pCode, false, false, pContext);
         aComp.CreateStringFromTokenArray(aBuf);
     }
 
@@ -1199,7 +1200,7 @@ void ScFormulaCell::CompileTokenArray( bool bNoListening )
 
         if( !bNoListening && pCode->GetCodeLen() )
             EndListeningTo( pDocument );
-        ScCompiler aComp(pDocument, aPos, *pCode, pDocument->GetGrammar());
+        ScCompiler aComp(pDocument, aPos, *pCode, pDocument->GetGrammar(), true, cMatrixFlag != ScMatrixMode::NONE);
         bSubTotal = aComp.CompileTokenArray();
         if( pCode->GetCodeError() == FormulaError::NONE )
         {
@@ -1239,7 +1240,7 @@ void ScFormulaCell::CompileTokenArray( sc::CompileFormulaContext& rCxt, bool bNo
 
         if( !bNoListening && pCode->GetCodeLen() )
             EndListeningTo( pDocument );
-        ScCompiler aComp(rCxt, aPos, *pCode);
+        ScCompiler aComp(rCxt, aPos, *pCode, true, cMatrixFlag != ScMatrixMode::NONE);
         bSubTotal = aComp.CompileTokenArray();
         if( pCode->GetCodeError() == FormulaError::NONE )
         {
@@ -1277,7 +1278,7 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
     if (bWasInFormulaTree)
         pDocument->RemoveFromFormulaTree( this);
     rCxt.setGrammar(eTempGrammar);
-    ScCompiler aComp(rCxt, aPos, *pCode);
+    ScCompiler aComp(rCxt, aPos, *pCode, true, cMatrixFlag != ScMatrixMode::NONE);
     OUString aFormula, aFormulaNmsp;
     aComp.CreateStringFromXMLTokenArray( aFormula, aFormulaNmsp );
     pDocument->DecXMLImportedFormulaCount( aFormula.getLength() );
@@ -1395,7 +1396,7 @@ void ScFormulaCell::CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartL
     // The RPN array is not created when a Calc 3.0-Doc has been read as the Range Names exist until now.
     if( pCode->GetLen() && !pCode->GetCodeLen() && pCode->GetCodeError() == FormulaError::NONE )
     {
-        ScCompiler aComp(rCxt, aPos, *pCode);
+        ScCompiler aComp(rCxt, aPos, *pCode, true, cMatrixFlag != ScMatrixMode::NONE);
         bSubTotal = aComp.CompileTokenArray();
         nFormatType = aComp.GetNumFormatType();
         bDirty = true;
@@ -4110,6 +4111,39 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( const ScFormulaC
 
         switch (pThisTok->GetType())
         {
+            // ScCompiler::HandleIIOpCode() may optimize some refs only in RPN code,
+            // resulting in identical RPN references that could lead to creating
+            // a formula group from formulas that should not be merged into a group,
+            // so check also the formula itself.
+            case formula::svSingleRef:
+            {
+                // Single cell reference.
+                const ScSingleRefData& rRef = *pThisTok->GetSingleRef();
+                if (rRef != *pOtherTok->GetSingleRef())
+                    return NotEqual;
+
+                if (rRef.IsRowRel())
+                    bInvariant = false;
+            }
+            break;
+            case formula::svDoubleRef:
+            {
+                // Range reference.
+                const ScSingleRefData& rRef1 = *pThisTok->GetSingleRef();
+                const ScSingleRefData& rRef2 = *pThisTok->GetSingleRef2();
+                if (rRef1 != *pOtherTok->GetSingleRef())
+                    return NotEqual;
+
+                if (rRef2 != *pOtherTok->GetSingleRef2())
+                    return NotEqual;
+
+                if (rRef1.IsRowRel())
+                    bInvariant = false;
+
+                if (rRef2.IsRowRel())
+                    bInvariant = false;
+            }
+            break;
             // All index tokens are names. Different categories already had
             // different OpCode values.
             case formula::svIndex:
@@ -4802,7 +4836,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
             }
         }
 
-        ScCompiler aComp(pDocument, aPos, aCode, pDocument->GetGrammar());
+        ScCompiler aComp(pDocument, aPos, aCode, pDocument->GetGrammar(), true, cMatrixFlag != ScMatrixMode::NONE);
         aComp.CompileTokenArray(); // Create RPN token array.
         ScInterpreter aInterpreter(this, pDocument, pDocument->GetNonThreadedContext(), aPos, aCode);
         aInterpreter.Interpret();
