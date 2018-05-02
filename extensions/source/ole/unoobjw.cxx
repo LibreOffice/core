@@ -2272,6 +2272,8 @@ Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
             // have done "compile-time binding" and where the sink would actually be an object with
             // a vtbl corresponding to the outgoing interface. Late binding clients that work like
             // VBScript is all we support.
+            SAL_INFO("extensions.olebridge", "Sink::Call(" << Method << "): Calling Invoke(" << nMemId << ")");
+
             nResult = pDispatch->Invoke(nMemId, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &aDispParams, &aVarResult, NULL, &uArgErr);
             SAL_WARN_IF(!SUCCEEDED(nResult), "extensions.olebridge", "Call to " << Method << " failed: " << WindowsErrorStringFromHRESULT(nResult));
 
