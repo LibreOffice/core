@@ -1868,7 +1868,7 @@ void ScInterpreter::ScHypGeomDist( int nMinParamCount )
 
     for ( int i = ( bCumulative ? 0 : x ); i <= x && nGlobalError == FormulaError::NONE; i++ )
     {
-        if ( (i >= n - N + M)  || (i >= M) )
+        if ( (n - i <= N - M) && (i <= M) )
             fVal +=  GetHypGeomDist( i, n, M, N );
     }
 
