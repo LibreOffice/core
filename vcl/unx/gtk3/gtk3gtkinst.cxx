@@ -1402,16 +1402,14 @@ public:
 
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
     {
-        assert(!m_aFocusInHdl.IsSet());
         m_nFocusInSignalId = g_signal_connect(m_pWidget, "focus-in-event", G_CALLBACK(signalFocusIn), this);
-        m_aFocusInHdl = rLink;
+        weld::Widget::connect_focus_in(rLink);
     }
 
     virtual void connect_focus_out(const Link<Widget&, void>& rLink) override
     {
-        assert(!m_aFocusOutHdl.IsSet());
         m_nFocusOutSignalId = g_signal_connect(m_pWidget, "focus-out-event", G_CALLBACK(signalFocusOut), this);
-        m_aFocusOutHdl = rLink;
+        weld::Widget::connect_focus_out(rLink);
     }
 
     virtual void grab_add() override
@@ -4453,6 +4451,15 @@ public:
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pButton));
         return new GtkInstanceMenuButton(pButton, bTakeOwnership);
+    }
+
+    virtual weld::ToggleButton* weld_toggle_button(const OString &id, bool bTakeOwnership) override
+    {
+        GtkToggleButton* pToggleButton = GTK_TOGGLE_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pToggleButton)
+            return nullptr;
+        auto_add_parentless_widgets_to_container(GTK_WIDGET(pToggleButton));
+        return new GtkInstanceToggleButton(pToggleButton, bTakeOwnership);
     }
 
     virtual weld::RadioButton* weld_radio_button(const OString &id, bool bTakeOwnership) override

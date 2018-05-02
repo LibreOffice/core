@@ -1402,7 +1402,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "GtkAlignment")
         xWindow = VclPtr<VclAlignment>::Create(pParent);
-    else if (name == "GtkButton")
+    else if (name == "GtkButton" || (!m_bLegacy && name == "GtkToggleButton"))
     {
         VclPtr<Button> xButton;
         OUString sMenu = BuilderUtils::extractCustomProperty(rMap);
@@ -1429,7 +1429,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         setupFromActionName(xButton, rMap, m_xFrame);
         xWindow = xButton;
     }
-    else if (name == "GtkToggleButton")
+    else if (name == "GtkToggleButton" && m_bLegacy)
     {
         VclPtr<Button> xButton;
         OUString sMenu = BuilderUtils::extractCustomProperty(rMap);
@@ -1465,7 +1465,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         //maybe always import as TriStateBox and enable/disable tristate
         bool bIsTriState = extractInconsistent(rMap);
         VclPtr<CheckBox> xCheckBox;
-        if (bIsTriState)
+        if (bIsTriState && m_bLegacy)
             xCheckBox = VclPtr<TriStateBox>::Create(pParent, nBits);
         else
             xCheckBox = VclPtr<CheckBox>::Create(pParent, nBits);

@@ -123,7 +123,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkButton" id="BTN_UP">
+                  <object class="GtkToggleButton" id="BTN_UP">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -132,6 +132,7 @@
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
                     <property name="image">imageUP</property>
+                    <property name="always_show_image">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="BTN_UP-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_UP-atkobject">Up</property>
@@ -144,7 +145,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="BTN_RIGHT">
+                  <object class="GtkToggleButton" id="BTN_RIGHT">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -153,6 +154,7 @@
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
                     <property name="image">imageRIGHT</property>
+                    <property name="always_show_image">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="BTN_RIGHT-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_RIGHT-atkobject">Right</property>
@@ -165,7 +167,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="BTN_LEFT">
+                  <object class="GtkToggleButton" id="BTN_LEFT">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -174,6 +176,7 @@
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
                     <property name="image">imageLEFT</property>
+                    <property name="always_show_image">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="BTN_LEFT-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_LEFT-atkobject">Left</property>
@@ -186,7 +189,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="BTN_DOWN">
+                  <object class="GtkToggleButton" id="BTN_DOWN">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -195,6 +198,7 @@
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
                     <property name="image">imageDOWN</property>
+                    <property name="always_show_image">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="BTN_DOWN-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_DOWN-atkobject">Down</property>
@@ -314,7 +318,6 @@
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
                     <property name="spacing">12</property>
-                    <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkCheckButton" id="TSB_ENDLESS">
                         <property name="label" translatable="yes" context="textanimtabpage|TSB_ENDLESS">_Continuous</property>
@@ -378,7 +381,6 @@
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
                     <property name="spacing">12</property>
-                    <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkCheckButton" id="TSB_PIXEL">
                         <property name="label" translatable="yes" context="textanimtabpage|TSB_PIXEL">_Pixels</property>
@@ -390,7 +392,7 @@
                         <property name="inconsistent">True</property>
                         <property name="draw_indicator">True</property>
                         <accessibility>
-                          <relation type="label-for" target="MTR_FLD_AMOUNT:0pixels"/>
+                          <relation type="label-for" target="MTR_FLD_AMOUNT"/>
                         </accessibility>
                       </object>
                       <packing>
@@ -400,7 +402,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_FLD_AMOUNT:0pixels">
+                      <object class="GtkSpinButton" id="MTR_FLD_AMOUNT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
@@ -442,7 +444,6 @@
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
                     <property name="spacing">12</property>
-                    <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkCheckButton" id="TSB_AUTO">
                         <property name="label" translatable="yes" context="textanimtabpage|TSB_AUTO">_Automatic</property>
@@ -454,7 +455,7 @@
                         <property name="inconsistent">True</property>
                         <property name="draw_indicator">True</property>
                         <accessibility>
-                          <relation type="label-for" target="MTR_FLD_DELAY:0ms"/>
+                          <relation type="label-for" target="MTR_FLD_DELAY"/>
                         </accessibility>
                       </object>
                       <packing>
@@ -464,7 +465,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_FLD_DELAY:0ms">
+                      <object class="GtkSpinButton" id="MTR_FLD_DELAY">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
@@ -508,6 +509,13 @@
         <property name="position">1</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup">
+    <widgets>
+      <widget name="NUM_FLD_COUNT"/>
+      <widget name="MTR_FLD_AMOUNT"/>
+      <widget name="MTR_FLD_DELAY"/>
+    </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
