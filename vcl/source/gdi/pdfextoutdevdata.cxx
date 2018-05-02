@@ -403,13 +403,13 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                             GfxLinkType eType = rGraphic.GetGfxLink().GetType();
                             if ( eType == GfxLinkType::NativeJpg )
                             {
-                                mbGroupIgnoreGDIMtfActions = rOutDevData.HasAdequateCompression(rGraphic);
+                                mbGroupIgnoreGDIMtfActions = rOutDevData.HasAdequateCompression(rGraphic, mParaRects[0], mParaRects[1]);
                                 if ( !mbGroupIgnoreGDIMtfActions )
                                     mCurrentGraphic = rGraphic;
                             }
                             else if ( eType == GfxLinkType::NativePng || eType == GfxLinkType::NativePdf )
                             {
-                                if ( eType == GfxLinkType::NativePdf || rOutDevData.HasAdequateCompression(rGraphic) )
+                                if ( eType == GfxLinkType::NativePdf || rOutDevData.HasAdequateCompression(rGraphic, mParaRects[0], mParaRects[1]) )
                                     mCurrentGraphic = rGraphic;
                             }
                         }
@@ -799,12 +799,18 @@ void PDFExtOutDevData::EndGroup( const Graphic&     rGraphic,
 }
 
 // Avoids expensive de-compression and re-compression of large images.
-bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic ) const
+bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic,
+                                               const tools::Rectangle & rOutputRect,
+                                               const tools::Rectangle & rVisibleOutputRect ) const
 {
     assert(rGraphic.IsGfxLink() &&
            (rGraphic.GetGfxLink().GetType() == GfxLinkType::NativeJpg ||
             rGraphic.GetGfxLink().GetType() == GfxLinkType::NativePng ||
             rGraphic.GetGfxLink().GetType() == GfxLinkType::NativePdf));
+
+    if (rOutputRect != rVisibleOutputRect)
+        // rOutputRect is the crop rectangle, re-compress cropped image.
+        return false;
 
     if (rGraphic.GetGfxLink().GetDataSize() == 0)
         return false;
