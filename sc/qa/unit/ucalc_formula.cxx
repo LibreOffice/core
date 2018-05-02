@@ -1105,7 +1105,7 @@ void Test::testFormulaCompilerJumpReordering()
     }
 }
 
-void Test::testFormulaCompilerImplicitIntersection()
+void Test::testFormulaCompilerImplicitIntersection2Param()
 {
     struct TestCaseFormula
     {
@@ -1227,6 +1227,183 @@ void Test::testFormulaCompilerImplicitIntersection()
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong IsRel type for start column address in sum-range", rCase.bStartColRel, aSumRangeData.Ref1.IsColRel());
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong IsRel type for end column address in sum-range", rCase.bEndColRel, aSumRangeData.Ref2.IsColRel());
+        }
+    }
+}
+
+void Test::testFormulaCompilerImplicitIntersection1ParamNoChange()
+{
+    struct TestCaseFormulaNoChange
+    {
+        OUString  aFormula;
+        ScAddress aCellAddress;
+        bool      bMatrixFormula;
+        bool      bForcedArray;
+    };
+
+    m_pDoc->InsertTab(0, "Formula");
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    {
+        ScAddress aStartAddr(4, 5, 0);
+        TestCaseFormulaNoChange aCasesNoChange[] =
+        {
+            {
+                OUString("=COS(A$2:A$100)"),  // No change because of abs col ref.
+                aStartAddr,
+                false,
+                false
+            },
+            {
+                OUString("=COS($A7:$A100)"),  // No intersection
+                aStartAddr,
+                false,
+                false
+            },
+            {
+                OUString("=COS($A5:$C7)"),   // No intersection 2-D range
+                aStartAddr,
+                false,
+                false
+            },
+            {
+                OUString("=SUMPRODUCT(COS(A6:A10))"),  // COS() in forced array mode
+                aStartAddr,
+                false,
+                true
+            },
+            {
+                OUString("=COS(A6:A10)"),  // Matrix formula
+                aStartAddr,
+                true,
+                false
+            }
+        };
+
+        for (auto& rCase : aCasesNoChange)
+        {
+            if (rCase.bMatrixFormula)
+            {
+                ScMarkData aMark;
+                aMark.SelectOneTable(0);
+                SCCOL nColStart = rCase.aCellAddress.Col();
+                SCROW nRowStart = rCase.aCellAddress.Row();
+                m_pDoc->InsertMatrixFormula(nColStart, nRowStart, nColStart, nRowStart + 4,
+                                            aMark, rCase.aFormula);
+            }
+            else
+                m_pDoc->SetString(rCase.aCellAddress, rCase.aFormula);
+
+            const ScFormulaCell* pCell = m_pDoc->GetFormulaCell(rCase.aCellAddress);
+            const ScTokenArray* pCode = pCell->GetCode();
+            CPPUNIT_ASSERT(pCode);
+
+            sal_uInt16 nRPNLen = pCode->GetCodeLen();
+            sal_uInt16 nRawLen = pCode->GetLen();
+            sal_uInt16 nRawArgPos;
+            if (rCase.bForcedArray)
+            {
+                nRawArgPos = 4;
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong raw token count.", static_cast<sal_uInt16>(7), nRawLen);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong RPN token count.", static_cast<sal_uInt16>(3), nRPNLen);
+            }
+            else
+            {
+                nRawArgPos = 2;
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong raw token count.", static_cast<sal_uInt16>(4), nRawLen);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong RPN token count.", static_cast<sal_uInt16>(2), nRPNLen);
+            }
+
+            FormulaToken** ppRawTokens = pCode->GetArray();
+            FormulaToken** ppRPNTokens = pCode->GetCode();
+
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong type of raw token(argument to COS)", svDoubleRef, ppRawTokens[nRawArgPos]->GetType());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong type of RPN token(argument to COS)", svDoubleRef, ppRPNTokens[0]->GetType());
+
+            ScComplexRefData aArgRangeRaw = *ppRawTokens[nRawArgPos]->GetDoubleRef();
+            ScComplexRefData aArgRangeRPN = *ppRPNTokens[0]->GetDoubleRef();
+            CPPUNIT_ASSERT_MESSAGE("raw arg token and RPN arg token contents do not match", aArgRangeRaw == aArgRangeRPN);
+        }
+    }
+}
+
+void Test::testFormulaCompilerImplicitIntersection1ParamWithChange()
+{
+    struct TestCaseFormula
+    {
+        OUString  aFormula;
+        ScAddress aCellAddress;
+        ScAddress aArgAddr;
+    };
+
+    m_pDoc->InsertTab(0, "Formula");
+    m_pDoc->InsertTab(1, "Formula1");
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    {
+        ScAddress aStartAddr(10, 5, 0);
+        TestCaseFormula aCasesWithChange[] =
+        {
+            {
+                OUString("=COS($A6:$A100)"),  // Corner case with intersection
+                aStartAddr,
+                ScAddress(0, 5, 0)
+            },
+            {
+                OUString("=COS($A2:$A6)"),    // Corner case with intersection
+                aStartAddr,
+                ScAddress(0, 5, 0)
+            },
+            {
+                OUString("=COS($A2:$A100)"),    // Typical 1D case
+                aStartAddr,
+                ScAddress(0, 5, 0)
+            },
+            {
+                OUString("=COS($Formula.$A1:$C3)"),      // 2D corner case
+                ScAddress(0, 0, 1),                      // Formula in sheet 1
+                ScAddress(0, 0, 0)
+            },
+            {
+                OUString("=COS($Formula.$A1:$C3)"),      // 2D corner case
+                ScAddress(0, 2, 1),                      // Formula in sheet 1
+                ScAddress(0, 2, 0)
+            },
+            {
+                OUString("=COS($Formula.$A1:$C3)"),      // 2D corner case
+                ScAddress(2, 0, 1),                      // Formula in sheet 1
+                ScAddress(2, 0, 0)
+            },
+            {
+                OUString("=COS($Formula.$A1:$C3)"),      // 2D corner case
+                ScAddress(2, 2, 1),                      // Formula in sheet 1
+                ScAddress(2, 2, 0)
+            },
+            {
+                OUString("=COS($Formula.$A1:$C3)"),      // Typical 2D case
+                ScAddress(1, 1, 1),                      // Formula in sheet 1
+                ScAddress(1, 1, 0)
+            }
+        };
+
+        for (auto& rCase : aCasesWithChange)
+        {
+            m_pDoc->SetString(rCase.aCellAddress, rCase.aFormula);
+
+            const ScFormulaCell* pCell = m_pDoc->GetFormulaCell(rCase.aCellAddress);
+            const ScTokenArray* pCode = pCell->GetCode();
+            CPPUNIT_ASSERT(pCode);
+
+            sal_uInt16 nRPNLen = pCode->GetCodeLen();
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong RPN token count.", static_cast<sal_uInt16>(2), nRPNLen);
+
+            FormulaToken** ppRPNTokens = pCode->GetCode();
+
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong type of RPN token(argument to COS)", svSingleRef, ppRPNTokens[0]->GetType());
+
+            ScSingleRefData aArgAddrRPN = *ppRPNTokens[0]->GetSingleRef();
+            ScAddress aArgAddrActual = aArgAddrRPN.toAbs(rCase.aCellAddress);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Computed implicit intersection singleref is wrong", rCase.aArgAddr, aArgAddrActual);
         }
     }
 }

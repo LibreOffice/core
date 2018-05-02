@@ -269,6 +269,12 @@ public:
     static void ResetNativeSymbols();
     static void SetNativeSymbols( const OpCodeMapPtr& xMap );
 
+    /** Sets the implicit intersection compute flag */
+    void SetComputeIIFlag(bool bSet) { mbComputeII = bSet; }
+
+    /** Sets the matrix flag for the formula*/
+    void SetMatrixFlag(bool bSet) { mbMatrixFlag = bSet; }
+
     /** Separators mapped when loading opcodes from the resource, values other
         than RESOURCE_BASE may override the resource strings. Used by OpCodeList
         implementation via loadSymbols().
@@ -327,7 +333,8 @@ protected:
     // This is no-op for this class.
     virtual bool IsIIOpCode(OpCode /*nOpCode*/) const { return false; }
     // Handles II opcode and passes the parameter array and number of parameters.
-    virtual void HandleIIOpCode(OpCode /*nOpCode*/, FormulaToken*** /*pppToken*/, sal_uInt8 /*nNumParams*/) {}
+    virtual void HandleIIOpCode(OpCode /*nOpCode*/, formula::ParamClass /*eClass*/,
+                                FormulaToken*** /*pppToken*/, sal_uInt8 /*nNumParams*/) {}
 
     OUString            aCorrectedFormula;      // autocorrected Formula
     OUString            aCorrectedSymbol;       // autocorrected Symbol
@@ -357,6 +364,9 @@ protected:
 
     bool mbJumpCommandReorder; /// Whether or not to reorder RPN for jump commands.
     bool mbStopOnError;        /// Whether to stop compilation on first encountered error.
+
+    bool mbComputeII;  // whether to attempt computing implicit intersection ranges while building the RPN array.
+    bool mbMatrixFlag; // whether the formula is a matrix formula (needed for II computation)
 
 private:
     void InitSymbolsNative() const;    /// only SymbolsNative, on first document creation
