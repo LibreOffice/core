@@ -185,7 +185,6 @@ SdrPaintView::SdrPaintView(
     SdrModel& rSdrModel,
     OutputDevice* pOut)
 :   mrSdrModelFromSdrView(rSdrModel),
-    mpPageView(nullptr),
     maDefaultAttr(rSdrModel.GetItemPool()),
     mbBufferedOutputAllowed(false),
     mbBufferedOverlayAllowed(false),
@@ -394,8 +393,7 @@ void SdrPaintView::ClearPageView()
     if(mpPageView)
     {
         InvalidateAllWin();
-        delete mpPageView;
-        mpPageView = nullptr;
+        mpPageView.reset();
     }
 }
 
@@ -406,14 +404,14 @@ SdrPageView* SdrPaintView::ShowSdrPage(SdrPage* pPage)
         if(mpPageView)
         {
             InvalidateAllWin();
-            delete mpPageView;
+            mpPageView.reset();
         }
 
-        mpPageView = new SdrPageView(pPage, *static_cast<SdrView*>(this));
+        mpPageView.reset(new SdrPageView(pPage, *static_cast<SdrView*>(this)));
         mpPageView->Show();
     }
 
-    return mpPageView;
+    return mpPageView.get();
 }
 
 void SdrPaintView::HideSdrPage()
@@ -421,8 +419,7 @@ void SdrPaintView::HideSdrPage()
     if(mpPageView)
     {
         mpPageView->Hide();
-        delete mpPageView;
-        mpPageView = nullptr;
+        mpPageView.reset();
     }
 }
 
