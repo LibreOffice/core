@@ -338,7 +338,6 @@ OUString convertBitmapExTransparentType(TransparentType eType)
         default:
         case TransparentType::NONE:   return OUString("none");
         case TransparentType::Bitmap: return OUString("bitmap");
-        case TransparentType::Color:  return OUString("color");
     }
 }
 

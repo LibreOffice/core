@@ -1781,19 +1781,6 @@ bool ReadDIBBitmapEx(
                         }
                         break;
                     }
-                case TransparentType::Color:
-                    {
-                        Color maTransparentColor;
-
-                        ReadColor( rIStm, maTransparentColor );
-                        bRetval = !rIStm.GetError();
-
-                        if(bRetval)
-                        {
-                            rTarget = BitmapEx(aBmp, maTransparentColor);
-                        }
-                        break;
-                    }
                 default: break;
                 }
             }
@@ -1848,11 +1835,6 @@ bool WriteDIBBitmapEx(
         if(TransparentType::Bitmap == rSource.meTransparent)
         {
             return ImplWriteDIB(rSource.maMask, rOStm, true, true);
-        }
-        else if(TransparentType::Color == rSource.meTransparent)
-        {
-            WriteColor( rOStm, rSource.maTransparentColor );
-            return true;
         }
     }
 

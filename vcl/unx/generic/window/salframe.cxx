@@ -284,9 +284,6 @@ static void CreateNetWmAppIcon( sal_uInt16 nIcon, NetWmIconData& netwm_icon )
                 mask = AlphaMask( icon.GetSizePixel(), &nTrans );
             }
             break;
-            case TransparentType::Color:
-                mask = AlphaMask( icon.CreateMask( aIcon.GetTransparentColor() ) );
-            break;
             case TransparentType::Bitmap:
                 mask = aIcon.GetAlpha();
             break;

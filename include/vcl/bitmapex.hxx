@@ -36,7 +36,6 @@ namespace com { namespace sun { namespace star { namespace rendering {
 enum class TransparentType
 {
     NONE,
-    Color,
     Bitmap
 };
 

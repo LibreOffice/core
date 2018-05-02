@@ -184,9 +184,6 @@ bool BitmapEx::operator==( const BitmapEx& rBitmapEx ) const
     if (meTransparent == TransparentType::NONE)
         return true;
 
-    if (meTransparent == TransparentType::Color)
-        return maTransparentColor == rBitmapEx.maTransparentColor;
-
     return maMask.ShallowEquals(rBitmapEx.maMask) && mbAlpha == rBitmapEx.mbAlpha;
 }
 
@@ -229,12 +226,7 @@ Bitmap BitmapEx::GetBitmap( const Color* pTransReplaceColor ) const
 
     if( pTransReplaceColor && ( meTransparent != TransparentType::NONE ) )
     {
-        Bitmap aTempMask;
-
-        if( meTransparent == TransparentType::Color )
-            aTempMask = maBitmap.CreateMask( maTransparentColor );
-        else
-            aTempMask = maMask;
+        Bitmap aTempMask = maMask;
 
         if( !IsAlpha() )
             aRetBmp.Replace( aTempMask, *pTransReplaceColor );
@@ -312,9 +304,6 @@ bool BitmapEx::Invert()
     if (!!maBitmap)
     {
         bRet = maBitmap.Invert();
-
-        if (bRet && (meTransparent == TransparentType::Color))
-            maTransparentColor = BitmapColor(maTransparentColor).Invert().GetColor();
     }
 
     return bRet;
@@ -387,22 +376,17 @@ bool BitmapEx::Rotate( long nAngle10, const Color& rFillColor )
 
         if( bTransRotate )
         {
-            if( meTransparent == TransparentType::Color )
-                bRet = maBitmap.Rotate( nAngle10, maTransparentColor );
-            else
+            bRet = maBitmap.Rotate( nAngle10, COL_BLACK );
+
+            if( meTransparent == TransparentType::NONE )
             {
-                bRet = maBitmap.Rotate( nAngle10, COL_BLACK );
-
-                if( meTransparent == TransparentType::NONE )
-                {
-                    maMask = Bitmap(GetSizePixel(), 1);
-                    maMask.Erase( COL_BLACK );
-                    meTransparent = TransparentType::Bitmap;
-                }
-
-                if( bRet && !!maMask )
-                    maMask.Rotate( nAngle10, COL_WHITE );
+                maMask = Bitmap(GetSizePixel(), 1);
+                maMask.Erase( COL_BLACK );
+                meTransparent = TransparentType::Bitmap;
             }
+
+            if( bRet && !!maMask )
+                maMask.Rotate( nAngle10, COL_WHITE );
         }
         else
         {
@@ -690,23 +674,6 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
                 {
                     // Not transparent, ergo all covered
                     nTransparency = 0x00;
-                    break;
-                }
-                case TransparentType::Color:
-                {
-                    Bitmap aTestBitmap(maBitmap);
-                    Bitmap::ScopedReadAccess pRead(aTestBitmap);
-
-                    if(pRead)
-                    {
-                        const BitmapColor aBmpColor = pRead->GetColor(nY, nX);
-                        const Color aColor = aBmpColor.GetColor();
-
-                        // If color is not equal to TransparentColor, we are not transparent
-                        if (aColor != maTransparentColor)
-                            nTransparency = 0x00;
-
-                    }
                     break;
                 }
                 case TransparentType::Bitmap:

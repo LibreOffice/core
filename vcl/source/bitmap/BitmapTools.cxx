@@ -489,10 +489,6 @@ void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparen
     {
         aOldMask = rBitmapEx.GetMask();
     }
-    else if(TransparentType::Color == rBitmapEx.GetTransparentType())
-    {
-        aOldMask = rBitmapEx.GetBitmap().CreateMask(rBitmapEx.GetTransparentColor());
-    }
 
     {
         AlphaScopedWriteAccess pOld(aOldMask);

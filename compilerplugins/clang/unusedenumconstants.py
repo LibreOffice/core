@@ -97,7 +97,6 @@ def is_ignore(srcLoc):
          "vcl/source/filter/wmf/winmtf.hxx",
          "vcl/source/filter/sgvmain.hxx",
          "vcl/source/filter/jpeg/transupp.h",
-         "include/vcl/bitmapex.hxx", # TransparentType
          "vcl/inc/sft.hxx", # CompositeFlags, WidthClass, WeightClass
          "vcl/inc/CommonSalLayout.hxx", # VerticalOrientation
          "include/tools/fontenum.hxx", # part of GDI file format
