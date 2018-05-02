@@ -1413,7 +1413,7 @@ void SdrPage::TRG_SetMasterPage(SdrPage& rNew)
     if(mpMasterPageDescriptor)
         TRG_ClearMasterPage();
 
-    mpMasterPageDescriptor = new sdr::MasterPageDescriptor(*this, rNew);
+    mpMasterPageDescriptor.reset(new sdr::MasterPageDescriptor(*this, rNew));
     GetViewContact().ActionChanged();
 }
 
@@ -1426,8 +1426,7 @@ void SdrPage::TRG_ClearMasterPage()
         // the flushViewObjectContacts() will do needed invalidates by deleting the involved VOCs
         mpMasterPageDescriptor->GetUsedPage().GetViewContact().flushViewObjectContacts();
 
-        delete mpMasterPageDescriptor;
-        mpMasterPageDescriptor = nullptr;
+        mpMasterPageDescriptor.reset();
     }
 }
 
