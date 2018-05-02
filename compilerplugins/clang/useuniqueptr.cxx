@@ -52,6 +52,7 @@ public:
     bool VisitCXXMethodDecl(const CXXMethodDecl* );
     bool VisitCompoundStmt(const CompoundStmt* );
 private:
+    void CheckCompoundStmt(const CXXMethodDecl*, const CompoundStmt* );
     void CheckForUnconditionalDelete(const CXXMethodDecl*, const CompoundStmt* );
     void CheckForSimpleDelete(const CXXMethodDecl*, const CompoundStmt* );
     void CheckRangedLoopDelete(const CXXMethodDecl*, const CXXForRangeStmt* );
@@ -74,6 +75,13 @@ bool UseUniquePtr::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
     if (!compoundStmt || compoundStmt->size() == 0)
         return true;
 
+    CheckCompoundStmt(methodDecl, compoundStmt);
+
+    return true;
+}
+
+void UseUniquePtr::CheckCompoundStmt(const CXXMethodDecl* methodDecl, const CompoundStmt* compoundStmt)
+{
     CheckForSimpleDelete(methodDecl, compoundStmt);
 
     for (auto i = compoundStmt->body_begin(); i != compoundStmt->body_end(); ++i)
@@ -84,9 +92,10 @@ bool UseUniquePtr::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
             CheckLoopDelete(methodDecl, forStmt->getBody());
         else if (auto whileStmt = dyn_cast<WhileStmt>(*i))
             CheckLoopDelete(methodDecl, whileStmt->getBody());
+        // check for unconditional inner compound statements
+        else if (auto innerCompoundStmt = dyn_cast<CompoundStmt>(*i))
+            CheckCompoundStmt(methodDecl, innerCompoundStmt);
     }
-
-    return true;
 }
 
 /**
