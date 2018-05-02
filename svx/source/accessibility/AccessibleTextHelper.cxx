@@ -759,12 +759,15 @@ namespace accessibility
             SvxTextForwarder& rCacheTF = GetTextForwarder();
             sal_Int32 nParas=rCacheTF.GetParagraphCount();
 
-            mnFirstVisibleChild = nParas ? 0 : -1;
+            mnFirstVisibleChild = -1;
             mnLastVisibleChild = -2;
 
-            if (mxFrontEnd.is() && bBroadcastEvents)
+            for( sal_Int32 nCurrPara=0; nCurrPara<nParas; ++nCurrPara )
             {
-                for( sal_Int32 nCurrPara=0; nCurrPara<nParas; ++nCurrPara )
+                if (nCurrPara == 0)
+                    mnFirstVisibleChild = nCurrPara;
+                mnLastVisibleChild = nCurrPara;
+                if (mxFrontEnd.is() && bBroadcastEvents)
                 {
                     // child not yet created?
                     ::accessibility::AccessibleParaManager::WeakChild aChild( maParaManager.GetChild(nCurrPara) );
@@ -777,8 +780,6 @@ namespace accessibility
                     }
                 }
             }
-
-            mnLastVisibleChild = nParas - 1;
         }
         catch( const uno::Exception& )
         {
