@@ -34,6 +34,7 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <unotools/options.hxx>
 #include <vcl/idle.hxx>
+#include <memory>
 
 
 // Pre defines
@@ -133,7 +134,7 @@ private:
     // the SdrModel this view was created with, unchanged during lifetime
     SdrModel&                   mrSdrModelFromSdrView;
 
-    SdrPageView*                mpPageView;
+    std::unique_ptr<SdrPageView> mpPageView;
 protected:
     SdrModel*                   mpModel;
 #ifdef DBG_UTIL
@@ -313,7 +314,7 @@ public:
     virtual void HideSdrPage();
 
     // Iterate over all registered PageViews
-    SdrPageView* GetSdrPageView() const { return mpPageView; }
+    SdrPageView* GetSdrPageView() const { return mpPageView.get(); }
 
     // A SdrView can be displayed on multiple Windows at the same time
     virtual void AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window* pWindow);
