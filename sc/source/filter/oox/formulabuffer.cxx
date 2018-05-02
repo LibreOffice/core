@@ -120,7 +120,7 @@ void applySharedFormulas(
             sal_Int32 nId = rEntry.mnSharedId;
             const OUString& rTokenStr = rEntry.maTokenStr;
 
-            ScCompiler aComp(&rDoc.getDoc(), aPos, formula::FormulaGrammar::GRAM_OOXML);
+            ScCompiler aComp(&rDoc.getDoc(), aPos, formula::FormulaGrammar::GRAM_OOXML, true, false);
             aComp.SetNumberFormatter(&rFormatter);
             ScTokenArray* pArray = aComp.CompileString(rTokenStr);
             if (pArray)
@@ -205,7 +205,7 @@ void applyCellFormulas(
             continue;
         }
 
-        ScCompiler aCompiler(&rDoc.getDoc(), aPos, formula::FormulaGrammar::GRAM_OOXML);
+        ScCompiler aCompiler(&rDoc.getDoc(), aPos, formula::FormulaGrammar::GRAM_OOXML, true, false);
         aCompiler.SetNumberFormatter(&rFormatter);
         aCompiler.SetExternalLinks(rExternalLinks);
         ScTokenArray* pCode = aCompiler.CompileString(rItem.maTokenStr);

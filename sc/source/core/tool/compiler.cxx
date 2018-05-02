@@ -1731,8 +1731,9 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
     }
 };
 
-ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr ) :
-    FormulaCompiler(rArr),
+ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr,
+                        bool bComputeII, bool bMatrixFlag ) :
+    FormulaCompiler(rArr, bComputeII, bMatrixFlag),
     pDoc(rCxt.getDoc()),
     aPos(rPos),
     mpFormatter(pDoc->GetFormatTable()),
@@ -1751,8 +1752,9 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, 
 }
 
 ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos, ScTokenArray& rArr,
-            formula::FormulaGrammar::Grammar eGrammar )
-        : FormulaCompiler(rArr),
+                        formula::FormulaGrammar::Grammar eGrammar,
+                        bool bComputeII, bool bMatrixFlag )
+    : FormulaCompiler(rArr, bComputeII, bMatrixFlag),
         pDoc( pDocument ),
         aPos( rPos ),
         mpFormatter(pDoc->GetFormatTable()),
@@ -1772,7 +1774,9 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos, ScTokenArr
                 eGrammar );
 }
 
-ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos ) :
+ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos,
+                        bool bComputeII, bool bMatrixFlag ) :
+    FormulaCompiler(bComputeII, bMatrixFlag),
     pDoc(rCxt.getDoc()),
     aPos(rPos),
     mpFormatter(pDoc ? pDoc->GetFormatTable() : nullptr),
@@ -1791,8 +1795,10 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos )
 }
 
 ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
-            formula::FormulaGrammar::Grammar eGrammar )
+                        formula::FormulaGrammar::Grammar eGrammar,
+                        bool bComputeII, bool bMatrixFlag )
         :
+        FormulaCompiler(bComputeII, bMatrixFlag),
         pDoc( pDocument ),
         aPos( rPos ),
         mpFormatter(pDoc ? pDoc->GetFormatTable() : nullptr),
@@ -5782,50 +5788,153 @@ formula::ParamClass ScCompiler::GetForceArrayParameter( const formula::FormulaTo
 
 bool ScCompiler::IsIIOpCode(OpCode nOpCode) const
 {
-    if (nOpCode == ocSumIf || nOpCode == ocAverageIf)
+    if (nOpCode == ocSumIf || nOpCode == ocAverageIf || (nOpCode >= SC_OPCODE_START_1_PAR && nOpCode < SC_OPCODE_STOP_1_PAR))
         return true;
 
     return false;
 }
 
-void ScCompiler::HandleIIOpCode(OpCode nOpCode, FormulaToken*** pppToken, sal_uInt8 nNumParams)
+void ScCompiler::HandleIIOpCode(OpCode nOpCode, formula::ParamClass eClass, FormulaToken*** pppToken, sal_uInt8 nNumParams)
 {
-    switch (nOpCode)
+    if (!mbComputeII)
+        return;
+
+    if (nOpCode == ocSumIf || nOpCode == ocAverageIf)
     {
-        case ocSumIf:
-        case ocAverageIf:
+        if (nNumParams != 3)
+            return;
+
+        if (!(pppToken[0] && pppToken[2] && *pppToken[0] && *pppToken[2]))
+            return;
+
+        if ((*pppToken[0])->GetType() != svDoubleRef)
+            return;
+
+        const StackVar eSumRangeType = (*pppToken[2])->GetType();
+
+        if ( eSumRangeType != svSingleRef && eSumRangeType != svDoubleRef )
+            return;
+
+        const ScComplexRefData& rBaseRange = *(*pppToken[0])->GetDoubleRef();
+
+        ScComplexRefData aSumRange;
+        if (eSumRangeType == svSingleRef)
         {
-            if (nNumParams != 3)
-                return;
-
-            if (!(pppToken[0] && pppToken[2] && *pppToken[0] && *pppToken[2]))
-                return;
-
-            if ((*pppToken[0])->GetType() != svDoubleRef)
-                return;
-
-            const StackVar eSumRangeType = (*pppToken[2])->GetType();
-
-            if ( eSumRangeType != svSingleRef && eSumRangeType != svDoubleRef )
-                return;
-
-            const ScComplexRefData& rBaseRange = *(*pppToken[0])->GetDoubleRef();
-
-            ScComplexRefData aSumRange;
-            if (eSumRangeType == svSingleRef)
-            {
-                aSumRange.Ref1 = *(*pppToken[2])->GetSingleRef();
-                aSumRange.Ref2 = aSumRange.Ref1;
-            }
-            else
-                aSumRange = *(*pppToken[2])->GetDoubleRef();
-
-            CorrectSumRange(rBaseRange, aSumRange, pppToken[2]);
+            aSumRange.Ref1 = *(*pppToken[2])->GetSingleRef();
+            aSumRange.Ref2 = aSumRange.Ref1;
         }
-        break;
-        default:
-            ;
+        else
+            aSumRange = *(*pppToken[2])->GetDoubleRef();
+
+        CorrectSumRange(rBaseRange, aSumRange, pppToken[2]);
     }
+    else if (nOpCode >= SC_OPCODE_START_1_PAR && nOpCode < SC_OPCODE_STOP_1_PAR)
+    {
+        if (nNumParams != 1)
+            return;
+
+        if (eClass == formula::ForceArray || mbMatrixFlag)
+            return;
+
+        if ((*pppToken[0])->GetType() != svDoubleRef)
+            return;
+
+        ReplaceDoubleRefII(pppToken[0]);
+    }
+}
+
+void ScCompiler::ReplaceDoubleRefII(FormulaToken** ppDoubleRefTok)
+{
+    const ScComplexRefData& rRange = *(*ppDoubleRefTok)->GetDoubleRef();
+
+    // Can't do optimization reliably in this case (when row references are absolute).
+    // Example : =SIN(A$1:A$10) filled in a formula group starting at B5 and of length 100.
+    // If we just optimize the argument $A$1:$A$10 to singleref "A5" for the top cell in the fg, then
+    // the results in cells B11:B104 will be incorrect (sin(0) = 0, assuming empty cells in A11:A104)
+    // instead of the #VALUE! errors we would expect. We need to know the formula-group length to
+    // fix this, but that is unknown at this stage, so skip such cases.
+    if (!rRange.Ref1.IsRowRel() && !rRange.Ref2.IsRowRel())
+        return;
+
+    ScRange aAbsRange = rRange.toAbs(aPos);
+    if (aAbsRange.aStart == aAbsRange.aEnd)
+        return; // Nothing to do (trivial case).
+
+    ScAddress aAddr;
+
+    if (!DoubleRefToPosSingleRefScalarCase(aAbsRange, aAddr, aPos))
+        return;
+
+    ScSingleRefData aSingleRef;
+    aSingleRef.SetColRel(rRange.Ref1.IsColRel());
+    aSingleRef.SetRowRel(true);
+    aSingleRef.SetTabRel(rRange.Ref1.IsTabRel());
+    aSingleRef.SetAddress(aAddr, aPos);
+
+    // Replace the original doubleref token with computed singleref token
+    FormulaToken* pNewSingleRefTok = new ScSingleRefToken(aSingleRef);
+    (*ppDoubleRefTok)->DecRef();
+    *ppDoubleRefTok = pNewSingleRefTok;
+    pNewSingleRefTok->IncRef();
+}
+
+bool ScCompiler::DoubleRefToPosSingleRefScalarCase(const ScRange& rRange, ScAddress& rAdr, const ScAddress& rFormulaPos)
+{
+    // Note that this assumes rRange.aStart != rRange.aEnd
+
+    bool bOk = false;
+    SCCOL nMyCol = rFormulaPos.Col();
+    SCROW nMyRow = rFormulaPos.Row();
+    SCTAB nMyTab = rFormulaPos.Tab();
+    SCCOL nCol = 0;
+    SCROW nRow = 0;
+    SCTAB nTab;
+    nTab = rRange.aStart.Tab();
+    if ( rRange.aStart.Col() <= nMyCol && nMyCol <= rRange.aEnd.Col() )
+    {
+        nRow = rRange.aStart.Row();
+        if ( nRow == rRange.aEnd.Row() )
+        {
+            bOk = true;
+            nCol = nMyCol;
+        }
+        else if ( nTab != nMyTab && nTab == rRange.aEnd.Tab()
+                && rRange.aStart.Row() <= nMyRow && nMyRow <= rRange.aEnd.Row() )
+        {
+            bOk = true;
+            nCol = nMyCol;
+            nRow = nMyRow;
+        }
+    }
+    else if ( rRange.aStart.Row() <= nMyRow && nMyRow <= rRange.aEnd.Row() )
+    {
+        nCol = rRange.aStart.Col();
+        if ( nCol == rRange.aEnd.Col() )
+        {
+            bOk = true;
+            nRow = nMyRow;
+        }
+        else if ( nTab != nMyTab && nTab == rRange.aEnd.Tab()
+                && rRange.aStart.Col() <= nMyCol && nMyCol <= rRange.aEnd.Col() )
+        {
+            bOk = true;
+            nCol = nMyCol;
+            nRow = nMyRow;
+        }
+    }
+    if ( bOk )
+    {
+        if ( nTab == rRange.aEnd.Tab() )
+            ;   // all done
+        else if ( nTab <= nMyTab && nMyTab <= rRange.aEnd.Tab() )
+            nTab = nMyTab;
+        else
+            bOk = false;
+        if ( bOk )
+            rAdr.Set( nCol, nRow, nTab );
+    }
+
+    return bOk;
 }
 
 static void lcl_GetColRowDeltas(const ScRange& rRange, SCCOL& rXDelta, SCROW& rYDelta)

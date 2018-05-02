@@ -697,7 +697,7 @@ void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode 
 
 // class FormulaCompiler
 
-FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
+FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr, bool bComputeII, bool bMatrixFlag )
         :
         nCurrentFactorParam(0),
         pArr( &rArr ),
@@ -713,13 +713,15 @@ FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
         bCorrected( false ),
         glSubTotal( false ),
         mbJumpCommandReorder(true),
-        mbStopOnError(true)
+        mbStopOnError(true),
+        mbComputeII(bComputeII),
+        mbMatrixFlag(bMatrixFlag)
 {
 }
 
 FormulaTokenArray FormulaCompiler::smDummyTokenArray;
 
-FormulaCompiler::FormulaCompiler()
+FormulaCompiler::FormulaCompiler(bool bComputeII, bool bMatrixFlag)
         :
         nCurrentFactorParam(0),
         pArr( nullptr ),
@@ -735,7 +737,9 @@ FormulaCompiler::FormulaCompiler()
         bCorrected( false ),
         glSubTotal( false ),
         mbJumpCommandReorder(true),
-        mbStopOnError(true)
+        mbStopOnError(true),
+        mbComputeII(bComputeII),
+        mbMatrixFlag(bMatrixFlag)
 {
 }
 
@@ -1540,6 +1544,7 @@ void FormulaCompiler::Factor()
             else
             {
                 // standard handling of 1-parameter opcodes
+                OpCode eMyLastOp = eOp;
                 pFacToken = mpToken;
                 eOp = NextToken();
                 if( nNumFmt == SvNumFormatType::UNDEFINED && eOp == ocNot )
@@ -1555,7 +1560,14 @@ void FormulaCompiler::Factor()
                 if (eOp != ocClose)
                     SetError( FormulaError::PairExpected);
                 else if ( pArr->GetCodeError() == FormulaError::NONE )
+                {
                     pFacToken->SetByte( 1 );
+                    if (mbComputeII && IsIIOpCode(eMyLastOp))
+                    {
+                        FormulaToken** pArg = pCode - 1;
+                        HandleIIOpCode(eMyLastOp, pFacToken->GetInForceArray(), &pArg, 1);
+                    }
+                }
                 PutCode( pFacToken );
                 NextToken();
             }
@@ -1597,7 +1609,7 @@ void FormulaCompiler::Factor()
             sal_uInt32 nSepCount = 0;
             if( !bNoParam )
             {
-                bool bDoIICompute = IsIIOpCode(eMyLastOp);
+                bool bDoIICompute = mbComputeII && IsIIOpCode(eMyLastOp);
                 // Array of FormulaToken double pointers to collect the parameters of II opcodes.
                 FormulaToken*** pArgArray = nullptr;
                 if (bDoIICompute)
@@ -1624,7 +1636,7 @@ void FormulaCompiler::Factor()
                         pArgArray[nSepCount - 1] = pCode - 1; // Add rest of the arguments
                 }
                 if (bDoIICompute)
-                    HandleIIOpCode(eMyLastOp, pArgArray,
+                    HandleIIOpCode(eMyLastOp, pFacToken->GetInForceArray(), pArgArray,
                                    std::min(nSepCount, static_cast<sal_uInt32>(FORMULA_MAXPARAMSII)));
             }
             if (bBadName)
