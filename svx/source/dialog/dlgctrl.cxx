@@ -684,6 +684,7 @@ RectCtl::RectCtl(weld::Builder& rBuilder, const OString& rDrawingId, SvxTabPage*
     m_xControl->connect_key_press(LINK(this, RectCtl, DoKeyDown));
     m_xControl->connect_focus_in(LINK(this, RectCtl, DoGetFocus));
     m_xControl->connect_focus_out(LINK(this, RectCtl, DoLoseFocus));
+    m_xControl->connect_focus_rect(LINK(this, RectCtl, DoFocusRect));
 
     m_xControl->set_size_request(m_xControl->get_approximate_digit_width() * 25, m_xControl->get_text_height() * 5);
     Resize_Impl();
@@ -976,12 +977,14 @@ IMPL_LINK(RectCtl, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
             rRenderContext.DrawBitmap(aCenterPt, aDstBtnSize, aBtnPnt2, aBtnSize, rBitmap.GetBitmap());
         }
     }
+}
 
-    if (m_xControl->has_focus())
-    {
-        tools::Rectangle aFocusRect(CalculateFocusRectangle());
-        rRenderContext.Invert(aFocusRect, InvertFlags(0xffff));
-    }
+IMPL_LINK(RectCtl, DoFocusRect, weld::Widget&, rControl, tools::Rectangle)
+{
+    tools::Rectangle aRet;
+    if (rControl.has_focus())
+        aRet = CalculateFocusRectangle();
+    return aRet;
 }
 
 // Convert RectPoint Point
