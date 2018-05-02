@@ -129,7 +129,7 @@ namespace connectivity
                                 bool bEvaluate = true,
                                 bool bRetrieveData = true);
 
-            OKeyValue* GetOrderbyKeyValue(OValueRefRow const & _rRow);
+            std::unique_ptr<OKeyValue> GetOrderbyKeyValue(OValueRefRow const & _rRow);
             bool IsSorted() const { return !m_aOrderbyColumnNumber.empty() && m_aOrderbyColumnNumber[0] >= 0;}
 
             // return true when the select statement is "select count(*) from table"
