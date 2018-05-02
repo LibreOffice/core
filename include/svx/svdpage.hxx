@@ -421,7 +421,7 @@ public:
 
 protected:
     // new MasterPageDescriptorVector
-    sdr::MasterPageDescriptor*                    mpMasterPageDescriptor;
+    std::unique_ptr<sdr::MasterPageDescriptor> mpMasterPageDescriptor;
 
     SdrLayerIDSet       aPrefVisiLayers;
     sal_uInt16          nPageNum;
