@@ -1080,6 +1080,33 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 pClipDoc->ClosingClipboardSource();
         }
     }
+
+    if ( const SfxEventHint* pSfxEventHint = dynamic_cast<const SfxEventHint*>(&rHint) )
+    {
+        switch( pSfxEventHint->GetEventId() )
+        {
+           case SfxEventHintId::CreateDoc:
+                {
+                    uno::Any aWorkbook;
+                    aWorkbook <<= mxAutomationWorkbookObject;
+                    uno::Sequence< uno::Any > aArgs(1);
+                    aArgs[0] = aWorkbook;
+                    SC_MOD()->CallAutomationApplicationEventSinks( "NewWorkbook", aArgs );
+                }
+                break;
+            case SfxEventHintId::OpenDoc:
+                {
+                    uno::Any aWorkbook;
+                    aWorkbook <<= mxAutomationWorkbookObject;
+                    uno::Sequence< uno::Any > aArgs(1);
+                    aArgs[0] = aWorkbook;
+                    SC_MOD()->CallAutomationApplicationEventSinks( "WorkbookOpen", aArgs );
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 // Load contents for organizer
@@ -3338,6 +3365,11 @@ bool ScDocShell::GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPas
 void ScDocShell::SetIsInUcalc()
 {
     mbUcalcTest = true;
+}
+
+void ScDocShell::RegisterAutomationWorkbookObject(css::uno::Reference< ooo::vba::excel::XWorkbook > const& xWorkbook)
+{
+    mxAutomationWorkbookObject = xWorkbook;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportSLK(SvStream &rStream)

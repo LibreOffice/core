@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DOCSH_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DOCSH_HXX
 
+#include <ooo/vba/excel/XWorkbook.hpp>
 #include <sfx2/objsh.hxx>
-
 #include <sfx2/docfac.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/viewsh.hxx>
@@ -113,6 +113,8 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
     ScFormatSaveData*   mpFormatSaveData;
 
     ScDocShellModificator* pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
+
+    css::uno::Reference< ooo::vba::excel::XWorkbook> mxAutomationWorkbookObject;
 
     // Only used by Vba helper functions
     css::uno::Reference<css::script::vba::XVBAScriptListener>   m_xVBAListener;
@@ -427,6 +429,8 @@ public:
     void SnapVisArea( tools::Rectangle& rRect ) const;
 
     void SetIsInUcalc();
+
+    void RegisterAutomationWorkbookObject(css::uno::Reference< ooo::vba::excel::XWorkbook > const& xWorkbook);
 };
 
 void UpdateAcceptChangesDialog();
