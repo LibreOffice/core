@@ -701,6 +701,7 @@ protected:
     Link<const KeyEvent&, bool> m_aKeyPressHdl;
     Link<const KeyEvent&, bool> m_aKeyReleaseHdl;
     Link<Widget&, void> m_aStyleUpdatedHdl;
+    Link<Widget&, tools::Rectangle> m_aGetFocusRectHdl;
 
 public:
     void connect_draw(const Link<draw_args, void>& rLink) { m_aDrawHdl = rLink; }
@@ -720,6 +721,10 @@ public:
     void connect_key_press(const Link<const KeyEvent&, bool>& rLink) { m_aKeyPressHdl = rLink; }
     void connect_key_release(const Link<const KeyEvent&, bool>& rLink) { m_aKeyReleaseHdl = rLink; }
     void connect_style_updated(const Link<Widget&, void>& rLink) { m_aStyleUpdatedHdl = rLink; }
+    void connect_focus_rect(const Link<Widget&, tools::Rectangle>& rLink)
+    {
+        m_aGetFocusRectHdl = rLink;
+    }
     virtual void queue_draw() = 0;
     virtual void queue_draw_area(int x, int y, int width, int height) = 0;
     virtual a11yref get_accessible_parent() = 0;
