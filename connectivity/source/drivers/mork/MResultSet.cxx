@@ -1136,7 +1136,7 @@ void OResultSet::executeQuery()
 #endif
                     for ( sal_Int32 nRow = 1; nRow <= m_aQueryHelper.getResultCount(); nRow++ ) {
 
-                        OKeyValue* pKeyValue = OKeyValue::createKeyValue(nRow);
+                        std::unique_ptr<OKeyValue> pKeyValue = OKeyValue::createKeyValue(nRow);
 
                         std::vector<sal_Int32>::const_iterator aIter = m_aOrderbyColumnNumber.begin();
                         for (;aIter != m_aOrderbyColumnNumber.end(); ++aIter)
@@ -1151,7 +1151,7 @@ void OResultSet::executeQuery()
                             pKeyValue->pushKey(new ORowSetValueDecorator(value));
                         }
 
-                        aSortIndex.AddKeyValue( pKeyValue );
+                        aSortIndex.AddKeyValue( std::move(pKeyValue) );
                     }
 
                     m_pKeySet = aSortIndex.CreateKeySet();

@@ -47,8 +47,15 @@ namespace connectivity
     class OOO_DLLPUBLIC_DBTOOLS OSortIndex
     {
     public:
-        typedef std::vector< std::pair<sal_Int32,OKeyValue*> >  TIntValuePairVector;
-        typedef std::vector<OKeyType>                             TKeyTypeVector;
+        // Because MSVC2015's std::pair/std::unique_ptr interaction is braindead
+        struct MyPair {
+            typedef sal_Int32 first_type;
+            typedef std::unique_ptr<OKeyValue> second_type;
+            sal_Int32 first;
+            std::unique_ptr<OKeyValue> second;
+        };
+        typedef std::vector<MyPair>   TIntValuePairVector;
+        typedef std::vector<OKeyType> TKeyTypeVector;
 
     private:
         TIntValuePairVector             m_aKeyValues;
@@ -69,7 +76,7 @@ namespace connectivity
                 pKeyValue   the keyvalue to be appended
             ATTENTION: when the sortindex is already frozen the parameter will be deleted
         */
-        void AddKeyValue(OKeyValue * pKeyValue);
+        void AddKeyValue(std::unique_ptr<OKeyValue> pKeyValue);
 
         /**
             Freeze freezes the sortindex so that new values could only be appended by their value
