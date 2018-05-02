@@ -423,6 +423,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             if ( pArr->GetCodeError() == FormulaError::NONE )
             {
                 bAddEqual = true;
+                aComp.SetComputeIIFlag(true);
+                aComp.SetMatrixFlag(false);
                 aComp.CompileTokenArray();
                 bCorrected |= aComp.IsCorrected();
             }

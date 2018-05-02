@@ -561,7 +561,10 @@ void ScFormulaCellGroup::compileCode(
 
     if (mpCode->GetLen() && mpCode->GetCodeError() == FormulaError::NONE && !mpCode->GetCodeLen())
     {
+        bool bMatrixFormula = mpTopCell->GetMatrixFlag() != ScMatrixMode::NONE;
         ScCompiler aComp(&rDoc, rPos, *mpCode, eGram);
+        aComp.SetComputeIIFlag(true);
+        aComp.SetMatrixFlag(bMatrixFormula);
         mbSubTotal = aComp.CompileTokenArray();
         mnFormatType = aComp.GetNumFormatType();
     }
@@ -700,6 +703,8 @@ ScFormulaCell::ScFormulaCell(
     if (pCode->GetLen() && pCode->GetCodeError() == FormulaError::NONE && !pCode->GetCodeLen())
     {
         ScCompiler aComp( pDocument, aPos, *pCode, eTempGrammar);
+        aComp.SetComputeIIFlag(true);
+        aComp.SetMatrixFlag(cMatrixFlag != ScMatrixMode::NONE);
         bSubTotal = aComp.CompileTokenArray();
         nFormatType = aComp.GetNumFormatType();
     }
@@ -747,6 +752,8 @@ ScFormulaCell::ScFormulaCell(
     if( pCode->GetLen() && pCode->GetCodeError() == FormulaError::NONE && !pCode->GetCodeLen() )
     {
         ScCompiler aComp( pDocument, aPos, *pCode, eTempGrammar);
+        aComp.SetComputeIIFlag(true);
+        aComp.SetMatrixFlag(cMatrixFlag != ScMatrixMode::NONE);
         bSubTotal = aComp.CompileTokenArray();
         nFormatType = aComp.GetNumFormatType();
     }
@@ -1198,6 +1205,8 @@ void ScFormulaCell::CompileTokenArray( bool bNoListening )
         if( !bNoListening && pCode->GetCodeLen() )
             EndListeningTo( pDocument );
         ScCompiler aComp(pDocument, aPos, *pCode, pDocument->GetGrammar());
+        aComp.SetComputeIIFlag(true);
+        aComp.SetMatrixFlag(cMatrixFlag != ScMatrixMode::NONE);
         bSubTotal = aComp.CompileTokenArray();
         if( pCode->GetCodeError() == FormulaError::NONE )
         {
@@ -1238,6 +1247,8 @@ void ScFormulaCell::CompileTokenArray( sc::CompileFormulaContext& rCxt, bool bNo
         if( !bNoListening && pCode->GetCodeLen() )
             EndListeningTo( pDocument );
         ScCompiler aComp(rCxt, aPos, *pCode);
+        aComp.SetComputeIIFlag(true);
+        aComp.SetMatrixFlag(cMatrixFlag != ScMatrixMode::NONE);
         bSubTotal = aComp.CompileTokenArray();
         if( pCode->GetCodeError() == FormulaError::NONE )
         {
@@ -1344,6 +1355,8 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
                 else
                     pCode->AddBad( aFormula );
             }
+            aComp.SetComputeIIFlag(true);
+            aComp.SetMatrixFlag(cMatrixFlag != ScMatrixMode::NONE);
             bSubTotal = aComp.CompileTokenArray();
             if( pCode->GetCodeError() == FormulaError::NONE )
             {
@@ -1394,6 +1407,8 @@ void ScFormulaCell::CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartL
     if( pCode->GetLen() && !pCode->GetCodeLen() && pCode->GetCodeError() == FormulaError::NONE )
     {
         ScCompiler aComp(rCxt, aPos, *pCode);
+        aComp.SetComputeIIFlag(true);
+        aComp.SetMatrixFlag(cMatrixFlag != ScMatrixMode::NONE);
         bSubTotal = aComp.CompileTokenArray();
         nFormatType = aComp.GetNumFormatType();
         bDirty = true;
@@ -4626,6 +4641,8 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
         }
 
         ScCompiler aComp(pDocument, aPos, aCode, pDocument->GetGrammar());
+        aComp.SetComputeIIFlag(true);
+        aComp.SetMatrixFlag(cMatrixFlag != ScMatrixMode::NONE);
         aComp.CompileTokenArray(); // Create RPN token array.
         ScInterpreter aInterpreter(this, pDocument, pDocument->GetNonThreadedContext(), aPos, aCode);
         aInterpreter.Interpret();

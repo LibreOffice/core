@@ -125,6 +125,8 @@ void applySharedFormulas(
             ScTokenArray* pArray = aComp.CompileString(rTokenStr);
             if (pArray)
             {
+                aComp.SetComputeIIFlag(true);
+                aComp.SetMatrixFlag(false);
                 aComp.CompileTokenArray(); // Generate RPN tokens.
                 aGroups.set(nId, pArray);
             }
@@ -212,6 +214,8 @@ void applyCellFormulas(
         if (!pCode)
             continue;
 
+        aCompiler.SetComputeIIFlag(true);
+        aCompiler.SetMatrixFlag(false);
         aCompiler.CompileTokenArray(); // Generate RPN tokens.
 
         // Check if ocDde/ocWebservice is in any formula for external links warning.

@@ -842,6 +842,8 @@ void FormulaDlg_Impl::UpdateTokenArray( const OUString& rStrExp)
     // #i101512# Disable special handling of jump commands.
     pCompiler->EnableJumpCommandReorder(false);
     pCompiler->EnableStopOnError(false);
+    pCompiler->SetComputeIIFlag(true);
+    pCompiler->SetMatrixFlag(m_bUserMatrixFlag);
     pCompiler->CompileTokenArray();
 }
 

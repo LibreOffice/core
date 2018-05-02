@@ -2113,6 +2113,8 @@ class UpdateRefOnNonCopy
         // modified, to correctly reflect the new references in the
         // name.
         ScCompiler aComp(&mpCxt->mrDoc, rTopCell.aPos, *rTopCell.GetCode(), mpCxt->mrDoc.GetGrammar());
+        aComp.SetComputeIIFlag(true);
+        aComp.SetMatrixFlag(rTopCell.GetMatrixFlag() != ScMatrixMode::NONE);
         aComp.CompileTokenArray();
     }
 

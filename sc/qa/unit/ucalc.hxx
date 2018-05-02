@@ -143,7 +143,9 @@ public:
     void testFormulaRefData();
     void testFormulaCompiler();
     void testFormulaCompilerJumpReordering();
-    void testFormulaCompilerImplicitIntersection();
+    void testFormulaCompilerImplicitIntersection2Param();
+    void testFormulaCompilerImplicitIntersection1ParamNoChange();
+    void testFormulaCompilerImplicitIntersection1ParamWithChange();
     void testFormulaRefUpdate();
     void testFormulaRefUpdateRange();
     void testFormulaRefUpdateSheets();
@@ -568,7 +570,9 @@ public:
     CPPUNIT_TEST(testFormulaRefData);
     CPPUNIT_TEST(testFormulaCompiler);
     CPPUNIT_TEST(testFormulaCompilerJumpReordering);
-    CPPUNIT_TEST(testFormulaCompilerImplicitIntersection);
+    CPPUNIT_TEST(testFormulaCompilerImplicitIntersection2Param);
+    CPPUNIT_TEST(testFormulaCompilerImplicitIntersection1ParamNoChange);
+    CPPUNIT_TEST(testFormulaCompilerImplicitIntersection1ParamWithChange);
     CPPUNIT_TEST(testFormulaRefUpdate);
     CPPUNIT_TEST(testFormulaRefUpdateRange);
     CPPUNIT_TEST(testFormulaRefUpdateSheets);

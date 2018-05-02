@@ -929,6 +929,8 @@ public:
 
                 // Generate RPN tokens.
                 ScCompiler aComp2(mpDoc, pCell->aPos, *pNewCode);
+                aComp2.SetComputeIIFlag(true);
+                aComp2.SetMatrixFlag(pCell->GetMatrixFlag() != ScMatrixMode::NONE);
                 aComp2.CompileTokenArray();
 
                 pCell->SetCode(pNewCode);
