@@ -194,18 +194,6 @@ bool ImplDdeService::SysTopicExecute( const OUString* pStr )
 }
 #endif
 
-class SfxDdeTriggerTopic_Impl : public DdeTopic
-{
-#if defined(_WIN32)
-public:
-    SfxDdeTriggerTopic_Impl()
-        : DdeTopic( "TRIGGER" )
-        {}
-
-    virtual bool Execute( const OUString* ) override { return true; }
-#endif
-};
-
 class SfxDdeDocTopic_Impl : public DdeTopic
 {
 #if defined(_WIN32)
@@ -452,10 +440,10 @@ bool SfxApplication::InitializeDde()
 
 void SfxAppData_Impl::DeInitDDE()
 {
-    DELETEZ( pTriggerTopic );
-    DELETEZ( pDdeService2 );
-    DELETEZ( pDocTopics );
-    DELETEZ( pDdeService );
+    pTriggerTopic.reset();
+    pDdeService2.reset();
+    pDocTopics.reset();
+    pDdeService.reset();
 }
 
 #if defined(_WIN32)
@@ -514,12 +502,12 @@ void SfxApplication::RemoveDdeTopic( SfxObjectShell const * pSh )
 
 const DdeService* SfxApplication::GetDdeService() const
 {
-    return pImpl->pDdeService;
+    return pImpl->pDdeService.get();
 }
 
 DdeService* SfxApplication::GetDdeService()
 {
-    return pImpl->pDdeService;
+    return pImpl->pDdeService.get();
 }
 
 #if defined(_WIN32)
