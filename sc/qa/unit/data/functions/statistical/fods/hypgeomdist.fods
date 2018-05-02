@@ -4469,6 +4469,151 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro9">
+    <table:table-cell table:style-name="ce10" table:formula="of:=HYPGEOMDIST(2;4;1;10;1)" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce54" table:formula="of:=ROUND([.A34];12)=ROUND([.B34];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A34])" office:value-type="string" office:string-value="=HYPGEOMDIST(2,4,1,10,1)" calcext:value-type="string">
+      <text:p>=HYPGEOMDIST(2,4,1,10,1)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf117041</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+     <table:table-cell table:style-name="ce33"/>
+     <table:table-cell table:style-name="ce35"/>
+     <table:table-cell table:style-name="ce26"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce36"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce26" table:number-columns-repeated="2"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce36"/>
+     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro9">
+    <table:table-cell table:style-name="ce10" table:formula="of:=HYPGEOMDIST(2;4;1;10;0)" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce54" table:formula="of:=ROUND([.A35];12)=ROUND([.B35];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A35])" office:value-type="string" office:string-value="=HYPGEOMDIST(2,4,1,10,1)" calcext:value-type="string">
+      <text:p>=HYPGEOMDIST(2,4,1,10,1)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf117041</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+     <table:table-cell table:style-name="ce33"/>
+     <table:table-cell table:style-name="ce35"/>
+     <table:table-cell table:style-name="ce26"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce36"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce26" table:number-columns-repeated="2"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce36"/>
+     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro9">
+    <table:table-cell table:style-name="ce10" table:formula="of:=HYPGEOMDIST(1;4;1;10;0)" office:value-type="float" office:value="0.4" calcext:value-type="float">
+      <text:p>0.4</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0.4" calcext:value-type="float">
+      <text:p>0.4</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce54" table:formula="of:=ROUND([.A36];12)=ROUND([.B36];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A36])" office:value-type="string" office:string-value="=HYPGEOMDIST(1,4,1,10;0)" calcext:value-type="string">
+      <text:p>=HYPGEOMDIST(1,4,1,10,0)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf117041</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+     <table:table-cell table:style-name="ce33"/>
+     <table:table-cell table:style-name="ce35"/>
+     <table:table-cell table:style-name="ce26"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce36"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce26" table:number-columns-repeated="2"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce36"/>
+     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro9">
+    <table:table-cell table:style-name="ce10" table:formula="of:=HYPGEOMDIST(1;4;4;6;0)" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce54" table:formula="of:=ROUND([.A37];12)=ROUND([.B37];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A37])" office:value-type="string" office:string-value="=HYPGEOMDIST(1,4,4,6,0)" calcext:value-type="string">
+      <text:p>=HYPGEOMDIST(1,4,4,6,0)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf117041</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+     <table:table-cell table:style-name="ce33"/>
+     <table:table-cell table:style-name="ce35"/>
+     <table:table-cell table:style-name="ce26"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce36"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce26" table:number-columns-repeated="2"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce36"/>
+     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro9">
+    <table:table-cell table:style-name="ce10" table:formula="of:=HYPGEOMDIST(2;4;4;6;1)" office:value-type="float" office:value="0.4" calcext:value-type="float">
+      <text:p>0.4</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0.4" calcext:value-type="float">
+      <text:p>0.4</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce54" table:formula="of:=ROUND([.A38];12)=ROUND([.B38];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A38])" office:value-type="string" office:string-value="=HYPGEOMDIST(2,4,4,6,0)" calcext:value-type="string">
+      <text:p>=HYPGEOMDIST(2,4,4,6,0)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf117041</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+     <table:table-cell table:style-name="ce33"/>
+     <table:table-cell table:style-name="ce35"/>
+     <table:table-cell table:style-name="ce26"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce36"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce26" table:number-columns-repeated="2"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce36"/>
+     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro9">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce16"/>
      <table:table-cell table:style-name="ce21"/>
