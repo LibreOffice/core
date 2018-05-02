@@ -106,7 +106,7 @@ void PathDragMove::createSdrDragEntries()
 
     if(maPathPolyPolygon.count())
     {
-        addSdrDragEntry(new SdrDragEntryPolyPolygon(maPathPolyPolygon));
+        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(maPathPolyPolygon)));
     }
 }
 
@@ -167,7 +167,7 @@ void PathDragResize::createSdrDragEntries()
 
     if(maPathPolyPolygon.count())
     {
-        addSdrDragEntry(new SdrDragEntryPolyPolygon(maPathPolyPolygon));
+        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(maPathPolyPolygon)));
     }
 }
 
@@ -221,7 +221,7 @@ void PathDragObjOwn::createSdrDragEntries()
 
     if(maPathPolyPolygon.count())
     {
-        addSdrDragEntry(new SdrDragEntryPolyPolygon(maPathPolyPolygon));
+        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(maPathPolyPolygon)));
     }
 }
 

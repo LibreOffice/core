@@ -142,7 +142,7 @@ void DragMethod_PieSegment::createSdrDragEntries()
     if( pObj && pPV )
     {
         const basegfx::B2DPolyPolygon aNewPolyPolygon(pObj->TakeXorPoly());
-        addSdrDragEntry(new SdrDragEntryPolyPolygon(aNewPolyPolygon));
+        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(aNewPolyPolygon)));
     }
 }
 } //namespace chart
