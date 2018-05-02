@@ -1165,7 +1165,7 @@ void E3dView::DoDepthArrange(E3dScene const * pScene, double fDepth)
 
 bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
     SdrHdl* pHdl, short nMinMov,
-    SdrDragMethod* pForcedMeth)
+    std::unique_ptr<SdrDragMethod> pForcedMeth)
 {
     if(Is3DRotationCreationActive() && GetMarkedObjectCount())
     {
@@ -1242,7 +1242,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
 
                         // do not mask the allowed rotations
                         eConstraint = E3dDragConstraint(eConstraint& eDragConstraint);
-                        pForcedMeth = new E3dDragRotate(*this, GetMarkedObjectList(), eConstraint, IsSolidDragging());
+                        pForcedMeth.reset(new E3dDragRotate(*this, GetMarkedObjectList(), eConstraint, IsSolidDragging()));
                     }
                     break;
 
@@ -1250,7 +1250,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                     {
                         if(!bThereAreRootScenes)
                         {
-                            pForcedMeth = new E3dDragMove(*this, GetMarkedObjectList(), meDragHdl, eConstraint, IsSolidDragging());
+                            pForcedMeth.reset(new E3dDragMove(*this, GetMarkedObjectList(), meDragHdl, eConstraint, IsSolidDragging()));
                         }
                     }
                     break;
@@ -1268,7 +1268,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
             }
         }
     }
-    return SdrView::BegDragObj(rPnt, pOut, pHdl, nMinMov, pForcedMeth);
+    return SdrView::BegDragObj(rPnt, pOut, pHdl, nMinMov, std::move(pForcedMeth));
 }
 
 // Set current 3D drawing object, create the scene for this

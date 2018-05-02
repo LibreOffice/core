@@ -1192,7 +1192,7 @@ OUString SdrView::GetStatusText()
             {
                 SAL_INFO(
                     "svx.svdraw",
-                    "(" << this << ") " << mpCurrentSdrDragMethod);
+                    "(" << this << ") " << mpCurrentSdrDragMethod.get());
                 mpCurrentSdrDragMethod->TakeSdrDragComment(aStr);
             }
         }

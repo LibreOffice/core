@@ -22,6 +22,7 @@
 
 #include <svx/svxdllapi.h>
 #include <svx/svdxcgv.hxx>
+#include <memory>
 
 class SdrUndoGeoObj;
 
@@ -38,7 +39,7 @@ class SVX_DLLPUBLIC SdrDragView : public SdrExchangeView
 
 protected:
     SdrHdl*                     mpDragHdl;
-    SdrDragMethod*              mpCurrentSdrDragMethod;
+    std::unique_ptr<SdrDragMethod> mpCurrentSdrDragMethod;
     SdrUndoGeoObj*              mpInsPointUndo;
     tools::Rectangle            maDragLimit;
     OUString                    maInsPointUndoStr;
@@ -98,13 +99,13 @@ public:
     // If pForcedMeth is passed, then pHdl, ... is not evaluated, but this Drag
     // method is used. In this, the ownership of the instance passes
     // to the View and is destroyed at the end of the dragging.
-    virtual bool BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl, short nMinMov=-3, SdrDragMethod* pForcedMeth=nullptr);
+    virtual bool BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl, short nMinMov=-3, std::unique_ptr<SdrDragMethod> pForcedMeth=nullptr);
     void MovDragObj(const Point& rPnt);
     bool EndDragObj(bool bCopy=false);
     void BrkDragObj();
     bool IsDragObj() const { return mpCurrentSdrDragMethod && !mbInsPolyPoint && !mbInsGluePoint; }
     SdrHdl* GetDragHdl() const { return mpDragHdl; }
-    SdrDragMethod* GetDragMethod() const { return mpCurrentSdrDragMethod; }
+    SdrDragMethod* GetDragMethod() const { return mpCurrentSdrDragMethod.get(); }
     bool IsDraggingPoints() const { return meDragHdl==SdrHdlKind::Poly; }
     bool IsDraggingGluePoints() const { return meDragHdl==SdrHdlKind::Glue; }
 
