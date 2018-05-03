@@ -138,7 +138,7 @@ SfxModalDialog::~SfxModalDialog()
 void SfxModalDialog::dispose()
 {
     SetDialogData_Impl();
-    delete pOutputSet;
+    pOutputSet.reset();
 
     ModalDialog::dispose();
 }
@@ -148,7 +148,7 @@ void SfxModalDialog::CreateOutputItemSet( const SfxItemSet& rSet )
     DBG_ASSERT( !pOutputSet, "Double creation of OutputSet!" );
     if (!pOutputSet)
     {
-        pOutputSet = new SfxItemSet( rSet );
+        pOutputSet.reset(new SfxItemSet( rSet ));
         pOutputSet->ClearItem();
     }
 }

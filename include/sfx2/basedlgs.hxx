@@ -47,7 +47,7 @@ class SFX2_DLLPUBLIC SfxModalDialog: public ModalDialog
 {
     OUString                aExtraData;
     const SfxItemSet*       pInputSet;
-    SfxItemSet*             pOutputSet;
+    std::unique_ptr<SfxItemSet> pOutputSet;
 
 private:
     SfxModalDialog(SfxModalDialog &) = delete;
@@ -62,13 +62,13 @@ protected:
     OUString&           GetExtraData()      { return aExtraData; }
     void                CreateOutputItemSet( const SfxItemSet& rInput );
     void                SetInputSet( const SfxItemSet* pInSet ) { pInputSet = pInSet; }
-    SfxItemSet*         GetOutputSetImpl() { return pOutputSet; }
+    SfxItemSet*         GetOutputSetImpl() { return pOutputSet.get(); }
 
 public:
     virtual ~SfxModalDialog() override;
     virtual void dispose() override;
 
-    const SfxItemSet*   GetOutputItemSet() const { return pOutputSet; }
+    const SfxItemSet*   GetOutputItemSet() const { return pOutputSet.get(); }
     const SfxItemSet*   GetInputItemSet() const { return pInputSet; }
     void                StateChanged( StateChangedType nStateChange ) override;
 };
