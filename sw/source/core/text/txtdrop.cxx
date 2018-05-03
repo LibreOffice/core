@@ -162,7 +162,7 @@ sal_Int32 SwTextNode::GetDropLen( sal_Int32 nWishLen ) const
         sal_Unicode const cChar = GetText()[i];
         if( CH_TAB == cChar || CH_BREAK == cChar ||
             (( CH_TXTATR_BREAKWORD == cChar || CH_TXTATR_INWORD == cChar )
-                && SwTextSizeInfo::HasHint_( this, i ) ) )
+                && GetTextAttrForCharAt(i)) )
             break;
     }
     return i;
