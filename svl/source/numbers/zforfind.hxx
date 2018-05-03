@@ -70,6 +70,7 @@ public:
 
 private:
     SvNumberFormatter*  pFormatter;
+    const SvNumberformat* mpFormat;                            //* The format to compare against, if any
     std::unique_ptr<OUString[]> pUpperMonthText;               //* Array of month names, uppercase
     std::unique_ptr<OUString[]> pUpperAbbrevMonthText;         //* Array of month names, abbreviated, uppercase
     std::unique_ptr<OUString[]> pUpperGenitiveMonthText;       //* Array of genitive month names, uppercase
@@ -283,8 +284,7 @@ private:
 
     // Get currency symbol and advance string position
     bool GetCurrency( const OUString& rString,
-                      sal_Int32& nPos,
-                      const SvNumberformat* pFormat ); // number format to match against
+                      sal_Int32& nPos );
 
     // Get symbol AM or PM and advance string position
     bool GetTimeAmPm( const OUString& rString,
@@ -324,28 +324,23 @@ private:
 
     // Conversion of date to number
     bool GetDateRef( double& fDays,                          // OUT: days diff to null date
-                     sal_uInt16& nCounter,                   // Count of date substrings
-                     const SvNumberformat* pFormat );        // number format to match against
+                     sal_uInt16& nCounter );                 // Count of date substrings
 
     // Analyze start of string
-    bool ScanStartString( const OUString& rString,
-                          const SvNumberformat* pFormat );
+    bool ScanStartString( const OUString& rString );
 
     // Analyze middle substring
     bool ScanMidString( const OUString& rString,
-                        sal_uInt16 nStringPos,
-                        const SvNumberformat* pFormat );
+                        sal_uInt16 nStringPos );
 
 
     // Analyze end of string
-    bool ScanEndString( const OUString& rString,
-                        const SvNumberformat* pFormat );
+    bool ScanEndString( const OUString& rString );
 
     // Compare rString to substring of array indexed by nString
     // nString == 0xFFFF => last substring
     bool ScanStringNumFor( const OUString& rString,
                            sal_Int32 nPos,
-                           const SvNumberformat* pFormat,
                            sal_uInt16 nString,
                            bool bDontDetectNegation = false );
 
@@ -420,7 +415,7 @@ private:
     /** Whether input is acceptable as ISO 8601 date format in the current
         NfEvalDateFormat setting.
      */
-    bool IsAcceptableIso8601( const SvNumberformat* pFormat );
+    bool IsAcceptableIso8601();
 };
 
 #endif // INCLUDED_SVL_SOURCE_NUMBERS_ZFORFIND_HXX
