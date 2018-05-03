@@ -10,41 +10,29 @@
 
 #include <mergecellsdialog.hxx>
 
-ScMergeCellsDialog::ScMergeCellsDialog( vcl::Window * pParent )
-            : ModalDialog( pParent, "MergeCellsDialog",
-               "modules/scalc/ui/mergecellsdialog.ui" )
+ScMergeCellsDialog::ScMergeCellsDialog(weld::Window * pParent)
+    : GenericDialogController(pParent, "modules/scalc/ui/mergecellsdialog.ui", "MergeCellsDialog")
+    , m_xRBMoveContent(m_xBuilder->weld_radio_button("move-cells-radio"))
+    , m_xRBKeepContent(m_xBuilder->weld_radio_button("keep-content-radio"))
+    , m_xRBEmptyContent(m_xBuilder->weld_radio_button("empty-cells-radio"))
 {
-    get(mpRBMoveContent, "move-cells-radio");
-    get(mpRBKeepContent, "keep-content-radio");
-    get(mpRBEmptyContent, "empty-cells-radio");
-
-    mpRBKeepContent->Check();
+    m_xRBKeepContent->set_active(true);
 }
 
 ScMergeCellsDialog::~ScMergeCellsDialog()
 {
-    disposeOnce();
-}
-
-void ScMergeCellsDialog::dispose()
-{
-    mpRBMoveContent.disposeAndClear();
-    mpRBKeepContent.disposeAndClear();
-    mpRBEmptyContent.disposeAndClear();
-    ModalDialog::dispose();
 }
 
 ScMergeCellsOption ScMergeCellsDialog::GetMergeCellsOption()
 {
-    if ( mpRBMoveContent->IsChecked() )
+    if ( m_xRBMoveContent->get_active() )
         return MoveContentHiddenCells;
-    if ( mpRBKeepContent->IsChecked() )
+    if ( m_xRBKeepContent->get_active() )
         return KeepContentHiddenCells;
-    if ( mpRBEmptyContent->IsChecked() )
+    if ( m_xRBEmptyContent->get_active() )
         return EmptyContentHiddenCells;
     assert(!"Unknown selection for merge cells.");
     return KeepContentHiddenCells; // default value
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

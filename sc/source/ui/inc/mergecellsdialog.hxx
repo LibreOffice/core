@@ -11,9 +11,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_MERGECELLSDIALOG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_MERGECELLSDIALOG_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 
 enum ScMergeCellsOption
 {
@@ -22,16 +20,15 @@ enum ScMergeCellsOption
     EmptyContentHiddenCells
 };
 
-class ScMergeCellsDialog : public ModalDialog
+class ScMergeCellsDialog : public weld::GenericDialogController
 {
-    VclPtr<RadioButton> mpRBMoveContent;
-    VclPtr<RadioButton> mpRBKeepContent;
-    VclPtr<RadioButton> mpRBEmptyContent;
+    std::unique_ptr<weld::RadioButton> m_xRBMoveContent;
+    std::unique_ptr<weld::RadioButton> m_xRBKeepContent;
+    std::unique_ptr<weld::RadioButton> m_xRBEmptyContent;
 
 public:
-    ScMergeCellsDialog( vcl::Window * pParent );
+    ScMergeCellsDialog(weld::Window* pParent);
     virtual ~ScMergeCellsDialog() override;
-    virtual void dispose() override;
 
     ScMergeCellsOption GetMergeCellsOption();
 };
