@@ -17,19 +17,37 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <tools/diagnose_ex.h>
-#include <tools/helpers.hxx>
-#include <canvas/elapsedtime.hxx>
+#include <rtl/math.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-
-#include <rtl/math.hxx>
+#include <tools/diagnose_ex.h>
+//#include <tools/helpers.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/metaact.hxx>
+#include <canvas/elapsedtime.hxx>
+
+#include <activity.hxx>
+#include <wakeupevent.hxx>
+#include <eventqueue.hxx>
+#include <shapesubset.hxx>
+#include <shapeattributelayerholder.hxx>
+#include <slideshowcontext.hxx>
+#include <tools.hxx>
+#include <eventmultiplexer.hxx>
+#include <intrinsicanimationeventhandler.hxx>
+
+#include "drawinglayeranimation.hxx"
+#include "drawshapesubsetting.hxx"
+#include "drawshape.hxx"
+#include "gdimtftools.hxx"
+#include "intrinsicanimationactivity.hxx"
+
+#include <vector>
+#include <memory>
+#include <cmath>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/TextAnimationKind.hpp>
 #include <com/sun/star/drawing/TextAnimationDirection.hpp>
@@ -37,24 +55,6 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-
-#include <activity.hxx>
-#include <wakeupevent.hxx>
-#include <eventqueue.hxx>
-#include "drawinglayeranimation.hxx"
-#include "drawshapesubsetting.hxx"
-#include "drawshape.hxx"
-#include <shapesubset.hxx>
-#include <shapeattributelayerholder.hxx>
-#include <slideshowcontext.hxx>
-#include <tools.hxx>
-#include "gdimtftools.hxx"
-#include <eventmultiplexer.hxx>
-#include "intrinsicanimationactivity.hxx"
-#include <intrinsicanimationeventhandler.hxx>
-
-#include <vector>
-#include <memory>
 
 using namespace com::sun::star;
 using namespace ::slideshow::internal;
@@ -431,7 +431,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
 
             const double fNumberSteps =
                 (fRelativeDistance * fDistanceLogic) / GetStepWidthLogic();
-            nLoopTime = FRound(fNumberSteps * mnFrequency);
+            nLoopTime = std::lround(fNumberSteps * mnFrequency);
 
             // init loop
             ScrollTextAnimNode aInitNode(
@@ -460,7 +460,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
 
             const double fNumberSteps =
                 (fRelativeDistance * fDistanceLogic) / GetStepWidthLogic();
-            nLoopTime = FRound(fNumberSteps * mnFrequency);
+            nLoopTime = std::lround(fNumberSteps * mnFrequency);
 
             if(0 == mnRepeat)
             {
@@ -509,7 +509,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
 
             const double fNumberSteps =
                 (fRelativeDistance * fDistanceLogic) / GetStepWidthLogic();
-            nLoopTime = FRound(fNumberSteps * mnFrequency);
+            nLoopTime = std::lround(fNumberSteps * mnFrequency);
 
             // exit loop
             ScrollTextAnimNode aExitNode(
