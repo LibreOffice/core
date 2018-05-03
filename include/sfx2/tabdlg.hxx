@@ -254,7 +254,7 @@ protected:
     virtual void                RefreshInputSet();
     virtual void                PageCreated(const OString &rName, SfxTabPage &rPage);
 
-    SfxItemSet*     m_pExampleSet;
+    std::unique_ptr<SfxItemSet> m_xExampleSet;
     SfxItemSet*     GetInputSetImpl();
     SfxTabPage*     GetTabPage(const OString& rPageId) const;
 
@@ -294,7 +294,7 @@ public:
 
     short               execute();
 
-    const SfxItemSet*   GetExampleSet() const { return m_pExampleSet; }
+    const SfxItemSet*   GetExampleSet() const { return m_xExampleSet.get(); }
 
     SAL_DLLPRIVATE void Start_Impl();
 };

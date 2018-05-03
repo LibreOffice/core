@@ -135,8 +135,8 @@ SwLabDlg::SwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
     if ( !aMakes.empty() )
         ReplaceGroup_( aMakes[nLstGroup] );
 
-    if (m_pExampleSet)
-        m_pExampleSet->Put(aItem);
+    if (m_xExampleSet)
+        m_xExampleSet->Put(aItem);
 
     AddTabPage("format", SwLabFormatPage::Create, nullptr);
     AddTabPage("options", SwLabPrtPage::Create, nullptr);
