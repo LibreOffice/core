@@ -143,10 +143,10 @@ OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Lo
         aCode += "-" + aCountry;
     OString aLangCode(OUStringToOString(aCode, RTL_TEXTENCODING_ASCII_US));
     OString aInput(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
-    std::wstring aResult = m_aNumberText.string2wstring(aInput.getStr());
+    std::wstring aResult = Numbertext::string2wstring(aInput.getStr());
     bool result = m_aNumberText.numbertext(aResult, aLangCode.getStr());
     DBG_ASSERT(result, "numbertext: false");
-    OString aResult2(m_aNumberText.wstring2string(aResult).c_str());
+    OString aResult2(Numbertext::wstring2string(aResult).c_str());
     return OUString::fromUtf8(aResult2);
 #else
     return rText;
