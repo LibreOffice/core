@@ -485,7 +485,7 @@ sal_Int16 ConvertNumberingType(sal_Int32 nFmt)
             nRet = style::NumberingType::ROMAN_LOWER;
             break;
         case NS_ooxml::LN_Value_ST_NumberFormat_ordinal:
-            nRet = style::NumberingType::ARABIC;
+            nRet = style::NumberingType::TEXT_NUMBER;
             break;
         case NS_ooxml::LN_Value_ST_NumberFormat_bullet:
             nRet = style::NumberingType::CHAR_SPECIAL;
@@ -576,12 +576,15 @@ sal_Int16 ConvertNumberingType(sal_Int32 nFmt)
         case NS_ooxml::LN_Value_ST_NumberFormat_decimalFullWidth2:
             nRet = style::NumberingType::FULLWIDTH_ARABIC;
             break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_cardinalText:
+            nRet = style::NumberingType::TEXT_CARDINAL;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_ordinalText:
+            nRet = style::NumberingType::TEXT_ORDINAL;
+            break;
         default: nRet = style::NumberingType::ARABIC;
     }
 /*  TODO: Lots of additional values are available - some are supported in the I18 framework
-    NS_ooxml::LN_Value_ST_NumberFormat_ordinal = 91682;
-    NS_ooxml::LN_Value_ST_NumberFormat_cardinalText = 91683;
-    NS_ooxml::LN_Value_ST_NumberFormat_ordinalText = 91684;
     NS_ooxml::LN_Value_ST_NumberFormat_hex = 91685;
     NS_ooxml::LN_Value_ST_NumberFormat_chicago = 91686;
     NS_ooxml::LN_Value_ST_NumberFormat_decimalFullWidth = 91691;

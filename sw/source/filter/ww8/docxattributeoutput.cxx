@@ -6158,6 +6158,9 @@ static OString impl_LevelNFC( sal_uInt16 nNumberingType , const SfxItemSet *pOut
         case style::NumberingType::CHARS_ARABIC: aType="arabicAlpha"; break;
         case style::NumberingType::CHARS_THAI: aType="thaiLetters"; break;
         case style::NumberingType::CHARS_PERSIAN: aType="hindiVowels"; break;
+        case style::NumberingType::TEXT_NUMBER: aType="ordinal"; break;
+        case style::NumberingType::TEXT_CARDINAL: aType="cardinalText"; break;
+        case style::NumberingType::TEXT_ORDINAL: aType="ordinalText"; break;
 /*
         Fallback the rest to decimal.
         case style::NumberingType::NATIVE_NUMBERING:

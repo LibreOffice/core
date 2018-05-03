@@ -228,6 +228,15 @@
             <xsl:when test="$number-format = 'I'">
                 <!-- nfcUCRoman: Uppercase roman -->
                 <w:nfc w:val="1"/>
+            <xsl:when test="$number-format = '1st'">
+                <!-- nfcUCOrdinal: Ordinal indicator -->
+                <w:nfc w:val="5"/>
+            <xsl:when test="$number-format = 'One'">
+                <!-- nfcCardText: Cardinal -->
+                <w:nfc w:val="6"/>
+            <xsl:when test="$number-format = 'First'">
+                <!-- nfcOrdText: Ordinal -->
+                <w:nfc w:val="7"/>
             </xsl:when>
             <xsl:when test="$number-format = '１, ２, ３, ...'">
                 <!-- '１, ２, ３, ...' also seems: decimal-full-width2 -->
@@ -328,7 +337,7 @@
                     </xsl:when>
                 </xsl:choose>
             </xsl:when>
-            <!-- unsupported: ordinal, cardinal-text, ordinal-text, hex, chicago, bullet, ideograph-zodiac-traditional,
+            <!-- unsupported: hex, chicago, bullet, ideograph-zodiac-traditional,
             chinese-not-impl, korean-legal, none  -->
         </xsl:choose>
     </xsl:template>
