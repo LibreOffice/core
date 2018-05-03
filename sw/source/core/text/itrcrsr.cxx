@@ -389,7 +389,7 @@ void SwTextCursor::CtorInitTextCursor( SwTextFrame *pNewFrame, SwTextSizeInfo *p
 }
 
 // 1170: Ancient bug: Shift-End forgets the last character ...
-bool SwTextCursor::GetEndCharRect( SwRect* pOrig, const sal_Int32 nOfst,
+bool SwTextCursor::GetEndCharRect(SwRect* pOrig, const TextFrameIndex nOfst,
                                   SwCursorMoveState* pCMS, const long nMax )
 {
     // 1170: Ambiguity of document positions
@@ -463,7 +463,7 @@ bool SwTextCursor::GetEndCharRect( SwRect* pOrig, const sal_Int32 nOfst,
 // pCMS is used for restricting the cursor, if there are different font
 // heights in one line ( first value = offset to y of pOrig, second
 // value = real height of (shortened) cursor
-void SwTextCursor::GetCharRect_( SwRect* pOrig, const sal_Int32 nOfst,
+void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
     SwCursorMoveState* pCMS )
 {
     const OUString aText = GetInfo().GetText();
@@ -1165,7 +1165,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, const sal_Int32 nOfst,
     }
 }
 
-bool SwTextCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
+bool SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
                                SwCursorMoveState* pCMS, const long nMax )
 {
     CharCursorToLine(nOfst);
@@ -1253,7 +1253,7 @@ bool SwTextCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
 }
 
 // Return: Offset in String
-sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
+TextFrameIndex SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
                                     bool bChgNode, SwCursorMoveState* pCMS ) const
 {
     // If necessary, as catch up, do the adjustment

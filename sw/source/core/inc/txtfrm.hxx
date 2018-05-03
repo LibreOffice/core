@@ -54,7 +54,7 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     friend class SwTestFormat;
     friend class WidowsAndOrphans;
     friend class TextFrameLockGuard; // May Lock()/Unlock()
-    friend bool sw_ChangeOffset( SwTextFrame* pFrame, sal_Int32 nNew );
+    friend bool sw_ChangeOffset(SwTextFrame* pFrame, TextFrameIndex nNew);
 
     /// SwLineLayout cache: the lines are not actually owned by the SwTextFrame
     /// but by this SwCache, so they will be deleted in large documents
@@ -85,13 +85,13 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     // It is NOT used for the determination of printing area.
     SwTwips mnAdditionalFirstLineOffset;
 
-    sal_Int32 mnOffset; // Is the offset in the Content (character count)
+    TextFrameIndex mnOffset; // Is the offset in the Content (character count)
 
     sal_uInt16 mnCacheIndex; // Index into the cache, USHRT_MAX if there's definitely no fitting object in the cache
 
     // Separates the Master and creates a Follow or adjusts the data in the Follow
-    void AdjustFollow_( SwTextFormatter &rLine, const sal_Int32 nOffset,
-                               const sal_Int32 nStrEnd, const sal_uInt8 nMode );
+    void AdjustFollow_( SwTextFormatter &rLine, TextFrameIndex nOffset,
+                               TextFrameIndex nStrEnd, const sal_uInt8 nMode );
 
     // Iterates all Lines and sets the line spacing using the attribute
     void CalcLineSpace();
@@ -107,7 +107,7 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
 
     // WidowsAndOrphans, AdjustFrame, AdjustFollow
     void FormatAdjust( SwTextFormatter &rLine, WidowsAndOrphans &rFrameBreak,
-                       const sal_Int32 nStrLen, const bool bDummy );
+                       TextFrameIndex nStrLen, const bool bDummy );
 
     bool mbLocked        : 1;        // In the Format?
     bool mbWidow         : 1;        // Are we a Widow?
@@ -135,7 +135,7 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     void SetEmpty( const bool bNew ) { mbEmpty = bNew; }
     void SetFieldFollow( const bool bNew ) { mbFieldFollow = bNew; }
 
-    bool IsIdxInside( const sal_Int32 nPos, const sal_Int32 nLen ) const;
+    bool IsIdxInside(TextFrameIndex nPos, TextFrameIndex nLen) const;
 
     // Changes the Frame or not (cf. FlyCnt)
     bool GetCursorOfst_(SwPosition *pPos, const Point &rPoint,
@@ -153,13 +153,13 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     void FormatOnceMore( SwTextFormatter &rLine, SwTextFormatInfo &rInf );
 
     // Formats the Follow and ensures disposing on orphans
-    bool CalcFollow(  const sal_Int32 nTextOfst );
+    bool CalcFollow(TextFrameIndex nTextOfst);
 
     virtual void MakePos() override;
 
     // Corrects the position from which we need to format
-    static sal_Int32 FindBrk(const OUString &rText, const sal_Int32 nStart,
-                                       const sal_Int32 nEnd);
+    static TextFrameIndex FindBrk(const OUString &rText, TextFrameIndex nStart,
+                                  TextFrameIndex nEnd);
 
     // inline branch
     SwTwips GetFootnoteFrameHeight_() const;
@@ -312,19 +312,19 @@ public:
      * Prepares the cursor position for a visual cursor move (BiDi).
      * The behaviour is different for insert and overwrite cursors
      */
-    void PrepareVisualMove( sal_Int32& nPos, sal_uInt8& nCursorLevel,
+    void PrepareVisualMove( TextFrameIndex& nPos, sal_uInt8& nCursorLevel,
                             bool& bRight, bool bInsertCursor );
 
     /// Methods to manage the FollowFrame
-    void            SplitFrame( const sal_Int32 nTextPos );
+    void            SplitFrame(TextFrameIndex nTextPos);
     SwContentFrame *JoinFrame();
-    sal_Int32  GetOfst() const { return mnOffset; }
-           void        SetOfst_( const sal_Int32 nNewOfst );
-    inline void        SetOfst ( const sal_Int32 nNewOfst );
-    void        ManipOfst ( const sal_Int32 nNewOfst ){ mnOffset = nNewOfst; }
+    TextFrameIndex GetOfst() const { return mnOffset; }
+           void        SetOfst_(TextFrameIndex nNewOfst);
+    inline void        SetOfst (TextFrameIndex nNewOfst);
+    void ManipOfst(TextFrameIndex const nNewOfst) { mnOffset = nNewOfst; }
            SwTextFrame   *GetFrameAtPos ( const SwPosition &rPos);
     inline const SwTextFrame *GetFrameAtPos ( const SwPosition &rPos) const;
-    SwTextFrame&   GetFrameAtOfst( const sal_Int32 nOfst );
+    SwTextFrame&   GetFrameAtOfst(TextFrameIndex nOfst);
     /// If there's a Follow and we don't contain text ourselves
     bool IsEmptyMaster() const
         { return GetFollow() && !GetFollow()->GetOfst(); }
@@ -422,7 +422,7 @@ public:
 
     /// Does the Frame have a local footnote (in this Frame or Follow)?
 #ifdef DBG_UTIL
-    void CalcFootnoteFlag( sal_Int32 nStop = COMPLETE_STRING ); //For testing SplitFrame
+    void CalcFootnoteFlag(TextFrameIndex nStop = TextFrameIndex(COMPLETE_STRING)); //For testing SplitFrame
 #else
     void CalcFootnoteFlag();
 #endif
@@ -430,7 +430,7 @@ public:
     /// Hidden
     bool IsHiddenNow() const;       // bHidden && pOut == pPrt
     void HideHidden();              // Remove appendage if Hidden
-    void HideFootnotes( sal_Int32 nStart, sal_Int32 nEnd );
+    void HideFootnotes(TextFrameIndex nStart, TextFrameIndex nEnd);
 
     /**
      * Hides respectively shows objects, which are anchored at paragraph,
@@ -440,8 +440,8 @@ public:
     void HideAndShowObjects();
 
     /// Footnote
-    void RemoveFootnote( const sal_Int32 nStart,
-                    const sal_Int32 nLen = COMPLETE_STRING );
+    void RemoveFootnote(TextFrameIndex nStart,
+                        TextFrameIndex nLen = TextFrameIndex(COMPLETE_STRING));
     inline SwTwips GetFootnoteFrameHeight() const;
     SwTextFrame *FindFootnoteRef( const SwTextFootnote *pFootnote );
     const SwTextFrame *FindFootnoteRef( const SwTextFootnote *pFootnote ) const
@@ -480,7 +480,7 @@ public:
     void SetFootnote( const bool bNew ) { mbFootnote = bNew; }
 
     /// Respect the Follows
-    inline bool IsInside( const sal_Int32 nPos ) const;
+    inline bool IsInside(TextFrameIndex nPos) const;
 
     const SwBodyFrame   *FindBodyFrame()   const;
 
@@ -533,16 +533,16 @@ public:
     sal_uInt16 FirstLineHeight() const;
 
     /// Rewires FlyInContentFrame, if nEnd > Index >= nStart
-    void MoveFlyInCnt( SwTextFrame *pNew, sal_Int32 nStart, sal_Int32 nEnd );
+    void MoveFlyInCnt(SwTextFrame *pNew, TextFrameIndex nStart, TextFrameIndex nEnd);
 
     /// Calculates the position of FlyInContentFrames
-    sal_Int32 CalcFlyPos( SwFrameFormat const * pSearch );
+    TextFrameIndex CalcFlyPos( SwFrameFormat const * pSearch );
 
     /// Determines the start position and step size of the register
     bool FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff );
 
     /// Determines the line count
-    sal_uInt16 GetLineCount( sal_Int32 nPos );
+    sal_uInt16 GetLineCount(TextFrameIndex nPos);
 
     /// For displaying the line numbers
     sal_uLong GetAllLines()  const { return mnAllLines; }
@@ -701,7 +701,7 @@ inline SwTwips SwTextFrame::GrowTst( const SwTwips nGrow )
     return Grow( nGrow, true );
 }
 
-inline bool SwTextFrame::IsInside( const sal_Int32 nPos ) const
+inline bool SwTextFrame::IsInside(TextFrameIndex const nPos) const
 {
     bool bRet = true;
     if( nPos < GetOfst() )
@@ -737,7 +737,7 @@ inline const SwTextFrame *SwTextFrame::GetFrameAtPos( const SwPosition &rPos) co
     return const_cast<SwTextFrame*>(this)->GetFrameAtPos( rPos );
 }
 
-inline void SwTextFrame::SetOfst( const sal_Int32 nNewOfst )
+inline void SwTextFrame::SetOfst(TextFrameIndex const nNewOfst)
 {
     if ( mnOffset != nNewOfst )
         SetOfst_( nNewOfst );

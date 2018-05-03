@@ -183,7 +183,7 @@ const SwBodyFrame *SwTextFrame::FindBodyFrame() const
     return nullptr;
 }
 
-bool SwTextFrame::CalcFollow( const sal_Int32 nTextOfst )
+bool SwTextFrame::CalcFollow(TextFrameIndex const nTextOfst)
 {
     vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     SwSwapIfSwapped swap( this );
@@ -565,7 +565,7 @@ css::uno::Sequence< css::style::TabStop > SwTextFrame::GetTabStopInfo( SwTwips C
 // and the Follow starts.
 // If it's 0, the FollowFrame is deleted.
 void SwTextFrame::AdjustFollow_( SwTextFormatter &rLine,
-                             const sal_Int32 nOffset, const sal_Int32 nEnd,
+                 const TextFrameIndex nOffset, const TextFrameIndex nEnd,
                              const sal_uInt8 nMode )
 {
     SwFrameSwapper aSwapper( this, false );
@@ -689,7 +689,7 @@ SwContentFrame *SwTextFrame::JoinFrame()
     return pNxt;
 }
 
-void SwTextFrame::SplitFrame( const sal_Int32 nTextPos )
+void SwTextFrame::SplitFrame(TextFrameIndex const nTextPos)
 {
     SwSwapIfSwapped swap( this );
 
@@ -765,7 +765,7 @@ void SwTextFrame::SplitFrame( const sal_Int32 nTextPos )
     pNew->ManipOfst( nTextPos );
 }
 
-void SwTextFrame::SetOfst_( const sal_Int32 nNewOfst )
+void SwTextFrame::SetOfst_(TextFrameIndex const nNewOfst)
 {
     // We do not need to invalidate out Follow.
     // We are a Follow, get formatted right away and call
@@ -1000,7 +1000,7 @@ bool SwTextFrame::CalcPreps()
 
 void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
                              WidowsAndOrphans &rFrameBreak,
-                             const sal_Int32 nStrLen,
+                             TextFrameIndex const nStrLen,
                              const bool bDummy )
 {
     SwSwapIfNotSwapped swap( this );
