@@ -1454,7 +1454,7 @@
                             <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="singleprintjob">
-                                <property name="label" translatable="yes" context="printdialog|singleprintjob">Create single print jobs for collated output</property>
+                                <property name="label" translatable="yes" context="printdialog|singleprintjob">Create separate print jobs for collated output</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
