@@ -55,7 +55,7 @@ class SfxVersionDialog : public SfxModalDialog
     VclPtr<PushButton>                 m_pCompareButton;
     VclPtr<PushButton>                 m_pCmisButton;
     SfxViewFrame*               pViewFrame;
-    SfxVersionTableDtor*        m_pTable;
+    std::unique_ptr<SfxVersionTableDtor> m_pTable;
     bool                        m_bIsSaveVersionOnClose;
 
     DECL_LINK(            DClickHdl_Impl, SvTreeListBox*, bool);
