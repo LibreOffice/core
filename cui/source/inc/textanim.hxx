@@ -95,20 +95,16 @@ public:
 |* Text-Tab-Dialog
 |*
 \************************************************************************/
-class SvxTextTabDialog : public SfxTabDialog
+class SvxTextTabDialog : public SfxTabDialogController
 {
-    sal_uInt16          m_nTextId;
 private:
     const SdrView*      pView;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    virtual void        PageCreated(const OString& rId, SfxTabPage &rPage) override;
 
 public:
-
-            SvxTextTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
-                                const SdrView* pView );
+    SvxTextTabDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrView* pView);
 };
-
 
 #endif // INCLUDED_CUI_SOURCE_INC_TEXTANIM_HXX
 

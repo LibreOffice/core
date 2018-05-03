@@ -335,7 +335,7 @@ public:
 
     virtual                             ~SvxAbstractDialogFactory() override;
 
-    virtual VclPtr<SfxAbstractTabDialog>      CreateTextTabDialog( vcl::Window* pParent,
+    virtual VclPtr<SfxAbstractTabDialog>      CreateTextTabDialog( weld::Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             SdrView* pView ) = 0 ;
 
