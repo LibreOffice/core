@@ -210,7 +210,6 @@ public:
     void                Start();
 
     const SfxItemSet*   GetExampleSet() const { return m_pExampleSet; }
-    SfxItemSet*         GetExampleSet() { return m_pExampleSet; }
 
     void                SetApplyHandler(const Link<Button*,void>& _rHdl);
 
@@ -296,7 +295,6 @@ public:
     short               execute();
 
     const SfxItemSet*   GetExampleSet() const { return m_pExampleSet; }
-    SfxItemSet*         GetExampleSet() { return m_pExampleSet; }
 
     SAL_DLLPRIVATE void Start_Impl();
 };

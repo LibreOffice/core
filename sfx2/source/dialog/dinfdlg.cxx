@@ -950,7 +950,7 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
          m_pUseUserDataCB->IsValueChangedFromSaved() &&
          GetTabDialog() && GetTabDialog()->GetExampleSet() )
     {
-        SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
+        const SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
         const SfxPoolItem* pItem;
 
         if ( pExpSet && SfxItemState::SET == pExpSet->GetItemState( SID_DOCINFO, true, &pItem ) )
@@ -965,7 +965,7 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
 
     if ( bHandleDelete )
     {
-        SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
+        const SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
         const SfxPoolItem* pItem;
         if ( pExpSet && SfxItemState::SET == pExpSet->GetItemState( SID_DOCINFO, true, &pItem ) )
         {
@@ -987,7 +987,7 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
     if ( m_pUseThumbnailSaveCB->IsValueChangedFromSaved() &&
        GetTabDialog() && GetTabDialog()->GetExampleSet() )
     {
-        SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
+        const SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
         const SfxPoolItem* pItem;
 
         if ( pExpSet && SfxItemState::SET == pExpSet->GetItemState( SID_DOCINFO, true, &pItem ) )
