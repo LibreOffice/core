@@ -51,7 +51,7 @@ namespace connectivity
 
             SQLSMALLINT     numParams;      // Number of parameter markers for the prepared statement
 
-            OBoundParam*    boundParams;
+            std::unique_ptr<OBoundParam[]>  boundParams;
                             // Array of bound parameter objects. Each parameter marker will have a
                             // corresponding object to hold bind information, and resulting data.
             css::uno::Reference< css::sdbc::XResultSetMetaData >  m_xMetaData;
@@ -92,6 +92,9 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
             // A ctor, needed to return the object
             OPreparedStatement( OConnection* _pConnection,const OUString& sql);
+            virtual ~OPreparedStatement() override;
+            OPreparedStatement& operator=( OPreparedStatement const & ) = delete; // MSVC2015 workaround
+            OPreparedStatement( OPreparedStatement const & ) = delete; // MSVC2015 workaround
 
             //XInterface
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
