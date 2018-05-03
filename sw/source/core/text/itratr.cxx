@@ -108,12 +108,12 @@ SwAttrIter::~SwAttrIter()
  * The Formatter later on encounters such a special character and retrieves the
  * degenerate attribute via GetAttr().
  */
-SwTextAttr *SwAttrIter::GetAttr( const sal_Int32 nPosition ) const
+SwTextAttr *SwAttrIter::GetAttr(TextFrameIndex const nPosition) const
 {
     return (m_pTextNode) ? m_pTextNode->GetTextAttrForCharAt(nPosition) : nullptr;
 }
 
-bool SwAttrIter::SeekAndChgAttrIter( const sal_Int32 nNewPos, OutputDevice* pOut )
+bool SwAttrIter::SeekAndChgAttrIter(TextFrameIndex const nNewPos, OutputDevice* pOut)
 {
     bool bChg = m_nStartIndex && nNewPos == m_nPosition ? m_pFont->IsFntChg() : Seek( nNewPos );
     if ( m_pLastOut.get() != pOut )
@@ -134,7 +134,7 @@ bool SwAttrIter::SeekAndChgAttrIter( const sal_Int32 nNewPos, OutputDevice* pOut
     return bChg;
 }
 
-bool SwAttrIter::IsSymbol( const sal_Int32 nNewPos )
+bool SwAttrIter::IsSymbol(TextFrameIndex const nNewPos)
 {
     Seek( nNewPos );
     if ( !m_nChgCnt && !m_nPropFont )
@@ -240,7 +240,7 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
 
 }
 
-bool SwAttrIter::Seek( const sal_Int32 nNewPos )
+bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
 {
     if ( m_pRedline && m_pRedline->ExtOn() )
         m_pRedline->LeaveExtend( *m_pFont, nNewPos );
@@ -581,7 +581,7 @@ static sal_Int32 GetNextAttrImpl(SwTextNode const*const pTextNode,
     return nNext;
 }
 
-sal_Int32 SwAttrIter::GetNextAttr() const
+TextFrameIndex SwAttrIter::GetNextAttr() const
 {
     size_t nStartIndex(m_nStartIndex);
     size_t nEndIndex(m_nEndIndex);
