@@ -19,7 +19,6 @@
 
 #include <svl/itemiter.hxx>
 #include <svtools/imap.hxx>
-#include <tools/helpers.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -66,6 +65,8 @@
 #include <pam.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+
+#include <cmath>
 
 using namespace ::com::sun::star;
 
@@ -2533,7 +2534,7 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
                                 else
                                     aNewPoint = OutputDevice::LogicToLogic( rPoly[ i ], aGrfMap, aDispMap  );
 
-                                rPoly[ i ] = Point( FRound( aNewPoint.getX() * fScaleX ), FRound( aNewPoint.getY() * fScaleY ) );
+                                rPoly[ i ] = Point( std::lround( aNewPoint.getX() * fScaleX ), std::lround( aNewPoint.getY() * fScaleY ) );
                             }
                         }
                     }
