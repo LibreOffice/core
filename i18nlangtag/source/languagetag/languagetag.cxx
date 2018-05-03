@@ -3117,7 +3117,7 @@ LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage)
             nLang = LANGUAGE_MALAY_MALAYSIA;
             break;
         case AppleLanguageId::MALAY_ARABIC:
-            return LanguageTag("ms-Arab");
+            nLang = LANGUAGE_USER_MALAY_ARABIC_MALAYSIA;
             break;
         case AppleLanguageId::AMHARIC:
             nLang = LANGUAGE_AMHARIC_ETHIOPIA;

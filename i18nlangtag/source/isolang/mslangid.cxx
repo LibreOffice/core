@@ -215,7 +215,9 @@ bool MsLangId::isRightToLeft( LanguageType nLang )
         LANGUAGE_KURDISH_ARABIC_LSO,
         LANGUAGE_USER_KURDISH_SOUTHERN_IRAN,
         LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ,
-        LANGUAGE_USER_HUNGARIAN_ROVAS))
+        LANGUAGE_USER_HUNGARIAN_ROVAS,
+        LANGUAGE_USER_MALAY_ARABIC_MALAYSIA,
+        LANGUAGE_USER_MALAY_ARABIC_BRUNEI))
     {
             return true;
     }
@@ -332,7 +334,9 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
          LANGUAGE_USER_KYRGYZ_CHINA,
          LANGUAGE_USER_HUNGARIAN_ROVAS,
          LANGUAGE_USER_MANCHU,
-         LANGUAGE_USER_XIBE))
+         LANGUAGE_USER_XIBE,
+         LANGUAGE_USER_MALAY_ARABIC_MALAYSIA,
+         LANGUAGE_USER_MALAY_ARABIC_BRUNEI))
     {
             nScript = css::i18n::ScriptType::COMPLEX;
     }
