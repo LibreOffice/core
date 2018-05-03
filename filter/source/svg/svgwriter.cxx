@@ -17,21 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <rtl/crc.h>
+#include <comphelper/base64.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <tools/helpers.hxx>
+#include <vcl/unohelp.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
+#include <sax/tools/converter.hxx>
+
 #include "svgfilter.hxx"
 #include "svgfontexport.hxx"
 #include "svgwriter.hxx"
 
-#include <comphelper/base64.hxx>
-#include <rtl/crc.h>
-#include <vcl/unohelp.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/settings.hxx>
-#include <tools/helpers.hxx>
-#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
-#include <sax/tools/converter.hxx>
-
 #include <memory>
-
+#include <cmath>
 
 static const char   aPrefixClipPathId[] = "clip_path_";
 

@@ -17,26 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/i18n/BreakIterator.hpp>
-#include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <comphelper/processfactory.hxx>
-#include "swfwriter.hxx"
+#include <vcl/salbtype.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/graphictools.hxx>
 
+#include "swfwriter.hxx"
+
 #include <zlib.h>
 
-#include <vcl/salbtype.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <com/sun/star/i18n/BreakIterator.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
 #include <memory>
+#include <cmath>
 
 using namespace ::swf;
 using namespace ::com::sun::star::i18n;
@@ -525,7 +528,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
                 const double fFactor = static_cast<double>(nWidth) / aNormSize.Width();
 
                 for( sal_Int32 i = 0; i < ( nLen - 1 ); i++ )
-                    pDX[ i ] = FRound( pDX[ i ] * fFactor );
+                    pDX[ i ] = std::lround( pDX[ i ] * fFactor );
             }
         }
 
@@ -657,12 +660,12 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
         if( ( aOldFont.GetStrikeout() != STRIKEOUT_NONE ) || ( aOldFont.GetUnderline() != LINESTYLE_NONE ) )
         {
             tools::Polygon aPoly( 4 );
-            const long  nLineHeight = std::max<long>( FRound( aMetric.GetLineHeight() * 0.05 ), 1 );
+            const long  nLineHeight = std::max<long>( std::lround( aMetric.GetLineHeight() * 0.05 ), 1 );
 
             if( aOldFont.GetStrikeout() != STRIKEOUT_NONE )
             {
                 aPoly[ 0 ].setX( aBaseLinePos.X() );
-                aPoly[ 0 ].setY( aBaseLinePos.Y() - FRound( aMetric.GetAscent() * 0.26 ) - nLineHeight );
+                aPoly[ 0 ].setY( aBaseLinePos.Y() - std::lround( aMetric.GetAscent() * 0.26 ) - nLineHeight );
                 aPoly[ 1 ].setX( aPoly[ 0 ].X() + aNormSize.Width() - 1 );
                 aPoly[ 1 ].setY( aPoly[ 0 ].Y() );
                 aPoly[ 2 ].setX( aPoly[ 1 ].X() );
@@ -1453,7 +1456,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 if( rPolyPoly.Count() )
                 {
                     // convert transparence from percent into 0x00 - 0xff
-                    sal_uInt8 nTransparence = static_cast<sal_uInt8>(MinMax( FRound( pA->GetTransparence() * 2.55 ), 0, 255 ));
+                    sal_uInt8 nTransparence = static_cast<sal_uInt8>(MinMax( std::lround( pA->GetTransparence() * 2.55 ), 0, 255 ));
                     Impl_writePolyPolygon( rPolyPoly, true, nTransparence );
                 }
             }
@@ -1474,8 +1477,8 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 if( fScaleX != 1.0 || fScaleY != 1.0 )
                 {
                     aTmpMtf.Scale( fScaleX, fScaleY );
-                    aSrcPt.setX( FRound( aSrcPt.X() * fScaleX ) );
-                    aSrcPt.setY( FRound( aSrcPt.Y() * fScaleY ) );
+                    aSrcPt.setX( std::lround( aSrcPt.X() * fScaleX ) );
+                    aSrcPt.setY( std::lround( aSrcPt.Y() * fScaleY ) );
                 }
 
                 nMoveX = aDestPt.X() - aSrcPt.X();
@@ -1748,7 +1751,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 void Writer::Impl_addStraightLine( BitStream& rBits, Point& rLastPoint,
                                    const double P2x, const double P2y )
 {
-    Point aPoint( FRound(P2x), FRound(P2y) );
+    Point aPoint( std::lround(P2x), std::lround(P2y) );
 
     Impl_addStraightEdgeRecord( rBits, Int16_(aPoint.X() - rLastPoint.X()),Int16_(aPoint.Y() - rLastPoint.Y()));
     rLastPoint = aPoint;
@@ -1761,8 +1764,8 @@ void Writer::Impl_addQuadBezier( BitStream& rBits, Point& rLastPoint,
                                  const double P3x, const double P3y )
 {
 
-    Point aControlPoint( FRound(P2x), FRound(P2y) );
-    Point aAnchorPoint( FRound(P3x), FRound(P3y) );
+    Point aControlPoint( std::lround(P2x), std::lround(P2y) );
+    Point aAnchorPoint( std::lround(P3x), std::lround(P3y) );
 
     Impl_addCurvedEdgeRecord( rBits,
                                 Int16_(aControlPoint.X() - rLastPoint.X()),Int16_(aControlPoint.Y() - rLastPoint.Y()),
