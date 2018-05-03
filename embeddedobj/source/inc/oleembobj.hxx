@@ -120,7 +120,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper
 
     OleComponent*   m_pOleComponent;
 
-    ::cppu::OMultiTypeInterfaceContainerHelper* m_pInterfaceContainer;
+    std::unique_ptr<::cppu::OMultiTypeInterfaceContainerHelper> m_pInterfaceContainer;
 
     bool m_bReadOnly;
 
