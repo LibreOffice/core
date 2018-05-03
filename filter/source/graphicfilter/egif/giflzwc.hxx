@@ -31,8 +31,8 @@ class GIFLZWCompressor
 {
 private:
 
-    GIFImageDataOutputStream*   pIDOS;
-    GIFLZWCTreeNode*            pTable;
+    std::unique_ptr<GIFImageDataOutputStream> pIDOS;
+    std::unique_ptr<GIFLZWCTreeNode[]> pTable;
     GIFLZWCTreeNode*            pPrefix;
     sal_uInt16                  nDataSize;
     sal_uInt16                  nClearCode;
