@@ -11,6 +11,7 @@
 
 #include "sallogareas.hxx"
 #include "check.hxx"
+#include "compat.hxx"
 
 #include <clang/Lex/Lexer.h>
 
@@ -102,7 +103,7 @@ bool SalLogAreas::VisitCallExpr( const CallExpr* call )
         const SourceManager& source = compiler.getSourceManager();
         for( SourceLocation loc = call->getLocStart();
              loc.isMacroID();
-             loc = source.getImmediateExpansionRange( loc ).first )
+             loc = compat::getImmediateExpansionRange(source, loc ).first )
             {
             StringRef inMacro = Lexer::getImmediateMacroName( loc, source, compiler.getLangOpts());
             if( inMacro == "SAL_DEBUG" || inMacro == "SAL_DEBUG_BACKTRACE" )

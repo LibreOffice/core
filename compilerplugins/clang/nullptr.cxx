@@ -13,6 +13,7 @@
 #include <set>
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -317,8 +318,7 @@ void Nullptr::handleNull(
                     // ellipsis, cast to void*
                     return;
                 }
-                loc = compiler.getSourceManager()
-                    .getImmediateExpansionRange(loc).first;
+                loc = compat::getImmediateExpansionRange(compiler.getSourceManager(), loc).first;
                 if (ignoreLocation(
                         compiler.getSourceManager().getSpellingLoc(loc)))
                 {
@@ -381,8 +381,8 @@ void Nullptr::rewriteOrWarn(
                     compiler.getLangOpts())
                 == "NULL"))
         {
-            locStart = compiler.getSourceManager().getImmediateExpansionRange(
-                locStart).first;
+            locStart = compat::getImmediateExpansionRange(compiler.getSourceManager(), locStart)
+                .first;
         }
         SourceLocation locEnd(expr->getLocEnd());
         while (compiler.getSourceManager().isMacroArgExpansion(locEnd)) {
@@ -396,8 +396,7 @@ void Nullptr::rewriteOrWarn(
                     compiler.getLangOpts())
                 == "NULL"))
         {
-            locEnd = compiler.getSourceManager().getImmediateExpansionRange(
-                locEnd).first;
+            locEnd = compat::getImmediateExpansionRange(compiler.getSourceManager(), locEnd).first;
         }
         if (replaceText(SourceRange(compiler.getSourceManager().getSpellingLoc(locStart), compiler.getSourceManager().getSpellingLoc(locEnd)), replacement)) {
             return;

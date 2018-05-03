@@ -12,6 +12,7 @@
 
 #include "clang/Lex/Lexer.h"
 
+#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -125,8 +126,7 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
             StringRef name { Lexer::getImmediateMacroName(
                 loc, compiler.getSourceManager(), compiler.getLangOpts()) };
             if (name == "sal_False" || name == "sal_True") {
-                loc = compiler.getSourceManager().getImmediateExpansionRange(
-                    loc).first;
+                loc = compat::getImmediateExpansionRange(compiler.getSourceManager(), loc).first;
             }
             if (isSharedCAndCppCode(loc)) {
                 return;
