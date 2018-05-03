@@ -5201,7 +5201,7 @@
               protocol) present in the document will be exported as relative to
               the source document location.</desc>
             </info>
-            <value>false</value>
+            <value>true</value>
           </prop>
           <prop oor:name="PDFViewSelection" oor:type="xs:int" oor:nillable="false">
             <info>
