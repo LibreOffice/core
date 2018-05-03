@@ -510,7 +510,38 @@ TextFrameIndex SwTextFrame::MapModelToViewPos(SwPosition const& rPos) const
 
 const OUString& SwTextFrame::GetText() const
 {
-    return GetTextNode()->GetText();
+    // FIXME can GetPara be 0 ?
+    assert(GetPara());
+    sw::MergedPara const*const pMerged(GetPara()->GetMergedPara());
+    if (pMerged)
+        return pMerged->mergedText;
+    else
+        return static_cast<SwTextNode const*>(SwFrame::GetDep())->GetText();
+}
+
+SwTextNode const* SwTextFrame::GetTextNodeForParaProps() const
+{
+    assert(GetPara());
+    sw::MergedPara const*const pMerged(GetPara()->GetMergedPara());
+    if (pMerged)
+        return pMerged->pParaPropsNode;
+    else
+        return static_cast<SwTextNode const*>(SwFrame::GetDep());
+}
+
+SwTextNode const* SwTextFrame::GetTextNodeFirst() const
+{
+    assert(GetPara());
+    sw::MergedPara const*const pMerged(GetPara()->GetMergedPara());
+    if (pMerged)
+        return pMerged->pFirstNode;
+    else
+        return static_cast<SwTextNode const*>(SwFrame::GetDep());
+}
+
+SwDoc const& SwTextFrame::GetDoc() const
+{
+    return *GetTextNodeFirst()->GetDoc();
 }
 
 void SwTextFrame::ResetPreps()
