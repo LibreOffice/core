@@ -124,14 +124,14 @@ OUString getNameNoExtension(OUString const & sName)
     return sName.copy(0, nDotPosition);
 }
 
-std::shared_ptr<SvStream> wrapStream(css::uno::Reference< css::io::XInputStream > const & stream)
+std::shared_ptr<SvMemoryStream> wrapStream(css::uno::Reference< css::io::XInputStream > const & stream)
 {
     // This could use SvInputStream instead if that did not have a broken
     // SeekPos implementation for an XInputStream that is not also XSeekable
     // (cf. "@@@" at tags/DEV300_m37/svtools/source/misc1/strmadpt.cxx@264807
     // l. 593):
     OSL_ASSERT(stream.is());
-    std::shared_ptr<SvStream> s(std::make_shared<SvMemoryStream>());
+    std::shared_ptr<SvMemoryStream> s(std::make_shared<SvMemoryStream>());
     for (;;)
     {
         sal_Int32 const size = 2048;
