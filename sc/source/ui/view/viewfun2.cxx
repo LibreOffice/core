@@ -1148,12 +1148,13 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bCenter )
         bool bShowDialog = officecfg::Office::Calc::Compatibility::MergeCells::ShowDialog::get();
         if (!bApi && bShowDialog)
         {
-            ScopedVclPtr<ScMergeCellsDialog> aBox( VclPtr<ScMergeCellsDialog>::Create( GetViewData().GetDialogParent() ) );
-            sal_uInt16 nRetVal = aBox->Execute();
+            vcl::Window* pWin = GetViewData().GetDialogParent();
+            ScMergeCellsDialog aBox(pWin ? pWin->GetFrameWeld() : nullptr);
+            sal_uInt16 nRetVal = aBox.run();
 
             if ( nRetVal == RET_OK )
             {
-                switch ( aBox->GetMergeCellsOption() )
+                switch (aBox.GetMergeCellsOption())
                 {
                     case MoveContentHiddenCells:
                         rDoContents = true;
