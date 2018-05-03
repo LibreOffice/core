@@ -812,7 +812,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
         if ( ( nByteOffset + nLen) > m_nBufferSize )
             break; // length doesn't match buffer size.
 
-        char *pData = reinterpret_cast<char *>(m_pBuffer + nByteOffset);
+        char *pData = reinterpret_cast<char *>(m_pBuffer.get() + nByteOffset);
 
         if (nType == DataType::CHAR || nType == DataType::VARCHAR)
         {
@@ -1458,7 +1458,7 @@ bool ODbaseTable::InsertRow(OValueRefVector& rRow, const Reference<XIndexAccess>
     if (!AllocBuffer())
         return false;
 
-    memset(m_pBuffer, 0, m_aHeader.recordLength);
+    memset(m_pBuffer.get(), 0, m_aHeader.recordLength);
     m_pBuffer[0] = ' ';
 
     // Copy new row completely:
@@ -1518,7 +1518,7 @@ bool ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow, const 
     // position on desired record:
     std::size_t nPos = m_aHeader.headerLength + static_cast<long>(m_nFilePos-1) * m_aHeader.recordLength;
     m_pFileStream->Seek(nPos);
-    m_pFileStream->ReadBytes(m_pBuffer, m_aHeader.recordLength);
+    m_pFileStream->ReadBytes(m_pBuffer.get(), m_aHeader.recordLength);
 
     std::size_t nMemoFileSize( 0 );
     if (HasMemoFields() && m_pMemoStream)
@@ -1793,7 +1793,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                 pIndex->Insert(m_nFilePos, thisColVal);
         }
 
-        char* pData = reinterpret_cast<char *>(m_pBuffer + nByteOffset);
+        char* pData = reinterpret_cast<char *>(m_pBuffer.get() + nByteOffset);
         if (thisColIsNull)
         {
             if ( bSetZero )
@@ -2591,7 +2591,7 @@ bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 
         if (m_pFileStream->GetError() != ERRCODE_NONE)
             goto Error;
 
-        std::size_t nRead = m_pFileStream->ReadBytes(m_pBuffer, nEntryLen);
+        std::size_t nRead = m_pFileStream->ReadBytes(m_pBuffer.get(), nEntryLen);
         if (nRead != nEntryLen)
         {
             SAL_WARN("connectivity.drivers", "ODbaseTable::seekRow: short read!");
@@ -2710,15 +2710,14 @@ bool ODbaseTable::AllocBuffer()
 
     if (m_nBufferSize != nSize)
     {
-        delete m_pBuffer;
-        m_pBuffer = nullptr;
+        m_pBuffer.reset();
     }
 
     // if there is no buffer available: allocate:
-    if (m_pBuffer == nullptr && nSize > 0)
+    if (!m_pBuffer && nSize > 0)
     {
         m_nBufferSize = nSize;
-        m_pBuffer = new sal_uInt8[m_nBufferSize+1];
+        m_pBuffer.reset(new sal_uInt8[m_nBufferSize+1]);
     }
 
     return m_pBuffer != nullptr;
@@ -2731,7 +2730,7 @@ bool ODbaseTable::WriteBuffer()
     // position on desired record:
     std::size_t nPos = m_aHeader.headerLength + static_cast<long>(m_nFilePos-1) * m_aHeader.recordLength;
     m_pFileStream->Seek(nPos);
-    return m_pFileStream->WriteBytes(m_pBuffer, m_aHeader.recordLength) > 0;
+    return m_pFileStream->WriteBytes(m_pBuffer.get(), m_aHeader.recordLength) > 0;
 }
 
 sal_Int32 ODbaseTable::getCurrentLastPos() const

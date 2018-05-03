@@ -40,7 +40,6 @@ OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
                 ,m_pConnection(_pConnection)
                 ,m_pFileStream(nullptr)
                 ,m_nFilePos(0)
-                ,m_pBuffer(nullptr)
                 ,m_nBufferSize(0)
                 ,m_bWriteable(false)
 {
@@ -63,7 +62,6 @@ OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
     , m_pConnection(_pConnection)
     , m_pFileStream(nullptr)
     , m_nFilePos(0)
-    , m_pBuffer(nullptr)
     , m_nBufferSize(0)
     , m_bWriteable(false)
 {
@@ -156,12 +154,7 @@ void OFileTable::FileClose()
         m_pFileStream->Flush();
 
     m_pFileStream.reset();
-
-    if (m_pBuffer)
-    {
-        delete[] m_pBuffer;
-        m_pBuffer = nullptr;
-    }
+    m_pBuffer.reset();
 }
 
 bool OFileTable::InsertRow(OValueRefVector& /*rRow*/, const css::uno::Reference< css::container::XIndexAccess>& /*_xCols*/)
