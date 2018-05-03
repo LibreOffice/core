@@ -79,7 +79,7 @@ private:
     sal_uInt32              mnBitmapPos;
     sal_uInt32              mnStripByteCountPos;
 
-    TIFFLZWCTreeNode*       pTable;
+    std::unique_ptr<TIFFLZWCTreeNode[]> pTable;
     TIFFLZWCTreeNode*       pPrefix;
     sal_uInt16              nDataSize;
     sal_uInt16              nClearCode;
@@ -499,7 +499,7 @@ void TIFFWriter::StartCompression()
     nOffset = 32;                       // number of free bits in dwShift
     dwShift = 0;
 
-    pTable = new TIFFLZWCTreeNode[ 4096 ];
+    pTable.reset(new TIFFLZWCTreeNode[ 4096 ]);
 
     for ( i = 0; i < 4096; i++)
     {
@@ -520,7 +520,7 @@ void TIFFWriter::Compress( sal_uInt8 nCompThis )
 
     if( !pPrefix )
     {
-        pPrefix = pTable + nCompThis;
+        pPrefix = &pTable[nCompThis];
     }
     else
     {
@@ -552,14 +552,14 @@ void TIFFWriter::Compress( sal_uInt8 nCompThis )
                 if( nTableSize == static_cast<sal_uInt16>( ( 1 << nCodeSize ) - 1 ) )
                     nCodeSize++;
 
-                p = pTable + ( nTableSize++ );
+                p = &pTable[ nTableSize++ ];
                 p->pBrother = pPrefix->pFirstChild;
                 pPrefix->pFirstChild = p;
                 p->nValue = nV;
                 p->pFirstChild = nullptr;
             }
 
-            pPrefix = pTable + nV;
+            pPrefix = &pTable[nV];
         }
     }
 }
@@ -571,7 +571,7 @@ void TIFFWriter::EndCompression()
         WriteBits( pPrefix->nCode, nCodeSize );
 
     WriteBits( nEOICode, nCodeSize );
-    delete[] pTable;
+    pTable.reset();
 }
 
 
