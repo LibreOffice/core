@@ -18,9 +18,22 @@
  */
 
 #include <tools/bigint.hxx>
-#include <tools/helpers.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/curve/b2dcubicbezier.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/curve/b2dcubicbezier.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <sdr/contact/viewcontactofsdrpathobj.hxx>
+
 #include <svx/svdopath.hxx>
-#include <math.h>
 #include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/svdattr.hxx>
@@ -32,27 +45,21 @@
 #include <svx/svdhdl.hxx>
 #include <svx/svdview.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/strings.hrc>
-
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/polypolygoneditor.hxx>
 #include <svx/xlntrit.hxx>
-#include <sdr/contact/viewcontactofsdrpathobj.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include "svdconv.hxx"
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/range/b2drange.hxx>
-#include <basegfx/curve/b2dcubicbezier.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/sdr/attribute/sdrformtextattribute.hxx>
+#include <svx/strings.hrc>
+
+#include "svdconv.hxx"
+
 #include <memory>
+#include <cmath>
 
 using namespace sdr;
 
@@ -1661,8 +1668,8 @@ static tools::Rectangle lcl_ImpGetBoundRect(const basegfx::B2DPolyPolygon& rPoly
     basegfx::B2DRange aRange(basegfx::utils::getRange(rPolyPolygon));
 
     return tools::Rectangle(
-        FRound(aRange.getMinX()), FRound(aRange.getMinY()),
-        FRound(aRange.getMaxX()), FRound(aRange.getMaxY()));
+        std::lround(aRange.getMinX()), std::lround(aRange.getMinY()),
+        std::lround(aRange.getMaxX()), std::lround(aRange.getMaxY()));
 }
 
 void SdrPathObj::ImpForceLineAngle()
@@ -1673,8 +1680,8 @@ void SdrPathObj::ImpForceLineAngle()
     const basegfx::B2DPolygon aPoly(GetPathPoly().getB2DPolygon(0));
     const basegfx::B2DPoint aB2DPoint0(aPoly.getB2DPoint(0));
     const basegfx::B2DPoint aB2DPoint1(aPoly.getB2DPoint(1));
-    const Point aPoint0(FRound(aB2DPoint0.getX()), FRound(aB2DPoint0.getY()));
-    const Point aPoint1(FRound(aB2DPoint1.getX()), FRound(aB2DPoint1.getY()));
+    const Point aPoint0(std::lround(aB2DPoint0.getX()), std::lround(aB2DPoint0.getY()));
+    const Point aPoint1(std::lround(aB2DPoint1.getX()), std::lround(aB2DPoint1.getY()));
     const Point aDelt(aPoint1 - aPoint0);
 
     aGeo.nRotationAngle=GetAngle(aDelt);
@@ -2440,7 +2447,7 @@ Point SdrPathObj::GetSnapPoint(sal_uInt32 nSnapPnt) const
     }
 
     const basegfx::B2DPoint aB2DPoint(GetPathPoly().getB2DPolygon(nPoly).getB2DPoint(nPnt));
-    return Point(FRound(aB2DPoint.getX()), FRound(aB2DPoint.getY()));
+    return Point(std::lround(aB2DPoint.getX()), std::lround(aB2DPoint.getY()));
 }
 
 bool SdrPathObj::IsPolyObj() const
@@ -2470,7 +2477,7 @@ Point SdrPathObj::GetPoint(sal_uInt32 nHdlNum) const
     {
         const basegfx::B2DPolygon aPoly(GetPathPoly().getB2DPolygon(nPoly));
         const basegfx::B2DPoint aPoint(aPoly.getB2DPoint(nPnt));
-        aRetval = Point(FRound(aPoint.getX()), FRound(aPoint.getY()));
+        aRetval = Point(std::lround(aPoint.getX()), std::lround(aPoint.getY()));
     }
 
     return aRetval;
@@ -2958,7 +2965,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     if(!basegfx::fTools::equalZero(fShearX))
     {
         aTransform.shearX(tan(-atan(fShearX)));
-        aGeo.nShearAngle = FRound(atan(fShearX) / F_PI18000);
+        aGeo.nShearAngle = std::lround(atan(fShearX) / F_PI18000);
         aGeo.RecalcTan();
     }
 
@@ -2972,7 +2979,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         // #i78696#
         // fRotate is mathematically correct, but aGeoStat.nRotationAngle is
         // mirrored -> mirror value here
-        aGeo.nRotationAngle = NormAngle360(FRound(-fRotate / F_PI18000));
+        aGeo.nRotationAngle = NormAngle360(std::lround(-fRotate / F_PI18000));
         aGeo.RecalcSinCos();
     }
 

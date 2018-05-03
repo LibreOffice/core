@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 #include <svx/svdpoev.hxx>
-#include <math.h>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx>
@@ -27,11 +28,9 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/svdtrans.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <tools/helpers.hxx>
-
 #include <svx/polypolygoneditor.hxx>
+
+#include <cmath>
 
 using namespace sdr;
 
@@ -564,19 +563,19 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
                 bool bC2(false);
 
                 const basegfx::B2DPoint aB2DPos(aNewXP.getB2DPoint(nPointNum));
-                aPos = Point(FRound(aB2DPos.getX()), FRound(aB2DPos.getY()));
+                aPos = Point(std::lround(aB2DPos.getX()), std::lround(aB2DPos.getY()));
 
                 if(aNewXP.isPrevControlPointUsed(nPointNum))
                 {
                     const basegfx::B2DPoint aB2DC1(aNewXP.getPrevControlPoint(nPointNum));
-                    aC1 = Point(FRound(aB2DC1.getX()), FRound(aB2DC1.getY()));
+                    aC1 = Point(std::lround(aB2DC1.getX()), std::lround(aB2DC1.getY()));
                     bC1 = true;
                 }
 
                 if(aNewXP.isNextControlPointUsed(nPointNum))
                 {
                     const basegfx::B2DPoint aB2DC2(aNewXP.getNextControlPoint(nPointNum));
-                    aC2 = Point(FRound(aB2DC2.getX()), FRound(aB2DC2.getY()));
+                    aC2 = Point(std::lround(aB2DC2.getX()), std::lround(aB2DC2.getY()));
                     bC2 = true;
                 }
 

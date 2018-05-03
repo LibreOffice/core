@@ -17,55 +17,55 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <algorithm>
-#include <cassert>
-
-#include <svx/svdhdl.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svdetc.hxx>
-#include <svx/svdmrkv.hxx>
+#include <basegfx/vector/b2dvector.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <tools/poly.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
-#include <tools/poly.hxx>
 #include <vcl/bitmapaccess.hxx>
-
-#include <svx/sxekitm.hxx>
-#include <svx/strings.hrc>
-#include <svx/svdmodel.hxx>
-#include "gradtrns.hxx"
-#include <svx/xflgrit.hxx>
-#include <svx/svdundo.hxx>
-#include <svx/dialmgr.hxx>
-#include <svx/xflftrit.hxx>
-
-#include <svx/svdopath.hxx>
-#include <basegfx/vector/b2dvector.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <svx/sdr/overlay/overlaymanager.hxx>
-#include <svx/sdr/overlay/overlayanimatedbitmapex.hxx>
-#include <svx/sdr/overlay/overlaybitmapex.hxx>
-#include <sdr/overlay/overlayline.hxx>
-#include <svx/sdr/overlay/overlaytriangle.hxx>
-#include <sdr/overlay/overlayhandle.hxx>
-#include <sdr/overlay/overlayrectangle.hxx>
-#include <svx/sdrpagewindow.hxx>
-#include <svx/sdrpaintwindow.hxx>
-#include <vcl/svapp.hxx>
-#include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/BitmapTools.hxx>
-
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
+#include <vcl/svapp.hxx>
+#include <sdr/overlay/overlayline.hxx>
+#include <sdr/overlay/overlayhandle.hxx>
+#include <sdr/overlay/overlayrectangle.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-#include <memory>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+
+#include <svx/sxekitm.hxx>
+#include <svx/strings.hrc>
+#include <svx/svdmodel.hxx>
+#include <svx/svdhdl.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdetc.hxx>
+#include <svx/svdmrkv.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/xflftrit.hxx>
+#include <svx/svdopath.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#include <svx/sdr/overlay/overlayanimatedbitmapex.hxx>
+#include <svx/sdr/overlay/overlaybitmapex.hxx>
+#include <svx/sdr/overlay/overlaytriangle.hxx>
+#include <svx/sdrpagewindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
+#include <svx/sdr/overlay/overlaypolypolygon.hxx>
+#include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
+
 #include <bitmaps.hlst>
+
+#include "gradtrns.hxx"
+
+#include <memory>
+#include <algorithm>
+#include <cassert>
+#include <cmath>
 
 // #i15222#
 // Due to the resource problems in Win95/98 with bitmap resources I
@@ -1378,16 +1378,16 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, bool bSetItemOnObject, bool
     // back transformation, set values on pIAOHandle
     GradTransformer::GradToVec(aGradTransGradient, aGradTransVector, _pObj);
 
-    SetPos(Point(FRound(aGradTransVector.maPositionA.getX()), FRound(aGradTransVector.maPositionA.getY())));
-    Set2ndPos(Point(FRound(aGradTransVector.maPositionB.getX()), FRound(aGradTransVector.maPositionB.getY())));
+    SetPos(Point(std::lround(aGradTransVector.maPositionA.getX()), std::lround(aGradTransVector.maPositionA.getY())));
+    Set2ndPos(Point(std::lround(aGradTransVector.maPositionB.getX()), std::lround(aGradTransVector.maPositionB.getY())));
     if(pColHdl1)
     {
-        pColHdl1->SetPos(Point(FRound(aGradTransVector.maPositionA.getX()), FRound(aGradTransVector.maPositionA.getY())));
+        pColHdl1->SetPos(Point(std::lround(aGradTransVector.maPositionA.getX()), std::lround(aGradTransVector.maPositionA.getY())));
         pColHdl1->SetColor(aGradTransVector.aCol1);
     }
     if(pColHdl2)
     {
-        pColHdl2->SetPos(Point(FRound(aGradTransVector.maPositionB.getX()), FRound(aGradTransVector.maPositionB.getY())));
+        pColHdl2->SetPos(Point(std::lround(aGradTransVector.maPositionB.getX()), std::lround(aGradTransVector.maPositionB.getY())));
         pColHdl2->SetColor(aGradTransVector.aCol2);
     }
 }

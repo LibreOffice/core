@@ -19,24 +19,24 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
-
 #include <osl/endian.h>
-#include <tools/stream.hxx>
-#include <tools/debug.hxx>
-#include <tools/poly.hxx>
-#include <tools/helpers.hxx>
-#include <tools/gen.hxx>
-
-#include <svx/xpoly.hxx>
-#include <xpolyimp.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <tools/stream.hxx>
+#include <tools/debug.hxx>
+#include <tools/poly.hxx>
+#include <tools/gen.hxx>
 
+#include <svx/xpoly.hxx>
+
+#include <xpolyimp.hxx>
+
+#include <algorithm>
+#include <cmath>
 
 ImpXPolygon::ImpXPolygon(sal_uInt16 nInitSize, sal_uInt16 _nResize)
     : pPointAry(nullptr)
@@ -417,8 +417,8 @@ tools::Rectangle XPolygon::GetBoundRect() const
 
         const basegfx::B2DRange aPolygonRange(basegfx::utils::getRange(getB2DPolygon()));
         aRetval = tools::Rectangle(
-            FRound(aPolygonRange.getMinX()), FRound(aPolygonRange.getMinY()),
-            FRound(aPolygonRange.getMaxX()), FRound(aPolygonRange.getMaxY()));
+            std::lround(aPolygonRange.getMinX()), std::lround(aPolygonRange.getMinY()),
+            std::lround(aPolygonRange.getMaxX()), std::lround(aPolygonRange.getMaxY()));
     }
 
     return aRetval;

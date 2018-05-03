@@ -17,12 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svdfmtf.hxx"
-#include <editeng/editdata.hxx>
 #include <o3tl/make_unique.hxx>
-#include <math.h>
-#include <svx/xpoly.hxx>
+
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/metric.hxx>
+#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapTools.hxx>
+#include <svl/itemset.hxx>
+#include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -30,19 +37,20 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/shdditem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/autokernitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/contouritem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/charscaleitem.hxx>
+
+#include <svx/xpoly.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlncapit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xflgrit.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/autokernitem.hxx>
-#include <editeng/wrlmitem.hxx>
-#include <editeng/contouritem.hxx>
-#include <editeng/colritem.hxx>
-#include <vcl/metric.hxx>
-#include <editeng/charscaleitem.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svdmodel.hxx>
@@ -54,24 +62,19 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdetc.hxx>
-#include <svl/itemset.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <tools/helpers.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/xlinjoit.hxx>
 #include <svx/xlndsit.hxx>
-#include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xfltrit.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/svdpntv.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
-#include <vcl/BitmapTools.hxx>
+
+#include "svdfmtf.hxx"
+
+#include <cmath>
 
 using namespace com::sun::star;
 
@@ -398,7 +401,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
     if(bText && mbFntDirty)
     {
         vcl::Font aFnt(mpVD->GetFont());
-        const sal_uInt32 nHeight(FRound(aFnt.GetFontSize().Height() * mfScaleY));
+        const sal_uInt32 nHeight(std::lround(aFnt.GetFontSize().Height() * mfScaleY));
 
         mpTextAttr->Put( SvxFontItem( aFnt.GetFamilyType(), aFnt.GetFamilyName(), aFnt.GetStyleName(), aFnt.GetPitch(), aFnt.GetCharSet(), EE_CHAR_FONTINFO ) );
         mpTextAttr->Put( SvxFontItem( aFnt.GetFamilyType(), aFnt.GetFamilyName(), aFnt.GetStyleName(), aFnt.GetPitch(), aFnt.GetCharSet(), EE_CHAR_FONTINFO_CJK ) );
@@ -1012,11 +1015,11 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
     sal_Int32 nTextWidth = static_cast<sal_Int32>( mpVD->GetTextWidth( rStr ) * mfScaleX );
     sal_Int32 nTextHeight = static_cast<sal_Int32>( mpVD->GetTextHeight() * mfScaleY );
 
-    Point aPos( FRound(rPos.X() * mfScaleX + maOfs.X()), FRound(rPos.Y() * mfScaleY + maOfs.Y()) );
+    Point aPos( std::lround(rPos.X() * mfScaleX + maOfs.X()), std::lround(rPos.Y() * mfScaleY + maOfs.Y()) );
     Size aSize( nTextWidth, nTextHeight );
 
     if ( eAlg == ALIGN_BASELINE )
-        aPos.AdjustY( -(FRound(aFontMetric.GetAscent() * mfScaleY)) );
+        aPos.AdjustY( -(std::lround(aFontMetric.GetAscent() * mfScaleY)) );
     else if ( eAlg == ALIGN_BOTTOM )
         aPos.AdjustY( -nTextHeight );
 

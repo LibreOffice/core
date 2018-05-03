@@ -18,14 +18,16 @@
  */
 
 
-#include "gradtrns.hxx"
-#include <svx/svdobj.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <tools/helpers.hxx>
 #include <vcl/outdev.hxx>
 
+#include <svx/svdobj.hxx>
+
+#include "gradtrns.hxx"
+
+#include <cmath>
 
 void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& rV, const SdrObject* pObj)
 {
@@ -236,7 +238,7 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
                 }
 
                 // to int and set
-                sal_Int32 nNewAngle = FRound(fNewFullAngle);
+                sal_Int32 nNewAngle = std::lround(fNewFullAngle);
 
                 if(nNewAngle != rGOld.aGradient.GetAngle())
                 {
@@ -253,7 +255,7 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
                 const double fFullLen(aFullVec.getLength());
                 const double fOldLen(aOldVec.getLength());
                 const double fNewBorder((fFullLen * 100.0) / fOldLen);
-                sal_Int32 nNewBorder(100 - FRound(fNewBorder));
+                sal_Int32 nNewBorder(100 - std::lround(fNewBorder));
 
                 // clip
                 if(nNewBorder < 0)
@@ -284,7 +286,7 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
                 const double fFullLen(aFullVec.getLength());
                 const double fOldLen(aOldVec.getLength());
                 const double fNewBorder((fFullLen * 100.0) / fOldLen);
-                sal_Int32 nNewBorder = 100 - FRound(fNewBorder);
+                sal_Int32 nNewBorder = 100 - std::lround(fNewBorder);
 
                 // clip
                 if(nNewBorder < 0)
@@ -321,7 +323,7 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
                 }
 
                 // to int and set
-                const sal_Int32 nNewAngle(FRound(fNewFullAngle));
+                const sal_Int32 nNewAngle(std::lround(fNewFullAngle));
 
                 if(nNewAngle != rGOld.aGradient.GetAngle())
                 {
@@ -338,8 +340,8 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
             {
                 const basegfx::B2DPoint aTopLeft(aRange.getMinX(), aRange.getMinY());
                 const basegfx::B2DPoint aOffset(aEndPos - aTopLeft);
-                sal_Int32 nNewXOffset(FRound((aOffset.getX() * 100.0) / aRange.getWidth()));
-                sal_Int32 nNewYOffset(FRound((aOffset.getY() * 100.0) / aRange.getHeight()));
+                sal_Int32 nNewXOffset(std::lround((aOffset.getX() * 100.0) / aRange.getWidth()));
+                sal_Int32 nNewYOffset(std::lround((aOffset.getY() * 100.0) / aRange.getHeight()));
 
                 // clip
                 if(nNewXOffset < 0)
@@ -378,7 +380,7 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
                 const double fFullLen(aFullVec.getLength());
                 const double fOldLen(aOldVec.getLength());
                 const double fNewBorder((fFullLen * 100.0) / fOldLen);
-                sal_Int32 nNewBorder(100 - FRound(fNewBorder));
+                sal_Int32 nNewBorder(100 - std::lround(fNewBorder));
 
                 // clip
                 if(nNewBorder < 0)
@@ -417,7 +419,7 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
                 }
 
                 // to int and set
-                const sal_Int32 nNewAngle(FRound(fNewFullAngle));
+                const sal_Int32 nNewAngle(std::lround(fNewFullAngle));
 
                 if(nNewAngle != rGOld.aGradient.GetAngle())
                 {
@@ -434,8 +436,8 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
             {
                 const basegfx::B2DPoint aTopLeft(aRange.getMinX(), aRange.getMinY());
                 const basegfx::B2DPoint aOffset(aEndPos - aTopLeft);
-                sal_Int32 nNewXOffset(FRound((aOffset.getX() * 100.0) / aRange.getWidth()));
-                sal_Int32 nNewYOffset(FRound((aOffset.getY() * 100.0) / aRange.getHeight()));
+                sal_Int32 nNewXOffset(std::lround((aOffset.getX() * 100.0) / aRange.getWidth()));
+                sal_Int32 nNewYOffset(std::lround((aOffset.getY() * 100.0) / aRange.getHeight()));
 
                 // clip
                 if(nNewXOffset < 0)
@@ -474,7 +476,7 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
                 const double fFullLen(aFullVec.getLength());
                 const double fOldLen(aOldVec.getLength());
                 const double fNewBorder((fFullLen * 100.0) / fOldLen);
-                sal_Int32 nNewBorder(100 - FRound(fNewBorder));
+                sal_Int32 nNewBorder(100 - std::lround(fNewBorder));
 
                 // clip
                 if(nNewBorder < 0)
@@ -513,7 +515,7 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
                 }
 
                 // to int and set
-                const sal_Int32 nNewAngle(FRound(fNewFullAngle));
+                const sal_Int32 nNewAngle(std::lround(fNewFullAngle));
 
                 if(nNewAngle != rGOld.aGradient.GetAngle())
                 {

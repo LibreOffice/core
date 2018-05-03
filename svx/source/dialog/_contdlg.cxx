@@ -19,28 +19,30 @@
 
 #include <sal/config.h>
 
+#include <unotools/localedatawrapper.hxx>
 #include <vcl/wrkwin.hxx>
-#include <tools/helpers.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/weld.hxx>
+#include <svtools/miscopt.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/miscopt.hxx>
-#include <unotools/localedatawrapper.hxx>
 
 #include <svx/xoutbmp.hxx>
 #include <svx/svxids.hrc>
 #include <svx/contdlg.hxx>
-#include "contimp.hxx"
-#include "contwnd.hxx"
 #include <svx/svdtrans.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/dlgutil.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/virdev.hxx>
+
+#include "contimp.hxx"
+#include "contwnd.hxx"
 #include "dlgunit.hxx"
-#include <vcl/weld.hxx>
+
+#include <cmath>
 
 SFX_IMPL_FLOATINGWINDOW_WITHID( SvxContourDlgChildWindow, SID_CONTOUR_DLG );
 
@@ -157,12 +159,12 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
             if( fWH <= 1.0 )
             {
                 aSizePix.setHeight(512);
-                aSizePix.setWidth( FRound( ( aSizePix.Height() ) * fWH ) );
+                aSizePix.setWidth( std::lround( ( aSizePix.Height() ) * fWH ) );
             }
             else
             {
                 aSizePix.setWidth(512);
-                aSizePix.setHeight( FRound( ( aSizePix.Width() ) / fWH ) );
+                aSizePix.setHeight( std::lround( ( aSizePix.Width() ) / fWH ) );
             }
         }
 

@@ -17,25 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdrpagewindow.hxx>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <vcl/svapp.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <sdr/contact/objectcontactofpageview.hxx>
+
+#include <svx/sdrpagewindow.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdrpaintwindow.hxx>
-#include <sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/fmview.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <sfx2/lokhelper.hxx>
+
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/util/XModeChangeBroadcaster.hpp>
+
+#include <cmath>
 
 using namespace ::com::sun::star;
 
@@ -240,8 +244,8 @@ namespace
             {
                 const basegfx::B2DPoint aBStart(aCandidate.getB2DPoint(a));
                 const basegfx::B2DPoint aBEnd(aCandidate.getB2DPoint((a + 1) % aCandidate.count()));
-                const Point aStart(FRound(aBStart.getX()), FRound(aBStart.getY()));
-                const Point aEnd(FRound(aBEnd.getX()), FRound(aBEnd.getY()));
+                const Point aStart(std::lround(aBStart.getX()), std::lround(aBStart.getY()));
+                const Point aEnd(std::lround(aBEnd.getX()), std::lround(aBEnd.getY()));
                 rOutDev.DrawLine(aStart, aEnd);
             }
         }

@@ -18,29 +18,34 @@
  */
 
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <sfx2/objsh.hxx>
-#include <sfx2/docfac.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/vcompat.hxx>
-#include <tools/helpers.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/dibtools.hxx>
 #include <svl/itempool.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfac.hxx>
+
 #include <svx/fmmodel.hxx>
 #include <svx/fmview.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/galmisc.hxx>
+
 #include <galobj.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/dibtools.hxx>
-#include "gallerydrawmodel.hxx"
-#include <memory>
 #include <bitmaps.hlst>
+
+#include "gallerydrawmodel.hxx"
+
+#include <memory>
+#include <cmath>
+
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 using namespace ::com::sun::star;
 
@@ -113,9 +118,9 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
                     double  fFactorPix = static_cast< double >( aBmpSize.Width() ) / aBmpSize.Height();
 
                     if( fFactorPix > fFactorLog )
-                        aBmpSize.setWidth( FRound( aBmpSize.Height() * fFactorLog ) );
+                        aBmpSize.setWidth( std::lround( aBmpSize.Height() * fFactorLog ) );
                     else
-                        aBmpSize.setHeight( FRound( aBmpSize.Width() / fFactorLog ) );
+                        aBmpSize.setHeight( std::lround( aBmpSize.Width() / fFactorLog ) );
 
                     aBmpEx.Scale(aBmpSize, BmpScaleFlag::BestQuality);
                 }

@@ -19,24 +19,18 @@
 
 #include <sal/config.h>
 
-#include <cassert>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
+#include <tools/bigint.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/style.hxx>
-#include <tools/bigint.hxx>
-#include <tools/helpers.hxx>
-
-#include "svdconv.hxx"
-#include <svx/dialmgr.hxx>
-#include <svx/strings.hrc>
-
 #include <sdr/contact/viewcontactofsdrcaptionobj.hxx>
 #include <sdr/properties/captionproperties.hxx>
+
+#include <svx/dialmgr.hxx>
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdetc.hxx>
@@ -59,7 +53,12 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xpool.hxx>
+#include <svx/strings.hrc>
 
+#include "svdconv.hxx"
+
+#include <cassert>
+#include <cmath>
 
 enum EscDir {LKS,RTS,OBN,UNT};
 
@@ -768,8 +767,8 @@ void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
     }
 
     // build BaseRect
-    Point aPoint(FRound(aTranslate.getX()), FRound(aTranslate.getY()));
-    tools::Rectangle aBaseRect(aPoint, Size(FRound(aScale.getX()), FRound(aScale.getY())));
+    Point aPoint(std::lround(aTranslate.getX()), std::lround(aTranslate.getY()));
+    tools::Rectangle aBaseRect(aPoint, Size(std::lround(aScale.getX()), std::lround(aScale.getY())));
 
     // set BaseRect, but rescue TailPos over this call
     const Point aTailPoint = GetTailPos();

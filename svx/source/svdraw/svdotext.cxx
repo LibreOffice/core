@@ -17,8 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <basegfx/tuple/b2dtuple.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <comphelper/string.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/virdev.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/style.hxx>
+#include <svl/itempool.hxx>
+#include <svtools/colorcfg.hxx>
+#include <editeng/writingmodeitem.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/editeng.hxx>
+#include <sdr/properties/textproperties.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
+
 #include <svx/svdotext.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
@@ -28,39 +51,18 @@
 #include <svx/svdmodel.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
-#include <editeng/writingmodeitem.hxx>
 #include <svx/sdtfchim.hxx>
-#include <svtools/colorcfg.hxx>
-#include <editeng/editdata.hxx>
-#include <editeng/eeitem.hxx>
-#include <editeng/editstat.hxx>
-#include <editeng/outlobj.hxx>
-#include <editeng/editobj.hxx>
-#include <editeng/outliner.hxx>
-#include <editeng/fhgtitem.hxx>
 #include <svx/textchain.hxx>
 #include <svx/textchainflow.hxx>
-#include <svl/itempool.hxx>
-#include <editeng/adjustitem.hxx>
-#include <editeng/flditem.hxx>
 #include <svx/xftouit.hxx>
-#include <tools/helpers.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/xflclit.hxx>
-#include <svl/style.hxx>
-#include <editeng/editeng.hxx>
-#include <svl/itemiter.hxx>
-#include <sdr/properties/textproperties.hxx>
-#include <vcl/metaact.hxx>
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
-#include <basegfx/tuple/b2dtuple.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <vcl/virdev.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
+
 #include "svdconv.hxx"
+
+#include <cmath>
 
 using namespace com::sun::star;
 
@@ -1694,7 +1696,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
 
     // build and set BaseRect (use scale)
     Point aPoint = Point();
-    Size aSize(FRound(aScale.getX()), FRound(aScale.getY()));
+    Size aSize(std::lround(aScale.getX()), std::lround(aScale.getY()));
     tools::Rectangle aBaseRect(aPoint, aSize);
     SetSnapRect(aBaseRect);
 
@@ -1712,7 +1714,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     if(!basegfx::fTools::equalZero(fShearX))
     {
         GeoStat aGeoStat;
-        aGeoStat.nShearAngle = FRound((atan(fShearX) / F_PI180) * 100.0);
+        aGeoStat.nShearAngle = std::lround((atan(fShearX) / F_PI180) * 100.0);
         aGeoStat.RecalcTan();
         Shear(Point(), aGeoStat.nShearAngle, aGeoStat.nTan, false);
     }
@@ -1725,7 +1727,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         // #i78696#
         // fRotate is matematically correct, but aGeoStat.nRotationAngle is
         // mirrored -> mirror value here
-        aGeoStat.nRotationAngle = NormAngle360(FRound(-fRotate / F_PI18000));
+        aGeoStat.nRotationAngle = NormAngle360(std::lround(-fRotate / F_PI18000));
         aGeoStat.RecalcSinCos();
         Rotate(Point(), aGeoStat.nRotationAngle, aGeoStat.nSin, aGeoStat.nCos);
     }
@@ -1733,7 +1735,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     // translate?
     if(!aTranslate.equalZero())
     {
-        Move(Size(FRound(aTranslate.getX()), FRound(aTranslate.getY())));
+        Move(Size(std::lround(aTranslate.getX()), std::lround(aTranslate.getY())));
     }
 }
 

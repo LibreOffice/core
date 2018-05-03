@@ -17,7 +17,35 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <basegfx/vector/b2dvector.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/color/bcolor.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <tools/helpers.hxx>
+#include <svl/itemset.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/metaact.hxx>
+#include <editeng/escapementitem.hxx>
+#include <editeng/svxenum.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/overflowingtxt.hxx>
+#include <editeng/editstat.hxx>
+#include <sdr/primitive2d/sdrtextprimitive2d.hxx>
+#include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
+#include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <drawinglayer/animation/animationtiming.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 
+#include <svx/unoapi.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdpage.hxx>
@@ -25,35 +53,9 @@
 #include <svx/svdmodel.hxx>
 #include <svx/textchain.hxx>
 #include <svx/textchainflow.hxx>
-#include <basegfx/vector/b2dvector.hxx>
-#include <sdr/primitive2d/sdrtextprimitive2d.hxx>
-#include <drawinglayer/primitive2d/textprimitive2d.hxx>
-#include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
-#include <basegfx/range/b2drange.hxx>
-#include <editeng/editstat.hxx>
-#include <tools/helpers.hxx>
 #include <svx/sdtfchim.hxx>
-#include <svl/itemset.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <drawinglayer/animation/animationtiming.hxx>
-#include <basegfx/color/bcolor.hxx>
-#include <vcl/svapp.hxx>
-#include <editeng/escapementitem.hxx>
-#include <editeng/svxenum.hxx>
-#include <editeng/flditem.hxx>
-#include <editeng/adjustitem.hxx>
-#include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
-#include <vcl/metaact.hxx>
-#include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
-#include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
-#include <svx/unoapi.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <editeng/outlobj.hxx>
-#include <editeng/editobj.hxx>
-#include <editeng/overflowingtxt.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
+
+#include <cmath>
 
 using namespace com::sun::star;
 
@@ -745,8 +747,8 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
 
     // add one to rage sizes to get back to the old Rectangle and outliner measurements
-    const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1));
-    const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1));
+    const sal_uInt32 nAnchorTextWidth(std::lround(aAnchorTextRange.getWidth() + 1));
+    const sal_uInt32 nAnchorTextHeight(std::lround(aAnchorTextRange.getHeight() + 1));
     const OutlinerParaObject* pOutlinerParaObject = rSdrAutofitTextPrimitive.getSdrText()->GetOutlinerParaObject();
     OSL_ENSURE(pOutlinerParaObject, "impDecomposeBlockTextPrimitive used with no OutlinerParaObject (!)");
     const bool bVerticalWriting(pOutlinerParaObject->IsVertical());
@@ -912,8 +914,8 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     }
 
     // add one to rage sizes to get back to the old Rectangle and outliner measurements
-    const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1));
-    const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1));
+    const sal_uInt32 nAnchorTextWidth(std::lround(aAnchorTextRange.getWidth() + 1));
+    const sal_uInt32 nAnchorTextHeight(std::lround(aAnchorTextRange.getHeight() + 1));
     const bool bVerticalWriting(rSdrBlockTextPrimitive.getOutlinerParaObject().IsVertical());
     const bool bTopToBottom(rSdrBlockTextPrimitive.getOutlinerParaObject().IsTopToBottom());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
@@ -1168,7 +1170,7 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     // to layout without mirroring
     const double fScaleX(fabs(aScale.getX()) / aOutlinerScale.getX());
     const double fScaleY(fabs(aScale.getY()) / aOutlinerScale.getY());
-    rOutliner.SetGlobalCharStretching(static_cast<sal_Int16>(FRound(fScaleX * 100.0)), static_cast<sal_Int16>(FRound(fScaleY * 100.0)));
+    rOutliner.SetGlobalCharStretching(static_cast<sal_Int16>(std::lround(fScaleX * 100.0)), static_cast<sal_Int16>(std::lround(fScaleY * 100.0)));
 
     // When mirroring in X and Y,
     // move the null point which was top left to bottom right.
@@ -1505,8 +1507,8 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
 
     // add one to rage sizes to get back to the old Rectangle and outliner measurements
-    const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1));
-    const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1));
+    const sal_uInt32 nAnchorTextWidth(std::lround(aAnchorTextRange.getWidth() + 1));
+    const sal_uInt32 nAnchorTextHeight(std::lround(aAnchorTextRange.getHeight() + 1));
 
     // Text
     const OutlinerParaObject* pOutlinerParaObject = rSdrChainedTextPrimitive.getSdrText()->GetOutlinerParaObject();

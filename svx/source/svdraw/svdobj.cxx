@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svdobj.hxx>
 #include <config_features.h>
-
 #include <sal/config.h>
 
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/text/RelOrientation.hpp>
+#include <o3tl/deleter.hxx>
 
-#include "svdconv.hxx"
+#include <rtl/strbuf.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -34,38 +31,34 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <tools/bigint.hxx>
+#include <tools/diagnose_ex.h>
+#include <tools/line.hxx>
+#include <unotools/configmgr.hxx>
+#include <svl/whiter.hxx>
+#include <svl/grabbagitem.hxx>
+#include <svtools/colorcfg.hxx>
+#include <vcl/graphictools.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/virdev.hxx>
+#include <sfx2/objface.hxx>
+#include <sfx2/objsh.hxx>
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
 #include <drawinglayer/processor2d/linegeometryextractor2d.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/outlobj.hxx>
-#include <o3tl/deleter.hxx>
-#include <math.h>
-#include <sfx2/objface.hxx>
-#include <sfx2/objsh.hxx>
-#include <svl/whiter.hxx>
-#include <svl/grabbagitem.hxx>
-#include <svtools/colorcfg.hxx>
-#include <tools/bigint.hxx>
-#include <tools/diagnose_ex.h>
-#include <tools/helpers.hxx>
-#include <tools/line.hxx>
-#include <unotools/configmgr.hxx>
-#include <vcl/graphictools.hxx>
-#include <vcl/metaact.hxx>
-#include <vcl/virdev.hxx>
-#include <vector>
+#include <sdr/contact/viewcontactofgraphic.hxx>
+#include <sdr/properties/emptyproperties.hxx>
 
 #include <svx/shapepropertynotifier.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/xlinjoit.hxx>
-
+#include <svx/svdobj.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
-#include <sdr/contact/viewcontactofgraphic.hxx>
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
-#include <sdr/properties/emptyproperties.hxx>
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/sdrobjectuser.hxx>
 #include <svx/sdrobjectfilter.hxx>
@@ -96,16 +89,6 @@
 #include <svx/svdtrans.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
-#include <sxlayitm.hxx>
-#include <sxlogitm.hxx>
-#include <sxmovitm.hxx>
-#include <sxoneitm.hxx>
-#include <sxopitm.hxx>
-#include <sxreoitm.hxx>
-#include <sxrooitm.hxx>
-#include <sxsaitm.hxx>
-#include <sxsoitm.hxx>
-#include <sxtraitm.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/xbtmpit.hxx>
@@ -129,13 +112,31 @@
 #include <svx/xpoly.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svdsob.hxx>
-#include <rtl/strbuf.hxx>
+
+#include <sxlayitm.hxx>
+#include <sxlogitm.hxx>
+#include <sxmovitm.hxx>
+#include <sxoneitm.hxx>
+#include <sxopitm.hxx>
+#include <sxreoitm.hxx>
+#include <sxrooitm.hxx>
+#include <sxsaitm.hxx>
+#include <sxsoitm.hxx>
+#include <sxtraitm.hxx>
 #include <svdobjplusdata.hxx>
 #include <svdobjuserdatalist.hxx>
 
+#include "svdconv.hxx"
+
 #include <boost/optional.hpp>
 #include <libxml/xmlwriter.h>
+
 #include <memory>
+#include <vector>
+#include <cmath>
+
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 
 using namespace ::com::sun::star;
 
@@ -2902,8 +2903,8 @@ void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const ba
     }
 
     // build BaseRect
-    Point aPoint(FRound(aTranslate.getX()), FRound(aTranslate.getY()));
-    tools::Rectangle aBaseRect(aPoint, Size(FRound(aScale.getX()), FRound(aScale.getY())));
+    Point aPoint(std::lround(aTranslate.getX()), std::lround(aTranslate.getY()));
+    tools::Rectangle aBaseRect(aPoint, Size(std::lround(aScale.getX()), std::lround(aScale.getY())));
 
     // set BaseRect
     SetSnapRect(aBaseRect);

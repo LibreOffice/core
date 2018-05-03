@@ -17,24 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/utils/unotools.hxx>
+#include <comphelper/processfactory.hxx>
+#include <unotools/datetime.hxx>
+#include <ucbhelper/content.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/whiter.hxx>
+#include <vcl/bitmapaccess.hxx>
+#include <vcl/virdev.hxx>
+#include <sfx2/lnkbase.hxx>
+#include <sdr/properties/customshapeproperties.hxx>
+#include <sdr/contact/viewcontactofsdrobjcustomshape.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/writingmodeitem.hxx>
+
+#include <svx/svdview.hxx>
+#include <svx/xlntrit.hxx>
+#include <svx/xfltrit.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/svxids.hrc>
 #include <svx/svdoashp.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unoshape.hxx>
-#include <ucbhelper/content.hxx>
-#include <unotools/datetime.hxx>
-#include <sfx2/lnkbase.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/drawing/XCustomShapeEngine.hpp>
-#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
-#include <comphelper/processfactory.hxx>
-#include <svl/urihelper.hxx>
-#include <com/sun/star/uno/Sequence.h>
 #include <svx/svdogrp.hxx>
-#include <tools/helpers.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>
@@ -47,43 +62,33 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/strings.hrc>
-#include <editeng/eeitem.hxx>
-#include <editeng/editstat.hxx>
-#include <editeng/adjustitem.hxx>
 #include <svx/svdoutl.hxx>
-#include <editeng/outlobj.hxx>
 #include <svx/sdtfchim.hxx>
 #include <svx/EnhancedCustomShapeGeometry.hxx>
 #include <svx/EnhancedCustomShapeTypeNames.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
+#include <svx/strings.hrc>
+
+#include <svdobjplusdata.hxx>
+
+#include "svdconv.hxx"
+
+#include <cmath>
+
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XCustomShapeEngine.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
-#include <editeng/writingmodeitem.hxx>
-#include <svx/xlnclit.hxx>
-#include <svx/svxids.hrc>
-#include <svl/whiter.hxx>
-#include <sdr/properties/customshapeproperties.hxx>
-#include <sdr/contact/viewcontactofsdrobjcustomshape.hxx>
-#include <svx/xlntrit.hxx>
-#include <svx/xfltrit.hxx>
-#include <svx/xflclit.hxx>
-#include <svx/xflgrit.hxx>
-#include <svx/xflhtit.hxx>
-#include <svx/xbtmpit.hxx>
-#include <vcl/bitmapaccess.hxx>
-#include <vcl/virdev.hxx>
-#include <svx/svdview.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/utils/unotools.hxx>
-#include "svdconv.hxx"
-#include <svdobjplusdata.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -2923,7 +2928,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     }
 
     // build and set BaseRect (use scale)
-    Size aSize(FRound(aScale.getX()), FRound(aScale.getY()));
+    Size aSize(std::lround(aScale.getX()), std::lround(aScale.getY()));
     // fdo#47434 We need a valid rectangle here
     if( !aSize.Height() ) aSize.setHeight( 1 );
     if( !aSize.Width() ) aSize.setWidth( 1 );
@@ -2938,7 +2943,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
         // #i123181# The fix for #121932# here was wrong, the trunk version does not correct the
         // mirrored shear values, neither at the object level, nor on the API or XML level. Taking
         // back the mirroring of the shear angle
-        aGeoStat.nShearAngle = FRound((atan(fShearX) / F_PI180) * 100.0);
+        aGeoStat.nShearAngle = std::lround((atan(fShearX) / F_PI180) * 100.0);
         aGeoStat.RecalcTan();
         Shear(Point(), aGeoStat.nShearAngle, aGeoStat.nTan, false);
     }
@@ -2951,7 +2956,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
         // #i78696#
         // fRotate is mathematically correct, but aGeoStat.nRotationAngle is
         // mirrored -> mirror value here
-        aGeoStat.nRotationAngle = NormAngle360(FRound(-fRotate / F_PI18000));
+        aGeoStat.nRotationAngle = NormAngle360(std::lround(-fRotate / F_PI18000));
         aGeoStat.RecalcSinCos();
         Rotate(Point(), aGeoStat.nRotationAngle, aGeoStat.nSin, aGeoStat.nCos);
     }
@@ -2959,7 +2964,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     // translate?
     if(!aTranslate.equalZero())
     {
-        Move(Size(FRound(aTranslate.getX()), FRound(aTranslate.getY())));
+        Move(Size(std::lround(aTranslate.getX()), std::lround(aTranslate.getY())));
     }
 }
 
