@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_21b13890",
+        "filename": "tools/source/datetime/systemdatetime.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-03T16:23:26Z",
+      "side": 1,
+      "message": "Instead of having another place with hard coded numbers with a bunch of trailing 0s I\u0027d rather prefer if the already existing constants (secMask,minMask,hourMask) from ttime.cxx could be factored out and reused.",
+      "revId": "641cdbfc3125f25cd2210f5e72d069471e2938e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
