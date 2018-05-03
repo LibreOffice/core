@@ -464,7 +464,7 @@ namespace sfx2
     {
         DBG_ASSERT( !_rWildCard.isEmpty(),
             "AppendWildcardToDescriptor::AppendWildcardToDescriptor: invalid wildcard!" );
-        DBG_ASSERT( !_rWildCard.isEmpty() && _rWildCard[0] != s_cWildcardSeparator,
+        DBG_ASSERT( _rWildCard.isEmpty() || _rWildCard[0] != s_cWildcardSeparator,
             "AppendWildcardToDescriptor::AppendWildcardToDescriptor: wildcard already separated!" );
 
         aWildCards.reserve( comphelper::string::getTokenCount(_rWildCard, s_cWildcardSeparator) );
