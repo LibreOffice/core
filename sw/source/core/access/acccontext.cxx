@@ -955,9 +955,7 @@ void SAL_CALL SwAccessibleContext::grabFocus()
             if( pTextNd )
             {
                 // create pam for selection
-                SwIndex aIndex( const_cast< SwTextNode * >( pTextNd ),
-                                pTextFrame->GetOfst() );
-                SwPosition aStartPos( *pTextNd, aIndex );
+                SwPosition const aStartPos(pTextFrame->MapViewToModelPos(pTextFrame->GetOfst()));
                 SwPaM aPaM( aStartPos );
 
                 // set PaM at cursor shell
