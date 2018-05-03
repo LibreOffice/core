@@ -32,8 +32,8 @@
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <unotools/resmgr.hxx>
+#include <vcl/ImageTree.hxx>
 #include <vcl/mnemonic.hxx>
-#include <vcl/pngwrite.hxx>
 #include <vcl/weld.hxx>
 
 using namespace com::sun::star;
@@ -4226,6 +4226,8 @@ private:
     ResHookProc m_pStringReplace;
     OUString m_sHelpRoot;
     OString m_aUtf8HelpRoot;
+    OUString m_aIconTheme;
+    OUString m_aUILang;
     GtkBuilder* m_pBuilder;
     GSList* m_pObjectList;
     GtkWidget* m_pParentWidget;
@@ -4251,20 +4253,18 @@ private:
             if (icon_name)
             {
                 OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
+                auto xMemStm = ImageTree::get().getImageStream(aIconName, m_aIconTheme, m_aUILang);
+                if (xMemStm)
+                {
+                    GdkPixbufLoader *pixbuf_loader = gdk_pixbuf_loader_new();
+                    gdk_pixbuf_loader_write(pixbuf_loader, static_cast<const guchar*>(xMemStm->GetData()),
+                                            xMemStm->Seek(STREAM_SEEK_TO_END), nullptr);
+                    gdk_pixbuf_loader_close(pixbuf_loader, nullptr);
+                    GdkPixbuf* pixbuf = gdk_pixbuf_loader_get_pixbuf(pixbuf_loader);
 
-                SvMemoryStream aMemStm;
-                BitmapEx aBitmap(aIconName);
-                vcl::PNGWriter aWriter(aBitmap);
-                aWriter.Write(aMemStm);
-
-                GdkPixbufLoader *pixbuf_loader = gdk_pixbuf_loader_new();
-                gdk_pixbuf_loader_write(pixbuf_loader, static_cast<const guchar*>(aMemStm.GetData()),
-                                        aMemStm.Seek(STREAM_SEEK_TO_END), nullptr);
-                gdk_pixbuf_loader_close(pixbuf_loader, nullptr);
-                GdkPixbuf* pixbuf = gdk_pixbuf_loader_get_pixbuf(pixbuf_loader);
-
-                gtk_image_set_from_pixbuf(pImage, pixbuf);
-                g_object_unref(pixbuf_loader);
+                    gtk_image_set_from_pixbuf(pImage, pixbuf);
+                    g_object_unref(pixbuf_loader);
+                }
             }
         }
         //set helpids
@@ -4343,6 +4343,8 @@ public:
             m_sHelpRoot = m_sHelpRoot.copy(0, nIdx);
         m_sHelpRoot = m_sHelpRoot + OUString('/');
         m_aUtf8HelpRoot = OUStringToOString(m_sHelpRoot, RTL_TEXTENCODING_UTF8);
+        m_aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+        m_aUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
 
         m_pObjectList = gtk_builder_get_objects(m_pBuilder);
         g_slist_foreach(m_pObjectList, postprocess, this);

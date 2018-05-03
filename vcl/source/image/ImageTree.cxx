@@ -30,6 +30,11 @@ OUString ImageTree::getImageUrl(OUString const & rName, OUString const & rStyle,
     return mpImplImageTree->getImageUrl(rName, rStyle, rLang);
 }
 
+std::shared_ptr<SvMemoryStream> ImageTree::getImageStream(OUString const & rName, OUString const & rStyle, OUString const & rLang)
+{
+    return mpImplImageTree->getImageStream(rName, rStyle, rLang);
+}
+
 bool ImageTree::loadImage(OUString const & rName, OUString const & rStyle,
                           BitmapEx & rBitmap, bool bLocalized,
                           const ImageLoadFlags eFlags)

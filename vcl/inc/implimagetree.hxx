@@ -69,6 +69,9 @@ public:
     OUString getImageUrl(
         OUString const & name, OUString const & style, OUString const & lang);
 
+    std::shared_ptr<SvMemoryStream> getImageStream(
+        OUString const & rName, OUString const & rStyle, OUString const & rLang);
+
     bool loadImage(
         OUString const & name, OUString const & style,
         BitmapEx & bitmap, bool localized,

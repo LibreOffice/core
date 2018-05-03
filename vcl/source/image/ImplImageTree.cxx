@@ -256,6 +256,46 @@ OUString ImplImageTree::getImageUrl(OUString const & rName, OUString const & rSt
     return OUString();
 }
 
+std::shared_ptr<SvMemoryStream> ImplImageTree::getImageStream(OUString const & rName, OUString const & rStyle, OUString const & rLang)
+{
+    OUString aStyle(rStyle);
+
+    while (!aStyle.isEmpty())
+    {
+        try
+        {
+            setStyle(aStyle);
+
+            if (checkPathAccess())
+            {
+                IconSet& rIconSet = getCurrentIconSet();
+                const css::uno::Reference<css::container::XNameAccess>& rNameAccess = rIconSet.maNameAccess;
+
+                LanguageTag aLanguageTag(rLang);
+
+                for (OUString& rPath: getPaths(rName, aLanguageTag))
+                {
+                    if (rNameAccess->hasByName(rPath))
+                    {
+                        css::uno::Reference<css::io::XInputStream> aStream;
+                        bool ok = rNameAccess->getByName(rPath) >>= aStream;
+                        assert(ok);
+                        (void)ok; // prevent unused warning in release build
+                        return wrapStream(aStream);
+                    }
+                }
+            }
+        }
+        catch (const css::uno::Exception & e)
+        {
+            SAL_INFO("vcl", e);
+        }
+
+        aStyle = fallbackStyle(aStyle);
+    }
+    return std::shared_ptr<SvMemoryStream>();
+}
+
 OUString ImplImageTree::fallbackStyle(const OUString& rsStyle)
 {
     OUString sResult;
