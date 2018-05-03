@@ -1079,7 +1079,9 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
 
     SvNumFormatType FType;
-    const SvNumberformat* pFormat = ImpSubstituteEntry( GetFormatEntry(F_Index));
+    // For the 0 General format directly use the init/system locale and avoid
+    // all overhead that is associated with a format passed to the scanner.
+    const SvNumberformat* pFormat = (F_Index == 0 ? nullptr : ImpSubstituteEntry( GetFormatEntry(F_Index)));
     if (!pFormat)
     {
         ChangeIntl(IniLnge);
