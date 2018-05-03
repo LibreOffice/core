@@ -961,12 +961,10 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
     if( pCursorSh != nullptr && pTextNd != nullptr &&
         ( pCursor == nullptr ||
            pCursor->GetPoint()->nNode.GetIndex() != pTextNd->GetIndex() ||
-          !pTextFrame->IsInside( pCursor->GetPoint()->nContent.GetIndex()) ) )
+          !pTextFrame->IsInside(pTextFrame->MapModelToViewPos(*pCursor->GetPoint()))))
     {
         // create pam for selection
-        SwIndex aIndex( const_cast< SwTextNode * >( pTextNd ),
-                        pTextFrame->GetOfst() );
-        SwPosition aStartPos( *pTextNd, aIndex );
+        SwPosition const aStartPos(pTextFrame->MapViewToModelPos(pTextFrame->GetOfst()));
         SwPaM aPaM( aStartPos );
 
         // set PaM at cursor shell
@@ -2966,7 +2964,7 @@ SwHyperlinkIter_Impl::SwHyperlinkIter_Impl( const SwTextFrame *pTextFrame ) :
     nPos( 0 )
 {
     const SwTextFrame *pFollFrame = pTextFrame->GetFollow();
-    nEnd = pFollFrame ? pFollFrame->GetOfst() : pTextFrame->GetTextNode()->Len();
+    nEnd = pFollFrame ? pFollFrame->GetOfst() : TextFrameIndex(pTextFrame->GetText().getLength());
 }
 
 const SwTextAttr *SwHyperlinkIter_Impl::next()
