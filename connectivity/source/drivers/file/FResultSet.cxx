@@ -149,7 +149,7 @@ void OResultSet::disposing()
     m_pTable.clear();
 
     m_pFileSet = nullptr;
-    DELETEZ(m_pSortIndex);
+    m_pSortIndex.reset();
 
     if(m_aInsertRow.is())
         m_aInsertRow->get().clear();
@@ -1147,7 +1147,7 @@ void OResultSet::sortRows()
         ++i;
     }
 
-    m_pSortIndex = new OSortIndex(eKeyType,m_aOrderbyAscending);
+    m_pSortIndex.reset(new OSortIndex(eKeyType,m_aOrderbyAscending));
 
     while ( ExecuteRow( IResultSetHelper::NEXT, 1, false ) )
     {
@@ -1161,7 +1161,7 @@ void OResultSet::sortRows()
     // create sorted Keyset
     m_pFileSet = nullptr;
     m_pFileSet = m_pSortIndex->CreateKeySet();
-    DELETEZ(m_pSortIndex);
+    m_pSortIndex.reset();
     // now access to a sorted set is possible via Index
 }
 
