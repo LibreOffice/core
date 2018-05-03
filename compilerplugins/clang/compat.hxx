@@ -49,6 +49,29 @@ inline clang::FunctionDecl::param_const_range parameters(
 }
 #endif
 
+inline clang::SourceLocation getBegin(clang::CharSourceRange const & range) {
+#if CLANG_VERSION >= 70000
+    return range.getBegin();
+#else
+    return range.first;
+#endif
+}
+
+inline clang::SourceLocation getEnd(clang::CharSourceRange const & range) {
+#if CLANG_VERSION >= 70000
+    return range.getEnd();
+#else
+    return range.second;
+#endif
+}
+
+inline bool equal(clang::CharSourceRange const & range1, clang::CharSourceRange const & range2) {
+#if CLANG_VERSION >= 70000
+    return range1.getBegin() == range2.getBegin() && range1.getEnd() == range2.getEnd();
+#else
+    return range1 == range2;
+#endif
+}
 
 inline bool isPointWithin(
     clang::SourceManager const & SM, clang::SourceLocation Location, clang::SourceLocation Start,

@@ -12,6 +12,8 @@
 #include <limits>
 #include <set>
 #include <string>
+
+#include "compat.hxx"
 #include "plugin.hxx"
 
 //
@@ -351,7 +353,7 @@ bool CStyleCast::isLastTokenOfImmediateMacroBodyExpansion(
     assert(MI != nullptr);
     if (spell == MI->getDefinitionEndLoc()) {
         if (macroEnd != nullptr) {
-            *macroEnd = compiler.getSourceManager().getImmediateExpansionRange(loc).second;
+            *macroEnd = compat::getEnd(compiler.getSourceManager().getImmediateExpansionRange(loc));
         }
         return true;
     }
@@ -391,8 +393,9 @@ bool CStyleCast::rewriteArithmeticCast(CStyleCastExpr const * expr, char const *
     auto secondBegin = expr->getRParenLoc();
     while (compiler.getSourceManager().isMacroArgExpansion(firstBegin)
            && compiler.getSourceManager().isMacroArgExpansion(secondBegin)
-           && (compiler.getSourceManager().getImmediateExpansionRange(firstBegin)
-               == compiler.getSourceManager().getImmediateExpansionRange(secondBegin)))
+           && compat::equal(
+               compiler.getSourceManager().getImmediateExpansionRange(firstBegin),
+               compiler.getSourceManager().getImmediateExpansionRange(secondBegin)))
     {
         firstBegin = compiler.getSourceManager().getImmediateSpellingLoc(firstBegin);
         secondBegin = compiler.getSourceManager().getImmediateSpellingLoc(secondBegin);
@@ -424,23 +427,25 @@ bool CStyleCast::rewriteArithmeticCast(CStyleCastExpr const * expr, char const *
     //  FOO((y))
     while (compiler.getSourceManager().isMacroArgExpansion(third)
            && compiler.getSourceManager().isMacroArgExpansion(fourth)
-           && (compiler.getSourceManager().getImmediateExpansionRange(third)
-               == compiler.getSourceManager().getImmediateExpansionRange(fourth))
+           && compat::equal(
+               compiler.getSourceManager().getImmediateExpansionRange(third),
+               compiler.getSourceManager().getImmediateExpansionRange(fourth))
            && compiler.getSourceManager().isAtStartOfImmediateMacroExpansion(third))
             //TODO: check fourth is at end of immediate macro expansion, but
             // SourceManager::isAtEndOfImmediateMacroExpansion requires a location pointing at the
             // character end of the last token
     {
         auto const range = compiler.getSourceManager().getImmediateExpansionRange(third);
-        third = range.first;
-        fourth = range.second;
+        third = compat::getBegin(range);
+        fourth = compat::getEnd(range);
         macro = true;
         assert(third.isValid());
     }
     while (compiler.getSourceManager().isMacroArgExpansion(third)
            && compiler.getSourceManager().isMacroArgExpansion(fourth)
-           && (compiler.getSourceManager().getImmediateExpansionRange(third)
-               == compiler.getSourceManager().getImmediateExpansionRange(fourth)))
+           && compat::equal(
+               compiler.getSourceManager().getImmediateExpansionRange(third),
+               compiler.getSourceManager().getImmediateExpansionRange(fourth)))
     {
         third = compiler.getSourceManager().getImmediateSpellingLoc(third);
         fourth = compiler.getSourceManager().getImmediateSpellingLoc(fourth);
@@ -475,8 +480,8 @@ bool CStyleCast::rewriteArithmeticCast(CStyleCastExpr const * expr, char const *
                 break;
             }
             auto const range = compiler.getSourceManager().getImmediateExpansionRange(third);
-            third = range.first;
-            fourth = range.second;
+            third = compat::getBegin(range);
+            fourth = compat::getEnd(range);
             assert(third.isValid());
         }
         if (third.isValid() && compiler.getSourceManager().isMacroBodyExpansion(third)
@@ -512,8 +517,8 @@ bool CStyleCast::rewriteArithmeticCast(CStyleCastExpr const * expr, char const *
                 break;
             }
             auto const range = compiler.getSourceManager().getImmediateExpansionRange(third);
-            third = range.first;
-            fourth = range.second;
+            third = compat::getBegin(range);
+            fourth = compat::getEnd(range);
         }
         // ...and additionally asymmetrically unwind macros only at the start or end, for code like
         //

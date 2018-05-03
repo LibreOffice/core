@@ -9,6 +9,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "compat.hxx"
 
 /**
   Check for calls to CPPUNIT_ASSERT when it should be using CPPUNIT_ASSERT_EQUALS
@@ -97,7 +98,7 @@ bool CppunitAssertEquals::VisitCallExpr(const CallExpr* callExpr)
     }
     auto range = compiler.getSourceManager().getImmediateExpansionRange(loc);
     checkExpr(
-        SourceRange(range.first, range.second), name,
+        SourceRange(compat::getBegin(range), compat::getEnd(range)), name,
         e2->IgnoreParenImpCasts(), false);
     return true;
 }
