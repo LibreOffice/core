@@ -42,7 +42,7 @@ public:
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;
-    virtual sal_Int32 GetCursorOfst( const sal_uInt16 nOfst ) const override;
+    virtual TextFrameIndex GetCursorOfst(sal_uInt16 nOfst) const override;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
@@ -94,7 +94,11 @@ class SwHangingPortion : public SwTextPortion
     sal_uInt16 nInnerWidth;
 public:
     explicit SwHangingPortion( SwPosSize aSize ) : nInnerWidth( aSize.Width() )
-        { SetWhichPor( POR_HNG );  SetLen( 1 ); Height( aSize.Height() ); }
+    {
+        SetWhichPor( POR_HNG );
+        SetLen(TextFrameIndex(1));
+        Height( aSize.Height() );
+    }
 
     sal_uInt16 GetInnerWidth() const { return nInnerWidth; }
 };
@@ -103,8 +107,10 @@ public:
 class SwHiddenTextPortion : public SwLinePortion
 {
 public:
-    explicit SwHiddenTextPortion( sal_Int32 nLen )
-        { SetWhichPor( POR_HIDDEN_TXT );  SetLen( nLen ); }
+    explicit SwHiddenTextPortion(TextFrameIndex const nLen)
+    {
+        SetWhichPor( POR_HIDDEN_TXT );  SetLen( nLen );
+    }
 
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
@@ -123,7 +129,7 @@ public:
     explicit SwControlCharPortion( sal_Unicode cChar )
         : mnViewWidth( 0 ), mnHalfCharWidth( 0 ), mcChar( cChar )
     {
-        SetWhichPor( POR_CONTROLCHAR ); SetLen( 1 );
+        SetWhichPor( POR_CONTROLCHAR ); SetLen( TextFrameIndex(1) );
     }
 
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;

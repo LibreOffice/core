@@ -597,7 +597,7 @@ void SwTextFrame::HideHidden()
     ClearPara();
 }
 
-void SwTextFrame::HideFootnotes( sal_Int32 nStart, sal_Int32 nEnd )
+void SwTextFrame::HideFootnotes(TextFrameIndex const nStart, TextFrameIndex const nEnd)
 {
     const SwpHints *pHints = GetTextNode()->GetpSwpHints();
     if( pHints )
@@ -774,9 +774,9 @@ void SwTextFrame::HideAndShowObjects()
  * line has to be formatted as well.
  * nFound is <= nEndLine.
  */
-sal_Int32 SwTextFrame::FindBrk( const OUString &rText,
-                              const sal_Int32 nStart,
-                              const sal_Int32 nEnd )
+TextFrameIndex SwTextFrame::FindBrk(const OUString &rText,
+                              const TextFrameIndex nStart,
+                              const TextFrameIndex nEnd)
 {
     sal_Int32 nFound = nStart;
     const sal_Int32 nEndLine = std::min( nEnd, rText.getLength() - 1 );
@@ -799,7 +799,7 @@ sal_Int32 SwTextFrame::FindBrk( const OUString &rText,
     return nFound;
 }
 
-bool SwTextFrame::IsIdxInside( const sal_Int32 nPos, const sal_Int32 nLen ) const
+bool SwTextFrame::IsIdxInside(TextFrameIndex const nPos, TextFrameIndex const nLen) const
 {
 // Silence over-eager warning emitted at least by GCC trunk towards 6:
 #if defined __GNUC__ && !defined __clang__
@@ -2580,7 +2580,7 @@ sal_uInt16 SwTextFrame::FirstLineHeight() const
     return pPara->Height();
 }
 
-sal_uInt16 SwTextFrame::GetLineCount( sal_Int32 nPos )
+sal_uInt16 SwTextFrame::GetLineCount(TextFrameIndex const nPos)
 {
     sal_uInt16 nRet = 0;
     SwTextFrame *pFrame = this;

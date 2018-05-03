@@ -513,7 +513,7 @@ SwNumberPortion::SwNumberPortion( const OUString &rExpand,
     SetCenter( bCntr );
 }
 
-sal_Int32 SwNumberPortion::GetCursorOfst( const sal_uInt16 ) const
+TextFrameIndex SwNumberPortion::GetCursorOfst(const sal_uInt16) const
 {
     return 0;
 }

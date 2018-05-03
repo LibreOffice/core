@@ -21,6 +21,7 @@
 
 #include "possiz.hxx"
 #include <txttypes.hxx>
+#include <TextFrameIndex.hxx>
 
 #ifdef DBG_UTIL
 #include <libxml/xmlwriter.h>
@@ -54,7 +55,7 @@ protected:
     // Here we have areas with different attributes
     SwLinePortion *pPortion;
     // Count of chars and spaces on the line
-    sal_Int32 nLineLength;
+    TextFrameIndex nLineLength;
     sal_uInt16 nAscent;      // Maximum ascender
 
     SwLinePortion();
@@ -72,8 +73,8 @@ public:
     // Access methods
     SwLinePortion *GetPortion() const { return pPortion; }
     inline SwLinePortion &operator=(const SwLinePortion &rPortion);
-    sal_Int32 GetLen() const { return nLineLength; }
-    void SetLen( const sal_Int32 nLen ) { nLineLength = nLen; }
+    TextFrameIndex GetLen() const { return nLineLength; }
+    void SetLen(TextFrameIndex const nLen) { nLineLength = nLen; }
     void SetPortion( SwLinePortion *pNew ){ pPortion = pNew; }
     sal_uInt16 &GetAscent() { return nAscent; }
     sal_uInt16 GetAscent() const { return nAscent; }
@@ -140,7 +141,8 @@ public:
     SwLinePortion *FindPrevPortion( const SwLinePortion *pRoot );
     SwLinePortion *FindLastPortion();
 
-    virtual sal_Int32 GetCursorOfst( const sal_uInt16 nOfst ) const;
+    /// the parameter is actually SwTwips apparently?
+    virtual TextFrameIndex GetCursorOfst(sal_uInt16 nOfst) const;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const;
     void CalcTextSize( const SwTextSizeInfo &rInfo );
 

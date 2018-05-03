@@ -497,7 +497,7 @@ void SwTextPortion::FormatEOL( SwTextFormatInfo &rInf )
 
 }
 
-sal_Int32 SwTextPortion::GetCursorOfst( const sal_uInt16 nOfst ) const
+TextFrameIndex SwTextPortion::GetCursorOfst(const sal_uInt16 nOfst) const
 {
     OSL_ENSURE( false, "SwTextPortion::GetCursorOfst: don't use this method!" );
     return SwLinePortion::GetCursorOfst( nOfst );
@@ -566,8 +566,8 @@ bool SwTextPortion::GetExpText( const SwTextSizeInfo &, OUString & ) const
 
 // Responsible for the justified paragraph. They calculate the blank
 // count and the resulting added space.
-sal_Int32 SwTextPortion::GetSpaceCnt( const SwTextSizeInfo &rInf,
-                                      sal_Int32& rCharCnt ) const
+TextFrameIndex SwTextPortion::GetSpaceCnt(const SwTextSizeInfo &rInf,
+                                          TextFrameIndex& rCharCnt) const
 {
     sal_Int32 nCnt = 0;
     sal_Int32 nPos = 0;

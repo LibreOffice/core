@@ -1463,7 +1463,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
     return pPor;
 }
 
-sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
+TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
 {
     OSL_ENSURE( ! m_pFrame->IsVertical() || m_pFrame->IsSwapped(),
             "SwTextFormatter::FormatLine( nStartPos ) with unswapped frame" );
@@ -1977,7 +1977,7 @@ void SwTextFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
 }
 
 void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
-    sal_Int32 nStartIdx, bool bAlways ) const
+    TextFrameIndex const nStartIdx, bool bAlways) const
 {
     OSL_ENSURE( ! m_pFrame->IsVertical() || m_pFrame->IsSwapped(),
             "SwTextFormatter::UpdatePos with unswapped frame" );

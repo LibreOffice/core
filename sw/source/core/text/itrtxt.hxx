@@ -39,7 +39,7 @@ protected:
     SwTwips m_nFrameStart;
     SwTwips m_nY;
     SwTwips m_nRegStart;          // The register's start position (Y)
-    sal_Int32 m_nStart;          // Start in the text string, end = pCurr->GetLen()
+    TextFrameIndex m_nStart;          // Start in the text string, end = pCurr->GetLen()
     sal_uInt16 m_nRegDiff;            // Register's line distance
     sal_uInt16 m_nLineNr;             // Line number
     bool m_bPrev          : 1;
@@ -84,10 +84,10 @@ public:
     const SwLineLayout *GetCurr() const { return m_pCurr; } // NEVER 0!
     const SwLineLayout *GetNext() const { return m_pCurr->GetNext(); }
            const SwLineLayout *GetPrev();
-    sal_Int32 GetLength() const { return m_pCurr->GetLen(); }
+    TextFrameIndex GetLength() const { return m_pCurr->GetLen(); }
     sal_uInt16 GetLineNr() const { return m_nLineNr; }
-    sal_Int32 GetStart() const { return m_nStart; }
-    sal_Int32 GetEnd() const { return GetStart() + GetLength(); }
+    TextFrameIndex GetStart() const { return m_nStart; }
+    TextFrameIndex GetEnd() const { return GetStart() + GetLength(); }
     SwTwips Y() const { return m_nY; }
 
     SwTwips RegStart() const { return m_nRegStart; }
@@ -108,7 +108,7 @@ public:
     const SwLineLayout *GetNextLine() const;
     const SwLineLayout *GetPrevLine();
 
-    void CharToLine( const sal_Int32 );
+    void CharToLine(TextFrameIndex);
     void TwipsToLine(const SwTwips);
 
     // Truncates all after pCurr
@@ -211,8 +211,8 @@ public:
 
     // Returns the TextPos for start and end of the current line without whitespace
     // Implemented in frminf.cxx
-    sal_Int32 GetTextStart() const;
-    sal_Int32 GetTextEnd() const;
+    TextFrameIndex GetTextStart() const;
+    TextFrameIndex GetTextEnd() const;
 
     SwTextSizeInfo &GetInfo()
         { return static_cast<SwTextSizeInfo&>(SwTextIter::GetInfo()); }
@@ -267,7 +267,7 @@ class SwTextCursor : public SwTextAdjuster
 
     // Ambiguities
     static bool bRightMargin;
-    void GetCharRect_(SwRect *, const sal_Int32, SwCursorMoveState* );
+    void GetCharRect_(SwRect *, TextFrameIndex, SwCursorMoveState *);
 protected:
     void CtorInitTextCursor( SwTextFrame *pFrame, SwTextSizeInfo *pInf );
     explicit SwTextCursor(SwTextNode const * pTextNode) : SwTextAdjuster(pTextNode) { }
@@ -277,14 +277,14 @@ public:
     {
         CtorInitTextCursor(pTextFrame, pTextSizeInf);
     }
-    bool GetCharRect(SwRect *, const sal_Int32, SwCursorMoveState* = nullptr,
+    bool GetCharRect(SwRect *, TextFrameIndex, SwCursorMoveState* = nullptr,
         const long nMax = 0 );
-    bool GetEndCharRect(SwRect *, const sal_Int32, SwCursorMoveState* = nullptr,
+    bool GetEndCharRect(SwRect *, TextFrameIndex, SwCursorMoveState* = nullptr,
         const long nMax = 0 );
-    sal_Int32 GetCursorOfst( SwPosition *pPos, const Point &rPoint,
+    TextFrameIndex GetCursorOfst( SwPosition *pPos, const Point &rPoint,
                 bool bChgNode, SwCursorMoveState* = nullptr ) const;
     // Respects ambiguities: For the implementation see below
-    const SwLineLayout *CharCursorToLine( const sal_Int32 nPos );
+    const SwLineLayout *CharCursorToLine(TextFrameIndex const nPos);
 
     // calculates baseline for portion rPor
     // bAutoToCentered indicates, if AUTOMATIC mode means CENTERED or BASELINE
@@ -316,7 +316,7 @@ inline bool SwTextIter::SeekAndChg( SwTextSizeInfo &rInf )
 inline bool SwTextIter::SeekAndChgBefore( SwTextSizeInfo &rInf )
 {
     if ( rInf.GetIdx() )
-        return SeekAndChgAttrIter( rInf.GetIdx()-1, rInf.GetOut() );
+        return SeekAndChgAttrIter(rInf.GetIdx() - TextFrameIndex(1), rInf.GetOut());
     else
         return SeekAndChgAttrIter( rInf.GetIdx(), rInf.GetOut() );
 }

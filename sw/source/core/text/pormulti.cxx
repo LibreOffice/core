@@ -160,7 +160,8 @@ void SwMultiPortion::ActualizeTabulator()
 }
 
 SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
-    sal_Int32 nEnd, bool bRTL ) : SwMultiPortion( nEnd )
+        TextFrameIndex const nEnd, bool bRTL )
+    : SwMultiPortion( nEnd )
 {
     const SvxCharRotateItem* pRot = static_cast<const SvxCharRotateItem*>(rCreate.pItem);
     if( !pRot )
@@ -185,7 +186,7 @@ SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
     }
 }
 
-SwBidiPortion::SwBidiPortion( sal_Int32 nEnd, sal_uInt8 nLv )
+SwBidiPortion::SwBidiPortion(TextFrameIndex const nEnd, sal_uInt8 nLv)
     : SwMultiPortion( nEnd ), nLevel( nLv )
 {
     SetBidi();
@@ -213,7 +214,7 @@ bool SwBidiPortion::ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const
     return false;
 }
 
-sal_Int32 SwBidiPortion::GetSpaceCnt( const SwTextSizeInfo &rInf ) const
+TextFrameIndex SwBidiPortion::GetSpaceCnt(const SwTextSizeInfo &rInf) const
 {
     // Calculate number of blanks for justified alignment
     SwLinePortion* pPor = GetRoot().GetFirstPortion();
@@ -239,7 +240,8 @@ sal_Int32 SwBidiPortion::GetSpaceCnt( const SwTextSizeInfo &rInf ) const
 // in the next line.
 // It takes the same brackets and if the original has no content except
 // brackets, these will be deleted.
-SwDoubleLinePortion::SwDoubleLinePortion(SwDoubleLinePortion& rDouble, sal_Int32 nEnd)
+SwDoubleLinePortion::SwDoubleLinePortion(
+        SwDoubleLinePortion& rDouble, TextFrameIndex const nEnd)
     : SwMultiPortion(nEnd)
     , pBracket(nullptr)
     , nLineDiff(0)
@@ -265,7 +267,8 @@ SwDoubleLinePortion::SwDoubleLinePortion(SwDoubleLinePortion& rDouble, sal_Int32
 // This constructor uses the textattribute to get the right brackets.
 // The textattribute could be a 2-line-attribute or a character- or
 // internet style, which contains the 2-line-attribute.
-SwDoubleLinePortion::SwDoubleLinePortion(const SwMultiCreator& rCreate, sal_Int32 nEnd)
+SwDoubleLinePortion::SwDoubleLinePortion(
+        const SwMultiCreator& rCreate, TextFrameIndex const nEnd)
     : SwMultiPortion(nEnd)
     , pBracket(new SwBracket)
     , nLineDiff(0)
@@ -539,10 +542,10 @@ SwDoubleLinePortion::~SwDoubleLinePortion()
 
 // constructs a ruby portion, i.e. an additional text is displayed
 // beside the main text, e.g. phonetic characters.
-SwRubyPortion::SwRubyPortion( const SwRubyPortion& rRuby, sal_Int32 nEnd ) :
-    SwMultiPortion( nEnd ),
-    nRubyOffset( rRuby.GetRubyOffset() ),
-    nAdjustment( rRuby.GetAdjustment() )
+SwRubyPortion::SwRubyPortion(const SwRubyPortion& rRuby, TextFrameIndex const nEnd)
+    : SwMultiPortion( nEnd )
+    , nRubyOffset( rRuby.GetRubyOffset() )
+    , nAdjustment( rRuby.GetAdjustment() )
 {
     SetDirection( rRuby.GetDirection() );
     SetRubyPosition( rRuby.GetRubyPosition() );
@@ -553,7 +556,7 @@ SwRubyPortion::SwRubyPortion( const SwRubyPortion& rRuby, sal_Int32 nEnd ) :
 // beside the main text, e.g. phonetic characters.
 SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
                               const IDocumentSettingAccess& rIDocumentSettingAccess,
-                              sal_Int32 nEnd, sal_Int32 nOffs,
+                              TextFrameIndex const nEnd, TextFrameIndex const nOffs,
                               const SwTextSizeInfo &rInf )
      : SwMultiPortion( nEnd )
 {
@@ -807,7 +810,7 @@ static bool lcl_HasRotation( const SwTextAttr& rAttr,
 // interrupts the first attribute.
 // E.g. a ruby portion interrupts a 2-line-attribute, a 2-line-attribute
 // with different brackets interrupts another 2-line-attribute.
-SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
+SwMultiCreator* SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rPos,
                                                 SwMultiPortion const * pMulti ) const
 {
     SwScriptInfo& rSI = const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
@@ -2125,7 +2128,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
 // a doubleline- or ruby-portion.
 // The second parameter is the start index of the line.
 SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
-    sal_Int32 nPosition )
+    TextFrameIndex nPosition)
 {
     if( !nPosition )
         return nullptr;
@@ -2270,7 +2273,7 @@ SwTextCursorSave::SwTextCursorSave( SwTextCursor* pCursor,
                                   SwMultiPortion* pMulti,
                                   SwTwips nY,
                                   sal_uInt16& nX,
-                                  sal_Int32 nCurrStart,
+                                  TextFrameIndex const nCurrStart,
                                   long nSpaceAdd )
 {
     pTextCursor = pCursor;

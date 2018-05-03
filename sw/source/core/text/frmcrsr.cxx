@@ -103,7 +103,7 @@ SwTextFrame *GetAdjFrameAtPos( SwTextFrame *pFrame, const SwPosition &rPos,
 
 }
 
-bool sw_ChangeOffset( SwTextFrame* pFrame, sal_Int32 nNew )
+bool sw_ChangeOffset(SwTextFrame* pFrame, TextFrameIndex nNew)
 {
     // Do not scroll in areas and outside of flies
     OSL_ENSURE( !pFrame->IsFollow(), "Illegal Scrolling by Follow!" );
@@ -138,7 +138,7 @@ bool sw_ChangeOffset( SwTextFrame* pFrame, sal_Int32 nNew )
     return false;
 }
 
-SwTextFrame& SwTextFrame::GetFrameAtOfst( const sal_Int32 nWhere )
+SwTextFrame& SwTextFrame::GetFrameAtOfst(TextFrameIndex const nWhere)
 {
     SwTextFrame* pRet = this;
     while( pRet->HasFollow() && nWhere >= pRet->GetFollow()->GetOfst() )
@@ -1038,7 +1038,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
     }
 }
 
-void SwTextFrame::PrepareVisualMove( sal_Int32& nPos, sal_uInt8& nCursorLevel,
+void SwTextFrame::PrepareVisualMove(TextFrameIndex & nPos, sal_uInt8& nCursorLevel,
                                   bool& bForward, bool bInsertCursor )
 {
     if( IsEmpty() || IsHiddenNow() )

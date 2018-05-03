@@ -27,7 +27,7 @@ class SwExpandPortion : public SwTextPortion
 public:
     SwExpandPortion() { SetWhichPor( POR_EXP ); }
     virtual bool Format( SwTextFormatInfo &rInf ) override;
-    virtual sal_Int32 GetCursorOfst( const sal_uInt16 nOfst ) const override;
+    virtual TextFrameIndex GetCursorOfst(sal_uInt16 nOfst) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
@@ -43,14 +43,14 @@ class SwBlankPortion : public SwExpandPortion
 public:
     SwBlankPortion( sal_Unicode cCh, bool bMult = false )
         : cChar( cCh ), bMulti( bMult )
-        { cChar = cCh; SetLen(1); SetWhichPor( POR_BLANK ); }
+        { cChar = cCh; SetLen(TextFrameIndex(1)); SetWhichPor( POR_BLANK ); }
 
     virtual SwLinePortion *Compress() override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     virtual void FormatEOL( SwTextFormatInfo &rInf ) override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
-    static sal_uInt16 MayUnderflow( const SwTextFormatInfo &rInf, sal_Int32 nIdx,
+    static sal_uInt16 MayUnderflow(const SwTextFormatInfo &rInf, TextFrameIndex nIdx,
         bool bUnderflow );
 
     // Accessibility: pass information about this portion to the PortionHandler

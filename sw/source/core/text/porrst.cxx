@@ -81,7 +81,7 @@ SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
     SetWhichPor( POR_BRK );
 }
 
-sal_Int32 SwBreakPortion::GetCursorOfst( const sal_uInt16 ) const
+TextFrameIndex SwBreakPortion::GetCursorOfst(const sal_uInt16) const
 { return 0; }
 
 sal_uInt16 SwBreakPortion::GetViewWidth( const SwTextSizeInfo & ) const

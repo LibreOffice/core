@@ -62,7 +62,7 @@ struct SwMultiCreator
 // in this case the structure SwBracket will be used.
 struct SwBracket
 {
-    sal_Int32 nStart;           // Start of text attribute determines the font
+    TextFrameIndex nStart;      // Start of text attribute determines the font
     sal_uInt16 nAscent;         // Ascent of the brackets
     sal_uInt16 nHeight;         // Height of them
     sal_uInt16 nPreWidth;       // Width of the opening bracket
@@ -93,7 +93,7 @@ class SwMultiPortion : public SwLinePortion
     RubyPosition eRubyPosition;     // Phonetic position
     sal_uInt8 nDirection:2; // Direction (0/90/180/270 degrees)
 protected:
-    explicit SwMultiPortion(sal_Int32 nEnd)
+    explicit SwMultiPortion(TextFrameIndex const nEnd)
         : bTab1(false)
         , bTab2(false)
         , bDouble(false)
@@ -106,7 +106,7 @@ protected:
         , nDirection(0)
     {
         SetWhichPor(POR_MULTI);
-        SetLen(nEnd);
+        SetLen(TextFrameIndex(nEnd));
     }
     void SetDouble() { bDouble = true; }
     void SetRuby() { bRuby = true; }
@@ -157,11 +157,11 @@ class SwDoubleLinePortion : public SwMultiPortion
 {
     std::unique_ptr<SwBracket> pBracket;    // Surrounding brackets
     SwTwips nLineDiff;      // Difference of the width of the both lines
-    sal_Int32 nBlank1;     // Number of blanks in the first line
-    sal_Int32 nBlank2;     // Number of blanks in the second line
+    TextFrameIndex nBlank1; ///< Number of blanks in the first line
+    TextFrameIndex nBlank2; ///< Number of blanks in the second line
 public:
-    SwDoubleLinePortion( SwDoubleLinePortion& rDouble, sal_Int32 nEnd );
-    SwDoubleLinePortion( const SwMultiCreator& rCreate, sal_Int32 nEnd );
+    SwDoubleLinePortion(SwDoubleLinePortion& rDouble, TextFrameIndex nEnd);
+    SwDoubleLinePortion(const SwMultiCreator& rCreate, TextFrameIndex nEnd);
     virtual ~SwDoubleLinePortion() override;
 
     SwBracket* GetBrackets() const { return pBracket.get(); }
@@ -177,9 +177,9 @@ public:
     void CalcBlanks( SwTextFormatInfo &rInf );
     static void ResetSpaceAdd( SwLineLayout* pCurr );
     SwTwips GetLineDiff() const { return nLineDiff; }
-    sal_Int32 GetSpaceCnt() const
+    TextFrameIndex GetSpaceCnt() const
         { return ( nLineDiff < 0 ) ? nBlank2 : nBlank1; }
-    sal_Int32 GetSmallerSpaceCnt() const
+    TextFrameIndex GetSmallerSpaceCnt() const
         { return ( nLineDiff < 0 ) ? nBlank1 : nBlank2; }
 
     virtual long CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
@@ -188,30 +188,30 @@ public:
 
 class SwRubyPortion : public SwMultiPortion
 {
-    sal_Int32 nRubyOffset;
+    TextFrameIndex nRubyOffset;
     css::text::RubyAdjust nAdjustment;
     void Adjust_( SwTextFormatInfo &rInf);
 public:
-    SwRubyPortion( const SwRubyPortion& rRuby, sal_Int32 nEnd );
+    SwRubyPortion(const SwRubyPortion& rRuby, TextFrameIndex nEnd);
 
     SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
                    const IDocumentSettingAccess& rIDocumentSettingAccess,
-                   sal_Int32 nEnd, sal_Int32 nOffs,
+                   TextFrameIndex nEnd, TextFrameIndex nOffs,
                    const SwTextSizeInfo &rInf );
 
     void CalcRubyOffset();
     void Adjust( SwTextFormatInfo &rInf )
         { if(nAdjustment != css::text::RubyAdjust_LEFT && GetRoot().GetNext()) Adjust_(rInf); }
     css::text::RubyAdjust GetAdjustment() const { return nAdjustment; }
-    sal_Int32 GetRubyOffset() const { return nRubyOffset; }
+    TextFrameIndex GetRubyOffset() const { return nRubyOffset; }
 };
 
 class SwRotatedPortion : public SwMultiPortion
 {
 public:
-    SwRotatedPortion( sal_Int32 nEnd, sal_uInt8 nDir )
+    SwRotatedPortion(TextFrameIndex const nEnd, sal_uInt8 nDir)
         : SwMultiPortion( nEnd ) { SetDirection( nDir ); }
-    SwRotatedPortion( const SwMultiCreator& rCreate, sal_Int32 nEnd,
+    SwRotatedPortion( const SwMultiCreator& rCreate, TextFrameIndex nEnd,
                       bool bRTL );
 };
 
@@ -220,11 +220,11 @@ class SwBidiPortion : public SwMultiPortion
     sal_uInt8 nLevel;
 
 public:
-    SwBidiPortion( sal_Int32 nEnd, sal_uInt8 nLv );
+    SwBidiPortion(TextFrameIndex nEnd, sal_uInt8 nLv);
 
     sal_uInt8 GetLevel() const { return nLevel; }
     // Get number of blanks for justified alignment
-    sal_Int32 GetSpaceCnt( const SwTextSizeInfo &rInf ) const;
+    TextFrameIndex GetSpaceCnt(const SwTextSizeInfo &rInf) const;
     // Calculates extra spacing based on number of blanks
     virtual long CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
     // Manipulate the spacing array at pCurr
@@ -237,13 +237,13 @@ class SwTextCursorSave
 {
     SwTextCursor* pTextCursor;
     SwLineLayout* pCurr;
-    sal_Int32 nStart;
+    TextFrameIndex nStart;
     sal_uInt16 nWidth;
     sal_uInt8 nOldProp;
     bool bSpaceChg;
 public:
     SwTextCursorSave( SwTextCursor* pTextCursor, SwMultiPortion* pMulti,
-        SwTwips nY, sal_uInt16& nX, sal_Int32 nCurrStart, long nSpaceAdd );
+        SwTwips nY, sal_uInt16& nX, TextFrameIndex nCurrStart, long nSpaceAdd);
     ~SwTextCursorSave();
 };
 
