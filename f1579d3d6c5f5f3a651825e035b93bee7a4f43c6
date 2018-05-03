@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_01a35450",
+        "filename": "i18npool/source/defaultnumberingprovider/defaultnumberingprovider.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-03T15:16:28Z",
+      "side": 1,
+      "message": "Instead of initializing with an empty string and appending a string for each mutually exclusive case, this should be simply an empty OUString which for two cases gets a value assigned:\n\n OUString numbertext_prefix;\n if (numType \u003d\u003d TEXT_NUMBER)\n     numbertext_prefix \u003d \"ordinal-number \";\n else if (numType \u003d\u003d TEXT_ORDINAL)\n     numbertext_prefix \u003d \"ordinal \";",
+      "range": {
+        "startLine": 649,
+        "startChar": 0,
+        "endLine": 653,
+        "endChar": 55
+      },
+      "revId": "f1579d3d6c5f5f3a651825e035b93bee7a4f43c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
