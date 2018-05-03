@@ -1095,6 +1095,13 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
             FType = SvNumFormatType::DEFINED;
         }
         ChangeIntl(pFormat->GetLanguage());
+        // Avoid scanner overhead with the General format of any locale.
+        // These are never substituded above so safe to ignore.
+        if ((F_Index % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+        {
+            assert(FType == SvNumFormatType::NUMBER);
+            pFormat = nullptr;
+        }
     }
 
     bool res;
