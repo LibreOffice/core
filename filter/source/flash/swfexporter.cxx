@@ -102,9 +102,7 @@ FlashExporter::~FlashExporter()
 
 void FlashExporter::Flush()
 {
-    delete mpWriter;
-    mpWriter = nullptr;
-
+    mpWriter.reset();
     maPagesMap.clear();
 }
 
@@ -148,8 +146,7 @@ bool FlashExporter::exportAll( const Reference< XComponent >& xDoc, Reference< X
 
         sal_Int32 nOutputWidth = 14400;
         sal_Int32 nOutputHeight = (nOutputWidth * mnDocHeight ) / mnDocWidth;
-        delete mpWriter;
-        mpWriter = new Writer( nOutputWidth, nOutputHeight, mnDocWidth, mnDocHeight, mnJPEGcompressMode  );
+        mpWriter.reset(new Writer( nOutputWidth, nOutputHeight, mnDocWidth, mnDocHeight, mnJPEGcompressMode  ));
     }
     catch( const Exception& )
     {
@@ -264,12 +261,12 @@ bool FlashExporter::exportSlides( const Reference< XDrawPage >& xDrawPage, Refer
 
     try
     {
-        if( nullptr == mpWriter )
+        if( !mpWriter )
         {
             xPropSet->getPropertyValue( "Width" ) >>= mnDocWidth;
             xPropSet->getPropertyValue( "Height" ) >>= mnDocHeight;
 
-            mpWriter = new Writer( 14400, 10800, mnDocWidth, mnDocHeight, mnJPEGcompressMode );
+            mpWriter.reset(new Writer( 14400, 10800, mnDocWidth, mnDocHeight, mnJPEGcompressMode ));
         }
 
         if( mbPresentation )
@@ -298,12 +295,12 @@ sal_uInt16 FlashExporter::exportBackgrounds( const Reference< XDrawPage >& xDraw
     if( !xDrawPage.is() || !xPropSet.is() )
         return 0;
 
-    if( nullptr == mpWriter )
+    if( !mpWriter )
     {
         xPropSet->getPropertyValue( "Width" ) >>= mnDocWidth;
         xPropSet->getPropertyValue( "Height" ) >>= mnDocHeight;
 
-        mpWriter = new Writer( 14400, 10800, mnDocWidth, mnDocHeight, mnJPEGcompressMode );
+        mpWriter.reset(new Writer( 14400, 10800, mnDocWidth, mnDocHeight, mnJPEGcompressMode ));
     }
 
     sal_uInt16 ret = exportBackgrounds(xDrawPage, nPage, bExportObjects);
