@@ -709,8 +709,9 @@ bool ImpSvNumberInputScan::GetCurrency( const OUString& rString, sal_Int32& nPos
     if ( rString.getLength() > nPos )
     {
         if ( !aUpperCurrSymbol.getLength() )
-        {   // if no format specified the currency of the initialized formatter
-            LanguageType eLang = (mpFormat ? mpFormat->GetLanguage() : pFormatter->GetLanguage());
+        {   // If no format specified the currency of the currently active locale.
+            LanguageType eLang = (mpFormat ? mpFormat->GetLanguage() :
+                    pFormatter->GetLocaleData()->getLanguageTag().getLanguageType());
             aUpperCurrSymbol = pFormatter->GetCharClass()->uppercase(
                 SvNumberFormatter::GetCurrencyEntry( eLang ).GetSymbol() );
         }
