@@ -68,7 +68,7 @@ namespace connectivity
             std::shared_ptr< ::connectivity::OSQLParseTreeIterator >
                                                         m_pSQLIterator;
 
-            connectivity::OSQLParseNode*                m_pParseTree;
+            std::unique_ptr<connectivity::OSQLParseNode> m_pParseTree;
 
             std::vector<sal_Int32>                    m_aColMapping;
             std::vector<sal_Int32>                    m_aOrderbyColumnNumber;
