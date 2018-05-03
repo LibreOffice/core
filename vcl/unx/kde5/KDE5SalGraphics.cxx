@@ -90,6 +90,9 @@ bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart pa
         case ControlType::Pushbutton:
             return (part == ControlPart::Entire) || (part == ControlPart::Focus);
 
+        case ControlType::ListHeader:
+            return (part == ControlPart::Button);
+
         case ControlType::Menubar:
         case ControlType::MenuPopup:
         case ControlType::Editbox:
@@ -420,6 +423,12 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
             option.state |= QStyle::State_Open;
 
         draw( QStyle::PE_IndicatorBranch, &option, m_image.get(),
+              vclStateValue2StateFlag(nControlState, value) );
+    }
+    else if (type == ControlType::ListHeader)
+    {
+        QStyleOptionHeader option;
+        draw(QStyle::CE_HeaderSection, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == ControlType::Checkbox)
