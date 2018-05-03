@@ -227,6 +227,13 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         case RTF_ITAP:
             nSprm = NS_ooxml::LN_tblDepth;
+            // tdf#117268: If \itap0 is encountered inside tables (between \cellxN and \cell), then
+            // use the default value (1), as Word apparently does
+            if (nParam == 0 && (m_nTopLevelCells != 0 || m_nNestedCells != 0))
+            {
+                nParam = 1;
+                pIntValue = std::make_shared<RTFValue>(nParam);
+            }
             break;
         default:
             break;
