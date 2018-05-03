@@ -70,14 +70,14 @@ SwTextFrame *GetAdjFrameAtPos( SwTextFrame *pFrame, const SwPosition &rPos,
     if( !bNoScroll || pFrame->GetFollow() )
     {
         pFrameAtPos = pFrame->GetFrameAtPos( rPos );
-        if( nOffset < pFrameAtPos->GetOfst() &&
+        if (rPos < pFrameAtPos->MapViewToModelPos(pFrameAtPos->GetOfst()) &&
             !pFrameAtPos->IsFollow() )
         {
-            sal_Int32 nNew = nOffset;
-            if( nNew < MIN_OFFSET_STEP )
-                nNew = 0;
+            TextFrameIndex nNew = pFrameAtPos->MapModelToViewPos(rPos);
+            if (nNew < TextFrameIndex(MIN_OFFSET_STEP))
+                nNew = TextFrameIndex(0);
             else
-                nNew -= MIN_OFFSET_STEP;
+                nNew -= TextFrameIndex(MIN_OFFSET_STEP);
             sw_ChangeOffset( pFrameAtPos, nNew );
         }
     }
@@ -90,7 +90,8 @@ SwTextFrame *GetAdjFrameAtPos( SwTextFrame *pFrame, const SwPosition &rPos,
 
     if( nOffset && bRightMargin )
     {
-        while( pFrameAtPos && pFrameAtPos->GetOfst() == nOffset &&
+        while (pFrameAtPos &&
+               pFrameAtPos->MapViewToModelPos(pFrameAtPos->GetOfst()) == rPos &&
                pFrameAtPos->IsFollow() )
         {
             pFrameAtPos->GetFormatted();
@@ -124,7 +125,7 @@ bool sw_ChangeOffset(SwTextFrame* pFrame, TextFrameIndex nNew)
                 {
                     if( !pFrame->GetOfst() )
                         return false;
-                    nNew = 0;
+                    nNew = TextFrameIndex(0);
                 }
                 pFrame->SetOfst( nNew );
                 pFrame->SetPara( nullptr );
@@ -148,14 +149,15 @@ SwTextFrame& SwTextFrame::GetFrameAtOfst(TextFrameIndex const nWhere)
 
 SwTextFrame *SwTextFrame::GetFrameAtPos( const SwPosition &rPos )
 {
+    TextFrameIndex const nPos(MapModelToViewPos(rPos));
     SwTextFrame *pFoll = this;
     while( pFoll->GetFollow() )
     {
-        if( rPos.nContent.GetIndex() > pFoll->GetFollow()->GetOfst() )
+        if (nPos > pFoll->GetFollow()->GetOfst())
             pFoll = pFoll->GetFollow();
         else
         {
-            if( rPos.nContent.GetIndex() == pFoll->GetFollow()->GetOfst()
+            if (nPos == pFoll->GetFollow()->GetOfst()
                  && !SwTextCursor::IsRightMargin() )
                  pFoll = pFoll->GetFollow();
             else
@@ -263,8 +265,8 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
             nMaxY = pFrame->SwitchVerticalToHorizontal( nMaxY );
 
         bool bGoOn = true;
-        const sal_Int32 nOffset = rPos.nContent.GetIndex();
-        sal_Int32 nNextOfst;
+        TextFrameIndex const nOffset = MapModelToViewPos(rPos);
+        TextFrameIndex nNextOfst;
 
         do
         {
@@ -361,7 +363,7 @@ bool SwTextFrame::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
     if( IsHiddenNow() )
         return false;
 
-    const sal_Int32 nOffset = rPos.nContent.GetIndex();
+    TextFrameIndex const nOffset = MapModelToViewPos(rPos);
     SwTextFrame* pFrame = &(const_cast<SwTextFrame*>(this)->GetFrameAtOfst( nOffset ));
 
     pFrame->GetFormatted();
@@ -452,9 +454,9 @@ bool SwTextFrame::GetTopOfLine( SwTwips& _onTopOfLine,
     bool bRet = true;
 
     // get position offset
-    const sal_Int32 nOffset = _rPos.nContent.GetIndex();
+    TextFrameIndex const nOffset = MapModelToViewPos(_rPos);
 
-    if ( GetText().getLength() < nOffset )
+    if (TextFrameIndex(GetText().getLength()) < nOffset)
     {
         bRet = false;
     }
@@ -598,7 +600,7 @@ bool SwTextFrame::GetCursorOfst_(SwPosition* pPos, const Point& rPoint,
             while( aLine.GetLineNr() > 1 )
                 aLine.Prev();
 
-        sal_Int32 nOffset = aLine.GetCursorOfst( pPos, rPoint, bChgFrame, pCMS );
+        TextFrameIndex nOffset = aLine.GetCursorOfst(pPos, rPoint, bChgFrame, pCMS);
 
         if( pCMS && pCMS->m_eState == MV_NONE && aLine.GetEnd() == nOffset )
             pCMS->m_eState = MV_RIGHTMARGIN;
@@ -608,11 +610,10 @@ bool SwTextFrame::GetCursorOfst_(SwPosition* pPos, const Point& rPoint,
     // If SwTextIter::GetCursorOfst calls GetCursorOfst further by itself
     // nNode changes the position.
     // In such cases, pPos must not be calculated.
-        if( COMPLETE_STRING != nOffset )
+        if (TextFrameIndex(COMPLETE_STRING) != nOffset)
         {
             SwTextNode* pTextNd = const_cast<SwTextFrame*>(this)->GetTextNode();
-            pPos->nNode = *pTextNd;
-            pPos->nContent.Assign( pTextNd, nOffset );
+            *pPos = MapViewToModelPos(nOffset);
             if( pFillData )
             {
                 if (pTextNd->GetText().getLength() > nOffset ||
@@ -677,23 +678,23 @@ bool SwTextFrame::LeftMargin(SwPaM *pPam) const
     SwTextFrame *pFrame = GetAdjFrameAtPos( const_cast<SwTextFrame*>(this), *pPam->GetPoint(),
                                      SwTextCursor::IsRightMargin() );
     pFrame->GetFormatted();
-    sal_Int32 nIndx;
+    TextFrameIndex nIndx;
     if ( pFrame->IsEmpty() )
-        nIndx = 0;
+        nIndx = TextFrameIndex(0);
     else
     {
         SwTextSizeInfo aInf( pFrame );
         SwTextCursor  aLine( pFrame, &aInf );
 
-        aLine.CharCursorToLine(pPam->GetPoint()->nContent.GetIndex());
+        aLine.CharCursorToLine(pFrame->MapModelToViewPos(*pPam->GetPoint()));
         nIndx = aLine.GetStart();
         if( pFrame->GetOfst() && !pFrame->IsFollow() && !aLine.GetPrev() )
         {
-            sw_ChangeOffset( pFrame, 0 );
-            nIndx = 0;
+            sw_ChangeOffset(pFrame, TextFrameIndex(0));
+            nIndx = TextFrameIndex(0);
         }
     }
-    pPam->GetPoint()->nContent.Assign(pFrame->GetTextNode(), nIndx);
+    *pPam->GetPoint() = pFrame->MapViewToModelPos(nIndx);
     SwTextCursor::SetRightMargin( false );
     return true;
 }
@@ -712,29 +713,27 @@ bool SwTextFrame::RightMargin(SwPaM *pPam, bool bAPI) const
     SwTextFrame *pFrame = GetAdjFrameAtPos( const_cast<SwTextFrame*>(this), *pPam->GetPoint(),
                                      SwTextCursor::IsRightMargin() );
     pFrame->GetFormatted();
-    sal_Int32 nRightMargin;
-    if ( IsEmpty() )
-        nRightMargin = 0;
-    else
+    TextFrameIndex nRightMargin(0);
+    if (!IsEmpty())
     {
         SwTextSizeInfo aInf( pFrame );
         SwTextCursor  aLine( pFrame, &aInf );
 
-        aLine.CharCursorToLine(pPam->GetPoint()->nContent.GetIndex());
+        aLine.CharCursorToLine(MapModelToViewPos(*pPam->GetPoint()));
         nRightMargin = aLine.GetStart() + aLine.GetCurr()->GetLen();
 
         // We skip hard line brakes
         if( aLine.GetCurr()->GetLen() &&
-            CH_BREAK == aInf.GetText()[nRightMargin - 1])
+            CH_BREAK == aInf.GetText()[sal_Int32(nRightMargin) - 1])
             --nRightMargin;
         else if( !bAPI && (aLine.GetNext() || pFrame->GetFollow()) )
         {
             while( nRightMargin > aLine.GetStart() &&
-                ' ' == aInf.GetText()[nRightMargin - 1])
+                ' ' == aInf.GetText()[sal_Int32(nRightMargin) - 1])
                 --nRightMargin;
         }
     }
-    pPam->GetPoint()->nContent.Assign(pFrame->GetTextNode(), nRightMargin);
+    *pPam->GetPoint() = pFrame->MapViewToModelPos(nRightMargin);
     SwTextCursor::SetRightMargin( !bAPI );
     return true;
 }
@@ -769,15 +768,15 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
     }
 
     const_cast<SwTextFrame*>(this)->GetFormatted();
-    const sal_Int32 nPos = pPam->GetPoint()->nContent.GetIndex();
+    const TextFrameIndex nPos = MapModelToViewPos(*pPam->GetPoint());
     SwRect aCharBox;
 
     if( !IsEmpty() && !IsHiddenNow() )
     {
-        sal_Int32 nFormat = COMPLETE_STRING;
+        TextFrameIndex nFormat(COMPLETE_STRING);
         do
         {
-            if( nFormat != COMPLETE_STRING && !IsFollow() )
+            if (nFormat != TextFrameIndex(COMPLETE_STRING) && !IsFollow())
                 sw_ChangeOffset( const_cast<SwTextFrame*>(this), nFormat );
 
             SwTextSizeInfo aInf( const_cast<SwTextFrame*>(this) );
@@ -790,7 +789,7 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
                 aLine.Top();
 
             const SwLineLayout *pPrevLine = aLine.GetPrevLine();
-            const sal_Int32 nStart = aLine.GetStart();
+            const TextFrameIndex nStart = aLine.GetStart();
             aLine.GetCharRect( &aCharBox, nPos );
 
             bool bSecondOfDouble = ( aInf.IsMulti() && ! aInf.IsFirstMulti() );
@@ -799,13 +798,13 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
             if( !pPrevLine && !bSecondOfDouble && GetOfst() && !IsFollow() )
             {
                 nFormat = GetOfst();
-                sal_Int32 nDiff = aLine.GetLength();
+                TextFrameIndex nDiff = aLine.GetLength();
                 if( !nDiff )
-                    nDiff = MIN_OFFSET_STEP;
+                    nDiff = TextFrameIndex(MIN_OFFSET_STEP);
                 if( nFormat > nDiff )
                     nFormat = nFormat - nDiff;
                 else
-                    nFormat = 0;
+                    nFormat = TextFrameIndex(0);
                 continue;
             }
 
@@ -830,7 +829,7 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
                 const sal_uLong nOldNode = pPam->GetPoint()->nNode.GetIndex();
 #endif
                 // The node should not be changed
-                sal_Int32 nTmpOfst = aLine.GetCursorOfst( pPam->GetPoint(),
+                TextFrameIndex nTmpOfst = aLine.GetCursorOfst(pPam->GetPoint(),
                                                          aCharBox.Pos(), false );
 #if OSL_DEBUG_LEVEL > 0
                 OSL_ENSURE( nOldNode == pPam->GetPoint()->nNode.GetIndex(),
@@ -843,7 +842,7 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
                     nTmpOfst = nStart;
                     aSet.SetRight( true );
                 }
-                pPam->GetPoint()->nContent.Assign(const_cast<SwTextFrame*>(this)->GetTextNode(), nTmpOfst);
+                *pPam->GetPoint() = MapViewToModelPos(nTmpOfst);
                 return true;
             }
 
@@ -862,7 +861,7 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
     if ( IsFollow() )
     {
         const SwTextFrame *pTmpPrev = FindMaster();
-        sal_Int32 nOffs = GetOfst();
+        TextFrameIndex nOffs = GetOfst();
         if( pTmpPrev )
         {
             SwViewShell *pSh = getRootFrame()->GetCurrShell();
@@ -893,8 +892,8 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
 // nPos: the new visual position
 // bLeft: whether the break iterator has to add or subtract from the
 //        current position
-static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nIdx,
-                              sal_Int32& nPos, bool& bRight,
+static void lcl_VisualMoveRecursion(const SwLineLayout& rCurrLine, TextFrameIndex nIdx,
+                              TextFrameIndex & nPos, bool& bRight,
                               sal_uInt8& nCursorLevel, sal_uInt8 nDefaultDir )
 {
     const SwLinePortion* pPor = rCurrLine.GetFirstPortion();
@@ -948,10 +947,10 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
         if ( bRecurse )
         {
             const SwLineLayout& rLine = static_cast<const SwMultiPortion*>(pPor)->GetRoot();
-            sal_Int32 nTmpPos = nPos - nIdx;
+            TextFrameIndex nTmpPos = nPos - nIdx;
             bool bTmpForward = ! bRight;
             sal_uInt8 nTmpCursorLevel = nCursorLevel;
-            lcl_VisualMoveRecursion( rLine, 0, nTmpPos, bTmpForward,
+            lcl_VisualMoveRecursion(rLine, TextFrameIndex(0), nTmpPos, bTmpForward,
                                      nTmpCursorLevel, nDefaultDir + 1 );
 
             nPos = nTmpPos + nIdx;
@@ -1007,10 +1006,10 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
         if ( bRecurse )
         {
             const SwLineLayout& rLine = static_cast<const SwMultiPortion*>(pPor)->GetRoot();
-            sal_Int32 nTmpPos = nPos - nIdx;
+            TextFrameIndex nTmpPos = nPos - nIdx;
             bool bTmpForward = ! bRight;
             sal_uInt8 nTmpCursorLevel = nCursorLevel;
-            lcl_VisualMoveRecursion( rLine, 0, nTmpPos, bTmpForward,
+            lcl_VisualMoveRecursion(rLine, TextFrameIndex(0), nTmpPos, bTmpForward,
                                      nTmpCursorLevel, nDefaultDir + 1 );
 
             // special case:
@@ -1055,8 +1054,8 @@ void SwTextFrame::PrepareVisualMove(TextFrameIndex & nPos, sal_uInt8& nCursorLev
         aLine.Top();
 
     const SwLineLayout* pLine = aLine.GetCurr();
-    const sal_Int32 nStt = aLine.GetStart();
-    const sal_Int32 nLen = pLine->GetLen();
+    const TextFrameIndex nStt = aLine.GetStart();
+    const TextFrameIndex nLen = pLine->GetLen();
 
     // We have to distinguish between an insert and overwrite cursor:
     // The insert cursor position depends on the cursor level:
@@ -1096,11 +1095,11 @@ void SwTextFrame::PrepareVisualMove(TextFrameIndex & nPos, sal_uInt8& nCursorLev
         // visual indices are always LTR aligned
         if ( bVisualRight )
         {
-            if ( nTmpPos + 1 < nStt + nLen )
+            if (nTmpPos + TextFrameIndex(1) < nStt + nLen)
                 ++nTmpPos;
             else
             {
-                nPos = nDefaultDir == UBIDI_RTL ? 0 : nStt + nLen;
+                nPos = nDefaultDir == UBIDI_RTL ? TextFrameIndex(0) : nStt + nLen;
                 bOutOfBounds = true;
             }
         }
@@ -1110,14 +1109,14 @@ void SwTextFrame::PrepareVisualMove(TextFrameIndex & nPos, sal_uInt8& nCursorLev
                 --nTmpPos;
             else
             {
-                nPos = nDefaultDir == UBIDI_RTL ? nStt + nLen : 0;
+                nPos = nDefaultDir == UBIDI_RTL ? nStt + nLen : TextFrameIndex(0);
                 bOutOfBounds = true;
             }
         }
     }
     else
     {
-        nTmpPos = nDefaultDir == UBIDI_LTR ? nPos - 1 : 0;
+        nTmpPos = nDefaultDir == UBIDI_LTR ? nPos - TextFrameIndex(1) : TextFrameIndex(0);
     }
 
     if ( ! bOutOfBounds )
@@ -1154,7 +1153,7 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
         return SwContentFrame::UnitDown( pPam, nOffset, bSetInReadOnly );
     }
     const_cast<SwTextFrame*>(this)->GetFormatted();
-    const sal_Int32 nPos = pPam->GetPoint()->nContent.GetIndex();
+    const TextFrameIndex nPos = MapModelToViewPos(*pPam->GetPoint());
     SwRect aCharBox;
     const SwContentFrame *pTmpFollow = nullptr;
 
@@ -1163,10 +1162,10 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
 
     if ( !IsEmpty() && !IsHiddenNow() )
     {
-        sal_Int32 nFormat = COMPLETE_STRING;
+        TextFrameIndex nFormat = TextFrameIndex(COMPLETE_STRING);
         do
         {
-            if( nFormat != COMPLETE_STRING && !IsFollow() &&
+            if (nFormat != TextFrameIndex(COMPLETE_STRING) && !IsFollow() &&
                 !sw_ChangeOffset( const_cast<SwTextFrame*>(this), nFormat ) )
                 break;
 
@@ -1177,7 +1176,7 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
             aLine.CharCursorToLine( nPos );
 
             const SwLineLayout* pNextLine = aLine.GetNextLine();
-            const sal_Int32 nStart = aLine.GetStart();
+            const TextFrameIndex nStart = aLine.GetStart();
             aLine.GetCharRect( &aCharBox, nPos );
 
             bool bFirstOfDouble = ( aInf.IsMulti() && aInf.IsFirstMulti() );
@@ -1192,7 +1191,7 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
                 if ( pNextLine && ! bFirstOfDouble )
                     aLine.NextLine();
 
-                sal_Int32 nTmpOfst = aLine.GetCursorOfst( pPam->GetPoint(),
+                TextFrameIndex nTmpOfst = aLine.GetCursorOfst( pPam->GetPoint(),
                                  aCharBox.Pos(), false );
 #if OSL_DEBUG_LEVEL > 0
                 OSL_ENSURE( nOldNode == pPam->GetPoint()->nNode.GetIndex(),
@@ -1201,8 +1200,8 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
 
                 // We make sure that we move down.
                 if( nTmpOfst <= nStart && ! bFirstOfDouble )
-                    nTmpOfst = nStart + 1;
-                pPam->GetPoint()->nContent.Assign(const_cast<SwTextFrame*>(this)->GetTextNode(), nTmpOfst);
+                    nTmpOfst = nStart + TextFrameIndex(1);
+                *pPam->GetPoint() = MapViewToModelPos(nTmpOfst);
 
                 if ( IsVertical() )
                     const_cast<SwTextFrame*>(this)->SwapWidthAndHeight();
@@ -1233,12 +1232,12 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
             }
             else if( !IsFollow() )
             {
-                sal_Int32 nTmpLen = aInf.GetText().getLength();
+                TextFrameIndex nTmpLen(aInf.GetText().getLength());
                 if( aLine.GetEnd() < nTmpLen )
                 {
                     if( nFormat <= GetOfst() )
                     {
-                        nFormat = std::min( sal_Int32( GetOfst() + MIN_OFFSET_STEP ),
+                        nFormat = std::min(GetOfst() + TextFrameIndex(MIN_OFFSET_STEP),
                                        nTmpLen );
                         if( nFormat <= GetOfst() )
                             break;
