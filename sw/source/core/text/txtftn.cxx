@@ -97,10 +97,13 @@ void SwTextFrame::CalcFootnoteFlag()
     const size_t nSize = pHints->Count();
 
 #ifdef DBG_UTIL
-    const sal_Int32 nEnd = nStop != COMPLETE_STRING ? nStop
-                        : GetFollow() ? GetFollow()->GetOfst() : COMPLETE_STRING;
+    const TextFrameIndex nEnd = nStop != TextFrameIndex(COMPLETE_STRING)
+        ? nStop
+        : GetFollow() ? GetFollow()->GetOfst() : TextFrameIndex(COMPLETE_STRING);
 #else
-    const sal_Int32 nEnd = GetFollow() ? GetFollow()->GetOfst() : COMPLETE_STRING;
+    const TextFrameIndex nEnd = GetFollow()
+        ? GetFollow()->GetOfst()
+        : TextFrameIndex(COMPLETE_STRING);
 #endif
 
     for ( size_t i = 0; i < nSize; ++i )
@@ -396,9 +399,9 @@ void SwTextFrame::RemoveFootnote(TextFrameIndex const nStart, TextFrameIndex con
     if( !pHints )
         return;
 
-    bool bRollBack = nLen != COMPLETE_STRING;
+    bool bRollBack = nLen != TextFrameIndex(COMPLETE_STRING);
     const size_t nSize = pHints->Count();
-    sal_Int32 nEnd;
+    TextFrameIndex nEnd;
     SwTextFrame* pSource;
     if( bRollBack )
     {
@@ -409,7 +412,7 @@ void SwTextFrame::RemoveFootnote(TextFrameIndex const nStart, TextFrameIndex con
     }
     else
     {
-        nEnd = COMPLETE_STRING;
+        nEnd = TextFrameIndex(COMPLETE_STRING);
         pSource = this;
     }
 
@@ -549,14 +552,14 @@ void SwTextFrame::RemoveFootnote(TextFrameIndex const nStart, TextFrameIndex con
     // to be passed to the Follow. The Offset of the Follow is, however, outdated;
     // it'll be set soon. CalcFntFlag depends on a correctly set Follow Offset.
     // Therefore we temporarily calculate the Follow Offset here
-    sal_Int32 nOldOfst = COMPLETE_STRING;
+    TextFrameIndex nOldOfst(COMPLETE_STRING);
     if( HasFollow() && nStart > GetOfst() )
     {
         nOldOfst = GetFollow()->GetOfst();
-        GetFollow()->ManipOfst( nStart + ( bRollBack ? nLen : 0 ) );
+        GetFollow()->ManipOfst(nStart + (bRollBack ? nLen : TextFrameIndex(0)));
     }
     pSource->CalcFootnoteFlag();
-    if( nOldOfst < COMPLETE_STRING )
+    if (nOldOfst < TextFrameIndex(COMPLETE_STRING))
         GetFollow()->ManipOfst( nOldOfst );
 }
 
@@ -1088,7 +1091,7 @@ TextFrameIndex SwTextFormatter::FormatQuoVadis(TextFrameIndex const nOffset)
 
     Right( Right() - nQuoWidth );
 
-    sal_Int32 nRet;
+    TextFrameIndex nRet;
     {
         SwSwapIfNotSwapped swap(m_pFrame);
 
@@ -1108,7 +1111,7 @@ TextFrameIndex SwTextFormatter::FormatQuoVadis(TextFrameIndex const nOffset)
     {
         pGlue->Height( 0 );
         pGlue->Width( 0 );
-        pGlue->SetLen( 0 );
+        pGlue->SetLen(TextFrameIndex(0));
         pGlue->SetAscent( 0 );
         pGlue->SetPortion( nullptr );
         pGlue->SetFixWidth(0);
@@ -1126,7 +1129,7 @@ TextFrameIndex SwTextFormatter::FormatQuoVadis(TextFrameIndex const nOffset)
                 case SvxAdjust::Block:
                 {
                     if( !m_pCurr->GetLen() ||
-                        CH_BREAK != GetInfo().GetChar(m_nStart+m_pCurr->GetLen()-1))
+                        CH_BREAK != GetInfo().GetChar(m_nStart + m_pCurr->GetLen() - TextFrameIndex(1)))
                         nLastLeft = pQuo->GetAscent();
                     nQuoWidth = nQuoWidth + nLastLeft;
                     break;
@@ -1313,7 +1316,7 @@ SwFootnotePortion::SwFootnotePortion( const OUString &rExpand,
         , mbPreferredScriptTypeSet( false )
         , mnPreferredScriptType( SwFontScript::Latin )
 {
-    SetLen(1);
+    SetLen(TextFrameIndex(1));
     SetWhichPor( POR_FTN );
 }
 
@@ -1374,7 +1377,7 @@ SwFieldPortion *SwQuoVadisPortion::Clone( const OUString &rExpand ) const
 SwQuoVadisPortion::SwQuoVadisPortion( const OUString &rExp, const OUString& rStr )
     : SwFieldPortion( rExp ), aErgo(rStr)
 {
-    SetLen(0);
+    SetLen(TextFrameIndex(0));
     SetWhichPor( POR_QUOVADIS );
 }
 
@@ -1383,14 +1386,14 @@ bool SwQuoVadisPortion::Format( SwTextFormatInfo &rInf )
     // First try; maybe the Text fits
     CheckScript( rInf );
     bool bFull = SwFieldPortion::Format( rInf );
-    SetLen( 0 );
+    SetLen(TextFrameIndex(0));
 
     if( bFull )
     {
         // Second try; we make the String shorter
         m_aExpand = "...";
         bFull = SwFieldPortion::Format( rInf );
-        SetLen( 0 );
+        SetLen(TextFrameIndex(0));
         if( bFull  )
             // Third try; we're done: we crush
             Width( sal_uInt16(rInf.Width() - rInf.X()) );
@@ -1441,7 +1444,7 @@ SwFieldPortion *SwErgoSumPortion::Clone( const OUString &rExpand ) const
 SwErgoSumPortion::SwErgoSumPortion(const OUString &rExp, const OUString& rStr)
     : SwFieldPortion( rExp )
 {
-    SetLen(0);
+    SetLen(TextFrameIndex(0));
     m_aExpand += rStr;
 
     // One blank distance to the text
@@ -1451,13 +1454,13 @@ SwErgoSumPortion::SwErgoSumPortion(const OUString &rExp, const OUString& rStr)
 
 TextFrameIndex SwErgoSumPortion::GetCursorOfst(const sal_uInt16) const
 {
-    return 0;
+    return TextFrameIndex(0);
 }
 
 bool SwErgoSumPortion::Format( SwTextFormatInfo &rInf )
 {
     const bool bFull = SwFieldPortion::Format( rInf );
-    SetLen( 0 );
+    SetLen(TextFrameIndex(0));
     rInf.SetErgoDone( true );
 
     // No multiline Fields for QuoVadis and ErgoSum
