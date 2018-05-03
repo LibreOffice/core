@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_81682489",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-05-03T09:44:33Z",
+      "side": 1,
+      "message": "This might[1] make tdf#111834 come back so maybe you want to make this conditional to !HandoutView\n\n[1] Not sure, didn\u0027t test. If it ain\u0027t the case, ignore me",
+      "revId": "44e8bb6f7732ad524a1e00930775328214dd3588",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
