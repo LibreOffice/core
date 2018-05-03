@@ -180,7 +180,7 @@ bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
     //if no image, or resized, make a new image
     if (!m_image || m_image->size() != widgetRect.size())
     {
-        m_image.reset(new QImage( widgetRect.width(), widgetRect.height(), QImage::Format_ARGB32 ) );
+        m_image.reset(new QImage( widgetRect.width(), widgetRect.height(), QImage::Format_ARGB32_Premultiplied ) );
     }
 
     // Default image color - just once

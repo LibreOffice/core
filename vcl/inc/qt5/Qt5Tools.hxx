@@ -91,6 +91,7 @@ inline sal_uInt16 getFormatBits(QImage::Format eFormat)
         case QImage::Format_RGB888:
             return 24;
         case Qt5_DefaultFormat32:
+        case QImage::Format_ARGB32_Premultiplied:
             return 32;
         default:
             std::abort();
