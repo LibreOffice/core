@@ -35,20 +35,20 @@ class SwDropPortionPart
 {
     SwDropPortionPart* pFollow;
     SwFont* pFnt;
-    sal_Int32 nLen;
+    TextFrameIndex nLen;
     sal_uInt16 nWidth;
     bool m_bJoinBorderWithNext;
     bool m_bJoinBorderWithPrev;
 
 public:
-    SwDropPortionPart( SwFont& rFont, const sal_Int32 nL )
+    SwDropPortionPart( SwFont& rFont, const TextFrameIndex nL )
             : pFollow( nullptr ), pFnt( &rFont ), nLen( nL ), nWidth( 0 ), m_bJoinBorderWithNext(false), m_bJoinBorderWithPrev(false) {};
     ~SwDropPortionPart();
 
     SwDropPortionPart* GetFollow() const { return pFollow; };
     void SetFollow( SwDropPortionPart* pNew ) { pFollow = pNew; };
     SwFont& GetFont() const { return *pFnt; }
-    sal_Int32 GetLen() const { return nLen; }
+    TextFrameIndex GetLen() const { return nLen; }
     sal_uInt16 GetWidth() const { return nWidth; }
     void SetWidth( sal_uInt16 nNew )  { nWidth = nNew; }
 
@@ -83,7 +83,7 @@ public:
             void PaintDrop( const SwTextPaintInfo &rInf ) const;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
-    virtual sal_Int32 GetCursorOfst( const sal_uInt16 nOfst ) const override;
+    virtual TextFrameIndex GetCursorOfst(sal_uInt16 nOfst) const override;
 
     sal_uInt16 GetLines() const { return nLines; }
     sal_uInt16 GetDistance() const { return nDistance; }

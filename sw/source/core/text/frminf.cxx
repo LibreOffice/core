@@ -21,7 +21,7 @@
 #include <frminf.hxx>
 #include "itrtxt.hxx"
 
-sal_Int32 SwTextMargin::GetTextStart() const
+TextFrameIndex SwTextMargin::GetTextStart() const
 {
     const OUString &rText = GetInfo().GetText();
     const sal_Int32 nEnd = m_nStart + m_pCurr->GetLen();
@@ -35,7 +35,7 @@ sal_Int32 SwTextMargin::GetTextStart() const
     return nEnd;
 }
 
-sal_Int32 SwTextMargin::GetTextEnd() const
+TextFrameIndex SwTextMargin::GetTextEnd() const
 {
     const OUString &rText = GetInfo().GetText();
     const sal_Int32 nEnd = m_nStart + m_pCurr->GetLen();
@@ -105,7 +105,7 @@ SwTwips SwTextFrameInfo::GetLineStart() const
 }
 
 // Calculates the character's position and returns the middle position
-SwTwips SwTextFrameInfo::GetCharPos( sal_Int32 nChar, bool bCenter ) const
+SwTwips SwTextFrameInfo::GetCharPos(TextFrameIndex const nChar, bool bCenter) const
 {
     SwRectFnSet aRectFnSet(pFrame);
     SwFrameSwapper aSwapper( pFrame, true );
@@ -251,7 +251,7 @@ SwTwips SwTextFrameInfo::GetFirstIndent() const
     return 1;
 }
 
-sal_Int32 SwTextFrameInfo::GetBigIndent( sal_Int32& rFndPos,
+sal_Int32 SwTextFrameInfo::GetBigIndent(TextFrameIndex& rFndPos,
                                     const SwTextFrame *pNextFrame ) const
 {
     SwTextSizeInfo aInf( const_cast<SwTextFrame*>(pFrame) );

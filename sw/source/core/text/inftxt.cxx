@@ -246,7 +246,7 @@ SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew )
 }
 
 void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame,
-                   const sal_Int32 nNewIdx )
+           TextFrameIndex const nNewIdx)
 {
     m_pKanaComp = nullptr;
     m_nKanaIdx = 0;
@@ -322,7 +322,7 @@ void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextF
 }
 
 SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew, const OUString* pText,
-                              const sal_Int32 nIndex )
+              TextFrameIndex const nIndex)
     : SwTextInfo( rNew ),
       m_pKanaComp(rNew.GetpKanaComp()),
       m_pVsh(const_cast<SwTextSizeInfo&>(rNew).GetVsh()),
@@ -357,7 +357,8 @@ SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew, const OUString* pTex
     SetLen( GetMinLen( *this ) );
 }
 
-SwTextSizeInfo::SwTextSizeInfo( SwTextFrame *pTextFrame, const sal_Int32 nIndex )
+SwTextSizeInfo::SwTextSizeInfo(SwTextFrame *const pTextFrame,
+            TextFrameIndex const nIndex)
     : m_bOnWin(false)
 {
     CtorInitTextSizeInfo( pTextFrame->getRootFrame()->GetCurrShell()->GetOut(), pTextFrame, nIndex );
@@ -384,8 +385,8 @@ void SwTextSizeInfo::NoteAnimation() const
 SwPosSize SwTextSizeInfo::GetTextSize( OutputDevice* pOutDev,
                                      const SwScriptInfo* pSI,
                                      const OUString& rText,
-                                     const sal_Int32 nIndex,
-                                     const sal_Int32 nLength) const
+                                     const TextFrameIndex nIndex,
+                                     const TextFrameIndex nLength) const
 {
     SwDrawTextInfo aDrawInf( m_pVsh, *pOutDev, pSI, rText, nIndex, nLength );
     aDrawInf.SetFrame( m_pFrame );
@@ -416,8 +417,8 @@ SwPosSize SwTextSizeInfo::GetTextSize() const
     return SwPosSize(m_pFnt->GetTextSize_( aDrawInf ));
 }
 
-void SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI, const sal_Int32 nIndex,
-                                const sal_Int32 nLength, const sal_uInt16 nComp,
+void SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI, const TextFrameIndex nIndex,
+                                const TextFrameIndex nLength, const sal_uInt16 nComp,
                                 sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff,
                                 vcl::TextLayoutCache const*const pCache) const
 {
@@ -432,8 +433,8 @@ void SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI, const sal_Int32 nInde
     nMinSize = aSize.Width();
 }
 
-sal_Int32 SwTextSizeInfo::GetTextBreak( const long nLineWidth,
-                                       const sal_Int32 nMaxLen,
+TextFrameIndex SwTextSizeInfo::GetTextBreak( const long nLineWidth,
+                                       const TextFrameIndex nMaxLen,
                                        const sal_uInt16 nComp,
                                        vcl::TextLayoutCache const*const pCache) const
 {
@@ -452,10 +453,10 @@ sal_Int32 SwTextSizeInfo::GetTextBreak( const long nLineWidth,
     return m_pFnt->GetTextBreak( aDrawInf, nLineWidth );
 }
 
-sal_Int32 SwTextSizeInfo::GetTextBreak( const long nLineWidth,
-                                       const sal_Int32 nMaxLen,
+TextFrameIndex SwTextSizeInfo::GetTextBreak( const long nLineWidth,
+                                       const TextFrameIndex nMaxLen,
                                        const sal_uInt16 nComp,
-                                       sal_Int32& rExtraCharPos,
+                                       TextFrameIndex& rExtraCharPos,
                                        vcl::TextLayoutCache const*const pCache) const
 {
     const SwScriptInfo& rScriptInfo =
@@ -473,9 +474,9 @@ sal_Int32 SwTextSizeInfo::GetTextBreak( const long nLineWidth,
     return m_pFnt->GetTextBreak( aDrawInf, nLineWidth );
 }
 
-bool SwTextSizeInfo::HasHint_( const SwTextNode* pTextNode, sal_Int32 nPos )
+bool SwTextSizeInfo::HasHint(TextFrameIndex const nPos) const
 {
-    return pTextNode->GetTextAttrForCharAt(nPos);
+    return m_pFrame->GetTextNode()->GetTextAttrForCharAt(nPos);
 }
 
 void SwTextPaintInfo::CtorInitTextPaintInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame, const SwRect &rPaint )
@@ -556,7 +557,7 @@ static bool lcl_IsDarkBackground( const SwTextPaintInfo& rInf )
 }
 
 void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPor,
-                                const sal_Int32 nStart, const sal_Int32 nLength,
+                                TextFrameIndex const nStart, TextFrameIndex const nLength,
                                 const bool bKern, const bool bWrong,
                                 const bool bSmartTag,
                                 const bool bGrammarCheck )
@@ -1568,8 +1569,8 @@ bool SwTextFormatInfo::CheckFootnotePortion_( SwLineLayout const * pCurr )
     return false;
 }
 
-sal_Int32 SwTextFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
-                                            const sal_Int32 nEnd )
+TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
+                                                TextFrameIndex const nEnd)
 {
     m_cHookChar = 0;
     sal_Int32 i = nStart;

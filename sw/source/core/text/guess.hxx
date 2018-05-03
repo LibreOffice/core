@@ -31,10 +31,10 @@ class SwTextGuess
 {
     css::uno::Reference< css::linguistic2::XHyphenatedWord >  xHyphWord;
     std::unique_ptr<SwHangingPortion> pHanging; // for hanging punctuation
-    sal_Int32 nCutPos;         // this character doesn't fit
-    sal_Int32 nBreakStart;     // start index of word containing line break
-    sal_Int32 nBreakPos;       // start index of break position
-    sal_Int32 nFieldDiff;      // absolute positions can be wrong if we
+    TextFrameIndex nCutPos;         // this character doesn't fit
+    TextFrameIndex nBreakStart;     // start index of word containing line break
+    TextFrameIndex nBreakPos;       // start index of break position
+    TextFrameIndex nFieldDiff;      // absolute positions can be wrong if we
                                // a field in the text has been expanded
     sal_uInt16 nBreakWidth;    // width of the broken portion
 public:
@@ -45,15 +45,15 @@ public:
     // true, if current portion still fits to current line
     bool Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                     const sal_uInt16 nHeight );
-    bool AlternativeSpelling( const SwTextFormatInfo &rInf, const sal_Int32 nPos );
+    bool AlternativeSpelling( const SwTextFormatInfo &rInf, const TextFrameIndex nPos );
 
     SwHangingPortion* GetHangingPortion() const { return pHanging.get(); }
     SwHangingPortion* ReleaseHangingPortion() { return pHanging.release(); }
     sal_uInt16 BreakWidth() const { return nBreakWidth; }
-    sal_Int32 CutPos() const { return nCutPos; }
-    sal_Int32 BreakStart() const { return nBreakStart; }
-    sal_Int32 BreakPos() const {return nBreakPos; }
-    sal_Int32 FieldDiff() const {return nFieldDiff; }
+    TextFrameIndex CutPos() const { return nCutPos; }
+    TextFrameIndex BreakStart() const { return nBreakStart; }
+    TextFrameIndex BreakPos() const {return nBreakPos; }
+    TextFrameIndex FieldDiff() const {return nFieldDiff; }
     const css::uno::Reference< css::linguistic2::XHyphenatedWord >& HyphWord() const
         { return xHyphWord; }
 };

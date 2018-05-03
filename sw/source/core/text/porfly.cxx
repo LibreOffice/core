@@ -147,7 +147,8 @@ bool SwFlyCntPortion::Format( SwTextFormatInfo &rInf )
  * @param nStart
  * @param nEnd
  */
-void SwTextFrame::MoveFlyInCnt( SwTextFrame *pNew, sal_Int32 nStart, sal_Int32 nEnd )
+void SwTextFrame::MoveFlyInCnt(SwTextFrame *pNew,
+        TextFrameIndex const nStart, TextFrameIndex const nEnd)
 {
     SwSortedObjs *pObjs = nullptr;
     if ( nullptr != (pObjs = GetDrawObjs()) )
@@ -180,7 +181,7 @@ void SwTextFrame::MoveFlyInCnt( SwTextFrame *pNew, sal_Int32 nStart, sal_Int32 n
     }
 }
 
-sal_Int32 SwTextFrame::CalcFlyPos( SwFrameFormat const * pSearch )
+TextFrameIndex SwTextFrame::CalcFlyPos( SwFrameFormat const * pSearch )
 {
     SwpHints* pHints = GetTextNode()->GetpSwpHints();
     OSL_ENSURE( pHints, "CalcFlyPos: Why me?" );

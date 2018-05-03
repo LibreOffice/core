@@ -190,7 +190,7 @@ void SwTextIter::Bottom()
     }
 }
 
-void SwTextIter::CharToLine(const sal_Int32 nChar)
+void SwTextIter::CharToLine(TextFrameIndex const nChar)
 {
     while( m_nStart + m_pCurr->GetLen() <= nChar && Next() )
         ;
@@ -199,7 +199,7 @@ void SwTextIter::CharToLine(const sal_Int32 nChar)
 }
 
 // 1170: takes into account ambiguities:
-const SwLineLayout *SwTextCursor::CharCursorToLine( const sal_Int32 nPosition )
+const SwLineLayout *SwTextCursor::CharCursorToLine(TextFrameIndex const nPosition)
 {
     CharToLine( nPosition );
     if( nPosition != m_nStart )
