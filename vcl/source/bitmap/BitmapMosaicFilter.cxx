@@ -166,20 +166,27 @@ BitmapEx BitmapMosaicFilter::execute(BitmapEx const& rBitmapEx)
 
         Bitmap::ReleaseAccess(pReadAcc);
 
-        if (bRet)
+        if (pNewBmp)
         {
-            const MapMode aMap(aBitmap.GetPrefMapMode());
-            const Size aPrefSize(aBitmap.GetPrefSize());
+            Bitmap::ReleaseAccess(pWriteAcc);
 
-            aBitmap = *pNewBmp;
+            if (bRet)
+            {
+                const MapMode aMap(aBitmap.GetPrefMapMode());
+                const Size aPrefSize(aBitmap.GetPrefSize());
 
-            aBitmap.SetPrefMapMode(aMap);
-            aBitmap.SetPrefSize(aPrefSize);
+                aBitmap = *pNewBmp;
+
+                aBitmap.SetPrefMapMode(aMap);
+                aBitmap.SetPrefSize(aPrefSize);
+            }
+
+            delete pNewBmp;
         }
     }
 
     if (bRet)
-        return rBitmapEx;
+        return BitmapEx(aBitmap);
 
     return BitmapEx();
 }
