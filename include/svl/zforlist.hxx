@@ -882,10 +882,6 @@ public:
     /** Access for unit tests. */
     size_t GetMaxDefaultColors() const;
 
-    struct InputScannerPrivateAccess { friend class ImpSvNumberInputScan; private: InputScannerPrivateAccess() {} };
-    /** Access for input scanner to temporarily (!) switch locales. */
-    OnDemandLocaleDataWrapper& GetOnDemandLocaleDataWrapper( const InputScannerPrivateAccess& ) { return xLocaleData; }
-
 private:
     mutable ::osl::Mutex m_aMutex;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;

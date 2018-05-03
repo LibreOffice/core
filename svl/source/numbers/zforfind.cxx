@@ -30,7 +30,6 @@
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/LocaleCalendar2.hpp>
 #include <unotools/digitgroupingiterator.hxx>
-#include <comphelper/sequence.hxx>
 
 #include <svl/zforlist.hxx>
 #include "zforscan.hxx"
@@ -99,7 +98,6 @@ ImpSvNumberInputScan::~ImpSvNumberInputScan()
 
 void ImpSvNumberInputScan::Reset()
 {
-    mpFormat     = nullptr;
     nMonth       = 0;
     nMonthPos    = 0;
     nDayOfWeek   = 0;
@@ -704,13 +702,14 @@ int ImpSvNumberInputScan::GetDayOfWeek( const OUString& rString, sal_Int32& nPos
  * '$'   => true
  * else => false
  */
-bool ImpSvNumberInputScan::GetCurrency( const OUString& rString, sal_Int32& nPos )
+bool ImpSvNumberInputScan::GetCurrency( const OUString& rString, sal_Int32& nPos,
+                                        const SvNumberformat* pFormat )
 {
     if ( rString.getLength() > nPos )
     {
         if ( !aUpperCurrSymbol.getLength() )
         {   // if no format specified the currency of the initialized formatter
-            LanguageType eLang = (mpFormat ? mpFormat->GetLanguage() : pFormatter->GetLanguage());
+            LanguageType eLang = (pFormat ? pFormat->GetLanguage() : pFormatter->GetLanguage());
             aUpperCurrSymbol = pFormatter->GetCharClass()->uppercase(
                 SvNumberFormatter::GetCurrencyEntry( eLang ).GetSymbol() );
         }
@@ -719,10 +718,10 @@ bool ImpSvNumberInputScan::GetCurrency( const OUString& rString, sal_Int32& nPos
             nPos = nPos + aUpperCurrSymbol.getLength();
             return true;
         }
-        if ( mpFormat )
+        if ( pFormat )
         {
             OUString aSymbol, aExtension;
-            if ( mpFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
+            if ( pFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
             {
                 if ( aSymbol.getLength() <= rString.getLength() - nPos )
                 {
@@ -1101,18 +1100,18 @@ bool ImpSvNumberInputScan::CanForceToIso8601( DateOrder eDateOrder )
 }
 
 
-bool ImpSvNumberInputScan::IsAcceptableIso8601()
+bool ImpSvNumberInputScan::IsAcceptableIso8601( const SvNumberformat* pFormat )
 {
-    if (mpFormat && (mpFormat->GetType() & SvNumFormatType::DATE))
+    if (pFormat && (pFormat->GetType() & SvNumFormatType::DATE))
     {
         switch (pFormatter->GetEvalDateFormat())
         {
             case NF_EVALDATEFORMAT_INTL:
                 return CanForceToIso8601( GetDateOrder());
             case NF_EVALDATEFORMAT_FORMAT:
-                return CanForceToIso8601( mpFormat->GetDateOrder());
+                return CanForceToIso8601( pFormat->GetDateOrder());
             default:
-                return CanForceToIso8601( GetDateOrder()) || CanForceToIso8601( mpFormat->GetDateOrder());
+                return CanForceToIso8601( GetDateOrder()) || CanForceToIso8601( pFormat->GetDateOrder());
         }
     }
     return CanForceToIso8601( GetDateOrder());
@@ -1192,46 +1191,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
     }
     else if (!sDateAcceptancePatterns.getLength())
     {
-        // The current locale is the format's locale, if a format is present.
-        const NfEvalDateFormat eEDF = pFormatter->GetEvalDateFormat();
-        if (!mpFormat || eEDF == NF_EVALDATEFORMAT_FORMAT || mpFormat->GetLanguage() == pFormatter->GetLanguage())
-        {
-            sDateAcceptancePatterns = pFormatter->GetLocaleData()->getDateAcceptancePatterns();
-        }
-        else
-        {
-            OnDemandLocaleDataWrapper& xLocaleData = pFormatter->GetOnDemandLocaleDataWrapper(
-                    SvNumberFormatter::InputScannerPrivateAccess());
-            const LanguageTag aSaveLocale( xLocaleData->getLanguageTag() );
-            assert(mpFormat->GetLanguage() == aSaveLocale.getLanguageType());   // prerequisite
-            // Obtain formatter's locale's (e.g. system) patterns.
-            xLocaleData.changeLocale( LanguageTag( pFormatter->GetLanguage()));
-            const css::uno::Sequence<OUString> aLocalePatterns( xLocaleData->getDateAcceptancePatterns());
-            // Reset to format's locale.
-            xLocaleData.changeLocale( aSaveLocale);
-            // When concatenating don't care about duplicates, combining
-            // weeding those out reallocs yet another time and probably doesn't
-            // take less time than looping over two additional patterns below..
-            switch (eEDF)
-            {
-                case NF_EVALDATEFORMAT_FORMAT:
-                    assert(!"shouldn't reach here");
-                break;
-                case NF_EVALDATEFORMAT_INTL:
-                    sDateAcceptancePatterns = aLocalePatterns;
-                break;
-                case NF_EVALDATEFORMAT_INTL_FORMAT:
-                    sDateAcceptancePatterns = comphelper::concatSequences(
-                            aLocalePatterns,
-                            xLocaleData->getDateAcceptancePatterns());
-                break;
-                case NF_EVALDATEFORMAT_FORMAT_INTL:
-                    sDateAcceptancePatterns = comphelper::concatSequences(
-                            xLocaleData->getDateAcceptancePatterns(),
-                            aLocalePatterns);
-                break;
-            }
-        }
+        sDateAcceptancePatterns = pFormatter->GetLocaleData()->getDateAcceptancePatterns();
         SAL_WARN_IF( !sDateAcceptancePatterns.getLength(), "svl.numbers", "ImpSvNumberInputScan::IsAcceptedDatePattern: no date acceptance patterns");
         nAcceptedDatePattern = (sDateAcceptancePatterns.getLength() ? -2 : -1);
     }
@@ -1586,12 +1546,13 @@ DateOrder ImpSvNumberInputScan::GetDateOrder()
     return pFormatter->GetLocaleData()->getDateOrder();
 }
 
-bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter )
+bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
+                                       const SvNumberformat* pFormat )
 {
     using namespace ::com::sun::star::i18n;
     NfEvalDateFormat eEDF;
     int nFormatOrder;
-    if ( mpFormat && (mpFormat->GetType() & SvNumFormatType::DATE) )
+    if ( pFormat && (pFormat->GetType() & SvNumFormatType::DATE) )
     {
         eEDF = pFormatter->GetEvalDateFormat();
         switch ( eEDF )
@@ -1632,7 +1593,7 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter )
             break;
         case NF_EVALDATEFORMAT_FORMAT :
             bFormatTurn = true;
-            DateFmt = mpFormat->GetDateOrder();
+            DateFmt = pFormat->GetDateOrder();
             break;
         case NF_EVALDATEFORMAT_INTL_FORMAT :
             if ( nTryOrder == 1 )
@@ -1643,7 +1604,7 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter )
             else
             {
                 bFormatTurn = true;
-                DateFmt = mpFormat->GetDateOrder();
+                DateFmt = pFormat->GetDateOrder();
             }
             break;
         case NF_EVALDATEFORMAT_FORMAT_INTL :
@@ -1655,7 +1616,7 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter )
             else
             {
                 bFormatTurn = true;
-                DateFmt = mpFormat->GetDateOrder();
+                DateFmt = pFormat->GetDateOrder();
             }
             break;
         default:
@@ -1692,13 +1653,13 @@ input for the following reasons:
 
 */
 #ifdef THE_FUTURE
-            if ( mpFormat->IsOtherCalendar( nStringScanNumFor ) )
+            if ( pFormat->IsOtherCalendar( nStringScanNumFor ) )
             {
-                mpFormat->SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                pFormat->SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             else
             {
-                mpFormat->SwitchToSpecifiedCalendar( aOrgCalendar, fOrgDateTime,
+                pFormat->SwitchToSpecifiedCalendar( aOrgCalendar, fOrgDateTime,
                                                     nStringScanNumFor );
             }
 #endif
@@ -1734,7 +1695,7 @@ input for the following reasons:
                 // 'D-', 'M-' or 'Y-'. If input did not match a
                 // pattern assume the usual day of current month.
                 sal_uInt32 nDateOrder = (bFormatTurn ?
-                                         mpFormat->GetExactDateOrder() :
+                                         pFormat->GetExactDateOrder() :
                                          GetDatePatternOrder());
                 switch (nDateOrder)
                 {
@@ -1806,7 +1767,7 @@ input for the following reasons:
             case 0:             // not found
             {
                 sal_uInt32 nExactDateOrder = (bFormatTurn ?
-                                              mpFormat->GetExactDateOrder() :
+                                              pFormat->GetExactDateOrder() :
                                               GetDatePatternOrder());
                 bool bIsExact = (0xff < nExactDateOrder && nExactDateOrder <= 0xffff);
                 if (!bIsExact && bFormatTurn && IsAcceptedDatePattern( nNums[0]))
@@ -1915,7 +1876,7 @@ input for the following reasons:
                 // constellation, there is no date order (M)YD except if
                 // set in a format applied.
                 pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
-                sal_uInt32 nExactDateOrder = (bFormatTurn ? mpFormat->GetExactDateOrder() : 0);
+                sal_uInt32 nExactDateOrder = (bFormatTurn ? pFormat->GetExactDateOrder() : 0);
                 if ((((nExactDateOrder >> 8) & 0xff) == 'Y') && ((nExactDateOrder & 0xff) == 'D'))
                 {
                     pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
@@ -2147,7 +2108,8 @@ input for the following reasons:
  * All gone => true
  * else     => false
  */
-bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
+bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
+                                            const SvNumberformat* pFormat )
 {
     sal_Int32 nPos = 0;
 
@@ -2166,7 +2128,7 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
         // Match against format in any case, so later on for a "x1-2-3" input
         // we may distinguish between a xy-m-d (or similar) date and a x0-0-0
         // format. No sign detection here!
-        if ( ScanStringNumFor( rString, nPos, 0, true ) )
+        if ( ScanStringNumFor( rString, nPos, pFormat, 0, true ) )
         {
             nMatchedAllStrings |= nMatchedStartString;
         }
@@ -2185,7 +2147,7 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
         nDecPos = 1;
         SkipBlanks(rString, nPos);
     }
-    else if ( GetCurrency(rString, nPos) )          // currency (DM 1)?
+    else if ( GetCurrency(rString, nPos, pFormat) ) // currency (DM 1)?
     {
         eScannedType = SvNumFormatType::CURRENCY;       // !!! it IS currency !!!
         SkipBlanks(rString, nPos);
@@ -2318,7 +2280,7 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
     {
         // Does input StartString equal StartString of format?
         // This time with sign detection!
-        if ( !ScanStringNumFor( rString, nPos, 0 ) )
+        if ( !ScanStringNumFor( rString, nPos, pFormat, 0 ) )
         {
             return MatchedReturn();
         }
@@ -2333,7 +2295,8 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
  * All gone => true
  * else     => false
  */
-bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nStringPos )
+bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
+                                          sal_uInt16 nStringPos, const SvNumberformat* pFormat )
 {
     sal_Int32 nPos = 0;
     SvNumFormatType eOldScannedType = eScannedType;
@@ -2342,7 +2305,7 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
     {   // Match against format in any case, so later on for a "1-2-3-4" input
         // we may distinguish between a y-m-d (or similar) date and a 0-0-0-0
         // format.
-        if ( ScanStringNumFor( rString, 0, nStringPos ) )
+        if ( ScanStringNumFor( rString, 0, pFormat, nStringPos ) )
         {
             nMatchedAllStrings |= nMatchedMidString;
         }
@@ -2690,7 +2653,8 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
  * All gone => true
  * else     => false
  */
-bool ImpSvNumberInputScan::ScanEndString( const OUString& rString )
+bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
+                                          const SvNumberformat* pFormat )
 {
     sal_Int32 nPos = 0;
 
@@ -2698,7 +2662,7 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString )
     {   // Match against format in any case, so later on for a "1-2-3-4" input
         // we may distinguish between a y-m-d (or similar) date and a 0-0-0-0
         // format.
-        if ( ScanStringNumFor( rString, 0, 0xFFFF ) )
+        if ( ScanStringNumFor( rString, 0, pFormat, 0xFFFF ) )
         {
             nMatchedAllStrings |= nMatchedEndString;
         }
@@ -2768,7 +2732,7 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString )
         SkipBlanks(rString, nPos);
     }
 
-    if ( GetCurrency(rString, nPos) )               // currency symbol?
+    if ( GetCurrency(rString, nPos, pFormat) )      // currency symbol?
     {
         if (eScannedType != SvNumFormatType::UNDEFINED) // currency dup
         {
@@ -2992,7 +2956,7 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString )
     if (nPos < rString.getLength()) // everything consumed?
     {
         // does input EndString equal EndString in Format?
-        if ( !ScanStringNumFor( rString, nPos, 0xFFFF ) )
+        if ( !ScanStringNumFor( rString, nPos, pFormat, 0xFFFF ) )
         {
             return false;
         }
@@ -3004,10 +2968,11 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString )
 
 bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,       // String to scan
                                              sal_Int32 nPos,                // Position until which was consumed
+                                             const SvNumberformat* pFormat, // The format to match
                                              sal_uInt16 nString,            // Substring of format, 0xFFFF => last
                                              bool bDontDetectNegation)      // Suppress sign detection
 {
-    if ( !mpFormat )
+    if ( !pFormat )
     {
         return false;
     }
@@ -3026,7 +2991,7 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,       // S
         do
         {   // Step through subformats, first positive, then negative, then
             // other, but not the last (text) subformat.
-            pStr = mpFormat->GetNumForString( nSub, nString, true );
+            pStr = pFormat->GetNumForString( nSub, nString, true );
             if ( pStr && pTransliteration->isEqual( aString, *pStr ) )
             {
                 bFound = true;
@@ -3055,7 +3020,7 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,       // S
     if ( !bFound )
     {
         if ( !bDontDetectNegation && (nString == 0) &&
-             !bFirst && (nSign < 0) && mpFormat->IsSecondSubformatRealNegative() )
+             !bFirst && (nSign < 0) && pFormat->IsSecondSubformatRealNegative() )
         {
             // simply negated twice? --1
             aString = aString.replaceAll(" ", "");
@@ -3072,7 +3037,7 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,       // S
         }
     }
     else if ( !bDontDetectNegation && (nSub == 1) &&
-              mpFormat->IsSecondSubformatRealNegative() )
+              pFormat->IsSecondSubformatRealNegative() )
     {
         // negative
         if ( nStringScanSign < 0 )
@@ -3092,7 +3057,7 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,       // S
                 {
                     nStringScanSign = -1; // direct double negation
                 }
-                else if ( mpFormat->IsNegativeWithoutSign() )
+                else if ( pFormat->IsNegativeWithoutSign() )
                 {
                     nStringScanSign = -1; // indirect double negation
                 }
@@ -3120,7 +3085,6 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
                                                const SvNumberformat* pFormat ) // maybe number format set to match against
 {
     Reset();
-    mpFormat = pFormat;
     NumberStringDivision( rString );             // breakdown into strings and numbers
     if (nStringsCnt >= SV_MAX_COUNT_INPUT_STRINGS) // too many elements
     {
@@ -3174,7 +3138,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         }
         else
         {                                   // Analyze start string
-            if (!ScanStartString( sStrArray[i] ))  // i=0
+            if (!ScanStartString( sStrArray[i], pFormat ))  // i=0
             {
                 return false;               // already an error
             }
@@ -3195,7 +3159,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
                 return true;
             }
         }
-        if (i < nStringsCnt && !ScanEndString( sStrArray[i] ))
+        if (i < nStringsCnt && !ScanEndString( sStrArray[i], pFormat ))
         {
             return false;
         }
@@ -3204,18 +3168,18 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
                                             // nStringsCnt >= 3
         if (!GetNextNumber(i,j))            // i=1,0
         {                                   // Analyze start string
-            if (!ScanStartString( sStrArray[i] ))
+            if (!ScanStartString( sStrArray[i], pFormat ))
                 return false;               // already an error
             i++;                            // i=1
         }
         GetNextNumber(i,j);                 // i=1,2
-        if ( !ScanMidString( sStrArray[i], i ) )
+        if ( !ScanMidString( sStrArray[i], i, pFormat ) )
         {
             return false;
         }
         i++;                                // next symbol, i=2,3
         GetNextNumber(i,j);                 // i=3,4
-        if (i < nStringsCnt && !ScanEndString( sStrArray[i] ))
+        if (i < nStringsCnt && !ScanEndString( sStrArray[i], pFormat ))
         {
             return false;
         }
@@ -3236,7 +3200,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
                                             // nStringsCnt >= 5
         if (!GetNextNumber(i,j))            // i=1,0
         {                                   // Analyze start string
-            if (!ScanStartString( sStrArray[i] ))
+            if (!ScanStartString( sStrArray[i], pFormat ))
             {
                 return false;               // already an error
             }
@@ -3247,7 +3211,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
             }
         }
         GetNextNumber(i,j);                 // i=1,2
-        if ( !ScanMidString( sStrArray[i], i ) )
+        if ( !ScanMidString( sStrArray[i], i, pFormat ) )
         {
             return false;
         }
@@ -3257,13 +3221,13 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
             return false;
         }
         GetNextNumber(i,j);                 // i=3,4
-        if ( !ScanMidString( sStrArray[i], i ) )
+        if ( !ScanMidString( sStrArray[i], i, pFormat ) )
         {
             return false;
         }
         i++;                                // i=4,5
         GetNextNumber(i,j);                 // i=5,6
-        if (i < nStringsCnt && !ScanEndString( sStrArray[i] ))
+        if (i < nStringsCnt && !ScanEndString( sStrArray[i], pFormat ))
         {
             return false;
         }
@@ -3288,14 +3252,14 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
                                             // nStringsCnt >= 7
         if (!GetNextNumber(i,j))            // i=1,0
         {                                   // Analyze startstring
-            if (!ScanStartString( sStrArray[i] ))
+            if (!ScanStartString( sStrArray[i], pFormat ))
                 return false;               // already an error
             i++;                            // i=1
             if (nDecPos == 1)               // decimal separator at start => error
                 return false;
         }
         GetNextNumber(i,j);                 // i=1,2
-        if ( !ScanMidString( sStrArray[i], i ) )
+        if ( !ScanMidString( sStrArray[i], i, pFormat ) )
         {
             return false;
         }
@@ -3311,7 +3275,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
                     return false;
                 }
                 GetNextNumber(i,j);
-                if ( i < nStringsCnt && !ScanMidString( sStrArray[i], i ) )
+                if ( i < nStringsCnt && !ScanMidString( sStrArray[i], i, pFormat ) )
                 {
                     return false;
                 }
@@ -3329,7 +3293,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
                     return false;
                 }
                 GetNextNumber(i,j);
-                if ( i < nStringsCnt && !ScanMidString( sStrArray[i], i ) )
+                if ( i < nStringsCnt && !ScanMidString( sStrArray[i], i, pFormat ) )
                 {
                     return false;
                 }
@@ -3337,7 +3301,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
             }
         }
         GetNextNumber(i,j);
-        if (i < nStringsCnt && !ScanEndString( sStrArray[i] ))
+        if (i < nStringsCnt && !ScanEndString( sStrArray[i], pFormat ))
         {
             return false;
         }
@@ -3367,7 +3331,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         bool bDidMatch = (nMatchedAllStrings != 0);
         if ( nMatchedAllStrings )
         {
-            bool bMatch = mpFormat && mpFormat->IsNumForStringElementCountEqual(
+            bool bMatch = pFormat && pFormat->IsNumForStringElementCountEqual(
                                nStringScanNumFor, nStringsCnt, nNumericsCnt );
             if ( !bMatch )
             {
@@ -3380,8 +3344,8 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
             // overall format because of mixed type subformats. Use the scan
             // matched subformat's type if any.
             SvNumFormatType eForType = eSetType;
-            if ((eForType == SvNumFormatType::UNDEFINED || eForType == SvNumFormatType::DEFINED) && mpFormat)
-                eForType = mpFormat->GetNumForInfoScannedType( nStringScanNumFor);
+            if ((eForType == SvNumFormatType::UNDEFINED || eForType == SvNumFormatType::DEFINED) && pFormat)
+                eForType = pFormat->GetNumForInfoScannedType( nStringScanNumFor);
             if (eForType != SvNumFormatType::UNDEFINED && eForType != SvNumFormatType::DEFINED)
                 eScannedType = eForType;
             else
@@ -3404,7 +3368,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         bool bWasReturn = ((nMatchedAllStrings & nMatchedUsedAsReturn) != 0);
         if ( nMatchedAllStrings )
         {
-            bool bMatch = mpFormat && mpFormat->IsNumForStringElementCountEqual(
+            bool bMatch = pFormat && pFormat->IsNumForStringElementCountEqual(
                                nStringScanNumFor, nStringsCnt, nNumericsCnt );
             if ( !bMatch )
             {
@@ -3418,8 +3382,8 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
             // the scanned type in this case. Otherwise in IsNumberFormat() the
             // first numeric particle would be accepted as number.
             SvNumFormatType eForType = eSetType;
-            if ((eForType == SvNumFormatType::UNDEFINED || eForType == SvNumFormatType::DEFINED) && mpFormat)
-                eForType = mpFormat->GetNumForInfoScannedType( nStringScanNumFor);
+            if ((eForType == SvNumFormatType::UNDEFINED || eForType == SvNumFormatType::DEFINED) && pFormat)
+                eForType = pFormat->GetNumForInfoScannedType( nStringScanNumFor);
             if (eForType != SvNumFormatType::UNDEFINED && eForType != SvNumFormatType::DEFINED)
                 eScannedType = eForType;
         }
@@ -3727,7 +3691,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                         // not. The count of numbers in pattern must match the
                         // count of numbers in input.
                         res = (GetDatePatternNumbers() == nNumericsCnt)
-                            || IsAcceptableIso8601() || nMatchedAllStrings;
+                            || IsAcceptableIso8601( pFormat) || nMatchedAllStrings;
                     }
                 }
                 break;
@@ -3983,11 +3947,11 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
             break;
 
         case SvNumFormatType::DATE:
-            res = GetDateRef( fOutNumber, k );
+            res = GetDateRef( fOutNumber, k, pFormat );
             break;
 
         case SvNumFormatType::DATETIME:
-            res = GetDateRef( fOutNumber, k );
+            res = GetDateRef( fOutNumber, k, pFormat );
             if ( res )
             {
                 double fTime;
