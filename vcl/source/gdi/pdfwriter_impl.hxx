@@ -592,7 +592,6 @@ public:
         sal_Int32   m_nMappedFontId;
         sal_uInt8   m_nMappedGlyphId;
         int         m_nCharPos;
-        int         m_nCharCount;
 
         PDFGlyph( const Point& rPos,
                   const GlyphItem* pGlyph,
