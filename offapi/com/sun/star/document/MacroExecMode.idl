@@ -37,7 +37,7 @@ published constants MacroExecMode
     /** Execute macros from secure list quietly.
 
         <p>
-        If a macro is not in the list a conformation for it executing will
+        If a macro is not in the list a confirmation for it executing will
         appear.
         </p>
     */
