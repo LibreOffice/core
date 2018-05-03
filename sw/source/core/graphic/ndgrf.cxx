@@ -19,7 +19,6 @@
 
 #include <hintids.hxx>
 #include <mdiexp.hxx>
-#include <tools/helpers.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/fract.hxx>
 #include <svl/undo.hxx>
@@ -56,6 +55,8 @@
 #include <retrieveinputstreamconsumer.hxx>
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
+
+#include <cmath>
 
 using namespace com::sun::star;
 
@@ -797,7 +798,7 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
     rGA.SetInvert( rSet.GetInvertGrf().GetValue() );
 
     const sal_uInt16 nTrans = rSet.GetTransparencyGrf().GetValue();
-    rGA.SetTransparency( static_cast<sal_uInt8>(FRound(
+    rGA.SetTransparency( static_cast<sal_uInt8>(std::lround(
                                 std::min( nTrans, sal_uInt16(100) )  * 2.55 )) );
 
     return rGA;
