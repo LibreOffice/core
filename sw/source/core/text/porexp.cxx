@@ -22,7 +22,7 @@
 #include "inftxt.hxx"
 #include "porexp.hxx"
 
-sal_Int32 SwExpandPortion::GetCursorOfst( const sal_uInt16 nOfst ) const
+TextFrameIndex SwExpandPortion::GetCursorOfst(const sal_uInt16 nOfst) const
 { return SwLinePortion::GetCursorOfst( nOfst ); }
 
 bool SwExpandPortion::GetExpText( const SwTextSizeInfo&, OUString &rText ) const
@@ -102,7 +102,7 @@ SwLinePortion *SwBlankPortion::Compress() { return this; }
  * Causes problems with Fly
  */
 sal_uInt16 SwBlankPortion::MayUnderflow( const SwTextFormatInfo &rInf,
-    sal_Int32 nIdx, bool bUnderflow )
+    TextFrameIndex const nIdx, bool bUnderflow)
 {
     if( rInf.StopUnderflow() )
         return 0;
