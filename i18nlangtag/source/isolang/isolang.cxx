@@ -758,6 +758,8 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_USER_CREE_PLAINS_LATIN,             "crk-Latn", "CN", kSAME },   // erroneous tdf#73973
     { LANGUAGE_USER_CREE_PLAINS_SYLLABICS,         "crk-Cans", "CN", kSAME },   // erroneous tdf#73973
     { LANGUAGE_USER_HUNGARIAN_ROVAS,                "hu-Hung", "HU", k0    },
+    { LANGUAGE_USER_MALAY_ARABIC_MALAYSIA,          "ms-Arab", "MY", k0    },
+    { LANGUAGE_USER_MALAY_ARABIC_BRUNEI,            "ms-Arab", "BN", k0    },
     { LANGUAGE_DONTKNOW,                            "",        ""  , k0    }    // marks end of table
 };
 
