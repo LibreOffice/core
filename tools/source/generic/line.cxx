@@ -19,10 +19,9 @@
 
 #include <tools/link.hxx>
 #include <tools/line.hxx>
-#include <tools/helpers.hxx>
 
 #include <cstdlib>
-#include <math.h>
+#include <cmath>
 
 namespace tools
 {
@@ -39,8 +38,8 @@ bool Line::Intersection( const Line& rLine, Point& rIntersection ) const
 
     if( Intersection( rLine, fX, fY ) )
     {
-        rIntersection.setX( FRound( fX ) );
-        rIntersection.setY( FRound( fY ) );
+        rIntersection.setX( std::lround( fX ) );
+        rIntersection.setY( std::lround( fY ) );
         bRet = true;
     }
     else

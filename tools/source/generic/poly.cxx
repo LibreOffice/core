@@ -17,24 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/safeint.hxx>
+
 #include <osl/endian.h>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/vector/b2dvector.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/curve/b2dcubicbezier.hxx>
+
 #include <tools/bigint.hxx>
 #include <tools/debug.hxx>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/gen.hxx>
-#include <poly.h>
-#include <o3tl/safeint.hxx>
 #include <tools/line.hxx>
 #include <tools/poly.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/vector/b2dvector.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/curve/b2dcubicbezier.hxx>
+
+#include <poly.h>
 
 #include <memory>
 #include <vector>
@@ -202,8 +205,8 @@ ImplPolygon::ImplPolygon( const Point& rCenter, long nRadX, long nRadY )
 
         for( i=0, nAngle = 0.0; i < nPoints4; i++, nAngle += nAngleStep )
         {
-            long nX = FRound( nRadX * cos( nAngle ) );
-            long nY = FRound( -nRadY * sin( nAngle ) );
+            long nX = std::lround( nRadX * cos( nAngle ) );
+            long nY = std::lround( -nRadY * sin( nAngle ) );
 
             Point* pPt = &(mxPointAry[i]);
             pPt->setX(  nX + rCenter.X() );
@@ -278,7 +281,7 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
 
         if( PolyStyle::Pie == eStyle )
         {
-            const Point aCenter2( FRound( fCenterX ), FRound( fCenterY ) );
+            const Point aCenter2( std::lround( fCenterX ), std::lround( fCenterY ) );
 
             nStart = 1;
             nEnd = nPoints + 1;
@@ -297,8 +300,8 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
         {
             Point& rPt = mxPointAry[nStart];
 
-            rPt.setX( FRound( fCenterX + fRadX * cos( fStart ) ) );
-            rPt.setY( FRound( fCenterY - fRadY * sin( fStart ) ) );
+            rPt.setX( std::lround( fCenterX + fRadX * cos( fStart ) ) );
+            rPt.setY( std::lround( fCenterY - fRadY * sin( fStart ) ) );
         }
 
         if( PolyStyle::Chord == eStyle )
@@ -340,8 +343,8 @@ ImplPolygon::ImplPolygon( const Point& rBezPt1, const Point& rCtrlPt1,
         double fK12 = fK_1 * fK1_2;
         double fK21 = fK_2 * fK1_1;
 
-        rPt.setX( FRound( fK1_3 * fX0 + fK12 * fX1 + fK21 * fX2 + fK_3 * fX3 ) );
-        rPt.setY( FRound( fK1_3 * fY0 + fK12 * fY1 + fK21 * fY2 + fK_3 * fY3 ) );
+        rPt.setX( std::lround( fK1_3 * fX0 + fK12 * fX1 + fK21 * fX2 + fK_3 * fX3 ) );
+        rPt.setY( std::lround( fK1_3 * fY0 + fK12 * fY1 + fK21 * fY2 + fK_3 * fY3 ) );
     }
 }
 
@@ -384,7 +387,7 @@ ImplPolygon::ImplPolygon(const basegfx::B2DPolygon& rPolygon)
             for(sal_uInt32 a(0); a < nLoopCount; a++)
             {
                 // add current point (always) and remember StartPointIndex for evtl. later corrections
-                const Point aStartPoint(FRound(aBezier.getStartPoint().getX()), FRound(aBezier.getStartPoint().getY()));
+                const Point aStartPoint(std::lround(aBezier.getStartPoint().getX()), std::lround(aBezier.getStartPoint().getY()));
                 const sal_uInt32 nStartPointIndex(nArrayInsert);
                 mxPointAry[nStartPointIndex] = aStartPoint;
                 mxFlagAry[nStartPointIndex] = PolyFlags::Normal;
@@ -399,11 +402,11 @@ ImplPolygon::ImplPolygon(const basegfx::B2DPolygon& rPolygon)
                 if(aBezier.isBezier())
                 {
                     // if one is used, add always two control points due to the old schema
-                    mxPointAry[nArrayInsert] = Point(FRound(aBezier.getControlPointA().getX()), FRound(aBezier.getControlPointA().getY()));
+                    mxPointAry[nArrayInsert] = Point(std::lround(aBezier.getControlPointA().getX()), std::lround(aBezier.getControlPointA().getY()));
                     mxFlagAry[nArrayInsert] = PolyFlags::Control;
                     nArrayInsert++;
 
-                    mxPointAry[nArrayInsert] = Point(FRound(aBezier.getControlPointB().getX()), FRound(aBezier.getControlPointB().getY()));
+                    mxPointAry[nArrayInsert] = Point(std::lround(aBezier.getControlPointB().getX()), std::lround(aBezier.getControlPointB().getY()));
                     mxFlagAry[nArrayInsert] = PolyFlags::Control;
                     nArrayInsert++;
                 }
@@ -438,7 +441,7 @@ ImplPolygon::ImplPolygon(const basegfx::B2DPolygon& rPolygon)
             {
                 // add last point as closing point
                 const basegfx::B2DPoint aClosingPoint(rPolygon.getB2DPoint(nB2DLocalCount - 1));
-                const Point aEnd(FRound(aClosingPoint.getX()), FRound(aClosingPoint.getY()));
+                const Point aEnd(std::lround(aClosingPoint.getX()), std::lround(aClosingPoint.getY()));
                 mxPointAry[nArrayInsert] = aEnd;
                 mxFlagAry[nArrayInsert] = PolyFlags::Normal;
                 nArrayInsert++;
@@ -471,7 +474,7 @@ ImplPolygon::ImplPolygon(const basegfx::B2DPolygon& rPolygon)
             for(sal_uInt32 a(0); a < nB2DLocalCount; a++)
             {
                 basegfx::B2DPoint aB2DPoint(rPolygon.getB2DPoint(a));
-                Point aPoint(FRound(aB2DPoint.getX()), FRound(aB2DPoint.getY()));
+                Point aPoint(std::lround(aB2DPoint.getX()), std::lround(aB2DPoint.getY()));
                 mxPointAry[nIndex++] = aPoint;
             }
 
@@ -1052,7 +1055,7 @@ void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
                 for( sal_uInt16 i = 1; i < nSize; i++ )
                 {
                     if( ( mpImplPolygon->mxPointAry[ i ] != mpImplPolygon->mxPointAry[ nLast ] ) &&
-                        ( !nReduce || ( nReduce < FRound( CalcDistance( nLast, i ) ) ) ) )
+                        ( !nReduce || ( nReduce < std::lround( CalcDistance( nLast, i ) ) ) ) )
                     {
                         aNewPoly[ nNewCount++ ] = mpImplPolygon->mxPointAry[ nLast = i ];
                     }
@@ -1168,7 +1171,7 @@ static void ImplAdaptiveSubdivide( ::std::back_insert_iterator< ::std::vector< P
         // requested resolution reached.
         // Add end points to output iterator.
         // order is preserved, since this is so to say depth first traversal.
-        *rPointIter++ = Point( FRound(P1x), FRound(P1y) );
+        *rPointIter++ = Point( std::lround(P1x), std::lround(P1y) );
     }
 }
 
@@ -1411,8 +1414,8 @@ void Polygon::Rotate( const Point& rCenter, double fSin, double fCos )
 
         const long nX = rPt.X() - nCenterX;
         const long nY = rPt.Y() - nCenterY;
-        rPt.setX( FRound( fCos * nX + fSin * nY ) + nCenterX );
-        rPt.setY( - FRound( fSin * nX - fCos * nY ) + nCenterY );
+        rPt.setX( std::lround( fCos * nX + fSin * nY ) + nCenterX );
+        rPt.setY( - std::lround( fSin * nX - fCos * nY ) + nCenterY );
     }
 }
 

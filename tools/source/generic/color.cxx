@@ -19,14 +19,15 @@
 
 #include <sal/config.h>
 
-#include <iomanip>
-#include <sstream>
-#include <stdlib.h>
+#include <basegfx/color/bcolortools.hxx>
 
 #include <tools/color.hxx>
 #include <tools/stream.hxx>
-#include <tools/helpers.hxx>
-#include <basegfx/color/bcolortools.hxx>
+
+#include <iomanip>
+#include <sstream>
+#include <cstdlib>
+#include <cmath>
 
 sal_uInt8 Color::GetColorError( const Color& rCompareColor ) const
 {
@@ -34,7 +35,7 @@ sal_uInt8 Color::GetColorError( const Color& rCompareColor ) const
                          labs( static_cast<long>(rCompareColor.GetGreen()) - GetGreen() ) +
                          labs( static_cast<long>(rCompareColor.GetBlue()) - GetBlue() );
 
-    return static_cast<sal_uInt8>(FRound( nErrAbs * 0.3333333333 ));
+    return static_cast<sal_uInt8>(std::lround( nErrAbs * 0.3333333333 ));
 }
 
 void Color::IncreaseLuminance( sal_uInt8 cLumInc )
@@ -58,9 +59,9 @@ void Color::DecreaseContrast( sal_uInt8 cContDec )
         const double fM = ( 128.0 - 0.4985 * cContDec ) / 128.0;
         const double fOff = 128.0 - fM * 128.0;
 
-        SetRed( static_cast<sal_uInt8>(SAL_BOUND( FRound( COLORDATA_RED( mnColor ) * fM + fOff ), 0L, 255L )) );
-        SetGreen( static_cast<sal_uInt8>(SAL_BOUND( FRound( COLORDATA_GREEN( mnColor ) * fM + fOff ), 0L, 255L )) );
-        SetBlue( static_cast<sal_uInt8>(SAL_BOUND( FRound( COLORDATA_BLUE( mnColor ) * fM + fOff ), 0L, 255L )) );
+        SetRed( static_cast<sal_uInt8>(SAL_BOUND( std::lround( COLORDATA_RED( mnColor ) * fM + fOff ), 0L, 255L )) );
+        SetGreen( static_cast<sal_uInt8>(SAL_BOUND( std::lround( COLORDATA_GREEN( mnColor ) * fM + fOff ), 0L, 255L )) );
+        SetBlue( static_cast<sal_uInt8>(SAL_BOUND( std::lround( COLORDATA_BLUE( mnColor ) * fM + fOff ), 0L, 255L )) );
     }
 }
 
