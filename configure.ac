@@ -1939,8 +1939,6 @@ AC_ARG_WITH(help,
                                  --without-help     no local help (default)
                                  --with-help=html   build the new HTML local help
                                  --with-help=online build the new HTML online help
-                                 --with-help=common bundle common files for the local
-                                                    help but do not build the whole help
     ],
 ,)
 
@@ -4710,9 +4708,6 @@ if test -n "$with_help" -a "$with_help" != "no" -a $_os != iOS -a $_os != Androi
     BUILD_TYPE="$BUILD_TYPE HELP"
     GIT_NEEDED_SUBMODULES="helpcontent2 $GIT_NEEDED_SUBMODULES"
     case "$with_help" in
-    "common")
-        AC_MSG_RESULT([common only])
-        ;;
     "html")
         ENABLE_HTMLHELP=TRUE
         SCPDEFS="$SCPDEFS -DWITH_HELP"
@@ -4723,9 +4718,12 @@ if test -n "$with_help" -a "$with_help" != "no" -a $_os != iOS -a $_os != Androi
         HELP_ONLINE=TRUE
         AC_MSG_RESULT([HTML])
         ;;
-    *)
+    yes)
         SCPDEFS="$SCPDEFS -DWITH_HELP"
         AC_MSG_RESULT([yes])
+        ;;
+    *)
+        AC_MSG_ERROR([Unknown --with-help=$with_help])
         ;;
     esac
 else
