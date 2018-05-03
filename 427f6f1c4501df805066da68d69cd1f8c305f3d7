@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_81bae408",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-03T09:11:29Z",
+      "side": 1,
+      "message": "OutputDebugStringA?",
+      "range": {
+        "startLine": 331,
+        "startChar": 12,
+        "endLine": 331,
+        "endChar": 29
+      },
+      "revId": "427f6f1c4501df805066da68d69cd1f8c305f3d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
