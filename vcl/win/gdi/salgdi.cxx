@@ -614,8 +614,7 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
     mhDefFont(nullptr),
     mhDefPal(nullptr),
     mpStdClipRgnData(nullptr),
-    mnPenWidth(GSL_PEN_WIDTH),
-    mpCurrentPhysicalFontFace(nullptr)
+    mnPenWidth(GSL_PEN_WIDTH)
 {
     if (OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter)
         mpImpl.reset(new WinOpenGLSalGraphicsImpl(*this, pProvider));
