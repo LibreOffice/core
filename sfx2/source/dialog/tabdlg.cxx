@@ -1470,7 +1470,6 @@ SfxTabDialogController::SfxTabDialogController
     , m_pSet(pItemSet ? new SfxItemSet(*pItemSet) : nullptr)
     , m_pOutSet(nullptr)
     , m_pRanges(nullptr)
-    , m_bStandardPushed(false)
     , m_pExampleSet(nullptr)
 {
     Init_Impl(bEditFmt);
@@ -1889,8 +1888,6 @@ short SfxTabDialogController::Ok()
     if ( m_pOutSet && m_pOutSet->Count() > 0 )
         bModified = true;
 
-    if (m_bStandardPushed)
-        bModified = true;
     return bModified ? RET_OK : RET_CANCEL;
 }
 
