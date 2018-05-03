@@ -179,7 +179,7 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
                 canonicalDecl->getLocStart(), compiler.getSourceManager(), compiler.getLangOpts()) };
         if (name.startswith("DECL_LINK") || name.startswith("DECL_STATIC_LINK"))
             return false;
-        auto loc2 = compiler.getSourceManager().getImmediateExpansionRange(canonicalDecl->getLocStart()).first;
+        auto loc2 = compat::getImmediateExpansionRange(compiler.getSourceManager(), canonicalDecl->getLocStart()).first;
         if (compiler.getSourceManager().isMacroBodyExpansion(loc2))
         {
             StringRef name2 { Lexer::getImmediateMacroName(

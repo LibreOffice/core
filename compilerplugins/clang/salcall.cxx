@@ -428,7 +428,7 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
             //TODO: If the macro is a function-like macro with a parameter named "SAL_CALL", uses of
             // that parameter in the remainder of the replacement text will be false positives.
             assert(SM.isMacroBodyExpansion(startLoc));
-            auto const startLoc2 = SM.getImmediateExpansionRange(startLoc).second;
+            auto const startLoc2 = compat::getImmediateExpansionRange(SM, startLoc).second;
             auto name = Lexer::getImmediateMacroName(startLoc, SM, compiler.getLangOpts());
             while (name.startswith("\\\n"))
             {

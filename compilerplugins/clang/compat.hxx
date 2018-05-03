@@ -11,6 +11,7 @@
 #define INCLUDED_COMPILERPLUGINS_CLANG_COMPAT_HXX
 
 #include <cstddef>
+#include <utility>
 
 #include "clang/AST/Decl.h"
 #include "clang/AST/Expr.h"
@@ -49,6 +50,17 @@ inline clang::FunctionDecl::param_const_range parameters(
 }
 #endif
 
+inline std::pair<clang::SourceLocation, clang::SourceLocation> getImmediateExpansionRange(
+    clang::SourceManager const & SM, clang::SourceLocation Loc)
+{
+#if CLANG_VERSION >= 70000
+    auto const csr = SM.getImmediateExpansionRange(Loc);
+    if (csr.isCharRange()) { /*TODO*/ }
+    return {csr.getBegin(), csr.getEnd()};
+#else
+    return SM.getImmediateExpansionRange(Loc);
+#endif
+}
 
 inline bool isPointWithin(
     clang::SourceManager const & SM, clang::SourceLocation Location, clang::SourceLocation Start,
