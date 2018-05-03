@@ -1470,7 +1470,6 @@ SfxTabDialogController::SfxTabDialogController
     , m_pSet(pItemSet ? new SfxItemSet(*pItemSet) : nullptr)
     , m_pOutSet(nullptr)
     , m_pRanges(nullptr)
-    , m_pExampleSet(nullptr)
 {
     Init_Impl(bEditFmt);
 }
@@ -1492,7 +1491,7 @@ void SfxTabDialogController::Init_Impl(bool /*bFmtFlag*/)
 
     if (m_pSet)
     {
-        m_pExampleSet = new SfxItemSet(*m_pSet);
+        m_xExampleSet.reset(new SfxItemSet(*m_pSet));
         m_pOutSet.reset(new SfxItemSet(*m_pSet->GetPool(), m_pSet->GetRanges()));
     }
 }
@@ -1557,8 +1556,8 @@ IMPL_LINK_NOARG(SfxTabDialogController, ResetHdl, weld::Button&, void)
     // Also reset relevant items of ExampleSet and OutSet to initial state
     if (pDataObject->fnGetRanges)
     {
-        if (!m_pExampleSet)
-            m_pExampleSet = new SfxItemSet(*m_pSet);
+        if (!m_xExampleSet)
+            m_xExampleSet.reset(new SfxItemSet(*m_pSet));
 
         const SfxItemPool* pPool = m_pSet->GetPool();
         const sal_uInt16* pTmpRanges = (pDataObject->fnGetRanges)();
@@ -1584,12 +1583,12 @@ IMPL_LINK_NOARG(SfxTabDialogController, ResetHdl, weld::Button&, void)
                 const SfxPoolItem* pItem;
                 if (SfxItemState::SET == m_pSet->GetItemState(nWh, false, &pItem))
                 {
-                    m_pExampleSet->Put(*pItem);
+                    m_xExampleSet->Put(*pItem);
                     m_pOutSet->Put(*pItem);
                 }
                 else
                 {
-                    m_pExampleSet->ClearItem(nWh);
+                    m_xExampleSet->ClearItem(nWh);
                     m_pOutSet->ClearItem(nWh);
                 }
                 nTmp++;
@@ -1624,8 +1623,8 @@ IMPL_LINK(SfxTabDialogController, ActivatePageHdl, const OString&, rPage, void)
         pTabPage->Reset(m_pSet);
     pDataObject->bRefresh = false;
 
-    if (m_pExampleSet)
-        pTabPage->ActivatePage(*m_pExampleSet);
+    if (m_xExampleSet)
+        pTabPage->ActivatePage(*m_xExampleSet);
 
     if (pTabPage->IsReadOnly() || m_pImpl->bHideResetBtn)
         m_xResetBtn->hide();
@@ -1660,8 +1659,8 @@ IMPL_LINK(SfxTabDialogController, DeactivatePageHdl, const OString&, rPage, bool
 
     DeactivateRC nRet = DeactivateRC::LeavePage;
 
-    if (!m_pExampleSet && pPage->HasExchangeSupport() && m_pSet)
-        m_pExampleSet = new SfxItemSet(*m_pSet->GetPool(), m_pSet->GetRanges());
+    if (!m_xExampleSet && pPage->HasExchangeSupport() && m_pSet)
+        m_xExampleSet.reset(new SfxItemSet(*m_pSet->GetPool(), m_pSet->GetRanges()));
 
     if (m_pSet)
     {
@@ -1672,9 +1671,9 @@ IMPL_LINK(SfxTabDialogController, DeactivatePageHdl, const OString&, rPage, bool
         else
             nRet = pPage->DeactivatePage(nullptr);
         if ( ( DeactivateRC::LeavePage & nRet ) == DeactivateRC::LeavePage &&
-             aTmp.Count() && m_pExampleSet)
+             aTmp.Count() && m_xExampleSet)
         {
-            m_pExampleSet->Put( aTmp );
+            m_xExampleSet->Put( aTmp );
             m_pOutSet->Put( aTmp );
         }
     }
@@ -1682,13 +1681,12 @@ IMPL_LINK(SfxTabDialogController, DeactivatePageHdl, const OString&, rPage, bool
     {
         if ( pPage->HasExchangeSupport() ) //!!!
         {
-            if ( !m_pExampleSet )
+            if (!m_xExampleSet)
             {
                 SfxItemPool* pPool = pPage->GetItemSet().GetPool();
-                m_pExampleSet =
-                    new SfxItemSet( *pPool, GetInputRanges( *pPool ) );
+                m_xExampleSet.reset(new SfxItemSet(*pPool, GetInputRanges(*pPool)));
             }
-            nRet = pPage->DeactivatePage( m_pExampleSet );
+            nRet = pPage->DeactivatePage(m_xExampleSet.get());
         }
         else
             nRet = pPage->DeactivatePage( nullptr );
@@ -1731,7 +1729,7 @@ bool SfxTabDialogController::PrepareLeaveCurrentPage()
             if ( ( DeactivateRC::LeavePage & nRet ) == DeactivateRC::LeavePage
                  && aTmp.Count() )
             {
-                m_pExampleSet->Put( aTmp );
+                m_xExampleSet->Put( aTmp );
                 m_pOutSet->Put( aTmp );
             }
         }
@@ -1857,8 +1855,8 @@ short SfxTabDialogController::Ok()
 
     if ( !m_pOutSet )
     {
-        if ( m_pExampleSet )
-            m_pOutSet.reset(new SfxItemSet( *m_pExampleSet ));
+        if ( m_xExampleSet )
+            m_pOutSet.reset(new SfxItemSet( *m_xExampleSet ));
         else if ( m_pSet )
             m_pOutSet = m_pSet->Clone( false );  // without Items
     }
@@ -1877,8 +1875,8 @@ short SfxTabDialogController::Ok()
                 if ( pTabPage->FillItemSet( &aTmp ) )
                 {
                     bModified = true;
-                    if (m_pExampleSet)
-                        m_pExampleSet->Put( aTmp );
+                    if (m_xExampleSet)
+                        m_xExampleSet->Put( aTmp );
                     m_pOutSet->Put( aTmp );
                 }
             }
@@ -2035,9 +2033,9 @@ void SfxTabDialogController::SetInputSet( const SfxItemSet* pInSet )
     delete m_pSet;
     m_pSet = pInSet ? new SfxItemSet(*pInSet) : nullptr;
 
-    if (!bSet && !m_pExampleSet && !m_pOutSet && m_pSet)
+    if (!bSet && !m_xExampleSet && !m_pOutSet && m_pSet)
     {
-        m_pExampleSet = new SfxItemSet( *m_pSet );
+        m_xExampleSet.reset(new SfxItemSet(*m_pSet));
         m_pOutSet.reset(new SfxItemSet( *m_pSet->GetPool(), m_pSet->GetRanges() ));
     }
 }
