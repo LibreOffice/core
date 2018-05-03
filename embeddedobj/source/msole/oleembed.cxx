@@ -195,8 +195,7 @@ void OleEmbeddedObject::MoveListeners()
             }
         }
 
-        delete m_pInterfaceContainer;
-        m_pInterfaceContainer = nullptr;
+        m_pInterfaceContainer.reset();
     }
 }
 
