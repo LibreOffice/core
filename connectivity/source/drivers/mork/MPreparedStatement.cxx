@@ -429,7 +429,7 @@ void OPreparedStatement::describeColumn(OSQLParseNode const * _pParameter,
 void OPreparedStatement::describeParameter()
 {
     std::vector< OSQLParseNode*> aParseNodes;
-    scanParameter(m_pParseTree,aParseNodes);
+    scanParameter(m_pParseTree.get(), aParseNodes);
     if(!aParseNodes.empty())
     {
         m_xParamColumns = new OSQLColumns();
