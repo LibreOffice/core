@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <sal/config.h>
+#include <tools/stream.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/bitmapex.hxx>
 
@@ -54,6 +55,9 @@ public:
 
     VCL_DLLPUBLIC OUString getImageUrl(
         OUString const & name, OUString const & style, OUString const & lang);
+
+    VCL_DLLPUBLIC std::shared_ptr<SvMemoryStream> getImageStream(
+        OUString const & rName, OUString const & rStyle, OUString const & rLang);
 
     VCL_DLLPUBLIC bool loadImage(
         OUString const & name, OUString const & style,
