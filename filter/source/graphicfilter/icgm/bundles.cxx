@@ -112,9 +112,9 @@ CGMFList& CGMFList::operator=( const CGMFList& rSource )
     nFontsAvailable = rSource.nFontsAvailable;
     nFontNameCount  = rSource.nFontNameCount;
     nCharSetCount   = rSource.nCharSetCount;
-    for (FontEntry* pPtr : rSource.aFontEntryList)
+    for (auto const & pPtr : rSource.aFontEntryList)
     {
-        FontEntry* pCFontEntry = new FontEntry;
+        std::unique_ptr<FontEntry> pCFontEntry(new FontEntry);
         if ( pPtr->pFontName )
         {
             sal_uInt32 nSize = strlen( reinterpret_cast<char*>(pPtr->pFontName.get()) ) + 1;
@@ -129,7 +129,7 @@ CGMFList& CGMFList::operator=( const CGMFList& rSource )
         }
         pCFontEntry->eCharSetType = pPtr->eCharSetType;
         pCFontEntry->nFontType = pPtr->nFontType;
-        aFontEntryList.push_back( pCFontEntry );
+        aFontEntryList.push_back( std::move(pCFontEntry) );
     }
     return *this;
 }
@@ -140,7 +140,7 @@ FontEntry* CGMFList::GetFontEntry( sal_uInt32 nIndex )
     sal_uInt32 nInd = nIndex;
     if ( nInd )
         nInd--;
-    return ( nInd < aFontEntryList.size() ) ? aFontEntryList[ nInd ] : nullptr;
+    return ( nInd < aFontEntryList.size() ) ? aFontEntryList[ nInd ].get() : nullptr;
 }
 
 
@@ -168,11 +168,11 @@ void CGMFList::InsertName( sal_uInt8 const * pSource, sal_uInt32 nSize )
     {
         nFontsAvailable++;
         pFontEntry = new FontEntry;
-        aFontEntryList.push_back( pFontEntry );
+        aFontEntryList.push_back( std::unique_ptr<FontEntry>(pFontEntry) );
     }
     else
     {
-        pFontEntry = aFontEntryList[ nFontNameCount ];
+        pFontEntry = aFontEntryList[ nFontNameCount ].get();
     }
     nFontNameCount++;
     std::unique_ptr<sal_Int8[]> pBuf(new sal_Int8[ nSize ]);
@@ -229,11 +229,11 @@ void CGMFList::InsertCharSet( CharSetType eCharSetType, sal_uInt8 const * pSourc
     {
         nFontsAvailable++;
         pFontEntry = new FontEntry;
-        aFontEntryList.push_back( pFontEntry );
+        aFontEntryList.push_back( std::unique_ptr<FontEntry>(pFontEntry) );
     }
     else
     {
-        pFontEntry = aFontEntryList[ nCharSetCount ];
+        pFontEntry = aFontEntryList[ nCharSetCount ].get();
     }
     nCharSetCount++;
     pFontEntry->eCharSetType = eCharSetType;
@@ -245,8 +245,6 @@ void CGMFList::InsertCharSet( CharSetType eCharSetType, sal_uInt8 const * pSourc
 
 void CGMFList::ImplDeleteList()
 {
-    for (FontEntry* i : aFontEntryList)
-        delete i;
     aFontEntryList.clear();
 }
 
