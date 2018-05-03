@@ -36,8 +36,9 @@
 #include <Window.hxx>
 #include <drawview.hxx>
 #include <zoomlist.hxx>
-#include <tools/helpers.hxx>
 #include <vcl/svapp.hxx>
+
+#include <cmath>
 
 namespace sd {
 
@@ -81,13 +82,13 @@ void DrawViewShell::ScannerEvent()
 
                         if( fGrfWH < fWinWH )
                         {
-                            aBmpSize.setWidth( FRound( aPageSize.Height() * fGrfWH ) );
+                            aBmpSize.setWidth( std::lround( aPageSize.Height() * fGrfWH ) );
                             aBmpSize.setHeight( aPageSize.Height() );
                         }
                         else if( fGrfWH > 0.F )
                         {
                             aBmpSize.setWidth( aPageSize.Width() );
-                            aBmpSize.setHeight( FRound( aPageSize.Width() / fGrfWH ) );
+                            aBmpSize.setHeight( std::lround( aPageSize.Width() / fGrfWH ) );
                         }
                     }
 

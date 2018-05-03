@@ -45,6 +45,7 @@
 #include <tools/helpers.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <memory>
+#include <cmath>
 
 using namespace ::com::sun::star;
 
@@ -665,7 +666,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 const ::basegfx::B2DPolygon aPolygon(rPolyPolygon.getB2DPolygon(nNoOfPolygons - 1));
                 sal_uInt32 nPoints(aPolygon.count());
                 const ::basegfx::B2DPoint aNewB2DCenter(aPolygon.getB2DPoint(nPoints - 1));
-                const Point aNewCenter(FRound(aNewB2DCenter.getX()), FRound(aNewB2DCenter.getY()));
+                const Point aNewCenter(std::lround(aNewB2DCenter.getX()), std::lround(aNewB2DCenter.getY()));
                 Size aDistance(aNewCenter.X() - aCurCenter.X(), aNewCenter.Y() - aCurCenter.Y());
                 pRunningObj->Move(aDistance);
 

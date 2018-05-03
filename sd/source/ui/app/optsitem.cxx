@@ -23,13 +23,14 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/app.hxx>
-#include <tools/helpers.hxx>
 #include <unotools/syslocale.hxx>
 
 #include <sdmod.hxx>
 #include <optsitem.hxx>
 #include <FrameView.hxx>
 #include <sdattr.hrc>
+
+#include <cmath>
 
 using namespace ::utl;
 using namespace ::com::sun::star::uno;
@@ -1029,13 +1030,13 @@ bool SdOptionsGrid::ReadData( const Any* pValues )
 
     if( pValues[2].hasValue() )
     {
-        const sal_uInt32 nDivX = FRound( *o3tl::doAccess<double>(pValues[ 2 ]) );
+        const sal_uInt32 nDivX = std::lround( *o3tl::doAccess<double>(pValues[ 2 ]) );
         SetFieldDivisionX( SvxOptionsGrid::GetFieldDrawX() / ( nDivX + 1 ) );
     }
 
     if( pValues[3].hasValue() )
     {
-        const sal_uInt32 nDivY = FRound( *o3tl::doAccess<double>(pValues[ 3 ]) );
+        const sal_uInt32 nDivY = std::lround( *o3tl::doAccess<double>(pValues[ 3 ]) );
         SetFieldDivisionY( SvxOptionsGrid::GetFieldDrawY() / ( nDivY + 1 ) );
     }
 

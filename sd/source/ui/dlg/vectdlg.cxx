@@ -28,6 +28,8 @@
 #include <sdiocmpt.hxx>
 #include <vectdlg.hxx>
 
+#include <cmath>
+
 #define VECTORIZE_MAX_EXTENT 512
 
 SdVectorizeDlg::SdVectorizeDlg(vcl::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell)
@@ -242,9 +244,9 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
         }
     }
 
-    const Color aColor( static_cast<sal_uInt8>(FRound( nSumR * fMult )),
-                        static_cast<sal_uInt8>(FRound( nSumG * fMult )),
-                        static_cast<sal_uInt8>(FRound( nSumB * fMult )) );
+    const Color aColor( static_cast<sal_uInt8>(std::lround( nSumR * fMult )),
+                        static_cast<sal_uInt8>(std::lround( nSumG * fMult )),
+                        static_cast<sal_uInt8>(std::lround( nSumB * fMult )) );
 
     ::tools::Rectangle   aRect( Point( nPosX, nPosY ), Size( nWidth + 1, nHeight + 1 ) );
     const Size& rMaxSize = rMtf.GetPrefSize();

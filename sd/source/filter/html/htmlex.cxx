@@ -86,6 +86,8 @@
 #include <sdresid.hxx>
 #include "buttonset.hxx"
 
+#include <cmath>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -2799,7 +2801,7 @@ OUString HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPo
         for ( sal_uInt32 nPoint = 0; nPoint < nNoOfPoints; nPoint++ )
         {
             const ::basegfx::B2DPoint aB2DPoint(aPolygon.getB2DPoint(nPoint));
-            Point aPnt(FRound(aB2DPoint.getX()), FRound(aB2DPoint.getY()));
+            Point aPnt(std::lround(aB2DPoint.getX()), std::lround(aB2DPoint.getY()));
             // coordinates are relative to the physical page origin, not the
             // origin of ordinates
             aPnt.Move(aShift.Width(), aShift.Height());
