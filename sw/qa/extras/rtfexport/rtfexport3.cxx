@@ -109,6 +109,42 @@ DECLARE_RTFEXPORT_TEST(testTdf116841, "tdf116841.rtf")
                          getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf117268, "tdf117268.rtf")
+{
+    // Here we check that we correctly mimic Word's treatment of erroneous \itap0 inside tables.
+    // Previously, the first table was import as text, and second top-level one only imported
+    // last row with nested table (first row was also imported as text).
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY_THROW);
+
+    // First (simple) table
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getColumns()->getCount());
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text 1"), xCell->getString());
+
+    // Nested table
+    xTable.set(xTables->getByIndex(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getColumns()->getCount());
+    xCell.set(xTable->getCellByName("A1"), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text 3"), xCell->getString());
+    uno::Reference<beans::XPropertySet> xNestedAnchor(xTable->getAnchor(), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextRange> xAnchorCell(xNestedAnchor->getPropertyValue("Cell"),
+                                                 uno::UNO_QUERY_THROW);
+
+    // Outer table
+    xTable.set(xTables->getByIndex(2), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getColumns()->getCount());
+    xCell.set(xTable->getCellByName("A1"), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text 2"), xCell->getString());
+    xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(xCell, xAnchorCell);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
