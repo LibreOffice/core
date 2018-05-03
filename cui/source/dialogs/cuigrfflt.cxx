@@ -19,13 +19,15 @@
 
 #include <vcl/BitmapColorQuantizationFilter.hxx>
 #include <vcl/builderfactory.hxx>
+#include <svx/dialogs.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
-#include <cuigrfflt.hxx>
-#include <svx/dialogs.hrc>
 
+#include <cuigrfflt.hxx>
+
+#include <cmath>
 
 GraphicPreviewWindow::GraphicPreviewWindow(vcl::Window* pParent,
     const WinBits nStyle)
@@ -232,8 +234,8 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
     Graphic         aRet;
     long            nTileWidth = static_cast<long>(mpMtrWidth->GetValue());
     long            nTileHeight = static_cast<long>(mpMtrHeight->GetValue());
-    const Size      aSize( std::max( FRound( nTileWidth * fScaleX ), 1L ),
-                           std::max( FRound( nTileHeight * fScaleY ), 1L ) );
+    const Size      aSize( std::max( std::lround( nTileWidth * fScaleX ), 1L ),
+                           std::max( std::lround( nTileHeight * fScaleY ), 1L ) );
     BmpFilterParam  aParam( aSize );
 
     if( rGraphic.IsAnimated() )
@@ -333,7 +335,7 @@ GraphicFilterSolarize::GraphicFilterSolarize( vcl::Window* pParent, const Graphi
     get(mpMtrThreshold, "value");
     get(mpCbxInvert, "invert");
 
-    mpMtrThreshold->SetValue( FRound( cGreyThreshold / 2.55 ) );
+    mpMtrThreshold->SetValue( std::lround( cGreyThreshold / 2.55 ) );
     mpMtrThreshold->SetModifyHdl( LINK(this, GraphicFilterSolarize, EditModifyHdl) );
 
     mpCbxInvert->Check( bInvert );
@@ -370,7 +372,7 @@ void GraphicFilterSolarize::dispose()
 Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic         aRet;
-    sal_uInt8       nGreyThreshold = static_cast<sal_uInt8>(FRound( mpMtrThreshold->GetValue() * 2.55 ));
+    sal_uInt8       nGreyThreshold = static_cast<sal_uInt8>(std::lround( mpMtrThreshold->GetValue() * 2.55 ));
     BmpFilterParam  aParam( nGreyThreshold );
 
     if( rGraphic.IsAnimated() )
