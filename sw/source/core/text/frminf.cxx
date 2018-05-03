@@ -24,11 +24,11 @@
 TextFrameIndex SwTextMargin::GetTextStart() const
 {
     const OUString &rText = GetInfo().GetText();
-    const sal_Int32 nEnd = m_nStart + m_pCurr->GetLen();
+    const TextFrameIndex nEnd = m_nStart + m_pCurr->GetLen();
 
-    for( sal_Int32 i = m_nStart; i < nEnd; ++i )
+    for (TextFrameIndex i = m_nStart; i < nEnd; ++i)
     {
-        const sal_Unicode aChar = rText[i];
+        const sal_Unicode aChar = rText[sal_Int32(i)];
         if( CH_TAB != aChar && ' ' != aChar )
             return i;
     }
@@ -38,12 +38,12 @@ TextFrameIndex SwTextMargin::GetTextStart() const
 TextFrameIndex SwTextMargin::GetTextEnd() const
 {
     const OUString &rText = GetInfo().GetText();
-    const sal_Int32 nEnd = m_nStart + m_pCurr->GetLen();
-    for( sal_Int32 i = nEnd - 1; i >= m_nStart; --i )
+    const TextFrameIndex nEnd = m_nStart + m_pCurr->GetLen();
+    for (TextFrameIndex i = nEnd - TextFrameIndex(1); i >= m_nStart; --i)
     {
-        const sal_Unicode aChar = rText[i];
+        const sal_Unicode aChar = rText[sal_Int32(i)];
         if( CH_TAB != aChar && CH_BREAK != aChar && ' ' != aChar )
-            return i + 1;
+            return i + TextFrameIndex(1);
     }
     return m_nStart;
 }
@@ -85,7 +85,7 @@ bool SwTextFrameInfo::IsFilled( const sal_uInt8 nPercent ) const
 // Where does the text start (without whitespace)? (document global)
 SwTwips SwTextFrameInfo::GetLineStart( const SwTextCursor &rLine )
 {
-    const sal_Int32 nTextStart = rLine.GetTextStart();
+    const TextFrameIndex nTextStart = rLine.GetTextStart();
     if( rLine.GetStart() == nTextStart )
         return rLine.GetLineStart();
 
@@ -128,7 +128,7 @@ SwTwips SwTextFrameInfo::GetCharPos(TextFrameIndex const nChar, bool bCenter) co
     if( !bCenter )
         return nStt - aRectFnSet.GetLeft(pFrame->getFrameArea());
 
-    if( aLine.GetCharRect( &aRect, nChar+1 ) )
+    if (aLine.GetCharRect( &aRect, nChar + TextFrameIndex(1) ))
     {
         if ( aRectFnSet.IsVert() )
             pFrame->SwitchHorizontalToVertical( aRect );
@@ -142,27 +142,28 @@ SwTwips SwTextFrameInfo::GetCharPos(TextFrameIndex const nChar, bool bCenter) co
 }
 
 SwPaM *AddPam( SwPaM *pPam, const SwTextFrame* pTextFrame,
-                const sal_Int32 nPos, const sal_Int32 nLen )
+            TextFrameIndex const nPos, TextFrameIndex const nLen)
 {
     if( nLen )
     {
+        SwPosition const start(pTextFrame->MapViewToModelPos(nPos));
+        SwPosition const end(pTextFrame->MapViewToModelPos(nPos + nLen));
         // It could be the first
         if( pPam->HasMark() )
         {
             // If the new position is right after the current one, then
             // simply extend the Pam
-            if( nPos == pPam->GetPoint()->nContent.GetIndex() )
+            if (start == *pPam->GetPoint())
             {
-                pPam->GetPoint()->nContent += nLen;
+                *pPam->GetPoint() = end;
                 return pPam;
             }
             pPam = new SwPaM(*pPam, pPam);
         }
 
-        SwIndex &rContent = pPam->GetPoint()->nContent;
-        rContent.Assign( const_cast<SwTextNode*>(pTextFrame->GetTextNode()), nPos );
+        *pPam->GetPoint() = start;
         pPam->SetMark();
-        rContent += nLen;
+        *pPam->GetPoint() = end;
     }
     return pPam;
 }
@@ -178,7 +179,7 @@ void SwTextFrameInfo::GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const
 
         if( aLine.GetCurr()->GetLen() )
         {
-            sal_Int32 nPos = aLine.GetTextStart();
+            TextFrameIndex nPos = aLine.GetTextStart();
             // Do NOT include the blanks/tabs from the first line
             // in the selection
             if( !bFirstLine && nPos > aLine.GetStart() )
@@ -193,9 +194,9 @@ void SwTextFrameInfo::GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const
 
                 if( nPos < aLine.GetEnd() )
                 {
-                    sal_uInt16 nOff = !bWithLineBreak && CH_BREAK ==
-                                aLine.GetInfo().GetChar( aLine.GetEnd() - 1 )
-                                ? 1 : 0;
+                    TextFrameIndex const nOff( !bWithLineBreak && CH_BREAK ==
+                        aLine.GetInfo().GetChar(aLine.GetEnd() - TextFrameIndex(1))
+                                ? 1 : 0 );
                     pPam = AddPam( pPam, pFrame, nPos, aLine.GetEnd() - nPos - nOff );
                 }
             }
@@ -207,7 +208,7 @@ void SwTextFrameInfo::GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const
 
 // Is there a bullet/symbol etc. at the text position?
 // Fonts: CharSet, SYMBOL and DONTKNOW
-bool SwTextFrameInfo::IsBullet( sal_Int32 nTextStart ) const
+bool SwTextFrameInfo::IsBullet(TextFrameIndex const nTextStart) const
 {
     SwTextSizeInfo aInf( const_cast<SwTextFrame*>(pFrame) );
     SwTextMargin aLine( const_cast<SwTextFrame*>(pFrame), &aInf );
@@ -280,24 +281,24 @@ sal_Int32 SwTextFrameInfo::GetBigIndent(TextFrameIndex& rFndPos,
 
     const Point aPoint( nNextIndent, aLine.Y() );
     rFndPos = aLine.GetCursorOfst( nullptr, aPoint, false );
-    if( 1 >= rFndPos )
+    if (TextFrameIndex(1) >= rFndPos)
         return 0;
 
     // Is on front of a non-space
     const OUString& rText = aInf.GetText();
-    sal_Unicode aChar = rText[rFndPos];
+    sal_Unicode aChar = rText[sal_Int32(rFndPos)];
     if( CH_TAB == aChar || CH_BREAK == aChar || ' ' == aChar ||
         (( CH_TXTATR_BREAKWORD == aChar || CH_TXTATR_INWORD == aChar ) &&
             aInf.HasHint( rFndPos ) ) )
         return 0;
 
     // and after a space
-    aChar = rText[rFndPos - 1];
+    aChar = rText[sal_Int32(rFndPos) - 1];
     if( CH_TAB != aChar && CH_BREAK != aChar &&
         ( ( CH_TXTATR_BREAKWORD != aChar && CH_TXTATR_INWORD != aChar ) ||
-            !aInf.HasHint( rFndPos - 1 ) ) &&
+            !aInf.HasHint(rFndPos - TextFrameIndex(1))) &&
         // More than two Blanks!
-        ( ' ' != aChar || ' ' != rText[rFndPos - 2] ) )
+        (' ' != aChar || ' ' != rText[sal_Int32(rFndPos) - 2]))
         return 0;
 
     SwRect aRect;
