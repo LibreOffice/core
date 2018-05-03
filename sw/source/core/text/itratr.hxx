@@ -107,24 +107,24 @@ public:
     SwRedlineItr *GetRedln() { return m_pRedline; }
     // The parameter returns the position of the next change before or at the
     // char position.
-    sal_Int32 GetNextAttr( ) const;
+    TextFrameIndex GetNextAttr() const;
     /// Enables the attributes used at char pos nPos in the logical font
-    bool Seek( const sal_Int32 nPos );
+    bool Seek(TextFrameIndex nPos);
     // Creates the font at the specified position via Seek() and checks
     // if it's a symbol font.
-    bool IsSymbol( const sal_Int32 nPos );
+    bool IsSymbol(TextFrameIndex nPos);
 
     /** Executes ChgPhysFnt if Seek() returns true
      *  and change font to merge character border with neighbours.
     **/
-    bool SeekAndChgAttrIter( const sal_Int32 nPos, OutputDevice* pOut );
+    bool SeekAndChgAttrIter(TextFrameIndex nPos, OutputDevice* pOut);
     bool SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFont );
 
     // Do we have an attribute change at all?
     bool HasHints() const { return nullptr != m_pHints; }
 
     // Returns the attribute for a position
-    SwTextAttr *GetAttr( const sal_Int32 nPos ) const;
+    SwTextAttr *GetAttr(TextFrameIndex nPos) const;
 
     const SwpHints *GetHints() const { return m_pHints; }
 
