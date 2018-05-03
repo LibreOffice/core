@@ -34,6 +34,7 @@ SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChi
                                            vcl::Window* pParentWindow, WinBits nBits)
     : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, nBits)
     , mpSidebarController()
+    , mbIsReadyToDrag(false)
 {
     // Get the XFrame from the bindings.
     if (pSfxBindings==nullptr || pSfxBindings->GetDispatcher()==nullptr)
