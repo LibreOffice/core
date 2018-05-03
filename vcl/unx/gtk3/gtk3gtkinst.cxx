@@ -36,6 +36,8 @@
 #include <vcl/pngwrite.hxx>
 #include <vcl/weld.hxx>
 
+#include <cmath>
+
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -3252,7 +3254,7 @@ private:
 
     int fromGtk(double fValue) const
     {
-        return FRound(fValue * Power10(get_digits()));
+        return std::lround(fValue * Power10(get_digits()));
     }
 
 public:

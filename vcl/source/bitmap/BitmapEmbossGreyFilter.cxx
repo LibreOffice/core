@@ -15,6 +15,8 @@
 
 #include <bitmapwriteaccess.hxx>
 
+#include <cmath>
+
 BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx)
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
@@ -45,9 +47,9 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx)
                 long* pHMap = new long[nWidth + 2];
                 long* pVMap = new long[nHeight + 2];
                 long nX, nY, nNx, nNy, nDotL;
-                const long nLx = FRound(cos(fAzim) * cos(fElev) * 255.0);
-                const long nLy = FRound(sin(fAzim) * cos(fElev) * 255.0);
-                const long nLz = FRound(sin(fElev) * 255.0);
+                const long nLx = std::lround(cos(fAzim) * cos(fElev) * 255.0);
+                const long nLy = std::lround(sin(fAzim) * cos(fElev) * 255.0);
+                const long nLz = std::lround(sin(fElev) * 255.0);
                 const auto nZ2 = ((6 * 255) / 4) * ((6 * 255) / 4);
                 const long nNzLz = ((6 * 255) / 4) * nLz;
                 const sal_uInt8 cLz = static_cast<sal_uInt8>(SAL_BOUND(nLz, 0, 255));

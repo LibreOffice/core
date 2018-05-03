@@ -26,6 +26,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <cmath>
 
 namespace {
 
@@ -943,8 +944,8 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap)
     double fScaleX = std::fabs(mrScaleX);
     double fScaleY = std::fabs(mrScaleY);
 
-    const long nDstW = FRound(aSizePix.Width()  * fScaleX);
-    const long nDstH = FRound(aSizePix.Height() * fScaleY);
+    const long nDstW = std::lround(aSizePix.Width()  * fScaleX);
+    const long nDstH = std::lround(aSizePix.Height() * fScaleY);
 
     const double fScaleThresh = 0.6;
 

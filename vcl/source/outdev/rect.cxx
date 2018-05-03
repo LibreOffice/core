@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
 #include <sal/types.h>
 
 #include <tools/poly.hxx>
@@ -29,6 +27,9 @@
 #include <vcl/window.hxx>
 
 #include <salgdi.hxx>
+
+#include <cassert>
+#include <cmath>
 
 void OutputDevice::DrawRect( const tools::Rectangle& rRect )
 {
@@ -366,10 +367,10 @@ BmpMirrorFlags AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix )
             const double fFactorX = ( rTwoRect.mnSrcWidth > 1 ) ? static_cast<double>( rTwoRect.mnDestWidth - 1 ) / ( rTwoRect.mnSrcWidth - 1 ) : 0.0;
             const double fFactorY = ( rTwoRect.mnSrcHeight > 1 ) ? static_cast<double>( rTwoRect.mnDestHeight - 1 ) / ( rTwoRect.mnSrcHeight - 1 ) : 0.0;
 
-            const long nDstX1 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Left() - rTwoRect.mnSrcX ) );
-            const long nDstY1 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Top() - rTwoRect.mnSrcY ) );
-            const long nDstX2 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Right() - rTwoRect.mnSrcX ) );
-            const long nDstY2 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Bottom() - rTwoRect.mnSrcY ) );
+            const long nDstX1 = rTwoRect.mnDestX + std::lround( fFactorX * ( aCropRect.Left() - rTwoRect.mnSrcX ) );
+            const long nDstY1 = rTwoRect.mnDestY + std::lround( fFactorY * ( aCropRect.Top() - rTwoRect.mnSrcY ) );
+            const long nDstX2 = rTwoRect.mnDestX + std::lround( fFactorX * ( aCropRect.Right() - rTwoRect.mnSrcX ) );
+            const long nDstY2 = rTwoRect.mnDestY + std::lround( fFactorY * ( aCropRect.Bottom() - rTwoRect.mnSrcY ) );
 
             rTwoRect.mnSrcX = aCropRect.Left();
             rTwoRect.mnSrcY = aCropRect.Top();
@@ -407,10 +408,10 @@ void AdjustTwoRect( SalTwoRect& rTwoRect, const tools::Rectangle& rValidSrcRect 
             const double fFactorX = ( rTwoRect.mnSrcWidth > 1 ) ? static_cast<double>( rTwoRect.mnDestWidth - 1 ) / ( rTwoRect.mnSrcWidth - 1 ) : 0.0;
             const double fFactorY = ( rTwoRect.mnSrcHeight > 1 ) ? static_cast<double>( rTwoRect.mnDestHeight - 1 ) / ( rTwoRect.mnSrcHeight - 1 ) : 0.0;
 
-            const long nDstX1 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Left() - rTwoRect.mnSrcX ) );
-            const long nDstY1 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Top() - rTwoRect.mnSrcY ) );
-            const long nDstX2 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Right() - rTwoRect.mnSrcX ) );
-            const long nDstY2 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Bottom() - rTwoRect.mnSrcY ) );
+            const long nDstX1 = rTwoRect.mnDestX + std::lround( fFactorX * ( aCropRect.Left() - rTwoRect.mnSrcX ) );
+            const long nDstY1 = rTwoRect.mnDestY + std::lround( fFactorY * ( aCropRect.Top() - rTwoRect.mnSrcY ) );
+            const long nDstX2 = rTwoRect.mnDestX + std::lround( fFactorX * ( aCropRect.Right() - rTwoRect.mnSrcX ) );
+            const long nDstY2 = rTwoRect.mnDestY + std::lround( fFactorY * ( aCropRect.Bottom() - rTwoRect.mnSrcY ) );
 
             rTwoRect.mnSrcX = aCropRect.Left();
             rTwoRect.mnSrcY = aCropRect.Top();

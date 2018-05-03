@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <algorithm>
-#include <stdio.h>
-#include <string.h>
 #include <osl/thread.h>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
@@ -30,6 +27,11 @@
 #include <vcl/graphictools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <unotools/fontdefs.hxx>
+
+#include <algorithm>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
 
 namespace
 {
@@ -109,8 +111,8 @@ meta_action_name(MetaActionType nMetaAction)
 
 inline void ImplScalePoint( Point& rPt, double fScaleX, double fScaleY )
 {
-    rPt.setX( FRound( fScaleX * rPt.X() ) );
-    rPt.setY( FRound( fScaleY * rPt.Y() ) );
+    rPt.setX( std::lround( fScaleX * rPt.X() ) );
+    rPt.setY( std::lround( fScaleY * rPt.Y() ) );
 }
 
 inline void ImplScaleRect( tools::Rectangle& rRect, double fScaleX, double fScaleY )
@@ -137,10 +139,10 @@ inline void ImplScaleLineInfo( LineInfo& rLineInfo, double fScaleX, double fScal
     {
         const double fScale = ( fabs(fScaleX) + fabs(fScaleY) ) * 0.5;
 
-        rLineInfo.SetWidth( FRound( fScale * rLineInfo.GetWidth() ) );
-        rLineInfo.SetDashLen( FRound( fScale * rLineInfo.GetDashLen() ) );
-        rLineInfo.SetDotLen( FRound( fScale * rLineInfo.GetDotLen() ) );
-        rLineInfo.SetDistance( FRound( fScale * rLineInfo.GetDistance() ) );
+        rLineInfo.SetWidth( std::lround( fScale * rLineInfo.GetWidth() ) );
+        rLineInfo.SetDashLen( std::lround( fScale * rLineInfo.GetDashLen() ) );
+        rLineInfo.SetDotLen( std::lround( fScale * rLineInfo.GetDotLen() ) );
+        rLineInfo.SetDistance( std::lround( fScale * rLineInfo.GetDistance() ) );
     }
 }
 
@@ -516,8 +518,8 @@ void MetaRoundRectAction::Move( long nHorzMove, long nVertMove )
 void MetaRoundRectAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScaleRect( maRect, fScaleX, fScaleY );
-    mnHorzRound = FRound( mnHorzRound * fabs(fScaleX) );
-    mnVertRound = FRound( mnVertRound * fabs(fScaleY) );
+    mnHorzRound = std::lround( mnHorzRound * fabs(fScaleX) );
+    mnVertRound = std::lround( mnVertRound * fabs(fScaleY) );
 }
 
 void MetaRoundRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -1120,7 +1122,7 @@ void MetaTextArrayAction::Scale( double fScaleX, double fScaleY )
     if ( mpDXAry && mnLen )
     {
         for ( sal_uInt16 i = 0, nCount = mnLen; i < nCount; i++ )
-            mpDXAry[ i ] = FRound( mpDXAry[ i ] * fabs(fScaleX) );
+            mpDXAry[ i ] = std::lround( mpDXAry[ i ] * fabs(fScaleX) );
     }
 }
 
@@ -1245,7 +1247,7 @@ void MetaStretchTextAction::Move( long nHorzMove, long nVertMove )
 void MetaStretchTextAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPt, fScaleX, fScaleY );
-    mnWidth = static_cast<sal_uLong>(FRound( mnWidth * fabs(fScaleX) ));
+    mnWidth = static_cast<sal_uLong>(std::lround( mnWidth * fabs(fScaleX) ));
 }
 
 void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -1379,7 +1381,7 @@ void MetaTextLineAction::Move( long nHorzMove, long nVertMove )
 void MetaTextLineAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPos, fScaleX, fScaleY );
-    mnWidth = FRound( mnWidth * fabs(fScaleX) );
+    mnWidth = std::lround( mnWidth * fabs(fScaleX) );
 }
 
 void MetaTextLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -2329,8 +2331,8 @@ rtl::Reference<MetaAction> MetaMoveClipRegionAction::Clone()
 
 void MetaMoveClipRegionAction::Scale( double fScaleX, double fScaleY )
 {
-    mnHorzMove = FRound( mnHorzMove * fScaleX );
-    mnVertMove = FRound( mnVertMove * fScaleY );
+    mnHorzMove = std::lround( mnHorzMove * fScaleX );
+    mnVertMove = std::lround( mnVertMove * fScaleY );
 }
 
 void MetaMoveClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -2710,8 +2712,8 @@ rtl::Reference<MetaAction> MetaFontAction::Clone()
 void MetaFontAction::Scale( double fScaleX, double fScaleY )
 {
     const Size aSize(
-        FRound(maFont.GetFontSize().Width() * fabs(fScaleX)),
-        FRound(maFont.GetFontSize().Height() * fabs(fScaleY)));
+        std::lround(maFont.GetFontSize().Width() * fabs(fScaleX)),
+        std::lround(maFont.GetFontSize().Height() * fabs(fScaleY)));
     maFont.SetFontSize( aSize );
 }
 

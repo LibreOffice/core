@@ -27,6 +27,7 @@
 #include <string.h>
 #include <svsys.h>
 #include <vector>
+#include <cmath>
 
 #include <o3tl/lru_map.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -874,13 +875,13 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const * i_pFont, float& o_
     {
         o_rFontScale = -aLogFont.lfHeight / float(MAXFONTHEIGHT);
         aLogFont.lfHeight = -MAXFONTHEIGHT;
-        aLogFont.lfWidth = FRound( aLogFont.lfWidth / o_rFontScale );
+        aLogFont.lfWidth = std::lround( aLogFont.lfWidth / o_rFontScale );
     }
     else // #i95867# also limit font widths
     {
         o_rFontScale = +aLogFont.lfWidth / float(MAXFONTHEIGHT);
         aLogFont.lfWidth = +MAXFONTHEIGHT;
-        aLogFont.lfHeight = FRound( aLogFont.lfHeight / o_rFontScale );
+        aLogFont.lfHeight = std::lround( aLogFont.lfHeight / o_rFontScale );
     }
 
     hNewFont = ::CreateFontIndirectW( &aLogFont );

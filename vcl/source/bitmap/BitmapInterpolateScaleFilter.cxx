@@ -26,13 +26,15 @@
 #include <BitmapFastScaleFilter.hxx>
 #include <BitmapInterpolateScaleFilter.hxx>
 
+#include <cmath>
+
 BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx)
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
     const Size aSizePix(aBitmap.GetSizePixel());
-    const long nNewWidth = FRound(aSizePix.Width() * mfScaleX);
-    const long nNewHeight = FRound(aSizePix.Height() * mfScaleY);
+    const long nNewWidth = std::lround(aSizePix.Width() * mfScaleX);
+    const long nNewHeight = std::lround(aSizePix.Height() * mfScaleY);
     bool bRet = false;
 
     if ((nNewWidth > 1) && (nNewHeight > 1))

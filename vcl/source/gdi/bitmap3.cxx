@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <math.h>
-#include <stdlib.h>
-
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmap.hxx>
@@ -42,8 +39,10 @@
 #include "impvect.hxx"
 
 #include <memory>
+#include <cmath>
+#include <cstdlib>
 
-#define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
+#define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(std::lround(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
 
 #define CALC_ERRORS                                                             \
                         nTemp = p1T[nX++] >> 12;                              \
@@ -1267,18 +1266,18 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
             {
                 if(!msoBrightness)
                 {
-                    cMapR[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fROff ), 0, 255 ));
-                    cMapG[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fGOff ), 0, 255 ));
-                    cMapB[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fBOff ), 0, 255 ));
+                    cMapR[ nX ] = static_cast<sal_uInt8>(MinMax( std::lround( nX * fM + fROff ), 0, 255 ));
+                    cMapG[ nX ] = static_cast<sal_uInt8>(MinMax( std::lround( nX * fM + fGOff ), 0, 255 ));
+                    cMapB[ nX ] = static_cast<sal_uInt8>(MinMax( std::lround( nX * fM + fBOff ), 0, 255 ));
                 }
                 else
                 {
                     // LO simply uses (in a somewhat optimized form) "newcolor = (oldcolor-128)*contrast+brightness+128"
                     // as the formula, i.e. contrast first, brightness afterwards. MSOffice, for whatever weird reason,
                     // use neither first, but apparently it applies half of brightness before contrast and half afterwards.
-                    cMapR[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0, 255 ));
-                    cMapG[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0, 255 ));
-                    cMapB[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0, 255 ));
+                    cMapR[ nX ] = static_cast<sal_uInt8>(MinMax( std::lround( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0, 255 ));
+                    cMapG[ nX ] = static_cast<sal_uInt8>(MinMax( std::lround( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0, 255 ));
+                    cMapB[ nX ] = static_cast<sal_uInt8>(MinMax( std::lround( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0, 255 ));
                 }
                 if( bGamma )
                 {

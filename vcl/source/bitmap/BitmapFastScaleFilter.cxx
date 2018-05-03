@@ -25,6 +25,8 @@
 #include <bitmapwriteaccess.hxx>
 #include <BitmapFastScaleFilter.hxx>
 
+#include <cmath>
+
 BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx)
 {
     SAL_INFO("vcl.gdi", "BitmapFastScaleFilter::execute()");
@@ -32,8 +34,8 @@ BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx)
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
     const Size aSizePix(aBitmap.GetSizePixel());
-    const long nNewWidth = FRound(aSizePix.Width() * mfScaleX);
-    const long nNewHeight = FRound(aSizePix.Height() * mfScaleY);
+    const long nNewWidth = std::lround(aSizePix.Width() * mfScaleX);
+    const long nNewHeight = std::lround(aSizePix.Height() * mfScaleY);
     bool bRet = false;
 
     SAL_INFO("vcl.gdi", "New width: " << nNewWidth << "\nNew height: " << nNewHeight);

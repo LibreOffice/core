@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <comphelper/lok.hxx>
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
@@ -37,11 +38,11 @@
 #include <salgdi.hxx>
 #include <salbmp.hxx>
 #include <image.h>
-
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <memory>
-#include <comphelper/lok.hxx>
 #include <bitmapwriteaccess.hxx>
+
+#include <memory>
+#include <cassert>
+#include <cmath>
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 {
@@ -221,13 +222,13 @@ Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
 
                 if( fBmpWH < fMaxWH )
                 {
-                    aNewBmpSize.setWidth( FRound( fMaxPixelY * fBmpWH ) );
-                    aNewBmpSize.setHeight( FRound( fMaxPixelY ) );
+                    aNewBmpSize.setWidth( std::lround( fMaxPixelY * fBmpWH ) );
+                    aNewBmpSize.setHeight( std::lround( fMaxPixelY ) );
                 }
                 else if( fBmpWH > 0.0 )
                 {
-                    aNewBmpSize.setWidth( FRound( fMaxPixelX ) );
-                    aNewBmpSize.setHeight( FRound( fMaxPixelX / fBmpWH) );
+                    aNewBmpSize.setWidth( std::lround( fMaxPixelX ) );
+                    aNewBmpSize.setHeight( std::lround( fMaxPixelX / fBmpWH) );
                 }
 
                 if( aNewBmpSize.Width() && aNewBmpSize.Height() )

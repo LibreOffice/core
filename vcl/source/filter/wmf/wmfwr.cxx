@@ -19,25 +19,28 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
-
-#include "wmfwr.hxx"
-#include <unotools/fontcvt.hxx>
-#include "emfwr.hxx"
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/bigint.hxx>
 #include <tools/helpers.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/fract.hxx>
 #include <osl/endian.h>
+#include <unotools/fontcvt.hxx>
+
 #include <vcl/dibtools.hxx>
 #include <vcl/metric.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <memory>
 #include <vcl/fontcharmap.hxx>
+
+#include "wmfwr.hxx"
+#include "emfwr.hxx"
+
+#include <memory>
+#include <algorithm>
+#include <cmath>
 
 // MS Windows defines
 
@@ -1581,8 +1584,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     if( fScaleX != 1.0 || fScaleY != 1.0 )
                     {
                         aTmpMtf.Scale( fScaleX, fScaleY );
-                        aSrcPt.setX( FRound( aSrcPt.X() * fScaleX ) );
-                        aSrcPt.setY( FRound( aSrcPt.Y() * fScaleY ) );
+                        aSrcPt.setX( std::lround( aSrcPt.X() * fScaleX ) );
+                        aSrcPt.setY( std::lround( aSrcPt.Y() * fScaleY ) );
                     }
 
                     nMoveX = aDestPt.X() - aSrcPt.X();

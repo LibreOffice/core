@@ -17,12 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
 #include <sal/types.h>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <memory>
 
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/gdimtf.hxx>
@@ -35,6 +32,10 @@
 #include <outdata.hxx>
 #include <salgdi.hxx>
 #include <bitmapwriteaccess.hxx>
+
+#include <cassert>
+#include <cmath>
+#include <memory>
 
 namespace
 {
@@ -183,10 +184,10 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
 
     // create forward mapping tables
     for( nX = 0; nX <= nSrcWidth; nX++ )
-        pMapX[ nX ] = aDestPt.X() + FRound( static_cast<double>(aDestSz.Width()) * nX / nSrcWidth );
+        pMapX[ nX ] = aDestPt.X() + std::lround( static_cast<double>(aDestSz.Width()) * nX / nSrcWidth );
 
     for( nY = 0; nY <= nSrcHeight; nY++ )
-        pMapY[ nY ] = aDestPt.Y() + FRound( static_cast<double>(aDestSz.Height()) * nY / nSrcHeight );
+        pMapY[ nY ] = aDestPt.Y() + std::lround( static_cast<double>(aDestSz.Height()) * nY / nSrcHeight );
 
     // walk through all rectangles of mask
     const vcl::Region aWorkRgn(aMask.CreateRegion(COL_BLACK, tools::Rectangle(Point(), aMask.GetSizePixel())));
@@ -448,7 +449,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
         {
             ScopedVclPtrInstance< VirtualDevice > aVDev(*this, DeviceFormat::BITMASK);
             const Size aDstSz( aDstRect.GetSize() );
-            const sal_uInt8 cTrans = static_cast<sal_uInt8>(MinMax( FRound( nTransparencePercent * 2.55 ), 0, 255 ));
+            const sal_uInt8 cTrans = static_cast<sal_uInt8>(MinMax( std::lround( nTransparencePercent * 2.55 ), 0, 255 ));
 
             if( aDstRect.Left() || aDstRect.Top() )
                 aPolyPoly.Move( -aDstRect.Left(), -aDstRect.Top() );

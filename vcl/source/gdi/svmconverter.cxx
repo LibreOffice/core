@@ -17,23 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <algorithm>
-#include <string.h>
+#include <o3tl/make_unique.hxx>
+
 #include <osl/thread.h>
+#include <rtl/strbuf.hxx>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <tools/helpers.hxx>
+
 #include <vcl/dibtools.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/lineinfo.hxx>
-#include <rtl/strbuf.hxx>
 
 #include <svmconverter.hxx>
 
 #include <memory>
-#include <o3tl/make_unique.hxx>
+#include <algorithm>
+#include <cstring>
+#include <cmath>
 
 // Inlines
 void ImplReadRect( SvStream& rIStm, tools::Rectangle& rRect )
@@ -2377,8 +2380,8 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & r
                     if( fScaleX != 1.0 || fScaleY != 1.0 )
                     {
                         aMtf.Scale( fScaleX, fScaleY );
-                        aSrcPt.setX( FRound( aSrcPt.X() * fScaleX ) );
-                        aSrcPt.setY( FRound( aSrcPt.Y() * fScaleY ) );
+                        aSrcPt.setX( std::lround( aSrcPt.X() * fScaleX ) );
+                        aSrcPt.setY( std::lround( aSrcPt.Y() * fScaleY ) );
                     }
 
                     nMoveX = rPos.X() - aSrcPt.X();

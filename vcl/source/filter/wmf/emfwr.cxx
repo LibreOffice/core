@@ -19,17 +19,20 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
-
-#include "emfwr.hxx"
 #include <rtl/strbuf.hxx>
 #include <tools/helpers.hxx>
 #include <tools/fract.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+
 #include <vcl/lineinfo.hxx>
 #include <vcl/dibtools.hxx>
+
+#include "emfwr.hxx"
+
 #include <memory>
+#include <algorithm>
+#include <cmath>
 
 #define WIN_EMR_POLYGON                     3
 #define WIN_EMR_POLYLINE                    4
@@ -867,7 +870,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, c
             const double fFactor = static_cast<double>(nWidth) / nNormWidth;
 
             for( i = 0; i < ( nLen - 1 ); i++ )
-                pDX[ i ] = FRound( pDX[ i ] * fFactor );
+                pDX[ i ] = std::lround( pDX[ i ] * fFactor );
         }
     }
 
@@ -1187,8 +1190,8 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 if( fScaleX != 1.0 || fScaleY != 1.0 )
                 {
                     aTmpMtf.Scale( fScaleX, fScaleY );
-                    aSrcPt.setX( FRound( aSrcPt.X() * fScaleX ) );
-                    aSrcPt.setY( FRound( aSrcPt.Y() * fScaleY ) );
+                    aSrcPt.setX( std::lround( aSrcPt.X() * fScaleX ) );
+                    aSrcPt.setY( std::lround( aSrcPt.Y() * fScaleY ) );
                 }
 
                 nMoveX = aDestPt.X() - aSrcPt.X();

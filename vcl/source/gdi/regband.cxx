@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <algorithm>
-
 #include <tools/helpers.hxx>
 #include <osl/diagnose.hxx>
 
 #include <regband.hxx>
+
+#include <algorithm>
+#include <cmath>
 
 // ImplRegionBand
 
@@ -315,8 +316,8 @@ void ImplRegionBand::ScaleX( double fHorzScale )
     ImplRegionBandSep* pSep = mpFirstSep;
     while ( pSep )
     {
-        pSep->mnXLeft   = FRound( pSep->mnXLeft * fHorzScale );
-        pSep->mnXRight  = FRound( pSep->mnXRight * fHorzScale );
+        pSep->mnXLeft   = std::lround( pSep->mnXLeft * fHorzScale );
+        pSep->mnXRight  = std::lround( pSep->mnXRight * fHorzScale );
         pSep = pSep->mpNextSep;
     }
 }

@@ -20,11 +20,10 @@
 #include <sal/types.h>
 
 #include <tools/helpers.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <vcl/virdev.hxx>
 #include <vcl/print.hxx>
-
-#include <comphelper/processfactory.hxx>
 
 #include <salinst.hxx>
 #include <salvd.hxx>
@@ -38,6 +37,8 @@
 #include <outdev.h>
 #include <PhysicalFontCollection.hxx>
 #include <print.h>
+
+#include <cmath>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -241,7 +242,7 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
     tools::Rectangle       aPolyRect( LogicToPixel( rPolyPoly ).GetBoundRect() );
     const Size      aDPISize( LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)) );
-    const long      nBaseExtent = std::max( FRound( aDPISize.Width() / 300. ), 1L );
+    const long      nBaseExtent = std::max( std::lround( aDPISize.Width() / 300. ), 1L );
     long            nMove;
     const sal_uInt16    nTrans = ( nTransparencePercent < 13 ) ? 0 :
         ( nTransparencePercent < 38 ) ? 25 :
@@ -771,10 +772,10 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
 
     // create forward mapping tables
     for( nX = 0; nX <= nSrcWidth; nX++ )
-        pMapX[ nX ] = aDestPt.X() + FRound( static_cast<double>(aDestSz.Width()) * nX / nSrcWidth );
+        pMapX[ nX ] = aDestPt.X() + std::lround( static_cast<double>(aDestSz.Width()) * nX / nSrcWidth );
 
     for( nY = 0; nY <= nSrcHeight; nY++ )
-        pMapY[ nY ] = aDestPt.Y() + FRound( static_cast<double>(aDestSz.Height()) * nY / nSrcHeight );
+        pMapY[ nY ] = aDestPt.Y() + std::lround( static_cast<double>(aDestSz.Height()) * nY / nSrcHeight );
 
     // walk through all rectangles of mask
     const vcl::Region aWorkRgn(aMask.CreateRegion(COL_BLACK, tools::Rectangle(Point(), aMask.GetSizePixel())));

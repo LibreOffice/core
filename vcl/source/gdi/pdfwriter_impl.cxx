@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 
-#include <math.h>
+#include <cmath>
 #include <algorithm>
 
 #if defined __GNUC__ && __cplusplus > 201402L
@@ -8454,12 +8454,12 @@ void PDFWriterImpl::drawPolyLine( const tools::Polygon& rPoly, const PDFWriter::
                     const sal_uInt32 nNextIndex((a + 1) % nPointCount);
                     const basegfx::B2DPoint aNext(aPoly.getB2DPoint(nNextIndex));
 
-                    m_aPages.back().appendPoint( Point( FRound(aCurrent.getX()),
-                                                        FRound(aCurrent.getY()) ),
+                    m_aPages.back().appendPoint( Point( std::lround(aCurrent.getX()),
+                                                        std::lround(aCurrent.getY()) ),
                                                  aLine );
                     aLine.append( " m " );
-                    m_aPages.back().appendPoint( Point( FRound(aNext.getX()),
-                                                        FRound(aNext.getY()) ),
+                    m_aPages.back().appendPoint( Point( std::lround(aNext.getX()),
+                                                        std::lround(aNext.getY()) ),
                                                  aLine );
                     aLine.append( " l" );
 

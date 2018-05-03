@@ -17,18 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdlib.h>
-
 #include <o3tl/make_unique.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <tools/poly.hxx>
+
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
+
 #include "impvect.hxx"
+
 #include <memory>
+#include <cstdlib>
+#include <cmath>
 
 #define VECT_POLY_MAX 8192
 
@@ -661,7 +664,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
         if( n )
             fPercentStep_2 = 45.0 / n;
 
-        VECT_PROGRESS( pProgress, FRound( fPercent += 10.0 ) );
+        VECT_PROGRESS( pProgress, std::lround( fPercent += 10.0 ) );
 
         for( sal_uInt16 i = 0; i < n; i++ )
         {
@@ -669,7 +672,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
             const Color         aFindColor( aBmpCol.GetRed(), aBmpCol.GetGreen(), aBmpCol.GetBlue() );
             std::unique_ptr<ImplVectMap> xMap(ImplExpand( pRAcc.get(), aFindColor ));
 
-            VECT_PROGRESS( pProgress, FRound( fPercent += fPercentStep_2 ) );
+            VECT_PROGRESS( pProgress, std::lround( fPercent += fPercentStep_2 ) );
 
             if( xMap )
             {
@@ -692,7 +695,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
                 }
             }
 
-            VECT_PROGRESS( pProgress, FRound( fPercent += fPercentStep_2 ) );
+            VECT_PROGRESS( pProgress, std::lround( fPercent += fPercentStep_2 ) );
         }
 
         delete[] pColorSet;

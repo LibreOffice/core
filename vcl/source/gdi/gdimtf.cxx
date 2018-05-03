@@ -18,11 +18,12 @@
  */
 
 #include <rtl/crc.h>
-#include <cstdlib>
-#include <memory>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/fract.hxx>
+#include <comphelper/fileformat.h>
+#include <basegfx/polygon/b2dpolygon.hxx>
+
 #include <vcl/metaact.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
@@ -31,15 +32,19 @@
 #include <vcl/svapp.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graphictools.hxx>
-#include <comphelper/fileformat.h>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <vcl/canvastools.hxx>
 
 #include <svmconverter.hxx>
-
 #include <salbmp.hxx>
 #include <salinst.hxx>
 #include <svdata.hxx>
+
+#include <algorithm>
+#include <memory>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+#include <cmath>
 
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/rendering/MtfRenderer.hpp>
@@ -54,7 +59,7 @@
 
 using namespace com::sun::star;
 
-#define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
+#define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(std::lround(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
 
 struct ImplColAdjustParam
 {
@@ -704,8 +709,8 @@ void GDIMetaFile::Scale( double fScaleX, double fScaleY )
         pModAct->Scale( fScaleX, fScaleY );
     }
 
-    m_aPrefSize.setWidth( FRound( m_aPrefSize.Width() * fScaleX ) );
-    m_aPrefSize.setHeight( FRound( m_aPrefSize.Height() * fScaleY ) );
+    m_aPrefSize.setWidth( std::lround( m_aPrefSize.Width() * fScaleX ) );
+    m_aPrefSize.setHeight( std::lround( m_aPrefSize.Height() * fScaleY ) );
 }
 
 void GDIMetaFile::Scale( const Fraction& rScaleX, const Fraction& rScaleY )
@@ -750,8 +755,8 @@ Point GDIMetaFile::ImplGetRotatedPoint( const Point& rPt, const Point& rRotatePt
     const long nX = rPt.X() - rRotatePt.X();
     const long nY = rPt.Y() - rRotatePt.Y();
 
-    return Point( FRound( fCos * nX + fSin * nY ) + rRotatePt.X() + rOffset.Width(),
-                  -FRound( fSin * nX - fCos * nY ) + rRotatePt.Y() + rOffset.Height() );
+    return Point( std::lround( fCos * nX + fSin * nY ) + rRotatePt.X() + rOffset.Width(),
+                  -std::lround( fSin * nX - fCos * nY ) + rRotatePt.Y() + rOffset.Height() );
 }
 
 tools::Polygon GDIMetaFile::ImplGetRotatedPolygon( const tools::Polygon& rPoly, const Point& rRotatePt,
@@ -2096,15 +2101,15 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
     {
         if(!msoBrightness)
         {
-            aColParam.pMapR[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fROff ), 0, 255 ));
-            aColParam.pMapG[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fGOff ), 0, 255 ));
-            aColParam.pMapB[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fBOff ), 0, 255 ));
+            aColParam.pMapR[ nX ] = static_cast<sal_uInt8>(MinMax( std::lround( nX * fM + fROff ), 0, 255 ));
+            aColParam.pMapG[ nX ] = static_cast<sal_uInt8>(MinMax( std::lround( nX * fM + fGOff ), 0, 255 ));
+            aColParam.pMapB[ nX ] = static_cast<sal_uInt8>(MinMax( std::lround( nX * fM + fBOff ), 0, 255 ));
         }
         else
         {
-            aColParam.pMapR[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0, 255 ));
-            aColParam.pMapG[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0, 255 ));
-            aColParam.pMapB[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0, 255 ));
+            aColParam.pMapR[ nX ] = static_cast<sal_uInt8>(MinMax( std::lround( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0, 255 ));
+            aColParam.pMapG[ nX ] = static_cast<sal_uInt8>(MinMax( std::lround( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0, 255 ));
+            aColParam.pMapB[ nX ] = static_cast<sal_uInt8>(MinMax( std::lround( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0, 255 ));
         }
         if( bGamma )
         {
@@ -2807,17 +2812,17 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, BmpConversion eColorConve
 
         if ( fWH <= 1.0 )
         {
-            aSizePix.setWidth( FRound( nMaximumExtent * fWH ) );
+            aSizePix.setWidth( std::lround( nMaximumExtent * fWH ) );
             aSizePix.setHeight( nMaximumExtent );
         }
         else
         {
             aSizePix.setWidth( nMaximumExtent );
-            aSizePix.setHeight( FRound(  nMaximumExtent / fWH ) );
+            aSizePix.setHeight( std::lround(  nMaximumExtent / fWH ) );
         }
 
-        aDrawSize.setWidth( FRound( ( static_cast< double >( aDrawSize.Width() ) * aSizePix.Width() ) / aOldSizePix.Width() ) );
-        aDrawSize.setHeight( FRound( ( static_cast< double >( aDrawSize.Height() ) * aSizePix.Height() ) / aOldSizePix.Height() ) );
+        aDrawSize.setWidth( std::lround( ( static_cast< double >( aDrawSize.Width() ) * aSizePix.Width() ) / aOldSizePix.Width() ) );
+        aDrawSize.setHeight( std::lround( ( static_cast< double >( aDrawSize.Height() ) * aSizePix.Height() ) / aOldSizePix.Height() ) );
     }
 
     // draw image(s) into VDev and get resulting image

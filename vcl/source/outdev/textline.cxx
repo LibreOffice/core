@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
 #include <sal/types.h>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
@@ -32,6 +30,9 @@
 #include <salgdi.hxx>
 #include <impfont.hxx>
 #include <outdata.hxx>
+
+#include <cassert>
+#include <cmath>
 
 #define UNDERLINE_LAST      LINESTYLE_BOLDWAVE
 #define STRIKEOUT_LAST      STRIKEOUT_X
@@ -691,7 +692,7 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
     {
         long nXAdd = nWidth - nDistX;
         if( mpFontInstance->mnOrientation )
-            nXAdd = FRound( nXAdd * cos( mpFontInstance->mnOrientation * F_PI1800 ) );
+            nXAdd = std::lround( nXAdd * cos( mpFontInstance->mnOrientation * F_PI1800 ) );
 
         nX += nXAdd - 1;
     }
@@ -764,7 +765,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
                     {
                         const long nDY = aPos.Y() - aStartPt.Y();
                         const double fRad = mpFontInstance->mnOrientation * F_PI1800;
-                        nDist = FRound( nDist*cos(fRad) - nDY*sin(fRad) );
+                        nDist = std::lround( nDist*cos(fRad) - nDY*sin(fRad) );
                     }
                 }
 

@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
-
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <tools/vcompat.hxx>
@@ -36,10 +34,12 @@
 #include <vcl/GraphicObject.hxx>
 #include <vcl/GraphicLoader.hxx>
 
+#include <memory>
+#include <algorithm>
+#include <cmath>
+
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <memory>
-
 
 using namespace css;
 using com::sun::star::uno::Reference;
@@ -389,20 +389,20 @@ bool GraphicObject::ImplGetCropParams( OutputDevice const * pOut, Point& rPt, Si
         if( aSize100.Width() > 0 && aSize100.Height() > 0 && nTotalWidth > 0 && nTotalHeight > 0 )
         {
             double fScale = static_cast<double>(aSize100.Width()) / nTotalWidth;
-            const long nNewLeft = -FRound( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Horizontal ) ? pAttr->GetRightCrop() : pAttr->GetLeftCrop() ) * fScale );
-            const long nNewRight = nNewLeft + FRound( aSize100.Width() * fScale ) - 1;
+            const long nNewLeft = -std::lround( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Horizontal ) ? pAttr->GetRightCrop() : pAttr->GetLeftCrop() ) * fScale );
+            const long nNewRight = nNewLeft + std::lround( aSize100.Width() * fScale ) - 1;
 
             fScale = static_cast<double>(rSz.Width()) / aSize100.Width();
-            rPt.AdjustX(FRound( nNewLeft * fScale ) );
-            rSz.setWidth( FRound( ( nNewRight - nNewLeft + 1 ) * fScale ) );
+            rPt.AdjustX(std::lround( nNewLeft * fScale ) );
+            rSz.setWidth( std::lround( ( nNewRight - nNewLeft + 1 ) * fScale ) );
 
             fScale = static_cast<double>(aSize100.Height()) / nTotalHeight;
-            const long nNewTop = -FRound( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Vertical ) ? pAttr->GetBottomCrop() : pAttr->GetTopCrop() ) * fScale );
-            const long nNewBottom = nNewTop + FRound( aSize100.Height() * fScale ) - 1;
+            const long nNewTop = -std::lround( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Vertical ) ? pAttr->GetBottomCrop() : pAttr->GetTopCrop() ) * fScale );
+            const long nNewBottom = nNewTop + std::lround( aSize100.Height() * fScale ) - 1;
 
             fScale = static_cast<double>(rSz.Height()) / aSize100.Height();
-            rPt.AdjustY(FRound( nNewTop * fScale ) );
-            rSz.setHeight( FRound( ( nNewBottom - nNewTop + 1 ) * fScale ) );
+            rPt.AdjustY(std::lround( nNewTop * fScale ) );
+            rSz.setHeight( std::lround( ( nNewBottom - nNewTop + 1 ) * fScale ) );
 
             if( nRot10 )
             {

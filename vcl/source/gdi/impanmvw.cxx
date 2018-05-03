@@ -17,14 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
-#include <impanmvw.hxx>
+#include <tools/helpers.hxx>
 
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
-#include <tools/helpers.hxx>
 
 #include <window.h>
+#include <impanmvw.hxx>
+
+#include <memory>
+#include <cmath>
 
 ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
                             const Point& rPt, const Size& rSz,
@@ -137,11 +139,11 @@ void ImplAnimView::getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size
     else
         fFactY = 1.0;
 
-    rPosPix.setX( FRound( rAnm.aPosPix.X() * fFactX ) );
-    rPosPix.setY( FRound( rAnm.aPosPix.Y() * fFactY ) );
+    rPosPix.setX( std::lround( rAnm.aPosPix.X() * fFactX ) );
+    rPosPix.setY( std::lround( rAnm.aPosPix.Y() * fFactY ) );
 
-    aPt2.setX( FRound( aPt2.X() * fFactX ) );
-    aPt2.setY( FRound( aPt2.Y() * fFactY ) );
+    aPt2.setX( std::lround( aPt2.X() * fFactX ) );
+    aPt2.setY( std::lround( aPt2.Y() * fFactY ) );
 
     rSizePix.setWidth( aPt2.X() - rPosPix.X() + 1 );
     rSizePix.setHeight( aPt2.Y() - rPosPix.Y() + 1 );

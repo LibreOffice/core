@@ -29,6 +29,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <cmath>
 
 bool Bitmap::Erase(const Color& rFillColor)
 {
@@ -358,16 +359,16 @@ bool Bitmap::Rotate(long nAngle10, const Color& rFillColor)
                     {
                         const double fTmp = (fXMin + nX) * 64.;
 
-                        pCosX[nX] = FRound(fCosAngle * fTmp);
-                        pSinX[nX] = FRound(fSinAngle * fTmp);
+                        pCosX[nX] = std::lround(fCosAngle * fTmp);
+                        pSinX[nX] = std::lround(fSinAngle * fTmp);
                     }
 
                     for (nY = 0; nY < nNewHeight; nY++)
                     {
                         const double fTmp = (fYMin + nY) * 64.;
 
-                        pCosY[nY] = FRound(fCosAngle * fTmp);
-                        pSinY[nY] = FRound(fSinAngle * fTmp);
+                        pCosY[nY] = std::lround(fCosAngle * fTmp);
+                        pSinY[nY] = std::lround(fSinAngle * fTmp);
                     }
 
                     for (nY = 0; nY < nNewHeight; nY++)

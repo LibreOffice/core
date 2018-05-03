@@ -17,26 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cppuhelper/compbase.hxx>
-
-#include <com/sun/star/geometry/RealSize2D.hpp>
-#include <com/sun/star/geometry/RealPoint2D.hpp>
-#include <com/sun/star/geometry/RealRectangle2D.hpp>
-#include <com/sun/star/geometry/IntegerSize2D.hpp>
-#include <com/sun/star/geometry/IntegerPoint2D.hpp>
-#include <com/sun/star/geometry/IntegerRectangle2D.hpp>
-#include <com/sun/star/geometry/RealBezierSegment2D.hpp>
-
-#include <com/sun/star/rendering/ColorSpaceType.hpp>
-#include <com/sun/star/rendering/RenderingIntent.hpp>
-#include <com/sun/star/rendering/VolatileContentDestroyedException.hpp>
-#include <com/sun/star/rendering/XGraphicDevice.hpp>
-#include <com/sun/star/rendering/XBitmap.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
-#include <com/sun/star/rendering/ColorComponentTag.hpp>
-
+#include <rtl/uuid.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -47,18 +28,36 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-
 #include <tools/poly.hxx>
 #include <tools/diagnose_ex.h>
-#include <rtl/uuid.h>
+#include <cppuhelper/compbase.hxx>
 
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/canvastools.hxx>
 
 #include <canvasbitmap.hxx>
-#include <vcl/canvastools.hxx>
 #include <bitmapwriteaccess.hxx>
+
+#include <cmath>
+
+#include <com/sun/star/geometry/RealSize2D.hpp>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
+#include <com/sun/star/geometry/RealRectangle2D.hpp>
+#include <com/sun/star/geometry/IntegerSize2D.hpp>
+#include <com/sun/star/geometry/IntegerPoint2D.hpp>
+#include <com/sun/star/geometry/IntegerRectangle2D.hpp>
+#include <com/sun/star/geometry/RealBezierSegment2D.hpp>
+#include <com/sun/star/rendering/ColorSpaceType.hpp>
+#include <com/sun/star/rendering/RenderingIntent.hpp>
+#include <com/sun/star/rendering/VolatileContentDestroyedException.hpp>
+#include <com/sun/star/rendering/XGraphicDevice.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
+#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
+#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
+#include <com/sun/star/rendering/XIntegerBitmap.hpp>
+#include <com/sun/star/rendering/ColorComponentTag.hpp>
 
 using namespace ::com::sun::star;
 
@@ -339,8 +338,8 @@ namespace vcl
 
         ::Size sizeFromB2DSize( const basegfx::B2DVector& rVec )
         {
-            return ::Size( FRound( rVec.getX() ),
-                           FRound( rVec.getY() ) );
+            return ::Size( std::lround( rVec.getX() ),
+                           std::lround( rVec.getY() ) );
         }
 
         ::Point pointFromB2DPoint( const basegfx::B2DPoint& rPoint )

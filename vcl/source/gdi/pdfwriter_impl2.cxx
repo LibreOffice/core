@@ -17,7 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "pdfwriter_impl.hxx"
+#include <rtl/digest.h>
+#include <tools/fract.hxx>
+#include <tools/stream.hxx>
+#include <comphelper/fileformat.h>
+#include <comphelper/hash.hxx>
+#include <comphelper/processfactory.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <unotools/streamwrap.hxx>
 
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/virdev.hxx>
@@ -28,24 +35,15 @@
 
 #include <svdata.hxx>
 
-#include <unotools/streamwrap.hxx>
-
-#include <tools/fract.hxx>
-#include <tools/stream.hxx>
-
-#include <comphelper/fileformat.h>
-#include <comphelper/hash.hxx>
-#include <comphelper/processfactory.hxx>
+#include "pdfwriter_impl.hxx"
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 
-#include <cppuhelper/implbase.hxx>
-
-#include <rtl/digest.h>
 #include <memory>
+#include <cmath>
 
 using namespace vcl;
 using namespace com::sun::star;
@@ -129,13 +127,13 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
 
             if( fBmpWH < fMaxWH )
             {
-                aNewBmpSize.setWidth( FRound( fMaxPixelY * fBmpWH ) );
-                aNewBmpSize.setHeight( FRound( fMaxPixelY ) );
+                aNewBmpSize.setWidth( std::lround( fMaxPixelY * fBmpWH ) );
+                aNewBmpSize.setHeight( std::lround( fMaxPixelY ) );
             }
             else if( fBmpWH > 0.0 )
             {
-                aNewBmpSize.setWidth( FRound( fMaxPixelX ) );
-                aNewBmpSize.setHeight( FRound( fMaxPixelX / fBmpWH) );
+                aNewBmpSize.setWidth( std::lround( fMaxPixelX ) );
+                aNewBmpSize.setHeight( std::lround( fMaxPixelX / fBmpWH) );
             }
 
             if( aNewBmpSize.Width() && aNewBmpSize.Height() )

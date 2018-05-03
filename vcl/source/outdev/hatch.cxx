@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
 #include <tools/line.hxx>
 
 #include <vcl/hatch.hxx>
@@ -31,6 +29,8 @@
 
 #include "../gdi/pdfwriter_impl.hxx"
 
+#include <cassert>
+#include <cmath>
 #include <memory>
 
 #define HATCH_MAXPOINTS             1024
@@ -260,24 +260,24 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, long nDist, s
     {
         const double    fAngle = F_PI1800 * labs( nAngle );
         const double    fTan = tan( fAngle );
-        const long      nYOff = FRound( ( rRect.Right() - rRect.Left() ) * fTan );
+        const long      nYOff = std::lround( ( rRect.Right() - rRect.Left() ) * fTan );
         long            nPY;
 
-        rInc = Size( 0, nDist = FRound( nDist / cos( fAngle ) ) );
+        rInc = Size( 0, nDist = std::lround( nDist / cos( fAngle ) ) );
 
         if( nAngle > 0 )
         {
             rPt1 = rRect.TopLeft();
             rPt2 = Point( rRect.Right(), rRect.Top() - nYOff );
             rEndPt1 = Point( rRect.Left(), rRect.Bottom() + nYOff );
-            nPY = FRound( aRef.Y() - ( ( rPt1.X() - aRef.X() ) * fTan ) );
+            nPY = std::lround( aRef.Y() - ( ( rPt1.X() - aRef.X() ) * fTan ) );
         }
         else
         {
             rPt1 = rRect.TopRight();
             rPt2 = Point( rRect.Left(), rRect.Top() - nYOff );
             rEndPt1 = Point( rRect.Right(), rRect.Bottom() + nYOff );
-            nPY = FRound( aRef.Y() + ( ( rPt1.X() - aRef.X() ) * fTan ) );
+            nPY = std::lround( aRef.Y() + ( ( rPt1.X() - aRef.X() ) * fTan ) );
         }
 
         if( nPY <= rPt1.Y() )
@@ -292,24 +292,24 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, long nDist, s
     {
         const double fAngle = F_PI1800 * labs( nAngle );
         const double fTan = tan( fAngle );
-        const long   nXOff = FRound( ( rRect.Bottom() - rRect.Top() ) / fTan );
+        const long   nXOff = std::lround( ( rRect.Bottom() - rRect.Top() ) / fTan );
         long         nPX;
 
-        rInc = Size( nDist = FRound( nDist / sin( fAngle ) ), 0 );
+        rInc = Size( nDist = std::lround( nDist / sin( fAngle ) ), 0 );
 
         if( nAngle > 0 )
         {
             rPt1 = rRect.TopLeft();
             rPt2 = Point( rRect.Left() - nXOff, rRect.Bottom() );
             rEndPt1 = Point( rRect.Right() + nXOff, rRect.Top() );
-            nPX = FRound( aRef.X() - ( ( rPt1.Y() - aRef.Y() ) / fTan ) );
+            nPX = std::lround( aRef.X() - ( ( rPt1.Y() - aRef.Y() ) / fTan ) );
         }
         else
         {
             rPt1 = rRect.BottomLeft();
             rPt2 = Point( rRect.Left() - nXOff, rRect.Top() );
             rEndPt1 = Point( rRect.Right() + nXOff, rRect.Bottom() );
-            nPX = FRound( aRef.X() + ( ( rPt1.Y() - aRef.Y() ) / fTan ) );
+            nPX = std::lround( aRef.X() + ( ( rPt1.Y() - aRef.Y() ) / fTan ) );
         }
 
         if( nPX <= rPt1.X() )
@@ -373,7 +373,7 @@ void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPol
                         nAdd = 1;
 
                     if( nAdd )
-                        pPtBuffer[ nPCounter++ ] = Point( FRound( fX ), FRound( fY ) );
+                        pPtBuffer[ nPCounter++ ] = Point( std::lround( fX ), std::lround( fY ) );
                 }
 
                 aCurSegment.SetStart( aCurSegment.GetEnd() );
