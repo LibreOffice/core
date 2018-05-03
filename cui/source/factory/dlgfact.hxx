@@ -124,6 +124,24 @@ class CuiAbstractTabDialog_Impl : public SfxAbstractTabDialog
     virtual void        SetText( const OUString& rStr ) override;
 };
 
+class CuiAbstractTabController_Impl : public SfxAbstractTabDialog
+{
+protected:
+    std::unique_ptr<SfxTabDialogController> m_xDlg;
+public:
+    explicit CuiAbstractTabController_Impl(SfxTabDialogController* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
+    virtual void                SetCurPageId( const OString &rName ) override;
+    virtual const SfxItemSet*   GetOutputItemSet() const override;
+    virtual const sal_uInt16*   GetInputRanges( const SfxItemPool& pItem ) override;
+    virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
+        //From class Window.
+    virtual void        SetText( const OUString& rStr ) override;
+};
+
 class SvxDistributeDialog;
 class AbstractSvxDistributeDialog_Impl: public AbstractSvxDistributeDialog
 {
@@ -588,7 +606,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog> CreateCustomizeTabDialog(
                                             const SfxItemSet* pAttrSet,
                                             const css::uno::Reference< css::frame::XFrame >& xViewFrame ) override;
-    virtual VclPtr<SfxAbstractTabDialog> CreateTextTabDialog( vcl::Window* pParent,
+    virtual VclPtr<SfxAbstractTabDialog> CreateTextTabDialog( weld::Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             SdrView* pView ) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateTabItemDialog(vcl::Window* pParent,

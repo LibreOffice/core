@@ -446,7 +446,8 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq )
         pView->MergeAttrFromMarked( aNewAttr, false );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aNewAttr, pView ));
+    vcl::Window* pWin = pViewData->GetDialogParent();
+    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(pWin ? pWin->GetFrameWeld() : nullptr, &aNewAttr, pView));
 
     sal_uInt16 nResult = pDlg->Execute();
 

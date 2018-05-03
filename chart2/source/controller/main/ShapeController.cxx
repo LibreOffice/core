@@ -336,7 +336,7 @@ void ShapeController::executeDispatch_TextAttributes()
             if ( pFact )
             {
                 ScopedVclPtr< SfxAbstractTabDialog > pDlg(
-                    pFact->CreateTextTabDialog( pChartWindow, &aAttr, pDrawViewWrapper ) );
+                    pFact->CreateTextTabDialog( pChartWindow ? pChartWindow->GetFrameWeld() : nullptr, &aAttr, pDrawViewWrapper ) );
                 if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                 {
                     const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();

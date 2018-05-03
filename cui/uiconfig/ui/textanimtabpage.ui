@@ -268,7 +268,7 @@
                   <object class="GtkCheckButton" id="TSB_START_INSIDE">
                     <property name="label" translatable="yes" context="textanimtabpage|TSB_START_INSIDE">S_tart inside</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
@@ -285,7 +285,7 @@
                   <object class="GtkCheckButton" id="TSB_STOP_INSIDE">
                     <property name="label" translatable="yes" context="textanimtabpage|TSB_STOP_INSIDE">Text _visible when exiting</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
@@ -322,7 +322,7 @@
                       <object class="GtkCheckButton" id="TSB_ENDLESS">
                         <property name="label" translatable="yes" context="textanimtabpage|TSB_ENDLESS">_Continuous</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -341,7 +341,7 @@
                     <child>
                       <object class="GtkSpinButton" id="NUM_FLD_COUNT">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="halign">start</property>
                         <property name="activates_default">True</property>
                         <accessibility>
@@ -385,7 +385,7 @@
                       <object class="GtkCheckButton" id="TSB_PIXEL">
                         <property name="label" translatable="yes" context="textanimtabpage|TSB_PIXEL">_Pixels</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -404,7 +404,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_FLD_AMOUNT">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="halign">start</property>
                         <property name="activates_default">True</property>
                         <accessibility>
@@ -448,7 +448,7 @@
                       <object class="GtkCheckButton" id="TSB_AUTO">
                         <property name="label" translatable="yes" context="textanimtabpage|TSB_AUTO">_Automatic</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -467,7 +467,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_FLD_DELAY">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="halign">start</property>
                         <property name="activates_default">True</property>
                         <accessibility>

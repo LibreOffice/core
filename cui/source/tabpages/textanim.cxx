@@ -41,17 +41,12 @@ const sal_uInt16 SvxTextAnimationPage::pRanges[] =
 |*
 \************************************************************************/
 
-SvxTextTabDialog::SvxTextTabDialog( vcl::Window* pParent,
-                                const SfxItemSet* pAttr,
-                                const SdrView* pSdrView ) :
-        SfxTabDialog        ( pParent
-                              ,"TextDialog"
-                              ,"cui/ui/textdialog.ui"
-                              , pAttr ),
-        pView               ( pSdrView )
+SvxTextTabDialog::SvxTextTabDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrView* pSdrView)
+    : SfxTabDialogController(pParent, "cui/ui/textdialog.ui", "TextDialog", pAttr)
+    , pView(pSdrView)
 {
-    m_nTextId = AddTabPage( "RID_SVXPAGE_TEXTATTR", SvxTextAttrPage::Create, nullptr);
-    AddTabPage( "RID_SVXPAGE_TEXTANIMATION", SvxTextAnimationPage::Create, nullptr);
+    AddTabPage("RID_SVXPAGE_TEXTATTR", SvxTextAttrPage::Create, nullptr);
+    AddTabPage("RID_SVXPAGE_TEXTANIMATION", SvxTextAnimationPage::Create, nullptr);
 }
 
 /*************************************************************************
@@ -60,9 +55,9 @@ SvxTextTabDialog::SvxTextTabDialog( vcl::Window* pParent,
 |*
 \************************************************************************/
 
-void SvxTextTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SvxTextTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
-    if (nId == m_nTextId)
+    if (rId == "RID_SVXPAGE_TEXTATTR")
     {
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         bool bHasMarked = rMarkList.GetMarkCount() > 0;

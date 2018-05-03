@@ -275,6 +275,38 @@ void CuiAbstractTabDialog_Impl::SetText( const OUString& rStr )
     pDlg->SetText( rStr );
 }
 
+short CuiAbstractTabController_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
+
+void CuiAbstractTabController_Impl::SetCurPageId( const OString &rName )
+{
+    m_xDlg->SetCurPageId( rName );
+}
+
+const SfxItemSet* CuiAbstractTabController_Impl::GetOutputItemSet() const
+{
+    return m_xDlg->GetOutputItemSet();
+}
+
+const sal_uInt16* CuiAbstractTabController_Impl::GetInputRanges(const SfxItemPool& pItem )
+{
+    return m_xDlg->GetInputRanges( pItem );
+}
+
+void CuiAbstractTabController_Impl::SetInputSet( const SfxItemSet* pInSet )
+{
+     m_xDlg->SetInputSet( pInSet );
+}
+
+//From class Window.
+void CuiAbstractTabController_Impl::SetText( const OUString& rStr )
+{
+    m_xDlg->set_title(rStr);
+}
+
+
 
 const SfxItemSet* CuiAbstractSfxDialog_Impl::GetOutputItemSet() const
 {
@@ -934,12 +966,11 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateCustomizeTabDialo
 }
 
 // TabDialog that use functionality of the drawing layer
-VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateTextTabDialog( vcl::Window* pParent,
+VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateTextTabDialog(weld::Window* pParent,
                                             const SfxItemSet* pAttrSet,
-                                            SdrView* pView )
+                                            SdrView* pView)
 {
-    VclPtrInstance<SvxTextTabDialog> pDlg( pParent, pAttrSet, pView );
-    return VclPtr<CuiAbstractTabDialog_Impl>::Create( pDlg );
+    return VclPtr<CuiAbstractTabController_Impl>::Create(new SvxTextTabDialog(pParent, pAttrSet, pView));
 }
 
 // TabDialog that use functionality of the drawing layer and add AnchorTypes -- for SvxCaptionTabDialog
