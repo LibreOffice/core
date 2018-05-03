@@ -115,7 +115,7 @@ private:
 
     bool getMetaFile( css::uno::Reference< css::lang::XComponent > const &xComponent, GDIMetaFile& rMtf, bool bOnlyBackground = false, bool bExportAsJPEG = false );
 
-    Writer* mpWriter;
+    std::unique_ptr<Writer> mpWriter;
 
     sal_Int32 mnDocWidth;
     sal_Int32 mnDocHeight;
