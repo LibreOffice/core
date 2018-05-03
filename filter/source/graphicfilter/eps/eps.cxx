@@ -22,6 +22,7 @@
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
 #include <unotools/resmgr.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graph.hxx>
@@ -33,16 +34,16 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/settings.hxx>
-#include <unotools/configmgr.hxx>
-#include <svl/solar.hrc>
 #include <vcl/fltcall.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/weld.hxx>
+#include <svl/solar.hrc>
+
 #include <strings.hrc>
 
-#include <math.h>
 #include <memory>
+#include <cmath>
 
 using namespace ::com::sun::star::uno;
 
@@ -1184,8 +1185,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 if( fScaleX != 1.0 || fScaleY != 1.0 )
                 {
                     aTmpMtf.Scale( fScaleX, fScaleY );
-                    aSrcPt.setX( FRound( aSrcPt.X() * fScaleX ) );
-                    aSrcPt.setY( FRound( aSrcPt.Y() * fScaleY ) );
+                    aSrcPt.setX( std::lround( aSrcPt.X() * fScaleX ) );
+                    aSrcPt.setY( std::lround( aSrcPt.Y() * fScaleY ) );
                 }
 
                 nMoveX = aDestPt.X() - aSrcPt.X();
