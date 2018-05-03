@@ -593,8 +593,8 @@ void SwTextFrame::AdjustFollow_( SwTextFormatter &rLine,
     // Dancing on the volcano: We'll just format the last line quickly
     // for the QuoVadis stuff.
     // The Offset can move of course:
-    const sal_Int32 nNewOfst = ( IsInFootnote() && ( !GetIndNext() || HasFollow() ) ) ?
-                            rLine.FormatQuoVadis(nOffset) : nOffset;
+    const TextFrameIndex nNewOfst = (IsInFootnote() && (!GetIndNext() || HasFollow()))
+        ? rLine.FormatQuoVadis(nOffset) : nOffset;
 
     if( !(nMode & 1) )
     {
@@ -611,7 +611,7 @@ void SwTextFrame::AdjustFollow_( SwTextFormatter &rLine,
     if( GetFollow() )
     {
         if ( nMode )
-            GetFollow()->ManipOfst( 0 );
+            GetFollow()->ManipOfst(TextFrameIndex(0));
 
         if ( CalcFollow( nNewOfst ) )   // CalcFollow only at the end, we do a SetOfst there
             rLine.SetOnceMore( true );
@@ -626,7 +626,7 @@ SwContentFrame *SwTextFrame::JoinFrame()
     SwTextFrame *pNxt = pFoll->GetFollow();
 
     // All footnotes of the to-be-destroyed Follow are relocated to us
-    sal_Int32 nStart = pFoll->GetOfst();
+    TextFrameIndex nStart = pFoll->GetOfst();
     if ( pFoll->HasFootnote() )
     {
         const SwpHints *pHints = pFoll->GetTextNode()->GetpSwpHints();
@@ -666,7 +666,7 @@ SwContentFrame *SwTextFrame::JoinFrame()
     }
 #endif
 
-    pFoll->MoveFlyInCnt( this, nStart, COMPLETE_STRING );
+    pFoll->MoveFlyInCnt( this, nStart, TextFrameIndex(COMPLETE_STRING) );
     pFoll->SetFootnote( false );
     // i#27138
     // Notify accessibility paragraphs objects about changed CONTENT_FLOWS_FROM/_TO relation.
@@ -753,12 +753,12 @@ void SwTextFrame::SplitFrame(TextFrameIndex const nTextPos)
 #ifdef DBG_UTIL
     else
     {
-        CalcFootnoteFlag( nTextPos-1 );
+        CalcFootnoteFlag( nTextPos - TextFrameIndex(1) );
         OSL_ENSURE( !HasFootnote(), "Missing FootnoteFlag." );
     }
 #endif
 
-    MoveFlyInCnt( pNew, nTextPos, COMPLETE_STRING );
+    MoveFlyInCnt( pNew, nTextPos, TextFrameIndex(COMPLETE_STRING) );
 
     // No SetOfst or CalcFollow, because an AdjustFollow follows immediately anyways
 
@@ -775,8 +775,8 @@ void SwTextFrame::SetOfst_(TextFrameIndex const nNewOfst)
     if( pPara )
     {
         SwCharRange &rReformat = pPara->GetReformat();
-        rReformat.Start() = 0;
-        rReformat.Len() = GetText().getLength();
+        rReformat.Start() = TextFrameIndex(0);
+        rReformat.Len() = TextFrameIndex(GetText().getLength());
         pPara->GetDelta() = rReformat.Len();
     }
     InvalidateSize();
@@ -930,20 +930,20 @@ bool SwTextFrame::CalcPreps()
                     // Let's see if it works ...
                     aLine.TruncLines();
                     aFrameBreak.SetRstHeight( aLine );
-                    FormatAdjust( aLine, aFrameBreak, aInf.GetText().getLength(), aInf.IsStop() );
+                    FormatAdjust( aLine, aFrameBreak, TextFrameIndex(aInf.GetText().getLength()), aInf.IsStop() );
                 }
                 else
                 {
                     if( !GetFollow() )
                     {
                         FormatAdjust( aLine, aFrameBreak,
-                                      aInf.GetText().getLength(), aInf.IsStop() );
+                            TextFrameIndex(aInf.GetText().getLength()), aInf.IsStop() );
                     }
                     else if ( !aFrameBreak.IsKeepAlways() )
                     {
                         // We delete a line before the Master, because the Follow
                         // could hand over a line
-                        const SwCharRange aFollowRg( GetFollow()->GetOfst(), 1 );
+                        const SwCharRange aFollowRg(GetFollow()->GetOfst(), TextFrameIndex(1));
                         pPara->GetReformat() += aFollowRg;
                         // We should continue!
                     bRet = false;
@@ -993,9 +993,9 @@ bool SwTextFrame::CalcPreps()
 #define CHG_OFFSET( pFrame, nNew )\
     {\
         if( pFrame->GetOfst() < nNew )\
-            pFrame->MoveFlyInCnt( this, 0, nNew );\
+            pFrame->MoveFlyInCnt( this, TextFrameIndex(0), nNew );\
         else if( pFrame->GetOfst() > nNew )\
-            MoveFlyInCnt( pFrame, nNew, COMPLETE_STRING );\
+            MoveFlyInCnt( pFrame, nNew, TextFrameIndex(COMPLETE_STRING) );\
     }
 
 void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
@@ -1007,7 +1007,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
 
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
 
-    sal_Int32 nEnd = rLine.GetStart();
+    TextFrameIndex nEnd = rLine.GetStart();
 
     const bool bHasToFit = pPara->IsPrepMustFit();
 
@@ -1026,7 +1026,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
     // i#84870
     // no split of text frame, which only contains a as-character anchored object
     bool bOnlyContainsAsCharAnchoredObj =
-            !IsFollow() && nStrLen == 1 &&
+            !IsFollow() && nStrLen == TextFrameIndex(1) &&
             GetDrawObjs() && GetDrawObjs()->size() == 1 &&
             (*GetDrawObjs())[0]->GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR;
 
@@ -1068,7 +1068,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
         // If we're done formatting, we set nEnd to the end.
         // AdjustFollow might execute JoinFrame() because of this.
         // Else, nEnd is the end of the last line in the Master.
-        sal_Int32 nOld = nEnd;
+        TextFrameIndex nOld = nEnd;
         nEnd = rLine.GetEnd();
         if( GetFollow() )
         {
@@ -1096,11 +1096,12 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
             // the numbering and must stay.
             if ( GetFollow()->GetOfst() != nEnd ||
                  GetFollow()->IsFieldFollow() ||
-                 ( nStrLen == 0 && GetTextNode()->GetNumRule() ) )
+                 (nStrLen == TextFrameIndex(0) && GetTextNode()->GetNumRule()))
             {
                 nNew |= 3;
             }
-            else if (FindTabFrame() && nEnd > 0 && rLine.GetInfo().GetChar(nEnd - 1) == CH_BREAK)
+            else if (FindTabFrame() && nEnd > TextFrameIndex(0) &&
+                rLine.GetInfo().GetChar(nEnd - TextFrameIndex(1)) == CH_BREAK)
             {
                 // We are in a table, the paragraph has a follow and the text
                 // ends with a hard line break. Don't join the follow just
@@ -1118,8 +1119,8 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
             // i#84870 - No split, if text frame only contains one
             // as-character anchored object.
             if ( !bOnlyContainsAsCharAnchoredObj &&
-                 ( nStrLen > 0 ||
-                   ( nStrLen == 0 && GetTextNode()->GetNumRule() ) )
+                 (nStrLen > TextFrameIndex(0) ||
+                   (nStrLen == TextFrameIndex(0) && GetTextNode()->GetNumRule()))
                )
             {
                 SplitFrame( nEnd );
@@ -1177,7 +1178,7 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
             "SwTextFrame::FormatLine( rLine, bPrev) with unswapped frame" );
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
     const SwLineLayout *pOldCur = rLine.GetCurr();
-    const sal_Int32 nOldLen    = pOldCur->GetLen();
+    const TextFrameIndex nOldLen = pOldCur->GetLen();
     const sal_uInt16 nOldAscent = pOldCur->GetAscent();
     const sal_uInt16 nOldHeight = pOldCur->Height();
     const SwTwips nOldWidth = pOldCur->Width() + pOldCur->GetHangingMargin();
@@ -1187,7 +1188,7 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
     if( rLine.GetCurr()->IsClipping() )
         rLine.CalcUnclipped( nOldTop, nOldBottom );
 
-    const sal_Int32 nNewStart = rLine.FormatLine( rLine.GetStart() );
+    TextFrameIndex const nNewStart = rLine.FormatLine( rLine.GetStart() );
 
     OSL_ENSURE( getFrameArea().Pos().Y() + getFramePrintArea().Pos().Y() == rLine.GetFirstPos(),
             "SwTextFrame::FormatLine: frame leaves orbit." );
@@ -1296,7 +1297,7 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
         return true;
 
     // Reached the Reformat's end?
-    const sal_Int32 nEnd = pPara->GetReformat().Start() +
+    const TextFrameIndex nEnd = pPara->GetReformat().Start() +
                         pPara->GetReformat().Len();
 
     if( nNewStart <= nEnd )
@@ -1355,7 +1356,7 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
     // to the result of FindBrk() does not solve the problem in all cases,
     // nevertheless it should be sufficient.
     bool bPrev = rLine.GetPrev() &&
-                     ( FindBrk( rString, rLine.GetStart(), rReformat.Start() + 1 )
+                     (FindBrk(rString, rLine.GetStart(), rReformat.Start() + TextFrameIndex(1))
                        // i#46560
                        + 1
                        >= rReformat.Start() ||
@@ -1369,11 +1370,11 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
                     rLine.Top(); // So that NumDone doesn't get confused
                 break;
             }
-        sal_Int32 nNew = rLine.GetStart() + rLine.GetLength();
+        TextFrameIndex nNew = rLine.GetStart() + rLine.GetLength();
         if( nNew )
         {
             --nNew;
-            if( CH_BREAK == rString[nNew] )
+            if (CH_BREAK == rString[sal_Int32(nNew)])
             {
                 ++nNew;
                 rLine.Next();
@@ -1622,7 +1623,7 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
             rLine.Bottom();
             SwTwips nNewBottom = rLine.Y();
             if( nNewBottom < nOldBottom )
-                SetOfst_( 0 );
+                SetOfst_(TextFrameIndex(0));
         }
     }
 }
@@ -1649,7 +1650,7 @@ void SwTextFrame::FormatOnceMore( SwTextFormatter &rLine, SwTextFormatInfo &rInf
         rLine.Top();
         if( !rLine.GetDropFormat() )
             rLine.SetOnceMore( false );
-        SwCharRange aRange( 0, rInf.GetText().getLength() );
+        SwCharRange aRange(TextFrameIndex(0), TextFrameIndex(rInf.GetText().getLength()));
         pPara->GetReformat() = aRange;
         Format_( rLine, rInf );
 
@@ -1679,7 +1680,7 @@ void SwTextFrame::FormatOnceMore( SwTextFormatter &rLine, SwTextFormatInfo &rInf
                 rLine.CtorInitTextFormatter( this, &rInf );
                 rLine.SetDropLines( 1 );
                 rLine.CalcDropHeight( 1 );
-                SwCharRange aTmpRange( 0, rInf.GetText().getLength() );
+                SwCharRange aTmpRange(TextFrameIndex(0), TextFrameIndex(rInf.GetText().getLength()));
                 pPara->GetReformat() = aTmpRange;
                 Format_( rLine, rInf, true );
                 // We paint everything ...
@@ -1874,7 +1875,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
         {
             // bSetOfst here means that we have the "red arrow situation"
             if ( bSetOfst )
-                SetOfst_( 0 );
+                SetOfst_(TextFrameIndex(0));
 
             const bool bOrphan = IsWidow();
             const SwFootnoteBossFrame* pFootnoteBoss = HasFootnote() ? FindFootnoteBossFrame() : nullptr;
@@ -1972,14 +1973,15 @@ bool SwTextFrame::FormatQuick( bool bForceQuickFormat )
     if( aLine.GetDropFormat() )
         return false;
 
-    sal_Int32 nStart = GetOfst();
-    const sal_Int32 nEnd = GetFollow()
-                      ? GetFollow()->GetOfst() : aInf.GetText().getLength();
+    TextFrameIndex nStart = GetOfst();
+    const TextFrameIndex nEnd = GetFollow()
+                  ? GetFollow()->GetOfst()
+                  : TextFrameIndex(aInf.GetText().getLength());
 
     int nLoopProtection = 0;
     do
     {
-        sal_Int32 nNewStart = aLine.FormatLine(nStart);
+        TextFrameIndex nNewStart = aLine.FormatLine(nStart);
         if (nNewStart == nStart)
             ++nLoopProtection;
         else
@@ -2002,7 +2004,7 @@ bool SwTextFrame::FormatQuick( bool bForceQuickFormat )
     if( !bForceQuickFormat && nNewHeight != nOldHeight && !IsUndersized() )
     {
         // Attention: This situation can occur due to FormatLevel==12. Don't panic!
-        const sal_Int32 nStrt = GetOfst();
+        TextFrameIndex const nStrt = GetOfst();
         InvalidateRange_( SwCharRange( nStrt, nEnd - nStrt) );
         return false;
     }
