@@ -159,11 +159,11 @@ namespace connectivity
         class MQueryHelper final
         {
         private:
-            typedef std::vector< MQueryHelperResultEntry* > resultsArray;
+            typedef std::vector< std::unique_ptr<MQueryHelperResultEntry> > resultsArray;
 
             mutable ::osl::Mutex        m_aMutex;
             resultsArray        m_aResults;
-            void            append(MQueryHelperResultEntry* resEnt );
+            void            append(std::unique_ptr<MQueryHelperResultEntry> resEnt );
             void            clear_results();
             OColumnAlias        m_rColumnAlias;
             ErrorDescriptor     m_aError;
