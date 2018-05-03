@@ -270,20 +270,17 @@ void SfxVersionDialog::Init_Impl()
     SfxObjectShell *pObjShell = pViewFrame->GetObjectShell();
     SfxMedium* pMedium = pObjShell->GetMedium();
     uno::Sequence < util::RevisionTag > aVersions = pMedium->GetVersionList( true );
-    delete m_pTable;
-    m_pTable = new SfxVersionTableDtor( aVersions );
+    m_pTable.reset(new SfxVersionTableDtor( aVersions ));
+    for ( size_t n = 0; n < m_pTable->size(); ++n )
     {
-        for ( size_t n = 0; n < m_pTable->size(); ++n )
-        {
-            SfxVersionInfo *pInfo = m_pTable->at( n );
-            OUString aEntry = formatTime(pInfo->aCreationDate, Application::GetSettings().GetLocaleDataWrapper());
-            aEntry += "\t";
-            aEntry += pInfo->aAuthor;
-            aEntry += "\t";
-            aEntry += ConvertWhiteSpaces_Impl( pInfo->aComment );
-            SvTreeListEntry *pEntry = m_pVersionBox->InsertEntry( aEntry );
-            pEntry->SetUserData( pInfo );
-        }
+        SfxVersionInfo *pInfo = m_pTable->at( n );
+        OUString aEntry = formatTime(pInfo->aCreationDate, Application::GetSettings().GetLocaleDataWrapper());
+        aEntry += "\t";
+        aEntry += pInfo->aAuthor;
+        aEntry += "\t";
+        aEntry += ConvertWhiteSpaces_Impl( pInfo->aComment );
+        SvTreeListEntry *pEntry = m_pVersionBox->InsertEntry( aEntry );
+        pEntry->SetUserData( pInfo );
     }
 
     m_pSaveCheckBox->Check( m_bIsSaveVersionOnClose );
@@ -312,7 +309,7 @@ SfxVersionDialog::~SfxVersionDialog()
 
 void SfxVersionDialog::dispose()
 {
-    delete m_pTable;
+    m_pTable.reset();
     m_pVersionBox.disposeAndClear();
     m_pSaveButton.clear();
     m_pSaveCheckBox.clear();
