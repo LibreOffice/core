@@ -88,17 +88,14 @@ void MQueryHelper::setAddressbook(OUString const &ab)
     m_aAddressbook = ab;
 }
 
-void MQueryHelper::append(MQueryHelperResultEntry* resEnt)
+void MQueryHelper::append(std::unique_ptr<MQueryHelperResultEntry> resEnt)
 {
-    if ( resEnt != nullptr ) {
-        m_aResults.push_back( resEnt );
-    }
+   assert(resEnt);
+   m_aResults.push_back( std::move(resEnt) );
 }
 
 void MQueryHelper::clear_results()
 {
-    for (auto const& result : m_aResults)
-        delete result;
     m_aResults.clear();
 }
 
@@ -116,7 +113,7 @@ MQueryHelper::getByIndex(sal_uInt32 nRow)
     if ( nRow < 1 ) {
         return nullptr;
     }
-    return m_aResults[nRow -1];
+    return m_aResults[nRow -1].get();
 }
 
 sal_Int32 MQueryHelper::getResultCount() const
@@ -225,7 +222,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
                     }
                 }
 
-                MQueryHelperResultEntry* entry = new MQueryHelperResultEntry();
+                std::unique_ptr<MQueryHelperResultEntry> entry(new MQueryHelperResultEntry());
                 for (auto const& cell : row.second)
                 {
                     std::string column = pMork->getColumn(cell.first);
@@ -236,17 +233,13 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
                     entry->setValue(key, valueOUString);
                 }
                 bool result = true;
-                for (auto const& elem : entryMatchedByExpression(this, &expr, entry))
+                for (auto const& elem : entryMatchedByExpression(this, &expr, entry.get()))
                 {
                     result = result && elem;
                 }
                 if (result)
                 {
-                    append(entry);
-                }
-                else
-                {
-                    delete entry;
+                    append(std::move(entry));
                 }
             }
         }
