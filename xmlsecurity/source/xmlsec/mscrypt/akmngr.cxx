@@ -28,14 +28,17 @@
 #include <xmlsec/mscrypto/keysstore.h>
 #include <xmlsec/mscrypto/x509.h>
 
+namespace xmlsecurity
+{
+
 /**
- * xmlSecMSCryptoAppliedKeysMngrCreate:
+ * MSCryptoAppliedKeysMngrCreate:
  *
  * Create and load key store and certificate database into keys manager
  *
  * Returns keys manager pointer on success or NULL otherwise.
  */
-xmlSecKeysMngrPtr xmlSecMSCryptoAppliedKeysMngrCreate()
+xmlSecKeysMngrPtr MSCryptoAppliedKeysMngrCreate()
 {
     xmlSecKeysMngrPtr        keyMngr = nullptr ;
     xmlSecKeyStorePtr        keyStore = nullptr ;
@@ -120,7 +123,7 @@ xmlSecKeysMngrPtr xmlSecMSCryptoAppliedKeysMngrCreate()
 }
 
 int
-xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore(
+MSCryptoAppliedKeysMngrAdoptKeyStore(
     xmlSecKeysMngrPtr    mngr,
     HCERTSTORE keyStore
 )
@@ -155,7 +158,7 @@ xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore(
 }
 
 int
-xmlSecMSCryptoAppliedKeysMngrAdoptTrustedStore(
+MSCryptoAppliedKeysMngrAdoptTrustedStore(
     xmlSecKeysMngrPtr    mngr,
     HCERTSTORE trustedStore
 )
@@ -190,7 +193,7 @@ xmlSecMSCryptoAppliedKeysMngrAdoptTrustedStore(
 }
 
 int
-xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore(
+MSCryptoAppliedKeysMngrAdoptUntrustedStore(
     xmlSecKeysMngrPtr    mngr,
     HCERTSTORE untrustedStore
 )
@@ -222,6 +225,8 @@ xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore(
     }
 
     return 0 ;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

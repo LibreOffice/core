@@ -1021,7 +1021,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
     /*-
      * The following lines is based on the of xmlsec-mscrypto crypto engine
      */
-    pKeysMngr = xmlSecMSCryptoAppliedKeysMngrCreate() ;
+    pKeysMngr = xmlsecurity::MSCryptoAppliedKeysMngrCreate() ;
     if( pKeysMngr == nullptr )
         throw uno::RuntimeException() ;
 
@@ -1032,7 +1032,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
         //Add system key store into the keys manager.
         m_hMySystemStore = CertOpenSystemStoreW( 0, L"MY" ) ;
         if( m_hMySystemStore != nullptr ) {
-            if( xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore( pKeysMngr, m_hMySystemStore ) < 0 ) {
+            if( xmlsecurity::MSCryptoAppliedKeysMngrAdoptKeyStore( pKeysMngr, m_hMySystemStore ) < 0 ) {
                 CertCloseStore( m_hMySystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
                 m_hMySystemStore = nullptr;
                 throw uno::RuntimeException() ;
@@ -1042,7 +1042,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
         //Add system root store into the keys manager.
         m_hRootSystemStore = CertOpenSystemStoreW( 0, L"Root" ) ;
         if( m_hRootSystemStore != nullptr ) {
-            if( xmlSecMSCryptoAppliedKeysMngrAdoptTrustedStore( pKeysMngr, m_hRootSystemStore ) < 0 ) {
+            if( xmlsecurity::MSCryptoAppliedKeysMngrAdoptTrustedStore( pKeysMngr, m_hRootSystemStore ) < 0 ) {
                 CertCloseStore( m_hRootSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
                 m_hRootSystemStore = nullptr;
                 throw uno::RuntimeException() ;
@@ -1052,7 +1052,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
         //Add system trusted store into the keys manager.
         m_hTrustSystemStore = CertOpenSystemStoreW( 0, L"Trust" ) ;
         if( m_hTrustSystemStore != nullptr ) {
-            if( xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore( pKeysMngr, m_hTrustSystemStore ) < 0 ) {
+            if( xmlsecurity::MSCryptoAppliedKeysMngrAdoptUntrustedStore( pKeysMngr, m_hTrustSystemStore ) < 0 ) {
                 CertCloseStore( m_hTrustSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
                 m_hTrustSystemStore = nullptr;
                 throw uno::RuntimeException() ;
@@ -1062,7 +1062,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
         //Add system CA store into the keys manager.
         m_hCaSystemStore = CertOpenSystemStoreW( 0, L"CA" ) ;
         if( m_hCaSystemStore != nullptr ) {
-            if( xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore( pKeysMngr, m_hCaSystemStore ) < 0 ) {
+            if( xmlsecurity::MSCryptoAppliedKeysMngrAdoptUntrustedStore( pKeysMngr, m_hCaSystemStore ) < 0 ) {
                 CertCloseStore( m_hCaSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
                 m_hCaSystemStore = nullptr;
                 throw uno::RuntimeException() ;

@@ -29,25 +29,30 @@
 #include <xmlsec/keys.h>
 #include <xmlsec/transforms.h>
 
-xmlSecKeysMngrPtr xmlSecMSCryptoAppliedKeysMngrCreate();
+namespace xmlsecurity
+{
+
+xmlSecKeysMngrPtr MSCryptoAppliedKeysMngrCreate();
 
 int
-xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore(
+MSCryptoAppliedKeysMngrAdoptKeyStore(
     xmlSecKeysMngrPtr    mngr,
     HCERTSTORE keyStore
 ) ;
 
 int
-xmlSecMSCryptoAppliedKeysMngrAdoptTrustedStore(
+MSCryptoAppliedKeysMngrAdoptTrustedStore(
     xmlSecKeysMngrPtr    mngr,
     HCERTSTORE trustedStore
 ) ;
 
 int
-xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore(
+MSCryptoAppliedKeysMngrAdoptUntrustedStore(
     xmlSecKeysMngrPtr    mngr,
     HCERTSTORE untrustedStore
 ) ;
+
+}
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_AKMNGR_HXX
 
