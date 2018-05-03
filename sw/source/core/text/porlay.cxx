@@ -2026,9 +2026,9 @@ SwParaPortion::~SwParaPortion()
 {
 }
 
-sal_Int32 SwParaPortion::GetParLen() const
+TextFrameIndex SwParaPortion::GetParLen() const
 {
-    sal_Int32 nLen = 0;
+    TextFrameIndex nLen(0);
     const SwLineLayout *pLay = this;
     while( pLay )
     {

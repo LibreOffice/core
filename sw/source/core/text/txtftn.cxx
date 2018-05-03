@@ -83,7 +83,7 @@ SwTextFrame *SwTextFrame::FindFootnoteRef( const SwTextFootnote *pFootnote )
 }
 
 #ifdef DBG_UTIL
-void SwTextFrame::CalcFootnoteFlag( sal_Int32 nStop )// For testing the SplitFrame
+void SwTextFrame::CalcFootnoteFlag(TextFrameIndex nStop) // For testing the SplitFrame
 #else
 void SwTextFrame::CalcFootnoteFlag()
 #endif
@@ -387,7 +387,7 @@ SwTextFrame *SwTextFrame::FindQuoVadisFrame()
     return static_cast<SwTextFrame*>(pLast);
 }
 
-void SwTextFrame::RemoveFootnote( const sal_Int32 nStart, const sal_Int32 nLen )
+void SwTextFrame::RemoveFootnote(TextFrameIndex const nStart, TextFrameIndex const nLen)
 {
     if ( !IsFootnoteAllowed() )
         return;
@@ -998,7 +998,7 @@ SwErgoSumPortion *SwTextFormatter::NewErgoSumPortion( SwTextFormatInfo const &rI
     return pErgo;
 }
 
-sal_Int32 SwTextFormatter::FormatQuoVadis( const sal_Int32 nOffset )
+TextFrameIndex SwTextFormatter::FormatQuoVadis(TextFrameIndex const nOffset)
 {
     OSL_ENSURE( ! m_pFrame->IsVertical() || ! m_pFrame->IsSwapped(),
             "SwTextFormatter::FormatQuoVadis with swapped frame" );
@@ -1449,7 +1449,7 @@ SwErgoSumPortion::SwErgoSumPortion(const OUString &rExp, const OUString& rStr)
     SetWhichPor( POR_ERGOSUM );
 }
 
-sal_Int32 SwErgoSumPortion::GetCursorOfst( const sal_uInt16 ) const
+TextFrameIndex SwErgoSumPortion::GetCursorOfst(const sal_uInt16) const
 {
     return 0;
 }

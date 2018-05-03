@@ -34,7 +34,7 @@ SwGluePortion::SwGluePortion( const sal_uInt16 nInitFixWidth )
     SetWhichPor( POR_GLUE );
 }
 
-sal_Int32 SwGluePortion::GetCursorOfst( const sal_uInt16 nOfst ) const
+TextFrameIndex SwGluePortion::GetCursorOfst(const sal_uInt16 nOfst) const
 {
     if( !GetLen() || nOfst > GetLen() || !Width() )
         return SwLinePortion::GetCursorOfst( nOfst );
