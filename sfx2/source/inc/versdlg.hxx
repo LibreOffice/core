@@ -97,7 +97,7 @@ class SfxCmisVersionsDialog : public SfxModalDialog
     VclPtr<PushButton>                 m_pDeleteButton;
     VclPtr<PushButton>                 m_pCompareButton;
     SfxViewFrame*               pViewFrame;
-    SfxVersionTableDtor*        m_pTable;
+    std::unique_ptr<SfxVersionTableDtor> m_pTable;
 
     void                        LoadVersions();
 

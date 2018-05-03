@@ -544,7 +544,7 @@ SfxCmisVersionsDialog::~SfxCmisVersionsDialog()
 
 void SfxCmisVersionsDialog::dispose()
 {
-    delete m_pTable;
+    m_pTable.reset();
     m_pVersionBox.disposeAndClear();
     m_pOpenButton.clear();
     m_pViewButton.clear();
@@ -557,20 +557,17 @@ void SfxCmisVersionsDialog::LoadVersions()
 {
     SfxObjectShell *pObjShell = pViewFrame->GetObjectShell();
     uno::Sequence < document::CmisVersion > aVersions = pObjShell->GetCmisVersions( );
-    delete m_pTable;
-    m_pTable = new SfxVersionTableDtor( aVersions );
+    m_pTable.reset(new SfxVersionTableDtor( aVersions ));
+    for ( size_t n = 0; n < m_pTable->size(); ++n )
     {
-        for ( size_t n = 0; n < m_pTable->size(); ++n )
-        {
-            SfxVersionInfo *pInfo = m_pTable->at( n );
-            OUString aEntry = formatTime(pInfo->aCreationDate, Application::GetSettings().GetLocaleDataWrapper());
-            aEntry += "\t";
-            aEntry += pInfo->aAuthor;
-            aEntry += "\t";
-            aEntry += ConvertWhiteSpaces_Impl( pInfo->aComment );
-            SvTreeListEntry *pEntry = m_pVersionBox->InsertEntry( aEntry );
-            pEntry->SetUserData( pInfo );
-        }
+        SfxVersionInfo *pInfo = m_pTable->at( n );
+        OUString aEntry = formatTime(pInfo->aCreationDate, Application::GetSettings().GetLocaleDataWrapper());
+        aEntry += "\t";
+        aEntry += pInfo->aAuthor;
+        aEntry += "\t";
+        aEntry += ConvertWhiteSpaces_Impl( pInfo->aComment );
+        SvTreeListEntry *pEntry = m_pVersionBox->InsertEntry( aEntry );
+        pEntry->SetUserData( pInfo );
     }
 
 }
