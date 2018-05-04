@@ -32,6 +32,7 @@
 #include <unotools/charclass.hxx>
 #include "porfld.hxx"
 #include <paratr.hxx>
+#include <doc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -73,7 +74,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     SwTwips nLineWidth = rInf.GetLineWidth();
     TextFrameIndex nMaxLen = TextFrameIndex(rInf.GetText().getLength()) - rInf.GetIdx();
 
-    const SvxAdjust& rAdjust = rInf.GetTextFrame()->GetTextNode()->GetSwAttrSet().GetAdjust().GetAdjust();
+    const SvxAdjust& rAdjust = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust().GetAdjust();
 
     // tdf#104668 space chars at the end should be cut if the compatibility option is enabled
     // for LTR mode only
@@ -143,8 +144,8 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
     nLineWidth -= nLeftRightBorderSpace;
 
-    const bool bUnbreakableNumberings = rInf.GetTextFrame()->GetTextNode()->
-            getIDocumentSettingAccess()->get(DocumentSettingId::UNBREAKABLE_NUMBERINGS);
+    const bool bUnbreakableNumberings = rInf.GetTextFrame()->GetDoc()
+        .getIDocumentSettingAccess().get(DocumentSettingId::UNBREAKABLE_NUMBERINGS);
 
     // first check if everything fits to line
     if ( ( long ( nLineWidth ) * 2 > sal_Int32(nMaxLen) * nPorHeight ) ||
