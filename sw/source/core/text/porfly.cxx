@@ -196,6 +196,7 @@ TextFrameIndex SwTextFrame::CalcFlyPos( SwFrameFormat const * pSearch )
             }
         }
     }
+    OSL_ENSURE(false, "CalcFlyPos: Not Found!");
     return TextFrameIndex(COMPLETE_STRING);
 }
 
