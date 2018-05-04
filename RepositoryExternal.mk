@@ -847,7 +847,7 @@ else
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(call gb_UnpackedTarball_get_dir,libnumbertext)/src/.libs/libnumbertext-1.0.a\
 )
-$(call gb_LinkTarget_use_external_project,$(1),libnumbertext)
+$(call gb_LinkTarget_use_external_project,$(1),libnumbertext,full)
 
 endif
 
