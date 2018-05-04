@@ -151,6 +151,26 @@ namespace
     }
 }
 
+namespace
+{
+    cairo_t* syncCairoContext(cairo_t* cr)
+    {
+        //rhbz#1283420 tdf#117413 bodge to force a read from the underlying surface which has
+        //the side effect of making the mysterious xrender related problem go away
+        cairo_surface_t *target = cairo_get_target(cr);
+        if (cairo_surface_get_type(target) == CAIRO_SURFACE_TYPE_XLIB)
+        {
+            cairo_surface_t *throw_away = cairo_surface_create_similar(target, cairo_surface_get_content(target), 1, 1);
+            cairo_t *force_read_cr = cairo_create(throw_away);
+            cairo_set_source_surface(force_read_cr, target, 0, 0);
+            cairo_paint(force_read_cr);
+            cairo_destroy(force_read_cr);
+            cairo_surface_destroy(throw_away);
+        }
+        return cr;
+    }
+}
+
 void CairoTextRender::DrawTextLayout(const CommonSalLayout& rLayout)
 {
     const FreetypeFont& rFont = *rLayout.getFreetypeFont();
@@ -191,7 +211,7 @@ void CairoTextRender::DrawTextLayout(const CommonSalLayout& rLayout)
      * least change the SalFrame etc impls to dtor the SalGraphics *before* the
      * destruction of the windows they reference
     */
-    cairo_t *cr = getCairoContext();
+    cairo_t *cr = syncCairoContext(getCairoContext());
     if (!cr)
     {
         SAL_WARN("vcl", "no cairo context for text");

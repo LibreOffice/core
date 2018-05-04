@@ -36,21 +36,7 @@ GlyphCache& X11CairoTextRender::getPlatformGlyphCache()
 
 cairo_t* X11CairoTextRender::getCairoContext()
 {
-    cairo_t *cr = mrParent.getCairoContext();
-
-    //rhbz#1283420 bodge to force a read from the underlying surface which has
-    //the side effect of making the mysterious xrender related problem go away
-    {
-        cairo_surface_t *target = cairo_get_target(cr);
-        cairo_surface_t *throw_away = cairo_surface_create_similar(target, cairo_surface_get_content(target), 1, 1);
-        cairo_t *force_read_cr = cairo_create(throw_away);
-        cairo_set_source_surface(force_read_cr, target, 0, 0);
-        cairo_paint(force_read_cr);
-        cairo_destroy(force_read_cr);
-        cairo_surface_destroy(throw_away);
-    }
-
-    return cr;
+    return mrParent.getCairoContext();
 }
 
 void X11CairoTextRender::getSurfaceOffset( double& nDX, double& nDY )
