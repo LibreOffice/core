@@ -4612,7 +4612,7 @@ bool SwRowFrame::ShouldRowKeepWithNext() const
     const SwFrame* pText = pCell->Lower();
 
     return pText && pText->IsTextFrame() &&
-           static_cast<const SwTextFrame*>(pText)->GetTextNode()->GetSwAttrSet().GetKeep().GetValue();
+           static_cast<const SwTextFrame*>(pText)->GetTextNodeForParaProps()->GetSwAttrSet().GetKeep().GetValue();
 }
 
 SwCellFrame::SwCellFrame(const SwTableBox &rBox, SwFrame* pSib, bool bInsertContent)
