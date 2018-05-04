@@ -96,7 +96,8 @@ SwAccessiblePortionData::~SwAccessiblePortionData()
 {
 }
 
-void SwAccessiblePortionData::Text(sal_Int32 nLength, sal_uInt16 nType, sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/)
+void SwAccessiblePortionData::Text(TextFrameIndex const nLength,
+        sal_uInt16 nType, sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/)
 {
     OSL_ENSURE( (m_nModelPosition + nLength) <= m_pTextNode->GetText().getLength(),
                 "portion exceeds model string!" );
@@ -126,7 +127,8 @@ void SwAccessiblePortionData::SetAttrFieldType( sal_uInt16 nAttrFieldType )
 }
 
 void SwAccessiblePortionData::Special(
-    sal_Int32 nLength, const OUString& rText, sal_uInt16 nType, sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/, const SwFont* /*pFont*/)
+    TextFrameIndex const nLength, const OUString& rText, sal_uInt16 nType,
+    sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/, const SwFont* /*pFont*/)
 {
     OSL_ENSURE( m_nModelPosition >= 0, "illegal position" );
     OSL_ENSURE( (m_nModelPosition + nLength) <= m_pTextNode->GetText().getLength(),
@@ -215,7 +217,7 @@ void SwAccessiblePortionData::LineBreak(sal_Int32 /*nWidth*/)
     m_aLineBreaks.push_back( m_aBuffer.getLength() );
 }
 
-void SwAccessiblePortionData::Skip(sal_Int32 nLength)
+void SwAccessiblePortionData::Skip(TextFrameIndex const nLength)
 {
     OSL_ENSURE( !m_bFinished, "We are already done!" );
     OSL_ENSURE( m_aModelPositions.empty(), "Never Skip() after portions" );
