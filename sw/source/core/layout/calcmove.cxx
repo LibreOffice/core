@@ -998,7 +998,7 @@ bool SwFrame::IsCollapse() const
         return false;
 
     const SwTextFrame *pTextFrame = static_cast<const SwTextFrame*>(this);
-    const SwTextNode *pTextNode = pTextFrame->GetTextNode();
+    const SwTextNode *pTextNode = pTextFrame->GetTextNodeForParaProps();
     return pTextNode && pTextNode->IsCollapse();
 }
 
