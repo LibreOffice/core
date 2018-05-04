@@ -170,7 +170,7 @@ bool lcl_IsHeadlineCell( const SwCellFrame& rCellFrame )
     const SwContentFrame *pCnt = rCellFrame.ContainsContent();
     if ( pCnt && pCnt->IsTextFrame() )
     {
-        const SwTextNode* pTextNode = static_cast<const SwTextFrame*>(pCnt)->GetTextNode();
+        SwTextNode const*const pTextNode = static_cast<const SwTextFrame*>(pCnt)->GetTextNodeForParaProps();
         const SwFormat* pTextFormat = pTextNode->GetFormatColl();
 
         OUString sStyleName;
@@ -210,7 +210,7 @@ void* lcl_GetKeyFromFrame( const SwFrame& rFrame )
     if ( rFrame.IsPageFrame() )
         pKey = const_cast<void*>(static_cast<void const *>(&(static_cast<const SwPageFrame&>(rFrame).GetFormat()->getIDocumentSettingAccess())));
     else if ( rFrame.IsTextFrame() )
-        pKey = const_cast<void*>(static_cast<void const *>(static_cast<const SwTextFrame&>(rFrame).GetTextNode()));
+        pKey = const_cast<void*>(static_cast<void const *>(static_cast<const SwTextFrame&>(rFrame).GetTextNodeFirst()));
     else if ( rFrame.IsSctFrame() )
         pKey = const_cast<void*>(static_cast<void const *>(static_cast<const SwSectionFrame&>(rFrame).GetSection()));
     else if ( rFrame.IsTabFrame() )
@@ -418,7 +418,7 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
     if ( mpNumInfo )
     {
         const SwTextFrame& rTextFrame = static_cast<const SwTextFrame&>(mpNumInfo->mrFrame);
-        const SwTextNode* pTextNd = rTextFrame.GetTextNode();
+        SwTextNode const*const pTextNd = rTextFrame.GetTextNodeForParaProps();
         const SwNodeNum* pNodeNum = pTextNd->GetNum();
 
         if ( vcl::PDFWriter::List == eType )
@@ -836,7 +836,7 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
     if ( lcl_IsInNonStructEnv( rTextFrame ) || rTextFrame.IsFollow() )
         return;
 
-    const SwTextNode* pTextNd = rTextFrame.GetTextNode();
+    const SwTextNode *const pTextNd = rTextFrame.GetTextNodeForParaProps();
     const SwNumRule* pNumRule = pTextNd->GetNumRule();
     const SwNodeNum* pNodeNum = pTextNd->GetNum();
 
@@ -1054,7 +1054,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
         case SwFrameType::Txt :
             {
                 const SwTextNode* pTextNd =
-                    static_cast<const SwTextFrame*>(pFrame)->GetTextNode();
+                    static_cast<const SwTextFrame*>(pFrame)->GetTextNodeForParaProps();
 
                 const SwFormat* pTextFormat = pTextNd->GetFormatColl();
                 const SwFormat* pParentTextFormat = pTextFormat ? pTextFormat->DerivedFrom() : nullptr;
