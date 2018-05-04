@@ -86,8 +86,8 @@ private:
     VclPtr<const vcl::Window>       mpWindow;
     SdrModel*                       mpModel;            // TTTT probably not needed -> use SdrModel from SdrObject (?)
     SdrOutliner*                    mpOutliner;
-    SvxOutlinerForwarder*           mpTextForwarder;
-    SvxDrawOutlinerViewForwarder*   mpViewForwarder;    // if non-NULL, use GetViewModeTextForwarder text forwarder
+    std::unique_ptr<SvxOutlinerForwarder> mpTextForwarder;
+    std::unique_ptr<SvxDrawOutlinerViewForwarder> mpViewForwarder;    // if non-NULL, use GetViewModeTextForwarder text forwarder
     css::uno::Reference< css::linguistic2::XLinguServiceManager2 > m_xLinguServiceManager;
     Point                           maTextOffset;
     bool                            mbDataValid;
@@ -103,7 +103,7 @@ private:
 
     SvxTextForwarder*               GetBackgroundTextForwarder();
     SvxTextForwarder*               GetEditModeTextForwarder();
-    SvxDrawOutlinerViewForwarder*   CreateViewForwarder();
+    std::unique_ptr<SvxDrawOutlinerViewForwarder> CreateViewForwarder();
 
     void                            SetupOutliner();
 
@@ -272,11 +272,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         if (&rBC == mpView)
         {
             mpView = nullptr;
-            if (mpViewForwarder)
-            {
-                delete mpViewForwarder;
-                mpViewForwarder = nullptr;
-            }
+            mpViewForwarder.reset();
         }
     }
     else if (const SvxViewChangedHint* pViewHint = dynamic_cast<const SvxViewChangedHint*>(&rHint))
@@ -334,8 +330,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                     // invalidate old forwarder
                     if( !mbForwarderIsEditMode )
                     {
-                        delete mpTextForwarder;
-                        mpTextForwarder = nullptr;
+                        mpTextForwarder.reset();
                     }
 
                     // register as listener - need to broadcast state change messages
@@ -370,8 +365,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                     // destroy view forwarder, OutlinerView no longer
                     // valid (no need for UpdateData(), it's been
                     // synched on SdrEndTextEdit)
-                    delete mpViewForwarder;
-                    mpViewForwarder = nullptr;
+                    mpViewForwarder.reset();
 
                     // Invalidate text forwarder, we might
                     // not be called again before entering edit mode a
@@ -380,8 +374,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                     if( mbForwarderIsEditMode )
                     {
                         mbForwarderIsEditMode = false;
-                        delete mpTextForwarder;
-                        mpTextForwarder = nullptr;
+                        mpTextForwarder.reset();
                     }
                 }
                 break;
@@ -406,17 +399,8 @@ void SvxTextEditSourceImpl::ObjectInDestruction(const SdrObject&)
 /* unregister at all objects and set all references to 0 */
 void SvxTextEditSourceImpl::dispose()
 {
-    if( mpTextForwarder )
-    {
-        delete mpTextForwarder;
-        mpTextForwarder = nullptr;
-    }
-
-    if( mpViewForwarder )
-    {
-        delete mpViewForwarder;
-        mpViewForwarder = nullptr;
-    }
+    mpTextForwarder.reset();
+    mpViewForwarder.reset();
 
     if( mpOutliner )
     {
@@ -548,7 +532,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         }
 
 
-        mpTextForwarder = new SvxOutlinerForwarder( *mpOutliner, (mpObject->GetObjInventor() == SdrInventor::Default) && (mpObject->GetObjIdentifier() == OBJ_OUTLINETEXT) );
+        mpTextForwarder.reset(new SvxOutlinerForwarder( *mpOutliner, (mpObject->GetObjInventor() == SdrInventor::Default) && (mpObject->GetObjIdentifier() == OBJ_OUTLINETEXT) ));
         // delay listener subscription and UAA initialization until Outliner is fully setup
         bCreated = true;
 
@@ -635,7 +619,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
     // prevent EE/Outliner notifications during setup
     mbNotificationsDisabled = false;
 
-    return mpTextForwarder;
+    return mpTextForwarder.get();
 }
 
 
@@ -647,12 +631,12 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetEditModeTextForwarder()
 
         if( pEditOutliner )
         {
-            mpTextForwarder = new SvxOutlinerForwarder( *pEditOutliner, (mpObject->GetObjInventor() == SdrInventor::Default) && (mpObject->GetObjIdentifier() == OBJ_OUTLINETEXT) );
+            mpTextForwarder.reset(new SvxOutlinerForwarder( *pEditOutliner, (mpObject->GetObjInventor() == SdrInventor::Default) && (mpObject->GetObjIdentifier() == OBJ_OUTLINETEXT) ));
             mbForwarderIsEditMode = true;
         }
     }
 
-    return mpTextForwarder;
+    return mpTextForwarder.get();
 }
 
 
@@ -672,8 +656,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
         if( IsEditMode() != mbForwarderIsEditMode )
         {
             // forwarder mismatch - create new
-            delete mpTextForwarder;
-            mpTextForwarder = nullptr;
+            mpTextForwarder.reset();
         }
 
         if( IsEditMode() )
@@ -686,7 +669,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
 }
 
 
-SvxDrawOutlinerViewForwarder* SvxTextEditSourceImpl::CreateViewForwarder()
+std::unique_ptr<SvxDrawOutlinerViewForwarder> SvxTextEditSourceImpl::CreateViewForwarder()
 {
     if( mpView->GetTextEditOutlinerView() && mpObject )
     {
@@ -700,7 +683,7 @@ SvxDrawOutlinerViewForwarder* SvxTextEditSourceImpl::CreateViewForwarder()
             tools::Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
             OutlinerView& rOutlView = *mpView->GetTextEditOutlinerView();
 
-            return new SvxDrawOutlinerViewForwarder( rOutlView, aBoundRect.TopLeft() );
+            return std::unique_ptr<SvxDrawOutlinerViewForwarder>(new SvxDrawOutlinerViewForwarder( rOutlView, aBoundRect.TopLeft() ));
         }
     }
 
@@ -722,8 +705,7 @@ SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( bool bCreate 
         {
             // destroy all forwarders (no need for UpdateData(),
             // it's been synched on SdrEndTextEdit)
-            delete mpViewForwarder;
-            mpViewForwarder = nullptr;
+            mpViewForwarder.reset();
         }
     }
     // which to create? Directly in edit mode, create new, or none?
@@ -739,8 +721,7 @@ SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( bool bCreate 
             // dispose old text forwarder
             UpdateData();
 
-            delete mpTextForwarder;
-            mpTextForwarder = nullptr;
+            mpTextForwarder.reset();
 
             // enter edit mode
             mpView->SdrEndTextEdit();
@@ -763,7 +744,7 @@ SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( bool bCreate 
         }
     }
 
-    return mpViewForwarder;
+    return mpViewForwarder.get();
 }
 
 
