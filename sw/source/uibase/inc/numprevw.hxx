@@ -59,6 +59,56 @@ class NumberingPreview : public vcl::Window
 
 };
 
+class SwNumberingPreview
+{
+    std::unique_ptr<weld::DrawingArea> m_xDrawingArea;
+    Size m_aSize;
+    const SwNumRule*    pActNum;
+    vcl::Font           aStdFont;
+    long                nPageWidth;
+    const OUString*     pOutlineNames;
+    bool                bPosition;
+    sal_uInt16          nActLevel;
+
+private:
+    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
+    DECL_LINK(DoResize, const Size& rSize, void);
+
+public:
+    SwNumberingPreview(weld::DrawingArea* pDrawingArea)
+        : m_xDrawingArea(pDrawingArea)
+        , pActNum(nullptr)
+        , nPageWidth(0)
+        , pOutlineNames(nullptr)
+        , bPosition(false)
+        , nActLevel(USHRT_MAX)
+    {
+        m_xDrawingArea->connect_size_allocate(LINK(this, SwNumberingPreview, DoResize));
+        m_xDrawingArea->connect_draw(LINK(this, SwNumberingPreview, DoPaint));
+    }
+
+    void queue_draw()
+    {
+        m_xDrawingArea->queue_draw();
+    }
+
+    void    SetNumRule(const SwNumRule* pNum)
+    {
+        pActNum = pNum;
+        queue_draw();
+    }
+
+    void    SetPageWidth(long nPgWidth)
+                            {nPageWidth = nPgWidth;}
+    void    SetOutlineNames(const OUString* pNames)
+                    {pOutlineNames = pNames;}
+    void    SetPositionMode()
+                    { bPosition = true;}
+    void    SetLevel(sal_uInt16 nSet) {nActLevel = nSet;}
+
+};
+
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
