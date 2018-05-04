@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_8472f247",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 9
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-04T01:32:51Z",
+      "side": 1,
+      "message": "No shouting please ;)\n(i.e. don\u0027t use all uppercase)",
+      "revId": "131f507de4f9e116e524badc75490ed49f40e62e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
