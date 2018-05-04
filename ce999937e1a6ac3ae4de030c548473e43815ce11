@@ -16,6 +16,24 @@
       "revId": "ce999937e1a6ac3ae4de030c548473e43815ce11",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_87a67451",
+        "filename": "dbaccess/source/core/dataaccess/datasource.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-04T16:09:34Z",
+      "side": 1,
+      "message": "Seems doing that is more complex than what I expected, probably best to be done as a follow-up commit.",
+      "parentUuid": "9a30ddce_274068a5",
+      "revId": "ce999937e1a6ac3ae4de030c548473e43815ce11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
