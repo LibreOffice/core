@@ -67,9 +67,12 @@ public:
     NumberingTypeListBox(weld::ComboBoxText* pWidget);
     ~NumberingTypeListBox();
 
+    void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_xWidget->connect_changed(rLink); }
+
     void          Reload(SwInsertNumTypes nTypeFlags);
     SvxNumType    GetSelectedNumberingType();
     bool          SelectNumberingType(SvxNumType nType);
+    void          SetNoSelection() { m_xWidget->set_active(-1); }
 };
 
 #endif
