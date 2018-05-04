@@ -1342,14 +1342,16 @@ static bool lcl_IdenticalStyles(const SwFrame* pPrevFrame, const SwFrame* pFrame
     if (pPrevFrame && pPrevFrame->IsTextFrame())
     {
         const SwTextFrame *pTextFrame = static_cast< const SwTextFrame * >( pPrevFrame );
-        pPrevFormatColl = dynamic_cast<SwTextFormatColl*>(pTextFrame->GetTextNode()->GetFormatColl());
+        pPrevFormatColl = dynamic_cast<SwTextFormatColl*>(
+            pTextFrame->GetTextNodeForParaProps()->GetFormatColl());
     }
 
     bool bIdenticalStyles = false;
     if (pFrame && pFrame->IsTextFrame())
     {
         const SwTextFrame *pTextFrame = static_cast< const SwTextFrame * >( pFrame );
-        SwTextFormatColl *pFormatColl = dynamic_cast<SwTextFormatColl*>(pTextFrame->GetTextNode()->GetFormatColl());
+        SwTextFormatColl *const pFormatColl = dynamic_cast<SwTextFormatColl*>(
+            pTextFrame->GetTextNodeForParaProps()->GetFormatColl());
         bIdenticalStyles = pPrevFormatColl == pFormatColl;
     }
     return bIdenticalStyles;
