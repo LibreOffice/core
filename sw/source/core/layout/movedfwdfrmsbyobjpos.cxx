@@ -36,22 +36,24 @@ void SwMovedFwdFramesByObjPos::Insert( const SwTextFrame& _rMovedFwdFrameByObjPo
                                      const sal_uInt32 _nToPageNum )
 {
     if ( maMovedFwdFrames.end() ==
-         maMovedFwdFrames.find( _rMovedFwdFrameByObjPos.GetTextNode() ) )
+         maMovedFwdFrames.find(_rMovedFwdFrameByObjPos.GetTextNodeFirst()) )
     {
-        const NodeMapEntry aEntry( _rMovedFwdFrameByObjPos.GetTextNode(), _nToPageNum );
+        const NodeMapEntry aEntry(_rMovedFwdFrameByObjPos.GetTextNodeFirst(), _nToPageNum);
         maMovedFwdFrames.insert( aEntry );
     }
 }
 
 void SwMovedFwdFramesByObjPos::Remove( const SwTextFrame& _rTextFrame )
 {
-    maMovedFwdFrames.erase( _rTextFrame.GetTextNode() );
+    maMovedFwdFrames.erase(_rTextFrame.GetTextNodeFirst());
 }
 
 bool SwMovedFwdFramesByObjPos::FrameMovedFwdByObjPos( const SwTextFrame& _rTextFrame,
                                                   sal_uInt32& _ornToPageNum ) const
 {
-    NodeMapIter aIter = maMovedFwdFrames.find( _rTextFrame.GetTextNode() );
+    // sw_redlinehide: assumption: this wants to uniquely identify all
+    // SwTextFrame belonging to the same paragraph, so just use first one as key
+    NodeMapIter aIter = maMovedFwdFrames.find( _rTextFrame.GetTextNodeFirst() );
     if ( maMovedFwdFrames.end() != aIter )
     {
         _ornToPageNum = (*aIter).second;
