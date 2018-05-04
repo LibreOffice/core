@@ -1,0 +1,9 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+1: Eike Rathke <erack@redhat.com>
+Code-Review+2: Caolán McNamara <caolanm@redhat.com>
+Verified+1: Caolán McNamara <caolanm@redhat.com>
+Submitted-by: Caolán McNamara <caolanm@redhat.com>
+Submitted-at: Fri, 04 May 2018 17:29:11 +0200
+Reviewed-on: https://gerrit.libreoffice.org/53144
+Project: core
+Branch: refs/heads/libreoffice-6-0
