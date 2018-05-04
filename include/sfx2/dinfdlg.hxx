@@ -46,6 +46,7 @@
 #include <sfx2/tabdlg.hxx>
 
 #include <boost/optional/optional.hpp>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
     namespace document {
@@ -81,7 +82,7 @@ private:
     bool                         m_bDeleteUserData;
     bool                         m_bUseUserData;
     bool                         m_bUseThumbnailSave;
-    std::vector< CustomProperty* >    m_aCustomProperties;
+    std::vector< std::unique_ptr<CustomProperty> >    m_aCustomProperties;
     css::uno::Sequence< css::document::CmisProperty > m_aCmisProperties;
 
 public:
@@ -150,7 +151,7 @@ public:
     bool        IsUseThumbnailSave() const { return m_bUseThumbnailSave;}
 
 
-    std::vector< CustomProperty* >  GetCustomProperties() const;
+    std::vector< std::unique_ptr<CustomProperty> > GetCustomProperties() const;
     void        ClearCustomProperties();
     void        AddCustomProperty(  const OUString& sName,
                                     const css::uno::Any& rValue );
@@ -402,7 +403,7 @@ private:
     sal_Int32                           m_nTypeBoxWidth;
     sal_Int32                           m_nLineHeight;
     sal_Int32                           m_nScrollPos;
-    std::vector<CustomProperty*>        m_aCustomProperties;
+    std::vector<std::unique_ptr<CustomProperty>> m_aCustomProperties;
     std::vector<CustomPropertyLine*>    m_aCustomPropertiesLines;
     CustomPropertyLine*                 m_pCurrentLine;
     SvNumberFormatter                   m_aNumberFormatter;
@@ -455,7 +456,7 @@ public:
 
     css::uno::Sequence< css::beans::PropertyValue >
                         GetCustomProperties();
-    void                SetCustomProperties(const std::vector<CustomProperty*>& rProperties);
+    void                SetCustomProperties(std::vector< std::unique_ptr<CustomProperty> >&& rProperties);
     void                SetRemovedHdl( const Link<void*,void>& rLink ) { m_aRemovedHdl = rLink; }
 };
 
@@ -488,7 +489,7 @@ public:
     css::uno::Sequence<css::beans::PropertyValue>
                  GetCustomProperties() const
                         { return m_pPropertiesWin->GetCustomProperties(); }
-    void         SetCustomProperties(const std::vector<CustomProperty*>& rProperties);
+    void         SetCustomProperties(std::vector< std::unique_ptr<CustomProperty> >&& rProperties);
 
     void         Init(VclBuilderContainer& rParent);
     virtual void Resize() override;
