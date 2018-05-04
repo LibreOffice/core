@@ -385,8 +385,7 @@ bool GtkSalFrame::doKeyCallback( guint state,
     vcl::DeletionListener aDel( this );
 
 #if OSL_DEBUG_LEVEL > 0
-    char* pKeyDebug = nullptr;
-    pKeyDebug = getenv("VCL_GTK3_PAINTDEBUG");
+    const char* pKeyDebug = getenv("VCL_GTK3_PAINTDEBUG");
 
     if (pKeyDebug && *pKeyDebug == '1')
     {
@@ -413,8 +412,6 @@ bool GtkSalFrame::doKeyCallback( guint state,
             }
         }
     }
-
-    free(pKeyDebug);
 #endif
 
     /*
