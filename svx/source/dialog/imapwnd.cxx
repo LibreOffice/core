@@ -101,8 +101,8 @@ void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap )
 
     if(pPage)
     {
-        // clear all draw objects
-        pPage->Clear();
+        // clear SdrObjects with broadcasting
+        pPage->ClearSdrObjList();
     }
 
     if(GetSdrView())

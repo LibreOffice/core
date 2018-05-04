@@ -175,7 +175,8 @@ SdPage::~SdPage()
 
     clearChildNodes(mxAnimationNode);
 
-    Clear();
+    // clear SdrObjects with broadcasting
+    ClearSdrObjList();
 }
 
 struct OrdNumSorter

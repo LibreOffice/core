@@ -84,9 +84,52 @@ SdrObjList::SdrObjList(SdrPage* pNewPage)
     eListKind=SdrObjListKind::Unknown;
 }
 
+void SdrObjList::impClearSdrObjList(bool bBroadcast)
+{
+    SdrModel* pSdrModelFromRemovedSdrObject(nullptr);
+
+    while(!maList.empty())
+    {
+        // remove last object from list
+        SdrObject* pObj = maList.back();
+        RemoveObjectFromContainer(maList.size()-1);
+
+        // flushViewObjectContacts() is done since SdrObject::Free is not guaranteed
+        // to delete the object and thus refresh visualisations
+        pObj->GetViewContact().flushViewObjectContacts();
+
+        if(bBroadcast)
+        {
+            if(nullptr == pSdrModelFromRemovedSdrObject)
+            {
+                pSdrModelFromRemovedSdrObject = &pObj->getSdrModelFromSdrObject();
+            }
+
+            // sent remove hint (after removal, see RemoveObject())
+            SdrHint aHint(SdrHintKind::ObjectRemoved, *pObj, mpPage);
+            pObj->getSdrModelFromSdrObject().Broadcast(aHint);
+        }
+
+        // delete the object itself
+        SdrObject::Free( pObj );
+    }
+
+    if(bBroadcast && nullptr != pSdrModelFromRemovedSdrObject)
+    {
+        pSdrModelFromRemovedSdrObject->SetChanged();
+    }
+}
+
+void SdrObjList::ClearSdrObjList()
+{
+    // clear SdrObjects with broadcasting
+    impClearSdrObjList(true);
+}
+
 SdrObjList::~SdrObjList()
 {
-    Clear(); // delete contents of container
+    // clear SdrObjects without broadcasting
+    impClearSdrObjList(false);
 }
 
 void SdrObjList::copyDataFromSdrObjList(const SdrObjList& rSrcList, SdrModel* pNewModelel)
@@ -99,7 +142,9 @@ void SdrObjList::copyDataFromSdrObjList(const SdrObjList& rSrcList, SdrModel* pN
 
 void SdrObjList::CopyObjects(const SdrObjList& rSrcList, SdrModel* pNewModelel)
 {
-    Clear();
+    // clear SdrObjects with broadcasting
+    ClearSdrObjList();
+
     bObjOrdNumsDirty = false;
     bRectsDirty = false;
     size_t nCloneErrCnt(0);
@@ -184,39 +229,6 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList, SdrModel* pNewModelel)
 
         OSL_FAIL(aStr.getStr());
 #endif
-    }
-}
-
-void SdrObjList::Clear()
-{
-    SdrModel* pSdrModelFromRemovedSdrObject(nullptr);
-
-    while(!maList.empty())
-    {
-        // remove last object from list
-        SdrObject* pObj = maList.back();
-        RemoveObjectFromContainer(maList.size()-1);
-
-        // flushViewObjectContacts() is done since SdrObject::Free is not guaranteed
-        // to delete the object and thus refresh visualisations
-        pObj->GetViewContact().flushViewObjectContacts();
-
-        if(nullptr == pSdrModelFromRemovedSdrObject)
-        {
-            pSdrModelFromRemovedSdrObject = &pObj->getSdrModelFromSdrObject();
-        }
-
-        // sent remove hint (after removal, see RemoveObject())
-        SdrHint aHint(SdrHintKind::ObjectRemoved, *pObj, mpPage);
-        pObj->getSdrModelFromSdrObject().Broadcast(aHint);
-
-        // delete the object itself
-        SdrObject::Free( pObj );
-    }
-
-    if(nullptr != pSdrModelFromRemovedSdrObject)
-    {
-        pSdrModelFromRemovedSdrObject->SetChanged();
     }
 }
 
