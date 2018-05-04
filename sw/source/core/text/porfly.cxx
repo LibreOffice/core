@@ -184,25 +184,19 @@ void SwTextFrame::MoveFlyInCnt(SwTextFrame *pNew,
 
 TextFrameIndex SwTextFrame::CalcFlyPos( SwFrameFormat const * pSearch )
 {
-    SwpHints* pHints = GetTextNode()->GetpSwpHints();
-    OSL_ENSURE( pHints, "CalcFlyPos: Why me?" );
-    if( !pHints )
-        return TextFrameIndex(COMPLETE_STRING);
-    SwTextAttr* pFound = nullptr;
-    for ( size_t i = 0; i < pHints->Count(); ++i )
+    sw::MergedAttrIter iter(*this);
+    for (SwTextAttr const* pHt = iter.NextAttr(); pHt; pHt = iter.NextAttr())
     {
-        SwTextAttr *pHt = pHints->Get( i );
         if( RES_TXTATR_FLYCNT == pHt->Which() )
         {
             SwFrameFormat* pFrameFormat = pHt->GetFlyCnt().GetFrameFormat();
             if( pFrameFormat == pSearch )
-                pFound = pHt;
+            {
+                return TextFrameIndex(pHt->GetStart());
+            }
         }
     }
-    OSL_ENSURE( pHints, "CalcFlyPos: Not Found!" );
-    if( !pFound )
-        return TextFrameIndex(COMPLETE_STRING);
-    return pFound->GetStart();
+    return TextFrameIndex(COMPLETE_STRING);
 }
 
 void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
