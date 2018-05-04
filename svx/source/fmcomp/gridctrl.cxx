@@ -1013,11 +1013,7 @@ void DbGridControl::dispose()
         osl::MutexGuard aGuard(m_aDestructionSafety);
         if (m_pFieldListeners)
             DisconnectFromFields();
-        if (m_pCursorDisposeListener)
-        {
-            delete m_pCursorDisposeListener;
-            m_pCursorDisposeListener = nullptr;
-        }
+        m_pCursorDisposeListener.reset();
     }
 
     if (m_nDeleteEvent)
@@ -1442,7 +1438,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, DbGridCo
     RemoveRows();
     DisconnectFromFields();
 
-    DELETEZ(m_pCursorDisposeListener);
+    m_pCursorDisposeListener.reset();
 
     {
         ::osl::MutexGuard aGuard(m_aAdjustSafety);
@@ -1640,7 +1636,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, DbGridCo
 
     // start listening on the seek cursor
     if (m_pSeekCursor)
-        m_pCursorDisposeListener = new DisposeListenerGridBridge(*this, Reference< XComponent > (Reference< XInterface >(*m_pSeekCursor), UNO_QUERY));
+        m_pCursorDisposeListener.reset(new DisposeListenerGridBridge(*this, Reference< XComponent > (Reference< XInterface >(*m_pSeekCursor), UNO_QUERY)));
 }
 
 void DbGridControl::RemoveColumns()
