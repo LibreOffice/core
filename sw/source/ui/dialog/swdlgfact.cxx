@@ -1007,12 +1007,11 @@ VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSvxNumBulletTab
     return VclPtr<AbstractTabDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateOutlineTabDialog(vcl::Window* pParent,
+VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateOutlineTabDialog(weld::Window* pParent,
                                                 const SfxItemSet* pSwItemSet,
                                                 SwWrtShell & rWrtSh )
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<SwOutlineTabDialog>::Create(pParent, pSwItemSet, rWrtSh);
-    return VclPtr<AbstractTabDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractTabController_Impl>::Create(new SwOutlineTabDialog(pParent, pSwItemSet, rWrtSh));
 }
 
 VclPtr<AbstractMultiTOXTabDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXTabDialog(

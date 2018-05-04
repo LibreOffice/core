@@ -43,12 +43,9 @@ class SwWrtShell;
 class SwNumRule;
 class SwChapterNumRules;
 
-class SwOutlineTabDialog final : public SfxTabDialog
+class SwOutlineTabDialog final : public SfxTabDialogController
 {
     static     sal_uInt16    nNumLevel;
-
-    sal_uInt16 m_nNumPosId;
-    sal_uInt16 m_nOutlineId;
 
     OUString            aCollNames[MAXLEVEL];
 
@@ -58,19 +55,18 @@ class SwOutlineTabDialog final : public SfxTabDialog
 
     bool                bModified : 1;
 
-    DECL_LINK(CancelHdl, Button*, void);
-    DECL_LINK( FormHdl, Button *, void );
-    DECL_LINK( MenuSelectHdl, Menu *, bool );
+    std::unique_ptr<weld::MenuButton> m_xMenuButton;
 
-    virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage) override;
+    DECL_LINK(CancelHdl, weld::Button&, void);
+    DECL_LINK(FormHdl, weld::Button&, void);
+    DECL_LINK(MenuSelectHdl, const OString&, void);
+
+    virtual void    PageCreated(const OString& rPageId, SfxTabPage& rPage) override;
     virtual short   Ok() override;
 
 public:
-    SwOutlineTabDialog(vcl::Window* pParent,
-                    const SfxItemSet* pSwItemSet,
-                    SwWrtShell &);
+    SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* pSwItemSet, SwWrtShell &);
     virtual ~SwOutlineTabDialog() override;
-    virtual void        dispose() override;
 
     SwNumRule*          GetNumRule() { return xNumRule.get(); }
     sal_uInt16          GetLevel(const OUString &rFormatName) const;

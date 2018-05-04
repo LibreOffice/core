@@ -365,8 +365,10 @@ protected:
 
 public:
     void connect_selected(const Link<const OString&, void>& rLink) { m_aSelectHdl = rLink; }
-
-    virtual void set_active(const OString& rIdent, bool bActive) = 0;
+    virtual void set_item_active(const OString& rIdent, bool bActive) = 0;
+    virtual void set_item_label(const OString& rIdent, const OUString& rLabel) = 0;
+    virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) = 0;
+    virtual OString get_item_help_id(const OString& rIdent) const = 0;
 };
 
 class VCL_DLLPUBLIC ToggleButton : virtual public Button

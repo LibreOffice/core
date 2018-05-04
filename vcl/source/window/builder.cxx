@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <i18nutil/unicode.hxx>
@@ -1426,6 +1427,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         assert(!sMenu.isEmpty());
         m_pParserState->m_aButtonMenuMaps.emplace_back(id, sMenu);
         xButton->SetImageAlign(ImageAlign::Left); //default to left
+        xButton->SetAccessibleRole(css::accessibility::AccessibleRole::BUTTON_MENU);
         setupFromActionName(xButton, rMap, m_xFrame);
         xWindow = xButton;
     }

@@ -636,7 +636,7 @@ public:
     virtual VclPtr<AbstractMailMergeCreateFromDlg>     CreateMailMergeCreateFromDlg(vcl::Window* pParent) override;
     virtual VclPtr<AbstractMailMergeFieldConnectionsDlg> CreateMailMergeFieldConnectionsDlg(vcl::Window* pParent) override;
     virtual VclPtr<VclAbstractDialog>          CreateMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr &rTOXMgr) override;
-    virtual VclPtr<SfxAbstractTabDialog>       CreateOutlineTabDialog(vcl::Window* pParent, const SfxItemSet* pSwItemSet,
+    virtual VclPtr<SfxAbstractTabDialog>       CreateOutlineTabDialog(weld::Window* pParent, const SfxItemSet* pSwItemSet,
                                                 SwWrtShell &) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSvxNumBulletTabDialog(vcl::Window* pParent,
                                                 const SfxItemSet* pSwItemSet,

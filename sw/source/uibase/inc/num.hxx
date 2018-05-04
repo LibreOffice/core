@@ -41,8 +41,8 @@ class SwNumPositionTabPage : public SfxTabPage
     SwNumRule*          pSaveNum;
     SwWrtShell*         pWrtSh;
 
-    VclPtr<SwOutlineTabDialog> pOutlineDlg;
-    sal_uInt16              nActNumLvl;
+    SwOutlineTabDialog* pOutlineDlg;
+    sal_uInt16          nActNumLvl;
 
     bool                bModified           : 1;
     bool                bPreset             : 1;
