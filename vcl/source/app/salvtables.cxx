@@ -915,10 +915,28 @@ public:
         m_xMenuButton->SetSelectHdl(LINK(this, SalInstanceMenuButton, MenuSelectHdl));
     }
 
-    virtual void set_active(const OString& rIdent, bool bActive) override
+    virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
         PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
         pMenu->CheckItem(pMenu->GetItemId(rIdent), bActive);
+    }
+
+    virtual void set_item_label(const OString& rIdent, const OUString& rText) override
+    {
+        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+        pMenu->SetItemText(pMenu->GetItemId(rIdent), rText);
+    }
+
+    virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) override
+    {
+        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+        pMenu->SetHelpId(pMenu->GetItemId(rIdent), rHelpId);
+    }
+
+    virtual OString get_item_help_id(const OString& rIdent) const override
+    {
+        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+        return pMenu->GetHelpId(pMenu->GetItemId(rIdent));
     }
 
     virtual ~SalInstanceMenuButton() override
