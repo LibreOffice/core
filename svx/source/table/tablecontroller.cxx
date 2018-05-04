@@ -2183,7 +2183,7 @@ void SvxTableController::updateSelectionOverlay()
                         sdr::overlay::OverlayObjectCell* pOverlay = new sdr::overlay::OverlayObjectCell( aHighlight, aRanges );
 
                         xOverlayManager->add(*pOverlay);
-                        mpSelectionOverlay = new sdr::overlay::OverlayObjectList;
+                        mpSelectionOverlay.reset(new sdr::overlay::OverlayObjectList);
                         mpSelectionOverlay->append(pOverlay);
                     }
                 }
@@ -2221,8 +2221,7 @@ void SvxTableController::destroySelectionOverlay()
 {
     if( mpSelectionOverlay )
     {
-        delete mpSelectionOverlay;
-        mpSelectionOverlay = nullptr;
+        mpSelectionOverlay.reset();
 
         if (comphelper::LibreOfficeKit::isActive())
         {
