@@ -1004,7 +1004,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                     else
                     {
                         // No content position provided. Thus, use a default one.
-                        SwPosition aDefaultContentPos( *(pTextFrame->GetTextNode()) );
+                        SwPosition aDefaultContentPos(*(pTextFrame->GetTextNodeFirst()));
                         pTextFrame->GetAutoPos( aChRect, aDefaultContentPos );
                     }
                     nTop = aRectFnSet.GetBottom(aChRect);
@@ -1018,7 +1018,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                     else
                     {
                         // No content position provided. Thus, use a default one.
-                        SwPosition aDefaultContentPos( *(pTextFrame->GetTextNode()) );
+                        SwPosition aDefaultContentPos(*(pTextFrame->GetTextNodeFirst()));
                         pTextFrame->GetTopOfLine( nTop, aDefaultContentPos );
                     }
                 }
@@ -1048,7 +1048,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 else
                 {
                     // No content position provided. Thus, use a default one.
-                    SwPosition aDefaultContentPos( *(pTextFrame->GetTextNode()) );
+                    SwPosition aDefaultContentPos(*(pTextFrame->GetTextNodeFirst()));
                     pTextFrame->GetAutoPos( aChRect, aDefaultContentPos );
                 }
                 nLeft = aRectFnSet.GetLeft(aChRect);
