@@ -55,6 +55,11 @@ $(eval $(call gb_CppunitTest_use_custom_headers,sw_odfexport,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_odfexport))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,sw_odfexport, \
+    modules/swriter \
+    svx \
+))
+
 ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
 $(call gb_CppunitTest_get_target,sw_odfexport): \
     $(call gb_ExternalPackage_get_target,fonts_liberation)
