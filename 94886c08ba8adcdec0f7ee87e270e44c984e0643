@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_87ed94f1",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-04T11:42:40Z",
+      "side": 1,
+      "message": "Nitpick: please follow the style of surrounding code, { goes to the start of the next line.",
+      "revId": "94886c08ba8adcdec0f7ee87e270e44c984e0643",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_c7bdccd8",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-04T11:42:40Z",
+      "side": 1,
+      "message": "Could you please document (source code comment) what was the old value? If it\u0027s 100 now, it\u0027s interesting if it was 99 before or 0 e.g.\n\nAlso, do you really have to allow tolerance check in both directions? If it was 50 before and now it\u0027s 100, usually it\u0027s enough to assert that it\u0027s e.g. \u003e 90. That way you can use CPPUNIT_ASSERT_LESS/CPPUNIT_ASSERT_GREATER and get much more readable error message when the assert fails.",
+      "revId": "94886c08ba8adcdec0f7ee87e270e44c984e0643",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_e7b490f3",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-04T11:42:40Z",
+      "side": 1,
+      "message": "Same style issue here.",
+      "revId": "94886c08ba8adcdec0f7ee87e270e44c984e0643",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
