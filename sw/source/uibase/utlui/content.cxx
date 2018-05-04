@@ -1972,6 +1972,9 @@ void SwContentTree::ToggleToRoot()
             if (m_nRootType == ContentTypeId::OUTLINE)
             {
                 SetSelectionMode(SelectionMode::Multiple);
+                SetDragDropMode(DragDropMode::CTRL_MOVE |
+                    DragDropMode::CTRL_COPY |
+                    DragDropMode::ENABLE_TOP);
             }
         }
     }
