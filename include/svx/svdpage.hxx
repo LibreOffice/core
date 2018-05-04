@@ -88,13 +88,24 @@ protected:
 private:
     /// simple ActionChildInserted forwarder to have it on a central place
     static void impChildInserted(SdrObject const & rChild);
+
+    // tdf#116879 Clear SdrObjList, no Undo done. Used from destructor, but also
+    // from other places. When used from destructor, suppress broadcasts
+    // to not get callbacks to evtl. derived objects already in destruction
+    // (e.g. SdrPage)
+    void impClearSdrObjList(bool bBroadcast);
+
 public:
     SdrObjList(SdrPage* pNewPage = nullptr);
     virtual ~SdrObjList();
 
     void CopyObjects(const SdrObjList& rSrcList, SdrModel* pNewModel = nullptr);
-    /// clean up everything (without Undo)
-    void    Clear();
+
+    // tdf#116879 clean up everything (without Undo), plus broadcasting
+    // changes. Split to this call and a private one (impClearSdrObjList)
+    // that allows cleanup without broadcasting in the destructor
+    void ClearSdrObjList();
+
     SdrObjListKind GetListKind() const                  { return eListKind; }
     void           SetListKind(SdrObjListKind eNewKind) { eListKind=eNewKind; }
     SdrObjList*    GetUpList() const                    { return pUpList; }

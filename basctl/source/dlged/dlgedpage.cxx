@@ -34,7 +34,8 @@ DlgEdPage::DlgEdPage(DlgEdModel& rModel, bool bMasterPage)
 
 DlgEdPage::~DlgEdPage()
 {
-    Clear();
+    // clear SdrObjects with broadcasting
+    ClearSdrObjList();
 }
 
 SdrPage* DlgEdPage::Clone(SdrModel* const pNewModel) const

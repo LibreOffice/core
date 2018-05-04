@@ -414,7 +414,10 @@ void DlgEditor::ResetDialog ()
     SdrPageView* pPgView = pDlgEdView->GetSdrPageView();
     bool bWasMarked = pDlgEdView->IsObjMarked( pOldDlgEdForm );
     pDlgEdView->UnmarkAll();
-    pPage->Clear();
+
+    // clear SdrObjects with broadcasting
+    pPage->ClearSdrObjList();
+
     pPage->SetDlgEdForm( nullptr );
     SetDialog( m_xUnoControlDialogModel );
     if( bWasMarked )
