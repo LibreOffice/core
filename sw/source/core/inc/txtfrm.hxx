@@ -881,6 +881,24 @@ public:
     ~SwDigitModeModifier();
 };
 
+namespace sw {
+
+struct MergedPara;
+
+/// iterate SwTextAttr in potentially merged text frame
+class MergedAttrIter
+{
+    sw::MergedPara const*const m_pMerged;
+    SwTextNode const*const m_pNode;
+    size_t m_CurrentExtent;
+    size_t m_CurrentHint;
+public:
+    MergedAttrIter(SwTextFrame const& rFrame);
+    SwTextAttr const* NextAttr(SwTextNode const** ppNode = nullptr);
+};
+
+} // namespace sw
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
