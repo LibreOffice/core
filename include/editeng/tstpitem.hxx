@@ -85,6 +85,7 @@ public:
                             cFill = rTS.cFill;
                             return *this;
                         }
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 // class SvxTabStopItem --------------------------------------------------
@@ -149,6 +150,7 @@ public:
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
 
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
 #endif

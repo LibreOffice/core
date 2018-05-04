@@ -21,6 +21,7 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <libxml/xmlwriter.h>
 #include <comphelper/fileformat.h>
 #include <comphelper/extract.hxx>
 #include <osl/diagnose.h>
@@ -692,6 +693,15 @@ void SvxTabStop::fillDecimal() const
         m_cDecimal = SvtSysLocale().GetLocaleData().getNumDecimalSep()[0];
 }
 
+void SvxTabStop::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxTabStop"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nTabPos"),
+                                BAD_CAST(OString::number(nTabPos).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eAdjustment"),
+                                BAD_CAST(OString::number(static_cast<int>(eAdjustment)).getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
 
 // class SvxTabStopItem --------------------------------------------------
 
@@ -958,6 +968,13 @@ void SvxTabStopItem::Insert( const SvxTabStopItem* pTabs )
     }
 }
 
+void SvxTabStopItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxTabStopItem"));
+    for (const auto& rTabStop : maTabStops)
+        rTabStop.dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+}
 
 // class SvxFormatSplitItem -------------------------------------------------
 SvxFormatSplitItem::~SvxFormatSplitItem()
