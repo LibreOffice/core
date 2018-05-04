@@ -1002,6 +1002,7 @@ SwContentNode::SwContentNode( const SwNodeIndex &rWhere, const SwNodeType nNdTyp
                             SwFormatColl *pColl )
     : SwModify( pColl ),     // CursorsShell, FrameFormat,
     SwNode( rWhere, nNdType ),
+    m_aCondCollListener( *this ),
     m_pCondColl( nullptr ),
     mbSetModifyAtAttr( false )
 {
@@ -1013,91 +1014,94 @@ SwContentNode::~SwContentNode()
     // Thus, we need to delete all Frames in the dependency list.
     DelFrames(false);
 
-    m_pCondColl.reset();
+    m_aCondCollListener.EndListeningAll();
+    m_pCondColl = nullptr;
 
     if ( mpAttrSet.get() && mbSetModifyAtAttr )
         const_cast<SwAttrSet*>(static_cast<const SwAttrSet*>(mpAttrSet.get()))->SetModifyAtAttr( nullptr );
 }
 
-void SwContentNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
+void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
 {
-    sal_uInt16 nWhich = pOldValue ? pOldValue->Which() :
-                    pNewValue ? pNewValue->Which() : 0 ;
-
-    switch( nWhich )
+    if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-    case RES_OBJECTDYING :
-        if (pNewValue)
-        {
-            SwFormat * pFormat = static_cast<SwFormat *>( static_cast<const SwPtrMsgPoolItem *>(pNewValue)->pObject );
+        const sal_uInt16 nWhich = pLegacyHint->m_pOld
+                ? pLegacyHint->m_pOld->Which()
+                : pLegacyHint->m_pNew
+                ? pLegacyHint->m_pNew->Which()
+                : 0 ;
 
-            // Do not mangle pointers if it is the upper-most format!
-            if( GetRegisteredIn() == pFormat )
-            {
-                if( pFormat->GetRegisteredIn() )
+        bool bSetParent = false;
+        bool bCalcHidden = false;
+        SwFormatColl* pFormatColl = nullptr;
+        switch(nWhich)
+        {
+            case RES_OBJECTDYING:
                 {
-                    // If Parent, register anew in the new Parent
-                    pFormat->GetRegisteredIn()->Add( this );
-                    if ( GetpSwAttrSet() )
-                        AttrSetHandleHelper::SetParent( mpAttrSet, *this, GetFormatColl(), GetFormatColl() );
+                    SwFormat* pFormat = pLegacyHint->m_pNew
+                            ? static_cast<SwFormat*>(static_cast<const SwPtrMsgPoolItem*>(pLegacyHint->m_pNew)->pObject)
+                            : nullptr;
+                    // Do not mangle pointers if it is the upper-most format!
+                    if(pFormat && GetRegisteredIn() == pFormat)
+                    {
+                        if(pFormat->GetRegisteredIn())
+                        {
+                            // If Parent, register anew in the new Parent
+                            pFormat->GetRegisteredIn()->Add(this);
+                            pFormatColl = GetFormatColl();
+                        }
+                        else
+                            EndListeningAll();
+                        bSetParent = true;
+                    }
                 }
-                else
+                break;
+
+            case RES_FMT_CHG:
+                // If the Format parent was switched, register the Attrset at the new one
+                // Skip own Modify!
+                if(GetpSwAttrSet()
+                        && pLegacyHint->m_pNew
+                        && static_cast<const SwFormatChg*>(pLegacyHint->m_pNew)->pChangedFormat == GetRegisteredIn())
                 {
-                    // Else register anyways when dying
-                    EndListeningAll();
-                    if ( GetpSwAttrSet() )
-                        AttrSetHandleHelper::SetParent( mpAttrSet, *this, nullptr, nullptr );
+                    pFormatColl = GetFormatColl();
+                    bSetParent = true;
                 }
-            }
-        }
-        break;
+                break;
 
-    case RES_FMT_CHG:
-        // If the Format parent was switched, register the Attrset at the new one
-        // Skip own Modify!
-        if( GetpSwAttrSet() && pNewValue &&
-            static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat == GetRegisteredIn() )
-        {
-            // Attach Set to the new parent
-            AttrSetHandleHelper::SetParent( mpAttrSet, *this, GetFormatColl(), GetFormatColl() );
-        }
-        break;
+            case RES_CONDCOLL_CONDCHG:
+                if(pLegacyHint->m_pNew
+                        && static_cast<const SwCondCollCondChg*>(pLegacyHint->m_pNew)->pChangedFormat == GetRegisteredIn()
+                        && &GetNodes() == &GetDoc()->GetNodes() )
+                    ChkCondColl();
+                return;    // Do not pass through to the base class/Frames
 
-//FEATURE::CONDCOLL
-    case RES_CONDCOLL_CONDCHG:
-        if( pNewValue && static_cast<const SwCondCollCondChg*>(pNewValue)->pChangedFormat == GetRegisteredIn() &&
-            &GetNodes() == &GetDoc()->GetNodes() )
-        {
-            ChkCondColl();
-        }
-        return ;    // Do not pass through to the base class/Frames
-//FEATURE::CONDCOLL
+            case RES_ATTRSET_CHG:
+                if (GetNodes().IsDocNodes()
+                        && IsTextNode()
+                        && pLegacyHint->m_pOld
+                        && SfxItemState::SET == static_cast<const SwAttrSetChg*>(pLegacyHint->m_pOld)->GetChgSet()->GetItemState(RES_CHRATR_HIDDEN, false))
+                    bCalcHidden = true;
+                break;
 
-    case RES_ATTRSET_CHG:
-        if (GetNodes().IsDocNodes() && IsTextNode() && pOldValue)
-        {
-            if( SfxItemState::SET == static_cast<const SwAttrSetChg*>(pOldValue)->GetChgSet()->GetItemState(
-                RES_CHRATR_HIDDEN, false ) )
-            {
-                static_cast<SwTextNode*>(this)->SetCalcHiddenCharFlags();
-            }
+            case RES_UPDATE_ATTR:
+                if (GetNodes().IsDocNodes()
+                        && IsTextNode()
+                        && pLegacyHint->m_pNew
+                        && RES_ATTRSET_CHG == static_cast<const SwUpdateAttr*>(pLegacyHint->m_pNew)->getWhichAttr())
+                    bCalcHidden = true;
+                break;
         }
-        break;
-
-    case RES_UPDATE_ATTR:
-        if (GetNodes().IsDocNodes() && IsTextNode() && pNewValue)
-        {
-            const sal_uInt16 nTmp = static_cast<const SwUpdateAttr*>(pNewValue)->getWhichAttr();
-            if ( RES_ATTRSET_CHG == nTmp )
-            {
-                // TODO: anybody wants to do some optimization here?
-                static_cast<SwTextNode*>(this)->SetCalcHiddenCharFlags();
-            }
-        }
-        break;
+        if(bSetParent && GetpSwAttrSet())
+            AttrSetHandleHelper::SetParent(mpAttrSet, *this, pFormatColl, pFormatColl);
+        if(bCalcHidden)
+            static_cast<SwTextNode*>(this)->SetCalcHiddenCharFlags();
+        NotifyClients(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
     }
-
-    NotifyClients( pOldValue, pNewValue );
+    else if (auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
+    {
+        m_pCondColl = const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(pModifyChangedHint->m_pNew));
+    }
 }
 
 bool SwContentNode::InvalidateNumRule()
@@ -1156,19 +1160,11 @@ SwFormatColl *SwContentNode::ChgFormatColl( SwFormatColl *pNewColl )
         if( GetpSwAttrSet() )
             AttrSetHandleHelper::SetParent( mpAttrSet, *this, pNewColl, pNewColl );
 
-//FEATURE::CONDCOLL
-        // TODO: HACK: We need to recheck this condition according to the new template!
-        if( true /*pNewColl */ )
-        {
-            SetCondFormatColl( nullptr );
-        }
-//FEATURE::CONDCOLL
+        SetCondFormatColl( nullptr );
 
         if( !IsModifyLocked() )
         {
-            SwFormatChg aTmp1( pOldColl );
-            SwFormatChg aTmp2( pNewColl );
-            SwContentNode::Modify( &aTmp1, &aTmp2 );
+            ChkCondColl();
         }
     }
     if ( IsInCache() )
@@ -1756,32 +1752,29 @@ bool SwContentNode::CanJoinPrev( SwNodeIndex* pIdx ) const
     return true;
 }
 
-//FEATURE::CONDCOLL
-void SwContentNode::SetCondFormatColl( SwFormatColl* pColl )
+void SwContentNode::SetCondFormatColl(SwFormatColl* pColl)
 {
     if( (!pColl && m_pCondColl) || ( pColl && !m_pCondColl ) ||
         ( pColl && pColl != m_pCondColl->GetRegisteredIn() ) )
     {
         SwFormatColl* pOldColl = GetCondFormatColl();
-        m_pCondColl.reset();
-        if( pColl )
-            m_pCondColl.reset(new SwDepend( this, pColl ));
+        m_aCondCollListener.EndListeningAll();
+        if(pColl)
+            m_aCondCollListener.StartListening(pColl);
+        m_pCondColl = pColl;
+        if(GetpSwAttrSet())
+            AttrSetHandleHelper::SetParent(mpAttrSet, *this, &GetAnyFormatColl(), GetFormatColl());
 
-        if( GetpSwAttrSet() )
+        if(!IsModifyLocked())
         {
-            AttrSetHandleHelper::SetParent( mpAttrSet, *this, &GetAnyFormatColl(), GetFormatColl() );
+            SwFormatChg aTmp1(pOldColl ? pOldColl : GetFormatColl());
+            SwFormatChg aTmp2(pColl ? pColl : GetFormatColl());
+            NotifyClients(&aTmp1, &aTmp2);
         }
-
-        if( !IsModifyLocked() )
+        if(IsInCache())
         {
-            SwFormatChg aTmp1( pOldColl ? pOldColl : GetFormatColl() );
-            SwFormatChg aTmp2( pColl ? pColl : GetFormatColl() );
-            NotifyClients( &aTmp1, &aTmp2 );
-        }
-        if( IsInCache() )
-        {
-            SwFrame::GetCache().Delete( this );
-            SetInCache( false );
+            SwFrame::GetCache().Delete(this);
+            SetInCache(false);
         }
     }
 }
