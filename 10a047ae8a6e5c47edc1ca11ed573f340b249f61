@@ -16,6 +16,24 @@
       "revId": "10a047ae8a6e5c47edc1ca11ed573f340b249f61",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_c785cc59",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 9677,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2018-05-04T10:22:51Z",
+      "side": 0,
+      "message": "\"of course\" not there but above, like\n\n    AC_MSG_RESULT([yes])\n    ENABLE_LIBNUMBERTEXT\u003dTRUE\n    AC_DEFINE(ENABLE_LIBNUMBERTEXT)\n    libo_CHECK_SYSTEM_MODULE([libnumbertext],[LIBNUMBERTEXT],[libnumbertext \u003e\u003d 1.0.0])",
+      "parentUuid": "9a30ddce_87b59432",
+      "revId": "10a047ae8a6e5c47edc1ca11ed573f340b249f61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
