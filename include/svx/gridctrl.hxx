@@ -98,8 +98,6 @@ typedef tools::SvRef<DbGridRow> DbGridRowRef;
 // DbGridControl
 
 class DbGridColumn;
-typedef ::std::vector< DbGridColumn* > DbGridColumns;
-
 
 class FmGridListener
 {
@@ -233,7 +231,7 @@ private:
     css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;
 
-    DbGridColumns   m_aColumns;         // Column description
+    std::vector< std::unique_ptr<DbGridColumn> > m_aColumns;         // Column description
     VclPtr<NavigationBar>   m_aBar;
     DbGridRowRef    m_xDataRow;         // Row which can be modified
                                         // comes from the data cursor
@@ -328,7 +326,7 @@ protected:
 
     virtual sal_uInt16 AppendColumn(const OUString& rName, sal_uInt16 nWidth, sal_uInt16 nPos = HEADERBAR_APPEND, sal_uInt16 nId = sal_uInt16(-1)) override;
     void RemoveColumn(sal_uInt16 nId);
-    DbGridColumn* CreateColumn(sal_uInt16 nId) const;
+    std::unique_ptr<DbGridColumn> CreateColumn(sal_uInt16 nId) const;
     virtual void ColumnMoved(sal_uInt16 nId) override;
     virtual bool SaveRow() override;
     virtual bool IsTabAllowed(bool bForward) const override;
@@ -403,7 +401,7 @@ public:
     virtual void Dispatch(sal_uInt16 nId) override;
 
     CursorWrapper* getDataSource() const {return m_pDataCursor.get();}
-    const DbGridColumns& GetColumns() const {return m_aColumns;}
+    const std::vector< std::unique_ptr<DbGridColumn> >& GetColumns() const {return m_aColumns;}
 
     void EnableHandle(bool bEnable);
     bool HasHandle() const {return m_bHandle;}
