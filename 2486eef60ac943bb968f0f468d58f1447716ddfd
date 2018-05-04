@@ -70,6 +70,24 @@
       "revId": "2486eef60ac943bb968f0f468d58f1447716ddfd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_27cb0855",
+        "filename": "sw/qa/unoapi/knownissues.xcl",
+        "patchSetId": 9
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-04T13:41:37Z",
+      "side": 1,
+      "message": "I see your point. Either I or Tomaz will check the other approach (where you don\u0027t blacklist the whole interface, just those specific properties), let\u0027s see if that works in practice.",
+      "parentUuid": "9a30ddce_4791dc51",
+      "revId": "2486eef60ac943bb968f0f468d58f1447716ddfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
