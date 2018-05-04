@@ -273,9 +273,7 @@ void Sane::ReloadOptions()
     mnOptions = pOptions[ 0 ];
     if( static_cast<size_t>(pZero->size) > sizeof( SANE_Word ) )
         fprintf( stderr, "driver returned numer of options with larger size tha SANE_Word !!!\n" );
-    if( mppOptions )
-        delete [] mppOptions;
-    mppOptions = new const SANE_Option_Descriptor*[ mnOptions ];
+    mppOptions.reset(new const SANE_Option_Descriptor*[ mnOptions ]);
     mppOptions[ 0 ] = pZero;
     for( int i = 1; i < mnOptions; i++ )
         mppOptions[ i ] = p_get_option_descriptor( maHandle, i );
@@ -323,8 +321,7 @@ void Sane::Close()
     if( maHandle )
     {
         p_close( maHandle );
-        delete [] mppOptions;
-        mppOptions = nullptr;
+        mppOptions.reset();
         maHandle = nullptr;
         mnDevice = -1;
     }
@@ -513,7 +510,7 @@ bool Sane::CheckConsistency( const char* pMes, bool bInit )
 
     if( bInit )
     {
-        pDescArray = mppOptions;
+        pDescArray = mppOptions.get();
         if( mppOptions )
             pZero = mppOptions[0];
         return true;
@@ -521,7 +518,7 @@ bool Sane::CheckConsistency( const char* pMes, bool bInit )
 
     bool bConsistent = true;
 
-    if( pDescArray != mppOptions )
+    if( pDescArray != mppOptions.get() )
         bConsistent = false;
     if( pZero != mppOptions[0] )
         bConsistent = false;

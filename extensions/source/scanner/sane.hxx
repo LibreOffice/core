@@ -80,7 +80,7 @@ private:
     static SANE_Device**        ppDevices;
     static int                  nDevices;
 
-    const SANE_Option_Descriptor**  mppOptions;
+    std::unique_ptr<const SANE_Option_Descriptor*[]> mppOptions;
     int                             mnOptions;
     int                             mnDevice;
     SANE_Handle                     maHandle;
