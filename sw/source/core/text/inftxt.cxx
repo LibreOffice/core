@@ -252,7 +252,7 @@ void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextF
     m_nKanaIdx = 0;
     m_pFrame = pFrame;
     CtorInitTextInfo( m_pFrame );
-    const SwTextNode *pNd = m_pFrame->GetTextNode();
+    SwDoc const& rDoc(m_pFrame->GetDoc());
     m_pVsh = m_pFrame->getRootFrame()->GetCurrShell();
 
     // Get the output and reference device
@@ -265,13 +265,13 @@ void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextF
     else
     {
         // Access via StarONE. We do not need a Shell or an active one.
-        if ( pNd->getIDocumentSettingAccess()->get(DocumentSettingId::HTML_MODE) )
+        if (rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE))
         {
             // We can only pick the AppWin here? (there's nothing better to pick?)
             m_pOut = Application::GetDefaultDevice();
         }
         else
-            m_pOut = pNd->getIDocumentDeviceAccess().getPrinter( false );
+            m_pOut = rDoc.getIDocumentDeviceAccess().getPrinter(false);
 
         m_pRef = m_pOut;
     }
@@ -298,18 +298,18 @@ void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextF
 
     m_pOpt = m_pVsh ?
            m_pVsh->GetViewOptions() :
-           SW_MOD()->GetViewOption( pNd->getIDocumentSettingAccess()->get(DocumentSettingId::HTML_MODE) ); // Options from Module, due to StarONE
+           SW_MOD()->GetViewOption(rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE)); // Options from Module, due to StarONE
 
     // bURLNotify is set if MakeGraphic prepares it
     // TODO: Unwind
     m_bURLNotify = pNoteURL && !m_bOnWin;
 
-    SetSnapToGrid( pNd->GetSwAttrSet().GetParaGrid().GetValue() &&
+    SetSnapToGrid( m_pFrame->GetTextNodeForParaProps()->GetSwAttrSet().GetParaGrid().GetValue() &&
                    m_pFrame->IsInDocBody() );
 
     m_pFnt = nullptr;
     m_pUnderFnt = nullptr;
-    m_pText = &pNd->GetText();
+    m_pText = &m_pFrame->GetText();
 
     m_nIdx = nNewIdx;
     m_nLen = COMPLETE_STRING;
@@ -476,7 +476,8 @@ TextFrameIndex SwTextSizeInfo::GetTextBreak( const long nLineWidth,
 
 bool SwTextSizeInfo::HasHint(TextFrameIndex const nPos) const
 {
-    return m_pFrame->GetTextNode()->GetTextAttrForCharAt(nPos);
+    std::pair<SwTextNode const*, sal_Int32> const pos(m_pFrame->MapViewToModel(nPos));
+    return pos.first->GetTextAttrForCharAt(pos.second);
 }
 
 void SwTextPaintInfo::CtorInitTextPaintInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame, const SwRect &rPaint )
