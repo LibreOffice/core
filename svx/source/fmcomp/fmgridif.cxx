@@ -2715,10 +2715,8 @@ void FmXGridPeer::UpdateDispatches()
 
     if (!nDispatchersGot)
     {
-        delete[] m_pStateCache;
-        delete[] m_pDispatchers;
-        m_pStateCache = nullptr;
-        m_pDispatchers = nullptr;
+        m_pStateCache.reset();
+        m_pDispatchers.reset();
     }
 }
 
@@ -2735,8 +2733,8 @@ void FmXGridPeer::ConnectToDispatcher()
     const Sequence< css::util::URL>& aSupportedURLs = getSupportedURLs();
 
     // _before_ adding the status listeners (as the add should result in a statusChanged-call) !
-    m_pStateCache = new bool[aSupportedURLs.getLength()];
-    m_pDispatchers = new Reference< css::frame::XDispatch > [aSupportedURLs.getLength()];
+    m_pStateCache.reset(new bool[aSupportedURLs.getLength()]);
+    m_pDispatchers.reset(new Reference< css::frame::XDispatch > [aSupportedURLs.getLength()]);
 
     sal_uInt16 nDispatchersGot = 0;
     const css::util::URL* pSupportedURLs = aSupportedURLs.getConstArray();
@@ -2753,10 +2751,8 @@ void FmXGridPeer::ConnectToDispatcher()
 
     if (!nDispatchersGot)
     {
-        delete[] m_pStateCache;
-        delete[] m_pDispatchers;
-        m_pStateCache = nullptr;
-        m_pDispatchers = nullptr;
+        m_pStateCache.reset();
+        m_pDispatchers.reset();
     }
 }
 
@@ -2775,10 +2771,8 @@ void FmXGridPeer::DisConnectFromDispatcher()
             m_pDispatchers[i]->removeStatusListener(static_cast<css::frame::XStatusListener*>(this), *pSupportedURLs);
     }
 
-    delete[] m_pStateCache;
-    delete[] m_pDispatchers;
-    m_pStateCache = nullptr;
-    m_pDispatchers = nullptr;
+    m_pStateCache.reset();
+    m_pDispatchers.reset();
 }
 
 
