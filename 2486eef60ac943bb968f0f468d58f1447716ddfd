@@ -16,6 +16,24 @@
       "revId": "2486eef60ac943bb968f0f468d58f1447716ddfd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_47cabc6f",
+        "filename": "sw/qa/unoapi/knownissues.xcl",
+        "patchSetId": 9
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-04T11:47:17Z",
+      "side": 1,
+      "message": "If testing of XMultiPropertyStates on SwXTextCursor is not excluded, then qadevOOo code will try to set and get all advertised properties on that UNO object. The problem is that these FooURL properties are write-only, since we agreed to not hand out pointer addresses as strings at API level.\n\nI think the possible are to either blacklist the interfaces in question in this config file or teach qadevOOo/ about these properties which are write-only and are restored only for compatibility reasons. From these two, adjusting the config file (and leaving the code generic) sounded like a better option.",
+      "parentUuid": "9a30ddce_47e39c05",
+      "revId": "2486eef60ac943bb968f0f468d58f1447716ddfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
