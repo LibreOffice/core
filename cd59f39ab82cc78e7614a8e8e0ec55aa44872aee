@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_e4abae87",
+        "filename": "sd/source/core/sdpage.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2978,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-04T01:13:38Z",
+      "side": 1,
+      "message": "SAL_FALLTHROUGH missing",
+      "revId": "cd59f39ab82cc78e7614a8e8e0ec55aa44872aee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_c4a4eaba",
+        "filename": "sd/source/core/sdpage.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2990,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-04T01:13:38Z",
+      "side": 1,
+      "message": "why not use a range-based for loop here? for(const tools::Rectangle\u0026 rRect: vSlideAreas...",
+      "revId": "cd59f39ab82cc78e7614a8e8e0ec55aa44872aee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
