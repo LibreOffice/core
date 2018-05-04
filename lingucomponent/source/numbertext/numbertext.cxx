@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_libnumbertext.h>
 #include <iostream>
 
 #include <osl/file.hxx>
@@ -37,7 +38,7 @@
 
 #include <sal/macros.h>
 
-#ifdef ENABLE_LIBNUMBERTEXT
+#if ENABLE_LIBNUMBERTEXT
 #include <Numbertext.hxx>
 #endif
 
@@ -67,7 +68,7 @@ static osl::Mutex& GetNumberTextMutex()
 
 class NumberText_Impl : public ::cppu::WeakImplHelper<XNumberText, XServiceInfo>
 {
-#if defined(ENABLE_LIBNUMBERTEXT) || defined(SYSTEM_LIBNUMBERTEXT)
+#if ENABLE_LIBNUMBERTEXT
     Numbertext m_aNumberText;
 #endif
     bool m_bInitialized;
@@ -114,7 +115,7 @@ void NumberText_Impl::EnsureInitialized()
 #else
         aPhysPath += "/";
 #endif
-#if defined(ENABLE_LIBNUMBERTEXT) || defined(SYSTEM_LIBNUMBERTEXT)
+#if ENABLE_LIBNUMBERTEXT
         OString path = OUStringToOString(aPhysPath, osl_getThreadTextEncoding());
         m_aNumberText.set_prefix(path.getStr());
 #endif
@@ -122,7 +123,7 @@ void NumberText_Impl::EnsureInitialized()
 }
 
 OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Locale&
-#if defined(ENABLE_LIBNUMBERTEXT) || defined(SYSTEM_LIBNUMBERTEXT)
+#if ENABLE_LIBNUMBERTEXT
                                                                             rLocale)
 #else
 )
@@ -130,7 +131,7 @@ OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Lo
 {
     osl::MutexGuard aGuard(GetNumberTextMutex());
     EnsureInitialized();
-#if defined(ENABLE_LIBNUMBERTEXT) || defined(SYSTEM_LIBNUMBERTEXT)
+#if ENABLE_LIBNUMBERTEXT
     // libnumbertext supports Language + Country tags (separated by "_" or "-")
     LanguageTag aLanguageTag(rLocale);
     OUString aCode(aLanguageTag.getLanguage());
