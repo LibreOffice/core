@@ -402,7 +402,7 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
             }
             case RndStdIds::FLY_AT_CHAR:
             {
-                OSL_ENSURE( pOld->IsContentFrame(), "Wrong anchor, page expected." );
+                OSL_ENSURE(pOld->IsTextFrame(), "Wrong anchor, text frame expected.");
                 if( SwMove::LEFT == nDir || SwMove::RIGHT == nDir )
                 {
                     SwPosition pos = *aAnch.GetContentAnchor();
@@ -437,7 +437,7 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
             }
             case RndStdIds::FLY_AT_PARA:
             {
-                OSL_ENSURE( pOld->IsContentFrame(), "Wrong anchor, page expected." );
+                OSL_ENSURE(pOld->IsTextFrame(), "Wrong anchor, text frame expected.");
                 if( SwMove::UP == nDir )
                     pNew = pOld->FindPrev();
                 else if( SwMove::DOWN == nDir )
