@@ -255,7 +255,7 @@ private:
     void*                                           m_pFieldListeners;
         // property listeners for field values
 
-    DisposeListenerGridBridge*                      m_pCursorDisposeListener;
+    std::unique_ptr<DisposeListenerGridBridge>      m_pCursorDisposeListener;
         // need to know about the diposing of the seek cursor
         // construct analogous to the data source proplistener/multiplexer above :
         // DisposeListenerGridBridge is a bridge from FmXDisposeListener which I don't want to be derived from
