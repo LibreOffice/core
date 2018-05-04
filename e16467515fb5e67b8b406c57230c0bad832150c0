@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_e7573000",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 9668,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2018-05-04T09:55:19Z",
+      "side": 1,
+      "message": "11:52 \u003c _rene_\u003e oh, and if we have config_libnumbertext.h.in now, we could \n                remove that explicit -D in configure.ac?\n11:53 \u003c noelgrandin\u003e _rene_, yup, correct. [...]",
+      "revId": "e16467515fb5e67b8b406c57230c0bad832150c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_c7506c0d",
+        "filename": "lingucomponent/source/numbertext/numbertext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2018-05-04T09:55:19Z",
+      "side": 1,
+      "message": "11:49 \u003c _rene_\u003e noelgrandin: why are you readding the if SYSTEM_LIBNUMBERTEXT?\n11:50 \u003c _rene_\u003e since \nhttps://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d672501c91feab21824e77f3087dc3e69a14f5f0b this shouldn\u0027t be needed anymore given now the correct \n                include is set\n11:50 \u003c IZBot\u003e core - set -DENABLE_LIBNJUMBERTEXT after pkg-config\n11:50 \u003c noelgrandin\u003e _rene_, just a bad merge, will fix\n11:50 \u003c _rene_\u003e export LIBNUMBERTEXT_CFLAGS\u003d$(gb_SPACE)-isystem \n                /usr/include/libnumbertext/ -DENABLE_LIBNUMBERTEXT",
+      "revId": "e16467515fb5e67b8b406c57230c0bad832150c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
