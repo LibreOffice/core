@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_e4b48ef3",
+        "filename": "sw/source/uibase/uno/unotxdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3061,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-04T01:02:17Z",
+      "side": 1,
+      "message": "That might break on Linux, when the pdf print queue is used (pdfExtOutDevData being set). Did you test that?",
+      "revId": "ab6834e0e19a8b77bf14de45a24fc6637b5f6655",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
