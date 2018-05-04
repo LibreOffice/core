@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_e4356e46",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-04T05:32:11Z",
+      "side": 1,
+      "message": "Personally I\u0027d like more if the #if...#else...#endif were inside else{...}",
+      "range": {
+        "startLine": 328,
+        "startChar": 0,
+        "endLine": 328,
+        "endChar": 42
+      },
+      "revId": "90204cbbb6e94566091dca0a065003d60452eb6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
