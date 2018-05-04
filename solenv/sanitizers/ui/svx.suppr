@@ -1,4 +1,9 @@
 svx/uiconfig/ui/addinstancedialog.ui://GtkEntry[@id='name'] duplicate-mnemonic
+svx/uiconfig/ui/chinesedictionary.ui://GtkLabel[@id='termft'] orphan-label
+svx/uiconfig/ui/chinesedictionary.ui://GtkEntry[@id='term'] no-labelled-by
+svx/uiconfig/ui/chinesedictionary.ui://GtkLabel[@id='mappingft'] orphan-label
+svx/uiconfig/ui/chinesedictionary.ui://GtkEntry[@id='mapping'] no-labelled-by
+svx/uiconfig/ui/chinesedictionary.ui://GtkLabel[@id='propertyft'] orphan-label
 svx/uiconfig/ui/colorwindow.ui://GtkButton[@id='auto_color_button'] button-no-label
 svx/uiconfig/ui/colorwindow.ui://GtkLabel[@id='label1'] orphan-label
 svx/uiconfig/ui/compressgraphicdialog.ui://GtkScale[@id='scale-quality'] no-labelled-by
@@ -9,6 +14,7 @@ svx/uiconfig/ui/mediaplayback.ui://GtkLabel[@id='label1'] orphan-label
 svx/uiconfig/ui/mediaplayback.ui://GtkLabel[@id='label2'] orphan-label
 svx/uiconfig/ui/mediaplayback.ui://GtkLabel[@id='label3'] orphan-label
 svx/uiconfig/ui/mediaplayback.ui://GtkScale[@id='timeslider'] no-labelled-by
+svx/uiconfig/ui/mediaplayback.ui://GtkEntry[@id='timeedit:border'] no-labelled-by
 svx/uiconfig/ui/mediaplayback.ui://GtkScale[@id='volumeslider'] no-labelled-by
 svx/uiconfig/ui/redlinefilterpage.ui://GtkCheckButton[@id='comment'] missing-labelled-by
 svx/uiconfig/ui/redlinefilterpage.ui://GtkComboBoxText[@id='actionlist'] missing-label-for

@@ -174,7 +174,7 @@ gb_UIConfig_gla11y_PARAMETERS += --enable-type duplicate-mnemonic --enable-type 
 gb_UIConfig_gla11y_PARAMETERS += --disable-type no-labelled-by
 # Clearly need labelling
 gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkScale
-#gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkEntry
+gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkEntry
 #gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkSpinButton
 #gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkSpinner
 #gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkProgressBar

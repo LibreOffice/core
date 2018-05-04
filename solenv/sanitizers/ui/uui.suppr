@@ -1,0 +1,7 @@
+uui/uiconfig/ui/authfallback.ui://GtkEntry[@id='url'] no-labelled-by
+uui/uiconfig/ui/authfallback.ui://GtkEntry[@id='code'] no-labelled-by
+uui/uiconfig/ui/authfallback.ui://GtkLabel[@id='label1'] orphan-label
+uui/uiconfig/ui/authfallback.ui://GtkLabel[@id='google_prefix_label'] orphan-label
+uui/uiconfig/ui/authfallback.ui://GtkEntry[@id='google_code'] no-labelled-by
+uui/uiconfig/ui/simplenameclash.ui://GtkLabel[@id='warning'] orphan-label
+uui/uiconfig/ui/simplenameclash.ui://GtkEntry[@id='newname'] no-labelled-by

@@ -1,0 +1,9 @@
+extensions/uiconfig/sabpilot/ui/datasourcepage.ui://GtkLabel[@id='label2'] orphan-label
+extensions/uiconfig/sabpilot/ui/datasourcepage.ui://svtlo-OFileURLControl[@id='location'] duplicate-mnemonic
+extensions/uiconfig/sabpilot/ui/datasourcepage.ui://GtkEntry[@id='name'] no-labelled-by
+extensions/uiconfig/sabpilot/ui/datasourcepage.ui://GtkLabel[@id='warning'] orphan-label
+extensions/uiconfig/sabpilot/ui/groupradioselectionpage.ui://GtkEntry[@id='radiolabels'] no-labelled-by
+extensions/uiconfig/sabpilot/ui/groupradioselectionpage.ui://GtkLabel[@id='label1'] orphan-label
+extensions/uiconfig/sabpilot/ui/optionvaluespage.ui://GtkLabel[@id='label1'] orphan-label
+extensions/uiconfig/sabpilot/ui/optionvaluespage.ui://GtkLabel[@id='label2'] orphan-label
+extensions/uiconfig/sabpilot/ui/optionvaluespage.ui://GtkEntry[@id='optionvalue'] no-labelled-by
