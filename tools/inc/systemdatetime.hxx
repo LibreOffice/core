@@ -17,7 +17,7 @@ constexpr sal_Int64 HOUR_MASK = SAL_CONST_INT64(10000000000000);
 
 /** Get current local timestamp.
     Both pDate and pTime can be null.
-    Returns true if succeeded, false otherwse.
+    Returns true if succeeded, false otherwise.
  */
 bool GetSystemDateTime(sal_Int32* pDate, sal_Int64* pTime);
 
