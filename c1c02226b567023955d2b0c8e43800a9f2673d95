@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_64309e02",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 9665,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2018-05-04T09:03:06Z",
+      "side": 1,
+      "message": "looks on on q quick look but\n- needs a rebase to 672501c91feab21824e77f3087dc3e69a14f5f0b\n- misses a AC_MSG_RESULT([yes])",
+      "revId": "c1c02226b567023955d2b0c8e43800a9f2673d95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
