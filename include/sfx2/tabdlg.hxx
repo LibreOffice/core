@@ -279,6 +279,8 @@ public:
     void                RemoveTabPage( const OString& rName ); // Name of the label for the page in the notebook .ui
 
     void                SetCurPageId(const OString& rName);
+    OString             GetCurPageId() const;
+    SfxTabPage*         GetCurTabPage() const { return GetTabPage(GetCurPageId()); }
 
     // may provide local slots converted by Map
     const sal_uInt16*   GetInputRanges( const SfxItemPool& );
@@ -287,6 +289,8 @@ public:
 
     const weld::Button& GetOKButton() const { return *m_xOKBtn; }
     weld::Button&       GetOKButton() { return *m_xOKBtn; }
+    const weld::Button& GetCancelButton() const { return *m_xCancelBtn; }
+    weld::Button&       GetCancelButton() { return *m_xCancelBtn; }
 
     const weld::Button* GetUserButton() const { return m_xUserBtn.get(); }
     weld::Button*       GetUserButton() { return m_xUserBtn.get(); }

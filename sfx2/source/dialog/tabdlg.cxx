@@ -2015,6 +2015,11 @@ void SfxTabDialogController::SetCurPageId(const OString& rIdent)
     m_xTabCtrl->set_current_page(rIdent);
 }
 
+OString SfxTabDialogController::GetCurPageId() const
+{
+    return m_xTabCtrl->get_current_page_ident();
+}
+
 short SfxTabDialogController::execute()
 {
     Start_Impl();

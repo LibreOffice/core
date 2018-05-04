@@ -725,7 +725,7 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
         if (nActiveCategory == 5)
             bScaleAllBrackets = m_xCheckBox1->get_active();
 
-        m_xMenuButton->set_active("menuitem" + OString::number(nActiveCategory + 1), false);
+        m_xMenuButton->set_item_active("menuitem" + OString::number(nActiveCategory + 1), false);
     }
 
     // activation/deactivation of the associated controls depending on the chosen category
@@ -784,7 +784,7 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
         m_xMetricField4->set_sensitive( bChecked );
     }
 
-    m_xMenuButton->set_active("menuitem" + OString::number(nCategory + 1), true);
+    m_xMenuButton->set_item_active("menuitem" + OString::number(nCategory + 1), true);
     m_xFrame->set_label(Categories[nCategory]->GetName());
 
     nActiveCategory = nCategory;

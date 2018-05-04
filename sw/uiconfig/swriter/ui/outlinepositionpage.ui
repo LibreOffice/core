@@ -18,6 +18,21 @@
     <property name="step_increment">0.050000000000000003</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment4">
+    <property name="upper">100</property>
+    <property name="step_increment">0.01</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment5">
+    <property name="upper">100</property>
+    <property name="step_increment">0.01</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment6">
+    <property name="upper">100</property>
+    <property name="step_increment">0.01</property>
+    <property name="page_increment">1</property>
+  </object>
   <object class="GtkListStore" id="liststore1">
     <columns>
       <!-- column-name text -->
@@ -49,8 +64,6 @@
               <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
                 <property name="shadow_type">in</property>
                 <child>
                   <object class="GtkTreeView" id="levellb">
@@ -275,6 +288,7 @@ numbering and text:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment6</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -325,6 +339,7 @@ numbering and text:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment4</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -351,6 +366,7 @@ numbering and text:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment5</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
