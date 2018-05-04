@@ -1,0 +1,4 @@
+sd/uiconfig/sdraw/ui/insertlayer.ui://GtkEntry[@id='name'] no-labelled-by
+sd/uiconfig/sdraw/ui/insertlayer.ui://GtkEntry[@id='title'] no-labelled-by
+sd/uiconfig/sdraw/ui/namedesign.ui://GtkEntry[@id='entry'] no-labelled-by
+sd/uiconfig/sdraw/ui/vectorize.ui://GtkSpinButton[@id='tiles:0px'] duplicate-mnemonic
