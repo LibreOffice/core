@@ -247,7 +247,7 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
     {
         pLeft->Height( 0 );
         pLeft->Width( 0 );
-        pLeft->SetLen( 0 );
+        pLeft->SetLen(TextFrameIndex(0));
         pLeft->SetAscent( 0 );
         pLeft->SetPortion( nullptr );
         pLeft->SetFixWidth(0);
@@ -285,12 +285,12 @@ void SwLineLayout::CreateSpaceAdd( const long nInit )
 }
 
 // Returns true if there are only blanks in [nStt, nEnd[
-static bool lcl_HasOnlyBlanks( const OUString& rText, sal_Int32 nStt, sal_Int32 nEnd )
+static bool lcl_HasOnlyBlanks(const OUString& rText, TextFrameIndex nStt, TextFrameIndex nEnd)
 {
     bool bBlankOnly = true;
     while ( nStt < nEnd )
     {
-        const sal_Unicode cChar = rText[ nStt++ ];
+        const sal_Unicode cChar = rText[ sal_Int32(nStt++) ];
         if ( ' ' != cChar && 0x3000 != cChar )
         {
             bBlankOnly = false;
@@ -369,7 +369,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                     continue;
                 }
 
-                const sal_Int32 nPorSttIdx = rInf.GetLineStart() + nLineLength;
+                TextFrameIndex const nPorSttIdx = rInf.GetLineStart() + nLineLength;
                 nLineLength += pPos->GetLen();
                 AddPrtWidth( pPos->Width() );
 
@@ -644,8 +644,9 @@ SwLinePortion *SwLineLayout::GetFirstPortion() const
 
 SwCharRange &SwCharRange::operator+=(const SwCharRange &rRange)
 {
-    if(0 != rRange.nLen ) {
-        if(0 == nLen) {
+    if (TextFrameIndex(0) != rRange.nLen)
+    {
+        if (TextFrameIndex(0) == nLen) {
             nStart = rRange.nStart;
             nLen = rRange.nLen ;
         }
@@ -2059,7 +2060,7 @@ void SwLineLayout::Init( SwLinePortion* pNextPortion )
 {
     Height( 0 );
     Width( 0 );
-    SetLen( 0 );
+    SetLen(TextFrameIndex(0));
     SetAscent( 0 );
     SetRealHeight( 0 );
     SetPortion( pNextPortion );
