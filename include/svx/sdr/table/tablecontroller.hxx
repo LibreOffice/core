@@ -28,6 +28,7 @@
 #include <svx/selectioncontroller.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdview.hxx>
+#include <memory>
 
 class SdrView;
 class SdrObject;
@@ -178,7 +179,7 @@ private:
     bool mbCellSelectionMode;
     CellPos maMouseDownPos;
     bool mbLeftButtonDown;
-    sdr::overlay::OverlayObjectList*  mpSelectionOverlay;
+    std::unique_ptr<sdr::overlay::OverlayObjectList>  mpSelectionOverlay;
     SdrView& mrView;
     tools::WeakReference<SdrTableObj> mxTableObj;
     css::uno::Reference< css::util::XModifyListener > mxModifyListener;
