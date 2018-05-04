@@ -36,18 +36,19 @@ SwGluePortion::SwGluePortion( const sal_uInt16 nInitFixWidth )
 
 TextFrameIndex SwGluePortion::GetCursorOfst(const sal_uInt16 nOfst) const
 {
-    if( !GetLen() || nOfst > GetLen() || !Width() )
+    // FIXME why nOfst > GetLen() ? is that supposed to be > Width() ?
+    if( !GetLen() || nOfst > sal_Int32(GetLen()) || !Width() )
         return SwLinePortion::GetCursorOfst( nOfst );
     else
-        return nOfst / (Width() / GetLen());
+        return TextFrameIndex(nOfst / (Width() / sal_Int32(GetLen())));
 }
 
 SwPosSize SwGluePortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 {
-    if( 1 >= GetLen() || rInf.GetLen() > GetLen() || !Width() || !GetLen() )
+    if (TextFrameIndex(1) >= GetLen() || rInf.GetLen() > GetLen() || !Width() || !GetLen())
         return SwPosSize(*this);
     else
-        return SwPosSize( (Width() / GetLen()) * rInf.GetLen(), Height() );
+        return SwPosSize((Width() / sal_Int32(GetLen())) * sal_Int32(rInf.GetLen()), Height());
 }
 
 bool SwGluePortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const
@@ -56,7 +57,7 @@ bool SwGluePortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) co
         rInf.GetOpt().IsBlank() && rInf.IsNoSymbol() )
     {
         OUStringBuffer aBuf;
-        comphelper::string::padToLength(aBuf, GetLen(), CH_BULLET);
+        comphelper::string::padToLength(aBuf, sal_Int32(GetLen()), CH_BULLET);
         rText = aBuf.makeStringAndClear();
         return true;
     }
@@ -71,10 +72,10 @@ void SwGluePortion::Paint( const SwTextPaintInfo &rInf ) const
     if( rInf.GetFont()->IsPaintBlank() )
     {
         OUStringBuffer aBuf;
-        comphelper::string::padToLength(aBuf, GetFixWidth() / GetLen(), ' ');
+        comphelper::string::padToLength(aBuf, GetFixWidth() / sal_Int32(GetLen()), ' ');
         OUString aText(aBuf.makeStringAndClear());
         SwTextPaintInfo aInf( rInf, &aText );
-        aInf.DrawText( *this, aText.getLength(), true );
+        aInf.DrawText(*this, TextFrameIndex(aText.getLength()), true);
     }
 
     if( rInf.OnWin() && rInf.GetOpt().IsBlank() && rInf.IsNoSymbol() )
@@ -84,7 +85,7 @@ void SwGluePortion::Paint( const SwTextPaintInfo &rInf ) const
         OSL_ENSURE( CH_BLANK  == cChar || CH_BULLET == cChar,
                 "SwGluePortion::Paint: blank expected" );
 #endif
-        if( 1 == GetLen() )
+        if (TextFrameIndex(1) == GetLen())
         {
             OUString aBullet( CH_BULLET );
             SwPosSize aBulletSize( rInf.GetTextSize( aBullet ) );
@@ -96,7 +97,7 @@ void SwGluePortion::Paint( const SwTextPaintInfo &rInf ) const
             aBulletPor.Width( aBulletSize.Width() );
             aBulletPor.Height( aBulletSize.Height() );
             aBulletPor.SetAscent( GetAscent() );
-            aInf.DrawText( aBulletPor, aBullet.getLength(), true );
+            aInf.DrawText(aBulletPor, TextFrameIndex(aBullet.getLength()), true);
         }
         else
         {
@@ -204,9 +205,9 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                     // Blank previously swallowed by the Fly.
                     nRightGlue = nRightGlue - pFly->GetBlankWidth();
                     pFly->SubPrtWidth( pFly->GetBlankWidth() );
-                    pFly->SetLen( 0 );
+                    pFly->SetLen(TextFrameIndex(0));
                     SwTextPortion *pNewPor = new SwTextPortion;
-                    pNewPor->SetLen( 1 );
+                    pNewPor->SetLen(TextFrameIndex(1));
                     pNewPor->Height( pFly->Height() );
                     pNewPor->Width( pFly->GetBlankWidth() );
                     pFly->Insert( pNewPor );
@@ -244,7 +245,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                              !pHolePor->GetPortion()->InFixMargGrp() )
                         {
                             pPrev->AddPrtWidth( pHolePor->GetBlankWidth() );
-                            pPrev->SetLen( pPrev->GetLen() + 1 );
+                            pPrev->SetLen(pPrev->GetLen() + TextFrameIndex(1));
                             pPrev->SetPortion( pHolePor->GetPortion() );
                             delete pHolePor;
                         }
