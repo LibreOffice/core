@@ -951,7 +951,8 @@ void SAL_CALL SwAccessibleContext::grabFocus()
         if( pCFrame && pCFrame->IsTextFrame() )
         {
             const SwTextFrame *pTextFrame = static_cast< const SwTextFrame * >( pCFrame );
-            const SwTextNode *pTextNd = pTextFrame->GetTextNode();
+            const SwTextNode *pTextNd = pTextFrame->GetTextNodeFirst();
+            assert(pTextNd); // can it actually be null? probably not=>simplify
             if( pTextNd )
             {
                 // create pam for selection
