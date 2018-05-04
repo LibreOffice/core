@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_4478fa2b",
+        "filename": "testtools/source/cliversioning/version_libs/version_3_1.dll",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-04T01:26:31Z",
+      "side": 1,
+      "message": "I\u0027d leave executable bit on those DLLs. Or is that inconsistent?",
+      "revId": "1bfecbccc542c56e88b6deb23e00007e2dd0460b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
