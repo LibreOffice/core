@@ -124,7 +124,6 @@ SwNumNamesDlg::SwNumNamesDlg(weld::Window *pParent)
     m_xFormBox->connect_changed(LINK(this, SwNumNamesDlg, SelectHdl));
     m_xFormBox->connect_row_activated(LINK(this, SwNumNamesDlg, DoubleClickHdl));
     m_xFormBox->set_size_request(-1, m_xFormBox->get_height_rows(9));
-    SelectHdl(*m_xFormBox);
 }
 
 static sal_uInt16 lcl_BitToLevel(sal_uInt16 nActLevel)
@@ -138,23 +137,22 @@ static sal_uInt16 lcl_BitToLevel(sal_uInt16 nActLevel)
 
 sal_uInt16 SwOutlineTabDialog::nNumLevel = 1;
 
-SwOutlineTabDialog::SwOutlineTabDialog(vcl::Window* pParent, const SfxItemSet* pSwItemSet,
+SwOutlineTabDialog::SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* pSwItemSet,
     SwWrtShell &rSh)
-    : SfxTabDialog(pParent, "OutlineNumberingDialog",
-        "modules/swriter/ui/outlinenumbering.ui", pSwItemSet)
+    : SfxTabDialogController(pParent, "modules/swriter/ui/outlinenumbering.ui", "OutlineNumberingDialog", pSwItemSet)
     , rWrtSh(rSh)
     , pChapterNumRules(SW_MOD()->GetChapterNumRules())
     , bModified(rWrtSh.IsModified())
+    , m_xMenuButton(m_xBuilder->weld_menu_button("format"))
 {
-    PushButton* pUserButton = GetUserButton();
-    pUserButton->SetClickHdl(LINK(this, SwOutlineTabDialog, FormHdl));
-    pUserButton->SetAccessibleRole( css::accessibility::AccessibleRole::BUTTON_MENU );
+    m_xMenuButton->connect_clicked(LINK(this, SwOutlineTabDialog, FormHdl));
+    m_xMenuButton->connect_selected(LINK(this, SwOutlineTabDialog, MenuSelectHdl));
 
     xNumRule.reset(new SwNumRule(*rSh.GetOutlineNumRule()));
-    GetCancelButton().SetClickHdl(LINK(this, SwOutlineTabDialog, CancelHdl));
+    GetCancelButton().connect_clicked(LINK(this, SwOutlineTabDialog, CancelHdl));
 
-    m_nNumPosId = AddTabPage("position", &SwNumPositionTabPage::Create, nullptr);
-    m_nOutlineId = AddTabPage("numbering", &SwOutlineSettingsTabPage::Create, nullptr);
+    AddTabPage("position", &SwNumPositionTabPage::Create, nullptr);
+    AddTabPage("numbering", &SwOutlineSettingsTabPage::Create, nullptr);
 
     OUString sHeadline;
     sal_uInt16 i;
@@ -186,82 +184,71 @@ SwOutlineTabDialog::SwOutlineTabDialog(vcl::Window* pParent, const SfxItemSet* p
 
 SwOutlineTabDialog::~SwOutlineTabDialog()
 {
-    disposeOnce();
 }
 
-void SwOutlineTabDialog::dispose()
+void SwOutlineTabDialog::PageCreated(const OString& rPageId, SfxTabPage& rPage)
 {
-    xNumRule.reset();
-    SfxTabDialog::dispose();
-}
-
-void SwOutlineTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
-{
-    if (nPageId == m_nNumPosId)
+    if (rPageId == "position")
     {
         static_cast<SwNumPositionTabPage&>(rPage).SetWrtShell(&rWrtSh);
         static_cast<SwNumPositionTabPage&>(rPage).SetOutlineTabDialog(this);
     }
-    else if (nPageId == m_nOutlineId)
+    else if (rPageId == "numbering")
     {
         static_cast<SwOutlineSettingsTabPage&>(rPage).SetWrtShell(&rWrtSh);
     }
 }
 
-IMPL_LINK_NOARG(SwOutlineTabDialog, CancelHdl, Button*, void)
+IMPL_LINK_NOARG(SwOutlineTabDialog, CancelHdl, weld::Button&, void)
 {
     if (!bModified)
         rWrtSh.ResetModified();
-    EndDialog();
+    m_xDialog->response(RET_CANCEL);
 }
 
-IMPL_LINK( SwOutlineTabDialog, FormHdl, Button *, pBtn, void )
+IMPL_LINK_NOARG(SwOutlineTabDialog, FormHdl, weld::Button&, void)
 {
-    PopupMenu *pFormMenu = get_menu("form");
     // fill PopupMenu
-    for( sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i )
+    for(sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i)
     {
         const SwNumRulesWithName *pRules = pChapterNumRules->GetRules(i);
-        if( pRules )
-            pFormMenu->SetItemText(pFormMenu->GetItemId(i), pRules->GetName());
+        if (!pRules)
+            continue;
+        m_xMenuButton->set_item_label("form" + OString::number(i + 1), pRules->GetName());
     }
 
-    OString sHelpId(pFormMenu->GetHelpId(pFormMenu->GetItemId("form1")));
+    OString sHelpId(m_xMenuButton->get_item_help_id("form1"));
     for (sal_Int32 i = 2; i <= 9; ++i)
     {
-        pFormMenu->SetHelpId(pFormMenu->GetItemId("form" + OString::number(i)), sHelpId);
+        m_xMenuButton->set_item_help_id("form" + OString::number(i), sHelpId);
     }
-
-    pFormMenu->SetSelectHdl(LINK(this, SwOutlineTabDialog, MenuSelectHdl));
-    pFormMenu->Execute(pBtn, tools::Rectangle(Point(0,0), pBtn->GetSizePixel()), PopupMenuFlags::ExecuteDown);
 }
 
-IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu, bool )
+IMPL_LINK(SwOutlineTabDialog, MenuSelectHdl, const OString&, rIdent, void)
 {
     sal_uInt8 nLevelNo = 0;
-    OString sIdent = pMenu->GetCurItemIdent();
 
-    if (sIdent == "form1")
+    if (rIdent == "form1")
         nLevelNo = 1;
-    else if (sIdent == "form2")
+    else if (rIdent == "form2")
         nLevelNo = 2;
-    else if (sIdent == "form3")
+    else if (rIdent == "form3")
         nLevelNo = 3;
-    else if (sIdent == "form4")
+    else if (rIdent == "form4")
         nLevelNo = 4;
-    else if (sIdent == "form5")
+    else if (rIdent == "form5")
         nLevelNo = 5;
-    else if (sIdent == "form6")
+    else if (rIdent == "form6")
         nLevelNo = 6;
-    else if (sIdent == "form7")
+    else if (rIdent == "form7")
         nLevelNo = 7;
-    else if (sIdent == "form8")
+    else if (rIdent == "form8")
         nLevelNo = 8;
-    else if (sIdent == "form9")
+    else if (rIdent == "form9")
         nLevelNo = 9;
-    else if (sIdent == "saveas")
+    else if (rIdent == "saveas")
     {
-        SwNumNamesDlg aDlg(GetFrameWeld());
+        SwNumNamesDlg aDlg(m_xDialog.get());
         const OUString *aStrArr[SwChapterNumRules::nMaxRules];
         for(sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i)
         {
@@ -277,9 +264,9 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu, bool )
             const OUString aName(aDlg.GetName());
             pChapterNumRules->ApplyNumRules( SwNumRulesWithName(
                     *xNumRule, aName ), aDlg.GetCurEntryPos() );
-            pMenu->SetItemText(pMenu->GetItemId(aDlg.GetCurEntryPos()), aName);
+            m_xMenuButton->set_item_label("form" + OString::number(aDlg.GetCurEntryPos() + 1), aName);
         }
-        return false;
+        return;
     }
 
     if( nLevelNo-- )
@@ -289,7 +276,7 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu, bool )
         {
             xNumRule.reset(pRules->MakeNumRule(rWrtSh));
             xNumRule->SetRuleType( OUTLINE_RULE );
-            SfxTabPage* pOutlinePage = GetTabPage(m_nOutlineId);
+            SfxTabPage* pOutlinePage = GetTabPage("numbering");
             assert(pOutlinePage);
             static_cast<SwOutlineSettingsTabPage*>(pOutlinePage)->SetNumRule(xNumRule.get());
         }
@@ -297,11 +284,8 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu, bool )
             *xNumRule = *rWrtSh.GetOutlineNumRule();
     }
 
-    sal_uInt16  nPageId = GetCurPageId();
-    SfxTabPage* pPage = GetTabPage( nPageId );
+    SfxTabPage* pPage = GetCurTabPage();
     pPage->Reset(GetOutputItemSet());
-
-    return false;
 }
 
 sal_uInt16  SwOutlineTabDialog::GetLevel(const OUString &rFormatName) const
@@ -316,7 +300,7 @@ sal_uInt16  SwOutlineTabDialog::GetLevel(const OUString &rFormatName) const
 
 short SwOutlineTabDialog::Ok()
 {
-    SfxTabDialog::Ok();
+    SfxTabDialogController::Ok();
     // set levels for all created templates; has to be done in order to
     // delete possibly cancelled assignments again.
 
@@ -736,8 +720,8 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
 {
     pSh = pShell;
     // query this document's NumRules
-    pNumRule = static_cast<SwOutlineTabDialog*>(GetTabDialog())->GetNumRule();
-    pCollNames = static_cast<SwOutlineTabDialog*>(GetTabDialog())->GetCollNames();
+    pNumRule = static_cast<SwOutlineTabDialog*>(GetDialogController())->GetNumRule();
+    pCollNames = static_cast<SwOutlineTabDialog*>(GetDialogController())->GetCollNames();
 
     m_xPreviewWIN->SetNumRule(pNumRule);
     m_xPreviewWIN->SetOutlineNames(pCollNames);

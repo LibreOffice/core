@@ -142,7 +142,7 @@ SwNumPositionTabPage::~SwNumPositionTabPage()
 void SwNumPositionTabPage::dispose()
 {
     delete pActNum;
-    pOutlineDlg.clear();
+    pOutlineDlg = nullptr;
     SfxTabPage::dispose();
 }
 
@@ -155,9 +155,9 @@ void SwNumPositionTabPage::InitControls()
                                   USHRT_MAX != nActNumLvl;
 
     m_xDistBorderMF->set_sensitive( !bLabelAlignmentPosAndSpaceModeActive &&
-                          ( bSingleSelection || bRelative || pOutlineDlg.get() != nullptr ) );
+                          ( bSingleSelection || bRelative || pOutlineDlg != nullptr ) );
     m_xDistBorderFT->set_sensitive( !bLabelAlignmentPosAndSpaceModeActive &&
-                          ( bSingleSelection || bRelative || pOutlineDlg.get() != nullptr ) );
+                          ( bSingleSelection || bRelative || pOutlineDlg != nullptr ) );
 
     bool bSetDistEmpty = false;
     bool bSameDistBorderNum = !bLabelAlignmentPosAndSpaceModeActive;
@@ -349,7 +349,7 @@ void SwNumPositionTabPage::ActivatePage(const SfxItemSet& )
     const SfxPoolItem* pItem;
     sal_uInt16 nTmpNumLvl =
         pOutlineDlg ? SwOutlineTabDialog::GetActNumLevel() : 0;
-    const SfxItemSet* pExampleSet = GetTabDialog()->GetExampleSet();
+    const SfxItemSet* pExampleSet = GetDialogController()->GetExampleSet();
     if(pExampleSet && pExampleSet->GetItemState(FN_PARAM_NUM_PRESET, false, &pItem) != SfxItemState::UNKNOWN)
     {
         bPreset = static_cast<const SfxBoolItem*>(pItem)->GetValue();

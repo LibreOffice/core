@@ -1449,6 +1449,75 @@ public:
     }
 };
 
+namespace
+{
+    OString MapToGtkAccelerator(const OUString &rStr)
+    {
+        return OUStringToOString(rStr.replaceFirst("~", "_"), RTL_TEXTENCODING_UTF8);
+    }
+
+    OUString get_label(GtkLabel* pLabel)
+    {
+        const gchar* pStr = gtk_label_get_label(pLabel);
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
+    void set_label(GtkLabel* pLabel, const OUString& rText)
+    {
+        gtk_label_set_label(pLabel, MapToGtkAccelerator(rText).getStr());
+    }
+
+    OUString get_label(GtkButton* pButton)
+    {
+        const gchar* pStr = gtk_button_get_label(pButton);
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
+    void set_label(GtkButton* pButton, const OUString& rText)
+    {
+        gtk_button_set_label(pButton, MapToGtkAccelerator(rText).getStr());
+    }
+
+    OUString get_title(GtkWindow* pWindow)
+    {
+        const gchar* pStr = gtk_window_get_title(pWindow);
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
+    void set_title(GtkWindow* pWindow, const OUString& rTitle)
+    {
+        gtk_window_set_title(pWindow, OUStringToOString(rTitle, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    OUString get_primary_text(GtkMessageDialog* pMessageDialog)
+    {
+        gchar* pText = nullptr;
+        g_object_get(G_OBJECT(pMessageDialog), "text", &pText, nullptr);
+        return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
+    void set_primary_text(GtkMessageDialog* pMessageDialog, const OUString& rText)
+    {
+        g_object_set(G_OBJECT(pMessageDialog), "text",
+            OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+            nullptr);
+    }
+
+    void set_secondary_text(GtkMessageDialog* pMessageDialog, const OUString& rText)
+    {
+        g_object_set(G_OBJECT(pMessageDialog), "secondary-text",
+                OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                nullptr);
+    }
+
+    OUString get_secondary_text(GtkMessageDialog* pMessageDialog)
+    {
+        gchar* pText = nullptr;
+        g_object_get(G_OBJECT(pMessageDialog), "secondary-text", &pText, nullptr);
+        return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
+    }
+}
+
 class MenuHelper
 {
 protected:
@@ -1517,6 +1586,21 @@ public:
         disable_item_notify_events();
         gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(m_aMap[rIdent]), bActive);
         enable_item_notify_events();
+    }
+
+    void set_item_label(const OString& rIdent, const OUString& rText)
+    {
+        gtk_menu_item_set_label(m_aMap[rIdent], MapToGtkAccelerator(rText).getStr());
+    }
+
+    void set_item_help_id(const OString& rIdent, const OString& rHelpId)
+    {
+        set_help_id(GTK_WIDGET(m_aMap[rIdent]), rHelpId);
+    }
+
+    OString get_item_help_id(const OString& rIdent) const
+    {
+        return get_help_id(GTK_WIDGET(m_aMap.find(rIdent)->second));
     }
 
     void show_item(const OString& rIdent, bool bShow)
@@ -1664,75 +1748,6 @@ weld::Container* GtkInstanceWidget::weld_parent() const
 {
     GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
     return pParent ? new GtkInstanceContainer(GTK_CONTAINER(pParent), false) : nullptr;
-}
-
-namespace
-{
-    OString MapToGtkAccelerator(const OUString &rStr)
-    {
-        return OUStringToOString(rStr.replaceFirst("~", "_"), RTL_TEXTENCODING_UTF8);
-    }
-
-    OUString get_label(GtkLabel* pLabel)
-    {
-        const gchar* pStr = gtk_label_get_label(pLabel);
-        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
-    }
-
-    void set_label(GtkLabel* pLabel, const OUString& rText)
-    {
-        gtk_label_set_label(pLabel, MapToGtkAccelerator(rText).getStr());
-    }
-
-    OUString get_label(GtkButton* pButton)
-    {
-        const gchar* pStr = gtk_button_get_label(pButton);
-        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
-    }
-
-    void set_label(GtkButton* pButton, const OUString& rText)
-    {
-        gtk_button_set_label(pButton, MapToGtkAccelerator(rText).getStr());
-    }
-
-    OUString get_title(GtkWindow* pWindow)
-    {
-        const gchar* pStr = gtk_window_get_title(pWindow);
-        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
-    }
-
-    void set_title(GtkWindow* pWindow, const OUString& rTitle)
-    {
-        gtk_window_set_title(pWindow, OUStringToOString(rTitle, RTL_TEXTENCODING_UTF8).getStr());
-    }
-
-    OUString get_primary_text(GtkMessageDialog* pMessageDialog)
-    {
-        gchar* pText = nullptr;
-        g_object_get(G_OBJECT(pMessageDialog), "text", &pText, nullptr);
-        return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
-    }
-
-    void set_primary_text(GtkMessageDialog* pMessageDialog, const OUString& rText)
-    {
-        g_object_set(G_OBJECT(pMessageDialog), "text",
-            OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
-            nullptr);
-    }
-
-    void set_secondary_text(GtkMessageDialog* pMessageDialog, const OUString& rText)
-    {
-        g_object_set(G_OBJECT(pMessageDialog), "secondary-text",
-                OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
-                nullptr);
-    }
-
-    OUString get_secondary_text(GtkMessageDialog* pMessageDialog)
-    {
-        gchar* pText = nullptr;
-        g_object_get(G_OBJECT(pMessageDialog), "secondary-text", &pText, nullptr);
-        return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
-    }
 }
 
 class GtkInstanceWindow : public GtkInstanceContainer, public virtual weld::Window
@@ -2578,9 +2593,24 @@ public:
     {
     }
 
-    virtual void set_active(const OString& rIdent, bool bActive) override
+    virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
-        set_item_active(rIdent, bActive);
+        MenuHelper::set_item_active(rIdent, bActive);
+    }
+
+    virtual void set_item_label(const OString& rIdent, const OUString& rLabel) override
+    {
+        MenuHelper::set_item_label(rIdent, rLabel);
+    }
+
+    virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) override
+    {
+        MenuHelper::set_item_help_id(rIdent, rHelpId);
+    }
+
+    virtual OString get_item_help_id(const OString& rIdent) const override
+    {
+        return MenuHelper::get_item_help_id(rIdent);
     }
 
     virtual void signal_activate(GtkMenuItem* pItem) override
@@ -3211,7 +3241,9 @@ public:
 
     virtual void set_selection_mode(bool bMultiple) override
     {
+        disable_notify_events();
         gtk_tree_selection_set_mode(gtk_tree_view_get_selection(m_pTreeView), bMultiple ? GTK_SELECTION_MULTIPLE : GTK_SELECTION_SINGLE);
+        enable_notify_events();
     }
 
     virtual int count_selected_rows() const override
