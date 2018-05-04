@@ -1032,10 +1032,8 @@ void DbGridControl::dispose()
     }
     m_xRowSetListener.clear();
 
-    delete m_pDataCursor;
-    m_pDataCursor = nullptr;
-    delete m_pSeekCursor;
-    m_pSeekCursor = nullptr;
+    m_pDataCursor.reset();
+    m_pSeekCursor.reset();
 
     m_aBar.disposeAndClear();
 
@@ -1153,7 +1151,7 @@ void DbGridControl::RemoveRows(bool bNewCursor)
     // Did the data cursor change?
     if (!bNewCursor)
     {
-        DELETEZ(m_pSeekCursor);
+        m_pSeekCursor.reset();
         m_xPaintRow = m_xDataRow = m_xEmptyRow  = m_xCurrentRow = m_xSeekRow = nullptr;
         m_nCurrentPos = m_nSeekPos = -1;
         m_nOptions  = DbGridControlOptions::Readonly;
@@ -1178,8 +1176,8 @@ void DbGridControl::RemoveRows()
     for (DbGridColumn* pColumn : m_aColumns)
         pColumn->Clear();
 
-    DELETEZ(m_pSeekCursor);
-    DELETEZ(m_pDataCursor);
+    m_pSeekCursor.reset();
+    m_pDataCursor.reset();
 
     m_xPaintRow = m_xDataRow = m_xEmptyRow  = m_xCurrentRow = m_xSeekRow = nullptr;
     m_nCurrentPos = m_nSeekPos = m_nTotalCount  = -1;
@@ -1473,7 +1471,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, DbGridCo
         }
     }
 
-    m_pDataCursor = new CursorWrapper(_xCursor);
+    m_pDataCursor.reset(new CursorWrapper(_xCursor));
 
     // now create a cursor for painting rows
     // we need that cursor only if we are not in insert only mode
@@ -1487,7 +1485,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, DbGridCo
     {
     }
     if (xClone.is())
-        m_pSeekCursor = new CursorWrapper(xClone);
+        m_pSeekCursor.reset(new CursorWrapper(xClone));
 
     // property listening on the data source
     // (Normally one class would be sufficient : the multiplexer which could forward the property change to us.
@@ -1588,8 +1586,8 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, DbGridCo
         }
         if (nRecordCount)
         {
-            m_xPaintRow = m_xSeekRow = new DbGridRow(m_pSeekCursor, true);
-            m_xDataRow  = new DbGridRow(m_pDataCursor, false);
+            m_xPaintRow = m_xSeekRow = new DbGridRow(m_pSeekCursor.get(), true);
+            m_xDataRow  = new DbGridRow(m_pDataCursor.get(), false);
             RowInserted(0, nRecordCount, false);
 
             if (m_xSeekRow->IsValid())
@@ -1606,7 +1604,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, DbGridCo
         else
         {
             // no rows so we don't need a seekcursor
-            DELETEZ(m_pSeekCursor);
+            m_pSeekCursor.reset();
         }
     }
 
@@ -1833,7 +1831,7 @@ bool DbGridControl::SeekRow(long nRow)
             m_xPaintRow = m_xEmptyRow;
         else
         {
-            m_xSeekRow->SetState( m_pSeekCursor, true );
+            m_xSeekRow->SetState( m_pSeekCursor.get(), true );
             m_xPaintRow = m_xSeekRow;
         }
     }
@@ -2117,7 +2115,7 @@ bool DbGridControl::SetCurrent(long nNewRow)
                         }
                     }
                 }
-                m_xDataRow->SetState(m_pDataCursor, false);
+                m_xDataRow->SetState(m_pDataCursor.get(), false);
                 m_xCurrentRow = m_xDataRow;
 
                 long nPaintPos = -1;
@@ -2954,7 +2952,7 @@ void DbGridControl::CellModified()
         }
         else if (m_xCurrentRow->GetStatus() != GridRowStatus::Modified)
         {
-            m_xCurrentRow->SetState(m_pDataCursor, false);
+            m_xCurrentRow->SetState(m_pDataCursor.get(), false);
             SAL_INFO("svx.fmcomp", "current row is not new, after SetState, new state: " << ROWSTATUS(m_xCurrentRow));
             m_xCurrentRow->SetStatus(GridRowStatus::Modified);
             SAL_INFO("svx.fmcomp", "current row is not new, new state: MODIFIED");
@@ -3021,7 +3019,7 @@ void DbGridControl::Undo()
 
     EndCursorAction();
 
-    m_xDataRow->SetState(m_pDataCursor, false);
+    m_xDataRow->SetState(m_pDataCursor.get(), false);
     if (m_xPaintRow == m_xCurrentRow)
         m_xPaintRow = m_xCurrentRow = m_xDataRow;
     else
@@ -3065,7 +3063,7 @@ void DbGridControl::resetCurrentRow()
         }
 
         // update the rows
-        m_xDataRow->SetState(m_pDataCursor, false);
+        m_xDataRow->SetState(m_pDataCursor.get(), false);
         if (m_xPaintRow == m_xCurrentRow)
             m_xPaintRow = m_xCurrentRow = m_xDataRow;
         else
@@ -3132,7 +3130,7 @@ bool DbGridControl::SaveModified()
 
         if ( IsValid(m_xCurrentRow) )
         {
-            m_xCurrentRow->SetState(m_pDataCursor, false);
+            m_xCurrentRow->SetState(m_pDataCursor.get(), false);
             SAL_INFO("svx.fmcomp", "explicit SetState, new state: " << ROWSTATUS(m_xCurrentRow));
             InvalidateStatusCell( m_nCurrentPos );
         }
@@ -3189,7 +3187,7 @@ bool DbGridControl::SaveRow()
         {
             // if we are appending we still sit on the insert row
             // we don't move just clear the flags not to move on the current row
-            m_xCurrentRow->SetState(m_pDataCursor, false);
+            m_xCurrentRow->SetState(m_pDataCursor.get(), false);
             SAL_INFO("svx.fmcomp", "explicit SetState after a successful update, new state: " << ROWSTATUS(m_xCurrentRow));
             m_xCurrentRow->SetNew(false);
 
@@ -3201,7 +3199,7 @@ bool DbGridControl::SaveRow()
                 Any aBookmark = bAppending ? m_pDataCursor->getBookmark() : m_pSeekCursor->getBookmark();
                 m_pSeekCursor->moveToBookmark(aBookmark);
                 // get the data
-                m_xSeekRow->SetState(m_pSeekCursor, true);
+                m_xSeekRow->SetState(m_pSeekCursor.get(), true);
                 m_nSeekPos = m_pSeekCursor->getRow() - 1;
             }
         }

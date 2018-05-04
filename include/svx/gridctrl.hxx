@@ -263,8 +263,8 @@ private:
     FmGridListener*                                 m_pGridListener;
 
 protected:
-    CursorWrapper*  m_pDataCursor;      // Cursor for Updates
-    CursorWrapper*  m_pSeekCursor;      // Cursor for Seeking
+    std::unique_ptr<CursorWrapper> m_pDataCursor;      // Cursor for Updates
+    std::unique_ptr<CursorWrapper> m_pSeekCursor;      // Cursor for Seeking
 
 private:
     // iteration variables
@@ -402,7 +402,7 @@ public:
         DbGridControlOptions nOpts = DbGridControlOptions::Insert | DbGridControlOptions::Update | DbGridControlOptions::Delete);
     virtual void Dispatch(sal_uInt16 nId) override;
 
-    CursorWrapper* getDataSource() const {return m_pDataCursor;}
+    CursorWrapper* getDataSource() const {return m_pDataCursor.get();}
     const DbGridColumns& GetColumns() const {return m_aColumns;}
 
     void EnableHandle(bool bEnable);
@@ -523,7 +523,7 @@ public:
     /// called when a controller needs to be re-initialized
     void refreshController(sal_uInt16 _nColId, GrantControlAccess _aAccess);
 
-    CursorWrapper* GetSeekCursor(GrantControlAccess /*_aAccess*/) const    { return m_pSeekCursor; }
+    CursorWrapper* GetSeekCursor(GrantControlAccess /*_aAccess*/) const    { return m_pSeekCursor.get(); }
     const DbGridRowRef& GetSeekRow(GrantControlAccess /*_aAccess*/) const  { return m_xSeekRow;    }
     void  SetSeekPos(sal_Int32 nPos,GrantControlAccess /*_aAccess*/) {m_nSeekPos = nPos;}
 

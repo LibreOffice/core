@@ -1232,7 +1232,7 @@ void FmGridControl::DeleteSelectedRows()
                 // there is a next row to position on
                 if (SeekCursor(nIdx))
                 {
-                    GetSeekRow()->SetState(m_pSeekCursor, true);
+                    GetSeekRow()->SetState(m_pSeekCursor.get(), true);
 
                     bNewPos = true;
                     // if it's not the row for inserting we keep the bookmark
@@ -1246,7 +1246,7 @@ void FmGridControl::DeleteSelectedRows()
                 nIdx = FirstSelectedRow() - 1;
                 if (nIdx >= 0 && SeekCursor(nIdx))
                 {
-                    GetSeekRow()->SetState(m_pSeekCursor, true);
+                    GetSeekRow()->SetState(m_pSeekCursor.get(), true);
 
                     bNewPos = true;
                     aBookmark = m_pSeekCursor->getBookmark();
@@ -1438,7 +1438,7 @@ void FmGridControl::inserted()
         return;
 
     // line has been inserted, then reset the status and mode
-    xRow->SetState(m_pDataCursor, false);
+    xRow->SetState(m_pDataCursor.get(), false);
     xRow->SetNew(false);
 
 }
@@ -1862,7 +1862,7 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
             // first, position the data cursor on the selected block
             if (SeekCursor(nIdx))
             {
-                GetSeekRow()->SetState(m_pSeekCursor, true);
+                GetSeekRow()->SetState(m_pSeekCursor.get(), true);
 
                 pBookmarks[i] = m_pSeekCursor->getBookmark();
             }
