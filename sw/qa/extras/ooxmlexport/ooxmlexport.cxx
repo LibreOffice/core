@@ -558,6 +558,20 @@ DECLARE_OOXMLEXPORT_TEST(testEffectExtent, "effect-extent.docx")
         assertXPath(pXmlDoc, "//wp:effectExtent", "l", "114300");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testEffectExtentInline, "effect-extent-inline.docx")
+{
+    // The problem was that in case there was inline rotated picture, we
+    // wrote a <wp:effectExtent> full or zeros.
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        // E.g. this was 0.
+        assertXPath(pXmlDoc, "//wp:effectExtent", "l", "609600");
+        assertXPath(pXmlDoc, "//wp:effectExtent", "r", "590550");
+        assertXPath(pXmlDoc, "//wp:effectExtent", "t", "590550");
+        assertXPath(pXmlDoc, "//wp:effectExtent", "b", "571500");
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testEm, "em.docx")
 {
     // Test all possible <w:em> arguments.

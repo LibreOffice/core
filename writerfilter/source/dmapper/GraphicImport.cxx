@@ -838,6 +838,13 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         aInteropGrabBag.update(m_pImpl->getInteropGrabBag());
                         xShapeProps->setPropertyValue("InteropGrabBag", uno::makeAny(aInteropGrabBag.getAsConstPropertyValueList()));
                     }
+                    else if (bUseShape && m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_INLINE)
+                    {
+                        uno::Reference< beans::XPropertySet > xShapeProps(m_xShape, uno::UNO_QUERY_THROW);
+                        comphelper::SequenceAsHashMap aInteropGrabBag(xShapeProps->getPropertyValue("InteropGrabBag"));
+                        aInteropGrabBag.update(m_pImpl->getInteropGrabBag());
+                        xShapeProps->setPropertyValue("InteropGrabBag", uno::makeAny(aInteropGrabBag.getAsConstPropertyValueList()));
+                    }
                 }
             }
         break;
