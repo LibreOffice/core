@@ -3102,6 +3102,23 @@ public:
         enable_notify_events();
     }
 
+    virtual void unselect(int pos) override
+    {
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
+        disable_notify_events();
+        if (pos != -1)
+        {
+            GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
+            gtk_tree_selection_unselect_path(gtk_tree_view_get_selection(m_pTreeView), path);
+            gtk_tree_path_free(path);
+        }
+        else
+        {
+            gtk_tree_selection_select_all(gtk_tree_view_get_selection(m_pTreeView));
+        }
+        enable_notify_events();
+    }
+
     virtual std::vector<int> get_selected_rows() const override
     {
         std::vector<int> aRows;
