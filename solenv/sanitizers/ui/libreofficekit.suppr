@@ -1,0 +1,6 @@
+libreofficekit/qa/gtktiledviewer/gtv.ui://GtkLabel[@id='zoomlabel'] orphan-label
+libreofficekit/qa/gtktiledviewer/gtv.ui://GtkLabel[@id='redlinelabel'] orphan-label
+libreofficekit/qa/gtktiledviewer/gtv.ui://GtkEntry[@id='findbar_entry'] no-labelled-by
+libreofficekit/qa/gtktiledviewer/gtv.ui://GtkLabel[@id='findbar_label'] orphan-label
+libreofficekit/qa/gtktiledviewer/gtv.ui://GtkEntry[@id='addressbar_entry'] no-labelled-by
+libreofficekit/qa/gtktiledviewer/gtv.ui://GtkEntry[@id='formulabar_entry'] no-labelled-by
