@@ -74,7 +74,7 @@ protected:
     }
 public:
     SwTextIter(SwTextFrame *pTextFrame, SwTextInfo *pTextInf)
-        : SwAttrIter(pTextFrame->GetTextNode())
+        : SwAttrIter(pTextFrame->GetTextNodeFirst())
         , m_bOneBlock(false)
         , m_bLastBlock(false)
         , m_bLastCenter(false)
@@ -173,7 +173,7 @@ protected:
     }
 public:
     SwTextMargin(SwTextFrame *pTextFrame, SwTextSizeInfo *pTextSizeInf)
-        : SwTextIter(pTextFrame->GetTextNode())
+        : SwTextIter(pTextFrame->GetTextNodeFirst())
     {
         CtorInitTextMargin( pTextFrame, pTextSizeInf );
     }
@@ -273,7 +273,7 @@ protected:
     explicit SwTextCursor(SwTextNode const * pTextNode) : SwTextAdjuster(pTextNode) { }
 public:
     SwTextCursor( SwTextFrame *pTextFrame, SwTextSizeInfo *pTextSizeInf )
-        : SwTextAdjuster(pTextFrame->GetTextNode())
+        : SwTextAdjuster(pTextFrame->GetTextNodeFirst())
     {
         CtorInitTextCursor(pTextFrame, pTextSizeInf);
     }
