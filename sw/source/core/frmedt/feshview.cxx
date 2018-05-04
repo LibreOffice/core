@@ -1349,7 +1349,7 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
                                     dynamic_cast<const SwTextFrame*>(pContentFrame);
                             if ( pTextFrame )
                             {
-                                SwPosition aPos( *(pTextFrame->GetTextNode()) );
+                                SwPosition aPos(GetDoc()->GetNodes());
                                 Point aTmpPt( rPt );
                                 if (pTextFrame->GetKeyCursorOfst(&aPos, aTmpPt))
                                 {
