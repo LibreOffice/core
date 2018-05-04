@@ -735,7 +735,7 @@ SwContentNotify::SwContentNotify( SwContentFrame *pContentFrame ) :
     if ( pContentFrame->IsTextFrame() )
     {
         SwTextFrame* pTextFrame = static_cast<SwTextFrame*>(pContentFrame);
-        if ( !pTextFrame->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::OLD_LINE_SPACING) )
+        if (!pTextFrame->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::OLD_LINE_SPACING))
         {
             const SwAttrSet* pSet = pTextFrame->GetAttrSet();
             const SvxLineSpacingItem &rSpace = pSet->GetLineSpacing();
@@ -1765,7 +1765,7 @@ SwBorderAttrs::SwBorderAttrs(const SwModify *pMod, const SwFrame *pConstructor)
     const SwTextFrame* pTextFrame = dynamic_cast<const SwTextFrame*>(pConstructor);
     if ( pTextFrame )
     {
-        pTextFrame->GetTextNode()->ClearLRSpaceItemDueToListLevelIndents( m_rLR );
+        pTextFrame->GetTextNodeForParaProps()->ClearLRSpaceItemDueToListLevelIndents( m_rLR );
     }
     else if ( pConstructor->IsNoTextFrame() )
     {
@@ -1813,7 +1813,7 @@ long SwBorderAttrs::CalcRight( const SwFrame* pCaller ) const
 {
     long nRight=0;
 
-    if (!pCaller->IsTextFrame() || !static_cast<const SwTextFrame*>(pCaller)->GetTextNode()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::INVERT_BORDER_SPACING)) {
+    if (!pCaller->IsTextFrame() || !static_cast<const SwTextFrame*>(pCaller)->GetDoc().GetDocumentSettingManager().get(DocumentSettingId::INVERT_BORDER_SPACING)) {
     // OD 23.01.2003 #106895# - for cell frame in R2L text direction the left
     // and right border are painted on the right respectively left.
     if ( pCaller->IsCellFrame() && pCaller->IsRightToLeft() )
@@ -1831,7 +1831,7 @@ long SwBorderAttrs::CalcRight( const SwFrame* pCaller ) const
     // correction: retrieve left margin for numbering in R2L-layout
     if ( pCaller->IsTextFrame() && pCaller->IsRightToLeft() )
     {
-        nRight += static_cast<const SwTextFrame*>(pCaller)->GetTextNode()->GetLeftMarginWithNum();
+        nRight += static_cast<const SwTextFrame*>(pCaller)->GetTextNodeForParaProps()->GetLeftMarginWithNum();
     }
 
     return nRight;
@@ -1861,7 +1861,8 @@ long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
 {
     long nLeft=0;
 
-    if (!pCaller->IsTextFrame() || !static_cast<const SwTextFrame*>(pCaller)->GetTextNode()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::INVERT_BORDER_SPACING)) {
+    if (!pCaller->IsTextFrame() || !static_cast<const SwTextFrame*>(pCaller)->GetDoc().GetDocumentSettingManager().get(DocumentSettingId::INVERT_BORDER_SPACING))
+    {
     // OD 23.01.2003 #106895# - for cell frame in R2L text direction the left
     // and right border are painted on the right respectively left.
     if ( pCaller->IsCellFrame() && pCaller->IsRightToLeft() )
@@ -1879,7 +1880,7 @@ long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
         if (pCaller->IsTextFrame())
         {
             const SwTextFrame* pTextFrame = static_cast<const SwTextFrame*>(pCaller);
-            if (pTextFrame->GetTextNode()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::FLOATTABLE_NOMARGINS))
+            if (pTextFrame->GetDoc().GetDocumentSettingManager().get(DocumentSettingId::FLOATTABLE_NOMARGINS))
             {
                 // If this is explicitly requested, ignore the margins next to the floating table.
                 if (lcl_hasTabFrame(pTextFrame))
@@ -1896,7 +1897,7 @@ long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
     // correction: do not retrieve left margin for numbering in R2L-layout
     if ( pCaller->IsTextFrame() && !pCaller->IsRightToLeft() )
     {
-        nLeft += static_cast<const SwTextFrame*>(pCaller)->GetTextNode()->GetLeftMarginWithNum();
+        nLeft += static_cast<const SwTextFrame*>(pCaller)->GetTextNodeForParaProps()->GetLeftMarginWithNum();
     }
 
     return nLeft;
