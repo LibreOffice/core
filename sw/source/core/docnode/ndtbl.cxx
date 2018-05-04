@@ -2555,7 +2555,7 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
     const SwContentFrame* pContent = ::GetCellContent( *pBoxFrame );
     if ( pContent && pContent->IsTextFrame() )
     {
-        const SwPosition aPos( *static_cast<const SwTextFrame*>(pContent)->GetTextNode() );
+        const SwPosition aPos(*static_cast<const SwTextFrame*>(pContent)->GetTextNodeFirst());
         const SwCursor aTmpCursor( aPos, nullptr );
         ::GetTableSel( aTmpCursor, aBoxes, SwTableSearchType::Col );
     }
@@ -2835,7 +2835,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
                                         if ( ATT_VAR_SIZE == aNew.GetHeightSizeType() )
                                             aNew.SetHeightSizeType( ATT_MIN_SIZE );
                                         // This position must not be in an overlapped box
-                                        const SwPosition aPos( *static_cast<const SwTextFrame*>(pContent)->GetTextNode() );
+                                        const SwPosition aPos(*static_cast<const SwTextFrame*>(pContent)->GetTextNodeFirst());
                                         const SwCursor aTmpCursor( aPos, nullptr );
                                         SetRowHeight( aTmpCursor, aNew );
                                         // For the new table model we're done, for the old one
