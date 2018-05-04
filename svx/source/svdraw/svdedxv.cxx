@@ -73,7 +73,7 @@
 void SdrObjEditView::ImpClearVars()
 {
     bQuickTextEditMode=true;
-    pTextEditOutliner=nullptr;
+    pTextEditOutliner.reset();
     pTextEditOutlinerView=nullptr;
     pTextEditPV=nullptr;
     pTextEditWin=nullptr;
@@ -103,7 +103,7 @@ SdrObjEditView::~SdrObjEditView()
     assert(!IsTextEdit());
     if (IsTextEdit())
         SdrEndTextEdit();
-    delete pTextEditOutliner;
+    pTextEditOutliner.reset();
     assert(nullptr == mpOldTextEditUndoManager); // should have been reset
 }
 
@@ -822,7 +822,7 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, OutlinerVie
 
     if (pOutlView == nullptr)
     {
-        pOutlView = new OutlinerView(pTextEditOutliner, pWin);
+        pOutlView = new OutlinerView(pTextEditOutliner.get(), pWin);
     }
     else
     {
@@ -1080,8 +1080,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
     if(pTextEditOutliner)
     {
         OSL_FAIL("SdrObjEditView::SdrBeginTextEdit(): Old Outliner still exists.");
-        delete pTextEditOutliner;
-        pTextEditOutliner = nullptr;
+        pTextEditOutliner.reset();
     }
 
     if(!bBrk)
@@ -1089,9 +1088,13 @@ bool SdrObjEditView::SdrBeginTextEdit(
         pTextEditWin=pWin;
         pTextEditPV=pPV;
         mxTextEditObj.reset( pObj );
-        pTextEditOutliner=pGivenOutliner;
-        if (pTextEditOutliner==nullptr)
-            pTextEditOutliner = SdrMakeOutliner( OutlinerMode::TextObject, mxTextEditObj->getSdrModelFromSdrObject() ).release();
+        if (pGivenOutliner)
+        {
+            pTextEditOutliner.reset(pGivenOutliner);
+            pGivenOutliner = nullptr; // so we don't delete it on the error path
+        }
+        else
+            pTextEditOutliner = SdrMakeOutliner( OutlinerMode::TextObject, mxTextEditObj->getSdrModelFromSdrObject() );
 
         {
             SvtAccessibilityOptions aOptions;
@@ -1326,20 +1329,15 @@ bool SdrObjEditView::SdrBeginTextEdit(
     // something went wrong...
     if(!bDontDeleteOutliner)
     {
-        if(pGivenOutliner!=nullptr)
-        {
-            delete pGivenOutliner;
-            pTextEditOutliner = nullptr;
-        }
+        delete pGivenOutliner;
         if(pGivenOutlinerView!=nullptr)
         {
             delete pGivenOutlinerView;
             pGivenOutlinerView = nullptr;
         }
     }
-    delete pTextEditOutliner;
+    pTextEditOutliner.reset();
 
-    pTextEditOutliner=nullptr;
     pTextEditOutlinerView=nullptr;
     mxTextEditObj.reset(nullptr);
     pTextEditPV=nullptr;
@@ -1354,16 +1352,15 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     SdrEndTextEditKind eRet=SdrEndTextEditKind::Unchanged;
     SdrTextObj* pTEObj = mxTextEditObj.get();
     vcl::Window*       pTEWin         =pTextEditWin;
-    SdrOutliner*  pTEOutliner    =pTextEditOutliner;
     OutlinerView* pTEOutlinerView=pTextEditOutlinerView;
     vcl::Cursor*  pTECursorMerker=pTextEditCursorMerker;
     SdrUndoManager* pUndoEditUndoManager = nullptr;
     bool bNeedToUndoSavedRedoTextEdit(false);
 
-    if (GetModel() && IsUndoEnabled() && pTEObj && pTEOutliner && !GetModel()->GetDisableTextEditUsesCommonUndoManager())
+    if (GetModel() && IsUndoEnabled() && pTEObj && pTextEditOutliner && !GetModel()->GetDisableTextEditUsesCommonUndoManager())
     {
         // change back the UndoManager to the remembered original one
-        ::svl::IUndoManager* pOriginal = pTEOutliner->SetUndoManager(mpOldTextEditUndoManager);
+        ::svl::IUndoManager* pOriginal = pTextEditOutliner->SetUndoManager(mpOldTextEditUndoManager);
         mpOldTextEditUndoManager = nullptr;
 
         if(pOriginal)
@@ -1424,7 +1421,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     mxTextEditObj.reset(nullptr);
     pTextEditPV=nullptr;
     pTextEditWin=nullptr;
-    pTextEditOutliner=nullptr;
+    SdrOutliner* pTEOutliner = pTextEditOutliner.release();
     pTextEditOutlinerView=nullptr;
     pTextEditCursorMerker=nullptr;
     aTextEditArea=tools::Rectangle();
@@ -1928,7 +1925,7 @@ bool SdrObjEditView::ImpIsTextEditAllSelected() const
     bool bRet=false;
     if (pTextEditOutliner!=nullptr && pTextEditOutlinerView!=nullptr)
     {
-        if(SdrTextObj::HasTextImpl( pTextEditOutliner ) )
+        if(SdrTextObj::HasTextImpl( pTextEditOutliner.get() ) )
         {
             const sal_Int32 nParaCnt=pTextEditOutliner->GetParagraphCount();
             Paragraph* pLastPara=pTextEditOutliner->GetParagraph( nParaCnt > 1 ? nParaCnt - 1 : 0 );
