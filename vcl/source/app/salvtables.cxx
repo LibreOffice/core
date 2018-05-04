@@ -1314,6 +1314,18 @@ public:
             m_xTreeView->SelectEntryPos(pos);
     }
 
+    virtual void unselect(int pos) override
+    {
+        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
+        if (pos == -1)
+        {
+            for (sal_Int32 i = 0; i < m_xTreeView->GetEntryCount(); ++i)
+                m_xTreeView->SelectEntryPos(i);
+        }
+        else
+            m_xTreeView->SelectEntryPos(pos, false);
+    }
+
     virtual std::vector<int> get_selected_rows() const override
     {
         std::vector<int> aRows;

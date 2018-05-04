@@ -309,6 +309,7 @@ public:
     //by index
     virtual int get_selected_index() const = 0;
     virtual void select(int pos) = 0;
+    virtual void unselect(int pos) = 0;
     virtual void remove(int pos) = 0;
     virtual void set_top_entry(int pos) = 0;
     virtual std::vector<int> get_selected_rows() const = 0;
@@ -334,6 +335,10 @@ public:
     virtual int find_id(const OUString& rId) const = 0;
     OUString get_selected_id() const { return get_id(get_selected_index()); }
     void select_id(const OUString& rId) { select(find_id(rId)); }
+
+    //all of them
+    void select_all() { unselect(-1); }
+    void unselect_all() { select(-1); }
 };
 
 class VCL_DLLPUBLIC Button : virtual public Container
