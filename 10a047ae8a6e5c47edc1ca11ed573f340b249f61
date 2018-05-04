@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_87b59432",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 9677,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2018-05-04T10:16:19Z",
+      "side": 0,
+      "message": "as discussed on IRC. We need a AC_DEFINE(ENABLE_LIBNUMBERTEXT) here too otherwise the header stays at 0 (\"disable\") even in my --with-system-libnumbertext build...",
+      "revId": "10a047ae8a6e5c47edc1ca11ed573f340b249f61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
