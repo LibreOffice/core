@@ -1329,7 +1329,7 @@
       </node>
       <node oor:name=".uno:FieldDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">F~ields...</value>
+          <value xml:lang="en-US">Edit F~ields...</value>
         </prop>
       </node>
       <node oor:name=".uno:LinkDialog" oor:op="replace">
