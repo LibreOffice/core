@@ -9653,8 +9653,8 @@ dnl ===================================================================
 dnl Checking for libnumbertext
 dnl ===================================================================
 ENABLE_LIBNUMBERTEXT=TRUE
-LIBNUMBERTEXT_CFLAGS="-DENABLE_LIBNUMBERTEXT"
 libo_CHECK_SYSTEM_MODULE([libnumbertext],[LIBNUMBERTEXT],[libnumbertext >= 1.0.0])
+LIBNUMBERTEXT_CFLAGS="$LIBNUMBERTEXT_CFLAGS -DENABLE_LIBNUMBERTEXT"
 if test "$with_system_libnumbertext" = "yes"; then
     SYSTEM_LIBNUMBERTEXT_DATA=file://`$PKG_CONFIG --variable=pkgdatadir libnumbertext`
     SYSTEM_LIBNUMBERTEXT=YES

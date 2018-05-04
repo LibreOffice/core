@@ -37,12 +37,8 @@
 
 #include <sal/macros.h>
 
-#ifdef SYSTEM_LIBNUMBERTEXT
-#include <libnumbertext/Numbertext.hxx>
-#else
 #ifdef ENABLE_LIBNUMBERTEXT
 #include <Numbertext.hxx>
-#endif
 #endif
 
 using namespace ::osl;
