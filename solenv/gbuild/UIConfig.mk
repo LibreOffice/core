@@ -248,6 +248,12 @@ $(call gb_UIConfig__package_file,$(1),$(2),ui,$(3),$(4))
 
 endef
 
+define gb_UIConfig_add_a11yerrors_uifile
+$(call gb_UIConfig_get_a11yerrors_target,$(1)) : UIFILES += $(SRCDIR)/$(2).ui
+$(call gb_UIConfig_get_a11yerrors_target,$(1)) : $(SRCDIR)/$(2).ui
+
+endef
+
 # gb_UIConfig__add_uifile target file
 define gb_UIConfig__add_uifile
 $(call gb_UIConfig__package_uifile,$(1),$(call gb_UIConfig_get_packagename,$(1)),$(notdir $(2)).ui,$(2).ui)
@@ -257,8 +263,7 @@ $(call gb_UIConfig_get_imagelist_target,$(1)) : UI_IMAGELISTS += $(call gb_UIIma
 $(call gb_UIConfig_get_imagelist_target,$(1)) : $(call gb_UIImageListTarget_get_target,$(2))
 $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_UIImageListTarget_get_clean_target,$(2))
 
-$(call gb_UIConfig_get_a11yerrors_target,$(1)) : UIFILES += $(SRCDIR)/$(2).ui
-$(call gb_UIConfig_get_a11yerrors_target,$(1)) : $(SRCDIR)/$(2).ui
+$(call gb_UIConfig_add_a11yerrors_uifile,$(1),$(2))
 
 endef
 
@@ -279,6 +284,12 @@ endef
 # gb_UIConfig_add_uifiles target uifile(s)
 define gb_UIConfig_add_uifiles
 $(foreach uifile,$(2),$(call gb_UIConfig_add_uifile,$(1),$(uifile)))
+
+endef
+
+# gb_UIConfig_add_uifiles target uifile(s) but only for running gla11y
+define gb_UIConfig_add_a11yerrors_uifiles
+$(foreach uifile,$(2),$(call gb_UIConfig_add_a11yerrors_uifile,$(1),$(uifile)))
 
 endef
 
