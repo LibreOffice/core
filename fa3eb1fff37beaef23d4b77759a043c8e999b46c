@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_67f3409f",
+        "filename": "dbaccess/source/core/dataaccess/datasource.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-04T14:00:52Z",
+      "side": 1,
+      "message": "This call hangs in PythonTest_dbaccess_python. I assume you want the default (yes) in case you run headless. I\u0027ll upload a new patchset that does that.",
+      "revId": "fa3eb1fff37beaef23d4b77759a043c8e999b46c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
