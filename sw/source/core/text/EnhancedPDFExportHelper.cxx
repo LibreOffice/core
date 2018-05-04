@@ -760,7 +760,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             if (pPor->GetWhichPor() == POR_SOFTHYPH || pPor->GetWhichPor() == POR_HYPH)
                 aActualText = OUString(u'\x00ad'); // soft hyphen
             else
-                aActualText = rInf.GetText().copy(rInf.GetIdx(), pPor->GetLen());
+                aActualText = rInf.GetText().copy(sal_Int32(rInf.GetIdx()), sal_Int32(pPor->GetLen()));
             mpPDFExtOutDevData->SetActualText( aActualText );
         }
 
@@ -1335,15 +1335,16 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         case POR_TXT :
         case POR_PARA :
             {
-                SwTextNode* pNd = const_cast<SwTextNode*>(pFrame->GetTextNode());
+                std::pair<SwTextNode const*, sal_Int32> const pos(
+                        pFrame->MapViewToModel(rInf.GetIdx()));
                 SwTextAttr const*const pInetFormatAttr =
-                    pNd->GetTextAttrAt(rInf.GetIdx(), RES_TXTATR_INETFMT);
+                    pos.first->GetTextAttrAt(pos.second, RES_TXTATR_INETFMT);
 
                 OUString sStyleName;
                 if ( !pInetFormatAttr )
                 {
                     std::vector<SwTextAttr *> const charAttrs(
-                        pNd->GetTextAttrsAt(rInf.GetIdx(), RES_TXTATR_CHARFMT));
+                        pos.first->GetTextAttrsAt(pos.second, RES_TXTATR_CHARFMT));
                     // TODO: handle more than 1 char style?
                     const SwCharFormat* pCharFormat = (charAttrs.size())
                         ? (*charAttrs.begin())->GetCharFormat().GetCharFormat() : nullptr;
@@ -1401,9 +1402,9 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         case POR_FLD :
             {
                 // check field type:
-                const sal_Int32 nIdx = static_cast<const SwFieldPortion*>(pPor)->IsFollow() ?
-                                        rInf.GetIdx() - 1 :
-                                        rInf.GetIdx();
+                TextFrameIndex const nIdx = static_cast<const SwFieldPortion*>(pPor)->IsFollow()
+                        ? rInf.GetIdx() - TextFrameIndex(1)
+                        : rInf.GetIdx();
                 const SwTextAttr* pHint = mpPorInfo->mrTextPainter.GetAttr( nIdx );
                 if ( pHint && RES_TXTATR_FIELD == pHint->Which() )
                 {
