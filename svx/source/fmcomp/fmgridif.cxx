@@ -1219,7 +1219,7 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
     VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
     sal_Int32 nColumns = pGrid->GetViewColCount();
 
-    DbGridColumns aColumns = pGrid->GetColumns();
+    std::vector< std::unique_ptr<DbGridColumn> > const & aColumns = pGrid->GetColumns();
 
     Sequence<sal_Bool> aReturnSequence(nColumns);
     sal_Bool* pReturnArray = aReturnSequence.getArray();
@@ -1242,7 +1242,7 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
         sal_uInt16 nModelPos = pGrid->GetModelColumnPos(pGrid->GetColumnIdFromViewPos(static_cast<sal_uInt16>(i)));
         DBG_ASSERT(nModelPos != sal_uInt16(-1), "FmXGridPeer::queryFieldDataType : no model pos !");
 
-        pCol = aColumns[ nModelPos ];
+        pCol = aColumns[ nModelPos ].get();
         const DbGridRowRef xRow = pGrid->GetSeekRow();
         xFieldContent = (xRow.is() && xRow->HasField(pCol->GetFieldPos())) ? xRow->GetField(pCol->GetFieldPos()).getColumn() : Reference< css::sdb::XColumn > ();
         if (!xFieldContent.is())
@@ -1287,7 +1287,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
     ENSURE_OR_THROW( xPaintRow.is(), "invalid paint row" );
 
     // I need the columns of the control for GetFieldText
-    DbGridColumns aColumns = pGrid->GetColumns();
+    std::vector< std::unique_ptr<DbGridColumn> > const & aColumns = pGrid->GetColumns();
 
     // and through all the columns
     sal_Int32 nColumnCount = pGrid->GetViewColCount();
@@ -1304,7 +1304,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
 
         // don't use GetCurrentFieldValue to determine the field content as this isn't affected by the above SeekRow
         // FS - 30.09.99 - 68644
-        DbGridColumn* pCol = aColumns[ nModelPos ];
+        DbGridColumn* pCol = aColumns[ nModelPos ].get();
         xFieldContent = xPaintRow->HasField( pCol->GetFieldPos() )
                     ?   xPaintRow->GetField( pCol->GetFieldPos() ).getColumn()
                     :   Reference< XColumn > ();
@@ -1436,7 +1436,7 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt)
             // in design mode it doesn't matter
             if (!isDesignMode())
             {
-                DbGridColumn* pCol = pGrid->GetColumns().at( i );
+                DbGridColumn* pCol = pGrid->GetColumns()[i].get();
 
                 pCol->SetAlignmentFromModel(-1);
                 bInvalidateColumn = true;
@@ -1727,7 +1727,7 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt)
     pGrid->AppendColumn(aName, static_cast<sal_uInt16>(nWidth), static_cast<sal_Int16>(::comphelper::getINT32(evt.Accessor)));
 
     // now set the column
-    DbGridColumn* pCol = pGrid->GetColumns().at( ::comphelper::getINT32(evt.Accessor) );
+    DbGridColumn* pCol = pGrid->GetColumns()[ ::comphelper::getINT32(evt.Accessor) ].get();
     pCol->setModel(xNewColumn);
 
     Any aHidden = xNewColumn->getPropertyValue(FM_PROP_HIDDEN);
@@ -1770,7 +1770,7 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt)
     sal_uInt16 nNewPos = pGrid->GetModelColumnPos(nNewId);
 
     // set the model of the new column
-    DbGridColumn* pCol = pGrid->GetColumns().at( nNewPos );
+    DbGridColumn* pCol = pGrid->GetColumns()[ nNewPos ].get();
 
     // for initializing this grid column, we need the fields of the grid's data source
     Reference< XColumnsSupplier > xSuppColumns;
@@ -1833,8 +1833,8 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value)
         }
 
         // need to forward this to the columns
-        DbGridColumns& rColumns = const_cast<DbGridColumns&>(pGrid->GetColumns());
-        for (DbGridColumn* pLoop : rColumns)
+        std::vector< std::unique_ptr<DbGridColumn> > const & rColumns = pGrid->GetColumns();
+        for (auto const & pLoop : rColumns)
         {
             FmXGridCell* pXCell = pLoop->GetCell();
             if (pXCell)
@@ -2334,7 +2334,7 @@ Any FmXGridPeer::getByIndex(sal_Int32 _nIndex)
     if ( nPos == GRID_COLUMN_NOT_FOUND )
         return aElement;
 
-    DbGridColumn* pCol = pGrid->GetColumns().at( nPos );
+    DbGridColumn* pCol = pGrid->GetColumns()[ nPos ].get();
     Reference< css::awt::XControl >  xControl(pCol->GetCell());
     aElement <<= xControl;
 
