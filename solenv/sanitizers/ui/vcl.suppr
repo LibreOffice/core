@@ -4,3 +4,7 @@ vcl/uiconfig/ui/printdialog.ui://GtkButton[@id='backward'] button-no-label
 vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='fromwhich'] orphan-label
 vcl/uiconfig/ui/printdialog.ui://GtkEntry[@id='pagerange'] no-labelled-by
 vcl/uiconfig/ui/printerdevicepage.ui://GtkEntry[@id='custom'] no-labelled-by
+vcl/qa/cppunit/builder/demo.ui://GtkLabel[@id='label6'] orphan-label
+vcl/qa/cppunit/builder/demo.ui://GtkLabel[@id='label7'] orphan-label
+vcl/qa/cppunit/builder/demo.ui://GtkLabel[@id='label8'] orphan-label
+vcl/qa/cppunit/builder/demo.ui://GtkEntry[@id='entry1'] no-labelled-by
