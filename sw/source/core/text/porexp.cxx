@@ -47,7 +47,7 @@ SwPosSize SwExpandPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 bool SwExpandPortion::Format( SwTextFormatInfo &rInf )
 {
     SwTextSlot aDiffText( &rInf, this, true, false );
-    const sal_Int32 nFullLen = rInf.GetLen();
+    TextFrameIndex const nFullLen = rInf.GetLen();
 
     // As odd as it may seem: the query for GetLen() must return
     // false due to the ExpandPortions _after_ the aDiffText (see SoftHyphs)
@@ -116,8 +116,12 @@ sal_uInt16 SwBlankPortion::MayUnderflow( const SwTextFormatInfo &rInf,
 
     // If a Blank is preceding us, we do not need to trigger underflow
     // If a Blank is succeeding us, we do not need to pass on the underflow
-    if (bUnderflow && nIdx + 1 < rInf.GetText().getLength() && CH_BLANK == rInf.GetText()[nIdx + 1])
+    if (bUnderflow
+        && nIdx + TextFrameIndex(1) < TextFrameIndex(rInf.GetText().getLength())
+        && CH_BLANK == rInf.GetText()[sal_Int32(nIdx) + 1])
+    {
         return 0;
+    }
     if( nIdx && !const_cast<SwTextFormatInfo&>(rInf).GetFly() )
     {
         while( pPos && !pPos->IsFlyPortion() )
@@ -127,7 +131,7 @@ sal_uInt16 SwBlankPortion::MayUnderflow( const SwTextFormatInfo &rInf,
         // We check to see if there are useful line breaks, blanks or fields etc. left
         // In case there still are some, no underflow
         // If there are Flys, we still allow the underflow
-            sal_Int32 nBlank = nIdx;
+            TextFrameIndex nBlank = nIdx;
             while( --nBlank > rInf.GetLineStart() )
             {
                 const sal_Unicode cCh = rInf.GetChar( nBlank );
@@ -140,8 +144,10 @@ sal_uInt16 SwBlankPortion::MayUnderflow( const SwTextFormatInfo &rInf,
                 return 0;
         }
     }
-    sal_Unicode cCh;
-    if( nIdx < 2 || CH_BLANK == (cCh = rInf.GetChar( nIdx - 1 )) )
+    if (nIdx < TextFrameIndex(2))
+        return 1;
+    sal_Unicode const cCh(rInf.GetChar(nIdx - TextFrameIndex(1)));
+    if (CH_BLANK == cCh)
         return 1;
     if( CH_BREAK == cCh )
         return 0;
@@ -207,7 +213,7 @@ void SwBlankPortion::HandlePortion( SwPortionHandler& rPH ) const
 SwPostItsPortion::SwPostItsPortion( bool bScrpt )
     : bScript( bScrpt )
 {
-    nLineLength = 1;
+    nLineLength = TextFrameIndex(1);
     SetWhichPor( POR_POSTITS );
 }
 
