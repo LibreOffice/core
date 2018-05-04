@@ -406,26 +406,25 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
                 if( SwMove::LEFT == nDir || SwMove::RIGHT == nDir )
                 {
                     SwPosition pos = *aAnch.GetContentAnchor();
-                    SwTextNode* pTextNd = static_cast<SwTextFrame*>(pOld)->GetTextNode();
-                    const sal_Int32 nAct = pos.nContent.GetIndex();
+                    SwTextFrame *const pOldFrame(static_cast<SwTextFrame*>(pOld));
+                    TextFrameIndex const nAct(pOldFrame->MapModelToViewPos(pos));
                     if( SwMove::LEFT == nDir )
                     {
                         bRet = true;
                         if( nAct )
                         {
-                            pos.nContent.Assign( pTextNd, nAct-1 );
+                            pos = pOldFrame->MapViewToModelPos(nAct - TextFrameIndex(1));
                         }
                         else
                             nDir = SwMove::UP;
                     }
                     else
                     {
-                        const sal_Int32 nMax =
-                            static_cast<SwTextFrame*>(pOld)->GetTextNode()->GetText().getLength();
+                        TextFrameIndex const nMax(pOldFrame->GetText().getLength());
                         if( nAct < nMax )
                         {
                             bRet = true;
-                            pos.nContent.Assign( pTextNd, nAct+1 );
+                            pos = pOldFrame->MapViewToModelPos(nAct + TextFrameIndex(1));
                         }
                         else
                             nDir = SwMove::DOWN;
@@ -444,17 +443,12 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
                     pNew = pOld->FindNext();
                 if( pNew && pNew != pOld && pNew->IsContentFrame() )
                 {
-                    SwPosition pos = *aAnch.GetContentAnchor();
-                    SwTextNode* pTextNd = static_cast<SwTextFrame*>(pNew)->GetTextNode();
-                    pos.nNode = *pTextNd;
-                    sal_Int32 nTmp = 0;
-                    if( bRet )
-                    {
-                        nTmp = static_cast<SwTextFrame*>(pNew)->GetTextNode()->GetText().getLength();
-                        if( nTmp )
-                            --nTmp;
-                    }
-                    pos.nContent.Assign( pTextNd, nTmp );
+                    SwTextFrame *const pNewFrame(static_cast<SwTextFrame*>(pNew));
+                    SwPosition const pos = pNewFrame->MapViewToModelPos(
+                        TextFrameIndex(
+                            (bRet && pNewFrame->GetText().getLength() != 0)
+                                ? pNewFrame->GetText().getLength() - 1
+                                : 0));
                     aAnch.SetAnchor( &pos );
                     bRet = true;
                 }
