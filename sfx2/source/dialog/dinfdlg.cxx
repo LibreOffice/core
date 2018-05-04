@@ -248,8 +248,8 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
                 }
 
                 uno::Any aValue = xSet->getPropertyValue(pProps[i].Name);
-                CustomProperty* pProp = new CustomProperty( pProps[i].Name, aValue );
-                m_aCustomProperties.push_back( pProp );
+                std::unique_ptr<CustomProperty> pProp(new CustomProperty( pProps[i].Name, aValue ));
+                m_aCustomProperties.push_back( std::move(pProp) );
             }
         }
 
@@ -284,11 +284,11 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const SfxDocumentInfoItem& rItem )
     , m_bUseUserData( rItem.m_bUseUserData )
     , m_bUseThumbnailSave( rItem.m_bUseThumbnailSave )
 {
-    for (const CustomProperty* pOtherProp : rItem.m_aCustomProperties)
+    for (auto const & pOtherProp : rItem.m_aCustomProperties)
     {
-        CustomProperty* pProp = new CustomProperty( pOtherProp->m_sName,
-                                                    pOtherProp->m_aValue );
-        m_aCustomProperties.push_back( pProp );
+        std::unique_ptr<CustomProperty> pProp(new CustomProperty( pOtherProp->m_sName,
+                                                    pOtherProp->m_aValue ));
+        m_aCustomProperties.push_back( std::move(pProp) );
     }
 
     m_aCmisProperties = rItem.m_aCmisProperties;
@@ -402,7 +402,7 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
             }
         }
 
-        for (const CustomProperty* pProp : m_aCustomProperties)
+        for (auto const & pProp : m_aCustomProperties)
         {
             try
             {
@@ -438,14 +438,14 @@ void SfxDocumentInfoItem::SetUseThumbnailSave( bool bSet )
     m_bUseThumbnailSave = bSet;
 }
 
-std::vector< CustomProperty* > SfxDocumentInfoItem::GetCustomProperties() const
+std::vector< std::unique_ptr<CustomProperty> > SfxDocumentInfoItem::GetCustomProperties() const
 {
-    std::vector< CustomProperty* > aRet;
-    for (CustomProperty* pOtherProp : m_aCustomProperties)
+    std::vector< std::unique_ptr<CustomProperty> > aRet;
+    for (auto const & pOtherProp : m_aCustomProperties)
     {
-        CustomProperty* pProp = new CustomProperty( pOtherProp->m_sName,
-                                                    pOtherProp->m_aValue );
-        aRet.push_back( pProp );
+        std::unique_ptr<CustomProperty> pProp(new CustomProperty( pOtherProp->m_sName,
+                                                    pOtherProp->m_aValue ));
+        aRet.push_back( std::move(pProp) );
     }
 
     return aRet;
@@ -453,15 +453,13 @@ std::vector< CustomProperty* > SfxDocumentInfoItem::GetCustomProperties() const
 
 void SfxDocumentInfoItem::ClearCustomProperties()
 {
-    for (CustomProperty* pProp : m_aCustomProperties)
-        delete pProp;
     m_aCustomProperties.clear();
 }
 
 void SfxDocumentInfoItem::AddCustomProperty( const OUString& sName, const Any& rValue )
 {
-    CustomProperty* pProp = new CustomProperty( sName, rValue );
-    m_aCustomProperties.push_back( pProp );
+    std::unique_ptr<CustomProperty> pProp(new CustomProperty( sName, rValue ));
+    m_aCustomProperties.push_back( std::move(pProp) );
 }
 
 
@@ -1702,7 +1700,7 @@ void CustomPropertiesWindow::SetVisibleLineCount(sal_uInt32 nCount)
 
 void CustomPropertiesWindow::AddLine(const OUString& sName, Any const & rAny)
 {
-    m_aCustomProperties.push_back(new CustomProperty(sName, rAny));
+    m_aCustomProperties.push_back(std::unique_ptr<CustomProperty>(new CustomProperty(sName, rAny)));
     ReloadLinesContent();
 }
 
@@ -1864,9 +1862,9 @@ void CustomPropertiesWindow::StoreCustomProperties()
     }
 }
 
-void CustomPropertiesWindow::SetCustomProperties(const std::vector<CustomProperty*>& rProperties)
+void CustomPropertiesWindow::SetCustomProperties(std::vector< std::unique_ptr<CustomProperty> >&& rProperties)
 {
-    m_aCustomProperties = rProperties;
+    m_aCustomProperties = std::move(rProperties);
     ReloadLinesContent();
 }
 
@@ -2107,9 +2105,9 @@ void CustomPropertiesControl::AddLine( Any const & rAny )
         m_pVertScroll->DoScroll(nLineCount + 1);
 }
 
-void CustomPropertiesControl::SetCustomProperties(const std::vector<CustomProperty*>& rProperties)
+void CustomPropertiesControl::SetCustomProperties(std::vector< std::unique_ptr<CustomProperty> >&& rProperties)
 {
-    m_pPropertiesWin->SetCustomProperties(rProperties);
+    m_pPropertiesWin->SetCustomProperties(std::move(rProperties));
     long nLineCount = m_pPropertiesWin->GetTotalLineCount();
     m_pVertScroll->SetRangeMax(nLineCount + 1);
 }
@@ -2209,8 +2207,8 @@ void SfxCustomPropertiesPage::Reset( const SfxItemSet* rItemSet )
 {
     m_pPropertiesCtrl->ClearAllLines();
     const SfxDocumentInfoItem& rInfoItem = rItemSet->Get(SID_DOCINFO);
-    std::vector< CustomProperty* > aCustomProps = rInfoItem.GetCustomProperties();
-    m_pPropertiesCtrl->SetCustomProperties(aCustomProps);
+    std::vector< std::unique_ptr<CustomProperty> > aCustomProps = rInfoItem.GetCustomProperties();
+    m_pPropertiesCtrl->SetCustomProperties(std::move(aCustomProps));
 }
 
 DeactivateRC SfxCustomPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
