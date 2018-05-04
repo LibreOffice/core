@@ -52,6 +52,24 @@
       "revId": "2486eef60ac943bb968f0f468d58f1447716ddfd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_4791dc51",
+        "filename": "sw/qa/unoapi/knownissues.xcl",
+        "patchSetId": 9
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-04T12:01:22Z",
+      "side": 1,
+      "message": "...at the expense on reducing overall test coverage",
+      "parentUuid": "9a30ddce_47cabc6f",
+      "revId": "2486eef60ac943bb968f0f468d58f1447716ddfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
