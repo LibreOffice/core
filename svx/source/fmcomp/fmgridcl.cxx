@@ -1508,7 +1508,7 @@ void FmGridControl::ColumnResized(sal_uInt16 nId)
     DbGridControl::ColumnResized(nId);
 
     // transfer value to the model
-    DbGridColumn* pCol = DbGridControl::GetColumns().at( GetModelColumnPos(nId) );
+    DbGridColumn* pCol = DbGridControl::GetColumns()[ GetModelColumnPos(nId) ].get();
     Reference< css::beans::XPropertySet >  xColModel(pCol->getModel());
     if (xColModel.is())
     {
@@ -1550,7 +1550,7 @@ void FmGridControl::ColumnMoved(sal_uInt16 nId)
     {
         // locate the column and move in the model;
         // get ColumnPos
-        DbGridColumn* pCol = DbGridControl::GetColumns().at( GetModelColumnPos(nId) );
+        DbGridColumn* pCol = DbGridControl::GetColumns()[ GetModelColumnPos(nId) ].get();
         Reference< css::beans::XPropertySet >  xCol;
 
         // inserting must be based on the column positions
@@ -1612,7 +1612,7 @@ void FmGridControl::InitColumnsByModels(const Reference< css::container::XIndexC
             nWidth = LogicToPixel(Point(nWidth, 0), MapMode(MapUnit::Map10thMM)).X();
 
         AppendColumn(aName, static_cast<sal_uInt16>(nWidth));
-        DbGridColumn* pCol = DbGridControl::GetColumns().at( i );
+        DbGridColumn* pCol = DbGridControl::GetColumns()[ i ].get();
         pCol->setModel(xCol);
     }
 
@@ -1716,7 +1716,7 @@ void FmGridControl::InitColumnsByFields(const Reference< css::container::XIndexA
     // inserting must be based on the column positions
     for (sal_Int32 i = 0; i < xColumns->getCount(); i++)
     {
-        DbGridColumn* pCol = GetColumns().at( i );
+        DbGridColumn* pCol = GetColumns()[ i ].get();
         OSL_ENSURE(pCol,"No grid column!");
         if ( pCol )
         {
@@ -1736,7 +1736,7 @@ void FmGridControl::HideColumn(sal_uInt16 nId)
     if (nPos == sal_uInt16(-1))
         return;
 
-    DbGridColumn* pColumn = GetColumns().at( nPos );
+    DbGridColumn* pColumn = GetColumns()[ nPos ].get();
     if (pColumn->IsHidden())
         GetPeer()->columnHidden(pColumn);
 
@@ -1767,7 +1767,7 @@ void FmGridControl::ShowColumn(sal_uInt16 nId)
     if (nPos == sal_uInt16(-1))
         return;
 
-    DbGridColumn* pColumn = GetColumns().at( nPos );
+    DbGridColumn* pColumn = GetColumns()[ nPos ].get();
     if (!pColumn->IsHidden())
         GetPeer()->columnVisible(pColumn);
 
