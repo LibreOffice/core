@@ -96,7 +96,7 @@ sal_Int32 lcl_getDataTypeFromHsql(const OUString& sTypeName)
 {
     if (sTypeName == "CHAR")
         return DataType::CHAR;
-    else if (sTypeName == "VARCHAR")
+    else if (sTypeName == "VARCHAR" || sTypeName == "VARCHAR_IGNORECASE")
         return DataType::VARCHAR;
     else if (sTypeName == "TINYINT")
         return DataType::TINYINT;
@@ -189,9 +189,10 @@ void CreateStmtParser::parseColumnPart(const OUString& sColumnPart)
             lcl_addDefaultParameters(aParams, lcl_getDataTypeFromHsql(sTypeName));
         }
 
+        bool bCaseInsensitive = sTypeName.indexOf("IGNORECASE") >= 0;
         ColumnDefinition aColDef(words[0], lcl_getDataTypeFromHsql(sTypeName), aParams,
                                  lcl_isPrimaryKey(sColumn), lcl_getAutoIncrementDefault(sColumn),
-                                 lcl_isNullable(sColumn));
+                                 lcl_isNullable(sColumn), bCaseInsensitive);
 
         m_aColumns.push_back(aColDef);
     }

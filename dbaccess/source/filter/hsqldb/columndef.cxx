@@ -27,13 +27,14 @@ using namespace css::sdbc;
 
 ColumnDefinition::ColumnDefinition(const OUString& sName, sal_Int32 eType,
                                    const std::vector<sal_Int32> aParams, bool bPrimary,
-                                   sal_Int32 nAutoIncr, bool bNullable)
+                                   sal_Int32 nAutoIncr, bool bNullable, bool bCaseInsensitive)
     : m_sName(sName)
     , m_eType(eType)
     , m_aParams(aParams)
     , m_bPrimaryKey(bPrimary)
     , m_nAutoIncrement(nAutoIncr)
     , m_bNullable(bNullable)
+    , m_bCaseInsensitive(bCaseInsensitive)
 {
 }
 }

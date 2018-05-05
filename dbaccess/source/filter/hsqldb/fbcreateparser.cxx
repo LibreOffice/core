@@ -159,6 +159,9 @@ OUString FbCreateStmtParser::compose() const
         if (columnIter->isPrimaryKey())
             lcl_appendWithSpace(sSql, "PRIMARY KEY");
 
+        if (columnIter->isCaseInsensitive())
+            lcl_appendWithSpace(sSql, "COLLATE UNICODE_CI");
+
         ++columnIter;
         if (columnIter != rColumns.end())
             sSql.append(",");
