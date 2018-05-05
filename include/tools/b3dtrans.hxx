@@ -86,7 +86,12 @@ public:
 
     void Reset();
 
-    // Orientation
+    /** Set the orientation
+
+        @param vVRP the View Reference Point (VRP)
+        @param vVPN the View Plane Normal (VPN)
+        @param vVUP the View Up Plane (VUP)
+    */
     void SetOrientation(
         const basegfx::B3DPoint& rVRP = basegfx::B3DPoint(0.0,0.0,1.0),
         const basegfx::B3DVector& rVPN = basegfx::B3DVector(0.0,0.0,1.0),
