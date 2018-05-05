@@ -23,7 +23,6 @@
 #include <unordered_map>
 #include <vector>
 #include "address.hxx"
-#include "global.hxx"
 
 typedef std::vector< ScAddress > ScAutoNameAddresses;
 typedef std::unordered_map< OUString, ScAutoNameAddresses > ScAutoNameHashMap;

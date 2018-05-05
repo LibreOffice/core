@@ -20,21 +20,15 @@
 #ifndef INCLUDED_SC_INC_AFMTUNO_HXX
 #define INCLUDED_SC_INC_AFMTUNO_HXX
 
-#include <svl/lstner.hxx>
 #include <svl/itemprop.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XSet.hpp>
-#include <com/sun/star/container/ContainerEvent.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/implbase.hxx>
 
 class ScAutoFormatFieldObj;
