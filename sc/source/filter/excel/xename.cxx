@@ -645,7 +645,7 @@ void XclExpNameManagerImpl::CreateUserNames()
         if (!FindNamedExpIndex(SCTAB_GLOBAL, itr->second->GetIndex()))
             CreateName(SCTAB_GLOBAL, *itr->second);
     }
-    //look at every sheet for local range names
+    //look at sheets containing local range names
     ScRangeName::TabNameCopyMap rLocalNames;
     GetDoc().GetAllTabRangeNames(rLocalNames);
     ScRangeName::TabNameCopyMap::iterator tabIt = rLocalNames.begin(), tabItEnd = rLocalNames.end();
