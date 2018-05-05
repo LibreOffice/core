@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:52:22 using:
+ Generated on 2018-05-06 03:52:18 using:
  ./bin/update_pch desktop deploymentgui --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -55,15 +55,16 @@
 #include <sal/typesizes.h>
 #include <salhelper/thread.hxx>
 #include <vcl/accel.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/button.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/edit.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/mnemonicengine.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/quickselectionengine.hxx>
@@ -71,10 +72,13 @@
 #include <vcl/seleng.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/deployment/DependencyException.hpp>
 #include <com/sun/star/deployment/DeploymentException.hpp>
+#include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -91,7 +95,6 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <comphelper/anytostring.hxx>
-#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
@@ -105,8 +108,6 @@
 #include <svtools/treelist.hxx>
 #include <svtools/treelistbox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/color.hxx>
-#include <tools/contnr.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>
