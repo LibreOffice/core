@@ -71,6 +71,8 @@ OUString lcl_DataTypetoFbTypeName(sal_Int32 eType)
         case DataType::DOUBLE:
         case DataType::REAL:
             return OUString("DOUBLE PRECISION");
+        case DataType::FLOAT:
+            return OUString("FLOAT");
         default:
             assert(false);
             return OUString();
