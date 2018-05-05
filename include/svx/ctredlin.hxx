@@ -29,7 +29,6 @@
 #include <svtools/treelistbox.hxx>
 #include <svtools/treelistentry.hxx>
 #include <tools/color.hxx>
-#include <tools/contnr.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/link.hxx>
@@ -166,14 +165,14 @@ public:
         The rStr contains the entire redline entry; the columns are delimited by '\t'.
     */
     SvTreeListEntry* InsertEntry(const OUString &rStr, RedlinData *pUserData,
-                                 SvTreeListEntry* pParent = nullptr, sal_uLong nPos = TREELIST_APPEND);
+                                 SvTreeListEntry* pParent = nullptr, sal_uLong nPos = (ULONG_MAX));
 
     /** Insert a redline entry.
 
         The rStr contains the entire redline entry; the columns are delimited by '\t'.
     */
     SvTreeListEntry* InsertEntry(const OUString &rStr, RedlinData *pUserData, const Color&,
-                                 SvTreeListEntry* pParent, sal_uLong nPos = TREELIST_APPEND);
+                                 SvTreeListEntry* pParent, sal_uLong nPos = (ULONG_MAX));
 
     /** Insert a redline entry.
 
@@ -181,7 +180,7 @@ public:
         rStr contains the rest of the redline entry; the columns are delimited by '\t'.
     */
     SvTreeListEntry* InsertEntry(const Image &rRedlineType, const OUString &rStr, RedlinData *pUserData,
-                                 SvTreeListEntry* pParent, sal_uLong nPos = TREELIST_APPEND);
+                                 SvTreeListEntry* pParent, sal_uLong nPos = (ULONG_MAX));
 
     virtual SvTreeListEntry* CreateEntry() const override;
 

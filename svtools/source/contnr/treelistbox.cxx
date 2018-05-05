@@ -510,7 +510,7 @@ TriState SvTreeListBox::NotifyMoving(
         if( IsExpanded(pTarget))
             rNewChildPos = 0;
         else
-            rNewChildPos = TREELIST_APPEND;
+            rNewChildPos = (ULONG_MAX);
     }
     return TRISTATE_TRUE;
 }
@@ -565,7 +565,7 @@ bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTar
     {
         pSourceEntry = elem;
         SvTreeListEntry* pNewParent = nullptr;
-        sal_uLong nInsertionPos = TREELIST_APPEND;
+        sal_uLong nInsertionPos = (ULONG_MAX);
         TriState nOk = NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         if ( nOk )
         {
@@ -615,12 +615,12 @@ bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, S
     {
         pSourceEntry = elem;
         SvTreeListEntry* pNewParent = nullptr;
-        sal_uLong nInsertionPos = TREELIST_APPEND;
+        sal_uLong nInsertionPos = (ULONG_MAX);
         TriState nOk = NotifyMoving(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         TriState nCopyOk = nOk;
         if ( !nOk && bAllowCopyFallback )
         {
-            nInsertionPos = TREELIST_APPEND;
+            nInsertionPos = (ULONG_MAX);
             nCopyOk = NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         }
 
@@ -3343,7 +3343,7 @@ void SvTreeListBox::RemoveParentKeepChildren( SvTreeListEntry* pParent )
         SvTreeListEntry* pChild = FirstChild( pParent );
         while( pChild )
         {
-            pModel->Move( pChild, pNewParent, TREELIST_APPEND );
+            pModel->Move( pChild, pNewParent, (ULONG_MAX) );
             pChild = FirstChild( pParent );
         }
     }

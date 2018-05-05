@@ -680,7 +680,7 @@ void UpdateDialog::CheckListBox::handlePopupMenu( const Point &rPos )
 
 sal_uInt16 UpdateDialog::insertItem( UpdateDialog::Index *pEntry, SvLBoxButtonKind kind )
 {
-    m_pUpdates->InsertEntry( pEntry->m_aName, TREELIST_APPEND, static_cast< void * >( pEntry ), kind );
+    m_pUpdates->InsertEntry( pEntry->m_aName, ULONG_MAX, static_cast< void * >( pEntry ), kind );
 
     for ( sal_uInt16 i = m_pUpdates->getItemCount(); i != 0 ; )
     {

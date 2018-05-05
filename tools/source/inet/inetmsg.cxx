@@ -20,7 +20,6 @@
 #include <sal/types.h>
 #include <tools/datetime.hxx>
 #include <tools/inetmsg.hxx>
-#include <tools/contnr.hxx>
 #include <rtl/instance.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/character.hxx>

@@ -700,7 +700,7 @@ SvTreeListEntry* TreeListBox::AddEntry(
 )
 {
     SvTreeListEntry* p = InsertEntry(
-        rText, rImage, rImage, pParent, bChildrenOnDemand, TREELIST_APPEND,
+        rText, rImage, rImage, pParent, bChildrenOnDemand, (ULONG_MAX),
         aUserData.get()
     );
     aUserData.release();

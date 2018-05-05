@@ -475,12 +475,12 @@ SvTreeListEntry* ScAcceptChgDlg::AppendChangeAction(
     if(!bFlag&& bUseColor&& pParent==nullptr)
     {
         pEntry = pTheView->InsertEntry(
-            aBuf.makeStringAndClear() ,pNewData, COL_LIGHTBLUE, pParent, TREELIST_APPEND);
+            aBuf.makeStringAndClear() ,pNewData, COL_LIGHTBLUE, pParent, ULONG_MAX);
     }
     else if(bFlag&& bUseColor&& pParent!=nullptr)
     {
         pEntry = pTheView->InsertEntry(
-            aBuf.makeStringAndClear(), pNewData, COL_GREEN, pParent, TREELIST_APPEND);
+            aBuf.makeStringAndClear(), pNewData, COL_GREEN, pParent, ULONG_MAX);
         SvTreeListEntry* pExpEntry=pParent;
 
         while(pExpEntry!=nullptr && !pTheView->IsExpanded(pExpEntry))
@@ -495,7 +495,7 @@ SvTreeListEntry* ScAcceptChgDlg::AppendChangeAction(
     else
     {
         pEntry = pTheView->InsertEntry(
-            aBuf.makeStringAndClear(), pNewData, pParent, TREELIST_APPEND);
+            aBuf.makeStringAndClear(), pNewData, pParent, ULONG_MAX);
     }
     return pEntry;
 }
@@ -615,7 +615,7 @@ SvTreeListEntry* ScAcceptChgDlg::AppendFilteredAction(
         if (pTheView->IsValidComment(aComment))
         {
             aString+=aComment;
-            pEntry=pTheView->InsertEntry(aString,pNewData,pParent,TREELIST_APPEND);
+            pEntry=pTheView->InsertEntry(aString,pNewData,pParent,ULONG_MAX);
         }
         else
             delete pNewData;

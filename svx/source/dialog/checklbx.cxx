@@ -83,7 +83,7 @@ sal_uLong SvxCheckListBox::GetSelectedEntryPos() const
 
     if ( pEntry )
         return GetModel()->GetAbsPos( pEntry );
-    return TREELIST_ENTRY_NOTFOUND;
+    return (ULONG_MAX);
 }
 
 
