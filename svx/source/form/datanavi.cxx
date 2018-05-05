@@ -444,7 +444,7 @@ namespace svxform
                     {
                         ItemNode* pNode = new ItemNode( xChild );
                         SvTreeListEntry* pEntry = m_pItemList->InsertEntry(
-                            sName, aExpImg, aCollImg, _pParent, false, TREELIST_APPEND, pNode );
+                            sName, aExpImg, aCollImg, _pParent, false, (ULONG_MAX), pNode );
                         if ( xChild->hasAttributes() )
                         {
                             Reference< css::xml::dom::XNamedNodeMap > xMap = xChild->getAttributes();
@@ -460,7 +460,7 @@ namespace svxform
                                         m_xUIHelper->getNodeDisplayName( xAttr, bShowDetails );
                                     m_pItemList->InsertEntry(
                                         sAttrName, aExpImg, aCollImg,
-                                        pEntry, false, TREELIST_APPEND, pNode );
+                                        pEntry, false, (ULONG_MAX), pNode );
                                 }
                             }
                         }
@@ -802,7 +802,7 @@ namespace svxform
             DBG_UNHANDLED_EXCEPTION("svx");
         }
         return m_pItemList->InsertEntry(
-            sName, aImage, aImage, pParent, false, TREELIST_APPEND, _pNewNode );
+            sName, aImage, aImage, pParent, false, (ULONG_MAX), _pNewNode );
     }
 
     SvTreeListEntry* XFormsPage::AddEntry( const Reference< XPropertySet >& _rEntry )
@@ -819,7 +819,7 @@ namespace svxform
             {
                 // ID
                 _rEntry->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
-                pEntry = m_pItemList->InsertEntry( sTemp, aImage, aImage, nullptr, false, TREELIST_APPEND, pNode );
+                pEntry = m_pItemList->InsertEntry( sTemp, aImage, aImage, nullptr, false, (ULONG_MAX), pNode );
                 // Action
                 _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
                 OUString sEntry = SvxResId( RID_STR_DATANAV_SUBM_ACTION );
@@ -862,7 +862,7 @@ namespace svxform
                 _rEntry->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                 sName += sTemp;
                 pEntry = m_pItemList->InsertEntry(
-                    sName, aImage, aImage, nullptr, false, TREELIST_APPEND, pNode );
+                    sName, aImage, aImage, nullptr, false, (ULONG_MAX), pNode );
             }
             catch ( Exception& )
             {
@@ -1176,7 +1176,7 @@ namespace svxform
 
                                     ItemNode* pNode = new ItemNode( xPropSet );
                                     m_pItemList->InsertEntry(
-                                        sEntry, aImage, aImage, nullptr, false, TREELIST_APPEND, pNode );
+                                        sEntry, aImage, aImage, nullptr, false, (ULONG_MAX), pNode );
                                 }
                             }
                         }

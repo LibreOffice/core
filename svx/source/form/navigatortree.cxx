@@ -629,7 +629,7 @@ namespace svxform
         for( size_t i = 0; i < nChildCount; i++ )
         {
             FmEntryData* pChildData = pChildList->at( i );
-            Insert( pChildData, TREELIST_APPEND );
+            Insert( pChildData, (ULONG_MAX) );
         }
 
         return pNewEntry;
