@@ -41,6 +41,6 @@ Module gid_Module_Optional_Xsltfiltersamples
     gid_File_Xsl_Export_Xhtml_Table,
     gid_File_Share_Registry_Xsltfilter_Xcd );
     Minimal = NO;
-    Default = NO;
+    Default = YES;
     Styles = ( );
 End
