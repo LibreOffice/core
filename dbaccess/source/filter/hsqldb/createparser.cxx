@@ -134,6 +134,8 @@ sal_Int32 lcl_getDataTypeFromHsql(const OUString& sTypeName)
         return DataType::DOUBLE;
     else if (sTypeName == "REAL")
         return DataType::REAL;
+    else if (sTypeName == "FLOAT")
+        return DataType::FLOAT;
 
     assert(false);
     return -1;
