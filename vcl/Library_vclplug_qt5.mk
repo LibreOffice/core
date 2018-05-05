@@ -33,7 +33,7 @@ $(eval $(call gb_Library_add_defs,vclplug_qt5,\
 $(eval $(call gb_Library_use_sdk_api,vclplug_qt5))
 
 $(eval $(call gb_Library_use_libraries,vclplug_qt5,\
-    vclplug_gen \
+    $(if $(USING_X11),vclplug_gen) \
     vcl \
     tl \
     utl \

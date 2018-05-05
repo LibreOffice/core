@@ -311,6 +311,12 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,kde, \
 ))
 endif
 
+ifeq ($(OS),HAIKU)
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,haiku, \
+    $(if $(ENABLE_QT5),vclplug_qt5) \
+))
+endif
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,math, \
 	sm \
 	smd \
