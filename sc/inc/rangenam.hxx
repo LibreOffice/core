@@ -117,6 +117,7 @@ public:
     const OUString&   GetName() const           { return maNewName.isEmpty() ? aName : maNewName; }
     const OUString&   GetUpperName() const      { return aUpperName; }
     const ScAddress&  GetPos() const                  { return aPos; }
+    ScDocument* GetDoc() const                  { return pDoc; }
     // The index has to be unique. If index=0 a new index value is assigned.
     void            SetIndex( sal_uInt16 nInd )         { nIndex = nInd; }
     sal_uInt16      GetIndex() const                { return nIndex; }
