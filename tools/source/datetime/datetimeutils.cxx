@@ -74,3 +74,9 @@ OString DateToDDMMYYYYOString( const Date& rDate )
 
     return aBuffer.makeStringAndClear();
 }
+
+std::ostream& operator<<(std::ostream& os, const Date& rDate)
+{
+    os << rDate.GetYear() << "-" << rDate.GetMonth() << "-" << rDate.GetDay();
+    return os;
+}

@@ -19,9 +19,25 @@ class DateTest : public CppUnit::TestFixture
 {
 public:
     void testDate();
+    void testLeapYear();
+    void testGetDaysInYear();
+    void testValidGregorianDate();
+    void testValidDate();
+    void testNormalize();
+    void testGetDayOfWeek();
+    void testGetDaysInMonth();
+    void testIsBetween();
 
     CPPUNIT_TEST_SUITE(DateTest);
     CPPUNIT_TEST(testDate);
+    CPPUNIT_TEST(testLeapYear);
+    CPPUNIT_TEST(testGetDaysInYear);
+    CPPUNIT_TEST(testValidGregorianDate);
+    CPPUNIT_TEST(testValidDate);
+    CPPUNIT_TEST(testNormalize);
+    CPPUNIT_TEST(testGetDayOfWeek);
+    CPPUNIT_TEST(testGetDaysInMonth);
+    CPPUNIT_TEST(testIsBetween);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -66,10 +82,7 @@ void DateTest::testDate()
     aDate.SetDay(32);
     aDate.Normalize();
     CPPUNIT_ASSERT_EQUAL( aMax.GetDate(), aDate.GetDate());
-
-    // Empty date is not a valid date.
-    aDate = Date( Date::EMPTY );
-    CPPUNIT_ASSERT( !aDate.IsValidDate());
+    CPPUNIT_ASSERT(!aDate.IsEmpty());
 
     // 0001-00-x normalized to -0001-12-x
     aDate.SetYear(1);
@@ -77,6 +90,9 @@ void DateTest::testDate()
     aDate.SetDay(22);
     aDate.Normalize();
     CPPUNIT_ASSERT_EQUAL( Date(22,12,-1).GetDate(), aDate.GetDate());
+
+    sal_uInt32 nExpected = 11222;
+    CPPUNIT_ASSERT_EQUAL(nExpected, aDate.GetDateUnsigned());
     // 1999-02-32 normalized to 1999-03-04
     aDate.SetYear(1999);
     aDate.SetMonth(2);
@@ -112,21 +128,428 @@ void DateTest::testDate()
     aDate.SetDay(0);
     aDate.Normalize();
     CPPUNIT_ASSERT_EQUAL( Date(31,12,-1).GetDate(), aDate.GetDate());
+}
 
-    // Year -1 is a leap year.
-    aDate = Date(28,2,-1);
-    aDate.AddDays(1);
-    CPPUNIT_ASSERT_EQUAL( Date(29,2,-1).GetDate(), aDate.GetDate());
-    aDate = Date(1,3,-1);
-    aDate.AddDays(-1);
-    CPPUNIT_ASSERT_EQUAL( Date(29,2,-1).GetDate(), aDate.GetDate());
-    // Year -5 is a leap year.
-    aDate = Date(28,2,-5);
-    aDate.AddDays(1);
-    CPPUNIT_ASSERT_EQUAL( Date(29,2,-5).GetDate(), aDate.GetDate());
-    aDate = Date(1,3,-5);
-    aDate.AddDays(-1);
-    CPPUNIT_ASSERT_EQUAL( Date(29,2,-5).GetDate(), aDate.GetDate());
+void DateTest::testLeapYear()
+{
+    {
+        Date aDate(1, 1, 2000);
+        CPPUNIT_ASSERT(aDate.IsLeapYear());
+    }
+
+    {
+        Date aDate(1, 1, 1900);
+        CPPUNIT_ASSERT(!aDate.IsLeapYear());
+    }
+
+    {
+        Date aDate(1, 1, 1999);
+        CPPUNIT_ASSERT(!aDate.IsLeapYear());
+    }
+
+    {
+        Date aDate(1, 1, 2004);
+        CPPUNIT_ASSERT(aDate.IsLeapYear());
+    }
+
+    {
+        Date aDate(1, 1, 400);
+        CPPUNIT_ASSERT(aDate.IsLeapYear());
+    }
+
+    {
+        // Year -1 is a leap year.
+        Date aDate (28,2,-1);
+        aDate.AddDays(1);
+        CPPUNIT_ASSERT(aDate.IsLeapYear());
+        CPPUNIT_ASSERT_EQUAL( Date(29,2,-1).GetDate(), aDate.GetDate());
+    }
+
+    {
+        Date aDate(1,3,-1);
+        aDate.AddDays(-1);
+        CPPUNIT_ASSERT(aDate.IsLeapYear());
+        CPPUNIT_ASSERT_EQUAL( Date(29,2,-1).GetDate(), aDate.GetDate());
+    }
+
+    {
+        // Year -5 is a leap year.
+        Date aDate(28,2,-5);
+        aDate.AddDays(1);
+        CPPUNIT_ASSERT(aDate.IsLeapYear());
+        CPPUNIT_ASSERT_EQUAL( Date(29,2,-5).GetDate(), aDate.GetDate());
+    }
+
+    {
+        Date aDate(1,3,-5);
+        aDate.AddDays(-1);
+        CPPUNIT_ASSERT(aDate.IsLeapYear());
+        CPPUNIT_ASSERT_EQUAL( Date(29,2,-5).GetDate(), aDate.GetDate());
+    }
+}
+
+void DateTest::testGetDaysInYear()
+{
+    {
+        Date aDate(1, 1, 2000);
+        sal_uInt16 nExpectedDays = 366;
+        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInYear());
+    }
+
+    {
+        Date aDate(1, 1, 1900);
+        sal_uInt16 nExpectedDays = 365;
+        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInYear());
+    }
+
+    {
+        Date aDate(1, 1, 1999);
+        sal_uInt16 nExpectedDays = 365;
+        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInYear());
+    }
+
+    {
+        Date aDate(1, 1, 2004);
+        sal_uInt16 nExpectedDays = 366;
+        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInYear());
+    }
+
+    {
+        Date aDate(1, 1, 400);
+        sal_uInt16 nExpectedDays = 366;
+        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInYear());
+    }
+}
+
+void DateTest::testValidGregorianDate()
+{
+    {
+        Date aDate(1, 0, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidAndGregorian());
+    }
+
+    {
+        Date aDate(1, 13, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidAndGregorian());
+    }
+
+    {
+        Date aDate(1, 1, 1581);
+        CPPUNIT_ASSERT(!aDate.IsValidAndGregorian());
+    }
+
+    {
+        Date aDate(1, 9, 1582);
+        CPPUNIT_ASSERT(!aDate.IsValidAndGregorian());
+    }
+
+    {
+        Date aDate(1, 10, 1582);
+        CPPUNIT_ASSERT(!aDate.IsValidAndGregorian());
+    }
+
+    {
+        Date aDate(32, 1, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidAndGregorian());
+    }
+
+    {
+        Date aDate(29, 2, 2000);
+        CPPUNIT_ASSERT(aDate.IsValidAndGregorian());
+    }
+
+    {
+        Date aDate(29, 2, 2001);
+        CPPUNIT_ASSERT(!aDate.IsValidAndGregorian());
+    }
+
+    {
+        Date aDate(32, 3, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidAndGregorian());
+    }
+
+    {
+        Date aDate(31, 4, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidAndGregorian());
+    }
+
+    {
+        Date aDate(32, 5, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidAndGregorian());
+    }
+
+    {
+        Date aDate(31, 6, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidAndGregorian());
+    }
+
+    {
+        Date aDate(32, 7, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidAndGregorian());
+    }
+
+    {
+        Date aDate(32, 8, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidAndGregorian());
+    }
+
+    {
+        Date aDate(31, 9, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidAndGregorian());
+    }
+
+    {
+        Date aDate(32, 10, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidAndGregorian());
+    }
+
+    {
+        Date aDate(31, 11, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidAndGregorian());
+    }
+
+    {
+        Date aDate(32, 12, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidAndGregorian());
+    }
+}
+
+void DateTest::testValidDate()
+{
+    {
+        // Empty date is not a valid date.
+        Date aDate(Date::EMPTY);
+        CPPUNIT_ASSERT(aDate.IsEmpty());
+        CPPUNIT_ASSERT(!aDate.IsValidDate());
+    }
+
+    {
+        Date aDate(32, 1, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidDate());
+    }
+
+    {
+        Date aDate(29, 2, 2000);
+        CPPUNIT_ASSERT(aDate.IsValidDate());
+    }
+
+    {
+        Date aDate(29, 2, 2001);
+        CPPUNIT_ASSERT(!aDate.IsValidDate());
+    }
+
+    {
+        Date aDate(32, 3, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidDate());
+    }
+
+    {
+        Date aDate(31, 4, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidDate());
+    }
+
+    {
+        Date aDate(32, 5, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidDate());
+    }
+
+    {
+        Date aDate(31, 6, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidDate());
+    }
+
+    {
+        Date aDate(32, 7, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidDate());
+    }
+
+    {
+        Date aDate(32, 8, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidDate());
+    }
+
+    {
+        Date aDate(31, 9, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidDate());
+    }
+
+    {
+        Date aDate(32, 10, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidDate());
+    }
+
+    {
+        Date aDate(31, 11, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidDate());
+    }
+
+    {
+        Date aDate(32, 12, 2000);
+        CPPUNIT_ASSERT(!aDate.IsValidDate());
+    }
+}
+
+void DateTest::testNormalize()
+{
+    {
+        Date aDate(32, 2, 1999);
+        aDate.Normalize();
+        Date aExpectedDate(4, 3, 1999);
+        CPPUNIT_ASSERT_EQUAL(aExpectedDate, aDate);
+    }
+
+    {
+        Date aDate(1, 13, 1999);
+        aDate.Normalize();
+        Date aExpectedDate(1, 1, 2000);
+        CPPUNIT_ASSERT_EQUAL(aExpectedDate, aDate);
+    }
+
+    {
+        Date aDate(42, 13, 1999);
+        aDate.Normalize();
+        Date aExpectedDate(11, 2, 2000);
+        CPPUNIT_ASSERT_EQUAL(aExpectedDate, aDate);
+    }
+
+    {
+        Date aDate(1, 0, 1);
+        aDate.Normalize();
+        Date aExpectedDate(1, 12, -1);
+        CPPUNIT_ASSERT_EQUAL(aExpectedDate, aDate);
+    }
+}
+
+void DateTest::testGetDayOfWeek()
+{
+    {
+        DayOfWeek eExpectedDay = DayOfWeek::MONDAY;
+        Date aDate(30, 4, 2018);
+        CPPUNIT_ASSERT_EQUAL(eExpectedDay, aDate.GetDayOfWeek());
+    }
+
+    {
+        DayOfWeek eExpectedDay = DayOfWeek::TUESDAY;
+        Date aDate(1, 5, 2018);
+        CPPUNIT_ASSERT_EQUAL(eExpectedDay, aDate.GetDayOfWeek());
+    }
+
+    {
+        DayOfWeek eExpectedDay = DayOfWeek::WEDNESDAY;
+        Date aDate(2, 5, 2018);
+        CPPUNIT_ASSERT_EQUAL(eExpectedDay, aDate.GetDayOfWeek());
+    }
+
+    {
+        DayOfWeek eExpectedDay = DayOfWeek::THURSDAY;
+        Date aDate(3, 5, 2018);
+        CPPUNIT_ASSERT_EQUAL(eExpectedDay, aDate.GetDayOfWeek());
+    }
+
+    {
+        DayOfWeek eExpectedDay = DayOfWeek::FRIDAY;
+        Date aDate(4, 5, 2018);
+        CPPUNIT_ASSERT_EQUAL(eExpectedDay, aDate.GetDayOfWeek());
+    }
+
+    {
+        DayOfWeek eExpectedDay = DayOfWeek::SATURDAY;
+        Date aDate(5, 5, 2018);
+        CPPUNIT_ASSERT_EQUAL(eExpectedDay, aDate.GetDayOfWeek());
+    }
+
+    {
+        DayOfWeek eExpectedDay = DayOfWeek::SUNDAY;
+        Date aDate(6, 5, 2018);
+        CPPUNIT_ASSERT_EQUAL(eExpectedDay, aDate.GetDayOfWeek());
+    }
+}
+
+void DateTest::testGetDaysInMonth()
+{
+    {
+        Date aDate(1, 1, 2000);
+        sal_uInt16 nExpectedDays = 31;
+        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+    }
+
+    {
+        Date aDate(1, 2, 2000);
+        sal_uInt16 nExpectedDays = 29;
+        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+    }
+
+    {
+        Date aDate(1, 2, 1999);
+        sal_uInt16 nExpectedDays = 28;
+        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+    }
+
+    {
+        Date aDate(1, 3, 2000);
+        sal_uInt16 nExpectedDays = 31;
+        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+    }
+
+    {
+        Date aDate(1, 4, 2000);
+        sal_uInt16 nExpectedDays = 30;
+        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+    }
+
+    {
+        Date aDate(1, 5, 2000);
+        sal_uInt16 nExpectedDays = 31;
+        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+    }
+
+    {
+        Date aDate(1, 6, 2000);
+        sal_uInt16 nExpectedDays = 30;
+        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+    }
+
+    {
+        Date aDate(1, 7, 2000);
+        sal_uInt16 nExpectedDays = 31;
+        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+    }
+
+    {
+        Date aDate(1, 8, 2000);
+        sal_uInt16 nExpectedDays = 31;
+        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+    }
+
+    {
+        Date aDate(1, 9, 2000);
+        sal_uInt16 nExpectedDays = 30;
+        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+    }
+
+    {
+        Date aDate(1, 10, 2000);
+        sal_uInt16 nExpectedDays = 31;
+        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+    }
+
+    {
+        Date aDate(1, 11, 2000);
+        sal_uInt16 nExpectedDays = 30;
+        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+    }
+
+    {
+        Date aDate(1, 12, 2000);
+        sal_uInt16 nExpectedDays = 31;
+        CPPUNIT_ASSERT_EQUAL(nExpectedDays, aDate.GetDaysInMonth());
+    }
+}
+
+void DateTest::testIsBetween()
+{
+    Date aDate(6, 4, 2018);
+    CPPUNIT_ASSERT(aDate.IsBetween(Date(1, 1, 2018), Date(1, 12, 2018)));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DateTest);
