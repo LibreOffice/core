@@ -1055,6 +1055,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92521, "tdf92521.odt")
 DECLARE_OOXMLEXPORT_TEST(testTdf102466, "tdf102466.docx")
 {
     // the problem was: file is truncated: the first page is missing.
+    // More precisely, the table in the first page was clipped.
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        sal_Int32 nFlyPrtHeight = getXPath(pXmlDoc, "(/root/page[1]//fly)[1]/infos/prtBounds", "height").toInt32();
+        sal_Int32 nTableHeight = getXPath(pXmlDoc, "(/root/page[1]//fly)[1]/tab/infos/bounds", "height").toInt32();
+        CPPUNIT_ASSERT_MESSAGE("The table is clipped in a fly frame.", nFlyPrtHeight >= nTableHeight);
+    }
 
     // check how much pages we have
     CPPUNIT_ASSERT_EQUAL(10, getPages());
