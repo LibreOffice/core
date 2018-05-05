@@ -35,7 +35,6 @@
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/image.hxx>
 #include <tools/gen.hxx>
-#include <tools/contnr.hxx>
 #include <svtools/treelist.hxx>
 #include <svtools/transfer.hxx>
 #include <vcl/idle.hxx>
@@ -287,8 +286,8 @@ protected:
     // Invalidate children on enable/disable
     virtual void StateChanged( StateChangedType eType ) override;
 
-    virtual sal_uLong Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uLong nPos=TREELIST_APPEND);
-    virtual sal_uLong Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos = TREELIST_APPEND );
+    virtual sal_uLong Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uLong nPos=(ULONG_MAX));
+    virtual sal_uLong Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos = (ULONG_MAX) );
 
     // In-place editing
     std::unique_ptr<SvInplaceEdit2>  pEdCtrl;
@@ -612,7 +611,7 @@ public:
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
-                                         sal_uLong nPos=TREELIST_APPEND, void* pUserData = nullptr,
+                                         sal_uLong nPos=(ULONG_MAX), void* pUserData = nullptr,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind::EnabledCheckbox );
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText,
@@ -620,7 +619,7 @@ public:
                                          const Image& rCollapsedEntryBmp,
                                          SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
-                                         sal_uLong nPos = TREELIST_APPEND, void* pUserData = nullptr,
+                                         sal_uLong nPos = (ULONG_MAX), void* pUserData = nullptr,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind::EnabledCheckbox );
 
     const Image&    GetDefaultExpandedEntryBmp( ) const;
