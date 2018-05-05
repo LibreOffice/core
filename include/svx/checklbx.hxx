@@ -23,7 +23,6 @@
 #include <sal/types.h>
 #include <svtools/treelistbox.hxx>
 #include <svx/svxdllapi.h>
-#include <tools/contnr.hxx>
 #include <tools/solar.h>
 #include <tools/wintypes.hxx>
 #include <vcl/event.hxx>

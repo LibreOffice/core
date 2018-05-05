@@ -257,7 +257,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                 sRootEntryText  = DBA_RES(STR_ALL_VIEWS);
             else
                 sRootEntryText  = DBA_RES(STR_ALL_TABLES_AND_VIEWS);
-            InsertEntry( sRootEntryText, nullptr, false, TREELIST_APPEND, reinterpret_cast< void* >( DatabaseObjectContainer::TABLES ) );
+            InsertEntry( sRootEntryText, nullptr, false, (ULONG_MAX), reinterpret_cast< void* >( DatabaseObjectContainer::TABLES ) );
         }
 
         if ( _rTables.empty() )
@@ -297,7 +297,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                 {
                     SvTreeListEntry* pFolder = GetEntryPosByName( folderName, pRootEntry );
                     if ( !pFolder )
-                        InsertEntry( folderName, pRootEntry, false, TREELIST_APPEND, reinterpret_cast< void* >( nFolderType ) );
+                        InsertEntry( folderName, pRootEntry, false, (ULONG_MAX), reinterpret_cast< void* >( nFolderType ) );
                 }
             }
         }
@@ -428,7 +428,7 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
     {
         SvTreeListEntry* pFolder = GetEntryPosByName( rFirstName, pParentEntry );
         if ( !pFolder )
-            pFolder = InsertEntry( rFirstName, pParentEntry, false, TREELIST_APPEND, reinterpret_cast< void* >( nFirstFolderType ) );
+            pFolder = InsertEntry( rFirstName, pParentEntry, false, (ULONG_MAX), reinterpret_cast< void* >( nFirstFolderType ) );
         pParentEntry = pFolder;
     }
 
@@ -436,7 +436,7 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
     {
         SvTreeListEntry* pFolder = GetEntryPosByName( rSecondName, pParentEntry );
         if ( !pFolder )
-            pFolder = InsertEntry( rSecondName, pParentEntry, false, TREELIST_APPEND, reinterpret_cast< void* >( nSecondFolderType ) );
+            pFolder = InsertEntry( rSecondName, pParentEntry, false, (ULONG_MAX), reinterpret_cast< void* >( nSecondFolderType ) );
         pParentEntry = pFolder;
     }
 

@@ -896,7 +896,7 @@ sal_uLong SvTreeList::Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,s
         rList.push_back(std::unique_ptr<SvTreeListEntry>(pEntry));
 
     nEntryCount++;
-    if (nPos != TREELIST_APPEND && (nPos != (rList.size()-1)))
+    if (nPos != (ULONG_MAX) && (nPos != (rList.size()-1)))
         SetListPositions(rList);
     else
         pEntry->nListPos = rList.size()-1;
@@ -1564,7 +1564,7 @@ void SvTreeList::GetInsertionPos( SvTreeListEntry const * pEntry, SvTreeListEntr
     if( eSortMode == SortNone )
         return;
 
-    rPos = TREELIST_ENTRY_NOTFOUND;
+    rPos = (ULONG_MAX);
     const SvTreeListEntries& rChildList = GetChildList(pParent);
 
     if (rChildList.empty())
@@ -1596,7 +1596,7 @@ void SvTreeList::GetInsertionPos( SvTreeListEntry const * pEntry, SvTreeListEntr
     if( nCompare != 0 )
     {
         if (i > static_cast<long>(rChildList.size()-1)) // not found, end of list
-            rPos = TREELIST_ENTRY_NOTFOUND;
+            rPos = (ULONG_MAX);
         else
             rPos = i;              // not found, middle of list
     }
