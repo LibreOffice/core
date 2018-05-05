@@ -88,7 +88,7 @@ public:
     /** Initializes the control, enables/disables frame borders according to flags. */
     void                Initialize( FrameSelFlags nFlags );
 
-    // enabled frame borders --------------------------------------------------
+    // enabled frame borders
 
     /** Returns true, if the specified frame border is enabled. */
     bool                IsBorderEnabled( FrameBorderType eBorder ) const;
@@ -99,7 +99,7 @@ public:
     /** Returns the index of a frame border (counts only enabled borders) from passed type. */
     sal_Int32           GetEnabledBorderIndex( FrameBorderType eBorder ) const;
 
-    // frame border state and style -------------------------------------------
+    // frame border state and style
 
     /** Returns true, if the control supports the "don't care" frame border state. */
     bool                SupportsDontCareState() const;
@@ -128,7 +128,7 @@ public:
         returns the color in the passed parameter. */
     bool                GetVisibleColor( Color& rColor ) const;
 
-    // frame border selection -------------------------------------------------
+    // frame border selection
 
     /** Returns the current selection handler. */
     const Link<LinkParamNone*,void>&  GetSelectHdl() const;
@@ -154,7 +154,7 @@ public:
     /** Sets the passed color to all selected frame borders. */
     void                SetColorToSelection( const Color& rColor );
 
-    // accessibility ----------------------------------------------------------
+    // accessibility
 
     virtual css::uno::Reference< css::accessibility::XAccessible >
                         CreateAccessible() override;

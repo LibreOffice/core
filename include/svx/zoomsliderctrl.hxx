@@ -24,7 +24,6 @@
 #include <svx/svxdllapi.h>
 #include <memory>
 
-// class SvxZoomSliderControl ----------------------------------------
 class SVX_DLLPUBLIC SvxZoomSliderControl : public SfxStatusBarControl
 {
 private:

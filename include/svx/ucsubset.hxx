@@ -28,7 +28,6 @@
 
 class FontCharMap;
 
-// classes Subset & SubsetMap --------------------------------------------
 // TODO: should be moved into Font Attributes territory,
 // we let them mature here though because this is currently the only use
 

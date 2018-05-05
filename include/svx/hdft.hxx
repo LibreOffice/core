@@ -35,8 +35,6 @@ namespace svx
     SVX_DLLPUBLIC bool ShowBorderBackgroundDlg( vcl::Window* pParent, SfxItemSet* pBBSet );
 }
 
-// class  SvxHFPage ------------------------------------------------------
-
 class SVX_DLLPUBLIC SvxHFPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -100,8 +98,6 @@ private:
     SVX_DLLPRIVATE void         ResetBackground_Impl( const SfxItemSet& rSet );
 };
 
-// class SvxHeaderPage ---------------------------------------------------
-
 class SVX_DLLPUBLIC SvxHeaderPage : public SvxHFPage
 {
 public:
@@ -110,8 +106,6 @@ public:
     static const sal_uInt16*  GetRanges() { return pRanges; }
     SVX_DLLPRIVATE SvxHeaderPage( vcl::Window* pParent, const SfxItemSet& rSet );
 };
-
-// class SvxFooterPage ---------------------------------------------------
 
 class SVX_DLLPUBLIC SvxFooterPage : public SvxHFPage
 {

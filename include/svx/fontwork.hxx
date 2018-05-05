@@ -30,8 +30,6 @@
 #include <svx/svxdllapi.h>
 #include <svx/xtextit0.hxx>
 
-// forward ---------------------------------------------------------------
-
 class SdrView;
 class SdrPageView;
 class SdrObject;
@@ -48,11 +46,9 @@ class XFormTextShadowColorItem;
 class XFormTextShadowXValItem;
 class XFormTextShadowYValItem;
 
-/*************************************************************************
-|*
-|* ControllerItem for Fontwork
-|*
-\************************************************************************/
+/** ControllerItem for Fontwork
+ */
+
 
 class SvxFontWorkDialog;
 
@@ -68,11 +64,8 @@ public:
     SvxFontWorkControllerItem(sal_uInt16 nId, SvxFontWorkDialog&, SfxBindings&);
 };
 
-/*************************************************************************
-|*
-|* Derived from SfxChildWindow as "container" for fontwork dialog
-|*
-\************************************************************************/
+/** Derived from SfxChildWindow as "container" for fontwork dialog
+ */
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontWorkChildWindow : public SfxChildWindow
 {
@@ -81,11 +74,8 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontWorkChildWindow : public SfxChildWind
     SFX_DECL_CHILDWINDOW_WITHID(SvxFontWorkChildWindow);
 };
 
-/*************************************************************************
-|*
-|* Floating window for setting attributes of text effects
-|*
-\************************************************************************/
+/** Floating window for setting attributes of text effects
+  */
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
 {

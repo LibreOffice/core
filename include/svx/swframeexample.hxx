@@ -26,19 +26,17 @@
 #include <svx/swframetypes.hxx>
 #include <com/sun/star/text/WrapTextMode.hpp>
 
-// class SwFrmPagePreview -------------------------------------------------------
-
 class SVX_DLLPUBLIC SvxSwFrameExample : public vcl::Window
 {
-    Color       m_aTransColor;      // transparency
-    Color       m_aBgCol;           // background
-    Color       m_aFrameColor;      // graphic frame
-    Color       m_aAlignColor;      // align anchor
-    Color       m_aBorderCol;       // frame of doc
-    Color       m_aPrintAreaCol;    // frame of printable area of doc
-    Color       m_aTxtCol;          // symbolised text
-    Color       m_aBlankCol;        // area of symbol for blank
-    Color       m_aBlankFrameCol;   // frame of symbol for blank
+    Color       m_aTransColor;      ///< transparency
+    Color       m_aBgCol;           ///< background
+    Color       m_aFrameColor;      ///< graphic frame
+    Color       m_aAlignColor;      ///< align anchor
+    Color       m_aBorderCol;       ///< frame of doc
+    Color       m_aPrintAreaCol;    ///< frame of printable area of doc
+    Color       m_aTxtCol;          ///< symbolised text
+    Color       m_aBlankCol;        ///< area of symbol for blank
+    Color       m_aBlankFrameCol;   ///< frame of symbol for blank
 
     tools::Rectangle   aPage;
     tools::Rectangle   aPagePrtArea;

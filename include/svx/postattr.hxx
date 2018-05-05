@@ -23,12 +23,8 @@
 #include <svl/stritem.hxx>
 #include <svx/svxdllapi.h>
 
-// class SvxPostItAuthorItem ---------------------------------------------
-
-
-/*
-The author shorthand symbol of a note
-*/
+/** The author shorthand symbol of a note
+ */
 
 class SVX_DLLPUBLIC SvxPostItAuthorItem: public SfxStringItem
 {
@@ -53,12 +49,8 @@ public:
 };
 
 
-// class SvxPostItDateItem -----------------------------------------------
-
-
-/*
-The date of a note
-*/
+/** The date of a note
+ */
 
 class SVX_DLLPUBLIC SvxPostItDateItem: public SfxStringItem
 {
@@ -82,13 +74,8 @@ public:
     }
 };
 
-
-// class SvxPostItTextItem -----------------------------------------------
-
-
-/*
-The text of a note
-*/
+/** The text of a note
+ */
 
 class SVX_DLLPUBLIC SvxPostItTextItem: public SfxStringItem
 {
@@ -113,12 +100,9 @@ public:
     }
 };
 
-// class SvxPostItIdItem -----------------------------------------------
 
-
-/*
-The internal id of a note
-*/
+/** The internal id of a note
+ */
 
 class SVX_DLLPUBLIC SvxPostItIdItem: public SfxStringItem
 {
@@ -135,7 +119,6 @@ public:
         return *this;
     }
 };
-
 
 #endif
 

@@ -22,8 +22,6 @@
 #include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 
-// class SvxPasswordDialog -----------------------------------------------
-
 class SVX_DLLPUBLIC SvxPasswordDialog : public weld::GenericDialogController
 {
 private:

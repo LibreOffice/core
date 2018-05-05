@@ -23,9 +23,6 @@
 #include <vcl/field.hxx>
 #include <svx/svxdllapi.h>
 
-
-// class SvxRelativeField ------------------------------------------------
-
 class SVX_DLLPUBLIC SvxRelativeField : public MetricField
 {
 private:
@@ -46,7 +43,6 @@ public:
     bool            IsRelative() const { return bRelative; }
     void            EnableNegativeMode() {bNegativeEnabled = true;}
 };
-
 
 #endif
 

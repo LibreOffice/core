@@ -23,8 +23,6 @@
 #include <rtl/ref.hxx>
 #include <svx/svxdllapi.h>
 
-// class OfaPtrItem ------------------------------------------------------
-
 class SVX_DLLPUBLIC OfaPtrItem : public SfxPoolItem
 {
 private:
@@ -38,8 +36,6 @@ public:
 
     void*                    GetValue() const { return pPtr; }
 };
-
-// class OfaRefItem - for ref counting items
 
 template <class reference_type>
 class OfaRefItem : public SfxPoolItem

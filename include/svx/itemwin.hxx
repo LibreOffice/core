@@ -24,13 +24,9 @@
 #include <svx/dlgctrl.hxx>
 #include <svx/svxdllapi.h>
 
-// forward ---------------------------------------------------------------
-
 class XLineColorItem;
 class XLineWidthItem;
 class SfxObjectShell;
-
-// class SvxLineBox ------------------------------------------------------
 
 class SvxLineBox : public LineLB
 {
@@ -59,7 +55,6 @@ protected:
 
 };
 
-// class SvxMetricField --------------------------------------------------
 class SVX_DLLPUBLIC SvxMetricField : public MetricField
 {
     using Window::Update;
@@ -87,8 +82,6 @@ public:
     void            SetCoreUnit( MapUnit eUnit );
     void            RefreshDlgUnit();
 };
-
-// class SvxFillTypeBox --------------------------------------------------
 
 class SVX_DLLPUBLIC SvxFillTypeBox : public FillTypeLB
 {

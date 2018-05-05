@@ -25,10 +25,7 @@
 
 #include <memory>
 
-// Forward declarations
 class Timer;
-
-// class SvxModifyControl ------------------------------------------------
 
 class SVX_DLLPUBLIC SvxModifyControl : public SfxStatusBarControl
 {
@@ -52,7 +49,6 @@ private:
     struct ImplData;
     std::shared_ptr<ImplData> mxImpl;
 };
-
 
 #endif
 
