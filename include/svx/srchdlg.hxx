@@ -50,8 +50,6 @@ struct SearchAttrItem
     SfxPoolItem*    pItem;
 };
 
-// class SearchAttrItemList ----------------------------------------------
-
 typedef std::vector<SearchAttrItem> SrchAttrItemList;
 
 class SVX_DLLPUBLIC SearchAttrItemList : private SrchAttrItemList
@@ -76,9 +74,6 @@ public:
     // deletes the pointer to the items
     void Remove(size_t nPos);
 };
-
-
-// class SvxSearchDialogWrapper ------------------------------------------
 
 enum class SearchLabel
 {
@@ -108,16 +103,12 @@ public:
     SFX_DECL_CHILDWINDOW_WITHID(SvxSearchDialogWrapper);
 };
 
-// class SvxSearchDialog -------------------------------------------------
-/*
-    [Description]
+/**
     In this modeless dialog the attributes for a search are configured
     and a search is started from it. Several search types
     (search, search all, replace, replace all) are possible.
 
-    [Items]
-    <SvxSearchItem><SID_ATTR_SEARCH>
-*/
+ */
 
 class SvxSearchDialog : public SfxModelessDialog
 {

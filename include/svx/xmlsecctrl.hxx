@@ -26,8 +26,6 @@
 
 class  SvxSizeItem;
 
-// class SvxPosSizeToolBoxControl ----------------------------------------
-
 class SVX_DLLPUBLIC XmlSecStatusBarControl : public SfxStatusBarControl
 {
 private:

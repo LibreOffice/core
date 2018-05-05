@@ -197,8 +197,6 @@ public:
     bool        IsConsistent() const;
 };
 
-// class SvxObjectItem ---------------------------------------------------
-
 class SVX_DLLPUBLIC SvxObjectItem : public SfxPoolItem
 {
 private:
@@ -238,7 +236,6 @@ public:
     void SetStartY(long lValue);
     void SetEndY(long lValue);
 };
-
 
 #endif
 

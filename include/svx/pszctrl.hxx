@@ -23,12 +23,8 @@
 #include <sfx2/stbitem.hxx>
 #include <svx/svxdllapi.h>
 
-// forward ---------------------------------------------------------------
-
 class  SvxSizeItem;
 struct SvxPosSizeStatusBarControl_Impl;
-
-// class SvxPosSizeToolBoxControl ----------------------------------------
 
 class SVX_DLLPUBLIC SvxPosSizeStatusBarControl : public SfxStatusBarControl
 {
@@ -45,7 +41,6 @@ public:
     virtual void    Paint( const UserDrawEvent& rEvt ) override;
     virtual void    Command( const CommandEvent& rCEvt ) override;
 };
-
 
 #endif
 

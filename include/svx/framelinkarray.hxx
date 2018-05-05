@@ -68,7 +68,7 @@ public:
     /** Destructs the array. */
                         ~Array();
 
-    // array size and column/row indexes --------------------------------------
+    // array size and column/row indexes
 
     /** Reinitializes the array with the specified size. Clears all styles. */
     void                Initialize( size_t nWidth, size_t nHeight );
@@ -85,7 +85,7 @@ public:
     /** Returns the cell index from the cell address (nCol,nRow). */
     size_t              GetCellIndex( size_t nCol, size_t nRow, bool bRTL) const;
 
-    // cell border styles -----------------------------------------------------
+    // cell border styles
 
     /** Sets the left frame style of the cell (nCol,nRow). Ignores merged ranges. */
     void                SetCellStyleLeft( size_t nCol, size_t nRow, const Style& rStyle );
@@ -198,7 +198,7 @@ public:
             An invisible style for invalid cell addresses. */
     const Style&        GetCellStyleTR( size_t nCol, size_t nRow ) const;
 
-    // cell merging -----------------------------------------------------------
+    // cell merging
 
     /** Inserts a new merged cell range.
         @precond  The range must not intersect other merged ranges. */
@@ -234,7 +234,7 @@ public:
     void                GetMergedRange( size_t& rnFirstCol, size_t& rnFirstRow,
                             size_t& rnLastCol, size_t& rnLastRow, size_t nCol, size_t nRow ) const;
 
-    // clipping ---------------------------------------------------------------
+    // clipping
 
     /** Sets a clipping range.
         @descr
@@ -247,7 +247,7 @@ public:
             clipped too. This array can handle only one clip range at a time. */
     void                SetClipRange( size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow );
 
-    // cell coordinates -------------------------------------------------------
+    // cell coordinates
 
     /** Sets the X output coordinate of the left column. */
     void                SetXOffset( long nXOffset );
@@ -293,12 +293,12 @@ public:
         Returns total output range of merged ranges, if bExpandMerged is true. */
     basegfx::B2DRange GetCellRange( size_t nCol, size_t nRow, bool bExpandMerged ) const;
 
-    // mirroring --------------------------------------------------------------
+    // mirroring
 
     /** Mirrors the entire array horizontally. */
     void                MirrorSelfX();
 
-    // drawing ----------------------------------------------------------------
+    // drawing
 
     /** Draws the part of the specified range, that is inside the clipping range.
         @param pForceColor

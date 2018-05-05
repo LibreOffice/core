@@ -24,10 +24,6 @@
 #include <svx/svxdllapi.h>
 #include <editeng/measfld.hxx>
 
-
-//  Initial Declarations
-
-
 class SdrOutliner;
 struct ImpMeasureRec;
 struct ImpMeasurePoly;
@@ -35,10 +31,6 @@ struct ImpMeasurePoly;
 namespace sdr { namespace properties {
     class MeasureProperties;
 }}
-
-
-//   Auxiliary Class SdrMeasureObjGeoData
-
 
 class SdrMeasureObjGeoData : public SdrTextObjGeoData
 {
@@ -50,10 +42,6 @@ public:
     SdrMeasureObjGeoData();
     virtual ~SdrMeasureObjGeoData() override;
 };
-
-
-//   SdrMeasureObj
-
 
 class SVX_DLLPUBLIC SdrMeasureObj : public SdrTextObj
 {

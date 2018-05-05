@@ -22,8 +22,6 @@
 #include <sfx2/basedlgs.hxx>
 #include <svx/svxdllapi.h>
 
-// class SvxStandardDialog -----------------------------------------------
-
 class SVX_DLLPUBLIC SvxStandardDialog: public SfxModalDialog
 {
 public:
@@ -32,9 +30,8 @@ public:
     short           Execute() override;
 
 protected:
-    virtual void    Apply() = 0;    // pure virtual!!!
+    virtual void    Apply() = 0;
 };
-
 
 #endif
 

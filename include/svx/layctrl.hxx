@@ -22,8 +22,6 @@
 #include <sfx2/tbxctrl.hxx>
 #include <svx/svxdllapi.h>
 
-// class SvxTableToolBoxControl ------------------------------------------
-
 class SVX_DLLPUBLIC SvxTableToolBoxControl : public SfxToolBoxControl
 {
 private:
@@ -41,8 +39,6 @@ public:
     virtual ~SvxTableToolBoxControl() override;
 };
 
-// class SvxColumnsToolBoxControl ----------------------------------------
-
 class SVX_DLLPUBLIC SvxColumnsToolBoxControl : public SfxToolBoxControl
 {
     bool    bEnabled;
@@ -58,7 +54,6 @@ public:
                                               SfxItemState eState,
                                               const SfxPoolItem* pState ) override;
 };
-
 
 #endif
 

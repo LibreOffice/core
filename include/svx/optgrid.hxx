@@ -28,8 +28,6 @@
 
 class SvxGridTabPage;
 
-// class SvxOptionsGrid --------------------------------------------------
-
 class SVX_DLLPUBLIC SvxOptionsGrid
 {
 protected:
@@ -70,8 +68,6 @@ public:
     bool        GetEqualGrid()    const {  return bEqualGrid;   }
 };
 
-// class SvxGridItem -----------------------------------------------------
-
 class SVX_DLLPUBLIC SvxGridItem : public SvxOptionsGrid, public SfxPoolItem
 {
     // #i9076#
@@ -89,8 +85,6 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
 };
-
-// class SvxGridTabPage --------------------------------------------------
 
 class SVX_DLLPUBLIC SvxGridTabPage : public SfxTabPage
 {

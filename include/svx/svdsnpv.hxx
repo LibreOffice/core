@@ -79,7 +79,7 @@ namespace o3tl
     template<> struct typed_flags<SdrSnap> : is_typed_flags<SdrSnap, 3> {};
 }
 
-// SdrCrookMode::Stretch is not implemented yet!
+// TODO SdrCrookMode::Stretch is not implemented yet!
 enum class SdrCrookMode {
     Rotate,
     Slant,

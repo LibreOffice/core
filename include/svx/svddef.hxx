@@ -60,9 +60,6 @@
 //     V3:  1000..1126, 1127..1140
 //     V4:  1000..1126, 1172..1185
 
-
-
-
 class SdrAllPositionXItem;
 class SdrAllPositionYItem;
 class SdrAllSizeHeightItem;

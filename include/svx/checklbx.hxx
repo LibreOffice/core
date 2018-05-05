@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_SVX_CHECKLBX_HXX
 #define INCLUDED_SVX_CHECKLBX_HXX
 
@@ -33,8 +34,6 @@
 class Image;
 class SvLBoxButtonData;
 class SvTreeListEntry;
-
-// class SvxCheckListBox -------------------------------------------------
 
 class SVX_DLLPUBLIC SvxCheckListBox : public SvTreeListBox
 {
