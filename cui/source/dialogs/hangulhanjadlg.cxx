@@ -41,6 +41,8 @@
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
 
+#include <climits>
+
 #define HHC editeng::HangulHanjaConversion
 #define LINE_CNT        static_cast< sal_uInt16 >(2)
 #define MAXNUM_SUGGESTIONS 50
@@ -1067,7 +1069,7 @@ namespace svx
     IMPL_LINK_NOARG(HangulHanjaOptionsDialog, DeleteDictHdl, Button*, void)
     {
         sal_uLong nSelPos = m_pDictsLB->GetSelectedEntryPos();
-        if( nSelPos != TREELIST_ENTRY_NOTFOUND )
+        if( nSelPos != ULONG_MAX )
         {
             Reference< XConversionDictionary >  xDic( m_aDictList[ nSelPos ] );
             if( m_xConversionDictionaryList.is() && xDic.is() )

@@ -23,7 +23,6 @@
 #include <sal/types.h>
 #include <svtools/treelistbox.hxx>
 #include <svx/svxdllapi.h>
-#include <tools/contnr.hxx>
 #include <tools/solar.h>
 #include <tools/wintypes.hxx>
 #include <vcl/event.hxx>
@@ -59,7 +58,7 @@ public:
     virtual void dispose() override;
 
     void            InsertEntry         ( const OUString& rStr,
-                                          sal_uLong  nPos = TREELIST_APPEND,
+                                          sal_uLong  nPos = (ULONG_MAX),
                                           void* pUserData = nullptr,
                                           SvLBoxButtonKind eButtonKind = SvLBoxButtonKind::EnabledCheckbox );
     void            RemoveEntry         ( sal_uLong  nPos );

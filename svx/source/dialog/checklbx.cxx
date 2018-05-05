@@ -22,6 +22,8 @@
 #include <svx/checklbx.hxx>
 #include <vcl/builderfactory.hxx>
 
+#include <climits>
+
 SvxCheckListBox::SvxCheckListBox( vcl::Window* pParent, WinBits nWinStyle ) :
 
     SvTreeListBox( pParent, nWinStyle )
@@ -83,7 +85,7 @@ sal_uLong SvxCheckListBox::GetSelectedEntryPos() const
 
     if ( pEntry )
         return GetModel()->GetAbsPos( pEntry );
-    return TREELIST_ENTRY_NOTFOUND;
+    return ULONG_MAX;
 }
 
 

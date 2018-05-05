@@ -41,6 +41,7 @@
 #include <svtools/svlbitm.hxx>
 
 #include <map>
+#include <climits>
 #include <o3tl/make_unique.hxx>
 using namespace ::com::sun::star;
 using namespace css::uno;
@@ -210,7 +211,7 @@ void TreeControlPeer::disposeControl()
 }
 
 
-UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uLong nPos /* = TREELIST_APPEND */ )
+UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uLong nPos /* = ULONG_MAX */ )
 {
     UnoTreeListEntry* pEntry = nullptr;
     if( mpTreeImpl )
@@ -406,7 +407,7 @@ void TreeControlPeer::addNode( UnoTreeListBoxImpl& rTree, const Reference< XTree
 {
     if( xNode.is() )
     {
-        UnoTreeListEntry* pEntry = createEntry( xNode, pParentEntry, TREELIST_APPEND );
+        UnoTreeListEntry* pEntry = createEntry( xNode, pParentEntry, ULONG_MAX );
         const sal_Int32 nChildCount = xNode->getChildCount();
         for( sal_Int32 nChild = 0; nChild < nChildCount; nChild++ )
             addNode( rTree, xNode->getChildAt( nChild ), pEntry );
@@ -1007,7 +1008,7 @@ void TreeControlPeer::updateNode( UnoTreeListBoxImpl const & rTree, const Refere
     {
         Reference< XTreeNode > xParentNode( xNode->getParent() );
         UnoTreeListEntry* pParentEntry = nullptr;
-        sal_uLong nChild = TREELIST_APPEND;
+        sal_uLong nChild = ULONG_MAX;
 
         if( xParentNode.is() )
         {
