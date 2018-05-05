@@ -27,9 +27,10 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/fixedhyper.hxx>
-
 #include <svtools/svmedit.hxx>
 #include <svtools/svtabbx.hxx>
+
+#include <climits>
 
 /********************** SvUpdateLinksDialog ******************************
 *************************************************************************/
@@ -76,7 +77,7 @@ class SvBaseLinksDlg : public ModalDialog
     sfx2::SvBaseLink* GetSelEntry( sal_uLong* pPos );
     OUString ImplGetStateStr( const sfx2::SvBaseLink& );
     void SetType( sfx2::SvBaseLink& rLink, sal_uLong nPos, SfxLinkUpdateMode nType );
-    void InsertEntry( const sfx2::SvBaseLink& rLink, sal_uLong nPos = TREELIST_APPEND, bool bSelect = false);
+    void InsertEntry(const sfx2::SvBaseLink& rLink, sal_uLong nPos = ULONG_MAX, bool bSelect = false);
 
     void SetManager( sfx2::LinkManager* );
 

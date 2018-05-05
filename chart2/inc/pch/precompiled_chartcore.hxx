@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:51:44 using:
+ Generated on 2018-05-06 03:52:58 using:
  ./bin/update_pch chart2 chartcore --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -33,7 +33,6 @@
 #include <new>
 #include <ostream>
 #include <set>
-#include <stdlib.h>
 #include <string.h>
 #include <utility>
 #include <vector>
@@ -48,6 +47,7 @@
 #include <rtl/character.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
+#include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
@@ -61,8 +61,8 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
-#include <sal/saldllapi.h>
 #include <sal/types.h>
+#include <vcl/bitmap.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
 #include <vcl/settings.hxx>
@@ -154,8 +154,8 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
@@ -173,12 +173,13 @@
 #include <svl/eitem.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
+#include <svl/typedwhich.hxx>
 #include <svl/zformat.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/unoshape.hxx>
 #include <svx/xpoly.hxx>
 #include <tools/color.hxx>
-#include <tools/contnr.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>

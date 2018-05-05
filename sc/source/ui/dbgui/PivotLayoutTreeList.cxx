@@ -10,6 +10,7 @@
  */
 
 #include <memory>
+#include <climits>
 #include <PivotLayoutTreeList.hxx>
 #include <PivotLayoutDialog.hxx>
 
@@ -78,7 +79,7 @@ void ScPivotLayoutTreeList::FillFields(ScPivotFieldVector& rFieldVector)
         OUString aLabel = mpParent->GetItem( rField.nCol )->maName;
         ScItemValue* pItemValue = new ScItemValue( aLabel, rField.nCol, rField.nFuncMask );
         maItemValues.push_back(std::unique_ptr<ScItemValue>(pItemValue));
-        InsertEntry(pItemValue->maName, nullptr, false, TREELIST_APPEND, pItemValue);
+        InsertEntry(pItemValue->maName, nullptr, false, ULONG_MAX, pItemValue);
     }
 }
 
@@ -93,7 +94,7 @@ void ScPivotLayoutTreeList::InsertEntryForSourceTarget(SvTreeListEntry* pSource,
 
     mpParent->ItemInserted(pOriginalItemValue, meType);
 
-    sal_uLong nPosition = (pTarget == nullptr) ? TREELIST_APPEND : GetModel()->GetAbsPos(pTarget) + 1;
+    sal_uLong nPosition = (pTarget == nullptr) ? ULONG_MAX : GetModel()->GetAbsPos(pTarget) + 1;
     InsertEntryForItem(pOriginalItemValue, nPosition);
 }
 
