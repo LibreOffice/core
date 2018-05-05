@@ -4626,6 +4626,7 @@ fi
 
 if test "$OS" = "HAIKU"; then
     enable_cairo_canvas=yes
+    test_qt5=yes
 fi
 
 dnl ===================================================================
