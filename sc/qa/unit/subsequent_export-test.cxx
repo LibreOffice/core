@@ -176,6 +176,7 @@ public:
     void testSupBookVirtualPathXLS();
 #endif
     void testSheetLocalRangeNameXLS();
+    void testRelativeNamedExpressionsXLS();
     void testSheetTextBoxHyperlinkXLSX();
     void testFontSizeXLSX();
     void testSheetCharacterKerningSpaceXLSX();
@@ -282,6 +283,7 @@ public:
     CPPUNIT_TEST(testPreserveTextWhitespaceXLSX);
     CPPUNIT_TEST(testPreserveTextWhitespace2XLSX);
     CPPUNIT_TEST(testSheetLocalRangeNameXLS);
+    CPPUNIT_TEST(testRelativeNamedExpressionsXLS);
     CPPUNIT_TEST(testSheetTextBoxHyperlinkXLSX);
     CPPUNIT_TEST(testFontSizeXLSX);
     CPPUNIT_TEST(testSheetCharacterKerningSpaceXLSX);
@@ -3346,6 +3348,26 @@ void ScExportTest::testSheetLocalRangeNameXLS()
     rDoc.GetFormula(6, 4, 0, aFormula);
     CPPUNIT_ASSERT_EQUAL(OUString("=local_name1"), aFormula);
 
+    xDocSh2->DoClose();
+}
+
+void ScExportTest::testRelativeNamedExpressionsXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf113991_relativeNamedRanges.", FORMAT_ODS);
+    xDocSh->DoHardRecalc();
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_XLS);
+    xDocSh->DoClose();
+    xDocSh2->DoHardRecalc();
+    ScDocument& rDoc = xDocSh2->GetDocument();
+
+    // Sheet1:G3
+    ScAddress aPos(6,2,0);
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(aPos));
+    ASSERT_FORMULA_EQUAL(rDoc, aPos, "single_cell_A3", nullptr);
+    // Sheet2:F6
+    aPos = ScAddress(5,5,1);
+    CPPUNIT_ASSERT_EQUAL(18.0, rDoc.GetValue(aPos));
+    ASSERT_FORMULA_EQUAL(rDoc, aPos, "SUM(test_conflict)", nullptr);
     xDocSh2->DoClose();
 }
 
