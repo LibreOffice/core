@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_caca311a",
+        "filename": "include/tools/helpers.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-05T07:03:43Z",
+      "side": 1,
+      "message": "Convert 100th-mm to twips",
+      "revId": "644c645860bf0bc4df9d652845e0276ff98d10f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
