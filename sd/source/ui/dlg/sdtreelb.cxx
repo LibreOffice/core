@@ -491,7 +491,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
     Image aImgDocClosed=Image(BitmapEx(BMP_DOC_CLOSED));
 
     // insert document name
-    InsertEntry( maDocName, aImgDocOpen, aImgDocClosed, nullptr, true, TREELIST_APPEND,
+    InsertEntry( maDocName, aImgDocOpen, aImgDocClosed, nullptr, true, ULONG_MAX,
                  reinterpret_cast< void* >( 1 )
     );
 }
@@ -520,7 +520,7 @@ void SdPageObjsTLB::AddShapeList (
         aIcon,
         pParentEntry,
         false,
-        TREELIST_APPEND,
+        ULONG_MAX,
         pUserData);
 
     SdrObjListIter aIter(
@@ -546,7 +546,7 @@ void SdPageObjsTLB::AddShapeList (
                     maImgOle,
                     pEntry,
                     false,
-                    TREELIST_APPEND,
+                    ULONG_MAX,
                     pObj
                 );
             }
@@ -558,7 +558,7 @@ void SdPageObjsTLB::AddShapeList (
                     maImgGraphic,
                     pEntry,
                     false,
-                    TREELIST_APPEND,
+                    ULONG_MAX,
                     pObj
                 );
             }
@@ -581,7 +581,7 @@ void SdPageObjsTLB::AddShapeList (
                     rIconProvider.maImgObjects,
                     pEntry,
                     false,
-                    TREELIST_APPEND,
+                    ULONG_MAX,
                     pObj
                 );
             }
@@ -769,7 +769,7 @@ void SdPageObjsTLB::RequestingChildren( SvTreeListEntry* pFileEntry )
                                               aImgPage,
                                               pFileEntry,
                                               false,
-                                              TREELIST_APPEND,
+                                              ULONG_MAX,
                                               reinterpret_cast< void* >( 1 ) );
 
                     SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );

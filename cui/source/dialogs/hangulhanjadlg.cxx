@@ -1067,7 +1067,7 @@ namespace svx
     IMPL_LINK_NOARG(HangulHanjaOptionsDialog, DeleteDictHdl, Button*, void)
     {
         sal_uLong nSelPos = m_pDictsLB->GetSelectedEntryPos();
-        if( nSelPos != TREELIST_ENTRY_NOTFOUND )
+        if( nSelPos != (ULONG_MAX) )
         {
             Reference< XConversionDictionary >  xDic( m_aDictList[ nSelPos ] );
             if( m_xConversionDictionaryList.is() && xDic.is() )

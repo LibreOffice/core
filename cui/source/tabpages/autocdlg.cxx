@@ -1234,7 +1234,7 @@ bool OfaAutocorrReplacePage::NewDelHdl(void const * pBtn)
 
             NewEntry(m_pShortED->GetText(), m_pReplaceED->GetText(), bKeepSourceFormatting);
             m_pReplaceTLB->SetUpdateMode(false);
-            sal_uLong nPos = TREELIST_ENTRY_NOTFOUND;
+            sal_uLong nPos = (ULONG_MAX);
             sEntry += "\t" + m_pReplaceED->GetText();
             if(_pNewEntry)
             {
@@ -1254,7 +1254,7 @@ bool OfaAutocorrReplacePage::NewDelHdl(void const * pBtn)
             }
             SvTreeListEntry* pInsEntry = m_pReplaceTLB->InsertEntry(
                                         sEntry, static_cast< SvTreeListEntry * >(nullptr), false,
-                                        nPos == TREELIST_ENTRY_NOTFOUND ? TREELIST_APPEND : nPos);
+                                        nPos == (ULONG_MAX) ? (ULONG_MAX) : nPos);
             if (bKeepSourceFormatting)
             {
                 pInsEntry->SetUserData(&bHasSelectionText); // new formatted text

@@ -250,7 +250,7 @@ void DictionaryList::deleteEntryOnPos( sal_Int32 nPos  )
 
 sal_uIntPtr DictionaryList::deleteEntries( const OUString& rTerm )
 {
-    sal_uIntPtr nPos = TREELIST_APPEND;
+    sal_uIntPtr nPos = (ULONG_MAX);
     for( sal_Int32 nN=GetRowCount(); nN--; )
     {
         DictionaryEntry* pCurEntry = getEntryOnPos( nN );

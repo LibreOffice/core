@@ -394,7 +394,7 @@ void BookmarkTable::InsertBookmark(sw::mark::IMark* pMark)
 
     OUString sPageNum = OUString::number(SwPaM(pMark->GetMarkStart()).GetPageNum());
     OUString sColumnData = sPageNum + "\t" + pMark->GetName() + "\t" + sBookmarkNodeText;
-    InsertEntryToColumn(sColumnData, TREELIST_APPEND, 0xffff, pMark);
+    InsertEntryToColumn(sColumnData, ULONG_MAX, 0xffff, pMark);
 }
 
 SvTreeListEntry* BookmarkTable::GetRowByBookmarkName(const OUString& sName)

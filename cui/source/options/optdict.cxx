@@ -358,7 +358,7 @@ void SvxEditDictionaryDialog::SetLanguage_Impl( LanguageType nLanguage )
 
 sal_uLong SvxEditDictionaryDialog::GetLBInsertPos(const OUString &rDicWord)
 {
-    sal_uLong nPos = TREELIST_ENTRY_NOTFOUND;
+    sal_uLong nPos = (ULONG_MAX);
 
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
     const CollatorWrapper* pCollator = aIntlWrapper.getCollator();
@@ -526,7 +526,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
         {
             aStr += "\t" + pEntry[i]->getReplacementText();
         }
-        pWordsLB->InsertEntry(aStr, nullptr, false, nPos == TREELIST_ENTRY_NOTFOUND ?  TREELIST_APPEND : nPos);
+        pWordsLB->InsertEntry(aStr, nullptr, false, nPos == (ULONG_MAX) ?  (ULONG_MAX) : nPos);
     }
 
     if (pWordsLB->GetEntryCount())
@@ -629,7 +629,7 @@ bool SvxEditDictionaryDialog::NewDelHdl(void const * pBtn)
             // insert new entry in list-box etc...
 
             pWordsLB->SetUpdateMode(false);
-            sal_uLong _nPos = TREELIST_ENTRY_NOTFOUND;
+            sal_uLong _nPos = (ULONG_MAX);
 
             if(!aReplaceStr.isEmpty())
             {
@@ -646,7 +646,7 @@ bool SvxEditDictionaryDialog::NewDelHdl(void const * pBtn)
             {
                 _nPos = GetLBInsertPos( aNewWord );
                 SvTreeListEntry* pInsEntry = pWordsLB->InsertEntry(sEntry, nullptr, false,
-                            _nPos == TREELIST_ENTRY_NOTFOUND ? TREELIST_APPEND : _nPos);
+                            _nPos == (ULONG_MAX) ? (ULONG_MAX) : _nPos);
                 pNewEntry = pInsEntry;
             }
 

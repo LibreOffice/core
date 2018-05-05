@@ -340,7 +340,7 @@ SvTreeListEntry * SFTreeListBox::insertEntry(
     {
         Image aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL) );
         p = InsertEntry(
-            rText, aImage, aImage, pParent, bChildrenOnDemand, TREELIST_APPEND,
+            rText, aImage, aImage, pParent, bChildrenOnDemand, (ULONG_MAX),
             aUserData.release()); // XXX possible leak
     }
     else
@@ -372,7 +372,7 @@ SvTreeListEntry * SFTreeListBox::insertEntry(
         aImage = m_docImage;
     }
     SvTreeListEntry * p = InsertEntry(
-        rText, aImage, aImage, pParent, bChildrenOnDemand, TREELIST_APPEND,
+        rText, aImage, aImage, pParent, bChildrenOnDemand, (ULONG_MAX),
         aUserData.release()); // XXX possible leak
    return p;
 }

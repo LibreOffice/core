@@ -1230,9 +1230,9 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb )
 
         // Current category may be UserDefined with no format entries defined.
         // And yes, m_pLbFormat is a SvxFontListBox with sal_uLong list positions,
-        // implementation returns a TREELIST_ENTRY_NOTFOUND if empty,
+        // implementation returns a (ULONG_MAX) if empty,
         // comparison with sal_Int32 LISTBOX_ENTRY_NOTFOUND wouldn't match.
-        if ( m_pLbFormat->GetSelectedEntryPos() == TREELIST_ENTRY_NOTFOUND )
+        if ( m_pLbFormat->GetSelectedEntryPos() == (ULONG_MAX) )
             pLb = m_pLbCategory; // continue with the current category selected
         else
             pLb = m_pLbFormat;   // continue with the current format selected

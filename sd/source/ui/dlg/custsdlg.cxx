@@ -407,7 +407,7 @@ void SdDefineCustomShowDlg::ClickButtonHdl2(void const * p)
         sal_Int32 nCount = m_pLbPages->GetSelectedEntryCount();
         if( nCount > 0 )
         {
-            sal_uLong nPosCP = TREELIST_APPEND;
+            sal_uLong nPosCP = ULONG_MAX;
             SvTreeListEntry* pEntry = m_pLbCustomPages->FirstSelected();
             if( pEntry )
                 nPosCP = m_pLbCustomPages->GetModel()->GetAbsPos( pEntry ) + 1;
@@ -423,7 +423,7 @@ void SdDefineCustomShowDlg::ClickButtonHdl2(void const * p)
                                     GetSelectedEntryPos( i )), PageKind::Standard );
                 pEntry->SetUserData( pPage );
 
-                if( nPosCP != TREELIST_APPEND )
+                if( nPosCP != ULONG_MAX )
                     nPosCP++;
             }
             bModified = true;

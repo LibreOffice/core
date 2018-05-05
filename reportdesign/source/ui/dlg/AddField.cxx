@@ -279,7 +279,7 @@ namespace
         const OUString* pEntries = _rEntries.getConstArray();
         sal_Int32 nEntries = _rEntries.getLength();
         for ( sal_Int32 i = 0; i < nEntries; ++i, ++pEntries )
-            _rListBox.InsertEntry( *pEntries,nullptr,false,TREELIST_APPEND,new ColumnInfo(*pEntries) );
+            _rListBox.InsertEntry( *pEntries,nullptr,false,ULONG_MAX,new ColumnInfo(*pEntries) );
     }
     void lcl_addToList( OAddFieldWindowListBox& _rListBox, const uno::Reference< container::XNameAccess>& i_xColumns )
     {
@@ -293,9 +293,9 @@ namespace
             if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
             if ( !sLabel.isEmpty() )
-                _rListBox.InsertEntry( sLabel,nullptr,false,TREELIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
+                _rListBox.InsertEntry( sLabel,nullptr,false,ULONG_MAX,new ColumnInfo(*pEntries,sLabel) );
             else
-                _rListBox.InsertEntry( *pEntries,nullptr,false,TREELIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
+                _rListBox.InsertEntry( *pEntries,nullptr,false,ULONG_MAX,new ColumnInfo(*pEntries,sLabel) );
         }
     }
 }
@@ -420,9 +420,9 @@ void OAddFieldWindow::_elementInserted( const container::ContainerEvent& _rEvent
             if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
             if ( !sLabel.isEmpty() )
-                m_pListBox->InsertEntry( sLabel,nullptr,false,TREELIST_APPEND,new ColumnInfo(sName,sLabel) );
+                m_pListBox->InsertEntry( sLabel,nullptr,false,ULONG_MAX,new ColumnInfo(sName,sLabel) );
             else
-                m_pListBox->InsertEntry( sName,nullptr,false,TREELIST_APPEND,new ColumnInfo(sName,sLabel) );
+                m_pListBox->InsertEntry( sName,nullptr,false,ULONG_MAX,new ColumnInfo(sName,sLabel) );
         }
     }
 }

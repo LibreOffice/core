@@ -278,7 +278,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl, Button*, void)
     while( pE )
     {
         sal_uLong nFndPos = rListBox.GetModel()->GetAbsPos( pE );
-        if( TREELIST_ENTRY_NOTFOUND != nFndPos )
+        if( (ULONG_MAX) != nFndPos )
         {
             aLnkArr.push_back( static_cast< SvBaseLink* >( pE->GetUserData() ) );
             aPosArr.push_back( nFndPos );
@@ -653,7 +653,7 @@ SvBaseLink* SvBaseLinksDlg::GetSelEntry( sal_uLong* pPos )
 {
     SvTreeListEntry* pE = m_pTbLinks->FirstSelected();
     sal_uLong nPos;
-    if( pE && TREELIST_ENTRY_NOTFOUND !=
+    if( pE && (ULONG_MAX) !=
         ( nPos = m_pTbLinks->GetModel()->GetAbsPos( pE ) ) )
     {
         DBG_ASSERT( pE, "Where does the empty entry come from?" );

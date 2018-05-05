@@ -96,9 +96,9 @@ static void lcl_addToList( SvTreeListBox& _rListBox, const uno::Reference< conta
         if ( xColumn->getPropertySetInfo()->hasPropertyByName(FM_PROP_LABEL) )
             xColumn->getPropertyValue(FM_PROP_LABEL) >>= sLabel;
         if ( !sLabel.isEmpty() )
-            _rListBox.InsertEntry( sLabel, nullptr, false, TREELIST_APPEND, new ColumnInfo(*pEntries) );
+            _rListBox.InsertEntry( sLabel, nullptr, false, (ULONG_MAX), new ColumnInfo(*pEntries) );
         else
-            _rListBox.InsertEntry( *pEntries, nullptr, false, TREELIST_APPEND, new ColumnInfo(*pEntries) );
+            _rListBox.InsertEntry( *pEntries, nullptr, false, (ULONG_MAX), new ColumnInfo(*pEntries) );
     }
 }
 
