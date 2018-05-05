@@ -22,7 +22,6 @@ package com.sun.star.comp.sdbc;
 
 import java.util.Iterator;
 import java.util.Properties;
-import java.util.Set;
 
 import org.apache.openoffice.comp.sdbc.dbtools.comphelper.CompHelper;
 import org.apache.openoffice.comp.sdbc.dbtools.util.AutoRetrievingBase;
@@ -62,10 +61,10 @@ public class JavaSQLConnection extends ComponentBase
     };
     private static final ClassMap classMap = new ClassMap();
 
-    private AutoRetrievingBase autoRetrievingBase = new AutoRetrievingBase();
+    private final AutoRetrievingBase autoRetrievingBase = new AutoRetrievingBase();
     private String url;
-    private JDBCDriver driver;
-    private ConnectionLog logger;
+    private final JDBCDriver driver;
+    private final ConnectionLog logger;
     private boolean useParameterSubstitution;
     private boolean ignoreDriverPrivileges;
     private boolean ignoreCurrency;
@@ -75,7 +74,7 @@ public class JavaSQLConnection extends ComponentBase
     private java.sql.Driver driverObject;
     private java.sql.Connection connection;
     private PropertyValue[] connectionInfo;
-    private WeakMap statements = new WeakMap();
+    private final WeakMap statements = new WeakMap();
 
     public JavaSQLConnection(JDBCDriver driver) {
         this.driver = driver;
@@ -103,6 +102,7 @@ public class JavaSQLConnection extends ComponentBase
 
     // XCloseable
 
+    @Override
     public void close() throws SQLException {
         dispose();
     }
@@ -347,54 +347,6 @@ public class JavaSQLConnection extends ComponentBase
 
     // others:
 
-    private static String getOrDefault(PropertyValue[] properties, String name, String defaultValue) throws IllegalArgumentException {
-        String ret = defaultValue;
-        for (PropertyValue property : properties) {
-            if (property.Name.equals(name)) {
-                ret = AnyConverter.toString(property.Value);
-                break;
-            }
-        }
-        return ret;
-    }
-
-    private static boolean getOrDefault(PropertyValue[] properties, String name, boolean defaultValue) throws IllegalArgumentException {
-        boolean ret = defaultValue;
-        for (PropertyValue property : properties) {
-            if (property.Name.equals(name)) {
-                ret = AnyConverter.toBoolean(property.Value);
-                break;
-            }
-        }
-        return ret;
-    }
-
-    private static Object getOrDefault(PropertyValue[] properties, String name, Object defaultValue) throws IllegalArgumentException {
-        Object ret = defaultValue;
-        for (PropertyValue property : properties) {
-            if (property.Name.equals(name)) {
-                ret = property.Value;
-                break;
-            }
-        }
-        return ret;
-    }
-
-    private static NamedValue[] getOrDefault(PropertyValue[] properties, String name, NamedValue[] defaultValue) throws IllegalArgumentException {
-        NamedValue[] ret = defaultValue;
-        for (PropertyValue property : properties) {
-            if (property.Name.equals(name)) {
-                Object[] array = (Object[]) AnyConverter.toArray(property.Value);
-                ret = new NamedValue[array.length];
-                for (int i = 0; i < array.length; i++) {
-                    ret[i] = (NamedValue) array[i];
-                }
-                break;
-            }
-        }
-        return ret;
-    }
-
     public boolean construct(String url, PropertyValue[] info) throws SQLException {
         this.url = url;
         String generatedValueStatement = ""; // contains the statement which should be used when query for automatically generated values
@@ -404,19 +356,19 @@ public class JavaSQLConnection extends ComponentBase
         NamedValue[] systemProperties = new NamedValue[0];
 
         try {
-            driverClass = getOrDefault(info, "JavaDriverClass", driverClass);
-            driverClassPath = getOrDefault(info, "JavaDriverClassPath", driverClassPath);
+            driverClass = Tools.getOrDefault(info, "JavaDriverClass", driverClass);
+            driverClassPath = Tools.getOrDefault(info, "JavaDriverClassPath", driverClassPath);
             if (driverClassPath.isEmpty()) {
                 driverClassPath = getJavaDriverClassPath(driverClass);
             }
-            autoRetrievingEnabled = getOrDefault(info, "IsAutoRetrievingEnabled", autoRetrievingEnabled);
-            generatedValueStatement = getOrDefault(info, "AutoRetrievingStatement", generatedValueStatement);
-            useParameterSubstitution = getOrDefault(info, "ParameterNameSubstitution", useParameterSubstitution);
-            ignoreDriverPrivileges = getOrDefault(info, "IgnoreDriverPrivileges", ignoreDriverPrivileges);
-            ignoreCurrency = getOrDefault(info, "IgnoreCurrency", ignoreCurrency);
-            systemProperties = getOrDefault(info, "SystemProperties", systemProperties);
-            catalogRestriction = getOrDefault(info, "ImplicitCatalogRestriction", Any.VOID);
-            schemaRestriction = getOrDefault(info, "ImplicitSchemaRestriction", Any.VOID);
+            autoRetrievingEnabled = Tools.getOrDefault(info, "IsAutoRetrievingEnabled", autoRetrievingEnabled);
+            generatedValueStatement = Tools.getOrDefault(info, "AutoRetrievingStatement", generatedValueStatement);
+            useParameterSubstitution = Tools.getOrDefault(info, "ParameterNameSubstitution", useParameterSubstitution);
+            ignoreDriverPrivileges = Tools.getOrDefault(info, "IgnoreDriverPrivileges", ignoreDriverPrivileges);
+            ignoreCurrency = Tools.getOrDefault(info, "IgnoreCurrency", ignoreCurrency);
+            systemProperties = Tools.getOrDefault(info, "SystemProperties", systemProperties);
+            catalogRestriction = Tools.getOrDefault(info, "ImplicitCatalogRestriction", Any.VOID);
+            schemaRestriction = Tools.getOrDefault(info, "ImplicitSchemaRestriction", Any.VOID);
 
             loadDriverFromProperties(driverClass, driverClassPath, systemProperties);
 

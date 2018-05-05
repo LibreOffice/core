@@ -21,8 +21,8 @@
 package com.sun.star.comp.sdbc;
 
 public class ContextClassLoaderScope implements AutoCloseable {
-    private Thread currentThread;
-    private ClassLoader oldClassLoader;
+    private final Thread currentThread;
+    private final ClassLoader oldClassLoader;
 
     public ContextClassLoaderScope(ClassLoader classLoader) {
         currentThread = Thread.currentThread();

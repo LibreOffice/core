@@ -360,6 +360,7 @@ public class JavaSQLPreparedStatement extends JavaSQLStatementBase
         throw new SQLException(error, this, StandardSQLState.SQL_FEATURE_NOT_IMPLEMENTED.text(), 0, Any.VOID);
     }
 
+    @Override
     public synchronized void setShort(int index, short x) throws SQLException {
         createStatement();
         logger.log(LogLevel.FINE, Resources.STR_LOG_SHORT_PARAMETER, index, x);

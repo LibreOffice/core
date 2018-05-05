@@ -34,8 +34,8 @@ import com.sun.star.sdbc.XResultSet;
 import com.sun.star.uno.Any;
 
 public class JavaSQLArray extends ComponentBase implements XArray {
-    private ResourceBasedEventLogger logger;
-    private java.sql.Array jdbcArray;
+    private final ResourceBasedEventLogger logger;
+    private final java.sql.Array jdbcArray;
 
     public JavaSQLArray(ResourceBasedEventLogger logger, java.sql.Array jdcbArray) {
         this.logger = logger;

@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class BoundedInputStream extends InputStream {
-    private InputStream is;
+    private final InputStream is;
     private long remaining;
 
     public BoundedInputStream(InputStream is, long max) {

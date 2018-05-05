@@ -44,7 +44,7 @@ public class JDBCDriver extends ComponentBase implements XServiceInfo, XDriver {
             "com.sun.star.sdbc.Driver"
     };
     private XComponentContext context;
-    private ResourceBasedEventLogger logger;
+    private final ResourceBasedEventLogger logger;
 
     public static XSingleComponentFactory __getComponentFactory(String implName) {
         XSingleComponentFactory xSingleComponentFactory = null;

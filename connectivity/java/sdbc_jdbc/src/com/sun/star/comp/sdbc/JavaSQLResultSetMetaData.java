@@ -25,8 +25,8 @@ import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XResultSetMetaData;
 
 public class JavaSQLResultSetMetaData extends WeakBase implements XResultSetMetaData {
-    private JavaSQLConnection connection;
-    private java.sql.ResultSetMetaData jdbcResultSetMetaData;
+    private final JavaSQLConnection connection;
+    private final java.sql.ResultSetMetaData jdbcResultSetMetaData;
     private int columnCount;
 
     public JavaSQLResultSetMetaData(JavaSQLConnection connection, java.sql.ResultSetMetaData jdbcResultSetMetaData) {

@@ -25,7 +25,7 @@ import java.io.InputStream;
 import java.io.Reader;
 
 public class ReaderInputStream extends InputStream {
-    private Reader reader;
+    private final Reader reader;
     private int nextByte = -1;
 
     public ReaderInputStream(Reader reader) {

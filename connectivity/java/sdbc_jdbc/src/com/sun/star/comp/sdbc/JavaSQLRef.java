@@ -25,7 +25,7 @@ import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XRef;
 
 public class JavaSQLRef extends WeakBase implements XRef {
-    private java.sql.Ref jdbcRef;
+    private final java.sql.Ref jdbcRef;
 
     public JavaSQLRef(java.sql.Ref jdbcRef) {
         this.jdbcRef = jdbcRef;

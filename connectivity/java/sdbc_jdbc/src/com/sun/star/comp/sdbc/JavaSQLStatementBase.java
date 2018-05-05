@@ -448,6 +448,7 @@ public abstract class JavaSQLStatementBase extends PropertySet
 
     // XGeneratedResultSet
 
+    @Override
     public synchronized com.sun.star.sdbc.XResultSet getGeneratedValues() throws SQLException {
         logger.log(LogLevel.FINE, Resources.STR_LOG_GENERATED_VALUES);
         createStatement();

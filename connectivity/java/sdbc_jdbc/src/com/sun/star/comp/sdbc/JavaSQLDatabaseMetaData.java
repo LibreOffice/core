@@ -45,9 +45,9 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 
 public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaData2 {
-    private java.sql.DatabaseMetaData jdbcDatabaseMetaData;
-    private JavaSQLConnection connection;
-    private ConnectionLog logger;
+    private final java.sql.DatabaseMetaData jdbcDatabaseMetaData;
+    private final JavaSQLConnection connection;
+    private final ConnectionLog logger;
 
     public JavaSQLDatabaseMetaData(java.sql.DatabaseMetaData jdbcDatabaseMetaData, JavaSQLConnection connection) {
         this.jdbcDatabaseMetaData = jdbcDatabaseMetaData;
@@ -1559,6 +1559,7 @@ public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaDa
         }
     }
 
+    @Override
     public boolean supportsMinimumSQLGrammar() {
         try {
             return jdbcDatabaseMetaData.supportsMinimumSQLGrammar();

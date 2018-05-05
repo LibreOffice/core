@@ -23,9 +23,13 @@ package com.sun.star.comp.sdbc;
 import org.apache.openoffice.comp.sdbc.dbtools.comphelper.ResourceBasedEventLogger;
 import org.apache.openoffice.comp.sdbc.dbtools.util.StandardSQLState;
 
+import com.sun.star.beans.NamedValue;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.logging.LogLevel;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
 
 public class Tools {
     public static SQLException toUnoException(Object source, Throwable throwable) {
@@ -68,5 +72,53 @@ public class Tools {
         SQLException exception = toUnoException(source, throwable);
         logger.log(LogLevel.SEVERE, exception);
         return exception;
+    }
+
+    public static String getOrDefault(PropertyValue[] properties, String name, String defaultValue) throws IllegalArgumentException {
+        String ret = defaultValue;
+        for (PropertyValue property : properties) {
+            if (property.Name.equals(name)) {
+                ret = AnyConverter.toString(property.Value);
+                break;
+            }
+        }
+        return ret;
+    }
+
+    public static boolean getOrDefault(PropertyValue[] properties, String name, boolean defaultValue) throws IllegalArgumentException {
+        boolean ret = defaultValue;
+        for (PropertyValue property : properties) {
+            if (property.Name.equals(name)) {
+                ret = AnyConverter.toBoolean(property.Value);
+                break;
+            }
+        }
+        return ret;
+    }
+
+    public static Object getOrDefault(PropertyValue[] properties, String name, Object defaultValue) throws IllegalArgumentException {
+        Object ret = defaultValue;
+        for (PropertyValue property : properties) {
+            if (property.Name.equals(name)) {
+                ret = property.Value;
+                break;
+            }
+        }
+        return ret;
+    }
+
+    public static NamedValue[] getOrDefault(PropertyValue[] properties, String name, NamedValue[] defaultValue) throws IllegalArgumentException {
+        NamedValue[] ret = defaultValue;
+        for (PropertyValue property : properties) {
+            if (property.Name.equals(name)) {
+                Object[] array = (Object[]) AnyConverter.toArray(property.Value);
+                ret = new NamedValue[array.length];
+                for (int i = 0; i < array.length; i++) {
+                    ret[i] = (NamedValue) array[i];
+                }
+                break;
+            }
+        }
+        return ret;
     }
 }

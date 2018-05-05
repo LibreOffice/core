@@ -59,8 +59,8 @@ import com.sun.star.util.XMacroExpander;
  */
 public class ClassMap {
     public static class ClassLoaderAndClass {
-        private ClassLoader classLoader;
-        private Class<?> classObject;
+        private final ClassLoader classLoader;
+        private final Class<?> classObject;
 
         public ClassLoaderAndClass(ClassLoader classLoader, Class<?> classObject) {
             this.classLoader = classLoader;

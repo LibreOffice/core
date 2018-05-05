@@ -36,8 +36,8 @@ import com.sun.star.sdbc.XClob;
 import com.sun.star.uno.Any;
 
 public class JavaSQLClob extends ComponentBase implements XClob {
-    private ResourceBasedEventLogger logger;
-    private java.sql.Clob jdbcClob;
+    private final ResourceBasedEventLogger logger;
+    private final java.sql.Clob jdbcClob;
 
     public JavaSQLClob(ResourceBasedEventLogger logger, java.sql.Clob jdbcClob) {
         this.logger = logger;

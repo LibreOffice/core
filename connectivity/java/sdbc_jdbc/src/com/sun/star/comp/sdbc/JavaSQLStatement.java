@@ -65,6 +65,7 @@ public class JavaSQLStatement extends JavaSQLStatementBase
 
     // XBatchExecution
 
+    @Override
     public synchronized void addBatch(String sql) throws SQLException {
         createStatement();
         try {
@@ -96,6 +97,7 @@ public class JavaSQLStatement extends JavaSQLStatementBase
 
     // XStatement
 
+    @Override
     public synchronized boolean execute(String sql) throws SQLException {
         createStatement();
         sqlStatement = sql;
@@ -144,6 +146,7 @@ public class JavaSQLStatement extends JavaSQLStatementBase
 
     // others
 
+    @Override
     protected synchronized void createStatement() throws SQLException {
         checkDisposed();
         if (jdbcStatement == null) {
