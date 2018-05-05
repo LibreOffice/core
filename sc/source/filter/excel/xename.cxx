@@ -23,6 +23,7 @@
 
 #include <document.hxx>
 #include <rangenam.hxx>
+#include <tokenarray.hxx>
 #include <dbdata.hxx>
 #include <xehelper.hxx>
 #include <xelink.hxx>
@@ -334,6 +335,44 @@ void XclExpName::WriteBody( XclExpStream& rStrm )
         mxTokArr->WriteArray( rStrm );  // token array without size
 }
 
+void lcl_EnsureAbs3DToken( const SCTAB nTab, formula::FormulaToken* pTok, const bool bFix = true )
+{
+    if ( !pTok || ( pTok->GetType() != formula::svSingleRef && pTok->GetType() != formula::svDoubleRef ) )
+        return;
+
+    ScSingleRefData* pRef1 = pTok->GetSingleRef();
+    if ( !pRef1 )
+        return;
+
+    ScSingleRefData* pRef2 = nullptr;
+    if ( pTok->GetType() == formula::svDoubleRef )
+        pRef2 = pTok->GetSingleRef2();
+
+    if ( pRef1->IsTabRel() || !pRef1->IsFlag3D() )
+    {
+        if ( bFix )
+        {
+            if ( pRef1->IsTabRel() && nTab != SCTAB_GLOBAL )
+                pRef1->SetAbsTab( nTab + pRef1->Tab() );  //XLS requirement
+            if ( !pRef1->IsTabRel() )
+            {
+                pRef1->SetFlag3D( true );  //XLSX requirement
+                if ( pRef2 && !pRef2->IsTabRel() )
+                    pRef2->SetFlag3D( pRef2->Tab() != pRef1->Tab() );
+            }
+        }
+    }
+
+    if ( pRef2 && pRef2->IsTabRel() && !pRef1->IsTabRel() )
+    {
+        if ( bFix && nTab != SCTAB_GLOBAL )
+        {
+            pRef2->SetAbsTab( nTab + pRef2->Tab() );
+            pRef2->SetFlag3D( pRef2->Tab() != pRef1->Tab() );
+        }
+    }
+}
+
 XclExpNameManagerImpl::XclExpNameManagerImpl( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     mnFirstUserIdx( 0 )
@@ -543,13 +582,20 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
         This may cause recursive creation of other defined names. */
     if( const ScTokenArray* pScTokArr = const_cast< ScRangeData& >( rRangeData ).GetCode() )
     {
-        XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, *pScTokArr );
+        // Ensuring 3D for export: Don't modify the actual document; use a temporary copy to create the export formulas.
+        ScTokenArray* pTokenCopy = pScTokArr->Clone();
+        if ( pTokenCopy && (rRangeData.HasType( ScRangeData::Type::AbsPos ) || rRangeData.HasType( ScRangeData::Type::AbsArea )) )
+           lcl_EnsureAbs3DToken( nTab, pTokenCopy->FirstToken() );
+        XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, *pTokenCopy );
         xName->SetTokenArray( xTokArr );
 
         OUString sSymbol;
-        rRangeData.GetSymbol( sSymbol, ((GetOutput() == EXC_OUTPUT_BINARY) ?
+        ScCompiler aComp(rRangeData.GetDoc(), rRangeData.GetPos(), *pTokenCopy, ((GetOutput() == EXC_OUTPUT_BINARY) ?
                     formula::FormulaGrammar::GRAM_ENGLISH_XL_A1 : formula::FormulaGrammar::GRAM_OOXML));
+
+        aComp.CreateStringFromTokenArray( sSymbol );
         xName->SetSymbol( sSymbol );
+        pTokenCopy->Clear();
 
         /*  Try to replace by existing built-in name - complete token array is
             needed for comparison, and due to the recursion problem above this
