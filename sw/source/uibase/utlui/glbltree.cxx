@@ -56,6 +56,7 @@
 #include <globals.hrc>
 #include <bitmaps.hlst>
 #include <swabstdlg.hxx>
+#include <climits>
 #include <memory>
 
 using namespace ::com::sun::star::uno;
@@ -236,7 +237,7 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if( m_bIsInternalDrag )
     {
         SvTreeListEntry* pDummy = nullptr;
-        sal_uLong nInsertionPos = TREELIST_APPEND;
+        sal_uLong nInsertionPos = ULONG_MAX;
         NotifyMoving( pDropEntry, m_pDDSource, pDummy, nInsertionPos );
     }
     else
@@ -674,7 +675,7 @@ void SwGlobalTree::Display(bool bOnlyUpdateUserData)
         SetUpdateMode( false );
         SvTreeListEntry* pOldSelEntry = FirstSelected();
         OUString sEntryName;  // Name of the entry
-        sal_uLong nSelPos = TREELIST_ENTRY_NOTFOUND;
+        sal_uLong nSelPos = ULONG_MAX;
         if(pOldSelEntry)
         {
             sEntryName = GetEntryText(pOldSelEntry);
@@ -713,7 +714,7 @@ void SwGlobalTree::Display(bool bOnlyUpdateUserData)
                 break;
             }
             SvTreeListEntry* pEntry = InsertEntry(sEntry, aImage, aImage,
-                        nullptr, false, TREELIST_APPEND, pCont);
+                        nullptr, false, ULONG_MAX, pCont);
             if(sEntry == sEntryName)
             {
                 pSelEntry = pEntry;
@@ -723,7 +724,7 @@ void SwGlobalTree::Display(bool bOnlyUpdateUserData)
         {
             Select(pSelEntry);
         }
-        else if(nSelPos != TREELIST_ENTRY_NOTFOUND && nSelPos < nCount)
+        else if(nSelPos != ULONG_MAX && nSelPos < nCount)
         {
             Select(GetEntry(nSelPos));
         }

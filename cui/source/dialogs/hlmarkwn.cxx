@@ -43,6 +43,8 @@
 #include <hlmarkwn.hxx>
 #include <hltpbase.hxx>
 
+#include <climits>
+
 using namespace ::com::sun::star;
 
 // Userdata-struct for tree-entries
@@ -414,7 +416,7 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
                         pEntry = mpLbTree->InsertEntry ( aStrDisplayname,
                                                         aBmp, aBmp,
                                                         pParentEntry,
-                                                        false, TREELIST_APPEND,
+                                                        false, ULONG_MAX,
                                                         static_cast<void*>(pData) );
                         nEntries++;
                     }
@@ -423,7 +425,7 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
                         // insert Displayname into treelist without bitmaps
                         pEntry = mpLbTree->InsertEntry ( aStrDisplayname,
                                                         pParentEntry,
-                                                        false, TREELIST_APPEND,
+                                                        false, ULONG_MAX,
                                                         static_cast<void*>(pData) );
                         nEntries++;
                     }
@@ -433,7 +435,7 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
                     // insert Displayname into treelist without bitmaps
                     pEntry = mpLbTree->InsertEntry ( aStrDisplayname,
                                                     pParentEntry,
-                                                    false, TREELIST_APPEND,
+                                                    false, ULONG_MAX,
                                                     static_cast<void*>(pData) );
                     nEntries++;
                 }
