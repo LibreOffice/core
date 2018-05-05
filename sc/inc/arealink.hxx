@@ -24,11 +24,9 @@
 #include "address.hxx"
 #include <sfx2/lnkbase.hxx>
 #include "scdllapi.h"
-#include <memory>
 
 class SfxObjectShell;
 class ScDocShell;
-class Dialog;
 
 class SC_DLLPUBLIC ScAreaLink : public ::sfx2::SvBaseLink, public ScRefreshTimer
 {

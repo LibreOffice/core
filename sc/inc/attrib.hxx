@@ -27,7 +27,6 @@
 #include <o3tl/typed_flags_set.hxx>
 #include "scdllapi.h"
 #include "global.hxx"
-#include "address.hxx"
 
 // flags for cells hidden by merge
 // and control for auto filter
