@@ -23,6 +23,7 @@
 
 #include <document.hxx>
 #include <rangenam.hxx>
+#include <tokenarray.hxx>
 #include <dbdata.hxx>
 #include <xehelper.hxx>
 #include <xelink.hxx>
@@ -334,6 +335,35 @@ void XclExpName::WriteBody( XclExpStream& rStrm )
         mxTokArr->WriteArray( rStrm );  // token array without size
 }
 
+/** Returns true if defined name was not 3D (needed fixing).
+    So, even if the fix was successful, true is still returned since a fix was required.
+    Caution: despite const, pScTokArr CAN be modified for non-SCTAB_GLOBAL*/
+bool lcl_Ensure3DNamedRange( SCTAB nTab, const ScTokenArray* pScTokArr )
+{
+    bool bFixRequired = false;
+    if ( !pScTokArr )
+        return bFixRequired;
+
+    formula::FormulaToken* pTok = pScTokArr->FirstToken();
+    if ( pTok && pTok->GetType() == formula::svDoubleRef )
+    {
+        ScComplexRefData* pRef = pTok->GetDoubleRef();
+        if ( pRef && ( !pRef->Ref1.IsFlag3D() || !pRef->Ref2.IsFlag3D() ) )
+        {
+            bFixRequired = true;
+            // Only fix sheet-local names. SCTAB_GLOBAL must be read-only
+            if ( nTab != SCTAB_GLOBAL )
+            {
+                if ( pRef->Ref1.IsTabRel() )
+                    pRef->Ref1.SetAbsTab( nTab + pRef->Ref1.Tab() ); //XLS fix
+                if ( pRef->Ref2.IsTabRel() )
+                    pRef->Ref2.SetAbsTab( nTab + pRef->Ref2.Tab() );
+            }
+        }
+    }
+    return bFixRequired;
+}
+
 XclExpNameManagerImpl::XclExpNameManagerImpl( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     mnFirstUserIdx( 0 )
@@ -543,6 +573,7 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
         This may cause recursive creation of other defined names. */
     if( const ScTokenArray* pScTokArr = const_cast< ScRangeData& >( rRangeData ).GetCode() )
     {
+        lcl_Ensure3DNamedRange( nTab, pScTokArr );
         XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, *pScTokArr );
         xName->SetTokenArray( xTokArr );
 
