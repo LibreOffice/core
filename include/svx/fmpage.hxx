@@ -23,7 +23,6 @@
 #include <memory>
 #include <svx/svdpage.hxx>
 #include <svx/svxdllapi.h>
-#include <tools/contnr.hxx>
 
 class StarBASIC;
 class FmFormModel;

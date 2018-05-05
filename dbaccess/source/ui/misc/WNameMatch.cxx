@@ -31,6 +31,8 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <o3tl/make_unique.hxx>
 
+#include <climits>
+
 using namespace ::dbaui;
 
 // OWizColumnSelect
@@ -403,7 +405,7 @@ void OColumnTreeBox::FillListBox( const ODatabaseExport::TColumnVector& _rList)
     Clear();
     for (auto const& elem : _rList)
     {
-        SvTreeListEntry* pEntry = InsertEntry(elem->first, nullptr, false, TREELIST_APPEND, elem->second);
+        SvTreeListEntry* pEntry = InsertEntry(elem->first, nullptr, false, ULONG_MAX, elem->second);
         SvButtonState eState = !(m_bReadOnly && elem->second->IsAutoIncrement()) ? SvButtonState::Checked : SvButtonState::Unchecked;
         SetCheckButtonState( pEntry, eState );
     }

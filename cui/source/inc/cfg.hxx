@@ -50,6 +50,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <memory>
 #include <vector>
+#include <climits>
 
 #include "cfgutil.hxx"
 #include "CommandCategoryListBox.hxx"
@@ -436,8 +437,8 @@ protected:
     void                AddSubMenusToUI(    const OUString& rBaseTitle,
                                         SvxConfigEntry const * pParentData );
 
-    SvTreeListEntry*    InsertEntryIntoUI ( SvxConfigEntry* pNewEntryData,
-                                        sal_uLong nPos = TREELIST_APPEND );
+    SvTreeListEntry*    InsertEntryIntoUI (SvxConfigEntry* pNewEntryData,
+                                        sal_uLong nPos = ULONG_MAX);
 
     SvxEntries*     FindParentForChild( SvxEntries* pParentEntries,
                                         SvxConfigEntry* pChildData );

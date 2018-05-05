@@ -24,12 +24,13 @@
 #include <sal/types.h>
 #include <svtools/treelistbox.hxx>
 #include <svx/svxdllapi.h>
-#include <tools/contnr.hxx>
 #include <tools/solar.h>
 #include <tools/wintypes.hxx>
 #include <vcl/event.hxx>
 #include <vcl/window.hxx>
+
 #include <memory>
+#include <climits>
 
 class Image;
 class SvLBoxButtonData;
@@ -57,10 +58,10 @@ public:
     virtual ~SvxCheckListBox() override;
     virtual void dispose() override;
 
-    void            InsertEntry         ( const OUString& rStr,
-                                          sal_uLong  nPos = TREELIST_APPEND,
-                                          void* pUserData = nullptr,
-                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind::EnabledCheckbox );
+    void            InsertEntry         (const OUString& rStr,
+                                         sal_uLong  nPos = ULONG_MAX,
+                                         void* pUserData = nullptr,
+                                         SvLBoxButtonKind eButtonKind = SvLBoxButtonKind::EnabledCheckbox);
     void            RemoveEntry         ( sal_uLong  nPos );
 
     void            SelectEntryPos      ( sal_uLong  nPos );

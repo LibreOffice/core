@@ -49,6 +49,7 @@
 
 #include <memory>
 #include <algorithm>
+#include <climits>
 
 #define DROP_ACTION_TIMER_INITIAL_TICKS     10
 #define DROP_ACTION_TIMER_SCROLL_TICKS      3
@@ -149,7 +150,7 @@ class NavigatorTree :   public ::cppu::BaseMutex
     unsigned short                                                              m_nTimerCounter;
 
     SvTreeListEntry* insertEntry(const OUString& _sName,SvTreeListEntry* _pParent, const OUString& rImageId, sal_uLong _nPosition,UserData* _pData);
-    void traverseSection(const uno::Reference< report::XSection>& _xSection,SvTreeListEntry* _pParent, const OUString& rImageId, sal_uLong _nPosition = TREELIST_APPEND);
+    void traverseSection(const uno::Reference< report::XSection>& _xSection,SvTreeListEntry* _pParent, const OUString& rImageId, sal_uLong _nPosition = ULONG_MAX);
     void traverseFunctions(const uno::Reference< report::XFunctions>& _xFunctions,SvTreeListEntry* _pParent);
 
 protected:
@@ -539,7 +540,7 @@ void NavigatorTree::traverseSection(const uno::Reference< report::XSection>& _xS
     {
         uno::Reference< report::XReportComponent> xElement(_xSection->getByIndex(i),uno::UNO_QUERY_THROW);
         OSL_ENSURE(xElement.is(),"Found report element which is NULL!");
-        insertEntry(lcl_getName(xElement.get()),pSection,lcl_getImageId(xElement),TREELIST_APPEND,new UserData(this,xElement));
+        insertEntry(lcl_getName(xElement.get()),pSection,lcl_getImageId(xElement),ULONG_MAX,new UserData(this,xElement));
         uno::Reference< report::XReportDefinition> xSubReport(xElement,uno::UNO_QUERY);
         if ( xSubReport.is() )
         {
@@ -552,12 +553,12 @@ void NavigatorTree::traverseSection(const uno::Reference< report::XSection>& _xS
 
 void NavigatorTree::traverseFunctions(const uno::Reference< report::XFunctions>& _xFunctions,SvTreeListEntry* _pParent)
 {
-    SvTreeListEntry* pFunctions = insertEntry(RptResId(RID_STR_FUNCTIONS), _pParent, RID_SVXBMP_RPT_NEW_FUNCTION, TREELIST_APPEND, new UserData(this,_xFunctions));
+    SvTreeListEntry* pFunctions = insertEntry(RptResId(RID_STR_FUNCTIONS), _pParent, RID_SVXBMP_RPT_NEW_FUNCTION, ULONG_MAX, new UserData(this,_xFunctions));
     const sal_Int32 nCount = _xFunctions->getCount();
     for (sal_Int32 i = 0; i< nCount; ++i)
     {
         uno::Reference< report::XFunction> xElement(_xFunctions->getByIndex(i),uno::UNO_QUERY);
-        insertEntry(xElement->getName(),pFunctions,RID_SVXBMP_RPT_NEW_FUNCTION,TREELIST_APPEND,new UserData(this,xElement));
+        insertEntry(xElement->getName(),pFunctions,RID_SVXBMP_RPT_NEW_FUNCTION,ULONG_MAX,new UserData(this,xElement));
     }
 }
 
@@ -586,7 +587,7 @@ SvTreeListEntry* NavigatorTree::find(const uno::Reference< uno::XInterface >& _x
 
 void NavigatorTree::traverseReport(const uno::Reference< report::XReportDefinition>& _xReport)
 {
-    insertEntry(_xReport->getName(),m_pMasterReport,RID_SVXBMP_SELECT_REPORT,TREELIST_APPEND,new UserData(this,_xReport));
+    insertEntry(_xReport->getName(),m_pMasterReport,RID_SVXBMP_SELECT_REPORT,ULONG_MAX,new UserData(this,_xReport));
 }
 
 void NavigatorTree::traverseReportFunctions(const uno::Reference< report::XFunctions>& _xFunctions)
@@ -622,7 +623,7 @@ void NavigatorTree::traversePageFooter(const uno::Reference< report::XSection>& 
 void NavigatorTree::traverseGroups(const uno::Reference< report::XGroups>& _xGroups)
 {
     SvTreeListEntry* pReport = find(_xGroups->getReportDefinition());
-    insertEntry(RptResId(RID_STR_GROUPS), pReport, RID_SVXBMP_SORTINGANDGROUPING, TREELIST_APPEND, new UserData(this,_xGroups));
+    insertEntry(RptResId(RID_STR_GROUPS), pReport, RID_SVXBMP_SORTINGANDGROUPING, ULONG_MAX, new UserData(this,_xGroups));
 }
 
 void NavigatorTree::traverseGroup(const uno::Reference< report::XGroup>& _xGroup)
@@ -683,7 +684,7 @@ void NavigatorTree::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
                 traverseSection(xReport->getPageFooter(),pParent, RID_SVXBMP_PAGEHEADERFOOTER);
             else if ( _rEvent.PropertyName == PROPERTY_REPORTFOOTERON )
             {
-                sal_uLong nPos = xReport->getPageFooterOn() ? (GetLevelChildCount(pParent) - 1) : TREELIST_APPEND;
+                sal_uLong nPos = xReport->getPageFooterOn() ? (GetLevelChildCount(pParent) - 1) : ULONG_MAX;
                 traverseSection(xReport->getReportFooter(),pParent,RID_SVXBMP_REPORTHEADERFOOTER,nPos);
             }
         }
@@ -714,7 +715,7 @@ void NavigatorTree::_elementInserted( const container::ContainerEvent& _rEvent )
         uno::Reference< report::XReportComponent> xElement(xProp,uno::UNO_QUERY);
         if ( xProp.is() )
             sName = lcl_getName(xProp);
-        insertEntry(sName,pEntry,(!xElement.is() ? OUString(RID_SVXBMP_RPT_NEW_FUNCTION) : lcl_getImageId(xElement)),TREELIST_APPEND,new UserData(this,xProp));
+        insertEntry(sName,pEntry,(!xElement.is() ? OUString(RID_SVXBMP_RPT_NEW_FUNCTION) : lcl_getImageId(xElement)),ULONG_MAX,new UserData(this,xProp));
     }
     if ( !IsExpanded(pEntry) )
         Expand(pEntry);

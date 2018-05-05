@@ -31,8 +31,6 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <tools/contnr.hxx>
-
 #include <map>
 
 namespace com { namespace sun { namespace star { namespace awt { namespace tree {

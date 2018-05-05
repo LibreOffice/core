@@ -47,7 +47,6 @@
 #include <unotools/configmgr.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/contnr.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <WCopyTable.hxx>
@@ -63,6 +62,8 @@
 #include <sqlmessage.hxx>
 #include "UpdateHelperImpl.hxx"
 #include <cppuhelper/exc_hlp.hxx>
+
+#include <climits>
 
 using namespace dbaui;
 using namespace utl;

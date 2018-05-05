@@ -40,6 +40,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <climits>
 
 #include <strings.hrc>
 #include "xmlfiltersettingsdialog.hxx"
@@ -1447,7 +1448,7 @@ IMPL_LINK( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
 void XMLFilterListBox::addFilterEntry( const filter_info_impl* pInfo )
 {
     const OUString aEntryStr( getEntryString( pInfo ) );
-    InsertEntryToColumn( aEntryStr, TREELIST_APPEND, 0xffff, const_cast<filter_info_impl *>(pInfo) );
+    InsertEntryToColumn( aEntryStr, ULONG_MAX, 0xffff, const_cast<filter_info_impl *>(pInfo) );
 }
 
 void XMLFilterListBox::changeEntry( const filter_info_impl* pInfo )

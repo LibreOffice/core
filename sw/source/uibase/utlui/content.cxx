@@ -92,6 +92,7 @@
 #include <navmgr.hxx>
 #include <AnnotationWin.hxx>
 #include <memory>
+#include <climits>
 
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
@@ -1365,12 +1366,12 @@ void SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                         if(sEntry.isEmpty())
                             sEntry = m_sSpace;
                         if(!pChild || (nLevel == 0))
-                            pChild = InsertEntry(sEntry, pParent, false, TREELIST_APPEND,const_cast<SwContent *>(pCnt));
+                            pChild = InsertEntry(sEntry, pParent, false, ULONG_MAX,const_cast<SwContent *>(pCnt));
                         else
                         {
                             //back search parent.
                             if(static_cast<const SwOutlineContent*>(pCntType->GetMember(i-1))->GetOutlineLevel() < nLevel)
-                                pChild = InsertEntry(sEntry, pChild, false, TREELIST_APPEND, const_cast<SwContent *>(pCnt));
+                                pChild = InsertEntry(sEntry, pChild, false, ULONG_MAX, const_cast<SwContent *>(pCnt));
                             else
                             {
                                 pChild = Prev(pChild);
@@ -1384,7 +1385,7 @@ void SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                                 }
                                 if(pChild)
                                     pChild = InsertEntry(sEntry, pChild,
-                                                false, TREELIST_APPEND, const_cast<SwContent *>(pCnt));
+                                                false, ULONG_MAX, const_cast<SwContent *>(pCnt));
                             }
                         }
                     }
@@ -1400,7 +1401,7 @@ void SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                         OUString sEntry = pCnt->GetName();
                         if (sEntry.isEmpty())
                             sEntry = m_sSpace;
-                        InsertEntry(sEntry, pParent, false, TREELIST_APPEND, const_cast<SwContent *>(pCnt));
+                        InsertEntry(sEntry, pParent, false, ULONG_MAX, const_cast<SwContent *>(pCnt));
                     }
                 }
             }
@@ -1676,7 +1677,7 @@ void SwContentTree::Display( bool bActive )
                 Image aImage(GetBitmapForContentTypeId(nCntType));
                 bool bChOnDemand = 0 != (*ppContentT)->GetMemberCount();
                 pEntry = InsertEntry(sEntry, aImage, aImage,
-                                nullptr, bChOnDemand, TREELIST_APPEND, (*ppContentT));
+                                nullptr, bChOnDemand, ULONG_MAX, (*ppContentT));
                 if(nCntType == m_nLastSelType)
                     pSelEntry = pEntry;
                 sal_Int32 nExpandOptions = (State::HIDDEN == m_eState)
@@ -1727,7 +1728,7 @@ void SwContentTree::Display( bool bActive )
             Image aImage(GetBitmapForContentTypeId(m_nRootType));
             SvTreeListEntry* pParent = InsertEntry(
                     (*ppRootContentT)->GetName(), aImage, aImage,
-                        nullptr, false, TREELIST_APPEND, *ppRootContentT);
+                        nullptr, false, ULONG_MAX, *ppRootContentT);
 
             if(m_nRootType != ContentTypeId::OUTLINE)
             {
@@ -1740,7 +1741,7 @@ void SwContentTree::Display( bool bActive )
                         if(sEntry.isEmpty())
                             sEntry = m_sSpace;
                         InsertEntry( sEntry, pParent,
-                            false, TREELIST_APPEND, const_cast<SwContent *>(pCnt));
+                            false, ULONG_MAX, const_cast<SwContent *>(pCnt));
                     }
                 }
             }

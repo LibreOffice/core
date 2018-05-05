@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:53:27 using:
+ Generated on 2018-05-06 03:55:04 using:
  ./bin/update_pch sc sc --cutoff=12 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -33,6 +33,7 @@
 #include <exception>
 #include <float.h>
 #include <functional>
+#include <helpids.h>
 #include <iomanip>
 #include <iterator>
 #include <limits.h>
@@ -68,7 +69,6 @@
 #include <osl/diagnose.hxx>
 #include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
-#include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
@@ -76,20 +76,16 @@
 #include <osl/module.hxx>
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
-#include <osl/pipe.h>
-#include <osl/process.h>
-#include <osl/security.h>
 #include <osl/security.hxx>
-#include <osl/socket.h>
 #include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
-#include <rtl/byteseq.h>
 #include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
+#include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
@@ -115,13 +111,18 @@
 #include <salhelper/singletonref.hxx>
 #include <salhelper/thread.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/GraphicExternalLink.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/IContext.hxx>
+#include <vcl/IDialogRenderable.hxx>
 #include <vcl/NotebookbarContextControl.hxx>
+#include <vcl/abstdlg.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/button.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/combobox.hxx>
@@ -143,7 +144,6 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/GraphicObject.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/inputctx.hxx>
@@ -155,7 +155,6 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/notebookbar.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pointr.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -168,6 +167,9 @@
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
+#include <vcl/tabctrl.hxx>
+#include <vcl/tabdlg.hxx>
+#include <vcl/tabpage.hxx>
 #include <vcl/task.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
@@ -181,6 +183,7 @@
 #include <vcl/vectorgraphicdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <appoptio.hxx>
@@ -251,6 +254,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/HatchStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -264,10 +268,10 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
-#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <com/sun/star/i18n/LocaleItem.hpp>
-#include <com/sun/star/i18n/XLocaleData4.hpp>
+#include <com/sun/star/i18n/XLocaleData5.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -288,7 +292,6 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -320,7 +323,6 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/extract.hxx>
-#include <comphelper/fileformat.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propagg.hxx>
@@ -329,6 +331,7 @@
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/propertycontainerhelper.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertysetinfo.hxx>
 #include <comphelper/propstate.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -392,7 +395,9 @@
 #include <editeng/langitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/postitem.hxx>
 #include <editeng/scripttypeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/unolingu.hxx>
@@ -420,9 +425,9 @@
 #include <markdata.hxx>
 #include <miscuno.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/deleter.hxx>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/make_unique.hxx>
-#include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <olinetab.hxx>
@@ -461,9 +466,11 @@
 #include <sfx2/sfxstatuslistener.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/shell.hxx>
+#include <sfx2/tabdlg.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sheetdata.hxx>
+#include <sheetevents.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sot/sotdllapi.h>
@@ -487,6 +494,7 @@
 #include <svl/style.hxx>
 #include <svl/stylesheetuser.hxx>
 #include <svl/svldllapi.h>
+#include <svl/typedwhich.hxx>
 #include <svl/undo.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
@@ -505,7 +513,6 @@
 #include <svx/sdasitm.hxx>
 #include <svx/sderitm.hxx>
 #include <svx/sdgcoitm.hxx>
-#include <svx/sdgcpitm.hxx>
 #include <svx/sdggaitm.hxx>
 #include <svx/sdginitm.hxx>
 #include <svx/sdgluitm.hxx>
@@ -516,7 +523,6 @@
 #include <svx/sdprcitm.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
-#include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include <svx/sdshcitm.hxx>
 #include <svx/sdshitm.hxx>
 #include <svx/sdshtitm.hxx>
@@ -536,14 +542,11 @@
 #include <svx/sdynitm.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svddef.hxx>
-#include <svx/svddrag.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svditer.hxx>
-#include <svx/svdlayer.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/svdoedge.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdotext.hxx>
@@ -577,9 +580,7 @@
 #include <textuno.hxx>
 #include <tokenarray.hxx>
 #include <tokenstringcontext.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
-#include <tools/contnr.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>

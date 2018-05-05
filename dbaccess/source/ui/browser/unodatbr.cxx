@@ -128,6 +128,7 @@
 #include <vcl/settings.hxx>
 
 #include <memory>
+#include <climits>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -2039,7 +2040,7 @@ void SbaTableQueryBrowser::implAddDatasource(const OUString& _rDbName, Image& _r
 
         m_pTreeView->getListBox().InsertEntry(
             _rQueryName, _rQueryImage, _rQueryImage, pDatasourceEntry,
-            true /*ChildrenOnDemand*/, TREELIST_APPEND, pQueriesData );
+            true /*ChildrenOnDemand*/, ULONG_MAX, pQueriesData );
     }
 
     // the child for the tables container
@@ -2049,7 +2050,7 @@ void SbaTableQueryBrowser::implAddDatasource(const OUString& _rDbName, Image& _r
 
         m_pTreeView->getListBox().InsertEntry(
             _rTableName, _rTableImage, _rTableImage, pDatasourceEntry,
-            true /*ChildrenOnDemand*/, TREELIST_APPEND, pTablesData );
+            true /*ChildrenOnDemand*/, ULONG_MAX, pTablesData );
     }
 
 }
@@ -2106,7 +2107,7 @@ SvTreeListEntry* SbaTableQueryBrowser::implAppendEntry( SvTreeListEntry* _pParen
     Image aImage;
     pImageProvider->getImages( _rName, getDatabaseObjectType( _eEntryType ), aImage );
 
-    SvTreeListEntry* pNewEntry = m_pTreeView->getListBox().InsertEntry( _rName, _pParent, _eEntryType == etQueryContainer , TREELIST_APPEND, _pUserData );
+    SvTreeListEntry* pNewEntry = m_pTreeView->getListBox().InsertEntry( _rName, _pParent, _eEntryType == etQueryContainer , ULONG_MAX, _pUserData );
 
     m_pTreeView->getListBox().SetExpandedEntryBmp(  pNewEntry, aImage );
     m_pTreeView->getListBox().SetCollapsedEntryBmp( pNewEntry, aImage );
