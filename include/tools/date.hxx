@@ -19,10 +19,14 @@
 #ifndef INCLUDED_TOOLS_DATE_HXX
 #define INCLUDED_TOOLS_DATE_HXX
 
+#include <sal/log.hxx>
+
 #include <tools/toolsdllapi.h>
+
+#include <ostream>
+
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include <sal/log.hxx>
 
 enum DayOfWeek { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY,
                  SATURDAY, SUNDAY };
@@ -243,6 +247,8 @@ public:
     /// An accelerated form of DateToDays on this date
     sal_Int32 GetAsNormalizedDays() const;
 };
+
+TOOLS_DLLPUBLIC std::ostream& operator<<(std::ostream& os, const Date& rDate);
 
 #endif
 
