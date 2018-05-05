@@ -144,7 +144,7 @@ private:
     typedef XclExpRecordList< XclExpName >      XclExpNameList;
     typedef XclExpNameList::RecordRefType       XclExpNameRef;
 
-    typedef ::std::map< ::std::pair<SCTAB, sal_uInt16>, sal_uInt16> NamedExpIndexMap;
+    typedef ::std::map< ::std::pair<SCTAB, OUString>, sal_uInt16> NamedExpMap;
 
 private:
     /**
@@ -153,7 +153,7 @@ private:
      *
      * @return excel's name index.
      */
-    sal_uInt16          FindNamedExpIndex( SCTAB nTab, sal_uInt16 nScIdx );
+    sal_uInt16          FindNamedExp( SCTAB nTab, OUString sName );
 
     /** Returns the index of an existing built-in NAME record with the passed definition, otherwise 0. */
     sal_uInt16          FindBuiltInNameIdx( const OUString& rName,
@@ -179,7 +179,7 @@ private:
      * -1 as their table index, whereas sheet-local names have 0-based table
      *  index.
      */
-    NamedExpIndexMap    maNamedExpMap;
+    NamedExpMap         maNamedExpMap;
     XclExpNameList      maNameList;         /// List of NAME records.
     size_t              mnFirstUserIdx;     /// List index of first user-defined NAME record.
 };
@@ -388,17 +388,18 @@ void XclExpNameManagerImpl::Initialize()
 
 sal_uInt16 XclExpNameManagerImpl::InsertName( SCTAB nTab, sal_uInt16 nScNameIdx )
 {
-    sal_uInt16 nNameIdx = FindNamedExpIndex( nTab, nScNameIdx );
-    if (nNameIdx)
-        return nNameIdx;
-
+    sal_uInt16 nNameIdx = 0;
     const ScRangeData* pData = nullptr;
     ScRangeName* pRN = (nTab == SCTAB_GLOBAL) ? GetDoc().GetRangeName() : GetDoc().GetRangeName(nTab);
     if (pRN)
         pData = pRN->findByIndex(nScNameIdx);
 
     if (pData)
-        nNameIdx = CreateName(nTab, *pData);
+    {
+        nNameIdx = FindNamedExp( nTab, pData->GetName() );
+        if (!nNameIdx)
+            nNameIdx = CreateName(nTab, *pData);
+    }
 
     return nNameIdx;
 }
@@ -502,10 +503,10 @@ void XclExpNameManagerImpl::SaveXml( XclExpXmlStream& rStrm )
 
 // private --------------------------------------------------------------------
 
-sal_uInt16 XclExpNameManagerImpl::FindNamedExpIndex( SCTAB nTab, sal_uInt16 nScIdx )
+sal_uInt16 XclExpNameManagerImpl::FindNamedExp( SCTAB nTab, OUString sName )
 {
-    NamedExpIndexMap::key_type key = NamedExpIndexMap::key_type(nTab, nScIdx);
-    NamedExpIndexMap::const_iterator itr = maNamedExpMap.find(key);
+    NamedExpMap::key_type key = NamedExpMap::key_type(nTab, sName);
+    NamedExpMap::const_iterator itr = maNamedExpMap.find(key);
     return (itr == maNamedExpMap.end()) ? 0 : itr->second;
 }
 
@@ -575,7 +576,7 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
         xName->SetLocalTab(nTab);
     sal_uInt16 nNameIdx = Append( xName );
     // store the index of the NAME record in the lookup map
-    NamedExpIndexMap::key_type key = NamedExpIndexMap::key_type(nTab, rRangeData.GetIndex());
+    NamedExpMap::key_type key = NamedExpMap::key_type(nTab, rRangeData.GetName());
     maNamedExpMap[key] = nNameIdx;
 
     /*  Create the definition formula.
@@ -609,7 +610,7 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
             while( maNameList.GetSize() > nOldListSize )
                 maNameList.RemoveRecord( maNameList.GetSize() - 1 );
             // use index of the found built-in NAME record
-            key = NamedExpIndexMap::key_type(nTab, rRangeData.GetIndex());
+            key = NamedExpMap::key_type(nTab, rRangeData.GetName());
             maNamedExpMap[key] = nNameIdx = nBuiltInIdx;
         }
     }
@@ -688,7 +689,7 @@ void XclExpNameManagerImpl::CreateUserNames()
     for (; itr != itrEnd; ++itr)
     {
         // skip definitions of shared formulas
-        if (!FindNamedExpIndex(SCTAB_GLOBAL, itr->second->GetIndex()))
+        if (!FindNamedExp(SCTAB_GLOBAL, itr->second->GetName()))
             CreateName(SCTAB_GLOBAL, *itr->second);
     }
     //look at every sheet for local range names
@@ -702,7 +703,7 @@ void XclExpNameManagerImpl::CreateUserNames()
         for (; itr != itrEnd; ++itr)
         {
             // skip definitions of shared formulas
-            if (!FindNamedExpIndex(tabIt->first, itr->second->GetIndex()))
+            if (!FindNamedExp(tabIt->first, itr->second->GetName()))
                 CreateName(tabIt->first, *itr->second);
         }
     }
