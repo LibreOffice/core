@@ -44,6 +44,8 @@
 
 #include <systemdatetime.hxx>
 
+#include <iomanip>
+
 #if defined(__sun) && defined(__GNUC__)
 extern long altzone;
 #endif
@@ -415,6 +417,15 @@ sal_uInt64 tools::Time::GetMonotonicTicks()
 #endif // __MACH__
     return nMicroSeconds;
 #endif // _WIN32
+}
+
+std::ostream& operator<<(std::ostream& os, const Time& rTime)
+{
+    os << std::setfill('0') << std::setw(2) << rTime.GetHour() << ":"
+       << std::setfill('0') << std::setw(2) << rTime.GetMin() << ":"
+       << std::setfill('0') << std::setw(2) << rTime.GetSec() << "."
+       << std::setfill('0') << std::setw(9) << rTime.GetNanoSec();
+    return os;
 }
 
 } /* namespace tools */
