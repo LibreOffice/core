@@ -151,6 +151,8 @@ public:
     TOOLS_DLLPUBLIC friend Time     operator -( const tools::Time& rTime1, const tools::Time& rTime2 );
 };
 
+TOOLS_DLLPUBLIC std::ostream& operator<<(std::ostream& os, const Time& rTime);
+
 } /* namespace tools */
 
 #endif
