@@ -557,6 +557,7 @@ postprocess_main_SED := \
 	-e 's,$${STARTCENTER_HIDE_EXTERNAL_LINKS},0,g' \
 	-e 's,$${STARTCENTER_TEMPLREP_URL},http://templates.libreoffice.org/,g' \
 	-e 's,$${SYSTEM_LIBEXTTEXTCAT_DATA},$(SYSTEM_LIBEXTTEXTCAT_DATA),g' \
+	-e 's,$${SYSTEM_LIBNUMBERTEXT_DATA},$(SYSTEM_LIBNUMBERTEXT_DATA),g' \
 
 $(call gb_XcdTarget_get_target,main.xcd) \
 		: $(BUILDDIR)/config_host.mk.stamp \
