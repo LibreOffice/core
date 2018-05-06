@@ -382,7 +382,7 @@ sal_uInt16 TemplateLocalView::createRegion(const OUString &rName)
 
     maRegions.push_back(std::move(pItem));
 
-    return pItem->mnId;
+    return nItemId;
 }
 
 bool TemplateLocalView::renameRegion(const OUString &rTitle, const OUString &rNewTitle)
