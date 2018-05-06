@@ -77,7 +77,6 @@ class SvxGrfCropPage : public SfxTabPage
     // Example
     VclPtr<SvxCropExample> m_pExampleWN;
 
-
     Timer           aTimer;
     OUString        aGraphicName;
     Size            aOrigSize;
@@ -88,7 +87,6 @@ class SvxGrfCropPage : public SfxTabPage
     long            nOldHeight;
     bool            bReset;
     bool            bSetOrigSize;
-
 
     SvxGrfCropPage( vcl::Window *pParent, const SfxItemSet &rSet );
     virtual ~SvxGrfCropPage() override;
@@ -115,7 +113,6 @@ public:
     virtual void Reset( const SfxItemSet *rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet *pSet ) override;
 };
-
 
 #endif
 

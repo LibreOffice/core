@@ -29,10 +29,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 
-
-//  FmShowColsDialog
-
-
 class FmShowColsDialog final : public ModalDialog
 {
     VclPtr<ListBox>        m_pList;

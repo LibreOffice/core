@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_TRANSFRM_HXX
 #define INCLUDED_CUI_SOURCE_INC_TRANSFRM_HXX
 
@@ -27,14 +28,7 @@
 
 #include <basegfx/range/b2drange.hxx>
 
-// predefines
 class SdrView;
-
-/*************************************************************************
-|*
-|* Transform-Tab-Dialog
-|*
-\************************************************************************/
 
 struct SvxSwFrameValidation;
 class SvxTransformTabDialog : public SfxTabDialog
@@ -61,12 +55,7 @@ public:
             void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink );
 };
 
-/*************************************************************************
-|*
-|* position and size tab page
-|*
-\************************************************************************/
-
+/// position and size tab page
 class SvxPositionSizeTabPage : public SvxTabPage
 {
     using TabPage::ActivatePage;
@@ -123,7 +112,6 @@ private:
     double              mfOldHeight;
     RectPoint          meRP;
 
-
     DECL_LINK( ChangePosProtectHdl, Button*, void );
     DECL_LINK( ChangeSizeProtectHdl, Button*, void );
 
@@ -163,11 +151,7 @@ public:
     void        UpdateControlStates();
 };
 
-/*************************************************************************
-|*
-|* rotation angle tab page
-|*
-\************************************************************************/
+/// rotation angle tab page
 class SvxAngleTabPage : public SvxTabPage
 {
     using TabPage::ActivatePage;
@@ -215,11 +199,7 @@ public:
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
 };
 
-/*************************************************************************
-|*
-|* slant/corner radius tab page
-|*
-\************************************************************************/
+/// slant/corner radius tab page
 class SvxSlantTabPage : public SvxTabPage
 {
     using TabPage::ActivatePage;
@@ -268,7 +248,6 @@ public:
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
 };
-
 
 #endif // INCLUDED_CUI_SOURCE_INC_TRANSFRM_HXX
 

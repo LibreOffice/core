@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_PAGE_HXX
 #define INCLUDED_CUI_SOURCE_INC_PAGE_HXX
 
@@ -31,38 +32,9 @@
 #include <i18nutil/paper.hxx>
 #include <svx/flagsdef.hxx>
 
-// class SvxPageDescPage -------------------------------------------------
-/*
-    [Description]
+/**
     TabPage for page settings (size, margins, ...)
-
-    [Items]
-    <SvxPageItem>:          <SID_ATTR_PAGE>
-    <SvxSizeItem>:          <SID_ATTR_SIZE>
-    <SvxSizeItem>:          <SID_ATTR_MAXSIZE>
-    <SvxULSpaceItem>:       <SID_ATTR_LRSPACE>
-    <SvxLRSpaceItem>:       <SID_ATTR_ULSPACE>
-    <SfxAllEnumItem>:       <SID_ATTR_PAPERTRAY>
-    <SvxPaperBinItem>:      <SID_ATTR_PAPERBIN>
-    <SvxBoolItem>:          <SID_ATTR_EXT1>
-    <SvxBoolItem>:          <SID_ATTR_EXT2>
-
-    <SfxSetItem>:           <SID_ATTR_HEADERSET>
-        <SfxBoolItem>:          <SID_ATTR_ON>
-        <SfxBoolItem>:          <SID_ATTR_DYNAMIC>
-        <SfxBoolItem>:          <SID_ATTR_SHARED>
-        <SvxSizeItem>:          <SID_ATTR_SIZE>
-        <SvxULSpaceItem>:       <SID_ATTR_ULSPACE>
-        <SvxLRSpaceItem>:       <SID_ATTR_LRSPACE>
-
-    <SfxSetItem>:           <SID_ATTR_FOOTERSET>
-        <SfxBoolItem>:          <SID_ATTR_ON>
-        <SfxBoolItem>:          <SID_ATTR_DYNAMIC>
-        <SfxBoolItem>:          <SID_ATTR_SHARED>
-        <SvxSizeItem>:          <SID_ATTR_SIZE>
-        <SvxULSpaceItem>:       <SID_ATTR_ULSPACE>
-        <SvxLRSpaceItem>:       <SID_ATTR_LRSPACE>
-*/
+ */
 
 typedef sal_uInt16 MarginPosition;
 

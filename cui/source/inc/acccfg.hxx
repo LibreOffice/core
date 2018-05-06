@@ -70,8 +70,6 @@ public:
     }
 };
 
-// class SfxAcceleratorConfigPage ----------------------------------------
-
 struct TAccInfo
 {
     public:

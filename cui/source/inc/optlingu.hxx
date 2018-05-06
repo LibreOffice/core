@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_OPTLINGU_HXX
 #define INCLUDED_CUI_SOURCE_INC_OPTLINGU_HXX
 
@@ -44,11 +45,7 @@ namespace linguistic2{
 class SvTreeListEntry;
 class SvxLinguData_Impl;
 
-// define ----------------------------------------------------------------
-
 #define GROUP_MODULES   (sal_uInt16(0x0008))
-
-// forward ---------------------------------------------------------------
 
 class SvxEditModulesDlg : public ModalDialog
 {
@@ -88,8 +85,6 @@ public:
     virtual ~SvxEditModulesDlg() override;
     virtual void dispose() override;
 };
-
-// class SvxLinguTabPage -------------------------------------------------
 
 class SvxLinguTabPage : public SfxTabPage
 {

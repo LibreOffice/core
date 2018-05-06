@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_OPTDICT_HXX
 #define INCLUDED_CUI_SOURCE_INC_OPTDICT_HXX
 
@@ -32,7 +33,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-
 #include <svtools/simptabl.hxx>
 #include <svx/langbox.hxx>
 
@@ -41,11 +41,6 @@ namespace linguistic2{
     class XDictionary;
     class XSpellChecker1;
 }}}}
-
-// forward ---------------------------------------------------------------
-
-
-// class SvxNewDictionaryDialog ------------------------------------------
 
 class SvxNewDictionaryDialog : public weld::GenericDialogController
 {
@@ -65,8 +60,6 @@ public:
     const css::uno::Reference<css::linguistic2::XDictionary>& GetNewDictionary() { return m_xNewDic; }
 };
 
-// class SvxDictEdit ----------------------------------------------------
-
 class SvxDictEdit : public Edit
 {
     Link<SvxDictEdit&,bool>  aActionLink;
@@ -84,8 +77,6 @@ class SvxDictEdit : public Edit
 
     virtual void    KeyInput( const KeyEvent& rKEvent ) override;
 };
-
-// class SvxEditDictionaryDialog -----------------------------------------
 
 class SvxEditDictionaryDialog : public ModalDialog
 {
@@ -108,7 +99,7 @@ private:
 
     css::uno::Sequence<
         css::uno::Reference<
-            css::linguistic2::XDictionary >  > aDics;  //! snapshot copy to work on
+            css::linguistic2::XDictionary >  > aDics;  ///< snapshot copy to work on
 
     long                nWidth;
     bool            bFirstSelect;

@@ -27,8 +27,6 @@
 #include <sfx2/basedlgs.hxx>
 #include <vector>
 
-// class AboutDialog -----------------------------------------------------
-
 class AboutDialog : public SfxModalDialog
 {
 private:

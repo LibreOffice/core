@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_TEXTANIM_HXX
 #define INCLUDED_CUI_SOURCE_INC_TEXTANIM_HXX
 
@@ -28,12 +29,7 @@
 
 class SdrView;
 
-/*************************************************************************
-|*
-|* Page for changing TextAnimations (running text etc.)
-|*
-\************************************************************************/
-
+/// Page for changing TextAnimations (running text etc.)
 class SvxTextAnimationPage : public SfxTabPage
 {
 private:
@@ -90,11 +86,6 @@ public:
     virtual void        Reset( const SfxItemSet * ) override;
 };
 
-/*************************************************************************
-|*
-|* Text-Tab-Dialog
-|*
-\************************************************************************/
 class SvxTextTabDialog : public SfxTabDialogController
 {
 private:

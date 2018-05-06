@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_MEASURE_HXX
 #define INCLUDED_CUI_SOURCE_INC_MEASURE_HXX
 
@@ -87,8 +88,10 @@ public:
 
 };
 
-/* Derived from SfxSingleTabDialog, in order to be able to be
-   informed about virtual methods by the control. */
+/**
+    Derived from SfxSingleTabDialog, in order to be able to be
+   informed about virtual methods by the control.
+ */
 class SvxMeasureDialog : public SfxSingleTabDialog
 {
 public:

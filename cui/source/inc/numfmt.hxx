@@ -16,9 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_NUMFMT_HXX
 #define INCLUDED_CUI_SOURCE_INC_NUMFMT_HXX
-
 
 #include <rtl/ustring.hxx>
 #include <sfx2/tabdlg.hxx>
@@ -32,11 +32,9 @@
 #include <vcl/field.hxx>
 #include <vcl/window.hxx>
 
-
 class SvxNumberFormatShell;
 class SvxNumberInfoItem;
 class vector;
-
 
 class SvxNumberPreview : public vcl::Window
 {
@@ -57,7 +55,6 @@ public:
 
     void            NotifyChange( const OUString& rPrevStr, const Color* pColor = nullptr );
 };
-
 
 class SvxNumberFormatTabPage : public SfxTabPage
 {

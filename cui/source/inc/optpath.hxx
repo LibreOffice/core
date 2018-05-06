@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_OPTPATH_HXX
 #define INCLUDED_CUI_SOURCE_INC_OPTPATH_HXX
 
@@ -28,16 +29,13 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <svtools/dialogclosedlistener.hxx>
 
-// forward ---------------------------------------------------------------
-
 namespace svx
 {
     class OptHeaderTabListBox;
 }
+
 struct OptPath_Impl;
 class SvxPathTabPage;
-
-// class SvxPathTabPage --------------------------------------------------
 
 class SvxPathTabPage : public SfxTabPage
 {

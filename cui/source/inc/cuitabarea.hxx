@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_CUITABAREA_HXX
 #define INCLUDED_CUI_SOURCE_INC_CUITABAREA_HXX
 
@@ -41,7 +42,6 @@ class SdrModel;
 class SvxBitmapCtl;
 class SvxColorListBox;
 
-/************************************************************************/
 class ButtonBox
 {
     private:
@@ -133,8 +133,6 @@ public:
     const XColorListRef&  GetNewColorList() const { return mpNewColorList; }
 };
 
-/************************************************************************/
-
 class SvxTransparenceTabPage : public SvxTabPage
 {
     using TabPage::ActivatePage;
@@ -210,8 +208,6 @@ public:
     void SetDlgType(sal_uInt16 nInType) { nDlgType = nInType; }
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
 };
-
-/************************************************************************/
 
 class SvxAreaTabPage : public SvxTabPage
 {
@@ -343,8 +339,6 @@ public:
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
 };
 
-/************************************************************************/
-
 class SvxGradientTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -418,8 +412,6 @@ public:
     void    SetGrdChgd( ChangeType* pIn ) { m_pnGradientListState = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
 };
-
-/************************************************************************/
 
 class SvxHatchTabPage : public SvxTabPage
 {
@@ -495,8 +487,6 @@ public:
 
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
-
-/************************************************************************/
 
 class SvxBitmapTabPage : public SvxTabPage
 {
@@ -574,8 +564,6 @@ public:
     void    SetBmpChgd( ChangeType* pIn ) { m_pnBitmapListState = pIn; }
 };
 
-/************************************************************************/
-
 class SvxPatternTabPage : public SvxTabPage
 {
     using TabPage::ActivatePage;
@@ -636,8 +624,6 @@ public:
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
     void    ChangeColor_Impl();
 };
-
-/************************************************************************/
 
 enum class ColorModel
 {

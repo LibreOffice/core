@@ -42,12 +42,6 @@ enum class HyperLinkPageType
     NONE = USHRT_MAX
 };
 
-/*************************************************************************
-|*
-|* Hyperlink-Dialog
-|*
-\************************************************************************/
-
 class SvxHpLinkDlg;
 class SvxHlinkCtrl : public SfxControllerItem
 {
@@ -63,13 +57,6 @@ public:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                 const SfxPoolItem* pState ) override;
 };
-
-
-/*************************************************************************
-|*
-|* Hyperlink-Dialog
-|*
-\************************************************************************/
 
 class SvxHpLinkDlg : public IconChoiceDialog
 {

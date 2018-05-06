@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_PARAGRPH_HXX
 #define INCLUDED_CUI_SOURCE_INC_PARAGRPH_HXX
 
@@ -30,17 +31,9 @@
 
 class SvxLineSpacingItem;
 
-// class SvxStdParagraphTabPage ------------------------------------------
 /*
-    [Description]
     With this TabPage standard attributes of a paragraph can be set
     (indention, distance, alignment, line spacing).
-
-    [Items]
-    <SvxAdjustItem><SID_ATTR_PARA_ADJUST>
-    <SvxLineSpacingItem><SID_ATTR_PARA_LINESPACE>
-    <SvxULSpaceItem><SID_ATTR_ULSPACE>
-    <SvxLRSpaceItem><SID_ATTR_LRSPACE>
 */
 
 class SvxStdParagraphTabPage: public SfxTabPage
@@ -121,8 +114,6 @@ public:
     virtual void            PageCreated(const SfxAllItemSet& aSet) override;
 };
 
-// class SvxParaAlignTabPage ------------------------------------------------
-
 class SvxParaAlignTabPage : public SfxTabPage
 {
     friend class VclPtr<SvxParaAlignTabPage>;
@@ -180,18 +171,9 @@ public:
     virtual void            PageCreated(const SfxAllItemSet& aSet) override;
 };
 
-// class SvxExtParagraphTabPage ------------------------------------------
-/*
-    [Description]
+/**
     With this TabPage special attributes of a paragraph can be set
     (hyphenation, pagebreak, orphan, widow, ...).
-
-    [Items]
-    <SvxHyphenZoneItem><SID_ATTR_PARA_HYPHENZONE>
-    <SvxFormatBreakItem><SID_ATTR_PARA_PAGEBREAK>
-    <SvxFormatSplitItem><SID_ATTR_PARA_SPLIT>
-    <SvxWidowsItem><SID_ATTR_PARA_WIDOWS>
-    <SvxOrphansItem><SID_ATTR_PARA_ORPHANS>
 */
 
 class SvxExtParagraphTabPage: public SfxTabPage

@@ -25,8 +25,6 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/configuration/XReadWriteAccess.hpp>
 
-// class SvxPathTabPage --------------------------------------------------
-
 class SvxOnlineUpdateTabPage : public SfxTabPage
 {
 private:
@@ -67,7 +65,6 @@ public:
     virtual void            Reset( const SfxItemSet* rSet ) override;
     virtual void            FillUserData() override;
 };
-
 
 #endif
 

@@ -47,7 +47,6 @@ public:
     virtual void FillUserData() override;
 };
 
-
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_OPTBASIC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

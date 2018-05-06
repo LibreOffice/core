@@ -27,7 +27,6 @@
 namespace vcl { class Window; }
 class SfxItemSet;
 
-
 class SvxJSearchOptionsPage : public SfxTabPage
 {
 private:
@@ -74,7 +73,6 @@ public:
                         GetTransliterationFlags() const { return nTransliterationFlags; }
     void                SetTransliterationFlags( TransliterationFlags nSettings );
 };
-
 
 #endif
 

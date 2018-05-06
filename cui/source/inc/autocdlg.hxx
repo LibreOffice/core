@@ -39,8 +39,6 @@ class SmartTagMgr;
 
 namespace editeng { class SortedAutoCompleteStrings; }
 
-// class OfaAutoCorrDlg --------------------------------------------------
-
 class OfaAutoCorrDlg : public SfxTabDialog
 {
     VclPtr<VclContainer> m_pLanguageBox;
@@ -58,8 +56,6 @@ public:
 
     void EnableLanguage(bool bEnable);
 };
-
-// class OfaACorrCheckListBox ------------------------------------------
 
 class OfaACorrCheckListBox : public SvSimpleTable
 {
@@ -87,9 +83,6 @@ class OfaACorrCheckListBox : public SvSimpleTable
         static SvButtonState GetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol );
         void            SetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol, SvButtonState );
 };
-
-// class OfaAutocorrOptionsPage ------------------------------------------
-
 
 class OfaAutocorrOptionsPage : public SfxTabPage
 {
@@ -120,8 +113,6 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
 
 };
-
-// class OfaSwAutoFmtOptionsPage ----------------------------------------------------
 
 class OfaSwAutoFmtOptionsPage : public SfxTabPage
 {
@@ -179,8 +170,6 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
 };
 
-// class AutoCorrEdit ----------------------------------------------------
-
 class AutoCorrEdit : public Edit
 {
     Link<AutoCorrEdit&,bool>  aActionLink;
@@ -211,9 +200,6 @@ public:
     virtual void    KeyInput( const KeyEvent& rKEvent ) override;
     virtual void    Resize() override;
 };
-
-// class OfaAutocorrReplacePage ------------------------------------------
-
 
 struct DoubleString
 {
@@ -290,8 +276,6 @@ public:
     void    NewEntry(const OUString& sShort, const OUString& sLong, bool bKeepSourceFormatting);
 };
 
-// class OfaAutocorrExceptPage ---------------------------------------------
-
 struct StringsArrays
 {
     std::vector<OUString> aAbbrevStrings;
@@ -347,8 +331,6 @@ public:
     void                SetLanguage(LanguageType eSet);
 
 };
-
-// class OfaQuoteTabPage -------------------------------------------------
 
 class OfaQuoteTabPage : public SfxTabPage
 {
@@ -410,8 +392,6 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
 };
 
-// class OfaAutoCompleteTabPage ---------------------------------------------
-
 class OfaAutoCompleteTabPage : public SfxTabPage
 {
     friend class VclPtr<OfaAutoCompleteTabPage>;
@@ -465,8 +445,6 @@ public:
     void CopyToClipboard() const;
     DECL_LINK(DeleteHdl, Button*, void);
 };
-
-// class OfaSmartTagOptionsTabPage ---------------------------------------------
 
 /** Smart tag options tab page
 

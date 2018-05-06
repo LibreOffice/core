@@ -119,12 +119,8 @@ namespace svx
 
         virtual short   Execute() override;
     };
-
-
 }
 
-
 #endif // INCLUDED_CUI_SOURCE_INC_DBREGISTER_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

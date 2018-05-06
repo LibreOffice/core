@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_CHARDLG_HXX
 #define INCLUDED_CUI_SOURCE_INC_CHARDLG_HXX
 
@@ -28,12 +29,8 @@
 #include <vcl/layout.hxx>
 #include <memory>
 
-// forward ---------------------------------------------------------------
-
 class SvxFontListItem;
 class FontList;
-
-// class SvxCharBasePage -------------------------------------------------
 
 class SvxCharBasePage : public SfxTabPage
 {
@@ -61,8 +58,6 @@ public:
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
 
 };
-
-// class SvxCharNamePage -------------------------------------------------
 
 struct SvxCharNamePage_Impl;
 
@@ -165,8 +160,6 @@ public:
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 
-// class SvxCharEffectsPage ----------------------------------------------
-
 class SvxCharEffectsPage : public SvxCharBasePage
 {
     friend class VclPtr<SvxCharEffectsPage>;
@@ -249,9 +242,6 @@ public:
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 
-// class SvxCharPositionPage ---------------------------------------------
-
-
 class SvxCharPositionPage : public SvxCharBasePage
 {
     friend class VclPtr<SvxCharPositionPage>;
@@ -324,8 +314,6 @@ public:
     virtual void        FillUserData() override;
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
-
-// class SvxCharTwoLinesPage ---------------------------------------------
 
 class SvxCharTwoLinesPage : public SvxCharBasePage
 {

@@ -20,11 +20,11 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_SDRCELLDLG_HXX
 #define INCLUDED_CUI_SOURCE_INC_SDRCELLDLG_HXX
 
-
 #include <sfx2/tabdlg.hxx>
 #include <svx/xtable.hxx>
 
 class SdrModel;
+
 class SvxFormatCellsDialog : public SfxTabDialog
 {
 private:

@@ -76,8 +76,6 @@ public:
     const XColorListRef& GetNewColorList() const { return mpNewColorList; }
 };
 
-/*************************************************************************/
-
 struct SvxBmpItemInfo;
 
 class SvxLineTabPage : public SvxTabPage
@@ -234,8 +232,6 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
-/*************************************************************************/
-
 class SvxLineDefTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -318,8 +314,6 @@ public:
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
-
-/*************************************************************************/
 
 class SvxLineEndDefTabPage : public SfxTabPage
 {

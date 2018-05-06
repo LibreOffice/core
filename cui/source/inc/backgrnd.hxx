@@ -34,13 +34,9 @@ struct SvxBackgroundTable_Impl;
 struct SvxBackgroundPage_Impl;
 class SvxBrushItem;
 
-/** class SvxBackgroundTabPage --------------------------------------------
-
-    [Description]
+/**
     With this TabPage a Brush (e. g. for a frame's background color)
     can be set.
-    [Items]
-    <SvxBrushItem>:     <SID_ATTR_BRUSH>;
 */
 
 class SvxBackgroundTabPage : public SvxTabPage
@@ -86,7 +82,6 @@ private:
 
     VclPtr<CheckBox>               m_pBtnPreview;
 
-    // Background Bitmap ----------------------------------
     VclPtr<VclContainer>           m_pBitmapContainer;
     VclPtr<VclContainer>           m_pFileFrame;
     VclPtr<PushButton>             m_pBtnBrowse;
@@ -101,8 +96,6 @@ private:
     VclPtr<SvxRectCtl>             m_pWndPosition;
 
     VclPtr<BackgroundPreviewImpl>  m_pPreviewWin2;
-
-    // DDListBox for Writer -------------------------------
 
     Color       aBgdColor;
     sal_uInt16      nHtmlMode;

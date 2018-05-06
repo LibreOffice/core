@@ -26,11 +26,8 @@
 
 #include <svl/poolitem.hxx>
 
-
 namespace svx
 {
-
-
     struct DatabaseRegistration
     {
         OUString sLocation;
@@ -73,8 +70,6 @@ namespace svx
         const DatabaseRegistrations&
                                 getRegistrations() const { return m_aRegistrations; }
     };
-
-
 }
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_DBREGISTERSETTINGS_HXX

@@ -16,10 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_CUIOPTGENRL_HXX
 #define INCLUDED_CUI_SOURCE_INC_CUIOPTGENRL_HXX
-
-// include ---------------------------------------------------------------
 
 #include <svx/optgenrl.hxx>
 #include <sfx2/tabdlg.hxx>
@@ -28,12 +27,7 @@
 
 #include <vector>
 
-// forward ---------------------------------------------------------------
-
 class Edit;
-
-
-// class SvxGeneralTabPage -----------------------------------------------
 
 class SvxGeneralTabPage : public SfxTabPage
 {

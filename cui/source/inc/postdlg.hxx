@@ -16,22 +16,17 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_POSTDLG_HXX
 #define INCLUDED_CUI_SOURCE_INC_POSTDLG_HXX
 
 #include <vcl/weld.hxx>
 
-// class SvxPostItDialog -------------------------------------------------
-/*
-    [Description]
+/**
     In this dialog a note can be created or edited. If the
     application holds a list of notes, it can be iterated
     over this list with links.
 
-    [Items]
-    <SvxPostItAuthorItem><SID_ATTR_POSTIT_AUTHOR>
-    <SvxPostItDateItem><SID_ATTR_POSTIT_DATE>
-    <SvxPostItTextItem><SID_ATTR_POSTIT_TEXT>
 */
 
 class SvxPostItDialog : public weld::GenericDialogController
@@ -50,27 +45,34 @@ public:
                             { m_aNextHdlLink = rLink; }
 
     void EnableTravel(bool bNext, bool bPrev);
+
     OUString GetNote() const
     {
         return m_xEditED->get_text();
     }
+
     void SetNote(const OUString& rTxt)
     {
         m_xEditED->set_text(rTxt);
     }
+
     void ShowLastAuthor(const OUString& rAuthor, const OUString& rDate);
+
     void DontChangeAuthor()
     {
         m_xAuthorBtn->set_sensitive(false);
     }
+
     void HideAuthor()
     {
         m_xInsertAuthor->hide();
     }
+
     void set_title(const OUString& rTitle)
     {
         m_xDialog->set_title(rTitle);
     }
+
     std::shared_ptr<weld::Dialog> GetDialog()
     {
         return m_xDialog;

@@ -27,12 +27,11 @@
 #include <vcl/field.hxx>
 #include <svx/databaseregistrationui.hxx>
 
-
 namespace offapp
 {
-
     struct DriverPooling;
     class DriverListControl;
+
     class ConnectionPoolOptionsPage final : public SfxTabPage
     {
         using TabPage::ActivatePage;

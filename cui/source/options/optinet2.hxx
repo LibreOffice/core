@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTINET2_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTINET2_HXX
 
@@ -35,9 +36,6 @@ namespace svx {
     class SecurityOptionsDialog;
 }
 
-
-// class SvxNoSpaceEdit --------------------------------------------------
-
 class SvxNoSpaceEdit : public Edit
 {
 private:
@@ -51,8 +49,6 @@ public:
     virtual void Modify() override;
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 };
-
-// class SvxProxyTabPage -------------------------------------------------
 
 class SvxProxyTabPage : public SfxTabPage
 {
@@ -98,10 +94,9 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };
 
-// class SvxSecurityTabPage ---------------------------------------------
-
 class SvtSecurityOptions;
 class CertPathDialog;
+
 class SvxSecurityTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -159,6 +154,7 @@ public:
 };
 
 struct SvxEMailTabPage_Impl;
+
 class SvxEMailTabPage : public SfxTabPage
 {
     VclPtr<VclContainer> m_pMailContainer;
@@ -187,6 +183,5 @@ public:
 };
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_OPTINET2_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTJAVA_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTJAVA_HXX
 
@@ -36,8 +37,6 @@
 #include <svtools/simptabl.hxx>
 #include <radiobtnbox.hxx>
 
-// forward ---------------------------------------------------------------
-
 #if HAVE_FEATURE_JAVA
 struct JavaInfo;
 #else
@@ -48,8 +47,6 @@ class   SvxJavaParameterDlg;
 class   SvxJavaClassPathDlg;
 class   SvxJavaListBox;
 class   OfaTreeOptionsDialog;
-
-// class SvxJavaOptionsPage ----------------------------------------------
 
 class SvxJavaOptionsPage : public SfxTabPage
 {
@@ -119,8 +116,6 @@ public:
     virtual void            FillUserData() override;
 };
 
-// class SvxJavaParameterDlg ---------------------------------------------
-
 class SvxJavaParameterDlg : public ModalDialog
 {
 private:
@@ -174,8 +169,6 @@ public:
     void EditParameter();
 };
 
-// class SvxJavaClassPathDlg ---------------------------------------------
-
 class SvxJavaClassPathDlg : public ModalDialog
 {
 private:
@@ -195,7 +188,6 @@ private:
     void             EnableRemoveButton()
                                 { m_pRemoveBtn->Enable(
                                     m_pPathList->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND ); }
-
 
 public:
     explicit SvxJavaClassPathDlg( vcl::Window* pParent );

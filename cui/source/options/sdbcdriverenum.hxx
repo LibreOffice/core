@@ -20,17 +20,14 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_SDBCDRIVERENUM_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_SDBCDRIVERENUM_HXX
 
-
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
 #include <vector>
 #include <memory>
 
-
 namespace offapp
 {
-
     class ODriverEnumerationImpl;
     /** simple class for accessing SDBC drivers registered within the office
         <p>Rather small, introduced to not contaminate other instances with the
@@ -50,12 +47,8 @@ namespace offapp
         const_iterator  begin() const throw();
         const_iterator  end() const throw();
     };
-
-
 }   // namespace offapp
 
-
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_SDBCDRIVERENUM_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

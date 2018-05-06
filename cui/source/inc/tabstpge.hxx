@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_TABSTPGE_HXX
 #define INCLUDED_CUI_SOURCE_INC_TABSTPGE_HXX
 
@@ -31,18 +32,8 @@
 
 class TabWin_Impl;
 
-// class SvxTabulatorTabPage ---------------------------------------------
-/*
-    [Description]
-    In this TabPage tabulators are managed.
-
-    [Items]
-    <SvxTabStopItem><SID_ATTR_TABSTOP>
-    <SfxUInt16Item><SID_ATTR_TABSTOP_DEFAULTS>
-    <SfxUInt16Item><SID_ATTR_TABSTOP_POS>
-    <SfxInt32Item><SID_ATTR_TABSTOP_OFFSET>
-*/
-
+/** In this TabPage tabulators are managed.
+ */
 class SvxTabulatorTabPage : public SfxTabPage
 {
     friend class VclPtr<SvxTabulatorTabPage>;

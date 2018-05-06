@@ -31,8 +31,6 @@
 #include <svtools/svmedit.hxx>
 #include <svtools/svtabbx.hxx>
 
-/********************** SvUpdateLinksDialog ******************************
-*************************************************************************/
 namespace sfx2
 {
     class LinkManager;

@@ -27,14 +27,8 @@
 #include <svtools/treelistbox.hxx>
 
 #include "hlmarkwn_def.hxx"
+
 class SvxHyperlinkTabPageBase;
-
-
-//#                                                                      #
-//# Tree-Window                                                          #
-//#                                                                      #
-
-
 class SvxHlinkDlgMarkWnd;
 
 class SvxHlmarkTreeLBox : public SvTreeListBox
@@ -56,11 +50,7 @@ public:
     virtual Size GetOptimalSize() const override;
 };
 
-
-//#                                                                      #
-//# Window-Class                                                         #
-//#                                                                      #
-class SvxHlinkDlgMarkWnd : public FloatingWindow //FloatingWindow
+class SvxHlinkDlgMarkWnd : public FloatingWindow
 {
 private:
     friend class SvxHlmarkTreeLBox;
@@ -104,7 +94,6 @@ public:
 
     sal_uInt16 SetError( sal_uInt16 nError);
 };
-
 
 #endif // INCLUDED_CUI_SOURCE_INC_HLMARKWN_HXX
 

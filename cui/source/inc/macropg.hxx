@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_MACROPG_HXX
 #define INCLUDED_CUI_SOURCE_INC_MACROPG_HXX
 
@@ -47,13 +48,12 @@ struct EventDisplayName
     {
     }
 };
+
 typedef std::vector< EventDisplayName >   EventDisplayNames;
 
 class SvxMacroTabPage_;
 class SvTabListBox;
-
 class SvxMacroTabPage_Impl;
-
 
 class SvxMacroTabPage_ : public SfxTabPage
 {
@@ -107,8 +107,6 @@ public:
     );
 };
 
-// class SvxMacroAssignDlg --------------------------------------------------
-
 typedef const sal_uInt16* (*GetTabPageRanges)(); // gives international Which-values
 
 class SvxMacroAssignSingleTabDialog : public SfxSingleTabDialog
@@ -119,7 +117,6 @@ public:
 private:
     DECL_LINK( OKHdl_Impl, Button *, void );
 };
-
 
 class SvxMacroAssignDlg : public SvxMacroAssignSingleTabDialog
 {

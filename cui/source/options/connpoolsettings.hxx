@@ -27,10 +27,8 @@
 #include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
 
-
 namespace offapp
 {
-
     struct DriverPooling
     {
         OUString            sName;
@@ -70,7 +68,6 @@ namespace offapp
         DriverPoolingSettings   m_aSettings;
 
     public:
-
         DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings &_rSettings );
 
         virtual bool             operator==( const SfxPoolItem& ) const override;
@@ -78,10 +75,7 @@ namespace offapp
 
         const DriverPoolingSettings& getSettings() const    { return m_aSettings; }
     };
-
-
 }   // namespace offapp
-
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_CONNPOOLSETTINGS_HXX
 

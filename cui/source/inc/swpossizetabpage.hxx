@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_SWPOSSIZETABPAGE_HXX
 #define INCLUDED_CUI_SOURCE_INC_SWPOSSIZETABPAGE_HXX
 
@@ -27,12 +28,12 @@
 #include <svx/swframeposstrings.hxx>
 #include <svx/swframeexample.hxx>
 
-// SvxSwPosSizeTabPage - position and size page for Writer drawing objects
 struct FrmMap;
 class SdrView;
 struct SvxSwFrameValidation;
 enum class SvxAnchorIds;
 
+/// Position and size page for Writer drawing objects
 class SvxSwPosSizeTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;

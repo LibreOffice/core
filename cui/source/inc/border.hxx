@@ -31,13 +31,10 @@
 
 #include <set>
 
-// forward ---------------------------------------------------------------
-
 namespace editeng
 {
     class SvxBorderLine;
 }
-
 
 class SvxBorderTabPage : public SfxTabPage
 {
@@ -150,7 +147,6 @@ private:
     bool IsBorderLineStyleAllowed( SvxBorderLineStyle nStyle ) const;
     void UpdateRemoveAdjCellBorderCB( sal_uInt16 nPreset );
 };
-
 
 #endif
 

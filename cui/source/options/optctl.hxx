@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTCTL_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTCTL_HXX
 
@@ -23,8 +24,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <sfx2/tabdlg.hxx>
-
-// class SvxCTLOptionsPage -----------------------------------------------------
 
 class SvxCTLOptionsPage : public SfxTabPage
 {

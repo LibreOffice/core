@@ -24,7 +24,6 @@ class SfxItemSet;
 
 namespace svx
 {
-
     class DbRegisteredNamesConfig
     {
 
@@ -32,12 +31,8 @@ namespace svx
         static void GetOptions(SfxItemSet& _rFillItems);
         static void SetOptions(const SfxItemSet& _rSourceItems);
     };
-
-
 }
 
-
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_DBREGISTEREDNAMESCONFIG_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

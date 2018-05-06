@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_MACROASS_HXX
 #define INCLUDED_CUI_SOURCE_INC_MACROASS_HXX
 
@@ -69,13 +70,11 @@ public:
     virtual void                ActivatePage( const SfxItemSet& ) override;
     void                        LaunchFillGroup();
 
-    // --------- inherit from the base -------------
     virtual bool                FillItemSet( SfxItemSet* rSet ) override;
     virtual void                Reset( const SfxItemSet* rSet ) override;
 
     bool                        IsReadOnly() const override;
 
-    // --------- inherit from the base -------------
     static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 };
 

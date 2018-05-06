@@ -55,9 +55,7 @@ public:
     bool operator==( const SvxChartColorTable & _rOther ) const;
 };
 
-
-// all options
-
+/// All options
 class SvxChartOptions : public ::utl::ConfigItem
 {
 private:
@@ -84,8 +82,7 @@ public:
 };
 
 
-// items
-
+/// Items
 class SvxChartColorTableItem : public SfxPoolItem
 {
 public:

@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_NUMPAGES_HXX
 #define INCLUDED_CUI_SOURCE_INC_NUMPAGES_HXX
 
@@ -81,7 +82,6 @@ struct SvxNumSettings_Impl
 
 typedef std::vector<std::unique_ptr<SvxNumSettings_Impl> > SvxNumSettingsArr_Impl;
 
-
 class SvxSingleNumPickTabPage final : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -114,7 +114,6 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };
-
 
 class SvxBulletPickTabPage final : public SfxTabPage
 {
@@ -195,7 +194,6 @@ public:
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 
-
 class SvxBitmapPickTabPage final : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -219,7 +217,6 @@ class SvxBitmapPickTabPage final : public SfxTabPage
     DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
     DECL_LINK(ClickAddBrowseHdl_Impl, Button*, void );
 
-
 public:
         SvxBitmapPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
@@ -234,7 +231,6 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };
-
 
 class SvxNumOptionsTabPage : public SfxTabPage
 {
@@ -354,7 +350,6 @@ public:
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 
-
 class SvxNumPositionTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -400,7 +395,7 @@ class SvxNumPositionTabPage : public SfxTabPage
 
     bool                bModified           : 1;
     bool                bPreset             : 1;
-    bool                bInInintControl     : 1;  // workaround for Modify-error, is said to be corrected from 391 on
+    bool                bInInintControl     : 1;  ///< workaround for Modify-error, is said to be corrected from 391 on
     bool                bLabelAlignmentPosAndSpaceModeActive;
 
     void                InitControls();

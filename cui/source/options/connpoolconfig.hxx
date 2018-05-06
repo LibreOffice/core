@@ -24,7 +24,6 @@ class SfxItemSet;
 
 namespace offapp
 {
-
     class ConnectionPoolConfig
     {
 
@@ -32,12 +31,8 @@ namespace offapp
         static void GetOptions(SfxItemSet& _rFillItems);
         static void SetOptions(const SfxItemSet& _rSourceItems);
     };
-
-
 }   // namespace offapp
 
-
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_CONNPOOLCONFIG_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_SPELLDIALOG_HXX
 #define INCLUDED_CUI_SOURCE_INC_SPELLDIALOG_HXX
 
@@ -31,7 +32,6 @@
 #include <vcl/toolbox.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-
 #include <svx/langbox.hxx>
 #include <memory>
 #include <svtools/svmedit.hxx>
@@ -44,14 +44,13 @@
 
 namespace svx{ class SpellUndoAction_Impl;}
 
-// forward ---------------------------------------------------------------
-
 struct SpellDialog_Impl;
 
 namespace com{namespace sun{namespace star{
 namespace linguistic2{
     class XSpellChecker1;
 }}}}
+
 namespace svx{
 class SpellDialog;
 struct SpellErrorDescription;
@@ -120,7 +119,6 @@ public:
     void            ResetIgnoreErrorsAt()   { m_aIgnoreErrorsAt.clear(); }
 };
 
-// class SvxSpellDialog ---------------------------------------------
 class SpellDialogChildWindow;
 
 class SpellDialog : public SfxModelessDialog

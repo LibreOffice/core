@@ -23,7 +23,6 @@
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
 
-
 class MacroEventListBox final : public Control
 {
 private:

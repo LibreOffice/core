@@ -31,8 +31,6 @@
 class SfxModule;
 class SfxShell;
 
-// struct OrderedEntry ---------------------------------------------------
-
 struct OrderedEntry
 {
     sal_Int32       m_nIndex;
@@ -42,9 +40,6 @@ struct OrderedEntry
         m_nIndex( nIndex ), m_sId( rId ) {}
 };
 
-
-// struct Module ---------------------------------------------------------
-
 struct Module
 {
     bool                          m_bActive;
@@ -52,8 +47,6 @@ struct Module
 
     Module() : m_bActive( false ) {}
 };
-
-// struct OptionsLeaf ----------------------------------------------------
 
 struct OptionsLeaf
 {
@@ -74,8 +67,6 @@ struct OptionsLeaf
         m_sGroupId( rGroupId ),
         m_nGroupIndex( nGroupIndex ) {}
 };
-
-// struct OptionsNode ----------------------------------------------------
 
 struct OptionsNode
 {
@@ -107,8 +98,6 @@ struct LastPageSaver
 
     LastPageSaver() : m_nLastPageId( USHRT_MAX ) {}
 };
-
-// class OfaTreeOptionsDialog --------------------------------------------
 
 namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
 namespace com { namespace sun { namespace star { namespace awt { class XContainerWindowProvider; } } } }
@@ -192,8 +181,6 @@ public:
 
     void                SetNeedsRestart( svtools::RestartReason eReason );
 };
-
-// class ExtensionsTabPage -----------------------------------------------
 
 namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
 namespace com { namespace sun { namespace star { namespace awt { class XContainerWindowEventHandler; } } } }

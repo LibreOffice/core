@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_CUI_SOURCE_INC_LABDLG_HXX
 #define INCLUDED_CUI_SOURCE_INC_LABDLG_HXX
 
@@ -28,10 +29,7 @@
 #include <svx/sxcecitm.hxx>
 #include <svx/anchorid.hxx>
 
-
 class SdrView;
-
-// class SvxCaptionTabPage -----------------------------------------------
 
 const sal_uInt16 CAPTYPE_BITMAPS_COUNT = 3;
 
@@ -96,7 +94,6 @@ public:
     void FillValueSet();
 };
 
-// class SvxCaptionTabDialog ---------------------------------------------
 struct SvxSwFrameValidation;
 class SvxCaptionTabDialog : public SfxTabDialog
 {
@@ -118,7 +115,6 @@ public:
     /// link for the Writer to validate positions
     void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink );
 };
-
 
 #endif // INCLUDED_CUI_SOURCE_INC_LABDLG_HXX
 

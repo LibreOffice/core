@@ -27,10 +27,8 @@
 #include <svtools/inettbc.hxx>
 #include <svtools/urlcontrol.hxx>
 
-
 namespace svx
 {
-
     /** dialog for editing document links associated with data sources
     */
     class ODocumentLinkDialog final : public ModalDialog
@@ -64,10 +62,7 @@ namespace svx
 
         void validate( );
     };
-
-
 }
-
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_DOCLINKDIALOG_HXX
 
