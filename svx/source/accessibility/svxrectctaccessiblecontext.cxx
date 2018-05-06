@@ -851,7 +851,7 @@ void RectCtlAccessibleContext::FireChildFocus( RectPoint eButton )
             Any                             aOld;
             Any                             aNew;
             aNew <<= AccessibleStateType::FOCUSED;
-            NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aNew, aOld);
+            NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOld, aNew);
         }
     }
     else
@@ -1545,11 +1545,11 @@ void RectCtlChildAccessibleContext::setStateChecked( bool bChecked )
 
         //Send the STATE_CHANGED(Focused) event to accessible
         rMod <<= AccessibleStateType::FOCUSED;
-        NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aNew, aOld);
+        NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOld, aNew);
 
         rMod <<= AccessibleStateType::CHECKED;
 
-        NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aNew, aOld);
+        NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOld, aNew);
     }
 }
 
@@ -1558,7 +1558,7 @@ void RectCtlChildAccessibleContext::FireFocusEvent()
     Any                             aOld;
     Any                             aNew;
     aNew <<= AccessibleStateType::FOCUSED;
-    NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aNew, aOld);
+    NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOld, aNew);
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2( RectCtlChildAccessibleContext, OAccessibleComponentHelper, OAccessibleHelper_Base_3 )
