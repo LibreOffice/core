@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_70edb4ee",
+        "filename": "sw/inc/calbck.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-06T18:48:31Z",
+      "side": 1,
+      "message": "any idea why this is a shared_ptr?",
+      "revId": "2d9b01893c9b6506d32919f29842268d40a11c94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
