@@ -1146,6 +1146,7 @@ private:
     VclPtr<Edit> m_xEntry;
 
     DECL_LINK(ChangeHdl, Edit&, void);
+    DECL_LINK(CursorListener, VclWindowEvent&, void);
 
     class WeldTextFilter : public TextFilter
     {
@@ -1237,8 +1238,17 @@ public:
         m_xEntry->SetFont(rFont);
     }
 
+    virtual void connect_cursor_position(const Link<Entry&, void>& rLink) override
+    {
+        assert(!m_aCursorPositionHdl.IsSet());
+        m_xEntry->AddEventListener(LINK(this, SalInstanceEntry, CursorListener));
+        weld::Entry::connect_cursor_position(rLink);
+    }
+
     virtual ~SalInstanceEntry() override
     {
+        if (m_aCursorPositionHdl.IsSet())
+            m_xEntry->RemoveEventListener(LINK(this, SalInstanceEntry, CursorListener));
         m_xEntry->SetTextFilter(nullptr);
         m_xEntry->SetModifyHdl(Link<Edit&, void>());
     }
@@ -1247,6 +1257,12 @@ public:
 IMPL_LINK_NOARG(SalInstanceEntry, ChangeHdl, Edit&, void)
 {
     signal_changed();
+}
+
+IMPL_LINK(SalInstanceEntry, CursorListener, VclWindowEvent&, rEvent, void)
+{
+    if (rEvent.GetId() == VclEventId::EditSelectionChanged || rEvent.GetId() == VclEventId::EditCaretChanged)
+        signal_cursor_position();
 }
 
 class SalInstanceTreeView : public SalInstanceContainer, public virtual weld::TreeView
@@ -1442,6 +1458,7 @@ private:
     DECL_LINK(UpDownHdl, SpinField&, void);
     DECL_LINK(LoseFocusHdl, Control&, void);
     DECL_LINK(OutputHdl, Edit&, bool);
+    DECL_LINK(InputHdl, sal_Int64*, TriState);
 
 public:
     SalInstanceSpinButton(NumericField* pButton, bool bTakeOwnership)
@@ -1452,6 +1469,7 @@ public:
         m_xButton->SetDownHdl(LINK(this, SalInstanceSpinButton, UpDownHdl));
         m_xButton->SetLoseFocusHdl(LINK(this, SalInstanceSpinButton, LoseFocusHdl));
         m_xButton->SetOutputHdl(LINK(this, SalInstanceSpinButton, OutputHdl));
+        m_xButton->SetInputHdl(LINK(this, SalInstanceSpinButton, InputHdl));
     }
 
     virtual int get_value() const override
@@ -1494,6 +1512,11 @@ public:
         m_xButton->SetDecimalDigits(digits);
     }
 
+    void DisableRemainderFactor()
+    {
+        m_xButton->DisableRemainderFactor();
+    }
+
     virtual unsigned int get_digits() const override
     {
         return m_xButton->GetDecimalDigits();
@@ -1501,6 +1524,7 @@ public:
 
     virtual ~SalInstanceSpinButton() override
     {
+        m_xButton->SetInputHdl(Link<sal_Int64*, TriState>());
         m_xButton->SetOutputHdl(Link<Edit&, bool>());
         m_xButton->SetLoseFocusHdl(Link<Control&, void>());
         m_xButton->SetDownHdl(Link<SpinField&, void>());
@@ -1521,6 +1545,15 @@ IMPL_LINK_NOARG(SalInstanceSpinButton, LoseFocusHdl, Control&, void)
 IMPL_LINK_NOARG(SalInstanceSpinButton, OutputHdl, Edit&, bool)
 {
     return signal_output();
+}
+
+IMPL_LINK(SalInstanceSpinButton, InputHdl, sal_Int64*, pResult, TriState)
+{
+    int nResult;
+    TriState eRet = signal_input(&nResult);
+    if (eRet == TRISTATE_TRUE)
+        *pResult = nResult;
+    return eRet;
 }
 
 class SalInstanceLabel : public SalInstanceWidget, public virtual weld::Label
@@ -2152,6 +2185,16 @@ public:
     {
         NumericField* pSpinButton = m_xBuilder->get<NumericField>(id);
         return pSpinButton ? new SalInstanceSpinButton(pSpinButton, bTakeOwnership) : nullptr;
+    }
+
+    virtual weld::TimeSpinButton* weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,
+                                                        bool bTakeOwnership) override
+    {
+        weld::TimeSpinButton* pRet = new weld::TimeSpinButton(weld_spin_button(id, bTakeOwnership), eFormat);
+        SalInstanceSpinButton* pButton = dynamic_cast<SalInstanceSpinButton*>(pRet->get_widget());
+        assert(pButton);
+        pButton->DisableRemainderFactor(); //so with hh::mm::ss, incrementing mm will not reset ss
+        return pRet;
     }
 
     virtual weld::ComboBoxText* weld_combo_box_text(const OString &id, bool bTakeOwnership) override

@@ -430,7 +430,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
         }
         case 13:
         {
-            // CreateSdStartPresentationDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs, const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList) override;
+            // CreateSdStartPresentationDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList) override;
             const std::vector<OUString> aPageNames;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
             CPPUNIT_ASSERT(pDrawDoc);
@@ -451,8 +451,9 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             aDlgSet.Put(SfxBoolItem(ATTR_PRESENT_SHOW_PAUSELOGO, rPresentationSettings.mbShowPauseLogo));
             //SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
             aDlgSet.Put(SfxInt32Item(ATTR_PRESENT_DISPLAY, 0 /*pOptions->GetDisplay()*/));
+            vcl::Window* pWin = Application::GetDefDialogParent(),
             pRetval = getSdAbstractDialogFactory()->CreateSdStartPresentationDlg(
-                Application::GetDefDialogParent(),
+                pWin ? pWin->GetFrameWeld() : nullptr,
                 aDlgSet,
                 aPageNames,
                 nullptr);
