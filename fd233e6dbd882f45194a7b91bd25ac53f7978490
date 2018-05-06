@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_7554c620",
+        "filename": "include/tools/helpers.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-06T12:42:00Z",
+      "side": 1,
+      "message": "one inch is 25.4 mm \u003d 2540 100th-mm",
+      "range": {
+        "startLine": 61,
+        "startChar": 4,
+        "endLine": 61,
+        "endChar": 22
+      },
+      "revId": "fd233e6dbd882f45194a7b91bd25ac53f7978490",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_95313a0e",
+        "filename": "include/tools/helpers.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-06T12:42:00Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 83,
+        "startChar": 30,
+        "endLine": 83,
+        "endChar": 36
+      },
+      "revId": "fd233e6dbd882f45194a7b91bd25ac53f7978490",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
