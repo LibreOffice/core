@@ -68,14 +68,6 @@ public class _ChartDataPointProperties extends MultiPropertyTest {
         doc.setDiagram(Line);
     }
 
-    protected PropertyTester URLTester = new PropertyTester() {
-        @Override
-        protected Object getNewValue(String propName, Object oldValue)
-                throws java.lang.IllegalArgumentException {
-            return utils.getFullTestURL("space-metal.jpg");
-        }
-    };
-
     /**
     * Tests property 'SymbolBitmapURL' using file <code>polibal.gif</code>.
     */
