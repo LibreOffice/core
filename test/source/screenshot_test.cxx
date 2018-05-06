@@ -16,7 +16,6 @@
 #include <vcl/pngwrite.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/configmgr.hxx>
-#include <unotools/syslocaleoptions.hxx>
 
 
 namespace {
@@ -39,8 +38,7 @@ ScreenshotTest::ScreenshotTest()
 :   m_aScreenshotDirectory("screenshots"),
     maKnownDialogs()
 {
-    SvtSysLocaleOptions localeOptions;
-    maCurrentLanguage = localeOptions.GetRealUILanguageTag().getBcp47();
+    maCurrentLanguage = OUString::fromUtf8(getenv("LO_TEST_LOCALE"));
 }
 
 ScreenshotTest::~ScreenshotTest()
