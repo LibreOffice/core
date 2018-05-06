@@ -86,16 +86,6 @@ public class _LineDiagram extends MultiPropertyTest {
         doc.setDiagram(oldDiagram);
     }
 
-    protected PropertyTester URLTester = new PropertyTester() {
-        @Override
-        protected Object getNewValue(String propName, Object oldValue)
-                throws java.lang.IllegalArgumentException {
-            if (oldValue.equals(util.utils.getFullTestURL("space-metal.jpg")))
-                return util.utils.getFullTestURL("crazy-blue.jpg"); else
-                return util.utils.getFullTestURL("space-metal.jpg");
-        }
-    } ;
-
     protected PropertyTester SymbolTester = new PropertyTester() {
         @Override
         protected Object getNewValue(String propName, Object oldValue)
