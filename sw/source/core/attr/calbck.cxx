@@ -25,6 +25,43 @@
 #include <tools/debug.hxx>
 #include <algorithm>
 
+namespace sw
+{
+    class ListenerEntry final : public SwClient
+    {
+        SwClient *m_pToTell;
+
+    public:
+        ListenerEntry(SwClient* pTellHim, SwModify * pDepend) : SwClient(pDepend), m_pToTell(pTellHim) {}
+        ListenerEntry(ListenerEntry&) = delete;
+
+        /** get Client information */
+        virtual bool GetInfo( SfxPoolItem& rInfo) const override
+            { return m_pToTell == nullptr || m_pToTell->GetInfo( rInfo ); }
+    private:
+        virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem *pNewValue ) override
+        {
+            SwClientNotify(*GetRegisteredIn(), sw::LegacyModifyHint(pOldValue, pNewValue));
+        }
+        virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) override
+        {
+            if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+            {
+                if( pLegacyHint->m_pNew && pLegacyHint->m_pNew->Which() == RES_OBJECTDYING )
+                {
+                    auto pModifyChanged = CheckRegistration(pLegacyHint->m_pOld);
+                    if(pModifyChanged)
+                        m_pToTell->SwClientNotify(rModify, *pModifyChanged);
+                }
+                else if( m_pToTell )
+                    m_pToTell->ModifyNotification(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+            }
+            else if(m_pToTell)
+                m_pToTell->SwClientNotifyCall(rModify, rHint);
+        }
+    };
+}
+
 sw::LegacyModifyHint::~LegacyModifyHint() {}
 sw::ModifyChangedHint::~ModifyChangedHint() {}
 
@@ -296,10 +333,17 @@ void SwModify::CheckCaching( const sal_uInt16 nWhich )
     }
 }
 
+sw::WriterMultiListener::WriterMultiListener(SwClient& rToTell)
+    : m_rToTell(rToTell)
+{}
+
+sw::WriterMultiListener::~WriterMultiListener()
+{}
+
 void sw::WriterMultiListener::StartListening(SwModify* pDepend)
 {
     EndListening(nullptr);
-    m_vDepends.emplace_back(pointer_t( new SwDepend(&m_rToTell, pDepend)));
+    m_vDepends.emplace_back(pointer_t(new ListenerEntry(&m_rToTell, pDepend)));
 }
 
 

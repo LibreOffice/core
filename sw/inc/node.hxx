@@ -371,7 +371,7 @@ protected:
        SwAttrSet (handle): */
     sal_uInt16 ClearItemsFromAttrSet( const std::vector<sal_uInt16>& rWhichIds );
 
-    virtual void SwClientNotify( const SwModify&, const SfxHint& rHint);
+    virtual void SwClientNotify( const SwModify&, const SfxHint& rHint) override;
 
 public:
 
