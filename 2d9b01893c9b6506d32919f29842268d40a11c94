@@ -16,6 +16,24 @@
       "revId": "2d9b01893c9b6506d32919f29842268d40a11c94",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_70c0542b",
+        "filename": "sw/inc/calbck.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2018-05-06T21:32:36Z",
+      "side": 1,
+      "message": "Because MSVC is somehow too stupid to track unique_ptr in a std::vector -- even if ListenerEntry has a move ctor.  This _should_ work AFAICS. Two possible reasons:\n- the move ctor was not noexcept, maybe that would fix it\n- there were no noexcept move ctors in the base classes\n\nBut I would investigate that in a followup commit ...",
+      "parentUuid": "9a30ddce_70edb4ee",
+      "revId": "2d9b01893c9b6506d32919f29842268d40a11c94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
