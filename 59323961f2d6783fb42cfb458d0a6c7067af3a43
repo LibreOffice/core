@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_30225c02",
+        "filename": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-06T22:39:26Z",
+      "side": 1,
+      "message": "I\u0027m surprised we can change global defaults like that, w/o side effects",
+      "revId": "59323961f2d6783fb42cfb458d0a6c7067af3a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
