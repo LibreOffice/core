@@ -251,18 +251,19 @@ private:
 
 namespace sw
 {
+    class ListenerEntry;
     class SW_DLLPUBLIC WriterMultiListener final
     {
         #ifdef WNT
-            typedef std::shared_ptr<SwDepend> pointer_t;
+            typedef std::shared_ptr<ListenerEntry> pointer_t;
         #else
-            typedef std::unique_ptr<SwDepend> pointer_t;
+            typedef std::unique_ptr<ListenerEntry> pointer_t;
         #endif
         SwClient& m_rToTell;
         std::vector<pointer_t> m_vDepends;
         public:
-            WriterMultiListener(SwClient& rToTell)
-                : m_rToTell(rToTell) {}
+            WriterMultiListener(SwClient& rToTell);
+            ~WriterMultiListener();
             void StartListening(SwModify* pDepend);
             void EndListening(SwModify* pDepend);
             bool IsListeningTo(const SwModify* const pDepend);
