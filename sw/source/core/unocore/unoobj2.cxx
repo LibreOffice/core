@@ -1582,7 +1582,7 @@ struct SwXParaFrameEnumerationImpl final : public SwXParaFrameEnumeration
         }
         else
         {
-            // removing orphaned SwDepends
+            // removing orphaned Clients
             const auto iter = std::remove_if(m_vFrames.begin(), m_vFrames.end(),
                     [] (std::shared_ptr<sw::FrameClient>& rEntry) -> bool { return !rEntry->GetRegisteredIn(); });
             m_vFrames.erase(iter, m_vFrames.end());
