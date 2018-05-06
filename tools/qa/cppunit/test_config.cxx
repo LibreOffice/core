@@ -151,6 +151,7 @@ public:
         aConfig.WriteKey(OString("testkey_new"), OString("testvalue"));
 
         nActual = aConfig.GetKeyCount();
+        nExpected = 2;
         CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
         CPPUNIT_ASSERT_EQUAL(OString("testvalue"), aConfig.ReadKey(OString("testkey_new")));
 
