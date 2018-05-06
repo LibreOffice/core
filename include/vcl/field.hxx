@@ -40,7 +40,6 @@ class VCL_DLLPUBLIC FormatterBase
 {
 private:
     VclPtr<Edit>            mpField;
-    Link<Edit&, bool>       maOutputHdl;
     std::unique_ptr<LocaleDataWrapper>
                             mpLocaleDataWrapper;
     bool                    mbReformat;
@@ -85,8 +84,6 @@ public:
 
     void                    EnableEmptyFieldValue( bool bEnable )   { mbEmptyFieldValueEnabled = bEnable; }
     bool                    IsEmptyFieldValueEnabled() const        { return mbEmptyFieldValueEnabled; }
-
-    void                    SetOutputHdl(const Link<Edit&, bool>& rLink) { maOutputHdl = rLink; }
 };
 
 #define PATTERN_FORMAT_EMPTYLITERALS    (sal_uInt16(0x0001))
@@ -152,6 +149,7 @@ public:
     void                    SetShowTrailingZeros( bool bShowTrailingZeros );
     bool                    IsShowTrailingZeros() const { return mbShowTrailingZeros; }
 
+    void                    DisableRemainderFactor();
 
     void                    SetUserValue( sal_Int64 nNewValue );
     virtual void            SetValue( sal_Int64 nNewValue );
@@ -163,12 +161,16 @@ public:
     sal_Int64               Normalize( sal_Int64 nValue ) const;
     sal_Int64               Denormalize( sal_Int64 nValue ) const;
 
+    void  SetInputHdl(const Link<sal_Int64*,TriState>& rLink) { m_aInputHdl = rLink; }
+    void  SetOutputHdl(const Link<Edit&, bool>& rLink) { m_aOutputHdl = rLink; }
 protected:
     sal_Int64               mnFieldValue;
     sal_Int64               mnLastValue;
     sal_Int64               mnMin;
     sal_Int64               mnMax;
     bool                    mbWrapOnLimits;
+    bool                    mbFormatting;
+    bool                    mbDisableRemainderFactor;
 
     // the members below are used in all derivatives of NumericFormatter
     // not in NumericFormatter itself.
@@ -182,8 +184,9 @@ protected:
     void                    FieldDown();
     void                    FieldFirst();
     void                    FieldLast();
+    void                    FormatValue(Selection const * pNewSelection = nullptr);
 
-    SAL_DLLPRIVATE void     ImplNumericReformat( sal_Int64& rValue, OUString& rOutStr );
+    SAL_DLLPRIVATE void     ImplNumericReformat();
     SAL_DLLPRIVATE void     ImplNewFieldValue( sal_Int64 nNewValue );
     SAL_DLLPRIVATE void     ImplSetUserValue( sal_Int64 nNewValue, Selection const * pNewSelection = nullptr );
 
@@ -192,6 +195,8 @@ protected:
 private:
     SAL_DLLPRIVATE void     ImplInit();
 
+    Link<sal_Int64*, TriState> m_aInputHdl;
+    Link<Edit&, bool>       m_aOutputHdl;
     sal_uInt16              mnDecimalDigits;
     bool                    mbThousandSep;
     bool                    mbShowTrailingZeros;
@@ -358,12 +363,6 @@ public:
 
 class VCL_DLLPUBLIC TimeFormatter : public FormatterBase
 {
-public:
-                            enum class TimeFormat {
-                                Hour12,
-                                Hour24
-                            };
-
 private:
     tools::Time             maLastTime;
     tools::Time             maMin;
@@ -386,6 +385,13 @@ protected:
     SAL_DLLPRIVATE bool     ImplAllowMalformedInput() const;
 
 public:
+    static OUString         FormatTime(const tools::Time& rNewTime, TimeFieldFormat eFormat, TimeFormat eHourFormat, bool bDuration, const LocaleDataWrapper& rLocaleData);
+    static bool             TextToTime(const OUString& rStr, tools::Time& rTime, TimeFieldFormat eFormat, bool bDuration, const LocaleDataWrapper& rLocaleDataWrapper, bool _bSkipInvalidCharacters = true);
+    static int              GetTimeArea(TimeFieldFormat eFormat, const OUString& rText, int nCursor,
+                                        const LocaleDataWrapper& rLocaleDataWrapper);
+    static tools::Time      SpinTime(bool bUp, const tools::Time& rTime, TimeFieldFormat eFormat,
+                                     bool bDuration, const OUString& rText, int nCursor,
+                                     const LocaleDataWrapper& rLocaleDataWrapper);
 
     virtual                 ~TimeFormatter() override;
 

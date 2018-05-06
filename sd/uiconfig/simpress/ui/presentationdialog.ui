@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">86400000</property>
+    <property name="step_increment">1000</property>
+    <property name="page_increment">60000</property>
+  </object>
   <object class="GtkDialog" id="PresentationDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="presentationdialog|PresentationDialog">Slide Show Settings</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -13,6 +21,64 @@
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="ok">
+                <property name="label">gtk-ok</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="cancel">
+                <property name="label">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="help">
+                <property name="label">gtk-help</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="receives_default">False</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
         <child>
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
@@ -64,7 +130,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkComboBox" id="from_cb">
+                              <object class="GtkComboBoxText" id="from_cb">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
@@ -98,7 +164,6 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">from</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -114,7 +179,7 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">from</property>
+                            <property name="group">allslides</property>
                             <accessibility>
                               <relation type="label-for" target="customslideshow_cb"/>
                             </accessibility>
@@ -125,7 +190,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox" id="customslideshow_cb">
+                          <object class="GtkComboBoxText" id="customslideshow_cb">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
@@ -187,7 +252,7 @@
                             <property name="vexpand">True</property>
                             <property name="column_spacing">12</property>
                             <child>
-                              <object class="GtkComboBox" id="presdisplay_cb">
+                              <object class="GtkComboBoxText" id="presdisplay_cb">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
@@ -201,10 +266,10 @@
                               <object class="GtkLabel" id="presdisplay_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes" context="presentationdialog|presdisplay_label">P_resentation display:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">presdisplay_cb</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -322,7 +387,6 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">auto</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -338,7 +402,7 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">auto</property>
+                                <property name="group">default</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -354,9 +418,9 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">window</property>
+                                <property name="group">default</property>
                                 <accessibility>
-                                  <relation type="label-for" target="pauseduration:hh:mm"/>
+                                  <relation type="label-for" target="pauseduration"/>
                                 </accessibility>
                               </object>
                               <packing>
@@ -381,17 +445,19 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="pauseduration:hh:mm">
+                              <object class="GtkSpinButton" id="pauseduration">
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="tooltip_text" translatable="yes" context="presentationdialog|pauseduration|tooltip_text">Duration of pause</property>
                                 <property name="margin_left">12</property>
+                                <property name="activates_default">True</property>
+                                <property name="adjustment">adjustment1</property>
                                 <accessibility>
                                   <relation type="labelled-by" target="auto"/>
                                 </accessibility>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="pauseduration:hh:mm-atkobject">
+                                  <object class="AtkObject" id="pauseduration-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="presentationdialog|pauseduration-atkobject">Pause Duration</property>
                                   </object>
                                 </child>
@@ -532,6 +598,9 @@
                                 <property name="top_attach">6</property>
                               </packing>
                             </child>
+                            <child>
+                              <placeholder/>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -565,64 +634,6 @@
             <property name="position">0</property>
           </packing>
         </child>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="ok">
-                <property name="label">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="cancel">
-                <property name="label">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="help">
-                <property name="label">gtk-help</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="receives_default">False</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-                <property name="secondary">True</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
       </object>
     </child>
     <action-widgets>
@@ -630,5 +641,8 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>

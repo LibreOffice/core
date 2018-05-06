@@ -15,6 +15,7 @@
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/field.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/virdev.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
@@ -451,9 +452,10 @@ private:
 protected:
     Link<Entry&, void> m_aChangeHdl;
     Link<OUString&, bool> m_aInsertTextHdl;
+    Link<Entry&, void> m_aCursorPositionHdl;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
-
+    void signal_cursor_position() { m_aCursorPositionHdl.Call(*this); }
     void signal_insert_text(OUString& rString);
 
 public:
@@ -470,8 +472,11 @@ public:
     virtual void set_font(const vcl::Font& rFont) = 0;
 
     void connect_changed(const Link<Entry&, void>& rLink) { m_aChangeHdl = rLink; }
-
     void connect_insert_text(const Link<OUString&, bool>& rLink) { m_aInsertTextHdl = rLink; }
+    virtual void connect_cursor_position(const Link<Entry&, void>& rLink)
+    {
+        m_aCursorPositionHdl = rLink;
+    }
 
     void save_value() { m_sSavedValue = get_text(); }
 
@@ -483,6 +488,7 @@ class VCL_DLLPUBLIC SpinButton : virtual public Entry
 protected:
     Link<SpinButton&, void> m_aValueChangedHdl;
     Link<SpinButton&, void> m_aOutputHdl;
+    Link<int*, bool> m_aInputHdl;
 
     void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
 
@@ -492,6 +498,13 @@ protected:
             return false;
         m_aOutputHdl.Call(*this);
         return true;
+    }
+
+    TriState signal_input(int* result)
+    {
+        if (!m_aInputHdl.IsSet())
+            return TRISTATE_INDET;
+        return m_aInputHdl.Call(result) ? TRISTATE_TRUE : TRISTATE_FALSE;
     }
 
 public:
@@ -519,6 +532,7 @@ public:
     void connect_value_changed(const Link<SpinButton&, void>& rLink) { m_aValueChangedHdl = rLink; }
 
     void connect_output(const Link<SpinButton&, void>& rLink) { m_aOutputHdl = rLink; }
+    void connect_input(const Link<int*, bool>& rLink) { m_aInputHdl = rLink; }
 
     int normalize(int nValue) const { return (nValue * Power10(get_digits())); }
 
@@ -621,6 +635,8 @@ public:
         m_aValueChangedHdl = rLink;
     }
 
+    void connect_changed(const Link<Entry&, void>& rLink) { m_xSpinButton->connect_changed(rLink); }
+
     int normalize(int nValue) const { return m_xSpinButton->normalize(nValue); }
     int denormalize(int nValue) const { return m_xSpinButton->denormalize(nValue); }
     void set_sensitive(bool sensitive) { m_xSpinButton->set_sensitive(sensitive); }
@@ -653,7 +669,67 @@ public:
         m_xSpinButton->connect_focus_out(rLink);
     }
     void set_help_id(const OString& rName) { m_xSpinButton->set_help_id(rName); }
+    void set_position(int nCursorPos) { m_xSpinButton->set_position(nCursorPos); }
     const weld::SpinButton* get_widget() const { return m_xSpinButton.get(); }
+};
+
+class VCL_DLLPUBLIC TimeSpinButton
+{
+protected:
+    TimeFieldFormat m_eFormat;
+    std::unique_ptr<weld::SpinButton> m_xSpinButton;
+    Link<TimeSpinButton&, void> m_aValueChangedHdl;
+
+    DECL_LINK(spin_button_value_changed, weld::SpinButton&, void);
+    DECL_LINK(spin_button_output, weld::SpinButton&, void);
+    DECL_LINK(spin_button_input, int* result, bool);
+    DECL_LINK(spin_button_cursor_position, weld::Entry&, void);
+
+    void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
+
+    tools::Time ConvertValue(int nValue) const;
+    int ConvertValue(const tools::Time& rTime) const;
+    OUString format_number(int nValue) const;
+    void update_width_chars();
+
+public:
+    TimeSpinButton(SpinButton* pSpinButton, TimeFieldFormat eFormat)
+        : m_eFormat(eFormat)
+        , m_xSpinButton(pSpinButton)
+    {
+        update_width_chars();
+        m_xSpinButton->connect_output(LINK(this, TimeSpinButton, spin_button_output));
+        m_xSpinButton->connect_input(LINK(this, TimeSpinButton, spin_button_input));
+        m_xSpinButton->connect_value_changed(LINK(this, TimeSpinButton, spin_button_value_changed));
+        m_xSpinButton->connect_cursor_position(
+            LINK(this, TimeSpinButton, spin_button_cursor_position));
+    }
+
+    void set_value(const tools::Time& rTime) { m_xSpinButton->set_value(ConvertValue(rTime)); }
+
+    tools::Time get_value() const { return ConvertValue(m_xSpinButton->get_value()); }
+
+    void connect_value_changed(const Link<TimeSpinButton&, void>& rLink)
+    {
+        m_aValueChangedHdl = rLink;
+    }
+
+    void connect_changed(const Link<Entry&, void>& rLink) { m_xSpinButton->connect_changed(rLink); }
+
+    void set_sensitive(bool sensitive) { m_xSpinButton->set_sensitive(sensitive); }
+    bool get_sensitive() const { return m_xSpinButton->get_sensitive(); }
+    bool get_visible() const { return m_xSpinButton->get_visible(); }
+    void grab_focus() { m_xSpinButton->grab_focus(); }
+    bool has_focus() const { return m_xSpinButton->has_focus(); }
+    void show(bool bShow = true) { m_xSpinButton->show(bShow); }
+    void hide() { m_xSpinButton->hide(); }
+    void save_value() { m_xSpinButton->save_value(); }
+    bool get_value_changed_from_saved() const
+    {
+        return m_xSpinButton->get_value_changed_from_saved();
+    }
+    void set_position(int nCursorPos) { m_xSpinButton->set_position(nCursorPos); }
+    weld::SpinButton* get_widget() { return m_xSpinButton.get(); }
 };
 
 class VCL_DLLPUBLIC Label : virtual public Widget
@@ -782,6 +858,9 @@ public:
     {
         return new MetricSpinButton(weld_spin_button(id, bTakeOwnership), eUnit);
     }
+    virtual TimeSpinButton* weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,
+                                                  bool bTakeOwnership = false)
+        = 0;
     virtual ComboBoxText* weld_combo_box_text(const OString& id, bool bTakeOwnership = false) = 0;
     virtual TreeView* weld_tree_view(const OString& id, bool bTakeOwnership = false) = 0;
     virtual Label* weld_label(const OString& id, bool bTakeOwnership = false) = 0;
