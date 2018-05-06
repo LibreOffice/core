@@ -1964,9 +1964,8 @@ static bool ImplCutTimePortion( OUStringBuffer& _rStr, sal_Int32 _nSepPos, bool 
     return true;
 }
 
-static bool ImplTimeGetValue( const OUString& rStr, tools::Time& rTime,
-                              TimeFieldFormat eFormat, bool bDuration,
-                              const LocaleDataWrapper& rLocaleDataWrapper, bool _bSkipInvalidCharacters = true )
+bool TimeFormatter::TextToTime(const OUString& rStr, tools::Time& rTime, TimeFieldFormat eFormat,
+    bool bDuration, const LocaleDataWrapper& rLocaleDataWrapper, bool _bSkipInvalidCharacters)
 {
     OUStringBuffer    aStr    = rStr;
     short       nHour   = 0;
@@ -2161,7 +2160,7 @@ static bool ImplTimeGetValue( const OUString& rStr, tools::Time& rTime,
 bool TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutStr )
 {
     tools::Time aTime( 0, 0, 0 );
-    if ( !ImplTimeGetValue( rStr, aTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper() ) )
+    if ( !TextToTime( rStr, aTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper() ) )
         return true;
 
     tools::Time aTempTime = aTime;
@@ -2211,81 +2210,102 @@ bool TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutStr )
 
     return true;
 }
+
 bool TimeFormatter::ImplAllowMalformedInput() const
 {
     return !IsEnforceValidValue();
+}
+
+int TimeFormatter::GetTimeArea(TimeFieldFormat eFormat, const OUString& rText, int nCursor,
+                                     const LocaleDataWrapper& rLocaleDataWrapper)
+{
+    int nTimeArea = 0;
+
+    // Area search
+    if (eFormat != TimeFieldFormat::F_SEC_CS)
+    {
+        //Which area is the cursor in of HH:MM:SS.TT
+        for ( sal_Int32 i = 1, nPos = 0; i <= 4; i++ )
+        {
+            sal_Int32 nPos1 = rText.indexOf(rLocaleDataWrapper.getTimeSep(), nPos);
+            sal_Int32 nPos2 = rText.indexOf(rLocaleDataWrapper.getTime100SecSep(), nPos);
+            //which ever comes first, bearing in mind that one might not be there
+            if (nPos1 >= 0 && nPos2 >= 0)
+                nPos = std::min(nPos1, nPos2);
+            else if (nPos1 >= 0)
+                nPos = nPos1;
+            else
+                nPos = nPos2;
+            if (nPos < 0 || nPos >= nCursor)
+            {
+                nTimeArea = i;
+                break;
+            }
+            else
+                nPos++;
+        }
+    }
+    else
+    {
+        sal_Int32 nPos = rText.indexOf(rLocaleDataWrapper.getTime100SecSep());
+        if (nPos < 0 || nPos >= nCursor)
+            nTimeArea = 3;
+        else
+            nTimeArea = 4;
+    }
+
+    return nTimeArea;
+}
+
+tools::Time TimeFormatter::SpinTime(bool bUp, const tools::Time& rTime, TimeFieldFormat eFormat,
+                                    bool bDuration, const OUString& rText, int nCursor,
+                                    const LocaleDataWrapper& rLocaleDataWrapper)
+{
+    tools::Time aTime(rTime);
+
+    int nTimeArea = GetTimeArea(eFormat, rText, nCursor, rLocaleDataWrapper);
+
+    if ( nTimeArea )
+    {
+        tools::Time aAddTime( 0, 0, 0 );
+        if ( nTimeArea == 1 )
+            aAddTime = tools::Time( 1, 0 );
+        else if ( nTimeArea == 2 )
+            aAddTime = tools::Time( 0, 1 );
+        else if ( nTimeArea == 3 )
+            aAddTime = tools::Time( 0, 0, 1 );
+        else if ( nTimeArea == 4 )
+            aAddTime = tools::Time( 0, 0, 0, 1 );
+
+        if ( !bUp )
+            aAddTime = -aAddTime;
+
+        aTime += aAddTime;
+        if (!bDuration)
+        {
+            tools::Time aAbsMaxTime( 23, 59, 59, 999999999 );
+            if ( aTime > aAbsMaxTime )
+                aTime = aAbsMaxTime;
+            tools::Time aAbsMinTime( 0, 0 );
+            if ( aTime < aAbsMinTime )
+                aTime = aAbsMinTime;
+        }
+    }
+
+    return aTime;
 }
 
 void TimeField::ImplTimeSpinArea( bool bUp )
 {
     if ( GetField() )
     {
-        sal_Int32 nTimeArea = 0;
         tools::Time aTime( GetTime() );
         OUString aText( GetText() );
         Selection aSelection( GetField()->GetSelection() );
 
-        // Area search
-        if ( GetFormat() != TimeFieldFormat::F_SEC_CS )
-        {
-            //Which area is the cursor in of HH:MM:SS.TT
-            for ( sal_Int32 i = 1, nPos = 0; i <= 4; i++ )
-            {
-                sal_Int32 nPos1 = aText.indexOf( ImplGetLocaleDataWrapper().getTimeSep(), nPos );
-                sal_Int32 nPos2 = aText.indexOf( ImplGetLocaleDataWrapper().getTime100SecSep(), nPos );
-                //which ever comes first, bearing in mind that one might not be there
-                if (nPos1 >= 0 && nPos2 >= 0)
-                    nPos = std::min(nPos1, nPos2);
-                else if (nPos1 >= 0)
-                    nPos = nPos1;
-                else
-                    nPos = nPos2;
-                if ( nPos < 0 || nPos >= aSelection.Max() )
-                {
-                    nTimeArea = i;
-                    break;
-                }
-                else
-                    nPos++;
-            }
-        }
-        else
-        {
-            sal_Int32 nPos = aText.indexOf( ImplGetLocaleDataWrapper().getTime100SecSep() );
-            if ( nPos < 0 || nPos >= aSelection.Max() )
-                nTimeArea = 3;
-            else
-                nTimeArea = 4;
-        }
+        aTime = TimeFormatter::SpinTime(bUp, aTime, GetFormat(), IsDuration(), aText, aSelection.Max(), ImplGetLocaleDataWrapper());
 
-        if ( nTimeArea )
-        {
-            tools::Time aAddTime( 0, 0, 0 );
-            if ( nTimeArea == 1 )
-                aAddTime = tools::Time( 1, 0 );
-            else if ( nTimeArea == 2 )
-                aAddTime = tools::Time( 0, 1 );
-            else if ( nTimeArea == 3 )
-                aAddTime = tools::Time( 0, 0, 1 );
-            else if ( nTimeArea == 4 )
-                aAddTime = tools::Time( 0, 0, 0, 1 );
-
-            if ( !bUp )
-                aAddTime = -aAddTime;
-
-            aTime += aAddTime;
-            if ( !IsDuration() )
-            {
-                tools::Time aAbsMaxTime( 23, 59, 59, 999999999 );
-                if ( aTime > aAbsMaxTime )
-                    aTime = aAbsMaxTime;
-                tools::Time aAbsMinTime( 0, 0 );
-                if ( aTime < aAbsMinTime )
-                    aTime = aAbsMinTime;
-            }
-            ImplNewFieldValue( aTime );
-        }
-
+        ImplNewFieldValue( aTime );
     }
 }
 
@@ -2329,7 +2349,7 @@ void TimeFormatter::SetMax( const tools::Time& rNewMax )
         ReformatAll();
 }
 
-void TimeFormatter::SetTimeFormat( TimeFormatter::TimeFormat eNewFormat )
+void TimeFormatter::SetTimeFormat( TimeFormat eNewFormat )
 {
     mnTimeFormat = eNewFormat;
 }
@@ -2383,6 +2403,54 @@ void TimeFormatter::ImplNewFieldValue( const tools::Time& rTime )
     }
 }
 
+OUString TimeFormatter::FormatTime(const tools::Time& rNewTime, TimeFieldFormat eFormat, TimeFormat eHourFormat, bool bDuration, const LocaleDataWrapper& rLocaleData)
+{
+    OUString aStr;
+    bool bSec    = false;
+    bool b100Sec = false;
+    if ( eFormat != TimeFieldFormat::F_NONE )
+        bSec = true;
+    if ( eFormat == TimeFieldFormat::F_SEC_CS )
+        b100Sec = true;
+    if ( eFormat == TimeFieldFormat::F_SEC_CS )
+    {
+        sal_uLong n  = rNewTime.GetHour() * 3600L;
+        n       += rNewTime.GetMin()  * 60L;
+        n       += rNewTime.GetSec();
+        aStr     = OUString::number( n );
+        aStr    += rLocaleData.getTime100SecSep();
+        std::ostringstream ostr;
+        ostr.fill('0');
+        ostr.width(9);
+        ostr << rNewTime.GetNanoSec();
+        aStr += OUString::createFromAscii(ostr.str().c_str());
+    }
+    else if ( bDuration )
+    {
+        aStr = rLocaleData.getDuration( rNewTime, bSec, b100Sec );
+    }
+    else
+    {
+        aStr = rLocaleData.getTime( rNewTime, bSec, b100Sec );
+        if ( eHourFormat == TimeFormat::Hour12 )
+        {
+            if ( rNewTime.GetHour() > 12 )
+            {
+                tools::Time aT( rNewTime );
+                aT.SetHour( aT.GetHour() % 12 );
+                aStr = rLocaleData.getTime( aT, bSec, b100Sec );
+            }
+            // Don't use LocaleDataWrapper, we want AM/PM
+            if ( rNewTime.GetHour() < 12 )
+                aStr += "AM"; // rLocaleData.getTimeAM();
+            else
+                aStr += "PM"; // rLocaleData.getTimePM();
+        }
+    }
+
+    return aStr;
+}
+
 void TimeFormatter::ImplSetUserTime( const tools::Time& rNewTime, Selection const * pNewSelection )
 {
     tools::Time aNewTime = rNewTime;
@@ -2394,49 +2462,7 @@ void TimeFormatter::ImplSetUserTime( const tools::Time& rNewTime, Selection cons
 
     if ( GetField() )
     {
-        OUString aStr;
-        bool bSec    = false;
-        bool b100Sec = false;
-        if ( meFormat != TimeFieldFormat::F_NONE )
-            bSec = true;
-        if ( meFormat == TimeFieldFormat::F_SEC_CS )
-            b100Sec = true;
-        if ( meFormat == TimeFieldFormat::F_SEC_CS )
-        {
-            sal_uLong n  = aNewTime.GetHour() * 3600L;
-            n       += aNewTime.GetMin()  * 60L;
-            n       += aNewTime.GetSec();
-            aStr     = OUString::number( n );
-            aStr    += ImplGetLocaleDataWrapper().getTime100SecSep();
-            std::ostringstream ostr;
-            ostr.fill('0');
-            ostr.width(9);
-            ostr << aNewTime.GetNanoSec();
-            aStr += OUString::createFromAscii(ostr.str().c_str());
-        }
-        else if ( mbDuration )
-        {
-            aStr = ImplGetLocaleDataWrapper().getDuration( aNewTime, bSec, b100Sec );
-        }
-        else
-        {
-            aStr = ImplGetLocaleDataWrapper().getTime( aNewTime, bSec, b100Sec );
-            if ( GetTimeFormat() == TimeFormat::Hour12 )
-            {
-                if ( aNewTime.GetHour() > 12 )
-                {
-                    tools::Time aT( aNewTime );
-                    aT.SetHour( aT.GetHour() % 12 );
-                    aStr = ImplGetLocaleDataWrapper().getTime( aT, bSec, b100Sec );
-                }
-                // Don't use LocaleDataWrapper, we want AM/PM
-                if ( aNewTime.GetHour() < 12 )
-                    aStr += "AM"; // ImplGetLocaleDataWrapper().getTimeAM();
-                else
-                    aStr += "PM"; // ImplGetLocaleDataWrapper().getTimePM();
-            }
-        }
-
+        OUString aStr = TimeFormatter::FormatTime(aNewTime, meFormat, GetTimeFormat(), mbDuration, ImplGetLocaleDataWrapper());
         ImplSetText( aStr, pNewSelection );
     }
 }
@@ -2453,7 +2479,7 @@ tools::Time TimeFormatter::GetTime() const
     if ( GetField() )
     {
         bool bAllowMailformed = ImplAllowMalformedInput();
-        if ( ImplTimeGetValue( GetField()->GetText(), aTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper(), !bAllowMailformed ) )
+        if ( TextToTime( GetField()->GetText(), aTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper(), !bAllowMailformed ) )
         {
             if ( aTime > GetMax() )
                 aTime = GetMax();
@@ -2488,7 +2514,7 @@ void TimeFormatter::Reformat()
     if ( !aStr.isEmpty() )
     {
         ImplSetText( aStr );
-        ImplTimeGetValue( aStr, maLastTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper() );
+        TextToTime( aStr, maLastTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper() );
     }
     else
         SetTime( maLastTime );
@@ -2534,7 +2560,7 @@ bool TimeField::EventNotify( NotifyEvent& rNEvt )
             else
             {
                 tools::Time aTime( 0, 0, 0 );
-                if ( ImplTimeGetValue( GetText(), aTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper(), false ) )
+                if ( TextToTime( GetText(), aTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper(), false ) )
                     // even with strict text analysis, our text is a valid time -> do a complete
                     // reformat
                     Reformat();

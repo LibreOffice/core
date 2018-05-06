@@ -202,7 +202,14 @@ public:
 class SdStartPresentationDlg;
 class AbstractSdStartPresDlg_Impl : public AbstractSdStartPresDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSdStartPresDlg_Impl,SdStartPresentationDlg)
+private:
+    std::unique_ptr<SdStartPresentationDlg> m_xDlg;
+public:
+    AbstractSdStartPresDlg_Impl(SdStartPresentationDlg* pDlg)
+        : m_xDlg(pDlg)
+    {
+    }
+    virtual short   Execute() override;
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) override;
 };
 
@@ -258,7 +265,7 @@ public:
     virtual VclPtr<AbstractMorphDlg>           CreateMorphDlg(weld::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdOutlineBulletTabDlg(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdParagraphTabDlg(vcl::Window* pParent, const SfxItemSet* pAttr) override;
-    virtual VclPtr<AbstractSdStartPresDlg>     CreateSdStartPresentationDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs,
+    virtual VclPtr<AbstractSdStartPresDlg>     CreateSdStartPresentationDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs,
                                                                      const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList ) override;
     virtual VclPtr<VclAbstractDialog>          CreateRemoteDialog( vcl::Window* pWindow ) override; // ad for RemoteDialog
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdPresLayoutTemplateDlg( SfxObjectShell* pDocSh, vcl::Window* pParent, bool bBackgroundDlg, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool ) override;

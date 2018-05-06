@@ -242,6 +242,84 @@ namespace weld
     {
         return MetricField::ConvertValue(nValue, 0, m_xSpinButton->get_digits(), eInUnit, eOutUnit);
     }
+
+    IMPL_LINK_NOARG(TimeSpinButton, spin_button_cursor_position, Entry&, void)
+    {
+        int nStartPos, nEndPos;
+        m_xSpinButton->get_selection_bounds(nStartPos, nEndPos);
+
+        const SvtSysLocale aSysLocale;
+        const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
+        const int nTimeArea = TimeFormatter::GetTimeArea(m_eFormat, m_xSpinButton->get_text(), nEndPos,
+                                                         rLocaleData);
+
+        int nIncrements = 1;
+
+        if (nTimeArea == 1)
+            nIncrements = 1000 * 60 * 60;
+        else if (nTimeArea == 2)
+            nIncrements = 1000 * 60;
+        else if (nTimeArea == 3)
+            nIncrements = 1000;
+
+        m_xSpinButton->set_increments(nIncrements, nIncrements * 10);
+    }
+
+    IMPL_LINK_NOARG(TimeSpinButton, spin_button_value_changed, SpinButton&, void)
+    {
+        signal_value_changed();
+    }
+
+    IMPL_LINK(TimeSpinButton, spin_button_output, SpinButton&, rSpinButton, void)
+    {
+        int nStartPos, nEndPos;
+        rSpinButton.get_selection_bounds(nStartPos, nEndPos);
+        rSpinButton.set_text(format_number(rSpinButton.get_value()));
+        rSpinButton.set_position(nEndPos);
+    }
+
+    IMPL_LINK(TimeSpinButton, spin_button_input, int*, result, bool)
+    {
+        int nStartPos, nEndPos;
+        m_xSpinButton->get_selection_bounds(nStartPos, nEndPos);
+
+        const SvtSysLocale aSysLocale;
+        const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
+        tools::Time aResult(0);
+        bool bRet = TimeFormatter::TextToTime(m_xSpinButton->get_text(), aResult, m_eFormat, true, rLocaleData);
+        if (bRet)
+            *result = ConvertValue(aResult);
+        return bRet;
+    }
+
+    void TimeSpinButton::update_width_chars()
+    {
+        int min, max;
+        m_xSpinButton->get_range(min, max);
+        auto width = std::max(m_xSpinButton->get_pixel_size(format_number(min)).Width(),
+                              m_xSpinButton->get_pixel_size(format_number(max)).Width());
+        int chars = ceil(width / m_xSpinButton->get_approximate_digit_width());
+        m_xSpinButton->set_width_chars(chars);
+    }
+
+    tools::Time TimeSpinButton::ConvertValue(int nValue) const
+    {
+        tools::Time aTime(0);
+        aTime.MakeTimeFromMS(nValue);
+        return aTime;
+    }
+
+    int TimeSpinButton::ConvertValue(const tools::Time& rTime) const
+    {
+        return rTime.GetMSFromTime();
+    }
+
+    OUString TimeSpinButton::format_number(int nValue) const
+    {
+        const SvtSysLocale aSysLocale;
+        const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
+        return TimeFormatter::FormatTime(ConvertValue(nValue), m_eFormat, TimeFormat::Hour24, true, rLocaleData);
+    }
 }
 
 VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUString& sUIFile, const OString& sID,

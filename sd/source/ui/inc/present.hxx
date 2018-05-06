@@ -20,57 +20,53 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_PRESENT_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_PRESENT_HXX
 
-#include <vcl/lstbox.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/field.hxx>
+#include <vcl/weld.hxx>
 
 class SfxItemSet;
 class List;
 class SdCustomShowList;
 
 /**
- * Dialog to define options and to start the presentation
+ * Dialog to define optionsm_xnd to start the presentation
  */
-class SdStartPresentationDlg : public ModalDialog
+class SdStartPresentationDlg : public weld::GenericDialogController
 {
 private:
-
-    VclPtr<RadioButton>        aRbtAll;
-    VclPtr<RadioButton>        aRbtAtDia;
-    VclPtr<RadioButton>        aRbtCustomshow;
-    VclPtr<ListBox>            aLbDias;
-    VclPtr<ListBox>            aLbCustomshow;
-
-    VclPtr<RadioButton>        aRbtStandard;
-    VclPtr<RadioButton>        aRbtWindow;
-    VclPtr<RadioButton>        aRbtAuto;
-    VclPtr<TimeField>          aTmfPause;
-    VclPtr<CheckBox>           aCbxAutoLogo;
-
-    VclPtr<CheckBox>           aCbxManuel;
-    VclPtr<CheckBox>           aCbxMousepointer;
-    VclPtr<CheckBox>           aCbxPen;
-    VclPtr<CheckBox>           aCbxAnimationAllowed;
-    VclPtr<CheckBox>           aCbxChangePage;
-    VclPtr<CheckBox>           aCbxAlwaysOnTop;
-
-    VclPtr<FixedText>          maFtMonitor;
-    VclPtr<ListBox>            maLBMonitor;
-
     SdCustomShowList*   pCustomShowList;
     const SfxItemSet&   rOutAttrs;
     sal_Int32           mnMonitors;
 
-    VclPtr<FixedText>          msMonitor;
-    VclPtr<FixedText>          msAllMonitors;
-    VclPtr<FixedText>          msMonitorExternal;
-    VclPtr<FixedText>          msExternal;
+    std::unique_ptr<weld::RadioButton> m_xRbtAll;
+    std::unique_ptr<weld::RadioButton> m_xRbtAtDia;
+    std::unique_ptr<weld::RadioButton> m_xRbtCustomshow;
+    std::unique_ptr<weld::ComboBoxText> m_xLbDias;
+    std::unique_ptr<weld::ComboBoxText> m_xLbCustomshow;
 
-                        DECL_LINK( ChangeRangeHdl, Button*, void );
-                        DECL_LINK( ClickWindowPresentationHdl, Button*, void );
-                        DECL_LINK( ChangePauseHdl, Edit&, void );
+    std::unique_ptr<weld::RadioButton> m_xRbtStandard;
+    std::unique_ptr<weld::RadioButton> m_xRbtWindow;
+    std::unique_ptr<weld::RadioButton> m_xRbtAuto;
+    std::unique_ptr<weld::TimeSpinButton> m_xTmfPause;
+    std::unique_ptr<weld::CheckButton> m_xCbxAutoLogo;
+
+    std::unique_ptr<weld::CheckButton> m_xCbxManuel;
+    std::unique_ptr<weld::CheckButton> m_xCbxMousepointer;
+    std::unique_ptr<weld::CheckButton> m_xCbxPen;
+    std::unique_ptr<weld::CheckButton> m_xCbxAnimationAllowed;
+    std::unique_ptr<weld::CheckButton> m_xCbxChangePage;
+    std::unique_ptr<weld::CheckButton> m_xCbxAlwaysOnTop;
+
+    std::unique_ptr<weld::Label> m_xFtMonitor;
+    std::unique_ptr<weld::ComboBoxText> m_xLBMonitor;
+
+    std::unique_ptr<weld::Label> m_xMonitor;
+    std::unique_ptr<weld::Label> m_xAllMonitors;
+    std::unique_ptr<weld::Label> m_xMonitorExternal;
+    std::unique_ptr<weld::Label> m_xExternal;
+
+    DECL_LINK(ChangeRangeHdl, weld::Button&, void);
+    DECL_LINK(ClickWindowPresentationHdl, weld::Button&, void);
+    void ChangePause();
+    DECL_LINK(ChangePauseHdl, weld::Entry&, void);
 
     void                InitMonitorSettings();
     enum DisplayType {
@@ -83,13 +79,11 @@ private:
     OUString            GetDisplayName( sal_Int32 nDisplay,
                                         DisplayType eType );
 public:
-                        SdStartPresentationDlg( vcl::Window* pWindow,
-                                const SfxItemSet& rInAttrs,
-                                const std::vector<OUString> &rPageNames,
-                                SdCustomShowList* pCSList );
+                        SdStartPresentationDlg(weld::Window* pWindow,
+                                               const SfxItemSet& rInAttrs,
+                                               const std::vector<OUString> &rPageNames,
+                                               SdCustomShowList* pCSList);
     virtual             ~SdStartPresentationDlg() override;
-    virtual void        dispose() override;
-
     void                GetAttr( SfxItemSet& rOutAttrs );
 };
 

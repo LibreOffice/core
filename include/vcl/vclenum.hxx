@@ -118,6 +118,11 @@ namespace o3tl
     template<> struct typed_flags<WindowBorderStyle> : is_typed_flags<WindowBorderStyle, 0x3033> {};
 }
 
+enum class TimeFormat
+{
+    Hour12, Hour24
+};
+
 enum class ExtTimeFieldFormat
 {
     Short24H, Long24H

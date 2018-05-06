@@ -2753,6 +2753,7 @@ private:
     GtkEntry* m_pEntry;
     gulong m_nChangedSignalId;
     gulong m_nInsertTextSignalId;
+    gulong m_nCursorPosSignalId;
 
     static void signalChanged(GtkEntry*, gpointer widget)
     {
@@ -2784,12 +2785,20 @@ private:
         }
         g_signal_stop_emission_by_name(pEntry, "insert-text");
     }
+
+    static void signalCursorPosition(GtkEntry*, GParamSpec*, gpointer widget)
+    {
+        GtkInstanceEntry* pThis = static_cast<GtkInstanceEntry*>(widget);
+        pThis->signal_cursor_position();
+    }
+
 public:
     GtkInstanceEntry(GtkEntry* pEntry, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pEntry), bTakeOwnership)
         , m_pEntry(pEntry)
         , m_nChangedSignalId(g_signal_connect(pEntry, "changed", G_CALLBACK(signalChanged), this))
         , m_nInsertTextSignalId(g_signal_connect(pEntry, "insert-text", G_CALLBACK(signalInsertText), this))
+        , m_nCursorPosSignalId(g_signal_connect(pEntry, "notify::cursor-position", G_CALLBACK(signalCursorPosition), this))
     {
     }
 
@@ -2941,6 +2950,7 @@ public:
 
     virtual ~GtkInstanceEntry() override
     {
+        g_signal_handler_disconnect(m_pEntry, m_nCursorPosSignalId);
         g_signal_handler_disconnect(m_pEntry, m_nInsertTextSignalId);
         g_signal_handler_disconnect(m_pEntry, m_nChangedSignalId);
     }
@@ -3279,6 +3289,7 @@ private:
     GtkSpinButton* m_pButton;
     gulong m_nValueChangedSignalId;
     gulong m_nOutputSignalId;
+    gulong m_nInputSignalId;
 
     static void signalValueChanged(GtkSpinButton*, gpointer widget)
     {
@@ -3292,6 +3303,22 @@ private:
         GtkInstanceSpinButton* pThis = static_cast<GtkInstanceSpinButton*>(widget);
         SolarMutexGuard aGuard;
         return pThis->signal_output();
+    }
+
+    static gboolean signalInput(GtkSpinButton*, gdouble* new_value, gpointer widget)
+    {
+        GtkInstanceSpinButton* pThis = static_cast<GtkInstanceSpinButton*>(widget);
+        SolarMutexGuard aGuard;
+        int result;
+        TriState eHandled = pThis->signal_input(&result);
+        if (eHandled == TRISTATE_INDET)
+            return false;
+        if (eHandled == TRISTATE_TRUE)
+        {
+            *new_value = result;
+            return true;
+        }
+        return GTK_INPUT_ERROR;
     }
 
     double toGtk(int nValue) const
@@ -3310,6 +3337,7 @@ public:
         , m_pButton(pButton)
         , m_nValueChangedSignalId(g_signal_connect(pButton, "value-changed", G_CALLBACK(signalValueChanged), this))
         , m_nOutputSignalId(g_signal_connect(pButton, "output", G_CALLBACK(signalOutput), this))
+        , m_nInputSignalId(g_signal_connect(pButton, "input", G_CALLBACK(signalInput), this))
     {
     }
 
@@ -3381,6 +3409,7 @@ public:
 
     virtual ~GtkInstanceSpinButton() override
     {
+        g_signal_handler_disconnect(m_pButton, m_nInputSignalId);
         g_signal_handler_disconnect(m_pButton, m_nOutputSignalId);
         g_signal_handler_disconnect(m_pButton, m_nValueChangedSignalId);
     }
@@ -4585,6 +4614,12 @@ public:
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pSpinButton));
         return new GtkInstanceSpinButton(pSpinButton, bTakeOwnership);
+    }
+
+    virtual weld::TimeSpinButton* weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,
+                                                        bool bTakeOwnership) override
+    {
+        return new weld::TimeSpinButton(weld_spin_button(id, bTakeOwnership), eFormat);
     }
 
     virtual weld::ComboBoxText* weld_combo_box_text(const OString &id, bool bTakeOwnership) override

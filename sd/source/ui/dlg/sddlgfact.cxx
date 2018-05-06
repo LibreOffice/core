@@ -70,7 +70,11 @@ short AbstractMorphDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractSdStartPresDlg_Impl);
+short AbstractSdStartPresDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractSdPresLayoutDlg_Impl);
 IMPL_ABSTDLG_BASE(SdAbstractSfxDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdVectorizeDlg_Impl);
@@ -271,7 +275,7 @@ bool AbstractMorphDlg_Impl::IsOrientationFade() const
 
 void AbstractSdStartPresDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
 {
-    pDlg->GetAttr( rOutAttrs );
+    m_xDlg->GetAttr( rOutAttrs );
 }
 
 void AbstractSdPresLayoutDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
@@ -368,10 +372,10 @@ VclPtr<SfxAbstractTabDialog> SdAbstractDialogFactory_Impl::CreateSdParagraphTabD
     return VclPtr<SdAbstractTabDialog_Impl>::Create( VclPtr<SdParagraphDlg>::Create( pParent, pAttr ) );
 }
 
-VclPtr<AbstractSdStartPresDlg> SdAbstractDialogFactory_Impl::CreateSdStartPresentationDlg( vcl::Window* pParent, const SfxItemSet& rInAttrs,
-                                                                                     const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList )
+VclPtr<AbstractSdStartPresDlg> SdAbstractDialogFactory_Impl::CreateSdStartPresentationDlg(weld::Window* pParent,
+        const SfxItemSet& rInAttrs, const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList)
 {
-    return VclPtr<AbstractSdStartPresDlg_Impl>::Create( VclPtr<SdStartPresentationDlg>::Create( pParent, rInAttrs, rPageNames, pCSList ) );
+    return VclPtr<AbstractSdStartPresDlg_Impl>::Create(new SdStartPresentationDlg(pParent, rInAttrs, rPageNames, pCSList));
 }
 
 VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateRemoteDialog( vcl::Window* pParent )
