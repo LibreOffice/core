@@ -103,8 +103,8 @@ public:
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
-    CPPUNIT_TEST(testPostKeyEvent);
-    CPPUNIT_TEST(testPostMouseEvent);
+    // CPPUNIT_TEST(testPostKeyEvent); // Cores with make -j
+    // CPPUNIT_TEST(testPostMouseEvent); // Cores with make -j
     CPPUNIT_TEST(testSetTextSelection);
     CPPUNIT_TEST(testGetTextSelection);
     CPPUNIT_TEST(testSetGraphicSelection);
