@@ -3480,12 +3480,12 @@ void SwContentTree::GotoContent(SwContent* pCnt)
                         if( pPV )
                         {
                             pDrawView->MarkObj( pTemp, pPV );
-                            m_pActiveShell->EnterStdMode();
-                            bSel = true;
                         }
                     }
                 }
                 m_pActiveShell->GetNavigationMgr().addEntry(aPos);
+                m_pActiveShell->EnterStdMode();
+                bSel = true;
             }
         }
         break;
