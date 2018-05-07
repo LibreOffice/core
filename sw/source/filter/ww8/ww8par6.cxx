@@ -3465,7 +3465,7 @@ void SwWW8ImplReader::Read_TextColor( sal_uInt16, const sal_uInt8* pData, short 
 
         NewAttr( SvxColorItem(GetCol(b), RES_CHRATR_COLOR));
         if (m_pCurrentColl && m_xStyles)
-            m_xStyles->bTextColChanged = true;
+            m_xStyles->mbTextColChanged = true;
     }
 }
 
@@ -3478,7 +3478,7 @@ void SwWW8ImplReader::Read_TextForeColor(sal_uInt16, const sal_uInt8* pData, sho
         Color aColor(msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)));
         NewAttr(SvxColorItem(aColor, RES_CHRATR_COLOR));
         if (m_pCurrentColl && m_xStyles)
-            m_xStyles->bTextColChanged = true;
+            m_xStyles->mbTextColChanged = true;
     }
 }
 
@@ -3703,11 +3703,11 @@ void SwWW8ImplReader::openFont(sal_uInt16 nFCode, sal_uInt16 nId)
     {
         // remember for simulating default font
         if (RES_CHRATR_CJK_FONT == nId)
-            m_xStyles->bCJKFontChanged = true;
+            m_xStyles->mbCJKFontChanged = true;
         else if (RES_CHRATR_CTL_FONT == nId)
-            m_xStyles->bCTLFontChanged = true;
+            m_xStyles->mbCTLFontChanged = true;
         else
-            m_xStyles->bFontChanged = true;
+            m_xStyles->mbFontChanged = true;
     }
 }
 
@@ -3821,12 +3821,12 @@ void SwWW8ImplReader::Read_FontSize( sal_uInt16 nId, const sal_uInt8* pData, sho
         {
             // remember for simulating default font size
             if (nId == RES_CHRATR_CTL_FONTSIZE)
-                m_xStyles->bFCTLSizeChanged = true;
+                m_xStyles->mbFCTLSizeChanged = true;
             else
             {
-                m_xStyles->bFSizeChanged = true;
+                m_xStyles->mbFSizeChanged = true;
                 if (eVersion <= ww::eWW6)
-                    m_xStyles->bFCTLSizeChanged= true;
+                    m_xStyles->mbFCTLSizeChanged= true;
             }
         }
     }
@@ -4991,7 +4991,7 @@ void SwWW8ImplReader::Read_WidowControl( sal_uInt16, const sal_uInt8* pData, sho
         NewAttr( SvxOrphansItem( nL, RES_PARATR_ORPHANS ) );
 
         if( m_pCurrentColl && m_xStyles )           // Style-Def ?
-            m_xStyles->bWidowsChanged = true; // save for simulation
+            m_xStyles->mbWidowsChanged = true; // save for simulation
                                             // Default-Widows
     }
 }

@@ -1912,7 +1912,7 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
         // the current level is finished, what should we do ?
         m_nListLevel = WW8ListManager::nMaxLevel;
         if (m_xStyles && !m_bVer67)
-            m_xStyles->nWwNumLevel = 0;
+            m_xStyles->mnWwNumLevel = 0;
     }
     else
     {
@@ -1931,7 +1931,7 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
             to set the ww6 list level information which we will need when we
             reach the true ww6 list def.  So set it now
             */
-            m_xStyles->nWwNumLevel = m_nListLevel;
+            m_xStyles->mnWwNumLevel = m_nListLevel;
         }
 
         if (WW8ListManager::nMaxLevel <= m_nListLevel )
