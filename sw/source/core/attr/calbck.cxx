@@ -34,6 +34,18 @@ namespace sw
     public:
         ListenerEntry(SwClient* pTellHim, SwModify * pDepend) : SwClient(pDepend), m_pToTell(pTellHim) {}
         ListenerEntry(ListenerEntry&) = delete;
+        ListenerEntry& operator=(ListenerEntry const&) = delete;
+        ListenerEntry(ListenerEntry&& other) noexcept
+            : SwClient(std::move(other))
+            , m_pToTell(other.m_pToTell)
+        { }
+        ListenerEntry& operator=(ListenerEntry&& other) noexcept
+        {
+            m_pToTell = other.m_pToTell;
+            other.GetRegisteredIn()->Add(this);
+            other.EndListeningAll();
+            return *this;
+        }
 
         /** get Client information */
         virtual bool GetInfo( SfxPoolItem& rInfo) const override
@@ -65,7 +77,7 @@ namespace sw
 sw::LegacyModifyHint::~LegacyModifyHint() {}
 sw::ModifyChangedHint::~ModifyChangedHint() {}
 
-SwClient::SwClient(SwClient&& o)
+SwClient::SwClient(SwClient&& o) noexcept
     : m_pRegisteredIn(nullptr)
 {
     if(o.m_pRegisteredIn)
@@ -343,16 +355,16 @@ sw::WriterMultiListener::~WriterMultiListener()
 void sw::WriterMultiListener::StartListening(SwModify* pDepend)
 {
     EndListening(nullptr);
-    m_vDepends.emplace_back(pointer_t(new ListenerEntry(&m_rToTell, pDepend)));
+    m_vDepends.emplace_back(ListenerEntry(&m_rToTell, pDepend));
 }
 
 
 bool sw::WriterMultiListener::IsListeningTo(const SwModify* const pBroadcaster)
 {
     return std::any_of(m_vDepends.begin(), m_vDepends.end(),
-        [&pBroadcaster](const pointer_t& pListener)
+        [&pBroadcaster](const ListenerEntry& aListener)
         {
-            return pListener->GetRegisteredIn() == pBroadcaster;
+            return aListener.GetRegisteredIn() == pBroadcaster;
         });
 }
 
@@ -360,9 +372,9 @@ void sw::WriterMultiListener::EndListening(SwModify* pBroadcaster)
 {
     m_vDepends.erase(
         std::remove_if( m_vDepends.begin(), m_vDepends.end(),
-            [&pBroadcaster](const pointer_t& pListener)
+            [&pBroadcaster](const ListenerEntry& aListener)
             {
-                return pListener->GetRegisteredIn() == nullptr || pListener->GetRegisteredIn() == pBroadcaster;
+                return aListener.GetRegisteredIn() == nullptr || aListener.GetRegisteredIn() == pBroadcaster;
             }),
         m_vDepends.end());
 }

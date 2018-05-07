@@ -106,14 +106,13 @@ class SW_DLLPUBLIC SwClient : public ::sw::WriterListener
 protected:
     // single argument ctors shall be explicit.
     inline explicit SwClient( SwModify* pToRegisterIn );
-    SwClient(SwClient&&);
 
     // write access to pRegisteredIn shall be granted only to the object itself (protected access)
     SwModify* GetRegisteredInNonConst() const { return m_pRegisteredIn; }
 
 public:
-
     SwClient() : m_pRegisteredIn(nullptr) {}
+    SwClient(SwClient&&) noexcept;
     virtual ~SwClient() override;
     // callbacks received from SwModify (friend class - so these methods can be private)
     // should be called only from SwModify the client is registered in
@@ -209,15 +208,12 @@ namespace sw
     class ListenerEntry;
     class SW_DLLPUBLIC WriterMultiListener final
     {
-        #ifdef WNT
-            typedef std::shared_ptr<ListenerEntry> pointer_t;
-        #else
-            typedef std::unique_ptr<ListenerEntry> pointer_t;
-        #endif
         SwClient& m_rToTell;
-        std::vector<pointer_t> m_vDepends;
+        std::vector<ListenerEntry> m_vDepends;
         public:
             WriterMultiListener(SwClient& rToTell);
+            WriterMultiListener& operator=(WriterMultiListener const&) = delete; // MSVC2015 workaround
+            WriterMultiListener(WriterMultiListener const&) = delete; // MSVC2015 workaround
             ~WriterMultiListener();
             void StartListening(SwModify* pDepend);
             void EndListening(SwModify* pDepend);
