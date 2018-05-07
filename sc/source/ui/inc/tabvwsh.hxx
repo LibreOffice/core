@@ -167,6 +167,9 @@ private:
     OUString   maName;
     OUString   maScope;
 
+    // ClipData
+    css::uno::Reference<css::datatransfer::XTransferable2>   m_xClipData;
+
 private:
     void    Construct( TriState nForceDesignMode );
 
@@ -391,6 +394,9 @@ public:
     static void notifyAllViewsHeaderInvalidation(bool Columns, SCTAB nCurrentTabIndex);
     static bool isAnyEditViewInRange(bool bColumns, SCCOLROW nStart, SCCOLROW nEnd);
     css::uno::Reference<css::drawing::XShapes> getSelectedXShapes();
+
+    css::uno::Reference<css::datatransfer::XTransferable2> GetClipData() { return m_xClipData; };
+    void SetClipData(const css::uno::Reference<css::datatransfer::XTransferable2>& xTransferable) { m_xClipData = xTransferable; }
 };
 
 #endif
