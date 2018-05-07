@@ -378,6 +378,7 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib )
     , mnFootnoteLine( 0 )
     , mnHeightOfLastLine( 0 )
     , mnAdditionalFirstLineOffset( 0 )
+    , m_pMergedPara(CheckParaRedlineMerge(*this, *pNode)) // ensure it is inited
     , mnOffset( 0 )
     , mnCacheIndex( USHRT_MAX )
     , mbLocked( false )
@@ -438,8 +439,8 @@ std::pair<SwTextNode*, sal_Int32>
 SwTextFrame::MapViewToModel(TextFrameIndex const i_nIndex) const
 {
     sal_Int32 nIndex(i_nIndex);
-    assert(GetPara());
-    sw::MergedPara const*const pMerged(GetPara()->GetMergedPara());
+//nope    assert(GetPara());
+    sw::MergedPara const*const pMerged(GetMergedPara());
     if (pMerged)
     {
         for (auto const& e : pMerged->extents)
@@ -466,13 +467,11 @@ SwPosition SwTextFrame::MapViewToModelPos(TextFrameIndex const nIndex) const
     return SwPosition(*ret.first, ret.second);
 }
 
-TextFrameIndex SwTextFrame::MapModelToViewPos(SwPosition const& rPos) const
+TextFrameIndex SwTextFrame::MapModelToView(SwTextNode const*const pNode, sal_Int32 nIndex) const
 {
     sal_Int32 nRet(0);
-    SwTextNode const*const pNode(rPos.nNode.GetNode().GetTextNode());
-    sal_Int32 const nIndex(rPos.nContent.GetIndex());
-    assert(GetPara());
-    sw::MergedPara const*const pMerged(GetPara()->GetMergedPara());
+//nope    assert(GetPara());
+    sw::MergedPara const*const pMerged(GetMergedPara());
     if (pMerged)
     {
         bool bFoundNode(false);
@@ -508,11 +507,17 @@ TextFrameIndex SwTextFrame::MapModelToViewPos(SwPosition const& rPos) const
     }
 }
 
+TextFrameIndex SwTextFrame::MapModelToViewPos(SwPosition const& rPos) const
+{
+    SwTextNode const*const pNode(rPos.nNode.GetNode().GetTextNode());
+    sal_Int32 const nIndex(rPos.nContent.GetIndex());
+    return MapModelToView(pNode, nIndex);
+}
+
 const OUString& SwTextFrame::GetText() const
 {
-    // FIXME can GetPara be 0 ?
-    assert(GetPara());
-    sw::MergedPara const*const pMerged(GetPara()->GetMergedPara());
+//nope    assert(GetPara());
+    sw::MergedPara const*const pMerged(GetMergedPara());
     if (pMerged)
         return pMerged->mergedText;
     else
@@ -521,8 +526,9 @@ const OUString& SwTextFrame::GetText() const
 
 SwTextNode const* SwTextFrame::GetTextNodeForParaProps() const
 {
-    assert(GetPara());
-    sw::MergedPara const*const pMerged(GetPara()->GetMergedPara());
+    // FIXME can GetPara be 0 ? yes... this is needed in  SwContentNotify::SwContentNotify() which is called before any formatting is started
+//nope    assert(GetPara());
+    sw::MergedPara const*const pMerged(GetMergedPara());
     if (pMerged)
         return pMerged->pParaPropsNode;
     else
@@ -531,8 +537,8 @@ SwTextNode const* SwTextFrame::GetTextNodeForParaProps() const
 
 SwTextNode const* SwTextFrame::GetTextNodeFirst() const
 {
-    assert(GetPara());
-    sw::MergedPara const*const pMerged(GetPara()->GetMergedPara());
+//nope    assert(GetPara());
+    sw::MergedPara const*const pMerged(GetMergedPara());
     if (pMerged)
         return pMerged->pFirstNode;
     else
