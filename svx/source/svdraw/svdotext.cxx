@@ -570,7 +570,7 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, tools::Rectangle 
         if(bShadowOn)
         {
             // force shadow off
-            SdrObject* pCopy = Clone();
+            SdrObject* pCopy(CloneSdrObject(getSdrModelFromSdrObject()));
             pCopy->SetMergedItem(makeSdrShadowItem(false));
             *pContourPolyPolygon = pCopy->TakeContour();
             SdrObject::Free( pCopy );
@@ -1010,9 +1010,9 @@ OUString SdrTextObj::TakeObjNamePlural() const
     return sName;
 }
 
-SdrTextObj* SdrTextObj::Clone(SdrModel* pTargetModel) const
+SdrTextObj* SdrTextObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrTextObj >(pTargetModel);
+    return CloneHelper< SdrTextObj >(rTargetModel);
 }
 
 SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)

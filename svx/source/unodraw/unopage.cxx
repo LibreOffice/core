@@ -200,7 +200,7 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
         // 'change' a SdrObject to another SdrModel (including dangerous MigrateItemPool
         // stuff), but is no longer. We need to Clone the SdrObject to the target model
         // and ::Create a new SvxShape (set SdrObject there, take obver values, ...)
-        SdrObject* pClonedSdrShape(pObj->Clone(&mpPage->getSdrModelFromSdrPage()));
+        SdrObject* pClonedSdrShape(pObj->CloneSdrObject(mpPage->getSdrModelFromSdrPage()));
         pObj->setUnoShape(nullptr);
         pClonedSdrShape->setUnoShape(xShape);
         // pShape->InvalidateSdrObject();

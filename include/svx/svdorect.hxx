@@ -59,6 +59,9 @@ protected:
     const XPolygon& GetXPoly() const;
     virtual void           RestGeoData(const SdrObjGeoData& rGeo) override;
 
+    // protected destructor
+    virtual ~SdrRectObj() override;
+
 public:
     /**
      * The corner radius parameter is dropped at some point.
@@ -82,8 +85,6 @@ public:
         SdrObjKind eNewTextKind,
         const tools::Rectangle& rRect);
 
-    virtual ~SdrRectObj() override;
-
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
@@ -91,7 +92,7 @@ public:
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 
-    virtual SdrRectObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual SdrRectObj* CloneSdrObject(SdrModel& rTargetModel) const override;
     virtual void RecalcSnapRect() override;
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
     virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;

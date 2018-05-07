@@ -465,7 +465,7 @@ void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
             }
 
             // Clone to target SdrModel
-            SdrObject* pNewObject = pOldObject->Clone(this);
+            SdrObject* pNewObject(pOldObject->CloneSdrObject(*this));
             pNewObject->SetPage(pNewPage);
             pNewObject->NbcMove(Size(0,0));
             pNewPage->InsertObject( pNewObject );
@@ -1477,7 +1477,7 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rec
                 if (pDestPage)
                 {
                     // Clone to target SdrModel
-                    SdrObject* pNewObject = pOldObject->Clone(pDestModel);
+                    SdrObject* pNewObject(pOldObject->CloneSdrObject(*pDestModel));
                     pNewObject->SetPage(pDestPage);
 
                     uno::Reference< chart2::XChartDocument > xOldChart( ScChartHelper::GetChartFromSdrObject( pOldObject ) );
@@ -1652,7 +1652,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
             && !IsNoteCaption(pOldObject))
         {
             // Clone to target SdrModel
-            SdrObject* pNewObject = pOldObject->Clone(this);
+            SdrObject* pNewObject(pOldObject->CloneSdrObject(*this));
             pNewObject->SetPage(pDestPage);
 
             if ( bMirrorObj )

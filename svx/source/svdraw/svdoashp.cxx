@@ -217,7 +217,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         const sal_Int32 nYDist(rOriginalSet.Get(SDRATTR_SHADOWYDIST).GetValue());
         const ::Color aShadowColor(rOriginalSet.Get(SDRATTR_SHADOWCOLOR).GetColorValue());
         const sal_uInt16 nShadowTransparence(rOriginalSet.Get(SDRATTR_SHADOWTRANSPARENCE).GetValue());
-        pRetval = rOriginal.Clone();
+        pRetval = rOriginal.CloneSdrObject(rOriginal.getSdrModelFromSdrObject());
         DBG_ASSERT(pRetval, "ImpCreateShadowObjectClone: Could not clone object (!)");
 
         // look for used stuff
@@ -2737,9 +2737,9 @@ void SdrObjCustomShape::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject
     InvalidateRenderGeometry();
 }
 
-SdrObjCustomShape* SdrObjCustomShape::Clone(SdrModel* pTargetModel) const
+SdrObjCustomShape* SdrObjCustomShape::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrObjCustomShape >(pTargetModel);
+    return CloneHelper< SdrObjCustomShape >(rTargetModel);
 }
 
 SdrObjCustomShape& SdrObjCustomShape::operator=(const SdrObjCustomShape& rObj)
@@ -2807,7 +2807,7 @@ SdrObject* SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bool bAddText) co
     if ( pRenderedCustomShape )
     {
         // Clone to same SdrModel
-        SdrObject* pCandidate = pRenderedCustomShape->Clone();
+        SdrObject* pCandidate(pRenderedCustomShape->CloneSdrObject(pRenderedCustomShape->getSdrModelFromSdrObject()));
         DBG_ASSERT(pCandidate, "SdrObjCustomShape::DoConvertToPolyObj: Could not clone SdrObject (!)");
         pRetval = pCandidate->DoConvertToPolyObj(bBezier, bAddText);
         SdrObject::Free( pCandidate );

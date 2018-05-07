@@ -83,7 +83,7 @@ friend class SdrEditView;
 
 protected:
     void RecalcRects();
-    void copyDataFromSdrObjList(const SdrObjList& rSrcList, SdrModel* pNewModel);
+    void copyDataFromSdrObjList(const SdrObjList& rSrcList);
 
 private:
     /// simple ActionChildInserted forwarder to have it on a central place
@@ -99,7 +99,7 @@ public:
     SdrObjList(SdrPage* pNewPage = nullptr);
     virtual ~SdrObjList();
 
-    void CopyObjects(const SdrObjList& rSrcList, SdrModel* pNewModel = nullptr);
+    void CopyObjects(const SdrObjList& rSrcList);
 
     // tdf#116879 clean up everything (without Undo), plus broadcasting
     // changes. Split to this call and a private one (impClearSdrObjList)
@@ -449,7 +449,7 @@ protected:
     virtual css::uno::Reference< css::uno::XInterface > createUnoPage();
 
     // Copying of pages is split into two parts: construction and copying of page objects,
-    // because the copying might need access to fully initialized page. Clone() is responsible
+    // because the copying might need access to fully initialized page. CloneSdrPage() is responsible
     // to call lateInit() after copy-construction of a new object. Any initialization in derived
     // classes that needs access to the page objects must be deferred to lateInit. And it must
     // call lateInit() of its parent class.
@@ -459,7 +459,7 @@ public:
     explicit SdrPage(SdrModel& rModel, bool bMasterPage=false);
     virtual ~SdrPage() override;
 
-    virtual SdrPage* Clone(SdrModel* pNewModel = nullptr) const;
+    virtual SdrPage* CloneSdrPage(SdrModel& rTargetModel) const;
     bool             IsMasterPage() const       { return mbMaster; }
     void             SetInserted(bool bNew = true);
     bool             IsInserted() const         { return mbInserted; }

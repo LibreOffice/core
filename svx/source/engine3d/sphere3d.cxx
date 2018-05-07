@@ -68,6 +68,10 @@ E3dSphereObj::E3dSphereObj(SdrModel& rSdrModel)
     SetDefaultAttributes(aDefault);
 }
 
+E3dSphereObj::~E3dSphereObj()
+{
+}
+
 void E3dSphereObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 {
     // Set defaults
@@ -87,9 +91,9 @@ SdrObject *E3dSphereObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/)
     return nullptr;
 }
 
-E3dSphereObj* E3dSphereObj::Clone(SdrModel* pTargetModel) const
+E3dSphereObj* E3dSphereObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< E3dSphereObj >(pTargetModel);
+    return CloneHelper< E3dSphereObj >(rTargetModel);
 }
 
 E3dSphereObj& E3dSphereObj::operator=(const E3dSphereObj& rObj)

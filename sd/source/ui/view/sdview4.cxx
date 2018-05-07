@@ -111,7 +111,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         if( bIsGraphic )
         {
             // We fill the object with the Bitmap
-            pNewGrafObj = static_cast<SdrGrafObj*>( pPickObj->Clone() );
+            pNewGrafObj = static_cast<SdrGrafObj*>( pPickObj->CloneSdrObject(pPickObj->getSdrModelFromSdrObject()) );
             pNewGrafObj->SetGraphic(rGraphic);
         }
         else
@@ -318,7 +318,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
 
     if( mnAction == DND_ACTION_LINK && pPickObj && pPV && dynamic_cast< SdrMediaObj *>( pPickObj ) !=  nullptr )
     {
-        pNewMediaObj = static_cast< SdrMediaObj* >( pPickObj->Clone() );
+        pNewMediaObj = static_cast< SdrMediaObj* >( pPickObj->CloneSdrObject(pPickObj->getSdrModelFromSdrObject()) );
         pNewMediaObj->setURL( rMediaURL, ""/*TODO?*/, rMimeType );
 
         BegUndo(SdResId(STR_UNDO_DRAGDROP));

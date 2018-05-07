@@ -259,9 +259,9 @@ OUString SdrRectObj::TakeObjNamePlural() const
     return SvxResId(pResId);
 }
 
-SdrRectObj* SdrRectObj::Clone(SdrModel* pTargetModel) const
+SdrRectObj* SdrRectObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrRectObj >(pTargetModel);
+    return CloneHelper< SdrRectObj >(rTargetModel);
 }
 
 SdrRectObj& SdrRectObj::operator=(const SdrRectObj& rCopy)

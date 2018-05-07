@@ -132,15 +132,15 @@ SdrObjList::~SdrObjList()
     impClearSdrObjList(false);
 }
 
-void SdrObjList::copyDataFromSdrObjList(const SdrObjList& rSrcList, SdrModel* pNewModelel)
+void SdrObjList::copyDataFromSdrObjList(const SdrObjList& rSrcList)
 {
     // this function is only supposed to be called once, right after construction
     assert(maList.empty());
     eListKind=rSrcList.eListKind;
-    CopyObjects(rSrcList, pNewModelel);
+    CopyObjects(rSrcList);
 }
 
-void SdrObjList::CopyObjects(const SdrObjList& rSrcList, SdrModel* pNewModelel)
+void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
 {
     // clear SdrObjects with broadcasting
     ClearSdrObjList();
@@ -150,10 +150,20 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList, SdrModel* pNewModelel)
     size_t nCloneErrCnt(0);
     const size_t nCount(rSrcList.GetObjCount());
 
+    if(nullptr == GetOwnerObj() && nullptr == GetPage())
+    {
+        OSL_ENSURE(false, "SdrObjList which is not part of SdrPage or SdrObject (!)");
+        return;
+    }
+
+    SdrModel& rTargetSdrModel(nullptr == GetOwnerObj()
+        ? GetPage()->getSdrModelFromSdrPage()
+        : GetOwnerObj()->getSdrModelFromSdrObject());
+
     for (size_t no(0); no < nCount; ++no)
     {
         SdrObject* pSO(rSrcList.GetObj(no));
-        SdrObject* pDO(pSO->Clone(pNewModelel));
+        SdrObject* pDO(pSO->CloneSdrObject(rTargetSdrModel));
 
         if(nullptr != pDO)
         {
@@ -1217,16 +1227,16 @@ void SdrPage::lateInit(const SdrPage& rSrcPage)
     }
 
     // Now copy the contained objects
-    SdrObjList::copyDataFromSdrObjList(rSrcPage, &getSdrModelFromSdrPage());
+    SdrObjList::copyDataFromSdrObjList(rSrcPage);
 
     // be careful and correct eListKind, a member of SdrObjList which
     // will be changed by the SdrObjList::lateInit before...
     eListKind = (mbMaster) ? SdrObjListKind::MasterPage : SdrObjListKind::DrawPage;
 }
 
-SdrPage* SdrPage::Clone(SdrModel* pNewModelel) const
+SdrPage* SdrPage::CloneSdrPage(SdrModel& rTargetModel) const
 {
-    SdrPage* pClonedPage(new SdrPage(nullptr == pNewModelel ? getSdrModelFromSdrPage() : *pNewModelel));
+    SdrPage* pClonedPage(new SdrPage(rTargetModel));
     pClonedPage->lateInit(*this);
     return pClonedPage;
 }

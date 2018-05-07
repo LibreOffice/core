@@ -507,7 +507,7 @@ bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene const * pSrcScene, E3dSce
 
             if(pCompoundObj)
             {
-                E3dCompoundObject* pNewCompoundObj = pCompoundObj->Clone();
+                E3dCompoundObject* pNewCompoundObj(pCompoundObj->CloneSdrObject(pDstScene->getSdrModelFromSdrObject()));
 
                 if(pNewCompoundObj)
                 {
@@ -997,7 +997,9 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
     else
     {
         // No 3D object was created, throw away everything
-        delete pScene;
+        // always use SdrObject::Free(...) for SdrObjects (!)
+        SdrObject* pTemp(pScene);
+        SdrObject::Free(pTemp);
     }
 
     EndUndo();

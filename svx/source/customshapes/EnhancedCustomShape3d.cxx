@@ -741,12 +741,19 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
             // removing placeholder objects
             for (std::vector< E3dCompoundObject* >::iterator aObjectListIter( aPlaceholderObjectList.begin() ); aObjectListIter != aPlaceholderObjectList.end(); )
             {
-                pScene->Remove3DObj( *aObjectListIter );
-                delete *aObjectListIter++;
+                E3dCompoundObject* pTemp(*aObjectListIter++);
+                pScene->Remove3DObj( pTemp );
+                // always use SdrObject::Free(...) for SdrObjects (!)
+                SdrObject* pTemp2(pTemp);
+                SdrObject::Free(pTemp2);
             }
         }
         else
-            delete pScene;
+        {
+            // always use SdrObject::Free(...) for SdrObjects (!)
+            SdrObject* pTemp(pScene);
+            SdrObject::Free(pTemp);
+        }
     }
     return pRet;
 }

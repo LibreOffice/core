@@ -505,7 +505,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
         * standard page
         **************************************************************/
         if( bDuplicate )
-            pStandardPage = static_cast<SdPage*>( pPreviousStandardPage->Clone() );
+            pStandardPage = static_cast<SdPage*>( pPreviousStandardPage->CloneSdrPage(*mpDoc) );
         else
             pStandardPage = mpDoc->AllocSdPage(false);
 
@@ -540,7 +540,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
         SdPage* pNotesPage = nullptr;
 
         if( bDuplicate )
-            pNotesPage = static_cast<SdPage*>( pPreviousNotesPage->Clone() );
+            pNotesPage = static_cast<SdPage*>( pPreviousNotesPage->CloneSdrPage(*mpDoc) );
         else
             pNotesPage = mpDoc->AllocSdPage(false);
 

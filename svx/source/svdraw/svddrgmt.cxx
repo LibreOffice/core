@@ -3587,8 +3587,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     // there are currently no easy mechanisms to plug an alternative interaction
     // from there
     SdrObject* pSdrObject = rMarkList.GetMark(0)->GetMarkedSdrObj();
-    struct SdrObjDeleter { void operator()(SdrObject* b) { SdrObject::Free(b); }};
-    std::unique_ptr< SdrObject, SdrObjDeleter > pFullDragClone;
+    std::unique_ptr< SdrObject, SdrObjectFreeOp > pFullDragClone;
     bool bExternal(false);
     SdrObject* pExternalSdrObject(nullptr);
 

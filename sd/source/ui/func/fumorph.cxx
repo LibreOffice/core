@@ -81,8 +81,8 @@ void FuMorph::DoExecute( SfxRequest& )
         // create clones
         SdrObject*  pObj1 = rMarkList.GetMark(0)->GetMarkedSdrObj();
         SdrObject*  pObj2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
-        SdrObject*  pCloneObj1 = pObj1->Clone();
-        SdrObject*  pCloneObj2 = pObj2->Clone();
+        SdrObject*  pCloneObj1(pObj1->CloneSdrObject(pObj1->getSdrModelFromSdrObject()));
+        SdrObject*  pCloneObj2(pObj2->CloneSdrObject(pObj2->getSdrModelFromSdrObject()));
 
         // delete text at clone, otherwise we do net get a correct PathObj
         pCloneObj1->SetOutlinerParaObject(nullptr);
@@ -431,8 +431,12 @@ void FuMorph::ImpInsertPolygons(
 
         if ( nCount )
         {
-            pObjList->InsertObject( pObj1->Clone(), 0 );
-            pObjList->InsertObject( pObj2->Clone() );
+            pObjList->InsertObject(
+                pObj1->CloneSdrObject(pObj1->getSdrModelFromSdrObject()),
+                0 );
+            pObjList->InsertObject(
+                pObj2->CloneSdrObject(pObj2->getSdrModelFromSdrObject()) );
+
             mpView->DeleteMarked();
             mpView->InsertObjectAtView( pObjGroup, *pPageView, SdrInsertFlags:: SETDEFLAYER );
         }

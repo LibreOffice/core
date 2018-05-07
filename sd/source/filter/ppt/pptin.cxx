@@ -735,7 +735,7 @@ bool ImplSdPPTImport::Import()
             if ( pPersist->bStarDrawFiller && pPersist->bNotesMaster && ( nCurrentPageNum > 2 ) && ( ( nCurrentPageNum & 1 ) == 0 ) )
             {
                 pSdrModel->DeleteMasterPage( nCurrentPageNum );
-                SdrPage* pNotesClone = static_cast<SdPage*>(pSdrModel->GetMasterPage( 2 ))->Clone();
+                SdrPage* pNotesClone = static_cast<SdPage*>(pSdrModel->GetMasterPage( 2 ))->CloneSdrPage(*pSdrModel);
                 pSdrModel->InsertMasterPage( pNotesClone, nCurrentPageNum );
                 if ( pNotesClone )
                 {

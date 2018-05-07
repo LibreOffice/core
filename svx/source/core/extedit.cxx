@@ -185,7 +185,7 @@ void SdrExternalToolEdit::Update(Graphic & rGraphic)
     SdrPageView *const pPageView = m_pView->GetSdrPageView();
     if (pPageView)
     {
-        SdrGrafObj *const pNewObj(static_cast<SdrGrafObj*>(m_pObj->Clone()));
+        SdrGrafObj *const pNewObj(static_cast<SdrGrafObj*>(m_pObj->CloneSdrObject(m_pObj->getSdrModelFromSdrObject())));
         assert(pNewObj);
         OUString const description =
             m_pView->GetDescriptionOfMarkedObjects() + " External Edit";

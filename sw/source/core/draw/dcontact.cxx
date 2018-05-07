@@ -80,6 +80,7 @@ namespace
     struct VirtObjAnchoredAtFramePred
     {
         const SwFrame* m_pAnchorFrame;
+
         // #i26791# - compare with master frame
         static const SwFrame* FindFrame(const SwFrame* pFrame)
         {
@@ -89,10 +90,16 @@ namespace
             while(pContentFrame->IsFollow())
                 pContentFrame = pContentFrame->FindMaster();
             return pContentFrame;
-        };
-        VirtObjAnchoredAtFramePred(const SwFrame* pAnchorFrame) : m_pAnchorFrame(FindFrame(pAnchorFrame)) {};
-        bool operator()(const std::unique_ptr<SwDrawVirtObj>& rpDrawVirtObj)
-            { return FindFrame(rpDrawVirtObj->GetAnchorFrame()) == m_pAnchorFrame; };
+        }
+
+        VirtObjAnchoredAtFramePred(const SwFrame* pAnchorFrame)
+        :   m_pAnchorFrame(FindFrame(pAnchorFrame))
+        {}
+
+        bool operator()(const SwDrawVirtObjPtr& rpDrawVirtObj)
+        {
+            return FindFrame(rpDrawVirtObj->GetAnchorFrame()) == m_pAnchorFrame;
+        }
     };
 }
 
@@ -813,7 +820,7 @@ SwFrame* SwDrawContact::GetAnchorFrame(SdrObject const *const pDrawObj)
 SwDrawVirtObj* SwDrawContact::AddVirtObj()
 {
     maDrawVirtObjs.push_back(
-        std::unique_ptr<SwDrawVirtObj>(
+        SwDrawVirtObjPtr(
             new SwDrawVirtObj(
                 GetMaster()->getSdrModelFromSdrObject(),
                 *GetMaster(),
@@ -1676,7 +1683,8 @@ void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
     else
     {
         const auto ppVirtDrawObj(std::find_if(maDrawVirtObjs.begin(), maDrawVirtObjs.end(),
-                [] (const std::unique_ptr<SwDrawVirtObj>& pObj) { return pObj->IsConnected(); }));
+                [] (const SwDrawVirtObjPtr& pObj) { return pObj->IsConnected(); }));
+
         if(ppVirtDrawObj != maDrawVirtObjs.end())
         {
             // replace found 'virtual' drawing object by 'master' drawing
@@ -2180,10 +2188,10 @@ SwDrawVirtObj& SwDrawVirtObj::operator=( const SwDrawVirtObj& rObj )
     return *this;
 }
 
-SwDrawVirtObj* SwDrawVirtObj::Clone(SdrModel* pTargetModel) const
+SwDrawVirtObj* SwDrawVirtObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     SwDrawVirtObj* pObj = new SwDrawVirtObj(
-        nullptr == pTargetModel ? getSdrModelFromSdrObject() : *pTargetModel,
+        rTargetModel,
         rRefObj,
         mrDrawContact);
 

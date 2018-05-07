@@ -1383,8 +1383,8 @@ sal_uInt16 SdDrawDocument::DuplicatePage (
     }
 
     // Create duplicates of a standard page and the associated notes page
-    pStandardPage = static_cast<SdPage*>( pPreviousStandardPage->Clone() );
-    pNotesPage = static_cast<SdPage*>( pPreviousNotesPage->Clone() );
+    pStandardPage = static_cast<SdPage*>( pPreviousStandardPage->CloneSdrPage(*this) );
+    pNotesPage = static_cast<SdPage*>( pPreviousNotesPage->CloneSdrPage(*this) );
 
     return InsertPageSet (
         pActualPage,
