@@ -1055,6 +1055,14 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="ShowInlineTooltips" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
+          <info>
+            <desc>Enables the writer to show the display of tips for tracked changes.</desc>
+            <label>Show inline tips</label>
+          </info>
+          <value>true</value>
+        </prop>
       </group>
       <group oor:name="NonprintingCharacter">
         <info>
