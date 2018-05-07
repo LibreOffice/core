@@ -354,6 +354,8 @@ bool lcl_Ensure3DNamedRange( SCTAB nTab, const ScTokenArray* pScTokArr )
             // Only fix sheet-local names. SCTAB_GLOBAL must be read-only
             if ( nTab != SCTAB_GLOBAL )
             {
+                pRef->Ref1.SetFlag3D( true ); //XLSX fix
+                pRef->Ref2.SetFlag3D( true );
                 if ( pRef->Ref1.IsTabRel() )
                     pRef->Ref1.SetAbsTab( nTab + pRef->Ref1.Tab() ); //XLS fix
                 if ( pRef->Ref2.IsTabRel() )
