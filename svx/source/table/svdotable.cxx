@@ -1634,9 +1634,9 @@ OUString SdrTableObj::TakeObjNamePlural() const
 }
 
 
-SdrTableObj* SdrTableObj::Clone(SdrModel* pTargetModel) const
+SdrTableObj* SdrTableObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrTableObj >(pTargetModel);
+    return CloneHelper< SdrTableObj >(rTargetModel);
 }
 
 SdrTableObj& SdrTableObj::operator=(const SdrTableObj& rObj)

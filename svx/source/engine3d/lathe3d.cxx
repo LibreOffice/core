@@ -90,6 +90,10 @@ E3dLatheObj::E3dLatheObj(SdrModel& rSdrModel)
     SetDefaultAttributes(aDefault);
 }
 
+E3dLatheObj::~E3dLatheObj()
+{
+}
+
 void E3dLatheObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 {
     GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(rDefault.GetDefaultLatheSmoothed()));
@@ -104,9 +108,9 @@ sal_uInt16 E3dLatheObj::GetObjIdentifier() const
     return E3D_LATHEOBJ_ID;
 }
 
-E3dLatheObj* E3dLatheObj::Clone(SdrModel* pTargetModel) const
+E3dLatheObj* E3dLatheObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< E3dLatheObj >(pTargetModel);
+    return CloneHelper< E3dLatheObj >(rTargetModel);
 }
 
 E3dLatheObj& E3dLatheObj::operator=(const E3dLatheObj& rObj)

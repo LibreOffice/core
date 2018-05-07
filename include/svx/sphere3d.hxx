@@ -37,6 +37,10 @@ private:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
     void SetDefaultAttributes(const E3dDefaultAttributes& rDefault);
 
+private:
+    // protected destructor - due to final, make private
+    virtual ~E3dSphereObj() override;
+
 public:
     E3dSphereObj(
         SdrModel& rSdrModel,
@@ -60,7 +64,7 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
-    virtual E3dSphereObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual E3dSphereObj* CloneSdrObject(SdrModel& rTargetModel) const override;
 
     // implemented mainly for the purposes of Clone()
     E3dSphereObj& operator=(const E3dSphereObj& rObj);

@@ -142,9 +142,9 @@ OUString SdrMediaObj::TakeObjNamePlural() const
     return SvxResId(STR_ObjNamePluralMEDIA);
 }
 
-SdrMediaObj* SdrMediaObj::Clone(SdrModel* pTargetModel) const
+SdrMediaObj* SdrMediaObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrMediaObj >(pTargetModel);
+    return CloneHelper< SdrMediaObj >(rTargetModel);
 }
 
 SdrMediaObj& SdrMediaObj::operator=(const SdrMediaObj& rObj)

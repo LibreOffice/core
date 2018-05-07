@@ -279,7 +279,8 @@ void DrawViewShell::ExecBmpMask( SfxRequest const & rReq )
 
             if ( pObj && !mpDrawView->IsTextEdit() )
             {
-                std::unique_ptr<SdrGrafObj> xNewObj(pObj->Clone());
+                typedef std::unique_ptr< SdrGrafObj, SdrObjectFreeOp > SdrGrafObjPtr;
+                SdrGrafObjPtr xNewObj(pObj->CloneSdrObject(pObj->getSdrModelFromSdrObject()));
                 bool bCont = true;
 
                 if (xNewObj->IsLinkedGraphic())

@@ -103,11 +103,12 @@ protected:
     // to protected area
     E3dObject(SdrModel& rSdrModel);
 
+    // protected destructor
+    virtual ~E3dObject() override;
+
 public:
     virtual void SetTransformChanged();
     virtual void RecalcSnapRect() override;
-
-    virtual ~E3dObject() override;
 
     virtual SdrInventor GetObjInventor() const override;
     virtual sal_uInt16  GetObjIdentifier() const override;
@@ -139,7 +140,7 @@ public:
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
-    virtual E3dObject* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual E3dObject* CloneSdrObject(SdrModel& rTargetModel) const override;
     E3dObject& operator=( const E3dObject& rObj );
 
     virtual SdrObjGeoData *NewGeoData() const override;
@@ -186,10 +187,11 @@ protected:
     // convert given basegfx::B3DPolyPolygon to screen coor
     basegfx::B2DPolyPolygon TransformToScreenCoor(const basegfx::B3DPolyPolygon& rCandidate);
 
-public:
-
-    E3dCompoundObject(SdrModel& rSdrModel);
+    // protected destructor
     virtual ~E3dCompoundObject() override;
+
+public:
+    E3dCompoundObject(SdrModel& rSdrModel);
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
     virtual sal_uInt32 GetHdlCount() const override;
@@ -198,7 +200,7 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual void RecalcSnapRect() override;
 
-    virtual E3dCompoundObject* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual E3dCompoundObject* CloneSdrObject(SdrModel& rTargetModel) const override;
 
     // implemented mainly for the purposes of Clone()
     E3dCompoundObject& operator=(const E3dCompoundObject& rObj);

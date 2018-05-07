@@ -31,6 +31,7 @@ class XclExpMsoDrawing;
 class SdrCaptionObj;
 class SdrTextObj;
 class XclTxo;
+struct SdrObjectFreeOp;
 
 class XclExpObjList : public ExcEmptyRec, protected XclExpRoot
 {
@@ -157,7 +158,7 @@ public:
 class XclObjComment : public XclObj
 {
     ScAddress                   maScPos;
-    std::unique_ptr< SdrCaptionObj >
+    std::unique_ptr< SdrCaptionObj, SdrObjectFreeOp >
                                 mpCaption;
     bool                        mbVisible;
     tools::Rectangle                   maFrom;

@@ -1011,7 +1011,7 @@ std::size_t XclImpGroupObj::DoGetProgressSize() const
 
 SdrObjectPtr XclImpGroupObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& /*rAnchorRect*/ ) const
 {
-    std::unique_ptr<SdrObjGroup, SdrObjectFree> xSdrObj(
+    std::unique_ptr<SdrObjGroup, SdrObjectFreeOp> xSdrObj(
         new SdrObjGroup(
             *GetDoc().GetDrawLayer()));
     // child objects in BIFF2-BIFF5 have absolute size, not needed to pass own anchor rectangle
@@ -1442,7 +1442,7 @@ void XclImpTextObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uI
 
 SdrObjectPtr XclImpTextObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const
 {
-    std::unique_ptr<SdrObjCustomShape, SdrObjectFree> xSdrObj(
+    std::unique_ptr<SdrObjCustomShape, SdrObjectFreeOp> xSdrObj(
         new SdrObjCustomShape(
             *GetDoc().GetDrawLayer()));
     xSdrObj->NbcSetSnapRect( rAnchorRect );
