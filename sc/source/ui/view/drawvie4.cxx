@@ -41,6 +41,7 @@
 #include <chartarr.hxx>
 #include <gridwin.hxx>
 #include <userdat.hxx>
+#include <tabvwsh.hxx>
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -369,13 +370,15 @@ void ScDrawView::DoCopy()
     aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
     // maSize is set in ScDrawTransferObj ctor
 
-    rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
+    ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
+    uno::Reference<css::datatransfer::XTransferable2> xTransferObj = pTransferObj;
 
     if ( ScGlobal::xDrawClipDocShellRef.is() )
     {
         pTransferObj->SetDrawPersist( ScGlobal::xDrawClipDocShellRef.get() );    // keep persist for ole objects alive
     }
 
+    pViewData->GetViewShell()->SetClipData(xTransferObj); // internal clipboard
     pTransferObj->CopyToClipboard( pViewData->GetActiveWin() );     // system clipboard
 }
 
