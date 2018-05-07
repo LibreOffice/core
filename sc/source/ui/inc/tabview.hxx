@@ -490,7 +490,7 @@ public:
     void            UpdateShrinkOverlay();
     void            UpdateAllOverlays();
 
-    void            UpdateFormulas();
+    void            UpdateFormulas( SCCOL nStartCol = -1, SCROW nStartRow = -1, SCCOL nEndCol = -1, SCROW nEndRow = -1 );
     void            InterpretVisible();
     void            CheckNeedsRepaint();
     bool            NeedsRepaint();
@@ -605,6 +605,11 @@ public:
     /// @see ScModelObj::getRowColumnHeaders().
     OUString getRowColumnHeaders(const tools::Rectangle& rRectangle);
     static void OnLOKNoteStateChanged(const ScPostIt* pNote);
+
+    SCROW GetLOKStartHeaderRow() { return mnLOKStartHeaderRow; }
+    SCROW GetLOKEndHeaderRow() { return mnLOKEndHeaderRow; }
+    SCCOL GetLOKStartHeaderCol() { return mnLOKStartHeaderCol; }
+    SCCOL GetLOKEndHeaderCol() { return mnLOKEndHeaderCol; }
 };
 
 #endif
