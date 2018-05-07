@@ -83,6 +83,7 @@
   <block-list:block block-list:abbreviated-name=":^(:" block-list:name="⁽"/>
   <block-list:block block-list:abbreviated-name=":^):" block-list:name="⁾"/>
   <block-list:block block-list:abbreviated-name=":^+:" block-list:name="⁺"/>
+  <block-list:block block-list:abbreviated-name=":~:" block-list:name="≈"/>
   <block-list:block block-list:abbreviated-name=":_=:" block-list:name="₌"/>
   <block-list:block block-list:abbreviated-name=":_-:" block-list:name="₋"/>
   <block-list:block block-list:abbreviated-name=":_(:" block-list:name="₍"/>
@@ -515,7 +516,6 @@
   <block-list:block block-list:abbreviated-name=":кит2:" block-list:name="🐋"/>
   <block-list:block block-list:abbreviated-name=":кит:" block-list:name="🐳"/>
   <block-list:block block-list:abbreviated-name=":китара:" block-list:name="🎸"/>
-  <block-list:block block-list:abbreviated-name=":ккнигоразделител2:" block-list:name="🔖"/>
   <block-list:block block-list:abbreviated-name=":клавиатура:" block-list:name="⌨"/>
   <block-list:block block-list:abbreviated-name=":кламер:" block-list:name="📎"/>
   <block-list:block block-list:abbreviated-name=":клипборд:" block-list:name="📋"/>
@@ -524,6 +524,7 @@
   <block-list:block block-list:abbreviated-name=":книга2:" block-list:name="📖"/>
   <block-list:block block-list:abbreviated-name=":книга:" block-list:name="📕"/>
   <block-list:block block-list:abbreviated-name=":книги:" block-list:name="📚"/>
+  <block-list:block block-list:abbreviated-name=":книгоразделител2:" block-list:name="🔖"/>
   <block-list:block block-list:abbreviated-name=":книгоразделител:" block-list:name="📑"/>
   <block-list:block block-list:abbreviated-name=":коала:" block-list:name="🐨"/>
   <block-list:block block-list:abbreviated-name=":ковчег:" block-list:name="⚰"/>
@@ -851,7 +852,6 @@
   <block-list:block block-list:abbreviated-name=":праскова:" block-list:name="🍑"/>
   <block-list:block block-list:abbreviated-name=":предупреждение:" block-list:name="⚠"/>
   <block-list:block block-list:abbreviated-name=":пресичащи деца:" block-list:name="🚸"/>
-  <block-list:block block-list:abbreviated-name=":приблизително равно:" block-list:name="≈"/>
   <block-list:block block-list:abbreviated-name=":призрак:" block-list:name="👻"/>
   <block-list:block block-list:abbreviated-name=":прим:" block-list:name="′"/>
   <block-list:block block-list:abbreviated-name=":примка2:" block-list:name="➿"/>

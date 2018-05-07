@@ -875,6 +875,9 @@
   <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
   <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
   <block-list:block block-list:abbreviated-name=":+-:" block-list:name="±"/>
+  <block-list:block block-list:abbreviated-name=":엔:" block-list:name="¥"/>
+  <block-list:block block-list:abbreviated-name=":센트:" block-list:name="¢"/>
+  <block-list:block block-list:abbreviated-name=":파운드:" block-list:name="£"/>
   <block-list:block block-list:abbreviated-name=":^c:" block-list:name="ᶜ"/>
   <block-list:block block-list:abbreviated-name=":^d:" block-list:name="ᵈ"/>
   <block-list:block block-list:abbreviated-name=":^e:" block-list:name="ᵉ"/>
