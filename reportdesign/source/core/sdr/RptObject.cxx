@@ -883,9 +883,9 @@ void OUnoObject::impl_setUnoShape( const uno::Reference< uno::XInterface >& rxUn
     releaseUnoShape();
 }
 
-OUnoObject* OUnoObject::Clone(SdrModel* pTargetModel) const
+OUnoObject* OUnoObject::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< OUnoObject >(pTargetModel);
+    return CloneHelper< OUnoObject >(rTargetModel);
 }
 
 OUnoObject& OUnoObject::operator=(const OUnoObject& rObj)
@@ -1089,9 +1089,9 @@ uno::Reference< chart2::data::XDatabaseDataProvider > lcl_getDataProvider(const 
 }
 
 // Clone() should make a complete copy of the object.
-OOle2Obj* OOle2Obj::Clone(SdrModel* pTargetModel) const
+OOle2Obj* OOle2Obj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< OOle2Obj >(pTargetModel);
+    return CloneHelper< OOle2Obj >(rTargetModel);
 }
 
 OOle2Obj& OOle2Obj::operator=(const OOle2Obj& rObj)

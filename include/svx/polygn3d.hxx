@@ -38,6 +38,9 @@ private:
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 
+    // protected destructor
+    virtual ~E3dPolygonObj() override;
+
 public:
     void SetPolyPolygon3D(const basegfx::B3DPolyPolygon& rNewPolyPoly3D);
     void SetPolyNormals3D(const basegfx::B3DPolyPolygon& rNewPolyPoly3D);
@@ -48,8 +51,6 @@ public:
         const basegfx::B3DPolyPolygon& rPolyPoly3D);
     E3dPolygonObj(SdrModel& rSdrModel);
 
-    virtual ~E3dPolygonObj() override;
-
     const basegfx::B3DPolyPolygon& GetPolyPolygon3D() const { return aPolyPoly3D; }
     const basegfx::B3DPolyPolygon& GetPolyNormals3D() const { return aPolyNormals3D; }
     const basegfx::B2DPolyPolygon& GetPolyTexture2D() const { return aPolyTexture2D; }
@@ -57,7 +58,7 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
-    virtual E3dPolygonObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual E3dPolygonObj* CloneSdrObject(SdrModel& rTargetModel) const override;
 
     // implemented mainly for the purposes of Clone()
     E3dPolygonObj& operator=(const E3dPolygonObj& rObj);

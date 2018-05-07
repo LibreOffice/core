@@ -307,7 +307,7 @@ bool SdrExchangeView::Paste(
         {
             const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
 
-            SdrObject* pNewObj = pSrcOb->Clone();
+            SdrObject* pNewObj(pSrcOb->CloneSdrObject(*mpModel));
 
             if (pNewObj!=nullptr)
             {
@@ -742,7 +742,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
             }
             else
             {
-                pNewObj = pObj->Clone();
+                pNewObj = pObj->CloneSdrObject(*pNewModel);
                 pNewObj->SetPage( pnewPage );
             }
 

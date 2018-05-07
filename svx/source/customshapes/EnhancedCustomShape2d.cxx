@@ -2277,7 +2277,9 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
             // #i40600# if bLineGeometryNeededOnly is set, linestyle does not matter
             if(!bLineGeometryNeededOnly && (drawing::LineStyle_NONE == eLineStyle) && (drawing::FillStyle_NONE == eFillStyle))
             {
-                delete pObj;
+                // always use SdrObject::Free(...) for SdrObjects (!)
+                SdrObject* pTemp(pObj);
+                SdrObject::Free(pTemp);
             }
             else
             {

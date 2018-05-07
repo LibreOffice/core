@@ -84,7 +84,6 @@ private:
     friend class SdrExchangeView; // Only for a ForceSwapIn() call.
     friend class SdrGraphicLink;
 
-private:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
@@ -115,8 +114,6 @@ private:
     bool mbIsSignatureLineCanAddComment;
     css::uno::Reference<css::graphic::XGraphic> mpSignatureLineUnsignedGraphic;
 
-private:
-
     void                    ImpRegisterLink();
     void                    ImpDeregisterLink();
     bool                    ImpUpdateGraphicLink( bool bAsynchron = true ) const;
@@ -126,8 +123,11 @@ private:
     void onGraphicChanged();
     GDIMetaFile             GetMetaFile(GraphicType &rGraphicType) const;
 
-public:
+protected:
+    // protected destructor
+    virtual ~SdrGrafObj() override;
 
+public:
     SdrGrafObj(SdrModel& rSdrModel);
     SdrGrafObj(
         SdrModel& rSdrModel,
@@ -136,8 +136,6 @@ public:
         SdrModel& rSdrModel,
         const Graphic& rGrf,
         const tools::Rectangle& rRect);
-
-    virtual ~SdrGrafObj() override;
 
     void                    SetGraphicObject( const GraphicObject& rGrfObj );
     const GraphicObject&    GetGraphicObject(bool bForceSwapIn = false) const;
@@ -185,7 +183,7 @@ public:
     // #i25616#
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
 
-    virtual SdrGrafObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual SdrGrafObj* CloneSdrObject(SdrModel& rTargetModel) const override;
     SdrGrafObj&             operator=(const SdrGrafObj& rObj);
 
     virtual sal_uInt32 GetHdlCount() const override;

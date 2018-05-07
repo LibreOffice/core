@@ -154,7 +154,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                 const SdrObject* pObj=pM->GetMarkedSdrObj();
 
                 // Directly Clone to target SdrModel
-                SdrObject* pNewObj(pObj->Clone(pDrawModel));
+                SdrObject* pNewObj(pObj->CloneSdrObject(*pDrawModel));
 
                 if (pNewObj!=nullptr)
                 {

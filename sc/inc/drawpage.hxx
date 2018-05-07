@@ -33,7 +33,7 @@ public:
     explicit ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage);
     virtual ~ScDrawPage() override;
 
-    virtual ScDrawPage* Clone(SdrModel* pNewModel = nullptr) const override;
+    virtual ScDrawPage* CloneSdrPage(SdrModel& rTargetModel) const override;
 
     virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;
 };

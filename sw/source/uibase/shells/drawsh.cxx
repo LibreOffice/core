@@ -138,7 +138,7 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
 
                 if (SdrGrafObj* pSdrGrafObj = dynamic_cast<SdrGrafObj*>(&rObject))
                 {
-                    SdrGrafObj* pNewGrafObj = pSdrGrafObj->Clone();
+                    SdrGrafObj* pNewGrafObj(pSdrGrafObj->CloneSdrObject(pSdrGrafObj->getSdrModelFromSdrObject()));
 
                     pNewGrafObj->SetGraphic(aGraphic);
 

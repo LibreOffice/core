@@ -80,6 +80,10 @@ E3dExtrudeObj::E3dExtrudeObj(SdrModel& rSdrModel)
     SetDefaultAttributes(aDefault);
 }
 
+E3dExtrudeObj::~E3dExtrudeObj()
+{
+}
+
 void E3dExtrudeObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 {
     GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(rDefault.GetDefaultExtrudeSmoothed()));
@@ -98,9 +102,9 @@ sal_uInt16 E3dExtrudeObj::GetObjIdentifier() const
     return E3D_EXTRUDEOBJ_ID;
 }
 
-E3dExtrudeObj* E3dExtrudeObj::Clone(SdrModel* pTargetModel) const
+E3dExtrudeObj* E3dExtrudeObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< E3dExtrudeObj >(pTargetModel);
+    return CloneHelper< E3dExtrudeObj >(rTargetModel);
 }
 
 E3dExtrudeObj& E3dExtrudeObj::operator=(const E3dExtrudeObj& rObj)

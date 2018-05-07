@@ -59,6 +59,10 @@ E3dCubeObj::E3dCubeObj(SdrModel& rSdrModel)
     SetDefaultAttributes(aDefault);
 }
 
+E3dCubeObj::~E3dCubeObj()
+{
+}
+
 void E3dCubeObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 {
     aCubePos = rDefault.GetDefaultCubePos();
@@ -78,9 +82,9 @@ SdrObject *E3dCubeObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) c
     return nullptr;
 }
 
-E3dCubeObj* E3dCubeObj::Clone(SdrModel* pTargetModel) const
+E3dCubeObj* E3dCubeObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< E3dCubeObj >(pTargetModel);
+    return CloneHelper< E3dCubeObj >(rTargetModel);
 }
 
 E3dCubeObj& E3dCubeObj::operator=(const E3dCubeObj& rObj)

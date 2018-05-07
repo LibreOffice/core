@@ -325,7 +325,10 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
             SdrCircObj* pCircObj = const_cast<SdrCircObj*>( static_cast<const SdrCircObj*>(&rObj) );
             SdrPathObj* pPathObj = static_cast<SdrPathObj*>( pCircObj->ConvertToPolyObj( false, false ) );
             tools::Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0));
-            delete pPathObj;
+
+            // always use SdrObject::Free(...) for SdrObjects (!)
+            SdrObject* pTemp(pPathObj);
+            SdrObject::Free(pTemp);
 
             IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, "", "", "", "", "", true, false );
             pObj->SetExtraEllipse( aPoly.GetBoundRect() );
@@ -396,7 +399,10 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
                 pObj->SetExtraEllipse( aPoly.GetBoundRect() );
 
                 // was only created by us temporarily
-                delete pPathObj;
+                // always use SdrObject::Free(...) for SdrObjects (!)
+                SdrObject* pTemp(pPathObj);
+                SdrObject::Free(pTemp);
+
                 pUserData->ReplaceObject( IMapObjectPtr(pObj) );
             }
             break;

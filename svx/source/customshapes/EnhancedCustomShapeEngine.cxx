@@ -170,10 +170,15 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText(
                     pRenderedShape = new SdrObjGroup(rSdrObjCustomShape.getSdrModelFromSdrObject());
                     static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
                 }
-                static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pShadowGeometry->Clone(), 0 );
+
+                static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject(
+                    pShadowGeometry->CloneSdrObject(pShadowGeometry->getSdrModelFromSdrObject()),
+                    0);
             }
             else
-                pRenderedShape = pShadowGeometry->Clone();
+            {
+                pRenderedShape = pShadowGeometry->CloneSdrObject(pShadowGeometry->getSdrModelFromSdrObject());
+            }
         }
 
         // apply text

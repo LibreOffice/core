@@ -727,7 +727,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
 
             // #i101648# check if dragged object is a naked SdrObject (not
             // a derivation). This is e.g. used in SW Frame construction
-            // as placeholder. Do not use SolidDragging for naked SDrObjects,
+            // as placeholder. Do not use SolidDragging for naked SdrObjects,
             // they cannot have a valid optical representation
             if(bUseSolidDragging && OBJ_NONE == pCurrentCreate->GetObjIdentifier())
             {
