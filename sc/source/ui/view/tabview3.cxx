@@ -2206,7 +2206,7 @@ void ScTabView::KillEditView( bool bNoPaint )
     }
 }
 
-void ScTabView::UpdateFormulas()
+void ScTabView::UpdateFormulas(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow)
 {
     if ( aViewData.GetDocument()->IsAutoCalcShellDisabled() )
         return;
@@ -2214,7 +2214,7 @@ void ScTabView::UpdateFormulas()
     for (sal_uInt16 i = 0; i < 4; i++)
     {
         if (pGridWin[i] && pGridWin[i]->IsVisible())
-            pGridWin[i]->UpdateFormulas();
+            pGridWin[i]->UpdateFormulas(nStartCol, nStartRow, nEndCol, nEndRow);
     }
 
     if ( aViewData.IsPagebreakMode() )
