@@ -44,6 +44,8 @@
 
 using namespace ::com::sun::star;
 
+namespace sw {
+
 std::unique_ptr<sw::MergedPara>
 CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode)
 {
@@ -108,6 +110,8 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode)
             mergedText.makeStringAndClear(), pParaPropsNode, &rTextNode);
 }
 
+} // namespace sw
+
 void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
         SwScriptInfo & rScriptInfo, SwTextFrame *const pFrame)
 {
@@ -116,11 +120,6 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
     m_pViewShell = pRootFrame ? pRootFrame->GetCurrShell() : nullptr;
 
     m_pScriptInfo = &rScriptInfo;
-
-    if (pFrame)
-    {
-        pFrame->GetPara()->SetMergedPara(CheckParaRedlineMerge(*pFrame, rTextNode));
-    }
 
     // attribute array
     m_pHints = rTextNode.GetpSwpHints();
