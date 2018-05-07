@@ -306,7 +306,7 @@ public:
 //      SwFlyDrawObj
 
 /// Abstract DrawObject
-class SVX_DLLPUBLIC SdrObject: public SfxListener, public virtual tools::WeakBase
+class SVX_DLLPUBLIC SdrObject : public SfxListener, public virtual tools::WeakBase
 {
 private:
     friend class                SdrObjListIter;
@@ -479,11 +479,11 @@ public:
     virtual bool HasLimitedRotation() const;
 
     // Returns a copy of the object. Every inherited class must reimplement this (in class Foo
-    // it should be sufficient to do "virtual Foo* Clone() const { return CloneHelper< Foo >(); }".
+    // it should be sufficient to do "virtual Foo* CloneSdrObject(...) const { return CloneHelper< Foo >(); }".
     // Note that this function uses operator= internally.
-    virtual SdrObject* Clone(SdrModel* pTargetModel = nullptr) const;
+    virtual SdrObject* CloneSdrObject(SdrModel& rTargetModel) const;
 
-    // implemented mainly for the purposes of Clone()
+    // implemented mainly for the purposes of CloneSdrObject()
     SdrObject& operator=(const SdrObject& rObj);
 
     // TakeObjName...() is for the display in the UI, e.g. "3 frames selected"
@@ -982,7 +982,7 @@ protected:
     virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& _rxUnoShape );
 
     // helper function for reimplementing Clone().
-    template< typename T > T* CloneHelper(SdrModel* pTargetModel) const;
+    template< typename T > T* CloneHelper(SdrModel& rTargetModel) const;
 
 private:
     struct Impl;
@@ -1023,6 +1023,16 @@ private:
     SvxShape* getSvxShape();
 
     SdrObject( const SdrObject& ) = delete;
+};
+
+// helper for constructing std::unique_ptr for SdrObjects where a
+// deleter is needed - here, SdrObject::Free needs to be used.
+struct SVX_DLLPUBLIC SdrObjectFreeOp
+{
+    void operator()(SdrObject* obj)
+    {
+        SdrObject::Free(obj);
+    }
 };
 
 /** Suppress BroadcastObjectChange() until destruction of the (last) instance.
@@ -1076,12 +1086,12 @@ private:
     SdrObjFactory() = delete;
 };
 
-template< typename T > T* SdrObject::CloneHelper(SdrModel* pTargetModel) const
+template< typename T > T* SdrObject::CloneHelper(SdrModel& rTargetModel) const
 {
     OSL_ASSERT( typeid( T ) == typeid( *this ));
     T* pObj = dynamic_cast< T* >(
         SdrObjFactory::MakeNewObject(
-            nullptr == pTargetModel ? getSdrModelFromSdrObject() : *pTargetModel,
+            rTargetModel,
             GetObjInventor(),
             GetObjIdentifier()));
 

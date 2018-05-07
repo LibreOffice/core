@@ -56,13 +56,16 @@ private:
     bool                        mbFixedTail; // for calc note box fixed tail, default FALSE
     Point                       maFixedTailPos; // for calc note box fixed tail position.
 
-private:
     SVX_DLLPRIVATE void ImpGetCaptParams(ImpCaptParams& rPara) const;
     SVX_DLLPRIVATE static void ImpCalcTail1(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle const & rRect);
     SVX_DLLPRIVATE static void ImpCalcTail2(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle const & rRect);
     SVX_DLLPRIVATE static void ImpCalcTail3(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle const & rRect);
     SVX_DLLPRIVATE static void ImpCalcTail (const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle const & rRect);
     SVX_DLLPRIVATE void ImpRecalcTail();
+
+protected:
+    // protected destructor
+    virtual ~SdrCaptionObj() override;
 
 public:
     SdrCaptionObj(SdrModel& rSdrModel);
@@ -71,11 +74,9 @@ public:
         const tools::Rectangle& rRect,
         const Point& rTail);
 
-    virtual ~SdrCaptionObj() override;
-
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
-    virtual SdrCaptionObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual SdrCaptionObj* CloneSdrObject(SdrModel& rTargetModel) const override;
 
     // implemented mainly for the purposes of Clone()
     SdrCaptionObj& operator=(const SdrCaptionObj& rObj);

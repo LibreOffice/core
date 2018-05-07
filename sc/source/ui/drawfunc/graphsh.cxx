@@ -121,7 +121,7 @@ void ScGraphicShell::ExecuteFilter( const SfxRequest& rReq )
 
                 if( pPageView )
                 {
-                    SdrGrafObj* pFilteredObj = static_cast<SdrGrafObj*>(pObj->Clone());
+                    SdrGrafObj* pFilteredObj(static_cast<SdrGrafObj*>(pObj->CloneSdrObject(pObj->getSdrModelFromSdrObject())));
                     OUString    aStr = pView->GetDescriptionOfMarkedObjects() + " " + ScResId(SCSTR_UNDO_GRAFFILTER);
                     pView->BegUndo( aStr );
                     pFilteredObj->SetGraphicObject( aFilterObj );
@@ -333,7 +333,7 @@ void ScGraphicShell::ExecuteChangePicture( SAL_UNUSED_PARAMETER SfxRequest& /*rR
                 ErrCode nError = aDlg.GetGraphic(aGraphic);
                 if( nError == ERRCODE_NONE )
                 {
-                    SdrGrafObj* pNewObject = pGraphicObj->Clone();
+                    SdrGrafObj* pNewObject(pGraphicObj->CloneSdrObject(pGraphicObj->getSdrModelFromSdrObject()));
                     pNewObject->SetGraphic( aGraphic );
                     SdrPageView* pPageView = pView->GetSdrPageView();
                     OUString aUndoString = pView->GetDescriptionOfMarkedObjects() + " Change";

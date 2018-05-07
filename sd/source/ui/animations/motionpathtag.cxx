@@ -986,10 +986,12 @@ void MotionPathTag::disposing()
 
     if( mpPathObj )
     {
-        SdrPathObj* pPathObj = mpPathObj;
+        SdrObject* pTemp(mpPathObj);
         mpPathObj = nullptr;
         mrView.updateHandles();
-        delete pPathObj;
+
+        // always use SdrObject::Free(...) for SdrObjects (!)
+        SdrObject::Free(pTemp);
     }
 
     if( mpMark )

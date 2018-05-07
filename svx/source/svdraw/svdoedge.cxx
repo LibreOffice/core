@@ -1616,9 +1616,9 @@ void SdrEdgeObj::Reformat()
     }
 }
 
-SdrEdgeObj* SdrEdgeObj::Clone(SdrModel* pTargetModel) const
+SdrEdgeObj* SdrEdgeObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrEdgeObj >(pTargetModel);
+    return CloneHelper< SdrEdgeObj >(rTargetModel);
 }
 
 SdrEdgeObj& SdrEdgeObj::operator=(const SdrEdgeObj& rObj)
@@ -1808,7 +1808,7 @@ bool SdrEdgeObj::hasSpecialDrag() const
 SdrObject* SdrEdgeObj::getFullDragClone() const
 {
     // use Clone operator
-    SdrEdgeObj* pRetval = Clone();
+    SdrEdgeObj* pRetval(CloneSdrObject(getSdrModelFromSdrObject()));
 
     // copy connections for clone, SdrEdgeObj::operator= does not do this
     pRetval->ConnectToNode(true, GetConnectedNode(true));

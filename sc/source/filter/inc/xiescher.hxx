@@ -48,11 +48,7 @@ class XclImpDrawing;
 
 // Drawing objects ============================================================
 
-struct SdrObjectFree {
-    void operator ()(SdrObject * obj) { SdrObject::Free(obj); }
-};
-typedef std::unique_ptr<SdrObject, SdrObjectFree> SdrObjectPtr;
-
+typedef std::unique_ptr< SdrObject, SdrObjectFreeOp > SdrObjectPtr;
 class XclImpDrawObjBase;
 typedef std::shared_ptr< XclImpDrawObjBase > XclImpDrawObjRef;
 

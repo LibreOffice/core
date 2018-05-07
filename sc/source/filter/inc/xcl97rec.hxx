@@ -25,6 +25,7 @@
 #include "xcl97esc.hxx"
 #include "xlstyle.hxx"
 #include <tabprotection.hxx>
+#include <svx/svdobj.hxx>
 
 class XclObj;
 class XclExpMsoDrawing;
@@ -157,7 +158,7 @@ public:
 class XclObjComment : public XclObj
 {
     ScAddress                   maScPos;
-    std::unique_ptr< SdrCaptionObj >
+    std::unique_ptr< SdrCaptionObj, SdrObjectFreeOp >
                                 mpCaption;
     bool                        mbVisible;
     tools::Rectangle                   maFrom;

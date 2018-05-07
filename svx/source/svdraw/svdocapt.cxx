@@ -235,9 +235,9 @@ sal_uInt16 SdrCaptionObj::GetObjIdentifier() const
     return sal_uInt16(OBJ_CAPTION);
 }
 
-SdrCaptionObj* SdrCaptionObj::Clone(SdrModel* pTargetModel) const
+SdrCaptionObj* SdrCaptionObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrCaptionObj >(pTargetModel);
+    return CloneHelper< SdrCaptionObj >(rTargetModel);
 }
 
 SdrCaptionObj& SdrCaptionObj::operator=(const SdrCaptionObj& rObj)

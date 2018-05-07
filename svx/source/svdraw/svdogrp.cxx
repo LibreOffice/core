@@ -202,9 +202,9 @@ const tools::Rectangle& SdrObjGroup::GetSnapRect() const
     }
 }
 
-SdrObjGroup* SdrObjGroup::Clone(SdrModel* pTargetModel) const
+SdrObjGroup* SdrObjGroup::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrObjGroup >(pTargetModel);
+    return CloneHelper< SdrObjGroup >(rTargetModel);
 }
 
 SdrObjGroup& SdrObjGroup::operator=(const SdrObjGroup& rObj)

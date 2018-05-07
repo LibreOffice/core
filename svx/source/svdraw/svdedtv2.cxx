@@ -1588,7 +1588,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
 
             if(pReplacement)
             {
-                SdrObject* pCandidate = pReplacement->Clone();
+                SdrObject* pCandidate(pReplacement->CloneSdrObject(pReplacement->getSdrModelFromSdrObject()));
                 DBG_ASSERT(pCandidate, "SdrEditView::ImpDismantleOneObject: Could not clone SdrObject (!)");
 
                 if(pCustomShape->GetMergedItem(SDRATTR_SHADOW).GetValue())

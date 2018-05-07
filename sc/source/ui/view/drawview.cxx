@@ -978,7 +978,7 @@ SdrObject* ScDrawView::ApplyGraphicToObject(
 {
     if(dynamic_cast< SdrGrafObj* >(&rHitObject))
     {
-        SdrGrafObj* pNewGrafObj = static_cast<SdrGrafObj*>(rHitObject.Clone());
+        SdrGrafObj* pNewGrafObj(static_cast<SdrGrafObj*>(rHitObject.CloneSdrObject(rHitObject.getSdrModelFromSdrObject())));
 
         pNewGrafObj->SetGraphic(rGraphic);
         BegUndo(rBeginUndoText);

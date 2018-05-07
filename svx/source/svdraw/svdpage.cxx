@@ -153,7 +153,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList, SdrModel* pNewModelel)
     for (size_t no(0); no < nCount; ++no)
     {
         SdrObject* pSO(rSrcList.GetObj(no));
-        SdrObject* pDO(pSO->Clone(pNewModelel));
+        SdrObject* pDO(pSO->CloneSdrObject(*pNewModelel));
 
         if(nullptr != pDO)
         {
@@ -1224,9 +1224,9 @@ void SdrPage::lateInit(const SdrPage& rSrcPage)
     eListKind = (mbMaster) ? SdrObjListKind::MasterPage : SdrObjListKind::DrawPage;
 }
 
-SdrPage* SdrPage::Clone(SdrModel* pNewModelel) const
+SdrPage* SdrPage::CloneSdrPage(SdrModel& rTargetModel) const
 {
-    SdrPage* pClonedPage(new SdrPage(nullptr == pNewModelel ? getSdrModelFromSdrPage() : *pNewModelel));
+    SdrPage* pClonedPage(new SdrPage(rTargetModel));
     pClonedPage->lateInit(*this);
     return pClonedPage;
 }

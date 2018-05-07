@@ -3144,7 +3144,10 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
                             ,nullptr,nullptr,_nObjectId,SdrInventor::ReportDesign,OBJ_DLG_FIXEDTEXT,
                          nullptr,pSectionWindow->getReportSection().getPage(),m_aReportModel.get(),
                          pLabel,pControl);
-        delete pLabel;
+
+        // always use SdrObject::Free(...) for SdrObjects (!)
+        SdrObject* pTemp(pLabel);
+        SdrObject::Free(pTemp);
 
         pNewControl = pControl;
         OUnoObject* pObj = dynamic_cast<OUnoObject*>(pControl);
@@ -3576,7 +3579,11 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             else
             {
                 for(SdrUnoObj* i : pControl)
-                    delete i;
+                {
+                    // always use SdrObject::Free(...) for SdrObjects (!)
+                    SdrObject* pTemp(i);
+                    SdrObject::Free(pTemp);
+                }
             }
         }
     }

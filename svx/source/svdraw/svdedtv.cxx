@@ -899,7 +899,8 @@ void SdrEditView::CopyMarkedObj()
     const size_t nMarkCount=aSourceObjectsForCopy.GetMarkCount();
     for (size_t nm=0; nm<nMarkCount; ++nm) {
         SdrMark* pM=aSourceObjectsForCopy.GetMark(nm);
-        SdrObject* pO=pM->GetMarkedSdrObj()->Clone();
+        SdrObject* pSource(pM->GetMarkedSdrObj());
+        SdrObject* pO(pSource->CloneSdrObject(pSource->getSdrModelFromSdrObject()));
         if (pO!=nullptr) {
             pM->GetPageView()->GetObjList()->InsertObject(pO, SAL_MAX_SIZE);
 

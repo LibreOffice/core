@@ -348,9 +348,9 @@ OUString SdrCircObj::TakeObjNamePlural() const
     return SvxResId(pID);
 }
 
-SdrCircObj* SdrCircObj::Clone(SdrModel* pTargetModel) const
+SdrCircObj* SdrCircObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrCircObj >(pTargetModel);
+    return CloneHelper< SdrCircObj >(rTargetModel);
 }
 
 SdrCircObj& SdrCircObj::operator=(const SdrCircObj& rObj)

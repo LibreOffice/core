@@ -122,11 +122,11 @@ void SdrVirtObj::RecalcBoundRect()
     aOutRect+=aAnchor;
 }
 
-SdrVirtObj* SdrVirtObj::Clone(SdrModel* pTargetModel) const
+SdrVirtObj* SdrVirtObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrVirtObj >(pTargetModel);
+    return CloneHelper< SdrVirtObj >(rTargetModel);
     // TTTT not sure if the above works - how could SdrObjFactory::MakeNewObject
-    // create an object wit correct rRefObj (?) OTOH VirtObj probably needs not
+    // create an object with correct rRefObj (?) OTOH VirtObj probably needs not
     // to be cloned ever - only used in Writer for multiple instances e.g. Header/Footer
     // return new SdrVirtObj(
     //     getSdrModelFromSdrObject(),

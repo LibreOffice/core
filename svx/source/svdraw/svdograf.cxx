@@ -874,9 +874,9 @@ SdrObject* SdrGrafObj::getFullDragClone() const
     return pRetval;
 }
 
-SdrGrafObj* SdrGrafObj::Clone(SdrModel* pTargetModel) const
+SdrGrafObj* SdrGrafObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrGrafObj >(pTargetModel);
+    return CloneHelper< SdrGrafObj >(rTargetModel);
 }
 
 SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
@@ -1148,7 +1148,9 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
             }
             else
             {
-                delete pGrp;
+                // always use SdrObject::Free(...) for SdrObjects (!)
+                SdrObject* pTemp(pGrp);
+                SdrObject::Free(pTemp);
             }
 
             // #i118485# convert line and fill

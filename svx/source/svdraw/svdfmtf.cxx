@@ -513,7 +513,7 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
                     {
                         SdrObject* pCandidate = aIter.Next();
                         OSL_ENSURE(pCandidate && dynamic_cast< SdrObjGroup* >(pCandidate) ==  nullptr, "SdrObjListIter with SdrIterMode::DeepNoGroups error (!)");
-                        SdrObject* pNewClone = pCandidate->Clone();
+                        SdrObject* pNewClone(pCandidate->CloneSdrObject(pCandidate->getSdrModelFromSdrObject()));
 
                         if(pNewClone)
                         {
