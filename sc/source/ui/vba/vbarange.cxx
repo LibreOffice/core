@@ -4681,11 +4681,7 @@ ScVbaRange::Insert( const uno::Any& Shift, const uno::Any& /*CopyOrigin*/ )
 
     // Paste from clipboard only if the clipboard content was copied via VBA, and not already pasted via VBA again.
     // "Insert" behavior should not depend on random clipboard content previously copied by the user.
-    vcl::Window* pWin = nullptr;
-    if(ScTabViewShell* pViewShell = excel::getBestViewShell( getUnoModel() ))
-        pWin = pViewShell->GetViewData().GetActiveWin();
-
-    ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( pWin );
+    const ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard(SC_MOD()->GetClipData());
     if ( pClipObj && pClipObj->GetUseInApi() )
     {
         // After the insert ( this range ) actually has moved
