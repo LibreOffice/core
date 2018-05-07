@@ -74,6 +74,8 @@
 #include <iterator>
 #include <set>
 
+#include <config_firebird.h>
+
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdb;
@@ -581,25 +583,24 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 
     Reference< XDriverManager > xManager;
 
-    OUString sMigrEnvVal;
-    osl_getEnvironment(OUString("DBACCESS_HSQL_MIGRATION").pData,
-            &sMigrEnvVal.pData);
+#if ENABLE_FIREBIRD_SDBC
     bool bNeedMigration = false;
     if(m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
     {
-        OUString sSalUseVclplugin;
-        osl_getEnvironment(OUString("SAL_USE_VCLPLUGIN").pData,
-                &sSalUseVclplugin.pData);
-        if(!sMigrEnvVal.isEmpty() || sSalUseVclplugin == "svp")
+        OUString sMigrEnvVal;
+        osl_getEnvironment(OUString("DBACCESS_HSQL_MIGRATION").pData,
+            &sMigrEnvVal.pData);
+        if(!sMigrEnvVal.isEmpty())
             bNeedMigration = true;
         else
         {
             MigrationWarnDialog aWarnDlg{nullptr};
             bNeedMigration = aWarnDlg.run() == RET_OK;
         }
+        if (bNeedMigration)
+            m_pImpl->m_sConnectURL = "sdbc:embedded:firebird";
     }
-    if(bNeedMigration)
-        m_pImpl->m_sConnectURL = "sdbc:embedded:firebird";
+#endif
 
     try {
         xManager.set( ConnectionPool::create( m_pImpl->m_aContext ), UNO_QUERY_THROW );
@@ -712,6 +713,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
         throwGenericSQLException( sMessage, static_cast< XDataSource* >( this ), makeAny( aContext ) );
     }
 
+#if ENABLE_FIREBIRD_SDBC
     if( bNeedMigration )
     {
         Reference< css::document::XDocumentSubStorageSupplier> xDocSup(
@@ -720,6 +722,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
                 xDocSup->getDocumentSubStorage("database",ElementModes::READWRITE) );
         importer.importHsqlDatabase();
     }
+#endif
 
     return xReturn;
 }

@@ -8769,6 +8769,7 @@ int fb_api_is_30(void) { return 0; }
 
         BUILD_TYPE="$BUILD_TYPE FIREBIRD"
         ENABLE_FIREBIRD_SDBC="TRUE"
+        AC_DEFINE(ENABLE_FIREBIRD_SDBC)
     fi
 fi
 AC_SUBST(ENABLE_FIREBIRD_SDBC)
