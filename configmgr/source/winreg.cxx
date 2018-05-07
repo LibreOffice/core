@@ -142,6 +142,7 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
 
             bool bFinal = false;
             bool bExternal = false;
+            bool bNil = false;
             OUString aValue;
             OUString aType;
             OUString aExternalBackend;
@@ -166,6 +167,11 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                 {
                     if (*reinterpret_cast<DWORD*>(pValue.get()) == 1)
                         bExternal = true;
+                }
+                else if (!wcscmp(pValueName.get(), L"Nil"))
+                {
+                    if (*reinterpret_cast<DWORD*>(pValue.get()) == 1)
+                        bNil = true;
                 }
                 else if (!wcscmp(pValueName.get(), L"ExternalBackend"))
                     aExternalBackend = o3tl::toU(pValue.get());
@@ -237,17 +243,24 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
             if(bFinal)
                 aFileHandle.writeString(" oor:finalized=\"true\"");
             aFileHandle.writeString("><value");
-            if (bExternal)
+            if (aValue.isEmpty() && bNil)
             {
-                aFileHandle.writeString(" oor:external=\"");
-                writeAttributeValue(aFileHandle, aValue);
-                aFileHandle.writeString("\"/");
+                aFileHandle.writeString(" xsi:nil=\"true\"/");
             }
             else
             {
-                aFileHandle.writeString(">");
-                writeValueContent(aFileHandle, aValue);
-                aFileHandle.writeString("</value");
+                if (bExternal)
+                {
+                    aFileHandle.writeString(" oor:external=\"");
+                    writeAttributeValue(aFileHandle, aValue);
+                    aFileHandle.writeString("\"/");
+                }
+                else
+                {
+                    aFileHandle.writeString(">");
+                    writeValueContent(aFileHandle, aValue);
+                    aFileHandle.writeString("</value");
+                }
             }
             aFileHandle.writeString("></prop>");
             for(; nCloseNode > 0; nCloseNode--)
