@@ -142,6 +142,7 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
 
             bool bFinal = false;
             bool bExternal = false;
+            bool bNil = false;
             OUString aValue;
             OUString aType;
             OUString aExternalBackend;
@@ -161,6 +162,11 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                 {
                     if (*reinterpret_cast<DWORD*>(pValue.get()) == 1)
                         bFinal = true;
+                }
+                else if (!wcscmp(pValueName.get(), L"Nil"))
+                {
+                    if (*reinterpret_cast<DWORD*>(pValue.get()) == 1)
+                        bNil = true;
                 }
                 else if (!wcscmp(pValueName.get(), L"External"))
                 {
@@ -237,7 +243,11 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
             if(bFinal)
                 aFileHandle.writeString(" oor:finalized=\"true\"");
             aFileHandle.writeString("><value");
-            if (bExternal)
+            if (bNil && aValue.isEmpty())
+            {
+                aFileHandle.writeString(" xsi:nil=\"true\"/");
+            }
+            else if (bExternal)
             {
                 aFileHandle.writeString(" oor:external=\"");
                 writeAttributeValue(aFileHandle, aValue);
