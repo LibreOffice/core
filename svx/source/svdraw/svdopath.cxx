@@ -1828,9 +1828,9 @@ sal_uInt16 SdrPathObj::GetObjIdentifier() const
     return sal_uInt16(meKind);
 }
 
-SdrPathObj* SdrPathObj::Clone(SdrModel* pTargetModel) const
+SdrPathObj* SdrPathObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrPathObj >(pTargetModel);
+    return CloneHelper< SdrPathObj >(rTargetModel);
 }
 
 SdrPathObj& SdrPathObj::operator=(const SdrPathObj& rObj)
@@ -2676,7 +2676,7 @@ SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
                         basegfx::B2DPolygon aSplitPolyA(aCandidate, 0L, nPnt + 1);
                         SetPathPoly(basegfx::B2DPolyPolygon(aSplitPolyA));
 
-                        pNewObj = Clone();
+                        pNewObj = CloneSdrObject(getSdrModelFromSdrObject());
                         basegfx::B2DPolygon aSplitPolyB(aCandidate, nPnt, nPointCount - nPnt);
                         pNewObj->SetPathPoly(basegfx::B2DPolyPolygon(aSplitPolyB));
                     }

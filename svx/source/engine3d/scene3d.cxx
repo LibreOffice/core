@@ -411,9 +411,9 @@ void E3dScene::removeAllNonSelectedObjects()
     }
 }
 
-E3dScene* E3dScene::Clone(SdrModel* pTargetModel) const
+E3dScene* E3dScene::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< E3dScene >(pTargetModel);
+    return CloneHelper< E3dScene >(rTargetModel);
 }
 
 E3dScene& E3dScene::operator=(const E3dScene& rSource)

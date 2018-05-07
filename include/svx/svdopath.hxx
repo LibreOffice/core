@@ -61,6 +61,10 @@ private:
     void ImpForceLineAngle();
     ImpPathForDragAndCreate& impGetDAC() const;
 
+private:
+    // protected destructor - due to final, make private
+    virtual ~SdrPathObj() override;
+
 public:
     SdrPathObj(
         SdrModel& rSdrModel,
@@ -70,12 +74,10 @@ public:
         SdrObjKind eNewKind,
         const basegfx::B2DPolyPolygon& rPathPoly);
 
-    virtual ~SdrPathObj() override;
-
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
-    virtual SdrPathObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual SdrPathObj* CloneSdrObject(SdrModel& rTargetModel) const override;
     SdrPathObj& operator=(const SdrPathObj& rObj);
 
     virtual OUString TakeObjNameSingul() const override;

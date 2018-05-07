@@ -1575,7 +1575,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
     bool bNeedLabel = ( _nControlObjectID != OBJ_FM_CHECKBOX );
 
     // the label
-    ::std::unique_ptr< SdrUnoObj > pLabel;
+    ::std::unique_ptr< SdrUnoObj, SdrObjectFreeOp > pLabel;
     Reference< XPropertySet > xLabelModel;
 
     if ( bNeedLabel )
@@ -1613,7 +1613,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
     }
 
     // the control
-    ::std::unique_ptr< SdrUnoObj > pControl( dynamic_cast< SdrUnoObj* >(
+    ::std::unique_ptr< SdrUnoObj, SdrObjectFreeOp > pControl( dynamic_cast< SdrUnoObj* >(
         SdrObjFactory::MakeNewObject(
             *_pModel,
              _nInventor,

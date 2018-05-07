@@ -126,7 +126,7 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
     }
 
     // TTTT Clone directly to target SdrModel
-    SdrObject *pObj = rObj.Clone(getIDocumentDrawModelAccess().GetDrawModel());
+    SdrObject *pObj(rObj.CloneSdrObject(*getIDocumentDrawModelAccess().GetDrawModel()));
 
     if( bMoveWithinDoc && SdrInventor::FmForm == pObj->GetObjInventor() )
     {

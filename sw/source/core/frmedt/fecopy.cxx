@@ -1362,7 +1362,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
                     }
                 }
 
-                SdrObject* pNewObj = pClpObj->Clone();
+                SdrObject* pNewObj(pClpObj->CloneSdrObject(pOldObj->getSdrModelFromSdrObject()));
                 tools::Rectangle aOldObjRect( pOldObj->GetCurrentBoundRect() );
                 Size aOldObjSize( aOldObjRect.GetSize() );
                 tools::Rectangle aNewRect( pNewObj->GetCurrentBoundRect() );
@@ -1542,7 +1542,7 @@ bool SwFEShell::Paste(const Graphic &rGrf, const OUString& rURL)
 
         if(dynamic_cast< SdrGrafObj* >(pObj))
         {
-            SdrGrafObj* pNewGrafObj = static_cast<SdrGrafObj*>(pObj->Clone());
+            SdrGrafObj* pNewGrafObj(static_cast<SdrGrafObj*>(pObj->CloneSdrObject(pObj->getSdrModelFromSdrObject())));
 
             pNewGrafObj->SetGraphic(rGrf);
 

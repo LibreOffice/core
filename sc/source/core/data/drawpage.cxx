@@ -34,9 +34,9 @@ ScDrawPage::~ScDrawPage()
 {
 }
 
-ScDrawPage* ScDrawPage::Clone(SdrModel* const pNewModel) const
+ScDrawPage* ScDrawPage::CloneSdrPage(SdrModel& rTargetModel) const
 {
-    ScDrawLayer& rScDrawLayer(static_cast< ScDrawLayer& >(nullptr == pNewModel ? getSdrModelFromSdrPage() : *pNewModel));
+    ScDrawLayer& rScDrawLayer(static_cast< ScDrawLayer& >(rTargetModel));
     ScDrawPage* pClonedScDrawPage(
         new ScDrawPage(
             rScDrawLayer,

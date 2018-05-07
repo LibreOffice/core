@@ -38,9 +38,9 @@ DlgEdPage::~DlgEdPage()
     ClearSdrObjList();
 }
 
-SdrPage* DlgEdPage::Clone(SdrModel* const pNewModel) const
+SdrPage* DlgEdPage::CloneSdrPage(SdrModel& rTargetModel) const
 {
-    DlgEdModel& rDlgEdModel(static_cast< DlgEdModel& >(nullptr == pNewModel ? getSdrModelFromSdrPage() : *pNewModel));
+    DlgEdModel& rDlgEdModel(static_cast< DlgEdModel& >(rTargetModel));
     DlgEdPage* pClonedDlgEdPage(
         new DlgEdPage(
             rDlgEdModel,

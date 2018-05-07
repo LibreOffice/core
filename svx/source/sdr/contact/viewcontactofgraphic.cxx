@@ -240,13 +240,13 @@ namespace sdr
                 // needed and can be deleted.
 
                 // create temp RectObj as TextObj and set needed attributes
-                SdrRectObj aRectObj(GetGrafObject().getSdrModelFromSdrObject(), OBJ_TEXT);
-                aRectObj.NbcSetText(aDraftText);
-                aRectObj.SetMergedItem(SvxColorItem(COL_LIGHTRED, EE_CHAR_COLOR));
+                SdrRectObj* pRectObj(new SdrRectObj(GetGrafObject().getSdrModelFromSdrObject(), OBJ_TEXT));
+                pRectObj->NbcSetText(aDraftText);
+                pRectObj->SetMergedItem(SvxColorItem(COL_LIGHTRED, EE_CHAR_COLOR));
 
                 // get SdrText and OPO
-                SdrText* pSdrText = aRectObj.getText(0);
-                OutlinerParaObject* pOPO = aRectObj.GetOutlinerParaObject();
+                SdrText* pSdrText(pRectObj->getText(0));
+                OutlinerParaObject* pOPO(pRectObj->GetOutlinerParaObject());
 
                 if(pSdrText && pOPO)
                 {
@@ -272,6 +272,10 @@ namespace sdr
                     const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
                     xBlockTextPrimitive->get2DDecomposition(xRetval, aViewInformation2D);
                 }
+
+                // always use SdrObject::Free(...) for SdrObjects (!)
+                SdrObject* pTemp(pRectObj);
+                SdrObject::Free(pTemp);
             }
 
             return xRetval;

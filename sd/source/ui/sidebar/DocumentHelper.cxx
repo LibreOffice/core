@@ -209,7 +209,7 @@ SdPage* DocumentHelper::AddMasterPage (
         try
         {
             // Duplicate the master page.
-            pClonedMasterPage = static_cast<SdPage*>(pMasterPage->Clone());
+            pClonedMasterPage = static_cast<SdPage*>(pMasterPage->CloneSdrPage(rTargetDocument));
 
             // Copy the necessary styles.
             SdDrawDocument& rSourceDocument(static_cast< SdDrawDocument& >(pMasterPage->getSdrModelFromSdrPage()));
@@ -347,7 +347,7 @@ SdPage* DocumentHelper::AddMasterPage (
     if (pMasterPage!=nullptr)
     {
         // Duplicate the master page.
-        pClonedMasterPage = static_cast<SdPage*>(pMasterPage->Clone());
+        pClonedMasterPage = static_cast<SdPage*>(pMasterPage->CloneSdrPage(rTargetDocument));
 
         // Copy the precious flag.
         pClonedMasterPage->SetPrecious(pMasterPage->IsPrecious());
