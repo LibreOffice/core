@@ -46,6 +46,43 @@ class SwScriptInfo;
 
 #define NON_PRINTING_CHARACTER_COLOR Color(0x26, 0x8b, 0xd2)
 
+namespace sw {
+
+struct Extent
+{
+    SwTextNode *const pNode;
+    sal_Int32 const nStart;
+    sal_Int32 const nEnd;
+    Extent(SwTextNode *const p, sal_Int32 const s, sal_Int32 const e)
+        : pNode(p), nStart(s), nEnd(e)
+    {
+        assert(pNode);
+        assert(nStart != nEnd);
+    }
+};
+
+struct MergedPara
+{
+    std::vector<Extent> const extents;
+    /// note: cannot be const currently to avoid UB because SwTextGuess::Guess
+    /// const_casts it and modifies it
+    OUString mergedText;
+    /// most paragraph properties are taken from the first non-empty node
+    SwTextNode const*const pParaPropsNode;
+    /// except break attributes, those are taken from the first node
+    SwTextNode *const pFirstNode;
+    MergedPara(std::vector<Extent>&& rExtents, OUString const& rText, SwTextNode const*const pProps, SwTextNode *const pFirst)
+        : extents(std::move(rExtents)), mergedText(rText), pParaPropsNode(pProps), pFirstNode(pFirst)
+    {
+        assert(pParaPropsNode);
+        assert(pFirstNode);
+    }
+};
+
+std::unique_ptr<sw::MergedPara> CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode);
+
+} // namespace sw
+
 /// Represents the visualization of a paragraph. Typical upper is an
 /// SwBodyFrame. The first text portion of the first line is az SwParaPortion.
 class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
@@ -84,6 +121,9 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     // This additional first line offset is used for the text formatting.
     // It is NOT used for the determination of printing area.
     SwTwips mnAdditionalFirstLineOffset;
+
+    /// redline merge data
+    std::unique_ptr<sw::MergedPara> m_pMergedPara;
 
     TextFrameIndex mnOffset; // Is the offset in the Content (character count)
 
@@ -329,6 +369,12 @@ public:
     bool IsEmptyMaster() const
         { return GetFollow() && !GetFollow()->GetOfst(); }
 
+    void SetMergedPara(std::unique_ptr<sw::MergedPara> p) { m_pMergedPara = std::move(p); }
+#if 0
+    sw::MergedPara      * GetMergedPara()       { return m_pMergedPara.get(); }
+#endif
+    sw::MergedPara const* GetMergedPara() const { return m_pMergedPara.get(); }
+
     /// Returns the text portion we want to edit (for inline see underneath)
     const OUString& GetText() const;
     // TODO: remove GetTextNode
@@ -389,6 +435,7 @@ public:
     /// map position in potentially merged text frame to SwPosition
     std::pair<SwTextNode*, sal_Int32> MapViewToModel(TextFrameIndex nIndex) const;
     SwPosition MapViewToModelPos(TextFrameIndex nIndex) const;
+    TextFrameIndex MapModelToView(SwTextNode const* pNode, sal_Int32 nIndex) const;
     TextFrameIndex MapModelToViewPos(SwPosition const& rPos) const;
 
     // If there are any hanging punctuation portions in the margin
