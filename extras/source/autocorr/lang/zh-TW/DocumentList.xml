@@ -1338,9 +1338,7 @@
   <block-list:block block-list:abbreviated-name=":彗星:" block-list:name="☄"/>
   <block-list:block block-list:abbreviated-name=":彩球:" block-list:name="🎊"/>
   <block-list:block block-list:abbreviated-name=":彩虹:" block-list:name="🌈"/>
-  <block-list:block block-list:abbreviated-name=":微笑:" block-list:name="☺"/>
-  <block-list:block block-list:abbreviated-name=":微笑二:" block-list:name="☻"/>
-  <block-list:block block-list:abbreviated-name=":微笑小惡魔:" block-list:name="😈"/>
+  <block-list:block block-list:abbreviated-name=":微笑:" block-list:name="😄"/>
   <block-list:block block-list:abbreviated-name=":心動:" block-list:name="💗"/>
   <block-list:block block-list:abbreviated-name=":心碎:" block-list:name="💔"/>
   <block-list:block block-list:abbreviated-name=":心跳:" block-list:name="💓"/>
@@ -1622,7 +1620,9 @@
   <block-list:block block-list:abbreviated-name=":章魚:" block-list:name="🐙"/>
   <block-list:block block-list:abbreviated-name=":竹子:" block-list:name="🎍"/>
   <block-list:block block-list:abbreviated-name=":笑到哭的貓:" block-list:name="😹"/>
-  <block-list:block block-list:abbreviated-name=":笑臉:" block-list:name="😃"/>
+  <block-list:block block-list:abbreviated-name=":笑臉:" block-list:name="☺"/>
+  <block-list:block block-list:abbreviated-name=":笑臉二:" block-list:name="☻"/>
+  <block-list:block block-list:abbreviated-name=":笑臉小惡魔:" block-list:name="😈"/>
   <block-list:block block-list:abbreviated-name=":笑臉貓:" block-list:name="😸"/>
   <block-list:block block-list:abbreviated-name=":笹飾:" block-list:name="🎋"/>
   <block-list:block block-list:abbreviated-name=":筆記本:" block-list:name="📓"/>
@@ -1938,6 +1938,7 @@
   <block-list:block block-list:abbreviated-name=":魚三:" block-list:name="🐡"/>
   <block-list:block block-list:abbreviated-name=":魚二:" block-list:name="🐠"/>
   <block-list:block block-list:abbreviated-name=":魚板:" block-list:name="🍥"/>
+  <block-list:block block-list:abbreviated-name=":鯉魚旗:" block-list:name="🎏"/>
   <block-list:block block-list:abbreviated-name=":鯨魚:" block-list:name="🐳"/>
   <block-list:block block-list:abbreviated-name=":鯨魚二:" block-list:name="🐋"/>
   <block-list:block block-list:abbreviated-name=":鱷魚:" block-list:name="🐊"/>
