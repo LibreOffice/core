@@ -45,7 +45,7 @@ class WriterPageDialog(UITestCase):
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillGradient.Style, LINEAR)
             self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.FillGradient.StartColor, 9101876)
+                document.StyleFamilies.PageStyles.Standard.FillGradient.StartColor, 14543051)
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillGradient.Angle, 300)
             self.assertEqual(
@@ -59,7 +59,7 @@ class WriterPageDialog(UITestCase):
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillGradient.EndIntensity, 100)
             self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.FillGradientName, 'Tango Green')
+                document.StyleFamilies.PageStyles.Standard.FillGradientName, 'Pastel Bouqet')
         elif btn == 'btnhatch':
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillHatch.Style, SINGLE )
