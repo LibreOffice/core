@@ -763,6 +763,12 @@ svx/res/legtyp1.png cmd/sc_calloutshapes.line-callout-3.png
 svx/res/legtyp2.png cmd/sc_calloutshapes.line-callout-1.png
 svx/res/legtyp3.png cmd/sc_calloutshapes.line-callout-2.png
 
+# 3d
+svx/res/3dgeo.png cmd/lc_diagramaxisxyz.png
+svx/res/3drepres.png cmd/lc_fillshadow.png
+svx/res/3dtextur.png cmd/lc_graphicfilterpopart.png
+svx/res/3dlight.png cmd/lc_graphicfiltersolarize.png
+
 # Presentation
 cmd/lc_diaauto.png cmd/lc_dia.png
 cmd/sc_diaauto.png cmd/sc_dia.png
