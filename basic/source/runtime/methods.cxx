@@ -2224,13 +2224,12 @@ void SbRtl_Second(StarBASIC *, SbxArray & rPar, bool)
 
 double Now_Impl()
 {
-    Date aDate( Date::SYSTEM );
-    tools::Time aTime( tools::Time::SYSTEM );
-    double aSerial = static_cast<double>(GetDayDiff( aDate ));
-    long nSeconds = aTime.GetHour();
+    DateTime aDateTime( DateTime::SYSTEM );
+    double aSerial = static_cast<double>(GetDayDiff( aDateTime ));
+    long nSeconds = aDateTime.GetHour();
     nSeconds *= 3600;
-    nSeconds += aTime.GetMin() * 60;
-    nSeconds += aTime.GetSec();
+    nSeconds += aDateTime.GetMin() * 60;
+    nSeconds += aDateTime.GetSec();
     double nDays = static_cast<double>(nSeconds) / (24.0*3600.0);
     aSerial += nDays;
     return aSerial;
