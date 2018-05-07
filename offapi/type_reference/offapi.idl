@@ -15272,6 +15272,7 @@ module com {
      [property, optional] boolean ShowContentTips;
      [property, optional] boolean ShowScrollBarTips;
      [property, optional] boolean HideWhitespace;
+     [property, optional] boolean ShowInlineTooltips;
     };
     published constants WritingMode2 {
      const short CONTEXT = 4;
