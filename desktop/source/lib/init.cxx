@@ -3443,6 +3443,21 @@ static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindo
         else if (FloatingWindow* pFloatWin = dynamic_cast<FloatingWindow*>(pWindow.get()))
             pFloatWin->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
     }
+    else if (nAction == LOK_WINDOW_PASTE)
+    {
+        // create a key event for PASTE
+        KeyEvent aEvent(0, vcl::KeyCode(KeyFuncType::PASTE), 0);
+        SAL_DEBUG("Pasting...");
+
+        // well, let's hope nobody has messed up with the clipboard and we have
+        // the system clipboard assigned to both the dialog window and the
+        // window on which the content is to be pasted (edit, textarea, etc.)
+        uno::Reference<datatransfer::clipboard::XClipboard> aClipboard = pWindow->GetClipboard();
+        uno::Reference<datatransfer::XTransferable> xTransferable(new LOKTransferable("text/plain;charset=utf-8", "copypasting", 11));
+        aClipboard->setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
+
+        Application::PostKeyEvent(VclEventId::WindowKeyInput, pWindow, &aEvent);
+    }
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)

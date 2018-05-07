@@ -987,6 +987,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
         {
             UITestLogger::getInstance().logKeyInput(pChild, aKeyEvt);
             pChild->ImplGetWindowImpl()->mbKeyInput = false;
+            SAL_DEBUG("ImplHandleKey: Before pChild->KeyInput");
             pChild->KeyInput( aKeyEvt );
         }
         else
@@ -2349,6 +2350,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
         case SalEvent::KeyInput:
             {
             SalKeyEvent const * pKeyEvt = static_cast<SalKeyEvent const *>(pEvent);
+            SAL_DEBUG("ImplWindowFrameProc: KeyInput");
             bRet = ImplHandleKey( pWindow, MouseNotifyEvent::KEYINPUT,
                 pKeyEvt->mnCode, pKeyEvt->mnCharCode, pKeyEvt->mnRepeat, true );
             }
@@ -2356,12 +2358,14 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
         case SalEvent::ExternalKeyInput:
             {
             KeyEvent const * pKeyEvt = static_cast<KeyEvent const *>(pEvent);
+            SAL_DEBUG("ImplWindowFrameProc: ExtKeyInput");
             bRet = ImplHandleKey( pWindow, MouseNotifyEvent::KEYINPUT,
                 pKeyEvt->GetKeyCode().GetFullCode(), pKeyEvt->GetCharCode(), pKeyEvt->GetRepeat(), false );
             }
             break;
         case SalEvent::KeyUp:
             {
+                SAL_DEBUG("IMplWindowFrameProc: KeyUp");
             SalKeyEvent const * pKeyEvt = static_cast<SalKeyEvent const *>(pEvent);
             bRet = ImplHandleKey( pWindow, MouseNotifyEvent::KEYUP,
                 pKeyEvt->mnCode, pKeyEvt->mnCharCode, pKeyEvt->mnRepeat, true );
@@ -2369,6 +2373,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
             break;
         case SalEvent::ExternalKeyUp:
             {
+                SAL_DEBUG("ImplWindowFrameProc: ExtKeyUp");
             KeyEvent const * pKeyEvt = static_cast<KeyEvent const *>(pEvent);
             bRet = ImplHandleKey( pWindow, MouseNotifyEvent::KEYUP,
                 pKeyEvt->GetKeyCode().GetFullCode(), pKeyEvt->GetCharCode(), pKeyEvt->GetRepeat(), false );

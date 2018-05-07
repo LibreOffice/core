@@ -2581,6 +2581,7 @@ void Edit::Copy()
 
 void Edit::Paste()
 {
+    SAL_DEBUG("Edit::Paste");
     css::uno::Reference<css::datatransfer::clipboard::XClipboard> aClipboard(GetClipboard());
     ImplPaste( aClipboard );
 }

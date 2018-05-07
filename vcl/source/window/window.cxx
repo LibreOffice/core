@@ -1808,6 +1808,7 @@ void Window::KeyInput( const KeyEvent& rKEvt )
 
 void Window::KeyUp( const KeyEvent& rKEvt )
 {
+    SAL_DEBUG("Window::KeyUp");
     NotifyEvent aNEvt( MouseNotifyEvent::KEYUP, this, &rKEvt );
     if ( !CompatNotify( aNEvt ) )
         mpWindowImpl->mbKeyUp = true;
@@ -3308,11 +3309,16 @@ void Window::SetClipboard(Reference<XClipboard> const & xClipboard)
 
 Reference< XClipboard > Window::GetClipboard()
 {
-
     if( mpWindowImpl->mpFrameData )
     {
         if( ! mpWindowImpl->mpFrameData->mxClipboard.is() )
         {
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
+                    return pParent->GetClipboard();
+            }
+
             try
             {
                 mpWindowImpl->mpFrameData->mxClipboard
