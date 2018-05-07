@@ -576,14 +576,19 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
         This may cause recursive creation of other defined names. */
     if( const ScTokenArray* pScTokArr = const_cast< ScRangeData& >( rRangeData ).GetCode() )
     {
-        lcl_Ensure3DNamedRange( nTab, pScTokArr );
-        XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, *pScTokArr );
+        // Ensuring 3D for export: Don't modify the actual document; use a temporary copy to create the export formulas.
+        ScTokenArray* pTokenCopy = pScTokArr->Clone();
+        const bool bEmulatedGlobalRelativeTable = lcl_Ensure3DNamedRange( nTab, pTokenCopy ) && (nTab == SCTAB_GLOBAL);
+        XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, *pTokenCopy );
         xName->SetTokenArray( xTokArr );
 
         OUString sSymbol;
-        rRangeData.GetSymbol( sSymbol, ((GetOutput() == EXC_OUTPUT_BINARY) ?
+        ScCompiler aComp(rRangeData.GetDoc(), rRangeData.GetPos(), *pTokenCopy, ((GetOutput() == EXC_OUTPUT_BINARY) ?
                     formula::FormulaGrammar::GRAM_ENGLISH_XL_A1 : formula::FormulaGrammar::GRAM_OOXML));
+
+        aComp.CreateStringFromTokenArray( sSymbol );
         xName->SetSymbol( sSymbol );
+        pTokenCopy->Clear();
 
         /*  Try to replace by existing built-in name - complete token array is
             needed for comparison, and due to the recursion problem above this
@@ -591,7 +596,7 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
             record for this name and all following records in the list must be
             deleted, otherwise they may contain wrong name list indexes. */
         sal_uInt16 nBuiltInIdx = FindBuiltInNameIdx( rName, *xTokArr );
-        if( nBuiltInIdx != 0 )
+        if ( nBuiltInIdx != 0 || bEmulatedGlobalRelativeTable )
         {
             // delete the new NAME records
             while( maNameList.GetSize() > nOldListSize )
@@ -671,13 +676,21 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
 
 void XclExpNameManagerImpl::CreateUserNames()
 {
+    std::vector<ScRangeData*> vEmulateAsLocalRange;
     const ScRangeName& rNamedRanges = GetNamedRanges();
     ScRangeName::const_iterator itr = rNamedRanges.begin(), itrEnd = rNamedRanges.end();
     for (; itr != itrEnd; ++itr)
     {
         // skip definitions of shared formulas
         if (!FindNamedExp(SCTAB_GLOBAL, itr->second->GetName()))
-            CreateName(SCTAB_GLOBAL, *itr->second);
+        {
+            // Ensuring 3D for export: safe to use here without a copy since no modifications occur when SCTAB_GLOBAL.
+            // REMOVEME: Unfortunately, there is no clone option for ScRangeData, which would have been easier.
+            if ( lcl_Ensure3DNamedRange (SCTAB_GLOBAL, itr->second->GetCode()) )
+                vEmulateAsLocalRange.emplace_back(itr->second.get());
+            else
+                CreateName(SCTAB_GLOBAL, *itr->second);
+        }
     }
     //look at sheets containing local range names
     ScRangeName::TabNameCopyMap rLocalNames;
@@ -693,6 +706,15 @@ void XclExpNameManagerImpl::CreateUserNames()
             if (!FindNamedExp(tabIt->first, itr->second->GetName()))
                 CreateName(tabIt->first, *itr->second);
         }
+    }
+
+    // Emulate relative global variables by creating a copy in each local range.
+    // Creating AFTER true local range names so that conflicting global names will be ignored.
+    for ( SCTAB nTab = 0; nTab < GetDoc().GetTableCount(); ++nTab )
+    {
+        for ( auto rangeDataItr : vEmulateAsLocalRange )
+            if (!FindNamedExp(nTab, rangeDataItr->GetName()))
+                CreateName(nTab, *rangeDataItr );
     }
 }
 
