@@ -1212,6 +1212,10 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     DrawContent(rDevice, aTabInfo, aOutputData, true);
 
     rDevice.SetMapMode(aOriginalMode);
+
+    // Flag drawn formula cells "unchanged".
+    pDoc->ResetChanged(ScRange(nTopLeftTileCol, nTopLeftTileRow, nTab, nBottomRightTileCol, nBottomRightTileRow, nTab));
+    pDoc->PrepareFormulaCalc();
 }
 
 void ScGridWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
