@@ -690,7 +690,7 @@ void SwViewShell::PrepareForPrint( const SwPrintData &rOptions, bool bIsPDFExpor
     mpOpt->SetDraw     ( rOptions.m_bPrintDraw );
     mpOpt->SetControl  ( rOptions.m_bPrintControl );
     mpOpt->SetPageBack ( rOptions.m_bPrintPageBackground );
-    // Font should not be balck if it's a PDF Export
+    // Font should not be black if it's a PDF Export
     mpOpt->SetBlackFont( rOptions.m_bPrintBlackFont && !bIsPDFExport );
 
     if ( HasDrawView() )
