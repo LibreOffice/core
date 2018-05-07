@@ -19,6 +19,12 @@ $(eval $(call gb_ExternalProject_use_externals,libwps,\
 	revenge \
 ))
 
+ifneq (,$(filter ANDROID DRAGONFLY FREEBSD IOS LINUX NETBSD OPENBSD,$(OS)))
+ifneq (,$(gb_ENABLE_DBGUTIL))
+libwps_CPPFLAGS+=-D_GLIBCXX_DEBUG
+endif
+endif
+
 $(call gb_ExternalProject_get_state_target,libwps,build) :
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
@@ -36,6 +42,7 @@ $(call gb_ExternalProject_get_state_target,libwps,build) :
 			--disable-werror \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
+			$(if $(libwps_CPPFLAGS),CPPFLAGS='$(libwps_CPPFLAGS)') \
 			$(if $(filter LINUX,$(OS)),$(if $(SYSTEM_REVENGE),, \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN')) \
