@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="http://openoffice.org/2000/office" xmlns:text="http://openoffice.org/2000/text">
+  <office:automatic-styles>
+  <office:body>
+    <office:text text:use-soft-page-breaks="true">
+      <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+      <text:sequence-decls>
+        <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Figure"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Formula"/>
+      </text:sequence-decls>
+      <text:table-of-content text:style-name="Sect1" text:protected="true" text:name="Table of Contents1">
+        <text:table-of-content-source text:outline-level="10">
+          <text:index-title-template text:style-name="Contents_20_Heading">Table of Contents</text:index-title-template>
+          <text:table-of-content-entry-template text:outline-level="1" text:style-name="Contents_20_1">
+            <text:index-entry-link-start text:style-name="Index_20_Link"/>
+            <text:index-entry-chapter/>
+            <text:index-entry-text/>
+            <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+            <text:index-entry-page-number/>
+            <text:index-entry-link-end/>
+          </text:table-of-content-entry-template>
+          <text:table-of-content-entry-template text:outline-level="2" text:style-name="Contents_20_2">
+            <text:index-entry-link-start text:style-name="Index_20_Link"/>
+            <text:index-entry-chapter/>
+            <text:index-entry-text/>
+            <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+            <text:index-entry-page-number/>
+            <text:index-entry-link-end/>
+          </text:table-of-content-entry-template>
+          <text:table-of-content-entry-template text:outline-level="3" text:style-name="Contents_20_3">
+            <text:index-entry-link-start text:style-name="Index_20_Link"/>
+            <text:index-entry-chapter/>
+            <text:index-entry-text/>
+            <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+            <text:index-entry-page-number/>
+            <text:index-entry-link-end/>
+          </text:table-of-content-entry-template>
+          <text:table-of-content-entry-template text:outline-level="4" text:style-name="Contents_20_4">
+            <text:index-entry-link-start text:style-name="Index_20_Link"/>
+            <text:index-entry-chapter/>
+            <text:index-entry-text/>
+            <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+            <text:index-entry-page-number/>
+            <text:index-entry-link-end/>
+          </text:table-of-content-entry-template>
+          <text:table-of-content-entry-template text:outline-level="5" text:style-name="Contents_20_5">
+            <text:index-entry-link-start text:style-name="Index_20_Link"/>
+            <text:index-entry-chapter/>
+            <text:index-entry-text/>
+            <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+            <text:index-entry-page-number/>
+            <text:index-entry-link-end/>
+          </text:table-of-content-entry-template>
+          <text:table-of-content-entry-template text:outline-level="6" text:style-name="Contents_20_6">
+            <text:index-entry-link-start text:style-name="Index_20_Link"/>
+            <text:index-entry-chapter/>
+            <text:index-entry-text/>
+            <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+            <text:index-entry-page-number/>
+            <text:index-entry-link-end/>
+          </text:table-of-content-entry-template>
+          <text:table-of-content-entry-template text:outline-level="7" text:style-name="Contents_20_7">
+            <text:index-entry-link-start text:style-name="Index_20_Link"/>
+            <text:index-entry-chapter/>
+            <text:index-entry-text/>
+            <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+            <text:index-entry-page-number/>
+            <text:index-entry-link-end/>
+          </text:table-of-content-entry-template>
+          <text:table-of-content-entry-template text:outline-level="8" text:style-name="Contents_20_8">
+            <text:index-entry-link-start text:style-name="Index_20_Link"/>
+            <text:index-entry-chapter/>
+            <text:index-entry-text/>
+            <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+            <text:index-entry-page-number/>
+            <text:index-entry-link-end/>
+          </text:table-of-content-entry-template>
+          <text:table-of-content-entry-template text:outline-level="9" text:style-name="Contents_20_9">
+            <text:index-entry-link-start text:style-name="Index_20_Link"/>
+            <text:index-entry-chapter/>
+            <text:index-entry-text/>
+            <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+            <text:index-entry-page-number/>
+            <text:index-entry-link-end/>
+          </text:table-of-content-entry-template>
+          <text:table-of-content-entry-template text:outline-level="10" text:style-name="Contents_20_10">
+            <text:index-entry-link-start text:style-name="Index_20_Link"/>
+            <text:index-entry-chapter/>
+            <text:index-entry-text/>
+            <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+            <text:index-entry-page-number/>
+            <text:index-entry-link-end/>
+          </text:table-of-content-entry-template>
+        </text:table-of-content-source>
+        <text:index-body>
+          <text:index-title text:style-name="Sect1" text:name="Table of Contents1_Head">
+            <text:p text:style-name="Contents_20_Heading">Table of Contents</text:p>
+          </text:index-title>
+          <text:p text:style-name="P12">
+            <text:a xlink:type="simple" xlink:href="#__RefHeading___Toc186_1753018186" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">First chapter<text:tab/>1</text:a>
+          </text:p>
+          <text:p text:style-name="P12">
+            <text:a xlink:type="simple" xlink:href="#__RefHeading___Toc188_1753018186" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Second Chapter<text:tab/>2</text:a>
+          </text:p>
+          <text:p text:style-name="P11">
+            <text:a xlink:type="simple" xlink:href="#__RefHeading___Toc228_1753018186" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Image<text:tab/>2</text:a>
+          </text:p>
+          <text:p text:style-name="P11">
+            <text:a xlink:type="simple" xlink:href="#__RefHeading___Toc190_1753018186" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Table<text:tab/>2</text:a>
+          </text:p>
+          <text:p text:style-name="P11">
+            <text:a xlink:type="simple" xlink:href="#__RefHeading___Toc192_1753018186" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Chart<text:tab/>2</text:a>
+          </text:p>
+          <text:p text:style-name="P11">
+            <text:a xlink:type="simple" xlink:href="#__RefHeading___Toc230_1753018186" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Formula<text:tab/>2</text:a>
+          </text:p>
+        </text:index-body>
+      </text:table-of-content>
+      <text:h text:style-name="Heading_20_1" text:outline-level="1"><text:bookmark-start text:name="__RefHeading___Toc186_1753018186"/>First chapter<text:bookmark-end text:name="__RefHeading___Toc186_1753018186"/></text:h>
+      <text:p text:style-name="P3">He heard quiet steps behind him. That didn't bode well. Who could be following him this late at night and in this deadbeat part of town? And at this <office:annotation><dc:creator>Unknown Author</dc:creator><dc:date>2018-04-12T15:56:18.642433234</dc:date><text:p text:style-name="P13"><text:span text:style-name="T6">Emphasis</text:span></text:p></office:annotation><text:span text:style-name="Emphasis">particular moment</text:span>, just after he pulled off the <office:annotation><dc:creator>Unknown Author</dc:creator><dc:date>2018-04-12T15:56:31.721965192</dc:date><text:p text:style-name="P13"><text:span text:style-name="T6">Strong Emphasis</text:span></text:p></office:annotation><text:span text:style-name="Strong_20_Emphasis">big time</text:span> and was making off with the greenbacks. Was there another crook who'd had the same idea, and was now watching him and waiting for a chance to grab the fruit of his labor?</text:p>
+      <text:p text:style-name="Caption">Or did the steps behind him mean that one of many law officers in town was on to him and just waiting to pounce and snap those cuffs on his wrists?</text:p>
+      <text:p text:style-name="P4"><draw:frame draw:style-name="fr3" draw:name="Frame3" text:anchor-type="paragraph" svg:y="1.7cm" svg:width="13.783cm" draw:z-index="4"><draw:text-box fo:min-height="3.602cm"><text:p text:style-name="Frame_20_contents">He tried to nervously tap his way along in the inky darkness and suddenly stiffened: it was a dead-end, he would have to go back the way he had come. The steps got louder and louder, he saw the black outline of a figure coming around the corner. Is this the end of the line? he thought pressing himself back against the wall trying to make himself invisible in the dark, was all that planning and energy wasted?</text:p></draw:text-box></draw:frame>He nervously looked all around. Suddenly he saw the alley. Like lightning he darted off to the left and disappeared between the two warehouses almost falling over the trash can lying in the middle of the sidewalk. </text:p>
+      <text:p text:style-name="P4">He was dripping with sweat now, cold and wet, he could smell the fear coming off his clothes. Suddenly next to him, with a barely noticeable squeak, a door swung quietly to and fro in the night's breeze. Could this be the haven he'd prayed for? <office:annotation><dc:creator>Unknown Author</dc:creator><dc:date>2018-04-12T15:56:58.026505266</dc:date><text:p text:style-name="P13"><text:span text:style-name="T6">Direct formatting</text:span></text:p></office:annotation><text:span text:style-name="T4">Slowly</text:span> he slid <text:span text:style-name="T5">toward</text:span> the door, pressing himself more and more into the wall, into the dark, away from his enemy. Would this door save his hide?</text:p>
+      <text:h text:style-name="Heading_20_1" text:outline-level="1"><text:bookmark-start text:name="__RefHeading___Toc188_1753018186"/><text:soft-page-break/>Second Chapter<text:bookmark-end text:name="__RefHeading___Toc188_1753018186"/></text:h>
+      <text:h text:style-name="P7" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc228_1753018186"/>Image<text:bookmark-end text:name="__RefHeading___Toc228_1753018186"/></text:h>
+      <text:p text:style-name="Standard"><draw:frame draw:style-name="fr1" draw:name="Frame1" text:anchor-type="paragraph" svg:width="11.284cm" draw:z-index="0"><draw:text-box fo:min-height="3.425cm"><text:p text:style-name="P10"><draw:frame draw:style-name="fr5" draw:name="Image1" text:anchor-type="as-char" svg:width="17.59cm" style:rel-width="100%" svg:height="4.798cm" style:rel-height="scale" draw:z-index="1"><draw:image xlink:href="Pictures/100002010000031F000000DAE20A1FC3F3481386.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" loext:mime-type="image/x-vclgraphic"/></draw:frame><text:span text:style-name="T2"><text:line-break/></text:span>Figure <text:sequence text:ref-name="refFigure0" text:name="Figure" text:formula="ooow:Figure+1" style:num-format="1">1</text:sequence>: Love LibreOffice sticker</text:p></draw:text-box></draw:frame><text:bookmark text:name="firstHeading"/>A picture is worth a thousand words.</text:p>
+      <text:h text:style-name="Heading_20_2" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc190_1753018186"/>Table<text:bookmark-end text:name="__RefHeading___Toc190_1753018186"/></text:h>
+      <text:p text:style-name="P2">Table <text:sequence text:ref-name="refTable0" text:name="Table" text:formula="ooow:Table+1" style:num-format="1">1</text:sequence>: Table with style and formula.</text:p>
+      <table:table table:name="Table1" table:style-name="Table1" table:template-name="Elegant">
+        <table:table-column table:style-name="Table1.A" table:number-columns-repeated="5"/>
+        <table:table-row table:style-name="Table1.1">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table_20_Heading">Column A</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A1" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table_20_Heading">Column B</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A1" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table_20_Heading">Column C</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A1" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table_20_Heading">Column D</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A1" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table_20_Heading">Value</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row>
+          <table:table-cell table:style-name="Table1.A2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table_20_Contents">Cell A1</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table_20_Contents">Cell B1</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table_20_Contents">Cell C1</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table_20_Contents">Cell D1</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.E2" table:formula="ooow:1.23" office:value-type="float" office:value="1.23">
+            <text:p text:style-name="Table_20_Contents">1.23</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="Table1.1">
+          <table:table-cell table:style-name="Table1.A2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table_20_Contents">Cell A2</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table_20_Contents">Cell B2</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table_20_Contents">Cell C2</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table_20_Contents">Cell D2</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.E2" table:formula="ooow:2.34" office:value-type="float" office:value="2.34">
+            <text:p text:style-name="Table_20_Contents">2.34</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row>
+          <table:table-cell table:style-name="Table1.A2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table_20_Contents">Cell A3</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table_20_Contents">Cell B3</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table_20_Contents">Cell C3</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A2" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table_20_Contents">Cell D3</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.E2" table:formula="ooow:3.45" office:value-type="float" office:value="3.45">
+            <text:p text:style-name="Table_20_Contents">3.45</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row>
+          <table:table-cell table:style-name="Table1.A5" table:number-columns-spanned="4" office:value-type="float" office:value="0">
+            <text:p text:style-name="Table_20_Contents">Sum: </text:p>
+          </table:table-cell>
+          <table:covered-table-cell/>
+          <table:covered-table-cell/>
+          <table:covered-table-cell/>
+          <table:table-cell table:style-name="Table1.E5" table:formula="ooow:sum(&lt;E2:E4&gt;)" office:value-type="float" office:value="7.02">
+            <text:p text:style-name="Table_20_Contents">7.02</text:p>
+          </table:table-cell>
+        </table:table-row>
+      </table:table>
+      <text:h text:style-name="P8" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc192_1753018186"/>Chart<text:bookmark-end text:name="__RefHeading___Toc192_1753018186"/></text:h>
+      <text:p text:style-name="P5">If a picture is worth a thousand words, charts are golden as silence.</text:p>
+      <text:p text:style-name="P5">
+        <draw:frame draw:style-name="fr2" draw:name="Frame2" text:anchor-type="as-char" svg:width="9.641cm" draw:z-index="2">
+          <draw:text-box fo:min-height="3.919cm">
+            <text:p text:style-name="Illustration"><draw:frame draw:style-name="fr6" draw:name="Object1" text:anchor-type="as-char" svg:width="9.641cm" style:rel-width="100%" svg:height="2.859cm" style:rel-height="scale" draw:z-index="3"><draw:object xlink:href="./Object 1" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/><draw:image xlink:href="./ObjectReplacements/Object 1" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/></draw:frame><text:span text:style-name="T2"><text:line-break/></text:span>Illustration <text:sequence text:ref-name="refIllustration0" text:name="Illustration" text:formula="ooow:Illustration+1" style:num-format="1">1</text:sequence>: Everybody loves charts.</text:p>
+          </draw:text-box>
+        </draw:frame>
+      </text:p>
+      <text:h text:style-name="Heading_20_2" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc230_1753018186"/>Formula<text:bookmark-end text:name="__RefHeading___Toc230_1753018186"/></text:h>
+      <text:p text:style-name="P6">
+        <draw:frame draw:style-name="fr4" draw:name="Frame4" text:anchor-type="as-char" svg:y="-0.72cm" svg:width="3.639cm" draw:z-index="5">
+          <draw:text-box fo:min-height="1.162cm">
+            <text:p text:style-name="Formula"><draw:frame draw:style-name="fr7" draw:name="Object2" text:anchor-type="as-char" svg:width="3.639cm" svg:height="1.162cm" style:rel-height="scale" draw:z-index="6"><draw:object xlink:href="./Object 2" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/><draw:image xlink:href="./ObjectReplacements/Object 2" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/></draw:frame><text:span text:style-name="T2"><text:line-break/></text:span>Formula <text:sequence text:ref-name="refFormula0" text:name="Formula" text:formula="ooow:Formula+1" style:num-format="1">1</text:sequence>: The sum of all fears.</text:p>
+          </draw:text-box>
+        </draw:frame>
+      </text:p>
+      <text:p text:style-name="P1">
+        <text:soft-page-break/>
+      </text:p>
+    </office:text>
+  </office:body>
+</office:document-content>
