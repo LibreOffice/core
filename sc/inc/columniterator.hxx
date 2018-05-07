@@ -10,7 +10,15 @@
 #ifndef INCLUDED_SC_INC_COLUMNITERATOR_HXX
 #define INCLUDED_SC_INC_COLUMNITERATOR_HXX
 
-#include "column.hxx"
+#include <stddef.h>
+#include "address.hxx"
+#include <mdds/multi_type_vector_types.hpp>
+#include "mtvelements.hxx"
+#include <sal/types.h>
+#include "types.hxx"
+class ScColumn;
+class ScDocument;
+struct ScRefCellValue;
 
 class ScColumnTextWidthIterator
 {
