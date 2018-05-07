@@ -4494,7 +4494,7 @@ void ScGridWindow::ScrollPixel( long nDifX, long nDifY )
 
 // Update Formulas ------------------------------------------------------
 
-void ScGridWindow::UpdateFormulas()
+void ScGridWindow::UpdateFormulas(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2)
 {
     if (pViewData->GetView()->IsMinimized())
         return;
@@ -4509,10 +4509,30 @@ void ScGridWindow::UpdateFormulas()
         return;
     }
 
-    SCCOL   nX1 = pViewData->GetPosX( eHWhich );
-    SCROW   nY1 = pViewData->GetPosY( eVWhich );
-    SCCOL   nX2 = nX1 + pViewData->VisibleCellsX( eHWhich );
-    SCROW   nY2 = nY1 + pViewData->VisibleCellsY( eVWhich );
+    if ( comphelper::LibreOfficeKit::isActive() )
+    {
+        ScTabViewShell* pViewShell = pViewData->GetViewShell();
+        if (nX1 < 0)
+            nX1 = pViewShell->GetLOKStartHeaderCol() + 1;
+        if (nY1 < 0)
+            nY1 = pViewShell->GetLOKStartHeaderRow() + 1;
+        if (nX2 < 0)
+            nX2 = pViewShell->GetLOKEndHeaderCol();
+        if (nY2 < 0)
+            nY2 = pViewShell->GetLOKEndHeaderRow();
+
+        if (nX1 < 0 || nY1 < 0) return;
+    }
+    else
+    {
+        nX1 = pViewData->GetPosX( eHWhich );
+        nY1 = pViewData->GetPosY( eVWhich );
+        nX2 = nX1 + pViewData->VisibleCellsX( eHWhich );
+        nY2 = nY1 + pViewData->VisibleCellsY( eVWhich );
+    }
+
+    if (nX2 < nX1) nX2 = nX1;
+    if (nY2 < nY1) nY2 = nY1;
 
     if (nX2 > MAXCOL) nX2 = MAXCOL;
     if (nY2 > MAXROW) nY2 = MAXROW;
@@ -4526,7 +4546,10 @@ void ScGridWindow::UpdateFormulas()
     ScDocument& rDoc = *pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
 
-    rDoc.ExtendHidden( nX1, nY1, nX2, nY2, nTab );
+    if ( !comphelper::LibreOfficeKit::isActive() )
+    {
+        rDoc.ExtendHidden( nX1, nY1, nX2, nY2, nTab );
+    }
 
     Point aScrPos = pViewData->GetScrPos( nX1, nY1, eWhich );
     long nMirrorWidth = GetSizePixel().Width();
