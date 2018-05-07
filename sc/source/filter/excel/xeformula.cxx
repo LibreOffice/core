@@ -2089,7 +2089,7 @@ void XclExpFmlaCompImpl::ProcessDefinedName( const XclExpScToken& rTokData )
     SCTAB nTab = (nSheet < 0 ? SCTAB_GLOBAL : nSheet);
 
     XclExpNameManager& rNameMgr = GetNameManager();
-    sal_uInt16 nNameIdx = rNameMgr.InsertName(nTab, rTokData.mpScToken->GetIndex());
+    sal_uInt16 nNameIdx = rNameMgr.InsertName(nTab, rTokData.mpScToken->GetIndex(), GetCurrScTab());
     if( nNameIdx != 0 )
     {
         // global names always with tName token, local names dependent on config
