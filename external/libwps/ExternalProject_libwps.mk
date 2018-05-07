@@ -32,7 +32,7 @@ $(call gb_ExternalProject_get_state_target,libwps,build) :
 			--with-sharedptr=c++11 \
 			--without-docs \
 			--disable-tools \
-			--disable-debug \
+			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
