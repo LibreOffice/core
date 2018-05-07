@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_INC_CHARTUNO_HXX
 #define INCLUDED_SC_INC_CHARTUNO_HXX
 
-#include "address.hxx"
 #include "rangelst.hxx"
 #include <svl/lstner.hxx>
 #include <comphelper/proparrhlp.hxx>

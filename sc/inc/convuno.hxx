@@ -25,7 +25,6 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include "global.hxx"
 #include "address.hxx"
 
 class ScUnoConversion

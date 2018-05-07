@@ -81,7 +81,6 @@ namespace o3tl {
 class ScDocument;
 class ScMatrix;
 class ScRangeData;
-class ScExternalRefManager;
 class ScTokenArray;
 
 namespace sc {

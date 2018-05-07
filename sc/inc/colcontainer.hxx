@@ -21,12 +21,10 @@
 #define INCLUDED_SC_INC_COLCONTAINER_HXX
 
 #include "types.hxx"
-#include "address.hxx"
 
 #include <vector>
 
 class ScColumn;
-class ScDocument;
 
 class ScColContainer
 {

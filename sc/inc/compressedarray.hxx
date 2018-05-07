@@ -21,7 +21,6 @@
 #define INCLUDED_SC_INC_COMPRESSEDARRAY_HXX
 
 #include <cstddef>
-#include <algorithm>
 
 #include "scdllapi.h"
 

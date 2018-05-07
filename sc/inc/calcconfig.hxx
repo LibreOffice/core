@@ -13,7 +13,6 @@
 #include "scdllapi.h"
 
 #include <memory>
-#include <ostream>
 #include <set>
 
 #include <formula/grammar.hxx>

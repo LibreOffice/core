@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_INC_CELLFORM_HXX
 #define INCLUDED_SC_INC_CELLFORM_HXX
 
-#include <tools/solar.h>
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
 

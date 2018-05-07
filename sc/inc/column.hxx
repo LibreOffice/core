@@ -20,10 +20,8 @@
 #ifndef INCLUDED_SC_INC_COLUMN_HXX
 #define INCLUDED_SC_INC_COLUMN_HXX
 
-#include "markarr.hxx"
 #include "global.hxx"
 #include "address.hxx"
-#include "rangenam.hxx"
 #include "rangelst.hxx"
 #include "types.hxx"
 #include "mtvelements.hxx"
@@ -35,7 +33,6 @@
 #include <set>
 #include <vector>
 
-#include <boost/intrusive_ptr.hpp>
 #include <mdds/flat_segment_tree.hpp>
 
 namespace editeng { class SvxBorderLine; }
@@ -82,9 +79,6 @@ class SfxStyleSheetBase;
 class SvxBoxInfoItem;
 class SvxBoxItem;
 
-class ScAttrIterator;
-class ScAttrArray;
-struct ScAttrEntry;
 class ScDocument;
 class ScEditDataArray;
 class ScFormulaCell;
@@ -95,16 +89,11 @@ class SvtBroadcaster;
 class ScTypedStrData;
 class ScProgress;
 struct ScFunctionData;
-struct ScLineFlags;
-struct ScMergePatternState;
 class ScFlatBoolRowSegments;
 struct ScSetStringParam;
 struct ScColWidthParam;
-class ScColumnTextWidthIterator;
-struct ScFormulaCellGroup;
 struct ScRefCellValue;
 struct ScCellValue;
-class ScDocumentImport;
 class ScHint;
 enum class ScMF;
 struct ScFilterEntries;

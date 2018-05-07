@@ -22,8 +22,6 @@
 #include "address.hxx"
 #include <svl/hint.hxx>
 
-class SvtBroadcaster;
-
 class ScHint : public SfxHint
 {
     ScAddress   aAddress;

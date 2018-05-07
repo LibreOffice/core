@@ -18,7 +18,6 @@
 class ScDocument;
 class ScColumn;
 class ScMarkData;
-class ScRange;
 class ScRangeList;
 
 namespace sc {

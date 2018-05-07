@@ -24,8 +24,6 @@
 #include <memory>
 #include <map>
 
-class ScAddress;
-
 // map of row number to ScAddress*
 typedef std::map<sal_uLong, ScAddress*> RowMap;
 // map of column number to RowMap*
