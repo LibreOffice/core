@@ -574,7 +574,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
 
         uno::Sequence< beans::PropertyValue > aMediaDescriptor( 1 );
         aMediaDescriptor[0].Name = "URL";
-        aMediaDescriptor[0].Value <<= aURLObj.GetMainURL( INetURLObject::NO_DECODE )
+        aMediaDescriptor[0].Value <<= aURLObj.GetMainURL( INetURLObject::NO_DECODE );
 
         if (SfxMedium* pMedium = pDoc->GetDocShell() ? pDoc->GetDocShell()->GetMedium() : nullptr)
         {
