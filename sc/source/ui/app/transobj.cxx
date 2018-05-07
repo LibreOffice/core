@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -33,8 +34,10 @@
 #include <sot/storage.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/wrkwin.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include <transobj.hxx>
 #include <patattr.hxx>
@@ -198,18 +201,11 @@ ScTransferObj::~ScTransferObj()
 
 }
 
-ScTransferObj* ScTransferObj::GetOwnClipboard( vcl::Window* pUIWin )
+ScTransferObj* ScTransferObj::GetOwnClipboard(const uno::Reference<datatransfer::XTransferable2>& xTransferable)
 {
     ScTransferObj* pObj = nullptr;
-    uno::Reference<XTransferable> xTransferable;
-    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard;
-
-    if( pUIWin )
-        xClipboard = pUIWin->GetClipboard();
-
-    if( xClipboard.is() )
+    if (xTransferable.is())
     {
-        xTransferable = xClipboard->getContents();
         uno::Reference<XUnoTunnel> xTunnel( xTransferable, uno::UNO_QUERY );
         if ( xTunnel.is() )
         {

@@ -5741,7 +5741,7 @@ void ScGridWindow::UpdateCopySourceOverlay()
     rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
     if (!xOverlayManager.is())
         return;
-    ScTransferObj* pTransObj = ScTransferObj::GetOwnClipboard( pViewData->GetActiveWin() );
+    const ScTransferObj* pTransObj = ScTransferObj::GetOwnClipboard(pViewData->GetViewShell()->GetClipData());
     if (!pTransObj)
         return;
     ScDocument* pClipDoc = pTransObj->GetDocument();
