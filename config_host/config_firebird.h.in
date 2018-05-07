@@ -5,6 +5,8 @@ Settings for Firebird
 #ifndef CONFIG_FIREBIRD_H
 #define CONFIG_FIREBIRD_H
 
+#define ENABLE_FIREBIRD_SDBC 0
+
 #define HAVE_FIREBIRD_30 0
 
 #endif

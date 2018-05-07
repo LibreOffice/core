@@ -74,6 +74,8 @@
 #include <iterator>
 #include <set>
 
+#include <config_firebird.h>
+
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdb;
@@ -581,16 +583,14 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 
     Reference< XDriverManager > xManager;
 
+#if ENABLE_FIREBIRD_SDBC
     OUString sMigrEnvVal;
     osl_getEnvironment(OUString("DBACCESS_HSQL_MIGRATION").pData,
             &sMigrEnvVal.pData);
     bool bNeedMigration = false;
     if(m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
     {
-        OUString sSalUseVclplugin;
-        osl_getEnvironment(OUString("SAL_USE_VCLPLUGIN").pData,
-                &sSalUseVclplugin.pData);
-        if(!sMigrEnvVal.isEmpty() || sSalUseVclplugin == "svp")
+        if(!sMigrEnvVal.isEmpty() || Application::IsHeadlessModeEnabled())
             bNeedMigration = true;
         else
         {
@@ -600,6 +600,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
     }
     if(bNeedMigration)
         m_pImpl->m_sConnectURL = "sdbc:embedded:firebird";
+#endif
 
     try {
         xManager.set( ConnectionPool::create( m_pImpl->m_aContext ), UNO_QUERY_THROW );
