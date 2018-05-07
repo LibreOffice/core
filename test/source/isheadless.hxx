@@ -19,6 +19,11 @@
 namespace test {
 
 inline bool isHeadless() {
+    OUString sSalUseVclplugin;
+    osl_getEnvironment(OUString("SAL_USE_VCLPLUGIN").pData,
+        &sSalUseVclplugin.pData);
+    if(sSalUseVclplugin == "svp") return true;
+
     sal_uInt32 n = rtl_getAppCommandArgCount();
     for (sal_uInt32 i = 0; i != n; ++i) {
         OUString arg;
