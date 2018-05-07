@@ -195,8 +195,9 @@ void Svx3DPreviewControl::SetObjectType(SvxPreviewObjectType nType)
         {
             aSet.Put(mp3DObj->GetMergedItemSet());
             mpScene->Remove3DObj( mp3DObj );
-            delete mp3DObj;
-            mp3DObj = nullptr;
+            // always use SdrObject::Free(...) for SdrObjects (!)
+            SdrObject* pTemp(mp3DObj);
+            SdrObject::Free(pTemp);
         }
 
         switch( nType )
@@ -375,7 +376,9 @@ void Svx3DLightControl::ConstructLightObjects()
         if(maLightObjects[a])
         {
             mpScene->Remove3DObj(maLightObjects[a]);
-            delete maLightObjects[a];
+            // always use SdrObject::Free(...) for SdrObjects (!)
+            SdrObject* pTemp(maLightObjects[a]);
+            SdrObject::Free(pTemp);
             maLightObjects[a] = nullptr;
         }
 

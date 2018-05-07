@@ -196,7 +196,9 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
                 delete pGraphicStream;
             }
 
-            delete pRet;
+            // always use SdrObject::Free(...) for SdrObjects (!)
+            SdrObject* pTemp(pRet);
+            SdrObject::Free(pTemp);
         }
     }
     else

@@ -357,9 +357,9 @@ void FmFormObj::clonedFrom(const FmFormObj* _pSource)
 }
 
 
-FmFormObj* FmFormObj::Clone(SdrModel* pTargetModel) const
+FmFormObj* FmFormObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    FmFormObj* pFormObject = CloneHelper< FmFormObj >(pTargetModel);
+    FmFormObj* pFormObject = CloneHelper< FmFormObj >(rTargetModel);
     DBG_ASSERT(pFormObject != nullptr, "FmFormObj::Clone : invalid clone !");
     if (pFormObject)
         pFormObject->clonedFrom(this);

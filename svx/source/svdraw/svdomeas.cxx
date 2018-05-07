@@ -701,9 +701,9 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
     }
 }
 
-SdrMeasureObj* SdrMeasureObj::Clone(SdrModel* pTargetModel) const
+SdrMeasureObj* SdrMeasureObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrMeasureObj >(pTargetModel);
+    return CloneHelper< SdrMeasureObj >(rTargetModel);
 }
 
 SdrMeasureObj& SdrMeasureObj::operator=(const SdrMeasureObj& rObj)

@@ -38,9 +38,12 @@ private:
     SdrObjList                  maSdrObjList;   // sub list (children)
     Point                       aRefPoint;      // Reference point inside the object group
 
+private:
+    // protected destructor - due to final, make private
+    virtual ~SdrObjGroup() override;
+
 public:
     SdrObjGroup(SdrModel& rSdrModel);
-    virtual ~SdrObjGroup() override;
 
     virtual void SetBoundRectDirty() override;
     virtual sal_uInt16 GetObjIdentifier() const override;
@@ -54,7 +57,7 @@ public:
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;
     virtual const tools::Rectangle& GetSnapRect() const override;
 
-    virtual SdrObjGroup* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual SdrObjGroup* CloneSdrObject(SdrModel& rTargetModel) const override;
     SdrObjGroup& operator=(const SdrObjGroup& rObj);
 
     virtual OUString TakeObjNameSingul() const override;

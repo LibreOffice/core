@@ -42,9 +42,9 @@ OReportPage::~OReportPage()
 {
 }
 
-SdrPage* OReportPage::Clone(SdrModel* pNewModel) const
+SdrPage* OReportPage::CloneSdrPage(SdrModel& rTargetModel) const
 {
-    OReportModel& rOReportModel(static_cast< OReportModel& >(nullptr == pNewModel ? getSdrModelFromSdrPage() : *pNewModel));
+    OReportModel& rOReportModel(static_cast< OReportModel& >(rTargetModel));
     OReportPage* pClonedOReportPage(
         new OReportPage(
             rOReportModel,

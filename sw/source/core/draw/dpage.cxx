@@ -72,9 +72,9 @@ void SwDPage::lateInit(const SwDPage& rSrcPage)
     }
 }
 
-SwDPage* SwDPage::Clone(SdrModel* const pNewModel) const
+SwDPage* SwDPage::CloneSdrPage(SdrModel& rTargetModel) const
 {
-    SwDrawModel& rSwDrawModel(static_cast< SwDrawModel& >(nullptr == pNewModel ? getSdrModelFromSdrPage() : *pNewModel));
+    SwDrawModel& rSwDrawModel(static_cast< SwDrawModel& >(rTargetModel));
     SwDPage* pClonedSwDPage(
         new SwDPage(
             rSwDrawModel,

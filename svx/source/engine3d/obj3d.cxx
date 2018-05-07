@@ -420,9 +420,9 @@ OUString E3dObject::TakeObjNamePlural() const
     return SvxResId(STR_ObjNamePluralObj3d);
 }
 
-E3dObject* E3dObject::Clone(SdrModel* pTargetModel) const
+E3dObject* E3dObject::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< E3dObject >(pTargetModel);
+    return CloneHelper< E3dObject >(rTargetModel);
 }
 
 E3dObject& E3dObject::operator=(const E3dObject& rSource)
@@ -640,9 +640,9 @@ void E3dCompoundObject::RecalcSnapRect()
     }
 }
 
-E3dCompoundObject* E3dCompoundObject::Clone(SdrModel* pTargetModel) const
+E3dCompoundObject* E3dCompoundObject::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< E3dCompoundObject >(pTargetModel);
+    return CloneHelper< E3dCompoundObject >(rTargetModel);
 }
 
 E3dCompoundObject& E3dCompoundObject::operator=(const E3dCompoundObject& rObj)

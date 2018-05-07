@@ -124,6 +124,11 @@ class REPORTDESIGN_DLLPUBLIC OCustomShape final : public SdrObjCustomShape , pub
 {
     friend class OReportPage;
     friend class DlgEdFactory;
+
+private:
+    // protected destructor - due to final, make private
+    virtual ~OCustomShape() override;
+
 public:
     static OCustomShape* Create(
         SdrModel& rSdrModel,
@@ -131,8 +136,6 @@ public:
     {
         return new OCustomShape(rSdrModel, _xComponent );
     }
-
-    virtual ~OCustomShape() override;
 
     virtual css::uno::Reference< css::beans::XPropertySet> getAwtComponent() override;
 
@@ -165,6 +168,11 @@ class REPORTDESIGN_DLLPUBLIC OOle2Obj final : public SdrOle2Obj , public OObject
 {
     friend class OReportPage;
     friend class DlgEdFactory;
+
+private:
+    // protected destructor - due to final, make private
+    virtual ~OOle2Obj() override;
+
 public:
     static OOle2Obj* Create(
         SdrModel& rSdrModel,
@@ -174,15 +182,13 @@ public:
         return new OOle2Obj(rSdrModel, _xComponent, _nType);
     }
 
-    virtual ~OOle2Obj() override;
-
     virtual css::uno::Reference< css::beans::XPropertySet> getAwtComponent() override;
 
     virtual css::uno::Reference< css::uno::XInterface > getUnoShape() override;
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual SdrInventor GetObjInventor() const override;
     // Clone() should make a complete copy of the object.
-    virtual OOle2Obj* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual OOle2Obj* CloneSdrObject(SdrModel& rTargetModel) const override;
     virtual void initializeOle() override;
 
     OOle2Obj& operator=(const OOle2Obj& rObj);
@@ -234,6 +240,7 @@ protected:
         const OUString& rModelName,
         sal_uInt16 _nObjectType);
 
+    // protected destructor
     virtual ~OUnoObject() override;
 
     virtual void NbcMove( const Size& rSize ) override;
@@ -259,7 +266,7 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > getUnoShape() override;
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual SdrInventor GetObjInventor() const override;
-    virtual OUnoObject* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual OUnoObject* CloneSdrObject(SdrModel& rTargetModel) const override;
 
     OUnoObject& operator=(const OUnoObject& rObj);
 

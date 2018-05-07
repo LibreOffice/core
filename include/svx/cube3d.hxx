@@ -57,6 +57,10 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dCubeObj final : public E3dCompoundObject
     void SetDefaultAttributes(const E3dDefaultAttributes& rDefault);
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 
+private:
+    // protected destructor - due to final, make private
+    virtual ~E3dCubeObj() override;
+
 public:
     E3dCubeObj(SdrModel& rSdrModel,
         const E3dDefaultAttributes& rDefault,
@@ -67,7 +71,7 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
-    virtual E3dCubeObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual E3dCubeObj* CloneSdrObject(SdrModel& rTargetModel) const override;
 
     // implemented mainly for the purposes of Clone()
     E3dCubeObj& operator=(const E3dCubeObj& rObj);

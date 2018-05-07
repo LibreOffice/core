@@ -398,7 +398,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
                 {
                     SdrObject* pObj(aIter.Next());
                     // Clone to new SdrModel
-                    SdrObject* pNewObj(pObj ? pObj->Clone(&pDrawModelWrapper->getSdrModel()) : nullptr);
+                    SdrObject* pNewObj(pObj ? pObj->CloneSdrObject(pDrawModelWrapper->getSdrModel()) : nullptr);
 
                     if ( pNewObj )
                     {

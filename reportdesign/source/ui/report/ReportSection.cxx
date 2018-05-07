@@ -265,7 +265,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                         if ( pObject )
                         {
                             // Clone to target SdrModel
-                            SdrObject* pNewObj(pObject->Clone(m_pModel.get()));
+                            SdrObject* pNewObj(pObject->CloneSdrObject(*m_pModel.get()));
 
                             pNewObj->SetPage( m_pPage );
                             m_pPage->InsertObject(pNewObj, SAL_MAX_SIZE);
@@ -357,7 +357,7 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
         {
             try
             {
-                SdrObject* pNewObj = pSdrObject->Clone();
+                SdrObject* pNewObj(pSdrObject->CloneSdrObject(pSdrObject->getSdrModelFromSdrObject()));
                 aCopies.emplace_back(pNewObj->getUnoShape(),uno::UNO_QUERY);
                 if ( _bEraseAnddNoClone )
                 {

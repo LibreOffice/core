@@ -941,9 +941,9 @@ bool SdrObject::HasLimitedRotation() const
     return false;
 }
 
-SdrObject* SdrObject::Clone(SdrModel* pTargetModel) const
+SdrObject* SdrObject::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrObject >(pTargetModel);
+    return CloneHelper< SdrObject >(rTargetModel);
 }
 
 SdrObject& SdrObject::operator=(const SdrObject& rObj)
@@ -954,7 +954,7 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
     mpProperties.reset();
     mpViewContact.reset();
 
-    // The Clone() method uses the local copy constructor from the individual
+    // The CloneSdrObject() method uses the local copy constructor from the individual
     // sdr::properties::BaseProperties class. Since the target class maybe for another
     // draw object, an SdrObject needs to be provided, as in the normal constructor.
     mpProperties = rObj.GetProperties().Clone(*this);
@@ -1053,7 +1053,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
 
     // create cloned object without text, but with drawing::LineStyle_SOLID,
     // COL_BLACK as line color and drawing::FillStyle_NONE
-    SdrObject* pClone = Clone();
+    SdrObject* pClone(CloneSdrObject(getSdrModelFromSdrObject()));
 
     if(pClone)
     {
@@ -1128,7 +1128,8 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
             }
         }
 
-        delete pClone;
+        // Always use SdrObject::Free to delete SdrObjects (!)
+        SdrObject::Free(pClone);
     }
 
     return aRetval;
@@ -1266,7 +1267,7 @@ bool SdrObject::supportsFullDrag() const
 SdrObject* SdrObject::getFullDragClone() const
 {
     // default uses simple clone
-    return Clone();
+    return CloneSdrObject(getSdrModelFromSdrObject());
 }
 
 bool SdrObject::beginSpecialDrag(SdrDragStat& rDrag) const
@@ -2411,7 +2412,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(bool bForceLineDash)
                     aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
                     aSet.Put(XLineWidthItem(0));
 
-                    SdrObject* pClone = Clone();
+                    SdrObject* pClone(CloneSdrObject(getSdrModelFromSdrObject()));
                     pClone->SetMergedItemSet(aSet);
 
                     pGroup->GetSubList()->NbcInsertObject(pClone);
@@ -2446,7 +2447,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(bool bForceLineDash)
     if(nullptr == pRetval)
     {
         // due to current method usage, create and return a clone when nothing has changed
-        SdrObject* pClone = Clone();
+        SdrObject* pClone(CloneSdrObject(getSdrModelFromSdrObject()));
         pRetval = pClone;
     }
 

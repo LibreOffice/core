@@ -151,7 +151,7 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
                         // the empty graphic object gets a new graphic
                         bInsertNewObject = false;
 
-                        SdrGrafObj* pNewGrafObj = pGrafObj->Clone();
+                        SdrGrafObj* pNewGrafObj(pGrafObj->CloneSdrObject(pGrafObj->getSdrModelFromSdrObject()));
                         pNewGrafObj->SetEmptyPresObj(false);
                         pNewGrafObj->SetOutlinerParaObject(nullptr);
                         pNewGrafObj->SetGraphic(aGraphic);

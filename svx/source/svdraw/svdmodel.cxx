@@ -1479,7 +1479,7 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
             const SdrPage* pPg1=GetPage(nPageNum2);
 
             // Clone to local model
-            pPg=pPg1->Clone();
+            pPg = pPg1->CloneSdrPage(*this);
 
             InsertPage(pPg,nDestNum);
             if (bUndo)
@@ -1585,7 +1585,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
             {
                 // Always Clone to new model
                 const SdrPage* pPg1(rSourceModel.GetMasterPage(i));
-                SdrPage* pPg(pPg1->Clone(this));
+                SdrPage* pPg(pPg1->CloneSdrPage(*this));
 
                 if(!bTreadSourceAsConst)
                 {
@@ -1618,7 +1618,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
         {
             // Always Clone to new model
             const SdrPage* pPg1(rSourceModel.GetPage(nSourcePos));
-            SdrPage* pPg(pPg1->Clone(this));
+            SdrPage* pPg(pPg1->CloneSdrPage(*this));
 
             if(!bTreadSourceAsConst)
             {

@@ -42,6 +42,10 @@ private:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
     void SetDefaultAttributes(const E3dDefaultAttributes& rDefault);
 
+private:
+    // protected destructor - due to final, make private
+    virtual ~E3dExtrudeObj() override;
+
 public:
     E3dExtrudeObj(
         SdrModel& rSdrModel,
@@ -84,7 +88,7 @@ public:
 
     virtual sal_uInt16 GetObjIdentifier() const override;
 
-    virtual E3dExtrudeObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual E3dExtrudeObj* CloneSdrObject(SdrModel& rTargetModel) const override;
 
     // implemented mainly for the purposes of Clone()
     E3dExtrudeObj& operator=(const E3dExtrudeObj& rObj);
