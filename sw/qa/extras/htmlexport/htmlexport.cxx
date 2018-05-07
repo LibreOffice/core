@@ -529,6 +529,19 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOle2, "reqif-ole2.xhtml")
     // exception of type com.sun.star.io.IOException was thrown.
 }
 
+DECLARE_HTMLEXPORT_TEST(testList, "list.html")
+{
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    pStream->Seek(STREAM_SEEK_TO_END);
+    sal_uInt64 nLength = pStream->Tell();
+    pStream->Seek(0);
+    OString aStream(read_uInt8s_ToOString(*pStream, nLength));
+    // This failed, it was <li/>, i.e. list item was closed before content
+    // started.
+    CPPUNIT_ASSERT(aStream.indexOf("<li>") != -1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

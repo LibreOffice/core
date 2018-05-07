@@ -764,7 +764,8 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
             rInfo.bOutLi = true;
         }
         else
-            html.endAttribute();
+            // Finish the opening element, but don't close it.
+            html.characters(OString());
     }
 
     if( rHWrt.m_nDefListLvl > 0 && !bForceDL )
