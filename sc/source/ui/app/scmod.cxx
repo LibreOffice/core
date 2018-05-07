@@ -70,6 +70,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/datatransfer/XTransferable2.hpp>
 
 #include <scmod.hxx>
 #include <global.hxx>
@@ -660,11 +661,28 @@ void ScModule::SetDragJump(
 ScDocument* ScModule::GetClipDoc()
 {
     // called from document
-    vcl::Window* pWin = nullptr;
-    if( ScTabViewShell* pViewShell = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() ))
-        pWin = pViewShell->GetViewData().GetActiveWin();
+    ScTabViewShell* pViewShell = nullptr;
+    const ScTransferObj* pObj = nullptr;
 
-    ScTransferObj* pObj = ScTransferObj::GetOwnClipboard( pWin );
+    if ((pViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current())))
+        pObj = ScTransferObj::GetOwnClipboard(pViewShell->GetClipData());
+    else if ((pViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::GetFirst())))
+        pObj = ScTransferObj::GetOwnClipboard(pViewShell->GetClipData());
+    else
+    {
+        css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard;
+
+        if (SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst())
+            xClipboard = pViewFrame->GetWindow().GetClipboard();
+
+        if (xClipboard.is())
+        {
+            css::uno::Reference<css::datatransfer::XTransferable2> xTransferable(
+                xClipboard->getContents(), css::uno::UNO_QUERY);
+            pObj = ScTransferObj::GetOwnClipboard(xTransferable);
+        }
+    }
+
     if (pObj)
     {
         ScDocument* pDoc = pObj->GetDocument();

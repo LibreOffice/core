@@ -1018,6 +1018,20 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         //  RegisterNewTargetNames doesn't exist any longer
         SfxGetpApp()->Broadcast(SfxHint( SfxHintId::ScDocNameChanged )); // Navigator
     }
+    else if (rHint.GetId() == SfxHintId::Deinitializing)
+    {
+        if (aDocument.IsClipboardSource())
+        {
+            // Notes copied to the clipboard have a raw SdrCaptionObj pointer
+            // copied from this document, forget it as it references this
+            // document's drawing layer pages and what not, which otherwise when
+            // pasting to another document after this document was destructed would
+            // attempt to access non-existing data. Preserve the text data though.
+            ScDocument* pClipDoc = ScModule::GetClipDoc();
+            if (pClipDoc)
+                pClipDoc->ClosingClipboardSource();
+        }
+    }
 }
 
 // Load contents for organizer

@@ -79,7 +79,7 @@ public:
                                         const css::datatransfer::DataFlavor& rFlavor ) override;
     virtual void        DragFinished( sal_Int8 nDropAction ) override;
 
-    SdrModel*           GetModel()  { return pModel.get(); }
+    SdrModel*           GetModel() const { return pModel.get(); }
 
     void                SetDrawPersist( const SfxObjectShellRef& rRef );
     void                SetDragSource( const ScDrawView* pView );
@@ -92,7 +92,7 @@ public:
     SdrView*            GetDragSourceView()             { return pDragSourceView.get(); }
     ScDragSrc           GetDragSourceFlags() const      { return nDragSourceFlags; }
 
-    static ScDrawTransferObj* GetOwnClipboard( vcl::Window* );
+    static ScDrawTransferObj* GetOwnClipboard(const css::uno::Reference<css::datatransfer::XTransferable2>&);
 
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();

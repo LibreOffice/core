@@ -78,7 +78,7 @@ public:
                                         const css::datatransfer::DataFlavor& rFlavor ) override;
     virtual void        DragFinished( sal_Int8 nDropAction ) override;
 
-    ScDocument*         GetDocument()           { return pDoc; }        // owned by ScTransferObj
+    ScDocument*         GetDocument() const     { return pDoc; }        // owned by ScTransferObj
     const ScRange&      GetRange() const        { return aBlock; }
     SCROW               GetNonFilteredRows() const { return nNonFiltered; }
     SCCOL               GetDragHandleX() const  { return nDragHandleX; }
@@ -103,7 +103,7 @@ public:
     void                SetDragWasInternal();
     SC_DLLPUBLIC void   SetUseInApi( bool bSet );
 
-    static SC_DLLPUBLIC ScTransferObj* GetOwnClipboard( vcl::Window* pUIWin );
+    static  SC_DLLPUBLIC ScTransferObj* GetOwnClipboard(const css::uno::Reference<css::datatransfer::XTransferable2>&);
 
     static SfxObjectShell*  SetDrawClipDoc( bool bAnyOle );     // update ScGlobal::xDrawClipDocShellRef
     virtual sal_Int64 SAL_CALL getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) override;

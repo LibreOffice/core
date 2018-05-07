@@ -29,6 +29,8 @@
 #include "shellids.hxx"
 #include <unotools/options.hxx>
 
+#include <com/sun/star/datatransfer/XTransferable2.hpp>
+
 #include <algorithm>
 #include <vector>
 #include <map>
@@ -78,6 +80,7 @@ class ScModule: public SfxModule, public SfxListener, public utl::ConfigurationL
     Timer               aIdleTimer;
     Idle                aSpellIdle;
     ScDragData*         mpDragData;
+    css::uno::Reference<css::datatransfer::XTransferable2> m_xClipData; // Only used by Vba helper functions
     ScSelectionTransferObj* pSelTransfer;
     ScMessagePool*      pMessagePool;
     // there is no global InputHandler anymore, each View has its own
@@ -171,6 +174,11 @@ public:
     SC_DLLPUBLIC void   SetInputOptions ( const ScInputOptions& rOpt );
     void                SetPrintOptions ( const ScPrintOptions& rOpt );
     void                InsertEntryToLRUList(sal_uInt16 nFIndex);
+
+    SC_DLLPUBLIC css::uno::Reference<css::datatransfer::XTransferable2>
+        GetClipData() { return m_xClipData; }
+    SC_DLLPUBLIC void SetClipData(
+        const css::uno::Reference<css::datatransfer::XTransferable2>& xTransferable) { m_xClipData = xTransferable; }
 
     static void         GetSpellSettings( LanguageType& rDefLang, LanguageType& rCjkLang, LanguageType& rCtlLang,
                                           bool& rAutoSpell );

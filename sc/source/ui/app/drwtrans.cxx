@@ -236,16 +236,18 @@ ScDrawTransferObj::~ScDrawTransferObj()
     pDragSourceView.reset();
 }
 
-ScDrawTransferObj* ScDrawTransferObj::GetOwnClipboard( vcl::Window* pWin )
+ScDrawTransferObj* ScDrawTransferObj::GetOwnClipboard(const uno::Reference<datatransfer::XTransferable2>& xTransferable)
 {
     ScDrawTransferObj* pObj = nullptr;
-    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
-    uno::Reference<XUnoTunnel> xTunnel( aDataHelper.GetTransferable(), uno::UNO_QUERY );
-    if ( xTunnel.is() )
+    if (xTransferable.is())
     {
-        sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
-        if ( nHandle )
-            pObj = dynamic_cast<ScDrawTransferObj*>(reinterpret_cast<TransferableHelper*>( static_cast<sal_IntPtr>(nHandle) ));
+        uno::Reference<XUnoTunnel> xTunnel( xTransferable, uno::UNO_QUERY );
+        if ( xTunnel.is() )
+        {
+            sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
+            if ( nHandle )
+                pObj = dynamic_cast<ScDrawTransferObj*>(reinterpret_cast<TransferableHelper*>( static_cast<sal_IntPtr>(nHandle) ));
+        }
     }
 
     return pObj;

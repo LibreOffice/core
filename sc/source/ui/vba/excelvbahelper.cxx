@@ -170,9 +170,13 @@ implnCopy( const uno::Reference< frame::XModel>& xModel )
         pViewShell->CopyToClip(nullptr,false,false,true);
 
         // mark the copied transfer object so it is used in ScVbaRange::Insert
-        ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( pViewShell->GetViewData().GetActiveWin() );
+        uno::Reference<datatransfer::XTransferable2> xTransferable(pViewShell->GetClipData());
+        ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard(xTransferable);
         if (pClipObj)
+        {
             pClipObj->SetUseInApi( true );
+            SC_MOD()->SetClipData(xTransferable);
+        }
     }
 }
 
@@ -185,9 +189,13 @@ implnCut( const uno::Reference< frame::XModel>& xModel )
         pViewShell->CutToClip();
 
         // mark the copied transfer object so it is used in ScVbaRange::Insert
-        ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( pViewShell->GetViewData().GetActiveWin() );
+        uno::Reference<datatransfer::XTransferable2> xTransferable(pViewShell->GetClipData());
+        ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard(xTransferable);
         if (pClipObj)
+        {
             pClipObj->SetUseInApi( true );
+            SC_MOD()->SetClipData(xTransferable);
+        }
     }
 }
 
@@ -202,7 +210,7 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, InsertDele
         vcl::Window* pWin = rView.GetActiveWin();
         if (pWin)
         {
-            ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
+            const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(SC_MOD()->GetClipData());
             ScDocument* pDoc = nullptr;
             if ( pOwnClip )
                 pDoc = pOwnClip->GetDocument();
