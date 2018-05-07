@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_9b5ec9e7",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 9668,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-07T08:31:35Z",
+      "side": 1,
+      "message": "move the AC_DEFINE past the place below that can reset ENABLE_LIBNUMBERTEXT\u003d, and wrap it in an if test",
+      "revId": "01a56918cd88b8b884d3b0f5ae7bbe4c4478e774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
