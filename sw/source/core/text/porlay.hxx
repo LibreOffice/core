@@ -229,41 +229,6 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwLineLayout)
 };
 
-namespace sw {
-
-struct Extent
-{
-    SwTextNode *const pNode;
-    sal_Int32 const nStart;
-    sal_Int32 const nEnd;
-    Extent(SwTextNode *const p, sal_Int32 const s, sal_Int32 const e)
-        : pNode(p), nStart(s), nEnd(e)
-    {
-        assert(pNode);
-        assert(nStart != nEnd);
-    }
-};
-
-struct MergedPara
-{
-    std::vector<Extent> const extents;
-    /// note: cannot be const currently to avoid UB because SwTextGuess::Guess
-    /// const_casts it and modifies it
-    OUString mergedText;
-    /// most paragraph properties are taken from the first non-empty node
-    SwTextNode const*const pParaPropsNode;
-    /// except break attributes, those are taken from the first node
-    SwTextNode *const pFirstNode;
-    MergedPara(std::vector<Extent>&& rExtents, OUString const& rText, SwTextNode const*const pProps, SwTextNode *const pFirst)
-        : extents(std::move(rExtents)), mergedText(rText), pParaPropsNode(pProps), pFirstNode(pFirst)
-    {
-        assert(pParaPropsNode);
-        assert(pFirstNode);
-    }
-};
-
-} // namespace sw
-
 /// Collection of SwLineLayout instances, represents the paragraph text in Writer layout.
 /// Typically owned by an SwTextFrame.
 class SwParaPortion : public SwLineLayout
@@ -273,9 +238,6 @@ class SwParaPortion : public SwLineLayout
     // Area that needs reformatting
     SwCharRange m_aReformat;
     SwScriptInfo m_aScriptInfo;
-
-    /// redline merge data
-    std::unique_ptr<sw::MergedPara> m_pMergedPara;
 
     // Fraction aZoom;
     long m_nDelta;
@@ -312,9 +274,6 @@ public:
     const long& GetDelta() const { return m_nDelta; }
     SwScriptInfo& GetScriptInfo() { return m_aScriptInfo; }
     const SwScriptInfo& GetScriptInfo() const { return m_aScriptInfo; }
-    void SetMergedPara(std::unique_ptr<sw::MergedPara> p) { m_pMergedPara = std::move(p); }
-    sw::MergedPara      * GetMergedPara()       { return m_pMergedPara.get(); }
-    sw::MergedPara const* GetMergedPara() const { return m_pMergedPara.get(); }
 
     // For SwTextFrame::Format: returns the paragraph's current length
     TextFrameIndex GetParLen() const;
