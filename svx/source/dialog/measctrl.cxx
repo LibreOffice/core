@@ -83,7 +83,10 @@ void SvxXMeasurePreview::dispose()
     // a StyleSheet of the model which was set. Thus, if You want to keep the object,
     // set the model to 0L, if object is not needed (seems to be the case here),
     // delete it.
-    delete pMeasureObj;
+
+    // always use SdrObject::Free(...) for SdrObjects (!)
+    SdrObject* pTemp(pMeasureObj);
+    SdrObject::Free(pTemp);
 
     delete pModel;
     Control::dispose();

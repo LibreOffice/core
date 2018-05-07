@@ -358,7 +358,10 @@ void SvxLineTabPage::InitSymbols(MenuButton const * pButton)
         // Generate invisible square to give all symbols a
         // bitmap size, which is independent from specific glyph
         SdrObject *pInvisibleSquare=m_pSymbolList->GetObj(0);
-        pInvisibleSquare=pInvisibleSquare->Clone();
+
+        // directly clone to target SdrModel
+        pInvisibleSquare = pInvisibleSquare->CloneSdrObject(*pModel);
+
         pPage->NbcInsertObject(pInvisibleSquare);
         pInvisibleSquare->SetMergedItem(XFillTransparenceItem(100));
         pInvisibleSquare->SetMergedItem(XLineTransparenceItem(100));
@@ -368,7 +371,10 @@ void SvxLineTabPage::InitSymbols(MenuButton const * pButton)
             SdrObject *pObj=m_pSymbolList->GetObj(i);
             if(pObj==nullptr)
                 break;
-            pObj=pObj->Clone();
+
+            // directly clone to target SdrModel
+            pObj = pObj->CloneSdrObject(*pModel);
+
             m_aGrfNames.emplace_back("");
             pPage->NbcInsertObject(pObj);
             if(m_pSymbolAttr)
@@ -1132,7 +1138,9 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
                 pObj=m_pSymbolList->GetObj(nSymTmp);
                 if(pObj)
                 {
-                    pObj=pObj->Clone();
+                    // directly clone to target SdrModel
+                    pObj = pObj->CloneSdrObject(*pModel);
+
                     if(m_pSymbolAttr)
                     {
                         pObj->SetMergedItemSet(*m_pSymbolAttr);
@@ -1146,8 +1154,11 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 
                     // Generate invisible square to give all symbol types a
                     // bitmap size, which is independent from specific glyph
-                    SdrObject *pInvisibleSquare=m_pSymbolList->GetObj(0);
-                    pInvisibleSquare=pInvisibleSquare->Clone();
+                    SdrObject* pInvisibleSquare(m_pSymbolList->GetObj(0));
+
+                    // directly clone to target SdrModel
+                    pInvisibleSquare = pInvisibleSquare->CloneSdrObject(*pModel);
+
                     pPage->NbcInsertObject(pInvisibleSquare);
                     pInvisibleSquare->SetMergedItem(XFillTransparenceItem(100));
                     pInvisibleSquare->SetMergedItem(XLineTransparenceItem(100));

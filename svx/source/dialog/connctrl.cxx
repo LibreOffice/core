@@ -156,17 +156,6 @@ void SvxXConnectionPreview::Construct()
             if( nInv == SdrInventor::Default && nId == OBJ_EDGE )
             {
                 bFound = true;
-                const SdrEdgeObj* pTmpEdgeObj = static_cast<const SdrEdgeObj*>(pObj);
-                pEdgeObj = pTmpEdgeObj->Clone();
-
-                SdrObjConnection& rConn1 = pEdgeObj->GetConnection( true );
-                SdrObjConnection& rConn2 = pEdgeObj->GetConnection( false );
-
-                rConn1 = pTmpEdgeObj->GetConnection( true );
-                rConn2 = pTmpEdgeObj->GetConnection( false );
-
-                SdrObject* pTmpObj1 = pTmpEdgeObj->GetConnectedNode( true );
-                SdrObject* pTmpObj2 = pTmpEdgeObj->GetConnectedNode( false );
 
                 // potential memory leak here (!). Create SdrObjList only when there is
                 // not yet one.
@@ -177,16 +166,28 @@ void SvxXConnectionPreview::Construct()
                         false);
                 }
 
+                const SdrEdgeObj* pTmpEdgeObj = static_cast<const SdrEdgeObj*>(pObj);
+                pEdgeObj = pTmpEdgeObj->CloneSdrObject(pSdrPage->getSdrModelFromSdrPage());
+
+                SdrObjConnection& rConn1 = pEdgeObj->GetConnection( true );
+                SdrObjConnection& rConn2 = pEdgeObj->GetConnection( false );
+
+                rConn1 = pTmpEdgeObj->GetConnection( true );
+                rConn2 = pTmpEdgeObj->GetConnection( false );
+
+                SdrObject* pTmpObj1 = pTmpEdgeObj->GetConnectedNode( true );
+                SdrObject* pTmpObj2 = pTmpEdgeObj->GetConnectedNode( false );
+
                 if( pTmpObj1 )
                 {
-                    SdrObject* pObj1 = pTmpObj1->Clone();
+                    SdrObject* pObj1 = pTmpObj1->CloneSdrObject(pSdrPage->getSdrModelFromSdrPage());
                     pSdrPage->InsertObject( pObj1 );
                     pEdgeObj->ConnectToNode( true, pObj1 );
                 }
 
                 if( pTmpObj2 )
                 {
-                    SdrObject* pObj2 = pTmpObj2->Clone();
+                    SdrObject* pObj2 = pTmpObj2->CloneSdrObject(pSdrPage->getSdrModelFromSdrPage());
                     pSdrPage->InsertObject( pObj2 );
                     pEdgeObj->ConnectToNode( false, pObj2 );
                 }

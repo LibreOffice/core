@@ -1391,9 +1391,9 @@ OUString SdrOle2Obj::TakeObjNamePlural() const
     return SvxResId(mpImpl->mbFrame ? STR_ObjNamePluralFrame : STR_ObjNamePluralOLE2);
 }
 
-SdrOle2Obj* SdrOle2Obj::Clone(SdrModel* pTargetModel) const
+SdrOle2Obj* SdrOle2Obj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrOle2Obj >(pTargetModel);
+    return CloneHelper< SdrOle2Obj >(rTargetModel);
 }
 
 SdrOle2Obj& SdrOle2Obj::operator=(const SdrOle2Obj& rObj)

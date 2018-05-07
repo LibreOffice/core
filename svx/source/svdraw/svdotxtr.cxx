@@ -389,12 +389,17 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
             // postprocess; if no result and/or only one object, simplify
             if(!pObjectList->GetObjCount())
             {
-                delete pGroup;
+                // always use SdrObject::Free(...) for SdrObjects (!)
+                SdrObject* pTemp(pGroup);
+                SdrObject::Free(pTemp);
             }
             else if(1 == pObjectList->GetObjCount())
             {
                 pRetval = pObjectList->RemoveObject(0);
-                delete pGroup;
+
+                // always use SdrObject::Free(...) for SdrObjects (!)
+                SdrObject* pTemp(pGroup);
+                SdrObject::Free(pTemp);
             }
             else
             {

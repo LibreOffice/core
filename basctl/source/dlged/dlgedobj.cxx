@@ -886,9 +886,9 @@ void DlgEdObj::clonedFrom(const DlgEdObj* _pSource)
     StartListening();
 }
 
-DlgEdObj* DlgEdObj::Clone(SdrModel* pTargetModel) const
+DlgEdObj* DlgEdObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    DlgEdObj* pDlgEdObj = CloneHelper< DlgEdObj >(pTargetModel);
+    DlgEdObj* pDlgEdObj = CloneHelper< DlgEdObj >(rTargetModel);
     DBG_ASSERT( pDlgEdObj != nullptr, "DlgEdObj::Clone: invalid clone!" );
     if ( pDlgEdObj )
         pDlgEdObj->clonedFrom( this );

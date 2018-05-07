@@ -1488,8 +1488,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         if (pSourceDoc != this)
         {
             // #i121863# clone masterpages, they are from another model (!)
-            SdPage* pNewNotesMaster = dynamic_cast< SdPage* >(pNotesMaster->Clone(this));
-            SdPage* pNewMaster = dynamic_cast< SdPage* >(pMaster->Clone(this));
+            SdPage* pNewNotesMaster = dynamic_cast< SdPage* >(pNotesMaster->CloneSdrPage(*this));
+            SdPage* pNewMaster = dynamic_cast< SdPage* >(pMaster->CloneSdrPage(*this));
 
             if(!pNewNotesMaster || !pNewMaster)
             {

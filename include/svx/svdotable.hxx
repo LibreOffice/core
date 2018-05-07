@@ -97,6 +97,10 @@ class SVX_DLLPUBLIC SdrTableObj : public ::SdrTextObj
     friend class Cell;
     friend class SdrTableObjImpl;
 
+protected:
+    // protected destructor
+    virtual ~SdrTableObj() override;
+
 public:
     SdrTableObj(SdrModel& rSdrModel);
     SdrTableObj(
@@ -104,8 +108,6 @@ public:
         const ::tools::Rectangle& rNewRect,
         sal_Int32 nColumns,
         sal_Int32 nRows);
-
-    virtual ~SdrTableObj() override;
 
     // Table stuff
     SdrTableObj* CloneRange(
@@ -199,7 +201,7 @@ public:
     virtual bool AdjustTextFrameWidthAndHeight() override;
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
-    virtual SdrTableObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual SdrTableObj* CloneSdrObject(SdrModel& rTargetModel) const override;
     SdrTableObj& operator=(const SdrTableObj& rObj);
     virtual void RecalcSnapRect() override;
     virtual const tools::Rectangle& GetSnapRect() const override;

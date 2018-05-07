@@ -65,6 +65,9 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
+    // protected destructor
+    virtual ~SdrOle2Obj() override;
+
 public:
     OUString GetStyleString();
 
@@ -76,8 +79,6 @@ public:
         const svt::EmbeddedObjectRef& rNewObjRef,
         const OUString& rNewObjName,
         const tools::Rectangle& rNewRect);
-
-    virtual ~SdrOle2Obj() override;
 
     const svt::EmbeddedObjectRef& getEmbeddedObjectRef() const;
 
@@ -136,7 +137,7 @@ public:
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 
-    virtual SdrOle2Obj* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual SdrOle2Obj* CloneSdrObject(SdrModel& rTargetModel) const override;
 
     SdrOle2Obj& assignFrom(const SdrOle2Obj& rObj);
     SdrOle2Obj& operator=(const SdrOle2Obj& rObj);
