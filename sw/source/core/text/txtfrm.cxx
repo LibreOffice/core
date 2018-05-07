@@ -836,25 +836,21 @@ void SwTextFrame::HideHidden()
 
 void SwTextFrame::HideFootnotes(TextFrameIndex const nStart, TextFrameIndex const nEnd)
 {
-    const SwpHints *pHints = GetTextNode()->GetpSwpHints();
-    if( pHints )
+    SwPageFrame *pPage = nullptr;
+    sw::MergedAttrIter iter(*this);
+    SwTextNode const* pNode(nullptr);
+    for (SwTextAttr const* pHt = iter.NextAttr(&pNode); pHt; pHt = iter.NextAttr(&pNode))
     {
-        const size_t nSize = pHints->Count();
-        SwPageFrame *pPage = nullptr;
-        for ( size_t i = 0; i < nSize; ++i )
+        if (pHt->Which() == RES_TXTATR_FTN)
         {
-            const SwTextAttr *pHt = pHints->Get(i);
-            if ( pHt->Which() == RES_TXTATR_FTN )
+            TextFrameIndex const nIdx(MapModelToView(pNode, pHt->GetStart()));
+            if (nEnd < nIdx)
+                break;
+            if (nStart <= nIdx)
             {
-                const sal_Int32 nIdx = pHt->GetStart();
-                if ( nEnd < nIdx )
-                    break;
-                if( nStart <= nIdx )
-                {
-                    if( !pPage )
-                        pPage = FindPageFrame();
-                    pPage->RemoveFootnote( this, static_cast<const SwTextFootnote*>(pHt) );
-                }
+                if (!pPage)
+                    pPage = FindPageFrame();
+                pPage->RemoveFootnote( this, static_cast<const SwTextFootnote*>(pHt) );
             }
         }
     }
