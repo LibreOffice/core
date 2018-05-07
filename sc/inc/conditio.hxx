@@ -26,9 +26,7 @@
 #include "scdllapi.h"
 #include "rangelst.hxx"
 
-#include <svl/hint.hxx>
 #include <svl/listener.hxx>
-#include <svl/broadcast.hxx>
 
 #include <comphelper/stl_types.hxx>
 #include <com/sun/star/sheet/ConditionOperator.hpp>

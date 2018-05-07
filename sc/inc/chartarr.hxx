@@ -24,7 +24,6 @@
 #include "chartpos.hxx"
 
 #include <memory>
-#include <vector>
 
 class ScDocument;
 

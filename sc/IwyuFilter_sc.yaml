@@ -40,3 +40,40 @@ blacklist:
     sc/inc/autoform.hxx:
     # contains macro definitions
     - scitems.hxx
+    sc/inc/calcconfig.hxx:
+    # needed for std::shared_ptr
+    - memory
+    sc/inc/chartuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/document/XEmbeddedObjectSupplier.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/table/XTableChart.hpp
+    - com/sun/star/table/XTableCharts.hpp
+    sc/inc/chgviset.hxx:
+    # base class has to be a complete type
+    - unotools/textsearch.hxx
+    sc/inc/column.hxx:
+    # base class has to be a complete type
+    - mdds/flat_segment_tree.hpp
+    - svx/svdobj.hxx
+    sc/inc/columnset.hxx:
+    # contains macro definitions
+    - address.hxx
+    sc/inc/compiler.hxx:
+    # base class has to be a complete type
+    - com/sun/star/sheet/ExternalLinkInfo.hpp
+    - o3tl/typed_flags_set.hxx
+    - unotools/charclass.hxx
+    sc/inc/confuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sc/inc/conditio.hxx:
+    # base class has to be a complete type
+    - tools/link.hxx
+    sc/inc/convuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/Locale.hpp

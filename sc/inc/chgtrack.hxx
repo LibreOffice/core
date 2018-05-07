@@ -85,8 +85,6 @@ enum ScChangeActionClipMode
     SC_CACM_PASTE
 };
 
-class ScChangeAction;
-
 /** A link/connection/dependency between change actions.
 
     Upon construction inserts itself as the head of a chain / linked list,
@@ -196,12 +194,6 @@ class ScChangeActionCellListEntry
 public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScChangeActionCellListEntry )
 };
-
-//  ScChangeAction
-class ScChangeTrack;
-class ScChangeActionIns;
-class ScChangeActionDel;
-class ScChangeActionContent;
 
 class ScChangeAction
 {
