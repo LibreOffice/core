@@ -24,7 +24,7 @@ class ImpressBackgrounds(UITestCase):
             self.assertEqual(
               document.DrawPages.getByIndex(0).Background.FillGradient.Style, LINEAR)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillGradient.StartColor, 9101876)
+              document.DrawPages.getByIndex(0).Background.FillGradient.StartColor, 14543051)
             self.assertEqual(
               document.DrawPages.getByIndex(0).Background.FillGradient.Angle, 300)
             self.assertEqual(
@@ -37,8 +37,8 @@ class ImpressBackgrounds(UITestCase):
               document.DrawPages.getByIndex(0).Background.FillGradient.StartIntensity, 100)
             self.assertEqual(
               document.DrawPages.getByIndex(0).Background.FillGradient.EndIntensity, 100)
-            #self.assertEqual(
-              #document.DrawPages.getByIndex(0).Background.FillGradientName, 'Tango Green')
+            self.assertEqual(
+              document.DrawPages.getByIndex(0).Background.FillGradientName, 'Pastel Bouqet')
         elif btn == 'btnhatch':
             self.assertEqual(
               document.DrawPages.getByIndex(0).Background.FillHatch.Style, SINGLE )
