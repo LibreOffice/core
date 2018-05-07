@@ -477,12 +477,14 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
 
         }
 
-        SwIterator<SwContentFrame,SwTextNode> aIter( *this );
-        for( SwContentFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
+        SwIterator<SwTextFrame,SwTextNode> aIter( *this );
+        for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
         {
             pFrame->RegisterToNode( *pNode );
-            if( pFrame->IsTextFrame() && !pFrame->IsFollow() && static_cast<SwTextFrame*>(pFrame)->GetOfst() )
-                static_cast<SwTextFrame*>(pFrame)->SetOfst( 0 );
+            if (!pFrame->IsFollow() && pFrame->GetOfst())
+            {
+                pFrame->SetOfst( 0 );
+            }
         }
 
         if ( IsInCache() )

@@ -96,7 +96,6 @@ public:
     inline  SwContentFrame* GetNextContentFrame() const;
     inline  SwContentFrame* GetPrevContentFrame() const;
     static bool CalcLowers( SwLayoutFrame* pLay, const SwLayoutFrame* pDontLeave, long nBottom, bool bSkipRowSpanCells );
-    void RegisterToNode( SwContentNode& );
 };
 
 inline SwContentFrame* SwContentFrame::GetNextContentFrame() const

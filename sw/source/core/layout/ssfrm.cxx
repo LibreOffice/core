@@ -434,8 +434,9 @@ SwContentFrame::~SwContentFrame()
 {
 }
 
-void SwContentFrame::RegisterToNode( SwContentNode& rNode )
+void SwTextFrame::RegisterToNode(SwTextNode & rNode)
 {
+    assert(&rNode != GetRegisteredIn());
     rNode.Add( this );
 }
 
