@@ -41,6 +41,10 @@ cmd/sc_addons.png cmd/sc_insertplugin.png
 cmd/sc_addprintarea.png cmd/sc_inserttable.png
 cmd/sc_addtable.png cmd/sc_inserttable.png
 
+# tooltips
+cmd/lc_showinlinetooltips.png cmd/lc_editannotation.png
+cmd/sc_showinlinetooltips.png cmd/sc_editannotation.png
+
 # Insert
 cmd/lc_insobjctrl.png cmd/lc_newdoc.png
 cmd/lc_insert.png cmd/lc_togglesheetgrid.png
