@@ -2493,6 +2493,9 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     long nStartWidthPx = 0;
     long nEndWidthPx = 0;
 
+    tools::Rectangle aOldVisArea(
+            mnLOKStartHeaderCol + 1, mnLOKStartHeaderRow + 1,
+            mnLOKEndHeaderCol, mnLOKEndHeaderRow);
 
     /// *** start collecting ROWS ***
 
@@ -2776,6 +2779,16 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
 
     aBuffer.append("\n}");
     OUString sRet = aBuffer.makeStringAndClear();
+
+    vcl::Region aNewVisArea(
+            tools::Rectangle(mnLOKStartHeaderCol + 1, mnLOKStartHeaderRow + 1,
+                    mnLOKEndHeaderCol, mnLOKEndHeaderRow));
+    aNewVisArea.Exclude(aOldVisArea);
+    tools::Rectangle aChangedArea = aNewVisArea.GetBoundRect();
+    if (!aChangedArea.IsEmpty())
+    {
+        UpdateFormulas(aChangedArea.Left(), aChangedArea.Top(), aChangedArea.Right(), aChangedArea.Bottom());
+    }
 
     return sRet;
 }
