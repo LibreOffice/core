@@ -1137,6 +1137,8 @@ SdrPage::SdrPage(SdrModel& rModel, bool bMasterPage)
 
 SdrPage::~SdrPage()
 {
+    Clear();
+
     if( mxUnoPage.is() ) try
     {
         uno::Reference< lang::XComponent > xPageComponent( mxUnoPage, uno::UNO_QUERY_THROW );
