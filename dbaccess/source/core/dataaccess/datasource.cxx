@@ -587,10 +587,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
     bool bNeedMigration = false;
     if(m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
     {
-        OUString sSalUseVclplugin;
-        osl_getEnvironment(OUString("SAL_USE_VCLPLUGIN").pData,
-                &sSalUseVclplugin.pData);
-        if(!sMigrEnvVal.isEmpty() || sSalUseVclplugin == "svp")
+        if(!sMigrEnvVal.isEmpty() || Application::IsHeadlessModeEnabled())
             bNeedMigration = true;
         else
         {
