@@ -47,8 +47,6 @@
 #include <unordered_map>
 #include <hb-ot.h>
 
-#include "fontinstance.hxx"
-
 class AquaSalFrame;
 class FontAttributes;
 class CoreTextStyle;
