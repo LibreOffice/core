@@ -3314,6 +3314,8 @@ namespace xmloff { namespace token {
 
         XML_NEWLINE,
 
+        XML_CREATOR_INITIALS,
+
         XML_TOKEN_END
     };
 
