@@ -95,6 +95,7 @@ public:
     void testPageWithTransparentBackground();
     void testTextRotation();
     void testTdf115394PPT();
+    void testBulletsAsImage();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -117,6 +118,7 @@ public:
     CPPUNIT_TEST(testPageWithTransparentBackground);
     CPPUNIT_TEST(testTextRotation);
     CPPUNIT_TEST(testTdf115394PPT);
+    CPPUNIT_TEST(testBulletsAsImage);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -913,6 +915,46 @@ void SdExportTest::testTdf115394PPT()
     CPPUNIT_ASSERT_EQUAL(1.0, fTransitionDuration);
 
     xDocShRef->DoClose();
+}
+
+void SdExportTest::testBulletsAsImage()
+{
+    for (sal_Int32 nExportFormat : {ODP, PPTX, PPT})
+    {
+        ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/BulletsAsImage.odp"), ODP);
+        const OString sFailedMessageBase = OString("Failed on filter '") + OString(aFileFormats[nExportFormat].pFilterName) + OString("': ");
+
+        uno::Reference< lang::XComponent > xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
+        uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[nExportFormat].pFilterName), RTL_TEXTENCODING_UTF8);
+
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        xComponent.set(xStorable, uno::UNO_QUERY);
+        xComponent->dispose();
+
+        xDocShRef = loadURL(aTempFile.GetURL(), nExportFormat);
+
+        uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+        uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
+        uno::Reference<beans::XPropertySet> xPropSet(xParagraph, uno::UNO_QUERY_THROW);
+
+        uno::Reference<container::XIndexAccess> xLevels(xPropSet->getPropertyValue("NumberingRules"), uno::UNO_QUERY_THROW);
+        uno::Sequence<beans::PropertyValue> aProperties;
+        xLevels->getByIndex(0) >>= aProperties; // 1st level
+        uno::Reference<awt::XBitmap> xBitmap;
+        for (const beans::PropertyValue& rProperty : aProperties)
+        {
+            if (rProperty.Name == "GraphicBitmap")
+                xBitmap = rProperty.Value.get<uno::Reference<awt::XBitmap>>();
+        }
+        const OString sFailed = sFailedMessageBase + "No bitmap for the bullets";
+        CPPUNIT_ASSERT_MESSAGE(sFailed.getStr(), xBitmap.is());
+
+        xDocShRef->DoClose();
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
