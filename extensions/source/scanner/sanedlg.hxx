@@ -75,7 +75,7 @@ private:
 
     int             mnCurrentOption;
     int             mnCurrentElement;
-    double*         mpRange;
+    std::unique_ptr<double[]> mpRange;
     double          mfMin, mfMax;
 
     bool            doScan;

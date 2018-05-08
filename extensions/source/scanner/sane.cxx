@@ -888,7 +888,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
     return bSuccess;
 }
 
-int Sane::GetRange( int n, double*& rpDouble )
+int Sane::GetRange( int n, std::unique_ptr<double[]>& rpDouble )
 {
     if( mppOptions[n]->constraint_type != SANE_CONSTRAINT_RANGE &&
         mppOptions[n]->constraint_type != SANE_CONSTRAINT_WORD_LIST )
@@ -921,7 +921,7 @@ int Sane::GetRange( int n, double*& rpDouble )
             dbg_msg( "quantum range [ %lg ; %lg ; %lg ]\n",
                      fMin, fQuant, fMax );
             nItems = static_cast<int>((fMax - fMin)/fQuant)+1;
-            rpDouble = new double[ nItems ];
+            rpDouble.reset(new double[ nItems ]);
             double fValue = fMin;
             for( i = 0; i < nItems; i++, fValue += fQuant )
                 rpDouble[i] = fValue;
@@ -932,7 +932,7 @@ int Sane::GetRange( int n, double*& rpDouble )
         {
             dbg_msg( "normal range [ %lg %lg ]\n",
                      fMin, fMax );
-            rpDouble = new double[2];
+            rpDouble.reset(new double[2]);
             rpDouble[0] = fMin;
             rpDouble[1] = fMax;
             return 0;
@@ -941,7 +941,7 @@ int Sane::GetRange( int n, double*& rpDouble )
     else
     {
         nItems = mppOptions[n]->constraint.word_list[0];
-        rpDouble = new double[nItems];
+        rpDouble.reset(new double[nItems]);
         for( i=0; i<nItems; i++ )
         {
             rpDouble[i] = bIsFixed ?

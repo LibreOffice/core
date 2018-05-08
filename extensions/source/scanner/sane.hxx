@@ -130,7 +130,7 @@ public:
         { return mppOptions[n]->constraint_type; }
     const char**    GetStringConstraint( int n )
         { return const_cast<const char**>(mppOptions[n]->constraint.string_list); }
-    int             GetRange( int, double*& );
+    int             GetRange( int, std::unique_ptr<double[]>& );
 
     inline int      GetOptionElements( int n );
     int             GetOptionByName( const char* );
