@@ -673,10 +673,14 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
                 if ( aStorage->IsStream("Equation Native") )
                 {
                     // is this a MathType Storage?
-                    MathType aEquation( maText );
+                    OUStringBuffer aBuffer;
+                    MathType aEquation(aBuffer);
                     bSuccess = aEquation.Parse( aStorage.get() );
                     if ( bSuccess )
+                    {
+                        maText = aBuffer.makeStringAndClear();
                         Parse();
+                    }
                 }
             }
         }
@@ -1284,7 +1288,8 @@ void SmDocShell::SetModified(bool bModified)
 
 bool SmDocShell::WriteAsMathType3( SfxMedium& rMedium )
 {
-    MathType aEquation( maText, mpTree.get() );
+    OUStringBuffer aTextAsBuffer(maText);
+    MathType aEquation(aTextAsBuffer, mpTree.get());
     return aEquation.ConvertFromStarMath( rMedium );
 }
 
