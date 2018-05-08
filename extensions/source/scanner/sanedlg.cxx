@@ -396,7 +396,7 @@ void SaneDlg::InitFields()
             mpReslBox->Enable();
 
             mpReslBox->SetValue( static_cast<long>(fRes) );
-            double *pDouble = nullptr;
+            std::unique_ptr<double[]> pDouble;
             nValue = mrSane.GetRange( nOption, pDouble );
             if( nValue > -1 )
             {
@@ -434,7 +434,6 @@ void SaneDlg::InitFields()
             }
             else
                 mpReslBox->Enable( false );
-            delete [] pDouble;
         }
     }
     else
@@ -485,7 +484,7 @@ void SaneDlg::InitFields()
                     case 3: aBottomRight.setY( static_cast<int>(fValue) );break;
                 }
             }
-            double *pDouble = nullptr;
+            std::unique_ptr<double[]> pDouble;
             nValue = mrSane.GetRange( nOption, pDouble );
             if( nValue > -1 )
             {
@@ -1021,18 +1020,13 @@ void SaneDlg::EstablishStringRange()
 
 void SaneDlg::EstablishQuantumRange()
 {
-    if( mpRange )
-    {
-        delete [] mpRange;
-        mpRange = nullptr;
-    }
+    mpRange.reset();
     int nValues = mrSane.GetRange( mnCurrentOption, mpRange );
     if( nValues == 0 )
     {
         mfMin = mpRange[ 0 ];
         mfMax = mpRange[ 1 ];
-        delete [] mpRange;
-        mpRange = nullptr;
+        mpRange.reset();
         EstablishNumericOption();
     }
     else if( nValues > 0 )
