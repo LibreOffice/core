@@ -82,7 +82,7 @@
 
 namespace sw {
 
-    MergedAttrIter::MergedAttrIter(SwTextFrame const& rFrame)
+    MergedAttrIterBase::MergedAttrIterBase(SwTextFrame const& rFrame)
         : m_pMerged(rFrame.GetMergedPara())
         , m_pNode(m_pMerged ? nullptr : rFrame.GetTextNode())
         , m_CurrentExtent(0)
@@ -135,6 +135,83 @@ namespace sw {
                 {
                     SwTextAttr const*const pHint(pHints->Get(m_CurrentHint));
                     ++m_CurrentHint;
+                    if (ppNode)
+                    {
+                        *ppNode = m_pNode;
+                    }
+                    return pHint;
+                }
+            }
+            return nullptr;
+        }
+    }
+
+    MergedAttrIterReverse::MergedAttrIterReverse(SwTextFrame const& rFrame)
+        : MergedAttrIterBase(rFrame)
+    {
+        if (m_pMerged)
+        {
+            m_CurrentExtent = m_pMerged->extents.size();
+            SwpHints const*const pHints(0 < m_CurrentExtent
+                ? m_pMerged->extents[m_CurrentExtent-1].pNode->GetpSwpHints()
+                : nullptr);
+            m_CurrentHint = pHints ? pHints->Count() : 0;
+        }
+        else
+        {
+            if (SwpHints const*const pHints = m_pNode->GetpSwpHints())
+            {
+                m_CurrentHint = pHints->Count();
+            }
+        }
+    }
+
+    SwTextAttr const* MergedAttrIterReverse::PrevAttr(SwTextNode const** ppNode)
+    {
+        if (m_pMerged)
+        {
+            while (0 < m_CurrentExtent)
+            {
+                sw::Extent const& rExtent(m_pMerged->extents[m_CurrentExtent-1]);
+                if (SwpHints const*const pHints = rExtent.pNode->GetpSwpHints())
+                {
+                    while (0 < m_CurrentHint)
+                    {
+                        SwTextAttr const*const pHint(pHints->Get(m_CurrentHint - 1));
+                        if (pHint->GetStart() < rExtent.nStart)
+                        {
+                            break;
+                        }
+                        --m_CurrentHint;
+                        if (pHint->GetStart() <= rExtent.nEnd)
+                        {
+                            if (ppNode)
+                            {
+                                *ppNode = rExtent.pNode;
+                            }
+                            return pHint;
+                        }
+                    }
+                }
+                --m_CurrentExtent;
+                if (0 < m_CurrentExtent &&
+                    rExtent.pNode != m_pMerged->extents[m_CurrentExtent-1].pNode)
+                {
+                    SwpHints const*const pHints(rExtent.pNode->GetpSwpHints());
+                    m_CurrentHint = pHints ? pHints->Count() : 0; // reset
+                }
+            }
+            return nullptr;
+        }
+        else
+        {
+            SwpHints const*const pHints(m_pNode->GetpSwpHints());
+            if (pHints)
+            {
+                while (0 < m_CurrentHint)
+                {
+                    SwTextAttr const*const pHint(pHints->Get(m_CurrentHint - 1));
+                    --m_CurrentHint;
                     if (ppNode)
                     {
                         *ppNode = m_pNode;
