@@ -61,7 +61,7 @@ public:
     virtual bool GetStyleSheet( SfxStyleSheet* &rpStyleSheet ) const;
     virtual bool SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr );
 
-    virtual bool GetMarkedObjModel( SdrPage* pNewPage );
+    virtual SdrObject* GetMarkedSdrObjClone( SdrModel& rTargetModel );
     virtual bool PasteObjModel( const SdrModel& rModel );
 
     /** returns a format paint brush set from the current selection */
