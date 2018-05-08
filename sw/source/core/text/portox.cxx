@@ -36,7 +36,7 @@ SwLinePortion *SwIsoToxPortion::Compress() { return this; }
 
 SwIsoToxPortion::SwIsoToxPortion() : nViewWidth(0)
 {
-    SetLen(1);
+    SetLen(TextFrameIndex(1));
     SetWhichPor( POR_ISOTOX );
 }
 
