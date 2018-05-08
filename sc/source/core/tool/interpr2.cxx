@@ -112,9 +112,8 @@ void ScInterpreter::ScGetActDate()
 void ScInterpreter::ScGetActTime()
 {
     nFuncFmtType = SvNumFormatType::DATETIME;
-    Date aActDate( Date::SYSTEM );
-    long nDiff = aActDate - pFormatter->GetNullDate();
-    tools::Time aActTime( tools::Time::SYSTEM );
+    DateTime aActTime( DateTime::SYSTEM );
+    long nDiff = aActTime - pFormatter->GetNullDate();
     double fTime = aActTime.GetHour()    / static_cast<double>(::tools::Time::hourPerDay)   +
                    aActTime.GetMin()     / static_cast<double>(::tools::Time::minutePerDay) +
                    aActTime.GetSec()     / static_cast<double>(::tools::Time::secondPerDay) +
