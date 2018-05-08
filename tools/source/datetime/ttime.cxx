@@ -239,7 +239,7 @@ sal_Int32 tools::Time::GetMSFromTime() const
            ( nNanoSec/1000000 +
              nSec  * 1000 +
              nMin  * 60000 +
-             nHour * 360000 );
+             nHour * 3600000 );
 }
 
 void tools::Time::MakeTimeFromMS( sal_Int32 nMS )
