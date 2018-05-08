@@ -26,7 +26,6 @@
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
-#include "global.hxx"
 #include "address.hxx"
 
 #include "dpfilteredcache.hxx"

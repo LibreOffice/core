@@ -10,7 +10,8 @@
 #ifndef INCLUDED_SC_INC_DOCPARAM_HXX
 #define INCLUDED_SC_INC_DOCPARAM_HXX
 
-#include "address.hxx"
+#include <sal/types.h>  // for sal_uInt32
+#include "types.hxx"    // for SCROW
 
 // Let's put here misc structures that get passed to ScDocument's methods.
 

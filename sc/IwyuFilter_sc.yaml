@@ -77,3 +77,49 @@ blacklist:
     sc/inc/convuno.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/Locale.hpp
+    sc/inc/dbdocutl.hxx:
+    # base class has to be a complete type
+    - com/sun/star/uno/Reference.hxx
+    sc/inc/defltuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sc/inc/dispuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XDispatchProviderInterceptor.hpp
+    - com/sun/star/view/XSelectionChangeListener.hpp
+    sc/inc/dpglobal.hxx:
+    # base class has to be a complete type
+    - o3tl/typed_flags_set.hxx
+    sc/inc/dpoutput.hxx:
+    # base class has to be a complete type
+    - com/sun/star/sheet/DataResult.hpp
+    - com/sun/star/sheet/MemberResult.hpp
+    - com/sun/star/sheet/XDimensionsSupplier.hpp
+    sc/inc/dpobject.hxx:
+    # base class has to be a complete type
+    - com/sun/star/sheet/XDimensionsSupplier.hpp
+    sc/inc/dpsave.hxx:
+    # base class has to be a complete type
+    - com/sun/star/sheet/XDimensionsSupplier.hpp
+    sc/inc/dptabres.hxx:
+    # base class has to be a complete type
+    - com/sun/star/sheet/DataResult.hpp
+    - com/sun/star/sheet/MemberResult.hpp
+    - com/sun/star/uno/Sequence.hxx
+    sc/inc/dptabsrc.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/sheet/MemberResult.hpp
+    - com/sun/star/sheet/XDataPilotMemberResults.hpp
+    - com/sun/star/sheet/XDataPilotResults.hpp
+    - com/sun/star/sheet/XDimensionsSupplier.hpp
+    - com/sun/star/sheet/XDrillDownDataSupplier.hpp
+    - com/sun/star/sheet/XHierarchiesSupplier.hpp
+    - com/sun/star/sheet/XLevelsSupplier.hpp
+    - com/sun/star/sheet/XMembersSupplier.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XRefreshable.hpp

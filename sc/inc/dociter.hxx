@@ -22,7 +22,6 @@
 
 #include "address.hxx"
 #include "formulagroup.hxx"
-#include <tools/solar.h>
 #include "global.hxx"
 #include "scdllapi.h"
 #include "cellvalue.hxx"
@@ -37,7 +36,6 @@ class ScDocument;
 class ScPatternAttr;
 class ScAttrArray;
 class ScAttrIterator;
-class ScRange;
 class ScFlatBoolRowSegments;
 class ScMatrix;
 struct ScDBQueryParamBase;

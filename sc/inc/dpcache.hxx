@@ -22,7 +22,6 @@
 #include "global.hxx"
 #include "dpnumgroupinfo.hxx"
 #include "calcmacros.hxx"
-#include <tools/date.hxx>
 
 #include <mdds/flat_segment_tree.hpp>
 
@@ -34,7 +33,6 @@
 struct ScQueryParam;
 class ScDPObject;
 class ScDPItemData;
-struct ScDPNumGroupInfo;
 enum class SvNumFormatType : sal_Int16;
 
 /**

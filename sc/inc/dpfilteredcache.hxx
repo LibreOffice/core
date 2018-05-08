@@ -21,21 +21,15 @@
 #define INCLUDED_SC_INC_DPFILTEREDCACHE_HXX
 
 #include <sal/types.h>
-#include <osl/mutex.hxx>
-#include "global.hxx"
 #include "dpitemdata.hxx"
 #include "calcmacros.hxx"
 
-#include <memory>
 #include <unordered_set>
 #include <vector>
 
 #include <mdds/flat_segment_tree.hpp>
 
-class ScDPItemData;
 class ScDPCache;
-class ScDocument;
-class ScRange;
 struct ScDPValue;
 struct ScQueryParam;
 

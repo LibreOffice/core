@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_INC_DPSAVE_HXX
 #define INCLUDED_SC_INC_DPSAVE_HXX
 
-#include <list>
 #include <memory>
 #include <vector>
 

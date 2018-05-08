@@ -14,8 +14,6 @@
 #include "scdllapi.h"
 #include "global.hxx"
 
-#include <com/sun/star/sheet/GeneralFunction.hpp>
-
 class SvNumberFormatter;
 struct ScDPNumGroupInfo;
 enum class ScGeneralFunction;
