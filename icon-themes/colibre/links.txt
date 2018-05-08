@@ -1271,6 +1271,7 @@ sc/res/paste_transpose.png cmd/lc_datadatapilotrun.png
 sc/res/paste_values_formats.png cmd/lc_formatpaintbrush.png
 sc/res/paste_values_only.png cmd/lc_numberformatstandard.png
 sc/res/sf01.png cmd/sc_tabledesign.png
+sc/res/sf02.png cmd/sc_adddirect.png
 sc/res/table.png cmd/sc_inserttable.png
 sc/res/text.png cmd/sc_text.png
 sc/res/time.png cmd/sc_timefield.png
