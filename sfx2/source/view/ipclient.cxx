@@ -105,7 +105,7 @@ public:
     tools::Rectangle                       m_aObjArea;             // area of object in coordinate system of the container (without scaling)
     Fraction                        m_aScaleWidth;          // scaling that was applied to the object when it was not active
     Fraction                        m_aScaleHeight;
-    SfxInPlaceClient*               m_pClient;
+    std::unique_ptr<SfxInPlaceClient> m_pClient;
     sal_Int64                       m_nAspect;              // ViewAspect that is assigned from the container
     bool                            m_bStoreObject;
     bool                            m_bUIActive;            // set and cleared when notification for UI (de)activation is sent
@@ -196,7 +196,7 @@ void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& a
 
 void SAL_CALL SfxInPlaceClient_Impl::disposing( const css::lang::EventObject& /*aEvent*/ )
 {
-    DELETEZ( m_pClient );
+    m_pClient.reset();
 }
 
 // XEmbeddedClient
@@ -338,9 +338,9 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingUI()
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
 
-    m_pClient->GetViewShell()->ResetAllClients_Impl(m_pClient);
+    m_pClient->GetViewShell()->ResetAllClients_Impl(m_pClient.get());
     m_bUIActive = true;
-    m_pClient->GetViewShell()->UIActivating( m_pClient );
+    m_pClient->GetViewShell()->UIActivating( m_pClient.get() );
 }
 
 
@@ -356,7 +356,7 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedUI()
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
 
-    m_pClient->GetViewShell()->UIDeactivated( m_pClient );
+    m_pClient->GetViewShell()->UIDeactivated( m_pClient.get() );
     m_bUIActive = false;
 }
 
@@ -584,7 +584,7 @@ IMPL_LINK_NOARG(SfxInPlaceClient_Impl, TimerHdl, Timer *, void)
 {
     if ( m_pClient && m_xObject.is() )
     {
-        m_pClient->GetViewShell()->CheckIPClient_Impl(m_pClient,
+        m_pClient->GetViewShell()->CheckIPClient_Impl(m_pClient.get(),
                 m_pClient->GetViewShell()->GetObjectShell()->GetVisArea());
     }
 }
@@ -598,7 +598,7 @@ SfxInPlaceClient::SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window *pDraw
     m_pViewSh( pViewShell ),
     m_pEditWin( pDraw )
 {
-    m_xImp->m_pClient = this;
+    m_xImp->m_pClient.reset(this);
     m_xImp->m_nAspect = nAspect;
     m_xImp->m_aScaleWidth = m_xImp->m_aScaleHeight = Fraction(1,1);
     m_xImp->m_xClient = static_cast< embed::XEmbeddedClient* >( m_xImp.get() );
