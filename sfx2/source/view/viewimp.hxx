@@ -51,7 +51,7 @@ struct SfxViewShell_Impl
     ::rtl::Reference< SfxClipboardChangeListener > xClipboardListener;
     std::shared_ptr< vcl::PrinterController > m_xPrinterController;
 
-    mutable std::vector<SfxInPlaceClient*>* mpIPClients;
+    mutable std::unique_ptr<std::vector<SfxInPlaceClient*>> mpIPClients;
 
     LibreOfficeKitCallback m_pLibreOfficeKitViewCallback;
     void* m_pLibreOfficeKitViewData;
