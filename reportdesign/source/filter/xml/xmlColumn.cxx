@@ -33,8 +33,9 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <strings.hxx>
 
-#define PROPERTY_ID_WIDTH    1
-#define PROPERTY_ID_HEIGHT   2
+#define PROPERTY_ID_WIDTH      1
+#define PROPERTY_ID_HEIGHT     2
+#define PROPERTY_ID_MINHEIGHT  3
 
 namespace rptxml
 {
@@ -130,9 +131,10 @@ void OXMLRowColumn::fillStyle(const OUString& _sStyleName)
             PropertySetInfo* pInfo = new PropertySetInfo();
             static PropertyMapEntry const pMap[] =
             {
-                {OUString(PROPERTY_WIDTH),  PROPERTY_ID_WIDTH,          ::cppu::UnoType<sal_Int32>::get()       ,PropertyAttribute::BOUND,0},
-                {OUString(PROPERTY_HEIGHT), PROPERTY_ID_HEIGHT,         ::cppu::UnoType<sal_Int32>::get()       ,PropertyAttribute::BOUND,0},
-                { OUString(), 0, css::uno::Type(), 0, 0 }
+                {OUString(PROPERTY_WIDTH),    PROPERTY_ID_WIDTH,        ::cppu::UnoType<sal_Int32>::get()       ,PropertyAttribute::BOUND,0},
+                {OUString(PROPERTY_HEIGHT),   PROPERTY_ID_HEIGHT,       ::cppu::UnoType<sal_Int32>::get()       ,PropertyAttribute::BOUND,0 },
+                {OUString(PROPERTY_MINHEIGHT), PROPERTY_ID_MINHEIGHT,    ::cppu::UnoType<sal_Int32>::get()       ,PropertyAttribute::BOUND,0 },
+                {OUString(), 0, css::uno::Type(), 0, 0 }
             };
             pInfo->add(pMap);
             Reference<XPropertySet> xProp = GenericPropertySet_CreateInstance(pInfo);
@@ -151,8 +153,19 @@ void OXMLRowColumn::fillStyle(const OUString& _sStyleName)
                 {
                     pAutoStyle->FillPropertySet(xProp);
                     sal_Int32 nHeight = 0;
+                    sal_Int32 nMinHeight = 0;
                     xProp->getPropertyValue(PROPERTY_HEIGHT) >>= nHeight;
-                    m_pContainer->addHeight(nHeight);
+                    xProp->getPropertyValue(PROPERTY_MINHEIGHT) >>= nMinHeight;
+                    if (nHeight == 0 && nMinHeight > 0)
+                    {
+                        m_pContainer->addHeight(nMinHeight);
+                        m_pContainer->addAutoHeight(true);
+                    }
+                    else
+                    {
+                        m_pContainer->addHeight(nHeight);
+                        m_pContainer->addAutoHeight(false);
+                    }
                 }
             }
         }

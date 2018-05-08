@@ -156,6 +156,7 @@ namespace pcr
     #define PROPERTY_HASNAVIGATION          "HasNavigationBar"
     #define PROPERTY_POSITIONX              "PositionX"
     #define PROPERTY_POSITIONY              "PositionY"
+    #define PROPERTY_AUTOGROW               "AutoGrow"
     #define PROPERTY_STEP                   "Step"
     #define PROPERTY_WORDLINEMODE           "FontWordLineMode"
     #define PROPERTY_PROGRESSVALUE          "ProgressValue"
