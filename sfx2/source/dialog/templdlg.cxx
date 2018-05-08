@@ -809,7 +809,7 @@ void SfxCommonTemplateDialog_Impl::impl_clear()
     pStyleFamilies = nullptr;
     sal_uInt16 i;
     for ( i = 0; i < MAX_FAMILIES; ++i )
-        DELETEX(SfxTemplateItem, pFamilyState[i]);
+        DELETEZ(pFamilyState[i]);
     for ( i = 0; i < COUNT_BOUND_FUNC; ++i )
         delete pBoundItems[i];
     pCurObjShell = nullptr;
