@@ -68,12 +68,12 @@ sal_Bool MathTypeFilter::filter(const uno::Sequence<beans::PropertyValue>& rDesc
                     if (auto pModel = dynamic_cast<SmModel*>(m_xDstDoc.get()))
                     {
                         auto pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
-                        OUString aText = pDocShell->GetText();
+                        OUStringBuffer aText(pDocShell->GetText());
                         MathType aEquation(aText);
                         bSuccess = aEquation.Parse(aStorage.get());
                         if (bSuccess)
                         {
-                            pDocShell->SetText(aText);
+                            pDocShell->SetText(aText.makeStringAndClear());
                             pDocShell->Parse();
                         }
                     }
