@@ -595,14 +595,29 @@ Size ScModelObj::getDocumentSize()
 
     rDoc.GetTiledRenderingArea(nTab, nEndCol, nEndRow);
 
-    pViewData->SetMaxTiledCol(nEndCol);
-    pViewData->SetMaxTiledRow(nEndRow);
+    const ScDocument* pThisDoc = &rDoc;
 
-    if (pViewData->GetLOKDocWidthPixel() > 0 && pViewData->GetLOKDocHeightPixel() > 0)
+    auto GetColWidthPx = [pThisDoc, nTab](SCCOL nCol) {
+        const sal_uInt16 nSize = pThisDoc->GetColWidth(nCol, nTab);
+        return ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
+    };
+
+    long nDocWidthPixel = pViewData->GetLOKWidthHelper().computePosition(nEndCol, GetColWidthPx);
+
+
+    auto GetRowHeightPx = [pThisDoc, nTab](SCROW nRow) {
+        const sal_uInt16 nSize = pThisDoc->GetRowHeight(nRow, nTab);
+        return ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
+    };
+
+    long nDocHeightPixel = pViewData->GetLOKHeightHelper().computePosition(nEndRow, GetRowHeightPx);
+
+
+    if (nDocWidthPixel > 0 && nDocHeightPixel > 0)
     {
         // convert to twips
-        aSize.setWidth(pViewData->GetLOKDocWidthPixel() * TWIPS_PER_PIXEL);
-        aSize.setHeight(pViewData->GetLOKDocHeightPixel() * TWIPS_PER_PIXEL);
+        aSize.setWidth(nDocWidthPixel * TWIPS_PER_PIXEL);
+        aSize.setHeight(nDocHeightPixel * TWIPS_PER_PIXEL);
     }
     else
     {
