@@ -68,13 +68,13 @@ void Hdf::createHashMap( bool bOptimizeForPerformance )
     {
         if( m_pStringToDataMap != nullptr )
             return;
-        m_pStringToDataMap = new StringToDataMap;
+        m_pStringToDataMap.reset(new StringToDataMap);
     }
     else
     {
         if( m_pStringToValPosMap != nullptr )
             return;
-        m_pStringToValPosMap = new StringToValPosMap;
+        m_pStringToValPosMap.reset(new StringToValPosMap);
     }
 
     Reference< XInputStream > xIn = m_xSFA->openFileRead( m_aFileURL );
@@ -123,18 +123,14 @@ void Hdf::createHashMap( bool bOptimizeForPerformance )
 
 void Hdf::releaseHashMap()
 {
-    if( m_pStringToDataMap != nullptr )
-    {
-        delete m_pStringToDataMap;
-        m_pStringToDataMap = nullptr;
-    }
-    if( m_pStringToValPosMap != nullptr )
-    {
-        delete m_pStringToValPosMap;
-        m_pStringToValPosMap = nullptr;
-    }
+    m_pStringToDataMap.reset();
+    m_pStringToValPosMap.reset();
 }
 
+
+Hdf::~Hdf()
+{
+}
 
 bool Hdf::getValueForKey( const OString& rKey, HDFData& rValue )
 {
