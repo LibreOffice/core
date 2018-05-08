@@ -3301,6 +3301,8 @@ namespace xmloff { namespace token {
         XML_ZEROS_DENOMINATOR_DIGITS,
         XML_INTEGER_FRACTION_DELIMITER,
 
+        XML_CREATOR_INITIALS,
+
         XML_TOKEN_END
     };
 
