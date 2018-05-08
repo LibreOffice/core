@@ -184,7 +184,12 @@ void ScreenshotTest::dumpDialogToPath(const OString& rUIXMLDescription)
         {
             VclPtr<vcl::Window> aOwnedToplevel;
 
-            std::unique_ptr<VclBuilder> xBuilder(new VclBuilder(pDialog, VclBuilderContainer::getUIRootDir(), OStringToOUString(rUIXMLDescription, RTL_TEXTENCODING_UTF8)));
+            bool bLegacy;
+            if (rUIXMLDescription == "cui/ui/textanimtabpage.ui")
+                bLegacy = false;
+            else
+                bLegacy = true;
+            std::unique_ptr<VclBuilder> xBuilder(new VclBuilder(pDialog, VclBuilderContainer::getUIRootDir(), OStringToOUString(rUIXMLDescription, RTL_TEXTENCODING_UTF8), OString(), css::uno::Reference<css::frame::XFrame>(), bLegacy));
             vcl::Window *pRoot = xBuilder->get_widget_root();
             Dialog *pRealDialog = dynamic_cast<Dialog*>(pRoot);
 
