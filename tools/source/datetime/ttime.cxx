@@ -288,7 +288,7 @@ sal_Int32 tools::Time::GetMSFromTime() const
            ( nNanoSec/1000000 +
              nSec  * 1000 +
              nMin  * 60000 +
-             nHour * 360000 );
+             nHour * 3600000 );
 }
 
 void tools::Time::MakeTimeFromMS( sal_Int32 nMS )
@@ -467,5 +467,11 @@ sal_uInt64 tools::Time::GetMonotonicTicks()
 }
 
 } /* namespace tools */
+
+std::ostream& operator<<(std::ostream& os, const tools::Time& rTime)
+{
+    os << rTime.GetHour() << ":" << rTime.GetMin() << ":" << rTime.GetSec() << ":" << rTime.GetNanoSec();
+    return os;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
