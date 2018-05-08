@@ -845,7 +845,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                             aFontDesc.CharSet = RTL_TEXTENCODING_MS_1252;
 
                     }
-                    else if ( aPropName == "Graphic" )
+                    else if ( aPropName == "GraphicBitmap" )
                         xGraphic = pPropValue[i].Value.get<uno::Reference<graphic::XGraphic>>();
                     else if ( aPropName == "GraphicSize" )
                     {
@@ -882,7 +882,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
 #ifdef DBG_UTIL
                     else if ( ! (
                             ( aPropName == "SymbolTextDistance" )
-                        ||  ( aPropName == "Graphic" ) ) )
+                        ||  ( aPropName == "GraphicBitmap" ) ) )
                     {
                         OSL_FAIL( "Unknown Property" );
                     }
