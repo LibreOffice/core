@@ -1875,7 +1875,6 @@ void TextEngine::RecalcTextPortion( sal_uInt32 nPara, sal_Int32 nStartPos, sal_I
         {
             // remove Portion
             pTEParaPortion->GetTextPortions().erase( pTEParaPortion->GetTextPortions().begin() + nPortion );
-            delete pTP;
         }
         else
         {
