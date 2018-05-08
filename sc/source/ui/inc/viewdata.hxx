@@ -134,10 +134,11 @@ private:
         bool operator() (const value_type& rValue1, const value_type& rValue2) const;
     };
 
+    const index_type MAX_INDEX;
     std::set<value_type, Comp> mData;
 
 public:
-    ScPositionHelper();
+    ScPositionHelper(bool bColumn);
 
     void insert(index_type nIndex, long nPos);
     void removeByIndex(index_type nIndex);
@@ -146,6 +147,7 @@ public:
     const value_type& getNearestByIndex(index_type nIndex) const;
     const value_type& getNearestByPosition(long nPos) const;
     long getPosition(index_type nIndex) const;
+    long computePosition(index_type nIndex, const std::function<long (index_type)>& getSizePx);
 };
 
 class ScBoundsProvider
