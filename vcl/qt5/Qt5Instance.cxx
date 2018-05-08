@@ -24,6 +24,7 @@
 #include "Qt5Data.hxx"
 #include "Qt5FilePicker.hxx"
 #include "Qt5Frame.hxx"
+#include "Qt5Menu.hxx"
 #include "Qt5Object.hxx"
 #include "Qt5Timer.hxx"
 #include "Qt5VirtualDevice.hxx"
@@ -108,6 +109,28 @@ Qt5Instance::CreateVirtualDevice(SalGraphics* pGraphics, long& nDX, long& nDY, D
         pVD->SetSize(nDX, nDY);
         return pVD;
     }
+}
+
+SalMenu* Qt5Instance::CreateMenu( bool bMenuBar, Menu* pVCLMenu )
+{
+    Qt5Menu* pSalMenu = new Qt5Menu( bMenuBar );
+    pSalMenu->SetMenu( pVCLMenu );
+    return pSalMenu;
+}
+
+void Qt5Instance::DestroyMenu( SalMenu* pMenu )
+{
+    delete pMenu;
+}
+
+SalMenuItem* Qt5Instance::CreateMenuItem( const SalItemParams* pItemData )
+{
+    return new Qt5MenuItem( pItemData );
+}
+
+void Qt5Instance::DestroyMenuItem( SalMenuItem* pItem )
+{
+    delete pItem;
 }
 
 SalTimer* Qt5Instance::CreateSalTimer() { return new Qt5Timer(); }
