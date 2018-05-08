@@ -9,10 +9,7 @@
 
 #include <test/unoapi_property_testers.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-
 #include <cppunit/extensions/HelperMacros.h>
 
 using namespace css;
@@ -37,6 +34,19 @@ void testBooleanProperty(uno::Reference<beans::XPropertySet> const& xPropertySet
     OString msgSet
         = "Unable to set PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), !bPropertyGet, bPropertySet);
+}
+
+void testBooleanOptionalProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
+                                 const OUString& rName)
+{
+    try
+    {
+        testBooleanProperty(xPropertySet, rName);
+    }
+    catch (css::beans::UnknownPropertyException /*ex*/)
+    {
+        // ignore if the property is unknown as it is optional
+    }
 }
 
 void testBooleanReadonlyProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
@@ -175,6 +185,19 @@ void testShortReadonlyProperty(uno::Reference<beans::XPropertySet> const& xPrope
     CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), nPropertyGet, nPropertySet);
 }
 
+void testStringOptionalProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
+                                const OUString& rName, const OUString& rValue)
+{
+    try
+    {
+        testStringProperty(xPropertySet, rName, rValue);
+    }
+    catch (css::beans::UnknownPropertyException /*ex*/)
+    {
+        // ignore if the property is unknown as it is optional
+    }
+}
+
 void testStringProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
                         const OUString& name, const OUString& rValue)
 {
@@ -213,6 +236,27 @@ void testStringReadonlyProperty(uno::Reference<beans::XPropertySet> const& xProp
     OString msgSet = "Able to set PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), sPropertyGet, sPropertySet);
 }
+
+void testColorProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
+                       const OUString& name, const util::Color& rValue)
+{
+    uno::Any aNewValue;
+
+    util::Color sPropertyGet;
+    util::Color sPropertySet;
+
+    OString msgGet
+        = "Unable to get PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_MESSAGE(msgGet.getStr(), xPropertySet->getPropertyValue(name) >>= sPropertyGet);
+
+    aNewValue <<= rValue;
+    xPropertySet->setPropertyValue(name, aNewValue);
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue(name) >>= sPropertySet);
+    OString msgSet
+        = "Unable to set PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), rValue, sPropertySet);
+}
+
 } // namespace apitest
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
