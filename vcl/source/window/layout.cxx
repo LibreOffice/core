@@ -2344,6 +2344,23 @@ MessageDialog::MessageDialog(vcl::Window* pParent,
     SetType(WindowType::MESSBOX);
     create_owned_areas();
     create_message_area();
+
+    switch (m_eMessageType)
+    {
+        case VclMessageType::Info:
+            SetText(GetStandardInfoBoxText());
+            break;
+        case VclMessageType::Warning:
+            SetText(GetStandardWarningBoxText());
+            break;
+        case VclMessageType::Question:
+            SetText(GetStandardQueryBoxText());
+            m_pImage->SetImage(GetStandardQueryBoxImage());
+            break;
+        case VclMessageType::Error:
+            SetText(GetStandardErrorBoxText());
+            break;
+    }
 }
 
 void MessageDialog::dispose()
