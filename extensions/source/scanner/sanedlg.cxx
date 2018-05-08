@@ -396,7 +396,7 @@ void SaneDlg::InitFields()
             mpReslBox->Enable();
 
             mpReslBox->SetValue( static_cast<long>(fRes) );
-            double *pDouble = nullptr;
+            std::unique_ptr<double[]> pDouble;
             nValue = mrSane.GetRange( nOption, pDouble );
             if( nValue > -1 )
             {
@@ -434,7 +434,6 @@ void SaneDlg::InitFields()
             }
             else
                 mpReslBox->Enable( false );
-            delete [] pDouble;
         }
     }
     else
@@ -485,7 +484,7 @@ void SaneDlg::InitFields()
                     case 3: aBottomRight.setY( static_cast<int>(fValue) );break;
                 }
             }
-            double *pDouble = nullptr;
+            std::unique_ptr<double[]> pDouble;
             nValue = mrSane.GetRange( nOption, pDouble );
             if( nValue > -1 )
             {
@@ -513,7 +512,6 @@ void SaneDlg::InitFields()
                     case 3: aMaxBottomRight.setY( static_cast<int>(fValue) );break;
                 }
             }
-            delete [] pDouble;
             pField->Enable();
         }
         else
@@ -787,7 +785,7 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit&, rEdit, void )
             int nOption = mrSane.GetOptionByName( "resolution" );
             if( nOption != -1 )
             {
-                double* pDouble = nullptr;
+                std::unique_ptr<double[]> pDouble;
                 int nValues = mrSane.GetRange( nOption, pDouble );
                 if( nValues > 0 )
                 {
@@ -807,7 +805,6 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit&, rEdit, void )
                     if( fRes > pDouble[ 1 ] )
                         fRes = pDouble[ 1 ];
                 }
-                delete[] pDouble;
                 mpReslBox->SetValue( static_cast<sal_uLong>(fRes) );
             }
         }
@@ -1021,18 +1018,13 @@ void SaneDlg::EstablishStringRange()
 
 void SaneDlg::EstablishQuantumRange()
 {
-    if( mpRange )
-    {
-        delete [] mpRange;
-        mpRange = nullptr;
-    }
+    mpRange.reset();
     int nValues = mrSane.GetRange( mnCurrentOption, mpRange );
     if( nValues == 0 )
     {
         mfMin = mpRange[ 0 ];
         mfMax = mpRange[ 1 ];
-        delete [] mpRange;
-        mpRange = nullptr;
+        mpRange.reset();
         EstablishNumericOption();
     }
     else if( nValues > 0 )
@@ -1485,11 +1477,10 @@ bool SaneDlg::SetAdjustedNumericalValue(
     if( nElement < 0 || nElement >= mrSane.GetOptionElements( nOption ) )
         return false;
 
-    double* pValues = nullptr;
+    std::unique_ptr<double[]> pValues;
     int nValues;
     if( ( nValues = mrSane.GetRange( nOption, pValues ) ) < 0 )
     {
-        delete [] pValues;
         return false;
     }
 
@@ -1516,7 +1507,6 @@ bool SaneDlg::SetAdjustedNumericalValue(
         if( fValue > pValues[1] )
             fValue = pValues[1];
     }
-    delete [] pValues;
     mrSane.SetOptionValue( nOption, fValue, nElement );
     SAL_INFO("extensions.scanner", "yields " << fValue);
 
