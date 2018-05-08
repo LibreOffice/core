@@ -493,4 +493,5 @@ Error_Function:
 	_PropertyGet = EMPTY
 	GoTo Exit_Function
 End Function		&apos;	_PropertyGet	V1.1.0
+
 </script:module>

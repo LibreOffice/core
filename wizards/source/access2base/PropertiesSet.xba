@@ -590,4 +590,5 @@ Error_Function:
 	TraceError(TRACEABORT, Err, &quot;_setProperty&quot;, Erl)
 	GoTo Exit_Function
 End Function		&apos;	_setProperty	V0.9.1
+
 </script:module>

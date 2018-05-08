@@ -1860,4 +1860,5 @@ Const cstSingleQuote = &quot;&apos;&quot;
 	_ReplaceSquareBrackets = Trim(Join(vSubStrings, cstSingleQuote))
 	
 End Function	&apos;	ReplaceSquareBrackets		V1.1.0
+
 </script:module>

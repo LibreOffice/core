@@ -1212,4 +1212,5 @@ Exit_Function:
 	Set _PropertiesList = vPropertiesList
 	Exit Function
 End Function		&apos;	PropertiesList		V0.9.0
+
 </script:module>

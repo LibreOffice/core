@@ -577,4 +577,5 @@ Error_Function:
 	_PropertySet = False
 	GoTo Exit_Function
 End Function			&apos;	_PropertySet
+
 </script:module>

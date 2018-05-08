@@ -1295,5 +1295,4 @@ Private Function _UTF8Encode(ByVal psChar As String) As String
 
 End Function	&apos;	_UTF8Encode V1.4.0
 
-
 </script:module>

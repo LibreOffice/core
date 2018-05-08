@@ -2650,4 +2650,5 @@ Dim oShell As Object
 	oShell.execute(sCommand, &quot;&quot; , com.sun.star.system.SystemShellExecuteFlags.DEFAULTS)
 
 End Sub				&apos;	_ShellExecute			V0.8.5
+
 </script:module>

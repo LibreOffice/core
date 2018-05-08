@@ -326,4 +326,5 @@ Const cstEqualArray = &quot; = (&quot;, cstEqual = &quot; = &quot;
 	_StrToPropValues = vResult
 
 End Function
+
 </script:module>

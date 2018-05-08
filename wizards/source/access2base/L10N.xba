@@ -536,5 +536,4 @@ Dim oLocale as Object
 	_GetLocale = oLocale.getByName(&quot;ooLocale&quot;)
 End Function	&apos;	GetLocale			V0.8.9
 
-
 </script:module>

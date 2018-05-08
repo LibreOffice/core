@@ -144,5 +144,4 @@ Error_Function:
 	GoTo Exit_Function
 End Function		&apos;	_PropertyGet
 
-
 </script:module>

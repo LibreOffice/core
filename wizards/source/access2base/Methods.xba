@@ -294,4 +294,5 @@ Error_Function:
 	TraceError(TRACEABORT, Err,&quot;_OptionGroup&quot;, Erl)
 	GoTo Exit_Function
 End Function		&apos;	_OptionGroup	V1.1.0
+
 </script:module>

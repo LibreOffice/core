@@ -284,4 +284,5 @@ Trace_Error:
 	TraceError(TRACEABORT, ERRDBNOTCONNECTED, Utils._CalledSub(), 0, 1)
 	Goto Exit_Function
 End Function		&apos;	_CurrentDb
+
 </script:module>
