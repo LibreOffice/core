@@ -510,6 +510,30 @@ void ORptExport::collectStyleNames(sal_Int32 _nFamily,const ::std::vector< sal_I
     }
 }
 
+void ORptExport::collectStyleNames(sal_Int32 _nFamily, const ::std::vector< sal_Int32>& _aSize, const ::std::vector< sal_Int32>& _aSizeAutoGrow, ORptExport::TStringVec& _rStyleNames)
+{
+    ::std::vector< XMLPropertyState > aPropertyStates;
+    aPropertyStates.emplace_back(0);
+    aPropertyStates.emplace_back(false);
+    aPropertyStates[1].mnIndex = 1;
+    ::std::vector<sal_Int32>::const_iterator aIter = _aSize.begin();
+    ::std::vector<sal_Int32>::const_iterator aIter2 = aIter + 1;
+    ::std::vector<sal_Int32>::const_iterator aEnd = _aSize.end();
+    for (;aIter2 != aEnd; ++aIter, ++aIter2)
+    {
+        sal_Int32 nValue = static_cast<sal_Int32>(*aIter2 - *aIter);
+        aPropertyStates[0].maValue <<= nValue;
+        ::std::vector<sal_Int32>::const_iterator aAutoGrow = ::std::find(_aSizeAutoGrow.begin(), _aSizeAutoGrow.end(), *aIter2);
+        bool bAutoGrow = aAutoGrow != _aSizeAutoGrow.end();
+        //sal_Int32 nAutogrow = aAutoGrow != _aSizeAutoGrow.end() ? 1 : 0;
+        /*if(aAutoGrow!= _aSizeAutoGrow.end())
+            aPropertyStates[1].maValue <<= sal_Int32(1);
+        else*/
+        aPropertyStates[1].maValue <<= bAutoGrow;
+        _rStyleNames.push_back(GetAutoStylePool()->Add(_nFamily, aPropertyStates));
+    }
+}
+
 void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
 {
     OSL_ENSURE(_xProp != nullptr,"Section is NULL -> GPF");
@@ -530,7 +554,13 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
     aRowPos.push_back(0);
     aRowPos.push_back(_xProp->getHeight());
 
+
+    ::std::vector<sal_Int32> aRowPosAutoGrow;
+    aRowPosAutoGrow.reserve(2 * (nCount + 1));
+
+
     sal_Int32 i;
+    //bool bAuto = false;
     for (i = 0 ; i< nCount ; ++i)
     {
         Reference<XReportComponent> xReportElement(_xProp->getByIndex(i),uno::UNO_QUERY);
@@ -558,6 +588,12 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
         aRowPos.push_back(nY);
         nY += xReportElement->getHeight();
         aRowPos.push_back(nY); // --nY why?
+        bool bAutoGrow = xReportElement->getAutoGrow();
+        if (bAutoGrow)
+        {
+            //bAuto = true;
+            aRowPosAutoGrow.push_back(nY);
+        }
     }
 
     ::std::sort(aColumnPos.begin(),aColumnPos.end(),::std::less<sal_Int32>());
@@ -572,10 +608,12 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
         ).first;
     lcl_calculate(aColumnPos,aRowPos,aInsert->second);
 
+
+
     TGridStyleMap::iterator aPos = m_aColumnStyleNames.emplace(_xProp.get(),TStringVec()).first;
     collectStyleNames(XML_STYLE_FAMILY_TABLE_COLUMN,aColumnPos,aPos->second);
     aPos = m_aRowStyleNames.emplace(_xProp.get(),TStringVec()).first;
-    collectStyleNames(XML_STYLE_FAMILY_TABLE_ROW,aRowPos,aPos->second);
+    collectStyleNames(XML_STYLE_FAMILY_TABLE_ROW,aRowPos, aRowPosAutoGrow,aPos->second);
 
     sal_Int32 x1 = 0;
     sal_Int32 y1 = 0;
