@@ -80,9 +80,9 @@ bool SelectionController::SetStyleSheet( SfxStyleSheet* /*pStyleSheet*/, bool /*
     return false;
 }
 
-bool SelectionController::GetMarkedObjModel( SdrPage* /*pNewPage*/ )
+SdrObject* SelectionController::GetMarkedSdrObjClone( SdrModel& /*rTargetModel*/ )
 {
-    return false;
+    return nullptr;
 }
 
 bool SelectionController::PasteObjModel( const SdrModel& /*rModel*/ )

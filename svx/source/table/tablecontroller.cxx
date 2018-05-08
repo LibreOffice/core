@@ -2615,34 +2615,39 @@ bool SvxTableController::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
     return false;
 }
 
-
-bool SvxTableController::GetMarkedObjModel( SdrPage* pNewPage )
+SdrObject* SvxTableController::GetMarkedSdrObjClone(SdrModel& rTargetModel)
 {
-    if( mxTableObj.is() && mbCellSelectionMode && pNewPage ) try
-    {
-        sdr::table::SdrTableObj& rTableObj(*mxTableObj.get());
-        CellPos aStart, aEnd;
-        getSelectedCells(aStart, aEnd);
+    SdrTableObj* pRetval(nullptr);
+    sdr::table::SdrTableObj* pCurrentSdrTableObj(GetTableObj());
 
-        // Clone to new SdrModel
-        SdrTableObj* pNewTableObj(
-            rTableObj.CloneRange(
-                aStart,
-                aEnd,
-                pNewPage->getSdrModelFromSdrPage()));
-        pNewTableObj->SetPage(pNewPage);
-        pNewPage->InsertObject(pNewTableObj, SAL_MAX_SIZE);
-
-        return true;
-    }
-    catch( Exception& )
+    if(nullptr == pCurrentSdrTableObj)
     {
-        OSL_FAIL( "svx::SvxTableController::GetMarkedObjModel(), exception caught!" );
+        return pRetval;
     }
 
-    return false;
+    if(!mxTableObj.is())
+    {
+        return pRetval;
+    }
+
+    // get selection and create full selection
+    CellPos aStart, aEnd;
+    const CellPos aFullStart, aFullEnd(mxTable->getColumnCount()-1, mxTable->getRowCount()-1);
+
+    getSelectedCells(aStart, aEnd);
+
+    // compare to see if we have a partial selection
+    if(aStart != aFullStart || aEnd != aFullEnd)
+    {
+        // create full clone
+        pRetval = pCurrentSdrTableObj->CloneSdrObject(rTargetModel);
+
+        // limit SdrObject's TableModel to partial selection
+        pRetval->CropTableModelToSelection(aStart, aEnd);
+    }
+
+    return pRetval;
 }
-
 
 bool SvxTableController::PasteObjModel( const SdrModel& rModel )
 {
