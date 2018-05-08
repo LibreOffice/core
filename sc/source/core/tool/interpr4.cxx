@@ -129,7 +129,7 @@ sal_uInt32 ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, ScRefCellV
     FormulaError nErr;
     if (rCell.isEmpty())
     {
-        nFormat = pDok->GetNumberFormat( rPos );
+        nFormat = pDok->GetNumberFormat( mrContext, rPos );
         nErr = FormulaError::NONE;
     }
     else
@@ -138,7 +138,7 @@ sal_uInt32 ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, ScRefCellV
             nErr = rCell.mpFormula->GetErrCode();
         else
             nErr = FormulaError::NONE;
-        nFormat = pDok->GetNumberFormat( rPos );
+        nFormat = pDok->GetNumberFormat( mrContext, rPos );
     }
 
     SetError(nErr);
@@ -150,7 +150,7 @@ double ScInterpreter::GetValueCellValue( const ScAddress& rPos, double fOrig )
 {
     if ( bCalcAsShown && fOrig != 0.0 )
     {
-        sal_uInt32 nFormat = pDok->GetNumberFormat( rPos );
+        sal_uInt32 nFormat = pDok->GetNumberFormat( mrContext, rPos );
         fOrig = pDok->RoundValueAsShown( fOrig, nFormat );
     }
     return fOrig;
