@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_f69c3c5f",
+        "filename": "sw/inc/calbck.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-08T07:10:14Z",
+      "side": 1,
+      "message": "you probably need:\n\n   WriterMultiListener\u0026 operator\u003d( WriterMultiListenerconst \u0026 ) \u003d delete; // MSVC2015 workaround\n    WriterMultiListener( WriterMultiListenerconst \u0026 ) \u003d delete; // MSVC2015 workaround\n\nhere",
+      "revId": "37a8f9b00743aa1dec02cb166796dd56dc8aaa86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
