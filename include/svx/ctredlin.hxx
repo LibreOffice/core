@@ -33,7 +33,6 @@
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/link.hxx>
-#include <tools/time.hxx>
 #include <tools/wintypes.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/image.hxx>

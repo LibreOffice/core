@@ -10,12 +10,13 @@
 #include <comphelper/random.hxx>
 #include <rtl/math.hxx>
 #include <rtl/string.hxx>
-#include <tools/time.hxx>
+
 #include <vcl/keycodes.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/debugevent.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/menu.hxx>
+
 #include <window.h>
 #include <salwtype.hxx>
 

@@ -20,9 +20,6 @@
 #include <config_features.h>
 
 #include <i18nlangtag/mslangid.hxx>
-
-#include <tools/time.hxx>
-
 #include <unotools/fontcfg.hxx>
 #include <unotools/confignode.hxx>
 

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:54:58 using:
+ Generated on 2018-05-09 05:22:01 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -21,6 +21,7 @@
 */
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <climits>
 #include <cmdid.h>
@@ -28,6 +29,7 @@
 #include <config_global.h>
 #include <cstddef>
 #include <cstdlib>
+#include <cstring>
 #include <deque>
 #include <exception>
 #include <float.h>
@@ -94,6 +96,10 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/singletonref.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/GraphicObject.hxx>
+#include <vcl/IContext.hxx>
+#include <vcl/IDialogRenderable.hxx>
+#include <vcl/abstdlg.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
@@ -111,11 +117,9 @@
 #include <vcl/errinf.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/GraphicObject.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>
@@ -127,8 +131,10 @@
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
+#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/spinfld.hxx>
+#include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/tabctrl.hxx>
@@ -136,8 +142,10 @@
 #include <vcl/task.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/vclenum.hxx>
+#include <vcl/vclmedit.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <AnnotationWin.hxx>
@@ -149,6 +157,7 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentState.hxx>
@@ -168,8 +177,10 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
@@ -203,15 +214,18 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -230,6 +244,7 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -242,13 +257,13 @@
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/XAccounting.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <comphelper/classids.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/fileformat.h>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
@@ -290,13 +305,16 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/charrotateitem.hxx>
+#include <editeng/charscaleitem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/contouritem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/emphasismarkitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/flstitem.hxx>
@@ -317,12 +335,15 @@
 #include <editeng/pbinitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/protitem.hxx>
+#include <editeng/rsiditem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/shaditem.hxx>
+#include <editeng/shdditem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/spltitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/tstpitem.hxx>
+#include <editeng/twolinesitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/unolingu.hxx>
@@ -376,6 +397,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <init.hxx>
+#include <iodetect.hxx>
 #include <istyleaccess.hxx>
 #include <libxml/xmlwriter.h>
 #include <lineinfo.hxx>
@@ -392,6 +414,8 @@
 #include <o3tl/any.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/make_unique.hxx>
+#include <o3tl/safeint.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <pagedesc.hxx>
@@ -404,7 +428,6 @@
 #include <reffld.hxx>
 #include <sax/fastattribs.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/chalign.hxx>
 #include <sfx2/childwin.hxx>
@@ -445,6 +468,7 @@
 #include <svl/intitem.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/itempool.hxx>
+#include <svl/itemprop.hxx>
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
 #include <svl/lstner.hxx>
@@ -458,11 +482,13 @@
 #include <svl/style.hxx>
 #include <svl/stylesheetuser.hxx>
 #include <svl/svldllapi.h>
+#include <svl/typedwhich.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svtools/ctrltool.hxx>
+#include <svtools/embedhlp.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
@@ -473,7 +499,6 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/valueset.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <svx/dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/fmglob.hxx>
@@ -482,6 +507,7 @@
 #include <svx/pageitem.hxx>
 #include <svx/ruler.hxx>
 #include <svx/rulritem.hxx>
+#include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svditer.hxx>
@@ -534,6 +560,7 @@
 #include <tools/datetime.hxx>
 #include <tools/datetimeutils.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>

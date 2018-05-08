@@ -19,7 +19,6 @@
 
 #include <tools/date.hxx>
 #include <tools/lineend.hxx>
-#include <tools/time.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svl/itempool.hxx>

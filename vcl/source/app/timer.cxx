@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/time.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/scheduler.hxx>
+
 #include <saltimer.hxx>
 #include <schedulerimpl.hxx>
 

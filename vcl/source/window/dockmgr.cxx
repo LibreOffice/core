@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/time.hxx>
-
-#include <brdwin.hxx>
-#include <svdata.hxx>
-#include <salframe.hxx>
-#include <window.h>
-
 #include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/dockwin.hxx>
@@ -34,6 +27,11 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/unowrap.hxx>
 #include <vcl/settings.hxx>
+
+#include <brdwin.hxx>
+#include <svdata.hxx>
+#include <salframe.hxx>
+#include <window.h>
 
 #define DOCKWIN_FLOATSTYLES         (WB_SIZEABLE | WB_MOVEABLE | WB_CLOSEABLE | WB_STANDALONE | WB_ROLLABLE )
 

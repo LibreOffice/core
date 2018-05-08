@@ -20,7 +20,6 @@
 
 #include <file/FDateFunctions.hxx>
 #include <tools/date.hxx>
-#include <tools/time.hxx>
 #include <tools/datetime.hxx>
 
 using namespace connectivity;

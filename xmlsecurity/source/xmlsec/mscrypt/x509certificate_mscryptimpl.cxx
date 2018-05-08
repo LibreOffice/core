@@ -36,7 +36,6 @@
 #include <memory>
 #include <utility>
 #include <vector>
-#include <tools/time.hxx>
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno ;

@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <config_features.h>
 
-#include <tools/time.hxx>
+#include <sal/types.h>
+#include <comphelper/processfactory.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
@@ -32,22 +32,17 @@
 #include <vcl/cursor.hxx>
 #include <vcl/sysdata.hxx>
 
-#include <sal/types.h>
-
 #include <window.h>
 #include <outdev.h>
 #include <svdata.hxx>
 #include <salobj.hxx>
 #include <salgdi.hxx>
 #include <salframe.hxx>
-
 #include <dndlistenercontainer.hxx>
 #include <dndeventdispatcher.hxx>
 
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
-
-#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star::uno;
 
