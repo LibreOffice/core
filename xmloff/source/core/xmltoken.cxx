@@ -3256,6 +3256,8 @@ namespace xmloff { namespace token {
         TOKEN( "forced-exponent-sign",            XML_FORCED_EXPONENT_SIGN ),
         TOKEN( "min-decimal-places",              XML_MIN_DECIMAL_PLACES ),
 
+        TOKEN( "creator-initials",                XML_CREATOR_INITIALS ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, nullptr,                       XML_TOKEN_END }
 #else

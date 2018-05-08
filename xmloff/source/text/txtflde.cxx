@@ -1760,6 +1760,7 @@ void XMLTextFieldExport::ExportFieldHelper(
             OUString aInitials( GetStringProperty(sPropertyInitials, rPropSet) );
             if( !aInitials.isEmpty() )
             {
+                // TODO: see OFFICE-3776 export meta:creator-initials for ODF 1.3
                 SvXMLElementExport aCreatorElem( GetExport(), XML_NAMESPACE_LO_EXT,
                         XML_SENDER_INITIALS, true,
                         false );
