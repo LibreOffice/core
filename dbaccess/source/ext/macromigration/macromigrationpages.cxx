@@ -79,8 +79,8 @@ namespace dbmm
         get(m_pStartMigration, "startmigrate");
         get(m_pBrowseSaveAsLocation, "browse");
         get(m_pSaveAsLocation, "location");
-        m_pLocationController = new svx::DatabaseLocationInputController(
-            _rParentDialog.getComponentContext(), *m_pSaveAsLocation, *m_pBrowseSaveAsLocation);
+        m_pLocationController.reset( new svx::DatabaseLocationInputController(
+            _rParentDialog.getComponentContext(), *m_pSaveAsLocation, *m_pBrowseSaveAsLocation) );
 
         m_pSaveAsLocation->SetModifyHdl( LINK( this, SaveDBDocPage, OnLocationModified ) );
         m_pSaveAsLocation->SetDropDownLineCount( 20 );
@@ -95,7 +95,7 @@ namespace dbmm
 
     void SaveDBDocPage::dispose()
     {
-        delete m_pLocationController;
+        m_pLocationController.reset();
         m_pSaveAsLocation.clear();
         m_pBrowseSaveAsLocation.clear();
         m_pStartMigration.clear();
