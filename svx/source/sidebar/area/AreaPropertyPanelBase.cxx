@@ -418,7 +418,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
                         {
                             const XBitmapEntry* pXPatternEntry = pXPatternList->GetBitmap(mnLastPosPattern);
                             aBitmap = pXPatternEntry->GetGraphicObject();
-                            aName = mpLbFillAttr->GetSelectedEntry();
+                            aName = pXPatternEntry->GetName();
                             mpLbFillAttr->SelectEntryPos(mnLastPosPattern);
                         }
                     }
