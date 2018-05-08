@@ -470,7 +470,7 @@ weld::Container* SalInstanceWidget::weld_parent() const
 class SalInstanceWindow : public SalInstanceContainer, public virtual weld::Window
 {
 private:
-    VclPtr<SystemWindow> m_xWindow;
+    VclPtr<vcl::Window> m_xWindow;
 
     DECL_LINK(HelpHdl, vcl::Window&, bool);
 
@@ -489,7 +489,7 @@ private:
     }
 
 public:
-    SalInstanceWindow(SystemWindow* pWindow, bool bTakeOwnership)
+    SalInstanceWindow(vcl::Window* pWindow, bool bTakeOwnership)
         : SalInstanceContainer(pWindow, bTakeOwnership)
         , m_xWindow(pWindow)
     {
@@ -545,7 +545,17 @@ public:
 
     virtual void resize_to_request() override
     {
-        m_xWindow->setOptimalLayoutSize();
+        if (SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get()))
+        {
+            pSysWin->setOptimalLayoutSize();
+            return;
+        }
+        if (DockingWindow* pDockWin = dynamic_cast<DockingWindow*>(m_xWindow.get()))
+        {
+            pDockWin->setOptimalLayoutSize();
+            return;
+        }
+        assert(false && "must be system or docking window");
     }
 
     virtual void window_move(int x, int y) override
@@ -553,7 +563,7 @@ public:
         m_xWindow->SetPosPixel(Point(x, y));
     }
 
-    SystemWindow* getWindow()
+    vcl::Window* getWindow()
     {
         return m_xWindow.get();
     }
@@ -2237,9 +2247,9 @@ weld::Window* SalFrame::GetFrameWeld() const
     {
         vcl::Window* pWindow = GetWindow();
         pWindow = pWindow ? pWindow->ImplGetWindow() : nullptr;
-        SystemWindow* pSystemWindow = pWindow ? pWindow->GetSystemWindow() : nullptr;
-        if (pSystemWindow)
-            m_xFrameWeld.reset(new SalInstanceWindow(pSystemWindow, false));
+        assert(!pWindow || (pWindow->IsSystemWindow() || pWindow->IsDockingWindow()));
+        if (pWindow)
+            m_xFrameWeld.reset(new SalInstanceWindow(pWindow, false));
     }
     return m_xFrameWeld.get();
 }
