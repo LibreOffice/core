@@ -1033,14 +1033,18 @@ SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)
     bNoShear = rObj.bNoShear;
     bNoMirror = rObj.bNoMirror;
     bDisableAutoWidthOnDragging = rObj.bDisableAutoWidthOnDragging;
-
-    OutlinerParaObject* pNewOutlinerParaObject = nullptr;
-
     SdrText* pText = getActiveText();
 
     if( pText && rObj.HasText() )
     {
+        // before pNewOutlinerParaObject was created the same, but
+        // set at mpText (outside this scope), but mpText might be
+        // empty (this operator== seems not prepared for MultiText
+        // objects). In the current form it makes only sense to
+        // create locally and use locally on a known existing SdrText
         const Outliner* pEO=rObj.pEdtOutl;
+        OutlinerParaObject* pNewOutlinerParaObject = nullptr;
+
         if (pEO!=nullptr)
         {
             pNewOutlinerParaObject = pEO->CreateParaObject();
@@ -1049,9 +1053,10 @@ SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)
         {
             pNewOutlinerParaObject = new OutlinerParaObject(*rObj.getActiveText()->GetOutlinerParaObject());
         }
+
+        pText->SetOutlinerParaObject( pNewOutlinerParaObject );
     }
 
-    mpText->SetOutlinerParaObject( pNewOutlinerParaObject );
     ImpSetTextStyleSheetListeners();
     return *this;
 }
