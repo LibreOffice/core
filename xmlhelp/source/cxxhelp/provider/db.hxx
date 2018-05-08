@@ -52,8 +52,8 @@ namespace helpdatafileproxy {
     class Hdf
     {
         OUString       m_aFileURL;
-        StringToDataMap*    m_pStringToDataMap;
-        StringToValPosMap*  m_pStringToValPosMap;
+        std::unique_ptr<StringToDataMap>   m_pStringToDataMap;
+        std::unique_ptr<StringToValPosMap> m_pStringToValPosMap;
         css::uno::Reference< css::ucb::XSimpleFileAccess3 >
                             m_xSFA;
 
@@ -81,8 +81,7 @@ namespace helpdatafileproxy {
         {
             OSL_ASSERT(comphelper::isFileUrl(rFileURL));
         }
-        ~Hdf()
-            { releaseHashMap(); }
+        ~Hdf();
 
         void createHashMap( bool bOptimizeForPerformance );
         void releaseHashMap();
