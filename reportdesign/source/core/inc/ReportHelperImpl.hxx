@@ -74,6 +74,15 @@ uno::Reference< report::XSection > SAL_CALL clazz::getSection() \
     ::osl::MutexGuard aGuard(m_aMutex); \
     uno::Reference< container::XChild > xParent(getParent(  ),uno::UNO_QUERY); \
     return lcl_getSection(xParent); \
+} \
+sal_Bool SAL_CALL clazz::getAutoGrow() \
+{ \
+    ::osl::MutexGuard aGuard(m_aMutex); \
+    return (arg).m_bAutoGrow; \
+} \
+void SAL_CALL clazz::setAutoGrow(sal_Bool _autogrow) \
+{ \
+    set(PROPERTY_AUTOGROW,static_cast<bool>(_autogrow),(arg).m_bAutoGrow); \
 }
 
 #define REPORTCOMPONENT_IMPL(clazz,arg) \

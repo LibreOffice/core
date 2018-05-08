@@ -89,6 +89,7 @@
 #define PROPERTY_HELPFILENAME "HelpFileName"
 #define PROPERTY_WIDTH "Width"
 #define PROPERTY_ROW_HEIGHT "RowHeight"
+#define PROPERTY_AUTOGROW "AutoGrow"
 #define PROPERTY_FORMATKEY "FormatKey"
 #define PROPERTY_ALIGN "Align"
 #define PROPERTY_FONT "FontDescriptor"

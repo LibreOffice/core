@@ -73,6 +73,8 @@
 #define PROPERTY_WIDTH "Width"
 #define PROPERTY_POSITIONX "PositionX"
 #define PROPERTY_POSITIONY "PositionY"
+#define PROPERTY_AUTOGROW "AutoGrow"
+#define PROPERTY_MINHEIGHT "MinHeight"
 #define PROPERTY_DATAFIELD "DataField"
 #define PROPERTY_PARAADJUST "ParaAdjust"
 #define PROPERTY_FONTDESCRIPTOR "FontDescriptor"
