@@ -109,11 +109,10 @@ public:
         sal_Int32 nColumns,
         sal_Int32 nRows);
 
+    // helper to limit existing TableModel to a given selection
+    void CropTableModelToSelection(const CellPos& rStart, const CellPos& rEnd);
+
     // Table stuff
-    SdrTableObj* CloneRange(
-        const CellPos& rStartPos,
-        const CellPos& rEndPos,
-        SdrModel& rTargetModel);
     void DistributeColumns( sal_Int32 nFirstColumn, sal_Int32 nLastColumn );
     void DistributeRows( sal_Int32 nFirstRow, sal_Int32 nLastRow );
 

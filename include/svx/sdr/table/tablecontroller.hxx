@@ -96,7 +96,7 @@ public:
     SVX_DLLPRIVATE virtual bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const override;
     SVX_DLLPRIVATE virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll) override;
 
-    SVX_DLLPRIVATE virtual bool GetMarkedObjModel( SdrPage* pNewPage ) override;
+    SVX_DLLPRIVATE virtual SdrObject* GetMarkedSdrObjClone( SdrModel& rTargetModel ) override;
     SVX_DLLPRIVATE virtual bool PasteObjModel( const SdrModel& rModel ) override;
 
     SVX_DLLPRIVATE virtual bool hasSelectedCells() const override { return mbCellSelectionMode || mrView.IsTextEdit(); }
