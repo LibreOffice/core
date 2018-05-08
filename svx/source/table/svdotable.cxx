@@ -198,7 +198,7 @@ public:
     std::vector<std::unique_ptr<SdrUndoAction>> maUndos;
     bool mbSkipChangeLayout;
 
-    void SetModel(SdrModel* pNewModelel);
+    void CropTableModelToSelection(const CellPos& rStart, const CellPos& rEnd);
 
     CellRef getCell( const CellPos& rPos ) const;
     void LayoutTable( tools::Rectangle& rArea, bool bFitWidth, bool bFitHeight );
@@ -270,6 +270,96 @@ SdrTableObjImpl::~SdrTableObjImpl()
 }
 
 
+void SdrTableObjImpl::CropTableModelToSelection(const CellPos& rStart, const CellPos& rEnd)
+{
+    if(!mxTable.is())
+    {
+        return;
+    }
+
+    const sal_Int32 nColumns(rEnd.mnCol - rStart.mnCol + 1);
+    const sal_Int32 nRows(rEnd.mnRow - rStart.mnRow + 1);
+
+    if(nColumns < 1 || nRows < 1 || nColumns > getColumnCount() || nRows > getRowCount())
+    {
+        return;
+    }
+
+    // tdf#116977 First thought was to create the new TableModel, copy data to it and then exchange
+    // mxTable and dispose old one. This does *not* work, even when all stuff looks nicely referenced
+    // and safe *because* Cell::create gets handed over the current SdrTableObj, hands it to
+    // ::Cell and there the local mxTable is initialized using rTableObj.getTable() (!). Due to This,
+    // the new created Cells in a new created TableModel based on given mpTableObj *will be disposed*
+    // when the old mxTable gets disposed - ARGH!
+    // To avoid, change strategy: Remember old TableModel, reset mxTable immediately - this is the
+    // SdrTableObjImpl of the current SdrTableObj anyways. Luckily, this works as intended...
+
+    // remember old TableModel
+    TableModelRef xOldTable(mxTable);
+
+    // immediately create new one and initialize. This creates ::Cell's which then will use
+    // the correct TableModel (accessed through SdrTableObj, but using local mxTable)
+    mxTable = new TableModel(mpTableObj);
+    mxTable->init(nColumns, nRows);
+
+    // copy cells
+    for( sal_Int32 nRow = 0; nRow < nRows; ++nRow )
+    {
+        for( sal_Int32 nCol = 0; nCol < nColumns; ++nCol ) try
+        {
+            CellRef xTargetCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
+            if( xTargetCell.is() )
+                xTargetCell->cloneFrom( dynamic_cast< Cell* >( xOldTable->getCellByPosition( rStart.mnCol + nCol, rStart.mnRow + nRow ).get() ) );
+        }
+        catch( Exception& )
+        {
+            OSL_FAIL( "SdrTableObj::CropTableModelToSelection(), exception caught!" );
+        }
+    }
+
+    // copy row heights
+    Reference< XTableRows > xNewRows(mxTable->getRows(), UNO_QUERY_THROW );
+    const OUString sHeight( "Height" );
+    for( sal_Int32 nRow = 0; nRow < nRows; ++nRow )
+    {
+        Reference< XPropertySet > xNewSet( xNewRows->getByIndex( nRow ), UNO_QUERY_THROW );
+        xNewSet->setPropertyValue( sHeight, Any( mpLayouter->getRowHeight( rStart.mnRow + nRow ) ) );
+    }
+
+    // copy column widths
+    Reference< XTableColumns > xNewColumns( mxTable->getColumns(), UNO_QUERY_THROW );
+    const OUString sWidth( "Width" );
+    for( sal_Int32 nCol = 0; nCol < nColumns; ++nCol )
+    {
+        Reference< XPropertySet > xNewSet( xNewColumns->getByIndex( nCol ), UNO_QUERY_THROW );
+        xNewSet->setPropertyValue( sWidth, Any( mpLayouter->getColumnWidth( rStart.mnCol + nCol ) ) );
+    }
+
+    // reset layouter which still holds a copy to old TableModel
+    mpLayouter.reset();
+
+    // cleanup old TableModel
+    {
+        Reference< XModifyListener > xListener( static_cast< css::util::XModifyListener* >(this) );
+        xOldTable->removeModifyListener( xListener );
+        xOldTable->dispose();
+        xOldTable.clear();
+    }
+
+    // create and hand over to new TableLayouter
+    mpLayouter.reset(new TableLayouter( mxTable ));
+
+    // add needed listener to react on changes
+    Reference< XModifyListener > xListener( static_cast< css::util::XModifyListener* >(this) );
+    mxTable->addModifyListener( xListener );
+
+    // Apply Style to Cells
+    ApplyCellStyles();
+
+    // layout cropped table
+    LayoutTable( mpTableObj->maRect, false, false );
+}
+
 void SdrTableObjImpl::init( SdrTableObj* pTable, sal_Int32 nColumns, sal_Int32 nRows )
 {
     mpTableObj = pTable;
@@ -285,48 +375,61 @@ void SdrTableObjImpl::init( SdrTableObj* pTable, sal_Int32 nColumns, sal_Int32 n
 
 SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
 {
-    if (this != &rSource)
+    if(this == &rSource)
     {
-        disconnectTableStyle();
-
-        mpLayouter.reset();
-
-        if( mxTable.is() )
-        {
-            Reference< XModifyListener > xListener( static_cast< css::util::XModifyListener* >(this) );
-            mxTable->removeModifyListener( xListener );
-            mxTable->dispose();
-            mxTable.clear();
-        }
-
-        maTableStyle = rSource.maTableStyle;
-
-        mxTable = new TableModel( mpTableObj, rSource.mxTable );
-        mpLayouter.reset(new TableLayouter( mxTable ));
-        Reference< XModifyListener > xListener( static_cast< css::util::XModifyListener* >(this) );
-        mxTable->addModifyListener( xListener );
-        mxTableStyle = rSource.mxTableStyle;
-        ApplyCellStyles();
-        mpTableObj->maRect = mpTableObj->maLogicRect;
-        LayoutTable( mpTableObj->maRect, false, false );
-
-        connectTableStyle();
+        return *this;
     }
-    return *this;
-}
 
+    if(nullptr == mpTableObj || nullptr == rSource.mpTableObj)
+    {
+        // error: need both SdrObjects to successfully copy data
+        return *this;
+    }
 
-void SdrTableObjImpl::SetModel(SdrModel* pNewModelel)
-{
-    // try to find new table style
+    // remove evtl. listeners from local
     disconnectTableStyle();
 
-    Reference< XIndexAccess > xNewTableStyle;
-    if( mxTableStyle.is() ) try
-    {
-        const OUString sStyleName( Reference< XNamed >( mxTableStyle, UNO_QUERY_THROW )->getName() );
+    // reset layouter which holds a copy
+    mpLayouter.reset();
 
-        Reference< XStyleFamiliesSupplier > xSFS( pNewModelel->getUnoModel(), UNO_QUERY_THROW );
+    // cleanup local mxTable if used
+    if( mxTable.is() )
+    {
+        Reference< XModifyListener > xListener( static_cast< css::util::XModifyListener* >(this) );
+        mxTable->removeModifyListener( xListener );
+        mxTable->dispose();
+        mxTable.clear();
+    }
+
+    // copy TableStyle (short internal data)
+    maTableStyle = rSource.maTableStyle;
+
+    // create/copy new mxTable. This will copy all needed cells, too
+    mxTable = new TableModel( mpTableObj, rSource.mxTable );
+
+    // create and hand over to new TableLayouter
+    mpLayouter.reset(new TableLayouter( mxTable ));
+
+    // add needed listener to react on changes
+    Reference< XModifyListener > xListener( static_cast< css::util::XModifyListener* >(this) );
+    mxTable->addModifyListener( xListener );
+
+    // handle TableStyle
+    Reference< XIndexAccess > xNewTableStyle;
+    SdrModel& rSourceSdrModel(rSource.mpTableObj->getSdrModelFromSdrObject());
+    SdrModel& rTargetSdrModel(mpTableObj->getSdrModelFromSdrObject());
+
+    if(rSource.mxTableStyle.is() && &rSourceSdrModel == &rTargetSdrModel)
+    {
+        // source and target model the same -> keep current TableStyle
+        xNewTableStyle = rSource.mxTableStyle;
+    }
+
+    if(!xNewTableStyle.is() && rSource.mxTableStyle.is()) try
+    {
+        // search in traget SdrModel for that TableStyle
+        const OUString sStyleName( Reference< XNamed >( rSource.mxTableStyle, UNO_QUERY_THROW )->getName() );
+        Reference< XStyleFamiliesSupplier > xSFS(rTargetSdrModel.getUnoModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilyNameAccess( xSFS->getStyleFamilies(), UNO_QUERY_THROW );
         const OUString sFamilyName( "table" );
         Reference< XNameAccess > xTableFamilyAccess( xFamilyNameAccess->getByName( sFamilyName ), UNO_QUERY_THROW );
@@ -338,22 +441,33 @@ void SdrTableObjImpl::SetModel(SdrModel* pNewModelel)
         }
         else
         {
-            // copy or?
+            // copy or? Not found, use 1st existing TableStyle (or none)
             Reference< XIndexAccess > xIndexAccess( xTableFamilyAccess, UNO_QUERY_THROW );
             xIndexAccess->getByIndex( 0 ) >>= xNewTableStyle;
         }
     }
     catch( Exception& )
     {
-        OSL_FAIL("svx::SdrTableObjImpl::SetModel(), exception caught!");
+        OSL_FAIL("svx::SdrTableObjImpl::operator=(), exception caught!");
     }
 
+    // set that TableStyle
     mxTableStyle = xNewTableStyle;
 
-    connectTableStyle();
-    update();
-}
+    // Apply Style to Cells
+    ApplyCellStyles();
 
+    // copy geometry
+    mpTableObj->maRect = mpTableObj->maLogicRect;
+
+    // layout cloned table
+    LayoutTable( mpTableObj->maRect, false, false );
+
+    // re-connect to styles (evtl. in new SdrModel)
+    connectTableStyle();
+
+    return *this;
+}
 
 void SdrTableObjImpl::ApplyCellStyles()
 {
@@ -774,9 +888,6 @@ void SdrTableObj::init( sal_Int32 nColumns, sal_Int32 nRows )
         maRect = maLogicRect;
         mpImpl->LayoutTable( maRect, false, false );
     }
-
-    // Also init from old SetModel:
-    mpImpl->SetModel(&getSdrModelFromSdrObject());
 }
 
 
@@ -1642,9 +1753,16 @@ SdrTableObj* SdrTableObj::CloneSdrObject(SdrModel& rTargetModel) const
 SdrTableObj& SdrTableObj::operator=(const SdrTableObj& rObj)
 {
     if( this == &rObj )
+    {
         return *this;
+    }
+
     // call parent
-    SdrObject::operator=(rObj);
+    // before SdrObject::operator= was called which is wrong from
+    // the derivation hierarchy and may leave quite some entries
+    // unititialized. Changed to SdrTextObj::operator=, but had to adapt
+    // usage of pNewOutlinerParaObject/mpText there due to nullptr access
+    SdrTextObj::operator=(rObj);
 
     TableModelNotifyGuard aGuard( mpImpl.is() ? mpImpl->mxTable.get() : nullptr );
 
@@ -1659,7 +1777,10 @@ SdrTableObj& SdrTableObj::operator=(const SdrTableObj& rObj)
     bNoMirror = rObj.bNoMirror;
     bDisableAutoWidthOnDragging = rObj.bDisableAutoWidthOnDragging;
 
+    // use SdrTableObjImpl::operator= now to
+    // copy model data and other stuff (see there)
     *mpImpl = *rObj.mpImpl;
+
     return *this;
 }
 
@@ -2312,73 +2433,15 @@ void SdrTableObj::RestGeoData(const SdrObjGeoData& rGeo)
     ActionChanged();
 }
 
-
-SdrTableObj* SdrTableObj::CloneRange(
-    const CellPos& rStart,
-    const CellPos& rEnd,
-    SdrModel& rTargetModel)
+void SdrTableObj::CropTableModelToSelection(const CellPos& rStart, const CellPos& rEnd)
 {
-    const sal_Int32 nColumns = rEnd.mnCol - rStart.mnCol + 1;
-    const sal_Int32 nRows = rEnd.mnRow - rStart.mnRow + 1;
-
-    SdrTableObj* pNewTableObj(
-        new SdrTableObj(
-            rTargetModel,
-            GetCurrentBoundRect(),
-            nColumns,
-            nRows));
-
-    pNewTableObj->setTableStyleSettings( getTableStyleSettings() );
-    pNewTableObj->setTableStyle( getTableStyle() );
-
-    Reference< XTable > xTable( getTable() );
-    Reference< XTable > xNewTable( pNewTableObj->getTable() );
-
-    if( !xTable.is() || !xNewTable.is() )
+    if(!mpImpl.is())
     {
-        delete pNewTableObj;
-        return nullptr;
+        return;
     }
 
-    // copy cells
-    for( sal_Int32 nRow = 0; nRow < nRows; ++nRow )
-    {
-        for( sal_Int32 nCol = 0; nCol < nColumns; ++nCol ) try
-        {
-            CellRef xTargetCell( dynamic_cast< Cell* >( xNewTable->getCellByPosition( nCol, nRow ).get() ) );
-            if( xTargetCell.is() )
-                xTargetCell->cloneFrom( dynamic_cast< Cell* >( xTable->getCellByPosition( rStart.mnCol + nCol, rStart.mnRow + nRow ).get() ) );
-        }
-        catch( Exception& )
-        {
-            OSL_FAIL( "svx::SvxTableController::GetMarkedObjModel(), exception caught!" );
-        }
-    }
-
-    // copy row heights
-    Reference< XTableRows > xNewRows( xNewTable->getRows(), UNO_QUERY_THROW );
-    const OUString sHeight( "Height" );
-    for( sal_Int32 nRow = 0; nRow < nRows; ++nRow )
-    {
-        Reference< XPropertySet > xNewSet( xNewRows->getByIndex( nRow ), UNO_QUERY_THROW );
-        xNewSet->setPropertyValue( sHeight, Any( mpImpl->mpLayouter->getRowHeight( rStart.mnRow + nRow ) ) );
-    }
-
-    // copy column widths
-    Reference< XTableColumns > xNewColumns( xNewTable->getColumns(), UNO_QUERY_THROW );
-    const OUString sWidth( "Width" );
-    for( sal_Int32 nCol = 0; nCol < nColumns; ++nCol )
-    {
-        Reference< XPropertySet > xNewSet( xNewColumns->getByIndex( nCol ), UNO_QUERY_THROW );
-        xNewSet->setPropertyValue( sWidth, Any( mpImpl->mpLayouter->getColumnWidth( rStart.mnCol + nCol ) ) );
-    }
-
-    pNewTableObj->NbcReformatText();
-    pNewTableObj->SetLogicRect( pNewTableObj->GetCurrentBoundRect() );
-
-    return pNewTableObj;
+    mpImpl->CropTableModelToSelection(rStart, rEnd);
 }
-
 
 void SdrTableObj::DistributeColumns( sal_Int32 nFirstColumn, sal_Int32 nLastColumn )
 {
