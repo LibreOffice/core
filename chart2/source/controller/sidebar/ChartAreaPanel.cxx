@@ -15,8 +15,10 @@
 
 #include <chartview/DrawModelWrapper.hxx>
 
+#include <editeng/memberids.h>
 #include <svx/xfltrit.hxx>
 #include <svx/xflftrit.hxx>
+#include <svx/xbtmpit.hxx>
 #include <svx/unomid.hxx>
 #include <vcl/svapp.hxx>
 
@@ -181,11 +183,27 @@ GraphicObject getXBitmapFromName(const css::uno::Reference<css::frame::XModel>& 
     try
     {
         ViewElementListProvider aProvider = getViewElementListProvider(xModel);
-        XBitmapListRef aRef = aProvider.GetBitmapList();
-        size_t n = aRef->Count();
+        XBitmapListRef aBmpRef = aProvider.GetBitmapList();
+        XPatternListRef aPatRef = aProvider.GetPatternList();
+
+        size_t n = aBmpRef->Count();
         for (size_t i = 0; i < n; ++i)
         {
-            const XBitmapEntry* pBitmap = aRef->GetBitmap(i);
+            const XBitmapEntry* pBitmap = aBmpRef->GetBitmap(i);
+            if (!pBitmap)
+                continue;
+
+            if (pBitmap->GetName().equalsIgnoreAsciiCase(rName))
+            {
+                return GraphicObject(pBitmap->GetGraphicObject());
+            }
+        }
+
+        // perhaps it's a pattern
+        size_t m = aPatRef->Count();
+        for (size_t i = 0; i < m; ++i)
+        {
+            const XBitmapEntry* pBitmap = aPatRef->GetBitmap(i);
             if (!pBitmap)
                 continue;
 
@@ -376,7 +394,12 @@ void ChartAreaPanel::setFillStyleAndBitmap(const XFillStyleItem* pStyleItem,
 
     if (pStyleItem)
         xPropSet->setPropertyValue("FillStyle", css::uno::Any(pStyleItem->GetValue()));
-    xPropSet->setPropertyValue("FillBitmapName", css::uno::Any(rBitmapItem.GetValue()));
+
+    css::uno::Any aBitmap;
+    rBitmapItem.QueryValue(aBitmap, MID_BITMAP);
+    OUString aPreferredName = rBitmapItem.GetName();
+    aBitmap <<= PropertyHelper::addBitmapUniqueNameToTable(aBitmap, css::uno::Reference<css::lang::XMultiServiceFactory>(mxModel, css::uno::UNO_QUERY_THROW), aPreferredName);
+    xPropSet->setPropertyValue("FillBitmapName", aBitmap);
 }
 
 void ChartAreaPanel::updateData()
