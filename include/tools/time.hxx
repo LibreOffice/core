@@ -20,6 +20,7 @@
 #define INCLUDED_TOOLS_TIME_HXX
 
 #include <tools/toolsdllapi.h>
+#include <ostream>
 #include <tools/solar.h>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -152,6 +153,8 @@ public:
 };
 
 } /* namespace tools */
+
+TOOLS_DLLPUBLIC std::ostream& operator<<(std::ostream& os, const tools::Time& rTime);
 
 #endif
 
