@@ -153,6 +153,8 @@ public:
 
 } /* namespace tools */
 
+TOOLS_DLLPUBLIC std::ostream& operator<<(std::ostream& os, const tools::Time& rTime);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
