@@ -64,6 +64,7 @@ private:
     OUString            maCommand;
     Link<const NamedColor&, void> maSelectedLink;
 
+    VclPtr<vcl::Window> mxParentWindow;
     std::shared_ptr<PaletteManager> mxPaletteManager;
     BorderColorStatus&  mrBorderColorStatus;
 
