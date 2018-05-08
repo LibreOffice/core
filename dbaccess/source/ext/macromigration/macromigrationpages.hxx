@@ -83,7 +83,7 @@ namespace dbmm
         VclPtr< ::svt::OFileURLControl>  m_pSaveAsLocation;
         VclPtr<PushButton>             m_pBrowseSaveAsLocation;
         VclPtr<FixedText>              m_pStartMigration;
-        svx::DatabaseLocationInputController* m_pLocationController;
+        std::unique_ptr<svx::DatabaseLocationInputController> m_pLocationController;
 
         // IWizardPageController overridables
         virtual void        initializePage() override;
