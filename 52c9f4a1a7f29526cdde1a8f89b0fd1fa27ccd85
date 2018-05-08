@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_76a92c7b",
+        "filename": "tools/qa/cppunit/test_config.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-08T07:30:02Z",
+      "side": 1,
+      "message": "I think this is going to break out of tree builds with a readonly-source folder (which is a thing, weird I know)",
+      "revId": "52c9f4a1a7f29526cdde1a8f89b0fd1fa27ccd85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
