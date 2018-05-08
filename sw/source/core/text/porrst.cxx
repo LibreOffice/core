@@ -77,12 +77,14 @@ void SwTmpEndPortion::Paint( const SwTextPaintInfo &rInf ) const
 SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
     : SwLinePortion( rPortion )
 {
-    nLineLength = 1;
+    nLineLength = TextFrameIndex(1);
     SetWhichPor( POR_BRK );
 }
 
 TextFrameIndex SwBreakPortion::GetCursorOfst(const sal_uInt16) const
-{ return 0; }
+{
+    return TextFrameIndex(0);
+}
 
 sal_uInt16 SwBreakPortion::GetViewWidth( const SwTextSizeInfo & ) const
 { return 0; }
@@ -102,7 +104,7 @@ bool SwBreakPortion::Format( SwTextFormatInfo &rInf )
     Width( 0 );
     Height( pRoot->Height() );
     SetAscent( pRoot->GetAscent() );
-    if ( rInf.GetIdx()+1 == rInf.GetText().getLength() )
+    if (rInf.GetIdx() + TextFrameIndex(1) == TextFrameIndex(rInf.GetText().getLength()))
         rInf.SetNewLine( true );
     return true;
 }
@@ -118,7 +120,7 @@ SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn,
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
-    nLineLength = 0;
+    nLineLength = TextFrameIndex(0);
     SetWhichPor( POR_KERN );
     if( nKern > 0 )
         Width( nKern );
@@ -131,7 +133,7 @@ SwKernPortion::SwKernPortion( const SwLinePortion& rPortion ) :
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
 
-    nLineLength = 0;
+    nLineLength = TextFrameIndex(0);
     SetWhichPor( POR_KERN );
 }
 
@@ -157,7 +159,7 @@ void SwKernPortion::Paint( const SwTextPaintInfo &rInf ) const
             rInf.CalcRect( *this, &aClipRect );
             SwSaveClip aClip( const_cast<OutputDevice*>(rInf.GetOut()) );
             aClip.ChgClip( aClipRect );
-            rInf.DrawText( "  ", *this, 0, 2, true );
+            rInf.DrawText("  ", *this, TextFrameIndex(0), TextFrameIndex(2), true );
         }
     }
 }
@@ -181,7 +183,7 @@ SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
-    nLineLength = 0;
+    nLineLength = TextFrameIndex(0);
     SetWhichPor( POR_ARROW );
 }
 
