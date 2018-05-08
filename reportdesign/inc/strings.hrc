@@ -47,6 +47,7 @@
 #define RID_STR_POSITIONY                       NC_("RID_STR_POSITIONY", "Position Y")
 #define RID_STR_WIDTH                           NC_("RID_STR_WIDTH", "Width")
 #define RID_STR_HEIGHT                          NC_("RID_STR_HEIGHT", "Height")
+#define RID_STR_AUTOGROW                        NC_("RID_STR_AUTOGROW", "Auto Grow")
 #define RID_STR_INITIALFORMULA                  NC_("RID_STR_INITIALFORMULA", "Initial value")
 #define RID_STR_PRESERVEIRI                     NC_("RID_STR_PRESERVEIRI", "Preserve as Link")
 #define RID_STR_FORMULA                         NC_("RID_STR_FORMULA", "Formula")

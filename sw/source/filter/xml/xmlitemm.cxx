@@ -133,8 +133,8 @@ SvXMLItemMapEntry const aXMLTableRowItemMap[] =
     // RES_FILL_ORDER
     // not required
     // RES_FRM_SIZE
-    MAP_ENTRY( STYLE,    ROW_HEIGHT,         RES_FRM_SIZE,   MID_FRMSIZE_FIX_HEIGHT ),
-    MAP_ENTRY( STYLE,    MIN_ROW_HEIGHT,     RES_FRM_SIZE,   MID_FRMSIZE_MIN_HEIGHT ),
+    MAP_ENTRY( STYLE,    ROW_HEIGHT,                 RES_FRM_SIZE,   MID_FRMSIZE_FIX_HEIGHT ),
+    MAP_ENTRY(STYLE,     MIN_ROW_HEIGHT,             RES_FRM_SIZE,   MID_FRMSIZE_MIN_HEIGHT),
     // RES_PAPER_BIN
     // not required
     // RES_LR_SPACE

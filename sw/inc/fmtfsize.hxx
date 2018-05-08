@@ -78,7 +78,7 @@ public:
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     SwFrameSize GetHeightSizeType() const { return m_eFrameHeightType; }
-    void SetHeightSizeType( SwFrameSize eSize ) { m_eFrameHeightType = eSize; }
+    void SetHeightSizeType(SwFrameSize eSize) { m_eFrameHeightType = eSize; }
 
     SwFrameSize GetWidthSizeType() const { return m_eFrameWidthType; }
     void SetWidthSizeType( SwFrameSize eSize ) { m_eFrameWidthType = eSize; }

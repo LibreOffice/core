@@ -170,7 +170,8 @@ const XMLPropertyMapEntry* OXMLHelper::GetRowStyleProps()
 {
     static const XMLPropertyMapEntry aXMLStylesProperties[] =
     {
-        MAP_CONST_S( "Height", STYLE, ROW_HEIGHT, XML_TYPE_PROP_TABLE_ROW|XML_TYPE_MEASURE, 0),
+        MAP_CONST_S("Height", STYLE, ROW_HEIGHT, XML_TYPE_PROP_TABLE_ROW | XML_TYPE_MEASURE, 0),
+        MAP_CONST_S("AutoGrow", STYLE, MIN_ROW_HEIGHT, XML_TYPE_PROP_TABLE_ROW | XML_TYPE_MEASURE, 0),
         MAP_END()
     };
     return aXMLStylesProperties;

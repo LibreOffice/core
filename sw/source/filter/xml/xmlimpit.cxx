@@ -890,7 +890,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                     }
                 }
                 break;
-                }
+            }
 
             sal_Int32 nValue;
             if( bSetHeight || bSetWidth )
