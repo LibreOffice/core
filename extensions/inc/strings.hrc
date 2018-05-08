@@ -106,6 +106,7 @@
 #define RID_STR_CLASSID                         NC_("RID_STR_CLASSID", "Class ID")
 #define RID_STR_HEIGHT                          NC_("RID_STR_HEIGHT", "Height")
 #define RID_STR_WIDTH                           NC_("RID_STR_WIDTH", "Width")
+#define RID_STR_AUTOGROW                        NC_("RID_STR_AUTOGROW", "Auto grow")
 #define RID_STR_LISTINDEX                       NC_("RID_STR_LISTINDEX", "List index")
 #define RID_STR_ROWHEIGHT                       NC_("RID_STR_ROWHEIGHT", "Row height")
 #define RID_STR_FILLCOLOR                       NC_("RID_STR_FILLCOLOR", "Fill color")

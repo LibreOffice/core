@@ -245,6 +245,7 @@ void OXMLTable::EndElement()
                             {
                                 rxElement->setSize(awt::Size(nWidth,nHeight));
                                 rxElement->setPosition(awt::Point(nPosX,nPosY));
+                                rxElement->setAutoGrow(rCell.bAutoHeight);
                             }
                             catch(const beans::PropertyVetoException &)
                             {
@@ -278,6 +279,7 @@ void OXMLTable::addCell(const Reference<XReportComponent>& _xElement)
         {
             rCell.nWidth   = m_aWidth[m_nColumnIndex-1];
             rCell.nHeight  = m_aHeight[m_nRowIndex-1];
+            rCell.bAutoHeight = m_aAutoHeight[m_nRowIndex-1];
             rCell.nColSpan = m_nColSpan;
             rCell.nRowSpan = m_nRowSpan;
         }
