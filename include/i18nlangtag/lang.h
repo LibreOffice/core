@@ -742,6 +742,8 @@ namespace o3tl
 #define LANGUAGE_USER_ARMENIAN_CLASSIC      LanguageType(0x06A0)
 #define LANGUAGE_USER_MALAY_ARABIC_MALAYSIA LanguageType(0x803E)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_MALAY_MALAYSIA)) */
 #define LANGUAGE_USER_MALAY_ARABIC_BRUNEI   LanguageType(0x843E)  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_MALAY_BRUNEI_DARUSSALAM)) */
+#define LANGUAGE_USER_JUHOAN                LanguageType(0x06A1)
+#define LANGUAGE_USER_NARO                  LanguageType(0x06A2)
 
 
 /* XXX Add new user defined LCIDs ^^^ there.

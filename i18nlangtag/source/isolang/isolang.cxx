@@ -674,6 +674,8 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_PLAUTDIETSCH,          "pdt", "CA", k0    },
     { LANGUAGE_USER_ARMENIAN_WESTERN,      "hyw", "AM", k0    },
     { LANGUAGE_USER_ARMENIAN_CLASSIC,      "xcl", "AM", k0    },
+    { LANGUAGE_USER_JUHOAN,                "ktz", "NA", k0    },
+    { LANGUAGE_USER_NARO,                  "nhr", "BW", k0    },
     { LANGUAGE_MULTIPLE,                   "mul", ""  , k0    },    // multiple languages, many languages are used
     { LANGUAGE_UNDETERMINED,               "und", ""  , k0    },    // undetermined language, language cannot be identified
     { LANGUAGE_NONE,                       "zxx", ""  , k0    },    // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
