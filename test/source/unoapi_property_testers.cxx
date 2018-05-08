@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <unoapi_property_testers.hxx>
+#include <test/unoapi_property_testers.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -15,8 +15,7 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 
-using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace css;
 
 namespace apitest
 {
