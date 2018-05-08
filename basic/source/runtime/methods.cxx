@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 
-#include <tools/date.hxx>
 #include <basic/sbxvar.hxx>
 #include <basic/sbuno.hxx>
 #include <osl/process.h>

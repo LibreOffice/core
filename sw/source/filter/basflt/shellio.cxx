@@ -18,7 +18,7 @@
  */
 
 #include <hintids.hxx>
-#include <tools/date.hxx>
+//#include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/fstathelper.hxx>

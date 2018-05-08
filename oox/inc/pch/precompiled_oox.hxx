@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:52:46 using:
+ Generated on 2018-05-08 18:12:25 using:
  ./bin/update_pch oox oox --cutoff=6 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -30,7 +30,6 @@
 #include <iomanip>
 #include <limits.h>
 #include <limits>
-#include <list>
 #include <map>
 #include <memory>
 #include <new>
@@ -38,7 +37,6 @@
 #include <set>
 #include <sstream>
 #include <stdarg.h>
-#include <stdlib.h>
 #include <string.h>
 #include <string>
 #include <unordered_set>
@@ -52,7 +50,6 @@
 #include <osl/interlck.h>
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
-#include <osl/process.h>
 #include <osl/thread.h>
 #include <osl/thread.hxx>
 #include <rtl/bootstrap.hxx>
@@ -73,17 +70,19 @@
 #include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/uuid.h>
 #include <sal/config.h>
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
+#include <vcl/GraphicExternalLink.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
+#include <vcl/field.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
@@ -98,6 +97,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -112,6 +112,7 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -138,7 +139,6 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
-#include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/xml/Attribute.hpp>
@@ -149,11 +149,11 @@
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
-#include <comphelper/anytostring.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -188,14 +188,15 @@
 #include <sax/fshelper.hxx>
 #include <sax/saxdllapi.h>
 #include <services.hxx>
-#include <svtools/svtdllapi.h>
+#include <svl/poolitem.hxx>
+#include <svl/svldllapi.h>
 #include <svx/msdffdef.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/color.hxx>
-#include <tools/date.hxx>
 #include <tools/gen.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
+#include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>

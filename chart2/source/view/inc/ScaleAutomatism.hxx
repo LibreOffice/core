@@ -22,7 +22,7 @@
 #include <chartview/ExplicitScaleValues.hxx>
 #include <com/sun/star/chart2/ScaleData.hpp>
 
-#include <tools/date.hxx>
+class Date;
 
 namespace chart
 {
