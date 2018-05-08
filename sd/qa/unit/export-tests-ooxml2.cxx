@@ -132,7 +132,6 @@ public:
     void testFontScale();
     void testTdf115394();
     void testTdf115394Zero();
-    void testBulletsAsImage();
     void testTdf115005();
     int testTdf115005_FallBack_Images(bool bAddReplacementImages);
     void testTdf115005_FallBack_Images_On();
@@ -200,7 +199,6 @@ public:
     CPPUNIT_TEST(testFontScale);
     CPPUNIT_TEST(testTdf115394);
     CPPUNIT_TEST(testTdf115394Zero);
-    CPPUNIT_TEST(testBulletsAsImage);
     CPPUNIT_TEST(testTdf115005);
     CPPUNIT_TEST(testTdf115005_FallBack_Images_On);
     CPPUNIT_TEST(testTdf115005_FallBack_Images_Off);
@@ -1501,32 +1499,6 @@ void SdOOXMLExportTest2::testTdf115394Zero()
     SdPage* pPage = xDocShRef->GetDoc()->GetSdPage(0, PageKind::Standard);
     fTransitionDuration = pPage->getTransitionDuration();
     CPPUNIT_ASSERT_EQUAL(0.01, fTransitionDuration);
-
-    xDocShRef->DoClose();
-}
-
-void SdOOXMLExportTest2::testBulletsAsImage()
-{
-    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/BulletsAsImage.odp"), ODP);
-    utl::TempFile tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-
-    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
-    uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
-    uno::Reference<beans::XPropertySet> xPropSet(xParagraph, uno::UNO_QUERY_THROW);
-
-    uno::Reference<container::XIndexAccess> xLevels(xPropSet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProperties;
-    xLevels->getByIndex(0) >>= aProperties; // 1st level
-    uno::Reference<awt::XBitmap> xBitmap;
-    for (const beans::PropertyValue& rProperty : aProperties)
-    {
-        if (rProperty.Name == "GraphicBitmap")
-        {
-            xBitmap = rProperty.Value.get<uno::Reference<awt::XBitmap>>();
-        }
-    }
-    CPPUNIT_ASSERT_MESSAGE("No bitmap for the bullets", xBitmap.is());
 
     xDocShRef->DoClose();
 }
