@@ -12,6 +12,7 @@
 
 #include "address.hxx"
 #include <memory>
+#include <vector>
 
 class ScColumn;
 
