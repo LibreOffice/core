@@ -29,16 +29,6 @@
 #define DELETEZ(pPtr) ( delete pPtr, pPtr = 0 )
 #endif
 
-#ifndef DELETEX
-#ifdef DBG_UTIL
-#define DELETEX(T, pPtr) \
-    ( delete pPtr, pPtr = reinterpret_cast<T *>(sal_IntPtr(-1)) )
-#else
-#define DELETEX(T, pPtr) delete pPtr
-#endif
-#endif
-
-
 #if defined(DBG_UTIL)
 
 class SfxStack
