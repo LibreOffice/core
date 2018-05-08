@@ -1962,30 +1962,26 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                     InvalidateRange( SwCharRange( nPos, TextFrameIndex(1)) );
             }
             // If we have a page number field, we must invalidate those spots
-            SwpHints *pHints = GetTextNode()->GetpSwpHints();
-            if( pHints )
+            SwTextNode const* pNode(nullptr);
+            sw::MergedAttrIter iter(*this);
+            TextFrameIndex const nEnd = GetFollow()
+                    ? GetFollow()->GetOfst() : COMPLETE_STRING;
+            for (SwTextAttr const* pHt = iter.NextAttr(&pNode); pHt; pHt = iter.NextAttr(&pNode))
             {
-                const size_t nSize = pHints->Count();
-                const sal_Int32 nEnd = GetFollow() ?
-                                    GetFollow()->GetOfst() : COMPLETE_STRING;
-                for ( size_t i = 0; i < nSize; ++i )
+                TextFrameIndex const nStart(MapModelToView(pNode, pHt->GetStart()));
+                if (nStart >= GetOfst())
                 {
-                    const SwTextAttr *pHt = pHints->Get(i);
-                    const sal_Int32 nStart = pHt->GetStart();
-                    if( nStart >= GetOfst() )
-                    {
-                        if( nStart >= nEnd )
-                            break;
+                    if (nStart >= nEnd)
+                        break;
 
                 // If we're flowing back and own a Footnote, the Footnote also flows
                 // with us. So that it doesn't obstruct us, we send ourselves
                 // a ADJUST_FRM.
                 // pVoid != 0 means MoveBwd()
-                        const sal_uInt16 nWhich = pHt->Which();
-                        if( RES_TXTATR_FIELD == nWhich ||
-                            (HasFootnote() && pVoid && RES_TXTATR_FTN == nWhich))
-                        InvalidateRange(SwCharRange(nStart, TextFrameIndex(1)), 1);
-                    }
+                    const sal_uInt16 nWhich = pHt->Which();
+                    if (RES_TXTATR_FIELD == nWhich ||
+                        (HasFootnote() && pVoid && RES_TXTATR_FTN == nWhich))
+                    InvalidateRange(SwCharRange(nStart, TextFrameIndex(1)), 1);
                 }
             }
             // A new boss, a new chance for growing
