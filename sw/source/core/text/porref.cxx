@@ -36,7 +36,7 @@ SwLinePortion *SwIsoRefPortion::Compress() { return this; }
 
 SwIsoRefPortion::SwIsoRefPortion() : nViewWidth(0)
 {
-    SetLen(1);
+    SetLen(TextFrameIndex(1));
     SetWhichPor( POR_ISOREF );
 }
 
