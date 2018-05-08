@@ -35,12 +35,14 @@ namespace rptxml
             sal_Int32 nHeight;
             sal_Int32 nColSpan;
             sal_Int32 nRowSpan;
+            bool  bAutoHeight;
             ::std::vector< css::uno::Reference< css::report::XReportComponent> > xElements;
-            TCell() : nWidth(0),nHeight(0),nColSpan(1),nRowSpan(1){}
+            TCell() : nWidth(0),nHeight(0),nColSpan(1),nRowSpan(1),bAutoHeight(false){}
         };
     private:
         ::std::vector< ::std::vector<TCell> >                                               m_aGrid;
         ::std::vector<sal_Int32>                                                            m_aHeight;
+        ::std::vector<bool>                                                                 m_aAutoHeight;
         ::std::vector<sal_Int32>                                                            m_aWidth;
         css::uno::Reference< css::report::XSection >                                        m_xSection;
         OUString                                                                            m_sStyleName;
@@ -68,7 +70,8 @@ namespace rptxml
 
         virtual void EndElement() override;
 
-        void addHeight(sal_Int32 _nHeight)   { m_aHeight.push_back( _nHeight ); }
+        void addHeight(sal_Int32 _nHeight) { m_aHeight.push_back(_nHeight); }
+        void addAutoHeight(bool _bAutoHeight) { m_aAutoHeight.push_back(_bAutoHeight); }
         void addWidth(sal_Int32 _nWidth)     { m_aWidth.push_back( _nWidth ); }
 
         void setColumnSpanned(sal_Int32 _nColSpan)     { m_nColSpan = _nColSpan; }

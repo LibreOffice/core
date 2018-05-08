@@ -44,6 +44,7 @@ public:
     bool                           m_bApplyFilter;     // no BitField ! the base class needs a pointer to this member !
     css::awt::FontDescriptor       m_aFont;
     css::uno::Any                  m_aRowHeight;
+    bool                           m_bAutoGrow;
     css::uno::Any                  m_aTextColor;
     css::uno::Any                  m_aTextLineColor;
     sal_Int16                      m_nFontEmphasis;
