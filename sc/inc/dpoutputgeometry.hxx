@@ -23,8 +23,6 @@
 #include "address.hxx"
 #include <vector>
 
-class ScAddress;
-
 class SC_DLLPUBLIC ScDPOutputGeometry
 {
 public:

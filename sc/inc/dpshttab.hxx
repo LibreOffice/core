@@ -21,7 +21,6 @@
 #define INCLUDED_SC_INC_DPSHTTAB_HXX
 
 #include "dptabdat.hxx"
-#include "global.hxx"
 #include "address.hxx"
 #include "scdllapi.h"
 #include "queryparam.hxx"

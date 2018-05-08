@@ -56,10 +56,8 @@ namespace com { namespace sun { namespace star {
 namespace tools { class Rectangle; }
 class ScDPSaveData;
 class ScDPOutput;
-struct ScPivotParam;
 struct ScImportSourceDesc;
 class ScSheetSourceDesc;
-struct ScPivotField;
 class ScDPTableData;
 class ScDPDimensionSaveData;
 class ScRangeList;

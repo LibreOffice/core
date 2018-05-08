@@ -24,7 +24,6 @@
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include "scdllapi.h"
-#include "token.hxx"
 
 #include <vector>
 
@@ -32,8 +31,6 @@ class SdrObject;
 
 class ScDetectiveData;
 class ScDocument;
-class ScAddress;
-class ScRange;
 
 #define SC_DET_MAXCIRCLE    1000
 

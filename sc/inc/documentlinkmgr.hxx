@@ -13,7 +13,6 @@
 #include <rtl/ustring.hxx>
 #include <memory>
 
-class ScDocument;
 class SfxObjectShell;
 namespace weld { class Window; }
 

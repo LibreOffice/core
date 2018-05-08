@@ -27,7 +27,6 @@
 #include <unordered_set>
 #include <vector>
 
-class ScDPFilteredCache;
 class ScDocument;
 class ScDPCache;
 class ScDPDimensionSaveData;

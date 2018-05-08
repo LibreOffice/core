@@ -36,7 +36,6 @@ class ScDocument;
 struct ScSortParam;
 struct ScQueryParam;
 struct ScSubTotalParam;
-struct ScImportParam;
 
 /** Enum used to indicate which portion of the DBArea is to be considered. */
 enum class ScDBDataPortion
