@@ -41,23 +41,23 @@ enum class ScDragSrc;
 class ScDrawTransferObj : public TransferableHelper
 {
 private:
-    SdrModel*                       pModel;
-    TransferableDataHelper          aOleData;
-    TransferableObjectDescriptor    aObjDesc;
-    SfxObjectShellRef               aDocShellRef;
-    SfxObjectShellRef               aDrawPersistRef;
+    SdrModel*                       m_pModel;
+    TransferableDataHelper          m_aOleData;
+    TransferableObjectDescriptor    m_aObjDesc;
+    SfxObjectShellRef               m_aDocShellRef;
+    SfxObjectShellRef               m_aDrawPersistRef;
 
                                     // extracted from model in ctor:
-    Size                            aSrcSize;
-    INetBookmark*                   pBookmark;
-    bool                            bGraphic;
-    bool                            bGrIsBit;
-    bool                            bOleObj;
+    Size                            m_aSrcSize;
+    INetBookmark*                   m_pBookmark;
+    bool                            m_bGraphic;
+    bool                            m_bGrIsBit;
+    bool                            m_bOleObj;
                                     // source information for drag&drop:
                                     // (view is needed to handle drawing obejcts)
-    SdrView*                        pDragSourceView;
-    ScDragSrc                       nDragSourceFlags;
-    bool                            bDragWasInternal;
+    SdrView*                        m_pDragSourceView;
+    ScDragSrc                       m_nDragSourceFlags;
+    bool                            m_bDragWasInternal;
 
     ScRangeListVector               m_aProtectedChartRangesVector;
 
@@ -79,7 +79,7 @@ public:
                                         const css::datatransfer::DataFlavor& rFlavor ) override;
     virtual void        DragFinished( sal_Int8 nDropAction ) override;
 
-    SdrModel*           GetModel()  { return pModel; }
+    SdrModel*           GetModel()  { return m_pModel; }
 
     void                SetDrawPersist( const SfxObjectShellRef& rRef );
     void                SetDragSource( const ScDrawView* pView );
@@ -89,8 +89,8 @@ public:
 
     const OUString& GetShellID() const;
 
-    SdrView*            GetDragSourceView()             { return pDragSourceView; }
-    ScDragSrc           GetDragSourceFlags() const      { return nDragSourceFlags; }
+    SdrView*            GetDragSourceView()             { return m_pDragSourceView; }
+    ScDragSrc           GetDragSourceFlags() const      { return m_nDragSourceFlags; }
 
     static ScDrawTransferObj* GetOwnClipboard( vcl::Window* );
 
