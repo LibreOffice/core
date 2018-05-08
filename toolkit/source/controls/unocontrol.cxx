@@ -32,7 +32,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/uuid.h>
 #include <osl/mutex.hxx>
-#include <tools/date.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>

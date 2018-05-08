@@ -55,7 +55,6 @@
 #include <vcl/combobox.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/date.hxx>
 #include <tools/time.hxx>
 
 #include <algorithm>

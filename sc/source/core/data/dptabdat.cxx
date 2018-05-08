@@ -27,7 +27,7 @@
 
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
-#include <tools/date.hxx>
+//#include <tools/date.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
 

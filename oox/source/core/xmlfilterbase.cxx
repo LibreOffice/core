@@ -64,7 +64,6 @@
 #include <comphelper/ofopxmlhelper.hxx>
 
 #include <oox/crypto/DocumentEncryption.hxx>
-#include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <com/sun/star/util/Duration.hpp>
 #include <sax/tools/converter.hxx>

@@ -44,7 +44,6 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
-#include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/sequence.hxx>

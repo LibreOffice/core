@@ -45,7 +45,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
 
-#include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <svtools/treelistentry.hxx>
 
