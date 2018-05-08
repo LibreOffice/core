@@ -886,16 +886,32 @@ namespace sw {
 struct MergedPara;
 
 /// iterate SwTextAttr in potentially merged text frame
-class MergedAttrIter
+class MergedAttrIterBase
 {
+protected:
     sw::MergedPara const*const m_pMerged;
     SwTextNode const*const m_pNode;
     size_t m_CurrentExtent;
     size_t m_CurrentHint;
+    MergedAttrIterBase(SwTextFrame const& rFrame);
+};
+
+class MergedAttrIter
+    : public MergedAttrIterBase
+{
 public:
-    MergedAttrIter(SwTextFrame const& rFrame);
+    MergedAttrIter(SwTextFrame const& rFrame) : MergedAttrIterBase(rFrame) {}
     SwTextAttr const* NextAttr(SwTextNode const** ppNode = nullptr);
 };
+
+class MergedAttrIterReverse
+    : public MergedAttrIterBase
+{
+public:
+    MergedAttrIterReverse(SwTextFrame const& rFrame);
+    SwTextAttr const* PrevAttr(SwTextNode const** ppNode = nullptr);
+};
+
 
 } // namespace sw
 
