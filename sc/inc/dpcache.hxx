@@ -22,7 +22,6 @@
 #include "global.hxx"
 #include "dpnumgroupinfo.hxx"
 #include "calcmacros.hxx"
-#include <tools/date.hxx>
 
 #include <mdds/flat_segment_tree.hpp>
 

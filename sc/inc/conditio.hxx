@@ -32,13 +32,14 @@
 #include <com/sun/star/sheet/ConditionOperator.hpp>
 
 #include <rtl/math.hxx>
-#include <tools/date.hxx>
+//#include <tools/date.hxx>
 #include <tools/link.hxx>
 
 #include <map>
 #include <memory>
 #include <set>
 
+class Date;
 class ScFormulaCell;
 class ScTokenArray;
 struct ScRefCellValue;

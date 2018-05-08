@@ -41,7 +41,6 @@
 #include <comphelper/types.hxx>
 #include "callbacks.hxx"
 #include <unotools/datetime.hxx>
-#include <tools/date.hxx>
 #include <tools/datetime.hxx>
 
 namespace xmloff

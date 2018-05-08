@@ -28,7 +28,7 @@
 #include <math.h>
 
 #include <rtl/math.hxx>
-#include <tools/date.hxx>
+//#include <tools/date.hxx>
 #include <svl/zformat.hxx>
 #include <sot/storage.hxx>
 #include <document.hxx>

@@ -24,7 +24,6 @@
 #include <svl/nfkeytab.hxx>
 #include <svl/nfsymbol.hxx>
 #include <tools/color.hxx>
-#include <tools/date.hxx>
 
 class SvNumberFormatter;
 struct ImpSvNumberformatInfo;

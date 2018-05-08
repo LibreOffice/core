@@ -21,7 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CTABLE_HXX
 
 #include <file/FTable.hxx>
-#include <tools/date.hxx>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     class XSpreadsheet;

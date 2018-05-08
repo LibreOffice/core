@@ -100,7 +100,7 @@
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 
 #include <rtl/ustrbuf.hxx>
-#include <tools/date.hxx>
+//#include <tools/date.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/make_unique.hxx>
 

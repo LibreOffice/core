@@ -21,8 +21,9 @@
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_MINIMUMANDMAXIMUMSUPPLIER_HXX
 
 #include <sal/types.h>
-#include <tools/date.hxx>
 #include <set>
+
+class Date;
 
 namespace chart
 {
