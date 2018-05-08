@@ -82,7 +82,7 @@ inline
 size_t GlyphCache::IFSD_Hash::operator()( const FontSelectPattern& rFontSelData ) const
 {
     // TODO: is it worth to improve this hash function?
-    sal_IntPtr nFontId = GetFontId(rFontSelData);
+    sal_uIntPtr nFontId = GetFontId(rFontSelData);
 
     if (rFontSelData.maTargetName.indexOf(FontSelectPatternAttributes::FEAT_PREFIX)
         != -1)
