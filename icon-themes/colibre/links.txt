@@ -1476,21 +1476,24 @@ svx/res/sphere3d.png cmd/sc_sphere.png
 svx/res/wireframe_16.png cmd/sc_window3d.png
 svx/res/zoom_page_statusbar.png cmd/sc_zoompanning.png
 svx/res/reloads.png cmd/sc_reload.png
-svx/res/sc_bold.png cmd/sc_bold.png
-svx/res/sc_italic.png cmd/sc_italic.png
-svx/res/sc_shadowed.png cmd/sc_shadowed.png
-svx/res/sc_strikeout.png cmd/sc_strikeout.png
-svx/res/sc_underline.png cmd/sc_underline.png
-svx/res/sc_subscript.png cmd/sc_subscript.png
-svx/res/sc_superscript.png cmd/sc_superscript.png
-svx/res/sc_backgroundcolor.png cmd/sc_backgroundcolor.png
-svx/res/rotate_left.png cmd/sc_rotateleft.png
-svx/res/rotate_right.png cmd/sc_rotateright.png
-svx/res/spacing3.png cmd/sc_spacepara1.png
-svx/res/para_numbullet01.png cmd/sc_defaultbullet.png
-svx/res/para_numbullet02.png cmd/sc_defaultnumbering.png
-svx/res/decrease_font.png cmd/sc_shrink.png
-svx/res/enlarge_font.png cmd/sc_grow.png
+
+svx/res/symphony/sc_bold.png cmd/sc_bold.png
+svx/res/symphony/sc_italic.png cmd/sc_italic.png
+svx/res/symphony/sc_shadowed.png cmd/sc_shadowed.png
+svx/res/symphony/sc_strikeout.png cmd/sc_strikeout.png
+svx/res/symphony/sc_underline.png cmd/sc_underline.png
+svx/res/symphony/sc_subscript.png cmd/sc_subscript.png
+svx/res/symphony/sc_superscript.png cmd/sc_superscript.png
+svx/res/symphony/sc_backgroundcolor.png cmd/sc_backgroundcolor.png
+svx/res/symphony/sc_color.png cmd/sc_backgroundcolor.png
+svx/res/symphony/rotate_left.png cmd/sc_rotateleft.png
+svx/res/symphony/rotate_right.png cmd/sc_rotateright.png
+svx/res/symphony/spacing3.png cmd/sc_spacepara1.png
+svx/res/symphony/para_numbullet01.png cmd/sc_defaultbullet.png
+svx/res/symphony/para_numbullet02.png cmd/sc_defaultnumbering.png
+svx/res/symphony/decrease_font.png cmd/sc_shrink.png
+svx/res/symphony/enlarge_font.png cmd/sc_grow.png
+
 svx/res/fill_color.png cmd/sc_backgroundcolor.png
 svx/res/ColorModeBlackWhite_16x16.png cmd/sc_outputqualityblackwhite.png
 svx/res/ColorModeGrey_16x16.png cmd/sc_outputqualitygrayscale.png
@@ -1498,11 +1501,12 @@ svx/res/AdjustColorBlue_16x16.png cmd/sc_grafblue.png
 svx/res/AdjustColorGreen_16x16.png cmd/sc_grafgreen.png
 svx/res/AdjustColorRed_16x16.png cmd/sc_grafred.png
 svx/res/AdjustColorGamma_16x16.png cmd/sc_graphicfilterinvert.png
-svx/res/lpselected-spacing-1_15.png cmd/lc_spacepara1.png
-svx/res/lpselected-spacing-1.png cmd/lc_spacepara1.png
-svx/res/lpselected-spacing-1_5.png cmd/lc_spacepara15.png
-svx/res/lpselected-spacing-2.png cmd/lc_spacepara2.png
-svx/res/lpsmall-spacing-1.png cmd/lc_spacepara1.png
+
+svx/res/symphony/lpselected-spacing-1_15.png cmd/lc_spacepara1.png
+svx/res/symphony/lpselected-spacing-1.png cmd/lc_spacepara1.png
+svx/res/symphony/lpselected-spacing-1_5.png cmd/lc_spacepara15.png
+svx/res/symphony/lpselected-spacing-2.png cmd/lc_spacepara2.png
+svx/res/symphony/lpsmall-spacing-1.png cmd/lc_spacepara1.png
 
 svx/res/symphony/AdjustColorBlue_16x16.png cmd/sc_grafblue.png
 svx/res/symphony/AdjustColorGamma_16x16.png cmd/sc_graphicfilterinvert.png
