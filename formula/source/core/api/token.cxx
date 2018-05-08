@@ -605,8 +605,9 @@ void FormulaTokenArray::Assign( const FormulaTokenArray& r )
     FormulaToken** pp;
     if( nLen )
     {
-        pp = pCode = new FormulaToken*[ nLen ];
-        memcpy( pp, r.pCode, nLen * sizeof( FormulaToken* ) );
+        pCode.reset(new FormulaToken*[ nLen ]);
+        pp = pCode.get();
+        memcpy( pp, r.pCode.get(), nLen * sizeof( FormulaToken* ) );
         for( sal_uInt16 i = 0; i < nLen; i++ )
             (*pp++)->IncRef();
         mbFinalized = true;
@@ -627,7 +628,7 @@ void FormulaTokenArray::Assign( sal_uInt16 nCode, FormulaToken **pTokens )
     assert( pCode == nullptr );
 
     nLen = nCode;
-    pCode = new FormulaToken*[ nLen ];
+    pCode.reset(new FormulaToken*[ nLen ]);
     mbFinalized = true;
 
     for( sal_uInt16 i = 0; i < nLen; i++ )
@@ -651,14 +652,14 @@ void FormulaTokenArray::Clear()
     if( nRPN ) DelRPN();
     if( pCode )
     {
-        FormulaToken** p = pCode;
+        FormulaToken** p = pCode.get();
         for( sal_uInt16 i = 0; i < nLen; i++ )
         {
             (*p++)->DecRef();
         }
-        delete [] pCode;
+        pCode.reset();
     }
-    pCode = nullptr; pRPN = nullptr;
+    pRPN = nullptr;
     nError = FormulaError::NONE;
     nLen = nRPN = 0;
     bHyperLink = false;
@@ -775,7 +776,7 @@ FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
     }
 
     if( !pCode )
-        pCode = new FormulaToken*[ FORMULA_MAXTOKENS ];
+        pCode.reset(new FormulaToken*[ FORMULA_MAXTOKENS ]);
     if( nLen < FORMULA_MAXTOKENS - 1 )
     {
         CheckToken(*t);
