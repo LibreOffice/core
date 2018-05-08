@@ -1256,6 +1256,7 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
     ToolbarPopup( rFrame, pParentWindow, "palette_popup_window", "svx/ui/colorwindow.ui" ),
     theSlotId( nSlotId ),
     maCommand( rCommand ),
+    mxParentWindow(pParentWindow),
     mxPaletteManager( rPaletteManager ),
     mrBorderColorStatus( rBorderColorStatus ),
     maColorSelectFunction(aFunction)
@@ -1374,6 +1375,7 @@ void SvxColorWindow::dispose()
     mpButtonNoneColor.clear();
     mpButtonPicker.clear();
     mpAutomaticSeparator.clear();
+    mxParentWindow.clear();
     ToolbarPopup::dispose();
 }
 
@@ -1505,8 +1507,7 @@ IMPL_LINK_NOARG(SvxColorWindow, OpenPickerClickHdl, Button*, void)
 
     if ( IsInPopupMode() )
         EndPopupMode();
-    const css::uno::Reference<css::awt::XWindow> xParent(mxFrame->getContainerWindow(), uno::UNO_QUERY);
-    mxPaletteManager->PopupColorPicker(VCLUnoHelper::GetWindow(xParent), maCommand, GetSelectEntryColor().first);
+    mxPaletteManager->PopupColorPicker(mxParentWindow, maCommand, GetSelectEntryColor().first);
 }
 
 void SvxColorWindow::StartSelection()
