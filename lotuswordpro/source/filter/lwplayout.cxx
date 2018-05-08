@@ -84,6 +84,7 @@ LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader const &objHdr, LwpSvStream* p
     , m_bGettingExtMarginsValue(false)
     , m_bGettingUsePrinterSettings(false)
     , m_bGettingScaleCenter(false)
+    , m_bGettingBorderStuff(false)
     , m_bGettingUseWhen(false)
     , m_bGettingStyleLayout(false)
     , m_nAttributes(0)
@@ -788,20 +789,28 @@ double LwpMiddleLayout::ExtMarginsValue(sal_uInt8 nWhichSide)
 */
 LwpBorderStuff* LwpMiddleLayout::GetBorderStuff()
 {
+    if (m_bGettingBorderStuff)
+        throw std::runtime_error("recursion in layout");
+    m_bGettingBorderStuff = true;
+
+    LwpBorderStuff* pRet = nullptr;
+
     if(m_nOverrideFlag & OVER_BORDERS)
     {
         LwpLayoutBorder* pLayoutBorder = dynamic_cast<LwpLayoutBorder*>(m_LayBorderStuff.obj().get());
-        return pLayoutBorder ? &pLayoutBorder->GetBorderStuff() : nullptr;
+        pRet = pLayoutBorder ? &pLayoutBorder->GetBorderStuff() : nullptr;
     }
     else
     {
         rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
         if (LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*>(xBase.get()))
         {
-            return pLay->GetBorderStuff();
+            pRet = pLay->GetBorderStuff();
         }
     }
-    return nullptr;
+
+    m_bGettingBorderStuff= false;
+    return pRet;
 }
 
 /**
