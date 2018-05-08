@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:53:58 using:
+ Generated on 2018-05-09 05:00:39 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,10 +27,11 @@
 #include <config_global.h>
 #include <cstddef>
 #include <cstdlib>
+#include <cstring>
 #include <exception>
 #include <functional>
 #include <limits.h>
-#include <list>
+#include <limits>
 #include <map>
 #include <memory>
 #include <new>
@@ -118,7 +119,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
@@ -137,6 +137,7 @@
 #include <vcl/vclreferencebase.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/wall.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <basegfx/basegfxdllapi.h>
@@ -261,6 +262,7 @@
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
+#include <com/sun/star/task/XInteractionRetry.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
@@ -296,7 +298,6 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
@@ -311,6 +312,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/fileformat.h>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/interfacecontainer2.hxx>
@@ -318,7 +320,6 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -389,13 +390,13 @@
 #include <svtools/helpopt.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/imapobj.hxx>
+#include <svtools/langhelp.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/parhtml.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/soerr.hxx>
 #include <svtools/svtdllapi.h>
-#include <svtools/svtresid.hxx>
 #include <svtools/treelistentry.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -414,7 +415,7 @@
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/svborder.hxx>
-#include <tools/time.hxx>
+#include <tools/svlibrary.h>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
 #include <tools/wintypes.hxx>

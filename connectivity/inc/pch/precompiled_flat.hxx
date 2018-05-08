@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:51:58 using:
+ Generated on 2018-05-09 04:28:49 using:
  ./bin/update_pch connectivity flat --cutoff=2 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -33,7 +33,6 @@
 #include <functional>
 #include <iomanip>
 #include <limits>
-#include <list>
 #include <map>
 #include <math.h>
 #include <memory>
@@ -42,7 +41,6 @@
 #include <set>
 #include <sstream>
 #include <stddef.h>
-#include <stdlib.h>
 #include <string.h>
 #include <string>
 #include <type_traits>
@@ -110,7 +108,7 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
-#include <com/sun/star/i18n/XLocaleData4.hpp>
+#include <com/sun/star/i18n/XLocaleData5.hpp>
 #include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -155,8 +153,6 @@
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/extract.hxx>
-#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/propertycontainerhelper.hxx>

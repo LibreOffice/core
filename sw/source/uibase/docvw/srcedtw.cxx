@@ -40,7 +40,6 @@
 #include <editeng/flstitem.hxx>
 #include <vcl/metric.hxx>
 #include <svtools/ctrltool.hxx>
-#include <tools/time.hxx>
 #include <swmodule.hxx>
 #include <docsh.hxx>
 #include <srcview.hxx>

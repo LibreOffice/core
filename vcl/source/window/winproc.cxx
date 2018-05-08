@@ -18,11 +18,9 @@
  */
 
 #include <tools/debug.hxx>
-#include <tools/time.hxx>
-
 #include <unotools/localedatawrapper.hxx>
-
 #include <comphelper/lok.hxx>
+
 #include <vcl/i18nhelp.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/timer.hxx>

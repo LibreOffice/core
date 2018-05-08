@@ -46,7 +46,6 @@
 #include <unotools/syslocale.hxx>
 #include <svl/zforlist.hxx>
 
-#include <tools/time.hxx>
 #include <tools/datetime.hxx>
 
 #include <com/sun/star/util/DateTime.hpp>
