@@ -104,7 +104,8 @@ bool ScPositionHelper::Comp::operator() (const value_type& rValue1, const value_
     }
 }
 
-ScPositionHelper::ScPositionHelper()
+ScPositionHelper::ScPositionHelper(bool bColumn)
+    : MAX_INDEX(bColumn ? MAXCOL : MAXTILEDROW)
 {
     mData.insert(std::make_pair(-1, 0));
 }
@@ -229,6 +230,32 @@ long ScPositionHelper::getPosition(index_type nIndex) const
     auto it = mData.find(std::make_pair(nIndex, 0));
     if (it == mData.end()) return -1;
     return it->second;
+}
+
+long ScPositionHelper::computePosition(index_type nIndex, const std::function<long (index_type)>& getSizePx)
+{
+    if (nIndex < 0) nIndex = 0;
+    if (nIndex > MAX_INDEX) nIndex = MAX_INDEX;
+
+    const auto& rNearest = getNearestByIndex(nIndex);
+    index_type nStartIndex = rNearest.first;
+    long nTotalPixels = rNearest.second;
+
+    if (nStartIndex < nIndex)
+    {
+        for (index_type nIdx = nStartIndex + 1; nIdx <= nIndex; ++nIdx)
+        {
+            nTotalPixels += getSizePx(nIdx);
+        }
+    }
+    else
+    {
+        for (index_type nIdx = nStartIndex; nIdx > nIndex; --nIdx)
+        {
+            nTotalPixels -= getSizePx(nIdx);
+        }
+    }
+    return nTotalPixels;
 }
 
 ScBoundsProvider::ScBoundsProvider(ScDocument* pD, SCTAB nT, bool bColHeader)
@@ -448,6 +475,8 @@ ScViewDataTable::ScViewDataTable() :
                 nOldCurY( 0 ),
                 nLOKOldCurX( 0 ),
                 nLOKOldCurY( 0 ),
+                aWidthHelper(true),
+                aHeightHelper(false),
                 nMaxTiledCol( 20 ),
                 nMaxTiledRow( 50 ),
                 bShowGrid( true ),
@@ -1363,24 +1392,7 @@ void ScViewData::SetMaxTiledCol( SCCOL nNewMaxCol )
         return nSizePx;
     };
 
-    const auto& rNearest = GetLOKWidthHelper().getNearestByIndex(nNewMaxCol);
-    SCCOL nStartCol = rNearest.first;
-    long nTotalPixels = rNearest.second;
-
-    if (nStartCol < nNewMaxCol)
-    {
-        for (SCCOL nCol = nStartCol + 1; nCol <= nNewMaxCol; ++nCol)
-        {
-            nTotalPixels += GetColWidthPx(nCol);
-        }
-    }
-    else
-    {
-        for (SCCOL nCol = nStartCol; nCol > nNewMaxCol; --nCol)
-        {
-            nTotalPixels -= GetColWidthPx(nCol);
-        }
-    }
+    long nTotalPixels = GetLOKWidthHelper().computePosition(nNewMaxCol, GetColWidthPx);
 
     SAL_INFO("sc.lok.docsize", "ScViewData::SetMaxTiledCol: nNewMaxCol: "
             << nNewMaxCol << ", nTotalPixels: " << nTotalPixels);
@@ -1406,24 +1418,7 @@ void ScViewData::SetMaxTiledRow( SCROW nNewMaxRow )
         return nSizePx;
     };
 
-    const auto& rNearest = GetLOKHeightHelper().getNearestByIndex(nNewMaxRow);
-    SCROW nStartRow = rNearest.first;
-    long nTotalPixels = rNearest.second;
-
-    if (nStartRow < nNewMaxRow)
-    {
-        for (SCROW nRow = nStartRow + 1; nRow <= nNewMaxRow; ++nRow)
-        {
-            nTotalPixels += GetRowHeightPx(nRow);
-        }
-    }
-    else
-    {
-        for (SCROW nRow = nStartRow; nRow > nNewMaxRow; --nRow)
-        {
-            nTotalPixels -= GetRowHeightPx(nRow);
-        }
-    }
+    long nTotalPixels = GetLOKHeightHelper().computePosition(nNewMaxRow, GetRowHeightPx);
 
     SAL_INFO("sc.lok.docsize", "ScViewData::SetMaxTiledRow: nNewMaxRow: "
             << nNewMaxRow << ", nTotalPixels: " << nTotalPixels);
