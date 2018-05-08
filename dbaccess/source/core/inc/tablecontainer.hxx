@@ -64,8 +64,6 @@ namespace dbaccess
 
         virtual void disposing() override;
 
-        virtual void SAL_CALL acquire() throw() override { OFilteredContainer::acquire();}
-        virtual void SAL_CALL release() throw() override { OFilteredContainer::release();}
     // css::lang::XServiceInfo
         DECLARE_SERVICE_INFO();
 
@@ -77,6 +75,9 @@ namespace dbaccess
         virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
 
     public:
+        virtual void SAL_CALL acquire() throw() override { OFilteredContainer::acquire();}
+        virtual void SAL_CALL release() throw() override { OFilteredContainer::release();}
+
         /** ctor of the container. The parent has to support the <type scope="css::sdbc">XConnection</type>
             interface.<BR>
             @param          _rParent            the object which acts as parent for the container.
