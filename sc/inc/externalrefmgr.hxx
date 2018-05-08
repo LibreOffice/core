@@ -25,7 +25,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/event.hxx>
-#include <tools/time.hxx>
 #include <vcl/timer.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/lstner.hxx>

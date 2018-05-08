@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:51:56 using:
+ Generated on 2018-05-09 04:28:27 using:
  ./bin/update_pch connectivity file --cutoff=2 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -39,32 +39,26 @@
 #include <set>
 #include <sstream>
 #include <stddef.h>
-#include <stdlib.h>
 #include <string.h>
 #include <string>
 #include <type_traits>
 #include <utility>
 #include <vector>
+#include <boost/optional.hpp>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
-#include <osl/file.h>
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/nlsupport.h>
-#include <osl/pipe.h>
-#include <osl/process.h>
-#include <osl/security.h>
-#include <osl/socket.h>
 #include <osl/thread.h>
-#include <osl/time.h>
 #include <rtl/alloc.h>
-#include <rtl/byteseq.h>
 #include <rtl/character.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
+#include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/string.h>
@@ -85,6 +79,7 @@
 #include <sal/typesizes.h>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
+#include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -109,13 +104,14 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
-#include <com/sun/star/i18n/XLocaleData4.hpp>
+#include <com/sun/star/i18n/XLocaleData5.hpp>
 #include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -145,6 +141,7 @@
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
+#include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -158,8 +155,6 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/extract.hxx>
-#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>

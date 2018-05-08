@@ -20,6 +20,7 @@
 #include <string.h>
 
 #include <sal/config.h>
+#include <tools/time.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/windowserrorstring.hxx>
 #include "x509certificate_mscryptimpl.hxx"
@@ -36,7 +37,6 @@
 #include <memory>
 #include <utility>
 #include <vector>
-#include <tools/time.hxx>
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno ;

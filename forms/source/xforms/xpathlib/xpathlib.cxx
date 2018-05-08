@@ -26,7 +26,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <tools/date.hxx>
-#include <tools/time.hxx>
 #include <tools/datetime.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>

@@ -23,7 +23,6 @@
 
 #include <osl/conditn.hxx>
 #include <osl/file.hxx>
-#include <tools/time.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 

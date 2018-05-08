@@ -18,9 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
-
 #include <tools/diagnose_ex.h>
-#include <tools/time.hxx>
 
 #include <vcl/window.hxx>
 #include <vcl/event.hxx>

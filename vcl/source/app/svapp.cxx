@@ -19,18 +19,15 @@
 
 #include <config_features.h>
 
+#include <osl/process.h>
 #include <osl/module.h>
 #include <osl/file.hxx>
 #include <osl/thread.h>
-
 #include <rtl/tencinfo.h>
 #include <rtl/instance.hxx>
-
 #include <tools/debug.hxx>
-#include <tools/time.hxx>
-
+#include <comphelper/solarmutex.hxx>
 #include <i18nlangtag/mslangid.hxx>
-
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
@@ -73,8 +70,6 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <comphelper/solarmutex.hxx>
-#include <osl/process.h>
 
 #include <cassert>
 #include <utility>

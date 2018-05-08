@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:51:51 using:
+ Generated on 2018-05-09 04:28:37 using:
  ./bin/update_pch connectivity dbase --cutoff=2 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -40,7 +40,6 @@
 #include <sstream>
 #include <stddef.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <string>
 #include <type_traits>
@@ -55,10 +54,6 @@
 #include <osl/interlck.h>
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
-#include <osl/pipe.h>
-#include <osl/process.h>
-#include <osl/security.h>
-#include <osl/socket.h>
 #include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
@@ -75,7 +70,6 @@
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
-#include <rtl/tencinfo.h>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
@@ -91,6 +85,7 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -116,7 +111,7 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
-#include <com/sun/star/i18n/XLocaleData4.hpp>
+#include <com/sun/star/i18n/XLocaleData5.hpp>
 #include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -147,7 +142,6 @@
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
-#include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -160,7 +154,6 @@
 #include <com/sun/star/util/Time.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>
