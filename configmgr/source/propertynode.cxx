@@ -49,10 +49,17 @@ rtl::Reference< Node > PropertyNode::clone(bool) const {
 
 css::uno::Any const & PropertyNode::getValue(Components & components) {
     if (!externalDescriptor_.isEmpty()) {
-        css::beans::Optional< css::uno::Any > val(
-            components.getExternalValue(externalDescriptor_));
-        if (val.IsPresent) {
-            value_ = val.Value; //TODO: check value type
+        try
+        {
+            css::beans::Optional< css::uno::Any > val(
+                components.getExternalValue(externalDescriptor_));
+            if (val.IsPresent) {
+                value_ = val.Value; //TODO: check value type
+            }
+        }
+        catch (css::uno::RuntimeException& e)
+        {
+            SAL_WARN("configmgr", "Getting external value failed: " << e);
         }
         externalDescriptor_.clear(); // must not throw
     }
