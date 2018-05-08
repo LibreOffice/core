@@ -178,7 +178,7 @@ void SwFEShell::InsertRow( sal_uInt16 nCnt, bool bBehind )
     {
         vcl::Window* pWin = GetWin();
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
-                        DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
+                        DialogMask::MessageInfo | DialogMask::ButtonsOk );
         return;
     }
 
@@ -218,7 +218,7 @@ void SwFEShell::InsertCol( sal_uInt16 nCnt, bool bBehind )
     {
         vcl::Window* pWin = GetWin();
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
-                        DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
+                        DialogMask::MessageInfo | DialogMask::ButtonsOk );
         return;
     }
 
@@ -228,7 +228,7 @@ void SwFEShell::InsertCol( sal_uInt16 nCnt, bool bBehind )
     {
         vcl::Window* pWin = GetWin();
         ErrorHandler::HandleError( ERR_TBLINSCOL_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
-                        DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
+                        DialogMask::MessageInfo | DialogMask::ButtonsOk );
         return;
     }
 
@@ -273,7 +273,7 @@ bool SwFEShell::DeleteCol()
     {
         vcl::Window* pWin = GetWin();
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
-                        DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
+                        DialogMask::MessageInfo | DialogMask::ButtonsOk );
         return false;
     }
 
@@ -325,7 +325,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
     {
         vcl::Window* pWin = GetWin();
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
-                        DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
+                        DialogMask::MessageInfo | DialogMask::ButtonsOk );
         return false;
     }
 
@@ -445,7 +445,7 @@ TableMergeErr SwFEShell::MergeTab()
         {
             vcl::Window* pWin = GetWin();
             ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
-                            DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
+                            DialogMask::MessageInfo | DialogMask::ButtonsOk );
         }
         else
         {
@@ -477,7 +477,7 @@ void SwFEShell::SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight )
     {
         vcl::Window* pWin = GetWin();
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
-                        DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
+                        DialogMask::MessageInfo | DialogMask::ButtonsOk );
         return;
     }
 
@@ -487,7 +487,7 @@ void SwFEShell::SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight )
     {
         vcl::Window* pWin = GetWin();
         ErrorHandler::HandleError( ERR_TBLSPLIT_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
-                        DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
+                        DialogMask::MessageInfo | DialogMask::ButtonsOk );
         return;
     }
     StartAllAction();
@@ -1281,7 +1281,7 @@ bool SwFEShell::DeleteTableSel()
     {
         vcl::Window* pWin = GetWin();
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
-                        DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
+                        DialogMask::MessageInfo | DialogMask::ButtonsOk );
         return false;
     }
 
@@ -2174,7 +2174,7 @@ void SwFEShell::SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 
     {
         vcl::Window* pWin = GetWin();
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
-                        DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
+                        DialogMask::MessageInfo | DialogMask::ButtonsOk );
         return;
     }
 
