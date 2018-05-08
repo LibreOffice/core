@@ -104,6 +104,7 @@
 #define HID_PROP_RIGHT                                  "EXTENSIONS_HID_PROP_RIGHT"
 #define HID_PROP_HEIGHT                                 "EXTENSIONS_HID_PROP_HEIGHT"
 #define HID_PROP_WIDTH                                  "EXTENSIONS_HID_PROP_WIDTH"
+#define HID_PROP_AUTOGROW                               "EXTENSIONS_HID_PROP_AUTOGROW"
 #define HID_PROP_BOUNDCOLUMN                            "EXTENSIONS_HID_PROP_BOUNDCOLUMN"
 #define HID_PROP_LISTSOURCETYPE                         "EXTENSIONS_HID_PROP_LISTSOURCETYPE"
 #define HID_PROP_LISTSOURCE                             "EXTENSIONS_HID_PROP_LISTSOURCE"
