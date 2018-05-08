@@ -629,30 +629,28 @@ SwContentFrame *SwTextFrame::JoinFrame()
     TextFrameIndex nStart = pFoll->GetOfst();
     if ( pFoll->HasFootnote() )
     {
-        const SwpHints *pHints = pFoll->GetTextNode()->GetpSwpHints();
-        if( pHints )
+        SwFootnoteBossFrame *pFootnoteBoss = nullptr;
+        SwFootnoteBossFrame *pEndBoss = nullptr;
+        SwTextNode const* pNode(nullptr);
+        sw::MergedAttrIter iter(*pFoll);
+        for (SwTextAttr const* pHt = iter.NextAttr(&pNode); pHt; pHt = iter.NextAttr(&pNode))
         {
-            SwFootnoteBossFrame *pFootnoteBoss = nullptr;
-            SwFootnoteBossFrame *pEndBoss = nullptr;
-            for ( size_t i = 0; i < pHints->Count(); ++i )
+            if (RES_TXTATR_FTN == pHt->Which()
+                && nStart <= pFoll->MapModelToView(pNode, pHt->GetStart()))
             {
-                const SwTextAttr *pHt = pHints->Get(i);
-                if( RES_TXTATR_FTN==pHt->Which() && pHt->GetStart()>=nStart )
+                if (pHt->GetFootnote().IsEndNote())
                 {
-                    if( pHt->GetFootnote().IsEndNote() )
-                    {
-                        if( !pEndBoss )
-                            pEndBoss = pFoll->FindFootnoteBossFrame();
-                        SwFootnoteBossFrame::ChangeFootnoteRef( pFoll, static_cast<const SwTextFootnote*>(pHt), this );
-                    }
-                    else
-                    {
-                        if( !pFootnoteBoss )
-                            pFootnoteBoss = pFoll->FindFootnoteBossFrame( true );
-                        SwFootnoteBossFrame::ChangeFootnoteRef( pFoll, static_cast<const SwTextFootnote*>(pHt), this );
-                    }
-                    SetFootnote( true );
+                    if (!pEndBoss)
+                        pEndBoss = pFoll->FindFootnoteBossFrame();
+                    SwFootnoteBossFrame::ChangeFootnoteRef( pFoll, static_cast<const SwTextFootnote*>(pHt), this );
                 }
+                else
+                {
+                    if (!pFootnoteBoss)
+                        pFootnoteBoss = pFoll->FindFootnoteBossFrame( true );
+                    SwFootnoteBossFrame::ChangeFootnoteRef( pFoll, static_cast<const SwTextFootnote*>(pHt), this );
+                }
+                SetFootnote( true );
             }
         }
     }
