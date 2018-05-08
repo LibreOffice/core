@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_ca74ec9d",
+        "filename": "offapi/com/sun/star/drawing/GraphicObjectShape.idl",
+        "patchSetId": 11
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-08T13:58:41Z",
+      "side": 1,
+      "message": "What benefit is the incompatible change of moving this property up in the list of properties (cf. the corresponding change to offapi/type_reference/offapi.rdb that apparently became necessary in part due to that move)?\n\nWhat benefit is the incompatible change of making this property non-optional?  Is there old providers of this service (in 3rd-party code) that don\u0027t provide that property, and now cause issues (with core LO code) that expects the property to be provided?  (I doubt that, and I guess a better change would be to just comment that since LO 6.1 the property will be always present.)",
+      "revId": "2bf4d69e0bfa98d641939e62945a7f8915441297",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_ea77f09c",
+        "filename": "offapi/com/sun/star/style/NumberingLevel.idl",
+        "patchSetId": 11
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-08T13:58:41Z",
+      "side": 1,
+      "message": "What benefit is the incompatible change of adding this property as non-optional? Is there old providers of this service (in 3rd-party code) that don\u0027t provide that property, and now cause issues (with core LO code) that expects the property to be provided? (I doubt that, and I guess a better change would be to just comment that this new property will be always present.)",
+      "revId": "2bf4d69e0bfa98d641939e62945a7f8915441297",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_0a6fe4c5",
+        "filename": "offapi/com/sun/star/text/TextGraphicObject.idl",
+        "patchSetId": 11
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-08T13:58:41Z",
+      "side": 1,
+      "message": "What benefit is the incompatible change of moving this property up in the list of properties (cf. the corresponding change to offapi/type_reference/offapi.rdb that apparently became necessary in part due to that move)?\n\nWhat benefit is the incompatible change of making this property non-optional?  Is there old providers of this service (in 3rd-party code) that don\u0027t provide that property, and now cause issues (with core LO code) that expects the property to be provided?  (I doubt that, and I guess a better change would be to just comment that since LO 6.1 the property will be always present.)",
+      "revId": "2bf4d69e0bfa98d641939e62945a7f8915441297",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
