@@ -180,6 +180,9 @@ void ODBTable::construct()
     registerMayBeVoidProperty(PROPERTY_ROW_HEIGHT, PROPERTY_ID_ROW_HEIGHT, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
                     &m_aRowHeight, cppu::UnoType<sal_Int32>::get());
 
+    registerProperty(PROPERTY_AUTOGROW, PROPERTY_ID_AUTOGROW, PropertyAttribute::BOUND,
+                    &m_bAutoGrow, cppu::UnoType<bool>::get());
+
     registerMayBeVoidProperty(PROPERTY_TEXTCOLOR, PROPERTY_ID_TEXTCOLOR, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
                     &m_aTextColor, cppu::UnoType<sal_Int32>::get());
 
