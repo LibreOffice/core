@@ -21,7 +21,6 @@
 class EditTextObject;
 class ScDocument;
 class ScColumn;
-class ScAddress;
 struct ScAttrEntry;
 class ScTokenArray;
 class ScFormulaCell;

@@ -20,8 +20,9 @@
 #ifndef INCLUDED_SC_INC_DBDOCUTL_HXX
 #define INCLUDED_SC_INC_DBDOCUTL_HXX
 
-#include "address.hxx"
 #include <com/sun/star/uno/Reference.hxx>
+#include "types.hxx"
+#include <sal/types.h>
 
 class ScDocument;
 

@@ -12,9 +12,8 @@
 
 #include <svl/poolitem.hxx>
 #include <unotools/configitem.hxx>
-#include <formula/grammar.hxx>
 #include "scdllapi.h"
-#include "global.hxx"
+#include "types.hxx"
 
 class SC_DLLPUBLIC ScDefaultsOptions
 {

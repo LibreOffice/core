@@ -10,7 +10,6 @@
 #ifndef INCLUDED_SC_INC_EXTERNALDATAMAPPER_HXX
 #define INCLUDED_SC_INC_EXTERNALDATAMAPPER_HXX
 
-#include <memory>
 #include <vector>
 
 #include "scdllapi.h"

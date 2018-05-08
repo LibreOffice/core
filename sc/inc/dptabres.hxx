@@ -39,13 +39,10 @@ namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
 } } } }
 
-class ScAddress;
-class ScDocument;
 class ScDPSource;
 class ScDPDimension;
 class ScDPLevel;
 class ScDPMember;
-class ScDPAggData;
 class ScDPResultMember;
 class ScDPResultVisibilityData;
 
