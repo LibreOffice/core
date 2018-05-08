@@ -1292,6 +1292,20 @@ DECLARE_RTFIMPORT_TEST(testTdf78506, "tdf78506.rtf")
     }
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf117403, "tdf117403.rtf")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCell.is());
+    table::BorderLine2 aExpected(static_cast<sal_Int32>(COL_BLACK), 0, 4, 0,
+                                 table::BorderLineStyle::SOLID, 4);
+    // This failed, border was not imported, OuterLineWidth was 0 instead of 4.
+    CPPUNIT_ASSERT_BORDER_EQUAL(aExpected, getProperty<table::BorderLine2>(xCell, "BottomBorder"));
+}
+
 DECLARE_RTFIMPORT_TEST(testImportHeaderFooter, "tdf108055.rtf")
 {
     // The RTF import sometimes added Header and Footer multiple Times
