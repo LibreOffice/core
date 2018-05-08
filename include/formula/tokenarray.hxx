@@ -230,7 +230,7 @@ public:
 class FORMULA_DLLPUBLIC FormulaTokenArray
 {
 protected:
-    FormulaToken**  pCode;                  // Token code array
+    std::unique_ptr<FormulaToken*[]> pCode; // Token code array
     FormulaToken**  pRPN;                   // RPN array
     sal_uInt16      nLen;                   // Length of token array
     sal_uInt16      nRPN;                   // Length of RPN array
@@ -363,11 +363,11 @@ public:
         memcpy( pRPN, pData, nSize * sizeof( FormulaToken* ) );
     }
 
-    FormulaToken** GetArray() const  { return pCode; }
+    FormulaToken** GetArray() const  { return pCode.get(); }
 
     FormulaTokenArrayStandardRange Tokens() const
     {
-        return FormulaTokenArrayStandardRange(pCode, nLen);
+        return FormulaTokenArrayStandardRange(pCode.get(), nLen);
     }
 
     FormulaToken** GetCode()  const  { return pRPN; }
