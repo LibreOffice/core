@@ -25,6 +25,6 @@
         <prop oor:name="TemplateName"/>
         <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Microsoft PowerPoint 97-2003 Template</value>
+            <value xml:lang="en-US">PowerPoint 97–2003 Template</value>
         </prop>
     </node>
