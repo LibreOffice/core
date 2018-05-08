@@ -104,7 +104,7 @@ namespace dbaccess
 
         ::dbtools::WarningsContainer                m_aWarnings;
 
-        OTableContainer*                            m_pTables;
+        rtl::Reference<OTableContainer>        m_xTables;
 
         OUString                               m_aCommand;
         OUString                               m_aDataSourceName;
