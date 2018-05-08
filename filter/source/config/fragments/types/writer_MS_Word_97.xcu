@@ -23,7 +23,7 @@
         <prop oor:name="Preferred"><value>true</value></prop>
         <prop oor:name="PreferredFilter"><value>MS Word 97</value></prop>
         <prop oor:name="UIName">
-            <value>Microsoft Word 97-2003</value>
+            <value>Word 97–2003</value>
         </prop>
         <prop oor:name="ClipboardFormat"><value>MSWordDoc</value></prop>
     </node>

@@ -21,7 +21,7 @@
     <prop oor:name="FilterService"/>
     <prop oor:name="UserData"/>
     <prop oor:name="UIName">
-        <value xml:lang="en-US">Microsoft Excel 97-2003</value>
+        <value xml:lang="en-US">Excel 97–2003</value>
     </prop>
     <prop oor:name="FileFormatVersion"><value>0</value></prop>
     <prop oor:name="Type"><value>calc_MS_Excel_97</value></prop>
