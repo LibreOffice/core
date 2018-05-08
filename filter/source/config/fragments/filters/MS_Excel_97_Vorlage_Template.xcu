@@ -25,6 +25,6 @@
     <prop oor:name="TemplateName"/>
     <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Microsoft Excel 97-2003 Template</value>
+            <value xml:lang="en-US">Excel 97–2003 Template</value>
         </prop>
     </node>
