@@ -54,6 +54,7 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+#include <svx/svdotable.hxx>
 
 using namespace com::sun::star;
 
@@ -714,48 +715,57 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
     // Sorting the MarkList here might be problematic in the future, so
     // use a copy.
     SortMarkedObjects();
-    SdrModel* pNewModel=mpModel->AllocModel();
-    SdrPage* pnewPage=pNewModel->AllocPage(false);
-    pNewModel->InsertPage(pnewPage);
+    SdrModel* pNewModel(mpModel->AllocModel());
+    SdrPage* pNewPage(pNewModel->AllocPage(false));
+    pNewModel->InsertPage(pNewPage);
+    ::std::vector< SdrObject* > aSdrObjects(GetMarkedObjects());
 
-    if( !mxSelectionController.is() || !mxSelectionController->GetMarkedObjModel( pnewPage ) )
+    // #i13033#
+    // New mechanism to re-create the connections of cloned connectors
+    CloneList aCloneList;
+
+    for(SdrObject* pObj : aSdrObjects)
     {
-        ::std::vector< SdrObject* > aSdrObjects(GetMarkedObjects());
+        SdrObject* pNewObj(nullptr);
 
-        // #i13033#
-        // New mechanism to re-create the connections of cloned connectors
-        CloneList aCloneList;
-
-        for(SdrObject* pObj : aSdrObjects)
+        if(nullptr != dynamic_cast< const SdrPageObj* >(pObj))
         {
-            SdrObject*          pNewObj;
-
-            if( dynamic_cast<const SdrPageObj*>( pObj) !=  nullptr )
+            // convert SdrPageObj's to a graphic representation, because
+            // virtual connection to referenced page gets lost in new model
+            pNewObj = new SdrGrafObj(
+                *pNewModel,
+                GetObjGraphic(*pObj),
+                pObj->GetLogicRect());
+        }
+        else if(nullptr != dynamic_cast< const sdr::table::SdrTableObj* >(pObj))
+        {
+            // check if we have a valid selection *different* from whole table
+            // being selected
+            if(mxSelectionController.is())
             {
-                // convert SdrPageObj's to a graphic representation, because
-                // virtual connection to referenced page gets lost in new model
-                pNewObj = new SdrGrafObj(
-                    *pNewModel,
-                    GetObjGraphic(*pObj),
-                    pObj->GetLogicRect());
-                pNewObj->SetPage( pnewPage );
+                pNewObj = mxSelectionController->GetMarkedSdrObjClone(*pNewModel);
             }
-            else
-            {
-                pNewObj = pObj->CloneSdrObject(*pNewModel);
-                pNewObj->SetPage( pnewPage );
-            }
+        }
 
-            pnewPage->InsertObject(pNewObj, SAL_MAX_SIZE);
+        if(nullptr == pNewObj)
+        {
+            // not cloned yet, use default way
+            pNewObj = pObj->CloneSdrObject(*pNewModel);
+        }
+
+        if(pNewObj)
+        {
+            pNewObj->SetPage(pNewPage);
+            pNewPage->InsertObject(pNewObj, SAL_MAX_SIZE);
 
             // #i13033#
             aCloneList.AddPair(pObj, pNewObj);
         }
-
-        // #i13033#
-        // New mechanism to re-create the connections of cloned connectors
-        aCloneList.CopyConnections();
     }
+
+    // #i13033#
+    // New mechanism to re-create the connections of cloned connectors
+    aCloneList.CopyConnections();
 
     return pNewModel;
 }
