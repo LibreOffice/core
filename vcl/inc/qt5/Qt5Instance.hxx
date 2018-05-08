@@ -79,6 +79,11 @@ public:
     virtual OUString GetDefaultPrinter() override;
     virtual void PostPrintersChanged() override;
 
+    virtual SalMenu*            CreateMenu( bool, Menu* ) override;
+    virtual void                DestroyMenu( SalMenu* pMenu ) override;
+    virtual SalMenuItem*        CreateMenuItem( const SalItemParams* ) override;
+    virtual void                DestroyMenuItem( SalMenuItem* pItem ) override;
+
     virtual SalTimer* CreateSalTimer() override;
     virtual SalSystem* CreateSalSystem() override;
     virtual SalBitmap* CreateSalBitmap() override;
