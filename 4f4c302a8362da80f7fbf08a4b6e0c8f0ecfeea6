@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_b64d649b",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 15275,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-08T12:11:28Z",
+      "side": 1,
+      "message": "changes to this file are almost never what you actually want; what is the purpose of this change?",
+      "revId": "4f4c302a8362da80f7fbf08a4b6e0c8f0ecfeea6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_165f1042",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-08T12:11:28Z",
+      "side": 1,
+      "message": "should this be nillable (as it is by default)?  probably not, if you provide a default \u003cvalue\u003e anyway",
+      "revId": "4f4c302a8362da80f7fbf08a4b6e0c8f0ecfeea6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_7654cc20",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-08T12:11:28Z",
+      "side": 1,
+      "message": "why is this line indented oddly, using tabs?",
+      "revId": "4f4c302a8362da80f7fbf08a4b6e0c8f0ecfeea6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
