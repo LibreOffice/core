@@ -170,7 +170,7 @@ protected:
     friend class SfxTemplateControllerItem;
 
     SfxBindings* pBindings;
-    SfxTemplateControllerItem* pBoundItems[COUNT_BOUND_FUNC];
+    std::array<std::unique_ptr<SfxTemplateControllerItem>, COUNT_BOUND_FUNC> pBoundItems;
 
     VclPtr<vcl::Window> pWindow;
     std::unique_ptr<VclBuilder> mxBuilder;
@@ -179,8 +179,8 @@ protected:
     SfxModule* pModule;
     std::unique_ptr<Idle> pIdle;
 
-    SfxStyleFamilies* pStyleFamilies;
-    SfxTemplateItem* pFamilyState[MAX_FAMILIES];
+    std::unique_ptr<SfxStyleFamilies> pStyleFamilies;
+    std::array<std::unique_ptr<SfxTemplateItem>, MAX_FAMILIES> pFamilyState;
     SfxStyleSheetBasePool* pStyleSheetPool;
     VclPtr<StyleTreeListBox_Impl> pTreeBox;
     SfxObjectShell* pCurObjShell;
