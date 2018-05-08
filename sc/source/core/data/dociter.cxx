@@ -1069,7 +1069,7 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, const ScInterpre
             ScQueryEntry& rEntry = mpParam->GetEntry(i);
             ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
             sal_uInt32 nIndex = 0;
-            bool bNumber = pDoc->GetFormatTable()->IsNumberFormat(
+            bool bNumber = mrContext.GetFormatTable()->IsNumberFormat(
                 rItem.maString.getString(), nIndex, rItem.mfVal);
             rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
         }
@@ -1665,7 +1665,7 @@ bool ScQueryCellIterator::BinarySearch()
 
     CollatorWrapper* pCollator = (mpParam->bCaseSens ? ScGlobal::GetCaseCollator() :
         ScGlobal::GetCollator());
-    SvNumberFormatter& rFormatter = *(pDoc->GetFormatTable());
+    SvNumberFormatter& rFormatter = *(mrContext.GetFormatTable());
     const ScQueryEntry& rEntry = mpParam->GetEntry(0);
     const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
     bool bLessEqual = rEntry.eOp == SC_LESS_EQUAL;
