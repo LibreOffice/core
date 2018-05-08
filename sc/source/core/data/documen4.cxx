@@ -653,9 +653,10 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
     return !aData.bError;
 }
 
-double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
+double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat, const ScInterpreterContext* pContext ) const
 {
-    const SvNumberformat* pFormat = GetFormatTable()->GetEntry( nFormat );
+    const SvNumberFormatter* pFormatter = pContext ? pContext->GetFormatTable() : GetFormatTable();
+    const SvNumberformat* pFormat = pFormatter->GetEntry( nFormat );
     SvNumFormatType nType;
     if (pFormat && (nType = pFormat->GetMaskedType()) != SvNumFormatType::DATE
             && nType != SvNumFormatType::TIME && nType != SvNumFormatType::DATETIME )

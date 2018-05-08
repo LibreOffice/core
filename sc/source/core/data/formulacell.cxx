@@ -1904,8 +1904,8 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
                     bForceNumberFormat = false;
                 else
                 {
-                    nOldFormatIndex = pDocument->GetNumberFormat( aPos);
-                    nFormatType = pDocument->GetFormatTable()->GetType( nOldFormatIndex);
+                    nOldFormatIndex = pDocument->GetNumberFormat( rContext, aPos);
+                    nFormatType = rContext.GetFormatTable()->GetType( nOldFormatIndex);
                     switch (nFormatType)
                     {
                         case SvNumFormatType::PERCENT:
@@ -1930,11 +1930,11 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
             {
                 if (nOldFormatIndex == NUMBERFORMAT_ENTRY_NOT_FOUND)
                 {
-                    nOldFormatIndex = pDocument->GetNumberFormat( aPos);
-                    nFormatType = pDocument->GetFormatTable()->GetType( nOldFormatIndex);
+                    nOldFormatIndex = pDocument->GetNumberFormat( rContext, aPos);
+                    nFormatType = rContext.GetFormatTable()->GetType( nOldFormatIndex);
                 }
                 if (nOldFormatIndex !=
-                        ScGlobal::GetStandardFormat( *pDocument->GetFormatTable(), nOldFormatIndex, nFormatType))
+                        ScGlobal::GetStandardFormat( *rContext.GetFormatTable(), nOldFormatIndex, nFormatType))
                     bForceNumberFormat = false;
             }
         }
@@ -2065,9 +2065,9 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
           && nFormatType != SvNumFormatType::TIME
           && nFormatType != SvNumFormatType::DATETIME )
         {
-            sal_uInt32 nFormat = pDocument->GetNumberFormat( aPos );
+            sal_uInt32 nFormat = pDocument->GetNumberFormat( rContext, aPos );
             aResult.SetDouble( pDocument->RoundValueAsShown(
-                        aResult.GetDouble(), nFormat));
+                        aResult.GetDouble(), nFormat, &rContext));
         }
         if (eTailParam == SCITP_NORMAL)
         {
