@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <unoapi_property_testers.hxx>
+#include <test/unoapi_property_testers.hxx>
 #include <test/sheet/spreadsheetdocumentsettings.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
