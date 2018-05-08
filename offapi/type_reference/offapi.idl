@@ -3643,7 +3643,6 @@ module com {
      [property, maybevoid, optional] boolean ParaIsConnectBorder;
      [property, optional] string ListId;
      [property, optional] short OutlineLevel;
-     [property, optional] ::com::sun::star::graphic::XGraphic ParaBackGraphic;
     };
    };
    module util {
