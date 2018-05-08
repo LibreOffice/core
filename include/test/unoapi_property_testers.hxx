@@ -12,6 +12,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/util/Color.hpp>
 
 #include <sal/config.h>
 #include <test/testdllapi.hxx>
@@ -24,6 +25,16 @@ namespace apitest
  * @param   name            Name of property to test.
  */
 void OOO_DLLPUBLIC_TEST testBooleanProperty(
+    css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, const OUString& name);
+
+/** @brief Tester for optional property type 'boolean' of a @see com::sun::star::beans::XPropertySet.
+ *
+ * Pass the test also if the property doesn't exists (throws a com::sun::star::beans::UnknownPropertyException)
+ *
+ * @param   xPropertySet    The property set, which contains the property to test against.
+ * @param   name            Name of property to test.
+ */
+void OOO_DLLPUBLIC_TEST testBooleanOptionalProperty(
     css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, const OUString& name);
 
 /** @brief Tester for read-only property type 'boolean' of a @see com::sun::star::beans::XPropertySet.
@@ -104,6 +115,18 @@ void OOO_DLLPUBLIC_TEST
 testStringProperty(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet,
                    const OUString& name, const OUString& rValue);
 
+/** @brief Tester for optional property type 'string' of a @see com::sun::star::beans::XPropertySet.
+ *
+ * Pass the test also if the property doesn't exists (throws a com::sun::star::beans::UnknownPropertyException)
+ *
+ * @param   xPropertySet    The property set, which contains the property to test against.
+ * @param   name            Name of property to test.
+ * @param   rValue          Value to use when setting a new value.
+ */
+void OOO_DLLPUBLIC_TEST
+testStringOptionalProperty(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet,
+                           const OUString& name, const OUString& rValue = OUString("StringValue"));
+
 /** @brief Tester for read-only property type 'string' of a @see com::sun::star::beans::XPropertySet.
  *
  * @param   xPropertySet    The property set, which contains the property to test against.
@@ -113,6 +136,17 @@ testStringProperty(css::uno::Reference<css::beans::XPropertySet> const& xPropert
 void OOO_DLLPUBLIC_TEST
 testStringReadonlyProperty(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet,
                            const OUString& name, const OUString& rValue);
+
+/** @brief Tester for property type com::sun::star::util::Color of a @see com::sun::star::beans::XPropertySet.
+ *
+ * @param   xPropertySet    The property set, which contains the property to test against.
+ * @param   name            Name of property to test.
+ * @param   rValue          Value to use when setting a new value.
+ */
+void OOO_DLLPUBLIC_TEST testColorProperty(
+    css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, const OUString& name,
+    const css::util::Color& rValue = css::util::Color(0x12345678));
+
 } // namespace apitest
 #endif // INCLUDED_TEST_INC_UNOAPIPROPERTYTESTERS_HXX
 
