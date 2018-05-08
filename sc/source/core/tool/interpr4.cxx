@@ -151,7 +151,7 @@ double ScInterpreter::GetValueCellValue( const ScAddress& rPos, double fOrig )
     if ( bCalcAsShown && fOrig != 0.0 )
     {
         sal_uInt32 nFormat = pDok->GetNumberFormat( mrContext, rPos );
-        fOrig = pDok->RoundValueAsShown( fOrig, nFormat );
+        fOrig = pDok->RoundValueAsShown( fOrig, nFormat, &mrContext );
     }
     return fOrig;
 }
@@ -223,7 +223,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
             nCurFmtIndex = pDok->GetNumberFormat( mrContext, rPos );
             nCurFmtType = pFormatter->GetType( nCurFmtIndex );
             if ( bCalcAsShown && fValue != 0.0 )
-                fValue = pDok->RoundValueAsShown( fValue, nCurFmtIndex );
+                fValue = pDok->RoundValueAsShown( fValue, nCurFmtIndex, &mrContext );
         }
         break;
         case  CELLTYPE_STRING:
