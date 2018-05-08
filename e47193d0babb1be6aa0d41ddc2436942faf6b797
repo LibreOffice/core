@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_aa541821",
+        "filename": "sw/source/core/attr/calbck.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2018-05-08T20:39:42Z",
+      "side": 1,
+      "message": "I assumed you really meant this, so I tried it first -- but it fails.",
+      "revId": "e47193d0babb1be6aa0d41ddc2436942faf6b797",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
