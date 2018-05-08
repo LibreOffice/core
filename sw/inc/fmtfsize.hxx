@@ -49,6 +49,10 @@ class SW_DLLPUBLIC SwFormatFrameSize: public SvxSizeItem
     sal_uInt8 m_nHeightPercent;
     sal_Int16 m_eHeightPercentRelation;
 
+    // In case, "style:use-optimal-row-height" is true, don't overwrite m_eFrameHeightType
+    // while reading "style:row-height"
+    bool m_bUseOptimalHeight;
+
     // For tables: width can be given in percent.
 
     // For frames: height and/or width may be given in percent.
@@ -79,7 +83,10 @@ public:
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     SwFrameSize GetHeightSizeType() const { return m_eFrameHeightType; }
-    void SetHeightSizeType( SwFrameSize eSize ) { m_eFrameHeightType = eSize; }
+    void SetHeightSizeType(SwFrameSize eSize) { m_eFrameHeightType = eSize; }
+
+    bool GetUseOptimalHeight() const { return m_bUseOptimalHeight; }
+    void SetUseOptimalHeight(bool bUseOptimalHeight) { m_bUseOptimalHeight = bUseOptimalHeight; }
 
     SwFrameSize GetWidthSizeType() const { return m_eFrameWidthType; }
     void SetWidthSizeType( SwFrameSize eSize ) { m_eFrameWidthType = eSize; }

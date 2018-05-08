@@ -192,7 +192,8 @@ bool SwFormatFrameSize::HasMetrics() const {
 SwFormatFrameSize::SwFormatFrameSize( SwFrameSize eSize, SwTwips nWidth, SwTwips nHeight )
     : SvxSizeItem( RES_FRM_SIZE, {nWidth, nHeight} ),
     m_eFrameHeightType( eSize ),
-    m_eFrameWidthType( ATT_FIX_SIZE )
+    m_eFrameWidthType( ATT_FIX_SIZE ),
+    m_bUseOptimalHeight(false)
 {
     m_nWidthPercent = m_eWidthPercentRelation = m_nHeightPercent = m_eHeightPercentRelation = 0;
 }
@@ -206,6 +207,7 @@ SwFormatFrameSize& SwFormatFrameSize::operator=( const SwFormatFrameSize& rCpy )
     m_eHeightPercentRelation  = rCpy.GetHeightPercentRelation();
     m_nWidthPercent  = rCpy.GetWidthPercent();
     m_eWidthPercentRelation  = rCpy.GetWidthPercentRelation();
+    m_bUseOptimalHeight = rCpy.GetUseOptimalHeight();
     return *this;
 }
 
@@ -218,7 +220,8 @@ bool SwFormatFrameSize::operator==( const SfxPoolItem& rAttr ) const
             m_nWidthPercent   == static_cast<const SwFormatFrameSize&>(rAttr).GetWidthPercent() &&
             m_eWidthPercentRelation == static_cast<const SwFormatFrameSize&>(rAttr).GetWidthPercentRelation() &&
             m_nHeightPercent  == static_cast<const SwFormatFrameSize&>(rAttr).GetHeightPercent() &&
-            m_eHeightPercentRelation == static_cast<const SwFormatFrameSize&>(rAttr).GetHeightPercentRelation() );
+            m_eHeightPercentRelation == static_cast<const SwFormatFrameSize&>(rAttr).GetHeightPercentRelation() &&
+            m_bUseOptimalHeight == static_cast<const SwFormatFrameSize&>(rAttr).GetUseOptimalHeight());
 }
 
 SfxPoolItem*  SwFormatFrameSize::Clone( SfxItemPool* ) const

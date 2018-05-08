@@ -108,6 +108,7 @@ sal_Bool SAL_CALL ODBTableDecorator::convertFastPropertyValue(
         case PROPERTY_ID_APPLYFILTER:
         case PROPERTY_ID_FONT:
         case PROPERTY_ID_ROW_HEIGHT:
+        case PROPERTY_ID_AUTOGROW:
         case PROPERTY_ID_TEXTCOLOR:
         case PROPERTY_ID_TEXTLINECOLOR:
         case PROPERTY_ID_TEXTEMPHASIS:
@@ -154,6 +155,7 @@ void ODBTableDecorator::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, con
         case PROPERTY_ID_APPLYFILTER:
         case PROPERTY_ID_FONT:
         case PROPERTY_ID_ROW_HEIGHT:
+        case PROPERTY_ID_AUTOGROW:
         case PROPERTY_ID_TEXTCOLOR:
         case PROPERTY_ID_TEXTLINECOLOR:
         case PROPERTY_ID_TEXTEMPHASIS:
@@ -234,6 +236,7 @@ void ODBTableDecorator::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) c
         case PROPERTY_ID_APPLYFILTER:
         case PROPERTY_ID_FONT:
         case PROPERTY_ID_ROW_HEIGHT:
+        case PROPERTY_ID_AUTOGROW:
         case PROPERTY_ID_TEXTCOLOR:
         case PROPERTY_ID_TEXTLINECOLOR:
         case PROPERTY_ID_TEXTEMPHASIS:
