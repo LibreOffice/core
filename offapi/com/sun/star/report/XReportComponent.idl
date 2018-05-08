@@ -84,6 +84,16 @@ interface XReportComponent
         set raises ( com::sun::star::beans::PropertyVetoException );
     };
 
+    /** Specifies that the control containing data shall automatically grow to the optimal height
+     to show the data without wasting space.
+    */
+
+    [attribute, bound] boolean AutoGrow
+    {
+        set raises(com::sun::star::beans::UnknownPropertyException);
+        get raises(com::sun::star::beans::UnknownPropertyException);
+    };
+
     /** specifies the border style of the control.
 
         <pre>

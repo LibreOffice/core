@@ -898,7 +898,12 @@ bool SvXMLImportItemMapper::PutXMLValue(
                     }
                 }
                 break;
-                }
+                case MID_FRMSIZE_IS_AUTO_HEIGHT:
+                    rFrameSize.SetHeightSizeType(ATT_VAR_SIZE);
+                    rFrameSize.SetUseOptimalHeight(true);
+                    bOk = true;
+                    break;
+            }
 
             sal_Int32 nValue;
             if( bSetHeight || bSetWidth )
@@ -911,7 +916,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         rFrameSize.SetWidth( static_cast<sal_uInt16>(nValue) );
                     if( bSetHeight )
                         rFrameSize.SetHeight( static_cast<sal_uInt16>(nValue) );
-                    if( bSetSizeType )
+                    if( bSetSizeType && !rFrameSize.GetUseOptimalHeight())
                         rFrameSize.SetHeightSizeType( eSizeType );
                 }
             }
