@@ -132,6 +132,7 @@ private:
     void                    exportReportComponentAutoStyles(const Reference<XSection>& _xProp);
     void                    collectComponentStyles();
     void                    collectStyleNames(sal_Int32 _nFamily,const ::std::vector< sal_Int32>& _aSize, ORptExport::TStringVec& _rStyleNames);
+    void                    collectStyleNames(sal_Int32 _nFamily,const ::std::vector< sal_Int32>& _aSize, const ::std::vector< sal_Int32>& _aSizeAutoGrow, ORptExport::TStringVec& _rStyleNames);
     void                    exportParagraph(const Reference< XReportControlModel >& _xReportElement);
     bool                    exportFormula(enum ::xmloff::token::XMLTokenEnum eName,const OUString& _sFormula);
     void                    exportGroupsExpressionAsFunction(const Reference< XGroups>& _xGroups);
