@@ -1315,6 +1315,7 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
         ,OUString(PROPERTY_POSITIONY)
         ,OUString(PROPERTY_WIDTH)
         ,OUString(PROPERTY_HEIGHT)
+        ,OUString(PROPERTY_AUTOGROW)
         ,OUString(PROPERTY_PREEVALUATED)
         ,OUString(PROPERTY_DEEPTRAVERSING)
         ,OUString(PROPERTY_FORMULA)

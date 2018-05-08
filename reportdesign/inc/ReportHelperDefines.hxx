@@ -45,6 +45,8 @@
     virtual void SAL_CALL setPositionY(::sal_Int32 the_value) override; \
     virtual ::sal_Int32 SAL_CALL getWidth() override; \
     virtual void SAL_CALL setWidth(::sal_Int32 the_value) override; \
+    virtual sal_Bool SAL_CALL getAutoGrow() override; \
+    virtual void SAL_CALL setAutoGrow(sal_Bool the_value) override; \
     virtual ::sal_Int16 SAL_CALL getControlBorder() override; \
     virtual void SAL_CALL setControlBorder(::sal_Int16 the_value) override; \
     virtual ::sal_Int32 SAL_CALL getControlBorderColor() override; \

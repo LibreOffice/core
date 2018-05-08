@@ -68,6 +68,18 @@ namespace reportdesign
             }
             l.notify();
         }
+        void set(const OUString& _sProperty
+            , bool Value
+            , bool& _member)
+        {
+            BoundListeners l;
+            {
+                ::osl::MutexGuard aGuard(m_aMutex);
+                prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(Value), &l);
+                _member = Value;
+            }
+            l.notify();
+        }
     protected:
         virtual ~OFixedLine() override;
     public:
