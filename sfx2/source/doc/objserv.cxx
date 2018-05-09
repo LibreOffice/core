@@ -673,6 +673,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             catch( const task::ErrorCodeIOException& aErrorEx )
             {
                 nErrorCode = ErrCode(aErrorEx.ErrCode);
+                SAL_WARN( "sfx.doc", "Fatal IO error during save " << aErrorEx );
             }
             catch( Exception& )
             {
