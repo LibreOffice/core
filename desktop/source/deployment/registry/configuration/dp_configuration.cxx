@@ -20,7 +20,7 @@
 //TODO: Large parts of this file were copied from dp_component.cxx; those parts
 // should be consolidated.
 
-#include <config_features.h>
+#include <config_extensions.h>
 
 #include <dp_backend.h>
 #if HAVE_FEATURE_EXTENSIONS
