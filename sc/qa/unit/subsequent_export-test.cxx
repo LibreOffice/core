@@ -3364,6 +3364,11 @@ void ScExportTest::testRelativeNamedExpressionsXLS()
     ScAddress aPos(5,5,1);
     CPPUNIT_ASSERT_EQUAL(18.0, rDoc.GetValue(aPos));
     ASSERT_FORMULA_EQUAL(rDoc, aPos, "SUM(test_conflict)", nullptr);
+
+    // Sheet2:H6
+    aPos = ScAddress(7,5,1);
+    CPPUNIT_ASSERT_EQUAL(75.0, rDoc.GetValue(aPos));
+    ASSERT_FORMULA_EQUAL(rDoc, aPos, "SUM(A6:F6)", nullptr);
     xDocSh2->DoClose();
 }
 

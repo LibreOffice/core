@@ -115,7 +115,7 @@ public:
     void                Initialize();
 
     /** Inserts the Calc name with the passed index and returns the Excel NAME index. */
-    sal_uInt16          InsertName( SCTAB nTab, sal_uInt16 nScNameIdx );
+    sal_uInt16          InsertName( SCTAB nTab, sal_uInt16 nScNameIdx, SCTAB nCurrTab );
 
     /** Inserts a new built-in defined name. */
     sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, const XclTokenArrayRef& xTokArr, SCTAB nScTab, const ScRangeList& aRangeList );
@@ -379,7 +379,7 @@ void XclExpNameManagerImpl::Initialize()
     CreateUserNames();
 }
 
-sal_uInt16 XclExpNameManagerImpl::InsertName( SCTAB nTab, sal_uInt16 nScNameIdx )
+sal_uInt16 XclExpNameManagerImpl::InsertName( SCTAB nTab, sal_uInt16 nScNameIdx, SCTAB nCurrTab )
 {
     sal_uInt16 nNameIdx = 0;
     const ScRangeData* pData = nullptr;
@@ -389,7 +389,9 @@ sal_uInt16 XclExpNameManagerImpl::InsertName( SCTAB nTab, sal_uInt16 nScNameIdx 
 
     if (pData)
     {
-        nNameIdx = FindNamedExp( nTab, pData->GetName() );
+        // Ensuring 3D for export: safe to use here without a copy of GetCode() ONLY IF SCTAB_GLOBAL
+        const bool bEmulatedEntry = (nTab == SCTAB_GLOBAL) && lcl_Ensure3DNamedRange(nTab, pData->GetCode());
+        nNameIdx = FindNamedExp( bEmulatedEntry ? nCurrTab : nTab, pData->GetName() );
         if (!nNameIdx)
             nNameIdx = CreateName(nTab, *pData);
     }
@@ -733,9 +735,9 @@ void XclExpNameManager::Initialize()
     mxImpl->Initialize();
 }
 
-sal_uInt16 XclExpNameManager::InsertName( SCTAB nTab, sal_uInt16 nScNameIdx )
+sal_uInt16 XclExpNameManager::InsertName( SCTAB nTab, sal_uInt16 nScNameIdx, SCTAB nCurrTab )
 {
-    return mxImpl->InsertName( nTab, nScNameIdx );
+    return mxImpl->InsertName( nTab, nScNameIdx, nCurrTab );
 }
 
 sal_uInt16 XclExpNameManager::InsertBuiltInName( sal_Unicode cBuiltIn, const ScRange& rRange )
