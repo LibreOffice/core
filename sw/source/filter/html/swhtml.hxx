@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_HTML_SWHTML_HXX
 #define INCLUDED_SW_SOURCE_FILTER_HTML_SWHTML_HXX
 
-#include <config_features.h>
+#include <config_java.h>
 
 #include <sfx2/sfxhtml.hxx>
 #include <svl/macitem.hxx>

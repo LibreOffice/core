@@ -20,7 +20,7 @@
 #define INCLUDED_CONNECTIVITY_COMMONTOOLS_HXX
 
 #include <sal/config.h>
-#include <config_features.h>
+#include <config_java.h>
 
 #include <map>
 
