@@ -223,7 +223,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             // #i22341# - get top of line, in which the anchor character is.
             mnToCharTopOfLine = GetAnchoredObj().GetLastTopOfLine();
             pOrientFrame = &(const_cast<SwTextFrame&>(rAnchorTextFrame).GetFrameAtOfst(
-                                rAnch.GetContentAnchor()->nContent.GetIndex() ) );
+                rAnchorTextFrame.MapModelToViewPos(*rAnch.GetContentAnchor())));
             mpToCharOrientFrame = pOrientFrame;
         }
     }
