@@ -109,8 +109,7 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, EditEngineA
         else
         {
             // no, we need delete the old cache
-            delete mpAttribsCache;
-            mpAttribsCache = nullptr;
+            mpAttribsCache.reset();
         }
     }
 
@@ -122,7 +121,7 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, EditEngineA
 
     if( EditEngineAttribs::All == nOnlyHardAttrib )
     {
-        mpAttribsCache = new SfxItemSet( aSet );
+        mpAttribsCache.reset(new SfxItemSet( aSet ));
         maAttribCacheSelection = rSel;
     }
 
@@ -146,12 +145,11 @@ SfxItemSet SvxOutlinerForwarder::GetParaAttribs( sal_Int32 nPara ) const
         else
         {
             // no, we need delete the old cache
-            delete mpParaAttribsCache;
-            mpParaAttribsCache = nullptr;
+            mpParaAttribsCache.reset();
         }
     }
 
-    mpParaAttribsCache = new SfxItemSet( rOutliner.GetParaAttribs( nPara ) );
+    mpParaAttribsCache.reset(new SfxItemSet( rOutliner.GetParaAttribs( nPara ) ));
     mnParaAttribsCache = nPara;
 
     EditEngine& rEditEngine = const_cast<EditEngine&>(rOutliner.GetEditEngine());
@@ -253,17 +251,8 @@ SfxItemState SvxOutlinerForwarder::GetItemState( sal_Int32 nPara, sal_uInt16 nWh
 
 void SvxOutlinerForwarder::flushCache()
 {
-    if( mpAttribsCache )
-    {
-        delete mpAttribsCache;
-        mpAttribsCache = nullptr;
-    }
-
-    if( mpParaAttribsCache )
-    {
-        delete mpParaAttribsCache;
-        mpParaAttribsCache = nullptr;
-    }
+    mpAttribsCache.reset();
+    mpParaAttribsCache.reset();
 }
 
 LanguageType SvxOutlinerForwarder::GetLanguage( sal_Int32 nPara, sal_Int32 nIndex ) const
