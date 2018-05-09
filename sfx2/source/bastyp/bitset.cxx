@@ -43,7 +43,7 @@ IndexBitSet& IndexBitSet::operator-=(sal_uInt16 nBit)
     return *this;
 }
 
-// unites with a single bit
+// units with a single bit
 
 IndexBitSet& IndexBitSet::operator|=( sal_uInt16 nBit )
 {
