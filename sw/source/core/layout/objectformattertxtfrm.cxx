@@ -272,7 +272,7 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
             // objects under the condition, that its follow contains all its text.
             else if ( !mrAnchorTextFrame.IsFollow() &&
                       mrAnchorTextFrame.GetFollow() &&
-                      mrAnchorTextFrame.GetFollow()->GetOfst() == 0 )
+                      mrAnchorTextFrame.GetFollow()->GetOfst() == TextFrameIndex(0))
             {
                 SwLayouter::RemoveMovedFwdFrame(
                                 *(mrAnchorTextFrame.FindPageFrame()->GetFormat()->GetDoc()),
@@ -440,7 +440,7 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
         // objects under the condition, that its follow contains all its text.
         else if ( !mrAnchorTextFrame.IsFollow() &&
                   mrAnchorTextFrame.GetFollow() &&
-                  mrAnchorTextFrame.GetFollow()->GetOfst() == 0 )
+                  mrAnchorTextFrame.GetFollow()->GetOfst() == TextFrameIndex(0))
         {
             SwLayouter::RemoveMovedFwdFrame(
                             *(mrAnchorTextFrame.FindPageFrame()->GetFormat()->GetDoc()),
