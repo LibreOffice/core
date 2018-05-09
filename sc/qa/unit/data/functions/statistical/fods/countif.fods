@@ -3865,10 +3865,22 @@
      <table:table-cell table:style-name="ce58"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce28"/>
-     <table:table-cell table:style-name="ce34"/>
-     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:formula="of:=COUNTIF([.P20:.R23];&quot;&quot;)" office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce64" table:formula="of:=ROUND([.A32];12)=ROUND([.B32];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce34" table:formula="of:=FORMULA([.A32])" office:value-type="string" office:string-value="=COUNTIF(P20:R23,&quot;&quot;)" calcext:value-type="string">
+      <text:p>=COUNTIF(P20:R23,&quot;&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf#117433</text:p>
+     </table:table-cell>
+     <table:table-cell/>
      <table:table-cell table:style-name="ce39"/>
      <table:table-cell/>
      <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
