@@ -743,7 +743,7 @@
 #define RID_SVXSTR_GRDT68                                   NC_("RID_SVXSTR_GRDT68", "Night")
 #define RID_SVXSTR_GRDT69                                   NC_("RID_SVXSTR_GRDT69", "Green Gradient")
 //actual gradients defined for 6.1
-#define RID_SVXSTR_GRDT70                                   NC_("RID_SVXSTR_GRDT70", "Pastel Bouqet")
+#define RID_SVXSTR_GRDT70                                   NC_("RID_SVXSTR_GRDT70", "Pastel Bouquet")
 #define RID_SVXSTR_GRDT71                                   NC_("RID_SVXSTR_GRDT71", "Pastel Dream")
 #define RID_SVXSTR_GRDT72                                   NC_("RID_SVXSTR_GRDT72", "Blue Touch")
 #define RID_SVXSTR_GRDT73                                   NC_("RID_SVXSTR_GRDT73", "Blank with Gray")

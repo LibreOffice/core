@@ -164,7 +164,7 @@
 #define RID_SVXSTR_GRDT68_DEF                       "Night"
 #define RID_SVXSTR_GRDT69_DEF                       "Green Gradient"
 //actual gradients defined for 6.1
-#define RID_SVXSTR_GRDT70_DEF                       "Pastel Bouqet"
+#define RID_SVXSTR_GRDT70_DEF                       "Pastel Bouquet"
 #define RID_SVXSTR_GRDT71_DEF                       "Pastel Dream"
 #define RID_SVXSTR_GRDT72_DEF                       "Blue Touch"
 #define RID_SVXSTR_GRDT73_DEF                       "Blank with Gray"

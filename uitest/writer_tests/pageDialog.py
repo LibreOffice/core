@@ -59,7 +59,7 @@ class WriterPageDialog(UITestCase):
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillGradient.EndIntensity, 100)
             self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.FillGradientName, 'Pastel Bouqet')
+                document.StyleFamilies.PageStyles.Standard.FillGradientName, 'Pastel Bouquet')
         elif btn == 'btnhatch':
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillHatch.Style, SINGLE )
