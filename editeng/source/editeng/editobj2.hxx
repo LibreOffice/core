@@ -184,7 +184,7 @@ private:
 
     ContentInfosType        aContents;
     SfxItemPool*            pPool;
-    XParaPortionList*       pPortionInfo;
+    std::unique_ptr<XParaPortionList> pPortionInfo;
 
     sal_uInt32              nObjSettings;
     sal_uInt16              nMetric;
@@ -227,9 +227,9 @@ public:
     ContentInfosType&       GetContents() { return aContents;}
     const ContentInfosType& GetContents() const { return aContents;}
     SfxItemPool*            GetPool() const         { return pPool; }
-    XParaPortionList*       GetPortionInfo() const  { return pPortionInfo; }
-    void                    SetPortionInfo( XParaPortionList* pP )
-                                { pPortionInfo = pP; }
+    XParaPortionList*       GetPortionInfo() const  { return pPortionInfo.get(); }
+    void                    SetPortionInfo( std::unique_ptr<XParaPortionList> pP )
+                                { pPortionInfo = std::move(pP); }
 
     sal_Int32 GetParagraphCount() const;
     OUString GetText(sal_Int32 nParagraph) const;

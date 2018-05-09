@@ -1095,7 +1095,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
     if ( bAllowBigObjects && bOnlyFullParagraphs && IsFormatted() && GetUpdateMode() && ( nTextPortions >= nBigObjectStart ) )
     {
         XParaPortionList* pXList = new XParaPortionList( GetRefDevice(), aPaperSize.Width(), nStretchX, nStretchY );
-        pTxtObj->mpImpl->SetPortionInfo(pXList);
+        pTxtObj->mpImpl->SetPortionInfo(std::unique_ptr<XParaPortionList>(pXList));
         for ( nNode = nStartNode; nNode <= nEndNode; nNode++  )
         {
             const ParaPortion* pParaPortion = GetParaPortions()[nNode];
