@@ -30,6 +30,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <comphelper/scopeguard.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/security.hxx>
 
@@ -42,6 +43,8 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
 {
     LdapDefinition aDefinition;
     OUString loggedOnUser;
+    // true initially to handle reentrant call; will become false if readLdapConfiguration fails
+    bool bHaveLdapConfiguration = true;
 
     // This whole rigmarole is to prevent an infinite recursion where reading
     // the configuration for the backend would create another instance of the
@@ -55,30 +58,26 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
 
         if (!bReentrantCall)
         {
-            try
-            {
-                bReentrantCall = true ;
-                if (!readLdapConfiguration(
-                        xContext, &aDefinition, &loggedOnUser))
-                {
-                    throw css::uno::RuntimeException(
-                        OUString("LdapUserProfileBe- LDAP not configured"),
-                        nullptr);
-                }
-
-                bReentrantCall = false ;
-            }
-            catch (...)
-            {
-                bReentrantCall = false;
-                throw;
-            }
+            bReentrantCall = true ;
+            comphelper::ScopeGuard aReentrantCallGuard([]() { bReentrantCall = false; });
+            // Don't throw on fail: this will crash if LDAP is misconfigured, and user opens
+            // Expert Configuration dialog. Instead, just don't fill data_, which will make the
+            // backend return empty values. This happens in SvtUserOptions::Impl::GetValue_Impl
+            // anyway even in throwing scenario, but doing it here also improves performance
+            // because of avoiding repeated attempts to create the backend.
+            bHaveLdapConfiguration = readLdapConfiguration(
+                xContext, &aDefinition, &loggedOnUser);
+            if (!bHaveLdapConfiguration)
+                SAL_WARN("extensions.config", "LdapUserProfileBackend: LDAP not configured");
         }
     }
 
-    LdapConnection connection;
-    connection.connectSimple(aDefinition);
-    connection.getUserProfile(loggedOnUser, &data_);
+    if (bHaveLdapConfiguration)
+    {
+        LdapConnection connection;
+        connection.connectSimple(aDefinition);
+        connection.getUserProfile(loggedOnUser, &data_);
+    }
 }
 
 LdapUserProfileBe::~LdapUserProfileBe()

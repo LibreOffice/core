@@ -28,6 +28,7 @@ $(eval $(call gb_Library_add_exception_objects,ldapbe2,\
 ))
 
 $(eval $(call gb_Library_use_libraries,ldapbe2,\
+	comphelper \
 	cppuhelper \
 	cppu \
 	salhelper \
