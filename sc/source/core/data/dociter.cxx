@@ -1144,7 +1144,7 @@ bool ScQueryCellIterator::GetThis()
                 }
                 pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
             }
-            while (pCol->IsEmptyData());
+            while (!rItem.mbMatchEmpty && pCol->IsEmptyData());
 
             InitPos();
 
