@@ -303,7 +303,7 @@ public:
 
     void            SetOffset( const Point& rOfs );
     void            SetManualZoom( sal_uInt16 nNewZoom );
-    void            SetDateTime( const Date& rDate, const tools::Time& rTime );
+    void            SetDateTime( const DateTime& );
 
     void            SetClearFlag( bool bFlag );
     void            SetUseStyleColor( bool bFlag );

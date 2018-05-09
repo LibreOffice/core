@@ -25,8 +25,7 @@
 #include "address.hxx"
 #include <editeng/editeng.hxx>
 #include <svx/pageitem.hxx>
-#include <tools/date.hxx>
-#include <tools/time.hxx>
+#include <tools/datetime.hxx>
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
 #include <vcl/outdev.hxx>
@@ -190,8 +189,7 @@ struct ScHeaderFieldData
     OUString    aLongDocName;       // path and file name
     OUString    aShortDocName;      // pure file name
     OUString    aTabName;
-    Date        aDate;
-    tools::Time aTime;
+    DateTime    aDateTime;
     long        nPageNo;
     long        nTotalPages;
     SvxNumType  eNumType;

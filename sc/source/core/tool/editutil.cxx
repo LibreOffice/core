@@ -781,9 +781,7 @@ static OUString lcl_GetNumStr(sal_Int32 nNo, SvxNumType eType)
 }
 
 ScHeaderFieldData::ScHeaderFieldData()
-    :
-        aDate( Date::EMPTY ),
-        aTime( tools::Time::EMPTY )
+    : aDateTime ( DateTime::EMPTY )
 {
     nPageNo = nTotalPages = 0;
     eNumType = SVX_NUM_ARABIC;
@@ -815,7 +813,7 @@ OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         case text::textfield::Type::EXTENDED_TIME:
         case text::textfield::Type::TIME:
             // For now, time field in the header / footer is always dynamic.
-            aRet = ScGlobal::pLocaleData->getTime(aData.aTime);
+            aRet = ScGlobal::pLocaleData->getTime(aData.aDateTime);
         break;
         case text::textfield::Type::DOCINFO_TITLE:
             aRet = aData.aTitle;
@@ -836,7 +834,7 @@ OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
             aRet = aData.aTabName;
         break;
         case text::textfield::Type::DATE:
-            aRet = ScGlobal::pLocaleData->getDate(aData.aDate);
+            aRet = ScGlobal::pLocaleData->getDate(aData.aDateTime);
         break;
         default:
             aRet = "?";

@@ -95,8 +95,7 @@ ScPreview::ScPreview( vcl::Window* pParent, ScDocShell* pDocSh, ScPreviewShell* 
     nTabPage( 0 ),
     nTabStart( 0 ),
     nDisplayStart( 0 ),
-    aDate( Date::SYSTEM ),
-    aTime( tools::Time::SYSTEM ),
+    aDateTime( DateTime::SYSTEM ),
     nTotalPages( 0 ),
     pLocationData( nullptr ),
     pDrawView( nullptr ),
@@ -400,7 +399,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
         pPrintFunc->SetOffset(aOffset);
         pPrintFunc->SetManualZoom(nZoom);
-        pPrintFunc->SetDateTime(aDate,aTime);
+        pPrintFunc->SetDateTime(aDateTime);
         pPrintFunc->SetClearFlag(true);
         pPrintFunc->SetUseStyleColor( pScMod->GetAccessOptions().GetIsForPagePreviews() );
 
@@ -700,10 +699,7 @@ const ScPreviewLocationData& ScPreview::GetLocationData()
 void ScPreview::DataChanged(bool bNewTime)
 {
     if (bNewTime)
-    {
-        aDate = Date( Date::SYSTEM );
-        aTime = tools::Time( tools::Time::SYSTEM );
-    }
+        aDateTime = DateTime( DateTime::SYSTEM );
 
     bValid = false;
     InvalidateLocationData( SfxHintId::ScDataChanged );

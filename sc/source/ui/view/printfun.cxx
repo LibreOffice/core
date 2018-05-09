@@ -1074,7 +1074,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     else
         aFieldData.nTotalPages = nTotalPages;
 
-    SetDateTime( Date( Date::SYSTEM ), tools::Time( tools::Time::SYSTEM ) );
+    SetDateTime( DateTime( DateTime::SYSTEM ) );
 
     if( pDocShell->getDocProperties()->getTitle().getLength() != 0 )
         aFieldData.aTitle = pDocShell->getDocProperties()->getTitle();
@@ -1110,10 +1110,9 @@ void ScPrintFunc::GetScaleData( Size& rPhysSize, long& rDocHdr, long& rDocFtr )
     rDocFtr = aFtr.nHeight;
 }
 
-void ScPrintFunc::SetDateTime( const Date& rDate, const tools::Time& rTime )
+void ScPrintFunc::SetDateTime( const DateTime& rDateTime )
 {
-    aFieldData.aDate = rDate;
-    aFieldData.aTime = rTime;
+    aFieldData.aDateTime = rDateTime;
 }
 
 static void lcl_DrawGraphic( const Graphic &rGraphic, vcl::RenderContext *pOut,
