@@ -263,7 +263,7 @@ bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess const &rGu
         return false;
 
     SwHyphPortion *pHyphPor;
-    sal_Int32 nPorEnd;
+    TextFrameIndex nPorEnd;
     SwTextSizeInfo aInf( rInf );
 
     // first case: hyphenated word has alternative spelling
@@ -274,11 +274,11 @@ bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess const &rGu
         OSL_ENSURE( aAltSpell.bIsAltSpelling, "no alternative spelling" );
 
         OUString aAltText = aAltSpell.aReplacement;
-        nPorEnd = aAltSpell.nChangedPos + rGuess.BreakStart() - rGuess.FieldDiff();
+        nPorEnd = TextFrameIndex(aAltSpell.nChangedPos) + rGuess.BreakStart() - rGuess.FieldDiff();
         sal_Int32 nTmpLen = 0;
 
         // soft hyphen at alternative spelling position?
-        if( rInf.GetText()[ rInf.GetSoftHyphPos() ] == CHAR_SOFTHYPHEN )
+        if( rInf.GetText()[sal_Int32(rInf.GetSoftHyphPos())] == CHAR_SOFTHYPHEN )
         {
             pHyphPor = new SwSoftHyphStrPortion( aAltText );
             nTmpLen = 1;
@@ -288,15 +288,15 @@ bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess const &rGu
         }
 
         // length of pHyphPor is adjusted
-        pHyphPor->SetLen( aAltText.getLength() + 1 );
+        pHyphPor->SetLen( TextFrameIndex(aAltText.getLength() + 1) );
         static_cast<SwPosSize&>(*pHyphPor) = pHyphPor->GetTextSize( rInf );
-        pHyphPor->SetLen( aAltSpell.nChangedLength + nTmpLen );
+        pHyphPor->SetLen( TextFrameIndex(aAltSpell.nChangedLength + nTmpLen) );
     }
     else
     {
         // second case: no alternative spelling
         pHyphPor = new SwHyphPortion;
-        pHyphPor->SetLen( 1 );
+        pHyphPor->SetLen(TextFrameIndex(1));
 
         static const void* pLastMagicNo = nullptr;
         static sal_uInt16 aMiniCacheH = 0, aMiniCacheW = 0;
@@ -312,11 +312,11 @@ bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess const &rGu
             pHyphPor->Height( aMiniCacheH );
             pHyphPor->Width( aMiniCacheW );
         }
-        pHyphPor->SetLen( 0 );
+        pHyphPor->SetLen(TextFrameIndex(0));
 
         // values required for this
-        nPorEnd = xHyphWord->getHyphenPos() + 1 + rGuess.BreakStart()
-                - rGuess.FieldDiff();
+        nPorEnd = TextFrameIndex(xHyphWord->getHyphenPos() + 1)
+                + rGuess.BreakStart() - rGuess.FieldDiff();
     }
 
     // portion end must be in front of us
@@ -391,7 +391,7 @@ SwLinePortion *SwSoftHyphPortion::Compress() { return this; }
 SwSoftHyphPortion::SwSoftHyphPortion() :
     bExpand(false), nViewWidth(0)
 {
-    SetLen(1);
+    SetLen(TextFrameIndex(1));
     SetWhichPor( POR_SOFTHYPH );
 }
 
@@ -466,13 +466,13 @@ bool SwSoftHyphPortion::Format( SwTextFormatInfo &rInf )
             // portion has to trigger an underflow
             SwTextGuess aGuess;
             bFull = rInf.IsInterHyph() ||
-                    !aGuess.AlternativeSpelling( rInf, rInf.GetIdx() - 1 );
+                    !aGuess.AlternativeSpelling(rInf, rInf.GetIdx() - TextFrameIndex(1));
         }
         rInf.ChgHyph( bHyph );
 
         if( bFull && !rInf.IsHyphForbud() )
         {
-            rInf.SetSoftHyphPos(0);
+            rInf.SetSoftHyphPos(TextFrameIndex(0));
             FormatEOL( rInf );
             if ( rInf.GetFly() )
                 rInf.GetRoot()->SetMidHyph( true );
@@ -488,7 +488,7 @@ bool SwSoftHyphPortion::Format( SwTextFormatInfo &rInf )
         return true;
     }
 
-    rInf.SetSoftHyphPos(0);
+    rInf.SetSoftHyphPos(TextFrameIndex(0));
     SetExpand( true );
     bFull = SwHyphPortion::Format( rInf );
     SetExpand( false );
@@ -513,7 +513,7 @@ void SwSoftHyphPortion::FormatEOL( SwTextFormatInfo &rInf )
 
         // We need to reset the old values
         const SwTwips nOldX  = rInf.X();
-        const sal_Int32 nOldIdx = rInf.GetIdx();
+        TextFrameIndex const nOldIdx = rInf.GetIdx();
         rInf.X( rInf.X() - PrtWidth() );
         rInf.SetIdx( rInf.GetIdx() - GetLen() );
         const bool bFull = SwHyphPortion::Format( rInf );
@@ -565,7 +565,7 @@ void SwSoftHyphStrPortion::Paint( const SwTextPaintInfo &rInf ) const
 SwSoftHyphStrPortion::SwSoftHyphStrPortion( const OUString &rStr )
     : SwHyphStrPortion( rStr )
 {
-    SetLen( 1 );
+    SetLen(TextFrameIndex(1));
     SetWhichPor( POR_SOFTHYPHSTR );
 }
 
