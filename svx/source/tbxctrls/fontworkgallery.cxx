@@ -197,29 +197,50 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
             SdrPage* pPage = pModel->GetPage(0);
             if( pPage && pPage->GetObjCount() )
             {
-                // Clone directly to target SdrModel
-                SdrObject* pNewObject(pPage->GetObj(0)->CloneSdrObject(*mpDestModel));
+                // tdf#116993 Calc uses a 'special' mode for this dialog in being the
+                // only caller of ::SetSdrObjectRef. Only in that case mpDestModel seems
+                // to be the correct target SdrModel.
+                // If this is not used, the correct SdrModel seems to be the one from
+                // the mpSdrView that is used to insert (InsertObjectAtView below) the
+                // cloned SdrObject.
+                const bool bUseSpecialCalcMode(nullptr != mppSdrObject && nullptr != mpDestModel);
+                const bool bSdrViewInsertMode(nullptr != mpSdrView);
 
                 // center shape on current view
-                OutputDevice* pOutDev = mpSdrView->GetFirstOutputDevice();
-                if( pOutDev )
+                OutputDevice* pOutDev(mpSdrView->GetFirstOutputDevice());
+
+                if(pOutDev && (bUseSpecialCalcMode || bSdrViewInsertMode))
                 {
+                    // Clone directly to target SdrModel (may be different due to user/caller (!))
+                    SdrObject* pNewObject(
+                        pPage->GetObj(0)->CloneSdrObject(
+                            bUseSpecialCalcMode ? *mpDestModel : mpSdrView->getSdrModelFromSdrView()));
+
                     tools::Rectangle aObjRect( pNewObject->GetLogicRect() );
                     tools::Rectangle aVisArea = pOutDev->PixelToLogic(tools::Rectangle(Point(0,0), pOutDev->GetOutputSizePixel()));
                     Point aPagePos = aVisArea.Center();
                     aPagePos.AdjustX( -(aObjRect.GetWidth() / 2) );
                     aPagePos.AdjustY( -(aObjRect.GetHeight() / 2) );
                     tools::Rectangle aNewObjectRectangle(aPagePos, aObjRect.GetSize());
-                    SdrPageView* pPV = mpSdrView->GetSdrPageView();
                     pNewObject->SetLogicRect(aNewObjectRectangle);
 
-                    if ( mppSdrObject )
+                    if(bUseSpecialCalcMode)
                     {
                         *mppSdrObject = pNewObject;
                     }
-                    else if( pPV )
+                    else // bSdrViewInsertMode
                     {
-                        mpSdrView->InsertObjectAtView( pNewObject, *pPV );
+                        SdrPageView* pPV(mpSdrView->GetSdrPageView());
+
+                        if(nullptr != pPV)
+                        {
+                            mpSdrView->InsertObjectAtView( pNewObject, *pPV );
+                        }
+                        else
+                        {
+                            // tdf#116993 no target -> delete clone
+                            SdrObject::Free(pNewObject);
+                        }
                     }
                 }
             }
