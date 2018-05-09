@@ -42,19 +42,9 @@ $(eval $(call gb_Executable_add_nativeres,soffice_bin,sofficebin/officeloader))
 
 ifeq ($(COM),MSC)
 
-ifeq ($(CPUNAME),X86_64)
-
 $(eval $(call gb_Executable_add_ldflags,soffice_bin,\
-    /STACK:30000000 \
+    /STACK:100000000 \
 ))
-
-else
-
-$(eval $(call gb_Executable_add_ldflags,soffice_bin,\
-    /STACK:15000000 \
-))
-
-endif
 
 endif
 
