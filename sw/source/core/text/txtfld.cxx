@@ -350,8 +350,8 @@ SwLinePortion *SwTextFormatter::NewExtraPortion( SwTextFormatInfo &rInf )
     if( !pHint )
     {
         pRet = new SwTextPortion;
-        pRet->SetLen( 1 );
-        rInf.SetLen( 1 );
+        pRet->SetLen(TextFrameIndex(1));
+        rInf.SetLen(TextFrameIndex(1));
         return pRet;
     }
 
@@ -394,7 +394,7 @@ SwLinePortion *SwTextFormatter::NewExtraPortion( SwTextFormatInfo &rInf )
     {
         const OUString aNothing;
         pRet = new SwFieldPortion( aNothing );
-        rInf.SetLen( 1 );
+        rInf.SetLen(TextFrameIndex(1));
     }
     return pRet;
 }
