@@ -97,10 +97,10 @@ friend class SfxTabDialogUIObject;
     bool m_bOwnsResetBtn;
     bool m_bOwnsBaseFmtBtn;
 
-    SfxItemSet*         m_pSet;
+    std::unique_ptr<SfxItemSet>           m_pSet;
     std::unique_ptr<SfxItemSet>           m_pOutSet;
     std::unique_ptr< TabDlg_Impl >        m_pImpl;
-    sal_uInt16*         m_pRanges;
+    std::unique_ptr<sal_uInt16[]>         m_pRanges;
     sal_uInt16          m_nAppPageId;
     bool                m_bStandardPushed;
 

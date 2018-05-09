@@ -45,6 +45,10 @@ public:
         // too clever
         if (fn == SRCDIR "/pyuno/source/module/pyuno_runtime.cxx")
             return;
+        // m_pExampleSet here is very badly manageed. sometimes it is owning, sometimes not,
+        // and the logic depends on overriding methods.
+        if (fn == SRCDIR "/sfx2/source/dialog/tabdlg.cxx")
+            return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
