@@ -345,19 +345,17 @@ EditCharAttribField::EditCharAttribField( const SvxFieldItem& rAttr, sal_Int32 n
     : EditCharAttrib( rAttr, nPos, nPos+1 )
 {
     SetFeature( true ); // !!!
-    pTxtColor = nullptr;
-    pFldColor = nullptr;
 }
 
 void EditCharAttribField::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    if ( pFldColor )
+    if ( mxFldColor )
     {
-        rFont.SetFillColor( *pFldColor );
+        rFont.SetFillColor( *mxFldColor );
         rFont.SetTransparent( false );
     }
-    if ( pTxtColor )
-        rFont.SetColor( *pTxtColor );
+    if ( mxTxtColor )
+        rFont.SetColor( *mxTxtColor );
 }
 
 
@@ -369,8 +367,8 @@ void EditCharAttribField::SetFieldValue(const OUString& rVal)
 void EditCharAttribField::Reset()
 {
     aFieldValue.clear();
-    delete pTxtColor; pTxtColor = nullptr;
-    delete pFldColor; pFldColor = nullptr;
+    mxTxtColor.reset();
+    mxFldColor.reset();
 }
 
 EditCharAttribField::EditCharAttribField( const EditCharAttribField& rAttr )
@@ -378,8 +376,8 @@ EditCharAttribField::EditCharAttribField( const EditCharAttribField& rAttr )
         aFieldValue( rAttr.aFieldValue )
 {
     // Use this constructor only for temporary Objects, Item is not pooled.
-    pTxtColor = rAttr.pTxtColor ? new Color( *rAttr.pTxtColor ) : nullptr;
-    pFldColor = rAttr.pFldColor ? new Color( *rAttr.pFldColor ) : nullptr;
+    mxTxtColor = rAttr.mxTxtColor;
+    mxFldColor = rAttr.mxFldColor;
 }
 
 EditCharAttribField::~EditCharAttribField()
@@ -392,14 +390,14 @@ bool EditCharAttribField::operator == ( const EditCharAttribField& rAttr ) const
     if ( aFieldValue != rAttr.aFieldValue )
         return false;
 
-    if ( ( pTxtColor && !rAttr.pTxtColor ) || ( !pTxtColor && rAttr.pTxtColor ) )
+    if ( ( mxTxtColor && !rAttr.mxTxtColor ) || ( !mxTxtColor && rAttr.mxTxtColor ) )
         return false;
-    if ( ( pTxtColor && rAttr.pTxtColor ) && ( *pTxtColor != *rAttr.pTxtColor ) )
+    if ( ( mxTxtColor && rAttr.mxTxtColor ) && ( *mxTxtColor != *rAttr.mxTxtColor ) )
         return false;
 
-    if ( ( pFldColor && !rAttr.pFldColor ) || ( !pFldColor && rAttr.pFldColor ) )
+    if ( ( mxFldColor && !rAttr.mxFldColor ) || ( !mxFldColor && rAttr.mxFldColor ) )
         return false;
-    if ( ( pFldColor && rAttr.pFldColor ) && ( *pFldColor != *rAttr.pFldColor ) )
+    if ( ( mxFldColor && rAttr.mxFldColor ) && ( *mxFldColor != *rAttr.mxFldColor ) )
         return false;
 
     return true;

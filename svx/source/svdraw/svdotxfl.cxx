@@ -22,7 +22,7 @@
 #include <svx/svdotext.hxx>
 
 bool SdrTextObj::CalcFieldValue(const SvxFieldItem& /*rField*/, sal_Int32 /*nPara*/, sal_uInt16 /*nPos*/,
-    bool /*bEdit*/, Color*& /*rpTxtColor*/, Color*& /*rpFldColor*/, OUString& /*rRet*/) const
+    bool /*bEdit*/, boost::optional<Color>& /*rpTxtColor*/, boost::optional<Color>& /*rpFldColor*/, OUString& /*rRet*/) const
 {
     return false;
 }

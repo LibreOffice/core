@@ -805,7 +805,7 @@ class UrlEditEngine : public EditEngine
 public:
     explicit UrlEditEngine(SfxItemPool *pPool) : EditEngine(pPool) {}
 
-    virtual OUString CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_Int32, Color*&, Color*& ) override
+    virtual OUString CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_Int32, boost::optional<Color>&, boost::optional<Color>& ) override
     {
         return OUString("jim@bob.com"); // a sophisticated view of value:
     }
