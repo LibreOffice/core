@@ -342,16 +342,16 @@ void SwTextIter::TruncLines( bool bNoteFollow )
                     pLine = pLine->GetNext();
                 }
 
-                SwpHints* pTmpHints = GetTextFrame()->GetTextNode()->GetpSwpHints();
-
                 // examine hints in range nEnd - (nEnd + nRangeChar)
-                for( size_t i = 0; i < pTmpHints->Count(); ++i )
+                SwTextNode const* pNode(nullptr);
+                sw::MergedAttrIter iter(*GetTextFrame());
+                for (SwTextAttr const* pHt = iter.NextAttr(&pNode); pHt; pHt = iter.NextAttr(&pNode))
                 {
-                    const SwTextAttr* pHt = pTmpHints->Get( i );
                     if( RES_TXTATR_FLYCNT == pHt->Which() )
                     {
-                        // check, if hint is in our range
-                        const sal_Int32 nTmpPos = pHt->GetStart();
+                        // check if hint is in our range
+                        TextFrameIndex const nTmpPos(
+                            GetTextFrame()->MapModelToView(pNode, pHt->GetStart()));
                         if ( nEnd <= nTmpPos && nTmpPos < nRangeEnd )
                             pFollow->InvalidateRange_(
                                 SwCharRange( nTmpPos, nTmpPos ) );
