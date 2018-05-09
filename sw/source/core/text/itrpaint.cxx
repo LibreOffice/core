@@ -317,7 +317,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             SeekAndChgBefore( GetInfo() );
         else if ( pPor->IsQuoVadisPortion() )
         {
-            sal_Int32 nOffset = GetInfo().GetIdx();
+            TextFrameIndex nOffset = GetInfo().GetIdx();
             SeekStartAndChg( GetInfo(), true );
             if( GetRedln() && m_pCurr->HasRedline() )
                 GetRedln()->Seek( *m_pFont, nOffset, 0 );
@@ -428,7 +428,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         if( !GetNextLine() &&
             GetInfo().GetVsh() && !GetInfo().GetVsh()->IsPreview() &&
             GetInfo().GetOpt().IsParagraph() && !GetTextFrame()->GetFollow() &&
-            GetInfo().GetIdx() >= GetInfo().GetText().getLength() )
+            GetInfo().GetIdx() >= TextFrameIndex(GetInfo().GetText().getLength()))
         {
             const SwTmpEndPortion aEnd( *pEndTempl );
             GetFnt()->ChgPhysFnt( GetInfo().GetVsh(), *pOut );
@@ -460,7 +460,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                 // GetInfo().Y() must be current baseline
                 SwTwips nDiff = GetInfo().Y() + nTmpHeight - nTmpAscent - GetTextFrame()->getFrameArea().Bottom();
                 if( ( nDiff > 0 &&
-                      ( GetEnd() < GetInfo().GetText().getLength() ||
+                      (GetEnd() < TextFrameIndex(GetInfo().GetText().getLength()) ||
                         ( nDiff > nTmpHeight/2 && GetPrevLine() ) ) ) ||
                     (nDiff >= 0 && bNextUndersized) )
 
@@ -490,7 +490,8 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         return;
     }
     // Reuse calculated underline font as much as possible.
-    if ( GetInfo().GetUnderFnt() && GetInfo().GetIdx() + pPor->GetLen() <= GetInfo().GetUnderFnt()->GetEnd() + 1 )
+    if (GetInfo().GetUnderFnt() &&
+        GetInfo().GetIdx() + pPor->GetLen() <= GetInfo().GetUnderFnt()->GetEnd() + TextFrameIndex(1))
     {
         SwFont &rFont = GetInfo().GetUnderFnt()->GetFont();
         const Color aColor = GetUnderColor( GetInfo().GetFont() );
@@ -536,47 +537,47 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         }
     }
 
-    const sal_Int32 nIndx = GetInfo().GetIdx();
-    long nUnderEnd = 0;
+    const TextFrameIndex nIndx = GetInfo().GetIdx();
+    TextFrameIndex nUnderEnd(0);
     const size_t nCnt = aUnderMulti.GetRangeCount();
 
     // find the underline range the current portion is contained in
     for( size_t i = 0; i < nCnt; ++i )
     {
         const Range& rRange = aUnderMulti.GetRange( i );
-        if( nUnderEnd == rRange.Min() )
-            nUnderEnd = rRange.Max();
-        else if( nIndx >= rRange.Min() )
+        if (nUnderEnd == TextFrameIndex(rRange.Min()))
+            nUnderEnd = TextFrameIndex(rRange.Max());
+        else if (nIndx >= TextFrameIndex(rRange.Min()))
         {
-            nUnderEnd = rRange.Max();
+            nUnderEnd = TextFrameIndex(rRange.Max());
         }
         else
             break;
     }
 
     if ( GetEnd() && GetEnd() <= nUnderEnd )
-        nUnderEnd = GetEnd() - 1;
+        nUnderEnd = GetEnd() - TextFrameIndex(1);
 
     // calculate the new common underline font
     SwFont* pUnderlineFnt = nullptr;
     Point aCommonBaseLine;
 
     // check, if underlining is not isolated
-    if ( nIndx + GetInfo().GetLen() < nUnderEnd + 1 )
+    if (nIndx + GetInfo().GetLen() < nUnderEnd + TextFrameIndex(1))
     {
         // here starts the algorithm for calculating the underline font
         SwScriptInfo& rScriptInfo = GetInfo().GetParaPortion()->GetScriptInfo();
         SwAttrIter aIter( *GetInfo().GetTextFrame()->GetTextNode(),
                           rScriptInfo );
 
-        sal_Int32 nTmpIdx = nIndx;
+        TextFrameIndex nTmpIdx = nIndx;
         sal_uLong nSumWidth = 0;
         sal_uLong nSumHeight = 0;
         sal_uLong nBold = 0;
         sal_uInt16 nMaxBaseLineOfst = 0;
         int nNumberOfPortions = 0;
 
-        while( sal::static_int_cast<long>(nTmpIdx) <= nUnderEnd && pPor )
+        while (nTmpIdx <= nUnderEnd && pPor)
         {
             if ( pPor->IsFlyPortion() || pPor->IsFlyCntPortion() ||
                 pPor->IsBreakPortion() || pPor->IsMarginPortion() ||
