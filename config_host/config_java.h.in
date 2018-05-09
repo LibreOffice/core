@@ -1,6 +1,14 @@
 #ifndef CONFIG_JAVA_H
 #define CONFIG_JAVA_H
 
+/* JAVA
+ *
+ * Whether we have support for Java extensions, and use own Java
+ * functionality).
+ */
+
+#define HAVE_FEATURE_JAVA 0
+
 #undef JAVA_ARCH
 
 #endif

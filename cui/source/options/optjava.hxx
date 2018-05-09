@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTJAVA_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTJAVA_HXX
 
-#include <config_features.h>
+#include <config_java.h>
 
 #include <memory>
 #include <vector>
