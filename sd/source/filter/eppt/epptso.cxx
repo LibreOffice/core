@@ -115,26 +115,41 @@ sal_uInt16 PPTExBulletProvider::GetId(Graphic const & rGraphic, Size& rGraphicSi
 
         if ( rGraphicSize.Width() && rGraphicSize.Height() )
         {
-            double          fQ1 = ( static_cast<double>(aPrefSize.Width()) / static_cast<double>(aPrefSize.Height()) );
-            double          fQ2 = ( static_cast<double>(rGraphicSize.Width()) / static_cast<double>(rGraphicSize.Height()) );
-            double          fXScale = 1;
-            double          fYScale = 1;
-
-            if ( fQ1 > fQ2 )
-                fYScale = fQ1 / fQ2;
-            else if ( fQ1 < fQ2 )
-                fXScale = fQ2 / fQ1;
-
-            if ( ( fXScale != 1.0 ) || ( fYScale != 1.0 ) )
+            Size aNewSize;
+            bool changed = false;
+            if (aPrefSize.Width() == 0 || aPrefSize.Height() == 0)
             {
-                aBmpEx.Scale( fXScale, fYScale );
-                Size aNewSize( static_cast<sal_Int32>(static_cast<double>(rGraphicSize.Width()) / fXScale + 0.5 ),
-                                static_cast<sal_Int32>(static_cast<double>(rGraphicSize.Height()) / fYScale + 0.5 ) );
+                aBmpEx.Scale(aPrefSize);
+                aNewSize = aPrefSize;
+                changed = true;
+            }
+            else
+            {
+                double          fQ1 = ( static_cast<double>(aPrefSize.Width()) / static_cast<double>(aPrefSize.Height()) );
+                double          fQ2 = ( static_cast<double>(rGraphicSize.Width()) / static_cast<double>(rGraphicSize.Height()) );
+                double          fXScale = 1;
+                double          fYScale = 1;
 
-                rGraphicSize = aNewSize;
+                if ( fQ1 > fQ2 )
+                    fYScale = fQ1 / fQ2;
+                else if ( fQ1 < fQ2 )
+                    fXScale = fQ2 / fQ1;
 
-                aMappedGraphic = Graphic( aBmpEx );
-                xGraphicObject.reset(new GraphicObject(aMappedGraphic));
+                if ( ( fXScale != 1.0 ) || ( fYScale != 1.0 ) )
+                {
+                    aBmpEx.Scale( fXScale, fYScale );
+                    aNewSize = Size( static_cast<sal_Int32>(static_cast<double>(rGraphicSize.Width()) / fXScale + 0.5 ),
+                                     static_cast<sal_Int32>(static_cast<double>(rGraphicSize.Height()) / fYScale + 0.5 ) );
+                    changed = true;
+                }
+
+                if (changed)
+                {
+                    rGraphicSize = aNewSize;
+
+                    aMappedGraphic = Graphic( aBmpEx );
+                    xGraphicObject.reset(new GraphicObject(aMappedGraphic));
+                }
             }
         }
         sal_uInt32 nId = pGraphicProv->GetBlibID(aBuExPictureStream, *xGraphicObject.get());
