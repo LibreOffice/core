@@ -37,7 +37,7 @@ def DefineNamedRange(sheet, x0, y0, width, height, name):
     # FIXME: Is there some Python-callable API to turn a row and column into an A1 string?
     # This obviously works only for the first 26 columns.
     abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    content = sheet +"!" + "$" + abc[x0 : x0+1] + "$" + str(y0+1) + ":" + "$" + abc[x0+width-1 : x0+width] + "$" + str(y0+height)
+    content = "$" + sheet + "." + "$" + abc[x0 : x0+1] + "$" + str(y0+1) + ":" + "$" + abc[x0+width-1 : x0+width] + "$" + str(y0+height)
     position = uno.createUnoStruct('com.sun.star.table.CellAddress')
     position.Sheet = 0
     position.Column = 0
