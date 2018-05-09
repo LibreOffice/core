@@ -688,11 +688,7 @@ OUString EditTextObjectImpl::GetText(sal_Int32 nPara) const
 
 void EditTextObjectImpl::ClearPortionInfo()
 {
-    if ( pPortionInfo )
-    {
-        delete pPortionInfo;
-        pPortionInfo = nullptr;
-    }
+    pPortionInfo.reset();
 }
 
 bool EditTextObjectImpl::HasOnlineSpellErrors() const
