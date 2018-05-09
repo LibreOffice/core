@@ -1568,6 +1568,7 @@ sw/res/sc20557.png cmd/sc_cancel.png
 sw/res/sc20558.png cmd/sc_ok.png
 
 sw/res/sc_datainrows.png cmd/sc_datainrows.png
+sw/res/sc20247.png cmd/sc_dataimport.png
 
 sw/res/sf01.png cmd/sc_controlcodes.png
 sw/res/sf02.png cmd/sc_charfontname.png
@@ -1597,6 +1598,8 @@ sw/res/sr20017.png cmd/sc_insertindexesentry.png
 sw/res/sr20018.png cmd/sc_inserttable.png
 sw/res/sr20019.png cmd/sc_remove.png
 
+sw/res/sx01.png cmd/sc_dbqueryedit.png
+sw/res/sx02.png cmd/sc_freezepanesfirstrow.png
 sw/res/sx03.png cmd/sc_dbqueryedit.png
 svx/res/reload.png cmd/sc_reload.png
 svx/res/time.png cmd/sc_timefield.png
