@@ -90,12 +90,6 @@ void SwTextFrame::CalcFootnoteFlag()
 {
     mbFootnote = false;
 
-    const SwpHints *pHints = GetTextNode()->GetpSwpHints();
-    if( !pHints )
-        return;
-
-    const size_t nSize = pHints->Count();
-
 #ifdef DBG_UTIL
     const TextFrameIndex nEnd = nStop != TextFrameIndex(COMPLETE_STRING)
         ? nStop
@@ -106,12 +100,13 @@ void SwTextFrame::CalcFootnoteFlag()
         : TextFrameIndex(COMPLETE_STRING);
 #endif
 
-    for ( size_t i = 0; i < nSize; ++i )
+    SwTextNode const* pNode(nullptr);
+    sw::MergedAttrIter iter(*this);
+    for (SwTextAttr const* pHt = iter.NextAttr(&pNode); pHt; pHt = iter.NextAttr(&pNode))
     {
-        const SwTextAttr *pHt = pHints->Get(i);
         if ( pHt->Which() == RES_TXTATR_FTN )
         {
-            const sal_Int32 nIdx = pHt->GetStart();
+            TextFrameIndex const nIdx(MapModelToView(pNode, pHt->GetStart()));
             if ( nEnd < nIdx )
                 break;
             if( GetOfst() <= nIdx )
