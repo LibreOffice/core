@@ -474,10 +474,9 @@ bool FormatterBase::IsEmptyFieldValue() const
     return (!mpField || mpField->GetText().isEmpty());
 }
 
-void NumericFormatter::ImplNumericReformat( const OUString& rStr, sal_Int64& rValue,
-                                                OUString& rOutStr )
+void NumericFormatter::ImplNumericReformat(sal_Int64& rValue, OUString& rOutStr)
 {
-    if (ImplNumericGetValue(rStr, rValue, GetDecimalDigits(), ImplGetLocaleDataWrapper()))
+    if (ImplNumericGetValue(GetField()->GetText(), rValue, GetDecimalDigits(), ImplGetLocaleDataWrapper()))
     {
         sal_Int64 nTempVal = ClipAgainstMinMax(rValue);
         rOutStr = CreateFieldText( nTempVal );
@@ -646,7 +645,7 @@ void NumericFormatter::Reformat()
 
     OUString aStr;
     sal_Int64 nTemp = mnLastValue;
-    ImplNumericReformat(GetField()->GetText(), nTemp, aStr);
+    ImplNumericReformat(nTemp, aStr);
     mnLastValue = nTemp;
 
     if ( !aStr.isEmpty() )
@@ -947,6 +946,16 @@ void NumericBox::Modify()
 {
     MarkToBeReformatted( true );
     ComboBox::Modify();
+}
+
+void NumericBox::ImplNumericReformat( const OUString& rStr, sal_Int64& rValue,
+                                                OUString& rOutStr )
+{
+    if (ImplNumericGetValue(rStr, rValue, GetDecimalDigits(), ImplGetLocaleDataWrapper()))
+    {
+        sal_Int64 nTempVal = ClipAgainstMinMax(rValue);
+        rOutStr = CreateFieldText( nTempVal );
+    }
 }
 
 void NumericBox::ReformatAll()

@@ -183,7 +183,7 @@ protected:
     void                    FieldFirst();
     void                    FieldLast();
 
-    SAL_DLLPRIVATE void     ImplNumericReformat( const OUString& rStr, sal_Int64& rValue, OUString& rOutStr );
+    SAL_DLLPRIVATE void     ImplNumericReformat( sal_Int64& rValue, OUString& rOutStr );
     SAL_DLLPRIVATE void     ImplNewFieldValue( sal_Int64 nNewValue );
     SAL_DLLPRIVATE void     ImplSetUserValue( sal_Int64 nNewValue, Selection const * pNewSelection = nullptr );
 
@@ -626,6 +626,7 @@ public:
 
 class VCL_DLLPUBLIC NumericBox : public ComboBox, public NumericFormatter
 {
+    SAL_DLLPRIVATE void     ImplNumericReformat( const OUString& rStr, sal_Int64& rValue, OUString& rOutStr );
 public:
     explicit                NumericBox( vcl::Window* pParent, WinBits nWinStyle );
 
