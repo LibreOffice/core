@@ -2243,13 +2243,11 @@ dnl ===================================================================
 dnl Test whether build target is Release Build
 dnl ===================================================================
 AC_MSG_CHECKING([whether build target is Release Build])
-ENABLE_RELEASE_BUILD=
-
 if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
     AC_MSG_RESULT([no])
+    ENABLE_RELEASE_BUILD=
 else
     AC_MSG_RESULT([yes])
-    AC_DEFINE(ENABLE_RELEASE_BUILD)
     ENABLE_RELEASE_BUILD=TRUE
 fi
 AC_SUBST(ENABLE_RELEASE_BUILD)
