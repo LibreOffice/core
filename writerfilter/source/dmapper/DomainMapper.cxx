@@ -2118,9 +2118,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     break;
     case NS_ooxml::LN_CT_PPrBase_pStyle:
     {
-        m_pImpl->SetCurrentParaStyleId( sStringValue );
         StyleSheetTablePtr pStyleTable = m_pImpl->GetStyleSheetTable();
         const OUString sConvertedStyleName = pStyleTable->ConvertStyleName( sStringValue, true );
+        m_pImpl->SetCurrentParaStyleName( sConvertedStyleName );
         if (m_pImpl->GetTopContext() && m_pImpl->GetTopContextType() != CONTEXT_SECTION)
         {
             m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::makeAny( sConvertedStyleName ));
@@ -2943,7 +2943,7 @@ void DomainMapper::lcl_startParagraphGroup()
         if (!m_pImpl->IsInShape())
         {
             m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::makeAny( OUString("Standard") ) ); //ConvertedStyleName
-            m_pImpl->SetCurrentParaStyleId("Normal"); //WW8 name
+            m_pImpl->SetCurrentParaStyleName("Standard");
         }
         if (m_pImpl->isBreakDeferred(PAGE_BREAK))
             m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));

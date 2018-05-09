@@ -474,7 +474,7 @@ private:
     PropertyMapPtr           m_pLastCharacterContext;
 
     ::std::vector<DeletableTabStop> m_aCurrentTabStops;
-    OUString                 m_sCurrentParaStyleId;
+    OUString                        m_sCurrentParaStyleName;
     bool                            m_bInStyleSheetImport; //in import of fonts, styles, lists or lfos
     bool                            m_bInAnyTableImport; //in import of fonts, styles, lists or lfos
     bool                            m_bInHeaderFooterImport;
@@ -693,8 +693,8 @@ public:
     void    IncorporateTabStop( const DeletableTabStop &aTabStop );
     css::uno::Sequence<css::style::TabStop> GetCurrentTabStopAndClear();
 
-    void        SetCurrentParaStyleId(const OUString& sStringValue) {m_sCurrentParaStyleId = sStringValue;}
-    const OUString& GetCurrentParaStyleId() const {return m_sCurrentParaStyleId;}
+    void            SetCurrentParaStyleName(const OUString& sStringValue) {m_sCurrentParaStyleName = sStringValue;}
+    const OUString& GetCurrentParaStyleName() const {return m_sCurrentParaStyleName;}
 
     css::uno::Any GetPropertyFromStyleSheet(PropertyIds eId);
     void        SetStyleSheetImport( bool bSet ) { m_bInStyleSheetImport = bSet;}

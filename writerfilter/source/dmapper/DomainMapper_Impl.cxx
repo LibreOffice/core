@@ -203,7 +203,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_sCurrentPermId(0),
         m_pLastSectionContext( ),
         m_pLastCharacterContext(),
-        m_sCurrentParaStyleId(),
+        m_sCurrentParaStyleName(),
         m_bInStyleSheetImport( false ),
         m_bInAnyTableImport( false ),
         m_bInHeaderFooterImport( false ),
@@ -660,8 +660,7 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
     if( m_bInStyleSheetImport )
         pEntry = GetStyleSheetTable()->FindParentStyleSheet(OUString());
     else
-        pEntry =
-                GetStyleSheetTable()->FindStyleSheetByISTD(GetCurrentParaStyleId());
+        pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(GetCurrentParaStyleName());
     while(pEntry.get( ) )
     {
         //is there a tab stop set?
@@ -1115,7 +1114,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
     //does not specify the numbering
     if( pParaContext && !pParaContext->isSet(PROP_NUMBERING_RULES) )
     {
-        const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByISTD( GetCurrentParaStyleId() );
+        const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( GetCurrentParaStyleName() );
         OSL_ENSURE( pEntry.get(), "no style sheet found" );
         const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
 
@@ -5585,10 +5584,10 @@ uno::Reference<container::XIndexAccess> DomainMapper_Impl::GetCurrentNumberingRu
     uno::Reference<container::XIndexAccess> xRet;
     try
     {
-        OUString aStyle = GetCurrentParaStyleId();
+        OUString aStyle = GetCurrentParaStyleName();
         if (aStyle.isEmpty())
             return xRet;
-        const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByISTD(aStyle);
+        const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(aStyle);
         if (!pEntry)
             return xRet;
         const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry->pProperties.get());
