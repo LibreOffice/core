@@ -8,13 +8,26 @@
  */
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace io
+{
+class XInputStream;
+}
+}
+}
+}
 
 using namespace com::sun::star;
 

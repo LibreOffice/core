@@ -13,7 +13,6 @@
 #include <svtools/rtfkeywd.hxx>
 #include <rtl/character.hxx>
 #include <tools/stream.hxx>
-#include <unotools/streamwrap.hxx>
 
 namespace msfilter
 {
