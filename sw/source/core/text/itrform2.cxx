@@ -68,10 +68,10 @@ namespace {
     //! Calculates and sets optimal repaint offset for the current line
     long lcl_CalcOptRepaint( SwTextFormatter &rThis,
                                     SwLineLayout const &rCurr,
-                                    const sal_Int32 nOldLineEnd,
+                                    TextFrameIndex nOldLineEnd,
                                     const std::vector<long> &rFlyStarts );
     //! Determine if we need to build hidden portions
-    bool lcl_BuildHiddenPortion( const SwTextSizeInfo& rInf, sal_Int32 &rPos );
+    bool lcl_BuildHiddenPortion(const SwTextSizeInfo& rInf, TextFrameIndex &rPos);
 
     // Check whether the two font has the same border
     bool lcl_HasSameBorder(const SwFont& rFirst, const SwFont& rSecond);
@@ -95,15 +95,15 @@ void SwTextFormatter::CtorInitTextFormatter( SwTextFrame *pNewFrame, SwTextForma
     bTruncLines = false;
     nCntEndHyph = 0;
     nCntMidHyph = 0;
-    nLeftScanIdx = COMPLETE_STRING;
-    nRightScanIdx = 0;
+    nLeftScanIdx = TextFrameIndex(COMPLETE_STRING);
+    nRightScanIdx = TextFrameIndex(0);
     m_nHintEndIndex = 0;
     m_pFirstOfBorderMerge = nullptr;
 
-    if( m_nStart > GetInfo().GetText().getLength() )
+    if (m_nStart > TextFrameIndex(GetInfo().GetText().getLength()))
     {
         OSL_ENSURE( false, "+SwTextFormatter::CTOR: bad offset" );
-        m_nStart = GetInfo().GetText().getLength();
+        m_nStart = TextFrameIndex(GetInfo().GetText().getLength());
     }
 
 }
@@ -159,8 +159,8 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
     // line again.
     // Can be seen in 8081.sdw, if you enter text in the first line
 
-    const sal_Int32 nSoftHyphPos = rInf.GetSoftHyphPos();
-    const sal_Int32 nUnderScorePos = rInf.GetUnderScorePos();
+    TextFrameIndex const nSoftHyphPos = rInf.GetSoftHyphPos();
+    TextFrameIndex const nUnderScorePos = rInf.GetUnderScorePos();
 
     // Save flys and set to 0, or else segmentation fault
     // Not ClearFly(rInf) !
@@ -398,8 +398,8 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
 
     while( pPor && !rInf.IsStop() )
     {
-        OSL_ENSURE( rInf.GetLen() < COMPLETE_STRING &&
-                rInf.GetIdx() <= rInf.GetText().getLength(),
+        OSL_ENSURE(rInf.GetLen() < TextFrameIndex(COMPLETE_STRING) &&
+                rInf.GetIdx() <= TextFrameIndex(rInf.GetText().getLength()),
                 "SwTextFormatter::BuildPortions: bad length in info" );
 
         // We have to check the script for fields in order to set the
@@ -435,7 +435,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             else
             {
                 const OUString& rText = rInf.GetText();
-                sal_Int32 nIdx = rInf.GetIdx();
+                sal_Int32 nIdx = sal_Int32(rInf.GetIdx());
                 bAllowBehind = nIdx < rText.getLength() && rCC.isLetterNumeric(rText, nIdx);
             }
 
@@ -462,10 +462,10 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                 }
                 else if ( rInf.GetIdx() )
                 {
-                    bAllowBefore = rCC.isLetterNumeric( rInf.GetText(), rInf.GetIdx() - 1 );
+                    bAllowBefore = rCC.isLetterNumeric(rInf.GetText(), sal_Int32(rInf.GetIdx()) - 1);
                     // Note: ScriptType returns values in [1,4]
                     if ( bAllowBefore )
-                        nLstActual = SwFontScript(m_pScriptInfo->ScriptType( rInf.GetIdx() - 1 ) - 1);
+                        nLstActual = SwFontScript(m_pScriptInfo->ScriptType(rInf.GetIdx() - TextFrameIndex(1)) - 1);
                 }
 
                 nLstHeight /= 5;
@@ -758,7 +758,7 @@ void SwTextFormatter::CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor )
     // i#89179
     // tab portion representing the list tab of a list label gets the
     // same height and ascent as the corresponding number portion
-    else if ( pPor->InTabGrp() && pPor->GetLen() == 0 &&
+    else if ( pPor->InTabGrp() && pPor->GetLen() == TextFrameIndex(0) &&
               rInf.GetLast() && rInf.GetLast()->InNumberGrp() &&
               static_cast<const SwNumberPortion*>(rInf.GetLast())->HasFont() )
     {
@@ -886,17 +886,16 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
             // Only at the End!
             // If pCurr does not have a width, it can however already have content.
             // E.g. for non-displayable characters
-            if (rInf.GetText()[rInf.GetIdx()]==CH_TXT_ATR_FIELDSTART)
+            auto const ch(rInf.GetText()[sal_Int32(rInf.GetIdx())]);
+            if (ch == CH_TXT_ATR_FIELDSTART)
                 pPor = new SwFieldMarkPortion();
-            else if (rInf.GetText()[rInf.GetIdx()]==CH_TXT_ATR_FIELDEND)
+            else if (ch == CH_TXT_ATR_FIELDEND)
                 pPor = new SwFieldMarkPortion();
-            else if (rInf.GetText()[rInf.GetIdx()]==CH_TXT_ATR_FORMELEMENT)
+            else if (ch == CH_TXT_ATR_FORMELEMENT)
             {
-                SwTextNode *pNd = rInf.GetTextFrame()->GetTextNode();
-                const SwDoc *doc = pNd->GetDoc();
-                SwIndex aIndex(pNd, rInf.GetIdx());
-                SwPosition aPosition(*pNd, aIndex);
-                sw::mark::IFieldmark *pBM = doc->getIDocumentMarkAccess()->getFieldmarkFor(aPosition);
+                SwTextFrame const*const pFrame(rInf.GetTextFrame());
+                SwPosition aPosition(pFrame->MapViewToModelPos(rInf.GetIdx()));
+                sw::mark::IFieldmark *pBM = pFrame->GetDoc().getIDocumentMarkAccess()->getFieldmarkFor(aPosition);
                 OSL_ENSURE(pBM != nullptr, "Where is my form field bookmark???");
                 if (pBM != nullptr)
                 {
@@ -947,8 +946,8 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
     SwTextPortion *pPor = WhichTextPor( rInf );
 
     // until next attribute change:
-    const sal_Int32 nNextAttr = GetNextAttr();
-    sal_Int32 nNextChg = std::min( nNextAttr, rInf.GetText().getLength() );
+    const TextFrameIndex nNextAttr = GetNextAttr();
+    TextFrameIndex nNextChg = std::min(nNextAttr, TextFrameIndex(rInf.GetText().getLength()));
 
     // end of script type:
     const sal_Int32 nNextScript = m_pScriptInfo->NextScriptChg( rInf.GetIdx() );
@@ -971,7 +970,7 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
     // It follows that a line with a lot of blanks is processed incorrectly.
     // Therefore we increase from factor 2 to 8 (due to negative kerning).
 
-    pPor->SetLen(1);
+    pPor->SetLen(TextFrameIndex(1));
     CalcAscent( rInf, pPor );
 
     const SwFont* pTmpFnt = rInf.GetFont();
@@ -979,9 +978,9 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
                              sal_Int32( pPor->GetAscent() ) ) / 8;
     if ( !nExpect )
         nExpect = 1;
-    nExpect = rInf.GetIdx() + (rInf.GetLineWidth() / nExpect);
-    if( nExpect > rInf.GetIdx() && nNextChg > nExpect )
-        nNextChg = std::min( nExpect, rInf.GetText().getLength() );
+    nExpect = sal_Int32(rInf.GetIdx()) + (rInf.GetLineWidth() / nExpect);
+    if (TextFrameIndex(nExpect) > rInf.GetIdx() && nNextChg > TextFrameIndex(nExpect))
+        nNextChg = TextFrameIndex(std::min(nExpect, rInf.GetText().getLength()));
 
     // we keep an invariant during method calls:
     // there are no portion ending characters like hard spaces
@@ -1231,7 +1230,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
     // Check for Hidden Portion:
     if ( !pPor )
     {
-        sal_Int32 nEnd = rInf.GetIdx();
+        TextFrameIndex nEnd = rInf.GetIdx();
         if ( ::lcl_BuildHiddenPortion( rInf, nEnd ) )
             pPor = new SwHiddenTextPortion( nEnd - rInf.GetIdx() );
     }
@@ -1245,7 +1244,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
         {
             // We open a multiportion part, if we enter a multi-line part
             // of the paragraph.
-            sal_Int32 nEnd = rInf.GetIdx();
+            TextFrameIndex nEnd = rInf.GetIdx();
             SwMultiCreator* pCreate = rInf.GetMultiCreator( nEnd, pMulti );
             if( pCreate )
             {
@@ -1257,7 +1256,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                 {
                     pTmp = new SwRubyPortion( *pCreate, *rInf.GetFont(),
                                               *GetTextFrame()->GetTextNode()->getIDocumentSettingAccess(),
-                                              nEnd, 0, rInf );
+                                              nEnd, TextFrameIndex(0), rInf );
                 }
                 else if( SwMultiCreatorId::Rotate == pCreate->nId )
                     pTmp = new SwRotatedPortion( *pCreate, nEnd,
@@ -1287,7 +1286,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
         }
         else
         {
-            if( rInf.GetIdx() >= rInf.GetText().getLength() )
+            if (rInf.GetIdx() >= TextFrameIndex(rInf.GetText().getLength()))
             {
                 rInf.SetFull(true);
                 CalcFlyWidth( rInf );
@@ -1370,7 +1369,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
         // if a portion is created despite there being a pending RestPortion,
         // then it is a field which has been split (e.g. because it contains a Tab)
         if( pPor && rInf.GetRest() )
-            pPor->SetLen( 0 );
+            pPor->SetLen(TextFrameIndex(0));
 
         // robust:
         if( !pPor || rInf.IsStop() )
@@ -1409,9 +1408,10 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                 if ( 0 != nDir )
                 {
                     delete pPor;
-                    pPor = new SwRotatedPortion( rInf.GetIdx() + 1, 900 == nDir ?
-                                                    DIR_BOTTOM2TOP :
-                                                    DIR_TOP2BOTTOM );
+                    pPor = new SwRotatedPortion(rInf.GetIdx() + TextFrameIndex(1),
+                                                900 == nDir
+                                                    ? DIR_BOTTOM2TOP
+                                                    : DIR_TOP2BOTTOM );
                 }
             }
         }
@@ -1425,9 +1425,9 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                 if ( 0 != nDir )
                 {
                     delete pPor;
-                    pPor = new SwRotatedPortion( 0, 900 == nDir ?
-                                                    DIR_BOTTOM2TOP :
-                                                    DIR_TOP2BOTTOM );
+                    pPor = new SwRotatedPortion(TextFrameIndex(0), 900 == nDir
+                                                    ? DIR_BOTTOM2TOP
+                                                    : DIR_TOP2BOTTOM );
 
                     rInf.SetNumDone( false );
                     rInf.SetFootnoteDone( false );
@@ -1470,8 +1470,8 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
 
     // For the formatting routines, we set pOut to the reference device.
     SwHookOut aHook( GetInfo() );
-    if( GetInfo().GetLen() < GetInfo().GetText().getLength() )
-        GetInfo().SetLen( GetInfo().GetText().getLength() );
+    if (GetInfo().GetLen() < TextFrameIndex(GetInfo().GetText().getLength()))
+        GetInfo().SetLen(TextFrameIndex(GetInfo().GetText().getLength()));
 
     bool bBuild = true;
     SetFlyInCntBase( false );
@@ -1497,7 +1497,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
     // for an optimal repaint rectangle, we want to compare fly portions
     // before and after the BuildPortions call
     const bool bOptimizeRepaint = AllowRepaintOpt();
-    const sal_Int32 nOldLineEnd = nStartPos + m_pCurr->GetLen();
+    TextFrameIndex const nOldLineEnd = nStartPos + m_pCurr->GetLen();
     std::vector<long> flyStarts;
 
     // these are the conditions for a fly position comparison
@@ -1539,7 +1539,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
 
         if( GetInfo().IsStop() )
         {
-            m_pCurr->SetLen( 0 );
+            m_pCurr->SetLen(TextFrameIndex(0));
             m_pCurr->Height( GetFrameRstHeight() + 1 );
             m_pCurr->SetRealHeight( GetFrameRstHeight() + 1 );
             m_pCurr->Width(0);
@@ -1594,7 +1594,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
                 if ( xSaveField )
                     GetInfo().SetRest( new SwFieldPortion( *xSaveField ) );
 
-                m_pCurr->SetLen( 0 );
+                m_pCurr->SetLen(TextFrameIndex(0));
                 m_pCurr->Width(0);
                 m_pCurr->Truncate();
             }
@@ -1639,7 +1639,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
     // delete master copy of rest portion
     xSaveField.reset();
 
-    sal_Int32 nNewStart = nStartPos + m_pCurr->GetLen();
+    TextFrameIndex const nNewStart = nStartPos + m_pCurr->GetLen();
 
     // adjust text if kana compression is enabled
     if ( GetInfo().CompressLine() )
@@ -1723,8 +1723,9 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
     // consider register-true and so on. Unfortunately an empty line can be at
     // the end of a paragraph (empty paragraphs or behind a Shift-Return),
     // which should consider the register.
-    if( !m_pCurr->IsDummy() || ( !m_pCurr->GetNext() &&
-        GetStart() >= GetTextFrame()->GetText().getLength() && !bNewLine ) )
+    if (!m_pCurr->IsDummy() || (!m_pCurr->GetNext()
+            && GetStart() >= TextFrameIndex(GetTextFrame()->GetText().getLength())
+            && !bNewLine))
     {
         const SvxLineSpacingItem *pSpace = m_aLineInf.GetLineSpacing();
         if( pSpace )
@@ -1953,10 +1954,12 @@ bool SwTextFormatter::AllowRepaintOpt() const
     }
 
     // Again another special case: invisible SoftHyphs
-    const sal_Int32 nReformat = GetInfo().GetReformatStart();
-    if( bOptimizeRepaint && COMPLETE_STRING != nReformat )
+    const TextFrameIndex nReformat = GetInfo().GetReformatStart();
+    if (bOptimizeRepaint && TextFrameIndex(COMPLETE_STRING) != nReformat)
     {
-        const sal_Unicode cCh = nReformat >= GetInfo().GetText().getLength() ? 0 : GetInfo().GetText()[ nReformat ];
+        const sal_Unicode cCh = nReformat >= TextFrameIndex(GetInfo().GetText().getLength())
+            ? 0
+            : GetInfo().GetText()[ sal_Int32(nReformat) ];
         bOptimizeRepaint = ( CH_TXTATR_BREAKWORD != cCh && CH_TXTATR_INWORD != cCh )
                             || ! GetInfo().HasHint( nReformat );
     }
@@ -2083,7 +2086,7 @@ void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
                 // jump to end of the bidi portion
                 aSt.AdjustX(pLay->Width() );
 
-            sal_Int32 nStIdx = aTmpInf.GetIdx();
+            TextFrameIndex nStIdx = aTmpInf.GetIdx();
             do
             {
                 UpdatePos( pLay, aSt, nStIdx, bAlways );
@@ -2343,7 +2346,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
 
     // Although no text is left, we need to format another line,
     // because also empty lines need to avoid a Fly with no wrapping.
-    if( bFullLine && rInf.GetIdx() == rInf.GetText().getLength() )
+    if (bFullLine && rInf.GetIdx() == TextFrameIndex(rInf.GetText().getLength()))
     {
         rInf.SetNewLine( true );
         // We know that for dummies, it holds ascent == height
@@ -2394,7 +2397,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     }
     else
     {
-        if( rInf.GetIdx() == rInf.GetText().getLength() )
+        if (rInf.GetIdx() == TextFrameIndex(rInf.GetText().getLength()))
         {
             // Don't use nHeight, or we have a huge descent
             pFly->Height( pLast->Height() );
@@ -2590,9 +2593,11 @@ void SwTextFormatter::MergeCharacterBorder( SwLinePortion& rPortion, SwLinePorti
 
         // Get next portion's font
         bool bSeek = false;
-        if( !rInf.IsFull() && // Not the last portion of the line (in case of line break)
-            rInf.GetIdx() + rPortion.GetLen() != rInf.GetText().getLength() ) // Not the last portion of the paragraph
+        if (!rInf.IsFull() && // Not the last portion of the line (in case of line break)
+            rInf.GetIdx() + rPortion.GetLen() != TextFrameIndex(rInf.GetText().getLength())) // Not the last portion of the paragraph
+        {
             bSeek = Seek(rInf.GetIdx() + rPortion.GetLen());
+        }
         // Don't join the next portion if SwKernPortion sits between two different boxes.
         bool bDisconnect = rPortion.IsKernPortion() && !rPortion.GetJoinBorderWithPrev();
         // If next portion has the same border then merge
@@ -2660,7 +2665,7 @@ namespace {
     // calculates and sets optimal repaint offset for the current line
     long lcl_CalcOptRepaint( SwTextFormatter &rThis,
                          SwLineLayout const &rCurr,
-                         const sal_Int32 nOldLineEnd,
+                         TextFrameIndex const nOldLineEnd,
                          const std::vector<long> &rFlyStarts )
     {
         SwTextFormatInfo& txtFormatInfo = rThis.GetInfo();
@@ -2669,7 +2674,7 @@ namespace {
         // something of our text has moved to the next line
             return 0;
 
-        sal_Int32 nReformat = std::min<sal_Int32>( txtFormatInfo.GetReformatStart(), nOldLineEnd );
+        TextFrameIndex nReformat = std::min(txtFormatInfo.GetReformatStart(), nOldLineEnd);
 
         // in case we do not have any fly in our line, our repaint position
         // is the changed position - 1
@@ -2681,16 +2686,16 @@ namespace {
             // limit for the repaint offset
             const long nFormatRepaint = txtFormatInfo.GetPaintOfst();
 
-            if ( nReformat < txtFormatInfo.GetLineStart() + 3 )
+            if (nReformat < txtFormatInfo.GetLineStart() + TextFrameIndex(3))
                 return 0;
 
             // step back two positions for smoother repaint
-            nReformat -= 2;
+            nReformat -= TextFrameIndex(2);
 
             // i#28795, i#34607, i#38388
             // step back more characters, this is required by complex scripts
             // e.g., for Khmer (thank you, Javier!)
-            static const sal_Int32 nMaxContext = 10;
+            static const TextFrameIndex nMaxContext(10);
             if (nReformat > txtFormatInfo.GetLineStart() + nMaxContext)
                 nReformat = nReformat - nMaxContext;
             else
@@ -2729,7 +2734,7 @@ namespace {
             long nPOfst = 0;
             size_t nCnt = 0;
             long nX = 0;
-            sal_Int32 nIdx = rThis.GetInfo().GetLineStart();
+            TextFrameIndex nIdx = rThis.GetInfo().GetLineStart();
             SwLinePortion* pPor = rCurr.GetFirstPortion();
 
             while ( pPor )
@@ -2758,7 +2763,7 @@ namespace {
     }
 
     // Determine if we need to build hidden portions
-    bool lcl_BuildHiddenPortion( const SwTextSizeInfo& rInf, sal_Int32 &rPos )
+    bool lcl_BuildHiddenPortion(const SwTextSizeInfo& rInf, TextFrameIndex & rPos)
     {
         // Only if hidden text should not be shown:
     //    if ( rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar() )
@@ -2768,8 +2773,8 @@ namespace {
             return false;
 
         const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
-        sal_Int32 nHiddenStart;
-        sal_Int32 nHiddenEnd;
+        TextFrameIndex nHiddenStart;
+        TextFrameIndex nHiddenEnd;
         rSI.GetBoundsOfHiddenRange( rPos, nHiddenStart, nHiddenEnd );
         if ( nHiddenEnd )
         {
