@@ -54,7 +54,7 @@ SvxItemPropertySet::~SvxItemPropertySet()
 
 uno::Any* SvxItemPropertySet::GetUsrAnyForID(sal_uInt16 nWID) const
 {
-    for (SvxIDPropertyCombine* pActual : aCombineList)
+    for (auto const & pActual : aCombineList)
     {
         if( pActual->nWID == nWID )
             return &pActual->aAny;
@@ -65,17 +65,15 @@ uno::Any* SvxItemPropertySet::GetUsrAnyForID(sal_uInt16 nWID) const
 
 void SvxItemPropertySet::AddUsrAnyForID(const uno::Any& rAny, sal_uInt16 nWID)
 {
-    SvxIDPropertyCombine* pNew = new SvxIDPropertyCombine;
+    std::unique_ptr<SvxIDPropertyCombine> pNew(new SvxIDPropertyCombine);
     pNew->nWID = nWID;
     pNew->aAny = rAny;
-    aCombineList.push_back( pNew );
+    aCombineList.push_back( std::move(pNew) );
 }
 
 
 void SvxItemPropertySet::ClearAllUsrAny()
 {
-    for (SvxIDPropertyCombine* i : aCombineList)
-        delete i;
     aCombineList.clear();
 }
 
