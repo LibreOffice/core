@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <memory>
 #include <vector>
 
 #include <tools/link.hxx>
@@ -47,13 +48,13 @@ public:
 
     Paragraph*      GetParagraph( sal_Int32 nPos ) const
     {
-        return 0 <= nPos && static_cast<size_t>(nPos) < maEntries.size() ? maEntries[nPos] : nullptr;
+        return 0 <= nPos && static_cast<size_t>(nPos) < maEntries.size() ? maEntries[nPos].get() : nullptr;
     }
 
     sal_Int32       GetAbsPos( Paragraph const * pParent ) const;
 
-    void            Append( Paragraph *pPara);
-    void            Insert( Paragraph* pPara, sal_Int32 nAbsPos);
+    void            Append( std::unique_ptr<Paragraph> pPara);
+    void            Insert( std::unique_ptr<Paragraph> pPara, sal_Int32 nAbsPos);
     void            Remove( sal_Int32 nPara );
     void            MoveParagraphs( sal_Int32 nStart, sal_Int32 nDest, sal_Int32 nCount );
 
@@ -73,7 +74,7 @@ public:
 private:
 
     Link<Paragraph&,void> aVisibleStateChangedHdl;
-    std::vector<Paragraph*> maEntries;
+    std::vector<std::unique_ptr<Paragraph>> maEntries;
 };
 
 #endif
