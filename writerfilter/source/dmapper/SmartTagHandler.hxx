@@ -11,12 +11,30 @@
 
 #include <vector>
 
-#include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-
 #include "LoggedResources.hxx"
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace rdf
+{
+class XDocumentMetadataAccess;
+}
+namespace text
+{
+class XTextDocument;
+class XTextRange;
+}
+namespace uno
+{
+class XComponentContext;
+}
+}
+}
+}
 
 namespace writerfilter
 {

@@ -11,7 +11,20 @@
 
 #include "LoggedResources.hxx"
 #include <memory>
-#include <com/sun/star/beans/PropertyValue.hpp>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace beans
+{
+struct PropertyValue;
+}
+}
+}
+}
 
 namespace writerfilter
 {

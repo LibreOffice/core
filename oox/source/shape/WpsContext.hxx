@@ -10,9 +10,22 @@
 #ifndef INCLUDED_OOX_SOURCE_SHAPE_WPSCONTEXT_HXX
 #define INCLUDED_OOX_SOURCE_SHAPE_WPSCONTEXT_HXX
 
-#include <com/sun/star/drawing/XShape.hpp>
 #include <oox/core/contexthandler2.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace drawing
+{
+class XShape;
+}
+}
+}
+}
 
 namespace oox
 {

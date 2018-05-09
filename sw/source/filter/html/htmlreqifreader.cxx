@@ -11,7 +11,6 @@
 
 #include <comphelper/scopeguard.hxx>
 #include <filter/msfilter/rtfutil.hxx>
-#include <rtl/character.hxx>
 #include <rtl/strbuf.hxx>
 #include <sot/storage.hxx>
 #include <svtools/parrtf.hxx>

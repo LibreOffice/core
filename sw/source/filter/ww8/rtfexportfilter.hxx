@@ -22,9 +22,22 @@
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <shellio.hxx>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace uno
+{
+class XComponentContext;
+}
+}
+}
+}
 
 /// Dummy Writer implementation to be able to use the string format methods of the base class
 class RtfWriter : public Writer

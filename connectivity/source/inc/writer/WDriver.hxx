@@ -22,7 +22,19 @@
 
 #include <file/FDriver.hxx>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace lang
+{
+class XMultiServiceFactory;
+}
+}
+}
+}
 
 namespace connectivity
 {

@@ -15,11 +15,25 @@
 #include <map>
 #include <vector>
 
-#include <com/sun/star/security/XCertificate.hpp>
+#include <com/sun/star/uno/Reference.h>
 
 #include <tools/stream.hxx>
 
 #include <vcl/dllapi.h>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace security
+{
+class XCertificate;
+}
+}
+}
+}
 
 namespace vcl
 {
