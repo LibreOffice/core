@@ -1088,10 +1088,10 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
             if( LONG_MAX != nNewY )
             {
                 aVert.SetVertOrient( text::VertOrientation::NONE );
-                sal_Int32 nOfs =
-                    pFormat->GetAnchor().GetContentAnchor()->nContent.GetIndex();
-                OSL_ENSURE( GetAnchorFrame()->IsTextFrame(), "TextFrame expected" );
+                assert(GetAnchorFrame()->IsTextFrame());
                 pAutoFrame = static_cast<const SwTextFrame*>(GetAnchorFrame());
+                TextFrameIndex const nOfs(pAutoFrame->MapModelToViewPos(
+                            *pFormat->GetAnchor().GetContentAnchor()));
                 while( pAutoFrame->GetFollow() &&
                        pAutoFrame->GetFollow()->GetOfst() <= nOfs )
                 {
@@ -1144,10 +1144,10 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
                 {
                     if( !pAutoFrame )
                     {
-                        sal_Int32 nOfs = pFormat->GetAnchor().GetContentAnchor()
-                                      ->nContent.GetIndex();
-                        OSL_ENSURE( GetAnchorFrame()->IsTextFrame(), "TextFrame expected");
+                        assert(GetAnchorFrame()->IsTextFrame());
                         pAutoFrame = static_cast<const SwTextFrame*>(GetAnchorFrame());
+                        TextFrameIndex const nOfs(pAutoFrame->MapModelToViewPos(
+                                    *pFormat->GetAnchor().GetContentAnchor()));
                         while( pAutoFrame->GetFollow() &&
                                pAutoFrame->GetFollow()->GetOfst() <= nOfs )
                             pAutoFrame = pAutoFrame->GetFollow();
