@@ -24,6 +24,7 @@
 #include <sfx2/dockwin.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <avmedia/avmediadllapi.h>
+#include <memory>
 
 namespace avmedia
 {
@@ -56,7 +57,7 @@ private:
     virtual void            Resize() override;
     virtual void            ToggleFloatingMode() override;
 
-    MediaWindow*            mpMediaWindow;
+    std::unique_ptr<MediaWindow> mpMediaWindow;
 };
 
 inline MediaFloater * getMediaFloater() {
