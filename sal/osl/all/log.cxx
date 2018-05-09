@@ -22,7 +22,6 @@
 #include <fstream>
 
 #include <config_global.h>
-#include <config_options.h>
 #include <osl/thread.hxx>
 #include <rtl/string.h>
 #include <sal/detail/log.h>
@@ -331,12 +330,9 @@ void sal_detail_log(
             // write to Windows debugger console, too
             OutputDebugStringA(s.str().c_str());
 #endif
-#if ! (defined(WNT) && ENABLE_RELEASE_BUILD)
-            // on Windows deployments, no one reads console output
             s << '\n';
             std::fputs(s.str().c_str(), stderr);
             std::fflush(stderr);
-#endif
         }
     }
 #endif
