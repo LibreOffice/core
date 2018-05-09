@@ -206,7 +206,7 @@ const SwLineLayout *SwTextCursor::CharCursorToLine(TextFrameIndex const nPositio
         bRightMargin = false;
     bool bPrevious = bRightMargin && m_pCurr->GetLen() && GetPrev() &&
         GetPrev()->GetLen();
-    if( bPrevious && nPosition && CH_BREAK == GetInfo().GetChar( nPosition-1 ) )
+    if (bPrevious && nPosition && CH_BREAK == GetInfo().GetChar(nPosition - TextFrameIndex(1)))
         bPrevious = false;
     return bPrevious ? PrevLine() : m_pCurr;
 }
@@ -317,7 +317,7 @@ static bool lcl_NeedsFieldRest( const SwLineLayout* pCurr )
 void SwTextIter::TruncLines( bool bNoteFollow )
 {
     SwLineLayout *pDel = m_pCurr->GetNext();
-    const sal_Int32 nEnd = m_nStart + m_pCurr->GetLen();
+    TextFrameIndex const nEnd = m_nStart + m_pCurr->GetLen();
 
     if( pDel )
     {
@@ -332,7 +332,7 @@ void SwTextIter::TruncLines( bool bNoteFollow )
             if ( pFollow && ! pFollow->IsLocked() &&
                  nEnd == pFollow->GetOfst() )
             {
-                sal_Int32 nRangeEnd = nEnd;
+                TextFrameIndex nRangeEnd = nEnd;
                 SwLineLayout* pLine = pDel;
 
                 // determine range to be searched for flys anchored as characters
@@ -363,8 +363,10 @@ void SwTextIter::TruncLines( bool bNoteFollow )
     }
     if( m_pCurr->IsDummy() &&
         !m_pCurr->GetLen() &&
-         m_nStart < GetTextFrame()->GetText().getLength() )
+         m_nStart < TextFrameIndex(GetTextFrame()->GetText().getLength()))
+    {
         m_pCurr->SetRealHeight( 1 );
+    }
     if( GetHints() )
         m_pFrame->RemoveFootnote( nEnd );
 }
