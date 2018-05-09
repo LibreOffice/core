@@ -191,7 +191,7 @@ std::unique_ptr<EditTextObject> ScEditUtil::Clone( const EditTextObject& rObj, S
 }
 
 OUString ScEditUtil::GetCellFieldValue(
-    const SvxFieldData& rFieldData, const ScDocument* pDoc, Color** ppTextColor )
+    const SvxFieldData& rFieldData, const ScDocument* pDoc, boost::optional<Color>* ppTextColor )
 {
     OUString aRet;
     switch (rFieldData.GetClassId())
@@ -218,7 +218,7 @@ OUString ScEditUtil::GetCellFieldValue(
                 INetURLHistory::GetOrCreate()->QueryUrl(aURL) ? svtools::LINKSVISITED : svtools::LINKS;
 
             if (ppTextColor)
-                *ppTextColor = new Color( SC_MOD()->GetColorConfig().GetColorValue(eEntry).nColor );
+                *ppTextColor = SC_MOD()->GetColorConfig().GetColorValue(eEntry).nColor;
         }
         break;
         case text::textfield::Type::EXTENDED_TIME:
@@ -796,7 +796,7 @@ ScHeaderEditEngine::ScHeaderEditEngine( SfxItemPool* pEnginePoolP )
 
 OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                                     sal_Int32 /* nPara */, sal_Int32 /* nPos */,
-                                    Color*& /* rTxtColor */, Color*& /* rFldColor */ )
+                                    boost::optional<Color>& /* rTxtColor */, boost::optional<Color>& /* rFldColor */ )
 {
     const SvxFieldData* pFieldData = rField.GetField();
     if (!pFieldData)
@@ -860,7 +860,7 @@ ScFieldEditEngine::ScFieldEditEngine(
 
 OUString ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                                     sal_Int32 /* nPara */, sal_Int32 /* nPos */,
-                                    Color*& rTxtColor, Color*& /* rFldColor */ )
+                                    boost::optional<Color>& rTxtColor, boost::optional<Color>& /* rFldColor */ )
 {
     const SvxFieldData* pFieldData = rField.GetField();
 

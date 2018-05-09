@@ -975,17 +975,15 @@ IMPL_LINK(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI,void)
     rStr.clear();
     SdrTextObj* pTextObj = mxTextEditObj.get();
     if (pTextObj!=nullptr) {
-        Color* pTxtCol=nullptr;
-        Color* pFldCol=nullptr;
+        boost::optional<Color> pTxtCol;
+        boost::optional<Color> pFldCol;
         bOk=pTextObj->CalcFieldValue(pFI->GetField(),pFI->GetPara(),pFI->GetPos(),true,pTxtCol,pFldCol,rStr);
         if (bOk) {
-            if (pTxtCol!=nullptr) {
+            if (pTxtCol) {
                 pFI->SetTextColor(*pTxtCol);
-                delete pTxtCol;
             }
-            if (pFldCol!=nullptr) {
+            if (pFldCol) {
                 pFI->SetFieldColor(*pFldCol);
-                delete pFldCol;
             } else {
                 pFI->SetFieldColor(COL_LIGHTGRAY); // TODO: remove this later on (357)
             }

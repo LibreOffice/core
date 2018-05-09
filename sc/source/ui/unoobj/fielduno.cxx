@@ -177,7 +177,7 @@ public:
     explicit ScUnoEditEngine(ScEditEngineDefaulter* pSource);
 
     virtual OUString  CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos,
-                                    Color*& rTxtColor, Color*& rFldColor ) override;
+                                   boost::optional<Color>& rTxtColor, boost::optional<Color>& rFldColor ) override;
 
     sal_uInt16 CountFields();
     SvxFieldData* FindByIndex(sal_uInt16 nIndex);
@@ -202,7 +202,7 @@ ScUnoEditEngine::ScUnoEditEngine(ScEditEngineDefaulter* pSource)
 }
 
 OUString ScUnoEditEngine::CalcFieldValue( const SvxFieldItem& rField,
-            sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor )
+            sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rTxtColor, boost::optional<Color>& rFldColor )
 {
     OUString aRet(EditEngine::CalcFieldValue( rField, nPara, nPos, rTxtColor, rFldColor ));
     if (eMode != SC_UNO_COLLECT_NONE)

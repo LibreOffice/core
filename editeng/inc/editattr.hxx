@@ -22,8 +22,9 @@
 
 #include <editeng/eeitem.hxx>
 #include <svl/poolitem.hxx>
+#include <boost/optional.hpp>
+#include <tools/color.hxx>
 
-class Color;
 class SvxFont;
 class SvxFontItem;
 class SvxWeightItem;
@@ -363,8 +364,8 @@ public:
 class EditCharAttribField: public EditCharAttrib
 {
     OUString   aFieldValue;
-    Color*          pTxtColor;
-    Color*          pFldColor;
+    boost::optional<Color>  mxTxtColor;
+    boost::optional<Color>  mxFldColor;
 
     EditCharAttribField& operator = ( const EditCharAttribField& rAttr ) = delete;
 
@@ -378,8 +379,8 @@ public:
                                     { return !(operator == ( rAttr ) ); }
 
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-    Color*&         GetTextColor()           { return pTxtColor; }
-    Color*&         GetFieldColor()           { return pFldColor; }
+    boost::optional<Color>&   GetTextColor()      { return mxTxtColor; }
+    boost::optional<Color>&   GetFieldColor()     { return mxFldColor; }
 
     const OUString& GetFieldValue() const { return aFieldValue;}
     void SetFieldValue(const OUString& rVal);

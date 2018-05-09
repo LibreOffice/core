@@ -29,7 +29,7 @@ ClassificationEditEngine::ClassificationEditEngine(SfxItemPool* pItemPool)
 {}
 
 OUString ClassificationEditEngine::CalcFieldValue(const SvxFieldItem& rField, sal_Int32 /*nPara*/,
-                                                  sal_Int32 /*nPos*/, Color*& /*rTxtColor*/, Color*& /*rFldColor*/)
+                                                  sal_Int32 /*nPos*/, boost::optional<Color>& /*rTxtColor*/, boost::optional<Color>& /*rFldColor*/)
 {
     OUString aString;
     const ClassificationField* pClassificationField = dynamic_cast<const ClassificationField*>(rField.GetField());

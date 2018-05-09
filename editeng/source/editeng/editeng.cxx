@@ -2590,7 +2590,7 @@ tools::Rectangle EditEngine::GetBulletArea( sal_Int32 )
     return tools::Rectangle( Point(), Point() );
 }
 
-OUString EditEngine::CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_Int32, Color*&, Color*& )
+OUString EditEngine::CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_Int32, boost::optional<Color>&, boost::optional<Color>& )
 {
     return OUString(' ');
 }

@@ -151,7 +151,7 @@ bool SvxEditEngineForwarder::IsValid() const
     return rEditEngine.GetUpdateMode();
 }
 
-OUString SvxEditEngineForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rpTxtColor, Color*& rpFldColor )
+OUString SvxEditEngineForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rpTxtColor, boost::optional<Color>& rpFldColor )
 {
     return rEditEngine.CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
 }

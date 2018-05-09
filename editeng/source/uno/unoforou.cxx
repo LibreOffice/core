@@ -223,7 +223,7 @@ void SvxOutlinerForwarder::QuickSetAttribs( const SfxItemSet& rSet, const ESelec
     rOutliner.QuickSetAttribs( rSet, rSel );
 }
 
-OUString SvxOutlinerForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rpTxtColor, Color*& rpFldColor )
+OUString SvxOutlinerForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rpTxtColor, boost::optional<Color>& rpFldColor )
 {
     return rOutliner.CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
 }

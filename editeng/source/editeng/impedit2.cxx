@@ -2968,7 +2968,7 @@ bool ImpEditEngine::UpdateFields()
                 rField.Reset();
 
                 if ( aStatus.MarkFields() )
-                    rField.GetFieldColor() = new Color( GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor );
+                    rField.GetFieldColor() = GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor;
 
                 const OUString aFldValue =
                     GetEditEnginePtr()->CalcFieldValue(
