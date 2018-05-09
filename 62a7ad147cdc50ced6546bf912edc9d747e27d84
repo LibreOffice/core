@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_2dd5a2b8",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-09T09:22:39Z",
+      "side": 1,
+      "message": "Seeing all these SetComputeIIFlag() and SetMatrixFlag() sprinkled everywhere, wouldn\u0027t it be better to pass them as ctor parameters?",
+      "revId": "62a7ad147cdc50ced6546bf912edc9d747e27d84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_4d55764e",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5785,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-09T09:22:39Z",
+      "side": 1,
+      "message": "Comparing against a range of opcode values up to a specific opcode value (here SC_OPCODE_FACT) is error prone, they may be moved around. Why is it that specific opcode anyway?",
+      "range": {
+        "startLine": 5785,
+        "startChar": 104,
+        "endLine": 5785,
+        "endChar": 118
+      },
+      "revId": "62a7ad147cdc50ced6546bf912edc9d747e27d84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_0d845ed2",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5825,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-09T09:22:39Z",
+      "side": 1,
+      "message": "Ditto, SC_OPCODE_FACT?",
+      "range": {
+        "startLine": 5825,
+        "startChar": 60,
+        "endLine": 5825,
+        "endChar": 74
+      },
+      "revId": "62a7ad147cdc50ced6546bf912edc9d747e27d84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_6d85daab",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5832,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-09T09:22:39Z",
+      "side": 1,
+      "message": "I think here is missing a check whether the current opcode\u0027s current parameter (it\u0027s always the first and only one here now, but the general handling would be the same) is actually of type ParameterClass::Value, and return (not process further) if it isn\u0027t.",
+      "revId": "62a7ad147cdc50ced6546bf912edc9d747e27d84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
