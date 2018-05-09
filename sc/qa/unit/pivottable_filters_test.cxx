@@ -27,6 +27,7 @@
 #include <attrib.hxx>
 #include <dpshttab.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 
 #include <test/xmltesttools.hxx>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -2309,7 +2310,7 @@ void ScPivotTableFiltersTest::testTdf112106()
     CPPUNIT_ASSERT(pDim);
     const boost::optional<OUString> & pLayoutName = pDim->GetLayoutName();
     CPPUNIT_ASSERT(pLayoutName);
-    CPPUNIT_ASSERT_EQUAL(ScGlobal::GetRscString(STR_PIVOT_DATA), (*pLayoutName));
+    CPPUNIT_ASSERT_EQUAL(ScResId(STR_PIVOT_DATA), (*pLayoutName));
 
     xDocSh->DoClose();
 }
