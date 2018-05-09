@@ -49,6 +49,10 @@ public:
         // and the logic depends on overriding methods.
         if (fn == SRCDIR "/sfx2/source/dialog/tabdlg.cxx")
             return;
+        // pLongArr is being deleted here because we temporarily overwrite a pointer to someone else's buffer, with a pointer
+        // to our own buffer
+        if (fn == SRCDIR "/editeng/source/misc/txtrange.cxx")
+            return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
