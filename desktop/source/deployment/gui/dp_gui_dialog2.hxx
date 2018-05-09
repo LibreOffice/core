@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_DIALOG2_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_DIALOG2_HXX
 
-#include <config_extension_update.h>
+#include <config_extensions.h>
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
