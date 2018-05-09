@@ -10,6 +10,8 @@
 #include "Qt5Frame.hxx"
 #include "Qt5Menu.hxx"
 
+#include <vcl/svapp.hxx>
+
 Qt5Menu::Qt5Menu( bool bMenuBar ) :
     mpVCLMenu( nullptr ),
     mpParentSalMenu( nullptr ),
@@ -20,6 +22,7 @@ Qt5Menu::Qt5Menu( bool bMenuBar ) :
 
 Qt5Menu::~Qt5Menu()
 {
+    maItems.clear();
 }
 
 bool Qt5Menu::VisibleMenuBar()
@@ -29,10 +32,21 @@ bool Qt5Menu::VisibleMenuBar()
 
 void Qt5Menu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 {
+    SolarMutexGuard aGuard;
+    Qt5MenuItem *pItem = static_cast<Qt5MenuItem*>( pSalMenuItem );
+
+    if ( nPos == MENU_APPEND )
+        maItems.push_back( pItem );
+    else
+        maItems.insert( maItems.begin() + nPos, pItem );
+
+    pItem->mpParentMenu = this;
 }
 
 void Qt5Menu::RemoveItem( unsigned nPos )
 {
+    SolarMutexGuard aGuard;
+    maItems.erase( maItems.begin() + nPos );
 }
 
 void Qt5Menu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos )
