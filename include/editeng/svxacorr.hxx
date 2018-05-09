@@ -154,8 +154,8 @@ public:
                            // free any objects still in the set
                            ~SvxAutocorrWordList();
     void                   DeleteAndDestroyAll();
-    bool                   Insert(SvxAutocorrWord *pWord) const;
-    SvxAutocorrWord*       FindAndRemove(SvxAutocorrWord *pWord);
+    bool                   Insert(std::unique_ptr<SvxAutocorrWord> pWord) const;
+    std::unique_ptr<SvxAutocorrWord> FindAndRemove(SvxAutocorrWord *pWord);
     void                   LoadEntry(const OUString& sWrong, const OUString& sRight, bool bOnlyTxt);
     bool                   empty() const;
 

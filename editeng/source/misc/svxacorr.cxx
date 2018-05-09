@@ -2457,7 +2457,7 @@ bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutocorrWo
     {
         for (SvxAutocorrWord & aWordToDelete : aDeleteEntries)
         {
-            SvxAutocorrWord *pFoundEntry = pAutocorr_List->FindAndRemove( &aWordToDelete );
+            std::unique_ptr<SvxAutocorrWord> pFoundEntry = pAutocorr_List->FindAndRemove( &aWordToDelete );
             if( pFoundEntry )
             {
                 if( !pFoundEntry->IsTextOnly() )
@@ -2474,14 +2474,13 @@ bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutocorrWo
                         bRet = xStorage->Commit();
                     }
                 }
-                delete pFoundEntry;
             }
         }
 
         for (SvxAutocorrWord & aNewEntrie : aNewEntries)
         {
-            SvxAutocorrWord *pWordToAdd = new SvxAutocorrWord( aNewEntrie.GetShort(), aNewEntrie.GetLong(), true );
-            SvxAutocorrWord *pRemoved = pAutocorr_List->FindAndRemove( pWordToAdd );
+            std::unique_ptr<SvxAutocorrWord> pWordToAdd(new SvxAutocorrWord( aNewEntrie.GetShort(), aNewEntrie.GetLong(), true ));
+            std::unique_ptr<SvxAutocorrWord> pRemoved = pAutocorr_List->FindAndRemove( pWordToAdd.get() );
             if( pRemoved )
             {
                 if( !pRemoved->IsTextOnly() )
@@ -2496,13 +2495,11 @@ bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutocorrWo
                     if( xStorage->IsContained( sStorageName ) )
                         xStorage->Remove( sStorageName );
                 }
-                delete pRemoved;
             }
-            bRet = pAutocorr_List->Insert( pWordToAdd );
+            bRet = pAutocorr_List->Insert( std::move(pWordToAdd) );
 
             if ( !bRet )
             {
-                delete pWordToAdd;
                 break;
             }
         }
@@ -2528,8 +2525,8 @@ bool SvxAutoCorrectLanguageLists::PutText( const OUString& rShort, const OUStrin
     // Update the word list
     if( bRet )
     {
-        SvxAutocorrWord* pNew = new SvxAutocorrWord( rShort, rLong, true );
-        SvxAutocorrWord *pRemove = pAutocorr_List->FindAndRemove( pNew );
+        std::unique_ptr<SvxAutocorrWord> pNew(new SvxAutocorrWord( rShort, rLong, true ));
+        std::unique_ptr<SvxAutocorrWord> pRemove = pAutocorr_List->FindAndRemove( pNew.get() );
         if( pRemove )
         {
             if( !pRemove->IsTextOnly() )
@@ -2544,17 +2541,15 @@ bool SvxAutoCorrectLanguageLists::PutText( const OUString& rShort, const OUStrin
                 if( xStg->IsContained( sStgNm ) )
                     xStg->Remove( sStgNm );
             }
-            delete pRemove;
         }
 
-        if( pAutocorr_List->Insert( pNew ) )
+        if( pAutocorr_List->Insert( std::move(pNew) ) )
         {
             bRet = MakeBlocklist_Imp( *xStg );
             xStg = nullptr;
         }
         else
         {
-            delete pNew;
             bRet = false;
         }
     }
@@ -2579,14 +2574,12 @@ void SvxAutoCorrectLanguageLists::PutText( const OUString& rShort,
         // Update the word list
         if( bRet )
         {
-            SvxAutocorrWord* pNew = new SvxAutocorrWord( rShort, sLong, false );
-            if( pAutocorr_List->Insert( pNew ) )
+            std::unique_ptr<SvxAutocorrWord> pNew(new SvxAutocorrWord( rShort, sLong, false ));
+            if( pAutocorr_List->Insert( std::move(pNew) ) )
             {
                 tools::SvRef<SotStorage> xStor = new SotStorage( sUserAutoCorrFile, StreamMode::READWRITE );
                 MakeBlocklist_Imp( *xStor );
             }
-            else
-                delete pNew;
         }
     }
     catch ( const uno::Exception& )
@@ -2606,8 +2599,9 @@ struct CompareSvxAutocorrWordList
 
 namespace {
 
+// can't use std::unique_ptr until we have C++14
 typedef std::set<SvxAutocorrWord*, CompareSvxAutocorrWordList> AutocorrWordSetType;
-typedef std::unordered_map<OUString, SvxAutocorrWord*> AutocorrWordHashType;
+typedef std::unordered_map<OUString, std::unique_ptr<SvxAutocorrWord>> AutocorrWordHashType;
 
 }
 
@@ -2620,8 +2614,6 @@ struct SvxAutocorrWordList::Impl
 
     void DeleteAndDestroyAll()
     {
-        for (auto const& elem : maHash)
-            delete elem.second;
         maHash.clear();
 
         for (auto const& elem : maSet)
@@ -2643,22 +2635,21 @@ void SvxAutocorrWordList::DeleteAndDestroyAll()
 }
 
 // returns true if inserted
-bool SvxAutocorrWordList::Insert(SvxAutocorrWord *pWord) const
+bool SvxAutocorrWordList::Insert(std::unique_ptr<SvxAutocorrWord> pWord) const
 {
     if ( mpImpl->maSet.empty() ) // use the hash
     {
         OUString aShort( pWord->GetShort() );
-        return mpImpl->maHash.insert( std::pair<OUString, SvxAutocorrWord *>( aShort, pWord ) ).second;
+        return mpImpl->maHash.insert( std::pair<OUString, std::unique_ptr<SvxAutocorrWord> >( aShort, std::move(pWord) ) ).second;
     }
     else
-        return mpImpl->maSet.insert( pWord ).second;
+        return mpImpl->maSet.insert( pWord.release() ).second;
 }
 
 void SvxAutocorrWordList::LoadEntry(const OUString& sWrong, const OUString& sRight, bool bOnlyTxt)
 {
-    SvxAutocorrWord* pNew = new SvxAutocorrWord( sWrong, sRight, bOnlyTxt );
-    if( !Insert( pNew ) )
-        delete pNew;
+    std::unique_ptr<SvxAutocorrWord> pNew(new SvxAutocorrWord( sWrong, sRight, bOnlyTxt ));
+    Insert( std::move(pNew) );
 }
 
 bool SvxAutocorrWordList::empty() const
@@ -2666,16 +2657,16 @@ bool SvxAutocorrWordList::empty() const
     return mpImpl->maHash.empty() && mpImpl->maSet.empty();
 }
 
-SvxAutocorrWord *SvxAutocorrWordList::FindAndRemove(SvxAutocorrWord *pWord)
+std::unique_ptr<SvxAutocorrWord> SvxAutocorrWordList::FindAndRemove(SvxAutocorrWord *pWord)
 {
-    SvxAutocorrWord *pMatch = nullptr;
+    std::unique_ptr<SvxAutocorrWord> pMatch;
 
     if ( mpImpl->maSet.empty() ) // use the hash
     {
         AutocorrWordHashType::iterator it = mpImpl->maHash.find( pWord->GetShort() );
         if( it != mpImpl->maHash.end() )
         {
-            pMatch = it->second;
+            pMatch = std::move(it->second);
             mpImpl->maHash.erase (it);
         }
     }
@@ -2684,7 +2675,7 @@ SvxAutocorrWord *SvxAutocorrWordList::FindAndRemove(SvxAutocorrWord *pWord)
         AutocorrWordSetType::iterator it = mpImpl->maSet.find( pWord );
         if( it != mpImpl->maSet.end() )
         {
-            pMatch = *it;
+            pMatch = std::unique_ptr<SvxAutocorrWord>(*it);
             mpImpl->maSet.erase (it);
         }
     }
@@ -2700,8 +2691,8 @@ SvxAutocorrWordList::Content SvxAutocorrWordList::getSortedContent() const
     if ( mpImpl->maSet.empty() )
     {
         // This beast has some O(N log(N)) in a terribly slow ICU collate fn.
-        for (auto const& elem : mpImpl->maHash)
-            mpImpl->maSet.insert( elem.second );
+        for (auto & elem : mpImpl->maHash)
+            mpImpl->maSet.insert( elem.second.release() );
         mpImpl->maHash.clear();
     }
     for (auto const& elem : mpImpl->maSet)
@@ -2755,7 +2746,8 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                 // avoid double spaces before simple "word" replacement
                 left_pattern += (left_pattern.getLength() == 0 && pFnd->GetLong()[0] == 0x20) ? pFnd->GetLong().copy(1) : pFnd->GetLong();
                 SvxAutocorrWord* pNew = new SvxAutocorrWord(rTxt.copy(rStt, nEndPos - rStt), left_pattern);
-                if( Insert( pNew ) ) return pNew; else delete pNew;
+                if( Insert( std::unique_ptr<SvxAutocorrWord>(pNew) ) )
+                    return pNew;
             }
         } else
         // match "word.*" or ".*word.*" patterns, eg. "i18n.*", ".*---.*", TODO: add transliteration support
@@ -2820,13 +2812,11 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                     aLong = buf.makeStringAndClear();
                 }
                 SvxAutocorrWord* pNew = new SvxAutocorrWord(aShort, aLong);
-                if ( Insert( pNew ) )
+                if ( Insert( std::unique_ptr<SvxAutocorrWord>(pNew) ) )
                 {
                     if ( (rTxt.getLength() > nEndPos && IsWordDelim(rTxt[nEndPos])) || rTxt.getLength() == nEndPos )
                         return pNew;
                 }
-                else
-                    delete pNew;
             }
         }
     }
@@ -2838,7 +2828,7 @@ const SvxAutocorrWord* SvxAutocorrWordList::SearchWordsInList(const OUString& rT
 {
     for (auto const& elem : mpImpl->maHash)
     {
-        if( const SvxAutocorrWord *aTmp = WordMatches( elem.second, rTxt, rStt, nEndPos ) )
+        if( const SvxAutocorrWord *aTmp = WordMatches( elem.second.get(), rTxt, rStt, nEndPos ) )
             return aTmp;
     }
 

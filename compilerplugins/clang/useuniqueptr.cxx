@@ -53,6 +53,9 @@ public:
         // to our own buffer
         if (fn == SRCDIR "/editeng/source/misc/txtrange.cxx")
             return;
+        // can't use std::set<std::unique_ptr<>> until C++14
+        if (fn == SRCDIR "/editeng/source/misc/svxacorr.cxx")
+            return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
