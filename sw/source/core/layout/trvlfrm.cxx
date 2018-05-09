@@ -1013,10 +1013,9 @@ sal_uInt16 SwRootFrame::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
             pContent = pContent->GetNextContentFrame();
     if ( pContent )
     {
-        SwContentNode* pCNd = const_cast<SwContentNode*>(pContent->GetNode());
-        pToSet->GetPoint()->nNode = *pCNd;
-        pCNd->MakeStartIndex( &pToSet->GetPoint()->nContent );
-        pToSet->GetPoint()->nContent = static_cast<const SwTextFrame*>(pContent)->GetOfst();
+        assert(pContent->IsTextFrame());
+        SwTextFrame const*const pFrame(static_cast<const SwTextFrame*>(pContent));
+        *pToSet->GetPoint() = pFrame->MapViewToModelPos(pFrame->GetOfst());
 
         SwShellCursor* pSCursor = dynamic_cast<SwShellCursor*>(pToSet);
         if( pSCursor )
@@ -1110,15 +1109,14 @@ bool GetFrameInPage( const SwContentFrame *pCnt, SwWhichPage fnWhichPage,
             }
         }
 
-        SwContentNode *pCNd = const_cast<SwContentNode*>(pCnt->GetNode());
-        pPam->GetPoint()->nNode = *pCNd;
-        sal_Int32 nIdx;
-        if( fnPosPage == GetFirstSub )
-            nIdx = static_cast<const SwTextFrame*>(pCnt)->GetOfst();
-        else
-            nIdx = pCnt->GetFollow() ?
-                    static_cast<const SwTextFrame*>(pCnt)->GetFollow()->GetOfst()-1 : pCNd->Len();
-        pPam->GetPoint()->nContent.Assign( pCNd, nIdx );
+        assert(pCnt->IsTextFrame());
+        SwTextFrame const*const pFrame(static_cast<const SwTextFrame*>(pCnt));
+        TextFrameIndex const nIdx((fnPosPage == GetFirstSub)
+            ? pFrame->GetOfst()
+            : (pFrame->GetFollow())
+                ? pFrame->GetFollow()->GetOfst() - TextFrameIndex(1)
+                : TextFrameIndex(pFrame->GetText().getLength()));
+        *pPam->GetPoint() = pFrame->MapViewToModelPos(nIdx);
         return true;
     }
 }
