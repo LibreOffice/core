@@ -17,7 +17,6 @@
 #include <fpdf_save.h>
 #endif
 
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/graph.hxx>
 #include <bitmapwriteaccess.hxx>
 

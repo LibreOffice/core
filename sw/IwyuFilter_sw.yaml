@@ -242,3 +242,12 @@ blacklist:
     - class SvxCharSetColorItem
     # used in extern declaration
     - struct SfxItemInfo
+    sw/inc/textboxhelper.hxx:
+    # used as a template parameter
+    - class SwFormatContent
+    sw/qa/extras/rtfimport/rtfimport.cxx:
+    # complete type is wanted
+    - com/sun/star/text/XDocumentIndexMark.hpp
+    sw/qa/extras/rtfexport/rtfexport.cxx:
+    # complete type is wanted
+    - com/sun/star/text/XTextColumns.hpp

@@ -13,10 +13,13 @@
 #include <memory>
 
 #include <rtl/strbuf.hxx>
-#include <rtl/ref.hxx>
 #include <sax/fshelper.hxx>
 #include <tools/solar.h>
 
+namespace rtl
+{
+template <typename> class Reference;
+}
 namespace oox
 {
 namespace drawingml
@@ -25,7 +28,6 @@ class DrawingML;
 }
 }
 class Size;
-class Point;
 class SdrObject;
 class SvxBoxItem;
 
@@ -34,7 +36,6 @@ namespace ww8
 class Frame;
 }
 class SwFrameFormat;
-class SwNode;
 
 class DocxExport;
 

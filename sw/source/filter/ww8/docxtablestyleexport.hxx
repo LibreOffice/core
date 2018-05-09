@@ -12,10 +12,21 @@
 
 #include <memory>
 
-#include <com/sun/star/beans/PropertyValue.hpp>
-
 #include <sax/fshelper.hxx>
 
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace beans
+{
+struct PropertyValue;
+}
+}
+}
+}
 class SwDoc;
 
 /// Handles DOCX export of table styles, based on InteropGrabBag.

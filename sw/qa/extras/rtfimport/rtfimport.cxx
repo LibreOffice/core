@@ -36,14 +36,26 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/XFormField.hpp>
 
 #include <rtl/ustring.hxx>
 #include <vcl/settings.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/configuration.hxx>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace graphic
+{
+class XGraphic;
+}
+}
+}
+}
 
 class Test : public SwModelTestBase
 {
