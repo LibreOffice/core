@@ -32,8 +32,6 @@ class COMPHELPER_DLLPUBLIC ScopeGuard
 {
 public:
     /** @param func function object to be executed in dtor
-        @param excHandling switches whether thrown exceptions in dtor will be
-                           silently ignored (but OSL_ asserted)
     */
     template <typename func_type>
     explicit ScopeGuard( func_type const & func ) : m_func( func ) {}
