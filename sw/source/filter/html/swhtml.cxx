@@ -21,7 +21,7 @@
 
 #include <algorithm>
 #include <memory>
-#include <config_features.h>
+#include <config_java.h>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>

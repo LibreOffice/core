@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include <config_features.h>
+#include <config_java.h>
 #include <config_folders.h>
 
 #include <sal/config.h>
