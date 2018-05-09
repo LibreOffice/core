@@ -101,7 +101,7 @@ Paragraph* Outliner::Insert(const OUString& rText, sal_Int32 nAbsPos, sal_Int16 
         pEditEngine->SetUpdateMode( false );
         ImplBlockInsertionCallbacks( true );
         pPara = new Paragraph( nDepth );
-        pParaList->Insert( pPara, nAbsPos );
+        pParaList->Insert( std::unique_ptr<Paragraph>(pPara), nAbsPos );
         pEditEngine->InsertParagraph( nAbsPos, OUString() );
         DBG_ASSERT(pPara==pParaList->GetParagraph(nAbsPos),"Insert:Failed");
         ImplInitDepth( nAbsPos, nDepth, false );
@@ -126,7 +126,7 @@ void Outliner::ParagraphInserted( sal_Int32 nPara )
     if( bPasting || pEditEngine->IsInUndo() )
     {
         Paragraph* pPara = new Paragraph( -1 );
-        pParaList->Insert( pPara, nPara );
+        pParaList->Insert( std::unique_ptr<Paragraph>(pPara), nPara );
         if( pEditEngine->IsInUndo() )
         {
             pPara->nFlags = ParaFlag::SETBULLETTEXT;
@@ -143,7 +143,7 @@ void Outliner::ParagraphInserted( sal_Int32 nPara )
             nDepth = pParaBefore->GetDepth();
 
         Paragraph* pPara = new Paragraph( nDepth );
-        pParaList->Insert( pPara, nPara );
+        pParaList->Insert( std::unique_ptr<Paragraph>(pPara), nPara );
 
         if( !pEditEngine->IsInUndo() )
         {
@@ -468,7 +468,7 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
             }
             if( nPos ) // not with the first paragraph
             {
-                pParaList->Insert( pPara, nInsPos );
+                pParaList->Insert( std::unique_ptr<Paragraph>(pPara), nInsPos );
                 pEditEngine->InsertParagraph( nInsPos, aStr );
                 ParagraphInsertedHdl(pPara);
             }
@@ -581,10 +581,10 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
     pParaList->Clear();
     for( sal_Int32 nCurPara = 0; nCurPara < rPObj.Count(); nCurPara++ )
     {
-        Paragraph* pPara = new Paragraph( rPObj.GetParagraphData(nCurPara));
+        std::unique_ptr<Paragraph> pPara(new Paragraph( rPObj.GetParagraphData(nCurPara)));
         ImplCheckDepth( pPara->nDepth );
 
-        pParaList->Append(pPara);
+        pParaList->Append(std::move(pPara));
         ImplCheckNumBulletItem( nCurPara );
     }
 
@@ -622,7 +622,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
     for( sal_Int32 n = 0; n < rPObj.Count(); n++ )
     {
         Paragraph* pPara = new Paragraph( rPObj.GetParagraphData(n) );
-        pParaList->Append(pPara);
+        pParaList->Append(std::unique_ptr<Paragraph>(pPara));
         sal_Int32 nP = nPara+n;
         DBG_ASSERT(pParaList->GetAbsPos(pPara)==nP,"AddText:Out of sync");
         ImplInitDepth( nP, pPara->GetDepth(), false );
@@ -1110,8 +1110,8 @@ ErrCode Outliner::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat
      pParaList->Clear();
     for ( sal_Int32 n = 0; n < nParas; n++ )
     {
-        Paragraph* pPara = new Paragraph( 0 );
-        pParaList->Append(pPara);
+        std::unique_ptr<Paragraph> pPara(new Paragraph( 0 ));
+        pParaList->Append(std::move(pPara));
     }
 
     ImpFilterIndents( 0, nParas-1 );
@@ -1257,8 +1257,8 @@ Outliner::Outliner(SfxItemPool* pPool, OutlinerMode nMode)
 
     pParaList.reset( new ParagraphList );
     pParaList->SetVisibleStateChangedHdl( LINK( this, Outliner, ParaVisibleStateChangedHdl ) );
-    Paragraph* pPara = new Paragraph( 0 );
-    pParaList->Append(pPara);
+    std::unique_ptr<Paragraph> pPara(new Paragraph( 0 ));
+    pParaList->Append(std::move(pPara));
 
     pEditEngine.reset( new OutlinerEditEng( this, pPool ) );
     pEditEngine->SetBeginMovingParagraphsHdl( LINK( this, Outliner, BeginMovingParagraphsHdl ) );
@@ -1887,7 +1887,7 @@ void Outliner::Clear()
         ImplBlockInsertionCallbacks( true );
         pEditEngine->Clear();
         pParaList->Clear();
-        pParaList->Append( new Paragraph( nMinDepth ));
+        pParaList->Append( std::unique_ptr<Paragraph>(new Paragraph( nMinDepth )));
         bFirstParaIsEmpty = true;
         ImplBlockInsertionCallbacks( false );
     }

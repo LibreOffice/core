@@ -93,27 +93,25 @@ void Paragraph::dumpAsXml(struct _xmlTextWriter* pWriter) const
 
 void ParagraphList::Clear()
 {
-    for (auto const& entry : maEntries)
-        delete entry;
     maEntries.clear();
 }
 
-void ParagraphList::Append( Paragraph* pPara)
+void ParagraphList::Append( std::unique_ptr<Paragraph> pPara)
 {
     SAL_WARN_IF( maEntries.size() >= EE_PARA_MAX_COUNT, "editeng", "ParagraphList::Append - overflow");
-    maEntries.push_back(pPara);
+    maEntries.push_back(std::move(pPara));
 }
 
-void ParagraphList::Insert( Paragraph* pPara, sal_Int32 nAbsPos)
+void ParagraphList::Insert( std::unique_ptr<Paragraph> pPara, sal_Int32 nAbsPos)
 {
     SAL_WARN_IF( nAbsPos < 0 || (maEntries.size() < static_cast<size_t>(nAbsPos) && nAbsPos != EE_PARA_APPEND),
             "editeng", "ParagraphList::Insert - bad insert position " << nAbsPos);
     SAL_WARN_IF( maEntries.size() >= EE_PARA_MAX_COUNT, "editeng", "ParagraphList::Insert - overflow");
 
     if (nAbsPos < 0 || maEntries.size() <= static_cast<size_t>(nAbsPos))
-        Append( pPara);
+        Append( std::move(pPara) );
     else
-        maEntries.insert(maEntries.begin()+nAbsPos,pPara);
+        maEntries.insert(maEntries.begin()+nAbsPos, std::move(pPara));
 }
 
 void ParagraphList::Remove( sal_Int32 nPara )
@@ -133,20 +131,23 @@ void ParagraphList::MoveParagraphs( sal_Int32 nStart, sal_Int32 nDest, sal_Int32
 
     if ( (( nDest < nStart ) || ( nDest >= ( nStart + _nCount ) )) && nStart >= 0 && nDest >= 0 && _nCount >= 0 )
     {
-        std::vector<Paragraph*> aParas;
-        std::vector<Paragraph*>::iterator iterBeg = maEntries.begin() + nStart;
-        std::vector<Paragraph*>::iterator iterEnd = iterBeg + _nCount;
+        std::vector<std::unique_ptr<Paragraph>> aParas;
+        auto iterBeg = maEntries.begin() + nStart;
+        auto iterEnd = iterBeg + _nCount;
 
-        std::copy(iterBeg,iterEnd,std::back_inserter(aParas));
+        for (auto it = iterBeg; it != iterEnd; ++it)
+            aParas.push_back(std::move(*it));
 
         maEntries.erase(iterBeg,iterEnd);
 
         if ( nDest > nStart )
             nDest -= _nCount;
 
-        std::vector<Paragraph*>::iterator iterIns = maEntries.begin() + nDest;
-
-        std::copy(aParas.begin(),aParas.end(),std::inserter(maEntries,iterIns));
+        for (auto & i : aParas)
+        {
+            maEntries.insert(maEntries.begin() + nDest, std::move(i));
+            ++nDest;
+        }
     }
     else
     {
@@ -237,7 +238,7 @@ sal_Int32 ParagraphList::GetAbsPos( Paragraph const * pParent ) const
     sal_Int32 pos = 0;
     for (auto const& entry : maEntries)
     {
-        if (entry == pParent)
+        if (entry.get() == pParent)
             return pos;
         ++pos;
     }
@@ -248,7 +249,7 @@ sal_Int32 ParagraphList::GetAbsPos( Paragraph const * pParent ) const
 void ParagraphList::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("ParagraphList"));
-    for (const Paragraph* pParagraph : maEntries)
+    for (auto const & pParagraph : maEntries)
         pParagraph->dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 }
