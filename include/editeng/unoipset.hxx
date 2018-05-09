@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <editeng/editengdllapi.h>
 #include <svl/itemprop.hxx>
+#include <memory>
 #include <vector>
 
 class SdrItemPool;
@@ -35,7 +36,7 @@ class EDITENG_DLLPUBLIC SvxItemPropertySet
 {
     SfxItemPropertyMap          m_aPropertyMap;
     mutable css::uno::Reference<css::beans::XPropertySetInfo> m_xInfo;
-    ::std::vector< SvxIDPropertyCombine* > aCombineList;
+    ::std::vector< std::unique_ptr<SvxIDPropertyCombine> > aCombineList;
     SfxItemPool&                    mrItemPool;
 
 public:
