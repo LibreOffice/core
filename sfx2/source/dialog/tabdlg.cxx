@@ -429,13 +429,11 @@ void SfxTabDialog::dispose()
     }
 
     m_pImpl.reset();
-    delete m_pSet;
-    m_pSet = nullptr;
+    m_pSet.reset();
     m_pOutSet.reset();
     delete m_pExampleSet;
     m_pExampleSet = nullptr;
-    delete [] m_pRanges;
-    m_pRanges = nullptr;
+    m_pRanges.reset();
 
     if (m_bOwnsBaseFmtBtn)
         m_pBaseFmtBtn.disposeAndClear();
@@ -779,7 +777,7 @@ SfxItemSet* SfxTabDialog::GetInputSetImpl()
 */
 
 {
-    return m_pSet;
+    return m_pSet.get();
 }
 
 
@@ -1017,7 +1015,7 @@ IMPL_LINK_NOARG(SfxTabDialog, ResetHdl, Button*, void)
     Data_Impl* pDataObject = Find( m_pImpl->aData, nId );
     DBG_ASSERT( pDataObject, "Id not known" );
 
-    pDataObject->pTabPage->Reset( m_pSet );
+    pDataObject->pTabPage->Reset( m_pSet.get() );
     // Also reset relevant items of ExampleSet and OutSet to initial state
     if (pDataObject->fnGetRanges)
     {
@@ -1165,7 +1163,7 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
     if ( !pTabPage )
     {
         if ( m_pSet )
-            pTabPage = (pDataObject->fnCreatePage)(static_cast<vcl::Window*>(pTabCtrl), m_pSet);
+            pTabPage = (pDataObject->fnCreatePage)(static_cast<vcl::Window*>(pTabCtrl), m_pSet.get());
         else
             pTabPage = (pDataObject->fnCreatePage)(pTabCtrl, CreateInputItemSet(nId));
         DBG_ASSERT( nullptr == pDataObject->pTabPage, "create TabPage more than once" );
@@ -1197,12 +1195,12 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
 
         PageCreated( nId, *pTabPage );
 
-        pTabPage->Reset( m_pSet );
+        pTabPage->Reset( m_pSet.get() );
 
         pTabCtrl->SetTabPage( nId, pTabPage );
     }
     else if ( pDataObject->bRefresh )
-        pTabPage->Reset( m_pSet );
+        pTabPage->Reset( m_pSet.get() );
     pDataObject->bRefresh = false;
 
     if ( m_pExampleSet )
@@ -1343,7 +1341,7 @@ const sal_uInt16* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
     }
 
     if ( m_pRanges )
-        return m_pRanges;
+        return m_pRanges.get();
     std::vector<sal_uInt16> aUS;
 
     for (auto const& elem : m_pImpl->aData)
@@ -1373,10 +1371,10 @@ const sal_uInt16* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
         std::sort( aUS.begin(), aUS.end() );
     }
 
-    m_pRanges = new sal_uInt16[aUS.size() + 1];
-    std::copy( aUS.begin(), aUS.end(), m_pRanges );
+    m_pRanges.reset(new sal_uInt16[aUS.size() + 1]);
+    std::copy( aUS.begin(), aUS.end(), m_pRanges.get() );
     m_pRanges[aUS.size()] = 0;
-    return m_pRanges;
+    return m_pRanges.get();
 }
 
 
@@ -1389,8 +1387,7 @@ void SfxTabDialog::SetInputSet( const SfxItemSet* pInSet )
 
 {
     bool bSet = ( m_pSet != nullptr );
-    delete m_pSet;
-    m_pSet = pInSet ? new SfxItemSet(*pInSet) : nullptr;
+    m_pSet.reset(pInSet ? new SfxItemSet(*pInSet) : nullptr);
 
     if (!bSet && !m_pExampleSet && !m_pOutSet && m_pSet)
     {
