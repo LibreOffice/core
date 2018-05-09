@@ -474,17 +474,13 @@ bool FormatterBase::IsEmptyFieldValue() const
     return (!mpField || mpField->GetText().isEmpty());
 }
 
-bool NumericFormatter::ImplNumericReformat( const OUString& rStr, sal_Int64& rValue,
+void NumericFormatter::ImplNumericReformat( const OUString& rStr, sal_Int64& rValue,
                                                 OUString& rOutStr )
 {
-    if ( !ImplNumericGetValue( rStr, rValue, GetDecimalDigits(), ImplGetLocaleDataWrapper() ) )
-        return true;
-    else
+    if (ImplNumericGetValue(rStr, rValue, GetDecimalDigits(), ImplGetLocaleDataWrapper()))
     {
         sal_Int64 nTempVal = ClipAgainstMinMax(rValue);
-
         rOutStr = CreateFieldText( nTempVal );
-        return true;
     }
 }
 
@@ -650,10 +646,8 @@ void NumericFormatter::Reformat()
 
     OUString aStr;
     sal_Int64 nTemp = mnLastValue;
-    bool bOK = ImplNumericReformat( GetField()->GetText(), nTemp, aStr );
+    ImplNumericReformat(GetField()->GetText(), nTemp, aStr);
     mnLastValue = nTemp;
-    if ( !bOK )
-        return;
 
     if ( !aStr.isEmpty() )
         ImplSetText( aStr );
