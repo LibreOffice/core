@@ -12217,59 +12217,40 @@ AC_SUBST(TESTINSTALLDIR)
 # ===================================================================
 
 AC_MSG_CHECKING([for Google Drive client id and secret])
-GDRIVE_CLIENT_ID="\"$with_gdrive_client_id\""
-GDRIVE_CLIENT_SECRET="\"$with_gdrive_client_secret\""
 if test "$with_gdrive_client_id" = "no" -o -z "$with_gdrive_client_id"; then
-    GDRIVE_CLIENT_ID="\"\""
-fi
-
-if test "$with_gdrive_client_secret" = "no" -o -z "$with_gdrive_client_secret"; then
-    GDRIVE_CLIENT_SECRET="\"\""
-fi
-
-if test -z "$GDRIVE_CLIENT_ID" -o -z "$GDRIVE_CLIENT_SECRET"; then
     AC_MSG_RESULT([not set])
+    GDRIVE_CLIENT_ID="\"\""
+    GDRIVE_CLIENT_SECRET="\"\""
 else
     AC_MSG_RESULT([set])
+    GDRIVE_CLIENT_ID="\"$with_gdrive_client_id\""
+    GDRIVE_CLIENT_SECRET="\"$with_gdrive_client_secret\""
 fi
-
 AC_DEFINE_UNQUOTED(GDRIVE_CLIENT_ID, $GDRIVE_CLIENT_ID)
 AC_DEFINE_UNQUOTED(GDRIVE_CLIENT_SECRET, $GDRIVE_CLIENT_SECRET)
 
 AC_MSG_CHECKING([for Alfresco Cloud client id and secret])
-ALFRESCO_CLOUD_CLIENT_ID="\"$with_alfresco_cloud_client_id\""
-ALFRESCO_CLOUD_CLIENT_SECRET="\"$with_alfresco_cloud_client_secret\""
 if test "$with_alfresco_cloud_client_id" = "no" -o -z "$with_alfresco_cloud_client_id"; then
-    ALFRESCO_CLOUD_CLIENT_ID="\"\""
-fi
-
-if test "$with_alfresco_cloud_client_secret" = "no" -o -z "$with_alfresco_cloud_client_secret"; then
-    ALFRESCO_CLOUD_CLIENT_SECRET="\"\""
-fi
-
-if test -z "$ALFRESCO_CLOUD_CLIENT_ID" -o -z "$ALFRESCO_CLOUD_CLIENT_SECRET"; then
     AC_MSG_RESULT([not set])
+    ALFRESCO_CLOUD_CLIENT_ID="\"\""
+    ALFRESCO_CLOUD_CLIENT_SECRET="\"\""
 else
     AC_MSG_RESULT([set])
+    ALFRESCO_CLOUD_CLIENT_ID="\"$with_alfresco_cloud_client_id\""
+    ALFRESCO_CLOUD_CLIENT_SECRET="\"$with_alfresco_cloud_client_secret\""
 fi
 AC_DEFINE_UNQUOTED(ALFRESCO_CLOUD_CLIENT_ID, $ALFRESCO_CLOUD_CLIENT_ID)
 AC_DEFINE_UNQUOTED(ALFRESCO_CLOUD_CLIENT_SECRET, $ALFRESCO_CLOUD_CLIENT_SECRET)
 
 AC_MSG_CHECKING([for OneDrive client id and secret])
-ONEDRIVE_CLIENT_ID="\"$with_onedrive_client_id\""
-ONEDRIVE_CLIENT_SECRET="\"$with_onedrive_client_secret\""
 if test "$with_onedrive_client_id" = "no" -o -z "$with_onedrive_client_id"; then
-    ONEDRIVE_CLIENT_ID="\"\""
-fi
-
-if test "$with_onedrive_client_secret" = "no" -o -z "$with_onedrive_client_secret"; then
-    ONEDRIVE_CLIENT_SECRET="\"\""
-fi
-
-if test -z "$ONEDRIVE_CLIENT_ID" -o -z "$ONEDRIVE_CLIENT_SECRET"; then
     AC_MSG_RESULT([not set])
+    ONEDRIVE_CLIENT_ID="\"\""
+    ONEDRIVE_CLIENT_SECRET="\"\""
 else
     AC_MSG_RESULT([set])
+    ONEDRIVE_CLIENT_ID="\"$with_onedrive_client_id\""
+    ONEDRIVE_CLIENT_SECRET="\"$with_onedrive_client_secret\""
 fi
 AC_DEFINE_UNQUOTED(ONEDRIVE_CLIENT_ID, $ONEDRIVE_CLIENT_ID)
 AC_DEFINE_UNQUOTED(ONEDRIVE_CLIENT_SECRET, $ONEDRIVE_CLIENT_SECRET)
