@@ -56,23 +56,9 @@ GlobalGlyphCache * GlobalGlyphCache::get() {
     return data->m_pGlobalGlyphCache.get();
 }
 
-bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, SalGraphics& rGraphics)
+bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, int nGlyphIndex, SalGraphics& rGraphics)
 {
     OpenGLGlyphDrawElement aElement;
-
-    ScopedHDC aHDC(CreateCompatibleDC(hDC));
-
-    if (!aHDC)
-    {
-        SAL_WARN("vcl.gdi", "CreateCompatibleDC failed: " << WindowsErrorString(GetLastError()));
-        return false;
-    }
-    HFONT hOrigFont = static_cast<HFONT>(SelectObject(aHDC.get(), hFont));
-    if (hOrigFont == nullptr)
-    {
-        SAL_WARN("vcl.gdi", "SelectObject failed: " << WindowsErrorString(GetLastError()));
-        return false;
-    }
 
     // For now we assume DWrite is present and we won't bother with fallback paths.
     D2DWriteTextOutRenderer * pTxt = dynamic_cast<D2DWriteTextOutRenderer *>(&TextOutRenderer::get(true));
@@ -81,7 +67,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
 
     pTxt->changeTextAntiAliasMode(D2DTextAntiAliasMode::AntiAliased);
 
-    if (!pTxt->BindFont(aHDC.get()))
+    if (!pTxt->BindFont(hDC))
     {
         SAL_WARN("vcl.gdi", "Binding of font failed. The font might not be supported by DirectWrite.");
         return false;
@@ -194,7 +180,6 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
         break;
     default:
         SAL_WARN("vcl.gdi", "DrawGlyphRun-EndDraw failed: " << WindowsErrorString(GetLastError()));
-        SelectFont(aDC.getCompatibleHDC(), hOrigFont);
         return false;
     }
 
@@ -206,8 +191,6 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
         return false;
 
     maGlyphCache.PutDrawElementInCache(aElement, nGlyphIndex);
-
-    SelectFont(aDC.getCompatibleHDC(), hOrigFont);
 
     return true;
 }
@@ -406,7 +389,6 @@ bool WinSalGraphics::CacheGlyphs(const CommonSalLayout& rLayout)
 
     HDC hDC = getHDC();
     WinFontInstance& rFont = *static_cast<WinFontInstance*>(&rLayout.getFont());
-    HFONT hFONT = rFont.GetHFONT();
 
     int nStart = 0;
     Point aPos(0, 0);
@@ -415,7 +397,7 @@ bool WinSalGraphics::CacheGlyphs(const CommonSalLayout& rLayout)
     {
         if (!rFont.GetGlyphCache().IsGlyphCached(pGlyph->maGlyphId))
         {
-            if (!rFont.CacheGlyphToAtlas(hDC, hFONT, pGlyph->maGlyphId, *this))
+            if (!rFont.CacheGlyphToAtlas(hDC, pGlyph->maGlyphId, *this))
                 return false;
         }
     }
