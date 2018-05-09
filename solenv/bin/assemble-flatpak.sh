@@ -26,6 +26,10 @@ done
 mv /app/share/applications/org.libreoffice.LibreOffice-startcenter.desktop \
  /app/share/applications/org.libreoffice.LibreOffice.desktop
 
+# Flatpak .desktop exports take precedence over system ones due to
+# the order of XDG_DATA_DIRS - re-associating text/plain seems a bit much
+sed -i "s/text\/plain;//" /app/share/applications/org.libreoffice.LibreOffice-writer.desktop
+
 ## icons/hicolor/*/apps/libreoffice-* ->
 ## icons/hicolor/*/apps/org.libreoffice.LibreOffice-*:
 mkdir -p /app/share/icons
@@ -33,6 +37,8 @@ for i in "${PREFIXDIR?}"/share/icons/hicolor/*/apps/libreoffice-*
 do
  mkdir -p \
   "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"
+ cp -a "$i" \
+  "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"/"$(basename "$i")"
  cp -a "$i" \
   "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"/org.libreoffice.LibreOffice-"${i##*/apps/libreoffice-}"
 done
@@ -132,6 +138,13 @@ cat <<EOF >/app/share/appdata/org.libreoffice.LibreOffice.appdata.xml
  </releases>
 </component>
 EOF
+
+# append the appdata for the different components
+for i in "${PREFIXDIR?}"/share/appdata/libreoffice-*.appdata.xml
+do
+  sed "1 d; s/<id>libreoffice/<id>org.libreoffice.LibreOffice/" "$i" \
+    >>/app/share/appdata/org.libreoffice.LibreOffice.appdata.xml
+done
 
 ## see <https://github.com/flatpak/flatpak/blob/master/app/
 ## flatpak-builtins-build-finish.c> for further places where build-finish would
