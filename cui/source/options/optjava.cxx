@@ -22,7 +22,7 @@
 #include <memory>
 #include <vector>
 
-#include <config_features.h>
+#include <config_java.h>
 
 #include "optaboutconfig.hxx"
 #include "optjava.hxx"
