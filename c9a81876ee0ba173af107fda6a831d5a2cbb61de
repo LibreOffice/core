@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_ad4a72aa",
+        "filename": "configmgr/source/winreg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-09T08:57:58Z",
+      "side": 1,
+      "message": "Couldn\u0027t the \"Value\" value instead be made optional (so that a missing \"Value\" means nil), instead of adding a \"Nil\" value?",
+      "revId": "c9a81876ee0ba173af107fda6a831d5a2cbb61de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
