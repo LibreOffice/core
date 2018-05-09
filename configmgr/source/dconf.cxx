@@ -938,6 +938,7 @@ void readDir(
                                 << templ);
                         continue;
                     }
+                    member = member->clone(true);
                     break;
                 default:
                     assert(false); // cannot happen
