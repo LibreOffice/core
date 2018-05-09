@@ -149,8 +149,8 @@ private:
     rtl::Reference<MediaEventListenersImpl> mxEvents;
     VclPtr<MediaChildWindow> mpChildWindow;
     VclPtr<MediaWindowControl> mpMediaWindowControl;
-    BitmapEx* mpEmptyBmpEx;
-    BitmapEx* mpAudioBmpEx;
+    std::unique_ptr<BitmapEx> mpEmptyBmpEx;
+    std::unique_ptr<BitmapEx> mpAudioBmpEx;
 };
 
 }} // end namespace avmedia::priv
