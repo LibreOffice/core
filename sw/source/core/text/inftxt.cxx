@@ -173,12 +173,12 @@ void ChkOutDev( const SwTextSizeInfo &rInf )
 }
 #endif
 
-inline sal_Int32 GetMinLen( const SwTextSizeInfo &rInf )
+inline TextFrameIndex GetMinLen( const SwTextSizeInfo &rInf )
 {
-    const sal_Int32 nTextLen = rInf.GetText().getLength();
-    if (rInf.GetLen() == COMPLETE_STRING)
+    const TextFrameIndex nTextLen(rInf.GetText().getLength());
+    if (rInf.GetLen() == TextFrameIndex(COMPLETE_STRING))
         return nTextLen;
-    const sal_Int32 nInfLen = rInf.GetIdx() + rInf.GetLen();
+    const TextFrameIndex nInfLen = rInf.GetIdx() + rInf.GetLen();
     return std::min(nTextLen, nInfLen);
 }
 
@@ -312,7 +312,7 @@ void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextF
     m_pText = &m_pFrame->GetText();
 
     m_nIdx = nNewIdx;
-    m_nLen = COMPLETE_STRING;
+    m_nLen = TextFrameIndex(COMPLETE_STRING);
     m_bNotEOL = false;
     m_bStopUnderflow = m_bFootnoteInside = m_bOtherThanFootnoteInside = false;
     m_bMulti = m_bFirstMulti = m_bRuby = m_bHanging = m_bScriptSpace =
@@ -482,7 +482,7 @@ bool SwTextSizeInfo::HasHint(TextFrameIndex const nPos) const
 
 void SwTextPaintInfo::CtorInitTextPaintInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame, const SwRect &rPaint )
 {
-    CtorInitTextSizeInfo( pRenderContext, pFrame, 0 );
+    CtorInitTextSizeInfo( pRenderContext, pFrame, TextFrameIndex(0) );
     aTextFly.CtorInitTextFly( pFrame );
     aPaintRect = rPaint;
     nSpaceIdx = 0;
@@ -627,12 +627,12 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
                              rPor.InNumberGrp() ) ? 0 : GetSpaceAdd();
     if ( nSpaceAdd )
     {
-        sal_Int32 nCharCnt = 0;
+        TextFrameIndex nCharCnt(0);
         // #i41860# Thai justified alignment needs some
         // additional information:
         aDrawInf.SetNumberOfBlanks( rPor.InTextGrp() ?
                                     static_cast<const SwTextPortion&>(rPor).GetSpaceCnt( *this, nCharCnt ) :
-                                    0 );
+                                    TextFrameIndex(0) );
     }
 
     aDrawInf.SetSpace( nSpaceAdd );
@@ -1117,19 +1117,11 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
         CalcRect( rPor, &aIntersect, nullptr, true );
         if(aIntersect.HasArea())
         {
-            SwTextNode *pNd = m_pFrame->GetTextNode();
-            const ::sw::mark::IMark* pFieldmark = nullptr;
-            if(pNd)
-            {
-                const SwDoc *doc=pNd->GetDoc();
-                if(doc)
-                {
-                    SwIndex aIndex(pNd, GetIdx());
-                    SwPosition aPosition(*pNd, aIndex);
-                    pFieldmark=doc->getIDocumentMarkAccess()->getFieldmarkFor(aPosition);
-                }
-            }
-            bool bIsStartMark=(1==GetLen() && CH_TXT_ATR_FIELDSTART==GetText()[GetIdx()]);
+            SwPosition const aPosition(m_pFrame->MapViewToModelPos(GetIdx()));
+            const ::sw::mark::IMark* pFieldmark =
+                m_pFrame->GetDoc().getIDocumentMarkAccess()->getFieldmarkFor(aPosition);
+            bool bIsStartMark = (TextFrameIndex(1) == GetLen()
+                    && CH_TXT_ATR_FIELDSTART == GetText()[sal_Int32(GetIdx())]);
             if(pFieldmark) {
                 SAL_INFO("sw.core", "Found Fieldmark " << pFieldmark->ToString());
             }
@@ -1181,22 +1173,24 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
                 bool           draw = false;
                 bool           full = false;
                 SwLinePortion *pPos = const_cast<SwLinePortion *>(&rPor);
-                sal_Int32      nIdx = GetIdx();
-                sal_Int32      nLen;
+                TextFrameIndex nIdx = GetIdx();
+                TextFrameIndex nLen;
 
                 do
                 {
                     nLen = pPos->GetLen();
-                    for ( int i = nIdx; i < (nIdx + nLen); ++i )
+                    for (TextFrameIndex i = nIdx; i < (nIdx + nLen); ++i)
                     {
-                        if ( i < GetText().getLength() && GetText()[i] == CH_TXTATR_NEWLINE )
+                        if (i < TextFrameIndex(GetText().getLength())
+                            && GetText()[sal_Int32(i)] == CH_TXTATR_NEWLINE)
                         {
                             if ( i >= (GetIdx() + rPor.GetLen()) )
                             {
                                 goto drawcontinue;
                             }
                         }
-                        if ( i >= GetText().getLength() || GetText()[i] != CH_BLANK )
+                        if (i >= TextFrameIndex(GetText().getLength())
+                            || GetText()[sal_Int32(i)] != CH_BLANK)
                         {
                             draw = true;
                             if ( i >= (GetIdx() + rPor.GetLen()) )
@@ -1221,16 +1215,20 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
                     nIdx = GetIdx();
 
                     nLen = pPos->GetLen();
-                    for ( int i = (nIdx + nLen - 1); i >= nIdx; --i )
+                    for (TextFrameIndex i = (nIdx + nLen - TextFrameIndex(1));
+                            i >= nIdx; --i)
                     {
-                        if ( i < GetText().getLength() && GetText()[i] == CH_TXTATR_NEWLINE )
+                        if (i < TextFrameIndex(GetText().getLength())
+                            && GetText()[sal_Int32(i)] == CH_TXTATR_NEWLINE)
                         {
                             continue;
                         }
-                        if ( i >= GetText().getLength() || GetText()[i] != CH_BLANK )
+                        if (i >= TextFrameIndex(GetText().getLength())
+                            || GetText()[sal_Int32(i)] != CH_BLANK)
                         {
                             sal_uInt16 nOldWidth = rPor.Width();
-                            sal_uInt16 nNewWidth = GetTextSize( m_pOut, nullptr, GetText(), nIdx, (i + 1 - nIdx) ).Width();
+                            sal_uInt16 nNewWidth = GetTextSize(m_pOut, nullptr,
+                                GetText(), nIdx, (i + TextFrameIndex(1) - nIdx)).Width();
 
                             const_cast<SwLinePortion&>(rPor).Width( nNewWidth );
                             CalcRect( rPor, nullptr, &aIntersect, true );
@@ -1404,7 +1402,7 @@ void SwTextFormatInfo::CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwT
     m_pRest = nullptr;
     m_nLineHeight = 0;
     m_nLineNetHeight = 0;
-    SetLineStart(0);
+    SetLineStart(TextFrameIndex(0));
 
     SvtCTLOptions::TextNumerals const nTextNumerals(
             SW_MOD()->GetCTLOptions().GetCTLTextNumerals());
@@ -1484,11 +1482,11 @@ void SwTextFormatInfo::Init()
     m_cTabDecimal = 0;
     m_nWidth = m_nRealWidth;
     m_nForcedLeftMargin = 0;
-    m_nSoftHyphPos = 0;
-    m_nUnderScorePos = COMPLETE_STRING;
+    m_nSoftHyphPos = TextFrameIndex(0);
+    m_nUnderScorePos = TextFrameIndex(COMPLETE_STRING);
     m_cHookChar = 0;
-    SetIdx(0);
-    SetLen( GetText().getLength() );
+    SetIdx(TextFrameIndex(0));
+    SetLen(TextFrameIndex(GetText().getLength()));
     SetPaintOfst(0);
 }
 
@@ -1517,8 +1515,8 @@ SwTextFormatInfo::SwTextFormatInfo( const SwTextFormatInfo& rInf,
     m_pRest = nullptr;
     m_pLastTab = nullptr;
 
-    m_nSoftHyphPos = 0;
-    m_nUnderScorePos = COMPLETE_STRING;
+    m_nSoftHyphPos = TextFrameIndex(0);
+    m_nUnderScorePos = TextFrameIndex(COMPLETE_STRING);
     m_nLineStart = rInf.GetIdx();
     m_nLeft = rInf.m_nLeft;
     m_nRight = rInf.m_nRight;
@@ -1574,7 +1572,7 @@ TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
                                                 TextFrameIndex const nEnd)
 {
     m_cHookChar = 0;
-    sal_Int32 i = nStart;
+    TextFrameIndex i = nStart;
 
     // Used for decimal tab handling:
     const sal_Unicode cTabDec = GetLastTab() ? GetTabDecimal() : 0;
@@ -1608,7 +1606,7 @@ TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
             return i;
 
         case CHAR_UNDERSCORE:
-            if ( COMPLETE_STRING == m_nUnderScorePos )
+            if (TextFrameIndex(COMPLETE_STRING) == m_nUnderScorePos)
                 m_nUnderScorePos = i;
             break;
 
@@ -1650,7 +1648,7 @@ TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
 
     // Check if character *behind* the portion has
     // to become the hook:
-    if ( i == nEnd && i < GetText().getLength() && bNumFound )
+    if (i == nEnd && i < TextFrameIndex(GetText().getLength()) && bNumFound)
     {
         const sal_Unicode cPos = GetChar( i );
         if ( cPos != cTabDec && cPos != cThousandSep && cPos !=cThousandSep2 && ( 0x2F >= cPos || cPos >= 0x3A ) )
@@ -1746,8 +1744,8 @@ SwTextSlot::SwTextSlot(
         pOldText = &(pInf->GetText());
         m_pOldCachedVclData = pInf->GetCachedVclData();
         pInf->SetText( aText );
-        pInf->SetIdx( 0 );
-        pInf->SetLen( bTextLen ? pInf->GetText().getLength() : pPor->GetLen() );
+        pInf->SetIdx(TextFrameIndex(0));
+        pInf->SetLen(bTextLen ? TextFrameIndex(pInf->GetText().getLength()) : pPor->GetLen());
         pInf->SetCachedVclData(nullptr);
 
         // ST2
