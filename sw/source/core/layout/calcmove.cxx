@@ -1403,7 +1403,8 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                 const SwTwips nHDiff = nOldH - aRectFnSet.GetHeight(getFrameArea());
                 const bool bNoPrepAdjustFrame =
                     nHDiff > 0 && IsInTab() && GetFollow() &&
-                    ( 1 == static_cast<SwTextFrame*>(GetFollow())->GetLineCount( COMPLETE_STRING ) || aRectFnSet.GetWidth(static_cast<SwTextFrame*>(GetFollow())->getFrameArea()) < 0 ) &&
+                    (1 == static_cast<SwTextFrame*>(GetFollow())->GetLineCount(TextFrameIndex(COMPLETE_STRING))
+                     || aRectFnSet.GetWidth(static_cast<SwTextFrame*>(GetFollow())->getFrameArea()) < 0) &&
                     GetFollow()->CalcAddLowerSpaceAsLastInTableCell() == nHDiff;
                 if ( !bNoPrepAdjustFrame )
                 {

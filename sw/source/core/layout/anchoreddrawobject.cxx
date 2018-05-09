@@ -572,7 +572,7 @@ void SwAnchoredDrawObject::InvalidateObjPos()
                  (GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR) )
             {
                 SwTextFrame* pAnchorTextFrame( static_cast<SwTextFrame*>(AnchorFrame()) );
-                if (pAnchorTextFrame->CalcFlyPos(&GetFrameFormat()) != COMPLETE_STRING)
+                if (pAnchorTextFrame->CalcFlyPos(&GetFrameFormat()) != TextFrameIndex(COMPLETE_STRING))
                 {
                     AnchorFrame()->Prepare( PREP_FLY_ATTR_CHG, &GetFrameFormat() );
                 }
