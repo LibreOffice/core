@@ -47,15 +47,6 @@
 
 #define HAVE_FEATURE_DBCONNECTIVITY 0
 
-/* EXTENSIONS - Whether we have any extension mechanism at all
- *
- * Primarily intended for non-desktop platforms where supporting
- * extensions can be complicated, or even prohibited by the OS (as on
- * iOS).
- */
-
-#define HAVE_FEATURE_EXTENSIONS 0
-
 /* SCRIPTING - Whether we have any mechanism to execute user-provided scripts
  *
  * Primarily intended for the iOS App Store where the
