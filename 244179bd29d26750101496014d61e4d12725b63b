@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_0d10de00",
+        "filename": "include/vcl/bitmap.hxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-05-09T03:20:25Z",
+      "side": 1,
+      "message": "Still the issue with this additions - where they come from?",
+      "range": {
+        "startLine": 636,
+        "startChar": 32,
+        "endLine": 643,
+        "endChar": 73
+      },
+      "revId": "244179bd29d26750101496014d61e4d12725b63b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
