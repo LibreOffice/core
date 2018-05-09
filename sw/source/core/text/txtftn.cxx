@@ -390,12 +390,7 @@ void SwTextFrame::RemoveFootnote(TextFrameIndex const nStart, TextFrameIndex con
     if ( !IsFootnoteAllowed() )
         return;
 
-    SwpHints *pHints = GetTextNode()->GetpSwpHints();
-    if( !pHints )
-        return;
-
     bool bRollBack = nLen != TextFrameIndex(COMPLETE_STRING);
-    const size_t nSize = pHints->Count();
     TextFrameIndex nEnd;
     SwTextFrame* pSource;
     if( bRollBack )
@@ -411,136 +406,134 @@ void SwTextFrame::RemoveFootnote(TextFrameIndex const nStart, TextFrameIndex con
         pSource = this;
     }
 
-    if( nSize )
+    SwPageFrame* pUpdate = nullptr;
+    bool bRemove = false;
+    SwFootnoteBossFrame *pFootnoteBoss = nullptr;
+    SwFootnoteBossFrame *pEndBoss = nullptr;
+    bool bFootnoteEndDoc
+        = FTNPOS_CHAPTER == GetNode()->GetDoc()->GetFootnoteInfo().ePos;
+    SwTextNode const* pNode(nullptr);
+    sw::MergedAttrIterReverse iter(*this);
+    for (SwTextAttr const* pHt = iter.PrevAttr(&pNode); pHt; pHt = iter.PrevAttr(&pNode))
     {
-        SwPageFrame* pUpdate = nullptr;
-        bool bRemove = false;
-        SwFootnoteBossFrame *pFootnoteBoss = nullptr;
-        SwFootnoteBossFrame *pEndBoss = nullptr;
-        bool bFootnoteEndDoc
-            = FTNPOS_CHAPTER == GetNode()->GetDoc()->GetFootnoteInfo().ePos;
-        for ( size_t i = nSize; i; )
+        if (RES_TXTATR_FTN != pHt->Which())
+            continue;
+
+        TextFrameIndex const nIdx(MapModelToView(pNode, pHt->GetStart()));
+        if (nStart > nIdx)
+            break;
+
+        if (nEnd >= nIdx)
         {
-            SwTextAttr *pHt = pHints->Get(--i);
-            if ( RES_TXTATR_FTN != pHt->Which() )
-                continue;
+            SwTextFootnote const*const pFootnote(static_cast<SwTextFootnote const*>(pHt));
+            const bool bEndn = pFootnote->GetFootnote().IsEndNote();
 
-            const sal_Int32 nIdx = pHt->GetStart();
-            if( nStart > nIdx )
-                break;
-
-            if( nEnd >= nIdx )
+            if (bEndn)
             {
-                SwTextFootnote *pFootnote = static_cast<SwTextFootnote*>(pHt);
-                const bool bEndn = pFootnote->GetFootnote().IsEndNote();
-
-                if( bEndn )
+                if (!pEndBoss)
+                    pEndBoss = pSource->FindFootnoteBossFrame();
+            }
+            else
+            {
+                if (!pFootnoteBoss)
                 {
-                    if( !pEndBoss )
-                        pEndBoss = pSource->FindFootnoteBossFrame();
-                }
-                else
-                {
-                    if( !pFootnoteBoss )
+                    pFootnoteBoss = pSource->FindFootnoteBossFrame( true );
+                    if( pFootnoteBoss->GetUpper()->IsSctFrame() )
                     {
-                        pFootnoteBoss = pSource->FindFootnoteBossFrame( true );
-                        if( pFootnoteBoss->GetUpper()->IsSctFrame() )
-                        {
-                            SwSectionFrame* pSect = static_cast<SwSectionFrame*>(
-                                                  pFootnoteBoss->GetUpper());
-                            if( pSect->IsFootnoteAtEnd() )
-                                bFootnoteEndDoc = false;
-                        }
+                        SwSectionFrame* pSect = static_cast<SwSectionFrame*>(
+                                              pFootnoteBoss->GetUpper());
+                        if (pSect->IsFootnoteAtEnd())
+                            bFootnoteEndDoc = false;
                     }
                 }
+            }
 
-                // We don't delete, but move instead.
-                // Three cases are to be considered:
-                // 1) There's neither Follow nor PrevFollow:
-                //    -> RemoveFootnote() (maybe even a OSL_ENSURE(value))
-                //
-                // 2) nStart > GetOfst, I have a Follow
-                //    -> Footnote moves into Follow
-                //
-                // 3) nStart < GetOfst, I am a Follow
-                //    -> Footnote moves into the PrevFollow
-                //
-                // Both need to be on one Page/in one Column
-                SwFootnoteFrame *pFootnoteFrame = SwFootnoteBossFrame::FindFootnote(pSource, pFootnote);
+            // We don't delete, but move instead.
+            // Three cases are to be considered:
+            // 1) There's neither Follow nor PrevFollow:
+            //    -> RemoveFootnote() (maybe even a OSL_ENSURE(value))
+            //
+            // 2) nStart > GetOfst, I have a Follow
+            //    -> Footnote moves into Follow
+            //
+            // 3) nStart < GetOfst, I am a Follow
+            //    -> Footnote moves into the PrevFollow
+            //
+            // Both need to be on one Page/in one Column
+            SwFootnoteFrame *pFootnoteFrame = SwFootnoteBossFrame::FindFootnote(pSource, pFootnote);
 
-                if( pFootnoteFrame )
+            if (pFootnoteFrame)
+            {
+                const bool bEndDoc = bEndn || bFootnoteEndDoc;
+                if( bRollBack )
                 {
-                    const bool bEndDoc = bEndn || bFootnoteEndDoc;
-                    if( bRollBack )
+                    while (pFootnoteFrame)
                     {
+                        pFootnoteFrame->SetRef( this );
+                        pFootnoteFrame = pFootnoteFrame->GetFollow();
+                        SetFootnote( true );
+                    }
+                }
+                else if (GetFollow())
+                {
+                    SwContentFrame *pDest = GetFollow();
+                    while (pDest->GetFollow() && static_cast<SwTextFrame*>(pDest->
+                           GetFollow())->GetOfst() <= nIdx)
+                        pDest = pDest->GetFollow();
+                    OSL_ENSURE( !SwFootnoteBossFrame::FindFootnote(
+                        pDest,pFootnote),"SwTextFrame::RemoveFootnote: footnote exists");
+
+                    // Never deregister; always move
+                    if (bEndDoc ||
+                        !pFootnoteFrame->FindFootnoteBossFrame()->IsBefore(pDest->FindFootnoteBossFrame(!bEndn))
+                       )
+                    {
+                        SwPageFrame* pTmp = pFootnoteFrame->FindPageFrame();
+                        if( pUpdate && pUpdate != pTmp )
+                            pUpdate->UpdateFootnoteNum();
+                        pUpdate = pTmp;
                         while ( pFootnoteFrame )
                         {
-                            pFootnoteFrame->SetRef( this );
+                            pFootnoteFrame->SetRef( pDest );
                             pFootnoteFrame = pFootnoteFrame->GetFollow();
-                            SetFootnote( true );
                         }
-                    }
-                    else if( GetFollow() )
-                    {
-                        SwContentFrame *pDest = GetFollow();
-                        while( pDest->GetFollow() && static_cast<SwTextFrame*>(pDest->
-                               GetFollow())->GetOfst() <= nIdx )
-                            pDest = pDest->GetFollow();
-                        OSL_ENSURE( !SwFootnoteBossFrame::FindFootnote(
-                            pDest,pFootnote),"SwTextFrame::RemoveFootnote: footnote exists");
-
-                        // Never deregister; always move
-                        if ( bEndDoc ||
-                             !pFootnoteFrame->FindFootnoteBossFrame()->IsBefore( pDest->FindFootnoteBossFrame( !bEndn ) )
-                           )
-                        {
-                            SwPageFrame* pTmp = pFootnoteFrame->FindPageFrame();
-                            if( pUpdate && pUpdate != pTmp )
-                                pUpdate->UpdateFootnoteNum();
-                            pUpdate = pTmp;
-                            while ( pFootnoteFrame )
-                            {
-                                pFootnoteFrame->SetRef( pDest );
-                                pFootnoteFrame = pFootnoteFrame->GetFollow();
-                            }
-                        }
-                        else
-                        {
-                            pFootnoteBoss->MoveFootnotes( this, pDest, pFootnote );
-                            bRemove = true;
-                        }
-                        static_cast<SwTextFrame*>(pDest)->SetFootnote( true );
-
-                        OSL_ENSURE( SwFootnoteBossFrame::FindFootnote( pDest,
-                           pFootnote),"SwTextFrame::RemoveFootnote: footnote ChgRef failed");
                     }
                     else
                     {
-                        if( !bEndDoc || ( bEndn && pEndBoss->IsInSct() &&
-                            !SwLayouter::Collecting( GetNode()->GetDoc(),
-                            pEndBoss->FindSctFrame(), nullptr ) ) )
-                        {
-                            if( bEndn )
-                                pEndBoss->RemoveFootnote( this, pFootnote );
-                            else
-                                pFootnoteBoss->RemoveFootnote( this, pFootnote );
-                            bRemove = bRemove || !bEndDoc;
-                            OSL_ENSURE( !SwFootnoteBossFrame::FindFootnote( this, pFootnote ),
-                            "SwTextFrame::RemoveFootnote: can't get off that footnote" );
-                        }
+                        pFootnoteBoss->MoveFootnotes( this, pDest, pFootnote );
+                        bRemove = true;
+                    }
+                    static_cast<SwTextFrame*>(pDest)->SetFootnote( true );
+
+                    OSL_ENSURE( SwFootnoteBossFrame::FindFootnote( pDest,
+                       pFootnote),"SwTextFrame::RemoveFootnote: footnote ChgRef failed");
+                }
+                else
+                {
+                    if (!bEndDoc || ( bEndn && pEndBoss->IsInSct() &&
+                        !SwLayouter::Collecting( GetNode()->GetDoc(),
+                        pEndBoss->FindSctFrame(), nullptr ) ))
+                    {
+                        if( bEndn )
+                            pEndBoss->RemoveFootnote( this, pFootnote );
+                        else
+                            pFootnoteBoss->RemoveFootnote( this, pFootnote );
+                        bRemove = bRemove || !bEndDoc;
+                        OSL_ENSURE( !SwFootnoteBossFrame::FindFootnote( this, pFootnote ),
+                        "SwTextFrame::RemoveFootnote: can't get off that footnote" );
                     }
                 }
             }
         }
-        if( pUpdate )
-            pUpdate->UpdateFootnoteNum();
+    }
+    if (pUpdate)
+        pUpdate->UpdateFootnoteNum();
 
-        // We brake the oscillation
-        if( bRemove && !bFootnoteEndDoc && HasPara() )
-        {
-            ValidateBodyFrame();
-            ValidateFrame();
-        }
+    // We break the oscillation
+    if (bRemove && !bFootnoteEndDoc && HasPara())
+    {
+        ValidateBodyFrame();
+        ValidateFrame();
     }
 
     // We call the RemoveFootnote from within the FindBreak, because the last line is
