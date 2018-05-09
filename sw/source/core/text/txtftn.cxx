@@ -71,7 +71,7 @@ bool SwTextFrame::IsFootnoteNumFrame_() const
 SwTextFrame *SwTextFrame::FindFootnoteRef( const SwTextFootnote *pFootnote )
 {
     SwTextFrame *pFrame = this;
-    const bool bFwd = pFootnote->GetStart() >= GetOfst();
+    const bool bFwd = MapModelToView(&pFootnote->GetTextNode(), pFootnote->GetStart()) >= GetOfst();
     while( pFrame )
     {
         if( SwFootnoteBossFrame::FindFootnote( pFrame, pFootnote ) )
@@ -273,7 +273,8 @@ SwTwips SwTextFrame::GetFootnoteLine( const SwTextFootnote *pFootnote ) const
 
         SwTextInfo aInf( pThis );
         SwTextIter aLine( pThis, &aInf );
-        const sal_Int32 nPos = pFootnote->GetStart();
+        TextFrameIndex const nPos(MapModelToView(
+                    &pFootnote->GetTextNode(), pFootnote->GetStart()));
         aLine.CharToLine( nPos );
 
         nRet = aLine.Y() + SwTwips(aLine.GetLineHeight());
