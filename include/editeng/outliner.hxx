@@ -154,7 +154,6 @@ private:
                         Paragraph( sal_Int16 nDepth );
                         Paragraph( const Paragraph& ) = delete;
                         Paragraph( const ParagraphData& );
-                        ~Paragraph();
 
     sal_Int16           GetDepth() const { return nDepth; }
 
@@ -168,6 +167,7 @@ private:
     void                RemoveFlag( ParaFlag nFlag ) { nFlags &= ~nFlag; }
     bool                HasFlag( ParaFlag nFlag ) const { return bool(nFlags & nFlag); }
 public:
+                        ~Paragraph();
     void                dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
