@@ -13,10 +13,4 @@
 
 #define ENABLE_RUNTIME_OPTIMIZATIONS 0
 
-/*
- * If this is a production build (where we might want to cut down on
- * debugging options)
- */
-#define ENABLE_RELEASE_BUILD 0
-
 #endif
