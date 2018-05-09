@@ -178,9 +178,9 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                     if (*reinterpret_cast<DWORD*>(pValue) == 1)
                         bFinal = true;
                 }
-                else if (!wcscmp(pValueName.get(), L"Nil"))
+                else if (!wcscmp(pValueName, L"Nil"))
                 {
-                    if (*reinterpret_cast<DWORD*>(pValue.get()) == 1)
+                    if (*reinterpret_cast<DWORD*>(pValue) == 1)
                         bNil = true;
                 }
                 else if (!wcscmp(pValueName, L"External"))
@@ -259,7 +259,7 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
             writeData(aFileHandle, "><value");
             if (aValue.isEmpty() && bNil)
             {
-                aFileHandle.writeString(" xsi:nil=\"true\"/");
+                writeData(aFileHandle, " xsi:nil=\"true\"/");
             }
             else if (bExternal)
             {
