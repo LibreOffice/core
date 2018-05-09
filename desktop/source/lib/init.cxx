@@ -3653,8 +3653,6 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
 /// Used only by LibreOfficeKit when used by Online to pre-initialize
 static void preloadData()
 {
-    std::cerr << "Preloading dictionaries: ";
-
     // Create user profile in the temp directory for loading the dictionaries
     OUString sUserPath;
     rtl::Bootstrap::get("UserInstallation", sUserPath);
@@ -3673,6 +3671,7 @@ static void preloadData()
         css::linguistic2::LinguServiceManager::create(comphelper::getProcessComponentContext());
     css::uno::Reference<linguistic2::XSpellChecker> xSpellChecker(xLngSvcMgr->getSpellChecker());
 
+    std::cerr << "Preloading dictionaries: ";
     css::uno::Reference<linguistic2::XSupportedLocales> xSpellLocales(xSpellChecker, css::uno::UNO_QUERY_THROW);
     uno::Sequence< css::lang::Locale > aLocales = xSpellLocales->getLocales();
     for (auto &it : aLocales)
