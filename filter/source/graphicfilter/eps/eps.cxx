@@ -138,7 +138,7 @@ private:
     vcl::Font           maLastFont;
     sal_uInt8           nNextChrSetId;      // first unused ChrSet-Id
 
-    PSLZWCTreeNode*     pTable;             // LZW compression data
+    std::unique_ptr<PSLZWCTreeNode[]> pTable; // LZW compression data
     PSLZWCTreeNode*     pPrefix;            // the compression is as same as the TIFF compression
     sal_uInt16          nDataSize;
     sal_uInt16          nClearCode;
@@ -2507,7 +2507,7 @@ void PSWriter::StartCompression()
     nOffset = 32;                       // number of free unused in dwShift
     dwShift = 0;
 
-    pTable = new PSLZWCTreeNode[ 4096 ];
+    pTable.reset(new PSLZWCTreeNode[ 4096 ]);
 
     for ( i = 0; i < 4096; i++ )
     {
@@ -2526,7 +2526,7 @@ void PSWriter::Compress( sal_uInt8 nCompThis )
 
     if( !pPrefix )
     {
-        pPrefix = pTable + nCompThis;
+        pPrefix = pTable.get() + nCompThis;
     }
     else
     {
@@ -2558,14 +2558,14 @@ void PSWriter::Compress( sal_uInt8 nCompThis )
                 if( nTableSize == static_cast<sal_uInt16>( ( 1 << nCodeSize ) - 1 ) )
                     nCodeSize++;
 
-                p = pTable + ( nTableSize++ );
+                p = pTable.get() + ( nTableSize++ );
                 p->pBrother = pPrefix->pFirstChild;
                 pPrefix->pFirstChild = p;
                 p->nValue = nV;
                 p->pFirstChild = nullptr;
             }
 
-            pPrefix = pTable + nV;
+            pPrefix = pTable.get() + nV;
         }
     }
 }
@@ -2576,7 +2576,7 @@ void PSWriter::EndCompression()
         WriteBits( pPrefix->nCode, nCodeSize );
 
     WriteBits( nEOICode, nCodeSize );
-    delete[] pTable;
+    pTable.reset();
 }
 
 sal_uInt8* PSWriter::ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uLong nComp, sal_uLong nSize )
