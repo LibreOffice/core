@@ -21,6 +21,7 @@
 #define INCLUDED_SW_INC_CALBCK_HXX
 
 #include <svl/hint.hxx>
+#include <svl/broadcast.hxx>
 #include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include "ring.hxx"
@@ -70,6 +71,19 @@ namespace sw
         ModifyChangedHint(const SwModify* pNew) : m_pNew(pNew) {};
         virtual ~ModifyChangedHint() override;
         const SwModify* m_pNew;
+    };
+    // Observer pattern using svl implementation
+    // use this instead of SwClient/SwModify whereever possible
+    // In writer layout, this might not always be possible,
+    // but for listeners outside of it (e.g. unocore) this should be used.
+    // The only "magic" signal this class issues is a ModifyChangedHint
+    // proclaiming its death. It does NOT however provide a new SwModify for
+    // listeners to switch to like the old SwModify/SwClient did, as that leads
+    // to madness.
+    class SW_DLLPUBLIC BroadcasterMixin {
+        SvtBroadcaster m_aNotifier;
+        public:
+            SvtBroadcaster& GetNotifier() { return m_aNotifier; }
     };
     /// refactoring out the some of the more sane SwClient functionality
     class SW_DLLPUBLIC WriterListener
