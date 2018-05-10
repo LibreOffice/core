@@ -100,8 +100,7 @@ typedef cppu::WeakImplHelper
 SwChartDataProviderBaseClass;
 
 class SwChartDataProvider :
-    public SwChartDataProviderBaseClass,
-    public SwClient
+    public SwChartDataProviderBaseClass
 {
 
     // used to keep weak-references to all data-sequences of a single table
@@ -141,10 +140,6 @@ class SwChartDataProvider :
     css::uno::Reference< css::chart2::data::XDataSequence > Impl_createDataSequenceByRangeRepresentation( const OUString& aRangeRepresentation, bool bTestOnly = false );
 
     static OUString GetBrokenCellRangeForExport( const OUString &rCellRangeRepresentation );
-
-protected:
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
     SwChartDataProvider( const SwDoc* pDoc );
