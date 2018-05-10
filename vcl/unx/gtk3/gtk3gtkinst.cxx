@@ -3128,16 +3128,16 @@ public:
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
         disable_notify_events();
-        if (pos != -1)
+        if (pos == -1 || (pos == 0 && n_children() == 0))
+        {
+            gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(m_pTreeView));
+        }
+        else
         {
             GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
             gtk_tree_selection_select_path(gtk_tree_view_get_selection(m_pTreeView), path);
             gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
             gtk_tree_path_free(path);
-        }
-        else
-        {
-            gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(m_pTreeView));
         }
         enable_notify_events();
     }
@@ -3146,15 +3146,15 @@ public:
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
         disable_notify_events();
-        if (pos != -1)
+        if (pos == -1 || (pos == 0 && n_children() == 0))
+        {
+            gtk_tree_selection_select_all(gtk_tree_view_get_selection(m_pTreeView));
+        }
+        else
         {
             GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
             gtk_tree_selection_unselect_path(gtk_tree_view_get_selection(m_pTreeView), path);
             gtk_tree_path_free(path);
-        }
-        else
-        {
-            gtk_tree_selection_select_all(gtk_tree_view_get_selection(m_pTreeView));
         }
         enable_notify_events();
     }

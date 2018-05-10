@@ -20,83 +20,75 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_CUSTSDLG_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_CUSTSDLG_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <svtools/treelistbox.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 
 class SdDrawDocument;
 class SdCustomShow;
 class SdCustomShowList;
 
-class SdCustomShowDlg : public ModalDialog
+class SdCustomShowDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<ListBox>         m_pLbCustomShows;
-    VclPtr<CheckBox>        m_pCbxUseCustomShow;
-    VclPtr<PushButton>      m_pBtnNew;
-    VclPtr<PushButton>      m_pBtnEdit;
-    VclPtr<PushButton>      m_pBtnRemove;
-    VclPtr<PushButton>      m_pBtnCopy;
-    VclPtr<HelpButton>      m_pBtnHelp;
-    VclPtr<PushButton>      m_pBtnStartShow;
-    VclPtr<OKButton>        m_pBtnOK;
-
     SdDrawDocument& rDoc;
     SdCustomShowList* pCustomShowList;
     SdCustomShow*   pCustomShow;
     bool            bModified;
 
+    std::unique_ptr<weld::TreeView> m_xLbCustomShows;
+    std::unique_ptr<weld::CheckButton> m_xCbxUseCustomShow;
+    std::unique_ptr<weld::Button> m_xBtnNew;
+    std::unique_ptr<weld::Button> m_xBtnEdit;
+    std::unique_ptr<weld::Button> m_xBtnRemove;
+    std::unique_ptr<weld::Button> m_xBtnCopy;
+    std::unique_ptr<weld::Button> m_xBtnHelp;
+    std::unique_ptr<weld::Button> m_xBtnStartShow;
+    std::unique_ptr<weld::Button> m_xBtnOK;
+
     void            CheckState();
 
-    DECL_LINK( ClickButtonHdl, Button*, void );
-    DECL_LINK( SelectListBoxHdl, ListBox&, void );
-    DECL_LINK( StartShowHdl, Button*, void );
+    DECL_LINK( ClickButtonHdl, weld::Button&, void );
+    DECL_LINK( SelectListBoxHdl, weld::TreeView&, void );
+    DECL_LINK( StartShowHdl, weld::Button&, void );
     void SelectHdl(void const *);
 
 public:
-                SdCustomShowDlg( vcl::Window* pWindow, SdDrawDocument& rDrawDoc );
-                virtual ~SdCustomShowDlg() override;
-    virtual void dispose() override;
+    SdCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc);
+    virtual ~SdCustomShowDlg() override;
     bool         IsModified() const { return bModified; }
     bool         IsCustomShow() const;
 };
 
-class SdDefineCustomShowDlg : public ModalDialog
+class SdDefineCustomShowDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<Edit>            m_pEdtName;
-    VclPtr<ListBox>         m_pLbPages;
-    VclPtr<PushButton>      m_pBtnAdd;
-    VclPtr<PushButton>      m_pBtnRemove;
-    VclPtr<SvTreeListBox>   m_pLbCustomPages;
-    VclPtr<OKButton>        m_pBtnOK;
-    VclPtr<CancelButton>    m_pBtnCancel;
-    VclPtr<HelpButton>      m_pBtnHelp;
-
     SdDrawDocument& rDoc;
     SdCustomShow*&  rpCustomShow;
     bool            bModified;
     OUString        aOldName;
 
+    std::unique_ptr<weld::Entry> m_xEdtName;
+    std::unique_ptr<weld::TreeView> m_xLbPages;
+    std::unique_ptr<weld::Button> m_xBtnAdd;
+    std::unique_ptr<weld::Button> m_xBtnRemove;
+    std::unique_ptr<weld::TreeView> m_xLbCustomPages;
+    std::unique_ptr<weld::Button> m_xBtnOK;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
+    std::unique_ptr<weld::Button> m_xBtnHelp;
+
     void            CheckState();
     void            CheckCustomShow();
 
-    DECL_LINK( ClickButtonHdl, Button*, void );
-    DECL_LINK( ClickButtonEditHdl, Edit&, void );
-    DECL_LINK( ClickButtonHdl3, SvTreeListBox*, void );
-    DECL_LINK( ClickButtonHdl4, ListBox&, void );
-    DECL_LINK( OKHdl, Button*, void );
+    DECL_LINK( ClickButtonHdl, weld::Button&, void );
+    DECL_LINK( ClickButtonEditHdl, weld::Entry&, void );
+    DECL_LINK( ClickButtonHdl3, weld::TreeView&, void );
+    DECL_LINK( ClickButtonHdl4, weld::TreeView&, void );
+    DECL_LINK( OKHdl, weld::Button&, void );
     void ClickButtonHdl2(void const *);
 
 public:
 
-                    SdDefineCustomShowDlg( vcl::Window* pWindow,
-                            SdDrawDocument& rDrawDoc, SdCustomShow*& rpCS );
-                    virtual ~SdDefineCustomShowDlg() override;
-    virtual void    dispose() override;
+    SdDefineCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc, SdCustomShow*& rpCS);
+    virtual ~SdDefineCustomShowDlg() override;
 
     bool            IsModified() const { return bModified; }
 };

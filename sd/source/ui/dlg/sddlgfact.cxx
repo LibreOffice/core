@@ -48,7 +48,12 @@
 
 IMPL_ABSTDLG_BASE(SdVclAbstractDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractCopyDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractSdCustomShowDlg_Impl);
+
+short AbstractSdCustomShowDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(SdAbstractTabDialog_Impl);
 IMPL_ABSTDLG_BASE(SdPresLayoutTemplateDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdModifyFieldDlg_Impl);
@@ -109,12 +114,12 @@ void AbstractCopyDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
 
 bool AbstractSdCustomShowDlg_Impl::IsModified() const
 {
-    return pDlg->IsModified();
+    return m_xDlg->IsModified();
 }
 
 bool AbstractSdCustomShowDlg_Impl::IsCustomShow() const
 {
-    return pDlg->IsCustomShow();
+    return m_xDlg->IsCustomShow();
 }
 
 void SdAbstractTabDialog_Impl::SetCurPageId( const OString& rName )
@@ -322,9 +327,9 @@ VclPtr<AbstractCopyDlg> SdAbstractDialogFactory_Impl::CreateCopyDlg(vcl::Window*
     return VclPtr<AbstractCopyDlg_Impl>::Create( VclPtr<::sd::CopyDlg>::Create( pParent, rInAttrs, pView ) );
 }
 
-VclPtr<AbstractSdCustomShowDlg> SdAbstractDialogFactory_Impl::CreateSdCustomShowDlg(vcl::Window* pParent, SdDrawDocument& rDrawDoc )
+VclPtr<AbstractSdCustomShowDlg> SdAbstractDialogFactory_Impl::CreateSdCustomShowDlg(weld::Window* pParent, SdDrawDocument& rDrawDoc )
 {
-    return VclPtr<AbstractSdCustomShowDlg_Impl>::Create( VclPtr<SdCustomShowDlg>::Create(pParent, rDrawDoc) );
+    return VclPtr<AbstractSdCustomShowDlg_Impl>::Create(new SdCustomShowDlg(pParent, rDrawDoc));
 }
 
 VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdTabCharDialog(vcl::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell )
