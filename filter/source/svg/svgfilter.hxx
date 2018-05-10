@@ -223,9 +223,6 @@ private:
     Link<EditFieldInfo*,void>           maNewFieldHdl;
 
     /// @throws css::uno::RuntimeException
-    bool                            implImport( const Sequence< PropertyValue >& rDescriptor );
-
-    /// @throws css::uno::RuntimeException
     bool                            implExport( const Sequence< PropertyValue >& rDescriptor );
     static Reference< XWriter >     implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm );
 

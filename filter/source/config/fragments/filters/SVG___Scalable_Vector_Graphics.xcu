@@ -26,5 +26,5 @@
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>svg_Scalable_Vector_Graphics</value></prop>
         <prop oor:name="TemplateName"/>
-        <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
     </node>

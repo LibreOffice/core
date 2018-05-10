@@ -1718,6 +1718,18 @@ void SdrModel::setUnoModel( const css::uno::Reference< css::uno::XInterface >& x
     mxUnoModel = xModel;
 }
 
+void SdrModel::adaptSizeAndBorderForAllPages(
+    const Size& /*rNewSize*/,
+    long /*nLeft*/,
+    long /*nRight*/,
+    long /*nUpper*/,
+    long /*nLower*/)
+{
+    // base implementation does currently nothing. It may be added if needed,
+    // but we are on SdrModel level here, thus probably have not enough information
+    // to do this for higher-level (derived) Models (e.g. Draw/Impress)
+}
+
 uno::Reference< uno::XInterface > SdrModel::createUnoModel()
 {
     OSL_FAIL( "SdrModel::createUnoModel() - base implementation should not be called!" );
