@@ -305,6 +305,8 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     uno::Sequence< ::beans::PropertyValue > aFilterData;
 
     bool bLazyRead = false;
+    bool bLoadAsLink = false;
+
     for( sal_Int32 i = 0; ( i < rMediaProperties.getLength() ) && !pIStm && !xRet.is(); ++i )
     {
         const OUString   aName( rMediaProperties[ i ].Name );
@@ -329,7 +331,13 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
             aValue >>= aFilterData;
         }
         else if (aName == "LazyRead")
+        {
             aValue >>= bLazyRead;
+        }
+        else if (aName == "LoadAsLink")
+        {
+            aValue >>= bLoadAsLink;
+        }
     }
 
     // Check for the goal width and height if they are defined
@@ -384,7 +392,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
         ::GraphicFilter& rFilter = ::GraphicFilter::GetGraphicFilter();
 
         {
-            ::Graphic aVCLGraphic;
+            Graphic aVCLGraphic;
 
             // Define APM Header if goal height and width are defined
             WmfExternal aExtHeader;
@@ -412,6 +420,9 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
             if( (error == ERRCODE_NONE ) &&
                 ( aVCLGraphic.GetType() != GraphicType::NONE ) )
             {
+                if (!aPath.isEmpty() && bLoadAsLink)
+                    aVCLGraphic.setOriginURL(aPath);
+
                 ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic;
 
                 pUnoGraphic->init( aVCLGraphic );
