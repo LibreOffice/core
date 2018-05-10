@@ -134,7 +134,9 @@ namespace o3tl {
     template<> struct typed_flags<UseOnPage> : is_typed_flags<UseOnPage, 0xffff> {};
 }
 
-class SW_DLLPUBLIC SwPageDesc : public SwModify
+class SW_DLLPUBLIC SwPageDesc
+    : public SwModify
+    , public sw::BroadcasterMixin
 {
     friend class SwDoc;
     friend class SwPageDescs;
