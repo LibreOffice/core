@@ -979,7 +979,7 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
                              sal_Int32( pPor->GetAscent() ) ) / 8;
     if ( !nExpect )
         nExpect = 1;
-    nExpect = rInf.GetIdx() + ((rInf.Width() - rInf.X()) / nExpect);
+    nExpect = rInf.GetIdx() + (rInf.GetLineWidth() / nExpect);
     if( nExpect > rInf.GetIdx() && nNextChg > nExpect )
         nNextChg = std::min( nExpect, rInf.GetText().getLength() );
 
