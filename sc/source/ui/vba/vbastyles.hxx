@@ -27,9 +27,6 @@ typedef CollTestImplHelper< ov::excel::XStyles > ScVbaStyles_BASE;
 class ScVbaStyles: public ScVbaStyles_BASE
 {
     css::uno::Reference< css::frame::XModel > mxModel;
-    // hard ref to parent ( perhaps we should try this in the
-    // XHelperInterface itself
-    css::uno::Reference< ov::XHelperInterface > mxParent;
     css::uno::Reference< css::lang::XMultiServiceFactory > mxMSF;
     css::uno::Reference< css::container::XNameContainer > mxNameContainerCellStyles;
 public:

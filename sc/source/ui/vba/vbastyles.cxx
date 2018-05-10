@@ -33,7 +33,13 @@ lcl_createAPIStyleToVBAObject( const css::uno::Any& aObject, const uno::Referenc
     return uno::makeAny( xStyle );
 }
 
-ScVbaStyles::ScVbaStyles( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel ) : ScVbaStyles_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( ScVbaStyle::getStylesNameContainer( xModel ), uno::UNO_QUERY_THROW ) ), mxModel( xModel ), mxParent( xParent )
+ScVbaStyles::ScVbaStyles( const uno::Reference< XHelperInterface >& xParent,
+                          const uno::Reference< css::uno::XComponentContext > & xContext,
+                          const uno::Reference< frame::XModel >& xModel )
+: ScVbaStyles_BASE( xParent,
+                    xContext,
+                    uno::Reference< container::XIndexAccess >( ScVbaStyle::getStylesNameContainer( xModel ), uno::UNO_QUERY_THROW ) ),
+  mxModel( xModel )
 {
     try
     {
