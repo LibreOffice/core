@@ -992,7 +992,8 @@ bool SwCursorShell::GotoPrevOutline()
     SwNode* pNd = &(pCursor->GetNode());
     SwOutlineNodes::size_type nPos;
     bool bRet = false;
-    if ( rNds.GetOutLineNds().Seek_Entry(pNd, &nPos) && nPos == 0 )
+    rNds.GetOutLineNds().Seek_Entry(pNd, &nPos);
+    if ( nPos == 0 )
     {
         nPos = rNds.GetOutLineNds().size();
         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::StartWrapped );
