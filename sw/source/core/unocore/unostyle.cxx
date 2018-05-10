@@ -24,6 +24,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svl/style.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/listener.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svx/pageitem.hxx>
@@ -274,7 +275,7 @@ class SwXStyle : public cppu::WeakImplHelper
         css::beans::XMultiPropertyStates
     >
     , public SfxListener
-    , public SwClient
+    , public SvtListener
 {
     SwDoc* m_pDoc;
     OUString m_sStyleName;
@@ -299,7 +300,6 @@ protected:
     uno::Any GetStyleProperty_Impl(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase);
     uno::Any GetPropertyValue_Impl(const SfxItemPropertySet* pPropSet, SwStyleBase_Impl& rBase, const OUString& rPropertyName);
 
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 public:
     SwXStyle(SwDoc* pDoc, SfxStyleFamily eFam, bool bConditional = false);
     SwXStyle(SfxStyleSheetBasePool* pPool, SfxStyleFamily eFamily, SwDoc* pDoc, const OUString& rStyleName);
@@ -364,6 +364,8 @@ public:
 
     //SfxListener
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+    //SvtListener
+    virtual void Notify(const SfxHint&) override;
     const OUString&     GetStyleName() const { return m_sStyleName;}
     SfxStyleFamily      GetFamily() const {return m_rEntry.m_eFamily;}
 
@@ -374,7 +376,7 @@ public:
                             {
                                 m_bIsDescriptor = false; m_pDoc = pDc;
                                 m_pBasePool = pPool;
-                                StartListening(*m_pBasePool);
+                                SfxListener::StartListening(*m_pBasePool);
                             }
     SwDoc*                GetDoc() const { return m_pDoc; }
     void Invalidate();
@@ -1289,7 +1291,7 @@ SwXStyle::SwXStyle(SwDoc* pDoc, SfxStyleFamily eFamily, bool bConditional)
 {
     assert(!m_bIsConditional || m_rEntry.m_eFamily == SfxStyleFamily::Para); // only paragraph styles are conditional
     // Register ourselves as a listener to the document (via the page descriptor)
-    pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    SvtListener::StartListening(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
     m_pPropertiesImpl = o3tl::make_unique<SwStyleProperties_Impl>(
             aSwMapProvider.GetPropertySet(m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE :  m_rEntry.m_nPropMapType)->getPropertyMap());
 }
@@ -1308,15 +1310,14 @@ SwXStyle::~SwXStyle()
 {
     SolarMutexGuard aGuard;
     if(m_pBasePool)
-        EndListening(*m_pBasePool);
+        SfxListener::EndListening(*m_pBasePool);
     m_pPropertiesImpl.reset();
-    SwClient::EndListeningAll();
+    SvtListener::EndListeningAll();
 }
 
-void SwXStyle::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXStyle::Notify(const SfxHint& rHint)
 {
-    ClientModify(this, pOld, pNew);
-    if(!GetRegisteredIn())
+    if(rHint.GetId() == SfxHintId::Dying)
     {
         m_pDoc = nullptr;
         m_xStyleData.clear();
@@ -2766,7 +2767,7 @@ void SwXStyle::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     if((rHint.GetId() == SfxHintId::Dying) || (rHint.GetId() == SfxHintId::StyleSheetErased))
     {
         m_pBasePool = nullptr;
-        EndListening(rBC);
+        SfxListener::EndListening(rBC);
     }
     else if(rHint.GetId() == SfxHintId::StyleSheetChanged)
     {
@@ -2774,7 +2775,7 @@ void SwXStyle::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         SfxStyleSheetBase* pOwnBase = static_cast<SfxStyleSheetBasePool&>(rBC).Find(m_sStyleName);
         if(!pOwnBase)
         {
-            EndListening(rBC);
+            SfxListener::EndListening(rBC);
             Invalidate();
         }
     }
