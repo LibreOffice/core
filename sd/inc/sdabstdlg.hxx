@@ -108,12 +108,6 @@ public:
     virtual void    SetHelpId( const OString& rHelpId ) = 0;
 };
 
-class AbstractSdInsertPasteDlg : public VclAbstractDialog
-{
-protected:
-    virtual ~AbstractSdInsertPasteDlg() override = default;
-};
-
 class AbstractSdInsertPagesObjsDlg : public VclAbstractDialog
 {
 protected:
