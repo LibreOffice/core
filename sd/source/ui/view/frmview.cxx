@@ -173,7 +173,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         mePageKindOnLoad = pFrameView->GetPageKindOnLoad();
         mnSelectedPage = pFrameView->GetSelectedPage();
         mnSelectedPageOnLoad = pFrameView->GetSelectedPageOnLoad();
-        meEditMode = pFrameView->GetViewShEditMode();
+        mePageEditMode = pFrameView->GetViewShEditMode();
         // meStandardEditMode = pFrameView->GetViewShEditMode(PageKind::Standard);
         // meNotesEditMode = pFrameView->GetViewShEditMode(PageKind::Notes);
         // meHandoutEditMode = pFrameView->GetViewShEditMode(PageKind::Handout);
@@ -208,7 +208,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         mePageKindOnLoad = PageKind::Standard;
         mnSelectedPage = 0;
         mnSelectedPageOnLoad = 0;
-        meEditMode = EditMode::Page;
+        mePageEditMode = EditMode::Page;
         // meStandardEditMode = EditMode::Page;
         // meNotesEditMode = EditMode::Page;
         // meHandoutEditMode = EditMode::MasterPage;
@@ -319,7 +319,7 @@ void FrameView::Update(SdOptions const * pOptions)
  */
 void FrameView::SetViewShEditMode(EditMode eMode)
 {
-    meEditMode = eMode;
+    mePageEditMode = eMode;
 }
 
 /**
@@ -327,7 +327,7 @@ void FrameView::SetViewShEditMode(EditMode eMode)
  */
 EditMode FrameView::GetViewShEditMode()
 {
-    return meEditMode;
+    return mePageEditMode;
 }
 
 void FrameView::SetViewShEditModeOnLoad (EditMode eMode)
