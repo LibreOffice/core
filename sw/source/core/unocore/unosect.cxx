@@ -29,6 +29,7 @@
 #include <cmdid.h>
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
+#include <svl/listener.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -100,7 +101,7 @@ struct SwTextSectionProperties_Impl
 };
 
 class SwXTextSection::Impl
-    : public SwClient
+    : public SvtListener
 {
 private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
@@ -114,24 +115,32 @@ public:
     bool                        m_bIsDescriptor;
     OUString             m_sName;
     std::unique_ptr<SwTextSectionProperties_Impl> m_pProps;
+    SwSectionFormat* m_pFormat;
 
-    Impl(   SwXTextSection & rThis,
-            SwSectionFormat *const pFormat, const bool bIndexHeader)
-        : SwClient(pFormat)
+    Impl(   SwXTextSection& rThis,
+            SwSectionFormat* const pFormat, const bool bIndexHeader)
+        : SvtListener()
         , m_rThis(rThis)
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_SECTION))
         , m_EventListeners(m_Mutex)
         , m_bIndexHeader(bIndexHeader)
         , m_bIsDescriptor(nullptr == pFormat)
         , m_pProps(pFormat ? nullptr : new SwTextSectionProperties_Impl())
+        , m_pFormat(pFormat)
     {
+        if(m_pFormat)
+            StartListening(m_pFormat->GetNotifier());
     }
 
-    SwSectionFormat * GetSectionFormat() const
+    void Attach(SwSectionFormat* pFormat)
     {
-        return static_cast<SwSectionFormat*>(const_cast<SwModify*>(
-                    GetRegisteredIn()));
+        EndListeningAll();
+        StartListening(pFormat->GetNotifier());
+        m_pFormat = pFormat;
     }
+
+    SwSectionFormat* GetSectionFormat() const
+        { return m_pFormat; }
 
     SwSectionFormat & GetSectionFormatOrThrow() const {
         SwSectionFormat *const pFormat( GetSectionFormat() );
@@ -155,27 +164,22 @@ public:
     uno::Sequence< uno::Any >
         GetPropertyValues_Impl(
             const uno::Sequence< OUString >& rPropertyNames);
-protected:
-    // SwClient
-    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
-
+    virtual void Notify(const SfxHint& rHint) override;
 };
 
-void SwXTextSection::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
+void SwXTextSection::Impl::Notify(const SfxHint& rHint)
 {
-    ClientModify(this, pOld, pNew);
-    if (GetRegisteredIn())
+    if(rHint.GetId() == SfxHintId::Dying)
     {
-        return; // core object still alive
+        m_pFormat = nullptr;
+        uno::Reference<uno::XInterface> const xThis(m_wThis);
+        if (!xThis.is())
+        {   // fdo#72695: if UNO object is already dead, don't revive it with event
+            return;
+        }
+        lang::EventObject const ev(xThis);
+        m_EventListeners.disposeAndClear(ev);
     }
-
-    uno::Reference<uno::XInterface> const xThis(m_wThis);
-    if (!xThis.is())
-    {   // fdo#72695: if UNO object is already dead, don't revive it with event
-        return;
-    }
-    lang::EventObject const ev(xThis);
-    m_EventListeners.disposeAndClear(ev);
 }
 
 SwSectionFormat * SwXTextSection::GetFormat() const
@@ -407,7 +411,7 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
                 "SwXTextSection::attach(): invalid TextRange",
                 static_cast< ::cppu::OWeakObject*>(this), 0);
     }
-    pRet->GetFormat()->Add(m_pImpl.get());
+    m_pImpl->Attach(pRet->GetFormat());
     pRet->GetFormat()->SetXObject(static_cast< ::cppu::OWeakObject*>(this));
 
     // XML import must hide sections depending on their old

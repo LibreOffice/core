@@ -270,6 +270,7 @@ enum class SectionSort { Not, Pos };
 class SW_DLLPUBLIC SwSectionFormat
     : public SwFrameFormat
     , public ::sfx2::Metadatable
+    , public sw::BroadcasterMixin
 {
     friend class SwDoc;
 
