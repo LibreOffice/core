@@ -214,8 +214,16 @@ public:
     sal_uInt16 getHandoutPageCount() const { return mnHandoutPageCount; }
     void setHandoutPageCount( sal_uInt16 nHandoutPageCount ) { mnHandoutPageCount = nHandoutPageCount; }
 
-protected:
+    // Adapt to given Size and Borders scaling all contained data, maybe
+    // including PresObj's in higher derivations
+    virtual void adaptSizeAndBorderForAllPages(
+        const Size& rNewSize,
+        long nLeft = 0,
+        long nRight = 0,
+        long nUpper = 0,
+        long nLower = 0);
 
+protected:
     virtual css::uno::Reference< css::uno::XInterface > createUnoModel();
 
 private:

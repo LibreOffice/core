@@ -68,13 +68,7 @@ $(eval $(call gb_Library_use_externals,svgfilter,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,svgfilter,\
-	filter/source/svg/b2dellipse \
-	filter/source/svg/parserfragments \
 	filter/source/svg/svgfilter \
-	filter/source/svg/svgimport \
-	filter/source/svg/svgreader \
-	filter/source/svg/tokenmap \
-	filter/source/svg/units \
 	filter/source/svg/svgexport \
 	filter/source/svg/svgfontexport \
 	filter/source/svg/svgwriter \
