@@ -587,7 +587,17 @@ bool ImpEditEngine::MouseButtonUp( const MouseEvent& rMEvt, EditView* pView )
     {
         if ( ( rMEvt.GetClicks() == 1 ) && rMEvt.IsLeft() && !rMEvt.IsMod2() )
         {
-            const SvxFieldItem* pFld = pView->GetFieldUnderMousePointer();
+
+            const SvxFieldItem* pFld;
+            if ( comphelper::LibreOfficeKit::isActive() )
+            {
+                Point aLogicClick = pView->GetWindow()->PixelToLogic( rMEvt.GetPosPixel() );
+                pFld = pView->GetField( aLogicClick );
+            }
+            else
+            {
+                pFld = pView->GetFieldUnderMousePointer();
+            }
             if ( pFld )
             {
                 EditPaM aPaM( aCurSel.Max() );

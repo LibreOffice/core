@@ -1805,56 +1805,6 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     }
 }
 
-void lcl_executeList( const ScViewData* pViewData, ScModule* pScMod, const ScMarkData& rMark )
-{
-    pViewData->GetView()->SelectionChanged();
-
-    SfxDispatcher* pDisp = pViewData->GetViewShell()->GetDispatcher();
-    bool bFormulaMode = pScMod->IsFormulaMode();
-    OSL_ENSURE( pDisp || bFormulaMode, "Cursor moved on inactive View ?" );
-
-    //  #i14927# execute SID_CURRENTCELL (for macro recording) only if there is no
-    //  multiple selection, so the argument string completely describes the selection,
-    //  and executing the slot won't change the existing selection (executing the slot
-    //  here and from a recorded macro is treated equally)
-    if ( pDisp && !bFormulaMode && !rMark.IsMultiMarked() )
-    {
-        OUString aAddr;                               // CurrentCell
-        if( rMark.IsMarked() )
-        {
-            ScRange aScRange;
-            rMark.GetMarkArea( aScRange );
-            aAddr = aScRange.Format(ScRefFlags::RANGE_ABS);
-            if ( aScRange.aStart == aScRange.aEnd )
-            {
-                //  make sure there is a range selection string even for a single cell
-                aAddr = aAddr + ":" + aAddr;
-            }
-
-            //! SID_MARKAREA does not exist anymore ???
-            //! What happens when selecting with the cursor ???
-        }
-        else                                        // only move cursor
-        {
-            ScAddress aScAddress( pViewData->GetCurX(), pViewData->GetCurY(), 0 );
-            aAddr = aScAddress.Format(ScRefFlags::ADDR_ABS);
-        }
-
-        SfxStringItem aPosItem( SID_CURRENTCELL, aAddr );
-        // We don't want to align to the cursor position because if the
-        // cell cursor isn't visible after making selection, it would jump
-        // back to the origin of the selection where the cell cursor is.
-        SfxBoolItem aAlignCursorItem( FN_PARAM_2, false );
-        pDisp->ExecuteList(SID_CURRENTCELL,
-                SfxCallMode::SLOT | SfxCallMode::RECORD,
-                { &aPosItem, &aAlignCursorItem });
-
-        pViewData->GetView()->InvalidateAttribs();
-
-    }
-    pViewData->GetViewShell()->SelectionChanged();
-}
-
 void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     aCurMousePos = rMEvt.GetPosPixel();
@@ -2104,7 +2054,10 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
     bool bDouble = ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() );
-    if ((bDouble || bIsTiledRendering) && !bRefMode && (nMouseStatus == SC_GM_DBLDOWN || bIsTiledRendering) && !pScMod->IsRefDialogOpen())
+    if ((bDouble || bIsTiledRendering)
+            && !bRefMode
+            && (nMouseStatus == SC_GM_DBLDOWN || (bIsTiledRendering && nMouseStatus != SC_GM_URLDOWN))
+            && !pScMod->IsRefDialogOpen())
     {
         //  data pilot table
         Point aPos = rMEvt.GetPosPixel();
@@ -2193,20 +2146,13 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             }
         }
 
-        if (bIsTiledRendering)
-        {
-            ScTabView* pTabView = pViewData->GetView();
-            if (rMEvt.IsLeft() && pTabView->GetSelEngine()->SelMouseButtonUp( rMEvt ))
-                pTabView->SelectionChanged();
-        }
-
         if ( bIsTiledRendering && rMEvt.IsLeft() && pViewData->GetView()->GetSelEngine()->SelMouseButtonUp( rMEvt ) )
         {
-            lcl_executeList( pViewData, pScMod, rMark);
-            return;
+            pViewData->GetView()->SelectionChanged();
         }
 
-        return;
+        if ( bDouble )
+            return;
     }
 
             //      Links in edit cells
@@ -2298,7 +2244,53 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
     if ( rMEvt.IsLeft() && pViewData->GetView()->GetSelEngine()->SelMouseButtonUp( rMEvt ) )
     {
-        lcl_executeList( pViewData, pScMod, rMark);
+        pViewData->GetView()->SelectionChanged();
+
+        SfxDispatcher* pDisp = pViewData->GetViewShell()->GetDispatcher();
+        bool bFormulaMode = pScMod->IsFormulaMode();
+        OSL_ENSURE( pDisp || bFormulaMode, "Cursor moved on inactive View ?" );
+
+        //  #i14927# execute SID_CURRENTCELL (for macro recording) only if there is no
+        //  multiple selection, so the argument string completely describes the selection,
+        //  and executing the slot won't change the existing selection (executing the slot
+        //  here and from a recorded macro is treated equally)
+        if ( pDisp && !bFormulaMode && !rMark.IsMultiMarked() )
+        {
+            OUString aAddr;                               // CurrentCell
+            if( rMark.IsMarked() )
+            {
+                ScRange aScRange;
+                rMark.GetMarkArea( aScRange );
+                aAddr = aScRange.Format(ScRefFlags::RANGE_ABS);
+                if ( aScRange.aStart == aScRange.aEnd )
+                {
+                    //  make sure there is a range selection string even for a single cell
+                    aAddr = aAddr + ":" + aAddr;
+                }
+
+                //! SID_MARKAREA does not exist anymore ???
+                //! What happens when selecting with the cursor ???
+            }
+            else                                        // only move cursor
+            {
+                ScAddress aScAddress( pViewData->GetCurX(), pViewData->GetCurY(), 0 );
+                aAddr = aScAddress.Format(ScRefFlags::ADDR_ABS);
+            }
+
+            SfxStringItem aPosItem( SID_CURRENTCELL, aAddr );
+            // We don't want to align to the cursor position because if the
+            // cell cursor isn't visible after making selection, it would jump
+            // back to the origin of the selection where the cell cursor is.
+            SfxBoolItem aAlignCursorItem( FN_PARAM_2, false );
+            pDisp->ExecuteList(SID_CURRENTCELL,
+                    SfxCallMode::SLOT | SfxCallMode::RECORD,
+                    { &aPosItem, &aAlignCursorItem });
+
+            pViewData->GetView()->InvalidateAttribs();
+
+        }
+        pViewData->GetViewShell()->SelectionChanged();
+
         return;
     }
 }
@@ -2409,11 +2401,27 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         if ( nPosX >= nEditCol && nPosX <= nEndCol &&
              nPosY >= nEditRow && nPosY <= nEndRow )
         {
+            if ( !pEditView )
+            {
+                SetPointer( Pointer( PointerStyle::Text ) );
+                return;
+            }
+
+            const SvxFieldItem* pFld;
+            if ( comphelper::LibreOfficeKit::isActive() )
+            {
+                Point aLogicClick = pEditView->GetWindow()->PixelToLogic( aPos );
+                pFld = pEditView->GetField( aLogicClick );
+            }
+            else
+            {
+                pFld = pEditView->GetFieldUnderMousePointer();
+            }
             //  Field can only be URL field
             bool bAlt = rMEvt.IsMod2();
-            if ( !bAlt && !nButtonDown && pEditView && pEditView->GetFieldUnderMousePointer() )
+            if ( !bAlt && !nButtonDown && pFld )
                 SetPointer( Pointer( PointerStyle::RefHand ) );
-            else if ( pEditView && pEditView->GetEditEngine()->IsVertical() )
+            else if ( pEditView->GetEditEngine()->IsVertical() )
                 SetPointer( Pointer( PointerStyle::TextVertical ) );
             else
                 SetPointer( Pointer( PointerStyle::Text ) );
@@ -5232,11 +5240,18 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
         EditView aTempView(pEngine.get(), this);
         aTempView.SetOutputArea( aLogicEdit );
 
-        MapMode aOld = GetMapMode();
-        SetMapMode(aEditMode);                  // no return anymore
-        bool bRet = extractURLInfo(aTempView.GetFieldUnderMousePointer(), pName, pUrl, pTarget);
-        SetMapMode(aOld);
-
+        bool bRet;
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            bRet = extractURLInfo(aTempView.GetField(aLogicClick), pName, pUrl, pTarget);
+        }
+        else
+        {
+            MapMode aOld = GetMapMode();
+            SetMapMode(aEditMode);                  // no return anymore
+            bRet = extractURLInfo(aTempView.GetFieldUnderMousePointer(), pName, pUrl, pTarget);
+            SetMapMode(aOld);
+        }
         return bRet;
     }
     return false;
