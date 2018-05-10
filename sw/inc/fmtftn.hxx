@@ -38,6 +38,7 @@ class SwTextFootnote;
 class SW_DLLPUBLIC SwFormatFootnote
     : public SfxPoolItem
     , public SwModify
+    , public sw::BroadcasterMixin
 {
     friend class SwTextFootnote;
     SwTextFootnote* m_pTextAttr;   ///< My TextAttribute.

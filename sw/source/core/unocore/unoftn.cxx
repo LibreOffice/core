@@ -21,12 +21,13 @@
 
 #include <utility>
 
-#include <osl/mutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <cppuhelper/supportsservice.hxx>
-#include <vcl/svapp.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <svl/listener.hxx>
+#include <osl/mutex.hxx>
+#include <vcl/svapp.hxx>
 
 #include <unomid.h>
 #include <unofootnote.hxx>
@@ -47,31 +48,31 @@
 using namespace ::com::sun::star;
 
 class SwXFootnote::Impl
-    : public SwClient
+    : public SvtListener
 {
 private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
 
 public:
 
-    SwXFootnote &               m_rThis;
+    SwXFootnote& m_rThis;
     uno::WeakReference<uno::XInterface> m_wThis;
-    const bool                  m_bIsEndnote;
-    ::comphelper::OInterfaceContainerHelper2  m_EventListeners;
-    bool                                m_bIsDescriptor;
-    const SwFormatFootnote *            m_pFormatFootnote;
-    OUString             m_sLabel;
+    const bool m_bIsEndnote;
+    ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
+    bool m_bIsDescriptor;
+    SwFormatFootnote* m_pFormatFootnote;
+    OUString m_sLabel;
 
-    Impl(   SwXFootnote & rThis,
-            SwFormatFootnote *const pFootnote,
+    Impl(SwXFootnote& rThis,
+            SwFormatFootnote* const pFootnote,
             const bool bIsEndnote)
-        : SwClient(pFootnote)
-        , m_rThis(rThis)
+        : m_rThis(rThis)
         , m_bIsEndnote(bIsEndnote)
         , m_EventListeners(m_Mutex)
         , m_bIsDescriptor(nullptr == pFootnote)
         , m_pFormatFootnote(pFootnote)
     {
+        m_pFormatFootnote && StartListening(m_pFormatFootnote->GetNotifier());
     }
 
     const SwFormatFootnote* GetFootnoteFormat() const {
@@ -86,10 +87,9 @@ public:
         return *pFootnote;
     }
 
-    void    Invalidate();
+    void Invalidate();
 protected:
-    // SwClient
-    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
+    void Notify(const SfxHint& rHint) override;
 
 };
 
@@ -107,14 +107,10 @@ void SwXFootnote::Impl::Invalidate()
     m_EventListeners.disposeAndClear(ev);
 }
 
-void SwXFootnote::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
+void SwXFootnote::Impl::Notify(const SfxHint& rHint)
 {
-    ClientModify(this, pOld, pNew);
-
-    if (!GetRegisteredIn()) // removed => dispose
-    {
+    if(rHint.GetId() == SfxHintId::Dying)
         Invalidate();
-    }
 }
 
 SwXFootnote::SwXFootnote(const bool bEndnote)
@@ -332,9 +328,10 @@ SwXFootnote::attach(const uno::Reference< text::XTextRange > & xTextRange)
 
     if (pTextAttr)
     {
-        const SwFormatFootnote& rFootnote = pTextAttr->GetFootnote();
-        m_pImpl->m_pFormatFootnote = &rFootnote;
-        const_cast<SwFormatFootnote*>(m_pImpl->m_pFormatFootnote)->Add(m_pImpl.get());
+        m_pImpl->EndListeningAll();
+        SwFormatFootnote* pFootnote = const_cast<SwFormatFootnote*>(&pTextAttr->GetFootnote());
+        m_pImpl->m_pFormatFootnote = pFootnote;
+        m_pImpl->StartListening(pFootnote->GetNotifier());
         // force creation of sequence id - is used for references
         if (pNewDoc->IsInReading())
         {
