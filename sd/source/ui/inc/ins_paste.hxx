@@ -22,21 +22,18 @@
 
 #include <sddllapi.h>
 
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 
 // SdInsertPasteDlg
-class SD_DLLPUBLIC SdInsertPasteDlg : public ModalDialog
+class SD_DLLPUBLIC SdInsertPasteDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<RadioButton> m_pRbBefore;
-    VclPtr<RadioButton> m_pRbAfter;
+    std::unique_ptr<weld::RadioButton> m_xRbBefore;
+    std::unique_ptr<weld::RadioButton> m_xRbAfter;
 
 public:
-    SdInsertPasteDlg( vcl::Window* pWindow );
+    SdInsertPasteDlg(weld::Window* pWindow);
     virtual ~SdInsertPasteDlg() override;
-    virtual void dispose() override;
     bool IsInsertBefore() const;
 };
 
