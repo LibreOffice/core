@@ -109,10 +109,6 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
     if (aFileName == SRCDIR "/extensions/source/plugin/unx/npnapi.cxx") {
         return true;
     }
-    // template magic
-    if (aFileName == SRCDIR "/filter/source/svg/svgreader.cxx") {
-        return true;
-    }
     // vcl/unx/gtk3 re-using vcl/unx/gtk:
     if (aFileName.find("/../../gtk/") != std::string::npos) {
         return true;
