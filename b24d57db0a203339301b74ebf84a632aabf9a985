@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_9e5152db",
+        "filename": "sc/source/core/data/docpool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2018-05-10T21:06:55Z",
+      "side": 1,
+      "message": "I\u0027m unsure about this place. I guess all this checking / default string could be dropped?",
+      "range": {
+        "startLine": 273,
+        "startChar": 4,
+        "endLine": 273,
+        "endChar": 40
+      },
+      "revId": "b24d57db0a203339301b74ebf84a632aabf9a985",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
