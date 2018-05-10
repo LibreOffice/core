@@ -62,7 +62,7 @@ void FuVectorize::DoExecute( SfxRequest& )
         if( pObj && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr )
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractSdVectorizeDlg> pDlg(pFact ? pFact->CreateSdVectorizeDlg( mpWindow, static_cast<SdrGrafObj*>( pObj )->GetGraphic().GetBitmap(), mpDocSh ) : nullptr);
+            ScopedVclPtr<AbstractSdVectorizeDlg> pDlg(pFact ? pFact->CreateSdVectorizeDlg(mpWindow ? mpWindow->GetFrameWeld() : nullptr, static_cast<SdrGrafObj*>( pObj )->GetGraphic().GetBitmap(), mpDocSh ) : nullptr);
             if( pDlg && pDlg->Execute() == RET_OK )
             {
                 const GDIMetaFile&  rMtf = pDlg->GetGDIMetaFile();

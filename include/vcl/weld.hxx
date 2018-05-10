@@ -444,6 +444,13 @@ public:
     void connect_value_changed(const Link<Scale&, void>& rLink) { m_aValueChangedHdl = rLink; }
 };
 
+class VCL_DLLPUBLIC ProgressBar : virtual public Widget
+{
+public:
+    //0-100
+    virtual void set_percentage(int value) = 0;
+};
+
 class VCL_DLLPUBLIC Entry : virtual public Widget
 {
 private:
@@ -868,6 +875,7 @@ public:
     virtual Expander* weld_expander(const OString& id, bool bTakeOwnership = false) = 0;
     virtual Entry* weld_entry(const OString& id, bool bTakeOwnership = false) = 0;
     virtual Scale* weld_scale(const OString& id, bool bTakeOwnership = false) = 0;
+    virtual ProgressBar* weld_progress_bar(const OString& id, bool bTakeOwnership = false) = 0;
     virtual DrawingArea* weld_drawing_area(const OString& id, const a11yref& rA11yImpl = nullptr,
                                            FactoryFunction pUITestFactoryFunction = nullptr,
                                            void* pUserData = nullptr, bool bTakeOwnership = false)

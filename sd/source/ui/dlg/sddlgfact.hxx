@@ -237,7 +237,14 @@ class SdAbstractSfxDialog_Impl : public SfxAbstractDialog
 class SdVectorizeDlg;
 class AbstractSdVectorizeDlg_Impl :public AbstractSdVectorizeDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSdVectorizeDlg_Impl,SdVectorizeDlg)
+private:
+    std::unique_ptr<SdVectorizeDlg> m_xDlg;
+public:
+    AbstractSdVectorizeDlg_Impl(SdVectorizeDlg* pDlg)
+        : m_xDlg(pDlg)
+    {
+    }
+    virtual short Execute() override;
     virtual const GDIMetaFile&  GetGDIMetaFile() const override ;
 };
 
@@ -279,7 +286,7 @@ public:
     virtual VclPtr<AbstractSdPresLayoutDlg>    CreateSdPresLayoutDlg( ::sd::DrawDocShell* pDocShell, const SfxItemSet& rInAttrs) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdTabTemplateDlg(vcl::Window* pParent, const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView ) override;
     virtual VclPtr<SfxAbstractDialog>          CreatSdActionDialog(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView) override;
-    virtual VclPtr<AbstractSdVectorizeDlg>     CreateSdVectorizeDlg(vcl::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell) override;
+    virtual VclPtr<AbstractSdVectorizeDlg>     CreateSdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell) override;
     virtual VclPtr<AbstractSdPublishingDlg>    CreateSdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType) override;
 
     virtual VclPtr<VclAbstractDialog>          CreateSdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pDoc) override;

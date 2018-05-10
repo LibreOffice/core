@@ -2747,6 +2747,24 @@ public:
     }
 };
 
+class GtkInstanceProgressBar : public GtkInstanceWidget, public virtual weld::ProgressBar
+{
+private:
+    GtkProgressBar* m_pProgressBar;
+
+public:
+    GtkInstanceProgressBar(GtkProgressBar* pProgressBar, bool bTakeOwnership)
+        : GtkInstanceWidget(GTK_WIDGET(pProgressBar), bTakeOwnership)
+        , m_pProgressBar(pProgressBar)
+    {
+    }
+
+    virtual void set_percentage(int value) override
+    {
+        gtk_progress_bar_set_fraction(m_pProgressBar, value / 100.0);
+    }
+};
+
 class GtkInstanceEntry : public GtkInstanceWidget, public virtual weld::Entry
 {
 private:
@@ -4596,6 +4614,15 @@ public:
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pScale));
         return new GtkInstanceScale(pScale, bTakeOwnership);
+    }
+
+    virtual weld::ProgressBar* weld_progress_bar(const OString &id, bool bTakeOwnership) override
+    {
+        GtkProgressBar* pProgressBar = GTK_PROGRESS_BAR(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pProgressBar)
+            return nullptr;
+        auto_add_parentless_widgets_to_container(GTK_WIDGET(pProgressBar));
+        return new GtkInstanceProgressBar(pProgressBar, bTakeOwnership);
     }
 
     virtual weld::Entry* weld_entry(const OString &id, bool bTakeOwnership) override

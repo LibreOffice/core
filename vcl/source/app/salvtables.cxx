@@ -38,6 +38,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/menubtn.hxx>
+#include <vcl/prgsbar.hxx>
 #include <vcl/slider.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/tabctrl.hxx>
@@ -1140,6 +1141,24 @@ IMPL_LINK_NOARG(SalInstanceScale, SlideHdl, Slider*, void)
     signal_value_changed();
 }
 
+class SalInstanceProgressBar : public SalInstanceWidget, public virtual weld::ProgressBar
+{
+private:
+    VclPtr<::ProgressBar> m_xProgressBar;
+
+public:
+    SalInstanceProgressBar(::ProgressBar* pProgressBar, bool bTakeOwnership)
+        : SalInstanceWidget(pProgressBar, bTakeOwnership)
+        , m_xProgressBar(pProgressBar)
+    {
+    }
+
+    virtual void set_percentage(int value) override
+    {
+        m_xProgressBar->SetValue(value);
+    }
+};
+
 class SalInstanceEntry : public SalInstanceWidget, public virtual weld::Entry
 {
 private:
@@ -2173,6 +2192,12 @@ public:
     {
         Slider* pSlider = m_xBuilder->get<Slider>(id);
         return pSlider ? new SalInstanceScale(pSlider, bTakeOwnership) : nullptr;
+    }
+
+    virtual weld::ProgressBar* weld_progress_bar(const OString &id, bool bTakeOwnership) override
+    {
+        ::ProgressBar* pProgress = m_xBuilder->get<::ProgressBar>(id);
+        return pProgress ? new SalInstanceProgressBar(pProgress, bTakeOwnership) : nullptr;
     }
 
     virtual weld::Entry* weld_entry(const OString &id, bool bTakeOwnership) override

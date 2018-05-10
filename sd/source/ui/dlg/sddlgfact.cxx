@@ -82,7 +82,12 @@ short AbstractSdStartPresDlg_Impl::Execute()
 
 IMPL_ABSTDLG_BASE(AbstractSdPresLayoutDlg_Impl);
 IMPL_ABSTDLG_BASE(SdAbstractSfxDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractSdVectorizeDlg_Impl);
+
+short AbstractSdVectorizeDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractSdPublishingDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractHeaderFooterDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractBulletDialog_Impl);
@@ -300,7 +305,7 @@ void SdAbstractSfxDialog_Impl::SetText( const OUString& rStr )
 
 const GDIMetaFile& AbstractSdVectorizeDlg_Impl::GetGDIMetaFile() const
 {
-    return pDlg->GetGDIMetaFile();
+    return m_xDlg->GetGDIMetaFile();
 }
 
 void AbstractSdPublishingDlg_Impl::GetParameterSequence( css::uno::Sequence< css::beans::PropertyValue >& rParams )
@@ -408,9 +413,9 @@ VclPtr<SfxAbstractDialog> SdAbstractDialogFactory_Impl::CreatSdActionDialog(vcl:
     return VclPtr<SdAbstractSfxDialog_Impl>::Create( VclPtr<SdActionDlg>::Create( pParent, pAttr, pView ) );
 }
 
-VclPtr<AbstractSdVectorizeDlg>  SdAbstractDialogFactory_Impl::CreateSdVectorizeDlg( vcl::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell )
+VclPtr<AbstractSdVectorizeDlg>  SdAbstractDialogFactory_Impl::CreateSdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell)
 {
-    return VclPtr<AbstractSdVectorizeDlg_Impl>::Create( VclPtr<SdVectorizeDlg>::Create( pParent, rBmp, pDocShell ) );
+    return VclPtr<AbstractSdVectorizeDlg_Impl>::Create(new SdVectorizeDlg(pParent, rBmp, pDocShell));
 }
 
 VclPtr<AbstractSdPublishingDlg>  SdAbstractDialogFactory_Impl::CreateSdPublishingDlg( vcl::Window* pParent, DocumentType eDocType)
