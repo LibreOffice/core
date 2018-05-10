@@ -126,22 +126,6 @@ public:
     }
 };
 
-class TableDesignDialog : public ModalDialog
-{
-private:
-    TableDesignWidget aImpl;
-public:
-    TableDesignDialog( vcl::Window* pParent, ViewShellBase& rBase )
-        : ModalDialog(pParent, "TableDesignDialog",
-        "modules/sdraw/ui/tabledesigndialog.ui")
-        , aImpl(this, rBase, true)
-    {
-    }
-    virtual short Execute() override;
-};
-
-void showTableDesignDialog( vcl::Window*, ViewShellBase& );
-
 }
 
 #endif // _SD_TABLEFORMATPANE_HXX

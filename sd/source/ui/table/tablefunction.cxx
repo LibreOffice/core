@@ -227,19 +227,11 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
     }
     case SID_TABLEDESIGN:
     {
-        if( GetDoc() && (GetDoc()->GetDocumentType() == DocumentType::Draw) )
-        {
-            // in draw open a modal dialog since we have no tool pane yet
-            showTableDesignDialog( GetActiveWindow(), GetViewShellBase() );
-        }
-        else
-        {
-            // First make sure that the sidebar is visible
-            GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
-            ::sfx2::sidebar::Sidebar::ShowPanel(
-                "SdTableDesignPanel",
-                GetViewFrame()->GetFrame().GetFrameInterface());
-        }
+        // First make sure that the sidebar is visible
+        GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
+        ::sfx2::sidebar::Sidebar::ShowPanel(
+            "SdTableDesignPanel",
+            GetViewFrame()->GetFrame().GetFrameInterface());
 
         Cancel();
         rReq.Done ();
