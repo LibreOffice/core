@@ -281,11 +281,12 @@ sal_Int32 Clipboard::GetInsertionPosition ()
     else if (mrController.GetFocusManager().IsFocusShowing())
     {
         // Use the focus to determine the insertion position.
-        ScopedVclPtrInstance< SdInsertPasteDlg > aDialog(nullptr);
-        if (aDialog->Execute() == RET_OK)
+        vcl::Window* pWin = mrSlideSorter.GetContentWindow();
+        SdInsertPasteDlg aDialog(pWin ? pWin->GetFrameWeld() : nullptr);
+        if (aDialog.run() == RET_OK)
         {
             nInsertPosition = mrController.GetFocusManager().GetFocusedPageIndex();
-            if ( ! aDialog->IsInsertBefore())
+            if (!aDialog.IsInsertBefore())
                 nInsertPosition ++;
         }
     }
