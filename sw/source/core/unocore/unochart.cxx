@@ -1455,12 +1455,6 @@ uno::Sequence< OUString > SAL_CALL SwChartDataProvider::getSupportedServiceNames
     return { "com.sun.star.chart2.data.DataProvider"};
 }
 
-void SwChartDataProvider::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
-{
-    // actually this function should be superfluous (need to check later)
-    ClientModify(this, pOld, pNew );
-}
-
 void SwChartDataProvider::AddDataSequence( const SwTable &rTable, uno::Reference< chart2::data::XDataSequence > const &rxDataSequence )
 {
     aDataSequences[ &rTable ].insert( rxDataSequence );
