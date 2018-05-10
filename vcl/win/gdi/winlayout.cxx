@@ -35,7 +35,6 @@
 
 #include <sft.hxx>
 #include <sallayout.hxx>
-#include <CommonSalLayout.hxx>
 #include <win/ScopedHDC.hxx>
 
 #include <cstdio>
@@ -226,7 +225,7 @@ TextOutRenderer & TextOutRenderer::get(bool bUseDWrite)
 }
 
 
-bool ExTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
+bool ExTextOutRenderer::operator ()(GenericSalLayout const &rLayout,
     SalGraphics & /*rGraphics*/,
     HDC hDC)
 {
@@ -234,7 +233,7 @@ bool ExTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
     HFONT hAltFont = nullptr;
     bool bUseAltFont = false;
     bool bShift = false;
-    if (rLayout.getFont().GetFontSelectPattern().mbVertical)
+    if (rLayout.GetFont().GetFontSelectPattern().mbVertical)
     {
         LOGFONTW aLogFont;
         GetObjectW(hFont, sizeof(aLogFont), &aLogFont);
@@ -291,7 +290,7 @@ std::unique_ptr<SalLayout> WinSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs
     assert(mpWinFontEntry[nFallbackLevel]->GetFontFace());
 
     mpWinFontEntry[nFallbackLevel]->SetHDC(getHDC());
-    CommonSalLayout *aLayout = new CommonSalLayout(*mpWinFontEntry[nFallbackLevel]);
+    GenericSalLayout *aLayout = new GenericSalLayout(*mpWinFontEntry[nFallbackLevel]);
     return std::unique_ptr<SalLayout>(aLayout);
 }
 
@@ -381,14 +380,14 @@ void WinFontInstance::SetHDC(const HDC hDC)
     m_hDC = hDC;
 }
 
-bool WinSalGraphics::CacheGlyphs(const CommonSalLayout& rLayout)
+bool WinSalGraphics::CacheGlyphs(const GenericSalLayout& rLayout)
 {
     static bool bDoGlyphCaching = (std::getenv("SAL_DISABLE_GLYPH_CACHING") == nullptr);
     if (!bDoGlyphCaching)
         return false;
 
     HDC hDC = getHDC();
-    WinFontInstance& rFont = *static_cast<WinFontInstance*>(&rLayout.getFont());
+    WinFontInstance& rFont = *static_cast<WinFontInstance*>(&rLayout.GetFont());
 
     int nStart = 0;
     Point aPos(0, 0);
@@ -405,7 +404,7 @@ bool WinSalGraphics::CacheGlyphs(const CommonSalLayout& rLayout)
     return true;
 }
 
-bool WinSalGraphics::DrawCachedGlyphs(const CommonSalLayout& rLayout)
+bool WinSalGraphics::DrawCachedGlyphs(const GenericSalLayout& rLayout)
 {
     HDC hDC = getHDC();
 
@@ -419,7 +418,7 @@ bool WinSalGraphics::DrawCachedGlyphs(const CommonSalLayout& rLayout)
     if (!pImpl)
         return false;
 
-    WinFontInstance& rFont = *static_cast<WinFontInstance*>(&rLayout.getFont());
+    WinFontInstance& rFont = *static_cast<WinFontInstance*>(&rLayout.GetFont());
 
     int nStart = 0;
     Point aPos(0, 0);
@@ -444,22 +443,22 @@ bool WinSalGraphics::DrawCachedGlyphs(const CommonSalLayout& rLayout)
     return true;
 }
 
-void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout, HDC hDC, bool bUseDWrite)
+void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout, HDC hDC, bool bUseDWrite)
 {
     TextOutRenderer &render = TextOutRenderer::get(bUseDWrite);
     render(rLayout, *this, hDC);
 }
 
-void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
+void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
     HDC hDC = getHDC();
 
-    HFONT hFont = static_cast<const WinFontInstance*>(&rLayout.getFont())->GetHFONT();
+    HFONT hFont = static_cast<const WinFontInstance*>(&rLayout.GetFont())->GetHFONT();
     HGDIOBJ hOrigFont = SelectObject(hDC, hFont);
 
     // Our DirectWrite renderer is incomplete, skip it for non-horizontal or
     // stretched text.
-    bool bForceGDI = rLayout.GetOrientation() || static_cast<const WinFontInstance*>(&rLayout.getFont())->hasHScale();
+    bool bForceGDI = rLayout.GetOrientation() || static_cast<const WinFontInstance*>(&rLayout.GetFont())->hasHScale();
 
     bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter;
     if (!bUseOpenGL)

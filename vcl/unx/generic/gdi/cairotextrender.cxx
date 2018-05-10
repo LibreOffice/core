@@ -38,7 +38,7 @@
 
 #include <cairo.h>
 #include <cairo-ft.h>
-#include <CommonSalLayout.hxx>
+#include <sallayout.hxx>
 
 namespace {
 
@@ -168,9 +168,9 @@ namespace
     }
 }
 
-void CairoTextRender::DrawTextLayout(const CommonSalLayout& rLayout)
+void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout)
 {
-    const FreetypeFontInstance& rInstance = static_cast<FreetypeFontInstance&>(rLayout.getFont());
+    const FreetypeFontInstance& rInstance = static_cast<FreetypeFontInstance&>(rLayout.GetFont());
     const FreetypeFont& rFont = *rInstance.GetFreetypeFont();
 
     std::vector<cairo_glyph_t> cairo_glyphs;
@@ -472,7 +472,7 @@ bool CairoTextRender::GetGlyphOutline(const GlyphItem& rGlyph,
 std::unique_ptr<SalLayout> CairoTextRender::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
 {
     if (mpFreetypeFont[nFallbackLevel])
-        return std::unique_ptr<SalLayout>(new CommonSalLayout(*mpFreetypeFont[nFallbackLevel]->GetFontInstance()));
+        return std::unique_ptr<SalLayout>(new GenericSalLayout(*mpFreetypeFont[nFallbackLevel]->GetFontInstance()));
 
     return nullptr;
 }

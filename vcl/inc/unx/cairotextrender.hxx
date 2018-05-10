@@ -79,7 +79,7 @@ public:
     virtual bool                GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) override;
     virtual std::unique_ptr<SalLayout>
                                 GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
-    virtual void                DrawTextLayout(const CommonSalLayout&) override;
+    virtual void                DrawTextLayout(const GenericSalLayout&) override;
 #if ENABLE_CAIRO_CANVAS
     virtual SystemFontData      GetSysFontData( int nFallbackLevel ) const override;
 #endif
