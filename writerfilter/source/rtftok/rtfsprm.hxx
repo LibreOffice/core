@@ -58,7 +58,7 @@ public:
     /// (yes, really; that's what Word does).
     RTFSprms cloneAndDeduplicate(RTFSprms& rReference) const;
     /// Inserts default values to override attributes of pAbstract.
-    void duplicateList(RTFValue::Pointer_t pAbstract);
+    void duplicateList(const RTFValue::Pointer_t& pAbstract);
     /// Removes duplicated values based on in-list properties.
     void deduplicateList(const std::map<int, int>& rInvalidListLevelFirstIndents);
     std::size_t size() const { return m_pSprms->size(); }

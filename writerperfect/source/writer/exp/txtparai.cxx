@@ -202,7 +202,6 @@ private:
 XMLRubyContext::XMLRubyContext(XMLImport& rImport,
                                const librevenge::RVNGPropertyList& rPropertyList)
     : XMLImportContext(rImport)
-    , m_sRubyText()
 {
     // Inherit properties from parent.
     librevenge::RVNGPropertyList::Iter itProp(rPropertyList);
