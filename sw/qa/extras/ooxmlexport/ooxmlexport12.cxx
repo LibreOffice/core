@@ -725,6 +725,12 @@ DECLARE_OOXMLEXPORT_TEST(testObjectCrossReference, "object_cross_reference.odt")
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(21), nIndex);
 }
 
+
+DECLARE_OOXMLEXPORT_TEST(testTdf117504_numberingIndent, "tdf117504_numberingIndent.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("WWNum1"), getProperty<OUString>(getParagraph(1), "NumberingStyleName"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")
 {
     uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
