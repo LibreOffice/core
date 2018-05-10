@@ -307,8 +307,9 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
             CPPUNIT_ASSERT(pDrawDoc);
 
+            auto const parent = getViewShell()->GetActiveWindow();
             pRetval = getSdAbstractDialogFactory()->CreateSdCustomShowDlg(
-                getViewShell()->GetActiveWindow(),
+                parent == nullptr ? nullptr : parent->GetFrameWeld(),
                 *pDrawDoc);
             break;
         }

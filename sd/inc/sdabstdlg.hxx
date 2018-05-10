@@ -180,7 +180,7 @@ public:
 
     virtual VclPtr<VclAbstractDialog>          CreateBreakDlg(weld::Window* pWindow, ::sd::DrawView* pDrView, ::sd::DrawDocShell* pShell, sal_uLong nSumActionCount, sal_uLong nObjCount ) = 0;
     virtual VclPtr<AbstractCopyDlg>            CreateCopyDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView ) = 0;
-    virtual VclPtr<AbstractSdCustomShowDlg>    CreateSdCustomShowDlg(vcl::Window* pWindow, SdDrawDocument& rDrawDoc) = 0;
+    virtual VclPtr<AbstractSdCustomShowDlg>    CreateSdCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc) = 0;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdTabCharDialog(vcl::Window* pWindow, const SfxItemSet* pAttr, SfxObjectShell* pDocShell) = 0;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdTabPageDialog(vcl::Window* pWindow, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, bool bAreaPage) = 0;
     virtual VclPtr<AbstractSdModifyFieldDlg>   CreateSdModifyFieldDlg(vcl::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet) = 0;
