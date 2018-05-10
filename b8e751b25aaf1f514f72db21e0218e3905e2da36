@@ -45,6 +45,24 @@
       "revId": "b8e751b25aaf1f514f72db21e0218e3905e2da36",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_43faa7be",
+        "filename": "dbaccess/source/core/dataaccess/datasource.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2018-05-10T09:54:01Z",
+      "side": 1,
+      "message": "oops, of course #ifdef.. Thanks :)",
+      "parentUuid": "9a30ddce_43738780",
+      "revId": "b8e751b25aaf1f514f72db21e0218e3905e2da36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
