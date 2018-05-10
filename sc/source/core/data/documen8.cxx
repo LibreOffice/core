@@ -340,7 +340,7 @@ bool ScDocument::RemovePageStyleInUse( const OUString& rStyle )
         if ( maTabs[i]->GetPageStyle() == rStyle )
         {
             bWasInUse = true;
-            maTabs[i]->SetPageStyle( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
+            maTabs[i]->SetPageStyle( ScResId(STR_STYLENAME_STANDARD) );
         }
 
     return bWasInUse;

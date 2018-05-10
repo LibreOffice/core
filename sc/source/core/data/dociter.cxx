@@ -35,6 +35,7 @@
 #include <queryparam.hxx>
 #include <queryentry.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <editutil.hxx>
 #include <cellvalue.hxx>
 #include <scmatrix.hxx>
@@ -2569,7 +2570,7 @@ void ScDocRowHeightUpdater::update()
         }
     }
 
-    ScProgress aProgress(mrDoc.GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nCellCount, true);
+    ScProgress aProgress(mrDoc.GetDocumentShell(), ScResId(STR_PROGRESS_HEIGHTING), nCellCount, true);
 
     Fraction aZoom(1, 1);
     itr = mpTabRangesArray->begin();
@@ -2607,7 +2608,7 @@ void ScDocRowHeightUpdater::updateAll()
         nCellCount += mrDoc.maTabs[nTab]->GetWeightedCount();
     }
 
-    ScProgress aProgress(mrDoc.GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nCellCount, true);
+    ScProgress aProgress(mrDoc.GetDocumentShell(), ScResId(STR_PROGRESS_HEIGHTING), nCellCount, true);
 
     Fraction aZoom(1, 1);
     sc::RowHeightContext aCxt(mfPPTX, mfPPTY, aZoom, aZoom, mpOutDev);

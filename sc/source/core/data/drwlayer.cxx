@@ -65,6 +65,7 @@
 #include <userdat.hxx>
 #include <markdata.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <scmod.hxx>
 #include <chartarr.hxx>
 #include <postit.hxx>
@@ -1881,7 +1882,7 @@ SdrObject* ScDrawLayer::GetNamedObject( const OUString& rName, sal_uInt16 nId, S
 
 OUString ScDrawLayer::GetNewGraphicName( long* pnCounter ) const
 {
-    OUString aBase = ScGlobal::GetRscString(STR_GRAPHICNAME) + " ";
+    OUString aBase = ScResId(STR_GRAPHICNAME) + " ";
 
     bool bThere = true;
     OUString aGraphicName;

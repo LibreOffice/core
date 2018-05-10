@@ -20,6 +20,7 @@
 #include <dpsdbtab.hxx>
 #include <global.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <dpfilteredcache.hxx>
 #include <dptabres.hxx>
 #include <document.hxx>
@@ -90,7 +91,7 @@ OUString ScDatabaseDPData::getDimensionName(long nColumn)
     {
         //TODO: different internal and display names?
         //return "Data";
-        return ScGlobal::GetRscString(STR_PIVOT_DATA);
+        return ScResId(STR_PIVOT_DATA);
     }
 
     CreateCacheTable();

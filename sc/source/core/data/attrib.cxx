@@ -37,6 +37,7 @@
 #include <sc.hrc>
 #include <mid.h>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <textuno.hxx>
 
 using namespace com::sun::star;
@@ -278,8 +279,8 @@ bool ScProtectionAttr::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 OUString ScProtectionAttr::GetValueText() const
 {
-    const OUString aStrYes ( ScGlobal::GetRscString(STR_YES) );
-    const OUString aStrNo  ( ScGlobal::GetRscString(STR_NO) );
+    const OUString aStrYes ( ScResId(STR_YES) );
+    const OUString aStrNo  ( ScResId(STR_NO) );
 
     const OUString aValue  = "("
         + (bProtection ? aStrYes : aStrNo)
@@ -303,8 +304,8 @@ bool ScProtectionAttr::GetPresentation
         const IntlWrapper& /* rIntl */
     ) const
 {
-    const OUString aStrYes ( ScGlobal::GetRscString(STR_YES) );
-    const OUString aStrNo  ( ScGlobal::GetRscString(STR_NO) );
+    const OUString aStrYes ( ScResId(STR_YES) );
+    const OUString aStrNo  ( ScResId(STR_NO) );
 
     switch ( ePres )
     {
@@ -313,19 +314,19 @@ bool ScProtectionAttr::GetPresentation
             break;
 
         case SfxItemPresentation::Complete:
-            rText  = ScGlobal::GetRscString(STR_PROTECTION)
+            rText  = ScResId(STR_PROTECTION)
                 + ": "
                 + (bProtection ? aStrYes : aStrNo)
                 + ", "
-                + ScGlobal::GetRscString(STR_FORMULAS)
+                + ScResId(STR_FORMULAS)
                 + ": "
                 + (!bHideFormula ? aStrYes : aStrNo)
                 + ", "
-                + ScGlobal::GetRscString(STR_HIDE)
+                + ScResId(STR_HIDE)
                 + ": "
                 + (bHideCell ? aStrYes : aStrNo)
                 + ", "
-                + ScGlobal::GetRscString(STR_PRINT)
+                + ScResId(STR_PRINT)
                 + ": "
                 + (!bHidePrint ? aStrYes : aStrNo);
             break;
@@ -530,15 +531,15 @@ bool ScViewObjectModeItem::GetPresentation
             switch( Which() )
             {
                 case SID_SCATTR_PAGE_CHARTS:
-                rText = ScGlobal::GetRscString(STR_VOBJ_CHART) + aDel;
+                rText = ScResId(STR_VOBJ_CHART) + aDel;
                 break;
 
                 case SID_SCATTR_PAGE_OBJECTS:
-                rText = ScGlobal::GetRscString(STR_VOBJ_OBJECT) + aDel;
+                rText = ScResId(STR_VOBJ_OBJECT) + aDel;
                 break;
 
                 case SID_SCATTR_PAGE_DRAWINGS:
-                rText = ScGlobal::GetRscString(STR_VOBJ_DRAWINGS) + aDel;
+                rText = ScResId(STR_VOBJ_DRAWINGS) + aDel;
                 break;
 
                 default: break;
@@ -546,9 +547,9 @@ bool ScViewObjectModeItem::GetPresentation
             SAL_FALLTHROUGH;
         case SfxItemPresentation::Nameless:
             if (GetValue() == VOBJ_MODE_SHOW)
-                rText += ScGlobal::GetRscString(STR_VOBJ_MODE_SHOW);
+                rText += ScResId(STR_VOBJ_MODE_SHOW);
             else
-                rText += ScGlobal::GetRscString(STR_VOBJ_MODE_HIDE);
+                rText += ScResId(STR_VOBJ_MODE_HIDE);
             return true;
             break;
 
@@ -641,11 +642,11 @@ void lclAppendScalePageCount( OUString& rText, sal_uInt16 nPages )
     rText += ": ";
     if( nPages )
     {
-        OUString aPages( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_PAGES ) );
+        OUString aPages( ScResId( STR_SCATTR_PAGE_SCALE_PAGES ) );
         rText += aPages.replaceFirst( "%1", OUString::number( nPages ) );
     }
     else
-        rText += ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_AUTO );
+        rText += ScResId( STR_SCATTR_PAGE_SCALE_AUTO );
 }
 } // namespace
 
@@ -656,10 +657,10 @@ bool ScPageScaleToItem::GetPresentation(
     if( !IsValid())
         return false;
 
-    OUString aName( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALETO ) );
-    OUString aValue( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_WIDTH ) );
+    OUString aName( ScResId( STR_SCATTR_PAGE_SCALETO ) );
+    OUString aValue( ScResId( STR_SCATTR_PAGE_SCALE_WIDTH ) );
     lclAppendScalePageCount( aValue, mnWidth );
-    aValue = aValue + ", " + ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_HEIGHT );
+    aValue = aValue + ", " + ScResId( STR_SCATTR_PAGE_SCALE_HEIGHT );
     lclAppendScalePageCount( aValue, mnHeight );
 
     switch( ePres )

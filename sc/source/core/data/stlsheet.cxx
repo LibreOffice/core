@@ -41,6 +41,7 @@
 #include <vcl/svapp.hxx>
 
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <sc.hrc>
 #include <helpids.h>
 
@@ -285,7 +286,7 @@ void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 bool ScStyleSheet::SetName(const OUString& rNew, bool bReindexNow)
 {
     OUString aFileStdName = STRING_STANDARD;
-    if ( rNew == aFileStdName && aFileStdName != ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
+    if ( rNew == aFileStdName && aFileStdName != ScResId(STR_STYLENAME_STANDARD) )
         return false;
     else
         return SfxStyleSheet::SetName(rNew, bReindexNow);

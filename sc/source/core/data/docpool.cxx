@@ -72,6 +72,7 @@
 #include <attrib.hxx>
 #include <patattr.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <document.hxx>
 #include <sc.hrc>
 
@@ -270,7 +271,7 @@ ScDocumentPool::ScDocumentPool()
     // TODO: Write additional method ScGlobal::IsInit() or somesuch
     //       or detect whether this is the Secondary Pool for a MessagePool
     if ( ScGlobal::GetEmptyBrushItem() )
-        mvPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] = new ScPatternAttr( std::move(pSet), ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
+        mvPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] = new ScPatternAttr( std::move(pSet), ScResId(STR_STYLENAME_STANDARD) );
     else
         mvPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] = new ScPatternAttr( std::move(pSet), STRING_STANDARD ); // FIXME: without name?
 
@@ -479,42 +480,42 @@ bool ScDocumentPool::GetPresentation(
     const IntlWrapper& rIntl ) const
 {
     sal_uInt16  nW = rItem.Which();
-    OUString aStrYes  ( ScGlobal::GetRscString(STR_YES) );
-    OUString aStrNo   ( ScGlobal::GetRscString(STR_NO) );
+    OUString aStrYes  ( ScResId(STR_YES) );
+    OUString aStrNo   ( ScResId(STR_NO) );
     OUString aStrSep(": ");
 
     bool ePresentationRet = true;
     switch( nW )
     {
         case ATTR_PAGE_TOPDOWN:
-            rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_PRINTDIR) + aStrSep;
+            rText = ScResId(STR_SCATTR_PAGE_PRINTDIR) + aStrSep;
             rText += static_cast<const SfxBoolItem&>(rItem).GetValue() ?
-                ScGlobal::GetRscString(STR_SCATTR_PAGE_TOPDOWN) :
-                ScGlobal::GetRscString(STR_SCATTR_PAGE_LEFTRIGHT) ;
+                ScResId(STR_SCATTR_PAGE_TOPDOWN) :
+                ScResId(STR_SCATTR_PAGE_LEFTRIGHT) ;
         break;
 
         case ATTR_PAGE_HEADERS:
-            rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_HEADERS) + aStrSep;
+            rText = ScResId(STR_SCATTR_PAGE_HEADERS) + aStrSep;
             rText += static_cast<const SfxBoolItem&>(rItem).GetValue() ? aStrYes : aStrNo ;
         break;
 
         case ATTR_PAGE_NULLVALS:
-            rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_NULLVALS) + aStrSep;
+            rText = ScResId(STR_SCATTR_PAGE_NULLVALS) + aStrSep;
             rText += static_cast<const SfxBoolItem&>(rItem).GetValue() ? aStrYes : aStrNo ;
         break;
 
         case ATTR_PAGE_FORMULAS:
-            rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_FORMULAS) + aStrSep;
+            rText = ScResId(STR_SCATTR_PAGE_FORMULAS) + aStrSep;
             rText += static_cast<const SfxBoolItem&>(rItem).GetValue() ? aStrYes : aStrNo ;
         break;
 
         case ATTR_PAGE_NOTES:
-            rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_NOTES) + aStrSep;
+            rText = ScResId(STR_SCATTR_PAGE_NOTES) + aStrSep;
             rText += static_cast<const SfxBoolItem&>(rItem).GetValue() ? aStrYes : aStrNo ;
         break;
 
         case ATTR_PAGE_GRID:
-            rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_GRID) + aStrSep;
+            rText = ScResId(STR_SCATTR_PAGE_GRID) + aStrSep;
             rText += static_cast<const SfxBoolItem&>(rItem).GetValue() ? aStrYes : aStrNo ;
         break;
 
@@ -524,8 +525,8 @@ bool ScDocumentPool::GetPresentation(
 
             if( nPagNo )
             {
-                rText = ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALETOPAGES ) + aStrSep;
-                OUString aPages( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_PAGES ) );
+                rText = ScResId( STR_SCATTR_PAGE_SCALETOPAGES ) + aStrSep;
+                OUString aPages( ScResId( STR_SCATTR_PAGE_SCALE_PAGES ) );
                 aPages = aPages.replaceFirst( "%1", OUString::number( nPagNo ) );
                 rText += aPages;
             }
@@ -542,7 +543,7 @@ bool ScDocumentPool::GetPresentation(
 
             if( nPagNo )
             {
-                rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_FIRSTPAGENO) + aStrSep;
+                rText = ScResId(STR_SCATTR_PAGE_FIRSTPAGENO) + aStrSep;
                 rText += OUString::number( nPagNo );
             }
             else
@@ -558,7 +559,7 @@ bool ScDocumentPool::GetPresentation(
 
             if( nPercent )
             {
-                rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_SCALE) + aStrSep;
+                rText = ScResId(STR_SCATTR_PAGE_SCALE) + aStrSep;
                 rText = rText + unicode::formatPercent(nPercent,
                     Application::GetSettings().GetUILanguageTag());
             }
@@ -575,7 +576,7 @@ bool ScDocumentPool::GetPresentation(
 
             if( lcl_HFPresentation( rItem, GetMetric( nW ), ePresentationMetric, aBuffer, rIntl ) )
             {
-                rText = ScGlobal::GetRscString(STR_HEADER) + " ( " + aBuffer + " ) ";
+                rText = ScResId(STR_HEADER) + " ( " + aBuffer + " ) ";
             }
         }
         break;
@@ -586,7 +587,7 @@ bool ScDocumentPool::GetPresentation(
 
             if( lcl_HFPresentation( rItem, GetMetric( nW ), ePresentationMetric, aBuffer, rIntl ) )
             {
-                rText = ScGlobal::GetRscString(STR_FOOTER) + " ( " + aBuffer + " ) ";
+                rText = ScResId(STR_FOOTER) + " ( " + aBuffer + " ) ";
             }
         }
         break;

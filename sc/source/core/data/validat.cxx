@@ -41,6 +41,7 @@
 #include <patattr.hxx>
 #include <rechead.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <rangenam.hxx>
 #include <dbdata.hxx>
 #include <typedstrdata.hxx>
@@ -252,7 +253,7 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
         //TODO: different error message, if found, but not bAllowed ??
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
                                                   VclMessageType::Warning, VclButtonsType::Ok,
-                                                  ScGlobal::GetRscString(STR_VALID_MACRONOTFOUND)));
+                                                  ScResId(STR_VALID_MACRONOTFOUND)));
         xBox->run();
     }
 
@@ -358,7 +359,7 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
         //TODO: different error message, if found, but not bAllowed ??
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
                                                   VclMessageType::Warning, VclButtonsType::Ok,
-                                                  ScGlobal::GetRscString(STR_VALID_MACRONOTFOUND)));
+                                                  ScResId(STR_VALID_MACRONOTFOUND)));
         xBox->run();
     }
 
@@ -383,10 +384,10 @@ bool ScValidationData::DoError(weld::Window* pParent, const OUString& rInput,
 
     OUString aTitle = aErrorTitle;
     if (aTitle.isEmpty())
-        aTitle = ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 );  // application title
+        aTitle = ScResId( STR_MSSG_DOSUBTOTALS_0 );  // application title
     OUString aMessage = aErrorMessage;
     if (aMessage.isEmpty())
-        aMessage = ScGlobal::GetRscString( STR_VALID_DEFERROR );
+        aMessage = ScResId( STR_VALID_DEFERROR );
 
     VclButtonsType eStyle = VclButtonsType::Ok;
     VclMessageType eType = VclMessageType::Error;

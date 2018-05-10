@@ -25,6 +25,7 @@
 #include <document.hxx>
 #include <table.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <subtotal.hxx>
 #include <docoptio.hxx>
 #include <interpre.hxx>
@@ -1191,7 +1192,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
 
             OUString aTabName;
             GetName( nThisTab, aTabName );
-            OUString aTemplate = ScGlobal::GetRscString(STR_PROGRESS_COMPARING);
+            OUString aTemplate = ScResId(STR_PROGRESS_COMPARING);
             sal_Int32 nIndex = 0;
             OUStringBuffer aProText = aTemplate.getToken( 0, '#', nIndex );
             aProText.append(aTabName);
