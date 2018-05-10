@@ -341,15 +341,15 @@ sal_Int64 SAL_CALL SdGenericDrawPage::getSomething( const css::uno::Sequence< sa
 SdGenericDrawPage::SdGenericDrawPage(SdXImpressDocument* _pModel, SdPage* pInPage, const SvxItemPropertySet* _pSet)
 :       SvxFmDrawPage( static_cast<SdrPage*>(pInPage) ),
         SdUnoSearchReplaceShape(this),
-        mpModel     ( _pModel ),
+        mpDocModel( _pModel ),
         mpSdrModel(nullptr),
         mbIsImpressDocument(false),
         mnTempPageNumber(0),
         mpPropSet   ( _pSet )
 {
     mpSdrModel = SvxFmDrawPage::mpModel;
-    if( mpModel )
-        mbIsImpressDocument = mpModel->IsImpressDocument();
+    if( mpDocModel )
+        mbIsImpressDocument = mpDocModel->IsImpressDocument();
 
 }
 
@@ -359,7 +359,7 @@ SdGenericDrawPage::~SdGenericDrawPage() throw()
 
 void SdGenericDrawPage::throwIfDisposed() const
 {
-    if( (SvxFmDrawPage::mpModel == nullptr) || (mpModel == nullptr) || (SvxFmDrawPage::mpPage == nullptr) )
+    if( (SvxFmDrawPage::mpModel == nullptr) || (mpDocModel == nullptr) || (SvxFmDrawPage::mpPage == nullptr) )
         throw lang::DisposedException();
 }
 
@@ -367,7 +367,7 @@ SdXImpressDocument* SdGenericDrawPage::GetModel() const
 {
     if( mpSdrModel != SvxFmDrawPage::mpModel )
         const_cast<SdGenericDrawPage*>(this)->UpdateModel();
-    return mpModel;
+    return mpDocModel;
 }
 
 bool SdGenericDrawPage::IsImpressDocument() const
@@ -384,13 +384,13 @@ void SdGenericDrawPage::UpdateModel()
     if( mpSdrModel )
     {
         uno::Reference< uno::XInterface > xModel( SvxFmDrawPage::mpModel->getUnoModel() );
-        mpModel = SdXImpressDocument::getImplementation( xModel );
+        mpDocModel = SdXImpressDocument::getImplementation( xModel );
     }
     else
     {
-        mpModel = nullptr;
+        mpDocModel = nullptr;
     }
-    mbIsImpressDocument = mpModel && mpModel->IsImpressDocument();
+    mbIsImpressDocument = mpDocModel && mpDocModel->IsImpressDocument();
 }
 
 // this is called whenever a SdrObject must be created for a empty api shape wrapper
@@ -1862,7 +1862,7 @@ void SdGenericDrawPage::release() throw()
 // XComponent
 void SdGenericDrawPage::disposing() throw()
 {
-    mpModel = nullptr;
+    mpDocModel = nullptr;
     SvxFmDrawPage::disposing();
 }
 
