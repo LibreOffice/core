@@ -1535,7 +1535,10 @@ bool ImpGraphic::loadPrepared()
     Graphic aGraphic;
     if (mpGfxLink->LoadNative(aGraphic))
     {
+        GraphicExternalLink aLink = maGraphicExternalLink;
         *this = *aGraphic.ImplGetImpGraphic();
+        maGraphicExternalLink = aLink;
+
         return true;
     }
     return false;
