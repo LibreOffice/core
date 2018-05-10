@@ -1255,7 +1255,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             if (bOk)
                                 rRet.append("} ");
                             else
-                                rRet = rRet.remove(nSizeStartPos, rRet.getLength());
+                                rRet = rRet.truncate(nSizeStartPos);
                             nSetSize--;
                             nCurSize=nOldCurSize;
                         }
@@ -1380,7 +1380,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             if (bOk)
                                 rRet.append("} ");
                             else
-                                rRet = rRet.remove(nSubSupStartPos, rRet.getLength());
+                                rRet = rRet.truncate(nSubSupStartPos);
                             nPart++;
                             }
                             break;
