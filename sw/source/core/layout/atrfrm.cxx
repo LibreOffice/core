@@ -121,7 +121,7 @@ static void lcl_DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
         // It's suboptimal if the format is deleted beforehand.
         SwIterator<SwClient,SwFrameFormat> aIter(*pFormat);
         for(SwClient* pLast = aIter.First(); bDel && pLast; pLast = aIter.Next())
-            if (dynamic_cast<const SwFrame*>(pLast) == nullptr && !SwXHeadFootText::IsXHeadFootText(pLast))
+            if (dynamic_cast<const SwFrame*>(pLast) == nullptr)
                 bDel = false;
     }
 
