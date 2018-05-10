@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_235cd3ec",
+        "filename": "configure.ac",
+        "patchSetId": 4
+      },
+      "lineNbr": 8778,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-10T09:50:55Z",
+      "side": 1,
+      "message": "A nitpick: tabs are ~not used in the file",
+      "range": {
+        "startLine": 8778,
+        "startChar": 0,
+        "endLine": 8778,
+        "endChar": 1
+      },
+      "revId": "b8e751b25aaf1f514f72db21e0218e3905e2da36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_43738780",
+        "filename": "dbaccess/source/core/dataaccess/datasource.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-10T09:50:55Z",
+      "side": 1,
+      "message": "if *not* defined?",
+      "range": {
+        "startLine": 586,
+        "startChar": 1,
+        "endLine": 586,
+        "endChar": 7
+      },
+      "revId": "b8e751b25aaf1f514f72db21e0218e3905e2da36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
