@@ -282,7 +282,7 @@ private:
     SdrObject* mpFirstObj;
 
     /// Candidate for being searched/spell checked.
-    SdrTextObj* mpTextObj;
+    SdrTextObj* mpSearchSpellTextObj;
 
     /// Current text to be searched/spelled inside the current text object
     sal_Int32 mnText;
