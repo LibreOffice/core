@@ -86,6 +86,7 @@
 #include <scriptinfo.hxx>
 #include <tools/datetime.hxx>
 #include <tools/urlobj.hxx>
+#include <svl/listener.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
@@ -2894,25 +2895,25 @@ void SAL_CALL SwXTextFieldTypes::removeRefreshListener(
     m_pImpl->m_RefreshListeners.removeInterface(xListener);
 }
 
-class SwXFieldEnumeration::Impl
-    : public SwClient
+struct SwXFieldEnumeration::Impl
+    : public SvtListener
 {
+    SwDoc* m_pDoc;
+    std::vector<uno::Reference<text::XTextField>> m_Items;
+    sal_Int32 m_nNextIndex;  ///< index of next element to be returned
 
-public:
-    SwDoc * m_pDoc;
-
-    std::vector< uno::Reference<text::XTextField> > m_Items;
-    sal_Int32       m_nNextIndex;  ///< index of next element to be returned
-
-    explicit Impl(SwDoc & rDoc)
-        : SwClient(rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD))
-        , m_pDoc(& rDoc)
+    explicit Impl(SwDoc& rDoc)
+        : m_pDoc(&rDoc)
         , m_nNextIndex(0)
-    { }
+    {
+        StartListening(rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
+    }
 
-protected:
-    // SwClient
-    virtual void Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew) override;
+    virtual void Notify(const SfxHint& rHint) override
+    {
+        if(rHint.GetId() == SfxHintId::Dying)
+            m_pDoc = nullptr;
+    }
 };
 
 OUString SAL_CALL
@@ -2926,11 +2927,10 @@ sal_Bool SAL_CALL SwXFieldEnumeration::supportsService(const OUString& rServiceN
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+uno::Sequence<OUString> SAL_CALL
 SwXFieldEnumeration::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet { "com.sun.star.text.FieldEnumeration" };
-    return aRet;
+    return { "com.sun.star.text.FieldEnumeration" };
 }
 
 SwXFieldEnumeration::SwXFieldEnumeration(SwDoc & rDoc)
@@ -2994,14 +2994,6 @@ uno::Any SAL_CALL SwXFieldEnumeration::nextElement()
     aRet <<= rxField;
     rxField = nullptr;  // free memory for item that is no longer used
     return aRet;
-}
-
-void SwXFieldEnumeration::Impl::Modify(
-        SfxPoolItem const*const pOld, SfxPoolItem const*const pNew)
-{
-    ClientModify(this, pOld, pNew);
-    if(!GetRegisteredIn())
-        m_pDoc = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
