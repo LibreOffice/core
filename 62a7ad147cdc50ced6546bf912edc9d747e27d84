@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_83565fd0",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5785,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2018-05-10T09:53:06Z",
+      "side": 1,
+      "message": "Actually, this optimization can be done to all single parameter(doubleref) functions when not in forced array mode and not in matrix mode. So I have amended accordingly in the latest.",
+      "parentUuid": "9a30ddce_4d55764e",
+      "range": {
+        "startLine": 5785,
+        "startChar": 104,
+        "endLine": 5785,
+        "endChar": 118
+      },
+      "revId": "62a7ad147cdc50ced6546bf912edc9d747e27d84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_0d845ed2",
         "filename": "sc/source/core/tool/compiler.cxx",
         "patchSetId": 2
@@ -76,6 +100,24 @@
       "writtenOn": "2018-05-09T09:22:39Z",
       "side": 1,
       "message": "I think here is missing a check whether the current opcode\u0027s current parameter (it\u0027s always the first and only one here now, but the general handling would be the same) is actually of type ParameterClass::Value, and return (not process further) if it isn\u0027t.",
+      "revId": "62a7ad147cdc50ced6546bf912edc9d747e27d84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_e361dba9",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5832,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2018-05-10T09:53:06Z",
+      "side": 1,
+      "message": "This method gets called from FormulaCompiler::Factor() and at this stage for some reason, the function opcode token will have the type of ParamClass::Unknown if it is not in forced array mode. May be this is set back to ParamClass::Value only after call to Factor() ends ?",
+      "parentUuid": "9a30ddce_6d85daab",
       "revId": "62a7ad147cdc50ced6546bf912edc9d747e27d84",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
