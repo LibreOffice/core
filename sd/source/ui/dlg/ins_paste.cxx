@@ -19,30 +19,21 @@
 
 #include <ins_paste.hxx>
 
-SdInsertPasteDlg::SdInsertPasteDlg(vcl::Window* pWindow)
-    : ModalDialog( pWindow, "InsertSlidesDialog",
-        "modules/simpress/ui/insertslides.ui")
+SdInsertPasteDlg::SdInsertPasteDlg(weld::Window* pWindow)
+    : GenericDialogController(pWindow, "modules/simpress/ui/insertslides.ui", "InsertSlidesDialog")
+    , m_xRbBefore(m_xBuilder->weld_radio_button("before"))
+    , m_xRbAfter(m_xBuilder->weld_radio_button("after"))
 {
-    get(m_pRbBefore, "before");
-    get(m_pRbAfter, "after");
-    m_pRbAfter->Check();
+    m_xRbAfter->set_active(true);
 }
 
 SdInsertPasteDlg::~SdInsertPasteDlg()
 {
-    disposeOnce();
-}
-
-void SdInsertPasteDlg::dispose()
-{
-    m_pRbBefore.clear();
-    m_pRbAfter.clear();
-    ModalDialog::dispose();
 }
 
 bool SdInsertPasteDlg::IsInsertBefore() const
 {
-    return m_pRbBefore->IsChecked();
+    return m_xRbBefore->get_active();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
