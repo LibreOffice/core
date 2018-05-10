@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_c32bf7e9",
+        "filename": "sc/inc/columniterator.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-10T12:17:27Z",
+      "side": 1,
+      "message": "I would drop these comments, no existing include in the codebase uses such comments. I even recall some commit in the past that removed such comments, but I can\u0027t find it right now.",
+      "revId": "56ed49c7bfe68d996c220fb7371becb3dd864665",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
