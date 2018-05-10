@@ -18,10 +18,16 @@
  */
 
 #include <unobookmark.hxx>
-#include <osl/mutex.hxx>
+
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/mutex.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/listener.hxx>
 #include <vcl/svapp.hxx>
+#include <xmloff/odffields.hxx>
 
 #include <TextCursorHelper.hxx>
 #include <unotextrange.hxx>
@@ -34,30 +40,25 @@
 #include <docary.hxx>
 #include <swundo.hxx>
 #include <docsh.hxx>
-#include <xmloff/odffields.hxx>
-#include <comphelper/servicehelper.hxx>
-#include <comphelper/sequence.hxx>
-#include <svl/itemprop.hxx>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
 
 class SwXBookmark::Impl
-    : public SwClient
+    : public SvtListener
 {
 private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::comphelper::OInterfaceContainerHelper2  m_EventListeners;
-    SwDoc *                     m_pDoc;
-    ::sw::mark::IMark *         m_pRegisteredBookmark;
-    OUString                    m_sMarkName;
+    ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
+    SwDoc* m_pDoc;
+    ::sw::mark::IMark* m_pRegisteredBookmark;
+    OUString m_sMarkName;
 
     Impl( SwDoc *const pDoc )
-        : SwClient()
-        , m_EventListeners(m_Mutex)
+        : m_EventListeners(m_Mutex)
         , m_pDoc(pDoc)
         , m_pRegisteredBookmark(nullptr)
     {
@@ -66,37 +67,34 @@ public:
 
     void registerInMark(SwXBookmark & rThis, ::sw::mark::IMark *const pBkmk);
 protected:
-    // SwClient
-    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
+    virtual void Notify(const SfxHint&) override;
 
 };
 
-void SwXBookmark::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
+void SwXBookmark::Impl::Notify(const SfxHint& rHint)
 {
-    ClientModify(this, pOld, pNew);
-    if (GetRegisteredIn())
+    if(rHint.GetId() == SfxHintId::Dying)
     {
-        return; // core object still alive
+        m_pRegisteredBookmark = nullptr;
+        m_pDoc = nullptr;
+        uno::Reference<uno::XInterface> const xThis(m_wThis);
+        if (!xThis.is())
+        {   // fdo#72695: if UNO object is already dead, don't revive it with event
+            return;
+        }
+        lang::EventObject const ev(xThis);
+        m_EventListeners.disposeAndClear(ev);
     }
-
-    m_pRegisteredBookmark = nullptr;
-    m_pDoc = nullptr;
-    uno::Reference<uno::XInterface> const xThis(m_wThis);
-    if (!xThis.is())
-    {   // fdo#72695: if UNO object is already dead, don't revive it with event
-        return;
-    }
-    lang::EventObject const ev(xThis);
-    m_EventListeners.disposeAndClear(ev);
 }
 
-void SwXBookmark::Impl::registerInMark(SwXBookmark & rThis,
-        ::sw::mark::IMark *const pBkmk)
+void SwXBookmark::Impl::registerInMark(SwXBookmark& rThis,
+        ::sw::mark::IMark* const pBkmk)
 {
-    const uno::Reference<text::XTextContent> xBookmark(& rThis);
+    const uno::Reference<text::XTextContent> xBookmark(&rThis);
     if (pBkmk)
     {
-        pBkmk->Add(this);
+        EndListeningAll();
+        StartListening(pBkmk->GetNotifier());
         ::sw::mark::MarkBase *const pMarkBase(dynamic_cast< ::sw::mark::MarkBase * >(pBkmk));
         OSL_ENSURE(pMarkBase, "registerInMark: no MarkBase?");
         if (pMarkBase)
