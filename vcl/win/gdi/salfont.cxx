@@ -997,15 +997,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
     const RawFontData aHheaRawData(getHDC(), nHheaTag);
     const RawFontData aOS2RawData(getHDC(), nOS2Tag);
 
-    WCHAR nKashidaCh = 0x0640;
-    WORD nKashidaGid;
-    DWORD ret = GetGlyphIndicesW(getHDC(), &nKashidaCh, 1, &nKashidaGid, GGI_MARK_NONEXISTING_GLYPHS);
-    if (ret != GDI_ERROR && nKashidaGid != 0xFFFF)
-    {
-        int nKashidaWidth = 0;
-        if (GetCharWidthI(getHDC(), nKashidaGid, 1, nullptr, &nKashidaWidth))
-            rxFontMetric->SetMinKashida(static_cast<int>(mfFontScale[nFallbackLevel] * nKashidaWidth));
-    }
+    rxFontMetric->SetMinKashida(mpWinFontEntry[nFallbackLevel]->GetKashidaWidth());
 
     // get the font metric
     OUTLINETEXTMETRICW aOutlineMetric;
