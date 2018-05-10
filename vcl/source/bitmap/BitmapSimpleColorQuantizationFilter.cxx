@@ -35,6 +35,13 @@ BitmapEx BitmapSimpleColorQuantizationFilter::execute(BitmapEx const& aBitmapEx)
         const sal_uInt16 nColorCount = std::min(mnNewColorCount, sal_uInt16(256));
         sal_uInt16 nBitCount = 0;
 
+        if (nColorCount <= 2)
+            nBitCount = 1;
+        else if (nColorCount <= 16)
+            nBitCount = 4;
+        else
+            nBitCount = 8;
+
         if (pRAcc)
         {
             Octree aOct(*pRAcc, nColorCount);
