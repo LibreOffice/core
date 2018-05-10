@@ -769,20 +769,6 @@ void TableDesignWidget::FillDesignPreviewControl()
     m_pValueSet->SelectItem(nSelectedItem);
 }
 
-short TableDesignDialog::Execute()
-{
-    if( ModalDialog::Execute() )
-    {
-        if( aImpl.isStyleChanged() )
-            aImpl.ApplyStyle();
-
-        if( aImpl.isOptionsChanged() )
-            aImpl.ApplyOptions();
-        return RET_OK;
-    }
-    return RET_CANCEL;
-}
-
 VclPtr<vcl::Window> createTableDesignPanel( vcl::Window* pParent, ViewShellBase& rBase )
 {
     VclPtr<TableDesignPane> pRet = nullptr;
@@ -794,12 +780,6 @@ VclPtr<vcl::Window> createTableDesignPanel( vcl::Window* pParent, ViewShellBase&
     {
     }
     return pRet;
-}
-
-void showTableDesignDialog( vcl::Window* pParent, ViewShellBase& rBase )
-{
-    ScopedVclPtrInstance< TableDesignDialog > xDialog( pParent, rBase );
-    xDialog->Execute();
 }
 
 }

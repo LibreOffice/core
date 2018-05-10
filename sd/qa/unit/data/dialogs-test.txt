@@ -55,7 +55,6 @@ modules/simpress/ui/headerfooterdialog.ui
 
 modules/sdraw/ui/paranumberingtab.ui
 modules/sdraw/ui/namedesign.ui
-modules/sdraw/ui/tabledesigndialog.ui
 
 # currently deactivated, leads to problems and the test to not work
 # This is typically a hint that these should be hard-coded in the
