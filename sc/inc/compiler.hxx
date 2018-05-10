@@ -82,6 +82,7 @@ class ScDocument;
 class ScMatrix;
 class ScRangeData;
 class ScTokenArray;
+struct ScInterpreterContext;
 
 namespace sc {
 
@@ -331,21 +332,24 @@ private:
     static void InitCharClassEnglish();
 
 public:
-    ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos );
+    ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, const ScInterpreterContext* pContext = nullptr );
 
     /** If eGrammar == GRAM_UNSPECIFIED then the grammar of pDocument is used,
         if pDocument==nullptr then GRAM_DEFAULT.
      */
     ScCompiler( ScDocument* pDocument, const ScAddress&,
-            formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED );
+            formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED,
+            const ScInterpreterContext* pContext = nullptr );
 
-    ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr );
+    ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr,
+            const ScInterpreterContext* pContext = nullptr );
 
     /** If eGrammar == GRAM_UNSPECIFIED then the grammar of pDocument is used,
         if pDocument==nullptr then GRAM_DEFAULT.
      */
     ScCompiler( ScDocument* pDocument, const ScAddress&, ScTokenArray& rArr,
-            formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED );
+            formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED,
+            const ScInterpreterContext* pContext = nullptr );
 
     virtual ~ScCompiler() override;
 

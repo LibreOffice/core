@@ -1731,11 +1731,12 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
     }
 };
 
-ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr ) :
-    FormulaCompiler(rArr),
+ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr,
+        const ScInterpreterContext* pContext )
+    : FormulaCompiler(rArr),
     pDoc(rCxt.getDoc()),
     aPos(rPos),
-    mpFormatter(pDoc->GetFormatTable()),
+    mpFormatter(pContext? pContext->GetFormatTable() : pDoc->GetFormatTable()),
     mnCurrentSheetTab(-1),
     mnCurrentSheetEndPos(0),
     pCharClass(ScGlobal::pCharClass),
@@ -1751,11 +1752,11 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, 
 }
 
 ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos, ScTokenArray& rArr,
-            formula::FormulaGrammar::Grammar eGrammar )
+            formula::FormulaGrammar::Grammar eGrammar, const ScInterpreterContext* pContext )
         : FormulaCompiler(rArr),
         pDoc( pDocument ),
         aPos( rPos ),
-        mpFormatter(pDoc->GetFormatTable()),
+        mpFormatter(pContext ? pContext->GetFormatTable() : pDoc->GetFormatTable()),
         mnCurrentSheetTab(-1),
         mnCurrentSheetEndPos(0),
         nSrcPos(0),
@@ -1772,10 +1773,10 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos, ScTokenArr
                 eGrammar );
 }
 
-ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos ) :
-    pDoc(rCxt.getDoc()),
+ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, const ScInterpreterContext* pContext )
+    : pDoc(rCxt.getDoc()),
     aPos(rPos),
-    mpFormatter(pDoc ? pDoc->GetFormatTable() : nullptr),
+    mpFormatter(pContext ? pContext->GetFormatTable() : pDoc ? pDoc->GetFormatTable() : nullptr),
     mnCurrentSheetTab(-1),
     mnCurrentSheetEndPos(0),
     pCharClass(ScGlobal::pCharClass),
@@ -1791,11 +1792,11 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos )
 }
 
 ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
-            formula::FormulaGrammar::Grammar eGrammar )
+            formula::FormulaGrammar::Grammar eGrammar, const ScInterpreterContext* pContext )
         :
         pDoc( pDocument ),
         aPos( rPos ),
-        mpFormatter(pDoc ? pDoc->GetFormatTable() : nullptr),
+        mpFormatter(pContext ? pContext->GetFormatTable() : pDoc ? pDoc->GetFormatTable() : nullptr),
         mnCurrentSheetTab(-1),
         mnCurrentSheetEndPos(0),
         nSrcPos(0),
