@@ -5201,12 +5201,8 @@ find_winsdk_version()
                 winsdklibsubdir="10.0.16299.0"
             elif test "$regvalue" = "10.0.15063"; then
                 winsdklibsubdir="10.0.15063.0"
-                dnl Hack needed at least by tml:
-                if test ! -f "${winsdktest}/Include/10.0.15063.0/um/sqlext.h" \
-                    -a -f "${winsdktest}/Include/10.0.14393.0/um/sqlext.h"
-                then
-                    winsdklibsubdir="10.0.14393.0"
-                fi
+            elif test "$regvalue" = "10.0.17134"; then
+                winsdklibsubdir="$regvalue.0"
             fi
             return
         fi
