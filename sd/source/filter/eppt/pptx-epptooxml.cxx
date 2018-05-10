@@ -2206,12 +2206,6 @@ sal_Int32 PowerPointExport::GetLayoutFileId(sal_Int32 nOffset, sal_uInt32 nMaste
     return mLayoutInfo[ nOffset ].mnFileIdArray[ nMasterNum ];
 }
 
-void PowerPointExport::ImplWriteLayout(sal_Int32 /*nOffset*/, sal_uInt32 /*nMasterNum*/)
-{
-    // we write all the layouts together with master(s)
-    // ImplWritePPTXLayout( GetPPTXLayoutId( nOffset ), nMasterNum );
-}
-
 void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMasterNum)
 {
     SAL_INFO("sd.eppt", "write layout: " << nOffset);

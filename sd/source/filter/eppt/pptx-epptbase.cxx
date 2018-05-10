@@ -211,14 +211,6 @@ void PPTWriterBase::exportPPT( const std::vector< css::beans::PropertyValue >& r
 
     sal_uInt32 i;
 
-    for ( i = 0; i < mnPages; i++ )
-    {
-    if ( GetPageByIndex( i, NORMAL ) ) {
-        sal_uInt32 nMasterNum = GetMasterIndex( NORMAL );
-        ImplWriteLayout( GetLayoutOffset( mXPagePropSet ), nMasterNum );
-    }
-    }
-
     for ( i = 0; i < mnMasterPages; i++ )
     {
         if ( !CreateSlideMaster( i ) )

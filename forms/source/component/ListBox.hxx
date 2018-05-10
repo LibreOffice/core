@@ -196,8 +196,6 @@ private:
 
     // OEntryListHelper overridables
     virtual void    stringItemListChanged( ControlModelLock& _rInstanceLock ) override;
-    virtual void    connectedExternalListSource( ) override;
-    virtual void    disconnectedExternalListSource( ) override;
     virtual void    refreshInternalEntryList() override;
 
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;

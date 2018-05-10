@@ -240,20 +240,6 @@ namespace frm
             m_xListSource->removeListEntryListener( this );
 
         m_xListSource.clear();
-
-        disconnectedExternalListSource();
-    }
-
-
-    void OEntryListHelper::connectedExternalListSource( )
-    {
-        // nothing to do here
-    }
-
-
-    void OEntryListHelper::disconnectedExternalListSource( )
-    {
-        // nothing to do here
     }
 
 
@@ -272,9 +258,6 @@ namespace frm
             m_xListSource->addListEntryListener( this );
 
             obtainListSourceEntries( _rInstanceLock );
-
-            // let derivees react on the new list source
-            connectedExternalListSource();
         }
     }
 
