@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_be0536c3",
+        "filename": "vcl/source/gdi/CommonSalLayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2018-05-10T21:45:01Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be (nGlyphCapacity + 1), like in the old Reserver() function in https://gerrit.libreoffice.org/#/c/54097/1/vcl/inc/sallayout.hxx?",
+      "range": {
+        "startLine": 277,
+        "startChar": 25,
+        "endLine": 277,
+        "endChar": 39
+      },
+      "revId": "9747e6781fa0ae0dd26fa111f21ae5e7a182d7c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
