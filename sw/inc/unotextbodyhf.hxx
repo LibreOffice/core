@@ -116,7 +116,6 @@ public:
 
     static css::uno::Reference< css::text::XText >
         CreateXHeadFootText(SwFrameFormat & rHeadFootFormat, const bool bIsHeader);
-    static bool IsXHeadFootText(SwClient const *const pClient);
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface(
