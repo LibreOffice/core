@@ -114,6 +114,7 @@ enum class SfxHintId {
 // SW
     SwDrawViewsCreated,
     SwSplitNodeOperation,
+    RemoveUnoObject
 };
 
 template< typename charT, typename traits >
@@ -194,6 +195,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     case SfxHintId::MathFormatChanged: return stream << "MathFormatChanged";
     case SfxHintId::SwDrawViewsCreated: return stream << "SwDrawViewsCreated";
     case SfxHintId::SwSplitNodeOperation: return stream << "SwSplitNodeOperation";
+    case SfxHintId::RemoveUnoObject: return stream << "RemoveUnoObject";
     default: return stream << "unk(" << std::to_string(int(id)) << ")";
     }
 }

@@ -664,9 +664,7 @@ void Meta::NotifyChangeTextNode(SwTextNode *const pTextNode)
     }
     if (!pTextNode) // text node gone? invalidate UNO object!
     {
-        SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
-            &static_cast<SwModify&>(*this) ); // cast to base class!
-        Modify(&aMsgHint, &aMsgHint);
+        GetNotifier().Broadcast(SfxHint(SfxHintId::RemoveUnoObject));
     }
 }
 
