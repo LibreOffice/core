@@ -182,7 +182,7 @@ private:
     sal_uInt16          mnSelectedPage;
     PageKind            mePageKindOnLoad;
     sal_uInt16          mnSelectedPageOnLoad;
-    EditMode            meEditMode; ///< edit mode in drawing mode (Page/MasterPage)
+    EditMode            mePageEditMode; ///< edit mode in drawing mode (Page/MasterPage)
     // EditMode            meStandardEditMode; ///< edit mode in drawing mode (Page/MasterPage)
     // EditMode            meNotesEditMode;    ///< edit mode in notes mode (Page/MasterPage)
     // EditMode            meHandoutEditMode;  ///< edit mode in handout mode (Page/MasterPage)

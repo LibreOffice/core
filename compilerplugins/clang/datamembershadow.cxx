@@ -51,8 +51,6 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
 
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/chart2/source/"))
         return true;
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/cppcanvas/source/mtfrenderer/emfplus.cxx"))
-        return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/sfx2/recentdocsview.hxx"))
         return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/sfx2/templatelocalview.hxx"))
@@ -60,13 +58,6 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
     if (loplugin::isSamePathname(aFileName, SRCDIR "/sc/source/ui/vba/vbastyles.hxx"))
         return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/sd/inc/Outliner.hxx"))
-        return true;
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/sd/source/ui/annotations/annotationtag.cxx"))
-        return true;
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/sd/source/ui/inc/FrameView.hxx")
-        || loplugin::isSamePathname(aFileName, SRCDIR "/sd/source/filter/ppt/../../ui/inc/FrameView.hxx"))
-        return true;
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/sd/source/ui/inc/unopage.hxx"))
         return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/store/source/stortree.hxx")
         || loplugin::isSamePathname(aFileName, SRCDIR "/store/source/stordata.hxx"))
