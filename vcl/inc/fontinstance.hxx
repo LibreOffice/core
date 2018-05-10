@@ -67,6 +67,8 @@ public: // TODO: make data members private
     const PhysicalFontFace* GetFontFace() const { return m_pFontFace; }
     const ImplFontCache* GetFontCache() const { return mpFontCache; }
 
+    int GetKashidaWidth();
+
     void GetScale(double* nXScale, double* nYScale);
     static inline void DecodeOpenTypeTag(const uint32_t nTableTag, char* pTagName);
 
