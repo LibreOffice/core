@@ -20,12 +20,14 @@ public:
     void testTdf116925();
     void testTdf117028();
     void testTdf116848();
+    void testTdf117245();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
     CPPUNIT_TEST(testTdf116925);
     CPPUNIT_TEST(testTdf117028);
     CPPUNIT_TEST(testTdf116848);
+    CPPUNIT_TEST(testTdf117245);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -115,6 +117,18 @@ void SwLayoutWriter::testTdf116848()
     SwDoc* pDoc = createDoc("tdf116848.odt");
     // This resulted in a layout loop.
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+}
+
+void SwLayoutWriter::testTdf117245()
+{
+    createDoc("tdf117245.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // This was 2, TabOverMargin did not use a single line when there was
+    // enough space for the text.
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/LineBreak", 1);
+
+    // This was 2, same problem elsewhere due to code duplication.
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/LineBreak", 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
