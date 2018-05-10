@@ -64,7 +64,6 @@ public:
     // commented with group codes:
     OString m_sLayer;                     //  8
     OString m_sLineType;                  //  6
-    double fElevation;                    // 38
     double fThickness;                    // 39
     long nColor;                          // 62
     long nSpace;                          // 67
@@ -304,7 +303,6 @@ class DXFPolyLineEntity : public DXFBasicEntity {
 
 public:
 
-    double fElevation; // 30
     long nFlags;       // 70
     double fSWidth;    // 40
     double fEWidth;    // 41

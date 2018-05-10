@@ -29,7 +29,6 @@ DXFBasicEntity::DXFBasicEntity(DXFEntityType eThisType)
 {
     eType=eThisType;
     pSucc=nullptr;
-    fElevation=0;
     fThickness=0;
     nColor=256;
     nSpace=0;
@@ -49,7 +48,6 @@ void DXFBasicEntity::EvaluateGroup(DXFGroupReader & rDGR)
     {
         case   8: m_sLayer = rDGR.GetS(); break;
         case   6: m_sLineType = rDGR.GetS(); break;
-        case  38: fElevation=rDGR.GetF(); break;
         case  39: fThickness=rDGR.GetF(); break;
         case  62: nColor=rDGR.GetI(); break;
         case  67: nSpace=rDGR.GetI(); break;
@@ -374,7 +372,6 @@ void DXFAttribEntity::EvaluateGroup(DXFGroupReader & rDGR)
 
 DXFPolyLineEntity::DXFPolyLineEntity() : DXFBasicEntity(DXF_POLYLINE)
 {
-    fElevation=0.0;
     nFlags=0;
     fSWidth=0.0;
     fEWidth=0.0;
@@ -388,7 +385,6 @@ DXFPolyLineEntity::DXFPolyLineEntity() : DXFBasicEntity(DXF_POLYLINE)
 void DXFPolyLineEntity::EvaluateGroup(DXFGroupReader & rDGR)
 {
     switch (rDGR.GetG()) {
-        case 30: fElevation=rDGR.GetF(); break;
         case 70: nFlags=rDGR.GetI(); break;
         case 40: fSWidth=rDGR.GetF(); break;
         case 41: fEWidth=rDGR.GetF(); break;
