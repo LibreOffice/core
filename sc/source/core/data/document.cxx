@@ -59,6 +59,7 @@
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <rechead.hxx>
 #include <dbdata.hxx>
 #include <pivot.hxx>
@@ -3966,7 +3967,7 @@ void ScDocument::CompileXML()
 {
     bool bOldAutoCalc = GetAutoCalc();
     SetAutoCalc( false );
-    ScProgress aProgress( GetDocumentShell(), ScGlobal::GetRscString(
+    ScProgress aProgress( GetDocumentShell(), ScResId(
                 STR_PROGRESS_CALCULATING ), GetXMLImportedFormulaCount(), true );
 
     sc::CompileFormulaContext aCxt(this);
@@ -4275,7 +4276,7 @@ void ScDocument::UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkDa
         if ( maTabs[nTab] && ( !pTabMark || pTabMark->GetTableSelect(nTab) ) )
             nCellCount += maTabs[nTab]->GetWeightedCount();
 
-    ScProgress aProgress( GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nCellCount, true );
+    ScProgress aProgress( GetDocumentShell(), ScResId(STR_PROGRESS_HEIGHTING), nCellCount, true );
 
     sal_uLong nProgressStart = 0;
     for ( SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()); nTab++ )
@@ -4939,7 +4940,7 @@ void ScDocument::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool b
             (*it)->StyleSheetChanged
                 ( pStyleSheet, bRemoved, pDev, nPPTX, nPPTY, rZoomX, rZoomY );
 
-    if ( pStyleSheet && pStyleSheet->GetName() == ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
+    if ( pStyleSheet && pStyleSheet->GetName() == ScResId(STR_STYLENAME_STANDARD) )
     {
         //  update attributes for all note objects
         ScDetectiveFunc::UpdateAllComments( *this );

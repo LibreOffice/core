@@ -49,6 +49,7 @@
 #include <attrib.hxx>
 #include <global.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <document.hxx>
 #include <docpool.hxx>
 #include <stlpool.hxx>
@@ -90,7 +91,7 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
         sal_uInt32 nCount = GetIndexedStyleSheets().GetNumberOfStyleSheets();
         for ( sal_uInt32 nAdd = 1; nAdd <= nCount; nAdd++ )
         {
-            OUString aNewName = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
+            OUString aNewName = ScResId(STR_STYLENAME_STANDARD);
             aNewName += OUString::number( nAdd );
             if ( Find( aNewName, eFam ) == nullptr )
                 return SfxStyleSheetPool::Make(aNewName, eFam, mask);
@@ -104,8 +105,8 @@ SfxStyleSheetBase* ScStyleSheetPool::Create( const OUString&   rName,
                                              SfxStyleSearchBits nMaskP )
 {
     ScStyleSheet* pSheet = new ScStyleSheet( rName, *this, eFamily, nMaskP );
-    if ( eFamily == SfxStyleFamily::Para && ScGlobal::GetRscString(STR_STYLENAME_STANDARD) != rName )
-        pSheet->SetParent( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
+    if ( eFamily == SfxStyleFamily::Para && ScResId(STR_STYLENAME_STANDARD) != rName )
+        pSheet->SetParent( ScResId(STR_STYLENAME_STANDARD) );
 
     return pSheet;
 }
@@ -184,7 +185,7 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
 
 //                      Standard templates
 
-#define SCSTR(id)   ScGlobal::GetRscString(id)
+#define SCSTR(id)   ScResId(id)
 
 void ScStyleSheetPool::CopyStdStylesFrom( ScStyleSheetPool* pSrcPool )
 {
@@ -232,7 +233,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     SvxBoxItem      aBoxItem        ( ATTR_BORDER );
     SvxBoxInfoItem  aBoxInfoItem    ( ATTR_BORDER_INNER );
 
-    OUString  aStrStandard = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
+    OUString  aStrStandard = ScResId(STR_STYLENAME_STANDARD);
 
     // Cell format templates:
 

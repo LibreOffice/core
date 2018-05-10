@@ -35,6 +35,7 @@
 #include <formulacell.hxx>
 #include <document.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <global.hxx>
 #include <stlpool.hxx>
 #include <compiler.hxx>
@@ -2019,7 +2020,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                                 //TODO: sort?
 
     ScStyleSheet* pStyle = static_cast<ScStyleSheet*>(pDocument->GetStyleSheetPool()->Find(
-                                ScGlobal::GetRscString(STR_STYLENAME_RESULT), SfxStyleFamily::Para ));
+                                ScResId(STR_STYLENAME_RESULT), SfxStyleFamily::Para ));
 
     bool bSpaceLeft = true;                                         // Success when inserting?
 
@@ -2118,12 +2119,12 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
                         aOutString = aSubString;
                         if (aOutString.isEmpty())
-                            aOutString = ScGlobal::GetRscString( STR_EMPTYDATA );
+                            aOutString = ScResId( STR_EMPTYDATA );
                         aOutString += " ";
                         const char* pStrId = STR_TABLE_ERGEBNIS;
                         if ( nResCount == 1 )
                             pStrId = lcl_GetSubTotalStrId(pResFunc[0]);
-                        aOutString += ScGlobal::GetRscString(pStrId);
+                        aOutString += ScResId(pStrId);
                         SetString( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, nTab, aOutString );
                         ApplyStyle( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, pStyle );
 
@@ -2192,9 +2193,9 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                 DBShowRow(aRowEntry.nDestRow, true);
 
                 // insert label
-                OUString label = ScGlobal::GetRscString(STR_TABLE_GRAND);
+                OUString label = ScResId(STR_TABLE_GRAND);
                 label += " ";
-                label += ScGlobal::GetRscString(lcl_GetSubTotalStrId(pResFunc[0]));
+                label += ScResId(lcl_GetSubTotalStrId(pResFunc[0]));
                 SetString(nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, nTab, label);
                 ApplyStyle(nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, pStyle);
             }
@@ -3274,12 +3275,12 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         if (nIndex > 0)
         {
             GetUpperCellString(nCol1, nRow, aCellStr);
-            if ( aCellStr == ScGlobal::GetRscString(STR_TABLE_UND) )
+            if ( aCellStr == ScResId(STR_TABLE_UND) )
             {
                 rEntry.eConnect = SC_AND;
                 bValid = true;
             }
-            else if ( aCellStr == ScGlobal::GetRscString(STR_TABLE_ODER) )
+            else if ( aCellStr == ScResId(STR_TABLE_ODER) )
             {
                 rEntry.eConnect = SC_OR;
                 bValid = true;

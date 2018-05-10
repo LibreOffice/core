@@ -25,6 +25,7 @@
 #include <dpglobal.hxx>
 #include <dpobject.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <docoptio.hxx>
 #include <dpitemdata.hxx>
 #include <dputil.hxx>
@@ -136,7 +137,7 @@ OUString createLabelString( const ScDocument* pDoc, SCCOL nCol, const ScRefCellV
     {
         // Replace an empty label string with column name.
         OUStringBuffer aBuf;
-        aBuf.append(ScGlobal::GetRscString(STR_COLUMN));
+        aBuf.append(ScResId(STR_COLUMN));
         aBuf.append(' ');
 
         ScAddress aColAddr(nCol, 0, 0);
@@ -349,7 +350,7 @@ public:
 
 std::vector<OUString> normalizeLabels( const std::vector<InitColumnData>& rColData )
 {
-    std::vector<OUString> aLabels(1u, ScGlobal::GetRscString(STR_PIVOT_DATA));
+    std::vector<OUString> aLabels(1u, ScResId(STR_PIVOT_DATA));
 
     LabelSet aExistingNames;
 
@@ -962,7 +963,7 @@ void ScDPCache::AddLabel(const OUString& rLabel)
 {
 
     if ( maLabelNames.empty() )
-        maLabelNames.push_back(ScGlobal::GetRscString(STR_PIVOT_DATA));
+        maLabelNames.push_back(ScResId(STR_PIVOT_DATA));
 
     //reset name if needed
     LabelSet aExistingNames;

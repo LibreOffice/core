@@ -26,6 +26,7 @@
 #include <dpfilteredcache.hxx>
 #include <dpobject.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <rangenam.hxx>
 #include <queryentry.hxx>
 
@@ -86,7 +87,7 @@ OUString ScSheetDPData::getDimensionName(long nColumn)
     {
         //TODO: different internal and display names?
         //return "Data";
-        return ScGlobal::GetRscString(STR_PIVOT_DATA);
+        return ScResId(STR_PIVOT_DATA);
     }
     else if (nColumn >= aCacheTable.getColSize())
     {

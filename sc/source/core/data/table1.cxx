@@ -33,6 +33,7 @@
 #include <stlsheet.hxx>
 #include <global.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <refupdat.hxx>
 #include <markdata.hxx>
 #include <progress.hxx>
@@ -75,7 +76,7 @@ ScProgress* GetProgressBar(
 
     if (nCount > 1)
         return new ScProgress(
-            pDoc->GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nTotalCount, true);
+            pDoc->GetDocumentShell(), ScResId(STR_PROGRESS_HEIGHTING), nTotalCount, true);
 
     return nullptr;
 }
@@ -240,7 +241,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     aCodeName( rNewName ),
     nLinkRefreshDelay( 0 ),
     nLinkMode( ScLinkMode::NONE ),
-    aPageStyle( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) ),
+    aPageStyle( ScResId(STR_STYLENAME_STANDARD) ),
     nRepeatStartX( SCCOL_REPEAT_NONE ),
     nRepeatEndX( SCCOL_REPEAT_NONE ),
     nRepeatStartY( SCROW_REPEAT_NONE ),

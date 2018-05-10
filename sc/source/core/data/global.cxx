@@ -344,9 +344,9 @@ OUString ScGlobal::GetErrorString(FormulaError nErr)
         case FormulaError::IllegalFPOperation:
             return ScCompiler::GetNativeSymbol(ocErrNum);
         default:
-            return GetRscString(STR_ERROR_STR) + OUString::number( static_cast<int>(nErr) );
+            return ScResId(STR_ERROR_STR) + OUString::number( static_cast<int>(nErr) );
     }
-    return GetRscString(pErrNumber);
+    return ScResId(pErrNumber);
 }
 
 OUString ScGlobal::GetLongErrorString(FormulaError nErr)
@@ -433,7 +433,7 @@ OUString ScGlobal::GetLongErrorString(FormulaError nErr)
             pErrNumber = STR_ERROR_STR;
         break;
     }
-    return GetRscString(pErrNumber);
+    return ScResId(pErrNumber);
 }
 
 SvxBrushItem* ScGlobal::GetButtonBrushItem()

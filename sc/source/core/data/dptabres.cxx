@@ -24,6 +24,7 @@
 #include <global.hxx>
 #include <subtotal.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <dpitemdata.hxx>
 #include <generalfunction.hxx>
 
@@ -780,7 +781,7 @@ void ScDPResultData::SetMeasureData(
 
     maMeasureNames.swap(rNames);
     if (maMeasureNames.empty())
-        maMeasureNames.push_back(ScGlobal::GetRscString(STR_EMPTYDATA));
+        maMeasureNames.push_back(ScResId(STR_EMPTYDATA));
 }
 
 void ScDPResultData::SetDataLayoutOrientation( sheet::DataPilotFieldOrientation nOrient )
@@ -839,10 +840,10 @@ OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotal
         //  display only function name
         assert(unsigned(eForceFunc) < SAL_N_ELEMENTS(aFuncStrIds));
         if ( eForceFunc != SUBTOTAL_FUNC_NONE )
-            return ScGlobal::GetRscString(aFuncStrIds[eForceFunc]);
+            return ScResId(aFuncStrIds[eForceFunc]);
 
         rbTotalResult = true;
-        return ScGlobal::GetRscString(STR_TABLE_ERGEBNIS);
+        return ScResId(STR_TABLE_ERGEBNIS);
     }
     else
     {
@@ -976,7 +977,7 @@ OUString ScDPResultMember::GetName() const
     if (pMemberDesc)
         return pMemberDesc->GetNameStr( false );
     else
-        return ScGlobal::GetRscString(STR_PIVOT_TOTAL);         // root member
+        return ScResId(STR_PIVOT_TOTAL);         // root member
 }
 
 OUString ScDPResultMember::GetDisplayName( bool bLocaleIndependent ) const
@@ -1000,7 +1001,7 @@ ScDPItemData ScDPResultMember::FillItemData() const
     const ScDPMember* pMemberDesc = GetDPMember();
     if (pMemberDesc)
         return pMemberDesc->FillItemData();
-    return ScDPItemData(ScGlobal::GetRscString(STR_PIVOT_TOTAL));     // root member
+    return ScDPItemData(ScResId(STR_PIVOT_TOTAL));     // root member
 }
 
 bool ScDPResultMember::IsNamedItem( SCROW nIndex ) const
@@ -1387,7 +1388,7 @@ void ScDPResultMember::FillMemberResults(
     if ( pMemberCaption )                   // use pMemberCaption if != NULL
         aCaption = *pMemberCaption;
     if (aCaption.isEmpty())
-        aCaption = ScGlobal::GetRscString(STR_EMPTYDATA);
+        aCaption = ScResId(STR_EMPTYDATA);
 
     if (bIsNumeric)
         pArray[rPos].Flags |= sheet::MemberResultFlags::NUMERIC;

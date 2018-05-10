@@ -12,6 +12,7 @@
 #include <dpnumgroupinfo.hxx>
 #include <globalnames.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <generalfunction.hxx>
 
 #include <comphelper/string.hxx>
@@ -394,7 +395,7 @@ OUString ScDPUtil::getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc
     const char* pId = aFuncStrIds[eFunc];
     if (pId)
     {
-        aRet.append(ScGlobal::GetRscString(pId));        // function name
+        aRet.append(ScResId(pId));        // function name
         aRet.append(" - ");
     }
     aRet.append(rName);                   // field name

@@ -35,6 +35,7 @@
 #include <brdcst.hxx>
 #include <tabprotection.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <segmenttree.hxx>
 #include <columniterator.hxx>
 #include <globalnames.hxx>
@@ -1133,7 +1134,7 @@ void ScTable::SetPageStyle( const OUString& rName )
 
         if ( !pNewStyle )
         {
-            aStrNew = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
+            aStrNew = ScResId(STR_STYLENAME_STANDARD);
             pNewStyle = pStylePool->Find( aStrNew, SfxStyleFamily::Page );
         }
 
