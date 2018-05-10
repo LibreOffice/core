@@ -274,7 +274,7 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs)
     hb_face_t* pHbFace = hb_font_get_face(pHbFont);
 
     int nGlyphCapacity = 2 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos);
-    Reserve(nGlyphCapacity);
+    m_GlyphItems.reserve(nGlyphCapacity);
 
     const int nLength = rArgs.mrStr.getLength();
     const sal_Unicode *pStr = rArgs.mrStr.getStr();
@@ -571,7 +571,7 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 Point aNewPos(aCurrPos.X() + nXOffset, aCurrPos.Y() + nYOffset);
                 const GlyphItem aGI(nCharPos, nCharCount, nGlyphIndex, aNewPos, nGlyphFlags,
                                     nAdvance, nXOffset);
-                AppendGlyph(aGI);
+                m_GlyphItems.push_back(aGI);
 
                 aCurrPos.AdjustX(nAdvance );
             }

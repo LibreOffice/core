@@ -342,8 +342,6 @@ private:
                     GenericSalLayout( const GenericSalLayout& ) = delete;
                     GenericSalLayout& operator=( const GenericSalLayout& ) = delete;
 
-    void            AppendGlyph( const GlyphItem& );
-    void            Reserve(int size) { m_GlyphItems.reserve(size + 1); }
     void            ApplyDXArray(ImplLayoutArgs&);
     void            Justify(DeviceCoordinate nNewWidth);
     void            ApplyAsianKerning(const OUString& rStr);
