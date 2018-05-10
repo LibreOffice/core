@@ -18,13 +18,16 @@
  */
 
 #include <memory>
-#include <sal/config.h>
-
 #include <utility>
 
-#include <osl/mutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
+#include <osl/mutex.hxx>
+#include <sal/config.h>
+#include <svl/listener.hxx>
 #include <vcl/svapp.hxx>
 
 #include <unomid.h>
@@ -39,7 +42,13 @@
 #include <fmtrfmrk.hxx>
 #include <txtrfmrk.hxx>
 #include <hints.hxx>
-#include <comphelper/servicehelper.hxx>
+#include <unometa.hxx>
+#include <unotext.hxx>
+#include <unoport.hxx>
+#include <txtatr.hxx>
+#include <fmtmeta.hxx>
+#include <docsh.hxx>
+
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/rdf/Statement.hpp>
@@ -47,21 +56,12 @@
 #include <com/sun/star/rdf/URIs.hpp>
 #include <com/sun/star/rdf/XLiteral.hpp>
 #include <com/sun/star/rdf/XRepositorySupplier.hpp>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <unometa.hxx>
-#include <unotext.hxx>
-#include <unoport.hxx>
-#include <txtatr.hxx>
-#include <fmtmeta.hxx>
-#include <docsh.hxx>
-#include <cppuhelper/weak.hxx>
-
 
 using namespace ::com::sun::star;
 
 class SwXReferenceMark::Impl
-    : public SwClient
+    : public SvtListener
 {
 private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
@@ -69,30 +69,29 @@ private:
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
     ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
-    bool                        m_bIsDescriptor;
-    SwDoc *                     m_pDoc;
-    const SwFormatRefMark *        m_pMarkFormat;
-    OUString             m_sMarkName;
+    bool m_bIsDescriptor;
+    SwDoc* m_pDoc;
+    const SwFormatRefMark* m_pMarkFormat;
+    OUString m_sMarkName;
 
-    Impl(   SwDoc *const pDoc, SwFormatRefMark *const pRefMark)
-        : SwClient(pRefMark)
-        , m_EventListeners(m_Mutex)
+    Impl(SwDoc* const pDoc, SwFormatRefMark* const pRefMark)
+        : m_EventListeners(m_Mutex)
         , m_bIsDescriptor(nullptr == pRefMark)
         , m_pDoc(pDoc)
         , m_pMarkFormat(pRefMark)
     {
         if (pRefMark)
         {
+            StartListening(pRefMark->GetNotifier());
             m_sMarkName = pRefMark->GetRefName();
         }
     }
 
-    bool    IsValid() const { return nullptr != GetRegisteredIn(); }
-    void    InsertRefMark( SwPaM & rPam, SwXTextCursor const*const pCursor );
-    void    Invalidate();
+    bool IsValid() const { return m_pMarkFormat; }
+    void InsertRefMark( SwPaM & rPam, SwXTextCursor const*const pCursor );
+    void Invalidate();
 protected:
-    // SwClient
-    virtual void    Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void Notify(const SfxHint&) override;
 
 };
 
@@ -110,14 +109,10 @@ void SwXReferenceMark::Impl::Invalidate()
     m_EventListeners.disposeAndClear(ev);
 }
 
-void SwXReferenceMark::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXReferenceMark::Impl::Notify(const SfxHint& rHint)
 {
-    ClientModify(this, pOld, pNew);
-
-    if (!IsValid()) // removed => dispose
-    {
+    if(rHint.GetId() == SfxHintId::Dying)
         Invalidate();
-    }
 }
 
 SwXReferenceMark::SwXReferenceMark(
@@ -272,8 +267,8 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     }
 
     m_pMarkFormat = &pTextAttr->GetRefMark();
-
-    const_cast<SwFormatRefMark*>(m_pMarkFormat)->Add(this);
+    EndListeningAll();
+    StartListening(const_cast<SwFormatRefMark*>(m_pMarkFormat)->GetNotifier());
 }
 
 void SAL_CALL
