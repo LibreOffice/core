@@ -36,6 +36,7 @@ class SwTextRefMark;
 class SwFormatRefMark
     : public SfxPoolItem
     , public SwModify
+    , public sw::BroadcasterMixin
 {
     friend class SwTextRefMark;
     SwTextRefMark* m_pTextAttr;
