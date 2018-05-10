@@ -59,7 +59,7 @@ class SdGenericDrawPage : public SvxFmDrawPage,
                           public css::document::XLinkTargetSupplier
 {
 private:
-    SdXImpressDocument* mpModel;
+    SdXImpressDocument* mpDocModel;
     SdrModel* mpSdrModel;
     bool      mbIsImpressDocument;
     sal_Int16 mnTempPageNumber; // for printing handouts
