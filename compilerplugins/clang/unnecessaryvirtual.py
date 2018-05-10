@@ -7,6 +7,7 @@ import sys
 definitionSet = set()
 definitionToSourceLocationMap = dict()
 overridingSet = set()
+nonEmptySet = set()
 
 
 with io.open("workdir/loplugin.unnecessaryvirtual.log", "rb", buffering=1024*1024) as txt:
@@ -20,7 +21,12 @@ with io.open("workdir/loplugin.unnecessaryvirtual.log", "rb", buffering=1024*102
         elif tokens[0] == "overriding:":
             fullMethodName = tokens[1]
             overridingSet.add(fullMethodName)
-            
+        elif tokens[0] == "nonempty:":
+            fullMethodName = tokens[1]
+            nonEmptySet.add(fullMethodName)
+        else:
+            print( "unknown line: " + line)
+
 unnecessaryVirtualSet = set()
 
 for clazz in (definitionSet - overridingSet):
@@ -56,6 +62,21 @@ for clazz in (definitionSet - overridingSet):
     unnecessaryVirtualSet.add( (clazz,loc) )
 
 
+deadSet = set()
+
+for clazz in (definitionSet - nonEmptySet):
+
+    # ignore destructors
+    if "::~" in clazz: continue
+
+    loc = definitionToSourceLocationMap[clazz]
+
+    # ignore external code
+    if loc.startswith("external/"): continue
+
+    deadSet.add( (clazz,loc) )
+
+
 # sort the results using a "natural order" so sequences like [item1,item2,item10] sort nicely
 def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
     return [int(text) if text.isdigit() else text.lower()
@@ -63,6 +84,7 @@ def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
 
 # sort results by name and line number
 tmp1list = sorted(unnecessaryVirtualSet, key=lambda v: natural_sort_key(v[1]))
+tmp2list = sorted(deadSet, key=lambda v: natural_sort_key(v[1]))
 
 with open("compilerplugins/clang/unnecessaryvirtual.results", "wt") as f:
     for t in tmp1list:
@@ -70,4 +92,9 @@ with open("compilerplugins/clang/unnecessaryvirtual.results", "wt") as f:
         f.write( "    " + t[0] + "\n" )
     # add an empty line at the end to make it easier for the removevirtuals plugin to mmap() the output file
     f.write("\n")
+
+with open("compilerplugins/clang/unnecessaryvirtual-dead.results", "wt") as f:
+    for t in tmp2list:
+        f.write( t[1] + "\n" )
+        f.write( "    " + t[0] + "\n" )
 

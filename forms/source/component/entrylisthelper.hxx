@@ -133,14 +133,6 @@ namespace frm
         */
         virtual void    stringItemListChanged( ControlModelLock& _rInstanceLock ) = 0;
 
-        /** called whenever a connection to a new external list source has been established
-        */
-        virtual void    connectedExternalListSource( );
-
-        /** called whenever a connection to a new external list source has been revoked
-        */
-        virtual void    disconnectedExternalListSource( );
-
         /** called when XRefreshable::refresh has been called, and we do *not* have an external
             list source
         */

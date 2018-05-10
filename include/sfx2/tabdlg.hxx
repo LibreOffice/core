@@ -251,7 +251,7 @@ private:
 
 protected:
     virtual short               Ok();
-    virtual void                RefreshInputSet();
+    void                        RefreshInputSet();
     virtual void                PageCreated(const OString &rName, SfxTabPage &rPage);
 
     std::unique_ptr<SfxItemSet> m_xExampleSet;

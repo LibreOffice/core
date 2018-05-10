@@ -124,8 +124,6 @@ private:
 
     // OEntryListHelper overridables
     virtual void    stringItemListChanged( ControlModelLock& _rInstanceLock ) override;
-    virtual void    connectedExternalListSource( ) override;
-    virtual void    disconnectedExternalListSource( ) override;
     virtual void    refreshInternalEntryList() override;
 
     void loadData( bool _bForce );

@@ -11,6 +11,7 @@
 #include <string>
 #include <iostream>
 #include <set>
+#include <unordered_set>
 #include "plugin.hxx"
 #include "compat.hxx"
 #include <fstream>
@@ -18,6 +19,9 @@
 /**
 Dump a list of virtual methods and a list of methods overriding virtual methods.
 Then we will post-process the 2 lists and find the set of virtual methods which don't need to be virtual.
+
+Also, we look for virtual methods where the bodies of all the overrides are empty i.e. this is leftover code
+that no longer has a purpose.
 
 The process goes something like this:
   $ make check
@@ -46,7 +50,8 @@ bool operator < (const MyFuncInfo &lhs, const MyFuncInfo &rhs)
 
 // try to limit the voluminous output a little
 static std::set<MyFuncInfo> definitionSet;
-static std::set<std::string> overridingSet;
+static std::unordered_set<std::string> overridingSet;
+static std::unordered_set<std::string> nonEmptySet;
 
 class UnnecessaryVirtual:
     public RecursiveASTVisitor<UnnecessaryVirtual>, public loplugin::Plugin
@@ -66,6 +71,8 @@ public:
             output += "definition:\t" + s.name + "\t" + s.sourceLocation + "\n";
         for (const std::string & s : overridingSet)
             output += "overriding:\t" + s + "\n";
+        for (const std::string & s : nonEmptySet)
+            output += "nonempty:\t" + s + "\n";
         std::ofstream myfile;
         myfile.open( WORKDIR "/loplugin.unnecessaryvirtual.log", std::ios::app | std::ios::out);
         myfile << output;
@@ -76,6 +83,7 @@ public:
 
     bool VisitCXXMethodDecl( const CXXMethodDecl* decl );
 private:
+    void MarkRootOverridesNonEmpty( const CXXMethodDecl* methodDecl );
     std::string toString(SourceLocation loc);
 };
 
@@ -103,18 +111,27 @@ bool UnnecessaryVirtual::VisitCXXMethodDecl( const CXXMethodDecl* methodDecl )
     if (ignoreLocation(methodDecl)) {
         return true;
     }
-    if (!methodDecl->isThisDeclarationADefinition() ||
-        !methodDecl->isVirtual() ||
-        methodDecl->isDeleted())
-    {
+    if (!methodDecl->isVirtual() || methodDecl->isDeleted()) {
         return true;
     }
-    methodDecl = methodDecl->getCanonicalDecl();
     // ignore stuff that forms part of the stable URE interface
-    if (isInUnoIncludeFile(methodDecl)) {
+    if (isInUnoIncludeFile(methodDecl->getCanonicalDecl())) {
         return true;
     }
 
+    auto body = methodDecl->getBody();
+    if (body) {
+        auto compoundStmt = dyn_cast<CompoundStmt>(body);
+        if (!compoundStmt)
+            MarkRootOverridesNonEmpty(methodDecl->getCanonicalDecl());
+        else if (compoundStmt->size() > 0)
+            MarkRootOverridesNonEmpty(methodDecl->getCanonicalDecl());
+    }
+
+    if (!methodDecl->isThisDeclarationADefinition())
+        return true;
+
+    methodDecl = methodDecl->getCanonicalDecl();
     std::string aNiceName = niceName(methodDecl);
 
     // for destructors, we need to check if any of the superclass' destructors are virtual
@@ -153,6 +170,19 @@ bool UnnecessaryVirtual::VisitCXXMethodDecl( const CXXMethodDecl* methodDecl )
         }
     }
     return true;
+}
+
+void UnnecessaryVirtual::MarkRootOverridesNonEmpty( const CXXMethodDecl* methodDecl )
+{
+    if (methodDecl->size_overridden_methods() == 0) {
+        nonEmptySet.insert(niceName(methodDecl));
+        return;
+    }
+    for (auto iter = methodDecl->begin_overridden_methods();
+          iter != methodDecl->end_overridden_methods(); ++iter)
+    {
+        MarkRootOverridesNonEmpty(*iter);
+    }
 }
 
 std::string UnnecessaryVirtual::toString(SourceLocation loc)

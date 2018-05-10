@@ -1765,20 +1765,6 @@ namespace frm
     }
 
 
-    void OListBoxModel::connectedExternalListSource( )
-    {
-        // TODO?
-    }
-
-
-    void OListBoxModel::disconnectedExternalListSource( )
-    {
-        // TODO: in case we're part of an already loaded form, we should probably simulate
-        // an onConnectedDbColumn, so our list gets filled with the data as indicated
-        // by our SQL-binding related properties
-    }
-
-
     void OListBoxModel::impl_refreshDbEntryList( bool _bForce )
     {
         DBG_ASSERT( !hasExternalListSource(), "OListBoxModel::impl_refreshDbEntryList: invalid call!" );

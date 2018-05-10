@@ -1,27 +1,23 @@
-basic/source/comp/codegen.cxx:464
+basic/source/comp/codegen.cxx:462
     void OffSetAccumulator::start(const unsigned char *,)
-basic/source/comp/codegen.cxx:465
+basic/source/comp/codegen.cxx:463
     void OffSetAccumulator::processOpCode0(enum SbiOpcode,)
-basic/source/comp/codegen.cxx:466
+basic/source/comp/codegen.cxx:464
     void OffSetAccumulator::processOpCode1(enum SbiOpcode,type-parameter-0-0,)
-basic/source/comp/codegen.cxx:467
+basic/source/comp/codegen.cxx:465
     void OffSetAccumulator::processOpCode2(enum SbiOpcode,type-parameter-0-0,type-parameter-0-0,)
-basic/source/comp/codegen.cxx:468
-    void OffSetAccumulator::end()
-basic/source/comp/codegen.cxx:477
+basic/source/comp/codegen.cxx:474
     _Bool OffSetAccumulator::processParams()
-basic/source/comp/codegen.cxx:488
+basic/source/comp/codegen.cxx:485
     void BufferTransformer::start(const unsigned char *,)
-basic/source/comp/codegen.cxx:489
+basic/source/comp/codegen.cxx:486
     void BufferTransformer::processOpCode0(enum SbiOpcode,)
-basic/source/comp/codegen.cxx:493
+basic/source/comp/codegen.cxx:490
     void BufferTransformer::processOpCode1(enum SbiOpcode,type-parameter-0-0,)
-basic/source/comp/codegen.cxx:518
+basic/source/comp/codegen.cxx:515
     void BufferTransformer::processOpCode2(enum SbiOpcode,type-parameter-0-0,type-parameter-0-0,)
-basic/source/comp/codegen.cxx:528
+basic/source/comp/codegen.cxx:525
     _Bool BufferTransformer::processParams()
-basic/source/comp/codegen.cxx:529
-    void BufferTransformer::end()
 chart2/source/inc/WeakListenerAdapter.hxx:58
     void chart::WeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
 extensions/source/dbpilots/unoautopilot.hxx:98
@@ -106,6 +102,8 @@ include/sfx2/itemwrapper.hxx:156
     const type-parameter-0-0 & sfx::IdentItemWrapper::GetItemValue(const type-parameter-0-0 &,)const
 include/sfx2/itemwrapper.hxx:158
     void sfx::IdentItemWrapper::SetItemValue(type-parameter-0-0 &,const type-parameter-0-0 &,)const
+include/sfx2/tabdlg.hxx:254
+    void SfxTabDialogController::RefreshInputSet()
 include/svl/svdde.hxx:244
     class DdeData * DdeTopic::Get(enum SotClipboardFormatId,)
 include/svl/svdde.hxx:245
@@ -120,8 +118,6 @@ include/svl/svdde.hxx:307
     void DdeService::~DdeService()
 include/svtools/treelistbox.hxx:722
     void SvTreeListBox::SelectAll(_Bool,_Bool,)
-include/svx/svdpage.hxx:94
-    class SdrObjList * SdrObjList::CloneSdrObjList(class SdrModel *,)const
 include/toolkit/controls/geometrycontrolmodel.hxx:191
     void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
 include/vbahelper/vbacollectionimpl.hxx:290
@@ -146,9 +142,9 @@ include/vbahelper/vbareturntypes.hxx:40
     void ooo::vba::DefaultReturnHelper::setValue(type-parameter-0-0,)
 include/vbahelper/vbareturntypes.hxx:41
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
-include/vcl/weld.hxx:267
+include/vcl/weld.hxx:288
     void weld::TreeView::append_text(const class rtl::OUString &,)
-include/vcl/weld.hxx:270
+include/vcl/weld.hxx:291
     void weld::TreeView::append(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,)
 sc/source/core/opencl/formulagroupcl.cxx:870
     void sc::opencl::DynamicKernelMixedArgument::GenNumDeclRef(class std::basic_stringstream<char> &,)const
@@ -242,7 +238,9 @@ vcl/inc/salframe.hxx:135
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
 vcl/inc/salframe.hxx:179
     void SalFrame::Flush(const class tools::Rectangle &,)
-vcl/inc/sallayout.hxx:181
+vcl/inc/salinst.hxx:167
+    class weld::Builder * SalInstance::CreateInterimBuilder(class vcl::Window *,const class rtl::OUString &,const class rtl::OUString &,)
+vcl/inc/sallayout.hxx:179
     _Bool SalLayout::GetBoundRect(class SalGraphics &,class tools::Rectangle &,)const
 vcl/inc/salmenu.hxx:79
     _Bool SalMenu::AddMenuBarButton(const struct SalMenuButtonItem &,)
@@ -252,8 +250,10 @@ vcl/inc/salmenu.hxx:92
     class tools::Rectangle SalMenu::GetMenuBarButtonRectPixel(unsigned short,class SalFrame *,)
 vcl/inc/salobj.hxx:46
     void SalObject::Enable(_Bool,)
-vcl/inc/salprn.hxx:111
+vcl/inc/salprn.hxx:112
     enum SalPrinterError SalPrinter::GetErrorCode()
+vcl/inc/unx/glyphcache.hxx:121
+    void FreetypeFont::~FreetypeFont()
 vcl/inc/unx/gtk/gtkdata.hxx:164
     int GtkSalDisplay::CaptureMouse(class SalFrame *,)
 vcl/inc/unx/saldata.hxx:65

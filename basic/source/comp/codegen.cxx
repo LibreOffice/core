@@ -391,7 +391,6 @@ public:
     virtual void processOpCode1( SbiOpcode eOp, T nOp1 ) = 0;
     virtual void processOpCode2( SbiOpcode eOp, T nOp1, T nOp2 ) = 0;
     virtual bool processParams() = 0;
-    virtual void end() = 0;
 };
 
 template <class T> PCodeVisitor< T >::~PCodeVisitor()
@@ -448,7 +447,6 @@ public:
                 visitor.processOpCode2( eOp, nOp1, nOp2 );
             }
         }
-        visitor.end();
     }
 };
 
@@ -465,7 +463,6 @@ public:
     virtual void processOpCode0( SbiOpcode /*eOp*/ ) override { ++m_nNumOp0; }
     virtual void processOpCode1( SbiOpcode /*eOp*/, T /*nOp1*/ ) override {  ++m_nNumSingleParams; }
     virtual void processOpCode2( SbiOpcode /*eOp*/, T /*nOp1*/, T /*nOp2*/ ) override { ++m_nNumDoubleParams; }
-    virtual void end() override {}
     S offset()
     {
         typedef decltype(T(1) + S(1)) larger_t; // type capable to hold both value ranges of T and S
@@ -526,7 +523,6 @@ public:
 
     }
     virtual bool processParams() override { return true; }
-    virtual void end() override {}
     // yeuch, careful here, you can only call
     // GetBuffer on the returned SbiBuffer once, also
     // you (as the caller) get to own the memory

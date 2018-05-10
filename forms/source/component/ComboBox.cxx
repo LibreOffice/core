@@ -830,18 +830,6 @@ void OComboBoxModel::stringItemListChanged( ControlModelLock& /*_rInstanceLock*/
 }
 
 
-void OComboBoxModel::connectedExternalListSource( )
-{
-    // TODO?
-}
-
-
-void OComboBoxModel::disconnectedExternalListSource( )
-{
-    // TODO?
-}
-
-
 void OComboBoxModel::refreshInternalEntryList()
 {
     DBG_ASSERT( !hasExternalListSource(), "OComboBoxModel::refreshInternalEntryList: invalid call!" );

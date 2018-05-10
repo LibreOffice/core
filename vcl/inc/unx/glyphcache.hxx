@@ -118,7 +118,7 @@ class VCL_DLLPUBLIC FreetypeFont final
 {
 public:
                             FreetypeFont( const FontSelectPattern&, FreetypeFontInfo* );
-    virtual                ~FreetypeFont();
+                            ~FreetypeFont();
 
     const OString&          GetFontFileName() const;
     int                     GetFontFaceIndex() const;
