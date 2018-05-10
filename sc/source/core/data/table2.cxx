@@ -277,6 +277,9 @@ void ScTable::InsertCol(
         if (mpColWidth && mpColFlags)
         {
             mpColWidth->InsertPreservingSize(nStartCol, nSize, STD_COL_WIDTH);
+            // The inserted columns have the same widths as the columns, which were selected for insert.
+            for (SCSIZE i=0; i < std::min(MAXCOL-nSize-nStartCol, nSize); ++i)
+                mpColWidth->SetValue(nStartCol + i, mpColWidth->GetValue(nStartCol+i+nSize));
             mpColFlags->InsertPreservingSize(nStartCol, nSize, CRFlags::NONE);
         }
         if (pOutlineTable)
