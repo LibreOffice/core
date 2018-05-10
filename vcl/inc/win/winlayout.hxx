@@ -25,7 +25,6 @@
 #include <sallayout.hxx>
 #include <svsys.h>
 #include <win/salgdi.h>
-#include <CommonSalLayout.hxx>
 
 #include <opengl/PackedTextureAtlas.hxx>
 
@@ -180,7 +179,7 @@ public:
 
     virtual ~TextOutRenderer() = default;
 
-    virtual bool operator ()(CommonSalLayout const &rLayout,
+    virtual bool operator ()(GenericSalLayout const &rLayout,
         SalGraphics &rGraphics,
         HDC hDC) = 0;
 };
@@ -193,7 +192,7 @@ class ExTextOutRenderer : public TextOutRenderer
 public:
     explicit ExTextOutRenderer() = default;
 
-    bool operator ()(CommonSalLayout const &rLayout,
+    bool operator ()(GenericSalLayout const &rLayout,
         SalGraphics &rGraphics,
         HDC hDC) override;
 };

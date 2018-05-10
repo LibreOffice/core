@@ -53,7 +53,6 @@ class AquaSalFrame;
 class FontAttributes;
 class CoreTextStyle;
 class XorEmulation;
-class CommonSalLayout;
 
 // CoreText-specific physically available font face
 class CoreTextFontFace : public PhysicalFontFace
@@ -380,7 +379,7 @@ public:
 
     virtual std::unique_ptr<SalLayout>
                             GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
-    virtual void            DrawTextLayout( const CommonSalLayout& ) override;
+    virtual void            DrawTextLayout( const GenericSalLayout& ) override;
     virtual bool            supportsOperation( OutDevSupportType ) const override;
 
 #ifdef MACOSX

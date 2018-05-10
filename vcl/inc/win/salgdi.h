@@ -50,7 +50,6 @@ class PhysicalFontCollection;
 class SalGraphicsImpl;
 class WinOpenGLSalGraphicsImpl;
 class ImplFontMetricData;
-class CommonSalLayout;
 
 #define RGB_TO_PALRGB(nRGB)         ((nRGB)|0x02000000)
 #define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)
@@ -174,8 +173,8 @@ private:
 
     LogicalFontInstance* GetWinFontEntry(int nFallbackLevel);
 
-    bool CacheGlyphs(const CommonSalLayout& rLayout);
-    bool DrawCachedGlyphs(const CommonSalLayout& rLayout);
+    bool CacheGlyphs(const GenericSalLayout& rLayout);
+    bool DrawCachedGlyphs(const GenericSalLayout& rLayout);
 
 public:
     HDC getHDC() const { return mhLocalDC; }
@@ -295,7 +294,7 @@ protected:
 private:
     // local helpers
 
-    void                    DrawTextLayout(const CommonSalLayout&, HDC, bool bUseDWrite);
+    void                    DrawTextLayout(const GenericSalLayout&, HDC, bool bUseDWrite);
 
 public:
     // public SalGraphics methods, the interface to the independent vcl part
@@ -378,7 +377,7 @@ public:
 
     virtual std::unique_ptr<SalLayout>
                             GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
-    virtual void            DrawTextLayout( const CommonSalLayout& ) override;
+    virtual void            DrawTextLayout( const GenericSalLayout& ) override;
 
     virtual bool            supportsOperation( OutDevSupportType ) const override;
     // Query the platform layer for control support

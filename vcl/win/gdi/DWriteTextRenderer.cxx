@@ -25,7 +25,6 @@
 
 #include <sft.hxx>
 #include <sallayout.hxx>
-#include <CommonSalLayout.hxx>
 
 #include <shlwapi.h>
 #include <winver.h>
@@ -233,7 +232,7 @@ HRESULT D2DWriteTextOutRenderer::BindDC(HDC hDC, tools::Rectangle const & rRect)
     return CHECKHR(mpRT->BindDC(hDC, &rc));
 }
 
-bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const & rLayout, SalGraphics& rGraphics, HDC hDC)
+bool D2DWriteTextOutRenderer::operator ()(GenericSalLayout const & rLayout, SalGraphics& rGraphics, HDC hDC)
 {
     bool bRetry = false;
     bool bResult = false;
@@ -247,7 +246,7 @@ bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const & rLayout, SalGr
     return bResult;
 }
 
-bool D2DWriteTextOutRenderer::performRender(CommonSalLayout const & rLayout, SalGraphics& rGraphics, HDC hDC, bool& bRetry)
+bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, SalGraphics& rGraphics, HDC hDC, bool& bRetry)
 {
     if (!Ready())
         return false;

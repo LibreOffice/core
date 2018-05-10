@@ -691,12 +691,6 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, tools::Rectangle& rRect
     return bRet;
 }
 
-GenericSalLayout::GenericSalLayout()
-{}
-
-GenericSalLayout::~GenericSalLayout()
-{}
-
 void GenericSalLayout::AppendGlyph( const GlyphItem& rGlyphItem )
 {
     m_GlyphItems.push_back(rGlyphItem);

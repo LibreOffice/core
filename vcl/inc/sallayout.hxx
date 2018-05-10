@@ -25,12 +25,18 @@
 #include <memory>
 #include <vector>
 
+#include <hb.h>
+
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx> // for typedef sal_UCS4
 #include <vcl/devicecoordinate.hxx>
+
+#include "fontinstance.hxx"
 
 #define MAX_FALLBACK 16
 
@@ -304,12 +310,15 @@ public:
 class VCL_PLUGIN_PUBLIC GenericSalLayout : public SalLayout
 {
 public:
-    // used by layout engines
-    void            AppendGlyph( const GlyphItem& );
-    void            Reserve(int size) { m_GlyphItems.reserve(size + 1); }
-    virtual void    ApplyDXArray(ImplLayoutArgs&) = 0;
-    void            Justify(DeviceCoordinate nNewWidth);
-    void            ApplyAsianKerning(const OUString& rStr);
+                    GenericSalLayout(LogicalFontInstance&);
+                    ~GenericSalLayout() override;
+
+    void            AdjustLayout(ImplLayoutArgs&) final override;
+    bool            LayoutText(ImplLayoutArgs&) final override;
+    void            DrawText(SalGraphics&) const final override;
+    std::shared_ptr<vcl::TextLayoutCache> CreateTextLayoutCache(OUString const&) const final override;
+
+    bool            IsKashidaPosValid(int nCharPos) const final override;
 
     // used by upper layers
     virtual DeviceCoordinate GetTextWidth() const override;
@@ -318,25 +327,45 @@ public:
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const override;
 
     // used by display layers
+    LogicalFontInstance& GetFont() const { return *mpFont; }
+
     virtual bool    GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int&,
                                  const PhysicalFontFace** pFallbackFont = nullptr) const override;
 
 protected:
-                    GenericSalLayout();
-    virtual         ~GenericSalLayout() override;
-
     // for glyph+font+script fallback
-    virtual void    MoveGlyph( int nStart, long nNewXPos ) override;
-    virtual void    DropGlyph( int nStart ) override;
-    virtual void    Simplify( bool bIsBase ) override;
-
-    virtual bool    GetCharWidths(DeviceCoordinate* pCharWidths) const = 0;
-
-    std::vector<GlyphItem>     m_GlyphItems;
+    void            MoveGlyph(int nStart, long nNewXPos) final override;
+    void            DropGlyph(int nStart) final override;
+    void            Simplify(bool bIsBase) final override;
 
 private:
                     GenericSalLayout( const GenericSalLayout& ) = delete;
                     GenericSalLayout& operator=( const GenericSalLayout& ) = delete;
+
+    void            AppendGlyph( const GlyphItem& );
+    void            Reserve(int size) { m_GlyphItems.reserve(size + 1); }
+    void            ApplyDXArray(ImplLayoutArgs&);
+    void            Justify(DeviceCoordinate nNewWidth);
+    void            ApplyAsianKerning(const OUString& rStr);
+
+    bool            GetCharWidths(DeviceCoordinate* pCharWidths) const;
+
+    void            SetNeedFallback(ImplLayoutArgs&, sal_Int32, bool);
+
+    bool            HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aNextChar);
+
+    void            ParseFeatures(const OUString& name);
+
+    LogicalFontInstance* const mpFont;
+    css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
+
+    std::vector<GlyphItem> m_GlyphItems;
+
+    OString         msLanguage;
+    std::vector<hb_feature_t> maFeatures;
+
+    hb_set_t*       mpVertGlyphs;
+    const bool      mbFuzzing;
 };
 
 #undef SalGraphics
