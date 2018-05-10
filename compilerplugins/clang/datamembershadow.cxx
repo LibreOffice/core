@@ -53,8 +53,6 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
         return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/cppcanvas/source/mtfrenderer/emfplus.cxx"))
         return true;
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/cui/source/customize/eventdlg.hxx"))
-        return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/sfx2/recentdocsview.hxx"))
         return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/sfx2/templatelocalview.hxx"))
