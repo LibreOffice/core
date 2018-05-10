@@ -127,6 +127,7 @@ namespace sw {
 class Meta
     : public ::sfx2::Metadatable
     , public SwModify
+    , public sw::BroadcasterMixin
 {
 protected:
     friend class ::SwFormatMeta; ///< SetFormatMeta, NotifyChangeTextNode
