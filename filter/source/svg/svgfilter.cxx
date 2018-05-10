@@ -52,6 +52,12 @@
 #include "svgfilter.hxx"
 #include "svgwriter.hxx"
 
+#include <svx/unopage.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdograf.hxx>
+#include <svl/itempool.hxx>
+
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -94,14 +100,167 @@ SVGFilter::~SVGFilter()
 sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
 {
     SolarMutexGuard aGuard;
-    vcl::Window*     pFocusWindow = Application::GetFocusWindow();
-    bool    bRet;
+    vcl::Window* pFocusWindow(Application::GetFocusWindow());
+    bool bRet(false);
 
-    if( pFocusWindow )
+    if(pFocusWindow)
+    {
         pFocusWindow->EnterWait();
+    }
 
-    if( mxDstDoc.is() )
-        bRet = implImport( rDescriptor );
+    if(mxDstDoc.is())
+    {
+        // Import. Use an endless loop to have easy exits for error handling
+        while(true)
+        {
+            // use MediaDescriptor to get needed data out of Sequence< PropertyValue >
+            utl::MediaDescriptor aMediaDescriptor(rDescriptor);
+            uno::Reference<io::XInputStream> xInputStream;
+            uno::Reference<task::XStatusIndicator> xStatus;
+
+            xInputStream.set(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY);
+            xStatus.set(aMediaDescriptor[utl::MediaDescriptor::PROP_STATUSINDICATOR()], UNO_QUERY);
+
+            if(!xInputStream.is() || !xStatus.is())
+            {
+                // we need the InputStream and StatusIndicator
+                break;
+            }
+
+            // get the DrawPagesSupplier
+            uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSupplier( mxDstDoc, uno::UNO_QUERY );
+
+            if(!xDrawPagesSupplier.is())
+            {
+                // we need the DrawPagesSupplier
+                break;
+            }
+
+            // get the DrawPages
+            uno::Reference< drawing::XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), uno::UNO_QUERY );
+
+            if(!xDrawPages.is())
+            {
+                // we need the DrawPages
+                break;
+            }
+
+            // check DrawPageCount (there should be one by default)
+            sal_Int32 nDrawPageCount(xDrawPages->getCount());
+
+            if(0 == nDrawPageCount)
+            {
+                // at least one DrawPage should be there - we need that
+                break;
+            }
+
+            // get that DrawPage
+            uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex(0), uno::UNO_QUERY );
+
+            if(!xDrawPage.is())
+            {
+                // we need that DrawPage
+                break;
+            }
+
+            // get that DrawPage's UNO API implementation
+            SvxDrawPage* pSvxDrawPage(SvxDrawPage::getImplementation(xDrawPage));
+
+            if(nullptr == pSvxDrawPage || nullptr == pSvxDrawPage->GetSdrPage())
+            {
+                // we need a SvxDrawPage
+                break;
+            }
+
+            // get the SvStream to work with
+            std::unique_ptr< SvStream > aStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+
+            if(!aStream.get())
+            {
+                // we need the SvStream
+                break;
+            }
+
+            // create a GraphicFilter and load the SVG (format already known, thus *could*
+            // be handed over to ImportGraphic - but detection is fast).
+            // As a bonus, zipped data is already detected and handled there
+            GraphicFilter aGraphicFilter;
+            Graphic aGraphic;
+            const ErrCode nGraphicFilterErrorCode(aGraphicFilter.ImportGraphic(aGraphic, OUString(), *aStream.get()));
+
+            if(ERRCODE_NONE != nGraphicFilterErrorCode)
+            {
+                // SVG import error, cannot continue
+                break;
+            }
+
+            // create a SdrModel-GraphicObject to insert to page
+            SdrPage* pTargetSdrPage(pSvxDrawPage->GetSdrPage());
+            std::unique_ptr< SdrGrafObj, SdrObjectFreeOp > aNewSdrGrafObj(
+                new SdrGrafObj(
+                    pTargetSdrPage->getSdrModelFromSdrPage(),
+                    aGraphic));
+
+            if(!aNewSdrGrafObj.get())
+            {
+                // could not create GraphicObject
+                break;
+            }
+
+            // get the GraphicPrefSize and evtl. adapt to target-MapMode of target-Model
+            // (should be 100thmm here, but just stay safe by doing the conversion)
+            const Size aGraphicPrefSize(aGraphic.GetPrefSize());
+            const MapMode aGraphicPrefMapMode(aGraphic.GetPrefMapMode());
+            const MapUnit eDestUnit(pTargetSdrPage->getSdrModelFromSdrPage().GetItemPool().GetMetric(0));
+            const MapUnit eSrcUnit(aGraphicPrefMapMode.GetMapUnit());
+            Size aGraphicSize(aGraphicPrefSize);
+
+            if (eDestUnit != eSrcUnit)
+            {
+                aGraphicSize = Size(
+                    OutputDevice::LogicToLogic(aGraphicSize.Width(), eSrcUnit, eDestUnit),
+                    OutputDevice::LogicToLogic(aGraphicSize.Height(), eSrcUnit, eDestUnit));
+            }
+
+            // Based on GraphicSize, set size of Page. Do not forget to adapt PageBorders,
+            // but interpret them relative to PageSize so that they do not 'expolde/shrink'
+            // in comparison. Use a common scaling factor for hor/ver to not get
+            // asynchronous border distances, though. All in all this will adapt borders
+            // nicely and is based on office-defaults for standard-page-border-sizes.
+            const Size aPageSize(pTargetSdrPage->GetSize());
+            const double fBorderRelation((
+                static_cast< double >(pTargetSdrPage->GetLeftBorder()) / aPageSize.Width() +
+                static_cast< double >(pTargetSdrPage->GetRightBorder()) / aPageSize.Width() +
+                static_cast< double >(pTargetSdrPage->GetUpperBorder()) / aPageSize.Height() +
+                static_cast< double >(pTargetSdrPage->GetLowerBorder()) / aPageSize.Height()) / 4.0);
+            const long nAllBorder(basegfx::fround((aGraphicSize.Width() + aGraphicSize.Height()) * fBorderRelation * 0.5));
+
+            pTargetSdrPage->SetBorder(
+                nAllBorder,
+                nAllBorder,
+                nAllBorder,
+                nAllBorder);
+            pTargetSdrPage->SetSize(
+                Size(
+                    aGraphicSize.Width() + nAllBorder + nAllBorder,
+                    aGraphicSize.Height() + nAllBorder + nAllBorder));
+
+            // set pos/size at SdrGraphicObj - add offset to PageBorder
+            aNewSdrGrafObj->SetSnapRect(
+                tools::Rectangle(
+                    Point(nAllBorder, nAllBorder),
+                    aGraphicSize));
+
+            // insert to page (owner change of SdrGrafObj)
+            pTargetSdrPage->InsertObject(aNewSdrGrafObj.release());
+
+            // done - set positive result now
+            bRet = true;
+
+            // always leave helper endless loop
+            break;
+        };
+    }
     else if( mxSrcDoc.is() )
     {
         // #i124608# detect selection

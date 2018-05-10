@@ -47,12 +47,6 @@ $(eval $(call gb_Module_add_l10n_targets,filter,\
 	AllLangMoTarget_flt \
 ))
 
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
-$(eval $(call gb_Module_add_targets,filter,\
-	Executable_svg2odf \
-))
-endif
-
 $(eval $(call gb_Module_add_check_targets,filter,\
     CppunitTest_filter_xslt \
     CppunitTest_filter_priority \
