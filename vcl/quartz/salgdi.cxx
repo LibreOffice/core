@@ -40,7 +40,6 @@
 #include <impfont.hxx>
 #include <impfontcharmap.hxx>
 #include <impfontmetricdata.hxx>
-#include <CommonSalLayout.hxx>
 #include <outdev.h>
 #include <PhysicalFontCollection.hxx>
 
@@ -407,9 +406,9 @@ bool AquaSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangl
     return false;
 }
 
-void AquaSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
+void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
-    const CoreTextStyle& rStyle = *static_cast<const CoreTextStyle*>(&rLayout.getFont());
+    const CoreTextStyle& rStyle = *static_cast<const CoreTextStyle*>(&rLayout.GetFont());
     const FontSelectPattern& rFontSelect = rStyle.GetFontSelectPattern();
     if (rFontSelect.mnHeight == 0)
         return;
@@ -521,7 +520,7 @@ void AquaSalGraphics::SetFont(const FontSelectPattern* pReqFont, int nFallbackLe
 std::unique_ptr<SalLayout> AquaSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
 {
     if (mpTextStyle[nFallbackLevel])
-        return std::unique_ptr<SalLayout>(new CommonSalLayout(*mpTextStyle[nFallbackLevel]));
+        return std::unique_ptr<SalLayout>(new GenericSalLayout(*mpTextStyle[nFallbackLevel]));
 
     return nullptr;
 }
