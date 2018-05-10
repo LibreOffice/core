@@ -113,7 +113,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/sdraw,\
 	sd/uiconfig/sdraw/ui/namedesign \
 	sd/uiconfig/sdraw/ui/paranumberingtab \
 	sd/uiconfig/sdraw/ui/queryunlinkimagedialog \
-	sd/uiconfig/sdraw/ui/tabledesigndialog \
 	sd/uiconfig/sdraw/ui/vectorize \
 ))
 
