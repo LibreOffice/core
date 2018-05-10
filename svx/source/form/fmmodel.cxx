@@ -100,7 +100,7 @@ SdrPage* FmFormModel::AllocPage(bool bMasterPage)
 
 void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 {
-    // hack solange method intern
+    // hack for as long as the method is internal
     if (m_pObjShell && !m_pImpl->mxUndoEnv->IsListening( *m_pObjShell ))
         SetObjectShell(m_pObjShell);
 
@@ -126,7 +126,7 @@ SdrPage* FmFormModel::RemovePage(sal_uInt16 nPgNum)
 
 void FmFormModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
 {
-    // hack solange method intern
+    // hack for as long as the method is internal
     if (m_pObjShell && !m_pImpl->mxUndoEnv->IsListening( *m_pObjShell ))
         SetObjectShell(m_pObjShell);
 

@@ -31,7 +31,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 
-// Deutsch (Deutschland) resources
+// German (Germany) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -118,7 +118,7 @@ BEGIN
     IDS_PROJNAME            "EventListener"
 END
 
-#endif    // Deutsch (Deutschland) resources
+#endif    // German (Germany) resources
 
 
 

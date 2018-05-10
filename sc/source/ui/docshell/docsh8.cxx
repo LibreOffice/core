@@ -912,7 +912,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
                         if (!aCell.isEmpty())
                         {
                             if (aCell.meType == CELLTYPE_EDIT)
-                            {   // Paragraphs erhalten
+                            {   // preserve paragraphs
                                 lcl_getLongVarCharEditString(aString, aCell, aEditEngine);
                             }
                             else
