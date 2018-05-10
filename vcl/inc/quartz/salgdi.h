@@ -90,7 +90,7 @@ class CoreTextStyle : public LogicalFontInstance
 public:
     ~CoreTextStyle();
 
-    void       GetFontMetric( ImplFontMetricDataRef const & ) const;
+    void       GetFontMetric( ImplFontMetricDataRef const & );
     bool       GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&) const;
     bool       GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) const;
 

@@ -79,6 +79,22 @@ hb_font_t* LogicalFontInstance::InitHbFont(hb_face_t* pHbFace) const
     return pHbFont;
 }
 
+int LogicalFontInstance::GetKashidaWidth()
+{
+    hb_font_t* pHbFont = GetHbFont();
+    hb_position_t nWidth = 0;
+    hb_codepoint_t nIndex = 0;
+
+    if (hb_font_get_glyph(pHbFont, 0x0640, 0, &nIndex))
+    {
+        double nXScale = 0;
+        GetScale(&nXScale, nullptr);
+        nWidth = hb_font_get_glyph_h_advance(pHbFont, nIndex) * nXScale;
+    }
+
+    return nWidth;
+}
+
 void LogicalFontInstance::GetScale(double* nXScale, double* nYScale)
 {
     hb_face_t* pHbFace = hb_font_get_face(GetHbFont());

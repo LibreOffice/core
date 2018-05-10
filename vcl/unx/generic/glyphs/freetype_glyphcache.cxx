@@ -549,16 +549,7 @@ void FreetypeFont::GetFontMetric(ImplFontMetricDataRef const & rxTo) const
     }
 
     // initialize kashida width
-    const int nKashidaGlyphId = FT_Get_Char_Index(maFaceFT, 0x0640);
-    if( nKashidaGlyphId )
-    {
-        if (FT_Load_Glyph(maFaceFT, nKashidaGlyphId, mnLoadFlags) == FT_Err_Ok)
-        {
-            int nWidth = (maFaceFT->glyph->metrics.horiAdvance + 32) >> 6;
-            rxTo->SetMinKashida(nWidth);
-        }
-    }
-
+    rxTo->SetMinKashida(mpFontInstance->GetKashidaWidth());
 }
 
 void FreetypeFont::ApplyGlyphTransform(bool bVertical, FT_Glyph pGlyphFT ) const

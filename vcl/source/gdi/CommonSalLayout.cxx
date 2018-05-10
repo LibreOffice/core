@@ -643,11 +643,7 @@ void GenericSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
         hb_font_t *pHbFont = mpFont->GetHbFont();
         // Find Kashida glyph width and index.
         if (hb_font_get_glyph(pHbFont, 0x0640, 0, &nKashidaIndex))
-        {
-            double nXScale = 0;
-            mpFont->GetScale(&nXScale, nullptr);
-            nKashidaWidth = hb_font_get_glyph_h_advance(pHbFont, nKashidaIndex) * nXScale;
-        }
+            nKashidaWidth = mpFont->GetKashidaWidth();
         bKashidaJustify = nKashidaWidth != 0;
     }
 

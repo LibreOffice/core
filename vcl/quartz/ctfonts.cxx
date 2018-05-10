@@ -104,7 +104,7 @@ CoreTextStyle::~CoreTextStyle()
         CFRelease( mpStyleDict );
 }
 
-void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric ) const
+void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric )
 {
     // get the matching CoreText font handle
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
@@ -133,18 +133,7 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric ) 
     // it also makes the calculation of the stretch factor simple
     rxFontMetric->SetWidth( lrint( CTFontGetSize( aCTFontRef ) * mfFontStretch) );
 
-    UniChar nKashidaCh = 0x0640;
-    CGGlyph nKashidaGid = 0;
-    if (CTFontGetGlyphsForCharacters(aCTFontRef, &nKashidaCh, &nKashidaGid, 1))
-    {
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            // 'kCTFontHorizontalOrientation' is deprecated: first deprecated in
-            // macOS 10.11
-        double nKashidaAdv = CTFontGetAdvancesForGlyphs(aCTFontRef,
-                kCTFontHorizontalOrientation, &nKashidaGid, nullptr, 1);
-SAL_WNODEPRECATED_DECLARATIONS_POP
-        rxFontMetric->SetMinKashida(lrint(nKashidaAdv));
-    }
+    rxFontMetric->SetMinKashida(GetKashidaWidth());
 }
 
 bool CoreTextStyle::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect ) const

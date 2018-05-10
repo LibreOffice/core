@@ -67,13 +67,7 @@ void Qt5Graphics::GetFontMetric(ImplFontMetricDataRef& rFMD, int nFallbackLevel)
 
     rFMD->SetWidth(aRawFont.averageCharWidth());
 
-    const QChar nKashidaCh[2] = { 0x06, 0x40 };
-    quint32 nKashidaGid = 0;
-    QPointF aPoint;
-    int nNumGlyphs;
-    if (aRawFont.glyphIndexesForChars(nKashidaCh, 1, &nKashidaGid, &nNumGlyphs)
-        && aRawFont.advancesForGlyphIndexes(&nKashidaGid, &aPoint, 1))
-        rFMD->SetMinKashida(lrint(aPoint.rx()));
+    rFMD->SetMinKashida(m_pTextStyle[nFallbackLevel]->GetKashidaWidth());
 }
 
 const FontCharMapRef Qt5Graphics::GetFontCharMap() const
