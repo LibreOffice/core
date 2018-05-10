@@ -53,7 +53,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	regsvrex \
 	saxparser \
 	sp2bv \
-	svg2odf \
 	svidl \
 	$(if $(ENABLE_ONLINE_UPDATE_MAR),\
 		test_updater_dialog \
