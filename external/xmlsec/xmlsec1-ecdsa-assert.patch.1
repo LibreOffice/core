@@ -1,0 +1,58 @@
+From 34899117d1c43022d2d9454bf59e3a30cfaa666a Mon Sep 17 00:00:00 2001
+Date: Mon, 7 May 2018 18:59:33 +0200
+Subject: [PATCH] NSS: ECDSA updates (#172)
+
+* nss: register ecdsa key data
+
+This test started to fail when 2ae61923d6e8db7eca0a8476e934e4af5b1cc5de
+(MS CNG: adopt trusted certificate (#141), 2018-01-15) fixed the typo in
+the test to require ecdsa key data.
+
+The implementation was there, just not the registration.
+
+Testcase: aleksey-xmldsig-01/enveloping-sha256-ecdsa-sha256
+
+* nss: fix assert condition when getting key type of ECDSA key
+
+The condition is now consistent with the RSA getter. In practice this
+fixes a crash when using libxmlsec via its API and setting only the
+private key (but not the public key) for signing -- as
+SECKEY_GetPublicKeyType(NULL) is not safe.
+
+Bugreport: https://bugs.documentfoundation.org/show_bug.cgi?id=109180
+---
+ src/nss/crypto.c  | 4 ++++
+ src/nss/pkikeys.c | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/nss/crypto.c b/src/nss/crypto.c
+index 57767465..bb50bfb5 100644
+--- a/src/nss/crypto.c
++++ b/src/nss/crypto.c
+@@ -75,6 +75,10 @@ xmlSecCryptoGetFunctions_nss(void) {
+     gXmlSecNssFunctions->keyDataDsaGetKlass             = xmlSecNssKeyDataDsaGetKlass;
+ #endif /* XMLSEC_NO_DSA */
+ 
++#ifndef XMLSEC_NO_ECDSA
++    gXmlSecNssFunctions->keyDataEcdsaGetKlass          = xmlSecNssKeyDataEcdsaGetKlass;
++#endif /* XMLSEC_NO_ECDSA */
++
+ #ifndef XMLSEC_NO_HMAC
+     gXmlSecNssFunctions->keyDataHmacGetKlass            = xmlSecNssKeyDataHmacGetKlass;
+ #endif /* XMLSEC_NO_HMAC */
+diff --git a/src/nss/pkikeys.c b/src/nss/pkikeys.c
+index 25828aec..cf18d1c0 100644
+--- a/src/nss/pkikeys.c
++++ b/src/nss/pkikeys.c
+@@ -1471,7 +1471,7 @@ xmlSecNssKeyDataEcdsaGetType(xmlSecKeyDataPtr data) {
+     xmlSecAssert2(xmlSecKeyDataCheckId(data, xmlSecNssKeyDataEcdsaId), xmlSecKeyDataTypeUnknown);
+     ctx = xmlSecNssPKIKeyDataGetCtx(data);
+     xmlSecAssert2(ctx != NULL, -1);
+-    xmlSecAssert2(SECKEY_GetPublicKeyType(ctx->pubkey) == ecKey, -1);
++    xmlSecAssert2(ctx->pubkey == NULL || SECKEY_GetPublicKeyType(ctx->pubkey) == ecKey, -1);
+     if (ctx->privkey != NULL) {
+         return(xmlSecKeyDataTypePrivate | xmlSecKeyDataTypePublic);
+     } else {
+-- 
+2.13.6
+
