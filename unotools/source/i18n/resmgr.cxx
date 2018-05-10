@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -68,6 +68,12 @@
 #include <unordered_map>
 #include <memory>
 
+#if defined(_WIN32) && defined(DBG_UTIL)
+#include <prewin.h>
+#include <crtdbg.h>
+#include <postwin.h>
+#endif
+
 namespace
 {
     OUString createFromUtf8(const char* data, size_t size)
@@ -100,6 +106,26 @@ namespace
     }
 }
 
+#if defined(_WIN32) && defined(DBG_UTIL)
+static int IgnoringCrtReportHook( int reportType, char *message, int * /* returnValue */ )
+{
+    OUString sType;
+    if (reportType == _CRT_WARN)
+        sType = "WARN";
+    else if (reportType == _CRT_ERROR)
+        sType = "ERROR";
+    else if (reportType == _CRT_ASSERT)
+        sType = "ASSERT";
+    else
+        sType = "?(" + OUString::number(reportType) + ")";
+
+    SAL_WARN("unotools.i18n", "CRT Report Hook: " << sType << ": '" << message << "'");
+
+    return TRUE;
+}
+#endif
+
+
 namespace Translate
 {
     std::locale Create(const sal_Char* pPrefixName, const LanguageTag& rLocale)
@@ -123,7 +149,31 @@ namespace Translate
         bindtextdomain(pPrefixName, sPath.getStr());
 #endif
         gen.add_messages_domain(pPrefixName);
+
+#if defined(_WIN32) && defined(DBG_UTIL)
+        // With a newer C++ debug runtime (in an --enable-dbgutil build), passing an invalid locale
+        // name causes an attempt to display an error dialog. Which does not even show up, at least
+        // for me, but instead the process (gengal, at least) just hangs. Which is far from ideal.
+
+        // Passing a POSIX-style locale name to the std::locale constructor on Windows is a bit odd,
+        // but apparently in the normal C++ runtime it "just" causes an exception to be thrown, that
+        // boost catches (see the loadable(std::string name) in boost's
+        // libs\locale\src\std\std_backend.cpp), and then instead uses the Windows style locale name
+        // it knows how to construct. (Why does it even try the POSIX style name I can't
+        // understand.)
+
+        // With a debug C++ runtime, we need to avoid the error dialog, and just ignore the error.
+
+        _CRT_REPORT_HOOK aOldCrtReportHook = _CrtSetReportHook(IgnoringCrtReportHook);
+#endif
+
         std::locale aRet(gen(sIdentifier.getStr()));
+
+#if defined(_WIN32) && defined(DBG_UTIL)
+        // Return the original hook (typically NULL perhaps?).
+        _CrtSetReportHook(aOldCrtReportHook);
+#endif
+
         aCache[sUnique] = aRet;
         return aRet;
     }
