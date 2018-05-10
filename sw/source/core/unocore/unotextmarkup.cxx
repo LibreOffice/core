@@ -19,6 +19,7 @@
 
 #include <unotextmarkup.hxx>
 
+#include <svl/listener.hxx>
 #include <vcl/svapp.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -43,20 +44,20 @@
 using namespace ::com::sun::star;
 
 struct SwXTextMarkup::Impl
-    : public SwClient
+    : public SvtListener
 {
     SwTextNode* m_pTextNode;
     ModelToViewHelper const m_ConversionMap;
 
-    Impl(SwTextNode *const pTextNode, const ModelToViewHelper& rMap)
-        : SwClient(pTextNode)
-        , m_pTextNode(pTextNode)
+    Impl(SwTextNode* const pTextNode, const ModelToViewHelper& rMap)
+        : m_pTextNode(pTextNode)
         , m_ConversionMap(rMap)
     {
+        if(m_pTextNode)
+            StartListening(pTextNode->GetNotifier());
     }
 
-    // SwClient
-    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
+    virtual void Notify(const SfxHint& rHint) override;
 };
 
 SwXTextMarkup::SwXTextMarkup(
@@ -77,6 +78,7 @@ SwTextNode* SwXTextMarkup::GetTextNode()
 void SwXTextMarkup::ClearTextNode()
 {
     m_pImpl->m_pTextNode = nullptr;
+    m_pImpl->EndListeningAll();
 }
 
 const ModelToViewHelper& SwXTextMarkup::GetConversionMap()
@@ -474,11 +476,13 @@ void SAL_CALL SwXTextMarkup::commitMultiTextMarkup(
         finishGrammarCheck(*m_pImpl->m_pTextNode);
 }
 
-void SwXTextMarkup::Impl::Modify( const SfxPoolItem* /*pOld*/, const SfxPoolItem* /*pNew*/ )
+void SwXTextMarkup::Impl::Notify(const SfxHint& rHint)
 {
     DBG_TESTSOLARMUTEX();
-    EndListeningAll();
-    m_pTextNode = nullptr;
+    if(rHint.GetId() == SfxHintId::Dying)
+    {
+        m_pTextNode = nullptr;
+    }
 }
 
 SwXStringKeyMap::SwXStringKeyMap()
