@@ -23,6 +23,7 @@
 #include <stylehelper.hxx>
 #include <global.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 
 //  conversion programmatic <-> display (visible) name
 //  currently, the core always has the visible names
@@ -57,37 +58,37 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
         static ScDisplayNameMap aCellMap[12];
         if ( !bCellMapFilled )
         {
-            aCellMap[0].aDispName = ScGlobal::GetRscString( STR_STYLENAME_STANDARD );
+            aCellMap[0].aDispName = ScResId( STR_STYLENAME_STANDARD );
             aCellMap[0].aProgName = SC_STYLE_PROG_STANDARD;
 
-            aCellMap[1].aDispName = ScGlobal::GetRscString( STR_STYLENAME_RESULT );
+            aCellMap[1].aDispName = ScResId( STR_STYLENAME_RESULT );
             aCellMap[1].aProgName = SC_STYLE_PROG_RESULT;
 
-            aCellMap[2].aDispName = ScGlobal::GetRscString( STR_STYLENAME_RESULT1 );
+            aCellMap[2].aDispName = ScResId( STR_STYLENAME_RESULT1 );
             aCellMap[2].aProgName = SC_STYLE_PROG_RESULT1;
 
-            aCellMap[3].aDispName = ScGlobal::GetRscString( STR_STYLENAME_HEADLINE );
+            aCellMap[3].aDispName = ScResId( STR_STYLENAME_HEADLINE );
             aCellMap[3].aProgName = SC_STYLE_PROG_HEADLINE;
 
-            aCellMap[4].aDispName = ScGlobal::GetRscString( STR_STYLENAME_HEADLINE1 );
+            aCellMap[4].aDispName = ScResId( STR_STYLENAME_HEADLINE1 );
             aCellMap[4].aProgName = SC_STYLE_PROG_HEADLINE1;
 
-            aCellMap[5].aDispName = ScGlobal::GetRscString( STR_PIVOT_STYLENAME_INNER );
+            aCellMap[5].aDispName = ScResId( STR_PIVOT_STYLENAME_INNER );
             aCellMap[5].aProgName = SC_PIVOT_STYLE_PROG_INNER;
 
-            aCellMap[6].aDispName = ScGlobal::GetRscString( STR_PIVOT_STYLENAME_RESULT );
+            aCellMap[6].aDispName = ScResId( STR_PIVOT_STYLENAME_RESULT );
             aCellMap[6].aProgName = SC_PIVOT_STYLE_PROG_RESULT;
 
-            aCellMap[7].aDispName = ScGlobal::GetRscString( STR_PIVOT_STYLENAME_CATEGORY );
+            aCellMap[7].aDispName = ScResId( STR_PIVOT_STYLENAME_CATEGORY );
             aCellMap[7].aProgName = SC_PIVOT_STYLE_PROG_CATEGORY;
 
-            aCellMap[8].aDispName = ScGlobal::GetRscString( STR_PIVOT_STYLENAME_TITLE );
+            aCellMap[8].aDispName = ScResId( STR_PIVOT_STYLENAME_TITLE );
             aCellMap[8].aProgName = SC_PIVOT_STYLE_PROG_TITLE;
 
-            aCellMap[9].aDispName = ScGlobal::GetRscString( STR_PIVOT_STYLENAME_FIELDNAME );
+            aCellMap[9].aDispName = ScResId( STR_PIVOT_STYLENAME_FIELDNAME );
             aCellMap[9].aProgName = SC_PIVOT_STYLE_PROG_FIELDNAME;
 
-            aCellMap[10].aDispName = ScGlobal::GetRscString( STR_PIVOT_STYLENAME_TOP );
+            aCellMap[10].aDispName = ScResId( STR_PIVOT_STYLENAME_TOP );
             aCellMap[10].aProgName = SC_PIVOT_STYLE_PROG_TOP;
 
             //  last entry remains empty
@@ -102,10 +103,10 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
         static ScDisplayNameMap aPageMap[3];
         if ( !bPageMapFilled )
         {
-            aPageMap[0].aDispName = ScGlobal::GetRscString( STR_STYLENAME_STANDARD );
+            aPageMap[0].aDispName = ScResId( STR_STYLENAME_STANDARD );
             aPageMap[0].aProgName = SC_STYLE_PROG_STANDARD;
 
-            aPageMap[1].aDispName = ScGlobal::GetRscString( STR_STYLENAME_REPORT );
+            aPageMap[1].aDispName = ScResId( STR_STYLENAME_REPORT );
             aPageMap[1].aProgName = SC_STYLE_PROG_REPORT;
 
             //  last entry remains empty

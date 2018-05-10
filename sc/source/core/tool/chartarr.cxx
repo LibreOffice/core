@@ -27,6 +27,7 @@
 #include <document.hxx>
 #include <rechead.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <formulacell.hxx>
 #include <docoptio.hxx>
 
@@ -241,7 +242,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
         if (aString.isEmpty())
         {
             OUStringBuffer aBuf;
-            aBuf.append(ScGlobal::GetRscString(STR_COLUMN));
+            aBuf.append(ScResId(STR_COLUMN));
             aBuf.append(' ');
 
             ScAddress aPos( aCols[ nCol ], 0, 0 );
@@ -264,7 +265,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
         if (aString.isEmpty())
         {
             OUStringBuffer aBuf;
-            aBuf.append(ScGlobal::GetRscString(STR_ROW));
+            aBuf.append(ScResId(STR_ROW));
             aBuf.append(' ');
             aBuf.append(static_cast<sal_Int32>(aRows[nRow]+1));
             aString = aBuf.makeStringAndClear();
@@ -350,7 +351,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
 
         if (aString.isEmpty())
         {
-            OUStringBuffer aBuf(ScGlobal::GetRscString(STR_COLUMN));
+            OUStringBuffer aBuf(ScResId(STR_COLUMN));
             aBuf.append(' ');
             if ( pPos )
                 nPosCol = pPos->Col() + 1;
@@ -375,7 +376,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
 
         if (aString.isEmpty())
         {
-            OUStringBuffer aBuf(ScGlobal::GetRscString(STR_ROW));
+            OUStringBuffer aBuf(ScResId(STR_ROW));
             aBuf.append(' ');
             if ( pPos )
                 nPosRow = pPos->Row() + 1;

@@ -24,6 +24,7 @@
 #include <queryparam.hxx>
 #include <queryentry.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <scmatrix.hxx>
 
 #include <svl/sharedstringpool.hxx>
@@ -77,12 +78,12 @@ bool lcl_createStarQuery(
             // For all entries after the first one, check the and/or connector in the first column.
             aCellStr = pQueryRef->getString(0, nRow);
             lcl_uppercase(aCellStr);
-            if ( aCellStr == ScGlobal::GetRscString(STR_TABLE_UND) )
+            if ( aCellStr == ScResId(STR_TABLE_UND) )
             {
                 rEntry.eConnect = SC_AND;
                 bValid = true;
             }
-            else if ( aCellStr == ScGlobal::GetRscString(STR_TABLE_ODER) )
+            else if ( aCellStr == ScResId(STR_TABLE_ODER) )
             {
                 rEntry.eConnect = SC_OR;
                 bValid = true;

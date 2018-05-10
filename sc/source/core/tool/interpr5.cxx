@@ -36,6 +36,7 @@
 #include <dociter.hxx>
 #include <scmatrix.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <cellkeytranslator.hxx>
 #include <formulagroup.hxx>
 
@@ -3208,7 +3209,7 @@ void ScInterpreter::ScInfo()
         else if( aStr == "NUMFILE" )
             PushDouble( 1 );
         else if( aStr == "RECALC" )
-            PushString( ScGlobal::GetRscString( pDok->GetAutoCalc() ? STR_RECALC_AUTO : STR_RECALC_MANUAL ) );
+            PushString( ScResId( pDok->GetAutoCalc() ? STR_RECALC_AUTO : STR_RECALC_MANUAL ) );
         else if (aStr == "DIRECTORY" || aStr == "MEMAVAIL" || aStr == "MEMUSED" || aStr == "ORIGIN" || aStr == "TOTMEM")
             PushNA();
         else

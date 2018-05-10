@@ -52,6 +52,7 @@
 #include <refupdat.hxx>
 #include <sc.hrc>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <formulacell.hxx>
 #include <dociter.hxx>
 #include <docoptio.hxx>
@@ -675,14 +676,14 @@ static bool lcl_getLastTabName( OUString& rTabName2, const OUString& rTabName1,
         vector<OUString>::const_iterator itr = ::std::find(itrBeg, itrEnd, rTabName1);
         if (itr == rTabNames.end())
         {
-            rTabName2 = ScGlobal::GetRscString(STR_NO_REF_TABLE);
+            rTabName2 = ScResId(STR_NO_REF_TABLE);
             return false;
         }
 
         size_t nDist = ::std::distance(itrBeg, itr);
         if (nDist + static_cast<size_t>(nTabSpan) >= nCount)
         {
-            rTabName2 = ScGlobal::GetRscString(STR_NO_REF_TABLE);
+            rTabName2 = ScResId(STR_NO_REF_TABLE);
             return false;
         }
 
@@ -726,7 +727,7 @@ struct Convention_A1 : public ScCompiler::Convention
 void Convention_A1::MakeColStr( OUStringBuffer& rBuffer, SCCOL nCol )
 {
     if ( !ValidCol( nCol) )
-        rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
+        rBuffer.append(ScResId(STR_NO_REF_TABLE));
     else
         ::ScColToAlpha( rBuffer, nCol);
 }
@@ -734,7 +735,7 @@ void Convention_A1::MakeColStr( OUStringBuffer& rBuffer, SCCOL nCol )
 void Convention_A1::MakeRowStr( OUStringBuffer& rBuffer, SCROW nRow )
 {
     if ( !ValidRow(nRow) )
-        rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
+        rBuffer.append(ScResId(STR_NO_REF_TABLE));
     else
         rBuffer.append(sal_Int32(nRow + 1));
 }
@@ -747,7 +748,7 @@ struct ConventionOOO_A1 : public Convention_A1
     static void MakeTabStr( OUStringBuffer &rBuf, const std::vector<OUString>& rTabNames, SCTAB nTab )
     {
         if (static_cast<size_t>(nTab) >= rTabNames.size())
-            rBuf.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
+            rBuf.append(ScResId(STR_NO_REF_TABLE));
         else
             rBuf.append(rTabNames[nTab]);
         rBuf.append('.');
@@ -1072,7 +1073,7 @@ struct ConventionXL
         ScAddress aAbs = rRef.toAbs(rPos);
         if (rRef.IsTabDeleted() || static_cast<size_t>(aAbs.Tab()) >= rTabNames.size())
         {
-            rTabName = ScGlobal::GetRscString( STR_NO_REF_TABLE );
+            rTabName = ScResId( STR_NO_REF_TABLE );
             return;
         }
         rTabName = rTabNames[aAbs.Tab()];
@@ -1688,7 +1689,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 
         if (!ValidCol(aAbsRef.aEnd.Col()) || !ValidRow(aAbsRef.aEnd.Row()))
         {
-            rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
+            rBuffer.append(ScResId(STR_NO_REF_TABLE));
             return;
         }
 
