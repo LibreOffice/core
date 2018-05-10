@@ -13,6 +13,7 @@
 #include <dbdata.hxx>
 #include <externalrefmgr.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 
 using namespace com::sun::star;
 
@@ -42,7 +43,7 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
     else
     {
         assert(!"TokenStringContext - no OpCodeMap?!?");
-        maErrRef = ScGlobal::GetRscString(STR_NO_REF_TABLE);
+        maErrRef = ScResId(STR_NO_REF_TABLE);
     }
 
     if (!pDoc)

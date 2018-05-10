@@ -30,6 +30,7 @@
 #include <document.hxx>
 #include <global.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 
 using namespace com::sun::star;
 
@@ -147,7 +148,7 @@ void ScProgress::CreateInterpretProgress( ScDocument* pDoc, bool bWait )
             // Keep the dummy interpret progress.
             if ( !pGlobalProgress )
                 pInterpretProgress = new ScProgress( pDoc->GetDocumentShell(),
-                    ScGlobal::GetRscString( STR_PROGRESS_CALCULATING ),
+                    ScResId( STR_PROGRESS_CALCULATING ),
                     pDoc->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE, bWait );
             pInterpretDoc = pDoc;
         }

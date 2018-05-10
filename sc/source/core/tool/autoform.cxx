@@ -37,6 +37,7 @@
 #include <o3tl/make_unique.hxx>
 
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <document.hxx>
 
 /*
@@ -851,7 +852,7 @@ ScAutoFormat::ScAutoFormat() :
 {
     //  create default autoformat
     ScAutoFormatData* pData = new ScAutoFormatData;
-    OUString aName(ScGlobal::GetRscString(STR_STYLENAME_STANDARD));
+    OUString aName(ScResId(STR_STYLENAME_STANDARD));
     pData->SetName(aName);
 
     //  default font, default height
@@ -931,7 +932,7 @@ ScAutoFormat::ScAutoFormat() :
 
 bool DefaultFirstEntry::operator() (const OUString& left, const OUString& right) const
 {
-    OUString aStrStandard(ScGlobal::GetRscString(STR_STYLENAME_STANDARD));
+    OUString aStrStandard(ScResId(STR_STYLENAME_STANDARD));
     if (ScGlobal::GetpTransliteration()->isEqual( left, right ) )
         return false;
     if ( ScGlobal::GetpTransliteration()->isEqual( left, aStrStandard ) )

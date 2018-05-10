@@ -31,6 +31,7 @@
 #include <hints.hxx>
 #include <markdata.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <editutil.hxx>
 #include <tokenarray.hxx>
 #include <refupdatecontext.hxx>
@@ -431,7 +432,7 @@ void ScChangeAction::GetDescription(
     if (GetType() == SC_CAT_MOVE)
     {
         aBuf.append(
-            ScGlobal::GetRscString(STR_CHANGED_MOVE_REJECTION_WARNING) + " ");
+            ScResId(STR_CHANGED_MOVE_REJECTION_WARNING) + " ");
         rStr = aBuf.makeStringAndClear();
         return;
     }
@@ -439,7 +440,7 @@ void ScChangeAction::GetDescription(
     if (IsInsertType())
     {
         aBuf.append(
-            ScGlobal::GetRscString(STR_CHANGED_DELETE_REJECTION_WARNING) + " ");
+            ScResId(STR_CHANGED_DELETE_REJECTION_WARNING) + " ");
         rStr = aBuf.makeStringAndClear();
         return;
     }
@@ -456,7 +457,7 @@ void ScChangeAction::GetDescription(
     if (pReject->GetType() == SC_CAT_MOVE)
     {
         aBuf.append(
-            ScGlobal::GetRscString(STR_CHANGED_MOVE_REJECTION_WARNING));
+            ScResId(STR_CHANGED_MOVE_REJECTION_WARNING));
         aBuf.append(' ');
         rStr = aBuf.makeStringAndClear();
         return;
@@ -465,7 +466,7 @@ void ScChangeAction::GetDescription(
     if (pReject->IsDeleteType())
     {
         aBuf.append(
-            ScGlobal::GetRscString(STR_CHANGED_DELETE_REJECTION_WARNING));
+            ScResId(STR_CHANGED_DELETE_REJECTION_WARNING));
         aBuf.append(' ');
         rStr = aBuf.makeStringAndClear();
         return;
@@ -481,7 +482,7 @@ void ScChangeAction::GetDescription(
             if( itChangeAction->second->GetType() == SC_CAT_MOVE)
             {
                 aBuf.append(
-                    ScGlobal::GetRscString(STR_CHANGED_MOVE_REJECTION_WARNING));
+                    ScResId(STR_CHANGED_MOVE_REJECTION_WARNING));
                 aBuf.append(' ');
                 rStr = aBuf.makeStringAndClear();
                 return;
@@ -490,7 +491,7 @@ void ScChangeAction::GetDescription(
             if (pReject->IsDeleteType())
             {
                 aBuf.append(
-                    ScGlobal::GetRscString(STR_CHANGED_DELETE_REJECTION_WARNING));
+                    ScResId(STR_CHANGED_DELETE_REJECTION_WARNING));
                 aBuf.append(' ');
                 rStr = aBuf.makeStringAndClear();
                 return;
@@ -714,12 +715,12 @@ void ScChangeActionIns::GetDescription(
             pWhatId = STR_AREA;
     }
 
-    OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_INSERT);
+    OUString aRsc = ScResId(STR_CHANGED_INSERT);
     sal_Int32 nPos = aRsc.indexOf("#1");
     if (nPos >= 0)
     {
         // Construct a range string to replace '#1' first.
-        OUStringBuffer aBuf(ScGlobal::GetRscString(pWhatId));
+        OUStringBuffer aBuf(ScResId(pWhatId));
         aBuf.append(' ');
         aBuf.append(GetRefString(GetBigRange(), pDoc));
         OUString aRangeStr = aBuf.makeStringAndClear();
@@ -963,13 +964,13 @@ void ScChangeActionDel::GetDescription(
         aTmpRange.aEnd.SetRow( aTmpRange.aEnd.Row() + GetDy() );
     }
 
-    OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_DELETE);
+    OUString aRsc = ScResId(STR_CHANGED_DELETE);
     sal_Int32 nPos = aRsc.indexOf("#1");
     if (nPos >= 0)
     {
         // Build a string to replace with.
         OUStringBuffer aBuf;
-        aBuf.append(ScGlobal::GetRscString(pWhatId));
+        aBuf.append(ScResId(pWhatId));
         aBuf.append(' ');
         aBuf.append(GetRefString(aTmpRange, pDoc));
         OUString aRangeStr = aBuf.makeStringAndClear();
@@ -1188,7 +1189,7 @@ void ScChangeActionMove::GetDescription(
 
     bool bFlag3D = GetFromRange().aStart.Tab() != GetBigRange().aStart.Tab();
 
-    OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_MOVE);
+    OUString aRsc = ScResId(STR_CHANGED_MOVE);
 
     OUString aTmpStr = ScChangeAction::GetRefString(GetFromRange(), pDoc, bFlag3D);
     sal_Int32 nPos = aRsc.indexOf("#1");
@@ -1448,7 +1449,7 @@ void ScChangeActionContent::GetDescription(
 {
     ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
-    OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_CELL);
+    OUString aRsc = ScResId(STR_CHANGED_CELL);
 
     OUString aTmpStr;
     GetRefString(aTmpStr, pDoc);
@@ -1463,7 +1464,7 @@ void ScChangeActionContent::GetDescription(
 
     GetOldString( aTmpStr, pDoc );
     if (aTmpStr.isEmpty())
-        aTmpStr = ScGlobal::GetRscString( STR_CHANGED_BLANK );
+        aTmpStr = ScResId( STR_CHANGED_BLANK );
 
     nPos = nPos >= 0 ? aRsc.indexOf("#2", nPos) : -1;
     if (nPos >= 0)
@@ -1474,7 +1475,7 @@ void ScChangeActionContent::GetDescription(
 
     GetNewString( aTmpStr, pDoc );
     if (aTmpStr.isEmpty())
-        aTmpStr = ScGlobal::GetRscString( STR_CHANGED_BLANK );
+        aTmpStr = ScResId( STR_CHANGED_BLANK );
 
     nPos = nPos >= 0 ? aRsc.indexOf("#3", nPos) : -1;
     if (nPos >= 0)

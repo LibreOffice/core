@@ -24,6 +24,7 @@
 
 #include <global.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <viewopti.hxx>
 #include <rechead.hxx>
 #include <sc.hrc>
@@ -129,7 +130,7 @@ void ScViewOptions::SetDefaults()
     aModeArr[VOBJ_TYPE_DRAW ] = VOBJ_MODE_SHOW;
 
     aGridCol     = SC_STD_GRIDCOLOR;
-    aGridColName = ScGlobal::GetRscString( STR_GRIDCOLOR );
+    aGridColName = ScResId( STR_GRIDCOLOR );
 
     aGridOpt.SetDefaults();
 }

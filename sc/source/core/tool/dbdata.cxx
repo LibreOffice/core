@@ -29,6 +29,7 @@
 #include <queryparam.hxx>
 #include <queryentry.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <subtotalparam.hxx>
 #include <sortparam.hxx>
 #include <dociter.hxx>
@@ -270,25 +271,25 @@ OUString ScDBData::GetOperations() const
     {
         const ScQueryEntry& rEntry = mpQueryParam->GetEntry(0);
         if (rEntry.bDoQuery)
-            aBuf.append(ScGlobal::GetRscString(STR_OPERATION_FILTER));
+            aBuf.append(ScResId(STR_OPERATION_FILTER));
     }
 
     if (mpSortParam->maKeyState[0].bDoSort)
     {
         if (!aBuf.isEmpty())
             aBuf.append(", ");
-        aBuf.append(ScGlobal::GetRscString(STR_OPERATION_SORT));
+        aBuf.append(ScResId(STR_OPERATION_SORT));
     }
 
     if (mpSubTotal->bGroupActive[0] && !mpSubTotal->bRemoveOnly)
     {
         if (!aBuf.isEmpty())
             aBuf.append(", ");
-        aBuf.append(ScGlobal::GetRscString(STR_OPERATION_SUBTOTAL));
+        aBuf.append(ScResId(STR_OPERATION_SUBTOTAL));
     }
 
     if (aBuf.isEmpty())
-        aBuf.append(ScGlobal::GetRscString(STR_OPERATION_NONE));
+        aBuf.append(ScResId(STR_OPERATION_NONE));
 
     return aBuf.makeStringAndClear();
 }
@@ -828,7 +829,7 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
     // starting at the column offset number. Still no duplicates of course.
     if (bHaveEmpty)
     {
-        OUString aColumn( ScGlobal::GetRscString(STR_COLUMN));
+        OUString aColumn( ScResId(STR_COLUMN));
         for (size_t i=0, n=aNewNames.size(); i < n; ++i)
         {
             if (aNewNames[i].isEmpty())

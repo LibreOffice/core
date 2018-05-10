@@ -16,6 +16,7 @@
 #include <attrib.hxx>
 #include <scitems.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <sc.hrc>
 
 using namespace utl;
@@ -30,7 +31,7 @@ ScDefaultsOptions::ScDefaultsOptions()
 void ScDefaultsOptions::SetDefaults()
 {
     nInitTabCount  = 1;
-    aInitTabPrefix = ScGlobal::GetRscString(STR_TABLE_DEF); // Default Prefix "Sheet"
+    aInitTabPrefix = ScResId(STR_TABLE_DEF); // Default Prefix "Sheet"
 }
 
 bool ScDefaultsOptions::operator==( const ScDefaultsOptions& rOpt ) const
