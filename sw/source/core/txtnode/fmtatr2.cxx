@@ -664,9 +664,7 @@ void Meta::NotifyChangeTextNode(SwTextNode *const pTextNode)
     }
     if (!pTextNode) // text node gone? invalidate UNO object!
     {
-        SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
-            &static_cast<SwModify&>(*this) ); // cast to base class!
-        Modify(&aMsgHint, &aMsgHint);
+        GetNotifier().Broadcast(SfxHint(SfxHintId::Deinitializing));
     }
 }
 
@@ -674,9 +672,11 @@ void Meta::NotifyChangeTextNode(SwTextNode *const pTextNode)
 void Meta::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew )
 {
     NotifyClients(pOld, pNew);
+    GetNotifier().Broadcast(SfxHint(SfxHintId::DataChanged));
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
     {   // invalidate cached uno object
         SetXMeta(uno::Reference<rdf::XMetadatable>(nullptr));
+        GetNotifier().Broadcast(SfxHint(SfxHintId::Deinitializing));
     }
 }
 
