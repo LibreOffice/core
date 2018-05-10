@@ -2459,7 +2459,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                     mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
                 }
 
-                if (!aMimeType.isEmpty())
+                if (!aMimeType.isEmpty() && GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012)
                     mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aMimeType);
 
                 SvXMLElementExport aElement(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
