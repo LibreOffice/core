@@ -73,7 +73,7 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     m_xRbtWindow->connect_clicked( aLink );
     m_xRbtAuto->connect_clicked( aLink );
 
-    m_xTmfPause->connect_changed( LINK( this, SdStartPresentationDlg, ChangePauseHdl ) );
+    m_xTmfPause->connect_value_changed( LINK( this, SdStartPresentationDlg, ChangePauseHdl ) );
 
     // fill Listbox with page names
     for (std::vector<OUString>::const_iterator pIter = rPageNames.begin(); pIter != rPageNames.end(); ++pIter)
@@ -309,7 +309,7 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl, weld::Button
 /**
  *      Handler: Enabled/Disabled Checkbox "AlwaysOnTop"
  */
-IMPL_LINK_NOARG(SdStartPresentationDlg, ChangePauseHdl, weld::Entry&, void)
+IMPL_LINK_NOARG(SdStartPresentationDlg, ChangePauseHdl, weld::TimeSpinButton&, void)
 {
     ChangePause();
 }

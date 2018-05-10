@@ -642,8 +642,6 @@ public:
         m_aValueChangedHdl = rLink;
     }
 
-    void connect_changed(const Link<Entry&, void>& rLink) { m_xSpinButton->connect_changed(rLink); }
-
     int normalize(int nValue) const { return m_xSpinButton->normalize(nValue); }
     int denormalize(int nValue) const { return m_xSpinButton->denormalize(nValue); }
     void set_sensitive(bool sensitive) { m_xSpinButton->set_sensitive(sensitive); }
@@ -720,8 +718,6 @@ public:
     {
         m_aValueChangedHdl = rLink;
     }
-
-    void connect_changed(const Link<Entry&, void>& rLink) { m_xSpinButton->connect_changed(rLink); }
 
     void set_sensitive(bool sensitive) { m_xSpinButton->set_sensitive(sensitive); }
     bool get_sensitive() const { return m_xSpinButton->get_sensitive(); }

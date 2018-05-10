@@ -66,7 +66,7 @@ private:
     DECL_LINK(ChangeRangeHdl, weld::Button&, void);
     DECL_LINK(ClickWindowPresentationHdl, weld::Button&, void);
     void ChangePause();
-    DECL_LINK(ChangePauseHdl, weld::Entry&, void);
+    DECL_LINK(ChangePauseHdl, weld::TimeSpinButton&, void);
 
     void                InitMonitorSettings();
     enum DisplayType {
