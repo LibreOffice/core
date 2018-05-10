@@ -410,7 +410,7 @@ static sal_uInt16 lcl_GetPropertyMapOfService( SwServiceType nServiceId )
 }
 
 class SwXFieldMaster::Impl
-    : public SwClient
+    : public SvtListener
 {
 private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
@@ -420,8 +420,7 @@ public:
     ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
 
     SwDoc*          m_pDoc;
-
-    bool            m_bIsDescriptor;
+    SwFieldType* m_pType;
 
     SwFieldIds      m_nResTypeId;
 
@@ -434,22 +433,39 @@ public:
     bool            m_bParam1;  // IsExpression
     sal_Int32       m_nParam2;
 
-    Impl(SwModify *const pModify,
-            SwDoc * pDoc, SwFieldIds nResId, bool bIsDescriptor)
-        : SwClient(pModify)
-        , m_EventListeners(m_Mutex)
+    Impl(SwPageDesc* const pPageDesc, SwDoc* pDoc, SwFieldIds nResId)
+        : m_EventListeners(m_Mutex)
         , m_pDoc(pDoc)
-        , m_bIsDescriptor(bIsDescriptor)
+        , m_pType(nullptr)
         , m_nResTypeId(nResId)
         , m_fParam1(0.0)
         , m_nParam1(-1)
         , m_bParam1(false)
         , m_nParam2(0)
-    { }
+    {
+        StartListening(pPageDesc->GetNotifier());
+    }
 
+    Impl(SwFieldType* const pType, SwDoc* pDoc, SwFieldIds nResId)
+        : m_EventListeners(m_Mutex)
+        , m_pDoc(pDoc)
+        , m_pType(pType)
+        , m_nResTypeId(nResId)
+        , m_fParam1(0.0)
+        , m_nParam1(-1)
+        , m_bParam1(false)
+        , m_nParam2(0)
+    {
+        StartListening(m_pType->GetNotifier());
+    }
+    void SetFieldType(SwFieldType* pType)
+    {
+        EndListeningAll();
+        m_pType = pType;
+        StartListening(m_pType->GetNotifier());
+    }
 protected:
-    // SwClient
-    virtual void Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew) override;
+    virtual void Notify(const SfxHint& rHint) override;
 };
 
 namespace
@@ -522,13 +538,12 @@ SwXFieldMaster::getSupportedServiceNames()
 }
 
 SwXFieldMaster::SwXFieldMaster(SwDoc *const pDoc, SwFieldIds const nResId)
-    : m_pImpl(new Impl(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD),
-                pDoc, nResId, true))
+    : m_pImpl(new Impl(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD), pDoc, nResId))
 {
 }
 
 SwXFieldMaster::SwXFieldMaster(SwFieldType& rType, SwDoc * pDoc)
-    : m_pImpl(new Impl(&rType, pDoc, rType.Which(), false))
+    : m_pImpl(new Impl(&rType, pDoc, rType.Which()))
 {
 }
 
@@ -686,8 +701,7 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
         {
             throw uno::RuntimeException("no field type found!", *this);
         }
-        pType2->Add(m_pImpl.get());
-        m_pImpl->m_bIsDescriptor = false;
+        m_pImpl->SetFieldType(pType2);
     }
     else
     {
@@ -781,7 +795,7 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
 SwFieldType* SwXFieldMaster::GetFieldType(bool const bDontCreate) const
 {
     if (!bDontCreate && SwFieldIds::Database == m_pImpl->m_nResTypeId
-        && m_pImpl->m_bIsDescriptor && m_pImpl->m_pDoc)
+        && !m_pImpl->m_pType && m_pImpl->m_pDoc)
     {
         SwDBData aData;
 
@@ -798,13 +812,9 @@ SwFieldType* SwXFieldMaster::GetFieldType(bool const bDontCreate) const
 
         SwDBFieldType aType(m_pImpl->m_pDoc, m_pImpl->m_sParam3, aData);
         SwFieldType *const pType = m_pImpl->m_pDoc->getIDocumentFieldsAccess().InsertFieldType(aType);
-        pType->Add(m_pImpl.get());
-        const_cast<SwXFieldMaster*>(this)->m_pImpl->m_bIsDescriptor = false;
+        m_pImpl->SetFieldType(pType);
     }
-    if (m_pImpl->m_bIsDescriptor)
-        return nullptr;
-    else
-        return static_cast<SwFieldType*>(m_pImpl->GetRegisteredIn());
+    return m_pImpl->m_pType;
 }
 
 uno::Any SAL_CALL
@@ -1011,23 +1021,20 @@ void SAL_CALL SwXFieldMaster::removeEventListener(
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
-void SwXFieldMaster::Impl::Modify(
-        SfxPoolItem const*const pOld, SfxPoolItem const*const pNew)
+void SwXFieldMaster::Impl::Notify(const SfxHint& rHint)
 {
-    ClientModify(this, pOld, pNew);
-    if (GetRegisteredIn())
+    if(rHint.GetId() == SfxHintId::Dying)
     {
-        return; // core object still alive
+        m_pDoc = nullptr;
+        m_pType = nullptr;
+        uno::Reference<uno::XInterface> const xThis(m_wThis);
+        if (!xThis.is())
+        {   // fdo#72695: if UNO object is already dead, don't revive it with event
+            return;
+        }
+        lang::EventObject const ev(xThis);
+        m_EventListeners.disposeAndClear(ev);
     }
-
-    m_pDoc = nullptr;
-    uno::Reference<uno::XInterface> const xThis(m_wThis);
-    if (!xThis.is())
-    {   // fdo#72695: if UNO object is already dead, don't revive it with event
-        return;
-    }
-    lang::EventObject const ev(xThis);
-    m_EventListeners.disposeAndClear(ev);
 }
 
 OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc)
