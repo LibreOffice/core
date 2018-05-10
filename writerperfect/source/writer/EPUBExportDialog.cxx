@@ -221,7 +221,7 @@ IMPL_LINK_NOARG(EPUBExportDialog, OKClickHdl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-EPUBExportDialog::~EPUBExportDialog() {}
+EPUBExportDialog::~EPUBExportDialog() = default;
 
 } // namespace writerperfect
 

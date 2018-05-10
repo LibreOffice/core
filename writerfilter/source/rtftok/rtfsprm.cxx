@@ -242,7 +242,7 @@ static void cloneAndDeduplicateSprm(std::pair<Id, RTFValue::Pointer_t> const& rS
 }
 
 /// Extracts the list level matching nLevel from pAbstract.
-static RTFValue::Pointer_t getListLevel(RTFValue::Pointer_t pAbstract, int nLevel)
+static RTFValue::Pointer_t getListLevel(const RTFValue::Pointer_t& pAbstract, int nLevel)
 {
     for (const auto& rPair : pAbstract->getSprms())
     {
@@ -287,7 +287,7 @@ void RTFSprms::deduplicateList(const std::map<int, int>& rInvalidListLevelFirstI
         eraseNestedAttribute(*this, NS_ooxml::LN_CT_PPrBase_ind, NS_ooxml::LN_CT_Ind_firstLine);
 }
 
-void RTFSprms::duplicateList(RTFValue::Pointer_t pAbstract)
+void RTFSprms::duplicateList(const RTFValue::Pointer_t& pAbstract)
 {
     int nLevel = 0;
     RTFValue::Pointer_t pLevelId
