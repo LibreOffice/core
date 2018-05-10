@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -68,6 +68,13 @@
 #include <unordered_map>
 #include <memory>
 
+#if defined(_WIN32) && defined(DBG_UTIL)
+#include <o3tl/char16_t2wchar_t.hxx>
+#include <prewin.h>
+#include <crtdbg.h>
+#include <postwin.h>
+#endif
+
 namespace
 {
     OUString createFromUtf8(const char* data, size_t size)
@@ -100,6 +107,26 @@ namespace
     }
 }
 
+#if defined(_WIN32) && defined(DBG_UTIL)
+static int IgnoringCrtReportHook(int reportType, wchar_t *message, int * /* returnValue */)
+{
+    OUString sType;
+    if (reportType == _CRT_WARN)
+        sType = "WARN";
+    else if (reportType == _CRT_ERROR)
+        sType = "ERROR";
+    else if (reportType == _CRT_ASSERT)
+        sType = "ASSERT";
+    else
+        sType = "?(" + OUString::number(reportType) + ")";
+
+    SAL_WARN("unotools.i18n", "CRT Report Hook: " << sType << ": " << OUString(o3tl::toU(message)));
+
+    return TRUE;
+}
+#endif
+
+
 namespace Translate
 {
     std::locale Create(const sal_Char* pPrefixName, const LanguageTag& rLocale)
@@ -123,7 +150,48 @@ namespace Translate
         bindtextdomain(pPrefixName, sPath.getStr());
 #endif
         gen.add_messages_domain(pPrefixName);
+
+#if defined(_WIN32) && defined(DBG_UTIL)
+        // With a newer C++ debug runtime (in an --enable-dbgutil build), passing an invalid locale
+        // name causes an attempt to display an error dialog. Which does not even show up, at least
+        // for me, but instead the process (gengal, at least) just hangs. Which is far from ideal.
+
+        // Passing a POSIX-style locale name to the std::locale constructor on Windows is a bit odd,
+        // but apparently in the normal C++ runtime it "just" causes an exception to be thrown, that
+        // boost catches (see the loadable(std::string name) in boost's
+        // libs\locale\src\std\std_backend.cpp), and then instead uses the Windows style locale name
+        // it knows how to construct. (Why does it even try the POSIX style name I can't
+        // understand.)
+
+        // Actually it isn't just the locale name part "en_US" of a locale like "en_US.UTF-8" that
+        // is problematic, but also the encoding part, "UTF-8". The Microsoft C/C++ library does not
+        // support UTF-8 locales. The error message that our own report hook catches says:
+        // "f:\dd\vctools\crt\crtw32\stdcpp\xmbtowc.c(89) : Assertion failed: ploc->_Mbcurmax == 1
+        // || ploc->_Mbcurmax == 2". Clearly in a UTF-8 locale (perhaps one that boost internally
+        // constructs?) the maximum bytes per character will be more than 2.
+
+        // With a debug C++ runtime, we need to avoid the error dialog, and just ignore the error.
+
+        struct CrtSetReportHook
+        {
+            int mnCrtSetReportHookSucceeded;
+
+            CrtSetReportHook()
+            {
+                mnCrtSetReportHookSucceeded = _CrtSetReportHookW2(_CRT_RPTHOOK_INSTALL, IgnoringCrtReportHook);
+            }
+
+            ~CrtSetReportHook()
+            {
+                if (mnCrtSetReportHookSucceeded >= 0)
+                    _CrtSetReportHookW2(_CRT_RPTHOOK_REMOVE, IgnoringCrtReportHook);
+            }
+        } aHook;
+
+#endif
+
         std::locale aRet(gen(sIdentifier.getStr()));
+
         aCache[sUnique] = aRet;
         return aRet;
     }
