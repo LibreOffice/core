@@ -2515,7 +2515,6 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
 
 void DocxAttributeOutput::RawText(const OUString& rText, rtl_TextEncoding /*eCharSet*/)
 {
-    assert ( (m_pHyperlinkAttrList.is() || m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen() /* || m_rExport.SdrExporter().IsDrawingOpen() */) && "jluth is at mail dot com-and wants example documents that use RawText/EEField");
     m_sRawText = rText;
 }
 
@@ -5551,7 +5550,6 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
 
             if ( !m_sRawText.isEmpty() )
             {
-                assert (bTextAtr && "jluth is at mail dot com-and is looking for sample documents");
                 RunText( m_sRawText );
                 m_sRawText.clear();
             }
