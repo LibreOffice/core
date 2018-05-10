@@ -2478,7 +2478,8 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
     ImpExportDescription( xShape ); // #i68101#
 
     // Signature Line - needs to be after the images!
-    ImpExportSignatureLine(xShape);
+    if (GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012)
+        ImpExportSignatureLine(xShape);
 }
 
 void XMLShapeExport::ImpExportChartShape(
