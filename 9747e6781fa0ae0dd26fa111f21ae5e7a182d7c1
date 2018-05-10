@@ -22,6 +22,24 @@
       "revId": "9747e6781fa0ae0dd26fa111f21ae5e7a182d7c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_9eff92a9",
+        "filename": "vcl/source/gdi/CommonSalLayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-05-10T22:31:15Z",
+      "side": 1,
+      "message": "Yes, but that + 1 didn\u0027t make any sense to begin with; we are not allocating a NULL terminated C array, but rather pre-allocation a vector with an arbitrary number of items based on a guess to avoid many re-allocations as the vector grows. So the number is arbitrary to begin with, and is already too much for the most common case where the number of glyphs will be equal or even less than the number of characters.",
+      "parentUuid": "9a30ddce_be0536c3",
+      "revId": "9747e6781fa0ae0dd26fa111f21ae5e7a182d7c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
