@@ -961,7 +961,7 @@ ScFormulaVectorState ScFormulaCell::GetVectorState() const
 }
 
 void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
-                                const FormulaGrammar::Grammar eGrammar ) const
+                                const FormulaGrammar::Grammar eGrammar, const ScInterpreterContext* pContext ) const
 {
     if( pCode->GetCodeError() != FormulaError::NONE && !pCode->GetLen() )
     {
@@ -992,7 +992,7 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
             }
             else
             {
-                ScCompiler aComp( pDocument, aPos, *pCode, eGrammar);
+                ScCompiler aComp( pDocument, aPos, *pCode, eGrammar, pContext );
                 aComp.CreateStringFromTokenArray( rBuffer );
             }
         }
@@ -1003,7 +1003,7 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
     }
     else
     {
-        ScCompiler aComp( pDocument, aPos, *pCode, eGrammar);
+        ScCompiler aComp( pDocument, aPos, *pCode, eGrammar, pContext );
         aComp.CreateStringFromTokenArray( rBuffer );
     }
 
@@ -1015,21 +1015,22 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
     }
 }
 
-void ScFormulaCell::GetFormula( OUString& rFormula, const FormulaGrammar::Grammar eGrammar ) const
+void ScFormulaCell::GetFormula( OUString& rFormula, const FormulaGrammar::Grammar eGrammar,
+    const ScInterpreterContext* pContext ) const
 {
     OUStringBuffer rBuffer( rFormula );
-    GetFormula( rBuffer, eGrammar );
+    GetFormula( rBuffer, eGrammar, pContext );
     rFormula = rBuffer.makeStringAndClear();
 }
 
-OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt ) const
+OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt, const ScInterpreterContext* pContext ) const
 {
     OUStringBuffer aBuf;
     if (pCode->GetCodeError() != FormulaError::NONE && !pCode->GetLen())
     {
         ScTokenArray aCode;
         aCode.AddToken( FormulaErrorToken( pCode->GetCodeError()));
-        ScCompiler aComp(rCxt, aPos, aCode);
+        ScCompiler aComp(rCxt, aPos, aCode, pContext);
         aComp.CreateStringFromTokenArray(aBuf);
         return aBuf.makeStringAndClear();
     }
@@ -1056,7 +1057,7 @@ OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt ) const
             }
             else
             {
-                ScCompiler aComp(rCxt, aPos, *pCode);
+                ScCompiler aComp(rCxt, aPos, *pCode, pContext);
                 aComp.CreateStringFromTokenArray(aBuf);
             }
         }
@@ -1067,7 +1068,7 @@ OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt ) const
     }
     else
     {
-        ScCompiler aComp(rCxt, aPos, *pCode);
+        ScCompiler aComp(rCxt, aPos, *pCode, pContext);
         aComp.CreateStringFromTokenArray(aBuf);
     }
 
