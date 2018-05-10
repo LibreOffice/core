@@ -57,6 +57,7 @@
 #include "porftn.hxx"
 #include "porrst.hxx"
 #include "itratr.hxx"
+#include "portab.hxx"
 #include <accessibilityoptions.hxx>
 #include <wrong.hxx>
 #include <doc.hxx>
@@ -1686,6 +1687,28 @@ bool SwTextFormatInfo::LastKernPortion()
         return true;
     }
     return false;
+}
+
+SwTwips SwTextFormatInfo::GetLineWidth()
+{
+    SwTwips nLineWidth = Width() - X();
+
+    const bool bTabOverMargin = GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(
+        DocumentSettingId::TAB_OVER_MARGIN);
+    if (!bTabOverMargin)
+        return nLineWidth;
+
+    SwTabPortion* pLastTab = GetLastTab();
+    if (!pLastTab)
+        return nLineWidth;
+
+    if (pLastTab->GetTabPos() <= Width())
+        return nLineWidth;
+
+    // Consider tab portions over the printing bounds of the text frame.
+    nLineWidth = pLastTab->GetTabPos() - X();
+
+    return nLineWidth;
 }
 
 SwTextSlot::SwTextSlot(

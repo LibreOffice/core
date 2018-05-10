@@ -540,6 +540,12 @@ public:
     void Width( const sal_uInt16 nNew ) { m_nWidth = nNew; }
            void Init();
 
+    /**
+     * Returns the distance between the current horizontal position and the end
+     * of the line.
+     */
+    SwTwips GetLineWidth();
+
     // Returns the first changed position of the paragraph
     inline sal_Int32 GetReformatStart() const;
 
