@@ -73,6 +73,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <svl/itemprop.hxx>
+#include <svl/listener.hxx>
 #include <paratr.hxx>
 
 using namespace ::com::sun::star;
@@ -82,6 +83,14 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::style;
 
+
+namespace
+{
+    inline static SvtBroadcaster& GetPageDescNotifier(SwDoc* pDoc)
+    {
+        return pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier();
+    }
+}
 // Constants for the css::text::ColumnSeparatorStyle
 #define API_COL_LINE_NONE               0
 #define API_COL_LINE_SOLID              1
@@ -999,15 +1008,13 @@ OSL_FAIL("not implemented");
 
 static const char aInvalidStyle[] = "__XXX___invalid";
 
-class SwXNumberingRules::Impl : public SwClient
+class SwXNumberingRules::Impl
+    : public SvtListener
 {
-private:
     SwXNumberingRules& m_rParent;
-public:
-    explicit Impl(SwXNumberingRules& rParent) : m_rParent(rParent) {}
-protected:
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void Notify(const SfxHint&) override;
+    public:
+        explicit Impl(SwXNumberingRules& rParent) : m_rParent(rParent) {}
 };
 
 bool SwXNumberingRules::isInvalidStyle(const OUString &rName)
@@ -1074,7 +1081,7 @@ SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc) :
         }
     }
     if(pDoc)
-        pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(&*m_pImpl);
+        m_pImpl->StartListening(GetPageDescNotifier(pDoc));
     for(sal_uInt16 i = 0; i < MAXLEVEL; ++i)
     {
         m_sNewCharStyleNames[i] = aInvalidStyle;
@@ -1090,7 +1097,7 @@ SwXNumberingRules::SwXNumberingRules(SwDocShell& rDocSh) :
     m_pPropertySet(GetNumberingRulesSet()),
     bOwnNumRuleCreated(false)
 {
-    pDocShell->GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(&*m_pImpl);
+    m_pImpl->StartListening(GetPageDescNotifier(pDocShell->GetDoc()));
 }
 
 SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
@@ -1101,7 +1108,7 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
     m_pPropertySet(GetNumberingRulesSet()),
     bOwnNumRuleCreated(false)
 {
-    rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(&*m_pImpl);
+    m_pImpl->StartListening(GetPageDescNotifier(&rDoc));
     m_sCreatedNumRuleName = rDoc.GetUniqueNumRuleName();
     rDoc.MakeNumRule( m_sCreatedNumRuleName, nullptr, false,
                       // #i89178#
@@ -2234,10 +2241,9 @@ void SwXNumberingRules::setName(const OUString& /*rName*/)
     throw aExcept;
 }
 
-void SwXNumberingRules::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXNumberingRules::Impl::Notify(const SfxHint& rHint)
 {
-    ClientModify(this, pOld, pNew);
-    if(!GetRegisteredIn())
+    if(rHint.GetId() == SfxHintId::Dying)
     {
         if(m_rParent.bOwnNumRuleCreated)
             delete m_rParent.pNumRule;
