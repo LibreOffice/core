@@ -338,18 +338,16 @@ SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDes
 }
 
 // Dialog for the entry of the name of the design
-class SdDesignNameDlg : public ModalDialog
+class SdDesignNameDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<Edit>           m_pEdit;
-    VclPtr<OKButton>       m_pBtnOK;
+    std::unique_ptr<weld::Entry> m_xEdit;
+    std::unique_ptr<weld::Button> m_xBtnOK;
 
 public:
-    SdDesignNameDlg(vcl::Window* pWindow, const OUString& aName );
-    virtual ~SdDesignNameDlg() override;
-    virtual void dispose() override;
+    SdDesignNameDlg(weld::Window* pWindow, const OUString& aName );
     OUString GetDesignName();
-    DECL_LINK(ModifyHdl, Edit&, void);
+    DECL_LINK(ModifyHdl, weld::Entry&, void);
 };
 
 // SdPublishingDlg Methods
@@ -1139,11 +1137,11 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl, Button*, void)
         {
             bRetry = false;
 
-            ScopedVclPtrInstance< SdDesignNameDlg > aDlg(this, aName );
+            SdDesignNameDlg aDlg(GetFrameWeld(), aName);
 
-            if ( aDlg->Execute() == RET_OK )
+            if (aDlg.run() == RET_OK)
             {
-                aDesign.m_aDesignName = aDlg->GetDesignName();
+                aDesign.m_aDesignName = aDlg.GetDesignName();
 
                 std::vector<SdPublishingDesign>::iterator iter;
                 for (iter = m_aDesignList.begin(); iter != m_aDesignList.end(); ++iter)
@@ -1616,36 +1614,24 @@ bool SdPublishingDlg::selectPageByUIXMLDescription(const OString& rUIXMLDescript
 }
 
 // SdDesignNameDlg Methods
-SdDesignNameDlg::SdDesignNameDlg(vcl::Window* pWindow, const OUString& aName)
-    : ModalDialog(pWindow, "NameDesignDialog", "modules/sdraw/ui/namedesign.ui")
+SdDesignNameDlg::SdDesignNameDlg(weld::Window* pWindow, const OUString& rName)
+    : GenericDialogController(pWindow, "modules/sdraw/ui/namedesign.ui", "NameDesignDialog")
+    , m_xEdit(m_xBuilder->weld_entry("entry"))
+    , m_xBtnOK(m_xBuilder->weld_button("ok"))
 {
-    get(m_pEdit, "entry");
-    get(m_pBtnOK, "ok");
-    m_pEdit->SetModifyHdl(LINK(this, SdDesignNameDlg, ModifyHdl ));
-    m_pEdit->SetText(aName);
-    m_pBtnOK->Enable(!aName.isEmpty());
-}
-
-SdDesignNameDlg::~SdDesignNameDlg()
-{
-    disposeOnce();
-}
-
-void SdDesignNameDlg::dispose()
-{
-    m_pEdit.clear();
-    m_pBtnOK.clear();
-    ModalDialog::dispose();
+    m_xEdit->connect_changed(LINK(this, SdDesignNameDlg, ModifyHdl ));
+    m_xEdit->set_text(rName);
+    m_xBtnOK->set_sensitive(!rName.isEmpty());
 }
 
 OUString SdDesignNameDlg::GetDesignName()
 {
-    return m_pEdit->GetText();
+    return m_xEdit->get_text();
 }
 
-IMPL_LINK_NOARG(SdDesignNameDlg, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SdDesignNameDlg, ModifyHdl, weld::Entry&, void)
 {
-    m_pBtnOK->Enable(!m_pEdit->GetText().isEmpty());
+    m_xBtnOK->set_sensitive(!m_xEdit->get_text().isEmpty());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
