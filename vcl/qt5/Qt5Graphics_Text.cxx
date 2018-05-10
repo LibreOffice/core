@@ -23,7 +23,7 @@
 
 #include <vcl/fontcharmap.hxx>
 
-#include <CommonSalLayout.hxx>
+#include <sallayout.hxx>
 #include <PhysicalFontCollection.hxx>
 
 #include <QtGui/QFontDatabase>
@@ -142,10 +142,10 @@ bool Qt5Graphics::GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) { 
 std::unique_ptr<SalLayout> Qt5Graphics::GetTextLayout(ImplLayoutArgs&, int nFallbackLevel)
 {
     if (m_pTextStyle[nFallbackLevel])
-        return std::unique_ptr<SalLayout>(new CommonSalLayout(*m_pTextStyle[nFallbackLevel]));
+        return std::unique_ptr<SalLayout>(new GenericSalLayout(*m_pTextStyle[nFallbackLevel]));
     return std::unique_ptr<SalLayout>();
 }
 
-void Qt5Graphics::DrawTextLayout(const CommonSalLayout&) {}
+void Qt5Graphics::DrawTextLayout(const GenericSalLayout&) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

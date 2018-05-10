@@ -54,7 +54,7 @@
 #include <PhysicalFontFace.hxx>
 #include <salbmp.hxx>
 #include <salprn.hxx>
-#include <CommonSalLayout.hxx>
+#include <sallayout.hxx>
 
 using namespace psp;
 
@@ -529,12 +529,12 @@ ImplPspFontData::ImplPspFontData(const psp::FastPrintFontInfo& rInfo)
     mnFontId( rInfo.m_nID )
 {}
 
-class PspCommonSalLayout : public CommonSalLayout
+class PspSalLayout : public GenericSalLayout
 {
 public:
-    PspCommonSalLayout(psp::PrinterGfx&, FreetypeFont& rFont);
+    PspSalLayout(psp::PrinterGfx&, FreetypeFont& rFont);
 
-    virtual void        InitFont() const override;
+    void                InitFont() const final override;
 
 private:
     ::psp::PrinterGfx&  mrPrinterGfx;
@@ -546,8 +546,8 @@ private:
     bool                mbArtBold;
 };
 
-PspCommonSalLayout::PspCommonSalLayout(::psp::PrinterGfx& rGfx, FreetypeFont& rFont)
-:   CommonSalLayout(*rFont.GetFontInstance())
+PspSalLayout::PspSalLayout(::psp::PrinterGfx& rGfx, FreetypeFont& rFont)
+:   GenericSalLayout(*rFont.GetFontInstance())
 ,   mrPrinterGfx(rGfx)
 {
     mnFontID     = mrPrinterGfx.GetFontID();
@@ -558,14 +558,14 @@ PspCommonSalLayout::PspCommonSalLayout(::psp::PrinterGfx& rGfx, FreetypeFont& rF
     mbArtBold    = mrPrinterGfx.GetArtificialBold();
 }
 
-void PspCommonSalLayout::InitFont() const
+void PspSalLayout::InitFont() const
 {
-    CommonSalLayout::InitFont();
+    GenericSalLayout::InitFont();
     mrPrinterGfx.SetFont(mnFontID, mnFontHeight, mnFontWidth,
                          mnOrientation, mbVertical, mbArtItalic, mbArtBold);
 }
 
-void GenPspGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
+void GenPspGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
     const GlyphItem* pGlyph;
     Point aPos;
@@ -763,7 +763,7 @@ bool GenPspGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
 std::unique_ptr<SalLayout> GenPspGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
 {
     if (m_pFreetypeFont[nFallbackLevel])
-        return std::unique_ptr<SalLayout>(new PspCommonSalLayout(*m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel]));
+        return std::unique_ptr<SalLayout>(new PspSalLayout(*m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel]));
 
     return nullptr;
 }

@@ -19,7 +19,10 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_complextext, \
 	vcl/qa/cppunit/complextext \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,vcl_complextext,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,vcl_complextext,\
+	boost_headers \
+	harfbuzz \
+))
 
 ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
 $(eval $(call gb_CppunitTest_use_package,vcl_complextext,fonts_dejavu))

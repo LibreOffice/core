@@ -17547,7 +17547,6 @@ vcl/inc/BitmapProcessor.hxx
 vcl/inc/BitmapScaleConvolutionFilter.hxx
 vcl/inc/BitmapScaleSuperFilter.hxx
 vcl/inc/BitmapSymmetryCheck.hxx
-vcl/inc/CommonSalLayout.hxx
 vcl/inc/ControlCacheKey.hxx
 vcl/inc/PhysicalFontCollection.hxx
 vcl/inc/PhysicalFontFace.hxx

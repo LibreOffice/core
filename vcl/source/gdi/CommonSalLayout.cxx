@@ -18,7 +18,10 @@
  */
 
 #include <memory>
-#include <CommonSalLayout.hxx>
+
+#include <hb-icu.h>
+
+#include <sallayout.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <vcl/unohelp.hxx>
@@ -50,7 +53,7 @@ static hb_unicode_funcs_t* getUnicodeFuncs()
 }
 #endif
 
-CommonSalLayout::CommonSalLayout(LogicalFontInstance &rFont)
+GenericSalLayout::GenericSalLayout(LogicalFontInstance &rFont)
     : mpFont(&rFont)
     , mpVertGlyphs(nullptr)
     , mbFuzzing(utl::ConfigManager::IsFuzzing())
@@ -58,12 +61,12 @@ CommonSalLayout::CommonSalLayout(LogicalFontInstance &rFont)
     mpFont->Acquire();
 }
 
-CommonSalLayout::~CommonSalLayout()
+GenericSalLayout::~GenericSalLayout()
 {
     mpFont->Release();
 }
 
-void CommonSalLayout::ParseFeatures(const OUString& aName)
+void GenericSalLayout::ParseFeatures(const OUString& aName)
 {
     if (aName.indexOf(FontSelectPatternAttributes::FEAT_PREFIX) < 0)
         return;
@@ -86,10 +89,6 @@ void CommonSalLayout::ParseFeatures(const OUString& aName)
         }
     }
     while (nIndex >= 0);
-}
-
-void CommonSalLayout::InitFont() const
-{
 }
 
 struct SubRun
@@ -175,12 +174,12 @@ namespace {
 
 } // namespace
 
-std::shared_ptr<vcl::TextLayoutCache> CommonSalLayout::CreateTextLayoutCache(OUString const& rString) const
+std::shared_ptr<vcl::TextLayoutCache> GenericSalLayout::CreateTextLayoutCache(OUString const& rString) const
 {
     return std::make_shared<vcl::TextLayoutCache>(rString.getStr(), rString.getLength());
 }
 
-void CommonSalLayout::SetNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos, bool bRightToLeft)
+void GenericSalLayout::SetNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos, bool bRightToLeft)
 {
     if (nCharPos < 0 || mbFuzzing)
         return;
@@ -206,7 +205,7 @@ void CommonSalLayout::SetNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos,
     rArgs.NeedFallback(nGraphemeStartPos, nGraphemeEndPos, bRightToLeft);
 }
 
-void CommonSalLayout::AdjustLayout(ImplLayoutArgs& rArgs)
+void GenericSalLayout::AdjustLayout(ImplLayoutArgs& rArgs)
 {
     SalLayout::AdjustLayout(rArgs);
 
@@ -222,7 +221,7 @@ void CommonSalLayout::AdjustLayout(ImplLayoutArgs& rArgs)
             ApplyAsianKerning(rArgs.mrStr);
 }
 
-void CommonSalLayout::DrawText(SalGraphics& rSalGraphics) const
+void GenericSalLayout::DrawText(SalGraphics& rSalGraphics) const
 {
     //call platform dependent DrawText functions
     rSalGraphics.DrawTextLayout( *this );
@@ -232,7 +231,7 @@ void CommonSalLayout::DrawText(SalGraphics& rSalGraphics) const
 // We don’t check for a specific script or language as it shouldn’t matter
 // here; if the glyph would be the result from applying “vert” for any
 // script/language then we want to always treat it as upright glyph.
-bool CommonSalLayout::HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aVariationSelector)
+bool GenericSalLayout::HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aVariationSelector)
 {
     hb_codepoint_t nGlyphIndex = 0;
     hb_font_t *pHbFont = mpFont->GetHbFont();
@@ -269,7 +268,7 @@ bool CommonSalLayout::HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aVariationSe
     return hb_set_has(mpVertGlyphs, nGlyphIndex) != 0;
 }
 
-bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
+bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 {
     hb_font_t *pHbFont = mpFont->GetHbFont();
     hb_face_t* pHbFace = hb_font_get_face(pHbFont);
@@ -584,7 +583,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
     return true;
 }
 
-bool CommonSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
+bool GenericSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
 {
     int nCharCount = mnEndCharPos - mnMinCharPos;
 
@@ -614,7 +613,7 @@ bool CommonSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
 //   * For any RTL glyph that has DX adjustment, insert enough Kashidas to
 //     fill in the added space.
 
-void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
+void GenericSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
 {
     if (rArgs.mpDXArray == nullptr)
         return;
@@ -780,7 +779,7 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
     }
 }
 
-bool CommonSalLayout::IsKashidaPosValid(int nCharPos) const
+bool GenericSalLayout::IsKashidaPosValid(int nCharPos) const
 {
     for (auto pIter = m_GlyphItems.begin(); pIter != m_GlyphItems.end(); ++pIter)
     {

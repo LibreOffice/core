@@ -18,6 +18,7 @@ $(eval $(call gb_Executable_use_api,vcldemo,\
 $(eval $(call gb_Executable_use_externals,vcldemo,\
 	boost_headers \
 	glm_headers \
+	harfbuzz \
 ))
 ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Executable_use_externals,vcldemo,\
