@@ -92,7 +92,7 @@ SAL_DLLPUBLIC_EXPORT void test_init(lang::XMultiServiceFactory *pFactory)
     try
     {
         ::comphelper::setProcessServiceFactory(pFactory);
-        test::setUpVcl();
+        test::setUpVcl(true); // hard-code python tests to headless
         test_init_impl(false, true, pFactory);
     }
     catch (...) { abort(); }

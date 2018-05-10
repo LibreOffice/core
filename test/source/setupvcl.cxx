@@ -57,7 +57,7 @@ IMPL_STATIC_LINK_NOARG(Hook, deinitHook, LinkParamNone *, void) {
 
 }
 
-void test::setUpVcl() {
+void test::setUpVcl(bool const forceHeadless) {
     // Force locale (and resource files loaded):
     OUString locale;
     if (getenv("LO_TEST_LOCALE") != nullptr)
@@ -72,7 +72,7 @@ void test::setUpVcl() {
     MsLangId::setConfiguredSystemUILanguage(tag.getLanguageType(false));
     LanguageTag::setConfiguredSystemLanguage(tag.getLanguageType(false));
     InitVCL();
-    if (isHeadless()) {
+    if (forceHeadless || isHeadless()) {
         Application::EnableHeadlessMode(false);
     }
     Application::setDeInitHook(LINK(nullptr, Hook, deinitHook));
