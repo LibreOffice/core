@@ -20,13 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_VECTDLG_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_VECTDLG_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/group.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/prgsbar.hxx>
+#include <vcl/weld.hxx>
 #include <svx/graphctl.hxx>
 
 namespace sd {
@@ -39,27 +33,23 @@ class DrawDocShell;
 |*
 \******************************************************************************/
 
-class SdVectorizeDlg : public ModalDialog
+class SdVectorizeDlg : public weld::GenericDialogController
 {
-    ::sd::DrawDocShell *    mpDocSh;
-    VclPtr<NumericField>       m_pNmLayers;
-    VclPtr<MetricField>        m_pMtReduce;
-    VclPtr<FixedText>          m_pFtFillHoles;
-    VclPtr<MetricField>        m_pMtFillHoles;
-    VclPtr<CheckBox>           m_pCbFillHoles;
-
-    VclPtr<GraphCtrl>          m_pBmpWin;
-
-    VclPtr<GraphCtrl>          m_pMtfWin;
-
-    VclPtr<ProgressBar>        m_pPrgs;
-
-    VclPtr<OKButton>           m_pBtnOK;
-    VclPtr<PushButton>         m_pBtnPreview;
-
+    ::sd::DrawDocShell* m_pDocSh;
     Bitmap              aBmp;
     Bitmap              aPreviewBmp;
     GDIMetaFile         aMtf;
+
+    std::unique_ptr<weld::SpinButton> m_xNmLayers;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtReduce;
+    std::unique_ptr<weld::Label> m_xFtFillHoles;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtFillHoles;
+    std::unique_ptr<weld::CheckButton> m_xCbFillHoles;
+    std::unique_ptr<SvxGraphCtrl> m_xBmpWin;
+    std::unique_ptr<SvxGraphCtrl> m_xMtfWin;
+    std::unique_ptr<weld::ProgressBar> m_xPrgs;
+    std::unique_ptr<weld::Button> m_xBtnOK;
+    std::unique_ptr<weld::Button> m_xBtnPreview;
 
     void                LoadSettings();
     void                SaveSettings() const;
@@ -71,17 +61,17 @@ class SdVectorizeDlg : public ModalDialog
     void                AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
                                  long nPosX, long nPosY, long nWidth, long nHeight );
 
-                        DECL_LINK( ProgressHdl, long, void );
-                        DECL_LINK( ClickPreviewHdl, Button*, void );
-                        DECL_LINK( ClickOKHdl, Button*, void );
-                        DECL_LINK( ToggleHdl, CheckBox&, void );
-                        DECL_LINK( ModifyHdl, Edit&, void );
+    DECL_LINK( ProgressHdl, long, void );
+    DECL_LINK( ClickPreviewHdl, weld::Button&, void );
+    DECL_LINK( ClickOKHdl, weld::Button&, void );
+    DECL_LINK( ToggleHdl, weld::ToggleButton&, void );
+    DECL_LINK( ModifyHdl, weld::SpinButton&, void );
+    DECL_LINK( MetricModifyHdl, weld::MetricSpinButton&, void );
 
 public:
 
-                        SdVectorizeDlg( vcl::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell );
-                        virtual ~SdVectorizeDlg() override;
-    virtual void        dispose() override;
+    SdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell);
+    virtual ~SdVectorizeDlg() override;
 
     const GDIMetaFile&  GetGDIMetaFile() const { return aMtf; }
 };

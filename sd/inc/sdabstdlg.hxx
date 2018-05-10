@@ -197,7 +197,7 @@ public:
     virtual VclPtr<AbstractSdPresLayoutDlg>    CreateSdPresLayoutDlg( ::sd::DrawDocShell* pDocShell, const SfxItemSet& rInAttrs) = 0;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdTabTemplateDlg(vcl::Window* pParent, const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView) = 0;
     virtual VclPtr<SfxAbstractDialog>          CreatSdActionDialog(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView) = 0;
-    virtual VclPtr<AbstractSdVectorizeDlg>     CreateSdVectorizeDlg( vcl::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell ) = 0;
+    virtual VclPtr<AbstractSdVectorizeDlg>     CreateSdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell) = 0;
     virtual VclPtr<AbstractSdPublishingDlg>    CreateSdPublishingDlg( vcl::Window* pWindow, DocumentType eDocType) = 0;
 
     virtual VclPtr<VclAbstractDialog>          CreateMasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pDoc, SdPage*) = 0;

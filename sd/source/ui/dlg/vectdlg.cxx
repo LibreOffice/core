@@ -30,39 +30,32 @@
 
 #define VECTORIZE_MAX_EXTENT 512
 
-SdVectorizeDlg::SdVectorizeDlg(vcl::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell)
-    : ModalDialog(pParent, "VectorizeDialog", "modules/sdraw/ui/vectorize.ui")
-    , mpDocSh(pDocShell)
+SdVectorizeDlg::SdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell)
+    : GenericDialogController(pParent, "modules/sdraw/ui/vectorize.ui", "VectorizeDialog")
+    , m_pDocSh(pDocShell)
     , aBmp(rBmp)
+    , m_xNmLayers(m_xBuilder->weld_spin_button("colors"))
+    , m_xMtReduce(m_xBuilder->weld_metric_spin_button("points", FUNIT_PIXEL))
+    , m_xFtFillHoles(m_xBuilder->weld_label("tilesft"))
+    , m_xMtFillHoles(m_xBuilder->weld_metric_spin_button("tiles", FUNIT_PIXEL))
+    , m_xCbFillHoles(m_xBuilder->weld_check_button("fillholes"))
+    , m_xBmpWin(new SvxGraphCtrl(*m_xBuilder, "source"))
+    , m_xMtfWin(new SvxGraphCtrl(*m_xBuilder, "vectorized"))
+    , m_xPrgs(m_xBuilder->weld_progress_bar("progressbar"))
+    , m_xBtnOK(m_xBuilder->weld_button("ok"))
+    , m_xBtnPreview(m_xBuilder->weld_button("preview"))
 {
-    get(m_pNmLayers, "colors");
-    get(m_pMtReduce, "points");
-    get(m_pCbFillHoles, "fillholes");
-    get(m_pFtFillHoles, "tilesft");
-    get(m_pMtFillHoles, "tiles");
-    get(m_pBmpWin, "source");
-    get(m_pMtfWin, "vectorized");
+    const int nWidth = m_xFtFillHoles->get_approximate_digit_width() * 32;
+    const int nHeight = m_xFtFillHoles->get_text_height() * 16;
+    m_xBmpWin->set_size_request(nWidth, nHeight);
+    m_xMtfWin->set_size_request(nWidth, nHeight);
 
-    Size aSize(LogicToPixel(Size(92, 100), MapMode(MapUnit::MapAppFont)));
-    m_pBmpWin->set_width_request(aSize.Width());
-    m_pMtfWin->set_width_request(aSize.Width());
-    m_pBmpWin->set_height_request(aSize.Height());
-    m_pMtfWin->set_height_request(aSize.Height());
-
-    get(m_pPrgs, "progressbar");
-    get(m_pBtnPreview, "preview");
-    get(m_pBtnOK, "ok");
-
-    m_pBtnPreview->SetClickHdl( LINK( this, SdVectorizeDlg, ClickPreviewHdl ) );
-    m_pBtnOK->SetClickHdl( LINK( this, SdVectorizeDlg, ClickOKHdl ) );
-    m_pNmLayers->SetModifyHdl( LINK( this, SdVectorizeDlg, ModifyHdl ) );
-    m_pMtReduce->SetModifyHdl( LINK( this, SdVectorizeDlg, ModifyHdl ) );
-    m_pMtFillHoles->SetModifyHdl( LINK( this, SdVectorizeDlg, ModifyHdl ) );
-    m_pCbFillHoles->SetToggleHdl( LINK( this, SdVectorizeDlg, ToggleHdl ) );
-
-    // disable 3D border
-    m_pBmpWin->SetBorderStyle(WindowBorderStyle::MONO);
-    m_pMtfWin->SetBorderStyle(WindowBorderStyle::MONO);
+    m_xBtnPreview->connect_clicked( LINK( this, SdVectorizeDlg, ClickPreviewHdl ) );
+    m_xBtnOK->connect_clicked( LINK( this, SdVectorizeDlg, ClickOKHdl ) );
+    m_xNmLayers->connect_value_changed( LINK( this, SdVectorizeDlg, ModifyHdl ) );
+    m_xMtReduce->connect_value_changed( LINK( this, SdVectorizeDlg, MetricModifyHdl ) );
+    m_xMtFillHoles->connect_value_changed( LINK( this, SdVectorizeDlg, MetricModifyHdl ) );
+    m_xCbFillHoles->connect_toggled( LINK( this, SdVectorizeDlg, ToggleHdl ) );
 
     LoadSettings();
     InitPreviewBmp();
@@ -70,22 +63,6 @@ SdVectorizeDlg::SdVectorizeDlg(vcl::Window* pParent, const Bitmap& rBmp, ::sd::D
 
 SdVectorizeDlg::~SdVectorizeDlg()
 {
-    disposeOnce();
-}
-
-void SdVectorizeDlg::dispose()
-{
-    m_pNmLayers.clear();
-    m_pMtReduce.clear();
-    m_pFtFillHoles.clear();
-    m_pMtFillHoles.clear();
-    m_pCbFillHoles.clear();
-    m_pBmpWin.clear();
-    m_pMtfWin.clear();
-    m_pPrgs.clear();
-    m_pBtnOK.clear();
-    m_pBtnPreview.clear();
-    ModalDialog::dispose();
 }
 
 ::tools::Rectangle SdVectorizeDlg::GetRect( const Size& rDispSize, const Size& rBmpSize )
@@ -120,11 +97,11 @@ void SdVectorizeDlg::dispose()
 
 void SdVectorizeDlg::InitPreviewBmp()
 {
-    const ::tools::Rectangle aRect( GetRect( m_pBmpWin->GetSizePixel(), aBmp.GetSizePixel() ) );
+    const ::tools::Rectangle aRect( GetRect( m_xBmpWin->GetSize(), aBmp.GetSizePixel() ) );
 
     aPreviewBmp = aBmp;
     aPreviewBmp.Scale( aRect.GetSize() );
-    m_pBmpWin->SetGraphic( aPreviewBmp );
+    m_xBmpWin->SetGraphic( aPreviewBmp );
 }
 
 Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap const & rBmp, Fraction& rScale )
@@ -142,7 +119,7 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap const & rBmp, Fraction& rScale 
         rScale = Fraction( 1, 1 );
 
     BitmapEx aNewBmpEx(aNew);
-    BitmapFilter::Filter(aNewBmpEx, BitmapSimpleColorQuantizationFilter(static_cast<sal_uInt16>(m_pNmLayers->GetValue())));
+    BitmapFilter::Filter(aNewBmpEx, BitmapSimpleColorQuantizationFilter(m_xNmLayers->get_value()));
     aNew = aNewBmpEx.GetBitmap();
 
     return aNew;
@@ -150,8 +127,8 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap const & rBmp, Fraction& rScale 
 
 void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
 {
-    mpDocSh->SetWaitCursor( true );
-    m_pPrgs->SetValue( 0 );
+    m_pDocSh->SetWaitCursor( true );
+    m_xPrgs->set_percentage(0);
 
     Fraction    aScale;
     Bitmap      aTmp( GetPreparedBitmap( rBmp, aScale ) );
@@ -159,9 +136,9 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
     if( !!aTmp )
     {
         const Link<long,void> aPrgsHdl( LINK( this, SdVectorizeDlg, ProgressHdl ) );
-        aTmp.Vectorize( rMtf, static_cast<sal_uInt8>(m_pMtReduce->GetValue()), &aPrgsHdl );
+        aTmp.Vectorize( rMtf, static_cast<sal_uInt8>(m_xMtReduce->get_value(FUNIT_NONE)), &aPrgsHdl );
 
-        if( m_pCbFillHoles->IsChecked() )
+        if (m_xCbFillHoles->get_active())
         {
             GDIMetaFile                 aNewMtf;
             Bitmap::ScopedReadAccess    pRAcc(aTmp);
@@ -170,8 +147,8 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
             {
                 const long      nWidth = pRAcc->Width();
                 const long      nHeight = pRAcc->Height();
-                const long      nTileX = static_cast<long>(m_pMtFillHoles->GetValue());
-                const long      nTileY = static_cast<long>(m_pMtFillHoles->GetValue());
+                const long      nTileX = m_xMtFillHoles->get_value(FUNIT_NONE);
+                const long      nTileY = m_xMtFillHoles->get_value(FUNIT_NONE);
                 assert(nTileX && "div-by-zero");
                 const long      nCountX = nWidth / nTileX;
                 assert(nTileY && "div-by-zero");
@@ -218,8 +195,8 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
         }
     }
 
-    m_pPrgs->SetValue( 0 );
-    mpDocSh->SetWaitCursor( false );
+    m_xPrgs->set_percentage(0);
+    m_pDocSh->SetWaitCursor( false );
 }
 
 void SdVectorizeDlg::AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
@@ -249,7 +226,7 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
     ::tools::Rectangle   aRect( Point( nPosX, nPosY ), Size( nWidth + 1, nHeight + 1 ) );
     const Size& rMaxSize = rMtf.GetPrefSize();
 
-    aRect = PixelToLogic( aRect, rMtf.GetPrefMapMode() );
+    aRect = Application::GetDefaultDevice()->PixelToLogic(aRect, rMtf.GetPrefMapMode());
 
     if( aRect.Right() > ( rMaxSize.Width() - 1 ) )
         aRect.SetRight( rMaxSize.Width() - 1 );
@@ -264,44 +241,49 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
 
 IMPL_LINK( SdVectorizeDlg, ProgressHdl, long, nData, void )
 {
-    m_pPrgs->SetValue( static_cast<sal_uInt16>(nData) );
+    m_xPrgs->set_percentage(nData);
 }
 
-IMPL_LINK_NOARG(SdVectorizeDlg, ClickPreviewHdl, Button*, void)
+IMPL_LINK_NOARG(SdVectorizeDlg, ClickPreviewHdl, weld::Button&, void)
 {
     Calculate( aBmp, aMtf );
-    m_pMtfWin->SetGraphic( aMtf );
-    m_pBtnPreview->Disable();
+    m_xMtfWin->SetGraphic( aMtf );
+    m_xBtnPreview->set_sensitive(false);
 }
 
-IMPL_LINK_NOARG(SdVectorizeDlg, ClickOKHdl, Button*, void)
+IMPL_LINK_NOARG(SdVectorizeDlg, ClickOKHdl, weld::Button&, void)
 {
-    if( m_pBtnPreview->IsEnabled() )
+    if (m_xBtnPreview->get_sensitive())
         Calculate( aBmp, aMtf );
 
     SaveSettings();
-    EndDialog( RET_OK );
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK( SdVectorizeDlg, ToggleHdl, CheckBox&, rCb, void )
+IMPL_LINK( SdVectorizeDlg, ToggleHdl, weld::ToggleButton&, rCb, void )
 {
-    if( rCb.IsChecked() )
+    if (rCb.get_active())
     {
-        m_pFtFillHoles->Enable();
-        m_pMtFillHoles->Enable();
+        m_xFtFillHoles->set_sensitive(true);
+        m_xMtFillHoles->set_sensitive(true);
     }
     else
     {
-        m_pFtFillHoles->Disable();
-        m_pMtFillHoles->Disable();
+        m_xFtFillHoles->set_sensitive(false);
+        m_xMtFillHoles->set_sensitive(false);
     }
 
-    m_pBtnPreview->Enable();
+    m_xBtnPreview->set_sensitive(true);
 }
 
-IMPL_LINK_NOARG(SdVectorizeDlg, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SdVectorizeDlg, ModifyHdl, weld::SpinButton&, void)
 {
-    m_pBtnPreview->Enable();
+    m_xBtnPreview->set_sensitive(true);
+}
+
+IMPL_LINK_NOARG(SdVectorizeDlg, MetricModifyHdl, weld::MetricSpinButton&, void)
+{
+    m_xBtnPreview->set_sensitive(true);
 }
 
 void SdVectorizeDlg::LoadSettings()
@@ -327,12 +309,12 @@ void SdVectorizeDlg::LoadSettings()
         bFillHoles = false;
     }
 
-    m_pNmLayers->SetValue( nLayers );
-    m_pMtReduce->SetValue( nReduce );
-    m_pMtFillHoles->SetValue( nFillHoles );
-    m_pCbFillHoles->Check( bFillHoles );
+    m_xNmLayers->set_value(nLayers);
+    m_xMtReduce->set_value(nReduce, FUNIT_NONE);
+    m_xMtFillHoles->set_value(nFillHoles, FUNIT_NONE);
+    m_xCbFillHoles->set_active(bFillHoles);
 
-    ToggleHdl(*m_pCbFillHoles);
+    ToggleHdl(*m_xCbFillHoles);
 }
 
 void SdVectorizeDlg::SaveSettings() const
@@ -344,8 +326,8 @@ void SdVectorizeDlg::SaveSettings() const
     if( xOStm.is() )
     {
         SdIOCompat aCompat( *xOStm, StreamMode::WRITE, 1 );
-        xOStm->WriteUInt16( m_pNmLayers->GetValue() ).WriteUInt16( m_pMtReduce->GetValue() );
-        xOStm->WriteUInt16( m_pMtFillHoles->GetValue() ).WriteBool( m_pCbFillHoles->IsChecked() );
+        xOStm->WriteUInt16( m_xNmLayers->get_value() ).WriteUInt16(m_xMtReduce->get_value(FUNIT_NONE));
+        xOStm->WriteUInt16( m_xMtFillHoles->get_value(FUNIT_NONE) ).WriteBool(m_xCbFillHoles->get_active());
     }
 }
 

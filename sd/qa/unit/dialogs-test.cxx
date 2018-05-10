@@ -545,8 +545,9 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             // CreateSdVectorizeDlg(vcl::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell) override;
             // works well with empty Bitmap, but my be nicer with setting one
             Bitmap aEmptyBitmap;
+            auto const parent = Application::GetDefDialogParent();
             pRetval = getSdAbstractDialogFactory()->CreateSdVectorizeDlg(
-                Application::GetDefDialogParent(),
+                parent == nullptr ? nullptr : parent->GetFrameWeld(),
                 aEmptyBitmap,
                 getDocShell());
             break;

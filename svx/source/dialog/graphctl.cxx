@@ -771,4 +771,76 @@ css::uno::Reference< css::accessibility::XAccessible > GraphCtrl::CreateAccessib
     return mpAccContext.get();
 }
 
+SvxGraphCtrl::SvxGraphCtrl(weld::Builder& rBuilder, const OString& rDrawingId)
+    : aMap100(MapUnit::Map100thMM)
+    , mxDrawingArea(rBuilder.weld_drawing_area(rDrawingId))
+{
+    mxDrawingArea->connect_size_allocate(LINK(this, SvxGraphCtrl, DoResize));
+    mxDrawingArea->connect_draw(LINK(this, SvxGraphCtrl, DoPaint));
+}
+
+IMPL_LINK(SvxGraphCtrl, DoResize, const Size&, rSize, void)
+{
+    maSize = rSize;
+    mxDrawingArea->queue_draw();
+}
+
+IMPL_LINK(SvxGraphCtrl, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
+{
+    vcl::RenderContext& rRenderContext = aPayload.first;
+    const bool bGraphicValid(GraphicType::NONE != aGraphic.GetType());
+    // #i73381# in non-SdrMode, paint to local directly
+    if (bGraphicValid && aGraphSize.Width() && aGraphSize.Height())
+    {
+        MapMode         aDisplayMap( aMap100 );
+        Point           aNewPos;
+        Size            aNewSize;
+        const Size      aWinSize = Application::GetDefaultDevice()->PixelToLogic( maSize, aMap100 );
+        const long      nWidth = aWinSize.Width();
+        const long      nHeight = aWinSize.Height();
+        double          fGrfWH = static_cast<double>(aGraphSize.Width()) / aGraphSize.Height();
+        double          fWinWH = static_cast<double>(nWidth) / nHeight;
+
+        // Adapt Bitmap to Thumb size
+        if ( fGrfWH < fWinWH)
+        {
+            aNewSize.setWidth( static_cast<long>( static_cast<double>(nHeight) * fGrfWH ) );
+            aNewSize.setHeight( nHeight );
+        }
+        else
+        {
+            aNewSize.setWidth( nWidth );
+            aNewSize.setHeight( static_cast<long>( static_cast<double>(nWidth) / fGrfWH ) );
+        }
+
+        aNewPos.setX( ( nWidth - aNewSize.Width() )  >> 1 );
+        aNewPos.setY( ( nHeight - aNewSize.Height() ) >> 1 );
+
+        // Implementing MapMode for Engine
+        aDisplayMap.SetScaleX( Fraction( aNewSize.Width(), aGraphSize.Width() ) );
+        aDisplayMap.SetScaleY( Fraction( aNewSize.Height(), aGraphSize.Height() ) );
+
+        aDisplayMap.SetOrigin(OutputDevice::LogicToLogic(aNewPos, aMap100, aDisplayMap));
+        rRenderContext.SetMapMode(aDisplayMap);
+
+        aGraphic.Draw(&rRenderContext, Point(), aGraphSize);
+    }
+}
+
+SvxGraphCtrl::~SvxGraphCtrl()
+{
+}
+
+void SvxGraphCtrl::SetGraphic(const Graphic& rGraphic)
+{
+    aGraphic = rGraphic;
+
+    if ( aGraphic.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel )
+        aGraphSize = Application::GetDefaultDevice()->PixelToLogic( aGraphic.GetPrefSize(), aMap100 );
+    else
+        aGraphSize = OutputDevice::LogicToLogic( aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), aMap100 );
+
+    mxDrawingArea->queue_draw();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
