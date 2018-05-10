@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
+#include <svl/listener.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/profilezone.hxx>
 #include <comphelper/sequence.hxx>
@@ -2453,108 +2454,90 @@ SwXBodyText::hasElements()
 }
 
 class SwXHeadFootText::Impl
-    : public SwClient
+    : public SvtListener
 {
+    public:
+        SwFrameFormat* m_pHeadFootFormat;
+        bool m_bIsHeader;
 
-public:
-
-    bool                        m_bIsHeader;
-
-    Impl( SwFrameFormat & rHeadFootFormat, const bool bIsHeader)
-        : SwClient(& rHeadFootFormat)
-        , m_bIsHeader(bIsHeader)
-    {
-    }
-
-    SwFrameFormat * GetHeadFootFormat() const {
-        return static_cast<SwFrameFormat*>(
-                const_cast<SwModify*>(GetRegisteredIn()));
-    }
-
-    SwFrameFormat & GetHeadFootFormatOrThrow() {
-        SwFrameFormat *const pFormat( GetHeadFootFormat() );
-        if (!pFormat) {
-            throw uno::RuntimeException("SwXHeadFootText: disposed or invalid", nullptr);
+        Impl(SwFrameFormat& rHeadFootFormat, const bool bIsHeader)
+            : m_pHeadFootFormat(&rHeadFootFormat)
+            , m_bIsHeader(bIsHeader)
+        {
+            if(m_pHeadFootFormat)
+                StartListening(m_pHeadFootFormat->GetNotifier());
         }
-        return *pFormat;
-    }
-protected:
-    // SwClient
-    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
 
+        SwFrameFormat* GetHeadFootFormat() const {
+            return m_pHeadFootFormat;
+        }
+
+        SwFrameFormat& GetHeadFootFormatOrThrow() {
+            if (!m_pHeadFootFormat) {
+                throw uno::RuntimeException("SwXHeadFootText: disposed or invalid", nullptr);
+            }
+            return *m_pHeadFootFormat;
+        }
+    protected:
+        virtual void Notify(const SfxHint& rHint) override
+        {
+            if(rHint.GetId() == SfxHintId::Dying)
+                m_pHeadFootFormat = nullptr;
+        }
 };
 
-void SwXHeadFootText::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
-{
-    ClientModify(this, pOld, pNew);
-}
-
-bool SwXHeadFootText::IsXHeadFootText(SwClient const *const pClient)
-{
-    return dynamic_cast<SwXHeadFootText::Impl const *>(pClient) !=  nullptr;
-}
-
-uno::Reference< text::XText >
-SwXHeadFootText::CreateXHeadFootText(
-        SwFrameFormat & rHeadFootFormat, const bool bIsHeader)
+uno::Reference<text::XText> SwXHeadFootText::CreateXHeadFootText(
+        SwFrameFormat& rHeadFootFormat,
+        const bool bIsHeader)
 {
     // re-use existing SwXHeadFootText
     // #i105557#: do not iterate over the registered clients: race condition
-    uno::Reference< text::XText > xText(rHeadFootFormat.GetXObject(),
-            uno::UNO_QUERY);
-    if (!xText.is())
+    uno::Reference<text::XText> xText(rHeadFootFormat.GetXObject(), uno::UNO_QUERY);
+    if(!xText.is())
     {
-        SwXHeadFootText *const pXHFT(
-                new SwXHeadFootText(rHeadFootFormat, bIsHeader));
+        const auto pXHFT(new SwXHeadFootText(rHeadFootFormat, bIsHeader));
         xText.set(pXHFT);
         rHeadFootFormat.SetXObject(xText);
     }
     return xText;
 }
 
-SwXHeadFootText::SwXHeadFootText(SwFrameFormat & rHeadFootFormat, const bool bIsHeader)
-    : SwXText(rHeadFootFormat.GetDoc(),
+SwXHeadFootText::SwXHeadFootText(SwFrameFormat& rHeadFootFormat, const bool bIsHeader)
+    : SwXText(
+            rHeadFootFormat.GetDoc(),
             bIsHeader ? CursorType::Header : CursorType::Footer)
-    , m_pImpl( new SwXHeadFootText::Impl(rHeadFootFormat, bIsHeader) )
+    , m_pImpl(new SwXHeadFootText::Impl(rHeadFootFormat, bIsHeader))
 {
 }
 
 SwXHeadFootText::~SwXHeadFootText()
-{
-}
+{ }
 
 OUString SAL_CALL
 SwXHeadFootText::getImplementationName()
 {
-    return OUString("SwXHeadFootText");
+  return {"SwXHeadFootText"};
 }
-
-static char const*const g_ServicesHeadFootText[] =
-{
-    "com.sun.star.text.Text",
-};
 
 sal_Bool SAL_CALL SwXHeadFootText::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+uno::Sequence<OUString> SAL_CALL
 SwXHeadFootText::getSupportedServiceNames()
 {
-    return ::sw::GetSupportedServiceNamesImpl(
-            SAL_N_ELEMENTS(g_ServicesHeadFootText),
-            g_ServicesHeadFootText);
+    return {"com.sun.star.text.Text"};
 }
 
-const SwStartNode *SwXHeadFootText::GetStartNode() const
+const SwStartNode* SwXHeadFootText::GetStartNode() const
 {
-    const SwStartNode *pSttNd = nullptr;
-    SwFrameFormat *const pHeadFootFormat = m_pImpl->GetHeadFootFormat();
+    const SwStartNode* pSttNd = nullptr;
+    SwFrameFormat* const pHeadFootFormat = m_pImpl->GetHeadFootFormat();
     if(pHeadFootFormat)
     {
         const SwFormatContent& rFlyContent = pHeadFootFormat->GetContent();
-        if( rFlyContent.GetContentIdx() )
+        if(rFlyContent.GetContentIdx())
         {
             pSttNd = rFlyContent.GetContentIdx()->GetNode().GetStartNode();
         }
@@ -2562,43 +2545,38 @@ const SwStartNode *SwXHeadFootText::GetStartNode() const
     return pSttNd;
 }
 
-uno::Reference< text::XTextCursor >
-SwXHeadFootText::CreateCursor()
+uno::Reference<text::XTextCursor> SwXHeadFootText::CreateCursor()
 {
     return createTextCursor();
 }
 
-uno::Sequence< uno::Type > SAL_CALL
-SwXHeadFootText::getTypes()
+uno::Sequence<uno::Type> SAL_CALL SwXHeadFootText::getTypes()
 {
-    const uno::Sequence< uno::Type > aTypes = SwXHeadFootText_Base::getTypes();
-    const uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
-    return ::comphelper::concatSequences(aTypes, aTextTypes);
+    return ::comphelper::concatSequences(
+        SwXHeadFootText_Base::getTypes(),
+        SwXText::getTypes());
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL
-SwXHeadFootText::getImplementationId()
+uno::Sequence<sal_Int8> SAL_CALL SwXHeadFootText::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-uno::Any SAL_CALL
-SwXHeadFootText::queryInterface(const uno::Type& rType)
+uno::Any SAL_CALL SwXHeadFootText::queryInterface(const uno::Type& rType)
 {
     const uno::Any ret = SwXHeadFootText_Base::queryInterface(rType);
     return (ret.getValueType() == cppu::UnoType<void>::get())
-        ?   SwXText::queryInterface(rType)
-        :   ret;
+        ? SwXText::queryInterface(rType)
+        : ret;
 }
 
-uno::Reference< text::XTextCursor > SAL_CALL
+uno::Reference<text::XTextCursor> SAL_CALL
 SwXHeadFootText::createTextCursor()
 {
     SolarMutexGuard aGuard;
 
     SwFrameFormat & rHeadFootFormat( m_pImpl->GetHeadFootFormatOrThrow() );
 
-    uno::Reference< text::XTextCursor > xRet;
     const SwFormatContent& rFlyContent = rHeadFootFormat.GetContent();
     const SwNode& rNode = rFlyContent.GetContentIdx()->GetNode();
     SwPosition aPos(rNode);
@@ -2624,8 +2602,7 @@ SwXHeadFootText::createTextCursor()
     {
         rUnoCursor.GetPoint()->nContent.Assign(pCont, 0);
     }
-    SwStartNode const*const pNewStartNode =
-        rUnoCursor.GetNode().FindSttNodeByType(
+    SwStartNode const*const pNewStartNode = rUnoCursor.GetNode().FindSttNodeByType(
             (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
     if (!pNewStartNode || (pNewStartNode != pOwnStartNode))
     {
@@ -2633,69 +2610,65 @@ SwXHeadFootText::createTextCursor()
         aExcept.Message = "no text available";
         throw aExcept;
     }
-    xRet = static_cast<text::XWordCursor*>(pXCursor);
-    return xRet;
+    return static_cast<text::XWordCursor*>(pXCursor);
 }
 
-uno::Reference< text::XTextCursor > SAL_CALL
-SwXHeadFootText::createTextCursorByRange(
-    const uno::Reference< text::XTextRange > & xTextPosition)
+uno::Reference<text::XTextCursor> SAL_CALL SwXHeadFootText::createTextCursorByRange(
+    const uno::Reference<text::XTextRange>& xTextPosition)
 {
     SolarMutexGuard aGuard;
-
-    SwFrameFormat & rHeadFootFormat( m_pImpl->GetHeadFootFormatOrThrow() );
+    SwFrameFormat& rHeadFootFormat( m_pImpl->GetHeadFootFormatOrThrow() );
 
     SwUnoInternalPaM aPam(*GetDoc());
-    if (!::sw::XTextRangeToSwPaM(aPam, xTextPosition))
+    if (!sw::XTextRangeToSwPaM(aPam, xTextPosition))
     {
         uno::RuntimeException aRuntime;
         aRuntime.Message = cInvalidObject;
         throw aRuntime;
     }
 
-    uno::Reference< text::XTextCursor >  xRet;
     SwNode& rNode = rHeadFootFormat.GetContent().GetContentIdx()->GetNode();
     SwPosition aPos(rNode);
     SwPaM aHFPam(aPos);
     aHFPam.Move(fnMoveForward, GoInNode);
-    SwStartNode *const pOwnStartNode = aHFPam.GetNode().FindSttNodeByType(
+    SwStartNode* const pOwnStartNode = aHFPam.GetNode().FindSttNodeByType(
             (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
-    SwStartNode *const p1 = aPam.GetNode().FindSttNodeByType(
+    SwStartNode* const p1 = aPam.GetNode().FindSttNodeByType(
             (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
     if (p1 == pOwnStartNode)
     {
-        xRet = static_cast<text::XWordCursor*>(
-                new SwXTextCursor(*GetDoc(), this,
+        return static_cast<text::XWordCursor*>(
+                new SwXTextCursor(
+                    *GetDoc(),
+                    this,
                     (m_pImpl->m_bIsHeader) ? CursorType::Header : CursorType::Footer,
                     *aPam.GetPoint(), aPam.GetMark()));
     }
-    return xRet;
+    return nullptr;
 }
 
-uno::Reference< container::XEnumeration > SAL_CALL
-SwXHeadFootText::createEnumeration()
+uno::Reference<container::XEnumeration> SAL_CALL SwXHeadFootText::createEnumeration()
 {
     SolarMutexGuard aGuard;
-
-    SwFrameFormat & rHeadFootFormat( m_pImpl->GetHeadFootFormatOrThrow() );
+    SwFrameFormat& rHeadFootFormat(m_pImpl->GetHeadFootFormatOrThrow());
 
     const SwFormatContent& rFlyContent = rHeadFootFormat.GetContent();
     const SwNode& rNode = rFlyContent.GetContentIdx()->GetNode();
     SwPosition aPos(rNode);
     auto pUnoCursor(GetDoc()->CreateUnoCursor(aPos));
     pUnoCursor->Move(fnMoveForward, GoInNode);
-    return SwXParagraphEnumeration::Create(this, pUnoCursor, (m_pImpl->m_bIsHeader) ? CursorType::Header : CursorType::Footer);
+    return SwXParagraphEnumeration::Create(
+            this,
+            pUnoCursor,
+            (m_pImpl->m_bIsHeader)
+                ? CursorType::Header
+                : CursorType::Footer);
 }
 
-uno::Type SAL_CALL
-SwXHeadFootText::getElementType()
-{
-    return cppu::UnoType<text::XTextRange>::get();
-}
+uno::Type SAL_CALL SwXHeadFootText::getElementType()
+    { return cppu::UnoType<text::XTextRange>::get(); }
 
 sal_Bool SAL_CALL SwXHeadFootText::hasElements()
-{
-    return true;
-}
+    { return true; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
