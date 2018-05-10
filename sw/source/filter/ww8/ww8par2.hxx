@@ -25,6 +25,7 @@
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
 #include <editeng/lrspitem.hxx>
+#include <svl/itemset.hxx>
 #include <svx/swframetypes.hxx>
 #include <swtable.hxx>
 
