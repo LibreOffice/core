@@ -691,11 +691,6 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, tools::Rectangle& rRect
     return bRet;
 }
 
-void GenericSalLayout::AppendGlyph( const GlyphItem& rGlyphItem )
-{
-    m_GlyphItems.push_back(rGlyphItem);
-}
-
 DeviceCoordinate GenericSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) const
 {
     if( pCharWidths )
