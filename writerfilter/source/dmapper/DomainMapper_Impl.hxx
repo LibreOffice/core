@@ -474,7 +474,7 @@ private:
     PropertyMapPtr           m_pLastCharacterContext;
 
     ::std::vector<DeletableTabStop> m_aCurrentTabStops;
-    OUString                        m_sCurrentParaStyleName;
+    OUString                        m_sCurrentParaStyleName; //highly inaccurate. Overwritten by "overlapping" paragraphs like comments, flys.
     bool                            m_bInStyleSheetImport; //in import of fonts, styles, lists or lfos
     bool                            m_bInAnyTableImport; //in import of fonts, styles, lists or lfos
     bool                            m_bInHeaderFooterImport;
@@ -694,7 +694,7 @@ public:
     css::uno::Sequence<css::style::TabStop> GetCurrentTabStopAndClear();
 
     void            SetCurrentParaStyleName(const OUString& sStringValue) {m_sCurrentParaStyleName = sStringValue;}
-    const OUString& GetCurrentParaStyleName() const {return m_sCurrentParaStyleName;}
+    const OUString  GetCurrentParaStyleName();
 
     css::uno::Any GetPropertyFromStyleSheet(PropertyIds eId);
     void        SetStyleSheetImport( bool bSet ) { m_bInStyleSheetImport = bSet;}

@@ -650,6 +650,17 @@ uno::Sequence< style::TabStop > DomainMapper_Impl::GetCurrentTabStopAndClear()
     return comphelper::containerToSequence(aRet);
 }
 
+const OUString DomainMapper_Impl::GetCurrentParaStyleName()
+{
+    // use saved currParaStyleName as a fallback, in case no particular para style name applied.
+    OUString sName = m_sCurrentParaStyleName;
+    PropertyMapPtr pParaContext = GetTopContextOfType(CONTEXT_PARAGRAPH);
+    if ( pParaContext && pParaContext->isSet(PROP_PARA_STYLE_NAME) )
+        pParaContext->getProperty(PROP_PARA_STYLE_NAME)->second >>= sName;
+
+    return sName;
+}
+
 /*-------------------------------------------------------------------------
     returns a the value from the current paragraph style - if available
     TODO: What about parent styles?

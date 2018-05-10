@@ -456,6 +456,12 @@ DECLARE_OOXMLIMPORT_TEST(testTdf128207, "tdf128207.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12), getProperty<sal_Int32>(getShape(1), "HoriOrientPosition"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf117504_numberingIndent, "tdf117504_numberingIndent.docx")
+{
+    OUString sName = getProperty<OUString>(getParagraph(1), "NumberingStyleName");
+    CPPUNIT_ASSERT_MESSAGE("Paragraph has numbering style", !sName.isEmpty());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
