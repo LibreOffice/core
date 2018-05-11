@@ -114,7 +114,9 @@ void WinOpenGLContext::makeCurrent()
     if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
     {
         g_bAnyCurrent = false;
-        SAL_WARN("vcl.opengl", "wglMakeCurrent failed: " << WindowsErrorString(GetLastError()));
+        DWORD nLastError = GetLastError();
+        if (nLastError != ERROR_SUCCESS)
+            SAL_WARN("vcl.opengl", "wglMakeCurrent failed: " << WindowsErrorString(nLastError));
         return;
     }
 
