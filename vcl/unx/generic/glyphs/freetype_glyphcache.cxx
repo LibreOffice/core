@@ -333,23 +333,22 @@ void FreetypeManager::ClearFontList( )
 
 FreetypeFont* FreetypeManager::CreateFont( const FontSelectPattern& rFSD )
 {
-    FreetypeFontInfo* pFontInfo = nullptr;
-
     // find a FontInfo matching to the font id
-    sal_IntPtr nFontId = 0;
-    if (rFSD.mpFontInstance && rFSD.mpFontInstance->GetFontFace())
-        nFontId = rFSD.mpFontInstance->GetFontFace()->GetFontId();
-
-    FontList::iterator it = maFontList.find(nFontId);
-    if( it != maFontList.end() )
-        pFontInfo = it->second;
-
-    if( !pFontInfo )
+    if (!rFSD.mpFontInstance)
         return nullptr;
 
-    FreetypeFont* pNew = new FreetypeFont( rFSD, pFontInfo );
+    const PhysicalFontFace* pFontFace = rFSD.mpFontInstance->GetFontFace();
+    if (!pFontFace)
+        return nullptr;
 
-    return pNew;
+    sal_IntPtr nFontId = pFontFace->GetFontId();
+    FontList::iterator it = maFontList.find(nFontId);
+    FreetypeFontInfo* pFontInfo = it != maFontList.end() ? it->second : nullptr;
+
+    if (!pFontInfo)
+        return nullptr;
+
+    return new FreetypeFont(rFSD, pFontInfo);
 }
 
 FreetypeFontFace::FreetypeFontFace( FreetypeFontInfo* pFI, const FontAttributes& rDFA )
