@@ -59,7 +59,7 @@ namespace vcl
     { PointerStyle::HSizeBar, "col-resize" },
     { PointerStyle::VSizeBar, "row-resize" },
     { PointerStyle::Hand, "grab" },
-    { PointerStyle::RefHand, "grabbing" },
+    { PointerStyle::RefHand, "pointer" },
     // Pen, Magnify, Fill, Rotate
     // HShear, VShear
     // Mirror, Crook, Crop, MovePoint, MoveBezierWeight
