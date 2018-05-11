@@ -216,8 +216,9 @@ private:
     void AdaptSize();
 
     SdPage* GetPage (const sal_Int32 nCoreIndex) const;
-    void InsertSlide (SdPage* pPage);
-    void DeleteSlide (const SdPage* pPage);
+    void InsertSlide (SdPage* pPage, bool bMarkSelected);
+    // return if this page was marked as selected before being removed
+    bool DeleteSlide (const SdPage* pPage);
     void UpdateIndices (const sal_Int32 nFirstIndex);
 };
 
