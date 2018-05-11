@@ -1032,7 +1032,11 @@ TextFrameIndex SwTextFormatter::FormatQuoVadis(TextFrameIndex const nOffset)
     FeedInf( rInf );
     SeekStartAndChg( rInf, true );
     if( GetRedln() && m_pCurr->HasRedline() )
-        GetRedln()->Seek( *m_pFont, nOffset, 0 );
+    {
+        std::pair<SwTextNode const*, sal_Int32> const pos(
+                GetTextFrame()->MapViewToModel(nOffset));
+        GetRedln()->Seek(*m_pFont, pos.first->GetIndex(), pos.second, 0);
+    }
 
     // A tricky special case: Flyfrms extend into the Line and are at the
     // position we want to insert the Quovadis text
