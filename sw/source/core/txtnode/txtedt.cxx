@@ -714,7 +714,7 @@ OUString SwTextNode::GetCurWord( sal_Int32 nPos ) const
 
     // check if word was found and if it uses a symbol font, if so
     // enforce returning an empty string
-    if (aBndry.endPos != aBndry.startPos && IsSymbol( aBndry.startPos ))
+    if (aBndry.endPos != aBndry.startPos && IsSymbolAt(aBndry.startPos))
         aBndry.endPos = aBndry.startPos;
 
     // can have -1 as start/end of bounds not found
@@ -1044,7 +1044,7 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
                 }
                 if( pArgs->xSpellAlt.is() )
                 {
-                    if( IsSymbol( aScanner.GetBegin() ) )
+                    if (IsSymbolAt(aScanner.GetBegin()))
                     {
                         pArgs->xSpellAlt = nullptr;
                     }

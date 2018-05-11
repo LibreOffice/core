@@ -657,7 +657,7 @@ public:
                     sal_uInt16 nScript = 0 ) const;
 
     /// in ndcopy.cxx
-    bool IsSymbol( const sal_Int32 nBegin ) const; // In itratr.cxx.
+    bool IsSymbolAt(sal_Int32 nBegin) const; // In itratr.cxx.
     virtual SwContentNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const override;
 
     /// Interactive hyphenation: we find TextFrame and call its CalcHyph.

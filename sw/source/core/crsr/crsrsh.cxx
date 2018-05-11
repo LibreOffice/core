@@ -3433,7 +3433,7 @@ void SwCursorShell::GetSmartTagTerm( std::vector< OUString >& rSmartTagTypes,
             sal_Int32 nBegin = nCurrent;
             sal_Int32 nLen = 1;
 
-            if( pSmartTagList->InWrongWord( nBegin, nLen ) && !pNode->IsSymbol(nBegin) )
+            if (pSmartTagList->InWrongWord(nBegin, nLen) && !pNode->IsSymbolAt(nBegin))
             {
                 const sal_uInt16 nIndex = pSmartTagList->GetWrongPos( nBegin );
                 const SwWrongList* pSubList = pSmartTagList->SubList( nIndex );
@@ -3470,7 +3470,7 @@ void SwCursorShell::GetSmartTagRect( const Point& rPt, SwRect& rSelectRect )
         sal_Int32 nBegin = aPos.nContent.GetIndex();
         sal_Int32 nLen = 1;
 
-        if( pSmartTagList->InWrongWord( nBegin, nLen ) && !pNode->IsSymbol(nBegin) )
+        if (pSmartTagList->InWrongWord(nBegin, nLen) && !pNode->IsSymbolAt(nBegin))
         {
             // get smarttag word
             OUString aText( pNode->GetText().copy(nBegin, nLen) );
