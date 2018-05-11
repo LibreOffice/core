@@ -126,8 +126,6 @@ public:
     // Returns the attribute for a position
     SwTextAttr *GetAttr(TextFrameIndex nPos) const;
 
-    const SwpHints *GetHints() const { return m_pHints; }
-
     SwFont *GetFnt() { return m_pFont; }
     const SwFont *GetFnt() const { return m_pFont; }
 
