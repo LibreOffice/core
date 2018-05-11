@@ -534,15 +534,17 @@ bool SlideSorterModel::NotifyPageEvent (const SdrPage* pSdrPage)
     //NotifyPageEvent is called for add, remove, *and* change position so for
     //the change position case we must ensure we don't end up with the slide
     //duplicated in our list
-    DeleteSlide(pPage);
+    bool bSelected = DeleteSlide(pPage);
     if (pPage->IsInserted())
-        InsertSlide(pPage);
+    {
+        InsertSlide(pPage, bSelected);
+    }
     CheckModel(*this);
 
     return true;
 }
 
-void SlideSorterModel::InsertSlide (SdPage* pPage)
+void SlideSorterModel::InsertSlide(SdPage* pPage, bool bMarkSelected)
 {
     // Find the index at which to insert the given page.
     sal_uInt16 nCoreIndex (pPage->GetPageNum());
@@ -559,19 +561,24 @@ void SlideSorterModel::InsertSlide (SdPage* pPage)
         if (GetPage(nIndex+1) != GetPageDescriptor(nIndex)->GetPage())
             return;
 
+    auto iter = maPageDescriptors.begin() + nIndex;
+
     // Insert the given page at index nIndex
-    maPageDescriptors.insert(
-        maPageDescriptors.begin()+nIndex,
+    iter = maPageDescriptors.insert(
+        iter,
         std::make_shared<PageDescriptor>(
                 Reference<drawing::XDrawPage>(mxSlides->getByIndex(nIndex),UNO_QUERY),
                 pPage,
                 nIndex));
 
+    if (bMarkSelected)
+        (*iter)->SetState(PageDescriptor::ST_Selected, true);
+
     // Update page indices.
     UpdateIndices(nIndex+1);
 }
 
-void SlideSorterModel::DeleteSlide (const SdPage* pPage)
+bool SlideSorterModel::DeleteSlide (const SdPage* pPage)
 {
     sal_Int32 nIndex(0);
 
@@ -594,15 +601,21 @@ void SlideSorterModel::DeleteSlide (const SdPage* pPage)
         }
     }
 
+    bool bMarkedSelected(false);
+
     if(nIndex >= 0 && nIndex < static_cast<sal_Int32>(maPageDescriptors.size()))
     {
         if (maPageDescriptors[nIndex])
             if (maPageDescriptors[nIndex]->GetPage() != pPage)
-                return;
+                return false;
 
-        maPageDescriptors.erase(maPageDescriptors.begin()+nIndex);
+        auto iter = maPageDescriptors.begin() + nIndex;
+        bMarkedSelected = (*iter)->HasState(PageDescriptor::ST_Selected);
+        maPageDescriptors.erase(iter);
         UpdateIndices(nIndex);
     }
+
+    return bMarkedSelected;
 }
 
 void SlideSorterModel::UpdateIndices (const sal_Int32 nFirstIndex)
