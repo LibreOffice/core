@@ -789,12 +789,6 @@ bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
 
 void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget)
 {
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        if(SfxViewShell* pViewShell = SfxViewShell::Current())
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, rURL.toUtf8().getStr());
-    }
-
     // OpenURL is always called in the GridWindow by mouse clicks in some way or another.
     // That's why pScActiveViewShell and nScClickMouseModifier are correct.
     // SvtSecurityOptions to access Libreoffice global security parameters
