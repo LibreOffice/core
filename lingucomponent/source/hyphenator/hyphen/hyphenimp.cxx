@@ -263,8 +263,6 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
        sal_Int16 nMaxLeading,
        const css::beans::PropertyValues& aProperties )
 {
-    int k = 0;
-
     PropertyHelper_Hyphenation& rHelper = GetPropHelper();
     rHelper.SetTmpPropVals(aProperties);
     sal_Int16 minTrail = rHelper.GetMinTrailing();
@@ -276,15 +274,15 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
 
     Reference< XHyphenatedWord > xRes;
 
-    k = -1;
-    for (size_t j = 0; j < mvDicts.size(); j++)
+    int k = -1;
+    for (size_t j = 0; j < mvDicts.size(); ++j)
     {
         if (aLocale == mvDicts[j].aLoc)
             k = j;
     }
 
     // if we have a hyphenation dictionary matching this locale
-    if (k >= 0)
+    if (k != -1)
     {
         int nHyphenationPos = -1;
         int nHyphenationPosAlt = -1;
@@ -520,9 +518,10 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
     }
 
     int k = -1;
-    for (size_t j = 0; j < mvDicts.size(); j++)
+    for (size_t j = 0; j < mvDicts.size(); ++j)
     {
-        if (aLocale == mvDicts[j].aLoc) k = j;
+        if (aLocale == mvDicts[j].aLoc)
+            k = j;
     }
 
     // if we have a hyphenation dictionary matching this locale
