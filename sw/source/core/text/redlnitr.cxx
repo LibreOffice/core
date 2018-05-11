@@ -267,7 +267,7 @@ SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
     }
     else
         m_pExt = nullptr;
-    Seek (rFnt, 0, COMPLETE_STRING);
+    Seek(rFnt, m_nNdIdx, 0, COMPLETE_STRING);
 }
 
 SwRedlineItr::~SwRedlineItr() COVERITY_NOEXCEPT_FALSE
@@ -278,7 +278,8 @@ SwRedlineItr::~SwRedlineItr() COVERITY_NOEXCEPT_FALSE
 
 // The return value of SwRedlineItr::Seek tells you if the current font
 // has been manipulated by leaving (-1) or accessing (+1) of a section
-short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
+short SwRedlineItr::Seek_(SwFont& rFnt, sal_uLong const nNode, sal_Int32 const nNew, sal_Int32 const nOld)
+    //TODO use nNode to compare
 {
     short nRet = 0;
     if( ExtOn() )
@@ -301,10 +302,10 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
                 if (m_nAct > m_nFirst)
                     m_nAct = m_nFirst;  // the test has to run from the beginning
                 else
-                    return nRet + EnterExtend( rFnt, nNew ); // There's none prior to us
+                    return nRet + EnterExtend(rFnt, nNode, nNew); // There's none prior to us
             }
             else
-                return nRet + EnterExtend( rFnt, nNew ); // We stayed in the same section
+                return nRet + EnterExtend(rFnt, nNode, nNew); // We stayed in the same section
         }
         if (SwRedlineTable::npos == m_nAct || nOld > nNew)
             m_nAct = m_nFirst;
@@ -362,7 +363,7 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
             m_nEnd = COMPLETE_STRING;
         }
     }
-    return nRet + EnterExtend( rFnt, nNew );
+    return nRet + EnterExtend(rFnt, nNode, nNew);
 }
 
 void SwRedlineItr::FillHints( std::size_t nAuthor, RedlineType_t eType )
@@ -426,7 +427,7 @@ SwRedlineItr::GetNextRedln(sal_Int32 nNext, SwTextNode const*const pNode, SwRedl
 {
     sal_Int32 nStart(m_nStart);
     sal_Int32 nEnd(m_nEnd);
-    nNext = NextExtend( nNext );
+    nNext = NextExtend(pNode->GetIndex(), nNext);
     if (!m_bShow || SwRedlineTable::npos == m_nFirst)
         return std::make_pair(nNext, nullptr);
     if (SwRedlineTable::npos == rAct)
@@ -541,10 +542,12 @@ void SwExtend::ActualizeFont( SwFont &rFnt, ExtTextInputAttr nAttr )
         rFnt.SetGreyWave( true );
 }
 
-short SwExtend::Enter(SwFont& rFnt, sal_Int32 nNew)
+short SwExtend::Enter(SwFont& rFnt, sal_uLong const nNode, sal_Int32 const nNew)
 {
-    OSL_ENSURE( !Inside(), "SwExtend: Enter without Leave" );
     OSL_ENSURE( !m_pFont, "SwExtend: Enter with Font" );
+    if (nNode != m_nNode)
+        return 0;
+    OSL_ENSURE( !Inside(), "SwExtend: Enter without Leave" );
     m_nPos = nNew;
     if( Inside() )
     {
@@ -555,9 +558,11 @@ short SwExtend::Enter(SwFont& rFnt, sal_Int32 nNew)
     return 0;
 }
 
-bool SwExtend::Leave_(SwFont& rFnt, sal_Int32 nNew)
+bool SwExtend::Leave_(SwFont& rFnt, sal_uLong const nNode, sal_Int32 const nNew)
 {
-    OSL_ENSURE( Inside(), "SwExtend: Leave without Enter" );
+    OSL_ENSURE(nNode == m_nNode && Inside(), "SwExtend: Leave without Enter");
+    if (nNode != m_nNode)
+        return true;
     const ExtTextInputAttr nOldAttr = m_rArr[m_nPos - m_nStart];
     m_nPos = nNew;
     if( Inside() )
@@ -578,9 +583,10 @@ bool SwExtend::Leave_(SwFont& rFnt, sal_Int32 nNew)
     return false;
 }
 
-sal_Int32 SwExtend::Next( sal_Int32 nNext )
+sal_Int32 SwExtend::Next(sal_uLong const nNode, sal_Int32 nNext)
 {
-    (void) m_nNode; // TODO use it here
+    if (nNode != m_nNode)
+        return nNext;
     if (m_nPos < m_nStart)
     {
         if (nNext > m_nStart)
