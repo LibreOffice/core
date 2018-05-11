@@ -43,7 +43,6 @@
 
 class ScDocument;
 class ScTableConditionalEntry;
-class ScConditionalFormat;
 class ScValidationData;
 
 struct ScCondFormatEntryItem

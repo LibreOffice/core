@@ -22,7 +22,6 @@
 
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <vcl/errcode.hxx>
 
 #include "scdllapi.h"

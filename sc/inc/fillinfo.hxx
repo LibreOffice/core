@@ -25,7 +25,6 @@
 #include <memory>
 
 #include <svx/framelinkarray.hxx>
-#include "global.hxx"
 #include "colorscale.hxx"
 #include "cellvalue.hxx"
 #include <o3tl/typed_flags_set.hxx>
@@ -35,7 +34,6 @@ class SvxBrushItem;
 class SvxBoxItem;
 class SvxLineItem;
 class SvxShadowItem;
-class Color;
 
 class ScPatternAttr;
 

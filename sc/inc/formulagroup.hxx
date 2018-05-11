@@ -17,14 +17,11 @@
 #include "types.hxx"
 #include "stlalgorithm.hxx"
 
-#include <formula/opcode.hxx>
 #if HAVE_FEATURE_OPENCL
 #include <opencl/platforminfo.hxx>
 #endif
-#include <svl/sharedstringpool.hxx>
 
 #include <memory>
-#include <set>
 #include <unordered_map>
 #include <vector>
 

@@ -10,7 +10,6 @@
 
 #include <rtl/ustring.hxx>
 
-#include <memory>
 #include <vector>
 
 #include <config_options_calc.h>
@@ -18,7 +17,6 @@
 class ScFormulaCell;
 class ScDocument;
 class ScAddress;
-struct ScFormulaCellGroup;
 
 namespace formula {
 
