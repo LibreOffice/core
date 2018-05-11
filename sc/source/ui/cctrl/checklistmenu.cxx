@@ -1228,7 +1228,7 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
 
         aLabelDisp = maMembers[i].maName;
         if ( aLabelDisp.isEmpty() )
-            aLabelDisp = ScGlobal::GetRscString( STR_EMPTYDATA );
+            aLabelDisp = ScResId( STR_EMPTYDATA );
 
         if ( !bSearchTextEmpty )
         {
@@ -1896,7 +1896,7 @@ void ScCheckListMenuWindow::initMembers()
         {
             OUString aLabel = maMembers[i].maName;
             if (aLabel.isEmpty())
-                aLabel = ScGlobal::GetRscString(STR_EMPTYDATA);
+                aLabel = ScResId(STR_EMPTYDATA);
             SvTreeListEntry* pEntry = maChecks->InsertEntry(
                 aLabel);
 
@@ -1950,7 +1950,7 @@ void ScCheckListMenuWindow::getResult(ResultType& rResult)
         {
             OUString aLabel = maMembers[i].maName;
             if (aLabel.isEmpty())
-                aLabel = ScGlobal::GetRscString(STR_EMPTYDATA);
+                aLabel = ScResId(STR_EMPTYDATA);
 
             /* TODO: performance-wise this looks suspicious, concatenating to
              * do the lookup for each leaf item seems wasteful. */

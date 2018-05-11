@@ -38,6 +38,7 @@
 #include <docsh.hxx>
 #include <postit.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <attrib.hxx>
 #include <scitems.hxx>
 #include <drawview.hxx>
@@ -81,7 +82,7 @@ void FuText::StopEditMode()
 
         if(pCalcUndo)
         {
-            const OUString aUndoStr = ScGlobal::GetRscString( STR_UNDO_EDITNOTE );
+            const OUString aUndoStr = ScResId( STR_UNDO_EDITNOTE );
             pUndoMgr->EnterListAction( aUndoStr, aUndoStr, 0, pViewShell->GetViewShellId() );
 
             /*  Note has been created before editing, if first undo action is
@@ -172,7 +173,7 @@ void FuText::StopEditMode()
                 SfxListUndoAction* pAction = dynamic_cast< SfxListUndoAction* >( pUndoMgr->GetUndoAction() );
                 OSL_ENSURE( pAction, "FuText::StopEditMode - list undo action expected" );
                 if( pAction )
-                    pAction->SetComment( ScGlobal::GetRscString( bNewNote ? STR_UNDO_INSERTNOTE : STR_UNDO_DELETENOTE ) );
+                    pAction->SetComment( ScResId( bNewNote ? STR_UNDO_INSERTNOTE : STR_UNDO_DELETENOTE ) );
             }
         }
 

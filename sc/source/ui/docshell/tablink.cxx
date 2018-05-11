@@ -43,6 +43,7 @@
 #include <document.hxx>
 #include <docsh.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <undoblk.hxx>
 #include <undotab.hxx>
 #include <global.hxx>
@@ -348,10 +349,10 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                 {
                     //  Normal link or no references: put error message on sheet.
 
-                    rDoc.SetString( 0,0,nTab, ScGlobal::GetRscString(STR_LINKERROR) );
-                    rDoc.SetString( 0,1,nTab, ScGlobal::GetRscString(STR_LINKERRORFILE) );
+                    rDoc.SetString( 0,0,nTab, ScResId(STR_LINKERROR) );
+                    rDoc.SetString( 0,1,nTab, ScResId(STR_LINKERRORFILE) );
                     rDoc.SetString( 1,1,nTab, aNewUrl );
-                    rDoc.SetString( 0,2,nTab, ScGlobal::GetRscString(STR_LINKERRORTAB) );
+                    rDoc.SetString( 0,2,nTab, ScResId(STR_LINKERRORTAB) );
                     rDoc.SetString( 1,2,nTab, aTabName );
                 }
 

@@ -379,7 +379,7 @@ bool ScDocFunc::DetectiveMarkInvalid(SCTAB nTab)
     {
         if (pUndo && bUndo)
         {
-            pUndo->SetComment( ScGlobal::GetRscString( STR_UNDO_DETINVALID ) );
+            pUndo->SetComment( ScResId( STR_UNDO_DETINVALID ) );
             rDocShell.GetUndoManager()->AddUndoAction( pUndo.release() );
         }
         aModificator.SetDocumentModified();
@@ -387,7 +387,7 @@ bool ScDocFunc::DetectiveMarkInvalid(SCTAB nTab)
         {
             std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
                                                           VclMessageType::Info, VclButtonsType::Ok,
-                                                          ScGlobal::GetRscString(STR_DETINVALID_OVERFLOW)));
+                                                          ScResId(STR_DETINVALID_OVERFLOW)));
             xInfoBox->run();
         }
     }
@@ -492,7 +492,7 @@ bool ScDocFunc::DetectiveRefresh( bool bAutomatic )
             std::unique_ptr<SdrUndoGroup> pUndo = pModel->GetCalcUndo();
             if (pUndo)
             {
-                pUndo->SetComment( ScGlobal::GetRscString( STR_UNDO_DETREFRESH ) );
+                pUndo->SetComment( ScResId( STR_UNDO_DETREFRESH ) );
                 // associate with the last action
                 rDocShell.GetUndoManager()->AddUndoAction(
                                                 new ScUndoDraw( pUndo.release(), &rDocShell ),
@@ -1816,7 +1816,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     // the patch comes from mloiseleur and maoyg
     bool bInsertMerge = false;
     std::vector<ScRange> qIncreaseRange;
-    OUString aUndo = ScGlobal::GetRscString( STR_UNDO_INSERTCELLS );
+    OUString aUndo = ScResId( STR_UNDO_INSERTCELLS );
     if (bRecord)
     {
         ViewShellId nViewShellId(-1);
@@ -2297,7 +2297,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     //the patch comes from maoyg
     ::std::vector<ScRange> qDecreaseRange;
     bool bDeletingMerge = false;
-    OUString aUndo = ScGlobal::GetRscString( STR_UNDO_DELETECELLS );
+    OUString aUndo = ScResId( STR_UNDO_DELETECELLS );
     if (bRecord)
     {
         ViewShellId nViewShellId(-1);
@@ -4490,7 +4490,7 @@ bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
             nProgCount = aSourceArea.aEnd.Row() - aSourceArea.aStart.Row() + 1;
         nProgCount *= nCount;
         ScProgress aProgress( rDoc.GetDocumentShell(),
-                ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount, true );
+                ScResId(STR_FILL_SERIES_PROGRESS), nProgCount, true );
 
         rDoc.Fill( aSourceArea.aStart.Col(), aSourceArea.aStart.Row(),
                 aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), &aProgress,
@@ -4617,7 +4617,7 @@ bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
                 nProgCount = aSourceArea.aEnd.Row() - aSourceArea.aStart.Row() + 1;
             nProgCount *= nCount;
             ScProgress aProgress( rDoc.GetDocumentShell(),
-                    ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount, true );
+                    ScResId(STR_FILL_SERIES_PROGRESS), nProgCount, true );
 
             rDoc.Fill( aSourceArea.aStart.Col(), aSourceArea.aStart.Row(),
                         aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), &aProgress,
@@ -4759,7 +4759,7 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
         nProgCount = aSourceArea.aEnd.Row() - aSourceArea.aStart.Row() + 1;
     nProgCount *= nCount;
     ScProgress aProgress( rDoc.GetDocumentShell(),
-            ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount, true );
+            ScResId(STR_FILL_SERIES_PROGRESS), nProgCount, true );
 
     rDoc.Fill( aSourceArea.aStart.Col(), aSourceArea.aStart.Row(),
             aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), &aProgress,
@@ -5086,7 +5086,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                         bInsert = true;     // don't check via API
                     else
                     {
-                        OUString aTemplate = ScGlobal::GetRscString( STR_CREATENAME_REPLACE );
+                        OUString aTemplate = ScResId( STR_CREATENAME_REPLACE );
 
                         OUString aMessage = aTemplate.getToken( 0, '#' );
                         aMessage += aName;
@@ -5337,7 +5337,7 @@ void ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
     rDoc.GetFormula( nStartCol, nStartRow, nTab, aFormula );
     if ( aFormula.startsWith("{") && aFormula.endsWith("}") )
     {
-        OUString aUndo = ScGlobal::GetRscString( STR_UNDO_RESIZEMATRIX );
+        OUString aUndo = ScResId( STR_UNDO_RESIZEMATRIX );
         bool bUndo(rDoc.IsUndoEnabled());
         if (bUndo)
         {
@@ -5397,7 +5397,7 @@ void ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
                 if ( !nRemoved )
                 {
                     // group all remove and the insert action
-                    OUString aUndo = ScGlobal::GetRscString( STR_UNDO_INSERTAREALINK );
+                    OUString aUndo = ScResId( STR_UNDO_INSERTAREALINK );
                     ViewShellId nViewShellId(-1);
                     if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
                         nViewShellId = pViewSh->GetViewShellId();
@@ -5617,7 +5617,7 @@ void ScDocFunc::ConvertFormulaToValue( const ScRange& rRange, bool bInteraction 
 
 void ScDocFunc::EnterListAction(const char* pNameResId)
 {
-    OUString aUndo(ScGlobal::GetRscString(pNameResId));
+    OUString aUndo(ScResId(pNameResId));
     ViewShellId nViewShellId(-1);
     if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
         nViewShellId = pViewSh->GetViewShellId();

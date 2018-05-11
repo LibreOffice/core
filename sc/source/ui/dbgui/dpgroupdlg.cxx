@@ -24,6 +24,7 @@
 #include <dpgroupdlg.hxx>
 #include <sc.hrc>
 #include <globstr.hrc>
+#include <scresid.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
@@ -228,7 +229,7 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( vcl::Window* pParent,
 {
     static const size_t nCount = SAL_N_ELEMENTS(aDatePartResIds);
     for (const char* pDatePartResId : aDatePartResIds)
-        mpLbUnits->InsertEntry(ScGlobal::GetRscString(pDatePartResId));
+        mpLbUnits->InsertEntry(ScResId(pDatePartResId));
 
     mpEdStart->SetShowDateCentury( true );
     mpEdEnd->SetShowDateCentury( true );

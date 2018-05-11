@@ -63,6 +63,7 @@
 
 #include <sc.hrc>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <scmod.hxx>
 #include <drtxtob.hxx>
 #include <fudraw.hxx>
@@ -625,7 +626,7 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
                         {
                             if (bUpdate)
                                 pOutliner->SetUpdateMode( false );
-                            OUString aName = ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
+                            OUString aName = ScResId( STR_UNDO_DELETECONTENTS );
                             ViewShellId nViewShellId(-1);
                             if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
                                 nViewShellId = pViewSh->GetViewShellId();
