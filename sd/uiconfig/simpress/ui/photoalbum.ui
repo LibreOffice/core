@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkListStore" id="liststore1">
@@ -56,7 +56,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="create_btn">
+              <object class="GtkButton" id="ok">
                 <property name="label" translatable="yes" context="photoalbum|create_btn">Insert Slides</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -428,8 +428,11 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">create_btn</action-widget>
+      <action-widget response="-11">help</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>
