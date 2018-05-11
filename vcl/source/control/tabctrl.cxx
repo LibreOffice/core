@@ -816,7 +816,7 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem co
     if (pItem->mnId == mnCurPageId)
     {
         nState |= ControlState::SELECTED;
-        // only the selected item can be focussed
+        // only the selected item can be focused
         if (HasFocus())
             nState |= ControlState::FOCUSED;
     }
