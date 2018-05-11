@@ -25,6 +25,7 @@
 #include <functional>
 #include <memory>
 
+#include <o3tl/deleter.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/menu.hxx>
@@ -73,7 +74,7 @@ private:
     VclPtr<Edit>        mpSubEdit;
     std::unique_ptr<Timer> mpUpdateDataTimer;
     TextFilter*         mpFilterText;
-    std::unique_ptr<DDInfo> mpDDInfo;
+    std::unique_ptr<DDInfo, o3tl::default_delete<DDInfo>> mpDDInfo;
     std::unique_ptr<Impl_IMEInfos> mpIMEInfos;
     OUStringBuffer      maText;
     OUString            maPlaceholderText;
