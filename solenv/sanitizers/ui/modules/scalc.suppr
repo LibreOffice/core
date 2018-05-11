@@ -34,6 +34,10 @@ sc/uiconfig/scalc/ui/deletecolumnentry.ui:GtkGrid[@id='grid']/GtkBox/GtkLabel or
 sc/uiconfig/scalc/ui/deletecolumnentry.ui:GtkGrid[@id='grid']/GtkBox/GtkGrid[@id='grid_details']/GtkLabel orphan-label
 sc/uiconfig/scalc/ui/deletecolumnentry.ui://GtkEntry[@id='ed_columns'] no-labelled-by
 sc/uiconfig/scalc/ui/doubledialog.ui://GtkEntry[@id='value'] no-labelled-by
+sc/uiconfig/scalc/ui/groupbydate.ui://GtkSpinButton[@id='start_date:yy:mm:dd'] no-labelled-by
+sc/uiconfig/scalc/ui/groupbydate.ui://GtkSpinButton[@id='end_date:yy:mm:dd'] no-labelled-by
+sc/uiconfig/scalc/ui/groupbydate.ui://GtkSpinButton[@id='days_value'] no-labelled-by
+sc/uiconfig/scalc/ui/integerdialog.ui://GtkSpinButton[@id='value'] no-labelled-by
 sc/uiconfig/scalc/ui/managenamesdialog.ui://GtkLabel[@id='info'] orphan-label
 sc/uiconfig/scalc/ui/managenamesdialog.ui://GtkLabel[@id='label2'] orphan-label
 sc/uiconfig/scalc/ui/managenamesdialog.ui://GtkEntry[@id='name'] no-labelled-by
@@ -47,6 +51,8 @@ sc/uiconfig/scalc/ui/movecopysheet.ui://GtkLabel[@id='newNameWarn'] orphan-label
 sc/uiconfig/scalc/ui/movecopysheet.ui://GtkLabel[@id='warnunused'] orphan-label
 sc/uiconfig/scalc/ui/movecopysheet.ui://GtkLabel[@id='warnempty'] orphan-label
 sc/uiconfig/scalc/ui/movecopysheet.ui://GtkLabel[@id='warninvalid'] orphan-label
+sc/uiconfig/scalc/ui/movingaveragedialog.ui://GtkLabel[@id='interval-label'] orphan-label
+sc/uiconfig/scalc/ui/movingaveragedialog.ui://GtkSpinButton[@id='interval-spin'] no-labelled-by
 sc/uiconfig/scalc/ui/pivotfilterdialog.ui://GtkComboBoxText[@id='connect1'] missing-label-for
 sc/uiconfig/scalc/ui/pivotfilterdialog.ui://GtkComboBoxText[@id='field1'] missing-label-for
 sc/uiconfig/scalc/ui/pivotfilterdialog.ui://GtkComboBoxText[@id='field2'] missing-label-for
@@ -57,6 +63,8 @@ sc/uiconfig/scalc/ui/pivotfilterdialog.ui://GtkComboBoxText[@id='cond3'] missing
 sc/uiconfig/scalc/ui/pivotfilterdialog.ui://GtkComboBoxText[@id='val1'] missing-label-for
 sc/uiconfig/scalc/ui/pivotfilterdialog.ui://GtkComboBoxText[@id='val2'] missing-label-for
 sc/uiconfig/scalc/ui/pivotfilterdialog.ui://GtkComboBoxText[@id='val3'] missing-label-for
+sc/uiconfig/scalc/ui/randomnumbergenerator.ui://GtkLabel[@id='decimal-places-label'] orphan-label
+sc/uiconfig/scalc/ui/randomnumbergenerator.ui://GtkSpinButton[@id='decimal-places-spin'] no-labelled-by
 sc/uiconfig/scalc/ui/regressiondialog.ui://foruilo-RefEdit[@id='variable2-range-edit'] duplicate-mnemonic
 sc/uiconfig/scalc/ui/standardfilterdialog.ui://GtkComboBoxText[@id='connect1'] missing-label-for
 sc/uiconfig/scalc/ui/standardfilterdialog.ui://GtkComboBoxText[@id='connect2'] missing-label-for
@@ -77,5 +85,6 @@ sc/uiconfig/scalc/ui/splitcolumnentry.ui:GtkGrid[@id='grid']/GtkBox/GtkLabel orp
 sc/uiconfig/scalc/ui/splitcolumnentry.ui:GtkGrid[@id='grid']/GtkBox/GtkGrid[@id='grid_details']/GtkLabel orphan-label
 sc/uiconfig/scalc/ui/splitcolumnentry.ui:GtkGrid[@id='grid']/GtkBox/GtkGrid[@id='grid_details']/GtkLabel orphan-label
 sc/uiconfig/scalc/ui/splitcolumnentry.ui://GtkEntry[@id='ed_separator'] no-labelled-by
+sc/uiconfig/scalc/ui/splitcolumnentry.ui://GtkSpinButton[@id='num_cols'] no-labelled-by
 sc/uiconfig/scalc/ui/ttestdialog.ui://foruilo-RefEdit[@id='variable2-range-edit'] duplicate-mnemonic
 sc/uiconfig/scalc/ui/ztestdialog.ui://foruilo-RefEdit[@id='variable2-range-edit'] duplicate-mnemonic
