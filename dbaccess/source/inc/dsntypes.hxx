@@ -100,10 +100,9 @@ enum DATASOURCE_TYPE
 // ODsnTypeCollection
 class OOO_DLLPUBLIC_DBA ODsnTypeCollection final
 {
-    typedef std::vector<OUString> StringVector;
 
-    StringVector    m_aDsnTypesDisplayNames;    /// user readable names for the datasource types
-    StringVector    m_aDsnPrefixes;             /// DSN prefixes which determine the type of a datasource
+    std::vector<OUString> m_aDsnTypesDisplayNames;    /// user readable names for the datasource types
+    std::vector<OUString> m_aDsnPrefixes;             /// DSN prefixes which determine the type of a datasource
     ::connectivity::DriversConfig m_aDriverConfig;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
