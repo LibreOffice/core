@@ -64,6 +64,18 @@ class SdVclAbstractDialog_Impl : public VclAbstractDialog
     DECL_ABSTDLG_BASE(SdVclAbstractDialog_Impl,Dialog)
 };
 
+class SdAbstractGenericDialog_Impl : public VclAbstractDialog
+{
+protected:
+    std::unique_ptr<weld::GenericDialogController> m_xDlg;
+public:
+    explicit SdAbstractGenericDialog_Impl(weld::GenericDialogController* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
+};
+
 class AbstractMasterLayoutDialog_Impl : public VclAbstractDialog
 {
 private:
@@ -289,7 +301,7 @@ public:
     virtual VclPtr<AbstractSdVectorizeDlg>     CreateSdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell) override;
     virtual VclPtr<AbstractSdPublishingDlg>    CreateSdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType) override;
 
-    virtual VclPtr<VclAbstractDialog>          CreateSdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pDoc) override;
+    virtual VclPtr<VclAbstractDialog>          CreateSdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument* pDoc) override;
 
     virtual VclPtr<VclAbstractDialog>          CreateMasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pDoc, SdPage*) override;
 

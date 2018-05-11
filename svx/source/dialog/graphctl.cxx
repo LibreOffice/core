@@ -788,6 +788,7 @@ IMPL_LINK(SvxGraphCtrl, DoResize, const Size&, rSize, void)
 IMPL_LINK(SvxGraphCtrl, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
 {
     vcl::RenderContext& rRenderContext = aPayload.first;
+    rRenderContext.Erase();
     const bool bGraphicValid(GraphicType::NONE != aGraphic.GetType());
     // #i73381# in non-SdrMode, paint to local directly
     if (bGraphicValid && aGraphSize.Width() && aGraphSize.Height())

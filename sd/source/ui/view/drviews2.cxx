@@ -3320,8 +3320,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             if (pFact)
             {
+                vcl::Window* pWin = GetActiveWindow();
                 ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSdPhotoAlbumDialog(
-                    GetActiveWindow(),
+                    pWin ? pWin->GetFrameWeld() : nullptr,
                     GetDoc()));
 
                 pDlg->Execute();
