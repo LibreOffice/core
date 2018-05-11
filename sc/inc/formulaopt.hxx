@@ -13,10 +13,8 @@
 #include <map>
 #include <svl/poolitem.hxx>
 #include <unotools/configitem.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <formula/grammar.hxx>
 #include "scdllapi.h"
-#include "global.hxx"
 #include "calcconfig.hxx"
 
 class SC_DLLPUBLIC ScFormulaOptions

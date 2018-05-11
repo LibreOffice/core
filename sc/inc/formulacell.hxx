@@ -20,13 +20,9 @@
 #ifndef INCLUDED_SC_INC_FORMULACELL_HXX
 #define INCLUDED_SC_INC_FORMULACELL_HXX
 
-#include <set>
 #include <memory>
 
 #include <formula/tokenarray.hxx>
-#include <osl/conditn.hxx>
-#include <osl/mutex.hxx>
-#include <rtl/ref.hxx>
 #include <svl/listener.hxx>
 
 #include "types.hxx"
