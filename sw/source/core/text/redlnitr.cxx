@@ -132,6 +132,7 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
     // set font to vertical if frame layout is vertical
     bool bVertLayout = false;
     bool bRTL = false;
+    sw::MergedPara const* pMerged(nullptr);
     if ( pFrame )
     {
         if ( pFrame->IsVertical() )
@@ -140,6 +141,7 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
             m_pFont->SetVertical( m_pFont->GetOrientation(), true );
         }
         bRTL = pFrame->IsRightToLeft();
+        pMerged = pFrame->GetMergedPara();
     }
 
     // Initialize the default attribute of the attribute handler
@@ -193,24 +195,39 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
     SwDoc* pDoc = rTextNode.GetDoc();
     const IDocumentRedlineAccess& rIDRA = rTextNode.getIDocumentRedlineAccess();
 
+    // sw_redlinehide: this is a Ring - pExtInp is the first PaM that's inside
+    // the node.  It's not clear whether there can be more than 1 PaM in the
+    // Ring, and this code doesn't handle that case; neither did the old code.
     const SwExtTextInput* pExtInp = pDoc->GetExtTextInput( rTextNode );
+    if (!pExtInp && pMerged)
+    {
+        SwTextNode const* pNode(&rTextNode);
+        for (auto const& rExtent : pMerged->extents)
+        {
+            if (rExtent.pNode != pNode)
+            {
+                pNode = rExtent.pNode;
+                pExtInp = pDoc->GetExtTextInput(*pNode);
+                if (pExtInp)
+                    break;
+            }
+        }
+    }
     const bool bShow = IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() );
-    if( pExtInp || bShow )
+    if (pExtInp || pMerged || bShow)
     {
         const SwRedlineTable::size_type nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
-        if( pExtInp || SwRedlineTable::npos != nRedlPos )
+        if (pExtInp || pMerged || SwRedlineTable::npos != nRedlPos)
         {
             const std::vector<ExtTextInputAttr> *pArr = nullptr;
-            sal_Int32 nInputStt = 0;
             if( pExtInp )
             {
                 pArr = &pExtInp->GetAttrs();
-                nInputStt = pExtInp->Start()->nContent.GetIndex();
                 Seek( 0 );
             }
 
             m_pRedline = new SwRedlineItr( rTextNode, *m_pFont, m_aAttrHandler, nRedlPos,
-                                        bShow, pArr, nInputStt );
+                            bShow, pArr, pExtInp ? pExtInp->Start() : nullptr);
 
             if( m_pRedline->IsOn() )
                 ++m_nChgCnt;
@@ -233,7 +250,7 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
 SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
                             SwAttrHandler& rAH, sal_Int32 nRed, bool bShow,
                             const std::vector<ExtTextInputAttr> *pArr,
-                            sal_Int32 nExtStart )
+                            SwPosition const*const pExtInputStart)
     : m_rDoc( *rTextNd.GetDoc() )
     , m_rAttrHandler( rAH )
     , m_nNdIdx( rTextNd.GetIndex() )
@@ -243,7 +260,11 @@ SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
     , m_bShow( bShow )
 {
     if( pArr )
-        m_pExt = new SwExtend( *pArr, nExtStart );
+    {
+        assert(pExtInputStart);
+        m_pExt = new SwExtend(*pArr, pExtInputStart->nNode.GetIndex(),
+                                     pExtInputStart->nContent.GetIndex());
+    }
     else
         m_pExt = nullptr;
     Seek (rFnt, 0, COMPLETE_STRING);
@@ -559,6 +580,7 @@ bool SwExtend::Leave_(SwFont& rFnt, sal_Int32 nNew)
 
 sal_Int32 SwExtend::Next( sal_Int32 nNext )
 {
+    (void) m_nNode; // TODO use it here
     if (m_nPos < m_nStart)
     {
         if (nNext > m_nStart)

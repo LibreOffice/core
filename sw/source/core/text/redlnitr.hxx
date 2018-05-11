@@ -38,6 +38,7 @@ class SwExtend
 {
     std::unique_ptr<SwFont> m_pFont;
     const std::vector<ExtTextInputAttr> &m_rArr;
+    sal_uLong m_nNode;
     sal_Int32 m_nStart;
     sal_Int32 m_nPos;
     sal_Int32 m_nEnd;
@@ -45,8 +46,10 @@ class SwExtend
     bool Inside() const { return (m_nPos >= m_nStart && m_nPos < m_nEnd); }
     static void ActualizeFont( SwFont &rFnt, ExtTextInputAttr nAttr );
 public:
-    SwExtend(const std::vector<ExtTextInputAttr> &rArr, sal_Int32 const nStart)
+    SwExtend(const std::vector<ExtTextInputAttr> &rArr,
+             sal_uLong const nNode, sal_Int32 const nStart)
         : m_rArr(rArr)
+        , m_nNode(nNode)
         , m_nStart(nStart)
         , m_nPos(COMPLETE_STRING)
         , m_nEnd(m_nStart + rArr.size())
@@ -91,7 +94,7 @@ class SwRedlineItr
 public:
     SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt, SwAttrHandler& rAH,
         sal_Int32 nRedlPos, bool bShw, const std::vector<ExtTextInputAttr> *pArr = nullptr,
-        sal_Int32 nExtStart = COMPLETE_STRING );
+        SwPosition const* pExtInputStart = nullptr);
     ~SwRedlineItr() COVERITY_NOEXCEPT_FALSE;
     SwRedlineTable::size_type GetAct() const { return m_nAct; }
     bool IsOn() const { return m_bOn || (m_pExt && m_pExt->IsOn()); }
