@@ -3991,7 +3991,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             else if ( nDestPosX != aSource.aStart.Col() || nDestPosY != aSource.aStart.Row() ||
                         nSourceTab != nThisTab )
             {
-                OUString aUndo = ScGlobal::GetRscString( bIsMove ? STR_UNDO_MOVE : STR_UNDO_COPY );
+                OUString aUndo = ScResId( bIsMove ? STR_UNDO_MOVE : STR_UNDO_COPY );
                 pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pViewData->GetViewShell()->GetViewShellId() );
 
                 SCCOL nCorrectCursorPosCol = 0;
@@ -4145,7 +4145,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             OSL_ENSURE(pSourceSh, "drag document has no shell");
             if (pSourceSh)
             {
-                OUString aUndo = ScGlobal::GetRscString( STR_UNDO_COPY );
+                OUString aUndo = ScResId( STR_UNDO_COPY );
                 pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pViewData->GetViewShell()->GetViewShellId() );
 
                 bDone = true;
@@ -4205,7 +4205,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             //! HasSelectedBlockMatrixFragment without selected sheet?
             //! or don't start dragging on a part of a matrix
 
-            OUString aUndo = ScGlobal::GetRscString( bIsMove ? STR_UNDO_MOVE : STR_UNDO_COPY );
+            OUString aUndo = ScResId( bIsMove ? STR_UNDO_MOVE : STR_UNDO_COPY );
             pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pViewData->GetViewShell()->GetViewShellId() );
 
             bDone = true;

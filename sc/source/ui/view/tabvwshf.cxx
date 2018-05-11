@@ -373,7 +373,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     sal_uInt16      nRet    = RET_OK;
                     bool        bDone   = false;
-                    OUString      aErrMsg ( ScGlobal::GetRscString( STR_INVALIDTABNAME ) );
+                    OUString      aErrMsg ( ScResId( STR_INVALIDTABNAME ) );
                     OUString aName;
                     OUString      aDlgTitle;
                     const sal_Char* pHelpId = nullptr;
@@ -633,7 +633,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     {
                         std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                        VclMessageType::Question, VclButtonsType::YesNo,
-                                                                       ScGlobal::GetRscString(STR_QUERY_PIVOTTABLE_DELTAB)));
+                                                                       ScResId(STR_QUERY_PIVOTTABLE_DELTAB)));
                         xQueryBox->set_default_response(RET_NO);
 
                         // Hard warning as there is potential of data loss on deletion
@@ -643,7 +643,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     {
                         std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                        VclMessageType::Question, VclButtonsType::YesNo,
-                                                                       ScGlobal::GetRscString(STR_QUERY_DELTAB)));
+                                                                       ScResId(STR_QUERY_DELTAB)));
                         xQueryBox->set_default_response(RET_YES);
 
                         // no parameter given, ask for confirmation
@@ -704,7 +704,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     //  handle several sheets
 
                     ::svl::IUndoManager* pUndoManager = pDocSh->GetUndoManager();
-                    OUString aUndo = ScGlobal::GetRscString( STR_UNDO_TAB_RTL );
+                    OUString aUndo = ScResId( STR_UNDO_TAB_RTL );
                     pUndoManager->EnterListAction( aUndo, aUndo, 0, rViewData.GetViewShell()->GetViewShellId() );
 
                     ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();

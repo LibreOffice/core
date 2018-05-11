@@ -54,6 +54,7 @@
 #include <pagedata.hxx>
 #include <docpool.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <docsh.hxx>
 #include <cbutton.hxx>
 #include <invmerge.hxx>
@@ -239,7 +240,7 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
                     }
 
                 if (aCurrent.isEmpty())
-                    aCurrent = ScGlobal::GetRscString( STR_EMPTYDATA );
+                    aCurrent = ScResId( STR_EMPTYDATA );
 
                 //! Own text "(None)" instead of "(Empty)" ???
 
@@ -1342,7 +1343,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
         Color aManual( rColorCfg.GetColorValue(svtools::CALCPAGEBREAKMANUAL).nColor );
         Color aAutomatic( rColorCfg.GetColorValue(svtools::CALCPAGEBREAK).nColor );
 
-        OUString aPageStr = ScGlobal::GetRscString( STR_PGNUM );
+        OUString aPageStr = ScResId( STR_PGNUM );
         if ( nPageScript == SvtScriptType::NONE )
         {
             //  get script type of translated "Page" string only once

@@ -52,6 +52,7 @@
 #include <docpool.hxx>
 #include <globstr.hrc>
 #include <global.hxx>
+#include <scresid.hxx>
 #include <undoblk.hxx>
 #include <undocell.hxx>
 #include <formulacell.hxx>
@@ -397,7 +398,7 @@ void ScViewFunc::DoThesaurus()
     {
         LanguageType eLnge = ScViewUtil::GetEffLanguage( &rDoc, ScAddress( nCol, nRow, nTab ) );
         OUString aErr = SvtLanguageTable::GetLanguageString(eLnge);
-        aErr += ScGlobal::GetRscString( STR_SPELLING_NO_LANG );
+        aErr += ScResId( STR_SPELLING_NO_LANG );
 
         vcl::Window* pWin = GetViewData().GetDialogParent();
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,

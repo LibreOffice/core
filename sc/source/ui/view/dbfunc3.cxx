@@ -37,6 +37,7 @@
 #include <com/sun/star/sheet/XDrillDownDataSupplier.hpp>
 
 #include <global.hxx>
+#include <scresid.hxx>
 #include <globstr.hrc>
 #include <sc.hrc>
 #include <undotab.hxx>
@@ -424,8 +425,8 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
             vcl::Window* pWin = GetViewData().GetDialogParent();
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                       VclMessageType::Question, VclButtonsType::YesNo,
-                                                      ScGlobal::GetRscString(STR_MSSG_DOSUBTOTALS_1))); // "delete data?"
-            xBox->set_title(ScGlobal::GetRscString(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"
+                                                      ScResId(STR_MSSG_DOSUBTOTALS_1))); // "delete data?"
+            xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"
             xBox->set_default_response(RET_YES);
             bOk = xBox->run() == RET_YES;
         }
@@ -594,7 +595,7 @@ bool ScDBFunc::MakePivotTable(
     {
         SCTAB nSrcTab = GetViewData().GetTabNo();
 
-        OUString aName( ScGlobal::GetRscString(STR_PIVOT_TABLE) );
+        OUString aName( ScResId(STR_PIVOT_TABLE) );
         OUString aStr;
 
         pDoc->GetName( nSrcTab, aStr );
@@ -1171,7 +1172,7 @@ void ScDBFunc::GroupDataPilot()
     }
     OUString aGroupDimName = pGroupDimension->GetGroupDimName();
 
-    OUString aGroupName = pGroupDimension->CreateGroupName(ScGlobal::GetRscString(STR_PIVOT_GROUP));
+    OUString aGroupName = pGroupDimension->CreateGroupName(ScResId(STR_PIVOT_GROUP));
     ScDPSaveGroupItem aGroup( aGroupName );
     ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
     for (; it != itEnd; ++it)
@@ -2069,7 +2070,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
     pInsDoc->SetClipArea( ScRange( 0, 0, nNewTab, nEndCol, nEndRow, nNewTab ) );
 
     ::svl::IUndoManager* pMgr = GetViewData().GetDocShell()->GetUndoManager();
-    OUString aUndo = ScGlobal::GetRscString( STR_UNDO_DOOUTLINE );
+    OUString aUndo = ScResId( STR_UNDO_DOOUTLINE );
     pMgr->EnterListAction( aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId() );
 
     OUString aNewTabName;

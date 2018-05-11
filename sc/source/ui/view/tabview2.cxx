@@ -41,6 +41,7 @@
 #include <colrowba.hxx>
 #include <waitoff.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <scmod.hxx>
 #include <tabprotection.hxx>
 #include <markdata.hxx>
@@ -1436,7 +1437,7 @@ void ScTabView::ErrorMessage(const char* pGlobStrId)
 
     std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
                                                   VclMessageType::Info, VclButtonsType::Ok,
-                                                  ScGlobal::GetRscString(pGlobStrId)));
+                                                  ScResId(pGlobStrId)));
     xInfoBox->run();
 
     if (bFocus)

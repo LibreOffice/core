@@ -26,6 +26,7 @@
 #include <docsh.hxx>
 #include <appoptio.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <markdata.hxx>
 #include <tabview.hxx>
 #include <columnspanset.hxx>
@@ -33,7 +34,7 @@
 static OUString lcl_MetricString( long nTwips, const OUString& rText )
 {
     if ( nTwips <= 0 )
-        return ScGlobal::GetRscString(STR_TIP_HIDE);
+        return ScResId(STR_TIP_HIDE);
     else
     {
         FieldUnit eUserMet = SC_MOD()->GetAppOptions().GetAppMetric();
@@ -197,7 +198,7 @@ void ScColBar::DrawInvert( long nDragPosP )
 OUString ScColBar::GetDragHelp( long nVal )
 {
     long nTwips = static_cast<long>( nVal / pTabView->GetViewData().GetPPTX() );
-    return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_WIDTH) );
+    return lcl_MetricString( nTwips, ScResId(STR_TIP_WIDTH) );
 }
 
 bool ScColBar::IsLayoutRTL() const        // override only for columns
@@ -356,7 +357,7 @@ void ScRowBar::DrawInvert( long nDragPosP )
 OUString ScRowBar::GetDragHelp( long nVal )
 {
     long nTwips = static_cast<long>( nVal / pTabView->GetViewData().GetPPTY() );
-    return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_HEIGHT) );
+    return lcl_MetricString( nTwips, ScResId(STR_TIP_HEIGHT) );
 }
 
 SCROW ScRowBar::GetHiddenCount( SCROW nEntryNo ) const // override only for rows
