@@ -28,6 +28,7 @@
 #include <vcl/weld.hxx>
 #include <sfx2/app.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <scmod.hxx>
 #include <appoptio.hxx>
 #include <tabvwsh.hxx>
@@ -424,7 +425,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             vcl::Window* pWin = pTabViewShell->GetDialogParent();
                             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                            VclMessageType::Question, VclButtonsType::YesNo,
-                                                                           ScGlobal::GetRscString(STR_UPDATE_SCENARIO)));
+                                                                           ScResId(STR_UPDATE_SCENARIO)));
                             xQueryBox->set_default_response(RET_YES);
                             bExtend = xQueryBox->run() == RET_YES;
                         }
@@ -440,7 +441,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         vcl::Window* pWin = pTabViewShell->GetDialogParent();
                         std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                        VclMessageType::Warning, VclButtonsType::Ok,
-                                                                       ScGlobal::GetRscString(STR_NOAREASELECTED)));
+                                                                       ScResId(STR_NOAREASELECTED)));
                         xErrorBox->run();
                     }
                 }
@@ -458,7 +459,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                         OUString aTmp;
                         pDoc->GetName(nTab, aTmp);
-                        aBaseName = aTmp + "_" + ScGlobal::GetRscString(STR_SCENARIO) + "_";
+                        aBaseName = aTmp + "_" + ScResId(STR_SCENARIO) + "_";
 
                         //  first test, if the prefix is recognised as valid,
                         //  else avoid only doubles
@@ -896,7 +897,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pDlgParent ? pDlgParent->GetFrameWeld() : nullptr,
                                                                    VclMessageType::Warning, VclButtonsType::Ok,
-                                                                   ScGlobal::GetRscString(STR_INVALID_AFAREA)));
+                                                                   ScResId(STR_INVALID_AFAREA)));
                     xErrorBox->run();
                 }
             }

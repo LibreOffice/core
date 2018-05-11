@@ -46,6 +46,7 @@
 #include <drawutil.hxx>
 #include <futext.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <tabvwsh.hxx>
 #include <client.hxx>
 #include <scmod.hxx>
@@ -214,7 +215,7 @@ void ScDrawView::SetMarkedToLayer( SdrLayerID nLayerNo )
     {
         //  #i11702# use SdrUndoObjectLayerChange for undo
         //  STR_UNDO_SELATTR is "Attributes" - should use a different text later
-        BegUndo( ScGlobal::GetRscString( STR_UNDO_SELATTR ) );
+        BegUndo( ScResId( STR_UNDO_SELATTR ) );
 
         const SdrMarkList& rMark = GetMarkedObjectList();
         const size_t nCount = rMark.GetMarkCount();
@@ -283,7 +284,7 @@ void ScDrawView::UpdateWorkArea()
 void ScDrawView::DoCut()
 {
     DoCopy();
-    BegUndo( ScGlobal::GetRscString( STR_UNDO_CUT ) );
+    BegUndo( ScResId( STR_UNDO_CUT ) );
     DeleteMarked();     // In this View - not affected by 505f change
     EndUndo();
 }

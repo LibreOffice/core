@@ -50,6 +50,7 @@
 #include <undoblk.hxx>
 #include <refundo.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <global.hxx>
 #include <transobj.hxx>
 #include <drwtrans.hxx>
@@ -763,7 +764,7 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
 
             ReadGraphic( *xStm, aGraphic );
 
-            const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
+            const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
 
             if(pScDrawView->ApplyGraphicToObject( rHitObj, aGraphic, aBeginUndo, "", "" ))
             {
@@ -778,7 +779,7 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
 
         if( pScDrawView && aDataHelper.GetGDIMetaFile( SotClipboardFormatId::GDIMETAFILE, aMtf ) )
         {
-            const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
+            const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
 
             if(pScDrawView->ApplyGraphicToObject( rHitObj, Graphic(aMtf), aBeginUndo, "", "" ))
             {
@@ -793,7 +794,7 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
 
         if( pScDrawView && aDataHelper.GetBitmapEx( SotClipboardFormatId::BITMAP, aBmpEx ) )
         {
-            const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
+            const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
 
             if(pScDrawView->ApplyGraphicToObject( rHitObj, Graphic(aBmpEx), aBeginUndo, "", "" ))
             {
@@ -1050,7 +1051,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
              ( bMarkIsFiltered && nUnfilteredRows < nDestSizeY+1 ) )
         {
             ScWaitCursorOff aWaitOff( GetFrameWin() );
-            OUString aMessage = ScGlobal::GetRscString( STR_PASTE_BIGGER );
+            OUString aMessage = ScResId( STR_PASTE_BIGGER );
 
             vcl::Window* pWin = GetViewData().GetDialogParent();
             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
@@ -1188,7 +1189,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     ScDocFunc& rDocFunc = pDocSh->GetDocFunc();
     if ( bRecord )
     {
-        OUString aUndo = ScGlobal::GetRscString( pClipDoc->IsCutMode() ? STR_UNDO_MOVE : STR_UNDO_COPY );
+        OUString aUndo = ScResId( pClipDoc->IsCutMode() ? STR_UNDO_MOVE : STR_UNDO_COPY );
         pUndoMgr->EnterListAction( aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId() );
     }
 
@@ -1582,7 +1583,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     if (pDoc->IsUndoEnabled())
     {
         ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
-        OUString aUndo = ScGlobal::GetRscString(
+        OUString aUndo = ScResId(
             pClipDoc->IsCutMode() ? STR_UNDO_CUT : STR_UNDO_COPY);
         pUndoMgr->EnterListAction(aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId());
 
@@ -1747,7 +1748,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
     if (pDoc->IsUndoEnabled())
     {
         svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
-        OUString aUndo = ScGlobal::GetRscString(
+        OUString aUndo = ScResId(
             pClipDoc->IsCutMode() ? STR_UNDO_CUT : STR_UNDO_COPY);
         pUndoMgr->EnterListAction(aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId());
 
@@ -1817,7 +1818,7 @@ bool ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
     {
         //  moving within one table and several tables selected -> apply to all selected tables
 
-        OUString aUndo = ScGlobal::GetRscString( bCut ? STR_UNDO_MOVE : STR_UNDO_COPY );
+        OUString aUndo = ScResId( bCut ? STR_UNDO_MOVE : STR_UNDO_COPY );
         pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId() );
 
         //  collect ranges of consecutive selected tables

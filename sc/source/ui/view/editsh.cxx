@@ -69,6 +69,7 @@
 #include <tabvwsh.hxx>
 #include <editutil.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <gridwin.hxx>
 
 #define ShellClass_ScEditShell
@@ -132,7 +133,7 @@ static void lcl_RemoveAttribs( EditView& rEditView )
     bool bOld = pEngine->GetUpdateMode();
     pEngine->SetUpdateMode(false);
 
-    OUString aName = ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
+    OUString aName = ScResId( STR_UNDO_DELETECONTENTS );
     ViewShellId nViewShellId(-1);
     if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
         nViewShellId = pViewSh->GetViewShellId();

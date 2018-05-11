@@ -61,6 +61,7 @@
 #include <sc.hrc>
 #include <scres.hrc>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <docsh.hxx>
 #include <patattr.hxx>
 #include <scmod.hxx>
@@ -571,7 +572,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         {
                             if ( bUndo )
                             {
-                                OUString aUndo = ScGlobal::GetRscString( STR_UNDO_EDITCELLSTYLE );
+                                OUString aUndo = ScResId( STR_UNDO_EDITCELLSTYLE );
                                 pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pTabViewShell->GetViewShellId() );
                                 bListAction = true;
                             }
@@ -629,7 +630,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                                 if ( bUndo )
                                 {
-                                    OUString aUndo = ScGlobal::GetRscString( STR_UNDO_EDITCELLSTYLE );
+                                    OUString aUndo = ScResId( STR_UNDO_EDITCELLSTYLE );
                                     pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pTabViewShell->GetViewShellId() );
                                     bListAction = true;
                                 }

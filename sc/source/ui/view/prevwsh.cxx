@@ -52,6 +52,7 @@
 #include <stlpool.hxx>
 #include <editutil.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <sc.hrc>
 #include <ViewSettingsSequenceDefines.hxx>
 #include <tpprint.hxx>
@@ -442,7 +443,7 @@ IMPL_LINK( ScPreviewShell, ScrollHandler, ScrollBar*, pScroll, void )
                 if( bIsDivide )
                     pPreview->SetPageNo( nPageNo );
 
-                aHelpStr = ScGlobal::GetRscString( STR_PAGE ) +
+                aHelpStr = ScResId( STR_PAGE ) +
                            " " + OUString::number( nPageNo ) +
                            " / "  + OUString::number( nTotalPages );
             }
@@ -452,7 +453,7 @@ IMPL_LINK( ScPreviewShell, ScrollHandler, ScrollBar*, pScroll, void )
                 if ( nTotalPages && ( nPageNo < nTotalPages || !bAllTested ) )
                     pPreview->SetPageNo( nPageNo );
 
-                aHelpStr = ScGlobal::GetRscString( STR_PAGE ) +
+                aHelpStr = ScResId( STR_PAGE ) +
                            " " + OUString::number( nPageNo+1 ) +
                            " / "  + OUString::number( nTotalPages );
             }
