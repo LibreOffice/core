@@ -35,6 +35,7 @@
 #include <undoblk.hxx>
 #include <sc.hrc>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <global.hxx>
 #include <rangenam.hxx>
 #include <arealink.hxx>
@@ -91,7 +92,7 @@ ScUndoDeleteContents::~ScUndoDeleteContents()
 
 OUString ScUndoDeleteContents::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );    // "Delete"
+    return ScResId( STR_UNDO_DELETECONTENTS );    // "Delete"
 }
 
 void ScUndoDeleteContents::SetDataSpans( const std::shared_ptr<DataSpansType>& pSpans )
@@ -233,7 +234,7 @@ ScUndoFillTable::~ScUndoFillTable()
 
 OUString ScUndoFillTable::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_FILL_TAB );
+    return ScResId( STR_FILL_TAB );
 }
 
 void ScUndoFillTable::SetChangeTrack()
@@ -376,7 +377,7 @@ ScUndoSelectionAttr::~ScUndoSelectionAttr()
 OUString ScUndoSelectionAttr::GetComment() const
 {
     //"Attribute" "/Lines"
-    return ScGlobal::GetRscString( pLineOuter ? STR_UNDO_SELATTRLINES : STR_UNDO_SELATTR );
+    return ScResId( pLineOuter ? STR_UNDO_SELATTRLINES : STR_UNDO_SELATTR );
 }
 
 ScEditDataArray* ScUndoSelectionAttr::GetDataArray()
@@ -506,7 +507,7 @@ ScUndoAutoFill::~ScUndoAutoFill()
 
 OUString ScUndoAutoFill::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_AUTOFILL ); //"Fill"
+    return ScResId( STR_UNDO_AUTOFILL ); //"Fill"
 }
 
 void ScUndoAutoFill::SetChangeTrack()
@@ -597,7 +598,7 @@ void ScUndoAutoFill::Redo()
         nProgCount = aSource.aEnd.Row() - aSource.aStart.Row() + 1;
     nProgCount *= nCount;
     ScProgress aProgress( rDoc.GetDocumentShell(),
-            ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount, true );
+            ScResId(STR_FILL_SERIES_PROGRESS), nProgCount, true );
 
     rDoc.Fill( aSource.aStart.Col(), aSource.aStart.Row(),
             aSource.aEnd.Col(), aSource.aEnd.Row(), &aProgress,
@@ -651,7 +652,7 @@ ScUndoMerge::~ScUndoMerge()
 
 OUString ScUndoMerge::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_MERGE );
+    return ScResId( STR_UNDO_MERGE );
 }
 
 void ScUndoMerge::DoChange( bool bUndo ) const
@@ -783,7 +784,7 @@ ScUndoAutoFormat::~ScUndoAutoFormat()
 
 OUString ScUndoAutoFormat::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_AUTOFORMAT );   //"Auto-Format"
+    return ScResId( STR_UNDO_AUTOFORMAT );   //"Auto-Format"
 }
 
 void ScUndoAutoFormat::Undo()
@@ -967,7 +968,7 @@ void ScUndoReplace::SetChangeTrack()
 
 OUString ScUndoReplace::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_REPLACE );  // "Replace"
+    return ScResId( STR_UNDO_REPLACE );  // "Replace"
 }
 
 void ScUndoReplace::Undo()
@@ -1121,7 +1122,7 @@ ScUndoTabOp::~ScUndoTabOp()
 
 OUString ScUndoTabOp::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_TABOP );    // "Multiple operation"
+    return ScResId( STR_UNDO_TABOP );    // "Multiple operation"
 }
 
 void ScUndoTabOp::Undo()
@@ -1215,9 +1216,9 @@ OUString ScUndoConversion::GetComment() const
     OUString aText;
     switch( maConvParam.GetType() )
     {
-        case SC_CONVERSION_SPELLCHECK:      aText = ScGlobal::GetRscString( STR_UNDO_SPELLING );    break;
-        case SC_CONVERSION_HANGULHANJA:     aText = ScGlobal::GetRscString( STR_UNDO_HANGULHANJA ); break;
-        case SC_CONVERSION_CHINESE_TRANSL:  aText = ScGlobal::GetRscString( STR_UNDO_CHINESE_TRANSLATION ); break;
+        case SC_CONVERSION_SPELLCHECK:      aText = ScResId( STR_UNDO_SPELLING );    break;
+        case SC_CONVERSION_HANGULHANJA:     aText = ScResId( STR_UNDO_HANGULHANJA ); break;
+        case SC_CONVERSION_CHINESE_TRANSL:  aText = ScResId( STR_UNDO_CHINESE_TRANSLATION ); break;
         default: OSL_FAIL( "ScUndoConversion::GetComment - unknown conversion type" );
     }
     return aText;
@@ -1297,7 +1298,7 @@ ScUndoRefConversion::~ScUndoRefConversion()
 
 OUString ScUndoRefConversion::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_ENTERDATA ); // "Input"
+    return ScResId( STR_UNDO_ENTERDATA ); // "Input"
 }
 
 void ScUndoRefConversion::SetChangeTrack()
@@ -1370,7 +1371,7 @@ ScUndoRefreshLink::ScUndoRefreshLink(ScDocShell* pNewDocShell,
 
 OUString ScUndoRefreshLink::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_UPDATELINK );
+    return ScResId( STR_UNDO_UPDATELINK );
 }
 
 void ScUndoRefreshLink::Undo()
@@ -1501,7 +1502,7 @@ ScUndoInsertAreaLink::~ScUndoInsertAreaLink()
 
 OUString ScUndoInsertAreaLink::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_INSERTAREALINK );
+    return ScResId( STR_UNDO_INSERTAREALINK );
 }
 
 void ScUndoInsertAreaLink::Undo()
@@ -1563,7 +1564,7 @@ ScUndoRemoveAreaLink::~ScUndoRemoveAreaLink()
 
 OUString ScUndoRemoveAreaLink::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_REMOVELINK );   //! own text ??
+    return ScResId( STR_UNDO_REMOVELINK );   //! own text ??
 }
 
 void ScUndoRemoveAreaLink::Undo()
@@ -1633,7 +1634,7 @@ ScUndoUpdateAreaLink::ScUndoUpdateAreaLink( ScDocShell* pShell,
 
 OUString ScUndoUpdateAreaLink::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_UPDATELINK );   //! own text ??
+    return ScResId( STR_UNDO_UPDATELINK );   //! own text ??
 }
 
 void ScUndoUpdateAreaLink::DoChange( const bool bUndo ) const

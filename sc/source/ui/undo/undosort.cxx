@@ -9,6 +9,7 @@
 
 #include <undosort.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <global.hxx>
 #include <undoutil.hxx>
 
@@ -19,7 +20,7 @@ UndoSort::UndoSort( ScDocShell* pDocSh, const ReorderParam& rParam ) :
 
 OUString UndoSort::GetComment() const
 {
-    return ScGlobal::GetRscString(STR_UNDO_SORT);
+    return ScResId(STR_UNDO_SORT);
 }
 
 void UndoSort::Undo()

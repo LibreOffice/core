@@ -25,6 +25,7 @@
 #include <hfedtdlg.hxx>
 #include <global.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <scuitphfedit.hxx>
 
 ScHFEditDlg::ScHFEditDlg( vcl::Window*           pParent,
@@ -37,7 +38,7 @@ ScHFEditDlg::ScHFEditDlg( vcl::Window*           pParent,
 
     OUString aTmp = GetText();
 
-    aTmp += " (" + ScGlobal::GetRscString( STR_PAGESTYLE ) + ": " + rPageStyle + ")";
+    aTmp += " (" + ScResId( STR_PAGESTYLE ) + ": " + rPageStyle + ")";
 
     SetText( aTmp );
 }

@@ -615,7 +615,7 @@ PivotTableDataProvider::assignLabelsToDataSequence(size_t nIndex)
 
     if (m_aLabels.empty())
     {
-        aLabel = ScGlobal::GetRscString(STR_PIVOT_TOTAL);
+        aLabel = ScResId(STR_PIVOT_TOTAL);
     }
     else
     {
