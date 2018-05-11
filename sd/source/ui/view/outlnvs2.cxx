@@ -573,7 +573,8 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
             {
                 // Dialog...
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSdModifyFieldDlg> pDlg(pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOutlinerView->GetAttribs() ) : nullptr);
+                vcl::Window* pWin = GetActiveWindow();
+                ScopedVclPtr<AbstractSdModifyFieldDlg> pDlg(pFact ? pFact->CreateSdModifyFieldDlg(pWin ? pWin->GetFrameWeld() : nullptr, pFldItem->GetField(), pOutlinerView->GetAttribs() ) : nullptr);
                 if( pDlg && (pDlg->Execute() == RET_OK) )
                 {
                     std::unique_ptr<SvxFieldData> pField(pDlg->GetField());

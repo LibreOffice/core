@@ -62,7 +62,11 @@ short AbstractSdCustomShowDlg_Impl::Execute()
 
 IMPL_ABSTDLG_BASE(SdAbstractTabDialog_Impl);
 IMPL_ABSTDLG_BASE(SdPresLayoutTemplateDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractSdModifyFieldDlg_Impl);
+
+short AbstractSdModifyFieldDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractSdSnapLineDlg_Impl::Execute()
 {
@@ -211,12 +215,12 @@ void SdPresLayoutTemplateDlg_Impl::SetText( const OUString& rStr )
 
 SvxFieldData* AbstractSdModifyFieldDlg_Impl::GetField()
 {
-    return pDlg->GetField();
+    return m_xDlg->GetField();
 }
 
 SfxItemSet AbstractSdModifyFieldDlg_Impl::GetItemSet()
 {
-    return pDlg->GetItemSet();
+    return m_xDlg->GetItemSet();
 }
 
 void AbstractSdSnapLineDlg_Impl::GetAttr(SfxItemSet& rOutAttrs)
@@ -353,9 +357,9 @@ VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdTabPageDialo
     return VclPtr<SdAbstractTabDialog_Impl>::Create( VclPtr<SdPageDlg>::Create( pDocShell, pParent, pAttr, bAreaPage ) );
 }
 
-VclPtr<AbstractSdModifyFieldDlg> SdAbstractDialogFactory_Impl::CreateSdModifyFieldDlg( vcl::Window* pParent, const SvxFieldData* pInField, const SfxItemSet& rSet )
+VclPtr<AbstractSdModifyFieldDlg> SdAbstractDialogFactory_Impl::CreateSdModifyFieldDlg(weld::Window* pParent, const SvxFieldData* pInField, const SfxItemSet& rSet)
 {
-    return VclPtr<AbstractSdModifyFieldDlg_Impl>::Create( VclPtr<SdModifyFieldDlg>::Create( pParent, pInField, rSet ) );
+    return VclPtr<AbstractSdModifyFieldDlg_Impl>::Create(new SdModifyFieldDlg(pParent, pInField, rSet));
 }
 
 VclPtr<AbstractSdSnapLineDlg> SdAbstractDialogFactory_Impl::CreateSdSnapLineDlg(weld::Window* pParent, const SfxItemSet& rInAttrs, ::sd::View* pView)

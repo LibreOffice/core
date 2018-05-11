@@ -2392,7 +2392,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     // Dialog...
                     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                    ScopedVclPtr<AbstractSdModifyFieldDlg> pDlg(pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOLV->GetAttribs() ) : nullptr);
+                    vcl::Window* pWin = GetActiveWindow();
+                    ScopedVclPtr<AbstractSdModifyFieldDlg> pDlg(pFact ? pFact->CreateSdModifyFieldDlg(pWin ? pWin->GetFrameWeld() : nullptr, pFldItem->GetField(), pOLV->GetAttribs() ) : nullptr);
                     if( pDlg && pDlg->Execute() == RET_OK )
                     {
                         // To make a correct SetAttribs() call at the utlinerView
