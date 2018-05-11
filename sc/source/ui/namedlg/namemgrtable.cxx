@@ -14,6 +14,7 @@
 #include <document.hxx>
 #include <docfunc.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <namedlg.hxx>
 #include <viewdata.hxx>
 #include <globalnames.hxx>
@@ -38,7 +39,7 @@ ScRangeManagerTable::ScRangeManagerTable(SvSimpleTableContainer& rParent,
         const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap,
         const ScAddress& rPos)
     : SvSimpleTable( rParent, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP )
-    , maGlobalString( ScGlobal::GetRscString(STR_GLOBAL_SCOPE))
+    , maGlobalString( ScResId(STR_GLOBAL_SCOPE))
     , m_RangeMap(rRangeMap)
     , maPos( rPos )
     , mpInitListener(nullptr)
@@ -46,9 +47,9 @@ ScRangeManagerTable::ScRangeManagerTable(SvSimpleTableContainer& rParent,
     static long aStaticTabs[] = { 0, 0, 0 };
     SetTabs( SAL_N_ELEMENTS(aStaticTabs), aStaticTabs, MapUnit::MapPixel );
 
-    OUString aNameStr(ScGlobal::GetRscString(STR_HEADER_NAME));
-    OUString aRangeStr(ScGlobal::GetRscString(STR_HEADER_RANGE_OR_EXPR));
-    OUString aScopeStr(ScGlobal::GetRscString(STR_HEADER_SCOPE));
+    OUString aNameStr(ScResId(STR_HEADER_NAME));
+    OUString aRangeStr(ScResId(STR_HEADER_RANGE_OR_EXPR));
+    OUString aScopeStr(ScResId(STR_HEADER_SCOPE));
 
     HeaderBar& rHeaderBar = GetTheHeaderBar();
     InsertHeaderEntry( aNameStr );

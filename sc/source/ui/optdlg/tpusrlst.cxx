@@ -32,6 +32,7 @@
 #include <crdlg.hxx>
 #include <sc.hrc>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <tpusrlst.hxx>
 
 #define CR  u'\x000D'
@@ -47,10 +48,10 @@ ScTpUserLists::ScTpUserLists( vcl::Window*               pParent,
     :   SfxTabPage      ( pParent,
                           "OptSortLists", "modules/scalc/ui/optsortlists.ui",
                           &rCoreAttrs ),
-        aStrQueryRemove ( ScGlobal::GetRscString( STR_QUERYREMOVE ) ),
-        aStrCopyList    ( ScGlobal::GetRscString( STR_COPYLIST ) ),
-        aStrCopyFrom    ( ScGlobal::GetRscString( STR_COPYFROM ) ),
-        aStrCopyErr     ( ScGlobal::GetRscString( STR_COPYERR ) ),
+        aStrQueryRemove ( ScResId( STR_QUERYREMOVE ) ),
+        aStrCopyList    ( ScResId( STR_COPYLIST ) ),
+        aStrCopyFrom    ( ScResId( STR_COPYFROM ) ),
+        aStrCopyErr     ( ScResId( STR_COPYERR ) ),
         nWhichUserLists ( GetWhich( SID_SCUSERLISTS ) ),
         pUserLists      ( nullptr ),
         pDoc            ( nullptr ),
@@ -698,7 +699,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
         {
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
                         VclMessageType::Warning, VclButtonsType::Ok,
-                        ScGlobal::GetRscString(STR_INVALID_TABREF)));
+                        ScResId(STR_INVALID_TABREF)));
 
             xBox->run();
             mpEdCopyFrom->GrabFocus();

@@ -80,9 +80,9 @@ ScUndoInsertTab::~ScUndoInsertTab()
 OUString ScUndoInsertTab::GetComment() const
 {
     if (bAppend)
-        return ScGlobal::GetRscString( STR_UNDO_APPEND_TAB );
+        return ScResId( STR_UNDO_APPEND_TAB );
     else
-        return ScGlobal::GetRscString( STR_UNDO_INSERT_TAB );
+        return ScResId( STR_UNDO_INSERT_TAB );
 }
 
 void ScUndoInsertTab::SetChangeTrack()
@@ -172,7 +172,7 @@ ScUndoInsertTables::~ScUndoInsertTables()
 
 OUString ScUndoInsertTables::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_INSERT_TAB );
+    return ScResId( STR_UNDO_INSERT_TAB );
 }
 
 void ScUndoInsertTables::SetChangeTrack()
@@ -261,7 +261,7 @@ ScUndoDeleteTab::~ScUndoDeleteTab()
 
 OUString ScUndoDeleteTab::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_DELETE_TAB );
+    return ScResId( STR_UNDO_DELETE_TAB );
 }
 
 void ScUndoDeleteTab::SetChangeTrack()
@@ -422,7 +422,7 @@ ScUndoRenameTab::~ScUndoRenameTab()
 
 OUString ScUndoRenameTab::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_RENAME_TAB );
+    return ScResId( STR_UNDO_RENAME_TAB );
 }
 
 void ScUndoRenameTab::DoChange( SCTAB nTabP, const OUString& rName ) const
@@ -484,7 +484,7 @@ ScUndoMoveTab::~ScUndoMoveTab()
 
 OUString ScUndoMoveTab::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_MOVE_TAB );
+    return ScResId( STR_UNDO_MOVE_TAB );
 }
 
 void ScUndoMoveTab::DoChange( bool bUndo ) const
@@ -495,7 +495,7 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
     if (bUndo)                                      // UnDo
     {
         size_t i = mpNewTabs->size();
-        std::unique_ptr<ScProgress> pProgress(new ScProgress(pDocShell , ScGlobal::GetRscString(STR_UNDO_MOVE_TAB),
+        std::unique_ptr<ScProgress> pProgress(new ScProgress(pDocShell , ScResId(STR_UNDO_MOVE_TAB),
                                                                i * rDoc.GetCodeCount(), true));
         for (; i > 0; --i)
         {
@@ -517,7 +517,7 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
     else
     {
         size_t n = mpNewTabs->size();
-        std::unique_ptr<ScProgress> pProgress(new ScProgress(pDocShell , ScGlobal::GetRscString(STR_UNDO_MOVE_TAB),
+        std::unique_ptr<ScProgress> pProgress(new ScProgress(pDocShell , ScResId(STR_UNDO_MOVE_TAB),
                                                                n * rDoc.GetCodeCount(), true));
         for (size_t i = 0; i < n; ++i)
         {
@@ -589,7 +589,7 @@ ScUndoCopyTab::~ScUndoCopyTab()
 
 OUString ScUndoCopyTab::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_COPY_TAB );
+    return ScResId( STR_UNDO_COPY_TAB );
 }
 
 void ScUndoCopyTab::DoChange() const
@@ -730,8 +730,8 @@ ScUndoTabColor::~ScUndoTabColor()
 OUString ScUndoTabColor::GetComment() const
 {
     if (aTabColorList.size() > 1)
-        return ScGlobal::GetRscString(STR_UNDO_SET_MULTI_TAB_BG_COLOR);
-    return ScGlobal::GetRscString(STR_UNDO_SET_TAB_BG_COLOR);
+        return ScResId(STR_UNDO_SET_MULTI_TAB_BG_COLOR);
+    return ScResId(STR_UNDO_SET_TAB_BG_COLOR);
 }
 
 void ScUndoTabColor::DoChange(bool bUndoType) const
@@ -796,7 +796,7 @@ ScUndoMakeScenario::~ScUndoMakeScenario()
 
 OUString ScUndoMakeScenario::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_MAKESCENARIO );
+    return ScResId( STR_UNDO_MAKESCENARIO );
 }
 
 void ScUndoMakeScenario::Undo()
@@ -875,7 +875,7 @@ ScUndoImportTab::~ScUndoImportTab()
 
 OUString ScUndoImportTab::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_INSERT_TAB );
+    return ScResId( STR_UNDO_INSERT_TAB );
 }
 
 void ScUndoImportTab::DoChange() const
@@ -1056,7 +1056,7 @@ ScUndoRemoveLink::~ScUndoRemoveLink()
 
 OUString ScUndoRemoveLink::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_REMOVELINK );
+    return ScResId( STR_UNDO_REMOVELINK );
 }
 
 void ScUndoRemoveLink::DoChange( bool bLink ) const
@@ -1155,7 +1155,7 @@ OUString ScUndoShowHideTab::GetComment() const
         pId = bShow ? STR_UNDO_SHOWTAB : STR_UNDO_HIDETAB;
     }
 
-    return ScGlobal::GetRscString(pId);
+    return ScResId(pId);
 }
 
 ScUndoDocProtect::ScUndoDocProtect(ScDocShell* pShell, unique_ptr<ScDocProtection> && pProtectSettings) :
@@ -1222,7 +1222,7 @@ bool ScUndoDocProtect::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 OUString ScUndoDocProtect::GetComment() const
 {
     const char* pId = mpProtectSettings->isProtected() ? STR_UNDO_PROTECT_DOC : STR_UNDO_UNPROTECT_DOC;
-    return ScGlobal::GetRscString(pId);
+    return ScResId(pId);
 }
 
 ScUndoTabProtect::ScUndoTabProtect(ScDocShell* pShell, SCTAB nTab, unique_ptr<ScTableProtection> && pProtectSettings) :
@@ -1290,7 +1290,7 @@ bool ScUndoTabProtect::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 OUString ScUndoTabProtect::GetComment() const
 {
     const char* pId = mpProtectSettings->isProtected() ? STR_UNDO_PROTECT_TAB : STR_UNDO_UNPROTECT_TAB;
-    return ScGlobal::GetRscString(pId);
+    return ScResId(pId);
 }
 
 ScUndoPrintRange::ScUndoPrintRange( ScDocShell* pShell, SCTAB nNewTab,
@@ -1351,7 +1351,7 @@ bool ScUndoPrintRange::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 
 OUString ScUndoPrintRange::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_PRINTRANGES );
+    return ScResId( STR_UNDO_PRINTRANGES );
 }
 
 ScUndoScenarioFlags::ScUndoScenarioFlags(ScDocShell* pNewDocShell, SCTAB nT,
@@ -1376,7 +1376,7 @@ ScUndoScenarioFlags::~ScUndoScenarioFlags()
 
 OUString ScUndoScenarioFlags::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_EDITSCENARIO );
+    return ScResId( STR_UNDO_EDITSCENARIO );
 }
 
 void ScUndoScenarioFlags::Undo()
@@ -1551,7 +1551,7 @@ bool ScUndoLayoutRTL::CanRepeat(SfxRepeatTarget& rTarget) const
 
 OUString ScUndoLayoutRTL::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_TAB_RTL );
+    return ScResId( STR_UNDO_TAB_RTL );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

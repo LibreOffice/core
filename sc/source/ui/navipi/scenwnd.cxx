@@ -28,6 +28,7 @@
 #include <navipi.hxx>
 #include <sc.hrc>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <helpids.h>
 
 // class ScScenarioWindow ------------------------------------------------
@@ -185,7 +186,7 @@ void ScScenarioListBox::DeleteScenario()
     {
         std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
                                                        VclMessageType::Question, VclButtonsType::YesNo,
-                                                       ScGlobal::GetRscString(STR_QUERY_DELSCENARIO)));
+                                                       ScResId(STR_QUERY_DELSCENARIO)));
         xQueryBox->set_default_response(RET_YES);
         if (xQueryBox->run() == RET_YES)
             ExecuteScenarioSlot( SID_DELETE_SCENARIO );

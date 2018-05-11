@@ -9,6 +9,7 @@
 
 #include <undorangename.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <global.hxx>
 #include <docfunc.hxx>
 #include <sc.hrc>
@@ -63,7 +64,7 @@ bool ScUndoAllRangeNames::CanRepeat(SfxRepeatTarget& /*rTarget*/) const
 
 OUString ScUndoAllRangeNames::GetComment() const
 {
-    return ScGlobal::GetRscString(STR_UNDO_RANGENAMES);
+    return ScResId(STR_UNDO_RANGENAMES);
 }
 
 void ScUndoAllRangeNames::DoChange(const std::map<OUString, std::unique_ptr<ScRangeName>>& rNames)
@@ -133,7 +134,7 @@ bool ScUndoAddRangeData::CanRepeat(SfxRepeatTarget& /*rTarget*/) const
 
 OUString ScUndoAddRangeData::GetComment() const
 {
-    return ScGlobal::GetRscString(STR_UNDO_RANGENAMES);
+    return ScResId(STR_UNDO_RANGENAMES);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

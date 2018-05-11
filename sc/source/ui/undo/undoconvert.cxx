@@ -9,6 +9,7 @@
 
 #include <undoconvert.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <undoutil.hxx>
 
 namespace sc {
@@ -21,7 +22,7 @@ UndoFormulaToValue::UndoFormulaToValue( ScDocShell* pDocSh, TableValues& rUndoVa
 
 OUString UndoFormulaToValue::GetComment() const
 {
-    return ScGlobal::GetRscString(STR_UNDO_FORMULA_TO_VALUE);
+    return ScResId(STR_UNDO_FORMULA_TO_VALUE);
 }
 
 void UndoFormulaToValue::Undo()

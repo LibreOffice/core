@@ -34,6 +34,7 @@
 #include <docsh.hxx>
 #include <tabvwsh.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <global.hxx>
 #include <formulacell.hxx>
 #include <target.hxx>
@@ -97,7 +98,7 @@ ScUndoCursorAttr::~ScUndoCursorAttr()
 OUString ScUndoCursorAttr::GetComment() const
 {
     //! own text for automatic attribution
-    return ScGlobal::GetRscString( STR_UNDO_CURSORATTR ); // "Attribute"
+    return ScResId( STR_UNDO_CURSORATTR ); // "Attribute"
 }
 
 void ScUndoCursorAttr::SetEditData( std::unique_ptr<EditTextObject> pOld, std::unique_ptr<EditTextObject> pNew )
@@ -179,7 +180,7 @@ ScUndoEnterData::ScUndoEnterData(
 
 OUString ScUndoEnterData::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_ENTERDATA ); // "Input"
+    return ScResId( STR_UNDO_ENTERDATA ); // "Input"
 }
 
 void ScUndoEnterData::DoChange() const
@@ -316,7 +317,7 @@ ScUndoEnterValue::~ScUndoEnterValue()
 
 OUString ScUndoEnterValue::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_ENTERDATA ); // "Input"
+    return ScResId( STR_UNDO_ENTERDATA ); // "Input"
 }
 
 void ScUndoEnterValue::SetChangeTrack()
@@ -420,7 +421,7 @@ bool ScUndoSetCell::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
 
 OUString ScUndoSetCell::GetComment() const
 {
-    return ScGlobal::GetRscString(STR_UNDO_ENTERDATA); // "Input"
+    return ScResId(STR_UNDO_ENTERDATA); // "Input"
 }
 
 void ScUndoSetCell::SetChangeTrack()
@@ -504,12 +505,12 @@ OUString ScUndoPageBreak::GetComment() const
     //"Column break" | "Row break"  "insert" | "delete"
     return bColumn ?
         ( bInsert ?
-            ScGlobal::GetRscString( STR_UNDO_INSCOLBREAK ) :
-            ScGlobal::GetRscString( STR_UNDO_DELCOLBREAK )
+            ScResId( STR_UNDO_INSCOLBREAK ) :
+            ScResId( STR_UNDO_DELCOLBREAK )
         ) :
         ( bInsert ?
-            ScGlobal::GetRscString( STR_UNDO_INSROWBREAK ) :
-            ScGlobal::GetRscString( STR_UNDO_DELROWBREAK )
+            ScResId( STR_UNDO_INSROWBREAK ) :
+            ScResId( STR_UNDO_DELROWBREAK )
         );
 }
 
@@ -580,7 +581,7 @@ ScUndoPrintZoom::~ScUndoPrintZoom()
 
 OUString ScUndoPrintZoom::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_PRINTSCALE );
+    return ScResId( STR_UNDO_PRINTSCALE );
 }
 
 void ScUndoPrintZoom::DoChange( bool bUndo )
@@ -650,7 +651,7 @@ ScUndoThesaurus::~ScUndoThesaurus() {}
 
 OUString ScUndoThesaurus::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_THESAURUS );    // "Thesaurus"
+    return ScResId( STR_UNDO_THESAURUS );    // "Thesaurus"
 }
 
 void ScUndoThesaurus::SetChangeTrack( const ScCellValue& rOldCell )
@@ -789,7 +790,7 @@ bool ScUndoReplaceNote::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
 
 OUString ScUndoReplaceNote::GetComment() const
 {
-    return ScGlobal::GetRscString( maNewData.mxCaption ?
+    return ScResId( maNewData.mxCaption ?
         (maOldData.mxCaption ? STR_UNDO_EDITNOTE : STR_UNDO_INSERTNOTE) : STR_UNDO_DELETENOTE );
 }
 
@@ -861,7 +862,7 @@ bool ScUndoShowHideNote::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
 
 OUString ScUndoShowHideNote::GetComment() const
 {
-    return ScGlobal::GetRscString( mbShown ? STR_UNDO_SHOWNOTE : STR_UNDO_HIDENOTE );
+    return ScResId( mbShown ? STR_UNDO_SHOWNOTE : STR_UNDO_HIDENOTE );
 }
 
 ScUndoDetective::ScUndoDetective( ScDocShell* pNewDocShell,
@@ -899,7 +900,7 @@ OUString ScUndoDetective::GetComment() const
             case SCDETOP_ADDERROR:  pId = STR_UNDO_DETADDERROR; break;
         }
 
-    return ScGlobal::GetRscString(pId);
+    return ScResId(pId);
 }
 
 void ScUndoDetective::Undo()
@@ -986,7 +987,7 @@ ScUndoRangeNames::~ScUndoRangeNames()
 
 OUString ScUndoRangeNames::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_RANGENAMES );
+    return ScResId( STR_UNDO_RANGENAMES );
 }
 
 void ScUndoRangeNames::DoChange( bool bUndo )

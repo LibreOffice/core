@@ -9,6 +9,7 @@
 
 #include <undocell.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <cellvalues.hxx>
 
 namespace sc {
@@ -51,7 +52,7 @@ bool UndoSetCells::CanRepeat( SfxRepeatTarget& ) const
 OUString UndoSetCells::GetComment() const
 {
     // "Input"
-    return ScGlobal::GetRscString(STR_UNDO_ENTERDATA);
+    return ScResId(STR_UNDO_ENTERDATA);
 }
 
 void UndoSetCells::SetNewValues( const std::vector<double>& rVals )

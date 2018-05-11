@@ -24,6 +24,7 @@
 #include <docsh.hxx>
 #include <global.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 
 ScMoveTableDlg::ScMoveTableDlg(weld::Window* pParent, const OUString& rDefault)
     : GenericDialogController(pParent, "modules/scalc/ui/movecopysheet.ui", "MoveCopySheetDialog")
@@ -289,7 +290,7 @@ IMPL_LINK_NOARG(ScMoveTableDlg, SelHdl, weld::ComboBoxText&, void)
             m_xLbTable->append_text(aName);
         }
     }
-    m_xLbTable->append_text(ScGlobal::GetRscString(STR_MOVE_TO_END));
+    m_xLbTable->append_text(ScResId(STR_MOVE_TO_END));
     m_xLbTable->thaw();
     m_xLbTable->select(0);
     ResetRenameInput();

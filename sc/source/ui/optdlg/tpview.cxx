@@ -310,7 +310,7 @@ void ScTpContentOptions::InitGridOpt()
     Color     aCol    = pLocalOptions->GetGridColor( &aName );
 
     if (aName.trim().isEmpty() && aCol == SC_STD_GRIDCOLOR)
-        aName = ScGlobal::GetRscString(STR_GRIDCOLOR);
+        aName = ScResId(STR_GRIDCOLOR);
 
     pColorLB->SelectEntry(std::make_pair(aCol, aName));
 }

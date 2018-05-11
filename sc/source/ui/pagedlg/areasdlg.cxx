@@ -32,6 +32,7 @@
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <compiler.hxx>
 #include <markdata.hxx>
 
@@ -56,7 +57,7 @@ namespace
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
                                                   VclMessageType::Warning, VclButtonsType::Ok,
-                                                  ScGlobal::GetRscString(rId)));
+                                                  ScResId(rId)));
         xBox->run();
     }
 }

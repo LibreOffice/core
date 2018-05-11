@@ -42,6 +42,7 @@
 #include <hints.hxx>
 #include <dputil.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <generalfunction.hxx>
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -2608,7 +2609,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         }
         OUString aGroupDimName = pGroupDimension->GetGroupDimName();
 
-        OUString aGroupName = pGroupDimension->CreateGroupName( ScGlobal::GetRscString(STR_PIVOT_GROUP) );
+        OUString aGroupName = pGroupDimension->CreateGroupName( ScResId(STR_PIVOT_GROUP) );
         ScDPSaveGroupItem aGroup( aGroupName );
         for (sal_Int32 nEntry = 0; nEntry < rItems.getLength(); nEntry++)
         {

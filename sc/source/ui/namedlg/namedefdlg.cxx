@@ -15,6 +15,7 @@
 
 #include <document.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <globalnames.hxx>
 #include <rangenam.hxx>
 #include <reffact.hxx>
@@ -33,10 +34,10 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* p
     mpDocShell ( pViewData->GetDocShell() ),
     maCursorPos( aCursorPos ),
 
-    maGlobalNameStr  ( ScGlobal::GetRscString(STR_GLOBAL_SCOPE) ),
-    maErrInvalidNameStr( ScGlobal::GetRscString(STR_ERR_NAME_INVALID)),
-    maErrInvalidNameCellRefStr( ScGlobal::GetRscString(STR_ERR_NAME_INVALID_CELL_REF)),
-    maErrNameInUse   ( ScGlobal::GetRscString(STR_ERR_NAME_EXISTS)),
+    maGlobalNameStr  ( ScResId(STR_GLOBAL_SCOPE) ),
+    maErrInvalidNameStr( ScResId(STR_ERR_NAME_INVALID)),
+    maErrInvalidNameCellRefStr( ScResId(STR_ERR_NAME_INVALID_CELL_REF)),
+    maErrNameInUse   ( ScResId(STR_ERR_NAME_EXISTS)),
     maRangeMap( aRangeMap )
 {
     get(m_pEdName, "edit");

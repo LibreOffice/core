@@ -71,6 +71,7 @@
 #include <unonames.hxx>
 #include <unowids.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <cellsuno.hxx>
 #include <stylehelper.hxx>
 
@@ -742,7 +743,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
             else
             {
                 if ( rDoc.RemovePageStyleInUse( aString ) )
-                    pDocShell->PageStyleModified( ScGlobal::GetRscString(STR_STYLENAME_STANDARD), true );
+                    pDocShell->PageStyleModified( ScResId(STR_STYLENAME_STANDARD), true );
 
                 pStylePool->Remove( pStyle );
 
@@ -887,7 +888,7 @@ uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const OUString& sPropertyN
     }
     if (pResId)
     {
-        OUString sDisplayName(ScGlobal::GetRscString(pResId));
+        OUString sDisplayName(ScResId(pResId));
         aRet <<= sDisplayName;
     }
 
