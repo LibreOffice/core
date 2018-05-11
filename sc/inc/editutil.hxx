@@ -22,7 +22,7 @@
 
 #include <memory>
 #include "scdllapi.h"
-#include "address.hxx"
+#include "types.hxx"
 #include <editeng/editeng.hxx>
 #include <svx/pageitem.hxx>
 #include <tools/date.hxx>

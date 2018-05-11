@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SC_INC_EDITDATAARRAY_HXX
 #define INCLUDED_SC_INC_EDITDATAARRAY_HXX
 
-#include "address.hxx"
 #include <editeng/editobj.hxx>
+#include "types.hxx"
 
 #include <memory>
 #include <vector>
