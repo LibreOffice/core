@@ -484,7 +484,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
             OUString aName = rMem.getDisplayName();
             if (aName.isEmpty())
                 // Use special string for an empty name.
-                mpDPFieldPopup->addMember(ScGlobal::GetRscString(STR_EMPTYDATA), rMem.mbVisible);
+                mpDPFieldPopup->addMember(ScResId(STR_EMPTYDATA), rMem.mbVisible);
             else
                 mpDPFieldPopup->addMember(rMem.getDisplayName(), rMem.mbVisible);
         }
@@ -579,7 +579,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
         {
             // This is an original member name.  Use it as-is.
             OUString aName = itr->aName;
-            if (aName == ScGlobal::GetRscString(STR_EMPTYDATA))
+            if (aName == ScResId(STR_EMPTYDATA))
                 // Translate the special empty name into an empty string.
                 aName.clear();
 
@@ -971,7 +971,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
             {
                 if (bUndo)
                 {
-                    OUString aUndo = ScGlobal::GetRscString( STR_UNDO_DRAG_BREAK );
+                    OUString aUndo = ScResId( STR_UNDO_DRAG_BREAK );
                     pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pViewData->GetViewShell()->GetViewShellId() );
                 }
 

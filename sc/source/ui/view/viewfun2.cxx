@@ -46,6 +46,7 @@
 
 #include <sc.hrc>
 #include <globstr.hrc>
+#include <scresid.hxx>
 
 #include <attrib.hxx>
 #include <autoform.hxx>
@@ -2083,22 +2084,22 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
 
         if ( bExact )
         {
-            aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_0 );
+            aMsgStr += ScResId( STR_MSSG_SOLVE_0 );
             aMsgStr += aResStr;
-            aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_1 );
+            aMsgStr += ScResId( STR_MSSG_SOLVE_1 );
         }
         else
         {
-            aMsgStr  = ScGlobal::GetRscString( STR_MSSG_SOLVE_2 );
-            aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_3 );
+            aMsgStr  = ScResId( STR_MSSG_SOLVE_2 );
+            aMsgStr += ScResId( STR_MSSG_SOLVE_3 );
             aMsgStr += aResStr ;
-            aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_4 );
+            aMsgStr += ScResId( STR_MSSG_SOLVE_4 );
         }
 
         vcl::Window* pWin = GetViewData().GetDialogParent();
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                   VclMessageType::Question, VclButtonsType::YesNo, aMsgStr));
-        xBox->set_title(ScGlobal::GetRscString(STR_MSSG_DOSUBTOTALS_0));
+        xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0));
         xBox->set_default_response(RET_NO);
         if (xBox->run() == RET_NO)
             EnterValue( nDestCol, nDestRow, nDestTab, nSolveResult );

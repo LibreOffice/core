@@ -42,6 +42,7 @@
 #include <drwlayer.hxx>
 #include <drwtrans.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <chartlis.hxx>
 #include <docuno.hxx>
 #include <docsh.hxx>
@@ -113,7 +114,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
     ScDrawView* pScDrawView = GetScDrawView();
     if (bGroup)
-        pScDrawView->BegUndo( ScGlobal::GetRscString( STR_UNDO_PASTE ) );
+        pScDrawView->BegUndo( ScResId( STR_UNDO_PASTE ) );
 
     bool bSameDoc = ( pDragEditView && pDragEditView->GetModel() == pScDrawView->GetModel() );
     if (bSameDoc)
@@ -398,7 +399,7 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
         SdrObject* pPickObj = pScDrawView->PickObj(rPos, pScDrawView->getHitTolLog(), pPageView);
         if (pPickObj)
         {
-            const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
+            const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
             SdrObject* pResult = pScDrawView->ApplyGraphicToObject(
                 *pPickObj,
                 rGraphic,

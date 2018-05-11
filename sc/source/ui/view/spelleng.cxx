@@ -40,6 +40,7 @@
 #include <patattr.hxx>
 #include <waitoff.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <markdata.hxx>
 
 #include <memory>
@@ -309,8 +310,8 @@ bool ScSpellingEngine::ShowTableWrapDialog()
 
     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
                                               VclMessageType::Question, VclButtonsType::YesNo,
-                                              ScGlobal::GetRscString(STR_SPELLING_BEGIN_TAB))); // "delete data?"
-    xBox->set_title(ScGlobal::GetRscString(STR_MSSG_DOSUBTOTALS_0));
+                                              ScResId(STR_SPELLING_BEGIN_TAB))); // "delete data?"
+    xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0));
     xBox->set_default_response(RET_YES);
     return xBox->run() == RET_YES;
 }
@@ -321,7 +322,7 @@ void ScSpellingEngine::ShowFinishDialog()
     ScWaitCursorOff aWaitOff( pParent );
     std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
                                                   VclMessageType::Info, VclButtonsType::Ok,
-                                                  ScGlobal::GetRscString(STR_SPELLING_STOP_OK)));
+                                                  ScResId(STR_SPELLING_STOP_OK)));
     xInfoBox->run();
 }
 
