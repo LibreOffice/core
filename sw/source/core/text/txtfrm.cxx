@@ -435,24 +435,78 @@ SwTextFrame::~SwTextFrame()
 {
 }
 
+namespace sw {
+
 std::pair<SwTextNode*, sal_Int32>
-SwTextFrame::MapViewToModel(TextFrameIndex const i_nIndex) const
+MapViewToModel(MergedPara const& rMerged, TextFrameIndex const i_nIndex)
 {
     sal_Int32 nIndex(i_nIndex);
+    sw::Extent const* pExtent(nullptr);
+    for (auto it = rMerged.extents.begin(); it != rMerged.extents.end(); ++it)
+    {
+        pExtent = &*it;
+        if (nIndex < (pExtent->nEnd - pExtent->nStart))
+        {
+            return std::make_pair(pExtent->pNode, pExtent->nStart + nIndex);
+        }
+        nIndex = nIndex - (pExtent->nEnd - pExtent->nStart);
+    }
+    assert(nIndex == 0 && "view index out of bounds");
+    return pExtent
+        ? std::make_pair(pExtent->pNode, pExtent->nEnd) //1-past-the-end index
+        : std::make_pair(rMerged.pFirstNode, 0);
+}
+
+TextFrameIndex MapModelToView(MergedPara const& rMerged, SwTextNode const*const pNode, sal_Int32 const nIndex)
+{
+    sal_Int32 nRet(0);
+    bool bFoundNode(false);
+    for (auto const& e : rMerged.extents)
+    {
+        if (e.pNode == pNode)
+        {
+            if (e.nStart <= nIndex && nIndex <= e.nEnd)
+            {
+                return TextFrameIndex(nRet + (nIndex - e.nStart));
+            }
+            else if (nIndex < e.nStart)
+            {
+                // in gap before this extent => map to 0 here TODO???
+                return TextFrameIndex(nRet);
+            }
+            bFoundNode = true;
+        }
+        else if (bFoundNode)
+        {
+            break;
+        }
+        nRet += e.nEnd - e.nStart;
+    }
+    if (bFoundNode)
+    {
+        // must be in a gap at the end of the node
+        assert(nIndex <= pNode->Len());
+        return TextFrameIndex(nRet);
+    }
+    else if (rMerged.extents.empty())
+    {
+        assert(nIndex <= pNode->Len());
+        return TextFrameIndex(0);
+    }
+    assert(!"text node not found");
+    return TextFrameIndex(COMPLETE_STRING);
+}
+
+} // namespace sw
+
+std::pair<SwTextNode*, sal_Int32>
+SwTextFrame::MapViewToModel(TextFrameIndex const nIndex) const
+{
 //nope    assert(GetPara());
     sw::MergedPara const*const pMerged(GetMergedPara());
     if (pMerged)
     {
-        for (auto const& e : pMerged->extents)
-        {
-            if (nIndex < (e.nEnd - e.nStart))
-            {
-                return std::make_pair(e.pNode, e.nStart + nIndex);
-            }
-            nIndex = nIndex - (e.nEnd - e.nStart);
-        }
-        assert(nIndex == 0 && "view index out of bounds");
-        return std::make_pair(pMerged->pFirstNode, 0);
+        return sw::MapViewToModel(*pMerged, nIndex);
     }
     else
     {
@@ -467,38 +521,13 @@ SwPosition SwTextFrame::MapViewToModelPos(TextFrameIndex const nIndex) const
     return SwPosition(*ret.first, ret.second);
 }
 
-TextFrameIndex SwTextFrame::MapModelToView(SwTextNode const*const pNode, sal_Int32 nIndex) const
+TextFrameIndex SwTextFrame::MapModelToView(SwTextNode const*const pNode, sal_Int32 const nIndex) const
 {
-    sal_Int32 nRet(0);
 //nope    assert(GetPara());
     sw::MergedPara const*const pMerged(GetMergedPara());
     if (pMerged)
     {
-        bool bFoundNode(false);
-        for (auto const& e : pMerged->extents)
-        {
-            if (e.pNode == pNode)
-            {
-                if (e.nStart <= nIndex && nIndex <= e.nEnd)
-                {
-                    return TextFrameIndex(nRet + (nIndex - e.nStart));
-                }
-                else if (e.nEnd < nIndex)
-                {
-                    // in gap before this extent => map to 0 here TODO???
-                    return TextFrameIndex(nRet);
-                }
-                bFoundNode = true;
-            }
-            else if (bFoundNode)
-            {
-                // must be in a gap at the end of the node
-                assert(nIndex <= pNode->Len());
-                return TextFrameIndex(nRet);
-            }
-            nRet += e.nEnd - e.nStart;
-        }
-        assert(!"text node not found");
+        return sw::MapModelToView(*pMerged, pNode, nIndex);
     }
     else
     {
