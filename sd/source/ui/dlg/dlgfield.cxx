@@ -38,35 +38,23 @@
 /**
  * dialog to edit field commands
  */
-SdModifyFieldDlg::SdModifyFieldDlg( vcl::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet ) :
-    ModalDialog ( pWindow, "EditFieldsDialog", "modules/simpress/ui/dlgfield.ui" ),
-    maInputSet  ( rSet ),
-    pField      ( pInField )
+SdModifyFieldDlg::SdModifyFieldDlg(weld::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet)
+    : GenericDialogController(pWindow, "modules/simpress/ui/dlgfield.ui", "EditFieldsDialog")
+    , m_aInputSet(rSet)
+    , m_pField(pInField)
+    , m_xRbtFix(m_xBuilder->weld_radio_button("fixedRB"))
+    , m_xRbtVar(m_xBuilder->weld_radio_button("varRB"))
+    , m_xLbLanguage(new LanguageBox(m_xBuilder->weld_combo_box_text("languageLB")))
+    , m_xLbFormat(m_xBuilder->weld_combo_box_text("formatLB"))
 {
-    get(m_pRbtFix, "fixedRB");
-    get(m_pRbtVar, "varRB");
-    get(m_pLbLanguage, "languageLB");
-    get(m_pLbFormat, "formatLB");
-
-    m_pLbLanguage->SetLanguageList( SvxLanguageListFlags::ALL|SvxLanguageListFlags::ONLY_KNOWN, false );
-    m_pLbLanguage->SetSelectHdl( LINK( this, SdModifyFieldDlg, LanguageChangeHdl ) );
+    m_xLbLanguage->SetLanguageList( SvxLanguageListFlags::ALL|SvxLanguageListFlags::ONLY_KNOWN, false );
+    m_xLbLanguage->connect_changed(LINK(this, SdModifyFieldDlg, LanguageChangeHdl));
     FillControls();
 }
 
 SdModifyFieldDlg::~SdModifyFieldDlg()
 {
-    disposeOnce();
 }
-
-void SdModifyFieldDlg::dispose()
-{
-    m_pRbtFix.clear();
-    m_pRbtVar.clear();
-    m_pLbLanguage.clear();
-    m_pLbFormat.clear();
-    ModalDialog::dispose();
-}
-
 
 /**
  * Returns the new field, owned by caller.
@@ -76,56 +64,56 @@ SvxFieldData* SdModifyFieldDlg::GetField()
 {
     SvxFieldData* pNewField = nullptr;
 
-    if( m_pRbtFix->IsValueChangedFromSaved() ||
-        m_pRbtVar->IsValueChangedFromSaved() ||
-        m_pLbFormat->IsValueChangedFromSaved() )
+    if( m_xRbtFix->get_state_changed_from_saved() ||
+        m_xRbtVar->get_state_changed_from_saved() ||
+        m_xLbFormat->get_value_changed_from_saved() )
     {
-        if( dynamic_cast< const SvxDateField *>( pField ) !=  nullptr )
+        if( dynamic_cast< const SvxDateField *>( m_pField ) !=  nullptr )
         {
-            const SvxDateField* pDateField = static_cast<const SvxDateField*>(pField);
+            const SvxDateField* pDateField = static_cast<const SvxDateField*>(m_pField);
             SvxDateType   eType;
             SvxDateFormat eFormat;
 
-            if( m_pRbtFix->IsChecked() )
+            if( m_xRbtFix->get_active() )
                 eType = SvxDateType::Fix;
             else
                 eType = SvxDateType::Var;
 
-            eFormat = static_cast<SvxDateFormat>( m_pLbFormat->GetSelectedEntryPos() + 2 );
+            eFormat = static_cast<SvxDateFormat>( m_xLbFormat->get_active() + 2 );
 
             pNewField = new SvxDateField( *pDateField );
             static_cast<SvxDateField*>( pNewField )->SetType( eType );
             static_cast<SvxDateField*>( pNewField )->SetFormat( eFormat );
         }
-        else if( dynamic_cast< const SvxExtTimeField *>( pField ) !=  nullptr )
+        else if( dynamic_cast< const SvxExtTimeField *>( m_pField ) !=  nullptr )
         {
-            const SvxExtTimeField* pTimeField = static_cast<const SvxExtTimeField*>( pField );
+            const SvxExtTimeField* pTimeField = static_cast<const SvxExtTimeField*>( m_pField );
             SvxTimeType   eType;
             SvxTimeFormat eFormat;
 
-            if( m_pRbtFix->IsChecked() )
+            if( m_xRbtFix->get_active() )
                 eType = SvxTimeType::Fix;
             else
                 eType = SvxTimeType::Var;
 
-            eFormat = static_cast<SvxTimeFormat>( m_pLbFormat->GetSelectedEntryPos() + 2 );
+            eFormat = static_cast<SvxTimeFormat>( m_xLbFormat->get_active() + 2 );
 
             pNewField = new SvxExtTimeField( *pTimeField );
             static_cast<SvxExtTimeField*>( pNewField )->SetType( eType );
             static_cast<SvxExtTimeField*>( pNewField )->SetFormat( eFormat );
         }
-        else if( dynamic_cast< const SvxExtFileField *>( pField ) !=  nullptr )
+        else if( dynamic_cast< const SvxExtFileField *>( m_pField ) !=  nullptr )
         {
-            const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>( pField );
+            const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>( m_pField );
             SvxFileType   eType;
             SvxFileFormat eFormat;
 
-            if( m_pRbtFix->IsChecked() )
+            if( m_xRbtFix->get_active() )
                 eType = SvxFileType::Fix;
             else
                 eType = SvxFileType::Var;
 
-            eFormat = static_cast<SvxFileFormat>( m_pLbFormat->GetSelectedEntryPos() );
+            eFormat = static_cast<SvxFileFormat>( m_xLbFormat->get_active() );
 
             ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell* >(SfxObjectShell::Current() );
 
@@ -143,17 +131,17 @@ SvxFieldData* SdModifyFieldDlg::GetField()
                 static_cast<SvxExtFileField*>( pNewField )->SetFormat( eFormat );
             }
         }
-        else if( dynamic_cast< const SvxAuthorField *>( pField ) !=  nullptr )
+        else if( dynamic_cast< const SvxAuthorField *>( m_pField ) !=  nullptr )
         {
             SvxAuthorType   eType;
             SvxAuthorFormat eFormat;
 
-            if( m_pRbtFix->IsChecked() )
+            if( m_xRbtFix->get_active() )
                 eType = SvxAuthorType::Fix;
             else
                 eType = SvxAuthorType::Var;
 
-            eFormat = static_cast<SvxAuthorFormat>( m_pLbFormat->GetSelectedEntryPos() );
+            eFormat = static_cast<SvxAuthorFormat>( m_xLbFormat->get_active() );
 
             // Get current state of address, not the old one
             SvtUserOptions aUserOptions;
@@ -168,88 +156,88 @@ SvxFieldData* SdModifyFieldDlg::GetField()
 
 void SdModifyFieldDlg::FillFormatList()
 {
-    LanguageType eLangType = m_pLbLanguage->GetSelectedLanguage();
+    LanguageType eLangType = m_xLbLanguage->GetSelectedLanguage();
 
-    m_pLbFormat->Clear();
+    m_xLbFormat->clear();
 
-    if( dynamic_cast< const SvxDateField *>( pField ) !=  nullptr )
+    if( dynamic_cast< const SvxDateField *>( m_pField ) !=  nullptr )
     {
-        const SvxDateField* pDateField = static_cast<const SvxDateField*>( pField );
+        const SvxDateField* pDateField = static_cast<const SvxDateField*>( m_pField );
         SvxDateField aDateField( *pDateField );
 
         //SvxDateFormat::AppDefault,     // not used
         //SvxDateFormat::System,         // not used
-        m_pLbFormat->InsertEntry( SdResId( STR_STANDARD_SMALL ) );
-        m_pLbFormat->InsertEntry( SdResId( STR_STANDARD_BIG ) );
+        m_xLbFormat->append_text( SdResId( STR_STANDARD_SMALL ) );
+        m_xLbFormat->append_text( SdResId( STR_STANDARD_BIG ) );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
         aDateField.SetFormat( SvxDateFormat::A );    // 13.02.96
-        m_pLbFormat->InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
+        m_xLbFormat->append_text( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
         aDateField.SetFormat( SvxDateFormat::B );    // 13.02.1996
-        m_pLbFormat->InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
+        m_xLbFormat->append_text( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
         aDateField.SetFormat( SvxDateFormat::C );    // 13.Feb 1996
-        m_pLbFormat->InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
+        m_xLbFormat->append_text( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
         aDateField.SetFormat( SvxDateFormat::D );    // 13.Februar 1996
-        m_pLbFormat->InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
+        m_xLbFormat->append_text( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
         aDateField.SetFormat( SvxDateFormat::E );    // Die, 13.Februar 1996
-        m_pLbFormat->InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
+        m_xLbFormat->append_text( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
         aDateField.SetFormat( SvxDateFormat::F );    // Dienstag, 13.Februar 1996
-        m_pLbFormat->InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
+        m_xLbFormat->append_text( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
 
-        m_pLbFormat->SelectEntryPos( static_cast<sal_uInt16>(pDateField->GetFormat()) - 2 );
+        m_xLbFormat->set_active( static_cast<sal_uInt16>(pDateField->GetFormat()) - 2 );
     }
-    else if( dynamic_cast< const SvxExtTimeField *>( pField ) !=  nullptr )
+    else if( dynamic_cast< const SvxExtTimeField *>( m_pField ) !=  nullptr )
     {
-        const SvxExtTimeField* pTimeField = static_cast<const SvxExtTimeField*>( pField );
+        const SvxExtTimeField* pTimeField = static_cast<const SvxExtTimeField*>( m_pField );
         SvxExtTimeField aTimeField( *pTimeField );
 
         //SvxTimeFormat::AppDefault,     // not used
         //SvxTimeFormat::System,         // not used
-        m_pLbFormat->InsertEntry( SdResId( STR_STANDARD_NORMAL ) );
+        m_xLbFormat->append_text( SdResId( STR_STANDARD_NORMAL ) );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
         aTimeField.SetFormat( SvxTimeFormat::HH24_MM );    // 13:49
-        m_pLbFormat->InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
+        m_xLbFormat->append_text( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
         aTimeField.SetFormat( SvxTimeFormat::HH24_MM_SS );   // 13:49:38
-        m_pLbFormat->InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
+        m_xLbFormat->append_text( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
         aTimeField.SetFormat( SvxTimeFormat::HH24_MM_SS_00 );  // 13:49:38.78
-        m_pLbFormat->InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
+        m_xLbFormat->append_text( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
         aTimeField.SetFormat( SvxTimeFormat::HH12_MM );    // 01:49
-        m_pLbFormat->InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
+        m_xLbFormat->append_text( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
         aTimeField.SetFormat( SvxTimeFormat::HH12_MM_SS );   // 01:49:38
-        m_pLbFormat->InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
+        m_xLbFormat->append_text( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
         aTimeField.SetFormat( SvxTimeFormat::HH12_MM_SS_00 );  // 01:49:38.78
-        m_pLbFormat->InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
+        m_xLbFormat->append_text( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
         //SvxTimeFormat::HH12_MM_AMPM,  // 01:49 PM
         //SvxTimeFormat::HH12_MM_SS_AMPM, // 01:49:38 PM
         //SvxTimeFormat::HH12_MM_SS_00_AMPM // 01:49:38.78 PM
 
-        m_pLbFormat->SelectEntryPos( static_cast<sal_uInt16>(pTimeField->GetFormat()) - 2 );
+        m_xLbFormat->set_active( static_cast<sal_uInt16>(pTimeField->GetFormat()) - 2 );
     }
-    else if( dynamic_cast< const SvxExtFileField *>( pField ) !=  nullptr )
+    else if( dynamic_cast< const SvxExtFileField *>( m_pField ) !=  nullptr )
     {
-        const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>( pField );
+        const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>( m_pField );
         SvxExtFileField aFileField( *pFileField );
 
-        m_pLbFormat->InsertEntry( SdResId( STR_FILEFORMAT_NAME_EXT ) );
-        m_pLbFormat->InsertEntry( SdResId( STR_FILEFORMAT_FULLPATH ) );
-        m_pLbFormat->InsertEntry( SdResId( STR_FILEFORMAT_PATH ) );
-        m_pLbFormat->InsertEntry( SdResId( STR_FILEFORMAT_NAME ) );
+        m_xLbFormat->append_text( SdResId( STR_FILEFORMAT_NAME_EXT ) );
+        m_xLbFormat->append_text( SdResId( STR_FILEFORMAT_FULLPATH ) );
+        m_xLbFormat->append_text( SdResId( STR_FILEFORMAT_PATH ) );
+        m_xLbFormat->append_text( SdResId( STR_FILEFORMAT_NAME ) );
 
-        m_pLbFormat->SelectEntryPos( static_cast<sal_uInt16>( pFileField->GetFormat() ) );
+        m_xLbFormat->set_active( static_cast<sal_uInt16>( pFileField->GetFormat() ) );
     }
-    else if( dynamic_cast< const SvxAuthorField *>( pField ) !=  nullptr )
+    else if( dynamic_cast< const SvxAuthorField *>( m_pField ) !=  nullptr )
     {
-        const SvxAuthorField* pAuthorField = static_cast<const SvxAuthorField*>( pField );
+        const SvxAuthorField* pAuthorField = static_cast<const SvxAuthorField*>( m_pField );
         SvxAuthorField aAuthorField( *pAuthorField );
 
         for( sal_uInt16 i = 0; i < 4; i++ )
         {
             aAuthorField.SetFormat( static_cast<SvxAuthorFormat>(i) );
-            m_pLbFormat->InsertEntry( aAuthorField.GetFormatted() );
+            m_xLbFormat->append_text( aAuthorField.GetFormatted() );
         }
 
-        m_pLbFormat->SelectEntryPos( static_cast<sal_uInt16>( pAuthorField->GetFormat() ) );
+        m_xLbFormat->set_active( static_cast<sal_uInt16>( pAuthorField->GetFormat() ) );
 
     }
 
@@ -257,73 +245,73 @@ void SdModifyFieldDlg::FillFormatList()
 
 void SdModifyFieldDlg::FillControls()
 {
-    m_pLbFormat->Clear();
+    m_xLbFormat->clear();
 
-    if( dynamic_cast< const SvxDateField *>( pField ) !=  nullptr )
+    if( dynamic_cast< const SvxDateField *>( m_pField ) !=  nullptr )
     {
-        const SvxDateField* pDateField = static_cast<const SvxDateField*>(pField);
+        const SvxDateField* pDateField = static_cast<const SvxDateField*>(m_pField);
         SvxDateField aDateField( *pDateField );
 
         if( pDateField->GetType() == SvxDateType::Fix )
-            m_pRbtFix->Check();
+            m_xRbtFix->set_active(true);
         else
-            m_pRbtVar->Check();
+            m_xRbtVar->set_active(true);
     }
-    else if( dynamic_cast< const SvxExtTimeField *>( pField ) !=  nullptr )
+    else if( dynamic_cast< const SvxExtTimeField *>( m_pField ) !=  nullptr )
     {
-        const SvxExtTimeField* pTimeField = static_cast<const SvxExtTimeField*>(pField);
+        const SvxExtTimeField* pTimeField = static_cast<const SvxExtTimeField*>(m_pField);
         SvxExtTimeField aTimeField( *pTimeField );
 
         if( pTimeField->GetType() == SvxTimeType::Fix )
-            m_pRbtFix->Check();
+            m_xRbtFix->set_active(true);
         else
-            m_pRbtVar->Check();
+            m_xRbtVar->set_active(true);
     }
-    else if( dynamic_cast< const SvxExtFileField *>( pField ) !=  nullptr )
+    else if( dynamic_cast< const SvxExtFileField *>( m_pField ) !=  nullptr )
     {
-        const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>(pField);
+        const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>(m_pField);
         SvxExtFileField aFileField( *pFileField );
 
         if( pFileField->GetType() == SvxFileType::Fix )
-            m_pRbtFix->Check();
+            m_xRbtFix->set_active(true);
         else
-            m_pRbtVar->Check();
+            m_xRbtVar->set_active(true);
     }
-    else if( dynamic_cast< const SvxAuthorField *>( pField ) !=  nullptr )
+    else if( dynamic_cast< const SvxAuthorField *>( m_pField ) !=  nullptr )
     {
-        const SvxAuthorField* pAuthorField = static_cast<const SvxAuthorField*>(pField);
+        const SvxAuthorField* pAuthorField = static_cast<const SvxAuthorField*>(m_pField);
         SvxAuthorField aAuthorField( *pAuthorField );
 
         if( pAuthorField->GetType() == SvxAuthorType::Fix )
-            m_pRbtFix->Check();
+            m_xRbtFix->set_active(true);
         else
-            m_pRbtVar->Check();
+            m_xRbtVar->set_active(true);
     }
-    m_pRbtFix->SaveValue();
-    m_pRbtVar->SaveValue();
+    m_xRbtFix->save_state();
+    m_xRbtVar->save_state();
 
     const SfxPoolItem* pItem;
-    if( SfxItemState::SET == maInputSet.GetItemState(EE_CHAR_LANGUAGE, true, &pItem ) )
-        m_pLbLanguage->SelectLanguage( static_cast<const SvxLanguageItem*>(pItem)->GetLanguage() );
+    if( SfxItemState::SET == m_aInputSet.GetItemState(EE_CHAR_LANGUAGE, true, &pItem ) )
+        m_xLbLanguage->SelectLanguage( static_cast<const SvxLanguageItem*>(pItem)->GetLanguage() );
 
-    m_pLbLanguage->SaveValue();
+    m_xLbLanguage->save_value();
 
     FillFormatList();
-    m_pLbFormat->SaveValue();
+    m_xLbFormat->save_value();
 }
 
-IMPL_LINK_NOARG(SdModifyFieldDlg, LanguageChangeHdl, ListBox&, void)
+IMPL_LINK_NOARG(SdModifyFieldDlg, LanguageChangeHdl, weld::ComboBoxText&, void)
 {
     FillFormatList();
 }
 
 SfxItemSet SdModifyFieldDlg::GetItemSet()
 {
-    SfxItemSet aOutput( *maInputSet.GetPool(), svl::Items<EE_CHAR_LANGUAGE, EE_CHAR_LANGUAGE_CTL>{} );
+    SfxItemSet aOutput( *m_aInputSet.GetPool(), svl::Items<EE_CHAR_LANGUAGE, EE_CHAR_LANGUAGE_CTL>{} );
 
-    if( m_pLbLanguage->IsValueChangedFromSaved() )
+    if( m_xLbLanguage->get_value_changed_from_saved() )
     {
-        LanguageType eLangType = m_pLbLanguage->GetSelectedLanguage();
+        LanguageType eLangType = m_xLbLanguage->GetSelectedLanguage();
         SvxLanguageItem aItem( eLangType, EE_CHAR_LANGUAGE );
         aOutput.Put( aItem );
 

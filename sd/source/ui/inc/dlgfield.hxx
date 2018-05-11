@@ -20,37 +20,32 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_DLGFIELD_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_DLGFIELD_HXX
 
-#include <vcl/lstbox.hxx>
-#include <vcl/group.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 #include <svx/langbox.hxx>
 class SvxFieldData;
 
 /**
  * dialog to adjust field-commands
  */
-class SdModifyFieldDlg : public ModalDialog
+class SdModifyFieldDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<RadioButton> m_pRbtFix;
-    VclPtr<RadioButton> m_pRbtVar;
-    VclPtr<SvxLanguageBox> m_pLbLanguage;
-    VclPtr<ListBox> m_pLbFormat;
-    SfxItemSet          maInputSet;
+    SfxItemSet          m_aInputSet;
+    const SvxFieldData* m_pField;
 
-    const SvxFieldData* pField;
+    std::unique_ptr<weld::RadioButton> m_xRbtFix;
+    std::unique_ptr<weld::RadioButton> m_xRbtVar;
+    std::unique_ptr<LanguageBox> m_xLbLanguage;
+    std::unique_ptr<weld::ComboBoxText> m_xLbFormat;
 
     void                FillFormatList();
     void                FillControls();
 
-    DECL_LINK( LanguageChangeHdl, ListBox&, void );
+    DECL_LINK(LanguageChangeHdl, weld::ComboBoxText&, void);
 
 public:
-    SdModifyFieldDlg( vcl::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet );
+    SdModifyFieldDlg(weld::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet);
     virtual ~SdModifyFieldDlg() override;
-    virtual void dispose() override;
 
     SvxFieldData*       GetField();
     SfxItemSet          GetItemSet();

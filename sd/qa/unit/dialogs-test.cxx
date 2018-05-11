@@ -338,9 +338,10 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
         }
         case 6:
         {
-            // CreateSdModifyFieldDlg(vcl::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet) override;
+            // CreateSdModifyFieldDlg(weld::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet) override;
+            auto const parent = getViewShell()->GetActiveWindow();
             pRetval = getSdAbstractDialogFactory()->CreateSdModifyFieldDlg(
-                Application::GetDefDialogParent(),
+                parent == nullptr ? nullptr : parent->GetFrameWeld(),
                 nullptr,
                 getEmptySfxItemSet());
             break;

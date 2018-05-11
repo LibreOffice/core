@@ -170,6 +170,8 @@ public:
     void            SelectEntryPos(int nPos) { m_xControl->set_active(nPos); }
 
     void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_aChangeHdl = rLink; }
+    void save_value() { m_xControl->save_value(); }
+    bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }
     void hide() { m_xControl->hide(); }
 };
 
