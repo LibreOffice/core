@@ -26,6 +26,13 @@ public:
     void testDir();
     void testMaxDepth();
     void testRotation();
+    void testPyramid();
+    void testFlowchart();
+    void testChevron();
+    void testCycle();
+    void testvenndiagram();
+    void testmatrix();
+    void testHierarchy();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -36,6 +43,13 @@ public:
     CPPUNIT_TEST(testDir);
     CPPUNIT_TEST(testMaxDepth);
     CPPUNIT_TEST(testRotation);
+    CPPUNIT_TEST(testPyramid);
+    CPPUNIT_TEST(testFlowchart);
+    CPPUNIT_TEST(testChevron);
+    CPPUNIT_TEST(testCycle);
+    CPPUNIT_TEST(testHierarchy);
+    CPPUNIT_TEST(testmatrix);
+    CPPUNIT_TEST(testvenndiagram);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -183,6 +197,41 @@ void SdImportTestSmartArt::testRotation()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12000), xShape2->getPropertyValue("RotateAngle").get<sal_Int32>());
 
     xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testFlowchart()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testPyramid()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testChevron()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testCycle()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testHierarchy()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testmatrix()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testvenndiagram()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTestSmartArt);
