@@ -84,6 +84,7 @@
 #include <condformatdlgitem.hxx>
 
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <scui_def.hxx>
 #include <svx/dialogs.hrc>
 #include <scabstdlg.hxx>
@@ -502,7 +503,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     ScopedVclPtr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg( pTabViewShell->GetDialogParent(),
-                                                                                            &ScGlobal::GetRscString(STR_FILL_TAB)));
+                                                                                                 new OUString(ScResId(STR_FILL_TAB)) ));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
                     pDlg->SetFillMode(true);
 
@@ -1706,11 +1707,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
         case SID_INSERT_CURRENT_DATE:
             pTabViewShell->InsertCurrentTime(
-                SvNumFormatType::DATE, ScGlobal::GetRscString(STR_UNDO_INSERT_CURRENT_DATE));
+                SvNumFormatType::DATE, ScResId(STR_UNDO_INSERT_CURRENT_DATE));
             break;
         case SID_INSERT_CURRENT_TIME:
             pTabViewShell->InsertCurrentTime(
-                SvNumFormatType::TIME, ScGlobal::GetRscString(STR_UNDO_INSERT_CURRENT_TIME));
+                SvNumFormatType::TIME, ScResId(STR_UNDO_INSERT_CURRENT_TIME));
             break;
 
         case SID_SPELL_DIALOG:
@@ -2015,7 +2016,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         vcl::Window* pWin = pTabViewShell->GetDialogParent();
                         std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                        VclMessageType::Question, VclButtonsType::YesNo,
-                                                                       ScGlobal::GetRscString(STR_EDIT_EXISTING_COND_FORMATS)));
+                                                                       ScResId(STR_EDIT_EXISTING_COND_FORMATS)));
                         xQueryBox->set_default_response(RET_YES);
                         bool bEditExisting = xQueryBox->run() == RET_YES;
                         if(bEditExisting)
@@ -2282,7 +2283,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     pData->GetMultiArea(aRangesRef);
                     const ScRangeList aRanges = *aRangesRef;
 
-                    OUString aUndo = ScGlobal::GetRscString( bShowNote ? STR_UNDO_SHOWNOTE : STR_UNDO_HIDENOTE );
+                    OUString aUndo = ScResId( bShowNote ? STR_UNDO_SHOWNOTE : STR_UNDO_HIDENOTE );
                     pData->GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pData->GetViewShell()->GetViewShellId() );
 
                     for (auto const& rTab : rMark.GetSelectedTabs())
@@ -2332,7 +2333,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                  ScDocument* pDoc   = pData->GetDocument();
                  std::vector<sc::NoteEntry> aNotes;
 
-                 OUString aUndo = ScGlobal::GetRscString( bShowNote ? STR_UNDO_SHOWALLNOTES : STR_UNDO_HIDEALLNOTES );
+                 OUString aUndo = ScResId( bShowNote ? STR_UNDO_SHOWALLNOTES : STR_UNDO_HIDEALLNOTES );
                  pData->GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pData->GetViewShell()->GetViewShellId() );
 
                  for (auto const& rTab : rMark.GetSelectedTabs())
@@ -2365,7 +2366,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                  pDoc->GetNotesInRange(aRanges, aNotes);
                  bool bShowNote = (eState == ALLHIDDEN || eState == MIXED);
 
-                 OUString aUndo = ScGlobal::GetRscString( bShowNote ? STR_UNDO_SHOWALLNOTES : STR_UNDO_HIDEALLNOTES );
+                 OUString aUndo = ScResId( bShowNote ? STR_UNDO_SHOWALLNOTES : STR_UNDO_HIDEALLNOTES );
                  pData->GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pData->GetViewShell()->GetViewShellId() );
 
                  for(std::vector<sc::NoteEntry>::const_iterator itr = aNotes.begin(),
@@ -2915,7 +2916,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                         vcl::Window* pWin = pTabViewShell->GetDialogParent();
                         std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                        VclMessageType::Question, VclButtonsType::YesNo,
-                                                                       ScGlobal::GetRscString(STR_DATAPILOT_SUBTOTAL)));
+                                                                       ScResId(STR_DATAPILOT_SUBTOTAL)));
                         xQueryBox->set_default_response(RET_YES);
                         if (xQueryBox->run() == RET_NO)
                             bOK = false;
@@ -2947,7 +2948,7 @@ void ScCellShell::ExecuteDataPilotDialog()
             vcl::Window* pWin = pTabViewShell->GetDialogParent();
             std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                           VclMessageType::Info, VclButtonsType::Ok,
-                                                          ScGlobal::GetRscString(pSrcErrorId)));
+                                                          ScResId(pSrcErrorId)));
             xInfoBox->run();
             return;
         }

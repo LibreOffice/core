@@ -59,6 +59,7 @@
 #include <formulacell.hxx>
 #include <drawutil.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <sc.hrc>
 #include <pagedata.hxx>
 #include <printopt.hxx>
@@ -2737,7 +2738,7 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
         }
     }
 
-    aFieldData.aTabName = ScGlobal::GetRscString( STR_NOTES );
+    aFieldData.aTabName = ScResId( STR_NOTES );
 
     long nNoteNr = 0;
     long nNoteAdd;

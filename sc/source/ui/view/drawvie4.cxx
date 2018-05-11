@@ -38,6 +38,7 @@
 #include <drawutil.hxx>
 #include <scmod.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <chartarr.hxx>
 #include <gridwin.hxx>
 #include <userdat.hxx>
@@ -522,7 +523,7 @@ void ScDrawView::SetMarkedOriginalSize()
 
     if (nDone && pViewData)
     {
-        pUndoGroup->SetComment(ScGlobal::GetRscString( STR_UNDO_ORIGINALSIZE ));
+        pUndoGroup->SetComment(ScResId( STR_UNDO_ORIGINALSIZE ));
         ScDocShell* pDocSh = pViewData->GetDocShell();
         pDocSh->GetUndoManager()->AddUndoAction(pUndoGroup);
         pDocSh->SetDrawModified();
@@ -580,7 +581,7 @@ void ScDrawView::FitToCellSize()
 
     pObj->SetSnapRect(aCellRect);
 
-    pUndoGroup->SetComment(ScGlobal::GetRscString( STR_UNDO_FITCELLSIZE ));
+    pUndoGroup->SetComment(ScResId( STR_UNDO_FITCELLSIZE ));
     ScDocShell* pDocSh = pViewData->GetDocShell();
     pDocSh->GetUndoManager()->AddUndoAction(pUndoGroup);
 

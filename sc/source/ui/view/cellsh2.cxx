@@ -41,6 +41,7 @@
 #include <tabvwsh.hxx>
 #include <sc.hrc>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <global.hxx>
 #include <globalnames.hxx>
 #include <scmod.hxx>
@@ -1014,7 +1015,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         ScDocShell* pDocSh = pData->GetDocShell();
                         OSL_ENSURE( pDocSh, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDocSh is null!" );
 
-                        OUString aUndo = ScGlobal::GetRscString( STR_UNDO_TEXTTOCOLUMNS );
+                        OUString aUndo = ScResId( STR_UNDO_TEXTTOCOLUMNS );
                         pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pData->GetViewShell()->GetViewShellId() );
 
                         ScImportExport aImport( pDoc, aRange.aStart );

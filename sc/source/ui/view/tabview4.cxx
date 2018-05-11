@@ -27,6 +27,7 @@
 #include <scmod.hxx>
 #include <gridwin.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <formulacell.hxx>
 #include <dociter.hxx>
 
@@ -65,7 +66,7 @@ void ScTabView::ShowRefTip()
             SCCOL nCols = nEndX+1-nStartX;
             SCROW nRows = nEndY+1-nStartY;
 
-            OUString aHelp = ScGlobal::GetRscString( STR_QUICKHELP_REF );
+            OUString aHelp = ScResId( STR_QUICKHELP_REF );
             aHelp = aHelp.replaceFirst("%1", OUString::number(nRows) );
             aHelp = aHelp.replaceFirst("%2", OUString::number(nCols) );
 
@@ -265,14 +266,14 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             ScRange aDelRange;
             if ( aViewData.GetFillMode() == ScFillMode::MATRIX && !(nScFillModeMouseModifier & KEY_MOD1) )
             {
-                aHelpStr = ScGlobal::GetRscString( STR_TIP_RESIZEMATRIX );
+                aHelpStr = ScResId( STR_TIP_RESIZEMATRIX );
                 SCCOL nCols = nEndX + 1 - aViewData.GetRefStartX(); // order is right
                 SCROW nRows = nEndY + 1 - aViewData.GetRefStartY();
                 aHelpStr = aHelpStr.replaceFirst("%1", OUString::number(nRows) );
                 aHelpStr = aHelpStr.replaceFirst("%2", OUString::number(nCols) );
             }
             else if ( aViewData.GetDelMark( aDelRange ) )
-                aHelpStr = ScGlobal::GetRscString( STR_QUICKHELP_DELETE );
+                aHelpStr = ScResId( STR_QUICKHELP_DELETE );
             else if ( nEndX != aMarkRange.aEnd.Col() || nEndY != aMarkRange.aEnd.Row() )
                 aHelpStr = pDoc->GetAutoFillPreview( aMarkRange, nEndX, nEndY );
 

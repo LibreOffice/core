@@ -31,6 +31,7 @@
 #include <undodat.hxx>
 #include <dbdata.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <global.hxx>
 #include <dbdocfun.hxx>
 #include <editable.hxx>
@@ -308,7 +309,7 @@ void ScDBFunc::ToggleAutoFilter()
 
         // use a list action for the AutoFilter buttons (ScUndoAutoFilter) and the filter operation
 
-        OUString aUndo = ScGlobal::GetRscString( STR_UNDO_QUERY );
+        OUString aUndo = ScResId( STR_UNDO_QUERY );
         pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId() );
 
         ScRange aRange;
@@ -341,8 +342,8 @@ void ScDBFunc::ToggleAutoFilter()
                 vcl::Window* pWin = GetViewData().GetDialogParent();
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                           VclMessageType::Question,
-                                                          VclButtonsType::YesNo, ScGlobal::GetRscString(STR_MSSG_MAKEAUTOFILTER_0))); // header from first row?
-                xBox->set_title(ScGlobal::GetRscString(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"
+                                                          VclButtonsType::YesNo, ScResId(STR_MSSG_MAKEAUTOFILTER_0))); // header from first row?
+                xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"
                 xBox->set_default_response(RET_YES);
                 if (xBox->run() == RET_YES)
                 {
@@ -371,7 +372,7 @@ void ScDBFunc::ToggleAutoFilter()
             vcl::Window* pWin = GetViewData().GetDialogParent();
             std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                            VclMessageType::Warning, VclButtonsType::Ok,
-                                                           ScGlobal::GetRscString(STR_ERR_AUTOFILTER)));
+                                                           ScResId(STR_ERR_AUTOFILTER)));
             xErrorBox->run();
         }
     }

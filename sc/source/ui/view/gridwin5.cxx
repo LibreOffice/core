@@ -53,6 +53,7 @@
 #include <postit.hxx>
 #include <global.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 
 bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
 {
@@ -230,11 +231,11 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
     OUString aModStr( aModifiedCode.GetName() );
     aModStr = aModStr.replaceFirst(aCode.GetName(), "");
     aModStr = aModStr.replaceAll("+", "");
-    OUString aCtrlClickHlinkStr = ScGlobal::GetRscString( STR_CTRLCLICKHYPERLINK );
+    OUString aCtrlClickHlinkStr = ScResId( STR_CTRLCLICKHYPERLINK );
 
     aCtrlClickHlinkStr = aCtrlClickHlinkStr.replaceAll("%s", aModStr);
     //Global string STR_CLICKHYPERLINK i.e, "click to open hyperlink"
-    OUString aClickHlinkStr = ScGlobal::GetRscString( STR_CLICKHYPERLINK );
+    OUString aClickHlinkStr = ScResId( STR_CLICKHYPERLINK );
     bool bDone = false;
     bool bHelpEnabled = bool(rHEvt.GetMode() & ( HelpEventMode::BALLOON | HelpEventMode::QUICK ));
     SdrView* pDrView = pViewData->GetScDrawView();

@@ -38,6 +38,7 @@
 #include <sc.hrc>
 #include <viewutil.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <drawview.hxx>
 #include <docsh.hxx>
 #include <viewuno.hxx>
@@ -1086,7 +1087,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
             QuickHelpFlags nAlign;
             if (bHoriz)
             {
-                aHelpStr = ScGlobal::GetRscString(STR_COLUMN) +
+                aHelpStr = ScResId(STR_COLUMN) +
                            " " + ScColToAlpha(static_cast<SCCOL>(nScrollPos));
 
                 aRect.SetLeft( aMousePos.X() );
@@ -1095,7 +1096,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
             }
             else
             {
-                aHelpStr = ScGlobal::GetRscString(STR_ROW) +
+                aHelpStr = ScResId(STR_ROW) +
                            " " + OUString::number(nScrollPos + 1);
 
                 // show quicktext always inside sheet area
