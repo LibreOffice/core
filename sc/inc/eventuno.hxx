@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
 
-#include "global.hxx"
+#include "types.hxx"
 
 class ScDocShell;
 
