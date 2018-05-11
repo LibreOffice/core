@@ -26,6 +26,8 @@ public:
     void testDir();
     void testMaxDepth();
     void testRotation();
+    void testPyramid();
+    void testFlowchart();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -36,6 +38,8 @@ public:
     CPPUNIT_TEST(testDir);
     CPPUNIT_TEST(testMaxDepth);
     CPPUNIT_TEST(testRotation);
+    CPPUNIT_TEST(testPyramid);
+    CPPUNIT_TEST(testFlowchart);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -184,6 +188,16 @@ void SdImportTestSmartArt::testRotation()
 
     xDocShRef->DoClose();
 }
+
+/*void SdImportTestSmartArt::testFlowchart()
+{
+    FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}*/
+
+/*void SdImportTestSmartArt::testPyramid()
+{
+    FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}*/
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTestSmartArt);
 
