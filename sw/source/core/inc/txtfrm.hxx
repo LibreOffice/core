@@ -79,6 +79,9 @@ struct MergedPara
     }
 };
 
+std::pair<SwTextNode*, sal_Int32> MapViewToModel(MergedPara const&, TextFrameIndex nIndex);
+TextFrameIndex MapModelToView(MergedPara const&, SwTextNode const* pNode, sal_Int32 nIndex);
+
 std::unique_ptr<sw::MergedPara> CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode);
 
 } // namespace sw
