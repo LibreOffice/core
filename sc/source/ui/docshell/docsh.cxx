@@ -490,7 +490,7 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css
 
             MessageWithCheck aQueryBox(pWin ? pWin->GetFrameWeld() : nullptr,
                     "modules/scalc/ui/recalcquerydialog.ui", "RecalcQueryDialog");
-            aQueryBox.set_primary_text(ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_ODS));
+            aQueryBox.set_primary_text(ScResId(STR_QUERY_FORMULA_RECALC_ONLOAD_ODS));
             aQueryBox.set_default_response(RET_YES);
 
             bHardRecalc = aQueryBox.run() == RET_YES;
@@ -822,7 +822,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                     {
                                         xCloseable->close( true );
 
-                                        OUString aUserName( ScGlobal::GetRscString( STR_UNKNOWN_USER ) );
+                                        OUString aUserName( ScResId( STR_UNKNOWN_USER ) );
                                         bool bNoLockAccess = false;
                                         try
                                         {
@@ -849,7 +849,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                         }
                                         else
                                         {
-                                            OUString aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_SAVE_LATER ) );
+                                            OUString aMessage( ScResId( STR_FILE_LOCKED_SAVE_LATER ) );
                                             aMessage = aMessage.replaceFirst( "%1", aUserName );
 
                                             vcl::Window* pWin = GetActiveDialogParent();
@@ -936,7 +936,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                         vcl::Window* pWin = GetActiveDialogParent();
                                         std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                                    VclMessageType::Warning, VclButtonsType::Ok,
-                                                                                   ScGlobal::GetRscString(STR_DOC_NOLONGERSHARED)));
+                                                                                   ScResId(STR_DOC_NOLONGERSHARED)));
                                         xWarn->run();
 
                                         SfxBindings* pBindings = GetViewBindings();
@@ -979,7 +979,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         vcl::Window* pWin = GetActiveDialogParent();
                         std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                    VclMessageType::Warning, VclButtonsType::YesNo,
-                                                                   ScGlobal::GetRscString(STR_UNSAVED_EXT_REF)));
+                                                                   ScResId(STR_UNSAVED_EXT_REF)));
                         if (RET_NO == xWarn->run())
                         {
                             SetError(ERRCODE_IO_ABORT); // this error code will produce no error message, but will break the further saving process
@@ -1929,7 +1929,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     SCROW nEndRow;
     aDocument.GetCellArea( nTab, nEndCol, nEndRow );
 
-    ScProgress aProgress( this, ScGlobal::GetRscString( STR_SAVE_DOC ), nEndRow, true );
+    ScProgress aProgress( this, ScResId( STR_SAVE_DOC ), nEndRow, true );
 
     OUString aString;
 
@@ -2951,7 +2951,7 @@ VclPtr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog( const SfxIte
         OSL_ENSURE(ScDocStatPageCreate, "Tabpage create fail!");
         pDlg->AddFontTabPage();
         pDlg->AddTabPage( 42,
-            ScGlobal::GetRscString( STR_DOC_STAT ),
+            ScResId( STR_DOC_STAT ),
             ScDocStatPageCreate,
             nullptr);
     }

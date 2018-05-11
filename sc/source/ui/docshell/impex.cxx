@@ -53,6 +53,7 @@
 #include <documentimport.hxx>
 
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <o3tl/safeint.hxx>
 #include <tools/svlibrary.h>
 #include <unotools/configmgr.hxx>
@@ -232,7 +233,7 @@ bool ScImportExport::StartPaste()
             vcl::Window* pWin = Application::GetDefDialogParent();
             std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                           VclMessageType::Info, VclButtonsType::Ok,
-                                                          ScGlobal::GetRscString(aTester.GetMessageId())));
+                                                          ScResId(aTester.GetMessageId())));
             xInfoBox->run();
             return false;
         }
@@ -1289,7 +1290,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     sal_uInt64 const nOldPos = rStrm.Tell();
     sal_uInt64 const nRemaining = rStrm.remainingSize();
     std::unique_ptr<ScProgress> xProgress( new ScProgress( pDocSh,
-            ScGlobal::GetRscString( STR_LOAD_DOC ), nRemaining, true ));
+            ScResId( STR_LOAD_DOC ), nRemaining, true ));
     rStrm.StartReadingUnicodeText( rStrm.GetStreamCharSet() );
 
     SCCOL nStartCol = aRange.aStart.Col();

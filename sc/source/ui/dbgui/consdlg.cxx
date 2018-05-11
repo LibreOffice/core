@@ -41,7 +41,7 @@ namespace
     {
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow,
                                                       VclMessageType::Info, VclButtonsType::Ok,
-                                                      ScGlobal::GetRscString(id)));
+                                                      ScResId(id)));
         xInfoBox->run();
     }
 }

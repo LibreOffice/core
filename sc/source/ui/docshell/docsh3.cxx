@@ -60,6 +60,7 @@
 #include <inputhdl.hxx>
 #include <conflictsdlg.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <markdata.hxx>
 #include <memory>
 
@@ -1205,7 +1206,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
                         vcl::Window* pWin = GetActiveDialogParent();
                         std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                        VclMessageType::Question, VclButtonsType::YesNo,
-                                                                       ScGlobal::GetRscString(STR_DOC_WILLNOTBESAVED)));
+                                                                       ScResId(STR_DOC_WILLNOTBESAVED)));
                         xQueryBox->set_default_response(RET_YES);
                         if (xQueryBox->run() == RET_YES)
                         {
@@ -1322,7 +1323,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
         vcl::Window* pWin = GetActiveDialogParent();
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                       VclMessageType::Info, VclButtonsType::Ok,
-                                                      ScGlobal::GetRscString(STR_DOC_UPDATED)));
+                                                      ScResId(STR_DOC_UPDATED)));
         xInfoBox->run();
     }
 

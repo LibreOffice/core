@@ -65,6 +65,7 @@
 #include <dbdocutl.hxx>
 #include <dociter.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <svl/zformat.hxx>
 #include <svl/intitem.hxx>
 #include <patattr.hxx>
@@ -296,7 +297,7 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
             return nRet;
         ::utl::DisposableComponent aConnectionHelper(xConnection);
 
-        ScProgress aProgress( this, ScGlobal::GetRscString( STR_LOAD_DOC ), 0, true );
+        ScProgress aProgress( this, ScResId( STR_LOAD_DOC ), 0, true );
         uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
         uno::Reference<sdbc::XRowSet> xRowSet( xFactory->createInstance(SC_SERVICE_ROWSET),
                             uno::UNO_QUERY);
@@ -756,7 +757,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
         nFirstCol = nLastCol;
     if ( nFirstRow > nLastRow )
         nFirstRow = nLastRow;
-    ScProgress aProgress( this, ScGlobal::GetRscString( STR_SAVE_DOC ),
+    ScProgress aProgress( this, ScResId( STR_SAVE_DOC ),
                                                     nLastRow - nFirstRow, true );
     SvNumberFormatter* pNumFmt = aDocument.GetFormatTable();
 

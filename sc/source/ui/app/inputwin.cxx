@@ -1882,7 +1882,7 @@ void ScPosWnd::FillRangeNames()
     {
         ScDocument& rDoc = static_cast<ScDocShell*>(pObjSh)->GetDocument();
 
-        InsertEntry(ScGlobal::GetRscString( STR_MANAGE_NAMES ));
+        InsertEntry(ScResId( STR_MANAGE_NAMES ));
         SetSeparatorPos(0);
 
         ScRange aDummy;
@@ -1956,7 +1956,7 @@ void ScPosWnd::FillFunctions()
     //! Re-add entry "Other..." for Function AutoPilot if it can work with text that
     // has been entered so far
 
-    //  InsertEntry( ScGlobal::GetRscString(STR_FUNCTIONLIST_MORE) );
+    //  InsertEntry( ScResId(STR_FUNCTIONLIST_MORE) );
 
     SetText(aFirstName);
 }
@@ -2013,7 +2013,7 @@ static ScNameInputType lcl_GetInputType( const OUString& rText )
         SCTAB nNameTab;
         sal_Int32 nNumeric;
 
-        if (rText == ScGlobal::GetRscString(STR_MANAGE_NAMES))
+        if (rText == ScResId(STR_MANAGE_NAMES))
             eRet = SC_MANAGE_NAMES;
         else if ( aRange.Parse( rText, pDoc, eConv ) & ScRefFlags::VALID )
             eRet = SC_NAME_INPUT_RANGE;
@@ -2093,7 +2093,7 @@ void ScPosWnd::Modify()
             aPos = pWin->OutputToScreenPixel( aPos );
             tools::Rectangle aRect( aPos, aPos );
 
-            OUString aText = ScGlobal::GetRscString(pStrId);
+            OUString aText = ScResId(pStrId);
             QuickHelpFlags const nAlign = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
             nTipVisible = Help::ShowPopover(pWin, aRect, aText, nAlign);
         }
@@ -2118,7 +2118,7 @@ void ScPosWnd::DoEnter()
         if ( bFormulaMode )
         {
             ScModule* pScMod = SC_MOD();
-            if ( aText == ScGlobal::GetRscString(STR_FUNCTIONLIST_MORE) )
+            if ( aText == ScResId(STR_FUNCTIONLIST_MORE) )
             {
                 // Function AutoPilot
                 //! Continue working with the text entered so far

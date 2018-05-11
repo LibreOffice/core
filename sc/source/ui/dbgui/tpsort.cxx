@@ -802,7 +802,7 @@ DeactivateRC ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
         {
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                       VclMessageType::Warning, VclButtonsType::Ok,
-                                                      ScGlobal::GetRscString(STR_INVALID_TABREF)));
+                                                      ScResId(STR_INVALID_TABREF)));
             xBox->run();
             m_pEdOutPos->GrabFocus();
             m_pEdOutPos->SetSelection( Selection( 0, SELECTION_MAX ) );

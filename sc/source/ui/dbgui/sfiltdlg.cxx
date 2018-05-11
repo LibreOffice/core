@@ -45,7 +45,7 @@ namespace
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
                                                   VclMessageType::Warning, VclButtonsType::Ok,
-                                                  ScGlobal::GetRscString(rid)));
+                                                  ScResId(rid)));
         xBox->run();
     }
 }

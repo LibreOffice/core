@@ -9,6 +9,7 @@
 
 #include <condformatmgr.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <condformatdlg.hxx>
 #include <document.hxx>
 
@@ -18,8 +19,8 @@ ScCondFormatManagerWindow::ScCondFormatManagerWindow(SvSimpleTableContainer& rPa
     , mpDoc(pDoc)
     , mpFormatList(pFormatList)
 {
-    OUString aConditionStr(ScGlobal::GetRscString(STR_HEADER_COND));
-    OUString aRangeStr(ScGlobal::GetRscString(STR_HEADER_RANGE));
+    OUString aConditionStr(ScResId(STR_HEADER_COND));
+    OUString aRangeStr(ScResId(STR_HEADER_RANGE));
 
     OUStringBuffer sHeader;
     sHeader.append(aRangeStr).append("\t").append(aConditionStr);
