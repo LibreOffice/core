@@ -44,7 +44,7 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pAc
   pDoc(pActDoc)
 {
     get(pCancelBtn, "cancel");
-    get(pCreateBtn, "create_btn");
+    get(pCreateBtn, "ok");
 
     get(pAddBtn, "add_btn");
     get(pUpBtn, "up_btn");
