@@ -91,6 +91,7 @@
 #include <scerrors.hrc>
 #include <scstyles.hrc>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <bitmaps.hlst>
 #include <inputhdl.hxx>
 #include <inputwin.hxx>
@@ -2263,12 +2264,12 @@ SfxStyleFamilies* ScModule::CreateStyleFamilies()
     SfxStyleFamilies *pStyleFamilies = new SfxStyleFamilies;
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
-                                                    ScGlobal::GetRscString(STR_STYLE_FAMILY_CELL),
+                                                    ScResId(STR_STYLE_FAMILY_CELL),
                                                     Image(BitmapEx(BMP_STYLES_FAMILY_CELL)),
                                                     RID_CELLSTYLEFAMILY, SC_MOD()->GetResLocale()));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Page,
-                                                    ScGlobal::GetRscString(STR_STYLE_FAMILY_PAGE),
+                                                    ScResId(STR_STYLE_FAMILY_PAGE),
                                                     Image(BitmapEx(BMP_STYLES_FAMILY_PAGE)),
                                                     RID_PAGESTYLEFAMILY, SC_MOD()->GetResLocale()));
 

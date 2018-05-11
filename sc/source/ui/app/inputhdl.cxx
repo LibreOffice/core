@@ -67,6 +67,7 @@
 #include <global.hxx>
 #include <sc.hrc>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <patattr.hxx>
 #include <viewdata.hxx>
 #include <document.hxx>
@@ -1179,7 +1180,7 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
     if ( nRemainFindNumber == 0 && nRemainNumber > 0 )
     {
         OUString aBufStr( aTipStr );
-        OUString aMessage( ScGlobal::GetRscString( STR_FUNCTIONS_FOUND ) );
+        OUString aMessage( ScResId( STR_FUNCTIONS_FOUND ) );
         aMessage = aMessage.replaceFirst("%2", OUString::number(nRemainNumber));
         aMessage = aMessage.replaceFirst("%1", aBufStr);
         aTipStr = aMessage;

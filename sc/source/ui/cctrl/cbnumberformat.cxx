@@ -20,6 +20,7 @@
 #include <cbnumberformat.hxx>
 #include <global.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/intitem.hxx>
 #include <sc.hrc>
@@ -30,16 +31,16 @@ ScNumberFormat::ScNumberFormat(vcl::Window* pParent, WinBits nStyle) :
     SetSelectHdl(LINK(this, ScNumberFormat, NumFormatSelectHdl));
     AdaptDropDownLineCountToMaximum();
 
-    InsertEntry(ScGlobal::GetRscString(STR_GENERAL));
-    InsertEntry(ScGlobal::GetRscString(STR_NUMBER));
-    InsertEntry(ScGlobal::GetRscString(STR_PERCENT));
-    InsertEntry(ScGlobal::GetRscString(STR_CURRENCY));
-    InsertEntry(ScGlobal::GetRscString(STR_DATE));
-    InsertEntry(ScGlobal::GetRscString(STR_TIME));
-    InsertEntry(ScGlobal::GetRscString(STR_SCIENTIFIC));
-    InsertEntry(ScGlobal::GetRscString(STR_FRACTION));
-    InsertEntry(ScGlobal::GetRscString(STR_BOOLEAN_VALUE));
-    InsertEntry(ScGlobal::GetRscString(STR_TEXT));
+    InsertEntry(ScResId(STR_GENERAL));
+    InsertEntry(ScResId(STR_NUMBER));
+    InsertEntry(ScResId(STR_PERCENT));
+    InsertEntry(ScResId(STR_CURRENCY));
+    InsertEntry(ScResId(STR_DATE));
+    InsertEntry(ScResId(STR_TIME));
+    InsertEntry(ScResId(STR_SCIENTIFIC));
+    InsertEntry(ScResId(STR_FRACTION));
+    InsertEntry(ScResId(STR_BOOLEAN_VALUE));
+    InsertEntry(ScResId(STR_TEXT));
 }
 
 IMPL_STATIC_LINK(ScNumberFormat, NumFormatSelectHdl, ListBox&, rBox, void)

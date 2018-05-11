@@ -31,6 +31,7 @@
 #include <tabvwsh.hxx>
 #include <sc.hrc>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <cellvalue.hxx>
 #include <defaultsoptions.hxx>
 
@@ -3196,7 +3197,7 @@ void ScExternalRefManager::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
                     std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                VclMessageType::Warning, VclButtonsType::Ok,
-                                                               ScGlobal::GetRscString(STR_CLOSE_WITH_UNSAVED_REFS)));
+                                                               ScResId(STR_CLOSE_WITH_UNSAVED_REFS)));
                     xWarn->run();
                 }
                 break;

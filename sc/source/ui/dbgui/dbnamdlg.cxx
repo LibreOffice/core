@@ -29,6 +29,7 @@
 #include <reffact.hxx>
 #include <document.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <rangenam.hxx>
 #include <globalnames.hxx>
 #include <dbnamdlg.hxx>
@@ -495,7 +496,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, Button*, void)
         }
         else
         {
-            ERRORBOX(GetFrameWeld(), ScGlobal::GetRscString(STR_INVALIDNAME));
+            ERRORBOX(GetFrameWeld(), ScResId(STR_INVALIDNAME));
             m_pEdName->SetSelection( Selection( 0, SELECTION_MAX ) );
             m_pEdName->GrabFocus();
         }
@@ -526,7 +527,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl, Button*, void)
 
     if (itr != rDBs.end())
     {
-        OUString aStrDelMsg = ScGlobal::GetRscString( STR_QUERY_DELENTRY );
+        OUString aStrDelMsg = ScResId( STR_QUERY_DELENTRY );
 
         OUStringBuffer aBuf;
         aBuf.append(aStrDelMsg.getToken(0, '#'));

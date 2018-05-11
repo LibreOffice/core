@@ -31,6 +31,7 @@
 #include <docsh.hxx>
 #include <docfunc.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <globalnames.hxx>
 #include <tabvwsh.hxx>
 #include <patattr.hxx>
@@ -561,7 +562,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     {
         ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
         bool bUpdateRefs = aInputOption.GetSortRefUpdate();
-        ScProgress aProgress(&rDocShell, ScGlobal::GetRscString(STR_PROGRESS_SORTING), 0, true);
+        ScProgress aProgress(&rDocShell, ScResId(STR_PROGRESS_SORTING), 0, true);
         rDoc.Sort(nTab, aLocalParam, bRepeatQuery, bUpdateRefs, &aProgress, &aUndoParam);
     }
 
@@ -831,7 +832,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                 sal_uLong nProgCount = nFormulaCols;
                 nProgCount *= aLocalParam.nRow2 - nFStartY;
                 ScProgress aProgress( rDoc.GetDocumentShell(),
-                        ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount, true );
+                        ScResId(STR_FILL_SERIES_PROGRESS), nProgCount, true );
 
                 rDoc.Fill( aLocalParam.nCol2+1, nFStartY,
                             aLocalParam.nCol2+nFormulaCols, nFStartY, &aProgress, aMark,
@@ -1012,8 +1013,8 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
             vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                       VclMessageType::Question,
-                                                      VclButtonsType::YesNo, ScGlobal::GetRscString(STR_MSSG_DOSUBTOTALS_1))); // "Delete Data?"
-            xBox->set_title(ScGlobal::GetRscString(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"
+                                                      VclButtonsType::YesNo, ScResId(STR_MSSG_DOSUBTOTALS_1))); // "Delete Data?"
+            xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"
             bOk = xBox->run() == RET_YES;
         }
     }
@@ -1302,7 +1303,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
             vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                            VclMessageType::Question, VclButtonsType::YesNo,
-                                                           ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY)));
+                                                           ScResId(STR_PIVOT_NOTEMPTY)));
             xQueryBox->set_default_response(RET_YES);
             if (xQueryBox->run() == RET_NO)
             {
@@ -1356,7 +1357,7 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
             vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                            VclMessageType::Question, VclButtonsType::YesNo,
-                                                           ScGlobal::GetRscString(STR_PIVOT_REMOVE_PIVOTCHART)));
+                                                           ScResId(STR_PIVOT_REMOVE_PIVOTCHART)));
             xQueryBox->set_default_response(RET_YES);
             if (xQueryBox->run() == RET_NO)
             {
@@ -1502,7 +1503,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
             vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                            VclMessageType::Question, VclButtonsType::YesNo,
-                                                           ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY)));
+                                                           ScResId(STR_PIVOT_NOTEMPTY)));
             xQueryBox->set_default_response(RET_YES);
             if (xQueryBox->run() == RET_NO)
             {
@@ -1577,7 +1578,7 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
             vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                            VclMessageType::Question, VclButtonsType::YesNo,
-                                                           ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY)));
+                                                           ScResId(STR_PIVOT_NOTEMPTY)));
             xQueryBox->set_default_response(RET_YES);
             if (xQueryBox->run() == RET_NO)
             {
@@ -1684,7 +1685,7 @@ void ScDBDocFunc::UpdateImport( const OUString& rTarget, const svx::ODataAccessD
         vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                       VclMessageType::Info, VclButtonsType::Ok,
-                                                      ScGlobal::GetRscString(STR_TARGETNOTFOUND)));
+                                                      ScResId(STR_TARGETNOTFOUND)));
         xInfoBox->run();
         return;
     }

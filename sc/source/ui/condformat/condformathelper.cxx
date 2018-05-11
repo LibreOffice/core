@@ -10,6 +10,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <condformathelper.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 
 namespace {
 
@@ -18,17 +19,17 @@ OUString getTextForType(ScCondFormatEntryType eType)
     switch(eType)
     {
         case CONDITION:
-            return ScGlobal::GetRscString(STR_COND_CONDITION);
+            return ScResId(STR_COND_CONDITION);
         case COLORSCALE:
-            return ScGlobal::GetRscString(STR_COND_COLORSCALE);
+            return ScResId(STR_COND_COLORSCALE);
         case DATABAR:
-            return ScGlobal::GetRscString(STR_COND_DATABAR);
+            return ScResId(STR_COND_DATABAR);
         case FORMULA:
-            return ScGlobal::GetRscString(STR_COND_FORMULA);
+            return ScResId(STR_COND_FORMULA);
         case ICONSET:
-            return ScGlobal::GetRscString(STR_COND_ICONSET);
+            return ScResId(STR_COND_ICONSET);
         case DATE:
-            return ScGlobal::GetRscString(STR_COND_DATE);
+            return ScResId(STR_COND_DATE);
         default:
             break;
     }
@@ -53,42 +54,42 @@ OUString getExpression(sal_Int32 nIndex)
         case 5:
             return OUString("!=");
         case 6:
-            return ScGlobal::GetRscString(STR_COND_BETWEEN);
+            return ScResId(STR_COND_BETWEEN);
         case 7:
-            return ScGlobal::GetRscString(STR_COND_NOTBETWEEN);
+            return ScResId(STR_COND_NOTBETWEEN);
         case 8:
-            return ScGlobal::GetRscString(STR_COND_DUPLICATE);
+            return ScResId(STR_COND_DUPLICATE);
         case 9:
-            return ScGlobal::GetRscString(STR_COND_UNIQUE);
+            return ScResId(STR_COND_UNIQUE);
 
         case 11:
-            return ScGlobal::GetRscString(STR_COND_TOP10);
+            return ScResId(STR_COND_TOP10);
         case 12:
-            return ScGlobal::GetRscString(STR_COND_BOTTOM10);
+            return ScResId(STR_COND_BOTTOM10);
         case 13:
-            return ScGlobal::GetRscString(STR_COND_TOP_PERCENT);
+            return ScResId(STR_COND_TOP_PERCENT);
         case 14:
-            return ScGlobal::GetRscString(STR_COND_BOTTOM_PERCENT);
+            return ScResId(STR_COND_BOTTOM_PERCENT);
         case 15:
-            return ScGlobal::GetRscString(STR_COND_ABOVE_AVERAGE);
+            return ScResId(STR_COND_ABOVE_AVERAGE);
         case 16:
-            return ScGlobal::GetRscString(STR_COND_BELOW_AVERAGE);
+            return ScResId(STR_COND_BELOW_AVERAGE);
         case 17:
-            return ScGlobal::GetRscString(STR_COND_ABOVE_EQUAL_AVERAGE);
+            return ScResId(STR_COND_ABOVE_EQUAL_AVERAGE);
         case 18:
-            return ScGlobal::GetRscString(STR_COND_BELOW_EQUAL_AVERAGE);
+            return ScResId(STR_COND_BELOW_EQUAL_AVERAGE);
         case 19:
-            return ScGlobal::GetRscString(STR_COND_ERROR);
+            return ScResId(STR_COND_ERROR);
         case 20:
-            return ScGlobal::GetRscString(STR_COND_NOERROR);
+            return ScResId(STR_COND_NOERROR);
         case 21:
-            return ScGlobal::GetRscString(STR_COND_BEGINS_WITH);
+            return ScResId(STR_COND_BEGINS_WITH);
         case 22:
-            return ScGlobal::GetRscString(STR_COND_ENDS_WITH);
+            return ScResId(STR_COND_ENDS_WITH);
         case 23:
-            return ScGlobal::GetRscString(STR_COND_CONTAINS);
+            return ScResId(STR_COND_CONTAINS);
         case 24:
-            return ScGlobal::GetRscString(STR_COND_NOT_CONTAINS);
+            return ScResId(STR_COND_NOT_CONTAINS);
 
         case 10:
             assert(false);
@@ -116,7 +117,7 @@ OUString getDateString(sal_Int32 nIndex)
     };
 
     if (nIndex >= 0 && static_cast<sal_uInt32>(nIndex) < SAL_N_ELEMENTS(aCondStrs))
-        return ScGlobal::GetRscString(aCondStrs[nIndex]);
+        return ScResId(aCondStrs[nIndex]);
     assert(false);
     return OUString();
 }
@@ -150,7 +151,7 @@ OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rFormat, c
                         {
                             aBuffer.append(pEntry->GetExpression(rPos, 0));
                             aBuffer.append(" ");
-                            aBuffer.append(ScGlobal::GetRscString(STR_COND_AND));
+                            aBuffer.append(ScResId(STR_COND_AND));
                             aBuffer.append(" ");
                             aBuffer.append(pEntry->GetExpression(rPos, 1));
                         }
@@ -202,7 +203,7 @@ OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sal_Int
             if(nIndex == 6 || nIndex == 7)
             {
                 aBuffer.append(" ");
-                aBuffer.append(ScGlobal::GetRscString(STR_COND_AND));
+                aBuffer.append(ScResId(STR_COND_AND));
                 aBuffer.append(" ");
                 aBuffer.append(aStr2);
             }

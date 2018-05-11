@@ -34,6 +34,7 @@
 #include <dbdata.hxx>
 #include <undoblk.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <markdata.hxx>
 #include <hints.hxx>
 #include <filter.hxx>
@@ -404,7 +405,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
         }
         else
         {
-            OUString aErr = ScGlobal::GetRscString(STR_LINKERROR);
+            OUString aErr = ScResId(STR_LINKERROR);
             rDoc.SetString( aDestPos.Col(), aDestPos.Row(), aDestPos.Tab(), aErr );
         }
 
@@ -466,7 +467,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
         vcl::Window* pWin = Application::GetDefDialogParent();
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                       VclMessageType::Info, VclButtonsType::Ok,
-                                                      ScGlobal::GetRscString(STR_MSSG_DOSUBTOTALS_2)));
+                                                      ScResId(STR_MSSG_DOSUBTOTALS_2)));
         xInfoBox->run();
     }
 

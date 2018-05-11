@@ -32,6 +32,7 @@
 #include <tabvwsh.hxx>
 #include <tablink.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <scmod.hxx>
 #include <compiler.hxx>
 #include <interpre.hxx>
@@ -502,7 +503,7 @@ void ScDocShell::CheckConfigOptions()
             vcl::Window* pParent = pViewShell->GetFrameWin();
             std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
                                                           VclMessageType::Info, VclButtonsType::Ok,
-                                                          ScGlobal::GetRscString(STR_OPTIONS_WARN_SEPARATORS)));
+                                                          ScResId(STR_OPTIONS_WARN_SEPARATORS)));
             xInfoBox->run();
         }
 

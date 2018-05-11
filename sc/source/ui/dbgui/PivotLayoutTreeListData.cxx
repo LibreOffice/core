@@ -18,6 +18,7 @@
 #include <pivot.hxx>
 #include <scabstdlg.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 
 VCL_BUILDER_FACTORY_ARGS(ScPivotLayoutTreeListData,
                          WB_BORDER | WB_TABSTOP | WB_CLIPCHILDREN)
@@ -47,7 +48,7 @@ OUString lclGetFunctionMaskName(const PivotFunc nFunctionMask)
             break;
     }
     if (pStrId)
-        return ScGlobal::GetRscString(pStrId);
+        return ScResId(pStrId);
     else
         return OUString();
 }

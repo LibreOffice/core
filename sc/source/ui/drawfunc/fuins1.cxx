@@ -130,7 +130,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
         {
             //sal_Int8 nAction(DND_ACTION_MOVE);
             //Point aPos;
-            const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
+            const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
 
             SdrObject* pResult = pDrawView->ApplyGraphicToObject(
                 *pPickObj,

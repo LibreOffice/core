@@ -40,6 +40,7 @@
 #include <dbdocfun.hxx>
 #include <docsh.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <scerrors.hxx>
 #include <dbdata.hxx>
 #include <markdata.hxx>
@@ -190,7 +191,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     {
         //  progress bar
         //  only text (title is still needed, for the cancel button)
-        ScProgress aProgress( &rDocShell, ScGlobal::GetRscString(STR_UNDO_IMPORTDATA), 0, true );
+        ScProgress aProgress( &rDocShell, ScResId(STR_UNDO_IMPORTDATA), 0, true );
 
         uno::Reference<sdbc::XRowSet> xRowSet( xResultSet, uno::UNO_QUERY );
         bool bDispose = false;
@@ -342,7 +343,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                             ++nInserted;
                             if (!(nInserted & 15))
                             {
-                                OUString aPict = ScGlobal::GetRscString( STR_PROGRESS_IMPORT );
+                                OUString aPict = ScResId( STR_PROGRESS_IMPORT );
                                 OUString aText = aPict.getToken(0,'#');
                                 aText += OUString::number( nInserted );
                                 aText += aPict.getToken(1,'#');
@@ -546,7 +547,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             sal_uLong nProgCount = nFormulaCols;
             nProgCount *= nEndRow-rParam.nRow1-1;
             ScProgress aProgress( rDoc.GetDocumentShell(),
-                    ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount, true );
+                    ScResId(STR_FILL_SERIES_PROGRESS), nProgCount, true );
 
             rDoc.Fill( nEndCol+1, rParam.nRow1+1, nEndCol+nFormulaCols, rParam.nRow1+1,
                             &aProgress, aMark, nEndRow-rParam.nRow1-1, FILL_TO_BOTTOM, FILL_SIMPLE );
@@ -614,7 +615,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         {
             if (!pErrStringId)
                 pErrStringId = STR_MSSG_IMPORTDATA_0;
-            aErrorMessage = ScGlobal::GetRscString(pErrStringId);
+            aErrorMessage = ScResId(pErrStringId);
         }
         vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,

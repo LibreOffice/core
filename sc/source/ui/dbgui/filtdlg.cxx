@@ -682,7 +682,7 @@ IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn, void )
 
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                           VclMessageType::Warning, VclButtonsType::Ok,
-                                                          ScGlobal::GetRscString(STR_INVALID_TABREF)));
+                                                          ScResId(STR_INVALID_TABREF)));
                 xBox->run();
                 pEdCopyArea->GrabFocus();
                 bAreaInputOk = false;

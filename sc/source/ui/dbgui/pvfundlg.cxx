@@ -67,7 +67,7 @@ bool lclFillListBox( ListBoxType& rLBox, const Sequence< OUString >& rStrings, s
                 rLBox.InsertEntry( *pStr );
             else
             {
-                rLBox.InsertEntry( ScGlobal::GetRscString( STR_EMPTYDATA ), nEmptyPos );
+                rLBox.InsertEntry( ScResId( STR_EMPTYDATA ), nEmptyPos );
                 bEmpty = true;
             }
         }
@@ -87,7 +87,7 @@ bool lclFillListBox( ListBoxType& rLBox, const vector<ScDPLabelData::Member>& rM
             rLBox.InsertEntry(aName);
         else
         {
-            rLBox.InsertEntry(ScGlobal::GetRscString(STR_EMPTYDATA), nEmptyPos);
+            rLBox.InsertEntry(ScResId(STR_EMPTYDATA), nEmptyPos);
             bEmpty = true;
         }
     }
