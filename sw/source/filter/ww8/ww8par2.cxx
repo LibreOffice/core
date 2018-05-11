@@ -1580,7 +1580,7 @@ void WW8TabBandDesc::ReadNewShd(const sal_uInt8* pS, bool bVer67)
 
 void WW8TabBandDesc::setcelldefaults(WW8_TCell *pCells, short nCols)
 {
-    memset( pCells, 0, nCols * sizeof( WW8_TCell ) );
+    memset(static_cast<void*>(pCells), 0, nCols * sizeof(WW8_TCell));
 }
 
 namespace
