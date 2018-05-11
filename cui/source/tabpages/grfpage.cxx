@@ -489,7 +489,7 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, SpinField&, rField, void )
         long nLeft = lcl_GetValue( *m_pLeftMF, eUnit );
         long nRight = lcl_GetValue( *m_pRightMF, eUnit );
         long nWidthZoom = static_cast<long>(m_pWidthZoomMF->GetValue());
-        if(bZoom && ( ( ( aOrigSize.Width() - (nLeft + nRight )) * nWidthZoom )
+        if (bZoom && nWidthZoom != 0 && ( ( ( aOrigSize.Width() - (nLeft + nRight )) * nWidthZoom )
                             / 100 >= aPageSize.Width() ) )
         {
             if(&rField == m_pLeftMF)
