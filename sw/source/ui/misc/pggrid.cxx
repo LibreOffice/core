@@ -405,9 +405,11 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField&, rField, void)
     }
     else//in normal mode
     {
-        if(m_pLinesPerPageNF == &rField)
+        if (m_pLinesPerPageNF == &rField)
         {
-            long nHeight = static_cast< sal_Int32 >(m_aPageSize.Height() / m_pLinesPerPageNF->GetValue());
+            auto nValue = m_pLinesPerPageNF->GetValue();
+            assert(nValue && "div-by-zero");
+            long nHeight = static_cast< sal_Int32 >(m_aPageSize.Height() / nValue);
             m_pTextSizeMF->SetValue(m_pTextSizeMF->Normalize(nHeight), FUNIT_TWIP);
             m_pRubySizeMF->SetValue(0, FUNIT_TWIP);
             SetLinesOrCharsRanges( *m_pLinesRangeFT , m_pLinesPerPageNF->GetMax() );
