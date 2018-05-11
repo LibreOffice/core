@@ -1,1 +1,3 @@
+filter/uiconfig/ui/pdfgeneralpage.ui://GtkSpinButton[@id='quality:0%'] no-labelled-by
+filter/uiconfig/ui/pdfgeneralpage.ui://GtkLabel[@id='label6'] orphan-label
 filter/uiconfig/ui/pdfgeneralpage.ui://GtkCheckButton[@id='reduceresolution'] missing-labelled-by

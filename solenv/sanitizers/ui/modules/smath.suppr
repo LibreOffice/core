@@ -1,1 +1,4 @@
 starmath/uiconfig/smath/ui/fontsizedialog.ui://GtkSpinButton[@id='spinB_function'] duplicate-mnemonic
+starmath/uiconfig/smath/ui/fontsizedialog.ui://GtkSpinButton[@id='spinB_operator'] no-labelled-by
+starmath/uiconfig/smath/ui/printeroptions.ui://GtkSpinButton[@id='scalingspin'] no-labelled-by
+starmath/uiconfig/smath/ui/smathsettings.ui://GtkSpinButton[@id='zoom'] no-labelled-by
