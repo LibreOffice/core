@@ -278,7 +278,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
         }
         case 1:
         {
-            // CreateBreakDlg(vcl::Window* pWindow, ::sd::DrawView* pDrView, ::sd::DrawDocShell* pShell, sal_uLong nSumActionCount, sal_uLong nObjCount) override;
+            // CreateBreakDlg(weld::Window* pWindow, ::sd::DrawView* pDrView, ::sd::DrawDocShell* pShell, sal_uLong nSumActionCount, sal_uLong nObjCount) override;
             // this dialog requires pDrawView. It does not show much when
             // there is no object selected that can be broken up. For better
             // results it might be necessary to add/select an object that
@@ -397,7 +397,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
         }
         case 10:
         {
-            // CreateMorphDlg(vcl::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2) override;
+            // CreateMorphDlg(weld::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
             CPPUNIT_ASSERT(pDrawDoc);
             SdPage* pSdPage = pDrawDoc->GetSdPage(0, PageKind::Standard);
@@ -542,7 +542,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
         }
         case 19:
         {
-            // CreateSdVectorizeDlg(vcl::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell) override;
+            // CreateSdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell) override;
             // works well with empty Bitmap, but my be nicer with setting one
             Bitmap aEmptyBitmap;
             auto const parent = Application::GetDefDialogParent();
@@ -554,17 +554,18 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
         }
         case 20:
         {
-            // CreateSdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pDoc) override;
+            // CreateSdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument* pDoc) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
             CPPUNIT_ASSERT(pDrawDoc);
+            auto const parent = Application::GetDefDialogParent();
             pRetval = getSdAbstractDialogFactory()->CreateSdPhotoAlbumDialog(
-                Application::GetDefDialogParent(),
+                parent == nullptr ? nullptr : parent->GetFrameWeld(),
                 pDrawDoc);
             break;
         }
         case 21:
         {
-            // CreateMasterLayoutDialog(vcl::Window* pParent, SdDrawDocument* pDoc, SdPage*) override;
+            // CreateMasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pDoc, SdPage*) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
             CPPUNIT_ASSERT(pDrawDoc);
             SdPage* pSdPage = pDrawDoc->GetSdPage(0, PageKind::Standard);

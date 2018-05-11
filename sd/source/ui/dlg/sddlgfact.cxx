@@ -47,6 +47,12 @@
 #include "PhotoAlbumDialog.hxx"
 
 IMPL_ABSTDLG_BASE(SdVclAbstractDialog_Impl);
+
+short SdAbstractGenericDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractCopyDlg_Impl);
 
 short AbstractSdCustomShowDlg_Impl::Execute()
@@ -455,9 +461,9 @@ VclPtr<AbstractHeaderFooterDialog> SdAbstractDialogFactory_Impl::CreateHeaderFoo
     return VclPtr<AbstractHeaderFooterDialog_Impl>::Create( VclPtr<::sd::HeaderFooterDialog>::Create( pViewShell, pParent, pDoc, pCurrentPage ));
 }
 
-VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateSdPhotoAlbumDialog( vcl::Window* pParent, SdDrawDocument* pDoc )
+VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateSdPhotoAlbumDialog(weld::Window* pParent, SdDrawDocument* pDoc)
 {
-    return VclPtr<SdVclAbstractDialog_Impl>::Create( VclPtr<::sd::SdPhotoAlbumDialog>::Create( pParent, pDoc ) );
+    return VclPtr<SdAbstractGenericDialog_Impl>::Create(new sd::SdPhotoAlbumDialog(pParent, pDoc));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

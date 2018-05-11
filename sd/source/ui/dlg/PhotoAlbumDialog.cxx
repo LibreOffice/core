@@ -39,106 +39,80 @@
 namespace sd
 {
 
-SdPhotoAlbumDialog::SdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pActDoc)
-: ModalDialog(pWindow, "PhotoAlbumCreatorDialog", "modules/simpress/ui/photoalbum.ui"),
-  pDoc(pActDoc)
+SdPhotoAlbumDialog::SdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument* pActDoc)
+    : GenericDialogController(pWindow, "modules/simpress/ui/photoalbum.ui", "PhotoAlbumCreatorDialog")
+    , m_pDoc(pActDoc)
+    , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
+    , m_xCreateBtn(m_xBuilder->weld_button("ok"))
+    , m_xAddBtn(m_xBuilder->weld_button("add_btn"))
+    , m_xUpBtn(m_xBuilder->weld_button("up_btn"))
+    , m_xDownBtn(m_xBuilder->weld_button("down_btn"))
+    , m_xRemoveBtn(m_xBuilder->weld_button("rem_btn"))
+    , m_xImagesLst(m_xBuilder->weld_tree_view("images_tree"))
+    , m_xImg(new SvxGraphCtrl(*m_xBuilder, "preview_img"))
+    , m_xInsTypeCombo(m_xBuilder->weld_combo_box_text("opt_combo"))
+    , m_xASRCheck(m_xBuilder->weld_check_button("asr_check"))
+    , m_xASRCheckCrop(m_xBuilder->weld_check_button("asr_check_crop"))
+    , m_xCapCheck(m_xBuilder->weld_check_button("cap_check"))
+    , m_xInsertAsLinkCheck(m_xBuilder->weld_check_button("insert_as_link_check"))
 {
-    get(pCancelBtn, "cancel");
-    get(pCreateBtn, "ok");
+    m_xCancelBtn->connect_clicked(LINK(this, SdPhotoAlbumDialog, CancelHdl));
+    m_xCreateBtn->connect_clicked(LINK(this, SdPhotoAlbumDialog, CreateHdl));
 
-    get(pAddBtn, "add_btn");
-    get(pUpBtn, "up_btn");
-    get(pDownBtn, "down_btn");
-    get(pRemoveBtn, "rem_btn");
+    m_xAddBtn->connect_clicked(LINK(this, SdPhotoAlbumDialog, FileHdl));
+    m_xUpBtn->connect_clicked(LINK(this, SdPhotoAlbumDialog, UpHdl));
+    m_xUpBtn->set_sensitive(false);
+    m_xDownBtn->connect_clicked(LINK(this, SdPhotoAlbumDialog, DownHdl));
+    m_xDownBtn->set_sensitive(false);
+    m_xRemoveBtn->connect_clicked(LINK(this, SdPhotoAlbumDialog, RemoveHdl));
+    m_xRemoveBtn->set_sensitive(false);
+    m_xImagesLst->connect_changed(LINK(this, SdPhotoAlbumDialog, SelectHdl));
+    m_xInsTypeCombo->connect_changed(LINK(this, SdPhotoAlbumDialog, TypeSelectHdl));
 
-    get(pImagesLst, "images_tree");
-    get(pImg, "preview_img");
-
-    get(pInsTypeCombo, "opt_combo");
-    get(pASRCheck, "asr_check");
-    get(pASRCheckCrop, "asr_check_crop");
-    get(pCapCheck, "cap_check");
-    get(pInsertAsLinkCheck, "insert_as_link_check");
-
-    pCancelBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, CancelHdl));
-    pCreateBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, CreateHdl));
-
-    pAddBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, FileHdl));
-    pUpBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, UpHdl));
-    pUpBtn->Disable();
-    pDownBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, DownHdl));
-    pDownBtn->Disable();
-    pRemoveBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, RemoveHdl));
-    pRemoveBtn->Disable();
-    pImagesLst->SetSelectHdl(LINK(this, SdPhotoAlbumDialog, SelectHdl));
-    pInsTypeCombo->SetSelectHdl(LINK(this, SdPhotoAlbumDialog, TypeSelectHdl));
-
-    mpGraphicFilter = new GraphicFilter;
-    pAddBtn->GrabFocus();
-    pImagesLst->Clear();
+    m_pGraphicFilter = new GraphicFilter;
+    m_xAddBtn->grab_focus();
 }
 
 SdPhotoAlbumDialog::~SdPhotoAlbumDialog()
 {
-    disposeOnce();
 }
 
-void SdPhotoAlbumDialog::dispose()
+IMPL_LINK_NOARG(SdPhotoAlbumDialog, CancelHdl, weld::Button&, void)
 {
-    pCancelBtn.clear();
-    pCreateBtn.clear();
-    pAddBtn.clear();
-    pUpBtn.clear();
-    pDownBtn.clear();
-    pRemoveBtn.clear();
-    pImagesLst.clear();
-    pImg.clear();
-    pInsTypeCombo.clear();
-    pASRCheck.clear();
-    pASRCheckCrop.clear();
-    pCapCheck.clear();
-    pInsertAsLinkCheck.clear();
-    ModalDialog::dispose();
+    m_xDialog->response(RET_CANCEL);
 }
 
-IMPL_LINK_NOARG(SdPhotoAlbumDialog, CancelHdl, Button*, void)
+IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
 {
-    Close();
-}
-
-IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
-{
-    if (pImagesLst->GetEntryCount() == 0)
+    if (m_xImagesLst->n_children() == 0)
     {
-        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(m_xDialog.get(),
                                                    VclMessageType::Warning, VclButtonsType::Ok,
                                                    SdResId(STR_PHOTO_ALBUM_EMPTY_WARNING)));
         xWarn->run();
     }
     else
     {
-        Reference< drawing::XDrawPagesSupplier > xDPS( pDoc->getUnoModel(), uno::UNO_QUERY );
+        Reference< drawing::XDrawPagesSupplier > xDPS( m_pDoc->getUnoModel(), uno::UNO_QUERY );
         Reference< drawing::XDrawPages > xDrawPages( xDPS->getDrawPages(), uno::UNO_QUERY );
-        Reference< lang::XMultiServiceFactory > xShapeFactory( pDoc->getUnoModel(), uno::UNO_QUERY );
+        Reference< lang::XMultiServiceFactory > xShapeFactory( m_pDoc->getUnoModel(), uno::UNO_QUERY );
 
         Reference< XComponentContext > xContext(::comphelper::getProcessComponentContext());
         Reference< graphic::XGraphicProvider> xProvider(graphic::GraphicProvider::create(xContext));
 
         // determine if to use Captions (use TitleObject) and choose the correct AutoLayout
         // from the beginning
-        const bool bCreateCaptions(pCapCheck->IsChecked());
-        const bool bInsertAsLink(pInsertAsLinkCheck->IsChecked());
+        const bool bCreateCaptions(m_xCapCheck->get_active());
+        const bool bInsertAsLink(m_xInsertAsLinkCheck->get_active());
         const AutoLayout aAutoLayout(bCreateCaptions ? AUTOLAYOUT_TITLE_ONLY : AUTOLAYOUT_NONE);
 
         // get the option
-        const sal_Int32 nOpt = pInsTypeCombo->GetSelectedEntryPos();
-        if ( nOpt == ONE_IMAGE )
+        const int nOpt = m_xInsTypeCombo->get_active();
+        if (nOpt == ONE_IMAGE)
         {
-            OUString sUrl;
-            for( sal_Int32 i = 0; i < pImagesLst->GetEntryCount(); ++i )
+            for( sal_Int32 i = 0; i < m_xImagesLst->n_children(); ++i )
             {
-                OUString const * pData = static_cast<OUString const *>(pImagesLst->GetEntryData(i));
-                sUrl = *pData;
+                OUString sUrl = m_xImagesLst->get_id(i);
 
                 Reference< drawing::XDrawPage > xSlide = appendNewSlide(aAutoLayout, xDrawPages);
                 Reference< beans::XPropertySet > xSlideProps( xSlide, uno::UNO_QUERY );
@@ -167,12 +141,12 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                 ::awt::Point aPicPos;
 
-                if(pASRCheck->IsChecked() && !pASRCheckCrop->IsChecked())
+                if (m_xASRCheck->get_active() && !m_xASRCheckCrop->get_active())
                 {
                     // Resize the image, with keeping ASR
                     aPicSize = createASRSize(aPicSize, aPageSize);
                 }
-                else if(pASRCheckCrop->IsChecked())
+                else if (m_xASRCheckCrop->get_active())
                 {
                     aPicSize = createASRSizeCrop(aPicSize, aPageSize);
                 }
@@ -196,13 +170,8 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
         }
         else if( nOpt == TWO_IMAGES )
         {
-            OUString sUrl1("");
-            OUString sUrl2("");
-
-            for( sal_Int32 i = 0; i < pImagesLst->GetEntryCount(); i+=2 )
+            for( sal_Int32 i = 0; i < m_xImagesLst->n_children(); i+=2 )
             {
-                OUString const * pData = nullptr;
-
                 // create the slide
                 Reference< drawing::XDrawPage > xSlide = appendNewSlide(aAutoLayout, xDrawPages);
                 Reference< beans::XPropertySet > xSlideProps( xSlide, uno::UNO_QUERY );
@@ -215,13 +184,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                     "Height") >>= aPageSize.Height;
 
                 // grab the left one
-                void* pD1 = pImagesLst->GetEntryData(i);
-                pData = static_cast<OUString const *>(pD1);
-                sUrl1 = pData ? *pData : "";
+                OUString sUrl1 = m_xImagesLst->get_id(i);
                 // grab the right one
-                void* pD2 = pImagesLst->GetEntryData(i+1);
-                pData = static_cast<OUString const *>(pD2);
-                sUrl2 = pData ? *pData : "";
+                OUString sUrl2 = m_xImagesLst->get_id(i+1);
 
                 if( !sUrl1.isEmpty() )
                 {
@@ -242,7 +207,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                     ::awt::Point aPicPos;
 
-                    if(pASRCheck->IsChecked())
+                    if (m_xASRCheck->get_active())
                     {
                         // Resize the image, with keeping ASR
                         aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
@@ -286,7 +251,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                     ::awt::Point aPicPos;
 
-                    if(pASRCheck->IsChecked())
+                    if (m_xASRCheck->get_active())
                     {
                         // Resize the image, with keeping ASR
                         aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
@@ -317,14 +282,8 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
         }
         else if( nOpt == FOUR_IMAGES )
         {
-            OUString sUrl1("");
-            OUString sUrl2("");
-            OUString sUrl3("");
-            OUString sUrl4("");
-
-            for( sal_Int32 i = 0; i < pImagesLst->GetEntryCount(); i+=4 )
+            for( sal_Int32 i = 0; i < m_xImagesLst->n_children(); i+=4 )
             {
-                OUString* pData = nullptr;
                 // create the slide
                 Reference< drawing::XDrawPage > xSlide = appendNewSlide(aAutoLayout, xDrawPages);
                 Reference< beans::XPropertySet > xSlideProps( xSlide, uno::UNO_QUERY );
@@ -337,24 +296,16 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                     "Height") >>= aPageSize.Height;
 
                 // grab the upper left one
-                void* pD1 = pImagesLst->GetEntryData(i);
-                pData = static_cast<OUString*>(pD1);
-                sUrl1 = pData ? *pData : "";
+                OUString sUrl1 = m_xImagesLst->get_id(i);
 
                 // grab the upper right one
-                void* pD2 = pImagesLst->GetEntryData(i+1);
-                pData = static_cast<OUString *>(pD2);
-                sUrl2 = pData ? *pData : "";
+                OUString sUrl2 = m_xImagesLst->get_id(i+1);
 
                 // grab the lower left one
-                void* pD3 = pImagesLst->GetEntryData(i+2);
-                pData = static_cast<OUString*>(pD3);
-                sUrl3 = pData ? *pData : "";
+                OUString sUrl3 = m_xImagesLst->get_id(i+2);
 
                 // grab the lower right one
-                void* pD4 = pImagesLst->GetEntryData(i+3);
-                pData = static_cast<OUString*>(pD4);
-                sUrl4 = pData ? *pData : "";
+                OUString sUrl4 = m_xImagesLst->get_id(i+3);
 
                 if( !sUrl1.isEmpty() )
                 {
@@ -375,7 +326,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                     ::awt::Point aPicPos;
 
-                    if(pASRCheck->IsChecked())
+                    if (m_xASRCheck->get_active())
                     {
                         // Resize the image, with keeping ASR
                         aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
@@ -418,7 +369,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                     ::awt::Point aPicPos;
 
-                    if(pASRCheck->IsChecked())
+                    if (m_xASRCheck->get_active())
                     {
                         // Resize the image, with keeping ASR
                         aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
@@ -461,7 +412,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                     ::awt::Point aPicPos;
 
-                    if(pASRCheck->IsChecked())
+                    if (m_xASRCheck->get_active())
                     {
                         // Resize the image, with keeping ASR
                         aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
@@ -504,7 +455,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                     ::awt::Point aPicPos;
 
-                    if(pASRCheck->IsChecked())
+                    if (m_xASRCheck->get_active())
                     {
                         // Resize the image, with keeping ASR
                         aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
@@ -534,20 +485,20 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
         }
         else
         {
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           "Function is not implemented!"));
             xInfoBox->run();
         }
-        EndDialog();
+        m_xDialog->response(RET_OK);
     }
 }
 
-IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl, Button*, void)
+IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl, weld::Button&, void)
 {
     ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILEOPEN_PREVIEW,
-        FileDialogFlags::Graphic | FileDialogFlags::MultiSelection, GetFrameWeld());
+        FileDialogFlags::Graphic | FileDialogFlags::MultiSelection, m_xDialog.get());
     // Read configuration
     OUString sUrl(officecfg::Office::Impress::Pictures::Path::get());
 
@@ -575,85 +526,71 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl, Button*, void)
             {
                 // Store full path, show filename only. Use INetURLObject to display spaces in filename correctly
                 INetURLObject aUrl = INetURLObject(aFilesArr[i]);
-                sal_Int16 nPos = pImagesLst->InsertEntry( aUrl.GetLastName(INetURLObject::DecodeMechanism::WithCharset) );
-                pImagesLst->SetEntryData(nPos, new OUString(aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE)));
+                m_xImagesLst->append(aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE), aUrl.GetLastName(INetURLObject::DecodeMechanism::WithCharset), "");
             }
         }
     }
     EnableDisableButtons();
 }
 
-IMPL_LINK_NOARG(SdPhotoAlbumDialog, UpHdl, Button*, void)
+IMPL_LINK_NOARG(SdPhotoAlbumDialog, UpHdl, weld::Button&, void)
 {
-    if (pImagesLst->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND
-        && pImagesLst->GetSelectedEntryPos() != 0)
+    const int nActPos = m_xImagesLst->get_selected_index();
+    if (nActPos != -1 && nActPos != 0)
     {
-        const sal_Int32 nActPos = pImagesLst->GetSelectedEntryPos();
-        OUString sActEntry( pImagesLst->GetEntry(nActPos) );
+        OUString sActEntry(m_xImagesLst->get_text(nActPos));
         // actual data
-        OUString* pActData = static_cast<OUString*>(pImagesLst->GetEntryData(nActPos));
-        OUString sAct(*pActData);
+        OUString sAct(m_xImagesLst->get_id(nActPos));
 
-        OUString sUpperEntry( pImagesLst->GetEntry(nActPos - 1) );
+        OUString sUpperEntry(m_xImagesLst->get_text(nActPos - 1));
         // upper data
-        OUString* pUpperData = static_cast<OUString*>(pImagesLst->GetEntryData(nActPos - 1));
-        OUString sUpper(*pUpperData);
+        OUString sUpper(m_xImagesLst->get_id(nActPos - 1));
 
-        pImagesLst->RemoveEntry( sActEntry );
-        pImagesLst->RemoveEntry( sUpperEntry );
+        m_xImagesLst->remove_text(sActEntry);
+        m_xImagesLst->remove_text(sUpperEntry);
 
-        pImagesLst->InsertEntry( sActEntry, nActPos - 1 );
-        pImagesLst->SetEntryData( nActPos - 1, new OUString(sAct));
+        m_xImagesLst->insert(nActPos - 1, sAct, sActEntry, "");
+        m_xImagesLst->insert(nActPos, sUpper, sUpperEntry, "");
 
-        pImagesLst->InsertEntry( sUpperEntry, nActPos );
-        pImagesLst->SetEntryData( nActPos, new OUString(sUpper));
-
-        pImagesLst->SelectEntryPos(nActPos - 1);
+        m_xImagesLst->select(nActPos - 1);
     }
 
     EnableDisableButtons();
 }
 
-IMPL_LINK_NOARG(SdPhotoAlbumDialog, DownHdl, Button*, void)
+IMPL_LINK_NOARG(SdPhotoAlbumDialog, DownHdl, weld::Button&, void)
 {
-    const sal_Int32 nActPos = pImagesLst->GetSelectedEntryPos();
-    if (!pImagesLst->GetEntry(nActPos + 1).isEmpty())
+    const int nActPos = m_xImagesLst->get_selected_index();
+    if (!m_xImagesLst->get_text(nActPos + 1).isEmpty())
     {
-        OUString sActEntry( pImagesLst->GetSelectedEntry() );
-        OUString* pActData = static_cast<OUString*>(pImagesLst->GetSelectedEntryData());
-        OUString sAct(*pActData);
+        OUString sActEntry(m_xImagesLst->get_selected_text());
+        OUString sAct(m_xImagesLst->get_selected_id());
 
-        OUString sDownEntry( pImagesLst->GetEntry(nActPos + 1) );
-        OUString* pDownData = static_cast<OUString*>(pImagesLst->GetEntryData(nActPos + 1));
-        OUString sDown(*pDownData);
+        OUString sDownEntry(m_xImagesLst->get_text(nActPos + 1));
+        OUString sDown(m_xImagesLst->get_id(nActPos + 1));
 
-        pImagesLst->RemoveEntry( sActEntry );
-        pImagesLst->RemoveEntry( sDownEntry );
+        m_xImagesLst->remove_text(sActEntry);
+        m_xImagesLst->remove_text(sDownEntry);
 
-        pImagesLst->InsertEntry( sDownEntry, nActPos );
-        pImagesLst->SetEntryData( nActPos, new OUString(sDown));
+        m_xImagesLst->insert(nActPos, sDown, sDownEntry, "");
+        m_xImagesLst->insert(nActPos + 1, sAct, sActEntry, "");
 
-        pImagesLst->InsertEntry( sActEntry, nActPos + 1 );
-        pImagesLst->SetEntryData( nActPos + 1, new OUString(sAct));
-
-        pImagesLst->SelectEntryPos(nActPos + 1);
-
+        m_xImagesLst->select(nActPos + 1);
     }
     EnableDisableButtons();
 }
 
-IMPL_LINK_NOARG(SdPhotoAlbumDialog, RemoveHdl, Button*, void)
+IMPL_LINK_NOARG(SdPhotoAlbumDialog, RemoveHdl, weld::Button&, void)
 {
-    pImagesLst->RemoveEntry( pImagesLst->GetSelectedEntryPos() );
-    pImg->SetImage(Image());
+    m_xImagesLst->remove(m_xImagesLst->get_selected_index());
+    m_xImg->SetGraphic(Graphic());
 
     EnableDisableButtons();
 }
 
-IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl, weld::TreeView&, void)
 {
-    OUString* pData = static_cast<OUString*>(pImagesLst->GetSelectedEntryData());
-    OUString sImgUrl = pData ? *pData : "";
+    OUString sImgUrl = m_xImagesLst->get_selected_id();
 
     if (sImgUrl != SdResId(STR_PHOTO_ALBUM_TEXTBOX))
     {
@@ -676,14 +613,14 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl, ListBox&, void)
             SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( sImgUrl, StreamMode::READ );
 
             if( pStream )
-                mpGraphicFilter->ImportGraphic( aGraphic, sImgUrl, *pStream, nFilter, nullptr, nFilterImportFlags );
+                m_pGraphicFilter->ImportGraphic( aGraphic, sImgUrl, *pStream, nFilter, nullptr, nFilterImportFlags );
             else
-                mpGraphicFilter->ImportGraphic( aGraphic, aURLObj, nFilter, nullptr, nFilterImportFlags );
+                m_pGraphicFilter->ImportGraphic( aGraphic, aURLObj, nFilter, nullptr, nFilterImportFlags );
             delete pStream;
         }
         else
         {
-            mpGraphicFilter->ImportGraphic( aGraphic, aURLObj, nFilter, nullptr, nFilterImportFlags );
+            m_pGraphicFilter->ImportGraphic( aGraphic, aURLObj, nFilter, nullptr, nFilterImportFlags );
         }
 
         Bitmap aBmp = aGraphic.GetBitmap();
@@ -698,23 +635,23 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl, ListBox&, void)
             aBmp.Scale( nYRatio, nYRatio );
 
         aBmp.Convert( BmpConversion::N24Bit );
-        pImg->SetImage(Image(aBmp));
+        m_xImg->SetGraphic(Graphic(aBmp));
     }
     else
     {
-        pImg->SetImage(Image());
+        m_xImg->SetGraphic(Graphic());
     }
     EnableDisableButtons();
 }
 
-IMPL_LINK_NOARG(SdPhotoAlbumDialog, TypeSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SdPhotoAlbumDialog, TypeSelectHdl, weld::ComboBoxText&, void)
 {
     // Enable "Fill Slide" only for one image
     // If we want to have it for other images too, we need to implement the actual cropping.
-    bool const bEnable = pInsTypeCombo->GetSelectedEntryPos() == ONE_IMAGE;
-    pASRCheckCrop->Enable(bEnable);
+    bool const bEnable = m_xInsTypeCombo->get_active() == ONE_IMAGE;
+    m_xASRCheckCrop->set_sensitive(bEnable);
     if (!bEnable)
-        pASRCheckCrop->Check(false);
+        m_xASRCheckCrop->set_active(false);
 }
 
 Reference< drawing::XDrawPage > SdPhotoAlbumDialog::appendNewSlide(AutoLayout aLayout,
@@ -724,7 +661,7 @@ Reference< drawing::XDrawPage > SdPhotoAlbumDialog::appendNewSlide(AutoLayout aL
     Reference< drawing::XDrawPage > xSlide; // Create the slide
     Reference< container::XIndexAccess > xIndexAccess( xDrawPages, uno::UNO_QUERY );
     xSlide = xDrawPages->insertNewByIndex( xIndexAccess->getCount() );
-    SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PageKind::Standard)-1, PageKind::Standard);
+    SdPage* pSlide = m_pDoc->GetSdPage( m_pDoc->GetSdPageCount(PageKind::Standard)-1, PageKind::Standard);
     pSlide->SetAutoLayout(aLayout, true); // Set the layout here
     return xSlide;
 }
@@ -799,7 +736,7 @@ void SdPhotoAlbumDialog::createCaption(const awt::Size& aPageSize )
     CapSize.setHeight( aPageSize.Height/6 );
     CapPos.setX( 0 );
     CapPos.setY( aPageSize.Height - CapSize.Height() );
-    SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PageKind::Standard)-1, PageKind::Standard );
+    SdPage* pSlide = m_pDoc->GetSdPage( m_pDoc->GetSdPageCount(PageKind::Standard)-1, PageKind::Standard );
 
     // try to get existing PresObj
     const ::tools::Rectangle rRect(CapPos,CapSize);
@@ -826,7 +763,7 @@ void SdPhotoAlbumDialog::createCaption(const awt::Size& aPageSize )
     if(pSdrObj)
     {
         // set color, style and some transparency
-        SfxItemSet aSet(pDoc->GetItemPool() );
+        SfxItemSet aSet(m_pDoc->GetItemPool() );
 
         aSet.Put( XFillStyleItem(drawing::FillStyle_SOLID) );
         aSet.Put( XFillColorItem( "", COL_BLACK ) );
@@ -849,11 +786,11 @@ Reference< graphic::XGraphic> SdPhotoAlbumDialog::createXGraphicFromUrl(const OU
 
 void SdPhotoAlbumDialog::EnableDisableButtons()
 {
-    pRemoveBtn->Enable(pImagesLst->GetSelectedEntryCount() > 0);
-    pUpBtn->Enable(pImagesLst->GetSelectedEntryCount() > 0 &&
-                   pImagesLst->GetSelectedEntryPos() != 0);
-    pDownBtn->Enable(pImagesLst->GetSelectedEntryCount() > 0 &&
-                     pImagesLst->GetSelectedEntryPos() < pImagesLst->GetEntryCount()-1);
+    m_xRemoveBtn->set_sensitive(m_xImagesLst->count_selected_rows() > 0);
+    m_xUpBtn->set_sensitive(m_xImagesLst->count_selected_rows() > 0 &&
+                            m_xImagesLst->get_selected_index() != 0);
+    m_xDownBtn->set_sensitive(m_xImagesLst->count_selected_rows() > 0 &&
+                              m_xImagesLst->get_selected_index() < m_xImagesLst->n_children() - 1);
 }
 
 } // end of namespace sd

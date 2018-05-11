@@ -15,12 +15,9 @@
 #include <pres.hxx>
 #include <drawdoc.hxx>
 
-#include <vcl/lstbox.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/field.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <svx/graphctl.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdobj.hxx>
 
@@ -41,44 +38,40 @@ using namespace ::com::sun::star::presentation;
 namespace sd
 {
 
-class SdPhotoAlbumDialog : public ModalDialog
+class SdPhotoAlbumDialog : public weld::GenericDialogController
 {
 public:
-    SdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pActDoc);
+    SdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument* pActDoc);
     virtual ~SdPhotoAlbumDialog() override;
-    virtual void dispose() override;
 
 private:
-    VclPtr<CancelButton>   pCancelBtn;
-    VclPtr<PushButton>     pCreateBtn;
+    SdDrawDocument* m_pDoc;
+    GraphicFilter* m_pGraphicFilter;
 
-    VclPtr<PushButton>     pAddBtn;
-    VclPtr<PushButton>     pUpBtn;
-    VclPtr<PushButton>     pDownBtn;
-    VclPtr<PushButton>     pRemoveBtn;
+    std::unique_ptr<weld::Button> m_xCancelBtn;
+    std::unique_ptr<weld::Button> m_xCreateBtn;
+    std::unique_ptr<weld::Button> m_xAddBtn;
+    std::unique_ptr<weld::Button> m_xUpBtn;
+    std::unique_ptr<weld::Button> m_xDownBtn;
+    std::unique_ptr<weld::Button> m_xRemoveBtn;
+    std::unique_ptr<weld::TreeView> m_xImagesLst;
+    std::unique_ptr<SvxGraphCtrl> m_xImg;
+    std::unique_ptr<weld::ComboBoxText> m_xInsTypeCombo;
+    std::unique_ptr<weld::CheckButton> m_xASRCheck;
+    std::unique_ptr<weld::CheckButton> m_xASRCheckCrop;
+    std::unique_ptr<weld::CheckButton> m_xCapCheck;
+    std::unique_ptr<weld::CheckButton> m_xInsertAsLinkCheck;
 
-    VclPtr<ListBox>        pImagesLst;
-    VclPtr<FixedImage>     pImg;
+    DECL_LINK(CancelHdl, weld::Button&, void);
+    DECL_LINK(CreateHdl, weld::Button&, void);
 
-    VclPtr<ListBox>    pInsTypeCombo;
-    VclPtr<CheckBox>   pASRCheck;
-    VclPtr<CheckBox>   pASRCheckCrop;
-    VclPtr<CheckBox>   pCapCheck;
-    VclPtr<CheckBox>   pInsertAsLinkCheck;
+    DECL_LINK(FileHdl, weld::Button&, void);
+    DECL_LINK(UpHdl, weld::Button&, void);
+    DECL_LINK(DownHdl, weld::Button&, void);
+    DECL_LINK(RemoveHdl, weld::Button&, void);
 
-    SdDrawDocument* pDoc;
-    GraphicFilter* mpGraphicFilter;
-
-    DECL_LINK(CancelHdl, Button*, void);
-    DECL_LINK(CreateHdl, Button*, void);
-
-    DECL_LINK(FileHdl, Button*, void);
-    DECL_LINK(UpHdl, Button*, void);
-    DECL_LINK(DownHdl, Button*, void);
-    DECL_LINK(RemoveHdl, Button*, void);
-
-    DECL_LINK(SelectHdl, ListBox&, void);
-    DECL_LINK(TypeSelectHdl, ListBox&, void);
+    DECL_LINK(SelectHdl, weld::TreeView&, void);
+    DECL_LINK(TypeSelectHdl, weld::ComboBoxText&, void);
 
     Reference< drawing::XDrawPage > appendNewSlide(AutoLayout aLayout,
         const Reference< drawing::XDrawPages >& xDrawPages);
@@ -97,7 +90,6 @@ private:
         TWO_IMAGES,
         FOUR_IMAGES
     };
-
 };
 
 } // end of namespace sd

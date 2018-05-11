@@ -256,8 +256,9 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             if (pFact)
             {
+                vcl::Window* pWin = mrSlideSorter.GetContentWindow();
                 ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSdPhotoAlbumDialog(
-                    mrSlideSorter.GetContentWindow(),
+                    pWin ? pWin->GetFrameWeld() : nullptr,
                     pDocument));
                 pDlg->Execute();
             }
