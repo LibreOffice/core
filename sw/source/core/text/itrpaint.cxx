@@ -317,10 +317,17 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             SeekAndChgBefore( GetInfo() );
         else if ( pPor->IsQuoVadisPortion() )
         {
+            // A remark on QuoVadis/ErgoSum:
+            // We use the Font set for the Paragraph for these portions.
+            // Thus, we initialize:
             TextFrameIndex nOffset = GetInfo().GetIdx();
             SeekStartAndChg( GetInfo(), true );
             if( GetRedln() && m_pCurr->HasRedline() )
-                GetRedln()->Seek( *m_pFont, nOffset, 0 );
+            {
+                std::pair<SwTextNode const*, sal_Int32> const pos(
+                        GetTextFrame()->MapViewToModel(nOffset));
+                GetRedln()->Seek(*m_pFont, pos.first->GetIndex(), pos.second, 0);
+            }
         }
         else if( pPor->InTextGrp() || pPor->InFieldGrp() || pPor->InTabGrp() )
             SeekAndChg( GetInfo() );
