@@ -219,7 +219,7 @@ public class Worksheet {
     }
 
     /**
-      * Adds a cell to this worksheet. Current valdid celltypes are
+      * Adds a cell to this worksheet. Current valid celltypes are
      * <code>FloatNumber</code>, <code>LabelCell</code> or <code>Formula</code>
      *
       * @param  br
@@ -230,7 +230,7 @@ public class Worksheet {
 
     /**
       * Adds a number of ColInfo Records to the worksheet base on a list of
-     * clumnwidths passed in
+     * columnwidths passed in
      *
       * @param r    list of column widths
       */

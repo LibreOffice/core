@@ -2533,7 +2533,7 @@ String ODbaseTable::createTempFile()
 void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::copyData" );
-    sal_Int32 nPos = _nPos + 1; // +1 because we always have the bookmark clumn as well
+    sal_Int32 nPos = _nPos + 1; // +1 because we always have the bookmark column as well
     OValueRefRow aRow = new OValueRefVector(m_pColumns->getCount());
     OValueRefRow aInsertRow;
     if(_nPos)
