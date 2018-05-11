@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_fefece69",
+        "filename": "sw/inc/section.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-11T06:55:16Z",
+      "side": 1,
+      "message": "so now you have a SvtBroadcaster here and in BroadcasterMixin ? That seems odd?",
+      "revId": "6830152397a6e7e9129eaf774bb731a599f6bf22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
