@@ -2349,6 +2349,8 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
         return false;
     if ( mpTabCtrlData->maItemList.empty() )
         return false;
+    if (!m_pOpenMenu || m_pOpenMenu->isDisposed())
+        return false;
 
     long nMaxWidth = nWidth - HAMBURGER_DIM;
     long nShortcutsWidth = m_pShortcuts != nullptr ? m_pShortcuts->GetSizePixel().getWidth() + 1 : 0;
@@ -2445,7 +2447,8 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
     }
 
     // position the shortcutbox
-    m_pShortcuts->SetPosPixel(Point(0, 0));
+    if (m_pShortcuts)
+        m_pShortcuts->SetPosPixel(Point(0, 0));
 
     // position the menu
     m_pOpenMenu->SetPosPixel(Point(nWidth - HAMBURGER_DIM, 0));
