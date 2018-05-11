@@ -397,7 +397,7 @@ static bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const OUString &
     return bRet;
 }
 
-bool SwTextNode::IsSymbol( const sal_Int32 nBegin ) const
+bool SwTextNode::IsSymbolAt(const sal_Int32 nBegin) const
 {
     SwScriptInfo aScriptInfo;
     SwAttrIter aIter( *const_cast<SwTextNode*>(this), aScriptInfo );

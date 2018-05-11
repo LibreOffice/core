@@ -2197,7 +2197,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
                 {
                     sal_Int32 nBegin = nIndex;
                     sal_Int32 nLen = 1;
-                    if( pWrongList->InWrongWord(nBegin,nLen) && !pTextNode->IsSymbol(nBegin) )
+                    if (pWrongList->InWrongWord(nBegin, nLen) && !pTextNode->IsSymbolAt(nBegin))
                     {
                         rValue.Value <<= sal_uInt16(LINESTYLE_WAVE);
                     }
@@ -2218,7 +2218,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
                 {
                     sal_Int32 nBegin = nIndex;
                     sal_Int32 nLen = 1;
-                    if( pWrongList->InWrongWord(nBegin,nLen) && !pTextNode->IsSymbol(nBegin) )
+                    if (pWrongList->InWrongWord(nBegin, nLen) && !pTextNode->IsSymbolAt(nBegin))
                     {
                         rValue.Value <<= sal_Int32(0x00ff0000);
                         continue;
