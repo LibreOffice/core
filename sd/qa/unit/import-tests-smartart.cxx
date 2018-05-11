@@ -26,6 +26,19 @@ public:
     void testDir();
     void testMaxDepth();
     void testRotation();
+    void testPyramid();
+    void testChevron();
+    void testCycle();
+    void testvenndiagram();
+    void testmatrix();
+    void testHierarchy();
+    void testInvertedPyramid();
+    void testBasicProcess();
+    void testMultidirectional();
+    void testHorizontalBulletList();
+    void testBasicRadicals();
+    void testEquation();
+    void testSegmentedCycle();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -36,6 +49,19 @@ public:
     CPPUNIT_TEST(testDir);
     CPPUNIT_TEST(testMaxDepth);
     CPPUNIT_TEST(testRotation);
+    CPPUNIT_TEST(testPyramid);
+    CPPUNIT_TEST(testChevron);
+    CPPUNIT_TEST(testCycle);
+    CPPUNIT_TEST(testHierarchy);
+    CPPUNIT_TEST(testmatrix);
+    CPPUNIT_TEST(testvenndiagram);
+    CPPUNIT_TEST(testInvertedPyramid);
+    CPPUNIT_TEST(testBasicProcess);
+    CPPUNIT_TEST(testMultidirectional);
+    CPPUNIT_TEST(testHorizontalBulletList);
+    CPPUNIT_TEST(testBasicRadicals);
+    CPPUNIT_TEST(testEquation);
+    CPPUNIT_TEST(testSegmentedCycle);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -187,6 +213,71 @@ void SdImportTestSmartArt::testRotation()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12000), xShape2->getPropertyValue("RotateAngle").get<sal_Int32>());
 
     xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testBasicProcess()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testPyramid()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testChevron()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testCycle()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testHierarchy()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testmatrix()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testvenndiagram()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testInvertedPyramid()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testMultidirectional()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testHorizontalBulletList()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testEquation()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testBasicRadicals()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testSegmentedCycle()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTestSmartArt);
