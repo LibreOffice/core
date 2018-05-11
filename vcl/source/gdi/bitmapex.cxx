@@ -265,7 +265,7 @@ AlphaMask BitmapEx::GetAlpha() const
     }
     else
     {
-        return maMask;
+        return AlphaMask(maMask);
     }
 }
 
