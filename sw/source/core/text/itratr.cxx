@@ -146,7 +146,7 @@ bool SwAttrIter::IsSymbol(TextFrameIndex const nNewPos)
 bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFont )
 {
     if ( m_pRedline && m_pRedline->ExtOn() )
-        m_pRedline->LeaveExtend( *m_pFont, 0 );
+        m_pRedline->LeaveExtend(*m_pFont, m_pFirstTextNode->GetIndex(), 0);
 
     // reset font to its original state
     m_aAttrHandler.Reset();
@@ -162,7 +162,7 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
     {
         m_pRedline->Clear( m_pFont );
         if( !bParaFont )
-            m_nChgCnt = m_nChgCnt + m_pRedline->Seek(*m_pFont, 0, COMPLETE_STRING);
+            m_nChgCnt = m_nChgCnt + m_pRedline->Seek(*m_pFont, m_pFirstTextNode->GetIndex(), 0, COMPLETE_STRING);
         else
             m_pRedline->Reset();
     }
@@ -242,8 +242,14 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
 
 bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
 {
+    // note: nNewPos isn't necessarily a index returned from GetNextAttr
+    sw::MergedPara * pMerged(nullptr); // FIXME
+    std::pair<SwTextNode const*, sal_Int32> const newPos( pMerged
+        ? sw::MapViewToModel(*pMerged, nNewPos)
+        : std::make_pair(m_pTextNode, nNewPos));
+
     if ( m_pRedline && m_pRedline->ExtOn() )
-        m_pRedline->LeaveExtend( *m_pFont, nNewPos );
+        m_pRedline->LeaveExtend(*m_pFont, newPos.first->GetIndex(), newPos.second);
 
     if( m_pHints )
     {
@@ -278,7 +284,7 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
     m_pFont->SetActual( SwScriptInfo::WhichFont( nNewPos, nullptr, m_pScriptInfo ) );
 
     if( m_pRedline )
-        m_nChgCnt = m_nChgCnt + m_pRedline->Seek( *m_pFont, nNewPos, m_nPosition );
+        m_nChgCnt = m_nChgCnt + m_pRedline->Seek(*m_pFont, newPos.first->GetIndex(), newPos.second, m_nPosition);
     m_nPosition = nNewPos;
 
     if( m_nPropFont )
