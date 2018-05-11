@@ -204,7 +204,7 @@ void ScEditWindow::SetCharAttributes()
         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
             GetParent(),  &aSet, pDocSh));
         OSL_ENSURE(pDlg, "Dialog create fail!");
-        pDlg->SetText( ScGlobal::GetRscString( STR_TEXTATTRS ) );
+        pDlg->SetText( ScResId( STR_TEXTATTRS ) );
         if ( pDlg->Execute() == RET_OK )
         {
             aSet.ClearItem();

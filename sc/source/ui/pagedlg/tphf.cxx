@@ -29,6 +29,7 @@
 #include <sc.hrc>
 #include <scabstdlg.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <tabvwsh.hxx>
 #include <viewdata.hxx>
 #include <document.hxx>
@@ -206,7 +207,7 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl, void*, void)
 
         if ( nId == SID_ATTR_PAGE_HEADERSET )
         {
-            aText = ScGlobal::GetRscString( STR_PAGEHEADER );
+            aText = ScResId( STR_PAGEHEADER );
             if ( bRightPage )
                 pDlg->SetTabPage( ScRightHeaderEditPage::Create( pDlg->get_content_area(), &aDataSet ) );
             else
@@ -214,7 +215,7 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl, void*, void)
         }
         else
         {
-            aText = ScGlobal::GetRscString( STR_PAGEFOOTER );
+            aText = ScResId( STR_PAGEFOOTER );
             if ( bRightPage )
                 pDlg->SetTabPage( ScRightFooterEditPage::Create( pDlg->get_content_area(), &aDataSet ) );
             else
@@ -224,7 +225,7 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl, void*, void)
         SvxNumType eNumType = aDataSet.Get(ATTR_PAGE).GetNumType();
         static_cast<ScHFEditPage*>(pDlg->GetTabPage())->SetNumType(eNumType);
 
-        aText += " (" + ScGlobal::GetRscString( STR_PAGESTYLE );
+        aText += " (" + ScResId( STR_PAGESTYLE );
         aText += ": " + aStrPageStyle + ")";
 
         pDlg->SetText( aText );

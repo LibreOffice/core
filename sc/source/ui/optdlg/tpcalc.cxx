@@ -24,6 +24,7 @@
 
 #include <global.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <uiitems.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
@@ -235,7 +236,7 @@ DeactivateRC ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
     if ( nReturn == DeactivateRC::KeepPage )
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning,
-                    VclButtonsType::Ok, ScGlobal::GetRscString(STR_INVALID_EPS)));
+                    VclButtonsType::Ok, ScResId(STR_INVALID_EPS)));
         xBox->run();
 
         m_pEdEps->GrabFocus();

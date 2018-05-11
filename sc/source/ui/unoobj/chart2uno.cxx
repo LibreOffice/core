@@ -30,6 +30,7 @@
 #include <chartpos.hxx>
 #include <unonames.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <convuno.hxx>
 #include <rangeutl.hxx>
 #include <hints.hxx>
@@ -3060,7 +3061,7 @@ public:
             {
                 if ( meOrigin != chart2::data::LabelOrigin_LONG_SIDE)
                 {
-                    OUString aString = ScGlobal::GetRscString(STR_COLUMN);
+                    OUString aString = ScResId(STR_COLUMN);
                     aString += " ";
                     ScAddress aPos( nCol, 0, 0 );
                     OUString aColStr(aPos.Format(ScRefFlags::COL_VALID));
@@ -3078,7 +3079,7 @@ public:
             {
                 if (meOrigin != chart2::data::LabelOrigin_LONG_SIDE)
                 {
-                    OUString aString = ScGlobal::GetRscString(STR_ROW) +
+                    OUString aString = ScResId(STR_ROW) +
                                        " " + OUString::number( nRow+1 );
                     pArr[mnCount] = aString;
                 }

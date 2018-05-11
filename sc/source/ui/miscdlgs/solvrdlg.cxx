@@ -27,6 +27,7 @@
 #include <reffact.hxx>
 #include <document.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <sc.hrc>
 #include <solvrdlg.hxx>
 
@@ -52,10 +53,10 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPa
     , nCurTab(aCursorPos.Tab())
     , pEdActive(nullptr)
     , bDlgLostFocus(false)
-    , errMsgInvalidVar(ScGlobal::GetRscString(STR_INVALIDVAR))
-    , errMsgInvalidForm(ScGlobal::GetRscString(STR_INVALIDFORM))
-    , errMsgNoFormula(ScGlobal::GetRscString(STR_NOFORMULA))
-    , errMsgInvalidVal(ScGlobal::GetRscString(STR_INVALIDVAL))
+    , errMsgInvalidVar(ScResId(STR_INVALIDVAR))
+    , errMsgInvalidForm(ScResId(STR_INVALIDFORM))
+    , errMsgNoFormula(ScResId(STR_NOFORMULA))
+    , errMsgInvalidVal(ScResId(STR_INVALIDVAL))
 {
     get(m_pFtFormulaCell, "formulatext");
     get(m_pEdFormulaCell, "formulaedit");

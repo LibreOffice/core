@@ -37,6 +37,7 @@
 #include <solveroptions.hxx>
 #include <solverutil.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 
 #include <optsolver.hxx>
 
@@ -179,8 +180,8 @@ ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Windo
                           ScDocShell* pDocSh, const ScAddress& aCursorPos )
 
     : ScAnyRefDlg(pB, pCW, pParent, "SolverDialog", "modules/scalc/ui/solverdlg.ui")
-    , maInputError(ScGlobal::GetRscString(STR_INVALIDINPUT))
-    , maConditionError(ScGlobal::GetRscString(STR_INVALIDCONDITION))
+    , maInputError(ScResId(STR_INVALIDINPUT))
+    , maConditionError(ScResId(STR_INVALIDCONDITION))
 
     , mpDocShell(pDocSh)
     , mrDoc(pDocSh->GetDocument())

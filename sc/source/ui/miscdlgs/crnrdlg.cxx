@@ -20,6 +20,7 @@
 #include <reffact.hxx>
 #include <document.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <docsh.hxx>
 #include <crnrdlg.hxx>
 #include <vcl/weld.hxx>
@@ -384,7 +385,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     OUString aString;
     OUString strDelim(" --- ");
     aString = strDelim;
-    aString += ScGlobal::GetRscString( STR_COLUMN );
+    aString += ScResId( STR_COLUMN );
     aString += strDelim;
     sal_Int32 nPos = pLbRange->InsertEntry( aString );
     pLbRange->SetEntryData( nPos, reinterpret_cast<void*>(nEntryDataDelim) );
@@ -428,7 +429,7 @@ void ScColRowNameRangesDlg::UpdateNames()
         }
     }
     aString = strDelim;
-    aString += ScGlobal::GetRscString( STR_ROW );
+    aString += ScResId( STR_ROW );
     aString += strDelim;
     nPos = pLbRange->InsertEntry( aString );
     pLbRange->SetEntryData( nPos, reinterpret_cast<void*>(nEntryDataDelim) );
@@ -582,7 +583,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl, Button*, void)
         }
         else
         {
-            ERRORBOX(GetFrameWeld(), ScGlobal::GetRscString(STR_INVALIDTABNAME));
+            ERRORBOX(GetFrameWeld(), ScResId(STR_INVALIDTABNAME));
             if ( !bOk1 )
                 pEdAssign->GrabFocus();
             else
@@ -610,7 +611,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl, Button*, void)
         bFound = true;
     if ( bFound )
     {
-        OUString aStrDelMsg = ScGlobal::GetRscString( STR_QUERY_DELENTRY );
+        OUString aStrDelMsg = ScResId( STR_QUERY_DELENTRY );
         OUString aMsg       = aStrDelMsg.getToken( 0, '#' )
                             + aRangeStr
                             + aStrDelMsg.getToken( 1, '#' );

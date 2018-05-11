@@ -38,6 +38,7 @@
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <global.hxx>
 #include <target.hxx>
 #include <docpool.hxx>
@@ -100,7 +101,7 @@ ScUndoInsertCells::~ScUndoInsertCells()
 
 OUString ScUndoInsertCells::GetComment() const
 {
-    return ScGlobal::GetRscString( pPasteUndo ? STR_UNDO_PASTE : STR_UNDO_INSERTCELLS );
+    return ScResId( pPasteUndo ? STR_UNDO_PASTE : STR_UNDO_INSERTCELLS );
 }
 
 bool ScUndoInsertCells::Merge( SfxUndoAction* pNextAction )
@@ -366,7 +367,7 @@ ScUndoDeleteCells::~ScUndoDeleteCells()
 
 OUString ScUndoDeleteCells::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_DELETECELLS ); // "Delete"
+    return ScResId( STR_UNDO_DELETECELLS ); // "Delete"
 }
 
 void ScUndoDeleteCells::SetChangeTrack()
@@ -617,7 +618,7 @@ ScUndoDeleteMulti::~ScUndoDeleteMulti()
 
 OUString ScUndoDeleteMulti::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_DELETECELLS );  // like DeleteCells
+    return ScResId( STR_UNDO_DELETECELLS );  // like DeleteCells
 }
 
 void ScUndoDeleteMulti::DoChange() const
@@ -792,7 +793,7 @@ ScUndoCut::~ScUndoCut()
 
 OUString ScUndoCut::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_CUT ); // "cut"
+    return ScResId( STR_UNDO_CUT ); // "cut"
 }
 
 void ScUndoCut::SetChangeTrack()
@@ -909,7 +910,7 @@ ScUndoPaste::~ScUndoPaste()
 
 OUString ScUndoPaste::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_PASTE ); // "paste"
+    return ScResId( STR_UNDO_PASTE ); // "paste"
 }
 
 void ScUndoPaste::SetChangeTrack()
@@ -1186,8 +1187,8 @@ ScUndoDragDrop::~ScUndoDragDrop()
 OUString ScUndoDragDrop::GetComment() const
 {   // "Move" : "Copy"
     return bCut ?
-        ScGlobal::GetRscString( STR_UNDO_MOVE ) :
-        ScGlobal::GetRscString( STR_UNDO_COPY );
+        ScResId( STR_UNDO_MOVE ) :
+        ScResId( STR_UNDO_COPY );
 }
 
 void ScUndoDragDrop::SetChangeTrack()
@@ -1493,7 +1494,7 @@ ScUndoListNames::ScUndoListNames(ScDocShell* pNewDocShell, const ScRange& rRange
 
 OUString ScUndoListNames::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_LISTNAMES );
+    return ScResId( STR_UNDO_LISTNAMES );
 }
 
 void ScUndoListNames::DoChange( ScDocument* pSrcDoc ) const
@@ -1549,7 +1550,7 @@ ScUndoConditionalFormat::~ScUndoConditionalFormat()
 
 OUString ScUndoConditionalFormat::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_CONDFORMAT );
+    return ScResId( STR_UNDO_CONDFORMAT );
 }
 
 void ScUndoConditionalFormat::Undo()
@@ -1599,7 +1600,7 @@ ScUndoConditionalFormatList::~ScUndoConditionalFormatList()
 
 OUString ScUndoConditionalFormatList::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_CONDFORMAT_LIST );
+    return ScResId( STR_UNDO_CONDFORMAT_LIST );
 }
 
 void ScUndoConditionalFormatList::Undo()
@@ -1668,7 +1669,7 @@ ScUndoUseScenario::~ScUndoUseScenario()
 
 OUString ScUndoUseScenario::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_USESCENARIO );
+    return ScResId( STR_UNDO_USESCENARIO );
 }
 
 void ScUndoUseScenario::Undo()
@@ -1783,7 +1784,7 @@ ScUndoSelectionStyle::~ScUndoSelectionStyle()
 
 OUString ScUndoSelectionStyle::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_APPLYCELLSTYLE );
+    return ScResId( STR_UNDO_APPLYCELLSTYLE );
 }
 
 void ScUndoSelectionStyle::DoChange( const bool bUndo )
@@ -1882,7 +1883,7 @@ ScUndoEnterMatrix::~ScUndoEnterMatrix()
 
 OUString ScUndoEnterMatrix::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_ENTERMATRIX );
+    return ScResId( STR_UNDO_ENTERMATRIX );
 }
 
 void ScUndoEnterMatrix::SetChangeTrack()
@@ -1976,7 +1977,7 @@ ScUndoIndent::~ScUndoIndent()
 OUString ScUndoIndent::GetComment() const
 {
     const char* pId = bIsIncrement ? STR_UNDO_INC_INDENT : STR_UNDO_DEC_INDENT;
-    return ScGlobal::GetRscString(pId);
+    return ScResId(pId);
 }
 
 void ScUndoIndent::Undo()
@@ -2031,7 +2032,7 @@ ScUndoTransliterate::~ScUndoTransliterate()
 
 OUString ScUndoTransliterate::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_TRANSLITERATE );
+    return ScResId( STR_UNDO_TRANSLITERATE );
 }
 
 void ScUndoTransliterate::Undo()
@@ -2094,7 +2095,7 @@ ScUndoClearItems::~ScUndoClearItems()
 
 OUString ScUndoClearItems::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
+    return ScResId( STR_UNDO_DELETECONTENTS );
 }
 
 void ScUndoClearItems::Undo()
@@ -2148,7 +2149,7 @@ ScUndoRemoveBreaks::~ScUndoRemoveBreaks()
 
 OUString ScUndoRemoveBreaks::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_REMOVEBREAKS );
+    return ScResId( STR_UNDO_REMOVEBREAKS );
 }
 
 void ScUndoRemoveBreaks::Undo()
@@ -2217,7 +2218,7 @@ ScUndoRemoveMerge::~ScUndoRemoveMerge()
 
 OUString ScUndoRemoveMerge::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_REMERGE );  // "remove merge"
+    return ScResId( STR_UNDO_REMERGE );  // "remove merge"
 }
 
 ScDocument* ScUndoRemoveMerge::GetUndoDoc()
@@ -2367,7 +2368,7 @@ ScUndoBorder::ScUndoBorder(ScDocShell* pNewDocShell,
 
 OUString ScUndoBorder::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_SELATTRLINES );     //! own string?
+    return ScResId( STR_UNDO_SELATTRLINES );     //! own string?
 }
 
 void ScUndoBorder::Undo()

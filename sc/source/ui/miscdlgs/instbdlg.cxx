@@ -31,6 +31,7 @@
 #include <docsh.hxx>
 #include <viewdata.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <instbdlg.hxx>
 
 ScInsertTableDlg::ScInsertTableDlg( vcl::Window* pParent, ScViewData& rData, SCTAB nTabCount, bool bFromFile )
@@ -298,7 +299,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, DoEnterHdl, Button*, void)
     }
     else
     {
-        OUString aErrMsg ( ScGlobal::GetRscString( STR_INVALIDTABNAME ) );
+        OUString aErrMsg ( ScResId( STR_INVALIDTABNAME ) );
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning,
                     VclButtonsType::Ok, aErrMsg));
         xBox->run();
