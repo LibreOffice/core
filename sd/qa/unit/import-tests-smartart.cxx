@@ -26,6 +26,8 @@ public:
     void testDir();
     void testMaxDepth();
     void testRotation();
+    void testPyramid();
+    void testFlowchart();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -183,6 +185,16 @@ void SdImportTestSmartArt::testRotation()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12000), xShape2->getPropertyValue("RotateAngle").get<sal_Int32>());
 
     xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testFlowchart()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testPyramid()
+{
+    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTestSmartArt);
