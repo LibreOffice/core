@@ -133,3 +133,42 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/container/XNameReplace.hpp
     - com/sun/star/lang/XServiceInfo.hpp
+    sc/inc/fillinfo.hxx:
+    # base class has to be a complete type
+    - o3tl/typed_flags_set.hxx
+    sc/inc/filtuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertyAccess.hpp
+    - com/sun/star/document/XExporter.hpp
+    - com/sun/star/document/XImporter.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/ui/dialogs/XExecutableDialog.hpp
+    sc/inc/fmtuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/container/XNameAccess.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/sheet/FormulaToken.hpp
+    - com/sun/star/sheet/XSheetCondition2.hpp
+    - com/sun/star/sheet/XMultiFormulaTokens.hpp
+    - com/sun/star/sheet/XSheetConditionalEntries.hpp
+    - com/sun/star/sheet/XSheetConditionalEntry.hpp
+    sc/inc/fonthelper.hxx:
+    # base class has to be a complete type
+    - tools/color.hxx
+    sc/inc/formulagroup.hxx:
+    # base class has to be a complete type
+    - opencl/platforminfo.hxx
+    sc/inc/formulacell.hxx:
+    # base class has to be a complete type
+    - interpretercontext.hxx
+    sc/inc/formulalogger.hxx:
+    # base class has to be a complete type
+    - memory
+    # needed for conditionally enabled code path
+    - struct ScFormulaCellGroup
+    sc/inc/formulaparserpool.hxx:
+    # base class has to be a complete type
+    - com/sun/star/sheet/XFormulaParser.hpp
