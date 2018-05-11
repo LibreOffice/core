@@ -16,6 +16,24 @@
       "revId": "6830152397a6e7e9129eaf774bb731a599f6bf22",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_d9020409",
+        "filename": "sw/inc/section.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2018-05-11T09:18:50Z",
+      "side": 1,
+      "message": "whoops: rebase fumble, fixed",
+      "parentUuid": "9a30ddce_fefece69",
+      "revId": "6830152397a6e7e9129eaf774bb731a599f6bf22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
