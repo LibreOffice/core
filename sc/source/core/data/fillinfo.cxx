@@ -1088,7 +1088,7 @@ ScTableInfo::ScTableInfo(const SCSIZE capacity)
     , mnArrCapacity(capacity)
     , mbPageMode(false)
 {
-    memset(mpRowInfo.get(), 0, mnArrCapacity * sizeof(RowInfo));
+    memset(static_cast<void*>(mpRowInfo.get()), 0, mnArrCapacity * sizeof(RowInfo));
 }
 
 ScTableInfo::~ScTableInfo()
