@@ -123,3 +123,13 @@ blacklist:
     - com/sun/star/sheet/XMembersSupplier.hpp
     - com/sun/star/util/XCloneable.hpp
     - com/sun/star/util/XRefreshable.hpp
+    sc/inc/editdataarray.hxx:
+    # base class has to be a complete type
+    - editeng/editobj.hxx
+    sc/inc/editutil.hxx:
+    # struct definition has to be a complete type
+    - svx/pageitem.hxx
+    sc/inc/eventuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNameReplace.hpp
+    - com/sun/star/lang/XServiceInfo.hpp

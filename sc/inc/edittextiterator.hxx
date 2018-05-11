@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_INC_EDITTEXTITERATOR_HXX
 #define INCLUDED_SC_INC_EDITTEXTITERATOR_HXX
 
-#include "address.hxx"
+#include "types.hxx"
 #include "mtvelements.hxx"
 
 class ScTable;
