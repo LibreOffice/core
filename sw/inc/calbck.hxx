@@ -73,7 +73,7 @@ namespace sw
         const SwModify* m_pNew;
     };
     // Observer pattern using svl implementation
-    // use this instead of SwClient/SwModify whereever possible
+    // use this instead of SwClient/SwModify wherever possible
     // In writer layout, this might not always be possible,
     // but for listeners outside of it (e.g. unocore) this should be used.
     // The only "magic" signal this class issues is a ModifyChangedHint

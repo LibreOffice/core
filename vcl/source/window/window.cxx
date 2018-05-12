@@ -418,7 +418,7 @@ void Window::dispose()
         bHasFocussedChild = true;
 #if OSL_DEBUG_LEVEL > 0
         OUString aTempStr = "Window (" + GetText() +
-                ") with focussed child window destroyed ! THIS WILL LEAD TO CRASHES AND MUST BE FIXED !";
+                ") with focused child window destroyed ! THIS WILL LEAD TO CRASHES AND MUST BE FIXED !";
         SAL_WARN( "vcl", aTempStr );
         Application::Abort(aTempStr);   // abort in debug build version, this must be fixed!
 #endif

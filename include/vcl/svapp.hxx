@@ -834,7 +834,7 @@ public:
     */
     static WorkWindow*          GetAppWindow();
 
-    /** Get the currently focussed window.
+    /** Get the currently focused window.
 
      @returns Pointer to focused window.
 

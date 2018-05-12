@@ -945,7 +945,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
     bool bIsNotFormated = false;
     bool bSel = false;
 
-    //#98883# don't select redlines while the dialog is not focussed
+    //#98883# don't select redlines while the dialog is not focused
     //#107938# But not only ask pTable if it has the focus. To move
     //         the selection to the selected redline any child of pParentDlg
     //         may the focus.
