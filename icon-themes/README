@@ -11,10 +11,9 @@ layered one on top of another.
 In general the layering is done like this:
 
 <leaf theme>
-tango
-industrial
+breeze
 colibre
-
+tango
 
 How to add a new image set:
 ---------------------------
