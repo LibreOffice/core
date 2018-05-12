@@ -28,6 +28,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tools_test, \
     tools/qa/cppunit/test_minmax \
     tools/qa/cppunit/test_100mm2twips \
     tools/qa/cppunit/test_fround \
+    tools/qa/cppunit/test_pair \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,tools_test))

@@ -20,6 +20,7 @@
 #define INCLUDED_TOOLS_GEN_HXX
 
 #include <tools/toolsdllapi.h>
+#include <tools/Pair.hxx>
 
 #include <limits.h>
 #include <algorithm>
@@ -33,39 +34,6 @@ namespace rtl
 }
 
 enum TriState { TRISTATE_FALSE, TRISTATE_TRUE, TRISTATE_INDET };
-
-// Pair
-
-class SAL_WARN_UNUSED Pair
-{
-public:
-                        Pair() : nA(0), nB(0) {}
-                        Pair( long _nA, long _nB ) : nA(_nA), nB(_nB) {}
-
-    long                A() const { return nA; }
-    long                B() const { return nB; }
-
-    long&               A() { return nA; }
-    long&               B() { return nB; }
-
-    TOOLS_DLLPUBLIC rtl::OString        toString() const;
-    TOOLS_DLLPUBLIC friend SvStream&    ReadPair( SvStream& rIStream, Pair& rPair );
-    TOOLS_DLLPUBLIC friend SvStream&    WritePair( SvStream& rOStream, const Pair& rPair );
-
-protected:
-    long                nA;
-    long                nB;
-};
-
-namespace tools { namespace detail {
-
-// Used to implement operator == for subclasses of Pair:
-inline bool equal(Pair const & p1, Pair const & p2)
-{
-    return p1.A() == p2.A() && p1.B() == p2.B();
-}
-
-} }
 
 // Point
 
@@ -743,11 +711,6 @@ inline std::basic_ostream<charT, traits> & operator <<(
         return stream << rectangle.getWidth() << 'x' << rectangle.getHeight()
                       << "@(" << rectangle.getX() << ',' << rectangle.getY() << ")";
 }
-
-inline SvStream& ReadPair( SvStream& rIStream, Point& v ) { return ReadPair(rIStream, v.toPair()); }
-inline SvStream& WritePair( SvStream& rOStream, const Point& v ) { return WritePair(rOStream, v.toPair()); }
-inline SvStream& ReadPair( SvStream& rIStream, Size& v ) { return ReadPair(rIStream, v.toPair()); }
-inline SvStream& WritePair( SvStream& rOStream, const Size& v ) { return WritePair(rOStream, v.toPair()); }
 
 #endif
 
