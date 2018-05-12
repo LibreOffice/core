@@ -224,7 +224,7 @@ bool XFillBitmapItem::operator==(const SfxPoolItem& rItem) const
 bool XFillBitmapItem::isPattern() const
 {
     BitmapColor aBack, aFront;
-    return isHistorical8x8(GetGraphicObject().GetGraphic().GetBitmap(), aBack, aFront);
+    return isHistorical8x8(GetGraphicObject().GetGraphic().GetBitmapEx(), aBack, aFront);
 }
 
 sal_uInt16 XFillBitmapItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const

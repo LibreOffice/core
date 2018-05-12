@@ -665,7 +665,7 @@ void CanvasBitmapTest::runTest()
             }
         }
 
-        rtl::Reference<VclCanvasBitmap> xBmp( new VclCanvasBitmap(aBitmap) );
+        rtl::Reference<VclCanvasBitmap> xBmp( new VclCanvasBitmap(BitmapEx(aBitmap)) );
 
         checkCanvasBitmap( xBmp, "single bitmap", nDepth );
 

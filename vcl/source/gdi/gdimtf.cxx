@@ -1766,7 +1766,7 @@ BitmapEx GDIMetaFile::ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpPa
     else if( rBmpEx.IsTransparent() )
         return BitmapEx( aBmp, rBmpEx.GetMask() );
     else
-        return aBmp;
+        return BitmapEx( aBmp );
 }
 
 Color GDIMetaFile::ImplColReplaceFnc( const Color& rColor, const void* pColParam )
@@ -1930,7 +1930,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             {
                 MetaBmpScaleAction* pAct = static_cast<MetaBmpScaleAction*>(pAction);
                 aMtf.push_back( new MetaBmpScaleAction( pAct->GetPoint(), pAct->GetSize(),
-                                    pFncBmp( pAct->GetBitmap(), pBmpParam ).GetBitmap() ) );
+                                    pFncBmp( BitmapEx(pAct->GetBitmap()), pBmpParam ).GetBitmap() ) );
             }
             break;
 
@@ -1939,7 +1939,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
                 MetaBmpScalePartAction* pAct = static_cast<MetaBmpScalePartAction*>(pAction);
                 aMtf.push_back( new MetaBmpScalePartAction( pAct->GetDestPoint(), pAct->GetDestSize(),
                                                     pAct->GetSrcPoint(), pAct->GetSrcSize(),
-                                                    pFncBmp( pAct->GetBitmap(), pBmpParam ).GetBitmap() )
+                                                    pFncBmp( BitmapEx(pAct->GetBitmap()), pBmpParam ).GetBitmap() )
                                                 );
             }
             break;

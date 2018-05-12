@@ -124,7 +124,7 @@ public:
                             Bitmap();
                             Bitmap( const Bitmap& rBitmap );
                             Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalette* pPal = nullptr );
-                            Bitmap( SalBitmap* pSalBitmap );
+    explicit                Bitmap( SalBitmap* pSalBitmap );
     virtual                 ~Bitmap();
 
     Bitmap&                 operator=( const Bitmap& rBitmap );

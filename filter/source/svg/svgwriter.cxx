@@ -3066,7 +3066,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         {
                             bFound = true;
                             const MetaBmpScaleAction* pBmpScaleAction = static_cast<const MetaBmpScaleAction*>(pSubstAct);
-                            ImplWriteBmp( pBmpScaleAction->GetBitmap(),
+                            ImplWriteBmp( BitmapEx(pBmpScaleAction->GetBitmap()),
                                           pA->GetPoint(), pA->GetSize(),
                                           Point(), pBmpScaleAction->GetBitmap().GetSizePixel() );
                         }
@@ -3448,7 +3448,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     const MetaBmpAction* pA = static_cast<const MetaBmpAction*>(pAction);
 
-                    ImplWriteBmp( pA->GetBitmap(),
+                    ImplWriteBmp( BitmapEx(pA->GetBitmap()),
                                   pA->GetPoint(), mpVDev->PixelToLogic( pA->GetBitmap().GetSizePixel() ),
                                   Point(), pA->GetBitmap().GetSizePixel() );
                 }
@@ -3468,7 +3468,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     }
                     else
                     {
-                        ImplWriteBmp( pA->GetBitmap(),
+                        ImplWriteBmp( BitmapEx(pA->GetBitmap()),
                                       pA->GetPoint(), pA->GetSize(),
                                       Point(), pA->GetBitmap().GetSizePixel() );
                     }
@@ -3482,7 +3482,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     const MetaBmpScalePartAction* pA = static_cast<const MetaBmpScalePartAction*>(pAction);
 
-                    ImplWriteBmp( pA->GetBitmap(),
+                    ImplWriteBmp( BitmapEx(pA->GetBitmap()),
                                   pA->GetDestPoint(), pA->GetDestSize(),
                                   pA->GetSrcPoint(), pA->GetSrcSize() );
                 }

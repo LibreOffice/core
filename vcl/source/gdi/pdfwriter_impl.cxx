@@ -9780,7 +9780,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
             drawBitmap( rTargetArea.TopLeft(), rTargetArea.GetSize(), aBmpEx );
         }
         else
-            drawBitmap( rTargetArea.TopLeft(), rTargetArea.GetSize(), aBmp );
+            drawBitmap( rTargetArea.TopLeft(), rTargetArea.GetSize(), BitmapEx(aBmp) );
         return;
     }
 

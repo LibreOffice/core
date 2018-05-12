@@ -493,7 +493,7 @@ BitmapEx OutputDevice::GetBitmapEx( const Point& rSrcPt, const Size& rSize ) con
         return BitmapEx(GetBitmap( rSrcPt, rSize ), AlphaMask( aAlphaBitmap ) );
     }
     else
-        return GetBitmap( rSrcPt, rSize );
+        return BitmapEx(GetBitmap( rSrcPt, rSize ));
 }
 
 void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,

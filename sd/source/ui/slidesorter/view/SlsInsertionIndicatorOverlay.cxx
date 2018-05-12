@@ -183,7 +183,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
         aPageOffset.AdjustY(gnShadowBorder );
 
         // Paint the preview.
-        Bitmap aPreview (rRepresentatives[nIndex].maBitmap);
+        BitmapEx aPreview (rRepresentatives[nIndex].maBitmap);
         aPreview.Scale(rPreviewSize, BmpScaleFlag::BestQuality);
         rContent.DrawBitmapEx(aPageOffset, aPreview);
 
