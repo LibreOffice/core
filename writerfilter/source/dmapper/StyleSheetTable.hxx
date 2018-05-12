@@ -55,7 +55,6 @@ class StyleSheetEntry
 public:
     OUString sStyleIdentifierD;   // WW8 name
     bool            bIsDefaultStyle;
-    bool            bIsChapterNumbering;  //LO built-in Chapter Numbering "Outline" list style
     bool            bInvalidHeight;
     bool            bHasUPE; //universal property expansion
     StyleType       nStyleTypeCode; //sgc

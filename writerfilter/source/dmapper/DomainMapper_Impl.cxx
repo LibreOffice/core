@@ -1132,8 +1132,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
         sal_Int32 nListId = pEntry ? lcl_getListId(pEntry, GetStyleSheetTable()) : -1;
         if( pStyleSheetProperties && nListId >= 0 )
         {
-            if ( !pEntry->bIsChapterNumbering )
-                pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny( ListDef::GetStyleName( nListId ) ), false);
+            pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny( ListDef::GetStyleName( nListId ) ), false);
 
             // Indent properties from the paragraph style have priority
             // over the ones from the numbering styles in Word
