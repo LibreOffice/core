@@ -75,6 +75,7 @@
 #include <scitems.hxx>
 #include <attrib.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <xlconst.hxx>
 #include <documentimport.hxx>
 #include <numformat.hxx>
@@ -2028,7 +2029,7 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
             {
                 ScStyleSheet* pStyleSheet = static_cast<ScStyleSheet*>(
                     pStylePool->Find(
-                        ScGlobal::GetRscString(STR_STYLENAME_STANDARD), SfxStyleFamily::Para));
+                        ScResId(STR_STYLENAME_STANDARD), SfxStyleFamily::Para));
 
                 if (pStyleSheet)
                     rPat.SetStyleSheet( pStyleSheet, false );
@@ -2462,7 +2463,7 @@ void CellStyle::createCellStyle()
     if( !mbCreated )
     {
         if ( bDefStyle && maFinalName.isEmpty() )
-            maFinalName = ScGlobal::GetRscString( STR_STYLENAME_STANDARD );
+            maFinalName = ScResId( STR_STYLENAME_STANDARD );
         mbCreated = maFinalName.isEmpty();
     }
 
@@ -2476,7 +2477,7 @@ void CellStyle::createCellStyle()
         {
             // use existing "Default" style sheet
             mpStyleSheet = static_cast< ScStyleSheet* >( rDoc.GetStyleSheetPool()->Find(
-                ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SfxStyleFamily::Para ) );
+                ScResId( STR_STYLENAME_STANDARD ), SfxStyleFamily::Para ) );
             OSL_ENSURE( mpStyleSheet, "CellStyle::createStyle - Default style not found" );
             bCreatePattern = true;
         }

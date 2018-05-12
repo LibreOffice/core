@@ -67,6 +67,7 @@
 #include <documentimport.hxx>
 #include <drwlayer.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 
 #include <formulabuffer.hxx>
 #include <editutil.hxx>
@@ -590,7 +591,7 @@ void WorkbookGlobals::initialize()
         // disable automatic update of linked sheets and DDE links
         mpDoc->EnableExecuteLink(false);
 
-        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), ScGlobal::GetRscString(STR_LOAD_DOC) ) );
+        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), ScResId(STR_LOAD_DOC) ) );
         mxFmlaParser.reset( createFormulaParser() );
 
         //prevent unnecessary broadcasts and "half way listeners" as
@@ -599,7 +600,7 @@ void WorkbookGlobals::initialize()
     }
     else if( mrBaseFilter.isExportFilter() )
     {
-        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), ScGlobal::GetRscString(STR_SAVE_DOC) ) );
+        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), ScResId(STR_SAVE_DOC) ) );
     }
 }
 

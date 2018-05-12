@@ -47,6 +47,7 @@
 #include <patattr.hxx>
 #include <attrib.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <global.hxx>
 #include <markdata.hxx>
 #include <olinetab.hxx>
@@ -1249,7 +1250,7 @@ void ImportExcel::PostDocLoad()
     /*  Set automatic page numbering in Default page style (default is "page number = 1").
         Otherwise hidden tables (i.e. for scenarios) which have Default page style will
         break automatic page numbering. */
-    if( SfxStyleSheetBase* pStyleSheet = GetStyleSheetPool().Find( ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SfxStyleFamily::Page ) )
+    if( SfxStyleSheetBase* pStyleSheet = GetStyleSheetPool().Find( ScResId( STR_STYLENAME_STANDARD ), SfxStyleFamily::Page ) )
         pStyleSheet->GetItemSet().Put( SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, 0 ) );
 
     // outlines for all sheets, sets hidden rows and columns (#i11776# after filtered ranges)

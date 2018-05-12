@@ -54,6 +54,7 @@
 #include <docsh.hxx>
 #include <calcconfig.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
@@ -548,7 +549,7 @@ void WorkbookFragment::recalcFormulaCells()
             vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
 
             MessageWithCheck aQueryBox(pWin ? pWin->GetFrameWeld() : nullptr, "modules/scalc/ui/recalcquerydialog.ui", "RecalcQueryDialog");
-            aQueryBox.set_primary_text(ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
+            aQueryBox.set_primary_text(ScResId(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
             aQueryBox.set_default_response(RET_YES);
 
             bHardRecalc = aQueryBox.run() == RET_YES;
