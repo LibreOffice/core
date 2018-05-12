@@ -1512,7 +1512,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                     {
                         bFound = true;
                         const MetaBmpScaleAction* pBmpScaleAction = static_cast<const MetaBmpScaleAction*>(pSubstAct);
-                        Impl_writeImage( pBmpScaleAction->GetBitmap(),
+                        Impl_writeImage( BitmapEx(pBmpScaleAction->GetBitmap()),
                                       pA->GetPoint(), pA->GetSize(),
                                       Point(), pBmpScaleAction->GetBitmap().GetSizePixel(), clipRect, 1 == bMap  );
                     }
@@ -1613,7 +1613,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             {
                 const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
 
-                Impl_writeImage( pA->GetBitmap(),
+                Impl_writeImage( BitmapEx(pA->GetBitmap()),
                           pA->GetPoint(), pA->GetSize(),
                           Point(), pA->GetBitmap().GetSizePixel(), clipRect, 1 == bMap );
             }
@@ -1622,7 +1622,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case MetaActionType::BMP:
             {
                 const MetaBmpAction* pA = static_cast<const MetaBmpAction*>(pAction);
-                Impl_writeImage( pA->GetBitmap(),
+                Impl_writeImage( BitmapEx(pA->GetBitmap()),
                           pA->GetPoint(), mpVDev->PixelToLogic( pA->GetBitmap().GetSizePixel()),
                           Point(), pA->GetBitmap().GetSizePixel(), clipRect, 1 ==bMap );
             }
@@ -1631,7 +1631,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case MetaActionType::BMPSCALEPART:
             {
                 const MetaBmpScalePartAction* pA = static_cast<const MetaBmpScalePartAction*>(pAction);
-                Impl_writeImage( pA->GetBitmap(),
+                Impl_writeImage( BitmapEx(pA->GetBitmap()),
                           pA->GetDestPoint(), pA->GetDestSize(),
                           pA->GetSrcPoint(), pA->GetSrcSize(), clipRect, 1 == bMap );
             }

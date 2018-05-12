@@ -176,7 +176,7 @@ BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHe
     if (nBitCount == 32)
         return BitmapEx(aBmp, *pAlphaMask);
     else
-        return aBmp;
+        return BitmapEx(aBmp);
 }
 
 /** Copy block of image data into the bitmap.
@@ -227,7 +227,7 @@ BitmapEx CreateFromData( RawBitmap&& rawBitmap )
     if (nBitCount == 32)
         return BitmapEx(aBmp, *pAlphaMask);
     else
-        return aBmp;
+        return BitmapEx(aBmp);
 }
 
 #if ENABLE_CAIRO_CANVAS

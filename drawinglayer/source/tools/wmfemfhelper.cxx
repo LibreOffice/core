@@ -2001,7 +2001,7 @@ namespace wmfemfhelper
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
-                    const Bitmap aBitmapEx(pA->GetBitmap());
+                    const BitmapEx aBitmapEx(pA->GetBitmap());
 
                     createBitmapExPrimitive(aBitmapEx, pA->GetPoint(), pA->GetSize(), rTargetHolders.Current(), rPropertyHolders.Current());
 

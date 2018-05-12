@@ -912,7 +912,7 @@ namespace vclcanvas
                        beFast ? BmpScaleFlag::Default : BmpScaleFlag::BestQuality );
 
         return uno::Reference< rendering::XBitmap >(
-            new CanvasBitmap( aBitmap, *mpDevice, mpOutDevProvider ) );
+            new CanvasBitmap( BitmapEx(aBitmap), *mpDevice, mpOutDevProvider ) );
     }
 
     uno::Sequence< sal_Int8 > CanvasHelper::getData( rendering::IntegerBitmapLayout&     rLayout,

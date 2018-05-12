@@ -908,7 +908,7 @@ BitmapEx SvxBmpMask::ImpReplaceTransparency( const BitmapEx& rBmpEx, const Color
     {
         Bitmap aBmp( rBmpEx.GetBitmap() );
         aBmp.Replace( rBmpEx.GetMask(), rColor );
-        return aBmp;
+        return BitmapEx(aBmp);
     }
     else
         return rBmpEx;

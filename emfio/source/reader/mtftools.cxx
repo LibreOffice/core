@@ -1756,7 +1756,7 @@ namespace emfio
                                 else
                                 {
                                     SetRasterOp( WMFRasterOp::XorPen );
-                                    ImplDrawBitmap( aPos, aSize, aBitmap );
+                                    ImplDrawBitmap( aPos, aSize, BitmapEx(aBitmap) );
                                     SetRasterOp( WMFRasterOp::CopyPen );
                                     Bitmap  aMask( aBitmap );
                                     aMask.Invert();
@@ -1800,7 +1800,7 @@ namespace emfio
                                 BitmapEx aBmpEx( aBitmap, aMask );
                                 ImplDrawBitmap( aPos, aSize, aBmpEx );
                                 SetRasterOp( WMFRasterOp::XorPen );
-                                ImplDrawBitmap( aPos, aSize, aBitmap );
+                                ImplDrawBitmap( aPos, aSize, BitmapEx(aBitmap) );
                                 if ( nOperation == 0xb )
                                 {
                                     SetRasterOp( WMFRasterOp::Not );
@@ -1817,7 +1817,7 @@ namespace emfio
                                 BitmapEx aBmpEx( aBitmap, aMask );
                                 ImplDrawBitmap( aPos, aSize, aBmpEx );
                                 SetRasterOp( WMFRasterOp::XorPen );
-                                ImplDrawBitmap( aPos, aSize, aBitmap );
+                                ImplDrawBitmap( aPos, aSize, BitmapEx(aBitmap) );
                                 if ( nOperation == 0xd )
                                 {
                                     SetRasterOp( WMFRasterOp::Not );
@@ -1829,7 +1829,7 @@ namespace emfio
                             case 0x9 :
                             {
                                 SetRasterOp( WMFRasterOp::XorPen );
-                                ImplDrawBitmap( aPos, aSize, aBitmap );
+                                ImplDrawBitmap( aPos, aSize, BitmapEx(aBitmap) );
                                 if ( nOperation == 0x9 )
                                 {
                                     SetRasterOp( WMFRasterOp::Not );
@@ -1852,7 +1852,7 @@ namespace emfio
                             {
                                 if ( nRasterOperation == 0x33 )
                                     aBitmap.Invert();
-                                ImplDrawBitmap( aPos, aSize, aBitmap );
+                                ImplDrawBitmap( aPos, aSize, BitmapEx(aBitmap) );
                             }
                             break;
 

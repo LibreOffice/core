@@ -386,8 +386,8 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, Button*, void)
                     RepaintToBuffer();
 
                     // extract Bitmap
-                    const Bitmap aTargetBitmap(
-                        mpVirtualBufferDevice->GetBitmap(
+                    const BitmapEx aTargetBitmap(
+                        mpVirtualBufferDevice->GetBitmapEx(
                         Point(0, 0),
                         mpVirtualBufferDevice->GetOutputSizePixel()));
 

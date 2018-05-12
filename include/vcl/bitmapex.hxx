@@ -45,15 +45,16 @@ class SAL_WARN_UNUSED VCL_DLLPUBLIC BitmapEx
 public:
 
                         BitmapEx();
-                        BitmapEx( const OUString& rIconName );
+    explicit            BitmapEx( const OUString& rIconName );
                         BitmapEx( const BitmapEx& rBitmapEx );
                         BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize );
-                        BitmapEx( const Bitmap& rBmp );
+    explicit            BitmapEx( const Bitmap& rBmp );
                         BitmapEx( const Bitmap& rBmp, const Bitmap& rMask );
                         BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask );
                         BitmapEx( const Bitmap& rBmp, const Color& rTransparentColor );
 
     BitmapEx&           operator=( const BitmapEx& rBitmapEx );
+    BitmapEx&           operator=( const Bitmap& rBitmap ) { return operator=(BitmapEx(rBitmap)); }
     bool                operator==( const BitmapEx& rBitmapEx ) const;
     bool                operator!=( const BitmapEx& rBitmapEx ) const { return !(*this==rBitmapEx); }
     bool                operator!() const { return !maBitmap; }

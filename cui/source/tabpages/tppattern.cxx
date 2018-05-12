@@ -297,7 +297,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
     {
         BitmapColor aBack;
         BitmapColor aFront;
-        bool bIs8x8(isHistorical8x8(pGraphicObject->GetGraphic().GetBitmap(), aBack, aFront));
+        bool bIs8x8(isHistorical8x8(pGraphicObject->GetGraphic().GetBitmapEx(), aBack, aFront));
 
         m_pLbColor->SetNoSelection();
         m_pLbBackgroundColor->SetNoSelection();

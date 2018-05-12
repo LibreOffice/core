@@ -2108,7 +2108,7 @@ namespace cppcanvas
 
                         std::shared_ptr<Action> pBmpAction(
                                 internal::BitmapActionFactory::createBitmapAction(
-                                    pAct->GetBitmap(),
+                                    BitmapEx(pAct->GetBitmap()),
                                     rStates.getState().mapModeTransform *
                                     vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                     rCanvas,
@@ -2131,7 +2131,7 @@ namespace cppcanvas
 
                         std::shared_ptr<Action> pBmpAction(
                                 internal::BitmapActionFactory::createBitmapAction(
-                                    pAct->GetBitmap(),
+                                    BitmapEx(pAct->GetBitmap()),
                                     rStates.getState().mapModeTransform *
                                     vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                     rStates.getState().mapModeTransform *
@@ -2163,7 +2163,7 @@ namespace cppcanvas
 
                         std::shared_ptr<Action> pBmpAction(
                                 internal::BitmapActionFactory::createBitmapAction(
-                                    aBmp,
+                                    BitmapEx(aBmp),
                                     rStates.getState().mapModeTransform *
                                     vcl::unotools::b2DPointFromPoint( pAct->GetDestPoint() ),
                                     rStates.getState().mapModeTransform *
