@@ -11,6 +11,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <tools/date.hxx>
+#include <tools/datetimeutils.hxx>
 
 namespace tools
 {
@@ -27,6 +28,7 @@ public:
     void testGetDayOfWeek();
     void testGetDaysInMonth();
     void testIsBetween();
+    void testDateToString();
 
     CPPUNIT_TEST_SUITE(DateTest);
     CPPUNIT_TEST(testDate);
@@ -38,6 +40,7 @@ public:
     CPPUNIT_TEST(testGetDayOfWeek);
     CPPUNIT_TEST(testGetDaysInMonth);
     CPPUNIT_TEST(testIsBetween);
+    CPPUNIT_TEST(testDateToString);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -550,6 +553,16 @@ void DateTest::testIsBetween()
 {
     Date aDate(6, 4, 2018);
     CPPUNIT_ASSERT(aDate.IsBetween(Date(1, 1, 2018), Date(1, 12, 2018)));
+}
+
+void DateTest::testDateToString()
+{
+    Date aDate(12, 5, 2018);
+    OString aExpectedString("2018-05-12T00:00:00Z");
+    CPPUNIT_ASSERT_EQUAL(aExpectedString, DateToOString(aDate));
+
+    aExpectedString = "12/05/2018";
+    CPPUNIT_ASSERT_EQUAL(aExpectedString, DateToDDMMYYYYOString(aDate));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DateTest);
