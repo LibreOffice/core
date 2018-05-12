@@ -55,9 +55,23 @@ GlobalGlyphCache * GlobalGlyphCache::get() {
     return data->m_pGlobalGlyphCache.get();
 }
 
-bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, int nGlyphIndex, SalGraphics& rGraphics)
+bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, SalGraphics& rGraphics)
 {
     OpenGLGlyphDrawElement aElement;
+
+    ScopedHDC aHDC(CreateCompatibleDC(hDC));
+
+    if (!aHDC)
+    {
+        SAL_WARN("vcl.gdi", "CreateCompatibleDC failed: " << WindowsErrorString(GetLastError()));
+        return false;
+    }
+    HFONT hOrigFont = static_cast<HFONT>(SelectObject(aHDC.get(), hFont));
+    if (hOrigFont == nullptr)
+    {
+        SAL_WARN("vcl.gdi", "SelectObject failed: " << WindowsErrorString(GetLastError()));
+        return false;
+    }
 
     // For now we assume DWrite is present and we won't bother with fallback paths.
     D2DWriteTextOutRenderer * pTxt = dynamic_cast<D2DWriteTextOutRenderer *>(&TextOutRenderer::get(true));
@@ -66,7 +80,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, int nGlyphIndex, SalGraphics& r
 
     pTxt->changeTextAntiAliasMode(D2DTextAntiAliasMode::AntiAliased);
 
-    if (!pTxt->BindFont(hDC))
+    if (!pTxt->BindFont(aHDC.get()))
     {
         SAL_WARN("vcl.gdi", "Binding of font failed. The font might not be supported by DirectWrite.");
         return false;
@@ -179,6 +193,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, int nGlyphIndex, SalGraphics& r
         break;
     default:
         SAL_WARN("vcl.gdi", "DrawGlyphRun-EndDraw failed: " << WindowsErrorString(GetLastError()));
+        SelectFont(aDC.getCompatibleHDC(), hOrigFont);
         return false;
     }
 
@@ -190,6 +205,8 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, int nGlyphIndex, SalGraphics& r
         return false;
 
     maGlyphCache.PutDrawElementInCache(aElement, nGlyphIndex);
+
+    SelectFont(aDC.getCompatibleHDC(), hOrigFont);
 
     return true;
 }
@@ -381,6 +398,11 @@ void WinFontInstance::SetHDC(const HDC hDC)
     m_hFont = static_cast<HFONT>(GetCurrentObject(m_hDC, OBJ_FONT));
 }
 
+void WinFontInstance::InitFont()
+{
+    SelectFont(m_hDC, m_hFont);
+}
+
 bool WinSalGraphics::CacheGlyphs(const GenericSalLayout& rLayout)
 {
     static bool bDoGlyphCaching = (std::getenv("SAL_DISABLE_GLYPH_CACHING") == nullptr);
@@ -389,6 +411,7 @@ bool WinSalGraphics::CacheGlyphs(const GenericSalLayout& rLayout)
 
     HDC hDC = getHDC();
     WinFontInstance& rFont = *static_cast<WinFontInstance*>(&rLayout.GetFont());
+    HFONT hFONT = rFont.GetHFONT();
 
     int nStart = 0;
     Point aPos(0, 0);
@@ -397,7 +420,7 @@ bool WinSalGraphics::CacheGlyphs(const GenericSalLayout& rLayout)
     {
         if (!rFont.GetGlyphCache().IsGlyphCached(pGlyph->maGlyphId))
         {
-            if (!rFont.CacheGlyphToAtlas(hDC, pGlyph->maGlyphId, *this))
+            if (!rFont.CacheGlyphToAtlas(hDC, hFONT, pGlyph->maGlyphId, *this))
                 return false;
         }
     }
@@ -453,9 +476,6 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout, HDC hDC, bo
 void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
     HDC hDC = getHDC();
-
-    HFONT hFont = static_cast<const WinFontInstance*>(&rLayout.GetFont())->GetHFONT();
-    HGDIOBJ hOrigFont = SelectObject(hDC, hFont);
 
     // Our DirectWrite renderer is incomplete, skip it for non-horizontal or
     // stretched text.
@@ -522,7 +542,7 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 
             // setup the hidden DC with black color and white background, we will
             // use the result of the text drawing later as a mask only
-            HFONT hOFont = ::SelectFont(aDC.getCompatibleHDC(), hFont);
+            HFONT hOrigFont = ::SelectFont(aDC.getCompatibleHDC(), static_cast<HFONT>(::GetCurrentObject(hDC, OBJ_FONT)));
 
             ::SetTextColor(aDC.getCompatibleHDC(), RGB(0, 0, 0));
             ::SetBkColor(aDC.getCompatibleHDC(), RGB(255, 255, 255));
@@ -540,13 +560,11 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
             if (xTexture)
                 pImpl->DrawMask(*xTexture, salColor, aDC.getTwoRect());
 
-            ::SelectFont(aDC.getCompatibleHDC(), hOFont);
+            ::SelectFont(aDC.getCompatibleHDC(), hOrigFont);
 
             pImpl->PostDraw();
         }
     }
-
-    SelectObject(hDC, hOrigFont);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -72,6 +72,8 @@ public: // TODO: make data members private
     void GetScale(double* nXScale, double* nYScale);
     static inline void DecodeOpenTypeTag(const uint32_t nTableTag, char* pTagName);
 
+    virtual void InitFont() {}
+
 protected:
     explicit LogicalFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
 
