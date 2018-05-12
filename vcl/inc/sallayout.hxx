@@ -196,8 +196,6 @@ protected:
     // used by layout engines
                     SalLayout();
 
-    static int      CalcAsianKerning( sal_UCS4, bool bLeft, bool bVertical );
-
 private:
                     SalLayout( const SalLayout& ) = delete;
                     SalLayout& operator=( const SalLayout& ) = delete;
