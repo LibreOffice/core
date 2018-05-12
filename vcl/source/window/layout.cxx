@@ -2355,7 +2355,6 @@ MessageDialog::MessageDialog(vcl::Window* pParent,
             break;
         case VclMessageType::Question:
             SetText(GetStandardQueryBoxText());
-            m_pImage->SetImage(GetStandardQueryBoxImage());
             break;
         case VclMessageType::Error:
             SetText(GetStandardErrorBoxText());
