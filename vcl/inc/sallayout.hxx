@@ -211,25 +211,25 @@ protected:
     Point           maDrawBase;
 };
 
-class VCL_PLUGIN_PUBLIC MultiSalLayout : public SalLayout
+class VCL_PLUGIN_PUBLIC MultiSalLayout final : public SalLayout
 {
 public:
-    virtual void    DrawText( SalGraphics& ) const override;
-    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
-    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const override;
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const override;
-    virtual bool    GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int&,
+    void            DrawText(SalGraphics&) const override;
+    sal_Int32       GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
+    DeviceCoordinate FillDXArray(DeviceCoordinate* pDXArray) const override;
+    void            GetCaretPositions(int nArraySize, long* pCaretXArray) const override;
+    bool            GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int&,
                                  const PhysicalFontFace** pFallbackFont = nullptr) const override;
-    virtual bool    GetOutline( SalGraphics&, basegfx::B2DPolyPolygonVector& ) const override;
-    virtual bool    IsKashidaPosValid(int nCharPos) const override;
+    bool            GetOutline(SalGraphics&, basegfx::B2DPolyPolygonVector&) const override;
+    bool            IsKashidaPosValid(int nCharPos) const override;
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
     explicit        MultiSalLayout( std::unique_ptr<SalLayout> pBaseLayout );
     void            AddFallback( std::unique_ptr<SalLayout> pFallbackLayout,
                                  ImplLayoutRuns const &, const PhysicalFontFace* pFallbackFont );
-    virtual bool    LayoutText( ImplLayoutArgs& ) override;
-    virtual void    AdjustLayout( ImplLayoutArgs& ) override;
-    virtual void    InitFont() const override;
+    bool            LayoutText(ImplLayoutArgs&) override;
+    void            AdjustLayout(ImplLayoutArgs&) override;
+    void            InitFont() const override;
 
     void SetIncomplete(bool bIncomplete);
 
@@ -238,9 +238,9 @@ public:
 
 private:
     // dummy implementations
-    virtual void    MoveGlyph( int, long ) override {}
-    virtual void    DropGlyph( int ) override {}
-    virtual void    Simplify( bool ) override {}
+    void            MoveGlyph(int, long) override {}
+    void            DropGlyph(int) override {}
+    void            Simplify(bool) override {}
 
                     MultiSalLayout( const MultiSalLayout& ) = delete;
                     MultiSalLayout& operator=( const MultiSalLayout& ) = delete;
@@ -319,16 +319,16 @@ public:
     bool            IsKashidaPosValid(int nCharPos) const final override;
 
     // used by upper layers
-    virtual DeviceCoordinate GetTextWidth() const override;
-    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const override;
-    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const override;
+    DeviceCoordinate GetTextWidth() const final override;
+    DeviceCoordinate FillDXArray(DeviceCoordinate* pDXArray) const final override;
+    sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const final override;
+    void            GetCaretPositions(int nArraySize, long* pCaretXArray) const final override;
 
     // used by display layers
     LogicalFontInstance& GetFont() const { return *mpFont; }
 
-    virtual bool    GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int&,
-                                 const PhysicalFontFace** pFallbackFont = nullptr) const override;
+    bool            GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int&,
+                                 const PhysicalFontFace** pFallbackFont = nullptr) const final override;
 
 protected:
     // for glyph+font+script fallback
