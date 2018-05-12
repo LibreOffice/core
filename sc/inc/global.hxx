@@ -566,7 +566,6 @@ public:
     SC_DLLPUBLIC static ScUnoAddInCollection* GetAddInCollection();
     SC_DLLPUBLIC static ScUserList*         GetUserList();
     static void                 SetUserList( const ScUserList* pNewList );
-    SC_DLLPUBLIC static const OUString&       GetRscString(const char* pResId);
     /// Open the specified URL.
     static void                 OpenURL(const OUString& rURL, const OUString& rTarget);
     SC_DLLPUBLIC static OUString            GetAbsDocName( const OUString& rFileName,
