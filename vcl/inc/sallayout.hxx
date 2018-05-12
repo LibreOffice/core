@@ -314,6 +314,7 @@ public:
     void            AdjustLayout(ImplLayoutArgs&) final override;
     bool            LayoutText(ImplLayoutArgs&) final override;
     void            DrawText(SalGraphics&) const final override;
+    void            InitFont() const override;
     std::shared_ptr<vcl::TextLayoutCache> CreateTextLayoutCache(OUString const&) const final override;
 
     bool            IsKashidaPosValid(int nCharPos) const final override;

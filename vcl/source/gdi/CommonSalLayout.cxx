@@ -91,6 +91,11 @@ void GenericSalLayout::ParseFeatures(const OUString& aName)
     while (nIndex >= 0);
 }
 
+void GenericSalLayout::InitFont() const
+{
+    mpFont->InitFont();
+}
+
 struct SubRun
 {
     int32_t mnMin;

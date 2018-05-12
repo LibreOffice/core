@@ -157,6 +157,8 @@ public:
     void SetHDC(const HDC);
     HFONT GetHFONT() const { return m_hFont; }
 
+    void InitFont() override;
+
 private:
     explicit WinFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
 

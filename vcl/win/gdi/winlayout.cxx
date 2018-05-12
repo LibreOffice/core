@@ -380,6 +380,11 @@ void WinFontInstance::SetHDC(const HDC hDC)
     m_hDC = hDC;
 }
 
+void WinFontInstance::InitFont()
+{
+    SelectFont(m_hDC, m_hFont);
+}
+
 bool WinSalGraphics::CacheGlyphs(const GenericSalLayout& rLayout)
 {
     static bool bDoGlyphCaching = (std::getenv("SAL_DISABLE_GLYPH_CACHING") == nullptr);
