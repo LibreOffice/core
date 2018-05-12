@@ -86,7 +86,6 @@ ScAutoFormat*   ScGlobal::pAutoFormat = nullptr;
 LegacyFuncCollection* ScGlobal::pLegacyFuncCollection = nullptr;
 ScUnoAddInCollection* ScGlobal::pAddInCollection = nullptr;
 ScUserList*     ScGlobal::pUserList = nullptr;
-std::map<const char*, OUString>* ScGlobal::pRscString = nullptr;
 LanguageType    ScGlobal::eLnge = LANGUAGE_SYSTEM;
 css::lang::Locale*     ScGlobal::pLocale = nullptr;
 SvtSysLocale*   ScGlobal::pSysLocale = nullptr;
@@ -310,13 +309,6 @@ void ScGlobal::SetUserList( const ScUserList* pNewList )
     }
 }
 
-const OUString& ScGlobal::GetRscString(const char* pResId)
-{
-    if (pRscString->find(pResId) == pRscString->end())
-        (*pRscString)[pResId] = ScResId(pResId);
-    return (*pRscString)[pResId];
-}
-
 OUString ScGlobal::GetErrorString(FormulaError nErr)
 {
     const char* pErrNumber;
@@ -462,8 +454,6 @@ void ScGlobal::Init()
     pCharClass = pSysLocale->GetCharClassPtr();
     pLocaleData = pSysLocale->GetLocaleDataPtr();
 
-    pRscString = new std::map<const char*, OUString>;
-
     pEmptyBrushItem = new SvxBrushItem( COL_TRANSPARENT, ATTR_BACKGROUND );
     pButtonBrushItem = new SvxBrushItem( Color(), ATTR_BACKGROUND );
     pEmbeddedBrushItem = new SvxBrushItem( COL_LIGHTCYAN, ATTR_BACKGROUND );
@@ -551,7 +541,6 @@ void ScGlobal::Clear()
     DELETEZ(pLegacyFuncCollection);
     DELETEZ(pAddInCollection);
     DELETEZ(pUserList);
-    DELETEZ(pRscString);
     DELETEZ(pStarCalcFunctionList); // Destroy before ResMgr!
     DELETEZ(pStarCalcFunctionMgr);
     ScParameterClassification::Exit();
