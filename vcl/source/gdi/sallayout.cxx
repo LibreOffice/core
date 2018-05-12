@@ -596,7 +596,7 @@ Point SalLayout::GetDrawPosition( const Point& rRelative ) const
 // If the range doesn't match in 0x3000 and 0x30FB, please change
 // also ImplCalcKerning.
 
-int SalLayout::CalcAsianKerning( sal_UCS4 c, bool bLeft, bool /*TODO:? bVertical*/ )
+static int lcl_CalcAsianKerning( sal_UCS4 c, bool bLeft, bool /*TODO:? bVertical*/ )
 {
     // http://www.asahi-net.or.jp/~sd5a-ucd/freetexts/jis/x4051/1995/appendix.html
     static const signed char nTable[0x30] =
@@ -821,8 +821,8 @@ void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
 
             // calculate compression values
             const bool bVertical = false;
-            long nKernFirst = +CalcAsianKerning( cHere, true, bVertical );
-            long nKernNext  = -CalcAsianKerning( cNext, false, bVertical );
+            long nKernFirst = +lcl_CalcAsianKerning( cHere, true, bVertical );
+            long nKernNext  = -lcl_CalcAsianKerning( cNext, false, bVertical );
 
             // apply punctuation compression to logical glyph widths
             long nDelta = (nKernFirst < nKernNext) ? nKernFirst : nKernNext;
