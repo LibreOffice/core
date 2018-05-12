@@ -58,10 +58,12 @@ $(eval $(call gb_Library_use_externals,vclplug_gtk,\
 	boost_headers \
 	cairo \
 	dbus \
-	gio \
 	epoxy \
-	gtk \
+	gio \
+	graphite \
 	gthread \
+	gtk \
+	harfbuzz \
 	icuuc \
 ))
 
