@@ -348,10 +348,13 @@ DECLARE_OOXMLEXPORT_TEST(testNumberingFont, "numbering-font.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106541_noinheritChapterNumbering, "tdf106541_noinheritChapterNumbering.odt")
 {
-    // in LO, it appears that styles based on the Chapter Numbering style explicitly sets the
-    // numbering style/outline level to 0 by default, and prevents inheriting directly from "Outline" style.
+    // in LO, it appears that styles based on the Chapter Numbering style explicitly set the
+    // numbering style/outline level to 0 by default, and that LO prevents inheriting directly from "Outline" style.
     // Adding this preventative unit test to ensure that any fix for tdf106541 doesn't make incorrect assumptions.
-    CPPUNIT_ASSERT_EQUAL(OUString("Outline"), getProperty<OUString>(getParagraph(1), "NumberingStyleName"));
+
+//reverting tdf#76817 hard-codes the numbering style on the paragraph, preventing RT of "Outline" style
+//    CPPUNIT_ASSERT_EQUAL(OUString("Outline"), getProperty<OUString>(getParagraph(1), "NumberingStyleName"));
+
     OUString sPara3NumberingStyle = getProperty<OUString>(getParagraph(3), "NumberingStyleName");
     CPPUNIT_ASSERT_EQUAL(sPara3NumberingStyle, getProperty<OUString>(getParagraph(4), "NumberingStyleName"));
 
@@ -719,7 +722,9 @@ DECLARE_OOXMLEXPORT_TEST(testOOxmlOutlineNumberTypes, "outline-number-types.odt"
 
 DECLARE_OOXMLEXPORT_TEST(testNumParentStyle, "num-parent-style.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(OUString("Outline"), getProperty<OUString>(getParagraph(4), "NumberingStyleName"));
+//reverting tdf#76817 hard-codes the numbering style on the paragraph, preventing RT of "Outline" style
+//I think this unit test is wrong, but I will revert to its original claim.
+    CPPUNIT_ASSERT(getProperty<OUString>(getParagraph(4), "NumberingStyleName").startsWith("WWNum"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testNumOverrideLvltext, "num-override-lvltext.docx")

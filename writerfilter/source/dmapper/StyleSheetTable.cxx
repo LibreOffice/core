@@ -56,7 +56,6 @@ typedef ::std::map< OUString, OUString> StringPairMap_t;
 StyleSheetEntry::StyleSheetEntry() :
         sStyleIdentifierD()
         ,bIsDefaultStyle(false)
-        ,bIsChapterNumbering(false)
         ,bInvalidHeight(false)
         ,bHasUPE(false)
         ,nStyleTypeCode(STYLE_TYPE_UNKNOWN)
@@ -75,7 +74,6 @@ TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry const & rEntry ):
     StyleSheetEntry( )
 {
     bIsDefaultStyle = rEntry.bIsDefaultStyle;
-    bIsChapterNumbering = rEntry.bIsChapterNumbering;
     bInvalidHeight = rEntry.bInvalidHeight;
     bHasUPE = rEntry.bHasUPE;
     nStyleTypeCode = STYLE_TYPE_TABLE;
