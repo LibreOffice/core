@@ -30,7 +30,7 @@ class IconThemeInfoTest : public CppUnit::TestFixture
     ImagesZipIsNotValid();
 
     void
-    ImagesOxygenZipIsValid();
+    ImagesColibreZipIsValid();
 
     void
     ThemeIdIsDetectedFromFileNameWithUnderscore();
@@ -46,7 +46,7 @@ class IconThemeInfoTest : public CppUnit::TestFixture
     CPPUNIT_TEST(UpperCaseDisplayNameIsReturnedForNonDefaultId);
     CPPUNIT_TEST(ThemeIdIsDetectedFromFileNameWithUnderscore);
     CPPUNIT_TEST(ImagesZipIsNotValid);
-    CPPUNIT_TEST(ImagesOxygenZipIsValid);
+    CPPUNIT_TEST(ImagesColibreZipIsValid);
     CPPUNIT_TEST(ExceptionIsThrownWhenIdCannotBeDetermined1);
     CPPUNIT_TEST(ExceptionIsThrownWhenIdCannotBeDetermined2);
 
@@ -70,26 +70,26 @@ IconThemeInfoTest::ImagesZipIsNotValid()
 }
 
 void
-IconThemeInfoTest::ImagesOxygenZipIsValid()
+IconThemeInfoTest::ImagesColibreZipIsValid()
 {
-    OUString const id("file://images_oxygen.zip");
+    OUString const id("file://images_colibre.zip");
     bool valid = vcl::IconThemeInfo::UrlCanBeParsed(id);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("images_oxygen.zip is a valid theme name", true, valid);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("images_colibre.zip is a valid theme name", true, valid);
 }
 
 void
 IconThemeInfoTest::ThemeIdIsDetectedFromFileNameWithUnderscore()
 {
-    OUString const fname("images_oxygen.zip");
+    OUString const fname("images_colibre.zip");
     OUString sname = vcl::IconThemeInfo::FileNameToThemeId(fname);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("'oxygen' theme id is returned for 'images_oxygen.zip'", OUString("oxygen"), sname);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("'colibre' theme id is returned for 'images_colibre.zip'", OUString("colibre"), sname);
 }
 
 void
 IconThemeInfoTest::ExceptionIsThrownWhenIdCannotBeDetermined1()
 {
     bool thrown = false;
-    OUString const fname("images_oxygen");
+    OUString const fname("images_colibre");
     try {
         vcl::IconThemeInfo::FileNameToThemeId(fname);
     }
@@ -103,7 +103,7 @@ void
 IconThemeInfoTest::ExceptionIsThrownWhenIdCannotBeDetermined2()
 {
     bool thrown = false;
-    OUString const fname("image_oxygen.zip");
+    OUString const fname("image_colibre.zip");
     try {
         vcl::IconThemeInfo::FileNameToThemeId(fname);
     }
