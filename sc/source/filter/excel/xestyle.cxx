@@ -50,6 +50,7 @@
 #include <patattr.hxx>
 #include <attrib.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <xestring.hxx>
 #include <conditio.hxx>
 
@@ -2057,7 +2058,7 @@ XclExpXF::XclExpXF( const XclExpRoot& rRoot, const SfxStyleSheetBase& rStyleShee
     XclExpRoot( rRoot ),
     mnParentXFId( XclExpXFBuffer::GetXFIdFromIndex( EXC_XF_STYLEPARENT ) )
 {
-    bool bDefStyle = (rStyleSheet.GetName() == ScGlobal::GetRscString( STR_STYLENAME_STANDARD ));
+    bool bDefStyle = (rStyleSheet.GetName() == ScResId( STR_STYLENAME_STANDARD ));
     sal_Int16 nScript = bDefStyle ? GetDefApiScript() : css::i18n::ScriptType::WEAK;
     Init( const_cast< SfxStyleSheetBase& >( rStyleSheet ).GetItemSet(), nScript,
         NUMBERFORMAT_ENTRY_NOT_FOUND, EXC_FONT_NOTFOUND, false, bDefStyle );
@@ -2890,7 +2891,7 @@ void XclExpXFBuffer::InsertDefaultRecords()
     maFills.push_back( lcl_GetPatternFill_Gray125() );
 
     // index 0: default style
-    if( SfxStyleSheetBase* pDefStyleSheet = GetStyleSheetPool().Find( ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SfxStyleFamily::Para ) )
+    if( SfxStyleSheetBase* pDefStyleSheet = GetStyleSheetPool().Find( ScResId( STR_STYLENAME_STANDARD ), SfxStyleFamily::Para ) )
     {
         XclExpXFRef xDefStyle( new XclExpXF( GetRoot(), *pDefStyleSheet ) );
         sal_uInt32 nXFId = AppendBuiltInXFWithStyle( xDefStyle, EXC_STYLE_NORMAL );

@@ -58,6 +58,7 @@
 #include <fuinsert.hxx>
 
 #include <globstr.hrc>
+#include <scresid.hxx>
 
 #include <memory>
 
@@ -118,7 +119,7 @@ namespace
 void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate )
 {
     std::unique_ptr<ScProgress> pProgress( new ScProgress( mpDoc->GetDocumentShell(),
-        ScGlobal::GetRscString( STR_LOAD_DOC ), mpParser->ListSize(), true ) );
+        ScResId( STR_LOAD_DOC ), mpParser->ListSize(), true ) );
     sal_uLong nProgress = 0;
 
     SCCOL nStartCol, nEndCol;

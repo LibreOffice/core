@@ -17,6 +17,7 @@
 #include <globalnames.hxx>
 #include <docoptio.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <compiler.hxx>
 #include <dbdata.hxx>
 #include <stlpool.hxx>
@@ -564,7 +565,7 @@ void ScOrcusFactory::incrementProgress()
     // in all cases.
 
     if (!mnProgress)
-        mxStatusIndicator->start(ScGlobal::GetRscString(STR_LOAD_DOC), 100);
+        mxStatusIndicator->start(ScResId(STR_LOAD_DOC), 100);
 
     if (mnProgress == 99)
         return;

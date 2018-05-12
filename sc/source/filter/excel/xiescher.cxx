@@ -92,6 +92,7 @@
 #include <convuno.hxx>
 #include <postit.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 
 #include <fprogressbar.hxx>
 #include <xltracer.hxx>
@@ -4235,27 +4236,27 @@ XclImpObjectManager::XclImpObjectManager( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
 {
     maDefObjNames[ EXC_OBJTYPE_GROUP ]          = "Group";
-    maDefObjNames[ EXC_OBJTYPE_LINE ]           = ScGlobal::GetRscString( STR_SHAPE_LINE );
-    maDefObjNames[ EXC_OBJTYPE_RECTANGLE ]      = ScGlobal::GetRscString( STR_SHAPE_RECTANGLE );
-    maDefObjNames[ EXC_OBJTYPE_OVAL ]           = ScGlobal::GetRscString( STR_SHAPE_OVAL );
+    maDefObjNames[ EXC_OBJTYPE_LINE ]           = ScResId( STR_SHAPE_LINE );
+    maDefObjNames[ EXC_OBJTYPE_RECTANGLE ]      = ScResId( STR_SHAPE_RECTANGLE );
+    maDefObjNames[ EXC_OBJTYPE_OVAL ]           = ScResId( STR_SHAPE_OVAL );
     maDefObjNames[ EXC_OBJTYPE_ARC ]            = "Arc";
     maDefObjNames[ EXC_OBJTYPE_CHART ]          = "Chart";
     maDefObjNames[ EXC_OBJTYPE_TEXT ]           = "Text";
-    maDefObjNames[ EXC_OBJTYPE_BUTTON ]         =  ScGlobal::GetRscString( STR_FORM_BUTTON );
+    maDefObjNames[ EXC_OBJTYPE_BUTTON ]         =  ScResId( STR_FORM_BUTTON );
     maDefObjNames[ EXC_OBJTYPE_PICTURE ]        = "Picture";
     maDefObjNames[ EXC_OBJTYPE_POLYGON ]        = "Freeform";
-    maDefObjNames[ EXC_OBJTYPE_CHECKBOX ]       = ScGlobal::GetRscString( STR_FORM_CHECKBOX );
-    maDefObjNames[ EXC_OBJTYPE_OPTIONBUTTON ]   = ScGlobal::GetRscString( STR_FORM_OPTIONBUTTON );
+    maDefObjNames[ EXC_OBJTYPE_CHECKBOX ]       = ScResId( STR_FORM_CHECKBOX );
+    maDefObjNames[ EXC_OBJTYPE_OPTIONBUTTON ]   = ScResId( STR_FORM_OPTIONBUTTON );
     maDefObjNames[ EXC_OBJTYPE_EDIT ]           = "Edit Box";
-    maDefObjNames[ EXC_OBJTYPE_LABEL ]          = ScGlobal::GetRscString( STR_FORM_LABEL );
+    maDefObjNames[ EXC_OBJTYPE_LABEL ]          = ScResId( STR_FORM_LABEL );
     maDefObjNames[ EXC_OBJTYPE_DIALOG ]         = "Dialog Frame";
-    maDefObjNames[ EXC_OBJTYPE_SPIN ]           = ScGlobal::GetRscString( STR_FORM_SPINNER );
-    maDefObjNames[ EXC_OBJTYPE_SCROLLBAR ]      = ScGlobal::GetRscString( STR_FORM_SCROLLBAR );
-    maDefObjNames[ EXC_OBJTYPE_LISTBOX ]        = ScGlobal::GetRscString( STR_FORM_LISTBOX );
-    maDefObjNames[ EXC_OBJTYPE_GROUPBOX ]       = ScGlobal::GetRscString( STR_FORM_GROUPBOX );
-    maDefObjNames[ EXC_OBJTYPE_DROPDOWN ]       = ScGlobal::GetRscString( STR_FORM_DROPDOWN );
+    maDefObjNames[ EXC_OBJTYPE_SPIN ]           = ScResId( STR_FORM_SPINNER );
+    maDefObjNames[ EXC_OBJTYPE_SCROLLBAR ]      = ScResId( STR_FORM_SCROLLBAR );
+    maDefObjNames[ EXC_OBJTYPE_LISTBOX ]        = ScResId( STR_FORM_LISTBOX );
+    maDefObjNames[ EXC_OBJTYPE_GROUPBOX ]       = ScResId( STR_FORM_GROUPBOX );
+    maDefObjNames[ EXC_OBJTYPE_DROPDOWN ]       = ScResId( STR_FORM_DROPDOWN );
     maDefObjNames[ EXC_OBJTYPE_NOTE ]           = "Comment";
-    maDefObjNames[ EXC_OBJTYPE_DRAWING ]        = ScGlobal::GetRscString( STR_SHAPE_AUTOSHAPE );
+    maDefObjNames[ EXC_OBJTYPE_DRAWING ]        = ScResId( STR_SHAPE_AUTOSHAPE );
 }
 
 XclImpObjectManager::~XclImpObjectManager()

@@ -43,6 +43,7 @@
 #include <tokenstringcontext.hxx>
 #include <refreshtimerprotector.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 
 #include <docsh.hxx>
 #include <viewdata.hxx>
@@ -1043,7 +1044,7 @@ bool XclExpXmlStream::exportDocument()
     uno::Reference<task::XStatusIndicator> xStatusIndicator = getStatusIndicator();
 
     if (xStatusIndicator.is())
-        xStatusIndicator->start(ScGlobal::GetRscString(STR_SAVE_DOC), 100);
+        xStatusIndicator->start(ScResId(STR_SAVE_DOC), 100);
 
     // NOTE: Don't use SotStorage or SvStream any more, and never call
     // SfxMedium::GetOutStream() anywhere in the xlsx export filter code!

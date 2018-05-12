@@ -64,6 +64,7 @@
 #include "xmlexprt.hxx"
 #include <global.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <scerrors.hxx>
 #include "XMLExportSharedData.hxx"
 #include <docuno.hxx>
@@ -776,7 +777,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         uno::Reference<task::XStatusIndicator> xStatusIndicator(GetStatusIndicator());
         sal_Int32 nProgressRange(1000000);
         if(xStatusIndicator.is())
-            xStatusIndicator->start(ScGlobal::GetRscString(STR_SAVE_DOC), nProgressRange);
+            xStatusIndicator->start(ScResId(STR_SAVE_DOC), nProgressRange);
         xInfoSet->setPropertyValue("ProgressRange", uno::makeAny(nProgressRange));
 
         SvtSaveOptions aSaveOpt;

@@ -24,6 +24,7 @@
 #include <document.hxx>
 #include <formulacell.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <global.hxx>
 #include <progress.hxx>
 #include <rtl/tencinfo.h>
@@ -99,7 +100,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
     SCROW               nNumRows = nEndRow - rRange.aStart.Row() + 1;
     SCTAB               nTab = rRange.aStart.Tab();
 
-    ScProgress          aPrgrsBar( pDoc->GetDocumentShell(), ScGlobal::GetRscString( STR_LOAD_DOC ), nNumRows, true );
+    ScProgress          aPrgrsBar( pDoc->GetDocumentShell(), ScResId( STR_LOAD_DOC ), nNumRows, true );
 
     aPrgrsBar.SetState( 0 );
 

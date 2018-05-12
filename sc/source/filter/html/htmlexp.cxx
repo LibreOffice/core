@@ -124,7 +124,7 @@ const sal_Char ScHTMLExport::sIndentSource[nIndentMax+1] =
 
 #define OUT_SP_CSTR_ASS( s )    rStrm.WriteChar( ' ').WriteCharPtr( s ).WriteChar( '=' )
 
-#define GLOBSTR(id) ScGlobal::GetRscString( id )
+#define GLOBSTR(id) ScResId( id )
 
 void ScFormatFilterPluginImpl::ScExportHTML( SvStream& rStrm, const OUString& rBaseURL, ScDocument* pDoc,
         const ScRange& rRange, const rtl_TextEncoding /*eNach*/, bool bAll,
@@ -417,7 +417,7 @@ void ScHTMLExport::WriteOverview()
         OUT_HR();
         IncIndent(1); TAG_ON( OOO_STRING_SVTOOLS_HTML_parabreak ); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_center );
         TAG_ON( OOO_STRING_SVTOOLS_HTML_head1 );
-        OUT_STR( ScGlobal::GetRscString( STR_OVERVIEW ) );
+        OUT_STR( ScResId( STR_OVERVIEW ) );
         TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_head1 );
 
         OUString aStr;
@@ -453,7 +453,7 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
     {
         pStylePool->SetSearchMask( SfxStyleFamily::Para );
         pStyleSheet = pStylePool->Find(
-                ScGlobal::GetRscString(STR_STYLENAME_STANDARD),
+                ScResId(STR_STYLENAME_STANDARD),
                 SfxStyleFamily::Para );
         OSL_ENSURE( pStyleSheet, "ParaStyle not found! :-(" );
         if (!pStyleSheet)

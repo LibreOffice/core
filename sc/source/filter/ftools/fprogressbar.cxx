@@ -20,6 +20,7 @@
 #include <fprogressbar.hxx>
 #include <global.hxx>
 #include <globstr.hrc>
+#include <scresid.hxx>
 #include <progress.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/make_unique.hxx>
@@ -43,7 +44,7 @@ ScfProgressBar::ScfProgressBar( SfxObjectShell* pDocShell, const OUString& rText
 }
 
 ScfProgressBar::ScfProgressBar(SfxObjectShell* pDocShell, const char* pResId)
-    : maText(ScGlobal::GetRscString(pResId))
+    : maText(ScResId(pResId))
 {
     Init( pDocShell );
 }
@@ -216,7 +217,7 @@ void ScfSimpleProgressBar::Init( std::size_t nSize )
 ScfStreamProgressBar::ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell ) :
     mrStrm( rStrm )
 {
-    Init( pDocShell, ScGlobal::GetRscString( STR_LOAD_DOC ) );
+    Init( pDocShell, ScResId( STR_LOAD_DOC ) );
 }
 
 void ScfStreamProgressBar::Progress()
