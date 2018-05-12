@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_3442473f",
+        "filename": "vcl/inc/sallayout.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-12T06:38:29Z",
+      "side": 1,
+      "message": "you could mark the whole class as final",
+      "revId": "01d204ebc07ee71dc67ffdaf4d3d798731962cb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
