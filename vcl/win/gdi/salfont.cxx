@@ -997,6 +997,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
     const RawFontData aHheaRawData(getHDC(), nHheaTag);
     const RawFontData aOS2RawData(getHDC(), nOS2Tag);
 
+    mpWinFontEntry[nFallbackLevel]->SetHDC(getHDC());
     rxFontMetric->SetMinKashida(mpWinFontEntry[nFallbackLevel]->GetKashidaWidth());
 
     // get the font metric

@@ -342,7 +342,7 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
 hb_font_t* WinFontInstance::ImplInitHbFont()
 {
     assert(m_hDC);
-    m_hFont = static_cast<HFONT>(GetCurrentObject(m_hDC, OBJ_FONT));
+    assert(m_hFont);
     hb_font_t* pHbFont = InitHbFont(hb_face_create_for_tables(getFontTable, m_hFont, nullptr));
 
     // Calculate the AverageWidthFactor, see LogicalFontInstance::GetScale().
@@ -378,6 +378,7 @@ void WinFontInstance::SetHDC(const HDC hDC)
         return;
     ReleaseHbFont();
     m_hDC = hDC;
+    m_hFont = static_cast<HFONT>(GetCurrentObject(m_hDC, OBJ_FONT));
 }
 
 bool WinSalGraphics::CacheGlyphs(const GenericSalLayout& rLayout)
