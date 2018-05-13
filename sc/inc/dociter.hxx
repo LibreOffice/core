@@ -43,6 +43,7 @@ struct ScQueryParam;
 struct ScDBQueryParamInternal;
 struct ScDBQueryParamMatrix;
 class ScFormulaCell;
+class OutputDevice;
 struct ScInterpreterContext;
 enum class SvNumFormatType : sal_Int16;
 
