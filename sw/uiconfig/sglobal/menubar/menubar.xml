@@ -159,7 +159,6 @@
       <menu:menuitem menu:id=".uno:ObjectMenue"/>
       <menu:menuitem menu:id=".uno:ChangeDatabaseField"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:SwitchControlDesignMode"/>
       <menu:menuitem menu:id=".uno:EditDoc"/>
     </menu:menupopup>
   </menu:menu>
