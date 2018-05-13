@@ -27,6 +27,7 @@
 
 class ScDocShell;
 class ScMarkData;
+class OutputDevice;
 
 /** Possible types of selection for print functions */
 

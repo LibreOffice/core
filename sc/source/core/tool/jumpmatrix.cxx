@@ -19,7 +19,7 @@
 
 #include <jumpmatrix.hxx>
 #include <scmatrix.hxx>
-
+#include <tools/solar.h>
 #include <osl/diagnose.h>
 
 namespace {
