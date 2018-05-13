@@ -25,6 +25,7 @@
 
 #include <vector>
 #include <list>
+#include <memory>
 
 struct ScMyDrawPage
 {

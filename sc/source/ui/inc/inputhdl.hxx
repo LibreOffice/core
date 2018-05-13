@@ -22,6 +22,7 @@
 
 #include <global.hxx>
 #include <address.hxx>
+#include <tools/solar.h>
 #include <typedstrdata.hxx>
 
 #include <tools/fract.hxx>

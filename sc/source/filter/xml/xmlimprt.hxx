@@ -28,6 +28,7 @@
 #include <xmloff/xmlstyle.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include "xmlsubti.hxx"
+#include <vcl/errcode.hxx>
 #include <global.hxx>
 #include <formula/grammar.hxx>
 #include <compiler.hxx>

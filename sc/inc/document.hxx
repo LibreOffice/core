@@ -23,6 +23,7 @@
 #include <vcl/prntypes.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/errcode.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <vcl/vclptr.hxx>
 #include "scdllapi.h"
