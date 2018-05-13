@@ -27,11 +27,13 @@
 namespace
 {
 
+using namespace css;
 using namespace css::uno;
 using namespace css::io;
 using namespace css::graphic;
 using drawinglayer::primitive2d::Primitive2DSequence;
 using drawinglayer::primitive2d::Primitive2DContainer;
+using drawinglayer::primitive2d::Primitive2DReference;
 
 class Test : public test::BootstrapFixture, public XmlTestTools
 {
@@ -61,6 +63,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testMaskText();
     void testTdf99994();
     void testTdf101237();
+    void testBehaviourWhenWidthAndHeightIsOrIsNotSet();
 
     Primitive2DSequence parseSvg(const OUString& aSource);
 
@@ -90,6 +93,7 @@ public:
     CPPUNIT_TEST(testMaskText);
     CPPUNIT_TEST(testTdf99994);
     CPPUNIT_TEST(testTdf101237);
+    CPPUNIT_TEST(testBehaviourWhenWidthAndHeightIsOrIsNotSet);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -131,7 +135,6 @@ void Test::checkRectPrimitive(Primitive2DSequence const & rPrimitive)
 
 
 }
-
 
 bool arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive2DSequence& rB)
 {
@@ -629,7 +632,68 @@ void Test::testTdf101237()
     assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#ff0000");
     assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "color", "#000000");
     assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "width", "5");
+}
 
+void Test::testBehaviourWhenWidthAndHeightIsOrIsNotSet()
+{
+    // This test checks the behaviour when width and height attributes
+    // are and are not set. In both cases the result must be the same,
+    // however if the width / height are set, then the size of the image
+    // is enforced, but this isn't really possible in LibreOffice (or
+    // maybe we could lock the size in this case).
+    // The behaviour in browsers is that when a SVG image has width / height
+    // attributes set, then the image is shown with that size, but if it
+    // isn't set then it is shown as scalable image which is the size of
+    // the container.
+
+    {
+        Primitive2DSequence aSequence = parseSvg("svgio/qa/cppunit/data/Drawing_WithWidthHeight.svg");
+        CPPUNIT_ASSERT(aSequence.hasElements());
+
+        geometry::RealRectangle2D aRealRect;
+        basegfx::B2DRange aRange;
+        uno::Sequence<beans::PropertyValue> aViewParameters;
+
+        for (Primitive2DReference const & xReference : aSequence)
+        {
+            if (xReference.is())
+            {
+                aRealRect = xReference->getRange(aViewParameters);
+                aRange.expand(basegfx::B2DRange(aRealRect.X1, aRealRect.Y1, aRealRect.X2, aRealRect.Y2));
+            }
+        }
+
+        double fWidth = (aRange.getWidth() / 2540.0) * 96.0;
+        double fHeight = (aRange.getHeight() / 2540.0) * 96.0;
+
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(11.0, fWidth, 1E-12);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(11.0, fHeight, 1E-12);
+    }
+
+    {
+        Primitive2DSequence aSequence = parseSvg("svgio/qa/cppunit/data/Drawing_NoWidthHeight.svg");
+        CPPUNIT_ASSERT(aSequence.hasElements());
+
+
+        geometry::RealRectangle2D aRealRect;
+        basegfx::B2DRange aRange;
+        uno::Sequence<beans::PropertyValue> aViewParameters;
+
+        for (Primitive2DReference const & xReference : aSequence)
+        {
+            if (xReference.is())
+            {
+                aRealRect = xReference->getRange(aViewParameters);
+                aRange.expand(basegfx::B2DRange(aRealRect.X1, aRealRect.Y1, aRealRect.X2, aRealRect.Y2));
+            }
+        }
+
+        double fWidth = (aRange.getWidth() / 2540.0) * 96.0;
+        double fHeight = (aRange.getHeight() / 2540.0) * 96.0;
+
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(11.0, fWidth, 1E-12);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(11.0, fHeight, 1E-12);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

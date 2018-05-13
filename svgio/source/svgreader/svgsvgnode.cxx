@@ -350,13 +350,20 @@ namespace svgio
                         seekReferenceWidth(fWReference, bHasFoundWidth);
                         if (!bHasFoundWidth)
                         {
-                            // Even outermost svg has not all information to resolve relative values,
-                            // I use content itself as fallback to set missing values for viewport
-                            // Any better idea for such ill structured svg documents?
-                            const basegfx::B2DRange aChildRange(
-                                        aSequence.getB2DRange(
-                                            drawinglayer::geometry::ViewInformation2D()));
-                            fWReference = aChildRange.getWidth();
+                            if (getViewBox())
+                            {
+                                fWReference = getViewBox()->getWidth();
+                            }
+                            else
+                            {
+                                // Even outermost svg has not all information to resolve relative values,
+                                // I use content itself as fallback to set missing values for viewport
+                                // Any better idea for such ill structured svg documents?
+                                const basegfx::B2DRange aChildRange(
+                                            aSequence.getB2DRange(
+                                                drawinglayer::geometry::ViewInformation2D()));
+                                fWReference = aChildRange.getWidth();
+                            }
                         }
                         // referenced values are already in 'user unit'
                         if (!bXIsAbsolute)
@@ -377,13 +384,20 @@ namespace svgio
                         seekReferenceHeight(fHReference, bHasFoundHeight);
                         if (!bHasFoundHeight)
                         {
+                            if (getViewBox())
+                            {
+                                fHReference = getViewBox()->getHeight();
+                            }
+                            else
+                            {
                             // Even outermost svg has not all information to resolve relative values,
-                            // I use content itself as fallback to set missing values for viewport
-                            // Any better idea for such ill structured svg documents?
-                            const basegfx::B2DRange aChildRange(
-                                    aSequence.getB2DRange(
-                                        drawinglayer::geometry::ViewInformation2D()));
-                            fHReference = aChildRange.getHeight();
+                                // I use content itself as fallback to set missing values for viewport
+                                // Any better idea for such ill structured svg documents?
+                                const basegfx::B2DRange aChildRange(
+                                        aSequence.getB2DRange(
+                                            drawinglayer::geometry::ViewInformation2D()));
+                                fHReference = aChildRange.getHeight();
+                            }
                         }
 
                         // referenced values are already in 'user unit'
@@ -527,13 +541,15 @@ namespace svgio
                                     // by the viewBox. No mapping.
                                     // We get viewport >= content, therefore no clipping.
                                     bNeedsMapping = false;
+
                                     const basegfx::B2DRange aChildRange(
                                         aSequence.getB2DRange(
                                             drawinglayer::geometry::ViewInformation2D()));
-                                    const double fChildWidth(aChildRange.getWidth());
-                                    const double fChildHeight(aChildRange.getHeight());
-                                    const double fLeft(aChildRange.getMinX());
-                                    const double fTop(aChildRange.getMinY());
+
+                                    const double fChildWidth(getViewBox() ? getViewBox()->getWidth() : aChildRange.getWidth());
+                                    const double fChildHeight(getViewBox() ? getViewBox()->getHeight() : aChildRange.getHeight());
+                                    const double fLeft(getViewBox() ? getViewBox()->getMinX()  : aChildRange.getMinX());
+                                    const double fTop (getViewBox() ? getViewBox()->getMinY() : aChildRange.getMinY());
                                     if ( fChildWidth / fViewBoxWidth > fChildHeight / fViewBoxHeight )
                                     {  // expand y
                                         fW = fChildWidth;
@@ -546,7 +562,6 @@ namespace svgio
                                     }
                                     aSvgCanvasRange = basegfx::B2DRange(fLeft, fTop, fLeft + fW, fTop + fH);
                                 }
-
 
                                 if (bNeedsMapping)
                                 {
