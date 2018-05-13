@@ -27,6 +27,10 @@ $(eval $(call gb_CppunitTest_use_externals,svl_qa_cppunit, \
 	icu_headers \
 ))
 
+$(eval $(call gb_CppunitTest_use_package,svl_qa_cppunit, \
+    libnumbertext_numbertext \
+))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,svl_qa_cppunit, \
 	svl/qa/unit/svl \
 ))
@@ -52,6 +56,8 @@ $(eval $(call gb_CppunitTest_set_include,svl_qa_cppunit,\
 $(eval $(call gb_CppunitTest_use_components,svl_qa_cppunit,\
 	i18npool/util/i18npool \
 	configmgr/source/configmgr \
+	framework/util/fwk \
+	lingucomponent/source/numbertext/numbertext \
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,svl_qa_cppunit))
