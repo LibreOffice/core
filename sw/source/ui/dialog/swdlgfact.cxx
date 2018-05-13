@@ -1148,10 +1148,10 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
     return pRet;
 }
 
-void SwAbstractDialogFactory_Impl::ExecuteMMResultSaveDialog()
+void SwAbstractDialogFactory_Impl::ExecuteMMResultSaveDialog(weld::Window* pParent)
 {
-    ScopedVclPtrInstance<SwMMResultSaveDialog> pDialog;
-    pDialog->Execute();
+    SwMMResultSaveDialog aDialog(pParent);
+    aDialog.run();
 }
 
 void SwAbstractDialogFactory_Impl::ExecuteMMResultPrintDialog(weld::Window* pParent)
