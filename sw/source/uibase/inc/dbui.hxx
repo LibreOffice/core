@@ -23,6 +23,7 @@
 
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 
 class SW_DLLPUBLIC CancelableDialog : public Dialog
 {
@@ -47,20 +48,26 @@ public:
 class SW_DLLPUBLIC PrintMonitor: public CancelableDialog
 {
 public:
-    enum PrintMonitorType
-    {
-        MONITOR_TYPE_PRINT,
-        MONITOR_TYPE_SAVE
-    };
-
     VclPtr<FixedText> m_pDocName;
     VclPtr<FixedText> m_pPrinting;
     VclPtr<FixedText> m_pPrinter;
     VclPtr<FixedText> m_pPrintInfo;
 
-    PrintMonitor( vcl::Window *pParent, bool modal, PrintMonitorType eType );
+    PrintMonitor(vcl::Window *pParent, bool modal);
     virtual ~PrintMonitor() override;
     virtual void dispose() override;
+};
+
+class SW_DLLPUBLIC SaveMonitor : public weld::GenericDialogController
+{
+public:
+    std::unique_ptr<weld::Label> m_xDocName;
+    std::unique_ptr<weld::Label> m_xPrinter;
+    std::unique_ptr<weld::Label> m_xPrintInfo;
+    std::unique_ptr<weld::Button> m_xCancel;
+
+    SaveMonitor(weld::Window *pParent);
+    virtual ~SaveMonitor() override;
 };
 
 class CreateMonitor : public CancelableDialog

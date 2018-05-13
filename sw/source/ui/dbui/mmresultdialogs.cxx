@@ -462,7 +462,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, CopyToHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveCancelHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveCancelHdl_Impl, weld::Button&, void)
 {
     m_bCancelSaving = true;
 }
@@ -625,13 +625,12 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
         }
 
         SwView* pSourceView = xConfigItem->GetSourceView();
-//TODO        ScopedVclPtrInstance< PrintMonitor > aSaveMonitor(this, false, PrintMonitor::MONITOR_TYPE_SAVE);
-        ScopedVclPtrInstance< PrintMonitor > aSaveMonitor(nullptr, false, PrintMonitor::MONITOR_TYPE_SAVE);
-        aSaveMonitor->m_pDocName->SetText(pSourceView->GetDocShell()->GetTitle(22));
-        aSaveMonitor->SetCancelHdl(LINK(this, SwMMResultSaveDialog, SaveCancelHdl_Impl));
-        aSaveMonitor->m_pPrinter->SetText( INetURLObject( sPath ).getFSysPath( FSysStyle::Detect ) );
+        std::shared_ptr<SaveMonitor> xSaveMonitor(new SaveMonitor(m_xDialog.get()));
+        xSaveMonitor->m_xDocName->set_label(pSourceView->GetDocShell()->GetTitle(22));
+        xSaveMonitor->m_xCancel->connect_clicked(LINK(this, SwMMResultSaveDialog, SaveCancelHdl_Impl));
+        xSaveMonitor->m_xPrinter->set_label( INetURLObject( sPath ).getFSysPath( FSysStyle::Detect ) );
         m_bCancelSaving = false;
-        aSaveMonitor->Show();
+        weld::DialogController::runAsync(xSaveMonitor, [](int) {});
 
         for(sal_uInt32 nDoc = nBegin; nDoc < nEnd && !m_bCancelSaving; ++nDoc)
         {
@@ -643,7 +642,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
                 sPath += "." + sExtension;
             }
             OUString sStat = SwResId(STR_STATSTR_LETTER) + " " + OUString::number( nDoc );
-            aSaveMonitor->m_pPrintInfo->SetText(sStat);
+            xSaveMonitor->m_xPrintInfo->set_label(sStat);
 
             //now extract a document from the target document
             // the shell will be closed at the end, but it is more safe to use SfxObjectShellLock here
@@ -708,6 +707,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
                 }
             }
         }
+        xSaveMonitor->response(RET_OK);
         ::osl::File::remove( sTargetTempURL );
     }
 

@@ -22,24 +22,28 @@
 #include <dbui.hrc>
 #include <dbui.hxx>
 
-PrintMonitor::PrintMonitor(vcl::Window *pParent, bool modal, PrintMonitorType eType )
+SaveMonitor::SaveMonitor(weld::Window *pParent)
+    : GenericDialogController(pParent, "modules/swriter/ui/savemonitordialog.ui",
+        "SaveMonitorDialog")
+    , m_xDocName(m_xBuilder->weld_label("docname"))
+    , m_xPrinter(m_xBuilder->weld_label("printer"))
+    , m_xPrintInfo(m_xBuilder->weld_label("printinfo"))
+    , m_xCancel(m_xBuilder->weld_button("cancel"))
+{
+}
+
+SaveMonitor::~SaveMonitor()
+{
+}
+
+PrintMonitor::PrintMonitor(vcl::Window *pParent, bool modal)
     : CancelableDialog(pParent, modal, "PrintMonitorDialog",
         "modules/swriter/ui/printmonitordialog.ui")
 {
     get(m_pDocName, "docname");
     get(m_pPrinter, "printer");
     get(m_pPrintInfo, "printinfo");
-    switch (eType)
-    {
-        case MONITOR_TYPE_SAVE:
-            SetText(get<FixedText>("alttitle")->GetText());
-            get(m_pPrinting, "saving");
-            break;
-        case MONITOR_TYPE_PRINT:
-            get(m_pPrinting, "printing");
-            break;
-    }
-    m_pPrinting->Show();
+    get(m_pPrinting, "printing");
 }
 
 PrintMonitor::~PrintMonitor()

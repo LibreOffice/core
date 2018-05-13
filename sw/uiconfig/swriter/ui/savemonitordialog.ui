@@ -2,10 +2,10 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
-  <object class="GtkDialog" id="PrintMonitorDialog">
+  <object class="GtkDialog" id="SaveMonitorDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="printmonitordialog|PrintMonitorDialog">Print monitor</property>
+    <property name="title" translatable="yes" context="printmonitordialog|PrintMonitorDialog">Save monitor</property>
     <property name="modal">True</property>
     <property name="default_width">0</property>
     <property name="default_height">0</property>
@@ -64,16 +64,16 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="printing">
+              <object class="GtkLabel" id="saving">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes" context="printmonitordialog|printing">is being prepared for printing on</property>
+                <property name="label" translatable="yes" context="printmonitordialog|saving">is being saved to</property>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>

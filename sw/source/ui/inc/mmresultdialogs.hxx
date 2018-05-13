@@ -57,7 +57,7 @@ class SwMMResultSaveDialog : public weld::GenericDialogController
     std::unique_ptr<weld::Button> m_xOKButton;
 
     DECL_LINK(SaveOutputHdl_Impl, weld::Button& , void);
-    DECL_LINK(SaveCancelHdl_Impl, Button*, void);
+    DECL_LINK(SaveCancelHdl_Impl, weld::Button&, void);
     DECL_LINK(DocumentSelectionHdl_Impl, weld::ToggleButton&, void);
 
 public:
