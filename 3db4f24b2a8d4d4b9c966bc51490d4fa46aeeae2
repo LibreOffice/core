@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_af04227e",
+        "filename": "sw/source/uibase/uiview/viewmdi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-13T16:46:38Z",
+      "side": 1,
+      "message": "you can do\n   bool bFrameTypeFootnote(rSh.GetFrameType(nullptr, false) \u0026 FrameTypeFlags::FOOTNOTE);\nhere",
+      "revId": "3db4f24b2a8d4d4b9c966bc51490d4fa46aeeae2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
