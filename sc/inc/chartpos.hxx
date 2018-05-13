@@ -21,6 +21,7 @@
 #define INCLUDED_SC_INC_CHARTPOS_HXX
 
 #include "rangelst.hxx"
+#include <tools/solar.h>
 #include <memory>
 #include <map>
 

@@ -21,6 +21,7 @@
 #define INCLUDED_SC_INC_CONDITIO_HXX
 
 #include "global.hxx"
+#include <tools/solar.h>
 #include "address.hxx"
 #include <formula/grammar.hxx>
 #include "scdllapi.h"
@@ -42,6 +43,7 @@
 class ScFormulaCell;
 class ScTokenArray;
 struct ScRefCellValue;
+class Color;
 
 namespace sc {
 
