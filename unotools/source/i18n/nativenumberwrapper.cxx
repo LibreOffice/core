@@ -21,7 +21,7 @@
 
 #include <sal/log.hxx>
 #include <unotools/nativenumberwrapper.hxx>
-#include <com/sun/star/i18n/NativeNumberSupplier.hpp>
+#include <com/sun/star/i18n/NativeNumberSupplier2.hpp>
 
 using namespace ::com::sun::star;
 
@@ -29,7 +29,7 @@ NativeNumberWrapper::NativeNumberWrapper(
             const uno::Reference< uno::XComponentContext > & rxContext
             )
 {
-    xNNS = i18n::NativeNumberSupplier::create(rxContext);
+    xNNS = i18n::NativeNumberSupplier2::create(rxContext);
 }
 
 NativeNumberWrapper::~NativeNumberWrapper()
@@ -40,16 +40,36 @@ OUString
 NativeNumberWrapper::getNativeNumberString(
                     const OUString& rNumberString,
                     const css::lang::Locale& rLocale,
-                    sal_Int16 nNativeNumberMode ) const
+                    sal_Int16 nNativeNumberMode) const
 {
     try
     {
         if ( xNNS.is() )
-            return xNNS->getNativeNumberString( rNumberString, rLocale, nNativeNumberMode );
+            return xNNS->getNativeNumberString(rNumberString, rLocale, nNativeNumberMode);
     }
     catch ( const uno::Exception& )
     {
         SAL_WARN( "unotools.i18n", "getNativeNumberString: Exception caught!" );
+    }
+    return OUString();
+}
+
+OUString
+NativeNumberWrapper::getNativeNumberStringParams(
+                    const OUString& rNumberString,
+                    const css::lang::Locale& rLocale,
+                    sal_Int16 nNativeNumberMode,
+                    const OUString& rNativeNumberParams) const
+{
+    try
+    {
+        if ( xNNS.is() )
+            return xNNS->getNativeNumberStringParams(rNumberString, rLocale, nNativeNumberMode,
+                                                     rNativeNumberParams);
+    }
+    catch ( const uno::Exception& )
+    {
+        SAL_WARN( "unotools.i18n", "getNativeNumberStringParams: Exception caught!" );
     }
     return OUString();
 }
