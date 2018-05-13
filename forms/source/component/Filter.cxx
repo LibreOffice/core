@@ -58,6 +58,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/TriState.hxx>
 #include <tools/wintypes.hxx>
 
 

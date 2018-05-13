@@ -48,6 +48,7 @@
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/TriState.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase2.hxx>

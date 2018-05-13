@@ -22,6 +22,7 @@
 
 #include <vcl/toolbox.hxx>
 #include <vcl/controllayout.hxx>
+#include <vcl/TriState.hxx>
 
 #include <vector>
 

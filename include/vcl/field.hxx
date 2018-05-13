@@ -20,14 +20,17 @@
 #ifndef INCLUDED_VCL_FIELD_HXX
 #define INCLUDED_VCL_FIELD_HXX
 
-#include <memory>
-#include <vcl/dllapi.h>
 #include <tools/link.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
+#include <tools/fldunit.hxx>
+
+#include <vcl/dllapi.h>
 #include <vcl/spinfld.hxx>
 #include <vcl/combobox.hxx>
-#include <tools/fldunit.hxx>
+#include <vcl/TriState.hxx>
+
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
 

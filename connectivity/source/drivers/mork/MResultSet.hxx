@@ -33,7 +33,7 @@
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include <tools/gen.hxx>
+#include <vcl/TriState.hxx>
 #include <rtl/ref.hxx>
 #include "MStatement.hxx"
 #include "MQueryHelper.hxx"

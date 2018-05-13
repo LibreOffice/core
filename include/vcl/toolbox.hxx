@@ -25,6 +25,8 @@
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
 #include <vcl/image.hxx>
+#include <vcl/TriState.hxx>
+
 #include <o3tl/typed_flags_set.hxx>
 
 #include <limits>

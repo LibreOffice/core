@@ -25,6 +25,7 @@
 #include <extended/accessiblebrowseboxcell.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <tools/wintypes.hxx>
+#include <vcl/TriState.hxx>
 
 namespace accessibility
 {

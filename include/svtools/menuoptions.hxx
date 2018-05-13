@@ -25,6 +25,8 @@
 #include <tools/link.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/options.hxx>
+#include <vcl/TriState.hxx>
+
 #include <memory>
 
 /*-************************************************************************************************************

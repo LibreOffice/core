@@ -32,8 +32,6 @@ namespace rtl
     class OString;
 }
 
-enum TriState { TRISTATE_FALSE, TRISTATE_TRUE, TRISTATE_INDET };
-
 // Pair
 
 class SAL_WARN_UNUSED Pair

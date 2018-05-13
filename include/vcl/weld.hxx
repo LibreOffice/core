@@ -13,7 +13,9 @@
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
+
 #include <vcl/dllapi.h>
+#include <vcl/TriState.hxx>
 #include <vcl/field.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/virdev.hxx>

@@ -21,13 +21,16 @@
 #define INCLUDED_VCL_BUTTON_HXX
 
 #include <tools/solar.h>
+
 #include <vcl/dllapi.h>
+#include <vcl/TriState.hxx>
 #include <vcl/image.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
+
 #include <memory>
 #include <vector>
 

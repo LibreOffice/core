@@ -20,14 +20,16 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_FORMS_FORMENUMS_HXX
 #define INCLUDED_XMLOFF_SOURCE_FORMS_FORMENUMS_HXX
 
+#include <vcl/TriState.hxx>
+
 #include <xmloff/xmlement.hxx>
+
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/form/FormSubmitEncoding.hpp>
 #include <com/sun/star/form/FormSubmitMethod.hpp>
 #include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/form/NavigationBarMode.hpp>
 #include <com/sun/star/form/TabulatorCycle.hpp>
-#include <tools/gen.hxx>
 
 namespace xmloff
 {

@@ -21,15 +21,17 @@
 #define INCLUDED_VCL_SETTINGS_HXX
 
 #include <tools/solar.h>
-#include <vcl/dllapi.h>
 #include <tools/color.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <unotools/syslocale.hxx>
+#include <o3tl/typed_flags_set.hxx>
+
+#include <vcl/dllapi.h>
+#include <vcl/TriState.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/font.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/wall.hxx>
-#include <i18nlangtag/languagetag.hxx>
-#include <unotools/syslocale.hxx>
-#include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
 
