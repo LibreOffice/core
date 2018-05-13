@@ -670,7 +670,7 @@ public:
     // For TabPage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) override;
 
-    virtual void ExecuteMMResultSaveDialog() override;
+    virtual void ExecuteMMResultSaveDialog(weld::Window* pParent) override;
     virtual void ExecuteMMResultPrintDialog(weld::Window* pParent) override;
     virtual void ExecuteMMResultEmailDialog() override;
 };
