@@ -556,17 +556,15 @@ Separators getLocaleSeparators(const Locale& rLocale, const OUString& rLocStr)
     return it->second;
 }
 
-OUString getNumberText(const Locale& aLocale, sal_Int16 numType, const OUString& rNumberString)
+OUString getNumberText(const Locale& rLocale, const OUString& rNumberString,
+                       const OUString& sNumberTextParams)
 {
-    assert(numType == NativeNumberMode::NATNUM12 || numType == NativeNumberMode::NATNUM13
-           || numType == NativeNumberMode::NATNUM14);
-
     sal_Int32 i, count = 0;
     const sal_Int32 len = rNumberString.getLength();
     const sal_Unicode* src = rNumberString.getStr();
 
-    OUString aLoc = LanguageTag::convertToBcp47(aLocale);
-    Separators aSeparators = getLocaleSeparators(aLocale, aLoc);
+    OUString aLoc = LanguageTag::convertToBcp47(rLocale);
+    Separators aSeparators = getLocaleSeparators(rLocale, aLoc);
 
     OUStringBuffer sBuf(len);
     for (i = 0; i < len; i++)
@@ -599,11 +597,9 @@ OUString getNumberText(const Locale& aLocale, sal_Int16 numType, const OUString&
 
     static auto xNumberText
         = css::linguistic2::NumberText::create(comphelper::getProcessComponentContext());
-    OUString numbertext_prefix;
-    if (numType == NativeNumberMode::NATNUM14)
-        numbertext_prefix = "ordinal-number ";
-    else if (numType == NativeNumberMode::NATNUM13)
-        numbertext_prefix = "ordinal ";
+    OUString numbertext_prefix = sNumberTextParams;
+    if (!numbertext_prefix.isEmpty())
+        numbertext_prefix += " ";
     // Several hundreds of headings could result typing lags because
     // of the continuous update of the multiple number names during typing.
     // We fix this by buffering the result of the conversion.
@@ -612,7 +608,7 @@ OUString getNumberText(const Locale& aLocale, sal_Int16 numType, const OUString&
     auto& rItem = rItems[numbertext_prefix + aLoc];
     if (rItem.isEmpty())
     {
-        rItem = xNumberText->getNumberText(numbertext_prefix + aNumberStr, aLocale);
+        rItem = xNumberText->getNumberText(numbertext_prefix + aNumberStr, rLocale);
         // use number at missing number to text conversion
         if (rItem.isEmpty())
             rItem = aNumberStr;
@@ -625,15 +621,15 @@ OUString getNumberText(const Locale& aLocale, sal_Int16 numType, const OUString&
 }
 
 OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
-                sal_Int16 nNativeNumberMode, Sequence< sal_Int32 >& offset)
+                                                            sal_Int16 nNativeNumberMode,
+                                                            Sequence<sal_Int32>& offset,
+                                                            const OUString& rNativeNumberParams)
 {
     if (!isValidNatNum(rLocale, nNativeNumberMode))
         return aNumberString;
 
-    if (nNativeNumberMode == NativeNumberMode::NATNUM12
-        || nNativeNumberMode == NativeNumberMode::NATNUM13
-        || nNativeNumberMode == NativeNumberMode::NATNUM14)
-        return getNumberText(rLocale, nNativeNumberMode, aNumberString);
+    if (nNativeNumberMode == NativeNumberMode::NATNUM12)
+        return getNumberText(rLocale, aNumberString, rNativeNumberParams);
 
     sal_Int16 langnum = getLanguageNumber(rLocale);
     if (langnum == -1)
@@ -721,6 +717,14 @@ OUString SAL_CALL NativeNumberSupplierService::getNativeNumberString(const OUStr
     return getNativeNumberString(aNumberString, rLocale, nNativeNumberMode, offset);
 }
 
+OUString SAL_CALL NativeNumberSupplierService::getNativeNumberStringParams(
+    const OUString& rNumberString, const css::lang::Locale& rLocale, sal_Int16 nNativeNumberMode,
+    const OUString& rNativeNumberParams)
+{
+    Sequence<sal_Int32> offset;
+    return getNativeNumberString(rNumberString, rLocale, nNativeNumberMode, offset, rNativeNumberParams);
+}
+
 sal_Unicode NativeNumberSupplierService::getNativeNumberChar( const sal_Unicode inChar, const Locale& rLocale, sal_Int16 nNativeNumberMode )
 {
     if (nNativeNumberMode == NativeNumberMode::NATNUM0) { // Ascii
@@ -772,9 +776,7 @@ sal_Bool SAL_CALL NativeNumberSupplierService::isValidNatNum( const Locale& rLoc
     switch (nNativeNumberMode) {
         case NativeNumberMode::NATNUM0:     // Ascii
         case NativeNumberMode::NATNUM3:     // Char, FullWidth
-        case NativeNumberMode::NATNUM12:    // Cardinal number names (one, two, three, ...)
-        case NativeNumberMode::NATNUM13:    // Ordinal number names (first, second, third, ...)
-        case NativeNumberMode::NATNUM14:    // Ordinal indicators (1st, 2nd, 3rd, ...)
+        case NativeNumberMode::NATNUM12:    // Spell number
             return true;
         case NativeNumberMode::NATNUM1:     // Char, Lower
             return (langnum >= 0);
@@ -1157,7 +1159,7 @@ NativeNumberSupplierService::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 NativeNumberSupplierService::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet {implementationName};
+    Sequence< OUString > aRet {implementationName, "com.sun.star.i18n.NativeNumberSupplier2"};
     return aRet;
 }
 

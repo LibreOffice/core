@@ -1388,10 +1388,10 @@ void Test::testUserDefinedNumberFormats()
         sCode = "[NatNum12]0.00";
         sExpected = "one hundred twenty-three point four five";
         checkPreviewString(aFormatter, sCode, 123.45, eLang, sExpected);
-        sCode = "[NatNum13]0";
+        sCode = "[NatNum12 ordinal]0";
         sExpected = "one hundred twenty-third";
         checkPreviewString(aFormatter, sCode, 123, eLang, sExpected);
-        sCode = "[NatNum14]0";
+        sCode = "[NatNum12 ordinal-number]0";
         sExpected = "123rd";
         checkPreviewString(aFormatter, sCode, 123, eLang, sExpected);
 #endif

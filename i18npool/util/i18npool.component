@@ -133,6 +133,7 @@
   <implementation name="com.sun.star.i18n.NativeNumberSupplier"
       constructor="com_sun_star_i18n_NativeNumberSupplier_get_implementation">
     <service name="com.sun.star.i18n.NativeNumberSupplier"/>
+    <service name="com.sun.star.i18n.NativeNumberSupplier2"/>
   </implementation>
   <implementation name="com.sun.star.i18n.NumberFormatCodeMapper"
       constructor="com_sun_star_i18n_NumberFormatCodeMapper_get_implementation">
