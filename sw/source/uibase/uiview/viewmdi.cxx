@@ -389,10 +389,26 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
             bNext ? rSh.GoNextCursor() : rSh.GoPrevCursor();
         break;
         case NID_FTN:
+        {
+            bool bFrameTypeFootnote(rSh.GetFrameType(nullptr, false) & FrameTypeFlags::FOOTNOTE);
+
+            if (bFrameTypeFootnote)
+            {
+                rSh.LockView(true);
+                rSh.GotoFootnoteAnchor();
+            }
+
             rSh.EnterStdMode();
             bNext ?
                 rSh.GotoNextFootnoteAnchor() :
                     rSh.GotoPrevFootnoteAnchor();
+
+            if (bFrameTypeFootnote)
+            {
+                rSh.LockView(false);
+                rSh.GotoFootnoteText();
+            }
+        }
         break;
         case NID_MARK:
         {
