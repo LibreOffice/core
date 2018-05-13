@@ -232,6 +232,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/i18n,\
 	LocaleData \
 	LocaleData2 \
 	NativeNumberSupplier \
+	NativeNumberSupplier2 \
 	NumberFormatMapper \
 	OrdinalSuffix \
 	TextConversion \
@@ -2788,6 +2789,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/i18n,\
 	XLocaleData4 \
 	XLocaleData5 \
 	XNativeNumberSupplier \
+	XNativeNumberSupplier2 \
 	XNumberFormatCode \
 	XOrdinalSuffix \
 	XScriptTypeDetector \

@@ -585,6 +585,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
      const sal_Unicode *table = nullptr;     // initialize to avoid compiler warning
      bool bRecycleSymbol = false;
      bool bCapitalize = false;
+     OUString sNatNumParams;
      Locale locale;
 
      OUString  prefix;
@@ -635,18 +636,20 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
           case CHARS_LOWER_LETTER:
                lcl_formatChars( lowerLetter, 26, number-1, result );
                break;
-          case TEXT_NUMBER:
-               natNum = NativeNumberMode::NATNUM14; // ordinal indicators (1st, 2nd, 3rd, ...)
+          case TEXT_NUMBER: // ordinal indicators (1st, 2nd, 3rd, ...)
+               natNum = NativeNumberMode::NATNUM12;
+               sNatNumParams = "ordinal-number";
                locale = aLocale;
                bCapitalize = true;
                break;
-          case TEXT_CARDINAL:
-               natNum = NativeNumberMode::NATNUM12; // cardinal number names (one, two, three, ...)
+          case TEXT_CARDINAL: // cardinal number names (one, two, three, ...)
+               natNum = NativeNumberMode::NATNUM12;
                locale = aLocale;
                bCapitalize = true;
                break;
-          case TEXT_ORDINAL:
-               natNum = NativeNumberMode::NATNUM13; // ordinal number names (first, second, third, ...)
+          case TEXT_ORDINAL: // ordinal number names (first, second, third, ...)
+               natNum = NativeNumberMode::NATNUM12;
+               sNatNumParams = "ordinal";
                locale = aLocale;
                bCapitalize = true;
                break;
@@ -909,8 +912,8 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 
         if (natNum) {
             rtl::Reference<NativeNumberSupplierService> xNatNum(new NativeNumberSupplierService);
-            OUString aNum
-                = xNatNum->getNativeNumberString(OUString::number(number), locale, natNum);
+            OUString aNum = xNatNum->getNativeNumberStringParams(OUString::number(number), locale,
+                                                                 natNum, sNatNumParams);
             if (bCapitalize)
             {
                 if (!xCharClass.is())
