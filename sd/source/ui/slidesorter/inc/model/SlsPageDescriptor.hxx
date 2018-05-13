@@ -22,7 +22,6 @@
 
 #include <model/SlsVisualState.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <tools/gen.hxx>
 #include <vcl/bitmap.hxx>
 #include <sfx2/viewfrm.hxx>
 

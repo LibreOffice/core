@@ -65,7 +65,6 @@
 #include <lwpobjhdr.hxx>
 #include <lwpobjid.hxx>
 #include "lwpstory.hxx"
-#include <tools/gen.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <sfx2/objsh.hxx>

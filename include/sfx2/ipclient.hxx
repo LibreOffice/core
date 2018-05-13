@@ -27,8 +27,6 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <rtl/ref.hxx>
 
-#include <tools/gen.hxx>
-
 #include <sfx2/objsh.hxx>
 #include <vcl/window.hxx>
 

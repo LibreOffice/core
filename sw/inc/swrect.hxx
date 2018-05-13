@@ -23,6 +23,7 @@
 
 #include <sal/log.hxx>
 #include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 
 class SvStream;
 

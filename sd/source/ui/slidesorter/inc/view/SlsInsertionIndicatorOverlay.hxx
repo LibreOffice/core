@@ -25,7 +25,6 @@
 #include <controller/SlsTransferableData.hxx>
 #include <sdxfer.hxx>
 
-#include <tools/gen.hxx>
 #include <vcl/bitmapex.hxx>
 #include <memory>
 #include <vector>

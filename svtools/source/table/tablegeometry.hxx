@@ -22,8 +22,7 @@
 
 #include <svtools/table/tabletypes.hxx>
 
-#include <tools/gen.hxx>
-
+#include <tools/Rectangle.hxx>
 
 namespace svt { namespace table
 {

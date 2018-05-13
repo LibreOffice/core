@@ -34,6 +34,11 @@ class Qt5Painter;
 class PhysicalFontCollection;
 class QImage;
 
+namespace tools
+{
+class Rectangle;
+}
+
 class Qt5Graphics : public SalGraphics
 {
     friend class Qt5Bitmap;

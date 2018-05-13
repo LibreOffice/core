@@ -30,7 +30,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 #include <unordered_map>
 
 namespace svt

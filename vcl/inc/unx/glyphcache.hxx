@@ -26,7 +26,7 @@
 #include FT_GLYPH_H
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/metric.hxx>
 

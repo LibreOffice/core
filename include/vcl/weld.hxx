@@ -11,8 +11,8 @@
 #define INCLUDED_VCL_WELD_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/gen.hxx>
 #include <tools/link.hxx>
+
 #include <vcl/dllapi.h>
 #include <vcl/field.hxx>
 #include <vcl/vclenum.hxx>
@@ -22,6 +22,11 @@
 
 typedef css::uno::Reference<css::accessibility::XAccessible> a11yref;
 typedef css::uno::Reference<css::accessibility::XAccessibleRelationSet> a11yrelationset;
+
+namespace tools
+{
+class Rectangle;
+}
 
 namespace weld
 {

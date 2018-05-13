@@ -12,14 +12,20 @@
 #define INCLUDED_VCL_ITILEDRENDERABLE_HXX
 
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
-#include <tools/gen.hxx>
+
 #include <svx/ruler.hxx>
+
 #include <vcl/event.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/pointr.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/virdev.hxx>
+
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
+
+namespace tools {
+class Rectangle;
+}
 
 namespace vcl
 {

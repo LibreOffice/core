@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_WIN_SALSYS_H
 #define INCLUDED_VCL_INC_WIN_SALSYS_H
 
+#include <tools/Rectangle.hxx>
+
 #include <salsys.hxx>
 
 #include <vector>

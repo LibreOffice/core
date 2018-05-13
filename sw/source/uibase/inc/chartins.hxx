@@ -22,6 +22,7 @@
 #include <tools/gen.hxx>
 
 namespace vcl { class Window; }
+namespace tools { class Rectangle; }
 
 Point SwGetChartDialogPos( const vcl::Window *pParentWin, const Size& rDialogSize, const tools::Rectangle& rLogicChart );
 void SwInsertChart();

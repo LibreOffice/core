@@ -22,7 +22,6 @@
 
 #include <vcl/timer.hxx>
 #include <tools/link.hxx>
-#include <tools/gen.hxx>
 #include <vcl/event.hxx>
 #include <rtl/ref.hxx>
 

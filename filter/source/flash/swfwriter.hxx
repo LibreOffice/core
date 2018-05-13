@@ -27,8 +27,8 @@
 #include <vcl/gradient.hxx>
 #include <vcl/vclptr.hxx>
 #include <unotools/tempfile.hxx>
+#include <tools/Rectangle.hxx>
 #include <tools/color.hxx>
-#include <tools/gen.hxx>
 #include <tools/stream.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <osl/file.hxx>

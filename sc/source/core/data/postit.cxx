@@ -36,7 +36,6 @@
 #include <svx/xflclit.hxx>
 #include <svx/sdshitm.hxx>
 #include <svx/sdsxyitm.hxx>
-#include <tools/gen.hxx>
 
 #include <table.hxx>
 #include <document.hxx>

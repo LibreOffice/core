@@ -19,7 +19,8 @@
 
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
+
 #include <vcl/gradient.hxx>
 
 Impl_Gradient::Impl_Gradient() :

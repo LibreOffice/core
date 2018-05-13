@@ -31,7 +31,6 @@
 #include <osl/mutex.hxx>
 #include <rtl/uuid.h>
 #include <tools/debug.hxx>
-#include <tools/gen.hxx>
 
 #include <svx/dlgctrl.hxx>
 

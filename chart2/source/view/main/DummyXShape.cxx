@@ -23,7 +23,6 @@
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/gen.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <editeng/unoprnms.hxx>

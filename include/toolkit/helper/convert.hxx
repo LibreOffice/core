@@ -24,7 +24,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 
 inline css::awt::Size AWTSize( const Size& rVCLSize )
 {

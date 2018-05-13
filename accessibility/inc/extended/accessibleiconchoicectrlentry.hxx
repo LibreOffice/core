@@ -34,7 +34,7 @@
 #include <cppuhelper/compbase8.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/accessibletexthelper.hxx>
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 #include <vcl/vclptr.hxx>
 
 // forward

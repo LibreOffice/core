@@ -21,8 +21,8 @@
 #define INCLUDED_SVX_IACCESSIBLEVIEWFORWARDER_HXX
 
 #include <sal/types.h>
-#include <tools/gen.hxx>
 
+#include <tools/Rectangle.hxx>
 
 namespace accessibility {
 

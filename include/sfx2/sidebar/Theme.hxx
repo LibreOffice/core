@@ -25,7 +25,6 @@
 #include <vcl/image.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <tools/gen.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/wall.hxx>
 

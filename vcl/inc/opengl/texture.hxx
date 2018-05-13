@@ -20,11 +20,13 @@
 #ifndef INCLUDED_VCL_INC_OPENGL_TEXTURE_H
 #define INCLUDED_VCL_INC_OPENGL_TEXTURE_H
 
-#include <epoxy/gl.h>
+#include <rtl/ustring.hxx>
+#include <tools/Rectangle.hxx>
+
 #include <vcl/dllapi.h>
 #include <vcl/salgtype.hxx>
-#include <rtl/ustring.hxx>
-#include <tools/gen.hxx>
+
+#include <epoxy/gl.h>
 
 #include <functional>
 #include <memory>

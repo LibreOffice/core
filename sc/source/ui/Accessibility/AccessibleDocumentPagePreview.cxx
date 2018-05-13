@@ -41,7 +41,6 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 
 #include <unotools/accessiblestatesethelper.hxx>
-#include <tools/gen.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/AccessibleTextHelper.hxx>

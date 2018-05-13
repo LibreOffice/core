@@ -19,6 +19,11 @@
 
 #include "Qt5Graphics.hxx"
 
+namespace tools
+{
+class Rectangle;
+}
+
 bool Qt5Graphics::IsNativeControlSupported(ControlType /*nType*/, ControlPart /*nPart*/)
 {
     return false;

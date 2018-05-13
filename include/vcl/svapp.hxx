@@ -22,29 +22,30 @@
 
 #include <sal/config.h>
 #include <sal/types.h>
-
-#include <cassert>
-#include <stdexcept>
-#include <vector>
-
-#include <comphelper/solarmutex.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
+#include <osl/mutex.hxx>
 #include <osl/thread.hxx>
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>
+#include <comphelper/solarmutex.hxx>
+#include <unotools/localedatawrapper.hxx>
+
 #include <vcl/dllapi.h>
 #include <vcl/inputtypes.hxx>
 #include <vcl/exceptiontypes.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/metric.hxx>
-#include <unotools/localedatawrapper.hxx>
+
 #include <o3tl/typed_flags_set.hxx>
+
+#include <cassert>
+#include <stdexcept>
+#include <vector>
+
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/connection/XConnection.hpp>
-
 
 class BitmapEx;
 namespace weld

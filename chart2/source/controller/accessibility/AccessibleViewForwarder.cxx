@@ -20,6 +20,7 @@
 #include "AccessibleViewForwarder.hxx"
 #include <AccessibleChartView.hxx>
 
+#include <tools/Rectangle.hxx>
 #include <vcl/window.hxx>
 
 using namespace ::com::sun::star;

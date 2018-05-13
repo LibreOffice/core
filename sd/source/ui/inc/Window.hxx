@@ -20,9 +20,10 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_WINDOW_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_WINDOW_HXX
 
-#include <tools/gen.hxx>
 #include <vcl/window.hxx>
 #include <svtools/transfer.hxx>
+
+namespace tools { class Rectangle; }
 
 namespace sd {
 

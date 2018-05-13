@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_PFUNCACHE_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_PFUNCACHE_HXX
 
+#include <tools/Rectangle.hxx>
 #include <vector>
-#include <tools/gen.hxx>
 #include <rangelst.hxx>
 #include <printopt.hxx>
 

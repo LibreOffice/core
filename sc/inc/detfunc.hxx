@@ -21,8 +21,9 @@
 #define INCLUDED_SC_INC_DETFUNC_HXX
 
 #include "address.hxx"
-#include <tools/gen.hxx>
 #include <tools/color.hxx>
+#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 #include "scdllapi.h"
 
 #include <vector>

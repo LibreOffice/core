@@ -22,7 +22,6 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <tools/gen.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/metric.hxx>
 

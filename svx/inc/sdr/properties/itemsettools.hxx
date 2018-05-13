@@ -21,12 +21,12 @@
 #define INCLUDED_SVX_INC_SDR_PROPERTIES_ITEMSETTOOLS_HXX
 
 #include <sal/types.h>
-#include <tools/gen.hxx>
 #include <vector>
 
 class SdrObject;
 class SfxItemSet;
 class Fraction;
+namespace tools { class Rectangle; }
 
 // class to remember broadcast start positions
 namespace sdr

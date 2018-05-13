@@ -17,14 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Qt5Graphics.hxx"
-#include "Qt5FontFace.hxx"
-#include "Qt5Font.hxx"
+#include <tools/Rectangle.hxx>
+#include <tools/gen.hxx>
 
 #include <vcl/fontcharmap.hxx>
 
 #include <sallayout.hxx>
 #include <PhysicalFontCollection.hxx>
+
+#include "Qt5Graphics.hxx"
+#include "Qt5FontFace.hxx"
+#include "Qt5Font.hxx"
 
 #include <QtGui/QFontDatabase>
 #include <QtGui/QRawFont>

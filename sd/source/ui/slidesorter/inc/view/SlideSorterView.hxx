@@ -30,7 +30,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <pres.hxx>
 #include <o3tl/deleter.hxx>
-#include <tools/gen.hxx>
 #include <svx/svdmodel.hxx>
 #include <vcl/region.hxx>
 #include <vcl/outdev.hxx>

@@ -20,11 +20,13 @@
 #ifndef INCLUDED_VCL_GDIMTF_HXX
 #define INCLUDED_VCL_GDIMTF_HXX
 
+#include <tools/Rectangle.hxx>
+
 #include <vcl/dllapi.h>
-#include <tools/gen.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/vclptr.hxx>
+
 #include <vector>
 
 class OutputDevice;

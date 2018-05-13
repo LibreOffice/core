@@ -21,8 +21,9 @@
 #define INCLUDED_VCL_EVENT_HXX
 
 #include <tools/solar.h>
+#include <tools/Rectangle.hxx>
+
 #include <vcl/dllapi.h>
-#include <tools/gen.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/settings.hxx>

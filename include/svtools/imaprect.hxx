@@ -21,7 +21,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <svtools/imapobj.hxx>
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 
 class Fraction;
 

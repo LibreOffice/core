@@ -30,24 +30,25 @@ class   SalXLib;
 #include <X11/extensions/Xrender.h>
 #include <epoxy/glx.h>
 
+#include <sal/types.h>
+#include <osl/mutex.h>
 #include <rtl/string.hxx>
-#include <unx/salunx.h>
-#include <unx/saltype.h>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <sal/types.h>
-#include <osl/mutex.h>
+
+#include <salwtype.hxx>
+#include <vclpluginapi.h>
+#include <unx/gendata.hxx>
+#include <unx/gendisp.hxx>
+#include <unx/salunx.h>
+#include <unx/saltype.h>
+
+#include <o3tl/enumarray.hxx>
+
 #include <list>
 #include <unordered_map>
 #include <vector>
-#include <tools/gen.hxx>
-#include <salwtype.hxx>
-#include <unx/gendata.hxx>
-#include <unx/gendisp.hxx>
-#include <o3tl/enumarray.hxx>
-
-#include <vclpluginapi.h>
 
 /* From <X11/Intrinsic.h> */
 typedef unsigned long Pixel;
@@ -57,6 +58,7 @@ class   SalFrame;
 class   ColorMask;
 
 namespace vcl_sal { class WMAdaptor; }
+namespace tools { class Rectangle; }
 
 // server vendor
 

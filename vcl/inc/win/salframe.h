@@ -25,7 +25,7 @@
 #include <svsys.h>
 
 class WinSalGraphics;
-
+namespace tools { class Rectangle; }
 
 class WinSalFrame : public SalFrame
 {

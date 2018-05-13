@@ -35,7 +35,7 @@
 #include <tools/link.hxx>
 #include <tools/weakbase.hxx>
 #include <tools/mapunit.hxx>
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 #include <typeinfo>
 #include <functional>
 

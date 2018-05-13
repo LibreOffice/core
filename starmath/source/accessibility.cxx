@@ -42,7 +42,6 @@
 #include <vcl/unohelp2.hxx>
 #include <vcl/settings.hxx>
 
-#include <tools/gen.hxx>
 #include <svl/itemset.hxx>
 
 #include <editeng/editobj.hxx>

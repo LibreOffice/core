@@ -21,7 +21,6 @@
 #define INCLUDED_SD_SOURCE_UI_INC_DOCPREV_HXX
 
 #include <vcl/window.hxx>
-#include <tools/gen.hxx>
 #include <tools/wintypes.hxx>
 
 #include <rtl/ref.hxx>

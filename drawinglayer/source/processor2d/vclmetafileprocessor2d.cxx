@@ -19,7 +19,6 @@
 
 #include <memory>
 #include "vclmetafileprocessor2d.hxx"
-#include <tools/gen.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gradient.hxx>

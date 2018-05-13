@@ -20,12 +20,17 @@
 #ifndef INCLUDED_VCL_OUTDEV_HXX
 #define INCLUDED_VCL_OUTDEV_HXX
 
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
-#include <o3tl/typed_flags_set.hxx>
+#include <tools/Rectangle.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/vector/b2enums.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <unotools/fontdefs.hxx>
+
 #include <vcl/bitmap.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/devicecoordinate.hxx>
@@ -40,17 +45,13 @@
 #include <vcl/outdevmap.hxx>
 #include <vcl/vclreferencebase.hxx>
 
-#include <basegfx/numeric/ftools.hxx>
-#include <basegfx/vector/b2enums.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-
-#include <unotools/fontdefs.hxx>
-
-#include <com/sun/star/drawing/LineCap.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
 #include <vector>
+
+#include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/uno/Reference.h>
 
 struct ImplOutDevData;
 class LogicalFontInstance;

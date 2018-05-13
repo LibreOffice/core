@@ -27,7 +27,6 @@
 #include <svx/pageitem.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
-#include <tools/gen.hxx>
 #include <tools/fract.hxx>
 #include <vcl/outdev.hxx>
 

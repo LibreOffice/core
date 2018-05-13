@@ -20,7 +20,7 @@
 
 #include <com/sun/star/table/XMergeableCell.hpp>
 
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 #include <libxml/xmlwriter.h>
 
 #include <cell.hxx>

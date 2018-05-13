@@ -20,9 +20,11 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_ZOOMLIST_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_ZOOMLIST_HXX
 
+#include <sal/types.h>
+
 #include <vector>
 
-#include <tools/gen.hxx>
+namespace tools { class Rectangle; }
 
 namespace sd {
 

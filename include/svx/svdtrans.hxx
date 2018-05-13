@@ -24,7 +24,6 @@
 #include <sal/log.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/fract.hxx>
-#include <tools/gen.hxx>
 #include <tools/poly.hxx>
 #include <vcl/field.hxx>
 #include <vcl/mapmod.hxx>

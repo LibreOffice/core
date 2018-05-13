@@ -28,7 +28,6 @@
 #include <o3tl/deleter.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
-#include <tools/gen.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/vclptr.hxx>
@@ -128,7 +127,7 @@ private:
     bool                bFirstDraw;
     Size                aGridSize;
     bool                bCreateOK;
-    tools::Rectangle           aPaintRect;
+    tools::Rectangle    aPaintRect;
     bool                bDialogModelChanged;
     Idle                aMarkIdle;
     long                mnPaintGuard;

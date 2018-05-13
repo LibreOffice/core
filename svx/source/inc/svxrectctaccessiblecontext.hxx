@@ -47,7 +47,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <svx/rectenum.hxx>
 #include <vcl/vclptr.hxx>
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace awt {

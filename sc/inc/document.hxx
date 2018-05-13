@@ -39,7 +39,7 @@
 #include "calcconfig.hxx"
 #include <o3tl/deleter.hxx>
 #include <svl/hint.hxx>
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/typedwhich.hxx>
 

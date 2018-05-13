@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLESCHER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLESCHER_HXX
 
-#include <tools/gen.hxx>
 #include <tools/mapunit.hxx>
 #include "fapihelper.hxx"
 #include "xladdress.hxx"
@@ -34,6 +33,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 namespace tools { class Rectangle; }
+class Size;
 
 // Constants and Enumerations =================================================
 

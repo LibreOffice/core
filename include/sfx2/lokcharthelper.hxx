@@ -11,7 +11,6 @@
 #define INCLUDED_SFX2_LOKCHARTHELPER_HXX
 
 #include <sfx2/dllapi.h>
-#include <tools/gen.hxx>
 #include <vcl/window.hxx>
 
 #include <com/sun/star/frame/XController.hpp>

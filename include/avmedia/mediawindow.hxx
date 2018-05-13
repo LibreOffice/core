@@ -22,7 +22,6 @@
 
 #include <memory>
 #include <vector>
-#include <tools/gen.hxx>
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>

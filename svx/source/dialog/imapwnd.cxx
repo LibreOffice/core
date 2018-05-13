@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/Rectangle.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
 #include <sfx2/sfxsids.hrc>

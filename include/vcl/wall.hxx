@@ -20,8 +20,10 @@
 #ifndef INCLUDED_VCL_WALL_HXX
 #define INCLUDED_VCL_WALL_HXX
 
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
+
 #include <vcl/dllapi.h>
+
 #include <o3tl/cow_wrapper.hxx>
 
 class Color;

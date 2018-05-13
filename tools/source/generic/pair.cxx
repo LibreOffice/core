@@ -19,10 +19,37 @@
 
 #include <tools/gen.hxx>
 #include <tools/Pair.hxx>
+#include <tools/stream.hxx>
 
 SvStream& ReadPair(SvStream& rIStream, Point& v) { return ReadPair(rIStream, v.toPair()); }
 SvStream& WritePair(SvStream& rOStream, const Point& v) { return WritePair(rOStream, v.toPair()); }
 SvStream& ReadPair(SvStream& rIStream, Size& v) { return ReadPair(rIStream, v.toPair()); }
 SvStream& WritePair(SvStream& rOStream, const Size& v) { return WritePair(rOStream, v.toPair()); }
 
+SvStream& ReadPair(SvStream& rIStream, Pair& rPair)
+{
+    sal_Int32 nTmpA(0), nTmpB(0);
+    rIStream.ReadInt32(nTmpA).ReadInt32(nTmpB);
+    rPair.nA = nTmpA;
+    rPair.nB = nTmpB;
+
+    return rIStream;
+}
+
+SvStream& WritePair(SvStream& rOStream, const Pair& rPair)
+{
+    rOStream.WriteInt32(rPair.nA).WriteInt32(rPair.nB);
+
+    return rOStream;
+}
+
+rtl::OString Pair::toString() const
+{
+    std::stringstream ss;
+    // Note that this is not just used for debugging output but the
+    // format is parsed by external code (passed in callbacks to
+    // LibreOfficeKit clients). So don't change.
+    ss << A() << ", " << B();
+    return ss.str().c_str();
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

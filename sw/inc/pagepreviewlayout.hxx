@@ -24,8 +24,6 @@
 #include <vector>
 // datatypes sal_xyz
 #include <sal/types.h>
-// classes <Point>, <Size> and <Rectangle>
-#include <tools/gen.hxx>
 // datatype <SwTwips>
 #include "swtypes.hxx"
 

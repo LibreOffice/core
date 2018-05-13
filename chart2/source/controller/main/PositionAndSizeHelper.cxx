@@ -26,7 +26,6 @@
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <chartview/ExplicitValueProvider.hxx>
 
-#include <tools/gen.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 namespace chart
