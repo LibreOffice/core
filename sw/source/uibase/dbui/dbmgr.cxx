@@ -1324,8 +1324,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 pParent, pParent != pSourceWindow );
         else {
             pProgressDlg = VclPtr<PrintMonitor>::Create(
-                pParent, pParent != pSourceWindow,
-                PrintMonitor::MONITOR_TYPE_PRINT );
+                pParent, pParent != pSourceWindow);
             static_cast<PrintMonitor*>( pProgressDlg.get() )->SetText(
                 pSourceDocSh->GetTitle(22) );
         }
