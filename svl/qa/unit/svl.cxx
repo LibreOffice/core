@@ -1383,6 +1383,16 @@ void Test::testUserDefinedNumberFormats()
         checkPreviewString(aFormatter, sCode, 120, eLang, sExpected);
         sCode = "[DBNum2][$-0404]General\\ ";
         checkPreviewString(aFormatter, sCode, 120, eLang, sExpected);
+        // tdf#115007 - cardinal/ordinal number names/indicators
+        sCode = "[NatNum12]0";
+        sExpected = "one hundred twenty three";
+        checkPreviewString(aFormatter, sCode, 123, eLang, sExpected);
+        sCode = "[NatNum13]0";
+        sExpected = "one hundred twenty third";
+        checkPreviewString(aFormatter, sCode, 123, eLang, sExpected);
+        sCode = "[NatNum14]0";
+        sExpected = "123rd";
+        checkPreviewString(aFormatter, sCode, 123, eLang, sExpected);
     }
     {  // tdf#105968 engineering format with value rounded up to next magnitude
         sCode = "##0.00E+00";
