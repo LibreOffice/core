@@ -27,6 +27,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
+#include <rtl/character.hxx>
 #include <sal/types.h>
 
 #include <map>
@@ -34,17 +35,6 @@
 
 using cppu::UnoUrl;
 using cppu::UnoUrlDescriptor;
-
-namespace {
-
-inline bool isAlphanum(sal_Unicode c)
-{
-    return (c >= 0x30 && c <= 0x39) // '0'--'9'
-        || (c >= 0x41 && c <= 0x5A) // 'A'--'Z'
-        || (c >= 0x61 && c <= 0x7A); // 'a'--'z'
-}
-
-}
 
 class UnoUrlDescriptor::Impl
 {
@@ -76,7 +66,7 @@ inline UnoUrlDescriptor::Impl::Impl(rtl::OUString const & rDescriptor)
         switch (eState)
         {
         case STATE_NAME0:
-            if (bEnd || !isAlphanum(c))
+            if (bEnd || !rtl::isAsciiAlphanumeric(c))
                 throw rtl::MalformedUriException(
                     "UNO URL contains bad descriptor name");
             nStart = i;
@@ -90,13 +80,13 @@ inline UnoUrlDescriptor::Impl::Impl(rtl::OUString const & rDescriptor)
                     = rDescriptor.copy(nStart, i - nStart).toAsciiLowerCase();
                 eState = STATE_KEY0;
             }
-            else if (!isAlphanum(c))
+            else if (!rtl::isAsciiAlphanumeric(c))
                 throw rtl::MalformedUriException(
                     "UNO URL contains bad descriptor name");
             break;
 
         case STATE_KEY0:
-            if (bEnd || !isAlphanum(c))
+            if (bEnd || !rtl::isAsciiAlphanumeric(c))
                 throw rtl::MalformedUriException(
                     "UNO URL contains bad parameter key");
             nStart = i;
@@ -110,7 +100,7 @@ inline UnoUrlDescriptor::Impl::Impl(rtl::OUString const & rDescriptor)
                 nStart = i + 1;
                 eState = STATE_VALUE;
             }
-            else if (bEnd || !isAlphanum(c))
+            else if (bEnd || !rtl::isAsciiAlphanumeric(c))
                 throw rtl::MalformedUriException(
                     "UNO URL contains bad parameter key");
             break;
@@ -222,7 +212,7 @@ inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
     for (j = i; j < rUrl.getLength(); ++j)
     {
         sal_Unicode c = rUrl[j];
-        if (!isAlphanum(c) && c != 0x21 && c != 0x24 // '!', '$'
+        if (!rtl::isAsciiAlphanumeric(c) && c != 0x21 && c != 0x24 // '!', '$'
             && c != 0x26 && c != 0x27 && c != 0x28 // '&', ''', '('
             && c != 0x29 && c != 0x2A && c != 0x2B // ')', '*', '+'
             && c != 0x2C && c != 0x2D && c != 0x2E // ',', '-', '.'
