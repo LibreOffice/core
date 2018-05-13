@@ -114,64 +114,54 @@ struct GroupUserData
 };
 
 // dialog for new block name
-class SwNewGlosNameDlg : public ModalDialog
+class SwNewGlosNameDlg : public weld::GenericDialogController
 {
-    VclPtr<Edit>        m_pNewName;
     TextFilter          m_aNoSpaceFilter;
-    VclPtr<Edit>        m_pNewShort;
-    VclPtr<OKButton>    m_pOk;
-    VclPtr<Edit>        m_pOldName;
-    VclPtr<Edit>        m_pOldShort;
+    VclPtr<SwGlossaryDlg>      m_pParent;
+
+    std::unique_ptr<weld::Entry> m_xNewName;
+    std::unique_ptr<weld::Entry> m_xNewShort;
+    std::unique_ptr<weld::Button> m_xOk;
+    std::unique_ptr<weld::Entry> m_xOldName;
+    std::unique_ptr<weld::Entry> m_xOldShort;
 
 protected:
-    DECL_LINK( Modify, Edit&, void );
-    DECL_LINK(Rename, Button*, void);
+    DECL_LINK(Modify, weld::Entry&, void);
+    DECL_LINK(Rename, weld::Button&, void);
+    DECL_LINK(TextFilterHdl, OUString&, bool);
 
 public:
-    SwNewGlosNameDlg( vcl::Window* pParent,
-                      const OUString& rOldName,
-                      const OUString& rOldShort );
-    virtual ~SwNewGlosNameDlg() override;
-    virtual void dispose() override;
+    SwNewGlosNameDlg(SwGlossaryDlg* pParent,
+                     const OUString& rOldName,
+                     const OUString& rOldShort);
 
-    OUString GetNewName()  const { return m_pNewName->GetText(); }
-    OUString GetNewShort() const { return m_pNewShort->GetText(); }
+    OUString GetNewName()  const { return m_xNewName->get_text(); }
+    OUString GetNewShort() const { return m_xNewShort->get_text(); }
 };
 
-SwNewGlosNameDlg::SwNewGlosNameDlg(vcl::Window* pParent,
-                            const OUString& rOldName,
-                            const OUString& rOldShort )
-    : ModalDialog(pParent, "RenameAutoTextDialog",
-        "modules/swriter/ui/renameautotextdialog.ui")
+IMPL_LINK(SwNewGlosNameDlg, TextFilterHdl, OUString&, rTest, bool)
 {
-    get(m_pNewName, "newname");
-    get(m_pNewShort, "newsc");
-    m_pNewShort->SetTextFilter(&m_aNoSpaceFilter);
-    get(m_pOk, "ok");
-    get(m_pOldName, "oldname");
-    get(m_pOldShort, "oldsc");
-
-    m_pOldName->SetText( rOldName );
-    m_pOldShort->SetText( rOldShort );
-    m_pNewName->SetModifyHdl(LINK(this, SwNewGlosNameDlg, Modify ));
-    m_pNewShort->SetModifyHdl(LINK(this, SwNewGlosNameDlg, Modify ));
-    m_pOk->SetClickHdl(LINK(this, SwNewGlosNameDlg, Rename ));
-    m_pNewName->GrabFocus();
+    rTest = m_aNoSpaceFilter.filter(rTest);
+    return true;
 }
 
-SwNewGlosNameDlg::~SwNewGlosNameDlg()
+SwNewGlosNameDlg::SwNewGlosNameDlg(SwGlossaryDlg* pParent, const OUString& rOldName, const OUString& rOldShort)
+    : GenericDialogController(pParent->GetFrameWeld(), "modules/swriter/ui/renameautotextdialog.ui", "RenameAutoTextDialog")
+    , m_pParent(pParent)
+    , m_xNewName(m_xBuilder->weld_entry("newname"))
+    , m_xNewShort(m_xBuilder->weld_entry("newsc"))
+    , m_xOk(m_xBuilder->weld_button("ok"))
+    , m_xOldName(m_xBuilder->weld_entry("oldname"))
+    , m_xOldShort(m_xBuilder->weld_entry("oldsc"))
 {
-    disposeOnce();
-}
+    m_xNewShort->connect_insert_text(LINK(this, SwNewGlosNameDlg, TextFilterHdl));
 
-void SwNewGlosNameDlg::dispose()
-{
-    m_pNewName.clear();
-    m_pNewShort.clear();
-    m_pOk.clear();
-    m_pOldName.clear();
-    m_pOldShort.clear();
-    ModalDialog::dispose();
+    m_xOldName->set_text(rOldName);
+    m_xOldShort->set_text(rOldShort);
+    m_xNewName->connect_changed(LINK(this, SwNewGlosNameDlg, Modify ));
+    m_xNewShort->connect_changed(LINK(this, SwNewGlosNameDlg, Modify ));
+    m_xOk->connect_clicked(LINK(this, SwNewGlosNameDlg, Rename ));
+    m_xNewName->grab_focus();
 }
 
 // query / set currently set group
@@ -503,17 +493,15 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
     else if (sItemIdent == "rename")
     {
         m_pShortNameEdit->SetText(pGlossaryHdl->GetGlossaryShortName(m_pNameED->GetText()));
-        ScopedVclPtrInstance<SwNewGlosNameDlg> pNewNameDlg(this, m_pNameED->GetText(),
-                                                           m_pShortNameEdit->GetText());
-        if( RET_OK == pNewNameDlg->Execute() &&
-            pGlossaryHdl->Rename( m_pShortNameEdit->GetText(),
-                                    pNewNameDlg->GetNewShort(),
-                                    pNewNameDlg->GetNewName()))
+        SwNewGlosNameDlg aNewNameDlg(this, m_pNameED->GetText(), m_pShortNameEdit->GetText());
+        if (aNewNameDlg.run() == RET_OK && pGlossaryHdl->Rename(m_pShortNameEdit->GetText(),
+                                                                aNewNameDlg.GetNewShort(),
+                                                                aNewNameDlg.GetNewName()))
         {
             SvTreeListEntry* pEntry = m_pCategoryBox->FirstSelected();
             SvTreeListEntry* pNewEntry = m_pCategoryBox->InsertEntry(
-                    pNewNameDlg->GetNewName(), m_pCategoryBox->GetParent(pEntry));
-            pNewEntry->SetUserData(new OUString(pNewNameDlg->GetNewShort()));
+                    aNewNameDlg.GetNewName(), m_pCategoryBox->GetParent(pEntry));
+            pNewEntry->SetUserData(new OUString(aNewNameDlg.GetNewShort()));
             delete static_cast<OUString*>(pEntry->GetUserData());
             m_pCategoryBox->GetModel()->Remove(pEntry);
             m_pCategoryBox->Select(pNewEntry);
@@ -790,34 +778,34 @@ IMPL_LINK_NOARG(SwGlossaryDlg, EditHdl, MenuButton *, void)
 }
 
 // KeyInput for ShortName - Edits without Spaces
-IMPL_LINK( SwNewGlosNameDlg, Modify, Edit&, rBox, void )
+IMPL_LINK( SwNewGlosNameDlg, Modify, weld::Entry&, rBox, void )
 {
-    OUString aName(m_pNewName->GetText());
-    SwGlossaryDlg* pDlg = static_cast<SwGlossaryDlg*>(GetParent());
-    if (&rBox == m_pNewName)
-        m_pNewShort->SetText( lcl_GetValidShortCut( aName ) );
+    OUString aName(m_xNewName->get_text());
+    SwGlossaryDlg* pDlg = m_pParent;
+    if (&rBox == m_xNewName.get())
+        m_xNewShort->set_text(lcl_GetValidShortCut(aName));
 
-    bool bEnable = !aName.isEmpty() && !m_pNewShort->GetText().isEmpty() &&
-        (!pDlg->DoesBlockExist(aName, m_pNewShort->GetText())
-            || aName == m_pOldName->GetText());
-    m_pOk->Enable(bEnable);
+    bool bEnable = !aName.isEmpty() && !m_xNewShort->get_text().isEmpty() &&
+        (!pDlg->DoesBlockExist(aName, m_xNewShort->get_text())
+            || aName == m_xOldName->get_text());
+    m_xOk->set_sensitive(bEnable);
 }
 
-IMPL_LINK_NOARG(SwNewGlosNameDlg, Rename, Button*, void)
+IMPL_LINK_NOARG(SwNewGlosNameDlg, Rename, weld::Button&, void)
 {
-    SwGlossaryDlg* pDlg = static_cast<SwGlossaryDlg*>(GetParent());
-    OUString sNew = GetAppCharClass().uppercase(m_pNewShort->GetText());
-    if( pDlg->pGlossaryHdl->HasShortName(m_pNewShort->GetText())
-        && sNew != m_pOldShort->GetText() )
+    SwGlossaryDlg* pDlg = m_pParent;
+    OUString sNew = GetAppCharClass().uppercase(m_xNewShort->get_text());
+    if (pDlg->pGlossaryHdl->HasShortName(m_xNewShort->get_text())
+        && sNew != m_xOldShort->get_text())
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                   VclMessageType::Info, VclButtonsType::Ok,
                                                   SwResId(STR_DOUBLE_SHORTNAME)));
         xBox->run();
-        m_pNewShort->GrabFocus();
+        m_xNewShort->grab_focus();
     }
     else
-        EndDialog(RET_OK);
+        m_xDialog->response(RET_OK);
 }
 
 IMPL_LINK( SwGlossaryDlg, CheckBoxHdl, Button *, pBox, void )
