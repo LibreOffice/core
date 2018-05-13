@@ -22,7 +22,7 @@
 
 #include <svx/svxdllapi.h>
 
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 #include <tools/color.hxx>
 #include <vcl/vclptr.hxx>
 

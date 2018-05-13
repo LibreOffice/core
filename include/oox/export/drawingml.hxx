@@ -36,9 +36,9 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <sax/fshelper.hxx>
+#include <tools/gen.hxx>
 #include <svx/msdffdef.hxx>
 #include <vcl/checksum.hxx>
-#include <tools/gen.hxx>
 #include <vcl/mapmod.hxx>
 
 #ifndef OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY

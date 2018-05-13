@@ -16,8 +16,29 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_VCL_SOURCE_GDI_PDFWRITER_IMPL_HXX
 #define INCLUDED_VCL_SOURCE_GDI_PDFWRITER_IMPL_HXX
+
+#include <osl/file.hxx>
+#include <rtl/cipher.h>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <tools/Rectangle.hxx>
+#include <comphelper/hash.hxx>
+#include <o3tl/typed_flags_set.hxx>
+
+#include <vcl/bitmapex.hxx>
+#include <vcl/gradient.hxx>
+#include <vcl/hatch.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/pdfwriter.hxx>
+#include <vcl/wall.hxx>
+
+#include <sallayout.hxx>
+#include <outdata.hxx>
+#include <PhysicalFontFace.hxx>
+#include "pdffontcache.hxx"
 
 #include <map>
 #include <list>
@@ -28,24 +49,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/uno/Sequence.h>
-#include <osl/file.hxx>
-#include <rtl/cipher.h>
-#include <rtl/strbuf.hxx>
-#include <rtl/ustring.hxx>
-#include <tools/gen.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/gradient.hxx>
-#include <vcl/hatch.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/pdfwriter.hxx>
-#include <vcl/wall.hxx>
-#include <o3tl/typed_flags_set.hxx>
-#include <comphelper/hash.hxx>
-
-#include <sallayout.hxx>
-#include <outdata.hxx>
-#include "pdffontcache.hxx"
-#include <PhysicalFontFace.hxx>
 
 class StyleSettings;
 class FontSelectPattern;

@@ -20,9 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CBUTTON_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CBUTTON_HXX
 
-#include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <vcl/vclptr.hxx>
+
+namespace tools { class Rectangle; }
 
 class OutputDevice;
 

@@ -21,7 +21,6 @@
 #define INCLUDED_EDITENG_ACCESSIBLEEDITABLETEXTPARA_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/gen.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>

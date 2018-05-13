@@ -21,7 +21,6 @@
 
 #include <vcl/window.hxx>
 #include <tools/color.hxx>
-#include <tools/gen.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/swframetypes.hxx>
 #include <com/sun/star/text/WrapTextMode.hpp>

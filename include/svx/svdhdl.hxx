@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SVX_SVDHDL_HXX
 #define INCLUDED_SVX_SVDHDL_HXX
 
-#include <tools/gen.hxx>
-
 #include <vcl/pointr.hxx>
 
 #include <svl/solar.hrc>

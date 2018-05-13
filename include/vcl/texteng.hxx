@@ -19,20 +19,21 @@
 #ifndef INCLUDED_VCL_TEXTENG_HXX
 #define INCLUDED_VCL_TEXTENG_HXX
 
-#include <memory>
 #include <sal/config.h>
 
-#include <cstddef>
+#include <rtl/ustring.hxx>
+#include <tools/lineend.hxx>
+#include <tools/link.hxx>
+#include <tools/Rectangle.hxx>
+#include <tools/color.hxx>
+#include <svl/SfxBroadcaster.hxx>
 
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
-#include <rtl/ustring.hxx>
-#include <svl/SfxBroadcaster.hxx>
-#include <tools/lineend.hxx>
-#include <tools/link.hxx>
-#include <tools/gen.hxx>
-#include <tools/color.hxx>
 #include <vcl/font.hxx>
+
+#include <memory>
+#include <cstddef>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Reference.hxx>

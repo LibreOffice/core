@@ -23,7 +23,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <tools/link.hxx>
-#include <tools/gen.hxx>
 
 using namespace css;
 using namespace css::uno;

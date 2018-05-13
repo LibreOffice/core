@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_WIN_WINLAYOUT_HXX
 
 #include <rtl/ustring.hxx>
+#include <tools/Rectangle.hxx>
 
 #include <sallayout.hxx>
 #include <svsys.h>

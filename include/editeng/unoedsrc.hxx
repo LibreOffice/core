@@ -24,7 +24,6 @@
 
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
-#include <tools/gen.hxx>
 #include <vcl/mapmod.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>

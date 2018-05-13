@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_HATCHWINDOW_IPWIN_HXX
 #define INCLUDED_SVTOOLS_SOURCE_HATCHWINDOW_IPWIN_HXX
 
-#include <tools/gen.hxx>
 #include <vcl/window.hxx>
 
 /********************** SvResizeHelper ***********************************

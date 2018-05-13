@@ -33,7 +33,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <svx/EnhancedCustomShapeFunctionParser.hxx>
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <memory>

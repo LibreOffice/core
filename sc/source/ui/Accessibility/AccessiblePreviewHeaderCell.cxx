@@ -21,7 +21,6 @@
 
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
-#include <tools/gen.hxx>
 #include <AccessibleText.hxx>
 #include <editsrc.hxx>
 #include <svx/AccessibleTextHelper.hxx>

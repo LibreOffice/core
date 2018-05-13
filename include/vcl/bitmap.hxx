@@ -22,11 +22,14 @@
 
 #include <tools/link.hxx>
 #include <tools/solar.h>
+#include <tools/gen.hxx>
+
 #include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
+
 #include <o3tl/typed_flags_set.hxx>
 
 class Color;

@@ -19,8 +19,9 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_CONNECTIONLINE_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_CONNECTIONLINE_HXX
 
-#include <tools/gen.hxx>
 #include "ConnectionLineData.hxx"
+#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 #include <vcl/vclptr.hxx>
 
 class OutputDevice;

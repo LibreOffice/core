@@ -21,8 +21,8 @@
 #define INCLUDED_SVX_SVDDRAG_HXX
 
 
-#include <tools/gen.hxx>
 #include <tools/fract.hxx>
+#include <tools/Rectangle.hxx>
 #include <svx/svxdllapi.h>
 
 #include <memory>

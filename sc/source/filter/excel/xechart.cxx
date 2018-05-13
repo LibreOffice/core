@@ -55,7 +55,6 @@
 
 #include <o3tl/make_unique.hxx>
 
-#include <tools/gen.hxx>
 #include <vcl/outdev.hxx>
 #include <filter/msfilter/escherex.hxx>
 

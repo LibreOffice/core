@@ -23,7 +23,6 @@
 
 #include <svtools/accessibletable.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/gen.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/implbase1.hxx>

@@ -26,7 +26,6 @@
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <tools/gen.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/propertysethelper.hxx>

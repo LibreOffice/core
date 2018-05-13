@@ -28,6 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <tools/Rectangle.hxx>
 
 
 namespace accessibility

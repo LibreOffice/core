@@ -20,18 +20,23 @@
 #ifndef INCLUDED_VCL_REGION_HXX
 #define INCLUDED_VCL_REGION_HXX
 
-#include <tools/gen.hxx>
-#include <vcl/dllapi.h>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+
+#include <vcl/dllapi.h>
+
 #include <memory>
 
 class ImplRegionBand;
 class RegionBand;
 
 namespace tools {
+    class Rectangle;
     class Polygon;
     class PolyPolygon;
 }
+
+class Point;
+class SvStream;
 
 namespace vcl { class Window; }
 class OutputDevice;

@@ -84,7 +84,6 @@
 #include <svtools/treelistbox.hxx>
 #include <svtools/controldims.hxx>
 #include <svx/checklbx.hxx>
-#include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>
 #include <unotools/configmgr.hxx>

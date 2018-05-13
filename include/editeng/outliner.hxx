@@ -27,7 +27,6 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/languageoptions.hxx>
 #include <svl/undo.hxx>
-#include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
 #include <vcl/graph.hxx>

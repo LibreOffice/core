@@ -40,7 +40,6 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 
-#include <tools/gen.hxx>
 #include <com/sun/star/awt/Command.hpp>
 #include <svl/languageoptions.hxx>
 

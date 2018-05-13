@@ -52,7 +52,7 @@
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/families.hxx>

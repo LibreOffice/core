@@ -23,7 +23,6 @@
 #include <global.hxx>
 #include <docpool.hxx>
 
-#include <tools/gen.hxx>
 #include <editeng/unoedsrc.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>

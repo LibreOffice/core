@@ -25,7 +25,7 @@
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 
 class SdrObject;
 class SdrObjCustomShape;

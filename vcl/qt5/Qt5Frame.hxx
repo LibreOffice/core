@@ -33,6 +33,11 @@ class QPaintDevice;
 class QImage;
 class SvpSalGraphics;
 
+namespace tools
+{
+class Rectangle;
+}
+
 class Qt5Frame : public SalFrame
 {
     friend class Qt5Widget;

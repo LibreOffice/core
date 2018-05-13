@@ -20,7 +20,6 @@
 #ifndef INCLUDED_EDITENG_ACCESSIBLEIMAGEBULLET_HXX
 #define INCLUDED_EDITENG_ACCESSIBLEIMAGEBULLET_HXX
 
-#include <tools/gen.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase.hxx>
 

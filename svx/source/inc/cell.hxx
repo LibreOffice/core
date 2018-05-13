@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 
 #include <rtl/ref.hxx>
+#include <tools/Rectangle.hxx>
 #include <svl/style.hxx>
 #include <svx/sdtaitm.hxx>
 #include "tablemodel.hxx"

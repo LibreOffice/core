@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 #include <tools/color.hxx>
 #include <rtl/strbuf.hxx>
 

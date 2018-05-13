@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLCHART_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLCHART_HXX
 
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 #include "fapihelper.hxx"
 #include <map>
 #include <memory>

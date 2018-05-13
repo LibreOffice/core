@@ -17,10 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/Rectangle.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+
 #include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 

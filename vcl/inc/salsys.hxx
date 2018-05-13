@@ -20,9 +20,10 @@
 #ifndef INCLUDED_VCL_INC_SALSYS_HXX
 #define INCLUDED_VCL_INC_SALSYS_HXX
 
-#include <tools/gen.hxx>
-#include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
+#include <tools/Rectangle.hxx>
+
+#include <vcl/dllapi.h>
 
 // Button identifier for ShowNativeMessageBox
 const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK     = 1;

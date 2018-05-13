@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <tools/gen.hxx>
 #include <AccessiblePageHeaderArea.hxx>
 #include <AccessibleText.hxx>
 #include <AccessibilityHints.hxx>

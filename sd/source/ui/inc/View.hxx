@@ -22,7 +22,6 @@
 
 #include <memory>
 #include <pres.hxx>
-#include <tools/gen.hxx>
 #include <svtools/transfer.hxx>
 #include <svx/fmview.hxx>
 #include <svx/svdmark.hxx>
@@ -46,6 +45,7 @@ class SdrOutliner;
 class TransferableDataHelper;
 class Outliner;
 
+namespace tools { class Rectangle; }
 namespace sd {
 
 class DrawDocShell;

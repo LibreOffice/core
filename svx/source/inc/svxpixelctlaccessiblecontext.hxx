@@ -42,8 +42,6 @@
 #include <comphelper/servicehelper.hxx>
 
 #include <svx/rectenum.hxx>
-#include <tools/gen.hxx>
-
 
 namespace com { namespace sun { namespace star { namespace awt {
     struct Point;

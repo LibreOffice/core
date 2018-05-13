@@ -24,7 +24,7 @@
 #include <tools/solar.h>
 #include <vcl/textdata.hxx>
 #include <svl/hint.hxx>
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 #include <editeng/editengdllapi.h>
 
 struct EENotify;

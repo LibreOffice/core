@@ -62,8 +62,8 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWRECT_HXX
 
 #include <lwpheader.hxx>
-#include <tools/gen.hxx>
 #include <array>
+#include <tools/Rectangle.hxx>
 
 /**
  * @brief

@@ -40,7 +40,6 @@
 #include <svx/msdffdef.hxx>
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
-#include <tools/gen.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <vcl/graph.hxx>

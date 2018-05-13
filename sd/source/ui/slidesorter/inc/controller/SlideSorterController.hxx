@@ -28,7 +28,6 @@
 #include <sfx2/shell.hxx>
 #include <sfx2/viewfac.hxx>
 #include <tools/link.hxx>
-#include <tools/gen.hxx>
 
 #include <sddllapi.h>
 

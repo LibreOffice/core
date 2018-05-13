@@ -24,10 +24,11 @@
 
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/range/b3drange.hxx>
-#include <tools/gen.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+
 #include <tools/toolsdllapi.h>
+#include <tools/Rectangle.hxx>
 
 /// Transformation sets for 3D output
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC B3dTransformationSet

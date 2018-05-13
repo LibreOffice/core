@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SFX2_THUMBNAILVIEWITEM_HXX
 #define INCLUDED_SFX2_THUMBNAILVIEWITEM_HXX
 
+#include <tools/Rectangle.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>

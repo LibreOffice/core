@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_INVMERGE_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_INVMERGE_HXX
 
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 
 #include <vector>
 

@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_WIN_SALGDI_H
 #define INCLUDED_VCL_INC_WIN_SALGDI_H
 
+#include <tools/Rectangle.hxx>
+
 #include <sallayout.hxx>
 #include <salgeom.hxx>
 #include <salgdi.hxx>

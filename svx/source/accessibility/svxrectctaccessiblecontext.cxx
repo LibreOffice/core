@@ -30,7 +30,6 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
-#include <tools/gen.hxx>
 
 #include <svx/strings.hrc>
 #include <svx/dlgctrl.hxx>

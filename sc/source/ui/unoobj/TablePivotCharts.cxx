@@ -15,7 +15,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-#include <tools/gen.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>

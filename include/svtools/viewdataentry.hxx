@@ -22,7 +22,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <tools/solar.h>
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 
 #include <vector>
 

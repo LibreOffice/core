@@ -20,13 +20,14 @@
 #ifndef INCLUDED_VCL_TEXTVIEW_HXX
 #define INCLUDED_VCL_TEXTVIEW_HXX
 
-#include <tools/gen.hxx>
 #include <tools/lineend.hxx>
 #include <tools/stream.hxx>
+
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/textdata.hxx>
 #include <vcl/window.hxx>
+
 #include <memory>
 
 class TextEngine;
@@ -44,10 +45,14 @@ namespace com { namespace sun { namespace star {
     namespace datatransfer { namespace clipboard {
         class XClipboard;
 }}}}}
+
 namespace i18nutil {
     struct SearchOptions;
 }
 
+namespace tools {
+    class Rectangle;
+}
 
 struct ImpTextView;
 class ExtTextEngine;

@@ -34,7 +34,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <comphelper/servicehelper.hxx>
-#include <tools/gen.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/svapp.hxx>
 #include <scresid.hxx>

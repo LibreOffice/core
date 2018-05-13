@@ -28,7 +28,6 @@
 #include <sal/types.h>
 #include <rtl/ref.hxx>
 #include <svx/svxdllapi.h>
-#include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/event.hxx>

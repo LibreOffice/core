@@ -17,10 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <osl/diagnose.h>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
+#include <tools/Rectangle.hxx>
+
 #include <regionband.hxx>
-#include <osl/diagnose.h>
 
 RegionBand::RegionBand()
 :   mpFirstBand(nullptr),

@@ -21,17 +21,21 @@
 #define INCLUDED_VCL_INC_UNX_WMADAPTOR_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/gen.hxx>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
 #include <vclpluginapi.h>
 #include "salframe.h"
+
 #include <vector>
 
 class SalDisplay;
 class X11SalFrame;
+
+namespace tools {
+    class Rectangle;
+}
 
 namespace vcl_sal {
 

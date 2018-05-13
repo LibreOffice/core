@@ -14,7 +14,6 @@
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <vcl/errcode.hxx>
-#include <tools/gen.hxx>
 #include <swmodeltestbase.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>

@@ -21,7 +21,6 @@
 
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
-#include <tools/gen.hxx>
 #include <tools/wintypes.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/event.hxx>

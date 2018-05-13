@@ -45,7 +45,6 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 
 #include <unotools/accessiblestatesethelper.hxx>
-#include <tools/gen.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/ShapeTypeHandler.hxx>

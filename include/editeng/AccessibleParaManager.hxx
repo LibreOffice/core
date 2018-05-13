@@ -23,7 +23,6 @@
 #include <vector>
 #include <algorithm>
 #include <utility>
-#include <tools/gen.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>

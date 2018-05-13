@@ -21,12 +21,12 @@
 #define INCLUDED_SC_SOURCE_UI_INC_PREVLOC_HXX
 
 #include <sal/types.h>
+#include <tools/Rectangle.hxx>
 
 #include <address.hxx>
 
 #include <vcl/mapmod.hxx>
 #include <vcl/vclptr.hxx>
-#include <tools/gen.hxx>
 
 #include <memory>
 #include <list>
@@ -38,7 +38,6 @@
 #define SC_PREVIEW_RANGE_TAB    3
 
 class OutputDevice;
-namespace tools { class Rectangle; }
 class ScAddress;
 class ScRange;
 class ScDocument;

@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SVDHLPLN_HXX
 
 #include <sal/types.h>
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 
 #include <vcl/pointr.hxx>
 #include <svx/svxdllapi.h>

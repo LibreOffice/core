@@ -21,7 +21,6 @@
 
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
-#include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/weld.hxx>

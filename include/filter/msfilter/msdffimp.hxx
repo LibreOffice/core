@@ -41,7 +41,6 @@
 #include <sal/types.h>
 #include <svx/msdffdef.hxx>
 #include <vcl/errcode.hxx>
-#include <tools/gen.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <vcl/graph.hxx>

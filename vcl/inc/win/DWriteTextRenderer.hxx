@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_WIN_DWRITERENDERER_HXX
 #define INCLUDED_VCL_INC_WIN_DWRITERENDERER_HXX
 
+#include <tools/Rectangle.hxx>
+
 #include <usp10.h>
 #include <d2d1.h>
 #include <dwrite.h>

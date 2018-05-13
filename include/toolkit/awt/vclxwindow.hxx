@@ -40,7 +40,6 @@
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
 
-#include <tools/gen.hxx>
 #include <tools/link.hxx>
 
 #include <stdarg.h>

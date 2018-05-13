@@ -26,6 +26,7 @@
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/Rectangle.hxx>
 #include <tools/gen.hxx>
 
 #include <memory>

@@ -21,10 +21,12 @@
 #define INCLUDED_VCL_CONTROLLAYOUT_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/gen.hxx>
-#include <vector>
+#include <tools/Rectangle.hxx>
+
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
+
+#include <vector>
 
 namespace vcl
 {

@@ -20,15 +20,15 @@
 #ifndef INCLUDED_VCL_INC_OUTDEV_H
 #define INCLUDED_VCL_INC_OUTDEV_H
 
-#include <set>
-#include <vector>
-
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 #include <vcl/vclptr.hxx>
 
 #include "fontinstance.hxx"
 #include "PhysicalFontFace.hxx"
 #include "impfontcache.hxx"
+
+#include <set>
+#include <vector>
 
 class Size;
 namespace vcl { class Font; }
@@ -130,7 +130,7 @@ struct ImplOutDevData
 {
     VclPtr<VirtualDevice>       mpRotateDev;
     vcl::ControlLayoutData*     mpRecordLayout;
-    tools::Rectangle                   maRecordRect;
+    tools::Rectangle            maRecordRect;
 
     // #i75163#
     basegfx::B2DHomMatrix*      mpViewTransform;

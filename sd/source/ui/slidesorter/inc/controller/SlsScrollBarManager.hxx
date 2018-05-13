@@ -23,7 +23,6 @@
 #include <SlideSorter.hxx>
 
 #include <tools/link.hxx>
-#include <tools/gen.hxx>
 #include <vcl/timer.hxx>
 
 #include <functional>

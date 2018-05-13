@@ -19,6 +19,7 @@
 
 
 #include "main.hxx"
+#include <tools/Rectangle.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <memory>
 

@@ -24,7 +24,7 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/vector/b3dvector.hxx>
-#include <tools/gen.hxx>
+#include <tools/Rectangle.hxx>
 
 // predefines
 namespace basegfx { class B3DRange; } // end of namespace basegfx
