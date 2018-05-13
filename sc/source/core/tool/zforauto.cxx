@@ -24,6 +24,7 @@
 
 #include <zforauto.hxx>
 #include <global.hxx>
+#include <tools/stream.hxx>
 
 ScNumFormatAbbrev::ScNumFormatAbbrev() :
     sFormatstring   ( "Standard" ),

@@ -23,6 +23,7 @@
 #include <tools/color.hxx>
 #include <global.hxx>
 #include <address.hxx>
+#include <tools/solar.h>
 
 struct ScRangeFindData
 {

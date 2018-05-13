@@ -177,3 +177,7 @@ blacklist:
     - global.hxx
     # Needed for macros
     - calcmacros.hxx
+    sc/inc/global.hxx:
+    # base class has to be a complete type
+    - com/sun/star/uno/Reference.hxx
+    - tools/ref.hxx
