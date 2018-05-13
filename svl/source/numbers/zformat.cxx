@@ -928,11 +928,22 @@ SvNumberformat::SvNumberformat(OUString& rString,
                     }
                     else
                     {
+                        OUString sParams;
+                        sal_Int32 nSpacePos = sStr.indexOf(' ');
+                        if (nSpacePos >= 0)
+                        {
+                            sParams = sStr.copy(nSpacePos+1);
+                        }
                         sStr = "NatNum";
                         //! eSymbolType is negative
                         sal_uInt8 nNum = static_cast<sal_uInt8>(0 - (eSymbolType - BRACKET_SYMBOLTYPE_NATNUM0));
                         sStr += OUString::number( nNum );
                         NumFor[nIndex].SetNatNumNum( nNum, false );
+                        if (!sParams.isEmpty())
+                        {
+                            NumFor[nIndex].SetNatNumParams(sParams);
+                            sStr += " " + sParams;
+                        }
                     }
                     break;
                 case BRACKET_SYMBOLTYPE_DBNUM1 :
@@ -5331,8 +5342,8 @@ OUString SvNumberformat::impTransliterateImpl(const OUString& rStr,
                                               const SvNumberNatNum& rNum ) const
 {
     css::lang::Locale aLocale( LanguageTag( rNum.GetLang() ).getLocale() );
-    return GetFormatter().GetNatNum()->getNativeNumberString( rStr,
-                                                              aLocale, rNum.GetNatNum() );
+    return GetFormatter().GetNatNum()->getNativeNumberStringParams(rStr, aLocale, rNum.GetNatNum(),
+                                                                   rNum.GetParams());
 }
 
 void SvNumberformat::impTransliterateImpl(OUStringBuffer& rStr,
@@ -5341,7 +5352,8 @@ void SvNumberformat::impTransliterateImpl(OUStringBuffer& rStr,
     css::lang::Locale aLocale( LanguageTag( rNum.GetLang() ).getLocale() );
 
     OUString sTemp(rStr.makeStringAndClear());
-    sTemp = GetFormatter().GetNatNum()->getNativeNumberString( sTemp, aLocale, rNum.GetNatNum() );
+    sTemp = GetFormatter().GetNatNum()->getNativeNumberStringParams(
+        sTemp, aLocale, rNum.GetNatNum(), rNum.GetParams());
     rStr.append(sTemp);
 }
 

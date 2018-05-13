@@ -69,6 +69,7 @@ class SvNumberNatNum
     bool            bDBNum  :1;     // DBNum, to be converted to NatNum
     bool            bDate   :1;     // Used in date? (needed for DBNum/NatNum mapping)
     bool            bSet    :1;     // If set, since NatNum0 is possible
+    OUString        sParams;        // For [NatNum12 ordinal-number]-like syntax
 
 public:
 
@@ -90,6 +91,8 @@ public:
                         }
     bool            IsSet() const       { return bSet; }
     void            SetDate( bool bDateP )   { bDate = bDateP; }
+    void            SetParams(const OUString& s) { sParams = s; }
+    OUString        GetParams() const { return sParams; }
 };
 
 class CharClass;
@@ -125,6 +128,7 @@ public:
     void SetNatNumNum( sal_uInt8 nNum, bool bDBNum ) { aNatNum.SetNum( nNum, bDBNum ); }
     void SetNatNumLang( LanguageType eLang ) { aNatNum.SetLang( eLang ); }
     void SetNatNumDate( bool bDate ) { aNatNum.SetDate( bDate ); }
+    void SetNatNumParams(const OUString& sParams) { aNatNum.SetParams(sParams); }
     const SvNumberNatNum& GetNatNum() const { return aNatNum; }
 
 private:
