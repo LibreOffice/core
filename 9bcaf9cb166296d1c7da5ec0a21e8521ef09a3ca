@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_0f5c4eec",
+        "filename": "xmlsecurity/source/helper/xmlsignaturehelper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-13T06:11:18Z",
+      "side": 1,
+      "message": "??",
+      "revId": "9bcaf9cb166296d1c7da5ec0a21e8521ef09a3ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
