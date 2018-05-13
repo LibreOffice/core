@@ -23,18 +23,16 @@
 #include "address.hxx"
 #include <i18nlangtag/lang.h>
 #include <svx/svdtypes.hxx>
-#include <tools/stream.hxx>
+#include <tools/ref.hxx>
+#include <sal/types.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
 
 #include <map>
-#include <vector>
 
-class Bitmap;
 class SfxItemSet;
 class SfxViewShell;
-class Color;
 struct ScCalcConfig;
 enum class SvtScriptType;
 enum class FormulaError : sal_uInt16;
@@ -460,7 +458,6 @@ struct ScImportParam
     bool            operator==  ( const ScImportParam& r ) const;
 };
 
-class ScDocument;
 class ScDocShell;
 class SvxSearchItem;
 class ScAutoFormat;
@@ -471,7 +468,6 @@ class SvxBrushItem;
 class ScFunctionList;
 class ScFunctionMgr;
 class SfxItemPool;
-class SdrModel;
 class EditTextObject;
 class SfxObjectShell;
 class SvNumberFormatter;
@@ -482,7 +478,6 @@ class SvtSysLocale;
 class CalendarWrapper;
 class CollatorWrapper;
 class IntlWrapper;
-class OutputDevice;
 class ScFieldEditEngine;
 
 namespace com { namespace sun { namespace star {
