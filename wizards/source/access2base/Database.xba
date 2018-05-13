@@ -1851,7 +1851,7 @@ Const cstSingleQuote = &quot;&apos;&quot;
 	End If
 	vSubStrings() = Split(psSql, cstSingleQuote)
 	For i = 0 To UBound(vSubStrings)
-		If (i Mod 2) = 0 Then		&apos;	Only even substrings are parsed for square brackets
+		If (i Mod 2) = 0 Or (i = UBound(vSubStrings)) Then		&apos;	Only even substrings are parsed for square brackets. Last substring is parsed anyway
 			vSubStrings(i) = Join(Split(vSubStrings(i), &quot;[&quot;), sQuote)
 			vSubStrings(i) = Join(Split(vSubStrings(i), &quot;]&quot;), sQuote)
 		End If
