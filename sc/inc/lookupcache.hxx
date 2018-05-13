@@ -21,8 +21,6 @@
 #define INCLUDED_SC_INC_LOOKUPCACHE_HXX
 
 #include "address.hxx"
-#include "global.hxx"
-#include <formula/token.hxx>
 #include <svl/listener.hxx>
 
 #include <unordered_map>
