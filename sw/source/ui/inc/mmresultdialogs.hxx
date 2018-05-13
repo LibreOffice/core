@@ -44,28 +44,25 @@ namespace com{ namespace sun{ namespace star{
 }}}
 
 /// Dialog implementing the saving as of the result document.
-class SwMMResultSaveDialog : public SfxModalDialog
+class SwMMResultSaveDialog : public weld::GenericDialogController
 {
-    VclPtr<RadioButton>    m_pSaveAsOneRB;
-    VclPtr<RadioButton>    m_pSaveIndividualRB;
-    VclPtr<RadioButton>    m_pFromRB;
-    VclPtr<NumericField>   m_pFromNF;
-    VclPtr<FixedText>      m_pToFT;
-    VclPtr<NumericField>   m_pToNF;
-
-    VclPtr<Button>         m_pOKButton;
-
     bool                   m_bCancelSaving;
 
-    DECL_LINK(SaveOutputHdl_Impl, Button* , void);
+    std::unique_ptr<weld::RadioButton> m_xSaveAsOneRB;
+    std::unique_ptr<weld::RadioButton> m_xSaveIndividualRB;
+    std::unique_ptr<weld::RadioButton> m_xFromRB;
+    std::unique_ptr<weld::SpinButton> m_xFromNF;
+    std::unique_ptr<weld::Label> m_xToFT;
+    std::unique_ptr<weld::SpinButton> m_xToNF;
+    std::unique_ptr<weld::Button> m_xOKButton;
+
+    DECL_LINK(SaveOutputHdl_Impl, weld::Button& , void);
     DECL_LINK(SaveCancelHdl_Impl, Button*, void);
-    DECL_LINK(DocumentSelectionHdl_Impl, Button*, void);
+    DECL_LINK(DocumentSelectionHdl_Impl, weld::ToggleButton&, void);
 
 public:
-    SwMMResultSaveDialog();
+    SwMMResultSaveDialog(weld::Window* pParent);
     virtual ~SwMMResultSaveDialog() override;
-
-    virtual void dispose() override;
 };
 
 /// Dialog implementing the printing of the result document.
