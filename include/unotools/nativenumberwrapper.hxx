@@ -21,7 +21,7 @@
 #define INCLUDED_UNOTOOLS_NATIVENUMBERWRAPPER_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
+#include <com/sun/star/i18n/XNativeNumberSupplier2.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace uno {
@@ -31,7 +31,7 @@ namespace com { namespace sun { namespace star {
 
 class UNOTOOLS_DLLPUBLIC NativeNumberWrapper
 {
-    css::uno::Reference< css::i18n::XNativeNumberSupplier >   xNNS;
+    css::uno::Reference< css::i18n::XNativeNumberSupplier2 >   xNNS;
                                 NativeNumberWrapper( const NativeNumberWrapper& ) = delete;
             NativeNumberWrapper&    operator=( const NativeNumberWrapper& ) = delete;
 
@@ -47,7 +47,13 @@ public:
     OUString getNativeNumberString(
                         const OUString& rNumberString,
                         const css::lang::Locale& rLocale,
-                        sal_Int16 nNativeNumberMode ) const;
+                        sal_Int16 nNativeNumberMode) const;
+
+    OUString getNativeNumberStringParams(
+                        const OUString& rNumberString,
+                        const css::lang::Locale& rLocale,
+                        sal_Int16 nNativeNumberMode,
+                        const OUString& rNativeNumberParams) const;
 
     css::i18n::NativeNumberXmlAttributes convertToXmlAttributes(
                         const css::lang::Locale& rLocale,
