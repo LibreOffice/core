@@ -20,6 +20,7 @@
 #include <markarr.hxx>
 #include <global.hxx>
 #include <address.hxx>
+#include <vector>
 
 #include <osl/diagnose.h>
 

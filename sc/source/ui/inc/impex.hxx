@@ -24,6 +24,7 @@
 #include <sot/exchange.hxx>
 #include <global.hxx>
 #include <address.hxx>
+#include <tools/stream.hxx>
 
 class ScDocShell;
 class ScDocument;

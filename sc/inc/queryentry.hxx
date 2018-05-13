@@ -24,6 +24,7 @@
 #include <svl/sharedstring.hxx>
 #include <unotools/textsearch.hxx>
 
+#include <memory>
 #include <vector>
 
 /**

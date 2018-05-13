@@ -22,6 +22,7 @@
 
 #include "global.hxx"
 #include "address.hxx"
+#include <vector>
 
 class ScDocument;
 

@@ -22,6 +22,7 @@
 
 #include <compiler.hxx>
 #include <global.hxx>
+#include <tools/stream.hxx>
 
 #include "root.hxx"
 #include "tokstack.hxx"
