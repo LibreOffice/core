@@ -2646,7 +2646,8 @@ bool MathType::HandlePile(int &rSetAlign, int nLevel, sal_uInt8 nSelector, sal_u
 
     rRet.append(" stack {\n");
     bool bRet = HandleRecords( nLevel+1, nSelector, nVariation, -1, -1 );
-    rRet.remove(rRet.getLength()-3, 2);
+    int nRemoveFrom = rRet.getLength() >= 3 ? rRet.getLength() - 3 : 0;
+    rRet.remove(nRemoveFrom, 2);
     rRet.append("} ");
 
     while (rSetAlign)
