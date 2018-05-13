@@ -604,20 +604,16 @@ void SdStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
             { OUStringLiteral("backgroundobjects"),HID_PSEUDOSHEET_BACKGROUNDOBJECTS },
             { OUStringLiteral("notes"),            HID_PSEUDOSHEET_NOTES },
             { OUStringLiteral("standard"),         HID_STANDARD_STYLESHEET_NAME },
-            { OUStringLiteral("objectwitharrow"),  HID_POOLSHEET_OBJWITHARROW },
-            { OUStringLiteral("objectwithshadow"), HID_POOLSHEET_OBJWITHSHADOW },
             { OUStringLiteral("objectwithoutfill"),HID_POOLSHEET_OBJWITHOUTFILL },
             { OUStringLiteral("text"),             HID_POOLSHEET_TEXT },
-            { OUStringLiteral("textbody"),         HID_POOLSHEET_TEXTBODY },
-            { OUStringLiteral("textbodyjustfied"), HID_POOLSHEET_TEXTBODY_JUSTIFY },
-            { OUStringLiteral("textbodyindent"),   HID_POOLSHEET_TEXTBODY_INDENT },
             { OUStringLiteral("title"),            HID_POOLSHEET_TITLE },
-            { OUStringLiteral("title1"),           HID_POOLSHEET_TITLE1 },
-            { OUStringLiteral("title2"),           HID_POOLSHEET_TITLE2 },
             { OUStringLiteral("headline"),         HID_POOLSHEET_HEADLINE },
-            { OUStringLiteral("headline1"),        HID_POOLSHEET_HEADLINE1 },
-            { OUStringLiteral("headline2"),        HID_POOLSHEET_HEADLINE2 },
-            { OUStringLiteral("measure"),          HID_POOLSHEET_MEASURE }
+            { OUStringLiteral("measure"),          HID_POOLSHEET_MEASURE },
+            { OUStringLiteral("filled"),           HID_POOLSHEET_FILLED },
+            { OUStringLiteral("filled_blue"),      HID_POOLSHEET_FILLED_BLUE },
+            { OUStringLiteral("filled_green"),     HID_POOLSHEET_FILLED_GREEN },
+            { OUStringLiteral("filled_red"),       HID_POOLSHEET_FILLED_RED },
+            { OUStringLiteral("filled_yellow"),    HID_POOLSHEET_FILLED_YELLOW }
         };
 
         for (std::size_t i = 0; i != SAL_N_ELEMENTS(pApiNameMap); ++i)

@@ -953,21 +953,17 @@ void SdStyleSheetPool::UpdateStdNames()
             switch( nHelpId )
             {
                 case HID_STANDARD_STYLESHEET_NAME:  pNameId = STR_STANDARD_STYLESHEET_NAME; break;
-                case HID_POOLSHEET_OBJWITHARROW:    pNameId = STR_POOLSHEET_OBJWITHARROW;   break;
-                case HID_POOLSHEET_OBJWITHSHADOW:   pNameId = STR_POOLSHEET_OBJWITHSHADOW;  break;
                 case HID_POOLSHEET_OBJWITHOUTFILL:  pNameId = STR_POOLSHEET_OBJWITHOUTFILL; break;
                 case HID_POOLSHEET_OBJNOLINENOFILL: pNameId = STR_POOLSHEET_OBJNOLINENOFILL;break;
                 case HID_POOLSHEET_TEXT:            pNameId = STR_POOLSHEET_TEXT;           break;
-                case HID_POOLSHEET_TEXTBODY:        pNameId = STR_POOLSHEET_TEXTBODY;       break;
-                case HID_POOLSHEET_TEXTBODY_JUSTIFY:pNameId = STR_POOLSHEET_TEXTBODY_JUSTIFY;break;
-                case HID_POOLSHEET_TEXTBODY_INDENT: pNameId = STR_POOLSHEET_TEXTBODY_INDENT;break;
                 case HID_POOLSHEET_TITLE:           pNameId = STR_POOLSHEET_TITLE;          break;
-                case HID_POOLSHEET_TITLE1:          pNameId = STR_POOLSHEET_TITLE1;         break;
-                case HID_POOLSHEET_TITLE2:          pNameId = STR_POOLSHEET_TITLE2;         break;
                 case HID_POOLSHEET_HEADLINE:        pNameId = STR_POOLSHEET_HEADLINE;       break;
-                case HID_POOLSHEET_HEADLINE1:       pNameId = STR_POOLSHEET_HEADLINE1;      break;
-                case HID_POOLSHEET_HEADLINE2:       pNameId = STR_POOLSHEET_HEADLINE2;      break;
                 case HID_POOLSHEET_MEASURE:         pNameId = STR_POOLSHEET_MEASURE;        break;
+                case HID_POOLSHEET_FILLED:          pNameId = STR_POOLSHEET_FILLED;         break;
+                case HID_POOLSHEET_FILLED_BLUE:     pNameId = STR_POOLSHEET_FILLED_BLUE;    break;
+                case HID_POOLSHEET_FILLED_GREEN:    pNameId = STR_POOLSHEET_FILLED_GREEN;   break;
+                case HID_POOLSHEET_FILLED_RED:      pNameId = STR_POOLSHEET_FILLED_RED;     break;
+                case HID_POOLSHEET_FILLED_YELLOW:   pNameId = STR_POOLSHEET_FILLED_YELLOW;  break;
 
                 case HID_PSEUDOSHEET_TITLE:         pNameId = STR_PSEUDOSHEET_TITLE;        break;
                 case HID_PSEUDOSHEET_SUBTITLE:      pNameId = STR_PSEUDOSHEET_SUBTITLE;     break;
