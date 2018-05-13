@@ -37,26 +37,34 @@ public:
     void testBasics()
     {
         o3tl::sorted_vector<SwContent*, o3tl::less_ptr_to<SwContent> > aVec;
+
+        // create 4 test elements
         std::unique_ptr<SwContent> p1( new SwContent(1) );
         std::unique_ptr<SwContent> p2( new SwContent(2) );
         SwContent *p3 = new SwContent(3);
         std::unique_ptr<SwContent> p4( new SwContent(4) );
 
+        // insert p3, p1 -> not presernt -> second is true
         CPPUNIT_ASSERT( aVec.insert(p3).second );
         CPPUNIT_ASSERT( aVec.insert(p1.get()).second );
+        // insert p3 again -> already present -> second is false
         CPPUNIT_ASSERT( !aVec.insert(p3).second );
 
+        // 2 element should be present
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(2), aVec.size() );
 
+        // check the order -> should be p1, p3
+        // by index access
         CPPUNIT_ASSERT_EQUAL( p1.get(), aVec[0] );
         CPPUNIT_ASSERT_EQUAL( p3, aVec[1] );
-
+        // by begin, end
         CPPUNIT_ASSERT_EQUAL( p1.get(), *aVec.begin() );
         CPPUNIT_ASSERT_EQUAL( p3, *(aVec.end()-1) );
-
+        // by front, back
         CPPUNIT_ASSERT_EQUAL( p1.get(), aVec.front() );
         CPPUNIT_ASSERT_EQUAL( p3, aVec.back() );
 
+        // find elements
         CPPUNIT_ASSERT( aVec.find(p1.get()) != aVec.end() );
         CPPUNIT_ASSERT_EQUAL( static_cast<std::ptrdiff_t>(0), aVec.find(p1.get()) - aVec.begin() );
         CPPUNIT_ASSERT( aVec.find(p3) != aVec.end() );
