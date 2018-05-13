@@ -25,10 +25,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 
-#ifndef DELETEZ
-#define DELETEZ(pPtr) ( delete pPtr, pPtr = 0 )
-#endif
-
 #if defined(DBG_UTIL)
 
 class SfxStack

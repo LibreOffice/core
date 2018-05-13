@@ -30,10 +30,6 @@
 class SfxPoolItem;
 class SfxItemPoolUser;
 
-#ifndef DELETEZ
-#define DELETEZ(pPtr) { delete pPtr; pPtr = 0; }
-#endif
-
 static const sal_uInt32 SFX_ITEMS_DEFAULT = 0xfffffffe;
 
 /**
