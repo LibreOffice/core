@@ -33,6 +33,7 @@
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #include <com/sun/star/i18n/CalendarDisplayCode.hpp>
 #include <com/sun/star/i18n/AmPmValue.hpp>
+#include <com/sun/star/i18n/NativeNumberMode.hpp>
 
 #include <svl/zformat.hxx>
 #include "zforscan.hxx"
@@ -751,6 +752,13 @@ OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, 
     return sCalendar;
 }
 
+namespace
+{
+bool NatNumTakesParameters(sal_Int16 nNum)
+{
+    return (nNum == css::i18n::NativeNumberMode::NATNUM12);
+}
+}
 
 SvNumberformat::SvNumberformat(OUString& rString,
                                ImpSvNumberformatScan* pSc,
@@ -928,11 +936,27 @@ SvNumberformat::SvNumberformat(OUString& rString,
                     }
                     else
                     {
-                        sStr = "NatNum";
+                        OUString sParams;
+                        sal_Int32 nSpacePos = sStr.indexOf(' ');
+                        if (nSpacePos >= 0)
+                        {
+                            sParams = sStr.copy(nSpacePos+1).trim();
+                        }
                         //! eSymbolType is negative
                         sal_uInt8 nNum = static_cast<sal_uInt8>(0 - (eSymbolType - BRACKET_SYMBOLTYPE_NATNUM0));
-                        sStr += OUString::number( nNum );
+                        if (!sParams.isEmpty() && !NatNumTakesParameters(nNum))
+                        {
+                            bCancel = true; // break for
+                            nCheckPos = nPosOld;
+                            break;
+                        }
+                        sStr = "NatNum" + OUString::number(nNum);
                         NumFor[nIndex].SetNatNumNum( nNum, false );
+                        if (!sParams.isEmpty())
+                        {
+                            NumFor[nIndex].SetNatNumParams(sParams);
+                            sStr += " " + sParams;
+                        }
                     }
                     break;
                 case BRACKET_SYMBOLTYPE_DBNUM1 :
@@ -5331,8 +5355,8 @@ OUString SvNumberformat::impTransliterateImpl(const OUString& rStr,
                                               const SvNumberNatNum& rNum ) const
 {
     css::lang::Locale aLocale( LanguageTag( rNum.GetLang() ).getLocale() );
-    return GetFormatter().GetNatNum()->getNativeNumberString( rStr,
-                                                              aLocale, rNum.GetNatNum() );
+    return GetFormatter().GetNatNum()->getNativeNumberStringParams(rStr, aLocale, rNum.GetNatNum(),
+                                                                   rNum.GetParams());
 }
 
 void SvNumberformat::impTransliterateImpl(OUStringBuffer& rStr,
@@ -5341,7 +5365,8 @@ void SvNumberformat::impTransliterateImpl(OUStringBuffer& rStr,
     css::lang::Locale aLocale( LanguageTag( rNum.GetLang() ).getLocale() );
 
     OUString sTemp(rStr.makeStringAndClear());
-    sTemp = GetFormatter().GetNatNum()->getNativeNumberString( sTemp, aLocale, rNum.GetNatNum() );
+    sTemp = GetFormatter().GetNatNum()->getNativeNumberStringParams(
+        sTemp, aLocale, rNum.GetNatNum(), rNum.GetParams());
     rStr.append(sTemp);
 }
 
