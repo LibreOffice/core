@@ -272,10 +272,6 @@ namespace o3tl
     template<> struct typed_flags<ScCloneFlags> : is_typed_flags<ScCloneFlags, 0x0007> {};
 }
 
-#ifndef DELETEZ
-#define DELETEZ(pPtr) { delete pPtr; pPtr = 0; }
-#endif
-
 enum CellType
     {
         CELLTYPE_NONE,
