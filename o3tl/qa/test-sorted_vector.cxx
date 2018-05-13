@@ -44,7 +44,7 @@ public:
         SwContent *p3 = new SwContent(3);
         std::unique_ptr<SwContent> p4( new SwContent(4) );
 
-        // insert p3, p1 -> not presernt -> second is true
+        // insert p3, p1 -> not present -> second is true
         CPPUNIT_ASSERT( aVec.insert(p3).second );
         CPPUNIT_ASSERT( aVec.insert(p1.get()).second );
         // insert p3 again -> already present -> second is false
