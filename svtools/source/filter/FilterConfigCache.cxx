@@ -129,7 +129,7 @@ String FilterConfigCache::FilterConfigCacheEntry::GetShortName()
             specify, which config package should be opened.
             Must be one of the defined static values TYPEPKG or FILTERPKG.
 
-    @return A valid object if open was successfull. The access on opened
+    @return A valid object if open was successful. The access on opened
             data will be readonly. It returns NULL in case open failed.
 
     @throws It let pass RuntimeExceptions only.

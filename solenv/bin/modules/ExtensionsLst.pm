@@ -483,7 +483,7 @@ sub Download (@)
         my $last_was_redirect = 0;
         my $response = $agent->get($URL);
 
-        # When download was successfull then check the md5 checksum and rename the .part file
+        # When download was successful then check the md5 checksum and rename the .part file
         # into the actual extension name.
         if ($response->is_success())
         {
