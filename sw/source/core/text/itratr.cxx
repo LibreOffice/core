@@ -145,8 +145,9 @@ bool SwAttrIter::IsSymbol(TextFrameIndex const nNewPos)
 
 bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFont )
 {
+    SwTextNode const*const pFirstTextNode(m_pMergedPara ? m_pMergedPara->pFirstNode : m_pTextNode);
     if ( m_pRedline && m_pRedline->ExtOn() )
-        m_pRedline->LeaveExtend(*m_pFont, m_pFirstTextNode->GetIndex(), 0);
+        m_pRedline->LeaveExtend(*m_pFont, pFirstTextNode->GetIndex(), 0);
 
     // reset font to its original state
     m_aAttrHandler.Reset();
@@ -162,7 +163,7 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
     {
         m_pRedline->Clear( m_pFont );
         if( !bParaFont )
-            m_nChgCnt = m_nChgCnt + m_pRedline->Seek(*m_pFont, m_pFirstTextNode->GetIndex(), 0, COMPLETE_STRING);
+            m_nChgCnt = m_nChgCnt + m_pRedline->Seek(*m_pFont, pFirstTextNode->GetIndex(), 0, COMPLETE_STRING);
         else
             m_pRedline->Reset();
     }
