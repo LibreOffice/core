@@ -87,6 +87,7 @@ class ImpSdrPdfImport final
         double d() const { return md; }
         double e() const { return me; }
         double f() const { return mf; }
+
         /// Mutliply this * other.
         void Concatinate(const Matrix& other)
         {
@@ -99,10 +100,61 @@ class ImpSdrPdfImport final
         }
 
         /// Transform the point (x, y) by this Matrix.
-        void Transform(double& x, double& y)
+        template <typename T> void Transform(T& x, T& y)
         {
             x = ma * x + mc * y + me;
             y = mb * x + md * y + mf;
+        }
+
+        /// Transform the rectangle (left, right, top, bottom) by this Matrix.
+        template <typename T> void Transform(T& left, T& right, T& top, T& bottom)
+        {
+            SAL_WARN("sd.filter",
+                     "Transforming: " << left << ", " << right << ", " << top << ", " << bottom);
+            T leftTopX = left;
+            T leftTopY = top;
+            Transform(leftTopX, leftTopY);
+            SAL_WARN("sd.filter", "Left-Top: " << leftTopX << ", " << leftTopY);
+
+            T leftBottomX = left;
+            T leftBottomY = bottom;
+            Transform(leftBottomX, leftBottomY);
+            SAL_WARN("sd.filter", "Left-Bottom: " << leftBottomX << ", " << leftBottomY);
+
+            T rightTopX = right;
+            T rightTopY = top;
+            Transform(rightTopX, rightTopY);
+            SAL_WARN("sd.filter", "Right-Top: " << rightTopX << ", " << rightTopY);
+
+            T rightBottomX = right;
+            T rightBottomY = bottom;
+            Transform(rightBottomX, rightBottomY);
+            SAL_WARN("sd.filter", "Right-Bottom: " << rightBottomX << ", " << rightBottomY);
+
+            left = std::min(leftTopX, leftBottomX);
+            SAL_WARN("sd.filter", "left: " << left);
+            right = std::max(rightTopX, rightBottomX);
+            SAL_WARN("sd.filter", "right: " << right);
+
+            if (top > bottom)
+                top = std::max(leftTopY, rightTopY);
+            else
+                top = std::min(leftTopY, rightTopY);
+            SAL_WARN("sd.filter", "top: " << top);
+
+            if (top > bottom)
+                bottom = std::max(leftBottomY, rightBottomY);
+            else
+                bottom = std::max(leftBottomY, rightBottomY);
+            SAL_WARN("sd.filter", "bottom: " << bottom);
+        }
+
+        std::string toString() const
+        {
+            std::ostringstream oss;
+            oss << '(' << ma << ", " << mb << ", " << mc << ", " << md << ", " << me << ", " << mf
+                << ')';
+            return oss.str();
         }
 
     private:
