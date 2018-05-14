@@ -28,7 +28,6 @@
 
 class Qt5Graphics;
 class Qt5Instance;
-class Qt5Widget;
 class QWidget;
 class QPaintDevice;
 class QImage;
@@ -36,7 +35,7 @@ class SvpSalGraphics;
 
 class VCLPLUG_QT5_PUBLIC Qt5Frame : public SalFrame
 {
-    friend class Qt5Widget;
+    friend class VclQtMixinBase;
 
     std::unique_ptr<QWidget> m_pQWidget;
 
