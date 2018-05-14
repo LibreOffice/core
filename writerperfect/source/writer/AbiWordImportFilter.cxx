@@ -20,7 +20,7 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool AbiWordImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
+bool AbiWordImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
                                            OdtGenerator& rGenerator, utl::MediaDescriptor&)
 {
     return libabw::AbiDocument::parse(&rInput, &rGenerator);

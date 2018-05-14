@@ -40,7 +40,8 @@ static bool handleEmbeddedSTOFFWriterSpreadsheetObject(const librevenge::RVNGBin
     return STOFFDocument::decodeSpreadsheet(data, &exporter);
 }
 
-bool StarOfficeWriterImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
+bool StarOfficeWriterImportFilter::doImportDocument(weld::Window* pParent,
+                                                    librevenge::RVNGInputStream& rInput,
                                                     OdtGenerator& rGenerator, utl::MediaDescriptor&)
 {
     STOFFDocument::Kind docKind = STOFFDocument::STOFF_K_UNKNOWN;
@@ -52,7 +53,7 @@ bool StarOfficeWriterImportFilter::doImportDocument(librevenge::RVNGInputStream&
         // try to ask for a password
         try
         {
-            SfxPasswordDialog aPasswdDlg(nullptr);
+            SfxPasswordDialog aPasswdDlg(pParent);
             aPasswdDlg.SetMinLen(0);
             if (!aPasswdDlg.execute())
                 return false;

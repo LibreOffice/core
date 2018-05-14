@@ -45,14 +45,15 @@ public:
 private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput,
                                 rtl::OUString& rTypeName) override;
-    virtual bool doImportDocument(librevenge::RVNGInputStream& rInput, OdgGenerator& rGenerator,
+    virtual bool doImportDocument(weld::Window* pWindow, librevenge::RVNGInputStream& rInput,
+                                  OdgGenerator& rGenerator,
                                   utl::MediaDescriptor& rDescriptor) override;
 
     static void generate(librevenge::RVNGDrawingInterface& rDocument);
 };
 
-bool DrawingImportFilter::doImportDocument(librevenge::RVNGInputStream&, OdgGenerator& rGenerator,
-                                           utl::MediaDescriptor&)
+bool DrawingImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream&,
+                                           OdgGenerator& rGenerator, utl::MediaDescriptor&)
 {
     DrawingImportFilter::generate(rGenerator);
     return true;
