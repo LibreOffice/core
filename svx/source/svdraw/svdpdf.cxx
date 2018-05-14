@@ -1067,17 +1067,23 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
         return;
     }
 
-    const Rectangle aRect = PointsToLogic(left, right, top, bottom);
-
     double a, b, c, d, e, f;
     FPDFTextObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
-    Matrix aTextMatrix(a, b, c, d, e, f);
-    aTextMatrix.Concatinate(mCurMatrix);
-    SAL_WARN("sd.filter", "Got font scale matrix (" << a << ", " << b << ", " << c << ", " << d
-                                                    << ", " << e << ", " << f << ')');
-    Point aPos = PointsToLogic(e, f);
+    // Matrix aTextMatrix(a, b, c, d, e, f);
+    Matrix aTextMatrix(mCurMatrix);
+    SAL_WARN("sd.filter", "Got text matrix " << aTextMatrix.toString());
+    SAL_WARN("sd.filter", "Context matrix " << mCurMatrix.toString());
+    // aTextMatrix.Concatinate(mCurMatrix);
+    // SAL_WARN("sd.filter", "Got text matrix concat " << aTextMatrix.toString());
+
+    Point aPos = PointsToLogic(aTextMatrix.e(), aTextMatrix.f());
     SAL_WARN("sd.filter", "Got TEXT origin: " << aPos);
-    SAL_WARN("sd.filter", "Got TEXT Bounds: " << aRect);
+
+    const Rectangle aRect2 = PointsToLogic(left, right, top, bottom);
+    SAL_WARN("sd.filter", "Untransformed TEXT Bounds: " << aRect2);
+    aTextMatrix.Transform(left, right, top, bottom);
+    const Rectangle aRect = PointsToLogic(left, right, top, bottom);
+    SAL_WARN("sd.filter", "Transformed TEXT Bounds: " << aRect);
 
     const int nChars = FPDFTextObj_CountChars(pPageObject) * 2;
     std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nChars + 1]); // + terminating null
@@ -1413,9 +1419,9 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
 
     float fWidth = 1;
     FPDFPath_GetStrokeWidth(pPageObject, &fWidth);
-    const double dWidth = 0.5 * fabs(sqrt2(mCurMatrix.a(), mCurMatrix.c()) * fWidth);
+    const double dWidth = 0.5 * fabs(sqrt2(aPathMatrix.a(), aPathMatrix.c()) * fWidth);
     mnLineWidth = lcl_ToLogic(lcl_PointToPixel(dWidth));
-    mnLineWidth /= 2;
+    // mnLineWidth /= 2;
     SAL_WARN("sd.filter", "Path Stroke Width: " << fWidth << ",  scaled: " << dWidth
                                                 << ", Logical: " << mnLineWidth);
 
