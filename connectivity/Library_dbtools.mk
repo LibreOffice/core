@@ -77,7 +77,7 @@ $(eval $(call gb_Library_add_exception_objects,dbtools,\
 	connectivity/source/commontools/FDatabaseMetaDataResultSet \
 	connectivity/source/commontools/FDatabaseMetaDataResultSetMetaData \
 	connectivity/source/commontools/FValue \
-	connectivity/source/commontools/ParamterSubstitution \
+	connectivity/source/commontools/ParameterSubstitution \
 	connectivity/source/commontools/RowFunctionParser \
 	connectivity/source/commontools/TColumnsHelper \
 	connectivity/source/commontools/TConnection \
