@@ -21,7 +21,7 @@
 #define INCLUDED_SC_INC_QUERYPARAM_HXX
 
 #include <unotools/textsearch.hxx>
-#include "global.hxx"
+#include "address.hxx"
 #include "types.hxx"
 
 #include <memory>

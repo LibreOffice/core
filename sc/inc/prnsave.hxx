@@ -24,8 +24,6 @@
 #include <vector>
 #include <memory>
 
-class ScRange;
-
 class ScPrintSaverTab
 {
     typedef ::std::vector< ScRange > ScRangeVec;

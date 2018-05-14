@@ -24,7 +24,6 @@
 #include "address.hxx"
 #include "scdllapi.h"
 
-#include <map>
 #include <memory>
 
 class EditTextObject;
