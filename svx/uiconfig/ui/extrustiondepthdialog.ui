@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">338.666</property>
     <property name="step_increment">0.10000000000000001</property>
@@ -10,7 +11,13 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="extrustiondepthdialog|ExtrustionDepthDialog">Extrusion Depth</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -62,6 +69,7 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">2</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
           </object>
@@ -95,17 +103,16 @@
                     <property name="hexpand">True</property>
                     <property name="column_spacing">12</property>
                     <child>
-                      <object class="GtkSpinButton" id="depth:0.00cm">
+                      <object class="GtkSpinButton" id="depth">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -114,13 +121,11 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="extrustiondepthdialog|label1">_Value</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">depth:0.00cm</property>
+                        <property name="mnemonic_widget">depth</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
