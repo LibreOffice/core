@@ -37,7 +37,7 @@ SaveMonitor::~SaveMonitor()
 }
 
 PrintMonitor::PrintMonitor(vcl::Window *pParent)
-    : CancelableDialog(pParent, false, "PrintMonitorDialog",
+    : CancelableDialog(pParent, "PrintMonitorDialog",
         "modules/swriter/ui/printmonitordialog.ui")
 {
     get(m_pDocName, "docname");
@@ -63,7 +63,7 @@ void PrintMonitor::dispose()
 
 // Progress Indicator for Creation of personalized Mail Merge documents:
 CreateMonitor::CreateMonitor(vcl::Window *pParent)
-    : CancelableDialog(pParent, false, "MMCreatingDialog",
+    : CancelableDialog(pParent, "MMCreatingDialog",
         "modules/swriter/ui/mmcreatingdialog.ui")
     , m_sCountingPattern()
     , m_sVariable_Total("%Y")
@@ -109,11 +109,9 @@ void CreateMonitor::SetCurrentPosition( sal_Int32 nCurrent )
     UpdateCountingText();
 }
 
-CancelableDialog::CancelableDialog( vcl::Window *pParent, bool modal,
+CancelableDialog::CancelableDialog( vcl::Window *pParent,
         const OUString& rID, const OUString& rUIXMLDescription )
-    : Dialog( pParent , rID, rUIXMLDescription,
-              modal ? WindowType::MODALDIALOG : WindowType::MODELESSDIALOG )
-    , mbModal( modal )
+    : Dialog(pParent, rID, rUIXMLDescription, WindowType::MODELESSDIALOG)
 {
     get(m_pCancelButton, "cancel");
 }
@@ -138,10 +136,7 @@ void CancelableDialog::SetCancelHdl( const Link<Button*,void>& rLink )
 
 void CancelableDialog::Show()
 {
-    if (mbModal)
-        StartExecuteModal( Link<Dialog&,void>() );
-    else
-        Dialog::Show();
+    Dialog::Show();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,15 +27,12 @@
 
 class SW_DLLPUBLIC CancelableDialog : public Dialog
 {
-    bool mbModal;
-
 protected:
     VclPtr<CancelButton> m_pCancelButton;
-    CancelableDialog( vcl::Window *pParent, bool modal, const OUString& rID,
+    CancelableDialog( vcl::Window *pParent, const OUString& rID,
                       const OUString& rUIXMLDescription );
 
     using Dialog::Execute;
-    using Dialog::StartExecuteModal;
 
 public:
     virtual ~CancelableDialog() override;
