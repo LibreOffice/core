@@ -71,7 +71,7 @@ namespace rtl
 /**
   This String class provide base functionality for C++ like 8-Bit
   character array handling. The advantage of this class is, that it
-  handle all the memory managament for you - and it do it
+  handle all the memory management for you - and it do it
   more efficient. If you assign a string to another string, the
   data of both strings are shared (without any copy operation or
   memory allocation) as long as you do not change the string. This class

@@ -56,7 +56,7 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(vcl::Window* _pParent, const St
     get(m_pManageDatasources, "organize");
     m_pManageDatasources->Show();
 
-    // allow ODBC datasource managenment
+    // allow ODBC datasource management
     m_pManageDatasources->Show();
     m_pManageDatasources->Enable();
     m_pManageDatasources->SetClickHdl(LINK(this,ODatasourceSelectDialog,ManageClickHdl));
