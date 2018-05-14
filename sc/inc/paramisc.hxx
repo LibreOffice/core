@@ -20,9 +20,7 @@
 #ifndef INCLUDED_SC_INC_PARAMISC_HXX
 #define INCLUDED_SC_INC_PARAMISC_HXX
 
-#include <memory>
 #include "address.hxx"
-#include <sal/types.h>
 #include <boost/optional.hpp>
 
 struct ScSolveParam

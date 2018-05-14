@@ -23,7 +23,6 @@
 #include <svl/poolitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
-#include <unotools/fontcvt.hxx>
 #include <editeng/svxenum.hxx>
 #include "scdllapi.h"
 #include "fonthelper.hxx"

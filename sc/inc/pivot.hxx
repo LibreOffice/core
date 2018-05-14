@@ -36,8 +36,9 @@
 #ifndef INCLUDED_SC_INC_PIVOT_HXX
 #define INCLUDED_SC_INC_PIVOT_HXX
 
-#include "global.hxx"
-#include "address.hxx"
+#include <rtl/ustring.hxx>
+#include "types.hxx"
+#include "scdllapi.h"
 #include "dpglobal.hxx"
 #include "calcmacros.hxx"
 
