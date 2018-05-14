@@ -49,8 +49,8 @@ private:
     static void generate(librevenge::RVNGTextInterface& rDocument);
 };
 
-bool TextImportFilter::doImportDocument(librevenge::RVNGInputStream&, OdtGenerator& rGenerator,
-                                        utl::MediaDescriptor&)
+bool TextImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream&,
+                                        OdtGenerator& rGenerator, utl::MediaDescriptor&)
 {
     TextImportFilter::generate(rGenerator);
     return true;

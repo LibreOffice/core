@@ -51,8 +51,8 @@ private:
     static void generate(librevenge::RVNGDrawingInterface& rDocument);
 };
 
-bool DrawingImportFilter::doImportDocument(librevenge::RVNGInputStream&, OdgGenerator& rGenerator,
-                                           utl::MediaDescriptor&)
+bool DrawingImportFilter::doImportDocument(Weld::Window*, librevenge::RVNGInputStream&,
+                                           OdgGenerator& rGenerator, utl::MediaDescriptor&)
 {
     DrawingImportFilter::generate(rGenerator);
     return true;

@@ -22,7 +22,7 @@ using com::sun::star::uno::XInterface;
 
 using libetonyek::EtonyekDocument;
 
-bool PagesImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
+bool PagesImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
                                          OdtGenerator& rGenerator, utl::MediaDescriptor&)
 {
     return EtonyekDocument::parse(&rInput, &rGenerator);

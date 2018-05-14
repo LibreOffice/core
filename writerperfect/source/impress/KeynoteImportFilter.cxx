@@ -48,7 +48,7 @@ using writerperfect::WPXSvInputStream;
 namespace beans = com::sun::star::beans;
 namespace ucb = com::sun::star::ucb;
 
-bool KeynoteImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
+bool KeynoteImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
                                            OdpGenerator& rGenerator, utl::MediaDescriptor&)
 {
     return libetonyek::EtonyekDocument::parse(&rInput, &rGenerator);
