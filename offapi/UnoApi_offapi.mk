@@ -3657,6 +3657,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/task,\
 	ClassifiedInteractionRequest \
 	DocumentMSPasswordRequest \
 	DocumentMSPasswordRequest2 \
+	DocumentOOXMLPasswordRequest \
+	DocumentOOXMLPasswordRequest2 \
 	DocumentMacroConfirmationRequest \
 	DocumentPasswordRequest \
 	DocumentPasswordRequest2 \

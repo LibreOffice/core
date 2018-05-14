@@ -20,6 +20,7 @@
 
 #include <comphelper/docpasswordrequest.hxx>
 #include <com/sun/star/task/DocumentMSPasswordRequest2.hpp>
+#include <com/sun/star/task/DocumentOOXMLPasswordRequest2.hpp>
 #include <com/sun/star/task/DocumentPasswordRequest2.hpp>
 #include <com/sun/star/task/PasswordRequest.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
@@ -33,6 +34,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::task::InteractionClassification_QUERY;
 using ::com::sun::star::task::DocumentMSPasswordRequest2;
+using ::com::sun::star::task::DocumentOOXMLPasswordRequest2;
 using ::com::sun::star::task::DocumentPasswordRequest2;
 using ::com::sun::star::task::PasswordRequest;
 using ::com::sun::star::task::PasswordRequestMode;
@@ -126,6 +128,13 @@ DocPasswordRequest::DocPasswordRequest( DocPasswordRequestType eType,
         case DocPasswordRequestType::MS:
         {
             DocumentMSPasswordRequest2 aRequest( OUString(), Reference< XInterface >(),
+                InteractionClassification_QUERY, eMode, rDocumentUrl, bPasswordToModify );
+            maRequest <<= aRequest;
+        }
+        break;
+        case DocPasswordRequestType::OOXML:
+        {
+            DocumentOOXMLPasswordRequest2 aRequest( OUString(), Reference< XInterface >(),
                 InteractionClassification_QUERY, eMode, rDocumentUrl, bPasswordToModify );
             maRequest <<= aRequest;
         }
