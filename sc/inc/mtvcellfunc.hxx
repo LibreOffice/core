@@ -13,8 +13,6 @@
 #include "mtvelements.hxx"
 #include "mtvfunctions.hxx"
 
-#include <functional>
-
 class ScFormulaCell;
 
 namespace sc {

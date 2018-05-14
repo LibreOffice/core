@@ -10,7 +10,6 @@
 #ifndef INCLUDED_SC_INC_MTVELEMENTS_HXX
 #define INCLUDED_SC_INC_MTVELEMENTS_HXX
 
-#include "address.hxx"
 #include "formulacell.hxx"
 #include <svl/broadcast.hxx>
 #include <svl/sharedstring.hxx>
