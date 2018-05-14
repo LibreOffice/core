@@ -516,32 +516,30 @@ namespace svxform
         virtual void dispose() override;
     };
 
-
-    class ManageNamespaceDialog : public ModalDialog
+    class ManageNamespaceDialog : public weld::GenericDialogController
     {
     private:
-        VclPtr<Edit>               m_pPrefixED;
-        VclPtr<Edit>               m_pUrlED;
-        VclPtr<OKButton>           m_pOKBtn;
+        VclPtr<AddConditionDialog> m_xConditionDlg;
 
-        VclPtr<AddConditionDialog> m_pConditionDlg;
+        std::unique_ptr<weld::Entry> m_xPrefixED;
+        std::unique_ptr<weld::Entry> m_xUrlED;
+        std::unique_ptr<weld::Button> m_xOKBtn;
+        std::unique_ptr<weld::Label> m_xAltTitle;
 
-        DECL_LINK(OKHdl, Button*, void);
+        DECL_LINK(OKHdl, weld::Button&, void);
 
     public:
-        ManageNamespaceDialog(vcl::Window* pParent, AddConditionDialog* _pCondDlg, bool bIsEdit);
+        ManageNamespaceDialog(weld::Window* pParent, AddConditionDialog* _pCondDlg, bool bIsEdit);
         virtual ~ManageNamespaceDialog() override;
-        virtual void dispose() override;
 
         void SetNamespace(const OUString& _rPrefix, const OUString& _rURL)
         {
-            m_pPrefixED->SetText( _rPrefix );
-            m_pUrlED->SetText( _rURL );
+            m_xPrefixED->set_text(_rPrefix);
+            m_xUrlED->set_text(_rURL);
         }
-        OUString GetPrefix() const { return m_pPrefixED->GetText(); }
-        OUString GetURL() const { return m_pUrlED->GetText(); }
+        OUString GetPrefix() const { return m_xPrefixED->get_text(); }
+        OUString GetURL() const { return m_xUrlED->get_text(); }
     };
-
 
     class AddSubmissionDialog : public ModalDialog
     {
