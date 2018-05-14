@@ -22,21 +22,17 @@
 
 #include <svx/svxdllapi.h>
 
-#include <vcl/fixed.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
+#include <vcl/weld.hxx>
 
 namespace svx {
 
-class ExtrusionDepthDialog : public ModalDialog
+class ExtrusionDepthDialog : public weld::GenericDialogController
 {
-    VclPtr<MetricField> m_pMtrDepth;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrDepth;
 
 public:
-    ExtrusionDepthDialog( vcl::Window* pParent, double fDepth, FieldUnit eDefaultUnit );
+    ExtrusionDepthDialog(weld::Window* pParent, double fDepth, FieldUnit eDefaultUnit);
     virtual ~ExtrusionDepthDialog() override;
-    virtual void dispose() override;
 
     double getDepth() const;
 };
