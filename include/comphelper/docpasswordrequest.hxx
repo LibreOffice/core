@@ -36,7 +36,8 @@ class PasswordContinuation;
 enum class DocPasswordRequestType
 {
     Standard,    /// Uses the standard com.sun.star.task.DocumentPasswordRequest request.
-    MS           /// Uses the com.sun.star.task.DocumentMSPasswordRequest request.
+    MS,          /// Uses the com.sun.star.task.DocumentMSPasswordRequest request.
+    OOXML,       /// Uses the com.sun.star.task.DocumentOOXMLPasswordRequest request.
 };
 
 
