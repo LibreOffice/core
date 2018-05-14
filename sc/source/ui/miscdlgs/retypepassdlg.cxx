@@ -287,11 +287,11 @@ IMPL_LINK( ScRetypePassDlg, RetypeBtnHdl, Button*, pBtn, void )
         // What the ... !?
         return;
 
-    ScopedVclPtrInstance< ScRetypePassInputDlg > aDlg(this, pProtected);
-    if (aDlg->Execute() == RET_OK)
+    ScRetypePassInputDlg aDlg(GetFrameWeld(), pProtected);
+    if (aDlg.run() == RET_OK)
     {
         // OK is pressed.  Update the protected item.
-        if (aDlg->IsRemovePassword())
+        if (aDlg.IsRemovePassword())
         {
             // Remove password from this item.
             pProtected->setPassword(OUString());
@@ -299,7 +299,7 @@ IMPL_LINK( ScRetypePassDlg, RetypeBtnHdl, Button*, pBtn, void )
         else
         {
             // Set a new password.
-            OUString aNewPass = aDlg->GetNewPassword();
+            OUString aNewPass = aDlg.GetNewPassword();
             pProtected->setPassword(aNewPass);
         }
 
@@ -308,131 +308,111 @@ IMPL_LINK( ScRetypePassDlg, RetypeBtnHdl, Button*, pBtn, void )
     }
 }
 
-ScRetypePassInputDlg::ScRetypePassInputDlg(vcl::Window* pParent, ScPassHashProtectable* pProtected)
-    : ModalDialog(pParent, "RetypePasswordDialog",
-        "modules/scalc/ui/retypepassworddialog.ui")
-    , mpProtected(pProtected)
+ScRetypePassInputDlg::ScRetypePassInputDlg(weld::Window* pParent, ScPassHashProtectable* pProtected)
+    : GenericDialogController(pParent, "modules/scalc/ui/retypepassworddialog.ui", "RetypePasswordDialog")
+    , m_pProtected(pProtected)
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
+    , m_xBtnRetypePassword(m_xBuilder->weld_radio_button("retypepassword"))
+    , m_xPasswordGrid(m_xBuilder->weld_widget("passwordgrid"))
+    , m_xPassword1Edit(m_xBuilder->weld_entry("newpassEntry"))
+    , m_xPassword2Edit(m_xBuilder->weld_entry("confirmpassEntry"))
+    , m_xBtnMatchOldPass(m_xBuilder->weld_check_button("mustmatch"))
+    , m_xBtnRemovePassword(m_xBuilder->weld_radio_button("removepassword"))
 {
-    get(m_pBtnOk, "ok");
-    get(m_pBtnRetypePassword, "retypepassword");
-    get(m_pBtnRemovePassword, "removepassword");
-    get(m_pPasswordGrid, "passwordgrid");
-    get(m_pPassword1Edit, "newpassEntry");
-    get(m_pPassword2Edit, "confirmpassEntry");
-    get(m_pBtnMatchOldPass, "mustmatch");
-
     Init();
 }
 
 ScRetypePassInputDlg::~ScRetypePassInputDlg()
 {
-    disposeOnce();
-}
-
-void ScRetypePassInputDlg::dispose()
-{
-    m_pBtnOk.clear();
-    m_pBtnRetypePassword.clear();
-    m_pPasswordGrid.clear();
-    m_pPassword1Edit.clear();
-    m_pPassword2Edit.clear();
-    m_pBtnMatchOldPass.clear();
-    m_pBtnRemovePassword.clear();
-    ModalDialog::dispose();
 }
 
 bool ScRetypePassInputDlg::IsRemovePassword() const
 {
-    return m_pBtnRemovePassword->IsChecked();
+    return m_xBtnRemovePassword->get_active();
 }
 
 OUString ScRetypePassInputDlg::GetNewPassword() const
 {
-    return m_pPassword1Edit->GetText();
+    return m_xPassword1Edit->get_text();
 }
 
 void ScRetypePassInputDlg::Init()
 {
-    Link<Button*,void> aLink = LINK( this, ScRetypePassInputDlg, OKHdl );
-    m_pBtnOk->SetClickHdl(aLink);
-    aLink = LINK( this, ScRetypePassInputDlg, RadioBtnHdl );
-    m_pBtnRetypePassword->SetClickHdl(aLink);
-    m_pBtnRemovePassword->SetClickHdl(aLink);
-    aLink = LINK( this, ScRetypePassInputDlg, CheckBoxHdl );
-    m_pBtnMatchOldPass->SetClickHdl(aLink);
-    Link<Edit&,void> aLink2 = LINK( this, ScRetypePassInputDlg, PasswordModifyHdl );
-    m_pPassword1Edit->SetModifyHdl(aLink2);
-    m_pPassword2Edit->SetModifyHdl(aLink2);
+    m_xBtnOk->connect_clicked(LINK(this, ScRetypePassInputDlg, OKHdl));
+    m_xBtnRetypePassword->connect_toggled(LINK(this, ScRetypePassInputDlg, RadioBtnHdl));
+    m_xBtnRemovePassword->connect_toggled(LINK(this, ScRetypePassInputDlg, RadioBtnHdl));
+    m_xBtnMatchOldPass->connect_toggled(LINK(this, ScRetypePassInputDlg, CheckBoxHdl));
+    Link<weld::Entry&,void> aLink2 = LINK( this, ScRetypePassInputDlg, PasswordModifyHdl );
+    m_xPassword1Edit->connect_changed(aLink2);
+    m_xPassword2Edit->connect_changed(aLink2);
 
-    m_pBtnOk->Disable();
-    m_pBtnRetypePassword->Check();
-    m_pBtnMatchOldPass->Check();
-    m_pPassword1Edit->GrabFocus();
+    m_xBtnOk->set_sensitive(false);
+    m_xBtnRetypePassword->set_active(true);
+    m_xBtnMatchOldPass->set_active(true);
+    m_xPassword1Edit->grab_focus();
 }
 
 void ScRetypePassInputDlg::CheckPasswordInput()
 {
-    OUString aPass1 = m_pPassword1Edit->GetText();
-    OUString aPass2 = m_pPassword2Edit->GetText();
+    OUString aPass1 = m_xPassword1Edit->get_text();
+    OUString aPass2 = m_xPassword2Edit->get_text();
 
     if (aPass1.isEmpty() || aPass2.isEmpty())
     {
         // Empty password is not allowed.
-        m_pBtnOk->Disable();
+        m_xBtnOk->set_sensitive(false);
         return;
     }
 
     if (aPass1 != aPass2)
     {
         // The two passwords differ.
-        m_pBtnOk->Disable();
+        m_xBtnOk->set_sensitive(false);
         return;
     }
 
-    if (!m_pBtnMatchOldPass->IsChecked())
+    if (!m_xBtnMatchOldPass->get_active())
     {
-        m_pBtnOk->Enable();
+        m_xBtnOk->set_sensitive(true);
         return;
     }
 
-    if (!mpProtected)
+    if (!m_pProtected)
     {
         // This should never happen!
-        m_pBtnOk->Disable();
+        m_xBtnOk->set_sensitive(false);
         return;
     }
 
-    bool bPassGood = mpProtected->verifyPassword(aPass1);
-    m_pBtnOk->Enable(bPassGood);
+    bool bPassGood = m_pProtected->verifyPassword(aPass1);
+    m_xBtnOk->set_sensitive(bPassGood);
 }
 
-IMPL_LINK_NOARG(ScRetypePassInputDlg, OKHdl, Button*, void)
+IMPL_LINK_NOARG(ScRetypePassInputDlg, OKHdl, weld::Button&, void)
 {
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK( ScRetypePassInputDlg, RadioBtnHdl, Button*, pBtn, void )
+IMPL_LINK_NOARG(ScRetypePassInputDlg, RadioBtnHdl, weld::ToggleButton&, void)
 {
-    if (pBtn == m_pBtnRetypePassword)
+    if (m_xBtnRetypePassword->get_active())
     {
-        m_pBtnRemovePassword->Check(false);
-        m_pPasswordGrid->Enable();
+        m_xPasswordGrid->set_sensitive(true);
         CheckPasswordInput();
     }
-    else if (pBtn == m_pBtnRemovePassword)
+    else
     {
-        m_pBtnRetypePassword->Check(false);
-        m_pPasswordGrid->Disable();
-        m_pBtnOk->Enable();
+        m_xPasswordGrid->set_sensitive(false);
+        m_xBtnOk->set_sensitive(false);
     }
 }
 
-IMPL_LINK_NOARG(ScRetypePassInputDlg, CheckBoxHdl, Button*, void)
+IMPL_LINK_NOARG(ScRetypePassInputDlg, CheckBoxHdl, weld::ToggleButton&, void)
 {
     CheckPasswordInput();
 }
 
-IMPL_LINK_NOARG(ScRetypePassInputDlg, PasswordModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(ScRetypePassInputDlg, PasswordModifyHdl, weld::Entry&, void)
 {
     CheckPasswordInput();
 }
