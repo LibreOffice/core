@@ -100,6 +100,7 @@ class SVT_DLLPUBLIC URLBox
     OUString                        aBaseURL;
     rtl::Reference< MatchContext_Impl > pCtx;
     std::unique_ptr<SvtURLBox_Impl> pImpl;
+    bool                            bHistoryDisabled    : 1;
 
     std::unique_ptr<weld::ComboBoxText> m_xWidget;
 
@@ -123,6 +124,7 @@ public:
 
     void                            SetBaseURL( const OUString& rURL );
     OUString                        GetURL();
+    void                            DisableHistory();
 
     weld::Widget*                   getWidget() { return m_xWidget.get(); }
 
