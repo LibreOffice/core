@@ -16,6 +16,24 @@
       "revId": "1d7115556ef38980a9f85d25235078b704b4bc40",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_0ef52f82",
+        "filename": "sw/source/core/layout/atrfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-05-14T16:03:30Z",
+      "side": 1,
+      "message": "before that divide though its...\n(nAct - nSpacings) which would be\n(sal_uInt16 - huge_sal_uInt32)\nwhere the first arg is going to be smaller than the second, so it\u0027ll end up as effectively an arbitrary number that gets divided by GetNumCols()",
+      "parentUuid": "9a30ddce_eea45ba7",
+      "revId": "1d7115556ef38980a9f85d25235078b704b4bc40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
