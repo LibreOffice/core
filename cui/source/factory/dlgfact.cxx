@@ -124,7 +124,11 @@ short AbstractSvxSearchSimilarityDialog_Impl::Execute()
 IMPL_ABSTDLG_BASE(AbstractSvxTransformTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxCaptionDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxJSearchOptionsDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractFmInputRecordNoDialog_Impl);
+
+short AbstractFmInputRecordNoDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractSvxNewDictionaryDialog_Impl::Execute()
 {
@@ -630,12 +634,12 @@ TransliterationFlags AbstractSvxJSearchOptionsDialog_Impl::GetTransliterationFla
 
 void AbstractFmInputRecordNoDialog_Impl::SetValue(long nNew)
 {
-    pDlg->SetValue(nNew);
+    m_xDlg->SetValue(nNew);
 }
 
 long AbstractFmInputRecordNoDialog_Impl::GetValue() const
 {
-    return pDlg->GetValue();
+    return m_xDlg->GetValue();
 }
 
 ::Reference< css::linguistic2::XDictionary > AbstractSvxNewDictionaryDialog_Impl::GetNewDictionary()
@@ -1169,10 +1173,9 @@ VclPtr<AbstractSvxJSearchOptionsDialog> AbstractDialogFactory_Impl::CreateSvxJSe
     return VclPtr<AbstractSvxJSearchOptionsDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractFmInputRecordNoDialog> AbstractDialogFactory_Impl::CreateFmInputRecordNoDialog( )
+VclPtr<AbstractFmInputRecordNoDialog> AbstractDialogFactory_Impl::CreateFmInputRecordNoDialog(weld::Window* pParent)
 {
-    VclPtrInstance<FmInputRecordNoDialog> pDlg( nullptr );
-    return VclPtr<AbstractFmInputRecordNoDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractFmInputRecordNoDialog_Impl>::Create(new FmInputRecordNoDialog(pParent));
 }
 
 VclPtr<AbstractSvxNewDictionaryDialog> AbstractDialogFactory_Impl::CreateSvxNewDictionaryDialog(weld::Window* pParent)

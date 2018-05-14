@@ -732,8 +732,8 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 DBG_ASSERT( pFact, "no dialog factory!" );
                 if ( pFact )
                 {
-                    ScopedVclPtr< AbstractFmInputRecordNoDialog > dlg( pFact->CreateFmInputRecordNoDialog() );
-                    DBG_ASSERT( dlg.get(), "Dialog creation failed!" );
+                    ScopedVclPtr<AbstractFmInputRecordNoDialog> dlg(pFact->CreateFmInputRecordNoDialog(rReq.GetFrameWeld()));
+                    assert(dlg.get() && "Dialog creation failed!");
                     dlg->SetValue( rController->getCursor()->getRow() );
                     if ( dlg->Execute() == RET_OK )
                         nRecord = dlg->GetValue();
