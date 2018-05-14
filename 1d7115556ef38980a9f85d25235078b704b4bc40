@@ -34,6 +34,24 @@
       "revId": "1d7115556ef38980a9f85d25235078b704b4bc40",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_ae5b4386",
+        "filename": "sw/source/core/layout/atrfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-14T18:18:49Z",
+      "side": 1,
+      "message": "good point",
+      "parentUuid": "9a30ddce_0ef52f82",
+      "revId": "1d7115556ef38980a9f85d25235078b704b4bc40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
