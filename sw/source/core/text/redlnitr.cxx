@@ -489,10 +489,15 @@ bool SwRedlineItr::ChkSpecialUnderline_() const
     return false;
 }
 
-bool SwRedlineItr::CheckLine( sal_Int32 nChkStart, sal_Int32 nChkEnd )
+bool SwRedlineItr::CheckLine(
+        sal_uLong const nStartNode, sal_Int32 const nChkStart,
+        sal_uLong const nEndNode, sal_Int32 nChkEnd)
 {
-    if (m_nFirst == SwRedlineTable::npos)
+    // note: previously this would return true in the (!m_bShow && m_pExt)
+    // case, but surely that was a bug?
+    if (m_nFirst == SwRedlineTable::npos || !m_bShow)
         return false;
+    assert(nStartNode == nEndNode);
     if( nChkEnd == nChkStart ) // empty lines look one char further
         ++nChkEnd;
     sal_Int32 nOldStart = m_nStart;
