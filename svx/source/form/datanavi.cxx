@@ -1485,15 +1485,15 @@ namespace svxform
             OString sIdent(pBtn->GetCurItemIdent());
             if (sIdent == "modelsadd")
             {
-                ScopedVclPtrInstance< AddModelDialog > aDlg( this, false );
+                AddModelDialog aDlg(GetFrameWeld(), false);
                 bool bShowDialog = true;
                 while ( bShowDialog )
                 {
                     bShowDialog = false;
-                    if ( aDlg->Execute() == RET_OK )
+                    if (aDlg.run() == RET_OK)
                     {
-                        OUString sNewName = aDlg->GetName();
-                        bool bDocumentData = aDlg->GetModifyDoc();
+                        OUString sNewName = aDlg.GetName();
+                        bool bDocumentData = aDlg.GetModifyDoc();
 
                         if ( m_pModelsBox->GetEntryPos( sNewName ) != LISTBOX_ENTRY_NOTFOUND )
                         {
@@ -1531,8 +1531,8 @@ namespace svxform
             }
             else if (sIdent == "modelsedit")
             {
-                ScopedVclPtrInstance< AddModelDialog > aDlg( this, true );
-                aDlg->SetName( sSelectedModel );
+                AddModelDialog aDlg(GetFrameWeld(), true);
+                aDlg.SetName( sSelectedModel );
 
                 bool bDocumentData( false );
                 try
@@ -1548,13 +1548,13 @@ namespace svxform
                 {
                     DBG_UNHANDLED_EXCEPTION("svx");
                 }
-                aDlg->SetModifyDoc( bDocumentData );
+                aDlg.SetModifyDoc( bDocumentData );
 
-                if ( aDlg->Execute() == RET_OK )
+                if (aDlg.run() == RET_OK)
                 {
-                    if ( aDlg->GetModifyDoc() != bDocumentData )
+                    if ( aDlg.GetModifyDoc() != bDocumentData )
                     {
-                        bDocumentData = aDlg->GetModifyDoc();
+                        bDocumentData = aDlg.GetModifyDoc();
                         try
                         {
                             Reference< css::xforms::XFormsSupplier > xFormsSupp( m_xFrameModel, UNO_QUERY_THROW );
@@ -1569,7 +1569,7 @@ namespace svxform
                         }
                     }
 
-                    OUString sNewName = aDlg->GetName();
+                    OUString sNewName = aDlg.GetName();
                     if ( !sNewName.isEmpty() && ( sNewName != sSelectedModel ) )
                     {
                         try
@@ -3317,26 +3317,18 @@ namespace svxform
         m_pRefBtn->Enable( m_xTempBinding.is() );
     }
 
-    AddModelDialog::AddModelDialog(vcl::Window* pParent, bool bIsEdit)
-        : ModalDialog(pParent, "AddModelDialog", "svx/ui/addmodeldialog.ui")
+    AddModelDialog::AddModelDialog(weld::Window* pParent, bool bIsEdit)
+        : GenericDialogController(pParent, "svx/ui/addmodeldialog.ui", "AddModelDialog")
+        , m_xNameED(m_xBuilder->weld_entry("name"))
+        , m_xModifyCB(m_xBuilder->weld_check_button("modify"))
+        , m_xAltTitle(m_xBuilder->weld_label("alttitle"))
     {
-        get(m_pNameED, "name");
-        get(m_pModifyCB, "modify");
-
         if (bIsEdit)
-            SetText(get<FixedText>("alttitle")->GetText());
+            m_xDialog->set_title(m_xAltTitle->get_label());
     }
 
     AddModelDialog::~AddModelDialog()
     {
-        disposeOnce();
-    }
-
-    void AddModelDialog::dispose()
-    {
-        m_pNameED.clear();
-        m_pModifyCB.clear();
-        ModalDialog::dispose();
     }
 
     AddInstanceDialog::AddInstanceDialog(weld::Window* pParent, bool _bEdit)
