@@ -24,6 +24,7 @@
 #include <swfont.hxx>
 #include "porlay.hxx"
 
+namespace sw { struct MergedPara; }
 class OutputDevice;
 class SwFont;
 class SwpHints;
@@ -61,6 +62,7 @@ private:
     o3tl::enumarray<SwFontScript, sal_uInt16> m_aFontIdx;
     /// input: the current text node
     const SwTextNode* m_pTextNode;
+    sw::MergedPara const* m_pMergedPara;
     /// the 1st one, for reset
     const SwTextNode* m_pFirstTextNode;
     /// from view (text frame) index to current node index
@@ -86,6 +88,7 @@ protected:
         , m_nPosition(0)
         , m_nPropFont(0)
         , m_pTextNode(pTextNode)
+        , m_pMergedPara(nullptr)
         , m_pFirstTextNode(pTextNode)
         , m_nCurrentIndexOffset(0)
         {
@@ -98,6 +101,7 @@ public:
     /// SwTextFrame in certain special cases via this ctor here
     SwAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf )
         : m_pViewShell(nullptr), m_pFont(nullptr), m_pHints(nullptr), m_pScriptInfo(nullptr), m_pLastOut(nullptr), m_nChgCnt(0), m_pRedline(nullptr),m_nPropFont(0), m_pTextNode(&rTextNode)
+        , m_pMergedPara(nullptr)
         , m_pFirstTextNode(&rTextNode)
         , m_nCurrentIndexOffset(0)
         { CtorInitAttrIter( rTextNode, rScrInf ); }
