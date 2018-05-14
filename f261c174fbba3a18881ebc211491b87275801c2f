@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_4e48075c",
+        "filename": "vcl/source/control/notebookbar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2018-05-14T11:07:27Z",
+      "side": 1,
+      "message": "Yes, as you said it\u0027s better to have this in separate method and maybe in another place, resize is invoked too often and this code will slow down the UI.\nProbably we can detect event after user changed settings.",
+      "revId": "f261c174fbba3a18881ebc211491b87275801c2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_2e4d936c",
+        "filename": "vcl/source/control/notebookbar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2018-05-14T11:07:27Z",
+      "side": 1,
+      "message": "Maybe we can store copy of original settings as a class member instead having backup in the fieldtext color? That will prevent us from swithcing colors",
+      "revId": "f261c174fbba3a18881ebc211491b87275801c2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
