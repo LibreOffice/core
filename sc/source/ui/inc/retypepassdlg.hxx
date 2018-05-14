@@ -26,6 +26,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/weld.hxx>
 #include <svx/checklbx.hxx>
 
 #include <tabprotection.hxx>
@@ -96,13 +97,12 @@ private:
     ScPasswordHash      meDesiredHash;
 };
 
-class ScRetypePassInputDlg : public ModalDialog
+class ScRetypePassInputDlg : public weld::GenericDialogController
 {
 public:
     ScRetypePassInputDlg() = delete;
-    explicit ScRetypePassInputDlg(vcl::Window* pParent, ScPassHashProtectable* pProtected);
+    explicit ScRetypePassInputDlg(weld::Window* pParent, ScPassHashProtectable* pProtected);
     virtual ~ScRetypePassInputDlg() override;
-    virtual void dispose() override;
 
     bool IsRemovePassword() const;
     OUString GetNewPassword() const;
@@ -112,24 +112,24 @@ private:
     void CheckPasswordInput();
 
 private:
-    VclPtr<OKButton>       m_pBtnOk;
+    ScPassHashProtectable* m_pProtected;
 
-    VclPtr<RadioButton>    m_pBtnRetypePassword;
+    std::unique_ptr<weld::Button> m_xBtnOk;
 
-    VclPtr<VclContainer>   m_pPasswordGrid;
-    VclPtr<Edit>           m_pPassword1Edit;
-    VclPtr<Edit>           m_pPassword2Edit;
+    std::unique_ptr<weld::RadioButton> m_xBtnRetypePassword;
 
-    VclPtr<CheckBox>       m_pBtnMatchOldPass;
+    std::unique_ptr<weld::Widget> m_xPasswordGrid;
+    std::unique_ptr<weld::Entry> m_xPassword1Edit;
+    std::unique_ptr<weld::Entry> m_xPassword2Edit;
 
-    VclPtr<RadioButton>    m_pBtnRemovePassword;
+    std::unique_ptr<weld::CheckButton> m_xBtnMatchOldPass;
 
-    DECL_LINK( OKHdl, Button*, void );
-    DECL_LINK( RadioBtnHdl, Button*, void );
-    DECL_LINK( CheckBoxHdl, Button*, void );
-    DECL_LINK( PasswordModifyHdl, Edit&, void );
+    std::unique_ptr<weld::RadioButton> m_xBtnRemovePassword;
 
-    ScPassHashProtectable* mpProtected;
+    DECL_LINK( OKHdl, weld::Button&, void );
+    DECL_LINK( RadioBtnHdl, weld::ToggleButton&, void );
+    DECL_LINK( CheckBoxHdl, weld::ToggleButton&, void );
+    DECL_LINK( PasswordModifyHdl, weld::Entry&, void );
 };
 
 #endif
