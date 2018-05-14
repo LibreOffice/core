@@ -68,12 +68,6 @@ published service CellProperties
      */
     [property] string BackGraphicURL;
 
-    /** contains the graphic object that is displayed as background graphic.
-
-        @since LibreOffice 6.1
-     */
-    [property] com::sun::star::graphic::XGraphic BackGraphic;
-
     /** contains the name of the graphic filter of the background graphic.
      */
     [property] string BackGraphicFilter;
@@ -135,6 +129,11 @@ published service CellProperties
      */
     [property] short VertOrient;
 
+    /** contains the graphic object that is displayed as background graphic.
+
+        @since LibreOffice 6.1
+     */
+    [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
 };
 
 

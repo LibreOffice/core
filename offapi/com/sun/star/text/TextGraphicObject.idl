@@ -85,9 +85,6 @@ published service TextGraphicObject
      */
     [property] string GraphicURL;
 
-    /** contains the background graphic of the object.
-     */
-    [property] com::sun::star::graphic::XGraphic Graphic;
 
     /** contains the name of the filter of the background graphic of the object.
      */
@@ -130,6 +127,11 @@ published service TextGraphicObject
     /** contains the ColorMode as com::sun::star::drawing::ColorMode.
      */
     [property] com::sun::star::drawing::ColorMode  GraphicColorMode;
+
+    /** contains the background graphic of the object.
+     */
+    [optional, property] com::sun::star::graphic::XGraphic Graphic;
+
 };
 
 

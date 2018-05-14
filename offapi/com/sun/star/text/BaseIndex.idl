@@ -89,12 +89,6 @@ published service BaseIndex
     */
     [property] string BackGraphicURL;
 
-    /** contains the graphic object that is displayed as background graphic.
-
-        @since LibreOffice 6.1
-    */
-    [property] com::sun::star::graphic::XGraphic BackGraphic;
-
     /** contains the name of the filter of the graphic file that is
          displayed as background graphic*/
     [property] string BackGraphicFilter;
@@ -124,6 +118,12 @@ published service BaseIndex
     [property] com::sun::star::text::XTextSection ContentSection;
     /** the text section containing the header of the index */
     [property] com::sun::star::text::XTextSection HeaderSection;
+
+    /** contains the graphic object that is displayed as background graphic.
+
+        @since LibreOffice 6.1
+    */
+    [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
 };
 
 
