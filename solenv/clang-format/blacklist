@@ -1996,7 +1996,7 @@ connectivity/source/commontools/DriversConfig.cxx
 connectivity/source/commontools/FDatabaseMetaDataResultSet.cxx
 connectivity/source/commontools/FDatabaseMetaDataResultSetMetaData.cxx
 connectivity/source/commontools/FValue.cxx
-connectivity/source/commontools/ParamterSubstitution.cxx
+connectivity/source/commontools/ParameterSubstitution.cxx
 connectivity/source/commontools/RowFunctionParser.cxx
 connectivity/source/commontools/TColumnsHelper.cxx
 connectivity/source/commontools/TConnection.cxx
