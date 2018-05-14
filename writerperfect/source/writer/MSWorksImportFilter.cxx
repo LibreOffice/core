@@ -32,7 +32,8 @@ static bool handleEmbeddedWKSObject(const librevenge::RVNGBinaryData& data,
     return libwps::WPSDocument::parse(data.getDataStream(), &exporter) == libwps::WPS_OK;
 }
 
-bool MSWorksImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
+bool MSWorksImportFilter::doImportDocument(weld::Window* pParent,
+                                           librevenge::RVNGInputStream& rInput,
                                            OdtGenerator& rGenerator, utl::MediaDescriptor&)
 {
     libwps::WPSKind kind = libwps::WPS_TEXT;
@@ -69,14 +70,14 @@ bool MSWorksImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
                     break;
             }
 
-            const ScopedVclPtrInstance<writerperfect::WPFTEncodingDialog> pDlg(title, encoding);
-            if (pDlg->Execute() == RET_OK)
+            writerperfect::WPFTEncodingDialog aDlg(pParent, title, encoding);
+            if (aDlg.run() == RET_OK)
             {
-                if (!pDlg->GetEncoding().isEmpty())
-                    fileEncoding = pDlg->GetEncoding().toUtf8().getStr();
+                if (!aDlg.GetEncoding().isEmpty())
+                    fileEncoding = aDlg.GetEncoding().toUtf8().getStr();
             }
             // we can fail because we are in headless mode, the user has cancelled conversion, ...
-            else if (pDlg->hasUserCalledCancel())
+            else if (aDlg.hasUserCalledCancel())
                 return false;
         }
     }

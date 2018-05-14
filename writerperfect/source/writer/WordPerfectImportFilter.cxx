@@ -11,6 +11,7 @@
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -42,6 +43,7 @@ using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
+using com::sun::star::awt::XWindow;
 using com::sun::star::document::XImporter;
 using com::sun::star::io::XInputStream;
 using com::sun::star::xml::sax::XDocumentHandler;
@@ -92,10 +94,13 @@ bool WordPerfectImportFilter::importImpl(const Sequence<css::beans::PropertyValu
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue* pValue = aDescriptor.getConstArray();
     Reference<XInputStream> xInputStream;
+    Reference<XWindow> xDialogParent;
     for (sal_Int32 i = 0; i < nLength; i++)
     {
         if (pValue[i].Name == "InputStream")
             pValue[i].Value >>= xInputStream;
+        else if (pValue[i].Name == "ParentWindow")
+            pValue[i].Value >>= xDialogParent;
     }
     if (!xInputStream.is())
     {
@@ -114,7 +119,7 @@ bool WordPerfectImportFilter::importImpl(const Sequence<css::beans::PropertyValu
         int unsuccessfulAttempts = 0;
         while (true)
         {
-            SfxPasswordDialog aPasswdDlg(nullptr);
+            SfxPasswordDialog aPasswdDlg(Application::GetFrameWeld(xDialogParent));
             aPasswdDlg.SetMinLen(0);
             if (!aPasswdDlg.execute())
                 return false;
