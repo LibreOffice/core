@@ -168,15 +168,14 @@ public:
     virtual short       Execute() override;
 };
 
-class TitleDialog : public ModalDialog
+class TitleDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<Edit> m_pEdit;
+    std::unique_ptr<weld::Entry> m_xEdit;
 public:
-    TitleDialog(vcl::Window* pParent, const OUString& rOldText);
+    TitleDialog(weld::Window* pParent, const OUString& rOldText);
     virtual ~TitleDialog() override;
-    virtual void dispose() override;
-    OUString GetTitle() const { return m_pEdit->GetText(); }
+    OUString GetTitle() const { return m_xEdit->get_text(); }
 };
 
 class GalleryIdDialog : public ModalDialog

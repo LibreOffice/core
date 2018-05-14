@@ -230,7 +230,14 @@ class AbstractSpellDialog_Impl : public AbstractSpellDialog
 class TitleDialog;
 class AbstractTitleDialog_Impl : public AbstractTitleDialog
 {
-    DECL_ABSTDLG_BASE(AbstractTitleDialog_Impl,TitleDialog)
+protected:
+    std::unique_ptr<TitleDialog> m_xDlg;
+public:
+    explicit AbstractTitleDialog_Impl(TitleDialog* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual OUString  GetTitle() const override ;
 
 };
@@ -666,8 +673,7 @@ public:
                             svx::SpellDialogChildWindow* pSpellChildWindow ) override;
 
     virtual VclPtr<VclAbstractRefreshableDialog> CreateActualizeProgressDialog( vcl::Window* pParent, GalleryTheme* pThm ) override;
-    virtual VclPtr<AbstractTitleDialog> CreateTitleDialog( vcl::Window* pParent,
-                                             const OUString& rOldText) override;
+    virtual VclPtr<AbstractTitleDialog> CreateTitleDialog(weld::Window* pParent, const OUString& rOldText) override;
     virtual VclPtr<AbstractGalleryIdDialog> CreateGalleryIdDialog( vcl::Window* pParent,
                                             GalleryTheme* pThm) override;
     virtual VclPtr<VclAbstractDialog2> CreateGalleryThemePropertiesDialog(vcl::Window* pParent,
