@@ -74,7 +74,8 @@ class SwRedlineItr
     SwAttrHandler& m_rAttrHandler;
     std::unique_ptr<SfxItemSet> m_pSet;
     SwExtend *m_pExt;
-    sal_uLong m_nNdIdx;
+    // note: this isn't actually used in the merged-para (Hide) case
+    sal_uLong const m_nNdIdx;
     SwRedlineTable::size_type const m_nFirst;
     SwRedlineTable::size_type m_nAct;
     sal_Int32 m_nStart;
