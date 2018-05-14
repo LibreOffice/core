@@ -1,0 +1,3 @@
+libreoffice-5-4-7-2.M4
+    * Initialization of the 5-4-1-1 MIMO version
+    * Apply RTF patch
