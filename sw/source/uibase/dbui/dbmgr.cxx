@@ -1312,22 +1312,25 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     sal_uInt16 nStartingPageNo = 0;
 
     vcl::Window *pSourceWindow = nullptr;
-    VclPtr<CancelableDialog> pProgressDlg;
+    std::shared_ptr<weld::GenericDialogController> xProgressDlg;
 
     if( !bIsMergeSilent )
     {
         // construct the process dialog
         pSourceWindow = &pSourceShell->GetView().GetEditWin();
         if (!bMT_PRINTER)
-            pProgressDlg = VclPtr<CreateMonitor>::Create(pSourceWindow);
+            xProgressDlg.reset(new CreateMonitor(pSourceWindow->GetFrameWeld()));
         else
         {
-            pProgressDlg = VclPtr<PrintMonitor>::Create(pSourceWindow);
-            static_cast<PrintMonitor*>( pProgressDlg.get() )->SetText(
-                pSourceDocSh->GetTitle(22) );
+            xProgressDlg.reset(new PrintMonitor(pSourceWindow->GetFrameWeld()));
+            static_cast<PrintMonitor*>(xProgressDlg.get())->set_title(
+                pSourceDocSh->GetTitle(22));
         }
-        pProgressDlg->SetCancelHdl( LINK(this, SwDBManager, PrtCancelHdl) );
-        pProgressDlg->Show();
+        weld::DialogController::runAsync(xProgressDlg, [this, &xProgressDlg](sal_Int32 nResult){
+            if (nResult == RET_CANCEL)
+                MergeCancel();
+            xProgressDlg.reset();
+        });
 
         Application::Reschedule( true );
     }
@@ -1392,7 +1395,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         sal_Int32 nMaxDocs = nRecordCount / nRecordPerDoc;
         if ( 0 != nRecordCount % nRecordPerDoc )
             nMaxDocs += 1;
-        static_cast<CreateMonitor*>( pProgressDlg.get() )->SetTotalCount( nMaxDocs );
+        static_cast<CreateMonitor*>(xProgressDlg.get())->SetTotalCount(nMaxDocs);
     }
 
     long nStartRow, nEndRow;
@@ -1460,16 +1463,16 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 aTempFileURL.reset( new INetURLObject(aTempFile->GetURL()));
             if( !bIsMergeSilent ) {
                 if( !bMT_PRINTER )
-                    static_cast<CreateMonitor*>( pProgressDlg.get() )->SetCurrentPosition( nDocNo );
+                    static_cast<CreateMonitor*>(xProgressDlg.get())->SetCurrentPosition(nDocNo);
                 else {
-                    PrintMonitor *pPrintMonDlg = static_cast<PrintMonitor*>( pProgressDlg.get() );
-                    pPrintMonDlg->m_pPrinter->SetText( bNeedsTempFiles
-                        ? aTempFileURL->GetBase() : pSourceDocSh->GetTitle( 22 ) );
+                    PrintMonitor *pPrintMonDlg = static_cast<PrintMonitor*>(xProgressDlg.get());
+                    pPrintMonDlg->m_xPrinter->set_label(bNeedsTempFiles
+                        ? aTempFileURL->GetBase() : pSourceDocSh->GetTitle( 2));
                     OUString sStat( SwResId(STR_STATSTR_LETTER) );
                     sStat += " " + OUString::number( nDocNo );
-                    pPrintMonDlg->m_pPrintInfo->SetText( sStat );
+                    pPrintMonDlg->m_xPrintInfo->set_label(sStat);
                 }
-                pProgressDlg->Update();
+                //TODO xProgressDlg->queue_draw();
             }
 
             Application::Reschedule( true );
@@ -1702,7 +1705,10 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
     Application::Reschedule( true );
 
-    pProgressDlg.disposeAndClear();
+    if (xProgressDlg)
+    {
+        xProgressDlg->response(RET_OK);
+    }
 
     // unlock all dispatchers
     pViewFrame = SfxViewFrame::GetFirst(pSourceDocSh);
@@ -1746,12 +1752,6 @@ void SwDBManager::MergeCancel()
 {
     if (m_aMergeStatus < MergeStatus::Cancel)
         m_aMergeStatus = MergeStatus::Cancel;
-}
-
-IMPL_LINK( SwDBManager, PrtCancelHdl, Button *, pButton, void )
-{
-    pButton->GetParent()->Hide();
-    MergeCancel();
 }
 
 // determine the column's Numberformat and transfer to the forwarded Formatter,
