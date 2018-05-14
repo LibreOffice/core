@@ -174,7 +174,7 @@ void SwEditShell::Overwrite(const OUString &rStr)
     EndAllAction();
 }
 
-long SwEditShell::SplitNode( bool bAutoFormat, bool bCheckTableStart )
+void SwEditShell::SplitNode( bool bAutoFormat, bool bCheckTableStart )
 {
     StartAllAction();
     GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
@@ -194,7 +194,6 @@ long SwEditShell::SplitNode( bool bAutoFormat, bool bCheckTableStart )
     ClearTableBoxContent();
 
     EndAllAction();
-    return 1;
 }
 
 bool SwEditShell::AppendTextNode()

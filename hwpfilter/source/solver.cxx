@@ -62,18 +62,18 @@ double* mgcLinearSystemD::NewVector (int N)
   return B;
 }
 
-int mgcLinearSystemD::Solve (int n, double** a, double* b)
+bool mgcLinearSystemD::Solve (int n, double** a, double* b)
 {
   std::unique_ptr<int[]> indxc( new int[n] );
   if ( !indxc )
-    return 0;
+    return false;
   std::unique_ptr<int[]> indxr( new int[n] );
   if ( !indxr ) {
-    return 0;
+    return false;
   }
   std::unique_ptr<int[]> ipiv( new int[n] );
   if ( !ipiv ) {
-    return 0;
+    return false;
   }
 
   int i, j, k;
@@ -104,7 +104,7 @@ int mgcLinearSystemD::Solve (int n, double** a, double* b)
           }
           else if ( ipiv[k] > 1 )
           {
-            return 0;
+            return false;
           }
         }
       }
@@ -126,7 +126,7 @@ int mgcLinearSystemD::Solve (int n, double** a, double* b)
     indxc[i] = icol;
     if ( a[icol][icol] == 0 )
     {
-      return 0;
+      return false;
     }
 
     double pivinv = 1/a[icol][icol];
@@ -161,7 +161,7 @@ int mgcLinearSystemD::Solve (int n, double** a, double* b)
     }
   }
 
-  return 1;
+  return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

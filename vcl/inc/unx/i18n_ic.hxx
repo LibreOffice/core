@@ -52,7 +52,7 @@ private:
 
     bool         SupportInputMethodStyle( XIMStyles const *pIMStyles );
     static unsigned int GetWeightingOfIMStyle(   XIMStyle n_style );
-    Bool         IsSupportedIMStyle(      XIMStyle n_style ) const;
+    bool         IsSupportedIMStyle(      XIMStyle n_style ) const;
 
 public:
 

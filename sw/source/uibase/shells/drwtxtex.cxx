@@ -612,7 +612,8 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
         {
             case SID_LANGUAGE_STATUS://20412:
             {
-                nSlotId = SwLangHelper::GetLanguageStatus(pOLV,rSet);
+                SwLangHelper::GetLanguageStatus(pOLV,rSet);
+                nSlotId = 0;
                 break;
             }
 

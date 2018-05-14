@@ -465,15 +465,15 @@ SalI18N_InputContext::GetWeightingOfIMStyle( XIMStyle nStyle )
     return nWeight;
 }
 
-Bool
+bool
 SalI18N_InputContext::IsSupportedIMStyle( XIMStyle nStyle ) const
 {
     if (   (nStyle & mnSupportedPreeditStyle)
            && (nStyle & g_nSupportedStatusStyle) )
     {
-        return True;
+        return true;
     }
-    return False;
+    return false;
 }
 
 bool

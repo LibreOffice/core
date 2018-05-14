@@ -65,9 +65,8 @@ namespace vcl
 /**
  * Adds a TrueType table to the TrueType creator.
  * SF_TABLEFORMAT value.
- * @return value of SFErrCodes type
  */
-    int AddTable(TrueTypeCreator *_this, TrueTypeTable *table);
+    void AddTable(TrueTypeCreator *_this, TrueTypeTable *table);
 
 /**
  * Removes a TrueType table from the TrueType creator if it is stored there.

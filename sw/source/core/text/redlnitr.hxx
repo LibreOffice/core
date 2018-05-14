@@ -55,7 +55,7 @@ public:
     void Reset() { m_pFont.reset(); m_nPos = COMPLETE_STRING; }
     bool Leave( SwFont& rFnt, sal_Int32 nNew )
         { return m_pFont && Leave_( rFnt, nNew ); }
-    short Enter( SwFont& rFnt, sal_Int32 nNew );
+    bool Enter( SwFont& rFnt, sal_Int32 nNew );
     sal_Int32 Next( sal_Int32 nNext );
     SwFont* GetFont() { return m_pFont.get(); }
     void UpdateFont(SwFont &rFont) { ActualizeFont(rFont, m_rArr[m_nPos - m_nStart]); }
@@ -81,9 +81,9 @@ class SwRedlineItr
     void FillHints( std::size_t nAuthor, RedlineType_t eType );
     short Seek_( SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld );
     sal_Int32 GetNextRedln_( sal_Int32 nNext );
-    short EnterExtend( SwFont& rFnt, sal_Int32 nNew ) {
+    bool EnterExtend( SwFont& rFnt, sal_Int32 nNew ) {
         if (m_pExt) return m_pExt->Enter( rFnt, nNew );
-        return 0;
+        return false;
     }
     sal_Int32 NextExtend( sal_Int32 nNext ) {
         if (m_pExt) return m_pExt->Next( nNext );

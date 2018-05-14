@@ -212,10 +212,10 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
                 if (m_nAct > m_nFirst)
                     m_nAct = m_nFirst;  // the test has to run from the beginning
                 else
-                    return nRet + EnterExtend( rFnt, nNew ); // There's none prior to us
+                    return nRet + (EnterExtend( rFnt, nNew ) ? 1 : 0); // There's none prior to us
             }
             else
-                return nRet + EnterExtend( rFnt, nNew ); // We stayed in the same section
+                return nRet + (EnterExtend( rFnt, nNew ) ? 1 : 0); // We stayed in the same section
         }
         if (SwRedlineTable::npos == m_nAct || nOld > nNew)
             m_nAct = m_nFirst;
@@ -273,7 +273,7 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
             m_nEnd = COMPLETE_STRING;
         }
     }
-    return nRet + EnterExtend( rFnt, nNew );
+    return nRet + (EnterExtend( rFnt, nNew ) ? 1 : 0);
 }
 
 void SwRedlineItr::FillHints( std::size_t nAuthor, RedlineType_t eType )
@@ -419,7 +419,7 @@ void SwExtend::ActualizeFont( SwFont &rFnt, ExtTextInputAttr nAttr )
         rFnt.SetGreyWave( true );
 }
 
-short SwExtend::Enter(SwFont& rFnt, sal_Int32 nNew)
+bool SwExtend::Enter(SwFont& rFnt, sal_Int32 nNew)
 {
     OSL_ENSURE( !Inside(), "SwExtend: Enter without Leave" );
     OSL_ENSURE( !m_pFont, "SwExtend: Enter with Font" );
@@ -428,9 +428,9 @@ short SwExtend::Enter(SwFont& rFnt, sal_Int32 nNew)
     {
         m_pFont.reset( new SwFont(rFnt) );
         ActualizeFont( rFnt, m_rArr[m_nPos - m_nStart] );
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 bool SwExtend::Leave_(SwFont& rFnt, sal_Int32 nNew)

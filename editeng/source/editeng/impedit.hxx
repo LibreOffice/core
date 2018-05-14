@@ -657,7 +657,7 @@ private:
     EditPaM             ReadHTML( SvStream& rInput, const OUString& rBaseURL, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs );
     ErrCode             WriteText( SvStream& rOutput, EditSelection aSel );
     ErrCode             WriteRTF( SvStream& rOutput, EditSelection aSel );
-    sal_uInt32          WriteXML(SvStream& rOutput, const EditSelection& rSel);
+    void                WriteXML(SvStream& rOutput, const EditSelection& rSel);
 
     void                WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput, sal_Int32 nPara, sal_Int32 nPos,
                             std::vector<SvxFontItem*>& rFontTable, SvxColorList& rColorList );

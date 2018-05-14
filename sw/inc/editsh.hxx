@@ -202,7 +202,7 @@ public:
        Copy all selections to the document. */
     bool CopySelToDoc( SwDoc* pInsDoc );
 
-    long SplitNode( bool bAutoFormat = false, bool bCheckTableStart = true );
+    void SplitNode( bool bAutoFormat = false, bool bCheckTableStart = true );
     bool AppendTextNode();
     void AutoFormatBySplitNode();
 
