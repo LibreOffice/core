@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="FillSeriesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="filldlg|FillSeriesDialog">Fill Series</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
-            <property name="layout_style">start</property>
+            <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
@@ -58,6 +64,7 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">2</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
           </object>
@@ -105,7 +112,6 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">right</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -122,7 +128,7 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">up</property>
+                            <property name="group">down</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -139,7 +145,7 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">left</property>
+                            <property name="group">down</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -216,7 +222,6 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">growth</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -233,7 +238,7 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">date</property>
+                            <property name="group">linear</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -250,7 +255,7 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">autofill</property>
+                            <property name="group">linear</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -327,7 +332,6 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">week</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -345,7 +349,7 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">month</property>
+                            <property name="group">day</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -362,7 +366,7 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">year</property>
+                            <property name="group">day</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -418,10 +422,10 @@
                   <object class="GtkLabel" id="startL">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="filldlg|startL">_Start value:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">startValue</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -432,10 +436,10 @@
                   <object class="GtkLabel" id="endL">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="filldlg|endL">End _value:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">endValue</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -446,10 +450,10 @@
                   <object class="GtkLabel" id="incrementL">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="filldlg|incrementL">In_crement:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">increment</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -460,6 +464,7 @@
                   <object class="GtkEntry" id="startValue">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -470,6 +475,7 @@
                   <object class="GtkEntry" id="endValue">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -480,6 +486,7 @@
                   <object class="GtkEntry" id="increment">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>

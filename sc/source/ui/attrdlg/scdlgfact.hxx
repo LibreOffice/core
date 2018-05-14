@@ -193,7 +193,13 @@ public:
 
 class AbstractScFillSeriesDlg_Impl:public AbstractScFillSeriesDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScFillSeriesDlg_Impl, ScFillSeriesDlg)
+    std::unique_ptr<ScFillSeriesDlg> m_xDlg;
+public:
+    explicit AbstractScFillSeriesDlg_Impl(ScFillSeriesDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short       Execute() override;
     virtual FillDir     GetFillDir() const override;
     virtual FillCmd     GetFillCmd() const override;
     virtual FillDateCmd GetFillDateCmd() const override;
@@ -485,7 +491,7 @@ public:
 
     virtual VclPtr<AbstractScDeleteContentsDlg> CreateScDeleteContentsDlg(weld::Window* pParent) override;
 
-    virtual VclPtr<AbstractScFillSeriesDlg> CreateScFillSeriesDlg( vcl::Window*        pParent,
+    virtual VclPtr<AbstractScFillSeriesDlg> CreateScFillSeriesDlg(weld::Window*        pParent,
                                                             ScDocument&     rDocument,
                                                             FillDir         eFillDir,
                                                             FillCmd         eFillCmd,
