@@ -99,11 +99,12 @@ private:
     using SwCursorShell::GotoMark;
 
     typedef long (SwWrtShell::*SELECTFUNC)(const Point *, bool bProp );
+    typedef void (SwWrtShell::*SELECTFUNC2)(const Point *, bool bProp );
 
-    SELECTFUNC  m_fnDrag;
-    SELECTFUNC  m_fnSetCursor;
-    SELECTFUNC  m_fnEndDrag;
-    SELECTFUNC  m_fnKillSel;
+    SELECTFUNC2  m_fnDrag;
+    SELECTFUNC   m_fnSetCursor;
+    SELECTFUNC2  m_fnEndDrag;
+    SELECTFUNC   m_fnKillSel;
 
 public:
 
@@ -574,17 +575,17 @@ private:
 
     SAL_DLLPRIVATE long  SetCursorKillSel(const Point *, bool bProp );
 
-    SAL_DLLPRIVATE long  BeginDrag(const Point *, bool bProp );
-    SAL_DLLPRIVATE long  DefaultDrag(const Point *, bool bProp );
-    SAL_DLLPRIVATE long  DefaultEndDrag(const Point *, bool bProp );
+    SAL_DLLPRIVATE void  BeginDrag(const Point *, bool bProp );
+    SAL_DLLPRIVATE void  DefaultDrag(const Point *, bool bProp );
+    SAL_DLLPRIVATE void  DefaultEndDrag(const Point *, bool bProp );
 
-    SAL_DLLPRIVATE long  ExtSelWrd(const Point *, bool bProp );
-    SAL_DLLPRIVATE long  ExtSelLn(const Point *, bool bProp );
+    SAL_DLLPRIVATE void  ExtSelWrd(const Point *, bool bProp );
+    SAL_DLLPRIVATE void  ExtSelLn(const Point *, bool bProp );
 
-    SAL_DLLPRIVATE long  BeginFrameDrag(const Point *, bool bProp );
+    SAL_DLLPRIVATE void  BeginFrameDrag(const Point *, bool bProp );
 
     // after SSize/Move of a frame update; Point is destination.
-    SAL_DLLPRIVATE long  UpdateLayoutFrame(const Point *, bool bProp );
+    SAL_DLLPRIVATE void  UpdateLayoutFrame(const Point *, bool bProp );
 
     SAL_DLLPRIVATE void  SttLeaveSelect();
     SAL_DLLPRIVATE void  AddLeaveSelect();
@@ -629,7 +630,7 @@ inline bool SwWrtShell::IsInClickToEdit() const { return m_bIsInClickToEdit; }
 inline bool SwWrtShell::Is_FnDragEQBeginDrag() const
 {
 #ifdef __GNUC__
-    SELECTFUNC  fnTmp = &SwWrtShell::BeginDrag;
+    SELECTFUNC2 fnTmp = &SwWrtShell::BeginDrag;
     return m_fnDrag == fnTmp;
 #else
     return m_fnDrag == &SwWrtShell::BeginDrag;

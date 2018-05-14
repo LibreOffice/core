@@ -338,7 +338,7 @@ public:
     void SetObjRect( const SwRect& rRect );
 
     long BeginDrag( const Point *pPt, bool bProp );
-    long Drag     ( const Point *pPt, bool bProp );
+    void Drag     ( const Point *pPt, bool bProp );
     void EndDrag  ();
     void BreakDrag();
 
