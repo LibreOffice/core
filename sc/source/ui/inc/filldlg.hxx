@@ -20,30 +20,26 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_FILLDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_FILLDLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/weld.hxx>
 #include <global.hxx>
 
 class ScDocument;
 
 #include "scui_def.hxx"
 
-class ScFillSeriesDlg : public ModalDialog
+class ScFillSeriesDlg : public weld::GenericDialogController
 {
 public:
-            ScFillSeriesDlg( vcl::Window*        pParent,
-                             ScDocument&    rDocument,
-                             FillDir        eFillDir,
-                             FillCmd        eFillCmd,
-                             FillDateCmd    eFillDateCmd,
-                             const OUString& aStartStr,
-                             double         fStep,
-                             double         fMax,
-                             sal_uInt16     nPossDir );
-            virtual ~ScFillSeriesDlg() override;
-    virtual void dispose() override;
+    ScFillSeriesDlg( weld::Window*        pParent,
+                     ScDocument&    rDocument,
+                     FillDir        eFillDir,
+                     FillCmd        eFillCmd,
+                     FillDateCmd    eFillDateCmd,
+                     const OUString& aStartStr,
+                     double         fStep,
+                     double         fMax,
+                     sal_uInt16     nPossDir );
+    virtual ~ScFillSeriesDlg() override;
 
     FillDir     GetFillDir() const          { return theFillDir; }
     FillCmd     GetFillCmd() const          { return theFillCmd; }
@@ -52,38 +48,12 @@ public:
     double      GetStep() const             { return fIncrement; }
     double      GetMax() const              { return fEndVal; }
 
-    OUString GetStartStr() const       { return m_pEdStartVal->GetText(); }
+    OUString GetStartStr() const       { return m_xEdStartVal->get_text(); }
 
     void SetEdStartValEnabled(bool bFlag);
 
 private:
-    VclPtr<FixedText> m_pFtStartVal;
-    VclPtr<Edit> m_pEdStartVal;
     const OUString aStartStrVal;
-
-    VclPtr<FixedText> m_pFtEndVal;
-    VclPtr<Edit> m_pEdEndVal;
-
-    VclPtr<FixedText> m_pFtIncrement;
-    VclPtr<Edit> m_pEdIncrement;
-    VclPtr<RadioButton> m_pBtnDown;
-    VclPtr<RadioButton> m_pBtnRight;
-    VclPtr<RadioButton> m_pBtnUp;
-    VclPtr<RadioButton> m_pBtnLeft;
-
-    VclPtr<RadioButton> m_pBtnArithmetic;
-    VclPtr<RadioButton> m_pBtnGeometric;
-    VclPtr<RadioButton> m_pBtnDate;
-    VclPtr<RadioButton> m_pBtnAutoFill;
-
-    VclPtr<FixedText> m_pFtTimeUnit;
-    VclPtr<RadioButton> m_pBtnDay;
-    VclPtr<RadioButton> m_pBtnDayOfWeek;
-    VclPtr<RadioButton> m_pBtnMonth;
-    VclPtr<RadioButton> m_pBtnYear;
-
-    VclPtr<OKButton> m_pBtnOk;
-
     const OUString aErrMsgInvalidVal;
 
     ScDocument& rDoc;
@@ -94,13 +64,39 @@ private:
     double      fIncrement;
     double      fEndVal;
 
+    std::unique_ptr<weld::Label> m_xFtStartVal;
+    std::unique_ptr<weld::Entry> m_xEdStartVal;
+
+    std::unique_ptr<weld::Label> m_xFtEndVal;
+    std::unique_ptr<weld::Entry> m_xEdEndVal;
+
+    std::unique_ptr<weld::Label> m_xFtIncrement;
+    std::unique_ptr<weld::Entry> m_xEdIncrement;
+    std::unique_ptr<weld::RadioButton> m_xBtnDown;
+    std::unique_ptr<weld::RadioButton> m_xBtnRight;
+    std::unique_ptr<weld::RadioButton> m_xBtnUp;
+    std::unique_ptr<weld::RadioButton> m_xBtnLeft;
+
+    std::unique_ptr<weld::RadioButton> m_xBtnArithmetic;
+    std::unique_ptr<weld::RadioButton> m_xBtnGeometric;
+    std::unique_ptr<weld::RadioButton> m_xBtnDate;
+    std::unique_ptr<weld::RadioButton> m_xBtnAutoFill;
+
+    std::unique_ptr<weld::Label> m_xFtTimeUnit;
+    std::unique_ptr<weld::RadioButton> m_xBtnDay;
+    std::unique_ptr<weld::RadioButton> m_xBtnDayOfWeek;
+    std::unique_ptr<weld::RadioButton> m_xBtnMonth;
+    std::unique_ptr<weld::RadioButton> m_xBtnYear;
+
+    std::unique_ptr<weld::Button> m_xBtnOk;
+
     void Init( sal_uInt16 nPossDir );
     bool CheckStartVal();
     bool CheckIncrementVal();
     bool CheckEndVal();
 
-    DECL_LINK( OKHdl, Button*, void );
-    DECL_LINK( DisableHdl, Button*, void );
+    DECL_LINK(OKHdl, weld::Button&, void);
+    DECL_LINK(DisableHdl, weld::ToggleButton&, void);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_FILLDLG_HXX

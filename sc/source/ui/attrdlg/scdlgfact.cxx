@@ -96,7 +96,10 @@ short AbstractScDeleteContentsDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractScFillSeriesDlg_Impl);
+short AbstractScFillSeriesDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractScGroupDlg_Impl::Execute()
 {
@@ -289,42 +292,42 @@ InsertDeleteFlags AbstractScDeleteContentsDlg_Impl::GetDelContentsCmdBits() cons
 
 FillDir AbstractScFillSeriesDlg_Impl::GetFillDir() const
 {
-    return pDlg->GetFillDir();
+    return m_xDlg->GetFillDir();
 }
 
 FillCmd AbstractScFillSeriesDlg_Impl::GetFillCmd() const
 {
-    return pDlg->GetFillCmd();
+    return m_xDlg->GetFillCmd();
 }
 
 FillDateCmd AbstractScFillSeriesDlg_Impl::GetFillDateCmd() const
 {
-    return pDlg->GetFillDateCmd();
+    return m_xDlg->GetFillDateCmd();
 }
 
 double  AbstractScFillSeriesDlg_Impl::GetStart() const
 {
-    return pDlg->GetStart();
+    return m_xDlg->GetStart();
 }
 
 double  AbstractScFillSeriesDlg_Impl::GetStep() const
 {
-    return pDlg->GetStep();
+    return m_xDlg->GetStep();
 }
 
 double  AbstractScFillSeriesDlg_Impl::GetMax() const
 {
-    return pDlg->GetMax();
+    return m_xDlg->GetMax();
 }
 
 OUString  AbstractScFillSeriesDlg_Impl::GetStartStr() const
 {
-    return pDlg->GetStartStr();
+    return m_xDlg->GetStartStr();
 }
 
 void    AbstractScFillSeriesDlg_Impl::SetEdStartValEnabled(bool bFlag)
 {
-    pDlg->SetEdStartValEnabled(bFlag);
+    m_xDlg->SetEdStartValEnabled(bFlag);
 }
 
 bool AbstractScGroupDlg_Impl::GetColsChecked() const
@@ -724,7 +727,7 @@ VclPtr<AbstractScDeleteContentsDlg> ScAbstractDialogFactory_Impl::CreateScDelete
     return VclPtr<AbstractScDeleteContentsDlg_Impl>::Create(new ScDeleteContentsDlg(pParent));
 }
 
-VclPtr<AbstractScFillSeriesDlg> ScAbstractDialogFactory_Impl::CreateScFillSeriesDlg( vcl::Window*       pParent,
+VclPtr<AbstractScFillSeriesDlg> ScAbstractDialogFactory_Impl::CreateScFillSeriesDlg(weld::Window*       pParent,
                                                             ScDocument&     rDocument,
                                                             FillDir         eFillDir,
                                                             FillCmd         eFillCmd,
@@ -734,8 +737,7 @@ VclPtr<AbstractScFillSeriesDlg> ScAbstractDialogFactory_Impl::CreateScFillSeries
                                                             double          fMax,
                                                             sal_uInt16      nPossDir)
 {
-    VclPtr<ScFillSeriesDlg> pDlg = VclPtr<ScFillSeriesDlg>::Create( pParent, rDocument,eFillDir, eFillCmd,eFillDateCmd, aStartStr,fStep,fMax,nPossDir);
-    return VclPtr<AbstractScFillSeriesDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScFillSeriesDlg_Impl>::Create(new ScFillSeriesDlg(pParent, rDocument,eFillDir, eFillCmd,eFillDateCmd, aStartStr,fStep,fMax,nPossDir));
 }
 
 VclPtr<AbstractScGroupDlg> ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg(weld::Window* pParent, bool bUnGroup)
