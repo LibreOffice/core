@@ -368,9 +368,9 @@ void GalleryBrowser1::ImplExecute(const OString &rIdent)
         const OUString  aOldName( pTheme->GetName() );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialog creation failed!");
-        ScopedVclPtr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog( this, aOldName ));
-        DBG_ASSERT(aDlg, "Dialog creation failed!");
+        assert(pFact && "Dialog creation failed!");
+        ScopedVclPtr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog(GetFrameWeld(), aOldName));
+        assert(aDlg.get() && "Dialog creation failed!");
 
         if( aDlg->Execute() == RET_OK )
         {
