@@ -9,6 +9,8 @@
 
 #include <memory>
 
+#include "config_clang.h"
+
 #include "compat.hxx"
 #include "plugin.hxx"
 
@@ -26,7 +28,11 @@ private:
     void InclusionDirective(
         SourceLocation HashLoc, Token const & IncludeTok, StringRef,
         bool IsAngled, CharSourceRange FilenameRange, FileEntry const * File,
-        StringRef SearchPath, StringRef, clang::Module const *) override
+        StringRef SearchPath, StringRef, clang::Module const *
+#if CLANG_VERSION >= 70000
+        , SrcMgr::CharacteristicKind
+#endif
+        ) override
     {
         if (ignoreLocation(HashLoc)) {
             return;
