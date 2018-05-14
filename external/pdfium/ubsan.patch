@@ -22,22 +22,3 @@
      int rowbytes = std::min(abs(src_pitch), dest_pitch);
      for (int row = 0; row < bmheight; row++)
        memcpy(pDestBuf + row * dest_pitch, pSrcBuf + row * src_pitch, rowbytes);
---- third_party/agg23/agg_rasterizer_scanline_aa.h
-+++ third_party/agg23/agg_rasterizer_scanline_aa.h
-@@ -349,14 +349,14 @@ public:
-                     cover += cur_cell->cover;
-                 }
-                 if(area) {
--                    alpha = calculate_alpha((cover << (poly_base_shift + 1)) - area, no_smooth);
-+                    alpha = calculate_alpha(int(unsigned(cover) << (poly_base_shift + 1)) - area, no_smooth);
-                     if(alpha) {
-                         sl.add_cell(x, alpha);
-                     }
-                     x++;
-                 }
-                 if(num_cells && cur_cell->x > x) {
--                    alpha = calculate_alpha(cover << (poly_base_shift + 1), no_smooth);
-+                    alpha = calculate_alpha(unsigned(cover) << (poly_base_shift + 1), no_smooth);
-                     if(alpha) {
-                         sl.add_span(x, cur_cell->x - x, alpha);
-                     }

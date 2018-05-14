@@ -19,3 +19,106 @@ index 8e01127b0..f4ce4d915 100644
    if (m_Storer.GetBitmap()->IsAlphaMask()) {
      CalcAlpha(cdata);
    } else {
+diff --git a/core/fxcrt/string_view_template.h b/core/fxcrt/string_view_template.h
+index 05694cf24..101253814 100644
+--- a/core/fxcrt/string_view_template.h
++++ b/core/fxcrt/string_view_template.h
+@@ -231,9 +231,6 @@ inline bool operator<(const T* lhs, const StringViewTemplate<T>& rhs) {
+   return rhs > lhs;
+ }
+ 
+-extern template class StringViewTemplate<char>;
+-extern template class StringViewTemplate<wchar_t>;
+-
+ using ByteStringView = StringViewTemplate<char>;
+ using WideStringView = StringViewTemplate<wchar_t>;
+ 
+diff --git a/core/fpdfdoc/cpdf_metadata.cpp b/core/fpdfdoc/cpdf_metadata.cpp
+index 323de4ffc..f11a0b0ad 100644
+--- a/core/fpdfdoc/cpdf_metadata.cpp
++++ b/core/fpdfdoc/cpdf_metadata.cpp
+@@ -74,7 +74,7 @@ std::vector<UnsupportedFeature> CPDF_Metadata::CheckForSharedForm() const {
+   CFX_XMLParser parser(stream);
+   std::unique_ptr<CFX_XMLDocument> doc = parser.Parse();
+   if (!doc)
+-    return {};
++    return std::vector<UnsupportedFeature>();
+ 
+   std::vector<UnsupportedFeature> unsupported;
+   CheckForSharedFormInternal(doc->GetRoot(), &unsupported);
+diff --git a/fpdfsdk/cpdf_annotcontext.cpp b/fpdfsdk/cpdf_annotcontext.cpp
+index 20c5fc343..a40cd1eae 100644
+--- a/fpdfsdk/cpdf_annotcontext.cpp
++++ b/fpdfsdk/cpdf_annotcontext.cpp
+@@ -16,12 +16,12 @@ CPDF_AnnotContext::CPDF_AnnotContext(CPDF_Dictionary* pAnnotDict,
+                                      CPDF_Page* pPage,
+                                      CPDF_Stream* pStream)
+     : m_pAnnotDict(pAnnotDict), m_pPage(pPage) {
+-  SetForm(pStream);
++  SetForm_(pStream);
+ }
+ 
+ CPDF_AnnotContext::~CPDF_AnnotContext() = default;
+ 
+-void CPDF_AnnotContext::SetForm(CPDF_Stream* pStream) {
++void CPDF_AnnotContext::SetForm_(CPDF_Stream* pStream) {
+   if (!pStream)
+     return;
+ 
+diff --git a/fpdfsdk/cpdf_annotcontext.h b/fpdfsdk/cpdf_annotcontext.h
+index 38cc91e03..7904ae044 100644
+--- a/fpdfsdk/cpdf_annotcontext.h
++++ b/fpdfsdk/cpdf_annotcontext.h
+@@ -23,7 +23,7 @@ class CPDF_AnnotContext {
+                     CPDF_Stream* pStream);
+   ~CPDF_AnnotContext();
+ 
+-  void SetForm(CPDF_Stream* pStream);
++  void SetForm_(CPDF_Stream* pStream);
+   bool HasForm() const { return !!m_pAnnotForm; }
+   CPDF_Form* GetForm() const { return m_pAnnotForm.get(); }
+   CPDF_Dictionary* GetAnnotDict() const { return m_pAnnotDict.Get(); }
+diff --git a/third_party/base/span.h b/third_party/base/span.h
+index 0fb627ba8..f71c362e2 100644
+--- a/third_party/base/span.h
++++ b/third_party/base/span.h
+@@ -214,7 +214,7 @@ class span {
+   // Conversions from spans of compatible types: this allows a span<T> to be
+   // seamlessly used as a span<const T>, but not the other way around.
+   template <typename U, typename = internal::EnableIfLegalSpanConversion<U, T>>
+-  constexpr span(const span<U>& other) : span(other.data(), other.size()) {}
++  span(const span<U>& other) : span(other.data(), other.size()) {}
+   span& operator=(const span& other) noexcept = default;
+   ~span() noexcept {
+     if (!size_) {
+diff --git a/fpdfsdk/fpdf_annot.cpp b/fpdfsdk/fpdf_annot.cpp
+index d3bf38d31..e8aea9707 100644
+--- a/fpdfsdk/fpdf_annot.cpp
++++ b/fpdfsdk/fpdf_annot.cpp
+@@ -389,7 +389,7 @@ FPDFAnnot_AppendObject(FPDF_ANNOTATION annot, FPDF_PAGEOBJECT obj) {
+ 
+   // Get the annotation's corresponding form object for parsing its AP stream.
+   if (!pAnnot->HasForm())
+-    pAnnot->SetForm(pStream);
++    pAnnot->SetForm_(pStream);
+ 
+   // Check that the object did not come from the same annotation. If this check
+   // succeeds, then it is assumed that the object came from
+@@ -425,7 +425,7 @@ FPDF_EXPORT int FPDF_CALLCONV FPDFAnnot_GetObjectCount(FPDF_ANNOTATION annot) {
+     if (!pStream)
+       return 0;
+ 
+-    pAnnot->SetForm(pStream);
++    pAnnot->SetForm_(pStream);
+   }
+   return pdfium::CollectionSize<int>(*pAnnot->GetForm()->GetPageObjectList());
+ }
+@@ -442,7 +442,7 @@ FPDFAnnot_GetObject(FPDF_ANNOTATION annot, int index) {
+     if (!pStream)
+       return nullptr;
+ 
+-    pAnnot->SetForm(pStream);
++    pAnnot->SetForm_(pStream);
+   }
+ 
+   return FPDFPageObjectFromCPDFPageObject(

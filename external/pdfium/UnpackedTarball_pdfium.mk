@@ -10,7 +10,7 @@
 pdfium_patches :=
 pdfium_patches += visibility.patch.1
 pdfium_patches += ubsan.patch
-pdfium_patches += freetype.patch.1
+pdfium_patches += icu.patch.1
 # Fixes build on our baseline.
 pdfium_patches += build.patch.1
 # Adds missing editing API
