@@ -1624,13 +1624,13 @@ namespace svxform
             OString sIdent(pBtn->GetCurItemIdent());
             if (sIdent == "instancesadd")
             {
-                ScopedVclPtrInstance< AddInstanceDialog > aDlg( this, false );
-                if ( aDlg->Execute() == RET_OK )
+                AddInstanceDialog aDlg(GetFrameWeld(), false);
+                if (aDlg.run() == RET_OK)
                 {
                     sal_uInt16 nInst = GetNewPageId();
-                    OUString sName = aDlg->GetName();
-                    OUString sURL = aDlg->GetURL();
-                    bool bLinkOnce = aDlg->IsLinkInstance();
+                    OUString sName = aDlg.GetName();
+                    OUString sURL = aDlg.GetURL();
+                    bool bLinkOnce = aDlg.IsLinkInstance();
                     try
                     {
                         xUIHelper->newInstance( sName, sURL, !bLinkOnce );
@@ -1655,16 +1655,16 @@ namespace svxform
                 XFormsPage* pPage = GetCurrentPage( nId );
                 if ( pPage )
                 {
-                    ScopedVclPtrInstance< AddInstanceDialog > aDlg( this, true );
-                    aDlg->SetName( pPage->GetInstanceName() );
-                    aDlg->SetURL( pPage->GetInstanceURL() );
-                    aDlg->SetLinkInstance( pPage->GetLinkOnce() );
-                    OUString sOldName = aDlg->GetName();
-                    if ( aDlg->Execute() == RET_OK )
+                    AddInstanceDialog aDlg(GetFrameWeld(), true);
+                    aDlg.SetName( pPage->GetInstanceName() );
+                    aDlg.SetURL( pPage->GetInstanceURL() );
+                    aDlg.SetLinkInstance( pPage->GetLinkOnce() );
+                    OUString sOldName = aDlg.GetName();
+                    if (aDlg.run() == RET_OK)
                     {
-                        OUString sNewName = aDlg->GetName();
-                        OUString sURL = aDlg->GetURL();
-                        bool bLinkOnce = aDlg->IsLinkInstance();
+                        OUString sNewName = aDlg.GetName();
+                        OUString sURL = aDlg.GetURL();
+                        bool bLinkOnce = aDlg.IsLinkInstance();
                         try
                         {
                             xUIHelper->renameInstance( sOldName,
@@ -3339,20 +3339,20 @@ namespace svxform
         ModalDialog::dispose();
     }
 
-    AddInstanceDialog::AddInstanceDialog(vcl::Window* pParent, bool _bEdit)
-        : ModalDialog(pParent, "AddInstanceDialog" , "svx/ui/addinstancedialog.ui")
+    AddInstanceDialog::AddInstanceDialog(weld::Window* pParent, bool _bEdit)
+        : GenericDialogController(pParent, "svx/ui/addinstancedialog.ui", "AddInstanceDialog")
+        , m_xNameED(m_xBuilder->weld_entry("name"))
+        , m_xURLFT(m_xBuilder->weld_label("urlft"))
+        , m_xURLED(new URLBox(m_xBuilder->weld_combo_box_text("url")))
+        , m_xFilePickerBtn(m_xBuilder->weld_button("browse"))
+        , m_xLinkInstanceCB(m_xBuilder->weld_check_button("link"))
+        , m_xAltTitle(m_xBuilder->weld_label("alttitle"))
     {
-        get(m_pNameED, "name");
-        get(m_pURLFT, "urlft");
-        get(m_pURLED, "url");
-        get(m_pFilePickerBtn, "browse");
-        get(m_pLinkInstanceCB, "link");
+        if (_bEdit)
+            m_xDialog->set_title(m_xAltTitle->get_label());
 
-        if ( _bEdit )
-            SetText(get<FixedText>("alttitle")->GetText());
-
-        m_pURLED->DisableHistory();
-        m_pFilePickerBtn->SetClickHdl( LINK( this, AddInstanceDialog, FilePickerHdl ) );
+        m_xURLED->DisableHistory();
+        m_xFilePickerBtn->connect_clicked(LINK(this, AddInstanceDialog, FilePickerHdl));
 
         // load the filter name from fps resource
         m_sAllFilterName = Translate::get(STR_FILTERNAME_ALL, Translate::Create("fps"));
@@ -3360,24 +3360,13 @@ namespace svxform
 
     AddInstanceDialog::~AddInstanceDialog()
     {
-        disposeOnce();
     }
 
-    void AddInstanceDialog::dispose()
-    {
-        m_pNameED.clear();
-        m_pURLFT.clear();
-        m_pURLED.clear();
-        m_pFilePickerBtn.clear();
-        m_pLinkInstanceCB.clear();
-        ModalDialog::dispose();
-    }
-
-    IMPL_LINK_NOARG(AddInstanceDialog, FilePickerHdl, Button*, void)
+    IMPL_LINK_NOARG(AddInstanceDialog, FilePickerHdl, weld::Button&, void)
     {
         ::sfx2::FileDialogHelper aDlg(
             css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-            FileDialogFlags::NONE, GetFrameWeld());
+            FileDialogFlags::NONE, m_xDialog.get());
         INetURLObject aFile( SvtPathOptions().GetWorkPath() );
 
         aDlg.AddFilter( m_sAllFilterName, FILEDIALOG_FILTER_ALL );
@@ -3386,8 +3375,8 @@ namespace svxform
         aDlg.SetCurrentFilter( sFilterName );
         aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
-        if( aDlg.Execute() == ERRCODE_NONE )
-            m_pURLED->SetText( aDlg.GetPath() );
+        if (aDlg.Execute() == ERRCODE_NONE)
+            m_xURLED->SetText( aDlg.GetPath() );
     }
 
     LinkedInstanceWarningBox::LinkedInstanceWarningBox(weld::Widget* pParent)

@@ -2010,7 +2010,8 @@ IMPL_LINK_NOARG(URLBox, TryAutoComplete, Timer *, void)
 }
 
 URLBox::URLBox(weld::ComboBoxText* pWidget)
-    : m_xWidget(pWidget)
+    : bHistoryDisabled(false)
+    , m_xWidget(pWidget)
 {
     Init();
 
@@ -2043,6 +2044,9 @@ URLBox::~URLBox()
 void URLBox::UpdatePicklistForSmartProtocol_Impl()
 {
     m_xWidget->clear();
+
+    if (bHistoryDisabled)
+        return;
 
     // read history pick list
     Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
@@ -2199,6 +2203,12 @@ void URLBox::SetBaseURL( const OUString& rURL )
     pImpl->aURLs.clear();
 
     aBaseURL = rURL;
+}
+
+void URLBox::DisableHistory()
+{
+    bHistoryDisabled = true;
+    UpdatePicklistForSmartProtocol_Impl();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
