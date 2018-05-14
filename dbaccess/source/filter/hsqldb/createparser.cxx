@@ -154,17 +154,36 @@ namespace dbahsql
 {
 CreateStmtParser::CreateStmtParser() {}
 
+void CreateStmtParser::parsePrimaryKeys(const OUString& sPrimaryPart)
+{
+    sal_Int32 nParenPos = sPrimaryPart.indexOf("(");
+    if (nParenPos > 0)
+    {
+        OUString sParamStr
+            = sPrimaryPart.copy(nParenPos + 1, sPrimaryPart.lastIndexOf(")") - nParenPos - 1);
+        auto sParams = string::split(sParamStr, sal_Unicode(u','));
+        for (auto& sParam : sParams)
+        {
+            m_PrimaryKeys.push_back(sParam);
+        }
+    }
+}
+
 void CreateStmtParser::parseColumnPart(const OUString& sColumnPart)
 {
     auto sColumns = lcl_splitColumnPart(sColumnPart);
     for (OUString& sColumn : sColumns)
     {
+        if (sColumn.startsWithIgnoreAsciiCase("PRIMARY KEY"))
+        {
+            parsePrimaryKeys(sColumn);
+            continue;
+        }
+
         std::vector<OUString> words = string::split(sColumn, sal_Unicode(u' '));
 
         if (words[0] == "CONSTRAINT")
         {
-            // TODO parse foreign key part instead of just saving the string
-            // part
             m_aForeignParts.push_back(sColumn);
             continue;
         }
@@ -192,8 +211,14 @@ void CreateStmtParser::parseColumnPart(const OUString& sColumnPart)
         }
 
         bool bCaseInsensitive = sTypeName.indexOf("IGNORECASE") >= 0;
-        ColumnDefinition aColDef(words[0], lcl_getDataTypeFromHsql(sTypeName), aParams,
-                                 lcl_isPrimaryKey(sColumn), lcl_getAutoIncrementDefault(sColumn),
+        const OUString& rTableName = words[0];
+        bool isPrimaryKey = lcl_isPrimaryKey(sColumn);
+
+        if (isPrimaryKey)
+            m_PrimaryKeys.push_back(rTableName);
+
+        ColumnDefinition aColDef(rTableName, lcl_getDataTypeFromHsql(sTypeName), aParams,
+                                 isPrimaryKey, lcl_getAutoIncrementDefault(sColumn),
                                  lcl_isNullable(sColumn), bCaseInsensitive);
 
         m_aColumns.push_back(aColDef);

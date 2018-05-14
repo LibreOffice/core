@@ -20,10 +20,12 @@ class SAL_DLLPUBLIC_EXPORT CreateStmtParser
 private:
     std::vector<ColumnDefinition> m_aColumns;
     std::vector<OUString> m_aForeignParts;
+    std::vector<OUString> m_PrimaryKeys;
     OUString m_sTableName;
 
 protected:
     void parseColumnPart(const OUString& sColumnPart);
+    void parsePrimaryKeys(const OUString& sPrimaryPart);
 
 public:
     CreateStmtParser();
@@ -33,6 +35,11 @@ public:
      * @return name of the table which is to be created.
      */
     OUString getTableName() const { return m_sTableName; }
+
+    /**
+     * @return primary keys of parsed table.
+     */
+    std::vector<OUString> getPrimaryKeys() const { return m_PrimaryKeys; }
 
     /**
      * @return a vector of column descriptors, representing the columns of the

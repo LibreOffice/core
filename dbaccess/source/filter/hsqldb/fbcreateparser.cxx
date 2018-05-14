@@ -158,18 +158,25 @@ OUString FbCreateStmtParser::compose() const
         else if (!columnIter->isNullable())
             lcl_appendWithSpace(sSql, "NOT NULL");
 
-        if (columnIter->isPrimaryKey())
-            lcl_appendWithSpace(sSql, "PRIMARY KEY");
-
         if (columnIter->isCaseInsensitive())
             lcl_appendWithSpace(sSql, "COLLATE UNICODE_CI");
 
         ++columnIter;
-        if (columnIter != rColumns.end())
+        sSql.append(",");
+    }
+
+    sSql.append("PRIMARY KEY(");
+    const std::vector<OUString>& sPrimaryKeys = getPrimaryKeys();
+    auto it = sPrimaryKeys.cbegin();
+    while (it != sPrimaryKeys.end())
+    {
+        sSql.append(*it);
+        ++it;
+        if (it != sPrimaryKeys.end())
             sSql.append(",");
     }
 
-    sSql.append(")"); // end of column declaration
+    sSql.append("))"); // end of column declaration and primary keys
     return sSql.makeStringAndClear();
 }
 
