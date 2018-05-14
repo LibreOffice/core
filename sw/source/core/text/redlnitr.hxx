@@ -69,8 +69,8 @@ class SwRedlineItr
     std::unique_ptr<SfxItemSet> m_pSet;
     SwExtend *m_pExt;
     sal_uLong m_nNdIdx;
-    sal_Int32 m_nFirst;
-    sal_Int32 m_nAct;
+    SwRedlineTable::size_type const m_nFirst;
+    SwRedlineTable::size_type m_nAct;
     sal_Int32 m_nStart;
     sal_Int32 m_nEnd;
     bool m_bOn;
@@ -102,7 +102,7 @@ public:
         return 0;
     }
     void Reset() {
-        if (m_nAct != m_nFirst) m_nAct = COMPLETE_STRING;
+        if (m_nAct != m_nFirst) m_nAct = SwRedlineTable::npos;
         if (m_pExt) m_pExt->Reset();
     }
     sal_Int32 GetNextRedln( sal_Int32 nNext ) {
