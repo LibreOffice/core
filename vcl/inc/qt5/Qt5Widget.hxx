@@ -21,43 +21,8 @@
 
 #include <QtWidgets/QWidget>
 
-class Qt5Frame;
-class Qt5Object;
-class QFocusEvent;
-class QKeyEvent;
-class QMouseEvent;
-class QMoveEvent;
-class QPaintEvent;
-class QResizeEvent;
-class QShowEvent;
-class QWheelEvent;
+#include  "Qt5Frame.hxx"
 
-class Qt5Widget : public QWidget
-{
-    Q_OBJECT
-
-    Qt5Frame* m_pFrame;
-
-    bool handleKeyEvent(QKeyEvent*, bool);
-    void handleMouseButtonEvent(QMouseEvent*, bool);
-
-    virtual void focusInEvent(QFocusEvent*) override;
-    virtual void focusOutEvent(QFocusEvent*) override;
-    virtual void keyPressEvent(QKeyEvent*) override;
-    virtual void keyReleaseEvent(QKeyEvent*) override;
-    virtual void mouseMoveEvent(QMouseEvent*) override;
-    virtual void mousePressEvent(QMouseEvent*) override;
-    virtual void mouseReleaseEvent(QMouseEvent*) override;
-    virtual void moveEvent(QMoveEvent*) override;
-    virtual void paintEvent(QPaintEvent*) override;
-    virtual void resizeEvent(QResizeEvent*) override;
-    virtual void showEvent(QShowEvent*) override;
-    virtual void wheelEvent(QWheelEvent*) override;
-    virtual void closeEvent(QCloseEvent*) override;
-
-public:
-    Qt5Widget(Qt5Frame& rFrame, QWidget* parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags());
-    virtual ~Qt5Widget() override;
-};
+QWidget* createQt5Widget(Qt5Frame &rFrame, QWidget* parent, Qt::WindowFlags f);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
