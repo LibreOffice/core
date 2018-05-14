@@ -22,7 +22,7 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool ZMFImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
+bool ZMFImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
                                        OdgGenerator& rGenerator, utl::MediaDescriptor&)
 {
     return libzmf::ZMFDocument::parse(&rInput, &rGenerator);

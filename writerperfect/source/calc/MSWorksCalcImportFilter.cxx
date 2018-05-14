@@ -179,7 +179,8 @@ private:
 }
 
 ////////////////////////////////////////////////////////////
-bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
+bool MSWorksCalcImportFilter::doImportDocument(weld::Window* pParent,
+                                               librevenge::RVNGInputStream& rInput,
                                                OdsGenerator& rGenerator, utl::MediaDescriptor&)
 {
     libwps::WPSKind kind = libwps::WPS_TEXT;
@@ -226,14 +227,14 @@ bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream& rInp
 
         try
         {
-            const ScopedVclPtrInstance<writerperfect::WPFTEncodingDialog> pDlg(title, encoding);
-            if (pDlg->Execute() == RET_OK)
+            writerperfect::WPFTEncodingDialog aDlg(pParent, title, encoding);
+            if (aDlg.run() == RET_OK)
             {
-                if (!pDlg->GetEncoding().isEmpty())
-                    fileEncoding = pDlg->GetEncoding().toUtf8().getStr();
+                if (!aDlg.GetEncoding().isEmpty())
+                    fileEncoding = aDlg.GetEncoding().toUtf8().getStr();
             }
             // we can fail because we are in headless mode, the user has cancelled conversion, ...
-            else if (pDlg->hasUserCalledCancel())
+            else if (aDlg.hasUserCalledCancel())
                 return false;
         }
         catch (...)
@@ -248,7 +249,7 @@ bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream& rInp
         // try to ask for a password
         try
         {
-            SfxPasswordDialog aPasswdDlg(nullptr);
+            SfxPasswordDialog aPasswdDlg(pParent);
             aPasswdDlg.SetMinLen(1);
             if (!aPasswdDlg.execute())
                 return false;
@@ -275,6 +276,7 @@ MSWorksCalcImportFilter::filter(const css::uno::Sequence<css::beans::PropertyVal
     OUString sUrl;
     css::uno::Reference<css::io::XInputStream> xInputStream;
     css::uno::Reference<ucb::XContent> xContent;
+    css::uno::Reference<css::awt::XWindow> xDialogParent;
 
     sal_Int32 nLength = rDescriptor.getLength();
     const css::beans::PropertyValue* pValue = rDescriptor.getConstArray();
@@ -286,6 +288,8 @@ MSWorksCalcImportFilter::filter(const css::uno::Sequence<css::beans::PropertyVal
             pValue[i].Value >>= xContent;
         else if (pValue[i].Name == "FileName" || pValue[i].Name == "URL")
             pValue[i].Value >>= sUrl;
+        else if (pValue[i].Name == "ParentWindow")
+            pValue[i].Value >>= xDialogParent;
     }
 
     if (!getXContext().is() || !xInputStream.is())
@@ -373,7 +377,8 @@ MSWorksCalcImportFilter::filter(const css::uno::Sequence<css::beans::PropertyVal
                         = libwps::WPSDocument::isFileFormatSupported(&structuredInput, kind,
                                                                      creator, needEncoding);
                     if (confidence != libwps::WPS_CONFIDENCE_NONE)
-                        return doImportDocument(structuredInput, exporter, aDescriptor);
+                        return doImportDocument(Application::GetFrameWeld(xDialogParent),
+                                                structuredInput, exporter, aDescriptor);
                 }
             }
         }
@@ -382,7 +387,7 @@ MSWorksCalcImportFilter::filter(const css::uno::Sequence<css::beans::PropertyVal
     {
     }
 
-    return doImportDocument(input, exporter, aDescriptor);
+    return doImportDocument(Application::GetFrameWeld(xDialogParent), input, exporter, aDescriptor);
 }
 
 bool MSWorksCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput,

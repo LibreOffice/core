@@ -50,7 +50,7 @@ private:
     static void generate(librevenge::RVNGSpreadsheetInterface& rDocument);
 };
 
-bool SpreadsheetImportFilter::doImportDocument(librevenge::RVNGInputStream&,
+bool SpreadsheetImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream&,
                                                OdsGenerator& rGenerator, utl::MediaDescriptor&)
 {
     SpreadsheetImportFilter::generate(rGenerator);

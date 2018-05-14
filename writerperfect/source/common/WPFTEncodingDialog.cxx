@@ -78,82 +78,46 @@ std::pair<OUStringLiteral, OUStringLiteral> const s_encodings[]
 
 std::size_t const numEncodings = SAL_N_ELEMENTS(s_encodings);
 
-void insertEncodings(ListBox* box)
+void insertEncodings(weld::ComboBoxText& box)
 {
     for (std::size_t i = 0; i < numEncodings; ++i)
-    {
-        sal_IntPtr nAt = box->InsertEntry(s_encodings[i].second);
-        box->SetEntryData(nAt, reinterpret_cast<void*>(static_cast<sal_uIntPtr>(i)));
-    }
+        box.append(s_encodings[i].first, s_encodings[i].second);
 }
 
-void selectEncoding(ListBox* box, const OUString& encoding)
+void selectEncoding(weld::ComboBoxText& box, const OUString& encoding)
 {
-    for (std::size_t i = 0; i < numEncodings; ++i)
-    {
-        if (encoding != s_encodings[i].first)
-            continue;
-        box->SelectEntryPos(i);
-        return;
-    }
+    box.set_active_id(encoding);
 }
 
-OUString getEncoding(ListBox const* box)
-{
-    sal_uIntPtr pos = reinterpret_cast<sal_uIntPtr>(box->GetSelectedEntryData());
-    if (pos >= numEncodings)
-        return OUString();
-    return s_encodings[pos].first;
-}
+OUString getEncoding(const weld::ComboBoxText& box) { return box.get_active_id(); }
 }
 
-WPFTEncodingDialog::WPFTEncodingDialog(const OUString& title, const OUString& encoding)
-    : ModalDialog(nullptr, "WPFTEncodingDialog", "writerperfect/ui/wpftencodingdialog.ui")
-    , m_pLbCharset()
-    , m_pBtnOk()
-    , m_pBtnCancel()
+WPFTEncodingDialog::WPFTEncodingDialog(weld::Window* pParent, const OUString& title,
+                                       const OUString& encoding)
+    : GenericDialogController(pParent, "writerperfect/ui/wpftencodingdialog.ui",
+                              "WPFTEncodingDialog")
     , m_userHasCancelled(false)
+    , m_xLbCharset(m_xBuilder->weld_combo_box_text("comboboxtext"))
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
+    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
 {
-    get(m_pLbCharset, "comboboxtext");
-    get(m_pBtnOk, "ok");
-    get(m_pBtnCancel, "cancel");
+    m_xBtnCancel->connect_clicked(LINK(this, WPFTEncodingDialog, CancelHdl));
 
-    m_pBtnCancel->SetClickHdl(LINK(this, WPFTEncodingDialog, CancelHdl));
+    insertEncodings(*m_xLbCharset);
+    m_xLbCharset->make_sorted();
+    selectEncoding(*m_xLbCharset, encoding);
 
-    insertEncodings(m_pLbCharset);
-    m_pLbCharset->SetStyle(m_pLbCharset->GetStyle() | WB_SORT);
-    // m_pLbCharset->set_height_request(6 * m_pLbCharset->GetTextHeight());
-    m_pLbCharset->SetDoubleClickHdl(LINK(this, WPFTEncodingDialog, DoubleClickHdl));
-    selectEncoding(m_pLbCharset, encoding);
-    m_pLbCharset->Show();
-
-    SetText(title);
+    m_xDialog->set_title(title);
 }
 
-WPFTEncodingDialog::~WPFTEncodingDialog() { disposeOnce(); }
+WPFTEncodingDialog::~WPFTEncodingDialog() {}
 
-OUString WPFTEncodingDialog::GetEncoding() const { return getEncoding(m_pLbCharset); }
+OUString WPFTEncodingDialog::GetEncoding() const { return getEncoding(*m_xLbCharset); }
 
-IMPL_LINK_NOARG(WPFTEncodingDialog, CancelHdl, Button*, void)
+IMPL_LINK_NOARG(WPFTEncodingDialog, CancelHdl, weld::Button&, void)
 {
     m_userHasCancelled = true;
-    Close();
-}
-
-IMPL_LINK(WPFTEncodingDialog, DoubleClickHdl, ListBox&, rLb, void)
-{
-    if (&rLb == m_pLbCharset)
-    {
-        m_pBtnOk->Click();
-    }
-}
-
-void WPFTEncodingDialog::dispose()
-{
-    m_pLbCharset.disposeAndClear();
-    m_pBtnOk.disposeAndClear();
-    m_pBtnCancel.disposeAndClear();
-    ModalDialog::dispose();
+    m_xDialog->response(RET_CANCEL);
 }
 }
 
