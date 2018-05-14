@@ -165,15 +165,59 @@ void NotebookBar::DataChanged(const DataChangedEvent& rDCEvt)
     Control::DataChanged(rDCEvt);
 }
 
+void NotebookBar::StateChanged( StateChangedType nStateChange )
+{
+    UpdateBackground();
+    Control::StateChanged(nStateChange);
+    Invalidate();
+}
+
 void NotebookBar::UpdateBackground()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     const BitmapEx aPersona = rStyleSettings.GetPersonaHeader();
 
     if (!aPersona.IsEmpty())
-        SetBackground(Wallpaper(aPersona));
+        {
+            SetBackground(Wallpaper(aPersona));
+            AllSettings aAllSettings( GetSettings() );
+            StyleSettings aStyleSet( aAllSettings.GetStyleSettings() );
+
+            ::Color aTextColor = aStyleSet.GetMenuBarTextColor();
+            aStyleSet.SetDialogTextColor( aTextColor );
+            aStyleSet.SetButtonTextColor( aTextColor );
+            aStyleSet.SetRadioCheckTextColor( aTextColor );
+            aStyleSet.SetGroupTextColor( aTextColor );
+            aStyleSet.SetLabelTextColor( aTextColor );
+            aStyleSet.SetWindowTextColor( aTextColor );
+            //aStyleSet.SetFieldTextColor( aTextColor );
+            aStyleSet.SetTabTextColor(aTextColor);
+            aStyleSet.SetToolTextColor(aTextColor);
+
+            aAllSettings.SetStyleSettings(aStyleSet);
+            SetSettings( aAllSettings );
+        }
     else
-        SetBackground(rStyleSettings.GetDialogColor());
+        {
+            SetBackground(rStyleSettings.GetDialogColor());
+            AllSettings aAllSettings( GetSettings() );
+            StyleSettings aStyleSet( aAllSettings.GetStyleSettings() );
+
+            ::Color aTextColor = aStyleSet.GetFieldTextColor();
+            aStyleSet.SetDialogTextColor( aTextColor );
+            aStyleSet.SetButtonTextColor( aTextColor );
+            aStyleSet.SetRadioCheckTextColor( aTextColor );
+            aStyleSet.SetGroupTextColor( aTextColor );
+            aStyleSet.SetLabelTextColor( aTextColor );
+            aStyleSet.SetWindowTextColor( aTextColor );
+            //aStyleSet.SetFieldTextColor( aTextColor );
+            aStyleSet.SetTabTextColor(aTextColor);
+            aStyleSet.SetToolTextColor(aTextColor);
+
+            aAllSettings.SetStyleSettings(aStyleSet);
+            SetSettings( aAllSettings );
+
+        }
 
     Invalidate(tools::Rectangle(Point(0,0), GetSizePixel()));
 }

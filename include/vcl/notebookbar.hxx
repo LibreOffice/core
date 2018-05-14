@@ -37,6 +37,7 @@ public:
 
     const css::uno::Reference<css::ui::XContextChangeEventListener>& getContextChangeEventListener() const { return m_pEventListener; }
 
+    void StateChanged(const StateChangedType nStateChange ) override;
     void DataChanged(const DataChangedEvent& rDCEvt) override;
 
 private:
