@@ -90,7 +90,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
             aWinFlags |= Qt::Window;
     }
 
-    m_pQWidget.reset(new Qt5Widget(*this, pParent ? pParent->GetQWidget() : nullptr, aWinFlags));
+    m_pQWidget.reset(createQt5Widget(*this, pParent ? pParent->GetQWidget() : nullptr, aWinFlags));
 
     if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
     {
