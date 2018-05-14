@@ -674,6 +674,18 @@ void FormulaTokenArray::CheckToken( const FormulaToken& /*r*/ )
     // Do nothing.
 }
 
+void FormulaTokenArray::CheckAllRPNTokens()
+{
+    if( nRPN )
+    {
+        FormulaToken** p = pRPN;
+        for( sal_uInt16 i = 0; i < nRPN; i++ )
+        {
+            CheckToken( *p[ i ] );
+        }
+    }
+}
+
 FormulaToken* FormulaTokenArray::AddToken( const FormulaToken& r )
 {
     return Add( r.Clone() );

@@ -453,6 +453,11 @@ public:
      */
     virtual void CheckToken( const FormulaToken& t );
 
+    /**
+     * Call CheckToken() for all RPN tokens.
+     */
+    void CheckAllRPNTokens();
+
     /** Clones the token and then adds the clone to the pCode array.
         For just new'ed tokens use Add() instead of cloning it again.
         Use this AddToken() when adding a token from another origin.

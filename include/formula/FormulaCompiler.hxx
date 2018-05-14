@@ -354,6 +354,7 @@ protected:
     bool                bAutoCorrect;           // whether to apply AutoCorrection
     bool                bCorrected;             // AutoCorrection was applied
     bool                glSubTotal;             // if code contains one or more subtotal functions
+    bool                needsRPNTokenCheck;     // whether to make FormulaTokenArray check all tokens at the end
 
     bool mbJumpCommandReorder; /// Whether or not to reorder RPN for jump commands.
     bool mbStopOnError;        /// Whether to stop compilation on first encountered error.
