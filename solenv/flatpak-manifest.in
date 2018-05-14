@@ -592,8 +592,8 @@
         "--device=dri",
         "--filesystem=host",
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
+        "--env=JAVA_HOME=/app/jre",
         "--env=LIBO_FLATPAK=1",
-        "--env=PATH=/usr/bin:/app/jre/bin",
         "--own-name=org.libreoffice.LibreOfficeIpc0",
         "--talk-name=ca.desrt.dconf",
         "--talk-name=org.gtk.vfs.*"
