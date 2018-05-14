@@ -132,7 +132,6 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
     // set font to vertical if frame layout is vertical
     bool bVertLayout = false;
     bool bRTL = false;
-    sw::MergedPara const* pMerged(nullptr);
     if ( pFrame )
     {
         if ( pFrame->IsVertical() )
@@ -141,7 +140,7 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
             m_pFont->SetVertical( m_pFont->GetOrientation(), true );
         }
         bRTL = pFrame->IsRightToLeft();
-        pMerged = pFrame->GetMergedPara();
+        m_pMergedPara = pFrame->GetMergedPara();
     }
 
     // Initialize the default attribute of the attribute handler
@@ -199,10 +198,10 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
     // the node.  It's not clear whether there can be more than 1 PaM in the
     // Ring, and this code doesn't handle that case; neither did the old code.
     const SwExtTextInput* pExtInp = pDoc->GetExtTextInput( rTextNode );
-    if (!pExtInp && pMerged)
+    if (!pExtInp && m_pMergedPara)
     {
         SwTextNode const* pNode(&rTextNode);
-        for (auto const& rExtent : pMerged->extents)
+        for (auto const& rExtent : m_pMergedPara->extents)
         {
             if (rExtent.pNode != pNode)
             {
@@ -214,16 +213,31 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
         }
     }
     const bool bShow = IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() );
-    if (pExtInp || pMerged || bShow)
+    if (pExtInp || m_pMergedPara || bShow)
     {
-        const SwRedlineTable::size_type nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
-        if (pExtInp || pMerged || SwRedlineTable::npos != nRedlPos)
+        SwRedlineTable::size_type nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
+        if (SwRedlineTable::npos == nRedlPos && m_pMergedPara)
+        {
+            SwTextNode const* pNode(&rTextNode);
+            for (auto const& rExtent : m_pMergedPara->extents)
+            {   // note: have to search because extents based only on Delete
+                if (rExtent.pNode != pNode)
+                {
+                    pNode = rExtent.pNode;
+                    nRedlPos = rIDRA.GetRedlinePos(*pNode, USHRT_MAX);
+                    if (SwRedlineTable::npos != nRedlPos)
+                        break;
+                }
+            }
+            assert(SwRedlineTable::npos != nRedlPos);
+        }
+        if (pExtInp || m_pMergedPara || SwRedlineTable::npos != nRedlPos)
         {
             const std::vector<ExtTextInputAttr> *pArr = nullptr;
             if( pExtInp )
             {
                 pArr = &pExtInp->GetAttrs();
-                Seek( 0 );
+                Seek( TextFrameIndex(0) );
             }
 
             m_pRedline = new SwRedlineItr( rTextNode, *m_pFont, m_aAttrHandler, nRedlPos,
