@@ -32,6 +32,9 @@ private:
     // root element's position of data for each table
     std::map<OUString, std::vector<sal_Int32>> m_Indexes;
 
+    // primary keys of each table
+    std::map<OUString, std::vector<OUString>> m_PrimaryKeys;
+
     SqlStatementVector m_sCreateStatements;
     SqlStatementVector m_sAlterStatements;
 
@@ -71,6 +74,12 @@ public:
      * contains one row.
      */
     const std::map<OUString, std::vector<sal_Int32>>& getTableIndexes() const;
+
+    /**
+     * Returns a vector of column names for each table. These columns are the
+     * primary keys of the table.
+     */
+    const std::map<OUString, std::vector<OUString>>& getPrimaryKeys() const;
 };
 }
 

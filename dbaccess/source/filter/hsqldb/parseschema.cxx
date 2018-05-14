@@ -147,6 +147,7 @@ void SchemaParser::parseSchema()
 
             // save column definitions
             m_ColumnTypes[aCreateParser.getTableName()] = aCreateParser.getColumnDef();
+
             m_sCreateStatements.push_back(sSql);
         }
         else if (sSql.startsWith("ALTER"))
@@ -171,6 +172,11 @@ ColumnTypeVector SchemaParser::getTableColumnTypes(const OUString& sTableName) c
 const std::map<OUString, std::vector<sal_Int32>>& SchemaParser::getTableIndexes() const
 {
     return m_Indexes;
+}
+
+const std::map<OUString, std::vector<OUString>>& SchemaParser::getPrimaryKeys() const
+{
+    return m_PrimaryKeys;
 }
 
 } // namespace dbahsql
