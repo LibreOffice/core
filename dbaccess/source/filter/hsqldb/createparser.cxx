@@ -27,6 +27,42 @@ using namespace css::sdbc;
 
 namespace
 {
+//Find ascii escaped unicode
+sal_Int32 lcl_IndexOfUnicode(const OString& rSource, const sal_Int32 nFrom = 0)
+{
+    const OString sHexDigits = "0123456789abcdefABCDEF";
+    sal_Int32 nIndex = rSource.indexOf("\\u", nFrom);
+    if (nIndex == -1)
+    {
+        return -1;
+    }
+    bool bIsUnicode = true;
+    for (short nDist = 2; nDist <= 5; ++nDist)
+    {
+        if (sHexDigits.indexOf(rSource[nIndex + nDist]) == -1)
+        {
+            bIsUnicode = false;
+        }
+    }
+    return bIsUnicode ? nIndex : -1;
+}
+
+//Convert ascii escaped unicode to utf-8
+OUString lcl_ConvertToUTF8(const OString& rText)
+{
+    OString sResult = rText;
+    sal_Int32 nIndex = lcl_IndexOfUnicode(sResult);
+    while (nIndex != -1 && nIndex < rText.getLength())
+    {
+        const OString sHex = sResult.copy(nIndex + 2, 4);
+        const sal_Unicode cDec = static_cast<sal_Unicode>(strtol(sHex.getStr(), nullptr, 16));
+        const OString sNewChar = OString(&cDec, 1, RTL_TEXTENCODING_UTF8);
+        sResult = sResult.replaceAll("\\u" + sHex, sNewChar);
+        nIndex = lcl_IndexOfUnicode(sResult, nIndex);
+    }
+    return OStringToOUString(sResult, RTL_TEXTENCODING_UTF8);
+}
+
 /// Returns substring of sSql from the first occurrence of '(' until the
 /// last occurrence of ')' (excluding the parenthesis)
 OUString lcl_getColumnPart(const OUString& sSql)
@@ -211,13 +247,14 @@ void CreateStmtParser::parseColumnPart(const OUString& sColumnPart)
         }
 
         bool bCaseInsensitive = sTypeName.indexOf("IGNORECASE") >= 0;
-        const OUString& rTableName = words[0];
+        const OUString& rColumnName
+            = lcl_ConvertToUTF8(OUStringToOString(words[0], RTL_TEXTENCODING_UTF8));
         bool isPrimaryKey = lcl_isPrimaryKey(sColumn);
 
         if (isPrimaryKey)
-            m_PrimaryKeys.push_back(rTableName);
+            m_PrimaryKeys.push_back(rColumnName);
 
-        ColumnDefinition aColDef(rTableName, lcl_getDataTypeFromHsql(sTypeName), aParams,
+        ColumnDefinition aColDef(rColumnName, lcl_getDataTypeFromHsql(sTypeName), aParams,
                                  isPrimaryKey, lcl_getAutoIncrementDefault(sColumn),
                                  lcl_isNullable(sColumn), bCaseInsensitive);
 
