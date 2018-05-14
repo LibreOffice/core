@@ -774,6 +774,7 @@ void ImpSdrPdfImport::InsertObj(SdrObject* pObj, bool bScale)
                 if (!aNewRange.isEmpty())
                 {
                     pObj = new SdrPathObj(aNewPoly.isClosed() ? OBJ_POLY : OBJ_PLIN, aNewPoly);
+                    pObj->SetModel(mpModel);
 
                     pObj->SetLayer(aOldLayer);
                     pObj->SetMergedItemSet(aOldItemSet);
@@ -1160,6 +1161,7 @@ void ImpSdrPdfImport::ImportText(const Point& rPos, const Size& rSize, const OUS
     tools::Rectangle aTextRect(aPos, bSize);
     // SAL_WARN("sd.filter", "Text Rect: " << aTextRect);
     SdrRectObj* pText = new SdrRectObj(OBJ_TEXT, aTextRect);
+    pText->SetModel(mpModel);
 
     pText->SetMergedItem(makeSdrTextUpperDistItem(0));
     pText->SetMergedItem(makeSdrTextLowerDistItem(0));
@@ -1307,6 +1309,7 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int nPageObjectIn
     SAL_WARN("sd.filter", "IMAGE Logical Rect FINAL: " << aRect);
 
     SdrGrafObj* pGraf = new SdrGrafObj(Graphic(aBitmap), aRect);
+    pGraf->SetModel(mpModel);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
     pGraf->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
@@ -1453,6 +1456,7 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
     // if(!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(basegfx::B2DPolyPolygon(aSource)))
 
     SdrPathObj* pPath = new SdrPathObj(OBJ_POLY, aPolyPoly);
+    pPath->SetModel(mpModel);
     SetAttributes(pPath);
     InsertObj(pPath, false);
 }
