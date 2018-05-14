@@ -124,6 +124,50 @@ void NotebookBar::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, P
 
 void NotebookBar::Resize()
 {
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const BitmapEx aPersona = rStyleSettings.GetPersonaHeader();
+
+    if (!aPersona.IsEmpty())
+        {
+
+            AllSettings aAllSettings( GetSettings() );
+            StyleSettings aStyleSet( aAllSettings.GetStyleSettings() );
+
+            ::Color aTextColor = aStyleSet.GetMenuBarTextColor();
+            aStyleSet.SetDialogTextColor( aTextColor );
+            aStyleSet.SetButtonTextColor( aTextColor );
+            aStyleSet.SetRadioCheckTextColor( aTextColor );
+            aStyleSet.SetGroupTextColor( aTextColor );
+            aStyleSet.SetLabelTextColor( aTextColor );
+            aStyleSet.SetWindowTextColor( aTextColor );
+            //aStyleSet.SetFieldTextColor( aTextColor );
+            aStyleSet.SetTabTextColor(aTextColor);
+            aStyleSet.SetToolTextColor(aTextColor);
+
+            aAllSettings.SetStyleSettings(aStyleSet);
+            SetSettings( aAllSettings );
+        }
+    else
+        {
+            AllSettings aAllSettings( GetSettings() );
+            StyleSettings aStyleSet( aAllSettings.GetStyleSettings() );
+
+            ::Color aTextColor = aStyleSet.GetFieldTextColor();
+            aStyleSet.SetDialogTextColor( aTextColor );
+            aStyleSet.SetButtonTextColor( aTextColor );
+            aStyleSet.SetRadioCheckTextColor( aTextColor );
+            aStyleSet.SetGroupTextColor( aTextColor );
+            aStyleSet.SetLabelTextColor( aTextColor );
+            aStyleSet.SetWindowTextColor( aTextColor );
+            //aStyleSet.SetFieldTextColor( aTextColor );
+            aStyleSet.SetTabTextColor(aTextColor);
+            aStyleSet.SetToolTextColor(aTextColor);
+
+            aAllSettings.SetStyleSettings(aStyleSet);
+            SetSettings( aAllSettings );
+
+        }
+
     if(m_pUIBuilder && m_pUIBuilder->get_widget_root())
     {
         vcl::Window* pWindow = m_pUIBuilder->get_widget_root()->GetChild(0);
