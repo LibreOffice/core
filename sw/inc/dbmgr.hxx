@@ -30,6 +30,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <vcl/weld.hxx>
 
 #include <memory>
 #include <vector>
@@ -269,8 +270,6 @@ class SW_DLLPUBLIC SwDBManager
 
     SAL_DLLPRIVATE SwDSParam*          FindDSData(const SwDBData& rData, bool bCreate);
     SAL_DLLPRIVATE SwDSParam*          FindDSConnection(const OUString& rSource, bool bCreate);
-
-    DECL_DLLPRIVATE_LINK( PrtCancelHdl, Button *, void );
 
     /// Insert data record as text into document.
     SAL_DLLPRIVATE void ImportFromConnection( SwWrtShell* pSh);
