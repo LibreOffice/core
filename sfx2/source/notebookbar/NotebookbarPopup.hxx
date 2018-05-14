@@ -48,6 +48,10 @@ public:
     void hideSeparators(bool bHide);
 
     void dispose() override;
+
+    void ApplyBackground(vcl::Window* pWindow);
+
+    void RemoveBackground(vcl::Window* pWindow);
 };
 
 #endif

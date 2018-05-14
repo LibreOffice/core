@@ -13,6 +13,7 @@
 #include <vcl/taskpanelist.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <vcl/vclevent.hxx>
 
 /**
  * split from the main class since it needs different ref-counting mana
@@ -165,17 +166,70 @@ void NotebookBar::DataChanged(const DataChangedEvent& rDCEvt)
     Control::DataChanged(rDCEvt);
 }
 
+void NotebookBar::StateChanged(const  StateChangedType nStateChange )
+{
+    UpdateBackground();
+    Control::StateChanged(nStateChange);
+    Invalidate();
+}
+
 void NotebookBar::UpdateBackground()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     const BitmapEx aPersona = rStyleSettings.GetPersonaHeader();
-
+        Wallpaper aWallpaper(aPersona);
+        aWallpaper.SetStyle(WallpaperStyle::TopRight);
     if (!aPersona.IsEmpty())
-        SetBackground(Wallpaper(aPersona));
+        {
+            SetBackground(aWallpaper);
+            UpdatePersonaSettings();
+            SetSettings( PersonaSettings );
+        }
     else
-        SetBackground(rStyleSettings.GetDialogColor());
+        {
+            SetBackground(rStyleSettings.GetDialogColor());
+            UpdateDefaultSettings();
+            SetSettings( DefaultSettings );
+        }
 
     Invalidate(tools::Rectangle(Point(0,0), GetSizePixel()));
 }
 
+void NotebookBar::UpdateDefaultSettings()
+{
+    AllSettings aAllSettings( GetSettings() );
+    StyleSettings aStyleSet( aAllSettings.GetStyleSettings() );
+
+    ::Color aTextColor = aStyleSet.GetFieldTextColor();
+    aStyleSet.SetDialogTextColor( aTextColor );
+    aStyleSet.SetButtonTextColor( aTextColor );
+    aStyleSet.SetRadioCheckTextColor( aTextColor );
+    aStyleSet.SetGroupTextColor( aTextColor );
+    aStyleSet.SetLabelTextColor( aTextColor );
+    aStyleSet.SetWindowTextColor( aTextColor );
+    aStyleSet.SetTabTextColor(aTextColor);
+    aStyleSet.SetToolTextColor(aTextColor);
+
+    aAllSettings.SetStyleSettings(aStyleSet);
+    DefaultSettings = aAllSettings;
+}
+
+void NotebookBar::UpdatePersonaSettings()
+{
+    AllSettings aAllSettings( GetSettings() );
+    StyleSettings aStyleSet( aAllSettings.GetStyleSettings() );
+
+    ::Color aTextColor = aStyleSet.GetPersonaMenuBarTextColor().get_value_or(COL_BLACK );
+    aStyleSet.SetDialogTextColor( aTextColor );
+    aStyleSet.SetButtonTextColor( aTextColor );
+    aStyleSet.SetRadioCheckTextColor( aTextColor );
+    aStyleSet.SetGroupTextColor( aTextColor );
+    aStyleSet.SetLabelTextColor( aTextColor );
+    aStyleSet.SetWindowTextColor( aTextColor );
+    aStyleSet.SetTabTextColor(aTextColor);
+    aStyleSet.SetToolTextColor(aTextColor);
+
+    aAllSettings.SetStyleSettings(aStyleSet);
+    PersonaSettings = aAllSettings;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
