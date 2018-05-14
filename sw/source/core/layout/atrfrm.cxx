@@ -22,6 +22,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/text/TextGridMode.hpp>
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <svtools/unoimap.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
@@ -994,16 +995,23 @@ sal_uInt16 SwFormatCol::CalcPrtColWidth( sal_uInt16 nCol, sal_uInt16 nAct ) cons
 
 void SwFormatCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
 {
-    if(!GetNumCols())
+    if (!GetNumCols())
         return;
+
     //First set the column widths with the current width, then calculate the
     //column's requested width using the requested total width.
-
     const sal_uInt16 nGutterHalf = nGutterWidth ? nGutterWidth / 2 : 0;
 
     //Width of PrtAreas is totalwidth - spacings / count
-    const sal_uInt16 nPrtWidth =
-                (nAct - ((GetNumCols()-1) * nGutterWidth)) / GetNumCols();
+    sal_uInt16 nSpacings;
+    bool bFail = o3tl::checked_multiply<sal_uInt16>(GetNumCols() - 1, nGutterWidth, nSpacings);
+    if (bFail)
+    {
+        SAL_WARN("sw.core", "SwFormatVertOrient::Calc: overflow");
+        return;
+    }
+
+    const sal_uInt16 nPrtWidth = (nAct - nSpacings) / GetNumCols();
     sal_uInt16 nAvail = nAct;
 
     //The first column is PrtWidth + (gap width / 2)
