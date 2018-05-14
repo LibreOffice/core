@@ -1799,10 +1799,10 @@ void SvtFileDialog::EnableControl( Control* _pControl, bool _bEnable )
 }
 
 
-short SvtFileDialog::PrepareExecute()
+bool SvtFileDialog::PrepareExecute()
 {
     if (comphelper::LibreOfficeKit::isActive())
-        return 0;
+        return false;
 
     OUString aEnvValue;
     if ( getEnvironmentValue( "WorkDirMustContainRemovableMedia", aEnvValue ) && aEnvValue == "1" )
@@ -1839,7 +1839,7 @@ short SvtFileDialog::PrepareExecute()
                                                               VclMessageType::Warning, VclButtonsType::Ok,
                                                               FpsResId(STR_SVT_NOREMOVABLEDEVICE)));
                     xBox->run();
-                    return 0;
+                    return false;
                 }
             }
         }
@@ -1939,7 +1939,7 @@ short SvtFileDialog::PrepareExecute()
     OUString aFilter;
 
     if ( !IsolateFilterFromPath_Impl( _aPath, aFilter ) )
-        return 0;
+        return false;
 
     AdjustFilterFlags nNewFilterFlags = adjustFilter( aFilter );
     if ( nNewFilterFlags & ( AdjustFilterFlags::NonEmpty | AdjustFilterFlags::UserFilter ) )
@@ -1979,7 +1979,7 @@ short SvtFileDialog::PrepareExecute()
     // if applicable read and set size from ini
     InitSize();
 
-    return 1;
+    return true;
 }
 
 

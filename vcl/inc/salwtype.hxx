@@ -221,8 +221,6 @@ enum class SalObjEvent {
     ToTop              = 3
 };
 
-typedef long (*SALOBJECTPROC)( void* pInst, SalObjEvent nEvent );
-
 struct SalFrameState
 {
     WindowStateMask mnMask;

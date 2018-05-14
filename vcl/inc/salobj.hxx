@@ -26,6 +26,8 @@
 
 struct SystemEnvData;
 
+typedef void (*SALOBJECTPROC)( void* pInst, SalObjEvent nEvent );
+
 class VCL_PLUGIN_PUBLIC SalObject
 {
     void*               m_pInst;

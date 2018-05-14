@@ -279,12 +279,12 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SAL_DLLPRIVATE bool          GetPageScrollDownOffset(SwTwips& rOff) const;
 
     // scrollbar movements
-    SAL_DLLPRIVATE long          PageUp();
-    SAL_DLLPRIVATE long          PageDown();
+    SAL_DLLPRIVATE bool          PageUp();
+    SAL_DLLPRIVATE bool          PageDown();
     SAL_DLLPRIVATE bool          PageUpCursor(bool bSelect);
     SAL_DLLPRIVATE bool          PageDownCursor(bool bSelect);
-    SAL_DLLPRIVATE long          PhyPageUp();
-    SAL_DLLPRIVATE long          PhyPageDown();
+    SAL_DLLPRIVATE void          PhyPageUp();
+    SAL_DLLPRIVATE void          PhyPageDown();
 
     SAL_DLLPRIVATE void           CreateScrollbar( bool bHori );
     DECL_DLLPRIVATE_LINK(  ScrollHdl, ScrollBar*, void );
@@ -472,10 +472,10 @@ public:
     void            EnableHScrollbar(bool bEnable);
     void            EnableVScrollbar(bool bEnable);
 
-    int             CreateVRuler();
-    int             KillVRuler();
-    int             CreateTab();
-    int             KillTab();
+    void            CreateVRuler();
+    void            KillVRuler();
+    void            CreateTab();
+    void            KillTab();
 
     bool            StatVRuler() const { return m_pVRuler->IsVisible(); }
     void            ChangeVRulerMetric(FieldUnit eUnit);

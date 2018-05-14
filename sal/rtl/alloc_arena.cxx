@@ -73,14 +73,12 @@ void rtl_machdep_free(
 
 sal_Size rtl_machdep_pagesize();
 
-int rtl_arena_segment_constructor(void * obj)
+void rtl_arena_segment_constructor(void * obj)
 {
     rtl_arena_segment_type * segment = static_cast<rtl_arena_segment_type*>(obj);
 
     QUEUE_START_NAMED(segment, s);
     QUEUE_START_NAMED(segment, f);
-
-    return 1;
 }
 
 void rtl_arena_segment_destructor(void * obj)
@@ -425,7 +423,7 @@ dequeue_and_leave:
     @precond arena->m_lock acquired
     @precond (*ppSegment == 0)
 */
-int rtl_arena_segment_create(
+bool rtl_arena_segment_create(
     rtl_arena_type * arena,
     sal_Size size,
     rtl_arena_segment_type ** ppSegment
@@ -463,14 +461,14 @@ int rtl_arena_segment_create(
                     QUEUE_INSERT_HEAD_NAMED(span, (*ppSegment), s);
 
                     /* report success */
-                    return 1;
+                    return true;
                 }
                 rtl_arena_segment_put (arena, &span);
             }
             rtl_arena_segment_put (arena, ppSegment);
         }
     }
-    return 0;
+    return false; // failure
 }
 
 /**

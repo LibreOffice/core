@@ -371,7 +371,7 @@ void OutlinerView::ImpToggleExpand( Paragraph const * pPara )
     pEditView->ShowCursor();
 }
 
-sal_Int32 OutlinerView::Select( Paragraph const * pParagraph, bool bSelect )
+void OutlinerView::Select( Paragraph const * pParagraph, bool bSelect )
 {
     sal_Int32 nPara = pOwner->pParaList->GetAbsPos( pParagraph );
     sal_Int32 nEnd = 0;
@@ -380,7 +380,6 @@ sal_Int32 OutlinerView::Select( Paragraph const * pParagraph, bool bSelect )
 
     ESelection aSel( nPara, 0, nPara, nEnd );
     pEditView->SetSelection( aSel );
-    return 1;
 }
 
 

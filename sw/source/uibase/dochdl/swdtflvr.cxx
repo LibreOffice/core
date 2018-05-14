@@ -1029,10 +1029,10 @@ void SwTransferable::CalculateAndCopy()
     CopyToClipboard( &m_pWrtShell->GetView().GetEditWin() );
 }
 
-int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr )
+bool SwTransferable::CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr )
 {
     if(!m_pWrtShell)
-        return 0;
+        return false;
     SwWait aWait( *m_pWrtShell->GetView().GetDocShell(), true );
 
     m_pClpDocFac = new SwDocFac;
@@ -1073,7 +1073,7 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr 
 
     CopyToClipboard( &m_pWrtShell->GetView().GetEditWin() );
 
-    return 1;
+    return true;
 }
 
 static inline uno::Reference < XTransferable > * lcl_getTransferPointer ( uno::Reference < XTransferable > &xRef )

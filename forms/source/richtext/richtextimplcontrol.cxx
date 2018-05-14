@@ -552,7 +552,7 @@ namespace frm
         }
     }
 
-    long RichTextControlImpl::HandleCommand( const CommandEvent& _rEvent )
+    bool RichTextControlImpl::HandleCommand( const CommandEvent& _rEvent )
     {
         if (  ( _rEvent.GetCommand() == CommandEventId::Wheel )
            || ( _rEvent.GetCommand() == CommandEventId::StartAutoScroll )
@@ -560,9 +560,9 @@ namespace frm
            )
         {
             m_pAntiImpl->HandleScrollCommand( _rEvent, m_pHScroll, m_pVScroll );
-            return 1;
+            return true;
         }
-        return 0;
+        return false;
     }
 
 

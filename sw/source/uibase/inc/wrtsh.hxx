@@ -188,7 +188,7 @@ public:
     // #i32329# Enhanced selection
     void    SelSentence (const Point *);
     void    SelPara     (const Point *);
-    long    SelAll();
+    void    SelAll();
 
     // basecursortravelling
 typedef bool (SwWrtShell:: *FNSimpleMove)();

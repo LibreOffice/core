@@ -57,7 +57,7 @@ using namespace ::com::sun::star;
 namespace SwLangHelper
 {
 
-    sal_uInt16 GetLanguageStatus( OutlinerView* pOLV, SfxItemSet& rSet )
+    void GetLanguageStatus( OutlinerView* pOLV, SfxItemSet& rSet )
     {
         ESelection aSelection = pOLV->GetSelection();
         EditView& rEditView=pOLV->GetEditView();
@@ -95,7 +95,6 @@ namespace SwLangHelper
         SfxStringListItem aItem( SID_LANGUAGE_STATUS );
         aItem.SetStringList( aSeq );
         rSet.Put( aItem );
-        return 0;
     }
 
     bool SetLanguageStatus( OutlinerView* pOLV, SfxRequest &rReq, SwView const &rView, SwWrtShell &rSh )

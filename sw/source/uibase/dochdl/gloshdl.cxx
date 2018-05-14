@@ -691,10 +691,10 @@ bool SwGlossaryHdl::CopyToClipboard(SwWrtShell& rSh, const OUString& rShortName)
 
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable( rSh );
 
-    int nRet = pTransfer->CopyGlossary( *pGlossary, rShortName );
+    bool bRet = pTransfer->CopyGlossary( *pGlossary, rShortName );
     if( !pCurGrp )
         delete pGlossary;
-    return 0 != nRet;
+    return bRet;
 }
 
 bool SwGlossaryHdl::ImportGlossaries( const OUString& rName )
