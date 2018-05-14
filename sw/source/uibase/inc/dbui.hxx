@@ -53,7 +53,7 @@ public:
     VclPtr<FixedText> m_pPrinter;
     VclPtr<FixedText> m_pPrintInfo;
 
-    PrintMonitor(vcl::Window *pParent, bool modal);
+    PrintMonitor(vcl::Window *pParent);
     virtual ~PrintMonitor() override;
     virtual void dispose() override;
 };
@@ -73,7 +73,7 @@ public:
 class CreateMonitor : public CancelableDialog
 {
 public:
-    CreateMonitor( vcl::Window *pParent, bool modal );
+    CreateMonitor(vcl::Window *pParent);
     virtual ~CreateMonitor() override;
     virtual void dispose() override;
 
