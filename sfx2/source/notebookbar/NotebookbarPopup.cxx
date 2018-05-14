@@ -17,6 +17,13 @@ NotebookbarPopup::NotebookbarPopup(const VclPtr<VclHBox>& pParent)
 {
     get(m_pBox, "box");
     m_pBox->SetSizePixel(Size(100, 75));
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const BitmapEx aPersona = rStyleSettings.GetPersonaHeader();
+
+    if (!aPersona.IsEmpty())
+        m_pBox->SetBackground(Wallpaper(aPersona));
+    else
+        m_pBox->SetBackground(rStyleSettings.GetDialogColor());
 }
 
 NotebookbarPopup::~NotebookbarPopup() { disposeOnce(); }
@@ -71,6 +78,33 @@ void NotebookbarPopup::hideSeparators(bool bHide)
         else
             pWindow->Show();
     }
+
+    if (bHide)
+    {
+        sal_Int32 BoxId = 0;
+        while (BoxId <= m_pBox->GetChildCount() - 1)
+        {
+            if (m_pBox->GetChild(BoxId))
+            {
+                pWindow = m_pBox->GetChild(BoxId);
+                ApplyBackground(pWindow);
+            }
+            BoxId++;
+        }
+    }
+    else
+    {
+        sal_Int32 BoxId = m_pBox->GetChildCount() - 1;
+        while (BoxId >= 0)
+        {
+            if (m_pBox->GetChild(BoxId))
+            {
+                pWindow = m_pBox->GetChild(BoxId);
+                RemoveBackground(pWindow);
+            }
+            BoxId--;
+        }
+    }
 }
 
 void NotebookbarPopup::dispose()
@@ -82,4 +116,43 @@ void NotebookbarPopup::dispose()
     FloatingWindow::dispose();
 }
 
+void NotebookbarPopup::ApplyBackground(vcl::Window* pWindow)
+{
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const BitmapEx aPersona = rStyleSettings.GetPersonaHeader();
+
+    if (!aPersona.IsEmpty())
+        pWindow->SetBackground(Wallpaper(aPersona));
+    else
+        pWindow->SetBackground(rStyleSettings.GetDialogColor());
+
+    sal_Int32 nNext = 0;
+    VclPtr<vcl::Window> pChild = pWindow->GetChild(nNext);
+    while (pChild && pWindow->GetType() == WindowType::CONTAINER)
+    {
+        ApplyBackground(pChild);
+        nNext++;
+        if (pWindow->GetChild(nNext) && pWindow->GetType() == WindowType::CONTAINER)
+            pChild = pWindow->GetChild(nNext);
+        else
+            break;
+    }
+}
+
+void NotebookbarPopup::RemoveBackground(vcl::Window* pWindow)
+{
+    pWindow->SetBackground(Wallpaper(COL_TRANSPARENT));
+
+    sal_Int32 nNext = 0;
+    VclPtr<vcl::Window> pChild = pWindow->GetChild(nNext);
+    while (pChild && pWindow->GetType() == WindowType::CONTAINER)
+    {
+        RemoveBackground(pChild);
+        nNext++;
+        if (pWindow->GetChild(nNext) && pWindow->GetType() == WindowType::CONTAINER)
+            pChild = pWindow->GetChild(nNext);
+        else
+            break;
+    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
