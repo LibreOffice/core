@@ -491,27 +491,17 @@ IMPL_LINK( ActualizeProgress, ActualizeHdl, const INetURLObject&, rURL, void )
 }
 
 
-TitleDialog::TitleDialog(vcl::Window* pParent, const OUString& rOldTitle)
-    : ModalDialog(pParent, "GalleryTitleDialog", "cui/ui/gallerytitledialog.ui")
+TitleDialog::TitleDialog(weld::Window* pParent, const OUString& rOldTitle)
+    : GenericDialogController(pParent, "cui/ui/gallerytitledialog.ui", "GalleryTitleDialog")
+    , m_xEdit(m_xBuilder->weld_entry("entry"))
 {
-    get(m_pEdit, "entry");
-    m_pEdit->SetText( rOldTitle );
-    m_pEdit->GrabFocus();
+    m_xEdit->set_text(rOldTitle);
+    m_xEdit->grab_focus();
 }
-
 
 TitleDialog::~TitleDialog()
 {
-    disposeOnce();
 }
-
-
-void TitleDialog::dispose()
-{
-    m_pEdit.clear();
-    ModalDialog::dispose();
-}
-
 
 GalleryIdDialog::GalleryIdDialog( vcl::Window* pParent, GalleryTheme* _pThm )
     : ModalDialog(pParent, "GalleryThemeIDDialog", "cui/ui/gallerythemeiddialog.ui")

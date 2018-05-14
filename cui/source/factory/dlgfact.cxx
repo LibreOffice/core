@@ -111,7 +111,11 @@ short AbstractSvxZoomDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractTitleDialog_Impl);
+short AbstractTitleDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractScriptSelectorDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractGalleryIdDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractURLDlg_Impl);
@@ -509,7 +513,7 @@ SfxBindings& AbstractSpellDialog_Impl::GetBindings()
 
 OUString AbstractTitleDialog_Impl::GetTitle() const
 {
-    return pDlg->GetTitle();
+    return m_xDlg->GetTitle();
 }
 
 sal_uInt32 AbstractGalleryIdDialog_Impl::GetId() const
@@ -1074,11 +1078,10 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog( 
     return VclPtr<CuiVclAbstractDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractTitleDialog> AbstractDialogFactory_Impl::CreateTitleDialog( vcl::Window* pParent,
+VclPtr<AbstractTitleDialog> AbstractDialogFactory_Impl::CreateTitleDialog(weld::Window* pParent,
                                             const OUString& rOldText)
 {
-   VclPtrInstance<TitleDialog> pDlg( pParent, rOldText);
-   return VclPtr<AbstractTitleDialog_Impl>::Create( pDlg );
+   return VclPtr<AbstractTitleDialog_Impl>::Create(new TitleDialog(pParent, rOldText));
 }
 
 VclPtr<AbstractGalleryIdDialog> AbstractDialogFactory_Impl::CreateGalleryIdDialog( vcl::Window* pParent,
