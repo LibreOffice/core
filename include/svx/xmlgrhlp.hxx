@@ -25,6 +25,7 @@
 #include <svtools/grfmgr.hxx>
 #include <vector>
 #include <set>
+#include <unordered_map>
 #include <utility>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/document/XBinaryStreamResolver.hpp>
@@ -58,6 +59,7 @@ class SVX_DLLPUBLIC SvXMLGraphicHelper final : public cppu::WeakComponentImplHel
     GraphicObjectVector         maGrfObjs;
     GraphicOutputStreamVector   maGrfStms;
     URLSet                      maURLSet;
+    std::unordered_map<void*, std::pair<OUString, OUString>> maExportPdf;
     SvXMLGraphicHelperMode      meCreateMode;
     OUString                    maOutputMimeType;
     bool                        mbDirect;

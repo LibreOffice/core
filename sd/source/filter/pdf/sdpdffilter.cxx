@@ -109,6 +109,7 @@ bool SdPdfFilter::Import()
     std::unique_ptr<sal_uInt8[]> pGraphicContent(new sal_uInt8[nGraphicContentSize]);
     memcpy(pGraphicContent.get(), aPdfData.get(), nGraphicContentSize);
     GfxLink aGfxLink(std::move(pGraphicContent), nGraphicContentSize, GfxLinkType::NativePdf);
+    auto pPdfData = std::make_shared<uno::Sequence<sal_Int8>>(aPdfData);
 
     mrDocument.CreateFirstPages();
     for (int i = 0; i < aBitmaps.size() - 1; ++i)
@@ -121,7 +122,7 @@ bool SdPdfFilter::Import()
     {
         // Create the Graphic and link the original PDF stream.
         Graphic aGraphic(aBitmap);
-        aGraphic.setPdfData(std::make_shared<uno::Sequence<sal_Int8>>(aPdfData));
+        aGraphic.setPdfData(pPdfData);
         aGraphic.SetLink(aGfxLink);
         aGraphic.setOriginURL(aFileName);
 
