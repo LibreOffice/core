@@ -332,21 +332,24 @@ IMPL_LINK(SafeModeDialog, DialogBtnHdl, Button*, pBtn, void)
 }
 
 namespace {
-    class ProfileExportedDialog : public ModalDialog
+    class ProfileExportedDialog : public weld::GenericDialogController
     {
     private:
-        DECL_LINK(OpenHdl, Button*, void);
+        std::unique_ptr<weld::Button> m_xButton;
+
+        DECL_LINK(OpenHdl, weld::Button&, void);
     public:
-        explicit ProfileExportedDialog();
+        explicit ProfileExportedDialog(weld::Window* pParent);
     };
 
-    ProfileExportedDialog::ProfileExportedDialog()
-        : ModalDialog(nullptr, "ProfileExportedDialog", "svx/ui/profileexporteddialog.ui")
+    ProfileExportedDialog::ProfileExportedDialog(weld::Window* pParent)
+        : GenericDialogController(pParent, "svx/ui/profileexporteddialog.ui", "GenericDialogController")
+        , m_xButton(m_xBuilder->weld_button("ok"))
     {
-        get<Button>("openfolder")->SetClickHdl(LINK(this, ProfileExportedDialog, OpenHdl));
+        m_xButton->connect_clicked(LINK(this, ProfileExportedDialog, OpenHdl));
     }
 
-    IMPL_LINK_NOARG(ProfileExportedDialog, OpenHdl, Button*, void)
+    IMPL_LINK_NOARG(ProfileExportedDialog, OpenHdl, weld::Button&, void)
     {
         const OUString uri(comphelper::BackupFileHelper::getUserProfileURL());
         css::uno::Reference< css::system::XSystemShellExecute > exec(
@@ -355,7 +358,7 @@ namespace {
             exec->execute(uri, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
         } catch (css::uno::Exception) {
         }
-        EndDialog(RET_OK);
+        m_xDialog->response(RET_OK);
     }
 }
 
@@ -379,8 +382,8 @@ IMPL_LINK(SafeModeDialog, CreateZipBtnHdl, Button*, /*pBtn*/, void)
         return;
     }
 
-    ScopedVclPtrInstance< ProfileExportedDialog > aDialog;
-    aDialog->Execute();
+    ProfileExportedDialog aDialog(GetFrameWeld());
+    aDialog.run();
 }
 
 IMPL_LINK(SafeModeDialog, CheckBoxHdl, CheckBox&, /*pCheckBox*/, void)
