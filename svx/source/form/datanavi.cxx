@@ -2937,32 +2937,32 @@ namespace svxform
         PushButton* pBtn = static_cast<PushButton*>(pButton);
         if ( m_pAddNamespaceBtn == pBtn )
         {
-            ScopedVclPtrInstance< ManageNamespaceDialog > aDlg(this, m_pConditionDlg, false);
-            if ( aDlg->Execute() == RET_OK )
+            ManageNamespaceDialog aDlg(GetFrameWeld(), m_pConditionDlg, false);
+            if (aDlg.run() == RET_OK)
             {
-                OUString sEntry = aDlg->GetPrefix();
+                OUString sEntry = aDlg.GetPrefix();
                 sEntry += "\t";
-                sEntry += aDlg->GetURL();
+                sEntry += aDlg.GetURL();
                 m_pNamespacesList->InsertEntry( sEntry );
             }
         }
         else if ( m_pEditNamespaceBtn == pBtn )
         {
-            ScopedVclPtrInstance< ManageNamespaceDialog > aDlg( this, m_pConditionDlg, true );
+            ManageNamespaceDialog aDlg(GetFrameWeld(), m_pConditionDlg, true);
             SvTreeListEntry* pEntry = m_pNamespacesList->FirstSelected();
             DBG_ASSERT( pEntry, "NamespaceItemDialog::ClickHdl(): no entry" );
             OUString sPrefix( SvTabListBox::GetEntryText( pEntry, 0 ) );
-            aDlg->SetNamespace(
+            aDlg.SetNamespace(
                 sPrefix,
                 SvTabListBox::GetEntryText( pEntry, 1 ) );
-            if ( aDlg->Execute() == RET_OK )
+            if (aDlg.run() == RET_OK)
             {
                 // if a prefix was changed, mark the old prefix as 'removed'
-                if( sPrefix != aDlg->GetPrefix() )
+                if( sPrefix != aDlg.GetPrefix() )
                     m_aRemovedList.push_back( sPrefix );
 
-                m_pNamespacesList->SetEntryText( aDlg->GetPrefix(), pEntry, 0 );
-                m_pNamespacesList->SetEntryText( aDlg->GetURL(), pEntry, 1 );
+                m_pNamespacesList->SetEntryText( aDlg.GetPrefix(), pEntry, 0 );
+                m_pNamespacesList->SetEntryText( aDlg.GetURL(), pEntry, 1 );
             }
         }
         else if ( m_pDeleteNamespaceBtn == pBtn )
@@ -3044,43 +3044,33 @@ namespace svxform
         }
     }
 
-    ManageNamespaceDialog::ManageNamespaceDialog(vcl::Window* pParent, AddConditionDialog* _pCondDlg, bool bIsEdit)
-        : ModalDialog(pParent, "AddNamespaceDialog", "svx/ui/addnamespacedialog.ui")
-        , m_pConditionDlg ( _pCondDlg )
+    ManageNamespaceDialog::ManageNamespaceDialog(weld::Window* pParent, AddConditionDialog* _pCondDlg, bool bIsEdit)
+        : GenericDialogController(pParent, "svx/ui/addnamespacedialog.ui", "AddNamespaceDialog")
+        , m_xConditionDlg(_pCondDlg)
+        , m_xPrefixED(m_xBuilder->weld_entry("prefix"))
+        , m_xUrlED(m_xBuilder->weld_entry("url"))
+        , m_xOKBtn(m_xBuilder->weld_button("ok"))
+        , m_xAltTitle(m_xBuilder->weld_label("alttitle"))
     {
-        get(m_pOKBtn, "ok");
-        get(m_pPrefixED, "prefix");
-        get(m_pUrlED, "url");
-
         if (bIsEdit)
-            SetText(get<FixedText>("alttitle")->GetText());
+            m_xDialog->set_title(m_xAltTitle->get_label());
 
-        m_pOKBtn->SetClickHdl( LINK( this, ManageNamespaceDialog, OKHdl ) );
+        m_xOKBtn->connect_clicked(LINK(this, ManageNamespaceDialog, OKHdl));
     }
 
     ManageNamespaceDialog::~ManageNamespaceDialog()
     {
-        disposeOnce();
     }
 
-    void ManageNamespaceDialog::dispose()
+    IMPL_LINK_NOARG(ManageNamespaceDialog, OKHdl, weld::Button&, void)
     {
-        m_pOKBtn.clear();
-        m_pPrefixED.clear();
-        m_pUrlED.clear();
-        m_pConditionDlg.clear();
-        ModalDialog::dispose();
-    }
-
-    IMPL_LINK_NOARG(ManageNamespaceDialog, OKHdl, Button*, void)
-    {
-        OUString sPrefix = m_pPrefixED->GetText();
+        OUString sPrefix = m_xPrefixED->get_text();
 
         try
         {
-            if ( !m_pConditionDlg->GetUIHelper()->isValidPrefixName( sPrefix ) )
+            if (!m_xConditionDlg->GetUIHelper()->isValidPrefixName(sPrefix))
             {
-                std::unique_ptr<weld::MessageDialog> xErrBox(Application::CreateMessageDialog(GetFrameWeld(),
+                std::unique_ptr<weld::MessageDialog> xErrBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                                          VclMessageType::Warning, VclButtonsType::Ok,
                                                                          SvxResId(RID_STR_INVALID_XMLPREFIX)));
                 xErrBox->set_primary_text(xErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sPrefix));
@@ -3094,7 +3084,7 @@ namespace svxform
         }
 
         // no error so close the dialog
-        EndDialog( RET_OK );
+        m_xDialog->response(RET_OK);
     }
 
     AddSubmissionDialog::AddSubmissionDialog(
