@@ -1318,13 +1318,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     {
         // construct the process dialog
         pSourceWindow = &pSourceShell->GetView().GetEditWin();
-        vcl::Window* pParent = pSourceWindow;
-        if( !bMT_PRINTER )
-            pProgressDlg = VclPtr<CreateMonitor>::Create(
-                pParent, pParent != pSourceWindow );
-        else {
-            pProgressDlg = VclPtr<PrintMonitor>::Create(
-                pParent, pParent != pSourceWindow);
+        if (!bMT_PRINTER)
+            pProgressDlg = VclPtr<CreateMonitor>::Create(pSourceWindow);
+        else
+        {
+            pProgressDlg = VclPtr<PrintMonitor>::Create(pSourceWindow);
             static_cast<PrintMonitor*>( pProgressDlg.get() )->SetText(
                 pSourceDocSh->GetTitle(22) );
         }

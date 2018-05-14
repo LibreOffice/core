@@ -36,8 +36,8 @@ SaveMonitor::~SaveMonitor()
 {
 }
 
-PrintMonitor::PrintMonitor(vcl::Window *pParent, bool modal)
-    : CancelableDialog(pParent, modal, "PrintMonitorDialog",
+PrintMonitor::PrintMonitor(vcl::Window *pParent)
+    : CancelableDialog(pParent, false, "PrintMonitorDialog",
         "modules/swriter/ui/printmonitordialog.ui")
 {
     get(m_pDocName, "docname");
@@ -62,8 +62,8 @@ void PrintMonitor::dispose()
 }
 
 // Progress Indicator for Creation of personalized Mail Merge documents:
-CreateMonitor::CreateMonitor( vcl::Window *pParent, bool modal )
-    : CancelableDialog(pParent, modal, "MMCreatingDialog",
+CreateMonitor::CreateMonitor(vcl::Window *pParent)
+    : CancelableDialog(pParent, false, "MMCreatingDialog",
         "modules/swriter/ui/mmcreatingdialog.ui")
     , m_sCountingPattern()
     , m_sVariable_Total("%Y")
