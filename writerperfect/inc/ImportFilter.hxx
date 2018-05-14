@@ -31,6 +31,8 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <unotools/mediadescriptor.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include "DocumentHandler.hxx"
 #include "WPXSvInputStream.hxx"
@@ -73,6 +75,9 @@ public:
             return false;
         }
 
+        css::uno::Reference<css::awt::XWindow> xDialogParent;
+        aDescriptor["ParentWindow"] >>= xDialogParent;
+
         // An XML import service: what we push sax messages to..
         css::uno::Reference<css::xml::sax::XDocumentHandler> xInternalHandler(
             mxContext->getServiceManager()->createInstanceWithContext(
@@ -95,7 +100,8 @@ public:
 
         doRegisterHandlers(exporter);
 
-        return doImportDocument(input, exporter, aDescriptor);
+        return doImportDocument(Application::GetFrameWeld(xDialogParent), input, exporter,
+                                aDescriptor);
     }
 
     virtual void SAL_CALL cancel() override {}
@@ -168,8 +174,8 @@ public:
 
 private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput, OUString& rTypeName) = 0;
-    virtual bool doImportDocument(librevenge::RVNGInputStream& rInput, Generator& rGenerator,
-                                  utl::MediaDescriptor& rDescriptor)
+    virtual bool doImportDocument(weld::Window* pParent, librevenge::RVNGInputStream& rInput,
+                                  Generator& rGenerator, utl::MediaDescriptor& rDescriptor)
         = 0;
     virtual void doRegisterHandlers(Generator&){};
 
