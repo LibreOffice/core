@@ -1567,7 +1567,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         OUString sUnit = extractUnit(sPattern);
 
         WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_BORDER|WB_3DLOOK;
-        if (!id.endsWith("-nospin"))
+        if (m_bLegacy && !id.endsWith("-nospin"))
             nBits |= WB_SPIN | WB_REPEAT;
 
         if (sPattern.isEmpty())
