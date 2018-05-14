@@ -259,7 +259,7 @@ SwTwips SwTextFrame::EmptyHeight() const
             aAttrHandler.Init(  GetTextNode()->GetSwAttrSet(),
                                *GetTextNode()->getIDocumentSettingAccess() );
             SwRedlineItr aRedln( rTextNode, *pFnt, aAttrHandler,
-                                 nRedlPos, true );
+                                 nRedlPos, SwRedlineItr::Mode::Show);
         }
     }
 
