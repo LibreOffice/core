@@ -51,7 +51,7 @@ private:
     static void generate(librevenge::RVNGPresentationInterface& rDocument);
 };
 
-bool PresentationImportFilter::doImportDocument(librevenge::RVNGInputStream&,
+bool PresentationImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream&,
                                                 OdpGenerator& rGenerator, utl::MediaDescriptor&)
 {
     PresentationImportFilter::generate(rGenerator);

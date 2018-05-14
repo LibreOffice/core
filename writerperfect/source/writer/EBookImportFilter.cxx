@@ -22,7 +22,7 @@ using com::sun::star::uno::XInterface;
 
 using libebook::EBOOKDocument;
 
-bool EBookImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
+bool EBookImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
                                          OdtGenerator& rGenerator,
                                          utl::MediaDescriptor& rDescriptor)
 {
