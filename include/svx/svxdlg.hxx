@@ -396,7 +396,7 @@ public:
     virtual VclPtr<AbstractSvxJSearchOptionsDialog> CreateSvxJSearchOptionsDialog( vcl::Window* pParent,
                                                             const SfxItemSet& rOptionsSet,
                                                             TransliterationFlags nInitialFlags )=0;
-    virtual VclPtr<AbstractFmInputRecordNoDialog> CreateFmInputRecordNoDialog() = 0;
+    virtual VclPtr<AbstractFmInputRecordNoDialog> CreateFmInputRecordNoDialog(weld::Window* pParent) = 0;
     virtual VclPtr<AbstractSvxNewDictionaryDialog> CreateSvxNewDictionaryDialog(weld::Window* pParent) = 0;
     virtual VclPtr<VclAbstractDialog>     CreateSvxEditDictionaryDialog( vcl::Window* pParent,
                                             const OUString& rName) = 0;
