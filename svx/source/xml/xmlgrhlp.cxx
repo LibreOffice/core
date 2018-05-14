@@ -41,6 +41,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/metaact.hxx>
+#include <tools/stream.hxx>
 #include <tools/zcodec.hxx>
 
 #include <vcl/graphicfilter.hxx>
@@ -767,11 +768,19 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                 const std::shared_ptr<uno::Sequence<sal_Int8>>& rPdfData = aGraphic.getPdfData();
                 if (rPdfData->hasElements())
                 {
+                    // See if we have this PDF already, and avoid duplicate storage.
+                    auto aIt = maExportPdf.find(rPdfData.get());
+                    if (aIt != maExportPdf.end())
+                        return true;
+
                     // The graphic has PDF data attached to it, use that.
                     // vcl::ImportPDF() possibly downgraded the PDF data from a
                     // higher PDF version, while aGfxLink still contains the
                     // original data provided by the user.
                     pStream->WriteBytes(rPdfData->getConstArray(), rPdfData->getLength());
+
+                    // Put into cache.
+                    maExportPdf[rPdfData.get()] = std::make_pair(rPictureStreamName, aMimeType);
                 }
                 else
                 {
