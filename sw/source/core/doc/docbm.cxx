@@ -206,6 +206,13 @@ namespace
         return false;
     }
 
+    bool lcl_MarkEqualByStart(const IDocumentMarkAccess::pMark_t& rpFirst,
+                              const IDocumentMarkAccess::pMark_t& rpSecond)
+    {
+        return !lcl_MarkOrderingByStart(rpFirst, rpSecond) &&
+               !lcl_MarkOrderingByStart(rpSecond, rpFirst);
+    }
+
     IDocumentMarkAccess::iterator_t lcl_FindMark(
         IDocumentMarkAccess::container_t& rMarks,
         const IDocumentMarkAccess::pMark_t& rpMarkToFind)
@@ -216,7 +223,7 @@ namespace
         // since there are usually not too many marks on the same start
         // position, we are not doing a bisect search for the upper bound
         // but instead start to iterate from pMarkLow directly
-        while(ppCurrentMark != rMarks.end() && **ppCurrentMark == *rpMarkToFind)
+        while (ppCurrentMark != rMarks.end() && lcl_MarkEqualByStart(*ppCurrentMark, rpMarkToFind))
         {
             if(ppCurrentMark->get() == rpMarkToFind.get())
             {
