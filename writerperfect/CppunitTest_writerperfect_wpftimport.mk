@@ -33,6 +33,8 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_wpftimport,\
 	writerperfect \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,writerperfect_wpftimport,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_ure,writerperfect_wpftimport))
 $(eval $(call gb_CppunitTest_use_vcl,writerperfect_wpftimport))
 

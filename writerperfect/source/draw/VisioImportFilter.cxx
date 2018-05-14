@@ -20,7 +20,7 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool VisioImportFilter::doImportDocument(librevenge::RVNGInputStream& rInput,
+bool VisioImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
                                          OdgGenerator& rGenerator, utl::MediaDescriptor&)
 {
     return libvisio::VisioDocument::parse(&rInput, &rGenerator);
