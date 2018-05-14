@@ -18,7 +18,7 @@ Module gid_Module_Optional_Pyuno_LibreLogo
     Sortkey = "810";
     Files = (auto_python_librelogo_ALL,
              gid_File_Share_Registry_LibreLogo_Xcd);
-    Default = YES;
+    Default = NO;
     Styles = ( );
 End
 #endif
