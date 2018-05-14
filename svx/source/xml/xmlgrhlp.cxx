@@ -38,6 +38,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/metaact.hxx>
+#include <tools/stream.hxx>
 #include <tools/zcodec.hxx>
 
 #include <vcl/graphicfilter.hxx>
@@ -565,15 +566,22 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
             std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aStream.xStream ));
             if( bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData() )
             {
-                const std::shared_ptr<uno::Sequence<sal_Int8>>& rPdfData = aGraphic.getPdfData();
-                if (rPdfData && rPdfData->hasElements())
+                if (aGraphic.hasPdfData())
                 {
+                    // See if we have this PDF already, and avoid duplicate storage.
+                    auto aIt = maExportPdf.find(aGraphic.getPdfData().get());
+                    if (aIt != maExportPdf.end())
+                        return true;
+
                     // The graphic has PDF data attached to it, use that.
                     // vcl::ImportPDF() possibly downgraded the PDF data from a
                     // higher PDF version, while aGfxLink still contains the
                     // original data provided by the user.
-                    pStream->WriteBytes(rPdfData->getConstArray(), rPdfData->getLength());
-                    bRet = (pStream->GetError() == 0);
+                    std::shared_ptr<uno::Sequence<sal_Int8>> pPdfData = aGraphic.getPdfData();
+                    pStream->WriteBytes(pPdfData->getConstArray(), pPdfData->getLength());
+
+                    // put into cache
+                    maExportPdf[aGraphic.getPdfData().get()] = std::make_pair(rPictureStreamName, aMimeType);
                 }
                 else
                     pStream->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
