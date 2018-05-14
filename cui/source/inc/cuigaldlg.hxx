@@ -178,19 +178,18 @@ public:
     OUString GetTitle() const { return m_xEdit->get_text(); }
 };
 
-class GalleryIdDialog : public ModalDialog
+class GalleryIdDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<OKButton> m_pBtnOk;
-    VclPtr<ListBox> m_pLbResName;
-    GalleryTheme*   pThm;
+    GalleryTheme* m_pThm;
+    std::unique_ptr<weld::Button> m_xBtnOk;
+    std::unique_ptr<weld::ComboBoxText> m_xLbResName;
 
-    DECL_LINK( ClickOkHdl, Button*, void );
+    DECL_LINK(ClickOkHdl, weld::Button&, void);
 public:
-    GalleryIdDialog( vcl::Window* pParent, GalleryTheme* pThm );
+    GalleryIdDialog(weld::Window* pParent, GalleryTheme* pThm);
     virtual ~GalleryIdDialog() override;
-    virtual void dispose() override;
-    sal_uInt32 GetId() const { return m_pLbResName->GetSelectedEntryPos(); }
+    sal_uInt32 GetId() const { return m_xLbResName->get_active(); }
 };
 
 class GalleryThemeProperties : public SfxTabDialog

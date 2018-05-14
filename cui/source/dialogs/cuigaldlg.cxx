@@ -503,41 +503,29 @@ TitleDialog::~TitleDialog()
 {
 }
 
-GalleryIdDialog::GalleryIdDialog( vcl::Window* pParent, GalleryTheme* _pThm )
-    : ModalDialog(pParent, "GalleryThemeIDDialog", "cui/ui/gallerythemeiddialog.ui")
-    , pThm(_pThm )
+GalleryIdDialog::GalleryIdDialog(weld::Window* pParent, GalleryTheme* _pThm)
+    : GenericDialogController(pParent, "cui/ui/gallerythemeiddialog.ui", "GalleryThemeIDDialog")
+    , m_pThm(_pThm)
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
+    , m_xLbResName(m_xBuilder->weld_combo_box_text("entry"))
 {
-    get(m_pBtnOk, "ok");
-    get(m_pLbResName, "entry");
+    m_xLbResName->append_text("!!! No Id !!!");
 
-    m_pLbResName->InsertEntry( OUString( "!!! No Id !!!" ) );
+    GalleryTheme::InsertAllThemes(*m_xLbResName);
 
-    GalleryTheme::InsertAllThemes(*m_pLbResName);
+    m_xLbResName->set_active(m_pThm->GetId());
+    m_xLbResName->grab_focus();
 
-    m_pLbResName->SelectEntryPos( static_cast<sal_uInt16>(pThm->GetId()) );
-    m_pLbResName->GrabFocus();
-
-    m_pBtnOk->SetClickHdl( LINK( this, GalleryIdDialog, ClickOkHdl ) );
+    m_xBtnOk->connect_clicked(LINK(this, GalleryIdDialog, ClickOkHdl));
 }
-
 
 GalleryIdDialog::~GalleryIdDialog()
 {
-    disposeOnce();
 }
 
-
-void GalleryIdDialog::dispose()
+IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl, weld::Button&, void)
 {
-    m_pBtnOk.clear();
-    m_pLbResName.clear();
-    ModalDialog::dispose();
-}
-
-
-IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl, Button*, void)
-{
-    Gallery*    pGal = pThm->GetParent();
+    Gallery*    pGal = m_pThm->GetParent();
     const sal_uLong nId = GetId();
     bool        bDifferentThemeExists = false;
 
@@ -545,25 +533,24 @@ IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl, Button*, void)
     {
         const GalleryThemeEntry* pInfo = pGal->GetThemeInfo( i );
 
-        if( ( pInfo->GetId() == nId ) && ( pInfo->GetThemeName() != pThm->GetName() ) )
+        if ((pInfo->GetId() == nId) && (pInfo->GetThemeName() != m_pThm->GetName()))
         {
             OUString aStr( CuiResId( RID_SVXSTR_GALLERY_ID_EXISTS ) );
 
             aStr += " (" + pInfo->GetThemeName() + ")";
 
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           aStr));
             xInfoBox->run();
-            m_pLbResName->GrabFocus();
+            m_xLbResName->grab_focus();
             bDifferentThemeExists = true;
         }
     }
 
-    if( !bDifferentThemeExists )
-        EndDialog( RET_OK );
+    if (!bDifferentThemeExists)
+        m_xDialog->response(RET_OK);
 }
-
 
 GalleryThemeProperties::GalleryThemeProperties(vcl::Window* pParent,
     ExchangeData* _pData, SfxItemSet const * pItemSet)
