@@ -358,8 +358,8 @@ public:
                                             GalleryTheme* pThm ) = 0;
     virtual VclPtr<AbstractTitleDialog> CreateTitleDialog(weld::Window* pParent,
                                              const OUString& rOldText) = 0;
-    virtual VclPtr<AbstractGalleryIdDialog> CreateGalleryIdDialog( vcl::Window* pParent,
-                                            GalleryTheme* pThm ) = 0;
+    virtual VclPtr<AbstractGalleryIdDialog> CreateGalleryIdDialog(weld::Window* pParent,
+                                            GalleryTheme* pThm) = 0;
     virtual VclPtr<VclAbstractDialog2> CreateGalleryThemePropertiesDialog(vcl::Window* pParent,
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet ) = 0;

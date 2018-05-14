@@ -25,6 +25,7 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/salctype.hxx>
+#include <vcl/weld.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/transfer.hxx>
@@ -56,7 +57,6 @@ typedef ::std::vector< GalleryObject* > GalleryObjectList;
 class GalleryThemeEntry;
 class SgaObject;
 class FmFormModel;
-class ListBox;
 
 class Gallery;
 class GalleryProgress;
@@ -205,7 +205,7 @@ public:
 
     SAL_DLLPRIVATE SvStream&    WriteData( SvStream& rOut ) const;
     SAL_DLLPRIVATE SvStream&    ReadData( SvStream& rIn );
-    static void                 InsertAllThemes( ListBox& rListBox );
+    static void                 InsertAllThemes(weld::ComboBoxText& rListBox);
 
     // for buffering PreviewBitmaps and strings for object and path
     SAL_DLLPRIVATE void GetPreviewBitmapExAndStrings(sal_uInt32 nPos, BitmapEx& rBitmapEx, Size& rSize, OUString& rTitle, OUString& rPath) const;
