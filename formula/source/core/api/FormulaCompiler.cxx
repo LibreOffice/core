@@ -712,6 +712,7 @@ FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
         bAutoCorrect( false ),
         bCorrected( false ),
         glSubTotal( false ),
+        needsRPNTokenCheck( false ),
         mbJumpCommandReorder(true),
         mbStopOnError(true)
 {
@@ -734,6 +735,7 @@ FormulaCompiler::FormulaCompiler()
         bAutoCorrect( false ),
         bCorrected( false ),
         glSubTotal( false ),
+        needsRPNTokenCheck( false ),
         mbJumpCommandReorder(true),
         mbStopOnError(true)
 {
@@ -1328,7 +1330,14 @@ bool FormulaCompiler::GetToken()
                 glSubTotal = true;
                 break;
             case ocName:
-                return HandleRange();
+                if( HandleRange())
+                {
+                    // Expanding ocName might have introduced tokens such as ocStyle that prevent formula threading,
+                    // but those wouldn't be present in the raw tokens array, so ensure RPN tokens will be checked too.
+                    needsRPNTokenCheck = true;
+                    return true;
+                }
+                return false;
             case ocColRowName:
                 return HandleColRowName();
             case ocDBArea:
@@ -1980,6 +1989,7 @@ bool FormulaCompiler::CompileTokenArray()
 {
     glSubTotal = false;
     bCorrected = false;
+    needsRPNTokenCheck = false;
     if (pArr->GetCodeError() == FormulaError::NONE || !mbStopOnError)
     {
         if ( bAutoCorrect )
@@ -2013,7 +2023,11 @@ bool FormulaCompiler::CompileTokenArray()
         while( pStack )
             PopTokenArray();
         if( pc )
+        {
             pArr->CreateNewRPNArrayFromData( pData, pc );
+            if( needsRPNTokenCheck )
+                pArr->CheckAllRPNTokens();
+        }
 
         // once an error, always an error
         if( pArr->GetCodeError() == FormulaError::NONE && nErrorBeforePop != FormulaError::NONE )
