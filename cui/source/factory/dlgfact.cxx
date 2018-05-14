@@ -117,7 +117,12 @@ short AbstractTitleDialog_Impl::Execute()
 }
 
 IMPL_ABSTDLG_BASE(AbstractScriptSelectorDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractGalleryIdDialog_Impl);
+
+short AbstractGalleryIdDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractURLDlg_Impl);
 
 short AbstractSvxSearchSimilarityDialog_Impl::Execute()
@@ -518,7 +523,7 @@ OUString AbstractTitleDialog_Impl::GetTitle() const
 
 sal_uInt32 AbstractGalleryIdDialog_Impl::GetId() const
 {
-    return pDlg->GetId();
+    return m_xDlg->GetId();
 }
 
 void VclAbstractRefreshableDialog_Impl::Update()
@@ -1084,11 +1089,10 @@ VclPtr<AbstractTitleDialog> AbstractDialogFactory_Impl::CreateTitleDialog(weld::
    return VclPtr<AbstractTitleDialog_Impl>::Create(new TitleDialog(pParent, rOldText));
 }
 
-VclPtr<AbstractGalleryIdDialog> AbstractDialogFactory_Impl::CreateGalleryIdDialog( vcl::Window* pParent,
-                                            GalleryTheme* pThm )
+VclPtr<AbstractGalleryIdDialog> AbstractDialogFactory_Impl::CreateGalleryIdDialog(weld::Window* pParent,
+                                            GalleryTheme* pThm)
 {
-   VclPtrInstance<GalleryIdDialog> pDlg( pParent, pThm);
-   return VclPtr<AbstractGalleryIdDialog_Impl>::Create( pDlg );
+   return VclPtr<AbstractGalleryIdDialog_Impl>::Create(new GalleryIdDialog(pParent, pThm));
 }
 
 VclPtr<VclAbstractDialog2> AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDialog(vcl::Window* pParent,

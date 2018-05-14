@@ -187,13 +187,13 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
         aName = rName;
 }
 
-void GalleryTheme::InsertAllThemes( ListBox& rListBox )
+void GalleryTheme::InsertAllThemes(weld::ComboBoxText& rListBox)
 {
     for (size_t i = 0; i < SAL_N_ELEMENTS(aUnlocalized); ++i)
-        rListBox.InsertEntry(OUString::createFromAscii(aUnlocalized[i].second));
+        rListBox.append_text(OUString::createFromAscii(aUnlocalized[i].second));
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aLocalized); ++i)
-        rListBox.InsertEntry(SvxResId(aLocalized[i].second));
+        rListBox.append_text(SvxResId(aLocalized[i].second));
 }
 
 INetURLObject GalleryThemeEntry::ImplGetURLIgnoreCase( const INetURLObject& rURL )

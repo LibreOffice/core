@@ -256,9 +256,15 @@ class AbstractScriptSelectorDialog_Impl : public AbstractScriptSelectorDialog
 class GalleryIdDialog;
 class AbstractGalleryIdDialog_Impl : public AbstractGalleryIdDialog
 {
-    DECL_ABSTDLG_BASE(AbstractGalleryIdDialog_Impl,GalleryIdDialog)
-
-    virtual sal_uInt32   GetId() const override;
+protected:
+    std::unique_ptr<GalleryIdDialog> m_xDlg;
+public:
+    explicit AbstractGalleryIdDialog_Impl(GalleryIdDialog* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
+    virtual sal_uInt32 GetId() const override;
 };
 
 class URLDlg;
@@ -674,7 +680,7 @@ public:
 
     virtual VclPtr<VclAbstractRefreshableDialog> CreateActualizeProgressDialog( vcl::Window* pParent, GalleryTheme* pThm ) override;
     virtual VclPtr<AbstractTitleDialog> CreateTitleDialog(weld::Window* pParent, const OUString& rOldText) override;
-    virtual VclPtr<AbstractGalleryIdDialog> CreateGalleryIdDialog( vcl::Window* pParent,
+    virtual VclPtr<AbstractGalleryIdDialog> CreateGalleryIdDialog(weld::Window* pParent,
                                             GalleryTheme* pThm) override;
     virtual VclPtr<VclAbstractDialog2> CreateGalleryThemePropertiesDialog(vcl::Window* pParent,
                                             ExchangeData* pData,

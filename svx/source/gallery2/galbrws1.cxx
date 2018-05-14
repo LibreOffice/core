@@ -403,7 +403,7 @@ void GalleryBrowser1::ImplExecute(const OString &rIdent)
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
             {
-                ScopedVclPtr<AbstractGalleryIdDialog> aDlg(pFact->CreateGalleryIdDialog( this, pTheme ));
+                ScopedVclPtr<AbstractGalleryIdDialog> aDlg(pFact->CreateGalleryIdDialog(GetFrameWeld(), pTheme));
                 DBG_ASSERT(aDlg, "Dialog creation failed!");
 
                 if( aDlg->Execute() == RET_OK )
