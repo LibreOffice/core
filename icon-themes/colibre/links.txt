@@ -258,6 +258,8 @@ cmd/sc_grafmode.png cmd/sc_graphicdialog.png
 cmd/sc_grafinvert.png cmd/sc_graphicfilterinvert.png
 cmd/sc_colorview.png cmd/sc_graphicfilterinvert.png
 cmd/sc_imagebutton.png cmd/sc_gallery.png
+cmd/sc_objecttitledescription.png cmd/sc_insertcaptiondialog.png
+cmd/lc_objecttitledescription.png cmd/lc_insertcaptiondialog.png
 
 # shapes
 cmd/lc_fontworkshapetype.fontwork-circle-pour.png cmd/lc_basicshapes.ring.png
