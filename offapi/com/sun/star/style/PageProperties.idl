@@ -53,12 +53,6 @@ published service PageProperties
      */
     [property] string BackGraphicURL;
 
-    /** contains the graphic of the background.
-
-        @since LibreOffice 6.1
-     */
-    [property] com::sun::star::graphic::XGraphic BackGraphic;
-
     /** contains the filter name of the background graphic.
      */
     [property] string BackGraphicFilter;
@@ -190,12 +184,6 @@ published service PageProperties
      */
     [property, maybevoid] string HeaderBackGraphicURL;
 
-    /** contains the graphic of the background of the header.
-
-        @since LibreOffice 6.1
-     */
-    [property, maybevoid] com::sun::star::graphic::XGraphic HeaderBackGraphic;
-
     /** contains the filter name of the background graphic of the header.
      */
     [property, maybevoid] string HeaderBackGraphicFilter;
@@ -308,12 +296,6 @@ published service PageProperties
         property.
      */
     [property, maybevoid] string FooterBackGraphicURL;
-
-    /** contains the graphic of the background of the footer.
-
-        @since LibreOffice 6.1
-     */
-    [property, maybevoid] com::sun::star::graphic::XGraphic FooterBackGraphic;
 
     /** contains the filter name of the background graphic in the footer.
      */
@@ -487,6 +469,24 @@ published service PageProperties
 
     /** determines the distance of all borders of the header. */
     [property, maybevoid] long HeaderBorderDistance;
+
+    /** contains the graphic of the background.
+
+        @since LibreOffice 6.1
+     */
+    [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
+
+    /** contains the graphic of the background of the header.
+
+        @since LibreOffice 6.1
+     */
+    [optional, property, maybevoid] com::sun::star::graphic::XGraphic HeaderBackGraphic;
+
+    /** contains the graphic of the background of the footer.
+
+        @since LibreOffice 6.1
+     */
+    [optional, property, maybevoid] com::sun::star::graphic::XGraphic FooterBackGraphic;
 };
 
 }; }; }; };

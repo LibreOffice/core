@@ -80,7 +80,7 @@ published service NumberingLevel
 
         @since LibreOffice 6.1
      */
-    [property] com::sun::star::graphic::XGraphic Graphic;
+    [optional, property] com::sun::star::graphic::XGraphic Graphic;
 };
 
 

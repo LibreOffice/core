@@ -72,12 +72,6 @@ published service BaseFrameProperties
      */
     [property] string BackGraphicURL;
 
-    /** contains the graphic for the background.
-
-        @since LibreOffice 6.1
-    */
-    [property] com::sun::star::graphic::XGraphic BackGraphic;
-
     /** contains the name of the file filter for the background graphic.
      */
     [property] string BackGraphicFilter;
@@ -367,6 +361,12 @@ published service BaseFrameProperties
             @since LibreOffice 4.3
          */
         [optional, property] short RelativeWidthRelation;
+
+    /** contains the graphic for the background.
+
+        @since LibreOffice 6.1
+    */
+    [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
 };
 
 

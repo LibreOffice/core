@@ -61,10 +61,6 @@ published service GraphicObjectShape
     */
     [property] string GraphicURL;
 
-    /** This is the graphic that represents this graphic shape
-    */
-    [property] com::sun::star::graphic::XGraphic Graphic;
-
     /** This is an url to the stream ("in document" or linked graphic) for this graphic shape.
     */
     [property] string GraphicStreamURL;
@@ -119,6 +115,10 @@ published service GraphicObjectShape
         @see com::sun::star::image::ImageMap
     */
     [optional, property] com::sun::star::container::XIndexContainer ImageMap;
+
+    /** This is the graphic that represents this graphic shape
+    */
+    [optional, property] com::sun::star::graphic::XGraphic Graphic;
 
     /// Whether this shape is actually a signature line.
     [optional, property] boolean IsSignatureLine;
