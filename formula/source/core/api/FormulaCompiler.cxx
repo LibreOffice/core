@@ -2013,7 +2013,10 @@ bool FormulaCompiler::CompileTokenArray()
         while( pStack )
             PopTokenArray();
         if( pc )
+        {
             pArr->CreateNewRPNArrayFromData( pData, pc );
+            pArr->CheckAllRPNTokens();
+        }
 
         // once an error, always an error
         if( pArr->GetCodeError() == FormulaError::NONE && nErrorBeforePop != FormulaError::NONE )
