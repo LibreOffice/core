@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_2baf4582",
+        "filename": "offapi/com/sun/star/task/DocumentOOXMLPasswordRequest.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-14T06:04:11Z",
+      "side": 1,
+      "message": "this can\u0027t be right",
+      "revId": "efc9641a3997330c781c7fe9ac205748940513b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_4baab971",
+        "filename": "offapi/com/sun/star/task/DocumentOOXMLPasswordRequest2.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-14T06:04:11Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "efc9641a3997330c781c7fe9ac205748940513b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
