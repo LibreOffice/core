@@ -120,7 +120,7 @@ void SwWrtShell::SelPara(const Point *pPt )
     m_bSelWrd = false;  // disable SelWord, otherwise no SelLine goes on
 }
 
-long SwWrtShell::SelAll()
+void SwWrtShell::SelAll()
 {
     const bool bLockedView = IsViewLocked();
     LockView( true );
@@ -205,7 +205,6 @@ long SwWrtShell::SelAll()
     }
     EndSelect();
     LockView( bLockedView );
-    return 1;
 }
 
 // Description: Text search

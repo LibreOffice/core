@@ -576,30 +576,30 @@ bool SwView::GetPageScrollDownOffset( SwTwips &rOff ) const
 }
 
 // Scroll page by page
-long SwView::PageUp()
+bool SwView::PageUp()
 {
     if (!m_aVisArea.GetHeight())
-        return 0;
+        return false;
 
     Point aPos(m_aVisArea.TopLeft());
     aPos.AdjustY( -(m_aVisArea.GetHeight() - (GetYScroll() / 2)) );
     aPos.setY( std::max(0L, aPos.Y()) );
     SetVisArea( aPos );
-    return 1;
+    return true;
 }
 
-long SwView::PageDown()
+bool SwView::PageDown()
 {
     if ( !m_aVisArea.GetHeight() )
-        return 0;
+        return false;
     Point aPos( m_aVisArea.TopLeft() );
     aPos.AdjustY(m_aVisArea.GetHeight() - (GetYScroll() / 2) );
     aPos.setY( SetVScrollMax( aPos.Y() ) );
     SetVisArea( aPos );
-    return 1;
+    return true;
 }
 
-long SwView::PhyPageUp()
+void SwView::PhyPageUp()
 {
     // Check for the currently visible page, do not format
     sal_uInt16 nActPage = m_pWrtShell->GetNextPrevPageNum( false );
@@ -615,10 +615,9 @@ long SwView::PhyPageUp()
             aAlPt.AdjustY(3 * GetEditWin().PixelToLogic( Size( 0, 1 ) ).Height() );
         SetVisArea( aAlPt );
     }
-    return 1;
 }
 
-long SwView::PhyPageDown()
+void SwView::PhyPageDown()
 {
     // Check for the currently visible page, do not format
     sal_uInt16 nActPage = m_pWrtShell->GetNextPrevPageNum();
@@ -634,7 +633,6 @@ long SwView::PhyPageDown()
             aAlPt.AdjustY(3 * GetEditWin().PixelToLogic( Size( 0, 1 ) ).Height() );
         SetVisArea( aAlPt );
     }
-    return 1;
 }
 
 bool SwView::PageUpCursor( bool bSelect )

@@ -145,7 +145,7 @@ namespace frm
         void    Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize );
 
         /// handles command events arrived at the anti-impl control
-        long    HandleCommand( const CommandEvent& _rEvent );
+        bool    HandleCommand( const CommandEvent& _rEvent );
 
     private:
         // updates the cache with the state provided by the given attribute handler

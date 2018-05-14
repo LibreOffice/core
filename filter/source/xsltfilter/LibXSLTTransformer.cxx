@@ -102,7 +102,8 @@ namespace XSLT
         on_close(void * context)
         {
             Reader * tmp = static_cast<Reader*> (context);
-            return tmp->closeOutput();
+            tmp->closeOutput();
+            return 0;
         }
     };
     /**
@@ -251,7 +252,7 @@ namespace XSLT
         return len;
     }
 
-    int
+    void
     Reader::closeOutput()
     {
         css::uno::Reference<XOutputStream> xos = m_transformer->getOutputStream();
@@ -261,7 +262,6 @@ namespace XSLT
             xos.get()->closeOutput();
         }
         m_transformer->done();
-        return 0;
     }
 
     void

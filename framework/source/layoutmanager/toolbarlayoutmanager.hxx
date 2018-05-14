@@ -125,7 +125,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
         css::uno::Sequence< css::uno::Reference< css::ui::XUIElement > > getToolbars();
 
         // child window notifications
-        long childWindowEvent( VclSimpleEvent const * pEvent );
+        void childWindowEvent( VclSimpleEvent const * pEvent );
 
         // XInterface
 

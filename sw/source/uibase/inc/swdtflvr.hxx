@@ -166,7 +166,7 @@ public:
     int  Copy( bool bIsCut = false );
     int  PrepareForCopy( bool bIsCut = false );
     void  CalculateAndCopy();                // special for Calculator
-    int  CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr );
+    bool  CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr );
 
     // remove the DDE-Link format promise
     void RemoveDDELinkFormat( const vcl::Window& rWin );

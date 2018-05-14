@@ -165,7 +165,7 @@ private:
         <member>EnableUI</member> for details.
     */
     void                        EnableControl( Control* _pControl, bool _bEnable );
-    short                       PrepareExecute();
+    bool                        PrepareExecute();
 
 public:
                                 SvtFileDialog( vcl::Window* _pParent, PickerFlags nBits );

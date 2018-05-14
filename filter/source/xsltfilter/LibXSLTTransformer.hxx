@@ -61,7 +61,7 @@ namespace XSLT
         int read(char * buffer, int len);
         int write(const char * buffer, int len);
         void forceStateStopped();
-        int closeOutput();
+        void closeOutput();
 
     private:
         virtual ~Reader() override;

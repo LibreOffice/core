@@ -486,20 +486,18 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
     delete pbNext;
 }
 
-int SwView::CreateTab()
+void SwView::CreateTab()
 {
     m_pHRuler->SetActive(GetFrame() && IsActive());
 
     m_pHRuler->Show();
     InvalidateBorder();
-    return 1;
 }
 
-int SwView::KillTab()
+void SwView::KillTab()
 {
     m_pHRuler->Hide();
     InvalidateBorder();
-    return 1;
 }
 
 void SwView::ChangeTabMetric( FieldUnit eUnit )
@@ -530,22 +528,20 @@ void SwView::GetHRulerMetric(FieldUnit& eToFill) const
     eToFill = m_pHRuler->GetUnit();
 }
 
-int SwView::CreateVRuler()
+void SwView::CreateVRuler()
 {
     m_pHRuler->SetBorderPos( m_pVRuler->GetSizePixel().Width()-1 );
 
     m_pVRuler->SetActive(GetFrame() && IsActive());
     m_pVRuler->Show();
     InvalidateBorder();
-    return 1;
 }
 
-int SwView::KillVRuler()
+void SwView::KillVRuler()
 {
     m_pVRuler->Hide();
     m_pHRuler->SetBorderPos();
     InvalidateBorder();
-    return 1;
 }
 
 IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler, void )

@@ -169,7 +169,7 @@ int OpenGLRender::InitOpenGL()
     return 0;
 }
 
-int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
+void OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
 {
     if (m_Line2DPointList.empty())
     {
@@ -184,7 +184,6 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
         m_Line2DShapePointList.push_back(m_Line2DPointList);
         m_Line2DPointList.clear();
     }
-    return 0;
 }
 
 int OpenGLRender::RenderLine2FBO()
@@ -275,13 +274,12 @@ void OpenGLRender::prepareToRender()
     m_fZStep = 0;
 }
 
-int OpenGLRender::MoveModelf(const PosVecf3& trans, const PosVecf3& angle, const PosVecf3& scale)
+void OpenGLRender::MoveModelf(const PosVecf3& trans, const PosVecf3& angle, const PosVecf3& scale)
 {
     glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
     glm::mat4 aScaleMatrix = glm::scale(glm::vec3(scale.x, scale.y, scale.z));
     glm::mat4 aRotationMatrix = glm::eulerAngleYXZ(angle.y, angle.x, angle.z);
     m_Model = aTranslationMatrix * aRotationMatrix * aScaleMatrix;
-    return 0;
 }
 
 void OpenGLRender::Release()
@@ -392,7 +390,7 @@ int OpenGLRender::Create2DCircle(int detail)
     return 0;
 }
 
-int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float directionY)
+void OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float directionY)
 {
     //check whether to create the circle data
     if (m_Bubble2DCircle.empty())
@@ -407,7 +405,6 @@ int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float d
     aBubble2DPointList.y = y + aBubble2DPointList.yScale / 2;
 
     m_Bubble2DShapePointList.push_back(aBubble2DPointList);
-    return 0;
 }
 
 int OpenGLRender::RenderBubble2FBO()
@@ -487,7 +484,7 @@ int OpenGLRender::RenderBubble2FBO()
     return 0;
 }
 
-int OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float directionY)
+void OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float directionY)
 {
     RectanglePointList aRectangle;
 
@@ -505,10 +502,9 @@ int OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float 
     aRectangle.points[11] = m_fZStep;
 
     m_RectangleShapePointList.push_back(aRectangle);
-    return 0;
 }
 
-int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
+void OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
 {
     for (auto const& pointList : m_RectangleShapePointList)
     {
@@ -613,7 +609,6 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
     CHECK_GL_ERROR();
 
     m_fZStep += Z_STEP;
-    return 0;
 }
 
 
@@ -637,11 +632,12 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Size& 
 
     OpenGLHelper::ConvertBitmapExToRGBATextureBuffer(rBitmapEx, bitmapBuf.get());
 
-    return CreateTextTexture(bitmapBuf, rBitmapEx.GetSizePixel(),
+    CreateTextTexture(bitmapBuf, rBitmapEx.GetSizePixel(),
                              aSize, rotation, rTrans);
+    return 0;
 }
 
-int OpenGLRender::CreateTextTexture(const boost::shared_array<sal_uInt8> &rPixels,
+void OpenGLRender::CreateTextTexture(const boost::shared_array<sal_uInt8> &rPixels,
                                     const ::Size &aPixelSize,
                                     const awt::Size& aSize,
                                     long rotation,
@@ -688,10 +684,9 @@ int OpenGLRender::CreateTextTexture(const boost::shared_array<sal_uInt8> &rPixel
     glBindTexture(GL_TEXTURE_2D, 0);
     CHECK_GL_ERROR();
     m_TextInfoVector.push_back(aTextInfo);
-    return 0;
 }
 
-int OpenGLRender::RenderTextShape()
+void OpenGLRender::RenderTextShape()
 {
     CHECK_GL_ERROR();
     for (auto const& textInfo : m_TextInfoVector)
@@ -753,10 +748,9 @@ int OpenGLRender::RenderTextShape()
     m_TextInfoVector.clear();
     CHECK_GL_ERROR();
     m_fZStep += Z_STEP;
-    return 0;
 }
 
-int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
+void OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
 {
     if (m_Area2DPointList.empty())
     {
@@ -771,7 +765,6 @@ int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
         m_Area2DShapePointList.push_back(m_Area2DPointList);
         m_Area2DPointList.clear();
     }
-    return 0;
 }
 
 namespace {
@@ -799,7 +792,7 @@ bool checkCCW(const PointList& rPoints)
 
 }
 
-int OpenGLRender::RenderArea2DShape()
+void OpenGLRender::RenderArea2DShape()
 {
     CHECK_GL_ERROR();
 
@@ -847,8 +840,6 @@ int OpenGLRender::RenderArea2DShape()
     m_fZStep += Z_STEP;
 
     CHECK_GL_ERROR();
-
-    return 0;
 }
 
 void OpenGLRender::SetBackGroundColor(::Color color1, ::Color color2, css::drawing::FillStyle fillStyle)
@@ -932,7 +923,7 @@ void OpenGLRender::GeneratePieSegment2D(double fInnerRadius, double fOutterRadiu
     m_PieSegment2DShapePointList.push_back(aPointList);
 }
 
-int OpenGLRender::RenderPieSegment2DShape(float fSize, float fPosX, float fPosY)
+void OpenGLRender::RenderPieSegment2DShape(float fSize, float fPosX, float fPosY)
 {
     int listNum = m_PieSegment2DShapePointList.size();
     PosVecf3 const trans = {fPosX, fPosY, 0.0f};
@@ -975,10 +966,9 @@ int OpenGLRender::RenderPieSegment2DShape(float fSize, float fPosX, float fPosY)
     m_fZStep += Z_STEP;
 
     CHECK_GL_ERROR();
-    return 0;
 }
 
-int OpenGLRender::RenderSymbol2DShape(float x, float y, sal_Int32 nSymbol)
+void OpenGLRender::RenderSymbol2DShape(float x, float y, sal_Int32 nSymbol)
 {
     CHECK_GL_ERROR();
 
@@ -1028,7 +1018,6 @@ int OpenGLRender::RenderSymbol2DShape(float x, float y, sal_Int32 nSymbol)
     m_fZStep += Z_STEP;
 
     CHECK_GL_ERROR();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

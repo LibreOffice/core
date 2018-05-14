@@ -35,7 +35,7 @@ enum class SvtScriptType;
 
 namespace SwLangHelper
 {
-    extern sal_uInt16 GetLanguageStatus( OutlinerView* pOLV, SfxItemSet& rSet );
+    extern void GetLanguageStatus( OutlinerView* pOLV, SfxItemSet& rSet );
     extern bool SetLanguageStatus( OutlinerView* pOLV, SfxRequest &rReq, SwView const &rView, SwWrtShell &rSh );
 
     extern void SetLanguage( SwWrtShell &rWrtSh, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );

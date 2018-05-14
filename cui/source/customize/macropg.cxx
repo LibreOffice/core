@@ -564,11 +564,12 @@ IMPL_LINK( SvxMacroTabPage_, AssignDeleteHdl_Impl, Button*, pBtn, void )
 
 IMPL_LINK_NOARG( SvxMacroTabPage_, DoubleClickHdl_Impl, SvTreeListBox*, bool)
 {
-    return GenericHandler_Impl( this, nullptr );
+    GenericHandler_Impl( this, nullptr );
+    return false;
 }
 
 // handler for double click on the listbox, and for the assign/delete buttons
-long SvxMacroTabPage_::GenericHandler_Impl( SvxMacroTabPage_* pThis, PushButton* pBtn )
+void SvxMacroTabPage_::GenericHandler_Impl( SvxMacroTabPage_* pThis, PushButton* pBtn )
 {
     SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl;
     SvHeaderTabListBox& rListBox = pImpl->pEventLB->GetListBox();
@@ -576,7 +577,7 @@ long SvxMacroTabPage_::GenericHandler_Impl( SvxMacroTabPage_* pThis, PushButton*
     if( !pE || LISTBOX_ENTRY_NOTFOUND == rListBox.GetModel()->GetAbsPos( pE ) )
     {
         DBG_ASSERT( pE, "Where does the empty entry come from?" );
-        return 0;
+        return;
     }
 
     const bool bAssEnabled = pBtn != pImpl->pDeletePB && pImpl->pAssignPB->IsEnabled();
@@ -675,7 +676,6 @@ long SvxMacroTabPage_::GenericHandler_Impl( SvxMacroTabPage_* pThis, PushButton*
     rListBox.SetUpdateMode( true );
 
     pThis->EnableButtons();
-    return 0;
 }
 
 // pass in the XNameReplace.

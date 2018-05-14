@@ -67,24 +67,24 @@ public:
     OpenGLRender();
     ~OpenGLRender();
     int InitOpenGL();
-    int MoveModelf(const PosVecf3& trans, const PosVecf3& angle, const PosVecf3& scale);
+    void MoveModelf(const PosVecf3& trans, const PosVecf3& angle, const PosVecf3& scale);
     void SetSize(int width, int height);
     void SetSizePixel(int width, int height);
     void Release();
     int RenderLine2FBO();
-    int SetLine2DShapePoint(float x, float y, int listLength);
+    void SetLine2DShapePoint(float x, float y, int listLength);
     void SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b, sal_uInt8 nAlpha);
     void SetLine2DWidth(int width);
     void SetColor(sal_uInt32 color, sal_uInt8 nAlpha);
-    int Bubble2DShapePoint(float x, float y, float directionX, float directionY);
+    void Bubble2DShapePoint(float x, float y, float directionX, float directionY);
     int RenderBubble2FBO();
 
     void prepareToRender();
 
-    int RenderRectangleShape(bool bBorder, bool bFill);
-    int RectangleShapePoint(float x, float y, float directionX, float directionY);
+    void RenderRectangleShape(bool bBorder, bool bFill);
+    void RectangleShapePoint(float x, float y, float directionX, float directionY);
 
-    int CreateTextTexture(const boost::shared_array<sal_uInt8> &rPixels,
+    void CreateTextTexture(const boost::shared_array<sal_uInt8> &rPixels,
                           const ::Size &aPixelSize,
                           const css::awt::Size& aSize,
                           long rotation,
@@ -92,16 +92,16 @@ public:
     int CreateTextTexture(const BitmapEx& rBitmapEx,
             const css::awt::Size& aSize,
             long rotation, const css::drawing::HomogenMatrix3& rTrans);
-    int RenderTextShape();
+    void RenderTextShape();
 
-    int SetArea2DShapePoint(float x, float y, int listLength);
-    int RenderArea2DShape();
+    void SetArea2DShapePoint(float x, float y, int listLength);
+    void RenderArea2DShape();
     void SetChartTransparencyGradient(long transparencyGradient);
 
     void GeneratePieSegment2D(double, double, double, double);
-    int RenderPieSegment2DShape(float, float, float);
+    void RenderPieSegment2DShape(float, float, float);
 
-    int RenderSymbol2DShape(float, float, sal_Int32);
+    void RenderSymbol2DShape(float, float, sal_Int32);
 #if DEBUG_POSITIONING
     void renderDebug();
 #endif

@@ -155,7 +155,8 @@ void SwTextShell::ExecMove(SfxRequest &rReq)
             bRet = rSh.SelNearestWrd();
             break;
         case SID_SELECTALL:
-            bRet = 0 != rSh.SelAll();
+            rSh.SelAll();
+            bRet = true;
             break;
         default:
             OSL_FAIL("wrong dispatcher");
