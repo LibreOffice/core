@@ -721,7 +721,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    ScopedVclPtr<AbstractScFillSeriesDlg> pDlg(pFact->CreateScFillSeriesDlg( pTabViewShell->GetDialogParent(),
+                    ScopedVclPtr<AbstractScFillSeriesDlg> pDlg(pFact->CreateScFillSeriesDlg( pTabViewShell->GetFrameWeld(),
                                                             *pDoc,
                                                             eFillDir, eFillCmd, eFillDateCmd,
                                                             aStartStr, fIncVal, fMaxVal,
