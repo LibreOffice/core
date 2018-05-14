@@ -44,13 +44,14 @@ public:
 private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput,
                                 rtl::OUString& rTypeName) override;
-    virtual bool doImportDocument(librevenge::RVNGInputStream& rInput, OdsGenerator& rGenerator,
+    virtual bool doImportDocument(weld::Window* pWindow, librevenge::RVNGInputStream& rInput,
+                                  OdsGenerator& rGenerator,
                                   utl::MediaDescriptor& rDescriptor) override;
 
     static void generate(librevenge::RVNGSpreadsheetInterface& rDocument);
 };
 
-bool SpreadsheetImportFilter::doImportDocument(librevenge::RVNGInputStream&,
+bool SpreadsheetImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream&,
                                                OdsGenerator& rGenerator, utl::MediaDescriptor&)
 {
     SpreadsheetImportFilter::generate(rGenerator);
