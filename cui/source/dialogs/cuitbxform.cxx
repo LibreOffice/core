@@ -17,37 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string>
-#include <svl/intitem.hxx>
-#include <svl/eitem.hxx>
-#include <svl/stritem.hxx>
-#include <sfx2/dispatch.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/fixed.hxx>
 #include <cuitbxform.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/viewsh.hxx>
 
-FmInputRecordNoDialog::FmInputRecordNoDialog(vcl::Window * pParent)
-    : ModalDialog( pParent, "RecordNumberDialog", "cui/ui/recordnumberdialog.ui")
+FmInputRecordNoDialog::FmInputRecordNoDialog(weld::Window * pParent)
+    : GenericDialogController(pParent, "cui/ui/recordnumberdialog.ui", "RecordNumberDialog")
+    , m_xRecordNo(m_xBuilder->weld_spin_button("entry"))
 {
-    get(m_pRecordNo, "entry-nospin");
-
-    m_pRecordNo->SetMin(1);
-    m_pRecordNo->SetMax(0x7FFFFFFF);
-    m_pRecordNo->SetStrictFormat(true);
-    m_pRecordNo->SetDecimalDigits(0);
+    m_xRecordNo->set_range(1, 0x7FFFFFFF);
 }
 
 FmInputRecordNoDialog::~FmInputRecordNoDialog()
 {
-    disposeOnce();
-}
-
-void FmInputRecordNoDialog::dispose()
-{
-    m_pRecordNo.clear();
-    ModalDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,24 +19,19 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_CUITBXFORM_HXX
 #define INCLUDED_CUI_SOURCE_INC_CUITBXFORM_HXX
 
-#include <sfx2/tbxctrl.hxx>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/field.hxx>
+#include <vcl/weld.hxx>
 
-
-class FmInputRecordNoDialog : public ModalDialog
+class FmInputRecordNoDialog : public weld::GenericDialogController
 {
 public:
-    VclPtr<NumericField> m_pRecordNo;
+    std::unique_ptr<weld::SpinButton> m_xRecordNo;
 
 public:
-    FmInputRecordNoDialog(vcl::Window * pParent);
+    FmInputRecordNoDialog(weld::Window* pParent);
     virtual ~FmInputRecordNoDialog() override;
-    virtual void dispose() override;
 
-    void SetValue(long dNew) { m_pRecordNo->SetValue(dNew); }
-    long GetValue() const { return static_cast<long>(m_pRecordNo->GetValue()); }
+    void SetValue(int dNew) { m_xRecordNo->set_value(dNew); }
+    int GetValue() const { return m_xRecordNo->get_value(); }
 };
 
 #endif

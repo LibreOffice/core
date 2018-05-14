@@ -314,7 +314,14 @@ class AbstractSvxCaptionDialog_Impl : public AbstractSvxCaptionDialog
 class FmInputRecordNoDialog;
 class AbstractFmInputRecordNoDialog_Impl :public AbstractFmInputRecordNoDialog
 {
-    DECL_ABSTDLG_BASE(AbstractFmInputRecordNoDialog_Impl,FmInputRecordNoDialog)
+protected:
+    std::unique_ptr<FmInputRecordNoDialog> m_xDlg;
+public:
+    explicit AbstractFmInputRecordNoDialog_Impl(FmInputRecordNoDialog* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual void SetValue(long nNew) override ;
     virtual long GetValue() const override ;
 };
@@ -682,7 +689,7 @@ public:
     virtual VclPtr<AbstractSvxJSearchOptionsDialog> CreateSvxJSearchOptionsDialog( vcl::Window* pParent,
                                                             const SfxItemSet& rOptionsSet,
                                                             TransliterationFlags nInitialFlags) override;
-    virtual VclPtr<AbstractFmInputRecordNoDialog> CreateFmInputRecordNoDialog() override;
+    virtual VclPtr<AbstractFmInputRecordNoDialog> CreateFmInputRecordNoDialog(weld::Window* pParent) override;
     virtual VclPtr<AbstractSvxNewDictionaryDialog> CreateSvxNewDictionaryDialog(weld::Window* pParent) override;
     virtual VclPtr<VclAbstractDialog>     CreateSvxEditDictionaryDialog(vcl::Window* pParent, const OUString& rName) override;
     virtual VclPtr<AbstractSvxNameDialog> CreateSvxNameDialog(weld::Window* pParent,
