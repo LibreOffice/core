@@ -84,8 +84,8 @@ public:
     /// Test writing ActualText for LTR many to one glyph to Unicode mapping.
     void testTdf66597_3();
 #endif
-#endif
     void testTdf109143();
+#endif
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
 #if HAVE_FEATURE_PDFIUM
@@ -112,8 +112,8 @@ public:
     CPPUNIT_TEST(testTdf66597_2);
     CPPUNIT_TEST(testTdf66597_3);
 #endif
-#endif
     CPPUNIT_TEST(testTdf109143);
+#endif
     CPPUNIT_TEST_SUITE_END();
 };
 
