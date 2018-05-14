@@ -583,25 +583,23 @@ namespace svxform
         const css::uno::Reference< css::xforms::XSubmission >& GetNewSubmission() const { return m_xNewSubmission; }
     };
 
-
-    class AddModelDialog : public ModalDialog
+    class AddModelDialog : public weld::GenericDialogController
     {
     private:
-        VclPtr<Edit>     m_pNameED;
-        VclPtr<CheckBox> m_pModifyCB;
+        std::unique_ptr<weld::Entry> m_xNameED;
+        std::unique_ptr<weld::CheckButton> m_xModifyCB;
+        std::unique_ptr<weld::Label> m_xAltTitle;
 
     public:
-        AddModelDialog( vcl::Window* pParent, bool _bEdit );
+        AddModelDialog(weld::Window* pParent, bool _bEdit);
         virtual ~AddModelDialog() override;
-        virtual void dispose() override;
 
-        OUString         GetName() const { return m_pNameED->GetText(); }
-        void             SetName( const OUString& _rName ) { m_pNameED->SetText( _rName );}
+        OUString         GetName() const { return m_xNameED->get_text(); }
+        void             SetName( const OUString& _rName ) { m_xNameED->set_text( _rName );}
 
-        bool             GetModifyDoc() const { return m_pModifyCB->IsChecked(); }
-        void             SetModifyDoc( const bool bModify ) { m_pModifyCB->Check( bModify ); }
+        bool             GetModifyDoc() const { return m_xModifyCB->get_active(); }
+        void             SetModifyDoc( const bool bModify ) { m_xModifyCB->set_active(bModify); }
     };
-
 
     class AddInstanceDialog : public weld::GenericDialogController
     {
