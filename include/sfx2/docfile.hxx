@@ -265,6 +265,8 @@ public:
     SAL_DLLPRIVATE SignatureState GetCachedSignatureState_Impl();
     SAL_DLLPRIVATE void       SetCachedSignatureState_Impl( SignatureState nState );
 
+    void SetHasEmbeddedObjects(bool bHasEmbeddedObjects);
+
     static css::uno::Sequence < css::util::RevisionTag > GetVersionList(
                     const css::uno::Reference< css::embed::XStorage >& xStorage );
     static OUString CreateTempCopyWithExt( const OUString& aURL );

@@ -1238,7 +1238,9 @@ bool SfxObjectShell::SaveTo_Impl
                     //             if the url is not provided ( means the document is based on a stream ) this code is not
                     //             reachable.
                     rMedium.CloseAndRelease();
+                    rMedium.SetHasEmbeddedObjects(GetEmbeddedObjectContainer().HasEmbeddedObjects());
                     rMedium.GetOutputStorage();
+                    rMedium.SetHasEmbeddedObjects(false);
                 }
             }
             else if ( !bStorageBasedSource && !bStorageBasedTarget )

@@ -257,6 +257,8 @@ public:
     //             in this case the member will hold this information
     SignatureState             m_nSignatureState;
 
+    bool m_bHasEmbeddedObjects = false;
+
     util::DateTime m_aDateTime;
 
     explicit SfxMedium_Impl();
@@ -3396,6 +3398,10 @@ OUString GetLogicBase(std::unique_ptr<SfxMedium_Impl>& pImpl)
             aLogicBase.clear();
     }
 
+    if (pImpl->m_bHasEmbeddedObjects)
+        // Embedded objects would mean a special base, ignore that.
+        aLogicBase.clear();
+
     return aLogicBase;
 }
 }
@@ -3698,6 +3704,11 @@ SignatureState SfxMedium::GetCachedSignatureState_Impl()
 void SfxMedium::SetCachedSignatureState_Impl( SignatureState nState )
 {
     pImpl->m_nSignatureState = nState;
+}
+
+void SfxMedium::SetHasEmbeddedObjects(bool bHasEmbeddedObjects)
+{
+    pImpl->m_bHasEmbeddedObjects = bHasEmbeddedObjects;
 }
 
 bool SfxMedium::HasStorage_Impl() const

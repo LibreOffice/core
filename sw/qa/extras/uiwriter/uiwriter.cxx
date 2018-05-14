@@ -110,7 +110,29 @@
 #include <test/htmltesttools.hxx>
 #include <wrthtml.hxx>
 
-static const char* const DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
+namespace
+{
+char const DATA_DIRECTORY[] = "/sw/qa/extras/uiwriter/data/";
+
+int CountFilesInDirectory(const OUString &rURL)
+{
+    int nRet = 0;
+
+    osl::Directory aDir(rURL);
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, aDir.open());
+
+    osl::DirectoryItem aItem;
+    osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
+    while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
+    {
+        aItem.getFileStatus(aFileStatus);
+        if (aFileStatus.getFileType() != osl::FileStatus::Directory)
+            ++nRet;
+    }
+
+    return nRet;
+}
+}
 
 class SwUiWriterTest : public SwModelTestBase, public HtmlTestTools
 {
@@ -256,6 +278,7 @@ public:
     void testTdf113790();
     void testHtmlCopyImages();
     void testTdf116789();
+    void testTdf117225();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -396,6 +419,7 @@ public:
     CPPUNIT_TEST(testTdf113790);
     CPPUNIT_TEST(testHtmlCopyImages);
     CPPUNIT_TEST(testTdf116789);
+    CPPUNIT_TEST(testTdf117225);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5040,6 +5064,23 @@ void SwUiWriterTest::testTdf116789()
     }
     // This failed, we got two different SwXCell for the same bookmark anchor text.
     CPPUNIT_ASSERT_EQUAL(xText1, xText2);
+}
+
+void SwUiWriterTest::testTdf117225()
+{
+    // Test that saving a document with an embedded object does not leak
+    // tempfiles in the directory of the target file.
+    OUString aTargetDirectory = m_directories.getURLFromWorkdir("/CppunitTest/sw_uiwriter.test.user/");
+    OUString aTargetFile = aTargetDirectory + "tdf117225.odt";
+    OUString aSourceFile = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf117225.odt";
+    osl::File::copy(aSourceFile, aTargetFile);
+    mxComponent = loadFromDesktop(aTargetFile);
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    int nExpected = CountFilesInDirectory(aTargetDirectory);
+    xStorable->store();
+    int nActual = CountFilesInDirectory(aTargetDirectory);
+    // nActual was nExpected + 1, i.e. we leaked a tempfile.
+    CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
