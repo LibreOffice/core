@@ -71,24 +71,22 @@ public:
     sal_Int32 GetLineNumber() const;
 };
 
-class ExportDialog : public ModalDialog
+class ExportDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<RadioButton>    m_pExportAsPackageButton;
-    VclPtr<OKButton>       m_pOKButton;
+    bool m_bExportAsPackage;
 
-    bool            mbExportAsPackage;
+    std::unique_ptr<weld::RadioButton> m_xExportAsPackageButton;
+    std::unique_ptr<weld::Button> m_xOKButton;
 
-    DECL_LINK(OkButtonHandler, Button*, void);
+    DECL_LINK(OkButtonHandler, weld::Button&, void);
 
 public:
-    explicit ExportDialog( vcl::Window * pParent );
+    explicit ExportDialog(weld::Window * pParent);
     virtual ~ExportDialog() override;
-    virtual void dispose() override;
 
-    bool isExportAsPackage () const { return mbExportAsPackage; }
+    bool isExportAsPackage () const { return m_bExportAsPackage; }
 };
-
 
 class ExtTreeListBox final : public TreeListBox
 {
