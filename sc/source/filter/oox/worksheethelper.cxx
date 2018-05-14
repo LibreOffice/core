@@ -772,9 +772,6 @@ void WorksheetGlobals::setColumnModel( const ColumnModel& rModel )
             --nLastCol;
         // This is totally fouled up. If we saved 1025 and the file is saved
         // with Excel again, it increments the value to 1026.
-        /* TODO: we may have to completely ignore the very last
-         * <cols><col ... max=...></cols> value and use checkCol(...,false) on
-         * that, if it turns out that Excel stores arbitrary columns. */
         else if (nLastCol == mrMaxApiPos.Col() + 2)
             nLastCol -= 2;
         // Excel may add a column range for the remaining columns (with
@@ -784,7 +781,12 @@ void WorksheetGlobals::setColumnModel( const ColumnModel& rModel )
         // the range that should be caught anyway.
         else if (nLastCol == getAddressConverter().getMaxXlsAddress().Col())
             nLastCol = mrMaxApiPos.Col();
-        else if( !getAddressConverter().checkCol( nLastCol, true ) )
+        // User may have applied custom column widths to arbitrary excess
+        // columns. Ignore those and don't track as overflow columns (false).
+        // Effectively this does the same as the above cases, just keep them
+        // for explanation.
+        // Actual data present should trigger the overflow detection later.
+        else if( !getAddressConverter().checkCol( nLastCol, false ) )
             nLastCol = mrMaxApiPos.Col();
         // try to find entry in column model map that is able to merge with the passed model
         bool bInsertModel = true;
