@@ -243,7 +243,12 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
             }
 
             m_pRedline = new SwRedlineItr( rTextNode, *m_pFont, m_aAttrHandler, nRedlPos,
-                            bShow, pArr, pExtInp ? pExtInp->Start() : nullptr);
+                            m_pMergedPara
+                                ? SwRedlineItr::Mode::Hide
+                                : bShow
+                                    ? SwRedlineItr::Mode::Show
+                                    : SwRedlineItr::Mode::Ignore,
+                            pArr, pExtInp ? pExtInp->Start() : nullptr);
 
             if( m_pRedline->IsOn() )
                 ++m_nChgCnt;
@@ -264,7 +269,8 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
 // If m_nAct is set to SwRedlineTable::npos (via Reset()), then currently no
 // Redline is active, m_nStart and m_nEnd are invalid.
 SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
-                            SwAttrHandler& rAH, sal_Int32 nRed, bool bShow,
+                            SwAttrHandler& rAH, sal_Int32 nRed,
+                            Mode const mode,
                             const std::vector<ExtTextInputAttr> *pArr,
                             SwPosition const*const pExtInputStart)
     : m_rDoc( *rTextNd.GetDoc() )
@@ -273,7 +279,7 @@ SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
     , m_nFirst( nRed )
     , m_nAct( SwRedlineTable::npos )
     , m_bOn( false )
-    , m_bShow( bShow )
+    , m_eMode( mode )
 {
     if( pArr )
     {
@@ -301,7 +307,8 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_uLong const nNode, sal_Int32 const n
     if( ExtOn() )
         return 0; // Abbreviation: if we're within an ExtendTextInputs
                   // there can't be other changes of attributes (not even by redlining)
-    if (m_bShow)
+    assert(m_eMode == Mode::Hide || m_nNdIdx == nNode);
+    if (m_eMode == Mode::Show)
     {
         if (m_bOn)
         {
@@ -405,7 +412,7 @@ void SwRedlineItr::ChangeTextAttr( SwFont* pFnt, SwTextAttr const &rHt, bool bCh
 {
     OSL_ENSURE( IsOn(), "SwRedlineItr::ChangeTextAttr: Off?" );
 
-    if (!m_bShow && !m_pExt)
+    if (m_eMode != Mode::Show && !m_pExt)
         return;
 
     if( bChg )
@@ -444,7 +451,7 @@ SwRedlineItr::GetNextRedln(sal_Int32 nNext, SwTextNode const*const pNode, SwRedl
     sal_Int32 nStart(m_nStart);
     sal_Int32 nEnd(m_nEnd);
     nNext = NextExtend(pNode->GetIndex(), nNext);
-    if (!m_bShow || SwRedlineTable::npos == m_nFirst)
+    if (m_eMode == Mode::Ignore || SwRedlineTable::npos == m_nFirst)
         return std::make_pair(nNext, nullptr);
     if (SwRedlineTable::npos == rAct)
     {
@@ -463,7 +470,7 @@ SwRedlineItr::GetNextRedln(sal_Int32 nNext, SwTextNode const*const pNode, SwRedl
     else if (nStart <= nNext)
     {
         nNext = nStart;
-        if (!m_bShow)
+        if (m_eMode == Mode::Hide)
         {
             SwRangeRedline const* pRedline = m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct];
             if (pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE)
@@ -511,7 +518,7 @@ bool SwRedlineItr::CheckLine(
 {
     // note: previously this would return true in the (!m_bShow && m_pExt)
     // case, but surely that was a bug?
-    if (m_nFirst == SwRedlineTable::npos || !m_bShow)
+    if (m_nFirst == SwRedlineTable::npos || m_eMode != Mode::Show)
         return false;
     assert(nStartNode == nEndNode); (void) nStartNode; (void) nEndNode;
     if( nChkEnd == nChkStart ) // empty lines look one char further
