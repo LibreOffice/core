@@ -32,43 +32,61 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QShowEvent>
 #include <QtGui/QWheelEvent>
+#include <QtWidgets/QtWidgets>
+#include <QtWidgets/QMainWindow>
 
 #include <cairo.h>
 #include <headless/svpgdi.hxx>
 
-Qt5Widget::Qt5Widget(Qt5Frame& rFrame, QWidget* parent, Qt::WindowFlags f)
-    : QWidget(parent, f)
-    , m_pFrame(&rFrame)
+class VclQtMixinBase
 {
-    create();
-    setMouseTracking(true);
-    setFocusPolicy(Qt::StrongFocus);
-}
+public:
+    VclQtMixinBase( Qt5Frame *pFrame) { m_pFrame = pFrame; }
 
-Qt5Widget::~Qt5Widget() {}
+    void mixinFocusInEvent(QFocusEvent*);
+    void mixinFocusOutEvent(QFocusEvent*);
+    void mixinKeyPressEvent(QKeyEvent*);
+    void mixinKeyReleaseEvent(QKeyEvent*);
+    void mixinMouseMoveEvent(QMouseEvent*);
+    void mixinMousePressEvent(QMouseEvent*);
+    void mixinMouseReleaseEvent(QMouseEvent*);
+    void mixinMoveEvent(QMoveEvent*);
+    void mixinPaintEvent(QPaintEvent*, QWidget* widget);
+    void mixinResizeEvent(QResizeEvent*, QSize aSize);
+    void mixinShowEvent(QShowEvent*);
+    void mixinWheelEvent(QWheelEvent*);
+    void mixinCloseEvent(QCloseEvent*);
 
-void Qt5Widget::paintEvent(QPaintEvent* pEvent)
+private:
+    bool mixinHandleKeyEvent(QKeyEvent*, bool);
+    void mixinHandleMouseButtonEvent(QMouseEvent*, bool);
+
+    Qt5Frame *m_pFrame;
+};
+
+
+void VclQtMixinBase::mixinPaintEvent(QPaintEvent* pEvent, QWidget* widget)
 {
-    QPainter p(this);
+    QPainter p(widget);
     if (m_pFrame->m_bUseCairo)
     {
         cairo_surface_t* pSurface = m_pFrame->m_pSurface.get();
         cairo_surface_flush(pSurface);
 
-        QImage aImage(cairo_image_surface_get_data(pSurface), size().width(), size().height(),
-                      Qt5_DefaultFormat32);
+        QImage aImage(cairo_image_surface_get_data(pSurface), widget->size().width(),
+                      widget->size().height(),Qt5_DefaultFormat32);
         p.drawImage(pEvent->rect().topLeft(), aImage, pEvent->rect());
     }
     else
         p.drawImage(pEvent->rect().topLeft(), *m_pFrame->m_pQImage, pEvent->rect());
 }
 
-void Qt5Widget::resizeEvent(QResizeEvent*)
+void VclQtMixinBase::mixinResizeEvent(QResizeEvent*, QSize aSize)
 {
     if (m_pFrame->m_bUseCairo)
     {
-        int width = size().width();
-        int height = size().height();
+        int width = aSize.width();
+        int height = aSize.height();
         cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
         cairo_surface_set_user_data(pSurface, SvpSalGraphics::getDamageKey(),
                                     &m_pFrame->m_aDamageHandler, nullptr);
@@ -77,18 +95,18 @@ void Qt5Widget::resizeEvent(QResizeEvent*)
     }
     else
     {
-        QImage* pImage = new QImage(size(), Qt5_DefaultFormat32);
+        QImage* pImage = new QImage(aSize, Qt5_DefaultFormat32);
         m_pFrame->m_pQt5Graphics->ChangeQImage(pImage);
         m_pFrame->m_pQImage.reset(pImage);
     }
 
-    m_pFrame->maGeometry.nWidth = size().width();
-    m_pFrame->maGeometry.nHeight = size().height();
+    m_pFrame->maGeometry.nWidth = aSize.width();
+    m_pFrame->maGeometry.nHeight = aSize.height();
 
     m_pFrame->CallCallback(SalEvent::Resize, nullptr);
 }
 
-void Qt5Widget::handleMouseButtonEvent(QMouseEvent* pEvent, bool bReleased)
+void VclQtMixinBase::mixinHandleMouseButtonEvent(QMouseEvent* pEvent, bool bReleased)
 {
     SalMouseEvent aEvent;
     switch (pEvent->button())
@@ -119,11 +137,17 @@ void Qt5Widget::handleMouseButtonEvent(QMouseEvent* pEvent, bool bReleased)
     m_pFrame->CallCallback(nEventType, &aEvent);
 }
 
-void Qt5Widget::mousePressEvent(QMouseEvent* pEvent) { handleMouseButtonEvent(pEvent, false); }
+void VclQtMixinBase::mixinMousePressEvent(QMouseEvent* pEvent)
+{
+    mixinHandleMouseButtonEvent(pEvent, false);
+}
 
-void Qt5Widget::mouseReleaseEvent(QMouseEvent* pEvent) { handleMouseButtonEvent(pEvent, true); }
+void VclQtMixinBase::mixinMouseReleaseEvent(QMouseEvent* pEvent)
+{
+    mixinHandleMouseButtonEvent(pEvent, true);
+}
 
-void Qt5Widget::mouseMoveEvent(QMouseEvent* pEvent)
+void VclQtMixinBase::mixinMouseMoveEvent(QMouseEvent* pEvent)
 {
     SalMouseEvent aEvent;
     aEvent.mnTime = pEvent->timestamp();
@@ -136,7 +160,7 @@ void Qt5Widget::mouseMoveEvent(QMouseEvent* pEvent)
     pEvent->accept();
 }
 
-void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
+void VclQtMixinBase::mixinWheelEvent(QWheelEvent* pEvent)
 {
     SalWheelMouseEvent aEvent;
 
@@ -164,16 +188,19 @@ void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
     pEvent->accept();
 }
 
-void Qt5Widget::moveEvent(QMoveEvent*) { m_pFrame->CallCallback(SalEvent::Move, nullptr); }
-
-void Qt5Widget::showEvent(QShowEvent*)
+void VclQtMixinBase::mixinMoveEvent(QMoveEvent*)
 {
-    QSize aSize(m_pFrame->m_pQWidget->size());
+    m_pFrame->CallCallback(SalEvent::Move, nullptr);
+}
+
+void VclQtMixinBase::mixinShowEvent(QShowEvent*)
+{
+    QSize aSize( m_pFrame->GetQWidget()->size() );
     SalPaintEvent aPaintEvt(0, 0, aSize.width(), aSize.height(), true);
     m_pFrame->CallCallback(SalEvent::Paint, &aPaintEvt);
 }
 
-void Qt5Widget::closeEvent(QCloseEvent* /*pEvent*/)
+void VclQtMixinBase::mixinCloseEvent(QCloseEvent* /*pEvent*/)
 {
     m_pFrame->CallCallback(SalEvent::Close, nullptr);
 }
@@ -314,7 +341,7 @@ static sal_uInt16 GetKeyCode(int keyval)
     return nCode;
 }
 
-bool Qt5Widget::handleKeyEvent(QKeyEvent* pEvent, bool bDown)
+bool VclQtMixinBase::mixinHandleKeyEvent(QKeyEvent* pEvent, bool bDown)
 {
     SalKeyEvent aEvent;
 
@@ -331,23 +358,133 @@ bool Qt5Widget::handleKeyEvent(QKeyEvent* pEvent, bool bDown)
     return bStopProcessingKey;
 }
 
-void Qt5Widget::keyPressEvent(QKeyEvent* pEvent)
+void VclQtMixinBase::mixinKeyPressEvent(QKeyEvent* pEvent)
 {
-    if (handleKeyEvent(pEvent, true))
+    if (mixinHandleKeyEvent(pEvent, true))
         pEvent->accept();
 }
 
-void Qt5Widget::keyReleaseEvent(QKeyEvent* pEvent)
+void VclQtMixinBase::mixinKeyReleaseEvent(QKeyEvent* pEvent)
 {
-    if (handleKeyEvent(pEvent, false))
+    if (mixinHandleKeyEvent(pEvent, false))
         pEvent->accept();
 }
 
-void Qt5Widget::focusInEvent(QFocusEvent*) { m_pFrame->CallCallback(SalEvent::GetFocus, nullptr); }
+void VclQtMixinBase::mixinFocusInEvent(QFocusEvent*)
+{
+    m_pFrame->CallCallback(SalEvent::GetFocus, nullptr);
+}
 
-void Qt5Widget::focusOutEvent(QFocusEvent*)
+void VclQtMixinBase::mixinFocusOutEvent(QFocusEvent*)
 {
     m_pFrame->CallCallback(SalEvent::LoseFocus, nullptr);
+}
+
+template<class ParentClassT>
+class Qt5Widget : public ParentClassT
+{
+    //Q_OBJECT
+
+    VclQtMixinBase maMixin;
+
+    virtual void focusInEvent(QFocusEvent* event) override
+    {
+        return maMixin.mixinFocusInEvent(event);
+    }
+
+    virtual void focusOutEvent(QFocusEvent* event) override
+    {
+        return maMixin.mixinFocusOutEvent(event);
+    }
+
+    virtual void keyPressEvent(QKeyEvent* event) override
+    {
+        return maMixin.mixinKeyPressEvent(event);
+    }
+
+    virtual void keyReleaseEvent(QKeyEvent* event) override
+    {
+        return maMixin.mixinKeyReleaseEvent(event);
+    }
+
+    virtual void mouseMoveEvent(QMouseEvent* event) override
+    {
+        return maMixin.mixinMouseMoveEvent(event);
+    }
+
+    virtual void mousePressEvent(QMouseEvent* event) override
+    {
+        return maMixin.mixinMousePressEvent(event);
+    }
+
+    virtual void mouseReleaseEvent(QMouseEvent* event) override
+    {
+        return maMixin.mixinMouseReleaseEvent(event);
+    }
+
+    virtual void moveEvent(QMoveEvent* event) override
+    {
+        return maMixin.mixinMoveEvent(event);
+    }
+
+    virtual void paintEvent(QPaintEvent* event) override
+    {
+        return maMixin.mixinPaintEvent(event, this);
+    }
+
+    virtual void resizeEvent(QResizeEvent* event) override
+    {
+        return maMixin.mixinResizeEvent(event, ParentClassT::size());
+    }
+
+    virtual void showEvent(QShowEvent* event) override
+    {
+        return maMixin.mixinShowEvent(event);
+    }
+
+    virtual void wheelEvent(QWheelEvent* event) override
+    {
+        return maMixin.mixinWheelEvent(event);
+    }
+
+    virtual void closeEvent(QCloseEvent* event) override
+    {
+        return maMixin.mixinCloseEvent(event);
+    }
+
+
+private:
+    Qt5Widget( Qt5Frame& rFrame, QWidget* parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags() )
+        : QWidget(parent, f), maMixin(&rFrame)
+    {
+        Init();
+    }
+
+    Qt5Widget( Qt5Frame& rFrame, Qt::WindowFlags f )
+        : QMainWindow(Q_NULLPTR, f), maMixin(&rFrame)
+    {
+        Init();
+        ParentClassT::menuBar()->addMenu("ExperimentMenu");
+    }
+
+    void Init()
+    {
+        ParentClassT::create();
+        ParentClassT::setMouseTracking(true);
+        ParentClassT::setFocusPolicy(Qt::StrongFocus);
+    }
+public:
+    virtual ~Qt5Widget() override {};
+
+    friend QWidget* createQt5Widget(Qt5Frame &rFrame, QWidget* parent, Qt::WindowFlags f);
+};
+
+QWidget* createQt5Widget( Qt5Frame& rFrame, QWidget* parent, Qt::WindowFlags f)
+{
+    if(parent)
+       return new Qt5Widget<QWidget>(rFrame, parent, f);
+    else
+       return new Qt5Widget<QMainWindow>(rFrame, f);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
