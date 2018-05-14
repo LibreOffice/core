@@ -81,7 +81,10 @@ class SwRedlineItr
     sal_Int32 m_nStart;
     sal_Int32 m_nEnd;
     bool m_bOn;
-    bool m_bShow;
+public:
+    enum class Mode { Show, Ignore, Hide };
+private:
+    Mode const m_eMode;
 
     void Clear_( SwFont* pFnt );
     bool ChkSpecialUnderline_() const;
@@ -98,7 +101,8 @@ class SwRedlineItr
     }
 public:
     SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt, SwAttrHandler& rAH,
-        sal_Int32 nRedlPos, bool bShw, const std::vector<ExtTextInputAttr> *pArr = nullptr,
+        sal_Int32 nRedlPos, Mode mode,
+        const std::vector<ExtTextInputAttr> *pArr = nullptr,
         SwPosition const* pExtInputStart = nullptr);
     ~SwRedlineItr() COVERITY_NOEXCEPT_FALSE;
     SwRedlineTable::size_type GetAct() const { return m_nAct; }
@@ -107,7 +111,7 @@ public:
     void ChangeTextAttr( SwFont* pFnt, SwTextAttr const &rHt, bool bChg );
     short Seek(SwFont& rFnt, sal_uLong nNode, sal_Int32 nNew, sal_Int32 nOld)
     {
-        if (m_bShow || m_pExt) return Seek_(rFnt, nNode, nNew, nOld);
+        if (m_eMode != Mode::Hide || m_pExt) return Seek_(rFnt, nNode, nNew, nOld);
         return 0;
     }
     void Reset() {
