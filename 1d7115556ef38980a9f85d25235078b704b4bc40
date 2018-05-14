@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_eea45ba7",
+        "filename": "sw/source/core/layout/atrfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-14T14:54:04Z",
+      "side": 1,
+      "message": "given that this value is immediately divided by a number very close to one of its factors i.e. GetNumCols(), surely this is just an intermediate result that should be represented in a sal_uInt32 ?",
+      "revId": "1d7115556ef38980a9f85d25235078b704b4bc40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
