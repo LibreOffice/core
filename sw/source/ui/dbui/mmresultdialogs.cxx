@@ -462,11 +462,6 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, CopyToHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveCancelHdl_Impl, weld::Button&, void)
-{
-    m_bCancelSaving = true;
-}
-
 namespace {
 
 int documentStartPageNumber(SwMailMergeConfigItem* pConfigItem, int document)
@@ -627,10 +622,13 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
         SwView* pSourceView = xConfigItem->GetSourceView();
         std::shared_ptr<SaveMonitor> xSaveMonitor(new SaveMonitor(m_xDialog.get()));
         xSaveMonitor->m_xDocName->set_label(pSourceView->GetDocShell()->GetTitle(22));
-        xSaveMonitor->m_xCancel->connect_clicked(LINK(this, SwMMResultSaveDialog, SaveCancelHdl_Impl));
         xSaveMonitor->m_xPrinter->set_label( INetURLObject( sPath ).getFSysPath( FSysStyle::Detect ) );
         m_bCancelSaving = false;
-        weld::DialogController::runAsync(xSaveMonitor, [](int) {});
+        weld::DialogController::runAsync(xSaveMonitor, [this, &xSaveMonitor](sal_Int32 nResult){
+            if (nResult == RET_CANCEL)
+                m_bCancelSaving = true;
+            xSaveMonitor.reset();
+        });
 
         for(sal_uInt32 nDoc = nBegin; nDoc < nEnd && !m_bCancelSaving; ++nDoc)
         {
@@ -707,7 +705,8 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
                 }
             }
         }
-        xSaveMonitor->response(RET_OK);
+        if (xSaveMonitor)
+            xSaveMonitor->response(RET_OK);
         ::osl::File::remove( sTargetTempURL );
     }
 

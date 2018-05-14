@@ -25,34 +25,15 @@
 #include <vcl/fixed.hxx>
 #include <vcl/weld.hxx>
 
-class SW_DLLPUBLIC CancelableDialog : public Dialog
-{
-protected:
-    VclPtr<CancelButton> m_pCancelButton;
-    CancelableDialog( vcl::Window *pParent, const OUString& rID,
-                      const OUString& rUIXMLDescription );
-
-    using Dialog::Execute;
-
-public:
-    virtual ~CancelableDialog() override;
-    virtual void dispose() override;
-
-    void SetCancelHdl( const Link<Button*,void>& rLink );
-    void Show();
-};
-
-class SW_DLLPUBLIC PrintMonitor: public CancelableDialog
+class SW_DLLPUBLIC PrintMonitor: public weld::GenericDialogController
 {
 public:
-    VclPtr<FixedText> m_pDocName;
-    VclPtr<FixedText> m_pPrinting;
-    VclPtr<FixedText> m_pPrinter;
-    VclPtr<FixedText> m_pPrintInfo;
+    std::unique_ptr<weld::Label> m_xDocName;
+    std::unique_ptr<weld::Label> m_xPrinter;
+    std::unique_ptr<weld::Label> m_xPrintInfo;
 
-    PrintMonitor(vcl::Window *pParent);
+    PrintMonitor(weld::Window *pParent);
     virtual ~PrintMonitor() override;
-    virtual void dispose() override;
 };
 
 class SW_DLLPUBLIC SaveMonitor : public weld::GenericDialogController
@@ -61,18 +42,16 @@ public:
     std::unique_ptr<weld::Label> m_xDocName;
     std::unique_ptr<weld::Label> m_xPrinter;
     std::unique_ptr<weld::Label> m_xPrintInfo;
-    std::unique_ptr<weld::Button> m_xCancel;
 
     SaveMonitor(weld::Window *pParent);
     virtual ~SaveMonitor() override;
 };
 
-class CreateMonitor : public CancelableDialog
+class CreateMonitor : public weld::GenericDialogController
 {
 public:
-    CreateMonitor(vcl::Window *pParent);
+    CreateMonitor(weld::Window *pParent);
     virtual ~CreateMonitor() override;
-    virtual void dispose() override;
 
     void SetTotalCount( sal_Int32 nTotal );
     void SetCurrentPosition( sal_Int32 nCurrent );
@@ -81,13 +60,13 @@ private:
     void UpdateCountingText();
 
 private:
-    VclPtr<FixedText>      m_pCounting;
-
     OUString        m_sCountingPattern;
     OUString        m_sVariable_Total;
     OUString        m_sVariable_Position;
     sal_Int32       m_nTotalCount;
     sal_Int32       m_nCurrentPosition;
+
+    std::unique_ptr<weld::Label> m_xCounting;
 };
 
 #endif
