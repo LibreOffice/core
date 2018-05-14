@@ -419,34 +419,24 @@ IMPL_LINK_NOARG(GotoLineDialog, OkButtonHandler, weld::Button&, void)
 }
 
 // ExportDialog
-IMPL_LINK_NOARG(ExportDialog, OkButtonHandler, Button*, void)
+IMPL_LINK_NOARG(ExportDialog, OkButtonHandler, weld::Button&, void)
 {
-    mbExportAsPackage = m_pExportAsPackageButton->IsChecked();
-    EndDialog(1);
+    m_bExportAsPackage = m_xExportAsPackageButton->get_active();
+    m_xDialog->response(RET_OK);
 }
 
-ExportDialog::ExportDialog(vcl::Window * pParent)
-    : ModalDialog(pParent, "ExportDialog",
-        "modules/BasicIDE/ui/exportdialog.ui")
-    , mbExportAsPackage(false)
+ExportDialog::ExportDialog(weld::Window * pParent)
+    : GenericDialogController(pParent, "modules/BasicIDE/ui/exportdialog.ui", "ExportDialog")
+    , m_bExportAsPackage(false)
+    , m_xExportAsPackageButton(m_xBuilder->weld_radio_button("extension"))
+    , m_xOKButton(m_xBuilder->weld_button("ok"))
 {
-    get(m_pExportAsPackageButton, "extension");
-    get(m_pOKButton, "ok");
-
-    m_pExportAsPackageButton->Check();
-    m_pOKButton->SetClickHdl(LINK(this, ExportDialog, OkButtonHandler));
+    m_xExportAsPackageButton->set_active(true);
+    m_xOKButton->connect_clicked(LINK(this, ExportDialog, OkButtonHandler));
 }
 
 ExportDialog::~ExportDialog()
 {
-    disposeOnce();
-}
-
-void ExportDialog::dispose()
-{
-    m_pExportAsPackageButton.clear();
-    m_pOKButton.clear();
-    ModalDialog::dispose();
 }
 
 // LibPage
@@ -1103,15 +1093,15 @@ void LibPage::Export()
             return;
     }
 
-    ScopedVclPtrInstance<ExportDialog> aNewDlg(this);
-    if (aNewDlg->Execute() == RET_OK)
+    std::unique_ptr<ExportDialog> xNewDlg(new ExportDialog(GetFrameWeld()));
+    if (xNewDlg->run() == RET_OK)
     {
         try
         {
-            bool bExportAsPackage = aNewDlg->isExportAsPackage();
-            //tdf#112063 ensure closing aNewDlg is not selected as
+            bool bExportAsPackage = xNewDlg->isExportAsPackage();
+            //tdf#112063 ensure closing xNewDlg is not selected as
             //parent of file dialog from ExportAs...
-            aNewDlg.disposeAndClear();
+            xNewDlg.reset();
             if (bExportAsPackage)
                 ExportAsPackage( aLibName );
             else
