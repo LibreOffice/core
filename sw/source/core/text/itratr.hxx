@@ -63,8 +63,6 @@ private:
     /// input: the current text node
     const SwTextNode* m_pTextNode;
     sw::MergedPara const* m_pMergedPara;
-    /// the 1st one, for reset
-    const SwTextNode* m_pFirstTextNode;
     /// from view (text frame) index to current node index
     sal_Int32 m_nCurrentIndexOffset;
 
@@ -89,7 +87,6 @@ protected:
         , m_nPropFont(0)
         , m_pTextNode(pTextNode)
         , m_pMergedPara(nullptr)
-        , m_pFirstTextNode(pTextNode)
         , m_nCurrentIndexOffset(0)
         {
             m_aMagicNo[SwFontScript::Latin] = m_aMagicNo[SwFontScript::CJK] = m_aMagicNo[SwFontScript::CTL] = nullptr;
@@ -102,7 +99,6 @@ public:
     SwAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf )
         : m_pViewShell(nullptr), m_pFont(nullptr), m_pHints(nullptr), m_pScriptInfo(nullptr), m_pLastOut(nullptr), m_nChgCnt(0), m_pRedline(nullptr),m_nPropFont(0), m_pTextNode(&rTextNode)
         , m_pMergedPara(nullptr)
-        , m_pFirstTextNode(&rTextNode)
         , m_nCurrentIndexOffset(0)
         { CtorInitAttrIter( rTextNode, rScrInf ); }
 
