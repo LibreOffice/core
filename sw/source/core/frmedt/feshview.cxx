@@ -717,7 +717,7 @@ long SwFEShell::BeginDrag( const Point* pPt, bool bIsShift)
     return 0;
 }
 
-long SwFEShell::Drag( const Point *pPt, bool )
+void SwFEShell::Drag( const Point *pPt, bool )
 {
     OSL_ENSURE( Imp()->HasDrawView(), "Drag without DrawView?" );
     if ( Imp()->GetDrawView()->IsDragObj() )
@@ -726,9 +726,7 @@ long SwFEShell::Drag( const Point *pPt, bool )
         Imp()->GetDrawView()->MovDragObj( *pPt );
         Imp()->GetDrawView()->ShowDragAnchor();
         ::FrameNotify( this );
-        return 1;
     }
-    return 0;
 }
 
 void SwFEShell::EndDrag()
