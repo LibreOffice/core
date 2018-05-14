@@ -160,7 +160,7 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
 //
 // If m_bOn is set, the font has been manipulated according to it.
 //
-// If m_nAct is set to COMPLETE_STRING (via Reset()), then currently no
+// If m_nAct is set to SwRedlineTable::npos (via Reset()), then currently no
 // Redline is active, m_nStart and m_nEnd are invalid.
 SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
                             SwAttrHandler& rAH, sal_Int32 nRed, bool bShow,
@@ -170,7 +170,7 @@ SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
     , m_rAttrHandler( rAH )
     , m_nNdIdx( rTextNd.GetIndex() )
     , m_nFirst( nRed )
-    , m_nAct( COMPLETE_STRING )
+    , m_nAct( SwRedlineTable::npos )
     , m_bOn( false )
     , m_bShow( bShow )
 {
@@ -217,13 +217,13 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
             else
                 return nRet + EnterExtend( rFnt, nNew ); // We stayed in the same section
         }
-        if (COMPLETE_STRING == m_nAct || nOld > nNew)
+        if (SwRedlineTable::npos == m_nAct || nOld > nNew)
             m_nAct = m_nFirst;
 
         m_nStart = COMPLETE_STRING;
         m_nEnd = COMPLETE_STRING;
 
-        for ( ; m_nAct < static_cast<sal_Int32>(m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size()) ; ++m_nAct)
+        for ( ; m_nAct < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size() ; ++m_nAct)
         {
             m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nAct ]->CalcStartEnd(m_nNdIdx, m_nStart, m_nEnd);
 
@@ -334,9 +334,9 @@ void SwRedlineItr::Clear_( SwFont* pFnt )
 sal_Int32 SwRedlineItr::GetNextRedln_( sal_Int32 nNext )
 {
     nNext = NextExtend( nNext );
-    if (!m_bShow || COMPLETE_STRING == m_nFirst)
+    if (!m_bShow || SwRedlineTable::npos == m_nFirst)
         return nNext;
-    if (COMPLETE_STRING == m_nAct)
+    if (SwRedlineTable::npos == m_nAct)
     {
         m_nAct = m_nFirst;
         m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nAct ]->CalcStartEnd(m_nNdIdx, m_nStart, m_nEnd);
@@ -368,16 +368,16 @@ bool SwRedlineItr::ChkSpecialUnderline_() const
 
 bool SwRedlineItr::CheckLine( sal_Int32 nChkStart, sal_Int32 nChkEnd )
 {
-    if (m_nFirst == COMPLETE_STRING)
+    if (m_nFirst == SwRedlineTable::npos)
         return false;
     if( nChkEnd == nChkStart ) // empty lines look one char further
         ++nChkEnd;
     sal_Int32 nOldStart = m_nStart;
     sal_Int32 nOldEnd = m_nEnd;
-    sal_Int32 nOldAct = m_nAct;
+    SwRedlineTable::size_type const nOldAct = m_nAct;
     bool bRet = false;
 
-    for (m_nAct = m_nFirst; m_nAct < static_cast<sal_Int32>(m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size()) ; ++m_nAct)
+    for (m_nAct = m_nFirst; m_nAct < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); ++m_nAct)
     {
         m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nAct ]->CalcStartEnd( m_nNdIdx, m_nStart, m_nEnd );
         if (nChkEnd < m_nStart)
