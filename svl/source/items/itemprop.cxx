@@ -218,7 +218,7 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEn
     SfxItemState eState = rSet.GetItemState( rEntry.nWID, true, &pItem );
     if (SfxItemState::SET != eState && SfxItemPool::IsWhich(rEntry.nWID))
         pItem = &rSet.GetPool()->GetDefaultItem(rEntry.nWID);
-    if(!pNewItem && pItem)
+    if (pItem)
     {
         pNewItem.reset(pItem->Clone());
     }
