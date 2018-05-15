@@ -247,6 +247,9 @@ void SvxShape::InvalidateSdrObject()
         EndListening(GetSdrObject()->getSdrModelFromSdrObject());
     }
 
+    if (HasSdrObjectOwnership())
+        return;
+
     mpSdrObjectWeakReference.reset( nullptr );
 };
 
