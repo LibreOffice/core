@@ -357,7 +357,8 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
     if ( (nStartCol != nEndCol) && (nStartRow != nEndRow) )
     {
-        nCellDir = ScopedVclPtrInstance<ScColOrRowDlg>(this, aStrCopyList, aStrCopyFrom)->Execute();
+        ScColOrRowDlg aDialog(GetFrameWeld(), aStrCopyList, aStrCopyFrom);
+        nCellDir = aDialog.run();
     }
     else if ( nStartCol != nEndCol )
         nCellDir = SCRET_ROWS;

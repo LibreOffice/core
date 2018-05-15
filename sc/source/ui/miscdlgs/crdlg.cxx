@@ -21,42 +21,25 @@
 
 #include <crdlg.hxx>
 
-ScColOrRowDlg::ScColOrRowDlg(vcl::Window* pParent, const OUString& rStrTitle,
-    const OUString& rStrLabel)
-    : ModalDialog(pParent, "ColOrRowDialog",
-        "modules/scalc/ui/colorrowdialog.ui")
+ScColOrRowDlg::ScColOrRowDlg(weld::Window* pParent, const OUString& rStrTitle, const OUString& rStrLabel)
+    : GenericDialogController(pParent, "modules/scalc/ui/colorrowdialog.ui", "ColOrRowDialog")
+    , m_xFrame(m_xBuilder->weld_frame("frame"))
+    , m_xBtnRows(m_xBuilder->weld_radio_button("rows"))
+    , m_xBtnCols(m_xBuilder->weld_radio_button("columns"))
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
 {
-    get(m_pBtnOk, "ok");
-    get(m_pBtnCols, "columns");
-    get(m_pBtnRows, "rows");
-    get(m_pFrame, "frame");
-
-    SetText(rStrTitle);
-    m_pFrame->set_label(rStrLabel);
-
-    m_pBtnCols->Check();
-
-    m_pBtnOk->SetClickHdl( LINK( this, ScColOrRowDlg, OkHdl ) );
+    m_xDialog->set_title(rStrTitle);
+    m_xFrame->set_label(rStrLabel);
+    m_xBtnOk->connect_clicked(LINK(this, ScColOrRowDlg, OkHdl));
 }
 
 ScColOrRowDlg::~ScColOrRowDlg()
 {
-    disposeOnce();
 }
 
-void ScColOrRowDlg::dispose()
+IMPL_LINK_NOARG(ScColOrRowDlg, OkHdl, weld::Button&, void)
 {
-    m_pFrame.clear();
-    m_pBtnRows.clear();
-    m_pBtnCols.clear();
-    m_pBtnOk.clear();
-    ModalDialog::dispose();
-}
-
-
-IMPL_LINK_NOARG(ScColOrRowDlg, OkHdl, Button*, void)
-{
-    EndDialog( m_pBtnCols->IsChecked() ? SCRET_COLS : SCRET_ROWS );
+    m_xDialog->response(m_xBtnCols->get_active() ? SCRET_COLS : SCRET_ROWS);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
