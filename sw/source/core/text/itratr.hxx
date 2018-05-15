@@ -66,6 +66,8 @@ private:
 
     void SeekFwd( const sal_Int32 nPos );
     void SetFnt( SwFont* pNew ) { m_pFont = pNew; }
+    void InitFontAndAttrHandler(SwTextNode const& rTextNode,
+        OUString const& rText, bool const* pbVertLayout);
 
 protected:
     void Chg( SwTextAttr const *pHt );
