@@ -1344,7 +1344,7 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl, ListBox&, rBox, void)
     if( nType & TO_ILLUSTRATION )
     {
         m_pCaptionSequenceLB->SelectEntry( SwStyleNameMapper::GetUIName(
-                                    RES_POOLCOLL_LABEL_ABB, OUString() ));
+                                    RES_POOLCOLL_LABEL_FIGURE, OUString() ));
     }
     else if( nType & TO_TABLE )
     {

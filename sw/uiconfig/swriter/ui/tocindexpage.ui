@@ -55,7 +55,7 @@
         <col id="1">2</col>
       </row>
       <row>
-        <col id="0" translatable="yes" context="tocindexpage|liststore1">Illustration Index</col>
+        <col id="0" translatable="yes" context="tocindexpage|liststore1">Table of Figures</col>
         <col id="1">4</col>
       </row>
       <row>
