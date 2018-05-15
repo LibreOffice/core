@@ -19,6 +19,9 @@
  */
 
 #include <comphelper/string.hxx>
+#include <comphelper/processfactory.hxx>
+#include <connectivity/dbexception.hxx>
+
 #include "utils.hxx"
 
 using namespace dbahsql;
@@ -43,6 +46,18 @@ OUString utils::getTableNameFromStmt(const OUString& sSql)
         return wordIter->copy(0, nParenPos);
     else
         return *wordIter;
+}
+
+void utils::ensureFirebirdTableLength(const OUString& sName)
+{
+    if (sName.getLength() > 30) // Firebird limitation
+    {
+        constexpr char NAME_TOO_LONG[] = "Firebird 3 doesn't currently support table names of more "
+                                         "than 30 characters, please shorten your table names in "
+                                         "the original file and try again.";
+        dbtools::throwGenericSQLException(NAME_TOO_LONG,
+                                          ::comphelper::getProcessComponentContext());
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

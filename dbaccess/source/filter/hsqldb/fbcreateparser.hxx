@@ -16,12 +16,15 @@ namespace dbahsql
 {
 class SAL_DLLPUBLIC_EXPORT FbCreateStmtParser : public CreateStmtParser
 {
+protected:
+    void ensureProperTableLengths() const;
+
 public:
     /**
      * Create statement parser, which can compose the result to statements of
      * Firebird dialect.
      */
-    FbCreateStmtParser() {}
+    FbCreateStmtParser() = default;
 
     /**
      * Compose the result of the parser to statements of Firebird dialect

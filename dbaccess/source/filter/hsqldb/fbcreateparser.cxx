@@ -19,8 +19,12 @@
 
 #include "fbcreateparser.hxx"
 #include "columndef.hxx"
+#include "utils.hxx"
 
 #include <com/sun/star/sdbc/DataType.hpp>
+
+#include <connectivity/dbexception.hxx>
+#include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 
 using namespace css::sdbc;
@@ -102,8 +106,16 @@ OUString lcl_getTypeModifier(sal_Int32 eType)
 
 namespace dbahsql
 {
+void FbCreateStmtParser::ensureProperTableLengths() const
+{
+    const std::vector<ColumnDefinition>& rColumns = getColumnDef();
+    for (const auto& col : rColumns)
+        utils::ensureFirebirdTableLength(col.getName());
+}
+
 OUString FbCreateStmtParser::compose() const
 {
+    ensureProperTableLengths();
     OUStringBuffer sSql("CREATE TABLE ");
     sSql.append(getTableName());
 
