@@ -331,6 +331,13 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
                     return sPath;
                 }
             }
+            else
+            {
+                XOutBitmap::WriteGraphic( rGraphic, sPath, aFilter,
+                                            XOutFlags::DontExpandFilename |
+                                            XOutFlags::DontAddExtension |
+                                            XOutFlags::UseNativeIfPossible );
+            }
         }
     }
     return OUString();
