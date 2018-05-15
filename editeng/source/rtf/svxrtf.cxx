@@ -356,7 +356,10 @@ void SvxRTFParser::ReadStyleTable()
             case RTF_CHRFMT:
             case RTF_BRDRDEF:
             case RTF_TABSTOPDEF:
-
+#ifndef NDEBUG
+                auto nEnteringToken = nToken;
+#endif
+                auto nEnteringIndex = m_nTokenIndex;
                 if( RTF_SWGDEFS & nToken)
                 {
                     if( RTF_IGNOREFLAG != GetStackPtr( -1 )->nTokenId )
@@ -368,6 +371,17 @@ void SvxRTFParser::ReadStyleTable()
                     }
                 }
                 ReadAttr( nToken, &pStyle->aAttrSet );
+                if (m_nTokenIndex == nEnteringIndex - 1)
+                {
+                    // we called SkipToken to go back one, but
+                    // ReadAttrs read nothing, so on next loop
+                    // of outer while we would end up in the
+                    // same state again (assert that)
+                    assert(nEnteringToken == GetNextToken());
+                    // and loop endlessly, skip format a token
+                    // instead to avoid that
+                    SkipToken(1);
+                }
                 break;
             }
             break;
