@@ -265,76 +265,76 @@ static bool lcl_ChgHyperLinkColor( const SwTextAttr& rAttr,
 }
 
 inline SwAttrHandler::SwAttrStack::SwAttrStack()
-    : nCount( 0 ), nSize( INITIAL_NUM_ATTR )
+    : m_nCount( 0 ), m_nSize( INITIAL_NUM_ATTR )
 {
-    pArray = pInitialArray;
+    m_pArray = m_pInitialArray;
 }
 
 void SwAttrHandler::SwAttrStack::Insert( const SwTextAttr& rAttr, const sal_uInt16 nPos )
 {
     // do we still have enough space?
-    if ( nCount >= nSize )
+    if (m_nCount >= m_nSize)
     {
          // we are still in our initial array
-        if ( INITIAL_NUM_ATTR == nSize )
+        if (INITIAL_NUM_ATTR == m_nSize)
         {
-            nSize += STACK_INCREMENT;
-            pArray = new SwTextAttr*[ nSize ];
+            m_nSize += STACK_INCREMENT;
+            m_pArray = new SwTextAttr*[ m_nSize ];
             // copy from pInitArray to new Array
-            memcpy( pArray, pInitialArray,
+            memcpy( m_pArray, m_pInitialArray,
                     INITIAL_NUM_ATTR * sizeof(SwTextAttr*)
                     );
         }
         // we are in new memory
         else
         {
-            nSize += STACK_INCREMENT;
-            SwTextAttr** pTmpArray = new SwTextAttr*[ nSize ];
-            // copy from pArray to new Array
-            memcpy( pTmpArray, pArray, nCount * sizeof(SwTextAttr*) );
+            m_nSize += STACK_INCREMENT;
+            SwTextAttr** pTmpArray = new SwTextAttr*[ m_nSize ];
+            // copy from m_pArray to new Array
+            memcpy( pTmpArray, m_pArray, m_nCount * sizeof(SwTextAttr*) );
             // free old array
-            delete [] pArray;
-            pArray = pTmpArray;
+            delete [] m_pArray;
+            m_pArray = pTmpArray;
         }
     }
 
-    OSL_ENSURE( nPos <= nCount, "wrong position for insert operation");
+    OSL_ENSURE(nPos <= m_nCount, "wrong position for insert operation");
 
-    if ( nPos < nCount )
-        memmove( pArray + nPos + 1, pArray + nPos,
-                ( nCount - nPos ) * sizeof(SwTextAttr*)
+    if (nPos < m_nCount)
+        memmove( m_pArray + nPos + 1, m_pArray + nPos,
+                (m_nCount - nPos) * sizeof(SwTextAttr*)
                 );
-    pArray[ nPos ] = const_cast<SwTextAttr*>(&rAttr);
+    m_pArray[ nPos ] = const_cast<SwTextAttr*>(&rAttr);
 
-    nCount++;
+    m_nCount++;
 }
 
 void SwAttrHandler::SwAttrStack::Remove( const SwTextAttr& rAttr )
 {
     sal_uInt16 nPos = Pos( rAttr );
-    if ( nPos < nCount )
+    if (nPos < m_nCount)
     {
-        memmove( pArray + nPos, pArray + nPos + 1,
-                ( nCount - 1 - nPos ) * sizeof(SwTextAttr*)
+        memmove( m_pArray + nPos, m_pArray + nPos + 1,
+                (m_nCount - 1 - nPos) * sizeof(SwTextAttr*)
                 );
-        nCount--;
+        m_nCount--;
     }
 }
 
 const SwTextAttr* SwAttrHandler::SwAttrStack::Top() const
 {
-    return nCount ? pArray[ nCount - 1 ] : nullptr;
+    return m_nCount ? m_pArray[ m_nCount - 1 ] : nullptr;
 }
 
 sal_uInt16 SwAttrHandler::SwAttrStack::Pos( const SwTextAttr& rAttr ) const
 {
-    if ( ! nCount )
+    if ( ! m_nCount )
         // empty stack
         return USHRT_MAX;
 
-    for ( sal_uInt16 nIdx = nCount; nIdx > 0; )
+    for (sal_uInt16 nIdx = m_nCount; nIdx > 0;)
     {
-        if ( &rAttr == pArray[ --nIdx ] )
+        if (&rAttr == m_pArray[ --nIdx ])
             return nIdx;
     }
 
