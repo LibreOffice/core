@@ -1919,7 +1919,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" context="notebookbar_groupedbar_compact|Menu"  translatable="yes">~Check for Updates...</property>
+        <property name="label" context="notebookbar_groupedbar_compact|Menu"  translatable="yes">_Check for Updates...</property>
       </object>
     </child>
     <child>
@@ -2327,7 +2327,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" context="notebookbar_groupedbar_compact|Tools"  translatable="yes">~Check for Updates...</property>
+        <property name="label" context="notebookbar_groupedbar_compact|Tools"  translatable="yes">_Check for Updates...</property>
       </object>
     </child>
     <child>
