@@ -73,19 +73,11 @@ SwGrfNode::SwGrfNode(
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( false )
 {
-    OUString sURLLink(pGraphic->getOriginURL());
-    if (sURLLink.isEmpty() && !rGrfName.isEmpty())
-    {
-        sURLLink = rGrfName;
-        Graphic aGraphic(*pGraphic);
-        aGraphic.setOriginURL(sURLLink);
-    }
-
     bInSwapIn = bChgTwipSize =
         bFrameInPaint = bScaleImageMap = false;
 
     bGraphicArrived = true;
-    ReRead(sURLLink, rFltName, pGraphic, false);
+    ReRead(rGrfName, rFltName, pGraphic, false);
 }
 
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
@@ -155,15 +147,32 @@ bool SwGrfNode::ReRead(
     OSL_ENSURE( pGraphic || !rGrfName.isEmpty(),
             "GraphicNode without a name, Graphic or GraphicObject" );
 
+    OUString sURLLink;
+    if (pGraphic)
+    {
+        Graphic aGraphic(*pGraphic);
+
+        sURLLink = aGraphic.getOriginURL();
+        if (sURLLink.isEmpty() && !rGrfName.isEmpty())
+        {
+            sURLLink = rGrfName;
+            aGraphic.setOriginURL(sURLLink);
+        }
+    }
+    else
+    {
+        sURLLink = rGrfName;
+    }
+
     // with name
     if( refLink.is() )
     {
         OSL_ENSURE( !bInSwapIn, "ReRead: I am still in SwapIn" );
 
-        if( !rGrfName.isEmpty() )
+        if( !sURLLink.isEmpty() )
         {
             // Note: If there is DDE in the FltName, than it is a DDE-linked graphic
-            OUString sCmd( rGrfName );
+            OUString sCmd( sURLLink );
             if( !rFltName.isEmpty() )
             {
                 sal_uInt16 nNewType;
@@ -171,7 +180,7 @@ bool SwGrfNode::ReRead(
                     nNewType = OBJECT_CLIENT_DDE;
                 else
                 {
-                    sfx2::MakeLnkName( sCmd, nullptr, rGrfName, OUString(), &rFltName );
+                    sfx2::MakeLnkName( sCmd, nullptr, sURLLink, OUString(), &rFltName );
                     nNewType = OBJECT_CLIENT_GRF;
                 }
 
@@ -192,7 +201,7 @@ bool SwGrfNode::ReRead(
 
         if( pGraphic )
         {
-            maGrfObj.SetGraphic( *pGraphic, rGrfName );
+            maGrfObj.SetGraphic( *pGraphic, sURLLink );
             onGraphicChanged();
             bReadGrf = true;
         }
@@ -201,7 +210,7 @@ bool SwGrfNode::ReRead(
             // reset data of the old graphic so that the correct placeholder is
             // shown in case the new link could not be loaded
             Graphic aGrf; aGrf.SetDefaultType();
-            maGrfObj.SetGraphic( aGrf, rGrfName );
+            maGrfObj.SetGraphic( aGrf, sURLLink );
 
             if( refLink.is() )
             {
@@ -220,7 +229,7 @@ bool SwGrfNode::ReRead(
             bSetTwipSize = false;
         }
     }
-    else if( pGraphic && rGrfName.isEmpty() )
+    else if( pGraphic && sURLLink.isEmpty() )
     {
         maGrfObj.SetGraphic( *pGraphic );
         onGraphicChanged();
@@ -232,13 +241,13 @@ bool SwGrfNode::ReRead(
     else
     {
         // create new link for the graphic object
-        InsertLink( rGrfName, rFltName );
+        InsertLink( sURLLink, rFltName );
 
         if( GetNodes().IsDocNodes() )
         {
             if( pGraphic )
             {
-                maGrfObj.SetGraphic( *pGraphic, rGrfName );
+                maGrfObj.SetGraphic( *pGraphic, sURLLink );
                 onGraphicChanged();
                 bReadGrf = true;
                 // create connection without update, as we have the graphic
@@ -248,7 +257,7 @@ bool SwGrfNode::ReRead(
             {
                 Graphic aGrf;
                 aGrf.SetDefaultType();
-                maGrfObj.SetGraphic( aGrf, rGrfName );
+                maGrfObj.SetGraphic( aGrf, sURLLink );
                 onGraphicChanged();
                 if ( bNewGrf )
                 {
