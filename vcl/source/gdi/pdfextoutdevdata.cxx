@@ -812,6 +812,11 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic,
         // rOutputRect is the crop rectangle, re-compress cropped image.
         return false;
 
+    if (mbReduceImageResolution)
+        // Reducing resolution was requested, implies that re-compressing is
+        // wanted.
+        return false;
+
     if (rGraphic.GetGfxLink().GetDataSize() == 0)
         return false;
 
