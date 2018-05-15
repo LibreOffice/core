@@ -135,6 +135,7 @@
 #include <calc.hxx>
 #include <dbfld.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentDeviceAccess.hxx>
 
 #include <memory>
 #include <comphelper/propertysequence.hxx>
@@ -1240,6 +1241,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         xTargetDocShell = lcl_CreateWorkingDocument( WorkingDocType::TARGET,
             *pSourceShell, bMT_SHELL ? pSourceWindow : nullptr,
             nullptr, &pTargetView, &pTargetShell, &pTargetDoc );
+
+        // import current print settings
+        const SwPrintData &rPrintData = pSourceShell->getIDocumentDeviceAccess().getPrintData();
+        pTargetDoc->getIDocumentDeviceAccess().setPrintData(rPrintData);
+
         if (nMaxDumpDocs)
             lcl_SaveDebugDoc( xTargetDocShell, "MergeDoc" );
     }
