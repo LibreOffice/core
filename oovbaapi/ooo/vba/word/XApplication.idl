@@ -32,6 +32,7 @@ interface XApplication : XConnectable
     [attribute, readonly] XSystem System;
     [attribute, readonly] XOptions Options;
     [attribute, readonly] XSelection Selection;
+    [attribute, readonly] XWordBasic WordBasic;
     [attribute] boolean DisplayAutoCompleteTips;
     [attribute] long EnableCancelKey;
     [attribute] long WindowState;
