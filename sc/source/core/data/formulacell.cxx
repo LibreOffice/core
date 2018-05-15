@@ -76,6 +76,8 @@
 #include <memory>
 #include <map>
 
+#define DEPENDANTS_MAX_RECURSION_LEVEL 3
+
 using namespace formula;
 
 IMPL_FIXEDMEMPOOL_NEWDEL( ScFormulaCell )
@@ -4129,14 +4131,14 @@ struct ScDependantsCalculator
 
         SCROW nEndRow = mrPos.Row() + mnLen - 1;
 
-        if (nRelRow < 0)
+        if (nRelRow <= 0)
         {
             SCROW nTest = nEndRow;
             nTest += nRelRow;
             if (nTest >= mrPos.Row())
                 return true;
         }
-        else if (nRelRow > 0)
+        else
         {
             SCROW nTest = mrPos.Row(); // top row.
             nTest += nRelRow;
@@ -4191,105 +4193,33 @@ struct ScDependantsCalculator
         return nRowLen;
     }
 
+    bool CheckPos(const ScAddress& rAddr, bool bParentRel, sal_uInt16 nLevel)
+    {
+        // Need to control recursion level as there might be
+        // circular references between the dependant formula(groups).
+        if (nLevel > DEPENDANTS_MAX_RECURSION_LEVEL)
+            return true;
+
+        const ScFormulaCell* pCell = mrDoc.GetFormulaCell(rAddr);
+        if (!pCell) // Not a formula cell.
+            return true;
+
+        // Assumption made for simplicity : pCell is part of a formula-group
+        // with at least the length of mnLen.
+        // TODO : If not (low-probability case), we'd have to
+        // traverse down the column of rAddr for mnLen cells for any other formulas.
+
+        return IsSafeToParallelize(*pCell->GetCode(), rAddr, bParentRel, nLevel);
+    }
+
     bool DoIt()
     {
         // Partially from ScGroupTokenConverter::convert in sc/source/core/data/grouptokenconverter.cxx
 
         ScRangeList aRangeList;
-        for (auto p: mrCode.RPNTokens())
-        {
-            switch (p->GetType())
-            {
-            case svSingleRef:
-                {
-                    ScSingleRefData aRef = *p->GetSingleRef(); // =Sheet1!A1
-                    ScAddress aRefPos = aRef.toAbs(mrPos);
 
-                    if (!mrDoc.TableExists(aRefPos.Tab()))
-                        return false; // or true?
-
-                    if (aRef.IsRowRel())
-                    {
-                        if (isSelfReferenceRelative(aRefPos, aRef.Row()))
-                            return false;
-
-                        // Trim data array length to actual data range.
-                        SCROW nTrimLen = trimLength(aRefPos.Tab(), aRefPos.Col(), aRefPos.Col(), aRefPos.Row(), mnLen);
-                        // Fetch double array guarantees that the length of the
-                        // returned array equals or greater than the requested
-                        // length.
-
-                        formula::VectorRefArray aArray;
-                        if (nTrimLen)
-                            aArray = mrDoc.FetchVectorRefArray(aRefPos, nTrimLen);
-
-                        if (!aArray.isValid())
-                            return false;
-
-                        aRangeList.Join(ScRange(aRefPos.Col(), aRefPos.Row(), aRefPos.Tab(),
-                                                aRefPos.Col(), aRefPos.Row() + nTrimLen - 1, aRefPos.Tab()));
-                    }
-                    else
-                    {
-                        if (isSelfReferenceAbsolute(aRefPos))
-                            return false;
-
-                        aRangeList.Join(ScRange(aRefPos.Col(), aRefPos.Row(), aRefPos.Tab()));
-                    }
-                }
-                break;
-            case svDoubleRef:
-                {
-                    ScComplexRefData aRef = *p->GetDoubleRef();
-                    ScRange aAbs = aRef.toAbs(mrPos);
-
-                    // Multiple sheet
-                    if (aRef.Ref1.Tab() != aRef.Ref2.Tab())
-                        return false;
-
-                    // Check for self reference.
-                    if (aRef.Ref1.IsRowRel())
-                    {
-                        if (isSelfReferenceRelative(aAbs.aStart, aRef.Ref1.Row()))
-                            return false;
-                    }
-                    else if (isSelfReferenceAbsolute(aAbs.aStart))
-                        return false;
-
-                    if (aRef.Ref2.IsRowRel())
-                    {
-                        if (isSelfReferenceRelative(aAbs.aEnd, aRef.Ref2.Row()))
-                            return false;
-                    }
-                    else if (isSelfReferenceAbsolute(aAbs.aEnd))
-                        return false;
-
-                    // Row reference is relative.
-                    bool bAbsLast = !aRef.Ref2.IsRowRel();
-                    ScAddress aRefPos = aAbs.aStart;
-                    SCROW nRefRowSize = aAbs.aEnd.Row() - aAbs.aStart.Row() + 1;
-                    SCROW nArrayLength = nRefRowSize;
-                    if (!bAbsLast)
-                    {
-                        // range end position is relative. Extend the array length.
-                        SCROW nLastRefRowOffset = aAbs.aEnd.Row() - mrPos.Row();
-                        SCROW nLastRefRow = mrPos.Row() + mnLen - 1 + nLastRefRowOffset;
-                        SCROW nNewLength = nLastRefRow - aAbs.aStart.Row() + 1;
-                        if (nNewLength > nArrayLength)
-                            nArrayLength = nNewLength;
-                    }
-
-                    // Trim trailing empty rows.
-                    nArrayLength = trimLength(aRefPos.Tab(), aAbs.aStart.Col(), aAbs.aEnd.Col(), aRefPos.Row(), nArrayLength);
-
-                    aRangeList.Join(ScRange(aAbs.aStart.Col(), aRefPos.Row(), aRefPos.Tab(),
-                               aAbs.aEnd.Col(), aRefPos.Row() + nArrayLength - 1, aRefPos.Tab()));
-                }
-                break;
-            default:
-                break;
-            }
-        }
+        if (!IsSafeToParallelize(mrCode, mrPos, true, 0, &aRangeList))
+            return false;
 
         for (size_t i = 0; i < aRangeList.size(); ++i)
         {
@@ -4300,6 +4230,126 @@ struct ScDependantsCalculator
                 if (!mrDoc.HandleRefArrayForParallelism(ScAddress(nCol, rRange.aStart.Row(), rRange.aStart.Tab()),
                                                         rRange.aEnd.Row() - rRange.aStart.Row() + 1))
                     return false;
+            }
+        }
+        return true;
+    }
+
+    bool IsSafeToParallelize(const ScTokenArray& rCurrCode, const ScAddress& rCurrPos, bool bParentRel, sal_uInt16 nLevel, ScRangeList* pRangeList = nullptr)
+    {
+        for (auto p: rCurrCode.RPNTokens())
+        {
+            switch (p->GetType())
+            {
+            case svSingleRef:
+                {
+                    ScSingleRefData aRef = *p->GetSingleRef(); // =Sheet1!A1
+                    ScAddress aRefPos = aRef.toAbs(rCurrPos);
+
+                    if (!mrDoc.TableExists(aRefPos.Tab()))
+                        return false; // or true?
+
+                    if (bParentRel && aRef.IsRowRel())
+                    {
+                        if (isSelfReferenceRelative(aRefPos, aRefPos.Row() - mrPos.Row()))
+                            return false;
+
+                        // Recursive call.
+                        if (!CheckPos(aRefPos, true, nLevel+1))
+                            return false;
+
+                        if (pRangeList) // Only happens for top level call
+                        {
+                            // Trim data array length to actual data range.
+                            SCROW nTrimLen = trimLength(aRefPos.Tab(), aRefPos.Col(), aRefPos.Col(), aRefPos.Row(), mnLen);
+                            // Fetch double array guarantees that the length of the
+                            // returned array equals or greater than the requested
+                            // length.
+
+                            formula::VectorRefArray aArray;
+                            if (nTrimLen)
+                                aArray = mrDoc.FetchVectorRefArray(aRefPos, nTrimLen);
+
+                            if (!aArray.isValid())
+                                return false;
+
+                            pRangeList->Join(ScRange(aRefPos.Col(), aRefPos.Row(), aRefPos.Tab(),
+                                                     aRefPos.Col(), aRefPos.Row() + nTrimLen - 1, aRefPos.Tab()));
+                        }
+                    }
+                    else
+                    {
+                        if (isSelfReferenceAbsolute(aRefPos))
+                            return false;
+
+                        // Recursive call.
+                        if (!CheckPos(aRefPos, false, nLevel+1))
+                            return false;
+
+                        if (pRangeList) // Only happens for top level call
+                            pRangeList->Join(ScRange(aRefPos.Col(), aRefPos.Row(), aRefPos.Tab()));
+                    }
+                }
+                break;
+            case svDoubleRef:
+                {
+                    ScComplexRefData aRef = *p->GetDoubleRef();
+                    ScRange aAbs = aRef.toAbs(rCurrPos);
+
+                    // Multiple sheet
+                    if (aRef.Ref1.Tab() != aRef.Ref2.Tab())
+                        return false;
+
+                    bool bRef1TreatAsRel = bParentRel && aRef.Ref1.IsRowRel();
+                    // Check for self reference.
+                    if (bRef1TreatAsRel)
+                    {
+                        if (isSelfReferenceRelative(aAbs.aStart, aAbs.aStart.Row() - mrPos.Row()))
+                            return false;
+                    }
+                    else if (isSelfReferenceAbsolute(aAbs.aStart))
+                        return false;
+
+                    bool bRef2TreatAsRel = bParentRel && aRef.Ref2.IsRowRel();
+                    if (bRef2TreatAsRel)
+                    {
+                        if (isSelfReferenceRelative(aAbs.aEnd, aAbs.aEnd.Row() - mrPos.Row()))
+                            return false;
+                    }
+                    else if (isSelfReferenceAbsolute(aAbs.aEnd))
+                        return false;
+
+                    // Recursive calls.
+                    if (!CheckPos(aAbs.aStart, bRef1TreatAsRel, nLevel+1) || !CheckPos(aAbs.aEnd, bRef2TreatAsRel, nLevel+1))
+                        return false;
+
+                    if (pRangeList) // Only happens for the top level call
+                    {
+                        // Row reference is relative.
+                        bool bAbsLast = !aRef.Ref2.IsRowRel() || !bParentRel;
+                        ScAddress aRefPos = aAbs.aStart;
+                        SCROW nRefRowSize = aAbs.aEnd.Row() - aAbs.aStart.Row() + 1;
+                        SCROW nArrayLength = nRefRowSize;
+                        if (!bAbsLast)
+                        {
+                            // range end position is relative. Extend the array length.
+                            SCROW nLastRefRowOffset = aAbs.aEnd.Row() - mrPos.Row();
+                            SCROW nLastRefRow = mrPos.Row() + mnLen - 1 + nLastRefRowOffset;
+                            SCROW nNewLength = nLastRefRow - aAbs.aStart.Row() + 1;
+                            if (nNewLength > nArrayLength)
+                                nArrayLength = nNewLength;
+                        }
+
+                        // Trim trailing empty rows.
+                        nArrayLength = trimLength(aRefPos.Tab(), aAbs.aStart.Col(), aAbs.aEnd.Col(), aRefPos.Row(), nArrayLength);
+
+                        pRangeList->Join(ScRange(aAbs.aStart.Col(), aRefPos.Row(), aRefPos.Tab(),
+                                                 aAbs.aEnd.Col(), aRefPos.Row() + nArrayLength - 1, aRefPos.Tab()));
+                    }
+                }
+                break;
+            default:
+                break;
             }
         }
         return true;
