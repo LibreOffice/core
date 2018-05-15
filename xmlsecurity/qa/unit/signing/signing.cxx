@@ -41,6 +41,7 @@
 #include <documentsignaturehelper.hxx>
 #include <xmlsignaturehelper.hxx>
 #include <documentsignaturemanager.hxx>
+#include <certificate.hxx>
 
 using namespace com::sun::star;
 
@@ -64,6 +65,7 @@ public:
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
 
     void testDescription();
+    void testECDSA();
     /// Test a typical ODF where all streams are signed.
     void testODFGood();
     /// Test a typical broken ODF signature where one stream is corrupted.
@@ -113,6 +115,7 @@ public:
 #endif
     CPPUNIT_TEST_SUITE(SigningTest);
     CPPUNIT_TEST(testDescription);
+    CPPUNIT_TEST(testECDSA);
     CPPUNIT_TEST(testODFGood);
     CPPUNIT_TEST(testODFBroken);
     CPPUNIT_TEST(testODFNo);
@@ -147,7 +150,7 @@ public:
 private:
     void createDoc(const OUString& rURL);
     void createCalc(const OUString& rURL);
-    uno::Reference<security::XCertificate> getCertificate(DocumentSignatureManager& rSignatureManager);
+    uno::Reference<security::XCertificate> getCertificate(DocumentSignatureManager& rSignatureManager, svl::crypto::SignatureMethodAlgorithm eAlgo);
 };
 
 SigningTest::SigningTest()
@@ -157,11 +160,6 @@ SigningTest::SigningTest()
 void SigningTest::setUp()
 {
     test::BootstrapFixture::setUp();
-
-    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-    mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
-    mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
 
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
     OUString aTargetDir = m_directories.getURLFromWorkdir(
@@ -184,6 +182,12 @@ void SigningTest::setUp()
     osl_setEnvironment(mozCertVar.pData, aTargetPath.pData);
     OUString gpgHomeVar("GNUPGHOME");
     osl_setEnvironment(gpgHomeVar.pData, aTargetPath.pData);
+
+    // Initialize crypto after setting up the environment variables.
+    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
+    mxDesktop.set(frame::Desktop::create(mxComponentContext));
+    mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
+    mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
 }
 
 void SigningTest::tearDown()
@@ -214,16 +218,19 @@ void SigningTest::createCalc(const OUString& rURL)
         mxComponent = loadFromDesktop(rURL, "com.sun.star.sheet.SpreadsheetDocument");
 }
 
-uno::Reference<security::XCertificate> SigningTest::getCertificate(DocumentSignatureManager& rSignatureManager)
+uno::Reference<security::XCertificate> SigningTest::getCertificate(DocumentSignatureManager& rSignatureManager, svl::crypto::SignatureMethodAlgorithm eAlgo)
 {
-    uno::Reference<security::XCertificate> xCertificate;
-
     uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = rSignatureManager.getSecurityEnvironment();
     uno::Sequence<uno::Reference<security::XCertificate>> aCertificates = xSecurityEnvironment->getPersonalCertificates();
-    if (!aCertificates.hasElements())
-        return xCertificate;
 
-    return aCertificates[0];
+    for (const auto& xCertificate : aCertificates)
+    {
+        auto pCertificate = dynamic_cast<xmlsecurity::Certificate*>(xCertificate.get());
+        CPPUNIT_ASSERT(pCertificate);
+        if (pCertificate->getSignatureMethodAlgorithm() == eAlgo)
+            return xCertificate;
+    }
+    return uno::Reference<security::XCertificate>();
 }
 
 void SigningTest::testDescription()
@@ -246,7 +253,7 @@ void SigningTest::testDescription()
     aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
 
     // Then add a signature document.
-    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager);
+    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager, svl::crypto::SignatureMethodAlgorithm::RSA);
     if (!xCertificate.is())
         return;
     OUString aDescription("SigningTest::testDescription");
@@ -258,6 +265,42 @@ void SigningTest::testDescription()
     std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
     CPPUNIT_ASSERT_EQUAL(aDescription, rInformations[0].ouDescription);
+}
+
+void SigningTest::testECDSA()
+{
+    // Create an empty document and store it to a tempfile, finally load it as a storage.
+    createDoc("");
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer8");
+    xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    CPPUNIT_ASSERT(aManager.init());
+    uno::Reference <embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
+    CPPUNIT_ASSERT(xStorage.is());
+    aManager.mxStore = xStorage;
+    aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
+
+    // Then add a signature.
+    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager, svl::crypto::SignatureMethodAlgorithm::ECDSA);
+    if (!xCertificate.is())
+        return;
+    OUString aDescription;
+    sal_Int32 nSecurityId;
+    aManager.add(xCertificate, mxSecurityContext, aDescription, nSecurityId, false);
+
+    // Read back the signature and make sure that it's valid.
+    aManager.read(/*bUseTempStream=*/true);
+    std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
+    // This was SecurityOperationStatus_UNKNOWN, signing with an ECDSA key was
+    // broken.
+    CPPUNIT_ASSERT_EQUAL(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED, rInformations[0].nStatus);
 }
 
 void SigningTest::testOOXMLDescription()
@@ -280,7 +323,7 @@ void SigningTest::testOOXMLDescription()
     aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
 
     // Then add a document signature.
-    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager);
+    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager, svl::crypto::SignatureMethodAlgorithm::RSA);
     if (!xCertificate.is())
         return;
     OUString aDescription("SigningTest::testDescription");
@@ -314,7 +357,7 @@ void SigningTest::testOOXMLAppend()
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
 
     // Then add a second document signature.
-    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager);
+    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager, svl::crypto::SignatureMethodAlgorithm::RSA);
     if (!xCertificate.is())
         return;
     sal_Int32 nSecurityId;
@@ -346,7 +389,7 @@ void SigningTest::testOOXMLRemove()
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), rInformations.size());
 
     // Then remove the last added signature.
-    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager);
+    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager, svl::crypto::SignatureMethodAlgorithm::RSA);
     if (!xCertificate.is())
         return;
     aManager.remove(0);
@@ -377,7 +420,7 @@ void SigningTest::testOOXMLRemoveAll()
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
 
     // Then remove the only signature in the document.
-    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager);
+    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager, svl::crypto::SignatureMethodAlgorithm::RSA);
     if (!xCertificate.is())
         return;
     aManager.remove(0);
@@ -625,7 +668,7 @@ void SigningTest::testXAdES()
     aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
 
     // Create a signature.
-    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager);
+    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager, svl::crypto::SignatureMethodAlgorithm::RSA);
     if (!xCertificate.is())
         return;
     sal_Int32 nSecurityId;

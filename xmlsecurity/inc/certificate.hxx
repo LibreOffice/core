@@ -14,6 +14,14 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
+namespace svl
+{
+namespace crypto
+{
+enum class SignatureMethodAlgorithm;
+}
+}
+
 namespace xmlsecurity
 {
 
@@ -26,6 +34,9 @@ public:
     ///
     /// @throws css::uno::RuntimeException
     virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() = 0;
+
+    /// Same as getSubjectPublicKeyAlgorithm(), but returns an ID, not a string.
+    virtual svl::crypto::SignatureMethodAlgorithm getSignatureMethodAlgorithm() = 0;
 
 protected:
     ~Certificate() noexcept = default;
