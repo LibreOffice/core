@@ -45,22 +45,23 @@ private:
     class SwAttrStack
     {
     private:
-        SwTextAttr* pInitialArray[ INITIAL_NUM_ATTR ];
-        SwTextAttr** pArray;
-        sal_uInt16 nCount; // number of elements on stack
-        sal_uInt16 nSize;  // number of positions in Array
+        SwTextAttr* m_pInitialArray[ INITIAL_NUM_ATTR ];
+        SwTextAttr** m_pArray;
+        sal_uInt16 m_nCount; // number of elements on stack
+        sal_uInt16 m_nSize;  // number of positions in Array
 
     public:
         // Ctor, Dtor
         inline SwAttrStack();
         ~SwAttrStack() {
-            if ( nSize > INITIAL_NUM_ATTR ) delete [] pArray; }
+            if (m_nSize > INITIAL_NUM_ATTR) delete [] m_pArray;
+        }
 
         // reset stack
-        void Reset() { nCount = 0; };
+        void Reset() { m_nCount = 0; };
 
         // insert on top
-        void Push( const SwTextAttr& rAttr ) { Insert( rAttr, nCount ); };
+        void Push( const SwTextAttr& rAttr ) { Insert(rAttr, m_nCount); };
         // insert at specified position, take care for not inserting behind
         // the value returned by Count()
         void Insert( const SwTextAttr& rAttr, const sal_uInt16 nPos );
@@ -72,7 +73,7 @@ private:
         const SwTextAttr* Top() const;
 
         // number of elements on stack
-        sal_uInt16 Count() const { return nCount; };
+        sal_uInt16 Count() const { return m_nCount; };
 
         // returns position of rAttr on Stack if found, otherwise USHRT_MAX
         // can be used for Remove of an attribute
