@@ -24,6 +24,7 @@
 #include "Qt5Graphics.hxx"
 #include "Qt5Widget.hxx"
 #include "Qt5Data.hxx"
+#include <Qt5Menu.hxx>
 
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
@@ -233,7 +234,10 @@ void Qt5Frame::SetIcon(sal_uInt16 nIcon)
     m_pQWidget->window()->setWindowIcon(aIcon);
 }
 
-void Qt5Frame::SetMenu(SalMenu* /*pMenu*/) {}
+void Qt5Frame::SetMenu(SalMenu* pMenu)
+{
+    m_pSalMenu = static_cast<Qt5Menu*>( pMenu );
+}
 
 void Qt5Frame::DrawMenuBar() {}
 
