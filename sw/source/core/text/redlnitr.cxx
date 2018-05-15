@@ -52,8 +52,6 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
 
     m_pScriptInfo = &rScrInf;
 
-    // attributes set at the whole paragraph
-    m_pAttrSet = rTextNode.GetpSwAttrSet();
     // attribute array
     m_pHints = rTextNode.GetpSwpHints();
 
@@ -80,7 +78,7 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
     // If any further attributes for the paragraph are given in pAttrSet
     // consider them during construction of the default array, and apply
     // them to the font
-    m_aAttrHandler.Init( aFontAccess.Get()->GetDefault(), m_pAttrSet,
+    m_aAttrHandler.Init(aFontAccess.Get()->GetDefault(), rTextNode.GetpSwAttrSet(),
                        *rTextNode.getIDocumentSettingAccess(), m_pViewShell, *m_pFont, bVertLayout );
 
     m_aMagicNo[SwFontScript::Latin] = m_aMagicNo[SwFontScript::CJK] = m_aMagicNo[SwFontScript::CTL] = nullptr;

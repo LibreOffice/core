@@ -42,16 +42,19 @@ protected:
     SwAttrHandler m_aAttrHandler;
     SwViewShell *m_pViewShell;
     SwFont *m_pFont;
-    SwpHints  *m_pHints;
-    const SwAttrSet* m_pAttrSet;       // The char attribute set
+    SwpHints const* m_pHints;
     SwScriptInfo* m_pScriptInfo;
 
 private:
     VclPtr<OutputDevice> m_pLastOut;
+    /// count currently open hints, redlines, ext-input
     short m_nChgCnt;
     SwRedlineItr *m_pRedline;
+    /// current iteration index in HintStarts
     size_t m_nStartIndex;
+    /// current iteration index in HintEnds
     size_t m_nEndIndex;
+    /// current iteration index in text node
     sal_Int32 m_nPosition;
     sal_uInt8 m_nPropFont;
     o3tl::enumarray<SwFontScript, const void*> m_aMagicNo;
@@ -69,7 +72,6 @@ protected:
         : m_pViewShell(nullptr)
         , m_pFont(nullptr)
         , m_pHints(nullptr)
-        , m_pAttrSet(nullptr)
         , m_pScriptInfo(nullptr)
         , m_pLastOut(nullptr)
         , m_nChgCnt(0)
