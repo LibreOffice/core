@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_b1e804b6",
+        "filename": "vcl/source/control/ctrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-05-15T11:03:13Z",
+      "side": 1,
+      "message": "Why did you remove this call?",
+      "revId": "ce0c49265b2807bdc1b4c3e3845b3603b538771a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_91e140d3",
+        "filename": "vcl/source/window/dialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1446,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-05-15T11:03:13Z",
+      "side": 1,
+      "message": "Note that the old location was selected to have the log entry being created at the same time as the event is going to be sent.",
+      "revId": "ce0c49265b2807bdc1b4c3e3845b3603b538771a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
