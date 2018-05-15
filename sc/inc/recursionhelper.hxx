@@ -23,9 +23,12 @@
 #include "formularesult.hxx"
 
 #include <list>
+#include <vector>
 #include <stack>
+#include <map>
 
 class ScFormulaCell;
+struct ScFormulaCellGroup;
 
 struct ScFormulaRecursionEntry
 {
@@ -44,10 +47,14 @@ typedef ::std::list< ScFormulaRecursionEntry > ScFormulaRecursionList;
 class ScRecursionHelper
 {
     typedef ::std::stack< ScFormulaCell* >  ScRecursionInIterationStack;
+    typedef ::std::vector< ScFormulaCellGroup* > ScFGList;
+    typedef ::std::multimap< ScFormulaCellGroup*, sal_uInt16 > ScFGMap;
     ScFormulaRecursionList              aRecursionFormulas;
     ScFormulaRecursionList::iterator    aInsertPos;
     ScFormulaRecursionList::iterator    aLastIterationStart;
     ScRecursionInIterationStack         aRecursionInIterationStack;
+    ScFGList                            aFGList;
+    ScFGMap                             aFGMap;
     sal_uInt16                              nRecursionCount;
     sal_uInt16                              nIteration;
     bool                                bInRecursionReturn;
@@ -94,6 +101,10 @@ public:
     ScRecursionInIterationStack&    GetRecursionInIterationStack()  { return aRecursionInIterationStack; }
 
     void Clear();
+
+    /** Detects whether the formula-group is part of a cycle of formula-groups. */
+    void PushFormulaGroup(ScFormulaCellGroup* pGrp);
+    void PopFormulaGroup();
 };
 
 #endif // INCLUDED_SC_INC_RECURSIONHELPER_HXX
