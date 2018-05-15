@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_919f80b3",
+        "filename": "sc/inc/columniterator.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-15T07:08:29Z",
+      "side": 1,
+      "message": "Nitpick: for future patches, it usually makes sense to group the includes: first the \"system\" ones (\u003c\u003e form) and then the \"local\" ones (\"\" form). Having a blank line between the includes and the forward declarations also helps readability.",
+      "revId": "3c12e726c4dc340fa22144106b94b2823ef2a7f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
