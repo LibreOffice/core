@@ -109,14 +109,16 @@ void XMLSignatureHelper::SetX509Certificate(
         const OUString& ouX509IssuerName,
         const OUString& ouX509SerialNumber,
         const OUString& ouX509Cert,
-        const OUString& ouX509CertDigest)
+        const OUString& ouX509CertDigest,
+        svl::crypto::SignatureMethodAlgorithm eAlgorithmID)
 {
     mpXSecController->setX509Certificate(
         nSecurityId,
         ouX509IssuerName,
         ouX509SerialNumber,
         ouX509Cert,
-        ouX509CertDigest);
+        ouX509CertDigest,
+        eAlgorithmID);
 }
 
 void XMLSignatureHelper::AddEncapsulatedX509Certificate(const OUString& ouEncapsulatedX509Certificate)
