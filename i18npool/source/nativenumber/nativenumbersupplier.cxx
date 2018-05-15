@@ -63,6 +63,8 @@ typedef struct {
 
 namespace i18npool {
 
+struct theNatNumMutex : public rtl::Static<osl::Mutex, theNatNumMutex> {};
+
 OUString getHebrewNativeNumberString(const OUString& aNumberString, bool useGeresh);
 
 OUString getCyrillicNativeNumberString(const OUString& aNumberString);
@@ -559,6 +561,9 @@ OUString getNumberText(const Locale& aLocale, sal_Int16 numType, const OUString&
         return rNumberString;
 
     OUString aNumberStr = sBuf.makeStringAndClear();
+
+    // Guard the static variables below.
+    osl::MutexGuard aGuard( theNatNumMutex::get());
 
     static auto xNumberText
         = css::linguistic2::NumberText::create(comphelper::getProcessComponentContext());
