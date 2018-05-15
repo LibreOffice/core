@@ -138,6 +138,7 @@
 #include <IDocumentState.hxx>
 #include <imaildsplistener.hxx>
 #include <iodetect.hxx>
+#include <IDocumentDeviceAccess.hxx>
 
 #include <memory>
 #include <comphelper/propertysequence.hxx>
@@ -1487,6 +1488,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 xWorkDocSh = lcl_CreateWorkingDocument( WorkingDocType::COPY,
                     *pSourceShell, nullptr, &pWorkDocOrigDBManager,
                     &pWorkView, &pWorkShell, &pWorkDoc );
+
+                const SwPrintData &rPrintData = pSourceShell->GetDoc()->getIDocumentDeviceAccess().getPrintData();
+                pWorkDoc->getIDocumentDeviceAccess().setPrintData(rPrintData);
+
+
                 if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
                     lcl_SaveDebugDoc( xWorkDocSh, "WorkDoc", nDocNo );
 
