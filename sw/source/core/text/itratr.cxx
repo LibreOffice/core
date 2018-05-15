@@ -599,36 +599,39 @@ TextFrameIndex SwAttrIter::GetNextAttr() const
         sal_Int32 nNext = GetNextAttrImpl(pTextNode, nStartIndex, nEndIndex, nPosition);
         if( m_pRedline )
         {
-            // TODO refactor this so it can iterate
-            std::pair<sal_Int32, SwRangeRedline const*> const redline(m_pRedline->GetNextRedln(nNext, pTextNode, nActRedline));
+            std::pair<sal_Int32, SwRangeRedline const*> const redline(
+                    m_pRedline->GetNextRedln(nNext, pTextNode, nActRedline));
             if (redline.second)
             {
+                assert(m_pMergedPara);
                 if (CanSkipOverRedline(*redline.second, nStartIndex, nEndIndex))
                 {
                     if (&redline.second->End()->nNode.GetNode() != pTextNode)
                     {
-                        // FIXME when to update the offset? now or when seeking?
-                        const_cast<SwAttrIter*>(this)->m_nCurrentIndexOffset += pTextNode->Len() - redline.first;
-                        // FIXME this needs to sum up *all* prev. nodes?
-                        const_cast<SwAttrIter*>(this)->m_nCurrentIndexOffset = redline.second->End()->nContent.GetIndex() - pTextNode->Len();
                         pTextNode = redline.second->End()->nNode.GetNode().GetTextNode();
                         nPosition = redline.second->End()->nContent.GetIndex();
-                        // TODO: reset m_pRedline ... its m_pExt ...
                     }
                     else
                     {
                         nPosition = redline.second->End()->nContent.GetIndex();
-                        const_cast<SwAttrIter*>(this)->m_nCurrentIndexOffset += (redline.second->End()->nContent.GetIndex() - redline.first);
                     }
                 }
                 else
-                    return redline.first - m_nCurrentIndexOffset;
+                {
+                    return sw::MapModelToView(*m_pMergedPara, pTextNode, redline.first);
+                }
             }
             else
-                return redline.first - m_nCurrentIndexOffset;
+            {
+                return m_pMergedPara
+                    ? sw::MapModelToView(*m_pMergedPara, pTextNode, redline.first)
+                    : TextFrameIndex(redline.first);
+            }
         }
         else
-            return nNext - m_nCurrentIndexOffset;
+        {
+            return TextFrameIndex(nNext);
+        }
     }
 }
 
