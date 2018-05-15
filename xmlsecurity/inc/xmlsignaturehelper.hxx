@@ -119,7 +119,8 @@ public:
         certificate.
      */
     void SetX509Certificate(sal_Int32 nSecurityId, const OUString& ouX509IssuerName,
-        const OUString& ouX509SerialNumber, const OUString& ouX509Cert, const OUString& ouX509CertDigest);
+        const OUString& ouX509SerialNumber, const OUString& ouX509Cert, const OUString& ouX509CertDigest,
+        svl::crypto::SignatureMethodAlgorithm eAlgorithmID);
 
     void AddEncapsulatedX509Certificate(const OUString& ouEncapsulatedX509Certificate);
 

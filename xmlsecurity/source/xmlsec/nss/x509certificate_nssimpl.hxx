@@ -85,6 +85,9 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper<
         /// @see xmlsecurity::Certificate::getSHA256Thumbprint().
         virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() override;
 
+        /// @see xmlsecurity::Certificate::getSignatureMethodAlgorithm().
+        virtual svl::crypto::SignatureMethodAlgorithm getSignatureMethodAlgorithm() override;
+
         static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
 
         //Helper methods

@@ -38,6 +38,7 @@
 #include <utility>
 #include <vector>
 #include <tools/time.hxx>
+#include <svl/sigstruct.hxx>
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno ;
@@ -568,6 +569,11 @@ OUString SAL_CALL X509Certificate_MSCryptImpl::getSignatureAlgorithm()
 uno::Sequence<sal_Int8> X509Certificate_MSCryptImpl::getSHA256Thumbprint()
 {
     return getThumbprint(m_pCertContext, CERT_SHA256_HASH_PROP_ID);
+}
+
+svl::crypto::SignatureMethodAlgorithm X509Certificate_MSCryptImpl::getSignatureMethodAlgorithm()
+{
+    return svl::crypto::SignatureMethodAlgorithm::RSA;
 }
 
 css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSHA1Thumbprint()
