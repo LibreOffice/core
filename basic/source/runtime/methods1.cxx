@@ -1898,7 +1898,7 @@ void SbRtl_DateAdd(StarBASIC *, SbxArray & rPar, bool)
                 nTargetYear16 = limitDate( nTargetYear, nMonth, nDay );
                 /* TODO: should the result be error if the date was limited? It never was. */
                 nTargetMonth = nMonth;
-                bOk = implDateSerial( nTargetYear16, nTargetMonth, nDay, false, true, dNewDate );
+                bOk = implDateSerial( nTargetYear16, nTargetMonth, nDay, false, SbDateCorrection::TruncateToMonth, dNewDate );
                 break;
             }
             case INTERVAL_Q:
@@ -1943,26 +1943,14 @@ void SbRtl_DateAdd(StarBASIC *, SbxArray & rPar, bool)
                 }
                 nTargetYear16 = limitDate( nTargetYear, nTargetMonth, nDay );
                 /* TODO: should the result be error if the date was limited? It never was. */
-                bOk = implDateSerial( nTargetYear16, nTargetMonth, nDay, false, true, dNewDate );
+                bOk = implDateSerial( nTargetYear16, nTargetMonth, nDay, false, SbDateCorrection::TruncateToMonth, dNewDate );
                 break;
             }
             default: break;
         }
 
         if( bOk )
-        {
-            // Overflow?
-            sal_Int16 nNewYear, nNewMonth, nNewDay;
-            implGetDayMonthYear( nNewYear, nNewMonth, nNewDay, dNewDate );
-            sal_Int16 nCorrectionDay = nDay;
-            while( nNewMonth > nTargetMonth )
-            {
-                nCorrectionDay--;
-                implDateSerial( nTargetYear16, nTargetMonth, nCorrectionDay, false, true, dNewDate );
-                implGetDayMonthYear( nNewYear, nNewMonth, nNewDay, dNewDate );
-            }
             dNewDate += dHoursMinutesSeconds;
-        }
     }
 
     rPar.Get(0)->PutDate( dNewDate );
@@ -2147,7 +2135,7 @@ double implGetDateOfFirstDayInFirstWeek
         nFirstWeekMinDays = 7;      // vbFirstFourDays
 
     double dBaseDate;
-    implDateSerial( nYear, 1, 1, false, false, dBaseDate );
+    implDateSerial( nYear, 1, 1, false, SbDateCorrection::None, dBaseDate );
 
     sal_Int16 nWeekDay0101 = implGetWeekDay( dBaseDate );
     sal_Int16 nDayDiff = nWeekDay0101 - nFirstDay;
@@ -2207,7 +2195,7 @@ void SbRtl_DatePart(StarBASIC *, SbxArray & rPar, bool)
         {
             sal_Int16 nYear = implGetDateYear( dDate );
             double dBaseDate;
-            implDateSerial( nYear, 1, 1, false, false, dBaseDate );
+            implDateSerial( nYear, 1, 1, false, SbDateCorrection::None, dBaseDate );
             nRet = 1 + sal_Int32( dDate - dBaseDate );
             break;
         }
