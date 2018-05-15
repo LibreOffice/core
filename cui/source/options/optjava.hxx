@@ -29,6 +29,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <svtools/dialogclosedlistener.hxx>
@@ -64,7 +65,7 @@ private:
     VclPtr<PushButton>                 m_pExpertConfigBtn;
 
     std::unique_ptr<SvxJavaParameterDlg> m_xParamDlg;
-    VclPtr<SvxJavaClassPathDlg>        m_pPathDlg;
+    std::unique_ptr<SvxJavaClassPathDlg> m_xPathDlg;
     VclPtr<OfaTreeOptionsDialog>       m_pParentDlg;
 
 #if HAVE_FEATURE_JAVA
@@ -176,34 +177,33 @@ public:
 
 // class SvxJavaClassPathDlg ---------------------------------------------
 
-class SvxJavaClassPathDlg : public ModalDialog
+class SvxJavaClassPathDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<ListBox>                 m_pPathList;
-    VclPtr<PushButton>              m_pAddArchiveBtn;
-    VclPtr<PushButton>              m_pAddPathBtn;
-    VclPtr<PushButton>              m_pRemoveBtn;
+    std::unique_ptr<weld::TreeView> m_xPathList;
+    std::unique_ptr<weld::Button> m_xAddArchiveBtn;
+    std::unique_ptr<weld::Button> m_xAddPathBtn;
+    std::unique_ptr<weld::Button> m_xRemoveBtn;
 
     OUString                m_sOldPath;
 
-    DECL_LINK(AddArchiveHdl_Impl, Button*, void);
-    DECL_LINK(AddPathHdl_Impl, Button*, void);
-    DECL_LINK(RemoveHdl_Impl, Button*, void);
-    DECL_LINK(SelectHdl_Impl, ListBox&, void);
+    DECL_LINK(AddArchiveHdl_Impl, weld::Button&, void);
+    DECL_LINK(AddPathHdl_Impl, weld::Button&, void);
+    DECL_LINK(RemoveHdl_Impl, weld::Button&, void);
+    DECL_LINK(SelectHdl_Impl, weld::TreeView&, void);
 
-    bool                    IsPathDuplicate( const OUString& _rPath );
-    void             EnableRemoveButton()
-                                { m_pRemoveBtn->Enable(
-                                    m_pPathList->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND ); }
-
+    bool IsPathDuplicate(const OUString& _rPath);
+    void EnableRemoveButton()
+    {
+        m_xRemoveBtn->set_sensitive(m_xPathList->get_selected_index() != -1);
+    }
 
 public:
-    explicit SvxJavaClassPathDlg( vcl::Window* pParent );
+    explicit SvxJavaClassPathDlg(weld::Window* pParent);
     virtual ~SvxJavaClassPathDlg() override;
-    virtual void            dispose() override;
 
     const OUString&  GetOldPath() const { return m_sOldPath; }
-    void             SetFocus() { m_pPathList->GrabFocus(); }
+    void             SetFocus() { m_xPathList->grab_focus(); }
 
     OUString                GetClassPath() const;
     void                    SetClassPath( const OUString& _rPath );

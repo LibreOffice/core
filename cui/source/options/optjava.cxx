@@ -111,7 +111,6 @@ public:
 
 SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet )
     : SfxTabPage(pParent, "OptAdvancedPage", "cui/ui/optadvancedpage.ui", &rSet)
-    , m_pPathDlg(nullptr)
     , m_aResetIdle("cui options SvxJavaOptionsPage Reset")
     , xDialogListener(new ::svt::DialogClosedListener())
 {
@@ -184,7 +183,7 @@ void SvxJavaOptionsPage::dispose()
 {
     m_pJavaList.disposeAndClear();
     m_xParamDlg.reset();
-    m_pPathDlg.disposeAndClear();
+    m_xPathDlg.reset();
     ClearJavaInfo();
 #if HAVE_FEATURE_JAVA
     m_aAddedInfos.clear();
@@ -304,26 +303,26 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl, Button*, void)
 #if HAVE_FEATURE_JAVA
     OUString sClassPath;
 
-    if ( !m_pPathDlg )
+    if ( !m_xPathDlg )
     {
-          m_pPathDlg = VclPtr<SvxJavaClassPathDlg>::Create( this );
+        m_xPathDlg.reset(new SvxJavaClassPathDlg(GetFrameWeld()));
         javaFrameworkError eErr = jfw_getUserClassPath( &m_pClassPath );
         if ( JFW_E_NONE == eErr )
         {
             sClassPath = m_pClassPath;
-            m_pPathDlg->SetClassPath( sClassPath );
+            m_xPathDlg->SetClassPath( sClassPath );
         }
     }
     else
-        sClassPath = m_pPathDlg->GetClassPath();
+        sClassPath = m_xPathDlg->GetClassPath();
 
-    m_pPathDlg->SetFocus();
-    if ( m_pPathDlg->Execute() == RET_OK )
+    m_xPathDlg->SetFocus();
+    if (m_xPathDlg->run() == RET_OK)
     {
 
-        if ( m_pPathDlg->GetClassPath() != sClassPath )
+        if (m_xPathDlg->GetClassPath() != sClassPath)
         {
-            sClassPath = m_pPathDlg->GetClassPath();
+            sClassPath = m_xPathDlg->GetClassPath();
             if ( jfw_isVMRunning() )
             {
                 RequestRestart( svtools::RESTART_REASON_ASSIGNING_FOLDERS );
@@ -331,7 +330,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl, Button*, void)
         }
     }
     else
-        m_pPathDlg->SetClassPath( sClassPath );
+        m_xPathDlg->SetClassPath( sClassPath );
 #else
     (void) this;
 #endif
@@ -602,10 +601,10 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
         bModified = true;
     }
 
-    if ( m_pPathDlg )
+    if (m_xPathDlg)
     {
-        OUString sPath( m_pPathDlg->GetClassPath() );
-        if ( m_pPathDlg->GetOldPath() != sPath )
+        OUString sPath(m_xPathDlg->GetClassPath());
+        if (m_xPathDlg->GetOldPath() != sPath)
         {
             eErr = jfw_setUserClassPath( sPath );
             SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setUserClassPath");
@@ -849,56 +848,37 @@ void SvxJavaParameterDlg::SetParameters( std::vector< OUString > const & rParams
 
 // class SvxJavaClassPathDlg ---------------------------------------------
 
-SvxJavaClassPathDlg::SvxJavaClassPathDlg(vcl::Window* pParent)
-    : ModalDialog(pParent, "JavaClassPath", "cui/ui/javaclasspathdialog.ui")
+SvxJavaClassPathDlg::SvxJavaClassPathDlg(weld::Window* pParent)
+    : GenericDialogController(pParent, "cui/ui/javaclasspathdialog.ui", "JavaClassPath")
+    , m_xPathList(m_xBuilder->weld_tree_view("paths"))
+    , m_xAddArchiveBtn(m_xBuilder->weld_button("archive"))
+    , m_xAddPathBtn(m_xBuilder->weld_button("folder"))
+    , m_xRemoveBtn(m_xBuilder->weld_button("remove"))
 {
-    get( m_pPathList, "paths");
-    m_pPathList->SetDropDownLineCount(8);
-    m_pPathList->set_width_request(m_pPathList->approximate_char_width() * 54);
-    get( m_pAddArchiveBtn, "archive");
-    get( m_pAddPathBtn, "folder");
-    get( m_pRemoveBtn, "remove");
-
-    m_pAddArchiveBtn->SetClickHdl( LINK( this, SvxJavaClassPathDlg, AddArchiveHdl_Impl ) );
-    m_pAddPathBtn->SetClickHdl( LINK( this, SvxJavaClassPathDlg, AddPathHdl_Impl ) );
-    m_pRemoveBtn->SetClickHdl( LINK( this, SvxJavaClassPathDlg, RemoveHdl_Impl ) );
-    m_pPathList->SetSelectHdl( LINK( this, SvxJavaClassPathDlg, SelectHdl_Impl ) );
+    m_xPathList->set_size_request(m_xPathList->get_approximate_digit_width() * 54,
+                                  m_xPathList->get_height_rows(8));
+    m_xAddArchiveBtn->connect_clicked( LINK( this, SvxJavaClassPathDlg, AddArchiveHdl_Impl ) );
+    m_xAddPathBtn->connect_clicked( LINK( this, SvxJavaClassPathDlg, AddPathHdl_Impl ) );
+    m_xRemoveBtn->connect_clicked( LINK( this, SvxJavaClassPathDlg, RemoveHdl_Impl ) );
+    m_xPathList->connect_changed( LINK( this, SvxJavaClassPathDlg, SelectHdl_Impl ) );
 
     // set initial focus to path list
-    m_pPathList->GrabFocus();
+    m_xPathList->grab_focus();
 }
-
 
 SvxJavaClassPathDlg::~SvxJavaClassPathDlg()
 {
-    disposeOnce();
 }
 
-void SvxJavaClassPathDlg::dispose()
+IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, weld::Button&, void)
 {
-    if (m_pPathList)
-    {
-        sal_Int32 i, nCount = m_pPathList->GetEntryCount();
-        for ( i = 0; i < nCount; ++i )
-            delete static_cast< OUString* >( m_pPathList->GetEntryData(i) );
-        m_pPathList = nullptr;
-    }
-    m_pPathList.clear();
-    m_pAddArchiveBtn.clear();
-    m_pAddPathBtn.clear();
-    m_pRemoveBtn.clear();
-    ModalDialog::dispose();
-}
-
-IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, Button*, void)
-{
-    sfx2::FileDialogHelper aDlg(TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, GetFrameWeld());
+    sfx2::FileDialogHelper aDlg(TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, m_xDialog.get());
     aDlg.SetTitle( CuiResId( RID_SVXSTR_ARCHIVE_TITLE ) );
     aDlg.AddFilter( CuiResId( RID_SVXSTR_ARCHIVE_HEADLINE ), "*.jar;*.zip" );
     OUString sFolder;
-    if ( m_pPathList->GetSelectedEntryCount() > 0 )
+    if (m_xPathList->count_selected_rows() > 0)
     {
-        INetURLObject aObj( m_pPathList->GetSelectedEntry(), FSysStyle::Detect );
+        INetURLObject aObj(m_xPathList->get_selected_text(), FSysStyle::Detect);
         sFolder = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
     else
@@ -911,14 +891,14 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, Button*, void)
         OUString sFile = aURL.getFSysPath( FSysStyle::Detect );
         if ( !IsPathDuplicate( sURL ) )
         {
-            sal_Int32 nPos = m_pPathList->InsertEntry( sFile, SvFileInformationManager::GetImage( aURL ) );
-            m_pPathList->SelectEntryPos( nPos );
+            m_xPathList->append("", sFile, SvFileInformationManager::GetImageId(aURL));
+            m_xPathList->select(m_xPathList->n_children() - 1);
         }
         else
         {
             OUString sMsg( CuiResId( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sFile );
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                       VclMessageType::Warning, VclButtonsType::Ok, sMsg));
             xBox->run();
         }
@@ -926,16 +906,15 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, Button*, void)
     EnableRemoveButton();
 }
 
-
-IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl, weld::Button&, void)
 {
     Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference < XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);
 
     OUString sOldFolder;
-    if ( m_pPathList->GetSelectedEntryCount() > 0 )
+    if (m_xPathList->count_selected_rows() > 0)
     {
-        INetURLObject aObj( m_pPathList->GetSelectedEntry(), FSysStyle::Detect );
+        INetURLObject aObj(m_xPathList->get_selected_text(), FSysStyle::Detect);
         sOldFolder = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
     else
@@ -948,14 +927,14 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl, Button*, void)
         OUString sNewFolder = aURL.getFSysPath( FSysStyle::Detect );
         if ( !IsPathDuplicate( sFolderURL ) )
         {
-            sal_Int32 nPos = m_pPathList->InsertEntry( sNewFolder, SvFileInformationManager::GetImage( aURL ) );
-            m_pPathList->SelectEntryPos( nPos );
+            m_xPathList->append("", sNewFolder, SvFileInformationManager::GetImageId(aURL));
+            m_xPathList->select(m_xPathList->n_children() - 1);
         }
         else
         {
             OUString sMsg( CuiResId( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sNewFolder );
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                       VclMessageType::Warning, VclButtonsType::Ok, sMsg));
             xBox->run();
         }
@@ -963,40 +942,37 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl, Button*, void)
     EnableRemoveButton();
 }
 
-
-IMPL_LINK_NOARG(SvxJavaClassPathDlg, RemoveHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxJavaClassPathDlg, RemoveHdl_Impl, weld::Button&, void)
 {
-    sal_Int32 nPos = m_pPathList->GetSelectedEntryPos();
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+    int nPos = m_xPathList->get_selected_index();
+    if (nPos != -1)
     {
-        m_pPathList->RemoveEntry( nPos );
-        sal_Int32 nCount = m_pPathList->GetEntryCount();
-        if ( nCount )
+        m_xPathList->remove(nPos);
+        int nCount = m_xPathList->n_children();
+        if (nCount)
         {
-            if ( nPos >= nCount )
-                nPos = ( nCount - 1 );
-            m_pPathList->SelectEntryPos( nPos );
+            if (nPos >= nCount)
+                nPos = nCount - 1;
+            m_xPathList->select( nPos );
         }
     }
 
     EnableRemoveButton();
 }
 
-
-IMPL_LINK_NOARG(SvxJavaClassPathDlg, SelectHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxJavaClassPathDlg, SelectHdl_Impl, weld::TreeView&, void)
 {
     EnableRemoveButton();
 }
-
 
 bool SvxJavaClassPathDlg::IsPathDuplicate( const OUString& _rPath )
 {
     bool bRet = false;
     INetURLObject aFileObj( _rPath );
-    sal_Int32 nCount = m_pPathList->GetEntryCount();
-    for ( sal_Int32 i = 0; i < nCount; ++i )
+    int nCount = m_xPathList->n_children();
+    for (int i = 0; i < nCount; ++i)
     {
-        INetURLObject aOtherObj( m_pPathList->GetEntry(i), FSysStyle::Detect );
+        INetURLObject aOtherObj(m_xPathList->get_text(i), FSysStyle::Detect);
         if ( aOtherObj == aFileObj )
         {
             bRet = true;
@@ -1007,42 +983,36 @@ bool SvxJavaClassPathDlg::IsPathDuplicate( const OUString& _rPath )
     return bRet;
 }
 
-
 OUString SvxJavaClassPathDlg::GetClassPath() const
 {
     OUString sPath;
-    sal_Int32 nCount = m_pPathList->GetEntryCount();
-    for ( sal_Int32 i = 0; i < nCount; ++i )
+    int nCount = m_xPathList->n_children();
+    for (int i = 0; i < nCount; ++i)
     {
-        if ( !sPath.isEmpty() )
+        if (!sPath.isEmpty())
             sPath += OUStringLiteral1(CLASSPATH_DELIMITER);
-        OUString* pFullPath = static_cast< OUString* >( m_pPathList->GetEntryData(i) );
-        if ( pFullPath )
-            sPath += *pFullPath;
-        else
-            sPath += m_pPathList->GetEntry(i);
+        sPath += m_xPathList->get_text(i);
     }
     return sPath;
 }
-
 
 void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
 {
     if ( m_sOldPath.isEmpty() )
         m_sOldPath = _rPath;
-    m_pPathList->Clear();
+    m_xPathList->clear();
     sal_Int32 nIdx = 0;
     do
     {
         OUString sToken = _rPath.getToken( 0, CLASSPATH_DELIMITER, nIdx );
         INetURLObject aURL( sToken, FSysStyle::Detect );
         OUString sPath = aURL.getFSysPath( FSysStyle::Detect );
-        m_pPathList->InsertEntry( sPath, SvFileInformationManager::GetImage( aURL ) );
+        m_xPathList->append("", sPath, SvFileInformationManager::GetImageId(aURL));
     }
     while (nIdx>=0);
     // select first entry
-    m_pPathList->SelectEntryPos(0);
-    SelectHdl_Impl( *m_pPathList );
+    m_xPathList->select(0);
+    SelectHdl_Impl(*m_xPathList);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
