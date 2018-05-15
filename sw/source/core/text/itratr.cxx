@@ -66,6 +66,9 @@
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
 
+static sal_Int32 GetNextAttrImpl(SwTextNode const* pTextNode,
+        size_t nStartIndex, size_t nEndIndex, sal_Int32 nPosition);
+
 void SwAttrIter::Chg( SwTextAttr const *pHt )
 {
     assert(pHt && m_pFont && "No attribute of font available for change");
@@ -244,17 +247,60 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
 bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
 {
     // note: nNewPos isn't necessarily a index returned from GetNextAttr
-    sw::MergedPara * pMerged(nullptr); // FIXME
-    std::pair<SwTextNode const*, sal_Int32> const newPos( pMerged
-        ? sw::MapViewToModel(*pMerged, nNewPos)
-        : std::make_pair(m_pTextNode, nNewPos));
+    std::pair<SwTextNode const*, sal_Int32> const newPos( m_pMergedPara
+        ? sw::MapViewToModel(*m_pMergedPara, nNewPos)
+        : std::make_pair(m_pTextNode, sal_Int32(nNewPos)));
 
     if ( m_pRedline && m_pRedline->ExtOn() )
         m_pRedline->LeaveExtend(*m_pFont, newPos.first->GetIndex(), newPos.second);
-
-    if( m_pHints )
+    if (m_pTextNode->GetIndex() < newPos.first->GetIndex())
     {
-        if( !nNewPos || nNewPos < m_nPosition )
+        // Skipping to a different node - first seek until the end of this node
+        // to get rid of all hint items
+        sal_Int32 nPos(m_nPosition);
+        do
+        {
+            nPos = GetNextAttrImpl(m_pTextNode, m_nStartIndex, m_nEndIndex, nPos);
+            if (nPos <= m_pTextNode->Len())
+            {
+                SeekFwd(nPos);
+            }
+            else
+            {
+                SeekFwd(m_pTextNode->Len());
+            }
+        }
+        while (nPos < m_pTextNode->Len());
+        assert(m_nChgCnt == 0); // should have reset it all? there cannot be ExtOn() inside of a Delete redline, surely?
+        // Unapply current para items:
+        // the SwAttrHandler doesn't appear to be capable of *unapplying*
+        // items at all; it can only apply a previously effective item.
+        // So do this by recreating the font from scratch.
+        // Apply new para items:
+        InitFontAndAttrHandler(*newPos.first, m_pMergedPara->mergedText, nullptr);
+        // reset to next
+        m_pTextNode = newPos.first;
+        m_pHints = m_pTextNode->GetpSwpHints();
+        m_nStartIndex = 0;
+        m_nEndIndex = 0;
+        m_nPosition = 0;
+        assert(m_pRedline);
+    }
+
+    if (!nNewPos || newPos.second < m_nPosition)
+    {
+        if (m_pMergedPara)
+        {
+            if (m_pTextNode != m_pMergedPara->pFirstNode)
+            {
+                m_pTextNode = m_pMergedPara->pFirstNode;
+                m_pHints = m_pTextNode->GetpSwpHints();
+                // sw_redlinehide: hope it's okay to use the current text node
+                // here; the AttrHandler shouldn't care about non-char items
+                InitFontAndAttrHandler(*m_pTextNode, m_pMergedPara->mergedText, nullptr);
+            }
+        }
+        if (m_pMergedPara || m_pTextNode->GetpSwpHints())
         {
             if( m_pRedline )
                 m_pRedline->Clear( nullptr );
@@ -279,14 +325,41 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
                 ++m_nChgCnt;
             }
         }
-        SeekFwd( nNewPos );
+    }
+
+    if (SwpHints const*const pHints = m_pTextNode->GetpSwpHints())
+    {
+        if (m_pMergedPara)
+        {
+            // iterate hint by hint: SeekFwd does not mix ends and starts,
+            // it always applies all the starts last, so it must be called once
+            // per position where hints start/end!
+            sal_Int32 nPos(m_nPosition);
+            do
+            {
+                nPos = GetNextAttrImpl(m_pTextNode, m_nStartIndex, m_nEndIndex, nPos);
+                if (nPos <= newPos.second)
+                {
+                    SeekFwd(nPos);
+                }
+                else
+                {
+                    SeekFwd(newPos.second);
+                }
+            }
+            while (nPos < newPos.second);
+        }
+        else
+        {
+            SeekFwd(newPos.second);
+        }
     }
 
     m_pFont->SetActual( SwScriptInfo::WhichFont( nNewPos, nullptr, m_pScriptInfo ) );
 
     if( m_pRedline )
         m_nChgCnt = m_nChgCnt + m_pRedline->Seek(*m_pFont, newPos.first->GetIndex(), newPos.second, m_nPosition);
-    m_nPosition = nNewPos;
+    m_nPosition = newPos.second;
 
     if( m_nPropFont )
         m_pFont->SetProportion( m_nPropFont );
