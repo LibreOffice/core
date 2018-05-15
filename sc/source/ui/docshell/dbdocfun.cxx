@@ -1562,7 +1562,7 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     if (bRecord)
         createUndoDoc(pNewUndoDoc, &rDoc, aNewOut);
 
-    rDPObj.Output(aNewOut.aStart);
+    rDPObj.Output(aNewOut.aStart,true);
     rDocShell.PostPaintGridAll();           //! only necessary parts
 
     if (bRecord)

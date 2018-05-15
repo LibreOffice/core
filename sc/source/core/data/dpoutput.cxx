@@ -281,7 +281,7 @@ void ScDPOutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL 
 
 void lcl_SetStyleById( ScDocument* pDoc, SCTAB nTab,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                    sal_uInt16 nStrId )
+                    sal_uInt16 nStrId,bool aFlag=false)
 {
     if ( nCol1 > nCol2 || nRow1 > nRow2 )
     {
@@ -305,8 +305,8 @@ void lcl_SetStyleById( ScDocument* pDoc, SCTAB nTab,
         if ( nStrId==STR_PIVOT_STYLE_CATEGORY || nStrId==STR_PIVOT_STYLE_TITLE )
             rSet.Put( SvxHorJustifyItem( SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY ) );
     }
-
-    pDoc->ApplyStyleAreaTab( nCol1, nRow1, nCol2, nRow2, nTab, *pStyle );
+    if(!aFlag)
+        pDoc->ApplyStyleAreaTab( nCol1, nRow1, nCol2, nRow2, nTab, *pStyle );
 }
 
 void lcl_SetFrame( ScDocument* pDoc, SCTAB nTab,
@@ -762,7 +762,7 @@ void ScDPOutput::DataCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const sheet::Data
 }
 
 void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                             const sheet::MemberResult& rData, bool bColHeader, long nLevel )
+                             const sheet::MemberResult& rData, bool bColHeader, long nLevel,bool aFlag )
 {
     long nFlags = rData.Flags;
 
@@ -796,23 +796,23 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
             outputimp.OutputBlockFrame( nCol,nMemberStartRow+(SCROW)nLevel, nCol,nDataStartRow-1 );
 
             lcl_SetStyleById( pDoc,nTab, nCol,nMemberStartRow+(SCROW)nLevel, nCol,nDataStartRow-1,
-                                    STR_PIVOT_STYLE_TITLE );
+                                    STR_PIVOT_STYLE_TITLE,aFlag);
             lcl_SetStyleById( pDoc,nTab, nCol,nDataStartRow, nCol,nTabEndRow,
-                                    STR_PIVOT_STYLE_RESULT );
+                                    STR_PIVOT_STYLE_RESULT,aFlag );
         }
         else
         {
             outputimp.OutputBlockFrame( nMemberStartCol+(SCCOL)nLevel,nRow, nDataStartCol-1,nRow );
             lcl_SetStyleById( pDoc,nTab, nMemberStartCol+(SCCOL)nLevel,nRow, nDataStartCol-1,nRow,
-                                    STR_PIVOT_STYLE_TITLE );
+                                    STR_PIVOT_STYLE_TITLE,aFlag );
             lcl_SetStyleById( pDoc,nTab, nDataStartCol,nRow, nTabEndCol,nRow,
-                                    STR_PIVOT_STYLE_RESULT );
+                                    STR_PIVOT_STYLE_RESULT,aFlag );
         }
     }
 }
 
 void ScDPOutput::FieldCell(
-    SCCOL nCol, SCROW nRow, SCTAB nTab, const ScDPOutLevelData& rData, bool bInTable)
+    SCCOL nCol, SCROW nRow, SCTAB nTab, const ScDPOutLevelData& rData, bool bInTable,bool aFlag)
 {
     // Avoid unwanted automatic format detection.
     ScSetStringParam aParam;
@@ -843,7 +843,7 @@ void ScDPOutput::FieldCell(
         pDoc->ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, nMergeFlag);
     }
 
-    lcl_SetStyleById( pDoc,nTab, nCol,nRow, nCol,nRow, STR_PIVOT_STYLE_FIELDNAME );
+    lcl_SetStyleById( pDoc,nTab, nCol,nRow, nCol,nRow, STR_PIVOT_STYLE_FIELDNAME,aFlag);
 }
 
 static void lcl_DoFilterButton( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
@@ -948,7 +948,7 @@ sal_Int32 ScDPOutput::GetPositionType(const ScAddress& rPos)
     return DataPilotTablePositionType::OTHER;
 }
 
-void ScDPOutput::Output()
+void ScDPOutput::Output(bool aFlag)
 {
     SCTAB nTab = aStartPos.Tab();
     const uno::Sequence<sheet::DataResult>* pRowAry = aData.getConstArray();
@@ -962,7 +962,8 @@ void ScDPOutput::Output()
     //  clear whole (new) output area
     // when modifying table, clear old area !
     //TODO: include InsertDeleteFlags::OBJECTS ???
-    pDoc->DeleteAreaTab( aStartPos.Col(), aStartPos.Row(), nTabEndCol, nTabEndRow, nTab, InsertDeleteFlags::ALL );
+    if(!aFlag)
+        pDoc->DeleteAreaTab( aStartPos.Col(), aStartPos.Row(), nTabEndCol, nTabEndRow, nTab, InsertDeleteFlags::ALL );
 
     if ( bDoFilter )
         lcl_DoFilterButton( pDoc, aStartPos.Col(), aStartPos.Row(), nTab );
@@ -1005,9 +1006,9 @@ void ScDPOutput::Output()
 
     if ( nDataStartRow > nTabStartRow )
         lcl_SetStyleById( pDoc, nTab, nTabStartCol, nTabStartRow, nTabEndCol, nDataStartRow-1,
-                            STR_PIVOT_STYLE_TOP );
+                            STR_PIVOT_STYLE_TOP,aFlag );
     lcl_SetStyleById( pDoc, nTab, nDataStartCol, nDataStartRow, nTabEndCol, nTabEndRow,
-                        STR_PIVOT_STYLE_INNER );
+                        STR_PIVOT_STYLE_INNER,aFlag );
 
     //  output column headers:
     ScDPOutputImpl outputimp( pDoc, nTab,
@@ -1016,7 +1017,7 @@ void ScDPOutput::Output()
     for (size_t nField=0; nField<pColFields.size(); nField++)
     {
         SCCOL nHdrCol = nDataStartCol + (SCCOL)nField;              //TODO: check for overflow
-        FieldCell(nHdrCol, nTabStartRow, nTab, pColFields[nField], true);
+        FieldCell(nHdrCol, nTabStartRow, nTab, pColFields[nField], true,aFlag);
 
         SCROW nRowPos = nMemberStartRow + (SCROW)nField;                //TODO: check for overflow
         const uno::Sequence<sheet::MemberResult> rSequence = pColFields[nField].maResult;
@@ -1026,7 +1027,7 @@ void ScDPOutput::Output()
         for (long nCol=0; nCol<nThisColCount; nCol++)
         {
             SCCOL nColPos = nDataStartCol + (SCCOL)nCol;                //TODO: check for overflow
-            HeaderCell( nColPos, nRowPos, nTab, pArray[nCol], true, nField );
+            HeaderCell( nColPos, nRowPos, nTab, pArray[nCol], true, nField,aFlag );
             if ( ( pArray[nCol].Flags & sheet::MemberResultFlags::HASMEMBER ) &&
                 !( pArray[nCol].Flags & sheet::MemberResultFlags::SUBTOTAL ) )
             {
@@ -1048,7 +1049,7 @@ void ScDPOutput::Output()
                     lcl_SetStyleById( pDoc, nTab, nColPos,nRowPos, nEndColPos,nDataStartRow-1, STR_PIVOT_STYLE_CATEGORY );
                 }
                 else
-                    lcl_SetStyleById( pDoc, nTab, nColPos,nRowPos, nColPos,nDataStartRow-1, STR_PIVOT_STYLE_CATEGORY );
+                    lcl_SetStyleById( pDoc, nTab, nColPos,nRowPos, nColPos,nDataStartRow-1, STR_PIVOT_STYLE_CATEGORY,aFlag );
             }
             else if (  pArray[nCol].Flags & sheet::MemberResultFlags::SUBTOTAL )
                 outputimp.AddCol( nColPos );
@@ -1067,7 +1068,7 @@ void ScDPOutput::Output()
     {
         SCCOL nHdrCol = nTabStartCol + (SCCOL)nField;                   //TODO: check for overflow
         SCROW nHdrRow = nDataStartRow - 1;
-        FieldCell(nHdrCol, nHdrRow, nTab, pRowFields[nField], true);
+        FieldCell(nHdrCol, nHdrRow, nTab, pRowFields[nField], true,aFlag);
 
         SCCOL nColPos = nMemberStartCol + (SCCOL)nField;                //TODO: check for overflow
         const uno::Sequence<sheet::MemberResult> rSequence = pRowFields[nField].maResult;
@@ -1077,7 +1078,7 @@ void ScDPOutput::Output()
         for (long nRow=0; nRow<nThisRowCount; nRow++)
         {
             SCROW nRowPos = nDataStartRow + (SCROW)nRow;                //TODO: check for overflow
-            HeaderCell( nColPos, nRowPos, nTab, pArray[nRow], false, nField );
+            HeaderCell( nColPos, nRowPos, nTab, pArray[nRow], false, nField,aFlag );
             if ( ( pArray[nRow].Flags & sheet::MemberResultFlags::HASMEMBER ) &&
                 !( pArray[nRow].Flags & sheet::MemberResultFlags::SUBTOTAL ) )
             {
@@ -1101,7 +1102,7 @@ void ScDPOutput::Output()
                     lcl_SetStyleById( pDoc, nTab, nColPos,nRowPos, nDataStartCol-1,nEndRowPos, STR_PIVOT_STYLE_CATEGORY );
                 }
                 else
-                    lcl_SetStyleById( pDoc, nTab, nColPos,nRowPos, nDataStartCol-1,nRowPos, STR_PIVOT_STYLE_CATEGORY );
+                    lcl_SetStyleById( pDoc, nTab, nColPos,nRowPos, nDataStartCol-1,nRowPos, STR_PIVOT_STYLE_CATEGORY,aFlag );
             }
             else if (  pArray[nRow].Flags & sheet::MemberResultFlags::SUBTOTAL )
                 outputimp.AddRow( nRowPos );

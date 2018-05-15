@@ -85,9 +85,9 @@ private:
                                 const css::sheet::DataResult& rData );
     void            HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const css::sheet::MemberResult& rData,
-                                bool bColHeader, long nLevel );
+                                bool bColHeader, long nLevel ,bool aFlag=false);
 
-    void FieldCell(SCCOL nCol, SCROW nRow, SCTAB nTab, const ScDPOutLevelData& rData, bool bInTable);
+    void FieldCell(SCCOL nCol, SCROW nRow, SCTAB nTab, const ScDPOutLevelData& rData, bool bInTable,bool aFlag=false);
 
     void            CalcSizes();
 
@@ -104,7 +104,7 @@ public:
 
     void            SetPosition( const ScAddress& rPos );
 
-    void            Output();           //! Refresh?
+    void            Output(bool aFlag=false);           //! Refresh?
     ScRange GetOutputRange( sal_Int32 nRegionType = css::sheet::DataPilotOutputRangeType::WHOLE );
     long            GetHeaderRows();
     bool            HasError();         // range overflow or exception from source

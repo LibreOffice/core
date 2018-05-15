@@ -124,7 +124,7 @@ public:
     void ClearTableData();
     void ReloadGroupTableData();
 
-    void                Output( const ScAddress& rPos );
+    void                Output( const ScAddress& rPos ,bool aFlag=false);
     ScRange             GetNewOutputRange( bool& rOverflow );
 
     ScRange GetOutputRangeByType( sal_Int32 nType );

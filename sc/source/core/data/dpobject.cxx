@@ -901,21 +901,23 @@ ScRange ScDPObject::GetNewOutputRange( bool& rOverflow )
     }
 }
 
-void ScDPObject::Output( const ScAddress& rPos )
+void ScDPObject::Output( const ScAddress& rPos ,bool aFlag)
 {
     //  clear old output area
-    pDoc->DeleteAreaTab( aOutRange.aStart.Col(), aOutRange.aStart.Row(),
-                         aOutRange.aEnd.Col(),   aOutRange.aEnd.Row(),
-                         aOutRange.aStart.Tab(), InsertDeleteFlags::ALL );
-    pDoc->RemoveFlagsTab( aOutRange.aStart.Col(), aOutRange.aStart.Row(),
-                          aOutRange.aEnd.Col(),   aOutRange.aEnd.Row(),
-                          aOutRange.aStart.Tab(), ScMF::Auto );
-
+    if (!aFlag)
+    {
+        pDoc->DeleteAreaTab(aOutRange.aStart.Col(), aOutRange.aStart.Row(),
+            aOutRange.aEnd.Col(), aOutRange.aEnd.Row(),
+            aOutRange.aStart.Tab(), InsertDeleteFlags::ALL);
+        pDoc->RemoveFlagsTab(aOutRange.aStart.Col(), aOutRange.aStart.Row(),
+            aOutRange.aEnd.Col(), aOutRange.aEnd.Row(),
+            aOutRange.aStart.Tab(), ScMF::Auto);
+    }
     CreateOutput();             // create xSource and pOutput if not already done
 
     pOutput->SetPosition( rPos );
 
-    pOutput->Output();
+    pOutput->Output(aFlag);
 
     //  aOutRange is always the range that was last output to the document
     aOutRange = pOutput->GetOutputRange();
