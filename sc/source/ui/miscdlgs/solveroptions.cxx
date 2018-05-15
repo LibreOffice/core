@@ -322,12 +322,12 @@ void ScSolverOptionsDialog::EditOption()
             {
                 if ( pStringItem->IsDouble() )
                 {
-                    ScopedVclPtrInstance< ScSolverValueDialog > aValDialog( this );
-                    aValDialog->SetOptionName( pStringItem->GetText() );
-                    aValDialog->SetValue( pStringItem->GetDoubleValue() );
-                    if ( aValDialog->Execute() == RET_OK )
+                    ScSolverValueDialog aValDialog(GetFrameWeld());
+                    aValDialog.SetOptionName( pStringItem->GetText() );
+                    aValDialog.SetValue( pStringItem->GetDoubleValue() );
+                    if (aValDialog.run() == RET_OK)
                     {
-                        pStringItem->SetDoubleValue( aValDialog->GetValue() );
+                        pStringItem->SetDoubleValue( aValDialog.GetValue() );
                         m_pLbSettings->InvalidateEntry( pEntry );
                     }
                 }
@@ -429,41 +429,32 @@ sal_Int32 ScSolverIntegerDialog::GetValue() const
     return static_cast<sal_Int32>(nValue);
 }
 
-ScSolverValueDialog::ScSolverValueDialog( vcl::Window * pParent )
-    : ModalDialog( pParent, "DoubleDialog",
-        "modules/scalc/ui/doubledialog.ui" )
+ScSolverValueDialog::ScSolverValueDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "modules/scalc/ui/doubledialog.ui", "DoubleDialog")
+    , m_xFrame(m_xBuilder->weld_frame("frame"))
+    , m_xEdValue(m_xBuilder->weld_entry("value"))
 {
-    get(m_pFrame, "frame");
-    get(m_pEdValue, "value");
 }
 
 ScSolverValueDialog::~ScSolverValueDialog()
 {
-    disposeOnce();
-}
-
-void ScSolverValueDialog::dispose()
-{
-    m_pFrame.clear();
-    m_pEdValue.clear();
-    ModalDialog::dispose();
 }
 
 void ScSolverValueDialog::SetOptionName( const OUString& rName )
 {
-    m_pFrame->set_label(rName);
+    m_xFrame->set_label(rName);
 }
 
 void ScSolverValueDialog::SetValue( double fValue )
 {
-    m_pEdValue->SetText( rtl::math::doubleToUString( fValue,
+    m_xEdValue->set_text( rtl::math::doubleToUString( fValue,
             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
             ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true ) );
 }
 
 double ScSolverValueDialog::GetValue() const
 {
-    OUString aInput = m_pEdValue->GetText();
+    OUString aInput = m_xEdValue->get_text();
 
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
     sal_Int32 nParseEnd = 0;

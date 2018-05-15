@@ -83,15 +83,14 @@ public:
     sal_Int32   GetValue() const;
 };
 
-class ScSolverValueDialog : public ModalDialog
+class ScSolverValueDialog : public weld::GenericDialogController
 {
-    VclPtr<VclFrame>   m_pFrame;
-    VclPtr<Edit>       m_pEdValue;
+    std::unique_ptr<weld::Frame> m_xFrame;
+    std::unique_ptr<weld::Entry> m_xEdValue;
 
 public:
-    ScSolverValueDialog( vcl::Window * pParent );
+    ScSolverValueDialog(weld::Window* pParent);
     virtual ~ScSolverValueDialog() override;
-    virtual void dispose() override;
 
     void        SetOptionName( const OUString& rName );
     void        SetValue( double fValue );
