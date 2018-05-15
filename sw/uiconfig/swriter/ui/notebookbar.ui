@@ -534,7 +534,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" context="notebookbar|Help" translatable="yes">~Check for Updates...</property>
+        <property name="label" translatable="yes" context="notebookbar|Help">~Check for Updates...</property>
       </object>
     </child>
     <child>
@@ -562,64 +562,51 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="FontDialog">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:FontDialog</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separator82">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="GrowD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:Grow</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="ShrinkD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:Shrink</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separator72">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="ShadowedD1">
+      <object class="GtkMenuItem" id="ShadowedD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Shadowed</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="OutlineFontD1">
+      <object class="GtkMenuItem" id="OutlineFontD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OutlineFont</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="UnderlineDoubleD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:UnderlineDouble</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="OverlineD1">
+      <object class="GtkMenuItem" id="OverlineD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Overline</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator52">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="ChangeCaseToUpperD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ChangeCaseToUpper</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="ChangeCaseToLowerD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ChangeCaseToLower</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="ChangeCaseRotateCaseD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ChangeCaseRotateCase</property>
       </object>
     </child>
     <child>
@@ -629,24 +616,24 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ChangeCaseToLower">
+      <object class="GtkMenuItem" id="ChangeCaseToSentenceCaseD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:ChangeCaseToLower</property>
+        <property name="action_name">.uno:ChangeCaseToSentenceCase</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ChangeCaseToUpper">
+      <object class="GtkMenuItem" id="ChangeCaseToTitleCaseD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:ChangeCaseToUpper</property>
+        <property name="action_name">.uno:ChangeCaseToTitleCase</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SmallCapsD">
+      <object class="GtkMenuItem" id="ChangeCaseToToggleCaseD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:SmallCaps</property>
+        <property name="action_name">.uno:ChangeCaseToToggleCase</property>
       </object>
     </child>
     <child>
@@ -656,14 +643,83 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ParagraphDialog">
+      <object class="GtkMenuItem" id="InsertNonBreakingSpaceD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:InsertNonBreakingSpace</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="InsertHardHyphenD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:InsertHardHyphen</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="InsertSoftHyphenD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:InsertSoftHyphen</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="InsertZWSPD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:InsertZWSP</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="InsertZWNBSPD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:InsertZWNBSP</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="InsertLRMD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:InsertLRM</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="InsertRLMD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:InsertRLM</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="FontDialog">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:FontDialog</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="BulletsAndNumberingDialogD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:BulletsAndNumberingDialog</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="ParagraphDialogD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ParagraphDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator81">
+      <object class="GtkSeparatorMenuItem" id="separator60">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -683,168 +739,68 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator52">
+      <object class="GtkSeparatorMenuItem" id="separator72">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DecrementLevelD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:DecrementLevel</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="IncrementLevelD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:IncrementLevel</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="DecrementSubLevelsD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:DecrementSubLevels</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="IncrementSubLevelsD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:IncrementSubLevels</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separator86">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="BulletsAndNumberingDialogD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:BulletsAndNumberingDialog</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separator2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MoveDownD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:MoveDown</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MoveUpD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:MoveUp</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MoveDownSubItemsD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:MoveDownSubItems</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MoveUpSubItemsD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:MoveUpSubItems</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separator88">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="InsertNeutralParagraphD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertNeutralParagraph</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separator89">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="JumpDownThisLevelD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:JumpDownThisLevel</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="JumpUpThisLevelD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:JumpUpThisLevel</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="ContinueNumberingD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ContinueNumbering</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separator83">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="SelectAllD">
+      <object class="GtkMenuItem" id="SelectAlld2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SelectAll</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SelectTextModeD">
+      <object class="GtkMenuItem" id="SelectionModeDefaultD2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SelectionModeDefault</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="SelectionModeBlockD2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SelectionModeBlock</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="SelectTextModeD2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SelectTextMode</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ShadowCursorD">
+      <object class="GtkMenuItem" id="ShadowCursorD2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ShadowCursor</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator84">
+      <object class="GtkSeparatorMenuItem" id="separator65">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="FindbarD">
+      <object class="GtkMenuItem" id="FocusToFindbarD2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">vnd.sun.star.findbar:FocusToFindbar</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="GotoPageD">
+      <object class="GtkMenuItem" id="SearchDialogD2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SearchDialog</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="GotoPageD2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:GotoPage</property>
@@ -1622,7 +1578,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label"  context="notebookbar|Tools" translatable="yes">~Check for Updates...</property>
+        <property name="label" translatable="yes" context="notebookbar|Tools">~Check for Updates...</property>
       </object>
     </child>
     <child>
