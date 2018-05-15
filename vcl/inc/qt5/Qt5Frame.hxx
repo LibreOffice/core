@@ -28,6 +28,7 @@
 
 class Qt5Graphics;
 class Qt5Instance;
+class Qt5Menu;
 class QWidget;
 class QPaintDevice;
 class QImage;
@@ -54,6 +55,8 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public SalFrame
     SalFrameStyleFlags m_nStyle;
     Qt5Frame* m_pParent;
     PointerStyle m_ePointerStyle;
+
+    Qt5Menu* m_pSalMenu;
 
     bool m_bDefaultSize;
     bool m_bDefaultPos;
