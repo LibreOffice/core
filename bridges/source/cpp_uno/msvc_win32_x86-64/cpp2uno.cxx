@@ -240,11 +240,11 @@ extern "C" typelib_TypeClass cpp_vtable_call(
 
     typelib_InterfaceTypeDescription * pTD = pCppI->getTypeDescr();
 
-    SAL_INFO( "bridges.win64", "cpp_vtable_call: pCallStack=[" <<
-            std::hex << pStack[0] << "," << pStack[1] << "," << pStack[2] << ",...]" <<
-            ", pThis=" << pThis << ", pCppI=" << pCppI <<
+    SAL_INFO( "bridges", "cpp_vtable_call: pCallStack=[" <<
+            std::hex << pStack[0] << "," << pStack[1] << "," << pStack[2] << ",...], pThis=" <<
+            pThis << ", pCppI=" << pCppI <<
             std::dec << ", nFunctionIndex=" << nFunctionIndex << ", nVtableOffset=" << nVtableOffset );
-    SAL_INFO( "bridges.win64", "name=" << OUString::unacquired(&pTD->aBase.pTypeName) );
+    SAL_INFO( "bridges", "name=" << OUString::unacquired(&pTD->aBase.pTypeName) );
 
     if ( nFunctionIndex >= pTD->nMapFunctionIndexToMemberIndex )
     {
@@ -266,7 +266,7 @@ extern "C" typelib_TypeClass cpp_vtable_call(
 
     TypeDescription aMemberDescr( pTD->ppAllMembers[nMemberPos] );
 
-    SAL_INFO( "bridges.win64", "Calling " << OUString::unacquired(&aMemberDescr.get()->pTypeName) );
+    SAL_INFO( "bridges", "Calling " << OUString::unacquired(&aMemberDescr.get()->pTypeName) );
 
     typelib_TypeClass eRet;
     switch ( aMemberDescr.get()->eTypeClass )
