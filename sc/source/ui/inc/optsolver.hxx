@@ -214,14 +214,13 @@ public:
     void    SetTimeLimit( sal_Int32 nSeconds );
 };
 
-class ScSolverNoSolutionDialog : public ModalDialog
+class ScSolverNoSolutionDialog : public weld::GenericDialogController
 {
-    VclPtr<FixedText> m_pFtErrorText;
+    std::unique_ptr<weld::Label> m_xFtErrorText;
 
 public:
-    ScSolverNoSolutionDialog(vcl::Window* pParent, const OUString& rErrorText);
+    ScSolverNoSolutionDialog(weld::Window* pParent, const OUString& rErrorText);
     virtual ~ScSolverNoSolutionDialog() override;
-    virtual void dispose() override;
 };
 
 class ScSolverSuccessDialog : public weld::GenericDialogController

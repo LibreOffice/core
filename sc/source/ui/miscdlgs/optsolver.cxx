@@ -77,22 +77,15 @@ void ScSolverProgressDialog::SetTimeLimit( sal_Int32 nSeconds )
     m_pFtTime->SetText( aNew );
 }
 
-ScSolverNoSolutionDialog::ScSolverNoSolutionDialog( vcl::Window* pParent, const OUString& rErrorText )
-    : ModalDialog(pParent, "NoSolutionDialog", "modules/scalc/ui/nosolutiondialog.ui")
+ScSolverNoSolutionDialog::ScSolverNoSolutionDialog(weld::Window* pParent, const OUString& rErrorText)
+    : GenericDialogController(pParent, "modules/scalc/ui/nosolutiondialog.ui", "NoSolutionDialog")
+    , m_xFtErrorText(m_xBuilder->weld_label("error"))
 {
-    get(m_pFtErrorText, "error");
-    m_pFtErrorText->SetText(rErrorText);
+    m_xFtErrorText->set_label(rErrorText);
 }
 
 ScSolverNoSolutionDialog::~ScSolverNoSolutionDialog()
 {
-    disposeOnce();
-}
-
-void ScSolverNoSolutionDialog::dispose()
-{
-    m_pFtErrorText.clear();
-    ModalDialog::dispose();
 }
 
 ScSolverSuccessDialog::ScSolverSuccessDialog(weld::Window* pParent, const OUString& rSolution)
@@ -1059,8 +1052,8 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         uno::Reference<sheet::XSolverDescription> xDesc( xSolver, uno::UNO_QUERY );
         if ( xDesc.is() )
             aError = xDesc->getStatusDescription();         // error description from component
-        ScopedVclPtrInstance< ScSolverNoSolutionDialog > aDialog( this, aError );
-        aDialog->Execute();
+        ScSolverNoSolutionDialog aDialog(GetFrameWeld(), aError);
+        aDialog.run();
     }
 
     if ( bRestore )         // restore old values
