@@ -505,8 +505,6 @@ public:
 
     /** invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
 
-        @author OD
-
         @param _pFromTextFrame
         input parameter - paragraph frame, for which the relation CONTENT_FLOWS_FROM
         has to be invalidated.
@@ -521,8 +519,6 @@ public:
                                                const SwTextFrame* _pToTextFrame );
 
     /** invalidate text selection for paragraphs
-
-        @author OD
     */
     void InvalidateAccessibleParaTextSelection();
 
@@ -530,8 +526,6 @@ public:
 
         usage also for changes of the attributes of
         paragraph's characters.
-
-        @author OD
 
         @param rTextFrame
         input parameter - paragraph frame, whose attributes have changed
