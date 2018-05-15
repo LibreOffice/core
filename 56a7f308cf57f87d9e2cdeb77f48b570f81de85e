@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_b4271263",
+        "filename": "i18npool/source/nativenumber/nativenumbersupplier.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2018-05-15T19:11:02Z",
+      "side": 1,
+      "message": "We never push in the map, is it fine ?",
+      "range": {
+        "startLine": 574,
+        "startChar": 0,
+        "endLine": 574,
+        "endChar": 76
+      },
+      "revId": "56a7f308cf57f87d9e2cdeb77f48b570f81de85e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
