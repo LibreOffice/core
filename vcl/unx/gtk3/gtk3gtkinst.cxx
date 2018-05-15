@@ -3000,6 +3000,24 @@ namespace
         g_free(pStr);
         return found;
     }
+
+    GdkPixbuf* load_icon_by_name(const OUString& rIconName, const OUString& rIconTheme, const OUString& rUILang)
+    {
+        GdkPixbuf* pixbuf = nullptr;
+        auto xMemStm = ImageTree::get().getImageStream(rIconName, rIconTheme, rUILang);
+        if (xMemStm)
+        {
+            GdkPixbufLoader *pixbuf_loader = gdk_pixbuf_loader_new();
+            gdk_pixbuf_loader_write(pixbuf_loader, static_cast<const guchar*>(xMemStm->GetData()),
+                                    xMemStm->Seek(STREAM_SEEK_TO_END), nullptr);
+            gdk_pixbuf_loader_close(pixbuf_loader, nullptr);
+            pixbuf = gdk_pixbuf_loader_get_pixbuf(pixbuf_loader);
+            if (pixbuf)
+                g_object_ref(pixbuf);
+            g_object_unref(pixbuf_loader);
+        }
+        return pixbuf;
+    }
 }
 
 class GtkInstanceTreeView : public GtkInstanceContainer, public virtual weld::TreeView
@@ -3073,13 +3091,33 @@ public:
         }
         else
         {
-            assert((rImage == "dialog-warning" || rImage == "dialog-error" || rImage == "dialog-information") && "unknown stock image");
+            GdkPixbuf* pixbuf = nullptr;
+
+            if (rImage.lastIndexOf('.') != rImage.getLength() - 4)
+            {
+                assert((rImage == "dialog-warning" || rImage == "dialog-error" || rImage == "dialog-information") && "unknown stock image");
+
+                GError *error = nullptr;
+                GtkIconTheme *icon_theme = gtk_icon_theme_get_default();
+                pixbuf = gtk_icon_theme_load_icon(icon_theme, OUStringToOString(rImage, RTL_TEXTENCODING_UTF8).getStr(),
+                                                  16, GTK_ICON_LOOKUP_USE_BUILTIN, &error);
+            }
+            else
+            {
+                const AllSettings& rSettings = Application::GetSettings();
+                pixbuf = load_icon_by_name(rImage,
+                                           rSettings.GetStyleSettings().DetermineIconTheme(),
+                                           rSettings.GetUILanguageTag().getBcp47());
+            }
 
             gtk_list_store_set(m_pListStore, &iter,
                     0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
                     1, OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr(),
-                    2, OUStringToOString(rImage, RTL_TEXTENCODING_UTF8).getStr(),
+                    2, pixbuf,
                     -1);
+
+            if (pixbuf)
+                g_object_unref(pixbuf);
         }
         enable_notify_events();
     }
@@ -4349,17 +4387,11 @@ private:
             if (icon_name)
             {
                 OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
-                auto xMemStm = ImageTree::get().getImageStream(aIconName, m_aIconTheme, m_aUILang);
-                if (xMemStm)
+                GdkPixbuf* pixbuf = load_icon_by_name(aIconName, m_aIconTheme, m_aUILang);
+                if (pixbuf)
                 {
-                    GdkPixbufLoader *pixbuf_loader = gdk_pixbuf_loader_new();
-                    gdk_pixbuf_loader_write(pixbuf_loader, static_cast<const guchar*>(xMemStm->GetData()),
-                                            xMemStm->Seek(STREAM_SEEK_TO_END), nullptr);
-                    gdk_pixbuf_loader_close(pixbuf_loader, nullptr);
-                    GdkPixbuf* pixbuf = gdk_pixbuf_loader_get_pixbuf(pixbuf_loader);
-
                     gtk_image_set_from_pixbuf(pImage, pixbuf);
-                    g_object_unref(pixbuf_loader);
+                    g_object_unref(pixbuf);
                 }
             }
         }

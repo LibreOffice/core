@@ -9,7 +9,7 @@
       <!-- column-name id -->
       <column type="gchararray"/>
       <!-- column-name image -->
-      <column type="gchararray"/>
+      <column type="GdkPixbuf"/>
     </columns>
   </object>
   <object class="GtkMessageDialog" id="WarnPDFDialog">
@@ -92,7 +92,7 @@
                         <child>
                           <object class="GtkCellRendererPixbuf" id="cellrenderertext1"/>
                           <attributes>
-                            <attribute name="icon-name">2</attribute>
+                            <attribute name="pixbuf">2</attribute>
                           </attributes>
                         </child>
                       </object>
