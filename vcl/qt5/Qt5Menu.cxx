@@ -10,6 +10,8 @@
 #include "Qt5Frame.hxx"
 #include "Qt5Menu.hxx"
 
+#include <QtWidgets/QtWidgets>
+
 #include <vcl/svapp.hxx>
 
 Qt5Menu::Qt5Menu( bool bMenuBar ) :
@@ -55,8 +57,32 @@ void Qt5Menu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned
 
 void Qt5Menu::SetFrame( const SalFrame* pFrame )
 {
-
+    SolarMutexGuard aGuard;
+    assert(mbMenuBar);
     mpFrame = const_cast<Qt5Frame*>( static_cast<const Qt5Frame*>( pFrame ) );
+
+    mpFrame->SetMenu( this );
+
+    QWidget* pWidget = mpFrame->GetQWidget();
+    QMainWindow* pMainWindow = dynamic_cast<QMainWindow*>(pWidget);
+    if( pMainWindow )
+        mpQMenuBar = pMainWindow->menuBar();
+
+    ActivateAllSubMenus( mpVCLMenu );
+}
+
+void Qt5Menu::ActivateAllSubMenus( Menu* pMenuBar )
+{
+    for (Qt5MenuItem* pSalItem : maItems)
+    {
+        if ( pSalItem->mpSubMenu != nullptr )
+        {
+            pMenuBar->HandleMenuActivateEvent(pSalItem->mpSubMenu->GetMenu());
+            pSalItem->mpSubMenu->ActivateAllSubMenus(pMenuBar);
+            pSalItem->mpSubMenu->Update();
+            pMenuBar->HandleMenuDeActivateEvent(pSalItem->mpSubMenu->GetMenu());
+        }
+    }
 }
 
 void Qt5Menu::ShowItem( unsigned nPos, bool bCheck )
