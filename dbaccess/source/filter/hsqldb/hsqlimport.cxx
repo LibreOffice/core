@@ -297,7 +297,7 @@ void HsqlImporter::importHsqlDatabase()
 
     auto statements = parser.getCreateStatements();
 
-    if (statements.size() < 1)
+    if (statements.size() < 1 && !pException)
     {
         SAL_WARN("dbaccess", "dbashql: there is nothing to import");
         return; // there is nothing to import

@@ -17,6 +17,8 @@ namespace dbahsql
 namespace utils
 {
 OUString getTableNameFromStmt(const OUString& sSql);
+
+void ensureFirebirdTableLength(const OUString& sName);
 }
 }
 

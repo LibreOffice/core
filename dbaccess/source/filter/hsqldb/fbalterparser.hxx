@@ -16,6 +16,9 @@ namespace dbahsql
 {
 class SAL_DLLPUBLIC_EXPORT FbAlterStmtParser : public AlterStmtParser
 {
+protected:
+    void ensureProperTableLengths() const;
+
 public:
     /**
      * Compose the result of the parser to statements of Firebird dialect
