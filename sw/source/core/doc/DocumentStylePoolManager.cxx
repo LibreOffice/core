@@ -412,6 +412,9 @@ static const char* STR_POOLCOLL_REGISTER_ARY[] =
     // Illustrations Index
     STR_POOLCOLL_TOX_ILLUSH,
     STR_POOLCOLL_TOX_ILLUS1,
+    // Figures Index
+    STR_POOLCOLL_TOX_FIGURE,
+    STR_POOLCOLL_TOX_FIGURE1,
     //  Object Index
     STR_POOLCOLL_TOX_OBJECTH,
     STR_POOLCOLL_TOX_OBJECT1,
@@ -1071,6 +1074,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_TOX_ILLUSH:
         case RES_POOLCOLL_TOX_OBJECTH:
         case RES_POOLCOLL_TOX_TABLESH:
+        case RES_POOLCOLL_TOX_FIGURE:
         case RES_POOLCOLL_TOX_AUTHORITIESH:
             lcl_SetRegister( &m_rDoc, aSet, 0, true, false );
             {
@@ -1081,6 +1085,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             break;
         case RES_POOLCOLL_TOX_ILLUS1:
         case RES_POOLCOLL_TOX_OBJECT1:
+        case RES_POOLCOLL_TOX_FIGURE1:
         case RES_POOLCOLL_TOX_TABLES1:
         case RES_POOLCOLL_TOX_AUTHORITIES1:
             lcl_SetRegister( &m_rDoc, aSet, 0, false, true );

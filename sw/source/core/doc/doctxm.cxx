@@ -458,6 +458,7 @@ const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, bool bCreate )
     case  TOX_TABLES:           prBase = &mpDefTOXBases->pTableBase;  break;
     case  TOX_OBJECTS:          prBase = &mpDefTOXBases->pObjBase;  break;
     case  TOX_ILLUSTRATIONS:    prBase = &mpDefTOXBases->pIllBase;  break;
+    case  TOX_FIGURE:           prBase = &mpDefTOXBases->pFigBase;  break;
     case  TOX_AUTHORITIES:      prBase = &mpDefTOXBases->pAuthBase; break;
     case  TOX_BIBLIOGRAPHY:      prBase = &mpDefTOXBases->pBiblioBase; break;
     case  TOX_CITATION: /** TODO */break;
@@ -484,6 +485,7 @@ void    SwDoc::SetDefaultTOXBase(const SwTOXBase& rBase)
     case  TOX_TABLES:           prBase = &mpDefTOXBases->pTableBase;  break;
     case  TOX_OBJECTS:          prBase = &mpDefTOXBases->pObjBase;  break;
     case  TOX_ILLUSTRATIONS:    prBase = &mpDefTOXBases->pIllBase;  break;
+    case  TOX_FIGURE:           prBase = &mpDefTOXBases->pFigBase;  break;
     case  TOX_AUTHORITIES:      prBase = &mpDefTOXBases->pAuthBase; break;
     case  TOX_BIBLIOGRAPHY:      prBase = &mpDefTOXBases->pBiblioBase; break;
     case  TOX_CITATION: /** TODO */break;
@@ -920,12 +922,13 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         UpdateTable( pOwnChapterNode );
 
     if( GetCreateType() & SwTOXElement::Graphic ||
-        (TOX_ILLUSTRATIONS == SwTOXBase::GetType() && IsFromObjectNames()))
+        (TOX_ILLUSTRATIONS == SwTOXBase::GetType() && IsFromObjectNames()) ||
+        (TOX_FIGURE == SwTOXBase::GetType() && IsFromObjectNames()))
         UpdateContent( SwTOXElement::Graphic, pOwnChapterNode );
 
     if( !GetSequenceName().isEmpty() && !IsFromObjectNames() &&
         (TOX_TABLES == SwTOXBase::GetType() ||
-         TOX_ILLUSTRATIONS == SwTOXBase::GetType() ) )
+         TOX_ILLUSTRATIONS == SwTOXBase::GetType()||TOX_FIGURE == SwTOXBase::GetType() ) )
         UpdateSequence( pOwnChapterNode );
 
     if( GetCreateType() & SwTOXElement::Frame )
@@ -1092,6 +1095,7 @@ SwTextFormatColl* SwTOXBaseSection::GetTextFormatColl( sal_uInt16 nLevel )
                 nPoolFormat = RES_POOLCOLL_TOX_USER6 - 6;
             break;
         case TOX_ILLUSTRATIONS: nPoolFormat = RES_POOLCOLL_TOX_ILLUSH;     break;
+        case TOX_FIGURE:        nPoolFormat = RES_POOLCOLL_TOX_FIGURE;     break;
         case TOX_OBJECTS:       nPoolFormat = RES_POOLCOLL_TOX_OBJECTH;    break;
         case TOX_TABLES:        nPoolFormat = RES_POOLCOLL_TOX_TABLESH;    break;
         case TOX_AUTHORITIES:
@@ -1452,7 +1456,7 @@ void SwTOXBaseSection::UpdateContent( SwTOXElement eMyType,
             if( IsLevelFromChapter() &&
                     TOX_TABLES != SwTOXBase::GetType() &&
                     TOX_ILLUSTRATIONS != SwTOXBase::GetType() &&
-                    TOX_OBJECTS != SwTOXBase::GetType() )
+                    TOX_OBJECTS != SwTOXBase::GetType() && TOX_FIGURE != SwTOXBase::GetType() )
             {
                 const SwTextNode* pOutlNd = ::lcl_FindChapterNode( *pCNd,
                                                         MAXLEVEL - 1 );

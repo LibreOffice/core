@@ -74,6 +74,10 @@
         <col id="0" translatable="yes" context="tocindexpage|liststore1">Bibliography</col>
         <col id="1">64</col>
       </row>
+      <row>
+        <col id="0" translatable="yes" context="tocindexpage|liststore1">Table of Figures</col>
+        <col id="1">256</col>
+      </row>
     </data>
   </object>
   <object class="GtkBox" id="TocIndexPage">

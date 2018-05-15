@@ -286,6 +286,7 @@ sal_uInt16 GetPoolParent( sal_uInt16 nId )
             case RES_POOLCOLL_TOX_CNTNTH:
             case RES_POOLCOLL_TOX_IDXH:
             case RES_POOLCOLL_TOX_ILLUSH:
+            case RES_POOLCOLL_TOX_FIGURE:
             case RES_POOLCOLL_TOX_OBJECTH:
             case RES_POOLCOLL_TOX_TABLESH:
             case RES_POOLCOLL_TOX_AUTHORITIESH:

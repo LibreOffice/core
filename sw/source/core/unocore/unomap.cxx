@@ -569,6 +569,33 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 m_aMapEntriesArr[nPropertyId] = aTOXIllustrationsMap_Impl;
             }
             break;
+            case PROPERTY_MAP_INDEX_FIGURES:
+            {
+                static SfxItemPropertyMapEntry const aTOXFiguresMap_Impl[] =
+                {
+                    BASE_INDEX_PROPERTIES_
+                    { OUString(UNO_NAME_CREATE_FROM_CHAPTER), WID_CREATE_FROM_CHAPTER                 ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
+                    { OUString(UNO_NAME_CREATE_FROM_LABELS), WID_CREATE_FROM_LABELS                  ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
+                    { OUString(UNO_NAME_IS_PROTECTED), WID_PROTECTED                           ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
+                    { OUString(UNO_NAME_USE_ALPHABETICAL_SEPARATORS), WID_USE_ALPHABETICAL_SEPARATORS         ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
+                    { OUString(UNO_NAME_LABEL_CATEGORY), WID_LABEL_CATEGORY                      ,  cppu::UnoType<OUString>::get()  , PROPERTY_NONE,     0},
+                    { OUString(UNO_NAME_LABEL_DISPLAY_TYPE), WID_LABEL_DISPLAY_TYPE                  ,  cppu::UnoType<sal_Int16>::get()  , PROPERTY_NONE,     0},
+                    { OUString(UNO_NAME_LEVEL_FORMAT), WID_LEVEL_FORMAT                        ,  cppu::UnoType<css::container::XIndexReplace>::get()  , PROPERTY_NONE,0},
+                    { OUString(UNO_NAME_TEXT_COLUMNS), RES_COL,                cppu::UnoType<css::text::XTextColumns>::get(),    PROPERTY_NONE, MID_COLUMNS},
+                    { OUString(UNO_NAME_BACK_GRAPHIC_URL), RES_BACKGROUND,      cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_URL    },
+                    { OUString(UNO_NAME_BACK_GRAPHIC), RES_BACKGROUND,      cppu::UnoType<graphic::XGraphic>::get(), PROPERTY_NONE, MID_GRAPHIC    },
+                    { OUString(UNO_NAME_BACK_GRAPHIC_FILTER), RES_BACKGROUND,       cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
+                    { OUString(UNO_NAME_BACK_GRAPHIC_LOCATION), RES_BACKGROUND,         cppu::UnoType<css::style::GraphicLocation>::get(),          PROPERTY_NONE ,MID_GRAPHIC_POSITION},
+                    { OUString(UNO_NAME_BACK_COLOR), RES_BACKGROUND,            cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        },
+                    { OUString(UNO_NAME_BACK_TRANSPARENT), RES_BACKGROUND,      cppu::UnoType<bool>::get(),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
+                    { OUString(UNO_NAME_PARA_STYLEHEADING),     WID_PARA_HEAD,  cppu::UnoType<OUString>::get()  , 0,     0},
+                    { OUString(UNO_NAME_PARA_STYLELEVEL1),  WID_PARA_LEV1,  cppu::UnoType<OUString>::get()  , 0,     0},
+                    { OUString(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
+                    { OUString(), 0, css::uno::Type(), 0, 0 }
+                };
+                m_aMapEntriesArr[nPropertyId] = aTOXFiguresMap_Impl;
+            }
+            break;
             case PROPERTY_MAP_TEXT_TABLE_ROW:
             {
                 static SfxItemPropertyMapEntry const aTableRowPropertyMap_Impl[] =

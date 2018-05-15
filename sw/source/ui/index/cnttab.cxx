@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_folders.h>
-
 #include <comphelper/string.hxx>
 #include <vcl/builderfactory.hxx>
 #include <svl/style.hxx>
@@ -238,7 +236,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
     m_eCurrentTOXType.nIndex = 0;
 
     const sal_uInt16 nUserTypeCount = m_rWrtShell.GetTOXTypeCount(TOX_USER);
-    m_nTypeCount = nUserTypeCount + 6;
+    m_nTypeCount = nUserTypeCount + 7;
     m_pFormArray = new SwForm*[m_nTypeCount];
     m_pDescriptionArray = new SwTOXDescription*[m_nTypeCount];
     m_pxIndexSectionsArray = new SwIndexSections_Impl*[m_nTypeCount];
@@ -406,12 +404,14 @@ SwForm* SwMultiTOXTabDialog::GetForm(CurTOXType eType)
 
 SwTOXDescription& SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
 {
-    const sal_uInt16 nIndex = eType.GetFlatIndex();
+   const sal_uInt16 nIndex = eType.GetFlatIndex();
     if(!m_pDescriptionArray[nIndex])
     {
         const SwTOXBase* pDef = m_rWrtShell.GetDefaultTOXBase( eType.eType );
         if(pDef)
+        {
             m_pDescriptionArray[nIndex] = CreateTOXDescFromTOXBase(pDef);
+        }
         else
         {
             m_pDescriptionArray[nIndex] = new SwTOXDescription(eType.eType);
@@ -975,6 +975,7 @@ static long lcl_TOXTypesToUserData(CurTOXType eType)
         break;
         case TOX_CONTENT     : nRet = TO_CONTENT;   break;
         case TOX_ILLUSTRATIONS:nRet = TO_ILLUSTRATION; break;
+        case TOX_FIGURE :      nRet = TO_FIGURE; break;
         case TOX_OBJECTS     : nRet = TO_OBJECT;    break;
         case TOX_TABLES      : nRet = TO_TABLE;     break;
         case TOX_AUTHORITIES : nRet = TO_AUTHORITIES; break;
@@ -998,8 +999,7 @@ void SwTOXSelectTabPage::SelectType(TOXTypes eSet)
 static CurTOXType lcl_UserData2TOXTypes(sal_uInt16 nData)
 {
     CurTOXType eRet;
-
-    switch(nData&0xff)
+    switch(nData&0x1fff)
     {
         case TO_INDEX       : eRet.eType = TOX_INDEX;       break;
         case TO_USER        :
@@ -1010,6 +1010,7 @@ static CurTOXType lcl_UserData2TOXTypes(sal_uInt16 nData)
         break;
         case TO_CONTENT     : eRet.eType = TOX_CONTENT;     break;
         case TO_ILLUSTRATION: eRet.eType = TOX_ILLUSTRATIONS; break;
+        case TO_FIGURE      : eRet.eType = TOX_FIGURE; break;
         case TO_OBJECT      : eRet.eType = TOX_OBJECTS;     break;
         case TO_TABLE       : eRet.eType = TOX_TABLES;      break;
         case TO_AUTHORITIES : eRet.eType = TOX_AUTHORITIES; break;
@@ -1044,8 +1045,10 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     //user + content
     bool bHasStyleNames = false;
 
+    rDesc.GetStyleNames(0);
+
     for( sal_uInt16 i = 0; i < MAXLEVEL; i++)
-        if(!rDesc.GetStyleNames(i).isEmpty())
+       if(!rDesc.GetStyleNames(i).isEmpty())
         {
             bHasStyleNames = true;
             break;
@@ -1086,7 +1089,7 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
         m_pKeyAsEntryCB->      Check( bool(nIndexOptions & SwTOIOptions::KeyAsEntry) );
     }
     else if(TOX_ILLUSTRATIONS == aCurType.eType ||
-        TOX_TABLES == aCurType.eType)
+        TOX_TABLES == aCurType.eType || TOX_FIGURE == aCurType.eType)
     {
         m_pFromObjectNamesRB->Check(rDesc.IsCreateFromObjectNames());
         m_pFromCaptionsRB->Check(!rDesc.IsCreateFromObjectNames());
@@ -1188,6 +1191,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
         break;
         case TOX_ILLUSTRATIONS:
         case TOX_TABLES :
+        case TOX_FIGURE :
             rDesc.SetCreateFromObjectNames(m_pFromObjectNamesRB->IsChecked());
             rDesc.SetSequenceName(m_pCaptionSequenceLB->GetSelectedEntry());
             rDesc.SetCaptionDisplay(static_cast<SwCaptionDisplay>(m_pDisplayTypeLB->GetSelectedEntryPos()));
@@ -1311,11 +1315,11 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl, ListBox&, rBox, void)
     CurTOXType eCurType = lcl_UserData2TOXTypes(nType);
     pTOXDlg->SetCurrentTOXType(eCurType);
 
-    m_pAreaLB->Show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT)) );
+    m_pAreaLB->Show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT|TO_FIGURE)) );
     m_pLevelFT->Show( 0 != (nType & (TO_CONTENT)) );
     m_pLevelNF->Show( 0 != (nType & (TO_CONTENT)) );
     m_pLevelFromChapterCB->Show( 0 != (nType & (TO_USER)) );
-    m_pAreaFrame->Show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT)) );
+    m_pAreaFrame->Show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT|TO_FIGURE)) );
 
     m_pFromHeadingsCB->Show( 0 != (nType & (TO_CONTENT)) );
     m_pAddStylesCB->Show( 0 != (nType & (TO_CONTENT|TO_USER)) );
@@ -1326,16 +1330,16 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl, ListBox&, rBox, void)
     m_pFromGraphicsCB->Show( 0 != (nType & (TO_USER)) );
     m_pFromOLECB->Show( 0 != (nType & (TO_USER)) );
 
-    m_pFromCaptionsRB->Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
-    m_pFromObjectNamesRB->Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
+    m_pFromCaptionsRB->Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE|TO_FIGURE)) );
+    m_pFromObjectNamesRB->Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE|TO_FIGURE)) );
 
     m_pTOXMarksCB->Show( 0 != (nType & (TO_CONTENT|TO_USER)) );
 
-    m_pCreateFrame->Show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_TABLE)) );
-    m_pCaptionSequenceFT->Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
-    m_pCaptionSequenceLB->Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
-    m_pDisplayTypeFT->Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
-    m_pDisplayTypeLB->Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
+    m_pCreateFrame->Show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_TABLE|TO_FIGURE)) );
+    m_pCaptionSequenceFT->Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE|TO_FIGURE)) );
+    m_pCaptionSequenceLB->Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE|TO_FIGURE)) );
+    m_pDisplayTypeFT->Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE|TO_FIGURE)) );
+    m_pDisplayTypeLB->Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE|TO_FIGURE)) );
 
     m_pAuthorityFrame->Show( 0 != (nType & TO_AUTHORITIES) );
 
@@ -1355,6 +1359,11 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl, ListBox&, rBox, void)
     else if( nType & TO_USER )
     {
         m_pAddStylesCB->SetText(sAddStyleUser);
+    }
+    else if ( nType & TO_FIGURE )
+    {
+              m_pCaptionSequenceLB->SelectEntry( SwStyleNameMapper::GetUIName(
+                                    RES_POOLCOLL_LABEL_FIGURE, OUString() ));
     }
 
     m_pIdxOptionsFrame->Show( 0 != (nType & TO_INDEX) );
@@ -2103,6 +2112,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         bool bToxIsContent =     TOX_CONTENT == aCurType.eType;
         bool bToxSupportsLinks = TOX_CONTENT == aCurType.eType ||
                                  TOX_ILLUSTRATIONS == aCurType.eType ||
+                                 TOX_FIGURE == aCurType.eType ||
                                  TOX_TABLES == aCurType.eType ||
                                  TOX_OBJECTS == aCurType.eType ||
                                  TOX_USER == aCurType.eType;

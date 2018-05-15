@@ -1251,6 +1251,12 @@ const SfxItemPropertySet*  SwUnoPropertyMapProvider::GetPropertySet( sal_uInt16 
                 m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_ILLUSTRATIONS;
             }
             break;
+            case PROPERTY_MAP_INDEX_FIGURES:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_INDEX_FIGURES(pEntries);
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_FIGURES;
+            }
+            break;
             case PROPERTY_MAP_INDEX_OBJECTS:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_INDEX_OBJECTS(pEntries);
