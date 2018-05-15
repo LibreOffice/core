@@ -95,7 +95,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,PYTHON,PYTHON_TARBALL) \
 		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
 		$(call fetch_Optional,ZLIB,ZLIB_TARBALL) \
-	,$(call fetch_Download_item_special,http://dev-www.libreoffice.org/src,$(item)))
+	,$(call fetch_Download_item_special,https://dev-www.libreoffice.org/src,$(item)))
 	$(foreach item, \
 		$(call fetch_Optional,AFMS,$(AFMS_TARBALL)) \
 		$(call fetch_Optional,APACHE_COMMONS,$(APACHE_COMMONS_CODEC_TARBALL)) \
@@ -173,11 +173,11 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,WPG,$(WPG_TARBALL)) \
 		$(call fetch_Optional,WPS,$(WPS_TARBALL)) \
 		$(call fetch_Optional,XSLTML,$(XSLTML_TARBALL)) \
-	,$(call fetch_Download_item,http://dev-www.libreoffice.org/src,$(item)))
+	,$(call fetch_Download_item,https://dev-www.libreoffice.org/src,$(item)))
 	$(foreach item, \
 		$(call fetch_Optional,DBGHELP,$(DBGHELP_DLL)) \
 		$(call fetch_Optional,ODK,$(UNOWINREG_DLL)) \
-	,$(call fetch_Download_item,http://dev-www.libreoffice.org/extern,$(item)))
+	,$(call fetch_Download_item,https://dev-www.libreoffice.org/extern,$(item)))
 	$(foreach item, \
 		$(BARCODE_EXTENSION_PACK) \
 		$(DIAGRAM_EXTENSION_PACK) \
@@ -200,7 +200,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,MOZ,$(MOZ_ZIP_INC)) \
 		$(call fetch_Optional,MOZ,$(MOZ_ZIP_LIB)) \
 		$(call fetch_Optional,MOZ,$(MOZ_ZIP_RUNTIME)) \
-	,$(call fetch_Download_item,http://dev-www.libreoffice.org/mozilla,$(item),no-sum))
+	,$(call fetch_Download_item,https://dev-www.libreoffice.org/mozilla,$(item),no-sum))
 	@mkdir -p $(dir $@) && touch $@
 
 # vim: set noet sw=4 ts=4:
