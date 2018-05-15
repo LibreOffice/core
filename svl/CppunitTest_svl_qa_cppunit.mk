@@ -27,14 +27,6 @@ $(eval $(call gb_CppunitTest_use_externals,svl_qa_cppunit, \
 	icu_headers \
 ))
 
-ifeq ($(ENABLE_LIBNUMBERTEXT),TRUE)
-ifneq ($(SYSTEM_LIBNUMBERTEXT),YES)
-$(eval $(call gb_CppunitTest_use_package,svl_qa_cppunit, \
-    libnumbertext_numbertext \
-))
-endif
-endif
-
 $(eval $(call gb_CppunitTest_add_defs,svl_qa_cppunit, \
     -DENABLE_LIBNUMBERTEXT=$(if $(filter TRUE,$(ENABLE_LIBNUMBERTEXT)),1,0) \
 ))
