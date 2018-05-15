@@ -531,6 +531,32 @@ sal_Int16 getLanguageNumber( const Locale& rLocale)
     return -1;
 }
 
+struct Separators
+{
+    sal_Unicode DecimalSeparator;
+    sal_Unicode ThousandSeparator;
+    Separators(const Locale& rLocale)
+    {
+        LocaleDataItem aLocaleItem = LocaleDataImpl::get()->getLocaleItem(rLocale);
+        DecimalSeparator = aLocaleItem.decimalSeparator.toChar();
+        ThousandSeparator = aLocaleItem.thousandSeparator.toChar();
+    }
+};
+
+Separators getLocaleSeparators(const Locale& rLocale, const OUString& rLocStr)
+{
+    // Guard the static variable below.
+    osl::MutexGuard aGuard(theNatNumMutex::get());
+    // Maximum a couple hunderd of pairs with 4-byte structs - so no need for smart managing
+    static std::unordered_map<OUString, Separators> aLocaleSeparatorsBuf;
+    auto it = aLocaleSeparatorsBuf.find(rLocStr);
+    if (it == aLocaleSeparatorsBuf.end())
+    {
+        it = aLocaleSeparatorsBuf.emplace(rLocStr, Separators(rLocale)).first;
+    }
+    return it->second;
+}
+
 OUString getNumberText(const Locale& aLocale, sal_Int16 numType, const OUString& rNumberString)
 {
     assert(numType == NativeNumberMode::NATNUM12 || numType == NativeNumberMode::NATNUM13
@@ -539,6 +565,9 @@ OUString getNumberText(const Locale& aLocale, sal_Int16 numType, const OUString&
     sal_Int32 i, count = 0;
     const sal_Int32 len = rNumberString.getLength();
     const sal_Unicode* src = rNumberString.getStr();
+
+    OUString aLoc = LanguageTag::convertToBcp47(aLocale);
+    Separators aSeparators = getLocaleSeparators(aLocale, aLoc);
 
     OUStringBuffer sBuf(len);
     for (i = 0; i < len; i++)
@@ -549,7 +578,11 @@ OUString getNumberText(const Locale& aLocale, sal_Int16 numType, const OUString&
             ++count;
             sBuf.append(ch);
         }
-        else if (isSeparator(ch) && count > 0)
+        else if (ch == aSeparators.DecimalSeparator)
+            // Convert any decimal separator to point - in case libnumbertext has a different one
+            // for this locale (it seems that point is supported for all locales in libnumbertext)
+            sBuf.append('.');
+        else if (ch == aSeparators.ThousandSeparator && count > 0)
             continue;
         else if (isMinus(ch) && count == 0)
             sBuf.append(ch);
@@ -567,7 +600,6 @@ OUString getNumberText(const Locale& aLocale, sal_Int16 numType, const OUString&
 
     static auto xNumberText
         = css::linguistic2::NumberText::create(comphelper::getProcessComponentContext());
-    OUString aLoc = LanguageTag::convertToBcp47(aLocale);
     OUString numbertext_prefix;
     if (numType == NativeNumberMode::NATNUM14)
         numbertext_prefix = "ordinal-number ";
