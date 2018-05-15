@@ -118,7 +118,8 @@ public:
         if (m_nAct != m_nFirst) m_nAct = SwRedlineTable::npos;
         if (m_pExt) m_pExt->Reset();
     }
-    std::pair<sal_Int32, SwRangeRedline const*> GetNextRedln(sal_Int32 nNext, SwTextNode const* pNode, SwRedlineTable::size_type & rAct);
+    std::pair<sal_Int32, std::pair<SwRangeRedline const*, size_t>> GetNextRedln(
+        sal_Int32 nNext, SwTextNode const* pNode, SwRedlineTable::size_type & rAct);
     bool ChkSpecialUnderline() const
         { return IsOn() && ChkSpecialUnderline_(); }
     bool CheckLine(sal_uLong nStartNode, sal_Int32 nChkStart, sal_uLong nEndNode, sal_Int32 nChkEnd);
