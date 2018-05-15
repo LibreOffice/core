@@ -812,6 +812,17 @@ OUString RadioButtonUIObject::get_name() const
     return OUString("RadioButtonUIObject");
 }
 
+OUString RadioButtonUIObject::get_action(VclEventId nEvent) const
+{
+    if (nEvent == VclEventId::RadiobuttonToggle)
+    {
+        return this->get_type() + "Clicked Id:" + mxRadioButton->get_id() + " Parent:" +
+            mxRadioButton->GetParentDialog()->get_id();
+    }
+    else
+        return WindowUIObject::get_action(nEvent);
+}
+
 std::unique_ptr<UIObject> RadioButtonUIObject::create(vcl::Window* pWindow)
 {
     RadioButton* pRadioButton = dynamic_cast<RadioButton*>(pWindow);
