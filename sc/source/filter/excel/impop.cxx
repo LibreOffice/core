@@ -30,11 +30,12 @@
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/flditem.hxx>
-#include <svx/pageitem.hxx>
 #include <editeng/colritem.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
+#include <svx/pageitem.hxx>
 #include <svl/zforlist.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
@@ -1079,6 +1080,12 @@ void ImportExcel::TableOp()
     nInpCol = aIn.ReaduInt16();
     nInpRow2 = aIn.ReaduInt16();
     nInpCol2 = aIn.ReaduInt16();
+
+    if (utl::ConfigManager::IsFuzzing())
+    {
+        //shrink to smallish arbitrary value to not timeout
+        nLastRow = std::min<sal_uInt16>(nLastRow, MAXROW_30);
+    }
 
     if( ValidColRow( nLastCol, nLastRow ) )
     {
