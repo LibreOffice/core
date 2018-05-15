@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_b1b72485",
+        "filename": "svtools/source/filter/exportdialog.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-15T14:08:06Z",
+      "side": 1,
+      "message": "Rather just define this as a constexpr constant in the relevant cxx file, since it never changes.",
+      "revId": "ef6e5af6650e00a15170df4b507269fb8cf45cf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
