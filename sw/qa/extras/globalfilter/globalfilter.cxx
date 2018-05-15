@@ -12,10 +12,11 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
-#include <officecfg/Office/Common.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <editsh.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <doc.hxx>
@@ -30,7 +31,7 @@ class Test : public SwModelTestBase
 public:
     Test() : SwModelTestBase() {}
 
-    void testSwappedOutImageExport();
+    void testEmbeddedGraphicRoundtrip();
     void testLinkedGraphicRT();
     void testImageWithSpecialID();
     void testGraphicShape();
@@ -45,7 +46,7 @@ public:
     void testRedlineFlags();
 
     CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testSwappedOutImageExport);
+    CPPUNIT_TEST(testEmbeddedGraphicRoundtrip);
     CPPUNIT_TEST(testLinkedGraphicRT);
     CPPUNIT_TEST(testImageWithSpecialID);
     CPPUNIT_TEST(testGraphicShape);
@@ -60,7 +61,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-void Test::testSwappedOutImageExport()
+void Test::testEmbeddedGraphicRoundtrip()
 {
     const char* aFilterNames[] = {
         "writer8",
@@ -72,11 +73,6 @@ void Test::testSwappedOutImageExport()
     for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
     {
         // Check whether the export code swaps in the image which was swapped out before by auto mechanism
-
-        // Set cache size to a very small value to make sure one of the images is swapped out
-        std::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(static_cast<sal_Int32>(1), batch);
-        batch->commit();
 
         if (mxComponent.is())
             mxComponent->dispose();
@@ -110,12 +106,12 @@ void Test::testSwappedOutImageExport()
         {
             uno::Reference<graphic::XGraphic> xGraphic;
             XPropSet->getPropertyValue("Graphic") >>= xGraphic;
-            CPPUNIT_ASSERT(xGraphic.is());
-            CPPUNIT_ASSERT(xGraphic->getType() != graphic::GraphicType::EMPTY);
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), graphic::GraphicType::PIXEL, xGraphic->getType());
             uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610), xBitmap->getSize().Width );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381), xBitmap->getSize().Height );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610), xBitmap->getSize().Width);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381), xBitmap->getSize().Height);
         }
 
         // Second Image
@@ -126,12 +122,12 @@ void Test::testSwappedOutImageExport()
         {
             uno::Reference<graphic::XGraphic> xGraphic;
             XPropSet->getPropertyValue("Graphic") >>= xGraphic;
-            CPPUNIT_ASSERT(xGraphic.is());
-            CPPUNIT_ASSERT(xGraphic->getType() != graphic::GraphicType::EMPTY);
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), graphic::GraphicType::PIXEL, xGraphic->getType());
             uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900), xBitmap->getSize().Width );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(600), xBitmap->getSize().Height );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900), xBitmap->getSize().Width);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(600), xBitmap->getSize().Height);
         }
     }
 }
@@ -176,6 +172,7 @@ void Test::testLinkedGraphicRT()
 
         // Find the image
         bool bImageFound = false;
+        Graphic aGraphic;
         for( sal_uLong nIndex = 0; nIndex < aNodes.Count(); ++nIndex)
         {
             if( aNodes[nIndex]->IsGrfNode() )
@@ -184,13 +181,20 @@ void Test::testLinkedGraphicRT()
                 CPPUNIT_ASSERT(pGrfNode);
 
                 const GraphicObject& rGraphicObj = pGrfNode->GetGrfObj(true);
-                const Graphic& rGraphic = rGraphicObj.GetGraphic();
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), int(GraphicType::Bitmap), int(rGraphic.GetType()));
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_uLong(864900), rGraphic.GetSizeBytes());
+                aGraphic = rGraphicObj.GetGraphic();
                 bImageFound = true;
             }
         }
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), bImageFound);
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), GraphicType::Bitmap, aGraphic.GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_uLong(864900), aGraphic.GetSizeBytes());
+
+        // Check if linked graphic is registered in LinkManager
+        sfx2::LinkManager& rLinkManager = pTextDoc->GetDocShell()->GetDoc()->GetEditShell()->GetLinkManager();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), size_t(1), rLinkManager.GetLinks().size());
+        const tools::SvRef<sfx2::SvBaseLink> & rLink = rLinkManager.GetLinks()[0];
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), rLink->GetLinkSourceName().indexOf("linked_graphic.jpg") >= 0);
     }
 }
 
@@ -205,11 +209,6 @@ void Test::testImageWithSpecialID()
         "MS Word 97",
         "Office Open XML Text",
     };
-
-    // Trigger swap out mechanism to test swapped state factor too.
-    std::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(static_cast<sal_Int32>(1), batch);
-    batch->commit();
 
     for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
     {
@@ -244,27 +243,27 @@ void Test::testImageWithSpecialID()
         {
             uno::Reference<graphic::XGraphic> xGraphic;
             XPropSet->getPropertyValue("Graphic") >>= xGraphic;
-            CPPUNIT_ASSERT(xGraphic.is());
-            CPPUNIT_ASSERT(xGraphic->getType() != graphic::GraphicType::EMPTY);
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), graphic::GraphicType::PIXEL, xGraphic->getType());
             uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
-            CPPUNIT_ASSERT(xBitmap.is());
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(610), xBitmap->getSize().Width );
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(381), xBitmap->getSize().Height );
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610), xBitmap->getSize().Width);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381), xBitmap->getSize().Height);
         }
         // Second Image
         xImage = getShape(2);
         XPropSet.set( xImage, uno::UNO_QUERY_THROW );
 
-        // Check size
+        // Check graphic, size
         {
             uno::Reference<graphic::XGraphic> xGraphic;
             XPropSet->getPropertyValue("Graphic") >>= xGraphic;
-            CPPUNIT_ASSERT(xGraphic.is());
-            CPPUNIT_ASSERT(xGraphic->getType() != graphic::GraphicType::EMPTY);
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), graphic::GraphicType::PIXEL, xGraphic->getType());
             uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
-            CPPUNIT_ASSERT(xBitmap.is());
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(900), xBitmap->getSize().Width );
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(600), xBitmap->getSize().Height );
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900), xBitmap->getSize().Width);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(600), xBitmap->getSize().Height);
         }
     }
 }
@@ -308,11 +307,6 @@ void Test::testGraphicShape()
         "MS Word 97",
         "Office Open XML Text",
     };
-
-    // Trigger swap out mechanism to test swapped state factor too.
-    std::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(static_cast<sal_Int32>(1), batch);
-    batch->commit();
 
     for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
     {
