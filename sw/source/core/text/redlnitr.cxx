@@ -112,35 +112,20 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode)
 
 } // namespace sw
 
-void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
-        SwScriptInfo & rScriptInfo, SwTextFrame *const pFrame)
+void SwAttrIter::InitFontAndAttrHandler(SwTextNode const& rTextNode,
+        OUString const& rText,
+        bool const*const pbVertLayout)
 {
-    // during HTML-Import it can happen, that no layout exists
-    SwRootFrame* pRootFrame = rTextNode.getIDocumentLayoutAccess().GetCurrentLayout();
-    m_pViewShell = pRootFrame ? pRootFrame->GetCurrShell() : nullptr;
-
-    m_pScriptInfo = &rScriptInfo;
-
-    // attribute array
-    m_pHints = rTextNode.GetpSwpHints();
-
     // Build a font matching the default paragraph style:
     SwFontAccess aFontAccess( &rTextNode.GetAnyFormatColl(), m_pViewShell );
     delete m_pFont;
     m_pFont = new SwFont( aFontAccess.Get()->GetFont() );
 
     // set font to vertical if frame layout is vertical
-    bool bVertLayout = false;
-    bool bRTL = false;
-    if ( pFrame )
+    // if it's a re-init, the vert flag never changes
+    if (pbVertLayout ? *pbVertLayout : m_aAttrHandler.IsVertLayout())
     {
-        if ( pFrame->IsVertical() )
-        {
-            bVertLayout = true;
-            m_pFont->SetVertical( m_pFont->GetOrientation(), true );
-        }
-        bRTL = pFrame->IsRightToLeft();
-        m_pMergedPara = pFrame->GetMergedPara();
+        m_pFont->SetVertical( m_pFont->GetOrientation(), true );
     }
 
     // Initialize the default attribute of the attribute handler
@@ -149,15 +134,10 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
     // consider them during construction of the default array, and apply
     // them to the font
     m_aAttrHandler.Init(aFontAccess.Get()->GetDefault(), rTextNode.GetpSwAttrSet(),
-                       *rTextNode.getIDocumentSettingAccess(), m_pViewShell, *m_pFont, bVertLayout );
+           *rTextNode.getIDocumentSettingAccess(), m_pViewShell, *m_pFont,
+           pbVertLayout ? *pbVertLayout : m_aAttrHandler.IsVertLayout() );
 
     m_aMagicNo[SwFontScript::Latin] = m_aMagicNo[SwFontScript::CJK] = m_aMagicNo[SwFontScript::CTL] = nullptr;
-
-    // TODO must init m_pRedline before this
-    // determine script changes if not already done for current paragraph
-    assert(m_pScriptInfo);
-    if ( m_pScriptInfo->GetInvalidityA() != COMPLETE_STRING )
-         m_pScriptInfo->InitScriptInfo( rTextNode, bRTL );
 
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
@@ -187,7 +167,43 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
             m_pFont->ChkMagic( m_pViewShell, nTmp );
             m_pFont->GetMagic( m_aMagicNo[ nTmp ], m_aFontIdx[ nTmp ], nTmp );
         }
-    } while (nChg < rTextNode.GetText().getLength());
+    }
+    while (nChg < rText.getLength());
+}
+
+void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
+        SwScriptInfo & rScriptInfo, SwTextFrame *const pFrame)
+{
+    // during HTML-Import it can happen, that no layout exists
+    SwRootFrame* pRootFrame = rTextNode.getIDocumentLayoutAccess().GetCurrentLayout();
+    m_pViewShell = pRootFrame ? pRootFrame->GetCurrShell() : nullptr;
+
+    m_pScriptInfo = &rScriptInfo;
+
+    // attribute array
+    m_pHints = rTextNode.GetpSwpHints();
+
+    // set font to vertical if frame layout is vertical
+    bool bVertLayout = false;
+    bool bRTL = false;
+    if ( pFrame )
+    {
+        if ( pFrame->IsVertical() )
+        {
+            bVertLayout = true;
+        }
+        bRTL = pFrame->IsRightToLeft();
+        m_pMergedPara = pFrame->GetMergedPara();
+    }
+
+    // determine script changes if not already done for current paragraph
+    assert(m_pScriptInfo);
+    if ( m_pScriptInfo->GetInvalidityA() != COMPLETE_STRING )
+         m_pScriptInfo->InitScriptInfo( rTextNode, bRTL );
+
+    InitFontAndAttrHandler(rTextNode,
+            m_pMergedPara ? m_pMergedPara->mergedText : rTextNode.GetText(),
+            & bVertLayout);
 
     m_nStartIndex = m_nEndIndex = m_nPosition = m_nChgCnt = 0;
     m_nPropFont = 0;
