@@ -621,8 +621,11 @@ void SwXTextDocument::dispose()
 
 void SwXTextDocument::close( sal_Bool bDeliverOwnership )
 {
-    uno::Sequence< uno::Any > aArgs;
-    pDocShell->CallAutomationDocumentEventSinks( "Close", aArgs );
+    if(pDocShell)
+    {
+        uno::Sequence< uno::Any > aArgs;
+        pDocShell->CallAutomationDocumentEventSinks( "Close", aArgs );
+    }
     SolarMutexGuard aGuard;
     if(IsValid() && m_pHiddenViewFrame)
         lcl_DisposeView( m_pHiddenViewFrame, pDocShell);
