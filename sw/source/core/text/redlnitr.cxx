@@ -299,7 +299,6 @@ SwRedlineItr::~SwRedlineItr() COVERITY_NOEXCEPT_FALSE
 // The return value of SwRedlineItr::Seek tells you if the current font
 // has been manipulated by leaving (-1) or accessing (+1) of a section
 short SwRedlineItr::Seek_(SwFont& rFnt, sal_uLong const nNode, sal_Int32 const nNew, sal_Int32 const nOld)
-    //TODO use nNode to compare
 {
     short nRet = 0;
     if( ExtOn() )
@@ -378,6 +377,36 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_uLong const nNode, sal_Int32 const n
 
                     ++nRet;
                 }
+                break;
+            }
+            m_nStart = COMPLETE_STRING;
+            m_nEnd = COMPLETE_STRING;
+        }
+    }
+    else if (m_eMode == Mode::Hide)
+    {   // ... just iterate to update m_nAct for GetNextRedln();
+        // there is no need to care about formatting in this mode
+        if (nOld == COMPLETE_STRING) // backward?
+        {
+            m_nAct = m_nFirst;
+        }
+        for ( ; m_nAct < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); ++m_nAct)
+        {   // only Start matters in this mode
+            // Seeks until it finds a RL that starts at or behind the seek pos.
+            // - then update m_nStart/m_nEnd to the intersection of it with the
+            // current node (if any).
+            // The only way to skip to a different node is if there is a Delete
+            // RL, so if there is no intersection we'll never skip again.
+            // Note: here, assume that delete can't nest inside delete!
+            SwRangeRedline const*const pRedline(
+                m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[m_nAct]);
+            SwPosition const*const pStart(pRedline->Start());
+            if (pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE
+                && (nNode < pStart->nNode.GetIndex()
+                    || (nNode == pStart->nNode.GetIndex()
+                        && nNew <= pStart->nContent.GetIndex())))
+            {
+                pRedline->CalcStartEnd(nNode, m_nStart, m_nEnd);
                 break;
             }
             m_nStart = COMPLETE_STRING;
