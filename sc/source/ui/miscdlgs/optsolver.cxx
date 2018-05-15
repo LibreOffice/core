@@ -95,37 +95,28 @@ void ScSolverNoSolutionDialog::dispose()
     ModalDialog::dispose();
 }
 
-ScSolverSuccessDialog::ScSolverSuccessDialog( vcl::Window* pParent, const OUString& rSolution )
-    : ModalDialog(pParent, "SolverSuccessDialog", "modules/scalc/ui/solversuccessdialog.ui")
+ScSolverSuccessDialog::ScSolverSuccessDialog(weld::Window* pParent, const OUString& rSolution)
+    : GenericDialogController(pParent, "modules/scalc/ui/solversuccessdialog.ui", "SolverSuccessDialog")
+    , m_xFtResult(m_xBuilder->weld_label("result"))
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
+    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
 {
-    get(m_pFtResult, "result");
-    get(m_pBtnOk, "ok");
-    m_pBtnOk->SetClickHdl(LINK(this, ScSolverSuccessDialog, ClickHdl));
-    get(m_pBtnCancel, "cancel");
-    m_pBtnCancel->SetClickHdl(LINK(this, ScSolverSuccessDialog, ClickHdl));
-    OUString aMessage = m_pFtResult->GetText() + " " + rSolution;
-    m_pFtResult->SetText(aMessage);
+    m_xBtnOk->connect_clicked(LINK(this, ScSolverSuccessDialog, ClickHdl));
+    m_xBtnCancel->connect_clicked(LINK(this, ScSolverSuccessDialog, ClickHdl));
+    OUString aMessage = m_xFtResult->get_label() + " " + rSolution;
+    m_xFtResult->set_label(aMessage);
 }
 
 ScSolverSuccessDialog::~ScSolverSuccessDialog()
 {
-    disposeOnce();
 }
 
-void ScSolverSuccessDialog::dispose()
+IMPL_LINK(ScSolverSuccessDialog, ClickHdl, weld::Button&, rBtn, void)
 {
-    m_pFtResult.clear();
-    m_pBtnOk.clear();
-    m_pBtnCancel.clear();
-    ModalDialog::dispose();
-}
-
-IMPL_LINK( ScSolverSuccessDialog, ClickHdl, Button*, pBtn, void )
-{
-    if (pBtn == m_pBtnOk)
-        EndDialog(RET_OK);
+    if (&rBtn == m_xBtnOk.get())
+        m_xDialog->response(RET_OK);
     else
-        EndDialog();
+        m_xDialog->response(RET_CANCEL);
 }
 
 ScCursorRefEdit::ScCursorRefEdit( vcl::Window* pParent, vcl::Window *pLabel )
@@ -1054,8 +1045,8 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             static_cast<SCCOL>(aObjective.Column), static_cast<SCROW>(aObjective.Row),
             static_cast<SCTAB>(aObjective.Sheet));
 
-        ScopedVclPtrInstance< ScSolverSuccessDialog > aDialog( this, aResultStr );
-        if ( aDialog->Execute() == RET_OK )
+        ScSolverSuccessDialog aDialog(GetFrameWeld(), aResultStr);
+        if (aDialog.run() == RET_OK)
         {
             // keep results and close dialog
             bRestore = false;

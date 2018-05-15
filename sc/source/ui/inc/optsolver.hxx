@@ -224,18 +224,17 @@ public:
     virtual void dispose() override;
 };
 
-class ScSolverSuccessDialog : public ModalDialog
+class ScSolverSuccessDialog : public weld::GenericDialogController
 {
-    VclPtr<FixedText> m_pFtResult;
-    VclPtr<PushButton> m_pBtnOk;
-    VclPtr<PushButton> m_pBtnCancel;
+    std::unique_ptr<weld::Label> m_xFtResult;
+    std::unique_ptr<weld::Button> m_xBtnOk;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
 
-    DECL_LINK(ClickHdl, Button*, void);
+    DECL_LINK(ClickHdl, weld::Button&, void);
 
 public:
-    ScSolverSuccessDialog( vcl::Window* pParent, const OUString& rSolution );
+    ScSolverSuccessDialog(weld::Window* pParent, const OUString& rSolution);
     virtual ~ScSolverSuccessDialog() override;
-    virtual void dispose() override;
 };
 
 #endif
