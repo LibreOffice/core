@@ -3039,7 +3039,7 @@ static script::ModuleInfo lcl_InitModuleInfo( const SfxObjectShell& rDocSh, cons
     return sModuleInfo;
 }
 
-void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sModuleName, const OUString& sSource )
+void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sSource )
 {
     SfxObjectShell& rDocSh = *rDoc.GetDocumentShell();
     uno::Reference< script::XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
@@ -3059,15 +3059,8 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sModuleName
     if( xLib.is() )
     {
         // if the Module with codename exists then find a new name
-        sal_Int32 nNum = 0;
-        OUString genModuleName;
-        if ( !sModuleName.isEmpty() )
-            genModuleName = sModuleName;
-        else
-        {
-             genModuleName = "Sheet1";
-             nNum = 1;
-        }
+        sal_Int32 nNum = 1;
+        OUString genModuleName = "Sheet1";
         while( xLib->hasByName( genModuleName ) )
             genModuleName = "Sheet" + OUString::number( ++nNum );
 
@@ -3152,7 +3145,7 @@ bool ScDocFunc::InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bo
         // Only insert vba modules if vba mode ( and not currently importing XML )
         if( bInsertDocModule )
         {
-            VBA_InsertModule( rDoc, nTab, OUString(), OUString() );
+            VBA_InsertModule( rDoc, nTab, OUString() );
         }
         rDocShell.Broadcast( ScTablesHint( SC_TAB_INSERTED, nTab ) );
 

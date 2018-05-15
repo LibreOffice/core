@@ -272,11 +272,9 @@ static OUString  HelpLocaleString()
 
 
 
-void AppendConfigToken( OUStringBuffer& rURL, bool bQuestionMark, const OUString &rLang )
+void AppendConfigToken( OUStringBuffer& rURL, bool bQuestionMark )
 {
-    OUString aLocaleStr( rLang );
-    if ( aLocaleStr.isEmpty() )
-        aLocaleStr = HelpLocaleString();
+    OUString aLocaleStr = HelpLocaleString();
 
     // query part exists?
     if ( bQuestionMark )

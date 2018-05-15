@@ -1287,7 +1287,7 @@ uno::Reference< sheet::XSheetCellRange > lclExpandToMerged( const uno::Reference
 }
 
 /// @throws uno::RuntimeException
-uno::Reference< sheet::XSheetCellRangeContainer > lclExpandToMerged( const uno::Reference< sheet::XSheetCellRangeContainer >& rxCellRanges, bool bRecursive )
+uno::Reference< sheet::XSheetCellRangeContainer > lclExpandToMerged( const uno::Reference< sheet::XSheetCellRangeContainer >& rxCellRanges )
 {
     if( !rxCellRanges.is() )
         throw uno::RuntimeException("Missing cell ranges object" );
@@ -1299,7 +1299,7 @@ uno::Reference< sheet::XSheetCellRangeContainer > lclExpandToMerged( const uno::
     for( sal_Int32 nIndex = 0; nIndex < nCount; ++nIndex )
     {
         uno::Reference< table::XCellRange > xRange( rxCellRanges->getByIndex( nIndex ), uno::UNO_QUERY_THROW );
-        table::CellRangeAddress aRangeAddr = lclGetRangeAddress( lclExpandToMerged( xRange, bRecursive ) );
+        table::CellRangeAddress aRangeAddr = lclGetRangeAddress( lclExpandToMerged( xRange, /*bRecursive*/true ) );
         ScRange aScRange;
         ScUnoConversion::FillScRange( aScRange, aRangeAddr );
         aScRanges.push_back( aScRange );
@@ -2242,7 +2242,7 @@ ScVbaRange::Select()
         uno::Reference< frame::XModel > xModel( pShell->GetModel(), uno::UNO_QUERY_THROW );
         uno::Reference< view::XSelectionSupplier > xSelection( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
         if ( mxRanges.is() )
-            xSelection->select( uno::Any( lclExpandToMerged( mxRanges, true ) ) );
+            xSelection->select( uno::Any( lclExpandToMerged( mxRanges ) ) );
         else
             xSelection->select( uno::Any( lclExpandToMerged( mxRange, true ) ) );
         // set focus on document e.g.

@@ -974,7 +974,7 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
                 catch ( const css::uno::Exception& )
                 {
                 }
-                VBA_InsertModule( aDocument, nTabToUse, OUString(), sSource );
+                VBA_InsertModule( aDocument, nTabToUse, sSource );
             }
         }
         Broadcast( ScTablesHint( SC_TAB_COPIED, nSrcTab, nDestTab ) );
