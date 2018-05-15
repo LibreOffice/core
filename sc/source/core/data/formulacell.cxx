@@ -528,6 +528,7 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     mnFormatType(SvNumFormatType::NUMBER),
     mbInvariant(false),
     mbSubTotal(false),
+    mbSeenInPath(false),
     meCalcState(sc::GroupCalcEnabled)
 {
 }
@@ -1527,6 +1528,14 @@ void ScFormulaCell::Interpret()
     else
     {
         pDocument->IncInterpretLevel();
+
+        bool bCheckForFGCycle = mxGroup && !pDocument->mbThreadedGroupCalcInProgress &&
+            mxGroup->meCalcState == sc::GroupCalcEnabled &&
+            ScCalcConfig::isThreadingEnabled();
+        bool bPopFormulaGroup = false;
+        if (bCheckForFGCycle)
+            bPopFormulaGroup = rRecursionHelper.PushFormulaGroup(mxGroup.get());
+
 #if DEBUG_CALCULATION
         aDC.enterGroup();
         bool bGroupInterpreted = InterpretFormulaGroup();
@@ -1537,6 +1546,10 @@ void ScFormulaCell::Interpret()
         if (!InterpretFormulaGroup())
             InterpretTail( pDocument->GetNonThreadedContext(), SCITP_NORMAL);
 #endif
+
+        if (bPopFormulaGroup)
+            rRecursionHelper.PopFormulaGroup();
+
         pDocument->DecInterpretLevel();
     }
 
@@ -4129,14 +4142,14 @@ struct ScDependantsCalculator
 
         SCROW nEndRow = mrPos.Row() + mnLen - 1;
 
-        if (nRelRow < 0)
+        if (nRelRow <= 0)
         {
             SCROW nTest = nEndRow;
             nTest += nRelRow;
             if (nTest >= mrPos.Row())
                 return true;
         }
-        else if (nRelRow > 0)
+        else
         {
             SCROW nTest = mrPos.Row(); // top row.
             nTest += nRelRow;
@@ -4368,6 +4381,12 @@ bool ScFormulaCell::InterpretFormulaGroup()
         {
             mxGroup->meCalcState = sc::GroupCalcDisabled;
             aScope.addMessage("could not do new dependencies calculation thing");
+            return false;
+        }
+
+        if (mxGroup->meCalcState == sc::GroupCalcDisabled)
+        {
+            aScope.addMessage("found circular formula-group dependencies");
             return false;
         }
 
