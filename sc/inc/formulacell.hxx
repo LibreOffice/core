@@ -66,6 +66,7 @@ public:
     SvNumFormatType mnFormatType;
     bool mbInvariant:1;
     bool mbSubTotal:1;
+    bool mbSeenInPath:1; // For detecting cycle of formula groups
 
     sal_uInt8 meCalcState;
 
