@@ -829,7 +829,7 @@ else # !SYSTEM_LIBNUMBERTEXT
 ifneq ($(ENABLE_LIBNUMBERTEXT),)
 
 define gb_LinkTarget__use_libnumbertext
-
+$(call gb_LinkTarget_use_package,$(1),libnumbertext_numbertext)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,libnumbertext/src) \
 	$$(INCLUDE) \
