@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_INC_REFDATA_HXX
 #define INCLUDED_SC_INC_REFDATA_HXX
 
-#include "global.hxx"
 #include "address.hxx"
 #include "scdllapi.h"
 #include "calcmacros.hxx"

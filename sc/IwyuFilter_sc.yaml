@@ -192,3 +192,18 @@ blacklist:
     - com/sun/star/container/XNameAccess.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - cppuhelper/supportsservice.hxx
+    sc/inc/rangeseq.hxx:
+    # base class has to be a complete type
+    - com/sun/star/uno/Any.h
+    sc/inc/rangeutl.hxx:
+    # base class has to be a complete type
+    - com/sun/star/uno/Sequence.hxx
+    sc/inc/refreshtimerprotector.hxx:
+    # base class has to be a complete type
+    - class ScRefreshTimerControl
+    sc/inc/reftokenhelper.hxx:
+    # base class has to be a complete type
+    - refdata.hxx
+    sc/inc/rowheightcontext.hxx:
+    # base class has to be a complete type
+    - vcl/outdev.hxx
