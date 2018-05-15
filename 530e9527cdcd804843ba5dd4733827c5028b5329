@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_6b7a1df3",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-05-15T05:19:51Z",
+      "side": 1,
+      "message": "Two changes here that I think were required.\n1.) const OUString\u0026 : copy/duplicate the value when returning it.  Before it could be a reference, since it referred to a string that exists as long as DomainMapper_Impl exists.  But now I am either returning that or a copy of a property value, so it can\u0027t be a reference anymore. The \"const\" part seems somewhat irrelevant now, since the function shouldn\u0027t really care whether or not the returned value is modified?\n2.) GetCurrentParaStyleName() const : It refused to compile as const now that I call other functions inside. Probably just included \"const\" as \"best practice\" before, since everything compiles without it. I think that I would have to create \"const\" versions of all of the function calls I use in order to keep the const here, which would be pointless.",
+      "range": {
+        "startLine": 696,
+        "startChar": 4,
+        "endLine": 696,
+        "endChar": 46
+      },
+      "revId": "530e9527cdcd804843ba5dd4733827c5028b5329",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
