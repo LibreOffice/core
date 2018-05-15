@@ -331,6 +331,13 @@ OUString GraphicHelper::ExportGraphic(const vcl::Window* pParent, const Graphic&
                     return sPath;
                 }
             }
+            else
+            {
+                XOutBitmap::WriteGraphic( rGraphic, sPath, aFilter,
+                                            XOutFlags::DontExpandFilename |
+                                            XOutFlags::DontAddExtension |
+                                            XOutFlags::UseNativeIfPossible );
+            }
         }
     }
     return OUString();
