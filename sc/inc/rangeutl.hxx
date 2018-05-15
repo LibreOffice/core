@@ -25,16 +25,13 @@
 #include "dbdata.hxx"
 #include "scdllapi.h"
 
-#include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+namespace com { namespace sun { namespace star { namespace table { struct CellAddress; } } } }
+namespace com { namespace sun { namespace star { namespace table { struct CellRangeAddress; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
 
 class ScArea;
 class ScDocument;
-class ScRange;
-class ScRangeName;
 class ScRangeList;
-class ScDBCollection;
 
 enum RutlNameScope { RUTL_NONE=0, RUTL_NAMES, RUTL_DBASE };
 

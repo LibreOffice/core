@@ -43,8 +43,6 @@
 // btw: 10 following 09 is not a counting error but an intentional gap,
 // because it was not clear, how long the RelRefs development would take. :)
 
-class SvStream;
-
         //  Header with size specification for multiple objects
 
 class ScMultipleReadHeader

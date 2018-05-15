@@ -20,11 +20,14 @@
 #ifndef INCLUDED_SC_INC_RANGESEQ_HXX
 #define INCLUDED_SC_INC_RANGESEQ_HXX
 
-#include <com/sun/star/uno/Any.h>
 #include "types.hxx"
+#include <com/sun/star/uno/TypeClass.hpp>
+
+namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
 
 class SvNumberFormatter;
 class ScDocument;
+class ScMatrix;
 class ScRange;
 
 class ScRangeToSequence
