@@ -212,6 +212,7 @@ ShellResource::ShellResource()
     aTOXTablesName(         SwResId(STR_TOX_TBL)),
     aTOXAuthoritiesName(    SwResId(STR_TOX_AUTH)),
     aTOXCitationName(    SwResId(STR_TOX_CITATION)),
+    aTOXFigureName(      SwResId(STR_TOX_FIG)),
     aLinkCtrlClick(SwResId(STR_LINK_CTRL_CLICK)),
     aLinkClick(SwResId(STR_LINK_CLICK)),
     pAutoFormatNameLst(nullptr),

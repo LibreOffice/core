@@ -395,6 +395,10 @@ RES_POOLCOLL_TOX_CNTNT10,                               ///< Content 10th level.
 RES_POOLCOLL_TOX_ILLUSH,                                ///< Illustrations header.
 RES_POOLCOLL_TOX_ILLUS1,                                ///< Illustrations all levels.
 
+/// figures index.
+RES_POOLCOLL_TOX_FIGURE,                                ///< Figures header.
+RES_POOLCOLL_TOX_FIGURE1,                                ///< Figures all levels.
+
 ///  object index.
 RES_POOLCOLL_TOX_OBJECTH,                               ///< Objects header.
 RES_POOLCOLL_TOX_OBJECT1,                               ///< Objects all levels.

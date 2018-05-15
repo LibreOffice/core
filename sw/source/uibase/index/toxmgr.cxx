@@ -343,6 +343,7 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
         case TOX_AUTHORITIES:
         case TOX_BIBLIOGRAPHY:
         case TOX_ILLUSTRATIONS:
+        case TOX_FIGURE:
         {
             //Special handling for TOX_AUTHORITY
             if(TOX_AUTHORITIES == eCurTOXType)

@@ -93,6 +93,7 @@ struct SwDefTOXBase_Impl
     std::unique_ptr<SwTOXBase> pIllBase;
     std::unique_ptr<SwTOXBase> pAuthBase;
     std::unique_ptr<SwTOXBase> pBiblioBase;
+    std::unique_ptr<SwTOXBase> pFigBase;
 
     SwDefTOXBase_Impl()
     {

@@ -194,6 +194,8 @@ const struct SwTableEntry RegisterProgNameTable [] =
     ENTRY( "Contents 10" ),
     ENTRY( "Illustration Index Heading" ),
     ENTRY( "Illustration Index 1" ),
+    ENTRY( "Figure Index Heading" ),
+    ENTRY( "Figure Index 1" ),
     ENTRY( "Object index heading" ),
     ENTRY( "Object index 1" ),
     ENTRY( "Table index heading" ),

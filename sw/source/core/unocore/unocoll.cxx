@@ -628,6 +628,7 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
         case  SwServiceType::UserIndex         :
         case  SwServiceType::TypeIndex    :
         case SwServiceType::IndexIllustrations:
+        case SwServiceType::IndexFigures:
         case SwServiceType::IndexObjects      :
         case SwServiceType::IndexTables:
         case SwServiceType::IndexBibliography :
@@ -652,6 +653,10 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
             else if(SwServiceType::IndexTables == nObjectType)
             {
                 eType = TOX_TABLES;
+            }
+            else if(SwServiceType::IndexFigures == nObjectType)
+            {
+                eType = TOX_FIGURE;
             }
             xRet = SwXDocumentIndex::CreateXDocumentIndex(rDoc, nullptr, eType);
         }

@@ -268,6 +268,12 @@ static const char* STR_POOLCOLL_TOX_ILLUS_ARY[] =
     STR_POOLCOLL_TOX_ILLUSH,
     STR_POOLCOLL_TOX_ILLUS1
 };
+static const char* STR_POOLCOLL_TOX_FIGURE_ARY[] =
+{
+    // Figures Index
+    STR_POOLCOLL_TOX_FIGURE,
+    STR_POOLCOLL_TOX_FIGURE1
+};
 
 static const char* STR_POOLCOLL_TOX_OBJECT_ARY[] =
 {
@@ -312,21 +318,22 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     const char** pPoolId;
     switch( m_eType )
     {
-    case TOX_INDEX:         pPoolId = STR_POOLCOLL_TOX_ARY;    break;
-    case TOX_USER:          pPoolId = STR_POOLCOLL_TOX_USER_ARY;   break;
-    case TOX_CONTENT:       pPoolId = STR_POOLCOLL_TOX_CNTNT_ARY;  break;
+    case TOX_INDEX        : pPoolId = STR_POOLCOLL_TOX_ARY;    break;
+    case TOX_USER         : pPoolId = STR_POOLCOLL_TOX_USER_ARY;   break;
+    case TOX_CONTENT      : pPoolId = STR_POOLCOLL_TOX_CNTNT_ARY;  break;
     case TOX_ILLUSTRATIONS: pPoolId = STR_POOLCOLL_TOX_ILLUS_ARY;  break;
     case TOX_OBJECTS      : pPoolId = STR_POOLCOLL_TOX_OBJECT_ARY; break;
     case TOX_TABLES       : pPoolId = STR_POOLCOLL_TOX_TABLES_ARY; break;
     case TOX_AUTHORITIES  : pPoolId = STR_POOLCOLL_TOX_AUTHORITIES_ARY;    break;
-    case TOX_CITATION  : pPoolId = STR_POOLCOLL_TOX_CITATION_ARY; break;
+    case TOX_CITATION     : pPoolId = STR_POOLCOLL_TOX_CITATION_ARY; break;
+    case TOX_FIGURE       : pPoolId = STR_POOLCOLL_TOX_FIGURE_ARY; break;
     default:
         OSL_ENSURE( false, "invalid TOXTyp");
         return ;
     }
 
     SwFormTokens aTokens;
-    if (TOX_CONTENT == m_eType || TOX_ILLUSTRATIONS == m_eType )
+    if (TOX_CONTENT == m_eType || TOX_ILLUSTRATIONS == m_eType  || TOX_FIGURE == m_eType)
     {
         SwFormToken aLinkStt (TOKEN_LINK_START);
         aLinkStt.sCharStyleName = SwResId(STR_POOLCHR_TOXJUMP);
@@ -354,7 +361,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
         aTokens.emplace_back(TOKEN_PAGE_NUMS);
     }
 
-    if (TOX_CONTENT == m_eType || TOX_ILLUSTRATIONS == m_eType)
+    if (TOX_CONTENT == m_eType || TOX_ILLUSTRATIONS == m_eType || TOX_FIGURE == m_eType)
         aTokens.emplace_back(TOKEN_LINK_END);
 
     SetTemplate(0, SwResId(*pPoolId++));
@@ -435,6 +442,7 @@ sal_uInt16 SwForm::GetFormMaxLevel( TOXTypes eTOXType )
         case TOX_CONTENT:
             return MAXLEVEL + 1;
         case TOX_ILLUSTRATIONS:
+        case TOX_FIGURE:
         case TOX_OBJECTS:
         case TOX_TABLES:
             return 2;

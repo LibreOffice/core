@@ -127,7 +127,8 @@ struct SfxItemPropertyMapEntry;
 #define PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE       99
 #define PROPERTY_MAP_TABLE_STYLE                        100
 #define PROPERTY_MAP_CELL_STYLE                         101
-#define PROPERTY_MAP_END                                102
+#define PROPERTY_MAP_INDEX_FIGURES                      102
+#define PROPERTY_MAP_END                                103
 
 //S&E
 #define WID_WORDS                0

@@ -302,6 +302,7 @@ lcl_TypeToPropertyMap_Index(const TOXTypes eType)
         case TOX_ILLUSTRATIONS: return PROPERTY_MAP_INDEX_ILLUSTRATIONS;
         case TOX_OBJECTS:       return PROPERTY_MAP_INDEX_OBJECTS;
         case TOX_AUTHORITIES:   return PROPERTY_MAP_BIBLIOGRAPHY;
+        case TOX_FIGURE:        return PROPERTY_MAP_INDEX_FIGURES;
         //case TOX_USER:
         default:
             return PROPERTY_MAP_INDEX_USER;
@@ -517,6 +518,8 @@ OUString SAL_CALL SwXDocumentIndex::getServiceName()
         case TOX_TABLES:        nObjectType = SwServiceType::IndexTables;
         break;
         case TOX_AUTHORITIES:   nObjectType = SwServiceType::IndexBibliography;
+        break;
+        case TOX_FIGURE:        nObjectType = SwServiceType::IndexFigures;
         break;
         default:
         break;
