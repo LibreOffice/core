@@ -8,6 +8,7 @@
  */
 
 #include <recursionhelper.hxx>
+#include <formulacell.hxx>
 
 void ScRecursionHelper::Init()
 {
@@ -15,6 +16,8 @@ void ScRecursionHelper::Init()
     bInRecursionReturn = bDoingRecursion = bInIterationReturn = false;
     aInsertPos = GetIterationEnd();
     ResetIteration();
+    aFGList.clear();
+    aFGMap.clear();
 }
 
 void ScRecursionHelper::ResetIteration()
@@ -92,6 +95,40 @@ void ScRecursionHelper::Clear()
     while (!aRecursionInIterationStack.empty())
         aRecursionInIterationStack.pop();
     Init();
+}
+
+bool ScRecursionHelper::PushFormulaGroup(ScFormulaCellGroup* pGrp)
+{
+    size_t nSize = aFGList.size();
+    const auto& rIter = aFGMap.find(pGrp);
+    if (rIter != aFGMap.end())
+    {
+        // Found a simple cycle of formula-groups.
+        size_t nLastIdx = rIter->second;
+        // Disable group calc for all elements of this cycle.
+        for (size_t nIdx = nLastIdx; nIdx < nSize; ++nIdx)
+        {
+            auto& eCalcState = aFGList[nIdx]->meCalcState;
+            if (eCalcState == sc::GroupCalcEnabled)
+                eCalcState = sc::GroupCalcDisabled;
+        }
+        return false;
+    }
+
+    aFGList.push_back(pGrp);
+    aFGMap.insert( ScFGMap::value_type(pGrp, nSize) );
+    return true;
+}
+
+void ScRecursionHelper::PopFormulaGroup()
+{
+    if (aFGList.empty())
+        return;
+    ScFormulaCellGroup* pGrp = aFGList.back();
+    const auto& rIter = aFGMap.find(pGrp);
+    assert(rIter != aFGMap.end());
+    aFGMap.erase(rIter);
+    aFGList.pop_back();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
