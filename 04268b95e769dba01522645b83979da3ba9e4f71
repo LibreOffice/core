@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_b459d200",
+        "filename": "i18npool/source/nativenumber/nativenumbersupplier.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-15T17:58:36Z",
+      "side": 1,
+      "message": "Ouch.. loading the locale data items on each call is heavy; that may even happen when typing text. This (or rather the separators) should be cached per locale, or at least for the 3 most frequently used locales or some such.",
+      "revId": "04268b95e769dba01522645b83979da3ba9e4f71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
