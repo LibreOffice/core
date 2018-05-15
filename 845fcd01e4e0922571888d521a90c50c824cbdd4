@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_b1e9e482",
+        "filename": "include/svl/zformat.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-15T13:56:16Z",
+      "side": 1,
+      "message": "Nitpick: to avoid alignment gaps and thus memory waste in mass objects (which SvNumberNatNum kind of is), order member variables by size, i.e. the OUString first.",
+      "revId": "845fcd01e4e0922571888d521a90c50c824cbdd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_11ff1035",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-15T13:56:16Z",
+      "side": 1,
+      "message": "This also needs a check if the space is actually followed by something and not just trailing. Also, these \"parameters\" are valid only for NATNUM12, and then also should be checked for validity and bail out with nCheckPos set if not.",
+      "revId": "845fcd01e4e0922571888d521a90c50c824cbdd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
