@@ -3432,7 +3432,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
         xIndex3 = xIndexes["Illustration Index1"]
         self.assertTrue(self.eq(xIndex3.MetadataReference,
                         StringPair("content.xml", "idII")), "idII")
-        xIndex3s = xSections["Illustration Index1"]
+        xIndex3s = xSections["Table of Figures1"]
         self.assertTrue(self.eq(xIndex3s.MetadataReference,
                         StringPair("content.xml", "idII")), "idII")
         xIndex4 = xIndexes["Index of Tables1"]
