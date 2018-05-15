@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface domain="sw">
+<interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
   <!-- interface-local-resource-path ../../../icon-themes/colibre/cmd/ -->
@@ -964,7 +964,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" translatable="yes" context="notebookbar|Help">~Check for Updates...</property>
+        <property name="label" translatable="yes" context="notebookbar|Help">_Check for Updates...</property>
       </object>
     </child>
     <child>
@@ -2095,7 +2095,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" translatable="yes" context="notebookbar|Tools">~Check for Updates...</property>
+        <property name="label" translatable="yes" context="notebookbar|Tools">_Check for Updates...</property>
       </object>
     </child>
     <child>
