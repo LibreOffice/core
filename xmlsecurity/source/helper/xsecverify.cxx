@@ -118,6 +118,14 @@ void XSecController::addSignature()
     m_vInternalSignatureInformations.push_back( isi );
 }
 
+void XSecController::setSignatureMethod(svl::crypto::SignatureMethodAlgorithm eAlgorithmID)
+{
+    if (m_vInternalSignatureInformations.empty())
+        return;
+
+    m_vInternalSignatureInformations.back().signatureInfor.eAlgorithmID = eAlgorithmID;
+}
+
 void XSecController::switchGpgSignature()
 {
 #if HAVE_FEATURE_GPGME

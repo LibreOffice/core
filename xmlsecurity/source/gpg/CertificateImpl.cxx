@@ -17,6 +17,7 @@
 
 #include <com/sun/star/security/KeyUsage.hpp>
 #include <officecfg/Office/Common.hxx>
+#include <svl/sigstruct.hxx>
 
 #include <gpgme.h>
 #include <context.h>
@@ -169,6 +170,11 @@ Sequence<sal_Int8> CertificateImpl::getSHA256Thumbprint()
     const char* keyId = m_pKey.primaryFingerprint();
     return comphelper::arrayToSequence<sal_Int8>(
         keyId, strlen(keyId)+1);
+}
+
+svl::crypto::SignatureMethodAlgorithm CertificateImpl::getSignatureMethodAlgorithm()
+{
+    return svl::crypto::SignatureMethodAlgorithm::RSA;
 }
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getMD5Thumbprint()

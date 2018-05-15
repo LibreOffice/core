@@ -68,9 +68,32 @@ OUString getDigestURI(sal_Int32 nID)
             return OUString(ALGO_XMLDSIGSHA1);
     }
 }
-OUString getSignatureURI(sal_Int32 nID)
+OUString getSignatureURI(svl::crypto::SignatureMethodAlgorithm eAlgorithm, sal_Int32 nDigestID)
 {
-    switch( nID )
+    OUString aRet;
+
+    if (eAlgorithm == svl::crypto::SignatureMethodAlgorithm::ECDSA)
+    {
+        switch (nDigestID)
+        {
+            case cssxc::DigestID::SHA1:
+                aRet = ALGO_ECDSASHA1;
+                break;
+            case cssxc::DigestID::SHA256:
+                aRet = ALGO_ECDSASHA256;
+                break;
+            case cssxc::DigestID::SHA512:
+                aRet = ALGO_ECDSASHA512;
+                break;
+            default:
+                aRet = ALGO_ECDSASHA1;
+                break;
+        }
+    }
+    if (!aRet.isEmpty())
+        return aRet;
+
+    switch (nDigestID)
     {
         case cssxc::DigestID::SHA1:
             return OUString(ALGO_RSASHA1);
@@ -608,7 +631,7 @@ void XSecController::exportSignature(
             // SignatureMethod:Algorithm should be the corresponding one.
             pAttributeList->AddAttribute(
                 "Algorithm",
-                getSignatureURI(vReferenceInfors[0].nDigestID));
+                getSignatureURI(signatureInfo.eAlgorithmID, vReferenceInfors[0].nDigestID));
             xDocumentHandler->startElement( "SignatureMethod", cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
             xDocumentHandler->endElement( "SignatureMethod" );
 

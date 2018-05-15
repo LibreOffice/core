@@ -88,6 +88,8 @@ public:
 
     /// @see xmlsecurity::Certificate::getSHA256Thumbprint().
     virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() override;
+    /// @see xmlsecurity::Certificate::getSignatureMethodAlgorithm().
+    virtual svl::crypto::SignatureMethodAlgorithm getSignatureMethodAlgorithm() override;
     virtual css::security::CertificateKind SAL_CALL getCertificateKind() override;
 
     // Helper methods
