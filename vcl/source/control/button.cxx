@@ -36,6 +36,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/vclstatuslistener.hxx>
 #include <vcl/uitest/uiobject.hxx>
+#include <vcl/uitest/logger.hxx>
 
 #include <strings.hrc>
 #include <bitmaps.hlst>
@@ -2293,6 +2294,14 @@ void RadioButton::ImplCallClick( bool bGrabFocus, GetFocusFlags nFocusFlags )
     if ( xWindow->IsDisposed() )
         return;
     Click();
+    OUString logStatement = "RadiobuttonClicked";
+    logStatement += " Id:" + get_id();
+    logStatement += " ParentDialog:" + GetParentDialog()->get_id();
+    if (IsChecked())
+        logStatement += " Action:Checked";
+    else
+        logStatement += " Action:Unchecked";
+    UITestLogger::getInstance().log(logStatement);
     if ( xWindow->IsDisposed() )
         return;
     mbStateChanged = false;

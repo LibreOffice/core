@@ -301,7 +301,7 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
 bool Control::ImplCallEventListenersAndHandler( VclEventId nEvent, std::function<void()> const & callHandler )
 {
     VclPtr<Control> xThis(this);
-    UITestLogger::getInstance().logAction(xThis, nEvent);
+    //UITestLogger::getInstance().logAction(xThis, nEvent);
 
     CallEventListeners( nEvent );
 
