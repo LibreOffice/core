@@ -56,6 +56,18 @@ public:
     void SAL_CALL Unadvise( sal_uInt32 Cookie ) override;
 };
 
+class SwWordBasic : public cppu::WeakImplHelper<word::XWordBasic>
+{
+private:
+    SwVbaApplication* mpApp;
+
+public:
+    SwWordBasic( SwVbaApplication* pApp );
+
+    // XWordBasic
+    virtual void SAL_CALL FileOpen( const OUString& Name, const uno::Any& ConfirmConversions, const uno::Any& ReadOnly, const uno::Any& AddToMru, const uno::Any& PasswordDoc, const uno::Any& PasswordDot, const uno::Any& Revert, const uno::Any& WritePasswordDoc, const uno::Any& WritePasswordDot ) override;
+};
+
 SwVbaApplication::SwVbaApplication( uno::Reference<uno::XComponentContext >& xContext ):
     SwVbaApplication_BASE( xContext )
 {
@@ -136,6 +148,13 @@ uno::Reference< word::XSelection > SAL_CALL
 SwVbaApplication::getSelection()
 {
     return new SwVbaSelection( this, mxContext, getCurrentDocument() );
+}
+
+uno::Reference< word::XWordBasic > SAL_CALL
+SwVbaApplication::getWordBasic()
+{
+    uno::Reference< word::XWordBasic > xWB( new SwWordBasic( this ) );
+    return xWB;
 }
 
 uno::Any SAL_CALL
@@ -385,6 +404,25 @@ void SAL_CALL
 SwVbaApplicationOutgoingConnectionPoint::Unadvise( sal_uInt32 Cookie )
 {
     mpApp->RemoveSink( Cookie );
+}
+
+// SwWordBasic
+
+SwWordBasic::SwWordBasic( SwVbaApplication* pApp ) :
+    mpApp(pApp)
+{
+}
+
+// XWordBasic
+void SAL_CALL
+SwWordBasic::FileOpen( const OUString& Name, const uno::Any& ConfirmConversions, const uno::Any& ReadOnly, const uno::Any& AddToMru, const uno::Any& PasswordDoc, const uno::Any& PasswordDot, const uno::Any& Revert, const uno::Any& WritePasswordDoc, const uno::Any& WritePasswordDot )
+{
+    uno::Any aDocuments = mpApp->Documents( uno::Any() );
+
+    uno::Reference<word::XDocuments> rDocuments;
+
+    if (aDocuments >>= rDocuments)
+        rDocuments->Open( Name, ConfirmConversions, ReadOnly, AddToMru, PasswordDoc, PasswordDot, Revert, WritePasswordDoc, WritePasswordDot, uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

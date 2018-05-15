@@ -1100,6 +1100,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,ooo/vba/word,\
 	XVariables \
 	XView \
 	XWindow \
+	XWordBasic \
 	XWrapFormat \
 ))
 
