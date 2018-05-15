@@ -2514,7 +2514,7 @@ void TimeFormatter::Reformat()
     if ( !aStr.isEmpty() )
     {
         ImplSetText( aStr );
-        TextToTime( aStr, maLastTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper() );
+        (void)TextToTime(aStr, maLastTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper());
     }
     else
         SetTime( maLastTime );
