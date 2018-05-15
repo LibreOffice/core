@@ -36,6 +36,7 @@
 
 #include "sanextension_nssimpl.hxx"
 #include <tools/time.hxx>
+#include <svl/sigstruct.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno ;
@@ -439,6 +440,20 @@ OUString SAL_CALL X509Certificate_NssImpl::getSignatureAlgorithm()
     {
         return OUString() ;
     }
+}
+
+svl::crypto::SignatureMethodAlgorithm X509Certificate_NssImpl::getSignatureMethodAlgorithm()
+{
+    svl::crypto::SignatureMethodAlgorithm nRet = svl::crypto::SignatureMethodAlgorithm::RSA;
+
+    if (!m_pCert)
+        return nRet;
+
+    SECOidTag eTag = SECOID_GetAlgorithmTag(&m_pCert->subjectPublicKeyInfo.algorithm);
+    if (eTag == SEC_OID_ANSIX962_EC_PUBLIC_KEY)
+        nRet = svl::crypto::SignatureMethodAlgorithm::ECDSA;
+
+    return nRet;
 }
 
 css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getSHA1Thumbprint()

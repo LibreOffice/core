@@ -19,6 +19,7 @@
 
 
 #include <xsecctl.hxx>
+#include <certificate.hxx>
 
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
@@ -201,7 +202,8 @@ void XSecController::setX509Certificate(
     const OUString& ouX509IssuerName,
     const OUString& ouX509SerialNumber,
     const OUString& ouX509Cert,
-    const OUString& ouX509CertDigest)
+    const OUString& ouX509CertDigest,
+    svl::crypto::SignatureMethodAlgorithm eAlgorithmID)
 {
     int index = findSignatureInfor( nSecurityId );
 
@@ -212,6 +214,7 @@ void XSecController::setX509Certificate(
         isi.signatureInfor.ouX509SerialNumber = ouX509SerialNumber;
         isi.signatureInfor.ouX509Certificate = ouX509Cert;
         isi.signatureInfor.ouCertDigest = ouX509CertDigest;
+        isi.signatureInfor.eAlgorithmID = eAlgorithmID;
         m_vInternalSignatureInformations.push_back( isi );
     }
     else

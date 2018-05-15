@@ -338,18 +338,23 @@ bool DocumentSignatureManager::add(
         comphelper::Base64::encode(aStrBuffer, xCert->getEncoded());
 
         OUString aCertDigest;
+        svl::crypto::SignatureMethodAlgorithm eAlgorithmID
+            = svl::crypto::SignatureMethodAlgorithm::RSA;
         if (auto pCertificate = dynamic_cast<xmlsecurity::Certificate*>(xCert.get()))
         {
             OUStringBuffer aBuffer;
             comphelper::Base64::encode(aBuffer, pCertificate->getSHA256Thumbprint());
             aCertDigest = aBuffer.makeStringAndClear();
+
+            eAlgorithmID = pCertificate->getSignatureMethodAlgorithm();
         }
         else
             SAL_WARN("xmlsecurity.helper",
                      "XCertificate implementation without an xmlsecurity::Certificate one");
 
         maSignatureHelper.SetX509Certificate(nSecurityId, xCert->getIssuerName(), aCertSerial,
-                                             aStrBuffer.makeStringAndClear(), aCertDigest);
+                                             aStrBuffer.makeStringAndClear(), aCertDigest,
+                                             eAlgorithmID);
     }
 
     uno::Sequence<uno::Reference<security::XCertificate>> aCertPath
