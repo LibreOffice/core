@@ -479,104 +479,104 @@ static const char* GetFolderDescriptionId_Impl( const OUString& rURL )
     return pRet;
 }
 
-static Image GetImageFromList_Impl( SvImageId nImageId, bool bBig )
+static OUString GetImageNameFromList_Impl( SvImageId nImageId, bool bBig )
 {
     if (bBig)
     {
         switch (nImageId)
         {
             case SvImageId::Impress:
-                return Image(BitmapEx(BMP_IMPRESS_LC));
+                return BMP_IMPRESS_LC;
             case SvImageId::Bitmap:
-                return Image(BitmapEx(BMP_BITMAP_LC));
+                return BMP_BITMAP_LC;
             case SvImageId::Calc:
-                return Image(BitmapEx(BMP_CALC_LC));
+                return BMP_CALC_LC;
             case SvImageId::CalcTemplate:
-                return Image(BitmapEx(BMP_CALCTEMPLATE_LC));
+                return BMP_CALCTEMPLATE_LC;
             case SvImageId::Database:
-                return Image(BitmapEx(BMP_DATABASE_LC));
+                return BMP_DATABASE_LC;
             case SvImageId::ImpressTemplate:
-                return Image(BitmapEx(BMP_IMPRESSTEMPLATE_LC));
+                return BMP_IMPRESSTEMPLATE_LC;
             case SvImageId::GIF:
-                return Image(BitmapEx(BMP_GIF_LC));
+                return BMP_GIF_LC;
             case SvImageId::HTML:
-                return Image(BitmapEx(BMP_HTML_LC));
+                return BMP_HTML_LC;
             case SvImageId::JPG:
-                return Image(BitmapEx(BMP_JPG_LC));
+                return BMP_JPG_LC;
             case SvImageId::Math:
-                return Image(BitmapEx(BMP_MATH_LC));
+                return BMP_MATH_LC;
             case SvImageId::MathTemplate:
-                return Image(BitmapEx(BMP_MATHTEMPLATE_LC));
+                return BMP_MATHTEMPLATE_LC;
             case SvImageId::File:
-                return Image(BitmapEx(BMP_FILE_LC));
+                return BMP_FILE_LC;
             case SvImageId::PCD:
-                return Image(BitmapEx(BMP_PCD_LC));
+                return BMP_PCD_LC;
             case SvImageId::PCT:
-                return Image(BitmapEx(BMP_PCT_LC));
+                return BMP_PCT_LC;
             case SvImageId::PCX:
-                return Image(BitmapEx(BMP_PCX_LC));
+                return BMP_PCX_LC;
             case SvImageId::SIM:
-                return Image(BitmapEx(BMP_SIM_LC));
+                return BMP_SIM_LC;
             case SvImageId::TextFile:
-                return Image(BitmapEx(BMP_TEXTFILE_LC));
+                return BMP_TEXTFILE_LC;
             case SvImageId::TIFF:
-                return Image(BitmapEx(BMP_TIFF_LC));
+                return BMP_TIFF_LC;
             case SvImageId::WMF:
-                return Image(BitmapEx(BMP_WMF_LC));
+                return BMP_WMF_LC;
             case SvImageId::Writer:
-                return Image(BitmapEx(BMP_WRITER_LC));
+                return BMP_WRITER_LC;
             case SvImageId::WriterTemplate:
-                return Image(BitmapEx(BMP_WRITERTEMPLATE_LC));
+                return BMP_WRITERTEMPLATE_LC;
             case SvImageId::FixedDevice:
-                return Image(BitmapEx(BMP_FIXEDDEV_LC));
+                return BMP_FIXEDDEV_LC;
             case SvImageId::RemoveableDevice:
-                return Image(BitmapEx(BMP_REMOVABLEDEV_LC));
+                return BMP_REMOVABLEDEV_LC;
             case SvImageId::CDRomDevice:
-                return Image(BitmapEx(BMP_CDROMDEV_LC));
+                return BMP_CDROMDEV_LC;
             case SvImageId::NetworkDevice:
-                return Image(BitmapEx(BMP_NETWORKDEV_LC));
+                return BMP_NETWORKDEV_LC;
             case SvImageId::Table:
-                return Image(BitmapEx(BMP_TABLE_LC));
+                return BMP_TABLE_LC;
             case SvImageId::Folder:
-                return Image(BitmapEx(BMP_FOLDER_LC));
+                return BMP_FOLDER_LC;
             case SvImageId::DXF:
-                return Image(BitmapEx(BMP_DXF_LC));
+                return BMP_DXF_LC;
             case SvImageId::MET:
-                return Image(BitmapEx(BMP_MET_LC));
+                return BMP_MET_LC;
             case SvImageId::PNG:
-                return Image(BitmapEx(BMP_PNG_LC));
+                return BMP_PNG_LC;
             case SvImageId::SVM:
-                return Image(BitmapEx(BMP_SVM_LC));
+                return BMP_SVM_LC;
             case SvImageId::GlobalDoc:
-                return Image(BitmapEx(BMP_GLOBAL_DOC_LC));
+                return BMP_GLOBAL_DOC_LC;
             case SvImageId::Draw:
-                return Image(BitmapEx(BMP_DRAW_LC));
+                return BMP_DRAW_LC;
             case SvImageId::DrawTemplate:
-                return Image(BitmapEx(BMP_DRAWTEMPLATE_LC));
+                return BMP_DRAWTEMPLATE_LC;
             case SvImageId::OO_DatabaseDoc:
-                return Image(BitmapEx(BMP_OO_DATABASE_DOC_LC));
+                return BMP_OO_DATABASE_DOC_LC;
             case SvImageId::OO_DrawDoc:
-                return Image(BitmapEx(BMP_OO_DRAW_DOC_LC));
+                return BMP_OO_DRAW_DOC_LC;
             case SvImageId::OO_MathDoc:
-                return Image(BitmapEx(BMP_OO_MATH_DOC_LC));
+                return BMP_OO_MATH_DOC_LC;
             case SvImageId::OO_GlobalDoc:
-                return Image(BitmapEx(BMP_OO_GLOBAL_DOC_LC));
+                return BMP_OO_GLOBAL_DOC_LC;
             case SvImageId::OO_ImpressDoc:
-                return Image(BitmapEx(BMP_OO_IMPRESS_DOC_LC));
+                return BMP_OO_IMPRESS_DOC_LC;
             case SvImageId::OO_CalcDoc:
-                return Image(BitmapEx(BMP_OO_CALC_DOC_LC));
+                return BMP_OO_CALC_DOC_LC;
             case SvImageId::OO_WriterDoc:
-                return Image(BitmapEx(BMP_OO_WRITER_DOC_LC));
+                return BMP_OO_WRITER_DOC_LC;
             case SvImageId::OO_DrawTemplate:
-                return Image(BitmapEx(BMP_OO_DRAW_TEMPLATE_LC));
+                return BMP_OO_DRAW_TEMPLATE_LC;
             case SvImageId::OO_ImpressTemplate:
-                return Image(BitmapEx(BMP_OO_IMPRESS_TEMPLATE_LC));
+                return BMP_OO_IMPRESS_TEMPLATE_LC;
             case SvImageId::OO_CalcTemplate:
-                return Image(BitmapEx(BMP_OO_CALC_TEMPLATE_LC));
+                return BMP_OO_CALC_TEMPLATE_LC;
             case SvImageId::OO_WriterTemplate:
-                return Image(BitmapEx(BMP_OO_WRITER_TEMPLATE_LC));
+                return BMP_OO_WRITER_TEMPLATE_LC;
             case SvImageId::Extension:
-                return Image(BitmapEx(BMP_EXTENSION_LC));
+                return BMP_EXTENSION_LC;
             default: break;
         }
     }
@@ -585,102 +585,110 @@ static Image GetImageFromList_Impl( SvImageId nImageId, bool bBig )
         switch (nImageId)
         {
             case SvImageId::Impress:
-                return Image(BitmapEx(BMP_IMPRESS_SC));
+                return BMP_IMPRESS_SC;
             case SvImageId::Bitmap:
-                return Image(BitmapEx(BMP_BITMAP_SC));
+                return BMP_BITMAP_SC;
             case SvImageId::Calc:
-                return Image(BitmapEx(BMP_CALC_SC));
+                return BMP_CALC_SC;
             case SvImageId::CalcTemplate:
-                return Image(BitmapEx(BMP_CALCTEMPLATE_SC));
+                return BMP_CALCTEMPLATE_SC;
             case SvImageId::Database:
-                return Image(BitmapEx(BMP_DATABASE_SC));
+                return BMP_DATABASE_SC;
             case SvImageId::ImpressTemplate:
-                return Image(BitmapEx(BMP_IMPRESSTEMPLATE_SC));
+                return BMP_IMPRESSTEMPLATE_SC;
             case SvImageId::GIF:
-                return Image(BitmapEx(BMP_GIF_SC));
+                return BMP_GIF_SC;
             case SvImageId::HTML:
-                return Image(BitmapEx(BMP_HTML_SC));
+                return BMP_HTML_SC;
             case SvImageId::JPG:
-                return Image(BitmapEx(BMP_JPG_SC));
+                return BMP_JPG_SC;
             case SvImageId::Math:
-                return Image(BitmapEx(BMP_MATH_SC));
+                return BMP_MATH_SC;
             case SvImageId::MathTemplate:
-                return Image(BitmapEx(BMP_MATHTEMPLATE_SC));
+                return BMP_MATHTEMPLATE_SC;
             case SvImageId::File:
-                return Image(BitmapEx(BMP_FILE_SC));
+                return BMP_FILE_SC;
             case SvImageId::PCD:
-                return Image(BitmapEx(BMP_PCD_SC));
+                return BMP_PCD_SC;
             case SvImageId::PCT:
-                return Image(BitmapEx(BMP_PCT_SC));
+                return BMP_PCT_SC;
             case SvImageId::PCX:
-                return Image(BitmapEx(BMP_PCX_SC));
+                return BMP_PCX_SC;
             case SvImageId::SIM:
-                return Image(BitmapEx(BMP_SIM_SC));
+                return BMP_SIM_SC;
             case SvImageId::TextFile:
-                return Image(BitmapEx(BMP_TEXTFILE_SC));
+                return BMP_TEXTFILE_SC;
             case SvImageId::TIFF:
-                return Image(BitmapEx(BMP_TIFF_SC));
+                return BMP_TIFF_SC;
             case SvImageId::WMF:
-                return Image(BitmapEx(BMP_WMF_SC));
+                return BMP_WMF_SC;
             case SvImageId::Writer:
-                return Image(BitmapEx(BMP_WRITER_SC));
+                return BMP_WRITER_SC;
             case SvImageId::WriterTemplate:
-                return Image(BitmapEx(BMP_WRITERTEMPLATE_SC));
+                return BMP_WRITERTEMPLATE_SC;
             case SvImageId::FixedDevice:
-                return Image(BitmapEx(BMP_FIXEDDEV_SC));
+                return BMP_FIXEDDEV_SC;
             case SvImageId::RemoveableDevice:
-                return Image(BitmapEx(BMP_REMOVABLEDEV_SC));
+                return BMP_REMOVABLEDEV_SC;
             case SvImageId::CDRomDevice:
-                return Image(BitmapEx(BMP_CDROMDEV_SC));
+                return BMP_CDROMDEV_SC;
             case SvImageId::NetworkDevice:
-                return Image(BitmapEx(BMP_NETWORKDEV_SC));
+                return BMP_NETWORKDEV_SC;
             case SvImageId::Table:
-                return Image(BitmapEx(BMP_TABLE_SC));
+                return BMP_TABLE_SC;
             case SvImageId::Folder:
                 // if not bBig, then return our new small folder image (256 colors)
-                return Image(BitmapEx(RID_BMP_FOLDER));
+                return RID_BMP_FOLDER;
             case SvImageId::DXF:
-                return Image(BitmapEx(BMP_DXF_SC));
+                return BMP_DXF_SC;
             case SvImageId::MET:
-                return Image(BitmapEx(BMP_MET_SC));
+                return BMP_MET_SC;
             case SvImageId::PNG:
-                return Image(BitmapEx(BMP_PNG_SC));
+                return BMP_PNG_SC;
             case SvImageId::SVM:
-                return Image(BitmapEx(BMP_SVM_SC));
+                return BMP_SVM_SC;
             case SvImageId::GlobalDoc:
-                return Image(BitmapEx(BMP_GLOBAL_DOC_SC));
+                return BMP_GLOBAL_DOC_SC;
             case SvImageId::Draw:
-                return Image(BitmapEx(BMP_DRAW_SC));
+                return BMP_DRAW_SC;
             case SvImageId::DrawTemplate:
-                return Image(BitmapEx(BMP_DRAWTEMPLATE_SC));
+                return BMP_DRAWTEMPLATE_SC;
             case SvImageId::OO_DatabaseDoc:
-                return Image(BitmapEx(BMP_OO_DATABASE_DOC_SC));
+                return BMP_OO_DATABASE_DOC_SC;
             case SvImageId::OO_DrawDoc:
-                return Image(BitmapEx(BMP_OO_DRAW_DOC_SC));
+                return BMP_OO_DRAW_DOC_SC;
             case SvImageId::OO_MathDoc:
-                return Image(BitmapEx(BMP_OO_MATH_DOC_SC));
+                return BMP_OO_MATH_DOC_SC;
             case SvImageId::OO_GlobalDoc:
-                return Image(BitmapEx(BMP_OO_GLOBAL_DOC_SC));
+                return BMP_OO_GLOBAL_DOC_SC;
             case SvImageId::OO_ImpressDoc:
-                return Image(BitmapEx(BMP_OO_IMPRESS_DOC_SC));
+                return BMP_OO_IMPRESS_DOC_SC;
             case SvImageId::OO_CalcDoc:
-                return Image(BitmapEx(BMP_OO_CALC_DOC_SC));
+                return BMP_OO_CALC_DOC_SC;
             case SvImageId::OO_WriterDoc:
-                return Image(BitmapEx(BMP_OO_WRITER_DOC_SC));
+                return BMP_OO_WRITER_DOC_SC;
             case SvImageId::OO_DrawTemplate:
-                return Image(BitmapEx(BMP_OO_DRAW_TEMPLATE_SC));
+                return BMP_OO_DRAW_TEMPLATE_SC;
             case SvImageId::OO_ImpressTemplate:
-                return Image(BitmapEx(BMP_OO_IMPRESS_TEMPLATE_SC));
+                return BMP_OO_IMPRESS_TEMPLATE_SC;
             case SvImageId::OO_CalcTemplate:
-                return Image(BitmapEx(BMP_OO_CALC_TEMPLATE_SC));
+                return BMP_OO_CALC_TEMPLATE_SC;
             case SvImageId::OO_WriterTemplate:
-                return Image(BitmapEx(BMP_OO_WRITER_TEMPLATE_SC));
+                return BMP_OO_WRITER_TEMPLATE_SC;
             case SvImageId::Extension:
-                return Image(BitmapEx(BMP_EXTENSION_SC));
+                return BMP_EXTENSION_SC;
             default: break;
         }
     }
 
+    return OUString();
+}
+
+static Image GetImageFromList_Impl( SvImageId nImageId, bool bBig )
+{
+    OUString sImageName(GetImageNameFromList_Impl(nImageId, bBig));
+    if (!sImageName.isEmpty())
+        return Image(BitmapEx(sImageName));
     return Image();
 }
 
@@ -747,6 +755,13 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
     }
 
     return sDescription;
+}
+
+OUString SvFileInformationManager::GetImageId(const INetURLObject& rObject, bool bBig)
+{
+    SvImageId nImage = GetImageId_Impl( rObject, true );
+    DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
+    return GetImageNameFromList_Impl(nImage, bBig);
 }
 
 Image SvFileInformationManager::GetImage( const INetURLObject& rObject, bool bBig )
