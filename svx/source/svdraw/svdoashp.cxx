@@ -82,7 +82,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/utils/unotools.hxx>
-#include "svdconv.hxx"
 #include <svdobjplusdata.hxx>
 
 using namespace ::com::sun::star;

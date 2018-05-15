@@ -25,8 +25,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 
-#include "svdconv.hxx"
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

@@ -117,7 +117,6 @@ protected:
 public:
     SvxRectCtl( vcl::Window* pParent, RectPoint eRpt = RectPoint::MM,
                 sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80 );
-    void SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder, sal_uInt16 nCircl);
     virtual ~SvxRectCtl() override;
     virtual void dispose() override;
 
@@ -145,7 +144,6 @@ public:
     RectPoint          GetApproxRPFromPixPt( const css::awt::Point& rPixelPoint ) const;
 
     bool IsCompletelyDisabled() const { return mbCompleteDisable; }
-    void DoCompletelyDisable(bool bNew);
 };
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC RectCtl
@@ -173,8 +171,6 @@ protected:
     CTL_STATE m_nState;
 
     bool mbCompleteDisable : 1;
-
-    void MarkToResetSettings();
 
     RectPoint           GetRPFromPoint( Point, bool bRTL = false ) const;
     const Point&        GetPointFromRP( RectPoint ) const;

@@ -60,7 +60,6 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <vcl/virdev.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include "svdconv.hxx"
 
 using namespace com::sun::star;
 

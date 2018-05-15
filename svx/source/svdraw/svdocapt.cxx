@@ -31,7 +31,6 @@
 #include <tools/bigint.hxx>
 #include <tools/helpers.hxx>
 
-#include "svdconv.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 

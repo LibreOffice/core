@@ -78,9 +78,6 @@ public:
     void ApplyOptions();
     void ApplyStyle();
 
-    bool isStyleChanged() const { return mbStyleSelected; }
-    bool isOptionsChanged() const { return mbOptionsChanged; }
-
 private:
     void addListener();
     void removeListener();
