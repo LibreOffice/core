@@ -100,7 +100,7 @@ public:
 
             IADsADSystemInfo* pADsys;
             HRESULT hr = CoCreateInstance(CLSID_ADSystemInfo, nullptr, CLSCTX_INPROC_SERVER,
-                                          IID_IADsADSystemInfo, (void**)&pADsys);
+                                          IID_IADsADSystemInfo, reinterpret_cast<void**>(&pADsys));
             if (FAILED(hr))
                 throw css::uno::RuntimeException();
             CoIfPtr<IADsADSystemInfo> aADsysGuard(pADsys);
@@ -116,7 +116,8 @@ public:
             m_sUserDN = o3tl::toU(sUserDN);
             OUString sLdapUserDN = "LDAP://" + m_sUserDN;
             IADsUser* pUser;
-            hr = ADsGetObject(o3tl::toW(sLdapUserDN.getStr()), IID_IADsUser, (void**)&pUser);
+            hr = ADsGetObject(o3tl::toW(sLdapUserDN.getStr()), IID_IADsUser,
+                              reinterpret_cast<void**>(&pUser));
             if (FAILED(hr))
                 throw css::uno::RuntimeException();
             CoIfPtr<IADsUser> pUserGuard(pUser);
@@ -145,7 +146,6 @@ public:
             GetCachedData(xContext);
         }
     }
-    ~ADsUserAccess() {}
 
     virtual OUString GetGivenName() override { return m_aMap[givenname]; }
     virtual OUString GetSn() override { return m_aMap[sn]; }
