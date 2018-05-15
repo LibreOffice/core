@@ -1254,7 +1254,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
 
                             if (bOk)
                                 rRet.append("} ");
-                            else
+                            else if (rRet.getLength() > nSizeStartPos)
                                 rRet = rRet.truncate(nSizeStartPos);
                             nSetSize--;
                             nCurSize=nOldCurSize;
@@ -1379,7 +1379,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
 
                             if (bOk)
                                 rRet.append("} ");
-                            else
+                            else if (rRet.getLength() > nSubSupStartPos)
                                 rRet = rRet.truncate(nSubSupStartPos);
                             nPart++;
                             }
