@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SC_INC_MISCUNO_HXX
 #define INCLUDED_SC_INC_MISCUNO_HXX
 
+#include <vector>
+
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
