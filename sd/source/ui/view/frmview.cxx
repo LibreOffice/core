@@ -337,7 +337,7 @@ void FrameView::SetViewShEditModeOnLoad (EditMode eMode)
 
 static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
 {
-    OUStringBuffer aLines;
+    OUString aLines;
 
     const sal_uInt16 nCount = rHelpLines.GetCount();
     for( sal_uInt16 nHlpLine = 0; nHlpLine < nCount; nHlpLine++ )
@@ -348,25 +348,25 @@ static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
         switch( rHelpLine.GetKind() )
         {
             case SdrHelpLineKind::Point:
-                aLines.append( 'P' );
-                aLines.append( static_cast<sal_Int32>(rPos.X()) );
-                aLines.append( ',' );
-                aLines.append( static_cast<sal_Int32>(rPos.Y()) );
+                aLines += "P"
+                + OUString::number( rPos.X() )
+                + ","
+                + OUString::number( rPos.Y() );
                 break;
             case SdrHelpLineKind::Vertical:
-                aLines.append( 'V' );
-                aLines.append( static_cast<sal_Int32>(rPos.X()) );
+                aLines += "V"
+                + OUString::number( rPos.X() );
                 break;
             case SdrHelpLineKind::Horizontal:
-                aLines.append( 'H' );
-                aLines.append( static_cast<sal_Int32>(rPos.Y()) );
+                aLines += "H"
+                + OUString::number( rPos.Y() );
                 break;
             default:
                 OSL_FAIL( "Unsupported helpline Kind!" );
         }
     }
 
-    return aLines.makeStringAndClear();
+    return aLines;
 }
 
 #define addValue( n, v ) push_back( std::pair< OUString, Any >( OUString( n ), v ) )
