@@ -1101,7 +1101,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                 xLib->getByName( sSrcCodeName ) >>= sRTLSource;
                 sSource = sRTLSource;
             }
-            VBA_InsertModule( *this, nDestPos, OUString(), sSource );
+            VBA_InsertModule( *this, nDestPos, sSource );
         }
     }
 

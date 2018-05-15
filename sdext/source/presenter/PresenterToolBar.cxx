@@ -1390,7 +1390,6 @@ void ElementMode::ReadElementMode (
         PresenterConfigurationAccess::GetProperty(xProperties, "Font"), UNO_QUERY);
     PresenterTheme::SharedFontDescriptor pFont (PresenterTheme::ReadFont(
         xFontNode,
-        "",
         rpDefaultMode.get()!=nullptr
             ? rpDefaultMode->maText.GetFont()
             : PresenterTheme::SharedFontDescriptor()));

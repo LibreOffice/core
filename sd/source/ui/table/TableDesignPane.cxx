@@ -84,25 +84,16 @@ static const OUStringLiteral gPropNames[CB_COUNT] =
     "UseBandingColumnStyle"
 };
 
-TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBase& rBase, bool bModal )
+TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBase& rBase )
     : mrBase(rBase)
-    , mbModal(bModal)
     , mbStyleSelected(false)
     , mbOptionsChanged(false)
 {
     pParent->get(m_pValueSet, "previews");
     m_pValueSet->SetStyle(m_pValueSet->GetStyle() | WB_NO_DIRECTSELECT | WB_FLATVALUESET | WB_ITEMBORDER);
     m_pValueSet->SetExtraSpacing(8);
-    m_pValueSet->setModal(mbModal);
-    if( !mbModal )
-    {
-        m_pValueSet->SetColor();
-    }
-    else
-    {
-        m_pValueSet->SetColor( COL_WHITE );
-        m_pValueSet->SetBackground( COL_WHITE );
-    }
+    m_pValueSet->setModal(false);
+    m_pValueSet->SetColor();
     m_pValueSet->SetSelectHdl (LINK(this, TableDesignWidget, implValueSetHdl));
 
     for (sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i)
@@ -156,8 +147,7 @@ static SfxDispatcher* getDispatcher( ViewShellBase const & rBase )
 IMPL_LINK_NOARG(TableDesignWidget, implValueSetHdl, ValueSet*, void)
 {
     mbStyleSelected = true;
-    if( !mbModal )
-        ApplyStyle();
+    ApplyStyle();
 }
 
 void TableDesignWidget::ApplyStyle()
@@ -214,8 +204,7 @@ IMPL_LINK_NOARG(TableDesignWidget, implCheckBoxHdl, Button*, void)
 {
     mbOptionsChanged = true;
 
-    if( !mbModal )
-        ApplyOptions();
+    ApplyOptions();
 
     FillDesignPreviewControl();
 }

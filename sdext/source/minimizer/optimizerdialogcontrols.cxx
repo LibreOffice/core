@@ -285,7 +285,7 @@ OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString& rCon
 
 
 OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, const Reference< XItemListener >& rItemListener,
-    const OUString& rLabel, sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, bool bMultiLine, sal_Int16 nTabIndex )
+    const OUString& rLabel, sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int16 nTabIndex )
 {
     sal_Int32 nHeight = 8;
     OUString pNames[] = {
@@ -301,7 +301,7 @@ OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUString& r
     Any pValues[] = {
         Any( nHeight ),
         Any( rLabel ),
-        Any( bMultiLine ),
+        Any( false ), // bMultiLine
         Any( nXPos ),
         Any( nYPos ),
         Any( sal_Int16(0) ),
@@ -518,8 +518,8 @@ void OptimizerDialog::InitPage2()
 
     std::vector< OUString > aControlList;
     aControlList.push_back( InsertFixedText( *this, "FixedText0Pg1", getString( STR_GRAPHIC_OPTIMIZATION ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, false, true, mnTabIndex++ ) );
-    aControlList.push_back( InsertRadioButton( *this, "RadioButton0Pg1", mxItemListener, getString( STR_LOSSLESS_COMPRESSION ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, false, mnTabIndex++ ) );
-    aControlList.push_back( InsertRadioButton( *this, "RadioButton1Pg1", mxItemListener, getString( STR_JPEG_COMPRESSION ), PAGE_POS_X + 6, PAGE_POS_Y + 28, PAGE_WIDTH - 12, false, mnTabIndex++ ) );
+    aControlList.push_back( InsertRadioButton( *this, "RadioButton0Pg1", mxItemListener, getString( STR_LOSSLESS_COMPRESSION ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, mnTabIndex++ ) );
+    aControlList.push_back( InsertRadioButton( *this, "RadioButton1Pg1", mxItemListener, getString( STR_JPEG_COMPRESSION ), PAGE_POS_X + 6, PAGE_POS_Y + 28, PAGE_WIDTH - 12, mnTabIndex++ ) );
     aControlList.push_back( InsertFixedText( *this, "FixedText1Pg1", getString( STR_QUALITY ), PAGE_POS_X + 20, PAGE_POS_Y + 40, 72, 8, false, false, mnTabIndex++ ) );
     aControlList.push_back( InsertFormattedField( *this, "FormattedField0Pg1", mxTextListenerFormattedField0Pg1, mxSpinListenerFormattedField0Pg1, PAGE_POS_X + 106, PAGE_POS_Y + 38, 0, 100, mnTabIndex++ ) );
     aControlList.push_back( InsertFixedText( *this, "FixedText2Pg1", getString( STR_IMAGE_RESOLUTION ), PAGE_POS_X + 6, PAGE_POS_Y + 54, 94, 8, false, false, mnTabIndex++ ) );
@@ -564,8 +564,8 @@ void OptimizerDialog::InitPage3()
     std::vector< OUString > aControlList;
     aControlList.push_back( InsertFixedText( *this, "FixedText0Pg2", getString( STR_OLE_OPTIMIZATION ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, false, true, mnTabIndex++ ) );
     aControlList.push_back( InsertCheckBox(  *this, "CheckBox0Pg2", mxItemListener, getString( STR_OLE_REPLACE ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, mnTabIndex++ ) );
-    aControlList.push_back( InsertRadioButton( *this, "RadioButton0Pg2", mxItemListener, getString( STR_ALL_OLE_OBJECTS ), PAGE_POS_X + 14, PAGE_POS_Y + 28, PAGE_WIDTH - 22, false, mnTabIndex++ ) );
-    aControlList.push_back( InsertRadioButton( *this, "RadioButton1Pg2", mxItemListener, getString( STR_ALIEN_OLE_OBJECTS_ONLY ), PAGE_POS_X + 14, PAGE_POS_Y + 40, PAGE_WIDTH - 22, false, mnTabIndex++ ) );
+    aControlList.push_back( InsertRadioButton( *this, "RadioButton0Pg2", mxItemListener, getString( STR_ALL_OLE_OBJECTS ), PAGE_POS_X + 14, PAGE_POS_Y + 28, PAGE_WIDTH - 22, mnTabIndex++ ) );
+    aControlList.push_back( InsertRadioButton( *this, "RadioButton1Pg2", mxItemListener, getString( STR_ALIEN_OLE_OBJECTS_ONLY ), PAGE_POS_X + 14, PAGE_POS_Y + 40, PAGE_WIDTH - 22, mnTabIndex++ ) );
     aControlList.push_back( InsertFixedText( *this, "FixedText1Pg2", nOLECount ? getString( STR_OLE_OBJECTS_DESC ) : getString( STR_NO_OLE_OBJECTS_DESC ), PAGE_POS_X + 6, PAGE_POS_Y + 64, PAGE_WIDTH - 22, 50, true, false, mnTabIndex++ ) );
     maControlPages.push_back( aControlList );
     DeactivatePage( 3 );
@@ -868,8 +868,8 @@ void OptimizerDialog::InitPage4()
     aControlList.push_back( InsertFixedText( *this, "FixedText8Pg4", OUString(), PAGE_POS_X + 100, PAGE_POS_Y + 58, 30, 8, false, false, mnTabIndex++ ) );
     setControlProperty( "FixedText8Pg4", "Align", Any( static_cast< short >( 2 ) ) );
 
-    aControlList.push_back( InsertRadioButton( *this, "RadioButton0Pg4", mxItemListener, getString(  STR_APPLY_TO_CURRENT ), PAGE_POS_X + 6, PAGE_POS_Y + 78, PAGE_WIDTH - 12, false, mnTabIndex++ ) );
-    aControlList.push_back( InsertRadioButton( *this, "RadioButton1Pg4", mxItemListener, getString( STR_SAVE_AS ), PAGE_POS_X + 6, PAGE_POS_Y + 90, PAGE_WIDTH - 12, false, mnTabIndex++ ) );
+    aControlList.push_back( InsertRadioButton( *this, "RadioButton0Pg4", mxItemListener, getString(  STR_APPLY_TO_CURRENT ), PAGE_POS_X + 6, PAGE_POS_Y + 78, PAGE_WIDTH - 12, mnTabIndex++ ) );
+    aControlList.push_back( InsertRadioButton( *this, "RadioButton1Pg4", mxItemListener, getString( STR_SAVE_AS ), PAGE_POS_X + 6, PAGE_POS_Y + 90, PAGE_WIDTH - 12, mnTabIndex++ ) );
     aControlList.push_back( InsertFixedText( *this, "FixedText1Pg4", OUString(), PAGE_POS_X + 6, DIALOG_HEIGHT - 87, PAGE_WIDTH - 12, 8, true, false, mnTabIndex++ ) );
     aControlList.emplace_back("Progress" );
     aControlList.push_back( InsertSeparator( *this, "Separator1Pg4", 0, PAGE_POS_X + 6, DIALOG_HEIGHT - 58, PAGE_WIDTH - 12, 1 ) );

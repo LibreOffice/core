@@ -478,7 +478,6 @@ handleError( ucb::InteractiveAugmentedIOException const & i_rException,
     e.g. ODB files seem to only have content.xml */
 static void
 collectFilesFromStorage(uno::Reference<embed::XStorage> const& i_xStorage,
-    const OUString& i_Path,
     std::set< OUString > & o_rFiles)
 {
     static OUString content(s_content);
@@ -487,12 +486,12 @@ collectFilesFromStorage(uno::Reference<embed::XStorage> const& i_xStorage,
         if (i_xStorage->hasByName(content) &&
             i_xStorage->isStreamElement(content))
         {
-            o_rFiles.insert(i_Path + content);
+            o_rFiles.insert(content);
         }
         if (i_xStorage->hasByName(styles) &&
             i_xStorage->isStreamElement(styles))
         {
-            o_rFiles.insert(i_Path + styles);
+            o_rFiles.insert(styles);
         }
     } catch (const uno::Exception &) {
         SAL_WARN("sfx", "collectFilesFromStorage: exception?");
@@ -1055,8 +1054,7 @@ void SAL_CALL DocumentMetadataAccess::loadMetadataFromStorage(
     initLoading(*m_pImpl, i_xStorage, i_xBaseURI, i_xHandler);
 
     std::set< OUString > StgFiles;
-    collectFilesFromStorage(i_xStorage,
-        "", StgFiles);
+    collectFilesFromStorage(i_xStorage, StgFiles);
 
     std::vector< OUString > MfstMetadataFiles;
 

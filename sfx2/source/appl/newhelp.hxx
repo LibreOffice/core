@@ -577,7 +577,7 @@ public:
 };
 
 /// Appends ?Language=xy&System=abc to the help URL in rURL
-void AppendConfigToken(OUStringBuffer& rURL, bool bQuestionMark, const OUString &rLang = OUString());
+void AppendConfigToken(OUStringBuffer& rURL, bool bQuestionMark);
 
 #endif // INCLUDED_SFX2_SOURCE_APPL_NEWHELP_HXX
 

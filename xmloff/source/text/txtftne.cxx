@@ -230,15 +230,14 @@ static void lcl_exportString(
     const OUString& sProperty,
     sal_uInt16 nPrefix,
     enum XMLTokenEnum eElement,
-    bool bEncodeName,
-    bool bOmitIfEmpty)
+    bool bEncodeName)
 {
     SAL_WARN_IF( eElement == XML_TOKEN_INVALID, "xmloff", "need element token");
 
     Any aAny = rPropSet->getPropertyValue(sProperty);
     OUString sTmp;
     aAny >>= sTmp;
-    if (!bOmitIfEmpty || !sTmp.isEmpty())
+    if (!sTmp.isEmpty())
     {
         if( bEncodeName )
             sTmp = rExport.EncodeStyleName( sTmp );
@@ -257,33 +256,33 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     lcl_exportString( GetExport(), rFootnoteConfig,
                       sParaStyleName,
                       XML_NAMESPACE_TEXT, XML_DEFAULT_STYLE_NAME,
-                      true, true);
+                      true);
 
     // citation style
     lcl_exportString( GetExport(), rFootnoteConfig,
                       sCharStyleName,
                       XML_NAMESPACE_TEXT, XML_CITATION_STYLE_NAME,
-                      true, true);
+                      true);
 
     // citation body style
     lcl_exportString( GetExport(), rFootnoteConfig,
                       sAnchorCharStyleName,
                       XML_NAMESPACE_TEXT, XML_CITATION_BODY_STYLE_NAME,
-                      true, true);
+                      true);
 
     // page style
     lcl_exportString( GetExport(), rFootnoteConfig,
                       sPageStyleName,
                       XML_NAMESPACE_TEXT, XML_MASTER_PAGE_NAME,
-                      true, true );
+                      true );
 
     // prefix
     lcl_exportString( GetExport(), rFootnoteConfig, sPrefix,
-                      XML_NAMESPACE_STYLE, XML_NUM_PREFIX, false, true);
+                      XML_NAMESPACE_STYLE, XML_NUM_PREFIX, false);
 
     // suffix
     lcl_exportString( GetExport(), rFootnoteConfig, sSuffix,
-                      XML_NAMESPACE_STYLE, XML_NUM_SUFFIX, false, true);
+                      XML_NAMESPACE_STYLE, XML_NUM_SUFFIX, false);
 
 
     Any aAny;

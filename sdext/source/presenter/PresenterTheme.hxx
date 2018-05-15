@@ -112,7 +112,6 @@ public:
 
     static SharedFontDescriptor ReadFont (
         const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
-        const OUString& rsFontPath,
         const SharedFontDescriptor& rDefaultFount);
 
     static bool ConvertToColor (

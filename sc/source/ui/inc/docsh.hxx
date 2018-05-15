@@ -484,7 +484,7 @@ namespace HelperNotifyChanges
     }
 };
 
-void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sModuleName, const OUString& sModuleSource );
+void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sModuleSource );
 
 #endif
 

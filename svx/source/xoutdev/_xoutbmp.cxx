@@ -528,9 +528,9 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
 }
 
 tools::Polygon XOutBitmap::GetContour( const Bitmap& rBmp, const XOutFlags nFlags,
-                                        const sal_uInt8 cEdgeDetectThreshold,
                                         const tools::Rectangle* pWorkRectPixel )
 {
+    const sal_uInt8 cEdgeDetectThreshold = 128;
     Bitmap      aWorkBmp;
     tools::Polygon aRetPoly;
     tools::Rectangle   aWorkRect( Point(), rBmp.GetSizePixel() );

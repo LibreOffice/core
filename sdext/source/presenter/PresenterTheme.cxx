@@ -318,10 +318,9 @@ OUString PresenterTheme::GetStyleName (const OUString& rsResourceURL) const
 
 PresenterTheme::SharedFontDescriptor PresenterTheme::ReadFont (
     const Reference<container::XHierarchicalNameAccess>& rxNode,
-    const OUString& rsFontPath,
     const PresenterTheme::SharedFontDescriptor& rpDefault)
 {
-    return ReadContext::ReadFont(rxNode, rsFontPath, rpDefault);
+    return ReadContext::ReadFont(rxNode, OUString(), rpDefault);
 }
 
 bool PresenterTheme::ConvertToColor (
