@@ -114,6 +114,13 @@ void SAL_CALL XSecParser::startElement(
                 m_pXSecController->setId( ouIdAttr );
             }
         }
+        else if (aName == "SignatureMethod")
+        {
+            OUString ouAlgorithm = xAttribs->getValueByName("Algorithm");
+            if (ouAlgorithm == ALGO_ECDSASHA1 || ouAlgorithm == ALGO_ECDSASHA256
+                || ouAlgorithm == ALGO_ECDSASHA512)
+                m_pXSecController->setSignatureMethod(svl::crypto::SignatureMethodAlgorithm::ECDSA);
+        }
         else if ( aName == "Reference" )
         {
             OUString ouUri = xAttribs->getValueByName("URI");
