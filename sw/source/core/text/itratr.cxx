@@ -113,12 +113,20 @@ SwAttrIter::~SwAttrIter()
  */
 SwTextAttr *SwAttrIter::GetAttr(TextFrameIndex const nPosition) const
 {
-    return (m_pTextNode) ? m_pTextNode->GetTextAttrForCharAt(nPosition) : nullptr;
+    std::pair<SwTextNode const*, sal_Int32> const pos( m_pMergedPara
+        ? sw::MapViewToModel(*m_pMergedPara, nPosition)
+        : std::make_pair(m_pTextNode, sal_Int32(nPosition)));
+    return pos.first->GetTextAttrForCharAt(pos.second);
 }
 
 bool SwAttrIter::SeekAndChgAttrIter(TextFrameIndex const nNewPos, OutputDevice* pOut)
 {
-    bool bChg = m_nStartIndex && nNewPos == m_nPosition ? m_pFont->IsFntChg() : Seek( nNewPos );
+    std::pair<SwTextNode const*, sal_Int32> const pos( m_pMergedPara
+        ? sw::MapViewToModel(*m_pMergedPara, nNewPos)
+        : std::make_pair(m_pTextNode, sal_Int32(nNewPos)));
+    bool bChg = m_nStartIndex && pos.first == m_pTextNode && pos.second == m_nPosition
+        ? m_pFont->IsFntChg()
+        : Seek( nNewPos );
     if ( m_pLastOut.get() != pOut )
     {
         m_pLastOut = pOut;
@@ -151,6 +159,14 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
     SwTextNode const*const pFirstTextNode(m_pMergedPara ? m_pMergedPara->pFirstNode : m_pTextNode);
     if ( m_pRedline && m_pRedline->ExtOn() )
         m_pRedline->LeaveExtend(*m_pFont, pFirstTextNode->GetIndex(), 0);
+
+    if (m_pTextNode != pFirstTextNode)
+    {
+        assert(m_pMergedPara);
+        m_pTextNode = m_pMergedPara->pFirstNode;
+        m_pHints = m_pTextNode->GetpSwpHints();
+        InitFontAndAttrHandler(*m_pTextNode, m_pMergedPara->mergedText, nullptr);
+    }
 
     // reset font to its original state
     m_aAttrHandler.Reset();
