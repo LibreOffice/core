@@ -599,21 +599,22 @@ TextFrameIndex SwAttrIter::GetNextAttr() const
         sal_Int32 nNext = GetNextAttrImpl(pTextNode, nStartIndex, nEndIndex, nPosition);
         if( m_pRedline )
         {
-            std::pair<sal_Int32, SwRangeRedline const*> const redline(
+            std::pair<sal_Int32, std::pair<SwRangeRedline const*, size_t>> const redline(
                     m_pRedline->GetNextRedln(nNext, pTextNode, nActRedline));
-            if (redline.second)
+            if (redline.second.first)
             {
                 assert(m_pMergedPara);
-                if (CanSkipOverRedline(*redline.second, nStartIndex, nEndIndex))
+                if (CanSkipOverRedline(*redline.second.first, nStartIndex, nEndIndex))
                 {
-                    if (&redline.second->End()->nNode.GetNode() != pTextNode)
+                    nActRedline += redline.second.second;
+                    if (&redline.second.first->End()->nNode.GetNode() != pTextNode)
                     {
-                        pTextNode = redline.second->End()->nNode.GetNode().GetTextNode();
-                        nPosition = redline.second->End()->nContent.GetIndex();
+                        pTextNode = redline.second.first->End()->nNode.GetNode().GetTextNode();
+                        nPosition = redline.second.first->End()->nContent.GetIndex();
                     }
                     else
                     {
-                        nPosition = redline.second->End()->nContent.GetIndex();
+                        nPosition = redline.second.first->End()->nContent.GetIndex();
                     }
                 }
                 else

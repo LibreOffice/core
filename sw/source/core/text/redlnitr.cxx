@@ -442,57 +442,85 @@ void SwRedlineItr::Clear_( SwFont* pFnt )
     m_Hints.clear();
 }
 
-// TODO this must be ITERABLE pass in members as parameter
-std::pair<sal_Int32, SwRangeRedline const*>
-SwRedlineItr::GetNextRedln(sal_Int32 nNext, SwTextNode const*const pNode, SwRedlineTable::size_type & rAct)
+/// Ignore mode: does nothing.
+/// Show mode: returns end of redline if currently in one, or start of next
+/// Hide mode: returns start of next redline in current node, plus (if it's a
+///            Delete) its end position and number of consecutive RLs
+std::pair<sal_Int32, std::pair<SwRangeRedline const*, size_t>>
+SwRedlineItr::GetNextRedln(sal_Int32 nNext, SwTextNode const*const pNode,
+        SwRedlineTable::size_type & rAct)
 {
     sal_Int32 nStart(m_nStart);
     sal_Int32 nEnd(m_nEnd);
     nNext = NextExtend(pNode->GetIndex(), nNext);
     if (m_eMode == Mode::Ignore || SwRedlineTable::npos == m_nFirst)
-        return std::make_pair(nNext, nullptr);
+        return std::make_pair(nNext, std::make_pair(nullptr, 0));
     if (SwRedlineTable::npos == rAct)
     {
-        rAct = m_nFirst; // TODO???
-        m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct]->CalcStartEnd(pNode->GetIndex(), nStart, nEnd);
+        rAct = m_nFirst;
     }
     if (rAct != m_nAct)
     {
-        m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct]->CalcStartEnd(pNode->GetIndex(), nStart, nEnd);
+        while (rAct < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size())
+        {
+            SwRangeRedline const*const pRedline(
+                    m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct]);
+            pRedline->CalcStartEnd(pNode->GetIndex(), nStart, nEnd);
+            if (m_eMode != Mode::Hide
+                || pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE)
+            {
+                break;
+            }
+            ++rAct; // Hide mode: search a Delete RL
+        }
     }
-    if (m_bOn || !nStart)
+    if (rAct == m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size())
     {
+        return std::make_pair(nNext, std::make_pair(nullptr, 0)); // no Delete here
+    }
+    if (m_bOn || (m_eMode == Mode::Show && nStart == 0))
+    {   // in Ignore mode, the end of redlines isn't relevant, except as returned in the second in the pair!
         if (nEnd < nNext)
             nNext = nEnd;
     }
     else if (nStart <= nNext)
     {
-        nNext = nStart;
-        if (m_eMode == Mode::Hide)
+        if (m_eMode == Mode::Show)
         {
-            SwRangeRedline const* pRedline = m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct];
+            nNext = nStart;
+        }
+        else
+        {
+            assert(m_eMode == Mode::Hide);
+            SwRangeRedline const* pRedline(
+                    m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct]);
+            assert(pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE); //?
             if (pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE)
             {
-                ++rAct;
-                while (rAct < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size())
+                nNext = nStart;
+                size_t nSkipped(1); // (consecutive) candidates to be skipped
+                while (rAct + nSkipped <
+                       m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size())
                 {
-                    SwRangeRedline *const pNext = m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct];
+                    SwRangeRedline const*const pNext =
+                        m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct + nSkipped];
                     if (pRedline->End() < pNext->Start())
                     {
                         break; // done for now
                     }
-                    else if (pNext->Start() == pRedline->End() && pNext->GetType() == nsRedlineType_t::REDLINE_DELETE)
+                    else if (pNext->Start() == pRedline->End() &&
+                            pNext->GetType() == nsRedlineType_t::REDLINE_DELETE)
                     {
                         // consecutive delete - continue
                         pRedline = pNext;
                     }
-                    ++rAct;
+                    ++nSkipped;
                 }
-                return std::make_pair(nNext, pRedline);
+                return std::make_pair(nNext, std::make_pair(pRedline, nSkipped));
             }
         }
     }
-    return std::make_pair(nNext, nullptr);
+    return std::make_pair(nNext, std::make_pair(nullptr, 0));
 }
 
 bool SwRedlineItr::ChkSpecialUnderline_() const
