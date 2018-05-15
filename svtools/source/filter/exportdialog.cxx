@@ -600,6 +600,7 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     , mbIsPixelFormat(bIsPixelFormat)
     , mbExportSelection(bExportSelection)
     , mbGraphicsSource(bGraphicsSource)
+    , mnMaxImageSize(5e7)
 {
     get(mpMfSizeX, "widthmf-nospin");
     get(mpMfSizeY, "heightmf-nospin");
@@ -1097,6 +1098,14 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeX, Edit&, void)
         maSize.Width = aDest.Width();
         maSize.Height = aDest.Height();
     }
+
+    sal_uInt64 nImageSizePx = maSize.Width * maSize.Height;
+    if (nImageSizePx > mnMaxImageSize)
+    {
+        maSize.Width = static_cast< sal_Int32 >(std::sqrt(mnMaxImageSize / fRatio));
+        maSize.Height = static_cast< sal_Int32 >( fRatio * maSize.Width + 0.5 );
+    }
+
     updateControls();
 }
 
@@ -1129,6 +1138,14 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeY, Edit&, void)
         maSize.Height = aDest.Height();
         maSize.Width = aDest.Width();
     }
+
+    sal_uInt64 nImageSizePx = maSize.Width * maSize.Height;
+    if (nImageSizePx > mnMaxImageSize)
+    {
+        maSize.Height = static_cast< sal_Int32 >(std::sqrt(mnMaxImageSize / fRatio));
+        maSize.Width = static_cast< sal_Int32 >( fRatio * maSize.Height + 0.5 );
+    }
+
     updateControls();
 }
 

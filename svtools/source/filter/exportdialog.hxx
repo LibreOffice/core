@@ -130,6 +130,8 @@ private:
 
     sal_Int32           mnInitialResolutionUnit;
 
+    sal_uInt32           mnMaxImageSize;
+
     // for pixel graphics it always contains the pixel count
     css::awt::Size      maResolution;       // it always contains the number of pixels per meter
 
