@@ -1628,7 +1628,7 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwNodeIndex &rIdx,
 
     // insert into the table
     const SwTableNode* pTableNd = m_pStartNode->FindTableNode();
-    OSL_ENSURE( pTableNd, "In which table is that box?" );
+    assert(pTableNd && "In which table is that box?");
     SwTableSortBoxes& rSrtArr = const_cast<SwTableSortBoxes&>(pTableNd->GetTable().
                                 GetTabSortBoxes());
     SwTableBox* p = this;   // error: &this

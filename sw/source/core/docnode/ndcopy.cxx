@@ -180,7 +180,7 @@ static void lcl_CopyTableBox( SwTableBox* pBox, CopyTable* pCT )
     else
     {
         SwNodeIndex aNewIdx(*pCT->m_pTableNd, pBox->GetSttIdx() - pCT->m_nOldTableSttIdx);
-        OSL_ENSURE( aNewIdx.GetNode().IsStartNode(), "Index is not on the start node" );
+        assert(aNewIdx.GetNode().IsStartNode() && "Index is not on the start node");
 
         pNewBox = new SwTableBox(pBoxFormat, aNewIdx, pCT->m_pInsLine);
         pNewBox->setRowSpan( pBox->getRowSpan() );
