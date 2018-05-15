@@ -80,16 +80,16 @@ private:
         sal_uInt16 Pos( const SwTextAttr& rAttr ) const;
     };
 
-    SwAttrStack aAttrStack[ NUM_ATTRIBUTE_STACKS ]; // stack collection
-    const SfxPoolItem* pDefaultArray[ NUM_DEFAULT_VALUES ];
-    const IDocumentSettingAccess* mpIDocumentSettingAccess;
-    const SwViewShell* mpShell;
+    SwAttrStack m_aAttrStack[ NUM_ATTRIBUTE_STACKS ]; // stack collection
+    const SfxPoolItem* m_pDefaultArray[ NUM_DEFAULT_VALUES ];
+    const IDocumentSettingAccess* m_pIDocumentSettingAccess;
+    const SwViewShell* m_pShell;
 
     // This is the base font for the paragraph. It is stored in order to have
     // a template, if we have to restart the attribute evaluation
-    std::unique_ptr<SwFont> pFnt;
+    std::unique_ptr<SwFont> m_pFnt;
 
-    bool bVertLayout;
+    bool m_bVertLayout;
 
     // change font according to pool item
     void FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush );
@@ -140,14 +140,14 @@ public:
 
 inline void SwAttrHandler::ResetFont( SwFont& rFnt ) const
 {
-    OSL_ENSURE( pFnt, "ResetFont without a font" );
-    if ( pFnt )
-        rFnt = *pFnt;
+    OSL_ENSURE(m_pFnt, "ResetFont without a font");
+    if (m_pFnt)
+        rFnt = *m_pFnt;
 };
 
 inline const SwFont* SwAttrHandler::GetFont() const
 {
-    return pFnt.get();
+    return m_pFnt.get();
 };
 
 #endif
