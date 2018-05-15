@@ -14679,7 +14679,6 @@ svx/source/svdraw/sdrpaintwindow.cxx
 svx/source/svdraw/sdrundomanager.cxx
 svx/source/svdraw/selectioncontroller.cxx
 svx/source/svdraw/svdattr.cxx
-svx/source/svdraw/svdconv.hxx
 svx/source/svdraw/svdcrtv.cxx
 svx/source/svdraw/svddrag.cxx
 svx/source/svdraw/svddrgm1.hxx

@@ -278,7 +278,6 @@ public:
 
     void SetForceControlBackground(bool b) { mbForceControlBackground = b; }
 
-    void SetPassword(bool b)  { mbPassword = b; }
     bool IsPassword() const { return mbPassword; }
 };
 

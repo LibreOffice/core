@@ -83,14 +83,6 @@ SvxRectCtl::SvxRectCtl(vcl::Window* pParent, RectPoint eRpt,
     Resize_Impl();
 }
 
-void SvxRectCtl::SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder, sal_uInt16 nCircle)
-{
-    nBorderWidth = nBorder;
-    nRadius = nCircle;
-    eDefRP = eRpt;
-    Resize_Impl();
-}
-
 Size SvxRectCtl::GetOptimalSize() const
 {
     return LogicToPixel(Size(78, 39), MapMode(MapUnit::MapAppFont));
@@ -650,13 +642,6 @@ Reference< XAccessible > SvxRectCtl::CreateAccessible()
 RectPoint SvxRectCtl::GetApproxRPFromPixPt( const css::awt::Point& r ) const
 {
     return GetRPFromPoint( GetApproxLogPtFromPixPt( Point( r.X, r.Y ) ) );
-}
-
-// CompletelyDisabled() added to have a disabled state for SvxRectCtl
-void SvxRectCtl::DoCompletelyDisable(bool bNew)
-{
-    mbCompleteDisable = bNew;
-    Invalidate();
 }
 
 BitmapEx& RectCtl::GetRectBitmap()

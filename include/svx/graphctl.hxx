@@ -142,8 +142,6 @@ public:
     virtual ~SvxGraphCtrl();
 
     void                SetGraphic( const Graphic& rGraphic );
-    const Graphic&      GetGraphic() const { return aGraphic; }
-    const Size&         GetGraphicSize() const { return aGraphSize; }
 
     const Size&         GetSize() const { return maSize; }
 
