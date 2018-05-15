@@ -540,6 +540,8 @@ OUString getNumberText(const Locale& aLocale, sal_Int16 numType, const OUString&
     const sal_Int32 len = rNumberString.getLength();
     const sal_Unicode* src = rNumberString.getStr();
 
+    LocaleDataItem aLocaleItem = LocaleDataImpl::get()->getLocaleItem(aLocale);
+
     OUStringBuffer sBuf(len);
     for (i = 0; i < len; i++)
     {
@@ -549,7 +551,11 @@ OUString getNumberText(const Locale& aLocale, sal_Int16 numType, const OUString&
             ++count;
             sBuf.append(ch);
         }
-        else if (isSeparator(ch) && count > 0)
+        else if (ch == aLocaleItem.decimalSeparator.toChar())
+            // Convert any decimal separator to point - in case libnumbertext has a different one
+            // for this locale (it seems that point is supported for all locales in libnumbertext)
+            sBuf.append('.');
+        else if (ch == aLocaleItem.thousandSeparator.toChar() && count > 0)
             continue;
         else if (isMinus(ch) && count == 0)
             sBuf.append(ch);
