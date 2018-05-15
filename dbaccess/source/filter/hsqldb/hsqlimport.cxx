@@ -19,6 +19,7 @@
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
@@ -27,8 +28,12 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <connectivity/dbtools.hxx>
+#include <connectivity/dbexception.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "hsqlimport.hxx"
 #include "parseschema.hxx"
@@ -293,7 +298,16 @@ void HsqlImporter::importHsqlDatabase()
     assert(m_xStorage);
 
     SchemaParser parser(m_xStorage);
-    parser.parseSchema();
+    std::unique_ptr<SQLException> pException;
+    try
+    {
+        parser.parseSchema();
+    }
+    catch (SQLException& ex)
+    {
+        if (!pException)
+            pException.reset(new SQLException{ ex });
+    }
 
     auto statements = parser.getCreateStatements();
 
@@ -307,21 +321,53 @@ void HsqlImporter::importHsqlDatabase()
     for (auto& sSql : statements)
     {
         Reference<XStatement> statement = m_rConnection->createStatement();
-        statement->executeQuery(sSql);
+        try
+        {
+            statement->executeQuery(sSql);
+        }
+        catch (SQLException& ex)
+        {
+            if (!pException)
+                pException.reset(new SQLException{ ex });
+        }
     }
 
     // data
     for (const auto& tableIndex : parser.getTableIndexes())
     {
         std::vector<ColumnDefinition> aColTypes = parser.getTableColumnTypes(tableIndex.first);
-        parseTableRows(tableIndex.second, aColTypes, tableIndex.first);
+        try
+        {
+            parseTableRows(tableIndex.second, aColTypes, tableIndex.first);
+        }
+        catch (SQLException& ex)
+        {
+            if (!pException)
+                pException.reset(new SQLException{ ex });
+        }
     }
 
     // alter stmts
     for (const auto& sSql : parser.getAlterStatements())
     {
         Reference<XStatement> statement = m_rConnection->createStatement();
-        statement->executeQuery(sSql);
+        try
+        {
+            statement->executeQuery(sSql);
+        }
+        catch (SQLException& ex)
+        {
+            if (!pException)
+                pException.reset(new SQLException{ ex });
+        }
+    }
+
+    // show first error occured
+    if (pException)
+    {
+        SAL_WARN("dbaccess", "Error during migration");
+        dbtools::showError(dbtools::SQLExceptionInfo{ *pException }, nullptr,
+                           ::comphelper::getProcessComponentContext());
     }
 }
 }
