@@ -67,6 +67,19 @@ struct SignatureReferenceInformation
 
 typedef ::std::vector< SignatureReferenceInformation > SignatureReferenceInformations;
 
+namespace svl
+{
+namespace crypto
+{
+/// Specifies the algorithm used for signature generation and validation.
+enum class SignatureMethodAlgorithm
+{
+    RSA,
+    ECDSA
+};
+}
+}
+
 struct SignatureInformation
 {
     sal_Int32 nSecurityId;
@@ -123,6 +136,8 @@ struct SignatureInformation
     /// The certificate owner (aka subject).
     OUString ouSubject;
 
+    svl::crypto::SignatureMethodAlgorithm eAlgorithmID;
+
     SignatureInformation( sal_Int32 nId )
     {
         nSecurityId = nId;
@@ -130,6 +145,7 @@ struct SignatureInformation
         nDigestID = 0;
         bHasSigningCertificate = false;
         bPartialDocumentSignature = false;
+        eAlgorithmID = svl::crypto::SignatureMethodAlgorithm::RSA;
     }
 };
 
