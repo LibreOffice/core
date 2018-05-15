@@ -333,12 +333,12 @@ void ScSolverOptionsDialog::EditOption()
                 }
                 else
                 {
-                    ScopedVclPtrInstance< ScSolverIntegerDialog > aIntDialog( this );
-                    aIntDialog->SetOptionName( pStringItem->GetText() );
-                    aIntDialog->SetValue( pStringItem->GetIntValue() );
-                    if ( aIntDialog->Execute() == RET_OK )
+                    ScSolverIntegerDialog aIntDialog(GetFrameWeld());
+                    aIntDialog.SetOptionName( pStringItem->GetText() );
+                    aIntDialog.SetValue( pStringItem->GetIntValue() );
+                    if (aIntDialog.run() == RET_OK)
                     {
-                        pStringItem->SetIntValue( aIntDialog->GetValue() );
+                        pStringItem->SetIntValue(aIntDialog.GetValue());
                         m_pLbSettings->InvalidateEntry( pEntry );
                     }
                 }
@@ -389,44 +389,30 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsSelHdl, SvTreeListBox*, void)
     m_pBtnEdit->Enable( !bCheckbox );
 }
 
-ScSolverIntegerDialog::ScSolverIntegerDialog(vcl::Window * pParent)
-    : ModalDialog( pParent, "IntegerDialog",
-        "modules/scalc/ui/integerdialog.ui" )
+ScSolverIntegerDialog::ScSolverIntegerDialog(weld::Window * pParent)
+    : GenericDialogController(pParent, "modules/scalc/ui/integerdialog.ui", "IntegerDialog")
+    , m_xFrame(m_xBuilder->weld_frame("frame"))
+    , m_xNfValue(m_xBuilder->weld_spin_button("value"))
 {
-    get(m_pFrame, "frame");
-    get(m_pNfValue, "value");
 }
 
 ScSolverIntegerDialog::~ScSolverIntegerDialog()
 {
-    disposeOnce();
-}
-
-void ScSolverIntegerDialog::dispose()
-{
-    m_pFrame.clear();
-    m_pNfValue.clear();
-    ModalDialog::dispose();
 }
 
 void ScSolverIntegerDialog::SetOptionName( const OUString& rName )
 {
-    m_pFrame->set_label(rName);
+    m_xFrame->set_label(rName);
 }
 
 void ScSolverIntegerDialog::SetValue( sal_Int32 nValue )
 {
-    m_pNfValue->SetValue( nValue );
+    m_xNfValue->set_value( nValue );
 }
 
 sal_Int32 ScSolverIntegerDialog::GetValue() const
 {
-    sal_Int64 nValue = m_pNfValue->GetValue();
-    if ( nValue < SAL_MIN_INT32 )
-        return SAL_MIN_INT32;
-    if ( nValue > SAL_MAX_INT32 )
-        return SAL_MAX_INT32;
-    return static_cast<sal_Int32>(nValue);
+    return m_xNfValue->get_value();
 }
 
 ScSolverValueDialog::ScSolverValueDialog(weld::Window* pParent)

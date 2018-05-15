@@ -26,6 +26,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include <svx/checklbx.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -68,15 +69,14 @@ public:
     const css::uno::Sequence<css::beans::PropertyValue>& GetProperties();
 };
 
-class ScSolverIntegerDialog : public ModalDialog
+class ScSolverIntegerDialog : public weld::GenericDialogController
 {
-    VclPtr<VclFrame>     m_pFrame;
-    VclPtr<NumericField> m_pNfValue;
+    std::unique_ptr<weld::Frame> m_xFrame;
+    std::unique_ptr<weld::SpinButton> m_xNfValue;
 
 public:
-    ScSolverIntegerDialog( vcl::Window * pParent );
+    ScSolverIntegerDialog(weld::Window* pParent);
     virtual ~ScSolverIntegerDialog() override;
-    virtual void dispose() override;
 
     void        SetOptionName( const OUString& rName );
     void        SetValue( sal_Int32 nValue );
