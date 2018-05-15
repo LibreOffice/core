@@ -192,3 +192,9 @@ blacklist:
     - com/sun/star/container/XNameAccess.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - cppuhelper/supportsservice.hxx
+    sc/inc/reftokenhelper.hxx:
+    # base class has to be a complete type
+    - refdata.hxx
+    sc/inc/rowheightcontext.hxx:
+    # base class has to be a complete type
+    - vcl/outdev.hxx

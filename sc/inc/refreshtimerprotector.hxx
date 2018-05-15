@@ -12,6 +12,7 @@
 
 #include <sal/config.h>
 #include "scdllapi.h"
+#include <memory>
 
 class ScRefreshTimerControl;
 
