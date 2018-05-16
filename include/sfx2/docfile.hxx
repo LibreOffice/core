@@ -265,6 +265,7 @@ public:
 
     SAL_DLLPRIVATE bool
     SignContents_Impl(const css::uno::Reference<css::security::XCertificate> xCert,
+                      const OUString& aSignatureLineId,
                       bool bScriptingContent, const OUString& aODFVersion,
                       bool bHasValidDocumentSignature);
 

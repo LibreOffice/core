@@ -146,6 +146,11 @@ void XMLSignatureHelper::SetDescription(sal_Int32 nSecurityId, const OUString& r
     mpXSecController->setDescription(nSecurityId, rDescription);
 }
 
+void XMLSignatureHelper::SetSignatureLineId(sal_Int32 nSecurityId, const OUString& rSignatureLineId)
+{
+    mpXSecController->setSignatureLineId(nSecurityId, rSignatureLineId);
+}
+
 void XMLSignatureHelper::AddForSigning( sal_Int32 nSecurityId, const OUString& uri, bool bBinary, bool bXAdESCompliantIfODF )
 {
     mpXSecController->signAStream( nSecurityId, uri, bBinary, bXAdESCompliantIfODF );

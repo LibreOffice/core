@@ -833,6 +833,28 @@ void XSecController::exportSignature(
                         "dc:date");
                 }
                 xDocumentHandler->endElement( "SignatureProperty" );
+
+                if (!signatureInfo.ouSignatureLineId.isEmpty())
+                {
+                    pAttributeList = new SvXMLAttributeList();
+                    pAttributeList->AddAttribute(
+                        "xmlns:loext",
+                        "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0");
+                    pAttributeList->AddAttribute("Target", "#" + signatureInfo.ouSignatureId);
+
+                    xDocumentHandler->startElement(
+                        "SignatureProperty",
+                        cssu::Reference<cssxs::XAttributeList>(pAttributeList));
+                    {
+                        // Write SignatureLineId element
+                        xDocumentHandler->startElement(
+                            "loext:SignatureLineId",
+                            cssu::Reference<cssxs::XAttributeList>(new SvXMLAttributeList()));
+                        xDocumentHandler->characters(signatureInfo.ouSignatureLineId);
+                        xDocumentHandler->endElement("loext:SignatureLineId");
+                    }
+                    xDocumentHandler->endElement("SignatureProperty");
+                }
             }
 
             // Write signature description.

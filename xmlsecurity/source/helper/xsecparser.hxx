@@ -67,6 +67,7 @@ private:
     OUString m_ouDate;
     /// Characters of a <dc:description> element, as just read from XML.
     OUString m_ouDescription;
+    OUString m_ouSignatureLineId;
 
     /*
      * whether inside a particular element
@@ -84,6 +85,7 @@ private:
     bool m_bInSignatureValue;
     bool m_bInDate;
     bool m_bInDescription;
+    bool m_bInSignatureLineId;
 
     /*
      * the XSecController collaborating with XSecParser

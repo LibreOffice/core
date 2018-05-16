@@ -125,7 +125,7 @@ sal_Bool DocumentDigitalSignatures::signDocumentContent(
 sal_Bool DocumentDigitalSignatures::signDocumentContentWithCertificate(
     const Reference<css::embed::XStorage>& rxStorage,
     const Reference<css::io::XStream>& xSignStream,
-    const Reference<css::security::XCertificate>& xCertificate)
+    const Reference<css::security::XCertificate>& xCertificate, const OUString& aSignatureLineId)
 {
     OSL_ENSURE(!m_sODFVersion.isEmpty(),
                "DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
@@ -149,8 +149,8 @@ sal_Bool DocumentDigitalSignatures::signDocumentContentWithCertificate(
 
     sal_Int32 nSecurityId;
     OUString aDescription("");
-    bool bSuccess
-        = aSignatureManager.add(xCertificate, xSecurityContext, aDescription, nSecurityId, true);
+    bool bSuccess = aSignatureManager.add(xCertificate, xSecurityContext, aDescription, nSecurityId,
+                                          true, aSignatureLineId);
     if (!bSuccess)
         return false;
 

@@ -288,6 +288,23 @@ void XSecController::setDescription(sal_Int32 nSecurityId, const OUString& rDesc
     }
 }
 
+void XSecController::setSignatureLineId(sal_Int32 nSecurityId, const OUString& rSignatureLineId)
+{
+    int nIndex = findSignatureInfor(nSecurityId);
+
+    if (nIndex == -1)
+    {
+        InternalSignatureInformation aInformation(nSecurityId, nullptr);
+        aInformation.signatureInfor.ouSignatureLineId = rSignatureLineId;
+        m_vInternalSignatureInformations.push_back(aInformation);
+    }
+    else
+    {
+        SignatureInformation& rInformation = m_vInternalSignatureInformations[nIndex].signatureInfor;
+        rInformation.ouSignatureLineId = rSignatureLineId;
+    }
+}
+
 bool XSecController::WriteSignature(
     const cssu::Reference<cssxs::XDocumentHandler>& xDocumentHandler,
     bool bXAdESCompliantIfODF )

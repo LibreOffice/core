@@ -351,6 +351,7 @@ void OOXMLSecExporter::Impl::writeSignatureInfo()
     m_xDocumentHandler->startElement("SignatureInfoV1", uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
 
     m_xDocumentHandler->startElement("SetupId", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    m_xDocumentHandler->characters(m_rInformation.ouSignatureLineId);
     m_xDocumentHandler->endElement("SetupId");
     m_xDocumentHandler->startElement("SignatureText", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
     m_xDocumentHandler->endElement("SignatureText");
