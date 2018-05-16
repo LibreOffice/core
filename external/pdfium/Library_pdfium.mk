@@ -555,7 +555,7 @@ $(eval $(call gb_Library_use_externals,pdfium,\
     icuuc \
 ))
 
-ifeq ($(OS),LINUX)
+ifneq (,$(filter LINUX ANDROID,$(OS)))
 $(eval $(call gb_Library_add_libs,pdfium,\
     -ldl \
     -lrt \
