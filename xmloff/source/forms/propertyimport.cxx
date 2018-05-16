@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cmath>
+
 #include "propertyimport.hxx"
 
 #include <sax/tools/converter.hxx>
@@ -182,7 +186,8 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
                 {
                     case TYPE_DATE:
                     {
-                        OSL_ENSURE((static_cast<sal_uInt32>(nValue)) - nValue == 0,
+                        double dummy;
+                        OSL_ENSURE(std::modf(nValue, &dummy) == 0,
                             "PropertyConversion::convertString: a Date value with a fractional part?");
                         aReturn <<= lcl_getDate(nValue);
                     }
