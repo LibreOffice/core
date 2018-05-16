@@ -199,8 +199,6 @@ public:
     bool                    m_bIsShutDown;
     bool                    m_bMakingTree;  // in method of constructing tree
 
-    vcl::Font               m_aFntBold;
-    vcl::Font               m_aFntLight;
     bool                    m_bEditFlag;
     const IFunctionDescription* m_pFuncDesc;
     sal_Int32               m_nArgs;
@@ -331,18 +329,18 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     m_pMEdit->SetModifyHdl( LINK( this, FormulaDlg_Impl, FormulaHdl ) );
     m_pMEFormula->SetSelChangedHdl( LINK( this, FormulaDlg_Impl, FormulaCursorHdl ) );
 
-    m_aFntLight = m_pFtFormula->GetFont();
-    m_aFntLight.SetTransparent( true );
-    m_aFntBold = m_aFntLight;
-    m_aFntBold.SetWeight( WEIGHT_BOLD );
+    vcl::Font aFntLight = m_pFtFormula->GetFont();
+    aFntLight.SetTransparent( true );
+    vcl::Font aFntBold = aFntLight;
+    aFntBold.SetWeight( WEIGHT_BOLD );
 
-    m_pParaWin->SetArgumentFonts( m_aFntBold, m_aFntLight);
+    m_pParaWin->SetArgumentFonts( aFntBold, aFntLight);
 
     //  function description for choosing a function is no longer in a different color
 
-    m_pFtHeadLine->SetFont(m_aFntBold);
-    m_pFtFuncName->SetFont(m_aFntLight);
-    m_pFtFuncDesc->SetFont(m_aFntLight);
+    m_pFtHeadLine->SetFont(aFntBold);
+    m_pFtFuncName->SetFont(aFntLight);
+    m_pFtFuncDesc->SetFont(aFntLight);
 }
 
 FormulaDlg_Impl::~FormulaDlg_Impl()

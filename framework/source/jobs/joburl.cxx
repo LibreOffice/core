@@ -65,7 +65,6 @@ JobURL::JobURL( /*IN*/ const OUString& sURL )
             {
                 // set the part value
                 m_sEvent     = sPartValue;
-                m_sEventArgs = sPartArguments;
                 m_eRequest  |= E_EVENT;
             }
             else
@@ -77,7 +76,6 @@ JobURL::JobURL( /*IN*/ const OUString& sURL )
             {
                 // set the part value
                 m_sAlias     = sPartValue;
-                m_sAliasArgs = sPartArguments;
                 m_eRequest  |= E_ALIAS;
             }
             else
@@ -89,7 +87,6 @@ JobURL::JobURL( /*IN*/ const OUString& sURL )
             {
                 // set the part value
                 m_sService     = sPartValue;
-                m_sServiceArgs = sPartArguments;
                 m_eRequest    |= E_SERVICE;
             }
         }
