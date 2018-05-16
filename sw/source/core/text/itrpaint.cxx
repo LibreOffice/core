@@ -523,23 +523,45 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     if( pParaFnt && pParaFnt->GetUnderline() == GetFnt()->GetUnderline() )
         aUnderMulti.SelectAll();
 
-    if( HasHints() )
+    if (sw::MergedPara const*const pMerged = GetTextFrame()->GetMergedPara())
     {
-        for ( size_t nTmp = 0; nTmp < m_pHints->Count(); ++nTmp )
+        // first, add the paragraph properties to MultiSelection - if there are
+        // Hints too, they will override the positions if they're added later
+        sal_Int32 nTmp(0);
+        for (auto const& e : pMerged->extents)
         {
-            SwTextAttr* const pTextAttr = m_pHints->Get( nTmp );
-
-            const SvxUnderlineItem* pItem = CharFormat::GetItem( *pTextAttr, RES_CHRATR_UNDERLINE );
-
-            if ( pItem )
+            const SfxPoolItem* pItem;
+            if (SfxItemState::SET == e.pNode->GetSwAttrSet().GetItemState(
+                        RES_CHRATR_UNDERLINE, true, &pItem))
             {
-                const sal_Int32 nSt = pTextAttr->GetStart();
-                const sal_Int32 nEnd = *pTextAttr->GetEnd();
-                if( nEnd > nSt )
-                {
-                    const bool bUnderSelect = m_pFont->GetUnderline() == pItem->GetLineStyle();
-                    aUnderMulti.Select( Range( nSt, nEnd - 1 ), bUnderSelect );
-                }
+                const bool bUnderSelect(m_pFont->GetUnderline() ==
+                    static_cast<SvxUnderlineItem const*>(pItem)->GetLineStyle());
+                aUnderMulti.Select(Range(nTmp, nTmp + e.nEnd - e.nStart - 1),
+                        bUnderSelect);
+            }
+            nTmp += e.nEnd - e.nStart;
+        }
+    }
+
+    SwTextNode const* pNode(nullptr);
+    sw::MergedAttrIter iter(*GetTextFrame());
+    for (SwTextAttr const* pTextAttr = iter.NextAttr(&pNode); pTextAttr;
+         pTextAttr = iter.NextAttr(&pNode))
+    {
+        SvxUnderlineItem const*const pItem =
+            CharFormat::GetItem(*pTextAttr, RES_CHRATR_UNDERLINE);
+
+        if (pItem)
+        {
+            TextFrameIndex const nStart(
+                GetTextFrame()->MapModelToView(pNode, pTextAttr->GetStart()));
+            TextFrameIndex const nEnd(
+                GetTextFrame()->MapModelToView(pNode, *pTextAttr->End()));
+            if (nEnd > nStart)
+            {
+                const bool bUnderSelect = m_pFont->GetUnderline() == pItem->GetLineStyle();
+                aUnderMulti.Select(Range(sal_Int32(nStart), sal_Int32(nEnd) - 1),
+                        bUnderSelect);
             }
         }
     }
