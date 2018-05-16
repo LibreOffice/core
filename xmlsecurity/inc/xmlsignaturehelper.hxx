@@ -129,6 +129,7 @@ public:
 
     void        SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const tools::Time& rTime );
     void SetDescription(sal_Int32 nSecurityId, const OUString& rDescription);
+    void SetSignatureLineId(sal_Int32 nSecurityId, const OUString& rSignatureLineId);
 
     void        AddForSigning( sal_Int32 securityId, const OUString& uri, bool bBinary, bool bXAdESCompliantIfODF );
     void        CreateAndWriteSignature( const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler, bool bXAdESCompliantIfODF );

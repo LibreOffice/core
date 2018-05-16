@@ -55,7 +55,8 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
      */
     boolean signDocumentContentWithCertificate( [in] ::com::sun::star::embed::XStorage xStorage,
                                                 [in] ::com::sun::star::io::XStream xSignStream,
-                                                [in] ::com::sun::star::security::XCertificate xCertificate);
+                                                [in] ::com::sun::star::security::XCertificate xCertificate,
+                                                [in] string signatureLineId);
 
     /** checks for digital signatures and their status.
 
