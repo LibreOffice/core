@@ -48,7 +48,6 @@ DocumentToGraphicRenderer::DocumentToGraphicRenderer( const Reference<XComponent
     mxController( mxModel->getCurrentController() ),
     mxRenderable (mxDocument, uno::UNO_QUERY ),
     mxToolkit( VCLUnoHelper::CreateToolkit() ),
-    mbSelectionOnly( bSelectionOnly ),
     mbIsWriter( false )
 {
     try
@@ -64,7 +63,7 @@ DocumentToGraphicRenderer::DocumentToGraphicRenderer( const Reference<XComponent
     {
     }
 
-    if (!(mbSelectionOnly && mxController.is()))
+    if (!(bSelectionOnly && mxController.is()))
         return;
 
     try

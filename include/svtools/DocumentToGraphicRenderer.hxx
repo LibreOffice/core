@@ -51,7 +51,6 @@ class SVT_DLLPUBLIC DocumentToGraphicRenderer
     css::uno::Reference<css::view::XRenderable>     mxRenderable;
     css::uno::Reference<css::awt::XToolkit>         mxToolkit;
     css::uno::Any                                   maSelection;
-    bool                                            mbSelectionOnly;
     bool                                            mbIsWriter;
     std::vector<OUString>                           maChapterNames;
 

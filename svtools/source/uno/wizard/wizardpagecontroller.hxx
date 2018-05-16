@@ -56,7 +56,6 @@ namespace svt { namespace uno
     private:
         const css::uno::Reference< css::ui::dialogs::XWizardController >  m_xController;
         css::uno::Reference< css::ui::dialogs::XWizardPage >              m_xWizardPage;
-        const sal_Int16                                                                             m_nPageId;
     };
 
 

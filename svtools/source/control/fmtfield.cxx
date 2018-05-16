@@ -75,8 +75,6 @@ namespace validation
     {
     private:
         TransitionTable     m_aTransitions;
-        const sal_Unicode   m_cThSep;
-        const sal_Unicode   m_cDecSep;
 
     public:
         NumberValidator( const sal_Unicode _cThSep, const sal_Unicode _cDecSep );
@@ -122,8 +120,6 @@ namespace validation
     }
 
     NumberValidator::NumberValidator( const sal_Unicode _cThSep, const sal_Unicode _cDecSep )
-        :m_cThSep( _cThSep )
-        ,m_cDecSep( _cDecSep )
     {
         // build up our transition table
 
@@ -142,7 +138,7 @@ namespace validation
             lcl_insertSignTransitions( rRow, DIGIT_PRE_COMMA );
 
             // common transitions for the two pre-comma states
-            lcl_insertCommonPreCommaTransitions( rRow, m_cThSep, m_cDecSep );
+            lcl_insertCommonPreCommaTransitions( rRow, _cThSep, _cDecSep );
 
             // the exponent may start here
             // (this would mean string like "_+e10_", but this is a valid fragment, though no valid number)
@@ -154,7 +150,7 @@ namespace validation
             StateTransitions& rRow = m_aTransitions[ DIGIT_PRE_COMMA ];
 
             // common transitions for the two pre-comma states
-            lcl_insertCommonPreCommaTransitions( rRow, m_cThSep, m_cDecSep );
+            lcl_insertCommonPreCommaTransitions( rRow, _cThSep, _cDecSep );
 
             // the exponent may start here
             lcl_insertStartExponentTransition( rRow );
