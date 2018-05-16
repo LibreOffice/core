@@ -78,7 +78,6 @@ namespace dbaui
             NONE
         };
     private:
-        css::lang::Locale                   m_aLocale;
         css::uno::Reference< css::lang::XComponent >
                                             m_xObject;
         VclPtr<OAppBorderWindow>            m_pWin;

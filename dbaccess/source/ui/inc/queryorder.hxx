@@ -64,7 +64,6 @@ namespace dbaui
         VclPtr<ListBox>        m_pLB_ORDERVALUE2;
         VclPtr<ListBox>        m_pLB_ORDERFIELD3;
         VclPtr<ListBox>        m_pLB_ORDERVALUE3;
-        OUString               aSTR_NOENTRY;
         OUString               m_sOrgOrder;
 
         css::uno::Reference< css::sdb::XSingleSelectQueryComposer> m_xQueryComposer;

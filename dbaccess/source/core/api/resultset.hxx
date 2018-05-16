@@ -72,7 +72,6 @@ namespace dbaccess
 
         ::dbtools::WarningsContainer    m_aWarnings;
         std::unique_ptr<OColumns>       m_pColumns;
-        sal_Int32                       m_nResultSetType;
         sal_Int32                       m_nResultSetConcurrency;
         bool                        m_bIsBookmarkable : 1;
 

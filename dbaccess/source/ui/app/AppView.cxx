@@ -176,15 +176,6 @@ OApplicationView::OApplicationView( vcl::Window* pParent
     ,m_rAppController( _rAppController )
     ,m_eChildFocus(NONE)
 {
-
-    try
-    {
-        m_aLocale = SvtSysLocale().GetLanguageTag().getLocale();
-    }
-    catch(Exception&)
-    {
-    }
-
     m_pWin = VclPtr<OAppBorderWindow>::Create(this,_ePreviewMode);
     m_pWin->Show();
 
