@@ -375,12 +375,6 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
     vcl::Window* pParentWindow
 )   : ToolbarMenu( rController.getFrameInterface(), pParentWindow, WB_STDPOPUP )
     , mrController( rController )
-    , maImgDepth0(BitmapEx(RID_SVXBMP_DEPTH_0))
-    , maImgDepth1(BitmapEx(RID_SVXBMP_DEPTH_1))
-    , maImgDepth2(BitmapEx(RID_SVXBMP_DEPTH_2))
-    , maImgDepth3(BitmapEx(RID_SVXBMP_DEPTH_3))
-    , maImgDepth4(BitmapEx(RID_SVXBMP_DEPTH_4))
-    , maImgDepthInfinity(BitmapEx(RID_SVXBMP_DEPTH_INFINITY))
     , meUnit(FUNIT_NONE)
     , mfDepth( -1.0 )
     , msExtrusionDepth( ".uno:ExtrusionDepth" )
@@ -388,12 +382,19 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
 {
     SetSelectHdl( LINK( this, ExtrusionDepthWindow, SelectHdl ) );
 
-    appendEntry(0, "", maImgDepth0);
-    appendEntry(1, "", maImgDepth1);
-    appendEntry(2, "", maImgDepth2);
-    appendEntry(3, "", maImgDepth3);
-    appendEntry(4, "", maImgDepth4);
-    appendEntry(5, SvxResId(RID_SVXSTR_INFINITY), maImgDepthInfinity);
+    Image aImgDepth0(BitmapEx(RID_SVXBMP_DEPTH_0));
+    Image aImgDepth1(BitmapEx(RID_SVXBMP_DEPTH_1));
+    Image aImgDepth2(BitmapEx(RID_SVXBMP_DEPTH_2));
+    Image aImgDepth3(BitmapEx(RID_SVXBMP_DEPTH_3));
+    Image aImgDepth4(BitmapEx(RID_SVXBMP_DEPTH_4));
+    Image aImgDepthInfinity(BitmapEx(RID_SVXBMP_DEPTH_INFINITY));
+
+    appendEntry(0, "", aImgDepth0);
+    appendEntry(1, "", aImgDepth1);
+    appendEntry(2, "", aImgDepth2);
+    appendEntry(3, "", aImgDepth3);
+    appendEntry(4, "", aImgDepth4);
+    appendEntry(5, SvxResId(RID_SVXSTR_INFINITY), aImgDepthInfinity);
     appendEntry(6, SvxResId(RID_SVXSTR_CUSTOM));
 
     SetOutputSizePixel( getMenuSize() );
@@ -863,17 +864,18 @@ ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
     vcl::Window* pParentWindow)
     : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
     , mrController(rController)
-    , maImgSurface1(BitmapEx(RID_SVXBMP_WIRE_FRAME))
-    , maImgSurface2(BitmapEx(RID_SVXBMP_MATTE))
-    , maImgSurface3(BitmapEx(RID_SVXBMP_PLASTIC))
-    , maImgSurface4(BitmapEx(RID_SVXBMP_METAL))
 {
     SetSelectHdl( LINK( this, ExtrusionSurfaceWindow, SelectHdl ) );
 
-    appendEntry(0, SvxResId(RID_SVXSTR_WIREFRAME), maImgSurface1);
-    appendEntry(1, SvxResId(RID_SVXSTR_MATTE), maImgSurface2);
-    appendEntry(2, SvxResId(RID_SVXSTR_PLASTIC), maImgSurface3);
-    appendEntry(3, SvxResId(RID_SVXSTR_METAL), maImgSurface4);
+    Image aImgSurface1(BitmapEx(RID_SVXBMP_WIRE_FRAME));
+    Image aImgSurface2(BitmapEx(RID_SVXBMP_MATTE));
+    Image aImgSurface3(BitmapEx(RID_SVXBMP_PLASTIC));
+    Image aImgSurface4(BitmapEx(RID_SVXBMP_METAL));
+
+    appendEntry(0, SvxResId(RID_SVXSTR_WIREFRAME), aImgSurface1);
+    appendEntry(1, SvxResId(RID_SVXSTR_MATTE), aImgSurface2);
+    appendEntry(2, SvxResId(RID_SVXSTR_PLASTIC), aImgSurface3);
+    appendEntry(3, SvxResId(RID_SVXSTR_METAL), aImgSurface4);
 
     SetOutputSizePixel( getMenuSize() );
 

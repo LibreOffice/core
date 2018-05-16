@@ -279,7 +279,7 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
     m_pMtfTolerance->SetPosPixel( aPos );
     m_pMtfTolerance->SetValue( 10 );
 
-    SetMinOutputSizePixel( aLastSize = GetOutputSizePixel() );
+    SetMinOutputSizePixel( GetOutputSizePixel() );
 
     m_pStbStatus->InsertItem( 1, 130, StatusBarItemBits::Left | StatusBarItemBits::In | StatusBarItemBits::AutoSize );
     m_pStbStatus->InsertItem( 2, 10 + GetTextWidth( " 9999,99 cm / 9999,99 cm " ) );

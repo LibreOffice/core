@@ -121,7 +121,6 @@ class GraphicFilter;
 class SVX_DLLPUBLIC GalleryProgress
 {
     css::uno::Reference< css::awt::XProgressBar > mxProgressBar;
-    GraphicFilter*                                                          mpFilter;
 
     public:
 

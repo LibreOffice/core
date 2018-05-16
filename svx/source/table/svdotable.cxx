@@ -1774,7 +1774,6 @@ SdrTableObj& SdrTableObj::operator=(const SdrTableObj& rObj)
     aTextSize = rObj.aTextSize;
     bTextSizeDirty = rObj.bTextSizeDirty;
     bNoShear = rObj.bNoShear;
-    bNoMirror = rObj.bNoMirror;
     bDisableAutoWidthOnDragging = rObj.bDisableAutoWidthOnDragging;
 
     // use SdrTableObjImpl::operator= now to
