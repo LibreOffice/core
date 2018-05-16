@@ -373,7 +373,6 @@ FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI
     mpNextGCFont( nullptr ),
     mnCos( 0x10000),
     mnSin( 0 ),
-    mnPrioEmbedded(nDefaultPrioEmbedded),
     mnPrioAntiAlias(nDefaultPrioAntiAlias),
     mpFontInfo( pFI ),
     mnLoadFlags( 0 ),
@@ -383,6 +382,7 @@ FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI
     mbArtItalic( false ),
     mbArtBold(false)
 {
+    int nPrioEmbedded = nDefaultPrioEmbedded;
     // TODO: move update of mpFontInstance into FontEntry class when
     // it becomes responsible for the FreetypeFont instantiation
     static_cast<FreetypeFontInstance*>(mpFontInstance)->SetFreetypeFont( this );
@@ -434,7 +434,7 @@ FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI
     mbArtItalic = (rFSD.GetItalic() != ITALIC_NONE && pFI->GetFontAttributes().GetItalic() == ITALIC_NONE);
     mbArtBold = (rFSD.GetWeight() > WEIGHT_MEDIUM && pFI->GetFontAttributes().GetWeight() <= WEIGHT_MEDIUM);
 
-    if( ((mnCos != 0) && (mnSin != 0)) || (mnPrioEmbedded <= 0) )
+    if( ((mnCos != 0) && (mnSin != 0)) || (nPrioEmbedded <= 0) )
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 

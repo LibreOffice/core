@@ -1262,10 +1262,10 @@ static void ImplHandleExtTextInputPos( vcl::Window* pWindow,
             = pChild != nullptr && pChild->GetInputContext().GetFont().IsVertical();
 }
 
-static bool ImplHandleInputContextChange( vcl::Window* pWindow, LanguageType eNewLang )
+static bool ImplHandleInputContextChange( vcl::Window* pWindow )
 {
     vcl::Window* pChild = ImplGetKeyInputWindow( pWindow );
-    CommandInputContextData aData( eNewLang );
+    CommandInputContextData aData;
     return !ImplCallCommand( pChild, CommandEventId::InputContextChange, &aData );
 }
 
@@ -2494,7 +2494,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
             ImplHandleSalExtTextInputPos( pWindow, const_cast<SalExtTextInputPosEvent *>(static_cast<SalExtTextInputPosEvent const *>(pEvent)) );
             break;
         case SalEvent::InputContextChange:
-            bRet = ImplHandleInputContextChange( pWindow, static_cast<SalInputContextChangeEvent const *>(pEvent)->meLanguage );
+            bRet = ImplHandleInputContextChange( pWindow );
             break;
         case SalEvent::ShowDialog:
             {

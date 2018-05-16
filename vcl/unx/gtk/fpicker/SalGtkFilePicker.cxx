@@ -179,9 +179,10 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
 
         m_pAligns[i] = gtk_alignment_new(0, 0, 0, 1);
 
-        m_pListStores[i] = gtk_list_store_new (1, G_TYPE_STRING);
-        m_pLists[i] = gtk_combo_box_new_with_model(GTK_TREE_MODEL(m_pListStores[i]));
-        g_object_unref (m_pListStores[i]); // owned by the widget.
+        GtkListStore *pListStores[ LIST_LAST ];
+        pListStores[i] = gtk_list_store_new (1, G_TYPE_STRING);
+        m_pLists[i] = gtk_combo_box_new_with_model(GTK_TREE_MODEL(pListStores[i]));
+        g_object_unref (pListStores[i]); // owned by the widget.
         GtkCellRenderer *pCell = gtk_cell_renderer_text_new ();
         gtk_cell_layout_pack_start(
                 GTK_CELL_LAYOUT(m_pLists[i]), pCell, TRUE);

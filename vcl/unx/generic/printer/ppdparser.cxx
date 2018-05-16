@@ -590,15 +590,11 @@ PPDParser::PPDParser( const OUString& rFile, std::vector<PPDKey*> keys) :
     m_bType42Capable( false ),
     m_nLanguageLevel( 0 ),
     m_aFileEncoding( RTL_TEXTENCODING_MS_1252 ),
-    m_pDefaultImageableArea( nullptr ),
     m_pImageableAreas( nullptr ),
     m_pDefaultPaperDimension( nullptr ),
     m_pPaperDimensions( nullptr ),
     m_pDefaultInputSlot( nullptr ),
-    m_pInputSlots( nullptr ),
     m_pDefaultResolution( nullptr ),
-    m_pResolutions( nullptr ),
-    m_pFontList( nullptr ),
     m_pTranslator( new PPDTranslator() )
 {
     for (PPDKey* key: keys)
@@ -650,12 +646,13 @@ PPDParser::PPDParser( const OUString& rFile, std::vector<PPDKey*> keys) :
     }
 
     m_pImageableAreas = getKey(  OUString( "ImageableArea" ) );
+    const PPDValue* pDefaultImageableArea = nullptr;
     if( m_pImageableAreas )
-        m_pDefaultImageableArea = m_pImageableAreas->getDefaultValue();
+        pDefaultImageableArea = m_pImageableAreas->getDefaultValue();
     if (m_pImageableAreas == nullptr) {
         SAL_WARN( "vcl.unx.print", "no ImageableArea in " << m_aFile);
     }
-    if (m_pDefaultImageableArea == nullptr) {
+    if (pDefaultImageableArea == nullptr) {
         SAL_WARN( "vcl.unx.print", "no DefaultImageableArea in " << m_aFile);
     }
 
@@ -669,33 +666,28 @@ PPDParser::PPDParser( const OUString& rFile, std::vector<PPDKey*> keys) :
         SAL_WARN( "vcl.unx.print", "no DefaultPaperDimensions in " << m_aFile);
     }
 
-    m_pResolutions = getKey( OUString( "Resolution" ) );
-    if( m_pResolutions )
-        m_pDefaultResolution = m_pResolutions->getDefaultValue();
-    if (m_pResolutions == nullptr) {
+    auto pResolutions = getKey( OUString( "Resolution" ) );
+    if( pResolutions )
+        m_pDefaultResolution = pResolutions->getDefaultValue();
+    if (pResolutions == nullptr) {
         SAL_WARN( "vcl.unx.print", "no Resolution in " << m_aFile);
     }
     SAL_INFO_IF(!m_pDefaultResolution, "vcl.unx.print", "no DefaultResolution in " + m_aFile);
 
-    m_pInputSlots = getKey( OUString( "InputSlot" ) );
-    if( m_pInputSlots )
-        m_pDefaultInputSlot = m_pInputSlots->getDefaultValue();
-    SAL_INFO_IF(!m_pInputSlots, "vcl.unx.print", "no InputSlot in " << m_aFile);
+    auto pInputSlots = getKey( OUString( "InputSlot" ) );
+    if( pInputSlots )
+        m_pDefaultInputSlot = pInputSlots->getDefaultValue();
+    SAL_INFO_IF(!pInputSlots, "vcl.unx.print", "no InputSlot in " << m_aFile);
     SAL_INFO_IF(!m_pDefaultInputSlot, "vcl.unx.print", "no DefaultInputSlot in " << m_aFile);
 
-    m_pFontList = getKey( OUString( "Font" ) );
-    if (m_pFontList == nullptr) {
+    auto pFontList = getKey( OUString( "Font" ) );
+    if (pFontList == nullptr) {
         SAL_WARN( "vcl.unx.print", "no Font in " << m_aFile);
     }
 
     // fill in direct values
-    if( (pKey = getKey( OUString( "ModelName" ) )) )
-        m_aPrinterName = pKey->getValue( 0 )->m_aValue;
-    if( (pKey = getKey( OUString( "NickName" ) )) )
-        m_aNickName = pKey->getValue( 0 )->m_aValue;
     if( (pKey = getKey( OUString( "print-color-mode" ) )) )
         m_bColorDevice = pKey->countValues() > 1;
-
 }
 
 PPDParser::PPDParser( const OUString& rFile ) :
@@ -704,15 +696,11 @@ PPDParser::PPDParser( const OUString& rFile ) :
         m_bType42Capable( false ),
         m_nLanguageLevel( 0 ),
         m_aFileEncoding( RTL_TEXTENCODING_MS_1252 ),
-        m_pDefaultImageableArea( nullptr ),
         m_pImageableAreas( nullptr ),
         m_pDefaultPaperDimension( nullptr ),
         m_pPaperDimensions( nullptr ),
         m_pDefaultInputSlot( nullptr ),
-        m_pInputSlots( nullptr ),
         m_pDefaultResolution( nullptr ),
-        m_pResolutions( nullptr ),
-        m_pFontList( nullptr ),
         m_pTranslator( new PPDTranslator() )
 {
     // read in the file
@@ -824,12 +812,13 @@ PPDParser::PPDParser( const OUString& rFile ) :
     const PPDKey* pKey;
 
     m_pImageableAreas = getKey(  OUString( "ImageableArea" ) );
+    const PPDValue * pDefaultImageableArea = nullptr;
     if( m_pImageableAreas )
-        m_pDefaultImageableArea = m_pImageableAreas->getDefaultValue();
+        pDefaultImageableArea = m_pImageableAreas->getDefaultValue();
     if (m_pImageableAreas == nullptr) {
         SAL_WARN( "vcl.unx.print", "no ImageableArea in " << m_aFile);
     }
-    if (m_pDefaultImageableArea == nullptr) {
+    if (pDefaultImageableArea == nullptr) {
         SAL_WARN( "vcl.unx.print", "no DefaultImageableArea in " << m_aFile);
     }
 
@@ -843,30 +832,26 @@ PPDParser::PPDParser( const OUString& rFile ) :
         SAL_WARN( "vcl.unx.print", "no DefaultPaperDimensions in " << m_aFile);
     }
 
-    m_pResolutions = getKey( OUString( "Resolution" ) );
-    if( m_pResolutions )
-        m_pDefaultResolution = m_pResolutions->getDefaultValue();
-    if (m_pResolutions == nullptr) {
+    auto pResolutions = getKey( OUString( "Resolution" ) );
+    if( pResolutions )
+        m_pDefaultResolution = pResolutions->getDefaultValue();
+    if (pResolutions == nullptr) {
         SAL_WARN( "vcl.unx.print", "no Resolution in " << m_aFile);
     }
     SAL_INFO_IF(!m_pDefaultResolution, "vcl.unx.print", "no DefaultResolution in " + m_aFile);
 
-    m_pInputSlots = getKey( OUString( "InputSlot" ) );
-    if( m_pInputSlots )
-        m_pDefaultInputSlot = m_pInputSlots->getDefaultValue();
-    SAL_INFO_IF(!m_pInputSlots, "vcl.unx.print", "no InputSlot in " << m_aFile);
+    auto pInputSlots = getKey( OUString( "InputSlot" ) );
+    if( pInputSlots )
+        m_pDefaultInputSlot = pInputSlots->getDefaultValue();
+    SAL_INFO_IF(!pInputSlots, "vcl.unx.print", "no InputSlot in " << m_aFile);
     SAL_INFO_IF(!m_pDefaultInputSlot, "vcl.unx.print", "no DefaultInputSlot in " << m_aFile);
 
-    m_pFontList = getKey( OUString( "Font" ) );
-    if (m_pFontList == nullptr) {
+    auto pFontList = getKey( OUString( "Font" ) );
+    if (pFontList == nullptr) {
         SAL_WARN( "vcl.unx.print", "no Font in " << m_aFile);
     }
 
     // fill in direct values
-    if( (pKey = getKey( OUString( "ModelName" ) )) )
-        m_aPrinterName = pKey->getValue( 0 )->m_aValue;
-    if( (pKey = getKey( OUString( "NickName" ) )) )
-        m_aNickName = pKey->getValue( 0 )->m_aValue;
     if( (pKey = getKey( OUString( "ColorDevice" ) )) )
         m_bColorDevice = pKey->getValue( 0 )->m_aValue.startsWithIgnoreAsciiCase( "true" );
 

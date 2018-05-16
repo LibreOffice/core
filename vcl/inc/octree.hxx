@@ -54,7 +54,6 @@ private:
 
 
     BitmapPalette               aPal;
-    sal_uLong                   nMax;
     sal_uLong                   nLeafCount;
     sal_uLong                   nLevel;
     NODE*                       pTree;

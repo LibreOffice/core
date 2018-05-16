@@ -93,7 +93,6 @@ namespace vcl
         OutputDevice&   m_rTargetDevice;
         OutputDevice&   m_rReferenceDevice;
         Font            m_aUnzoomedPointFont;
-        const Fraction  m_aZoom;
         const bool      m_bRTLEnabled;
 
         tools::Rectangle       m_aCompleteTextRect;
@@ -104,9 +103,9 @@ namespace vcl
         :m_rTargetDevice( _rTargetDevice )
         ,m_rReferenceDevice( _rReferenceDevice )
         ,m_aUnzoomedPointFont( _rControl.GetUnzoomedControlPointFont() )
-        ,m_aZoom( _rControl.GetZoom() )
         ,m_bRTLEnabled( _rControl.IsRTLEnabled() )
     {
+        const Fraction aZoom( _rControl.GetZoom() );
         m_rTargetDevice.Push( PushFlags::MAPMODE | PushFlags::FONT | PushFlags::TEXTLAYOUTMODE );
 
         MapMode aTargetMapMode( m_rTargetDevice.GetMapMode() );
@@ -116,8 +115,8 @@ namespace vcl
         // between text in Writer and text in controls in Writer, though both have the same font.
         // So, if we have a zoom set at the control, then we do not scale the font, but instead modify the map mode
         // to accommodate for the zoom.
-        aTargetMapMode.SetScaleX( m_aZoom );    // TODO: shouldn't this be "current_scale * zoom"?
-        aTargetMapMode.SetScaleY( m_aZoom );
+        aTargetMapMode.SetScaleX( aZoom );    // TODO: shouldn't this be "current_scale * zoom"?
+        aTargetMapMode.SetScaleY( aZoom );
 
         // also, use a higher-resolution map unit than "pixels", which should save us some rounding errors when
         // translating coordinates between the reference device and the target device.

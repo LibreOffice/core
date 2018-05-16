@@ -117,11 +117,6 @@ public:
 
 class VCL_DLLPUBLIC CommandInputContextData
 {
-private:
-    LanguageType    meLanguage;
-
-public:
-                    CommandInputContextData( LanguageType eLang );
 };
 
 enum class CommandWheelMode

@@ -175,7 +175,6 @@ private:
     long                    mnSin;
 
     int                     mnWidth;
-    int                     mnPrioEmbedded;
     int                     mnPrioAntiAlias;
     FreetypeFontInfo*       mpFontInfo;
     FT_Int                  mnLoadFlags;
