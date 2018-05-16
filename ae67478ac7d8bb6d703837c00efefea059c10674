@@ -22,6 +22,30 @@
       "revId": "ae67478ac7d8bb6d703837c00efefea059c10674",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_7f19f387",
+        "filename": "external/boost/windows-no-utf8-locales.patch.0",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2018-05-16T21:20:31Z",
+      "side": 1,
+      "message": "It has always failed, I think, but nowadays it also displays a message in the debug runtime (i.e. in a dbgutil LO build).",
+      "parentUuid": "9a30ddce_7f32d311",
+      "range": {
+        "startLine": 10,
+        "startChar": 20,
+        "endLine": 10,
+        "endChar": 33
+      },
+      "revId": "ae67478ac7d8bb6d703837c00efefea059c10674",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
