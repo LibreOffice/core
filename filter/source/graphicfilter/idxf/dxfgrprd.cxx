@@ -114,8 +114,6 @@ DXFGroupReader::DXFGroupReader(SvStream & rIStream)
   , S()
   , I(0)
 {
-    rIS.Seek(STREAM_SEEK_TO_END);
-    nFileSize=rIS.Tell();
     rIS.Seek(0);
 }
 

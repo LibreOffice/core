@@ -372,7 +372,6 @@ private:
     double mnDocXScale;
     double mnDocYScale;
 
-    sal_uInt16 mnWhiteBackgroundShapeId;
     sal_uInt16 mnPageButtonId;
 
     VclPtrInstance<VirtualDevice> mpVDev;

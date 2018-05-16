@@ -502,10 +502,8 @@ EditEngineItemPool* getEditEngineItemPool(SfxItemPool* pPool)
 EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pP ) :
     mpFront(pFront)
 {
-    nVersion = 0;
     nMetric = 0xFFFF;
     nUserType = OutlinerMode::DontKnow;
-    nObjSettings = 0;
     pPortionInfo = nullptr;
 
     // #i101239# ensure target is a EditEngineItemPool, else
@@ -540,10 +538,8 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pP 
 EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, const EditTextObjectImpl& r ) :
     mpFront(pFront)
 {
-    nVersion = r.nVersion;
     nMetric = r.nMetric;
     nUserType = r.nUserType;
-    nObjSettings = r.nObjSettings;
     bVertical = r.bVertical;
     bIsTopToBottomVert = r.bIsTopToBottomVert;
     nScriptType = r.nScriptType;

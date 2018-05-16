@@ -140,19 +140,16 @@ struct SpellCallbackInfo
 {
     SpellCallbackCommand nCommand;
     OUString        aWord;
-    LanguageType    eLanguage;
 
     SpellCallbackInfo( SpellCallbackCommand nCMD, const OUString& rWord )
         : aWord( rWord )
     {
         nCommand = nCMD;
-        eLanguage = LANGUAGE_DONTKNOW;
     }
 
-    SpellCallbackInfo( SpellCallbackCommand nCMD, LanguageType eLang )
+    SpellCallbackInfo( SpellCallbackCommand nCMD )
     {
         nCommand = nCMD;
-        eLanguage = eLang;
     }
 };
 

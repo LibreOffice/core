@@ -724,7 +724,6 @@ class PPTExtParaProv
 
 public:
     bool                bStyles;
-    bool                bGraphics;
     DffRecordManager    aExtendedPresRules;
 
     o3tl::enumarray<TSS_Type, PPTExtParaSheet> aExtParaSheet;

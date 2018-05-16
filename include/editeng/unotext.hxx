@@ -593,7 +593,6 @@ private:
     std::unique_ptr<SvxEditSource>          mpEditSource;
     sal_Int32               mnNextParagraph;
     const SvxUnoTextBase&   mrText;
-    const ESelection        maSelection;
     std::vector< rtl::Reference<SvxUnoTextContent> >  maContents;
 
 public:
@@ -611,11 +610,9 @@ class SvxUnoTextRangeEnumeration : public ::cppu::WeakAggImplHelper1< css::conta
 private:
     std::unique_ptr<SvxEditSource>      mpEditSource;
     css::uno::Reference< css::text::XText > mxParentText;
-    const SvxUnoTextBase&    mrParentText;
     sal_Int32                mnParagraph;
     std::vector< rtl::Reference<SvxUnoTextRange> >  maPortions;
     sal_uInt16               mnNextPortion;
-    const ESelection         mnSel;
 
 public:
     SvxUnoTextRangeEnumeration(const SvxUnoTextBase& rText, sal_Int32 nPara, const ESelection& rSel);
