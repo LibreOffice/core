@@ -745,17 +745,17 @@ IMPL_LINK_NOARG( SvtFileDialog, NewFolderHdl_Impl, Button*, void)
     SmartContent aContent( _pFileView->GetViewURL( ) );
     OUString aTitle;
     aContent.getTitle( aTitle );
-    ScopedVclPtrInstance< QueryFolderNameDialog > aDlg(this, aTitle, FpsResId(STR_SVT_NEW_FOLDER));
+    QueryFolderNameDialog aDlg(GetFrameWeld(), aTitle, FpsResId(STR_SVT_NEW_FOLDER));
     bool bHandled = false;
 
     while ( !bHandled )
     {
-        if ( aDlg->Execute() == RET_OK )
+        if (aDlg.run() == RET_OK)
         {
-            OUString aUrl = aContent.createFolder( aDlg->GetName( ) );
+            OUString aUrl = aContent.createFolder(aDlg.GetName());
             if ( !aUrl.isEmpty( ) )
             {
-                _pFileView->CreatedFolder( aUrl, aDlg->GetName() );
+                _pFileView->CreatedFolder(aUrl, aDlg.GetName());
                 bHandled = true;
             }
         }
@@ -2768,56 +2768,35 @@ Image SvtFileDialog::GetButtonImage(const OUString& rButtonId)
     return Image(BitmapEx(rButtonId));
 }
 
-QueryFolderNameDialog::QueryFolderNameDialog(vcl::Window* _pParent,
+QueryFolderNameDialog::QueryFolderNameDialog(weld::Window* _pParent,
     const OUString& rTitle, const OUString& rDefaultText)
-    : ModalDialog(_pParent, "FolderNameDialog", "fps/ui/foldernamedialog.ui")
+    : GenericDialogController(_pParent, "fps/ui/foldernamedialog.ui", "FolderNameDialog")
+    , m_xNameEdit(m_xBuilder->weld_entry("entry"))
+    , m_xOKBtn(m_xBuilder->weld_button("ok"))
 {
-    get(m_pNameEdit, "entry");
-    get(m_pNameLine, "frame");
-    get(m_pOKBtn, "ok");
-
-    SetText( rTitle );
-    m_pNameEdit->SetText( rDefaultText );
-    m_pNameEdit->SetSelection( Selection( 0, rDefaultText.getLength() ) );
-    m_pOKBtn->SetClickHdl( LINK( this, QueryFolderNameDialog, OKHdl ) );
-    m_pNameEdit->SetModifyHdl( LINK( this, QueryFolderNameDialog, NameHdl ) );
+    m_xDialog->set_title(rTitle);
+    m_xNameEdit->set_text(rDefaultText);
+    m_xNameEdit->select_region(0, -1);
+    m_xOKBtn->connect_clicked(LINK(this, QueryFolderNameDialog, OKHdl));
+    m_xNameEdit->connect_changed(LINK(this, QueryFolderNameDialog, NameHdl));
 };
 
 QueryFolderNameDialog::~QueryFolderNameDialog()
 {
-    disposeOnce();
 }
 
-void QueryFolderNameDialog::dispose()
-{
-    m_pNameEdit.clear();
-    m_pNameLine.clear();
-    m_pOKBtn.clear();
-    ModalDialog::dispose();
-}
-
-IMPL_LINK_NOARG(QueryFolderNameDialog, OKHdl, Button*, void)
+IMPL_LINK_NOARG(QueryFolderNameDialog, OKHdl, weld::Button&, void)
 {
     // trim the strings
-    m_pNameEdit->SetText(comphelper::string::strip(m_pNameEdit->GetText(), ' '));
-    EndDialog( RET_OK );
+    m_xNameEdit->set_text(comphelper::string::strip(m_xNameEdit->get_text(), ' '));
+    m_xDialog->response(RET_OK);
 }
 
-
-IMPL_LINK_NOARG(QueryFolderNameDialog, NameHdl, Edit&, void)
+IMPL_LINK_NOARG(QueryFolderNameDialog, NameHdl, weld::Entry&, void)
 {
     // trim the strings
-    OUString aName = comphelper::string::strip(m_pNameEdit->GetText(), ' ');
-    if ( !aName.isEmpty() )
-    {
-        if ( !m_pOKBtn->IsEnabled() )
-            m_pOKBtn->Enable();
-    }
-    else
-    {
-        if ( m_pOKBtn->IsEnabled() )
-            m_pOKBtn->Enable( false );
-    }
+    OUString aName = comphelper::string::strip(m_xNameEdit->get_text(), ' ');
+    m_xOKBtn->set_sensitive(!aName.isEmpty());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
