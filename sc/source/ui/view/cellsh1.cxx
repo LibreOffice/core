@@ -502,8 +502,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    ScopedVclPtr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg( pTabViewShell->GetDialogParent(),
-                                                                                                 new OUString(ScResId(STR_FILL_TAB)) ));
+                    ScopedVclPtr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg(pTabViewShell->GetFrameWeld(),
+                                                                                                    new OUString(ScResId(STR_FILL_TAB))));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
                     pDlg->SetFillMode(true);
 
@@ -1384,7 +1384,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                             OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                            ScopedVclPtr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg(pTabViewShell->GetDialogParent()));
+                            ScopedVclPtr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg(pTabViewShell->GetFrameWeld()));
                             OSL_ENSURE(pDlg, "Dialog create fail!");
                             pDlg->SetOtherDoc( bOtherDoc );
                             // if ChangeTrack MoveMode disable

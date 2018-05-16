@@ -166,7 +166,7 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
 
         case 2: // "modules/scalc/ui/pastespecial.ui"
         {
-            pReturnDialog = mpFact->CreateScInsertContentsDlg(mpViewShell->GetDialogParent());
+            pReturnDialog = mpFact->CreateScInsertContentsDlg(mpViewShell->GetFrameWeld());
             break;
         }
 

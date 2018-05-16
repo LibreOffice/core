@@ -20,21 +20,18 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_INSCODLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_INSCODLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 #include <global.hxx>
 
 #include "scui_def.hxx"
 
-class ScInsertContentsDlg : public ModalDialog
+class ScInsertContentsDlg : public weld::GenericDialogController
 {
 public:
-            ScInsertContentsDlg( vcl::Window*      pParent,
+            ScInsertContentsDlg( weld::Window*      pParent,
                                  InsertDeleteFlags nCheckDefaults,
                                  const OUString*   pStrTitle );
     virtual ~ScInsertContentsDlg() override;
-    virtual void dispose() override;
 
     InsertDeleteFlags GetInsContentsCmdBits() const;
     ScPasteFunc       GetFormulaCmdBits() const;
@@ -49,33 +46,6 @@ public:
     void    SetCellShiftDisabled( CellShiftDisabledFlags nDisable );
 
 private:
-    VclPtr<CheckBox>        mpBtnInsAll;
-    VclPtr<CheckBox>        mpBtnInsStrings;
-    VclPtr<CheckBox>        mpBtnInsNumbers;
-    VclPtr<CheckBox>        mpBtnInsDateTime;
-    VclPtr<CheckBox>        mpBtnInsFormulas;
-    VclPtr<CheckBox>        mpBtnInsNotes;
-    VclPtr<CheckBox>        mpBtnInsAttrs;
-    VclPtr<CheckBox>        mpBtnInsObjects;
-
-    VclPtr<CheckBox>        mpBtnSkipEmptyCells;
-    VclPtr<CheckBox>        mpBtnTranspose;
-    VclPtr<CheckBox>        mpBtnLink;
-
-    VclPtr<RadioButton>     mpRbNoOp;
-    VclPtr<RadioButton>     mpRbAdd;
-    VclPtr<RadioButton>     mpRbSub;
-    VclPtr<RadioButton>     mpRbMul;
-    VclPtr<RadioButton>     mpRbDiv;
-
-    VclPtr<RadioButton>     mpRbMoveNone;
-    VclPtr<RadioButton>     mpRbMoveDown;
-    VclPtr<RadioButton>     mpRbMoveRight;
-
-    VclPtr<PushButton>      mpBtnShortCutPasteValuesOnly;
-    VclPtr<PushButton>      mpBtnShortCutPasteValuesFormats;
-    VclPtr<PushButton>      mpBtnShortCutPasteTranspose;
-
     bool              bOtherDoc;
     bool              bFillMode;
     bool              bChangeTrack;
@@ -87,6 +57,34 @@ private:
     bool              bShortCutTranspose;
     InsCellCmd        nShortCutMoveMode;
 
+
+    std::unique_ptr<weld::CheckButton>        mxBtnInsAll;
+    std::unique_ptr<weld::CheckButton>        mxBtnInsStrings;
+    std::unique_ptr<weld::CheckButton>        mxBtnInsNumbers;
+    std::unique_ptr<weld::CheckButton>        mxBtnInsDateTime;
+    std::unique_ptr<weld::CheckButton>        mxBtnInsFormulas;
+    std::unique_ptr<weld::CheckButton>        mxBtnInsNotes;
+    std::unique_ptr<weld::CheckButton>        mxBtnInsAttrs;
+    std::unique_ptr<weld::CheckButton>        mxBtnInsObjects;
+
+    std::unique_ptr<weld::CheckButton>        mxBtnSkipEmptyCells;
+    std::unique_ptr<weld::CheckButton>        mxBtnTranspose;
+    std::unique_ptr<weld::CheckButton>        mxBtnLink;
+
+    std::unique_ptr<weld::RadioButton>     mxRbNoOp;
+    std::unique_ptr<weld::RadioButton>     mxRbAdd;
+    std::unique_ptr<weld::RadioButton>     mxRbSub;
+    std::unique_ptr<weld::RadioButton>     mxRbMul;
+    std::unique_ptr<weld::RadioButton>     mxRbDiv;
+
+    std::unique_ptr<weld::RadioButton>     mxRbMoveNone;
+    std::unique_ptr<weld::RadioButton>     mxRbMoveDown;
+    std::unique_ptr<weld::RadioButton>     mxRbMoveRight;
+
+    std::unique_ptr<weld::Button>      mxBtnShortCutPasteValuesOnly;
+    std::unique_ptr<weld::Button>      mxBtnShortCutPasteValuesFormats;
+    std::unique_ptr<weld::Button>      mxBtnShortCutPasteTranspose;
+
     static bool         bPreviousAllCheck;
     static InsertDeleteFlags nPreviousChecks;
     static InsertContentsFlags nPreviousChecks2;
@@ -97,9 +95,9 @@ private:
     void TestModes();
 
     // Handler
-    DECL_LINK( InsAllHdl, Button*, void );
-    DECL_LINK( LinkBtnHdl, Button*, void );
-    DECL_LINK( ShortCutHdl, Button*, void );
+    DECL_LINK( InsAllHdl, weld::ToggleButton&, void );
+    DECL_LINK( LinkBtnHdl, weld::ToggleButton&, void );
+    DECL_LINK( ShortCutHdl, weld::Button&, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_INSCODLG_HXX

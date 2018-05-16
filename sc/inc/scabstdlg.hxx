@@ -444,8 +444,8 @@ public:
     virtual VclPtr<AbstractScInsertCellDlg> CreateScInsertCellDlg(weld::Window* pParent,
                                                              bool bDisallowCellMove) = 0;
 
-    virtual VclPtr<AbstractScInsertContentsDlg> CreateScInsertContentsDlg( vcl::Window*        pParent,
-                                                                    const OUString* pStrTitle = nullptr ) = 0;
+    virtual VclPtr<AbstractScInsertContentsDlg> CreateScInsertContentsDlg(weld::Window* pParent,
+                                                                          const OUString* pStrTitle = nullptr) = 0;
 
     virtual VclPtr<AbstractScInsertTableDlg> CreateScInsertTableDlg(vcl::Window* pParent, ScViewData& rViewData,
         SCTAB nTabCount, bool bFromFile) = 0;
