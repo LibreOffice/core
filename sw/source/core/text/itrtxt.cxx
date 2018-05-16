@@ -322,7 +322,7 @@ void SwTextIter::TruncLines( bool bNoteFollow )
     if( pDel )
     {
         m_pCurr->SetNext( nullptr );
-        if (HasHints() && bNoteFollow)
+        if (MaybeHasHints() && bNoteFollow)
         {
             GetInfo().GetParaPortion()->SetFollowField( pDel->IsRest() ||
                                                         lcl_NeedsFieldRest( m_pCurr ) );
@@ -367,7 +367,7 @@ void SwTextIter::TruncLines( bool bNoteFollow )
     {
         m_pCurr->SetRealHeight( 1 );
     }
-    if (HasHints())
+    if (MaybeHasHints())
         m_pFrame->RemoveFootnote( nEnd );
 }
 
