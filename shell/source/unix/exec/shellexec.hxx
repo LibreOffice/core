@@ -32,7 +32,6 @@
 
 class ShellExec : public ::cppu::WeakImplHelper< css::system::XSystemShellExecute, css::lang::XServiceInfo >
 {
-    OString                                            m_aDesktopEnvironment;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
 public:

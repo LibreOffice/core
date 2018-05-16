@@ -194,7 +194,6 @@ class SfxWorkWindow final
                             aChildWins;
     SfxBindings*            pBindings;
     VclPtr<vcl::Window>     pWorkWin;
-    SfxShell*               pConfigShell;
     VclPtr<vcl::Window>     pActiveChild;
     SfxVisibilityFlags      nUpdateMode;
     sal_uInt16              nChildren;

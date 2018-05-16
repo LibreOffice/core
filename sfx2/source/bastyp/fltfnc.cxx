@@ -127,12 +127,10 @@ class SfxFilterContainer_Impl
 {
 public:
     OUString            aName;
-    OUString            aServiceName;
 
     explicit SfxFilterContainer_Impl( const OUString& rName )
         : aName( rName )
     {
-        aServiceName = SfxObjectShell::GetServiceNameFromFactory( rName );
     }
 };
 
