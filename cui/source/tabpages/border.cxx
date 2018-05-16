@@ -565,7 +565,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
                         sal_Int64( nWidth ), m_pLineWidthMF->GetDecimalDigits( ),
                         MapUnit::MapTwip, m_pLineWidthMF->GetUnit() ));
             m_pLineWidthMF->SetValue( nWidthPt );
-            m_pLbLineStyle->SetWidth( nWidth );
+            m_pLbLineStyle->SetWidth(5);
 
             // then set the style
             m_pLbLineStyle->SelectEntry( nStyle );
@@ -580,7 +580,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
             aColor = COL_BLACK;
 
         m_pLbLineColor->SelectEntry(aColor);
-        m_pLbLineStyle->SetColor(aColor);
+        m_pLbLineStyle->SetColor(GetTextColor());
 
         // Select all visible lines, if they are all equal.
         if( bWidthEq && bColorEq )
@@ -922,10 +922,6 @@ IMPL_LINK(SvxBorderTabPage, SelColHdl_Impl, SvxColorListBox&, rColorBox, void)
 {
     Color aColor = rColorBox.GetSelectEntryColor();
     m_pFrameSel->SetColorToSelection(aColor);
-    if(aColor == COL_WHITE)
-      m_pLbLineStyle->SetColor(COL_BLACK);
-    else
-      m_pLbLineStyle->SetColor(aColor);
 }
 
 IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl, Edit&, void)
@@ -934,7 +930,6 @@ IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl, Edit&, void)
                 m_pLineWidthMF->GetValue( ),
                 m_pLineWidthMF->GetDecimalDigits( ),
                 m_pLineWidthMF->GetUnit(), MapUnit::MapTwip ));
-    m_pLbLineStyle->SetWidth( nVal );
 
     m_pFrameSel->SetStyleToSelection( nVal,
         m_pLbLineStyle->GetSelectEntryStyle() );
