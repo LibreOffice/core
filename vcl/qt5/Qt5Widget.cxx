@@ -464,7 +464,6 @@ private:
         : QMainWindow(Q_NULLPTR, f), maMixin(&rFrame)
     {
         Init();
-        ParentClassT::menuBar()->addMenu("ExperimentMenu");
     }
 
     void Init()

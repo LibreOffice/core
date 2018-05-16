@@ -28,6 +28,7 @@ private:
     QMenuBar*                    mpQMenuBar;
 
     void ActivateAllSubMenus( Menu* pMenuBar );
+    void Update();
 
 public:
     Qt5Menu( bool bMenuBar );

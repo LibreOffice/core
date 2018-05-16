@@ -69,6 +69,8 @@ void Qt5Menu::SetFrame( const SalFrame* pFrame )
         mpQMenuBar = pMainWindow->menuBar();
 
     ActivateAllSubMenus( mpVCLMenu );
+
+    Update();
 }
 
 void Qt5Menu::ActivateAllSubMenus( Menu* pMenuBar )
@@ -81,6 +83,23 @@ void Qt5Menu::ActivateAllSubMenus( Menu* pMenuBar )
             pSalItem->mpSubMenu->ActivateAllSubMenus(pMenuBar);
             pSalItem->mpSubMenu->Update();
             pMenuBar->HandleMenuDeActivateEvent(pSalItem->mpSubMenu->GetMenu());
+        }
+    }
+}
+
+void Qt5Menu::Update()
+{
+    Menu* pVCLMenu = mpVCLMenu;
+
+    for ( sal_Int32 nItem = 0; nItem < static_cast<sal_Int32>(GetItemCount()); nItem++ )
+    {
+        Qt5MenuItem *pSalMenuItem = GetItemAtPos( nItem );
+        sal_uInt16 nId = pSalMenuItem->mnId;
+        OUString aText = pVCLMenu->GetItemText( nId );
+
+        if (mbMenuBar && mpQMenuBar)
+        {
+             mpQMenuBar->addMenu( toQString(aText) );
         }
     }
 }
