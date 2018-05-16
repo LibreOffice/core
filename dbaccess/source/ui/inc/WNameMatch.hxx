@@ -62,8 +62,6 @@ namespace dbaui
         VclPtr<PushButton>          m_pNone;
         OUString            m_sSourceText;
         OUString            m_sDestText;
-        Image               m_aImgUp;
-        Image               m_aImgDown;
 
         DECL_LINK( ButtonClickHdl, Button *, void );
         DECL_LINK( RightButtonClickHdl, Button *, void );

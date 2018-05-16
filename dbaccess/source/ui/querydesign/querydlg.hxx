@@ -44,7 +44,6 @@ namespace dbaui
         VclPtr<CheckBox>               m_pCBNatural;
 
         OTableListBoxControl*               m_pTableControl;
-        OJoinTableView::OTableWindowMap*    m_pTableMap;
 
         EJoinType                           eJoinType;
         TTableConnectionData::value_type    m_pConnData; // contains left and right table

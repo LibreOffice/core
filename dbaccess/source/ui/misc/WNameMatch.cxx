@@ -36,21 +36,21 @@ using namespace ::dbaui;
 // OWizColumnSelect
 OWizNameMatching::OWizNameMatching(vcl::Window* pParent)
     : OWizardPage(pParent, "NameMatching", "dbaccess/ui/namematchingpage.ui")
-    , m_aImgUp(BitmapEx(BMP_UP))
-    , m_aImgDown(BitmapEx(BMP_DOWN))
 {
+    Image aImgUp(BitmapEx(BMP_UP));
+    Image aImgDown(BitmapEx(BMP_DOWN));
     get(m_pTABLE_LEFT, "leftlabel");
     get(m_pTABLE_RIGHT, "rightlabel");
     get(m_pCTRL_LEFT, "left");
     get(m_pCTRL_RIGHT, "right");
     get(m_pColumn_up, "up");
-    m_pColumn_up->SetModeImage(m_aImgUp);
+    m_pColumn_up->SetModeImage(aImgUp);
     get(m_pColumn_down, "down");
-    m_pColumn_down->SetModeImage(m_aImgDown);
+    m_pColumn_down->SetModeImage(aImgDown);
     get(m_pColumn_up_right, "up_right");
-    m_pColumn_up_right->SetModeImage(m_aImgUp);
+    m_pColumn_up_right->SetModeImage(aImgUp);
     get(m_pColumn_down_right, "down_right");
-    m_pColumn_down_right->SetModeImage(m_aImgDown);
+    m_pColumn_down_right->SetModeImage(aImgDown);
     get(m_pAll, "all");
     get(m_pNone, "none");
 

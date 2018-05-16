@@ -57,7 +57,6 @@ OResultSet::OResultSet(const css::uno::Reference< css::sdbc::XResultSet >& _xRes
            ,OPropertySetHelper(OResultSetBase::rBHelper)
            ,m_xDelegatorResultSet(_xResultSet)
            ,m_aWarnings( Reference< XWarningsSupplier >( _xResultSet, UNO_QUERY ) )
-           ,m_nResultSetType(0)
            ,m_nResultSetConcurrency(0)
            ,m_bIsBookmarkable(false)
 {
@@ -71,11 +70,12 @@ OResultSet::OResultSet(const css::uno::Reference< css::sdbc::XResultSet >& _xRes
         m_xDelegatorRowUpdate.set(m_xDelegatorResultSet, css::uno::UNO_QUERY);
 
         Reference< XPropertySet > xSet(m_xDelegatorResultSet, UNO_QUERY);
-        xSet->getPropertyValue(PROPERTY_RESULTSETTYPE) >>= m_nResultSetType;
+        sal_Int32 nResultSetType(0);
+        xSet->getPropertyValue(PROPERTY_RESULTSETTYPE) >>= nResultSetType;
         xSet->getPropertyValue(PROPERTY_RESULTSETCONCURRENCY) >>= m_nResultSetConcurrency;
 
         // test for Bookmarks
-        if (ResultSetType::FORWARD_ONLY != m_nResultSetType)
+        if (ResultSetType::FORWARD_ONLY != nResultSetType)
         {
             Reference <XPropertySetInfo > xInfo(xSet->getPropertySetInfo());
             if (xInfo->hasPropertyByName(PROPERTY_ISBOOKMARKABLE))

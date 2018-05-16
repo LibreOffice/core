@@ -56,9 +56,6 @@ namespace drawinglayer
         class ZBufferProcessor3D : public DefaultProcessor3D
         {
         private:
-            /// the raster target, a Z-Buffer
-            basegfx::BZPixelRaster& mrBZPixelRaster;
-
             /// inverse of EyeToView for rasterconversion with evtl. Phong shading
             basegfx::B3DHomMatrix maInvEyeToView;
 

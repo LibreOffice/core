@@ -37,7 +37,6 @@ namespace dbaxml
         OUString m_sSchema;
         OUString m_sCatalog;
         OUString m_sStyleName;
-        OUString m_sServiceName;
         bool     m_bApplyFilter;
         bool     m_bApplyOrder;
 

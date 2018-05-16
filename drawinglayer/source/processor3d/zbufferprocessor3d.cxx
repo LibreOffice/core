@@ -526,7 +526,6 @@ namespace drawinglayer
             sal_uInt32 nStartLine,
             sal_uInt32 nStopLine)
         :   DefaultProcessor3D(rViewInformation3D, rSdrSceneAttribute, rSdrLightingAttribute),
-            mrBZPixelRaster(rBZPixelRaster),
             maInvEyeToView(),
             mpZBufferRasterConverter3D(nullptr),
             mnAntiAlialize(nAntiAlialize),
@@ -595,10 +594,10 @@ namespace drawinglayer
             // prepare maRasterRange
             maRasterRange.reset();
             maRasterRange.expand(basegfx::B2DPoint(0.0, nStartLine));
-            maRasterRange.expand(basegfx::B2DPoint(mrBZPixelRaster.getWidth(), nStopLine));
+            maRasterRange.expand(basegfx::B2DPoint(rBZPixelRaster.getWidth(), nStopLine));
 
             // create the raster converter
-            mpZBufferRasterConverter3D.reset( new ZBufferRasterConverter3D(mrBZPixelRaster, *this) );
+            mpZBufferRasterConverter3D.reset( new ZBufferRasterConverter3D(rBZPixelRaster, *this) );
         }
 
         ZBufferProcessor3D::~ZBufferProcessor3D()

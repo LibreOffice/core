@@ -138,9 +138,6 @@ class ServiceImpl
 {
     Reference<XComponentContext> const m_xComponentContext;
     boost::optional< Reference<awt::XWindow> > /* const */ m_parent;
-    boost::optional<OUString> /* const */ m_view;
-    /* if true then this service is running in an unopkg process and not in an office process */
-    boost::optional<sal_Bool> /* const */ m_unopkg;
     boost::optional<OUString> m_extensionURL;
     OUString m_initialTitle;
     bool m_bShowUpdateOnly;
@@ -164,8 +161,11 @@ ServiceImpl::ServiceImpl( Sequence<Any> const& args,
     : m_xComponentContext(xComponentContext),
       m_bShowUpdateOnly( false )
 {
+    /* if true then this service is running in an unopkg process and not in an office process */
+    boost::optional<sal_Bool> unopkg;
+    boost::optional<OUString> view;
     try {
-        comphelper::unwrapArgs( args, m_parent, m_view, m_unopkg );
+        comphelper::unwrapArgs( args, m_parent, view, unopkg );
         return;
     } catch ( const css::lang::IllegalArgumentException & ) {
     }

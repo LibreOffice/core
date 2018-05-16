@@ -34,7 +34,6 @@ namespace dbaui
                             ,public IRelationControlInterface
     {
         std::unique_ptr<OTableListBoxControl> m_xTableControl;
-        OJoinTableView::OTableWindowMap*        m_pTableMap;
 
         VclPtr<RadioButton> m_pRB_NoCascUpd;
         VclPtr<RadioButton> m_pRB_CascUpd;
