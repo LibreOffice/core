@@ -72,8 +72,7 @@ SvXMLWordListContext::~SvXMLWordListContext()
 SvXMLWordContext::SvXMLWordContext(
    SvXMLAutoCorrectImport& rImport,
    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) :
-   SvXMLImportContext ( rImport ),
-   rLocalRef(rImport)
+   SvXMLImportContext ( rImport )
 {
     OUString sWrong, sRight;
     if ( xAttrList.is() && xAttrList->hasAttribute( SvXMLAutoCorrectToken::ABBREVIATED_NAME ) )
@@ -89,14 +88,14 @@ SvXMLWordContext::SvXMLWordContext(
     if( !bOnlyTxt )
     {
         const OUString sLongSave( sRight );
-        if( !rLocalRef.rAutoCorrect.GetLongText( sWrong, sRight ) &&
+        if( !rImport.rAutoCorrect.GetLongText( sWrong, sRight ) &&
             !sLongSave.isEmpty() )
         {
             sRight = sLongSave;
             bOnlyTxt = true;
         }
     }
-    rLocalRef.pAutocorr_List->LoadEntry( sWrong, sRight, bOnlyTxt );
+    rImport.pAutocorr_List->LoadEntry( sWrong, sRight, bOnlyTxt );
 }
 
 SvXMLWordContext::~SvXMLWordContext()
@@ -147,8 +146,7 @@ SvXMLExceptionListContext::~SvXMLExceptionListContext()
 SvXMLExceptionContext::SvXMLExceptionContext(
    SvXMLExceptionListImport& rImport,
    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) :
-   SvXMLImportContext ( rImport ),
-   rLocalRef(rImport)
+   SvXMLImportContext ( rImport )
 {
     OUString sWord;
     if( xAttrList.is() && xAttrList->hasAttribute( SvXMLAutoCorrectToken::ABBREVIATED_NAME ) )
@@ -157,7 +155,7 @@ SvXMLExceptionContext::SvXMLExceptionContext(
     if (sWord.isEmpty())
         return;
 
-    rLocalRef.rList.insert( sWord );
+    rImport.rList.insert( sWord );
 }
 
 SvXMLExceptionContext::~SvXMLExceptionContext()

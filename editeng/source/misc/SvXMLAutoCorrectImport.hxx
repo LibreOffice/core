@@ -62,8 +62,6 @@ public:
 
 class SvXMLWordContext : public SvXMLImportContext
 {
-private:
-    SvXMLAutoCorrectImport & rLocalRef;
 public:
     SvXMLWordContext ( SvXMLAutoCorrectImport& rImport,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
@@ -105,8 +103,6 @@ public:
 
 class SvXMLExceptionContext : public SvXMLImportContext
 {
-private:
-    SvXMLExceptionListImport & rLocalRef;
 public:
     SvXMLExceptionContext ( SvXMLExceptionListImport& rImport,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );

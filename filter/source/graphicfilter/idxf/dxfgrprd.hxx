@@ -71,8 +71,6 @@ private:
     sal_uInt16 nLastG;
     sal_uLong nGCount;
 
-    sal_uLong nFileSize;
-
     OString S;
     union {
         double F;
