@@ -1001,15 +1001,18 @@ void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
     if ( m_sOldPath.isEmpty() )
         m_sOldPath = _rPath;
     m_xPathList->clear();
-    sal_Int32 nIdx = 0;
-    do
+    if (!_rPath.isEmpty())
     {
-        OUString sToken = _rPath.getToken( 0, CLASSPATH_DELIMITER, nIdx );
-        INetURLObject aURL( sToken, FSysStyle::Detect );
-        OUString sPath = aURL.getFSysPath( FSysStyle::Detect );
-        m_xPathList->append("", sPath, SvFileInformationManager::GetImageId(aURL));
+        sal_Int32 nIdx = 0;
+        do
+        {
+            OUString sToken = _rPath.getToken( 0, CLASSPATH_DELIMITER, nIdx );
+            INetURLObject aURL( sToken, FSysStyle::Detect );
+            OUString sPath = aURL.getFSysPath( FSysStyle::Detect );
+            m_xPathList->append("", sPath, SvFileInformationManager::GetImageId(aURL));
+        }
+        while (nIdx>=0);
     }
-    while (nIdx>=0);
     // select first entry
     m_xPathList->select(0);
     SelectHdl_Impl(*m_xPathList);
