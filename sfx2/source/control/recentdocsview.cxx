@@ -119,7 +119,6 @@ RecentDocsView::RecentDocsView( vcl::Window* pParent )
     , mnFileTypes(ApplicationType::TYPE_NONE)
     , mnTextHeight(30)
     , mnItemPadding(5)
-    , mnItemMaxTextLength(30)
     , mnLastMouseDownItem(THUMBNAILVIEW_ITEM_NOTFOUND)
     , maWelcomeImage(BitmapEx(BMP_WELCOME))
     , maWelcomeLine1(SfxResId(STR_WELCOME_LINE1))
@@ -129,7 +128,7 @@ RecentDocsView::RecentDocsView( vcl::Window* pParent )
     mnItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;
 
     SetStyle(GetStyle() | WB_VSCROLL);
-    setItemMaxTextLength( mnItemMaxTextLength );
+    setItemMaxTextLength( 30 );
     setItemDimensions( mnItemMaxSize, mnItemMaxSize, mnTextHeight, mnItemPadding );
 
     maFillColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsBackgroundColor::get());

@@ -107,11 +107,9 @@ class SfxDispatchController_Impl : public SfxControllerItem
     SfxDispatcher*              pDispatcher;
     SfxBindings*                pBindings;
     const SfxPoolItem*          pLastState;
-    sal_uInt16                  nSlot;
     SfxOfficeDispatch*          pDispatch;
     bool                        bMasterSlave;
     bool                        bVisible;
-    const char*                 pUnoName;
     css::uno::WeakReference< css::frame::XFrame > xFrame;
 
     static void         addParametersToArgs( const css::util::URL& aURL,

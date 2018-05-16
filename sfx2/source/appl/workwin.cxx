@@ -460,7 +460,6 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMast
     pParent( nullptr ),
     pBindings(&pFrm->GetCurrentViewFrame()->GetBindings()),
     pWorkWin (pWin),
-    pConfigShell( nullptr ),
     pActiveChild( nullptr ),
     nUpdateMode(SfxVisibilityFlags::Standard),
     nChildren( 0 ),
@@ -499,7 +498,7 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMast
                                   css::uno::UNO_QUERY );
     pLayoutManagerListener->setFrame( xFrame );
 
-    pConfigShell = pFrm->GetCurrentViewFrame();
+    SfxShell* pConfigShell = pFrm->GetCurrentViewFrame();
     if ( pConfigShell && pConfigShell->GetObjectShell() )
     {
         bShowStatusBar = ( !pConfigShell->GetObjectShell()->IsInPlaceActive() );

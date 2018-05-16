@@ -52,7 +52,6 @@ public:
 
 class StgAvlIterator {
     StgAvlNode* m_pRoot;                  // root entry (parent)
-    short       m_nCount;                 // tree size
     short       m_nCur;                   // current element
     StgAvlNode* Find( short );
 public:
