@@ -147,8 +147,9 @@ private:
                                              const editeng::SvxBorderLine* pCurLine,
                                              bool bValid );
 
-    bool IsBorderLineStyleAllowed( SvxBorderLineStyle nStyle ) const;
-    void UpdateRemoveAdjCellBorderCB( sal_uInt16 nPreset );
+    bool                IsBorderLineStyleAllowed( SvxBorderLineStyle nStyle ) const;
+    void                UpdateRemoveAdjCellBorderCB( sal_uInt16 nPreset );
+    static Color        TestColorsVisible(const Color &FontCol, const Color &BackCol);
 };
 
 

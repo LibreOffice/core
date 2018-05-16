@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/module.hxx>
@@ -437,6 +436,22 @@ bool SvxBorderTabPage::IsBorderLineStyleAllowed( SvxBorderLineStyle nStyle ) con
     return maUsedBorderStyles.count(nStyle) > 0;
 }
 
+Color SvxBorderTabPage::TestColorsVisible(const Color &LineCol, const Color &BackCol)
+{    const sal_uInt8  ChgVal = 60;       // increase/decrease the Contrast
+
+    Color  retCol = LineCol;
+    if ((LineCol.IsDark() == BackCol.IsDark()) && (LineCol.IsBright() == BackCol.IsBright()))
+    {
+        sal_uInt8 lumi = retCol.GetLuminance();
+
+        if((lumi > 120) && (lumi < 140))
+            retCol.DecreaseLuminance(ChgVal / 2);
+        else
+            retCol.DecreaseContrast(ChgVal);
+    }
+
+    return retCol;
+}
 
 void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 {
@@ -921,11 +936,10 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelSdwHdl_Impl, ValueSet*, void)
 IMPL_LINK(SvxBorderTabPage, SelColHdl_Impl, SvxColorListBox&, rColorBox, void)
 {
     Color aColor = rColorBox.GetSelectEntryColor();
+    Color aBackgroundColor = m_pLbLineStyle->GetControlBackground().GetRGBColor();
     m_pFrameSel->SetColorToSelection(aColor);
-    if(aColor == COL_WHITE)
-      m_pLbLineStyle->SetColor(COL_BLACK);
-    else
-      m_pLbLineStyle->SetColor(aColor);
+    aBackgroundColor = TestColorsVisible(aColor,aBackgroundColor);
+    m_pLbLineStyle->SetControlBackground(aBackgroundColor);
 }
 
 IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl, Edit&, void)
