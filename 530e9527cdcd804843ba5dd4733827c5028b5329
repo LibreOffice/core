@@ -22,6 +22,24 @@
       "revId": "530e9527cdcd804843ba5dd4733827c5028b5329",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_3fe93b15",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-16T09:24:33Z",
+      "side": 1,
+      "message": "Sure, constness in both cases is something you can change if you consider the consequences carefully. No problem with that.",
+      "parentUuid": "9a30ddce_6b7a1df3",
+      "revId": "530e9527cdcd804843ba5dd4733827c5028b5329",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
