@@ -37,23 +37,21 @@ public:
     bool                        bIDEDialogMode;
 };
 
-class AssignComponentDialog : public ModalDialog
+class AssignComponentDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<Edit>           mpMethodEdit;
-    VclPtr<OKButton>       mpOKButton;
-
     OUString maURL;
 
-    DECL_LINK(ButtonHandler, Button*, void);
+    std::unique_ptr<weld::Entry> mxMethodEdit;
+    std::unique_ptr<weld::Button> mxOKButton;
+
+    DECL_LINK(ButtonHandler, weld::Button&, void);
 
 public:
-    AssignComponentDialog( vcl::Window * pParent, const OUString& rURL );
+    AssignComponentDialog(weld::Window* pParent, const OUString& rURL);
     virtual ~AssignComponentDialog() override;
-    virtual void dispose() override;
 
-    const OUString& getURL() const
-        { return maURL; }
+    const OUString& getURL() const { return maURL; }
 };
 
 #endif
