@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_7fd4931f",
+        "filename": "sw/source/filter/ww8/wrtw8esh.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-16T12:57:48Z",
+      "side": 1,
+      "message": "the two halves of this if statement don\u0027t match, in some sense.\nSpecifically, the second half of it will effectively mirror the angle in the vertical plane, assuming 0 degrees is north, and clockwise is positive.\nI think what you want is simply\n   nAngle \u003d nAngle % 360\nfor the second half",
+      "revId": "73c3ba6007da1f183d459100231342831cdb3901",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
