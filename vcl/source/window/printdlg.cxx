@@ -650,6 +650,7 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
     , maJobPage(m_pUIBuilder.get())
     , maOptionsPage(m_pUIBuilder.get())
     , maNoPageStr( VclResId( SV_PRINT_NOPAGES ) )
+    , maNoPreviewStr( VclResId( SV_PRINT_NOPREVIEW ) )
     , mnCurPage( 0 )
     , mnCachedPages( 0 )
     , maPrintToFileText( VclResId( SV_PRINT_TOFILE_TXT ) )
@@ -665,6 +666,7 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
     get(mpPageEdit, "pageedit-nospin");
     get(mpTabCtrl, "tabcontrol");
     get(mpPreviewWindow, "preview");
+    get(mpPreviewBox, "previewbox");
 
     // save printbutton text, gets exchanged occasionally with print to file
     maPrintText = mpOKButton->GetText();
@@ -715,9 +717,6 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
     // not printing to file
     maPController->resetPrinterOptions( false );
 
-    // get the first page
-    preparePreview( true, true );
-
     // update the text fields for the printer
     updatePrinterText();
 
@@ -747,6 +746,7 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
     mpHelpButton->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     mpForwardBtn->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     mpBackwardBtn->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    mpPreviewBox->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
 
     maJobPage.mpCollateBox->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
     maJobPage.mpSetupButton->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
@@ -805,6 +805,7 @@ void PrintDialog::dispose()
     mpNumPagesText.clear();
     mpBackwardBtn.clear();
     mpForwardBtn.clear();
+    mpPreviewBox.clear();
     mpOKButton.clear();
     mpCancelButton.clear();
     mpHelpButton.clear();
@@ -832,6 +833,16 @@ void PrintDialog::readFromSettings()
             mpTabCtrl->SelectTabPage( nPageId );
             break;
         }
+    }
+
+    aValue = pItem->getValue( "PrintDialog", "HasPreview" );
+    if ( aValue.equalsIgnoreAsciiCase("true") )
+    {
+        mpPreviewBox->Check();
+    }
+    else
+    {
+        mpPreviewBox->Check( false );
     }
 
     // persistent window state
@@ -864,6 +875,9 @@ void PrintDialog::storeToSettings()
                      "WindowState",
                      OStringToOUString( GetWindowState(), RTL_TEXTENCODING_UTF8 )
                      );
+    pItem->setValue( "PrintDialog",
+                     "HasPreview",
+                     hasPreview() ? OUString("true") : OUString("false") );
     pItem->Commit();
 }
 
@@ -880,6 +894,11 @@ bool PrintDialog::isCollate()
 bool PrintDialog::isSingleJobs()
 {
     return maOptionsPage.mpCollateSingleJobsBox->IsChecked();
+}
+
+bool PrintDialog::hasPreview()
+{
+    return mpPreviewBox->IsChecked();
 }
 
 void setHelpId( vcl::Window* i_pWindow, const Sequence< OUString >& i_rHelpIds, sal_Int32 i_nIndex )
@@ -1381,25 +1400,43 @@ void PrintDialog::setPreviewText()
 
 void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
 {
+    VclPtr<Printer> aPrt( maPController->getPrinter() );
+    Size aCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MapUnit::Map100thMM ) );
+    GDIMetaFile aMtf;
+
     // page range may have changed depending on options
     sal_Int32 nPages = maPController->getFilteredPageCount();
     mnCachedPages = nPages;
+
+    mpPageEdit->SetMin( 1 );
+    mpPageEdit->SetMax( nPages );
+
+    setPreviewText();
+
+    if ( !hasPreview() )
+    {
+        mpPreviewWindow->setPreview( aMtf, aCurPageSize,
+                            aPrt->GetPaperName(),
+                            maNoPreviewStr,
+                            aPrt->GetDPIX(), aPrt->GetDPIY(),
+                            aPrt->GetPrinterOptions().IsConvertToGreyscales()
+                            );
+
+        mpForwardBtn->Enable( false );
+        mpBackwardBtn->Enable( false );
+        mpPageEdit->Enable( false );
+
+        return;
+    }
 
     if( mnCurPage >= nPages )
         mnCurPage = nPages-1;
     if( mnCurPage < 0 )
         mnCurPage = 0;
 
-    setPreviewText();
-
-    mpPageEdit->SetMin( 1 );
-    mpPageEdit->SetMax( nPages );
-
     if( i_bNewPage )
     {
         const MapMode aMapMode( MapUnit::Map100thMM );
-        GDIMetaFile aMtf;
-        VclPtr<Printer> aPrt( maPController->getPrinter() );
         if( nPages > 0 )
         {
             PrinterController::PageSize aPageSize =
@@ -1411,7 +1448,6 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
             }
         }
 
-        Size aCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MapUnit::Map100thMM ) );
         mpPreviewWindow->setPreview( aMtf, aCurPageSize,
                                     aPrt->GetPaperName(),
                                     nPages > 0 ? OUString() : maNoPageStr,
@@ -1654,6 +1690,10 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton, void )
         {
             pHelp->Start( "vcl/ui/printdialog", mpOKButton );
         }
+    }
+    else if ( pButton == mpPreviewBox )
+    {
+        preparePreview( true, true );
     }
     else if( pButton == mpForwardBtn )
     {
