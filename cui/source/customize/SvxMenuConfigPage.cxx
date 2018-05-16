@@ -320,13 +320,13 @@ IMPL_LINK( SvxMenuConfigPage, GearHdl, MenuButton *, pButton, void )
 
     if (sIdent == "gear_add")
     {
-        VclPtrInstance<SvxMainMenuOrganizerDialog> pDialog(
-            nullptr, GetSaveInData()->GetEntries(), nullptr, true );
+        SvxMainMenuOrganizerDialog aDialog(GetFrameWeld(),
+            GetSaveInData()->GetEntries(), nullptr, true );
 
-        if ( pDialog->Execute() == RET_OK )
+        if (aDialog.run() == RET_OK)
         {
-            GetSaveInData()->SetEntries( pDialog->ReleaseEntries() );
-            ReloadTopLevelListBox( pDialog->GetSelectedEntry() );
+            GetSaveInData()->SetEntries(aDialog.ReleaseEntries());
+            ReloadTopLevelListBox(aDialog.GetSelectedEntry());
             GetSaveInData()->SetModified();
         }
     }
@@ -363,12 +363,11 @@ IMPL_LINK( SvxMenuConfigPage, GearHdl, MenuButton *, pButton, void )
     {
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
-        VclPtrInstance<SvxMainMenuOrganizerDialog> pDialog(
-            this, GetSaveInData()->GetEntries(), pMenuData, false );
-
-        if ( pDialog->Execute() == RET_OK )
+        SvxMainMenuOrganizerDialog aDialog(GetFrameWeld(), GetSaveInData()->GetEntries(),
+                pMenuData, false );
+        if (aDialog.run() == RET_OK)
         {
-            GetSaveInData()->SetEntries( pDialog->ReleaseEntries() );
+            GetSaveInData()->SetEntries(aDialog.ReleaseEntries());
 
             ReloadTopLevelListBox();
 

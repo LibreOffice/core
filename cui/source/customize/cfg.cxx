@@ -1884,18 +1884,18 @@ bool SvxConfigPage::MoveEntryData(
 }
 
 SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
-    vcl::Window* pParent, SvxEntries* entries,
+    weld::Window* pParent, SvxEntries* entries,
     SvxConfigEntry const * selection, bool bCreateMenu )
-    : ModalDialog(pParent, "MoveMenuDialog", "cui/ui/movemenu.ui")
+    : GenericDialogController(pParent, "cui/ui/movemenu.ui", "MoveMenuDialog")
     , mpEntries(nullptr)
     , bModified(false)
+    , m_xMenuBox(m_xBuilder->weld_widget("namebox"))
+    , m_xMenuNameEdit(m_xBuilder->weld_entry("menuname"))
+    , m_xMenuListBox(m_xBuilder->weld_tree_view("menulist"))
+    , m_xMoveUpButton(m_xBuilder->weld_button("up"))
+    , m_xMoveDownButton(m_xBuilder->weld_button("down"))
 {
-    get(m_pMenuBox, "namebox");
-    get(m_pMenuNameEdit, "menuname");
-    get(m_pMoveUpButton, "up");
-    get(m_pMoveDownButton, "down");
-    get(m_pMenuListBox, "menulist");
-    m_pMenuListBox->set_height_request(m_pMenuListBox->GetTextHeight() * 12);
+    m_xMenuListBox->set_size_request(-1, m_xMenuListBox->get_height_rows(12));
 
     // Copy the entries list passed in
     if ( entries != nullptr )
@@ -1903,14 +1903,12 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         mpEntries.reset( new SvxEntries );
         for (auto const& entry : *entries)
         {
-            SvTreeListEntry* pLBEntry =
-                m_pMenuListBox->InsertEntry( SvxConfigPageHelper::stripHotKey( entry->GetName() ) );
-            pLBEntry->SetUserData(entry);
+            m_xMenuListBox->append(OUString::number(reinterpret_cast<sal_uInt64>(entry)),
+                                   SvxConfigPageHelper::stripHotKey(entry->GetName()), "");
             mpEntries->push_back(entry);
-
             if (entry == selection)
             {
-                m_pMenuListBox->Select( pLBEntry );
+                m_xMenuListBox->select(m_xMenuListBox->n_children() - 1);
             }
         }
     }
@@ -1929,70 +1927,54 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         pNewEntryData->SetUserDefined();
         pNewEntryData->SetMain();
 
-        pNewMenuEntry =
-            m_pMenuListBox->InsertEntry( SvxConfigPageHelper::stripHotKey( pNewEntryData->GetName() ) );
-        m_pMenuListBox->Select( pNewMenuEntry );
-
-        pNewMenuEntry->SetUserData( pNewEntryData );
+        m_sNewMenuEntryId = OUString::number(reinterpret_cast<sal_uInt64>(pNewEntryData));
+        m_xMenuListBox->append(m_sNewMenuEntryId,
+                               SvxConfigPageHelper::stripHotKey(pNewEntryData->GetName()), "");
+        m_xMenuListBox->select(m_xMenuListBox->n_children() - 1);
 
         if (mpEntries)
             mpEntries->push_back(pNewEntryData);
 
-        m_pMenuNameEdit->SetText( newname );
-        m_pMenuNameEdit->SetModifyHdl(
-            LINK( this, SvxMainMenuOrganizerDialog, ModifyHdl ) );
+        m_xMenuNameEdit->set_text(newname);
+        m_xMenuNameEdit->connect_changed(LINK(this, SvxMainMenuOrganizerDialog, ModifyHdl));
     }
     else
     {
-        pNewMenuEntry = nullptr;
-
         // hide name label and textfield
-        m_pMenuBox->Hide();
+        m_xMenuBox->hide();
         // change the title
-        SetText( CuiResId( RID_SVXSTR_MOVE_MENU ) );
+        m_xDialog->set_title(CuiResId(RID_SVXSTR_MOVE_MENU));
     }
 
-    m_pMenuListBox->SetSelectHdl(
-        LINK( this, SvxMainMenuOrganizerDialog, SelectHdl ) );
+    m_xMenuListBox->connect_changed(LINK(this, SvxMainMenuOrganizerDialog, SelectHdl));
 
-    m_pMoveUpButton->SetClickHdl (
-        LINK( this, SvxMainMenuOrganizerDialog, MoveHdl) );
-    m_pMoveDownButton->SetClickHdl (
-        LINK( this, SvxMainMenuOrganizerDialog, MoveHdl) );
+    m_xMoveUpButton->connect_clicked(LINK( this, SvxMainMenuOrganizerDialog, MoveHdl));
+    m_xMoveDownButton->connect_clicked(LINK( this, SvxMainMenuOrganizerDialog, MoveHdl));
 }
 
 SvxMainMenuOrganizerDialog::~SvxMainMenuOrganizerDialog()
 {
-    disposeOnce();
 }
 
-void SvxMainMenuOrganizerDialog::dispose()
-{
-    m_pMenuBox.clear();
-    m_pMenuNameEdit.clear();
-    m_pMenuListBox.clear();
-    m_pMoveUpButton.clear();
-    m_pMoveDownButton.clear();
-    ModalDialog::dispose();
-}
-
-IMPL_LINK_NOARG(SvxMainMenuOrganizerDialog, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SvxMainMenuOrganizerDialog, ModifyHdl, weld::Entry&, void)
 {
     // if the Edit control is empty do not change the name
-    if (m_pMenuNameEdit->GetText().isEmpty())
+    if (m_xMenuNameEdit->get_text().isEmpty())
     {
         return;
     }
 
-    SvxConfigEntry* pNewEntryData =
-        static_cast<SvxConfigEntry*>(pNewMenuEntry->GetUserData());
+    SvxConfigEntry* pNewEntryData = reinterpret_cast<SvxConfigEntry*>(m_sNewMenuEntryId.toUInt64());
+    pNewEntryData->SetName(m_xMenuNameEdit->get_text());
 
-    pNewEntryData->SetName(m_pMenuNameEdit->GetText());
-
-    m_pMenuListBox->SetEntryText( pNewMenuEntry, pNewEntryData->GetName() );
+    const int nNewMenuPos = m_xMenuListBox->find_id(m_sNewMenuEntryId);
+    const int nOldSelection = m_xMenuListBox->get_selected_index();
+    m_xMenuListBox->remove(nNewMenuPos);
+    m_xMenuListBox->insert(nNewMenuPos, m_sNewMenuEntryId, pNewEntryData->GetName(), "");
+    m_xMenuListBox->select(nOldSelection);
 }
 
-IMPL_LINK_NOARG( SvxMainMenuOrganizerDialog, SelectHdl, SvTreeListBox*, void )
+IMPL_LINK_NOARG(SvxMainMenuOrganizerDialog, SelectHdl, weld::TreeView&, void)
 {
     UpdateButtonStates();
 }
@@ -2000,71 +1982,46 @@ IMPL_LINK_NOARG( SvxMainMenuOrganizerDialog, SelectHdl, SvTreeListBox*, void )
 void SvxMainMenuOrganizerDialog::UpdateButtonStates()
 {
     // Disable Up and Down buttons depending on current selection
-    SvTreeListEntry* selection = m_pMenuListBox->GetCurEntry();
-    SvTreeListEntry* first = m_pMenuListBox->First();
-    SvTreeListEntry* last = m_pMenuListBox->Last();
-
-    m_pMoveUpButton->Enable( selection != first );
-    m_pMoveDownButton->Enable( selection != last );
+    const int nSelected = m_xMenuListBox->get_selected_index();
+    m_xMoveUpButton->set_sensitive(nSelected > 0);
+    m_xMoveDownButton->set_sensitive(nSelected != -1 && nSelected < m_xMenuListBox->n_children() - 1);
 }
 
-IMPL_LINK( SvxMainMenuOrganizerDialog, MoveHdl, Button *, pButton, void )
+IMPL_LINK( SvxMainMenuOrganizerDialog, MoveHdl, weld::Button&, rButton, void )
 {
-    SvTreeListEntry *pSourceEntry = m_pMenuListBox->FirstSelected();
-    SvTreeListEntry *pTargetEntry = nullptr;
-
-    if ( !pSourceEntry )
-    {
+    int nSourceEntry = m_xMenuListBox->get_selected_index();
+    if (nSourceEntry == -1)
         return;
-    }
 
-    if (pButton == m_pMoveDownButton)
+    int nTargetEntry;
+
+    if (&rButton == m_xMoveDownButton.get())
     {
-        pTargetEntry = SvTreeListBox::NextSibling( pSourceEntry );
+        nTargetEntry = nSourceEntry + 1;
     }
-    else if (pButton == m_pMoveUpButton)
+    else
     {
         // Move Up is just a Move Down with the source and target reversed
-        pTargetEntry = pSourceEntry;
-        pSourceEntry = SvTreeListBox::PrevSibling( pTargetEntry );
+        nTargetEntry = nSourceEntry - 1;
     }
 
-    if ( pSourceEntry != nullptr && pTargetEntry != nullptr )
-    {
-        SvxConfigEntry* pSourceData =
-            static_cast<SvxConfigEntry*>(pSourceEntry->GetUserData());
-        SvxConfigEntry* pTargetData =
-            static_cast<SvxConfigEntry*>(pTargetEntry->GetUserData());
+    OUString sId = m_xMenuListBox->get_id(nSourceEntry);
+    OUString sEntry = m_xMenuListBox->get_text(nSourceEntry);
+    m_xMenuListBox->remove(nSourceEntry);
+    m_xMenuListBox->insert(nTargetEntry, sId, sEntry, "");
+    m_xMenuListBox->select(nTargetEntry);
 
-        SvxEntries::iterator iter1 = mpEntries->begin();
-        SvxEntries::iterator iter2 = mpEntries->begin();
-        SvxEntries::const_iterator end = mpEntries->end();
+    bModified = true;
 
-        // Advance the iterators to the positions of the source and target
-        while (*iter1 != pSourceData && ++iter1 != end) ;
-        while (*iter2 != pTargetData && ++iter2 != end) ;
-
-        // Now swap the entries in the menu list and in the UI
-        if ( iter1 != end && iter2 != end )
-        {
-            std::swap( *iter1, *iter2 );
-            m_pMenuListBox->GetModel()->Move( pSourceEntry, pTargetEntry );
-            m_pMenuListBox->MakeVisible( pSourceEntry );
-
-            bModified = true;
-        }
-    }
-
-    if ( bModified )
-    {
-        UpdateButtonStates();
-    }
+    UpdateButtonStates();
 }
-
 
 SvxConfigEntry* SvxMainMenuOrganizerDialog::GetSelectedEntry()
 {
-    return static_cast<SvxConfigEntry*>(m_pMenuListBox->FirstSelected()->GetUserData());
+    const int nSelected(m_xMenuListBox->get_selected_index());
+    if (nSelected == -1)
+        return nullptr;
+    return reinterpret_cast<SvxConfigEntry*>(m_xMenuListBox->get_id(nSelected).toUInt64());
 }
 
 SvxConfigEntry::SvxConfigEntry( const OUString& rDisplayName,
