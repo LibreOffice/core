@@ -43,7 +43,6 @@ protected:
     SwAttrHandler m_aAttrHandler;
     SwViewShell *m_pViewShell;
     SwFont *m_pFont;
-    SwpHints const* m_pHints;
     SwScriptInfo* m_pScriptInfo;
 
 private:
@@ -76,7 +75,6 @@ protected:
     explicit SwAttrIter(SwTextNode const * pTextNode)
         : m_pViewShell(nullptr)
         , m_pFont(nullptr)
-        , m_pHints(nullptr)
         , m_pScriptInfo(nullptr)
         , m_pLastOut(nullptr)
         , m_nChgCnt(0)
@@ -96,7 +94,14 @@ public:
     /// constructor, but SwAttrIter itself may be created without a
     /// SwTextFrame in certain special cases via this ctor here
     SwAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf )
-        : m_pViewShell(nullptr), m_pFont(nullptr), m_pHints(nullptr), m_pScriptInfo(nullptr), m_pLastOut(nullptr), m_nChgCnt(0), m_pRedline(nullptr),m_nPropFont(0), m_pTextNode(&rTextNode)
+        : m_pViewShell(nullptr)
+        , m_pFont(nullptr)
+        , m_pScriptInfo(nullptr)
+        , m_pLastOut(nullptr)
+        , m_nChgCnt(0)
+        , m_pRedline(nullptr)
+        , m_nPropFont(0)
+        , m_pTextNode(&rTextNode)
         , m_pMergedPara(nullptr)
         { CtorInitAttrIter( rTextNode, rScrInf ); }
 
