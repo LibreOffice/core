@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="img_paste_transpose">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sc/res/paste_transpose.png</property>
+    <property name="icon_name">sc/res/paste_transpose.png</property>
   </object>
   <object class="GtkImage" id="img_paste_values_formats">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sc/res/paste_values_formats.png</property>
+    <property name="icon_name">sc/res/paste_values_formats.png</property>
   </object>
   <object class="GtkImage" id="img_paste_values_only">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sc/res/paste_values_only.png</property>
+    <property name="icon_name">sc/res/paste_values_only.png</property>
   </object>
   <object class="GtkDialog" id="PasteSpecial">
     <property name="can_focus">False</property>
@@ -23,6 +23,9 @@
     <property name="title" translatable="yes" context="pastespecial|PasteSpecial">Paste Special</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -37,6 +40,7 @@
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
@@ -88,7 +92,8 @@
           <object class="GtkButtonBox" id="buttonbox1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="layout_style">start</property>
+            <property name="spacing">6</property>
+            <property name="layout_style">center</property>
             <child>
               <object class="GtkButton" id="paste_values_only">
                 <property name="visible">True</property>
@@ -97,6 +102,7 @@
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="pastespecial|paste_values_only|tooltip_text">Values Only</property>
                 <property name="image">img_paste_values_only</property>
+                <property name="always_show_image">True</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -112,6 +118,7 @@
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="pastespecial|paste_values_formats|tooltip_text">Values &amp; Formats</property>
                 <property name="image">img_paste_values_formats</property>
+                <property name="always_show_image">True</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -127,6 +134,7 @@
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="pastespecial|paste_transpose|tooltip_text">Transpose</property>
                 <property name="image">img_paste_transpose</property>
+                <property name="always_show_image">True</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -346,7 +354,6 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">add</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -362,9 +369,8 @@
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
-                            <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">subtract</property>
+                            <property name="group">none</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -380,9 +386,8 @@
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
-                            <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">multiply</property>
+                            <property name="group">none</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -398,9 +403,8 @@
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
-                            <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">divide</property>
+                            <property name="group">none</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -416,7 +420,6 @@
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
-                            <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">none</property>
                           </object>
@@ -568,7 +571,6 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">move_down</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -584,9 +586,8 @@
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
-                            <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">move_right</property>
+                            <property name="group">no_shift</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -603,7 +604,6 @@
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
-                            <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">no_shift</property>
                           </object>

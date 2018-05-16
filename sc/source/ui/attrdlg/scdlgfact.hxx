@@ -236,7 +236,13 @@ public:
 
 class AbstractScInsertContentsDlg_Impl : public AbstractScInsertContentsDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScInsertContentsDlg_Impl, ScInsertContentsDlg)
+    std::unique_ptr<ScInsertContentsDlg> m_xDlg;
+public:
+    explicit AbstractScInsertContentsDlg_Impl(ScInsertContentsDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short           Execute() override;
     virtual InsertDeleteFlags GetInsContentsCmdBits() const override;
     virtual ScPasteFunc   GetFormulaCmdBits() const override;
     virtual bool        IsSkipEmptyCells() const override;
@@ -505,8 +511,8 @@ public:
     virtual VclPtr<AbstractScInsertCellDlg> CreateScInsertCellDlg(weld::Window* pParent,
                                                                   bool bDisallowCellMove) override;
 
-    virtual VclPtr<AbstractScInsertContentsDlg> CreateScInsertContentsDlg( vcl::Window*        pParent,
-                                                                    const OUString* pStrTitle = nullptr ) override;
+    virtual VclPtr<AbstractScInsertContentsDlg> CreateScInsertContentsDlg(weld::Window* pParent,
+                                                                          const OUString* pStrTitle = nullptr) override;
 
     virtual VclPtr<AbstractScInsertTableDlg> CreateScInsertTableDlg(vcl::Window* pParent, ScViewData& rViewData,
         SCTAB nTabCount, bool bFromFile) override;

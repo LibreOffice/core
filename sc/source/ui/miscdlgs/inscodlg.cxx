@@ -27,46 +27,44 @@ ScPasteFunc  ScInsertContentsDlg::nPreviousFormulaChecks = ScPasteFunc::NONE;
 InsertContentsFlags ScInsertContentsDlg::nPreviousChecks2 = InsertContentsFlags::NONE;
 sal_uInt16 ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;   // enum InsCellCmd
 
-ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
-                                          InsertDeleteFlags nCheckDefaults,
-                                          const OUString* pStrTitle )
-
- :  ModalDialog     ( pParent, "PasteSpecial", "modules/scalc/ui/pastespecial.ui" ),
-    bOtherDoc       ( false ),
-    bFillMode       ( false ),
-    bChangeTrack    ( false ),
-    bMoveDownDisabled( false ),
-    bMoveRightDisabled( false ),
-    bUsedShortCut   ( false ),
-    nShortCutInsContentsCmdBits( InsertDeleteFlags::NONE ),
-    bShortCutTranspose(false),
-    nShortCutMoveMode(INS_NONE)
+ScInsertContentsDlg::ScInsertContentsDlg(weld::Window* pParent,
+                                         InsertDeleteFlags nCheckDefaults,
+                                         const OUString* pStrTitle )
+    : GenericDialogController(pParent, "modules/scalc/ui/pastespecial.ui", "PasteSpecial")
+    , bOtherDoc(false)
+    , bFillMode(false)
+    , bChangeTrack(false)
+    , bMoveDownDisabled(false)
+    , bMoveRightDisabled(false)
+    , bUsedShortCut(false)
+    , nShortCutInsContentsCmdBits(InsertDeleteFlags::NONE )
+    , bShortCutTranspose(false)
+    , nShortCutMoveMode(INS_NONE)
+    , mxBtnInsAll(m_xBuilder->weld_check_button("paste_all"))
+    , mxBtnInsStrings(m_xBuilder->weld_check_button("text"))
+    , mxBtnInsNumbers(m_xBuilder->weld_check_button("numbers"))
+    , mxBtnInsDateTime(m_xBuilder->weld_check_button("datetime"))
+    , mxBtnInsFormulas(m_xBuilder->weld_check_button("formulas"))
+    , mxBtnInsNotes(m_xBuilder->weld_check_button("comments"))
+    , mxBtnInsAttrs(m_xBuilder->weld_check_button("formats"))
+    , mxBtnInsObjects(m_xBuilder->weld_check_button("objects"))
+    , mxBtnSkipEmptyCells(m_xBuilder->weld_check_button("skip_empty"))
+    , mxBtnTranspose(m_xBuilder->weld_check_button("transpose"))
+    , mxBtnLink(m_xBuilder->weld_check_button("link"))
+    , mxRbNoOp(m_xBuilder->weld_radio_button("none"))
+    , mxRbAdd(m_xBuilder->weld_radio_button("add"))
+    , mxRbSub(m_xBuilder->weld_radio_button("subtract"))
+    , mxRbMul(m_xBuilder->weld_radio_button("multiply"))
+    , mxRbDiv(m_xBuilder->weld_radio_button("divide"))
+    , mxRbMoveNone(m_xBuilder->weld_radio_button("no_shift"))
+    , mxRbMoveDown(m_xBuilder->weld_radio_button("move_down"))
+    , mxRbMoveRight(m_xBuilder->weld_radio_button("move_right"))
+    , mxBtnShortCutPasteValuesOnly(m_xBuilder->weld_button("paste_values_only"))
+    , mxBtnShortCutPasteValuesFormats(m_xBuilder->weld_button("paste_values_formats"))
+    , mxBtnShortCutPasteTranspose(m_xBuilder->weld_button("paste_transpose"))
 {
-    get( mpBtnInsAll, "paste_all" );
-    get( mpBtnInsStrings, "text" );
-    get( mpBtnInsNumbers, "numbers" );
-    get( mpBtnInsDateTime, "datetime" );
-    get( mpBtnInsFormulas, "formulas" );
-    get( mpBtnInsNotes, "comments" );
-    get( mpBtnInsAttrs, "formats" );
-    get( mpBtnInsObjects, "objects" );
-    get( mpBtnSkipEmptyCells, "skip_empty" );
-    get( mpBtnTranspose, "transpose" );
-    get( mpBtnLink, "link" );
-    get( mpRbNoOp, "none" );
-    get( mpRbAdd, "add" );
-    get( mpRbSub, "subtract" );
-    get( mpRbMul, "multiply" );
-    get( mpRbDiv, "divide" );
-    get( mpRbMoveNone, "no_shift" );
-    get( mpRbMoveDown, "move_down" );
-    get( mpRbMoveRight, "move_right" );
-    get( mpBtnShortCutPasteValuesOnly, "paste_values_only");
-    get( mpBtnShortCutPasteValuesFormats, "paste_values_formats");
-    get( mpBtnShortCutPasteTranspose, "paste_transpose");
-
-    if ( pStrTitle )
-        SetText( *pStrTitle );
+    if (pStrTitle)
+        m_xDialog->set_title(*pStrTitle);
 
     if ( nCheckDefaults != InsertDeleteFlags::NONE )
     {
@@ -75,65 +73,65 @@ ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
         ScInsertContentsDlg::nPreviousChecks2 = InsertContentsFlags::NONE;
     }
 
-    mpBtnInsAll->Check     ( ScInsertContentsDlg::bPreviousAllCheck );
-    mpBtnInsStrings->Check ( bool(InsertDeleteFlags::STRING & ScInsertContentsDlg::nPreviousChecks) );
-    mpBtnInsNumbers->Check ( bool(InsertDeleteFlags::VALUE & ScInsertContentsDlg::nPreviousChecks) );
-    mpBtnInsDateTime->Check( bool(InsertDeleteFlags::DATETIME & ScInsertContentsDlg::nPreviousChecks) );
-    mpBtnInsFormulas->Check( bool(InsertDeleteFlags::FORMULA & ScInsertContentsDlg::nPreviousChecks) );
-    mpBtnInsNotes->Check   ( bool(InsertDeleteFlags::NOTE & ScInsertContentsDlg::nPreviousChecks) );
-    mpBtnInsAttrs->Check   ( (InsertDeleteFlags::ATTRIB & ScInsertContentsDlg::nPreviousChecks) == InsertDeleteFlags::ATTRIB );
-    mpBtnInsObjects->Check ( bool(InsertDeleteFlags::OBJECTS & ScInsertContentsDlg::nPreviousChecks) );
+    mxBtnInsAll->set_active( ScInsertContentsDlg::bPreviousAllCheck );
+    mxBtnInsStrings->set_active( bool(InsertDeleteFlags::STRING & ScInsertContentsDlg::nPreviousChecks) );
+    mxBtnInsNumbers->set_active( bool(InsertDeleteFlags::VALUE & ScInsertContentsDlg::nPreviousChecks) );
+    mxBtnInsDateTime->set_active( bool(InsertDeleteFlags::DATETIME & ScInsertContentsDlg::nPreviousChecks) );
+    mxBtnInsFormulas->set_active( bool(InsertDeleteFlags::FORMULA & ScInsertContentsDlg::nPreviousChecks) );
+    mxBtnInsNotes->set_active( bool(InsertDeleteFlags::NOTE & ScInsertContentsDlg::nPreviousChecks) );
+    mxBtnInsAttrs->set_active( (InsertDeleteFlags::ATTRIB & ScInsertContentsDlg::nPreviousChecks) == InsertDeleteFlags::ATTRIB );
+    mxBtnInsObjects->set_active ( bool(InsertDeleteFlags::OBJECTS & ScInsertContentsDlg::nPreviousChecks) );
 
     switch( ScInsertContentsDlg::nPreviousFormulaChecks )
     {
-        case ScPasteFunc::NONE: mpRbNoOp->Check(); break;
-        case ScPasteFunc::ADD:    mpRbAdd->Check(); break;
-        case ScPasteFunc::SUB:    mpRbSub->Check(); break;
-        case ScPasteFunc::MUL:    mpRbMul->Check(); break;
-        case ScPasteFunc::DIV:    mpRbDiv->Check(); break;
+        case ScPasteFunc::NONE: mxRbNoOp->set_active(true); break;
+        case ScPasteFunc::ADD:    mxRbAdd->set_active(true); break;
+        case ScPasteFunc::SUB:    mxRbSub->set_active(true); break;
+        case ScPasteFunc::MUL:    mxRbMul->set_active(true); break;
+        case ScPasteFunc::DIV:    mxRbDiv->set_active(true); break;
     }
 
     switch( ScInsertContentsDlg::nPreviousMoveMode )
     {
-        case INS_NONE:       mpRbMoveNone->Check(); break;
-        case INS_CELLSDOWN:  mpRbMoveDown->Check(); break;
-        case INS_CELLSRIGHT: mpRbMoveRight->Check(); break;
+        case INS_NONE:       mxRbMoveNone->set_active(true); break;
+        case INS_CELLSDOWN:  mxRbMoveDown->set_active(true); break;
+        case INS_CELLSRIGHT: mxRbMoveRight->set_active(true); break;
     }
 
-    mpBtnSkipEmptyCells->Check( bool( ScInsertContentsDlg::nPreviousChecks2 & InsertContentsFlags::NoEmpty ));
-    mpBtnTranspose->Check( bool( ScInsertContentsDlg::nPreviousChecks2    & InsertContentsFlags::Trans ));
-    mpBtnLink->Check( bool( ScInsertContentsDlg::nPreviousChecks2             & InsertContentsFlags::Link  ));
+    mxBtnSkipEmptyCells->set_active( bool( ScInsertContentsDlg::nPreviousChecks2 & InsertContentsFlags::NoEmpty ));
+    mxBtnTranspose->set_active( bool( ScInsertContentsDlg::nPreviousChecks2    & InsertContentsFlags::Trans ));
+    mxBtnLink->set_active( bool( ScInsertContentsDlg::nPreviousChecks2             & InsertContentsFlags::Link  ));
 
-    DisableChecks( mpBtnInsAll->IsChecked() );
+    DisableChecks( mxBtnInsAll->get_active() );
 
-    mpBtnInsAll->SetClickHdl( LINK( this, ScInsertContentsDlg, InsAllHdl ) );
-    mpBtnLink->SetClickHdl( LINK( this, ScInsertContentsDlg, LinkBtnHdl ) );
+    mxBtnInsAll->connect_toggled( LINK( this, ScInsertContentsDlg, InsAllHdl ) );
+    mxBtnLink->connect_toggled( LINK( this, ScInsertContentsDlg, LinkBtnHdl ) );
 
-    mpBtnShortCutPasteValuesOnly->SetClickHdl( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );
-    mpBtnShortCutPasteValuesFormats->SetClickHdl( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );
-    mpBtnShortCutPasteTranspose->SetClickHdl( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );
+    mxBtnShortCutPasteValuesOnly->connect_clicked( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );
+    mxBtnShortCutPasteValuesFormats->connect_clicked( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );
+    mxBtnShortCutPasteTranspose->connect_clicked( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );
 }
 
 InsertDeleteFlags ScInsertContentsDlg::GetInsContentsCmdBits() const
 {
     ScInsertContentsDlg::nPreviousChecks = InsertDeleteFlags::NONE;
 
-    if ( mpBtnInsStrings->IsChecked() )
+    if ( mxBtnInsStrings->get_active() )
         ScInsertContentsDlg::nPreviousChecks = InsertDeleteFlags::STRING;
-    if ( mpBtnInsNumbers->IsChecked() )
+    if ( mxBtnInsNumbers->get_active() )
         ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::VALUE;
-    if ( mpBtnInsDateTime->IsChecked())
+    if ( mxBtnInsDateTime->get_active())
         ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::DATETIME;
-    if ( mpBtnInsFormulas->IsChecked())
+    if ( mxBtnInsFormulas->get_active())
         ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::FORMULA;
-    if ( mpBtnInsNotes->IsChecked()   )
+    if ( mxBtnInsNotes->get_active()   )
         ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::NOTE;
-    if ( mpBtnInsAttrs->IsChecked()   )
+    if ( mxBtnInsAttrs->get_active()   )
         ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::ATTRIB;
-    if ( mpBtnInsObjects->IsChecked() )
+    if ( mxBtnInsObjects->get_active() )
         ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::OBJECTS;
 
-    ScInsertContentsDlg::bPreviousAllCheck = mpBtnInsAll->IsChecked();
+    ScInsertContentsDlg::bPreviousAllCheck = mxBtnInsAll->get_active();
 
     if (bUsedShortCut)
         return nShortCutInsContentsCmdBits;
@@ -147,9 +145,9 @@ InsCellCmd ScInsertContentsDlg::GetMoveMode()
 {
     if (bUsedShortCut)
         return nShortCutMoveMode;
-    if ( mpRbMoveDown->IsChecked() )
+    if ( mxRbMoveDown->get_active() )
         return INS_CELLSDOWN;
-    if ( mpRbMoveRight->IsChecked() )
+    if ( mxRbMoveRight->get_active() )
         return INS_CELLSRIGHT;
 
     return INS_NONE;
@@ -159,49 +157,49 @@ bool ScInsertContentsDlg::IsSkipEmptyCells() const
 {
     if (bUsedShortCut)
         return false;
-    return mpBtnSkipEmptyCells->IsChecked();
+    return mxBtnSkipEmptyCells->get_active();
 }
 
 bool ScInsertContentsDlg::IsTranspose() const
 {
     if (bUsedShortCut)
         return bShortCutTranspose;
-    return mpBtnTranspose->IsChecked();
+    return mxBtnTranspose->get_active();
 }
 
 bool ScInsertContentsDlg::IsLink() const
 {
     if (bUsedShortCut)
         return false;
-    return mpBtnLink->IsChecked();
+    return mxBtnLink->get_active();
 }
 
 void ScInsertContentsDlg::DisableChecks( bool bInsAllChecked )
 {
     if ( bInsAllChecked )
     {
-        mpBtnInsStrings->Disable();
-        mpBtnInsNumbers->Disable();
-        mpBtnInsDateTime->Disable();
-        mpBtnInsFormulas->Disable();
-        mpBtnInsNotes->Disable();
-        mpBtnInsAttrs->Disable();
-        mpBtnInsObjects->Disable();
+        mxBtnInsStrings->set_sensitive(false);
+        mxBtnInsNumbers->set_sensitive(false);
+        mxBtnInsDateTime->set_sensitive(false);
+        mxBtnInsFormulas->set_sensitive(false);
+        mxBtnInsNotes->set_sensitive(false);
+        mxBtnInsAttrs->set_sensitive(false);
+        mxBtnInsObjects->set_sensitive(false);
     }
     else
     {
-        mpBtnInsStrings->Enable();
-        mpBtnInsNumbers->Enable();
-        mpBtnInsDateTime->Enable();
-        mpBtnInsFormulas->Enable();
-        mpBtnInsNotes->Enable();
-        mpBtnInsAttrs->Enable();
+        mxBtnInsStrings->set_sensitive(true);
+        mxBtnInsNumbers->set_sensitive(true);
+        mxBtnInsDateTime->set_sensitive(true);
+        mxBtnInsFormulas->set_sensitive(true);
+        mxBtnInsNotes->set_sensitive(true);
+        mxBtnInsAttrs->set_sensitive(true);
 
         //  "Objects" is disabled for "Fill Tables"
         if ( bFillMode )
-            mpBtnInsObjects->Disable();
+            mxBtnInsObjects->set_sensitive(false);
         else
-            mpBtnInsObjects->Enable();
+            mxBtnInsObjects->set_sensitive(true);
     }
 }
 
@@ -209,39 +207,39 @@ void ScInsertContentsDlg::DisableChecks( bool bInsAllChecked )
 
 void ScInsertContentsDlg::TestModes()
 {
-    if ( bOtherDoc && mpBtnLink->IsChecked() )
+    if ( bOtherDoc && mxBtnLink->get_active() )
     {
-        mpBtnSkipEmptyCells->Disable();
-        mpBtnTranspose->Disable();
-        mpRbNoOp->Disable();
-        mpRbAdd->Disable();
-        mpRbSub->Disable();
-        mpRbMul->Disable();
-        mpRbDiv->Disable();
+        mxBtnSkipEmptyCells->set_sensitive(false);
+        mxBtnTranspose->set_sensitive(false);
+        mxRbNoOp->set_sensitive(false);
+        mxRbAdd->set_sensitive(false);
+        mxRbSub->set_sensitive(false);
+        mxRbMul->set_sensitive(false);
+        mxRbDiv->set_sensitive(false);
 
-        mpRbMoveNone->Disable();
-        mpRbMoveDown->Disable();
-        mpRbMoveRight->Disable();
+        mxRbMoveNone->set_sensitive(false);
+        mxRbMoveDown->set_sensitive(false);
+        mxRbMoveRight->set_sensitive(false);
 
-        mpBtnInsAll->Disable();
+        mxBtnInsAll->set_sensitive(false);
         DisableChecks(true);
     }
     else
     {
-        mpBtnSkipEmptyCells->Enable();
-        mpBtnTranspose->Enable(!bFillMode);
-        mpRbNoOp->Enable();
-        mpRbAdd->Enable();
-        mpRbSub->Enable();
-        mpRbMul->Enable();
-        mpRbDiv->Enable();
+        mxBtnSkipEmptyCells->set_sensitive(true);
+        mxBtnTranspose->set_sensitive(!bFillMode);
+        mxRbNoOp->set_sensitive(true);
+        mxRbAdd->set_sensitive(true);
+        mxRbSub->set_sensitive(true);
+        mxRbMul->set_sensitive(true);
+        mxRbDiv->set_sensitive(true);
 
-        mpRbMoveNone->Enable(!bFillMode && !bChangeTrack && !(bMoveDownDisabled && bMoveRightDisabled));
-        mpRbMoveDown->Enable(!bFillMode && !bChangeTrack && !bMoveDownDisabled);
-        mpRbMoveRight->Enable(!bFillMode && !bChangeTrack && !bMoveRightDisabled);
+        mxRbMoveNone->set_sensitive(!bFillMode && !bChangeTrack && !(bMoveDownDisabled && bMoveRightDisabled));
+        mxRbMoveDown->set_sensitive(!bFillMode && !bChangeTrack && !bMoveDownDisabled);
+        mxRbMoveRight->set_sensitive(!bFillMode && !bChangeTrack && !bMoveRightDisabled);
 
-        mpBtnInsAll->Enable();
-        DisableChecks( mpBtnInsAll->IsChecked() );
+        mxBtnInsAll->set_sensitive(true);
+        DisableChecks( mxBtnInsAll->get_active() );
     }
 }
 
@@ -252,7 +250,7 @@ void ScInsertContentsDlg::SetOtherDoc( bool bSet )
         bOtherDoc = bSet;
         TestModes();
         if ( bSet )
-            mpRbMoveNone->Check();
+            mxRbMoveNone->set_active(true);
     }
 }
 
@@ -263,7 +261,7 @@ void ScInsertContentsDlg::SetFillMode( bool bSet )
         bFillMode = bSet;
         TestModes();
         if ( bSet )
-            mpRbMoveNone->Check();
+            mxRbMoveNone->set_active(true);
     }
 }
 
@@ -274,7 +272,7 @@ void ScInsertContentsDlg::SetChangeTrack( bool bSet )
         bChangeTrack = bSet;
         TestModes();
         if ( bSet )
-            mpRbMoveNone->Check();
+            mxRbMoveNone->set_active(true);
     }
 }
 
@@ -287,111 +285,82 @@ void ScInsertContentsDlg::SetCellShiftDisabled( CellShiftDisabledFlags nDisable 
         bMoveDownDisabled = bDown;
         bMoveRightDisabled = bRight;
         TestModes();
-        if ( bMoveDownDisabled && mpRbMoveDown->IsChecked() )
-            mpRbMoveNone->Check();
-        if ( bMoveRightDisabled && mpRbMoveRight->IsChecked() )
-            mpRbMoveNone->Check();
+        if ( bMoveDownDisabled && mxRbMoveDown->get_active() )
+            mxRbMoveNone->set_active(true);
+        if ( bMoveRightDisabled && mxRbMoveRight->get_active() )
+            mxRbMoveNone->set_active(true);
     }
 }
 
-IMPL_LINK( ScInsertContentsDlg, ShortCutHdl, Button*, pBtn, void )
+IMPL_LINK(ScInsertContentsDlg, ShortCutHdl, weld::Button&, rBtn, void)
 {
-    if ( pBtn == mpBtnShortCutPasteValuesOnly )
+    if (&rBtn == mxBtnShortCutPasteValuesOnly.get())
     {
         bUsedShortCut = true;
         nShortCutInsContentsCmdBits = InsertDeleteFlags::STRING | InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME;
         bShortCutTranspose = false;
         nShortCutMoveMode = INS_NONE;
-        EndDialog(RET_OK);
+        m_xDialog->response(RET_OK);
     }
-    else if ( pBtn == mpBtnShortCutPasteValuesFormats )
+    else if (&rBtn == mxBtnShortCutPasteValuesFormats.get())
     {
         bUsedShortCut = true;
         nShortCutInsContentsCmdBits = InsertDeleteFlags::STRING | InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::ATTRIB;
         bShortCutTranspose = false;
         nShortCutMoveMode = INS_NONE;
-        EndDialog(RET_OK);
+        m_xDialog->response(RET_OK);
     }
-    else if ( pBtn == mpBtnShortCutPasteTranspose )
+    else if (&rBtn == mxBtnShortCutPasteTranspose.get())
     {
         bUsedShortCut = true;
         nShortCutInsContentsCmdBits = InsertDeleteFlags::ALL;
         bShortCutTranspose = true;
         nShortCutMoveMode = INS_NONE;
-        EndDialog(RET_OK);
+        m_xDialog->response(RET_OK);
     }
 }
 
-
-IMPL_LINK_NOARG(ScInsertContentsDlg, InsAllHdl, Button*, void)
+IMPL_LINK_NOARG(ScInsertContentsDlg, InsAllHdl, weld::ToggleButton&, void)
 {
-    DisableChecks( mpBtnInsAll->IsChecked() );
+    DisableChecks( mxBtnInsAll->get_active() );
 }
 
-IMPL_LINK_NOARG(ScInsertContentsDlg, LinkBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScInsertContentsDlg, LinkBtnHdl, weld::ToggleButton&, void)
 {
     TestModes();
 }
 
 ScInsertContentsDlg::~ScInsertContentsDlg()
 {
-    disposeOnce();
-}
-
-void ScInsertContentsDlg::dispose()
-{
     ScInsertContentsDlg::nPreviousChecks2 = InsertContentsFlags::NONE;
-    if(mpBtnSkipEmptyCells->IsChecked())
+    if(mxBtnSkipEmptyCells->get_active())
         ScInsertContentsDlg::nPreviousChecks2 |= InsertContentsFlags::NoEmpty;
-    if( mpBtnTranspose->IsChecked())
+    if( mxBtnTranspose->get_active())
         ScInsertContentsDlg::nPreviousChecks2 |= InsertContentsFlags::Trans;
-    if( mpBtnLink->IsChecked() )
+    if( mxBtnLink->get_active() )
         ScInsertContentsDlg::nPreviousChecks2 |= InsertContentsFlags::Link;
 
     if (!bFillMode)     // in FillMode, None is checked and all three options are disabled
     {
-        if ( mpRbMoveNone->IsChecked() )
+        if ( mxRbMoveNone->get_active() )
             ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;
-        else if ( mpRbMoveDown->IsChecked() )
+        else if ( mxRbMoveDown->get_active() )
             ScInsertContentsDlg::nPreviousMoveMode = INS_CELLSDOWN;
-        else if ( mpRbMoveRight->IsChecked() )
+        else if ( mxRbMoveRight->get_active() )
             ScInsertContentsDlg::nPreviousMoveMode = INS_CELLSRIGHT;
     }
-    mpBtnInsAll.clear();
-    mpBtnInsStrings.clear();
-    mpBtnInsNumbers.clear();
-    mpBtnInsDateTime.clear();
-    mpBtnInsFormulas.clear();
-    mpBtnInsNotes.clear();
-    mpBtnInsAttrs.clear();
-    mpBtnInsObjects.clear();
-    mpBtnSkipEmptyCells.clear();
-    mpBtnTranspose.clear();
-    mpBtnLink.clear();
-    mpRbNoOp.clear();
-    mpRbAdd.clear();
-    mpRbSub.clear();
-    mpRbMul.clear();
-    mpRbDiv.clear();
-    mpRbMoveNone.clear();
-    mpRbMoveDown.clear();
-    mpRbMoveRight.clear();
-    mpBtnShortCutPasteValuesOnly.clear();
-    mpBtnShortCutPasteValuesFormats.clear();
-    mpBtnShortCutPasteTranspose.clear();
-    ModalDialog::dispose();
 }
 
 ScPasteFunc  ScInsertContentsDlg::GetFormulaCmdBits() const
 {
     ScInsertContentsDlg::nPreviousFormulaChecks = ScPasteFunc::NONE;
-    if(mpRbAdd->IsChecked())
+    if(mxRbAdd->get_active())
         ScInsertContentsDlg::nPreviousFormulaChecks = ScPasteFunc::ADD;
-    else if(mpRbSub->IsChecked())
+    else if(mxRbSub->get_active())
         ScInsertContentsDlg::nPreviousFormulaChecks = ScPasteFunc::SUB;
-    else if(mpRbMul->IsChecked())
+    else if(mxRbMul->get_active())
         ScInsertContentsDlg::nPreviousFormulaChecks = ScPasteFunc::MUL;
-    else if(mpRbDiv->IsChecked())
+    else if(mxRbDiv->get_active())
         ScInsertContentsDlg::nPreviousFormulaChecks = ScPasteFunc::DIV;
     if (bUsedShortCut)
         return ScPasteFunc::NONE;
