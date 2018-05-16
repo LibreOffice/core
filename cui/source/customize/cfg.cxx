@@ -2821,29 +2821,19 @@ void ToolbarSaveInData::LoadToolbar(
     }
 }
 
-SvxNewToolbarDialog::SvxNewToolbarDialog(vcl::Window* pWindow, const OUString& rName)
-    : ModalDialog(pWindow, "NewToolbarDialog", "cui/ui/newtoolbardialog.ui")
+SvxNewToolbarDialog::SvxNewToolbarDialog(weld::Window* pWindow, const OUString& rName)
+    : GenericDialogController(pWindow, "cui/ui/newtoolbardialog.ui", "NewToolbarDialog")
+    , m_xEdtName(m_xBuilder->weld_entry("edit"))
+    , m_xBtnOK(m_xBuilder->weld_button("ok"))
+    , m_xSaveInListBox(m_xBuilder->weld_combo_box_text("savein"))
 {
-    get(m_pEdtName, "edit");
-    get(m_pBtnOK, "ok");
-    get(m_pSaveInListBox, "savein");
-    m_pEdtName->SetText( rName );
-    m_pEdtName->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
+    m_xEdtName->set_text(rName);
+    m_xEdtName->select_region(0, -1);
 }
 
 SvxNewToolbarDialog::~SvxNewToolbarDialog()
 {
-    disposeOnce();
 }
-
-void SvxNewToolbarDialog::dispose()
-{
-    m_pEdtName.clear();
-    m_pBtnOK.clear();
-    m_pSaveInListBox.clear();
-    ModalDialog::dispose();
-}
-
 
 /*******************************************************************************
 *

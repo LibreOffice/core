@@ -571,22 +571,20 @@ public:
     bool            Apply() override;
 };
 
-class SvxNewToolbarDialog : public ModalDialog
+class SvxNewToolbarDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<Edit>           m_pEdtName;
-    VclPtr<OKButton>       m_pBtnOK;
-
+    std::unique_ptr<weld::Entry> m_xEdtName;
+    std::unique_ptr<weld::Button> m_xBtnOK;
 public:
-    SvxNewToolbarDialog(vcl::Window* pWindow, const OUString& rName);
-    virtual ~SvxNewToolbarDialog() override;
-    virtual void dispose() override;
+    std::unique_ptr<weld::ComboBoxText> m_xSaveInListBox;
 
-    VclPtr<ListBox>        m_pSaveInListBox;
+    SvxNewToolbarDialog(weld::Window* pWindow, const OUString& rName);
+    virtual ~SvxNewToolbarDialog() override;
 
     OUString GetName()
     {
-        return m_pEdtName->GetText();
+        return m_xEdtName->get_text();
     }
 };
 
