@@ -316,27 +316,39 @@ static SwFieldPortion * lcl_NewMetaPortion(SwTextAttr & rHint, const bool bPrefi
  */
 SwExpandPortion * SwTextFormatter::TryNewNoLengthPortion(SwTextFormatInfo const & rInfo)
 {
-    if (m_pHints)
+    const TextFrameIndex nIdx(rInfo.GetIdx());
+
+    // sw_redlinehide: because there is a dummy character at the start of these
+    // hints, it's impossible to have ends of hints from different nodes at the
+    // same view position, so it's sufficient to check the hints of the current
+    // node.  However, m_nHintEndIndex exists for the whole text frame, so
+    // it's necessary to iterate all hints for that purpose...
+    SwTextNode const* pNode(nullptr);
+    sw::MergedAttrIterByEnd iter(*rInfo.GetTextFrame());
+    size_t i(0);
+    for (SwTextAttr const* pHint = iter.NextAttr(&pNode); pHint;
+         pHint = iter.NextAttr(&pNode))
     {
-        const sal_Int32 nIdx(rInfo.GetIdx());
-        while (m_nHintEndIndex < m_pHints->Count())
+        if (i++ < m_nHintEndIndex)
         {
-            SwTextAttr & rHint( *m_pHints->GetSortedByEnd(m_nHintEndIndex) );
-            sal_Int32 const nEnd( *rHint.GetAnyEnd() );
-            if (nEnd > nIdx)
+            continue; // skip ones that were handled earlier
+        }
+        SwTextAttr & rHint(const_cast<SwTextAttr&>(*pHint));
+        TextFrameIndex const nEnd(
+            rInfo.GetTextFrame()->MapModelToView(pNode, *rHint.GetAnyEnd()));
+        if (nEnd > nIdx)
+        {
+            break;
+        }
+        ++m_nHintEndIndex;
+        if (nEnd == nIdx)
+        {
+            if (RES_TXTATR_METAFIELD == rHint.Which())
             {
-                break;
-            }
-            ++m_nHintEndIndex;
-            if (nEnd == nIdx)
-            {
-                if (RES_TXTATR_METAFIELD == rHint.Which())
-                {
-                    SwFieldPortion *const pPortion(
-                            lcl_NewMetaPortion(rHint, false));
-                    pPortion->SetNoLength(); // no CH_TXTATR at hint end!
-                    return pPortion;
-                }
+                SwFieldPortion *const pPortion(
+                        lcl_NewMetaPortion(rHint, false));
+                pPortion->SetNoLength(); // no CH_TXTATR at hint end!
+                return pPortion;
             }
         }
     }
