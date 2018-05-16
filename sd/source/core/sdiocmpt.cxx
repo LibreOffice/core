@@ -93,18 +93,18 @@ void old_SdrDownCompat::CloseSubRecord()
 |*
 \************************************************************************/
 
-SdIOCompat::SdIOCompat(SvStream& rNewStream, StreamMode nNewMode, sal_uInt16 nVer)
-:   old_SdrDownCompat(rNewStream, nNewMode), nVersion(nVer)
+SdIOCompat::SdIOCompat(SvStream& rNewStream, StreamMode nNewMode, sal_uInt16 nVersion)
+:   old_SdrDownCompat(rNewStream, nNewMode)
 {
     if (nNewMode == StreamMode::WRITE)
     {
-        DBG_ASSERT(nVer != SDIOCOMPAT_VERSIONDONTKNOW,
+        DBG_ASSERT(nVersion != SDIOCOMPAT_VERSIONDONTKNOW,
                    "can't write unknown version");
         rNewStream.WriteUInt16( nVersion );
     }
     else if (nNewMode == StreamMode::READ)
     {
-        DBG_ASSERT(nVer == SDIOCOMPAT_VERSIONDONTKNOW,
+        DBG_ASSERT(nVersion == SDIOCOMPAT_VERSIONDONTKNOW,
                    "referring to the version while reading is silly!");
         rNewStream.ReadUInt16( nVersion );
     }

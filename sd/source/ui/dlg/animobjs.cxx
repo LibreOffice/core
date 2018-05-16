@@ -131,7 +131,6 @@ AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, 
     , m_nCurrentFrame(EMPTY_FRAMELIST)
     , bMovie(false)
     , bAllObjects(false)
-    , pBindings(pInBindings)
 {
     get(m_pBtnFirst, "first");
     get(m_pBtnReverse, "prev");
@@ -165,7 +164,7 @@ AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, 
     SdPage* pPage = pMyDoc->AllocSdPage(false);
     pMyDoc->InsertPage(pPage);
 
-    pControllerItem = new AnimationControllerItem( SID_ANIMATOR_STATE, this, pBindings );
+    pControllerItem = new AnimationControllerItem( SID_ANIMATOR_STATE, this, pInBindings );
 
     // as long as not in the resource
     m_pTimeField->SetFormat( TimeFieldFormat::F_SEC_CS );

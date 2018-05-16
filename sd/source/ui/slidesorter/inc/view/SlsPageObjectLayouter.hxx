@@ -122,7 +122,6 @@ private:
 
 private:
     VclPtr<sd::Window> mpWindow;
-    Size maPageObjectSize;
     ::tools::Rectangle maFocusIndicatorBoundingBox;
     ::tools::Rectangle maPageObjectBoundingBox;
     ::tools::Rectangle maPageNumberAreaBoundingBox;

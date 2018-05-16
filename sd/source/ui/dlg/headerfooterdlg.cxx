@@ -210,9 +210,9 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, vcl::Window* pPar
         aCtrlSiz = aSiz;
     }
 
-    mnNotesId = mpTabCtrl->GetPageId("notes");
+    sal_uInt16 nNotesId = mpTabCtrl->GetPageId("notes");
     mpNotesHandoutsTabPage = VclPtr<HeaderFooterTabPage>::Create( mpTabCtrl, pDoc, pNotes, true );
-    mpTabCtrl->SetTabPage( mnNotesId, mpNotesHandoutsTabPage );
+    mpTabCtrl->SetTabPage( nNotesId, mpNotesHandoutsTabPage );
 
     get(maPBApplyToAll, "apply_all" );
     get(maPBApply, "apply" );

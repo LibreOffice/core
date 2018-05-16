@@ -104,7 +104,6 @@ class ConfigurationAccess
         std::map < PPPOptimizerTokenEnum, OUString > maStrings;
 
         std::vector< OptimizerSettings > maSettings;
-        std::vector< OptimizerSettings > maInitialSettings;
 
         css::uno::Reference< css::uno::XComponentContext > mxContext;
 

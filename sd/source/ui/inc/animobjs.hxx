@@ -124,7 +124,6 @@ private:
     bool            bMovie;
     bool            bAllObjects;
 
-    SfxBindings*                pBindings;
     AnimationControllerItem*    pControllerItem;
 
     ScopeLock       maPlayLock;

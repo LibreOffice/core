@@ -29,8 +29,6 @@ class SfxItemSet;
 class SD_DLLPUBLIC SdInsertLayerDlg : public weld::GenericDialogController
 {
 private:
-    const SfxItemSet&   mrOutAttrs;
-
     std::unique_ptr<weld::Entry> m_xEdtName;
     std::unique_ptr<weld::Entry> m_xEdtTitle;
     std::unique_ptr<weld::TextView> m_xEdtDesc;
