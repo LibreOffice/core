@@ -20,8 +20,14 @@
 #ifndef INCLUDED_SC_INC_FORMULARESULT_HXX
 #define INCLUDED_SC_INC_FORMULARESULT_HXX
 
-#include "token.hxx"
 #include "scdllapi.h"
+#include "global.hxx"
+#include "calcmacros.hxx"
+#include <svl/sharedstring.hxx>
+#include <formula/token.hxx>
+#include <formula/types.hxx>
+
+class ScMatrixFormulaCellToken;
 
 namespace sc {
 
