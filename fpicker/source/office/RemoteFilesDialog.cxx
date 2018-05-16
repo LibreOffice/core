@@ -1087,17 +1087,17 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, NewFolderHdl, Button*, void )
 
     OUString aTitle;
     aContent.getTitle( aTitle );
-    ScopedVclPtrInstance< QueryFolderNameDialog > aDlg(this, aTitle, FpsResId(STR_SVT_NEW_FOLDER));
+    QueryFolderNameDialog aDlg(GetFrameWeld(), aTitle, FpsResId(STR_SVT_NEW_FOLDER));
     bool bHandled = false;
 
     while( !bHandled )
     {
-        if( aDlg->Execute() == RET_OK )
+        if (aDlg.run() == RET_OK)
         {
-            OUString aUrl = aContent.createFolder( aDlg->GetName() );
+            OUString aUrl = aContent.createFolder(aDlg.GetName());
             if( !aUrl.isEmpty() )
             {
-                m_pFileView->CreatedFolder( aUrl, aDlg->GetName() );
+                m_pFileView->CreatedFolder(aUrl, aDlg.GetName());
                 bHandled = true;
             }
         }

@@ -19,28 +19,22 @@
 #ifndef INCLUDED_FPICKER_SOURCE_OFFICE_QUERYFOLDERNAME_HXX
 #define INCLUDED_FPICKER_SOURCE_OFFICE_QUERYFOLDERNAME_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 
-class QueryFolderNameDialog : public ModalDialog
+class QueryFolderNameDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<Edit>     m_pNameEdit;
-    VclPtr<VclFrame> m_pNameLine;
-    VclPtr<OKButton> m_pOKBtn;
+    std::unique_ptr<weld::Entry> m_xNameEdit;
+    std::unique_ptr<weld::Button> m_xOKBtn;
 
-    DECL_LINK( OKHdl, Button*, void );
-    DECL_LINK( NameHdl, Edit&, void );
+    DECL_LINK( OKHdl, weld::Button&, void );
+    DECL_LINK( NameHdl, weld::Entry&, void );
 
 public:
-    QueryFolderNameDialog(vcl::Window* _pParent, const OUString& rTitle,
+    QueryFolderNameDialog(weld::Window* _pParent, const OUString& rTitle,
         const OUString& rDefaultText);
     virtual ~QueryFolderNameDialog() override;
-    virtual void dispose() override;
-    OUString GetName() const { return m_pNameEdit->GetText(); }
+    OUString GetName() const { return m_xNameEdit->get_text(); }
 };
 
 #endif // INCLUDED_FPICKER_SOURCE_OFFICE_QUERYFOLDERNAME_HXX
