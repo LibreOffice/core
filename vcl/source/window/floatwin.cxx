@@ -594,8 +594,11 @@ void FloatingWindow::LogicInvalidate(const tools::Rectangle* /*pRectangle*/)
 {
     if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
     {
+        std::vector<vcl::LOKPayloadItem> aPayload;
+        const tools::Rectangle aRect(Point(0,0), GetSizePixel());
+        aPayload.push_back(std::make_pair(OString("rectangle"), aRect.toString()));
         const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
-        pNotifier->notifyWindow(GetLOKWindowId(), "invalidate");
+        pNotifier->notifyWindow(GetLOKWindowId(), "invalidate", aPayload);
     }
 }
 
