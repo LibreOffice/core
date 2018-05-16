@@ -67,6 +67,7 @@ bool operator < (const MyFieldInfo &lhs, const MyFieldInfo &rhs)
 // try to limit the voluminous output a little
 static std::set<MyFieldInfo> touchedFromInsideSet;
 static std::set<MyFieldInfo> touchedFromOutsideSet;
+static std::set<MyFieldInfo> touchedFromOutsideConstructorSet;
 static std::set<MyFieldInfo> readFromSet;
 static std::set<MyFieldInfo> writeToSet;
 static std::set<MyFieldInfo> definitionSet;
@@ -186,6 +187,8 @@ void UnusedFields::run()
             output += "inside:\t" + s.parentClass + "\t" + s.fieldName + "\n";
         for (const MyFieldInfo & s : touchedFromOutsideSet)
             output += "outside:\t" + s.parentClass + "\t" + s.fieldName + "\n";
+        for (const MyFieldInfo & s : touchedFromOutsideConstructorSet)
+            output += "outside-constructor:\t" + s.parentClass + "\t" + s.fieldName + "\n";
         for (const MyFieldInfo & s : readFromSet)
             output += "read:\t" + s.parentClass + "\t" + s.fieldName + "\n";
         for (const MyFieldInfo & s : writeToSet)
@@ -989,6 +992,8 @@ void UnusedFields::checkTouchedFromOutside(const FieldDecl* fieldDecl, const Exp
     } else {
         if (memberExprParentFunction->getParent() == fieldDecl->getParent()) {
             touchedFromInsideSet.insert(fieldInfo);
+            if (!constructorDecl)
+                touchedFromOutsideConstructorSet.insert(fieldInfo);
         } else {
             touchedFromOutsideSet.insert(fieldInfo);
         }
