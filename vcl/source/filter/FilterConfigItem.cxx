@@ -68,7 +68,8 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory > const & rXCfgP
         }
         if ( xReadAccess.is() )
         {
-            while (bAvailable && nIdx>=0 )
+            const sal_Int32 nEnd {rTree.getLength()};
+            while (bAvailable && nIdx>=0 && nIdx<nEnd)
             {
                 Reference< XHierarchicalNameAccess > xHierarchicalNameAccess
                     ( xReadAccess, UNO_QUERY );
