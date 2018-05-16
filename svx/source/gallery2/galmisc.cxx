@@ -330,8 +330,7 @@ bool KillFile( const INetURLObject& rURL )
 }
 
 
-GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
-    mpFilter( pFilter )
+GalleryProgress::GalleryProgress( GraphicFilter* pFilter )
 {
 
     uno::Reference< lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
@@ -347,10 +346,10 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
         {
             OUString aProgressText;
 
-            if( mpFilter )
+            if( pFilter )
             {
                 aProgressText = SvxResId(RID_SVXSTR_GALLERY_FILTER);
-//              mpFilter->SetUpdatePercentHdl( LINK( this, GalleryProgress, Update ) );     // sj: progress wasn't working up from SO7 at all
+//              pFilter->SetUpdatePercentHdl( LINK( this, GalleryProgress, Update ) );     // sj: progress wasn't working up from SO7 at all
 //                                                                                          // so I am removing this. The gallery progress should
 //                                                                                          // be changed to use the XStatusIndicator instead of XProgressMonitor
             }

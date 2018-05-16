@@ -187,7 +187,7 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, vcl::Window
     m_pTbxIMapDlg1->CheckItem( mnSelectId );
     TbxClickHdl( m_pTbxIMapDlg1 );
 
-    SetMinOutputSizePixel( aLastSize = GetOutputSizePixel() );
+    SetMinOutputSizePixel( GetOutputSizePixel() );
 
     m_pStbStatus->InsertItem( 1, 130, StatusBarItemBits::Left | StatusBarItemBits::In | StatusBarItemBits::AutoSize );
     m_pStbStatus->InsertItem( 2, 10 + GetTextWidth( " 9999,99 cm / 9999,99 cm " ) );

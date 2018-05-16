@@ -31,16 +31,15 @@
 namespace svx
 {
     ToolboxButtonColorUpdater::ToolboxButtonColorUpdater(
-        sal_uInt16 nId, sal_uInt16 nTbxBtnId, ToolBox* pToolBox, bool bWideButton)
+        sal_uInt16 nSlotId, sal_uInt16 nTbxBtnId, ToolBox* pToolBox, bool bWideButton)
         : mbWideButton(bWideButton)
         , mnBtnId(nTbxBtnId)
-        , mnSlotId(nId)
         , mpTbx(pToolBox)
         , maCurColor(COL_TRANSPARENT)
     {
         DBG_ASSERT(pToolBox, "ToolBox not found :-(");
         mbWasHiContrastMode = pToolBox && pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode();
-        switch (mnSlotId)
+        switch (nSlotId)
         {
             case SID_ATTR_CHAR_COLOR:
             case SID_ATTR_CHAR_COLOR2:

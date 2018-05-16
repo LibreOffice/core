@@ -51,7 +51,6 @@ class SvxSuperContourDlg : public SvxContourDlg
     tools::PolyPolygon         aUpdatePolyPoly;
     Idle                aUpdateIdle;
     Idle                aCreateIdle;
-    Size                aLastSize;
     void*               pUpdateEditingObject;
     void*               pCheckObj;
     SvxContourDlgItem   aContourItem;
