@@ -48,7 +48,6 @@ private:
     VclPtr<HeaderFooterTabPage>    mpNotesHandoutsTabPage;
 
     sal_uInt16 mnSlidesId;
-    sal_uInt16 mnNotesId;
 
     VclPtr<PushButton>      maPBApplyToAll;
     VclPtr<PushButton>      maPBApply;

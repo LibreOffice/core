@@ -211,7 +211,6 @@ private:
     OUString        msDescription;
     OUString        msEffectName;
     CustomAnimationEffectPtr mpEffect;
-    const CustomAnimationPresets* mpCustomAnimationPresets;
     static const long nIconWidth = 19;
     static const long nItemMinHeight = 38;
 };
@@ -222,7 +221,6 @@ CustomAnimationListEntryItem::CustomAnimationListEntryItem( const OUString& aDes
 , msDescription( aDescription )
 , msEffectName( OUString() )
 , mpEffect(pEffect)
-, mpCustomAnimationPresets(&CustomAnimationPresets::getCustomAnimationPresets())
 {
     switch(mpEffect->getPresetClass())
     {
@@ -235,7 +233,7 @@ CustomAnimationListEntryItem::CustomAnimationListEntryItem( const OUString& aDes
     case EffectPresetClass::MOTIONPATH:
         msEffectName = SdResId(STR_CUSTOMANIMATION_MOTION_PATHS); break;
     }
-    msEffectName = msEffectName.replaceFirst( "%1" , mpCustomAnimationPresets->getUINameForPresetId(mpEffect->getPresetId()));
+    msEffectName = msEffectName.replaceFirst( "%1" , CustomAnimationPresets::getCustomAnimationPresets().getUINameForPresetId(mpEffect->getPresetId()));
 }
 
 void CustomAnimationListEntryItem::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData )

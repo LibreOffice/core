@@ -141,7 +141,6 @@ private:
     SfxBindings* mpBindings;
 
     MapUnit meUnit;
-    Size m_aPageSize;
 
     DECL_LINK(FillBackgroundHdl, ListBox&, void);
     DECL_LINK(FillStyleModifyHdl, ListBox&, void);

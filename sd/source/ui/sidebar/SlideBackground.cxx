@@ -152,17 +152,6 @@ SlideBackground::SlideBackground(
 
     maCustomEntry = get<FixedText>("customlabel")->GetText();
 
-    SfxViewFrame* pCurrent = SfxViewFrame::Current();
-    if (pCurrent)
-    {
-        const SfxPoolItem* pItem = nullptr;
-        pCurrent->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_SIZE, pItem );
-        if (pItem)
-        {
-            const SvxSizeItem* pSize = static_cast<const SvxSizeItem*>( pItem );
-            m_aPageSize = pSize->GetSize();
-        }
-    }
     addListener();
     Initialize();
 }
