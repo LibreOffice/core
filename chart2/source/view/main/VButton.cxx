@@ -109,6 +109,8 @@ void VButton::createShapes(const uno::Reference<beans::XPropertySet>& xTextProp)
 
     tPropertyNameValueMap aTextValueMap;
     aTextValueMap["CharHeight"] <<= 10.0f;
+    aTextValueMap["CharHeightAsian"] <<= 10.0f;
+    aTextValueMap["CharHeightComplex"] <<= 10.0f;
     aTextValueMap["FillColor"] <<= m_nBGColor;
     aTextValueMap["FillStyle"] <<= drawing::FillStyle_SOLID;
     aTextValueMap["LineColor"] <<= sal_Int32(0xcccccc);
