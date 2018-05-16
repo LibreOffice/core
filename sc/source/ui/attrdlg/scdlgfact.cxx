@@ -111,7 +111,11 @@ short AbstractScInsertCellDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractScInsertContentsDlg_Impl);
+short AbstractScInsertContentsDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractScInsertTableDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScSelEntryDlg_Impl);
 
@@ -342,52 +346,52 @@ InsCellCmd  AbstractScInsertCellDlg_Impl::GetInsCellCmd() const
 
 InsertDeleteFlags AbstractScInsertContentsDlg_Impl::GetInsContentsCmdBits() const
 {
-    return pDlg->GetInsContentsCmdBits();
+    return m_xDlg->GetInsContentsCmdBits();
 }
 
 ScPasteFunc  AbstractScInsertContentsDlg_Impl::GetFormulaCmdBits() const
 {
-    return pDlg->GetFormulaCmdBits();
+    return m_xDlg->GetFormulaCmdBits();
 }
 
 bool    AbstractScInsertContentsDlg_Impl::IsSkipEmptyCells() const
 {
-    return pDlg->IsSkipEmptyCells();
+    return m_xDlg->IsSkipEmptyCells();
 }
 
 bool    AbstractScInsertContentsDlg_Impl::IsLink() const
 {
-    return pDlg->IsLink();
+    return m_xDlg->IsLink();
 }
 
 void    AbstractScInsertContentsDlg_Impl::SetFillMode( bool bSet )
 {
-    pDlg->SetFillMode( bSet );
+    m_xDlg->SetFillMode( bSet );
 }
 
 void    AbstractScInsertContentsDlg_Impl::SetOtherDoc( bool bSet )
 {
-    pDlg->SetOtherDoc( bSet );
+    m_xDlg->SetOtherDoc( bSet );
 }
 
 bool    AbstractScInsertContentsDlg_Impl::IsTranspose() const
 {
-    return pDlg->IsTranspose();
+    return m_xDlg->IsTranspose();
 }
 
 void    AbstractScInsertContentsDlg_Impl::SetChangeTrack( bool bSet )
 {
-    pDlg->SetChangeTrack( bSet );
+    m_xDlg->SetChangeTrack( bSet );
 }
 
 void    AbstractScInsertContentsDlg_Impl::SetCellShiftDisabled( CellShiftDisabledFlags nDisable )
 {
-    pDlg->SetCellShiftDisabled( nDisable );
+    m_xDlg->SetCellShiftDisabled( nDisable );
 }
 
 InsCellCmd  AbstractScInsertContentsDlg_Impl::GetMoveMode()
 {
-    return pDlg->GetMoveMode();
+    return m_xDlg->GetMoveMode();
 }
 
 bool AbstractScInsertTableDlg_Impl::GetTablesFromFile()
@@ -751,11 +755,10 @@ VclPtr<AbstractScInsertCellDlg> ScAbstractDialogFactory_Impl::CreateScInsertCell
     return VclPtr<AbstractScInsertCellDlg_Impl>::Create(new ScInsertCellDlg(pParent, bDisallowCellMove));
 }
 
-VclPtr<AbstractScInsertContentsDlg> ScAbstractDialogFactory_Impl::CreateScInsertContentsDlg( vcl::Window*      pParent,
-                                                                                    const OUString* pStrTitle )
+VclPtr<AbstractScInsertContentsDlg> ScAbstractDialogFactory_Impl::CreateScInsertContentsDlg(weld::Window* pParent,
+                                                                                            const OUString* pStrTitle)
 {
-    VclPtr<ScInsertContentsDlg> pDlg = VclPtr<ScInsertContentsDlg>::Create(pParent, InsertDeleteFlags::NONE, pStrTitle);
-    return VclPtr<AbstractScInsertContentsDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScInsertContentsDlg_Impl>::Create(new ScInsertContentsDlg(pParent, InsertDeleteFlags::NONE, pStrTitle));
 }
 
 VclPtr<AbstractScInsertTableDlg> ScAbstractDialogFactory_Impl::CreateScInsertTableDlg(vcl::Window* pParent, ScViewData& rViewData,
