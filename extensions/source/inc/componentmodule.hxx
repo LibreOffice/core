@@ -20,7 +20,7 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_INC_COMPONENTMODULE_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_INC_COMPONENTMODULE_HXX
 
-/** you may find this file helpful if you implement a component (in it's own library) which can't use
+/** you may find this file helpful if you implement a component (in its own library) which can't use
     the usual infrastructure.<br/>
     More precise, you find helper classes to ease the use of resources and the registration of services.
 */

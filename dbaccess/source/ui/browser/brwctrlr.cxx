@@ -1215,7 +1215,7 @@ void SbaXDataBrowserController::disposing()
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     m_xParser.clear();
-        // don't dispose, just reset - it's owned by the RowSet
+        // don't dispose, just reset - its owned by the RowSet
 }
 
 void SbaXDataBrowserController::frameAction(const css::frame::FrameActionEvent& aEvent)
