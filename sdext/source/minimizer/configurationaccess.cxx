@@ -150,7 +150,6 @@ ConfigurationAccess::ConfigurationAccess( const Reference< uno::XComponentContex
     maSettings.emplace_back( );
     maSettings.back().maName = "LastUsedSettings";
     LoadConfiguration();
-    maInitialSettings = maSettings;
 };
 
 ConfigurationAccess::~ConfigurationAccess()

@@ -42,7 +42,6 @@ PageObjectLayouter::PageObjectLayouter (
     sd::Window *pWindow,
     const sal_Int32 nPageCount)
     : mpWindow(pWindow),
-      maPageObjectSize(rPageObjectWindowSize.Width(), rPageObjectWindowSize.Height()),
       maPageObjectBoundingBox(),
       maPageNumberAreaBoundingBox(),
       maPreviewBoundingBox(),
@@ -56,19 +55,20 @@ PageObjectLayouter::PageObjectLayouter (
     const int nMaximumBorderWidth (gnOuterBorderWidth);
     const int nFocusIndicatorWidth (Theme_FocusIndicatorWidth);
 
+    Size aPageObjectSize(rPageObjectWindowSize.Width(), rPageObjectWindowSize.Height());
     maPreviewBoundingBox = CalculatePreviewBoundingBox(
-        maPageObjectSize,
+        aPageObjectSize,
         Size(rPageSize.Width(), rPageSize.Height()),
         aPageNumberAreaSize.Width(),
         nFocusIndicatorWidth);
-    maFocusIndicatorBoundingBox = ::tools::Rectangle(Point(0,0), maPageObjectSize);
+    maFocusIndicatorBoundingBox = ::tools::Rectangle(Point(0,0), rPageObjectWindowSize);
     maPageObjectBoundingBox = ::tools::Rectangle(
         Point(
             nFocusIndicatorWidth,
             nFocusIndicatorWidth),
         Size(
-            maPageObjectSize.Width()-2*nFocusIndicatorWidth,
-            maPageObjectSize.Height()-2*nFocusIndicatorWidth));
+            aPageObjectSize.Width()-2*nFocusIndicatorWidth,
+            aPageObjectSize.Height()-2*nFocusIndicatorWidth));
 
     maPageNumberAreaBoundingBox = ::tools::Rectangle(
         Point(

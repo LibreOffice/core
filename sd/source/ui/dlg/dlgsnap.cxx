@@ -32,7 +32,6 @@
  */
 SdSnapLineDlg::SdSnapLineDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View const * pView)
     : GenericDialogController(pWindow, "modules/sdraw/ui/dlgsnap.ui", "SnapObjectDialog")
-    , eUIUnit(pView->GetDoc().GetUIUnit())
     , aUIScale(pView->GetDoc().GetUIScale())
     , m_xFtX(m_xBuilder->weld_label("xlabel"))
     , m_xMtrFldX(m_xBuilder->weld_metric_spin_button("x", FUNIT_CM))
@@ -50,6 +49,7 @@ SdSnapLineDlg::SdSnapLineDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, 
 
     m_xBtnDelete->connect_clicked(LINK(this, SdSnapLineDlg, ClickHdl));
 
+    FieldUnit eUIUnit = pView->GetDoc().GetUIUnit();
     SetFieldUnit(*m_xMtrFldX, eUIUnit, true);
     SetFieldUnit(*m_xMtrFldY, eUIUnit, true);
 

@@ -121,21 +121,6 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,OutlineView,EventMultiplexerListener) );
     mrOutlineViewShell.GetViewShellBase().GetEventMultiplexer()->AddEventListener(aLink);
 
-    LanguageType eLang = mrOutliner.GetDefaultLanguage();
-    maPageNumberFont = OutputDevice::GetDefaultFont( DefaultFontType::SANS_UNICODE, eLang, GetDefaultFontFlags::NONE );
-    maPageNumberFont.SetFontHeight( 500 );
-
-    maBulletFont.SetColor( COL_AUTO );
-    maBulletFont.SetFontHeight( 1000 );
-    maBulletFont.SetCharSet(RTL_TEXTENCODING_MS_1252);   // and replacing other values by standard
-    maBulletFont.SetFamilyName( "StarSymbol" );
-    maBulletFont.SetWeight(WEIGHT_NORMAL);
-    maBulletFont.SetUnderline(LINESTYLE_NONE);
-    maBulletFont.SetStrikeout(STRIKEOUT_NONE);
-    maBulletFont.SetItalic(ITALIC_NONE);
-    maBulletFont.SetOutline(false);
-    maBulletFont.SetShadow(false);
-
     Reference<XFrame> xFrame (mrOutlineViewShell.GetViewShellBase().GetFrame()->GetFrame().GetFrameInterface(), UNO_QUERY);
     maSlideImage = vcl::CommandInfoProvider::GetImageForCommand(".uno:ShowSlide", xFrame, vcl::ImageType::Size26);
 
