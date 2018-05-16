@@ -1632,8 +1632,8 @@ void ScTiledRenderingTest::testFilterDlg()
     CPPUNIT_ASSERT_EQUAL(false, pView1->GetViewFrame()->GetDispatcher()->IsLocked());
 
     KeyEvent aEvent(27, KEY_ESCAPE, 0);
-    Application::PostKeyEvent(VclEventId::WindowKeyInput, pRefWindow->GetWindow(), &aEvent);
-    Application::PostKeyEvent(VclEventId::WindowKeyUp, pRefWindow->GetWindow(), &aEvent);
+    Application::PostKeyEvent(VCLEVENT_WINDOW_KEYINPUT, pRefWindow->GetWindow(), &aEvent);
+    Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, pRefWindow->GetWindow(), &aEvent);
 
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(false, pView2->GetViewFrame()->GetDispatcher()->IsLocked());
