@@ -27,11 +27,10 @@
 
 SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
     : mbUseExtension(true)
-    , mnDefaultGroup(0)
     , mnEventBase(0)
     , mnErrorBase(0)
-    , mpDisplay(pDisplay)
 {
+    sal_uInt32 nDefaultGroup = 0;
 
     // allow user to set the default keyboard group idx or to disable the usage
     // of x keyboard extension at all:
@@ -43,9 +42,9 @@ SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
     {
         mbUseExtension = pUseKeyboardExtension[0] != '\0' ;
         if ( mbUseExtension )
-            mnDefaultGroup = strtol( pUseKeyboardExtension, nullptr, 0 );
-        if ( mnDefaultGroup > XkbMaxKbdGroup )
-            mnDefaultGroup = 0;
+            nDefaultGroup = strtol( pUseKeyboardExtension, nullptr, 0 );
+        if ( nDefaultGroup > XkbMaxKbdGroup )
+            nDefaultGroup = 0;
     }
 
     // query XServer support for XKB Extension,
@@ -57,7 +56,7 @@ SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
         int nExtMajorVersion = XkbMajorVersion;
         int nExtMinorVersion = XkbMinorVersion;
 
-        mbUseExtension = XkbQueryExtension( mpDisplay,
+        mbUseExtension = XkbQueryExtension( pDisplay,
             &nMajorExtOpcode, &mnEventBase, &mnErrorBase,
             &nExtMajorVersion, &nExtMinorVersion ) != 0;
     }
@@ -68,7 +67,7 @@ SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
         #define XkbGroupMask (  XkbGroupStateMask | XkbGroupBaseMask \
                                 | XkbGroupLatchMask | XkbGroupLockMask )
 
-        mbUseExtension = XkbSelectEventDetails( mpDisplay,
+        mbUseExtension = XkbSelectEventDetails( pDisplay,
             XkbUseCoreKbd, XkbStateNotify, XkbGroupMask, XkbGroupMask );
     }
 
@@ -76,7 +75,7 @@ SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
     if ( mbUseExtension )
     {
         XkbStateRec aStateRecord;
-        XkbGetState( mpDisplay, XkbUseCoreKbd, &aStateRecord );
+        XkbGetState( pDisplay, XkbUseCoreKbd, &aStateRecord );
     }
 }
 

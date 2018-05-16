@@ -2010,8 +2010,6 @@ class OpenGLTests
 {
     VclPtr<WorkWindow> mxWinA;
     VclPtr<WorkWindow> mxWinB;
-    OpenGLSalGraphicsImpl *mpImplA;
-    OpenGLSalGraphicsImpl *mpImplB;
     rtl::Reference<OpenGLContext> mpA;
     rtl::Reference<OpenGLContext> mpB;
 
@@ -2025,18 +2023,20 @@ public:
         mxWinA(VclPtr<WorkWindow>::Create(nullptr, WB_APP | WB_STDWORK)),
         mxWinB(VclPtr<WorkWindow>::Create(nullptr, WB_APP | WB_STDWORK))
     {
+        OpenGLSalGraphicsImpl *pImplA;
+        OpenGLSalGraphicsImpl *pImplB;
         if (!OpenGLHelper::isVCLOpenGLEnabled())
         {
-            mpImplA = mpImplB = nullptr;
+            pImplA = pImplB = nullptr;
             fprintf (stderr, "OpenGL is not enabled: try SAL_FORCEGL=1\n");
             return;
         }
 
-        mpImplA = getImpl(mxWinA);
-        mpImplB = getImpl(mxWinB);
-        assert (mpImplA && mpImplB);
-        mpA = mpImplA->GetOpenGLContext();
-        mpB = mpImplB->GetOpenGLContext();
+        pImplA = getImpl(mxWinA);
+        pImplB = getImpl(mxWinB);
+        assert (pImplA && pImplB);
+        mpA = pImplA->GetOpenGLContext();
+        mpB = pImplB->GetOpenGLContext();
 
         assert (mpA.is() && mpB.is());
         assert (mpA != mpB);

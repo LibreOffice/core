@@ -58,7 +58,6 @@ class FilterConfigCache
 
     std::vector< FilterConfigCacheEntry >         aImport;
     std::vector< FilterConfigCacheEntry >         aExport;
-    bool            bUseConfig;
 
     static bool   bInitialized;
     static sal_Int32  nIndType;

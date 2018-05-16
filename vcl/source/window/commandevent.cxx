@@ -55,11 +55,6 @@ CommandExtTextInputData::~CommandExtTextInputData()
 {
 }
 
-CommandInputContextData::CommandInputContextData( LanguageType eLang )
-{
-    meLanguage = eLang;
-}
-
 CommandWheelData::CommandWheelData()
 {
     mnDelta         = 0;

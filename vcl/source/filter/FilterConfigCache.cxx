@@ -293,12 +293,11 @@ void FilterConfigCache::ImplInitSmart()
     }
 }
 
-FilterConfigCache::FilterConfigCache( bool bConfig ) :
-    bUseConfig ( bConfig )
+FilterConfigCache::FilterConfigCache( bool bConfig )
 {
-    if (bUseConfig)
-        bUseConfig = !utl::ConfigManager::IsFuzzing();
-    if (bUseConfig)
+    if (bConfig)
+        bConfig = !utl::ConfigManager::IsFuzzing();
+    if (bConfig)
         ImplInit();
     else
         ImplInitSmart();

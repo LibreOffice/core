@@ -55,14 +55,6 @@ struct CPDPrinter
     GDBusProxy* backend;
 };
 
-struct CPDPrinterOption
-{
-    OUString name;
-    OUString default_value;
-    int num_supported_values;
-    std::vector<OUString> supported_values;
-};
-
 class CPDManager : public PrinterInfoManager
 {
 #if ENABLE_DBUS && ENABLE_GIO
