@@ -1537,7 +1537,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
     aComboButton.SetOutputDevice( pContentDev );
 
     ScDocument* pDoc = pViewData->GetDocument();
-    ScDPFieldButton aCellBtn(pContentDev, &GetSettings().GetStyleSettings(), &pViewData->GetZoomX(), &pViewData->GetZoomY(), pDoc);
+    ScDPFieldButton aCellBtn(pContentDev, &GetSettings().GetStyleSettings(), &pViewData->GetZoomY(), pDoc);
 
     SCCOL nCol;
     SCROW nRow;

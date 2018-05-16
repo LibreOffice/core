@@ -225,12 +225,11 @@ ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, c
         return ERRCODE_NONE;
 }
 
-DifParser::DifParser( SvStream& rNewIn, const ScDocument& rDoc, rtl_TextEncoding e )
+DifParser::DifParser( SvStream& rNewIn, const ScDocument& rDoc, rtl_TextEncoding eCharSet )
     : fVal(0.0)
     , nVector(0)
     , nVal(0)
     , nNumFormat(0)
-    , eCharSet(e)
     , pNumFormatter(rDoc.GetFormatTable())
     , rIn(rNewIn)
 {

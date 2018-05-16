@@ -125,8 +125,6 @@ private:
     VclPtr<PushButton>          m_pBtnKeepAllOthers;
 
     OUString            maStrTitleConflict;
-    OUString            maStrTitleAuthor;
-    OUString            maStrTitleDate;
     OUString            maStrUnknownUser;
 
     ScViewData*         mpViewData;
@@ -135,7 +133,6 @@ private:
     ScDocument*         mpSharedDoc;
     ScChangeTrack*      mpSharedTrack;
     ScConflictsList&    mrConflictsList;
-    Size                maDialogSize;
 
     Idle                maSelectionIdle;
     bool                mbInSelectHdl;

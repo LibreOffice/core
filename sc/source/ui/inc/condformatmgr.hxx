@@ -65,8 +65,6 @@ private:
     ScConditionalFormatList* mpFormatList;
     VclPtr<ScCondFormatManagerWindow> m_pCtrlManager;
 
-    ScDocument* mpDoc;
-
     DECL_LINK(RemoveBtnHdl, Button*, void);
     DECL_LINK(EditBtnClickHdl, Button*, void);
     DECL_LINK(AddBtnHdl, Button*, void);

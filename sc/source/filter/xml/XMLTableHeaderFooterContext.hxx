@@ -36,13 +36,8 @@ class XMLTableHeaderFooterContext: public SvXMLImportContext
     css::uno::Reference< css::sheet::XHeaderFooterContent > xHeaderFooterContent;
 
     const OUString   sOn;
-    const OUString   sShareContent;
-    const OUString   sContent;
-    const OUString   sContentLeft;
     OUString         sCont;
 
-    bool    bDisplay;
-    bool    bLeft;
     bool    bContainsLeft;
     bool    bContainsRight;
     bool    bContainsCenter;

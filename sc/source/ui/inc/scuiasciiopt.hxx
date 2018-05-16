@@ -81,7 +81,6 @@ class ScImportAsciiDlg : public ModalDialog
 
     VclPtr<ScCsvTableBox>              mpTableBox;
 
-    OUString                    aCharSetUser;
     OUString                    aColumnUser;
     OUString                    aTextSepList;
     OUString                    maFieldSeparators;  // selected field separators

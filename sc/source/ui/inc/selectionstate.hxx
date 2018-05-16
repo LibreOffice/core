@@ -50,7 +50,6 @@ public:
 private:
     ScSelectionType     meType;             /// Type of the selection.
     ScAddress           maCursor;           /// Cell cursor position.
-    ScRangeList         maSheetSel;         /// Sheet selection.
     ESelection          maEditSel;          /// Selection in edit mode.
 };
 

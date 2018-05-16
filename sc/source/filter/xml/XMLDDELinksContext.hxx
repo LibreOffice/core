@@ -109,8 +109,6 @@ public:
 
 class ScXMLDDEColumnContext : public ScXMLImportContext
 {
-    ScXMLDDELinkContext* pDDELink;
-
 public:
     ScXMLDDEColumnContext( ScXMLImport& rImport,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,

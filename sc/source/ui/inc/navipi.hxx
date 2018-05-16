@@ -187,7 +187,6 @@ private:
     Size            aExpandedSize;
     Idle            aContentIdle;
 
-    OUString        aTitleBase;
     OUString        aStrDragMode;
     OUString        aStrDisplay;
     OUString        aStrActive;

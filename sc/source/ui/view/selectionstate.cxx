@@ -46,7 +46,6 @@ ScSelectionState::ScSelectionState( ScViewData& rViewData ) :
         if( rMarkData.IsMultiMarked() )
         {
             meType = SC_SELECTTYPE_SHEET;
-            rMarkData.FillRangeListWithMarks( &maSheetSel, false );
         }
         // else type is SC_SELECTTYPE_NONE - already initialized
     }
