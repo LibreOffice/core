@@ -181,13 +181,15 @@ namespace vcl
         VclPtr<FixedText>                       mpNumPagesText;
         VclPtr<PushButton>                      mpBackwardBtn;
         VclPtr<PushButton>                      mpForwardBtn;
+        VclPtr<CheckBox>                        mpPreviewBox;
 
         VclPtr<OKButton>                        mpOKButton;
         VclPtr<CancelButton>                    mpCancelButton;
         VclPtr<HelpButton>                      mpHelpButton;
 
         OUString                                maPageStr;
-        OUString const                          maNoPageStr;
+        OUString                                maNoPageStr;
+        OUString                                maNoPreviewStr;
         sal_Int32                               mnCurPage;
         sal_Int32                               mnCachedPages;
 
@@ -247,6 +249,7 @@ namespace vcl
         bool isPrintToFile();
         bool isCollate();
         bool isSingleJobs();
+        bool hasPreview();
 
         void previewForward();
         void previewBackward();
