@@ -113,6 +113,7 @@
 #define SV_ACCESSERROR_NO_FONTS                      NC_("SV_ACCESSERROR_NO_FONTS", "No fonts could be found on the system.")
 
 #define SV_PRINT_NOPAGES                             NC_("SV_PRINT_NOPAGES", "No pages")
+#define SV_PRINT_NOPREVIEW                           NC_("SV_PRINT_NOPREVIEW", "Preview is disabled")
 #define SV_PRINT_TOFILE_TXT                          NC_("SV_PRINT_TOFILE_TXT", "Print to File...")
 #define SV_PRINT_DEFPRT_TXT                          NC_("SV_PRINT_DEFPRT_TXT", "Default printer")
 #define SV_PRINT_PRINTPREVIEW_TXT                    NC_("SV_PRINT_PRINTPREVIEW_TXT", "Print preview")
