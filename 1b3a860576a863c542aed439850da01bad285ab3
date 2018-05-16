@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_1f6f1793",
+        "filename": "vcl/uiconfig/ui/printdialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-05-16T11:17:01Z",
+      "side": 1,
+      "message": "Please label this checkbox just “Preview”, and make it so that when it’s checked, the preview is enabled. It’s confusing for users to have a checkbox enabled to *disable* something, you know what I mean? It’s paradoxical.",
+      "range": {
+        "startLine": 276,
+        "startChar": 96,
+        "endLine": 276,
+        "endChar": 111
+      },
+      "revId": "1b3a860576a863c542aed439850da01bad285ab3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
