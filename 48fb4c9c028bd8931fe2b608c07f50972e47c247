@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_bfde0b3d",
+        "filename": "sw/source/core/doc/DocumentFieldsManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-05-16T13:03:31Z",
+      "side": 1,
+      "message": "this will return all sections, including the \"hidden\" ones?",
+      "revId": "48fb4c9c028bd8931fe2b608c07f50972e47c247",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_dfe1ffff",
+        "filename": "sw/source/core/doc/DocumentFieldsManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-05-16T13:03:31Z",
+      "side": 1,
+      "message": "here sections that were hidden already before, are excluded, so nShownSections still counts them, which looks counter-intuitive",
+      "revId": "48fb4c9c028bd8931fe2b608c07f50972e47c247",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_ffe883e4",
+        "filename": "sw/source/core/doc/DocumentFieldsManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-05-16T13:03:31Z",
+      "side": 1,
+      "message": "so is this hack here to ensure there\u0027s at least 1 non-hidden section in the document? .... yes that\u0027s what the comment above says.\n\nso if we count already-hidden sections as \"shown\", then this hack will apply in cases when it is not necessary.",
+      "revId": "48fb4c9c028bd8931fe2b608c07f50972e47c247",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
