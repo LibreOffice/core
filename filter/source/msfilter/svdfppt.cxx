@@ -3236,8 +3236,7 @@ bool PPTExtParaProv::GetGraphic( sal_uInt32 nInstance, Graphic& rGraph ) const
 }
 
 PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const DffRecordHeader* pHd ) :
-    bStyles         ( false ),
-    bGraphics       ( false )
+    bStyles         ( false )
 {
     sal_uInt32 nOldPos = rSt.Tell();
 
@@ -3304,8 +3303,6 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                         if (!aBuGraAtomHd.SeekToEndOfRecord(rSt))
                             break;
                     }
-                    if ( !aBuGraList.empty() )
-                        bGraphics = true;
                 }
                 break;
 

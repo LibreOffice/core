@@ -186,9 +186,7 @@ private:
     SfxItemPool*            pPool;
     std::unique_ptr<XParaPortionList> pPortionInfo;
 
-    sal_uInt32              nObjSettings;
     sal_uInt16              nMetric;
-    sal_uInt16              nVersion;
     OutlinerMode            nUserType;
     SvtScriptType           nScriptType;
 

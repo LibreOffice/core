@@ -109,7 +109,6 @@ class BibGeneralPage : public TabPage, public BibShortCutHandler
     css::uno::Reference< css::awt::XWindow >
                         aControls[ FIELD_COUNT ];
 
-    OUString            sErrorPrefix;
     OUString            sTableErrorString;
 
     OUString            sTypeColumnName;

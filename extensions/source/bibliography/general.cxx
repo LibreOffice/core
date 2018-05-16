@@ -167,7 +167,6 @@ void BibPosListener::disposing(const lang::EventObject& /*Source*/)
 BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
     TabPage(pParent, "GeneralPage", "modules/sbibliography/ui/generalpage.ui"),
     BibShortCutHandler( this ),
-    sErrorPrefix(BibResId(ST_ERROR_PREFIX)),
     mxBibGeneralPageFocusListener(new BibGeneralPageFocusListener(this)),
     pDatMan(pMan)
 {
@@ -332,7 +331,7 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
     xFormCtrl->activateTabOrder();
 
     if(!sTableErrorString.isEmpty())
-        sTableErrorString = sErrorPrefix + sTableErrorString;
+        sTableErrorString = BibResId(ST_ERROR_PREFIX) + sTableErrorString;
 
     SetText(BibResId(ST_TYPE_TITLE));
 
