@@ -350,33 +350,24 @@ IMPL_LINK( SvxToolbarConfigPage, GearHdl, MenuButton *, pButton, void )
         OUString aNewURL =
             SvxConfigPageHelper::generateCustomURL( GetSaveInData()->GetEntries() );
 
-        VclPtrInstance< SvxNewToolbarDialog > pNameDialog( nullptr, aNewName );
+        SvxNewToolbarDialog aNameDialog(GetFrameWeld(), aNewName);
 
         // Reflect the actual m_pSaveInListBox into the new toolbar dialog
-        for ( sal_Int32 i = 0; i < m_pSaveInListBox->GetEntryCount(); ++i )
+        for (sal_Int32 i = 0; i < m_pSaveInListBox->GetEntryCount(); ++i)
+            aNameDialog.m_xSaveInListBox->append_text(m_pSaveInListBox->GetEntry(i));
+
+        aNameDialog.m_xSaveInListBox->set_active(m_pSaveInListBox->GetSelectedEntryPos());
+
+        if (aNameDialog.run() == RET_OK)
         {
-            SaveInData* pData =
-                static_cast<SaveInData*>(m_pSaveInListBox->GetEntryData( i ));
-
-            const sal_Int32 nInsertPos =
-                pNameDialog->m_pSaveInListBox->InsertEntry( m_pSaveInListBox->GetEntry( i ) );
-
-            pNameDialog->m_pSaveInListBox->SetEntryData( nInsertPos, pData );
-        }
-
-        pNameDialog->m_pSaveInListBox->SelectEntryPos(
-            m_pSaveInListBox->GetSelectedEntryPos() );
-
-        if ( pNameDialog->Execute() == RET_OK )
-        {
-            aNewName = pNameDialog->GetName();
+            aNewName = aNameDialog.GetName();
 
             // Where to save the new toolbar? (i.e. Modulewise or documentwise)
-            sal_Int32 nInsertPos = pNameDialog->m_pSaveInListBox->GetSelectedEntryPos();
+            int nInsertPos = aNameDialog.m_xSaveInListBox->get_active();
 
             ToolbarSaveInData* pData =
                 static_cast<ToolbarSaveInData*>(
-                    pNameDialog->m_pSaveInListBox->GetEntryData( nInsertPos ) );
+                    m_pSaveInListBox->GetEntryData( nInsertPos ) );
 
             if ( GetSaveInData() != pData )
             {
