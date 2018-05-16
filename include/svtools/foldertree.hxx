@@ -37,8 +37,6 @@ private:
     Reference< XCommandEnvironment > m_xEnv;
     ::osl::Mutex m_aMutex;
     Sequence< OUString > m_aBlackList;
-    Image m_aFolderImage;
-    Image m_aFolderExpandedImage;
 
     OUString m_sLastUpdatedDir;
 

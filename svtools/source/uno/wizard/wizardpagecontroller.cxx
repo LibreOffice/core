@@ -49,14 +49,13 @@ namespace svt { namespace uno
             const sal_Int16 i_nPageId )
         :m_xController( i_rController )
         ,m_xWizardPage()
-        ,m_nPageId( i_nPageId )
     {
         ENSURE_OR_THROW( m_xController.is(), "no controller" );
         try
         {
             m_xWizardPage.set( m_xController->createPage(
                 Reference< XWindow >( i_rParent.GetComponentInterface(), UNO_QUERY_THROW ),
-                m_nPageId
+                i_nPageId
             ), UNO_SET_THROW );
 
             Reference< XWindow > xPageWindow( m_xWizardPage->getWindow(), UNO_SET_THROW );
