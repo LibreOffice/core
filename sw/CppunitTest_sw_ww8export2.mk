@@ -28,6 +28,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ww8export2, \
     utl \
     sw \
     tl \
+    svxcore \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_ww8export2,\
@@ -69,6 +70,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_ww8export2,\
     sfx2/util/sfx \
     svl/source/fsstor/fsstorage \
     svtools/util/svt \
+    svx/util/svxcore \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
