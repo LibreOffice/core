@@ -77,21 +77,6 @@ ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
     WeakImplHelper< XSystemShellExecute, XServiceInfo >(),
     m_xContext(xContext)
 {
-    try {
-        Reference< XCurrentContext > xCurrentContext(getCurrentContext());
-
-        if (xCurrentContext.is())
-        {
-            Any aValue = xCurrentContext->getValueByName( "system.desktop-environment" );
-
-            OUString aDesktopEnvironment;
-            if (aValue >>= aDesktopEnvironment)
-            {
-                m_aDesktopEnvironment = OUStringToOString(aDesktopEnvironment, RTL_TEXTENCODING_ASCII_US);
-            }
-        }
-    } catch (const RuntimeException &) {
-    }
 }
 
 void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )

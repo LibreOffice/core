@@ -69,7 +69,6 @@ private:
     std::unique_ptr<SfxPreviewWin_Impl> m_xPreviewWin;
     std::unique_ptr<weld::Label> m_xAltTitleFt;
     Idle m_aPrevIdle;
-    OUString m_sLoadTemplate;
 
     SfxNewFileDialogMode m_nFlags;
     SfxDocumentTemplates m_aTemplates;

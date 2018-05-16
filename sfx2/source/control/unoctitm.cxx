@@ -297,21 +297,18 @@ SfxDispatchController_Impl::SfxDispatchController_Impl(
     , pDispatcher( pDispat )
     , pBindings( pBind )
     , pLastState( nullptr )
-    , nSlot( pSlot->GetSlotId() )
     , pDispatch( pDisp )
     , bMasterSlave( false )
     , bVisible( true )
-    , pUnoName( pSlot->pUnoName )
 {
-    if ( aDispatchURL.Protocol == "slot:" && pUnoName )
+    if ( aDispatchURL.Protocol == "slot:" && pSlot->pUnoName )
     {
-        OStringBuffer aTmp(".uno:");
-        aTmp.append(pUnoName);
-        aDispatchURL.Complete = OStringToOUString(aTmp.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
+        aDispatchURL.Complete = ".uno:" + OUString::createFromAscii(pSlot->pUnoName);
         Reference< XURLTransformer > xTrans( URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
         xTrans->parseStrict( aDispatchURL );
     }
 
+    sal_uInt16 nSlot = pSlot->GetSlotId();
     SetId( nSlot );
     if ( pBindings )
     {

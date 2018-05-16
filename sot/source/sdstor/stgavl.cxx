@@ -376,10 +376,12 @@ bool StgAvlNode::Remove( StgAvlNode** pRoot, StgAvlNode* pDel, bool bDel )
 StgAvlIterator::StgAvlIterator( StgAvlNode* p )
 {
     m_pRoot = p;
-    m_nCount = 0;
     m_nCur = 0;
     if( p )
-        p->StgEnum( m_nCount );
+    {
+        short nCount = 0; // tree size
+        p->StgEnum( nCount );
+    }
 }
 
 StgAvlNode* StgAvlIterator::Find( short n )

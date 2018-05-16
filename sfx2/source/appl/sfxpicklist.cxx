@@ -84,7 +84,6 @@ namespace
 class SfxPickListImpl : public SfxListener
 {
 private:
-    sal_uInt32 m_nAllowedMenuSize;
     css::uno::Reference< css::util::XStringWidth > m_xStringLength;
 
     /**
@@ -95,7 +94,7 @@ private:
     static void         AddDocumentToPickList( SfxObjectShell* pDocShell );
 
 public:
-    SfxPickListImpl(sal_uInt32 nMenuSize);
+    SfxPickListImpl();
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
 
@@ -178,8 +177,8 @@ void SfxPickListImpl::AddDocumentToPickList( SfxObjectShell* pDocSh )
                                                                  pFilter ? pFilter->GetServiceName() : OUString() );
 }
 
-SfxPickList::SfxPickList(sal_uInt32 nAllowedMenuSize)
-    : mxImpl(new SfxPickListImpl(nAllowedMenuSize))
+SfxPickList::SfxPickList()
+    : mxImpl(new SfxPickListImpl())
 {
 }
 
@@ -191,14 +190,12 @@ SfxPickList::~SfxPickList()
 
 void SfxPickList::ensure()
 {
-    static SfxPickList aUniqueInstance(SvtHistoryOptions().GetSize(ePICKLIST));
+    static SfxPickList aUniqueInstance;
 }
 
-SfxPickListImpl::SfxPickListImpl( sal_uInt32 nAllowedMenuSize ) :
-    m_nAllowedMenuSize( nAllowedMenuSize )
+SfxPickListImpl::SfxPickListImpl()
 {
     m_xStringLength = new StringLength;
-    m_nAllowedMenuSize = ::std::min( m_nAllowedMenuSize, sal_uInt32(PICKLIST_MAXSIZE) );
     StartListening( *SfxGetpApp() );
 }
 
