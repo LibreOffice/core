@@ -86,15 +86,6 @@ class JobURL
         /** holds the service part of a job URL */
         OUString m_sService;
 
-        /** holds the event arguments */
-        OUString m_sEventArgs;
-
-        /** holds the alias arguments */
-        OUString m_sAliasArgs;
-
-        /** holds the service arguments */
-        OUString m_sServiceArgs;
-
     // native interface
 
     public:

@@ -55,7 +55,6 @@ private:
     /** identify the application module, where this accelerator
         configuration cache should work on. */
     OUString m_sModule;
-    OUString m_sLocale;
 
 public:
 
@@ -106,7 +105,7 @@ ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(
     {
         ::comphelper::SequenceAsHashMap lArgs(lArguments);
         m_sModule = lArgs.getUnpackedValueOrDefault("ModuleIdentifier", OUString());
-        m_sLocale = lArgs.getUnpackedValueOrDefault("Locale", OUString("x-default"));
+        // OUString sLocale = lArgs.getUnpackedValueOrDefault("Locale", OUString("x-default"));
     }
 
     if (m_sModule.isEmpty())

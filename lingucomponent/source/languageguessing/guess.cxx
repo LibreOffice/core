@@ -47,7 +47,6 @@ inline bool isSeparator(const char c){
 Guess::Guess()
     : language_str(DEFAULT_LANGUAGE)
     , country_str(DEFAULT_COUNTRY)
-    , encoding_str(DEFAULT_ENCODING)
 {
 }
 
@@ -59,7 +58,6 @@ Guess::Guess()
 Guess::Guess(const char * guess_str)
     : language_str(DEFAULT_LANGUAGE)
     , country_str(DEFAULT_COUNTRY)
-    , encoding_str(DEFAULT_ENCODING)
 {
     string lang;
     string country;
@@ -103,10 +101,6 @@ Guess::Guess(const char * guess_str)
             language_str=lang;
         }
         country_str=country;
-
-        if(enc!=""){//if not we use the default value
-            encoding_str=enc;
-        }
     }
 }
 

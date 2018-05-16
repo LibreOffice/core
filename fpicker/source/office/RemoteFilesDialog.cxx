@@ -195,7 +195,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, PickerFlags nBits )
 
     m_eMode = ( nBits & PickerFlags::SaveAs ) ? REMOTEDLG_MODE_SAVE : REMOTEDLG_MODE_OPEN;
     m_eType = ( nBits & PickerFlags::PathDialog ) ? REMOTEDLG_TYPE_PATHDLG : REMOTEDLG_TYPE_FILEDLG;
-    m_bMultiselection = bool( nBits & PickerFlags::MultiSelection );
+    bool bMultiselection = bool( nBits & PickerFlags::MultiSelection );
     m_bIsUpdated = false;
     m_bIsConnected = false;
     m_bServiceChanged = false;
@@ -245,7 +245,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, PickerFlags nBits )
 
     m_pFileView = VclPtr< SvtFileView >::Create( m_pContainer, WB_BORDER | WB_TABSTOP,
                                        REMOTEDLG_TYPE_PATHDLG == m_eType,
-                                       m_bMultiselection, false );
+                                       bMultiselection, false );
 
     m_pFileView->Show();
     m_pFileView->EnableAutoResize();

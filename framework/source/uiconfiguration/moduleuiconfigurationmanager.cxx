@@ -210,7 +210,6 @@ private:
     OUString                                                  m_aPropUIName;
     OUString                                                  m_aPropResourceURL;
     OUString                                                  m_aModuleIdentifier;
-    OUString                                                  m_aModuleShortName;
     css::uno::Reference< css::embed::XTransactedObject >      m_xUserRootCommit;
     css::uno::Reference< css::uno::XComponentContext >        m_xContext;
     osl::Mutex                                                m_mutex;
@@ -846,13 +845,14 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
 
     SolarMutexGuard g;
 
-    if( aArguments.getLength() == 2 && (aArguments[0] >>= m_aModuleShortName) && (aArguments[1] >>= m_aModuleIdentifier))
+    OUString aModuleShortName;
+    if( aArguments.getLength() == 2 && (aArguments[0] >>= aModuleShortName) && (aArguments[1] >>= m_aModuleIdentifier))
     {
     }
     else
     {
         ::comphelper::SequenceAsHashMap lArgs(aArguments);
-        m_aModuleShortName  = lArgs.getUnpackedValueOrDefault("ModuleShortName", OUString());
+        aModuleShortName  = lArgs.getUnpackedValueOrDefault("ModuleShortName", OUString());
         m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault("ModuleIdentifier", OUString());
     }
 
@@ -873,7 +873,7 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
             m_pStorageHandler[i].reset( new PresetHandler( m_xContext ) );
             m_pStorageHandler[i]->connectToResource( PresetHandler::E_MODULES,
                                                      aResourceType, // this path won't be used later... see next lines!
-                                                     m_aModuleShortName,
+                                                     aModuleShortName,
                                                      css::uno::Reference< css::embed::XStorage >()); // no document root used here!
         }
     }

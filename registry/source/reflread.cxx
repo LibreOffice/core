@@ -552,7 +552,6 @@ class FieldList : public BlopObject
 public:
 
     sal_uInt16      m_numOfEntries;
-    sal_uInt16      m_numOfFieldEntries;
     size_t          m_FIELD_ENTRY_SIZE;
     ConstantPool*   m_pCP;
 
@@ -563,11 +562,10 @@ public:
     {
         if ( m_numOfEntries > 0 )
         {
-            m_numOfFieldEntries = readUINT16(0);
-            m_FIELD_ENTRY_SIZE = m_numOfFieldEntries * sizeof(sal_uInt16);
+            sal_uInt16 numOfFieldEntries = readUINT16(0);
+            m_FIELD_ENTRY_SIZE = numOfFieldEntries * sizeof(sal_uInt16);
         } else
         {
-            m_numOfFieldEntries = 0;
             m_FIELD_ENTRY_SIZE = 0;
         }
     }
@@ -738,7 +736,6 @@ class ReferenceList : public BlopObject
 public:
 
     sal_uInt16      m_numOfEntries;
-    sal_uInt16      m_numOfReferenceEntries;
     size_t          m_REFERENCE_ENTRY_SIZE;
     ConstantPool*   m_pCP;
 
@@ -749,11 +746,10 @@ public:
     {
         if ( m_numOfEntries > 0 )
         {
-            m_numOfReferenceEntries = readUINT16(0);
-            m_REFERENCE_ENTRY_SIZE = m_numOfReferenceEntries * sizeof(sal_uInt16);
+            sal_uInt16 numOfReferenceEntries = readUINT16(0);
+            m_REFERENCE_ENTRY_SIZE = numOfReferenceEntries * sizeof(sal_uInt16);
         } else
         {
-            m_numOfReferenceEntries = 0;
             m_REFERENCE_ENTRY_SIZE = 0;
         }
     }
@@ -840,7 +836,6 @@ class MethodList : public BlopObject
 public:
 
     sal_uInt16      m_numOfEntries;
-    sal_uInt16      m_numOfParamEntries;
     size_t          m_PARAM_ENTRY_SIZE;
     std::unique_ptr<sal_uInt32[]>  m_pIndex;
     ConstantPool*   m_pCP;
@@ -853,11 +848,10 @@ public:
         if ( m_numOfEntries > 0 )
         {
             readUINT16(0) /* numOfMethodEntries */;
-            m_numOfParamEntries = readUINT16(sizeof(sal_uInt16));
-            m_PARAM_ENTRY_SIZE = m_numOfParamEntries * sizeof(sal_uInt16);
+            sal_uInt16 numOfParamEntries = readUINT16(sizeof(sal_uInt16));
+            m_PARAM_ENTRY_SIZE = numOfParamEntries * sizeof(sal_uInt16);
         } else
         {
-            m_numOfParamEntries = 0;
             m_PARAM_ENTRY_SIZE = 0;
         }
     }
