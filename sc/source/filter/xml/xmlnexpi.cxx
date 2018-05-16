@@ -89,10 +89,9 @@ ScXMLNamedRangeContext::ScXMLNamedRangeContext(
     ScXMLImport& rImport,
     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
     ScXMLNamedExpressionsContext::Inserter* pInserter ) :
-    ScXMLImportContext( rImport ),
-    mpInserter(pInserter)
+    ScXMLImportContext( rImport )
 {
-    if (!mpInserter)
+    if (!pInserter)
         return;
 
     ScMyNamedExpression* pNamedExpression(new ScMyNamedExpression);
@@ -124,7 +123,7 @@ ScXMLNamedRangeContext::ScXMLNamedRangeContext(
         }
     }
     pNamedExpression->bIsExpression = false;
-    mpInserter->insert(pNamedExpression);
+    pInserter->insert(pNamedExpression);
 }
 
 ScXMLNamedRangeContext::~ScXMLNamedRangeContext()
@@ -135,10 +134,9 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext(
     ScXMLImport& rImport,
     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
     ScXMLNamedExpressionsContext::Inserter* pInserter ) :
-    ScXMLImportContext( rImport ),
-    mpInserter(pInserter)
+    ScXMLImportContext( rImport )
 {
-    if (!mpInserter)
+    if (!pInserter)
         return;
 
     ScMyNamedExpression* pNamedExpression(new ScMyNamedExpression);
@@ -164,7 +162,7 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext(
         }
     }
     pNamedExpression->bIsExpression = true;
-    mpInserter->insert(pNamedExpression);
+    pInserter->insert(pNamedExpression);
 }
 
 ScXMLNamedExpressionContext::~ScXMLNamedExpressionContext()

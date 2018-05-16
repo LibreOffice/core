@@ -47,7 +47,6 @@ private:
     SCROW           nStartRow;
     SCROW           nEndRow;
     SCTAB           nTab;
-    bool            bNoSelection;
 
     std::vector<VclPtr<FixedText> > maFixedTexts;
     std::vector<VclPtr<Edit> >      maEdits;

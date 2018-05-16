@@ -249,7 +249,6 @@ public:
 private:
     ::std::vector<const ScFuncDesc*> aFunctionList; /**< List of functions */
     ::std::vector<const ScFuncDesc*>::iterator aFunctionListIter; /**< position in function list */
-    sal_Int32  nMaxFuncNameLen; /**< Length of longest function name */
 };
 
 /**

@@ -169,10 +169,6 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         pRuntimeWindow  ( lcl_chooseRuntimeImpl( this, pBind ) ),
         aTextWindow     ( *pRuntimeWindow ),
         pInputHdl       ( nullptr ),
-        aTextOk         ( ScResId( SCSTR_QHELP_BTNOK ) ),       // Not always new as a Resource
-        aTextCancel     ( ScResId( SCSTR_QHELP_BTNCANCEL ) ),
-        aTextSum        ( ScResId( SCSTR_QHELP_BTNSUM ) ),
-        aTextEqual      ( ScResId( SCSTR_QHELP_BTNEQUAL ) ),
         mnMaxY          (0),
         bIsOkCancelMode ( false ),
         bInResize       ( false )
@@ -209,16 +205,16 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     SetItemText (SID_INPUT_FUNCTION, ScResId(SCSTR_QHELP_BTNCALC));
     SetHelpId   (SID_INPUT_FUNCTION, HID_INSWIN_CALC);
 
-    SetItemText (SID_INPUT_SUM, aTextSum);
+    SetItemText (SID_INPUT_SUM, ScResId( SCSTR_QHELP_BTNSUM ) );
     SetHelpId   (SID_INPUT_SUM, HID_INSWIN_SUMME);
 
-    SetItemText (SID_INPUT_EQUAL, aTextEqual);
+    SetItemText (SID_INPUT_EQUAL, ScResId( SCSTR_QHELP_BTNEQUAL ) );
     SetHelpId   (SID_INPUT_EQUAL, HID_INSWIN_FUNC);
 
-    SetItemText ( SID_INPUT_CANCEL, aTextCancel );
+    SetItemText ( SID_INPUT_CANCEL, ScResId( SCSTR_QHELP_BTNCANCEL ) );
     SetHelpId   ( SID_INPUT_CANCEL, HID_INSWIN_CANCEL );
 
-    SetItemText ( SID_INPUT_OK, aTextOk );
+    SetItemText ( SID_INPUT_OK, ScResId( SCSTR_QHELP_BTNOK ) );
     SetHelpId   ( SID_INPUT_OK, HID_INSWIN_OK );
 
     EnableItem( SID_INPUT_CANCEL, false );

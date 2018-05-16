@@ -33,7 +33,6 @@ class ScFormulaCell;
 class ScDetectiveRefIter
 {
 private:
-    ScTokenArray* pCode;
     formula::FormulaTokenArrayPlainIterator maIter;
     ScAddress aPos;
 public:

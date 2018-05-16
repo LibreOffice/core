@@ -273,10 +273,6 @@ private:
     VclPtr<ScTextWndBase> pRuntimeWindow;
     ScTextWndBase&  aTextWindow;
     ScInputHandler* pInputHdl;
-    OUString        aTextOk;
-    OUString        aTextCancel;
-    OUString        aTextSum;
-    OUString        aTextEqual;
     long            mnMaxY;
     bool            bIsOkCancelMode;
     bool            bInResize;

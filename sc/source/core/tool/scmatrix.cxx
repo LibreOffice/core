@@ -1909,11 +1909,10 @@ struct ArrayMul
 template<typename Op>
 class MergeDoubleArrayFunc
 {
-    std::vector<double>& mrArray;
     std::vector<double>::iterator miPos;
     double mfNaN;
 public:
-    MergeDoubleArrayFunc(std::vector<double>& rArray) : mrArray(rArray), miPos(mrArray.begin())
+    MergeDoubleArrayFunc(std::vector<double>& rArray) : miPos(rArray.begin())
     {
         mfNaN = CreateDoubleError( FormulaError::ElementNaN);
     }

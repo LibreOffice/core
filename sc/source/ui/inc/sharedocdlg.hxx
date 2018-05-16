@@ -41,7 +41,6 @@ private:
     OUString            m_aStrUnknownUser;
     OUString            m_aStrExclusiveAccess;
 
-    ScViewData*         mpViewData;
     ScDocShell*         mpDocShell;
 
     DECL_LINK( ToggleHandle, CheckBox&, void );

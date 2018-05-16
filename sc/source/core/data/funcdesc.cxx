@@ -414,8 +414,9 @@ bool ScFuncDesc::compareByName(const ScFuncDesc* a, const ScFuncDesc* b)
 
 // class ScFunctionList:
 ScFunctionList::ScFunctionList()
-    : nMaxFuncNameLen(0)
 {
+    sal_Int32  nMaxFuncNameLen = 0; // Length of longest function name
+
     // See ScFuncDescCore definition for format details.
     // This list must be sorted in order of the opcode, dbgutil builds enable _GLIBCXX_DEBUG
     // which will concept check that the list is sorted on first use to ensure this holds

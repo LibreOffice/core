@@ -53,7 +53,6 @@ public:
 private:
     OUString         aName;
     OUString         aComment;
-    OUString         aUserName;
     sal_uInt8        nProtected;
     const sal_uInt16 nTab;
     std::vector<ExcScenarioCell> aEntries;

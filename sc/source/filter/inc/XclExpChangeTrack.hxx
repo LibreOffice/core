@@ -596,10 +596,6 @@ class XclExpChangeTrack : protected XclExpRoot
 
     ScDocumentUniquePtr         xTempDoc;           // empty document
 
-    XclExpChTrHeader*           pHeader;            // header record for last GUID
-    sal_uInt8                   aGUID[ 16 ];        // GUID for action info records
-    bool                        bValidGUID;
-
     ScChangeTrack*              CreateTempChangeTrack();
     void                        PushActionRecord( const ScChangeAction& rAction );
 

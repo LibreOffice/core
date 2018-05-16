@@ -164,7 +164,6 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 
         ScTabViewShell* pTabViewShell = static_cast<ScTabViewShell*>(pOldSh);
         const ScViewData& rData = pTabViewShell->GetViewData();
-        rData.WriteUserDataSequence( aSourceData );
         pPreview->SetSelectedTabs(rData.GetMarkData());
         InitStartTable( rData.GetTabNo() );
 

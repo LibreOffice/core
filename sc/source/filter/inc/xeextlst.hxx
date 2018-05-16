@@ -174,7 +174,6 @@ public:
     virtual XclExpExtType GetType() override { return XclExpExtDataFooType; }
 
 private:
-    formula::FormulaGrammar::AddressConvention meConv;
     OString maSyntax;
 };
 

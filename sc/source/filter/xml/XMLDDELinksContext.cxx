@@ -263,9 +263,8 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDETableContext::c
 
 ScXMLDDEColumnContext::ScXMLDDEColumnContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
-                                      ScXMLDDELinkContext* pTempDDELink) :
-    ScXMLImportContext( rImport ),
-    pDDELink(pTempDDELink)
+                                      ScXMLDDELinkContext* pDDELink) :
+    ScXMLImportContext( rImport )
 {
     if ( rAttrList.is() )
     {

@@ -285,7 +285,6 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
         mpRowPosArray( nullptr ),
         mnRowPosCount(0),
 
-        aCharSetUser( ScResId( SCSTR_CHARSET_USER ) ),
         aColumnUser ( ScResId( SCSTR_COLUMN_USER ) ),
         aTextSepList(SCSTR_TEXTSEP),
         mcTextSep   ( ScAsciiOptions::cDefaultTextSep ),
@@ -447,7 +446,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     pLbCharSet->FillFromTextEncodingTable( true );
     // Insert one "SYSTEM" entry for compatibility in AsciiOptions and system
     // independent document linkage.
-    pLbCharSet->InsertTextEncoding( RTL_TEXTENCODING_DONTKNOW, aCharSetUser );
+    pLbCharSet->InsertTextEncoding( RTL_TEXTENCODING_DONTKNOW, ScResId( SCSTR_CHARSET_USER ) );
     if ( ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW )
     {
         rtl_TextEncoding eSystemEncoding = osl_getThreadTextEncoding();

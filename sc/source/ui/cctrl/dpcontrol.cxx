@@ -27,7 +27,7 @@
 #include <docpool.hxx>
 #include <patattr.hxx>
 
-ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX, const Fraction* pZoomY, ScDocument* pDoc) :
+ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomY, ScDocument* pDoc) :
     mpDoc(pDoc),
     mpOutDev(pOutDev),
     mpStyle(pStyle),
@@ -37,11 +37,6 @@ ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pSt
     mbPopupPressed(false),
     mbPopupLeft(false)
 {
-    if (pZoomX)
-        maZoomX = *pZoomX;
-    else
-        maZoomX = Fraction(1, 1);
-
     if (pZoomY)
         maZoomY = *pZoomY;
     else

@@ -510,8 +510,6 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     aStrNotActive = " (" + ScResId(SCSTR_NOTACTIVE) + ")";  // " (not active)"
     aStrHidden    = " (" + ScResId(SCSTR_HIDDEN) + ")";     // " (hidden)"
 
-    aTitleBase = GetText();
-
     ppBoundItems = new ScNavigatorControllerItem* [CTRL_ITEMS];
 
     rBindings.ENTERREGISTRATIONS();

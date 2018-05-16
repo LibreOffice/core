@@ -64,8 +64,6 @@ public:
 
 class ScXMLBigRangeContext : public ScXMLImportContext
 {
-    ScBigRange&         rBigRange;
-
 public:
     ScXMLBigRangeContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
@@ -102,8 +100,6 @@ public:
 
 class ScXMLDependenceContext : public ScXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
-
 public:
     ScXMLDependenceContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
@@ -124,8 +120,6 @@ public:
 
 class ScXMLChangeDeletionContext : public ScXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
-
 public:
     ScXMLChangeDeletionContext( ScXMLImport& rImport,
                                 const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
@@ -180,7 +174,6 @@ class ScXMLChangeCellContext : public ScXMLImportContext
     OUString           sText;
     OUString&          rInputString;
     rtl::Reference<ScEditEngineTextObj> mpEditTextObj;
-    double&                 rDateTimeValue;
     double                  fValue;
     sal_uInt16&             rType;
     bool                bEmpty;
@@ -268,8 +261,6 @@ public:
 
 class ScXMLInsertionCutOffContext : public ScXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
-
 public:
     ScXMLInsertionCutOffContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
@@ -283,8 +274,6 @@ public:
 
 class ScXMLMovementCutOffContext : public ScXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
-
 public:
     ScXMLMovementCutOffContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
@@ -482,9 +471,8 @@ void SAL_CALL ScXMLChangeInfoContext::endFastElement( sal_Int32 /*nElement*/ )
 
 ScXMLBigRangeContext::ScXMLBigRangeContext(  ScXMLImport& rImport,
                                               const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
-                                              ScBigRange& rTempBigRange ) :
-    ScXMLImportContext( rImport ),
-    rBigRange(rTempBigRange)
+                                              ScBigRange& rBigRange ) :
+    ScXMLImportContext( rImport )
 {
     bool bColumn(false);
     bool bRow(false);
@@ -606,9 +594,8 @@ void SAL_CALL ScXMLCellContentDeletionContext::endFastElement( sal_Int32 /*nElem
 
 ScXMLDependenceContext::ScXMLDependenceContext(  ScXMLImport& rImport,
                                               const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
-                                            ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
-    ScXMLImportContext( rImport ),
-    pChangeTrackingImportHelper(pTempChangeTrackingImportHelper)
+                                            ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper ) :
+    ScXMLImportContext( rImport )
 {
     sal_uInt32 nID(0);
     if ( rAttrList.is() )
@@ -650,9 +637,8 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDependingsContext:
 
 ScXMLChangeDeletionContext::ScXMLChangeDeletionContext(  ScXMLImport& rImport,
                                               const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
-                                              ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
-    ScXMLImportContext( rImport ),
-    pChangeTrackingImportHelper(pTempChangeTrackingImportHelper)
+                                              ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper ) :
+    ScXMLImportContext( rImport )
 {
     sal_uInt32 nID(0);
     if ( rAttrList.is() )
@@ -781,12 +767,11 @@ ScXMLChangeCellContext::ScXMLChangeCellContext( ScXMLImport& rImport,
                                                 ScCellValue& rOldCell, OUString& rAddress,
                                                 OUString& rFormula, OUString& rFormulaNmsp,
                                                 formula::FormulaGrammar::Grammar& rGrammar,
-                                                OUString& rTempInputString, double& fDateTimeValue, sal_uInt16& nType,
+                                                OUString& rTempInputString, double& rDateTimeValue, sal_uInt16& nType,
                                                 ScMatrixMode& nMatrixFlag, sal_Int32& nMatrixCols, sal_Int32& nMatrixRows )
     : ScXMLImportContext( rImport )
     , mrOldCell(rOldCell)
     , rInputString(rTempInputString)
-    , rDateTimeValue(fDateTimeValue)
     , fValue(0.0)
     , rType(nType)
     , bEmpty(true)
@@ -1170,9 +1155,8 @@ ScXMLInsertionCutOffContext::ScXMLInsertionCutOffContext( ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
                                                    const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                                            ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
-    pChangeTrackingImportHelper(pTempChangeTrackingImportHelper)
+                                            ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper ) :
+    ScXMLImportContext( rImport, nPrfx, rLName )
 {
     sal_uInt32 nID(0);
     sal_Int32 nPosition(0);
@@ -1215,9 +1199,8 @@ ScXMLMovementCutOffContext::ScXMLMovementCutOffContext( ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
                                                    const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                                            ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
-    pChangeTrackingImportHelper(pTempChangeTrackingImportHelper)
+                                            ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper ) :
+    ScXMLImportContext( rImport, nPrfx, rLName )
 {
     sal_uInt32 nID(0);
     sal_Int32 nPosition(0);

@@ -366,12 +366,11 @@ void XclExpExtConditionalFormatting::SaveXml( XclExpXmlStream& rStrm )
 }
 
 XclExpExtCalcPr::XclExpExtCalcPr( const XclExpRoot& rRoot, formula::FormulaGrammar::AddressConvention eConv ):
-    XclExpExt( rRoot ),
-    meConv( eConv )
+    XclExpExt( rRoot )
 {
     maURI = OString("{7626C862-2A13-11E5-B345-FEFF819CDC9F}");
 
-    switch (meConv)
+    switch (eConv)
     {
         case formula::FormulaGrammar::CONV_OOO:
             maSyntax = OString("CalcA1");
