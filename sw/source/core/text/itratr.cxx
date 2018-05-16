@@ -169,7 +169,6 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
     {
         assert(m_pMergedPara);
         m_pTextNode = m_pMergedPara->pFirstNode;
-        m_pHints = m_pTextNode->GetpSwpHints();
         InitFontAndAttrHandler(*m_pTextNode, m_pMergedPara->mergedText, nullptr);
     }
 
@@ -192,12 +191,13 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
             m_pRedline->Reset();
     }
 
-    if ( m_pHints && !bParaFont )
+    SwpHints const*const pHints(m_pTextNode->GetpSwpHints());
+    if (pHints && !bParaFont)
     {
         SwTextAttr *pTextAttr;
         // While we've not reached the end of the StartArray && the TextAttribute starts at position 0...
-        while ( ( m_nStartIndex < m_pHints->Count() ) &&
-                !((pTextAttr = m_pHints->Get(m_nStartIndex))->GetStart()) )
+        while ((m_nStartIndex < pHints->Count()) &&
+               !((pTextAttr = pHints->Get(m_nStartIndex))->GetStart()))
         {
             // open the TextAttributes
             Chg( pTextAttr );
@@ -226,6 +226,7 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
 // AMA: New AttrIter Nov 94
 void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
 {
+    SwpHints const*const pHints(m_pTextNode->GetpSwpHints());
     SwTextAttr *pTextAttr;
 
     if ( m_nStartIndex ) // If attributes have been opened at all ...
@@ -234,8 +235,8 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
 
         // As long as we've not yet reached the end of EndArray and the
         // TextAttribute ends before or at the new position ...
-        while ( ( m_nEndIndex < m_pHints->Count() ) &&
-                (*(pTextAttr=m_pHints->GetSortedByEnd(m_nEndIndex))->GetAnyEnd()<=nNewPos))
+        while ((m_nEndIndex < pHints->Count()) &&
+               (*(pTextAttr = pHints->GetSortedByEnd(m_nEndIndex))->GetAnyEnd() <= nNewPos))
         {
             // Close the TextAttributes, whose StartPos were before or at
             // the old nPos and are currently open
@@ -245,8 +246,8 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
     }
     else // skip the not opened ends
     {
-        while ( (m_nEndIndex < m_pHints->Count()) &&
-                (*m_pHints->GetSortedByEnd(m_nEndIndex)->GetAnyEnd() <= nNewPos) )
+        while ((m_nEndIndex < pHints->Count()) &&
+               (*pHints->GetSortedByEnd(m_nEndIndex)->GetAnyEnd() <= nNewPos))
         {
             m_nEndIndex++;
         }
@@ -254,8 +255,8 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
 
     // As long as we've not yet reached the end of EndArray and the
     // TextAttribute ends before or at the new position...
-    while ( ( m_nStartIndex < m_pHints->Count() ) &&
-            ((pTextAttr=m_pHints->Get(m_nStartIndex))->GetStart()<=nNewPos) )
+    while ((m_nStartIndex < pHints->Count()) &&
+            ((pTextAttr = pHints->Get(m_nStartIndex))->GetStart() <= nNewPos))
     {
 
         // open the TextAttributes, whose ends lie behind the new position
@@ -301,7 +302,6 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
         InitFontAndAttrHandler(*newPos.first, m_pMergedPara->mergedText, nullptr);
         // reset to next
         m_pTextNode = newPos.first;
-        m_pHints = m_pTextNode->GetpSwpHints();
         m_nStartIndex = 0;
         m_nEndIndex = 0;
         m_nPosition = 0;
@@ -315,7 +315,6 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
             if (m_pTextNode != m_pMergedPara->pFirstNode)
             {
                 m_pTextNode = m_pMergedPara->pFirstNode;
-                m_pHints = m_pTextNode->GetpSwpHints();
                 // sw_redlinehide: hope it's okay to use the current text node
                 // here; the AttrHandler shouldn't care about non-char items
                 InitFontAndAttrHandler(*m_pTextNode, m_pMergedPara->mergedText, nullptr);

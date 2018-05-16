@@ -180,9 +180,6 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
 
     m_pScriptInfo = &rScriptInfo;
 
-    // attribute array
-    m_pHints = rTextNode.GetpSwpHints();
-
     // set font to vertical if frame layout is vertical
     bool bVertLayout = false;
     bool bRTL = false;
