@@ -100,8 +100,6 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, cons
 
     SfxTabPage( pParent, "DbRegisterPage", "cui/ui/dbregisterpage.ui", &rSet ),
 
-    m_aTypeText       ( CuiResId( RID_SVXSTR_TYPE ) ),
-    m_aPathText       ( CuiResId( RID_SVXSTR_PATH ) ),
     m_pPathBox        ( nullptr ),
     m_pCurEntry     ( nullptr ),
     m_nOldCount     ( 0 ),
@@ -132,11 +130,11 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, cons
     rBar.SetEndDragHdl( LINK( this, DbRegistrationOptionsPage, HeaderEndDrag_Impl ) );
     Size aSz;
     aSz.setWidth( TAB_WIDTH1 );
-    rBar.InsertItem( ITEMID_TYPE, m_aTypeText,
+    rBar.InsertItem( ITEMID_TYPE, CuiResId( RID_SVXSTR_TYPE ),
                             LogicToPixel( aSz, MapMode( MapUnit::MapAppFont ) ).Width(),
                             HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::UPARROW );
     aSz.setWidth( TAB_WIDTH2 );
-    rBar.InsertItem( ITEMID_PATH, m_aPathText,
+    rBar.InsertItem( ITEMID_PATH, CuiResId( RID_SVXSTR_PATH ),
                             LogicToPixel( aSz, MapMode( MapUnit::MapAppFont ) ).Width(),
                             HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
 

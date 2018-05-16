@@ -2854,7 +2854,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     get(pBtnImport, "importButton");
     get(pBtnDelete, "deleteButton");
 
-    aTbSize = pTbSymbol->LogicToPixel(Size(160, 80), MapMode(MapUnit::MapAppFont));
+    Size aTbSize = pTbSymbol->LogicToPixel(Size(160, 80), MapMode(MapUnit::MapAppFont));
     pTbSymbol->set_width_request(aTbSize.Width());
     pTbSymbol->set_height_request(aTbSize.Height());
     pTbSymbol->SetStyle(pTbSymbol->GetStyle() | WB_SCROLL);

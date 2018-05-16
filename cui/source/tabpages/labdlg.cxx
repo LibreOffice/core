@@ -105,8 +105,9 @@ SvxCaptionTabPage::SvxCaptionTabPage(vcl::Window* pParent, const SfxItemSet& rIn
 
     ListBox *pLineTypes = get<ListBox>("linetypes");
     assert(pLineTypes->GetEntryCount() == 3);
+    std::vector<OUString> aLineTypes;
     for (int i = 0;  i < 3; ++i)
-        m_aLineTypes.push_back(pLineTypes->GetEntry(i));
+        aLineTypes.push_back(pLineTypes->GetEntry(i));
 
     get(m_pFT_LAENGE, "lengthft");
     get(m_pMF_LAENGE, "length");
@@ -125,9 +126,9 @@ SvxCaptionTabPage::SvxCaptionTabPage(vcl::Window* pParent, const SfxItemSet& rIn
     m_pCT_CAPTTYPE->SetSelectHdl(LINK( this, SvxCaptionTabPage, SelectCaptTypeHdl_Impl));
 
     Image aImage;
-    m_pCT_CAPTTYPE->InsertItem(BMP_CAPTTYPE_1, aImage, m_aLineTypes[0]);
-    m_pCT_CAPTTYPE->InsertItem(BMP_CAPTTYPE_2, aImage, m_aLineTypes[1]);
-    m_pCT_CAPTTYPE->InsertItem(BMP_CAPTTYPE_3, aImage, m_aLineTypes[2]);
+    m_pCT_CAPTTYPE->InsertItem(BMP_CAPTTYPE_1, aImage, aLineTypes[0]);
+    m_pCT_CAPTTYPE->InsertItem(BMP_CAPTTYPE_2, aImage, aLineTypes[1]);
+    m_pCT_CAPTTYPE->InsertItem(BMP_CAPTTYPE_3, aImage, aLineTypes[2]);
 
     FillValueSet();
 

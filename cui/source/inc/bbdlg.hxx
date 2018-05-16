@@ -37,7 +37,6 @@ protected:
 
 private:
     bool        mbEnableBackgroundSelector : 1;         ///< for Border/Background
-    bool        mbEnableDrawingLayerFillStyles : 1;     ///< for full DrawingLayer FillStyles
     sal_uInt16  m_nBackgroundPageId;
     sal_uInt16  m_nAreaPageId;
     sal_uInt16  m_nTransparencePageId;

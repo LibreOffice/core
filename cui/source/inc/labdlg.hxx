@@ -54,7 +54,6 @@ private:
 
     std::vector<OUString> m_aStrHorzList;
     std::vector<OUString> m_aStrVertList;
-    std::vector<OUString> m_aLineTypes;
 
     SdrCaptionType      nCaptionType;
     sal_Int32           nGap;

@@ -77,7 +77,6 @@ SvxBitmapTabPage::SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     m_pBitmapList( nullptr ),
 
     m_pnBitmapListState( nullptr ),
-    m_aXBitmapItem( OUString(), Graphic() ),
     m_fObjectWidth(0.0),
     m_fObjectHeight(0.0),
     m_bLogicalSize(false),
@@ -104,7 +103,7 @@ SvxBitmapTabPage::SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInA
 
     // setting the output device
     m_rXFSet.Put( XFillStyleItem(drawing::FillStyle_BITMAP) );
-    m_rXFSet.Put( m_aXBitmapItem );
+    m_rXFSet.Put( XFillBitmapItem(OUString(), Graphic()) );
     m_pCtlBitmapPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
 
     m_pBitmapLB->SetSelectHdl( LINK(this, SvxBitmapTabPage, ModifyBitmapHdl) );

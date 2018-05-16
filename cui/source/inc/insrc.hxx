@@ -31,11 +31,6 @@ private:
     std::unique_ptr<weld::RadioButton> m_xBeforeBtn;
     std::unique_ptr<weld::RadioButton> m_xAfterBtn;
 
-    OUString   aRow;
-    OUString   aCol;
-
-    bool bColumn;
-
 public:
     SvxInsRowColDlg(weld::Window* pParent, bool bCol, const OString& rHelpId);
 

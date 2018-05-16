@@ -59,11 +59,8 @@ SvxHatchTabPage::SvxHatchTabPage
     m_rOutAttrs           ( rInAttrs ),
     m_pnHatchingListState ( nullptr ),
     m_pnColorListState    ( nullptr ),
-
-    m_aXHatchItem         ( OUString(), XHatch() ),
     m_aXFillAttr          ( rInAttrs.GetPool() ),
     m_rXFSet              ( m_aXFillAttr.GetItemSet() )
-
 {
     get(m_pMtrDistance, "distancemtr");
     get(m_pMtrAngle, "anglemtr");
@@ -105,7 +102,7 @@ SvxHatchTabPage::SvxHatchTabPage
 
     // setting the output device
     m_rXFSet.Put( XFillStyleItem(drawing::FillStyle_HATCH) );
-    m_rXFSet.Put( m_aXHatchItem );
+    m_rXFSet.Put( XFillHatchItem(OUString(), XHatch()) );
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pHatchLB->SetSelectHdl( LINK( this, SvxHatchTabPage, ChangeHatchHdl ) );
     m_pHatchLB->SetRenameHdl( LINK( this, SvxHatchTabPage, ClickRenameHdl_Impl ) );

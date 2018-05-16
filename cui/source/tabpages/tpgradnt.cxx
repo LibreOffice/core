@@ -56,11 +56,8 @@ SvxGradientTabPage::SvxGradientTabPage
     SfxTabPage          ( pParent, "GradientPage", "cui/ui/gradientpage.ui", &rInAttrs ),
 
     m_rOutAttrs           ( rInAttrs ),
-
     m_pnGradientListState ( nullptr ),
     m_pnColorListState    ( nullptr ),
-
-    m_aXGradientItem      ( OUString(), XGradient( COL_BLACK, COL_WHITE ) ),
     m_aXFillAttr          ( rInAttrs.GetPool() ),
     m_rXFSet              ( m_aXFillAttr.GetItemSet() )
 {
@@ -100,7 +97,7 @@ SvxGradientTabPage::SvxGradientTabPage
 
     // setting the output device
     m_rXFSet.Put( XFillStyleItem(drawing::FillStyle_GRADIENT) );
-    m_rXFSet.Put( m_aXGradientItem );
+    m_rXFSet.Put( XFillGradientItem(OUString(), XGradient( COL_BLACK, COL_WHITE )) );
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
 
     // set handler

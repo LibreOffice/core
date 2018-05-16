@@ -36,13 +36,12 @@ SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(vcl::Window *pParent,
             : OUString("cui/ui/borderbackgrounddialog.ui"),
         &rCoreSet)
     , mbEnableBackgroundSelector(bEnableSelector)
-    , mbEnableDrawingLayerFillStyles(bEnableDrawingLayerFillStyles)
     , m_nBackgroundPageId(0)
     , m_nAreaPageId(0)
     , m_nTransparencePageId(0)
 {
     AddTabPage("borders", SvxBorderTabPage::Create, nullptr );
-    if (mbEnableDrawingLayerFillStyles)
+    if (bEnableDrawingLayerFillStyles)
     {
         // Here we want full DrawingLayer FillStyle access, so add Area and Transparency TabPages
         m_nAreaPageId = AddTabPage("area", SvxAreaTabPage::Create, nullptr);
