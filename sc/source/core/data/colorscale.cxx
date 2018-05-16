@@ -15,6 +15,7 @@
 #include <bitmaps.hlst>
 #include <tokenarray.hxx>
 #include <refupdatecontext.hxx>
+#include <refdata.hxx>
 
 #include <formula/token.hxx>
 #include <o3tl/make_unique.hxx>

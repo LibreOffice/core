@@ -13,6 +13,7 @@
 #include <listenercontext.hxx>
 #include <document.hxx>
 #include <grouparealistener.hxx>
+#include <refdata.hxx>
 
 namespace sc {
 

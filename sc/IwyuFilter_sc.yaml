@@ -172,3 +172,8 @@ blacklist:
     sc/inc/formulaparserpool.hxx:
     # base class has to be a complete type
     - com/sun/star/sheet/XFormulaParser.hpp
+    sc/inc/formularesult.hxx:
+    # Needed for enum
+    - global.hxx
+    # Needed for macros
+    - calcmacros.hxx

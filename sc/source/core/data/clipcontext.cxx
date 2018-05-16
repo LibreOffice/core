@@ -19,6 +19,7 @@
 
 #include <svl/intitem.hxx>
 #include <formula/errorcodes.hxx>
+#include <refdata.hxx>
 
 namespace sc {
 

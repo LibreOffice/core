@@ -52,6 +52,7 @@
 #include <rowheightcontext.hxx>
 
 #include <formula/vectortoken.hxx>
+#include <token.hxx>
 
 #include <vector>
 #include <memory>
