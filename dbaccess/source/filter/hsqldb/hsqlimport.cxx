@@ -362,7 +362,7 @@ void HsqlImporter::importHsqlDatabase()
         }
     }
 
-    // show first error occured
+    // show first error occurred
     if (pException)
     {
         SAL_WARN("dbaccess", "Error during migration");
