@@ -558,13 +558,12 @@ GalleryThemeProperties::GalleryThemeProperties(vcl::Window* pParent,
         "cui/ui/gallerythemedialog.ui", pItemSet)
     , pData(_pData)
     , m_nGeneralPageId(0)
-    , m_nFilesPageId(0)
 {
     m_nGeneralPageId = AddTabPage("general", TPGalleryThemeGeneral::Create, nullptr);
-    m_nFilesPageId = AddTabPage("files", TPGalleryThemeProperties::Create, nullptr);
+    sal_uInt16 nFilesPageId = AddTabPage("files", TPGalleryThemeProperties::Create, nullptr);
 
     if( pData->pTheme->IsReadOnly() )
-        RemoveTabPage(m_nFilesPageId);
+        RemoveTabPage(nFilesPageId);
 
     OUString aText = GetText() + pData->pTheme->GetName();
 

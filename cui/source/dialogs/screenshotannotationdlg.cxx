@@ -158,7 +158,6 @@ private:
     Point GetOffsetInPicture() const;
 
     // local variables
-    ScreenshotAnnotationDlg&    mrParent;
     Dialog&                     mrParentDialog;
     Bitmap                      maParentDialogBitmap;
     Bitmap                      maDimmedDialogBitmap;
@@ -193,8 +192,7 @@ OUString ScreenshotAnnotationDlg_Impl::maLastFolderURL = OUString();
 ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     ScreenshotAnnotationDlg& rParent,
     Dialog& rParentDialog)
-:   mrParent(rParent),
-    mrParentDialog(rParentDialog),
+:   mrParentDialog(rParentDialog),
     maParentDialogBitmap(rParentDialog.createScreenshot()),
     maDimmedDialogBitmap(maParentDialogBitmap),
     maParentDialogSize(maParentDialogBitmap.GetSizePixel()),
@@ -213,11 +211,11 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     assert(0 != maParentDialogBitmap.GetSizePixel().Height());
 
     // get needed widgets
-    mrParent.get(mpPicture, "picture");
+    rParent.get(mpPicture, "picture");
     assert(mpPicture.get());
-    mrParent.get(mpText, "text");
+    rParent.get(mpText, "text");
     assert(mpText.get());
-    mrParent.get(mpSave, "save");
+    rParent.get(mpSave, "save");
     assert(mpSave.get());
 
     // set screenshot image at FixedImage, resize, set event listener

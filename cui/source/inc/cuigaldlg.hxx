@@ -197,7 +197,6 @@ class GalleryThemeProperties : public SfxTabDialog
     ExchangeData*   pData;
 
     sal_uInt16 m_nGeneralPageId;
-    sal_uInt16 m_nFilesPageId;
 
     virtual void PageCreated(sal_uInt16 nId, SfxTabPage &rPage) override;
 

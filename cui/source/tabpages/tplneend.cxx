@@ -63,7 +63,6 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     rOutAttrs           ( rInAttrs ),
     pPolyObj            ( nullptr ),
 
-    aXColor             ( OUString(), COL_BLACK ),
     aXLineAttr          ( rInAttrs.GetPool() ),
     rXLSet              ( aXLineAttr.GetItemSet() ),
     pLineEndList        ( nullptr ),
@@ -86,7 +85,7 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
 
     rXLSet.Put( XLineStyleItem(css::drawing::LineStyle_SOLID) );
     rXLSet.Put( XLineWidthItem(XOUT_WIDTH) );
-    rXLSet.Put( aXColor );
+    rXLSet.Put( XLineColorItem( OUString(), COL_BLACK ) );
     rXLSet.Put( XLineStartWidthItem( m_pCtlPreview->GetOutputSize().Height()  / 2 ) );
     rXLSet.Put( XLineEndWidthItem( m_pCtlPreview->GetOutputSize().Height() / 2 ) );
 

@@ -40,8 +40,6 @@ namespace svx
         VclPtr<Edit>                    m_pName;
         VclPtr<OKButton>                m_pOK;
 
-        bool                            m_bCreatingNew;
-
         Link<const OUString&,bool>      m_aNameValidator;
 
     public:

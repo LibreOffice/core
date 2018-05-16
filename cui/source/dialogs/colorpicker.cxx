@@ -776,7 +776,6 @@ public:
     void setColorComponent(ColorComponent nComp, double dValue);
 
 private:
-    sal_Int16 mnDialogMode;
     ColorMode meMode;
 
     double mdRed, mdGreen, mdBlue;
@@ -784,7 +783,7 @@ private:
     double mdCyan, mdMagenta, mdYellow, mdKey;
 };
 
-ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, Color nColor, sal_Int16 nMode)
+ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, Color nColor, sal_Int16 nDialogMode)
     : GenericDialogController(pParent, "cui/ui/colorpickerdialog.ui", "ColorPicker")
     , m_xColorField(new ColorFieldControl(m_xBuilder->weld_drawing_area("colorField")))
     , m_xColorSlider(new ColorSliderControl(m_xBuilder->weld_drawing_area("colorSlider")))
@@ -809,7 +808,6 @@ ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, Color nColor, sal_In
     , m_xMFMagenta(m_xBuilder->weld_metric_spin_button("magSpinbutton", FUNIT_PERCENT))
     , m_xMFYellow(m_xBuilder->weld_metric_spin_button("yellowSpinbutton", FUNIT_PERCENT))
     , m_xMFKey(m_xBuilder->weld_metric_spin_button("keySpinbutton", FUNIT_PERCENT))
-    , mnDialogMode( nMode )
     , meMode( DefaultMode )
 {
     m_xColorField->SetModifyHdl( LINK( this, ColorPickerDialog, ColorFieldControlModifydl ) );
@@ -847,7 +845,7 @@ ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, Color nColor, sal_In
     Color aColor(nColor);
 
     // modify
-    if (mnDialogMode == 2)
+    if (nDialogMode == 2)
     {
         m_xColorPrevious->SetColor(aColor);
         m_xColorPrevious->show();
