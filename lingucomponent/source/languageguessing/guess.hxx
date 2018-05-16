@@ -51,7 +51,6 @@ class Guess final {
     private:
         string language_str;
         string country_str;
-        string encoding_str;
 };
 
 #endif

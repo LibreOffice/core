@@ -63,12 +63,6 @@ class JobResult final
 
     private:
 
-        /** hold the original pure result, which was given back by an
-            executed job
-            We analyze it and use it to set all our other members.
-         */
-        css::uno::Any m_aPureResult;
-
         /**
             an user of us must know, which (possible) parts of
             a "pure result" was really set by an executed job.
@@ -84,13 +78,6 @@ class JobResult final
             user of us. We provide this information here only.
          */
         std::vector< css::beans::NamedValue > m_lArguments;
-
-        /**
-            an executed job can force his deactivation
-            But we provide this information here only.
-            Doing so is part of any user of us.
-         */
-        bool m_bDeactivate;
 
         /**
             represent the part "DispatchResult"
