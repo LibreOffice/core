@@ -135,7 +135,7 @@ private:
 
     DECL_LINK(SecurityOptionsHdl, Button*, void);
     DECL_LINK(SavePasswordHdl, Button*, void);
-    DECL_STATIC_LINK(SvxSecurityTabPage, MasterPasswordHdl, Button*, void);
+    DECL_LINK(MasterPasswordHdl, Button*, void);
     DECL_LINK(MasterPasswordCBHdl, Button*, void);
     DECL_LINK(ShowPasswordsHdl, Button*, void);
     DECL_STATIC_LINK(SvxSecurityTabPage, MacroSecPBHdl, Button*, void );
