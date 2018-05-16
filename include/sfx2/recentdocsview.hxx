@@ -87,7 +87,6 @@ private:
     long mnItemMaxSize;
     long mnTextHeight;
     long mnItemPadding;
-    long mnItemMaxTextLength;
     size_t mnLastMouseDownItem;
 
     /// Image that appears when there is no recent document.

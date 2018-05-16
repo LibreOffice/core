@@ -249,7 +249,6 @@ SfxNewFileDialog::SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode n
     , m_xMoreBt(m_xBuilder->weld_expander("expander"))
     , m_xPreviewWin(new SfxPreviewWin_Impl(m_xBuilder->weld_drawing_area("image")))
     , m_xAltTitleFt(m_xBuilder->weld_label("alttitle"))
-    , m_sLoadTemplate(m_xAltTitleFt->get_label())
     , m_nFlags(nFlags)
 {
     const int nWidth = m_xRegionLb->get_approximate_digit_width() * 32;
@@ -270,7 +269,7 @@ SfxNewFileDialog::SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode n
         m_xMergeStyleCB->show();
         m_xMoreBt->hide();
         m_xTextStyleCB->set_active(true);
-        m_xDialog->set_title(m_sLoadTemplate);
+        m_xDialog->set_title(m_xAltTitleFt->get_label());
     }
     else
     {

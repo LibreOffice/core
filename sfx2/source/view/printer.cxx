@@ -195,13 +195,12 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog(weld::Window *pParent,
                                              const SfxItemSet *pSet)
     : GenericDialogController(pParent, "sfx/ui/printeroptionsdialog.ui", "PrinterOptionsDialog")
     , pDlgImpl(new SfxPrintOptDlg_Impl)
-    , pViewSh(pViewShell)
     , pOptions(pSet->Clone())
     , m_xHelpBtn(m_xBuilder->weld_widget("help"))
     , m_xContainer(m_xDialog->weld_content_area())
 {
     // Insert TabPage
-    pPage.reset(pViewSh->CreatePrintOptionsPage(m_xContainer.get(), *pOptions));
+    pPage.reset(pViewShell->CreatePrintOptionsPage(m_xContainer.get(), *pOptions));
     DBG_ASSERT( pPage, "CreatePrintOptions != SFX_VIEW_HAS_PRINTOPTIONS" );
     if( pPage )
     {

@@ -503,7 +503,7 @@ friend class SfxHelpIndexWindow_Impl;
     VclPtr<SfxHelpIndexWindow_Impl>    pIndexWin;
     VclPtr<SfxHelpTextWindow_Impl>     pTextWin;
     HelpInterceptor_Impl*       pHelpInterceptor;
-    HelpListener_Impl*          pHelpListener;
+    std::unique_ptr<HelpListener_Impl> pHelpListener;
 
     sal_Int32           nExpandWidth;
     sal_Int32           nCollapseWidth;

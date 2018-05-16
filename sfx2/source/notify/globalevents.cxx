@@ -70,7 +70,6 @@ class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
     ::comphelper::OInterfaceContainerHelper2 m_aLegacyListeners;
     ::comphelper::OInterfaceContainerHelper2 m_aDocumentListeners;
     TModelList m_lModels;
-    GlobalEventConfig* pImp;
 
 public:
     explicit SfxGlobalEvents_Impl(const css::uno::Reference < css::uno::XComponentContext >& rxContext);
@@ -143,12 +142,10 @@ SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const uno::Reference < uno::XCompone
     , m_xJobExecutorListener( task::theJobExecutor::get( rxContext ), uno::UNO_QUERY_THROW )
     , m_aLegacyListeners      (m_aLock)
     , m_aDocumentListeners    (m_aLock)
-    , pImp                    (nullptr      )
 {
     m_refCount++;
     SfxApplication::GetOrCreate();
-    pImp                   = new GlobalEventConfig();
-    m_xEvents              = pImp;
+    m_xEvents = new GlobalEventConfig();
     m_refCount--;
 }
 

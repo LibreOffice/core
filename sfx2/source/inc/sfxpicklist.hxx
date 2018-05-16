@@ -35,7 +35,8 @@ class SfxPickList
 private:
     std::unique_ptr<SfxPickListImpl> mxImpl;
 public:
-    SfxPickList(sal_uInt32 nAllowedMenuSize);
+    SfxPickList();
+    /// Ensure instantiation of listener that manages the internal recently-used list
     static void ensure();
     ~SfxPickList();
 };

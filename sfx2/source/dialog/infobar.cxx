@@ -95,12 +95,12 @@ class SfxCloseButton : public PushButton
 {
     basegfx::BColor m_aBackgroundColor;
     basegfx::BColor m_aForegroundColor;
-    basegfx::BColor m_aMessageColor;
 
 public:
     explicit SfxCloseButton(vcl::Window* pParent) : PushButton(pParent, 0)
     {
-        GetInfoBarColors(InfoBarType::Warning,m_aBackgroundColor,m_aForegroundColor,m_aMessageColor);
+        basegfx::BColor aMessageColor;
+        GetInfoBarColors(InfoBarType::Warning,m_aBackgroundColor,m_aForegroundColor,aMessageColor);
     }
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
