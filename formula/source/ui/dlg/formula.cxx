@@ -614,40 +614,32 @@ void FormulaDlg_Impl::UpdateValues( bool bForceRecalcStruct )
 
 bool FormulaDlg_Impl::CalcStruct( const OUString& rStrExp, bool bForceRecalcStruct )
 {
-    bool bResult = true;
     sal_Int32 nLength = rStrExp.getLength();
 
     if ( !rStrExp.isEmpty() && (bForceRecalcStruct || m_aOldFormula != rStrExp) && m_bStructUpdate)
     {
-        // Only calculate the value when there isn't any more keyboard input:
+        m_pStructPage->ClearStruct();
 
-        if ( !Application::AnyInput( VclInputFlags::KEYBOARD ) )
+        OUString aString = rStrExp;
+        if (rStrExp[nLength-1] == '(')
         {
-            m_pStructPage->ClearStruct();
-
-            OUString aString = rStrExp;
-            if (rStrExp[nLength-1] == '(')
-            {
-                aString = aString.copy( 0, nLength-1);
-            }
-
-            aString = aString.replaceAll( "\n", "");
-            OUString aStrResult;
-
-            if ( CalcValue( aString, aStrResult ) )
-                m_pWndFormResult->SetText( aStrResult );
-
-            UpdateTokenArray(aString);
-            fillTree(m_pStructPage);
-
-            m_aOldFormula = rStrExp;
-            if (rStrExp[nLength-1] == '(')
-                UpdateTokenArray(rStrExp);
+            aString = aString.copy( 0, nLength-1);
         }
-        else
-            bResult = false;
+
+        aString = aString.replaceAll( "\n", "");
+        OUString aStrResult;
+
+        if ( CalcValue( aString, aStrResult ) )
+            m_pWndFormResult->SetText( aStrResult );
+
+        UpdateTokenArray(aString);
+        fillTree(m_pStructPage);
+
+        m_aOldFormula = rStrExp;
+        if (rStrExp[nLength-1] == '(')
+            UpdateTokenArray(rStrExp);
     }
-    return bResult;
+    return true;
 }
 
 
