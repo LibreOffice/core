@@ -622,13 +622,13 @@ long SvxMacroTabPage_::GenericHandler_Impl( SvxMacroTabPage_* pThis, PushButton*
                 )
             )
     {
-        ScopedVclPtrInstance< AssignComponentDialog > pAssignDlg( pThis, sEventURL );
+        AssignComponentDialog aAssignDlg(pThis->GetFrameWeld(), sEventURL);
 
-        short ret = pAssignDlg->Execute();
+        short ret = aAssignDlg.run();
         if( ret )
         {
             sEventType = "UNO";
-            sEventURL = pAssignDlg->getURL();
+            sEventURL = aAssignDlg.getURL();
             if(!pThis->bAppEvents)
                 pThis->bDocModified = true;
         }
@@ -821,45 +821,37 @@ SvxMacroAssignDlg::SvxMacroAssignDlg( vcl::Window* pParent, const Reference< fra
     SetTabPage(VclPtr<SvxMacroTabPage>::Create(get_content_area(), _rxDocumentFrame, rSet, xNameReplace, nSelectedIndex));
 }
 
-
-IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler, Button*, void)
+IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler, weld::Button&, void)
 {
-    OUString aMethodName = mpMethodEdit->GetText();
+    OUString aMethodName = mxMethodEdit->get_text();
     maURL.clear();
     if( !aMethodName.isEmpty() )
     {
         maURL = aVndSunStarUNO;
         maURL += aMethodName;
     }
-    EndDialog(1);
+    m_xDialog->response(RET_OK);
 }
 
-AssignComponentDialog::AssignComponentDialog( vcl::Window * pParent, const OUString& rURL )
-    : ModalDialog( pParent, "AssignComponent", "cui/ui/assigncomponentdialog.ui" )
+AssignComponentDialog::AssignComponentDialog(weld::Window* pParent, const OUString& rURL)
+    : GenericDialogController(pParent, "cui/ui/assigncomponentdialog.ui", "AssignComponent")
     , maURL( rURL )
+    , mxMethodEdit(m_xBuilder->weld_entry("methodEntry"))
+    , mxOKButton(m_xBuilder->weld_button("ok"))
 {
-    get(mpMethodEdit, "methodEntry");
-    get(mpOKButton, "ok");
-    mpOKButton->SetClickHdl(LINK(this, AssignComponentDialog, ButtonHandler));
+    mxOKButton->connect_clicked(LINK(this, AssignComponentDialog, ButtonHandler));
 
     OUString aMethodName;
     if( maURL.startsWith( aVndSunStarUNO ) )
     {
         aMethodName = maURL.copy( strlen(aVndSunStarUNO) );
     }
-    mpMethodEdit->SetText( aMethodName, Selection( 0, SELECTION_MAX ) );
+    mxMethodEdit->set_text(aMethodName);
+    mxMethodEdit->select_region(0, -1);
 }
 
 AssignComponentDialog::~AssignComponentDialog()
 {
-    disposeOnce();
-}
-
-void AssignComponentDialog::dispose()
-{
-    mpMethodEdit.clear();
-    mpOKButton.clear();
-    ModalDialog::dispose();
 }
 
 IMPL_LINK_NOARG( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, void )
