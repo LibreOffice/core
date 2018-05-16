@@ -265,7 +265,8 @@ SignatureStreamHelper DocumentSignatureManager::ImplOpenSignatureStream(sal_Int3
 bool DocumentSignatureManager::add(
     const uno::Reference<security::XCertificate>& xCert,
     const uno::Reference<xml::crypto::XXMLSecurityContext>& xSecurityContext,
-    const OUString& rDescription, sal_Int32& nSecurityId, bool bAdESCompliant)
+    const OUString& rDescription, sal_Int32& nSecurityId, bool bAdESCompliant,
+    const OUString& rSignatureLineId)
 {
     if (!xCert.is())
     {
@@ -383,6 +384,9 @@ bool DocumentSignatureManager::add(
     maSignatureHelper.SetDateTime(nSecurityId, Date(Date::SYSTEM),
                                   tools::Time(tools::Time::SYSTEM));
     maSignatureHelper.SetDescription(nSecurityId, rDescription);
+
+    if (!rSignatureLineId.isEmpty())
+        maSignatureHelper.SetSignatureLineId(nSecurityId, rSignatureLineId);
 
     // We open a signature stream in which the existing and the new
     //signature is written. ImplGetSignatureInformation (later in this function) will
