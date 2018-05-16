@@ -4399,21 +4399,21 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                   NaturalSpline(n, tarr, yarr, yb, carr, darr);
                               }
 
-                              sprintf(buf, "M%d %dC%d %d", WTSM(static_cast<int>(xarr[0])), WTSM(static_cast<int>(yarr[0])),
-                                      WTSM(static_cast<int>(xarr[0] + xb[0]/3)), WTSM(static_cast<int>(yarr[0] + yb[0]/3)) );
+                              sprintf(buf, "M%d %dC%d %d", WTSM(xarr[0]), WTSM(yarr[0]),
+                                      WTSM(xarr[0] + xb[0]/3), WTSM(yarr[0] + yb[0]/3) );
                               oustr += ascii(buf);
 
                               for( i = 1 ; i < n  ; i++ ){
                                   if( i == n -1 ){
                                       sprintf(buf, " %d %d %d %dz",
-                                              WTSM(static_cast<int>(xarr[i] - xb[i]/3)), WTSM(static_cast<int>(yarr[i] - yb[i]/3)),
-                                              WTSM(static_cast<int>(xarr[i])), WTSM(static_cast<int>(yarr[i])) );
+                                              WTSM(xarr[i] - xb[i]/3), WTSM(yarr[i] - yb[i]/3),
+                                              WTSM(xarr[i]), WTSM(yarr[i]) );
                                   }
                                   else{
                                       sprintf(buf, " %d %d %d %d %d %d",
-                                              WTSM(static_cast<int>(xarr[i] - xb[i]/3)), WTSM(static_cast<int>(yarr[i] - yb[i]/3)),
-                                              WTSM(static_cast<int>(xarr[i])), WTSM(static_cast<int>(yarr[i])),
-                                              WTSM(static_cast<int>(xarr[i]) + xb[i]/3), WTSM(static_cast<int>(yarr[i] + yb[i]/3)) );
+                                              WTSM(xarr[i] - xb[i]/3), WTSM(yarr[i] - yb[i]/3),
+                                              WTSM(xarr[i]), WTSM(yarr[i]),
+                                              WTSM(xarr[i] + xb[i]/3), WTSM(yarr[i] + yb[i]/3) );
                                   }
 
                                   oustr += ascii(buf);

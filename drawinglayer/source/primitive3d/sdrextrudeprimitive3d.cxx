@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cmath>
+
 #include <drawinglayer/primitive3d/sdrextrudeprimitive3d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -62,7 +66,7 @@ namespace drawinglayer
                     const double fFrontArea(basegfx::utils::getArea(aFirstPolygon));
                     const double fSqrtFrontArea(sqrt(fFrontArea));
                     double fRelativeTextureWidth = basegfx::fTools::equalZero(fSqrtFrontArea) ? 1.0 : fFrontLength / fSqrtFrontArea;
-                    fRelativeTextureWidth = static_cast<double>(static_cast<sal_uInt32>(fRelativeTextureWidth - 0.5));
+                    fRelativeTextureWidth = std::trunc(fRelativeTextureWidth - 0.5);
 
                     if(fRelativeTextureWidth < 1.0)
                     {

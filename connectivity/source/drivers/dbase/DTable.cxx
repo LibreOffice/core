@@ -134,9 +134,9 @@ void lcl_CalcJulDate(sal_Int32& _nJulianDate,sal_Int32& _nJulianTime, const css:
     } // if ( rDateTime.Year <= 0 )
     else
     {
-        _nJulianDate = static_cast<sal_Int32>( ((365.25 * iy0)
+        _nJulianDate = static_cast<sal_Int32>(365.25 * iy0)
             + static_cast<sal_Int32>(30.6001 * (im0 + 1))
-            + aDateTime.Day + 1720994));
+            + aDateTime.Day + 1720994;
     }
     double JD = _nJulianDate + 0.5;
     _nJulianDate = static_cast<sal_Int32>( JD + 0.5);

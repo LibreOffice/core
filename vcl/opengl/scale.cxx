@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <cmath>
+
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <vcl/bitmap.hxx>
@@ -203,7 +205,7 @@ bool OpenGLSalBitmap::ImplScaleArea( const rtl::Reference< OpenGLContext > &xCon
 
     double ixscale = 1 / rScaleX;
     double iyscale = 1 / rScaleY;
-    bool fast = ( ixscale == int( ixscale ) && iyscale == int( iyscale )
+    bool fast = ( ixscale == std::trunc( ixscale ) && iyscale == std::trunc( iyscale )
         && int( nNewWidth * ixscale ) == mnWidth && int( nNewHeight * iyscale ) == mnHeight );
 
     bool bTwoPasses = false;

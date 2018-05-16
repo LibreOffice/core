@@ -1898,8 +1898,8 @@ bool PowerPointExport::WriteComments(sal_uInt32 nPageNum)
                                     FSEND);
 
                 pFS->singleElementNS(XML_p, XML_pos,
-                                     XML_x, I64S((static_cast<sal_Int64>(57600*aRealPoint2D.X + 1270)/2540.0)),
-                                     XML_y, I64S((static_cast<sal_Int64>(57600*aRealPoint2D.Y + 1270)/2540.0)),
+                                     XML_x, I64S(static_cast<sal_Int64>((57600*aRealPoint2D.X + 1270)/2540.0)),
+                                     XML_y, I64S(static_cast<sal_Int64>((57600*aRealPoint2D.Y + 1270)/2540.0)),
                                      FSEND);
 
                 pFS->startElementNS(XML_p, XML_text,
