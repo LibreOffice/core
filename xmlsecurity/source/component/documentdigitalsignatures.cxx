@@ -107,7 +107,8 @@ public:
     sal_Bool SAL_CALL signDocumentContentWithCertificate(
         const css::uno::Reference<css::embed::XStorage>& Storage,
         const css::uno::Reference<css::io::XStream>& xSignStream,
-        const css::uno::Reference<css::security::XCertificate>& xCertificate) override;
+        const css::uno::Reference<css::security::XCertificate>& xCertificate,
+        const OUString& rSignatureLineId) override;
     css::uno::Sequence<css::security::DocumentSignatureInformation>
         SAL_CALL verifyDocumentContentSignatures(
             const css::uno::Reference<css::embed::XStorage>& xStorage,
@@ -225,7 +226,7 @@ sal_Bool DocumentDigitalSignatures::signDocumentContent(
 sal_Bool DocumentDigitalSignatures::signDocumentContentWithCertificate(
     const Reference<css::embed::XStorage>& rxStorage,
     const Reference<css::io::XStream>& xSignStream,
-    const Reference<css::security::XCertificate>& xCertificate)
+    const Reference<css::security::XCertificate>& xCertificate, const OUString& aSignatureLineId)
 {
     OSL_ENSURE(!m_sODFVersion.isEmpty(),
                "DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
@@ -249,8 +250,8 @@ sal_Bool DocumentDigitalSignatures::signDocumentContentWithCertificate(
 
     sal_Int32 nSecurityId;
     OUString aDescription("");
-    bool bSuccess
-        = aSignatureManager.add(xCertificate, xSecurityContext, aDescription, nSecurityId, true);
+    bool bSuccess = aSignatureManager.add(xCertificate, xSecurityContext, aDescription, nSecurityId,
+                                          true, aSignatureLineId);
     if (!bSuccess)
         return false;
 
