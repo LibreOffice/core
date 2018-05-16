@@ -341,12 +341,12 @@ style::LineSpacing SwVbaParagraphFormat::getOOoLineSpacing( float _lineSpace, sa
             aLineSpacing.Mode = style::LineSpacingMode::PROP;
             aLineSpacing.Height = PERCENT100;
         }
-        else if( _lineSpace == sal_Int16( CHARACTER_INDENT_FACTOR * 1.5 ) )
+        else if( _lineSpace == CHARACTER_INDENT_FACTOR * 1.5 ) // no rounding issues, == 18
         {
             aLineSpacing.Mode = style::LineSpacingMode::PROP;
             aLineSpacing.Height = PERCENT150;
         }
-        else if( _lineSpace == sal_Int16( CHARACTER_INDENT_FACTOR * 2 ) )
+        else if( _lineSpace == CHARACTER_INDENT_FACTOR * 2 )
         {
             aLineSpacing.Mode = style::LineSpacingMode::PROP;
             aLineSpacing.Height = PERCENT200;
