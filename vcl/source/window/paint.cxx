@@ -1218,6 +1218,11 @@ void Window::LogicInvalidate(const tools::Rectangle* pRectangle)
         std::vector<vcl::LOKPayloadItem> aPayload;
         if (pRectangle)
             aPayload.push_back(std::make_pair(OString("rectangle"), pRectangle->toString()));
+        else
+        {
+            const tools::Rectangle aRect(Point(0, 0), GetSizePixel());
+            aPayload.push_back(std::make_pair(OString("rectangle"), aRect.toString()));
+        }
 
         pNotifier->notifyWindow(GetLOKWindowId(), "invalidate", aPayload);
     }
