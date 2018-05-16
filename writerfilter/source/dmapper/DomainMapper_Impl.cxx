@@ -78,6 +78,7 @@
 
 #include <oox/token/tokens.hxx>
 
+#include <cmath>
 #include <map>
 #include <tuple>
 #include <unordered_map>
@@ -4586,7 +4587,8 @@ static util::DateTime lcl_dateTimeFromSerial(const double& dSerial)
     DateTime d(Date(30, 12, 1899));
     d.AddDays( static_cast<sal_Int32>(dSerial) );
 
-    double frac = dSerial - static_cast<sal_Int32>(dSerial);
+    double dummy;
+    double frac = std::modf(dSerial, &dummy);
     sal_uInt32 seconds = frac * secondsPerDay;
 
     util::DateTime date;

@@ -248,6 +248,23 @@ bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
             }
         }
         break;
+    case CK_FloatingToIntegral:
+    case CK_IntegralToFloating:
+        if (auto e = dyn_cast<ExplicitCastExpr>(expr->getSubExpr()->IgnoreParenImpCasts())) {
+            if ((isa<CXXStaticCastExpr>(e) || isa<CXXFunctionalCastExpr>(e))
+                && (e->getSubExprAsWritten()->getType().getCanonicalType().getTypePtr()
+                    == expr->getType().getCanonicalType().getTypePtr()))
+            {
+                report(
+                    DiagnosticsEngine::Warning,
+                    ("suspicious %select{static_cast|functional cast}0 from %1 to %2, result is"
+                     " implicitly cast to %3"),
+                    e->getExprLoc())
+                    << isa<CXXFunctionalCastExpr>(e) << e->getSubExprAsWritten()->getType()
+                    << e->getTypeAsWritten() << expr->getType() << expr->getSourceRange();
+            }
+        }
+        break;
     default:
         break;
     }

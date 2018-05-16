@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cmath>
 
 #include <osl/diagnose.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -87,7 +90,7 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
     if (in) {
         const double sqrtArea2 = sqrt( t * m_sqrtElements * m_sqrtElements );
         const double edge = ::basegfx::pruneScaleValue(
-            static_cast<double>( static_cast<sal_Int32>(sqrtArea2) ) /
+            std::trunc(sqrtArea2) /
             m_sqrtElements );
 
         ::basegfx::B2DPolygon poly;
@@ -99,7 +102,8 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
             res.append(poly);
         }
         const double a = (M_SQRT1_2 / m_sqrtElements);
-        const double d = (sqrtArea2 - static_cast<sal_Int32>(sqrtArea2));
+        double dummy;
+        const double d = std::modf(sqrtArea2, &dummy);
         const double len = (t * M_SQRT2 * d);
         const double height = ::basegfx::pruneScaleValue( M_SQRT1_2 / m_sqrtElements );
         poly.clear();
@@ -130,7 +134,7 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
     {
         const double sqrtArea2 = sqrt( t * m_sqrtElements * m_sqrtElements );
         const double edge = ::basegfx::pruneScaleValue(
-            static_cast<double>( static_cast<sal_Int32>(sqrtArea2) ) /
+            std::trunc(sqrtArea2) /
             m_sqrtElements );
 
         ::basegfx::B2DPolygon poly;
@@ -143,7 +147,8 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
             res.append(poly);
         }
         const double a = (M_SQRT1_2 / m_sqrtElements);
-        const double d = (sqrtArea2 - static_cast<sal_Int32>(sqrtArea2));
+        double dummy;
+        const double d = std::modf(sqrtArea2, &dummy);
         const double len = ((1.0 - t) * M_SQRT2 * d);
         const double height = ::basegfx::pruneScaleValue( M_SQRT1_2 / m_sqrtElements );
         poly.clear();

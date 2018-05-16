@@ -1329,7 +1329,7 @@ void Polygon::ImplReduceEdges( tools::Polygon& rPoly, const double& rArea, sal_u
                         else if( fRelLen > 1.0 )
                             fRelLen = 1.0;
 
-                        if( ( static_cast<sal_uInt32>( ( ( fLenFact - 1.0 ) * 1000000.0 ) + 0.5 ) < fBound ) &&
+                        if( ( std::round( ( fLenFact - 1.0 ) * 1000000.0 ) < fBound ) &&
                             ( fabs( fGradB ) <= ( fRelLen * fBound * 0.01 ) ) )
                         {
                             bDeletePoint = true;

@@ -30,6 +30,7 @@
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
 
+#include <cmath>
 #include <vector>
 #include <limits>
 #include <chrono>
@@ -370,7 +371,7 @@ double SwarmSolver::clampVariable(size_t nVarIndex, double fValue)
     double fResult = std::max(std::min(fValue, rBound.upper), rBound.lower);
 
     if (mbInteger)
-        return sal_Int64(fResult);
+        return std::trunc(fResult);
 
     return fResult;
 }
@@ -389,7 +390,7 @@ double SwarmSolver::boundVariable(size_t nVarIndex, double fValue)
     }
 
     if (mbInteger)
-        return sal_Int64(fResult);
+        return std::trunc(fResult);
 
     return fResult;
 }

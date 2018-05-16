@@ -155,7 +155,6 @@ void SbiExprNode::ConvertToIntConstIfPossible()
             double n;
             if( nVal >= SbxMININT && nVal <= SbxMAXINT && modf( nVal, &n ) == 0 )
             {
-                nVal = static_cast<double>(static_cast<short>(nVal));
                 eType = SbxINTEGER;
             }
         }

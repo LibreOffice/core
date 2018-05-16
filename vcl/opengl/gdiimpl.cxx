@@ -39,6 +39,7 @@
 #include <opengl/VertexUtils.hxx>
 #include <opengl/BufferObject.hxx>
 
+#include <cmath>
 #include <vector>
 
 #include <glm/gtc/type_ptr.hpp>
@@ -1071,7 +1072,7 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
     if( ixscale >= 2 && iyscale >= 2 )  // scale ratio less than 50%
     {
         areaScaling = true;
-        fastAreaScaling = ( ixscale == int( ixscale ) && iyscale == int( iyscale ));
+        fastAreaScaling = ( ixscale == std::trunc( ixscale ) && iyscale == std::trunc( iyscale ));
         // The generic case has arrays only up to 16 ratio downscaling and is performed in 2 passes,
         // when the ratio is in the 16-100 range, which is hopefully enough in practice, but protect
         // against buffer overflows in case such an extreme case happens (and in such case the precision
