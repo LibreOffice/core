@@ -907,13 +907,7 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
 #endif
 
     // Make sure we don't hide all sections, which would lead to a crash. First, count how many of them do we have.
-    int nShownSections = 0;
-    for( SetGetExpFields::const_iterator it = mpUpdateFields->GetSortLst()->begin(); it != mpUpdateFields->GetSortLst()->end(); ++it )
-    {
-        SwSection* pSect = const_cast<SwSection*>((*it)->GetSection());
-        if ( pSect && !pSect->IsCondHidden())
-            nShownSections++;
-    }
+    int nShownSections = m_rDoc.GetSections().size();
 
     OUString aNew;
     for( SetGetExpFields::const_iterator it = mpUpdateFields->GetSortLst()->begin(); it != mpUpdateFields->GetSortLst()->end(); ++it )
