@@ -118,8 +118,8 @@ public:
     bool SeekAndChgAttrIter(TextFrameIndex nPos, OutputDevice* pOut);
     bool SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFont );
 
-    // Do we have an attribute change at all?
-    bool HasHints() const { return nullptr != m_pHints; }
+    // Do we possibly have nasty things like footnotes?
+    bool MaybeHasHints() const;
 
     // Returns the attribute for a position
     SwTextAttr *GetAttr(TextFrameIndex nPos) const;
