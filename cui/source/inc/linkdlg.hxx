@@ -61,7 +61,6 @@ class SvBaseLinksDlg : public ModalDialog
     OUString aStrCloselinkmsgMulti;
     OUString aStrWaitinglink;
     sfx2::LinkManager*  pLinkMgr;
-    bool            bHtmlMode;
     Idle aUpdateIdle;
 
     DECL_LINK( LinksSelectHdl, SvTreeListBox*, void );

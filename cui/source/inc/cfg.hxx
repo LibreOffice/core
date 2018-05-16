@@ -598,7 +598,6 @@ private:
     VclPtr<FixedText>      pFtNote;
     VclPtr<PushButton>     pBtnImport;
     VclPtr<PushButton>     pBtnDelete;
-    Size            aTbSize;
     sal_uInt16      m_nNextId;
 
     sal_Int32       m_nExpectedSize;

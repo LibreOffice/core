@@ -38,9 +38,6 @@ namespace svx
     class DbRegistrationOptionsPage : public SfxTabPage
     {
     private:
-        OUString            m_aTypeText;
-        OUString            m_aPathText;
-
         VclPtr<SvSimpleTableContainer> m_pPathCtrl;
         VclPtr<PushButton>         m_pNew;
         VclPtr<PushButton>         m_pEdit;

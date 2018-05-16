@@ -62,8 +62,6 @@ SvxLineDefTabPage::SvxLineDefTabPage
               , &rInAttrs ),
     rOutAttrs       ( rInAttrs ),
 
-    aXDash              ( OUString(), XDash( css::drawing::DashStyle_RECT, 3, 7, 2, 40, 15 ) ),
-    aXColor             ( OUString(), COL_BLACK ),
     aXLineAttr          ( rInAttrs.GetPool() ),
     rXLSet              ( aXLineAttr.GetItemSet() ),
     pnDashListState(nullptr),
@@ -116,8 +114,8 @@ SvxLineDefTabPage::SvxLineDefTabPage
 
     rXLSet.Put( XLineStyleItem(drawing::LineStyle_DASH) );
     rXLSet.Put( XLineWidthItem(XOUT_WIDTH) );
-    rXLSet.Put( aXDash );
-    rXLSet.Put( aXColor );
+    rXLSet.Put( XLineDashItem( OUString(), XDash( css::drawing::DashStyle_RECT, 3, 7, 2, 40, 15 ) ) );
+    rXLSet.Put( XLineColorItem(OUString(), COL_BLACK) );
 
     // #i34740#
     m_pCtlPreview->SetLineAttributes(aXLineAttr.GetItemSet());

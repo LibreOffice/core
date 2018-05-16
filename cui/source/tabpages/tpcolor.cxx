@@ -59,7 +59,6 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     , rOutAttrs           ( rInAttrs )
     // All the horrific pointers we store and should not
     , pnColorListState( nullptr )
-    , aXFillColorItem( OUString(), COL_BLACK )
     , aXFillAttr( rInAttrs.GetPool() )
     , rXFSet( aXFillAttr.GetItemSet() )
     , eCM( ColorModel::RGB )
@@ -109,7 +108,7 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
 
     // setting the output device
     rXFSet.Put( XFillStyleItem(drawing::FillStyle_SOLID) );
-    rXFSet.Put( aXFillColorItem );
+    rXFSet.Put( XFillColorItem(OUString(), COL_BLACK) );
     m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
 

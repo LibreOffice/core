@@ -260,8 +260,6 @@ private:
     const SfxItemSet&   rOutAttrs;
     XDash               aDash;
 
-    XLineDashItem       aXDash;
-    XLineColorItem      aXColor;
     XLineAttrSetItem    aXLineAttr;
     SfxItemSet&         rXLSet;
 
@@ -339,7 +337,6 @@ private:
     const SfxItemSet&   rOutAttrs;
     const SdrObject*    pPolyObj;
 
-    XLineColorItem      aXColor;
     XLineAttrSetItem    aXLineAttr;
     SfxItemSet&         rXLSet;
 
