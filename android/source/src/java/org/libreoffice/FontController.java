@@ -1,6 +1,5 @@
 package org.libreoffice;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.support.design.widget.BottomSheetBehavior;
@@ -249,7 +248,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
     }
 
     private void setupColorPicker(){
-        LinearLayout colorPickerLayout = (LinearLayout)mActivity.findViewById(R.id.toolbar_color_picker);
+        LinearLayout colorPickerLayout = mActivity.findViewById(R.id.toolbar_color_picker);
 
         RecyclerView recyclerView = colorPickerLayout.findViewById(R.id.fontColorView);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mActivity, 11, GridLayoutManager.VERTICAL, true);

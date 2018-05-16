@@ -830,7 +830,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         SharedPreferences defaultPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         viewMode = Integer.valueOf(defaultPrefs.getString(EXPLORER_VIEW_TYPE_KEY, ""+ GRID_VIEW));
         filterMode = Integer.valueOf(defaultPrefs.getString(FILTER_MODE_KEY , "-1"));
-        showHiddenFiles = Boolean.valueOf(defaultPrefs.getBoolean(ENABLE_SHOW_HIDDEN_FILES_KEY, false));
+        showHiddenFiles = defaultPrefs.getBoolean(ENABLE_SHOW_HIDDEN_FILES_KEY, false);
 
         Intent i = this.getIntent();
         if (i.hasExtra(CURRENT_DIRECTORY_KEY)) {

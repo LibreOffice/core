@@ -13,7 +13,6 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.view.KeyEvent;
 
-import org.libreoffice.kit.Document;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.IntSize;
 
