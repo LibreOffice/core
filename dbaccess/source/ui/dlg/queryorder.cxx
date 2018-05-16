@@ -49,7 +49,6 @@ DlgOrderCrit::DlgOrderCrit(vcl::Window * pParent,
     const Reference< XSingleSelectQueryComposer >& _rxComposer,
     const Reference< XNameAccess>& _rxCols)
     : ModalDialog(pParent, "SortDialog", "dbaccess/ui/sortdialog.ui")
-    , aSTR_NOENTRY(DBA_RES(STR_VALUE_NONE))
     , m_xQueryComposer(_rxComposer)
     , m_xColumns(_rxCols)
     , m_xConnection(_rxConnection)
@@ -76,6 +75,7 @@ DlgOrderCrit::DlgOrderCrit(vcl::Window * pParent,
     m_aValueList[1] = m_pLB_ORDERVALUE2;
     m_aValueList[2] = m_pLB_ORDERVALUE3;
 
+    OUString aSTR_NOENTRY(DBA_RES(STR_VALUE_NONE));
     for (VclPtr<ListBox> & j : m_aColumnList)
     {
         j->InsertEntry( aSTR_NOENTRY );
