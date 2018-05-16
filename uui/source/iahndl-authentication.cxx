@@ -393,7 +393,7 @@ handleAuthenticationRequest_(
 
 void
 executeMasterPasswordDialog(
-    vcl::Window * pParent,
+    weld::Window* pParent,
     LoginErrorInfo & rInfo,
     task::PasswordRequestMode nMode)
 {
@@ -404,21 +404,19 @@ executeMasterPasswordDialog(
         std::locale aResLocale(Translate::Create("uui"));
         if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
         {
-            ScopedVclPtrInstance< MasterPasswordCreateDialog > xDialog(
-                pParent, aResLocale);
-            rInfo.SetResult(xDialog->Execute()
+            MasterPasswordCreateDialog aDialog(pParent, aResLocale);
+            rInfo.SetResult(aDialog.run()
                 == RET_OK ? DialogMask::ButtonsOk : DialogMask::ButtonsCancel);
             aMaster = OUStringToOString(
-                xDialog->GetMasterPassword(), RTL_TEXTENCODING_UTF8);
+                aDialog.GetMasterPassword(), RTL_TEXTENCODING_UTF8);
         }
         else
         {
-            ScopedVclPtrInstance< MasterPasswordDialog > xDialog(
-                pParent, nMode, aResLocale);
-            rInfo.SetResult(xDialog->Execute()
+            MasterPasswordDialog aDialog(pParent, nMode, aResLocale);
+            rInfo.SetResult(aDialog.run()
                 == RET_OK ? DialogMask::ButtonsOk : DialogMask::ButtonsCancel);
             aMaster = OUStringToOString(
-                xDialog->GetMasterPassword(), RTL_TEXTENCODING_UTF8);
+                aDialog.GetMasterPassword(), RTL_TEXTENCODING_UTF8);
         }
     }
 
@@ -446,7 +444,7 @@ executeMasterPasswordDialog(
 
 void
 handleMasterPasswordRequest_(
-    vcl::Window * pParent,
+    weld::Window * pParent,
     task::PasswordRequestMode nMode,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations)
@@ -632,7 +630,9 @@ UUIInteractionHelper::handleMasterPasswordRequest(
     task::MasterPasswordRequest aMasterPasswordRequest;
     if (aAnyRequest >>= aMasterPasswordRequest)
     {
-        handleMasterPasswordRequest_(getParentProperty(),
+        uno::Reference<awt::XWindow> xParent = getParentXWindow();
+
+        handleMasterPasswordRequest_(Application::GetFrameWeld(xParent),
                                      aMasterPasswordRequest.Mode,
                                      rRequest->getContinuations());
         return true;
