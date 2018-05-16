@@ -92,9 +92,6 @@ public:
         ScXMLNamedExpressionsContext::Inserter* pInserter );
 
     virtual ~ScXMLNamedRangeContext() override;
-
-private:
-    ScXMLNamedExpressionsContext::Inserter* mpInserter;
 };
 
 class ScXMLNamedExpressionContext : public ScXMLImportContext
@@ -107,9 +104,6 @@ public:
         ScXMLNamedExpressionsContext::Inserter* pInserter );
 
     virtual ~ScXMLNamedExpressionContext() override;
-
-private:
-    ScXMLNamedExpressionsContext::Inserter* mpInserter;
 };
 
 #endif

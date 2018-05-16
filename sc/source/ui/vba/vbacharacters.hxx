@@ -33,8 +33,6 @@ private:
     css::uno::Reference< css::text::XTextRange > m_xTextRange;
     css::uno::Reference< css::text::XSimpleText > m_xSimpleText;
     ScVbaPalette m_aPalette;
-    sal_Int16 nLength;
-    sal_Int16 nStart;
     // Add because of MSO has different behavior.
     bool bReplace;
 public:

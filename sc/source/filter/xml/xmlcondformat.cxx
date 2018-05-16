@@ -95,11 +95,12 @@ ScXMLConditionalFormatContext::ScXMLConditionalFormatContext( ScXMLImport& rImpo
         }
     }
 
-    ScRangeStringConverter::GetRangeListFromString(maRange, sRange, GetScImport().GetDocument(),
+    ScRangeList aRangeList;
+    ScRangeStringConverter::GetRangeListFromString(aRangeList, sRange, GetScImport().GetDocument(),
             formula::FormulaGrammar::CONV_ODF);
 
     mxFormat.reset(new ScConditionalFormat(0, GetScImport().GetDocument()));
-    mxFormat->SetRange(maRange);
+    mxFormat->SetRange(aRangeList);
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLConditionalFormatContext::createFastChildContext(
@@ -854,8 +855,7 @@ void setColorEntryType(const OUString& rType, ScColorScaleEntry* pEntry, const O
 ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImport& rImport,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScColorScaleFormat* pFormat):
-    ScXMLImportContext( rImport ),
-    mpFormatEntry( nullptr )
+    ScXMLImportContext( rImport )
 {
     double nVal = 0;
     Color aColor;
@@ -890,9 +890,9 @@ ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImpor
     if(!sVal.isEmpty())
         sax::Converter::convertDouble(nVal, sVal);
 
-    mpFormatEntry = new ScColorScaleEntry(nVal, aColor);
-    setColorEntryType(sType, mpFormatEntry, sVal, GetScImport());
-    pFormat->AddEntry(mpFormatEntry);
+    auto pFormatEntry = new ScColorScaleEntry(nVal, aColor);
+    setColorEntryType(sType, pFormatEntry, sVal, GetScImport());
+    pFormat->AddEntry(pFormatEntry);
 }
 
 ScXMLFormattingEntryContext::ScXMLFormattingEntryContext( ScXMLImport& rImport,

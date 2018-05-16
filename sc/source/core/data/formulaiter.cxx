@@ -26,8 +26,7 @@
 using namespace formula;
 
 ScDetectiveRefIter::ScDetectiveRefIter( ScFormulaCell* pCell ) :
-    pCode(pCell->GetCode()),
-    maIter(*pCode),
+    maIter(*pCell->GetCode()),
     aPos(pCell->aPos)
 {
 }

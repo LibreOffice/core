@@ -46,7 +46,6 @@ class SC_DLLPUBLIC ScPreviewShell: public SfxViewShell
     VclPtr<ScrollBar>      pVerScroll;
     VclPtr<vcl::Window>    pCorner;
 
-    css::uno::Sequence< css::beans::PropertyValue > aSourceData;  // ViewData
     TriState        nSourceDesignMode;      // form design mode from TabView
     SvxZoomType     eZoom;
     long            nMaxVertPos;

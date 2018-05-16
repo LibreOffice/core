@@ -1183,7 +1183,6 @@ XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
     }
     // append additional text
     aNoteText = ScGlobal::addToken( aNoteText, rAddText, '\n', 2 );
-    maOrigNoteText = aNoteText;
 
     // initialize record dependent on BIFF type
     switch( rRoot.GetBiff() )

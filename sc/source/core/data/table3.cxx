@@ -259,7 +259,6 @@ private:
     std::unique_ptr<RowsType> mpRows; /// row-wise data table for sort by row operation.
 
     std::vector<std::unique_ptr<ScSortInfo[]>> mvppInfo;
-    SCSIZE          nCount;
     SCCOLROW        nStart;
     SCCOLROW        mnLastIndex; /// index of last non-empty cell position.
 
@@ -273,11 +272,12 @@ public:
 
     ScSortInfoArray( sal_uInt16 nSorts, SCCOLROW nInd1, SCCOLROW nInd2 ) :
         mvppInfo(nSorts),
-        nCount( nInd2 - nInd1 + 1 ), nStart( nInd1 ),
+        nStart( nInd1 ),
         mnLastIndex(nInd2),
         mbKeepQuery(false),
         mbUpdateRefs(false)
     {
+        SCSIZE nCount( nInd2 - nInd1 + 1 );
         if (nSorts)
         {
             for ( sal_uInt16 nSort = 0; nSort < nSorts; nSort++ )

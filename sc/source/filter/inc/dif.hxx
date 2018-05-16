@@ -66,7 +66,6 @@ public:
     sal_uInt32          nVector;
     sal_uInt32          nVal;
     sal_uInt32          nNumFormat;
-    rtl_TextEncoding    eCharSet;
 private:
     SvNumberFormatter*  pNumFormatter;
     SvStream&           rIn;

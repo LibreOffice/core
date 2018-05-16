@@ -73,7 +73,6 @@ public:
 private:
 
     std::unique_ptr<ScConditionalFormat> mxFormat;
-    ScRangeList maRange;
 
     ScXMLConditionalFormatsContext& mrParent;
 };
@@ -127,9 +126,6 @@ public:
     ScXMLColorScaleFormatEntryContext( ScXMLImport& rImport,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScColorScaleFormat* pFormat);
-
-private:
-    ScColorScaleEntry* mpFormatEntry;
 };
 
 class ScXMLFormattingEntryContext : public ScXMLImportContext

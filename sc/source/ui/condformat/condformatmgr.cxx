@@ -104,14 +104,13 @@ void ScCondFormatManagerWindow::setColSizes()
 ScCondFormatManagerDlg::ScCondFormatManagerDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList):
     ModalDialog(pParent, "CondFormatManager", "modules/scalc/ui/condformatmanager.ui"),
     mpFormatList( pFormatList ? new ScConditionalFormatList(*pFormatList) : nullptr),
-    mpDoc(pDoc),
     mbModified(false)
 {
     SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("CONTAINER");
     Size aSize(LogicToPixel(Size(290, 220), MapMode(MapUnit::MapAppFont)));
     pContainer->set_width_request(aSize.Width());
     pContainer->set_height_request(aSize.Height());
-    m_pCtrlManager = VclPtr<ScCondFormatManagerWindow>::Create(*pContainer, mpDoc, mpFormatList);
+    m_pCtrlManager = VclPtr<ScCondFormatManagerWindow>::Create(*pContainer, pDoc, mpFormatList);
     get(m_pBtnAdd, "add");
     get(m_pBtnRemove, "remove");
     get(m_pBtnEdit, "edit");

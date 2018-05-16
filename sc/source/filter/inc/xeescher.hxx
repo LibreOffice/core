@@ -344,7 +344,6 @@ private:
 
 private:
     XclExpString        maAuthor;       /// Name of the author.
-    OUString            maOrigNoteText; /// Original main text of the note.
     OString             maNoteText;     /// Main text of the note (<=BIFF7).
     XclExpStringRef     mpNoteContents; /// Text and formatting data (OOXML)
     ScAddress           maScPos;        /// Calc cell address of the note.
