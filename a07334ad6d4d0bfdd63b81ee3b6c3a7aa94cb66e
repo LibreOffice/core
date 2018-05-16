@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_bf136b65",
+        "filename": "dbaccess/source/ui/browser/brwctrlr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-05-16T21:20:50Z",
+      "side": 1,
+      "message": "I think it should be indeed \"it\u0027s owned...\"",
+      "range": {
+        "startLine": 1218,
+        "startChar": 39,
+        "endLine": 1218,
+        "endChar": 48
+      },
+      "revId": "a07334ad6d4d0bfdd63b81ee3b6c3a7aa94cb66e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
