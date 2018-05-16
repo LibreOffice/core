@@ -3661,8 +3661,9 @@ void SfxMedium::CreateTempFileNoCopy()
     CloseStorage();
 }
 
-bool SfxMedium::SignContents_Impl(const Reference<XCertificate> xCert, bool bScriptingContent,
-                                  const OUString& aODFVersion, bool bHasValidDocumentSignature)
+bool SfxMedium::SignContents_Impl(const Reference<XCertificate> xCert, const OUString& aSignatureLineId,
+                                  bool bScriptingContent, const OUString& aODFVersion,
+                                  bool bHasValidDocumentSignature)
 {
     bool bChanges = false;
 
@@ -3753,7 +3754,7 @@ bool SfxMedium::SignContents_Impl(const Reference<XCertificate> xCert, bool bScr
                         bool bSuccess = false;
                         if (xCert.is())
                             bSuccess = xSigner->signDocumentContentWithCertificate(
-                                GetZipStorageToSign_Impl(), xStream, xCert);
+                                GetZipStorageToSign_Impl(), xStream, xCert, aSignatureLineId);
                         else
                             bSuccess = xSigner->signDocumentContent(GetZipStorageToSign_Impl(),
                                                                     xStream);
@@ -3779,7 +3780,7 @@ bool SfxMedium::SignContents_Impl(const Reference<XCertificate> xCert, bool bScr
                         if (xCert.is())
                         {
                             bSuccess = xSigner->signDocumentContentWithCertificate(
-                                GetZipStorageToSign_Impl(), xStream, xCert);
+                                GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream, xCert, aSignatureLineId);
                         }
                         else
                         {
