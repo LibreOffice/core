@@ -152,7 +152,7 @@ OUString URLParameter::get_title()
 }
 
 
-OUString const & URLParameter::get_language()
+OUString const & URLParameter::get_language() const
 {
     return m_aLanguage;
 }

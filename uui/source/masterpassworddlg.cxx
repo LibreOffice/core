@@ -35,11 +35,10 @@ IMPL_LINK_NOARG(MasterPasswordDialog, OKHdl_Impl, Button*, void)
 MasterPasswordDialog::MasterPasswordDialog
 (
     vcl::Window*                                pParent,
-    css::task::PasswordRequestMode              aDialogMode,
+    css::task::PasswordRequestMode              nDialogMode,
     const std::locale&                          rLocale
 )
     : ModalDialog(pParent, "MasterPasswordDialog", "uui/ui/masterpassworddlg.ui")
-    , nDialogMode(aDialogMode)
     , rResLocale(rLocale)
 {
     get(m_pEDMasterPassword, "password");

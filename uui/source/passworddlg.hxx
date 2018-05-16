@@ -44,7 +44,6 @@ public:
     OUString        GetPassword() const { return m_xEDPassword->get_text(); }
 
 private:
-    css::task::PasswordRequestMode     nDialogMode;
     const std::locale&                 rResLocale;
 };
 

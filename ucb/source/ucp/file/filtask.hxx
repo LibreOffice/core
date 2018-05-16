@@ -503,7 +503,6 @@ namespace fileaccess
         static bool getUrlFromUnq( const OUString& Unq, OUString& Url );
 
 
-        bool m_bWithConfig;
         FileProvider*                                             m_pProvider;
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         css::uno::Reference< css::ucb::XPropertySetRegistry >     m_xFileRegistry;

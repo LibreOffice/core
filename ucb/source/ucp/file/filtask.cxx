@@ -118,7 +118,6 @@ TaskManager::MyProperty::~MyProperty()
 TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxContext,
               FileProvider* pProvider, bool bWithConfig )
     : m_nCommandId( 0 ),
-      m_bWithConfig( bWithConfig ),
       m_pProvider( pProvider ),
       m_xContext( rxContext ),
       Title( "Title" ),
@@ -351,7 +350,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
     m_sCommandInfo[8].Handle = -1;
     m_sCommandInfo[8].ArgType = cppu::UnoType<ucb::ContentInfo>::get();
 
-    if(m_bWithConfig)
+    if(bWithConfig)
     {
         uno::Reference< XPropertySetRegistryFactory > xRegFac = ucb::Store::create( m_xContext );
         // Open/create a registry

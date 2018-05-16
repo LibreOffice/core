@@ -113,10 +113,9 @@ class DocumentsAccessImpl : public DocumentsAccessImpl_BASE
     uno::Reference< uno::XComponentContext > m_xContext;
     Documents m_documents;
     NameIndexHash namesToIndices;
-    VbaDocumentsBase::DOCUMENT_TYPE meDocType;
 public:
     /// @throws uno::RuntimeException
-    DocumentsAccessImpl( const uno::Reference< uno::XComponentContext >& xContext, VbaDocumentsBase::DOCUMENT_TYPE eDocType ) :m_xContext( xContext ), meDocType( eDocType )
+    DocumentsAccessImpl( const uno::Reference< uno::XComponentContext >& xContext, VbaDocumentsBase::DOCUMENT_TYPE eDocType ) :m_xContext( xContext )
     {
         uno::Reference< container::XEnumeration > xEnum = new DocumentsEnumImpl( m_xContext );
         sal_Int32 nIndex=0;
@@ -124,8 +123,8 @@ public:
         {
             uno::Reference< lang::XServiceInfo > xServiceInfo( xEnum->nextElement(), uno::UNO_QUERY );
             if ( xServiceInfo.is()
-                && (  ( xServiceInfo->supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) && meDocType == VbaDocumentsBase::EXCEL_DOCUMENT )
-                || ( xServiceInfo->supportsService( "com.sun.star.text.TextDocument" ) && meDocType == VbaDocumentsBase::WORD_DOCUMENT ) ) )
+                && (  ( xServiceInfo->supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) && eDocType == VbaDocumentsBase::EXCEL_DOCUMENT )
+                || ( xServiceInfo->supportsService( "com.sun.star.text.TextDocument" ) && eDocType == VbaDocumentsBase::WORD_DOCUMENT ) ) )
             {
                 uno::Reference< frame::XModel > xModel( xServiceInfo, uno::UNO_QUERY_THROW ); // that the spreadsheetdocument is a xmodel is a given
                 m_documents.push_back( xModel );

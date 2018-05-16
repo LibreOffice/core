@@ -135,7 +135,6 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
 
         css::uno::Reference<css::task::XInteractionRequest> m_xRequest;
 
-        OUString m_aClashingName;
         css::uno::Reference< css::uno::XInterface> m_xOrigin;
     };
 

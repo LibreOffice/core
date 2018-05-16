@@ -36,7 +36,6 @@ using namespace com::sun::star::ucb;
 
 XPropertySetInfo_impl::XPropertySetInfo_impl( TaskManager* pMyShell,const OUString& aUnqPath )
     : m_pMyShell( pMyShell ),
-      m_count( 0 ),
       m_seq( 0 )
 {
     m_pMyShell->m_pProvider->acquire();
@@ -48,9 +47,10 @@ XPropertySetInfo_impl::XPropertySetInfo_impl( TaskManager* pMyShell,const OUStri
 
     m_seq.realloc( properties.size() );
 
+    sal_Int32 count = 0;
     while( it1 != properties.end() )
     {
-        m_seq[ m_count++ ] = beans::Property( it1->getPropertyName(),
+        m_seq[ count++ ] = beans::Property( it1->getPropertyName(),
                                               it1->getHandle(),
                                               it1->getType(),
                                               it1->getAttributes() );
@@ -61,7 +61,6 @@ XPropertySetInfo_impl::XPropertySetInfo_impl( TaskManager* pMyShell,const OUStri
 
 XPropertySetInfo_impl::XPropertySetInfo_impl( TaskManager* pMyShell,const Sequence< beans::Property >& seq )
     : m_pMyShell( pMyShell ),
-      m_count( seq.getLength() ),
       m_seq( seq )
 {
     m_pMyShell->m_pProvider->acquire();
