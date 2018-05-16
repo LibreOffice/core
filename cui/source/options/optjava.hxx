@@ -63,7 +63,7 @@ private:
     VclPtr<PushButton>                 m_pClassPathBtn;
     VclPtr<PushButton>                 m_pExpertConfigBtn;
 
-    VclPtr<SvxJavaParameterDlg>        m_pParamDlg;
+    std::unique_ptr<SvxJavaParameterDlg> m_xParamDlg;
     VclPtr<SvxJavaClassPathDlg>        m_pPathDlg;
     VclPtr<OfaTreeOptionsDialog>       m_pParentDlg;
 
@@ -121,52 +121,52 @@ public:
 
 // class SvxJavaParameterDlg ---------------------------------------------
 
-class SvxJavaParameterDlg : public ModalDialog
+class SvxJavaParameterDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<Edit>                   m_pParameterEdit;
-    VclPtr<PushButton>             m_pAssignBtn;
+    std::unique_ptr<weld::Entry> m_xParameterEdit;
+    std::unique_ptr<weld::Button> m_xAssignBtn;
+    std::unique_ptr<weld::TreeView> m_xAssignedList;
+    std::unique_ptr<weld::Button> m_xRemoveBtn;
+    std::unique_ptr<weld::Button> m_xEditBtn;
 
-    VclPtr<ListBox>                m_pAssignedList;
-    VclPtr<PushButton>             m_pRemoveBtn;
+    DECL_LINK(ModifyHdl_Impl, weld::Entry&, void);
+    DECL_LINK(AssignHdl_Impl, weld::Button&, void);
+    DECL_LINK(SelectHdl_Impl, weld::TreeView&, void);
+    DECL_LINK(DblClickHdl_Impl, weld::TreeView&, void);
+    DECL_LINK(RemoveHdl_Impl, weld::Button&, void);
+    DECL_LINK(EditHdl_Impl, weld::Button&, void);
 
-    VclPtr<PushButton>             m_pEditBtn;
+    void EnableRemoveButton()
+    {
+        m_xRemoveBtn->set_sensitive(m_xAssignedList->get_selected_index() != -1);
+    }
 
-    DECL_LINK(ModifyHdl_Impl, Edit&, void);
-    DECL_LINK(AssignHdl_Impl, Button*, void);
-    DECL_LINK(SelectHdl_Impl, ListBox&, void);
-    DECL_LINK(DblClickHdl_Impl, ListBox&, void);
-    DECL_LINK(RemoveHdl_Impl, Button*, void);
+    void EnableEditButton()
+    {
+        m_xEditBtn->set_sensitive(m_xAssignedList->get_selected_index() != -1);
+    }
 
-    DECL_LINK(EditHdl_Impl, Button*, void);
+    void DisableAssignButton()
+    {
+        m_xAssignBtn->set_sensitive(false);
+    }
 
-    void             EnableRemoveButton()
-                                { m_pRemoveBtn->Enable(
-                                    m_pAssignedList->GetSelectedEntryPos()
-                                    != LISTBOX_ENTRY_NOTFOUND ); }
+    void DisableRemoveButton()
+    {
+        m_xRemoveBtn->set_sensitive(false);
+    }
 
-
-    void             EnableEditButton()
-                                { m_pEditBtn->Enable(
-                                    m_pAssignedList->GetSelectedEntryPos()
-                                    != LISTBOX_ENTRY_NOTFOUND ); }
-
-    void             DisableAssignButton()
-                                { m_pAssignBtn->Disable(); }
-
-    void             DisableRemoveButton()
-                                { m_pRemoveBtn->Disable(); }
-
-    void             DisableEditButton()
-                                { m_pEditBtn->Disable(); }
-
+    void DisableEditButton()
+    {
+        m_xEditBtn->set_sensitive(false);
+    }
 
 public:
-    explicit SvxJavaParameterDlg( vcl::Window* pParent );
+    explicit SvxJavaParameterDlg(weld::Window* pParent);
     virtual ~SvxJavaParameterDlg() override;
-    virtual void dispose() override;
 
-    virtual short           Execute() override;
+    short execute();
 
     std::vector< OUString > GetParameters() const;
     void SetParameters( std::vector< OUString > const & rParams );

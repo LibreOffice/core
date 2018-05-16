@@ -111,7 +111,6 @@ public:
 
 SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet )
     : SfxTabPage(pParent, "OptAdvancedPage", "cui/ui/optadvancedpage.ui", &rSet)
-    , m_pParamDlg(nullptr)
     , m_pPathDlg(nullptr)
     , m_aResetIdle("cui options SvxJavaOptionsPage Reset")
     , xDialogListener(new ::svt::DialogClosedListener())
@@ -184,7 +183,7 @@ SvxJavaOptionsPage::~SvxJavaOptionsPage()
 void SvxJavaOptionsPage::dispose()
 {
     m_pJavaList.disposeAndClear();
-    m_pParamDlg.disposeAndClear();
+    m_xParamDlg.reset();
     m_pPathDlg.disposeAndClear();
     ClearJavaInfo();
 #if HAVE_FEATURE_JAVA
@@ -265,27 +264,27 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
 {
 #if HAVE_FEATURE_JAVA
     std::vector< OUString > aParameterList;
-    if ( !m_pParamDlg )
+    if (!m_xParamDlg)
     {
-        m_pParamDlg = VclPtr<SvxJavaParameterDlg>::Create( this );
+        m_xParamDlg.reset(new SvxJavaParameterDlg(GetFrameWeld()));
         javaFrameworkError eErr = jfw_getVMParameters( &m_parParameters );
         if ( JFW_E_NONE == eErr && !m_parParameters.empty() )
         {
             aParameterList = m_parParameters;
-            m_pParamDlg->SetParameters( aParameterList );
+            m_xParamDlg->SetParameters( aParameterList );
         }
     }
     else
     {
-        aParameterList = m_pParamDlg->GetParameters();
-        m_pParamDlg->DisableButtons();   //disable add, edit and remove button when dialog is reopened
+        aParameterList = m_xParamDlg->GetParameters();
+        m_xParamDlg->DisableButtons();   //disable add, edit and remove button when dialog is reopened
     }
 
-    if ( m_pParamDlg->Execute() == RET_OK )
+    if (m_xParamDlg->execute() == RET_OK)
     {
-        if ( aParameterList != m_pParamDlg->GetParameters() )
+        if ( aParameterList != m_xParamDlg->GetParameters() )
         {
-            aParameterList = m_pParamDlg->GetParameters();
+            aParameterList = m_xParamDlg->GetParameters();
             if ( jfw_isVMRunning() )
             {
                 RequestRestart( svtools::RESTART_REASON_ASSIGNING_JAVAPARAMETERS );
@@ -293,7 +292,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
         }
     }
     else
-        m_pParamDlg->SetParameters( aParameterList );
+        m_xParamDlg->SetParameters( aParameterList );
 #else
     (void) this;                // Silence loplugin:staticmethods
 #endif
@@ -596,9 +595,9 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
 
 #if HAVE_FEATURE_JAVA
     javaFrameworkError eErr = JFW_E_NONE;
-    if ( m_pParamDlg )
+    if (m_xParamDlg)
     {
-        eErr = jfw_setVMParameters( m_pParamDlg->GetParameters() );
+        eErr = jfw_setVMParameters(m_xParamDlg->GetParameters());
         SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setVMParameters");
         bModified = true;
     }
@@ -698,101 +697,87 @@ void SvxJavaOptionsPage::FillUserData()
 
 // class SvxJavaParameterDlg ---------------------------------------------
 
-SvxJavaParameterDlg::SvxJavaParameterDlg( vcl::Window* pParent ) :
-
-    ModalDialog( pParent, "JavaStartParameters",
-                 "cui/ui/javastartparametersdialog.ui" )
+SvxJavaParameterDlg::SvxJavaParameterDlg(weld::Window* pParent)
+    : GenericDialogController(pParent, "cui/ui/javastartparametersdialog.ui",
+        "JavaStartParameters")
+    , m_xParameterEdit(m_xBuilder->weld_entry("parameterfield"))
+    , m_xAssignBtn(m_xBuilder->weld_button("assignbtn"))
+    , m_xAssignedList(m_xBuilder->weld_tree_view("assignlist"))
+    , m_xRemoveBtn(m_xBuilder->weld_button("removebtn"))
+    , m_xEditBtn(m_xBuilder->weld_button("editbtn"))
 {
-    get( m_pParameterEdit, "parameterfield");
-    get( m_pAssignBtn, "assignbtn");
-    get( m_pAssignedList, "assignlist");
-    m_pAssignedList->SetDropDownLineCount(6);
-    m_pAssignedList->set_width_request(m_pAssignedList->approximate_char_width() * 54);
-    get( m_pRemoveBtn, "removebtn");
-    get( m_pEditBtn, "editbtn");
+    m_xAssignedList->set_size_request(m_xAssignedList->get_approximate_digit_width() * 54,
+                                      m_xAssignedList->get_height_rows(6));
+    m_xParameterEdit->connect_changed( LINK( this, SvxJavaParameterDlg, ModifyHdl_Impl ) );
+    m_xAssignBtn->connect_clicked( LINK( this, SvxJavaParameterDlg, AssignHdl_Impl ) );
+    m_xRemoveBtn->connect_clicked( LINK( this, SvxJavaParameterDlg, RemoveHdl_Impl ) );
+    m_xEditBtn->connect_clicked( LINK( this, SvxJavaParameterDlg, EditHdl_Impl ) );
+    m_xAssignedList->connect_changed( LINK( this, SvxJavaParameterDlg, SelectHdl_Impl ) );
+    m_xAssignedList->connect_row_activated( LINK( this, SvxJavaParameterDlg, DblClickHdl_Impl ) );
 
-    m_pParameterEdit->SetModifyHdl( LINK( this, SvxJavaParameterDlg, ModifyHdl_Impl ) );
-    m_pAssignBtn->SetClickHdl( LINK( this, SvxJavaParameterDlg, AssignHdl_Impl ) );
-    m_pRemoveBtn->SetClickHdl( LINK( this, SvxJavaParameterDlg, RemoveHdl_Impl ) );
-    m_pEditBtn->SetClickHdl( LINK( this, SvxJavaParameterDlg, EditHdl_Impl ) );
-    m_pAssignedList->SetSelectHdl( LINK( this, SvxJavaParameterDlg, SelectHdl_Impl ) );
-    m_pAssignedList->SetDoubleClickHdl( LINK( this, SvxJavaParameterDlg, DblClickHdl_Impl ) );
-
-    ModifyHdl_Impl( *m_pParameterEdit );
+    ModifyHdl_Impl(*m_xParameterEdit);
     EnableEditButton();
     EnableRemoveButton();
 }
 
 SvxJavaParameterDlg::~SvxJavaParameterDlg()
 {
-    disposeOnce();
 }
 
-void SvxJavaParameterDlg::dispose()
+IMPL_LINK_NOARG(SvxJavaParameterDlg, ModifyHdl_Impl, weld::Entry&, void)
 {
-    m_pParameterEdit.clear();
-    m_pAssignBtn.clear();
-    m_pAssignedList.clear();
-    m_pRemoveBtn.clear();
-    m_pEditBtn.clear();
-    ModalDialog::dispose();
+    OUString sParam = comphelper::string::strip(m_xParameterEdit->get_text(), ' ');
+    m_xAssignBtn->set_sensitive(!sParam.isEmpty());
 }
 
-
-IMPL_LINK_NOARG(SvxJavaParameterDlg, ModifyHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxJavaParameterDlg, AssignHdl_Impl, weld::Button&, void)
 {
-    OUString sParam = comphelper::string::strip(m_pParameterEdit->GetText(), ' ');
-    m_pAssignBtn->Enable(!sParam.isEmpty());
-}
-
-
-IMPL_LINK_NOARG(SvxJavaParameterDlg, AssignHdl_Impl, Button*, void)
-{
-    OUString sParam = comphelper::string::strip(m_pParameterEdit->GetText(), ' ');
+    OUString sParam = comphelper::string::strip(m_xParameterEdit->get_text(), ' ');
     if (!sParam.isEmpty())
     {
-        sal_Int32 nPos = m_pAssignedList->GetEntryPos( sParam );
-        if ( LISTBOX_ENTRY_NOTFOUND == nPos )
-            nPos = m_pAssignedList->InsertEntry( sParam );
-        m_pAssignedList->SelectEntryPos( nPos );
-        m_pParameterEdit->SetText( OUString() );
-        ModifyHdl_Impl( *m_pParameterEdit );
+        int nPos = m_xAssignedList->find_text(sParam);
+        if (nPos == -1)
+        {
+            m_xAssignedList->append_text(sParam);
+            m_xAssignedList->select(m_xAssignedList->n_children() - 1);
+        }
+        else
+            m_xAssignedList->select(nPos);
+        m_xParameterEdit->set_text(OUString());
+        ModifyHdl_Impl(*m_xParameterEdit);
         EnableEditButton();
         EnableRemoveButton();
     }
 }
 
-IMPL_LINK_NOARG(SvxJavaParameterDlg, EditHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxJavaParameterDlg, EditHdl_Impl, weld::Button&, void)
 {
     EditParameter();
 }
 
-
-IMPL_LINK_NOARG(SvxJavaParameterDlg, SelectHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxJavaParameterDlg, SelectHdl_Impl, weld::TreeView&, void)
 {
     EnableEditButton();
     EnableRemoveButton();
 }
 
-
-IMPL_LINK_NOARG(SvxJavaParameterDlg, DblClickHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxJavaParameterDlg, DblClickHdl_Impl, weld::TreeView&, void)
 {
     EditParameter();
 }
 
-
-IMPL_LINK_NOARG(SvxJavaParameterDlg, RemoveHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxJavaParameterDlg, RemoveHdl_Impl, weld::Button&, void)
 {
-    sal_Int32 nPos = m_pAssignedList->GetSelectedEntryPos();
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+    int nPos = m_xAssignedList->get_selected_index();
+    if (nPos != -1)
     {
-        m_pAssignedList->RemoveEntry( nPos );
-        sal_Int32 nCount = m_pAssignedList->GetEntryCount();
-        if ( nCount )
+        m_xAssignedList->remove(nPos);
+        int nCount = m_xAssignedList->n_children();
+        if (nCount)
         {
-            if ( nPos >= nCount )
-                nPos = ( nCount - 1 );
-            m_pAssignedList->SelectEntryPos( nPos );
+            if (nPos >= nCount)
+                nPos = nCount - 1;
+            m_xAssignedList->select(nPos);
         }
         else
         {
@@ -804,13 +789,13 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, RemoveHdl_Impl, Button*, void)
 
 void SvxJavaParameterDlg::EditParameter()
 {
-    sal_Int32 nPos = m_pAssignedList->GetSelectedEntryPos();
-    m_pParameterEdit->SetText( OUString() );
+    int nPos = m_xAssignedList->get_selected_index();
+    m_xParameterEdit->set_text(OUString());
 
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+    if (nPos != -1)
     {
-        InputDialog aParamEditDlg(GetFrameWeld(), CuiResId(RID_SVXSTR_JAVA_START_PARAM));
-        OUString editableClassPath = m_pAssignedList->GetSelectedEntry();
+        InputDialog aParamEditDlg(m_xDialog.get(), CuiResId(RID_SVXSTR_JAVA_START_PARAM));
+        OUString editableClassPath = m_xAssignedList->get_selected_text();
         aParamEditDlg.SetEntryText(editableClassPath);
         aParamEditDlg.HideHelpBtn();
 
@@ -820,30 +805,28 @@ void SvxJavaParameterDlg::EditParameter()
 
         if ( !editedClassPath.isEmpty() && editableClassPath != editedClassPath )
         {
-            m_pAssignedList->RemoveEntry( nPos );
-            m_pAssignedList->InsertEntry( editedClassPath, nPos );
-            m_pAssignedList->SelectEntryPos( nPos );
+            m_xAssignedList->remove(nPos);
+            m_xAssignedList->insert_text(editedClassPath, nPos);
+            m_xAssignedList->select(nPos);
         }
     }
 }
 
-short SvxJavaParameterDlg::Execute()
+short SvxJavaParameterDlg::execute()
 {
-    m_pParameterEdit->GrabFocus();
-    m_pAssignedList->SetNoSelection();
-    return ModalDialog::Execute();
+    m_xParameterEdit->grab_focus();
+    m_xAssignedList->select(-1);
+    return m_xDialog->run();
 }
-
 
 std::vector< OUString > SvxJavaParameterDlg::GetParameters() const
 {
-    sal_Int32 nCount = m_pAssignedList->GetEntryCount();
+    int nCount = m_xAssignedList->n_children();
     std::vector< OUString > aParamList;
-     for ( sal_Int32 i = 0; i < nCount; ++i )
-         aParamList.push_back( m_pAssignedList->GetEntry(i) );
+    for (int i = 0; i < nCount; ++i)
+        aParamList.push_back(m_xAssignedList->get_text(i));
     return aParamList;
 }
-
 
 void SvxJavaParameterDlg::DisableButtons()
 {
@@ -854,10 +837,10 @@ void SvxJavaParameterDlg::DisableButtons()
 
 void SvxJavaParameterDlg::SetParameters( std::vector< OUString > const & rParams )
 {
-    m_pAssignedList->Clear();
+    m_xAssignedList->clear();
     for (auto const & sParam: rParams)
     {
-        m_pAssignedList->InsertEntry( sParam );
+        m_xAssignedList->append_text(sParam);
     }
     DisableEditButton();
     DisableRemoveButton();
