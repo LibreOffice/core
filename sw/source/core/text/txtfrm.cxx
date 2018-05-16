@@ -146,6 +146,64 @@ namespace sw {
         }
     }
 
+    SwTextAttr const* MergedAttrIterByEnd::NextAttr(SwTextNode const** ppNode)
+    {
+        if (m_pMerged)
+        {
+            while (m_CurrentExtent < m_pMerged->extents.size())
+            {
+                sw::Extent const& rExtent(m_pMerged->extents[m_CurrentExtent]);
+                if (SwpHints const*const pHints = rExtent.pNode->GetpSwpHints())
+                {
+                    while (m_CurrentHint < pHints->Count())
+                    {
+                        SwTextAttr const*const pHint(
+                                pHints->GetSortedByEnd(m_CurrentHint));
+                        if (rExtent.nEnd <= *pHint->GetAnyEnd())
+                        {
+                            break;
+                        }
+                        ++m_CurrentHint;
+                        if (rExtent.nStart < *pHint->GetAnyEnd())
+                        {
+                            if (ppNode)
+                            {
+                                *ppNode = rExtent.pNode;
+                            }
+                            return pHint;
+                        }
+                    }
+                }
+                ++m_CurrentExtent;
+                if (m_CurrentExtent < m_pMerged->extents.size() &&
+                    rExtent.pNode != m_pMerged->extents[m_CurrentExtent].pNode)
+                {
+                    m_CurrentHint = 0; // reset
+                }
+            }
+            return nullptr;
+        }
+        else
+        {
+            SwpHints const*const pHints(m_pNode->GetpSwpHints());
+            if (pHints)
+            {
+                while (m_CurrentHint < pHints->Count())
+                {
+                    SwTextAttr const*const pHint(
+                            pHints->GetSortedByEnd(m_CurrentHint));
+                    ++m_CurrentHint;
+                    if (ppNode)
+                    {
+                        *ppNode = m_pNode;
+                    }
+                    return pHint;
+                }
+            }
+            return nullptr;
+        }
+    }
+
     MergedAttrIterReverse::MergedAttrIterReverse(SwTextFrame const& rFrame)
         : MergedAttrIterBase(rFrame)
     {
