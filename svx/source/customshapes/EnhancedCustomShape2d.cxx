@@ -1790,13 +1790,8 @@ void EnhancedCustomShape2d::CreateSubPath(
                         tools::Rectangle aRect( GetPoint( seqCoordinates[ rSrcPt ], true, true ), GetPoint( seqCoordinates[ rSrcPt + 1 ], true, true ) );
                         if ( aRect.GetWidth() && aRect.GetHeight() )
                         {
-                            Point aCenter( aRect.Center() );
                             Point aStart( GetPoint( seqCoordinates[ static_cast<sal_uInt16>( rSrcPt + nXor ) ], true, true ) );
                             Point aEnd( GetPoint( seqCoordinates[ static_cast<sal_uInt16>( rSrcPt + ( nXor ^ 1 ) ) ], true, true ) );
-                            aStart.setX( static_cast<sal_Int32>( static_cast<double>( aStart.X() - aCenter.X() ) ) + aCenter.X() );
-                            aStart.setY( static_cast<sal_Int32>( static_cast<double>( aStart.Y() - aCenter.Y() ) ) + aCenter.Y() );
-                            aEnd.setX( static_cast<sal_Int32>( static_cast<double>( aEnd.X()   - aCenter.X() ) ) + aCenter.X() );
-                            aEnd.setY( static_cast<sal_Int32>( static_cast<double>( aEnd.Y()   - aCenter.Y() ) ) + aCenter.Y() );
                             aNewB2DPolygon.append(CreateArc( aRect, aStart, aEnd, bClockwise));
                         }
                         rSrcPt += 4;

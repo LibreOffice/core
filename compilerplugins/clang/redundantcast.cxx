@@ -65,6 +65,18 @@ char const * printExprValueKind(ExprValueKind k) {
     llvm_unreachable("unknown ExprValueKind");
 }
 
+enum class AlgebraicType { None, Integer, FloatingPoint };
+
+AlgebraicType algebraicType(clang::Type const & type) {
+    if (type.isIntegralOrEnumerationType()) {
+        return AlgebraicType::Integer;
+    } else if (type.isRealFloatingType()) {
+        return AlgebraicType::FloatingPoint;
+    } else {
+        return AlgebraicType::None;
+    }
+}
+
 class RedundantCast:
     public RecursiveASTVisitor<RedundantCast>, public loplugin::RewritePlugin
 {
@@ -252,8 +264,8 @@ bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
     case CK_IntegralToFloating:
         if (auto e = dyn_cast<ExplicitCastExpr>(expr->getSubExpr()->IgnoreParenImpCasts())) {
             if ((isa<CXXStaticCastExpr>(e) || isa<CXXFunctionalCastExpr>(e))
-                && (e->getSubExprAsWritten()->getType().getCanonicalType().getTypePtr()
-                    == expr->getType().getCanonicalType().getTypePtr()))
+                && (algebraicType(*e->getSubExprAsWritten()->getType())
+                    == algebraicType(*expr->getType())))
             {
                 report(
                     DiagnosticsEngine::Warning,
