@@ -9,6 +9,7 @@
 
 #include <formularesult.hxx>
 #include <scmatrix.hxx>
+#include <token.hxx>
 
 namespace sc {
 
