@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_7f32d311",
+        "filename": "external/boost/windows-no-utf8-locales.patch.0",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-16T20:20:10Z",
+      "side": 1,
+      "message": "So, in essence, 15.7 now makes this to succeed - unlike in previous versions?",
+      "range": {
+        "startLine": 10,
+        "startChar": 20,
+        "endLine": 10,
+        "endChar": 33
+      },
+      "revId": "ae67478ac7d8bb6d703837c00efefea059c10674",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
