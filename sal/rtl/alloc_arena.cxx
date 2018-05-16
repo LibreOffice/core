@@ -601,10 +601,6 @@ void rtl_arena_destructor(void * obj)
     assert(arena->m_hash_shift == highbit(arena->m_hash_size) - 1);
 }
 
-#if defined __GNUC__ && __GNUC__ >= 7
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wformat-truncation"
-#endif
 rtl_arena_type * rtl_arena_activate(
     rtl_arena_type * arena,
     const char *     name,
