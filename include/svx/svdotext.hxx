@@ -228,7 +228,6 @@ protected:
     // bTextFrame=sal_True.
     bool                        bTextFrame : 1;
     bool                        bNoShear : 1;            // disable shearing   (->graphic+Ole+TextFrame)
-    bool                        bNoMirror : 1;           // disable mirroring (->Ole,TextFrame)
     bool                        bTextSizeDirty : 1;
 
     bool                        mbInEditMode : 1;   // Is this text object in edit mode?

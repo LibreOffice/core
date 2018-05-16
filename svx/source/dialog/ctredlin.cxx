@@ -1060,14 +1060,14 @@ SvxAcceptChgCtr::SvxAcceptChgCtr(vcl::Window* pParent, VclBuilderContainer* pTop
     pTPFilter = VclPtr<SvxTPFilter>::Create(this);
     pTPView = VclPtr<SvxTPView>::Create(this, pTopLevel);
 
-    m_nViewPageId = GetPageId("view");
+    sal_uInt16 nViewPageId = GetPageId("view");
     m_nFilterPageId = GetPageId("filter");
-    SetTabPage(m_nViewPageId, pTPView);
+    SetTabPage(nViewPageId, pTPView);
     SetTabPage(m_nFilterPageId, pTPFilter);
 
     pTPFilter->SetRedlinTable(pTPView->GetTableControl());
 
-    SetCurPageId(m_nViewPageId);
+    SetCurPageId(nViewPageId);
 
     Show();
 }

@@ -55,7 +55,6 @@ namespace svx
 
         bool            mbWideButton;
         sal_uInt16      mnBtnId;
-        sal_uInt16      mnSlotId;
         VclPtr<ToolBox> mpTbx;
         Color       maCurColor;
         tools::Rectangle   maUpdRect;

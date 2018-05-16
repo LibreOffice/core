@@ -84,7 +84,6 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel)
     bTextSizeDirty=false;
     bTextFrame=false;
     bNoShear=false;
-    bNoMirror=false;
     bDisableAutoWidthOnDragging=false;
 
     mbInEditMode = false;
@@ -108,7 +107,6 @@ SdrTextObj::SdrTextObj(
     bTextSizeDirty=false;
     bTextFrame=false;
     bNoShear=false;
-    bNoMirror=false;
     bDisableAutoWidthOnDragging=false;
     ImpJustifyRect(maRect);
 
@@ -132,7 +130,6 @@ SdrTextObj::SdrTextObj(
     bTextSizeDirty=false;
     bTextFrame=true;
     bNoShear=true;
-    bNoMirror=true;
     bDisableAutoWidthOnDragging=false;
 
     mbInEditMode = false;
@@ -157,7 +154,6 @@ SdrTextObj::SdrTextObj(
     bTextSizeDirty=false;
     bTextFrame=true;
     bNoShear=true;
-    bNoMirror=true;
     bDisableAutoWidthOnDragging=false;
     ImpJustifyRect(maRect);
 
@@ -1030,7 +1026,6 @@ SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)
 
     // Not all of the necessary parameters were copied yet.
     bNoShear = rObj.bNoShear;
-    bNoMirror = rObj.bNoMirror;
     bDisableAutoWidthOnDragging = rObj.bDisableAutoWidthOnDragging;
     SdrText* pText = getActiveText();
 

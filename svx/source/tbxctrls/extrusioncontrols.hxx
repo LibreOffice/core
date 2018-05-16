@@ -105,17 +105,8 @@ class ExtrusionDepthWindow : public svtools::ToolbarMenu
 {
 private:
     svt::ToolboxController& mrController;
-
-    Image maImgDepth0;
-    Image maImgDepth1;
-    Image maImgDepth2;
-    Image maImgDepth3;
-    Image maImgDepth4;
-    Image maImgDepthInfinity;
-
     FieldUnit   meUnit;
     double      mfDepth;
-
     const OUString msExtrusionDepth;
     const OUString msMetricUnit;
 
@@ -203,11 +194,6 @@ class ExtrusionSurfaceWindow : public svtools::ToolbarMenu
 {
 private:
     svt::ToolboxController& mrController;
-
-    Image maImgSurface1;
-    Image maImgSurface2;
-    Image maImgSurface3;
-    Image maImgSurface4;
 
     DECL_LINK( SelectHdl, ToolbarMenu*, void );
 

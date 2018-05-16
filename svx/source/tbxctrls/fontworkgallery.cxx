@@ -273,12 +273,6 @@ public:
 private:
     svt::ToolboxController& mrController;
 
-    Image maImgAlgin1;
-    Image maImgAlgin2;
-    Image maImgAlgin3;
-    Image maImgAlgin4;
-    Image maImgAlgin5;
-
     const OUString msFontworkAlignment;
 
     DECL_LINK( SelectHdl, ToolbarMenu*, void );
@@ -289,20 +283,21 @@ private:
 FontworkAlignmentWindow::FontworkAlignmentWindow(svt::ToolboxController& rController, vcl::Window* pParentWindow)
     : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
     , mrController(rController)
-    , maImgAlgin1(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_LEFT))
-    , maImgAlgin2(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_CENTER))
-    , maImgAlgin3(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_RIGHT))
-    , maImgAlgin4(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_WORD))
-    , maImgAlgin5(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_STRETCH))
     , msFontworkAlignment(".uno:FontworkAlignment")
 {
     SetSelectHdl( LINK( this, FontworkAlignmentWindow, SelectHdl ) );
 
-    appendEntry(0, SvxResId(RID_SVXSTR_ALIGN_LEFT), maImgAlgin1);
-    appendEntry(1, SvxResId(RID_SVXSTR_ALIGN_CENTER), maImgAlgin2);
-    appendEntry(2, SvxResId(RID_SVXSTR_ALIGN_RIGHT), maImgAlgin3);
-    appendEntry(3, SvxResId(RID_SVXSTR_ALIGN_WORD), maImgAlgin4);
-    appendEntry(4, SvxResId(RID_SVXSTR_ALIGN_STRETCH), maImgAlgin5);
+    Image aImgAlgin1(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_LEFT));
+    Image aImgAlgin2(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_CENTER));
+    Image aImgAlgin3(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_RIGHT));
+    Image aImgAlgin4(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_WORD));
+    Image aImgAlgin5(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_STRETCH));
+
+    appendEntry(0, SvxResId(RID_SVXSTR_ALIGN_LEFT), aImgAlgin1);
+    appendEntry(1, SvxResId(RID_SVXSTR_ALIGN_CENTER), aImgAlgin2);
+    appendEntry(2, SvxResId(RID_SVXSTR_ALIGN_RIGHT), aImgAlgin3);
+    appendEntry(3, SvxResId(RID_SVXSTR_ALIGN_WORD), aImgAlgin4);
+    appendEntry(4, SvxResId(RID_SVXSTR_ALIGN_STRETCH), aImgAlgin5);
 
     SetOutputSizePixel( getMenuSize() );
 

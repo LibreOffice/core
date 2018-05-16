@@ -357,7 +357,6 @@ private:
     VclPtr<SvxTPFilter>    pTPFilter;
     VclPtr<SvxTPView>      pTPView;
 
-    sal_uInt16      m_nViewPageId;
     sal_uInt16      m_nFilterPageId;
 
 public:
