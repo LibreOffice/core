@@ -17,14 +17,12 @@ struct Encoder
 {
     rtl_UnicodeToTextConverter m_aConverter;
     bool m_bCapable;
-    rtl_TextEncoding m_nEncoding;
     const char *m_pEncoding;
     Encoder(rtl_TextEncoding nEncoding, const char *pEncoding)
         : m_bCapable(true)
-        , m_nEncoding(nEncoding)
         , m_pEncoding(pEncoding)
     {
-        m_aConverter = rtl_createUnicodeToTextConverter(m_nEncoding);
+        m_aConverter = rtl_createUnicodeToTextConverter(nEncoding);
     }
     ~Encoder()
     {

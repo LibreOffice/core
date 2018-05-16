@@ -47,7 +47,6 @@ XInteractionRequestImpl::XInteractionRequestImpl(
       p2( new XInteractionAbortImpl ),
       m_nErrorCode(0),
       m_nMinorError(0),
-      m_aClashingName(aClashingName),
       m_xOrigin(xOrigin)
 {
     if( pShell )
@@ -59,7 +58,7 @@ XInteractionRequestImpl::XInteractionRequestImpl(
     if(m_nErrorCode == TASKHANDLING_FOLDER_EXISTS_MKDIR)
     {
         NameClashException excep;
-        excep.Name = m_aClashingName;
+        excep.Name = aClashingName;
         excep.Classification = InteractionClassification_ERROR;
         excep.Context = m_xOrigin;
         excep.Message = "folder exists and overwrite forbidden";
@@ -72,7 +71,7 @@ XInteractionRequestImpl::XInteractionRequestImpl(
         PropertyValue prop;
         prop.Name = "ResourceName";
         prop.Handle = -1;
-        prop.Value <<= m_aClashingName;
+        prop.Value <<= aClashingName;
         Sequence<Any> seq(1);
         seq[0] <<= prop;
         excep.Arguments = seq;

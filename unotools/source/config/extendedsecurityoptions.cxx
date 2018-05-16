@@ -86,19 +86,10 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
 
         static Sequence< OUString > GetPropertyNames();
 
-        /*-****************************************************************************************************
-            @short      Fills the hash map with all extensions known to be secure
-            @descr      This method fills the given hash map object with all extensions known to be secure.
-            @param      aHashMap
-                        A hash map to be filled with secure extension strings.
-        *//*-*****************************************************************************************************/
-        void FillExtensionHashMap( ExtensionHashMap& aHashMap );
-
         OUString                                        m_aSecureExtensionsSetName;
         OUString                                        m_aExtensionPropName;
 
         SvtExtendedSecurityOptions::OpenHyperlinkMode   m_eOpenHyperlinkMode;
-        ExtensionHashMap                                m_aExtensionHashMap;
 };
 
 //  constructor
@@ -111,9 +102,6 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
     , m_eOpenHyperlinkMode(SvtExtendedSecurityOptions::OPEN_NEVER)
     // Init member then.
 {
-    // Fill the extension hash map with all secure extension strings
-    FillExtensionHashMap( m_aExtensionHashMap );
-
     Sequence< OUString >    seqNames    = GetPropertyNames();
     Sequence< Any >         seqValues   = GetProperties( seqNames );
 
@@ -181,43 +169,6 @@ void SvtExtendedSecurityOptions_Impl::ImplCommit()
 
     // Set properties in configuration.
     PutProperties( seqNames, seqValues );
-}
-
-//  public method
-
-
-//  private method
-
-void SvtExtendedSecurityOptions_Impl::FillExtensionHashMap( ExtensionHashMap& aHashMap )
-{
-    // Get sequence with secure extensions from configuration
-    Sequence< OUString >    seqNodes = GetNodeNames( m_aSecureExtensionsSetName );
-
-    OUString                aValue;
-    Sequence< Any >         aValues;
-    Sequence< OUString >    aPropSeq( 1 );
-    for ( int i = 0; i < seqNodes.getLength(); i++ )
-    {
-        // Create access name for property
-        OUStringBuffer aExtEntryProp( m_aSecureExtensionsSetName );
-        aExtEntryProp.append( "/" );
-        aExtEntryProp.append( seqNodes[i] );
-        aExtEntryProp.append( m_aExtensionPropName );
-
-        aPropSeq[0] = aExtEntryProp.makeStringAndClear();
-        aValues = GetProperties( aPropSeq );
-        if ( aValues.getLength() == 1 )
-        {
-            // Don't use value if sequence has not the correct length
-            if ( aValues[0] >>= aValue )
-                // Add extension into secure extensions hash map
-                aHashMap.emplace( aValue.toAsciiLowerCase(), 1 );
-            else
-            {
-                SAL_WARN( "unotools.config", "SvtExtendedSecurityOptions_Impl::FillExtensionHashMap(): not string value?" );
-            }
-        }
-    }
 }
 
 //  private method (currently not used)

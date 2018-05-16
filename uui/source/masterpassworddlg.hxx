@@ -42,7 +42,6 @@ public:
     OUString        GetMasterPassword() const { return m_pEDMasterPassword->GetText(); }
 
 private:
-    css::task::PasswordRequestMode     nDialogMode;
     const std::locale&                 rResLocale;
 };
 

@@ -28,7 +28,7 @@
 using namespace ::com::sun::star;
 
 PasswordDialog::PasswordDialog(weld::Window* pParent,
-    task::PasswordRequestMode nDlgMode, const std::locale& rLocale,
+    task::PasswordRequestMode nDialogMode, const std::locale& rLocale,
     const OUString& aDocURL, bool bOpenToModify, bool bIsSimplePasswordRequest)
     : GenericDialogController(pParent, "uui/ui/password.ui", "PasswordDialog")
     , m_xFTPassword(m_xBuilder->weld_label("newpassFT"))
@@ -38,7 +38,6 @@ PasswordDialog::PasswordDialog(weld::Window* pParent,
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
     , nMinLen(1)
     , aPasswdMismatch(Translate::get(STR_PASSWORD_MISMATCH, rLocale))
-    , nDialogMode(nDlgMode)
     , rResLocale(rLocale)
 {
     if( nDialogMode == task::PasswordRequestMode_PASSWORD_REENTER )
