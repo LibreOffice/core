@@ -370,12 +370,16 @@ class LOKitThread extends Thread {
      * Request a change of the handle position.
      */
     private void changeHandlePosition(SelectionHandle.HandleType handleType, PointF documentCoordinate) {
-        if (handleType == SelectionHandle.HandleType.MIDDLE) {
-            mTileProvider.setTextSelectionReset(documentCoordinate);
-        } else if (handleType == SelectionHandle.HandleType.START) {
-            mTileProvider.setTextSelectionStart(documentCoordinate);
-        } else if (handleType == SelectionHandle.HandleType.END) {
-            mTileProvider.setTextSelectionEnd(documentCoordinate);
+        switch (handleType) {
+            case MIDDLE:
+                mTileProvider.setTextSelectionReset(documentCoordinate);
+                break;
+            case START:
+                mTileProvider.setTextSelectionStart(documentCoordinate);
+                break;
+            case END:
+                mTileProvider.setTextSelectionEnd(documentCoordinate);
+                break;
         }
     }
 

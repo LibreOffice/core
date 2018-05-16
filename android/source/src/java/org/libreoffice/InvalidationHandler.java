@@ -575,14 +575,18 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
      * Handle a transition to OverlayState.TRANSITION state.
      */
     private void handleTransitionState(OverlayState previous) {
-        if (previous == OverlayState.SELECTION) {
-            mDocumentOverlay.hideHandle(SelectionHandle.HandleType.START);
-            mDocumentOverlay.hideHandle(SelectionHandle.HandleType.END);
-            mDocumentOverlay.hideSelections();
-        } else if (previous == OverlayState.CURSOR) {
-            mDocumentOverlay.hideHandle(SelectionHandle.HandleType.MIDDLE);
-        } else if (previous == OverlayState.GRAPHIC_SELECTION) {
-            mDocumentOverlay.hideGraphicSelection();
+        switch (previous) {
+            case SELECTION:
+                mDocumentOverlay.hideHandle(SelectionHandle.HandleType.START);
+                mDocumentOverlay.hideHandle(SelectionHandle.HandleType.END);
+                mDocumentOverlay.hideSelections();
+                break;
+            case CURSOR:
+                mDocumentOverlay.hideHandle(SelectionHandle.HandleType.MIDDLE);
+                break;
+            case GRAPHIC_SELECTION:
+                mDocumentOverlay.hideGraphicSelection();
+                break;
         }
     }
 

@@ -498,16 +498,20 @@ class LOKitTileProvider implements TileProvider {
      */
     @Override
     public void sendKeyEvent(KeyEvent keyEvent) {
-        if (keyEvent.getAction() == KeyEvent.ACTION_MULTIPLE) {
-            String keyString = keyEvent.getCharacters();
-            for (int i = 0; i < keyString.length(); i++) {
-                int codePoint = keyString.codePointAt(i);
-                mDocument.postKeyEvent(Document.KEY_EVENT_PRESS, codePoint, getKeyCode(keyEvent));
-            }
-        } else if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-            mDocument.postKeyEvent(Document.KEY_EVENT_PRESS, getCharCode(keyEvent), getKeyCode(keyEvent));
-        } else if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
-            mDocument.postKeyEvent(Document.KEY_EVENT_RELEASE, getCharCode(keyEvent), getKeyCode(keyEvent));
+        switch (keyEvent.getAction()) {
+            case KeyEvent.ACTION_MULTIPLE:
+                String keyString = keyEvent.getCharacters();
+                for (int i = 0; i < keyString.length(); i++) {
+                    int codePoint = keyString.codePointAt(i);
+                    mDocument.postKeyEvent(Document.KEY_EVENT_PRESS, codePoint, getKeyCode(keyEvent));
+                }
+                break;
+            case KeyEvent.ACTION_DOWN:
+                mDocument.postKeyEvent(Document.KEY_EVENT_PRESS, getCharCode(keyEvent), getKeyCode(keyEvent));
+                break;
+            case KeyEvent.ACTION_UP:
+                mDocument.postKeyEvent(Document.KEY_EVENT_RELEASE, getCharCode(keyEvent), getKeyCode(keyEvent));
+                break;
         }
     }
 
