@@ -63,6 +63,7 @@
 #include <editeng/editstat.hxx>
 
 #include <cstdio>
+#include <refdata.hxx>
 
 using ::com::sun::star::i18n::LocaleDataItem2;
 
