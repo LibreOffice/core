@@ -79,6 +79,7 @@ public:
     /// Text extracting RTL text with ligatures.
     void testTdf115117_2a();
 #endif
+    void testTdf105954();
 #endif
     void testTdf109143();
 
@@ -104,6 +105,7 @@ public:
     CPPUNIT_TEST(testTdf115117_2);
     CPPUNIT_TEST(testTdf115117_2a);
 #endif
+    CPPUNIT_TEST(testTdf105954);
 #endif
     CPPUNIT_TEST(testTdf109143);
     CPPUNIT_TEST_SUITE_END();
@@ -1019,6 +1021,51 @@ void PdfExportTest::testTdf115117_2a()
     CPPUNIT_ASSERT_EQUAL(aExpectedText, aActualText);
 }
 #endif
+
+void PdfExportTest::testTdf105954()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf105954.odt";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+        { { "ReduceImageResolution", uno::Any(true) },
+          { "MaxImageResolution", uno::Any(static_cast<sal_Int32>(300)) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result with pdfium.
+    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    mpPdfDocument
+        = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
+    CPPUNIT_ASSERT(mpPdfDocument);
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(mpPdfDocument));
+    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/0);
+    CPPUNIT_ASSERT(mpPdfPage);
+
+    // There is a single image on the page.
+    int nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
+    CPPUNIT_ASSERT_EQUAL(1, nPageObjectCount);
+
+    // Check width of the image.
+    FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(mpPdfPage, /*index=*/0);
+    FPDF_IMAGEOBJ_METADATA aMeta;
+    CPPUNIT_ASSERT(FPDFImageObj_GetImageMetadata(pPageObject, mpPdfPage, &aMeta));
+    // This was 2000, i.e. the 'reduce to 300 DPI' request was ignored.
+    // This is now around 238 (228 on macOS).
+    CPPUNIT_ASSERT_LESS(static_cast<unsigned int>(250), aMeta.width);
+}
+
 #endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
