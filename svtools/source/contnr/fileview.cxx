@@ -339,7 +339,6 @@ public:
     IntlWrapper             aIntlWrapper;
 
     OUString                maViewURL;
-    OUString                maAllFilter;
     OUString                maCurrentFilter;
     Image                   maFolderImage;
     Link<SvtFileView*,void> maOpenDoneLink;
@@ -1450,7 +1449,6 @@ SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommand
     ,mxCmdEnv ( xEnv )
 
 {
-    maAllFilter = "*.*";
     mpView = VclPtr<ViewTabListBox_Impl>::Create( mpAntiImpl, this, nFlags );
     mpCurView = mpView;
     mpIconView = VclPtr<IconView>::Create( mpAntiImpl, WB_TABSTOP );

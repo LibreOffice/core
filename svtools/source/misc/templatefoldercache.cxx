@@ -105,7 +105,6 @@ namespace svt
 
     private:
         INetURLObject           m_aURL;
-        OUString                m_sLocalName;       // redundant - last segment of m_aURL
         util::DateTime          m_aLastModified;    // date of last modification as reported by UCP
         TemplateFolderContent   m_aSubContents;     // sorted (by name) list of the children
 
@@ -143,7 +142,6 @@ namespace svt
         :m_aURL( _rURL )
     {
         DBG_ASSERT( INetProtocol::NotValid != m_aURL.GetProtocol(), "TemplateContent::TemplateContent: invalid URL!" );
-        m_sLocalName = m_aURL.getName();
         implResetDate();
     }
 
