@@ -352,6 +352,7 @@ public:
         sal_Int32 nSecurityId,
         const css::util::DateTime& rDateTime );
     void setDescription(sal_Int32 nSecurityId, const OUString& rDescription);
+    void setSignatureLineId(sal_Int32 nSecurityId, const OUString& rSignatureLineId);
 
     bool WriteSignature(
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler,
