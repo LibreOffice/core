@@ -1361,7 +1361,7 @@ SignatureState SfxObjectShell::ImplGetSignatureState( bool bScriptingContent )
     return *pState;
 }
 
-void SfxObjectShell::ImplSign(Reference<XCertificate> xCert,
+void SfxObjectShell::ImplSign(Reference<XCertificate> xCert, const OUString& aSignatureLineId,
                               bool bScriptingContent)
 {
     // Check if it is stored in OASIS format...
@@ -1488,7 +1488,7 @@ void SfxObjectShell::ImplSign(Reference<XCertificate> xCert,
             || pImpl->nDocumentSignatureState == SignatureState::PARTIAL_OK;
 
         bool bSignSuccess = GetMedium()->SignContents_Impl(
-            xCert, bScriptingContent, aODFVersion, bHasValidSignatures);
+            xCert, aSignatureLineId, bScriptingContent, aODFVersion, bHasValidSignatures);
 
         pImpl->m_bSavingForSigning = true;
         DoSaveCompleted( GetMedium() );
@@ -1523,12 +1523,13 @@ SignatureState SfxObjectShell::GetDocumentSignatureState()
 
 void SfxObjectShell::SignDocumentContent()
 {
-    ImplSign(Reference<XCertificate>());
+    ImplSign();
 }
 
-void SfxObjectShell::SignDocumentContent(const Reference<XCertificate> xCert)
+void SfxObjectShell::SignDocumentContent(const Reference<XCertificate> xCert,
+                                         const OUString& aSignatureLineId)
 {
-    ImplSign(xCert);
+    ImplSign(xCert, aSignatureLineId);
 }
 
 SignatureState SfxObjectShell::GetScriptingSignatureState()
@@ -1538,7 +1539,7 @@ SignatureState SfxObjectShell::GetScriptingSignatureState()
 
 void SfxObjectShell::SignScriptingContent()
 {
-    ImplSign( Reference<XCertificate>(), true );
+    ImplSign( Reference<XCertificate>(), OUString(), true );
 }
 
 namespace
