@@ -228,7 +228,7 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     {
         if(pColors[nIndex].hasValue())
         {
-            sal_Int32 nTmp;
+            sal_Int32 nTmp(0);
             pColors[nIndex] >>= nTmp;
             m_aConfigValues[i].nColor = Color(nTmp);
         }
