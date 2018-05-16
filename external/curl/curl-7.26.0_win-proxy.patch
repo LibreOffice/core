@@ -4,8 +4,8 @@
  
  CFLAGS_LIBCURL_STATIC  = /DCURL_STATICLIB
  
--WIN_LIBS    = ws2_32.lib wldap32.lib advapi32.lib
-+WIN_LIBS    = ws2_32.lib wldap32.lib advapi32.lib winhttp.lib
+-WIN_LIBS    = ws2_32.lib wldap32.lib advapi32.lib crypt32.lib
++WIN_LIBS    = ws2_32.lib wldap32.lib advapi32.lib crypt32.lib winhttp.lib
  
  BASE_NAME              = libcurl
  BASE_NAME_DEBUG        = $(BASE_NAME)_debug
@@ -112,9 +112,9 @@
    const char *protop = conn->handler->scheme;
    char *envp = proxy_env;
 @@ -4663,6 +4739,7 @@
-     if(!proxy)
-       proxy = curl_getenv("ALL_PROXY");
    }
+   if(proxy)
+     infof(conn->data, "Uses proxy env variable %s == '%s'\n", envp, proxy);
 +#endif /* WIN32 */
  
    return proxy;
