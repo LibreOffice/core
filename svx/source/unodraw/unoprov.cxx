@@ -759,7 +759,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxTableShapePropertyMap()
         { OUString("UseLastColumnStyle"),           OWN_ATTR_TABLETEMPLATE_LASTCOLUMN, cppu::UnoType<bool>::get(),0, 0},
         { OUString("UseBandingRowStyle"),           OWN_ATTR_TABLETEMPLATE_BANDINGROWS, cppu::UnoType<bool>::get(),0, 0},
         { OUString("UseBandingColumnStyle"),        OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS, cppu::UnoType<bool>::get(),0, 0},
-        { OUString("ReplacementGraphic"),           OWN_ATTR_BITMAP, cppu::UnoType<css::graphic::XGraphic>::get(), css::beans::PropertyAttribute::READONLY, 0},
+        { OUString("ReplacementGraphic"),           OWN_ATTR_REPLACEMENT_GRAPHIC, cppu::UnoType<css::graphic::XGraphic>::get(), css::beans::PropertyAttribute::READONLY, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 

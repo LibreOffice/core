@@ -120,7 +120,7 @@ bool SvxTableShape::getPropertyValueImpl(
         }
         return true;
     }
-    case OWN_ATTR_BITMAP:
+    case OWN_ATTR_REPLACEMENT_GRAPHIC:
     {
         if( HasSdrObject() )
         {
