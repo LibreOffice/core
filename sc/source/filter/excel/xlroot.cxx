@@ -31,6 +31,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <vcl/font.hxx>
 #include <vcl/settings.hxx>
 

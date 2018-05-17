@@ -22,6 +22,7 @@
 #include <mdds/flat_segment_tree.hpp>
 #include <algorithm>
 #include <limits>
+#include <address.hxx>
 
 using ::std::numeric_limits;
 

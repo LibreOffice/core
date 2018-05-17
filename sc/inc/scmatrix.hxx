@@ -20,20 +20,17 @@
 #ifndef INCLUDED_SC_INC_SCMATRIX_HXX
 #define INCLUDED_SC_INC_SCMATRIX_HXX
 
-#include "global.hxx"
+#include "address.hxx"
 #include "matrixoperators.hxx"
 #include "types.hxx"
 #include <formula/errorcodes.hxx>
 #include "scdllapi.h"
-#include <rtl/ustring.hxx>
 #include <svl/sharedstring.hxx>
 #include <svl/sharedstringpool.hxx>
 
-#include <functional>
 #include <memory>
 #include <utility>
 #include <vector>
-#include <boost/intrusive_ptr.hpp>
 
 #define DEBUG_MATRIX 0
 

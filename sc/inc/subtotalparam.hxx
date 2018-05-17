@@ -11,7 +11,6 @@
 #define INCLUDED_SC_INC_SUBTOTALPARAM_HXX
 
 #include "global.hxx"
-#include "address.hxx"
 
 struct SC_DLLPUBLIC ScSubTotalParam
 {

@@ -38,6 +38,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdundo.hxx>
+#include <svx/svxids.hrc>
 #include <i18nlangtag/mslangid.hxx>
 #include <editeng/unolingu.hxx>
 #include <svx/drawitem.hxx>

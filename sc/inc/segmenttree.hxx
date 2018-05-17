@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_INC_SEGMENTTREE_HXX
 #define INCLUDED_SC_INC_SEGMENTTREE_HXX
 
-#include "address.hxx"
+#include "types.hxx"
 
 #include <memory>
 

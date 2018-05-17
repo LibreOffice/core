@@ -26,9 +26,6 @@
 #include <map>
 #include <memory>
 
-class ScRange;
-class ScRangeList;
-
 /**
  * This container is optimized for use in the ods import filter, to store
  * ranges for cell styles.  We may change the name of this class once we

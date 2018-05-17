@@ -43,6 +43,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <editeng/editids.hrc>
 #include <sal/macros.h>
 #include <vcl/fontcharmap.hxx>
 #include <document.hxx>

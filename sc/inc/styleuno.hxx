@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_INC_STYLEUNO_HXX
 #define INCLUDED_SC_INC_STYLEUNO_HXX
 
-#include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>
 #include <svl/style.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -28,22 +27,23 @@
 #include <com/sun/star/style/XStyleLoader2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
 
+namespace com { namespace sun { namespace star { namespace container { class XIndexReplace; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XComponent; } } } }
 
-class SfxStyleSheetBase;
 class ScDocShell;
-class SfxObjectShell;
+class SfxItemPropertySet;
+class SfxItemSet;
 
 class ScStyleFamilyObj;
 class ScStyleObj;
+struct SfxItemPropertySimpleEntry;
 
 class ScStyleFamiliesObj : public ::cppu::WeakImplHelper<
                             css::container::XIndexAccess,

@@ -20,14 +20,12 @@
 #ifndef INCLUDED_SC_INC_SHEETDATA_HXX
 #define INCLUDED_SC_INC_SHEETDATA_HXX
 
-#include <xmloff/maptype.hxx>
 #include <editeng/editdata.hxx>
 #include <unordered_set>
 #include <vector>
 
 #include "address.hxx"
 
-class ScAddress;
 class SvXMLNamespaceMap;
 
 struct ScStreamEntry

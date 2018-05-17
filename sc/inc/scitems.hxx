@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_INC_SCITEMS_HXX
 #define INCLUDED_SC_INC_SCITEMS_HXX
 
-#include <svx/svxids.hrc>
 #include <svl/typedwhich.hxx>
 
 //  EditEngine is not allowed to define its own ITEMID's
