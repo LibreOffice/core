@@ -94,6 +94,7 @@ public:
     void testMultiViewCopyPaste();
     void testIMESupport();
     void testFilterDlg();
+    void testVbaRangeCopyPaste();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -126,6 +127,7 @@ public:
     CPPUNIT_TEST(testMultiViewCopyPaste);
     CPPUNIT_TEST(testIMESupport);
     CPPUNIT_TEST(testFilterDlg);
+    CPPUNIT_TEST(testVbaRangeCopyPaste);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1647,6 +1649,28 @@ void ScTiledRenderingTest::testFilterDlg()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(false, pView2->GetViewFrame()->GetDispatcher()->IsLocked());
     CPPUNIT_ASSERT_EQUAL(false, pView1->GetViewFrame()->GetDispatcher()->IsLocked());
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testVbaRangeCopyPaste()
+{
+    comphelper::LibreOfficeKit::setActive();
+    ScModelObj* pModelObj = createDoc("RangeCopyPaste.ods");
+    ScDocShell* pDocShell = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
+    CPPUNIT_ASSERT(pDocShell);
+
+    uno::Any aRet;
+    uno::Sequence< uno::Any > aOutParam;
+    uno::Sequence< uno::Any > aParams;
+    uno::Sequence< sal_Int16 > aOutParamIndex;
+
+    SfxObjectShell::CallXScript(
+        mxComponent,
+        "vnd.sun.Star.script:Standard.Module1.Test_RangeCopyPaste?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    CPPUNIT_ASSERT(!pDocShell->GetClipData().is());
 
     comphelper::LibreOfficeKit::setActive(false);
 }

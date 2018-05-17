@@ -65,6 +65,10 @@ class ScFlatBoolRowSegments;
 class HelperModelObj;
 struct ScColWidthParam;
 
+namespace com { namespace sun { namespace star { namespace script { namespace vba {
+    class XVBAScriptListener;
+} } } } }
+
 namespace sfx2 { class FileDialogHelper; }
 struct DocShell_Impl;
 
@@ -109,6 +113,10 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
     ScFormatSaveData*   mpFormatSaveData;
 
     ScDocShellModificator* pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
+
+    // Only used by Vba helper functions
+    css::uno::Reference<css::script::vba::XVBAScriptListener>   m_xVBAListener;
+    css::uno::Reference<css::datatransfer::XTransferable2>      m_xClipData;
 
     SAL_DLLPRIVATE void          InitItems();
     SAL_DLLPRIVATE void          DoEnterHandler();
@@ -215,6 +223,9 @@ public:
 
     ScDocument&     GetDocument()   { return aDocument; }
     ScDocFunc&      GetDocFunc()    { return *pDocFunc; }
+
+    css::uno::Reference<css::datatransfer::XTransferable2> GetClipData() { return m_xClipData; }
+    void SetClipData(const css::uno::Reference<css::datatransfer::XTransferable2>& xTransferable) { m_xClipData = xTransferable; }
 
     SfxPrinter*     GetPrinter( bool bCreateIfNotExist = true );
     sal_uInt16      SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL );
