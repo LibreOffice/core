@@ -48,7 +48,10 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
+#include <com/sun/star/script/vba/VBAScriptEventId.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
+#include <com/sun/star/script/vba/XVBAScriptListener.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
@@ -441,6 +444,32 @@ public:
     bool get_active() const { return m_xWarningOnBox->get_active(); }
 };
 
+
+class VBAScriptListener : public ::cppu::WeakImplHelper< css::script::vba::XVBAScriptListener >
+{
+private:
+    ScDocShell* m_pDocSh;
+public:
+    VBAScriptListener(ScDocShell* pDocSh) : m_pDocSh(pDocSh)
+    {
+    }
+
+    // XVBAScriptListener
+    virtual void SAL_CALL notifyVBAScriptEvent( const ::css::script::vba::VBAScriptEvent& aEvent ) override
+    {
+        if (aEvent.Identifier == script::vba::VBAScriptEventId::SCRIPT_STOPPED &&
+            m_pDocSh->GetClipData().is())
+        {
+            m_pDocSh->SetClipData(uno::Reference<datatransfer::XTransferable2>());
+        }
+    }
+
+    // XEventListener
+    virtual void SAL_CALL disposing( const ::css::lang::EventObject& /*Source*/ ) override
+    {
+    }
+};
+
 }
 
 bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css::embed::XStorage >& xStor )
@@ -688,6 +717,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     else if ( dynamic_cast<const SfxEventHint*>(&rHint) )
     {
         SfxEventHintId nEventId = static_cast<const SfxEventHint*>(&rHint)->GetEventId();
+
         switch ( nEventId )
         {
             case SfxEventHintId::LoadFinished:
@@ -717,6 +747,15 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 break;
             case SfxEventHintId::ViewCreated:
                 {
+ #if HAVE_FEATURE_SCRIPTING
+                    uno::Reference<script::vba::XVBACompatibility> xVBACompat(GetBasicContainer(), uno::UNO_QUERY);
+                    if ( !m_xVBAListener.is() && xVBACompat.is() )
+                    {
+                        m_xVBAListener.set(new VBAScriptListener(this));
+                        xVBACompat->addVBAScriptListener(m_xVBAListener);
+                    }
+#endif
+
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
                     if ( IsDocShared() && !SC_MOD()->IsInSharedDocLoading() )
                     {
@@ -1020,6 +1059,15 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if (rHint.GetId() == SfxHintId::Deinitializing)
     {
+
+#if HAVE_FEATURE_SCRIPTING
+        uno::Reference<script::vba::XVBACompatibility> xVBACompat(GetBasicContainer(), uno::UNO_QUERY);
+        if (m_xVBAListener.is() && xVBACompat.is())
+        {
+            xVBACompat->removeVBAScriptListener(m_xVBAListener);
+        }
+#endif
+
         if (aDocument.IsClipboardSource())
         {
             // Notes copied to the clipboard have a raw SdrCaptionObj pointer
