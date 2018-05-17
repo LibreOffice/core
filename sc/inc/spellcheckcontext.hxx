@@ -10,10 +10,11 @@
 #ifndef INCLUDED_SC_INC_SPELLCHECKCONTEXT_HXX
 #define INCLUDED_SC_INC_SPELLCHECKCONTEXT_HXX
 
-#include "address.hxx"
 #include <editeng/misspellrange.hxx>
+#include "types.hxx"
 
 #include <unordered_map>
+#include <vector>
 
 namespace sc {
 

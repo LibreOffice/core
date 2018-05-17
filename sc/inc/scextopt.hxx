@@ -22,7 +22,6 @@
 #include <memory>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
-#include "global.hxx"
 #include "rangelst.hxx"
 
 /** Extended settings for the document, used in import/export filters. */

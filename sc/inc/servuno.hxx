@@ -20,8 +20,10 @@
 #ifndef INCLUDED_SC_INC_SERVUNO_HXX
 #define INCLUDED_SC_INC_SERVUNO_HXX
 
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/Reference.h>
+
+namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
 
 class ScDocShell;
 

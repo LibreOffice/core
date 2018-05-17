@@ -23,8 +23,6 @@
 #include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>
 
-#include <svx/svxcommands.h>
-
 // areas
 
 #define SC_VIEW_START           (SID_SC_START)

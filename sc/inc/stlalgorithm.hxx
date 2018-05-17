@@ -10,7 +10,6 @@
 #ifndef INCLUDED_SC_INC_STLALGORITHM_HXX
 #define INCLUDED_SC_INC_STLALGORITHM_HXX
 
-#include <functional>
 #include <limits>
 
 #include <rtl/alloc.h>

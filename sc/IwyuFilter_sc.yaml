@@ -203,3 +203,35 @@ blacklist:
     sc/inc/rowheightcontext.hxx:
     # base class has to be a complete type
     - vcl/outdev.hxx
+    sc/inc/scerrors.hxx:
+    # needed for defines
+    - vcl/errcode.hxx
+    sc/inc/scitems.hxx:
+    # needed for defines
+    - svl/typedwhich.hxx
+    sc/inc/scmatrix.hxx:
+    # base class has to be a complete type
+    - svl/sharedstringpool.hxx
+    sc/inc/simplerangelist.hxx:
+    # base class has to be a complete type
+    - memory
+    sc/inc/spellcheckcontext.hxx:
+    # base class has to be a complete type
+    - editeng/misspellrange.hxx
+    sc/inc/srchuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/util/XReplaceDescriptor.hpp
+    sc/inc/styleuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XMultiPropertySet.hpp
+    - com/sun/star/beans/XMultiPropertyStates.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/container/XNameContainer.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/style/XStyle.hpp
+    - com/sun/star/style/XStyleLoader2.hpp

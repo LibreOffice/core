@@ -34,6 +34,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/svxfont.hxx>
+#include <editeng/editids.hrc>
 
 #include <document.hxx>
 #include <docpool.hxx>
