@@ -3662,7 +3662,7 @@ void SfxMedium::CreateTempFileNoCopy()
 }
 
 bool SfxMedium::SignContents_Impl(const Reference<XCertificate> xCert, const OUString& aSignatureLineId,
-                                  bool bScriptingContent, const OUString& aODFVersion,
+                                  bool bSignScriptingContent, const OUString& aODFVersion,
                                   bool bHasValidDocumentSignature)
 {
     bool bChanges = false;
@@ -3715,7 +3715,7 @@ bool SfxMedium::SignContents_Impl(const Reference<XCertificate> xCert, const OUS
                 throw uno::RuntimeException();
         }
 
-        if ( bScriptingContent )
+        if ( bSignScriptingContent )
         {
             // If the signature has already the document signature it will be removed
             // after the scripting signature is inserted.
