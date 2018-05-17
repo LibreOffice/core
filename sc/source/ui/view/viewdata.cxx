@@ -495,6 +495,9 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
         // don't apply SanitizeWhichActive() when reading the settings.
         // See tdf#117093
         const ScSplitPos eActiveSplitRange = SanitizeWhichActive();
+        // And point out to give us a chance to inspect weird things (if anyone
+        // remembers what s/he did).
+        assert(eWhichActive == eActiveSplitRange);
         pSettings[SC_ACTIVE_SPLIT_RANGE].Name = SC_ACTIVESPLITRANGE;
         pSettings[SC_ACTIVE_SPLIT_RANGE].Value <<= sal_Int16(eActiveSplitRange);
         pSettings[SC_POSITION_LEFT].Name = SC_POSITIONLEFT;
@@ -2086,6 +2089,12 @@ ScPositionHelper* ScViewData::GetLOKHeightHelper(SCTAB nTabIndex)
 void ScViewData::SetActivePart( ScSplitPos eNewActive )
 {
     pThisTab->eWhichActive = eNewActive;
+
+    // Let's hope we find the culprit for tdf#117093
+    // Don't sanitize the real value (yet?) because this function might be
+    // called before setting the then corresponding split modes. For which in
+    // fact then the order should be changed.
+    assert(eNewActive == pThisTab->SanitizeWhichActive());
 }
 
 Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScHSplitPos eWhich ) const
