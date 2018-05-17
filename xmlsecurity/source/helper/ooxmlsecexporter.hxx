@@ -12,10 +12,32 @@
 
 #include <memory>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <svl/sigstruct.hxx>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace embed
+{
+class XStorage;
+}
+namespace uno
+{
+class XComponentContext;
+}
+namespace xml
+{
+namespace sax
+{
+class XDocumentHandler;
+}
+}
+}
+}
+}
 
 /// Writes a single OOXML digital signature.
 class OOXMLSecExporter
