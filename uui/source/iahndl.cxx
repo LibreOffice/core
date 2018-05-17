@@ -72,7 +72,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/configmgr.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <typelib/typedescription.hxx>
 #include <unotools/confignode.hxx>
@@ -955,16 +954,6 @@ UUIInteractionHelper::getInteractionHandlerList(
     {
         OSL_FAIL( "GetInteractionHandlerList - Caught Exception!" );
     }
-}
-
-vcl::Window *
-UUIInteractionHelper::getParentProperty()
-{
-    uno::Reference< awt::XWindow > xWindow = getParentXWindow();
-    if ( xWindow.is() )
-        return VCLUnoHelper::GetWindow(xWindow);
-
-    return nullptr;
 }
 
 const uno::Reference< awt::XWindow>&

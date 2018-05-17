@@ -35,7 +35,6 @@ $(eval $(call gb_Library_use_libraries,uui,\
 	svl \
 	svt \
 	svx \
-	tk \
 	tl \
 	utl \
 	vcl \

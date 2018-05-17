@@ -42,7 +42,6 @@ $(eval $(call gb_CppunitTest_use_libraries,uui_dialogs_test, \
     svt \
     test \
     tl \
-    tk \
     ucbhelper \
     unotest \
     utl \
