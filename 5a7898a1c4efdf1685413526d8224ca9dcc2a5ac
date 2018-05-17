@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_ba59b900",
+        "filename": "sw/source/uibase/app/swmodule.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2018-05-17T04:27:48Z",
+      "side": 1,
+      "message": "Similarly, this should be: ResMgr::CreateResMgr(\"sw\", rLocale)",
+      "range": {
+        "startLine": 146,
+        "startChar": 32,
+        "endLine": 146,
+        "endChar": 58
+      },
+      "revId": "5a7898a1c4efdf1685413526d8224ca9dcc2a5ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
