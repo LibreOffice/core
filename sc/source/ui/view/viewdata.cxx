@@ -491,8 +491,12 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
             pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nFixPosY);
         else
             pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nVSplitPos);
+        // Prevent writing odd settings that would make crash versions that
+        // don't apply SanitizeWhichActive() when reading the settings.
+        // See tdf#117093
+        const ScSplitPos eActiveSplitRange = SanitizeWhichActive();
         pSettings[SC_ACTIVE_SPLIT_RANGE].Name = SC_ACTIVESPLITRANGE;
-        pSettings[SC_ACTIVE_SPLIT_RANGE].Value <<= sal_Int16(eWhichActive);
+        pSettings[SC_ACTIVE_SPLIT_RANGE].Value <<= sal_Int16(eActiveSplitRange);
         pSettings[SC_POSITION_LEFT].Name = SC_POSITIONLEFT;
         pSettings[SC_POSITION_LEFT].Value <<= sal_Int32(nPosX[SC_SPLIT_LEFT]);
         pSettings[SC_POSITION_RIGHT].Name = SC_POSITIONRIGHT;
@@ -649,6 +653,7 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
         // Fallback to common SdrModel processing
         else rViewData.GetDocument()->GetDrawLayer()->ReadUserDataSequenceValue(&aSettings[i]);
     }
+
     if (eHSplitMode == SC_SPLIT_FIX)
         nFixPosX = SanitizeCol( static_cast<SCCOL>( bHasHSplitInTwips ? nTempPosHTw : nTempPosH ));
     else
@@ -658,6 +663,20 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
         nFixPosY = SanitizeRow( static_cast<SCROW>( bHasVSplitInTwips ? nTempPosVTw : nTempPosV ));
     else
         nVSplitPos = bHasVSplitInTwips ? static_cast< long >( nTempPosVTw * rViewData.GetPPTY() ) : nTempPosV;
+
+    eWhichActive = SanitizeWhichActive();
+}
+
+ScSplitPos ScViewDataTable::SanitizeWhichActive() const
+{
+    if ((WhichH(eWhichActive) == SC_SPLIT_RIGHT && eHSplitMode == SC_SPLIT_NONE) ||
+            (WhichV(eWhichActive) == SC_SPLIT_TOP && eVSplitMode == SC_SPLIT_NONE))
+    {
+        SAL_WARN("sc.ui","ScViewDataTable::SanitizeWhichActive - bad eWhichActive " << eWhichActive);
+        // The default always initialized grid window is SC_SPLIT_BOTTOMLEFT.
+        return SC_SPLIT_BOTTOMLEFT;
+    }
+    return eWhichActive;
 }
 
 ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
@@ -2974,18 +2993,7 @@ void ScViewData::ReadUserData(const OUString& rData)
             maTabData[nPos]->nPosY[0] = SanitizeRow( aTabOpt.getToken(9,cTabSep).toInt32());
             maTabData[nPos]->nPosY[1] = SanitizeRow( aTabOpt.getToken(10,cTabSep).toInt32());
 
-            // test whether the active part according to SplitMode exists at all
-            //  (Bug #44516#)
-            ScSplitPos eTest = maTabData[nPos]->eWhichActive;
-            if ( ( WhichH( eTest ) == SC_SPLIT_RIGHT &&
-                    maTabData[nPos]->eHSplitMode == SC_SPLIT_NONE ) ||
-                 ( WhichV( eTest ) == SC_SPLIT_TOP &&
-                    maTabData[nPos]->eVSplitMode == SC_SPLIT_NONE ) )
-            {
-                // then back to default again (bottom left)
-                maTabData[nPos]->eWhichActive = SC_SPLIT_BOTTOMLEFT;
-                OSL_FAIL("SplitPos had to be corrected");
-            }
+            maTabData[nPos]->eWhichActive = maTabData[nPos]->SanitizeWhichActive();
         }
         ++nPos;
     }
