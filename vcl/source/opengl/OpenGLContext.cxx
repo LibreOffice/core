@@ -483,8 +483,19 @@ void OpenGLContext::prepareForYield()
 
     SAL_INFO("vcl.opengl", "Unbinding contexts in preparation for yield");
 
-    if( pCurrentCtx->isCurrent() )
-        pCurrentCtx->resetCurrent();
+    // Find the first context that is current and reset it.
+    // Usually the last context is the current, but not in case a new
+    // OpenGLContext is created already but not yet initialized.
+    while (pCurrentCtx.is())
+    {
+        if (pCurrentCtx->isCurrent())
+        {
+            pCurrentCtx->resetCurrent();
+            break;
+        }
+
+        pCurrentCtx = pCurrentCtx->mpPrevContext;
+    }
 
     assert (!hasCurrent());
 }
