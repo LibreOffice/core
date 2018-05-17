@@ -145,7 +145,7 @@ void SignSignatureLineDialog::Apply()
     }
 
     SfxObjectShell* pShell = SfxObjectShell::Current();
-    pShell->SignDocumentContent(m_xSelectedCertifate, m_aSignatureLineId);
+    pShell->SignSignatureLine(m_aSignatureLineId, m_xSelectedCertifate);
 
     bool bSuccess = false; // TODO
 
