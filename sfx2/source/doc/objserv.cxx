@@ -63,6 +63,7 @@
 #include <svtools/asynclink.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <tools/link.hxx>
 
 #include <sfx2/app.hxx>
@@ -1361,8 +1362,7 @@ SignatureState SfxObjectShell::ImplGetSignatureState( bool bScriptingContent )
     return *pState;
 }
 
-void SfxObjectShell::ImplSign(Reference<XCertificate> xCert, const OUString& aSignatureLineId,
-                              bool bScriptingContent)
+bool SfxObjectShell::PrepareForSigning()
 {
     // Check if it is stored in OASIS format...
     if  (   GetMedium()
@@ -1378,7 +1378,7 @@ void SfxObjectShell::ImplSign(Reference<XCertificate> xCert, const OUString& aSi
                                                   VclMessageType::Info, VclButtonsType::Ok, SfxResId(STR_INFO_WRONGDOCFORMAT)));
 
         xBox->run();
-        return;
+        return false;
     }
 
     // check whether the document is signed
@@ -1400,19 +1400,7 @@ void SfxObjectShell::ImplSign(Reference<XCertificate> xCert, const OUString& aSi
     SvtSaveOptions::ODFDefaultVersion nVersion = aSaveOpt.GetODFDefaultVersion();
 
     // the document is not new and is not modified
-    OUString aODFVersion;
-    try
-    {
-        // check the ODF version of the document
-        // No idea what relevance this has if the document has not been loaded from ODF (or is not
-        // being saved to ODF)
-        uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
-        xPropSet->getPropertyValue("Version") >>= aODFVersion;
-    }
-    catch( uno::Exception& )
-    {}
-
-    bool bNoSig = false;
+    OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
 
     if ( IsModified() || !GetMedium() || GetMedium()->GetName().isEmpty()
       || (aODFVersion != ODFVER_012_TEXT && !bHasSign) )
@@ -1445,7 +1433,7 @@ void SfxObjectShell::ImplSign(Reference<XCertificate> xCert, const OUString& aSi
                     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
                                                               VclMessageType::Info, VclButtonsType::Ok, SfxResId(STR_INFO_WRONGDOCFORMAT)));
                     xBox->run();
-                    return;
+                    return false;
                 }
             }
             else
@@ -1454,7 +1442,7 @@ void SfxObjectShell::ImplSign(Reference<XCertificate> xCert, const OUString& aSi
                 // digital signatures dialog
                 // If we have come here then the user denied to save.
                 if (!bHasSign)
-                    bNoSig = true;
+                    return false;
             }
         }
         else
@@ -1462,58 +1450,57 @@ void SfxObjectShell::ImplSign(Reference<XCertificate> xCert, const OUString& aSi
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
                                                       VclMessageType::Warning, VclButtonsType::Ok, SfxResId(STR_XMLSEC_ODF12_EXPECTED)));
             xBox->run();
-            return;
+            return false;
         }
 
         if ( IsModified() || !GetMedium() || GetMedium()->GetName().isEmpty() )
-            return;
+            return false;
     }
 
     // the document is not modified currently, so it can not become modified after signing
-    bool bAllowModifiedBack = false;
+    pImpl->m_bAllowModifiedBackAfterSigning = false;
     if ( IsEnableSetModified() )
     {
         EnableSetModified( false );
-        bAllowModifiedBack = true;
+        pImpl->m_bAllowModifiedBackAfterSigning = true;
     }
 
     // we have to store to the original document, the original medium should be closed for this time
-    if ( !bNoSig
-      && ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
+    if ( ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
     {
         GetMedium()->CloseAndRelease();
+        return true;
+    }
+    return false;
+}
 
-        bool bHasValidSignatures = pImpl->nDocumentSignatureState == SignatureState::OK
-            || pImpl->nDocumentSignatureState == SignatureState::NOTVALIDATED
-            || pImpl->nDocumentSignatureState == SignatureState::PARTIAL_OK;
+void SfxObjectShell::AfterSigning(bool bSignSuccess, bool bSignScriptingContent)
+{
+    pImpl->m_bSavingForSigning = true;
+    DoSaveCompleted( GetMedium() );
+    pImpl->m_bSavingForSigning = false;
 
-        bool bSignSuccess = GetMedium()->SignContents_Impl(
-            xCert, aSignatureLineId, bScriptingContent, aODFVersion, bHasValidSignatures);
+    if ( bSignSuccess )
+    {
+        if ( bSignScriptingContent )
+            pImpl->nScriptingSignatureState = SignatureState::UNKNOWN; // Re-Check
 
-        pImpl->m_bSavingForSigning = true;
-        DoSaveCompleted( GetMedium() );
-        pImpl->m_bSavingForSigning = false;
+        pImpl->nDocumentSignatureState = SignatureState::UNKNOWN; // Re-Check
 
-        if ( bSignSuccess )
-        {
-            if ( bScriptingContent )
-            {
-                pImpl->nScriptingSignatureState = SignatureState::UNKNOWN;// Re-Check
-
-                // adding of scripting signature removes existing document signature
-                pImpl->nDocumentSignatureState = SignatureState::UNKNOWN;// Re-Check
-            }
-            else
-                pImpl->nDocumentSignatureState = SignatureState::UNKNOWN;// Re-Check
-
-            Invalidate( SID_SIGNATURE );
-            Invalidate( SID_MACRO_SIGNATURE );
-            Broadcast( SfxHint(SfxHintId::TitleChanged) );
-        }
+        Invalidate( SID_SIGNATURE );
+        Invalidate( SID_MACRO_SIGNATURE );
+        Broadcast( SfxHint(SfxHintId::TitleChanged) );
     }
 
-    if ( bAllowModifiedBack )
+    if ( pImpl->m_bAllowModifiedBackAfterSigning )
         EnableSetModified();
+}
+
+bool SfxObjectShell::HasValidSignatures()
+{
+    return pImpl->nDocumentSignatureState == SignatureState::OK
+           || pImpl->nDocumentSignatureState == SignatureState::NOTVALIDATED
+           || pImpl->nDocumentSignatureState == SignatureState::PARTIAL_OK;
 }
 
 SignatureState SfxObjectShell::GetDocumentSignatureState()
@@ -1523,13 +1510,27 @@ SignatureState SfxObjectShell::GetDocumentSignatureState()
 
 void SfxObjectShell::SignDocumentContent()
 {
-    ImplSign();
+    if (!PrepareForSigning())
+        return;
+
+    OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
+    bool bSignSuccess = GetMedium()->SignContents_Impl(
+        Reference<XCertificate>(), "", false, aODFVersion, HasValidSignatures());
+
+    AfterSigning(bSignSuccess, false);
 }
 
-void SfxObjectShell::SignDocumentContent(const Reference<XCertificate> xCert,
-                                         const OUString& aSignatureLineId)
+void SfxObjectShell::SignSignatureLine(const OUString& aSignatureLineId,
+                                       const Reference<XCertificate> xCert)
 {
-    ImplSign(xCert, aSignatureLineId);
+    if (!PrepareForSigning())
+        return;
+
+    OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
+    bool bSignSuccess = GetMedium()->SignContents_Impl(
+        xCert, aSignatureLineId, false, aODFVersion, HasValidSignatures());
+
+    AfterSigning(bSignSuccess, false);
 }
 
 SignatureState SfxObjectShell::GetScriptingSignatureState()
@@ -1539,7 +1540,14 @@ SignatureState SfxObjectShell::GetScriptingSignatureState()
 
 void SfxObjectShell::SignScriptingContent()
 {
-    ImplSign( Reference<XCertificate>(), OUString(), true );
+    if (!PrepareForSigning())
+        return;
+
+    OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
+    bool bSignSuccess = GetMedium()->SignContents_Impl(
+        Reference<XCertificate>(), OUString(), true, aODFVersion, HasValidSignatures());
+
+    AfterSigning(bSignSuccess, true);
 }
 
 namespace
