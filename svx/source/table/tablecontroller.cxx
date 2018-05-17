@@ -172,6 +172,7 @@ SvxTableController::SvxTableController(
     SdrView& rView,
     const SdrTableObj& rObj)
 :   mbCellSelectionMode(false)
+    ,mbHasJustMerged(false)
     ,mbLeftButtonDown(false)
     ,mpSelectionOverlay(nullptr)
     ,mrView(rView)
@@ -1820,6 +1821,8 @@ void SvxTableController::MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, s
             }
 
             xRange->merge();
+            mbHasJustMerged = true;
+            setSelectedCells( maCursorFirstPos, maCursorFirstPos );
 
             if( bUndo )
                 rModel.EndUndo();
@@ -2144,6 +2147,11 @@ void SvxTableController::onTableModified()
 
 void SvxTableController::updateSelectionOverlay()
 {
+    // There is no need to update selection overlay after merging cells
+    // since the selection overlay should remain the same
+    if ( mbHasJustMerged )
+        return;
+
     destroySelectionOverlay();
     if( mbCellSelectionMode )
     {
@@ -2792,9 +2800,11 @@ IMPL_LINK_NOARG(SvxTableController, UpdateHdl, void*, void)
         if( aStart != maCursorFirstPos || aEnd != maCursorLastPos )
         {
             setSelectedCells( aStart, aEnd );
-            updateSelectionOverlay();
         }
     }
+
+    updateSelectionOverlay();
+    mbHasJustMerged = false;
 }
 
 namespace
