@@ -1555,9 +1555,8 @@ void SfxObjectShell::SignDocumentContent()
     if (CheckIsReadonly(false))
         return;
 
-    OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
     bool bSignSuccess = GetMedium()->SignContents_Impl(
-        Reference<XCertificate>(), "", false, aODFVersion, HasValidSignatures());
+        Reference<XCertificate>(), "", false, HasValidSignatures());
 
     AfterSigning(bSignSuccess, false);
 }
@@ -1571,9 +1570,8 @@ void SfxObjectShell::SignSignatureLine(const OUString& aSignatureLineId,
     if (CheckIsReadonly(false))
         return;
 
-    OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
     bool bSignSuccess = GetMedium()->SignContents_Impl(
-        xCert, aSignatureLineId, false, aODFVersion, HasValidSignatures());
+        xCert, aSignatureLineId, false, HasValidSignatures());
 
     AfterSigning(bSignSuccess, false);
 }
@@ -1591,9 +1589,8 @@ void SfxObjectShell::SignScriptingContent()
     if (CheckIsReadonly(true))
         return;
 
-    OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
     bool bSignSuccess = GetMedium()->SignContents_Impl(
-        Reference<XCertificate>(), "", true, aODFVersion, HasValidSignatures());
+        Reference<XCertificate>(), "", true, HasValidSignatures());
 
     AfterSigning(bSignSuccess, true);
 }
