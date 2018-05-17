@@ -45,20 +45,20 @@ namespace {
 
 void
 executeFilterDialog(
-    vcl::Window          * pParent ,
+    weld::Window* pParent ,
     OUString       const & rURL    ,
     uui::FilterNameList const & rFilters,
     OUString             & rFilter )
 {
     SolarMutexGuard aGuard;
 
-    ScopedVclPtrInstance< uui::FilterDialog > xDialog(pParent);
+    uui::FilterDialog aDialog(pParent);
 
-    xDialog->SetURL(rURL);
-    xDialog->ChangeFilters(&rFilters);
+    aDialog.SetURL(rURL);
+    aDialog.ChangeFilters(&rFilters);
 
     uui::FilterNameListPtr pSelected = rFilters.end();
-    if( xDialog->AskForFilter( pSelected ) )
+    if (aDialog.AskForFilter(pSelected))
     {
         rFilter = pSelected->sInternal;
     }
@@ -66,7 +66,7 @@ executeFilterDialog(
 
 void
 handleNoSuchFilterRequest_(
-    vcl::Window * pParent,
+    weld::Window* pParent,
     uno::Reference< uno::XComponentContext > const & xContext,
     document::NoSuchFilterRequest const & rRequest,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
@@ -292,7 +292,8 @@ UUIInteractionHelper::handleNoSuchFilterRequest(
     document::NoSuchFilterRequest aNoSuchFilterRequest;
     if (aAnyRequest >>= aNoSuchFilterRequest)
     {
-        handleNoSuchFilterRequest_(getParentProperty(),
+        uno::Reference<awt::XWindow> xParent = getParentXWindow();
+        handleNoSuchFilterRequest_(Application::GetFrameWeld(xParent),
                                    m_xContext,
                                    aNoSuchFilterRequest,
                                    rRequest->getContinuations());

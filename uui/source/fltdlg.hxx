@@ -20,12 +20,7 @@
 #ifndef INCLUDED_UUI_SOURCE_FLTDLG_HXX
 #define INCLUDED_UUI_SOURCE_FLTDLG_HXX
 
-#include <vcl/dialog.hxx>
-
-#include <vcl/lstbox.hxx>
-
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 
 #include <vector>
 
@@ -41,27 +36,24 @@ struct FilterNamePair
 typedef ::std::vector< FilterNamePair > FilterNameList   ;
 typedef FilterNameList::const_iterator  FilterNameListPtr;
 
-class FilterDialog : public ModalDialog
+class FilterDialog : public weld::GenericDialogController
 {
     // public interface
     public:
-        explicit FilterDialog(vcl::Window* pParentWindow);
+        explicit FilterDialog(weld::Window* pParentWindow);
         virtual ~FilterDialog() override;
-        virtual void dispose() override;
         void SetURL       ( const OUString&          sURL           );
         void ChangeFilters( const FilterNameList*    pFilterNames   );
         bool AskForFilter (       FilterNameListPtr& pSelectedItem  );
 
-    // helper (or hided functions!)
     private:
-        short Execute() override { return RET_CANCEL; };
         OUString impl_buildUIFileName( const OUString& sURL );
 
     // member
     private:
-              VclPtr<FixedText>       m_pFtURL       ;
-              VclPtr<ListBox>         m_pLbFilters   ;
         const FilterNameList* m_pFilterNames;
+        std::unique_ptr<weld::Label> m_xFtURL;
+        std::unique_ptr<weld::TreeView> m_xLbFilters;
 
 };  // class FilterDialog
 
