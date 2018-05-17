@@ -30,6 +30,8 @@ private:
     void ActivateAllSubMenus( Menu* pMenuBar );
     void Update();
 
+    void NativeItemText( OUString &rItemText );
+
 public:
     Qt5Menu( bool bMenuBar );
     virtual ~Qt5Menu() override;
