@@ -82,8 +82,17 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode)
         }
         if (&pEnd->nNode.GetNode() != pNode)
         {
+            if (pNode == &rTextNode)
+            {
+                pNode->SetRedlineMergeFlag(SwNode::Merge::First);
+            } // else: was already set before
+            for (sal_uLong j = pNode->GetIndex() + 1; j < pEnd->nNode.GetIndex(); ++j)
+            {
+                pNode->GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::Hidden);
+            }
             pNode = pEnd->nNode.GetNode().GetTextNode();
             assert(pNode);
+            pNode->SetRedlineMergeFlag(SwNode::Merge::NonFirst);
         }
         nLastEnd = pEnd->nContent.GetIndex();
     }
