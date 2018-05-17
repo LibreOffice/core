@@ -139,6 +139,7 @@
 #include <vcl/settings.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <paratr.hxx>
+#include <rootfrm.hxx>
 
 #include <memory>
 
@@ -638,7 +639,15 @@ void SwView::Execute(SfxRequest &rReq)
                 if( static_cast<const SfxBoolItem*>(pItem)->GetValue() )
                     nMode |= RedlineFlags::ShowDelete;
 
-                m_pWrtShell->SetRedlineFlagsAndCheckInsMode( nMode );
+                if (getenv("SW_REDLINEHIDE")) // TODO...
+                {
+                    m_pWrtShell->GetLayout()->SetHideRedlines(
+                        !static_cast<const SfxBoolItem*>(pItem)->GetValue());
+                    if (m_pWrtShell->IsRedlineOn())
+                        m_pWrtShell->SetInsMode();
+                }
+                else
+                    m_pWrtShell->SetRedlineFlagsAndCheckInsMode( nMode );
             }
             break;
         case FN_MAILMERGE_SENDMAIL_CHILDWINDOW:
