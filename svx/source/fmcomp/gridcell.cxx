@@ -1060,8 +1060,8 @@ DbTextField::DbTextField(DbGridColumn& _rColumn)
 
 DbTextField::~DbTextField( )
 {
-    DELETEZ( m_pPainterImplementation );
-    DELETEZ( m_pEdit );
+    m_pPainterImplementation.reset();
+    m_pEdit.reset();
 }
 
 
@@ -1102,18 +1102,18 @@ void DbTextField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCurso
     if ( bIsMultiLine )
     {
         m_pWindow = VclPtr<MultiLineTextCell>::Create( &rParent, nStyle );
-        m_pEdit = new MultiLineEditImplementation( *static_cast< MultiLineTextCell* >( m_pWindow.get() ) );
+        m_pEdit.reset(new MultiLineEditImplementation( *static_cast< MultiLineTextCell* >( m_pWindow.get() ) ));
 
         m_pPainter = VclPtr<MultiLineTextCell>::Create( &rParent, nStyle );
-        m_pPainterImplementation = new MultiLineEditImplementation( *static_cast< MultiLineTextCell* >( m_pPainter.get() ) );
+        m_pPainterImplementation.reset(new MultiLineEditImplementation( *static_cast< MultiLineTextCell* >( m_pPainter.get() ) ));
     }
     else
     {
         m_pWindow = VclPtr<Edit>::Create( &rParent, nStyle );
-        m_pEdit = new EditImplementation( *static_cast< Edit* >( m_pWindow.get() ) );
+        m_pEdit.reset(new EditImplementation( *static_cast< Edit* >( m_pWindow.get() ) ));
 
         m_pPainter = VclPtr<Edit>::Create( &rParent, nStyle );
-        m_pPainterImplementation = new EditImplementation( *static_cast< Edit* >( m_pPainter.get() ) );
+        m_pPainterImplementation.reset(new EditImplementation( *static_cast< Edit* >( m_pPainter.get() ) ));
     }
 
     if ( WB_LEFT == nStyle )
@@ -1135,7 +1135,7 @@ void DbTextField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCurso
 
 CellControllerRef DbTextField::CreateController() const
 {
-    return new EditCellController( m_pEdit );
+    return new EditCellController( m_pEdit.get() );
 }
 
 

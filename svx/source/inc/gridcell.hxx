@@ -377,8 +377,8 @@ protected:
 
 class DbTextField : public DbLimitedLengthField
 {
-    ::svt::IEditImplementation* m_pEdit;
-    ::svt::IEditImplementation* m_pPainterImplementation;
+    std::unique_ptr<::svt::IEditImplementation> m_pEdit;
+    std::unique_ptr<::svt::IEditImplementation> m_pPainterImplementation;
     bool                    m_bIsSimpleEdit;
 
 protected:
@@ -387,7 +387,7 @@ protected:
 public:
     DbTextField(DbGridColumn& _rColumn);
 
-    ::svt::IEditImplementation* GetEditImplementation() { return m_pEdit; }
+    ::svt::IEditImplementation* GetEditImplementation() { return m_pEdit.get(); }
     bool                    IsSimpleEdit() const { return m_bIsSimpleEdit; }
 
     virtual void Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
