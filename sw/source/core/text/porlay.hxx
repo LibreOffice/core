@@ -36,16 +36,20 @@ class SwTextFormatter;
 
 class SwCharRange
 {
-    sal_Int32 nStart, nLen;
+private:
+    TextFrameIndex nStart;
+    TextFrameIndex nLen;
+
 public:
-    SwCharRange( const sal_Int32 nInitStart = 0,
-        const sal_Int32 nInitLen = 0): nStart( nInitStart ), nLen(nInitLen) {}
-    sal_Int32 &Start() { return nStart; }
-    const sal_Int32 &Start() const { return nStart; }
-    void LeftMove( sal_Int32 nNew )
+    SwCharRange(TextFrameIndex const nInitStart = TextFrameIndex(0),
+                TextFrameIndex const nInitLen = TextFrameIndex(0))
+        : nStart( nInitStart ), nLen(nInitLen) {}
+    TextFrameIndex      & Start()       { return nStart; }
+    TextFrameIndex const& Start() const { return nStart; }
+    void LeftMove(TextFrameIndex const nNew)
             { if ( nNew < nStart ) { nLen += nStart-nNew; nStart = nNew; } }
-    sal_Int32 &Len() { return nLen; }
-    const sal_Int32 &Len() const { return nLen; }
+    TextFrameIndex      & Len()       { return nLen; }
+    TextFrameIndex const& Len() const { return nLen; }
     bool operator<(const SwCharRange &rRange) const
                 { return nStart < rRange.nStart; }
     bool operator>(const SwCharRange &rRange) const
@@ -234,6 +238,7 @@ class SwParaPortion : public SwLineLayout
     // Area that needs reformatting
     SwCharRange m_aReformat;
     SwScriptInfo m_aScriptInfo;
+
     // Fraction aZoom;
     long m_nDelta;
 
@@ -271,7 +276,7 @@ public:
     const SwScriptInfo& GetScriptInfo() const { return m_aScriptInfo; }
 
     // For SwTextFrame::Format: returns the paragraph's current length
-    sal_Int32 GetParLen() const;
+    TextFrameIndex GetParLen() const;
 
     // For Prepare()
     bool UpdateQuoVadis( const OUString &rQuo );
@@ -315,7 +320,7 @@ inline void SwParaPortion::ResetPreps()
 inline void SwParaPortion::FormatReset()
 {
     m_nDelta = 0;
-    m_aReformat = SwCharRange(0, COMPLETE_STRING);
+    m_aReformat = SwCharRange(TextFrameIndex(0), TextFrameIndex(COMPLETE_STRING));
     // bFlys needs to be retained in SwTextFrame::Format_() so that empty
     // paragraphs that needed to avoid Frames with no flow, reformat
     // when the Frame disappears from the Area

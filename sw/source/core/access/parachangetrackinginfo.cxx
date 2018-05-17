@@ -23,6 +23,7 @@
 #include <com/sun/star/text/TextMarkupType.hpp>
 
 #include <txtfrm.hxx>
+#include <rootfrm.hxx>
 #include <ndtxt.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <docary.hxx>
@@ -40,17 +41,20 @@ namespace {
         opChangeTrackDeletionTextMarkupList = new SwWrongList( WRONGLIST_CHANGETRACKING );
         opChangeTrackFormatChangeTextMarkupList = new SwWrongList( WRONGLIST_CHANGETRACKING );
 
-        if ( !rTextFrame.GetTextNode() )
+        if (!rTextFrame.GetTextNodeFirst())
         {
             OSL_FAIL( "<initChangeTrackTextMarkupLists(..) - missing <SwTextNode> instance!" );
             return;
         }
-        const SwTextNode& rTextNode( *(rTextFrame.GetTextNode()) );
+        // sw_redlinehide: the first node is sufficient - there are only
+        // multiple ones in Hide case and the code below returns early then
+        const SwTextNode& rTextNode(*(rTextFrame.GetTextNodeFirst()));
 
         const IDocumentRedlineAccess& rIDocChangeTrack( rTextNode.getIDocumentRedlineAccess() );
 
-        if ( !IDocumentRedlineAccess::IsShowChanges( rIDocChangeTrack.GetRedlineFlags() ) ||
-             rIDocChangeTrack.GetRedlineTable().empty() )
+        if (!IDocumentRedlineAccess::IsShowChanges(rIDocChangeTrack.GetRedlineFlags())
+           || rTextFrame.getRootFrame()->IsHideRedlines()
+           || rIDocChangeTrack.GetRedlineTable().empty())
         {
             // nothing to do --> empty change track text markup lists.
             return;
@@ -64,12 +68,14 @@ namespace {
             return;
         }
 
+        // sw_redlinehide: rely on the Hide early return above & cast
+        // TextFrameIndex to SwIndex directly
         const sal_Int32 nTextFrameTextStartPos = rTextFrame.IsFollow()
-                                               ? rTextFrame.GetOfst()
-                                               : 0;
+            ? sal_Int32(rTextFrame.GetOfst())
+            : 0;
         const sal_Int32 nTextFrameTextEndPos = rTextFrame.HasFollow()
-                                             ? rTextFrame.GetFollow()->GetOfst()
-                                             : rTextFrame.GetText().getLength();
+            ? sal_Int32(rTextFrame.GetFollow()->GetOfst())
+            : rTextFrame.GetText().getLength();
 
         // iteration over the redlines which overlap with the text node.
         const SwRedlineTable& rRedlineTable = rIDocChangeTrack.GetRedlineTable();

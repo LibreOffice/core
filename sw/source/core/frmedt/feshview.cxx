@@ -406,26 +406,25 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
                 if( SwMove::LEFT == nDir || SwMove::RIGHT == nDir )
                 {
                     SwPosition pos = *aAnch.GetContentAnchor();
-                    SwTextNode* pTextNd = static_cast<SwTextFrame*>(pOld)->GetTextNode();
-                    const sal_Int32 nAct = pos.nContent.GetIndex();
+                    SwTextFrame *const pOldFrame(static_cast<SwTextFrame*>(pOld));
+                    TextFrameIndex const nAct(pOldFrame->MapModelToViewPos(pos));
                     if( SwMove::LEFT == nDir )
                     {
                         bRet = true;
                         if( nAct )
                         {
-                            pos.nContent.Assign( pTextNd, nAct-1 );
+                            pos = pOldFrame->MapViewToModelPos(nAct - TextFrameIndex(1));
                         }
                         else
                             nDir = SwMove::UP;
                     }
                     else
                     {
-                        const sal_Int32 nMax =
-                            static_cast<SwTextFrame*>(pOld)->GetTextNode()->GetText().getLength();
+                        TextFrameIndex const nMax(pOldFrame->GetText().getLength());
                         if( nAct < nMax )
                         {
                             bRet = true;
-                            pos.nContent.Assign( pTextNd, nAct+1 );
+                            pos = pOldFrame->MapViewToModelPos(nAct + TextFrameIndex(1));
                         }
                         else
                             nDir = SwMove::DOWN;
@@ -444,17 +443,12 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
                     pNew = pOld->FindNext();
                 if( pNew && pNew != pOld && pNew->IsContentFrame() )
                 {
-                    SwPosition pos = *aAnch.GetContentAnchor();
-                    SwTextNode* pTextNd = static_cast<SwTextFrame*>(pNew)->GetTextNode();
-                    pos.nNode = *pTextNd;
-                    sal_Int32 nTmp = 0;
-                    if( bRet )
-                    {
-                        nTmp = static_cast<SwTextFrame*>(pNew)->GetTextNode()->GetText().getLength();
-                        if( nTmp )
-                            --nTmp;
-                    }
-                    pos.nContent.Assign( pTextNd, nTmp );
+                    SwTextFrame *const pNewFrame(static_cast<SwTextFrame*>(pNew));
+                    SwPosition const pos = pNewFrame->MapViewToModelPos(
+                        TextFrameIndex(
+                            (bRet && pNewFrame->GetText().getLength() != 0)
+                                ? pNewFrame->GetText().getLength() - 1
+                                : 0));
                     aAnch.SetAnchor( &pos );
                     bRet = true;
                 }
@@ -790,14 +784,23 @@ const SwFrameFormat* SwFEShell::SelFlyGrabCursor()
             SwContentFrame *pCFrame = pFly->ContainsContent();
             if ( pCFrame )
             {
-                SwContentNode *pCNode = pCFrame->GetNode();
                 // --> assure, that the cursor is consistent.
                 KillPams();
                 ClearMark();
                 SwPaM       *pCursor  = GetCursor();
 
-                pCursor->GetPoint()->nNode = *pCNode;
-                pCursor->GetPoint()->nContent.Assign( pCNode, 0 );
+                if (pCFrame->IsTextFrame())
+                {
+                    *pCursor->GetPoint() = static_cast<SwTextFrame *>(pCFrame)
+                        ->MapViewToModelPos(TextFrameIndex(0));
+                }
+                else
+                {
+                    assert(pCFrame->IsNoTextFrame());
+                    SwContentNode *const pCNode = static_cast<SwNoTextFrame *>(pCFrame)->GetNode();
+                    pCursor->GetPoint()->nNode = *pCNode;
+                    pCursor->GetPoint()->nContent.Assign( pCNode, 0 );
+                }
 
                 SwRect& rChrRect = const_cast<SwRect&>(GetCharRect());
                 rChrRect = pFly->getFramePrintArea();
@@ -1355,7 +1358,7 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
                                     dynamic_cast<const SwTextFrame*>(pContentFrame);
                             if ( pTextFrame )
                             {
-                                SwPosition aPos( *(pTextFrame->GetTextNode()) );
+                                SwPosition aPos(GetDoc()->GetNodes());
                                 Point aTmpPt( rPt );
                                 if (pTextFrame->GetKeyCursorOfst(&aPos, aTmpPt))
                                 {
@@ -1551,14 +1554,14 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
                         break;
                         case GotoObjFlags::FlyGrf:
                             if ( pFly->Lower() &&
-                                (pFly->Lower()->IsLayoutFrame() ||
-                                !static_cast<SwContentFrame*>(pFly->Lower())->GetNode()->GetGrfNode()))
+                                (!pFly->Lower()->IsNoTextFrame() ||
+                                 !static_cast<SwNoTextFrame*>(pFly->Lower())->GetNode()->GetGrfNode()))
                                 continue;
                         break;
                         case GotoObjFlags::FlyOLE:
                             if ( pFly->Lower() &&
-                                (pFly->Lower()->IsLayoutFrame() ||
-                                !static_cast<SwContentFrame*>(pFly->Lower())->GetNode()->GetOLENode()))
+                                (!pFly->Lower()->IsNoTextFrame() ||
+                                 !static_cast<SwNoTextFrame*>(pFly->Lower())->GetNode()->GetOLENode()))
                                 continue;
                         break;
                         default: break;
@@ -1889,7 +1892,16 @@ bool SwFEShell::ImpEndCreate()
             // Always via FindAnchor, to assure the frame will be bound
             // to the previous. With GetCrsOfst we can also reach the next. THIS IS WRONG.
             pAnch = ::FindAnchor( pPage, aPt, bBodyOnly );
-            aPos.nNode = *static_cast<const SwContentFrame*>(pAnch)->GetNode();
+            if (pAnch->IsTextFrame())
+            {
+                std::pair<SwTextNode const*, sal_Int32> const pos(
+                    static_cast<SwTextFrame const*>(pAnch)->MapViewToModel(TextFrameIndex(0)));
+                aPos.nNode = *pos.first;
+            }
+            else
+            {
+                aPos.nNode = *static_cast<const SwNoTextFrame*>(pAnch)->GetNode();
+            }
 
             // do not set in ReadnOnly-content
             if( aPos.nNode.GetNode().IsProtect() )
@@ -2513,12 +2525,22 @@ bool SwFEShell::GotoFly( const OUString& rName, FlyCntType eType, bool bSelFrame
                 SwContentFrame *pCFrame = pFrame->ContainsContent();
                 if ( pCFrame )
                 {
-                    SwContentNode *pCNode = pCFrame->GetNode();
                     ClearMark();
                     SwPaM* pCursor = GetCursor();
 
-                    pCursor->GetPoint()->nNode = *pCNode;
-                    pCursor->GetPoint()->nContent.Assign( pCNode, 0 );
+                    if (pCFrame->IsTextFrame())
+                    {
+                        *pCursor->GetPoint() = static_cast<SwTextFrame *>(pCFrame)
+                            ->MapViewToModelPos(TextFrameIndex(0));
+                    }
+                    else
+                    {
+                        assert(pCFrame->IsNoTextFrame());
+                        SwContentNode *const pCNode = static_cast<SwNoTextFrame *>(pCFrame)->GetNode();
+
+                        pCursor->GetPoint()->nNode = *pCNode;
+                        pCursor->GetPoint()->nContent.Assign( pCNode, 0 );
+                    }
 
                     SwRect& rChrRect = const_cast<SwRect&>(GetCharRect());
                     rChrRect = pFrame->getFramePrintArea();
@@ -2585,7 +2607,7 @@ FlyProtectFlags SwFEShell::IsSelObjProtected( FlyProtectFlags eType ) const
 
                     if ( pFly->Lower() && pFly->Lower()->IsNoTextFrame() )
                     {
-                        SwOLENode *pNd = static_cast<SwContentFrame*>(pFly->Lower())->GetNode()->GetOLENode();
+                        SwOLENode *pNd = static_cast<SwNoTextFrame*>(pFly->Lower())->GetNode()->GetOLENode();
                         uno::Reference < embed::XEmbeddedObject > xObj( pNd ? pNd->GetOLEObj().GetOleRef() : nullptr );
                         if ( xObj.is() )
                         {
@@ -2726,8 +2748,10 @@ void SwFEShell::CheckUnboundObjects()
 
             SwFormatAnchor aAnch;
             {
-            const SwFrame *pAnch = ::FindAnchor( pPage, aPt, true );
-            SwPosition aPos( *static_cast<const SwContentFrame*>(pAnch)->GetNode() );
+            const SwContentFrame *const pAnch = ::FindAnchor(pPage, aPt, true);
+            SwPosition aPos( pAnch->IsTextFrame()
+                ? *static_cast<SwTextFrame const*>(pAnch)->GetTextNodeForParaProps()
+                : *static_cast<SwNoTextFrame const*>(pAnch)->GetNode() );
             aAnch.SetType( RndStdIds::FLY_AT_PARA );
             aAnch.SetAnchor( &aPos );
             const_cast<SwRect&>(GetCharRect()).Pos() = aPt;

@@ -309,7 +309,7 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
             {
                 if( !pFrame )
                 {
-                    pFrame = SwIterator<SwContentFrame,SwTextNode>(rNode).First();
+                    pFrame = SwIterator<SwContentFrame, SwTextNode, sw::IteratorMode::UnwrapMulti>(rNode).First();
                     if (!pFrame)
                         return;
                 }
@@ -323,7 +323,7 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
                 if ( !pNd )
                     continue;
 
-                SwIterator<SwContentFrame,SwContentNode> aIter( *pNd );
+                SwIterator<SwContentFrame, SwContentNode, sw::IteratorMode::UnwrapMulti> aIter(*pNd);
                 SwContentFrame* pContent = aIter.First();
                 if( pContent )
                 {
@@ -477,12 +477,14 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
 
         }
 
-        SwIterator<SwContentFrame,SwTextNode> aIter( *this );
-        for( SwContentFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*this);
+        for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
         {
             pFrame->RegisterToNode( *pNode );
-            if( pFrame->IsTextFrame() && !pFrame->IsFollow() && static_cast<SwTextFrame*>(pFrame)->GetOfst() )
-                static_cast<SwTextFrame*>(pFrame)->SetOfst( 0 );
+            if (!pFrame->IsFollow() && pFrame->GetOfst())
+            {
+                pFrame->SetOfst( TextFrameIndex(0) );
+            }
         }
 
         if ( IsInCache() )
@@ -1991,6 +1993,12 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
         SetIgnoreDontExpand( bOldExpFlg );
     }
 
+    if ( HasWriterListeners() )
+    {   // send this before messing with hints, which will send RES_UPDATE_ATTR
+        SwInsText aHint( aPos, nLen );
+        NotifyClients( nullptr, &aHint );
+    }
+
     if ( HasHints() )
     {
         bool const bHadHints(!m_pSwpHints->CanBeDeleted());
@@ -2060,12 +2068,6 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
         }
         SAL_WARN_IF(bHadHints && m_pSwpHints->CanBeDeleted(), "sw.core",
                 "SwTextNode::InsertText: unexpected loss of hints");
-    }
-
-    if ( HasWriterListeners() )
-    {
-        SwInsText aHint( aPos, nLen );
-        NotifyClients( nullptr, &aHint );
     }
 
     // By inserting a character, the hidden flags

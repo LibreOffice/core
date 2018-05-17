@@ -39,6 +39,8 @@
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <cntfrm.hxx>
+#include <txtfrm.hxx>
+#include <notxtfrm.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <tabfrm.hxx>
@@ -347,7 +349,9 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
         //  2. the preceding row, if there is another row before this
         //  3. otherwise below the table
         {
-            SwTableNode* pTableNd = static_cast<SwContentFrame*>(pFrame)->GetNode()->FindTableNode();
+            SwTableNode* pTableNd = pFrame->IsTextFrame()
+                ? static_cast<SwTextFrame*>(pFrame)->GetTextNodeFirst()->FindTableNode()
+                : static_cast<SwNoTextFrame*>(pFrame)->GetNode()->FindTableNode();
 
             // search all boxes / lines
             FndBox_ aFndBox( nullptr, nullptr );
@@ -1805,8 +1809,8 @@ bool SwFEShell::SelTableRowCol( const Point& rPt, const Point* pEnd, bool bRowDr
 
             if ( pContent && pContent->IsTextFrame() )
             {
-                ppPos[i] = new SwPosition( *pContent->GetNode() );
-                ppPos[i]->nContent.Assign( const_cast<SwContentNode*>(pContent->GetNode()), 0 );
+
+                ppPos[i] = new SwPosition(static_cast<SwTextFrame const*>(pContent)->MapViewToModelPos(TextFrameIndex(0)));
 
                 // paPt[i] will not be used any longer, now we use it to store
                 // a position inside the content frame
