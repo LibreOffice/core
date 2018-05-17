@@ -275,7 +275,6 @@ Any OXMLControlProperty::convertString(const css::uno::Type& _rExpectedType, con
                         {
                             OSL_ENSURE(std::modf(nValue, &o3tl::temporary(double())) == 0,
                                 "OPropertyImport::convertString: a Date value with a fractional part?");
-                            (void)dummy;
                             aReturn <<= implGetDate(nValue);
                         }
                         break;
