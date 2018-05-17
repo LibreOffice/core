@@ -1496,6 +1496,46 @@ void SfxObjectShell::AfterSigning(bool bSignSuccess, bool bSignScriptingContent)
         EnableSetModified();
 }
 
+bool SfxObjectShell::CheckIsReadonly(bool bSignScriptingContent)
+{
+    if (GetMedium()->IsOriginallyReadOnly())
+    {
+        // If the file is physically read-only, we just show the existing signatures
+        try
+        {
+            OUString aODFVersion(
+                comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
+            uno::Reference<security::XDocumentDigitalSignatures> xSigner(
+                security::DocumentDigitalSignatures::createWithVersionAndValidSignature(
+                    comphelper::getProcessComponentContext(), aODFVersion, HasValidSignatures()));
+            if (bSignScriptingContent)
+                xSigner->showScriptingContentSignatures(GetMedium()->GetZipStorageToSign_Impl(),
+                                                        uno::Reference<io::XInputStream>());
+            else
+            {
+                uno::Reference<embed::XStorage> xStorage = GetMedium()->GetZipStorageToSign_Impl();
+                if (xStorage.is())
+                    xSigner->showDocumentContentSignatures(xStorage,
+                                                           uno::Reference<io::XInputStream>());
+                else
+                {
+                    std::unique_ptr<SvStream> pStream(
+                        utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ));
+                    uno::Reference<io::XInputStream> xStream(new utl::OStreamWrapper(*pStream));
+                    xSigner->showDocumentContentSignatures(uno::Reference<embed::XStorage>(),
+                                                           xStream);
+                }
+            }
+        }
+        catch (const uno::Exception&)
+        {
+            SAL_WARN("sfx.doc", "Couldn't use signing functionality!");
+        }
+        return true;
+    }
+    return false;
+}
+
 bool SfxObjectShell::HasValidSignatures()
 {
     return pImpl->nDocumentSignatureState == SignatureState::OK
@@ -1513,6 +1553,9 @@ void SfxObjectShell::SignDocumentContent()
     if (!PrepareForSigning())
         return;
 
+    if (CheckIsReadonly(false))
+        return;
+
     OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
     bool bSignSuccess = GetMedium()->SignContents_Impl(
         Reference<XCertificate>(), "", false, aODFVersion, HasValidSignatures());
@@ -1524,6 +1567,9 @@ void SfxObjectShell::SignSignatureLine(const OUString& aSignatureLineId,
                                        const Reference<XCertificate> xCert)
 {
     if (!PrepareForSigning())
+        return;
+
+    if (CheckIsReadonly(false))
         return;
 
     OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
@@ -1541,6 +1587,9 @@ SignatureState SfxObjectShell::GetScriptingSignatureState()
 void SfxObjectShell::SignScriptingContent()
 {
     if (!PrepareForSigning())
+        return;
+
+    if (CheckIsReadonly(true))
         return;
 
     OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
