@@ -366,7 +366,7 @@ DECLARE_OOXMLEXPORT_TEST(testFDO74215, "FDO74215.docx")
     if (!pXmlDoc)
         return;
     // tdf#106849 NumPicBullet xShape should not to be resized.
-    assertXPath(pXmlDoc, "/w:numbering/w:numPicBullet[2]/w:pict/v:shape", "style", "width:6.4pt;height:6.4pt");
+    assertXPath(pXmlDoc, "/w:numbering/w:numPicBullet[2]/w:pict/v:shape", "style", "width:11.25pt;height:11.25pt");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testColumnBreak_ColumnCountIsZero,"fdo74153.docx")

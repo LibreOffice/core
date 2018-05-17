@@ -512,7 +512,7 @@ ImpSwapFile::~ImpSwapFile()
     }
 }
 
-void ImpGraphic::ImplSetPrepared()
+void ImpGraphic::ImplSetPrepared(bool bAnimated)
 {
     mbPrepared = true;
     mbSwapOut = true;
@@ -545,11 +545,7 @@ void ImpGraphic::ImplSetPrepared()
     maSwapInfo.mbIsEPS = false;
     maSwapInfo.mbIsTransparent = false;
     maSwapInfo.mbIsAlpha = false;
-
-    if (mpGfxLink->GetType() == GfxLinkType::NativeGif)
-    {
-        maSwapInfo.mbIsAnimated = true;
-    }
+    maSwapInfo.mbIsAnimated = bAnimated;
 }
 
 void ImpGraphic::ImplClear()
