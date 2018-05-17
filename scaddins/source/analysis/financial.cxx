@@ -19,6 +19,7 @@
 
 #include "analysis.hxx"
 #include "analysishelper.hxx"
+#include <o3tl/temporary.hxx>
 #include <rtl/math.hxx>
 
 using namespace sca::analysis;
@@ -366,8 +367,7 @@ double SAL_CALL AnalysisAddIn::getTbillprice( const css::uno::Reference< css::be
 
     double  fFraction = GetYearFrac( xOpt, nSettle, nMat, 0 );  // method: USA 30/360
 
-    double  fDummy;
-    if( modf( fFraction, &fDummy ) == 0.0 )
+    if( modf( fFraction, &o3tl::temporary(double()) ) == 0.0 )
         throw css::lang::IllegalArgumentException();
 
     double fRet = 100.0 * ( 1.0 - fDisc * fFraction );

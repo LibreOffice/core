@@ -21,6 +21,7 @@
 
 #include <cmath>
 
+#include <o3tl/temporary.hxx>
 #include <osl/diagnose.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -102,8 +103,7 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
             res.append(poly);
         }
         const double a = (M_SQRT1_2 / m_sqrtElements);
-        double dummy;
-        const double d = std::modf(sqrtArea2, &dummy);
+        const double d = std::modf(sqrtArea2, &o3tl::temporary(double()));
         const double len = (t * M_SQRT2 * d);
         const double height = ::basegfx::pruneScaleValue( M_SQRT1_2 / m_sqrtElements );
         poly.clear();
@@ -147,8 +147,7 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
             res.append(poly);
         }
         const double a = (M_SQRT1_2 / m_sqrtElements);
-        double dummy;
-        const double d = std::modf(sqrtArea2, &dummy);
+        const double d = std::modf(sqrtArea2, &o3tl::temporary(double()));
         const double len = ((1.0 - t) * M_SQRT2 * d);
         const double height = ::basegfx::pruneScaleValue( M_SQRT1_2 / m_sqrtElements );
         poly.clear();

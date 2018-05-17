@@ -70,7 +70,7 @@
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
+#include <o3tl/temporary.hxx>
 #include <oox/mathml/import.hxx>
 #include <rtl/uri.hxx>
 #include "GraphicHelpers.hxx"
@@ -4587,8 +4587,7 @@ static util::DateTime lcl_dateTimeFromSerial(const double& dSerial)
     DateTime d(Date(30, 12, 1899));
     d.AddDays( static_cast<sal_Int32>(dSerial) );
 
-    double dummy;
-    double frac = std::modf(dSerial, &dummy);
+    double frac = std::modf(dSerial, &o3tl::temporary(double()));
     sal_uInt32 seconds = frac * secondsPerDay;
 
     util::DateTime date;

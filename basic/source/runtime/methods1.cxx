@@ -35,6 +35,7 @@
 #include <svl/zforlist.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/fract.hxx>
+#include <o3tl/temporary.hxx>
 #include <osl/file.hxx>
 #include <vcl/jobset.hxx>
 #include <sbobjmod.hxx>
@@ -2354,8 +2355,7 @@ void SbRtl_FormatDateTime(StarBASIC *, SbxArray & rPar, bool)
         // ShortTime: Display a time using the 24-hour format (hh:mm).
         // 11:24
     case 4:
-        double n;
-        double dTime = modf( dDate, &n );
+        double dTime = modf( dDate, &o3tl::temporary(double()) );
         pSbxVar->PutDate( dTime );
         if( nNamedFormat == 3 )
         {

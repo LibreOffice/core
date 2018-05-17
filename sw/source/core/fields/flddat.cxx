@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <o3tl/any.hxx>
+#include <o3tl/temporary.hxx>
 #include <tools/datetime.hxx>
 #include <svl/zforlist.hxx>
 #include <com/sun/star/util/DateTime.hpp>
@@ -150,8 +151,7 @@ Date SwDateTimeField::GetDate() const
 
 tools::Time SwDateTimeField::GetTime() const
 {
-    double fDummy;
-    double fFract = modf(GetValue(), &fDummy);
+    double fFract = modf(GetValue(), &o3tl::temporary(double()));
     DateTime aDT( DateTime::EMPTY );
     aDT.AddTime(fFract);
     return static_cast<tools::Time>(aDT);
