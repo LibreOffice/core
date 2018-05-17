@@ -27,10 +27,6 @@ $(eval $(call gb_CppunitTest_use_externals,svl_qa_cppunit, \
 	icu_headers \
 ))
 
-$(eval $(call gb_CppunitTest_add_defs,svl_qa_cppunit, \
-    -DENABLE_LIBNUMBERTEXT=$(if $(filter TRUE,$(ENABLE_LIBNUMBERTEXT)),1,0) \
-))
-
 $(eval $(call gb_CppunitTest_add_exception_objects,svl_qa_cppunit, \
 	svl/qa/unit/svl \
 ))
