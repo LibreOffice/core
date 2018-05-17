@@ -24,6 +24,8 @@
 
 #include "LoggedResources.hxx"
 
+#include <com/sun/star/graphic/XGraphic.hpp>
+
 namespace com { namespace sun { namespace star {
     namespace uno
     {
