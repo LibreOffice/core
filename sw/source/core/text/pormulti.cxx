@@ -160,7 +160,8 @@ void SwMultiPortion::ActualizeTabulator()
 }
 
 SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
-    sal_Int32 nEnd, bool bRTL ) : SwMultiPortion( nEnd )
+        TextFrameIndex const nEnd, bool bRTL )
+    : SwMultiPortion( nEnd )
 {
     const SvxCharRotateItem* pRot = static_cast<const SvxCharRotateItem*>(rCreate.pItem);
     if( !pRot )
@@ -185,7 +186,7 @@ SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
     }
 }
 
-SwBidiPortion::SwBidiPortion( sal_Int32 nEnd, sal_uInt8 nLv )
+SwBidiPortion::SwBidiPortion(TextFrameIndex const nEnd, sal_uInt8 nLv)
     : SwMultiPortion( nEnd ), nLevel( nLv )
 {
     SetBidi();
@@ -198,7 +199,7 @@ SwBidiPortion::SwBidiPortion( sal_Int32 nEnd, sal_uInt8 nLv )
 
 long SwBidiPortion::CalcSpacing( long nSpaceAdd, const SwTextSizeInfo& rInf ) const
 {
-    return HasTabulator() ? 0 : GetSpaceCnt(rInf) * nSpaceAdd / SPACING_PRECISION_FACTOR;
+    return HasTabulator() ? 0 : sal_Int32(GetSpaceCnt(rInf)) * nSpaceAdd / SPACING_PRECISION_FACTOR;
 }
 
 bool SwBidiPortion::ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const
@@ -213,15 +214,14 @@ bool SwBidiPortion::ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const
     return false;
 }
 
-sal_Int32 SwBidiPortion::GetSpaceCnt( const SwTextSizeInfo &rInf ) const
+TextFrameIndex SwBidiPortion::GetSpaceCnt(const SwTextSizeInfo &rInf) const
 {
     // Calculate number of blanks for justified alignment
-    SwLinePortion* pPor = GetRoot().GetFirstPortion();
-    sal_Int32 nTmpStart = rInf.GetIdx();
-    sal_Int32 nNull = 0;
-    sal_Int32 nBlanks;
+    TextFrameIndex nTmpStart = rInf.GetIdx();
+    TextFrameIndex nNull(0);
+    TextFrameIndex nBlanks(0);
 
-    for( nBlanks = 0; pPor; pPor = pPor->GetPortion() )
+    for (SwLinePortion* pPor = GetRoot().GetFirstPortion(); pPor; pPor = pPor->GetPortion())
     {
         if( pPor->InTextGrp() )
             nBlanks = nBlanks + static_cast<SwTextPortion*>(pPor)->GetSpaceCnt( rInf, nNull );
@@ -239,7 +239,8 @@ sal_Int32 SwBidiPortion::GetSpaceCnt( const SwTextSizeInfo &rInf ) const
 // in the next line.
 // It takes the same brackets and if the original has no content except
 // brackets, these will be deleted.
-SwDoubleLinePortion::SwDoubleLinePortion(SwDoubleLinePortion& rDouble, sal_Int32 nEnd)
+SwDoubleLinePortion::SwDoubleLinePortion(
+        SwDoubleLinePortion& rDouble, TextFrameIndex const nEnd)
     : SwMultiPortion(nEnd)
     , pBracket(nullptr)
     , nLineDiff(0)
@@ -265,7 +266,8 @@ SwDoubleLinePortion::SwDoubleLinePortion(SwDoubleLinePortion& rDouble, sal_Int32
 // This constructor uses the textattribute to get the right brackets.
 // The textattribute could be a 2-line-attribute or a character- or
 // internet style, which contains the 2-line-attribute.
-SwDoubleLinePortion::SwDoubleLinePortion(const SwMultiCreator& rCreate, sal_Int32 nEnd)
+SwDoubleLinePortion::SwDoubleLinePortion(
+        const SwMultiCreator& rCreate, TextFrameIndex const nEnd)
     : SwMultiPortion(nEnd)
     , pBracket(new SwBracket)
     , nLineDiff(0)
@@ -280,7 +282,7 @@ SwDoubleLinePortion::SwDoubleLinePortion(const SwMultiCreator& rCreate, sal_Int3
     SetDouble();
     const SvxTwoLinesItem* pTwo = static_cast<const SvxTwoLinesItem*>(rCreate.pItem);
     if( pTwo )
-        pBracket->nStart = 0;
+        pBracket->nStart = TextFrameIndex(0);
     else
     {
         const SwTextAttr& rAttr = *rCreate.pAttr;
@@ -307,14 +309,14 @@ SwDoubleLinePortion::SwDoubleLinePortion(const SwMultiCreator& rCreate, sal_Int3
     if( pBracket->cPre > 255 )
     {
         OUString aText = OUString(pBracket->cPre);
-        nTmp = SwScriptInfo::WhichFont( 0, &aText, nullptr );
+        nTmp = SwScriptInfo::WhichFont(0, aText);
     }
     pBracket->nPreScript = nTmp;
     nTmp = SW_SCRIPTS;
     if( pBracket->cPost > 255 )
     {
         OUString aText = OUString(pBracket->cPost);
-        nTmp = SwScriptInfo::WhichFont( 0, &aText, nullptr );
+        nTmp = SwScriptInfo::WhichFont(0, aText);
     }
     pBracket->nPostScript = nTmp;
 
@@ -453,11 +455,11 @@ void SwDoubleLinePortion::FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxW
 void SwDoubleLinePortion::CalcBlanks( SwTextFormatInfo &rInf )
 {
     SwLinePortion* pPor = GetRoot().GetFirstPortion();
-    sal_Int32 nNull = 0;
-    sal_Int32 nStart = rInf.GetIdx();
+    TextFrameIndex nNull(0);
+    TextFrameIndex nStart = rInf.GetIdx();
     SetTab1( false );
     SetTab2( false );
-    for( nBlank1 = 0; pPor; pPor = pPor->GetPortion() )
+    for (nBlank1 = TextFrameIndex(0); pPor; pPor = pPor->GetPortion())
     {
         if( pPor->InTextGrp() )
             nBlank1 = nBlank1 + static_cast<SwTextPortion*>(pPor)->GetSpaceCnt( rInf, nNull );
@@ -471,7 +473,7 @@ void SwDoubleLinePortion::CalcBlanks( SwTextFormatInfo &rInf )
         pPor = GetRoot().GetNext()->GetFirstPortion();
         nLineDiff -= GetRoot().GetNext()->Width();
     }
-    for( nBlank2 = 0; pPor; pPor = pPor->GetPortion() )
+    for (nBlank2 = TextFrameIndex(0); pPor; pPor = pPor->GetPortion())
     {
         if( pPor->InTextGrp() )
             nBlank2 = nBlank2 + static_cast<SwTextPortion*>(pPor)->GetSpaceCnt( rInf, nNull );
@@ -484,7 +486,7 @@ void SwDoubleLinePortion::CalcBlanks( SwTextFormatInfo &rInf )
 
 long SwDoubleLinePortion::CalcSpacing( long nSpaceAdd, const SwTextSizeInfo & ) const
 {
-    return HasTabulator() ? 0 : GetSpaceCnt() * nSpaceAdd / SPACING_PRECISION_FACTOR;
+    return HasTabulator() ? 0 : sal_Int32(GetSpaceCnt()) * nSpaceAdd / SPACING_PRECISION_FACTOR;
 }
 
 // Merges the spaces for text adjustment from the inner and outer part.
@@ -508,12 +510,12 @@ bool SwDoubleLinePortion::ChgSpaceAdd( SwLineLayout* pCurr,
         }
         else
         {
-            sal_Int32 nMyBlank = GetSmallerSpaceCnt();
-            sal_Int32 nOther = GetSpaceCnt();
+            sal_Int32 const nMyBlank = sal_Int32(GetSmallerSpaceCnt());
+            sal_Int32 const nOther = sal_Int32(GetSpaceCnt());
             SwTwips nMultiSpace = pCurr->GetLLSpaceAdd( 0 ) * nMyBlank + nOther * nSpaceAdd;
 
             if( nMyBlank )
-                nMultiSpace /= nMyBlank;
+                nMultiSpace /= sal_Int32(nMyBlank);
 
 //            pCurr->SetLLSpaceAdd( nMultiSpace, 0 );
             // #i65711# SetLLSpaceAdd replaces the first value,
@@ -539,10 +541,10 @@ SwDoubleLinePortion::~SwDoubleLinePortion()
 
 // constructs a ruby portion, i.e. an additional text is displayed
 // beside the main text, e.g. phonetic characters.
-SwRubyPortion::SwRubyPortion( const SwRubyPortion& rRuby, sal_Int32 nEnd ) :
-    SwMultiPortion( nEnd ),
-    nRubyOffset( rRuby.GetRubyOffset() ),
-    nAdjustment( rRuby.GetAdjustment() )
+SwRubyPortion::SwRubyPortion(const SwRubyPortion& rRuby, TextFrameIndex const nEnd)
+    : SwMultiPortion( nEnd )
+    , nRubyOffset( rRuby.GetRubyOffset() )
+    , nAdjustment( rRuby.GetAdjustment() )
 {
     SetDirection( rRuby.GetDirection() );
     SetRubyPosition( rRuby.GetRubyPosition() );
@@ -553,7 +555,7 @@ SwRubyPortion::SwRubyPortion( const SwRubyPortion& rRuby, sal_Int32 nEnd ) :
 // beside the main text, e.g. phonetic characters.
 SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
                               const IDocumentSettingAccess& rIDocumentSettingAccess,
-                              sal_Int32 nEnd, sal_Int32 nOffs,
+                              TextFrameIndex const nEnd, TextFrameIndex const nOffs,
                               const SwTextSizeInfo &rInf )
      : SwMultiPortion( nEnd )
 {
@@ -596,7 +598,7 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
     else
         pRubyFont = nullptr;
 
-    OUString aStr = rRuby.GetText().copy( nOffs );
+    OUString aStr = rRuby.GetText().copy( sal_Int32(nOffs) );
     SwFieldPortion *pField = new SwFieldPortion( aStr, pRubyFont );
     pField->SetNextOffset( nOffs );
     pField->SetFollow( true );
@@ -636,7 +638,7 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
 void SwRubyPortion::Adjust_( SwTextFormatInfo &rInf )
 {
     SwTwips nLineDiff = GetRoot().Width() - GetRoot().GetNext()->Width();
-    sal_Int32 nOldIdx = rInf.GetIdx();
+    TextFrameIndex const nOldIdx = rInf.GetIdx();
     if( !nLineDiff )
         return;
     SwLineLayout *pCurr;
@@ -656,17 +658,17 @@ void SwRubyPortion::Adjust_( SwTextFormatInfo &rInf )
     }
     sal_uInt16 nLeft = 0;   // the space in front of the first letter
     sal_uInt16 nRight = 0;  // the space at the end of the last letter
-    sal_Int32 nSub = 0;
+    TextFrameIndex nSub(0);
     switch ( nAdjustment )
     {
         case css::text::RubyAdjust_CENTER: nRight = static_cast<sal_uInt16>(nLineDiff / 2);
             SAL_FALLTHROUGH;
         case css::text::RubyAdjust_RIGHT: nLeft  = static_cast<sal_uInt16>(nLineDiff - nRight); break;
-        case css::text::RubyAdjust_BLOCK: nSub   = 1;
+        case css::text::RubyAdjust_BLOCK: nSub   = TextFrameIndex(1);
             SAL_FALLTHROUGH;
         case css::text::RubyAdjust_INDENT_BLOCK:
         {
-            sal_Int32 nCharCnt = 0;
+            TextFrameIndex nCharCnt(0);
             SwLinePortion *pPor;
             for( pPor = pCurr->GetFirstPortion(); pPor; pPor = pPor->GetPortion() )
             {
@@ -676,7 +678,7 @@ void SwRubyPortion::Adjust_( SwTextFormatInfo &rInf )
             }
             if( nCharCnt > nSub )
             {
-                SwTwips nCalc = nLineDiff / ( nCharCnt - nSub );
+                SwTwips nCalc = nLineDiff / sal_Int32(nCharCnt - nSub);
                 short nTmp;
                 if( nCalc < SHRT_MAX )
                     nTmp = -short(nCalc);
@@ -684,7 +686,7 @@ void SwRubyPortion::Adjust_( SwTextFormatInfo &rInf )
                     nTmp = SHRT_MIN;
 
                 pCurr->CreateSpaceAdd( SPACING_PRECISION_FACTOR * nTmp );
-                nLineDiff -= nCalc * ( nCharCnt - 1 );
+                nLineDiff -= nCalc * (sal_Int32(nCharCnt) - 1);
             }
             if( nLineDiff > 1 )
             {
@@ -744,7 +746,7 @@ void SwRubyPortion::CalcRubyOffset()
         if( pField->HasFollow() )
             nRubyOffset = pField->GetNextOffset();
         else
-            nRubyOffset = COMPLETE_STRING;
+            nRubyOffset = TextFrameIndex(COMPLETE_STRING);
     }
 }
 
@@ -754,10 +756,9 @@ void SwRubyPortion::CalcRubyOffset()
 // no 2-line-format reference is passed. If there is a 2-line-format reference,
 // then the rValue is set only, if the 2-line-attribute's value is set _and_
 // the 2-line-formats has the same brackets.
-static bool lcl_Has2Lines( const SwTextAttr& rAttr, const SvxTwoLinesItem* &rpRef,
-    bool &rValue )
+static bool lcl_Check2Lines(const SfxPoolItem *const pItem,
+        const SvxTwoLinesItem* &rpRef, bool &rValue)
 {
-    const SfxPoolItem* pItem = CharFormat::GetItem( rAttr, RES_CHRATR_TWO_LINES );
     if( pItem )
     {
         rValue = static_cast<const SvxTwoLinesItem*>(pItem)->GetValue();
@@ -773,6 +774,13 @@ static bool lcl_Has2Lines( const SwTextAttr& rAttr, const SvxTwoLinesItem* &rpRe
     return false;
 }
 
+static bool lcl_Has2Lines(const SwTextAttr& rAttr,
+        const SvxTwoLinesItem* &rpRef, bool &rValue)
+{
+    const SfxPoolItem* pItem = CharFormat::GetItem(rAttr, RES_CHRATR_TWO_LINES);
+    return lcl_Check2Lines(pItem, rpRef, rValue);
+}
+
 // is a little help function for GetMultiCreator(..)
 // It extracts the charrotation from a charrotate-attribute or a character style.
 // The rValue is set to true, if the charrotate-attribute's value is set and
@@ -780,10 +788,9 @@ static bool lcl_Has2Lines( const SwTextAttr& rAttr, const SvxTwoLinesItem* &rpRe
 // If there is a charrotate-format reference, then the rValue is set only,
 // if the charrotate-attribute's value is set _and_ identical
 // to the charrotate-format's value.
-static bool lcl_HasRotation( const SwTextAttr& rAttr,
-    const SvxCharRotateItem* &rpRef, bool &rValue )
+static bool lcl_CheckRotation(const SfxPoolItem *const pItem,
+        const SvxCharRotateItem* &rpRef, bool &rValue)
 {
-    const SfxPoolItem* pItem = CharFormat::GetItem( rAttr, RES_CHRATR_ROTATE );
     if ( pItem )
     {
         rValue = static_cast<const SvxCharRotateItem*>(pItem)->GetValue();
@@ -798,6 +805,100 @@ static bool lcl_HasRotation( const SwTextAttr& rAttr,
     return false;
 }
 
+static bool lcl_HasRotation(const SwTextAttr& rAttr,
+        const SvxCharRotateItem* &rpRef, bool &rValue)
+{
+    const SfxPoolItem* pItem = CharFormat::GetItem( rAttr, RES_CHRATR_ROTATE );
+    return lcl_CheckRotation(pItem, rpRef, rValue);
+}
+
+namespace sw {
+
+    // need to use a very special attribute iterator here that returns
+    // both the hints and the nodes, so that GetMultiCreator() can handle
+    // items in the nodes' set properly
+    class MergedAttrIterMulti
+        : public MergedAttrIterBase
+    {
+    private:
+        bool m_First = true;
+    public:
+        MergedAttrIterMulti(SwTextFrame const& rFrame) : MergedAttrIterBase(rFrame) {}
+        SwTextAttr const* NextAttr(SwTextNode const*& rpNode);
+        // can't have operator= because m_pMerged/m_pNode const
+        void Assign(MergedAttrIterMulti const& rOther)
+        {
+            assert(m_pMerged == rOther.m_pMerged);
+            assert(m_pNode == rOther.m_pNode);
+            m_CurrentExtent = rOther.m_CurrentExtent;
+            m_CurrentHint = rOther.m_CurrentHint;
+            m_First = rOther.m_First;
+        }
+    };
+
+    SwTextAttr const* MergedAttrIterMulti::NextAttr(SwTextNode const*& rpNode)
+    {
+        if (m_First)
+        {
+            m_First = false;
+            rpNode = m_pMerged
+                ? m_pMerged->extents.size()
+                    ? m_pMerged->extents[0].pNode
+                    : m_pMerged->pFirstNode
+                : m_pNode;
+            return nullptr;
+        }
+        if (m_pMerged)
+        {
+            while (m_CurrentExtent < m_pMerged->extents.size())
+            {
+                sw::Extent const& rExtent(m_pMerged->extents[m_CurrentExtent]);
+                if (SwpHints const*const pHints = rExtent.pNode->GetpSwpHints())
+                {
+                    while (m_CurrentHint < pHints->Count())
+                    {
+                        SwTextAttr const*const pHint(pHints->Get(m_CurrentHint));
+                        if (rExtent.nEnd < pHint->GetStart())
+                        {
+                            break;
+                        }
+                        ++m_CurrentHint;
+                        if (rExtent.nStart <= pHint->GetStart())
+                        {
+                            rpNode = rExtent.pNode;
+                            return pHint;
+                        }
+                    }
+                }
+                ++m_CurrentExtent;
+                if (m_CurrentExtent < m_pMerged->extents.size() &&
+                    rExtent.pNode != m_pMerged->extents[m_CurrentExtent].pNode)
+                {
+                    m_CurrentHint = 0; // reset
+                    rpNode = rExtent.pNode;
+                    return nullptr;
+                }
+            }
+            return nullptr;
+        }
+        else
+        {
+            SwpHints const*const pHints(m_pNode->GetpSwpHints());
+            if (pHints)
+            {
+                while (m_CurrentHint < pHints->Count())
+                {
+                    SwTextAttr const*const pHint(pHints->Get(m_CurrentHint));
+                    ++m_CurrentHint;
+                    rpNode = m_pNode;
+                    return pHint;
+                }
+            }
+            return nullptr;
+        }
+    }
+}
+
 // If we (e.g. the position rPos) are inside a two-line-attribute or
 // a ruby-attribute, the attribute will be returned in a SwMultiCreator-struct,
 // otherwise the function returns zero.
@@ -807,7 +908,7 @@ static bool lcl_HasRotation( const SwTextAttr& rAttr,
 // interrupts the first attribute.
 // E.g. a ruby portion interrupts a 2-line-attribute, a 2-line-attribute
 // with different brackets interrupts another 2-line-attribute.
-SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
+SwMultiCreator* SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rPos,
                                                 SwMultiPortion const * pMulti ) const
 {
     SwScriptInfo& rSI = const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
@@ -828,17 +929,17 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
     sal_uInt8 nNextLevel = nCurrLevel;
     bool bFieldBidi = false;
 
-    if ( rPos < GetText().getLength() && CH_TXTATR_BREAKWORD == GetChar( rPos ) )
+    if (rPos < TextFrameIndex(GetText().getLength()) && CH_TXTATR_BREAKWORD == GetChar(rPos))
     {
         bFieldBidi = true;
     }
     else
         nNextLevel = rSI.DirType( rPos );
 
-    if ( GetText().getLength() != rPos && nNextLevel > nCurrLevel )
+    if (TextFrameIndex(GetText().getLength()) != rPos && nNextLevel > nCurrLevel)
     {
-        rPos = bFieldBidi ? rPos + 1 : rSI.NextDirChg( rPos, &nCurrLevel );
-        if ( COMPLETE_STRING == rPos )
+        rPos = bFieldBidi ? rPos + TextFrameIndex(1) : rSI.NextDirChg(rPos, &nCurrLevel);
+        if (TextFrameIndex(COMPLETE_STRING) == rPos)
             return nullptr;
         SwMultiCreator *pRet = new SwMultiCreator;
         pRet->pItem = nullptr;
@@ -852,66 +953,99 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
     if ( pMulti )
         return nullptr;
 
-    const SvxCharRotateItem* pRotate = nullptr;
-    const SfxPoolItem* pRotItem;
-    if( SfxItemState::SET == m_pFrame->GetTextNode()->GetSwAttrSet().
-        GetItemState( RES_CHRATR_ROTATE, true, &pRotItem ) &&
-        static_cast<const SvxCharRotateItem*>(pRotItem)->GetValue() )
-        pRotate = static_cast<const SvxCharRotateItem*>(pRotItem);
-    else
-        pRotItem = nullptr;
-    const SvxTwoLinesItem* p2Lines = nullptr;
-    const SwTextNode *pLclTextNode = m_pFrame->GetTextNode();
-    if( !pLclTextNode )
-        return nullptr;
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET == pLclTextNode->GetSwAttrSet().
-        GetItemState( RES_CHRATR_TWO_LINES, true, &pItem ) &&
-        static_cast<const SvxTwoLinesItem*>(pItem)->GetValue() )
-        p2Lines = static_cast<const SvxTwoLinesItem*>(pItem);
-    else
-        pItem = nullptr;
-
-    const SwpHints *pHints = pLclTextNode->GetpSwpHints();
-    if( !pHints && !p2Lines && !pRotate )
-        return nullptr;
+    // need the node that contains input rPos
+    std::pair<SwTextNode const*, sal_Int32> startPos(m_pFrame->MapViewToModel(rPos));
+    const SvxCharRotateItem* pActiveRotateItem(nullptr);
+    const SfxPoolItem* pNodeRotateItem(nullptr);
+    const SvxTwoLinesItem* pActiveTwoLinesItem(nullptr);
+    const SfxPoolItem* pNodeTwoLinesItem(nullptr);
+    SwTextAttr const* pActiveTwoLinesHint(nullptr);
+    SwTextAttr const* pActiveRotateHint(nullptr);
     const SwTextAttr *pRuby = nullptr;
+    sw::MergedAttrIterMulti iterAtStartOfNode(*m_pFrame);
     bool bTwo = false;
     bool bRot = false;
-    size_t n2Lines = SAL_MAX_SIZE;
-    size_t nRotate = SAL_MAX_SIZE;
-    const size_t nCount = pHints ? pHints->Count() : 0;
-    for( size_t i = 0; i < nCount; ++i )
+
+    for (sw::MergedAttrIterMulti iter = *m_pFrame; ; )
     {
-        const SwTextAttr *pTmp = pHints->Get(i);
-        sal_Int32 nStart = pTmp->GetStart();
-        if( rPos < nStart )
-            break;
-        if( *pTmp->GetAnyEnd() > rPos )
+        SwTextNode const* pNode(nullptr);
+        SwTextAttr const*const pAttr = iter.NextAttr(pNode);
+        if (!pNode)
         {
-            if( RES_TXTATR_CJK_RUBY == pTmp->Which() )
-                pRuby = pTmp;
-            else
+            break;
+        }
+        if (pAttr)
+        {
+            assert(pNode->GetIndex() <= startPos.first->GetIndex()); // should break earlier
+            if (startPos.first->GetIndex() <= pNode->GetIndex())
             {
-                const SvxCharRotateItem* pRoTmp = nullptr;
-                if( lcl_HasRotation( *pTmp, pRoTmp, bRot ) )
+                if (startPos.first->GetIndex() != pNode->GetIndex()
+                    || startPos.second < pAttr->GetStart())
                 {
-                    nRotate = bRot ? i : nCount;
-                    pRotate = pRoTmp;
+                    break;
                 }
-                const SvxTwoLinesItem* p2Tmp = nullptr;
-                if( lcl_Has2Lines( *pTmp, p2Tmp, bTwo ) )
+                if (startPos.second < *pAttr->GetAnyEnd())
                 {
-                    n2Lines = bTwo ? i : nCount;
-                    p2Lines = p2Tmp;
+                    // sw_redlinehide: ruby *always* splits
+                    if (RES_TXTATR_CJK_RUBY == pAttr->Which())
+                        pRuby = pAttr;
+                    else
+                    {
+                        const SvxCharRotateItem* pRoTmp = nullptr;
+                        if (lcl_HasRotation( *pAttr, pRoTmp, bRot ))
+                        {
+                            pActiveRotateHint = bRot ? pAttr : nullptr;
+                            pActiveRotateItem = pRoTmp;
+                        }
+                        const SvxTwoLinesItem* p2Tmp = nullptr;
+                        if (lcl_Has2Lines( *pAttr, p2Tmp, bTwo ))
+                        {
+                            pActiveTwoLinesHint = bTwo ? pAttr : nullptr;
+                            pActiveTwoLinesItem = p2Tmp;
+                        }
+                    }
+                }
+            }
+        }
+        else if (pNode) // !pAttr && pNode means the node changed
+        {
+            if (startPos.first->GetIndex() < pNode->GetIndex())
+            {
+                break; // only one node initially
+            }
+            if (startPos.first->GetIndex() == pNode->GetIndex())
+            {
+                iterAtStartOfNode.Assign(iter);
+                if (SfxItemState::SET == pNode->GetSwAttrSet().GetItemState(
+                            RES_CHRATR_ROTATE, true, &pNodeRotateItem) &&
+                    static_cast<const SvxCharRotateItem*>(pNodeRotateItem)->GetValue())
+                {
+                    pActiveRotateItem = static_cast<const SvxCharRotateItem*>(pNodeRotateItem);
+                }
+                else
+                {
+                    pNodeRotateItem = nullptr;
+                }
+                if (SfxItemState::SET == startPos.first->GetSwAttrSet().GetItemState(
+                            RES_CHRATR_TWO_LINES, true, &pNodeTwoLinesItem) &&
+                    static_cast<const SvxTwoLinesItem*>(pNodeTwoLinesItem)->GetValue())
+                {
+                    pActiveTwoLinesItem = static_cast<const SvxTwoLinesItem*>(pNodeTwoLinesItem);
+                }
+                else
+                {
+                    pNodeTwoLinesItem = nullptr;
                 }
             }
         }
     }
+    if (!pRuby && !pActiveTwoLinesItem && !pActiveRotateItem)
+        return nullptr;
+
     if( pRuby )
     {   // The winner is ... a ruby attribute and so
         // the end of the multiportion is the end of the ruby attribute.
-        rPos = *pRuby->End();
+        rPos = m_pFrame->MapModelToView(startPos.first, *pRuby->End());
         SwMultiCreator *pRet = new SwMultiCreator;
         pRet->pItem = nullptr;
         pRet->pAttr = pRuby;
@@ -919,44 +1053,48 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
         pRet->nLevel = GetTextFrame()->IsRightToLeft() ? 1 : 0;
         return pRet;
     }
-    if( n2Lines < nCount || ( pItem && pItem == p2Lines &&
-        rPos < GetText().getLength() ) )
+    if (pActiveTwoLinesHint ||
+        (pNodeTwoLinesItem && pNodeTwoLinesItem == pActiveTwoLinesItem &&
+         rPos < TextFrameIndex(GetText().getLength())))
     {   // The winner is a 2-line-attribute,
         // the end of the multiportion depends on the following attributes...
         SwMultiCreator *pRet = new SwMultiCreator;
 
         // We note the endpositions of the 2-line attributes in aEnd as stack
-        std::deque< sal_Int32 > aEnd;
+        std::deque<TextFrameIndex> aEnd;
 
         // The bOn flag signs the state of the last 2-line attribute in the
         // aEnd-stack, it is compatible with the winner-attribute or
         // it interrupts the other attribute.
         bool bOn = true;
 
-        if( n2Lines < nCount )
+        if (pActiveTwoLinesHint)
         {
             pRet->pItem = nullptr;
-            pRet->pAttr = pHints->Get(n2Lines);
-            aEnd.push_front( *pRet->pAttr->End() );
-            if( pItem )
+            pRet->pAttr = pActiveTwoLinesHint;
+            if (pNodeTwoLinesItem)
             {
-                aEnd.front() = GetText().getLength();
-                bOn = static_cast<const SvxTwoLinesItem*>(pItem)->GetEndBracket() ==
-                        p2Lines->GetEndBracket() &&
-                      static_cast<const SvxTwoLinesItem*>(pItem)->GetStartBracket() ==
-                        p2Lines->GetStartBracket();
+                aEnd.push_front(m_pFrame->MapModelToView(startPos.first, startPos.first->Len()));
+                bOn = static_cast<const SvxTwoLinesItem*>(pNodeTwoLinesItem)->GetEndBracket() ==
+                        pActiveTwoLinesItem->GetEndBracket() &&
+                      static_cast<const SvxTwoLinesItem*>(pNodeTwoLinesItem)->GetStartBracket() ==
+                        pActiveTwoLinesItem->GetStartBracket();
+            }
+            else
+            {
+                aEnd.push_front(m_pFrame->MapModelToView(startPos.first, *pRet->pAttr->End()));
             }
         }
         else
         {
-            pRet->pItem = pItem;
+            pRet->pItem = pNodeTwoLinesItem;
             pRet->pAttr = nullptr;
-            aEnd.push_front( GetText().getLength() );
+            aEnd.push_front(m_pFrame->MapModelToView(startPos.first, startPos.first->Len()));
         }
         pRet->nId = SwMultiCreatorId::Double;
         pRet->nLevel = GetTextFrame()->IsRightToLeft() ? 1 : 0;
 
-        // n2Lines is the index of the last 2-line-attribute, which contains
+        // pActiveTwoLinesHint is the last 2-line-attribute, which contains
         // the actual position.
 
         // At this moment we know that at position rPos the "winner"-attribute
@@ -973,23 +1111,49 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
         // In the following loop rPos is the critical position and it will be
         // evaluated, if at rPos starts a interrupting or a maintaining
         // continuity attribute.
-        for( size_t i = 0; i < nCount; ++i )
+
+        // iterAtStartOfNode is positioned to the first hint of the node
+        // (if any); the node item itself has already been handled above
+        for (sw::MergedAttrIterMulti iter = iterAtStartOfNode; ; )
         {
-            const SwTextAttr *pTmp = pHints->Get(i);
-            if( *pTmp->GetAnyEnd() <= rPos )
-                continue;
-            if( rPos < pTmp->GetStart() )
+            SwTextNode const* pNode(nullptr);
+            SwTextAttr const*const pTmp = iter.NextAttr(pNode);
+            if (!pNode)
+            {
+                break;
+            }
+            assert(startPos.first->GetIndex() <= pNode->GetIndex());
+            TextFrameIndex nTmpStart;
+            TextFrameIndex nTmpEnd;
+            if (pTmp)
+            {
+                nTmpEnd = m_pFrame->MapModelToView(pNode, *pTmp->GetAnyEnd());
+                if (nTmpEnd <= rPos)
+                    continue;
+                nTmpStart = m_pFrame->MapModelToView(pNode, pTmp->GetStart());
+            }
+            else
+            {
+                pNodeTwoLinesItem = nullptr;
+                pNode->GetSwAttrSet().GetItemState(
+                            RES_CHRATR_TWO_LINES, true, &pNodeTwoLinesItem);
+                nTmpStart = m_pFrame->MapModelToView(pNode, 0);
+                nTmpEnd = m_pFrame->MapModelToView(pNode, pNode->Len());
+                assert(rPos <= nTmpEnd); // next node must not have smaller index
+            }
+
+            if (rPos < nTmpStart)
             {
                 // If bOn is false and the next attribute starts later than rPos
                 // the winner attribute is interrupted at rPos.
                 // If the start of the next attribute is behind the end of
                 // the last attribute on the aEnd-stack, this is the endposition
                 // on the stack is the end of the 2-line portion.
-                if( !bOn || aEnd.back() < pTmp->GetStart() )
+                if (!bOn || aEnd.back() < nTmpStart)
                     break;
                 // At this moment, bOn is true and the next attribute starts
                 // behind rPos, so we could move rPos to the next startpoint
-                rPos = pTmp->GetStart();
+                rPos = nTmpStart;
                 // We clean up the aEnd-stack, endpositions equal to rPos are
                 // superfluous.
                 while( !aEnd.empty() && aEnd.back() <= rPos )
@@ -1006,15 +1170,16 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
                 }
             }
             // A ruby attribute stops the 2-line immediately
-            if( RES_TXTATR_CJK_RUBY == pTmp->Which() )
+            if (pTmp && RES_TXTATR_CJK_RUBY == pTmp->Which())
                 return pRet;
-            if( lcl_Has2Lines( *pTmp, p2Lines, bTwo ) )
+            if (pTmp ? lcl_Has2Lines(*pTmp, pActiveTwoLinesItem, bTwo)
+                     : lcl_Check2Lines(pNodeTwoLinesItem, pActiveTwoLinesItem, bTwo))
             {   // We have an interesting attribute..
                 if( bTwo == bOn )
                 {   // .. with the same state, so the last attribute could
                     // be continued.
-                    if( aEnd.back() < *pTmp->End() )
-                        aEnd.back() = *pTmp->End();
+                    if (aEnd.back() < nTmpEnd)
+                        aEnd.back() = nTmpEnd;
                 }
                 else
                 {   // .. with a different state.
@@ -1022,12 +1187,12 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
                     // If this is smaller than the last on the stack, we put
                     // it on the stack. If it has the same endposition, the last
                     // could be removed.
-                    if( aEnd.back() > *pTmp->End() )
-                        aEnd.push_back( *pTmp->End() );
+                    if (nTmpEnd < aEnd.back())
+                        aEnd.push_back( nTmpEnd );
                     else if( aEnd.size() > 1 )
                         aEnd.pop_back();
                     else
-                        aEnd.back() = *pTmp->End();
+                        aEnd.back() = nTmpEnd;
                 }
             }
         }
@@ -1035,32 +1200,58 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
             rPos = aEnd.back();
         return pRet;
     }
-    if( nRotate < nCount || ( pRotItem && pRotItem == pRotate &&
-        rPos < GetText().getLength() ) )
+    if (pActiveRotateHint ||
+        (pNodeRotateItem && pNodeRotateItem == pActiveRotateItem &&
+         rPos < TextFrameIndex(GetText().getLength())))
     {   // The winner is a rotate-attribute,
         // the end of the multiportion depends on the following attributes...
         SwMultiCreator *pRet = new SwMultiCreator;
         pRet->nId = SwMultiCreatorId::Rotate;
 
         // We note the endpositions of the 2-line attributes in aEnd as stack
-        std::deque< sal_Int32 > aEnd;
+        std::deque<TextFrameIndex> aEnd;
 
         // The bOn flag signs the state of the last 2-line attribute in the
         // aEnd-stack, which could interrupts the winning rotation attribute.
-        bool bOn = pItem;
-        aEnd.push_front( GetText().getLength() );
+        bool bOn = pNodeTwoLinesItem != nullptr;
+        aEnd.push_front(TextFrameIndex(GetText().getLength()));
 
-        sal_Int32 n2Start = rPos;
-        for( size_t i = 0; i < nCount; ++i )
+        // first, search for the start position of the next TWOLINE portion
+        // because the ROTATE portion must end there at the latest
+        TextFrameIndex n2Start = rPos;
+        for (sw::MergedAttrIterMulti iter = iterAtStartOfNode; ; )
         {
-            const SwTextAttr *pTmp = pHints->Get(i);
-            if( *pTmp->GetAnyEnd() <= n2Start )
-                continue;
-            if( n2Start < pTmp->GetStart() )
+            SwTextNode const* pNode(nullptr);
+            SwTextAttr const*const pTmp = iter.NextAttr(pNode);
+            if (!pNode)
             {
-                if( bOn || aEnd.back() < pTmp->GetStart() )
+                break;
+            }
+            assert(startPos.first->GetIndex() <= pNode->GetIndex());
+            TextFrameIndex nTmpStart;
+            TextFrameIndex nTmpEnd;
+            if (pTmp)
+            {
+                nTmpEnd = m_pFrame->MapModelToView(pNode, *pTmp->GetAnyEnd());
+                if (nTmpEnd <= n2Start)
+                    continue;
+                nTmpStart = m_pFrame->MapModelToView(pNode, pTmp->GetStart());
+            }
+            else
+            {
+                pNodeTwoLinesItem = nullptr;
+                pNode->GetSwAttrSet().GetItemState(
+                            RES_CHRATR_TWO_LINES, true, &pNodeTwoLinesItem);
+                nTmpStart = m_pFrame->MapModelToView(pNode, 0);
+                nTmpEnd = m_pFrame->MapModelToView(pNode, pNode->Len());
+                assert(n2Start <= nTmpEnd); // next node must not have smaller index
+            }
+
+            if (n2Start < nTmpStart)
+            {
+                if (bOn || aEnd.back() < nTmpStart)
                     break;
-                n2Start = pTmp->GetStart();
+                n2Start = nTmpStart;
                 while( !aEnd.empty() && aEnd.back() <= n2Start )
                 {
                     bOn = !bOn;
@@ -1073,28 +1264,29 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
                 }
             }
             // A ruby attribute stops immediately
-            if( RES_TXTATR_CJK_RUBY == pTmp->Which() )
+            if (pTmp && RES_TXTATR_CJK_RUBY == pTmp->Which())
             {
                 bOn = true;
                 break;
             }
-            p2Lines = nullptr;
-            if( lcl_Has2Lines( *pTmp, p2Lines, bTwo ) )
+            const SvxTwoLinesItem* p2Lines = nullptr;
+            if (pTmp ? lcl_Has2Lines(*pTmp, p2Lines, bTwo)
+                     : lcl_Check2Lines(pNodeTwoLinesItem, p2Lines, bTwo))
             {
                 if( bTwo == bOn )
                 {
-                    if( aEnd.back() < *pTmp->End() )
-                        aEnd.back() = *pTmp->End();
+                    if (aEnd.back() < nTmpEnd)
+                        aEnd.back() = nTmpEnd;
                 }
                 else
                 {
                     bOn = bTwo;
-                    if( aEnd.back() > *pTmp->End() )
-                        aEnd.push_back( *pTmp->End() );
+                    if (nTmpEnd < aEnd.back())
+                        aEnd.push_back( nTmpEnd );
                     else if( aEnd.size() > 1 )
                         aEnd.pop_back();
                     else
-                        aEnd.back() = *pTmp->End();
+                        aEnd.back() = nTmpEnd;
                 }
             }
         }
@@ -1104,35 +1296,62 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
         if( !aEnd.empty() )
             aEnd.clear();
 
+        // now, search for the end of the ROTATE portion, similar to above
         bOn = true;
-        if( nRotate < nCount )
+        if (pActiveRotateHint)
         {
             pRet->pItem = nullptr;
-            pRet->pAttr = pHints->Get(nRotate);
-            aEnd.push_front( *pRet->pAttr->End() );
-            if( pRotItem )
+            pRet->pAttr = pActiveRotateHint;
+            if (pNodeRotateItem)
             {
-                aEnd.front() = GetText().getLength();
-                bOn = static_cast<const SvxCharRotateItem*>(pRotItem)->GetValue() ==
-                        pRotate->GetValue();
+                aEnd.push_front(m_pFrame->MapModelToView(startPos.first, startPos.first->Len()));
+                bOn = static_cast<const SvxCharRotateItem*>(pNodeRotateItem)->GetValue() ==
+                        pActiveRotateItem->GetValue();
+            }
+            else
+            {
+                aEnd.push_front(m_pFrame->MapModelToView(startPos.first, *pRet->pAttr->End()));
             }
         }
         else
         {
-            pRet->pItem = pRotItem;
+            pRet->pItem = pNodeRotateItem;
             pRet->pAttr = nullptr;
-            aEnd.push_front( GetText().getLength() );
+            aEnd.push_front(m_pFrame->MapModelToView(startPos.first, startPos.first->Len()));
         }
-        for( size_t i = 0; i < nCount; ++i )
+        for (sw::MergedAttrIterMulti iter = iterAtStartOfNode; ; )
         {
-            const SwTextAttr *pTmp = pHints->Get(i);
-            if( *pTmp->GetAnyEnd() <= rPos )
-                continue;
-            if( rPos < pTmp->GetStart() )
+            SwTextNode const* pNode(nullptr);
+            SwTextAttr const*const pTmp = iter.NextAttr(pNode);
+            if (!pNode)
             {
-                if( !bOn || aEnd.back() < pTmp->GetStart() )
+                break;
+            }
+            assert(startPos.first->GetIndex() <= pNode->GetIndex());
+            TextFrameIndex nTmpStart;
+            TextFrameIndex nTmpEnd;
+            if (pTmp)
+            {
+                nTmpEnd = m_pFrame->MapModelToView(pNode, *pTmp->GetAnyEnd());
+                if (nTmpEnd <= rPos)
+                    continue;
+                nTmpStart = m_pFrame->MapModelToView(pNode, pTmp->GetStart());
+            }
+            else
+            {
+                pNodeRotateItem = nullptr;
+                pNode->GetSwAttrSet().GetItemState(
+                            RES_CHRATR_ROTATE, true, &pNodeRotateItem);
+                nTmpStart = m_pFrame->MapModelToView(pNode, 0);
+                nTmpEnd = m_pFrame->MapModelToView(pNode, pNode->Len());
+                assert(rPos <= nTmpEnd); // next node must not have smaller index
+            }
+
+            if (rPos < nTmpStart)
+            {
+                if (!bOn || aEnd.back() < nTmpStart)
                     break;
-                rPos = pTmp->GetStart();
+                rPos = nTmpStart;
                 while( !aEnd.empty() && aEnd.back() <= rPos )
                 {
                     bOn = !bOn;
@@ -1144,27 +1363,29 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
                     bOn = true;
                 }
             }
-            if( RES_TXTATR_CJK_RUBY == pTmp->Which() )
+            if (pTmp && RES_TXTATR_CJK_RUBY == pTmp->Which())
             {
                 bOn = false;
                 break;
             }
-            if( lcl_HasRotation( *pTmp, pRotate, bTwo ) )
+            // TODO why does this use bTwo, not bRot ???
+            if (pTmp ? lcl_HasRotation(*pTmp, pActiveRotateItem, bTwo)
+                     : lcl_CheckRotation(pNodeRotateItem, pActiveRotateItem, bTwo))
             {
                 if( bTwo == bOn )
                 {
-                    if( aEnd.back() < *pTmp->End() )
-                        aEnd.back() = *pTmp->End();
+                    if (aEnd.back() < nTmpEnd)
+                        aEnd.back() = nTmpEnd;
                 }
                 else
                 {
                     bOn = bTwo;
-                    if( aEnd.back() > *pTmp->End() )
-                        aEnd.push_back( *pTmp->End() );
+                    if (nTmpEnd < aEnd.back())
+                        aEnd.push_back( nTmpEnd );
                     else if( aEnd.size() > 1 )
                         aEnd.pop_back();
                     else
-                        aEnd.back() = *pTmp->End();
+                        aEnd.back() = nTmpEnd;
                 }
             }
         }
@@ -1325,10 +1546,10 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
         rMulti.GetPortion()->PrePaint( GetInfo(), &rMulti );
 
     // old values must be saved and restored at the end
-    sal_Int32 nOldLen = GetInfo().GetLen();
+    TextFrameIndex const nOldLen = GetInfo().GetLen();
     const SwTwips nOldX = GetInfo().X();
     const SwTwips nOldY = GetInfo().Y();
-    sal_Int32 nOldIdx = GetInfo().GetIdx();
+    TextFrameIndex const nOldIdx = GetInfo().GetIdx();
 
     SwSpaceManipulator aManip( GetInfo(), rMulti );
 
@@ -1353,7 +1574,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
 
     if( rMulti.HasBrackets() )
     {
-        sal_Int32 nTmpOldIdx = GetInfo().GetIdx();
+        TextFrameIndex const nTmpOldIdx = GetInfo().GetIdx();
         GetInfo().SetIdx(static_cast<SwDoubleLinePortion&>(rMulti).GetBrackets()->nStart);
         SeekAndChg( GetInfo() );
         static_cast<SwDoubleLinePortion&>(rMulti).PaintBracket( GetInfo(), 0, true );
@@ -1592,7 +1813,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
 
     if( rMulti.HasBrackets() )
     {
-        sal_Int32 nTmpOldIdx = GetInfo().GetIdx();
+        TextFrameIndex const nTmpOldIdx = GetInfo().GetIdx();
         GetInfo().SetIdx(static_cast<SwDoubleLinePortion&>(rMulti).GetBrackets()->nStart);
         SeekAndChg( GetInfo() );
         GetInfo().X( nOldX );
@@ -1636,20 +1857,20 @@ static bool lcl_ExtractFieldFollow( SwLineLayout* pLine, SwLinePortion* &rpField
 // next line, this function is called to truncate
 // the rest of the remaining multi portion
 static void lcl_TruncateMultiPortion( SwMultiPortion& rMulti, SwTextFormatInfo& rInf,
-                               sal_Int32 nStartIdx )
+           TextFrameIndex const nStartIdx)
 {
     rMulti.GetRoot().Truncate();
-    rMulti.GetRoot().SetLen(0);
+    rMulti.GetRoot().SetLen(TextFrameIndex(0));
     rMulti.GetRoot().Width(0);
 //  rMulti.CalcSize( *this, aInf );
     if ( rMulti.GetRoot().GetNext() )
     {
         rMulti.GetRoot().GetNext()->Truncate();
-        rMulti.GetRoot().GetNext()->SetLen( 0 );
+        rMulti.GetRoot().GetNext()->SetLen(TextFrameIndex(0));
         rMulti.GetRoot().GetNext()->Width( 0 );
     }
     rMulti.Width( 0 );
-    rMulti.SetLen(0);
+    rMulti.SetLen(TextFrameIndex(0));
     rInf.SetIdx( nStartIdx );
 }
 
@@ -1664,7 +1885,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
 
     if( rMulti.HasBrackets() )
     {
-        sal_Int32 nOldIdx = rInf.GetIdx();
+        TextFrameIndex const nOldIdx = rInf.GetIdx();
         rInf.SetIdx( static_cast<SwDoubleLinePortion&>(rMulti).GetBrackets()->nStart );
         SeekAndChg( rInf );
         nOldX = GetInfo().X();
@@ -1736,11 +1957,11 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
 
     pMulti = &rMulti;
     SwLineLayout *pOldCurr = m_pCurr;
-    sal_Int32 nOldStart = GetStart();
+    TextFrameIndex const nOldStart = GetStart();
     SwTwips nMinWidth = nTmpX + 1;
     SwTwips nActWidth = nMaxWidth;
-    const sal_Int32 nStartIdx = rInf.GetIdx();
-    sal_Int32 nMultiLen = rMulti.GetLen();
+    const TextFrameIndex nStartIdx = rInf.GetIdx();
+    TextFrameIndex nMultiLen = rMulti.GetLen();
 
     SwLinePortion *pFirstRest;
     SwLinePortion *pSecondRest;
@@ -1773,7 +1994,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
     std::shared_ptr<vcl::TextLayoutCache> const pOldCachedVclData(rInf.GetCachedVclData());
     rInf.SetCachedVclData(nullptr);
 
-    OUString const aMultiStr( rInf.GetText().copy(0, nMultiLen + rInf.GetIdx()) );
+    OUString const aMultiStr( rInf.GetText().copy(0, sal_Int32(nMultiLen + rInf.GetIdx())) );
     rInf.SetText( aMultiStr );
     SwTextFormatInfo aInf( rInf, rMulti.GetRoot(), nActWidth );
     // Do we allow break cuts? The FirstMulti-Flag is evaluated during
@@ -1841,7 +2062,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
         // second line has to be formatted
         else if( m_pCurr->GetLen()<nMultiLen || rMulti.IsRuby() || aInf.GetRest())
         {
-            sal_Int32 nFirstLen = m_pCurr->GetLen();
+            TextFrameIndex const nFirstLen = m_pCurr->GetLen();
             delete m_pCurr->GetNext();
             m_pCurr->SetNext( new SwLineLayout() );
             m_pCurr = m_pCurr->GetNext();
@@ -1942,7 +2163,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
       SetPropFont( 0 );
 
     rMulti.SetLen( rMulti.GetRoot().GetLen() + ( rMulti.GetRoot().GetNext() ?
-        rMulti.GetRoot().GetNext()->GetLen() : 0 ) );
+        rMulti.GetRoot().GetNext()->GetLen() : TextFrameIndex(0) ) );
 
     if( rMulti.IsDouble() )
     {
@@ -2125,11 +2346,11 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
 // a doubleline- or ruby-portion.
 // The second parameter is the start index of the line.
 SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
-    sal_Int32 nPosition )
+    TextFrameIndex nPosition)
 {
     if( !nPosition )
         return nullptr;
-    sal_Int32 nMultiPos = nPosition - pLine->GetLen();
+    TextFrameIndex nMultiPos = nPosition - pLine->GetLen();
     const SwMultiPortion *pTmpMulti = nullptr;
     const SwMultiPortion *pHelpMulti = nullptr;
     const SwLinePortion* pPor = pLine->GetFirstPortion();
@@ -2191,7 +2412,7 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
     SwLinePortion *pRest = nullptr;
     if( pField )
     {
-        const SwTextAttr *pHint = GetAttr( nPosition - 1 );
+        const SwTextAttr *pHint = GetAttr(nPosition - TextFrameIndex(1));
         if ( pHint
              && ( pHint->Which() == RES_TXTATR_FIELD
                   || pHint->Which() == RES_TXTATR_ANNOTATION ) )
@@ -2224,7 +2445,7 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
         return pRest;
 
     if( pRest || nMultiPos > nPosition || ( pHelpMulti->IsRuby() &&
-        static_cast<const SwRubyPortion*>(pHelpMulti)->GetRubyOffset() < COMPLETE_STRING ) )
+        static_cast<const SwRubyPortion*>(pHelpMulti)->GetRubyOffset() < TextFrameIndex(COMPLETE_STRING)))
     {
         SwMultiPortion* pTmp;
         if( pHelpMulti->IsDouble() )
@@ -2234,7 +2455,7 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
         else if( pHelpMulti->IsRuby() )
         {
             pTmp = new SwRubyPortion( *pCreate, *GetInfo().GetFont(),
-                                      *m_pFrame->GetTextNode()->getIDocumentSettingAccess(),
+                                       m_pFrame->GetDoc().getIDocumentSettingAccess(),
                                        nMultiPos, static_cast<const SwRubyPortion*>(pHelpMulti)->GetRubyOffset(),
                                        GetInfo() );
         }
@@ -2270,7 +2491,7 @@ SwTextCursorSave::SwTextCursorSave( SwTextCursor* pCursor,
                                   SwMultiPortion* pMulti,
                                   SwTwips nY,
                                   sal_uInt16& nX,
-                                  sal_Int32 nCurrStart,
+                                  TextFrameIndex const nCurrStart,
                                   long nSpaceAdd )
 {
     pTextCursor = pCursor;
@@ -2288,7 +2509,7 @@ SwTextCursorSave::SwTextCursorSave( SwTextCursor* pCursor,
     {
         bSpaceChg = pMulti->ChgSpaceAdd( pCursor->m_pCurr, nSpaceAdd );
 
-        sal_Int32 nSpaceCnt;
+        TextFrameIndex nSpaceCnt;
         if ( pMulti->IsDouble() )
         {
             pCursor->SetPropFont( 50 );
@@ -2296,14 +2517,14 @@ SwTextCursorSave::SwTextCursorSave( SwTextCursor* pCursor,
         }
         else
         {
-            const sal_Int32 nOldIdx = pCursor->GetInfo().GetIdx();
+            TextFrameIndex const nOldIdx = pCursor->GetInfo().GetIdx();
             pCursor->GetInfo().SetIdx ( nCurrStart );
             nSpaceCnt = static_cast<SwBidiPortion*>(pMulti)->GetSpaceCnt(pCursor->GetInfo());
             pCursor->GetInfo().SetIdx ( nOldIdx );
         }
 
         if( nSpaceAdd > 0 && !pMulti->HasTabulator() )
-            pCursor->m_pCurr->Width( static_cast<sal_uInt16>(nWidth + nSpaceAdd * nSpaceCnt / SPACING_PRECISION_FACTOR ) );
+            pCursor->m_pCurr->Width( static_cast<sal_uInt16>(nWidth + nSpaceAdd * sal_Int32(nSpaceCnt) / SPACING_PRECISION_FACTOR) );
 
         // For a BidiPortion we have to calculate the offset from the
         // end of the portion

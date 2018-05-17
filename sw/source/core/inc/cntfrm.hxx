@@ -71,16 +71,13 @@ public:
     virtual void Cut() override;
     virtual void Paste( SwFrame* pParent, SwFrame* pSibling = nullptr ) override;
 
-    inline const SwContentNode *GetNode() const;
-    inline       SwContentNode *GetNode();
-
     inline const SwContentFrame *GetFollow() const;
     inline       SwContentFrame *GetFollow();
     SwTextFrame* FindMaster() const;
 
     // layout dependent cursor travelling
-    virtual bool LeftMargin( SwPaM * ) const;
-    virtual bool RightMargin( SwPaM *, bool bAPI = false ) const;
+    virtual bool LeftMargin(SwPaM *) const = 0;
+    virtual bool RightMargin(SwPaM *, bool bAPI = false) const = 0;
     virtual bool UnitUp( SwPaM *, const SwTwips nOffset,
                          bool bSetInReadOnly ) const;
     virtual bool UnitDown( SwPaM *, const SwTwips nOffset,
@@ -96,7 +93,6 @@ public:
     inline  SwContentFrame* GetNextContentFrame() const;
     inline  SwContentFrame* GetPrevContentFrame() const;
     static bool CalcLowers( SwLayoutFrame* pLay, const SwLayoutFrame* pDontLeave, long nBottom, bool bSkipRowSpanCells );
-    void RegisterToNode( SwContentNode& );
 };
 
 inline SwContentFrame* SwContentFrame::GetNextContentFrame() const
@@ -113,15 +109,6 @@ inline SwContentFrame* SwContentFrame::GetPrevContentFrame() const
         return const_cast<SwContentFrame*>(static_cast<const SwContentFrame*>(GetPrev()));
     else
         return const_cast<SwContentFrame*>(ImplGetNextContentFrame( false ));
-}
-
-inline SwContentNode *SwContentFrame::GetNode()
-{
-    return static_cast< SwContentNode* >( GetDep() );
-}
-inline const SwContentNode *SwContentFrame::GetNode() const
-{
-    return static_cast< const SwContentNode* >( GetDep() );
 }
 
 inline const SwContentFrame *SwContentFrame::GetFollow() const

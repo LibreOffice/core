@@ -44,33 +44,105 @@
 
 using namespace ::com::sun::star;
 
-void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame const * pFrame )
+namespace sw {
+
+std::unique_ptr<sw::MergedPara>
+CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode)
 {
-    // during HTML-Import it can happen, that no layout exists
-    SwRootFrame* pRootFrame = rTextNode.getIDocumentLayoutAccess().GetCurrentLayout();
-    m_pViewShell = pRootFrame ? pRootFrame->GetCurrShell() : nullptr;
+    IDocumentRedlineAccess const& rIDRA = rTextNode.getIDocumentRedlineAccess();
+    if (!rFrame.getRootFrame()->IsHideRedlines())
+    {
+        return nullptr;
+    }
+    bool bHaveRedlines(false);
+    std::vector<SwTextNode *> nodes{ &rTextNode };
+    std::vector<sw::Extent> extents;
+    OUStringBuffer mergedText;
+    SwTextNode const* pParaPropsNode(nullptr);
+    SwTextNode * pNode(&rTextNode);
+    sal_Int32 nLastEnd(0);
+    for (auto i = rIDRA.GetRedlinePos(rTextNode, USHRT_MAX);
+         i < rIDRA.GetRedlineTable().size(); ++i)
+    {
+        SwRangeRedline const*const pRed = rIDRA.GetRedlineTable()[i];
 
-    m_pScriptInfo = &rScrInf;
+        if (pNode->GetIndex() < pRed->Start()->nNode.GetIndex())
+            break;
 
-    // attribute array
-    m_pHints = rTextNode.GetpSwpHints();
+        if (pRed->GetType() != nsRedlineType_t::REDLINE_DELETE)
+            continue;
 
+        SwPosition const*const pStart(pRed->Start());
+        SwPosition const*const pEnd(pRed->End());
+        assert(*pStart != *pEnd); // empty delete allowed if shown ???
+        bHaveRedlines = true;
+        if (pStart->nContent != nLastEnd) // not 0 so we eliminate adjacent deletes
+        {
+            extents.emplace_back(pNode, nLastEnd, pStart->nContent.GetIndex());
+            mergedText.append(pNode->GetText().copy(nLastEnd, pStart->nContent.GetIndex() - nLastEnd));
+        }
+        if (&pEnd->nNode.GetNode() != pNode)
+        {
+            if (pNode == &rTextNode)
+            {
+                pNode->SetRedlineMergeFlag(SwNode::Merge::First);
+            } // else: was already set before
+            for (sal_uLong j = pNode->GetIndex() + 1; j < pEnd->nNode.GetIndex(); ++j)
+            {
+                pNode->GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::Hidden);
+            }
+            pNode = pEnd->nNode.GetNode().GetTextNode();
+            assert(pNode);
+            nodes.push_back(pNode);
+            pNode->SetRedlineMergeFlag(SwNode::Merge::NonFirst);
+        }
+        nLastEnd = pEnd->nContent.GetIndex();
+    }
+    if (!bHaveRedlines)
+    {
+        return nullptr;
+    }
+    if (nLastEnd != pNode->Len())
+    {
+        extents.emplace_back(pNode, nLastEnd, pNode->Len());
+        mergedText.append(pNode->GetText().copy(nLastEnd, pNode->Len() - nLastEnd));
+    }
+    if (extents.empty()) // there was no text anywhere
+    {
+        assert(mergedText.isEmpty());
+        pParaPropsNode = &rTextNode; // if every node is empty, the first one wins
+    }
+    else
+    {
+        assert(!mergedText.isEmpty());
+        pParaPropsNode = extents.begin()->pNode; // para props from first node that isn't empty
+    }
+    auto pRet(o3tl::make_unique<sw::MergedPara>(rFrame, std::move(extents),
+                mergedText.makeStringAndClear(), pParaPropsNode, &rTextNode));
+    for (SwTextNode * pTmp : nodes)
+    {
+        pRet->listener.StartListening(pTmp);
+    }
+    rFrame.EndListeningAll();
+    return pRet;
+}
+
+} // namespace sw
+
+void SwAttrIter::InitFontAndAttrHandler(SwTextNode const& rTextNode,
+        OUString const& rText,
+        bool const*const pbVertLayout)
+{
     // Build a font matching the default paragraph style:
     SwFontAccess aFontAccess( &rTextNode.GetAnyFormatColl(), m_pViewShell );
     delete m_pFont;
     m_pFont = new SwFont( aFontAccess.Get()->GetFont() );
 
     // set font to vertical if frame layout is vertical
-    bool bVertLayout = false;
-    bool bRTL = false;
-    if ( pFrame )
+    // if it's a re-init, the vert flag never changes
+    if (pbVertLayout ? *pbVertLayout : m_aAttrHandler.IsVertLayout())
     {
-        if ( pFrame->IsVertical() )
-        {
-            bVertLayout = true;
-            m_pFont->SetVertical( m_pFont->GetOrientation(), true );
-        }
-        bRTL = pFrame->IsRightToLeft();
+        m_pFont->SetVertical( m_pFont->GetOrientation(), true );
     }
 
     // Initialize the default attribute of the attribute handler
@@ -79,20 +151,16 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
     // consider them during construction of the default array, and apply
     // them to the font
     m_aAttrHandler.Init(aFontAccess.Get()->GetDefault(), rTextNode.GetpSwAttrSet(),
-                       *rTextNode.getIDocumentSettingAccess(), m_pViewShell, *m_pFont, bVertLayout );
+           *rTextNode.getIDocumentSettingAccess(), m_pViewShell, *m_pFont,
+           pbVertLayout ? *pbVertLayout : m_aAttrHandler.IsVertLayout() );
 
     m_aMagicNo[SwFontScript::Latin] = m_aMagicNo[SwFontScript::CJK] = m_aMagicNo[SwFontScript::CTL] = nullptr;
 
-    // determine script changes if not already done for current paragraph
-    assert(m_pScriptInfo);
-    if ( m_pScriptInfo->GetInvalidityA() != COMPLETE_STRING )
-         m_pScriptInfo->InitScriptInfo( rTextNode, bRTL );
-
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
-    m_pFont->SetActual( SwScriptInfo::WhichFont( 0, nullptr, m_pScriptInfo ) );
+    m_pFont->SetActual( m_pScriptInfo->WhichFont(TextFrameIndex(0)) );
 
-    sal_Int32 nChg = 0;
+    TextFrameIndex nChg(0);
     size_t nCnt = 0;
 
     do
@@ -116,31 +184,101 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
             m_pFont->ChkMagic( m_pViewShell, nTmp );
             m_pFont->GetMagic( m_aMagicNo[ nTmp ], m_aFontIdx[ nTmp ], nTmp );
         }
-    } while (nChg < rTextNode.GetText().getLength());
+    }
+    while (nChg < TextFrameIndex(rText.getLength()));
+}
+
+void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
+        SwScriptInfo & rScriptInfo, SwTextFrame const*const pFrame)
+{
+    // during HTML-Import it can happen, that no layout exists
+    SwRootFrame* pRootFrame = rTextNode.getIDocumentLayoutAccess().GetCurrentLayout();
+    m_pViewShell = pRootFrame ? pRootFrame->GetCurrShell() : nullptr;
+
+    m_pScriptInfo = &rScriptInfo;
+
+    // set font to vertical if frame layout is vertical
+    bool bVertLayout = false;
+    bool bRTL = false;
+    if ( pFrame )
+    {
+        if ( pFrame->IsVertical() )
+        {
+            bVertLayout = true;
+        }
+        bRTL = pFrame->IsRightToLeft();
+        m_pMergedPara = pFrame->GetMergedPara();
+    }
+
+    // determine script changes if not already done for current paragraph
+    assert(m_pScriptInfo);
+    if (m_pScriptInfo->GetInvalidityA() != TextFrameIndex(COMPLETE_STRING))
+         m_pScriptInfo->InitScriptInfo(rTextNode, m_pMergedPara, bRTL);
+
+    InitFontAndAttrHandler(rTextNode,
+            m_pMergedPara ? m_pMergedPara->mergedText : rTextNode.GetText(),
+            & bVertLayout);
 
     m_nStartIndex = m_nEndIndex = m_nPosition = m_nChgCnt = 0;
     m_nPropFont = 0;
     SwDoc* pDoc = rTextNode.GetDoc();
     const IDocumentRedlineAccess& rIDRA = rTextNode.getIDocumentRedlineAccess();
 
+    // sw_redlinehide: this is a Ring - pExtInp is the first PaM that's inside
+    // the node.  It's not clear whether there can be more than 1 PaM in the
+    // Ring, and this code doesn't handle that case; neither did the old code.
     const SwExtTextInput* pExtInp = pDoc->GetExtTextInput( rTextNode );
-    const bool bShow = IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() );
-    if( pExtInp || bShow )
+    if (!pExtInp && m_pMergedPara)
     {
-        const SwRedlineTable::size_type nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
-        if( pExtInp || SwRedlineTable::npos != nRedlPos )
+        SwTextNode const* pNode(&rTextNode);
+        for (auto const& rExtent : m_pMergedPara->extents)
+        {
+            if (rExtent.pNode != pNode)
+            {
+                pNode = rExtent.pNode;
+                pExtInp = pDoc->GetExtTextInput(*pNode);
+                if (pExtInp)
+                    break;
+            }
+        }
+    }
+    const bool bShow = IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() );
+    if (pExtInp || m_pMergedPara || bShow)
+    {
+        SwRedlineTable::size_type nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
+        if (SwRedlineTable::npos == nRedlPos && m_pMergedPara)
+        {
+            SwTextNode const* pNode(&rTextNode);
+            for (auto const& rExtent : m_pMergedPara->extents)
+            {   // note: have to search because extents based only on Delete
+                if (rExtent.pNode != pNode)
+                {
+                    pNode = rExtent.pNode;
+                    nRedlPos = rIDRA.GetRedlinePos(*pNode, USHRT_MAX);
+                    if (SwRedlineTable::npos != nRedlPos)
+                        break;
+                }
+            }
+            // TODO this is true initially but after delete ops it may be false... need to delete m_pMerged somewhere?
+            // assert(SwRedlineTable::npos != nRedlPos);
+            assert(SwRedlineTable::npos != nRedlPos || m_pMergedPara->extents.size() <= 1);
+        }
+        if (pExtInp || m_pMergedPara || SwRedlineTable::npos != nRedlPos)
         {
             const std::vector<ExtTextInputAttr> *pArr = nullptr;
-            sal_Int32 nInputStt = 0;
             if( pExtInp )
             {
                 pArr = &pExtInp->GetAttrs();
-                nInputStt = pExtInp->Start()->nContent.GetIndex();
-                Seek( 0 );
+                Seek( TextFrameIndex(0) );
             }
 
             m_pRedline = new SwRedlineItr( rTextNode, *m_pFont, m_aAttrHandler, nRedlPos,
-                                        bShow, pArr, nInputStt );
+                            m_pMergedPara
+                                ? SwRedlineItr::Mode::Hide
+                                : bShow
+                                    ? SwRedlineItr::Mode::Show
+                                    : SwRedlineItr::Mode::Ignore,
+                            pArr, pExtInp ? pExtInp->Start() : nullptr);
 
             if( m_pRedline->IsOn() )
                 ++m_nChgCnt;
@@ -161,22 +299,28 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
 // If m_nAct is set to SwRedlineTable::npos (via Reset()), then currently no
 // Redline is active, m_nStart and m_nEnd are invalid.
 SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
-                            SwAttrHandler& rAH, sal_Int32 nRed, bool bShow,
+                            SwAttrHandler& rAH, sal_Int32 nRed,
+                            Mode const mode,
                             const std::vector<ExtTextInputAttr> *pArr,
-                            sal_Int32 nExtStart )
+                            SwPosition const*const pExtInputStart)
     : m_rDoc( *rTextNd.GetDoc() )
     , m_rAttrHandler( rAH )
     , m_nNdIdx( rTextNd.GetIndex() )
     , m_nFirst( nRed )
     , m_nAct( SwRedlineTable::npos )
     , m_bOn( false )
-    , m_bShow( bShow )
+    , m_eMode( mode )
 {
     if( pArr )
-        m_pExt = new SwExtend( *pArr, nExtStart );
+    {
+        assert(pExtInputStart);
+        m_pExt = new SwExtend(*pArr, pExtInputStart->nNode.GetIndex(),
+                                     pExtInputStart->nContent.GetIndex());
+    }
     else
         m_pExt = nullptr;
-    Seek (rFnt, 0, COMPLETE_STRING);
+    assert(m_pExt || m_eMode != Mode::Ignore); // only create if necessary
+    Seek(rFnt, m_nNdIdx, 0, COMPLETE_STRING);
 }
 
 SwRedlineItr::~SwRedlineItr() COVERITY_NOEXCEPT_FALSE
@@ -187,13 +331,15 @@ SwRedlineItr::~SwRedlineItr() COVERITY_NOEXCEPT_FALSE
 
 // The return value of SwRedlineItr::Seek tells you if the current font
 // has been manipulated by leaving (-1) or accessing (+1) of a section
-short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
+short SwRedlineItr::Seek(SwFont& rFnt,
+        sal_uLong const nNode, sal_Int32 const nNew, sal_Int32 const nOld)
 {
     short nRet = 0;
     if( ExtOn() )
         return 0; // Abbreviation: if we're within an ExtendTextInputs
                   // there can't be other changes of attributes (not even by redlining)
-    if (m_bShow)
+    assert(m_eMode == Mode::Hide || m_nNdIdx == nNode);
+    if (m_eMode == Mode::Show)
     {
         if (m_bOn)
         {
@@ -210,10 +356,10 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
                 if (m_nAct > m_nFirst)
                     m_nAct = m_nFirst;  // the test has to run from the beginning
                 else
-                    return nRet + EnterExtend( rFnt, nNew ); // There's none prior to us
+                    return nRet + EnterExtend(rFnt, nNode, nNew); // There's none prior to us
             }
             else
-                return nRet + EnterExtend( rFnt, nNew ); // We stayed in the same section
+                return nRet + EnterExtend(rFnt, nNode, nNew); // We stayed in the same section
         }
         if (SwRedlineTable::npos == m_nAct || nOld > nNew)
             m_nAct = m_nFirst;
@@ -271,7 +417,37 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
             m_nEnd = COMPLETE_STRING;
         }
     }
-    return nRet + EnterExtend( rFnt, nNew );
+    else if (m_eMode == Mode::Hide)
+    {   // ... just iterate to update m_nAct for GetNextRedln();
+        // there is no need to care about formatting in this mode
+        if (nOld == COMPLETE_STRING) // backward?
+        {
+            m_nAct = m_nFirst;
+        }
+        for ( ; m_nAct < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); ++m_nAct)
+        {   // only Start matters in this mode
+            // Seeks until it finds a RL that starts at or behind the seek pos.
+            // - then update m_nStart/m_nEnd to the intersection of it with the
+            // current node (if any).
+            // The only way to skip to a different node is if there is a Delete
+            // RL, so if there is no intersection we'll never skip again.
+            // Note: here, assume that delete can't nest inside delete!
+            SwRangeRedline const*const pRedline(
+                m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[m_nAct]);
+            SwPosition const*const pStart(pRedline->Start());
+            if (pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE
+                && (nNode < pStart->nNode.GetIndex()
+                    || (nNode == pStart->nNode.GetIndex()
+                        && nNew <= pStart->nContent.GetIndex())))
+            {
+                pRedline->CalcStartEnd(nNode, m_nStart, m_nEnd);
+                break;
+            }
+            m_nStart = COMPLETE_STRING;
+            m_nEnd = COMPLETE_STRING;
+        }
+    }
+    return nRet + EnterExtend(rFnt, nNode, nNew);
 }
 
 void SwRedlineItr::FillHints( std::size_t nAuthor, RedlineType_t eType )
@@ -297,7 +473,7 @@ void SwRedlineItr::ChangeTextAttr( SwFont* pFnt, SwTextAttr const &rHt, bool bCh
 {
     OSL_ENSURE( IsOn(), "SwRedlineItr::ChangeTextAttr: Off?" );
 
-    if (!m_bShow && !m_pExt)
+    if (m_eMode != Mode::Show && !m_pExt)
         return;
 
     if( bChg )
@@ -329,24 +505,85 @@ void SwRedlineItr::Clear_( SwFont* pFnt )
     m_Hints.clear();
 }
 
-sal_Int32 SwRedlineItr::GetNextRedln_( sal_Int32 nNext )
+/// Ignore mode: does nothing.
+/// Show mode: returns end of redline if currently in one, or start of next
+/// Hide mode: returns start of next redline in current node, plus (if it's a
+///            Delete) its end position and number of consecutive RLs
+std::pair<sal_Int32, std::pair<SwRangeRedline const*, size_t>>
+SwRedlineItr::GetNextRedln(sal_Int32 nNext, SwTextNode const*const pNode,
+        SwRedlineTable::size_type & rAct)
 {
-    nNext = NextExtend( nNext );
-    if (!m_bShow || SwRedlineTable::npos == m_nFirst)
-        return nNext;
-    if (SwRedlineTable::npos == m_nAct)
+    sal_Int32 nStart(m_nStart);
+    sal_Int32 nEnd(m_nEnd);
+    nNext = NextExtend(pNode->GetIndex(), nNext);
+    if (m_eMode == Mode::Ignore || SwRedlineTable::npos == m_nFirst)
+        return std::make_pair(nNext, std::make_pair(nullptr, 0));
+    if (SwRedlineTable::npos == rAct)
     {
-        m_nAct = m_nFirst;
-        m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nAct ]->CalcStartEnd(m_nNdIdx, m_nStart, m_nEnd);
+        rAct = m_nFirst;
     }
-    if (m_bOn || !m_nStart)
+    if (rAct != m_nAct)
     {
-        if (m_nEnd < nNext)
-            nNext = m_nEnd;
+        while (rAct < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size())
+        {
+            SwRangeRedline const*const pRedline(
+                    m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct]);
+            pRedline->CalcStartEnd(pNode->GetIndex(), nStart, nEnd);
+            if (m_eMode != Mode::Hide
+                || pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE)
+            {
+                break;
+            }
+            ++rAct; // Hide mode: search a Delete RL
+        }
     }
-    else if (m_nStart < nNext)
-        nNext = m_nStart;
-    return nNext;
+    if (rAct == m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size())
+    {
+        return std::make_pair(nNext, std::make_pair(nullptr, 0)); // no Delete here
+    }
+    if (m_bOn || (m_eMode == Mode::Show && nStart == 0))
+    {   // in Ignore mode, the end of redlines isn't relevant, except as returned in the second in the pair!
+        if (nEnd < nNext)
+            nNext = nEnd;
+    }
+    else if (nStart <= nNext)
+    {
+        if (m_eMode == Mode::Show)
+        {
+            nNext = nStart;
+        }
+        else
+        {
+            assert(m_eMode == Mode::Hide);
+            SwRangeRedline const* pRedline(
+                    m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct]);
+            assert(pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE); //?
+            if (pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE)
+            {
+                nNext = nStart;
+                size_t nSkipped(1); // (consecutive) candidates to be skipped
+                while (rAct + nSkipped <
+                       m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size())
+                {
+                    SwRangeRedline const*const pNext =
+                        m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct + nSkipped];
+                    if (pRedline->End() < pNext->Start())
+                    {
+                        break; // done for now
+                    }
+                    else if (pNext->Start() == pRedline->End() &&
+                            pNext->GetType() == nsRedlineType_t::REDLINE_DELETE)
+                    {
+                        // consecutive delete - continue
+                        pRedline = pNext;
+                    }
+                    ++nSkipped;
+                }
+                return std::make_pair(nNext, std::make_pair(pRedline, nSkipped));
+            }
+        }
+    }
+    return std::make_pair(nNext, std::make_pair(nullptr, 0));
 }
 
 bool SwRedlineItr::ChkSpecialUnderline_() const
@@ -364,10 +601,15 @@ bool SwRedlineItr::ChkSpecialUnderline_() const
     return false;
 }
 
-bool SwRedlineItr::CheckLine( sal_Int32 nChkStart, sal_Int32 nChkEnd )
+bool SwRedlineItr::CheckLine(
+        sal_uLong const nStartNode, sal_Int32 const nChkStart,
+        sal_uLong const nEndNode, sal_Int32 nChkEnd)
 {
-    if (m_nFirst == SwRedlineTable::npos)
+    // note: previously this would return true in the (!m_bShow && m_pExt)
+    // case, but surely that was a bug?
+    if (m_nFirst == SwRedlineTable::npos || m_eMode != Mode::Show)
         return false;
+    assert(nStartNode == nEndNode); (void) nStartNode; (void) nEndNode;
     if( nChkEnd == nChkStart ) // empty lines look one char further
         ++nChkEnd;
     sal_Int32 nOldStart = m_nStart;
@@ -417,10 +659,12 @@ void SwExtend::ActualizeFont( SwFont &rFnt, ExtTextInputAttr nAttr )
         rFnt.SetGreyWave( true );
 }
 
-short SwExtend::Enter(SwFont& rFnt, sal_Int32 nNew)
+short SwExtend::Enter(SwFont& rFnt, sal_uLong const nNode, sal_Int32 const nNew)
 {
-    OSL_ENSURE( !Inside(), "SwExtend: Enter without Leave" );
     OSL_ENSURE( !m_pFont, "SwExtend: Enter with Font" );
+    if (nNode != m_nNode)
+        return 0;
+    OSL_ENSURE( !Inside(), "SwExtend: Enter without Leave" );
     m_nPos = nNew;
     if( Inside() )
     {
@@ -431,9 +675,11 @@ short SwExtend::Enter(SwFont& rFnt, sal_Int32 nNew)
     return 0;
 }
 
-bool SwExtend::Leave_(SwFont& rFnt, sal_Int32 nNew)
+bool SwExtend::Leave_(SwFont& rFnt, sal_uLong const nNode, sal_Int32 const nNew)
 {
-    OSL_ENSURE( Inside(), "SwExtend: Leave without Enter" );
+    OSL_ENSURE(nNode == m_nNode && Inside(), "SwExtend: Leave without Enter");
+    if (nNode != m_nNode)
+        return true;
     const ExtTextInputAttr nOldAttr = m_rArr[m_nPos - m_nStart];
     m_nPos = nNew;
     if( Inside() )
@@ -454,8 +700,10 @@ bool SwExtend::Leave_(SwFont& rFnt, sal_Int32 nNew)
     return false;
 }
 
-sal_Int32 SwExtend::Next( sal_Int32 nNext )
+sal_Int32 SwExtend::Next(sal_uLong const nNode, sal_Int32 nNext)
 {
+    if (nNode != m_nNode)
+        return nNext;
     if (m_nPos < m_nStart)
     {
         if (nNext > m_nStart)

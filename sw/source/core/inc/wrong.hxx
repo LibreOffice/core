@@ -32,6 +32,7 @@
 #include <tools/color.hxx>
 #include <swtypes.hxx>
 #include <viewopt.hxx>
+#include "TextFrameIndex.hxx"
 
 class SwWrongList;
 
@@ -330,6 +331,41 @@ public:
     void RemoveEntry( sal_Int32 nBegin, sal_Int32 nEnd );
     bool LookForEntry( sal_Int32 nBegin, sal_Int32 nEnd );
 };
+
+class SwTextNode;
+class SwTextFrame;
+
+namespace sw {
+
+struct MergedPara;
+
+class WrongListIterator
+{
+private:
+    SwWrongList const* (SwTextNode::*const m_pGetWrongList)() const;
+    sw::MergedPara const*const m_pMergedPara;
+    size_t m_CurrentExtent;
+    TextFrameIndex m_CurrentIndex;
+    TextFrameIndex m_CurrentNodeIndex;
+    SwWrongList const*const m_pWrongList;
+
+public:
+    /// for the text frame
+    WrongListIterator(SwTextFrame const& rFrame,
+        SwWrongList const* (SwTextNode::*pGetWrongList)() const);
+    /// for SwTextSlot
+    WrongListIterator(SwWrongList const& rWrongList);
+
+    bool Check(TextFrameIndex &rStart, TextFrameIndex &rLen);
+    const SwWrongArea* GetWrongElement(TextFrameIndex nStart);
+
+    bool LooksUseful() { return m_pMergedPara || m_pWrongList; }
+    bool MergedOrSame(SwWrongList const*const pList) const {
+        return m_pMergedPara || m_pWrongList == pList;
+    }
+};
+
+} // namespace sw
 
 #endif
 

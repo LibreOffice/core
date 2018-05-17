@@ -32,6 +32,7 @@
 #include <unotools/charclass.hxx>
 #include "porfld.hxx"
 #include <paratr.hxx>
+#include <doc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -53,7 +54,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     if( !rInf.GetLen() || rInf.GetText().isEmpty() )
         return false;
 
-    OSL_ENSURE( rInf.GetIdx() < rInf.GetText().getLength(),
+    OSL_ENSURE( rInf.GetIdx() < TextFrameIndex(rInf.GetText().getLength()),
             "+SwTextGuess::Guess: invalid SwTextFormatInfo" );
 
     OSL_ENSURE( nPorHeight, "+SwTextGuess::Guess: no height" );
@@ -71,27 +72,29 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                             0 ;
 
     SwTwips nLineWidth = rInf.GetLineWidth();
-    sal_Int32 nMaxLen = rInf.GetText().getLength() - rInf.GetIdx();
+    TextFrameIndex nMaxLen = TextFrameIndex(rInf.GetText().getLength()) - rInf.GetIdx();
 
-    const SvxAdjust& rAdjust = rInf.GetTextFrame()->GetTextNode()->GetSwAttrSet().GetAdjust().GetAdjust();
+    const SvxAdjust& rAdjust = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust().GetAdjust();
 
     // tdf#104668 space chars at the end should be cut if the compatibility option is enabled
     // for LTR mode only
     if ( !rInf.GetTextFrame()->IsRightToLeft() )
     {
-        if ( rInf.GetTextFrame()->GetNode()->getIDocumentSettingAccess()->get( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS ) )
+        if (rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                    DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS))
         {
             if ( rAdjust == SvxAdjust::Right || rAdjust == SvxAdjust::Center )
             {
-                sal_Int32 nSpaceCnt = 0;
-                for ( int i = (rInf.GetText().getLength() - 1); i >= rInf.GetIdx(); --i )
+                TextFrameIndex nSpaceCnt(0);
+                for (sal_Int32 i = (rInf.GetText().getLength() - 1);
+                     sal_Int32(rInf.GetIdx()) <= i; --i)
                 {
                     sal_Unicode cChar = rInf.GetText()[i];
                     if ( cChar != CH_BLANK && cChar != CH_FULL_BLANK )
                         break;
                     ++nSpaceCnt;
                 }
-                sal_Int32 nCharsCnt = nMaxLen - nSpaceCnt;
+                TextFrameIndex nCharsCnt = nMaxLen - nSpaceCnt;
                 if ( nSpaceCnt && nCharsCnt < rPor.GetLen() )
                 {
                     nMaxLen = nCharsCnt;
@@ -122,9 +125,11 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         }
 
         // do not add extra italic value for an isolated blank:
-        if ( 1 == rInf.GetLen() &&
-             CH_BLANK == rInf.GetText()[ rInf.GetIdx() ] )
+        if (TextFrameIndex(1) == rInf.GetLen() &&
+            CH_BLANK == rInf.GetText()[sal_Int32(rInf.GetIdx())])
+        {
             bAddItalic = false;
+        }
 
         nItalic = bAddItalic ? nPorHeight / 12 : 0;
 
@@ -140,11 +145,11 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
     nLineWidth -= nLeftRightBorderSpace;
 
-    const bool bUnbreakableNumberings = rInf.GetTextFrame()->GetTextNode()->
-            getIDocumentSettingAccess()->get(DocumentSettingId::UNBREAKABLE_NUMBERINGS);
+    const bool bUnbreakableNumberings = rInf.GetTextFrame()->GetDoc()
+        .getIDocumentSettingAccess().get(DocumentSettingId::UNBREAKABLE_NUMBERINGS);
 
     // first check if everything fits to line
-    if ( ( long ( nLineWidth ) * 2 > long ( nMaxLen ) * nPorHeight ) ||
+    if ( ( long ( nLineWidth ) * 2 > sal_Int32(nMaxLen) * nPorHeight ) ||
          ( bUnbreakableNumberings && rPor.IsNumberPortion() ) )
     {
         // call GetTextSize with maximum compression (for kanas)
@@ -156,10 +161,10 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             // portion fits to line
             nCutPos = rInf.GetIdx() + nMaxLen;
             if( nItalic &&
-                ( nCutPos >= rInf.GetText().getLength() ||
+                (nCutPos >= TextFrameIndex(rInf.GetText().getLength()) ||
                   // #i48035# Needed for CalcFitToContent
                   // if first line ends with a manual line break
-                  rInf.GetText()[ nCutPos ] == CH_BREAK ) )
+                  rInf.GetText()[sal_Int32(nCutPos)] == CH_BREAK))
                 nBreakWidth = nBreakWidth + nItalic;
 
             // save maximum width for later use
@@ -173,7 +178,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     }
 
     bool bHyph = rInf.IsHyphenate() && !rInf.IsHyphForbud();
-    sal_Int32 nHyphPos = 0;
+    TextFrameIndex nHyphPos = TextFrameIndex(0);
 
     // nCutPos is the first character not fitting to the current line
     // nHyphPos is the first character not fitting to the current line,
@@ -183,7 +188,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         nCutPos = rInf.GetTextBreak( nLineWidth, nMaxLen, nMaxComp, nHyphPos, rInf.GetCachedVclData().get() );
 
         if ( !nHyphPos && rInf.GetIdx() )
-            nHyphPos = rInf.GetIdx() - 1;
+            nHyphPos = rInf.GetIdx() - TextFrameIndex(1);
     }
     else
     {
@@ -203,7 +208,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     if( nCutPos > rInf.GetIdx() + nMaxLen )
     {
         // second check if everything fits to line
-        nCutPos = nBreakPos = rInf.GetIdx() + nMaxLen - 1;
+        nCutPos = nBreakPos = rInf.GetIdx() + nMaxLen - TextFrameIndex(1);
         rInf.GetTextSize( &rSI, rInf.GetIdx(), nMaxLen, nMaxComp,
                          nBreakWidth, nMaxSizeDiff );
 
@@ -211,7 +216,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         // there likely has been a pixel rounding error in GetTextBreak
         if ( nBreakWidth <= nLineWidth )
         {
-            if( nItalic && ( nBreakPos + 1 ) >= rInf.GetText().getLength() )
+            if (nItalic && (nBreakPos + TextFrameIndex(1)) >= TextFrameIndex(rInf.GetText().getLength()))
                 nBreakWidth = nBreakWidth + nItalic;
 
             // save maximum width for later use
@@ -229,30 +234,32 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     if ( rPor.IsFootnotePortion() )
     {
         nBreakPos = rInf.GetIdx();
-        nCutPos = -1;
+        nCutPos = TextFrameIndex(-1);
         return false;
     }
 
-    sal_Int32 nPorLen = 0;
+    TextFrameIndex nPorLen(0);
     // do not call the break iterator nCutPos is a blank
-    sal_Unicode cCutChar = nCutPos < rInf.GetText().getLength() ? rInf.GetText()[nCutPos] : 0;
+    sal_Unicode cCutChar = nCutPos < TextFrameIndex(rInf.GetText().getLength())
+        ? rInf.GetText()[sal_Int32(nCutPos)]
+        : 0;
     if( CH_BLANK == cCutChar || CH_FULL_BLANK == cCutChar )
     {
         nBreakPos = nCutPos;
-        sal_Int32 nX = nBreakPos;
+        TextFrameIndex nX = nBreakPos;
 
         if ( rAdjust == SvxAdjust::Left )
         {
             // we step back until a non blank character has been found
             // or there is only one more character left
-            while( nX && nBreakPos > rInf.GetText().getLength() &&
+            while (nX && TextFrameIndex(rInf.GetText().getLength()) < nBreakPos &&
                    ( CH_BLANK == ( cCutChar = rInf.GetChar( --nX ) ) ||
                      CH_FULL_BLANK == cCutChar ) )
                 --nBreakPos;
         }
         else // #i20878#
         {
-            while( nX && nBreakPos > rInf.GetLineStart() + 1 &&
+            while (nX && nBreakPos > rInf.GetLineStart() + TextFrameIndex(1) &&
                    ( CH_BLANK == ( cCutChar = rInf.GetChar( --nX ) ) ||
                      CH_FULL_BLANK == cCutChar ) )
                 --nBreakPos;
@@ -260,7 +267,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
         if( nBreakPos > rInf.GetIdx() )
             nPorLen = nBreakPos - rInf.GetIdx();
-        while( ++nCutPos < rInf.GetText().getLength() &&
+        while (++nCutPos < TextFrameIndex(rInf.GetText().getLength()) &&
                ( CH_BLANK == ( cCutChar = rInf.GetChar( nCutPos ) ) ||
                  CH_FULL_BLANK == cCutChar ) )
             ; // nothing
@@ -274,7 +281,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         // into our string. If the line break position is inside of before
         // the field portion, we trigger an underflow.
 
-        sal_Int32 nOldIdx = rInf.GetIdx();
+        TextFrameIndex nOldIdx = rInf.GetIdx();
         sal_Unicode cFieldChr = 0;
 
 #if OSL_DEBUG_LEVEL > 0
@@ -287,7 +294,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
              ! rInf.GetLast()->IsFootnotePortion() &&
              rInf.GetIdx() > rInf.GetLineStart() &&
              CH_TXTATR_BREAKWORD ==
-                ( cFieldChr = rInf.GetText()[ rInf.GetIdx() - 1 ] ) )
+                (cFieldChr = rInf.GetText()[sal_Int32(rInf.GetIdx()) - 1]))
         {
             SwFieldPortion* pField = static_cast<SwFieldPortion*>(rInf.GetLast());
             OUString aText;
@@ -295,7 +302,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
             if ( !aText.isEmpty() )
             {
-                nFieldDiff = aText.getLength() - 1;
+                nFieldDiff = TextFrameIndex(aText.getLength() - 1);
                 nCutPos = nCutPos + nFieldDiff;
                 nHyphPos = nHyphPos + nFieldDiff;
 
@@ -317,7 +324,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         {
             xHyph = ::GetHyphenator();
             aHyphOpt = LineBreakHyphenationOptions( xHyph,
-                                rInf.GetHyphValues(), nHyphPos );
+                                rInf.GetHyphValues(), sal_Int32(nHyphPos));
         }
 
         // Get Language for break iterator.
@@ -335,22 +342,22 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             const CharClass& rCC = GetAppCharClass();
 
             // step back until a non-punctuation character is reached
-            sal_Int32 nLangIndex = nCutPos;
+            TextFrameIndex nLangIndex = nCutPos;
 
             // If a field has been expanded right in front of us we do not
             // step further than the beginning of the expanded field
             // (which is the position of the field placeholder in our
             // original string).
-            const sal_Int32 nDoNotStepOver = CH_TXTATR_BREAKWORD == cFieldChr ?
-                                              rInf.GetIdx() - nFieldDiff - 1:
-                                              0;
+            const TextFrameIndex nDoNotStepOver = CH_TXTATR_BREAKWORD == cFieldChr
+                    ? rInf.GetIdx() - nFieldDiff - TextFrameIndex(1)
+                    : TextFrameIndex(0);
 
             if ( nLangIndex > nDoNotStepOver &&
-                    rInf.GetText().getLength() == nLangIndex )
+                    TextFrameIndex(rInf.GetText().getLength()) == nLangIndex)
                 --nLangIndex;
 
             while ( nLangIndex > nDoNotStepOver &&
-                    ! rCC.isLetterNumeric( rInf.GetText(), nLangIndex ) )
+                    !rCC.isLetterNumeric(rInf.GetText(), sal_Int32(nLangIndex)))
                 --nLangIndex;
 
             // last "real" character is not inside our current portion
@@ -358,20 +365,23 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             if ( nLangIndex < rInf.GetIdx() )
             {
                 sal_uInt16 nScript = g_pBreakIt->GetRealScriptOfText( rInf.GetText(),
-                                                                nLangIndex );
+                                        sal_Int32(nLangIndex));
                 OSL_ENSURE( nScript, "Script is not between 1 and 4" );
 
                 // compare current script with script from last "real" character
                 if ( SwFontScript(nScript - 1) != rInf.GetFont()->GetActual() )
-                    aLang = rInf.GetTextFrame()->GetTextNode()->GetLang(
-                        CH_TXTATR_BREAKWORD == cFieldChr ?
-                        nDoNotStepOver :
-                        nLangIndex, 0, nScript );
+                {
+                    aLang = rInf.GetTextFrame()->GetLangOfChar(
+                        CH_TXTATR_BREAKWORD == cFieldChr
+                            ? nDoNotStepOver
+                            : nLangIndex,
+                        nScript, true);
+                }
             }
         }
 
         const ForbiddenCharacters aForbidden(
-                *rInf.GetTextFrame()->GetNode()->getIDocumentSettingAccess()->getForbiddenCharacters( aLang, true ) );
+            *rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().getForbiddenCharacters(aLang, true));
 
         const bool bAllowHanging = rInf.IsHanging() && ! rInf.IsMulti() &&
                                       ! rInf.GetTextFrame()->IsInTab() &&
@@ -395,10 +405,10 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         // determines first possible line break from nCutPos to
         // start index of current line
         LineBreakResults aResult = g_pBreakIt->GetBreakIter()->getLineBreak(
-            rInf.GetText(), nCutPos, aLocale,
-            rInf.GetLineStart(), aHyphOpt, aUserOpt );
+            rInf.GetText(), sal_Int32(nCutPos), aLocale,
+            sal_Int32(rInf.GetLineStart()), aHyphOpt, aUserOpt );
 
-        nBreakPos = aResult.breakIndex;
+        nBreakPos = TextFrameIndex(aResult.breakIndex);
 
         // if we are formatting multi portions we want to allow line breaks
         // at the border between single line and multi line portion
@@ -412,35 +422,35 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
         bHyph = BreakType::HYPHENATION == aResult.breakType;
 
-        if ( bHyph && nBreakPos != COMPLETE_STRING )
+        if (bHyph && nBreakPos != TextFrameIndex(COMPLETE_STRING))
         {
             // found hyphenation position within line
             // nBreakPos is set to the hyphenation position
             xHyphWord = aResult.rHyphenatedWord;
-            nBreakPos += xHyphWord->getHyphenationPos() + 1;
+            nBreakPos += TextFrameIndex(xHyphWord->getHyphenationPos() + 1);
 
             // if not in interactive mode, we have to break behind a soft hyphen
             if ( ! rInf.IsInterHyph() && rInf.GetIdx() )
             {
-                const long nSoftHyphPos =
+                sal_Int32 const nSoftHyphPos =
                         xHyphWord->getWord().indexOf( CHAR_SOFTHYPHEN );
 
                 if ( nSoftHyphPos >= 0 &&
-                     nBreakStart + nSoftHyphPos <= nBreakPos &&
+                     nBreakStart + TextFrameIndex(nSoftHyphPos) <= nBreakPos &&
                      nBreakPos > rInf.GetLineStart() )
-                    nBreakPos = rInf.GetIdx() - 1;
+                    nBreakPos = rInf.GetIdx() - TextFrameIndex(1);
             }
 
             if( nBreakPos >= rInf.GetIdx() )
             {
                 nPorLen = nBreakPos - rInf.GetIdx();
-                if( '-' == rInf.GetText()[ nBreakPos - 1 ] )
+                if ('-' == rInf.GetText()[ sal_Int32(nBreakPos) - 1 ])
                     xHyphWord = nullptr;
             }
         }
         else if ( !bHyph && nBreakPos >= rInf.GetLineStart() )
         {
-            OSL_ENSURE( nBreakPos != COMPLETE_STRING, "we should have found a break pos" );
+            OSL_ENSURE(sal_Int32(nBreakPos) != COMPLETE_STRING, "we should have found a break pos");
 
             // found break position within line
             xHyphWord = nullptr;
@@ -448,8 +458,10 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             // check, if break position is soft hyphen and an underflow
             // has to be triggered
             if( nBreakPos > rInf.GetLineStart() && rInf.GetIdx() &&
-                CHAR_SOFTHYPHEN == rInf.GetText()[ nBreakPos - 1 ] )
-                nBreakPos = rInf.GetIdx() - 1;
+                CHAR_SOFTHYPHEN == rInf.GetText()[ sal_Int32(nBreakPos) - 1 ])
+            {
+                nBreakPos = rInf.GetIdx() - TextFrameIndex(1);
+            }
 
             if( rAdjust != SvxAdjust::Left )
             {
@@ -457,7 +469,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                 // If a field has been expanded, we do not want to delete any
                 // blanks inside the field portion. This would cause an unwanted
                 // underflow
-                sal_Int32 nX = nBreakPos;
+                TextFrameIndex nX = nBreakPos;
                 while( nX > rInf.GetLineStart() &&
                        ( CH_TXTATR_BREAKWORD != cFieldChr || nX > rInf.GetIdx() ) &&
                        ( CH_BLANK == rInf.GetChar( --nX ) ||
@@ -471,14 +483,14 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         {
             // no line break found, setting nBreakPos to COMPLETE_STRING
             // causes a break cut
-            nBreakPos = COMPLETE_STRING;
+            nBreakPos = TextFrameIndex(COMPLETE_STRING);
             OSL_ENSURE( nCutPos >= rInf.GetIdx(), "Deep cut" );
             nPorLen = nCutPos - rInf.GetIdx();
         }
 
-        if( nBreakPos > nCutPos && nBreakPos != COMPLETE_STRING )
+        if (nBreakPos > nCutPos && nBreakPos != TextFrameIndex(COMPLETE_STRING))
         {
-            const sal_Int32 nHangingLen = nBreakPos - nCutPos;
+            const TextFrameIndex nHangingLen = nBreakPos - nCutPos;
             SwPosSize aTmpSize = rInf.GetTextSize( &rSI, nCutPos, nHangingLen );
             aTmpSize.Width(aTmpSize.Width() + nLeftRightBorderSpace);
             OSL_ENSURE( !pHanging, "A hanging portion is hanging around" );
@@ -495,8 +507,8 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         if ( CH_TXTATR_BREAKWORD == cFieldChr )
         {
             if ( nBreakPos < rInf.GetIdx() )
-                nBreakPos = nOldIdx - 1;
-            else if ( COMPLETE_STRING != nBreakPos )
+                nBreakPos = nOldIdx - TextFrameIndex(1);
+            else if (TextFrameIndex(COMPLETE_STRING) != nBreakPos)
             {
                 OSL_ENSURE( nBreakPos >= nFieldDiff, "I've got field trouble!" );
                 nBreakPos = nBreakPos - nFieldDiff;
@@ -547,20 +559,20 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 // returns true if word at position nPos has a different spelling
 // if hyphenated at this position (old german spelling)
 bool SwTextGuess::AlternativeSpelling( const SwTextFormatInfo &rInf,
-    const sal_Int32 nPos )
+    const TextFrameIndex nPos)
 {
     // get word boundaries
-    Boundary aBound =
-        g_pBreakIt->GetBreakIter()->getWordBoundary( rInf.GetText(), nPos,
+    Boundary aBound = g_pBreakIt->GetBreakIter()->getWordBoundary(
+        rInf.GetText(), sal_Int32(nPos),
         g_pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
         WordType::DICTIONARY_WORD, true );
-    nBreakStart = aBound.startPos;
-    sal_Int32 nWordLen = aBound.endPos - nBreakStart;
+    nBreakStart = TextFrameIndex(aBound.startPos);
+    sal_Int32 nWordLen = aBound.endPos - sal_Int32(nBreakStart);
 
     // if everything else fails, we want to cut at nPos
     nCutPos = nPos;
 
-    OUString aText( rInf.GetText().copy( nBreakStart, nWordLen ) );
+    OUString const aText( rInf.GetText().copy(sal_Int32(nBreakStart), nWordLen) );
 
     // check, if word has alternative spelling
     Reference< XHyphenator >  xHyph( ::GetHyphenator() );
@@ -568,7 +580,8 @@ bool SwTextGuess::AlternativeSpelling( const SwTextFormatInfo &rInf,
     //! subtract 1 since the UNO-interface is 0 based
     xHyphWord = xHyph->queryAlternativeSpelling( aText,
                         g_pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
-                        nPos - nBreakStart, rInf.GetHyphValues() );
+                    sal::static_int_cast<sal_Int16>(sal_Int32(nPos - nBreakStart)),
+                    rInf.GetHyphValues() );
     return xHyphWord.is() && xHyphWord->isAlternativeSpelling();
 }
 

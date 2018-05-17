@@ -49,17 +49,17 @@ using namespace ::com::sun::star::i18n::ScriptType;
 
 // Returns for how many characters an extra space has to be added
 // (for justified alignment).
-static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
-                               const SwLinePortion& rPor )
+static TextFrameIndex lcl_AddSpace(const SwTextSizeInfo &rInf,
+        const OUString* pStr, const SwLinePortion& rPor)
 {
-    sal_Int32 nPos, nEnd;
+    TextFrameIndex nPos, nEnd;
     const SwScriptInfo* pSI = nullptr;
 
     if ( pStr )
     {
         // passing a string means we are inside a field
-        nPos = 0;
-        nEnd = pStr->getLength();
+        nPos = TextFrameIndex(0);
+        nEnd = TextFrameIndex(pStr->getLength());
     }
     else
     {
@@ -69,7 +69,7 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
         pSI = &const_cast<SwParaPortion*>(rInf.GetParaPortion())->GetScriptInfo();
     }
 
-    sal_Int32 nCnt = 0;
+    TextFrameIndex nCnt(0);
     sal_uInt8 nScript = 0;
 
     // If portion consists of Asian characters and language is not
@@ -78,7 +78,8 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
     if ( pSI )
         nScript = pSI->ScriptType( nPos );
     else
-        nScript = static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType( *pStr, nPos ));
+        nScript = static_cast<sal_uInt8>(
+            g_pBreakIt->GetBreakIter()->getScriptType(*pStr, sal_Int32(nPos)));
 
     // Note: rInf.GetIdx() can differ from nPos,
     // e.g., when rPor is a field portion. nPos referes to the string passed
@@ -91,7 +92,7 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
     if ( nEnd > nPos && ASIAN == nScript )
     {
         LanguageType aLang =
-            rInf.GetTextFrame()->GetTextNode()->GetLang( rInf.GetIdx(), 1, nScript );
+            rInf.GetTextFrame()->GetLangOfChar(rInf.GetIdx(), nScript);
 
         if (!MsLangId::isKorean(aLang))
         {
@@ -121,7 +122,7 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
             // i60591: need to check result of KashidaJustify
             // determine if kashida justification is applicable
             if (nKashRes != -1)
-                return nKashRes;
+                return TextFrameIndex(nKashRes);
         }
     }
 
@@ -129,7 +130,7 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
     if ( nEnd > nPos && COMPLEX == nScript )
     {
         LanguageType aLang =
-            rInf.GetTextFrame()->GetTextNode()->GetLang( rInf.GetIdx(), 1, nScript );
+            rInf.GetTextFrame()->GetLangOfChar(rInf.GetIdx(), nScript);
 
         if ( LANGUAGE_THAI == aLang )
         {
@@ -152,18 +153,18 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
     // Note: We do not want to add space to an isolated latin blank in front
     // of some complex characters in RTL environment
     const bool bDoNotAddSpace =
-            LATIN == nScript && ( nEnd == nPos + 1 ) && pSI &&
+            LATIN == nScript && (nEnd == nPos + TextFrameIndex(1)) && pSI &&
             ( i18n::ScriptType::COMPLEX ==
-              pSI->ScriptType( nPos + 1 ) ) &&
+              pSI->ScriptType(nPos + TextFrameIndex(1))) &&
             rInf.GetTextFrame() && rInf.GetTextFrame()->IsRightToLeft();
 
     if ( bDoNotAddSpace )
         return nCnt;
 
-    sal_Int32 nTextEnd = std::min(nEnd, pStr->getLength());
+    TextFrameIndex nTextEnd = std::min(nEnd, TextFrameIndex(pStr->getLength()));
     for ( ; nPos < nTextEnd; ++nPos )
     {
-        if( CH_BLANK == (*pStr)[ nPos ] )
+        if (CH_BLANK == (*pStr)[ sal_Int32(nPos) ])
             ++nCnt;
     }
 
@@ -173,7 +174,7 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
     // nPos referes to the original string, even if a field string has
     // been passed to this function
     nPos = rInf.GetIdx() + rPor.GetLen();
-    if ( nPos < rInf.GetText().getLength() )
+    if (nPos < TextFrameIndex(rInf.GetText().getLength()))
     {
         sal_uInt8 nNextScript = 0;
         const SwLinePortion* pPor = rPor.GetPortion();
@@ -196,12 +197,13 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
             nNextScript = static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType( aStr, 0 ));
         }
         else
-            nNextScript = static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType( rInf.GetText(), nPos ));
+            nNextScript = static_cast<sal_uInt8>(
+                g_pBreakIt->GetBreakIter()->getScriptType(rInf.GetText(), sal_Int32(nPos)));
 
         if( ASIAN == nNextScript )
         {
             LanguageType aLang =
-                rInf.GetTextFrame()->GetTextNode()->GetLang( nPos, 1, nNextScript );
+                rInf.GetTextFrame()->GetLangOfChar(nPos, nNextScript);
 
             if (!MsLangId::isKorean(aLang))
                 ++nCnt;
@@ -225,8 +227,8 @@ void SwTextPortion::BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess 
     // Special case 1: The word is larger than the line
     // We truncate ...
     const sal_uInt16 nLineWidth = static_cast<sal_uInt16>(rInf.Width() - rInf.X());
-    sal_Int32 nLen = rGuess.CutPos() - rInf.GetIdx();
-    if (nLen > 0)
+    TextFrameIndex nLen = rGuess.CutPos() - rInf.GetIdx();
+    if (nLen > TextFrameIndex(0))
     {
         // special case: guess does not always provide the correct
         // width, only in common cases.
@@ -254,12 +256,12 @@ void SwTextPortion::BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess 
     // special case: first character does not fit to line
     else if ( rGuess.CutPos() == rInf.GetLineStart() )
     {
-        SetLen( 1 );
+        SetLen( TextFrameIndex(1) );
         Width( nLineWidth );
     }
     else
     {
-        SetLen( 0 );
+        SetLen( TextFrameIndex(0) );
         Width( 0 );
     }
 }
@@ -269,7 +271,7 @@ void SwTextPortion::BreakUnderflow( SwTextFormatInfo &rInf )
     Truncate();
     Height( 0 );
     Width( 0 );
-    SetLen( 0 );
+    SetLen( TextFrameIndex(0) );
     SetAscent( 0 );
     rInf.SetUnderflow( this );
 }
@@ -295,12 +297,12 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
             SwTextGuess aGuess;
             // check for alternative spelling left from the soft hyphen
             // this should usually be true but
-            aGuess.AlternativeSpelling( rInf, rInf.GetSoftHyphPos() - 1 );
+            aGuess.AlternativeSpelling(rInf, rInf.GetSoftHyphPos() - TextFrameIndex(1));
             bFull = CreateHyphen( rInf, aGuess );
             OSL_ENSURE( bFull, "Problem with hyphenation!!!" );
         }
         rInf.ChgHyph( bHyph );
-        rInf.SetSoftHyphPos( 0 );
+        rInf.SetSoftHyphPos( TextFrameIndex(0) );
         return bFull;
     }
 
@@ -347,7 +349,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
         Insert( aGuess.ReleaseHangingPortion() );
     }
     // breakPos >= index
-    else if ( aGuess.BreakPos() >= rInf.GetIdx() && aGuess.BreakPos() != COMPLETE_STRING )
+    else if (aGuess.BreakPos() >= rInf.GetIdx() && aGuess.BreakPos() != TextFrameIndex(COMPLETE_STRING))
     {
         // case B1
         if( aGuess.HyphWord().is() && aGuess.BreakPos() > rInf.GetLineStart()
@@ -372,7 +374,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
 
                     rInf.IsOtherThanFootnoteInside() ) ||
                   ( rInf.GetLast() &&
-                    rInf.GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT) &&
+                    rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT) &&
                     rInf.GetLast()->InTabGrp() &&
                     rInf.GetLineStart() + rInf.GetLast()->GetLen() < rInf.GetIdx() &&
                     aGuess.BreakPos() == rInf.GetIdx()  &&
@@ -405,7 +407,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
 
             OSL_ENSURE( aGuess.BreakStart() >= aGuess.FieldDiff(),
                     "Trouble with expanded field portions during line break" );
-            const sal_Int32 nRealStart = aGuess.BreakStart() - aGuess.FieldDiff();
+            TextFrameIndex const nRealStart = aGuess.BreakStart() - aGuess.FieldDiff();
             if( aGuess.BreakPos() < nRealStart && !InExpGrp() )
             {
                 SwHolePortion *pNew = new SwHolePortion( *this );
@@ -420,11 +422,12 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     else
     {
         bool bFirstPor = rInf.GetLineStart() == rInf.GetIdx();
-        if( aGuess.BreakPos() != COMPLETE_STRING &&
+        if (aGuess.BreakPos() != TextFrameIndex(COMPLETE_STRING) &&
             aGuess.BreakPos() != rInf.GetLineStart() &&
             ( !bFirstPor || rInf.GetFly() || rInf.GetLast()->IsFlyPortion() ||
               rInf.IsFirstMulti() ) &&
-            ( !rInf.GetLast()->IsBlankPortion() || SwBlankPortion::MayUnderflow( rInf, rInf.GetIdx()-1, true )))
+            ( !rInf.GetLast()->IsBlankPortion() ||
+              SwBlankPortion::MayUnderflow(rInf, rInf.GetIdx() - TextFrameIndex(1), true)))
         {       // case C1 (former BreakUnderflow())
             BreakUnderflow( rInf );
         }
@@ -442,7 +445,7 @@ bool SwTextPortion::Format( SwTextFormatInfo &rInf )
     {
         Height( 0 );
         Width( 0 );
-        SetLen( 0 );
+        SetLen( TextFrameIndex(0) );
         SetAscent( 0 );
         SetPortion( nullptr );  // ????
         return true;
@@ -469,14 +472,15 @@ void SwTextPortion::FormatEOL( SwTextFormatInfo &rInf )
         ( !GetPortion() || ( GetPortion()->IsKernPortion() &&
           !GetPortion()->GetPortion() ) ) &&
         GetLen() &&
-        rInf.GetIdx() < rInf.GetText().getLength() &&
-        1 < rInf.GetIdx() && ' ' == rInf.GetChar( rInf.GetIdx() - 1 ) &&
+        rInf.GetIdx() < TextFrameIndex(rInf.GetText().getLength()) &&
+        TextFrameIndex(1) < rInf.GetIdx() &&
+        ' ' == rInf.GetChar(rInf.GetIdx() - TextFrameIndex(1)) &&
         !rInf.GetLast()->IsHolePortion()) )
         return;
 
     // calculate number of blanks
-    sal_Int32 nX = rInf.GetIdx() - 1;
-    sal_Int32 nHoleLen = 1;
+    TextFrameIndex nX(rInf.GetIdx() - TextFrameIndex(1));
+    TextFrameIndex nHoleLen(1);
     while( nX && nHoleLen < GetLen() && CH_BLANK == rInf.GetChar( --nX ) )
         nHoleLen++;
 
@@ -486,7 +490,7 @@ void SwTextPortion::FormatEOL( SwTextFormatInfo &rInf )
     if( nHoleLen == GetLen() )
         nBlankSize = Width();
     else
-        nBlankSize = nHoleLen * rInf.GetTextSize(OUString(' ')).Width();
+        nBlankSize = sal_Int32(nHoleLen) * rInf.GetTextSize(OUString(' ')).Width();
     Width( Width() - nBlankSize );
     rInf.X( rInf.X() - nBlankSize );
     SetLen( GetLen() - nHoleLen );
@@ -497,7 +501,7 @@ void SwTextPortion::FormatEOL( SwTextFormatInfo &rInf )
 
 }
 
-sal_Int32 SwTextPortion::GetCursorOfst( const sal_uInt16 nOfst ) const
+TextFrameIndex SwTextPortion::GetCursorOfst(const sal_uInt16 nOfst) const
 {
     OSL_ENSURE( false, "SwTextPortion::GetCursorOfst: don't use this method!" );
     return SwLinePortion::GetCursorOfst( nOfst );
@@ -521,19 +525,21 @@ SwPosSize SwTextPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 
 void SwTextPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
-    if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDEND==rInf.GetText()[rInf.GetIdx()])
+    if (rInf.OnWin() && TextFrameIndex(1) == rInf.GetLen()
+        && CH_TXT_ATR_FIELDEND == rInf.GetText()[sal_Int32(rInf.GetIdx())])
     {
         assert(false); // this is some debugging only code
         rInf.DrawBackBrush( *this );
         const OUString aText(CH_TXT_ATR_SUBST_FIELDEND);
-        rInf.DrawText( aText, *this, 0, aText.getLength() );
+        rInf.DrawText(aText, *this, TextFrameIndex(0), TextFrameIndex(aText.getLength()));
     }
-    else if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDSTART==rInf.GetText()[rInf.GetIdx()])
+    else if (rInf.OnWin() && TextFrameIndex(1) == rInf.GetLen()
+        && CH_TXT_ATR_FIELDSTART == rInf.GetText()[sal_Int32(rInf.GetIdx())])
     {
         assert(false); // this is some debugging only code
         rInf.DrawBackBrush( *this );
         const OUString aText(CH_TXT_ATR_SUBST_FIELDSTART);
-        rInf.DrawText( aText, *this, 0, aText.getLength() );
+        rInf.DrawText(aText, *this, TextFrameIndex(0), TextFrameIndex(aText.getLength()));
     }
     else if( GetLen() )
     {
@@ -544,9 +550,9 @@ void SwTextPortion::Paint( const SwTextPaintInfo &rInf ) const
         if( rInf.OnWin() && pPortion && !pPortion->Width() )
             pPortion->PrePaint( rInf, this );
 
-        const SwWrongList *pWrongList = rInf.GetpWrongList();
-        const SwWrongList *pGrammarCheckList = rInf.GetGrammarCheckList();
-        const SwWrongList *pSmarttags = rInf.GetSmartTags();
+        auto const* pWrongList = rInf.GetpWrongList();
+        auto const* pGrammarCheckList = rInf.GetGrammarCheckList();
+        auto const* pSmarttags = rInf.GetSmartTags();
 
         const bool bWrong = nullptr != pWrongList;
         const bool bGrammarCheck = nullptr != pGrammarCheckList;
@@ -566,17 +572,17 @@ bool SwTextPortion::GetExpText( const SwTextSizeInfo &, OUString & ) const
 
 // Responsible for the justified paragraph. They calculate the blank
 // count and the resulting added space.
-sal_Int32 SwTextPortion::GetSpaceCnt( const SwTextSizeInfo &rInf,
-                                      sal_Int32& rCharCnt ) const
+TextFrameIndex SwTextPortion::GetSpaceCnt(const SwTextSizeInfo &rInf,
+                                          TextFrameIndex& rCharCnt) const
 {
-    sal_Int32 nCnt = 0;
-    sal_Int32 nPos = 0;
+    TextFrameIndex nCnt(0);
+    TextFrameIndex nPos(0);
 
     if ( rInf.SnapToGrid() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetTextFrame()->FindPageFrame()));
         if (pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars())
-            return 0;
+            return TextFrameIndex(0);
     }
 
     if ( InExpGrp() )
@@ -593,7 +599,7 @@ sal_Int32 SwTextPortion::GetSpaceCnt( const SwTextSizeInfo &rInf,
             const_cast<SwTextSizeInfo &>(rInf).SetOnWin( bOldOnWin );
 
             nCnt = nCnt + lcl_AddSpace( rInf, &aStr, *this );
-            nPos = aStr.getLength();
+            nPos = TextFrameIndex(aStr.getLength());
         }
     }
     else if( !IsDropPortion() )
@@ -607,7 +613,7 @@ sal_Int32 SwTextPortion::GetSpaceCnt( const SwTextSizeInfo &rInf,
 
 long SwTextPortion::CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) const
 {
-    sal_Int32 nCnt = 0;
+    TextFrameIndex nCnt(0);
 
     if ( rInf.SnapToGrid() )
     {
@@ -633,7 +639,7 @@ long SwTextPortion::CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) co
             else
             {
                 nSpaceAdd = -nSpaceAdd;
-                nCnt = aStr.getLength();
+                nCnt = TextFrameIndex(aStr.getLength());
             }
         }
     }
@@ -659,7 +665,7 @@ long SwTextPortion::CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) co
         }
     }
 
-    return nCnt * nSpaceAdd / SPACING_PRECISION_FACTOR;
+    return sal_Int32(nCnt) * nSpaceAdd / SPACING_PRECISION_FACTOR;
 }
 
 void SwTextPortion::HandlePortion( SwPortionHandler& rPH ) const
@@ -690,14 +696,14 @@ void SwTextInputFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
 
 bool SwTextInputFieldPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const
 {
-    sal_Int32 nIdx = rInf.GetIdx();
-    sal_Int32 nLen = rInf.GetLen();
+    sal_Int32 nIdx(rInf.GetIdx());
+    sal_Int32 nLen(rInf.GetLen());
     if ( rInf.GetChar( rInf.GetIdx() ) == CH_TXT_ATR_INPUTFIELDSTART )
     {
         ++nIdx;
         --nLen;
     }
-    if ( rInf.GetChar( rInf.GetIdx() + rInf.GetLen() - 1 ) == CH_TXT_ATR_INPUTFIELDEND )
+    if (rInf.GetChar(rInf.GetIdx() + rInf.GetLen() - TextFrameIndex(1)) == CH_TXT_ATR_INPUTFIELDEND)
     {
         --nLen;
     }
@@ -709,7 +715,7 @@ bool SwTextInputFieldPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &
 SwPosSize SwTextInputFieldPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 {
     SwTextSlot aFormatText( &rInf, this, true, false );
-    if ( rInf.GetLen() == 0 )
+    if (rInf.GetLen() == TextFrameIndex(0))
     {
         return SwPosSize( 0, 0 );
     }
@@ -720,7 +726,7 @@ SwPosSize SwTextInputFieldPortion::GetTextSize( const SwTextSizeInfo &rInf ) con
 SwHolePortion::SwHolePortion( const SwTextPortion &rPor )
     : nBlankWidth( 0 )
 {
-    SetLen( 1 );
+    SetLen( TextFrameIndex(1) );
     Height( rPor.Height() );
     SetAscent( rPor.GetAscent() );
     SetWhichPor( POR_HOLE );
@@ -753,7 +759,7 @@ void SwHolePortion::Paint( const SwTextPaintInfo &rInf ) const
     }
 
     const OUString aText( ' ' );
-    rInf.DrawText( aText, *this, 0, 1 );
+    rInf.DrawText(aText, *this, TextFrameIndex(0), TextFrameIndex(1));
 
     delete pFontSave;
     delete pHoleFont;
@@ -783,19 +789,16 @@ bool SwFieldMarkPortion::Format( SwTextFormatInfo & )
 
 void SwFieldFormCheckboxPortion::Paint( const SwTextPaintInfo& rInf ) const
 {
-    SwTextNode* pNd = const_cast<SwTextNode*>(rInf.GetTextFrame()->GetTextNode());
-    const SwDoc *doc=pNd->GetDoc();
-    SwIndex aIndex( pNd, rInf.GetIdx() );
-    SwPosition aPosition(*pNd, aIndex);
+    SwPosition const aPosition(rInf.GetTextFrame()->MapViewToModelPos(rInf.GetIdx()));
 
-    IFieldmark* pBM = doc->getIDocumentMarkAccess( )->getFieldmarkFor( aPosition );
+    IFieldmark const*const pBM = rInf.GetTextFrame()->GetDoc().getIDocumentMarkAccess()->getFieldmarkFor( aPosition );
 
     OSL_ENSURE(pBM && pBM->GetFieldname( ) == ODF_FORMCHECKBOX,
         "Where is my form field bookmark???");
 
     if (pBM && pBM->GetFieldname( ) == ODF_FORMCHECKBOX)
     {
-        const ICheckboxFieldmark* pCheckboxFm = dynamic_cast< ICheckboxFieldmark* >(pBM);
+        const ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark const*>(pBM);
         bool bChecked = pCheckboxFm && pCheckboxFm->IsChecked();
         rInf.DrawCheckBox(*this, bChecked);
     }
@@ -803,11 +806,8 @@ void SwFieldFormCheckboxPortion::Paint( const SwTextPaintInfo& rInf ) const
 
 bool SwFieldFormCheckboxPortion::Format( SwTextFormatInfo & rInf )
 {
-    SwTextNode *pNd = rInf.GetTextFrame(  )->GetTextNode(  );
-    const SwDoc *doc = pNd->GetDoc(  );
-    SwIndex aIndex( pNd, rInf.GetIdx(  ) );
-    SwPosition aPosition( *pNd, aIndex );
-    IFieldmark *pBM = doc->getIDocumentMarkAccess( )->getFieldmarkFor( aPosition );
+    SwPosition const aPosition(rInf.GetTextFrame()->MapViewToModelPos(rInf.GetIdx()));
+    IFieldmark const*const pBM = rInf.GetTextFrame()->GetDoc().getIDocumentMarkAccess()->getFieldmarkFor( aPosition );
     OSL_ENSURE(pBM && pBM->GetFieldname( ) == ODF_FORMCHECKBOX, "Where is my form field bookmark???");
     if (pBM && pBM->GetFieldname( ) == ODF_FORMCHECKBOX)
     {
