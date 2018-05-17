@@ -698,6 +698,19 @@ uno::Reference< io::XStream > OStorageHelper::GetStreamAtPackageURL(
     return nullptr;
 }
 
+OUString OStorageHelper::GetODFVersionFromStorage(uno::Reference<embed::XStorage> xStorage)
+{
+    OUString aODFVersion;
+    try
+    {
+        uno::Reference<beans::XPropertySet> xPropSet(xStorage, uno::UNO_QUERY_THROW);
+        xPropSet->getPropertyValue("Version") >>= aODFVersion;
+    }
+    catch (uno::Exception&)
+    {
+    }
+    return aODFVersion;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

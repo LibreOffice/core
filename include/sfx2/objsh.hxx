@@ -205,6 +205,7 @@ private:
                                                   // sal_False := new object
     bool                        bIsInGenerateThumbnail; //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
     bool                        mbAvoidRecentDocs; ///< Avoid adding to the recent documents list, if not necessary.
+    bool m_bAllowModifiedBackAfterSigning;
 
     enum TriState               {undefined, yes, no};
     TriState                    mbContinueImportOnFilterExceptions = undefined; // try to import as much as possible
@@ -356,11 +357,14 @@ public:
             css::uno::Reference<css::text::XTextRange> const& xInsertPosition);
     bool                        ExportTo( SfxMedium &rMedium );
 
-    // xmlsec05, check with SFX team
+    /** Returns to if preparing was succesful, else false. */
+    bool PrepareForSigning();
+    void AfterSigning(bool bSignSuccess, bool bSignScriptingContent);
+    bool HasValidSignatures();
     SignatureState              GetDocumentSignatureState();
     void                        SignDocumentContent();
-    void                        SignDocumentContent(css::uno::Reference<css::security::XCertificate> xCert,
-                                                    const OUString& aSignatureLineId);
+    void SignSignatureLine(const OUString& aSignatureLineId,
+                           const css::uno::Reference<css::security::XCertificate> xCert);
     SignatureState              GetScriptingSignatureState();
     void                        SignScriptingContent();
     DECL_LINK(SignDocumentHandler, Button*, void);
@@ -742,10 +746,6 @@ public:
             bool bScriptingContent,
             const css::uno::Reference< css::security::XDocumentDigitalSignatures >& xSigner
                 = css::uno::Reference< css::security::XDocumentDigitalSignatures >() );
-
-    SAL_DLLPRIVATE void ImplSign(const css::uno::Reference<css::security::XCertificate> xCert
-                                 = css::uno::Reference<css::security::XCertificate>(),
-                                 const OUString& aSignatureLineId = OUString(), bool bScriptingContent = false);
 
     SAL_DLLPRIVATE bool QuerySaveSizeExceededModules_Impl( const css::uno::Reference< css::task::XInteractionHandler >& xHandler );
     SAL_DLLPRIVATE bool QueryAllowExoticFormat_Impl( const css::uno::Reference< css::task::XInteractionHandler >& xHandler,
