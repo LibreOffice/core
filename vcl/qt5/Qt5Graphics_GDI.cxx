@@ -172,7 +172,7 @@ void Qt5Graphics::drawPixel(long nX, long nY)
 void Qt5Graphics::drawPixel(long nX, long nY, Color nColor)
 {
     Qt5Painter aPainter(*this);
-    aPainter.setPen(QColor(QRgb(nColor)));
+    aPainter.setPen(toQColor(nColor));
     aPainter.setPen(Qt::SolidLine);
     aPainter.drawPoint(nX, nY);
     aPainter.update(nX, nY, 1, 1);
