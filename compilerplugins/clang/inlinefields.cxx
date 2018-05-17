@@ -189,7 +189,7 @@ bool InlineFields::VisitBinAssign(const BinaryOperator * binaryOp)
     if (!parentFunction) {
         return true;
     }
-    // if the field is being assigned from outside it's own constructor or destructor, exclude
+    // if the field is being assigned from outside its own constructor or destructor, exclude
     auto constructorDecl = dyn_cast<CXXConstructorDecl>(parentFunction);
     if (constructorDecl && isSameParent(constructorDecl, fieldDecl)) {
         if( isa<CXXNewExpr>(binaryOp->getRHS()) )
