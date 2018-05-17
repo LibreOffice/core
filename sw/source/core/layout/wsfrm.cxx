@@ -4140,4 +4140,13 @@ void SwRootFrame::InvalidateAllObjPos()
     }
 }
 
+void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
+{
+    if (bHideRedlines == mbHideRedlines)
+    {
+        return;
+    }
+    mbHideRedlines = bHideRedlines;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
