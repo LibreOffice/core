@@ -99,6 +99,7 @@ void Qt5Menu::Update()
 
         if (mbMenuBar && mpQMenuBar)
         {
+             NativeItemText( aText );
              mpQMenuBar->addMenu( toQString(aText) );
         }
     }
@@ -132,6 +133,10 @@ void Qt5Menu::GetSystemMenuData( SystemMenuData* pData )
 {
 }
 
+void Qt5Menu::NativeItemText( OUString& rItemText )
+{
+    rItemText = rItemText.replace( '~', '&' );
+}
 
 Qt5MenuItem::Qt5MenuItem( const SalItemParams* pItemData ) :
     mnId( pItemData->nId ),
