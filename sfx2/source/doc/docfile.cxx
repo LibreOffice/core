@@ -3667,71 +3667,103 @@ bool SfxMedium::SignContents_Impl(const Reference<XCertificate> xCert, const OUS
 {
     bool bChanges = false;
 
-    // the medium should be closed to be able to sign, the caller is responsible to close it
-    if ( !IsOpen() && !GetError() )
+    if (IsOpen() || GetError())
     {
-        // The component should know if there was a valid document signature, since
-        // it should show a warning in this case
-        uno::Reference< security::XDocumentDigitalSignatures > xSigner(
-            security::DocumentDigitalSignatures::createWithVersionAndValidSignature(
-                comphelper::getProcessComponentContext(), aODFVersion, bHasValidDocumentSignature ) );
+        SAL_WARN("sfx.doc", "The medium must be closed by the signer!");
+        return bChanges;
+    }
 
-        uno::Reference< embed::XStorage > xWriteableZipStor;
-        // Signing is not modification of the document, as seen by the user
-        // ("only a saved document can be signed"). So allow signing in the
-        // "opened read-only, but not physically-read-only" case.
-        if (!IsOriginallyReadOnly())
+    // The component should know if there was a valid document signature, since
+    // it should show a warning in this case
+    uno::Reference< security::XDocumentDigitalSignatures > xSigner(
+        security::DocumentDigitalSignatures::createWithVersionAndValidSignature(
+            comphelper::getProcessComponentContext(), aODFVersion, bHasValidDocumentSignature ) );
+
+    uno::Reference< embed::XStorage > xWriteableZipStor;
+    // Signing is not modification of the document, as seen by the user
+    // ("only a saved document can be signed"). So allow signing in the
+    // "opened read-only, but not physically-read-only" case.
+    if (!IsOriginallyReadOnly())
+    {
+        // we can reuse the temporary file if there is one already
+        CreateTempFile( false );
+        GetMedium_Impl();
+
+        try
         {
-            // we can reuse the temporary file if there is one already
-            CreateTempFile( false );
-            GetMedium_Impl();
+            if ( !pImpl->xStream.is() )
+                throw uno::RuntimeException();
 
+            bool bODF = GetFilter()->IsOwnFormat();
             try
             {
-                if ( !pImpl->xStream.is() )
+                xWriteableZipStor = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream( ZIP_STORAGE_FORMAT_STRING, pImpl->xStream );
+            }
+            catch (const io::IOException& rException)
+            {
+                if (bODF)
+                    SAL_WARN("sfx.doc", "ODF stream is not a zip storage: " << rException);
+            }
+
+            if ( !xWriteableZipStor.is() && bODF )
+                throw uno::RuntimeException();
+
+            uno::Reference< embed::XStorage > xMetaInf;
+            uno::Reference<container::XNameAccess> xNameAccess(xWriteableZipStor, uno::UNO_QUERY);
+            if (xNameAccess.is() && xNameAccess->hasByName("META-INF"))
+            {
+                xMetaInf = xWriteableZipStor->openStorageElement(
+                                                "META-INF",
+                                                embed::ElementModes::READWRITE );
+                if ( !xMetaInf.is() )
                     throw uno::RuntimeException();
+            }
 
-                bool bODF = GetFilter()->IsOwnFormat();
-                try
+            if ( bScriptingContent )
+            {
+                // If the signature has already the document signature it will be removed
+                // after the scripting signature is inserted.
+                uno::Reference< io::XStream > xStream(
+                    xMetaInf->openStreamElement( xSigner->getScriptingContentSignatureDefaultStreamName(),
+                                                    embed::ElementModes::READWRITE ),
+                    uno::UNO_SET_THROW );
+
+                if ( xSigner->signScriptingContent( GetZipStorageToSign_Impl(), xStream ) )
                 {
-                    xWriteableZipStor = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream( ZIP_STORAGE_FORMAT_STRING, pImpl->xStream );
+                    // remove the document signature if any
+                    OUString aDocSigName = xSigner->getDocumentContentSignatureDefaultStreamName();
+                    if ( !aDocSigName.isEmpty() && xMetaInf->hasByName( aDocSigName ) )
+                        xMetaInf->removeElement( aDocSigName );
+
+                    uno::Reference< embed::XTransactedObject > xTransact( xMetaInf, uno::UNO_QUERY_THROW );
+                    xTransact->commit();
+                    xTransact.set( xWriteableZipStor, uno::UNO_QUERY_THROW );
+                    xTransact->commit();
+
+                    // the temporary file has been written, commit it to the original file
+                    Commit();
+                    bChanges = true;
                 }
-                catch (const io::IOException& rException)
+            }
+            else
+            {
+                if (xMetaInf.is())
                 {
-                    if (bODF)
-                        SAL_WARN("sfx.doc", "ODF stream is not a zip storage: " << rException);
-                }
+                    // ODF.
+                    uno::Reference< io::XStream > xStream;
+                    if (GetFilter() && GetFilter()->IsOwnFormat())
+                        xStream.set(xMetaInf->openStreamElement(xSigner->getDocumentContentSignatureDefaultStreamName(), embed::ElementModes::READWRITE), uno::UNO_SET_THROW);
 
-                if ( !xWriteableZipStor.is() && bODF )
-                    throw uno::RuntimeException();
+                    bool bSuccess = false;
+                    if (xCert.is())
+                        bSuccess = xSigner->signDocumentContentWithCertificate(
+                            GetZipStorageToSign_Impl(), xStream, xCert, aSignatureLineId);
+                    else
+                        bSuccess = xSigner->signDocumentContent(GetZipStorageToSign_Impl(),
+                                                                xStream);
 
-                uno::Reference< embed::XStorage > xMetaInf;
-                uno::Reference<container::XNameAccess> xNameAccess(xWriteableZipStor, uno::UNO_QUERY);
-                if (xNameAccess.is() && xNameAccess->hasByName("META-INF"))
-                {
-                    xMetaInf = xWriteableZipStor->openStorageElement(
-                                                    "META-INF",
-                                                    embed::ElementModes::READWRITE );
-                    if ( !xMetaInf.is() )
-                        throw uno::RuntimeException();
-                }
-
-                if ( bScriptingContent )
-                {
-                    // If the signature has already the document signature it will be removed
-                    // after the scripting signature is inserted.
-                    uno::Reference< io::XStream > xStream(
-                        xMetaInf->openStreamElement( xSigner->getScriptingContentSignatureDefaultStreamName(),
-                                                     embed::ElementModes::READWRITE ),
-                        uno::UNO_SET_THROW );
-
-                    if ( xSigner->signScriptingContent( GetZipStorageToSign_Impl(), xStream ) )
+                    if (bSuccess)
                     {
-                        // remove the document signature if any
-                        OUString aDocSigName = xSigner->getDocumentContentSignatureDefaultStreamName();
-                        if ( !aDocSigName.isEmpty() && xMetaInf->hasByName( aDocSigName ) )
-                            xMetaInf->removeElement( aDocSigName );
-
                         uno::Reference< embed::XTransactedObject > xTransact( xMetaInf, uno::UNO_QUERY_THROW );
                         xTransact->commit();
                         xTransact.set( xWriteableZipStor, uno::UNO_QUERY_THROW );
@@ -3742,107 +3774,77 @@ bool SfxMedium::SignContents_Impl(const Reference<XCertificate> xCert, const OUS
                         bChanges = true;
                     }
                 }
-                else
+                else if (xWriteableZipStor.is())
                 {
-                    if (xMetaInf.is())
+                    // OOXML.
+                    uno::Reference<io::XStream> xStream;
+
+                    bool bSuccess = false;
+                    if (xCert.is())
                     {
-                        // ODF.
-                        uno::Reference< io::XStream > xStream;
-                        if (GetFilter() && GetFilter()->IsOwnFormat())
-                            xStream.set(xMetaInf->openStreamElement(xSigner->getDocumentContentSignatureDefaultStreamName(), embed::ElementModes::READWRITE), uno::UNO_SET_THROW);
-
-                        bool bSuccess = false;
-                        if (xCert.is())
-                            bSuccess = xSigner->signDocumentContentWithCertificate(
-                                GetZipStorageToSign_Impl(), xStream, xCert, aSignatureLineId);
-                        else
-                            bSuccess = xSigner->signDocumentContent(GetZipStorageToSign_Impl(),
-                                                                    xStream);
-
-                        if (bSuccess)
-                        {
-                            uno::Reference< embed::XTransactedObject > xTransact( xMetaInf, uno::UNO_QUERY_THROW );
-                            xTransact->commit();
-                            xTransact.set( xWriteableZipStor, uno::UNO_QUERY_THROW );
-                            xTransact->commit();
-
-                            // the temporary file has been written, commit it to the original file
-                            Commit();
-                            bChanges = true;
-                        }
-                    }
-                    else if (xWriteableZipStor.is())
-                    {
-                        // OOXML.
-                        uno::Reference<io::XStream> xStream;
-
-                        bool bSuccess = false;
-                        if (xCert.is())
-                        {
-                            bSuccess = xSigner->signDocumentContentWithCertificate(
-                                GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream, xCert, aSignatureLineId);
-                        }
-                        else
-                        {
-                            // We need read-write to be able to add the signature relation.
-                            bSuccess =xSigner->signDocumentContent(
-                                GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream);
-                        }
-
-                        if (bSuccess)
-                        {
-                            uno::Reference<embed::XTransactedObject> xTransact(xWriteableZipStor, uno::UNO_QUERY_THROW);
-                            xTransact->commit();
-
-                            // the temporary file has been written, commit it to the original file
-                            Commit();
-                            bChanges = true;
-                        }
+                        bSuccess = xSigner->signDocumentContentWithCertificate(
+                            GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream, xCert, aSignatureLineId);
                     }
                     else
                     {
-                        // Something not ZIP based: e.g. PDF.
-                        std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ | StreamMode::WRITE));
-                        uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
-                        if (xSigner->signDocumentContent(uno::Reference<embed::XStorage>(), xStream))
-                            bChanges = true;
+                        // We need read-write to be able to add the signature relation.
+                        bSuccess =xSigner->signDocumentContent(
+                            GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream);
+                    }
+
+                    if (bSuccess)
+                    {
+                        uno::Reference<embed::XTransactedObject> xTransact(xWriteableZipStor, uno::UNO_QUERY_THROW);
+                        xTransact->commit();
+
+                        // the temporary file has been written, commit it to the original file
+                        Commit();
+                        bChanges = true;
                     }
                 }
+                else
+                {
+                    // Something not ZIP based: e.g. PDF.
+                    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ | StreamMode::WRITE));
+                    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+                    if (xSigner->signDocumentContent(uno::Reference<embed::XStorage>(), xStream))
+                        bChanges = true;
+                }
             }
-            catch ( const uno::Exception& )
-            {
-                SAL_WARN( "sfx.doc", "Couldn't use signing functionality!" );
-            }
-
-            CloseAndRelease();
         }
-        else
+        catch ( const uno::Exception& )
         {
-            try
-            {
-                if ( bScriptingContent )
-                    xSigner->showScriptingContentSignatures( GetZipStorageToSign_Impl(), uno::Reference< io::XInputStream >() );
-                else
-                {
-                    uno::Reference<embed::XStorage> xStorage = GetZipStorageToSign_Impl();
-                    if (xStorage.is())
-                        xSigner->showDocumentContentSignatures(xStorage, uno::Reference<io::XInputStream>());
-                    else
-                    {
-                        std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ));
-                        uno::Reference<io::XInputStream> xStream(new utl::OStreamWrapper(*pStream));
-                        xSigner->showDocumentContentSignatures(uno::Reference<embed::XStorage>(), xStream);
-                    }
-                }
-            }
-            catch( const uno::Exception& )
-            {
-                SAL_WARN( "sfx.doc", "Couldn't use signing functionality!" );
-            }
+            SAL_WARN( "sfx.doc", "Couldn't use signing functionality!" );
         }
 
-        ResetError();
+        CloseAndRelease();
     }
+    else
+    {
+        try
+        {
+            if ( bScriptingContent )
+                xSigner->showScriptingContentSignatures( GetZipStorageToSign_Impl(), uno::Reference< io::XInputStream >() );
+            else
+            {
+                uno::Reference<embed::XStorage> xStorage = GetZipStorageToSign_Impl();
+                if (xStorage.is())
+                    xSigner->showDocumentContentSignatures(xStorage, uno::Reference<io::XInputStream>());
+                else
+                {
+                    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ));
+                    uno::Reference<io::XInputStream> xStream(new utl::OStreamWrapper(*pStream));
+                    xSigner->showDocumentContentSignatures(uno::Reference<embed::XStorage>(), xStream);
+                }
+            }
+        }
+        catch( const uno::Exception& )
+        {
+            SAL_WARN( "sfx.doc", "Couldn't use signing functionality!" );
+        }
+    }
+
+    ResetError();
 
     return bChanges;
 }
