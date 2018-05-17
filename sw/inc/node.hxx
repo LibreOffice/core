@@ -88,6 +88,17 @@ class SW_DLLPUBLIC SwNode
     sal_uInt8 m_nAFormatNumLvl : 3;
     bool m_bIgnoreDontExpand : 1;     ///< for Text Attributes - ignore the flag
 
+public:
+    /// sw_redlinehide: redline node merge state
+    enum class Merge { None, First, NonFirst, Hidden };
+    bool IsCreateFrameWhenHidingRedlines() {
+        return m_eMerge == Merge::None || m_eMerge == Merge::First;
+    }
+    void SetRedlineMergeFlag(Merge const eMerge) { m_eMerge = eMerge; }
+    Merge GetRedlineMergeFlag() const { return m_eMerge; }
+private:
+    Merge m_eMerge;
+
 #ifdef DBG_UTIL
     static long s_nSerial;
     long m_nSerial;
