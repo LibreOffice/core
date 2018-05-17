@@ -510,13 +510,13 @@ void ModulWindow::ToggleBreakPoint( sal_uLong nLine )
         if ( pBrk ) // remove
         {
             m_xModule->ClearBP( static_cast<sal_uInt16>(nLine) );
-            delete GetBreakPoints().remove( pBrk );
+            GetBreakPoints().remove( pBrk );
         }
         else // create one
         {
             if ( m_xModule->SetBP( static_cast<sal_uInt16>(nLine)) )
             {
-                GetBreakPoints().InsertSorted( new BreakPoint( nLine ) );
+                GetBreakPoints().InsertSorted( BreakPoint( nLine ) );
                 if ( StarBASIC::IsRunning() )
                 {
                     for ( sal_uInt16 nMethod = 0; nMethod < m_xModule->GetMethods()->Count(); nMethod++ )
