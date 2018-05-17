@@ -20,36 +20,31 @@
 #ifndef INCLUDED_UUI_SOURCE_NAMECLASHDLG_HXX
 #define INCLUDED_UUI_SOURCE_NAMECLASHDLG_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-
+#include <vcl/weld.hxx>
 
 enum NameClashResolveDialogResult { ABORT, RENAME, OVERWRITE };
 
-class NameClashDialog : public ModalDialog
+class NameClashDialog : public weld::GenericDialogController
 {
-    VclPtr<FixedText>     m_pFTMessage;
-    VclPtr<Edit>          m_pEDNewName;
-    VclPtr<PushButton>    m_pBtnOverwrite;
-    VclPtr<PushButton>    m_pBtnRename;
-    VclPtr<CancelButton>  m_pBtnCancel;
+    OUString m_aSameName;
+    OUString m_aNewName;
 
-    OUString maSameName;
-    OUString maNewName;
+    std::unique_ptr<weld::Label> m_xFTMessage;
+    std::unique_ptr<weld::Entry> m_xEDNewName;
+    std::unique_ptr<weld::Button> m_xBtnOverwrite;
+    std::unique_ptr<weld::Button> m_xBtnRename;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
 
-    DECL_LINK( ButtonHdl_Impl, Button *, void );
+    DECL_LINK(ButtonHdl_Impl, weld::Button&, void);
 
 public:
-    NameClashDialog( vcl::Window* pParent, const std::locale& rLocale,
-                     OUString const & rTargetFolderURL,
-                     OUString const & rClashingName,
-                     OUString const & rProposedNewName,
-                     bool bAllowOverwrite );
+    NameClashDialog(weld::Window* pParent, const std::locale& rLocale,
+                    OUString const & rTargetFolderURL,
+                    OUString const & rClashingName,
+                    OUString const & rProposedNewName,
+                    bool bAllowOverwrite);
     virtual ~NameClashDialog() override;
-    virtual void dispose() override;
-    const OUString& getNewName() const { return maNewName; }
+    const OUString& getNewName() const { return m_aNewName; }
 };
 
 #endif // UUI_COOKIEDG_HXX
