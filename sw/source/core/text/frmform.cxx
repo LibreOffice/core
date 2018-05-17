@@ -694,7 +694,7 @@ void SwTextFrame::SplitFrame(TextFrameIndex const nTextPos)
     // The Paste sends a Modify() to me
     // I lock myself, so that my data does not disappear
     TextFrameLockGuard aLock( this );
-    SwTextFrame *pNew = static_cast<SwTextFrame *>(GetTextNode()->MakeFrame( this ));
+    SwTextFrame *const pNew = static_cast<SwTextFrame *>(GetTextNodeFirst()->MakeFrame(this));
 
     pNew->SetFollow( GetFollow() );
     SetFollow( pNew );
@@ -1092,7 +1092,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
             // the numbering and must stay.
             if ( GetFollow()->GetOfst() != nEnd ||
                  GetFollow()->IsFieldFollow() ||
-                 (nStrLen == TextFrameIndex(0) && GetTextNode()->GetNumRule()))
+                 (nStrLen == TextFrameIndex(0) && GetTextNodeForParaProps()->GetNumRule()))
             {
                 nNew |= 3;
             }
@@ -1116,7 +1116,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
             // as-character anchored object.
             if ( !bOnlyContainsAsCharAnchoredObj &&
                  (nStrLen > TextFrameIndex(0) ||
-                   (nStrLen == TextFrameIndex(0) && GetTextNode()->GetNumRule()))
+                   (nStrLen == TextFrameIndex(0) && GetTextNodeForParaProps()->GetNumRule()))
                )
             {
                 SplitFrame( nEnd );
@@ -1215,7 +1215,7 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
     SwRepaint &rRepaint = pPara->GetRepaint();
     if( bUnChg && rRepaint.Top() == rLine.Y()
                && (bPrev || nNewStart <= pPara->GetReformat().Start())
-               && (nNewStart < GetTextNode()->GetText().getLength()))
+               && (nNewStart < TextFrameIndex(GetText().getLength())))
     {
         rRepaint.Top( nBottom );
         rRepaint.Height( 0 );
@@ -1286,7 +1286,7 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
         return true;
 
     // Until the String's end?
-    if (nNewStart >= GetTextNode()->GetText().getLength())
+    if (nNewStart >= TextFrameIndex(GetText().getLength()))
         return false;
 
     if( rLine.GetInfo().IsShift() )
@@ -1310,8 +1310,8 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
     rLine.SetUnclipped( false );
 
-    const OUString &rString = GetTextNode()->GetText();
-    const sal_Int32 nStrLen = rString.getLength();
+    const OUString & rString = GetText();
+    const TextFrameIndex nStrLen(rString.getLength());
 
     SwCharRange &rReformat = pPara->GetReformat();
     SwRepaint   &rRepaint = pPara->GetRepaint();
@@ -1354,7 +1354,7 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
     bool bPrev = rLine.GetPrev() &&
                      (FindBrk(rString, rLine.GetStart(), rReformat.Start() + TextFrameIndex(1))
                        // i#46560
-                       + 1
+                       + TextFrameIndex(1)
                        >= rReformat.Start() ||
                        rLine.GetCurr()->IsRest() );
     if( bPrev )
@@ -1440,7 +1440,7 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
     bool bJumpMidHyph  = false;
     bool bWatchMidHyph = false;
 
-    const SwAttrSet& rAttrSet = GetTextNode()->GetSwAttrSet();
+    const SwAttrSet& rAttrSet = GetTextNodeForParaProps()->GetSwAttrSet();
     bool bMaxHyph = ( 0 !=
         ( rInf.MaxHyph() = rAttrSet.GetHyphenZone().GetMaxHyphens() ) );
     if ( bMaxHyph )
@@ -1794,7 +1794,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
         return;
     }
 
-    const sal_Int32 nStrLen = GetTextNode()->GetText().getLength();
+    const TextFrameIndex nStrLen(GetText().getLength());
     if ( nStrLen || !FormatEmpty() )
     {
 
@@ -1833,7 +1833,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
         SwTextLineAccess aAccess( this );
         const bool bNew = !aAccess.IsAvailable();
         const bool bSetOfst =
-            (GetOfst() && GetOfst() > GetTextNode()->GetText().getLength());
+            (GetOfst() && GetOfst() > TextFrameIndex(GetText().getLength()));
 
         if( CalcPreps() )
             ; // nothing
@@ -1841,7 +1841,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
         // and does not have any format information
         else if( !bNew && !aAccess.GetPara()->GetReformat().Len() )
         {
-            if( GetTextNode()->GetSwAttrSet().GetRegister().GetValue() )
+            if (GetTextNodeForParaProps()->GetSwAttrSet().GetRegister().GetValue())
             {
                 aAccess.GetPara()->SetPrepAdjust();
                 aAccess.GetPara()->SetPrep();
