@@ -165,7 +165,8 @@ void
 implnCopy( const uno::Reference< frame::XModel>& xModel )
 {
     ScTabViewShell* pViewShell = getBestViewShell( xModel );
-    if ( pViewShell )
+    ScDocShell* pDocShell = getDocShell( xModel );
+    if ( pViewShell && pDocShell )
     {
         pViewShell->CopyToClip(nullptr,false,false,true);
 
@@ -175,7 +176,7 @@ implnCopy( const uno::Reference< frame::XModel>& xModel )
         if (pClipObj)
         {
             pClipObj->SetUseInApi( true );
-            SC_MOD()->SetClipData(xTransferable);
+            pDocShell->SetClipData(xTransferable);
         }
     }
 }
@@ -184,7 +185,8 @@ void
 implnCut( const uno::Reference< frame::XModel>& xModel )
 {
     ScTabViewShell* pViewShell =  getBestViewShell( xModel );
-    if ( pViewShell )
+    ScDocShell* pDocShell = getDocShell( xModel );
+    if ( pViewShell && pDocShell )
     {
         pViewShell->CutToClip();
 
@@ -194,7 +196,7 @@ implnCut( const uno::Reference< frame::XModel>& xModel )
         if (pClipObj)
         {
             pClipObj->SetUseInApi( true );
-            SC_MOD()->SetClipData(xTransferable);
+            pDocShell->SetClipData(xTransferable);
         }
     }
 }
@@ -204,13 +206,14 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, InsertDele
     PasteCellsWarningReseter resetWarningBox;
 
     ScTabViewShell* pTabViewShell = getBestViewShell( xModel );
-    if ( pTabViewShell )
+    ScDocShell* pDocShell = getDocShell( xModel );
+    if ( pTabViewShell && pDocShell )
     {
         ScViewData& rView = pTabViewShell->GetViewData();
         vcl::Window* pWin = rView.GetActiveWin();
         if (pWin)
         {
-            const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(SC_MOD()->GetClipData());
+            const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(pDocShell->GetClipData());
             ScDocument* pDoc = nullptr;
             if ( pOwnClip )
                 pDoc = pOwnClip->GetDocument();

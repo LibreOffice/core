@@ -30,6 +30,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_tiledrendering, \
     scui \
     test \
     unotest \
+    vbahelper \
     vcl \
     tl \
     utl \
@@ -51,6 +52,9 @@ $(eval $(call gb_CppunitTest_use_api,sc_tiledrendering,\
 	offapi \
 	oovbaapi \
 ))
+
+$(eval $(call gb_CppunitTest_use_sdk_api,sc_tiledrendering))
+$(eval $(call gb_CppunitTest_use_api,sc_tiledrendering,oovbaapi))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_tiledrendering))
 $(eval $(call gb_CppunitTest_use_vcl,sc_tiledrendering))
