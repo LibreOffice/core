@@ -166,8 +166,7 @@ CheckBox::~CheckBox()
 
 void CheckBox::dispose()
 {
-    delete pCheckButton;
-    pCheckButton = nullptr;
+    pCheckButton.reset();
 
     // delete user data
     SvTreeListEntry* pEntry = First();
@@ -182,10 +181,10 @@ void CheckBox::dispose()
 
 void CheckBox::Init()
 {
-    pCheckButton = new SvLBoxButtonData(this);
+    pCheckButton.reset(new SvLBoxButtonData(this));
 
     if (eMode == ObjectMode::Library)
-        EnableCheckButton( pCheckButton );
+        EnableCheckButton( pCheckButton.get() );
     else
         EnableCheckButton( nullptr );
 
@@ -197,7 +196,7 @@ void CheckBox::SetMode (ObjectMode e)
     eMode = e;
 
     if (eMode == ObjectMode::Library)
-        EnableCheckButton( pCheckButton );
+        EnableCheckButton( pCheckButton.get() );
     else
         EnableCheckButton( nullptr );
 }

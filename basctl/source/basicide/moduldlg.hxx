@@ -111,7 +111,7 @@ class CheckBox : public SvTabListBox
 {
 private:
     ObjectMode          eMode;
-    SvLBoxButtonData*   pCheckButton;
+    std::unique_ptr<SvLBoxButtonData> pCheckButton;
     ScriptDocument      m_aDocument;
     void                Init();
 
