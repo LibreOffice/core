@@ -35,6 +35,24 @@ PlaceEditDialog::PlaceEditDialog(weld::Window* pParent)
     , m_xEDPassword(m_xBuilder->weld_entry("password"))
     , m_xFTPasswordLabel(m_xBuilder->weld_label("passwordLabel"))
     , m_xTypeGrid(m_xBuilder->weld_widget("TypeGrid"))
+
+    , m_xRepositoryBox(m_xBuilder->weld_widget("RepositoryDetails"))
+    , m_xFTRepository(m_xBuilder->weld_label("repositoryLabel"))
+    , m_xLBRepository(m_xBuilder->weld_combo_box_text("repositories"))
+
+    , m_xEDShare(m_xBuilder->weld_entry("share"))
+    , m_xFTShare(m_xBuilder->weld_label("shareLabel"))
+
+    , m_xDetailsGrid(m_xBuilder->weld_widget("Details"))
+    , m_xHostBox(m_xBuilder->weld_widget("HostDetails"))
+    , m_xEDHost(m_xBuilder->weld_entry("host"))
+    , m_xFTHost(m_xBuilder->weld_label("hostLabel"))
+    , m_xEDPort(m_xBuilder->weld_spin_button("port"))
+    , m_xFTPort(m_xBuilder->weld_label("portLabel"))
+    , m_xEDRoot(m_xBuilder->weld_entry("path"))
+    , m_xFTRoot(m_xBuilder->weld_label("pathLabel"))
+
+    , m_xCBDavs(m_xBuilder->weld_check_button("webdavs"))
 {
     m_xBTOk->connect_clicked( LINK( this, PlaceEditDialog, OKHdl) );
     m_xBTOk->set_sensitive( false );
@@ -167,7 +185,7 @@ void PlaceEditDialog::InitDetails( )
 
         m_xLBServerType->insert_text(nPos, aTypesNamesList[i].replaceFirst("Other CMIS", SvtResId(STR_SVT_OTHER_CMIS)));
 
-        std::shared_ptr<DetailsContainer> xCmisDetails(std::make_shared<CmisDetailsContainer>(m_xBuilder.get(), m_xDialog.get(), sUrl));
+        std::shared_ptr<DetailsContainer> xCmisDetails(std::make_shared<CmisDetailsContainer>(this, sUrl));
         xCmisDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
         m_aDetailsContainers.push_back(xCmisDetails);
 
@@ -175,20 +193,20 @@ void PlaceEditDialog::InitDetails( )
     }
 
     // Create WebDAV / FTP / SSH details control
-    std::shared_ptr<DetailsContainer> xDavDetails(std::make_shared<DavDetailsContainer>(m_xBuilder.get()));
+    std::shared_ptr<DetailsContainer> xDavDetails(std::make_shared<DavDetailsContainer>(this));
     xDavDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
     m_aDetailsContainers.push_back(xDavDetails);
 
-    std::shared_ptr<DetailsContainer> xFtpDetails(std::make_shared<HostDetailsContainer>(m_xBuilder.get(), 21, "ftp"));
+    std::shared_ptr<DetailsContainer> xFtpDetails(std::make_shared<HostDetailsContainer>(this, 21, "ftp"));
     xFtpDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
     m_aDetailsContainers.push_back(xFtpDetails);
 
-    std::shared_ptr<DetailsContainer> xSshDetails(std::make_shared<HostDetailsContainer>(m_xBuilder.get(), 22, "ssh"));
+    std::shared_ptr<DetailsContainer> xSshDetails(std::make_shared<HostDetailsContainer>(this, 22, "ssh"));
     xSshDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
     m_aDetailsContainers.push_back(xSshDetails);
 
     // Create Windows Share control
-    std::shared_ptr<DetailsContainer> xSmbDetails(std::make_shared<SmbDetailsContainer>(m_xBuilder.get()));
+    std::shared_ptr<DetailsContainer> xSmbDetails(std::make_shared<SmbDetailsContainer>(this));
     xSmbDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
     m_aDetailsContainers.push_back(xSmbDetails);
 

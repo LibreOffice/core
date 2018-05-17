@@ -352,7 +352,7 @@ protected:
 public:
     virtual void set_label(const OUString& rText) = 0;
     virtual OUString get_label() const = 0;
-    virtual void clicked() = 0;
+    void clicked() { signal_clicked(); }
 
     void connect_clicked(const Link<Button&, void>& rLink) { m_aClickHdl = rLink; }
 };
