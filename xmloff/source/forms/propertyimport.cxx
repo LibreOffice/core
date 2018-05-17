@@ -28,6 +28,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <o3tl/temporary.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/extract.hxx>
 #include "callbacks.hxx"
@@ -186,9 +187,7 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
                 {
                     case TYPE_DATE:
                     {
-                        double dummy;
-                        (void) dummy; // avoid warning C4101 with some over-eager MSVC
-                        OSL_ENSURE(std::modf(nValue, &dummy) == 0,
+                        OSL_ENSURE(std::modf(nValue, &o3tl::temporary(double())) == 0,
                             "PropertyConversion::convertString: a Date value with a fractional part?");
                         aReturn <<= lcl_getDate(nValue);
                     }

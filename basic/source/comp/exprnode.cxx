@@ -21,6 +21,7 @@
 #include <math.h>
 #include <algorithm>
 
+#include <o3tl/temporary.hxx>
 #include <rtl/math.hxx>
 #include <codegen.hxx>
 #include <parser.hxx>
@@ -152,8 +153,7 @@ void SbiExprNode::ConvertToIntConstIfPossible()
     {
         if( eType >= SbxINTEGER && eType <= SbxDOUBLE )
         {
-            double n;
-            if( nVal >= SbxMININT && nVal <= SbxMAXINT && modf( nVal, &n ) == 0 )
+            if( nVal >= SbxMININT && nVal <= SbxMAXINT && modf( nVal, &o3tl::temporary(double()) ) == 0 )
             {
                 eType = SbxINTEGER;
             }
@@ -220,9 +220,8 @@ void SbiExprNode::FoldConstants(SbiParser* pParser)
         // Potentially convolve in INTEGER (because of better opcode)?
         if( eType == SbxSINGLE || eType == SbxDOUBLE )
         {
-            double x;
             if( nVal >= SbxMINLNG && nVal <= SbxMAXLNG
-            && !modf( nVal, &x ) )
+            && !modf( nVal, &o3tl::temporary(double()) ) )
                 eType = SbxLONG;
         }
         if( eType == SbxLONG && nVal >= SbxMININT && nVal <= SbxMAXINT )
@@ -463,9 +462,8 @@ void SbiExprNode::FoldConstantsUnaryNode(SbiParser* pParser)
         // Potentially convolve in INTEGER (because of better opcode)?
         if( eType == SbxSINGLE || eType == SbxDOUBLE )
         {
-            double x;
             if( nVal >= SbxMINLNG && nVal <= SbxMAXLNG
-            && !modf( nVal, &x ) )
+            && !modf( nVal, &o3tl::temporary(double()) ) )
                 eType = SbxLONG;
         }
         if( eType == SbxLONG && nVal >= SbxMININT && nVal <= SbxMAXINT )

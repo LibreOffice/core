@@ -24,6 +24,7 @@
 
 #include "xmlControlProperty.hxx"
 
+#include <o3tl/temporary.hxx>
 #include <rtl/strbuf.hxx>
 #include <sax/tools/converter.hxx>
 #include "xmlfilter.hxx"
@@ -272,8 +273,7 @@ Any OXMLControlProperty::convertString(const css::uno::Type& _rExpectedType, con
                     {
                         case TYPE_DATE:
                         {
-                            double dummy;
-                            OSL_ENSURE(std::modf(nValue, &dummy) == 0,
+                            OSL_ENSURE(std::modf(nValue, &o3tl::temporary(double())) == 0,
                                 "OPropertyImport::convertString: a Date value with a fractional part?");
                             (void)dummy;
                             aReturn <<= implGetDate(nValue);
