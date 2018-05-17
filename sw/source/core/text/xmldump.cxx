@@ -31,7 +31,7 @@ class XmlPortionDumper:public SwPortionHandler
 {
   private:
     xmlTextWriterPtr writer;
-    sal_Int32 ofs;
+    TextFrameIndex ofs;
 
     static const char* getTypeName( sal_uInt16 nType )
     {
@@ -115,7 +115,7 @@ class XmlPortionDumper:public SwPortionHandler
         @param rText
                 text which is painted on-screen
       */
-    virtual void Text( sal_Int32 nLength,
+    virtual void Text( TextFrameIndex nLength,
                        sal_uInt16 nType,
                        sal_Int32 nHeight,
                        sal_Int32 nWidth) override
@@ -146,7 +146,7 @@ class XmlPortionDumper:public SwPortionHandler
         @param nHeight
                 font size of the painted text
       */
-    virtual void Special( sal_Int32 nLength,
+    virtual void Special( TextFrameIndex nLength,
                           const OUString & rText,
                           sal_uInt16 nType,
                           sal_Int32 nHeight,
@@ -191,7 +191,7 @@ class XmlPortionDumper:public SwPortionHandler
       * @param nLength
       *         number of 'model string' characters to be skipped
       */
-    virtual void Skip( sal_Int32 nLength ) override
+    virtual void Skip( TextFrameIndex nLength ) override
     {
         xmlTextWriterStartElement( writer, BAD_CAST( "Skip" ) );
         xmlTextWriterWriteFormatAttribute( writer,
@@ -328,6 +328,26 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
             xmlTextWriterEndElement(writer);
         }
 
+        if (IsTextFrame())
+        {
+            const SwTextFrame *pTextFrame = static_cast<const SwTextFrame *>(this);
+            sw::MergedPara const*const pMerged(pTextFrame->GetMergedPara());
+            if (pMerged)
+            {
+                xmlTextWriterStartElement( writer, BAD_CAST( "merged" ) );
+                xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "paraPropsNodeIndex" ), "%" SAL_PRIuUINTPTR, pMerged->pParaPropsNode->GetIndex() );
+                for (auto const& e : pMerged->extents)
+                {
+                    xmlTextWriterStartElement( writer, BAD_CAST( "extent" ) );
+                    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), "%" SAL_PRIuUINTPTR, e.pNode->GetIndex() );
+                    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "start" ), "%" SAL_PRIdINT32, e.nStart );
+                    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "end" ), "%" SAL_PRIdINT32, e.nEnd );
+                    xmlTextWriterEndElement( writer );
+                }
+                xmlTextWriterEndElement( writer );
+            }
+        }
+
         xmlTextWriterStartElement( writer, BAD_CAST( "infos" ) );
         dumpInfosAsXml( writer );
         xmlTextWriterEndElement( writer );
@@ -426,7 +446,7 @@ void SwFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
     if ( IsTextFrame(  ) )
     {
         const SwTextFrame *pTextFrame = static_cast<const SwTextFrame *>(this);
-        const SwTextNode *pTextNode = pTextFrame->GetTextNode();
+        const SwTextNode *pTextNode = pTextFrame->GetTextNodeFirst();
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), TMP_FORMAT, pTextNode->GetIndex() );
     }
     if (IsHeaderFrame() || IsFooterFrame())

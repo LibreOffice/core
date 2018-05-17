@@ -394,8 +394,10 @@ void SwCursorShell::GotoTOXMarkBase()
                 {
                     SwCallLink aLk( *this ); // watch Cursor-Moves
                     SwCursorSaveState aSaveState( *m_pCurrentCursor );
-                    m_pCurrentCursor->GetPoint()->nNode = *pCNd;
-                    m_pCurrentCursor->GetPoint()->nContent.Assign( pCNd, 0 );
+                    assert(pCFrame->IsTextFrame());
+                    *m_pCurrentCursor->GetPoint() =
+                        static_cast<SwTextFrame const*>(pCFrame)
+                            ->MapViewToModelPos(TextFrameIndex(0));
                     bRet = !m_pCurrentCursor->IsInProtectTable() &&
                             !m_pCurrentCursor->IsSelOvr();
                     if( bRet )
@@ -1518,11 +1520,17 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
                         if( pFieldRect && nullptr != ( pFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt ) ) )
                         {
+                            // not sure if this should be limited to one
+                            // paragraph, or mark the entire redline; let's
+                            // leave it limited to one for now...
+                            sal_Int32 nStart;
+                            sal_Int32 nEnd;
+                            pRedl->CalcStartEnd(pTextNd->GetIndex(), nStart, nEnd);
                             //get bounding box of range
                             SwRect aStart;
-                            pFrame->GetCharRect(aStart, *pRedl->Start(), &aTmpState);
+                            pFrame->GetCharRect(aStart, SwPosition(*pTextNd, nStart), &aTmpState);
                             SwRect aEnd;
-                            pFrame->GetCharRect(aEnd, *pRedl->End(), &aTmpState);
+                            pFrame->GetCharRect(aEnd, SwPosition(*pTextNd, nEnd), &aTmpState);
                             if (aStart.Top() != aEnd.Top() || aStart.Bottom() != aEnd.Bottom())
                             {
                                 aStart.Left(pFrame->getFrameArea().Left());
@@ -1782,7 +1790,7 @@ bool SwContentAtPos::IsInRTLText()const
     }
     if(pNd)
     {
-        SwIterator<SwTextFrame,SwTextNode> aIter(*pNd);
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pNd);
         SwTextFrame* pTmpFrame = aIter.First();
         while( pTmpFrame )
         {

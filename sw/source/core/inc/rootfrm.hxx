@@ -110,6 +110,7 @@ class SwRootFrame: public SwLayoutFrame
     bool    mbCallbackActionEnabled:1; // No Action in Notification desired
                                       // @see dcontact.cxx, ::Changed()
     bool    mbLayoutFreezed;
+    bool    mbHideRedlines;
 
     /**
      * For BrowseMode
@@ -401,6 +402,9 @@ public:
     void FreezeLayout( bool freeze ) { mbLayoutFreezed = freeze; }
 
     void RemovePage( SwPageFrame **pDel, SwRemoveResult eResult );
+
+    bool IsHideRedlines() const { return mbHideRedlines; }
+    void SetHideRedlines(bool);
 };
 
 inline long SwRootFrame::GetBrowseWidth() const

@@ -187,7 +187,9 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                 {
                     if( pTmp->IsTextFrame() )
                     {
-                        sal_uLong nNdIdx = static_cast<SwTextFrame*>(pTmp)->GetNode()->GetIndex();
+                        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(pTmp));
+                        assert(!pFrame->GetMergedPara());
+                        sal_uLong nNdIdx = pFrame->GetTextNodeFirst()->GetIndex();
                         if( nNdIdx > nStartOfContent )
                         {
                             /*  Open Paragraph Record */
@@ -343,7 +345,10 @@ bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
             {
                 if( pTmp->IsTextFrame() )
                 {
-                    sal_uLong nNdIdx = static_cast<const SwTextFrame*>(pTmp)->GetNode()->GetIndex();
+
+                    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(pTmp));
+                    assert(!pFrame->GetMergedPara());
+                    sal_uLong nNdIdx = pFrame->GetTextNodeFirst()->GetIndex();
                     if( nNdIdx > nStartOfContent )
                     {
                         bool bFollow = static_cast<const SwTextFrame*>(pTmp)->IsFollow();
@@ -625,9 +630,8 @@ sal_uLong SwLayHelper::CalcPageCount()
 bool SwLayHelper::CheckInsertPage()
 {
     bool bEnd = nullptr == mrpPage->GetNext();
-    const SwAttrSet* pAttr = mrpFrame->GetAttrSet();
-    const SvxFormatBreakItem& rBrk = pAttr->GetBreak();
-    const SwFormatPageDesc& rDesc = pAttr->GetPageDesc();
+    const SvxFormatBreakItem& rBrk = mrpFrame->GetBreakItem();
+    const SwFormatPageDesc& rDesc = mrpFrame->GetPageDescItem();
     // #118195# Do not evaluate page description if frame
     // is a follow frame!
     const SwPageDesc* pDesc = mrpFrame->IsFlowFrame() &&

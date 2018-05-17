@@ -34,6 +34,7 @@
 #include <rowfrm.hxx>
 #include <cellfrm.hxx>
 #include <txtfrm.hxx>
+#include <notxtfrm.hxx>
 #include <viewopt.hxx>
 #include <DocumentSettingManager.hxx>
 #include <viscrs.hxx>
@@ -228,7 +229,15 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
             {
                 // Set point to pCnt, delete mark
                 // this may happen, if pCnt is hidden
-                aTextPos = SwPosition( *pCnt->GetNode(), SwIndex( const_cast<SwTextNode*>(static_cast<const SwTextNode*>(pCnt->GetNode())), 0 ) );
+                if (pCnt->IsTextFrame())
+                {
+                    aTextPos = static_cast<SwTextFrame const*>(pCnt)->MapViewToModelPos(TextFrameIndex(0));
+                }
+                else
+                {
+                    assert(pCnt->IsNoTextFrame());
+                    aTextPos = SwPosition( *static_cast<SwNoTextFrame const*>(pCnt)->GetNode() );
+                }
                 bTextRet = true;
             }
         }
@@ -606,7 +615,7 @@ bool SwFlyFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
 }
 
 /** Layout dependent cursor travelling */
-bool SwContentFrame::LeftMargin(SwPaM *pPam) const
+bool SwNoTextFrame::LeftMargin(SwPaM *pPam) const
 {
     if( &pPam->GetNode() != GetNode() )
         return false;
@@ -615,7 +624,7 @@ bool SwContentFrame::LeftMargin(SwPaM *pPam) const
     return true;
 }
 
-bool SwContentFrame::RightMargin(SwPaM *pPam, bool) const
+bool SwNoTextFrame::RightMargin(SwPaM *pPam, bool) const
 {
     if( &pPam->GetNode() != GetNode() )
         return false;
@@ -683,7 +692,7 @@ static const SwContentFrame * lcl_MissProtectedFrames( const SwContentFrame *pCn
 static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
                     GetNxtPrvCnt fnNxtPrv, bool bInReadOnly )
 {
-    OSL_ENSURE( &pPam->GetNode() == pStart->GetNode(),
+    OSL_ENSURE( FrameContainsNode(*pStart, pPam->GetNode().GetIndex()),
             "lcl_UpDown doesn't work for others." );
 
     const SwContentFrame *pCnt = nullptr;
@@ -930,9 +939,23 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
     } while ( !bEnd ||
               (pCnt && pCnt->IsTextFrame() && static_cast<const SwTextFrame*>(pCnt)->IsHiddenNow()));
 
-    if( pCnt )
+    if (pCnt == nullptr)
+    {
+        return false;
+    }
+    if (pCnt->IsTextFrame())
+    {
+        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(pCnt));
+        *pPam->GetPoint() = pFrame->MapViewToModelPos(TextFrameIndex(
+                fnNxtPrv == lcl_GetPrvCnt
+                    ? pFrame->GetText().getLength()
+                    : 0));
+        return true;
+    }
+    else
     {   // set the Point on the Content-Node
-        SwContentNode *pCNd = const_cast<SwContentNode*>(pCnt->GetNode());
+        assert(pCnt->IsNoTextFrame());
+        SwContentNode *const pCNd = const_cast<SwContentNode*>(static_cast<SwNoTextFrame const*>(pCnt)->GetNode());
         pPam->GetPoint()->nNode = *pCNd;
         if ( fnNxtPrv == lcl_GetPrvCnt )
             pCNd->MakeEndIndex( &pPam->GetPoint()->nContent );
@@ -1013,10 +1036,9 @@ sal_uInt16 SwRootFrame::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
             pContent = pContent->GetNextContentFrame();
     if ( pContent )
     {
-        SwContentNode* pCNd = const_cast<SwContentNode*>(pContent->GetNode());
-        pToSet->GetPoint()->nNode = *pCNd;
-        pCNd->MakeStartIndex( &pToSet->GetPoint()->nContent );
-        pToSet->GetPoint()->nContent = static_cast<const SwTextFrame*>(pContent)->GetOfst();
+        assert(pContent->IsTextFrame());
+        SwTextFrame const*const pFrame(static_cast<const SwTextFrame*>(pContent));
+        *pToSet->GetPoint() = pFrame->MapViewToModelPos(pFrame->GetOfst());
 
         SwShellCursor* pSCursor = dynamic_cast<SwShellCursor*>(pToSet);
         if( pSCursor )
@@ -1110,15 +1132,14 @@ bool GetFrameInPage( const SwContentFrame *pCnt, SwWhichPage fnWhichPage,
             }
         }
 
-        SwContentNode *pCNd = const_cast<SwContentNode*>(pCnt->GetNode());
-        pPam->GetPoint()->nNode = *pCNd;
-        sal_Int32 nIdx;
-        if( fnPosPage == GetFirstSub )
-            nIdx = static_cast<const SwTextFrame*>(pCnt)->GetOfst();
-        else
-            nIdx = pCnt->GetFollow() ?
-                    static_cast<const SwTextFrame*>(pCnt)->GetFollow()->GetOfst()-1 : pCNd->Len();
-        pPam->GetPoint()->nContent.Assign( pCNd, nIdx );
+        assert(pCnt->IsTextFrame());
+        SwTextFrame const*const pFrame(static_cast<const SwTextFrame*>(pCnt));
+        TextFrameIndex const nIdx((fnPosPage == GetFirstSub)
+            ? pFrame->GetOfst()
+            : (pFrame->GetFollow())
+                ? pFrame->GetFollow()->GetOfst() - TextFrameIndex(1)
+                : TextFrameIndex(pFrame->GetText().getLength()));
+        *pPam->GetPoint() = pFrame->MapViewToModelPos(nIdx);
         return true;
     }
 }
@@ -1439,10 +1460,7 @@ void SwPageFrame::GetContentPosition( const Point &rPt, SwPosition &rPos ) const
         // ContentFrame not formatted -> always on node-beginning
         // tdf#100635 also if the SwTextFrame would require reformatting,
         // which is unwanted in case this is called from text formatting code
-        SwContentNode* pCNd = const_cast<SwContentNode*>(pAct->GetNode());
-        OSL_ENSURE( pCNd, "Where is my ContentNode?" );
-        rPos.nNode = *pCNd;
-        rPos.nContent.Assign( pCNd, 0 );
+        rPos = static_cast<SwTextFrame const*>(pAct)->MapViewToModelPos(TextFrameIndex(0));
     }
     else
     {
@@ -1612,9 +1630,9 @@ bool SwRootFrame::IsDummyPage( sal_uInt16 nPageNum ) const
  */
 bool SwFrame::IsProtected() const
 {
-    if (IsContentFrame() && static_cast<const SwContentFrame*>(this)->GetNode())
+    if (IsTextFrame())
     {
-        const SwDoc *pDoc=static_cast<const SwContentFrame*>(this)->GetNode()->GetDoc();
+        const SwDoc *pDoc = &static_cast<const SwTextFrame*>(this)->GetDoc();
         bool isFormProtected=pDoc->GetDocumentSettingManager().get(DocumentSettingId::PROTECT_FORM );
         if (isFormProtected)
         {
@@ -1626,11 +1644,21 @@ bool SwFrame::IsProtected() const
     const SwFrame *pFrame = this;
     do
     {
-        if ( pFrame->IsContentFrame() )
-        {
-            if ( static_cast<const SwContentFrame*>(pFrame)->GetNode() &&
-                 static_cast<const SwContentFrame*>(pFrame)->GetNode()->IsInProtectSect() )
+        if (pFrame->IsTextFrame())
+        {   // sw_redlinehide: redlines can't overlap section nodes, so any node will do
+            if (static_cast<SwTextFrame const*>(pFrame)->GetTextNodeFirst()->IsInProtectSect())
+            {
                 return true;
+            }
+        }
+        else if ( pFrame->IsContentFrame() )
+        {
+            assert(pFrame->IsNoTextFrame());
+            if (static_cast<const SwNoTextFrame*>(pFrame)->GetNode() &&
+                static_cast<const SwNoTextFrame*>(pFrame)->GetNode()->IsInProtectSect())
+            {
+                return true;
+            }
         }
         else
         {
@@ -1700,7 +1728,7 @@ bool SwFrame::WannaRightPage() const
         const SwFlowFrame *pTmp = SwFlowFrame::CastFlowFrame( pFlow );
         if ( !pTmp->IsFollow() )
         {
-            const SwFormatPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
+            const SwFormatPageDesc& rPgDesc = pFlow->GetPageDescItem();
             pDesc = rPgDesc.GetPageDesc();
             oPgNum = rPgDesc.GetNumOffset();
         }
@@ -1826,7 +1854,7 @@ sal_uInt16 SwFrame::GetVirtPageNum() const
     }
     if ( pFrame )
     {
-        ::boost::optional<sal_uInt16> oNumOffset = pFrame->GetAttrSet()->GetPageDesc().GetNumOffset();
+        ::boost::optional<sal_uInt16> oNumOffset = pFrame->GetPageDescItem().GetNumOffset();
         if (oNumOffset)
         {
             return nPhyPage - pFrame->GetPhyPageNum() + oNumOffset.get();
