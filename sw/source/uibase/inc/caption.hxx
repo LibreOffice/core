@@ -27,62 +27,62 @@
 class SW_DLLPUBLIC InsCaptionOpt
 {
 private:
-    bool            bUseCaption;
-    SwCapObjType    eObjType;
-    SvGlobalName    aOleId;
-    OUString        sCategory;
-    sal_uInt16      nNumType;
-    OUString        sNumberSeparator;
-    OUString        sCaption;
-    sal_uInt16      nPos;
-    sal_uInt16      nLevel;
-    OUString        sSeparator;
-    OUString        sCharacterStyle;
+    bool            m_bUseCaption;
+    SwCapObjType    m_eObjType;
+    SvGlobalName    m_aOleId;
+    OUString        m_sCategory;
+    sal_uInt16      m_nNumType;
+    OUString        m_sNumberSeparator;
+    OUString        m_sCaption;
+    sal_uInt16      m_nPos;
+    sal_uInt16      m_nLevel;
+    OUString        m_sSeparator;
+    OUString        m_sCharacterStyle;
 
-    bool         bIgnoreSeqOpts;    // is not being saved
-    bool         bCopyAttributes;   //          -""-
+    bool         m_bIgnoreSeqOpts;    // is not being saved
+    bool         m_bCopyAttributes;   //          -""-
 
 public:
     InsCaptionOpt(const SwCapObjType eType = FRAME_CAP, const SvGlobalName* pOleId = nullptr);
     ~InsCaptionOpt();
 
-    bool&            UseCaption()                    { return bUseCaption; }
-    bool             UseCaption() const              { return bUseCaption; }
+    bool&            UseCaption()                    { return m_bUseCaption; }
+    bool             UseCaption() const              { return m_bUseCaption; }
 
-    SwCapObjType     GetObjType() const              { return eObjType; }
+    SwCapObjType     GetObjType() const              { return m_eObjType; }
 
-    const SvGlobalName&  GetOleId() const                { return aOleId; }
+    const SvGlobalName&  GetOleId() const                { return m_aOleId; }
 
-    const OUString&  GetCategory() const             { return sCategory; }
-    void             SetCategory(const OUString& rCat) { sCategory = rCat; }
+    const OUString&  GetCategory() const             { return m_sCategory; }
+    void             SetCategory(const OUString& rCat) { m_sCategory = rCat; }
 
-    sal_uInt16           GetNumType() const              { return nNumType; }
-    void             SetNumType(const sal_uInt16 nNT)    { nNumType = nNT; }
+    sal_uInt16           GetNumType() const              { return m_nNumType; }
+    void             SetNumType(const sal_uInt16 nNT)    { m_nNumType = nNT; }
 
-    const OUString&  GetNumSeparator() const { return sNumberSeparator; }
-    void                    SetNumSeparator(const OUString& rSet) {sNumberSeparator = rSet;}
+    const OUString&  GetNumSeparator() const { return m_sNumberSeparator; }
+    void                    SetNumSeparator(const OUString& rSet) {m_sNumberSeparator = rSet;}
 
-    const OUString&  GetCaption() const              { return sCaption; }
-    void             SetCaption(const OUString& rCap)  { sCaption = rCap; }
+    const OUString&  GetCaption() const              { return m_sCaption; }
+    void             SetCaption(const OUString& rCap)  { m_sCaption = rCap; }
 
-    sal_uInt16           GetPos() const                  { return nPos; }
-    void             SetPos(const sal_uInt16 nP)         { nPos = nP; }
+    sal_uInt16           GetPos() const                  { return m_nPos; }
+    void             SetPos(const sal_uInt16 nP)         { m_nPos = nP; }
 
-    sal_uInt16           GetLevel() const                { return nLevel; }
-    void             SetLevel(const sal_uInt16 nLvl)     { nLevel = nLvl; }
+    sal_uInt16           GetLevel() const                { return m_nLevel; }
+    void             SetLevel(const sal_uInt16 nLvl)     { m_nLevel = nLvl; }
 
-    const OUString&  GetSeparator() const                { return sSeparator; }
-    void             SetSeparator(const OUString& rSep)    { sSeparator = rSep; }
+    const OUString&  GetSeparator() const                { return m_sSeparator; }
+    void             SetSeparator(const OUString& rSep)    { m_sSeparator = rSep; }
 
-    const OUString&         GetCharacterStyle() const { return sCharacterStyle; }
+    const OUString&         GetCharacterStyle() const { return m_sCharacterStyle; }
     void                    SetCharacterStyle(const OUString& rStyle)
-                                    { sCharacterStyle = rStyle; }
+                                    { m_sCharacterStyle = rStyle; }
 
-    bool&            IgnoreSeqOpts()                 { return bIgnoreSeqOpts; }
-    bool             IgnoreSeqOpts() const           { return bIgnoreSeqOpts; }
+    bool&            IgnoreSeqOpts()                 { return m_bIgnoreSeqOpts; }
+    bool             IgnoreSeqOpts() const           { return m_bIgnoreSeqOpts; }
 
-    bool&            CopyAttributes()                { return bCopyAttributes; }
-    bool             CopyAttributes() const          { return bCopyAttributes; }
+    bool&            CopyAttributes()                { return m_bCopyAttributes; }
+    bool             CopyAttributes() const          { return m_bCopyAttributes; }
 };
 
 #endif
