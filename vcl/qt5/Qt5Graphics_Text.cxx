@@ -179,7 +179,7 @@ void Qt5Graphics::DrawTextLayout(const GenericSalLayout &rLayout )
     aGlyphRun.setRawFont( aRawFont );
 
     Qt5Painter aPainter(*this);
-    QColor aColor = QColor::fromRgb(QRgb(m_aTextColor));
+    QColor aColor = toQColor(m_aTextColor);
     aPainter.setPen(aColor);
     aPainter.drawGlyphRun( QPointF(), aGlyphRun );
 }
