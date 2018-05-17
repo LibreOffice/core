@@ -162,7 +162,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     SwTwips nMaxRight = std::min( rPaint.Right(), Right() );
     const SwTwips nTmpLeft = GetInfo().X();
     //compatibility setting: allow tabstop text to exceed right margin
-    if( GetInfo().GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_OVER_MARGIN) )
+    if (GetInfo().GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_OVER_MARGIN))
     {
         SwLinePortion* pPorIter = pPor;
         while( pPorIter )
@@ -317,10 +317,17 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             SeekAndChgBefore( GetInfo() );
         else if ( pPor->IsQuoVadisPortion() )
         {
-            sal_Int32 nOffset = GetInfo().GetIdx();
+            // A remark on QuoVadis/ErgoSum:
+            // We use the Font set for the Paragraph for these portions.
+            // Thus, we initialize:
+            TextFrameIndex nOffset = GetInfo().GetIdx();
             SeekStartAndChg( GetInfo(), true );
             if( GetRedln() && m_pCurr->HasRedline() )
-                GetRedln()->Seek( *m_pFont, nOffset, 0 );
+            {
+                std::pair<SwTextNode const*, sal_Int32> const pos(
+                        GetTextFrame()->MapViewToModel(nOffset));
+                GetRedln()->Seek(*m_pFont, pos.first->GetIndex(), pos.second, 0);
+            }
         }
         else if( pPor->InTextGrp() || pPor->InFieldGrp() || pPor->InTabGrp() )
             SeekAndChg( GetInfo() );
@@ -428,7 +435,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         if( !GetNextLine() &&
             GetInfo().GetVsh() && !GetInfo().GetVsh()->IsPreview() &&
             GetInfo().GetOpt().IsParagraph() && !GetTextFrame()->GetFollow() &&
-            GetInfo().GetIdx() >= GetInfo().GetText().getLength() )
+            GetInfo().GetIdx() >= TextFrameIndex(GetInfo().GetText().getLength()))
         {
             const SwTmpEndPortion aEnd( *pEndTempl );
             GetFnt()->ChgPhysFnt( GetInfo().GetVsh(), *pOut );
@@ -460,7 +467,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                 // GetInfo().Y() must be current baseline
                 SwTwips nDiff = GetInfo().Y() + nTmpHeight - nTmpAscent - GetTextFrame()->getFrameArea().Bottom();
                 if( ( nDiff > 0 &&
-                      ( GetEnd() < GetInfo().GetText().getLength() ||
+                      (GetEnd() < TextFrameIndex(GetInfo().GetText().getLength()) ||
                         ( nDiff > nTmpHeight/2 && GetPrevLine() ) ) ) ||
                     (nDiff >= 0 && bNextUndersized) )
 
@@ -490,7 +497,8 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         return;
     }
     // Reuse calculated underline font as much as possible.
-    if ( GetInfo().GetUnderFnt() && GetInfo().GetIdx() + pPor->GetLen() <= GetInfo().GetUnderFnt()->GetEnd() + 1 )
+    if (GetInfo().GetUnderFnt() &&
+        GetInfo().GetIdx() + pPor->GetLen() <= GetInfo().GetUnderFnt()->GetEnd() + TextFrameIndex(1))
     {
         SwFont &rFont = GetInfo().GetUnderFnt()->GetFont();
         const Color aColor = GetUnderColor( GetInfo().GetFont() );
@@ -515,68 +523,90 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     if( pParaFnt && pParaFnt->GetUnderline() == GetFnt()->GetUnderline() )
         aUnderMulti.SelectAll();
 
-    if( HasHints() )
+    if (sw::MergedPara const*const pMerged = GetTextFrame()->GetMergedPara())
     {
-        for ( size_t nTmp = 0; nTmp < m_pHints->Count(); ++nTmp )
+        // first, add the paragraph properties to MultiSelection - if there are
+        // Hints too, they will override the positions if they're added later
+        sal_Int32 nTmp(0);
+        for (auto const& e : pMerged->extents)
         {
-            SwTextAttr* const pTextAttr = m_pHints->Get( nTmp );
-
-            const SvxUnderlineItem* pItem = CharFormat::GetItem( *pTextAttr, RES_CHRATR_UNDERLINE );
-
-            if ( pItem )
+            const SfxPoolItem* pItem;
+            if (SfxItemState::SET == e.pNode->GetSwAttrSet().GetItemState(
+                        RES_CHRATR_UNDERLINE, true, &pItem))
             {
-                const sal_Int32 nSt = pTextAttr->GetStart();
-                const sal_Int32 nEnd = *pTextAttr->GetEnd();
-                if( nEnd > nSt )
-                {
-                    const bool bUnderSelect = m_pFont->GetUnderline() == pItem->GetLineStyle();
-                    aUnderMulti.Select( Range( nSt, nEnd - 1 ), bUnderSelect );
-                }
+                const bool bUnderSelect(m_pFont->GetUnderline() ==
+                    static_cast<SvxUnderlineItem const*>(pItem)->GetLineStyle());
+                aUnderMulti.Select(Range(nTmp, nTmp + e.nEnd - e.nStart - 1),
+                        bUnderSelect);
+            }
+            nTmp += e.nEnd - e.nStart;
+        }
+    }
+
+    SwTextNode const* pNode(nullptr);
+    sw::MergedAttrIter iter(*GetTextFrame());
+    for (SwTextAttr const* pTextAttr = iter.NextAttr(&pNode); pTextAttr;
+         pTextAttr = iter.NextAttr(&pNode))
+    {
+        SvxUnderlineItem const*const pItem =
+            CharFormat::GetItem(*pTextAttr, RES_CHRATR_UNDERLINE);
+
+        if (pItem)
+        {
+            TextFrameIndex const nStart(
+                GetTextFrame()->MapModelToView(pNode, pTextAttr->GetStart()));
+            TextFrameIndex const nEnd(
+                GetTextFrame()->MapModelToView(pNode, *pTextAttr->End()));
+            if (nEnd > nStart)
+            {
+                const bool bUnderSelect = m_pFont->GetUnderline() == pItem->GetLineStyle();
+                aUnderMulti.Select(Range(sal_Int32(nStart), sal_Int32(nEnd) - 1),
+                        bUnderSelect);
             }
         }
     }
 
-    const sal_Int32 nIndx = GetInfo().GetIdx();
-    long nUnderEnd = 0;
+    const TextFrameIndex nIndx = GetInfo().GetIdx();
+    TextFrameIndex nUnderEnd(0);
     const size_t nCnt = aUnderMulti.GetRangeCount();
 
     // find the underline range the current portion is contained in
     for( size_t i = 0; i < nCnt; ++i )
     {
         const Range& rRange = aUnderMulti.GetRange( i );
-        if( nUnderEnd == rRange.Min() )
-            nUnderEnd = rRange.Max();
-        else if( nIndx >= rRange.Min() )
+        if (nUnderEnd == TextFrameIndex(rRange.Min()))
+            nUnderEnd = TextFrameIndex(rRange.Max());
+        else if (nIndx >= TextFrameIndex(rRange.Min()))
         {
-            nUnderEnd = rRange.Max();
+            nUnderEnd = TextFrameIndex(rRange.Max());
         }
         else
             break;
     }
 
     if ( GetEnd() && GetEnd() <= nUnderEnd )
-        nUnderEnd = GetEnd() - 1;
+        nUnderEnd = GetEnd() - TextFrameIndex(1);
 
     // calculate the new common underline font
     SwFont* pUnderlineFnt = nullptr;
     Point aCommonBaseLine;
 
     // check, if underlining is not isolated
-    if ( nIndx + GetInfo().GetLen() < nUnderEnd + 1 )
+    if (nIndx + GetInfo().GetLen() < nUnderEnd + TextFrameIndex(1))
     {
         // here starts the algorithm for calculating the underline font
         SwScriptInfo& rScriptInfo = GetInfo().GetParaPortion()->GetScriptInfo();
-        SwAttrIter aIter( *GetInfo().GetTextFrame()->GetTextNode(),
-                          rScriptInfo );
+        SwAttrIter aIter(*GetInfo().GetTextFrame()->GetTextNodeFirst(),
+                         rScriptInfo, GetTextFrame());
 
-        sal_Int32 nTmpIdx = nIndx;
+        TextFrameIndex nTmpIdx = nIndx;
         sal_uLong nSumWidth = 0;
         sal_uLong nSumHeight = 0;
         sal_uLong nBold = 0;
         sal_uInt16 nMaxBaseLineOfst = 0;
         int nNumberOfPortions = 0;
 
-        while( sal::static_int_cast<long>(nTmpIdx) <= nUnderEnd && pPor )
+        while (nTmpIdx <= nUnderEnd && pPor)
         {
             if ( pPor->IsFlyPortion() || pPor->IsFlyCntPortion() ||
                 pPor->IsBreakPortion() || pPor->IsMarginPortion() ||

@@ -23,14 +23,16 @@
 #include <i18nlangtag/lang.h>
 #include "modeltoviewhelper.hxx"
 
+#include <functional>
+
 class SwTextNode;
 
 // Helper class that provides consecutively the words of a selected area
 // during spell check
 class SwScanner
 {
+    std::function<LanguageType (sal_Int32, sal_Int32, bool)> m_pGetLangOfChar;
     OUString m_aWord;
-    const SwTextNode& m_rNode;
     const OUString m_aPreDashReplacementText;
     OUString m_aText;
     const LanguageType* m_pLanguage;
@@ -45,6 +47,12 @@ class SwScanner
     bool m_bClip;
 
 public:
+    SwScanner( std::function<LanguageType (sal_Int32, sal_Int32, bool)> pGetLangOfChar,
+               const OUString& rText,
+               const LanguageType* pLang,
+               const ModelToViewHelper& rConvMap,
+               sal_uInt16 nWordType,
+               sal_Int32 nStart, sal_Int32 nEnde, bool bClip = false );
     SwScanner( const SwTextNode& rNd, const OUString& rText,
                const LanguageType* pLang,
                const ModelToViewHelper& rConvMap,

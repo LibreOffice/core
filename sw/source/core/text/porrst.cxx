@@ -77,12 +77,14 @@ void SwTmpEndPortion::Paint( const SwTextPaintInfo &rInf ) const
 SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
     : SwLinePortion( rPortion )
 {
-    nLineLength = 1;
+    nLineLength = TextFrameIndex(1);
     SetWhichPor( POR_BRK );
 }
 
-sal_Int32 SwBreakPortion::GetCursorOfst( const sal_uInt16 ) const
-{ return 0; }
+TextFrameIndex SwBreakPortion::GetCursorOfst(const sal_uInt16) const
+{
+    return TextFrameIndex(0);
+}
 
 sal_uInt16 SwBreakPortion::GetViewWidth( const SwTextSizeInfo & ) const
 { return 0; }
@@ -102,7 +104,7 @@ bool SwBreakPortion::Format( SwTextFormatInfo &rInf )
     Width( 0 );
     Height( pRoot->Height() );
     SetAscent( pRoot->GetAscent() );
-    if ( rInf.GetIdx()+1 == rInf.GetText().getLength() )
+    if (rInf.GetIdx() + TextFrameIndex(1) == TextFrameIndex(rInf.GetText().getLength()))
         rInf.SetNewLine( true );
     return true;
 }
@@ -118,7 +120,7 @@ SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn,
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
-    nLineLength = 0;
+    nLineLength = TextFrameIndex(0);
     SetWhichPor( POR_KERN );
     if( nKern > 0 )
         Width( nKern );
@@ -131,7 +133,7 @@ SwKernPortion::SwKernPortion( const SwLinePortion& rPortion ) :
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
 
-    nLineLength = 0;
+    nLineLength = TextFrameIndex(0);
     SetWhichPor( POR_KERN );
 }
 
@@ -157,7 +159,7 @@ void SwKernPortion::Paint( const SwTextPaintInfo &rInf ) const
             rInf.CalcRect( *this, &aClipRect );
             SwSaveClip aClip( const_cast<OutputDevice*>(rInf.GetOut()) );
             aClip.ChgClip( aClipRect );
-            rInf.DrawText( "  ", *this, 0, 2, true );
+            rInf.DrawText("  ", *this, TextFrameIndex(0), TextFrameIndex(2), true );
         }
     }
 }
@@ -181,7 +183,7 @@ SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
-    nLineLength = 0;
+    nLineLength = TextFrameIndex(0);
     SetWhichPor( POR_ARROW );
 }
 
@@ -222,7 +224,7 @@ SwTwips SwTextFrame::EmptyHeight() const
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTextFrame::EmptyHeight with swapped frame" );
 
     SwFont *pFnt;
-    const SwTextNode& rTextNode = *GetTextNode();
+    const SwTextNode& rTextNode = *GetTextNodeForParaProps();
     const IDocumentSettingAccess* pIDSA = rTextNode.getIDocumentSettingAccess();
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
     if ( rTextNode.HasSwAttrSet() )
@@ -254,10 +256,10 @@ SwTwips SwTextFrame::EmptyHeight() const
         if( SwRedlineTable::npos != nRedlPos )
         {
             SwAttrHandler aAttrHandler;
-            aAttrHandler.Init(  GetTextNode()->GetSwAttrSet(),
-                               *GetTextNode()->getIDocumentSettingAccess() );
+            aAttrHandler.Init(rTextNode.GetSwAttrSet(),
+                              *rTextNode.getIDocumentSettingAccess());
             SwRedlineItr aRedln( rTextNode, *pFnt, aAttrHandler,
-                                 nRedlPos, true );
+                                 nRedlPos, SwRedlineItr::Mode::Show);
         }
     }
 
@@ -282,12 +284,13 @@ bool SwTextFrame::FormatEmpty()
 
     bool bCollapse = EmptyHeight( ) == 1 && IsCollapse( );
 
-    if ( HasFollow() || GetTextNode()->GetpSwpHints() ||
-        nullptr != GetTextNode()->GetNumRule() ||
-        GetTextNode()->HasHiddenCharAttribute( true ) ||
+    // sw_redlinehide: just disable FormatEmpty optimisation for now
+    if (HasFollow() || GetMergedPara() || GetTextNodeFirst()->GetpSwpHints() ||
+        nullptr != GetTextNodeForParaProps()->GetNumRule() ||
+        GetTextNodeFirst()->HasHiddenCharAttribute(true) ||
          IsInFootnote() || ( HasPara() && GetPara()->IsPrepMustFit() ) )
         return false;
-    const SwAttrSet& aSet = GetTextNode()->GetSwAttrSet();
+    const SwAttrSet& aSet = GetTextNodeForParaProps()->GetSwAttrSet();
     const SvxAdjust nAdjust = aSet.GetAdjust().GetAdjust();
     if( !bCollapse && ( ( ( ! IsRightToLeft() && ( SvxAdjust::Left != nAdjust ) ) ||
           (   IsRightToLeft() && ( SvxAdjust::Right != nAdjust ) ) ) ||
@@ -308,7 +311,7 @@ bool SwTextFrame::FormatEmpty()
 
     SwTwips nHeight = EmptyHeight();
 
-    if ( GetTextNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
+    if (aSet.GetParaGrid().GetValue() &&
             IsInDocBody() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(FindPageFrame()));
@@ -384,7 +387,7 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                             OutputDevice *pOut = nullptr;
                             if( !pSh || !pSh->GetViewOptions()->getBrowseMode() ||
                                 pSh->GetViewOptions()->IsPrtFormat() )
-                                pOut = GetTextNode()->getIDocumentDeviceAccess().getReferenceDevice( true );
+                                pOut = GetDoc().getIDocumentDeviceAccess().getReferenceDevice( true );
 
                             if( pSh && !pOut )
                                 pOut = pSh->GetWin();

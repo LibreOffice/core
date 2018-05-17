@@ -20,6 +20,9 @@
 #include <swtypes.hxx>
 
 #include <SwGrammarMarkUp.hxx>
+#include <ndtxt.hxx>
+#include <txtfrm.hxx>
+
 #include <osl/diagnose.h>
 
 SwWrongArea::SwWrongArea( const OUString& rType, WrongListType listType,
@@ -658,5 +661,197 @@ void SwWrongList::Insert( const OUString& rType,
 
     maList.insert(aIter, SwWrongArea( rType, meType, xPropertyBag, nNewPos, nNewLen) );
 }
+
+namespace sw {
+
+WrongListIterator::WrongListIterator(SwTextFrame const& rFrame,
+        SwWrongList const* (SwTextNode::*pGetWrongList)() const)
+    : m_pGetWrongList(pGetWrongList)
+    , m_pMergedPara(rFrame.GetMergedPara())
+    , m_CurrentExtent(0)
+    , m_CurrentIndex(0)
+    , m_CurrentNodeIndex(0)
+    , m_pWrongList(m_pMergedPara
+                    ? nullptr
+                    : (rFrame.GetTextNodeFirst()->*pGetWrongList)())
+{
+}
+
+WrongListIterator::WrongListIterator(SwWrongList const& rWrongList)
+    : m_pGetWrongList(nullptr)
+    , m_pMergedPara(nullptr)
+    , m_CurrentExtent(0)
+    , m_CurrentIndex(0)
+    , m_CurrentNodeIndex(0)
+    , m_pWrongList(&rWrongList)
+{
+}
+
+bool WrongListIterator::Check(TextFrameIndex & rStart, TextFrameIndex & rLen)
+{
+    if (m_pMergedPara)
+    {
+        if (rStart < m_CurrentIndex)
+        {   // rewind
+            m_CurrentExtent = 0;
+            m_CurrentIndex = TextFrameIndex(0);
+            m_CurrentNodeIndex = TextFrameIndex(0);
+        }
+        while (m_CurrentExtent < m_pMergedPara->extents.size())
+        {
+            sw::Extent const& rExtent(m_pMergedPara->extents[m_CurrentExtent]);
+            if (rStart + rLen <= m_CurrentIndex)
+            {
+                return false;
+            }
+            else if (rStart < m_CurrentIndex)
+            {
+                rLen -= (m_CurrentIndex - rStart);
+                assert(0 < sal_Int32(rLen));
+                rStart = m_CurrentIndex;
+            }
+            if (m_CurrentIndex <= rStart &&
+                rStart < m_CurrentIndex + TextFrameIndex(rExtent.nEnd - rExtent.nStart))
+            {
+                SwWrongList const*const pWrongList((rExtent.pNode->*m_pGetWrongList)());
+                // found the extent containing start - first, call Check
+                sal_Int32 nStart(rExtent.nStart + sal_Int32(rStart - m_CurrentIndex)); // (m_CurrentIndex - m_CurrentNodeIndex));
+                sal_Int32 nLen;
+                if (sal_Int32(rLen) < rExtent.nEnd - nStart)
+                {
+                    nLen = sal_Int32(rLen);
+                }
+                else
+                {
+                    sal_Int32 nInLen(rLen);
+                    nLen = rExtent.nEnd - nStart;
+                    nInLen -= nLen;
+                    for (size_t i = m_CurrentExtent + 1;
+                         i < m_pMergedPara->extents.size(); ++i)
+                    {
+                        sw::Extent const& rExtentEnd(m_pMergedPara->extents[i]);
+                        if (rExtentEnd.pNode != rExtent.pNode)
+                        {
+                            nInLen = 0;
+                            break;
+                        }
+                        // add gap too
+                        nLen += rExtentEnd.nStart - m_pMergedPara->extents[i-1].nEnd;
+                        if (nInLen <= rExtentEnd.nEnd - rExtentEnd.nStart)
+                        {
+                            nLen += nInLen;
+                            nInLen = 0;
+                            break;
+                        }
+                        nLen += rExtentEnd.nEnd - rExtentEnd.nStart;
+                        nInLen -= rExtentEnd.nEnd - rExtentEnd.nStart;
+                    }
+                }
+                if (pWrongList && pWrongList->Check(nStart, nLen))
+                {
+                    // check if there's overlap with this extent
+                    if (rExtent.nStart <= nStart && nStart < rExtent.nEnd)
+                    {
+                        // yes - now compute end position / length
+                        sal_Int32 const nEnd(nStart + nLen);
+                        rStart = m_CurrentIndex + TextFrameIndex(nStart - rExtent.nStart);
+                        TextFrameIndex const nOrigLen(rLen);
+                        if (nEnd <= rExtent.nEnd)
+                        {
+                            rLen = TextFrameIndex(nEnd - nStart);
+                        }
+                        else // have to search other extents for the end...
+                        {
+                            rLen = TextFrameIndex(rExtent.nEnd - nStart);
+                            for (size_t i = m_CurrentExtent + 1;
+                                 i < m_pMergedPara->extents.size(); ++i)
+                            {
+                                sw::Extent const& rExtentEnd(m_pMergedPara->extents[i]);
+                                if (rExtentEnd.pNode != rExtent.pNode
+                                    || nEnd <= rExtentEnd.nStart)
+                                {
+                                    break;
+                                }
+                                if (nEnd <= rExtentEnd.nEnd)
+                                {
+                                    rLen += TextFrameIndex(nEnd - rExtentEnd.nStart);
+                                    break;
+                                }
+                                rLen += TextFrameIndex(rExtentEnd.nEnd - rExtentEnd.nStart);
+                            }
+                        }
+                        assert(rLen <= nOrigLen); (void) nOrigLen;
+                        return true;
+                    }
+                }
+            }
+            m_CurrentIndex += TextFrameIndex(rExtent.nEnd - rExtent.nStart);
+            ++m_CurrentExtent;
+            if (m_CurrentExtent < m_pMergedPara->extents.size() &&
+                rExtent.pNode != m_pMergedPara->extents[m_CurrentExtent].pNode)
+            {
+                m_CurrentNodeIndex = m_CurrentIndex; // reset
+            }
+        }
+        return false;
+    }
+    else if (m_pWrongList)
+    {
+        sal_Int32 nStart(rStart);
+        sal_Int32 nLen(rLen);
+        bool const bRet(m_pWrongList->Check(nStart, nLen));
+        rStart = TextFrameIndex(nStart);
+        rLen = TextFrameIndex(nLen);
+        return bRet;
+    }
+    return false;
+}
+
+const SwWrongArea*
+WrongListIterator::GetWrongElement(TextFrameIndex const nStart)
+{
+    if (m_pMergedPara)
+    {
+        if (nStart < m_CurrentIndex)
+        {   // rewind
+            m_CurrentExtent = 0;
+            m_CurrentIndex = TextFrameIndex(0);
+            m_CurrentNodeIndex = TextFrameIndex(0);
+        }
+        while (m_CurrentExtent < m_pMergedPara->extents.size())
+        {
+            sw::Extent const& rExtent(m_pMergedPara->extents[m_CurrentExtent]);
+            if (m_CurrentIndex <= nStart &&
+                nStart <= m_CurrentIndex + TextFrameIndex(rExtent.nEnd - rExtent.nStart))
+            {
+                // note: the returned object isn't wrapped because fntcache.cxx
+                // does not look at its positions, only its formatting props
+                SwWrongList const*const pWrongList((rExtent.pNode->*m_pGetWrongList)());
+                if (pWrongList)
+                {
+                    sal_Int32 const nNStart(rExtent.nStart + sal_Int32(nStart - m_CurrentIndex)); // (m_CurrentIndex - m_CurrentNodeIndex));
+                    sal_Int16 const nPos(pWrongList->GetWrongPos(nNStart));
+                    return pWrongList->GetElement(nPos);
+                }
+            }
+            m_CurrentIndex += TextFrameIndex(rExtent.nEnd - rExtent.nStart);
+            ++m_CurrentExtent;
+            if (m_CurrentExtent < m_pMergedPara->extents.size() &&
+                rExtent.pNode != m_pMergedPara->extents[m_CurrentExtent].pNode)
+            {
+                m_CurrentNodeIndex = m_CurrentIndex; // reset
+            }
+        }
+        return nullptr;
+    }
+    else if (m_pWrongList)
+    {
+        sal_Int16 const nPos(m_pWrongList->GetWrongPos(sal_Int32(nStart)));
+        return m_pWrongList->GetElement(nPos);
+    }
+    return nullptr;
+}
+
+} // namespace sw
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

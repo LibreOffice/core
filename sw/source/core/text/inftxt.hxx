@@ -55,7 +55,7 @@ class SwViewShell;
 class SwAttrIter;
 struct SwMultiCreator;
 class SwMultiPortion;
-class SwWrongList;
+namespace sw { class WrongListIterator; }
 
 #define ARROW_WIDTH 200
 #define DIR_LEFT2RIGHT 0
@@ -120,7 +120,7 @@ class SwTextInfo
     // Implementation in txthyph.cxx
     friend void SetParaPortion( SwTextInfo *pInf, SwParaPortion *pRoot );
     SwParaPortion *m_pPara;
-    sal_Int32 m_nTextStart; // TextOfst for Follows
+    TextFrameIndex m_nTextStart; // TextOfst for Follows
 
 protected:
     SwTextInfo()
@@ -134,7 +134,7 @@ public:
     explicit SwTextInfo( SwTextFrame *pFrame ) { CtorInitTextInfo( pFrame ); }
     SwParaPortion *GetParaPortion() { return m_pPara; }
     const SwParaPortion *GetParaPortion() const { return m_pPara; }
-    sal_Int32 GetTextStart() const { return m_nTextStart; }
+    TextFrameIndex GetTextStart() const { return m_nTextStart; }
 };
 
 class SwTextSizeInfo : public SwTextInfo
@@ -166,7 +166,8 @@ protected:
     SwTextFrame *m_pFrame;
     const SwViewOption *m_pOpt;
     const OUString *m_pText;
-    sal_Int32 m_nIdx, m_nLen;
+    TextFrameIndex m_nIdx;
+    TextFrameIndex m_nLen;
     sal_uInt16 m_nKanaIdx;
     bool m_bOnWin     : 1;
     bool m_bNotEOL    : 1;
@@ -189,18 +190,18 @@ protected:
 
 protected:
     void CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame,
-                   const sal_Int32 nIdx );
+                   TextFrameIndex nIdx);
     SwTextSizeInfo();
 public:
     SwTextSizeInfo( const SwTextSizeInfo &rInf );
     SwTextSizeInfo( const SwTextSizeInfo &rInf, const OUString* pText,
-                   const sal_Int32 nIdx = 0 );
-    SwTextSizeInfo( SwTextFrame *pTextFrame, const sal_Int32 nIndex = 0 );
+                   TextFrameIndex nIdx = TextFrameIndex(0) );
+    SwTextSizeInfo(SwTextFrame *pTextFrame, TextFrameIndex nIndex = TextFrameIndex(0));
 
     // GetMultiAttr returns the text attribute of the multiportion,
     // if rPos is inside any multi-line part.
     // rPos will set to the end of the multi-line part.
-    SwMultiCreator* GetMultiCreator( sal_Int32 &rPos, SwMultiPortion const * pM ) const;
+    SwMultiCreator* GetMultiCreator(TextFrameIndex &rPos, SwMultiPortion const* pM) const;
 
     bool OnWin() const { return m_bOnWin; }
     void SetOnWin( const bool bNew ) { m_bOnWin = bNew; }
@@ -250,41 +251,41 @@ public:
 
     const  SwViewOption &GetOpt() const { return *m_pOpt; }
     const OUString &GetText() const { return *m_pText; }
-    sal_Unicode GetChar( const sal_Int32 nPos ) const {
-        if (m_pText && nPos < m_pText->getLength()) return (*m_pText)[ nPos ];
+    sal_Unicode GetChar(TextFrameIndex const nPos) const {
+        if (m_pText && nPos < TextFrameIndex(m_pText->getLength())) return (*m_pText)[sal_Int32(nPos)];
         return 0;
     }
 
     sal_uInt16      GetTextHeight() const;
 
     SwPosSize GetTextSize( OutputDevice* pOut, const SwScriptInfo* pSI,
-                          const OUString& rText, const sal_Int32 nIdx,
-                          const sal_Int32 nLen ) const;
+                          const OUString& rText, TextFrameIndex nIdx,
+                          TextFrameIndex nLen ) const;
     SwPosSize GetTextSize() const;
-    void GetTextSize( const SwScriptInfo* pSI, const sal_Int32 nIdx,
-                      const sal_Int32 nLen, const sal_uInt16 nComp,
+    void GetTextSize( const SwScriptInfo* pSI, TextFrameIndex nIdx,
+                      TextFrameIndex nLen, const sal_uInt16 nComp,
                       sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff,
                       vcl::TextLayoutCache const* = nullptr) const;
-    inline SwPosSize GetTextSize( const SwScriptInfo* pSI, const sal_Int32 nIdx,
-                                 const sal_Int32 nLen ) const;
+    inline SwPosSize GetTextSize(const SwScriptInfo* pSI, TextFrameIndex nIdx,
+                                 TextFrameIndex nLen) const;
     inline SwPosSize GetTextSize( const OUString &rText ) const;
 
-    sal_Int32 GetTextBreak( const long nLineWidth,
-                            const sal_Int32 nMaxLen,
+    TextFrameIndex GetTextBreak( const long nLineWidth,
+                            const TextFrameIndex nMaxLen,
                             const sal_uInt16 nComp,
                             vcl::TextLayoutCache const*) const;
-    sal_Int32 GetTextBreak( const long nLineWidth,
-                            const sal_Int32 nMaxLen,
+    TextFrameIndex GetTextBreak( const long nLineWidth,
+                            const TextFrameIndex nMaxLen,
                             const sal_uInt16 nComp,
-                            sal_Int32& rExtraCharPos,
+                            TextFrameIndex& rExtraCharPos,
                             vcl::TextLayoutCache const*) const;
 
     sal_uInt16 GetAscent() const;
 
-    sal_Int32 GetIdx() const { return m_nIdx; }
-    void SetIdx( const sal_Int32 nNew ) { m_nIdx = nNew; }
-    sal_Int32 GetLen() const { return m_nLen; }
-    void SetLen( const sal_Int32 nNew ) { m_nLen = nNew; }
+    TextFrameIndex GetIdx() const { return m_nIdx; }
+    void SetIdx(const TextFrameIndex nNew) { m_nIdx = nNew; }
+    TextFrameIndex GetLen() const { return m_nLen; }
+    void SetLen(const TextFrameIndex nNew) { m_nLen = nNew; }
     void SetText( const OUString &rNew ){ m_pText = &rNew; }
 
     // No Bullets for the symbol font!
@@ -297,9 +298,7 @@ public:
     SwTextFrame *GetTextFrame() { return m_pFrame; }
     const SwTextFrame *GetTextFrame() const { return m_pFrame; }
 
-    bool HasHint( sal_Int32 nPos ) const
-        { return HasHint_( m_pFrame->GetTextNode(), nPos ); }
-    static bool HasHint_( const SwTextNode* pTextNode, sal_Int32 nPos );
+    bool HasHint(TextFrameIndex nPos) const;
 
     // If Kana Compression is enabled, a minimum and maximum portion width
     // is calculated. We format lines with minimal size and share remaining
@@ -352,9 +351,9 @@ public:
 
 class SwTextPaintInfo : public SwTextSizeInfo
 {
-    const SwWrongList *pWrongList;
-    const SwWrongList *pGrammarCheckList;
-    const SwWrongList *pSmartTags;
+    sw::WrongListIterator *m_pWrongList;
+    sw::WrongListIterator *m_pGrammarCheckList;
+    sw::WrongListIterator *m_pSmartTags;
     std::vector<long>* pSpaceAdd;
     const SvxBrushItem *pBrushItem; // For the background
     SwTextFly    aTextFly;    // Calculate the FlyFrame
@@ -362,8 +361,8 @@ class SwTextPaintInfo : public SwTextSizeInfo
     SwRect      aPaintRect; // Original paint rect (from Layout paint)
 
     sal_uInt16 nSpaceIdx;
-    void DrawText_( const OUString &rText, const SwLinePortion &rPor,
-                   const sal_Int32 nIdx, const sal_Int32 nLen,
+    void DrawText_(const OUString &rText, const SwLinePortion &rPor,
+                   const TextFrameIndex nIdx, const TextFrameIndex nLen,
                    const bool bKern, const bool bWrong = false,
                    const bool bSmartTag = false,
                    const bool bGrammarCheck = false );
@@ -372,9 +371,9 @@ class SwTextPaintInfo : public SwTextSizeInfo
 
 protected:
     SwTextPaintInfo()
-        : pWrongList(nullptr)
-        , pGrammarCheckList(nullptr)
-        , pSmartTags(nullptr)
+        : m_pWrongList(nullptr)
+        , m_pGrammarCheckList(nullptr)
+        , m_pSmartTags(nullptr)
         , pSpaceAdd(nullptr)
         , pBrushItem(nullptr)
         , nSpaceIdx(0)
@@ -398,12 +397,12 @@ public:
     SwTextFly& GetTextFly() { return aTextFly; }
     const SwTextFly& GetTextFly() const { return aTextFly; }
     inline void DrawText( const OUString &rText, const SwLinePortion &rPor,
-                          const sal_Int32 nIdx = 0,
-                          const sal_Int32 nLen = COMPLETE_STRING,
+                          TextFrameIndex nIdx = TextFrameIndex(0),
+                          TextFrameIndex nLen = TextFrameIndex(COMPLETE_STRING),
                           const bool bKern = false) const;
-    inline void DrawText( const SwLinePortion &rPor, const sal_Int32 nLen,
+    inline void DrawText( const SwLinePortion &rPor, TextFrameIndex nLen,
                           const bool bKern = false ) const;
-    inline void DrawMarkedText( const SwLinePortion &rPor, const sal_Int32 nLen,
+    inline void DrawMarkedText( const SwLinePortion &rPor, TextFrameIndex nLen,
                                 const bool bWrong,
                                 const bool bSmartTags,
                                 const bool bGrammarCheck ) const;
@@ -459,14 +458,14 @@ public:
     void SetpSpaceAdd( std::vector<long>* pNew ){ pSpaceAdd = pNew; }
     std::vector<long>* GetpSpaceAdd() const { return pSpaceAdd; }
 
-    void SetWrongList( const SwWrongList *pNew ){ pWrongList = pNew; }
-    const SwWrongList* GetpWrongList() const { return pWrongList; }
+    void SetWrongList(sw::WrongListIterator *const pNew) { m_pWrongList = pNew; }
+    sw::WrongListIterator* GetpWrongList() const { return m_pWrongList; }
 
-    void SetGrammarCheckList( const SwWrongList *pNew ){ pGrammarCheckList = pNew; }
-    const SwWrongList* GetGrammarCheckList() const { return pGrammarCheckList; }
+    void SetGrammarCheckList(sw::WrongListIterator *const pNew) { m_pGrammarCheckList = pNew; }
+    sw::WrongListIterator* GetGrammarCheckList() const { return m_pGrammarCheckList; }
 
-    void SetSmartTags( const SwWrongList *pNew ){ pSmartTags = pNew; }
-    const SwWrongList* GetSmartTags() const { return pSmartTags; }
+    void SetSmartTags(sw::WrongListIterator *const pNew) { m_pSmartTags = pNew; }
+    sw::WrongListIterator* GetSmartTags() const { return m_pSmartTags; }
 };
 
 class SwTextFormatInfo : public SwTextPaintInfo
@@ -482,9 +481,9 @@ class SwTextFormatInfo : public SwTextPaintInfo
 
     SwTabPortion    *m_pLastTab;     // The _last_ TabPortion
 
-    sal_Int32 m_nSoftHyphPos;    // SoftHyphPos for Hyphenation
-    sal_Int32 m_nLineStart;      // Current line start in rText
-    sal_Int32 m_nUnderScorePos;  // enlarge repaint if underscore has been found
+    TextFrameIndex m_nSoftHyphPos;   ///< SoftHyphPos for Hyphenation
+    TextFrameIndex m_nLineStart;     ///< Current line start in rText
+    TextFrameIndex m_nUnderScorePos; ///< enlarge repaint if underscore has been found
     // #i34348# Changed type from sal_uInt16 to SwTwips
     SwTwips m_nLeft;              // Left margin
     SwTwips m_nRight;             // Right margin
@@ -547,7 +546,7 @@ public:
     SwTwips GetLineWidth();
 
     // Returns the first changed position of the paragraph
-    inline sal_Int32 GetReformatStart() const;
+    inline TextFrameIndex GetReformatStart() const;
 
     // Margins
     SwTwips Left() const { return m_nLeft; }
@@ -597,8 +596,8 @@ public:
     bool IsQuick() const { return m_bQuick; }
     bool IsTest() const { return m_bTestFormat; }
 
-    sal_Int32 GetLineStart() const { return m_nLineStart; }
-    void SetLineStart( const sal_Int32 nNew ) { m_nLineStart = nNew; }
+    TextFrameIndex GetLineStart() const { return m_nLineStart; }
+    void SetLineStart(TextFrameIndex const nNew) { m_nLineStart = nNew; }
 
     // these are used during fly calculation
     sal_uInt16 GetLineHeight() const { return m_nLineHeight; }
@@ -610,8 +609,8 @@ public:
     SwLinePortion *GetUnderflow() { return m_pUnderflow; }
     void SetUnderflow( SwLinePortion *pNew )
            { m_pUnderflow = pNew; m_bUnderflow = true; }
-    sal_Int32 GetSoftHyphPos() const { return m_nSoftHyphPos; }
-    void SetSoftHyphPos( const sal_Int32 nNew ) { m_nSoftHyphPos = nNew; }
+    TextFrameIndex GetSoftHyphPos() const { return m_nSoftHyphPos; }
+    void SetSoftHyphPos(TextFrameIndex const nNew) { m_nSoftHyphPos = nNew; }
 
     inline void SetParaFootnote();
 
@@ -646,8 +645,8 @@ public:
 
     // Should the hyphenate helper be discarded?
     bool IsHyphenate() const;
-    sal_Int32 GetUnderScorePos() const { return m_nUnderScorePos; }
-    void SetUnderScorePos( sal_Int32 nNew ) { m_nUnderScorePos = nNew; }
+    TextFrameIndex GetUnderScorePos() const { return m_nUnderScorePos; }
+    void SetUnderScorePos(TextFrameIndex const nNew) { m_nUnderScorePos = nNew; }
 
     // Calls HyphenateWord() of Hyphenator
     css::uno::Reference< css::linguistic2::XHyphenatedWord >
@@ -665,7 +664,7 @@ public:
 
     // Looks for tabs, TabDec, TXTATR and BRK from nIdx until nEnd.
     // Return: Position; sets cHookChar if necessary
-    sal_Int32 ScanPortionEnd( const sal_Int32 nStart, const sal_Int32 nEnd );
+    TextFrameIndex ScanPortionEnd(TextFrameIndex nStart, TextFrameIndex nEnd);
 
     void SetTabOverflow( bool bOverflow ) { m_bTabOverflow = bOverflow; }
     bool IsTabOverflow() { return m_bTabOverflow; }
@@ -684,11 +683,12 @@ class SwTextSlot final
     OUString aText;
     std::shared_ptr<vcl::TextLayoutCache> m_pOldCachedVclData;
     const OUString *pOldText;
-    const SwWrongList* pOldSmartTagList;
-    const SwWrongList* pOldGrammarCheckList;
-    SwWrongList* pTempList;
-    sal_Int32 nIdx;
-    sal_Int32 nLen;
+    sw::WrongListIterator * m_pOldSmartTagList;
+    sw::WrongListIterator * m_pOldGrammarCheckList;
+    std::unique_ptr<SwWrongList> m_pTempList;
+    std::unique_ptr<sw::WrongListIterator> m_pTempIter;
+    TextFrameIndex nIdx;
+    TextFrameIndex nLen;
     bool bOn;
     SwTextSizeInfo *pInf;
 
@@ -727,12 +727,12 @@ inline sal_uInt16 SwTextSizeInfo::GetTextHeight() const
 
 inline SwPosSize SwTextSizeInfo::GetTextSize( const OUString &rText ) const
 {
-    return GetTextSize( m_pOut, nullptr, rText, 0, rText.getLength() );
+    return GetTextSize(m_pOut, nullptr, rText, TextFrameIndex(0), TextFrameIndex(rText.getLength()));
 }
 
 inline SwPosSize SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI,
-                                            const sal_Int32 nNewIdx,
-                                            const sal_Int32 nNewLen ) const
+                                            TextFrameIndex const nNewIdx,
+                                            TextFrameIndex const nNewLen) const
 {
     return GetTextSize( m_pOut, pSI, *m_pText, nNewIdx, nNewLen );
 }
@@ -749,20 +749,20 @@ inline void SwTextPaintInfo::SetPaintOfst( const SwTwips nNew )
 
 inline void SwTextPaintInfo::DrawText( const OUString &rText,
                             const SwLinePortion &rPor,
-                            const sal_Int32 nStart, const sal_Int32 nLength,
+                            const TextFrameIndex nStart, const TextFrameIndex nLength,
                             const bool bKern ) const
 {
     const_cast<SwTextPaintInfo*>(this)->DrawText_( rText, rPor, nStart, nLength, bKern );
 }
 
 inline void SwTextPaintInfo::DrawText( const SwLinePortion &rPor,
-        const sal_Int32 nLength, const bool bKern ) const
+        const TextFrameIndex nLength, const bool bKern ) const
 {
     const_cast<SwTextPaintInfo*>(this)->DrawText_( *m_pText, rPor, m_nIdx, nLength, bKern );
 }
 
 inline void SwTextPaintInfo::DrawMarkedText( const SwLinePortion &rPor,
-                                            const sal_Int32 nLength,
+                                            const TextFrameIndex nLength,
                                             const bool bWrong,
                                             const bool bSmartTags,
                                             const bool bGrammarCheck ) const
@@ -770,14 +770,15 @@ inline void SwTextPaintInfo::DrawMarkedText( const SwLinePortion &rPor,
     const_cast<SwTextPaintInfo*>(this)->DrawText_( *m_pText, rPor, m_nIdx, nLength, false/*bKern*/, bWrong, bSmartTags, bGrammarCheck );
 }
 
-inline sal_Int32 SwTextFormatInfo::GetReformatStart() const
+inline TextFrameIndex SwTextFormatInfo::GetReformatStart() const
 {
     return GetParaPortion()->GetReformat().Start();
 }
 
 inline const SwAttrSet& SwTextFormatInfo::GetCharAttr() const
 {
-    return GetTextFrame()->GetTextNode()->GetSwAttrSet();
+    // sw_redlinehide: this is used for numbering/footnote number portions, so:
+    return GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet();
 }
 
 inline void SwTextFormatInfo::SetParaFootnote()

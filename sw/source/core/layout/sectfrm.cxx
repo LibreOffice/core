@@ -2556,7 +2556,7 @@ void SwSectionFrame::SwClientNotify( const SwModify& rMod, const SfxHint& rHint 
     // #i117863#
     const SwSectionFrameMoveAndDeleteHint* pHint =
                     dynamic_cast<const SwSectionFrameMoveAndDeleteHint*>(&rHint);
-    if ( pHint && pHint->GetId() == SfxHintId::Dying && &rMod == GetRegisteredIn() )
+    if (pHint && pHint->GetId() == SfxHintId::Dying && &rMod == GetDep())
     {
         SwSectionFrame::MoveContentAndDelete( this, pHint->IsSaveContent() );
     }

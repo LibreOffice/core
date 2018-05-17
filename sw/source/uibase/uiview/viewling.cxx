@@ -656,7 +656,8 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                                         &rPt, &aPoint, false);
                 if (pContentFrame)
                 {
-                    SwRect aRepaint(static_cast<SwTextFrame*>(pContentFrame)->AutoSpell_(nullptr, 0));
+                    SwRect aRepaint(static_cast<SwTextFrame*>(pContentFrame)->AutoSpell_(
+                        *pCursor->GetContentNode()->GetTextNode(), 0));
                     if (aRepaint.HasArea())
                         m_pWrtShell->InvalidateWindows(aRepaint);
                 }

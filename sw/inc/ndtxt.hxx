@@ -194,8 +194,11 @@ public:
     const SwWrongList* GetWrong() const;
     void SetGrammarCheck( SwGrammarMarkUp* pNew, bool bDelete = true );
     SwGrammarMarkUp* GetGrammarCheck();
+    // return SwWrongList because *function pointer* return values aren't covariant
+    SwWrongList const* GetGrammarCheck() const;
     void SetSmartTags( SwWrongList* pNew, bool bDelete = true );
     SwWrongList* GetSmartTags();
+    SwWrongList const* GetSmartTags() const;
     void TryCharSetExpandToNum(const SfxItemSet& pCharSet);
 
     /// End: Data collected during idle time
