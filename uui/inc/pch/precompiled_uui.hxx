@@ -54,7 +54,6 @@
 #include <sal/typesizes.h>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
