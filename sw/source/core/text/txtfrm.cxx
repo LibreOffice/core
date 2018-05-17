@@ -873,7 +873,7 @@ bool sw_HideObj( const SwTextFrame& _rFrame,
 
     if (_eAnchorType == RndStdIds::FLY_AT_CHAR)
     {
-        const IDocumentSettingAccess* pIDSA = _rFrame.GetTextNode()->getIDocumentSettingAccess();
+        const IDocumentSettingAccess *const pIDSA = &_rFrame.GetDoc().getIDocumentSettingAccess();
         if ( !pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) &&
              !pIDSA->get(DocumentSettingId::OLD_LINE_SPACING) &&
              !pIDSA->get(DocumentSettingId::USE_FORMER_OBJECT_POS) &&
@@ -1107,7 +1107,7 @@ void SwTextFrame::CalcLineSpace()
         return;
 
     if( GetDrawObjs() ||
-        GetTextNode()->GetSwAttrSet().GetLRSpace().IsAutoFirst())
+        GetTextNodeForParaProps()->GetSwAttrSet().GetLRSpace().IsAutoFirst())
     {
         Init();
         return;
@@ -1239,14 +1239,14 @@ static void lcl_SetScriptInval( SwTextFrame& rFrame, sal_Int32 nPos )
         rFrame.GetPara()->GetScriptInfo().SetInvalidityA( nPos );
 }
 
-static void lcl_ModifyOfst( SwTextFrame* pFrame, sal_Int32 nPos, sal_Int32 nLen )
+static void lcl_ModifyOfst(SwTextFrame* pFrame, TextFrameIndex const nPos, TextFrameIndex const nLen)
 {
     while( pFrame && pFrame->GetOfst() <= nPos )
         pFrame = pFrame->GetFollow();
     while( pFrame )
     {
-        if (nLen == COMPLETE_STRING)
-            pFrame->ManipOfst( pFrame->GetTextNode()->GetText().getLength() );
+        if (nLen == TextFrameIndex(COMPLETE_STRING))
+            pFrame->ManipOfst(TextFrameIndex(pFrame->GetText().getLength()));
         else
             pFrame->ManipOfst( pFrame->GetOfst() + nLen );
         pFrame = pFrame->GetFollow();
@@ -1763,7 +1763,7 @@ void SwTextFrame::PrepWidows( const sal_uInt16 nNeed, bool bNotify )
     }
 }
 
-static bool lcl_ErgoVadis( SwTextFrame* pFrame, sal_Int32 &rPos, const PrepareHint ePrep )
+static bool lcl_ErgoVadis(SwTextFrame* pFrame, TextFrameIndex & rPos, const PrepareHint ePrep)
 {
     const SwFootnoteInfo &rFootnoteInfo = pFrame->GetNode()->GetDoc()->GetFootnoteInfo();
     if( ePrep == PREP_ERGOSUM )
@@ -1779,7 +1779,7 @@ static bool lcl_ErgoVadis( SwTextFrame* pFrame, sal_Int32 &rPos, const PrepareHi
         if( pFrame->HasFollow() )
             rPos = pFrame->GetFollow()->GetOfst();
         else
-            rPos = pFrame->GetText().getLength();
+            rPos = TextFrameIndex(pFrame->GetText().getLength());
         if( rPos )
             --rPos; // our last character
     }
@@ -1828,11 +1828,11 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                     if ( aTextFly.Relax() || IsUndersized() )
                         break;
                 }
-                if( GetTextNode()->GetSwAttrSet().GetRegister().GetValue())
+                if (GetTextNodeForParaProps()->GetSwAttrSet().GetRegister().GetValue())
                     break;
 
                 SwTextGridItem const*const pGrid(GetGridItem(FindPageFrame()));
-                if ( pGrid && GetTextNode()->GetSwAttrSet().GetParaGrid().GetValue() )
+                if (pGrid && GetTextNodeForParaProps()->GetSwAttrSet().GetParaGrid().GetValue())
                     break;
 
                 // i#28701 - consider anchored objects
@@ -1919,7 +1919,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                     const SwFootnoteInfo &rFootnoteInfo = GetNode()->GetDoc()->GetFootnoteInfo();
                     if( !pPara->UpdateQuoVadis( rFootnoteInfo.aQuoVadis ) )
                     {
-                        sal_Int32 nPos = pPara->GetParLen();
+                        TextFrameIndex nPos = pPara->GetParLen();
                         if( nPos )
                             --nPos;
                         InvalidateRange( SwCharRange(nPos, TextFrameIndex(1)), 1);
@@ -1947,14 +1947,14 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
 
             if( HasFollow() )
             {
-                sal_Int32 nNxtOfst = GetFollow()->GetOfst();
+                TextFrameIndex nNxtOfst = GetFollow()->GetOfst();
                 if( nNxtOfst )
                     --nNxtOfst;
                 InvalidateRange(SwCharRange( nNxtOfst, TextFrameIndex(1)), 1);
             }
             if( IsInFootnote() )
             {
-                sal_Int32 nPos;
+                TextFrameIndex nPos;
                 if( lcl_ErgoVadis( this, nPos, PREP_QUOVADIS ) )
                     InvalidateRange( SwCharRange( nPos, TextFrameIndex(1)) );
                 if( lcl_ErgoVadis( this, nPos, PREP_ERGOSUM ) )
@@ -1964,7 +1964,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             SwTextNode const* pNode(nullptr);
             sw::MergedAttrIter iter(*this);
             TextFrameIndex const nEnd = GetFollow()
-                    ? GetFollow()->GetOfst() : COMPLETE_STRING;
+                    ? GetFollow()->GetOfst() : TextFrameIndex(COMPLETE_STRING);
             for (SwTextAttr const* pHt = iter.NextAttr(&pNode); pHt; pHt = iter.NextAttr(&pNode))
             {
                 TextFrameIndex const nStart(MapModelToView(pNode, pHt->GetStart()));
@@ -1997,7 +1997,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             if ( isFramePrintAreaValid() )
             {
                 SwTextGridItem const*const pGrid(GetGridItem(FindPageFrame()));
-                if ( pGrid && GetTextNode()->GetSwAttrSet().GetParaGrid().GetValue() )
+                if (pGrid && GetTextNodeForParaProps()->GetSwAttrSet().GetParaGrid().GetValue())
                     InvalidatePrt();
             }
 
@@ -2057,7 +2057,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             }
             else
             {
-                if( GetTextNode()->GetSwAttrSet().GetRegister().GetValue() )
+                if (GetTextNodeForParaProps()->GetSwAttrSet().GetRegister().GetValue())
                     bParaPossiblyInvalid = Prepare( PREP_REGISTER, nullptr, bNotify );
                 // The Frames need to be readjusted, which caused by changes
                 // in position
@@ -2079,7 +2079,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             break;
         }
         case PREP_REGISTER:
-            if( GetTextNode()->GetSwAttrSet().GetRegister().GetValue() )
+            if (GetTextNodeForParaProps()->GetSwAttrSet().GetRegister().GetValue())
             {
                 pPara->SetPrepAdjust();
                 CalcLineSpace();
@@ -2107,7 +2107,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                 // Which had flowed to the next page to be together with the footnote (this is
                 // especially true for areas with columns)
                 OSL_ENSURE( GetFollow(), "PREP_FTN_GONE may only be called by Follow" );
-                sal_Int32 nPos = GetFollow()->GetOfst();
+                TextFrameIndex nPos = GetFollow()->GetOfst();
                 if( IsFollow() && GetOfst() == nPos )       // If we don't have a mass of text, we call our
                     FindMaster()->Prepare( PREP_FTN_GONE ); // Master's Prepare
                 if( nPos )
@@ -2118,7 +2118,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
         case PREP_ERGOSUM:
         case PREP_QUOVADIS:
             {
-                sal_Int32 nPos;
+                TextFrameIndex nPos;
                 if( lcl_ErgoVadis( this, nPos, ePrep ) )
                     InvalidateRange(SwCharRange(nPos, TextFrameIndex(1)));
             }
@@ -2127,8 +2127,8 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
         {
             if( pVoid )
             {
-                sal_Int32 nWhere = CalcFlyPos( static_cast<SwFrameFormat const *>(pVoid) );
-                OSL_ENSURE( COMPLETE_STRING != nWhere, "Prepare: Why me?" );
+                TextFrameIndex const nWhere = CalcFlyPos( static_cast<SwFrameFormat const *>(pVoid) );
+                OSL_ENSURE( TextFrameIndex(COMPLETE_STRING) != nWhere, "Prepare: Why me?" );
                 InvalidateRange(SwCharRange(nWhere, TextFrameIndex(1)));
                 return bParaPossiblyInvalid;
             }
@@ -2141,8 +2141,10 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             {
                 if( PREP_FLY_ARRIVE == ePrep || PREP_FLY_LEAVE == ePrep )
                 {
-                    sal_Int32 nLen = ( GetFollow() ? GetFollow()->GetOfst() :
-                                      COMPLETE_STRING ) - GetOfst();
+                    TextFrameIndex const nLen = (GetFollow()
+                                ? GetFollow()->GetOfst()
+                                : TextFrameIndex(COMPLETE_STRING))
+                            - GetOfst();
                     InvalidateRange( SwCharRange( GetOfst(), nLen ) );
                 }
             }
@@ -2153,7 +2155,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                 Init();
                 pPara = nullptr;
                 if( GetOfst() && !IsFollow() )
-                    SetOfst_( 0 );
+                    SetOfst_( TextFrameIndex(0) );
                 if ( bNotify )
                     InvalidateSize();
                 else
@@ -2537,7 +2539,7 @@ void SwTextFrame::CalcAdditionalFirstLineOffset()
     // reset additional first line offset
     mnAdditionalFirstLineOffset = 0;
 
-    const SwTextNode* pTextNode( GetTextNode() );
+    const SwTextNode* pTextNode( GetTextNodeForParaProps() );
     if ( pTextNode && pTextNode->IsNumbered() && pTextNode->IsCountedInList() &&
          pTextNode->GetNumRule() )
     {
@@ -2631,11 +2633,11 @@ void SwTextFrame::CalcHeightOfLastLine( const bool _bUseFont )
         return;
     }
     OutputDevice* pOut = pVsh->GetOut();
-    const IDocumentSettingAccess* pIDSA = GetTextNode()->getIDocumentSettingAccess();
+    const IDocumentSettingAccess *const pIDSA = &GetDoc().getIDocumentSettingAccess();
     if ( !pVsh->GetViewOptions()->getBrowseMode() ||
           pVsh->GetViewOptions()->IsPrtFormat() )
     {
-        pOut = GetTextNode()->getIDocumentDeviceAccess().getReferenceDevice( true );
+        pOut = GetDoc().getIDocumentDeviceAccess().getReferenceDevice( true );
     }
     OSL_ENSURE( pOut, "<SwTextFrame::_GetHeightOfLastLineForPropLineSpacing()> - no OutputDevice" );
 
@@ -2819,7 +2821,7 @@ sal_uInt16 SwTextFrame::GetLineCount(TextFrameIndex const nPos)
             break;
         SwTextSizeInfo aInf( pFrame );
         SwTextMargin aLine( pFrame, &aInf );
-        if( COMPLETE_STRING == nPos )
+        if (TextFrameIndex(COMPLETE_STRING) == nPos)
             aLine.Bottom();
         else
             aLine.CharToLine( nPos );
@@ -2895,7 +2897,7 @@ void SwTextFrame::RecalcAllLines()
         const sal_uLong nOld = GetAllLines();
         const SwFormatLineNumber &rLineNum = pAttrSet->GetLineNumber();
         sal_uLong nNewNum;
-        const bool bRestart = GetTextNode()->GetDoc()->GetLineNumberInfo().IsRestartEachPage();
+        const bool bRestart = GetDoc().GetLineNumberInfo().IsRestartEachPage();
 
         if ( !IsFollow() && rLineNum.GetStartValue() && rLineNum.IsCount() )
             nNewNum = rLineNum.GetStartValue() - 1;
@@ -3027,8 +3029,7 @@ void SwTextFrame::CalcBaseOfstForFly()
     OSL_ENSURE( !IsVertical() || !IsSwapped(),
             "SwTextFrame::CalcBasePosForFly with swapped frame!" );
 
-    const SwNode* pNode = GetTextNode();
-    if ( !pNode->getIDocumentSettingAccess()->get(DocumentSettingId::ADD_FLY_OFFSETS) )
+    if (!GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::ADD_FLY_OFFSETS))
         return;
 
     SwRectFnSet aRectFnSet(this);
@@ -3074,7 +3075,7 @@ void SwTextFrame::CalcBaseOfstForFly()
     mnFlyAnchorOfst = nRet1 - nLeft;
     mnFlyAnchorOfstNoWrap = nRet2 - nLeft;
 
-    if (!pNode->getIDocumentSettingAccess()->get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS))
+    if (!GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS))
         return;
 
     mnFlyAnchorVertOfstNoWrap = nFlyAnchorVertOfstNoWrap;
