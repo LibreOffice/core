@@ -367,6 +367,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/setup,\
 	UpdateCheckConfig \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/sheet,\
+    ExternalDataProvider \
 	ExternalDocLink \
 	ExternalDocLinks \
 	ExternalSheetCache \
@@ -3391,6 +3392,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	DataResultFlags \
 	DimensionFlags \
 	ExternalLinkInfo \
+	ExternalDataSourceInfo \
 	ExternalLinkType \
 	ExternalReference \
 	FillDateMode \
@@ -3485,6 +3487,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	XDocumentAuditing \
 	XDrillDownDataSupplier \
 	XEnhancedMouseClickBroadcaster \
+	XExternalDataProvider \
 	XExternalDocLink \
 	XExternalDocLinks \
 	XExternalSheetCache \

@@ -564,6 +564,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/unoobj/drdefuno \
     sc/source/ui/unoobj/editsrc \
     sc/source/ui/unoobj/eventuno \
+	sc/source/ui/unoobj/externaldataprovider \
     sc/source/ui/unoobj/fielduno \
     sc/source/ui/unoobj/filtuno \
     sc/source/ui/unoobj/fmtuno \
