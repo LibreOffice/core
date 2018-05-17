@@ -91,6 +91,9 @@ void Qt5Menu::Update()
 {
     Menu* pVCLMenu = mpVCLMenu;
 
+    if ( mbMenuBar && mpQMenuBar )
+        mpQMenuBar->clear();
+
     for ( sal_Int32 nItem = 0; nItem < static_cast<sal_Int32>(GetItemCount()); nItem++ )
     {
         Qt5MenuItem *pSalMenuItem = GetItemAtPos( nItem );
