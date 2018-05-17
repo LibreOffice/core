@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_6569668b",
+        "filename": "include/xmloff/xmlimp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-05-17T15:19:13Z",
+      "side": 1,
+      "message": "The hackery in my patch I guess is equivalent to making getNamespacePrefixFromToken call getNamespaceURIFromToken and then use the importer map on that uri to get the desired prefix. So... from my (uncertain) perspective the uris are good, its just the mapping back to the prefix that needs to be fixed ?",
+      "parentUuid": "9a30ddce_25484e2d",
+      "revId": "81a3af63946796eae057a698cae15221d7185c46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_455702ce",
         "filename": "include/xmloff/xmlimp.hxx",
         "patchSetId": 4
