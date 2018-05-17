@@ -13,77 +13,60 @@
 
 using namespace boost;
 
-AuthFallbackDlg::AuthFallbackDlg(Window* pParent, const OUString& instructions,
+AuthFallbackDlg::AuthFallbackDlg(weld::Window* pParent, const OUString& instructions,
                                  const OUString& url)
-    : ModalDialog(pParent, "AuthFallbackDlg", "uui/ui/authfallback.ui")
+    : GenericDialogController(pParent, "uui/ui/authfallback.ui", "AuthFallbackDlg")
     , m_bGoogleMode( false )
+    , m_xTVInstructions(m_xBuilder->weld_label("instructions"))
+    , m_xEDUrl(m_xBuilder->weld_entry("url"))
+    , m_xEDCode(m_xBuilder->weld_entry("code"))
+    , m_xEDGoogleCode(m_xBuilder->weld_entry("google_code"))
+    , m_xBTOk(m_xBuilder->weld_button("ok"))
+    , m_xBTCancel(m_xBuilder->weld_button("cancel"))
+    , m_xGoogleBox(m_xBuilder->weld_widget("GDrive"))
+    , m_xOneDriveBox(m_xBuilder->weld_widget("OneDrive"))
 {
-    get( m_pTVInstructions, "instructions" );
-    get( m_pEDUrl, "url" );
-    get( m_pEDCode, "code" );
-    get( m_pEDGoogleCode, "google_code" );
-    get( m_pBTOk, "ok" );
-    get( m_pBTCancel, "cancel" );
-    get( m_pGoogleBox, "GDrive" );
-    get( m_pOneDriveBox, "OneDrive" );
+    m_xBTOk->connect_clicked( LINK( this, AuthFallbackDlg, OKHdl) );
+    m_xBTCancel->connect_clicked( LINK( this, AuthFallbackDlg, CancelHdl) );
+    m_xBTOk->set_sensitive(true);
 
-    m_pBTOk->SetClickHdl( LINK( this, AuthFallbackDlg, OKHdl) );
-    m_pBTCancel->SetClickHdl( LINK( this, AuthFallbackDlg, CancelHdl) );
-    m_pBTOk->Enable();
-
-    m_pTVInstructions->SetText( instructions );
-    m_pTVInstructions->SetPaintTransparent(true);
+    m_xTVInstructions->set_label(instructions);
     if( url.isEmpty() )
     {
         // Google 2FA
         m_bGoogleMode = true;
-        m_pGoogleBox->Show();
-        m_pOneDriveBox->Hide();
-        m_pEDUrl->Hide();
+        m_xGoogleBox->show();
+        m_xOneDriveBox->hide();
+        m_xEDUrl->hide();
     }
     else
     {
         // OneDrive
         m_bGoogleMode = false;
-        m_pGoogleBox->Hide();
-        m_pOneDriveBox->Show();
-        m_pEDUrl->SetText( url );
+        m_xGoogleBox->hide();
+        m_xOneDriveBox->show();
+        m_xEDUrl->set_text( url );
     }
 }
 
 AuthFallbackDlg::~AuthFallbackDlg()
 {
-    disposeOnce();
 }
 
 OUString AuthFallbackDlg::GetCode() const
 {
     if( m_bGoogleMode )
-        return m_pEDGoogleCode->GetText();
+        return m_xEDGoogleCode->get_text();
     else
-        return m_pEDCode->GetText();
+        return m_xEDCode->get_text();
 }
 
-
-void AuthFallbackDlg::dispose()
+IMPL_LINK_NOARG(AuthFallbackDlg,  OKHdl, weld::Button&, void)
 {
-    m_pTVInstructions.clear();
-    m_pEDUrl.clear();
-    m_pEDCode.clear();
-    m_pEDGoogleCode.clear();
-    m_pBTOk.clear();
-    m_pBTCancel.clear();
-    m_pGoogleBox.clear();
-    m_pOneDriveBox.clear();
-    ModalDialog::dispose();
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG ( AuthFallbackDlg,  OKHdl, Button *, void)
+IMPL_LINK_NOARG(AuthFallbackDlg,  CancelHdl, weld::Button&, void)
 {
-    EndDialog( RET_OK );
-}
-
-IMPL_LINK_NOARG ( AuthFallbackDlg,  CancelHdl, Button *, void)
-{
-    EndDialog();
+    m_xDialog->response(RET_CANCEL);
 }
