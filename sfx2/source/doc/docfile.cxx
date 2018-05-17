@@ -333,7 +333,7 @@ SfxMedium_Impl::SfxMedium_Impl() :
     m_pInStream(nullptr),
     m_pOutStream(nullptr),
     pOrigFilter( nullptr ),
-    aExpireTime( Date( Date::SYSTEM ) + 10, tools::Time( tools::Time::SYSTEM ) ),
+    aExpireTime( DateTime( DateTime::SYSTEM ) + static_cast<sal_Int32>(10) ),
     pTempFile( nullptr ),
     nLastStorageError( ERRCODE_NONE ),
     m_nSignatureState( SignatureState::NOSIGNATURES )
