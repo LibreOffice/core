@@ -314,7 +314,6 @@ public:
 private:
     void setTransformatAsProperty(const css::drawing::HomogenMatrix3& rMatrix);
 
-    OUString maText;
     css::uno::Any maTrans;
     BitmapEx maBitmap;
     double mnRotation;

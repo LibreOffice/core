@@ -41,7 +41,6 @@ namespace comphelper
     {
     private:
         Reference< XComponentContext >  m_aContext;
-        OUString                 m_sLoggerName;
         Reference< XLogger >            m_xLogger;
 
     public:
@@ -53,13 +52,12 @@ namespace comphelper
 
     EventLogger_Impl::EventLogger_Impl( const Reference< XComponentContext >& _rxContext, const OUString& _rLoggerName )
         :m_aContext( _rxContext )
-        ,m_sLoggerName( _rLoggerName )
     {
         try
         {
             Reference< XLoggerPool > xPool( LoggerPool::get( m_aContext ) );
-            if ( !m_sLoggerName.isEmpty() )
-                m_xLogger = xPool->getNamedLogger( m_sLoggerName );
+            if ( !_rLoggerName.isEmpty() )
+                m_xLogger = xPool->getNamedLogger( _rLoggerName );
             else
                 m_xLogger = xPool->getDefaultLogger();
         }

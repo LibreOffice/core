@@ -43,9 +43,8 @@ VLCPlayer::VLCPlayer( const rtl::OUString& url,
                       wrapper::Instance& instance,
                       wrapper::EventHandler& eh )
     : VLC_Base( m_aMutex )
-    , mInstance( instance )
     , mEventHandler( eh )
-    , mMedia( url, mInstance )
+    , mMedia( url, instance )
     , mPlayer( mMedia )
     , mEventManager( mPlayer, mEventHandler )
     , mUrl( url )

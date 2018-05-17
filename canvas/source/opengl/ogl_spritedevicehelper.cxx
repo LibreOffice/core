@@ -515,7 +515,6 @@ namespace oglcanvas
 
         class BufferContextImpl : public IBufferContext
         {
-            ::basegfx::B2IVector       maSize;
             GLuint mnFrambufferId;
             GLuint mnDepthId;
             GLuint mnTextureId;
@@ -537,12 +536,11 @@ namespace oglcanvas
 
         public:
             explicit BufferContextImpl(const ::basegfx::B2IVector& rSize) :
-                maSize(rSize),
                 mnFrambufferId(0),
                 mnDepthId(0),
                 mnTextureId(0)
             {
-                OpenGLHelper::createFramebuffer(maSize.getX(), maSize.getY(), mnFrambufferId,
+                OpenGLHelper::createFramebuffer(rSize.getX(), rSize.getY(), mnFrambufferId,
                         mnDepthId, mnTextureId, false);
             }
 

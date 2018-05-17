@@ -144,10 +144,6 @@ BaseCoordinateSystem::BaseCoordinateSystem(
         xAxis->setScaleData( aScaleData );
     }
 
-    m_aOrigin.realloc( m_nDimensionCount );
-    for( sal_Int32 i = 0; i < m_nDimensionCount; ++i )
-        m_aOrigin[ i ] <<= 0.0;
-
     setFastPropertyValue_NoBroadcast( PROP_COORDINATESYSTEM_SWAPXANDYAXIS, uno::Any( false ));
 }
 
@@ -158,8 +154,7 @@ BaseCoordinateSystem::BaseCoordinateSystem(
         MutexContainer(),
         ::property::OPropertySet( rSource, m_aMutex ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
-    m_nDimensionCount( rSource.m_nDimensionCount ),
-    m_aOrigin( rSource.m_aOrigin )
+    m_nDimensionCount( rSource.m_nDimensionCount )
 {
     m_aAllAxis.resize(rSource.m_aAllAxis.size());
     tAxisVecVecType::size_type nN=0;
