@@ -1,0 +1,9 @@
+Code-Review+2: Michael Stahl <Michael.Stahl@cib.de>
+Code-Review+2: Rene Engelhard <rene@debian.org>
+Verified+1: Rene Engelhard <rene@debian.org>
+Verified+1: Jenkins <ci@libreoffice.org>
+Submitted-by: Mike Kaganski <mike.kaganski@collabora.com>
+Submitted-at: Thu, 17 May 2018 16:30:20 +0200
+Reviewed-on: https://gerrit.libreoffice.org/54381
+Project: core
+Branch: refs/heads/master
