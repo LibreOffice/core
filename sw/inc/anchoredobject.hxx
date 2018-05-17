@@ -23,6 +23,7 @@
 #include "swrect.hxx"
 #include <libxml/xmlwriter.h>
 
+struct SwPosition;
 class SdrObject;
 class SwFrame;
 class SwLayoutFrame;
@@ -160,7 +161,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         // object positioning
         friend bool sw_HideObj( const SwTextFrame& _rFrame,
                                  const RndStdIds _eAnchorType,
-                                 const sal_Int32 _nObjAnchorPos,
+                                 SwPosition const& rAnchorPos,
                                  SwAnchoredObject* _pAnchoredObj );
     protected:
         SwAnchoredObject();

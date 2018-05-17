@@ -22,13 +22,14 @@
 #include <cellfrm.hxx>
 #include <rowfrm.hxx>
 #include <swtable.hxx>
-
+#include <notxtfrm.hxx>
 #include <tabfrm.hxx>
 #include <sectfrm.hxx>
 #include <flyfrms.hxx>
 #include <ftnfrm.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
+#include <fmtpdsc.hxx>
 #include <txtfrm.hxx>
 #include <calbck.hxx>
 #include <viewopt.hxx>
@@ -621,19 +622,52 @@ bool SwRootFrame::IsBetweenPages(const Point& rPt) const
     return false;
 }
 
+const SvxFormatBreakItem& SwFrame::GetBreakItem() const
+{
+    return GetAttrSet()->GetBreak();
+}
+
+const SwFormatPageDesc& SwFrame::GetPageDescItem() const
+{
+    return GetAttrSet()->GetPageDesc();
+}
+
+const SvxFormatBreakItem& SwTextFrame::GetBreakItem() const
+{
+    return GetTextNodeFirst()->GetSwAttrSet().GetBreak();
+}
+
+const SwFormatPageDesc& SwTextFrame::GetPageDescItem() const
+{
+    return GetTextNodeFirst()->GetSwAttrSet().GetPageDesc();
+}
+
 const SwAttrSet* SwFrame::GetAttrSet() const
 {
-    if ( IsContentFrame() )
-        return &static_cast<const SwContentFrame*>(this)->GetNode()->GetSwAttrSet();
+    if (IsTextFrame())
+    {
+        return &static_cast<const SwTextFrame*>(this)->GetTextNodeForParaProps()->GetSwAttrSet();
+    }
+    else if (IsNoTextFrame())
+    {
+        return &static_cast<const SwNoTextFrame*>(this)->GetNode()->GetSwAttrSet();
+    }
     else
+    {
+        assert(IsLayoutFrame());
         return &static_cast<const SwLayoutFrame*>(this)->GetFormat()->GetAttrSet();
+    }
 }
 
 drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFrame::getSdrAllFillAttributesHelper() const
 {
-    if(IsContentFrame())
+    if (IsTextFrame())
     {
-        return static_cast< const SwContentFrame* >(this)->GetNode()->getSdrAllFillAttributesHelper();
+        return static_cast<const SwTextFrame*>(this)->GetTextNodeForParaProps()->getSdrAllFillAttributesHelper();
+    }
+    else if (IsNoTextFrame())
+    {
+        return static_cast<const SwNoTextFrame*>(this)->GetNode()->getSdrAllFillAttributesHelper();
     }
     else
     {

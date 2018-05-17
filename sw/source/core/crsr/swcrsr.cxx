@@ -39,6 +39,7 @@
 #include <cntfrm.hxx>
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>
+#include <notxtfrm.hxx>
 #include <scriptinfo.hxx>
 #include <crstate.hxx>
 #include <docsh.hxx>
@@ -351,18 +352,31 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
                 }
             }
 
-            SwContentNode* pCNd = (pFrame != nullptr) ? const_cast<SwContentNode*>(pFrame->GetNode()) : nullptr;
-            if ( pCNd != nullptr )
+            if (pFrame != nullptr)
             {
-                // set this ContentNode as new position
-                rPtIdx = *pCNd;
+                if (pFrame->IsTextFrame())
+                {
+                    SwTextFrame const*const pTextFrame(static_cast<SwTextFrame const*>(pFrame));
+                    *GetPoint() = pTextFrame->MapViewToModelPos(TextFrameIndex(
+                            bGoNxt ? 0 : pTextFrame->GetText().getLength()));
+                }
+                else
+                {
+                    assert(pFrame->IsNoTextFrame());
+                    SwContentNode *const pCNd = const_cast<SwContentNode*>(
+                        static_cast<SwNoTextFrame const*>(pFrame)->GetNode());
+                    assert(pCNd);
 
-                // assign corresponding ContentIndex
-                const sal_Int32 nTmpPos = bGoNxt ? 0 : pCNd->Len();
-                GetPoint()->nContent.Assign( pCNd, nTmpPos );
+                    // set this ContentNode as new position
+                    rPtIdx = *pCNd;
+                    // assign corresponding ContentIndex
+                    const sal_Int32 nTmpPos = bGoNxt ? 0 : pCNd->Len();
+                    GetPoint()->nContent.Assign( pCNd, nTmpPos );
+                }
+
 
                 if (rPtIdx.GetIndex() == m_vSavePos.back().nNode
-                    && nTmpPos == m_vSavePos.back().nContent)
+                    && GetPoint()->nContent.GetIndex() == m_vSavePos.back().nContent)
                 {
                     // new position equals saved one
                     // --> trigger restore of saved pos by setting <pFrame> to NULL - see below
@@ -1581,22 +1595,27 @@ SwCursor::DoSetBidiLevelLeftRight(
             {
                 sal_uInt8 nCursorLevel = GetCursorBidiLevel();
                 bool bForward = ! io_rbLeft;
-                const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pSttFrame))->PrepareVisualMove( nPos, nCursorLevel,
+                SwTextFrame *const pTF(const_cast<SwTextFrame*>(
+                            static_cast<const SwTextFrame*>(pSttFrame)));
+                TextFrameIndex nTFIndex(pTF->MapModelToViewPos(*GetPoint()));
+                pTF->PrepareVisualMove( nTFIndex, nCursorLevel,
                                                          bForward, bInsertCursor );
-                rIdx = nPos;
+                *GetPoint() = pTF->MapViewToModelPos(nTFIndex);
                 SetCursorBidiLevel( nCursorLevel );
                 io_rbLeft = ! bForward;
             }
         }
         else
         {
-            const SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( rTNd );
+            SwTextFrame const* pFrame;
+            const SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo(rTNd, &pFrame);
             if ( pSI )
             {
                 const sal_Int32 nMoveOverPos = io_rbLeft ?
                                                ( nPos ? nPos - 1 : 0 ) :
                                                 nPos;
-                SetCursorBidiLevel( pSI->DirType( nMoveOverPos ) );
+                TextFrameIndex nIndex(pFrame->MapModelToView(&rTNd, nMoveOverPos));
+                SetCursorBidiLevel( pSI->DirType(nIndex) );
             }
         }
     }
@@ -1733,8 +1752,9 @@ void SwCursor::DoSetBidiLevelUpDown()
     SwNode& rNode = GetPoint()->nNode.GetNode();
     if ( rNode.IsTextNode() )
     {
+        SwTextFrame const* pFrame;
         const SwScriptInfo* pSI =
-            SwScriptInfo::GetScriptInfo( *rNode.GetTextNode() );
+            SwScriptInfo::GetScriptInfo( *rNode.GetTextNode(), &pFrame );
         if ( pSI )
         {
             SwIndex& rIdx = GetPoint()->nContent;
@@ -1742,8 +1762,9 @@ void SwCursor::DoSetBidiLevelUpDown()
 
             if (nPos && nPos < rNode.GetTextNode()->GetText().getLength())
             {
-                const sal_uInt8 nCurrLevel = pSI->DirType( nPos );
-                const sal_uInt8 nPrevLevel = pSI->DirType( nPos - 1 );
+                TextFrameIndex const nIndex(pFrame->MapModelToView(rNode.GetTextNode(), nPos));
+                const sal_uInt8 nCurrLevel = pSI->DirType( nIndex );
+                const sal_uInt8 nPrevLevel = pSI->DirType( nIndex - TextFrameIndex(1) );
 
                 if ( nCurrLevel % 2 != nPrevLevel % 2 )
                 {

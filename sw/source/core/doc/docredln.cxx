@@ -60,6 +60,7 @@
 #include <txtfld.hxx>
 
 #include <flowfrm.hxx>
+#include <txtfrm.hxx>
 
 using namespace com::sun::star;
 
@@ -310,7 +311,7 @@ namespace
 void lcl_LOKInvalidateFrames(const SwModify& rMod, const SwRootFrame* pLayout,
         SwFrameType const nFrameType, const Point* pPoint)
 {
-    SwIterator<SwFrame,SwModify> aIter( rMod );
+    SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti> aIter(rMod);
 
     for (SwFrame* pTmpFrame = aIter.First(); pTmpFrame; pTmpFrame = aIter.Next() )
     {
@@ -1663,6 +1664,20 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
             *pItem = *Start();
         for( auto& pItem : aBehindArr )
             *pItem = *End();
+
+        // sw_redlinehide: assume that Show will only be called by filters;
+        // when it is called, ensure that no MergedPara instance survives
+        for (SwNodeIndex node = Start()->nNode; node.GetIndex() <= End()->nNode.GetIndex(); ++node)
+        {
+            if (SwTextNode const*const pNode = node.GetNode().GetTextNode())
+            {
+                SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pNode);
+                for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+                {
+                    pFrame->SetMergedPara(nullptr);
+                }
+            }
+        }
     }
     else
         InvalidateRange();

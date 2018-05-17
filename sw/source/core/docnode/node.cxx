@@ -286,6 +286,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const SwNodeType nNdType )
     : m_nNodeType( nNdType )
     , m_nAFormatNumLvl( 0 )
     , m_bIgnoreDontExpand( false)
+    , m_eMerge(Merge::None)
 #ifdef DBG_UTIL
     , m_nSerial( s_nSerial++)
 #endif
@@ -318,6 +319,7 @@ SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const SwNodeType nNdType )
     : m_nNodeType( nNdType )
     , m_nAFormatNumLvl( 0 )
     , m_bIgnoreDontExpand( false)
+    , m_eMerge(Merge::None)
 #ifdef DBG_UTIL
     , m_nSerial( s_nSerial++)
 #endif
@@ -715,7 +717,7 @@ SwFrameFormat* SwNode::GetFlyFormat() const
     {
         if( IsContentNode() )
         {
-            SwContentFrame* pFrame = SwIterator<SwContentFrame,SwContentNode>( *static_cast<const SwContentNode*>(this) ).First();
+            SwContentFrame* pFrame = SwIterator<SwContentFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*static_cast<const SwContentNode*>(this)).First();
             if( pFrame )
                 pRet = pFrame->FindFlyFrame()->GetFormat();
         }
@@ -1310,7 +1312,7 @@ void SwContentNode::DelFrames( bool bIsDisposeAccTable )
     if( !HasWriterListeners() )
         return;
 
-    SwIterator<SwContentFrame,SwContentNode> aIter( *this );
+    SwIterator<SwContentFrame, SwContentNode, sw::IteratorMode::UnwrapMulti> aIter(*this);
     for( SwContentFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
     {
         // #i27138#
@@ -1391,7 +1393,7 @@ bool SwContentNode::GetInfo( SfxPoolItem& rInfo ) const
     case RES_CONTENT_VISIBLE:
         {
             static_cast<SwPtrMsgPoolItem&>(rInfo).pObject =
-                SwIterator<SwFrame,SwContentNode>(*this).First();
+                SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*this).First();
         }
         return false;
     }

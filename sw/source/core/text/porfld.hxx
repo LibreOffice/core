@@ -33,8 +33,8 @@ class SwFieldPortion : public SwExpandPortion
 protected:
     OUString  m_aExpand;          // The expanded field
     SwFont  *m_pFont;              // For multi-line fields
-    sal_Int32 m_nNextOffset;      // Offset of the follow in the original string
-    sal_Int32 m_nNextScriptChg;
+    TextFrameIndex m_nNextOffset;  // Offset of the follow in the original string
+    TextFrameIndex m_nNextScriptChg;
     sal_uInt16  m_nViewWidth;     // Screen width for empty fields
     bool m_bFollow : 1;           // 2nd or later part of a field
     bool m_bLeft : 1;             // Used by SwNumberPortion
@@ -88,8 +88,8 @@ public:
     bool HasFollow() const { return m_bHasFollow; }
     void SetHasFollow( bool bNew ) { m_bHasFollow = bNew; }
 
-    sal_Int32 GetNextOffset() const { return m_nNextOffset; }
-    void SetNextOffset( sal_Int32 nNew ) { m_nNextOffset = nNew; }
+    TextFrameIndex GetNextOffset() const { return m_nNextOffset; }
+    void SetNextOffset(TextFrameIndex nNew) { m_nNextOffset = nNew; }
 
     // Field cloner for SplitGlue
     virtual SwFieldPortion *Clone( const OUString &rExpand ) const;
@@ -109,7 +109,7 @@ class SwHiddenPortion : public SwFieldPortion
 public:
     SwHiddenPortion( const OUString &rExpand, SwFont *pFntL = nullptr )
          : SwFieldPortion( rExpand, pFntL )
-        { SetLen(1); SetWhichPor( POR_HIDDEN ); }
+        { SetLen(TextFrameIndex(1)); SetWhichPor( POR_HIDDEN ); }
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
 
@@ -132,7 +132,7 @@ public:
                      const sal_uInt16 nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
-    virtual sal_Int32 GetCursorOfst( const sal_uInt16 nOfst ) const override;
+    virtual TextFrameIndex GetCursorOfst(sal_uInt16 nOfst) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 
     // Field cloner for SplitGlue

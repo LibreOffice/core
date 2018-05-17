@@ -279,7 +279,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
         if( !bName )
         {
             pTmpFnt = new SwFont( *m_pFont );
-            pTmpFnt->SetDiffFnt( &pChFormat->GetAttrSet(), m_pFrame->GetTextNode()->getIDocumentSettingAccess() );
+            pTmpFnt->SetDiffFnt(&pChFormat->GetAttrSet(), &m_pFrame->GetDoc().getIDocumentSettingAccess());
         }
         {
             OUString const aStr( bName
@@ -316,27 +316,39 @@ static SwFieldPortion * lcl_NewMetaPortion(SwTextAttr & rHint, const bool bPrefi
  */
 SwExpandPortion * SwTextFormatter::TryNewNoLengthPortion(SwTextFormatInfo const & rInfo)
 {
-    if (m_pHints)
+    const TextFrameIndex nIdx(rInfo.GetIdx());
+
+    // sw_redlinehide: because there is a dummy character at the start of these
+    // hints, it's impossible to have ends of hints from different nodes at the
+    // same view position, so it's sufficient to check the hints of the current
+    // node.  However, m_nHintEndIndex exists for the whole text frame, so
+    // it's necessary to iterate all hints for that purpose...
+    SwTextNode const* pNode(nullptr);
+    sw::MergedAttrIterByEnd iter(*rInfo.GetTextFrame());
+    size_t i(0);
+    for (SwTextAttr const* pHint = iter.NextAttr(&pNode); pHint;
+         pHint = iter.NextAttr(&pNode))
     {
-        const sal_Int32 nIdx(rInfo.GetIdx());
-        while (m_nHintEndIndex < m_pHints->Count())
+        if (i++ < m_nHintEndIndex)
         {
-            SwTextAttr & rHint( *m_pHints->GetSortedByEnd(m_nHintEndIndex) );
-            sal_Int32 const nEnd( *rHint.GetAnyEnd() );
-            if (nEnd > nIdx)
+            continue; // skip ones that were handled earlier
+        }
+        SwTextAttr & rHint(const_cast<SwTextAttr&>(*pHint));
+        TextFrameIndex const nEnd(
+            rInfo.GetTextFrame()->MapModelToView(pNode, *rHint.GetAnyEnd()));
+        if (nEnd > nIdx)
+        {
+            break;
+        }
+        ++m_nHintEndIndex;
+        if (nEnd == nIdx)
+        {
+            if (RES_TXTATR_METAFIELD == rHint.Which())
             {
-                break;
-            }
-            ++m_nHintEndIndex;
-            if (nEnd == nIdx)
-            {
-                if (RES_TXTATR_METAFIELD == rHint.Which())
-                {
-                    SwFieldPortion *const pPortion(
-                            lcl_NewMetaPortion(rHint, false));
-                    pPortion->SetNoLength(); // no CH_TXTATR at hint end!
-                    return pPortion;
-                }
+                SwFieldPortion *const pPortion(
+                        lcl_NewMetaPortion(rHint, false));
+                pPortion->SetNoLength(); // no CH_TXTATR at hint end!
+                return pPortion;
             }
         }
     }
@@ -350,8 +362,8 @@ SwLinePortion *SwTextFormatter::NewExtraPortion( SwTextFormatInfo &rInf )
     if( !pHint )
     {
         pRet = new SwTextPortion;
-        pRet->SetLen( 1 );
-        rInf.SetLen( 1 );
+        pRet->SetLen(TextFrameIndex(1));
+        rInf.SetLen(TextFrameIndex(1));
         return pRet;
     }
 
@@ -394,7 +406,7 @@ SwLinePortion *SwTextFormatter::NewExtraPortion( SwTextFormatInfo &rInf )
     {
         const OUString aNothing;
         pRet = new SwFieldPortion( aNothing );
-        rInf.SetLen( 1 );
+        rInf.SetLen(TextFrameIndex(1));
     }
     return pRet;
 }
@@ -406,47 +418,52 @@ SwLinePortion *SwTextFormatter::NewExtraPortion( SwTextFormatInfo &rInf )
  */
 static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTextFormatInfo& rInf, const IDocumentSettingAccess* pIDSA )
 {
-    SwTextNode* node = rInf.GetTextFrame()->GetTextNode();
     if( !pIDSA->get(DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING ))
         return;
-    if( SwpHints* hints = node->GetpSwpHints())
+    TextFrameIndex const nTextLen(rInf.GetTextFrame()->GetText().getLength());
+    SwTextNode const* pNode(nullptr);
+    sw::MergedAttrIterReverse iter(*rInf.GetTextFrame());
+    for (SwTextAttr const* pHint = iter.PrevAttr(&pNode); pHint;
+         pHint = iter.PrevAttr(&pNode))
     {
-        for( size_t i = 0; i < hints->Count(); ++i )
+        TextFrameIndex const nHintStart(
+            rInf.GetTextFrame()->MapModelToView(pNode, pHint->GetStart()));
+        if (nHintStart < nTextLen)
         {
-            SwTextAttr* hint = hints->Get( i );
-            // Formatting for the paragraph mark is set to apply only to the (non-existent) extra character
-            // the at end of the txt node.
-            if( hint->Which() == RES_TXTATR_AUTOFMT && hint->GetEnd() != nullptr
-                && hint->GetStart() == *hint->GetEnd() && hint->GetStart() == node->Len())
+            break; // only those at para end are interesting
+        }
+        // Formatting for the paragraph mark is set to apply only to the
+        // (non-existent) extra character at end of the text node.
+        if (pHint->Which() == RES_TXTATR_AUTOFMT
+            && pHint->GetStart() == *pHint->End())
+        {
+            std::shared_ptr<SfxItemSet> pSet(pHint->GetAutoFormat().GetStyleHandle());
+
+            // Check each item and in case it should be ignored, then clear it.
+            std::unique_ptr<SfxItemSet> pCleanedSet;
+            if (pSet.get())
             {
-                std::shared_ptr<SfxItemSet> pSet(hint->GetAutoFormat().GetStyleHandle());
+                pCleanedSet = pSet->Clone();
 
-                // Check each item and in case it should be ignored, then clear it.
-                std::unique_ptr<SfxItemSet> pCleanedSet;
-                if (pSet.get())
+                SfxItemIter aIter(*pSet);
+                const SfxPoolItem* pItem = aIter.GetCurItem();
+                while (true)
                 {
-                    pCleanedSet = pSet->Clone();
+                    if (SwTextNode::IsIgnoredCharFormatForNumbering(pItem->Which()))
+                        pCleanedSet->ClearItem(pItem->Which());
 
-                    SfxItemIter aIter(*pSet);
-                    const SfxPoolItem* pItem = aIter.GetCurItem();
-                    while (true)
-                    {
-                        if (SwTextNode::IsIgnoredCharFormatForNumbering(pItem->Which()))
-                            pCleanedSet->ClearItem(pItem->Which());
+                    if (aIter.IsAtEnd())
+                        break;
 
-                        if (aIter.IsAtEnd())
-                            break;
-
-                        pItem = aIter.NextItem();
-                    }
+                    pItem = aIter.NextItem();
                 }
-
-                // Highlightcolor also needed to be untouched, but we can't have that just by clearing the item
-                Color nSaveHighlight = pNumFnt->GetHighlightColor();
-
-                pNumFnt->SetDiffFnt(pCleanedSet.get(), pIDSA);
-                pNumFnt->SetHighlightColor(nSaveHighlight);
             }
+
+            // Highlightcolor also needed to be untouched, but we can't have that just by clearing the item
+            Color nSaveHighlight = pNumFnt->GetHighlightColor();
+
+            pNumFnt->SetDiffFnt(pCleanedSet.get(), pIDSA);
+            pNumFnt->SetHighlightColor(nSaveHighlight);
         }
     }
 }
@@ -459,7 +476,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
         return nullptr;
 
     SwNumberPortion *pRet = nullptr;
-    const SwTextNode* pTextNd = GetTextFrame()->GetTextNode();
+    const SwTextNode *const pTextNd = GetTextFrame()->GetTextNodeForParaProps();
     const SwNumRule* pNumRule = pTextNd->GetNumRule();
 
     // Has a "valid" number?
