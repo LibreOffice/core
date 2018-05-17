@@ -33,11 +33,11 @@ namespace basctl
 struct BreakPoint
 {
     bool bEnabled;
-    size_t nLine;
+    sal_uInt16 nLine;
     size_t nStopAfter;
     size_t nHitCount;
 
-    explicit BreakPoint(size_t nL)
+    explicit BreakPoint(sal_uInt16 nL)
         : bEnabled(true)
         , nLine(nL)
         , nStopAfter(0)
@@ -50,7 +50,7 @@ class BreakPointList
 {
 private:
     void operator =(BreakPointList) = delete;
-    std::vector<BreakPoint*> maBreakPoints;
+    std::vector<BreakPoint> maBreakPoints;
 
 public:
     BreakPointList();
@@ -63,16 +63,17 @@ public:
 
     void transfer(BreakPointList & rList);
 
-    void InsertSorted(BreakPoint* pBrk);
-    BreakPoint* FindBreakPoint(size_t nLine);
-    void AdjustBreakPoints(size_t nLine, bool bInserted);
+    void InsertSorted(BreakPoint pBrk);
+    BreakPoint* FindBreakPoint(sal_uInt16 nLine);
+    void AdjustBreakPoints(sal_uInt16 nLine, bool bInserted);
     void SetBreakPointsInBasic(SbModule* pModule);
     void ResetHitCount();
 
     size_t size() const;
-    BreakPoint* at(size_t i);
-    const BreakPoint* at(size_t i) const;
-    BreakPoint* remove(BreakPoint* ptr);
+    BreakPoint& at(size_t i);
+    const BreakPoint& at(size_t i) const;
+    void remove(BreakPoint* ptr);
+    void remove(size_t i);
 };
 
 } // namespace basctl
