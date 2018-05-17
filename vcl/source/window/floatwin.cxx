@@ -590,7 +590,7 @@ bool FloatingWindow::EventNotify( NotifyEvent& rNEvt )
     return bRet;
 }
 
-void FloatingWindow::LogicInvalidate(const tools::Rectangle* /*pRectangle*/)
+void FloatingWindow::PixelInvalidate(const tools::Rectangle* /*pRectangle*/)
 {
     if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
     {
