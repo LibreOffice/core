@@ -53,8 +53,8 @@ namespace abp
         get(m_pLocationLabel, "locationft");
         get(m_pName, "name");
         get(m_pDuplicateNameError, "warning");
-        m_pLocationController = new svx::DatabaseLocationInputController(_pParent->getORB(),
-            *m_pLocation, *m_pBrowse);
+        m_pLocationController.reset( new svx::DatabaseLocationInputController(_pParent->getORB(),
+            *m_pLocation, *m_pBrowse) );
 
         m_pName->SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
         m_pLocation->SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
@@ -72,7 +72,7 @@ namespace abp
 
     void FinalPage::dispose()
     {
-        delete m_pLocationController;
+        m_pLocationController.reset();
         m_pLocation.clear();
         m_pBrowse.clear();
         m_pRegisterName.clear();
