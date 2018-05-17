@@ -129,6 +129,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     bool                m_bModifyPasswordEntered;
     /// If true, then this is not a real save, just the signatures change.
     bool m_bSavingForSigning;
+    bool m_bAllowModifiedBackAfterSigning;
 
     SfxObjectShell_Impl( SfxObjectShell& _rDocShell );
     virtual ~SfxObjectShell_Impl();
