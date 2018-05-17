@@ -80,7 +80,7 @@ class GridWindow : public vcl::Window
     double*         m_pXValues;
     double*         m_pOrigYValues;
     int             m_nValues;
-    double*         m_pNewYValues;
+    std::unique_ptr<double[]> m_pNewYValues;
 
     sal_uInt16      m_BmOffX;
     sal_uInt16      m_BmOffY;
@@ -128,7 +128,7 @@ public:
 
     void setBoundings( double fMinX, double fMinY, double fMaxX, double fMaxY );
 
-    double* getNewYValues() { return m_pNewYValues; }
+    double* getNewYValues() { return m_pNewYValues.get(); }
 
     void ChangeMode(ResetType nType);
 
@@ -172,8 +172,8 @@ void GridWindow::Init(double* pXValues, double* pYValues, int nValues, bool bCut
 
     if (m_pOrigYValues && m_nValues)
     {
-        m_pNewYValues = new double[ m_nValues ];
-        memcpy( m_pNewYValues, m_pOrigYValues, sizeof( double ) * m_nValues );
+        m_pNewYValues.reset(new double[ m_nValues ]);
+        memcpy( m_pNewYValues.get(), m_pOrigYValues, sizeof( double ) * m_nValues );
     }
 
     setBoundings( 0, 0, 1023, 1023 );
@@ -238,7 +238,7 @@ GridWindow::~GridWindow()
 
 void GridWindow::dispose()
 {
-    delete [] m_pNewYValues;
+    m_pNewYValues.reset();
     vcl::Window::dispose();
 }
 
@@ -657,7 +657,7 @@ void GridWindow::ChangeMode(ResetType nType)
         case ResetType::RESET:
         {
             if( m_pOrigYValues && m_pNewYValues && m_nValues )
-                memcpy( m_pNewYValues, m_pOrigYValues, m_nValues*sizeof(double) );
+                memcpy( m_pNewYValues.get(), m_pOrigYValues, m_nValues*sizeof(double) );
         }
         break;
         case ResetType::EXPONENTIAL:
