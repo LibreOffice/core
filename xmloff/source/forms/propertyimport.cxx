@@ -187,6 +187,7 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
                     case TYPE_DATE:
                     {
                         double dummy;
+                        (void) dummy; // avoid warning C4101 with some over-eager MSVC
                         OSL_ENSURE(std::modf(nValue, &dummy) == 0,
                             "PropertyConversion::convertString: a Date value with a fractional part?");
                         aReturn <<= lcl_getDate(nValue);
