@@ -39,7 +39,6 @@ typedef ::cppu::WeakComponentImplHelper< css::media::XPlayer,
 class VLCPlayer : public ::cppu::BaseMutex,
                   public VLC_Base
 {
-    wrapper::Instance&     mInstance;
     wrapper::EventHandler& mEventHandler;
 
     wrapper::Media         mMedia;

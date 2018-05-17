@@ -48,8 +48,6 @@ public:
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 private:
-    const SfxItemSet & rInAttrs;
-
     std::unique_ptr< ErrorBarResources >    m_apErrorBarResources;
 };
 

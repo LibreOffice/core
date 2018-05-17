@@ -43,10 +43,6 @@ private: //member
     ExplicitIncrementData m_aIncrement;
     css::uno::Reference< css::chart2::XScaling >
                                                 m_xInverseScaling;
-
-    //minimum and maximum of the visible range after scaling
-    double    m_fScaledVisibleMin;
-    double    m_fScaledVisibleMax;
 };
 
 } //namespace chart

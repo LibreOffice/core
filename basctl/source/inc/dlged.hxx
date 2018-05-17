@@ -126,7 +126,6 @@ private:
     Mode                eMode;
     sal_uInt16          eActObj;
     bool                bFirstDraw;
-    Size                aGridSize;
     bool                bCreateOK;
     tools::Rectangle           aPaintRect;
     bool                bDialogModelChanged;

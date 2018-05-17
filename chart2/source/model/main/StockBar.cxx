@@ -111,10 +111,9 @@ namespace chart
 
 StockBar::StockBar( bool bRisingCourse ) :
         ::property::OPropertySet( m_aMutex ),
-    m_bRisingCourse( bRisingCourse ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
-    if( ! m_bRisingCourse )
+    if( ! bRisingCourse )
     {
         setFastPropertyValue_NoBroadcast(
             ::chart::FillProperties::PROP_FILL_COLOR,
@@ -129,7 +128,6 @@ StockBar::StockBar( const StockBar & rOther ) :
         MutexContainer(),
         impl::StockBar_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-    m_bRisingCourse( rOther.m_bRisingCourse ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 

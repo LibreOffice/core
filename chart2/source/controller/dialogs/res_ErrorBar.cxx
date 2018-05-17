@@ -86,7 +86,6 @@ ErrorBarResources::ErrorBarResources( VclBuilderContainer* pParent, Dialog * pPa
         m_bIndicatorUnique( true ),
         m_bRangePosUnique( true ),
         m_bRangeNegUnique( true ),
-        m_bNoneAvailable( bNoneAvailable ),
         m_eErrorBarType( eType ),
         m_nConstDecimalDigits( 1 ),
         m_nConstSpinSize( 1 ),
@@ -126,7 +125,7 @@ ErrorBarResources::ErrorBarResources( VclBuilderContainer* pParent, Dialog * pPa
         pParent->get(m_pUIStringNeg, "STR_DATA_SELECT_RANGE_FOR_NEGATIVE_ERRORBARS");
         pParent->get(m_pUIStringRbRange, "STR_CONTROLTEXT_ERROR_BARS_FROM_DATA");
 
-    if( m_bNoneAvailable )
+    if( bNoneAvailable )
         m_pRbNone->SetClickHdl( LINK( this, ErrorBarResources, CategoryChosen ));
     else
         m_pRbNone->Hide();

@@ -106,8 +106,6 @@ private:
     bool                 m_bRangePosUnique;
     bool                 m_bRangeNegUnique;
 
-    bool                 m_bNoneAvailable;
-
     tErrorBarType        m_eErrorBarType;
     sal_uInt16           m_nConstDecimalDigits;
     sal_Int64            m_nConstSpinSize;
