@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_25484e2d",
+        "filename": "include/xmloff/xmlimp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-05-17T14:58:38Z",
+      "side": 1,
+      "message": "i suspect this function has the same bug but it happens not to have caused a visible problem yet?",
+      "revId": "81a3af63946796eae057a698cae15221d7185c46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_455702ce",
+        "filename": "include/xmloff/xmlimp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-05-17T14:58:38Z",
+      "side": 1,
+      "message": "this one OTOH is called only once and ... in a rather bizarre way, quite possibly it\u0027s a work-around for the missing use of the actual namespace map in the other functions; doesn\u0027t make sense to pass this function a map.",
+      "revId": "81a3af63946796eae057a698cae15221d7185c46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_655246df",
+        "filename": "unoxml/source/dom/saxbuilder.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-05-17T14:58:38Z",
+      "side": 1,
+      "message": "uh... this looks rather unfixable unfortunately... why does a generic SAX component depend on xmloff code in the first place? that looks quite wrong.",
+      "revId": "81a3af63946796eae057a698cae15221d7185c46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
