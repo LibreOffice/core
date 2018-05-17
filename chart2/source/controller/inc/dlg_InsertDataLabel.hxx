@@ -38,8 +38,6 @@ private:
 //     HelpButton          m_aBtnHelp;
     std::unique_ptr < DataLabelResources >    m_apDataLabelResources;
 
-    const SfxItemSet&   m_rInAttrs;
-
 public:
     DataLabelsDialog(vcl::Window* pParent, const SfxItemSet& rInAttrs, SvNumberFormatter* pFormatter);
     virtual ~DataLabelsDialog() override;

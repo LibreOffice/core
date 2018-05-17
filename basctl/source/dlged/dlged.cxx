@@ -190,7 +190,6 @@ DlgEditor::DlgEditor (
     ,eMode( DlgEditor::SELECT )
     ,eActObj( OBJ_DLG_PUSHBUTTON )
     ,bFirstDraw(false)
-    ,aGridSize( 100, 100 )  // 100TH_MM
     ,bCreateOK(true)
     ,bDialogModelChanged(false)
     ,aMarkIdle("basctl DlgEditor Mark")
@@ -227,6 +226,7 @@ DlgEditor::DlgEditor (
     pDlgEdView->SetMoveSnapOnlyTopLeft(true);
     pDlgEdView->SetWorkArea( tools::Rectangle( Point( 0, 0 ), pDlgEdPage->GetSize() ) );
 
+    Size aGridSize( 100, 100 );  // 100TH_MM
     pDlgEdView->SetGridCoarse( aGridSize );
     pDlgEdView->SetSnapGridWidth(Fraction(aGridSize.Width(), 1), Fraction(aGridSize.Height(), 1));
     pDlgEdView->SetGridSnap( true );

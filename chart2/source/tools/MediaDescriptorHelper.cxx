@@ -28,13 +28,11 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
                         beans::PropertyValue > & rMediaDescriptor )
     : m_aRegularProperties(rMediaDescriptor.getLength())
     , m_aDeprecatedProperties(rMediaDescriptor.getLength())
-    , m_aAdditionalProperties(rMediaDescriptor.getLength())
     , m_aModelProperties(rMediaDescriptor.getLength())
 {
     impl_init();
     sal_Int32 nRegularCount = 0;
     sal_Int32 nDeprecatedCount = 0;
-    sal_Int32 nAdditionalCount = 0;
     sal_Int32 nModelCount = 0;
 
     auto addRegularProp = [this, &nRegularCount](const beans::PropertyValue& rRegularProp)
@@ -77,7 +75,6 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
         else if (rProp.Name == "ComponentData")
         {
-            ComponentData = rProp.Value;
             addModelProp(rProp);
         }
         else if (rProp.Name == "FileName")
@@ -86,7 +83,6 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
         else if (rProp.Name == "FilterData")
         {
-            FilterData = rProp.Value;
             addModelProp(rProp);
         }
         else if (rProp.Name == "FilterName")
@@ -223,7 +219,6 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
         else if (rProp.Name == "ViewData")
         {
-            ViewData = rProp.Value;
             addModelProp(rProp);
         }
         else if (rProp.Name == "ViewId")
@@ -234,16 +229,10 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         {
             addDepreciatedProp(rProp);
         }
-        else
-        {
-            m_aAdditionalProperties[nAdditionalCount]=rProp;
-            nAdditionalCount++;
-        }
     }
 
     m_aRegularProperties.realloc(nRegularCount);
     m_aDeprecatedProperties.realloc(nDeprecatedCount);
-    m_aAdditionalProperties.realloc(nAdditionalCount);
     m_aModelProperties.realloc(nModelCount);
 }
 

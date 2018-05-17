@@ -58,15 +58,10 @@ public:
     css::uno::Sequence< css::beans::PropertyValue >
                         m_aDeprecatedProperties; //these are properties which are described in service com.sun.star.document.MediaDescriptor but are marked as deprecated
 
-    css::uno::Sequence< css::beans::PropertyValue >
-                        m_aAdditionalProperties; //these are properties which are not described in service com.sun.star.document.MediaDescriptor
-
     //properties which should be given to a model are additionally stored in this sequence (not documented properties and deprecated properties are not included!)
     css::uno::Sequence< css::beans::PropertyValue >
                         m_aModelProperties; //these are properties which are not described in service com.sun.star.document.MediaDescriptor
 
-    css::uno::Any       ComponentData;
-    css::uno::Any       FilterData;
     OUString            FilterName; //internal filter name.
     bool                ISSET_FilterName;
 
@@ -83,8 +78,6 @@ public:
 
     OUString            URL;// FileName, URL of the document.
     bool                ISSET_URL;
-
-    css::uno::Any       ViewData;
 
     // new framework objects
     css::uno::Reference< css::embed::XStorage >

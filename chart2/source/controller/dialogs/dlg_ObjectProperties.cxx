@@ -325,7 +325,6 @@ SchAttribTabDlg::SchAttribTabDlg(vcl::Window* pParent,
                                  const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier
                                  )
     : SfxTabDialog(pParent, "AttributeDialog", "modules/schart/ui/attributedialog.ui", pAttr)
-    , eObjectType(pDialogParameter->getObjectType())
     , nDlgType(nNoArrowNoShadowDlg)
     , m_pParameter( pDialogParameter )
     , m_pViewElementListProvider( pViewElementListProvider )
@@ -342,7 +341,7 @@ SchAttribTabDlg::SchAttribTabDlg(vcl::Window* pParent,
 
     SvtCJKOptions aCJKOptions;
 
-    switch (eObjectType)
+    switch (pDialogParameter->getObjectType())
     {
         case OBJECTTYPE_TITLE:
             AddTabPage(RID_SVXPAGE_LINE, SchResId(STR_PAGE_BORDER));

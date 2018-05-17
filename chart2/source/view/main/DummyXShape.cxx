@@ -758,7 +758,6 @@ private:
 
 DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
         const tAnySequence& rValues, const uno::Any& rTrans, uno::Reference< drawing::XShapes > const & xTarget, double nRotation ):
-    maText(rText),
     maTrans(rTrans),
     mnRotation(nRotation)
 {
@@ -768,7 +767,7 @@ DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
     DummyChart* pChart = getRootShape();
     TextCache& rCache = pChart->getTextCache();
     TextCache::TextCacheKey aKey;
-    aKey.maText = maText;
+    aKey.maText = rText;
     aKey.maProperties = maProperties;
     int bmpWidth;
     int bmpHeight;

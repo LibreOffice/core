@@ -82,16 +82,14 @@ double findMaxValue(const std::vector<std::unique_ptr<VDataSeries> >& rDataSerie
 class SharedResourceAccess
 {
 private:
-    osl::Condition& mrCond1;
     osl::Condition& mrCond2;
 
 public:
 
     SharedResourceAccess(osl::Condition& rCond1, osl::Condition& rCond2):
-        mrCond1(rCond1),
         mrCond2(rCond2)
     {
-        mrCond1.set();
+        rCond1.set();
     }
 
     ~SharedResourceAccess()

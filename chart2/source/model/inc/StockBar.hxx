@@ -85,7 +85,6 @@ private:
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 
-    const bool m_bRisingCourse;
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
 };
 
