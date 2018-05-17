@@ -103,7 +103,9 @@ public:
     SwAutoTabDecimalPortion( const sal_uInt16 nTabPosVal, const sal_Unicode cTab,
                                     const sal_Unicode cFillChar )
          : SwTabDecimalPortion( nTabPosVal, cTab, cFillChar )
-    { SetLen( 0 ); }
+    {
+        SetLen(TextFrameIndex(0));
+    }
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 };
 

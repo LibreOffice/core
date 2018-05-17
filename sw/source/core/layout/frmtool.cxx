@@ -125,7 +125,8 @@ SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
                     if ( pPre && pPre->IsFlowFrame() )
                     {
                         // 1. pPre wants to keep with me:
-                        bool bInvalidPrePos = SwFlowFrame::CastFlowFrame( pPre )->IsKeep( *pPre->GetAttrSet() ) && pPre->GetIndPrev();
+                        bool bInvalidPrePos = SwFlowFrame::CastFlowFrame(pPre)->IsKeep(pPre->GetAttrSet()->GetKeep(), pPre->GetBreakItem())
+                            && pPre->GetIndPrev();
 
                         // 2. pPre is a table and the last row wants to keep with me:
                         if ( !bInvalidPrePos && pPre->IsTabFrame() )
@@ -735,10 +736,9 @@ SwContentNotify::SwContentNotify( SwContentFrame *pContentFrame ) :
     if ( pContentFrame->IsTextFrame() )
     {
         SwTextFrame* pTextFrame = static_cast<SwTextFrame*>(pContentFrame);
-        if ( !pTextFrame->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::OLD_LINE_SPACING) )
+        if (!pTextFrame->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::OLD_LINE_SPACING))
         {
-            const SwAttrSet* pSet = pTextFrame->GetAttrSet();
-            const SvxLineSpacingItem &rSpace = pSet->GetLineSpacing();
+            const SvxLineSpacingItem &rSpace = pTextFrame->GetAttrSet()->GetLineSpacing();
             if ( rSpace.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop )
             {
                 mbChkHeightOfLastLine = true;
@@ -822,8 +822,8 @@ SwContentNotify::~SwContentNotify()
         SwViewShell *pSh  = pCnt->getRootFrame()->GetCurrShell();
         if ( pSh )
         {
-            SwOLENode *pNd;
-            if ( nullptr != (pNd = pCnt->GetNode()->GetOLENode()) &&
+            SwOLENode *const pNd(static_cast<SwNoTextFrame*>(pCnt)->GetNode()->GetOLENode());
+            if (nullptr != pNd &&
                  (pNd->GetOLEObj().IsOleRef() ||
                   pNd->IsOLESizeInvalid()) )
             {
@@ -881,7 +881,9 @@ SwContentNotify::~SwContentNotify()
     {
         pCnt->SetRetouche();    //fix(13870)
 
-        SwDoc *pDoc = pCnt->GetNode()->GetDoc();
+        SwDoc *const pDoc = pCnt->IsTextFrame()
+            ? &static_cast<SwTextFrame*>(pCnt)->GetDoc()
+            : static_cast<SwNoTextFrame*>(pCnt)->GetNode()->GetDoc();
         if ( !pDoc->GetSpzFrameFormats()->empty() &&
              pDoc->DoesContainAtPageObjWithContentAnchor() && !pDoc->getIDocumentState().IsNewDoc() )
         {
@@ -894,7 +896,6 @@ SwContentNotify::~SwContentNotify()
             // the page is known. Thus, this data can be corrected now.
 
             const SwPageFrame *pPage = nullptr;
-            SwNodeIndex *pIdx  = nullptr;
             SwFrameFormats *pTable = pDoc->GetSpzFrameFormats();
 
             for ( size_t i = 0; i < pTable->size(); ++i )
@@ -907,11 +908,7 @@ SwContentNotify::~SwContentNotify()
                     continue;
                 }
 
-                if ( !pIdx )
-                {
-                    pIdx = new SwNodeIndex( *pCnt->GetNode() );
-                }
-                if ( rAnch.GetContentAnchor()->nNode == *pIdx )
+                if (FrameContainsNode(*pCnt, rAnch.GetContentAnchor()->nNode.GetIndex()))
                 {
                     OSL_FAIL( "<SwContentNotify::~SwContentNotify()> - to page anchored object with content position." );
                     if ( !pPage )
@@ -928,7 +925,6 @@ SwContentNotify::~SwContentNotify()
                     }
                 }
             }
-            delete pIdx;
         }
     }
 
@@ -972,38 +968,9 @@ SwContentNotify::~SwContentNotify()
     }
 }
 
-void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
-                        SwFrame *pFrame, SwPageFrame *pPage, SwDoc* doc )
+// note this *cannot* be static because it's a friend
+void AppendObj(SwFrame *const pFrame, SwPageFrame *const pPage, SwFrameFormat *const pFormat, const SwFormatAnchor & rAnch)
 {
-#if OSL_DEBUG_LEVEL > 0
-    std::vector<SwFrameFormat*> checkFormats;
-    for ( size_t i = 0; i < pTable->size(); ++i )
-    {
-        SwFrameFormat *pFormat = (*pTable)[i];
-        const SwFormatAnchor &rAnch = pFormat->GetAnchor();
-        if ( rAnch.GetContentAnchor() &&
-             (rAnch.GetContentAnchor()->nNode.GetIndex() == nIndex) )
-        {
-            checkFormats.push_back( pFormat );
-        }
-    }
-#else
-    (void)pTable;
-#endif
-    SwNode const& rNode(*doc->GetNodes()[nIndex]);
-    std::vector<SwFrameFormat*> const*const pFlys(rNode.GetAnchoredFlys());
-    for (size_t it = 0; pFlys && it != pFlys->size(); )
-    {
-        SwFrameFormat *const pFormat = (*pFlys)[it];
-        const SwFormatAnchor &rAnch = pFormat->GetAnchor();
-        if ( rAnch.GetContentAnchor() &&
-             (rAnch.GetContentAnchor()->nNode.GetIndex() == nIndex) )
-        {
-#if OSL_DEBUG_LEVEL > 0
-            std::vector<SwFrameFormat*>::iterator checkPos = std::find( checkFormats.begin(), checkFormats.end(), pFormat );
-            assert( checkPos != checkFormats.end());
-            checkFormats.erase( checkPos );
-#endif
             const bool bFlyAtFly = rAnch.GetAnchorId() == RndStdIds::FLY_AT_FLY; // LAYER_IMPL
             //Is a frame or a SdrObject described?
             const bool bSdrObj = RES_DRAWFRMFMT == pFormat->Which();
@@ -1021,9 +988,8 @@ void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
                 if ( bSdrObj && nullptr == (pSdrObj = pFormat->FindSdrObject()) )
                 {
                     OSL_ENSURE( !bSdrObj, "DrawObject not found." );
-                    ++it;
                     pFormat->GetDoc()->DelFrameFormat( pFormat );
-                    continue;
+                    return;
                 }
                 if ( pSdrObj )
                 {
@@ -1050,7 +1016,6 @@ void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
 
                         pDrawVirtObj->ActionChanged();
                     }
-
                 }
                 else
                 {
@@ -1066,12 +1031,131 @@ void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
                         ::RegistFlys( pPage, pFly );
                 }
             }
+}
+
+static bool IsShown(sal_uLong const nIndex,
+    const SwFormatAnchor & rAnch,
+    std::vector<sw::Extent>::const_iterator *const pIter,
+    std::vector<sw::Extent>::const_iterator const*const pEnd)
+{
+    SwPosition const& rAnchor(*rAnch.GetContentAnchor());
+    if (pIter && rAnch.GetAnchorId() != RndStdIds::FLY_AT_PARA)
+    {
+        // TODO are frames sorted by anchor positions perhaps?
+        assert(pEnd);
+        assert(rAnch.GetAnchorId() != RndStdIds::FLY_AT_FLY);
+        for ( ; *pIter != *pEnd; ++*pIter)
+        {
+            assert((**pIter).pNode->GetIndex() == nIndex);
+            if ((**pIter).nStart <= rAnchor.nContent.GetIndex())
+            {
+                // TODO off by one? need < for AS_CHAR but what for AT_CHAR?
+                if (rAnchor.nContent.GetIndex() < (**pIter).nEnd)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+    else
+    {
+        return rAnch.GetContentAnchor()->nNode.GetIndex() == nIndex;
+    }
+}
+
+void AppendObjsOfNode(SwFrameFormats const*const pTable, sal_uLong const nIndex,
+    SwFrame *const pFrame, SwPageFrame *const pPage, SwDoc *const pDoc,
+    std::vector<sw::Extent>::const_iterator *const pIter,
+    std::vector<sw::Extent>::const_iterator const*const pEnd)
+{
+#if OSL_DEBUG_LEVEL > 0
+    std::vector<SwFrameFormat*> checkFormats;
+    for ( size_t i = 0; i < pTable->size(); ++i )
+    {
+        SwFrameFormat *pFormat = (*pTable)[i];
+        const SwFormatAnchor &rAnch = pFormat->GetAnchor();
+        if ( rAnch.GetContentAnchor() &&
+            IsShown(nIndex, rAnch, pIter, pEnd))
+        {
+            checkFormats.push_back( pFormat );
+        }
+    }
+#else
+    (void)pTable;
+#endif
+
+    SwNode const& rNode(*pDoc->GetNodes()[nIndex]);
+    std::vector<SwFrameFormat*> const*const pFlys(rNode.GetAnchoredFlys());
+    for (size_t it = 0; pFlys && it != pFlys->size(); )
+    {
+        SwFrameFormat *const pFormat = (*pFlys)[it];
+        const SwFormatAnchor &rAnch = pFormat->GetAnchor();
+        if ( rAnch.GetContentAnchor() &&
+            IsShown(nIndex, rAnch, pIter, pEnd))
+        {
+#if OSL_DEBUG_LEVEL > 0
+            std::vector<SwFrameFormat*>::iterator checkPos = std::find( checkFormats.begin(), checkFormats.end(), pFormat );
+            assert( checkPos != checkFormats.end());
+            checkFormats.erase( checkPos );
+#endif
+            AppendObj(pFrame, pPage, pFormat, rAnch);
         }
         ++it;
     }
+
 #if OSL_DEBUG_LEVEL > 0
     assert( checkFormats.empty());
 #endif
+}
+
+
+void AppendObjs(const SwFrameFormats *const pTable, sal_uLong const nIndex,
+        SwFrame *const pFrame, SwPageFrame *const pPage, SwDoc *const pDoc)
+{
+    if (pFrame->IsTextFrame())
+    {
+        SwTextFrame const*const pTextFrame(static_cast<SwTextFrame const*>(pFrame));
+        if (sw::MergedPara const*const pMerged = pTextFrame->GetMergedPara())
+        {
+            std::vector<sw::Extent>::const_iterator iterFirst(pMerged->extents.begin());
+            std::vector<sw::Extent>::const_iterator iter(iterFirst);
+            SwTextNode const* pNode(nullptr);
+            for ( ; iter != pMerged->extents.end(); ++iter)
+            {
+                if (iter->pNode != pNode)
+                {
+                    if (pNode)
+                    {
+                        AppendObjsOfNode(pTable, pNode->GetIndex(), pFrame, pPage, pDoc, &iterFirst, &iter);
+                    }
+                    else
+                    {
+                        assert(nIndex == iter->pNode->GetIndex()); // first iteration
+                    }
+                    pNode = iter->pNode;
+                    iterFirst = iter;
+                }
+            }
+            if (!pNode)
+            {   // no extents?
+                pNode = pMerged->pFirstNode;
+            }
+            AppendObjsOfNode(pTable, pNode->GetIndex(), pFrame, pPage, pDoc, &iterFirst, &iter);
+        }
+        else
+        {
+            return AppendObjsOfNode(pTable, nIndex, pFrame, pPage, pDoc, nullptr, nullptr);
+        }
+    }
+    else
+    {
+        return AppendObjsOfNode(pTable, nIndex, pFrame, pPage, pDoc, nullptr, nullptr);
+    }
 }
 
 void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
@@ -1740,7 +1824,9 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
 SwBorderAttrs::SwBorderAttrs(const SwModify *pMod, const SwFrame *pConstructor)
     : SwCacheObj(pMod)
     , m_rAttrSet(pConstructor->IsContentFrame()
-                    ? static_cast<const SwContentFrame*>(pConstructor)->GetNode()->GetSwAttrSet()
+                    ? pConstructor->IsTextFrame()
+                        ? static_cast<const SwTextFrame*>(pConstructor)->GetTextNodeForParaProps()->GetSwAttrSet()
+                        : static_cast<const SwNoTextFrame*>(pConstructor)->GetNode()->GetSwAttrSet()
                     : static_cast<const SwLayoutFrame*>(pConstructor)->GetFormat()->GetAttrSet())
     , m_rUL(m_rAttrSet.GetULSpace())
     // #i96772#
@@ -1765,7 +1851,7 @@ SwBorderAttrs::SwBorderAttrs(const SwModify *pMod, const SwFrame *pConstructor)
     const SwTextFrame* pTextFrame = dynamic_cast<const SwTextFrame*>(pConstructor);
     if ( pTextFrame )
     {
-        pTextFrame->GetTextNode()->ClearLRSpaceItemDueToListLevelIndents( m_rLR );
+        pTextFrame->GetTextNodeForParaProps()->ClearLRSpaceItemDueToListLevelIndents( m_rLR );
     }
     else if ( pConstructor->IsNoTextFrame() )
     {
@@ -1813,7 +1899,7 @@ long SwBorderAttrs::CalcRight( const SwFrame* pCaller ) const
 {
     long nRight=0;
 
-    if (!pCaller->IsTextFrame() || !static_cast<const SwTextFrame*>(pCaller)->GetTextNode()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::INVERT_BORDER_SPACING)) {
+    if (!pCaller->IsTextFrame() || !static_cast<const SwTextFrame*>(pCaller)->GetDoc().GetDocumentSettingManager().get(DocumentSettingId::INVERT_BORDER_SPACING)) {
     // OD 23.01.2003 #106895# - for cell frame in R2L text direction the left
     // and right border are painted on the right respectively left.
     if ( pCaller->IsCellFrame() && pCaller->IsRightToLeft() )
@@ -1831,7 +1917,7 @@ long SwBorderAttrs::CalcRight( const SwFrame* pCaller ) const
     // correction: retrieve left margin for numbering in R2L-layout
     if ( pCaller->IsTextFrame() && pCaller->IsRightToLeft() )
     {
-        nRight += static_cast<const SwTextFrame*>(pCaller)->GetTextNode()->GetLeftMarginWithNum();
+        nRight += static_cast<const SwTextFrame*>(pCaller)->GetTextNodeForParaProps()->GetLeftMarginWithNum();
     }
 
     return nRight;
@@ -1861,7 +1947,8 @@ long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
 {
     long nLeft=0;
 
-    if (!pCaller->IsTextFrame() || !static_cast<const SwTextFrame*>(pCaller)->GetTextNode()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::INVERT_BORDER_SPACING)) {
+    if (!pCaller->IsTextFrame() || !static_cast<const SwTextFrame*>(pCaller)->GetDoc().GetDocumentSettingManager().get(DocumentSettingId::INVERT_BORDER_SPACING))
+    {
     // OD 23.01.2003 #106895# - for cell frame in R2L text direction the left
     // and right border are painted on the right respectively left.
     if ( pCaller->IsCellFrame() && pCaller->IsRightToLeft() )
@@ -1879,7 +1966,7 @@ long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
         if (pCaller->IsTextFrame())
         {
             const SwTextFrame* pTextFrame = static_cast<const SwTextFrame*>(pCaller);
-            if (pTextFrame->GetTextNode()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::FLOATTABLE_NOMARGINS))
+            if (pTextFrame->GetDoc().GetDocumentSettingManager().get(DocumentSettingId::FLOATTABLE_NOMARGINS))
             {
                 // If this is explicitly requested, ignore the margins next to the floating table.
                 if (lcl_hasTabFrame(pTextFrame))
@@ -1896,7 +1983,7 @@ long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
     // correction: do not retrieve left margin for numbering in R2L-layout
     if ( pCaller->IsTextFrame() && !pCaller->IsRightToLeft() )
     {
-        nLeft += static_cast<const SwTextFrame*>(pCaller)->GetTextNode()->GetLeftMarginWithNum();
+        nLeft += static_cast<const SwTextFrame*>(pCaller)->GetTextNodeForParaProps()->GetLeftMarginWithNum();
     }
 
     return nLeft;
@@ -2116,14 +2203,20 @@ void SwBorderAttrs::GetBottomLine_( const SwFrame& _rFrame )
     m_nGetBottomLine = nRet;
 }
 
+static SwModify const* GetCacheOwner(SwFrame const& rFrame)
+{
+    return rFrame.IsContentFrame()
+        ? static_cast<SwModify const*>(rFrame.IsTextFrame()
+        // sw_redlinehide: presumably this caches the border attrs at the model level and can be shared across different layouts so we want the ParaProps node here
+            ? static_cast<const SwTextFrame&>(rFrame).GetTextNodeForParaProps()
+            : static_cast<const SwNoTextFrame&>(rFrame).GetNode())
+        : static_cast<SwModify const*>(static_cast<const SwLayoutFrame&>(rFrame).GetFormat());
+}
+
 SwBorderAttrAccess::SwBorderAttrAccess( SwCache &rCach, const SwFrame *pFrame ) :
     SwCacheAccess( rCach,
-                   (pFrame->IsContentFrame() ?
-                      const_cast<void*>(static_cast<void const *>(static_cast<const SwContentFrame*>(pFrame)->GetNode())) :
-                      const_cast<void*>(static_cast<void const *>(static_cast<const SwLayoutFrame*>(pFrame)->GetFormat()))),
-                   (pFrame->IsContentFrame() ?
-                      static_cast<SwModify const *>(static_cast<const SwContentFrame*>(pFrame)->GetNode())->IsInCache() :
-                      static_cast<SwModify const *>(static_cast<const SwLayoutFrame*>(pFrame)->GetFormat())->IsInCache()) ),
+        static_cast<void const *>(GetCacheOwner(*pFrame)),
+        GetCacheOwner(*pFrame)->IsInCache()),
     m_pConstructor( pFrame )
 {
 }
@@ -3231,7 +3324,7 @@ SwFrame* GetFrameOfModify( const SwRootFrame* pLayout, SwModify const& rMod, SwF
     SwRect aCalcRect;
     bool bClientIterChanged = false;
 
-    SwIterator<SwFrame,SwModify> aIter( rMod );
+    SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti> aIter(rMod);
     do {
         pMinFrame = nullptr;
         aHolder.Reset();
@@ -3417,13 +3510,24 @@ const SwContentFrame* GetCellContent( const SwLayoutFrame& rCell )
     return pContent;
 }
 
+SwDeletionChecker::SwDeletionChecker(const SwFrame* pFrame)
+    : mpFrame( pFrame )
+    , mpRegIn( pFrame
+        ? pFrame->IsTextFrame()
+            // sw_redlinehide: GetDep() may be a member of SwTextFrame!
+            ? static_cast<SwTextFrame const*>(pFrame)->GetTextNodeFirst()
+            : const_cast<SwFrame*>(pFrame)->GetDep()
+        : nullptr )
+{
+}
+
 /// Can be used to check if a frame has been deleted
 bool SwDeletionChecker::HasBeenDeleted()
 {
     if ( !mpFrame || !mpRegIn )
         return false;
 
-    SwIterator<SwFrame,SwModify> aIter(*mpRegIn);
+    SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti> aIter(*mpRegIn);
     SwFrame* pLast = aIter.First();
     while ( pLast )
     {

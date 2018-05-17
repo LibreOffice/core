@@ -354,6 +354,7 @@ SwRootFrame::SwRootFrame( SwFrameFormat *pFormat, SwViewShell * pSh ) :
     mbIsNewLayout( true ),
     mbCallbackActionEnabled ( false ),
     mbLayoutFreezed ( false ),
+    mbHideRedlines( false ),
     mnBrowseWidth(MIN_BROWSE_WIDTH),
     mpTurbo( nullptr ),
     mpLastPage( nullptr ),
@@ -471,7 +472,7 @@ void SwRootFrame::DestroyImpl()
 
     if(pBlink)
         pBlink->FrameDelete( this );
-    SwFrameFormat *pRegisteredInNonConst = static_cast<SwFrameFormat*>(GetRegisteredInNonConst());
+    SwFrameFormat *pRegisteredInNonConst = static_cast<SwFrameFormat*>(GetDep());
     if ( pRegisteredInNonConst )
     {
         SwDoc *pDoc = pRegisteredInNonConst->GetDoc();

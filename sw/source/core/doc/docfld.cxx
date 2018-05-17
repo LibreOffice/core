@@ -34,6 +34,8 @@
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <cntfrm.hxx>
+#include <txtfrm.hxx>
+#include <notxtfrm.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
@@ -186,7 +188,9 @@ void SetGetExpField::SetBodyPos( const SwContentFrame& rFrame )
 {
     if( !rFrame.IsInDocBody() )
     {
-        SwNodeIndex aIdx( *rFrame.GetNode() );
+        SwNodeIndex aIdx( rFrame.IsTextFrame()
+                ? *static_cast<SwTextFrame const&>(rFrame).GetTextNodeFirst()
+                : *static_cast<SwNoTextFrame const&>(rFrame).GetNode() );
         SwDoc& rDoc = *aIdx.GetNodes().GetDoc();
         SwPosition aPos( aIdx );
         bool const bResult = ::GetBodyTextNode( rDoc, aPos, rFrame );
