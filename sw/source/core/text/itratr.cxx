@@ -627,7 +627,9 @@ static sal_Int32 GetNextAttrImpl(SwTextNode const*const pTextNode,
         size_t const nStartIndex, size_t const nEndIndex,
         sal_Int32 const nPosition)
 {
-    sal_Int32 nNext = COMPLETE_STRING;
+    // note: this used to be COMPLETE_STRING, but was set to Len() + 1 below,
+    // which is rather silly, so set it to Len() instead
+    sal_Int32 nNext = pTextNode->Len();
     if (SwpHints const*const pHints = pTextNode->GetpSwpHints())
     {
         // are there attribute starts left?
@@ -652,29 +654,27 @@ static sal_Int32 GetNextAttrImpl(SwTextNode const*const pTextNode,
             }
         }
     }
-    if (pTextNode != nullptr)
+    // TODO: maybe use hints like FieldHints for this instead of looking at the text...
+    const sal_Int32 l = std::min(nNext, pTextNode->Len());
+    sal_Int32 p = nPosition;
+    const sal_Unicode* pStr = pTextNode->GetText().getStr();
+    while (p < l)
     {
-        // TODO: maybe use hints like FieldHints for this instead of looking at the text...
-        const sal_Int32 l = std::min(nNext, pTextNode->Len());
-        sal_Int32 p = nPosition;
-        const sal_Unicode* aStr = pTextNode->GetText().getStr();
-        while (p<l)
+        sal_Unicode aChar = pStr[p];
+        if (aChar < CH_TXT_ATR_FORMELEMENT
+            || aChar > CH_TXT_ATR_FIELDEND)
         {
-            sal_Unicode aChar = aStr[p];
-            if (aChar < CH_TXT_ATR_FORMELEMENT
-                || aChar > CH_TXT_ATR_FIELDEND)
-            {
-                ++p;
-            }
-            else
-            {
-                break;
-            }
+            ++p;
         }
-        if ((p < l && nPosition < p) || nNext <= p)
-        nNext=p;
         else
-        nNext=p+1;
+        {
+            break;
+        }
+    }
+    assert(p <= nNext);
+    if (p < l && nPosition < p)
+    {
+        nNext=p;
     }
     return nNext;
 }
