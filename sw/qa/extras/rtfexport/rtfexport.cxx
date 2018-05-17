@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -552,7 +553,7 @@ DECLARE_RTFEXPORT_TEST(testI120928, "i120928.rtf")
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    uno::Reference<graphic::XGraphic> xGraphic;
+    uno::Reference<awt::XBitmap> xBitmap;
     sal_Int16 nNumberingType = -1;
 
     for (int i = 0; i < aProps.getLength(); ++i)
@@ -561,11 +562,11 @@ DECLARE_RTFEXPORT_TEST(testI120928, "i120928.rtf")
 
         if (rProp.Name == "NumberingType")
             nNumberingType = rProp.Value.get<sal_Int16>();
-        else if (rProp.Name == "Graphic")
-            xGraphic = rProp.Value.get<uno::Reference<graphic::XGraphic>>();
+        else if (rProp.Name == "GraphicBitmap")
+            xBitmap = rProp.Value.get<uno::Reference<awt::XBitmap>>();
     }
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::BITMAP, nNumberingType);
-    CPPUNIT_ASSERT(xGraphic.is());
+    CPPUNIT_ASSERT(xBitmap.is());
 }
 
 DECLARE_RTFEXPORT_TEST(testBookmark, "bookmark.rtf")
