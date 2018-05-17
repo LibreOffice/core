@@ -1358,8 +1358,8 @@ void BreakPointWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Re
 
     for (size_t i = 0, n = GetBreakPoints().size(); i < n; ++i)
     {
-        BreakPoint& rBrk = *GetBreakPoints().at(i);
-        size_t const nLine = rBrk.nLine - 1;
+        BreakPoint& rBrk = GetBreakPoints().at(i);
+        sal_uInt16 const nLine = rBrk.nLine - 1;
         size_t const nY = nLine*nLineHeight - nCurYOffset;
         rRenderContext.DrawImage(Point(0, nY) + aBmpOff, aBrk[rBrk.bEnabled]);
     }
@@ -1419,11 +1419,11 @@ BreakPoint* BreakPointWindow::FindBreakPoint( const Point& rMousePos )
 
     for ( size_t i = 0, n = GetBreakPoints().size(); i < n ; ++i )
     {
-        BreakPoint* pBrk = GetBreakPoints().at( i );
-        size_t nLine = pBrk->nLine-1;
+        BreakPoint& rBrk = GetBreakPoints().at( i );
+        sal_uInt16 nLine = rBrk.nLine-1;
         size_t nY = nLine*nLineHeight;
         if ( ( nYPos > nY ) && ( nYPos < ( nY + nLineHeight ) ) )
-            return pBrk;
+            return &rBrk;
     }
     return nullptr;
 }
@@ -1469,7 +1469,7 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
             else if (sCommand == "properties")
             {
                 ScopedVclPtrInstance<BreakPointDialog> aBrkDlg(this, GetBreakPoints());
-                aBrkDlg->SetCurrentBreakPoint( pBrk );
+                aBrkDlg->SetCurrentBreakPoint( *pBrk );
                 aBrkDlg->Execute();
                 Invalidate();
             }

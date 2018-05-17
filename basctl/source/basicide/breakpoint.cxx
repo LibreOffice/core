@@ -32,87 +32,83 @@ BreakPointList::BreakPointList()
 BreakPointList::BreakPointList(BreakPointList const & rList)
 {
     for (size_t i = 0; i < rList.size(); ++i)
-        maBreakPoints.push_back( new BreakPoint(*rList.at( i ) ) );
+        maBreakPoints.push_back( BreakPoint(rList.at( i )) );
 }
 
 BreakPointList::~BreakPointList()
 {
-    reset();
 }
 
 void BreakPointList::reset()
 {
-    for (BreakPoint* pBreakPoint : maBreakPoints)
-        delete pBreakPoint;
     maBreakPoints.clear();
 }
 
 void BreakPointList::transfer(BreakPointList & rList)
 {
-    maBreakPoints.swap(rList.maBreakPoints);
-    rList.reset();
+    maBreakPoints = std::move(rList.maBreakPoints);
 }
 
-void BreakPointList::InsertSorted(BreakPoint* pNewBrk)
+void BreakPointList::InsertSorted(BreakPoint aNewBrk)
 {
-    for ( std::vector< BreakPoint* >::iterator i = maBreakPoints.begin(); i != maBreakPoints.end(); ++i )
+    for ( auto it = maBreakPoints.begin(); it != maBreakPoints.end(); ++it )
     {
-        if ( pNewBrk->nLine <= (*i)->nLine )
+        if ( aNewBrk.nLine <= it->nLine )
         {
-            DBG_ASSERT( (*i)->nLine != pNewBrk->nLine, "BreakPoint exists already!" );
-            maBreakPoints.insert( i, pNewBrk );
+            DBG_ASSERT( it->nLine != aNewBrk.nLine, "BreakPoint exists already!" );
+            maBreakPoints.insert( it, aNewBrk );
             return;
         }
     }
     // no insert position found => LIST_APPEND
-    maBreakPoints.push_back( pNewBrk );
+    maBreakPoints.push_back( aNewBrk );
 }
 
 void BreakPointList::SetBreakPointsInBasic(SbModule* pModule)
 {
     pModule->ClearAllBP();
 
-    for (BreakPoint* pBrk : maBreakPoints)
+    for (BreakPoint& rBrk : maBreakPoints)
     {
-        if ( pBrk->bEnabled )
-            pModule->SetBP( static_cast<sal_uInt16>(pBrk->nLine) );
+        if ( rBrk.bEnabled )
+            pModule->SetBP( rBrk.nLine );
     }
 }
 
-BreakPoint* BreakPointList::FindBreakPoint(size_t nLine)
+BreakPoint* BreakPointList::FindBreakPoint(sal_uInt16 nLine)
 {
-    for (BreakPoint* pBrk : maBreakPoints)
+    for (BreakPoint& rBrk : maBreakPoints)
     {
-        if ( pBrk->nLine == nLine )
-            return pBrk;
+        if ( rBrk.nLine == nLine )
+            return &rBrk;
     }
     return nullptr;
 }
 
-void BreakPointList::AdjustBreakPoints(size_t nLine, bool bInserted)
+void BreakPointList::AdjustBreakPoints(sal_uInt16 nLine, bool bInserted)
 {
     for ( size_t i = 0; i < maBreakPoints.size(); )
     {
-        BreakPoint* pBrk = maBreakPoints[ i ];
+        BreakPoint& rBrk = maBreakPoints[ i ];
         bool bDelBrk = false;
-        if ( pBrk->nLine == nLine )
+        if ( rBrk.nLine == nLine )
         {
             if ( bInserted )
-                pBrk->nLine++;
+                rBrk.nLine++;
             else
                 bDelBrk = true;
         }
-        else if ( pBrk->nLine > nLine )
+        else if ( rBrk.nLine > nLine )
         {
             if ( bInserted )
-                pBrk->nLine++;
+                rBrk.nLine++;
             else
-                pBrk->nLine--;
+                rBrk.nLine--;
         }
 
         if ( bDelBrk )
         {
-            delete remove( pBrk );
+            maBreakPoints.erase(maBreakPoints.begin() + i);
         }
         else
         {
@@ -123,23 +119,28 @@ void BreakPointList::AdjustBreakPoints(size_t nLine, bool bInserted)
 
 void BreakPointList::ResetHitCount()
 {
-    for (BreakPoint* pBrk : maBreakPoints)
+    for (BreakPoint& rBrk : maBreakPoints)
     {
-        pBrk->nHitCount = 0;
+        rBrk.nHitCount = 0;
     }
 }
 
-BreakPoint* BreakPointList::remove(BreakPoint* ptr)
+void BreakPointList::remove(BreakPoint* ptr)
 {
-    for ( std::vector< BreakPoint* >::iterator i = maBreakPoints.begin(); i != maBreakPoints.end(); ++i )
+    for ( auto i = maBreakPoints.begin(); i != maBreakPoints.end(); ++i )
     {
-        if ( ptr == *i )
+        if ( ptr == &(*i) )
         {
             maBreakPoints.erase( i );
-            return ptr;
+            return;
         }
     }
-    return nullptr;
+    return;
+}
+
+void BreakPointList::remove(size_t idx)
+{
+    maBreakPoints.erase( maBreakPoints.begin() + idx );
 }
 
 size_t BreakPointList::size() const
@@ -147,14 +148,14 @@ size_t BreakPointList::size() const
     return maBreakPoints.size();
 }
 
-BreakPoint* BreakPointList::at(size_t i)
+BreakPoint& BreakPointList::at(size_t i)
 {
-    return i < maBreakPoints.size() ? maBreakPoints[ i ] : nullptr;
+    return maBreakPoints[ i ];
 }
 
-const BreakPoint* BreakPointList::at(size_t i) const
+const BreakPoint& BreakPointList::at(size_t i) const
 {
-    return i < maBreakPoints.size() ? maBreakPoints[ i ] : nullptr;
+    return maBreakPoints[ i ];
 }
 
 } // namespace basctl

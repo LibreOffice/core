@@ -45,8 +45,8 @@ class BreakPointDialog final : public ModalDialog
     DECL_LINK( ComboBoxHighlightHdl, ComboBox&, void );
     DECL_LINK( EditModifyHdl, Edit&, void );
     DECL_LINK( ButtonHdl, Button*, void );
-    void            UpdateFields( BreakPoint const * pBrk );
-    BreakPoint*     GetSelectedBreakPoint();
+    void            UpdateFields( BreakPoint const & rBrk );
+    BreakPoint&     GetSelectedBreakPoint();
 
 
 public:
@@ -54,7 +54,7 @@ public:
     virtual ~BreakPointDialog() override;
     virtual void dispose() override;
 
-    void    SetCurrentBreakPoint( BreakPoint const * pBrk );
+    void    SetCurrentBreakPoint( BreakPoint const & rBrk );
 };
 
 } // namespace basctl
