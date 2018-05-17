@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_7a5f41e5",
+        "filename": "chart2/source/tools/ResourceManager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2018-05-17T04:20:34Z",
+      "side": 1,
+      "message": "Ha, this should be CreateResMgr(\"chartcontroller\", rLocale)",
+      "range": {
+        "startLine": 34,
+        "startChar": 40,
+        "endLine": 34,
+        "endChar": 71
+      },
+      "revId": "3f26a41f79801466a26741a18e0f61024e77b1f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
