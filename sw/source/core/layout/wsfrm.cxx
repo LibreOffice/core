@@ -4171,6 +4171,53 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
         return;
     }
     mbHideRedlines = bHideRedlines;
+    SwNodes const& rNodes(GetFormat()->GetDoc()->GetNodes());
+    // Hide->Show: clear MergedPara, create frames
+    // Show->Hide: call CheckParaRedlineMerge, delete frames
+    // TODO how to traverse
+    // * via layout
+    //      - but that won't find nodes that don't have frames in ->Show case
+    // * via nodes
+    //      - what about special sections before content? flys? footnotes?
+    //        is order of these predictable? flys not anchored in content?
+    // * ideally should call something existing that tries to create everything?
+    //      - is that done automatically somewhere already?
+    // * other direction ->Hide - delete frames!
+    // in-order traversal should init flags in nodes *before* the nodes are found
+    for (sal_uLong i = 0; i < rNodes.Count(); ++i)
+    {
+        SwNode *const pNode(rNodes[i]);
+        if (pNode->IsTextNode())
+        {
+            SwTextNode & rTextNode(*pNode->GetTextNode());
+            SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(rTextNode);
+            std::vector<SwTextFrame*> frames;
+            for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+            {
+                if (pFrame->getRootFrame() == this)
+                {
+                    frames.push_back(pFrame);
+                }
+            }
+            // this messes with pRegisteredIn so do it outside SwIterator
+            for (SwTextFrame * pFrame : frames)
+            {
+                if (mbHideRedlines && pNode->IsCreateFrameWhenHidingRedlines())
+                {
+                    pFrame->SetMergedPara(CheckParaRedlineMerge(*pFrame, rTextNode));
+                }
+                else
+                {
+                    if (pFrame->GetMergedPara())
+                    {
+                        pFrame->SetMergedPara(nullptr);
+                        rTextNode.DelFrames(); // FIXME only those in this layout?
+                    }
+                }
+            }
+        }
+    }
+    InvalidateAllContent(SwInvalidateFlags::Size); // ??? TODO what to invalidate?
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
