@@ -72,14 +72,15 @@ bool SwFlyPortion::Format( SwTextFormatInfo &rInf )
     rInf.GetParaPortion()->SetFly();
 
     // trailing blank:
-    if( rInf.GetIdx() < rInf.GetText().getLength() &&  1 < rInf.GetIdx()
+    if( rInf.GetIdx() < TextFrameIndex(rInf.GetText().getLength())
+        && TextFrameIndex(1) < rInf.GetIdx()
         && !rInf.GetRest()
         && ' ' == rInf.GetChar( rInf.GetIdx() )
-        && ' ' != rInf.GetChar( rInf.GetIdx() - 1 )
+        && ' ' != rInf.GetChar(rInf.GetIdx() - TextFrameIndex(1))
         && ( !rInf.GetLast() || !rInf.GetLast()->IsBreakPortion() ) )
     {
         SetBlankWidth( rInf.GetTextSize(OUString(' ')).Width() );
-        SetLen( 1 );
+        SetLen(TextFrameIndex(1));
     }
 
     const sal_uInt16 nNewWidth = static_cast<sal_uInt16>(rInf.X() + PrtWidth());
@@ -126,7 +127,7 @@ bool SwFlyCntPortion::Format( SwTextFormatInfo &rInf )
                 rInf.SetNewLine( true );
             Width(0);
             SetAscent(0);
-            SetLen(0);
+            SetLen(TextFrameIndex(0));
             if( rInf.GetLast() )
                 rInf.GetLast()->FormatEOL( rInf );
 
@@ -147,7 +148,8 @@ bool SwFlyCntPortion::Format( SwTextFormatInfo &rInf )
  * @param nStart
  * @param nEnd
  */
-void SwTextFrame::MoveFlyInCnt( SwTextFrame *pNew, sal_Int32 nStart, sal_Int32 nEnd )
+void SwTextFrame::MoveFlyInCnt(SwTextFrame *pNew,
+        TextFrameIndex const nStart, TextFrameIndex const nEnd)
 {
     SwSortedObjs *pObjs = nullptr;
     if ( nullptr != (pObjs = GetDrawObjs()) )
@@ -160,8 +162,8 @@ void SwTextFrame::MoveFlyInCnt( SwTextFrame *pNew, sal_Int32 nStart, sal_Int32 n
             if (rAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
             {
                 const SwPosition* pPos = rAnch.GetContentAnchor();
-                const sal_Int32 nIdx = pPos->nContent.GetIndex();
-                if ( nIdx >= nStart && nEnd > nIdx )
+                TextFrameIndex const nIndex(MapModelToViewPos(*pPos));
+                if (nStart <= nIndex && nIndex < nEnd)
                 {
                     if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
                     {
@@ -180,27 +182,22 @@ void SwTextFrame::MoveFlyInCnt( SwTextFrame *pNew, sal_Int32 nStart, sal_Int32 n
     }
 }
 
-sal_Int32 SwTextFrame::CalcFlyPos( SwFrameFormat const * pSearch )
+TextFrameIndex SwTextFrame::CalcFlyPos( SwFrameFormat const * pSearch )
 {
-    SwpHints* pHints = GetTextNode()->GetpSwpHints();
-    OSL_ENSURE( pHints, "CalcFlyPos: Why me?" );
-    if( !pHints )
-        return COMPLETE_STRING;
-    SwTextAttr* pFound = nullptr;
-    for ( size_t i = 0; i < pHints->Count(); ++i )
+    sw::MergedAttrIter iter(*this);
+    for (SwTextAttr const* pHt = iter.NextAttr(); pHt; pHt = iter.NextAttr())
     {
-        SwTextAttr *pHt = pHints->Get( i );
         if( RES_TXTATR_FLYCNT == pHt->Which() )
         {
             SwFrameFormat* pFrameFormat = pHt->GetFlyCnt().GetFrameFormat();
             if( pFrameFormat == pSearch )
-                pFound = pHt;
+            {
+                return TextFrameIndex(pHt->GetStart());
+            }
         }
     }
-    OSL_ENSURE( pHints, "CalcFlyPos: Not Found!" );
-    if( !pFound )
-        return COMPLETE_STRING;
-    return pFound->GetStart();
+    OSL_ENSURE(false, "CalcFlyPos: Not Found!");
+    return TextFrameIndex(COMPLETE_STRING);
 }
 
 void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
@@ -257,7 +254,7 @@ SwFlyCntPortion::SwFlyCntPortion()
     : m_bMax(false)
     , m_eAlign(sw::LineAlign::NONE)
 {
-    nLineLength = 1;
+    nLineLength = TextFrameIndex(1);
     SetWhichPor(POR_FLYCNT);
 }
 

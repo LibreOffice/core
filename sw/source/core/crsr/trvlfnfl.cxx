@@ -100,11 +100,10 @@ bool SwCursorShell::GotoFootnoteText()
                                                         (pFrame)->ContainsContent();
                         if( pCnt )
                         {
-                            const SwContentNode* pNode = pCnt->GetNode();
-                            GetCursor_()->GetPoint()->nNode = *pNode;
-                            GetCursor_()->GetPoint()->nContent.Assign(
-                                const_cast<SwContentNode*>(pNode),
-                                static_cast<const SwTextFrame*>(pCnt)->GetOfst() );
+                            SwTextFrame const*const pTF(
+                                    static_cast<const SwTextFrame*>(pCnt));
+                            *GetCursor_()->GetPoint() =
+                                    pTF->MapViewToModelPos(pTF->GetOfst());
                             UpdateCursor( SwCursorShell::SCROLLWIN |
                                 SwCursorShell::CHKRANGE | SwCursorShell::READONLY );
                             bRet = true;

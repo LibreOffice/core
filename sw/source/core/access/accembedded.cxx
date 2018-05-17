@@ -25,6 +25,7 @@
 #include <flyfrm.hxx>
 #include "accembedded.hxx"
 #include <cntfrm.hxx>
+#include <notxtfrm.hxx>
 #include <ndole.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
@@ -111,7 +112,8 @@ css::uno::Any SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
         pCFrame = pFFrame->ContainsContent();
         if( pCFrame )
         {
-            SwContentNode* pCNode = pCFrame->GetNode();
+            assert(pCFrame->IsNoTextFrame());
+            SwContentNode *const pCNode = static_cast<SwNoTextFrame*>(pCFrame)->GetNode();
             if( pCNode )
             {
                 style += static_cast<SwOLENode*>(pCNode)->GetOLEObj().GetStyleString();
