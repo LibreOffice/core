@@ -106,6 +106,7 @@ class GIFReader : public GraphicReader
 public:
 
     ReadState           ReadGIF( Graphic& rGraphic );
+    bool                ReadIsAnimated();
     Graphic             GetIntermediateGraphic();
 
     explicit            GIFReader( SvStream& rStm );
@@ -868,6 +869,31 @@ bool GIFReader::ProcessGIF()
     return bRead;
 }
 
+bool GIFReader::ReadIsAnimated()
+{
+    ReadState eReadState;
+
+    bStatus = true;
+
+    while( ProcessGIF() && ( eActAction != END_READING ) ) {}
+
+    if( !bStatus )
+        eReadState = GIFREAD_ERROR;
+    else if( eActAction == END_READING )
+        eReadState = GIFREAD_OK;
+    else
+    {
+        if ( rIStm.GetError() == ERRCODE_IO_PENDING )
+            rIStm.ResetError();
+
+        eReadState = GIFREAD_NEED_MORE;
+    }
+
+    if (eReadState == GIFREAD_OK)
+        return aAnimation.Count() > 1;
+    return false;
+}
+
 ReadState GIFReader::ReadGIF( Graphic& rGraphic )
 {
     ReadState eReadState;
@@ -902,6 +928,18 @@ ReadState GIFReader::ReadGIF( Graphic& rGraphic )
         rGraphic = aAnimation;
 
     return eReadState;
+}
+
+VCL_DLLPUBLIC bool IsGIFAnimated(SvStream & rStm)
+{
+    GIFReader aReader(rStm);
+
+    SvStreamEndian nOldFormat = rStm.GetEndian();
+    rStm.SetEndian(SvStreamEndian::LITTLE);
+    bool bResult = aReader.ReadIsAnimated();
+    rStm.SetEndian(nOldFormat);
+
+    return bResult;
 }
 
 VCL_DLLPUBLIC bool ImportGIF( SvStream & rStm, Graphic& rGraphic )

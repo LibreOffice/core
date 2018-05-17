@@ -1947,29 +1947,6 @@ DECLARE_ODFEXPORT_TEST(testRubyPosition, "ruby-position.odt")
     }
 }
 
-DECLARE_ODFEXPORT_TEST(testBulletAsImage, "BulletAsImage.odt")
-{
-    uno::Reference<text::XTextRange> xPara(getParagraph(1));
-    uno::Reference<beans::XPropertySet> xPropertySet(xPara, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xLevels;
-    xLevels.set(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProperties;
-    xLevels->getByIndex(0) >>= aProperties;
-    uno::Reference<awt::XBitmap> xBitmap;
-    for (int i = 0; i < aProperties.getLength(); ++i)
-    {
-        if (aProperties[i].Name == "GraphicBitmap")
-            xBitmap = aProperties[i].Value.get<uno::Reference<awt::XBitmap>>();
-    }
-    CPPUNIT_ASSERT(xBitmap.is());
-
-    Graphic aGraphic(uno::Reference<graphic::XGraphic>(xBitmap, uno::UNO_QUERY));
-    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
-    CPPUNIT_ASSERT(aGraphic.GetSizeBytes() > sal_uLong(0));
-    CPPUNIT_ASSERT_EQUAL(15L, aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(15L, aGraphic.GetSizePixel().Height());
-}
-
 DECLARE_ODFEXPORT_TEST(testSignatureLineProperties, "signatureline-properties.fodt")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);

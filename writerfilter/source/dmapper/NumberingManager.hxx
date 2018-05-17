@@ -29,6 +29,7 @@
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 
 namespace writerfilter {
 namespace dmapper {
@@ -47,7 +48,7 @@ class ListLevel : public PropertyMap
     sal_Int16                                     m_nXChFollow;      //LN_IXCHFOLLOW
     OUString                               m_sBulletChar;
     css::awt::Size                         m_aGraphicSize;
-    css::uno::Reference<css::graphic::XGraphic> m_sGraphicBitmap;
+    css::uno::Reference<css::awt::XBitmap> m_xGraphicBitmap;
     sal_Int32                                     m_nTabstop;
     std::shared_ptr< StyleSheetEntry >          m_pParaStyle;
     bool                                          m_outline;
@@ -71,8 +72,8 @@ public:
     void SetBulletChar( const OUString& sValue ) { m_sBulletChar = sValue; };
     void SetGraphicSize( const css::awt::Size& aValue ) { m_aGraphicSize = aValue; };
 
-    void SetGraphicBitmap(css::uno::Reference<css::graphic::XGraphic> const& sValue)
-        { m_sGraphicBitmap = sValue; }
+    void SetGraphicBitmap(css::uno::Reference<css::awt::XBitmap> const& xGraphicBitmap)
+        { m_xGraphicBitmap = xGraphicBitmap; }
     void SetParaStyle( const std::shared_ptr< StyleSheetEntry >& pStyle );
 
     // Getters
