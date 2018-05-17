@@ -355,6 +355,7 @@ public:
 
     /** Returns to if preparing was succesful, else false. */
     bool PrepareForSigning();
+    bool CheckIsReadonly(bool bSignScriptingContent);
     void AfterSigning(bool bSignSuccess, bool bSignScriptingContent);
     bool HasValidSignatures();
     SignatureState              GetDocumentSignatureState();
