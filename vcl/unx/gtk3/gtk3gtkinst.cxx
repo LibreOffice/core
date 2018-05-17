@@ -2517,11 +2517,6 @@ public:
         return ::get_label(m_pButton);
     }
 
-    virtual void clicked() override
-    {
-        gtk_button_clicked(m_pButton);
-    }
-
     // allow us to block buttons with click handlers making dialogs return a response
     bool has_click_handler() const
     {
