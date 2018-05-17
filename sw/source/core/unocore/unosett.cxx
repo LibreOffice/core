@@ -1431,9 +1431,6 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
             const Graphic* pGraphic = pBrush ? pBrush->GetGraphic() : nullptr;
             if (pGraphic)
             {
-                uno::Reference<graphic::XGraphic> xGraphic(pGraphic->GetXGraphic());
-                //GraphicURL
-                aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_GRAPHIC, xGraphic));
                 //GraphicBitmap
                 uno::Reference<awt::XBitmap> xBitmap(pGraphic->GetXGraphic(), uno::UNO_QUERY);
                 aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_GRAPHIC_BITMAP, xBitmap));
