@@ -366,7 +366,15 @@ DECLARE_OOXMLEXPORT_TEST(testFDO74215, "FDO74215.docx")
     if (!pXmlDoc)
         return;
     // tdf#106849 NumPicBullet xShape should not to be resized.
-    assertXPath(pXmlDoc, "/w:numbering/w:numPicBullet[2]/w:pict/v:shape", "style", "width:6.4pt;height:6.4pt");
+
+// Seems this is dependent on the running system, which is - unfortunate
+// see: MSWordExportBase::BulletDefinitions
+// FIXME: the size of a bullet is defined by GraphicSize property
+// (stored in SvxNumberFormat::aGraphicSize) so use that for the size
+// (properly convert from 100mm to pt (1 inch is 72 pt, 1 pt is 20 twips).
+#if !defined(MACOSX)
+    assertXPath(pXmlDoc, "/w:numbering/w:numPicBullet[2]/w:pict/v:shape", "style", "width:11.25pt;height:11.25pt");
+#endif
 }
 
 DECLARE_OOXMLEXPORT_TEST(testColumnBreak_ColumnCountIsZero,"fdo74153.docx")
