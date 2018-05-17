@@ -879,11 +879,6 @@ public:
         return m_xButton->GetText();
     }
 
-    virtual void clicked() override
-    {
-        m_xButton->Click();
-    }
-
     virtual ~SalInstanceButton() override
     {
         m_xButton->SetClickHdl(Link<::Button*,void>());

@@ -16,30 +16,18 @@
 #include <com/sun/star/task/XPasswordContainer2.hpp>
 
 #include <tools/urlobj.hxx>
-#include <vcl/builder.hxx>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
+
+class PlaceEditDialog;
 
 class DetailsContainer
 {
     protected:
+        PlaceEditDialog* m_pDialog;
         Link<DetailsContainer*,void> m_aChangeHdl;
-        std::unique_ptr<weld::Widget> m_xDetailsGrid;
-        std::unique_ptr<weld::Widget> m_xHostBox;
-        std::unique_ptr<weld::Entry> m_xEDHost;
-        std::unique_ptr<weld::Label> m_xFTHost;
-        std::unique_ptr<weld::SpinButton> m_xEDPort;
-        std::unique_ptr<weld::Label> m_xFTPort;
-        std::unique_ptr<weld::Entry> m_xEDRoot;
-        std::unique_ptr<weld::Label> m_xFTRoot;
 
     public:
-        DetailsContainer( weld::Builder* pBuilder );
+        DetailsContainer(PlaceEditDialog* pDialog);
         virtual ~DetailsContainer( );
 
         void setChangeHdl( const Link<DetailsContainer*,void>& rLink ) { m_aChangeHdl = rLink; }
@@ -73,7 +61,7 @@ class HostDetailsContainer : public DetailsContainer
         OUString m_sHost;
 
     public:
-        HostDetailsContainer( weld::Builder* pBuilder, sal_uInt16 nPort, const OUString& sScheme );
+        HostDetailsContainer(PlaceEditDialog* pDialog, sal_uInt16 nPort, const OUString& sScheme);
 
         virtual void show( bool bShow = true ) override;
         virtual INetURLObject getUrl( ) override;
@@ -90,11 +78,8 @@ class HostDetailsContainer : public DetailsContainer
 
 class DavDetailsContainer : public HostDetailsContainer
 {
-    private:
-        std::unique_ptr<weld::CheckButton> m_xCBDavs;
-
     public:
-        DavDetailsContainer(weld::Builder* pBuilder);
+        DavDetailsContainer(PlaceEditDialog* pDialog);
 
         virtual void show( bool bShow = true ) override;
         virtual bool enableUserCredentials( ) override { return false; };
@@ -108,12 +93,8 @@ class DavDetailsContainer : public HostDetailsContainer
 
 class SmbDetailsContainer : public DetailsContainer
 {
-    private:
-        std::unique_ptr<weld::Entry> m_xEDShare;
-        std::unique_ptr<weld::Label> m_xFTShare;
-
     public:
-        SmbDetailsContainer(weld::Builder* pBuilder);
+        SmbDetailsContainer(PlaceEditDialog* pDialog);
 
         virtual INetURLObject getUrl( ) override;
         virtual bool setUrl( const INetURLObject& rUrl ) override;
@@ -131,13 +112,8 @@ class CmisDetailsContainer : public DetailsContainer
         OUString m_sBinding;
         css::uno::Reference< css::awt::XWindow > m_xParentDialog;
 
-        std::unique_ptr<weld::Widget> m_xRepositoryBox;
-        std::unique_ptr<weld::Label> m_xFTRepository;
-        std::unique_ptr<weld::ComboBoxText> m_xLBRepository;
-        std::unique_ptr<weld::Button> m_xBTRepoRefresh;
-
     public:
-        CmisDetailsContainer(weld::Builder* pBuilder, weld::Dialog* pParentDialog, OUString const & sBinding);
+        CmisDetailsContainer(PlaceEditDialog* pDialog, OUString const & sBinding);
 
         virtual void show( bool bShow = true ) override;
         virtual INetURLObject getUrl( ) override;

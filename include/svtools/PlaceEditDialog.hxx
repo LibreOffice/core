@@ -39,6 +39,7 @@ private:
     bool m_bLabelChanged;
     bool m_bShowPassword;
 
+public:
     std::unique_ptr<weld::Entry> m_xEDServerName;
     std::unique_ptr<weld::ComboBoxText> m_xLBServerType;
     std::unique_ptr<weld::Entry> m_xEDUsername;
@@ -52,21 +53,39 @@ private:
     std::unique_ptr<weld::Label> m_xFTPasswordLabel;
     std::unique_ptr<weld::Widget> m_xTypeGrid;
 
+    std::unique_ptr<weld::Widget> m_xRepositoryBox;
+    std::unique_ptr<weld::Label> m_xFTRepository;
+    std::unique_ptr<weld::ComboBoxText> m_xLBRepository;
+
+    std::unique_ptr<weld::Entry> m_xEDShare;
+    std::unique_ptr<weld::Label> m_xFTShare;
+
+    std::unique_ptr<weld::Widget> m_xDetailsGrid;
+    std::unique_ptr<weld::Widget> m_xHostBox;
+    std::unique_ptr<weld::Entry> m_xEDHost;
+    std::unique_ptr<weld::Label> m_xFTHost;
+    std::unique_ptr<weld::SpinButton> m_xEDPort;
+    std::unique_ptr<weld::Label> m_xFTPort;
+    std::unique_ptr<weld::Entry> m_xEDRoot;
+    std::unique_ptr<weld::Label> m_xFTRoot;
+
+    std::unique_ptr<weld::CheckButton> m_xCBDavs;
+
 public:
-     PlaceEditDialog(weld::Window* pParent);
-     PlaceEditDialog(weld::Window* pParent, const std::shared_ptr<Place> &rPlace );
-     virtual ~PlaceEditDialog() override;
+    PlaceEditDialog(weld::Window* pParent);
+    PlaceEditDialog(weld::Window* pParent, const std::shared_ptr<Place> &rPlace );
+    virtual ~PlaceEditDialog() override;
 
-     // Returns a place instance with given information
-     std::shared_ptr<Place> GetPlace();
+    // Returns a place instance with given information
+    std::shared_ptr<Place> GetPlace();
 
-     OUString GetServerName() { return m_xEDServerName->get_text(); }
-     OUString GetServerUrl();
-     OUString GetPassword() { return m_xEDPassword->get_text(); };
-     OUString GetUser() { return m_xEDUsername->get_text(); };
-     bool     IsRememberChecked() { return m_xCBPassword->get_active(); }
+    OUString GetServerName() { return m_xEDServerName->get_text(); }
+    OUString GetServerUrl();
+    OUString GetPassword() { return m_xEDPassword->get_text(); };
+    OUString GetUser() { return m_xEDUsername->get_text(); };
+    bool     IsRememberChecked() { return m_xCBPassword->get_active(); }
 
-     void ShowPasswordControl() { m_bShowPassword = true; }
+    void ShowPasswordControl() { m_bShowPassword = true; }
 
 private:
 
