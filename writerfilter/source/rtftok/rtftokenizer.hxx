@@ -14,8 +14,23 @@
 
 #include <vector>
 
-#include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/uno/Reference.h>
 
+#include <rtl/ustring.hxx>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace task
+{
+class XStatusIndicator;
+}
+}
+}
+}
 class SvStream;
 
 namespace writerfilter

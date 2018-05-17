@@ -10,16 +10,32 @@
 #ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EPUBEXPORTUICOMPONENT_HXX
 #define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EPUBEXPORTUICOMPONENT_HXX
 
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/implbase.hxx>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace awt
+{
+class XWindow;
+}
+namespace uno
+{
+class XComponentContext;
+}
+}
+}
+}
 
 namespace writerperfect
 {

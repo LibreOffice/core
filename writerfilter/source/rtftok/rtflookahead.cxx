@@ -8,9 +8,23 @@
  */
 
 #include "rtflookahead.hxx"
-#include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <tools/stream.hxx>
 #include "rtftokenizer.hxx"
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace task
+{
+class XStatusIndicator;
+}
+}
+}
+}
 
 using namespace com::sun::star;
 

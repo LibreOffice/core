@@ -13,11 +13,36 @@
 
 #include "xmlsecuritydllapi.h"
 
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/security/DocumentSignatureInformation.hpp>
-#include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
-
 #include <svl/sigstruct.hxx>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace io
+{
+class XInputStream;
+}
+namespace security
+{
+class XCertificate;
+}
+namespace security
+{
+struct DocumentSignatureInformation;
+}
+namespace xml
+{
+namespace crypto
+{
+class XSecurityEnvironment;
+}
+}
+}
+}
+}
 
 /// Handles signatures of a PDF file.
 class XMLSECURITY_DLLPUBLIC PDFSignatureHelper
