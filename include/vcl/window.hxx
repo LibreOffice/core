@@ -1074,11 +1074,20 @@ public:
     virtual void                        Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE );
     virtual void                        Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE );
     /**
-     * Notification about some rectangle of the output device got invalidated.
+     * Notification about some rectangle of the output device got invalidated.Used for the main
+     * document window.
      *
      * @param pRectangle If 0, that means the whole area, otherwise the area in logic coordinates.
      */
     virtual void                        LogicInvalidate(const tools::Rectangle* pRectangle);
+
+    /**
+     * Notification about some rectangle of the output device got invalidated. Used for the
+     * dialogs and floating windows (e.g. conext menu, popup).
+     *
+     * @param pRectangle If 0, that means the whole area, otherwise the area in pixel coordinates.
+     */
+    virtual void                        PixelInvalidate(const tools::Rectangle* pRectangle);
     void                                Validate();
     bool                                HasPaintEvent() const;
     void                                Update();

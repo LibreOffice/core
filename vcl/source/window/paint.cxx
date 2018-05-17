@@ -1189,6 +1189,17 @@ void Window::Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags )
 
 void Window::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
+    if(pRectangle)
+    {
+        tools::Rectangle aRect = GetOutDev()->ImplLogicToDevicePixel( *pRectangle );
+        PixelInvalidate(&aRect);
+    }
+    else
+        PixelInvalidate(nullptr);
+}
+
+void Window::PixelInvalidate(const tools::Rectangle* pRectangle)
+{
     if (comphelper::LibreOfficeKit::isDialogPainting() || !comphelper::LibreOfficeKit::isActive())
         return;
 
@@ -1210,7 +1221,7 @@ void Window::LogicInvalidate(const tools::Rectangle* pRectangle)
     else if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
     {
         const tools::Rectangle aRect(Point(GetOutOffXPixel(), GetOutOffYPixel()), GetSizePixel());
-        pParent->LogicInvalidate(&aRect);
+        pParent->PixelInvalidate(&aRect);
     }
 }
 
