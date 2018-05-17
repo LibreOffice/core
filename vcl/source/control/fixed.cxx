@@ -344,11 +344,12 @@ Size FixedText::CalcMinimumSize( long nMaxWidth ) const
 Size FixedText::GetOptimalSize() const
 {
     sal_Int32 nMaxAvailWidth = 0x7fffffff;
-    const OUString &rTxt = GetText();
-    if (m_nMaxWidthChars != -1 && m_nMaxWidthChars < rTxt.getLength())
+    if (m_nMaxWidthChars != -1)
     {
+        OUStringBuffer aBuf;
+        comphelper::string::padToLength(aBuf, m_nMaxWidthChars, 'x');
         nMaxAvailWidth = getTextDimensions(this,
-            rTxt.copy(0, m_nMaxWidthChars), 0x7fffffff).Width();
+            aBuf.makeStringAndClear(), 0x7fffffff).Width();
     }
     Size aRet = CalcMinimumSize(nMaxAvailWidth);
     if (m_nMinWidthChars != -1)
@@ -357,8 +358,7 @@ Size FixedText::GetOptimalSize() const
         comphelper::string::padToLength(aBuf, m_nMinWidthChars, 'x');
         Size aMinAllowed = getTextDimensions(this,
             aBuf.makeStringAndClear(), 0x7fffffff);
-        if (aMinAllowed.Width() > aRet.Width())
-            aRet = aMinAllowed;
+        aRet.setWidth(std::max(aMinAllowed.Width(), aRet.Width()));
     }
     return aRet;
 }
