@@ -110,16 +110,12 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         // TODO How on Mac OS X?
 
         // invoke a second  dictionary manager to get the shared dictionary list
-        NSArray *aLocales = [NSLocale availableLocaleIdentifiers];
+        NSArray *aSpellCheckLanguages = [[NSSpellChecker sharedSpellChecker] availableLanguages];
 
-        //Test for existence of the dictionaries
-        for (NSUInteger i = 0; i < [aLocales count]; i++)
+        for (NSUInteger i = 0; i < [aSpellCheckLanguages count]; i++)
         {
-            NSString* pLangStr = static_cast<NSString*>([aLocales objectAtIndex:i]);
-            if( [[NSSpellChecker sharedSpellChecker] setLanguage:pLangStr ] )
-            {
-                postspdict.push_back( pLangStr );
-            }
+            NSString* pLangStr = static_cast<NSString*>([aSpellCheckLanguages objectAtIndex:i]);
+            postspdict.push_back( pLangStr );
         }
 
         numshr = postspdict.size();
@@ -151,6 +147,16 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
                 NSString* aCountry = [ aLocDict objectForKey:NSLocaleCountryCode ];
                 OUString lang([aLang cStringUsingEncoding: NSUTF8StringEncoding], [aLang length], aEnc);
                 OUString country([ aCountry cStringUsingEncoding: NSUTF8StringEncoding], [aCountry length], aEnc);
+                // Fix some overly generic or odd locales LO doesn't know
+                if (lang == "en" && country.isEmpty())
+                    country = "US"; // I guess that is what it means
+                else if (lang == "nb" && country.isEmpty())
+                    country = "NO";
+                else if (lang == "es" && country.isEmpty())
+                    country = "ES"; // Probably better than claiming it to be for all es-* ?
+                else if ((lang == "en" && country == "JP")
+                         || (lang == "en" && country == "SG"))
+                    continue; // Just skip, LO doesn't have those yet in this context
                 Locale nLoc( lang, country, OUString() );
                 newloc = 1;
                 //eliminate duplicates (is this needed for MacOS?)
