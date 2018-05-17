@@ -38,6 +38,7 @@
 #include <editeng/unolingu.hxx>
 #include <expfld.hxx>
 #include <hintids.hxx>
+#include <o3tl/temporary.hxx>
 #include <osl/diagnose.hxx>
 #include <rtl/math.hxx>
 #include <shellres.hxx>
@@ -1195,8 +1196,8 @@ SwSbxValue SwCalc::Prim()
         GetToken();
         double right = Prim().GetDouble();
 
-        double fraction, integer;
-        fraction = modf( right, &integer );
+        double fraction;
+        fraction = modf( right, &o3tl::temporary(double()) );
         if( ( dleft < 0.0 && 0.0 != fraction ) ||
             ( 0.0 == dleft && right < 0.0 ) )
         {
