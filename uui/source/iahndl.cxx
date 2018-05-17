@@ -1019,18 +1019,18 @@ executeMessageBox(
     return aResult;
 }
 
-NameClashResolveDialogResult executeSimpleNameClashResolveDialog( vcl::Window *pParent,
-                                                                  OUString const & rTargetFolderURL,
-                                                                  OUString const & rClashingName,
-                                                                  OUString & rProposedNewName,
-                                                                  bool bAllowOverwrite )
+NameClashResolveDialogResult executeSimpleNameClashResolveDialog(weld::Window *pParent,
+                                                                 OUString const & rTargetFolderURL,
+                                                                 OUString const & rClashingName,
+                                                                 OUString & rProposedNewName,
+                                                                 bool bAllowOverwrite)
 {
     std::locale aResLocale = Translate::Create("uui");
-    ScopedVclPtrInstance<NameClashDialog> aDialog(pParent, aResLocale, rTargetFolderURL,
-                                                  rClashingName, rProposedNewName, bAllowOverwrite);
+    NameClashDialog aDialog(pParent, aResLocale, rTargetFolderURL,
+                            rClashingName, rProposedNewName, bAllowOverwrite);
 
-    NameClashResolveDialogResult eResult = static_cast<NameClashResolveDialogResult>(aDialog->Execute());
-    rProposedNewName = aDialog->getNewName();
+    NameClashResolveDialogResult eResult = static_cast<NameClashResolveDialogResult>(aDialog.run());
+    rProposedNewName = aDialog.getNewName();
     return eResult;
 }
 
@@ -1063,11 +1063,12 @@ UUIInteractionHelper::handleNameClashResolveRequest(
     NameClashResolveDialogResult eResult = ABORT;
     OUString aProposedNewName( rRequest.ProposedNewName );
 
-    eResult = executeSimpleNameClashResolveDialog( getParentProperty(),
+    uno::Reference<awt::XWindow> xParent = getParentXWindow();
+    eResult = executeSimpleNameClashResolveDialog(Application::GetFrameWeld(xParent),
                     rRequest.TargetFolderURL,
                     rRequest.ClashingName,
                     aProposedNewName,
-                    xReplaceExistingData.is() );
+                    xReplaceExistingData.is());
 
     switch ( eResult )
     {
