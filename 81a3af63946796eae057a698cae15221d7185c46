@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_451c6212",
+        "filename": "include/xmloff/xmlimp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-05-17T15:44:01Z",
+      "side": 1,
+      "message": "ah, you are right, the mapping between tokens and *known* namespace URIs should be static.",
+      "parentUuid": "9a30ddce_6569668b",
+      "revId": "81a3af63946796eae057a698cae15221d7185c46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_455702ce",
         "filename": "include/xmloff/xmlimp.hxx",
         "patchSetId": 4
@@ -65,6 +83,24 @@
       "writtenOn": "2018-05-17T14:58:38Z",
       "side": 1,
       "message": "uh... this looks rather unfixable unfortunately... why does a generic SAX component depend on xmloff code in the first place? that looks quite wrong.",
+      "revId": "81a3af63946796eae057a698cae15221d7185c46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_6517a6ed",
+        "filename": "unoxml/source/dom/saxbuilder.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-05-17T15:44:01Z",
+      "side": 1,
+      "message": "i\u0027m hoping that this isn\u0027t actually called and everything goes through startUnknownElement, but no time to investigate now...",
+      "parentUuid": "9a30ddce_655246df",
       "revId": "81a3af63946796eae057a698cae15221d7185c46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
