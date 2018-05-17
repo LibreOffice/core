@@ -43,7 +43,7 @@ namespace abp
         VclPtr<Edit>             m_pName;
         VclPtr<FixedText>        m_pDuplicateNameError;
 
-        svx::DatabaseLocationInputController*
+        std::unique_ptr<svx::DatabaseLocationInputController>
                         m_pLocationController;
 
         StringBag       m_aInvalidDataSourceNames;
