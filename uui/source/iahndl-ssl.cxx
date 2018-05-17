@@ -348,8 +348,8 @@ UUIInteractionHelper::handleCertificateValidationRequest(
     ucb::CertificateValidationRequest aCertificateValidationRequest;
     if (aAnyRequest >>= aCertificateValidationRequest)
     {
-        vcl::Window* pWindow = getParentProperty();
-        handleCertificateValidationRequest_(pWindow ? pWindow->GetFrameWeld() : nullptr,
+        uno::Reference<awt::XWindow> xParent = getParentXWindow();
+        handleCertificateValidationRequest_(Application::GetFrameWeld(xParent),
                                             m_xContext,
                                             aCertificateValidationRequest,
                                             rRequest->getContinuations());
