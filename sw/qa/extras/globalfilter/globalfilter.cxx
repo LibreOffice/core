@@ -44,6 +44,7 @@ public:
     void testSkipImages();
 #endif
     void testRedlineFlags();
+    void testBulletAsImage();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testEmbeddedGraphicRoundtrip);
@@ -58,6 +59,7 @@ public:
     CPPUNIT_TEST(testSkipImages);
 #endif
     CPPUNIT_TEST(testRedlineFlags);
+    CPPUNIT_TEST(testBulletAsImage);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -879,6 +881,146 @@ void Test::testRedlineFlags()
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             OString(OString("redline mode not restored in ") + rFilterName.toUtf8()).getStr(),
             static_cast<int>(nRedlineFlags), static_cast<int>(rIDRA.GetRedlineFlags()));
+    }
+}
+
+void Test::testBulletAsImage()
+{
+    OUString aFilterNames[] = {
+        "writer8",
+        "MS Word 97",
+        "Office Open XML Text",
+        "Rich Text Format",
+    };
+
+    for (OUString const & rFilterName : aFilterNames)
+    {
+        OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+
+        if (mxComponent.is())
+            mxComponent->dispose();
+
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/BulletAsImage.odt"), "com.sun.star.text.TextDocument");
+
+        // Check if import was successful
+        {
+            uno::Reference<text::XTextRange> xPara(getParagraph(1));
+            uno::Reference<beans::XPropertySet> xPropertySet(xPara, uno::UNO_QUERY);
+            uno::Reference<container::XIndexAccess> xLevels;
+            xLevels.set(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+            uno::Sequence<beans::PropertyValue> aProperties;
+            xLevels->getByIndex(0) >>= aProperties;
+            uno::Reference<awt::XBitmap> xBitmap;
+            awt::Size aSize;
+            sal_Int16 nNumberingType = -1;
+
+            for (beans::PropertyValue const & rProperty : aProperties)
+            {
+                if (rProperty.Name == "NumberingType")
+                {
+                    nNumberingType = rProperty.Value.get<sal_Int16>();
+                }
+                else if (rProperty.Name == "GraphicBitmap")
+                {
+                    if (rProperty.Value.has<uno::Reference<awt::XBitmap>>())
+                    {
+                        xBitmap = rProperty.Value.get<uno::Reference<awt::XBitmap>>();
+                    }
+                }
+                else if (rProperty.Name == "GraphicSize")
+                {
+                    aSize = rProperty.Value.get<awt::Size>();
+                }
+            }
+
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), style::NumberingType::BITMAP, nNumberingType);
+
+            // Graphic Bitmap
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+            Graphic aGraphic(uno::Reference<graphic::XGraphic>(xBitmap, uno::UNO_QUERY));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), GraphicType::Bitmap, aGraphic.GetType());
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), aGraphic.GetSizeBytes() > sal_uLong(0));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 16L, aGraphic.GetSizePixel().Width());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 16L, aGraphic.GetSizePixel().Height());
+
+            // Graphic Size
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(400), aSize.Width);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(400), aSize.Height);
+        }
+
+        // Export the document and import again for a check
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= rFilterName;
+
+
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
+        xComponent->dispose();
+
+        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+        {
+            uno::Reference<text::XTextRange> xPara(getParagraph(1));
+            uno::Reference<beans::XPropertySet> xPropertySet(xPara, uno::UNO_QUERY);
+            uno::Reference<container::XIndexAccess> xLevels;
+            xLevels.set(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+            uno::Sequence<beans::PropertyValue> aProperties;
+            xLevels->getByIndex(0) >>= aProperties;
+            uno::Reference<awt::XBitmap> xBitmap;
+            awt::Size aSize;
+            sal_Int16 nNumberingType = -1;
+
+            for (beans::PropertyValue const & rProperty : aProperties)
+            {
+                if (rProperty.Name == "NumberingType")
+                {
+                    nNumberingType = rProperty.Value.get<sal_Int16>();
+                }
+                else if (rProperty.Name == "GraphicBitmap")
+                {
+                    if (rProperty.Value.has<uno::Reference<awt::XBitmap>>())
+                    {
+                        xBitmap = rProperty.Value.get<uno::Reference<awt::XBitmap>>();
+                    }
+                }
+                else if (rProperty.Name == "GraphicSize")
+                {
+                    aSize = rProperty.Value.get<awt::Size>();
+                }
+            }
+
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), style::NumberingType::BITMAP, nNumberingType);
+
+            // Graphic Bitmap
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+            Graphic aGraphic(uno::Reference<graphic::XGraphic>(xBitmap, uno::UNO_QUERY));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), GraphicType::Bitmap, aGraphic.GetType());
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), aGraphic.GetSizeBytes() > sal_uLong(0));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 16L, aGraphic.GetSizePixel().Width());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 16L, aGraphic.GetSizePixel().Height());
+
+            // Graphic Size
+            if (rFilterName == "write8") // ODT is correct
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(400), aSize.Width);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(400), aSize.Height);
+            }
+            // FIXME: MS Filters don't work correctly for graphic bullet size
+            else if (rFilterName == "Office Open XML Text" || rFilterName == "Rich Text Format")
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(279), aSize.Width);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(279), aSize.Height);
+            }
+            else if (rFilterName == "MS Word 97")
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(296), aSize.Width);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(296), aSize.Height);
+            }
+        }
     }
 }
 
