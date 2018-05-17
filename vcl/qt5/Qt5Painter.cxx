@@ -37,7 +37,7 @@ Qt5Painter::Qt5Painter(Qt5Graphics& rGraphics, bool bPrepareBrush, sal_uInt8 nTr
         setClipRegion(rGraphics.m_aClipRegion);
     if (SALCOLOR_NONE != rGraphics.m_aLineColor)
     {
-        QColor aColor = QColor::fromRgb(QRgb(rGraphics.m_aLineColor));
+        QColor aColor = toQColor(rGraphics.m_aLineColor);
         aColor.setAlpha(nTransparency);
         setPen(aColor);
     }
@@ -45,7 +45,7 @@ Qt5Painter::Qt5Painter(Qt5Graphics& rGraphics, bool bPrepareBrush, sal_uInt8 nTr
         setPen(Qt::NoPen);
     if (bPrepareBrush && SALCOLOR_NONE != rGraphics.m_aFillColor)
     {
-        QColor aColor = QColor::fromRgb(QRgb(rGraphics.m_aFillColor));
+        QColor aColor = toQColor(rGraphics.m_aFillColor);
         aColor.setAlpha(nTransparency);
         setBrush(Qt::SolidPattern);
         setBrush(aColor);
