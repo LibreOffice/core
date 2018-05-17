@@ -177,6 +177,7 @@ private:
     CellPos maCursorFirstPos;
     CellPos maCursorLastPos;
     bool mbCellSelectionMode;
+    bool mbHasJustMerged;
     CellPos maMouseDownPos;
     bool mbLeftButtonDown;
     std::unique_ptr<sdr::overlay::OverlayObjectList>  mpSelectionOverlay;
