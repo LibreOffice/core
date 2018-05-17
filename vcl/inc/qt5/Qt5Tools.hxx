@@ -26,6 +26,7 @@
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/color.hxx>
 #include <tools/gen.hxx>
 
 #include <memory>
@@ -54,6 +55,11 @@ inline tools::Rectangle toRectangle(const QRect& rRect)
 inline QSize toQSize(const Size& rSize) { return QSize(rSize.Width(), rSize.Height()); }
 
 inline Size toSize(const QSize& rSize) { return Size(rSize.width(), rSize.height()); }
+
+inline QColor toQColor(const Color& rColor)
+{
+    return QColor( rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue(), rColor.GetTransparency() );
+}
 
 static constexpr QImage::Format Qt5_DefaultFormat32 = QImage::Format_ARGB32;
 
