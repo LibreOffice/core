@@ -42,7 +42,6 @@ using namespace ::com::sun::star::uno;
 #define ROOTNODE_SECURITY               "Office.Security"
 
 #define SECURE_EXTENSIONS_SET           OUString("SecureExtensions")
-#define EXTENSION_PROPNAME              OUString("/Extension")
 
 #define PROPERTYNAME_HYPERLINKS_OPEN    OUString("Hyperlinks/Open")
 
@@ -87,7 +86,6 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
         static Sequence< OUString > GetPropertyNames();
 
         OUString                                        m_aSecureExtensionsSetName;
-        OUString                                        m_aExtensionPropName;
 
         SvtExtendedSecurityOptions::OpenHyperlinkMode   m_eOpenHyperlinkMode;
 };
@@ -98,7 +96,6 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
     // Init baseclasses first
     :   ConfigItem          ( ROOTNODE_SECURITY         )
     , m_aSecureExtensionsSetName( SECURE_EXTENSIONS_SET )
-    , m_aExtensionPropName( EXTENSION_PROPNAME )
     , m_eOpenHyperlinkMode(SvtExtendedSecurityOptions::OPEN_NEVER)
     // Init member then.
 {
