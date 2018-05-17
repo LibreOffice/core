@@ -210,38 +210,38 @@ UUIInteractionHelper::handleLockedDocumentRequest(
     document::LockedDocumentRequest aLockedDocumentRequest;
     if (aAnyRequest >>= aLockedDocumentRequest )
     {
-        vcl::Window* pWin = getParentProperty();
-        handleLockedDocumentRequest_( pWin ? pWin->GetFrameWeld() : nullptr,
-                                      aLockedDocumentRequest.DocumentURL,
-                                      aLockedDocumentRequest.UserInfo,
-                                      rRequest->getContinuations(),
-                                      UUI_DOC_LOAD_LOCK );
+        uno::Reference<awt::XWindow> xParent = getParentXWindow();
+        handleLockedDocumentRequest_(Application::GetFrameWeld(xParent),
+                                     aLockedDocumentRequest.DocumentURL,
+                                     aLockedDocumentRequest.UserInfo,
+                                     rRequest->getContinuations(),
+                                     UUI_DOC_LOAD_LOCK);
         return true;
     }
 
     document::OwnLockOnDocumentRequest aOwnLockOnDocumentRequest;
     if (aAnyRequest >>= aOwnLockOnDocumentRequest )
     {
-        vcl::Window* pWin = getParentProperty();
-        handleLockedDocumentRequest_( pWin ? pWin->GetFrameWeld() : nullptr,
-                                      aOwnLockOnDocumentRequest.DocumentURL,
-                                      aOwnLockOnDocumentRequest.TimeInfo,
-                                      rRequest->getContinuations(),
-                                      aOwnLockOnDocumentRequest.IsStoring
-                                          ? UUI_DOC_OWN_SAVE_LOCK
-                                          : UUI_DOC_OWN_LOAD_LOCK );
+        uno::Reference<awt::XWindow> xParent = getParentXWindow();
+        handleLockedDocumentRequest_(Application::GetFrameWeld(xParent),
+                                     aOwnLockOnDocumentRequest.DocumentURL,
+                                     aOwnLockOnDocumentRequest.TimeInfo,
+                                     rRequest->getContinuations(),
+                                     aOwnLockOnDocumentRequest.IsStoring
+                                         ? UUI_DOC_OWN_SAVE_LOCK
+                                         : UUI_DOC_OWN_LOAD_LOCK);
         return true;
     }
 
     document::LockedOnSavingRequest aLockedOnSavingRequest;
     if (aAnyRequest >>= aLockedOnSavingRequest )
     {
-        vcl::Window* pWin = getParentProperty();
-        handleLockedDocumentRequest_( pWin ? pWin->GetFrameWeld() : nullptr,
-                                      aLockedOnSavingRequest.DocumentURL,
-                                      aLockedOnSavingRequest.UserInfo,
-                                      rRequest->getContinuations(),
-                                      UUI_DOC_SAVE_LOCK );
+        uno::Reference<awt::XWindow> xParent = getParentXWindow();
+        handleLockedDocumentRequest_(Application::GetFrameWeld(xParent),
+                                     aLockedOnSavingRequest.DocumentURL,
+                                     aLockedOnSavingRequest.UserInfo,
+                                     rRequest->getContinuations(),
+                                     UUI_DOC_SAVE_LOCK);
         return true;
     }
     return false;
@@ -256,9 +256,9 @@ UUIInteractionHelper::handleChangedByOthersRequest(
     document::ChangedByOthersRequest aChangedByOthersRequest;
     if (aAnyRequest >>= aChangedByOthersRequest )
     {
-        vcl::Window* pWin = getParentProperty();
-        handleChangedByOthersRequest_( pWin ? pWin->GetFrameWeld() : nullptr,
-                                       rRequest->getContinuations() );
+        uno::Reference<awt::XWindow> xParent = getParentXWindow();
+        handleChangedByOthersRequest_(Application::GetFrameWeld(xParent),
+                                      rRequest->getContinuations());
         return true;
     }
     return false;
@@ -274,18 +274,18 @@ UUIInteractionHelper::handleLockFileProblemRequest(
     document::LockFileIgnoreRequest aLockFileIgnoreRequest;
     if (aAnyRequest >>= aLockFileIgnoreRequest )
     {
-        vcl::Window* pWin = getParentProperty();
-        handleLockFileProblemRequest_( pWin ? pWin->GetFrameWeld() : nullptr,
-                                      rRequest->getContinuations(), UUI_DOC_CreateErrDlg );
+        uno::Reference<awt::XWindow> xParent = getParentXWindow();
+        handleLockFileProblemRequest_(Application::GetFrameWeld(xParent),
+                                      rRequest->getContinuations(), UUI_DOC_CreateErrDlg);
         return true;
     }
 
     document::LockFileCorruptRequest aLockFileCorruptRequest;
     if (aAnyRequest >>= aLockFileCorruptRequest )
     {
-        vcl::Window* pWin = getParentProperty();
-        handleLockFileProblemRequest_( pWin ? pWin->GetFrameWeld() : nullptr,
-                                      rRequest->getContinuations(), UUI_DOC_CorruptErrDlg );
+        uno::Reference<awt::XWindow> xParent = getParentXWindow();
+        handleLockFileProblemRequest_(Application::GetFrameWeld(xParent),
+                                      rRequest->getContinuations(), UUI_DOC_CorruptErrDlg);
         return true;
     }
 

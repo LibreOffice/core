@@ -1137,13 +1137,13 @@ UUIInteractionHelper::handleGenericErrorRequest(
                 aTitle += " - " ;
             aTitle += aErrTitle;
 
-            vcl::Window* pWin = getParentProperty();
-            executeMessageBox(pWin ? pWin->GetFrameWeld() : nullptr, aTitle, aErrorString, VclMessageType::Error);
+            uno::Reference<awt::XWindow> xParent = getParentXWindow();
+            executeMessageBox(Application::GetFrameWeld(xParent), aTitle, aErrorString, VclMessageType::Error);
         }
         else
         {
-            vcl::Window* pParent = getParentProperty();
-            ErrorHandler::HandleError(nErrorCode, pParent ? pParent->GetFrameWeld() : nullptr);
+            uno::Reference<awt::XWindow> xParent = getParentXWindow();
+            ErrorHandler::HandleError(nErrorCode, Application::GetFrameWeld(xParent));
         }
 
         if (xApprove.is() && bWarning)
@@ -1169,8 +1169,8 @@ UUIInteractionHelper::handleMacroConfirmRequest(
     bool bApprove = false;
 
     bool bShowSignatures = aSignInfo.getLength() > 0;
-    vcl::Window* pWin = getParentProperty();
-    MacroWarning aWarning(pWin ? pWin->GetFrameWeld() : nullptr, bShowSignatures);
+    uno::Reference<awt::XWindow> xParent = getParentXWindow();
+    MacroWarning aWarning(Application::GetFrameWeld(xParent), bShowSignatures);
 
     aWarning.SetDocumentURL(aDocumentURL);
     if ( aSignInfo.getLength() > 1 )
@@ -1252,8 +1252,8 @@ UUIInteractionHelper::handleBrokenPackageRequest(
         " " +
         utl::ConfigManager::getProductVersion() );
 
-    vcl::Window* pWin = getParentProperty();
-    switch (executeMessageBox(pWin ? pWin->GetFrameWeld() : nullptr, title, aMessage, eMessageType))
+    uno::Reference<awt::XWindow> xParent = getParentXWindow();
+    switch (executeMessageBox(Application::GetFrameWeld(xParent), title, aMessage, eMessageType))
     {
     case DialogMask::ButtonsOk:
         OSL_ENSURE( xAbort.is(), "unexpected situation" );
