@@ -14,6 +14,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 
 #include <comphelper/storagehelper.hxx>
 #include <unotools/mediadescriptor.hxx>

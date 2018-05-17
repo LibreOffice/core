@@ -12,11 +12,41 @@
 
 #include <libepubgen/EPUBPackage.h>
 
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/xml/sax/XWriter.hpp>
+#include <com/sun/star/uno/Reference.h>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace beans
+{
+struct PropertyValue;
+}
+namespace embed
+{
+class XHierarchicalStorageAccess;
+}
+namespace io
+{
+class XOutputStream;
+}
+namespace uno
+{
+class XComponentContext;
+}
+namespace xml
+{
+namespace sax
+{
+class XWriter;
+}
+}
+}
+}
+}
 
 namespace writerperfect
 {

@@ -16,14 +16,33 @@
 
 #include <librevenge/librevenge.h>
 
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <tools/gen.hxx>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace beans
+{
+struct PropertyValue;
+}
+namespace uno
+{
+class XComponentContext;
+}
+namespace uri
+{
+class XUriReferenceFactory;
+}
+}
+}
+}
 
 namespace writerperfect
 {

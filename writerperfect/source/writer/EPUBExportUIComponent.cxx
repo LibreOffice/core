@@ -13,7 +13,6 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/vclptr.hxx>
 
 #include "EPUBExportDialog.hxx"
 
