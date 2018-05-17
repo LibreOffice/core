@@ -10,38 +10,32 @@
 #ifndef INCLUDED_SVTOOLS_AUTHFALLBACKDLG_HXX
 #define INCLUDED_SVTOOLS_AUTHFALLBACKDLG_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/vclmedit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 
-class AuthFallbackDlg : public ModalDialog
+class AuthFallbackDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<VclMultiLineEdit> m_pTVInstructions;
-    VclPtr<Edit> m_pEDUrl;
-    VclPtr<Edit> m_pEDCode;
-    VclPtr<Edit> m_pEDGoogleCode;
-    VclPtr<PushButton> m_pBTOk;
-    VclPtr<PushButton> m_pBTCancel;
-    VclPtr<VclVBox> m_pGoogleBox;
-    VclPtr<VclVBox> m_pOneDriveBox;
     bool m_bGoogleMode;
 
+    std::unique_ptr<weld::Label> m_xTVInstructions;
+    std::unique_ptr<weld::Entry> m_xEDUrl;
+    std::unique_ptr<weld::Entry> m_xEDCode;
+    std::unique_ptr<weld::Entry> m_xEDGoogleCode;
+    std::unique_ptr<weld::Button> m_xBTOk;
+    std::unique_ptr<weld::Button> m_xBTCancel;
+    std::unique_ptr<weld::Widget> m_xGoogleBox;
+    std::unique_ptr<weld::Widget> m_xOneDriveBox;
+
 public:
-    AuthFallbackDlg(Window* pParent, const OUString& instructions,
+    AuthFallbackDlg(weld::Window* pParent, const OUString& instructions,
                     const OUString& url);
     virtual ~AuthFallbackDlg() override;
-    virtual void dispose() override;
 
     OUString GetCode() const;
 
 private:
-
-    DECL_LINK ( OKHdl, Button *, void );
-    DECL_LINK ( CancelHdl, Button *, void );
+    DECL_LINK(OKHdl, weld::Button&, void);
+    DECL_LINK(CancelHdl, weld::Button&, void);
 };
 
 #endif // INCLUDED_SVTOOLS_AUTHFALLBACKDLG_HXX

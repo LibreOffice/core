@@ -728,16 +728,16 @@ UUIInteractionHelper::handleAuthFallbackRequest( OUString & instructions,
         OUString & url,
         uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations )
 {
-    vcl::Window * pParent = getParentProperty( );
-    VclPtrInstance<AuthFallbackDlg> dlg( pParent, instructions, url );
-    int retCode = dlg->Execute( );
+    uno::Reference<awt::XWindow> xParent = getParentXWindow();
+    AuthFallbackDlg dlg(Application::GetFrameWeld(xParent), instructions, url);
+    int retCode = dlg.run();
     uno::Reference< task::XInteractionAbort > xAbort;
     uno::Reference< ucb::XInteractionAuthFallback > xAuthFallback;
     getContinuations(rContinuations, &xAbort, &xAuthFallback);
 
     if( retCode == RET_OK && xAuthFallback.is( ) )
     {
-        xAuthFallback->setCode( dlg->GetCode( ) );
+        xAuthFallback->setCode(dlg.GetCode());
         xAuthFallback->select( );
     }
 
