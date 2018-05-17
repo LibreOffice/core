@@ -61,7 +61,7 @@ PageObjectLayouter::PageObjectLayouter (
         Size(rPageSize.Width(), rPageSize.Height()),
         aPageNumberAreaSize.Width(),
         nFocusIndicatorWidth);
-    maFocusIndicatorBoundingBox = ::tools::Rectangle(Point(0,0), rPageObjectWindowSize);
+    maFocusIndicatorBoundingBox = ::tools::Rectangle(Point(0,0), aPageObjectSize);
     maPageObjectBoundingBox = ::tools::Rectangle(
         Point(
             nFocusIndicatorWidth,
