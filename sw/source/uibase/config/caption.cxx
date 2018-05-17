@@ -22,18 +22,18 @@
 #include <caption.hxx>
 
 InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleId) :
-    bUseCaption(false),
-    eObjType(eType),
-    nNumType(SVX_NUM_ARABIC),
-    sNumberSeparator(". "),
-    nPos(1),
-    nLevel(0),
-    sSeparator( OUString(": ") ),
-    bIgnoreSeqOpts(false),
-    bCopyAttributes(false)
+    m_bUseCaption(false),
+    m_eObjType(eType),
+    m_nNumType(SVX_NUM_ARABIC),
+    m_sNumberSeparator(". "),
+    m_nPos(1),
+    m_nLevel(0),
+    m_sSeparator( OUString(": ") ),
+    m_bIgnoreSeqOpts(false),
+    m_bCopyAttributes(false)
 {
     if (pOleId)
-        aOleId = *pOleId;
+        m_aOleId = *pOleId;
 }
 
 InsCaptionOpt::~InsCaptionOpt() = default;
