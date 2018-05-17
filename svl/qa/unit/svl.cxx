@@ -7,10 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifdef _WIN32
-# undef ERROR
-#endif
-
 #include <sal/types.h>
 #include <config_libnumbertext.h>
 #include <cppunit/TestAssert.h>
