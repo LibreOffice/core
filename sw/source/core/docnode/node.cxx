@@ -286,6 +286,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const SwNodeType nNdType )
     : m_nNodeType( nNdType )
     , m_nAFormatNumLvl( 0 )
     , m_bIgnoreDontExpand( false)
+    , m_eMerge(Merge::None)
 #ifdef DBG_UTIL
     , m_nSerial( s_nSerial++)
 #endif
@@ -318,6 +319,7 @@ SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const SwNodeType nNdType )
     : m_nNodeType( nNdType )
     , m_nAFormatNumLvl( 0 )
     , m_bIgnoreDontExpand( false)
+    , m_eMerge(Merge::None)
 #ifdef DBG_UTIL
     , m_nSerial( s_nSerial++)
 #endif
