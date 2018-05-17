@@ -456,8 +456,8 @@ void SwTextFrame::CheckDirection( bool bVert )
 {
     const SwViewShell *pSh = getRootFrame()->GetCurrShell();
     const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
-    CheckDir( GetNode()->GetSwAttrSet().GetFrameDir().GetValue(), bVert,
-              true, bBrowseMode );
+    CheckDir(GetTextNodeForParaProps()->GetSwAttrSet().GetFrameDir().GetValue(),
+             bVert, true, bBrowseMode);
 }
 
 void SwFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
@@ -678,9 +678,33 @@ void SwFrame::InvalidatePage( const SwPageFrame *pPage ) const
         }
         pRoot->SetIdleFlags();
 
-        const SwTextNode *pTextNode = dynamic_cast< const SwTextNode * >(GetDep());
-        if (pTextNode && pTextNode->IsGrammarCheckDirty())
-            pRoot->SetNeedGrammarCheck( true );
+        if (IsTextFrame())
+        {
+            SwTextFrame const*const pText(static_cast<SwTextFrame const*>(this));
+            if (sw::MergedPara const*const pMergedPara = pText->GetMergedPara())
+            {
+                SwTextNode const* pNode(nullptr);
+                for (auto const& e : pMergedPara->extents)
+                {
+                    if (e.pNode != pNode)
+                    {
+                        pNode = e.pNode;
+                        if (pNode->IsGrammarCheckDirty())
+                        {
+                            pRoot->SetNeedGrammarCheck( true );
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (pText->GetTextNodeFirst()->IsGrammarCheckDirty())
+                {
+                    pRoot->SetNeedGrammarCheck( true );
+                }
+            }
+        }
     }
 }
 
@@ -2358,7 +2382,7 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
                 SwPageFrame *pPage = FindPageFrame();
                 if ( !GetPrev() )
                     CheckPageDescs( pPage );
-                if ( GetAttrSet()->GetPageDesc().GetNumOffset() )
+                if (GetPageDescItem().GetNumOffset())
                     static_cast<SwRootFrame*>(pPage->GetUpper())->SetVirtPageNum( true );
                 SwDocPosUpdate aMsgHint( pPage->getFrameArea().Top() );
                 pPage->GetFormat()->GetDoc()->getIDocumentFieldsAccess().UpdatePageFields( &aMsgHint );
@@ -4138,6 +4162,62 @@ void SwRootFrame::InvalidateAllObjPos()
 
         pPageFrame = static_cast<const SwPageFrame*>(pPageFrame->GetNext());
     }
+}
+
+void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
+{
+    if (bHideRedlines == mbHideRedlines)
+    {
+        return;
+    }
+    mbHideRedlines = bHideRedlines;
+    SwNodes const& rNodes(GetFormat()->GetDoc()->GetNodes());
+    // Hide->Show: clear MergedPara, create frames
+    // Show->Hide: call CheckParaRedlineMerge, delete frames
+    // TODO how to traverse
+    // * via layout
+    //      - but that won't find nodes that don't have frames in ->Show case
+    // * via nodes
+    //      - what about special sections before content? flys? footnotes?
+    //        is order of these predictable? flys not anchored in content?
+    // * ideally should call something existing that tries to create everything?
+    //      - is that done automatically somewhere already?
+    // * other direction ->Hide - delete frames!
+    // in-order traversal should init flags in nodes *before* the nodes are found
+    for (sal_uLong i = 0; i < rNodes.Count(); ++i)
+    {
+        SwNode *const pNode(rNodes[i]);
+        if (pNode->IsTextNode())
+        {
+            SwTextNode & rTextNode(*pNode->GetTextNode());
+            SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(rTextNode);
+            std::vector<SwTextFrame*> frames;
+            for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+            {
+                if (pFrame->getRootFrame() == this)
+                {
+                    frames.push_back(pFrame);
+                }
+            }
+            // this messes with pRegisteredIn so do it outside SwIterator
+            for (SwTextFrame * pFrame : frames)
+            {
+                if (mbHideRedlines && pNode->IsCreateFrameWhenHidingRedlines())
+                {
+                    pFrame->SetMergedPara(CheckParaRedlineMerge(*pFrame, rTextNode));
+                }
+                else
+                {
+                    if (pFrame->GetMergedPara())
+                    {
+                        pFrame->SetMergedPara(nullptr);
+                        rTextNode.DelFrames(); // FIXME only those in this layout?
+                    }
+                }
+            }
+        }
+    }
+    InvalidateAllContent(SwInvalidateFlags::Size); // ??? TODO what to invalidate?
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

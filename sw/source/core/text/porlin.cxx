@@ -222,12 +222,12 @@ SwLinePortion *SwLinePortion::FindPrevPortion( const SwLinePortion *pRoot )
     return pPos;
 }
 
-sal_Int32 SwLinePortion::GetCursorOfst( const sal_uInt16 nOfst ) const
+TextFrameIndex SwLinePortion::GetCursorOfst(const sal_uInt16 nOfst) const
 {
     if( nOfst > ( PrtWidth() / 2 ) )
         return GetLen();
     else
-        return 0;
+        return TextFrameIndex(0);
 }
 
 SwPosSize SwLinePortion::GetTextSize( const SwTextSizeInfo & ) const

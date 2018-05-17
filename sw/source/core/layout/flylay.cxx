@@ -598,7 +598,7 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
             // Note: section frames seems to be not critical - didn't found
             //       any critical layout situation so far.
             if ( Lower() && Lower()->IsNoTextFrame() &&
-                 ( static_cast<SwContentFrame*>(Lower())->GetNode()->GetOLENode() ||
+                 (static_cast<SwNoTextFrame*>(Lower())->GetNode()->GetOLENode() ||
                    !HasEnvironmentAutoSize() ) )
             {
                 // If width and height got adjusted, then the bigger
@@ -638,7 +638,7 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
                 // attributes permanently. Maybe one day somebody dares to remove
                 // this code.
                 if ( aFrameRect.HasArea() &&
-                     static_cast<SwContentFrame*>(Lower())->GetNode()->GetOLENode() &&
+                     static_cast<SwNoTextFrame*>(Lower())->GetNode()->GetOLENode() &&
                      ( m_bWidthClipped || m_bHeightClipped ) )
                 {
                     SwFlyFrameFormat *pFormat = GetFormat();

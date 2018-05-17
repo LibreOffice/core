@@ -1847,23 +1847,55 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
     if( !pCnt->IsTextFrame() )
         return false;
 
-    const SwTextNode* pTextNode = pCnt->GetNode()->GetTextNode();
+    SwTextFrame const*const pTextFrame(static_cast<SwTextFrame const*>(pCnt));
+    // sw_redlinehide: spell check only the nodes with visible content?
+    SwTextNode* pTextNode = const_cast<SwTextNode*>(pTextFrame->GetTextNodeForParaProps());
 
     bool bProcess = false;
-    switch ( eJob )
+    for (size_t i = 0; pTextNode; )
     {
-        case ONLINE_SPELLING :
-            bProcess = pTextNode->IsWrongDirty(); break;
-        case AUTOCOMPLETE_WORDS :
-            bProcess = pTextNode->IsAutoCompleteWordDirty(); break;
-        case WORD_COUNT :
-            bProcess = pTextNode->IsWordCountDirty(); break;
-        case SMART_TAGS :
-            bProcess = pTextNode->IsSmartTagDirty(); break;
+        switch ( eJob )
+        {
+            case ONLINE_SPELLING :
+                bProcess = pTextNode->IsWrongDirty(); break;
+            case AUTOCOMPLETE_WORDS :
+                bProcess = pTextNode->IsAutoCompleteWordDirty(); break;
+            case WORD_COUNT :
+                bProcess = pTextNode->IsWordCountDirty(); break;
+            case SMART_TAGS :
+                bProcess = pTextNode->IsSmartTagDirty(); break;
+        }
+        if (bProcess)
+        {
+            break;
+        }
+        if (sw::MergedPara const* pMerged = pTextFrame->GetMergedPara())
+        {
+            while (true)
+            {
+                ++i;
+                if (i < pMerged->extents.size())
+                {
+                    if (pMerged->extents[i].pNode != pTextNode)
+                    {
+                        pTextNode = pMerged->extents[i].pNode;
+                        break;
+                    }
+                }
+                else
+                {
+                    pTextNode = nullptr;
+                    break;
+                }
+            }
+        }
+        else
+            pTextNode = nullptr;
     }
 
     if( bProcess )
     {
+        assert(pTextNode);
         SwViewShell *pSh = pImp->GetShell();
         if( COMPLETE_STRING == nTextPos )
         {
@@ -1878,12 +1910,15 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
                 }
             }
         }
+        sal_Int32 const nPos((pContentNode && pTextNode == pContentNode)
+                ? nTextPos
+                : COMPLETE_STRING);
 
         switch ( eJob )
         {
             case ONLINE_SPELLING :
             {
-                SwRect aRepaint( const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pCnt))->AutoSpell_( pContentNode, nTextPos ) );
+                SwRect aRepaint( const_cast<SwTextFrame*>(pTextFrame)->AutoSpell_(*pTextNode, nPos) );
                 // PENDING should stop idle spell checking
                 bPageValid = bPageValid && (SwTextNode::WrongState::TODO != pTextNode->GetWrongDirty());
                 if ( aRepaint.HasArea() )
@@ -1893,7 +1928,7 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
                 break;
             }
             case AUTOCOMPLETE_WORDS :
-                const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pCnt))->CollectAutoCmplWrds( pContentNode, nTextPos );
+                const_cast<SwTextFrame*>(pTextFrame)->CollectAutoCmplWrds(*pTextNode, nPos);
                 // note: bPageValid remains true here even if the cursor
                 // position is skipped, so no PENDING state needed currently
                 if (Application::AnyInput(VCL_INPUT_ANY & VclInputFlags(~VclInputFlags::TIMER)))
@@ -1911,7 +1946,7 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
             case SMART_TAGS :
             {
                 try {
-                    const SwRect aRepaint( const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pCnt))->SmartTagScan() );
+                    const SwRect aRepaint( const_cast<SwTextFrame*>(pTextFrame)->SmartTagScan(*pTextNode) );
                     bPageValid = bPageValid && !pTextNode->IsSmartTagDirty();
                     if ( aRepaint.HasArea() )
                         pImp->GetShell()->InvalidateWindows( aRepaint );

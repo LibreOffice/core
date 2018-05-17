@@ -38,6 +38,7 @@
 #include <charatr.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <calbck.hxx>
+#include <doc.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
@@ -85,8 +86,8 @@ SwDropSave::SwDropSave( const SwTextPaintInfo &rInf ) :
 
 SwDropSave::~SwDropSave()
 {
-    pInf->SetIdx( nIdx );
-    pInf->SetLen( nLen );
+    pInf->SetIdx(TextFrameIndex(nIdx));
+    pInf->SetLen(TextFrameIndex(nLen));
     pInf->X( nX );
     pInf->Y( nY );
 }
@@ -168,6 +169,61 @@ sal_Int32 SwTextNode::GetDropLen( sal_Int32 nWishLen ) const
     return i;
 }
 
+/// nWishLen = 0 indicates that we want a whole word
+TextFrameIndex SwTextFrame::GetDropLen(TextFrameIndex const nWishLen) const
+{
+    TextFrameIndex nEnd(GetText().getLength());
+    if (nWishLen && nWishLen < nEnd)
+        nEnd = nWishLen;
+
+    if (! nWishLen)
+    {
+        // find first word
+        const SwAttrSet& rAttrSet = GetTextNodeForParaProps()->GetSwAttrSet();
+        const sal_uInt16 nTextScript = g_pBreakIt->GetRealScriptOfText(GetText(), 0);
+
+        LanguageType eLanguage;
+
+        switch ( nTextScript )
+        {
+        case i18n::ScriptType::ASIAN :
+            eLanguage = rAttrSet.GetCJKLanguage().GetLanguage();
+            break;
+        case i18n::ScriptType::COMPLEX :
+            eLanguage = rAttrSet.GetCTLLanguage().GetLanguage();
+            break;
+        default :
+            eLanguage = rAttrSet.GetLanguage().GetLanguage();
+            break;
+        }
+
+        Boundary aBound = g_pBreakIt->GetBreakIter()->getWordBoundary(
+            GetText(), 0, g_pBreakIt->GetLocale(eLanguage),
+            WordType::DICTIONARY_WORD, true );
+
+        nEnd = TextFrameIndex(aBound.endPos);
+    }
+
+    TextFrameIndex i(0);
+    for ( ; i < nEnd; ++i)
+    {
+        sal_Unicode const cChar = GetText()[sal_Int32(i)];
+        if (CH_TAB == cChar || CH_BREAK == cChar ||
+            CH_TXTATR_BREAKWORD == cChar || CH_TXTATR_INWORD == cChar)
+        {
+#ifndef NDEBUG
+            if (CH_TXTATR_BREAKWORD == cChar || CH_TXTATR_INWORD == cChar)
+            {
+                std::pair<SwTextNode const*, sal_Int32> const pos(MapViewToModel(i));
+                assert(pos.first->GetTextAttrForCharAt(pos.second) != nullptr);
+            }
+#endif
+            break;
+        }
+    }
+    return i;
+}
+
 /**
  * If a dropcap is found the return value is true otherwise false. The
  * drop cap sizes passed back by reference are font height, drop height
@@ -190,11 +246,13 @@ bool SwTextNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDesce
     }
 
     // get text frame
-    SwIterator<SwTextFrame,SwTextNode> aIter( *this );
+    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*this);
     for( SwTextFrame* pLastFrame = aIter.First(); pLastFrame; pLastFrame = aIter.Next() )
     {
         // Only (master-) text frames can have a drop cap.
-        if ( !pLastFrame->IsFollow() )
+        if (!pLastFrame->IsFollow() &&
+            // sw_redlinehide: paraPropsNode has the first text of the frame
+            (!pLastFrame->GetMergedPara() || pLastFrame->GetMergedPara()->pParaPropsNode == this))
         {
 
             if( !pLastFrame->HasPara() )
@@ -247,7 +305,7 @@ void SwDropPortion::PaintText( const SwTextPaintInfo &rInf ) const
     OSL_ENSURE( nDropHeight && pPart && nLines != 1, "Drop Portion painted twice" );
 
     const SwDropPortionPart* pCurrPart = GetPart();
-    const sal_Int32 nOldLen = GetLen();
+    const TextFrameIndex nOldLen = GetLen();
     const sal_uInt16 nOldWidth = Width();
     const sal_uInt16 nOldAscent = GetAscent();
 
@@ -364,8 +422,8 @@ void SwDropPortion::Paint( const SwTextPaintInfo &rInf ) const
 
 bool SwDropPortion::FormatText( SwTextFormatInfo &rInf )
 {
-    const sal_Int32 nOldLen = GetLen();
-    const sal_Int32 nOldInfLen = rInf.GetLen();
+    const TextFrameIndex nOldLen = GetLen();
+    const TextFrameIndex nOldInfLen = rInf.GetLen();
     if (!SwTextPortion::Format( rInf ))
         return false;
 
@@ -381,7 +439,7 @@ bool SwDropPortion::FormatText( SwTextFormatInfo &rInf )
 SwPosSize SwDropPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 {
     sal_uInt16 nMyX = 0;
-    sal_Int32 nIdx = 0;
+    TextFrameIndex nIdx(0);
 
     const SwDropPortionPart* pCurrPart = GetPart();
 
@@ -393,8 +451,8 @@ SwPosSize SwDropPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
         pCurrPart = pCurrPart->GetFollow();
     }
 
-    sal_Int32 nOldIdx = rInf.GetIdx();
-    sal_Int32 nOldLen = rInf.GetLen();
+    TextFrameIndex const nOldIdx = rInf.GetIdx();
+    TextFrameIndex const nOldLen = rInf.GetLen();
 
     const_cast<SwTextSizeInfo&>(rInf).SetIdx( nIdx );
     const_cast<SwTextSizeInfo&>(rInf).SetLen( rInf.GetLen() - nIdx );
@@ -421,9 +479,9 @@ SwPosSize SwDropPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
     return aPosSize;
 }
 
-sal_Int32 SwDropPortion::GetCursorOfst( const sal_uInt16 ) const
+TextFrameIndex SwDropPortion::GetCursorOfst(const sal_uInt16) const
 {
-    return 0;
+    return TextFrameIndex(0);
 }
 
 void SwTextFormatter::CalcDropHeight( const sal_uInt16 nLines )
@@ -508,8 +566,8 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
     if( !pDropFormat )
         return nullptr;
 
-    sal_Int32 nPorLen = pDropFormat->GetWholeWord() ? 0 : pDropFormat->GetChars();
-    nPorLen = m_pFrame->GetTextNode()->GetDropLen( nPorLen );
+    TextFrameIndex nPorLen(pDropFormat->GetWholeWord() ? 0 : pDropFormat->GetChars());
+    nPorLen = m_pFrame->GetDropLen( nPorLen );
     if( !nPorLen )
     {
         ClearDropFormat();
@@ -548,7 +606,7 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
 
     // build DropPortionParts:
     OSL_ENSURE( ! rInf.GetIdx(), "Drop Portion not at 0 position!" );
-    sal_Int32 nNextChg = 0;
+    TextFrameIndex nNextChg(0);
     const SwCharFormat* pFormat = pDropFormat->GetCharFormat();
     SwDropPortionPart* pCurrPart = nullptr;
 
@@ -562,15 +620,15 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
         if ( pFormat )
         {
             const SwAttrSet& rSet = pFormat->GetAttrSet();
-            pTmpFnt->SetDiffFnt( &rSet, m_pFrame->GetTextNode()->getIDocumentSettingAccess() );
+            pTmpFnt->SetDiffFnt(&rSet, &m_pFrame->GetDoc().getIDocumentSettingAccess());
         }
 
         // we do not allow a vertical font for the drop portion
         pTmpFnt->SetVertical( 0, rInf.GetTextFrame()->IsVertical() );
 
         // find next attribute change / script change
-        const sal_Int32 nTmpIdx = nNextChg;
-        sal_Int32 nNextAttr = std::min( GetNextAttr(), rInf.GetText().getLength() );
+        const TextFrameIndex nTmpIdx = nNextChg;
+        TextFrameIndex nNextAttr = GetNextAttr();
         nNextChg = m_pScriptInfo->NextScriptChg( nTmpIdx );
         if( nNextChg > nNextAttr )
             nNextChg = nNextAttr;
@@ -673,8 +731,8 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
 
     SwDropPortionPart* pCurrPart = pDrop->GetPart();
     const bool bUseCache = ! pCurrPart->GetFollow() && !pCurrPart->GetFont().HasBorder();
-    sal_Int32 nIdx = rInf.GetIdx();
-    OUString aStr(rInf.GetText().copy(nIdx, pCurrPart->GetLen()));
+    TextFrameIndex nIdx = rInf.GetIdx();
+    OUString aStr(rInf.GetText().copy(sal_Int32(nIdx), sal_Int32(pCurrPart->GetLen())));
 
     long nDescent = 0;
     long nFactor = -1;
@@ -730,7 +788,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
             aFactor[ nTmpIdx ] = static_cast<sal_uInt16>(nFactor);
         }
 
-        bool bGrow = ( pDrop->GetLen() != 0 );
+        bool bGrow = (pDrop->GetLen() != TextFrameIndex(0));
 
         // for growing control
         long nMax = USHRT_MAX;
@@ -777,8 +835,8 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
 
                 // we get the rectangle that covers all chars
                 bool bHaveGlyphRect = pOut->GetTextBoundRect( aRect, rInf.GetText(), 0,
-                                     nIdx, pCurrPart->GetLen() ) &&
-                                 ! aRect.IsEmpty();
+                            sal_Int32(nIdx), sal_Int32(pCurrPart->GetLen()))
+                    && ! aRect.IsEmpty();
 
                 if ( ! bHaveGlyphRect )
                 {
@@ -796,8 +854,8 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
                         pWin->SetFont( rFnt.GetActualFont() );
 
                         bHaveGlyphRect = pWin->GetTextBoundRect( aRect, rInf.GetText(), 0,
-                                            nIdx, pCurrPart->GetLen() ) &&
-                                        ! aRect.IsEmpty();
+                                sal_Int32(nIdx), sal_Int32(pCurrPart->GetLen()))
+                            && ! aRect.IsEmpty();
                     }
                     if (!bHaveGlyphRect)
                     {
