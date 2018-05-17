@@ -775,7 +775,7 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
     {
         aOut.append(" ");
         while (aOut.getLength() < 140) aOut.append(" ");
-        const OUString& text = static_cast<const SwTextFrame*>(pFrame)->GetTextNode()->GetText();
+        const OUString& text = static_cast<const SwTextFrame*>(pFrame)->GetText();
         OString o = OUStringToOString(text, RTL_TEXTENCODING_ASCII_US);
         aOut.append(o);
     }

@@ -369,7 +369,7 @@ void SwFEShell::SetPageOffset( sal_uInt16 nOffset )
         {
             if ( pFlow->IsInTab() )
                 pFlow = pFlow->FindTabFrame();
-            const SwFormatPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
+            const SwFormatPageDesc& rPgDesc = pFlow->GetPageDescItem();
             if ( rPgDesc.GetNumOffset() )
             {
                 pDocLayout->SetVirtPageNum( true );
@@ -391,7 +391,7 @@ sal_uInt16 SwFEShell::GetPageOffset() const
         {
             if ( pFlow->IsInTab() )
                 pFlow = pFlow->FindTabFrame();
-            ::boost::optional<sal_uInt16> oNumOffset = pFlow->GetAttrSet()->GetPageDesc().GetNumOffset();
+            ::boost::optional<sal_uInt16> oNumOffset = pFlow->GetPageDescItem().GetNumOffset();
             if ( oNumOffset )
                 return oNumOffset.get();
         }
@@ -1004,7 +1004,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                     else
                     {
                         // No content position provided. Thus, use a default one.
-                        SwPosition aDefaultContentPos( *(pTextFrame->GetTextNode()) );
+                        SwPosition aDefaultContentPos(*(pTextFrame->GetTextNodeFirst()));
                         pTextFrame->GetAutoPos( aChRect, aDefaultContentPos );
                     }
                     nTop = aRectFnSet.GetBottom(aChRect);
@@ -1018,7 +1018,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                     else
                     {
                         // No content position provided. Thus, use a default one.
-                        SwPosition aDefaultContentPos( *(pTextFrame->GetTextNode()) );
+                        SwPosition aDefaultContentPos(*(pTextFrame->GetTextNodeFirst()));
                         pTextFrame->GetTopOfLine( nTop, aDefaultContentPos );
                     }
                 }
@@ -1048,7 +1048,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 else
                 {
                     // No content position provided. Thus, use a default one.
-                    SwPosition aDefaultContentPos( *(pTextFrame->GetTextNode()) );
+                    SwPosition aDefaultContentPos(*(pTextFrame->GetTextNodeFirst()));
                     pTextFrame->GetAutoPos( aChRect, aDefaultContentPos );
                 }
                 nLeft = aRectFnSet.GetLeft(aChRect);

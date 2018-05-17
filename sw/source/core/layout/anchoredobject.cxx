@@ -545,7 +545,7 @@ bool SwAnchoredObject::HasClearedEnvironment() const
             const SwTextFrame* pTmpTextFrame = static_cast<const SwTextFrame*>(pTmpFrame);
             if ( pTmpTextFrame->IsUndersized() ||
                  ( pTmpTextFrame->GetFollow() &&
-                   pTmpTextFrame->GetFollow()->GetOfst() == 0 ) )
+                   pTmpTextFrame->GetFollow()->GetOfst() == TextFrameIndex(0)))
             {
                 bHasClearedEnvironment = true;
             }
@@ -716,8 +716,9 @@ SwTextFrame* SwAnchoredObject::FindAnchorCharFrame()
         if ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR) ||
             (rAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR))
         {
-            pAnchorCharFrame = &(static_cast<SwTextFrame*>(AnchorFrame())->
-                        GetFrameAtOfst( rAnch.GetContentAnchor()->nContent.GetIndex() ));
+            SwTextFrame *const pFrame(static_cast<SwTextFrame*>(AnchorFrame()));
+            TextFrameIndex const nOffset(pFrame->MapModelToViewPos(*rAnch.GetContentAnchor()));
+            pAnchorCharFrame = &pFrame->GetFrameAtOfst(nOffset);
         }
     }
 
