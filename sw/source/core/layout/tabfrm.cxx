@@ -47,6 +47,7 @@
 #include <cellfrm.hxx>
 #include <flyfrms.hxx>
 #include <txtfrm.hxx>
+#include <notxtfrm.hxx>
 #include <htmltbl.hxx>
 #include <sectfrm.hxx>
 #include <fmtfollowtextflow.hxx>
@@ -1178,7 +1179,11 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
                 SwContentFrame* pFrame = pHeadline->ContainsContent();
                 while( pFrame )
                 {
-                    nIndex = pFrame->GetNode()->GetIndex();
+                    // sw_redlinehide: the implementation of AppendObjs
+                    // takes care of iterating merged SwTextFrame
+                    nIndex = pFrame->IsTextFrame()
+                        ? static_cast<SwTextFrame*>(pFrame)->GetTextNodeFirst()->GetIndex()
+                        : static_cast<SwNoTextFrame*>(pFrame)->GetNode()->GetIndex();
                     AppendObjs( pTable, nIndex, pFrame, pPage, GetFormat()->GetDoc());
                     pFrame = pFrame->GetNextContentFrame();
                     if( !pHeadline->IsAnLower( pFrame ) )
@@ -1480,12 +1485,14 @@ bool SwContentFrame::CalcLowers( SwLayoutFrame* pLay, const SwLayoutFrame* pDont
                 if ( !SwObjectFormatter::FormatObjsAtFrame( *pCnt,
                                                           *(pCnt->FindPageFrame()) ) )
                 {
-                    if ( pCnt->GetRegisteredIn() == pLoopControlCond )
+                    SwTextNode const*const pTextNode(
+                        static_cast<SwTextFrame*>(pCnt)->GetTextNodeFirst());
+                    if (pTextNode == pLoopControlCond)
                         ++nLoopControlRuns;
                     else
                     {
                         nLoopControlRuns = 0;
-                        pLoopControlCond = pCnt->GetRegisteredIn();
+                        pLoopControlCond = pTextNode;
                     }
 
                     if ( nLoopControlRuns < nLoopControlMax )
@@ -1857,7 +1864,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
     // The beloved keep attribute
     const bool bEmulateTableKeep = AreAllRowsKeepWithNext( GetFirstNonHeadlineRow() );
-    const bool bKeep = IsKeep( pAttrs->GetAttrSet(), bEmulateTableKeep );
+    const bool bKeep = IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), bEmulateTableKeep);
 
     // All rows should keep together
     const bool bDontSplit = !IsFollow() &&
@@ -2223,9 +2230,12 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     // 6. There is no section change behind the table (see IsKeep)
                     // 7. The last table row wants to keep with its next.
                     const SwRowFrame* pLastRow = static_cast<const SwRowFrame*>(GetLastLower());
-                    if ( pLastRow && IsKeep( pAttrs->GetAttrSet(), true ) &&
-                         pLastRow->ShouldRowKeepWithNext() )
+                    if (pLastRow
+                        && IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), true)
+                        && pLastRow->ShouldRowKeepWithNext())
+                    {
                         bFormat = true;
+                    }
                 }
 
                 if ( bFormat )
@@ -4612,7 +4622,7 @@ bool SwRowFrame::ShouldRowKeepWithNext() const
     const SwFrame* pText = pCell->Lower();
 
     return pText && pText->IsTextFrame() &&
-           static_cast<const SwTextFrame*>(pText)->GetTextNode()->GetSwAttrSet().GetKeep().GetValue();
+           static_cast<const SwTextFrame*>(pText)->GetTextNodeForParaProps()->GetSwAttrSet().GetKeep().GetValue();
 }
 
 SwCellFrame::SwCellFrame(const SwTableBox &rBox, SwFrame* pSib, bool bInsertContent)
@@ -5461,7 +5471,7 @@ static SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrame& rSourceLine )
                     // would have no follow and thus would add this space.
                     if ( pTmp->IsTextFrame() &&
                          const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pTmp))
-                                            ->GetLineCount( COMPLETE_STRING ) == 1 )
+                            ->GetLineCount(TextFrameIndex(COMPLETE_STRING)) == 1)
                     {
                         nTmpHeight += SwFlowFrame::CastFlowFrame(pTmp)
                                         ->CalcAddLowerSpaceAsLastInTableCell();

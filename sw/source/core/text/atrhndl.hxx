@@ -115,6 +115,8 @@ public:
                const SwViewShell* pShell, SwFont& rFnt,
                bool bVertLayout );
 
+    bool IsVertLayout() const { return m_bVertLayout; }
+
     // remove everything from internal stacks, keep default data
     void Reset( );
 

@@ -93,6 +93,19 @@ public:
     SwDelText( sal_Int32 nS, sal_Int32 nL );
 };
 
+namespace sw {
+
+class RedlineDelText : public SfxHint
+{
+public:
+    sal_Int32 nStart;
+    sal_Int32 nLen;
+
+    RedlineDelText(sal_Int32 nS, sal_Int32 nL);
+};
+
+}
+
 class SwUpdateAttr : public SwMsgPoolItem
 {
 private:

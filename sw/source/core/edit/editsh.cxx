@@ -129,26 +129,36 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
             if ( nPrevPos )
                 --nPrevPos;
 
-            SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( static_cast<SwTextNode&>(rNode), true );
+            SwTextFrame const* pFrame;
+            SwScriptInfo *const pSI = SwScriptInfo::GetScriptInfo(
+                    static_cast<SwTextNode&>(rNode), &pFrame, true);
 
             sal_uInt8 nLevel = 0;
             if ( ! pSI )
             {
                 // seems to be an empty paragraph.
-                Point aPt;
-                SwContentFrame* pFrame =
-                        static_cast<SwTextNode&>(rNode).getLayoutFrame( GetLayout(), &aPt, pTmpCursor->GetPoint(),
-                                                    false );
+                Point aPt; // why ???
+                pFrame = static_cast<SwTextFrame*>(
+                        static_cast<SwTextNode&>(rNode).getLayoutFrame(
+                            GetLayout(), &aPt, pTmpCursor->GetPoint(), false));
 
                 SwScriptInfo aScriptInfo;
-                aScriptInfo.InitScriptInfo( static_cast<SwTextNode&>(rNode), pFrame->IsRightToLeft() );
-                nLevel = aScriptInfo.DirType( nPrevPos );
+                aScriptInfo.InitScriptInfo(static_cast<SwTextNode&>(rNode),
+                        pFrame->GetMergedPara(), pFrame->IsRightToLeft());
+                TextFrameIndex const iPrevPos(pFrame->MapModelToView(
+                            &static_cast<SwTextNode&>(rNode), nPrevPos));
+                nLevel = aScriptInfo.DirType( iPrevPos );
             }
             else
             {
-                if ( COMPLETE_STRING != pSI->GetInvalidityA() )
-                    pSI->InitScriptInfo( static_cast<SwTextNode&>(rNode) );
-                nLevel = pSI->DirType( nPrevPos );
+                if (TextFrameIndex(COMPLETE_STRING) != pSI->GetInvalidityA())
+                {
+                    // mystery why this doesn't use the other overload?
+                    pSI->InitScriptInfo(static_cast<SwTextNode&>(rNode), pFrame->GetMergedPara());
+                }
+                TextFrameIndex const iPrevPos(pFrame->MapModelToView(
+                            &static_cast<SwTextNode&>(rNode), nPrevPos));
+                nLevel = pSI->DirType(iPrevPos);
             }
 
             pTmpCursor->SetCursorBidiLevel( nLevel );
@@ -826,7 +836,7 @@ sal_uInt16 SwEditShell::GetLineCount()
     {
         if( nullptr != ( pContentFrame = pCNd->getLayoutFrame( GetLayout() ) ) && pContentFrame->IsTextFrame() )
         {
-            nRet = nRet + static_cast<SwTextFrame*>(pContentFrame)->GetLineCount( COMPLETE_STRING );
+            nRet = nRet + static_cast<SwTextFrame*>(pContentFrame)->GetLineCount(TextFrameIndex(COMPLETE_STRING));
         }
     }
     return nRet;

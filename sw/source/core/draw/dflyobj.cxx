@@ -362,14 +362,11 @@ bool SwVirtFlyDrawObj::ContainsSwGrfNode() const
 
     if(nullptr != pFlyFrame && pFlyFrame->Lower() && pFlyFrame->Lower()->IsNoTextFrame())
     {
-        const SwContentFrame* pCntFr(static_cast<const SwContentFrame*>(pFlyFrame->Lower()));
+        const SwNoTextFrame *const pNTF(static_cast<const SwNoTextFrame*>(pFlyFrame->Lower()));
 
-        if(nullptr != pCntFr)
-        {
-            const SwGrfNode* pGrfNd(pCntFr->GetNode()->GetGrfNode());
+        const SwGrfNode *const pGrfNd(pNTF->GetNode()->GetGrfNode());
 
-            return nullptr != pGrfNd;
-        }
+        return nullptr != pGrfNd;
     }
 
     return false;

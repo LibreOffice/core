@@ -51,6 +51,8 @@ class Color;
 class SwBorderAttrs;
 class SwCache;
 class SvxBrushItem;
+class SvxFormatBreakItem;
+class SwFormatPageDesc;
 class SwSelectionList;
 struct SwPosition;
 struct SwCursorMoveState;
@@ -287,6 +289,7 @@ class SW_DLLPUBLIC SwFrame : public SwFrameAreaDefinition, public SwClient, publ
     friend class SwFlowFrame;
     friend class SwLayoutFrame;
     friend class SwLooping;
+    friend class SwDeletionChecker; // for GetDep()
 
     // voids lower during creation of a column
     friend SwFrame *SaveContent( SwLayoutFrame *, SwFrame* pStart );
@@ -311,6 +314,10 @@ class SW_DLLPUBLIC SwFrame : public SwFrameAreaDefinition, public SwClient, publ
     SwLayoutFrame *mpUpper;
     SwFrame       *mpNext;
     SwFrame       *mpPrev;
+
+    // sw_redlinehide: hide these dangerous SwClient functions
+    using SwClient::GetRegisteredInNonConst;
+    using SwClient::GetRegisteredIn;
 
     SwFrame *FindNext_();
     SwFrame *FindPrev_();
@@ -440,6 +447,8 @@ protected:
     virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) = 0;
     virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) = 0;
 
+    /// use these so we can grep for SwFrame's GetRegisteredIn accesses
+    /// beware that SwTextFrame may return sw::WriterMultiListener
     SwModify        *GetDep()       { return GetRegisteredInNonConst(); }
     const SwModify  *GetDep() const { return GetRegisteredIn(); }
 
@@ -624,7 +633,11 @@ public:
 
     void ReinitializeFrameSizeAttrFlags();
 
+    /// WARNING: this may not return correct RES_PAGEDESC/RES_BREAK items for
+    /// SwTextFrame, use GetBreakItem()/GetPageDescItem() instead
     const SwAttrSet *GetAttrSet() const;
+    virtual const SvxFormatBreakItem& GetBreakItem() const;
+    virtual const SwFormatPageDesc& GetPageDescItem() const;
 
     bool HasFixSize() const { return mbFixSize; }
 
