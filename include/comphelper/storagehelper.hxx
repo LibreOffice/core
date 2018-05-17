@@ -193,6 +193,9 @@ public:
         const css::uno::Reference< css::embed::XStorage > &xStorage,
         const OUString& rURL, sal_uInt32 const nOpenMode,
         LifecycleProxy const & rNastiness );
+
+    static OUString
+    GetODFVersionFromStorage(css::uno::Reference<css::embed::XStorage> xStorage);
 };
 
 }
