@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a30ddce_3afea937",
+        "filename": "basic/source/comp/exprnode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-17T10:07:59Z",
+      "side": 1,
+      "message": "Maybe call it dummy? (that would almost fit this line in the required 100 chars line :) )",
+      "range": {
+        "startLine": 156,
+        "startChar": 100,
+        "endLine": 156,
+        "endChar": 105
+      },
+      "revId": "6f89f46b0d3787477103e1429069260d74297b20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_fa033140",
         "filename": "sw/source/core/bastyp/calc.cxx",
         "patchSetId": 1
