@@ -266,8 +266,7 @@ public:
     SAL_DLLPRIVATE bool
     SignContents_Impl(const css::uno::Reference<css::security::XCertificate> xCert,
                       const OUString& aSignatureLineId,
-                      bool bSignScriptingContent, const OUString& aODFVersion,
-                      bool bHasValidDocumentSignature);
+                      bool bSignScriptingContent, bool bHasValidDocumentSignature);
 
     // the following two methods must be used and make sense only during saving currently
     // TODO/LATER: in future the signature state should be controlled by the medium not by the document

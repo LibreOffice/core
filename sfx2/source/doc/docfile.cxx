@@ -3662,7 +3662,7 @@ void SfxMedium::CreateTempFileNoCopy()
 }
 
 bool SfxMedium::SignContents_Impl(const Reference<XCertificate> xCert, const OUString& aSignatureLineId,
-                                  bool bSignScriptingContent, const OUString& aODFVersion,
+                                  bool bSignScriptingContent,
                                   bool bHasValidDocumentSignature)
 {
     bool bChanges = false;
@@ -3675,6 +3675,7 @@ bool SfxMedium::SignContents_Impl(const Reference<XCertificate> xCert, const OUS
 
     // The component should know if there was a valid document signature, since
     // it should show a warning in this case
+    OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
     uno::Reference< security::XDocumentDigitalSignatures > xSigner(
         security::DocumentDigitalSignatures::createWithVersionAndValidSignature(
             comphelper::getProcessComponentContext(), aODFVersion, bHasValidDocumentSignature ) );
