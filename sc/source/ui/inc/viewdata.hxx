@@ -252,6 +252,18 @@ private:
     void            ReadUserDataSequence(
                         const css::uno::Sequence <css::beans::PropertyValue>& rSettings,
                         ScViewData& rViewData, SCTAB nTab, bool& rHasZoom);
+
+    /** Sanitize the active split range value to not point into a grid window
+        that would never be initialized due to non-matching split modes.
+
+        This is to be done when reading settings from file formats or
+        configurations that could have arbitrary values. The caller is
+        reponsible for actually assigning the new value to eWhichActive because
+        we want this function to be const to be able to call the check from
+        anywhere.
+     */
+    SAL_WARN_UNUSED_RESULT ScSplitPos SanitizeWhichActive() const;
+
 public:
     ~ScViewDataTable();
 };
