@@ -224,7 +224,7 @@ SwTwips SwTextFrame::EmptyHeight() const
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTextFrame::EmptyHeight with swapped frame" );
 
     SwFont *pFnt;
-    const SwTextNode& rTextNode = *GetTextNode();
+    const SwTextNode& rTextNode = *GetTextNodeForParaProps();
     const IDocumentSettingAccess* pIDSA = rTextNode.getIDocumentSettingAccess();
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
     if ( rTextNode.HasSwAttrSet() )
@@ -256,8 +256,8 @@ SwTwips SwTextFrame::EmptyHeight() const
         if( SwRedlineTable::npos != nRedlPos )
         {
             SwAttrHandler aAttrHandler;
-            aAttrHandler.Init(  GetTextNode()->GetSwAttrSet(),
-                               *GetTextNode()->getIDocumentSettingAccess() );
+            aAttrHandler.Init(rTextNode.GetSwAttrSet(),
+                              *rTextNode.getIDocumentSettingAccess());
             SwRedlineItr aRedln( rTextNode, *pFnt, aAttrHandler,
                                  nRedlPos, SwRedlineItr::Mode::Show);
         }
@@ -284,12 +284,13 @@ bool SwTextFrame::FormatEmpty()
 
     bool bCollapse = EmptyHeight( ) == 1 && IsCollapse( );
 
-    if ( HasFollow() || GetTextNode()->GetpSwpHints() ||
-        nullptr != GetTextNode()->GetNumRule() ||
+    // sw_redlinehide: just disable FormatEmpty optimisation for now
+    if (HasFollow() || GetMergedPara() || GetTextNodeFirst()->GetpSwpHints() ||
+        nullptr != GetTextNodeForParaProps()->GetNumRule() ||
         GetTextNode()->HasHiddenCharAttribute( true ) ||
          IsInFootnote() || ( HasPara() && GetPara()->IsPrepMustFit() ) )
         return false;
-    const SwAttrSet& aSet = GetTextNode()->GetSwAttrSet();
+    const SwAttrSet& aSet = GetTextNodeForParaProps()->GetSwAttrSet();
     const SvxAdjust nAdjust = aSet.GetAdjust().GetAdjust();
     if( !bCollapse && ( ( ( ! IsRightToLeft() && ( SvxAdjust::Left != nAdjust ) ) ||
           (   IsRightToLeft() && ( SvxAdjust::Right != nAdjust ) ) ) ||
@@ -310,7 +311,7 @@ bool SwTextFrame::FormatEmpty()
 
     SwTwips nHeight = EmptyHeight();
 
-    if ( GetTextNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
+    if (aSet.GetParaGrid().GetValue() &&
             IsInDocBody() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(FindPageFrame()));
@@ -386,7 +387,7 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                             OutputDevice *pOut = nullptr;
                             if( !pSh || !pSh->GetViewOptions()->getBrowseMode() ||
                                 pSh->GetViewOptions()->IsPrtFormat() )
-                                pOut = GetTextNode()->getIDocumentDeviceAccess().getReferenceDevice( true );
+                                pOut = GetDoc().getIDocumentDeviceAccess().getReferenceDevice( true );
 
                             if( pSh && !pOut )
                                 pOut = pSh->GetWin();
