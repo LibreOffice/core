@@ -61,7 +61,8 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
                                [in] string signatureLineId,
                                [in] ::com::sun::star::security::XCertificate xCertificate,
                                [in] ::com::sun::star::graphic::XGraphic xValidGraphic,
-                               [in] ::com::sun::star::graphic::XGraphic xInvalidGraphic);
+                               [in] ::com::sun::star::graphic::XGraphic xInvalidGraphic,
+                               [in] string comment);
 
     /** checks for digital signatures and their status.
 
