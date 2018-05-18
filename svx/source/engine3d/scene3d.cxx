@@ -423,12 +423,18 @@ E3dScene& E3dScene::operator=(const E3dScene& rSource)
         // call parent
         E3dObject::operator=(rSource);
 
-        // copy local data
+        // copy child SdrObjects
         if (rSource.GetSubList())
         {
             CopyObjects(*rSource.GetSubList());
+
+            // tdf#116979: needed here, we need bSnapRectDirty to be true
+            // which it is after using SdrObject::operator= (see above),
+            // but set to false again using CopyObjects
+            SetRectsDirty();
         }
 
+        // copy local data
         aCamera = rSource.aCamera;
         aCameraSet = rSource.aCameraSet;
         static_cast<sdr::properties::E3dSceneProperties&>(GetProperties()).SetSceneItemsFromCamera();
