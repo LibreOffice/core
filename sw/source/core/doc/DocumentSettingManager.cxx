@@ -114,6 +114,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbProtectForm                       = aOptions.GetDefault( SvtCompatibilityEntry::Index::ProtectForm );
         mbMsWordCompTrailingBlanks          = aOptions.GetDefault( SvtCompatibilityEntry::Index::MsWordTrailingBlanks );
         mbSubtractFlys                      = aOptions.GetDefault( SvtCompatibilityEntry::Index::SubtractFlysAnchoredAtFlys );
+        mbEmptyDbFieldHidesPara
+            = aOptions.GetDefault(SvtCompatibilityEntry::Index::EmptyDbFieldHidesPara);
     }
     else
     {
@@ -131,6 +133,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbProtectForm                       = false;
         mbMsWordCompTrailingBlanks          = false;
         mbSubtractFlys                      = false;
+        mbEmptyDbFieldHidesPara             = true;
     }
 
     // COMPATIBILITY FLAGS END
@@ -204,6 +207,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::EMBED_SYSTEM_FONTS: return mEmbedSystemFonts;
         case DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING: return mApplyParagraphMarkFormatToNumbering;
         case DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING: return mbDisableOffPagePositioning;
+        case DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA: return mbEmptyDbFieldHidesPara;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -421,6 +425,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING:
             mbDisableOffPagePositioning = value;
             break;
+        case DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA:
+            mbEmptyDbFieldHidesPara = value;
+            break;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -562,6 +569,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbTabRelativeToIndent = rSource.mbTabRelativeToIndent;
     mbTabAtLeftIndentForParagraphsInList = rSource.mbTabAtLeftIndentForParagraphsInList;
     mbMsWordCompTrailingBlanks = rSource.mbMsWordCompTrailingBlanks;
+    mbEmptyDbFieldHidesPara = rSource.mbEmptyDbFieldHidesPara;
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const

@@ -87,12 +87,25 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
     PropertyMapEntry aImportInfoMap[] =
     {
         { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0},
+        { OUString("DefaultDocumentSettings"), 0,
+          ::cppu::UnoType<Sequence<PropertyValue>>::get(), PropertyAttribute::MAYBEVOID, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
     Reference< XPropertySet > xInfoSet(
             GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
     xInfoSet->setPropertyValue( "BaseURI", makeAny( aBaseURI ));
+
+    OUString aFilterName;
+    auto It = aMediaMap.find(OUString("FilterName"));
+    if (It != aMediaMap.end() && (It->second >>= aFilterName)
+        && aFilterName == "OpenDocument Text Flat XML")
+    {
+        PropertyValue EmptyDbFieldHidesPara("EmptyDbFieldHidesPara", 0, Any(false),
+                                            PropertyState::PropertyState_DIRECT_VALUE);
+        Sequence<PropertyValue> aSettings{ EmptyDbFieldHidesPara };
+        xInfoSet->setPropertyValue("DefaultDocumentSettings", makeAny(aSettings));
+    }
     aAnys[0] <<= xInfoSet;
 
 

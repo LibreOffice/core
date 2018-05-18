@@ -420,6 +420,8 @@ public:
 
     void SetSubtractFlysAnchoredAtFlys(bool bSubtractFlysAnchoredAtFlys);
 
+    void SetEmptyDbFieldHidesPara(bool bEmptyDbFieldHidesPara);
+
     // DOCUMENT COMPATIBILITY FLAGS END
 
     // Calls Idle-formatter of Layout.

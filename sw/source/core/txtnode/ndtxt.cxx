@@ -4168,7 +4168,7 @@ void SwTextNode::CalcHiddenCharFlags() const
 // #i12836# enhanced pdf export
 bool SwTextNode::IsHidden() const
 {
-    if ( HasHiddenParaField() || HasHiddenCharAttribute( true ) )
+    if ( IsHiddenByParaField() || HasHiddenCharAttribute( true ) )
         return true;
 
     const SwSectionNode* pSectNd = FindSectionNode();

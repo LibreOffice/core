@@ -115,7 +115,8 @@ sal_uLong convertBools2Ulong_Impl
     bool _bExpandWordSpace,
     bool _bProtectForm,
     bool _bMsWordCompTrailingBlanks,
-    bool bSubtractFlysAnchoredAtFlys
+    bool bSubtractFlysAnchoredAtFlys,
+    bool bEmptyDbFieldHidesPara
 )
 {
     sal_uLong nRet = 0;
@@ -161,6 +162,9 @@ sal_uLong convertBools2Ulong_Impl
         nRet |= nSetBit;
     nSetBit = nSetBit << 1;
     if (bSubtractFlysAnchoredAtFlys)
+        nRet |= nSetBit;
+    nSetBit = nSetBit << 1;
+    if (bEmptyDbFieldHidesPara)
         nRet |= nSetBit;
 
     return nRet;
@@ -246,7 +250,8 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::ExpandWordSpace ),
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::ProtectForm ),
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::MsWordTrailingBlanks ),
-            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::SubtractFlysAnchoredAtFlys ) );
+            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::SubtractFlysAnchoredAtFlys ),
+            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::EmptyDbFieldHidesPara ) );
         m_pFormattingLB->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)nOptions) );
     }
 
@@ -319,7 +324,8 @@ sal_uLong SwCompatibilityOptPage::GetDocumentOptions() const
             !rIDocumentSettingAccess.get( DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK ),
             rIDocumentSettingAccess.get( DocumentSettingId::PROTECT_FORM ),
             rIDocumentSettingAccess.get( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS ),
-            rIDocumentSettingAccess.get( DocumentSettingId::SUBTRACT_FLYS ) );
+            rIDocumentSettingAccess.get( DocumentSettingId::SUBTRACT_FLYS ),
+            rIDocumentSettingAccess.get( DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA ) );
     }
     return nRet;
 }
@@ -409,6 +415,10 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
 
                     case SvtCompatibilityEntry::Index::SubtractFlysAnchoredAtFlys:
                         m_pWrtShell->SetSubtractFlysAnchoredAtFlys(bChecked);
+                        break;
+
+                    case SvtCompatibilityEntry::Index::EmptyDbFieldHidesPara:
+                        m_pWrtShell->SetEmptyDbFieldHidesPara(bChecked);
                         break;
 
                     default:

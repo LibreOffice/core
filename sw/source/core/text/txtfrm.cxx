@@ -457,12 +457,11 @@ bool SwTextFrame::IsHiddenNow() const
         return true;
     }
 
-    const bool bHiddenCharsHidePara = GetTextNode()->HasHiddenCharAttribute( true );
-    const bool bHiddenParaField = GetTextNode()->HasHiddenParaField();
-    const SwViewShell* pVsh = getRootFrame()->GetCurrShell();
-
-    if ( pVsh && ( bHiddenCharsHidePara || bHiddenParaField ) )
+    if ( const SwViewShell* pVsh = getRootFrame()->GetCurrShell() )
     {
+        const bool bHiddenCharsHidePara = GetTextNode()->HasHiddenCharAttribute(true);
+        const bool bHiddenParaField = GetTextNode()->IsHiddenByParaField();
+
         if (
              ( bHiddenParaField &&
                ( !pVsh->GetViewOptions()->IsShowHiddenPara() &&
