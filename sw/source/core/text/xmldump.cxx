@@ -328,6 +328,26 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
             xmlTextWriterEndElement(writer);
         }
 
+        if (IsTextFrame())
+        {
+            const SwTextFrame *pTextFrame = static_cast<const SwTextFrame *>(this);
+            sw::MergedPara const*const pMerged(pTextFrame->GetMergedPara());
+            if (pMerged)
+            {
+                xmlTextWriterStartElement( writer, BAD_CAST( "merged" ) );
+                xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "paraPropsNodeIndex" ), "%" SAL_PRIuUINTPTR, pMerged->pParaPropsNode->GetIndex() );
+                for (auto const& e : pMerged->extents)
+                {
+                    xmlTextWriterStartElement( writer, BAD_CAST( "extent" ) );
+                    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), "%" SAL_PRIuUINTPTR, e.pNode->GetIndex() );
+                    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "start" ), "%" SAL_PRIdINT32, e.nStart );
+                    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "end" ), "%" SAL_PRIdINT32, e.nEnd );
+                    xmlTextWriterEndElement( writer );
+                }
+                xmlTextWriterEndElement( writer );
+            }
+        }
+
         xmlTextWriterStartElement( writer, BAD_CAST( "infos" ) );
         dumpInfosAsXml( writer );
         xmlTextWriterEndElement( writer );
@@ -426,7 +446,7 @@ void SwFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
     if ( IsTextFrame(  ) )
     {
         const SwTextFrame *pTextFrame = static_cast<const SwTextFrame *>(this);
-        const SwTextNode *pTextNode = pTextFrame->GetTextNode();
+        const SwTextNode *pTextNode = pTextFrame->GetTextNodeFirst();
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), TMP_FORMAT, pTextNode->GetIndex() );
     }
     if (IsHeaderFrame() || IsFooterFrame())
