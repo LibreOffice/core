@@ -1014,8 +1014,9 @@ SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)
 {
     if( this == &rObj )
         return *this;
-    // call parent
-    SdrObject::operator=(rObj);
+
+    // call parent. tdf#116979: use the correct parent class
+    SdrAttrObj::operator=(rObj);
 
     maRect = rObj.maRect;
     aGeo      =rObj.aGeo;

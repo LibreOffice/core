@@ -215,11 +215,20 @@ SdrObjGroup& SdrObjGroup::operator=(const SdrObjGroup& rObj)
     // copy SdrObject stuff
     SdrObject::operator=(rObj);
 
-    // #i36404#
-    // copy SubList, init model and page first
-    SdrObjList& rSourceSubList = *rObj.GetSubList();
-    maSdrObjList.SetPage(rSourceSubList.GetPage());
-    maSdrObjList.CopyObjects(*rObj.GetSubList());
+    // copy child SdrObjects
+    if(nullptr != rObj.GetSubList())
+    {
+        // #i36404# Copy SubList, init model and page first
+        const SdrObjList& rSourceSubList(*rObj.GetSubList());
+
+        maSdrObjList.SetPage(rSourceSubList.GetPage());
+        maSdrObjList.CopyObjects(rSourceSubList);
+
+        // tdf#116979: needed here, we need bSnapRectDirty to be true
+        // which it is after using SdrObject::operator= (see above),
+        // but set to false again using CopyObjects
+        SetRectsDirty();
+    }
 
     // copy local parameters
     aRefPoint  = rObj.aRefPoint;
