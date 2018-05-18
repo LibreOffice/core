@@ -2895,7 +2895,7 @@ bool MathType::HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
                 OUString aStr;
                 TypeFaceToString(aStr,nOldTypeFace);
                 aStr += "\"";
-                rRet.insert(rTextStart, aStr);
+                rRet.insert(std::min(rTextStart, rRet.getLength()), aStr);
 
                 aStr.clear();
                 TypeFaceToString(aStr,nTypeFace);
