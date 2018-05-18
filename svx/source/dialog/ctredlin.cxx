@@ -582,12 +582,11 @@ SvxTPFilter::SvxTPFilter( vcl::Window * pParent)
     RowEnableHdl(m_pCbAction);
     RowEnableHdl(m_pCbComment);
 
-    Date aDate( Date::SYSTEM );
-    tools::Time aTime( tools::Time::SYSTEM );
-    m_pDfDate->SetDate(aDate);
-    m_pTfDate->SetTime(aTime);
-    m_pDfDate2->SetDate(aDate);
-    m_pTfDate2->SetTime(aTime);
+    DateTime aDateTime( DateTime::SYSTEM );
+    m_pDfDate->SetDate(aDateTime);
+    m_pTfDate->SetTime(aDateTime);
+    m_pDfDate2->SetDate(aDateTime);
+    m_pTfDate2->SetTime(aDateTime);
     HideRange();
     ShowAction();
     bModified=false;
@@ -935,17 +934,16 @@ IMPL_LINK( SvxTPFilter, RowEnableHdl, Button*, pButton, void )
 IMPL_LINK( SvxTPFilter, TimeHdl, Button*, pButton, void )
 {
     ImageButton* pIB = static_cast<ImageButton*>(pButton);
-    Date aDate( Date::SYSTEM );
-    tools::Time aTime( tools::Time::SYSTEM );
+    DateTime aDateTime( DateTime::SYSTEM );
     if (pIB == m_pIbClock)
     {
-        m_pDfDate->SetDate(aDate);
-        m_pTfDate->SetTime(aTime);
+        m_pDfDate->SetDate(aDateTime);
+        m_pTfDate->SetTime(aDateTime);
     }
     else if (pIB == m_pIbClock2)
     {
-        m_pDfDate2->SetDate(aDate);
-        m_pTfDate2->SetTime(aTime);
+        m_pDfDate2->SetDate(aDateTime);
+        m_pTfDate2->SetTime(aDateTime);
     }
     bModified=true;
 }
