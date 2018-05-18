@@ -24,6 +24,8 @@ static const OUStringLiteral BREEZE_DARK_ID("breeze_dark");
 static const OUStringLiteral BREEZE_DARK_DISPLAY_NAME("Breeze Dark");
 static const OUStringLiteral SIFR_DARK_ID("sifr_dark");
 static const OUStringLiteral SIFR_DARK_DISPLAY_NAME("Sifr Dark");
+static const OUStringLiteral KARASA_JAGA_ID("karasa_jaga");
+static const OUStringLiteral KARASA_JAGA_DISPLAY_NAME("Karasa Jaga");
 
 static const OUStringLiteral HELPIMG_FAKE_THEME("helpimg");
 

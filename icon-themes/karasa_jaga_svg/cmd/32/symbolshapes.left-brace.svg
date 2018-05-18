@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="svg2"
+   width="128"
+   height="128"
+   viewBox="0 0 128 128"
+   sodipodi:docname="symbolshapes.left-brace.svg"
+   inkscape:export-filename="/home/rizmut/Dokumen/Proyek-Git/libreoffice-style-karasa-jaga/build/images_karasa_Jaga/cmd/32/symbolshapes.left-brace.png"
+   inkscape:export-xdpi="24"
+   inkscape:export-ydpi="24"
+   inkscape:version="0.92.2 (unknown)">
+  <metadata
+     id="metadata8">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="706"
+     id="namedview4"
+     showgrid="false"
+     inkscape:snap-page="true"
+     inkscape:snap-global="true"
+     inkscape:zoom="2.4494288"
+     inkscape:cx="97.767141"
+     inkscape:cy="45.384629"
+     inkscape:window-x="-1"
+     inkscape:window-y="-1"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2">
+    <inkscape:grid
+       type="xygrid"
+       id="grid837" />
+  </sodipodi:namedview>
+  <path
+     inkscape:connector-curvature="0"
+     id="path992"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:125%;font-family:'Nimbus Roman No9 L';-inkscape-font-specification:'Nimbus Roman No9 L';letter-spacing:0px;word-spacing:0px;fill:#507dbe;fill-opacity:0.72941176;stroke:none;stroke-width:3.07903862px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 78.874419,117.47516 C 70.663741,115.18063 68.045841,111.35643 68.045841,101.79591 V 80.380353 c 0,-10.580306 -2.260911,-13.894619 -11.185563,-16.316617 8.924652,-2.549471 11.185563,-5.863783 11.185563,-16.444089 V 26.204089 c 0,-9.560518 2.6179,-13.384725 10.828578,-15.679248 V 9.1226309 C 71.020725,9.2501046 67.926847,10.014946 64.475982,12.30947 c -3.450865,2.294525 -5.235796,7.265993 -5.235796,14.531986 v 22.690295 c 0,8.923149 -2.141917,11.855041 -10.114605,14.404512 7.972688,2.676945 10.114605,5.73631 10.114605,14.531986 v 22.562821 c 0,7.13852 1.903925,12.36493 5.235796,14.65946 3.331869,2.29453 6.544744,3.05937 14.398437,3.18684 z" />
+  <image
+     y="4.4408921e-16"
+     x="128"
+     id="image966"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAACYQAAAmEBwTBV+gAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAHvSURB
+VDiN1dXNahNRGMbx/3tOEgUxLUqiuFG7UtCmatd1E7wDEZSMiIuCqDdQaE4KXoCou6KYoqJ4A0o3
+dm9tUgVXVVdiQ8FGxDqTOa+LaEliUmbRCj7LZ2Z+PMwHAzsU6Ve6J4uHTJQ65y0L7tLoSt9zHtVH
+TMyElfDFVGn8c+9x01vMzNUCiexHRW8QxtmBk8I4q+jNlqY/VR4uXdhysXv2LiMbcUNEX06XCucH
+oh2pVGvPgeLBH1FucnI86r84bOVBs+p1PgnaXqbzwFBjdyrf2XfDPmV+t2FSWIWfAC1J28HwNubf
+wMbHOQD18i0pIPAdgDjc1xd2To03/jrwFWEhKWytfQWsizXXnNNNzwBUqrWqHK2/F2TNwGkXFFaT
+wlMXT34x3pwBmjJSf1up1ma7Fm9TLJDZhMtBIdAPo8cU3e9h0VVr+S0v78itx8sHvPGvgWFdGT1e
+DgpB12LnxBtv7gLDKBNJ4TiOzwJDonrPOfF/+q5b4Y1tAIjRvUlhhT0AXtJrnf1//oFgWu175NtP
+NklE2QWQ0igeDGdSqyBNMVJMCitSBNZzG62ud/+vP8jMXC1QZRZY1thfdVdOLfUD3YM3Y2LNfeAE
+qqXy5bGngxcD06VCVdPxEUHukLHNgVMztolyOyXR4V50R/ML/x+wIlsE7bEAAAAASUVORK5CYII=
+"
+     preserveAspectRatio="none"
+     height="128"
+     width="128" />
+</svg>
