@@ -279,7 +279,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
         if( !bName )
         {
             pTmpFnt = new SwFont( *m_pFont );
-            pTmpFnt->SetDiffFnt( &pChFormat->GetAttrSet(), m_pFrame->GetTextNode()->getIDocumentSettingAccess() );
+            pTmpFnt->SetDiffFnt(&pChFormat->GetAttrSet(), &m_pFrame->GetDoc().getIDocumentSettingAccess());
         }
         {
             OUString const aStr( bName
@@ -471,7 +471,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
         return nullptr;
 
     SwNumberPortion *pRet = nullptr;
-    const SwTextNode* pTextNd = GetTextFrame()->GetTextNode();
+    const SwTextNode *const pTextNd = GetTextFrame()->GetTextNodeForParaProps();
     const SwNumRule* pNumRule = pTextNd->GetNumRule();
 
     // Has a "valid" number?
