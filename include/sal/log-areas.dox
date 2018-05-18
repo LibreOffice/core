@@ -461,6 +461,7 @@ certain functionality.
 @li @c vcl.eventtesting
 @li @c vcl.filter
 @li @c vcl.fonts - font-specific code
+@li @c vcl.fonts.detail
 @li @c vcl.gdi - the GDI part of VCL, devices, bitmaps, etc.
 @li @c vcl.gdi.wndproc - Windows Procedure part of VCL
 @li @c vcl.gdi.fontmetric

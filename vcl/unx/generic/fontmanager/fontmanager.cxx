@@ -243,9 +243,7 @@ std::vector<std::unique_ptr<PrintFontManager::PrintFont>> PrintFontManager::anal
         int nLength = CountTTCFonts( aFullPath.getStr() );
         if (nLength > 0)
         {
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "ttc: %s contains %d fonts\n", aFullPath.getStr(), nLength );
-#endif
+            SAL_INFO("vcl.fonts", "ttc: " << aFullPath << " contains " << nLength << " fonts");
 
             sal_uInt64 fileSize = 0;
 
