@@ -109,7 +109,8 @@ public:
         const css::uno::Reference<css::io::XStream>& xSignStream, const OUString& aSignatureLineId,
         const Reference<css::security::XCertificate>& xCertificate,
         const Reference<css::graphic::XGraphic>& xValidGraphic,
-        const Reference<css::graphic::XGraphic>& xInvalidGraphic) override;
+        const Reference<css::graphic::XGraphic>& xInvalidGraphic,
+        const OUString& aComment) override;
     css::uno::Sequence<css::security::DocumentSignatureInformation>
         SAL_CALL verifyDocumentContentSignatures(
             const css::uno::Reference<css::embed::XStorage>& xStorage,
@@ -230,7 +231,8 @@ sal_Bool DocumentDigitalSignatures::signSignatureLine(
     const OUString& aSignatureLineId,
     const Reference<css::security::XCertificate>& xCertificate,
     const Reference<css::graphic::XGraphic>& xValidGraphic,
-    const Reference<css::graphic::XGraphic>& xInvalidGraphic)
+    const Reference<css::graphic::XGraphic>& xInvalidGraphic,
+    const OUString& aComment)
 {
     OSL_ENSURE(!m_sODFVersion.isEmpty(),
                "DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
@@ -253,8 +255,7 @@ sal_Bool DocumentDigitalSignatures::signSignatureLine(
         xSecurityContext = aSignatureManager.getSecurityContext();
 
     sal_Int32 nSecurityId;
-    OUString aDescription("");
-    bool bSuccess = aSignatureManager.add(xCertificate, xSecurityContext, aDescription, nSecurityId,
+    bool bSuccess = aSignatureManager.add(xCertificate, xSecurityContext, aComment, nSecurityId,
                                           true, aSignatureLineId, xValidGraphic, xInvalidGraphic);
     if (!bSuccess)
         return false;
