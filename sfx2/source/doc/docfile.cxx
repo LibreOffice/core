@@ -3668,7 +3668,8 @@ bool SfxMedium::SignContents_Impl(bool bSignScriptingContent,
                                   const OUString& aSignatureLineId,
                                   const Reference<XCertificate> xCert,
                                   const Reference<XGraphic> xValidGraphic,
-                                  const Reference<XGraphic> xInvalidGraphic)
+                                  const Reference<XGraphic> xInvalidGraphic,
+                                  const OUString& aComment)
 {
     bool bChanges = false;
 
@@ -3759,7 +3760,8 @@ bool SfxMedium::SignContents_Impl(bool bSignScriptingContent,
                 bool bSuccess = false;
                 if (xCert.is())
                     bSuccess = xSigner->signSignatureLine(
-                        GetZipStorageToSign_Impl(), xStream, aSignatureLineId, xCert, xValidGraphic, xInvalidGraphic);
+                        GetZipStorageToSign_Impl(), xStream, aSignatureLineId, xCert,
+                        xValidGraphic, xInvalidGraphic, aComment);
                 else
                     bSuccess = xSigner->signDocumentContent(GetZipStorageToSign_Impl(),
                                                             xStream);
@@ -3785,7 +3787,8 @@ bool SfxMedium::SignContents_Impl(bool bSignScriptingContent,
                 if (xCert.is())
                 {
                     bSuccess = xSigner->signSignatureLine(
-                        GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream, aSignatureLineId, xCert, xValidGraphic, xInvalidGraphic);
+                        GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream, aSignatureLineId,
+                        xCert, xValidGraphic, xInvalidGraphic, aComment);
                 }
                 else
                 {

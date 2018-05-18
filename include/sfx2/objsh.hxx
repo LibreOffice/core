@@ -364,7 +364,8 @@ public:
     void SignSignatureLine(const OUString& aSignatureLineId,
                            const css::uno::Reference<css::security::XCertificate> xCert,
                            const css::uno::Reference<css::graphic::XGraphic> xValidGraphic,
-                           const css::uno::Reference<css::graphic::XGraphic> xInvalidGraphic);
+                           const css::uno::Reference<css::graphic::XGraphic> xInvalidGraphic,
+                           const OUString& aComment);
     SignatureState              GetScriptingSignatureState();
     void                        SignScriptingContent();
     DECL_LINK(SignDocumentHandler, Button*, void);

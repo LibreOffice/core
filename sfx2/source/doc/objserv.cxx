@@ -1565,7 +1565,8 @@ void SfxObjectShell::SignDocumentContent()
 void SfxObjectShell::SignSignatureLine(const OUString& aSignatureLineId,
                                        const Reference<XCertificate> xCert,
                                        const Reference<XGraphic> xValidGraphic,
-                                       const Reference<XGraphic> xInvalidGraphic)
+                                       const Reference<XGraphic> xInvalidGraphic,
+                                       const OUString& aComment)
 {
     if (!PrepareForSigning())
         return;
@@ -1574,7 +1575,7 @@ void SfxObjectShell::SignSignatureLine(const OUString& aSignatureLineId,
         return;
 
     bool bSignSuccess = GetMedium()->SignContents_Impl(
-        false, HasValidSignatures(), aSignatureLineId, xCert, xValidGraphic, xInvalidGraphic);
+        false, HasValidSignatures(), aSignatureLineId, xCert, xValidGraphic, xInvalidGraphic, aComment);
 
     AfterSigning(bSignSuccess, false);
 }

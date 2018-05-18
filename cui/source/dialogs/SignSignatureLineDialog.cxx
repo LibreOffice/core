@@ -148,7 +148,7 @@ void SignSignatureLineDialog::Apply()
     Reference<XGraphic> xValidGraphic = getSignedGraphic(true);
     Reference<XGraphic> xInvalidGraphic = getSignedGraphic(false);
     pShell->SignSignatureLine(m_aSignatureLineId, m_xSelectedCertifate, xValidGraphic,
-                              xInvalidGraphic);
+                              xInvalidGraphic, m_xEditComment->get_text());
 }
 
 const css::uno::Reference<css::graphic::XGraphic>
