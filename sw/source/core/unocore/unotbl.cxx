@@ -45,6 +45,7 @@
 #include <shellres.hxx>
 #include <docary.hxx>
 #include <ndole.hxx>
+#include <ndtxt.hxx>
 #include <frame.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtfsize.hxx>
@@ -1043,6 +1044,36 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     else
     {
         auto pEntry(m_pPropSet->getPropertyMap().getByName(rPropertyName));
+        if ( !pEntry )
+        {
+            // not a table property: if it is a paragraph/character property, consider applying it to the underlying text.
+            const SfxItemPropertySet& rParaPropSet = *aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH);
+            pEntry = rParaPropSet.getPropertyMap().getByName(rPropertyName);
+
+            if ( pEntry )
+            {
+                SwNodeIndex aIdx( *GetStartNode(), 1 );
+                const SwNode* pEndNd = aIdx.GetNode().EndOfSectionNode();
+                while ( &aIdx.GetNode() != pEndNd )
+                {
+                    const SwTextNode* pNd = aIdx.GetNode().GetTextNode();
+                    if ( pNd )
+                    {
+                        //point and mark selecting the whole paragraph
+                        SwPaM aPaM(*pNd, 0, *pNd, pNd->GetText().getLength());
+                        const bool bHasAttrSet = pNd->HasSwAttrSet();
+                        const SfxItemSet& aSet = pNd->GetSwAttrSet();
+                        // isPARATR: replace DEFAULT_VALUE properties only
+                        // isCHRATR: change the base/auto SwAttr property, but don't remove the DIRECT hints
+                        if ( !bHasAttrSet || SfxItemState::DEFAULT == aSet.GetItemState(pEntry->nWID, /*bSrchInParent=*/false) )
+                            SwUnoCursorHelper::SetPropertyValue(aPaM, rParaPropSet, rPropertyName, aValue, SetAttrMode::DONTREPLACE);
+                    }
+                    ++aIdx;
+                }
+                return;
+            }
+        }
+
         if(!pEntry)
             throw beans::UnknownPropertyException(rPropertyName, static_cast<cppu::OWeakObject*>(this));
         if(pEntry->nWID != FN_UNO_CELL_ROW_SPAN)
