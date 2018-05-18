@@ -27,6 +27,7 @@
 #include <sfx2/signaturestate.hxx>
 #include <svl/lockfilecommon.hxx>
 #include <sal/types.h>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/util/RevisionTag.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -264,9 +265,14 @@ public:
                              const css::uno::Reference< css::ucb::XCommandEnvironment >& xComEnv );
 
     SAL_DLLPRIVATE bool
-    SignContents_Impl(const css::uno::Reference<css::security::XCertificate> xCert,
-                      const OUString& aSignatureLineId,
-                      bool bSignScriptingContent, bool bHasValidDocumentSignature);
+    SignContents_Impl(bool bSignScriptingContent, bool bHasValidDocumentSignature,
+                      const OUString& aSignatureLineId = OUString(),
+                      const css::uno::Reference<css::security::XCertificate> xCert
+                      = css::uno::Reference<css::security::XCertificate>(),
+                      const css::uno::Reference<css::graphic::XGraphic> xValidGraphic
+                      = css::uno::Reference<css::graphic::XGraphic>(),
+                      const css::uno::Reference<css::graphic::XGraphic> xInvalidGraphic
+                      = css::uno::Reference<css::graphic::XGraphic>());
 
     // the following two methods must be used and make sense only during saving currently
     // TODO/LATER: in future the signature state should be controlled by the medium not by the document

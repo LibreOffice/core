@@ -29,6 +29,7 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -361,7 +362,9 @@ public:
     SignatureState              GetDocumentSignatureState();
     void                        SignDocumentContent();
     void SignSignatureLine(const OUString& aSignatureLineId,
-                           const css::uno::Reference<css::security::XCertificate> xCert);
+                           const css::uno::Reference<css::security::XCertificate> xCert,
+                           const css::uno::Reference<css::graphic::XGraphic> xValidGraphic,
+                           const css::uno::Reference<css::graphic::XGraphic> xInvalidGraphic);
     SignatureState              GetScriptingSignatureState();
     void                        SignScriptingContent();
     DECL_LINK(SignDocumentHandler, Button*, void);
