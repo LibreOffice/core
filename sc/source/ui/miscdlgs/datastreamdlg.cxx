@@ -17,98 +17,78 @@
 
 namespace sc {
 
-DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, vcl::Window* pParent)
-    : ModalDialog(pParent, "DataStreamDialog", "modules/scalc/ui/datastreams.ui")
-    , mpDocShell(pDocShell)
+DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, weld::Window* pParent)
+    : GenericDialogController(pParent, "modules/scalc/ui/datastreams.ui", "DataStreamDialog")
+    , m_pDocShell(pDocShell)
+    , m_xCbUrl(new URLBox(m_xBuilder->weld_combo_box_text("url")))
+    , m_xBtnBrowse(m_xBuilder->weld_button("browse"))
+    , m_xRBValuesInLine(m_xBuilder->weld_radio_button("valuesinline"))
+    , m_xRBAddressValue(m_xBuilder->weld_radio_button("addressvalue"))
+    , m_xCBRefreshOnEmpty(m_xBuilder->weld_check_button("refresh_ui"))
+    , m_xRBDataDown(m_xBuilder->weld_radio_button("datadown"))
+    , m_xRBRangeDown(m_xBuilder->weld_radio_button("rangedown"))
+    , m_xRBNoMove(m_xBuilder->weld_radio_button("nomove"))
+    , m_xRBMaxLimit(m_xBuilder->weld_radio_button("maxlimit"))
+    , m_xRBUnlimited(m_xBuilder->weld_radio_button("unlimited"))
+    , m_xEdRange(m_xBuilder->weld_entry("range"))
+    , m_xEdLimit(m_xBuilder->weld_entry("limit"))
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
+    , m_xVclFrameLimit(m_xBuilder->weld_frame("framelimit"))
+    , m_xVclFrameMove(m_xBuilder->weld_frame("framemove"))
 {
-    get(m_pCbUrl, "url");
-    get(m_pBtnBrowse, "browse");
-    get(m_pRBValuesInLine, "valuesinline");
-    get(m_pRBAddressValue, "addressvalue");
-    get(m_pCBRefreshOnEmpty, "refresh_ui");
-    get(m_pRBDataDown, "datadown");
-    get(m_pRBRangeDown, "rangedown");
-    get(m_pRBNoMove, "nomove");
-    get(m_pRBMaxLimit, "maxlimit");
-    get(m_pRBUnlimited, "unlimited");
-    get(m_pEdRange, "range");
-    get(m_pEdLimit, "limit");
-    get(m_pBtnOk, "ok");
-    get(m_pVclFrameLimit, "framelimit");
-    get(m_pVclFrameMove, "framemove");
-
-    m_pCbUrl->SetSelectHdl( LINK( this, DataStreamDlg, UpdateComboBoxHdl ) );
-    m_pRBAddressValue->SetClickHdl( LINK( this, DataStreamDlg, UpdateClickHdl ) );
-    m_pRBAddressValue->Enable(false);
-    m_pRBNoMove->Hide();
-    m_pRBValuesInLine->SetClickHdl( LINK( this, DataStreamDlg, UpdateClickHdl ) );
-    m_pEdRange->SetModifyHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
-    m_pBtnBrowse->SetClickHdl( LINK( this, DataStreamDlg, BrowseHdl ) );
+    m_xCbUrl->connect_changed( LINK( this, DataStreamDlg, UpdateComboBoxHdl ) );
+    m_xRBAddressValue->connect_toggled( LINK( this, DataStreamDlg, UpdateClickHdl ) );
+    m_xRBAddressValue->set_sensitive(false);
+    m_xRBNoMove->hide();
+    m_xRBValuesInLine->connect_toggled( LINK( this, DataStreamDlg, UpdateClickHdl ) );
+    m_xEdRange->connect_changed( LINK( this, DataStreamDlg, UpdateHdl ) );
+    m_xBtnBrowse->connect_clicked( LINK( this, DataStreamDlg, BrowseHdl ) );
     UpdateEnable();
 }
 
 DataStreamDlg::~DataStreamDlg()
 {
-    disposeOnce();
 }
 
-void DataStreamDlg::dispose()
+IMPL_LINK_NOARG(DataStreamDlg, BrowseHdl, weld::Button&, void)
 {
-    m_pCbUrl.clear();
-    m_pBtnBrowse.clear();
-    m_pRBValuesInLine.clear();
-    m_pRBAddressValue.clear();
-    m_pCBRefreshOnEmpty.clear();
-    m_pRBDataDown.clear();
-    m_pRBRangeDown.clear();
-    m_pRBNoMove.clear();
-    m_pRBMaxLimit.clear();
-    m_pRBUnlimited.clear();
-    m_pEdRange.clear();
-    m_pEdLimit.clear();
-    m_pBtnOk.clear();
-    m_pVclFrameLimit.clear();
-    m_pVclFrameMove.clear();
-    ModalDialog::dispose();
-}
-
-IMPL_LINK_NOARG(DataStreamDlg, BrowseHdl, Button*, void)
-{
-    sfx2::FileDialogHelper aFileDialog(0, FileDialogFlags::NONE, GetFrameWeld());
+    sfx2::FileDialogHelper aFileDialog(0, FileDialogFlags::NONE, m_xDialog.get());
     if ( aFileDialog.Execute() != ERRCODE_NONE )
         return;
 
-    m_pCbUrl->SetText( aFileDialog.GetPath() );
+    m_xCbUrl->SetText( aFileDialog.GetPath() );
     UpdateEnable();
 }
 
-IMPL_LINK_NOARG(DataStreamDlg, UpdateClickHdl, Button*, void)
+IMPL_LINK_NOARG(DataStreamDlg, UpdateClickHdl, weld::ToggleButton&, void)
 {
     UpdateEnable();
 }
-IMPL_LINK_NOARG(DataStreamDlg, UpdateComboBoxHdl, ComboBox&, void)
+
+IMPL_LINK_NOARG(DataStreamDlg, UpdateComboBoxHdl, weld::ComboBoxText&, void)
 {
     UpdateEnable();
 }
-IMPL_LINK_NOARG(DataStreamDlg, UpdateHdl, Edit&, void)
+
+IMPL_LINK_NOARG(DataStreamDlg, UpdateHdl, weld::Entry&, void)
 {
     UpdateEnable();
 }
 
 void DataStreamDlg::UpdateEnable()
 {
-    bool bOk = !m_pCbUrl->GetURL().isEmpty();
-    if (m_pRBAddressValue->IsChecked())
+    bool bOk = !m_xCbUrl->GetURL().isEmpty();
+    if (m_xRBAddressValue->get_active())
     {
-        m_pVclFrameLimit->Disable();
-        m_pVclFrameMove->Disable();
-        m_pEdRange->Disable();
+        m_xVclFrameLimit->set_sensitive(false);
+        m_xVclFrameMove->set_sensitive(false);
+        m_xEdRange->set_sensitive(false);
     }
     else
     {
-        m_pVclFrameLimit->Enable();
-        m_pVclFrameMove->Enable();
-        m_pEdRange->Enable();
+        m_xVclFrameLimit->set_sensitive(true);
+        m_xVclFrameMove->set_sensitive(true);
+        m_xEdRange->set_sensitive(true);
         if (bOk)
         {
             // Check the given range to make sure it's valid.
@@ -117,14 +97,14 @@ void DataStreamDlg::UpdateEnable()
                 bOk = false;
         }
     }
-    m_pBtnOk->Enable(bOk);
-    setOptimalLayoutSize();
+    m_xBtnOk->set_sensitive(bOk);
+//    setOptimalLayoutSize();
 }
 
 ScRange DataStreamDlg::GetStartRange()
 {
-    OUString aStr = m_pEdRange->GetText();
-    ScDocument& rDoc = mpDocShell->GetDocument();
+    OUString aStr = m_xEdRange->get_text();
+    ScDocument& rDoc = m_pDocShell->GetDocument();
     ScRange aRange;
     ScRefFlags nRes = aRange.Parse(aStr, &rDoc, rDoc.GetAddressConvention());
     if ( ((nRes & ScRefFlags::VALID) == ScRefFlags::ZERO) || !aRange.IsValid())
@@ -143,32 +123,32 @@ ScRange DataStreamDlg::GetStartRange()
 
 void DataStreamDlg::Init( const DataStream& rStrm )
 {
-    m_pCbUrl->SetText(rStrm.GetURL());
-    ScDocument& rDoc = mpDocShell->GetDocument();
+    m_xCbUrl->SetText(rStrm.GetURL());
+    ScDocument& rDoc = m_pDocShell->GetDocument();
 
     ScRange aRange = rStrm.GetRange();
     ScRange aTopRange = aRange;
     aTopRange.aEnd.SetRow(aTopRange.aStart.Row());
     OUString aStr = aTopRange.Format(ScRefFlags::RANGE_ABS_3D, &rDoc, rDoc.GetAddressConvention());
-    m_pEdRange->SetText(aStr);
+    m_xEdRange->set_text(aStr);
     SCROW nRows = aRange.aEnd.Row() - aRange.aStart.Row() + 1;
 
     if (aRange.aEnd.Row() == MAXROW)
-        m_pRBUnlimited->Check();
+        m_xRBUnlimited->set_active(true);
     else
     {
-        m_pRBMaxLimit->Check();
-        m_pEdLimit->SetText(OUString::number(nRows));
+        m_xRBMaxLimit->set_active(true);
+        m_xEdLimit->set_text(OUString::number(nRows));
     }
 
     DataStream::MoveType eMove = rStrm.GetMove();
     switch (eMove)
     {
         case DataStream::MOVE_DOWN:
-            m_pRBDataDown->Check();
+            m_xRBDataDown->set_active(true);
         break;
         case DataStream::RANGE_DOWN:
-            m_pRBRangeDown->Check();
+            m_xRBRangeDown->set_active(true);
         break;
         case DataStream::MOVE_UP:
         case DataStream::NO_MOVE:
@@ -176,7 +156,7 @@ void DataStreamDlg::Init( const DataStream& rStrm )
             ;
     }
 
-    m_pCBRefreshOnEmpty->Check(rStrm.IsRefreshOnEmptyLine());
+    m_xCBRefreshOnEmpty->set_active(rStrm.IsRefreshOnEmptyLine());
 
     UpdateEnable();
 }
@@ -189,18 +169,18 @@ void DataStreamDlg::StartStream()
         return;
 
     sal_Int32 nLimit = 0;
-    if (m_pRBMaxLimit->IsChecked())
-        nLimit = m_pEdLimit->GetText().toInt32();
-    OUString rURL = m_pCbUrl->GetText();
+    if (m_xRBMaxLimit->get_active())
+        nLimit = m_xEdLimit->get_text().toInt32();
+    OUString rURL = m_xCbUrl->get_active_text();
     sal_uInt32 nSettings = 0;
-    if (m_pRBValuesInLine->IsChecked())
+    if (m_xRBValuesInLine->get_active())
        nSettings |= DataStream::VALUES_IN_LINE;
 
     DataStream::MoveType eMove =
-        m_pRBRangeDown->IsChecked() ? DataStream::RANGE_DOWN : DataStream::MOVE_DOWN;
+        m_xRBRangeDown->get_active() ? DataStream::RANGE_DOWN : DataStream::MOVE_DOWN;
 
-    DataStream* pStream = DataStream::Set(mpDocShell, rURL, aStartRange, nLimit, eMove, nSettings);
-    pStream->SetRefreshOnEmptyLine(m_pCBRefreshOnEmpty->IsChecked());
+    DataStream* pStream = DataStream::Set(m_pDocShell, rURL, aStartRange, nLimit, eMove, nSettings);
+    pStream->SetRefreshOnEmptyLine(m_xCBRefreshOnEmpty->get_active());
     DataStream::MakeToolbarVisible();
     pStream->StartImport();
 }
