@@ -21,7 +21,6 @@ $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/ooo,\
 ))
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
-	ENABLE_SYSTRAY_GTK \
 	ENABLE_MACOSX_SANDBOX \
 	ENABLE_ONLINE_UPDATE \
 	SYSTEM_CURL \
