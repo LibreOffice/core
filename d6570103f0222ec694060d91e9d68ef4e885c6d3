@@ -16,6 +16,24 @@
       "revId": "d6570103f0222ec694060d91e9d68ef4e885c6d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_74c035e1",
+        "filename": "sw/inc/SwNumberTree.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1001839
+      },
+      "writtenOn": "2018-05-18T15:47:51Z",
+      "side": 1,
+      "message": "Done.\nI\u0027m sorry for this. I did not know that those were doxygen comments. I\u0027ve fixed all occurrences.",
+      "parentUuid": "9a30ddce_d4d2c1ff",
+      "revId": "d6570103f0222ec694060d91e9d68ef4e885c6d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
