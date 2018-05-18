@@ -433,7 +433,7 @@ SwField * SwField::CopyField() const
 }
 
 /// expand numbering
-OUString FormatNumber(sal_uInt32 nNum, SvxNumType nFormat)
+OUString FormatNumber(sal_uInt32 nNum, SvxNumType nFormat, LanguageType nLang)
 {
     if(SVX_NUM_PAGEDESC == nFormat)
         return  OUString::number( nNum );
@@ -442,7 +442,11 @@ OUString FormatNumber(sal_uInt32 nNum, SvxNumType nFormat)
     OSL_ENSURE(nFormat != SVX_NUM_NUMBER_NONE, "wrong number format" );
 
     aNumber.SetNumberingType(nFormat);
-    return aNumber.GetNumStr(nNum);
+
+    if (nLang == LANGUAGE_NONE)
+        return aNumber.GetNumStr(nNum);
+    else
+        return aNumber.GetNumStr(nNum, LanguageTag::convertToLocale(nLang));
 }
 
 SwValueFieldType::SwValueFieldType(SwDoc *const pDoc, SwFieldIds const nWhichId)

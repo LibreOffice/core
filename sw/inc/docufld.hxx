@@ -131,7 +131,7 @@ public:
     SwPageNumberFieldType();
 
     OUString Expand( SvxNumType nFormat, short nOff, sal_uInt16 const nPageNumber,
-                     sal_uInt16 const nMaxPage, const OUString& ) const;
+                     sal_uInt16 const nMaxPage, const OUString&, LanguageType = LANGUAGE_NONE ) const;
     void ChangeExpansion( SwDoc* pDoc,
                           bool bVirtPageNum, const SvxNumType* pNumFormat );
     virtual SwFieldType* Copy() const override;
