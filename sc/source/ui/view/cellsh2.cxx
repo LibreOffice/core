@@ -756,15 +756,15 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             break;
         case SID_DATA_STREAMS:
         {
-            ScopedVclPtrInstance< sc::DataStreamDlg > aDialog( GetViewData()->GetDocShell(), pTabViewShell->GetDialogParent() );
+            sc::DataStreamDlg aDialog(GetViewData()->GetDocShell(), pTabViewShell->GetFrameWeld());
             ScDocument *pDoc = GetViewData()->GetDocument();
             sc::DocumentLinkManager& rMgr = pDoc->GetDocLinkManager();
             sc::DataStream* pStrm = rMgr.getDataStream();
             if (pStrm)
-                aDialog->Init(*pStrm);
+                aDialog.Init(*pStrm);
 
-            if (aDialog->Execute() == RET_OK)
-                aDialog->StartStream();
+            if (aDialog.run() == RET_OK)
+                aDialog.StartStream();
         }
         break;
         case SID_DATA_STREAMS_PLAY:
