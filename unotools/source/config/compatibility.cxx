@@ -58,8 +58,9 @@ using namespace ::com::sun::star::beans;
 #define PROPERTYNAME_EXPANDWORDSPACE    COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE
 #define PROPERTYNAME_PROTECTFORM        COMPATIBILITY_PROPERTYNAME_PROTECTFORM
 #define PROPERTYNAME_SUBTRACT_FLYS_ANCHORED_AT_FLYS COMPATIBILITY_PROPERTYNAME_SUBTRACT_FLYS_ANCHORED_AT_FLYS
+#define PROPERTYNAME_EMPTY_DB_FIELD_HIDES_PARA COMPATIBILITY_PROPERTYNAME_EMPTY_DB_FIELD_HIDES_PARA
 
-#define PROPERTYCOUNT                   15
+#define PROPERTYCOUNT                   16
 
 #define OFFSET_NAME                     0
 #define OFFSET_MODULE                   1
@@ -76,6 +77,7 @@ using namespace ::com::sun::star::beans;
 #define OFFSET_EXPANDWORDSPACE          12
 #define OFFSET_PROTECTFORM              13
 #define OFFSET_SUBTRACT_FLYS_ANCHORED_AT_FLYS 14
+#define OFFSET_EMPTY_DB_FIELD_HIDES_PARA 15
 
 //  private declarations!
 
@@ -91,7 +93,8 @@ struct SvtCompatibilityEntry
             bNoExtLeading( false ), bUseLineSpacing( false ),
             bAddTableSpacing( false ), bUseObjPos( false ),
             bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ),
-            bExpandWordSpace( true ), bProtectForm( false ), bSubtractFlysAnchoredAtFlys(false) {}
+            bExpandWordSpace( true ), bProtectForm( false ), bSubtractFlysAnchoredAtFlys(false),
+            bEmptyDbFieldHidesPara(true) {}
         SvtCompatibilityEntry(
             const OUString& _rName, const OUString& _rNewModule ) :
                 sName( _rName ), sModule( _rNewModule ),
@@ -100,7 +103,8 @@ struct SvtCompatibilityEntry
                 bNoExtLeading( false ), bUseLineSpacing( false ),
                 bAddTableSpacing( false ), bUseObjPos( false ),
                 bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ),
-                bExpandWordSpace( true ), bProtectForm( false ), bSubtractFlysAnchoredAtFlys(false) {}
+                bExpandWordSpace( true ), bProtectForm( false ), bSubtractFlysAnchoredAtFlys(false),
+                bEmptyDbFieldHidesPara(true) {}
 
         inline void     SetUsePrtMetrics( bool _bSet ) { bUsePrtMetrics = _bSet; }
         inline void     SetAddSpacing( bool _bSet ) { bAddSpacing = _bSet; }
@@ -115,6 +119,7 @@ struct SvtCompatibilityEntry
         inline void     SetExpandWordSpace( bool _bSet ) { bExpandWordSpace = _bSet; }
         inline void     SetProtectForm( bool _bSet ) { bProtectForm = _bSet; }
         inline void     SetSubtractFlysAnchoredAtFlys( bool _bSet ) { bSubtractFlysAnchoredAtFlys = _bSet; }
+        inline void     SetEmptyDbFieldHidesPara( bool _bSet ) { bEmptyDbFieldHidesPara = _bSet; }
 
     public:
         OUString    sName;
@@ -132,6 +137,7 @@ struct SvtCompatibilityEntry
         bool        bExpandWordSpace;
         bool        bProtectForm;
         bool bSubtractFlysAnchoredAtFlys;
+        bool bEmptyDbFieldHidesPara;
 };
 
 /*-****************************************************************************************************************
@@ -175,6 +181,9 @@ class SvtCompatibility
             lProperties[ OFFSET_USEOURTEXTWRAPPING ].Name = PROPERTYNAME_USEOURTEXTWRAP;
             lProperties[ OFFSET_CONSIDERWRAPPINGSTYLE ].Name = PROPERTYNAME_CONSIDERWRAPSTYLE;
             lProperties[ OFFSET_EXPANDWORDSPACE ].Name = PROPERTYNAME_EXPANDWORDSPACE;
+            lProperties[ OFFSET_PROTECTFORM ].Name = PROPERTYNAME_PROTECTFORM;
+            lProperties[ OFFSET_SUBTRACT_FLYS_ANCHORED_AT_FLYS ].Name = PROPERTYNAME_SUBTRACT_FLYS_ANCHORED_AT_FLYS;
+            lProperties[ OFFSET_EMPTY_DB_FIELD_HIDES_PARA ].Name = PROPERTYNAME_EMPTY_DB_FIELD_HIDES_PARA;
 
             for ( vector< SvtCompatibilityEntry >::const_iterator pItem = pList->begin();
                   pItem != pList->end(); ++pItem )
@@ -192,6 +201,9 @@ class SvtCompatibility
                 lProperties[ OFFSET_USEOURTEXTWRAPPING ].Value <<= pItem->bUseOurTextWrapping;
                 lProperties[ OFFSET_CONSIDERWRAPPINGSTYLE ].Value <<= pItem->bConsiderWrappingStyle;
                 lProperties[ OFFSET_EXPANDWORDSPACE ].Value <<= pItem->bExpandWordSpace;
+                lProperties[ OFFSET_PROTECTFORM ].Value <<= pItem->bProtectForm;
+                lProperties[ OFFSET_SUBTRACT_FLYS_ANCHORED_AT_FLYS ].Value <<= pItem->bSubtractFlysAnchoredAtFlys;
+                lProperties[ OFFSET_EMPTY_DB_FIELD_HIDES_PARA ].Value <<= pItem->bEmptyDbFieldHidesPara;
                 lResult[ nStep ] = lProperties;
                 ++nStep;
             }
@@ -266,7 +278,8 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
                                                             bool _bConsiderWrappingStyle,
                                                             bool _bExpandWordSpace,
                                                             bool _bProtectForm,
-                                                            bool _bSubtractFlysAnchoredAtFlys );
+                                                            bool _bSubtractFlysAnchoredAtFlys,
+                                                            bool _bEmptyDbFieldHidesPara );
 
         inline bool IsUsePrtDevice() const { return m_aDefOptions.bUsePrtMetrics; }
         inline bool IsAddSpacing() const { return m_aDefOptions.bAddSpacing; }
@@ -279,6 +292,7 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
         inline bool IsUseOurTextWrapping() const { return m_aDefOptions.bUseOurTextWrapping; }
         inline bool IsConsiderWrappingStyle() const { return m_aDefOptions.bConsiderWrappingStyle; }
         inline bool IsExpandWordSpace() const { return m_aDefOptions.bExpandWordSpace; }
+        inline bool IsEmptyDbFieldHidesPara() const { return m_aDefOptions.bEmptyDbFieldHidesPara; }
 
     //  private methods
 
@@ -356,6 +370,9 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
         lValues[ nPosition++ ] >>= aItem.bUseOurTextWrapping;
         lValues[ nPosition++ ] >>= aItem.bConsiderWrappingStyle;
         lValues[ nPosition++ ] >>= aItem.bExpandWordSpace;
+        lValues[ nPosition++ ] >>= aItem.bProtectForm;
+        lValues[ nPosition++ ] >>= aItem.bSubtractFlysAnchoredAtFlys;
+        lValues[ nPosition++ ] >>= aItem.bEmptyDbFieldHidesPara;
         m_aOptions.AppendEntry( aItem );
 
         if ( !bDefaultFound && aItem.sName == COMPATIBILITY_DEFAULT_NAME )
@@ -402,6 +419,12 @@ void SvtCompatibilityOptions_Impl::SetDefault( const OUString & sName, bool bVal
         m_aDefOptions.SetConsiderWrappingStyle( bValue );
     else if ( sName == COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE )
         m_aDefOptions.SetExpandWordSpace( bValue );
+    else if ( sName == COMPATIBILITY_PROPERTYNAME_PROTECTFORM )
+        m_aDefOptions.SetProtectForm( bValue );
+    else if ( sName == COMPATIBILITY_PROPERTYNAME_SUBTRACT_FLYS_ANCHORED_AT_FLYS )
+        m_aDefOptions.SetSubtractFlysAnchoredAtFlys( bValue );
+    else if ( sName == COMPATIBILITY_PROPERTYNAME_EMPTY_DB_FIELD_HIDES_PARA )
+        m_aDefOptions.SetEmptyDbFieldHidesPara( bValue );
 }
 
 //  public method
@@ -443,6 +466,7 @@ void SvtCompatibilityOptions_Impl::ImplCommit()
         lPropertyValues[ OFFSET_EXPANDWORDSPACE - 1         ].Name = sNode + PROPERTYNAME_EXPANDWORDSPACE;
         lPropertyValues[ OFFSET_PROTECTFORM - 1             ].Name = sNode + PROPERTYNAME_PROTECTFORM;
         lPropertyValues[ OFFSET_SUBTRACT_FLYS_ANCHORED_AT_FLYS - 1 ].Name = sNode + PROPERTYNAME_SUBTRACT_FLYS_ANCHORED_AT_FLYS;
+        lPropertyValues[ OFFSET_EMPTY_DB_FIELD_HIDES_PARA - 1 ].Name = sNode + PROPERTYNAME_EMPTY_DB_FIELD_HIDES_PARA;
 
         lPropertyValues[ OFFSET_MODULE - 1                  ].Value <<= aItem.sModule;
         lPropertyValues[ OFFSET_USEPRTMETRICS - 1           ].Value <<= aItem.bUsePrtMetrics;
@@ -458,6 +482,7 @@ void SvtCompatibilityOptions_Impl::ImplCommit()
         lPropertyValues[ OFFSET_EXPANDWORDSPACE - 1         ].Value <<= aItem.bExpandWordSpace;
         lPropertyValues[ OFFSET_PROTECTFORM - 1             ].Value <<= aItem.bProtectForm;
         lPropertyValues[ OFFSET_SUBTRACT_FLYS_ANCHORED_AT_FLYS - 1 ].Value <<= aItem.bSubtractFlysAnchoredAtFlys;
+        lPropertyValues[ OFFSET_EMPTY_DB_FIELD_HIDES_PARA - 1 ].Value <<= aItem.bEmptyDbFieldHidesPara;
 
         SetSetProperties( SETNODE_ALLFILEFORMATS, lPropertyValues );
     }
@@ -496,7 +521,8 @@ void SvtCompatibilityOptions_Impl::AppendItem(  const OUString& _sName,
                                                 bool _bConsiderWrappingStyle,
                                                 bool _bExpandWordSpace,
                                                 bool _bProtectForm,
-                                                bool _bSubtractFlysAnchoredAtFlys )
+                                                bool _bSubtractFlysAnchoredAtFlys,
+                                                bool _bEmptyDbFieldHidesPara )
 {
     SvtCompatibilityEntry aItem( _sName, _sModule );
     aItem.SetUsePrtMetrics( _bUsePrtMetrics );
@@ -512,6 +538,7 @@ void SvtCompatibilityOptions_Impl::AppendItem(  const OUString& _sName,
     aItem.SetExpandWordSpace( _bExpandWordSpace );
     aItem.SetProtectForm( _bProtectForm );
     aItem.SetSubtractFlysAnchoredAtFlys( _bSubtractFlysAnchoredAtFlys );
+    aItem.SetEmptyDbFieldHidesPara( _bEmptyDbFieldHidesPara );
     m_aOptions.AppendEntry( aItem );
 
     // default item reset?
@@ -586,6 +613,9 @@ void SvtCompatibilityOptions_Impl::impl_ExpandPropertyNames(
         lDestination[nDestStep] = sFixPath;
         lDestination[nDestStep] += PROPERTYNAME_EXPANDWORDSPACE;
         ++nDestStep;
+        lDestination[nDestStep++] = sFixPath + PROPERTYNAME_PROTECTFORM;
+        lDestination[nDestStep++] = sFixPath + PROPERTYNAME_SUBTRACT_FLYS_ANCHORED_AT_FLYS;
+        lDestination[nDestStep++] = sFixPath + PROPERTYNAME_EMPTY_DB_FIELD_HIDES_PARA;
     }
 }
 
@@ -641,14 +671,16 @@ void SvtCompatibilityOptions::AppendItem( const OUString& sName,
                                           bool bConsiderWrappingStyle,
                                           bool bExpandWordSpace,
                                           bool bProtectForm,
-                                          bool bSubtractFlysAnchoredAtFlys )
+                                          bool bSubtractFlysAnchoredAtFlys,
+                                          bool bEmptyDbFieldHidesPara )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pImpl->AppendItem(
         sName, sModule, bUsePrtMetrics, bAddSpacing,
         bAddSpacingAtPages, bUseOurTabStops, bNoExtLeading,
         bUseLineSpacing, bAddTableSpacing, bUseObjPos,
-        bUseOurTextWrapping, bConsiderWrappingStyle, bExpandWordSpace, bProtectForm, bSubtractFlysAnchoredAtFlys );
+        bUseOurTextWrapping, bConsiderWrappingStyle, bExpandWordSpace, bProtectForm,
+        bSubtractFlysAnchoredAtFlys, bEmptyDbFieldHidesPara);
 }
 
 bool SvtCompatibilityOptions::IsUsePrtDevice() const
@@ -715,6 +747,12 @@ bool SvtCompatibilityOptions::IsExpandWordSpace() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->IsExpandWordSpace();
+}
+
+bool SvtCompatibilityOptions::IsEmptyDbFieldHidesPara() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pImpl->IsEmptyDbFieldHidesPara();
 }
 
 Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions::GetList() const

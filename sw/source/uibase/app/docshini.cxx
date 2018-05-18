@@ -89,6 +89,7 @@
 #include <globals.hrc>
 #include <unochart.hxx>
 #include <drawdoc.hxx>
+#include <DocumentSettingManager.hxx>
 
 #include <svx/CommonStyleManager.hxx>
 
@@ -492,14 +493,6 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
 {
     bool bRet = false;
 
-    // If this is an ODF file being loaded, then by default, use legacy processing
-    // for tdf#99729 (if required, it will be overriden in *::ReadUserDataSequence())
-    if (IsOwnStorageFormat(rMedium))
-    {
-        if (m_pDoc && m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
-            m_pDoc->getIDocumentDrawModelAccess().GetDrawModel()->SetAnchoredTextOverflowLegacy(true);
-    }
-
     if (SfxObjectShell::Load(rMedium))
     {
         comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
@@ -510,6 +503,19 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
             RemoveLink();       // release the existing
 
         AddLink();      // set Link and update Data!!
+
+        // Define some settings for legacy ODF files that have different default values now
+        // (if required, they will be overridden later when settings will be read)
+        if (IsOwnStorageFormat(rMedium))
+        {
+            // legacy processing for tdf#99729
+            if (m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
+                m_pDoc->getIDocumentDrawModelAccess().GetDrawModel()->SetAnchoredTextOverflowLegacy(
+                    true);
+            // legacy behaviour (not hiding paragraph) for Database (MailMerge) fields
+            m_pDoc->GetDocumentSettingManager().set(DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA,
+                                                    false);
+        }
 
         // Loading
         // for MD

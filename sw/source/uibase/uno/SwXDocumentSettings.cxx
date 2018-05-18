@@ -136,6 +136,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING,
     HANDLE_PROP_LINE_SPACING_SHRINKS_FIRST_LINE,
     HANDLE_SUBTRACT_FLYS,
+    HANDLE_EMPTY_DB_FIELD_HIDES_PARA,
 };
 
 static MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -212,6 +213,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("ApplyParagraphMarkFormatToNumbering"), HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING, cppu::UnoType<bool>::get(), 0},
         { OUString("PropLineSpacingShrinksFirstLine"),       HANDLE_PROP_LINE_SPACING_SHRINKS_FIRST_LINE,         cppu::UnoType<bool>::get(),           0},
         { OUString("SubtractFlysAnchoredAtFlys"),       HANDLE_SUBTRACT_FLYS,         cppu::UnoType<bool>::get(),           0},
+        { OUString("EmptyDbFieldHidesPara"), HANDLE_EMPTY_DB_FIELD_HIDES_PARA, cppu::UnoType<bool>::get(), 0 },
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -863,6 +865,16 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
+        case HANDLE_EMPTY_DB_FIELD_HIDES_PARA:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA,
+                                                       bTmp);
+            }
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -1275,6 +1287,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_SUBTRACT_FLYS:
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::SUBTRACT_FLYS);
+        }
+        break;
+        case HANDLE_EMPTY_DB_FIELD_HIDES_PARA:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA);
         }
         break;
         default:
