@@ -366,13 +366,13 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
         {
             // aExpand has not yet been shortened; the new Ofst is a
             // result of nRest
-            sal_Int32 nNextOfst = m_aExpand.getLength() - nRest;
+            TextFrameIndex nNextOfst = TextFrameIndex(m_aExpand.getLength()) - nRest;
 
             if ( IsQuoVadisPortion() )
-                nNextOfst = nNextOfst + static_cast<SwQuoVadisPortion*>(this)->GetContText().getLength();
+                nNextOfst = nNextOfst + TextFrameIndex(static_cast<SwQuoVadisPortion*>(this)->GetContText().getLength());
 
-            OUString aNew( m_aExpand.copy( nNextOfst ) );
-            m_aExpand = m_aExpand.copy( 0, nNextOfst );
+            OUString aNew( m_aExpand.copy(sal_Int32(nNextOfst)) );
+            m_aExpand = m_aExpand.copy(0, sal_Int32(nNextOfst));
 
             // These characters should not be contained in the follow
             // field portion. They are handled via the HookChar mechanism.
@@ -551,12 +551,12 @@ bool SwNumberPortion::Format( SwTextFormatInfo &rInf )
 
         if ( !mbLabelAlignmentPosAndSpaceModeActive )
         {
-            if ( !rInf.GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) &&
+            if (!rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) &&
                  // #i32902#
                  !IsFootnoteNumPortion() )
             {
                 nDiff = rInf.Left()
-                    + rInf.GetTextFrame()->GetTextNode()->
+                    + rInf.GetTextFrame()->GetTextNodeForParaProps()->
                     GetSwAttrSet().GetLRSpace().GetTextFirstLineOfst()
                     - rInf.First()
                     + rInf.ForcedLeftMargin();
