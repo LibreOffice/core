@@ -74,7 +74,7 @@ ODbTypeWizDialog::ODbTypeWizDialog(vcl::Window* _pParent
     m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxORB,this,this));
     m_pImpl->setDataSourceOrName(_aDataSourceName);
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
-    m_pOutSet = new SfxItemSet( *_pItems->GetPool(), _pItems->GetRanges() );
+    m_pOutSet.reset(new SfxItemSet( *_pItems->GetPool(), _pItems->GetRanges() ));
 
     m_pImpl->translateProperties(xDatasource, *m_pOutSet);
     m_eType = dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(*m_pOutSet);
@@ -104,7 +104,7 @@ ODbTypeWizDialog::~ODbTypeWizDialog()
 
 void ODbTypeWizDialog::dispose()
 {
-    delete m_pOutSet;
+    m_pOutSet.reset();
     svt::OWizardMachine::dispose();
 }
 
@@ -197,12 +197,12 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCur
 
 const SfxItemSet* ODbTypeWizDialog::getOutputSet() const
 {
-    return m_pOutSet;
+    return m_pOutSet.get();
 }
 
 SfxItemSet* ODbTypeWizDialog::getWriteOutputSet()
 {
-    return m_pOutSet;
+    return m_pOutSet.get();
 }
 
 std::pair< Reference<XConnection>,bool> ODbTypeWizDialog::createConnection()
@@ -245,39 +245,39 @@ VclPtr<TabPage> ODbTypeWizDialog::createPage(WizardState _nState)
         }
         break;
         case CONNECTION_PAGE:
-            pPage = OConnectionTabPage::Create(this,m_pOutSet);
+            pPage = OConnectionTabPage::Create(this,m_pOutSet.get());
             pStringId = STR_PAGETITLE_CONNECTION;
             break;
 
         case ADDITIONAL_PAGE_DBASE:
-            pPage = ODriversSettings::CreateDbase(this,m_pOutSet);
+            pPage = ODriversSettings::CreateDbase(this,m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_FLAT:
-            pPage = ODriversSettings::CreateText(this,m_pOutSet);
+            pPage = ODriversSettings::CreateText(this,m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_LDAP:
-            pPage = ODriversSettings::CreateLDAP(this,m_pOutSet);
+            pPage = ODriversSettings::CreateLDAP(this,m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_MYSQL_JDBC:
-            pPage = ODriversSettings::CreateMySQLJDBC(this,m_pOutSet);
+            pPage = ODriversSettings::CreateMySQLJDBC(this,m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_MYSQL_NATIVE:
-            pPage = ODriversSettings::CreateMySQLNATIVE(this,m_pOutSet);
+            pPage = ODriversSettings::CreateMySQLNATIVE(this,m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_MYSQL_ODBC:
-            pPage = ODriversSettings::CreateMySQLODBC(this,m_pOutSet);
+            pPage = ODriversSettings::CreateMySQLODBC(this,m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_ORACLE_JDBC:
-            pPage = ODriversSettings::CreateOracleJDBC(this,m_pOutSet);
+            pPage = ODriversSettings::CreateOracleJDBC(this,m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_ADO:
-            pPage = ODriversSettings::CreateAdo(this,m_pOutSet);
+            pPage = ODriversSettings::CreateAdo(this,m_pOutSet.get());
             break;
         case ADDITIONAL_PAGE_ODBC:
-            pPage = ODriversSettings::CreateODBC(this,m_pOutSet);
+            pPage = ODriversSettings::CreateODBC(this,m_pOutSet.get());
             break;
         case ADDITIONAL_USERDEFINED:
-            pPage = ODriversSettings::CreateUser(this,m_pOutSet);
+            pPage = ODriversSettings::CreateUser(this,m_pOutSet.get());
             break;
         default:
             OSL_FAIL("Wrong state!");
@@ -301,7 +301,7 @@ bool ODbTypeWizDialog::leaveState(WizardState _nState)
 {
     SfxTabPage* pPage = static_cast<SfxTabPage*>(WizardDialog::GetPage(_nState));
     if ( pPage )
-        pPage->FillItemSet(m_pOutSet);
+        pPage->FillItemSet(m_pOutSet.get());
     return true;
 }
 
@@ -325,7 +325,7 @@ void ODbTypeWizDialog::saveDatasource()
 {
     SfxTabPage* pPage = static_cast<SfxTabPage*>(WizardDialog::GetPage(getCurrentState()));
     if ( pPage )
-        pPage->FillItemSet(m_pOutSet);
+        pPage->FillItemSet(m_pOutSet.get());
 
     OUString sOldURL;
     if ( m_pImpl->getCurrentDataSource().is() )
