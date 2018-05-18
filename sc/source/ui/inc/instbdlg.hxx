@@ -20,17 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_INSTBDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_INSTBDLG_HXX
 
-#include <address.hxx>
-
-#include <vcl/button.hxx>
-#include <vcl/group.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/dialog.hxx>
-
 #include <sfx2/objsh.hxx>
-#include <vcl/field.hxx>
+#include <vcl/weld.hxx>
+#include <address.hxx>
 
 class ScViewData;
 class ScDocument;
@@ -39,39 +31,24 @@ class ScDocShell;
 namespace sfx2 { class DocumentInserter; }
 namespace sfx2 { class FileDialogHelper; }
 
-class ScInsertTableDlg : public ModalDialog
+class ScInsertTableDlg : public weld::GenericDialogController
 {
 public:
-            ScInsertTableDlg( vcl::Window* pParent, ScViewData& rViewData, SCTAB nTabCount, bool bFromFile );
-            virtual ~ScInsertTableDlg() override;
-    virtual void dispose() override;
+    ScInsertTableDlg(weld::Window* pParent, ScViewData& rViewData, SCTAB nTabCount, bool bFromFile);
+    virtual ~ScInsertTableDlg() override;
 
-    virtual short   Execute() override; // override to set parent dialog
+    short       execute(); // override to set parent dialog
 
-    bool        GetTablesFromFile() const { return m_pBtnFromFile->IsChecked(); }
-    bool        GetTablesAsLink() const { return m_pBtnLink->IsChecked(); }
+    bool        GetTablesFromFile() const { return m_xBtnFromFile->get_active(); }
+    bool        GetTablesAsLink() const { return m_xBtnLink->get_active(); }
 
     const OUString* GetFirstTable( sal_uInt16* pN );
     const OUString* GetNextTable( sal_uInt16* pN );
     ScDocShell*     GetDocShellTables() { return pDocShTables; }
-    bool        IsTableBefore() const { return m_pBtnBefore->IsChecked(); }
+    bool        IsTableBefore() const { return m_xBtnBefore->get_active(); }
     SCTAB           GetTableCount() const { return nTableCount;}
 
 private:
-    VclPtr<RadioButton>            m_pBtnBefore;
-    VclPtr<RadioButton>            m_pBtnBehind;
-    VclPtr<RadioButton>            m_pBtnNew;
-    VclPtr<RadioButton>            m_pBtnFromFile;
-    VclPtr<FixedText>              m_pFtCount;
-    VclPtr<NumericField>           m_pNfCount;
-    VclPtr<FixedText>              m_pFtName;
-    VclPtr<Edit>                   m_pEdName;
-    VclPtr<ListBox>                m_pLbTables;
-    VclPtr<FixedText>              m_pFtPath;
-    VclPtr<PushButton>             m_pBtnBrowse;
-    VclPtr<CheckBox>               m_pBtnLink;
-    VclPtr<OKButton>               m_pBtnOk;
-
     Timer                   aBrowseTimer;
     ScViewData&             rViewData;
     ScDocument&             rDoc;
@@ -85,17 +62,31 @@ private:
     SCTAB               nTableCount;
     OUString            m_sSheetDotDotDot;
 
+    std::unique_ptr<weld::RadioButton> m_xBtnBefore;
+    std::unique_ptr<weld::RadioButton> m_xBtnBehind;
+    std::unique_ptr<weld::RadioButton> m_xBtnNew;
+    std::unique_ptr<weld::RadioButton> m_xBtnFromFile;
+    std::unique_ptr<weld::Label> m_xFtCount;
+    std::unique_ptr<weld::SpinButton> m_xNfCount;
+    std::unique_ptr<weld::Label> m_xFtName;
+    std::unique_ptr<weld::Entry> m_xEdName;
+    std::unique_ptr<weld::TreeView> m_xLbTables;
+    std::unique_ptr<weld::Label> m_xFtPath;
+    std::unique_ptr<weld::Button> m_xBtnBrowse;
+    std::unique_ptr<weld::CheckButton> m_xBtnLink;
+    std::unique_ptr<weld::Button> m_xBtnOk;
+
     void    Init_Impl( bool bFromFile );
     void    SetNewTable_Impl();
     void    SetFromTo_Impl();
     void    FillTables_Impl( const ScDocument* pSrcDoc );
     void    DoEnable_Impl();
 
-    DECL_LINK( BrowseHdl_Impl, Button*, void );
-    DECL_LINK( ChoiceHdl_Impl, Button*, void );
-    DECL_LINK( SelectHdl_Impl, ListBox&, void );
-    DECL_LINK( CountHdl_Impl, Edit&, void );
-    DECL_LINK( DoEnterHdl, Button*, void );
+    DECL_LINK( BrowseHdl_Impl, weld::Button&, void );
+    DECL_LINK( ChoiceHdl_Impl, weld::Button&, void );
+    DECL_LINK( SelectHdl_Impl, weld::TreeView&, void );
+    DECL_LINK( CountHdl_Impl, weld::SpinButton&, void );
+    DECL_LINK( DoEnterHdl, weld::Button&, void );
     DECL_LINK( BrowseTimeoutHdl, Timer *, void );
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
 };

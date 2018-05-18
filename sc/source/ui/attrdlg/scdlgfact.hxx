@@ -257,7 +257,13 @@ public:
 
 class AbstractScInsertTableDlg_Impl : public AbstractScInsertTableDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScInsertTableDlg_Impl, ScInsertTableDlg)
+    std::unique_ptr<ScInsertTableDlg> m_xDlg;
+public:
+    explicit AbstractScInsertTableDlg_Impl(ScInsertTableDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short           Execute() override;
     virtual bool            GetTablesFromFile() override;
     virtual bool            GetTablesAsLink() override;
     virtual const OUString* GetFirstTable( sal_uInt16* pN = nullptr ) override;
@@ -514,7 +520,7 @@ public:
     virtual VclPtr<AbstractScInsertContentsDlg> CreateScInsertContentsDlg(weld::Window* pParent,
                                                                           const OUString* pStrTitle = nullptr) override;
 
-    virtual VclPtr<AbstractScInsertTableDlg> CreateScInsertTableDlg(vcl::Window* pParent, ScViewData& rViewData,
+    virtual VclPtr<AbstractScInsertTableDlg> CreateScInsertTableDlg(weld::Window* pParent, ScViewData& rViewData,
         SCTAB nTabCount, bool bFromFile) override;
 
     virtual VclPtr<AbstractScSelEntryDlg> CreateScSelEntryDlg ( vcl::Window* pParent,

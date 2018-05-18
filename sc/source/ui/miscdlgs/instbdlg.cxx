@@ -34,8 +34,8 @@
 #include <scresid.hxx>
 #include <instbdlg.hxx>
 
-ScInsertTableDlg::ScInsertTableDlg( vcl::Window* pParent, ScViewData& rData, SCTAB nTabCount, bool bFromFile )
-    : ModalDialog(pParent, "InsertSheetDialog", "modules/scalc/ui/insertsheet.ui")
+ScInsertTableDlg::ScInsertTableDlg(weld::Window* pParent, ScViewData& rData, SCTAB nTabCount, bool bFromFile)
+    : GenericDialogController(pParent, "modules/scalc/ui/insertsheet.ui", "InsertSheetDialog")
     , rViewData(rData)
     , rDoc(*rData.GetDocument())
     , pDocShTables(nullptr)
@@ -43,92 +43,73 @@ ScInsertTableDlg::ScInsertTableDlg( vcl::Window* pParent, ScViewData& rData, SCT
     , bMustClose(false)
     , nSelTabIndex(0)
     , nTableCount(nTabCount)
+    , m_xBtnBefore(m_xBuilder->weld_radio_button("before"))
+    , m_xBtnBehind(m_xBuilder->weld_radio_button("after"))
+    , m_xBtnNew(m_xBuilder->weld_radio_button("new"))
+    , m_xBtnFromFile(m_xBuilder->weld_radio_button("fromfile"))
+    , m_xFtCount(m_xBuilder->weld_label("countft"))
+    , m_xNfCount(m_xBuilder->weld_spin_button("countnf"))
+    , m_xFtName(m_xBuilder->weld_label("nameft"))
+    , m_xEdName(m_xBuilder->weld_entry("nameed"))
+    , m_xLbTables(m_xBuilder->weld_tree_view("tables"))
+    , m_xFtPath(m_xBuilder->weld_label("path"))
+    , m_xBtnBrowse(m_xBuilder->weld_button("browse"))
+    , m_xBtnLink(m_xBuilder->weld_check_button("link"))
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
 {
-    get(m_pBtnBefore, "before");
-    get(m_pBtnBehind, "after");
-    get(m_pBtnNew, "new");
-    get(m_pBtnFromFile, "fromfile");
-    get(m_pFtCount, "countft");
-    get(m_pNfCount, "countnf");
-    get(m_pFtName, "nameft");
-    get(m_pEdName, "nameed");
-    m_sSheetDotDotDot = m_pEdName->GetText();
-    get(m_pLbTables, "tables");
-    m_pLbTables->SetDropDownLineCount(8);
-    get(m_pFtPath, "path");
-    get(m_pBtnBrowse, "browse");
-    get(m_pBtnLink, "link");
-    get(m_pBtnOk, "ok");
-    Init_Impl( bFromFile );
+    m_sSheetDotDotDot = m_xEdName->get_text();
+    m_xLbTables->set_size_request(-1, m_xLbTables->get_height_rows(8));
+    Init_Impl(bFromFile);
 }
 
 ScInsertTableDlg::~ScInsertTableDlg()
 {
-    disposeOnce();
-}
-
-void ScInsertTableDlg::dispose()
-{
     if (pDocShTables)
         pDocShTables->DoClose();
     delete pDocInserter;
-    m_pBtnBefore.clear();
-    m_pBtnBehind.clear();
-    m_pBtnNew.clear();
-    m_pBtnFromFile.clear();
-    m_pFtCount.clear();
-    m_pNfCount.clear();
-    m_pFtName.clear();
-    m_pEdName.clear();
-    m_pLbTables.clear();
-    m_pFtPath.clear();
-    m_pBtnBrowse.clear();
-    m_pBtnLink.clear();
-    m_pBtnOk.clear();
-    ModalDialog::dispose();
 }
 
 void ScInsertTableDlg::Init_Impl( bool bFromFile )
 {
-    m_pLbTables->EnableMultiSelection(true);
-    m_pBtnBrowse->SetClickHdl( LINK( this, ScInsertTableDlg, BrowseHdl_Impl ) );
-    m_pBtnNew->SetClickHdl( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
-    m_pBtnFromFile->SetClickHdl( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
-    m_pLbTables->SetSelectHdl( LINK( this, ScInsertTableDlg, SelectHdl_Impl ) );
-    m_pNfCount->SetModifyHdl( LINK( this, ScInsertTableDlg, CountHdl_Impl));
-    m_pBtnOk->SetClickHdl( LINK( this, ScInsertTableDlg, DoEnterHdl ));
-    m_pBtnBefore->Check();
+    m_xLbTables->set_selection_mode(true);
+    m_xBtnBrowse->connect_clicked( LINK( this, ScInsertTableDlg, BrowseHdl_Impl ) );
+    m_xBtnNew->connect_clicked( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
+    m_xBtnFromFile->connect_clicked( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
+    m_xLbTables->connect_changed( LINK( this, ScInsertTableDlg, SelectHdl_Impl ) );
+    m_xNfCount->connect_value_changed( LINK( this, ScInsertTableDlg, CountHdl_Impl));
+    m_xBtnOk->connect_clicked( LINK( this, ScInsertTableDlg, DoEnterHdl ));
+    m_xBtnBefore->set_active(true);
 
-    m_pNfCount->SetText( OUString::number(nTableCount) );
-    m_pNfCount->SetMax( MAXTAB - rDoc.GetTableCount() + 1 );
+    m_xNfCount->set_max(MAXTAB - rDoc.GetTableCount() + 1);
+    m_xNfCount->set_value(nTableCount);
 
     if(nTableCount==1)
     {
         OUString aName;
         rDoc.CreateValidTabName( aName );
-        m_pEdName->SetText( aName );
+        m_xEdName->set_text( aName );
     }
     else
     {
-        m_pEdName->SetText(m_sSheetDotDotDot);
-        m_pFtName->Disable();
-        m_pEdName->Disable();
+        m_xEdName->set_text(m_sSheetDotDotDot);
+        m_xFtName->set_sensitive(false);
+        m_xEdName->set_sensitive(false);
     }
 
     bool bShared = rViewData.GetDocShell() && rViewData.GetDocShell()->IsDocShared();
 
     if ( !bFromFile || bShared )
     {
-        m_pBtnNew->Check();
+        m_xBtnNew->set_active(true);
         SetNewTable_Impl();
         if ( bShared )
         {
-            m_pBtnFromFile->Disable();
+            m_xBtnFromFile->set_sensitive(false);
         }
     }
     else
     {
-        m_pBtnFromFile->Check();
+        m_xBtnFromFile->set_active(true);
         SetFromTo_Impl();
 
         aBrowseTimer.SetInvokeHandler( LINK( this, ScInsertTableDlg, BrowseTimeoutHdl ) );
@@ -136,87 +117,91 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
     }
 }
 
-short ScInsertTableDlg::Execute()
+short ScInsertTableDlg::execute()
 {
-    if ( m_pBtnFromFile->IsChecked() )
+    if (m_xBtnFromFile->get_active())
         aBrowseTimer.Start();
 
-    return ModalDialog::Execute();
+    return m_xDialog->run();
 }
 
 void ScInsertTableDlg::SetNewTable_Impl()
 {
-    if (m_pBtnNew->IsChecked() )
+    if (m_xBtnNew->get_active() )
     {
-        m_pNfCount->Enable();
-        m_pFtCount->Enable();
-        m_pLbTables->Disable();
-        m_pFtPath->Disable();
-        m_pBtnBrowse->Disable();
-        m_pBtnLink->Disable();
+        m_xNfCount->set_sensitive(true);
+        m_xFtCount->set_sensitive(true);
+        m_xLbTables->set_sensitive(false);
+        m_xFtPath->set_sensitive(false);
+        m_xBtnBrowse->set_sensitive(false);
+        m_xBtnLink->set_sensitive(false);
 
         if(nTableCount==1)
         {
-            m_pEdName->Enable();
-            m_pFtName->Enable();
+            m_xEdName->set_sensitive(true);
+            m_xFtName->set_sensitive(true);
         }
     }
 }
 
 void ScInsertTableDlg::SetFromTo_Impl()
 {
-    if (m_pBtnFromFile->IsChecked() )
+    if (m_xBtnFromFile->get_active() )
     {
-        m_pEdName->Disable();
-        m_pFtName->Disable();
-        m_pFtCount->Disable();
-        m_pNfCount->Disable();
-        m_pLbTables->Enable();
-        m_pFtPath->Enable();
-        m_pBtnBrowse->Enable();
-        m_pBtnLink->Enable();
+        m_xEdName->set_sensitive(false);
+        m_xFtName->set_sensitive(false);
+        m_xFtCount->set_sensitive(false);
+        m_xNfCount->set_sensitive(false);
+        m_xLbTables->set_sensitive(true);
+        m_xFtPath->set_sensitive(true);
+        m_xBtnBrowse->set_sensitive(true);
+        m_xBtnLink->set_sensitive(true);
     }
 }
 
 void ScInsertTableDlg::FillTables_Impl( const ScDocument* pSrcDoc )
 {
-    m_pLbTables->SetUpdateMode( false );
-    m_pLbTables->Clear();
+    m_xLbTables->freeze();
+    m_xLbTables->clear();
 
     if ( pSrcDoc )
     {
         SCTAB nCount = pSrcDoc->GetTableCount();
         OUString aName;
 
-        for ( SCTAB i=0; i<nCount; i++ )
+        for (SCTAB i=0; i<nCount; ++i)
         {
             pSrcDoc->GetName( i, aName );
-            m_pLbTables->InsertEntry( aName );
+            m_xLbTables->append_text(aName);
         }
     }
 
-    m_pLbTables->SetUpdateMode( true );
+    m_xLbTables->thaw();
 
-    if(m_pLbTables->GetEntryCount()==1)
-        m_pLbTables->SelectEntryPos(0);
+    if (m_xLbTables->n_children() == 1)
+        m_xLbTables->select(0);
 }
 
 const OUString* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
 {
     const OUString* pStr = nullptr;
 
-    if ( m_pBtnNew->IsChecked() )
+    if ( m_xBtnNew->get_active() )
     {
-        aStrCurSelTable = m_pEdName->GetText();
+        aStrCurSelTable = m_xEdName->get_text();
         pStr = &aStrCurSelTable;
     }
-    else if ( nSelTabIndex < m_pLbTables->GetSelectedEntryCount() )
+    else
     {
-        aStrCurSelTable = m_pLbTables->GetSelectedEntry();
-        pStr = &aStrCurSelTable;
-        if ( pN )
-            *pN = m_pLbTables->GetSelectedEntryPos();
-        nSelTabIndex = 1;
+        std::vector<int> aRows(m_xLbTables->get_selected_rows());
+        if (nSelTabIndex < aRows.size())
+        {
+            aStrCurSelTable = m_xLbTables->get_text(aRows[0]);
+            pStr = &aStrCurSelTable;
+            if ( pN )
+                *pN = aRows[0];
+            nSelTabIndex = 1;
+        }
     }
 
     return pStr;
@@ -224,14 +209,18 @@ const OUString* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
 
 const OUString* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
 {
-    const OUString* pStr = nullptr;
+    if (m_xBtnNew->get_active())
+        return nullptr;
 
-    if ( !m_pBtnNew->IsChecked() && nSelTabIndex < m_pLbTables->GetSelectedEntryCount() )
+    std::vector<int> aRows(m_xLbTables->get_selected_rows());
+
+    const OUString* pStr = nullptr;
+    if (nSelTabIndex < aRows.size())
     {
-        aStrCurSelTable = m_pLbTables->GetSelectedEntry( nSelTabIndex );
+        aStrCurSelTable = m_xLbTables->get_text(aRows[nSelTabIndex]);
         pStr = &aStrCurSelTable;
         if ( pN )
-            *pN = m_pLbTables->GetSelectedEntryPos( nSelTabIndex );
+            *pN = aRows[nSelTabIndex];
         nSelTabIndex++;
     }
 
@@ -240,30 +229,30 @@ const OUString* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
 
 // Handler:
 
-IMPL_LINK_NOARG(ScInsertTableDlg, CountHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(ScInsertTableDlg, CountHdl_Impl, weld::SpinButton&, void)
 {
-    nTableCount = static_cast<SCTAB>(m_pNfCount->GetValue());
+    nTableCount = static_cast<SCTAB>(m_xNfCount->get_value());
     if ( nTableCount==1)
     {
         OUString aName;
         rDoc.CreateValidTabName( aName );
-        m_pEdName->SetText( aName );
-        m_pFtName->Enable();
-        m_pEdName->Enable();
+        m_xEdName->set_text( aName );
+        m_xFtName->set_sensitive(true);
+        m_xEdName->set_sensitive(true);
     }
     else
     {
-        m_pEdName->SetText(m_sSheetDotDotDot);
-        m_pFtName->Disable();
-        m_pEdName->Disable();
+        m_xEdName->set_text(m_sSheetDotDotDot);
+        m_xFtName->set_sensitive(false);
+        m_xEdName->set_sensitive(false);
     }
 
     DoEnable_Impl();
 }
 
-IMPL_LINK_NOARG(ScInsertTableDlg, ChoiceHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(ScInsertTableDlg, ChoiceHdl_Impl, weld::Button&, void)
 {
-    if ( m_pBtnNew->IsChecked() )
+    if ( m_xBtnNew->get_active() )
         SetNewTable_Impl();
     else
         SetFromTo_Impl();
@@ -271,36 +260,36 @@ IMPL_LINK_NOARG(ScInsertTableDlg, ChoiceHdl_Impl, Button*, void)
     DoEnable_Impl();
 }
 
-IMPL_LINK_NOARG(ScInsertTableDlg, BrowseHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(ScInsertTableDlg, BrowseHdl_Impl, weld::Button&, void)
 {
     delete pDocInserter;
-    pDocInserter = new ::sfx2::DocumentInserter(GetFrameWeld(), ScDocShell::Factory().GetFactoryName());
+    pDocInserter = new ::sfx2::DocumentInserter(m_xDialog.get(), ScDocShell::Factory().GetFactoryName());
     pDocInserter->StartExecuteModal( LINK( this, ScInsertTableDlg, DialogClosedHdl ) );
 }
 
-IMPL_LINK_NOARG(ScInsertTableDlg, SelectHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(ScInsertTableDlg, SelectHdl_Impl, weld::TreeView&, void)
 {
     DoEnable_Impl();
 }
 
 void ScInsertTableDlg::DoEnable_Impl()
 {
-    if ( m_pBtnNew->IsChecked() || ( pDocShTables && m_pLbTables->GetSelectedEntryCount() ) )
-        m_pBtnOk->Enable();
+    if ( m_xBtnNew->get_active() || ( pDocShTables && m_xLbTables->count_selected_rows() ) )
+        m_xBtnOk->set_sensitive(true);
     else
-        m_pBtnOk->Disable();
+        m_xBtnOk->set_sensitive(false);
 }
 
-IMPL_LINK_NOARG(ScInsertTableDlg, DoEnterHdl, Button*, void)
+IMPL_LINK_NOARG(ScInsertTableDlg, DoEnterHdl, weld::Button&, void)
 {
-    if(nTableCount > 1 || ScDocument::ValidTabName(m_pEdName->GetText()))
+    if (nTableCount > 1 || ScDocument::ValidTabName(m_xEdName->get_text()))
     {
-        EndDialog(RET_OK);
+        m_xDialog->response(RET_OK);
     }
     else
     {
         OUString aErrMsg ( ScResId( STR_INVALIDTABNAME ) );
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning,
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(), VclMessageType::Warning,
                     VclButtonsType::Ok, aErrMsg));
         xBox->run();
     }
@@ -309,7 +298,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, DoEnterHdl, Button*, void)
 IMPL_LINK_NOARG(ScInsertTableDlg, BrowseTimeoutHdl, Timer *, void)
 {
     bMustClose = true;
-    BrowseHdl_Impl(m_pBtnBrowse);
+    BrowseHdl_Impl(*m_xBtnBrowse);
 }
 
 IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
@@ -330,10 +319,10 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
             pDocShTables = new ScDocShell;
             aDocShTablesRef = pDocShTables;
 
-            Pointer aOldPtr( GetPointer() );
-            SetPointer( Pointer( PointerStyle::Wait ) );
-            pDocShTables->DoLoad( pMed );
-            SetPointer( aOldPtr );
+            {
+                weld::WaitObject aWait(m_xDialog.get());
+                pDocShTables->DoLoad(pMed);
+            }
 
             ErrCode nErr = pDocShTables->GetErrorCode();
             if ( nErr )
@@ -342,7 +331,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
             if ( !pDocShTables->GetError() )                    // errors only
             {
                 FillTables_Impl( &pDocShTables->GetDocument() );
-                m_pFtPath->SetText( pDocShTables->GetTitle( SFX_TITLE_FULLNAME ) );
+                m_xFtPath->set_label(pDocShTables->GetTitle(SFX_TITLE_FULLNAME));
             }
             else
             {
@@ -351,7 +340,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
                 pDocShTables = nullptr;
 
                 FillTables_Impl( nullptr );
-                m_pFtPath->SetText( EMPTY_OUSTRING );
+                m_xFtPath->set_label(EMPTY_OUSTRING);
             }
         }
 
@@ -359,7 +348,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
     }
     else if ( bMustClose )
         // execute slot FID_INS_TABLE_EXT and cancel file dialog
-        EndDialog();
+        m_xDialog->response(RET_CANCEL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

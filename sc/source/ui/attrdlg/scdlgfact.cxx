@@ -116,7 +116,11 @@ short AbstractScInsertContentsDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractScInsertTableDlg_Impl);
+short AbstractScInsertTableDlg_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
+
 IMPL_ABSTDLG_BASE(AbstractScSelEntryDlg_Impl);
 
 short AbstractScMetricInputDlg_Impl::Execute()
@@ -396,37 +400,37 @@ InsCellCmd  AbstractScInsertContentsDlg_Impl::GetMoveMode()
 
 bool AbstractScInsertTableDlg_Impl::GetTablesFromFile()
 {
-    return pDlg->GetTablesFromFile();
+    return m_xDlg->GetTablesFromFile();
 }
 
 bool AbstractScInsertTableDlg_Impl::GetTablesAsLink()
 {
-    return pDlg->GetTablesAsLink();
+    return m_xDlg->GetTablesAsLink();
 }
 
 const OUString*  AbstractScInsertTableDlg_Impl::GetFirstTable( sal_uInt16* pN )
 {
-    return pDlg->GetFirstTable( pN );
+    return m_xDlg->GetFirstTable( pN );
 }
 
 ScDocShell* AbstractScInsertTableDlg_Impl::GetDocShellTables()
 {
-    return pDlg->GetDocShellTables();
+    return m_xDlg->GetDocShellTables();
 }
 
 bool AbstractScInsertTableDlg_Impl::IsTableBefore()
 {
-    return pDlg->IsTableBefore();
+    return m_xDlg->IsTableBefore();
 }
 
 sal_uInt16 AbstractScInsertTableDlg_Impl::GetTableCount()
 {
-    return pDlg->GetTableCount();
+    return m_xDlg->GetTableCount();
 }
 
 const OUString* AbstractScInsertTableDlg_Impl::GetNextTable( sal_uInt16* pN )
 {
-    return pDlg->GetNextTable( pN );
+    return m_xDlg->GetNextTable( pN );
 }
 
 OUString AbstractScSelEntryDlg_Impl::GetSelectedEntry() const
@@ -761,11 +765,10 @@ VclPtr<AbstractScInsertContentsDlg> ScAbstractDialogFactory_Impl::CreateScInsert
     return VclPtr<AbstractScInsertContentsDlg_Impl>::Create(new ScInsertContentsDlg(pParent, InsertDeleteFlags::NONE, pStrTitle));
 }
 
-VclPtr<AbstractScInsertTableDlg> ScAbstractDialogFactory_Impl::CreateScInsertTableDlg(vcl::Window* pParent, ScViewData& rViewData,
+VclPtr<AbstractScInsertTableDlg> ScAbstractDialogFactory_Impl::CreateScInsertTableDlg(weld::Window* pParent, ScViewData& rViewData,
     SCTAB nTabCount, bool bFromFile)
 {
-    VclPtr<ScInsertTableDlg> pDlg = VclPtr<ScInsertTableDlg>::Create( pParent, rViewData,nTabCount, bFromFile );
-    return VclPtr<AbstractScInsertTableDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScInsertTableDlg_Impl>::Create(new ScInsertTableDlg(pParent, rViewData,nTabCount, bFromFile));
 }
 
 VclPtr<AbstractScSelEntryDlg> ScAbstractDialogFactory_Impl::CreateScSelEntryDlg ( vcl::Window* pParent,
