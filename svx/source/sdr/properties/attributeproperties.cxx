@@ -179,28 +179,45 @@ namespace sdr
         {
             SfxStyleSheet* pTargetStyleSheet(rProps.GetStyleSheet());
 
-            if(pTargetStyleSheet && &rObj.getSdrModelFromSdrObject() != &GetSdrObject().getSdrModelFromSdrObject())
+            if(pTargetStyleSheet &&
+                &rObj.getSdrModelFromSdrObject() != &rProps.GetSdrObject().getSdrModelFromSdrObject())
             {
-                // TTTT It is a clone to another model, thus the TargetStyleSheet
-                // is probably also from another SdrModel, so do *not* simply use it.
-                //
-                // The DefaultProperties::Clone already has cloned the ::SET items
-                // to a new SfxItemSet in the new SfxItemPool. There are quite some
-                // possibilities to continue:
-                // - Do not use StyleSheet (will do this for now)
-                // - Search for same StyleSheet in Target-SdrModel and use if found
-                //   (use e.g. Name)
-                // - Clone used StyleSheet(s) to Target-SdrModel and use
-                // - Set all Attributes from the StyleSheet as hard attributes at the
-                //   SfxItemSet
-                // The original AW080 uses 'ImpModelChange' (see there) which Clones
-                // and uses the used StyleSheets if there is a Target-SfxItemPool
-                // and sets to hard attributes if not. This may be used later if needed,
-                // but for now only a single UnitTest uses this Clone-scenario and works
-                // well with not using the TargetStyleSheet. The logic Cloning
-                // StyleSheets *should* - if needed - be on a higher level where it is
-                // potentially better known what would be the correct thing to do.
+                // tdf#117506
+                // The error shows that it is definitely necessary to solve this problem.
+                // Interestingly I already had a note here for 'work needed'.
+                // Checked in libreoffice-6-0 what happened there. In principle, the whole
+                // ::Clone of SdrPage and SdrObject happened in the same SdrModel, only
+                // afterwards a ::SetModel was used at the cloned SdrPage which went through
+                // all layers. The StyleSheet-problem was solved in
+                // AttributeProperties::MoveToItemPool at the end. There, a StyleSheet with the
+                // same name was searched for in the target-SdrModel.
+                // Start by retetting the current TargetStyleSheet so that nothing goes wrong
+                // when we do not find a fitting TargetStyleSheet.
+                // Note: The test for SdrModelChange above was wrong (compared the already set
+                // new SdrObject), so this never triggered and pTargetStyleSheet was never set to
+                // nullptr before. This means that a StyleSheet from another SdrModel was used
+                // what of course is very dangerous. Interestingly did not crash since when that
+                // other SdrModel was destroyed the ::Notify mechanism still worked reliably
+                // and de-connected this Properties successfully from the alien-StyleSheet.
                 pTargetStyleSheet = nullptr;
+
+                // Check if we have a TargetStyleSheetPool at the target-SdrModel. This *should*
+                // be the case already (SdrModel::Merge and SdDrawDocument::InsertBookmarkAsPage)
+                // have already cloned the StyleSheets to the target-SdrModel.
+                // If none is found, ImpGetDefaultStyleSheet will be used to set a 'default'
+                // StyleSheet as StyleSheet (that's what happened in the task, thus the FillStyle
+                // changed to the 'default' Blue).
+                SfxStyleSheetBasePool* pTargetStyleSheetPool(rObj.getSdrModelFromSdrObject().GetStyleSheetPool());
+
+                if(nullptr != pTargetStyleSheetPool)
+                {
+                    // If we have a TargetStyleSheetPool, search for the StyleSheet used
+                    // in the original Properties in the source-SdrModel.
+                    pTargetStyleSheet = dynamic_cast< SfxStyleSheet* >(
+                        pTargetStyleSheetPool->Find(
+                            rProps.GetStyleSheet()->GetName(),
+                            SfxStyleFamily::All));
+                }
             }
 
             if(pTargetStyleSheet)
