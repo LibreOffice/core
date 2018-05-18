@@ -41,7 +41,7 @@ OMarkableTreeListBox::~OMarkableTreeListBox()
 
 void OMarkableTreeListBox::dispose()
 {
-    delete m_pCheckButton;
+    m_pCheckButton.reset();
     DBTreeListBox::dispose();
 }
 
@@ -65,8 +65,8 @@ void OMarkableTreeListBox::Paint(vcl::RenderContext& rRenderContext, const tools
 
 void OMarkableTreeListBox::InitButtonData()
 {
-    m_pCheckButton = new SvLBoxButtonData( this );
-    EnableCheckButton( m_pCheckButton );
+    m_pCheckButton.reset( new SvLBoxButtonData( this ) );
+    EnableCheckButton( m_pCheckButton.get() );
 }
 
 void OMarkableTreeListBox::KeyInput( const KeyEvent& rKEvt )
