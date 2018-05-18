@@ -54,7 +54,7 @@ class ODbTypeWizDialog : public svt::OWizardMachine , public IItemSetHelper, pub
 {
 private:
     std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
-    SfxItemSet*             m_pOutSet;
+    std::unique_ptr<SfxItemSet> m_pOutSet;
     ::dbaccess::ODsnTypeCollection*
                             m_pCollection;  /// the DSN type collection instance
     OUString                m_eType;

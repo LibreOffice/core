@@ -59,6 +59,9 @@ public:
         // horrible horrible spawn of evil ownership and deletion here
         if (fn == SRCDIR "/sfx2/source/view/ipclient.cxx")
             return;
+        // sometimes it owns, sometimes it doesn't
+        if (fn == SRCDIR "/editeng/source/misc/svxacorr.cxx")
+            return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
