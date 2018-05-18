@@ -1581,9 +1581,12 @@ SwCursor::DoSetBidiLevelLeftRight(
             {
                 sal_uInt8 nCursorLevel = GetCursorBidiLevel();
                 bool bForward = ! io_rbLeft;
-                const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pSttFrame))->PrepareVisualMove( nPos, nCursorLevel,
+                SwTextFrame *const pTF(const_cast<SwTextFrame*>(
+                            static_cast<const SwTextFrame*>(pSttFrame)));
+                TextFrameIndex nTFIndex(pTF->MapModelToViewPos(*GetPoint()));
+                pTF->PrepareVisualMove( nTFIndex, nCursorLevel,
                                                          bForward, bInsertCursor );
-                rIdx = nPos;
+                *GetPoint() = pTF->MapViewToModelPos(nTFIndex);
                 SetCursorBidiLevel( nCursorLevel );
                 io_rbLeft = ! bForward;
             }
