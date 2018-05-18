@@ -126,9 +126,9 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         */
         nDivider = !rLineInf.GetDivider().isEmpty() ? rLineInf.GetDividerCountBy() : 0;
         nX = pFrame->getFrameArea().Left();
-        SwCharFormat* pFormat = rLineInf.GetCharFormat( const_cast<IDocumentStylePoolAccess&>(pFrame->GetNode()->getIDocumentStylePoolAccess()) );
+        SwCharFormat* pFormat = rLineInf.GetCharFormat( const_cast<IDocumentStylePoolAccess&>(pFrame->GetDoc().getIDocumentStylePoolAccess()) );
         OSL_ENSURE( pFormat, "PaintExtraData without CharFormat" );
-        pFnt.reset( new SwFont( &pFormat->GetAttrSet(), pFrame->GetTextNode()->getIDocumentSettingAccess() ) );
+        pFnt.reset( new SwFont(&pFormat->GetAttrSet(), &pFrame->GetDoc().getIDocumentSettingAccess()) );
         pFnt->Invalidate();
         pFnt->ChgPhysFnt( pSh, *pSh->GetOut() );
         pFnt->SetVertical( 0, pFrame->IsVertical() );
@@ -286,9 +286,9 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
     if( getFrameArea().Top() > rRect.Bottom() || getFrameArea().Bottom() < rRect.Top() )
         return;
 
-    const SwTextNode& rTextNode = *GetTextNode();
-    const IDocumentRedlineAccess& rIDRA = rTextNode.getIDocumentRedlineAccess();
-    const SwLineNumberInfo &rLineInf = rTextNode.GetDoc()->GetLineNumberInfo();
+    SwDoc const& rDoc(GetDoc());
+    const IDocumentRedlineAccess& rIDRA = rDoc.getIDocumentRedlineAccess();
+    const SwLineNumberInfo &rLineInf = rDoc.GetLineNumberInfo();
     const SwFormatLineNumber &rLineNum = GetAttrSet()->GetLineNumber();
     bool bLineNum = !IsInTab() && rLineInf.IsPaintLineNumbers() &&
                ( !IsInFly() || rLineInf.IsCountInFlys() ) && rLineNum.IsCount();
@@ -387,8 +387,11 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
     }
     else
     {
-        if ( SwRedlineTable::npos == rIDRA.GetRedlinePos(rTextNode, USHRT_MAX) )
+        if (!GetMergedPara() &&
+            SwRedlineTable::npos == rIDRA.GetRedlinePos(*GetTextNodeFirst(), USHRT_MAX))
+        {
             bRedLine = false;
+        }
 
         if( bLineNum && rLineInf.IsCountBlankLines() &&
             ( aExtra.HasNumber() || aExtra.HasDivider() ) )
@@ -464,7 +467,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
         else if( pSh->GetWin() )
         {
             SwFont *pFnt;
-            const SwTextNode& rTextNode = *GetTextNode();
+            const SwTextNode& rTextNode = *GetTextNodeForParaProps();
             if ( rTextNode.HasSwAttrSet() )
             {
                 const SwAttrSet *pAttrSet = &( rTextNode.GetSwAttrSet() );
@@ -509,7 +512,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 Point aPos = getFrameArea().Pos() + getFramePrintArea().Pos();
 
                 const SvxLRSpaceItem &rSpace =
-                    GetTextNode()->GetSwAttrSet().GetLRSpace();
+                    GetTextNodeForParaProps()->GetSwAttrSet().GetLRSpace();
 
                 if ( rSpace.GetTextFirstLineOfst() > 0 )
                     aPos.AdjustX(rSpace.GetTextFirstLineOfst() );
@@ -525,7 +528,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
 
                 aPos.AdjustY(pFnt->GetAscent( pSh, *pSh->GetOut() ) );
 
-                if ( GetTextNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
+                if (GetTextNodeForParaProps()->GetSwAttrSet().GetParaGrid().GetValue() &&
                      IsInDocBody() )
                 {
                     SwTextGridItem const*const pGrid(GetGridItem(FindPageFrame()));
