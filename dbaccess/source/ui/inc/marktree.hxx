@@ -34,7 +34,7 @@ namespace dbaui
 */
 class OMarkableTreeListBox : public DBTreeListBox
 {
-    SvLBoxButtonData*   m_pCheckButton;
+    std::unique_ptr<SvLBoxButtonData> m_pCheckButton;
     Link<void*,void>    m_aCheckButtonHandler;
 
 public:
