@@ -10,6 +10,9 @@
   <prop oor:name="ActiveImpress">
     <value>notebookbar.ui</value>
   </prop>
+  <prop oor:name="ActiveDraw">
+    <value>notebookbar.ui</value>
+  </prop>
   <node oor:name="Applications">
     <node oor:name="Writer" oor:op="replace">
       <prop oor:name="Active">
@@ -669,6 +672,34 @@
           <prop oor:name="Toolbars">
             <value>
               <it>private:resource/toolbar/standardbar</it>
+            </value>
+          </prop>
+          <prop oor:name="UserToolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="Sidebar">
+            <value>Arrow</value>
+          </prop>
+        </node>
+        <node oor:name="Tabbed" oor:op="replace">
+          <prop oor:name="Label">
+            <value xml:lang="en-US">Tabbed</value>
+          </prop>
+          <prop oor:name="HasNotebookbar">
+            <value>true</value>
+          </prop>
+          <prop oor:name="IsExperimental">
+            <value>true</value>
+          </prop>
+          <prop oor:name="MenuPosition">
+            <value>1</value>
+          </prop>
+          <prop oor:name="CommandArg">
+            <value>notebookbar.ui</value>
+          </prop>
+          <prop oor:name="Toolbars">
+            <value>
             </value>
           </prop>
           <prop oor:name="UserToolbars">
