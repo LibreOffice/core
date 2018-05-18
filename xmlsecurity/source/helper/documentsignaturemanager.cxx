@@ -29,6 +29,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <comphelper/base64.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -46,6 +47,8 @@
 #include <pdfsignaturehelper.hxx>
 
 using namespace css;
+using namespace css::graphic;
+using namespace css::uno;
 
 DocumentSignatureManager::DocumentSignatureManager(
     const uno::Reference<uno::XComponentContext>& xContext, DocumentSignatureMode eMode)
@@ -266,7 +269,8 @@ bool DocumentSignatureManager::add(
     const uno::Reference<security::XCertificate>& xCert,
     const uno::Reference<xml::crypto::XXMLSecurityContext>& xSecurityContext,
     const OUString& rDescription, sal_Int32& nSecurityId, bool bAdESCompliant,
-    const OUString& rSignatureLineId)
+    const OUString& rSignatureLineId, const Reference<XGraphic> xValidGraphic,
+    const Reference<XGraphic> xInvalidGraphic)
 {
     if (!xCert.is())
     {
@@ -381,6 +385,9 @@ bool DocumentSignatureManager::add(
     maSignatureHelper.SetDescription(nSecurityId, rDescription);
 
     if (!rSignatureLineId.isEmpty())
+        maSignatureHelper.SetSignatureLineId(nSecurityId, rSignatureLineId);
+
+    if (xValidGraphic.is())
         maSignatureHelper.SetSignatureLineId(nSecurityId, rSignatureLineId);
 
     // We open a signature stream in which the existing and the new
