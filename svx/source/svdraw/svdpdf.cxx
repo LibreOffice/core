@@ -195,7 +195,6 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const Rectan
     }
 
     mnPageCount = FPDF_GetPageCount(mpPdfDocument);
-    SAL_WARN("sd.filter", "Scale Rect: " << maScaleRect);
 }
 
 ImpSdrPdfImport::~ImpSdrPdfImport()
@@ -204,11 +203,10 @@ ImpSdrPdfImport::~ImpSdrPdfImport()
     FPDF_DestroyLibrary();
 }
 
-void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport,
+void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport,
                                     int nPageIndex)
 {
     const int nPageCount = FPDF_GetPageCount(mpPdfDocument);
-    SAL_WARN("sd.filter", "Importing page " << nPageIndex << " of " << nPageCount);
     if (nPageCount > 0 && nPageIndex >= 0 && nPageIndex < nPageCount)
     {
         // Render next page.
@@ -218,187 +216,24 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
 
         const double dPageWidth = FPDF_GetPageWidth(pPdfPage);
         const double dPageHeight = FPDF_GetPageHeight(pPdfPage);
-        SAL_WARN("sd.filter", "Loaded page: " << nPageIndex << ", width: " << dPageWidth
-                                              << ", height: " << dPageHeight);
         SetupPageScale(dPageWidth, dPageHeight);
 
         // Load the page text to extract it when we get text elements.
         FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage);
 
         const int nPageObjectCount = FPDFPage_CountObject(pPdfPage);
+        if (pProgrInfo)
+            pProgrInfo->SetActionCount(nPageObjectCount);
+
         for (int nPageObjectIndex = 0; nPageObjectIndex < nPageObjectCount; ++nPageObjectIndex)
         {
             FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage, nPageObjectIndex);
             ImportPdfObject(pPageObject, pTextPage, nPageObjectIndex);
-        }
-
-        FPDFText_ClosePage(pTextPage);
-
-#if 0
-        // Now do the text.
-        FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage);
-        if (pTextPage != nullptr)
-        {
-            SAL_WARN("sd.filter", "TEXT TEXT TEXT");
-
-            const int nChars = FPDFText_CountChars(pTextPage);
-            SAL_WARN("sd.filter", "Got page chars: " << nChars);
-
-            const int nRects = FPDFText_CountRects(pTextPage, 0, nChars);
-            SAL_WARN("sd.filter", "Got Rects: " << nRects);
-
-            std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nChars + 1]); // + terminating null
-            for (int nRectIndex = 0; nRectIndex < nRects; ++nRectIndex)
-            {
-                SAL_WARN("sd.filter",
-                         "Processing Text Rect #" << nRectIndex + 1 << " of " << nRects);
-
-                double left = 0;
-                double top = 0;
-                double right = 0;
-                double bottom = 0;
-                FPDFText_GetRect(pTextPage, nRectIndex, &left, &top, &right, &bottom);
-                SAL_WARN("sd.filter", "Got Text Rect: " << left << ", " << right << ", " << top
-                                                        << ", " << bottom);
-                Rectangle aRect = PointsToLogic(left, right, top, bottom);
-
-                if (right < left)
-                    std::swap(right, left);
-                if (bottom < top)
-                    std::swap(bottom, top);
-
-                SAL_WARN("sd.filter", "Got Text Rect: " << left << ", " << right << ", " << top
-                                                        << ", " << bottom);
-                SAL_WARN("sd.filter", "Logic Text Rect: " << aRect);
-
-                unsigned short* pShortText = reinterpret_cast<unsigned short*>(pText.get());
-                const int nBoundedChars = FPDFText_GetBoundedText(pTextPage, left, top, right,
-                                                                  bottom, pShortText, nChars);
-                OUString sText(pText.get(), nBoundedChars);
-                SAL_WARN("sd.filter", "Got Text #" << nRectIndex + 1 << " (" << nBoundedChars
-                                                   << "): [" << sText << "].");
-
-                const double dHalfCharWidth = (right - left) / nBoundedChars / 2.0;
-                SAL_WARN("sd.filter", "Half Char Width: " << dHalfCharWidth);
-                const int nCharIndex = FPDFText_GetCharIndexAtPos(pTextPage, left + dHalfCharWidth,
-                                                                  top + dHalfCharWidth,
-                                                                  dHalfCharWidth, dHalfCharWidth);
-                SAL_WARN("sd.filter", "Got Char Index: " << nCharIndex);
-
-                // FPDF_FONT pFont = FPDFText_GetFont(pTextPage, nCharIndex);
-                // const int nFontAscent = FPDFFont_GetAscent(pFont);
-                // const int nFontDescent = FPDFFont_GetDescent(pFont);
-                // FPDF_BYTESTRING sFontName = FPDFFont_GetName(pFont);
-                // SAL_WARN("sd.filter", "Char #" << nCharIndex << ", Got Font [" << sFontName <<
-                //                       "], Ascent: "<< nFontAscent << ", Descent: " << nFontDescent);
-
-                // FontMetric aFontMetric = mpVD->GetFontMetric();
-                // aFontMetric.SetAscent(nFontAscent);
-                // aFontMetric.SetDescent(nFontDescent);
-
-                double dFontScale = 1.0;
-                geometry::Matrix2D aMatrix;
-                if (!FPDFText_GetMatrix(pTextPage, nCharIndex, &aMatrix.m00, &aMatrix.m01,
-                                        &aMatrix.m10, &aMatrix.m11))
-                {
-                    SAL_WARN("sd.filter", "No font scale matrix, will use heuristic height of "
-                                              << aRect.GetHeight() << ".");
-                    dFontScale = aRect.GetHeight();
-                }
-                else if (aMatrix.m00 != aMatrix.m11 || aMatrix.m00 <= 0)
-                {
-                    SAL_WARN("sd.filter", "Bogus font scale matrix ("
-                                              << aMatrix.m00 << ',' << aMatrix.m11
-                                              << "), will use heuristic height of "
-                                              << aRect.GetHeight() << ".");
-                    dFontScale = aRect.GetHeight();
-                }
-                else
-                    dFontScale = aMatrix.m00;
-
-                double dFontSize = FPDFText_GetFontSize(pTextPage, nCharIndex);
-                SAL_WARN("sd.filter", "Got Font Size: " << dFontSize);
-                dFontSize *= dFontScale;
-                SAL_WARN("sd.filter", "Got Font Size Scaled: " << dFontSize);
-                dFontSize = lcl_PointToPixel(dFontSize);
-                SAL_WARN("sd.filter", "Got Font Pixel Size: " << dFontSize);
-                dFontSize = lcl_ToLogic(dFontSize);
-                SAL_WARN("sd.filter", "Got Font Logic Size: " << dFontSize);
-                vcl::Font aFnt = mpVD->GetFont();
-                aFnt.SetFontSize(Size(dFontSize, dFontSize));
-                mpVD->SetFont(aFnt);
-
-                double x = 0;
-                double y = 0;
-                FPDFText_GetCharOrigin(pTextPage, nCharIndex, &x, &y);
-                SAL_WARN("sd.filter", "Got Char Origin: " << x << ", " << y);
-                Point aPos = PointsToLogic(x, y);
-                SAL_WARN("sd.filter", "Got Char Origin Logic: " << aPos);
-                // aRect.Move(aPos.X(), aPos.Y());
-
-                // geometry::RealRectangle2D aRect;
-                // aRect.X1 = left;
-                // aRect.Y1 = top;
-                // aRect.X2 = right;
-                // aRect.Y2 = bottom;
-
-                // geometry::Matrix2D aMatrix;
-                // FPDFText_GetMatrix(pTextPage, nCharIndex, &aMatrix.m00, &aMatrix.m01, &aMatrix.m10, &aMatrix.m11);
-
-                // basegfx::B2DHomMatrix fontMatrix(
-                //     aMatrix.m00, aMatrix.m01, 0.0,
-                //     aMatrix.m10, aMatrix.m11, 0.0);
-                // fontMatrix.scale(dFontSize, dFontSize);
-
-                // x = fontMatrix.get(0, 0) * x + fontMatrix.get(1, 0) * y + x;
-                // y = fontMatrix.get(0, 1) * x + fontMatrix.get(1, 1) * y + y;
-                // SAL_WARN("sd.filter", "Char Origin after xform: " << x << ", " << y);
-
-                // basegfx::B2DHomMatrix totalTextMatrix1(fontMatrix);
-                // basegfx::B2DHomMatrix totalTextMatrix2(fontMatrix);
-                // totalTextMatrix1.translate(rRect.X1, rRect.Y1);
-                // totalTextMatrix2.translate(rRect.X2, rRect.Y2);
-
-                // basegfx::B2DHomMatrix corrMatrix;
-                // corrMatrix.scale(1.0, -1.0);
-                // // corrMatrix.translate(0.0, ascent);
-                // totalTextMatrix1 = totalTextMatrix1 * corrMatrix;
-                // totalTextMatrix2 = totalTextMatrix2 * corrMatrix;
-
-                // totalTextMatrix1 *= getCurrentContext().Transformation;
-                // totalTextMatrix2 *= getCurrentContext().Transformation;
-
-                // basegfx::B2DHomMatrix invMatrix(totalTextMatrix1);
-                // basegfx::B2DHomMatrix invPrevMatrix(prevTextMatrix);
-                // invMatrix.invert();
-                // invPrevMatrix.invert();
-                // basegfx::B2DHomMatrix offsetMatrix1(totalTextMatrix1);
-                // basegfx::B2DHomMatrix offsetMatrix2(totalTextMatrix2);
-                // offsetMatrix1 *= invPrevMatrix;
-                // offsetMatrix2 *= invMatrix;
-
-                // double charWidth = offsetMatrix2.get(0, 2);
-                // double prevSpaceWidth = offsetMatrix1.get(0, 2) - prevCharWidth;
-
-                ImportText(aRect.TopLeft(), sText);
-            }
-
-            FPDFText_ClosePage(pTextPage);
-        }
-#endif
-
-        FPDF_ClosePage(pPdfPage);
-    }
-
-    // const sal_uLong nCount(rMtf.GetActionSize());
-
-    for (sal_uLong a(0); a < 0UL; a++)
-    {
         if (pProgrInfo && pActionsToReport)
         {
             (*pActionsToReport)++;
 
-            if (*pActionsToReport >= 16) // update all 16 actions
+                if (*pActionsToReport >= 16)
             {
                 if (!pProgrInfo->ReportActions(*pActionsToReport))
                     break;
@@ -406,6 +241,10 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
                 *pActionsToReport = 0;
             }
         }
+    }
+
+        FPDFText_ClosePage(pTextPage);
+        FPDF_ClosePage(pPdfPage);
     }
 }
 
@@ -419,8 +258,6 @@ void ImpSdrPdfImport::SetupPageScale(const double dPageWidth, const double dPage
 
     Size aPageSize(lcl_ToLogic(lcl_PointToPixel(dPageWidth)),
                    lcl_ToLogic(lcl_PointToPixel(dPageHeight)));
-    SAL_WARN("sd.filter", "Logical Page Size: " << aPageSize);
-    SAL_WARN("sd.filter", "Scale Rect: " << maScaleRect);
 
     if (aPageSize.Width() && aPageSize.Height() && (!maScaleRect.IsEmpty()))
     {
@@ -455,23 +292,15 @@ void ImpSdrPdfImport::SetupPageScale(const double dPageWidth, const double dPage
         maScaleY = Fraction(maScaleRect.GetHeight() - 1, aPageSize.Height());
         mbSize = true;
     }
-
-    //SAL_WARN("sd.filter", "ScaleX: " << maScaleX << "(" << mfScaleX << "), ScaleY: " << maScaleY
-    //                                 << "(" << mfScaleY << ")");
 }
 
 size_t ImpSdrPdfImport::DoImport(SdrObjList& rOL, size_t nInsPos, int nPageNumber,
                                  SvdProgressInfo* pProgrInfo)
 {
-    if (pProgrInfo)
-    {
-        // pProgrInfo->SetActionCount(rMtf.GetActionSize());
-    }
-
     sal_uInt32 nActionsToReport(0);
 
     // execute
-    DoLoopActions(pProgrInfo, &nActionsToReport, nPageNumber);
+    DoObjects(pProgrInfo, &nActionsToReport, nPageNumber);
 
     if (pProgrInfo)
     {
@@ -612,7 +441,6 @@ void ImpSdrPdfImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr)
     {
         vcl::Font aFnt(mpVD->GetFont());
         const sal_uInt32 nHeight(FRound(aFnt.GetFontSize().Height() * mfScaleY));
-        SAL_WARN("sd.filter", "Font Height: " << nHeight);
 
         mpTextAttr->Put(SvxFontItem(aFnt.GetFamilyType(), aFnt.GetFamilyName(), aFnt.GetStyleName(),
                                     aFnt.GetPitch(), aFnt.GetCharSet(), EE_CHAR_FONTINFO));
@@ -1024,10 +852,8 @@ void ImpSdrPdfImport::ImportPdfObject(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE
 }
 
 void ImpSdrPdfImport::ImportForm(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTextPage,
-                                 int nPageObjectIndex)
+                                 int /*nPageObjectIndex*/)
 {
-    SAL_WARN("sd.filter", "Got page object FORM: " << nPageObjectIndex);
-
     // Get the form matrix to perform correct translation/scaling of the form sub-objects.
     const Matrix aOldMatrix = mCurMatrix;
 
@@ -1047,9 +873,8 @@ void ImpSdrPdfImport::ImportForm(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
 }
 
 void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTextPage,
-                                 int nPageObjectIndex)
+                                 int /*nPageObjectIndex*/)
 {
-    SAL_WARN("sd.filter", "Got page object TEXT: " << nPageObjectIndex);
     float left;
     float bottom;
     float right;
@@ -1060,30 +885,14 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     }
 
     if (left == right || top == bottom)
-    {
-        SAL_WARN("sd.filter", "Skipping empty TEXT #" << nPageObjectIndex << " left: " << left
-                                                      << ", right: " << right << ", top: " << top
-                                                      << ", bottom: " << bottom);
         return;
-    }
 
     double a, b, c, d, e, f;
     FPDFTextObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
-    // Matrix aTextMatrix(a, b, c, d, e, f);
     Matrix aTextMatrix(mCurMatrix);
-    SAL_WARN("sd.filter", "Got text matrix " << aTextMatrix.toString());
-    SAL_WARN("sd.filter", "Context matrix " << mCurMatrix.toString());
-    // aTextMatrix.Concatinate(mCurMatrix);
-    // SAL_WARN("sd.filter", "Got text matrix concat " << aTextMatrix.toString());
 
-    Point aPos = PointsToLogic(aTextMatrix.e(), aTextMatrix.f());
-    SAL_WARN("sd.filter", "Got TEXT origin: " << aPos);
-
-    const Rectangle aRect2 = PointsToLogic(left, right, top, bottom);
-    SAL_WARN("sd.filter", "Untransformed TEXT Bounds: " << aRect2);
     aTextMatrix.Transform(left, right, top, bottom);
     const Rectangle aRect = PointsToLogic(left, right, top, bottom);
-    SAL_WARN("sd.filter", "Transformed TEXT Bounds: " << aRect);
 
     const int nChars = FPDFTextObj_CountChars(pPageObject) * 2;
     std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nChars + 1]); // + terminating null
@@ -1093,24 +902,18 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
         = FPDFTextObj_GetTextProcessed(pPageObject, pTextPage, 0, nChars, pShortText);
     if (nActualChars <= 0)
     {
-        SAL_WARN("sd.filter", "Got no TEXT");
         return;
     }
 
     OUString sText(pText.get(), nActualChars);
-    SAL_WARN("sd.filter", "Got Text (" << nChars << "): [" << sText << "].");
 
     const double dFontSize = FPDFTextObj_GetFontSize(pPageObject);
     double dFontSizeH = fabs(sqrt2(a, c) * dFontSize);
     double dFontSizeV = fabs(sqrt2(b, d) * dFontSize);
-    SAL_WARN("sd.filter", "Got Font Size: " << dFontSize << ", Scaled Font Size H: " << dFontSizeH
-                                            << ", V: " << dFontSizeV);
     dFontSizeH = lcl_PointToPixel(dFontSizeH);
     dFontSizeV = lcl_PointToPixel(dFontSizeV);
-    SAL_WARN("sd.filter", "Got Pixel Font Size H: " << dFontSizeH << ", V: " << dFontSizeV);
     dFontSizeH = lcl_ToLogic(dFontSizeH);
     dFontSizeV = lcl_ToLogic(dFontSizeV);
-    SAL_WARN("sd.filter", "Got Logic Font Size H: " << dFontSizeH << ", V: " << dFontSizeV);
 
     const Size aFontSize(dFontSizeH, dFontSizeV);
     vcl::Font aFnt = mpVD->GetFont();
@@ -1143,26 +946,18 @@ void ImpSdrPdfImport::ImportText(const Point& rPos, const Size& rSize, const OUS
     vcl::Font aFnt(mpVD->GetFont());
     FontAlign eAlg(aFnt.GetAlignment());
 
-    sal_Int32 nTextWidth = static_cast<sal_Int32>(mpVD->GetTextWidth(rStr) * mfScaleX);
+    // sal_Int32 nTextWidth = static_cast<sal_Int32>(mpVD->GetTextWidth(rStr) * mfScaleX);
     sal_Int32 nTextHeight = static_cast<sal_Int32>(mpVD->GetTextHeight() * mfScaleY);
-    SAL_WARN("sd.filter",
-             "Unscaled text size: " << mpVD->GetTextWidth(rStr) << 'x' << mpVD->GetTextHeight()
-                                    << ", Scaled: " << nTextWidth << 'x' << nTextHeight);
 
     Point aPos(FRound(rPos.X() * mfScaleX + maOfs.X()), FRound(rPos.Y() * mfScaleY + maOfs.Y()));
-    Size bSize(FRound(rSize.Width() * mfScaleX), FRound(rSize.Height() * mfScaleY));
-    Size aSize(nTextWidth, nTextHeight);
+    Size aSize(FRound(rSize.Width() * mfScaleX), FRound(rSize.Height() * mfScaleY));
 
     if (eAlg == ALIGN_BASELINE)
         aPos.Y() -= FRound(aFontMetric.GetAscent() * mfScaleY);
     else if (eAlg == ALIGN_BOTTOM)
         aPos.Y() -= nTextHeight;
 
-    SAL_WARN("sd.filter", "Final POS: " << aPos);
-    SAL_WARN("sd.filter", "Final Text Size: " << aSize);
-    SAL_WARN("sd.filter", "Final Bound Size: " << bSize);
-    Rectangle aTextRect(aPos, bSize);
-    // SAL_WARN("sd.filter", "Text Rect: " << aTextRect);
+    Rectangle aTextRect(aPos, aSize);
     SdrRectObj* pText = new SdrRectObj(OBJ_TEXT, aTextRect);
     pText->SetModel(mpModel);
 
@@ -1227,9 +1022,8 @@ void ImpSdrPdfImport::MapScaling()
     mnMapScalingOfs = nCount;
 }
 
-void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex)
+void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectIndex*/)
 {
-    SAL_WARN("sd.filter", "Got page object IMAGE: " << nPageObjectIndex);
     std::unique_ptr<void, FPDFBitmapDeleter> bitmap(FPDFImageObj_GetBitmapBgra(pPageObject));
     if (!bitmap)
     {
@@ -1253,27 +1047,13 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int nPageObjectIn
 
     switch (format)
     {
-        case FPDFBitmap_Gray:
-            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth << ", height: " << nHeight
-                                                      << ", stride: " << nStride
-                                                      << ", format: Gray");
-            break;
         case FPDFBitmap_BGR:
-            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth << ", height: " << nHeight
-                                                      << ", stride: " << nStride
-                                                      << ", format: BGR");
             ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N24BitTcBgr, nHeight, nStride);
             break;
         case FPDFBitmap_BGRx:
-            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth << ", height: " << nHeight
-                                                      << ", stride: " << nStride
-                                                      << ", format: BGRx");
             ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N32BitTcRgba, nHeight, nStride);
             break;
         case FPDFBitmap_BGRA:
-            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth << ", height: " << nHeight
-                                                      << ", stride: " << nStride
-                                                      << ", format: BGRA");
             ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N32BitTcBgra, nHeight, nStride);
             break;
         default:
@@ -1282,18 +1062,6 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int nPageObjectIn
                                                       << ", format: " << format);
             break;
     }
-
-    // double a, b, c, d, e, f;
-    // if (!FPDFImageObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f))
-    // {
-    //     SAL_WARN("sd.filter", "FAILED to get image Matrix");
-    // }
-    // SAL_WARN("sd.filter", "Got image Matrix: " << a << ", " << b << ", " << c << ", " << d << ", " << e << ", " << f);
-
-    // if (!FPDFImageObj_SetMatrix(pPageObject, a, b, c, d, e, f))
-    // {
-    //     SAL_WARN("sd.filter", "FAILED to set image Matrix");
-    // }
 
     float left;
     float bottom;
@@ -1304,12 +1072,9 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int nPageObjectIn
         SAL_WARN("sd.filter", "FAILED to get image bounds");
     }
 
-    SAL_WARN("sd.filter", "Got IMAGE bounds left: " << left << ", right: " << right
-                                                    << ", top: " << top << ", bottom: " << bottom);
     Rectangle aRect = PointsToLogic(left, right, top, bottom);
     aRect.MoveRight(1);
     aRect.MoveBottom(1);
-    SAL_WARN("sd.filter", "IMAGE Logical Rect FINAL: " << aRect);
 
     SdrGrafObj* pGraf = new SdrGrafObj(Graphic(aBitmap), aRect);
     pGraf->SetModel(mpModel);
@@ -1320,7 +1085,7 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int nPageObjectIn
     InsertObj(pGraf);
 }
 
-void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex)
+void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectIndex*/)
 {
     double a, b, c, d, e, f;
     FPDFPath_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
@@ -1332,9 +1097,6 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
     std::vector<basegfx::B2DPoint> aBezier;
 
     const int nSegments = FPDFPath_CountSegments(pPageObject);
-    SAL_WARN("sd.filter",
-             "Got page object PATH: " << nPageObjectIndex << " with " << nSegments << " segments.");
-
     for (int nSegmentIndex = 0; nSegmentIndex < nSegments; ++nSegmentIndex)
     {
         FPDF_PATHSEGMENT pPathSegment = FPDFPath_GetPathSegment(pPageObject, nSegmentIndex);
@@ -1354,11 +1116,6 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
             if (bClose)
                 aPoly.setClosed(bClose); // TODO: Review
 
-            SAL_WARN("sd.filter", "Got " << (bClose ? "CLOSE" : "OPEN") << " point (" << fx << ", "
-                                         << fy << ") matrix (" << a << ", " << b << ", " << c
-                                         << ", " << d << ", " << e << ", " << f << ") -> (" << x
-                                         << ", " << y << ")");
-
             Point aPoint = PointsToLogic(x, y);
             x = aPoint.X();
             y = aPoint.Y();
@@ -1367,12 +1124,10 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
             switch (nSegmentType)
             {
                 case FPDF_SEGMENT_LINETO:
-                    SAL_WARN("sd.filter", "Got LineTo Segment.");
                     aPoly.append(basegfx::B2DPoint(x, y));
                     break;
 
                 case FPDF_SEGMENT_BEZIERTO:
-                    SAL_WARN("sd.filter", "Got BezierTo Segment.");
                     aBezier.emplace_back(x, y);
                     if (aBezier.size() == 3)
                     {
@@ -1382,7 +1137,6 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
                     break;
 
                 case FPDF_SEGMENT_MOVETO:
-                    SAL_WARN("sd.filter", "Got MoveTo Segment.");
                     // New Poly.
                     if (aPoly.count() > 0)
                     {
@@ -1421,15 +1175,11 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
     FPDFPath_GetStrokeWidth(pPageObject, &fWidth);
     const double dWidth = 0.5 * fabs(sqrt2(aPathMatrix.a(), aPathMatrix.c()) * fWidth);
     mnLineWidth = lcl_ToLogic(lcl_PointToPixel(dWidth));
-    // mnLineWidth /= 2;
-    SAL_WARN("sd.filter", "Path Stroke Width: " << fWidth << ",  scaled: " << dWidth
-                                                << ", Logical: " << mnLineWidth);
 
     int nFillMode = FPDF_FILLMODE_ALTERNATE;
     FPDF_BOOL bStroke = true;
     if (FPDFPath_GetDrawMode(pPageObject, &nFillMode, &bStroke))
     {
-        SAL_WARN("sd.filter", "Got PATH FillMode: " << nFillMode << ", Storke: " << bStroke);
         if (nFillMode == FPDF_FILLMODE_ALTERNATE)
             mpVD->SetDrawMode(DrawModeFlags::Default);
         else if (nFillMode == FPDF_FILLMODE_WINDING)
@@ -1443,39 +1193,32 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
     unsigned int nB;
     unsigned int nA;
     FPDFPath_GetFillColor(pPageObject, &nR, &nG, &nB, &nA);
-    SAL_WARN("sd.filter", "Got PATH fill color: " << nR << ", " << nG << ", " << nB << ", " << nA);
     mpVD->SetFillColor(Color(nR, nG, nB));
 
     if (bStroke)
     {
         FPDFPath_GetStrokeColor(pPageObject, &nR, &nG, &nB, &nA);
-        SAL_WARN("sd.filter",
-                 "Got PATH stroke color: " << nR << ", " << nG << ", " << nB << ", " << nA);
         mpVD->SetLineColor(Color(nR, nG, nB));
     }
     else
         mpVD->SetLineColor(COL_TRANSPARENT);
 
-    // if(!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(basegfx::B2DPolyPolygon(aSource)))
-
+    if (!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(basegfx::B2DPolyPolygon(aPolyPoly)))
+    {
     SdrPathObj* pPath = new SdrPathObj(OBJ_POLY, aPolyPoly);
     pPath->SetModel(mpModel);
     SetAttributes(pPath);
     InsertObj(pPath, false);
 }
+}
 
 Point ImpSdrPdfImport::PointsToLogic(double x, double y) const
 {
     y = correctVertOrigin(y);
-    // SAL_WARN("sd.filter", "Corrected point x: " << x << ", y: " << y);
     x = lcl_PointToPixel(x);
     y = lcl_PointToPixel(y);
 
-    // SAL_WARN("sd.filter", "Pixel point x: " << x << ", y: " << y);
-
     Point aPos(lcl_ToLogic(x), lcl_ToLogic(y));
-    // SAL_WARN("sd.filter", "Logical Pos: " << aPos);
-
     return aPos;
 }
 
@@ -1484,21 +1227,15 @@ Rectangle ImpSdrPdfImport::PointsToLogic(double left, double right, double top,
 {
     top = correctVertOrigin(top);
     bottom = correctVertOrigin(bottom);
-    // SAL_WARN("sd.filter", "Corrected bounds left: " << left << ", right: " << right
-    //                                                 << ", top: " << top << ", bottom: " << bottom);
+
     left = lcl_PointToPixel(left);
     right = lcl_PointToPixel(right);
     top = lcl_PointToPixel(top);
     bottom = lcl_PointToPixel(bottom);
 
-    // SAL_WARN("sd.filter", "Pixel bounds left: " << left << ", right: " << right << ", top: " << top
-    //                                             << ", bottom: " << bottom);
-
     Point aPos(lcl_ToLogic(left), lcl_ToLogic(top));
     Size aSize(lcl_ToLogic(right - left), lcl_ToLogic(bottom - top));
     Rectangle aRect(aPos, aSize);
-    // SAL_WARN("sd.filter", "Logical BBox: " << aRect);
-
     return aRect;
 }
 
