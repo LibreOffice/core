@@ -615,7 +615,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
         {
             OSL_ENSURE( pFrame->IsTextFrame(), "Frame type <-> tag attribute mismatch" );
             const SvxLRSpaceItem &rSpace =
-                static_cast<const SwTextFrame*>(pFrame)->GetTextNode()->GetSwAttrSet().GetLRSpace();
+                static_cast<const SwTextFrame*>(pFrame)->GetTextNodeForParaProps()->GetSwAttrSet().GetLRSpace();
             nVal =  rSpace.GetTextFirstLineOfst();
             if ( 0 != nVal )
                 mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::TextIndent, nVal );
@@ -624,7 +624,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
         if ( bTextAlign )
         {
             OSL_ENSURE( pFrame->IsTextFrame(), "Frame type <-> tag attribute mismatch" );
-            const SwAttrSet& aSet = static_cast<const SwTextFrame*>(pFrame)->GetTextNode()->GetSwAttrSet();
+            const SwAttrSet& aSet = static_cast<const SwTextFrame*>(pFrame)->GetTextNodeForParaProps()->GetSwAttrSet();
             const SvxAdjust nAdjust = aSet.GetAdjust().GetAdjust();
             if ( SvxAdjust::Block == nAdjust || SvxAdjust::Center == nAdjust ||
                  (  (pFrame->IsRightToLeft() && SvxAdjust::Left == nAdjust) ||
