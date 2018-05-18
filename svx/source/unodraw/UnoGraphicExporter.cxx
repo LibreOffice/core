@@ -164,6 +164,7 @@ namespace {
         Reference< XShape >     mxShape;
         Reference< XDrawPage >  mxPage;
         Reference< XShapes >    mxShapes;
+        Graphic maGraphic;
 
         SvxDrawPage*        mpUnoPage;
 
@@ -988,10 +989,10 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 {
     ::SolarMutexGuard aGuard;
 
-    if( nullptr == mpUnoPage )
+    if( !maGraphic && nullptr == mpUnoPage )
         return false;
 
-    if( nullptr == mpUnoPage->GetSdrPage() || nullptr == mpDoc )
+    if( !maGraphic && ( nullptr == mpUnoPage->GetSdrPage() || nullptr == mpDoc ) )
         return false;
 
     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
@@ -1006,9 +1007,11 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     bool            bVectorType = !rFilter.IsExportPixelFormat( nFilter );
 
     // create the output stuff
-    Graphic aGraphic;
+    Graphic aGraphic = maGraphic;
 
-    ErrCode nStatus = GetGraphic( aSettings, aGraphic, bVectorType ) ? ERRCODE_NONE : ERRCODE_GRFILTER_FILTERERROR;
+    ErrCode nStatus = ERRCODE_NONE;
+    if (!maGraphic)
+        nStatus = GetGraphic( aSettings, aGraphic, bVectorType ) ? ERRCODE_NONE : ERRCODE_GRFILTER_FILTERERROR;
 
     if( nStatus == ERRCODE_NONE )
     {
@@ -1106,7 +1109,22 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
         if( mxShape.is() )
         {
             if( nullptr == GetSdrObjectFromXShape( mxShape ) )
-                break;
+            {
+                // This is not a Draw shape, let's see if it's a Writer one.
+                uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
+                if (!xPropertySet.is())
+                    break;
+                uno::Reference<graphic::XGraphic> xGraphic(
+                    xPropertySet->getPropertyValue("Graphic"), uno::UNO_QUERY);
+                if (!xGraphic.is())
+                    break;
+
+                maGraphic = Graphic(xGraphic);
+                if (maGraphic.GetType() != GraphicType::NONE)
+                    return;
+                else
+                    break;
+            }
 
             // get page for this shape
             Reference< XChild > xChild( mxShape, UNO_QUERY );
