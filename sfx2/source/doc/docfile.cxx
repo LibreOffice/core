@@ -43,6 +43,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/UseBackupException.hpp>
 #include <com/sun/star/embed/XOptimizedStorage.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
@@ -133,6 +134,7 @@
 #include <memory>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
@@ -3661,9 +3663,12 @@ void SfxMedium::CreateTempFileNoCopy()
     CloseStorage();
 }
 
-bool SfxMedium::SignContents_Impl(const Reference<XCertificate> xCert, const OUString& aSignatureLineId,
-                                  bool bSignScriptingContent,
-                                  bool bHasValidDocumentSignature)
+bool SfxMedium::SignContents_Impl(bool bSignScriptingContent,
+                                  bool bHasValidDocumentSignature,
+                                  const OUString& aSignatureLineId,
+                                  const Reference<XCertificate> xCert,
+                                  const Reference<XGraphic> xValidGraphic,
+                                  const Reference<XGraphic> xInvalidGraphic)
 {
     bool bChanges = false;
 
@@ -3753,8 +3758,8 @@ bool SfxMedium::SignContents_Impl(const Reference<XCertificate> xCert, const OUS
 
                 bool bSuccess = false;
                 if (xCert.is())
-                    bSuccess = xSigner->signDocumentContentWithCertificate(
-                        GetZipStorageToSign_Impl(), xStream, xCert, aSignatureLineId);
+                    bSuccess = xSigner->signSignatureLine(
+                        GetZipStorageToSign_Impl(), xStream, aSignatureLineId, xCert, xValidGraphic, xInvalidGraphic);
                 else
                     bSuccess = xSigner->signDocumentContent(GetZipStorageToSign_Impl(),
                                                             xStream);
@@ -3779,8 +3784,8 @@ bool SfxMedium::SignContents_Impl(const Reference<XCertificate> xCert, const OUS
                 bool bSuccess = false;
                 if (xCert.is())
                 {
-                    bSuccess = xSigner->signDocumentContentWithCertificate(
-                        GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream, xCert, aSignatureLineId);
+                    bSuccess = xSigner->signSignatureLine(
+                        GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream, aSignatureLineId, xCert, xValidGraphic, xInvalidGraphic);
                 }
                 else
                 {
