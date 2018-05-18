@@ -38,7 +38,7 @@ SbaSbAttrDlg::SbaSbAttrDlg(vcl::Window* pParent, const SfxItemSet* pCellAttrs,
     : SfxTabDialog(pParent, "FieldDialog", "dbaccess/ui/fielddialog.ui", pCellAttrs)
     , m_nNumberFormatId(0)
 {
-    pNumberInfoItem = new SvxNumberInfoItem( pFormatter, 0 );
+    pNumberInfoItem.reset( new SvxNumberInfoItem( pFormatter, 0 ) );
 
     if (bHasFormat)
         m_nNumberFormatId = AddTabPage("format", RID_SVXPAGE_NUMBERFORMAT);
@@ -54,7 +54,7 @@ SbaSbAttrDlg::~SbaSbAttrDlg()
 
 void SbaSbAttrDlg::dispose()
 {
-    delete pNumberInfoItem;
+    pNumberInfoItem.reset();
     SfxTabDialog::dispose();
 }
 
