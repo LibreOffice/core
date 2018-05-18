@@ -29,7 +29,7 @@ namespace dbaui
 
     class SbaSbAttrDlg : public SfxTabDialog
     {
-        SvxNumberInfoItem* pNumberInfoItem;
+        std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem;
         sal_uInt32 m_nNumberFormatId;
 
     public:
