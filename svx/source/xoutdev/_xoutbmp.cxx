@@ -357,7 +357,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
     }
 }
 
-bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString)
+bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString, bool bAddPrefix)
 {
     SvMemoryStream aOStm;
     OUString aMimeType;
@@ -393,7 +393,11 @@ bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString)
     css::uno::Sequence<sal_Int8> aOStmSeq( static_cast<sal_Int8 const *>(aOStm.GetData()),aOStm.Tell() );
     OUStringBuffer aStrBuffer;
     ::comphelper::Base64::encode(aStrBuffer,aOStmSeq);
-    rOUString = aMimeType + ";base64," + aStrBuffer.makeStringAndClear();
+    rOUString = aStrBuffer.makeStringAndClear();
+
+    if (bAddPrefix)
+        rOUString = aMimeType + ";base64," + rOUString;
+
     return true;
 }
 

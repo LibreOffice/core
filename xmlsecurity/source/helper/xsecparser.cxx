@@ -45,6 +45,8 @@ XSecParser::XSecParser(XMLSignatureHelper& rXMLSignatureHelper,
     , m_bInDate(false)
     , m_bInDescription(false)
     , m_bInSignatureLineId(false)
+    , m_bInSignatureLineValidImage(false)
+    , m_bInSignatureLineInvalidImage(false)
     , m_pXSecController(pXSecController)
     , m_bReferenceUnresolved(false)
     , m_nReferenceDigestID(cssxc::DigestID::SHA1)
@@ -265,6 +267,16 @@ void SAL_CALL XSecParser::startElement(
             m_ouSignatureLineId.clear();
             m_bInSignatureLineId = true;
         }
+        else if (aName == "loext:SignatureLineValidImage")
+        {
+            m_ouSignatureLineValidImage.clear();
+            m_bInSignatureLineValidImage = true;
+        }
+        else if (aName == "loext:SignatureLineInvalidImage")
+        {
+            m_ouSignatureLineInvalidImage.clear();
+            m_bInSignatureLineInvalidImage = true;
+        }
 
         if (m_xNextHandler.is())
         {
@@ -379,6 +391,16 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
             m_pXSecController->setSignatureLineId( m_ouSignatureLineId );
             m_bInSignatureLineId = false;
         }
+        else if (aName == "loext:SignatureLineValidImage")
+        {
+            m_pXSecController->setValidSignatureImage( m_ouSignatureLineValidImage );
+            m_bInSignatureLineValidImage = false;
+        }
+        else if (aName == "loext:SignatureLineInvalidImage")
+        {
+            m_pXSecController->setInvalidSignatureImage( m_ouSignatureLineInvalidImage );
+            m_bInSignatureLineInvalidImage = false;
+        }
 
         if (m_xNextHandler.is())
         {
@@ -457,6 +479,14 @@ void SAL_CALL XSecParser::characters( const OUString& aChars )
     else if (m_bInSignatureLineId)
     {
         m_ouSignatureLineId += aChars;
+    }
+    else if (m_bInSignatureLineValidImage)
+    {
+        m_ouSignatureLineValidImage += aChars;
+    }
+    else if (m_bInSignatureLineInvalidImage)
+    {
+        m_ouSignatureLineInvalidImage += aChars;
     }
 
     if (m_xNextHandler.is())
