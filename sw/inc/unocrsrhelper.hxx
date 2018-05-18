@@ -156,7 +156,8 @@ namespace SwUnoCursorHelper
             SwPaM& rPaM,
             const SfxItemPropertySet & rPropSet,
             const OUString & rPropertyName,
-            const css::uno::Any & rValue);
+            const css::uno::Any & rValue,
+            const SetAttrMode nAttrMode = SetAttrMode::DEFAULT);
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException
