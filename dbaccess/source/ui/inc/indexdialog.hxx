@@ -89,7 +89,7 @@ namespace dbaui
         VclPtr<IndexFieldsControl>      m_pFields;
         VclPtr<PushButton>              m_pClose;
 
-        OIndexCollection*               m_pIndexes;
+        std::unique_ptr<OIndexCollection> m_pIndexes;
         SvTreeListEntry*                m_pPreviousSelection;
         bool                            m_bEditAgain;
 
