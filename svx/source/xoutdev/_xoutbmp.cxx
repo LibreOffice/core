@@ -393,25 +393,7 @@ bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString)
     css::uno::Sequence<sal_Int8> aOStmSeq( static_cast<sal_Int8 const *>(aOStm.GetData()),aOStm.Tell() );
     OUStringBuffer aStrBuffer;
     ::comphelper::Base64::encode(aStrBuffer,aOStmSeq);
-    OUString aEncodedBase64Image = aStrBuffer.makeStringAndClear();
-    if( aLink.GetType() == GfxLinkType::NativeSvg )
-    {
-      sal_Int32 ite(8);
-      sal_Int32 nBufferLength(aOStmSeq.getLength());
-      const sal_Int8* pBuffer = aOStmSeq.getConstArray();
-      css::uno::Sequence<sal_Int8> newTempSeq = aOStmSeq;        // creates new Sequence to remove front 8 bits of garbage and encodes in base64
-      sal_Int8 *pOutBuffer = newTempSeq.getArray();
-      while(ite < nBufferLength)
-      {
-        *pOutBuffer++ = pBuffer[ite];
-        ite++;
-      }
-      ::comphelper::Base64::encode(aStrBuffer, newTempSeq);
-      aEncodedBase64Image = aStrBuffer.makeStringAndClear();
-      sal_Int32 SVGFixLength = aEncodedBase64Image.getLength();
-      aEncodedBase64Image = aEncodedBase64Image.replaceAt(SVGFixLength - 12, SVGFixLength, "") + "PC9zdmc+Cg=="; // removes rear 12 bits of garbage and adds svg closing tag in base64
-    }
-    rOUString = aMimeType + ";base64," + aEncodedBase64Image;
+    rOUString = aMimeType + ";base64," + aStrBuffer.makeStringAndClear();
     return true;
 }
 
