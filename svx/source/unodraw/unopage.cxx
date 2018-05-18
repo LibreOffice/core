@@ -94,11 +94,7 @@ void SvxDrawPage::disposing() throw()
         mpModel = nullptr;
     }
 
-    if( mpView )
-    {
-        delete mpView;
-        mpView = nullptr;
-    }
+    mpView.reset();
     mpPage = nullptr;
 }
 
