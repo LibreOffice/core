@@ -113,6 +113,11 @@
         <desc>Contains name of currently used implementation in the Impress module.</desc>
       </info>
     </prop>
+    <prop oor:name="ActiveDraw" oor:type="xs:string" oor:nillable="false">
+      <info>
+        <desc>Contains name of currently used implementation in the Draw module.</desc>
+      </info>
+    </prop>
     <set oor:name="Applications" oor:node-type="Application">
       <info>
         <desc>Contains list of toolbar mode settings for each application.</desc>
