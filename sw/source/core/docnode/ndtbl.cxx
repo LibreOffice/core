@@ -1036,8 +1036,10 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                 {
                     if (rText[nChPos] == cCh)
                     {
+                        // sw_redlinehide: no idea if this makes any sense...
+                        TextFrameIndex const nPos(aFInfo.GetFrame()->MapModelToView(pTextNd, nChPos));
                         aPosArr.push_back( static_cast<sal_uInt16>(
-                                        aFInfo.GetCharPos( nChPos+1, false )) );
+                            aFInfo.GetCharPos(nPos+TextFrameIndex(1), false)) );
                     }
                 }
 
