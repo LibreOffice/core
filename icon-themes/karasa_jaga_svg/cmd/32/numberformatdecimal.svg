@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128"
+   height="128"
+   viewBox="0 0 33.866666 33.866668"
+   version="1.1"
+   id="svg2883"
+   sodipodi:docname="numberformatdecimal.svg"
+   inkscape:export-filename="/home/rizmut/Dokumen/Proyek-Git/libreoffice-style-karasa-jaga/build/images_karasa_Jaga/cmd/32/numberformatdecimal.png"
+   inkscape:export-xdpi="24"
+   inkscape:export-ydpi="24"
+   inkscape:version="0.92.2 (unknown)">
+  <defs
+     id="defs2877" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.3755437"
+     inkscape:cx="72.523284"
+     inkscape:cy="58.354914"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1366"
+     inkscape:window-height="706"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:snap-page="true" />
+  <metadata
+     id="metadata2880">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-263.13332)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:18.88451958px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.47211301px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="3.9963307"
+       y="286.77951"
+       id="text10428"><tspan
+         sodipodi:role="line"
+         id="tspan10426"
+         x="3.9963307"
+         y="286.77951"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';stroke-width:0.47211301px">0.0</tspan></text>
+    <image
+       y="263.13333"
+       x="-33.866665"
+       id="image10423"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAACYQAAAmEBwTBV+gAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAEqSURB
+VDiN7dS9LqZBFMDx34hYJBKaDSIicQcSOgqSjZLSBUgU7kDlAtQ6dyAqjUJNQUSh8FFssihsJxEf
+xVG8ExnjWSrZ5j3JJHNy/uc/ec4zmRQRviM6vsXaFv8/cUppMKU0+lVzSmkspfSzsRgRbwsJW7jA
+KXbQWTKZ68E+TnCFjQ9M1TCNc/zIh+xjqUG8jL28783yiZKpRzGP3Yh4ilbXNhYbPnQ+10TEA3ax
+UAK1eBjXRX6NoQbxEG6K/KbmanEXXor8RWssddTcM7o/E99ioMj78bdBXHMDuPtMfIjJIp/CUYO4
+5iZx/I6o/nY3zrCGVa3ZjefaJjbzfgS/sYJ1XKLvn7ciIh4xi8Ag5iLiKpcP8hIRf/ArH/CEmYi4
+L12p/R63xR/iFVOjpaDu+z8NAAAAAElFTkSuQmCC
+"
+       preserveAspectRatio="none"
+       height="33.866665"
+       width="33.866665" />
+  </g>
+</svg>
