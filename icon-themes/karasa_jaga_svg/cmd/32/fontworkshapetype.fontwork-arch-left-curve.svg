@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="svg2"
+   width="128"
+   height="128"
+   viewBox="0 0 128 128"
+   sodipodi:docname="fontworkshapetype.fontwork-arch-left-curve.svg"
+   inkscape:export-filename="/home/rizmut/Dokumen/Rizmut/Github/libreoffice-style-karasa-jaga/build/images_karasa_Jaga/cmd/32/fontworkshapetype.fontwork-arch-left-curve.png"
+   inkscape:export-xdpi="24"
+   inkscape:export-ydpi="24"
+   inkscape:version="0.92.2 (unknown)">
+  <metadata
+     id="metadata8">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="691"
+     id="namedview4"
+     showgrid="false"
+     inkscape:snap-page="true"
+     inkscape:snap-global="true"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="120.71436"
+     inkscape:cy="-0.81192491"
+     inkscape:window-x="0"
+     inkscape:window-y="26"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <path
+     style="opacity:1;fill:#7d9ece;fill-opacity:1;stroke:none;stroke-width:6.18841791;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     d="M 30.366196,64.000014 C 30.366107,47.192501 37.284222,30.488236 49.168931,18.60353 61.053637,6.7188214 77.757902,-0.19929369 94.565415,-0.19920469 c 1.023752,-5.42e-6 2.046439,0.0272373 3.068359,0.078125 V 19.873061 a 44.236248,44.236248 0 0 0 -3.068359,-0.109375 44.236248,44.236248 0 0 0 -44.236328,44.236328 44.236248,44.236248 0 0 0 44.236328,44.236326 44.236248,44.236248 0 0 0 3.068359,-0.1543 v 20.03906 c -1.02192,0.0509 -2.044607,0.0781 -3.068359,0.0781 -16.807513,9e-5 -33.511778,-6.91803 -45.396484,-18.80274 C 37.284222,97.511808 30.366107,80.807527 30.366196,64.000014 Z"
+     id="path20806"
+     inkscape:connector-curvature="0" />
+  <path
+     style="opacity:1;fill:#f6f8fa;fill-opacity:1;stroke:none;stroke-width:6.18841791;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     d="M 33.539062,63.911132 C 33.538883,30.207222 60.790819,2.8732265 94.460937,2.7294919 V 15.911132 a 48,48 0 0 0 -47.984375,48 48,48 0 0 0 47.984375,47.999998 v 13.18164 C 60.790819,124.94904 33.538883,97.615042 33.539062,63.911132 Z"
+     id="circle20802"
+     inkscape:connector-curvature="0" />
+</svg>

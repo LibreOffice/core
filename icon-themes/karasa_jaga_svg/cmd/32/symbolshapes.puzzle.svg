@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="svg2"
+   width="128"
+   height="128"
+   viewBox="0 0 128 128"
+   sodipodi:docname="symbolshapes.puzzle.svg"
+   inkscape:export-filename="/home/rizmut/Dokumen/Proyek-Git/libreoffice-style-karasa-jaga/build/images_karasa_Jaga/cmd/32/symbolshapes.puzzle.png"
+   inkscape:export-xdpi="24"
+   inkscape:export-ydpi="24"
+   inkscape:version="0.92.2 (unknown)">
+  <metadata
+     id="metadata8">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient1958">
+      <stop
+         style="stop-color:#ededed;stop-opacity:1;"
+         offset="0"
+         id="stop1954" />
+      <stop
+         style="stop-color:#fcfcfc;stop-opacity:1"
+         offset="1"
+         id="stop1956" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1958"
+       id="linearGradient2969"
+       x1="53.203136"
+       y1="0"
+       x2="44.233444"
+       y2="95.448456"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="706"
+     id="namedview4"
+     showgrid="false"
+     inkscape:snap-page="true"
+     inkscape:snap-global="true"
+     inkscape:zoom="1.7320077"
+     inkscape:cx="180.65097"
+     inkscape:cy="114.69499"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2">
+    <inkscape:grid
+       type="xygrid"
+       id="grid837" />
+  </sodipodi:namedview>
+  <path
+     style="opacity:1;fill:url(#linearGradient2969);fill-opacity:1;stroke:#507dbe;stroke-width:3.40566444;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.72941176"
+     d="M 57.015625 14.660156 A 98.891586 49.532692 0 0 0 27.830078 18.025391 A 49.532692 98.891586 0 0 1 33.023438 50.761719 C 27.453461 49.708662 21.921016 48.599247 16.341797 47.607422 C 12.182548 46.868027 8.7167969 50.151153 8.7167969 53.310547 L 8.7167969 73.271484 C 8.7167969 76.430878 12.307182 80.226781 16.341797 78.974609 C 21.835765 77.269516 27.456798 75.819517 33.222656 74.658203 A 49.532692 98.891586 0 0 1 27.826172 109.95508 A 98.891586 49.532692 0 0 0 56.595703 113.36523 C 58.745897 104.9685 55.392462 97.79353 53.634766 90.265625 C 52.914793 87.182109 56.91127 84.550781 60.982422 84.550781 L 67.107422 84.550781 C 71.178575 84.550781 75.74624 87.374374 74.455078 90.265625 C 69.563332 101.21952 71.170066 107.30126 72.861328 113.31836 A 98.891586 49.532692 0 0 0 104.01367 109.38477 A 49.532692 98.891586 0 0 1 98.882812 75.669922 C 103.05487 76.59829 107.30878 77.691524 111.6582 78.974609 C 115.71003 80.169906 119.2832 76.430878 119.2832 73.271484 L 119.2832 53.310547 C 119.2832 50.151153 115.64169 46.201054 111.6582 47.607422 C 107.28352 49.1519 103.05315 50.399322 98.9375 51.412109 A 49.532692 98.891586 0 0 1 104.03516 18.660156 A 98.891586 49.532692 0 0 0 72.316406 14.6875 C 70.899118 20.105304 70.103722 25.99055 74.455078 35.734375 C 75.74624 38.625626 71.178575 41.449219 67.107422 41.449219 L 60.982422 41.449219 C 56.91127 41.449219 52.914793 38.817891 53.634766 35.734375 C 55.249543 28.818566 58.20877 22.200399 57.015625 14.660156 z "
+     id="path2943" />
+  <image
+     y="4.4408921e-16"
+     x="128"
+     id="image2940"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAACYQAAAmEBwTBV+gAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAQUSURB
+VDiNtZVLbBxFEIb/6u7Zx+z6/cBylsQPwIkTP4gVIOJ1ioQiIYSCcooDCAkQB84gCBkHCcGFA0gI
+pFxi33IgF4QC4hAgsoQVBH4ltkliY8dgx/Z6dz3r3Z2d7uLg7NpeJ8AB6jb/TH1d9XdNN/A/Bd1N
+dBwWaBlpJ0YPgWuMEDcRlF87x/d7H58fDLu58ocM6RXnRNetfw0+MzDyKhifMDi4VReEPn2j84xs
+HZ0yzK0AQERZYh7RjO+cF7ve2fq9KgUriSMNlYFgS4ON+yoDiIYlhqZSfG0u3SSbxpoJvPtIdzWy
+eYOE64fm47lDybS/D8Dfgz3fTDTVh/NdzWVWQVtI5NYNY9Co9JLgsLq/LoxoSAIAphczdPHn5eVS
+jtjpjZhdSHhpIgIRwRhgJeXbBP7eOfFYylLi1qrro/B+LaMhSMzs6LxUAJvr8/FcgGjDfqUI1WWW
+t+p6/X0DI196ed5VbisIIcDMyHgGvjHT9wQ7/cMHQIiR5rlMzoSZASkFjDF45mBt8MLgQs+6Zx55
+uLWcq6IWhBDQWiOV8T2tec7pHz4AbdTpl7qHiYgJAPr6h18BcHbDCqyEAsJ+/eiesFIKxhgYY+Br
+RmrdR/Ud6wOBADzPw6XRuP7lZlKDEbhj5qenT3a+SY7DQj04ttjVXFa7uy6MK1NJ09poU88DFWRZ
+G5Xl83kYY4ptFnTP85Bw87g0sozmBhueb/DjeNw3QVWlsOfX3UbL6ifbqyEloaXBLm7ops8KzAxm
+hhCiqAshUBFReO5wQ3HRy1dXgbSOKSlVmIRhpbYPyFYAADBzcRJKtc1nAGCCUr6KhNZmXC/C47Nr
+iAQVpuZdPLq3CpURq5js+/42mJSyaM3VWRdzS+vc0VROf67mICDWdez2DAHA+wMjnxvm1wrJ3S0V
++sjBeimlhNYaAJBM51Fuq2LVGzNu8NlX09lMTqcMcz0ACKK3TvV2fqQAQN/oeINahi8wwyKijlRG
+vwvALlT1w9gK/zQRp7qKoD72eKMsszfH3/M1aTbHBNFewzxxqrfrcnGOHYcMgG8AwDk3fDgaksUf
+JJHOY2gyDgZ9GF/znr94ZbH5+NOxQGFzK2zLW055Ve/1dp3dtkcoCcsSbRURSxXaTbg+lKA552Tn
+277hF35fyihg046qsqAiQlspZwdYAO2V0eL5g5ryAPIaMeeLK7YAP1EZUdktg4CqqAoTECvl7Dgr
+tMGuock4FuJZ1FeGQARIwcxRuUuSeCpWZ9vJdR9uxkfC9bAQz0EpavxHsGHz7e1E7tDiam5PQZOC
+rrdZv92c9Nr+GJ1OYnQ6uSWDjCDsuEnuejUBwAfnrtV4lNsHyCxCYsI5vt91zo9HKec/C8O1EHBZ
+ixvgsiHn5ebsvTj/efwFgD/U4sC8ze8AAAAASUVORK5CYII=
+"
+     preserveAspectRatio="none"
+     height="128"
+     width="128" />
+</svg>
