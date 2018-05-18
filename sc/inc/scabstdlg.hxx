@@ -540,7 +540,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog> CreateScParagraphDlg(vcl::Window* pParent,
         const SfxItemSet* pAttr) = 0;
 
-    virtual VclPtr<SfxAbstractTabDialog> CreateScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet) = 0;
+    virtual VclPtr<SfxAbstractTabDialog> CreateScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet) = 0;
 
     // for tabpage
     virtual CreateTabPage                GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;
