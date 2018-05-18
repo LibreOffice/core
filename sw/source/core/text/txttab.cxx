@@ -23,6 +23,7 @@
 #include <editeng/tstpitem.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <doc.hxx>
 #include <frmatr.hxx>
 #include <SwPortionHandler.hxx>
 
@@ -76,7 +77,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
 
         // #i91133#
         const bool bTabsRelativeToIndent =
-            m_pFrame->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TABS_RELATIVE_TO_INDENT);
+            m_pFrame->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT);
         const SwTwips nTabLeft = bRTL
                                  ? m_pFrame->getFrameArea().Right() -
                                    ( bTabsRelativeToIndent ? GetTabLeft() : 0 )
@@ -168,7 +169,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
                        : ( ( nCount + 1 ) * nDefTabDist );
 
             // --> FME 2004-09-21 #117919 Minimum tab stop width is 1 or 51 twips:
-            const SwTwips nMinimumTabWidth = m_pFrame->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT) ? 0 : 50;
+            const SwTwips nMinimumTabWidth = m_pFrame->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT) ? 0 : 50;
             if( (  bRTL && nTabLeft - nNextPos >= nCurrentAbsPos - nMinimumTabWidth ) ||
                  ( !bRTL && nNextPos + nTabLeft <= nCurrentAbsPos + nMinimumTabWidth  ) )
             {
@@ -229,7 +230,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
                       !pTabStop ||
                       nNextPos != m_aLineInf.GetListTabStopPosition() ) ||
                     // compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
-                    m_pFrame->GetTextNode()->getIDocumentSettingAccess()->
+                    m_pFrame->GetDoc().getIDocumentSettingAccess().
                         get(DocumentSettingId::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST);
                 if ( bTabAtLeftMarginAllowed )
                 {
@@ -322,9 +323,10 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
     // Here we settle down ...
     SetFix( static_cast<sal_uInt16>(rInf.X()) );
 
-    const bool bTabCompat = rInf.GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT);
-    const bool bTabOverflow = rInf.GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_OVERFLOW);
-    const bool bTabOverMargin = rInf.GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_OVER_MARGIN);
+    IDocumentSettingAccess const& rIDSA(rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess());
+    const bool bTabCompat = rIDSA.get(DocumentSettingId::TAB_COMPAT);
+    const bool bTabOverflow = rIDSA.get(DocumentSettingId::TAB_OVERFLOW);
+    const bool bTabOverMargin = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN);
 
     // The minimal width of a tab is one blank at least.
     // #i37686# In compatibility mode, the minimum width
@@ -437,7 +439,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
 
 bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
 {
-    const bool bTabOverMargin = rInf.GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_OVER_MARGIN);
+    const bool bTabOverMargin = rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_OVER_MARGIN);
     // If the tab position is larger than the right margin, it gets scaled down by default.
     // However, if compat mode enabled, we allow tabs to go over the margin: the rest of the paragraph is not broken into lines.
     const sal_uInt16 nRight = bTabOverMargin ? GetTabPos() : std::min(GetTabPos(), rInf.Width());
@@ -451,7 +453,7 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
     }
 
     const sal_uInt16 nWhich = GetWhichPor();
-    const bool bTabCompat = rInf.GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT);
+    const bool bTabCompat = rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT);
 
     if ( bTabOverMargin && POR_TABLEFT == nWhich )
     {

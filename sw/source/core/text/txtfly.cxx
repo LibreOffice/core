@@ -802,7 +802,7 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             // object position and former text wrapping is applied.
             // This condition is typically for documents imported from the
             // OpenOffice.org file format.
-            const IDocumentSettingAccess* pIDSA = pCurrFrame->GetTextNode()->getIDocumentSettingAccess();
+            const IDocumentSettingAccess* pIDSA = &pCurrFrame->GetDoc().getIDocumentSettingAccess();
             if ( (  pIDSA->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) ||
                    !pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ) &&
                  ::FindContext( pTmp, SwFrameType::None ) == ::FindContext( pCurrFrame, SwFrameType::None ) )
@@ -855,7 +855,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
     // --> #108724# Page header/footer content doesn't have to wrap around
     //              floating screen objects
     const bool bFooterHeader = nullptr != pCurrFrame->FindFooterOrHeader();
-    const IDocumentSettingAccess* pIDSA = pCurrFrame->GetTextNode()->getIDocumentSettingAccess();
+    const IDocumentSettingAccess* pIDSA = &pCurrFrame->GetDoc().getIDocumentSettingAccess();
     // #i40155# - check, if frame is marked not to wrap
     const bool bWrapAllowed = ( pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ||
                                     ( !pCurrFrame->IsInFootnote() && !bFooterHeader ) );
@@ -886,7 +886,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
         const long nLeft = aRectFnSet.GetLeft(aRect) + 1;
         const bool bR2L = pCurrFrame->IsRightToLeft();
 
-        const IDocumentDrawModelAccess& rIDDMA = pCurrFrame->GetTextNode()->getIDocumentDrawModelAccess();
+        const IDocumentDrawModelAccess& rIDDMA = pCurrFrame->GetDoc().getIDocumentDrawModelAccess();
 
         for( size_t i = 0; i < nCount; ++i )
         {
