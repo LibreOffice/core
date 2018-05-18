@@ -1981,7 +1981,7 @@ DECLARE_ODFEXPORT_TEST(testChapterNumberingNewLine, "chapter-number-new-line.odt
 DECLARE_ODFEXPORT_TEST(testSpellOutNumberingTypes, "spellout-numberingtypes.odt")
 {
     // ordinal indicator, ordinal and cardinal number numbering styles (from LibreOffice 6.1)
-    const char* aFieldTexts[] = { "1st", "First", "One" };
+    const char* aFieldTexts[] = { "1st", "Erste", "Eins",  "1.", "Premier", "Un", "1ᵉʳ", "First", "One" };
     // fallback for old platforms without std::codecvt and std::regex supports
     const char* aFieldTextFallbacks[] = { "Ordinal-number 1", "Ordinal 1", "1" };
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -1999,7 +1999,7 @@ DECLARE_ODFEXPORT_TEST(testSpellOutNumberingTypes, "spellout-numberingtypes.odt"
         {
             uno::Reference<text::XTextContent> xField(aField, uno::UNO_QUERY);
             CPPUNIT_ASSERT_EQUAL(true, OUString::fromUtf8(aFieldTexts[i]).equals(xField->getAnchor()->getString()) ||
-                           OUString::fromUtf8(aFieldTextFallbacks[i]).equals(xField->getAnchor()->getString()));
+                           OUString::fromUtf8(aFieldTextFallbacks[i%3]).equals(xField->getAnchor()->getString()));
         }
     }
 }
