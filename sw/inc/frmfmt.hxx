@@ -219,8 +219,6 @@ public:
         because format of fly frame provides transparent backgrounds.
         Method determines, if background of fly frame is transparent.
 
-        @author OD
-
         @return true, if background color is transparent, but not "no fill"
         or a existing background graphic is transparent.
     */
@@ -232,8 +230,6 @@ public:
         background is "inherited" from its parent/grandparent.
         This is the case, if no background graphic is set and the background
         color is "no fill"/"auto fill"
-
-        @author OD
 
         @return true, if background brush is "inherited" from parent/grandparent
     */

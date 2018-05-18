@@ -228,8 +228,6 @@ public:
     /** set level of this node
 
         precondition: node is already member of a list tree
-
-        @author OD
     */
     void SetLevelInListTree( const int nLevel );
 
@@ -286,14 +284,10 @@ public:
     */
     void ValidateMe();
 
-    /**
-       Notifies all invalid siblings of this node.
-    */
+    /** Notifies all invalid siblings of this node. */
     void NotifyInvalidSiblings();
 
-    /**
-       notification of all nodes in the list tree on certain list level
-    */
+    /** notification of all nodes in the list tree on certain list level */
     void NotifyNodesOnListLevel( const int nListLevel );
 
     /** Invalidation and notification of complete numbering tree
@@ -325,8 +319,6 @@ public:
         The search for the preceding node is performed for the tree below the
         <this> node. To search the complete tree, the method has been called for
         the root of the tree.
-
-        @author OD
     */
     const SwNumberTreeNode* GetPrecedingNodeOf( const SwNumberTreeNode& rNode ) const;
 
@@ -343,9 +335,7 @@ public:
 #endif // DBG_UTIL
 
 protected:
-    /**
-       the children
-    */
+    /** the children */
     tSwNumberTreeChildren mChildren;
 
     /**
@@ -392,14 +382,10 @@ protected:
     void IsSane(bool bRecursive, std::vector<const SwNumberTreeNode *> rParents) const;
 #endif // DBG_UTIL
 
-    /**
-       the parent node
-    */
+    /** he parent node */
     SwNumberTreeNode * mpParent;
 
-    /**
-       the number of the node
-    */
+    /** the number of the node */
     mutable SwNumberTree::tSwNumTreeNumber mnNumber;
 
     // boolean indicating, that a node of a not counted parent node is continuing
@@ -486,15 +472,10 @@ protected:
      */
     virtual void NotifyNode() = 0;
 
-    /**
-       Notifies this node (NotifyNode) and all descendants.
-     */
+    /** Notifies this node (NotifyNode) and all descendants.*/
     void Notify();
 
-    /** notification of children nodes on certain depth
-
-        @author OD
-    */
+    /** notification of children nodes on certain depth */
     void NotifyChildrenOnDepth( const int nDepth );
 
     /**
@@ -564,9 +545,7 @@ protected:
      */
     virtual bool IsCountPhantoms() const = 0;
 
-    /**
-       Return if all descendants of this node are phantoms.
-     */
+    /** Return if all descendants of this node are phantoms. */
     bool HasOnlyPhantoms() const;
 
     bool HasPhantomCountedParent() const;
