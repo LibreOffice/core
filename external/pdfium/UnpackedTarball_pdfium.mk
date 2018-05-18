@@ -26,6 +26,7 @@ pdfium_patches += 0009-svx-support-color-text-for-imported-PDFs.patch.2
 pdfium_patches += 0010-svx-support-importing-forms-from-PDFs.patch.2
 pdfium_patches += 0011-svx-correctly-possition-form-objects-from-PDF.patch.2
 pdfium_patches += 0012-svx-import-processed-PDF-text.patch.2
+pdfium_patches += 0013-svx-cleanup-pdfium-importer.patch.2
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
