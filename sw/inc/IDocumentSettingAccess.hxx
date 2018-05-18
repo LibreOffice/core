@@ -83,6 +83,7 @@ enum class DocumentSettingId
     SUBTRACT_FLYS,
     // tdf#112443 disable off-page content positioning
     DISABLE_OFF_PAGE_POSITIONING,
+    EMPTY_DB_FIELD_HIDES_PARA,
     // COMPATIBILITY FLAGS END
     BROWSE_MODE,
     HTML_MODE,

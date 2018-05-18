@@ -379,18 +379,26 @@ void SwTextField::ExpandTextField(const bool bForceNotify) const
     const SwField* pField = GetFormatField().GetField();
     const OUString aNewExpand( pField->ExpandField(m_pTextNode->GetDoc()->IsClipBoard()) );
 
+    const SwFieldIds nWhich = pField->GetTyp()->Which();
+    const bool bSameExpandSimpleNotification
+        = SwFieldIds::Chapter != nWhich && SwFieldIds::PageNumber != nWhich
+          && SwFieldIds::RefPageGet != nWhich
+          // Page count fields to not use aExpand during formatting,
+          // therefore an invalidation of the text frame has to be triggered even if aNewExpand == aExpand:
+          && (SwFieldIds::DocStat != nWhich
+              || DS_PAGE != static_cast<const SwDocStatField*>(pField)->GetSubType())
+          && (SwFieldIds::GetExp != nWhich
+              || static_cast<const SwGetExpField*>(pField)->IsInBodyText());
+
+    bool bHiddenParaChanged = false;
+    if (aNewExpand != m_aExpand || bSameExpandSimpleNotification)
+        bHiddenParaChanged = m_pTextNode->CalcHiddenParaField();
+
     if (aNewExpand == m_aExpand)
     {
-        const SwFieldIds nWhich = pField->GetTyp()->Which();
-        if ( SwFieldIds::Chapter != nWhich
-             && SwFieldIds::PageNumber != nWhich
-             && SwFieldIds::RefPageGet != nWhich
-             // Page count fields to not use aExpand during formatting,
-             // therefore an invalidation of the text frame has to be triggered even if aNewExpand == aExpand:
-             && ( SwFieldIds::DocStat != nWhich || DS_PAGE != static_cast<const SwDocStatField*>(pField)->GetSubType() )
-             && ( SwFieldIds::GetExp != nWhich || static_cast<const SwGetExpField*>(pField)->IsInBodyText() ) )
+        if ( bSameExpandSimpleNotification )
         {
-            if( m_pTextNode->CalcHiddenParaField() )
+            if( bHiddenParaChanged )
             {
                 m_pTextNode->ModifyNotification( nullptr, nullptr );
             }
