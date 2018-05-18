@@ -1,43 +1,8 @@
 diff --git a/core/fpdfapi/page/cpdf_colorstate.cpp b/core/fpdfapi/page/cpdf_colorstate.cpp
-index 693fcf1..d3e1202 100644
+index 693fcf1..14e883f 100644
 --- a/core/fpdfapi/page/cpdf_colorstate.cpp
 +++ b/core/fpdfapi/page/cpdf_colorstate.cpp
-@@ -74,6 +74,8 @@ void CPDF_ColorState::SetFillColor(CPDF_ColorSpace* pCS,
-                                    uint32_t nValues) {
-   ColorData* pData = m_Ref.GetPrivateCopy();
-   SetColor(pData->m_FillColor, pData->m_FillRGB, pCS, pValue, nValues);
-+  if (pData->m_FillRGB != 0 && pData->m_FillRGB != 0xFFFFFFFF)
-+    fprintf(stderr, "COLOR FILL!!!!> %x\n", pData->m_FillRGB);
- }
- 
- void CPDF_ColorState::SetStrokeColor(CPDF_ColorSpace* pCS,
-@@ -81,6 +83,8 @@ void CPDF_ColorState::SetStrokeColor(CPDF_ColorSpace* pCS,
-                                      uint32_t nValues) {
-   ColorData* pData = m_Ref.GetPrivateCopy();
-   SetColor(pData->m_StrokeColor, pData->m_StrokeRGB, pCS, pValue, nValues);
-+  if (pData->m_StrokeRGB != 0 && pData->m_StrokeRGB != 0xFFFFFFFF)
-+    fprintf(stderr, "COLOR STROkE!!!!> %x\n", pData->m_StrokeRGB);
- }
- 
- void CPDF_ColorState::SetFillPattern(CPDF_Pattern* pPattern,
-@@ -99,6 +103,8 @@ void CPDF_ColorState::SetFillPattern(CPDF_Pattern* pPattern,
-     }
-   }
-   pData->m_FillRGB = ret ? FXSYS_RGB(R, G, B) : 0xFFFFFFFF;
-+  if (pData->m_FillRGB != 0 && pData->m_FillRGB != 0xFFFFFFFF)
-+    fprintf(stderr, "COLOR FILL!!!!> %x\n", pData->m_FillRGB);
- }
- 
- void CPDF_ColorState::SetStrokePattern(CPDF_Pattern* pPattern,
-@@ -118,13 +124,15 @@ void CPDF_ColorState::SetStrokePattern(CPDF_Pattern* pPattern,
-   }
-   pData->m_StrokeRGB =
-       pData->m_StrokeColor.GetRGB(&R, &G, &B) ? FXSYS_RGB(R, G, B) : 0xFFFFFFFF;
-+  if (pData->m_StrokeRGB != 0 && pData->m_StrokeRGB != 0xFFFFFFFF)
-+    fprintf(stderr, "COLOR STROkE!!!!> %x\n", pData->m_StrokeRGB);
- }
- 
- void CPDF_ColorState::SetColor(CPDF_Color& color,
+@@ -124,7 +124,7 @@ void CPDF_ColorState::SetColor(CPDF_Color& color,
                                 uint32_t& rgb,
                                 CPDF_ColorSpace* pCS,
                                 float* pValue,
@@ -59,57 +24,6 @@ index 9619051..dbe9c47 100644
  
    SharedCopyOnWrite<ColorData> m_Ref;
  };
-diff --git a/core/fpdfapi/page/cpdf_imageobject.cpp b/core/fpdfapi/page/cpdf_imageobject.cpp
-index 3b5a740..416d82d 100644
---- a/core/fpdfapi/page/cpdf_imageobject.cpp
-+++ b/core/fpdfapi/page/cpdf_imageobject.cpp
-@@ -43,6 +43,7 @@ const CPDF_ImageObject* CPDF_ImageObject::AsImage() const {
- void CPDF_ImageObject::CalcBoundingBox() {
-   std::tie(m_Left, m_Right, m_Top, m_Bottom) =
-       m_Matrix.TransformRect(0.f, 1.f, 1.f, 0.f);
-+    // fprintf(stderr, "Image BB: %f, %f, %f, %f\n", m_Left, m_Right, m_Top, m_Bottom);
- }
- 
- void CPDF_ImageObject::SetImage(const RetainPtr<CPDF_Image>& pImage) {
-diff --git a/core/fpdfapi/page/cpdf_page.cpp b/core/fpdfapi/page/cpdf_page.cpp
-index ba93f4a..70d398b 100644
---- a/core/fpdfapi/page/cpdf_page.cpp
-+++ b/core/fpdfapi/page/cpdf_page.cpp
-@@ -35,12 +35,14 @@ CPDF_Page::CPDF_Page(CPDF_Document* pDocument,
-   CFX_FloatRect mediabox = GetBox("MediaBox");
-   if (mediabox.IsEmpty())
-     mediabox = CFX_FloatRect(0, 0, 612, 792);
-+  fprintf(stderr, "Page mediabox: %f, %f, %f, %f\n", mediabox.left, mediabox.right, mediabox.top, mediabox.bottom);
- 
-   m_BBox = GetBox("CropBox");
-   if (m_BBox.IsEmpty())
-     m_BBox = mediabox;
-   else
-     m_BBox.Intersect(mediabox);
-+  fprintf(stderr, "Page cropbox: %f, %f, %f, %f\n", m_BBox.left, m_BBox.right, m_BBox.top, m_BBox.bottom);
- 
-   m_PageSize.width = m_BBox.Width();
-   m_PageSize.height = m_BBox.Height();
-@@ -48,6 +50,7 @@ CPDF_Page::CPDF_Page(CPDF_Document* pDocument,
-   int rotate = GetPageRotation();
-   if (rotate % 2)
-     std::swap(m_PageSize.width, m_PageSize.height);
-+  fprintf(stderr, "Page rotate: %d, Page Width: %f, Page Height: %f\n", rotate, m_PageSize.width, m_PageSize.height);
- 
-   switch (rotate) {
-     case 0:
-diff --git a/core/fpdfapi/page/cpdf_pageobject.cpp b/core/fpdfapi/page/cpdf_pageobject.cpp
-index 8bb5bf5..9b5e2ce 100644
---- a/core/fpdfapi/page/cpdf_pageobject.cpp
-+++ b/core/fpdfapi/page/cpdf_pageobject.cpp
-@@ -98,5 +98,7 @@ FX_RECT CPDF_PageObject::GetBBox(const CFX_Matrix* pMatrix) const {
-   if (pMatrix)
-     rect = pMatrix->TransformRect(rect);
- 
-+  FX_RECT rc = rect.GetOuterRect();
-+  fprintf(stderr, "PageObject BB: %f, %f, %f, %f\n", rc.left, rc.right, rc.top, rc.bottom);
-   return rect.GetOuterRect();
- }
 diff --git a/core/fpdfapi/page/cpdf_pageobjectlist.cpp b/core/fpdfapi/page/cpdf_pageobjectlist.cpp
 index afd2c98..2c8e061 100644
 --- a/core/fpdfapi/page/cpdf_pageobjectlist.cpp
@@ -135,18 +49,6 @@ index b450537..77c7d81 100644
  };
  
  #endif  // CORE_FPDFAPI_PAGE_CPDF_PAGEOBJECTLIST_H_
-diff --git a/core/fpdfapi/render/cpdf_renderstatus.cpp b/core/fpdfapi/render/cpdf_renderstatus.cpp
-index 0a01ae0..6947e3a 100644
---- a/core/fpdfapi/render/cpdf_renderstatus.cpp
-+++ b/core/fpdfapi/render/cpdf_renderstatus.cpp
-@@ -1793,6 +1793,7 @@ bool CPDF_RenderStatus::ProcessText(CPDF_TextObject* textobj,
-     return true;
- 
-   float font_size = textobj->m_TextState.GetFontSize();
-+//   fprintf(stderr, "Font size: %f, matrix a: %f, b: %f, c: %f, d: %f, e: %f, f: %f\n", font_size, text_matrix.a, text_matrix.b, text_matrix.c, text_matrix.d, text_matrix.e, text_matrix.f);
-   if (bPattern) {
-     DrawTextPathWithPattern(textobj, pObj2Device, pFont, font_size,
-                             &text_matrix, bFill, bStroke);
 diff --git a/core/fpdftext/cpdf_textpage.cpp b/core/fpdftext/cpdf_textpage.cpp
 index e712549..a7973f7 100644
 --- a/core/fpdftext/cpdf_textpage.cpp
@@ -197,26 +99,6 @@ index c87ab00..e5a1ba8 100644
    int CountRects(int start, int nCount);
    bool GetRect(int rectIndex, CFX_FloatRect* pRect) const;
  
-diff --git a/core/fxge/cfx_pathdata.cpp b/core/fxge/cfx_pathdata.cpp
-index 4ac5cf6..4286de4 100644
---- a/core/fxge/cfx_pathdata.cpp
-+++ b/core/fxge/cfx_pathdata.cpp
-@@ -199,6 +199,7 @@ void CFX_PathData::Append(const CFX_PathData* pSrc, const CFX_Matrix* pMatrix) {
- void CFX_PathData::AppendPoint(const CFX_PointF& point,
-                                FXPT_TYPE type,
-                                bool closeFigure) {
-+//   fprintf(stderr, "Append: %f, %f (%s)\n", point.x, point.y, closeFigure ? "CLOSE" : "OPEN");
-   m_Points.push_back(FX_PATHPOINT(point, type, closeFigure));
- }
- 
-@@ -290,6 +291,7 @@ CFX_FloatRect CFX_PathData::GetBoundingBox(float line_width,
- void CFX_PathData::Transform(const CFX_Matrix* pMatrix) {
-   if (!pMatrix)
-     return;
-+//   fprintf(stderr, "XForm: %f, %f %f, %f, %f, %f\n", pMatrix->a, pMatrix->b, pMatrix->c, pMatrix->d, pMatrix->e, pMatrix->f);
-   for (auto& point : m_Points)
-     point.m_Point = pMatrix->Transform(point.m_Point);
- }
 diff --git a/fpdfsdk/fpdfeditimg.cpp b/fpdfsdk/fpdfeditimg.cpp
 index 0d7ba56..37bdf99 100644
 --- a/fpdfsdk/fpdfeditimg.cpp
@@ -249,7 +131,7 @@ index 0d7ba56..37bdf99 100644
  FPDFImageObj_GetImageDataDecoded(FPDF_PAGEOBJECT image_object,
                                   void* buffer,
 diff --git a/fpdfsdk/fpdfeditpage.cpp b/fpdfsdk/fpdfeditpage.cpp
-index ca2cf3f..2162625 100644
+index ca2cf3f..1eaa232 100644
 --- a/fpdfsdk/fpdfeditpage.cpp
 +++ b/fpdfsdk/fpdfeditpage.cpp
 @@ -11,12 +11,14 @@
@@ -275,7 +157,7 @@ index ca2cf3f..2162625 100644
  #include "fpdfsdk/fsdk_define.h"
  #include "public/fpdf_formfill.h"
  #include "third_party/base/logging.h"
-@@ -363,3 +366,252 @@ FPDFPageObj_GetBounds(FPDF_PAGEOBJECT pageObject,
+@@ -363,3 +366,240 @@ FPDFPageObj_GetBounds(FPDF_PAGEOBJECT pageObject,
    *top = bbox.top;
    return true;
  }
@@ -362,17 +244,6 @@ index ca2cf3f..2162625 100644
 +    if (charcode != CPDF_Font::kInvalidCharCode)
 +      str += pFont->UnicodeFromCharCode(charcode);
 +  }
-+
-+//   CFX_WideTextBuf m_TextBuf;
-+//   WideString str = textpage->GetPageText(char_start, char_count);
-+//   return WideString(m_TextBuf.AsStringView().Mid(
-+//       static_cast<size_t>(text_start), static_cast<size_t>(text_count)));
-+
-+//   if (str.GetLength() > static_cast<size_t>(char_count))
-+//     str = str.Left(static_cast<size_t>(char_count));
-+
-+  // Reincode in UTF-16.
-+//   WideString str = text.UTF8Decode();
 +
 +  // UFT16LE_Encode doesn't handle surrogate pairs properly, so it is expected
 +  // the number of items to stay the same.
@@ -495,7 +366,6 @@ index ca2cf3f..2162625 100644
 +  if (pFrmObj)
 +  {
 +    const CFX_Matrix& matrix = pFrmObj->form_matrix();
-+    fprintf(stderr, "Form matrix a: %f, b: %f, c: %f, d: %f, e: %f, f: %f\n", matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f);
 +    const CPDF_PageObjectList* pObjectList = pFrmObj->form()->GetPageObjectList();
 +    if (pObjectList)
 +        return pObjectList->GetPageObjectByIndex(index);

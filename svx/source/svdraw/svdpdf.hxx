@@ -109,44 +109,34 @@ class ImpSdrPdfImport final
         /// Transform the rectangle (left, right, top, bottom) by this Matrix.
         template <typename T> void Transform(T& left, T& right, T& top, T& bottom)
         {
-            SAL_WARN("sd.filter",
-                     "Transforming: " << left << ", " << right << ", " << top << ", " << bottom);
             T leftTopX = left;
             T leftTopY = top;
             Transform(leftTopX, leftTopY);
-            SAL_WARN("sd.filter", "Left-Top: " << leftTopX << ", " << leftTopY);
 
             T leftBottomX = left;
             T leftBottomY = bottom;
             Transform(leftBottomX, leftBottomY);
-            SAL_WARN("sd.filter", "Left-Bottom: " << leftBottomX << ", " << leftBottomY);
 
             T rightTopX = right;
             T rightTopY = top;
             Transform(rightTopX, rightTopY);
-            SAL_WARN("sd.filter", "Right-Top: " << rightTopX << ", " << rightTopY);
 
             T rightBottomX = right;
             T rightBottomY = bottom;
             Transform(rightBottomX, rightBottomY);
-            SAL_WARN("sd.filter", "Right-Bottom: " << rightBottomX << ", " << rightBottomY);
 
             left = std::min(leftTopX, leftBottomX);
-            SAL_WARN("sd.filter", "left: " << left);
             right = std::max(rightTopX, rightBottomX);
-            SAL_WARN("sd.filter", "right: " << right);
 
             if (top > bottom)
                 top = std::max(leftTopY, rightTopY);
             else
                 top = std::min(leftTopY, rightTopY);
-            SAL_WARN("sd.filter", "top: " << top);
 
             if (top > bottom)
                 bottom = std::max(leftBottomY, rightBottomY);
             else
                 bottom = std::max(leftBottomY, rightBottomY);
-            SAL_WARN("sd.filter", "bottom: " << bottom);
         }
 
         std::string toString() const
@@ -233,7 +223,7 @@ class ImpSdrPdfImport final
     bool CheckLastLineMerge(const basegfx::B2DPolygon& rSrcPoly);
     bool CheckLastPolyLineAndFillMerge(const basegfx::B2DPolyPolygon& rPolyPolygon);
 
-    void DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport, int nPageIndex);
+    void DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport, int nPageIndex);
 
     // Copy assignment is forbidden and not implemented.
     ImpSdrPdfImport(const ImpSdrPdfImport&) = delete;
