@@ -12,6 +12,7 @@
 #include "SignatureLineDialogBase.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -37,6 +38,7 @@ private:
     bool m_bShowSignDate;
 
     void ValidateFields();
+    const css::uno::Reference<css::graphic::XGraphic> getSignedGraphic(bool bValid);
     virtual void Apply() override;
 
     DECL_LINK(chooseCertificate, weld::Button&, void);

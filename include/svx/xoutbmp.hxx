@@ -62,7 +62,7 @@ public:
                                       const OUString& rFilterName, const XOutFlags nFlags,
                                       const Size* pMtfSize_100TH_MM = nullptr,
                                       const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr);
-    static bool         GraphicToBase64(const Graphic& rGraphic, OUString& rOUString);
+    static bool         GraphicToBase64(const Graphic& rGraphic, OUString& rOUString, bool bAddPrefix=true);
 
     static ErrCode      ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                        GraphicFilter& rFilter, const sal_uInt16 nFormat,
