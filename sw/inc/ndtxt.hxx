@@ -701,8 +701,13 @@ public:
         { if (m_pSwpHints) m_pSwpHints->SetCalcHiddenParaField(); }
 
     /// is the paragraph visible?
-    bool HasHiddenParaField() const
-        { return m_pSwpHints && m_pSwpHints->HasHiddenParaField(); }
+    bool IsHiddenByParaField() const
+        { return m_pSwpHints && m_pSwpHints->IsHiddenByParaField(); }
+
+    bool FieldCanHidePara(SwFieldIds eFieldId) const
+        { return GetDoc()->FieldCanHidePara(eFieldId); }
+    bool FieldHidesPara(const SwField& rField) const
+        { return GetDoc()->FieldHidesPara(rField); }
 
     /// Hidden Paragraph Field:
 
@@ -811,7 +816,7 @@ inline SwpHints& SwTextNode::GetOrCreateSwpHints()
 {
     if ( !m_pSwpHints )
     {
-        m_pSwpHints.reset(new SwpHints);
+        m_pSwpHints.reset(new SwpHints(*this));
     }
     return *m_pSwpHints;
 }
