@@ -20,24 +20,18 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_LBSELDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_LBSELDLG_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 
-#include <vcl/button.hxx>
-
-#include <vcl/dialog.hxx>
-
-class ScSelEntryDlg : public ModalDialog
+class ScSelEntryDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<ListBox> m_pLb;
+    std::unique_ptr<weld::TreeView> m_xLb;
 
-    DECL_LINK( DblClkHdl, ListBox&, void );
+    DECL_LINK(DblClkHdl, weld::TreeView&, void);
 
 public:
-    ScSelEntryDlg(vcl::Window* pParent, const std::vector<OUString> &rEntryList);
+    ScSelEntryDlg(weld::Window* pParent, const std::vector<OUString> &rEntryList);
     virtual ~ScSelEntryDlg() override;
-    virtual void dispose() override;
 
     OUString GetSelectedEntry() const;
 };

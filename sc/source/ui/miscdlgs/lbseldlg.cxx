@@ -21,42 +21,34 @@
 
 #include <lbseldlg.hxx>
 
-ScSelEntryDlg::ScSelEntryDlg(vcl::Window*  pParent, const std::vector<OUString> &rEntryList)
-    : ModalDialog(pParent, "SelectRangeDialog", "modules/scalc/ui/selectrange.ui")
+ScSelEntryDlg::ScSelEntryDlg(weld::Window* pParent, const std::vector<OUString> &rEntryList)
+    : GenericDialogController(pParent, "modules/scalc/ui/selectrange.ui", "SelectRangeDialog")
+    , m_xLb(m_xBuilder->weld_tree_view("treeview"))
 {
-    get(m_pLb, "treeview");
-    m_pLb->SetDropDownLineCount(8);
-    m_pLb->set_width_request(m_pLb->approximate_char_width() * 32);
-    m_pLb->SetDoubleClickHdl( LINK( this, ScSelEntryDlg, DblClkHdl ) );
+    m_xLb->set_size_request(m_xLb->get_approximate_digit_width() * 32,
+                            m_xLb->get_height_rows(8));
+    m_xLb->connect_row_activated(LINK(this, ScSelEntryDlg, DblClkHdl));
 
     std::vector<OUString>::const_iterator pIter;
-    for ( pIter = rEntryList.begin(); pIter != rEntryList.end(); ++pIter )
-        m_pLb->InsertEntry(*pIter);
+    for (pIter = rEntryList.begin(); pIter != rEntryList.end(); ++pIter)
+        m_xLb->append_text(*pIter);
 
-    if ( m_pLb->GetEntryCount() > 0 )
-        m_pLb->SelectEntryPos( 0 );
+    if (m_xLb->n_children() > 0)
+        m_xLb->select(0);
 }
 
 ScSelEntryDlg::~ScSelEntryDlg()
 {
-    disposeOnce();
 }
-
-void ScSelEntryDlg::dispose()
-{
-    m_pLb.clear();
-    ModalDialog::dispose();
-}
-
 
 OUString ScSelEntryDlg::GetSelectedEntry() const
 {
-    return m_pLb->GetSelectedEntry();
+    return m_xLb->get_selected_text();
 }
 
-IMPL_LINK_NOARG(ScSelEntryDlg, DblClkHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScSelEntryDlg, DblClkHdl, weld::TreeView&, void)
 {
-    EndDialog( RET_OK );
+    m_xDialog->response(RET_OK);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
