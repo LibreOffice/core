@@ -22,6 +22,29 @@
       "revId": "b62a70c9d268c28175c4af9d3a13a4972b12e079",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_e05c64ef",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-05-18T06:38:33Z",
+      "side": 0,
+      "message": "This was a total one-off hack to solve a particular property. The spacing is already applied to the table style. Now that the table style can handle char/para properties, remove the hack completely.",
+      "range": {
+        "startLine": 460,
+        "startChar": 57,
+        "endLine": 460,
+        "endChar": 85
+      },
+      "revId": "b62a70c9d268c28175c4af9d3a13a4972b12e079",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
