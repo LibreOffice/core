@@ -1291,7 +1291,7 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
                  && !GetOpt().IsReadonly()
                  && SwViewOption::IsFieldShadings()
                  && ( POR_NUMBER != nWhich
-                      || m_pFrame->GetTextNode()->HasMarkedLabel())) // #i27615#
+                      || m_pFrame->GetTextNodeForParaProps()->HasMarkedLabel())) // #i27615#
             {
                 bDraw = true;
             }
@@ -1362,7 +1362,7 @@ const PropertyValues & SwTextFormatInfo::GetHyphValues() const
 
 bool SwTextFormatInfo::InitHyph( const bool bAutoHyphen )
 {
-    const SwAttrSet& rAttrSet = GetTextFrame()->GetTextNode()->GetSwAttrSet();
+    const SwAttrSet& rAttrSet = GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet();
     SetHanging( rAttrSet.GetHangingPunctuation().GetValue() );
     SetScriptSpace( rAttrSet.GetScriptSpace().GetValue() );
     SetForbiddenChars( rAttrSet.GetForbiddenRule().GetValue() );
@@ -1447,7 +1447,7 @@ bool SwTextFormatInfo::IsHyphenate() const
 
 const SwFormatDrop *SwTextFormatInfo::GetDropFormat() const
 {
-    const SwFormatDrop *pDrop = &GetTextFrame()->GetTextNode()->GetSwAttrSet().GetDrop();
+    const SwFormatDrop *pDrop = &GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetDrop();
     if( 1 >= pDrop->GetLines() ||
         ( !pDrop->GetChars() && !pDrop->GetWholeWord() ) )
         pDrop = nullptr;
@@ -1582,7 +1582,7 @@ TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
     const sal_Unicode cThousandSep2 = ',' == cTabDec ? '.' : '\'';
 
     bool bNumFound = false;
-    const bool bTabCompat = GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT);
+    const bool bTabCompat = GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT);
 
     for( ; i < nEnd; ++i )
     {
@@ -1693,7 +1693,7 @@ SwTwips SwTextFormatInfo::GetLineWidth()
 {
     SwTwips nLineWidth = Width() - X();
 
-    const bool bTabOverMargin = GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(
+    const bool bTabOverMargin = GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
         DocumentSettingId::TAB_OVER_MARGIN);
     if (!bTabOverMargin)
         return nLineWidth;
