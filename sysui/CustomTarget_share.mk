@@ -26,7 +26,7 @@ share_SRCDIR := $(SRCDIR)/sysui/desktop
 share_TRANSLATE := $(SRCDIR)/solenv/bin/desktop-translate.pl
 
 LAUNCHERLIST_APPS := writer calc draw impress math base startcenter
-LAUNCHERLIST := $(LAUNCHERLIST_APPS) qstart xsltfilter
+LAUNCHERLIST := $(LAUNCHERLIST_APPS) xsltfilter
 LAUNCHERS := $(foreach launcher,$(LAUNCHERLIST),$(share_SRCDIR)/menus/$(launcher).desktop)
 
 MIMELIST := \
@@ -177,7 +177,7 @@ $(share_WORKDIR)/%/create_tree.sh: $(share_SRCDIR)/share/create_tree.sh \
 $(share_WORKDIR)/%/launcherlist: $(LAUNCHERS)
 	mkdir -p $(dir $@)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	echo "$(addsuffix .desktop,$(filter-out qstart,$(LAUNCHERLIST)))" > $@
+	echo "$(addsuffix .desktop,$(LAUNCHERLIST))" > $@
 
 
 $(share_WORKDIR)/%/openoffice.applications: $(share_SRCDIR)/mimetypes/openoffice.applications

@@ -237,17 +237,6 @@ End
 #endif
 
 #if defined UNX && ! defined MACOSX
-#ifdef ENABLE_SYSTRAY_GTK
-File gid_Brand_File_Share_Xdg_QStart
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Xdg;
-    Styles = (PACKED,SCPZIP_REPLACE);
-    Name = "qstart.desktop";
-End
-#endif
-#endif
-
-#if defined UNX && ! defined MACOSX
 File gid_Brand_File_Share_Xdg_Writer
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Share_Xdg;
