@@ -45,6 +45,7 @@
 #include <shellres.hxx>
 #include <docary.hxx>
 #include <ndole.hxx>
+#include <ndtxt.hxx>
 #include <frame.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtfsize.hxx>
@@ -1043,8 +1044,40 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     else
     {
         auto pEntry(m_pPropSet->getPropertyMap().getByName(rPropertyName));
-        if(!pEntry)
-            throw beans::UnknownPropertyException(rPropertyName, static_cast<cppu::OWeakObject*>(this));
+        //something about BottomBorder that messes up ParaLineSpacing.
+        //If processed by table styles, or not processed at all, then fdo80800 and other examples mess up.
+        if ( !pEntry || rPropertyName == "BottomBorderDistance" )
+        {
+            // attempt to apply paragraph/character properties to the underlying text.
+            const SfxItemPropertySet& rParaPropSet = *aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH);
+            pEntry = rParaPropSet.getPropertyMap().getByName(rPropertyName);
+
+            if ( !pEntry )
+                throw beans::UnknownPropertyException(rPropertyName, static_cast<cppu::OWeakObject*>(this));
+
+            SwNodeIndex aIdx( *GetStartNode(), 1 );
+            const SwNode* pEndNd = aIdx.GetNode().EndOfSectionNode();
+            while ( &aIdx.GetNode() != pEndNd )
+            {
+                const SwTextNode* pNd = aIdx.GetNode().GetTextNode();
+                if ( pNd )
+                {
+                    //point and mark selecting the whole paragraph
+                    SwPaM rPaM(*pNd);
+                    rPaM.SetMark();
+                    rPaM.GetMark()->nContent = pNd->GetText().getLength();
+                    const SfxItemSet& aSet = pNd->GetSwAttrSet();
+                    const SfxPoolItem* pItem;
+                    // isPARATR: replace DEFAULT_VALUE properties
+                    // isCHRATR: change the base SwAttr properties, but don't remove the hints
+                    if ( SfxItemState::DEFAULT == aSet.GetItemState(pEntry->nWID, false, &pItem) )
+                        SwUnoCursorHelper::SetPropertyValue(rPaM, rParaPropSet, rPropertyName, aValue, SetAttrMode::DONTREPLACE);
+                }
+                ++aIdx;
+            }
+            return;
+        }
+
         if(pEntry->nWID != FN_UNO_CELL_ROW_SPAN)
         {
             SwFrameFormat* pBoxFormat = pBox->ClaimFrameFormat();
