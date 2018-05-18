@@ -928,7 +928,7 @@ SwNumberPortion *SwTextFormatter::NewFootnoteNumPortion( SwTextFormatInfo const 
     const SwAttrSet& rSet = pInfo->GetCharFormat(*pDoc)->GetAttrSet();
 
     const SwAttrSet* pParSet = &rInf.GetCharAttr();
-    const IDocumentSettingAccess* pIDSA = m_pFrame->GetTextNode()->getIDocumentSettingAccess();
+    const IDocumentSettingAccess* pIDSA = &pDoc->getIDocumentSettingAccess();
     SwFont *pNumFnt = new SwFont( pParSet, pIDSA );
 
     // #i37142#
