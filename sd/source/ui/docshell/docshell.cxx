@@ -20,11 +20,10 @@
 #include <DrawDocShell.hxx>
 
 #include <officecfg/Office/Common.hxx>
-
+#include <unotools/moduleoptions.hxx>
 #include <unotools/configmgr.hxx>
 
 #include <vcl/svapp.hxx>
-
 #include <sfx2/docfac.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
@@ -314,8 +313,18 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
             {
                 if (mpViewShell)
                 {
-                    bool bVisible = sfx2::SfxNotebookBar::StateMethod(mpViewShell->GetFrame()->GetBindings(),
+                    bool bImpress = mpDoc->GetDocumentType() == DocumentType::Impress;
+                    bool bVisible = false;
+                    if(bImpress)
+                    {
+                        bVisible = sfx2::SfxNotebookBar::StateMethod(mpViewShell->GetFrame()->GetBindings(),
                                                                       "modules/simpress/ui/");
+                    }
+                    else
+                    {
+                        bVisible = sfx2::SfxNotebookBar::StateMethod(mpViewShell->GetFrame()->GetBindings(),
+                                                                      "modules/sdraw/ui/");
+                    }
                     rSet.Put( SfxBoolItem( SID_NOTEBOOKBAR, bVisible ) );
                 }
             }
