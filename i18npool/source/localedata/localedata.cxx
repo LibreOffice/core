@@ -317,7 +317,8 @@ static const struct {
     { "ar_MA",  lcl_DATA_OTHERS },
     { "ar_QA",  lcl_DATA_OTHERS },
     { "ar_SY",  lcl_DATA_OTHERS },
-    { "ar_YE",  lcl_DATA_OTHERS }
+    { "ar_YE",  lcl_DATA_OTHERS },
+    { "ilo_PH", lcl_DATA_OTHERS }
 };
 
 #else
