@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_8089e828",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-18T07:21:23Z",
+      "side": 1,
+      "message": "At this point you can probably drop the bug number from the commit messages (in the future), you just generate noise in that bug. :-)",
+      "revId": "cb570e29333ebddb8e32ba0493cbcbda511e6aa7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
