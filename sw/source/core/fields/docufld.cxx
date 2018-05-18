@@ -106,7 +106,7 @@ SwPageNumberFieldType::SwPageNumberFieldType()
 
 OUString SwPageNumberFieldType::Expand( SvxNumType nFormat, short nOff,
          sal_uInt16 const nPageNumber, sal_uInt16 const nMaxPage,
-         const OUString& rUserStr ) const
+         const OUString& rUserStr, LanguageType nLang ) const
 {
     SvxNumType nTmpFormat = (SVX_NUM_PAGEDESC == nFormat) ? m_nNumberingType : nFormat;
     int const nTmp = nPageNumber + nOff;
@@ -117,7 +117,7 @@ OUString SwPageNumberFieldType::Expand( SvxNumType nFormat, short nOff,
     if( SVX_NUM_CHAR_SPECIAL == nTmpFormat )
         return rUserStr;
 
-    return FormatNumber( nTmp, nTmpFormat );
+    return FormatNumber( nTmp, nTmpFormat, nLang );
 }
 
 SwFieldType* SwPageNumberFieldType::Copy() const
@@ -189,22 +189,22 @@ OUString SwPageNumberField::Expand() const
 
     if( PG_NEXT == m_nSubType && 1 != m_nOffset )
     {
-        sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), 1, m_nPageNumber, m_nMaxPage, m_sUserStr);
+        sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), 1, m_nPageNumber, m_nMaxPage, m_sUserStr, GetLanguage());
         if (!sRet.isEmpty())
         {
-            sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), m_nOffset, m_nPageNumber, m_nMaxPage, m_sUserStr);
+            sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), m_nOffset, m_nPageNumber, m_nMaxPage, m_sUserStr, GetLanguage());
         }
     }
     else if( PG_PREV == m_nSubType && -1 != m_nOffset )
     {
-        sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), -1, m_nPageNumber, m_nMaxPage, m_sUserStr);
+        sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), -1, m_nPageNumber, m_nMaxPage, m_sUserStr, GetLanguage());
         if (!sRet.isEmpty())
         {
-            sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), m_nOffset, m_nPageNumber, m_nMaxPage, m_sUserStr);
+            sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), m_nOffset, m_nPageNumber, m_nMaxPage, m_sUserStr, GetLanguage());
         }
     }
     else
-        sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), m_nOffset, m_nPageNumber, m_nMaxPage, m_sUserStr);
+        sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), m_nOffset, m_nPageNumber, m_nMaxPage, m_sUserStr, GetLanguage());
     return sRet;
 }
 
