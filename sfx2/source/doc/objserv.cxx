@@ -115,6 +115,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::security;
 using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::graphic;
 
 #define ShellClass_SfxObjectShell
 #include <sfxslots.hxx>
@@ -1556,14 +1557,15 @@ void SfxObjectShell::SignDocumentContent()
     if (CheckIsReadonly(false))
         return;
 
-    bool bSignSuccess = GetMedium()->SignContents_Impl(
-        Reference<XCertificate>(), "", false, HasValidSignatures());
+    bool bSignSuccess = GetMedium()->SignContents_Impl(false, HasValidSignatures());
 
     AfterSigning(bSignSuccess, false);
 }
 
 void SfxObjectShell::SignSignatureLine(const OUString& aSignatureLineId,
-                                       const Reference<XCertificate> xCert)
+                                       const Reference<XCertificate> xCert,
+                                       const Reference<XGraphic> xValidGraphic,
+                                       const Reference<XGraphic> xInvalidGraphic)
 {
     if (!PrepareForSigning())
         return;
@@ -1572,7 +1574,7 @@ void SfxObjectShell::SignSignatureLine(const OUString& aSignatureLineId,
         return;
 
     bool bSignSuccess = GetMedium()->SignContents_Impl(
-        xCert, aSignatureLineId, false, HasValidSignatures());
+        false, HasValidSignatures(), aSignatureLineId, xCert, xValidGraphic, xInvalidGraphic);
 
     AfterSigning(bSignSuccess, false);
 }
@@ -1590,8 +1592,7 @@ void SfxObjectShell::SignScriptingContent()
     if (CheckIsReadonly(true))
         return;
 
-    bool bSignSuccess = GetMedium()->SignContents_Impl(
-        Reference<XCertificate>(), OUString(), true, HasValidSignatures());
+    bool bSignSuccess = GetMedium()->SignContents_Impl(true, HasValidSignatures());
 
     AfterSigning(bSignSuccess, true);
 }
