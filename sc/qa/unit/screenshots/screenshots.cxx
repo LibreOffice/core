@@ -153,7 +153,7 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
             SCTAB nTabSelCount = rViewData.GetMarkData().GetSelectCount();
 
             pReturnDialog = mpFact->CreateScInsertTableDlg(
-                mpViewShell->GetDialogParent(), rViewData, nTabSelCount, false);
+                mpViewShell->GetFrameWeld(), rViewData, nTabSelCount, false);
 
             break;
         }
