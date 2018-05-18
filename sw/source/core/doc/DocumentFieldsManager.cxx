@@ -279,15 +279,17 @@ SwFieldType* DocumentFieldsManager::GetFieldType(
     {
         SwFieldType* pFieldType = (*mpFieldTypes)[i];
 
-        OUString aFieldName( pFieldType->GetName() );
-        if (bDbFieldMatching && nResId == SwFieldIds::Database)    // #i51815#
-            aFieldName = aFieldName.replace(DB_DELIM, '.');
-
-        if( nResId == pFieldType->Which() &&
-            rSCmp.isEqual( rName, aFieldName ))
+        if (nResId == pFieldType->Which())
         {
-            pRet = pFieldType;
-            break;
+            OUString aFieldName( pFieldType->GetName() );
+            if (bDbFieldMatching && nResId == SwFieldIds::Database)    // #i51815#
+                aFieldName = aFieldName.replace(DB_DELIM, '.');
+
+            if (rSCmp.isEqual( rName, aFieldName ))
+            {
+                pRet = pFieldType;
+                break;
+            }
         }
     }
     return pRet;
