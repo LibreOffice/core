@@ -2076,7 +2076,6 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="ImportSlideFromFileD">
-        <property name="use_action_appearance">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ImportSlideFromFile</property>
@@ -2122,7 +2121,6 @@
     <property name="can_focus">False</property>
     <child>
       <object class="GtkMenuItem" id="PresentationD">
-        <property name="use_action_appearance">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Presentation</property>
@@ -8161,7 +8159,6 @@
                                     <property name="show_arrow">False</property>
                                     <child>
                                       <object class="GtkMenuToolButton" id="XLineStyle1">
-                                        <property name="use_action_appearance">False</property>
                                         <property name="width_request">100</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
@@ -8186,7 +8183,6 @@
                                     </child>
                                     <child>
                                       <object class="GtkMenuToolButton" id="LineWidth1">
-                                        <property name="use_action_appearance">False</property>
                                         <property name="width_request">100</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>

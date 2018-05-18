@@ -4387,7 +4387,6 @@
                                     <property name="show_arrow">False</property>
                                     <child>
                                       <object class="GtkMenuToolButton" id="NumberFormatCurrency">
-                                        <property name="use_action_appearance">False</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="action_name">.uno:NumberFormatCurrency</property>
@@ -4719,7 +4718,6 @@
                                 <property name="show_arrow">False</property>
                                 <child>
                                   <object class="GtkToolButton" id="InsertColumnsBefore1">
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="has_tooltip">True</property>
@@ -4734,7 +4732,6 @@
                                 </child>
                                 <child>
                                   <object class="GtkToolButton" id="InsertRowsBefore1">
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="has_tooltip">True</property>
@@ -4749,7 +4746,6 @@
                                 </child>
                                 <child>
                                   <object class="GtkToolButton" id="DeleteColumns1">
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="has_tooltip">True</property>
@@ -4764,7 +4760,6 @@
                                 </child>
                                 <child>
                                   <object class="GtkToolButton" id="DeleteRows1">
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="has_tooltip">True</property>
@@ -7706,7 +7701,6 @@
                                     </child>
                                     <child>
                                       <object class="GtkMenuToolButton" id="SetBorderStyle3">
-                                        <property name="use_action_appearance">False</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="action_name">.uno:SetBorderStyle</property>
@@ -7718,7 +7712,6 @@
                                     </child>
                                     <child>
                                       <object class="GtkMenuToolButton" id="FrameLineColor1">
-                                        <property name="use_action_appearance">False</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="action_name">.uno:FrameLineColor</property>
@@ -7785,7 +7778,6 @@
                                     <property name="icon_size">1</property>
                                     <child>
                                       <object class="GtkMenuToolButton" id="LineStyle1">
-                                        <property name="use_action_appearance">False</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="action_name">.uno:LineStyle</property>
@@ -8449,7 +8441,6 @@
                                     </child>
                                     <child>
                                       <object class="GtkMenuToolButton" id="BackgroundColor">
-                                        <property name="use_action_appearance">False</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="action_name">.uno:BackgroundColor</property>
