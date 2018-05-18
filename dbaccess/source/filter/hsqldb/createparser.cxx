@@ -180,25 +180,44 @@ void CreateStmtParser::parseColumnPart(const OUString& sColumnPart)
             continue;
         }
 
-        std::vector<OUString> words = string::split(sColumn, sal_Unicode(u' '));
-
-        if (words[0] == "CONSTRAINT")
+        if (sColumn.startsWithIgnoreAsciiCase("CONSTRAINT"))
         {
             m_aForeignParts.push_back(sColumn);
             continue;
         }
+        OUStringBuffer buffer(sColumn);
 
+        // find next quote after the initial quote
+        // to fetch the whole column name, including quotes
+        auto nNextQuote = buffer.indexOf("\"", 1);
+        const OUString& rColumnName(buffer.copy(0, nNextQuote + 1).getStr());
+
+        // remove the column name + final quote
+        // so buffer begins on column type
+        buffer = buffer.remove(0, nNextQuote + 1);
+
+        // remove next spaces characters if there are
+        while (buffer[0] == ' ')
+            buffer = buffer.remove(0, 1);
+
+        // Now let's manage the column type
+        // search next space to get the whole type name
+        // eg: INTEGER, VARCHAR(10), DECIMAL(6,3)
+        auto nNextSpace = buffer.indexOf(" ");
+        OUString sFullTypeName;
+        OUString sTypeName;
+        if (nNextSpace > 0)
+            sFullTypeName = OUString(buffer.copy(0, nNextSpace).getStr());
+        // perhaps column type corresponds to the last info here
+        else
+            sFullTypeName = OUString(buffer.getStr());
+
+        auto nParenPos = sFullTypeName.indexOf("(");
         std::vector<sal_Int32> aParams;
-        OUString sTypeName = words[1];
-
-        // TODO what if there is a whitespace between type name and param?
-        sal_Int32 nParenPos = words[1].indexOf("(");
-        if (nParenPos > 0)
+        if (nParenPos > 0 && (nNextSpace < 0 || nNextSpace > nParenPos))
         {
-            sTypeName = words[1].copy(0, nParenPos);
-
-            OUString sParamStr
-                = words[1].copy(nParenPos + 1, words[1].lastIndexOf(")") - nParenPos - 1);
+            sTypeName = sFullTypeName.copy(0, nParenPos).trim();
+            OUString sParamStr = sFullTypeName.copy(nParenPos + 1, sFullTypeName.indexOf(")") - nParenPos - 1);
             auto sParams = string::split(sParamStr, sal_Unicode(u','));
             for (auto& sParam : sParams)
             {
@@ -207,17 +226,17 @@ void CreateStmtParser::parseColumnPart(const OUString& sColumnPart)
         }
         else
         {
+            sTypeName = sFullTypeName.trim();
             lcl_addDefaultParameters(aParams, lcl_getDataTypeFromHsql(sTypeName));
         }
 
         bool bCaseInsensitive = sTypeName.indexOf("IGNORECASE") >= 0;
-        const OUString& rTableName = words[0];
         bool isPrimaryKey = lcl_isPrimaryKey(sColumn);
 
         if (isPrimaryKey)
-            m_PrimaryKeys.push_back(rTableName);
+            m_PrimaryKeys.push_back(rColumnName);
 
-        ColumnDefinition aColDef(rTableName, lcl_getDataTypeFromHsql(sTypeName), aParams,
+        ColumnDefinition aColDef(rColumnName, lcl_getDataTypeFromHsql(sTypeName), aParams,
                                  isPrimaryKey, lcl_getAutoIncrementDefault(sColumn),
                                  lcl_isNullable(sColumn), bCaseInsensitive);
 
