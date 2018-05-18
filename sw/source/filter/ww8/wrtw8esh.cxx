@@ -689,6 +689,26 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                 if (pObj)
                 {
                     aRect = pObj->GetLogicRect();
+
+                    // tdf#70838 Export rotated shape vertically
+                    if (text::RelOrientation::FRAME == rVOr.GetRelationOrient())
+                    {
+                        sal_Int32 nAngle = pObj->GetRotateAngle() / 100;
+
+                        if ( nAngle < 0 )
+                            nAngle = ( 360 + nAngle ) % 360;
+                        else
+                            nAngle = nAngle % 360;
+
+                        if ( ( nAngle >= 45 && nAngle <= 135 ) || ( nAngle >= 225 && nAngle <= 315 ) )
+                        {
+                            const sal_Int32 width = aRect.getWidth();
+                            const sal_Int32 height = aRect.getHeight();
+
+                            aRect.setWidth( height );
+                            aRect.setHeight( width );
+                        }
+                    }
                 }
             }
 
