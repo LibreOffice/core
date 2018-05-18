@@ -62,6 +62,7 @@ SvtCompatibilityEntry::SvtCompatibilityEntry()
     setValue<bool>( Index::ProtectForm, false );
     setValue<bool>( Index::MsWordTrailingBlanks, false );
     setValue<bool>( Index::SubtractFlysAnchoredAtFlys, false );
+    setValue<bool>( Index::EmptyDbFieldHidesPara, true );
 
     setDefaultEntry( false );
 }
@@ -92,7 +93,8 @@ OUString SvtCompatibilityEntry::getName( const Index rIdx )
         "ExpandWordSpace",
         "ProtectForm",
         "MsWordCompTrailingBlanks",
-        "SubtractFlysAnchoredAtFlys"
+        "SubtractFlysAnchoredAtFlys",
+        "EmptyDbFieldHidesPara",
     };
 
     /* Size of sPropertyName array not equal size of the SvtCompatibilityEntry::Index enum class */
