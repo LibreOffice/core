@@ -1588,8 +1588,11 @@ void SwTOXBaseSection::UpdatePageNum()
                     {
                         // find the right one
                         SwTextFrame* pNext;
+                        TextFrameIndex const nPos(static_cast<SwTextFrame*>(pFrame)
+                            ->MapModelToView(static_cast<SwTextNode const*>(rTOXSource.pNd),
+                                rTOXSource.nPos));
                         while( nullptr != ( pNext = static_cast<SwTextFrame*>(pFrame->GetFollow()) )
-                                && rTOXSource.nPos >= pNext->GetOfst() )
+                                && nPos >= pNext->GetOfst())
                             pFrame = pNext;
                     }
 
