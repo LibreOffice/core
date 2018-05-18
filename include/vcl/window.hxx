@@ -1083,7 +1083,7 @@ public:
 
     /**
      * Notification about some rectangle of the output device got invalidated. Used for the
-     * dialogs and floating windows (e.g. conext menu, popup).
+     * dialogs and floating windows (e.g. context menu, popup).
      *
      * @param pRectangle If 0, that means the whole area, otherwise the area in pixel coordinates.
      */

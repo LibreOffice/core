@@ -258,7 +258,7 @@ private:
 
         This is to be done when reading settings from file formats or
         configurations that could have arbitrary values. The caller is
-        reponsible for actually assigning the new value to eWhichActive because
+        responsible for actually assigning the new value to eWhichActive because
         we want this function to be const to be able to call the check from
         anywhere.
      */
