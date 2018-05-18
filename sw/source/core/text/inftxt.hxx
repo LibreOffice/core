@@ -776,7 +776,8 @@ inline TextFrameIndex SwTextFormatInfo::GetReformatStart() const
 
 inline const SwAttrSet& SwTextFormatInfo::GetCharAttr() const
 {
-    return GetTextFrame()->GetTextNode()->GetSwAttrSet();
+    // sw_redlinehide: this is used for numbering/footnote number portions, so:
+    return GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet();
 }
 
 inline void SwTextFormatInfo::SetParaFootnote()

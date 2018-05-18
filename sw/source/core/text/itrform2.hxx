@@ -152,7 +152,7 @@ public:
 
     void CtorInitTextFormatter( SwTextFrame *pFrame, SwTextFormatInfo *pInf );
     SwTextFormatter(SwTextFrame *pTextFrame, SwTextFormatInfo *pTextFormatInf)
-        : SwTextPainter(pTextFrame->GetTextNode())
+        : SwTextPainter(pTextFrame->GetTextNodeFirst())
         , bUnclipped(false)
     {
         CtorInitTextFormatter( pTextFrame, pTextFormatInf );

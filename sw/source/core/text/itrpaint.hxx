@@ -40,7 +40,7 @@ protected:
 
 public:
     SwTextPainter(SwTextFrame *pTextFrame, SwTextPaintInfo *pTextPaintInf)
-        : SwTextCursor(pTextFrame->GetTextNode())
+        : SwTextCursor(pTextFrame->GetTextNodeFirst())
     {
         CtorInitTextPainter( pTextFrame, pTextPaintInf );
     }
