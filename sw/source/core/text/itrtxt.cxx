@@ -35,11 +35,11 @@
 
 void SwTextIter::CtorInitTextIter( SwTextFrame *pNewFrame, SwTextInfo *pNewInf )
 {
-    SwTextNode *pNode = pNewFrame->GetTextNode();
-
     assert(pNewFrame->GetPara());
 
-    CtorInitAttrIter( *pNode, pNewFrame->GetPara()->GetScriptInfo(), pNewFrame );
+    CtorInitAttrIter( *pNewFrame->GetTextNodeFirst(), pNewFrame->GetPara()->GetScriptInfo(), pNewFrame );
+
+    SwTextNode const*const pNode = pNewFrame->GetTextNodeForParaProps();
 
     m_pFrame = pNewFrame;
     m_pInf = pNewInf;
