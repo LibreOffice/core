@@ -157,7 +157,6 @@ private:
     bool m_bLangNoneIsLangAll;
 
     SVX_DLLPRIVATE int ImplTypeToPos(LanguageType eType) const;
-    SVX_DLLPRIVATE void InsertLanguage(const LanguageType nLangType);
     SVX_DLLPRIVATE void ImplClear();
     DECL_LINK(ChangeHdl, weld::ComboBoxText&, void);
 public:
@@ -165,6 +164,7 @@ public:
     void            SetLanguageList( SvxLanguageListFlags nLangList,
                             bool bHasLangNone, bool bLangNoneIsLangAll = false );
     void            AddLanguages( const std::vector< LanguageType >& rLanguageTypes, SvxLanguageListFlags nLangList );
+    void            InsertLanguage(const LanguageType nLangType);
     void            SelectLanguage( const LanguageType eLangType );
     LanguageType    GetSelectedLanguage() const;
     void            SelectEntryPos(int nPos) { m_xControl->set_active(nPos); }
