@@ -20,25 +20,20 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DAPITYPE_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DAPITYPE_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 
-class ScDataPilotSourceTypeDlg : public ModalDialog
+class ScDataPilotSourceTypeDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<RadioButton> m_pBtnSelection;
-    VclPtr<RadioButton> m_pBtnNamedRange;
-    VclPtr<RadioButton> m_pBtnDatabase;
-    VclPtr<RadioButton> m_pBtnExternal;
-    VclPtr<ListBox>     m_pLbNamedRange;
+    std::unique_ptr<weld::RadioButton> m_xBtnSelection;
+    std::unique_ptr<weld::RadioButton> m_xBtnNamedRange;
+    std::unique_ptr<weld::RadioButton> m_xBtnDatabase;
+    std::unique_ptr<weld::RadioButton> m_xBtnExternal;
+    std::unique_ptr<weld::ComboBoxText> m_xLbNamedRange;
 
 public:
-    ScDataPilotSourceTypeDlg(vcl::Window* pParent, bool bEnableExternal);
+    ScDataPilotSourceTypeDlg(weld::Window* pParent, bool bEnableExternal);
     virtual ~ScDataPilotSourceTypeDlg() override;
-    virtual void dispose() override;
     bool IsDatabase() const;
     bool IsExternal() const;
     bool IsNamedRange() const;
@@ -46,23 +41,21 @@ public:
     void AppendNamedRange(const OUString& rNames);
 
 private:
-    DECL_LINK( RadioClickHdl, Button *, void );
+    DECL_LINK(RadioClickHdl, weld::ToggleButton&, void);
 };
 
-class ScDataPilotServiceDlg : public ModalDialog
+class ScDataPilotServiceDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<ListBox>         m_pLbService;
-    VclPtr<Edit>            m_pEdSource;
-    VclPtr<Edit>            m_pEdName;
-    VclPtr<Edit>            m_pEdUser;
-    VclPtr<Edit>            m_pEdPasswd;
+    std::unique_ptr<weld::ComboBoxText> m_xLbService;
+    std::unique_ptr<weld::Entry> m_xEdSource;
+    std::unique_ptr<weld::Entry> m_xEdName;
+    std::unique_ptr<weld::Entry> m_xEdUser;
+    std::unique_ptr<weld::Entry> m_xEdPasswd;
 
 public:
-            ScDataPilotServiceDlg( vcl::Window* pParent,
-                    const std::vector<OUString>& rServices );
-            virtual ~ScDataPilotServiceDlg() override;
-    virtual void dispose() override;
+    ScDataPilotServiceDlg(weld::Window* pParent, const std::vector<OUString>& rServices);
+    virtual ~ScDataPilotServiceDlg() override;
 
     OUString  GetServiceName() const;
     OUString  GetParSource() const;

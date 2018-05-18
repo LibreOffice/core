@@ -2826,7 +2826,7 @@ void ScCellShell::ExecuteDataPilotDialog()
 
         ScopedVclPtr<AbstractScDataPilotSourceTypeDlg> pTypeDlg(
             pFact->CreateScDataPilotSourceTypeDlg(
-                pTabViewShell->GetDialogParent(), bEnableExt));
+                pTabViewShell->GetFrameWeld(), bEnableExt));
 
         // Populate named ranges (if any).
         ScRangeName* pRangeName = pDoc->GetRangeName();
@@ -2845,7 +2845,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                 std::vector<OUString> aSources = ScDPObject::GetRegisteredSources();
                 ScopedVclPtr<AbstractScDataPilotServiceDlg> pServDlg(
                     pFact->CreateScDataPilotServiceDlg(
-                        pTabViewShell->GetDialogParent(), aSources));
+                        pTabViewShell->GetFrameWeld(), aSources));
 
                 OSL_ENSURE(pServDlg, "Dialog create fail!");
                 if ( pServDlg->Execute() == RET_OK )

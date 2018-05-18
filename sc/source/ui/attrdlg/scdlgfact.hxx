@@ -142,7 +142,13 @@ class AbstractScDataPilotDatabaseDlg_Impl  :public AbstractScDataPilotDatabaseDl
 
 class AbstractScDataPilotSourceTypeDlg_Impl  :public AbstractScDataPilotSourceTypeDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScDataPilotSourceTypeDlg_Impl, ScDataPilotSourceTypeDlg)
+    std::unique_ptr<ScDataPilotSourceTypeDlg> m_xDlg;
+public:
+    explicit AbstractScDataPilotSourceTypeDlg_Impl(ScDataPilotSourceTypeDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual bool IsDatabase() const override;
     virtual bool IsExternal() const override;
     virtual bool IsNamedRange() const override;
@@ -152,7 +158,13 @@ class AbstractScDataPilotSourceTypeDlg_Impl  :public AbstractScDataPilotSourceTy
 
 class AbstractScDataPilotServiceDlg_Impl : public AbstractScDataPilotServiceDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScDataPilotServiceDlg_Impl, ScDataPilotServiceDlg)
+    std::unique_ptr<ScDataPilotServiceDlg> m_xDlg;
+public:
+    explicit AbstractScDataPilotServiceDlg_Impl(ScDataPilotServiceDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short     Execute() override;
     virtual OUString  GetServiceName() const override;
     virtual OUString  GetParSource() const override;
     virtual OUString  GetParName() const override;
@@ -490,11 +502,11 @@ public:
 
     virtual VclPtr<AbstractScDataPilotDatabaseDlg> CreateScDataPilotDatabaseDlg(vcl::Window* pParent) override;
 
-    virtual VclPtr<AbstractScDataPilotSourceTypeDlg> CreateScDataPilotSourceTypeDlg(vcl::Window* pParent,
+    virtual VclPtr<AbstractScDataPilotSourceTypeDlg> CreateScDataPilotSourceTypeDlg(weld::Window* pParent,
         bool bEnableExternal) override;
 
-    virtual VclPtr<AbstractScDataPilotServiceDlg> CreateScDataPilotServiceDlg( vcl::Window* pParent,
-                                                                        const std::vector<OUString>& rServices ) override;
+    virtual VclPtr<AbstractScDataPilotServiceDlg> CreateScDataPilotServiceDlg(weld::Window* pParent,
+                                                                              const std::vector<OUString>& rServices) override;
     virtual VclPtr<AbstractScDeleteCellDlg> CreateScDeleteCellDlg(weld::Window* pParent, bool bDisallowCellMove ) override;
 
     //for dataform
