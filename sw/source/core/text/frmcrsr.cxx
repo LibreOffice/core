@@ -65,15 +65,16 @@ SwTextFrame *GetAdjFrameAtPos( SwTextFrame *pFrame, const SwPosition &rPos,
                           const bool bRightMargin, const bool bNoScroll = true )
 {
     // RightMargin in the last master line
-    const sal_Int32 nOffset = rPos.nContent.GetIndex();
+    TextFrameIndex const nOffset = pFrame->MapModelToViewPos(rPos);
     SwTextFrame *pFrameAtPos = pFrame;
     if( !bNoScroll || pFrame->GetFollow() )
     {
         pFrameAtPos = pFrame->GetFrameAtPos( rPos );
-        if (rPos < pFrameAtPos->MapViewToModelPos(pFrameAtPos->GetOfst()) &&
+        if (nOffset < pFrameAtPos->GetOfst() &&
             !pFrameAtPos->IsFollow() )
         {
-            TextFrameIndex nNew = pFrameAtPos->MapModelToViewPos(rPos);
+            assert(pFrameAtPos->MapModelToViewPos(rPos) == nOffset);
+            TextFrameIndex nNew(nOffset);
             if (nNew < TextFrameIndex(MIN_OFFSET_STEP))
                 nNew = TextFrameIndex(0);
             else
@@ -213,7 +214,7 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     if ( pFrame->IsEmpty() || ! aRectFnSet.GetHeight(pFrame->getFramePrintArea()) )
     {
         Point aPnt1 = pFrame->getFrameArea().Pos() + pFrame->getFramePrintArea().Pos();
-        SwTextNode* pTextNd = const_cast<SwTextFrame*>(this)->GetTextNode();
+        SwTextNode const*const pTextNd(GetTextNodeForParaProps());
         short nFirstOffset;
         pTextNd->GetFirstLineOfsWithNum( nFirstOffset );
 
@@ -290,7 +291,7 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                 aRectFnSet.GetBottom(rOrig) == nUpperMaxY &&
                 pFrame->GetOfst() < nOffset &&
                 !pFrame->IsFollow() && !bNoScroll &&
-                pFrame->GetTextNode()->GetText().getLength() != nNextOfst)
+                TextFrameIndex(pFrame->GetText().getLength()) != nNextOfst)
             {
                 bGoOn = sw_ChangeOffset( pFrame, nNextOfst );
             }
@@ -571,9 +572,7 @@ bool SwTextFrame::GetCursorOfst_(SwPosition* pPos, const Point& rPoint,
 
     if ( IsEmpty() )
     {
-        SwTextNode* pTextNd = const_cast<SwTextFrame*>(this)->GetTextNode();
-        pPos->nNode = *pTextNd;
-        pPos->nContent.Assign( pTextNd, 0 );
+        *pPos = MapViewToModelPos(TextFrameIndex(0));
         if( pCMS && pCMS->m_bFieldInfo )
         {
             SwTwips nDiff = rPoint.X() - getFrameArea().Left() - getFramePrintArea().Left();
@@ -612,15 +611,14 @@ bool SwTextFrame::GetCursorOfst_(SwPosition* pPos, const Point& rPoint,
     // In such cases, pPos must not be calculated.
         if (TextFrameIndex(COMPLETE_STRING) != nOffset)
         {
-            SwTextNode* pTextNd = const_cast<SwTextFrame*>(this)->GetTextNode();
             *pPos = MapViewToModelPos(nOffset);
             if( pFillData )
             {
-                if (pTextNd->GetText().getLength() > nOffset ||
+                if (TextFrameIndex(GetText().getLength()) > nOffset ||
                     rPoint.Y() < getFrameArea().Top() )
                     pFillData->bInner = true;
                 pFillData->bFirstLine = aLine.GetLineNr() < 2;
-                if (pTextNd->GetText().getLength())
+                if (GetText().getLength())
                 {
                     pFillData->bEmpty = false;
                     pFillData->nLineWidth = aLine.GetCurr()->Width();
@@ -1336,10 +1334,9 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                 rFill.bColumn = true;
                 if( rFill.pPos )
                 {
-                    SwTextNode* pTextNd = const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pFrame))->GetTextNode();
-                    rFill.pPos->nNode = *pTextNd;
-                    rFill.pPos->nContent.Assign(
-                            pTextNd, pTextNd->GetText().getLength());
+                    SwTextFrame const*const pTextFrame(static_cast<const SwTextFrame*>(pFrame));
+                    *rFill.pPos = pTextFrame->MapViewToModelPos(
+                            TextFrameIndex(pTextFrame->GetText().getLength()));
                 }
                 if( nNextCol )
                 {
@@ -1354,19 +1351,22 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
         }
     }
     SwFont *pFnt;
-    SwTextFormatColl* pColl = GetTextNode()->GetTextColl();
-    SwTwips nFirst = GetTextNode()->GetSwAttrSet().GetULSpace().GetLower();
+    SwTextFormatColl* pColl = GetTextNodeForParaProps()->GetTextColl();
+    SwTwips nFirst = GetTextNodeForParaProps()->GetSwAttrSet().GetULSpace().GetLower();
     SwTwips nDiff = rFill.Y() - getFrameArea().Bottom();
     if( nDiff < nFirst )
         nDiff = -1;
     else
         pColl = &pColl->GetNextTextFormatColl();
-    SwAttrSet aSet( const_cast<SwDoc*>(GetTextNode()->GetDoc())->GetAttrPool(), aTextFormatCollSetRange );
+    SwAttrSet aSet(const_cast<SwDoc&>(GetDoc()).GetAttrPool(), aTextFormatCollSetRange );
     const SwAttrSet* pSet = &pColl->GetAttrSet();
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
-    if( GetTextNode()->HasSwAttrSet() )
+    if (GetTextNodeForParaProps()->HasSwAttrSet())
     {
-        aSet.Put( *GetTextNode()->GetpSwAttrSet() );
+        // sw_redlinehide: pSet is mostly used for para props, but there are
+        // accesses to char props via pFnt - why does it use only the node's
+        // props for this, and not hints?
+        aSet.Put( *GetTextNodeForParaProps()->GetpSwAttrSet() );
         aSet.SetParent( pSet );
         pSet = &aSet;
         pFnt = new SwFont( pSet, GetNode()->getIDocumentSettingAccess() );
@@ -1379,7 +1379,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
     }
     OutputDevice* pOut = pSh->GetOut();
     if( !pSh->GetViewOptions()->getBrowseMode() || pSh->GetViewOptions()->IsPrtFormat() )
-        pOut = GetTextNode()->getIDocumentDeviceAccess().getReferenceDevice( true );
+        pOut = GetDoc().getIDocumentDeviceAccess().getReferenceDevice( true );
 
     pFnt->SetFntChg( true );
     pFnt->ChgPhysFnt( pSh, *pOut );
@@ -1430,7 +1430,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                 rRect.Top( rRect.Top() + nFirst );
             rRect.Height( nLineHeight );
             SwTwips nLeft = rFill.Left() + rLRSpace.GetLeft() +
-                            GetTextNode()->GetLeftMarginWithNum();
+                            GetTextNodeForParaProps()->GetLeftMarginWithNum();
             SwTwips nRight = rFill.Right() - rLRSpace.GetRight();
             SwTwips nCenter = ( nLeft + nRight ) / 2;
             rRect.Left( nLeft );
@@ -1503,7 +1503,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                 else if( rFill.X() > nLeft )
                 {
                     SwTwips nTextLeft = rFill.Left() + rLRSpace.GetTextLeft() +
-                                    GetTextNode()->GetLeftMarginWithNum( true );
+                        GetTextNodeForParaProps()->GetLeftMarginWithNum(true);
                     rFill.nLineWidth += rFill.bFirstLine ? nLeft : nTextLeft;
                     SwTwips nLeftTab;
                     SwTwips nRightTab = nLeft;
