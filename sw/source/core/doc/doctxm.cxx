@@ -1152,7 +1152,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                 pTOXSrc->GetText().getLength() && pTOXSrc->HasWriterListeners() &&
                 pTOXSrc->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
                (!IsFromChapter() || ::lcl_FindChapterNode( *pTOXSrc ) == pOwnChapterNode ) &&
-               !pTOXSrc->HasHiddenParaField() &&
+               !pTOXSrc->IsHiddenByParaField() &&
                !SwScriptInfo::IsInHiddenRange( *pTOXSrc, pTextMark->GetStart() ) )
             {
                 SwTOXSortTabBase* pBase = nullptr;
@@ -1205,7 +1205,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTextNode* pOwnChapterNode )
         if( pTextNd && pTextNd->Len() && pTextNd->HasWriterListeners() &&
             sal_uInt16( pTextNd->GetAttrOutlineLevel()) <= GetLevel() &&
             pTextNd->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
-           !pTextNd->HasHiddenParaField() &&
+           !pTextNd->IsHiddenByParaField() &&
            !pTextNd->HasHiddenCharAttribute( true ) &&
             ( !IsFromChapter() ||
                ::lcl_FindChapterNode( *pTextNd ) == pOwnChapterNode ))
