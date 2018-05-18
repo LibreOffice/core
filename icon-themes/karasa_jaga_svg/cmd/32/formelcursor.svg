@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128"
+   height="128"
+   viewBox="0 0 33.866666 33.866668"
+   version="1.1"
+   id="svg872"
+   inkscape:version="0.92.2 (unknown)"
+   sodipodi:docname="formelcursor.svg"
+   inkscape:export-filename="/home/rizmut/Dokumen/Rizmut/Github/libreoffice-style-karasa-jaga/build/images_karasa_Jaga/cmd/32/formelcursor.png"
+   inkscape:export-xdpi="24"
+   inkscape:export-ydpi="24">
+  <defs
+     id="defs866" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.5021746"
+     inkscape:cx="29.104071"
+     inkscape:cy="77.861236"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     units="px"
+     inkscape:snap-page="true"
+     inkscape:window-width="1366"
+     inkscape:window-height="706"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid885" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata869">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-263.13332)">
+    <image
+       y="263.13333"
+       x="33.866665"
+       id="image882"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAA00lEQVRIx2NgGAXUADK6dldBWFBG PRaEZfUcXsjqO74CSjFBMSPFlgjKqMXLGTj/B2EBKZUUoBAPEPMDMS8Qs1JqCUgzB8wCIFsZiFWg tCQQc1LDF6xIFpgCsRnUEkFq+ADsCyQLLKFYCojZqBIHIIBkgTkUiwMxM9VSExYLxEYtGLVg1IKh ZIGQrEYMzAIeEZkGoJAF1YoKYAXzFFTBCEqrJfBLKObK6Nl/kNGxA1U40tQs7FihRbMKtKimanHN CK1UJJEqG1WqVzhI1SQPGhunDwBkTk1oJiWaQQAAAABJRU5ErkJggg== "
+       preserveAspectRatio="none"
+       height="33.866669"
+       width="33.866669" />
+    <path
+       sodipodi:type="inkscape:offset"
+       inkscape:radius="3.162277"
+       inkscape:original="M 48 19 L 48 23 L 60 23 L 60 19 L 48 19 z M 60 23 L 60 108 L 70 108 L 70 23 L 60 23 z M 70 23 L 82 23 L 82 19 L 70 19 L 70 23 z M 70 108 L 70 112 L 82 112 L 82 108 L 70 108 z M 60 108 L 48 108 L 48 112 L 60 112 L 60 108 z "
+       style="opacity:1;fill:#ffffff;fill-opacity:0.58088237;stroke:none;stroke-width:4.8579998;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.73039216"
+       id="path819"
+       d="M 48,15.837891 A 3.1625932,3.1625932 0 0 0 44.837891,19 v 4 A 3.1625932,3.1625932 0 0 0 48,26.162109 h 8.837891 V 104.83789 H 48 A 3.1625932,3.1625932 0 0 0 44.837891,108 v 4 A 3.1625932,3.1625932 0 0 0 48,115.16211 H 60 A 3.1625932,3.1625932 0 0 0 63.162109,112 v -0.83789 h 3.675782 V 112 A 3.1625932,3.1625932 0 0 0 70,115.16211 H 82 A 3.1625932,3.1625932 0 0 0 85.162109,112 v -4 A 3.1625932,3.1625932 0 0 0 82,104.83789 H 73.162109 V 26.162109 H 82 A 3.1625932,3.1625932 0 0 0 85.162109,23 V 19 A 3.1625932,3.1625932 0 0 0 82,15.837891 H 70 A 3.1625932,3.1625932 0 0 0 66.837891,19 v 0.837891 H 63.162109 V 19 A 3.1625932,3.1625932 0 0 0 60,15.837891 Z"
+       transform="matrix(0.26458333,0,0,0.26458333,0,263.13332)" />
+    <path
+       style="opacity:1;fill:#1c2d40;fill-opacity:1;stroke:none;stroke-width:4.8579998;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.73039216"
+       d="M 48 19 L 48 23 L 60 23 L 60 19 L 48 19 z M 60 23 L 60 108 L 70 108 L 70 23 L 60 23 z M 70 23 L 82 23 L 82 19 L 70 19 L 70 23 z M 70 108 L 70 112 L 82 112 L 82 108 L 70 108 z M 60 108 L 48 108 L 48 112 L 60 112 L 60 108 z "
+       transform="matrix(0.26458333,0,0,0.26458333,0,263.13332)"
+       id="rect887" />
+  </g>
+</svg>

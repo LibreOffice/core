@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="svg2"
+   width="128"
+   height="128"
+   viewBox="0 0 128 128"
+   sodipodi:docname="starshapes.star4.svg"
+   inkscape:export-filename="/home/rizmut/Dokumen/Proyek-Git/libreoffice-style-karasa-jaga/build/images_karasa_Jaga/cmd/32/starshapes.star4.png"
+   inkscape:export-xdpi="24"
+   inkscape:export-ydpi="24"
+   inkscape:version="0.92.2 (unknown)">
+  <metadata
+     id="metadata8">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient825">
+      <stop
+         style="stop-color:#f9f9fa;stop-opacity:1;"
+         offset="0"
+         id="stop821" />
+      <stop
+         style="stop-color:#f9f9fa;stop-opacity:0;"
+         offset="1"
+         id="stop823" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient825"
+       id="linearGradient839"
+       x1="57.991291"
+       y1="-44.160942"
+       x2="89.858658"
+       y2="102.4722"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1317"
+     inkscape:window-height="744"
+     id="namedview4"
+     showgrid="false"
+     inkscape:snap-page="true"
+     inkscape:snap-global="false"
+     inkscape:zoom="3.4640154"
+     inkscape:cx="67.636754"
+     inkscape:cy="43.139884"
+     inkscape:window-x="49"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <rect
+     style="opacity:1;fill:#f7f8f9;fill-opacity:0.99607843;stroke:#507dbe;stroke-width:4;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.73039216"
+     id="rect817"
+     width="81.527977"
+     height="81.527977"
+     x="-127.78281"
+     y="-37.273144"
+     transform="rotate(-45)" />
+  <path
+     sodipodi:type="star"
+     style="opacity:1;fill:#f2f2f2;fill-opacity:1;stroke:#507dbe;stroke-width:3.82664847;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.73039216"
+     id="path829"
+     sodipodi:sides="4"
+     sodipodi:cx="66.474297"
+     sodipodi:cy="66.972725"
+     sodipodi:r1="56.345581"
+     sodipodi:r2="18.060188"
+     sodipodi:arg1="0.7998899"
+     sodipodi:arg2="1.5158824"
+     inkscape:flatsided="false"
+     inkscape:rounded="0"
+     inkscape:randomized="0"
+     d="M 105.73509,107.38825 67.465554,85.005689 26.058773,106.23352 48.441332,67.963982 27.213502,26.557202 65.483039,48.93976 106.88982,27.711931 84.507261,65.981467 Z"
+     transform="matrix(0.7458265,0.73239151,-0.73239151,0.7458265,63.471963,-34.635243)" />
+  <path
+     transform="matrix(0.43302518,0.42522487,-0.42522487,0.43302518,64.930247,5.0225755)"
+     d="M 105.73509,107.38825 68.86066,83.980959 26.058773,106.23352 49.466062,69.359089 27.213502,26.557202 64.087933,49.964491 106.88982,27.711931 83.482531,64.586361 Z"
+     inkscape:randomized="0"
+     inkscape:rounded="0"
+     inkscape:flatsided="false"
+     sodipodi:arg2="1.4313999"
+     sodipodi:arg1="0.7998899"
+     sodipodi:r2="17.174829"
+     sodipodi:r1="56.345581"
+     sodipodi:cy="66.972725"
+     sodipodi:cx="66.474297"
+     sodipodi:sides="4"
+     id="path831"
+     style="opacity:1;fill:url(#linearGradient839);fill-opacity:1;stroke:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.73039216"
+     sodipodi:type="star" />
+</svg>

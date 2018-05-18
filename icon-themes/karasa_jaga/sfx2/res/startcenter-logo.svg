@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="svg2"
+   width="195"
+   height="173"
+   viewBox="0 0 195 173"
+   sodipodi:docname="startcenter-logo.svg"
+   inkscape:version="0.92.3 (unknown)"
+   inkscape:export-filename="/home/rizmut/Dokumen/Rizmut/Github/libreoffice-style-karasa-jaga/build/images_karasa_Jaga/sfx2/res/startcenter-logo.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <metadata
+     id="metadata8">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6">
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4322"
+       id="radialGradient4328"
+       cx="303.54272"
+       cy="54.597672"
+       fx="303.54272"
+       fy="54.597672"
+       r="330.5"
+       gradientTransform="matrix(0.32765227,0.00279775,-6.572504e-4,0.07697267,-2.7458531,143.75616)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4322">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="0"
+         id="stop4324" />
+      <stop
+         style="stop-color:#e0e2e3;stop-opacity:1"
+         offset="1"
+         id="stop4326" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="706"
+     id="namedview4"
+     showgrid="false"
+     inkscape:zoom="2.7283237"
+     inkscape:cx="61.125653"
+     inkscape:cy="76.398495"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <path
+     inkscape:connector-curvature="0"
+     style="fill:url(#radialGradient4328);fill-opacity:1;stroke-width:0.35747024;opacity:0.48"
+     d="M 61.941492,145.14596 C 34.349228,145.21856 12.091509,150.57653 0,155.58449 V 173 h 195 v -21.35326 c -31.16107,6.22054 -59.33363,4.4589 -92.57989,-2.79482 -14.29221,-2.68023 -27.936681,-3.73901 -40.478618,-3.70596 z"
+     id="rect4303" />
+  <path
+     inkscape:connector-curvature="0"
+     style="fill:#d7dae3;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.35792106px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;opacity:0.49"
+     d="m 195,142.11966 c -18.10343,6.61278 -51.25086,12.234 -94.05144,5.44222 -44.097406,-9.64652 -99.0368198,0.19555 -101.19449655,1.54353 v 0.12374 6.74108 C 17.363894,148.67671 56.510564,140.64164 102.30334,149.22915 c 33.28819,7.26287 61.49628,9.02673 92.69666,2.79836 z"
+     id="path4233" />
+</svg>
