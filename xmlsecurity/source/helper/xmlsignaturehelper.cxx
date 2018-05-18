@@ -56,6 +56,7 @@
 #define OOXML_SIGNATURE_SIGNATURE "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/signature"
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::uno;
 
 XMLSignatureHelper::XMLSignatureHelper( const uno::Reference< uno::XComponentContext >& rxCtx)
@@ -152,6 +153,18 @@ void XMLSignatureHelper::SetDescription(sal_Int32 nSecurityId, const OUString& r
 void XMLSignatureHelper::SetSignatureLineId(sal_Int32 nSecurityId, const OUString& rSignatureLineId)
 {
     mpXSecController->setSignatureLineId(nSecurityId, rSignatureLineId);
+}
+
+void XMLSignatureHelper::SetSignatureLineValidGraphic(
+    sal_Int32 nSecurityId, const css::uno::Reference<XGraphic>& xValidGraphic)
+{
+    mpXSecController->setSignatureLineValidGraphic(nSecurityId, xValidGraphic);
+}
+
+void XMLSignatureHelper::SetSignatureLineInvalidGraphic(
+    sal_Int32 nSecurityId, const css::uno::Reference<XGraphic>& xInvalidGraphic)
+{
+    mpXSecController->setSignatureLineInvalidGraphic(nSecurityId, xInvalidGraphic);
 }
 
 void XMLSignatureHelper::AddForSigning( sal_Int32 nSecurityId, const OUString& uri, bool bBinary, bool bXAdESCompliantIfODF )
