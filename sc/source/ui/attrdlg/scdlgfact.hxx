@@ -288,7 +288,13 @@ public:
 
 class AbstractScSelEntryDlg_Impl : public AbstractScSelEntryDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScSelEntryDlg_Impl, ScSelEntryDlg )
+    std::unique_ptr<ScSelEntryDlg> m_xDlg;
+public:
+    explicit AbstractScSelEntryDlg_Impl(ScSelEntryDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short    Execute() override;
     virtual OUString GetSelectedEntry() const override;
 };
 
@@ -535,8 +541,7 @@ public:
     virtual VclPtr<AbstractScInsertTableDlg> CreateScInsertTableDlg(weld::Window* pParent, ScViewData& rViewData,
         SCTAB nTabCount, bool bFromFile) override;
 
-    virtual VclPtr<AbstractScSelEntryDlg> CreateScSelEntryDlg ( vcl::Window* pParent,
-                                                          const std::vector<OUString> &rEntryList ) override;
+    virtual VclPtr<AbstractScSelEntryDlg> CreateScSelEntryDlg(weld::Window* pParent, const std::vector<OUString> &rEntryList) override;
 
     virtual VclPtr<AbstractScLinkedAreaDlg> CreateScLinkedAreaDlg(weld::Window* pParent) override;
 

@@ -129,7 +129,10 @@ short AbstractScInsertTableDlg_Impl::Execute()
     return m_xDlg->execute();
 }
 
-IMPL_ABSTDLG_BASE(AbstractScSelEntryDlg_Impl);
+short AbstractScSelEntryDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractScMetricInputDlg_Impl::Execute()
 {
@@ -443,7 +446,7 @@ const OUString* AbstractScInsertTableDlg_Impl::GetNextTable( sal_uInt16* pN )
 
 OUString AbstractScSelEntryDlg_Impl::GetSelectedEntry() const
 {
-    return pDlg->GetSelectedEntry();
+    return m_xDlg->GetSelectedEntry();
 }
 
 void AbstractScLinkedAreaDlg_Impl::InitFromOldLink( const OUString& rFile, const OUString& rFilter,
@@ -777,11 +780,10 @@ VclPtr<AbstractScInsertTableDlg> ScAbstractDialogFactory_Impl::CreateScInsertTab
     return VclPtr<AbstractScInsertTableDlg_Impl>::Create(new ScInsertTableDlg(pParent, rViewData,nTabCount, bFromFile));
 }
 
-VclPtr<AbstractScSelEntryDlg> ScAbstractDialogFactory_Impl::CreateScSelEntryDlg ( vcl::Window* pParent,
-                                                        const std::vector<OUString> &rEntryList )
+VclPtr<AbstractScSelEntryDlg> ScAbstractDialogFactory_Impl::CreateScSelEntryDlg(weld::Window* pParent,
+                                                                                const std::vector<OUString> &rEntryList)
 {
-    VclPtr<ScSelEntryDlg> pDlg = VclPtr<ScSelEntryDlg>::Create( pParent, rEntryList );
-    return VclPtr<AbstractScSelEntryDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScSelEntryDlg_Impl>::Create(new ScSelEntryDlg(pParent, rEntryList));
 }
 
 VclPtr<AbstractScLinkedAreaDlg> ScAbstractDialogFactory_Impl::CreateScLinkedAreaDlg(weld::Window* pParent)

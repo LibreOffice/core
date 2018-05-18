@@ -740,8 +740,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        ScopedVclPtr<AbstractScSelEntryDlg> pDlg(pFact->CreateScSelEntryDlg( pTabViewShell->GetDialogParent(),
-                                                                                                  aList ));
+                        ScopedVclPtr<AbstractScSelEntryDlg> pDlg(pFact->CreateScSelEntryDlg(pTabViewShell->GetFrameWeld(), aList));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
