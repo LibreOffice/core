@@ -448,14 +448,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     aSpacing.Height = sal_Int16(nIntValue * 100 / nSingleLineSpacing );
                 else
                     aSpacing.Height = sal_Int16(ConversionHelper::convertTwipToMM100( nIntValue ));
-
-                if (m_pImpl->hasTableManager() && m_pImpl->getTableManager().isInCell())
-                {
-                    // direct formatting is applied for table cell data
-                    TablePropertyMapPtr pTblCellWithDirectFormatting(new TablePropertyMap);
-                    pTblCellWithDirectFormatting->Insert(PROP_PARA_LINE_SPACING, uno::makeAny( aSpacing ), false);
-                    m_pImpl->getTableManager().cellProps(pTblCellWithDirectFormatting);
-                }
             }
             else //NS_ooxml::LN_CT_Spacing_lineRule:
             {
@@ -487,16 +479,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                         m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "lineRule", "exact");
                         aSpacing.Mode = style::LineSpacingMode::FIX;
                     }
-
-                if (m_pImpl->hasTableManager() && m_pImpl->getTableManager().isInCell())
-                {
-                    // If the table manager got the line rule after
-                    // ooxml::CT_Spacing_line, then it should get the rule
-                    // after lineRule as well.
-                    TablePropertyMapPtr pTblCellWithDirectFormatting(new TablePropertyMap);
-                    pTblCellWithDirectFormatting->Insert(PROP_PARA_LINE_SPACING, uno::makeAny(aSpacing), false);
-                    m_pImpl->getTableManager().cellProps(pTblCellWithDirectFormatting);
-                }
             }
             if (pTopContext)
                 pTopContext->Insert(PROP_PARA_LINE_SPACING, uno::makeAny( aSpacing ));
