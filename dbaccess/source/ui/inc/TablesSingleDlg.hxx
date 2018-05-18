@@ -44,7 +44,7 @@ class ODbDataSourceAdministrationHelper;
         std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
         bool m_bStopExecution; // set when the dialog should not be executed
 
-        SfxItemSet*             m_pOutSet;
+        std::unique_ptr<SfxItemSet> m_pOutSet;
     public:
 
         OTableSubscriptionDialog(vcl::Window* pParent
