@@ -46,7 +46,7 @@ public:
     virtual SwGrammarMarkUp* getGrammarCheck( SwTextNode& rTextNode, bool bCreate ) = 0;
 
     /** finishGrammarCheck() has to be called if a grammar checking has been completed
-        for a text node. If this text node has not been hided by the current proxy list
+        for a text node. If this text node has not been hidden by the current proxy list
         it will be repainted. Otherwise the proxy list replaces the old list and the
         repaint will be triggered by a timer
     @returns void
