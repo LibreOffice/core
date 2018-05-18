@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 #include <com/sun/star/xml/crypto/sax/XSecuritySAXEventKeeper.hpp>
@@ -360,6 +361,11 @@ public:
         const css::util::DateTime& rDateTime );
     void setDescription(sal_Int32 nSecurityId, const OUString& rDescription);
     void setSignatureLineId(sal_Int32 nSecurityId, const OUString& rSignatureLineId);
+    void
+    setSignatureLineValidGraphic(sal_Int32 nSecurityId,
+                                 const css::uno::Reference<css::graphic::XGraphic>& xValidGraphic);
+    void setSignatureLineInvalidGraphic(
+        sal_Int32 nSecurityId, const css::uno::Reference<css::graphic::XGraphic>& xInvalidGraphic);
 
     bool WriteSignature(
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler,
