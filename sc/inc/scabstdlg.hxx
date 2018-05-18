@@ -416,11 +416,11 @@ public:
 
     virtual VclPtr<AbstractScDataPilotDatabaseDlg> CreateScDataPilotDatabaseDlg(vcl::Window* pParent) = 0;
 
-    virtual VclPtr<AbstractScDataPilotSourceTypeDlg> CreateScDataPilotSourceTypeDlg(vcl::Window* pParent,
+    virtual VclPtr<AbstractScDataPilotSourceTypeDlg> CreateScDataPilotSourceTypeDlg(weld::Window* pParent,
         bool bEnableExternal) = 0;
 
-    virtual VclPtr<AbstractScDataPilotServiceDlg> CreateScDataPilotServiceDlg( vcl::Window* pParent,
-                                                                        const std::vector<OUString>& rServices ) = 0;
+    virtual VclPtr<AbstractScDataPilotServiceDlg> CreateScDataPilotServiceDlg(weld::Window* pParent,
+                                                                              const std::vector<OUString>& rServices) = 0;
 
     virtual VclPtr<AbstractScDeleteCellDlg> CreateScDeleteCellDlg(weld::Window* pParent, bool bDisallowCellMove) = 0 ;
 

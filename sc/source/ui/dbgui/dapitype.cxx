@@ -24,140 +24,114 @@
 
 using namespace com::sun::star;
 
-ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(vcl::Window* pParent, bool bEnableExternal)
-    : ModalDialog( pParent, "SelectSourceDialog", "modules/scalc/ui/selectsource.ui" )
+ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(weld::Window* pParent, bool bEnableExternal)
+    : GenericDialogController(pParent, "modules/scalc/ui/selectsource.ui", "SelectSourceDialog")
+    , m_xBtnSelection(m_xBuilder->weld_radio_button("selection"))
+    , m_xBtnNamedRange(m_xBuilder->weld_radio_button("namedrange"))
+    , m_xBtnDatabase(m_xBuilder->weld_radio_button("database"))
+    , m_xBtnExternal(m_xBuilder->weld_radio_button("external"))
+    , m_xLbNamedRange(m_xBuilder->weld_combo_box_text("rangelb"))
 {
-    get(m_pBtnSelection, "selection");
-    get(m_pBtnNamedRange, "namedrange");
-    get(m_pBtnDatabase, "database");
-    get(m_pBtnExternal, "external");
-    get(m_pLbNamedRange, "rangelb");
-    m_pBtnSelection->SetClickHdl( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
-    m_pBtnNamedRange->SetClickHdl( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
-    m_pBtnDatabase->SetClickHdl( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
-    m_pBtnExternal->SetClickHdl( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
+    m_xBtnSelection->connect_toggled( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
+    m_xBtnNamedRange->connect_toggled( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
+    m_xBtnDatabase->connect_toggled( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
+    m_xBtnExternal->connect_toggled( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
 
     if (!bEnableExternal)
-        m_pBtnExternal->Disable();
+        m_xBtnExternal->set_sensitive(false);
 
-    m_pBtnSelection->Check();
+    m_xBtnSelection->set_active(true);
 
     // Disabled unless at least one named range exists.
-    m_pLbNamedRange->Disable();
-    m_pBtnNamedRange->Disable();
+    m_xLbNamedRange->set_sensitive(false);
+    m_xBtnNamedRange->set_sensitive(false);
 
     // Intentionally hide this button to see if anyone complains.
-    m_pBtnExternal->Show(false);
+    m_xBtnExternal->show(false);
 }
 
 ScDataPilotSourceTypeDlg::~ScDataPilotSourceTypeDlg()
 {
-    disposeOnce();
-}
-
-void ScDataPilotSourceTypeDlg::dispose()
-{
-    m_pBtnSelection.clear();
-    m_pBtnNamedRange.clear();
-    m_pBtnDatabase.clear();
-    m_pBtnExternal.clear();
-    m_pLbNamedRange.clear();
-    ModalDialog::dispose();
 }
 
 bool ScDataPilotSourceTypeDlg::IsDatabase() const
 {
-    return m_pBtnDatabase->IsChecked();
+    return m_xBtnDatabase->get_active();
 }
 
 bool ScDataPilotSourceTypeDlg::IsExternal() const
 {
-    return m_pBtnExternal->IsChecked();
+    return m_xBtnExternal->get_active();
 }
 
 bool ScDataPilotSourceTypeDlg::IsNamedRange() const
 {
-    return m_pBtnNamedRange->IsChecked();
+    return m_xBtnNamedRange->get_active();
 }
 
 OUString ScDataPilotSourceTypeDlg::GetSelectedNamedRange() const
 {
-    const sal_Int32 nPos = m_pLbNamedRange->GetSelectedEntryPos();
-    return m_pLbNamedRange->GetEntry(nPos);
+    return m_xLbNamedRange->get_active_text();
 }
 
 void ScDataPilotSourceTypeDlg::AppendNamedRange(const OUString& rName)
 {
-    m_pLbNamedRange->InsertEntry(rName);
-    if (m_pLbNamedRange->GetEntryCount() == 1)
+    m_xLbNamedRange->append_text(rName);
+    if (m_xLbNamedRange->get_count() == 1)
     {
         // Select position 0 only for the first time.
-        m_pLbNamedRange->SelectEntryPos(0);
-        m_pBtnNamedRange->Enable();
+        m_xLbNamedRange->set_active(0);
+        m_xBtnNamedRange->set_sensitive(true);
     }
 }
 
-IMPL_LINK( ScDataPilotSourceTypeDlg, RadioClickHdl, Button*, pBtn, void )
+IMPL_LINK_NOARG(ScDataPilotSourceTypeDlg, RadioClickHdl, weld::ToggleButton&, void)
 {
-    m_pLbNamedRange->Enable(pBtn == m_pBtnNamedRange);
+    m_xLbNamedRange->set_sensitive(m_xBtnNamedRange->get_active());
 }
 
-ScDataPilotServiceDlg::ScDataPilotServiceDlg( vcl::Window* pParent,
-                                const std::vector<OUString>& rServices ) :
-    ModalDialog     ( pParent, "DapiserviceDialog", "modules/scalc/ui/dapiservicedialog.ui" )
+ScDataPilotServiceDlg::ScDataPilotServiceDlg(weld::Window* pParent, const std::vector<OUString>& rServices)
+    : GenericDialogController(pParent, "modules/scalc/ui/dapiservicedialog.ui", "DapiserviceDialog")
+    , m_xLbService(m_xBuilder->weld_combo_box_text("service"))
+    , m_xEdSource(m_xBuilder->weld_entry("source"))
+    , m_xEdName(m_xBuilder->weld_entry("name"))
+    , m_xEdUser(m_xBuilder->weld_entry("user"))
+    , m_xEdPasswd(m_xBuilder->weld_entry("password"))
 {
-    get(m_pLbService, "service");
-    get(m_pEdSource, "source");
-    get(m_pEdName, "name");
-    get(m_pEdUser, "user");
-    get(m_pEdPasswd, "password");
-
     for (const OUString& aName : rServices)
     {
-        m_pLbService->InsertEntry( aName );
+        m_xLbService->append_text(aName);
     }
-    m_pLbService->SelectEntryPos( 0 );
+    m_xLbService->set_active(0);
 }
 
 ScDataPilotServiceDlg::~ScDataPilotServiceDlg()
 {
-    disposeOnce();
 }
-
-void ScDataPilotServiceDlg::dispose()
-{
-    m_pLbService.clear();
-    m_pEdSource.clear();
-    m_pEdName.clear();
-    m_pEdUser.clear();
-    m_pEdPasswd.clear();
-    ModalDialog::dispose();
-}
-
 
 OUString ScDataPilotServiceDlg::GetServiceName() const
 {
-    return m_pLbService->GetSelectedEntry();
+    return m_xLbService->get_active_text();
 }
 
 OUString ScDataPilotServiceDlg::GetParSource() const
 {
-    return m_pEdSource->GetText();
+    return m_xEdSource->get_text();
 }
 
 OUString ScDataPilotServiceDlg::GetParName() const
 {
-    return m_pEdName->GetText();
+    return m_xEdName->get_text();
 }
 
 OUString ScDataPilotServiceDlg::GetParUser() const
 {
-    return m_pEdUser->GetText();
+    return m_xEdUser->get_text();
 }
 
 OUString ScDataPilotServiceDlg::GetParPass() const
 {
-    return m_pEdPasswd->GetText();
+    return m_xEdPasswd->get_text();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

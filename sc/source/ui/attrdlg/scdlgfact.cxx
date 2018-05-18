@@ -80,8 +80,16 @@ IMPL_ABSTDLG_BASE(AbstractScAutoFormatDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScColRowLabelDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScCondFormatManagerDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataPilotDatabaseDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScDataPilotSourceTypeDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScDataPilotServiceDlg_Impl);
+
+short AbstractScDataPilotSourceTypeDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+short AbstractScDataPilotServiceDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractScDeleteCellDlg_Impl::Execute()
 {
@@ -235,52 +243,52 @@ void AbstractScDataPilotDatabaseDlg_Impl::GetValues( ScImportSourceDesc& rDesc )
 
 bool AbstractScDataPilotSourceTypeDlg_Impl::IsDatabase() const
 {
-    return pDlg->IsDatabase();
+    return m_xDlg->IsDatabase();
 }
 
 bool AbstractScDataPilotSourceTypeDlg_Impl::IsExternal() const
 {
-    return pDlg->IsExternal();
+    return m_xDlg->IsExternal();
 }
 
 bool AbstractScDataPilotSourceTypeDlg_Impl::IsNamedRange() const
 {
-    return pDlg->IsNamedRange();
+    return m_xDlg->IsNamedRange();
 }
 
 OUString AbstractScDataPilotSourceTypeDlg_Impl::GetSelectedNamedRange() const
 {
-    return pDlg->GetSelectedNamedRange();
+    return m_xDlg->GetSelectedNamedRange();
 }
 
 void AbstractScDataPilotSourceTypeDlg_Impl::AppendNamedRange(const OUString& rName)
 {
-    pDlg->AppendNamedRange(rName);
+    m_xDlg->AppendNamedRange(rName);
 }
 
 OUString AbstractScDataPilotServiceDlg_Impl::GetServiceName() const
 {
-    return pDlg->GetServiceName();
+    return m_xDlg->GetServiceName();
 }
 
 OUString AbstractScDataPilotServiceDlg_Impl::GetParSource() const
 {
-    return pDlg->GetParSource();
+    return m_xDlg->GetParSource();
 }
 
 OUString AbstractScDataPilotServiceDlg_Impl::GetParName() const
 {
-    return pDlg->GetParName();
+    return m_xDlg->GetParName();
 }
 
 OUString AbstractScDataPilotServiceDlg_Impl::GetParUser() const
 {
-    return pDlg->GetParUser();
+    return m_xDlg->GetParUser();
 }
 
 OUString AbstractScDataPilotServiceDlg_Impl::GetParPass() const
 {
-    return pDlg->GetParPass();
+    return m_xDlg->GetParPass();
 }
 
 DelCellCmd AbstractScDeleteCellDlg_Impl::GetDelCellCmd() const
@@ -704,17 +712,15 @@ VclPtr<AbstractScDataPilotDatabaseDlg> ScAbstractDialogFactory_Impl::CreateScDat
 }
 
 VclPtr<AbstractScDataPilotSourceTypeDlg> ScAbstractDialogFactory_Impl::CreateScDataPilotSourceTypeDlg(
-    vcl::Window* pParent, bool bEnableExternal)
+    weld::Window* pParent, bool bEnableExternal)
 {
-    VclPtr<ScDataPilotSourceTypeDlg> pDlg = VclPtr<ScDataPilotSourceTypeDlg>::Create(pParent, bEnableExternal);
-    return VclPtr<AbstractScDataPilotSourceTypeDlg_Impl>::Create(pDlg);
+    return VclPtr<AbstractScDataPilotSourceTypeDlg_Impl>::Create(new ScDataPilotSourceTypeDlg(pParent, bEnableExternal));
 }
 
-VclPtr<AbstractScDataPilotServiceDlg> ScAbstractDialogFactory_Impl::CreateScDataPilotServiceDlg( vcl::Window* pParent,
-                                                                        const std::vector<OUString>& rServices )
+VclPtr<AbstractScDataPilotServiceDlg> ScAbstractDialogFactory_Impl::CreateScDataPilotServiceDlg(weld::Window* pParent,
+                                                                        const std::vector<OUString>& rServices)
 {
-    VclPtr<ScDataPilotServiceDlg> pDlg = VclPtr<ScDataPilotServiceDlg>::Create( pParent, rServices );
-    return VclPtr<AbstractScDataPilotServiceDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScDataPilotServiceDlg_Impl>::Create(new ScDataPilotServiceDlg(pParent, rServices));
 }
 
 VclPtr<AbstractScDeleteCellDlg> ScAbstractDialogFactory_Impl::CreateScDeleteCellDlg(weld::Window* pParent,
