@@ -225,8 +225,8 @@ void SwTextPortion::BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess 
     // Special case 1: The word is larger than the line
     // We truncate ...
     const sal_uInt16 nLineWidth = static_cast<sal_uInt16>(rInf.Width() - rInf.X());
-    sal_Int32 nLen = rGuess.CutPos() - rInf.GetIdx();
-    if (nLen > 0)
+    TextFrameIndex nLen = rGuess.CutPos() - rInf.GetIdx();
+    if (nLen > TextFrameIndex(0))
     {
         // special case: guess does not always provide the correct
         // width, only in common cases.
@@ -254,12 +254,12 @@ void SwTextPortion::BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess 
     // special case: first character does not fit to line
     else if ( rGuess.CutPos() == rInf.GetLineStart() )
     {
-        SetLen( 1 );
+        SetLen( TextFrameIndex(1) );
         Width( nLineWidth );
     }
     else
     {
-        SetLen( 0 );
+        SetLen( TextFrameIndex(0) );
         Width( 0 );
     }
 }
@@ -269,7 +269,7 @@ void SwTextPortion::BreakUnderflow( SwTextFormatInfo &rInf )
     Truncate();
     Height( 0 );
     Width( 0 );
-    SetLen( 0 );
+    SetLen( TextFrameIndex(0) );
     SetAscent( 0 );
     rInf.SetUnderflow( this );
 }
@@ -295,12 +295,12 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
             SwTextGuess aGuess;
             // check for alternative spelling left from the soft hyphen
             // this should usually be true but
-            aGuess.AlternativeSpelling( rInf, rInf.GetSoftHyphPos() - 1 );
+            aGuess.AlternativeSpelling(rInf, rInf.GetSoftHyphPos() - TextFrameIndex(1));
             bFull = CreateHyphen( rInf, aGuess );
             OSL_ENSURE( bFull, "Problem with hyphenation!!!" );
         }
         rInf.ChgHyph( bHyph );
-        rInf.SetSoftHyphPos( 0 );
+        rInf.SetSoftHyphPos( TextFrameIndex(0) );
         return bFull;
     }
 
@@ -347,7 +347,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
         Insert( aGuess.ReleaseHangingPortion() );
     }
     // breakPos >= index
-    else if ( aGuess.BreakPos() >= rInf.GetIdx() && aGuess.BreakPos() != COMPLETE_STRING )
+    else if (aGuess.BreakPos() >= rInf.GetIdx() && aGuess.BreakPos() != TextFrameIndex(COMPLETE_STRING))
     {
         // case B1
         if( aGuess.HyphWord().is() && aGuess.BreakPos() > rInf.GetLineStart()
@@ -372,7 +372,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
 
                     rInf.IsOtherThanFootnoteInside() ) ||
                   ( rInf.GetLast() &&
-                    rInf.GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT) &&
+                    rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT) &&
                     rInf.GetLast()->InTabGrp() &&
                     rInf.GetLineStart() + rInf.GetLast()->GetLen() < rInf.GetIdx() &&
                     aGuess.BreakPos() == rInf.GetIdx()  &&
@@ -405,7 +405,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
 
             OSL_ENSURE( aGuess.BreakStart() >= aGuess.FieldDiff(),
                     "Trouble with expanded field portions during line break" );
-            const sal_Int32 nRealStart = aGuess.BreakStart() - aGuess.FieldDiff();
+            TextFrameIndex const nRealStart = aGuess.BreakStart() - aGuess.FieldDiff();
             if( aGuess.BreakPos() < nRealStart && !InExpGrp() )
             {
                 SwHolePortion *pNew = new SwHolePortion( *this );
@@ -420,11 +420,12 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     else
     {
         bool bFirstPor = rInf.GetLineStart() == rInf.GetIdx();
-        if( aGuess.BreakPos() != COMPLETE_STRING &&
+        if (aGuess.BreakPos() != TextFrameIndex(COMPLETE_STRING) &&
             aGuess.BreakPos() != rInf.GetLineStart() &&
             ( !bFirstPor || rInf.GetFly() || rInf.GetLast()->IsFlyPortion() ||
               rInf.IsFirstMulti() ) &&
-            ( !rInf.GetLast()->IsBlankPortion() || SwBlankPortion::MayUnderflow( rInf, rInf.GetIdx()-1, true )))
+            ( !rInf.GetLast()->IsBlankPortion() ||
+              SwBlankPortion::MayUnderflow(rInf, rInf.GetIdx() - TextFrameIndex(1), true)))
         {       // case C1 (former BreakUnderflow())
             BreakUnderflow( rInf );
         }
@@ -442,7 +443,7 @@ bool SwTextPortion::Format( SwTextFormatInfo &rInf )
     {
         Height( 0 );
         Width( 0 );
-        SetLen( 0 );
+        SetLen( TextFrameIndex(0) );
         SetAscent( 0 );
         SetPortion( nullptr );  // ????
         return true;
@@ -469,14 +470,15 @@ void SwTextPortion::FormatEOL( SwTextFormatInfo &rInf )
         ( !GetPortion() || ( GetPortion()->IsKernPortion() &&
           !GetPortion()->GetPortion() ) ) &&
         GetLen() &&
-        rInf.GetIdx() < rInf.GetText().getLength() &&
-        1 < rInf.GetIdx() && ' ' == rInf.GetChar( rInf.GetIdx() - 1 ) &&
+        rInf.GetIdx() < TextFrameIndex(rInf.GetText().getLength()) &&
+        TextFrameIndex(1) < rInf.GetIdx() &&
+        ' ' == rInf.GetChar(rInf.GetIdx() - TextFrameIndex(1)) &&
         !rInf.GetLast()->IsHolePortion()) )
         return;
 
     // calculate number of blanks
-    sal_Int32 nX = rInf.GetIdx() - 1;
-    sal_Int32 nHoleLen = 1;
+    TextFrameIndex nX(rInf.GetIdx() - TextFrameIndex(1));
+    TextFrameIndex nHoleLen(1);
     while( nX && nHoleLen < GetLen() && CH_BLANK == rInf.GetChar( --nX ) )
         nHoleLen++;
 
@@ -486,7 +488,7 @@ void SwTextPortion::FormatEOL( SwTextFormatInfo &rInf )
     if( nHoleLen == GetLen() )
         nBlankSize = Width();
     else
-        nBlankSize = nHoleLen * rInf.GetTextSize(OUString(' ')).Width();
+        nBlankSize = sal_Int32(nHoleLen) * rInf.GetTextSize(OUString(' ')).Width();
     Width( Width() - nBlankSize );
     rInf.X( rInf.X() - nBlankSize );
     SetLen( GetLen() - nHoleLen );
@@ -521,14 +523,16 @@ SwPosSize SwTextPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 
 void SwTextPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
-    if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDEND==rInf.GetText()[rInf.GetIdx()])
+    if (rInf.OnWin() && TextFrameIndex(1) == rInf.GetLen()
+        && CH_TXT_ATR_FIELDEND == rInf.GetText()[sal_Int32(rInf.GetIdx())])
     {
         assert(false); // this is some debugging only code
         rInf.DrawBackBrush( *this );
         const OUString aText(CH_TXT_ATR_SUBST_FIELDEND);
         rInf.DrawText( aText, *this, 0, aText.getLength() );
     }
-    else if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDSTART==rInf.GetText()[rInf.GetIdx()])
+    else if (rInf.OnWin() && TextFrameIndex(1) == rInf.GetLen()
+        && CH_TXT_ATR_FIELDSTART == rInf.GetText()[sal_Int32(rInf.GetIdx())])
     {
         assert(false); // this is some debugging only code
         rInf.DrawBackBrush( *this );
@@ -576,7 +580,7 @@ TextFrameIndex SwTextPortion::GetSpaceCnt(const SwTextSizeInfo &rInf,
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetTextFrame()->FindPageFrame()));
         if (pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars())
-            return 0;
+            return TextFrameIndex(0);
     }
 
     if ( InExpGrp() )
@@ -690,14 +694,14 @@ void SwTextInputFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
 
 bool SwTextInputFieldPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const
 {
-    sal_Int32 nIdx = rInf.GetIdx();
-    sal_Int32 nLen = rInf.GetLen();
+    sal_Int32 nIdx(rInf.GetIdx());
+    sal_Int32 nLen(rInf.GetLen());
     if ( rInf.GetChar( rInf.GetIdx() ) == CH_TXT_ATR_INPUTFIELDSTART )
     {
         ++nIdx;
         --nLen;
     }
-    if ( rInf.GetChar( rInf.GetIdx() + rInf.GetLen() - 1 ) == CH_TXT_ATR_INPUTFIELDEND )
+    if (rInf.GetChar(rInf.GetIdx() + rInf.GetLen() - TextFrameIndex(1)) == CH_TXT_ATR_INPUTFIELDEND)
     {
         --nLen;
     }
@@ -709,7 +713,7 @@ bool SwTextInputFieldPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &
 SwPosSize SwTextInputFieldPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 {
     SwTextSlot aFormatText( &rInf, this, true, false );
-    if ( rInf.GetLen() == 0 )
+    if (rInf.GetLen() == TextFrameIndex(0))
     {
         return SwPosSize( 0, 0 );
     }
@@ -720,7 +724,7 @@ SwPosSize SwTextInputFieldPortion::GetTextSize( const SwTextSizeInfo &rInf ) con
 SwHolePortion::SwHolePortion( const SwTextPortion &rPor )
     : nBlankWidth( 0 )
 {
-    SetLen( 1 );
+    SetLen( TextFrameIndex(1) );
     Height( rPor.Height() );
     SetAscent( rPor.GetAscent() );
     SetWhichPor( POR_HOLE );
@@ -783,19 +787,16 @@ bool SwFieldMarkPortion::Format( SwTextFormatInfo & )
 
 void SwFieldFormCheckboxPortion::Paint( const SwTextPaintInfo& rInf ) const
 {
-    SwTextNode* pNd = const_cast<SwTextNode*>(rInf.GetTextFrame()->GetTextNode());
-    const SwDoc *doc=pNd->GetDoc();
-    SwIndex aIndex( pNd, rInf.GetIdx() );
-    SwPosition aPosition(*pNd, aIndex);
+    SwPosition const aPosition(rInf.GetTextFrame()->MapViewToModelPos(rInf.GetIdx()));
 
-    IFieldmark* pBM = doc->getIDocumentMarkAccess( )->getFieldmarkFor( aPosition );
+    IFieldmark const*const pBM = rInf.GetTextFrame()->GetDoc().getIDocumentMarkAccess()->getFieldmarkFor( aPosition );
 
     OSL_ENSURE(pBM && pBM->GetFieldname( ) == ODF_FORMCHECKBOX,
         "Where is my form field bookmark???");
 
     if (pBM && pBM->GetFieldname( ) == ODF_FORMCHECKBOX)
     {
-        const ICheckboxFieldmark* pCheckboxFm = dynamic_cast< ICheckboxFieldmark* >(pBM);
+        const ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark const*>(pBM);
         bool bChecked = pCheckboxFm && pCheckboxFm->IsChecked();
         rInf.DrawCheckBox(*this, bChecked);
     }
@@ -803,11 +804,8 @@ void SwFieldFormCheckboxPortion::Paint( const SwTextPaintInfo& rInf ) const
 
 bool SwFieldFormCheckboxPortion::Format( SwTextFormatInfo & rInf )
 {
-    SwTextNode *pNd = rInf.GetTextFrame(  )->GetTextNode(  );
-    const SwDoc *doc = pNd->GetDoc(  );
-    SwIndex aIndex( pNd, rInf.GetIdx(  ) );
-    SwPosition aPosition( *pNd, aIndex );
-    IFieldmark *pBM = doc->getIDocumentMarkAccess( )->getFieldmarkFor( aPosition );
+    SwPosition const aPosition(rInf.GetTextFrame()->MapViewToModelPos(rInf.GetIdx()));
+    IFieldmark const*const pBM = rInf.GetTextFrame()->GetDoc().getIDocumentMarkAccess()->getFieldmarkFor( aPosition );
     OSL_ENSURE(pBM && pBM->GetFieldname( ) == ODF_FORMCHECKBOX, "Where is my form field bookmark???");
     if (pBM && pBM->GetFieldname( ) == ODF_FORMCHECKBOX)
     {
