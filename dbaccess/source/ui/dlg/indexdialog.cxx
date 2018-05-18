@@ -215,7 +215,7 @@ namespace dbaui
 
         setToolBox(m_pActions);
 
-        m_pIndexes = new OIndexCollection();
+        m_pIndexes.reset(new OIndexCollection());
         try
         {
             m_pIndexes->attach(_rxIndexes);
@@ -307,7 +307,7 @@ namespace dbaui
     void DbaIndexDialog::dispose()
     {
         setToolBox(nullptr);
-        delete m_pIndexes;
+        m_pIndexes.reset();
         m_pActions.clear();
         m_pIndexList.clear();
         m_pIndexDetails.clear();
