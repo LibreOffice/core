@@ -44,14 +44,6 @@ $(eval $(call gb_Library_add_defs,sfx,\
     $(if $(filter TRUE,$(ENABLE_CUPS)),-DENABLE_CUPS) \
 ))
 
-ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
-$(eval $(call gb_Library_add_defs,sfx,\
-    -DENABLE_QUICKSTART_APPLET \
-    -DENABLE_SYSTRAY_GTK \
-    -DPLUGIN_NAME=libqstart_gtk$(gb_Library_OOOEXT) \
-))
-endif
-
 $(eval $(call gb_Library_use_libraries,sfx,\
     basegfx \
     comphelper \
