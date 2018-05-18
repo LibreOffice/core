@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <DocumentSettingManager.hxx>
 #include <hintids.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <svl/whiter.hxx>
@@ -85,11 +86,12 @@
 
 using namespace ::com::sun::star::i18n;
 
-SwpHints::SwpHints()
-    : m_pHistory(nullptr)
+SwpHints::SwpHints(const SwTextNode& rParent)
+    : m_rParent(rParent)
+    , m_pHistory(nullptr)
     , m_bInSplitNode(false)
     , m_bCalcHiddenParaField(false)
-    , m_bHasHiddenParaField(false)
+    , m_bHiddenByParaField(false)
     , m_bFootnote(false)
     , m_bDDEFields(false)
 {
@@ -1145,21 +1147,21 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
             if( !pDoc->IsInDtor() )
             {
                 SwTextField *const pTextField(static_txtattr_cast<SwTextField*>(pAttr));
-                // Wenn wir ein HiddenParaField sind, dann muessen wir
-                // ggf. fuer eine Neuberechnung des Visible-Flags sorgen.
-                const SwField* pField = pAttr->GetFormatField().GetField();
+                SwFieldType* pFieldType = pAttr->GetFormatField().GetField()->GetTyp();
 
-                //JP 06-08-95: DDE-Felder bilden eine Ausnahme
-                OSL_ENSURE( RES_DDEFLD == pField->GetTyp()->Which() ||
-                        this == pTextField->GetpTextNode(),
-                        "Wo steht denn dieses Feld?" );
+                //JP 06-08-95: DDE-fields are an exception
+                assert(RES_DDEFLD == pFieldType->Which() ||
+                       this == pTextField->GetpTextNode());
 
-                // bestimmte Felder mussen am Doc das Calculations-Flag updaten
-                switch( pField->GetTyp()->Which() )
+                // certain fields must update the SwDoc's calculation flags
+
+                // Certain fields (like HiddenParaField) must trigger recalculation of visible flag
+                if (FieldCanHidePara(pFieldType->Which()))
+                    SetCalcHiddenParaField();
+
+                switch( pFieldType->Which() )
                 {
                 case RES_HIDDENPARAFLD:
-                    SetCalcHiddenParaField();
-                    SAL_FALLTHROUGH;
                 case RES_DBSETNUMBERFLD:
                 case RES_GETEXPFLD:
                 case RES_DBFLD:
@@ -1172,7 +1174,7 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
                     break;
                 case RES_DDEFLD:
                     if (GetNodes().IsDocNodes() && pTextField->GetpTextNode())
-                        static_cast<SwDDEFieldType*>(pField->GetTyp())->DecRefCnt();
+                        static_cast<SwDDEFieldType*>(pFieldType)->DecRefCnt();
                     break;
                 case RES_POSTITFLD:
                     {
@@ -1462,9 +1464,8 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
 
             case RES_TXTATR_FIELD:
                 {
-                    // fuer HiddenParaFields Benachrichtigungsmechanismus
-                    // anwerfen
-                    if( RES_HIDDENPARAFLD == pAttr->GetFormatField().GetField()->GetTyp()->Which() )
+                    // trigger notification for relevant fields, like HiddenParaFields
+                    if (FieldCanHidePara(pAttr->GetFormatField().GetField()->GetTyp()->Which()))
                     {
                         bHiddenPara = true;
                     }
@@ -2599,38 +2600,32 @@ void SwpHints::CalcFlags()
     }
 }
 
-bool SwpHints::CalcHiddenParaField()
+bool SwpHints::CalcHiddenParaField() const
 {
     m_bCalcHiddenParaField = false;
-    bool bOldHasHiddenParaField = m_bHasHiddenParaField;
-    bool bNewHasHiddenParaField  = false;
+    const bool bOldHiddenByParaField = m_bHiddenByParaField;
+    bool bNewHiddenByParaField = false;
     const size_t nSize = Count();
-    const SwTextAttr *pTextHt;
+    const SwTextAttr* pTextHt;
 
-    for( size_t nPos = 0; nPos < nSize; ++nPos )
+    for (size_t nPos = 0; nPos < nSize; ++nPos)
     {
         pTextHt = Get(nPos);
         const sal_uInt16 nWhich = pTextHt->Which();
 
-        if( RES_TXTATR_FIELD == nWhich )
+        if (RES_TXTATR_FIELD == nWhich)
         {
             const SwFormatField& rField = pTextHt->GetFormatField();
-            if( RES_HIDDENPARAFLD == rField.GetField()->GetTyp()->Which() )
+            if (m_rParent.FieldCanHidePara(rField.GetField()->GetTyp()->Which())
+                && !(bNewHiddenByParaField = m_rParent.FieldHidesPara(*rField.GetField())))
             {
-                if( !static_cast<const SwHiddenParaField*>(rField.GetField())->IsHidden() )
-                {
-                    SetHiddenParaField(false);
-                    return bOldHasHiddenParaField != bNewHasHiddenParaField;
-                }
-                else
-                {
-                    bNewHasHiddenParaField = true;
-                }
+                // If there's at least one field telling not to hide, so be it
+                break;
             }
         }
     }
-    SetHiddenParaField( bNewHasHiddenParaField );
-    return bOldHasHiddenParaField != bNewHasHiddenParaField;
+    SetHiddenByParaField(bNewHiddenByParaField);
+    return bOldHiddenByParaField != bNewHiddenByParaField;
 }
 
 void SwpHints::NoteInHistory( SwTextAttr *pAttr, const bool bNew )
@@ -3314,8 +3309,8 @@ void SwpHints::DeleteAtPos( const size_t nPos )
                 const_cast<SwDDEFieldType*>(static_cast<const SwDDEFieldType*>(pFieldTyp))->DecRefCnt();
             pTextField->ChgTextNode(nullptr);
         }
-        else if ( m_bHasHiddenParaField &&
-                 RES_HIDDENPARAFLD == pFieldTyp->Which() )
+        else if ( m_bHiddenByParaField &&
+                  m_rParent.FieldCanHidePara(pFieldTyp->Which()))
         {
             m_bCalcHiddenParaField = true;
         }

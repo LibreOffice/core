@@ -505,6 +505,9 @@ public:
 
     ::sw::DocumentFieldsManager & GetDocumentFieldsManager();
 
+    bool FieldCanHidePara(sal_uInt16 eFieldId) const;
+    bool FieldHidesPara(const SwField& rField) const;
+
     // IDocumentContentOperations
     IDocumentContentOperations const & getIDocumentContentOperations() const;
     IDocumentContentOperations & getIDocumentContentOperations();

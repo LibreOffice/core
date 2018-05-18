@@ -605,6 +605,32 @@ void SwXMLImport::startDocument()
                     m_bOrganizerMode = true;
             }
         }
+
+        // default document properties
+        const OUString sDefSettings("DefaultDocumentSettings");
+        if (xPropertySetInfo->hasPropertyByName(sDefSettings))
+        {
+            aAny = xImportInfo->getPropertyValue(sDefSettings);
+            Sequence<PropertyValue> aProps;
+            if (aAny >>= aProps)
+            {
+                Reference<lang::XMultiServiceFactory> xFac(GetModel(), UNO_QUERY);
+                Reference<XPropertySet> xProps(
+                    xFac->createInstance("com.sun.star.document.Settings"), UNO_QUERY);
+                Reference<XPropertySetInfo> xInfo(xProps->getPropertySetInfo());
+
+                if (xProps.is() && xInfo.is())
+                {
+                    for (const auto& rProp : aProps)
+                    {
+                        if (xInfo->hasPropertyByName(rProp.Name))
+                        {
+                            xProps->setPropertyValue(rProp.Name, rProp.Value);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // There only is a text cursor by now if we are in insert mode. In any
