@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_mpl.h>
+
 #include <vcl/IconThemeSelector.hxx>
 
 #include <vcl/IconThemeScanner.hxx>
@@ -62,7 +64,11 @@ IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvi
         r = "breeze";
     }
     else if ( desktopEnvironment.equalsIgnoreAsciiCase("MacOSX") ) {
+#if MPL_HAVE_SUBSET
+        r = "tango";
+#else
         r = "breeze";
+#endif
     }
     else if ( desktopEnvironment.equalsIgnoreAsciiCase("unity") ) {
         r = "breeze";
