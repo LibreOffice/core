@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_14837999",
+        "filename": "sd/source/ui/docshell/docshell.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2018-05-18T16:43:13Z",
+      "side": 1,
+      "message": "two StateMethod calls in case of draw, shouldnt be in if-else block?\n\nif(bImpress)\n  impress\nelse\n  draw",
+      "revId": "2ae7d6057151c0f7f352bec633e9987d197c68c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
