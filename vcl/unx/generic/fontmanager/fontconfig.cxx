@@ -263,7 +263,7 @@ namespace
         FcChar8* candidate = elements.begin()->second;
         /* FIXME-BCP47: once fontconfig supports language tags this
          * language-territory stuff needs to be changed! */
-        SAL_INFO_IF( !rLangTag.isIsoLocale(), "i18n", "localizedsorter::bestname - not an ISO locale");
+        SAL_INFO_IF( !rLangTag.isIsoLocale(), "vcl.fonts", "localizedsorter::bestname - not an ISO locale");
         OString sLangMatch(OUStringToOString(rLangTag.getLanguage().toAsciiLowerCase(), RTL_TEXTENCODING_UTF8));
         OString sFullMatch = sLangMatch;
         sFullMatch += OString('-');
@@ -675,7 +675,7 @@ void PrintFontManager::addFontconfigDir( const OString& rDirName )
         if( !bCfgOk )
             fprintf( stderr, "FcConfigParseAndLoad( \"%s\") => %d\n", aConfFileName.getStr(), bCfgOk );
     } else {
-        SAL_INFO("vcl", "cannot open " << aConfFileName);
+        SAL_INFO("vcl.fonts", "cannot open " << aConfFileName);
     }
 }
 
@@ -839,7 +839,7 @@ namespace
             default:
                 break;
         }
-        SAL_WARN_IF(bIsImpossible, "vcl", "In glyph fallback throwing away the language property of "
+        SAL_WARN_IF(bIsImpossible, "vcl.fonts", "In glyph fallback throwing away the language property of "
             << sLang << " because the detected script for '0x"
             << OUString::number(currentChar, 16)
             << "' is " << uscript_getName(eScript)
@@ -868,7 +868,7 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
     }
     catch (const css::uno::Exception& e)
     {
-        SAL_INFO("vcl", "InstallFontconfigResources problem, caught " << e);
+        SAL_INFO("vcl.fonts", "InstallFontconfigResources problem, caught " << e);
         // Disable this method from now on. It's simply not available on some systems
         // and leads to an error dialog being shown each time this is called tdf#104883
         std::shared_ptr<comphelper::ConfigurationChanges> batch( comphelper::ConfigurationChanges::create() );
@@ -972,7 +972,7 @@ void PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
                 }
             }
 
-            SAL_WARN_IF(!bRet, "vcl", "no FC_FILE found, falling back to name search");
+            SAL_WARN_IF(!bRet, "vcl.fonts", "no FC_FILE found, falling back to name search");
 
             if (!bRet)
             {
