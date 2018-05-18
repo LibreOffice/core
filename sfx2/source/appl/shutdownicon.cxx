@@ -78,12 +78,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 
-#ifdef ENABLE_QUICKSTART_APPLET
-# if !defined(_WIN32) && !defined(MACOSX)
-extern "C" { static void thisModule() {} }
-# endif
-#endif
-
 class SfxNotificationListener_Impl : public cppu::WeakImplHelper< XDispatchResultListener >
 {
 public:
@@ -143,27 +137,7 @@ bool LoadModule()
         pInitSystray = aqua_init_systray;
         pDeInitSystray = aqua_shutdown_systray;
         loaded = true;
-#  else // UNX
-        osl::Module plugin;
-        oslGenericFunction pTmpInit = nullptr;
-        oslGenericFunction pTmpDeInit = nullptr;
-        if ( plugin.loadRelative( &thisModule, "libqstart_gtklo.so" ) )
-        {
-            pTmpInit = plugin.getFunctionSymbol( "plugin_init_sys_tray" );
-            pTmpDeInit = plugin.getFunctionSymbol( "plugin_shutdown_sys_tray" );
-        }
-        if ( !pTmpInit || !pTmpDeInit )
-        {
-            loaded = false;
-        }
-        else
-        {
-            plugin.release();
-            pInitSystray = pTmpInit;
-            pDeInitSystray = pTmpDeInit;
-            loaded = true;
-        }
-#  endif // UNX
+#  endif // MACOSX
 #endif // ENABLE_QUICKSTART_APPLET
     }
     assert(!boost::logic::indeterminate(loaded));
@@ -637,56 +611,15 @@ void ShutdownIcon::LeaveModalMode()
 #else
 bool ShutdownIcon::IsQuickstarterInstalled()
 {
-#ifndef ENABLE_QUICKSTART_APPLET
     return false;
-#else // !ENABLE_QUICKSTART_APPLET
-#ifdef UNX
-    return LoadModule();
-#endif // UNX
-#endif // !ENABLE_QUICKSTART_APPLET
-}
-#endif // !WNT
-
-
-#if defined (ENABLE_QUICKSTART_APPLET) && defined (UNX)
-/**
-* Return the XDG autostart directory.
-* http://standards.freedesktop.org/autostart-spec/autostart-spec-latest.html
-* Available in Unix and with Quickstart enabled.
-* @param bCreate Create the directory if it does not exist yet.
-* @return OUString containing the autostart directory path.
-*/
-static OUString getAutostartDir( bool bCreate )
-{
-    OUString aShortcut;
-    const char *pConfigHome;
-    if( (pConfigHome = getenv("XDG_CONFIG_HOME") ) )
-        aShortcut = OStringToOUString( OString( pConfigHome ),
-                                       RTL_TEXTENCODING_UTF8 );
-    else
-    {
-        OUString aHomeURL;
-        osl::Security().getHomeDir( aHomeURL );
-        ::osl::File::getSystemPathFromFileURL( aHomeURL, aShortcut );
-        aShortcut += "/.config";
-    }
-    aShortcut += "/autostart";
-    if (bCreate)
-    {
-        OUString aShortcutUrl;
-        osl::File::getFileURLFromSystemPath( aShortcut, aShortcutUrl );
-        osl::Directory::createPath( aShortcutUrl );
-    }
-    return aShortcut;
 }
 #endif
 
+
+#ifdef ENABLE_QUICKSTART_APPLET
+#ifndef MACOSX
 OUString ShutdownIcon::getShortcutName()
 {
-#ifndef ENABLE_QUICKSTART_APPLET
-    return OUString();
-#else
-
 #ifdef _WIN32
     OUString aShortcutName(SfxResId(STR_QUICKSTART_LNKNAME));
     aShortcutName += ".lnk";
@@ -694,13 +627,11 @@ OUString ShutdownIcon::getShortcutName()
     OUString aShortcut(GetAutostartFolderNameW32());
     aShortcut += "\\";
     aShortcut += aShortcutName;
-#else // UNX
-    OUString aShortcut = getAutostartDir(false);
-    aShortcut += "/qstart.desktop";
-#endif // UNX
     return aShortcut;
-#endif // ENABLE_QUICKSTART_APPLET
+#endif // _WIN32
 }
+#endif
+#endif
 
 bool ShutdownIcon::GetAutostart( )
 {
@@ -724,57 +655,23 @@ bool ShutdownIcon::GetAutostart( )
 #endif
 }
 
+#if defined ENABLE_QUICKSTART_APPLET && defined _WIN32
 void ShutdownIcon::SetAutostart( bool bActivate )
 {
-#ifdef ENABLE_QUICKSTART_APPLET
     OUString aShortcut( getShortcutName() );
 
     if( bActivate && IsQuickstarterInstalled() )
     {
-#ifdef _WIN32
         EnableAutostartW32( aShortcut );
-#else // UNX
-        getAutostartDir( true );
-
-        OUString aPath( "${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/xdg/qstart.desktop"  );
-        rtl::Bootstrap::expandMacros( aPath );
-
-        OUString aDesktopFile;
-        ::osl::File::getSystemPathFromFileURL( aPath, aDesktopFile );
-
-        OString aDesktopFileUnx = OUStringToOString( aDesktopFile,
-                                                     osl_getThreadTextEncoding() );
-        OString aShortcutUnx = OUStringToOString( aShortcut,
-                                                  osl_getThreadTextEncoding() );
-        if ((0 != symlink(aDesktopFileUnx.getStr(), aShortcutUnx.getStr())) && (errno == EEXIST))
-        {
-            unlink(aShortcutUnx.getStr());
-            (void) symlink(aDesktopFileUnx.getStr(), aShortcutUnx.getStr());
-                //deliberately ignore return value, it's non-critical if it fails
-        }
-
-        ShutdownIcon *pIcon = ShutdownIcon::createInstance();
-        if( pIcon )
-            pIcon->initSystray();
-#endif // UNX
     }
     else
     {
         OUString aShortcutUrl;
         ::osl::File::getFileURLFromSystemPath( aShortcut, aShortcutUrl );
         ::osl::File::remove( aShortcutUrl );
-#ifdef UNX
-        if (pShutdownIcon)
-        {
-            ShutdownIcon *pIcon = getInstance();
-            pIcon->deInitSystray();
-        }
-#endif
     }
-#else
-    (void)bActivate; // unused variable
-#endif // ENABLE_QUICKSTART_APPLET
 }
+#endif
 
 static const ::sal_Int32 PROPHANDLE_TERMINATEVETOSTATE = 0;
 
