@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_20acbcec",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1049,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-05-18T04:47:57Z",
+      "side": 1,
+      "message": "a total hack. Need to track down why not having this here changes whether PROP_PARA_LINE_SPACING is ::SET or ::DEFAULT.",
+      "range": {
+        "startLine": 1049,
+        "startChar": 24,
+        "endLine": 1049,
+        "endChar": 63
+      },
+      "revId": "4bcb4e3de5d3e1ac69d8ac23c185d0f9afdb4f5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_8083a855",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2041,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-05-18T04:47:57Z",
+      "side": 0,
+      "message": "This logic moved into the cell\u0027s setPropertyValue",
+      "range": {
+        "startLine": 2041,
+        "startChar": 16,
+        "endLine": 2041,
+        "endChar": 80
+      },
+      "revId": "b62a70c9d268c28175c4af9d3a13a4972b12e079",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
