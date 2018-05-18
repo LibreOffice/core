@@ -1103,7 +1103,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
                      "Rotated number portion trouble" );
 
             // If we're in the follow, then of course not
-            if( GetTextFrame()->GetTextNode()->GetNumRule() )
+            if (GetTextFrame()->GetTextNodeForParaProps()->GetNumRule())
                 pPor = static_cast<SwLinePortion*>(NewNumberPortion( rInf ));
             rInf.SetNumDone( true );
         }
@@ -1124,7 +1124,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
         // 10. Decimal tab portion at the beginning of each line in table cells
         if ( !pPor && !m_pCurr->GetPortion() &&
              GetTextFrame()->IsInTab() &&
-             GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT) )
+             GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT))
         {
             pPor = NewTabPortion( rInf, true );
         }
@@ -1255,8 +1255,8 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                 else if ( SwMultiCreatorId::Ruby == pCreate->nId )
                 {
                     pTmp = new SwRubyPortion( *pCreate, *rInf.GetFont(),
-                                              *GetTextFrame()->GetTextNode()->getIDocumentSettingAccess(),
-                                              nEnd, TextFrameIndex(0), rInf );
+                          GetTextFrame()->GetDoc().getIDocumentSettingAccess(),
+                          nEnd, TextFrameIndex(0), rInf );
                 }
                 else if( SwMultiCreatorId::Rotate == pCreate->nId )
                     pTmp = new SwRotatedPortion( *pCreate, nEnd,
@@ -1334,7 +1334,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                     // We have a decimal tab portion in the line and the next character has to be
                     // aligned at the tab stop position. We store the width from the beginning of
                     // the tab stop portion up to the portion containing the decimal separator:
-                  if ( GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT) /*rInf.GetVsh()->IsTabCompat();*/ &&
+                  if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT) /*rInf.GetVsh()->IsTabCompat();*/ &&
                          POR_TABDECIMAL == pLastTabPortion->GetWhichPor() )
                     {
                         OSL_ENSURE( rInf.X() >= pLastTabPortion->GetFix(), "Decimal tab stop position cannot be calculated" );
@@ -1604,7 +1604,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
     // In case of compat mode, it's possible that a tab portion is wider after
     // formatting than before. If this is the case, we also have to make sure
     // the SwLineLayout is wider as well.
-    if (GetInfo().GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_OVER_MARGIN))
+    if (GetInfo().GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_OVER_MARGIN))
     {
         sal_uInt16 nSum = 0;
         SwLinePortion* pPor = m_pCurr->GetFirstPortion();
@@ -1736,7 +1736,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                     // shrink first line of paragraph too on spacing < 100%
                     if (IsParaLine() &&
                         pSpace->GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop
-                        && GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::PROP_LINE_SPACING_SHRINKS_FIRST_LINE))
+                        && GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::PROP_LINE_SPACING_SHRINKS_FIRST_LINE))
                     {
                         long nTmp = pSpace->GetPropLineSpace();
                         // Word will render < 50% too but it's just not readable
@@ -2284,7 +2284,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     // tdf#116486: consider also the upper margin from getFramePrintArea because intersections
     //             with this additional space should lead to repositioning of paragraphs
     //             For compatibility we grab a related compat flag:
-    if ( GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS) )
+    if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS))
     {
         const long nUpper = m_pFrame->getFramePrintArea().Top();
         // Increase the rectangle

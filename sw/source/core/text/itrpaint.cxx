@@ -162,7 +162,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     SwTwips nMaxRight = std::min( rPaint.Right(), Right() );
     const SwTwips nTmpLeft = GetInfo().X();
     //compatibility setting: allow tabstop text to exceed right margin
-    if( GetInfo().GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_OVER_MARGIN) )
+    if (GetInfo().GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_OVER_MARGIN))
     {
         SwLinePortion* pPorIter = pPor;
         while( pPorIter )
