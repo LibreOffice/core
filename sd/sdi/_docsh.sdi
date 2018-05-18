@@ -72,5 +72,10 @@ interface DrawDocument
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
+    SID_NOTEBOOKBAR
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
 }
 
