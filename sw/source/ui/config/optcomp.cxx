@@ -58,6 +58,7 @@ struct CompatibilityItem
     bool        m_bExpandWordSpace;
     bool        m_bProtectForm;
     bool        m_bSubtractFlysAnchoredAtFlys;
+    bool        m_bEmptyDbFieldHidesPara;
     bool        m_bIsDefault;
 
     CompatibilityItem( const OUString& _rName, const OUString& _rModule,
@@ -65,7 +66,7 @@ struct CompatibilityItem
                        bool _bUseOurTabStops, bool _bNoExtLeading, bool _bUseLineSpacing,
                        bool _bAddTableSpacing, bool _bUseObjPos, bool _bUseOurTextWrapping,
                        bool _bConsiderWrappingStyle, bool _bExpandWordSpace, bool _bProtectForm, bool _bSubtractFlysAnchoredAtFlys,
-                       bool _bIsDefault ) :
+                       bool _bEmptyDbFieldHidesPara, bool _bIsDefault ) :
 
         m_sName                 ( _rName ),
         m_sModule               ( _rModule ),
@@ -82,6 +83,7 @@ struct CompatibilityItem
         m_bExpandWordSpace      ( _bExpandWordSpace ),
         m_bProtectForm          ( _bProtectForm),
         m_bSubtractFlysAnchoredAtFlys ( _bSubtractFlysAnchoredAtFlys),
+        m_bEmptyDbFieldHidesPara (_bEmptyDbFieldHidesPara),
         m_bIsDefault            ( _bIsDefault ) {}
 };
 
@@ -156,7 +158,8 @@ sal_uLong convertBools2Ulong_Impl
     bool _bConsiderWrappingStyle,
     bool _bExpandWordSpace,
     bool _bProtectForm,
-    bool bSubtractFlysAnchoredAtFlys
+    bool bSubtractFlysAnchoredAtFlys,
+    bool bEmptyDbFieldHidesPara
 )
 {
     sal_uLong nRet = 0;
@@ -200,6 +203,9 @@ sal_uLong convertBools2Ulong_Impl
     nSetBit = nSetBit << 1;
     if (bSubtractFlysAnchoredAtFlys)
         nRet |= nSetBit;
+    nSetBit = nSetBit << 1;
+    if (bEmptyDbFieldHidesPara)
+        nRet |= nSetBit;
 
     return nRet;
 }
@@ -242,6 +248,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     bool bExpandWordSpace = false;
     bool bProtectForm = false;
     bool bSubtractFlysAnchoredAtFlys = false;
+    bool bEmptyDbFieldHidesPara = true;
     const sal_Int32 nCount = aList.getLength();
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
@@ -280,6 +287,8 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
                 aValue.Value >>= bProtectForm;
             else if ( aValue.Name == COMPATIBILITY_PROPERTYNAME_SUBTRACT_FLYS_ANCHORED_AT_FLYS )
                 aValue.Value >>= bSubtractFlysAnchoredAtFlys;
+            else if ( aValue.Name == COMPATIBILITY_PROPERTYNAME_EMPTY_DB_FIELD_HIDES_PARA )
+                aValue.Value >>= bEmptyDbFieldHidesPara;
         }
 
         const bool bIsUserEntry = sName == "_user";
@@ -290,7 +299,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             bAddSpacingAtPages, bUseOurTabStops, bNoExtLeading,
             bUseLineSpacing, bAddTableSpacing, bUseObjPos,
             bUseOurTextWrapping, bConsiderWrappingStyle, bExpandWordSpace, bProtectForm, bSubtractFlysAnchoredAtFlys,
-            bIsDefaultEntry );
+            bEmptyDbFieldHidesPara, bIsDefaultEntry );
         m_pImpl->m_aList.push_back( aItem );
 
         if ( aItem.m_bIsDefault )
@@ -315,7 +324,8 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             bUsePrtMetrics, bAddSpacing, bAddSpacingAtPages,
             bUseOurTabStops, bNoExtLeading, bUseLineSpacing,
             bAddTableSpacing, bUseObjPos, bUseOurTextWrapping,
-            bConsiderWrappingStyle, bExpandWordSpace, bProtectForm, bSubtractFlysAnchoredAtFlys );
+            bConsiderWrappingStyle, bExpandWordSpace, bProtectForm, bSubtractFlysAnchoredAtFlys,
+            bEmptyDbFieldHidesPara);
         m_pFormattingLB->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)nOptions) );
     }
 
@@ -359,6 +369,8 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl, Button*, void)
                         case COPT_CONSIDER_WRAPPINGSTYLE: pItem->m_bConsiderWrappingStyle = bChecked; break;
                         case COPT_EXPAND_WORDSPACE:  pItem->m_bExpandWordSpace = bChecked; break;
                         case COPT_PROTECT_FORM: pItem->m_bProtectForm = bChecked; break;
+                        case COPT_SUBTRACT_FLYS_ANCHORED_AT_FLYS: pItem->m_bSubtractFlysAnchoredAtFlys = bChecked; break;
+                        case COPT_EMPTY_DB_FIELD_HIDES_PARA: pItem->m_bEmptyDbFieldHidesPara = bChecked; break;
                         default:
                         {
                             OSL_FAIL("SwCompatibilityOptPage::UseAsDefaultHdl(): wrong option" );
@@ -404,7 +416,8 @@ sal_uLong SwCompatibilityOptPage::GetDocumentOptions() const
                 rIDocumentSettingAccess.get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION),
                 !rIDocumentSettingAccess.get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK),
                 rIDocumentSettingAccess.get(DocumentSettingId::PROTECT_FORM),
-                rIDocumentSettingAccess.get( DocumentSettingId::SUBTRACT_FLYS ));
+                rIDocumentSettingAccess.get( DocumentSettingId::SUBTRACT_FLYS ),
+                rIDocumentSettingAccess.get( DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA ) );
     }
     return nRet;
 }
@@ -420,7 +433,8 @@ void SwCompatibilityOptPage::WriteOptions()
             pItem->m_bNoExtLeading, pItem->m_bUseLineSpacing,
             pItem->m_bAddTableSpacing, pItem->m_bUseObjPos,
             pItem->m_bUseOurTextWrapping, pItem->m_bConsiderWrappingStyle,
-            pItem->m_bExpandWordSpace, pItem->m_bProtectForm, pItem->m_bSubtractFlysAnchoredAtFlys );
+            pItem->m_bExpandWordSpace, pItem->m_bProtectForm, pItem->m_bSubtractFlysAnchoredAtFlys,
+            pItem->m_bEmptyDbFieldHidesPara);
 }
 
 VclPtr<SfxTabPage> SwCompatibilityOptPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
@@ -501,6 +515,11 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
                 else if ( COPT_SUBTRACT_FLYS_ANCHORED_AT_FLYS == nOption )
                 {
                     m_pWrtShell->SetSubtractFlysAnchoredAtFlys( bChecked );
+                    bModified = true;
+                }
+                else if ( COPT_EMPTY_DB_FIELD_HIDES_PARA == nOption )
+                {
+                    m_pWrtShell->SetEmptyDbFieldHidesPara( bChecked );
                     bModified = true;
                 }
             }

@@ -917,6 +917,26 @@ void SwViewShell::SetSubtractFlysAnchoredAtFlys(bool bSubtractFlysAnchoredAtFlys
     rIDSA.set(DocumentSettingId::SUBTRACT_FLYS, bSubtractFlysAnchoredAtFlys);
 }
 
+void SwViewShell::SetEmptyDbFieldHidesPara(bool bEmptyDbFieldHidesPara)
+{
+    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
+    if (rIDSA.get(DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA) != bEmptyDbFieldHidesPara)
+    {
+        SwWait aWait(*GetDoc()->GetDocShell(), true);
+        rIDSA.set(DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA, bEmptyDbFieldHidesPara);
+        StartAction();
+        GetDoc()->getIDocumentState().SetModified();
+        for (auto* pFieldType : *GetDoc()->getIDocumentFieldsAccess().GetFieldTypes())
+        {
+            if (pFieldType->Which() == SwFieldIds::Database)
+            {
+                pFieldType->ModifyNotification(nullptr, nullptr);
+            }
+        }
+        EndAction();
+    }
+}
+
 void SwViewShell::Reformat()
 {
     SwWait aWait( *GetDoc()->GetDocShell(), true );

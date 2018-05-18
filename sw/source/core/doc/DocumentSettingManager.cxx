@@ -112,6 +112,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbConsiderWrapOnObjPos              = aOptions.IsConsiderWrappingStyle();
 
         mbDoNotJustifyLinesWithManualBreak      = !aOptions.IsExpandWordSpace();
+        mbEmptyDbFieldHidesPara             = aOptions.IsEmptyDbFieldHidesPara();
     }
     else
     {
@@ -126,6 +127,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbUseFormerTextWrapping             = false;
         mbConsiderWrapOnObjPos              = false;
         mbDoNotJustifyLinesWithManualBreak  = true;
+        mbEmptyDbFieldHidesPara             = true;
     }
 
     // COMPATIBILITY FLAGS END
@@ -200,6 +202,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::EMBED_FONTS: return mEmbedFonts;
         case DocumentSettingId::EMBED_SYSTEM_FONTS: return mEmbedSystemFonts;
         case DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING: return mApplyParagraphMarkFormatToNumbering;
+        case DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA: return mbEmptyDbFieldHidesPara;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -421,6 +424,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING:
             mApplyParagraphMarkFormatToNumbering = value;
             break;
+        case DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA:
+            mbEmptyDbFieldHidesPara = value;
+            break;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -567,6 +573,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbTabRelativeToIndent = rSource.mbTabRelativeToIndent;
     mbTabAtLeftIndentForParagraphsInList = rSource.mbTabAtLeftIndentForParagraphsInList;
     mbMsWordCompTrailingBlanks = rSource.mbMsWordCompTrailingBlanks;
+    mbEmptyDbFieldHidesPara = rSource.mbEmptyDbFieldHidesPara;
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const

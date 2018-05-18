@@ -41,7 +41,8 @@ enum CompatibilityOptions
     COPT_CONSIDER_WRAPPINGSTYLE,
     COPT_EXPAND_WORDSPACE,
     COPT_PROTECT_FORM,
-    COPT_SUBTRACT_FLYS_ANCHORED_AT_FLYS
+    COPT_SUBTRACT_FLYS_ANCHORED_AT_FLYS,
+    COPT_EMPTY_DB_FIELD_HIDES_PARA,
 };
 
 /*-************************************************************************************************************
@@ -63,6 +64,7 @@ enum CompatibilityOptions
 #define COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE          "ExpandWordSpace"
 #define COMPATIBILITY_PROPERTYNAME_PROTECTFORM              "ProtectForm"
 #define COMPATIBILITY_PROPERTYNAME_SUBTRACT_FLYS_ANCHORED_AT_FLYS "SubtractFlysAnchoredAtFlys"
+#define COMPATIBILITY_PROPERTYNAME_EMPTY_DB_FIELD_HIDES_PARA "EmptyDbFieldHidesPara"
 
 #define COMPATIBILITY_DEFAULT_NAME                          "_default"
 
@@ -135,7 +137,8 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
                          bool bConsiderWrappingStyle,
                          bool bExpandWordSpace,
                          bool bProtectForm,
-                         bool bSubtractFlysAnchoredAtFlys );
+                         bool bSubtractFlysAnchoredAtFlys,
+                         bool bEmptyDbFieldHidesPara );
 
         bool        IsUsePrtDevice() const;
         bool        IsAddSpacing() const;
@@ -148,6 +151,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
         bool        IsUseOurTextWrapping() const;
         bool        IsConsiderWrappingStyle() const;
         bool        IsExpandWordSpace() const;
+        bool        IsEmptyDbFieldHidesPara() const;
 
     private:
 

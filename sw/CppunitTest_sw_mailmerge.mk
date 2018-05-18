@@ -45,7 +45,10 @@ $(eval $(call gb_CppunitTest_use_components,sw_mailmerge, \
     dbaccess/util/dba \
     embeddedobj/util/embobj \
     filter/source/config/cache/filterconfig1 \
+    filter/source/odfflatxml/odfflatxml \
     filter/source/storagefilterdetect/storagefd \
+    filter/source/xmlfilteradaptor/xmlfa \
+    filter/source/xmlfilterdetect/xmlfd \
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
@@ -78,6 +81,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_mailmerge, \
         ) \
     ) \
     xmloff/util/xo \
+    xmlscript/util/xmlscript \
 ))
 
 $(eval $(call gb_CppunitTest_use_instdir_configuration,sw_mailmerge))

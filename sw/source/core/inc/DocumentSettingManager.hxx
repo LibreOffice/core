@@ -156,6 +156,7 @@ class DocumentSettingManager :
     bool mApplyParagraphMarkFormatToNumbering;
 
     bool mbLastBrowseMode                           : 1;
+    bool mbEmptyDbFieldHidesPara;
 
 public:
 

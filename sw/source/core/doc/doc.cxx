@@ -1316,6 +1316,73 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
     }
 }
 
+namespace
+{
+void RemoveOrDeleteContents(SwTextNode* pTextNd, IDocumentContentOperations& xOperations)
+{
+    SwPaM aPam(*pTextNd, 0, *pTextNd, pTextNd->GetText().getLength());
+
+    // Remove hidden paragraph or delete contents:
+    // Delete contents if
+    // 1. removing the paragraph would result in an empty section or
+    // 2. if the paragraph is the last paragraph in the section and
+    //    there is no paragraph in front of the paragraph:
+    if ((2 == pTextNd->EndOfSectionIndex() - pTextNd->StartOfSectionIndex())
+        || (1 == pTextNd->EndOfSectionIndex() - pTextNd->GetIndex()
+            && !pTextNd->GetNodes()[pTextNd->GetIndex() - 1]->GetTextNode()))
+    {
+        xOperations.DeleteRange(aPam);
+    }
+    else
+    {
+        aPam.DeleteMark();
+        xOperations.DelFullPara(aPam);
+    }
+}
+// Returns if the data was actually modified
+bool HandleHidingField(SwFormatField& rFormatField, const SwNodes& rNodes,
+                       IDocumentContentOperations& xOperations)
+{
+    SwTextNode* pTextNd;
+    if (rFormatField.GetTextField()
+        && nullptr != (pTextNd = rFormatField.GetTextField()->GetpTextNode())
+        && pTextNd->GetpSwpHints() && pTextNd->IsHiddenByParaField()
+        && &pTextNd->GetNodes() == &rNodes)
+    {
+        RemoveOrDeleteContents(pTextNd, xOperations);
+        return true;
+    }
+    return false;
+}
+}
+
+bool SwDoc::FieldCanHidePara(sal_uInt16 eFieldId) const
+{
+    switch (eFieldId)
+    {
+        case RES_HIDDENPARAFLD:
+            return true;
+        case RES_DBFLD:
+            return GetDocumentSettingManager().get(
+                DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA);
+        default:
+            return false;
+    }
+}
+
+bool SwDoc::FieldHidesPara(const SwField& rField) const
+{
+    switch (rField.GetTyp()->Which())
+    {
+        case SwFieldIds::HiddenPara:
+            return static_cast<const SwHiddenParaField&>(rField).IsHidden();
+        case SwFieldIds::Database:
+            return FieldCanHidePara(SwFieldIds::Database) && rField.ExpandField(true).isEmpty();
+        default:
+            return false;
+    }
+}
+
 /// Remove the invisible content from the document e.g. hidden areas, hidden paragraphs
 bool SwDoc::RemoveInvisibleContent()
 {
@@ -1323,35 +1390,22 @@ bool SwDoc::RemoveInvisibleContent()
     GetIDocumentUndoRedo().StartUndo( UNDO_UI_DELETE_INVISIBLECNTNT, nullptr );
 
     {
-        SwTextNode* pTextNd;
-        SwIterator<SwFormatField,SwFieldType> aIter( *getIDocumentFieldsAccess().GetSysFieldType( RES_HIDDENPARAFLD )  );
-        for( SwFormatField* pFormatField = aIter.First(); pFormatField;  pFormatField = aIter.Next() )
+        // Removing some nodes for one SwFieldIds::Database type might remove the type from
+        // document's field types, invalidating iterators. So, we need to create own list of
+        // matching types prior to processing them.
+        std::vector<const SwFieldType*> aHidingFieldTypes;
+        for (const auto* pType : *getIDocumentFieldsAccess().GetFieldTypes())
         {
-            if( pFormatField->GetTextField() &&
-                nullptr != ( pTextNd = pFormatField->GetTextField()->GetpTextNode() ) &&
-                pTextNd->GetpSwpHints() && pTextNd->HasHiddenParaField() &&
-                &pTextNd->GetNodes() == &GetNodes() )
-            {
-                bRet = true;
-                SwPaM aPam(*pTextNd, 0, *pTextNd, pTextNd->GetText().getLength());
-
-                // Remove hidden paragraph or delete contents:
-                // Delete contents if
-                // 1. removing the paragraph would result in an empty section or
-                // 2. if the paragraph is the last paragraph in the section and
-                //    there is no paragraph in front of the paragraph:
-                if ( ( 2 == pTextNd->EndOfSectionIndex() - pTextNd->StartOfSectionIndex() ) ||
-                     ( 1 == pTextNd->EndOfSectionIndex() - pTextNd->GetIndex() &&
-                       !GetNodes()[ pTextNd->GetIndex() - 1 ]->GetTextNode() ) )
-                {
-                    getIDocumentContentOperations().DeleteRange( aPam );
-                }
-                else
-                {
-                    aPam.DeleteMark();
-                    getIDocumentContentOperations().DelFullPara( aPam );
-                }
-            }
+            if (FieldCanHidePara(pType->Which()))
+                aHidingFieldTypes.push_back(pType);
+        }
+        for (const auto* pType : aHidingFieldTypes)
+        {
+            SwIterator<SwFormatField, SwFieldType> aIter(*pType);
+            for (SwFormatField* pFormatField = aIter.First(); pFormatField;
+                 pFormatField = aIter.Next())
+                bRet |= HandleHidingField(*pFormatField, GetNodes(),
+                                          getIDocumentContentOperations());
         }
     }
 
@@ -1367,23 +1421,7 @@ bool SwDoc::RemoveInvisibleContent()
             {
                 bRemoved = true;
                 bRet = true;
-
-                // Remove hidden paragraph or delete contents:
-                // Delete contents if
-                // 1. removing the paragraph would result in an empty section or
-                // 2. if the paragraph is the last paragraph in the section and
-                //    there is no paragraph in front of the paragraph:
-                if ( ( 2 == pTextNd->EndOfSectionIndex() - pTextNd->StartOfSectionIndex() ) ||
-                     ( 1 == pTextNd->EndOfSectionIndex() - pTextNd->GetIndex() &&
-                       !GetNodes()[ pTextNd->GetIndex() - 1 ]->GetTextNode() ) )
-                {
-                    getIDocumentContentOperations().DeleteRange( aPam );
-                }
-                else
-                {
-                    aPam.DeleteMark();
-                    getIDocumentContentOperations().DelFullPara( aPam );
-                }
+                RemoveOrDeleteContents(pTextNd, getIDocumentContentOperations());
             }
             else if ( pTextNd->HasHiddenCharAttribute( false ) )
             {
