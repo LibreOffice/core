@@ -244,6 +244,7 @@ private:
     std::unique_ptr<SfxItemSet>           m_pOutSet;
     std::unique_ptr< TabDlg_Impl >        m_pImpl;
     sal_uInt16*         m_pRanges;
+    OString             m_sAppPageId;
 
     DECL_DLLPRIVATE_LINK(ActivatePageHdl, const OString&, void);
     DECL_DLLPRIVATE_LINK(DeactivatePageHdl, const OString&, bool);
