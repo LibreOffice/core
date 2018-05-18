@@ -917,6 +917,8 @@ void ComboBox::RemoveEntryAt(sal_Int32 const nPos)
 
 void ComboBox::Clear()
 {
+    if (!m_pImpl->m_pImplLB)
+        return;
     m_pImpl->m_pImplLB->Clear();
     CallEventListeners( VclEventId::ComboboxItemRemoved, reinterpret_cast<void*>(-1) );
 }
@@ -955,6 +957,8 @@ OUString ComboBox::GetEntry( sal_Int32 nPos ) const
 
 sal_Int32 ComboBox::GetEntryCount() const
 {
+    if (!m_pImpl->m_pImplLB)
+        return 0;
     return m_pImpl->m_pImplLB->GetEntryList()->GetEntryCount() - m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
 }
 
@@ -987,7 +991,12 @@ void ComboBox::SetDoubleClickHdl(const Link<ComboBox&,void>& rLink) { m_pImpl->m
 
 const Link<ComboBox&,void>& ComboBox::GetDoubleClickHdl() const { return m_pImpl->m_DoubleClickHdl; }
 
-void ComboBox::SetEntryActivateHdl(const Link<Edit&,void>& rLink) { m_pImpl->m_pSubEdit->SetActivateHdl(rLink); }
+void ComboBox::SetEntryActivateHdl(const Link<Edit&,void>& rLink)
+{
+    if (!m_pImpl->m_pSubEdit)
+        return;
+    m_pImpl->m_pSubEdit->SetActivateHdl(rLink);
+}
 
 long ComboBox::CalcWindowSizePixel(sal_uInt16 nLines) const
 {

@@ -2314,6 +2314,18 @@ public:
         enable_notify_events();
     }
 
+    virtual int vadjustment_get_upper() const override
+    {
+         return gtk_adjustment_get_upper(m_pVAdjustment);
+    }
+
+    virtual void vadjustment_set_upper(int upper) override
+    {
+        disable_notify_events();
+        gtk_adjustment_set_upper(m_pVAdjustment, upper);
+        enable_notify_events();
+    }
+
     virtual void set_user_managed_scrolling() override
     {
         disable_notify_events();

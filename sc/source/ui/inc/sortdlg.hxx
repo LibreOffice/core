@@ -24,10 +24,10 @@
 #include <vcl/weld.hxx>
 #include "scui_def.hxx"
 
-class ScSortDlg : public SfxTabDialog
+class ScSortDlg : public SfxTabDialogController
 {
 public:
-    ScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet);
+    ScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet);
 
     void SetHeaders( bool bHeaders )  { bIsHeaders = bHeaders; }
     void SetByRows ( bool bByRows  )  { bIsByRows = bByRows; }

@@ -714,6 +714,8 @@ class SalInstanceScrolledWindow : public SalInstanceContainer, public virtual we
 {
 private:
     VclPtr<VclScrolledWindow> m_xScrolledWindow;
+    Link<ScrollBar*,void> m_aOrigVScrollHdl;
+    bool m_bUserManagedScrolling;
 
     DECL_LINK(VscrollHdl, ScrollBar*, void);
 
@@ -721,8 +723,10 @@ public:
     SalInstanceScrolledWindow(VclScrolledWindow* pScrolledWindow, bool bTakeOwnership)
         : SalInstanceContainer(pScrolledWindow, bTakeOwnership)
         , m_xScrolledWindow(pScrolledWindow)
+        , m_bUserManagedScrolling(false)
     {
         ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
+        m_aOrigVScrollHdl = rVertScrollBar.GetScrollHdl();
         rVertScrollBar.SetScrollHdl(LINK(this, SalInstanceScrolledWindow, VscrollHdl));
     }
 
@@ -749,23 +753,40 @@ public:
     {
         ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
         rVertScrollBar.SetThumbPos(value);
+        if (!m_bUserManagedScrolling)
+            m_aOrigVScrollHdl.Call(&rVertScrollBar);
+    }
+
+    virtual int vadjustment_get_upper() const override
+    {
+        ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
+        return rVertScrollBar.GetRangeMax();
+    }
+
+    virtual void vadjustment_set_upper(int upper) override
+    {
+        ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
+        rVertScrollBar.SetRangeMax(upper);
     }
 
     virtual void set_user_managed_scrolling() override
     {
+        m_bUserManagedScrolling = true;
         m_xScrolledWindow->setUserManagedScrolling(true);
     }
 
     virtual ~SalInstanceScrolledWindow() override
     {
         ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
-        rVertScrollBar.SetScrollHdl(Link<ScrollBar*, void>());
+        rVertScrollBar.SetScrollHdl(m_aOrigVScrollHdl);
     }
 };
 
 IMPL_LINK_NOARG(SalInstanceScrolledWindow, VscrollHdl, ScrollBar*, void)
 {
     signal_vadjustment_changed();
+    if (!m_bUserManagedScrolling)
+        m_aOrigVScrollHdl.Call(&m_xScrolledWindow->getVertScrollBar());
 }
 
 class SalInstanceNotebook : public SalInstanceContainer, public virtual weld::Notebook
@@ -2143,7 +2164,14 @@ public:
     virtual weld::Frame* weld_frame(const OString &id, bool bTakeOwnership) override
     {
         VclFrame* pFrame = m_xBuilder->get<VclFrame>(id);
-        return pFrame ? new SalInstanceFrame(pFrame, bTakeOwnership) : nullptr;
+        weld::Frame* pRet = pFrame ? new SalInstanceFrame(pFrame, false) : nullptr;
+        if (bTakeOwnership && pFrame)
+        {
+            assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
+            m_aOwnedToplevel.set(pFrame);
+            m_xBuilder->drop_ownership(pFrame);
+        }
+        return pRet;
     }
 
     virtual weld::ScrolledWindow* weld_scrolled_window(const OString &id, bool bTakeOwnership) override
@@ -2274,6 +2302,8 @@ public:
     {
         if (VclBuilderContainer* pOwnedToplevel = dynamic_cast<VclBuilderContainer*>(m_aOwnedToplevel.get()))
             pOwnedToplevel->m_pUIBuilder = std::move(m_xBuilder);
+        else
+            m_xBuilder.reset();
         m_aOwnedToplevel.disposeAndClear();
     }
 };

@@ -507,6 +507,24 @@ class ScAbstractTabDialog_Impl : public SfxAbstractTabDialog
     virtual void        SetText( const OUString& rStr ) override;
 };
 
+class ScAbstractTabController_Impl : public SfxAbstractTabDialog
+{
+protected:
+    std::unique_ptr<SfxTabDialogController> m_xDlg;
+public:
+    explicit ScAbstractTabController_Impl(SfxTabDialogController* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
+    virtual void                SetCurPageId( const OString &rName ) override;
+    virtual const SfxItemSet*   GetOutputItemSet() const override;
+    virtual const sal_uInt16*   GetInputRanges( const SfxItemPool& pItem ) override;
+    virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
+        //From class Window.
+    virtual void        SetText( const OUString& rStr ) override;
+};
+
 //AbstractDialogFactory_Impl implementations
 class ScAbstractDialogFactory_Impl : public ScAbstractDialogFactory
 {
@@ -656,7 +674,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog> CreateScParagraphDlg(vcl::Window* pParent,
         const SfxItemSet* pAttr) override;
 
-    virtual VclPtr<SfxAbstractTabDialog> CreateScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet) override;
+    virtual VclPtr<SfxAbstractTabDialog> CreateScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet) override;
 
     // For TabPage
     virtual CreateTabPage                GetTabPageCreatorFunc( sal_uInt16 nId ) override;

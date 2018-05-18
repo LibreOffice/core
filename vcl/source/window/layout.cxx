@@ -2041,7 +2041,13 @@ void VclViewport::setAllocation(const Size &rAllocation)
         Size aReq(getLayoutRequisition(*pChild));
         aReq.setWidth( std::max(aReq.Width(), rAllocation.Width()) );
         aReq.setHeight( std::max(aReq.Height(), rAllocation.Height()) );
-        setLayoutAllocation(*pChild, Point(0, 0), aReq);
+        Point aKeepPos(pChild->GetPosPixel());
+        if (m_bInitialAllocation)
+        {
+            aKeepPos = Point(0, 0);
+            m_bInitialAllocation = false;
+        }
+        setLayoutAllocation(*pChild, aKeepPos, aReq);
     }
 }
 

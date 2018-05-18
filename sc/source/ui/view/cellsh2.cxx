@@ -495,7 +495,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         assert(pFact); //ScAbstractFactory create fail!
 
-                        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScSortDlg(pTabViewShell->GetDialogParent(),  &aArgSet));
+                        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScSortDlg(pTabViewShell->GetFrameWeld(),  &aArgSet));
                         assert(pDlg); //Dialog create fail!
                         pDlg->SetCurPageId("criteria");  // 1=sort field tab  2=sort options tab
 

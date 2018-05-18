@@ -683,6 +683,37 @@ bool AbstractScTextImportOptionsDlg_Impl::IsDateConversionSet() const
     return pDlg->isDateConversionSet();
 }
 
+short ScAbstractTabController_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
+
+void ScAbstractTabController_Impl::SetCurPageId( const OString &rName )
+{
+    m_xDlg->SetCurPageId( rName );
+}
+
+const SfxItemSet* ScAbstractTabController_Impl::GetOutputItemSet() const
+{
+    return m_xDlg->GetOutputItemSet();
+}
+
+const sal_uInt16* ScAbstractTabController_Impl::GetInputRanges(const SfxItemPool& pItem )
+{
+    return m_xDlg->GetInputRanges( pItem );
+}
+
+void ScAbstractTabController_Impl::SetInputSet( const SfxItemSet* pInSet )
+{
+     m_xDlg->SetInputSet( pInSet );
+}
+
+//From class Window.
+void ScAbstractTabController_Impl::SetText( const OUString& rStr )
+{
+    m_xDlg->set_title(rStr);
+}
+
 // =========================Factories  for createdialog ===================
 VclPtr<AbstractScImportAsciiDlg> ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg ( const OUString& aDatName,
                                                     SvStream* pInStream, ScImportAsciiCall eCall )
@@ -1015,10 +1046,9 @@ VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScParagraphDlg(
     return VclPtr<ScAbstractTabDialog_Impl>::Create(pDlg);
 }
 
-VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
+VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet)
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<ScSortDlg>::Create( pParent, pArgSet );
-    return VclPtr<ScAbstractTabDialog_Impl>::Create( pDlg );
+    return VclPtr<ScAbstractTabController_Impl>::Create(new ScSortDlg(pParent, pArgSet));
 }
 
 //------------------ Factories for TabPages--------------------

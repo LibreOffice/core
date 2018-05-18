@@ -15,23 +15,19 @@
 
 #include "anyrefdg.hxx"
 
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/ctrl.hxx>
+#include <vcl/weld.hxx>
 #include <svx/langbox.hxx>
 
-struct ScSortKeyItem : public VclBuilderContainer
+struct ScSortKeyItem
 {
-    VclPtr<VclFrame>       m_pFrame;
-    VclPtr<FixedText>      m_pFlSort;
-    VclPtr<ListBox>        m_pLbSort;
-    VclPtr<RadioButton>    m_pBtnUp;
-    VclPtr<RadioButton>    m_pBtnDown;
+    std::unique_ptr<weld::Builder> m_xBuilder;
 
-    ScSortKeyItem(vcl::Window* pParent);
+    std::unique_ptr<weld::Frame> m_xFrame;
+    std::unique_ptr<weld::ComboBoxText> m_xLbSort;
+    std::unique_ptr<weld::RadioButton> m_xBtnUp;
+    std::unique_ptr<weld::RadioButton> m_xBtnDown;
+
+    ScSortKeyItem(weld::Container* pParent);
 
     void DisableField();
     void EnableField();
@@ -43,38 +39,19 @@ typedef std::vector<std::unique_ptr<ScSortKeyItem> > ScSortKeyItems;
 
 class ScSortKeyWindow
 {
+public:
+    ScSortKeyItems m_aSortKeyItems;
 private:
-    VclPtr<VclBox>  m_pBox;
-    sal_Int32       nItemHeight;
-
-    ScSortKeyItems& mrSortKeyItems;
+    weld::Container* m_pBox;
+    sal_Int32 m_nItemHeight;
 
 public:
-    ScSortKeyWindow(SfxTabPage* pParent, ScSortKeyItems& mrSortKeyItems);
+    ScSortKeyWindow(weld::Container* pBox);
     ~ScSortKeyWindow();
-    void dispose();
 
     void AddSortKey( sal_uInt16 nItem );
     void DoScroll( sal_Int32 nNewPos );
-    sal_Int32 GetItemHeight() const { return nItemHeight; }
-};
-
-class ScSortKeyCtrl
-{
-private:
-    ScSortKeyWindow  m_aSortWin;
-    VclScrolledWindow& m_rScrolledWindow;
-    ScrollBar&       m_rVertScroll;
-
-    DECL_LINK(ScrollHdl, ScrollBar*, void);
-
-    void checkAutoVScroll();
-
-public:
-    ScSortKeyCtrl(SfxTabPage* pParent, ScSortKeyItems& mrSortKeyItems);
-    void dispose();
-    void setScrollRange();
-    void AddSortKey( sal_uInt16 nItem );
+    sal_Int32 GetItemHeight() const { return m_nItemHeight; }
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_SORTKEYDLG_HXX

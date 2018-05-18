@@ -1999,17 +1999,22 @@ void SfxTabDialogController::Start_Impl()
     assert(m_pImpl->aData.size() == static_cast<size_t>(m_xTabCtrl->get_n_pages())
             && "not all pages registered");
 
-    // load old settings, when exists
-    SvtViewOptions aDlgOpt(EViewType::TabDialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
-    if (aDlgOpt.Exists())
-        m_xTabCtrl->set_current_page(aDlgOpt.GetPageID());
+    // load old settings, when exists, setting SetCurPageId will override the settings,
+    // something that the sort dialog in calc depends on
+    if (m_sAppPageId.isEmpty())
+    {
+        SvtViewOptions aDlgOpt(EViewType::TabDialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+        if (aDlgOpt.Exists())
+            m_xTabCtrl->set_current_page(aDlgOpt.GetPageID());
+    }
 
     ActivatePageHdl(m_xTabCtrl->get_current_page_ident());
 }
 
 void SfxTabDialogController::SetCurPageId(const OString& rIdent)
 {
-    m_xTabCtrl->set_current_page(rIdent);
+    m_sAppPageId = rIdent;
+    m_xTabCtrl->set_current_page(m_sAppPageId);
 }
 
 OString SfxTabDialogController::GetCurPageId() const

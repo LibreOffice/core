@@ -22,8 +22,8 @@
 #include <tpsort.hxx>
 #include <sortdlg.hxx>
 
-ScSortDlg::ScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
-    : SfxTabDialog(pParent, "SortDialog", "modules/scalc/ui/sortdialog.ui", pArgSet)
+ScSortDlg::ScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet)
+    : SfxTabDialogController(pParent, "modules/scalc/ui/sortdialog.ui", "SortDialog", pArgSet)
     , bIsHeaders(false)
     , bIsByRows(false)
 {

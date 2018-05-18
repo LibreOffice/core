@@ -12,54 +12,39 @@
 #include <sortdlg.hxx>
 #include <vcl/layout.hxx>
 
-ScSortKeyItem::ScSortKeyItem(vcl::Window* pParent)
+ScSortKeyItem::ScSortKeyItem(weld::Container* pParent)
+    : m_xBuilder(Application::CreateBuilder(pParent, "modules/scalc/ui/sortkey.ui"))
+    , m_xFrame(m_xBuilder->weld_frame("SortKeyFrame", true))
+    , m_xLbSort(m_xBuilder->weld_combo_box_text("sortlb"))
+    , m_xBtnUp(m_xBuilder->weld_radio_button("up"))
+    , m_xBtnDown(m_xBuilder->weld_radio_button("down"))
 {
-    m_pUIBuilder.reset(new VclBuilder(pParent, getUIRootDir(), "modules/scalc/ui/sortkey.ui"));
-
-    get(m_pFrame, "SortKeyFrame");
-    get(m_pFlSort, "sortft");
-    get(m_pLbSort, "sortlb");
-    get(m_pBtnUp, "up");
-    get(m_pBtnDown, "down");
 }
 
 long ScSortKeyItem::getItemHeight() const
 {
-    return VclContainer::getLayoutRequisition(*m_pFrame).Height();
+    return m_xFrame->get_preferred_size().Height();
 }
 
 void ScSortKeyItem::DisableField()
 {
-    m_pFrame->Disable();
+    m_xFrame->set_sensitive(false);
 }
 
 void ScSortKeyItem::EnableField()
 {
-    m_pFrame->Enable();
+    m_xFrame->set_sensitive(true);
 }
 
-ScSortKeyWindow::ScSortKeyWindow(SfxTabPage* pParent, ScSortKeyItems& rSortKeyItems)
-    : mrSortKeyItems(rSortKeyItems)
+ScSortKeyWindow::ScSortKeyWindow(weld::Container* pBox)
+    : m_pBox(pBox)
 {
-    pParent->get(m_pBox, "SortKeyWindow");
-    if (!mrSortKeyItems.empty())
-        nItemHeight = mrSortKeyItems.front()->getItemHeight();
-    else
-    {
-        ScSortKeyItem aTemp(m_pBox);
-        nItemHeight = aTemp.getItemHeight();
-    }
+    ScSortKeyItem aTemp(m_pBox);
+    m_nItemHeight = aTemp.getItemHeight();
 }
 
 ScSortKeyWindow::~ScSortKeyWindow()
 {
-    dispose();
-}
-
-void ScSortKeyWindow::dispose()
-{
-    m_pBox.disposeAndClear();
-    mrSortKeyItems.clear();
 }
 
 void ScSortKeyWindow::AddSortKey( sal_uInt16 nItemNumber )
@@ -67,76 +52,11 @@ void ScSortKeyWindow::AddSortKey( sal_uInt16 nItemNumber )
     ScSortKeyItem* pSortKeyItem = new ScSortKeyItem(m_pBox);
 
     // Set Sort key number
-    OUString aLine = pSortKeyItem->m_pFlSort->GetText() +
+    OUString aLine = pSortKeyItem->m_xFrame->get_label() +
                      OUString::number( nItemNumber );
-    pSortKeyItem->m_pFlSort->SetText( aLine );
+    pSortKeyItem->m_xFrame->set_label(aLine);
 
-    mrSortKeyItems.push_back(std::unique_ptr<ScSortKeyItem>(pSortKeyItem));
-}
-
-void ScSortKeyWindow::DoScroll(sal_Int32 nNewPos)
-{
-    m_pBox->SetPosPixel(Point(0, nNewPos));
-}
-
-ScSortKeyCtrl::ScSortKeyCtrl(SfxTabPage* pParent, ScSortKeyItems& rItems)
-    : m_aSortWin(pParent, rItems)
-    , m_rScrolledWindow(*pParent->get<VclScrolledWindow>("SortCriteriaPage"))
-    , m_rVertScroll(m_rScrolledWindow.getVertScrollBar())
-{
-    m_rScrolledWindow.setUserManagedScrolling(true);
-
-    m_rVertScroll.EnableDrag();
-    m_rVertScroll.Show(m_rScrolledWindow.GetStyle() & WB_VSCROLL);
-
-    m_rVertScroll.SetRangeMin( 0 );
-    m_rVertScroll.SetVisibleSize( 0xFFFF );
-
-    Link<ScrollBar*,void> aScrollLink = LINK( this, ScSortKeyCtrl, ScrollHdl );
-    m_rVertScroll.SetScrollHdl( aScrollLink );
-}
-
-void ScSortKeyCtrl::dispose()
-{
-    m_aSortWin.dispose();
-}
-
-void ScSortKeyCtrl::checkAutoVScroll()
-{
-    WinBits nBits = m_rScrolledWindow.GetStyle();
-    if (nBits & WB_VSCROLL)
-        return;
-    if (nBits & WB_AUTOVSCROLL)
-    {
-        bool bShow = m_rVertScroll.GetRangeMax() > m_rVertScroll.GetVisibleSize();
-        if (bShow != m_rVertScroll.IsVisible())
-            m_rVertScroll.Show(bShow);
-    }
-}
-
-void ScSortKeyCtrl::setScrollRange()
-{
-    sal_Int32 nScrollOffset = m_aSortWin.GetItemHeight();
-    sal_Int32 nVisibleItems = m_rScrolledWindow.getVisibleChildSize().Height() / nScrollOffset;
-    m_rVertScroll.SetPageSize( nVisibleItems - 1 );
-    m_rVertScroll.SetVisibleSize( nVisibleItems );
-    m_rVertScroll.Scroll();
-    checkAutoVScroll();
-}
-
-IMPL_LINK( ScSortKeyCtrl, ScrollHdl, ScrollBar*, pScrollBar, void )
-{
-    sal_Int32 nOffset = m_aSortWin.GetItemHeight();
-    nOffset *= pScrollBar->GetThumbPos();
-    m_aSortWin.DoScroll( -nOffset );
-}
-
-void ScSortKeyCtrl::AddSortKey( sal_uInt16 nItem )
-{
-    m_rVertScroll.SetRangeMax( nItem );
-    m_rVertScroll.DoScroll( nItem );
-    m_aSortWin.AddSortKey( nItem );
-    checkAutoVScroll();
+    m_aSortKeyItems.push_back(std::unique_ptr<ScSortKeyItem>(pSortKeyItem));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
