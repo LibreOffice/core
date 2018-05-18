@@ -47,10 +47,10 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(vcl::Window* pParent
 {
     m_pImpl->setDataSourceOrName(_aDataSourceName);
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
-    m_pOutSet = new SfxItemSet( *_pItems );
+    m_pOutSet.reset(new SfxItemSet( *_pItems ));
 
     m_pImpl->translateProperties(xDatasource, *m_pOutSet);
-    SetInputSet(m_pOutSet);
+    SetInputSet(m_pOutSet.get());
 
     VclPtrInstance<OTableSubscriptionPage> pTabPage(get_content_area(), *m_pOutSet, this);
     pTabPage->SetServiceFactory(_rxORB);
@@ -64,7 +64,7 @@ OTableSubscriptionDialog::~OTableSubscriptionDialog()
 
 void OTableSubscriptionDialog::dispose()
 {
-    delete m_pOutSet;
+    m_pOutSet.reset();
     SfxSingleTabDialog::dispose();
 }
 
@@ -110,12 +110,12 @@ Reference< XPropertySet > const & OTableSubscriptionDialog::getCurrentDataSource
 
 const SfxItemSet* OTableSubscriptionDialog::getOutputSet() const
 {
-    return m_pOutSet;
+    return m_pOutSet.get();
 }
 
 SfxItemSet* OTableSubscriptionDialog::getWriteOutputSet()
 {
-    return m_pOutSet;
+    return m_pOutSet.get();
 }
 
 }   // namespace dbaui
