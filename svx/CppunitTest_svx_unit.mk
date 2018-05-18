@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_set_include,svx_unit,\
 
 $(eval $(call gb_CppunitTest_add_exception_objects,svx_unit, \
 	svx/qa/unit/svdraw/test_SdrTextObject \
+	svx/qa/unit/unodraw \
 	svx/qa/unit/xoutdev \
 	svx/qa/unit/XTableImportExportTest \
 ))
@@ -37,6 +38,8 @@ $(eval $(call gb_CppunitTest_use_libraries,svx_unit, \
 	comphelper \
 	cppuhelper \
 	cppu \
+	test \
+	unotest \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,svx_unit))
