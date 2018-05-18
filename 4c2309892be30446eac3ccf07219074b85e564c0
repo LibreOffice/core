@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_007978c8",
+        "filename": "xmlsecurity/source/helper/xsecparser.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-05-18T08:48:55Z",
+      "side": 1,
+      "message": "urgh, the namespace handling in here is quite broken, but it\u0027s a pre-existing condition",
+      "revId": "4c2309892be30446eac3ccf07219074b85e564c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
