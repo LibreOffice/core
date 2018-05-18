@@ -672,7 +672,6 @@ darwin*) # Mac OS X or iOS
         INSTROOTCONTENTSUFFIX=/Contents
         SDKDIRNAME=AC_PACKAGE_NAME${PRODUCTVERSION}_SDK
     fi
-    enable_systray=no
     # See comment above the case "$host_os"
     LINKFLAGSSHL="-dynamiclib -single_module"
 
@@ -1196,11 +1195,6 @@ libo_FUZZ_ARG_ENABLE(gtk3,
     AS_HELP_STRING([--disable-gtk3],
         [Determines whether to use Gtk+ 3.0 vclplug on platforms where Gtk+ 3.0 is available.]),
 ,test "${enable_gtk3+set}" = set || enable_gtk3=yes)
-
-libo_FUZZ_ARG_ENABLE(systray,
-    AS_HELP_STRING([--disable-systray],
-        [Determines whether to build the systray quickstarter.]),
-,test "${enable_systray+set}" = set || enable_systray=yes)
 
 AC_ARG_ENABLE(split-app-modules,
     AS_HELP_STRING([--enable-split-app-modules],
@@ -10111,7 +10105,6 @@ dnl ===================================================================
 
 GTK_CFLAGS=""
 GTK_LIBS=""
-ENABLE_SYSTRAY_GTK=""
 if test  "$test_gtk" = "yes"; then
 
     if test "$ENABLE_GTK" = "TRUE"; then
@@ -10124,10 +10117,6 @@ if test  "$test_gtk" = "yes"; then
         GTHREAD_CFLAGS=$(printf '%s' "$GTK_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
         FilterLibs "${GTHREAD_LIBS}"
         GTHREAD_LIBS="${filteredlibs}"
-
-        if test "x$enable_systray" = "xyes"; then
-            ENABLE_SYSTRAY_GTK="TRUE"
-        fi
 
         AC_MSG_CHECKING([whether to enable Gtk print dialog support])
         PKG_CHECK_MODULES([GTK_PRINT], [gtk+-unix-print-2.0 >= 2.10.0],
@@ -10156,7 +10145,6 @@ fi
 AC_SUBST(ENABLE_GIO)
 AC_SUBST(GIO_CFLAGS)
 AC_SUBST(GIO_LIBS)
-AC_SUBST(ENABLE_SYSTRAY_GTK)
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 AC_SUBST(GTHREAD_CFLAGS)
