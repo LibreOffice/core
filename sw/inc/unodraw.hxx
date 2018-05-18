@@ -47,7 +47,7 @@ public:
     const SdrMarkList&  PreGroup(const css::uno::Reference< css::drawing::XShapes >& rShapes);
     void                PreUnGroup(const css::uno::Reference< css::drawing::XShapeGroup >& rShapeGroup);
 
-    SdrView*            GetDrawView() {return mpView;}
+    SdrView*            GetDrawView() {return mpView.get();}
     SdrPageView*        GetPageView();
     void                RemovePageView();
     static css::uno::Reference< css::uno::XInterface >       GetInterface( SdrObject* pObj );

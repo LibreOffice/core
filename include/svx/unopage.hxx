@@ -40,6 +40,7 @@
 #include <comphelper/servicehelper.hxx>
 
 #include <svx/unoprov.hxx>
+#include <memory>
 
 class SdrPage;
 class SdrModel;
@@ -70,7 +71,7 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper6< css::drawin
 
     SdrPage*        mpPage;     // TTTT should be reference
     SdrModel*       mpModel;    // TTTT probably not needed -> use from SdrPage
-    SdrView*        mpView;
+    std::unique_ptr<SdrView> mpView;
 
     void    SelectObjectsInView( const css::uno::Reference< css::drawing::XShapes >& aShapes, SdrPageView*   pPageView ) throw ();
     void    SelectObjectInView( const css::uno::Reference< css::drawing::XShape >& xShape, SdrPageView*  pPageView ) throw();
