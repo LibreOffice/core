@@ -863,6 +863,53 @@ DECLARE_OOXMLEXPORT_TEST(testTableCellWithDirectFormatting, "fdo80800.docx")
 
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo80800b_tableStyle, "fdo80800b_tableStyle.docx")
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Cell1 1.5lines"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell A1 1.5 line spacing", sal_Int16(150), getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Height);
+
+    xCell.set(xTable->getCellByName("B1"), uno::UNO_QUERY);
+    xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
+    xParaEnum = xParaEnumAccess->createEnumeration();
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Cell2 Implicit (Single)"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B1 single line spacing", sal_Int16(100), getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Height);
+
+    xCell.set(xTable->getCellByName("C1"), uno::UNO_QUERY);
+    xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
+    xParaEnum = xParaEnumAccess->createEnumeration();
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Cell3 Implicit (Single)"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("C1 paragraph1 single line spacing", sal_Int16(100), getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Height);
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("C1 paragraph3 line spacing", sal_Int16(212), getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Height);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf117297_tableStyle, "tdf117297_tableStyle.docx")
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("B1"), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText(xPara->getText(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Green text, default size (9), 1.5 spaced"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B1 Paragraph1 green font", sal_Int32(0x70AD47), getProperty<sal_Int32>(getRun(xPara, 1), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B1 Paragraph1 1.5 line spacing", sal_Int16(150), getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Height);
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    xText.set(xPara->getText(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("TableGrid color (blue), TableGrid size (9), double spacing"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B1 Paragraph3 blue font", sal_Int32(0x00B0F0), getProperty<sal_Int32>(getRun(xPara, 1), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B1 Paragraph3 double spacing", sal_Int16(200), getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Height);
+}
+
 DECLARE_OOXMLEXPORT_TEST(test2colHeader, "2col-header.docx")
 {
     // Header was lost on export when the document had multiple columns.

@@ -2037,32 +2037,10 @@ lcl_ApplyCellProperties(
             {
                 xCellPS->setPropertyValue(rName, rValue);
             }
-            catch (const uno::Exception&)
+            catch (const uno::Exception& e)
             {
-                // Apply the paragraph and char properties to the cell's content
-                const uno::Reference< text::XText > xCellText(xCell,
-                        uno::UNO_QUERY);
-                const uno::Reference< text::XTextCursor > xCellCurs =
-                    xCellText->createTextCursor();
-                xCellCurs->gotoStart( false );
-                xCellCurs->gotoEnd( true );
-                const uno::Reference< beans::XPropertyState >
-                    xCellTextPropState(xCellCurs, uno::UNO_QUERY);
-                try
-                {
-                    const beans::PropertyState state = xCellTextPropState->getPropertyState(rName);
-                    if (state == beans::PropertyState_DEFAULT_VALUE)
-                    {
-                        const uno::Reference< beans::XPropertySet >
-                            xCellTextProps(xCellCurs, uno::UNO_QUERY);
-                        xCellTextProps->setPropertyValue(rName, rValue);
-                    }
-                }
-                catch (const uno::Exception& e)
-                {
-                    SAL_WARN( "sw.uno", "Exception when getting PropertyState: "
+                SAL_WARN( "sw.uno", "Exception when getting PropertyState: "
                         + rName + ". Message: " + e.Message );
-                }
             }
         }
     }
