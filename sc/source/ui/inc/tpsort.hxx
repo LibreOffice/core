@@ -103,15 +103,10 @@ class CollatorWrapper;
 class ScTabPageSortOptions : public SfxTabPage
 {
 public:
-    ScTabPageSortOptions( vcl::Window*            pParent,
-            const SfxItemSet&  rArgSet );
+    ScTabPageSortOptions(TabPageParent pParent, const SfxItemSet& rArgSet);
     virtual ~ScTabPageSortOptions() override;
-    virtual void dispose() override;
 
-#undef SfxTabPage
-#define SfxTabPage ::SfxTabPage
-    static  VclPtr<SfxTabPage> Create      ( TabPageParent               pParent,
-                                      const SfxItemSet*     rArgSet );
+    static  VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* pArgSet);
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 
@@ -122,29 +117,6 @@ protected:
     virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;
 
 private:
-
-    VclPtr<CheckBox>           m_pBtnCase;
-    VclPtr<CheckBox>           m_pBtnHeader;
-    VclPtr<CheckBox>           m_pBtnFormats;
-    VclPtr<CheckBox>           m_pBtnNaturalSort;
-
-    VclPtr<CheckBox>           m_pBtnCopyResult;
-    VclPtr<ListBox>            m_pLbOutPos;
-    VclPtr<Edit>               m_pEdOutPos;
-
-    VclPtr<CheckBox>           m_pBtnSortUser;
-    VclPtr<ListBox>            m_pLbSortUser;
-
-    VclPtr<SvxLanguageBox>     m_pLbLanguage;
-    VclPtr<FixedText>          m_pFtAlgorithm;
-    VclPtr<ListBox>            m_pLbAlgorithm;
-
-    VclPtr<RadioButton>        m_pBtnTopDown;
-    VclPtr<RadioButton>        m_pBtnLeftRight;
-
-    VclPtr<CheckBox>           m_pBtnIncComments;
-    VclPtr<CheckBox>           m_pBtnIncImages;
-
     OUString            aStrRowLabel;
     OUString            aStrColLabel;
     OUString            aStrUndefined;
@@ -153,22 +125,40 @@ private:
     ScSortParam         aSortData;
     ScViewData*         pViewData;
     ScDocument*         pDoc;
-    VclPtr<ScSortDlg>          pDlg;
+    VclPtr<ScSortDlg>   pDlg;
     ScAddress           theOutPos;
 
-    CollatorResource*  pColRes;
+    CollatorResource*   pColRes;
     CollatorWrapper*    pColWrap;
+
+    std::unique_ptr<weld::CheckButton> m_xBtnCase;
+    std::unique_ptr<weld::CheckButton> m_xBtnHeader;
+    std::unique_ptr<weld::CheckButton> m_xBtnFormats;
+    std::unique_ptr<weld::CheckButton> m_xBtnNaturalSort;
+    std::unique_ptr<weld::CheckButton> m_xBtnCopyResult;
+    std::unique_ptr<weld::ComboBoxText> m_xLbOutPos;
+    std::unique_ptr<weld::Entry> m_xEdOutPos;
+    std::unique_ptr<weld::CheckButton> m_xBtnSortUser;
+    std::unique_ptr<weld::ComboBoxText> m_xLbSortUser;
+    std::unique_ptr<LanguageBox> m_xLbLanguage;
+    std::unique_ptr<weld::Label> m_xFtAlgorithm;
+    std::unique_ptr<weld::ComboBoxText> m_xLbAlgorithm;
+    std::unique_ptr<weld::RadioButton> m_xBtnTopDown;
+    std::unique_ptr<weld::RadioButton> m_xBtnLeftRight;
+    std::unique_ptr<weld::CheckButton> m_xBtnIncComments;
+    std::unique_ptr<weld::CheckButton> m_xBtnIncImages;
 
 private:
     void Init                   ();
     void FillUserSortListBox    ();
 
     // Handler ------------------------
-    DECL_LINK( EnableHdl, Button*, void );
-    DECL_LINK( SelOutPosHdl, ListBox&, void );
-    void EdOutPosModHdl ( Edit* pEd );
-    DECL_LINK( SortDirHdl, Button *, void );
-    DECL_LINK( FillAlgorHdl, ListBox&, void );
+    DECL_LINK( EnableHdl, weld::ToggleButton&, void );
+    DECL_LINK( SelOutPosHdl, weld::ComboBoxText&, void );
+    void EdOutPosModHdl();
+    DECL_LINK( SortDirHdl, weld::ToggleButton&, void );
+    void FillAlgor();
+    DECL_LINK( FillAlgorHdl, weld::ComboBoxText&, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TPSORT_HXX

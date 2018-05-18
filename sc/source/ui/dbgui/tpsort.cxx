@@ -485,10 +485,8 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox&, rLb, void )
 
 // Sort option Tab Page:
 
-ScTabPageSortOptions::ScTabPageSortOptions( vcl::Window*             pParent,
-                                            const SfxItemSet&   rArgSet )
-    : SfxTabPage(pParent, "SortOptionsPage",
-        "modules/scalc/ui/sortoptionspage.ui", &rArgSet)
+ScTabPageSortOptions::ScTabPageSortOptions(TabPageParent pParent, const SfxItemSet& rArgSet)
+    : SfxTabPage(pParent, "modules/scalc/ui/sortoptionspage.ui", "SortOptionsPage", &rArgSet)
     , aStrRowLabel(ScResId(SCSTR_ROW_LABEL))
     , aStrColLabel(ScResId(SCSTR_COL_LABEL))
     , aStrUndefined(ScResId(SCSTR_UNDEFINED))
@@ -499,59 +497,32 @@ ScTabPageSortOptions::ScTabPageSortOptions( vcl::Window*             pParent,
     , pDlg(static_cast<ScSortDlg*>(GetParentDialog()))
     , pColRes( nullptr )
     , pColWrap( nullptr )
+    , m_xBtnCase(m_xBuilder->weld_check_button("case"))
+    , m_xBtnHeader(m_xBuilder->weld_check_button("header"))
+    , m_xBtnFormats(m_xBuilder->weld_check_button("formats"))
+    , m_xBtnNaturalSort(m_xBuilder->weld_check_button("naturalsort"))
+    , m_xBtnCopyResult(m_xBuilder->weld_check_button("copyresult"))
+    , m_xLbOutPos(m_xBuilder->weld_combo_box_text("outarealb"))
+    , m_xEdOutPos(m_xBuilder->weld_entry("outareaed"))
+    , m_xBtnSortUser(m_xBuilder->weld_check_button("sortuser"))
+    , m_xLbSortUser(m_xBuilder->weld_combo_box_text("sortuserlb"))
+    , m_xLbLanguage(new LanguageBox(m_xBuilder->weld_combo_box_text("language")))
+    , m_xFtAlgorithm(m_xBuilder->weld_label("algorithmft"))
+    , m_xLbAlgorithm(m_xBuilder->weld_combo_box_text("algorithmlb"))
+    , m_xBtnTopDown(m_xBuilder->weld_radio_button("topdown"))
+    , m_xBtnLeftRight(m_xBuilder->weld_radio_button("leftright"))
+    , m_xBtnIncComments(m_xBuilder->weld_check_button("includenotes"))
+    , m_xBtnIncImages(m_xBuilder->weld_check_button("includeimages"))
 {
-    get(m_pBtnCase, "case");
-    get(m_pBtnHeader, "header");
-    get(m_pBtnFormats, "formats");
-    get(m_pBtnNaturalSort, "naturalsort");
-    get(m_pBtnIncComments, "includenotes");
-    get(m_pBtnIncImages, "includeimages");
-    get(m_pBtnCopyResult, "copyresult");
-    get(m_pLbOutPos, "outarealb");
-    get(m_pEdOutPos, "outareaed");
-    get(m_pBtnSortUser, "sortuser");
-    get(m_pLbSortUser, "sortuserlb");
-    get(m_pFtAlgorithm, "algorithmft");
-    get(m_pLbAlgorithm, "algorithmlb");
-    get(m_pBtnTopDown, "topdown");
-    get(m_pBtnLeftRight, "leftright");
-    get(m_pLbLanguage, "language");
+    m_xLbSortUser->set_size_request(m_xLbSortUser->get_approximate_digit_width() * 50, -1);
     Init();
     SetExchangeSupport();
 }
 
 ScTabPageSortOptions::~ScTabPageSortOptions()
 {
-    disposeOnce();
-}
-
-void ScTabPageSortOptions::dispose()
-{
-    const sal_Int32 nEntries = m_pLbOutPos->GetEntryCount();
-
-    for ( sal_Int32 i=1; i<nEntries; ++i )
-        delete static_cast<OUString*>(m_pLbOutPos->GetEntryData( i ));
-
     delete pColRes;
     delete pColWrap;        //! not if from document
-    m_pBtnCase.clear();
-    m_pBtnHeader.clear();
-    m_pBtnFormats.clear();
-    m_pBtnNaturalSort.clear();
-    m_pBtnIncComments.clear();
-    m_pBtnIncImages.clear();
-    m_pBtnCopyResult.clear();
-    m_pLbOutPos.clear();
-    m_pEdOutPos.clear();
-    m_pBtnSortUser.clear();
-    m_pLbSortUser.clear();
-    m_pLbLanguage.clear();
-    m_pFtAlgorithm.clear();
-    m_pLbAlgorithm.clear();
-    m_pBtnTopDown.clear();
-    m_pBtnLeftRight.clear();
-    pDlg.clear();
-    SfxTabPage::dispose();
 }
 
 void ScTabPageSortOptions::Init()
@@ -565,12 +536,12 @@ void ScTabPageSortOptions::Init()
     const ScSortItem&   rSortItem = static_cast<const ScSortItem&>(
                                     GetItemSet().Get( nWhichSort ));
 
-    m_pLbOutPos->SetSelectHdl    ( LINK( this, ScTabPageSortOptions, SelOutPosHdl ) );
-    m_pBtnCopyResult->SetClickHdl( LINK( this, ScTabPageSortOptions, EnableHdl ) );
-    m_pBtnSortUser->SetClickHdl  ( LINK( this, ScTabPageSortOptions, EnableHdl ) );
-    m_pBtnTopDown->SetClickHdl   ( LINK( this, ScTabPageSortOptions, SortDirHdl ) );
-    m_pBtnLeftRight->SetClickHdl ( LINK( this, ScTabPageSortOptions, SortDirHdl ) );
-    m_pLbLanguage->SetSelectHdl  ( LINK( this, ScTabPageSortOptions, FillAlgorHdl ) );
+    m_xLbOutPos->connect_changed( LINK( this, ScTabPageSortOptions, SelOutPosHdl ) );
+    m_xBtnCopyResult->connect_toggled( LINK( this, ScTabPageSortOptions, EnableHdl ) );
+    m_xBtnSortUser->connect_toggled( LINK( this, ScTabPageSortOptions, EnableHdl ) );
+    m_xBtnTopDown->connect_toggled( LINK( this, ScTabPageSortOptions, SortDirHdl ) );
+    m_xBtnLeftRight->connect_toggled( LINK( this, ScTabPageSortOptions, SortDirHdl ) );
+    m_xLbLanguage->connect_changed( LINK( this, ScTabPageSortOptions, FillAlgorHdl ) );
 
     pViewData = rSortItem.GetViewData();
     pDoc      = pViewData ? pViewData->GetDocument() : nullptr;
@@ -583,23 +554,21 @@ void ScTabPageSortOptions::Init()
         const SCTAB     nCurTab     = pViewData->GetTabNo();
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
-        m_pLbOutPos->Clear();
-        m_pLbOutPos->InsertEntry( aStrUndefined, 0 );
-        m_pLbOutPos->Disable();
+        m_xLbOutPos->clear();
+        m_xLbOutPos->append_text(aStrUndefined);
+        m_xLbOutPos->set_sensitive(false);
 
         ScAreaNameIterator aIter( pDoc );
         OUString aName;
         ScRange aRange;
         while ( aIter.Next( aName, aRange ) )
         {
-            const sal_Int32 nInsert = m_pLbOutPos->InsertEntry( aName );
-
             OUString aRefStr(aRange.aStart.Format(ScRefFlags::ADDR_ABS_3D, pDoc, eConv));
-            m_pLbOutPos->SetEntryData( nInsert, new OUString( aRefStr ) );
+            m_xLbOutPos->append(aRefStr, aName);
         }
 
-        m_pLbOutPos->SelectEntryPos( 0 );
-        m_pEdOutPos->SetText( EMPTY_OUSTRING );
+        m_xLbOutPos->set_active(0);
+        m_xEdOutPos->set_text(EMPTY_OUSTRING);
 
         // Check whether the field that is passed on is a database field:
 
@@ -611,67 +580,66 @@ void ScTabPageSortOptions::Init()
                                             aSortData.nCol2, aSortData.nRow2 );
             if ( pDBData )
             {
-                m_pBtnHeader->Check( pDBData->HasHeader() );
+                m_xBtnHeader->set_active(pDBData->HasHeader());
             }
         }
 
-        m_pBtnHeader->SetText( aStrColLabel );
+        m_xBtnHeader->set_label(aStrColLabel);
     }
 
     FillUserSortListBox();
 
     //  get available languages
 
-    m_pLbLanguage->SetLanguageList( SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, false );
-    m_pLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
+    m_xLbLanguage->SetLanguageList( SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, false );
+    m_xLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
 }
 
-VclPtr<SfxTabPage> ScTabPageSortOptions::Create( TabPageParent pParent,
-                                                 const SfxItemSet* rArgSet )
+VclPtr<SfxTabPage> ScTabPageSortOptions::Create(TabPageParent pParent, const SfxItemSet* rArgSet)
 {
-    return VclPtr<ScTabPageSortOptions>::Create( pParent.pParent, *rArgSet );
+    return VclPtr<ScTabPageSortOptions>::Create(pParent, *rArgSet);
 }
 
 void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )
 {
     if ( aSortData.bUserDef )
     {
-        m_pBtnSortUser->Check();
-        m_pLbSortUser->Enable();
-        m_pLbSortUser->SelectEntryPos( aSortData.nUserIndex );
+        m_xBtnSortUser->set_active(true);
+        m_xLbSortUser->set_sensitive(true);
+        m_xLbSortUser->set_active(aSortData.nUserIndex);
     }
     else
     {
-        m_pBtnSortUser->Check( false );
-        m_pLbSortUser->Disable();
-        m_pLbSortUser->SelectEntryPos( 0 );
+        m_xBtnSortUser->set_active(false);
+        m_xLbSortUser->set_sensitive(false);
+        m_xLbSortUser->set_active(0);
     }
 
-    m_pBtnCase->Check          ( aSortData.bCaseSens );
-    m_pBtnFormats->Check       ( aSortData.bIncludePattern );
-    m_pBtnHeader->Check        ( aSortData.bHasHeader );
-    m_pBtnNaturalSort->Check   ( aSortData.bNaturalSort );
-    m_pBtnIncComments->Check   ( aSortData.bIncludeComments );
-    m_pBtnIncImages->Check     ( aSortData.bIncludeGraphicObjects );
+    m_xBtnCase->set_active( aSortData.bCaseSens );
+    m_xBtnFormats->set_active( aSortData.bIncludePattern );
+    m_xBtnHeader->set_active( aSortData.bHasHeader );
+    m_xBtnNaturalSort->set_active( aSortData.bNaturalSort );
+    m_xBtnIncComments->set_active( aSortData.bIncludeComments );
+    m_xBtnIncImages->set_active( aSortData.bIncludeGraphicObjects );
 
     if ( aSortData.bByRow )
     {
-        m_pBtnTopDown->Check();
-        m_pBtnHeader->SetText( aStrColLabel );
+        m_xBtnTopDown->set_active(true);
+        m_xBtnHeader->set_label( aStrColLabel );
     }
     else
     {
-        m_pBtnLeftRight->Check();
-        m_pBtnHeader->SetText( aStrRowLabel );
+        m_xBtnLeftRight->set_active(true);
+        m_xBtnHeader->set_label( aStrRowLabel );
     }
 
     LanguageType eLang = LanguageTag::convertToLanguageType( aSortData.aCollatorLocale, false);
     if ( eLang == LANGUAGE_DONTKNOW )
         eLang = LANGUAGE_SYSTEM;
-    m_pLbLanguage->SelectLanguage( eLang );
-    FillAlgorHdl(*m_pLbLanguage.get());               // get algorithms, select default
+    m_xLbLanguage->SelectLanguage( eLang );
+    FillAlgor();               // get algorithms, select default
     if ( !aSortData.aCollatorAlgorithm.isEmpty() )
-        m_pLbAlgorithm->SelectEntry( pColRes->GetTranslation( aSortData.aCollatorAlgorithm ) );
+        m_xLbAlgorithm->set_active_text(pColRes->GetTranslation(aSortData.aCollatorAlgorithm));
 
     if ( pDoc && !aSortData.bInplace )
     {
@@ -684,20 +652,20 @@ void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )
                        aSortData.nDestTab );
 
         OUString aStr(theOutPos.Format(nFormat, pDoc, pDoc->GetAddressConvention()));
-        m_pBtnCopyResult->Check();
-        m_pLbOutPos->Enable();
-        m_pEdOutPos->Enable();
-        m_pEdOutPos->SetText( aStr );
-        EdOutPosModHdl(m_pEdOutPos);
-        m_pEdOutPos->GrabFocus();
-        m_pEdOutPos->SetSelection( Selection( 0, SELECTION_MAX ) );
+        m_xBtnCopyResult->set_active(true);
+        m_xLbOutPos->set_sensitive(true);
+        m_xEdOutPos->set_sensitive(true);
+        m_xEdOutPos->set_text( aStr );
+        EdOutPosModHdl();
+        m_xEdOutPos->grab_focus();
+        m_xEdOutPos->select_region(0, -1);
     }
     else
     {
-        m_pBtnCopyResult->Check( false );
-        m_pLbOutPos->Disable();
-        m_pEdOutPos->Disable();
-        m_pEdOutPos->SetText( EMPTY_OUSTRING );
+        m_xBtnCopyResult->set_active( false );
+        m_xLbOutPos->set_sensitive(false);
+        m_xEdOutPos->set_sensitive(false);
+        m_xEdOutPos->set_text( EMPTY_OUSTRING );
     }
 }
 
@@ -713,24 +681,24 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
         if ( pExample && pExample->GetItemState( nWhichSort, true, &pItem ) == SfxItemState::SET )
             aNewSortData = static_cast<const ScSortItem*>(pItem)->GetSortData();
     }
-    aNewSortData.bByRow          = m_pBtnTopDown->IsChecked();
-    aNewSortData.bHasHeader      = m_pBtnHeader->IsChecked();
-    aNewSortData.bCaseSens       = m_pBtnCase->IsChecked();
-    aNewSortData.bNaturalSort    = m_pBtnNaturalSort->IsChecked();
-    aNewSortData.bIncludeComments= m_pBtnIncComments->IsChecked();
-    aNewSortData.bIncludeGraphicObjects = m_pBtnIncImages->IsChecked();
-    aNewSortData.bIncludePattern = m_pBtnFormats->IsChecked();
-    aNewSortData.bInplace        = !m_pBtnCopyResult->IsChecked();
+    aNewSortData.bByRow          = m_xBtnTopDown->get_active();
+    aNewSortData.bHasHeader      = m_xBtnHeader->get_active();
+    aNewSortData.bCaseSens       = m_xBtnCase->get_active();
+    aNewSortData.bNaturalSort    = m_xBtnNaturalSort->get_active();
+    aNewSortData.bIncludeComments= m_xBtnIncComments->get_active();
+    aNewSortData.bIncludeGraphicObjects = m_xBtnIncImages->get_active();
+    aNewSortData.bIncludePattern = m_xBtnFormats->get_active();
+    aNewSortData.bInplace        = !m_xBtnCopyResult->get_active();
     aNewSortData.nDestCol        = theOutPos.Col();
     aNewSortData.nDestRow        = theOutPos.Row();
     aNewSortData.nDestTab        = theOutPos.Tab();
-    aNewSortData.bUserDef        = m_pBtnSortUser->IsChecked();
-    aNewSortData.nUserIndex      = (m_pBtnSortUser->IsChecked())
-                                   ? m_pLbSortUser->GetSelectedEntryPos()
+    aNewSortData.bUserDef        = m_xBtnSortUser->get_active();
+    aNewSortData.nUserIndex      = (m_xBtnSortUser->get_active())
+                                   ? m_xLbSortUser->get_active()
                                    : 0;
 
     // get locale
-    LanguageType eLang = m_pLbLanguage->GetSelectedLanguage();
+    LanguageType eLang = m_xLbLanguage->GetSelectedLanguage();
     aNewSortData.aCollatorLocale = LanguageTag::convertToLocale( eLang, false);
 
     // get algorithm
@@ -739,7 +707,7 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
     {
         uno::Sequence<OUString> aAlgos = pColWrap->listCollatorAlgorithms(
                 aNewSortData.aCollatorLocale );
-        const sal_Int32 nSel = m_pLbAlgorithm->GetSelectedEntryPos();
+        const int nSel = m_xLbAlgorithm->get_active();
         if ( nSel < aAlgos.getLength() )
             sAlg = aAlgos[nSel];
     }
@@ -757,18 +725,18 @@ void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
     aSortData = static_cast<const ScSortItem&>(rSet.Get( SCITEM_SORTDATA )).GetSortData();
     if ( pDlg )
     {
-        if ( m_pBtnHeader->IsChecked() != pDlg->GetHeaders() )
+        if ( m_xBtnHeader->get_active() != pDlg->GetHeaders() )
         {
-            m_pBtnHeader->Check( pDlg->GetHeaders() );
+            m_xBtnHeader->set_active( pDlg->GetHeaders() );
         }
 
-        if ( m_pBtnTopDown->IsChecked() != pDlg->GetByRows() )
+        if ( m_xBtnTopDown->get_active() != pDlg->GetByRows() )
         {
-            m_pBtnTopDown->Check( pDlg->GetByRows() );
-            m_pBtnLeftRight->Check( !pDlg->GetByRows() );
+            m_xBtnTopDown->set_active( pDlg->GetByRows() );
+            m_xBtnLeftRight->set_active( !pDlg->GetByRows() );
         }
 
-        m_pBtnHeader->SetText( (pDlg->GetByRows())
+        m_xBtnHeader->set_label( (pDlg->GetByRows())
                             ? aStrColLabel
                             : aStrRowLabel );
     }
@@ -778,9 +746,9 @@ DeactivateRC ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
 {
     bool bPosInputOk = true;
 
-    if ( m_pBtnCopyResult->IsChecked() )
+    if ( m_xBtnCopyResult->get_active() )
     {
-        OUString    thePosStr = m_pEdOutPos->GetText();
+        OUString    thePosStr = m_xEdOutPos->get_text();
         ScAddress   thePos;
         sal_Int32   nColonPos = thePosStr.indexOf( ':' );
 
@@ -800,25 +768,25 @@ DeactivateRC ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
 
         if ( !bPosInputOk )
         {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetTabDialog()->GetFrameWeld(),
                                                       VclMessageType::Warning, VclButtonsType::Ok,
                                                       ScResId(STR_INVALID_TABREF)));
             xBox->run();
-            m_pEdOutPos->GrabFocus();
-            m_pEdOutPos->SetSelection( Selection( 0, SELECTION_MAX ) );
+            m_xEdOutPos->grab_focus();
+            m_xEdOutPos->select_region(0, -1);
             theOutPos.Set(0,0,0);
         }
         else
         {
-            m_pEdOutPos->SetText( thePosStr );
+            m_xEdOutPos->set_text(thePosStr);
             theOutPos = thePos;
         }
     }
 
     if ( pDlg && bPosInputOk )
     {
-        pDlg->SetHeaders( m_pBtnHeader->IsChecked() );
-        pDlg->SetByRows ( m_pBtnTopDown->IsChecked() );
+        pDlg->SetHeaders( m_xBtnHeader->get_active() );
+        pDlg->SetByRows ( m_xBtnTopDown->get_active() );
     }
 
     if ( pSetP && bPosInputOk )
@@ -831,113 +799,104 @@ void ScTabPageSortOptions::FillUserSortListBox()
 {
     ScUserList* pUserLists = ScGlobal::GetUserList();
 
-    m_pLbSortUser->Clear();
+    m_xLbSortUser->clear();
     if ( pUserLists )
     {
         size_t nCount = pUserLists->size();
-        if ( nCount > 0 )
-            for ( size_t i=0; i<nCount; ++i )
-                m_pLbSortUser->InsertEntry( (*pUserLists)[i].GetString() );
+        for (size_t i=0; i<nCount; ++i)
+            m_xLbSortUser->append_text((*pUserLists)[i].GetString());
     }
 }
 
 // Handler:
 
-IMPL_LINK( ScTabPageSortOptions, EnableHdl, Button*, pButton, void )
+IMPL_LINK( ScTabPageSortOptions, EnableHdl, weld::ToggleButton&, rButton, void )
 {
-    CheckBox* pBox = static_cast<CheckBox*>(pButton);
-    if (pBox == m_pBtnCopyResult)
+    if (&rButton == m_xBtnCopyResult.get())
     {
-        if ( pBox->IsChecked() )
+        if (rButton.get_active())
         {
-            m_pLbOutPos->Enable();
-            m_pEdOutPos->Enable();
-            m_pEdOutPos->GrabFocus();
+            m_xLbOutPos->set_sensitive(true);
+            m_xEdOutPos->set_sensitive(true);
+            m_xEdOutPos->grab_focus();
         }
         else
         {
-            m_pLbOutPos->Disable();
-            m_pEdOutPos->Disable();
+            m_xLbOutPos->set_sensitive(false);
+            m_xEdOutPos->set_sensitive(false);
         }
     }
-    else if (pBox == m_pBtnSortUser)
+    else if (&rButton == m_xBtnSortUser.get())
     {
-        if ( pBox->IsChecked() )
+        if (rButton.get_active())
         {
-            m_pLbSortUser->Enable();
-            m_pLbSortUser->GrabFocus();
+            m_xLbSortUser->set_sensitive(true);
+            m_xLbSortUser->grab_focus();
         }
         else
-            m_pLbSortUser->Disable();
+            m_xLbSortUser->set_sensitive(false);
     }
 }
 
-IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox&, rLb, void )
+IMPL_LINK(ScTabPageSortOptions, SelOutPosHdl, weld::ComboBoxText&, rLb, void)
 {
-    if (&rLb == m_pLbOutPos)
+    if (&rLb == m_xLbOutPos.get())
     {
         OUString  aString;
-        const sal_Int32 nSelPos = m_pLbOutPos->GetSelectedEntryPos();
+        const int nSelPos = m_xLbOutPos->get_active();
 
-        if ( nSelPos > 0 )
-            aString = *static_cast<OUString*>(m_pLbOutPos->GetEntryData( nSelPos ));
+        if (nSelPos > 0)
+            aString = m_xLbOutPos->get_id(nSelPos);
 
-        m_pEdOutPos->SetText( aString );
+        m_xEdOutPos->set_text(aString);
     }
 }
 
-IMPL_LINK( ScTabPageSortOptions, SortDirHdl, Button *, pBtn, void )
+IMPL_LINK_NOARG(ScTabPageSortOptions, SortDirHdl, weld::ToggleButton&, void)
 {
-    if (pBtn == m_pBtnTopDown)
-    {
-        m_pBtnHeader->SetText( aStrColLabel );
-    }
-    else if (pBtn == m_pBtnLeftRight)
-    {
-        m_pBtnHeader->SetText( aStrRowLabel );
-    }
+    if (m_xBtnTopDown->get_active())
+        m_xBtnHeader->set_label(aStrColLabel);
+    else
+        m_xBtnHeader->set_label(aStrRowLabel);
 }
 
-void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
+void ScTabPageSortOptions::EdOutPosModHdl()
 {
-    if (pEd == m_pEdOutPos)
-    {
-        OUString  theCurPosStr = m_pEdOutPos->GetText();
-        ScRefFlags  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
+    OUString  theCurPosStr = m_xEdOutPos->get_text();
+    ScRefFlags  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
 
-        if ( (nResult & ScRefFlags::VALID) == ScRefFlags::VALID )
+    if ( (nResult & ScRefFlags::VALID) == ScRefFlags::VALID )
+    {
+        bool    bFound  = false;
+        sal_Int32 i = 0;
+        const int nCount = m_xLbOutPos->get_count();
+
+        for ( i=2; i<nCount && !bFound; i++ )
         {
-            bool    bFound  = false;
-            sal_Int32 i = 0;
-            const sal_Int32 nCount = m_pLbOutPos->GetEntryCount();
-
-            for ( i=2; i<nCount && !bFound; i++ )
-            {
-                OUString* pStr = static_cast<OUString*>(m_pLbOutPos->GetEntryData( i ));
-                bFound = (theCurPosStr == *pStr);
-            }
-
-            if ( bFound )
-                m_pLbOutPos->SelectEntryPos( --i );
-            else
-                m_pLbOutPos->SelectEntryPos( 0 );
+            OUString aStr = m_xLbOutPos->get_id(i);
+            bFound = (theCurPosStr == aStr);
         }
+
+        if ( bFound )
+            m_xLbOutPos->set_active(--i);
+        else
+            m_xLbOutPos->set_active(0);
     }
 }
 
-IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl, ListBox&, void)
+void ScTabPageSortOptions::FillAlgor()
 {
-    m_pLbAlgorithm->SetUpdateMode( false );
-    m_pLbAlgorithm->Clear();
+    m_xLbAlgorithm->freeze();
+    m_xLbAlgorithm->clear();
 
-    LanguageType eLang = m_pLbLanguage->GetSelectedLanguage();
+    LanguageType eLang = m_xLbLanguage->GetSelectedLanguage();
     if ( eLang == LANGUAGE_SYSTEM )
     {
         //  for LANGUAGE_SYSTEM no algorithm can be selected because
         //  it wouldn't necessarily exist for other languages
         //  -> leave list box empty if LANGUAGE_SYSTEM is selected
-        m_pFtAlgorithm->Enable( false );           // nothing to select
-        m_pLbAlgorithm->Enable( false );           // nothing to select
+        m_xFtAlgorithm->set_sensitive( false );           // nothing to select
+        m_xLbAlgorithm->set_sensitive( false );           // nothing to select
     }
     else
     {
@@ -950,14 +909,19 @@ IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl, ListBox&, void)
         {
             OUString sAlg = pArray[i];
             OUString sUser = pColRes->GetTranslation( sAlg );
-            m_pLbAlgorithm->InsertEntry( sUser );
+            m_xLbAlgorithm->append_text(sUser);
         }
-        m_pLbAlgorithm->SelectEntryPos( 0 );       // first entry is default
-        m_pFtAlgorithm->Enable( nCount > 1 );      // enable only if there is a choice
-        m_pLbAlgorithm->Enable( nCount > 1 );      // enable only if there is a choice
+        m_xLbAlgorithm->set_active(0);       // first entry is default
+        m_xFtAlgorithm->set_sensitive(nCount > 1);      // enable only if there is a choice
+        m_xLbAlgorithm->set_sensitive(nCount > 1);      // enable only if there is a choice
     }
 
-    m_pLbAlgorithm->SetUpdateMode( true );
+    m_xLbAlgorithm->thaw();
+}
+
+IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl, weld::ComboBoxText&, void)
+{
+    FillAlgor();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
