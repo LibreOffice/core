@@ -40,7 +40,6 @@ enum class RndStdIds;
     of Writer fly frames (derived classes of <SwFlyFrame>) and of drawing objects
     (derived classes of <SwAnchoredDrawObject>).
 
-    @author OD
 */
 class SW_DLLPUBLIC SwAnchoredObject
 {
@@ -117,7 +116,6 @@ class SW_DLLPUBLIC SwAnchoredObject
 
             note: method is implemented empty
 
-            @author OD
         */
         friend class SwObjPositioningInProgress;
         void SetPositioningInProgress( const bool _bPosInProgress )
@@ -132,8 +130,6 @@ class SW_DLLPUBLIC SwAnchoredObject
             is updated. This is checked for change and depending on the applied
             positioning, it's decided, if the Writer fly frame has to be invalidated.
             improvement - add second parameter <_rAnchorCharFrame>
-
-            @author OD
 
             @param _rAnch
             input parameter - reference to anchor position
@@ -152,7 +148,6 @@ class SW_DLLPUBLIC SwAnchoredObject
             is updated. This is checked for change and depending on the applied
             positioning, it's decided, if the Writer fly frame has to be invalidated.
 
-            @author OD
 
             @param _rAnch
             input parameter - reference to anchor position
@@ -178,27 +173,23 @@ class SW_DLLPUBLIC SwAnchoredObject
         /** method to assure that anchored object is registered at the correct
             page frame
 
-            @author OD
         */
         virtual void RegisterAtCorrectPage() = 0;
 
         /** method to indicate, that anchored object is attached to a anchor frame
 
-            @author OD
         */
         virtual void ObjectAttachedToAnchorFrame();
 
         /** method to determine, if other anchored objects, also attached at
             to the anchor frame, have to consider its wrap influence.
 
-            @author OD
         */
         bool ConsiderObjWrapInfluenceOfOtherObjs() const;
 
         /** method to apply temporary consideration of wrapping style influence
             to the anchored objects, which are anchored at the same anchor frame
 
-            @author OD
         */
         void SetTmpConsiderWrapInfluenceOfOtherObjs();
 
@@ -226,7 +217,6 @@ class SW_DLLPUBLIC SwAnchoredObject
             and the anchor character frame for an at-character and as-character
             anchored object.
 
-            @author OD
         */
         SwFrame* GetAnchorFrameContainingAnchPos();
 
@@ -242,7 +232,6 @@ class SW_DLLPUBLIC SwAnchoredObject
             can be found. Thus, the return type changed to be a pointer and can
             be NULL.
 
-            @author OD
 
             @param _rAnchoredObj
             input parameter - anchored object, for which the page frame of its
@@ -256,7 +245,6 @@ class SW_DLLPUBLIC SwAnchoredObject
         /** get frame, which contains the anchor character, if the object
             is anchored at-character or as-character.
 
-            @author OD
 
             @return SwTextFrame*
             text frame containing the anchor character. It's NULL, if the object
@@ -280,8 +268,6 @@ class SW_DLLPUBLIC SwAnchoredObject
             depending on the applied positioning, it's decided, if the Writer fly
             frame has to be invalidated.
 
-            @author OD
-
             @param _bCheckForParaPorInf
             input parameter - boolean indicating, if check on paragraph portion
             information has to be done.
@@ -299,51 +285,42 @@ class SW_DLLPUBLIC SwAnchoredObject
         SwTwips GetLastTopOfLine() const { return mnLastTopOfLine;}
         void AddLastTopOfLineY( SwTwips _nDiff );
 
-        /** reset members <maLastCharRect> and <mnLastTopOfLine>
-
-            @author OD
+        /**
+         * reset members <maLastCharRect> and <mnLastTopOfLine>
         */
         void ClearCharRectAndTopOfLine();
 
         /** method to determine position for the object and set the position
             at the object
-
-            @author OD
         */
         virtual void MakeObjPos() = 0;
 
-        /** is positioning of anchored object in progress
-
-            @author OD
+        /**
+         * is positioning of anchored object in progress
         */
         bool IsPositioningInProgress() const
         {
             return mbPositioningInProgress;
         }
 
-        /** method to determine, if invalidation of position is allowed
-
-            @author OD
+        /*
+         * method to determine, if invalidation of position is allowed
         */
         bool InvalidationOfPosAllowed() const;
 
-        /** method to invalidate position of the anchored object
-
-            @author OD
+        /**
+         * method to invalidate position of the anchored object
         */
         virtual void InvalidateObjPos() = 0;
 
         /** method to perform necessary invalidations for the positioning of
             objects, for whose the wrapping style influence has to be considered
             on the object positioning.
-
-            @author OD
         */
         void InvalidateObjPosForConsiderWrapInfluence();
 
-        /** method to trigger notification of 'background'
-
-            @author OD
+        /*
+         * method to trigger notification of 'background'
         */
         virtual void NotifyBackground( SwPageFrame* _pPageFrame,
                                        const SwRect& _rRect,
@@ -369,14 +346,11 @@ class SW_DLLPUBLIC SwAnchoredObject
 
             method has typically to be called, if the anchored object gets its
             anchor frame assigned and if the anchor frame changes its layout direction
-
-            @author OD
         */
         virtual void UpdateLayoutDir();
 
-        /** method to determine object area inclusive its spacing
-
-            @author OD
+        /*
+         * method to determine object area inclusive its spacing
         */
         const SwRect& GetObjRectWithSpaces() const;
 
@@ -391,7 +365,6 @@ class SW_DLLPUBLIC SwAnchoredObject
             Note: result of this method also decides, if the boolean for the
             layout process are of relevance.
 
-            @author OD
         */
         bool ConsiderObjWrapInfluenceOnObjPos() const;
 
@@ -436,8 +409,6 @@ class SW_DLLPUBLIC SwAnchoredObject
 
         /** method to determine, if due to anchored object size and wrapping
             style, its layout environment is cleared.
-
-            @author OD
         */
         bool HasClearedEnvironment() const;
 
@@ -450,8 +421,6 @@ class SW_DLLPUBLIC SwAnchoredObject
             on object positioning' is ON, additionally all anchored objects
             at the anchor frame and all following anchored objects on the page
             frame are invalidated.
-
-            @author OD
         */
         void UpdateObjInSortedList();
 
@@ -459,8 +428,6 @@ class SW_DLLPUBLIC SwAnchoredObject
 
             A format isn't possible, if anchored object is in an invisible layer.
             Note: method is virtual to refine the conditions for the sub-classes.
-
-            @author OD
         */
         virtual bool IsFormatPossible() const;
 
@@ -475,8 +442,6 @@ class SW_DLLPUBLIC SwAnchoredObject
             with a column, which is a previous one of the column its anchor
             frame is in.
             Only applied for at-paragraph and at-character anchored objects.
-
-            @author OD
         */
         bool OverlapsPrevColumn() const;
 
@@ -484,8 +449,6 @@ class SW_DLLPUBLIC SwAnchoredObject
             anchor frame
 
             Usage: Needed layout information for WW8 export
-
-            @author OD
 
             @return Point - determined relative position
         */
@@ -499,8 +462,6 @@ class SW_DLLPUBLIC SwAnchoredObject
             If <_bFollowTextFlow> is set and object is anchored inside table,
             the position relative to the table cell is determined. Output
             parameter <_obRelToTableCell> reflects this situation
-
-            @author OD
 
             @param _bFollowTextFlow
             input parameter - boolean indicating, if the anchored object has to
@@ -520,8 +481,6 @@ class SW_DLLPUBLIC SwAnchoredObject
 
             Usage: Needed layout information for WW8 export
 
-            @author OD
-
             @return Point - determined relative position
         */
         Point GetRelPosToChar() const;
@@ -530,8 +489,6 @@ class SW_DLLPUBLIC SwAnchoredObject
             top of line
 
             Usage: Needed layout information for WW8 export
-
-            @author OD
 
             @return Point - determined relative position
         */

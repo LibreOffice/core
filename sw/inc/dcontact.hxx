@@ -83,8 +83,6 @@ class SW_DLLPUBLIC SwContact : public SdrObjUserCall, public SwClient
         <SdrObjGroup::SetLayer(..)|NbcSetLayer(..)> sets also the layer of
         the members.
 
-        @author OD
-
         @param _bToVisible
         input parameter - boolean indicating, if object has to be moved to
         visible (== true) or invisible (== false) layer.
@@ -122,8 +120,6 @@ public:
 
         uses method <MoveObjToLayer(..)>
 
-        @author OD
-
         @param _pDrawObj
         drawing object, which will be moved to the visible layer
     */
@@ -132,8 +128,6 @@ public:
     /** method to move drawing object to corresponding invisible layer
 
         uses method <MoveObjToLayer(..)>
-
-        @author OD
 
         @param _pDrawObj
         drawing object, which will be moved to the visible layer

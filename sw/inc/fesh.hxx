@@ -779,8 +779,6 @@ public:
         color COL_BLACK (default color on constructing object of class Color)
         is returned.
 
-        @author OD
-
         @returns an object of class Color
     */
     const Color GetShapeBackgrd() const;
@@ -790,8 +788,6 @@ public:
         Because drawing objects only painted for each page only, the default
         horizontal text direction of a drawing object is given by the corresponding
         page property.
-
-        @author OD
 
         @returns boolean, indicating, if the horizontal text direction of the
         page, the selected drawing object is on, is right-to-left.

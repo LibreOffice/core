@@ -228,8 +228,6 @@ public:
     /** set level of this node
 
         precondition: node is already member of a list tree
-
-        @author OD
     */
     void SetLevelInListTree( const int nLevel );
 
@@ -325,8 +323,6 @@ public:
         The search for the preceding node is performed for the tree below the
         <this> node. To search the complete tree, the method has been called for
         the root of the tree.
-
-        @author OD
     */
     const SwNumberTreeNode* GetPrecedingNodeOf( const SwNumberTreeNode& rNode ) const;
 
@@ -491,9 +487,8 @@ protected:
      */
     void Notify();
 
-    /** notification of children nodes on certain depth
-
-        @author OD
+    /*
+     * notification of children nodes on certain depth
     */
     void NotifyChildrenOnDepth( const int nDepth );
 
