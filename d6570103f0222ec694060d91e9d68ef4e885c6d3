@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_d4d2c1ff",
+        "filename": "sw/inc/SwNumberTree.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-05-18T12:33:47Z",
+      "side": 1,
+      "message": "When this is an one-liner, you can just write:\n\n/** notification of ... */\n\nwhich is an equally valid doxygen comment and uses less vertical space.",
+      "revId": "d6570103f0222ec694060d91e9d68ef4e885c6d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
