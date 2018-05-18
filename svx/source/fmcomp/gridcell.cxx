@@ -213,7 +213,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< css::bea
 
     // now create the control wrapper
     if (m_rParent.IsFilterMode())
-        m_pCell = new FmXFilterCell(this, pCellControl);
+        m_pCell = new FmXFilterCell(this, static_cast<DbFilterField*>(pCellControl));
     else
     {
         switch (nTypeId)
@@ -4504,13 +4504,11 @@ void FmXComboBoxCell::onWindowEvent( const VclEventId _nEventId, const vcl::Wind
 }
 
 
-FmXFilterCell::FmXFilterCell(DbGridColumn* pColumn, DbCellControl* pControl )
+FmXFilterCell::FmXFilterCell(DbGridColumn* pColumn, DbFilterField* pControl )
               :FmXGridCell( pColumn, pControl )
               ,m_aTextListeners(m_aMutex)
 {
-
-    DBG_ASSERT( dynamic_cast<const DbFilterField*>( m_pCellControl) !=  nullptr, "FmXFilterCell::FmXFilterCell: invalid cell control!" );
-    static_cast< DbFilterField* >( m_pCellControl )->SetCommitHdl( LINK( this, FmXFilterCell, OnCommit ) );
+    pControl->SetCommitHdl( LINK( this, FmXFilterCell, OnCommit ) );
 }
 
 
