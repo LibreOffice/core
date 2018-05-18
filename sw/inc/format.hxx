@@ -243,8 +243,6 @@ public:
         Default implementation returns false. Thus, subclasses have to override
         method, if the specific subclass can have a transparent background.
 
-        @author OD
-
         @return false, default implementation
     */
     virtual bool IsBackgroundTransparent() const;

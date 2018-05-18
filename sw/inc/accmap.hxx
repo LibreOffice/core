@@ -134,8 +134,6 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
         which have a selection
 
         Important note: method has to used inside a mutual exclusive section
-
-        @author OD
     */
     SwAccessibleSelectedParas_Impl* BuildSelectedParas();
 
@@ -184,8 +182,6 @@ public:
 
     /** get size of a dedicated preview page
 
-        @author OD
-
         @param _nPreviewPageNum
         input parameter - physical page number of page visible in the page preview
 
@@ -225,8 +221,6 @@ public:
 
     /** invalidation CONTENT_FLOWS_FROM/_TO relation of a paragraph
 
-        @author OD
-
         @param _rTextFrame
         input parameter - reference to paragraph, whose CONTENT_FLOWS_FROM/_TO
         has to be invalidated.
@@ -238,16 +232,10 @@ public:
     void InvalidateParaFlowRelation( const SwTextFrame& _rTextFrame,
                                      const bool _bFrom );
 
-    /** invalidation of text selection of a paragraph
-
-        @author OD
-    */
+    /** invalidation of text selection of a paragraph */
     void InvalidateParaTextSelection( const SwTextFrame& _rTextFrame );
 
-    /** invalidation of text selection of all paragraphs
-
-        @author OD
-    */
+    /** invalidation of text selection of all paragraphs */
     void InvalidateTextSelectionOfAllParas();
 
     sal_Int32 GetChildIndex( const SwFrame& rParentFrame,
@@ -298,8 +286,6 @@ private:
         Necessary, because <PreviewAdjust(..)> changes mapping mode at current
         output device for mapping logic document positions to page preview window
         positions and vice versa and doesn't take care to recover its changes.
-
-        @author OD
 
         @param _rPoint
         input parameter - constant reference to point to determine the mapping

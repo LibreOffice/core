@@ -173,10 +173,7 @@ public:
                              const bool bInclSuperiorNumLabels,
                              const int nRestrictInclToThisLevel ) const;
 
-    /**
-
-       @return list of associated text nodes
-    */
+    /** @return list of associated text nodes */
     void GetTextNodeList( SwNumRule::tTextNodeList& rTextNodeList ) const;
     SwNumRule::tTextNodeList::size_type GetTextNodeListSize() const;
 
@@ -274,44 +271,28 @@ public:
 /// namespace for static functions and methods for numbering and bullets
 namespace numfunc
 {
-    /** retrieve font family name used for the default bullet list characters
-
-        @author OD
-    */
+    /** retrieve font family name used for the default bullet list characters */
     OUString const & GetDefBulletFontname();
 
     /** determine if default bullet font is user defined
 
         The default bullet font is user defined, if it is given in the user configuration
-
-        @author OD
     */
     bool IsDefBulletFontUserDefined();
 
-    /** retrieve font used for the default bullet list characters
-
-        @author OD
-    */
+    /** retrieve font used for the default bullet list characters */
     SW_DLLPUBLIC const vcl::Font& GetDefBulletFont();
 
-    /** retrieve unicode of character used for the default bullet list for the given list level
-
-        @author OD
-    */
+    /** retrieve unicode of character used for the default bullet list for the given list level */
     sal_Unicode GetBulletChar( sal_uInt8 nLevel );
 
     /** configuration, if at first position of the first list item the <TAB>-key
         increased the indent of the complete list or only demotes this list item.
         The same for <SHIFT-TAB>-key at the same position for decreasing the
         indent of the complete list or only promotes this list item.
-
-        @author OD
     */
     bool ChangeIndentOnTabAtFirstPosOfFirstListItem();
 
-    /**
-        @author OD
-    */
     SvxNumberFormat::SvxNumPositionAndSpaceMode GetDefaultPositionAndSpaceMode();
 }
 

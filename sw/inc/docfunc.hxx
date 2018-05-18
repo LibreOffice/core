@@ -26,8 +26,6 @@ namespace docfunc
 {
     /** method to check, if given Writer document contains at least one drawing object
 
-        @author OD
-
         @param p_rDoc
         input parameter - reference to the Writer document, which is investigated.
     */
@@ -35,8 +33,6 @@ namespace docfunc
 
     /** method to check, if given Writer document contains only drawing objects,
         which are completely on its page.
-
-        @author OD
 
         @param p_rDoc
         input parameter - reference to the Writer document, which is investigated.
@@ -51,8 +47,6 @@ namespace docfunc
         the list levels of the outline style, has a list style set or inherits
         a list style from its parent paragraphs style.
         This information is needed for the OpenDocument file format export.
-
-        @author OD
 
         @param rDoc
         input parameter - reference to the text document, which is investigated.
