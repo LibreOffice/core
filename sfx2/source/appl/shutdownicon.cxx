@@ -143,27 +143,7 @@ bool LoadModule()
         pInitSystray = aqua_init_systray;
         pDeInitSystray = aqua_shutdown_systray;
         loaded = true;
-#  else // UNX
-        osl::Module plugin;
-        oslGenericFunction pTmpInit = nullptr;
-        oslGenericFunction pTmpDeInit = nullptr;
-        if ( plugin.loadRelative( &thisModule, "libqstart_gtklo.so" ) )
-        {
-            pTmpInit = plugin.getFunctionSymbol( "plugin_init_sys_tray" );
-            pTmpDeInit = plugin.getFunctionSymbol( "plugin_shutdown_sys_tray" );
-        }
-        if ( !pTmpInit || !pTmpDeInit )
-        {
-            loaded = false;
-        }
-        else
-        {
-            plugin.release();
-            pInitSystray = pTmpInit;
-            pDeInitSystray = pTmpDeInit;
-            loaded = true;
-        }
-#  endif // UNX
+#  endif // MACOSX
 #endif // ENABLE_QUICKSTART_APPLET
     }
     assert(!boost::logic::indeterminate(loaded));
@@ -640,9 +620,6 @@ bool ShutdownIcon::IsQuickstarterInstalled()
 #ifndef ENABLE_QUICKSTART_APPLET
     return false;
 #else // !ENABLE_QUICKSTART_APPLET
-#ifdef UNX
-    return LoadModule();
-#endif // UNX
 #endif // !ENABLE_QUICKSTART_APPLET
 }
 #endif // !WNT
@@ -694,9 +671,6 @@ OUString ShutdownIcon::getShortcutName()
     OUString aShortcut(GetAutostartFolderNameW32());
     aShortcut += "\\";
     aShortcut += aShortcutName;
-#else // UNX
-    OUString aShortcut = getAutostartDir(false);
-    aShortcut += "/qstart.desktop";
 #endif // UNX
     return aShortcut;
 #endif // ENABLE_QUICKSTART_APPLET
@@ -733,43 +707,13 @@ void ShutdownIcon::SetAutostart( bool bActivate )
     {
 #ifdef _WIN32
         EnableAutostartW32( aShortcut );
-#else // UNX
-        getAutostartDir( true );
-
-        OUString aPath( "${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/xdg/qstart.desktop"  );
-        rtl::Bootstrap::expandMacros( aPath );
-
-        OUString aDesktopFile;
-        ::osl::File::getSystemPathFromFileURL( aPath, aDesktopFile );
-
-        OString aDesktopFileUnx = OUStringToOString( aDesktopFile,
-                                                     osl_getThreadTextEncoding() );
-        OString aShortcutUnx = OUStringToOString( aShortcut,
-                                                  osl_getThreadTextEncoding() );
-        if ((0 != symlink(aDesktopFileUnx.getStr(), aShortcutUnx.getStr())) && (errno == EEXIST))
-        {
-            unlink(aShortcutUnx.getStr());
-            (void) symlink(aDesktopFileUnx.getStr(), aShortcutUnx.getStr());
-                //deliberately ignore return value, it's non-critical if it fails
-        }
-
-        ShutdownIcon *pIcon = ShutdownIcon::createInstance();
-        if( pIcon )
-            pIcon->initSystray();
-#endif // UNX
+#endif
     }
     else
     {
         OUString aShortcutUrl;
         ::osl::File::getFileURLFromSystemPath( aShortcut, aShortcutUrl );
         ::osl::File::remove( aShortcutUrl );
-#ifdef UNX
-        if (pShutdownIcon)
-        {
-            ShutdownIcon *pIcon = getInstance();
-            pIcon->deInitSystray();
-        }
-#endif
     }
 #else
     (void)bActivate; // unused variable
