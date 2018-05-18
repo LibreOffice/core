@@ -507,10 +507,13 @@ class VCL_DLLPUBLIC VclViewport : public VclBin
 public:
     VclViewport(vcl::Window *pParent)
         : VclBin(pParent, WB_HIDE | WB_CLIPCHILDREN)
+        , m_bInitialAllocation(true)
     {
     }
 protected:
     virtual void setAllocation(const Size &rAllocation) override;
+private:
+    bool m_bInitialAllocation;
 };
 
 //Enforces that its children are always the same size as itself.

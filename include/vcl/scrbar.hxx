@@ -133,6 +133,7 @@ public:
     ScrollType      GetType() const { return meScrollType; }
 
     void            SetScrollHdl( const Link<ScrollBar*,void>& rLink ) { maScrollHdl = rLink; }
+    const Link<ScrollBar*,void>&   GetScrollHdl() const { return maScrollHdl; }
     void            SetEndScrollHdl( const Link<ScrollBar*,void>& rLink ) { maEndScrollHdl = rLink; }
     const Link<ScrollBar*,void>&   GetEndScrollHdl() const { return maEndScrollHdl; }
 
