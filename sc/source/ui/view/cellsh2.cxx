@@ -36,6 +36,7 @@
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/sheet/TableValidationVisibility.hpp>
 
 #include <cellsh.hxx>
 #include <tabvwsh.hxx>

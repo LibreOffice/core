@@ -23,7 +23,6 @@
 #include <sfx2/sfxbasecontroller.hxx>
 #include <svl/itemprop.hxx>
 #include <com/sun/star/view/XFormLayerAccess.hpp>
-#include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XViewSplitable.hpp>
@@ -40,7 +39,9 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
 
-#include "address.hxx"
+#include "types.hxx"
+
+namespace com { namespace sun { namespace star { namespace view { class XSelectionChangeListener; } } } }
 
 class ScTabViewShell;
 class ScPreviewShell;

@@ -21,10 +21,7 @@
 #define INCLUDED_SC_INC_XMLWRAP_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/frame/XModel.hpp>
 #include "importfilterdata.hxx"
-#include <sal/types.h>
 
 #include <vcl/errcode.hxx>
 
@@ -32,8 +29,8 @@ namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
     namespace frame { class XModel; }
     namespace task { class XStatusIndicator; }
-    namespace lang { class XMultiServiceFactory; }
-    namespace uno { class XInterface; }
+    namespace uno { class XComponentContext; }
+    namespace uno { template <class E> class Sequence; }
     namespace embed { class XStorage; }
     namespace xml {
         namespace sax { struct InputSource; class XParser; class XWriter; } }

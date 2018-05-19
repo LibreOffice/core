@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
+#include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include <scitems.hxx>
 #include <editeng/langitem.hxx>
 #include <svl/srchitem.hxx>

@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <validat.hxx>
+#include <com/sun/star/sheet/TableValidationVisibility.hpp>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>

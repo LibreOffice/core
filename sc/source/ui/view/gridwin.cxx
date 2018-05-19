@@ -62,6 +62,7 @@
 #include <com/sun/star/sheet/DataPilotTablePositionData.hpp>
 #include <com/sun/star/sheet/DataPilotTablePositionType.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
+#include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>

@@ -208,6 +208,10 @@ blacklist:
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/util/XCloneable.hpp
     - com/sun/star/util/XModifyBroadcaster.hpp
+    sc/inc/PivotTableDataSource.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/data/XDataSource.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
     sc/inc/PivotTableDataProvider.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
@@ -287,3 +291,6 @@ blacklist:
     sc/inc/types.hxx:
     # base class has to be a complete type
     - o3tl/typed_flags_set.hxx
+    sc/inc/unitconv.hxx:
+    # base class has to be a complete type
+    - map
