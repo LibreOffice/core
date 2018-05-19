@@ -207,7 +207,6 @@ private:
                                                   // sal_False := new object
     bool                        bIsInGenerateThumbnail; //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
     bool                        mbAvoidRecentDocs; ///< Avoid adding to the recent documents list, if not necessary.
-    bool m_bAllowModifiedBackAfterSigning;
 
     enum TriState               {undefined, yes, no};
     TriState                    mbContinueImportOnFilterExceptions = undefined; // try to import as much as possible
