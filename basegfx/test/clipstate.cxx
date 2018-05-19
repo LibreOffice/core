@@ -135,7 +135,7 @@ public:
         const char unionSvg[]="m100 10v90h-90v10h-20v-10h-90v-90h-10v-20h10v-90h90v-10h20v10h90v90h10v20z";
 
         B2DPolyPolygon aTmp1;
-        utils::importFromSvgD(aTmp1, unionSvg, false, nullptr);
+        CPPUNIT_ASSERT(utils::importFromSvgD(aTmp1, unionSvg, false, nullptr));
 
         aMixedClip.intersectPolyPolygon(aTmp1);
         aMixedClip.subtractRange(B2DRange(-20,-150,20,0));
