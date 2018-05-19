@@ -42,15 +42,13 @@ using namespace com::sun::star;
 #define DP_TYPELIST_QUERY   1
 #define DP_TYPELIST_SQLNAT  3
 
-ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( vcl::Window* pParent ) :
-    ModalDialog(pParent, "SelectDataSourceDialog",
-        "modules/scalc/ui/selectdatasource.ui")
+ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg(weld::Window* pParent)
+    : GenericDialogController(pParent, "modules/scalc/ui/selectdatasource.ui", "SelectDataSourceDialog")
+    , m_xLbDatabase(m_xBuilder->weld_combo_box_text("database"))
+    , m_xCbObject(m_xBuilder->weld_combo_box_text("datasource"))
+    , m_xLbType(m_xBuilder->weld_combo_box_text("type"))
 {
-    get(m_pLbDatabase, "database");
-    get(m_pCbObject, "datasource");
-    get(m_pLbType, "type");
-
-    WaitObject aWait( this );       // initializing the database service the first time takes a while
+    weld::WaitObject aWait(pParent);       // initializing the database service the first time takes a while
 
     try
     {
@@ -64,7 +62,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( vcl::Window* pParent ) :
         for (long nPos = 0; nPos < nCount; nPos++)
         {
             OUString aName = pArray[nPos];
-            m_pLbDatabase->InsertEntry( aName );
+            m_xLbDatabase->append_text(aName);
         }
     }
     catch(uno::Exception&)
@@ -72,34 +70,25 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( vcl::Window* pParent ) :
         OSL_FAIL("exception in database");
     }
 
-    m_pLbDatabase->SelectEntryPos( 0 );
-    m_pLbType->SelectEntryPos( 0 );
+    m_xLbDatabase->set_active(0);
+    m_xLbType->set_active(0);
 
     FillObjects();
 
-    m_pLbDatabase->SetSelectHdl( LINK( this, ScDataPilotDatabaseDlg, SelectHdl ) );
-    m_pLbType->SetSelectHdl( LINK( this, ScDataPilotDatabaseDlg, SelectHdl ) );
+    m_xLbDatabase->connect_changed( LINK( this, ScDataPilotDatabaseDlg, SelectHdl ) );
+    m_xLbType->connect_changed( LINK( this, ScDataPilotDatabaseDlg, SelectHdl ) );
 }
 
 ScDataPilotDatabaseDlg::~ScDataPilotDatabaseDlg()
 {
-    disposeOnce();
-}
-
-void ScDataPilotDatabaseDlg::dispose()
-{
-    m_pLbDatabase.clear();
-    m_pCbObject.clear();
-    m_pLbType.clear();
-    ModalDialog::dispose();
 }
 
 void ScDataPilotDatabaseDlg::GetValues( ScImportSourceDesc& rDesc )
 {
-    const sal_Int32 nSelect = m_pLbType->GetSelectedEntryPos();
+    const sal_Int32 nSelect = m_xLbType->get_active();
 
-    rDesc.aDBName = m_pLbDatabase->GetSelectedEntry();
-    rDesc.aObject = m_pCbObject->GetText();
+    rDesc.aDBName = m_xLbDatabase->get_active_text();
+    rDesc.aObject = m_xCbObject->get_active_text();
 
     if (rDesc.aDBName.isEmpty() || rDesc.aObject.isEmpty())
         rDesc.nType = sheet::DataImportMode_NONE;
@@ -113,20 +102,20 @@ void ScDataPilotDatabaseDlg::GetValues( ScImportSourceDesc& rDesc )
     rDesc.bNative = ( nSelect == DP_TYPELIST_SQLNAT );
 }
 
-IMPL_LINK_NOARG(ScDataPilotDatabaseDlg, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScDataPilotDatabaseDlg, SelectHdl, weld::ComboBoxText&, void)
 {
     FillObjects();
 }
 
 void ScDataPilotDatabaseDlg::FillObjects()
 {
-    m_pCbObject->Clear();
+    m_xCbObject->clear();
 
-    OUString aDatabaseName = m_pLbDatabase->GetSelectedEntry();
+    OUString aDatabaseName = m_xLbDatabase->get_active_text();
     if (aDatabaseName.isEmpty())
         return;
 
-    const sal_Int32 nSelect = m_pLbType->GetSelectedEntryPos();
+    const int nSelect = m_xLbType->get_active();
     if ( nSelect > DP_TYPELIST_QUERY )
         return;                                 // only tables and queries
 
@@ -181,7 +170,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
         for( long nPos=0; nPos<nCount; nPos++ )
         {
             OUString aName = pArray[nPos];
-            m_pCbObject->InsertEntry( aName );
+            m_xCbObject->append_text(aName);
         }
     }
     catch(uno::Exception&)
