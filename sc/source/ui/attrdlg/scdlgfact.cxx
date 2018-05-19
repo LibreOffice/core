@@ -160,7 +160,12 @@ IMPL_ABSTDLG_BASE(AbstractScDPFunctionDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDPSubtotalDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDPNumGroupDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDPDateGroupDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScDPShowDetailDlg_Impl);
+
+short AbstractScDPShowDetailDlg_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
+
 IMPL_ABSTDLG_BASE(AbstractScNewScenarioDlg_Impl);
 
 short AbstractScShowTabDlg_Impl::Execute()
@@ -602,7 +607,7 @@ sal_Int32 AbstractScDPDateGroupDlg_Impl::GetDatePart() const
 
 OUString AbstractScDPShowDetailDlg_Impl::GetDimensionName() const
 {
-     return pDlg->GetDimensionName();
+     return m_xDlg->GetDimensionName();
 }
 
 void AbstractScNewScenarioDlg_Impl::SetScenarioData(
@@ -867,9 +872,9 @@ VclPtr<AbstractScDPDateGroupDlg> ScAbstractDialogFactory_Impl::CreateScDPDateGro
 }
 
 VclPtr<AbstractScDPShowDetailDlg> ScAbstractDialogFactory_Impl::CreateScDPShowDetailDlg (
-        vcl::Window* pParent, ScDPObject& rDPObj, css::sheet::DataPilotFieldOrientation nOrient )
+        weld::Window* pParent, ScDPObject& rDPObj, css::sheet::DataPilotFieldOrientation nOrient )
 {
-    return VclPtr<AbstractScDPShowDetailDlg_Impl>::Create( VclPtr<ScDPShowDetailDlg>::Create( pParent, rDPObj, nOrient ) );
+    return VclPtr<AbstractScDPShowDetailDlg_Impl>::Create(new ScDPShowDetailDlg(pParent, rDPObj, nOrient));
 }
 
 VclPtr<AbstractScNewScenarioDlg> ScAbstractDialogFactory_Impl::CreateScNewScenarioDlg(vcl::Window* pParent, const OUString& rName,

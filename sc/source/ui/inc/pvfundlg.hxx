@@ -31,6 +31,7 @@
 #include <vcl/button.hxx>
 #include <vcl/morebtn.hxx>
 #include <vcl/field.hxx>
+#include <vcl/weld.hxx>
 #include <svx/checklbx.hxx>
 #include <sfx2/itemconnect.hxx>
 #include <pivot.hxx>
@@ -186,14 +187,14 @@ private:
     NameMapType maDataFieldNameMap; /// Cache for displayed name to field name mapping.
 };
 
-class ScDPShowDetailDlg : public ModalDialog
+class ScDPShowDetailDlg : public weld::GenericDialogController
 {
 public:
-    explicit            ScDPShowDetailDlg( vcl::Window* pParent, ScDPObject& rDPObj,
-                                           css::sheet::DataPilotFieldOrientation nOrient );
-    virtual             ~ScDPShowDetailDlg() override;
-    virtual void        dispose() override;
-    virtual short       Execute() override;
+    explicit ScDPShowDetailDlg(weld::Window* pParent, ScDPObject& rDPObj,
+                               css::sheet::DataPilotFieldOrientation nOrient);
+    virtual ~ScDPShowDetailDlg() override;
+
+    short execute();
 
     /**
      * @return String internal name of the selected field.  Note that this may
@@ -203,15 +204,14 @@ public:
     OUString GetDimensionName() const;
 
 private:
-    DECL_LINK( DblClickHdl, ListBox&, void );
+    DECL_LINK(DblClickHdl, weld::TreeView&, void);
 
 private:
-    VclPtr<ListBox>            mpLbDims;
-    VclPtr<OKButton>           mpBtnOk;
-
     typedef std::unordered_map<OUString, long> DimNameIndexMap;
     DimNameIndexMap     maNameIndexMap;
     ScDPObject&         mrDPObj;
+
+    std::unique_ptr<weld::TreeView> mxLbDims;
 };
 
 #endif

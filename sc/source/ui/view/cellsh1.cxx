@@ -1083,11 +1083,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if ( pTabViewShell->HasSelectionForDrillDown( nOrientation ) )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-
+                        assert(pFact && "ScAbstractFactory create fail!");
                         ScopedVclPtr<AbstractScDPShowDetailDlg> pDlg( pFact->CreateScDPShowDetailDlg(
-                            pTabViewShell->GetDialogParent(), *pDPObj, nOrientation ) );
-                        OSL_ENSURE(pDlg, "Dialog create fail!");
+                            pTabViewShell->GetFrameWeld(), *pDPObj, nOrientation ) );
+                        assert(pDlg && "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
                             OUString aNewDimName( pDlg->GetDimensionName() );
