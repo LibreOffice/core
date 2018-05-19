@@ -410,7 +410,7 @@ public:
                                                                 bool bCol,
                                                                 bool bRow) = 0;
 
-    virtual VclPtr<AbstractScSortWarningDlg> CreateScSortWarningDlg(vcl::Window* pParent, const OUString& rExtendText, const OUString& rCurrentText ) = 0;
+    virtual VclPtr<AbstractScSortWarningDlg> CreateScSortWarningDlg(weld::Window* pParent, const OUString& rExtendText, const OUString& rCurrentText ) = 0;
 
     virtual VclPtr<AbstractScCondFormatManagerDlg> CreateScCondFormatMgrDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList ) = 0;
 

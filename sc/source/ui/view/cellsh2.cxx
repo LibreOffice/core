@@ -181,7 +181,7 @@ static bool lcl_GetSortParam( const ScViewData* pData, const ScSortParam& rSortP
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-        ScopedVclPtr<AbstractScSortWarningDlg> pWarningDlg(pFact->CreateScSortWarningDlg( pTabViewShell->GetDialogParent(), aExtendStr, aCurrentStr ));
+        ScopedVclPtr<AbstractScSortWarningDlg> pWarningDlg(pFact->CreateScSortWarningDlg(pTabViewShell->GetFrameWeld(), aExtendStr, aCurrentStr));
         OSL_ENSURE(pWarningDlg, "Dialog create fail!");
         short bResult = pWarningDlg->Execute();
         if( bResult == BTN_EXTEND_RANGE || bResult == BTN_CURRENT_SELECTION )

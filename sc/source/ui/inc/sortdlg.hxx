@@ -21,9 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_SORTDLG_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 #include "scui_def.hxx"
 
 class ScSortDlg : public SfxTabDialog
@@ -41,17 +39,16 @@ private:
     bool    bIsByRows;
 };
 
-class ScSortWarningDlg : public ModalDialog
+class ScSortWarningDlg : public weld::GenericDialogController
 {
 public:
-    ScSortWarningDlg( vcl::Window* pParent, const OUString& rExtendText,const OUString& rCurrentText );
+    ScSortWarningDlg(weld::Window* pParent, const OUString& rExtendText,const OUString& rCurrentText);
     virtual ~ScSortWarningDlg() override;
-    virtual void dispose() override;
-    DECL_LINK( BtnHdl, Button*, void );
+    DECL_LINK(BtnHdl, weld::Button&, void);
 private:
-    VclPtr<FixedText>       aFtText;
-    VclPtr<PushButton>      aBtnExtSort;
-    VclPtr<PushButton>      aBtnCurSort;
+    std::unique_ptr<weld::Label> m_xFtText;
+    std::unique_ptr<weld::Button> m_xBtnExtSort;
+    std::unique_ptr<weld::Button> m_xBtnCurSort;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_SORTDLG_HXX
