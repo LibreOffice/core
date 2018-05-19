@@ -37,6 +37,7 @@
 
 #include <limits>
 
+class SvxFontItem;
 using namespace ::com::sun::star;
 
 static const SfxItemPropertyMapEntry* lcl_GetDocDefaultsMap()

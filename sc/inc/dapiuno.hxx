@@ -20,10 +20,8 @@
 #ifndef INCLUDED_SC_INC_DAPIUNO_HXX
 #define INCLUDED_SC_INC_DAPIUNO_HXX
 
-#include "global.hxx"
-#include "dpobject.hxx"
-#include "rangeutl.hxx"
 #include "cellsuno.hxx"
+#include "dpglobal.hxx"
 
 #include <svl/lstner.hxx>
 #include <svl/itemprop.hxx>
@@ -35,17 +33,12 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
-#include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupInfo.hpp>
-#include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include <com/sun/star/sheet/DataPilotFieldReference.hpp>
-#include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 #include <com/sun/star/sheet/XDataPilotDataLayoutFieldSupplier.hpp>
 #include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
 #include <com/sun/star/sheet/XDataPilotField.hpp>
 #include <com/sun/star/sheet/XDataPilotFieldGrouping.hpp>
-#include <com/sun/star/sheet/XDataPilotTable.hpp>
 #include <com/sun/star/sheet/XDataPilotTable2.hpp>
 #include <com/sun/star/sheet/XDataPilotTables.hpp>
 
@@ -54,10 +47,12 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace sheet {
-    struct DataPilotFieldFilter;
-    struct DataPilotTablePositionData;
-}}}}
+namespace com { namespace sun { namespace star { namespace sheet { struct DataPilotFieldAutoShowInfo; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XMembersAccess; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { struct DataPilotFieldLayoutInfo; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { struct DataPilotFieldReference; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { struct DataPilotFieldSortInfo; } } } }
+
 
 class ScDocShell;
 class ScDPSaveDimension;
@@ -67,6 +62,7 @@ class ScDataPilotTableObj;
 class ScDataPilotFieldObj;
 class ScDataPilotItemObj;
 enum class ScGeneralFunction;
+class ScDPObject;
 
 class ScDataPilotConversion
 {

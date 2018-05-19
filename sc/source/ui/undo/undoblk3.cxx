@@ -31,6 +31,7 @@
 #include <sfx2/bindings.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/app.hxx>
+#include <svx/svdundo.hxx>
 
 #include <undoblk.hxx>
 #include <sc.hrc>

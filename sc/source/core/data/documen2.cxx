@@ -102,6 +102,7 @@
 #include <clipoptions.hxx>
 #include <listenercontext.hxx>
 #include <datamapper.hxx>
+#include <drwlayer.hxx>
 
 using namespace com::sun::star;
 

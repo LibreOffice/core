@@ -32,6 +32,8 @@
 #include <svl/zformat.hxx>
 #include <sot/storage.hxx>
 #include <document.hxx>
+#include <dpcache.hxx>
+#include <dpgroup.hxx>
 #include <dpobject.hxx>
 #include <dpsave.hxx>
 #include <dpdimsave.hxx>
