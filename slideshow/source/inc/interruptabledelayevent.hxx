@@ -99,7 +99,7 @@ namespace slideshow
             EventSharedPtr  mpImmediateEvent;
         };
 
-        /** Generate an interruptable delay event.
+        /** Generate an interruptible delay event.
 
             This function generates a pair of events, that are
             especially tailored to achieve the following behaviour: By

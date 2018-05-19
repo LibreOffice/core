@@ -34,7 +34,7 @@ class QueueProcessor;
 class GenericPageCache
 {
 public:
-    /** The page chache is created with a reference to the SlideSorter and
+    /** The page cache is created with a reference to the SlideSorter and
         thus has access to both view and model.  This allows the cache to
         fill itself with requests for all pages or just the visible ones.
         @param rPreviewSize
