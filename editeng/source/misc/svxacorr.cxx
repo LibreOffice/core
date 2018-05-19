@@ -2649,7 +2649,7 @@ bool SvxAutocorrWordList::Insert(std::unique_ptr<SvxAutocorrWord> pWord) const
 void SvxAutocorrWordList::LoadEntry(const OUString& sWrong, const OUString& sRight, bool bOnlyTxt)
 {
     std::unique_ptr<SvxAutocorrWord> pNew(new SvxAutocorrWord( sWrong, sRight, bOnlyTxt ));
-    Insert( std::move(pNew) );
+    (void)Insert(std::move(pNew));
 }
 
 bool SvxAutocorrWordList::empty() const
