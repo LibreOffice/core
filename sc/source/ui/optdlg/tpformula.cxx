@@ -138,12 +138,11 @@ void ScTpFormulaOptions::UpdateCustomCalcRadioButtons(bool bDefault)
 
 void ScTpFormulaOptions::LaunchCustomCalcSettings()
 {
-    ScopedVclPtrInstance< ScCalcOptionsDialog > aDlg(this, maCurrentConfig,
-                                                     maCurrentDocOptions.IsWriteCalcConfig());
-    if (aDlg->Execute() == RET_OK)
+    ScCalcOptionsDialog aDlg(GetFrameWeld(), maCurrentConfig, maCurrentDocOptions.IsWriteCalcConfig());
+    if (aDlg.run() == RET_OK)
     {
-        maCurrentConfig = aDlg->GetConfig();
-        maCurrentDocOptions.SetWriteCalcConfig( aDlg->GetWriteCalcConfig());
+        maCurrentConfig = aDlg.GetConfig();
+        maCurrentDocOptions.SetWriteCalcConfig(aDlg.GetWriteCalcConfig());
     }
 }
 

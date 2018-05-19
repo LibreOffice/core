@@ -72,43 +72,32 @@ sal_Int32 toSelectedItem( formula::FormulaGrammar::AddressConvention eConv )
 
 }
 
-ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfig& rConfig, bool bWriteConfig)
-    : ModalDialog(pParent, "FormulaCalculationOptions",
-        "modules/scalc/ui/formulacalculationoptions.ui")
+ScCalcOptionsDialog::ScCalcOptionsDialog(weld::Window* pParent, const ScCalcConfig& rConfig, bool bWriteConfig)
+    : GenericDialogController(pParent, "modules/scalc/ui/formulacalculationoptions.ui", "FormulaCalculationOptions")
     , maConfig(rConfig)
     , mbSelectedEmptyStringAsZero(rConfig.mbEmptyStringAsZero)
     , mbWriteConfig(bWriteConfig)
+    , mxEmptyAsZero(m_xBuilder->weld_check_button("checkEmptyAsZero"))
+    , mxConversion(m_xBuilder->weld_combo_box_text("comboConversion"))
+    , mxCurrentDocOnly(m_xBuilder->weld_check_button("current_doc"))
+    , mxSyntax(m_xBuilder->weld_combo_box_text("comboSyntaxRef"))
 {
-    get(mpConversion,"comboConversion");
-    mpConversion->SelectEntryPos(static_cast<sal_Int32>(rConfig.meStringConversion));
-    mpConversion->SetSelectHdl(LINK(this, ScCalcOptionsDialog, ConversionModifiedHdl));
+    mxConversion->set_active(static_cast<int>(rConfig.meStringConversion));
+    mxConversion->connect_changed(LINK(this, ScCalcOptionsDialog, ConversionModifiedHdl));
 
-    get(mpEmptyAsZero,"checkEmptyAsZero");
-    mpEmptyAsZero->Check(rConfig.mbEmptyStringAsZero);
-    mpEmptyAsZero->SetClickHdl(LINK(this, ScCalcOptionsDialog, AsZeroModifiedHdl));
+    mxEmptyAsZero->set_active(rConfig.mbEmptyStringAsZero);
+    mxEmptyAsZero->connect_toggled(LINK(this, ScCalcOptionsDialog, AsZeroModifiedHdl));
     CoupleEmptyAsZeroToStringConversion();
 
-    get(mpSyntax,"comboSyntaxRef");
-    mpSyntax->SelectEntryPos( toSelectedItem(rConfig.meStringRefAddressSyntax) );
-    mpSyntax->SetSelectHdl(LINK(this, ScCalcOptionsDialog, SyntaxModifiedHdl));
+    mxSyntax->set_active(toSelectedItem(rConfig.meStringRefAddressSyntax));
+    mxSyntax->connect_changed(LINK(this, ScCalcOptionsDialog, SyntaxModifiedHdl));
 
-    get(mpCurrentDocOnly,"current_doc");
-    mpCurrentDocOnly->Check(!mbWriteConfig);
-    mpCurrentDocOnly->SetClickHdl(LINK(this, ScCalcOptionsDialog, CurrentDocOnlyHdl));
+    mxCurrentDocOnly->set_active(!mbWriteConfig);
+    mxCurrentDocOnly->connect_toggled(LINK(this, ScCalcOptionsDialog, CurrentDocOnlyHdl));
 }
 
 ScCalcOptionsDialog::~ScCalcOptionsDialog()
 {
-    disposeOnce();
-}
-
-void ScCalcOptionsDialog::dispose()
-{
-    mpEmptyAsZero.clear();
-    mpConversion.clear();
-    mpSyntax.clear();
-    mpCurrentDocOnly.clear();
-    ModalDialog::dispose();
 }
 
 void ScCalcOptionsDialog::CoupleEmptyAsZeroToStringConversion()
@@ -117,43 +106,43 @@ void ScCalcOptionsDialog::CoupleEmptyAsZeroToStringConversion()
     {
         case ScCalcConfig::StringConversion::ILLEGAL:
             maConfig.mbEmptyStringAsZero = false;
-            mpEmptyAsZero->Check(false);
-            mpEmptyAsZero->Enable(false);
+            mxEmptyAsZero->set_active(false);
+            mxEmptyAsZero->set_sensitive(false);
             break;
         case ScCalcConfig::StringConversion::ZERO:
             maConfig.mbEmptyStringAsZero = true;
-            mpEmptyAsZero->Check();
-            mpEmptyAsZero->Enable(false);
+            mxEmptyAsZero->set_active(true);
+            mxEmptyAsZero->set_sensitive(false);
             break;
         case ScCalcConfig::StringConversion::UNAMBIGUOUS:
         case ScCalcConfig::StringConversion::LOCALE:
             // Reset to the value the user selected before.
             maConfig.mbEmptyStringAsZero = mbSelectedEmptyStringAsZero;
-            mpEmptyAsZero->Enable();
-            mpEmptyAsZero->Check( mbSelectedEmptyStringAsZero);
+            mxEmptyAsZero->set_sensitive(true);
+            mxEmptyAsZero->set_active(mbSelectedEmptyStringAsZero);
             break;
     }
 }
 
-IMPL_LINK(ScCalcOptionsDialog, AsZeroModifiedHdl, Button*, pCheckBox, void )
+IMPL_LINK(ScCalcOptionsDialog, AsZeroModifiedHdl, weld::ToggleButton&, rCheckBox, void )
 {
-    maConfig.mbEmptyStringAsZero = mbSelectedEmptyStringAsZero = static_cast<CheckBox*>(pCheckBox)->IsChecked();
+    maConfig.mbEmptyStringAsZero = mbSelectedEmptyStringAsZero = rCheckBox.get_active();
 }
 
-IMPL_LINK(ScCalcOptionsDialog, ConversionModifiedHdl, ListBox&, rConv, void )
+IMPL_LINK(ScCalcOptionsDialog, ConversionModifiedHdl, weld::ComboBoxText&, rConv, void)
 {
-    maConfig.meStringConversion = static_cast<ScCalcConfig::StringConversion>(rConv.GetSelectedEntryPos());
+    maConfig.meStringConversion = static_cast<ScCalcConfig::StringConversion>(rConv.get_active());
     CoupleEmptyAsZeroToStringConversion();
 }
 
-IMPL_LINK(ScCalcOptionsDialog, SyntaxModifiedHdl, ListBox&, rSyntax, void)
+IMPL_LINK(ScCalcOptionsDialog, SyntaxModifiedHdl, weld::ComboBoxText&, rSyntax, void)
 {
-    maConfig.SetStringRefSyntax(toAddressConvention(rSyntax.GetSelectedEntryPos()));
+    maConfig.SetStringRefSyntax(toAddressConvention(rSyntax.get_active()));
 }
 
-IMPL_LINK(ScCalcOptionsDialog, CurrentDocOnlyHdl, Button*, pCheckBox, void)
+IMPL_LINK(ScCalcOptionsDialog, CurrentDocOnlyHdl, weld::ToggleButton&, rCheckBox, void)
 {
-    mbWriteConfig = !(static_cast<CheckBox*>(pCheckBox)->IsChecked());
+    mbWriteConfig = !rCheckBox.get_active();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
