@@ -8,7 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
 -->
-<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
   <toolbar:toolbaritem xlink:href=".uno:NavigateBack"/>
   <toolbar:toolbaritem xlink:href=".uno:NavigateForward"/>
 </toolbar:toolbar>
