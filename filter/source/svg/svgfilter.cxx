@@ -237,7 +237,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             }
 
             // Based on GraphicSize, set size of Page. Do not forget to adapt PageBorders,
-            // but interpret them relative to PageSize so that they do not 'expolde/shrink'
+            // but interpret them relative to PageSize so that they do not 'explode/shrink'
             // in comparison. Use a common scaling factor for hor/ver to not get
             // asynchronous border distances, though. All in all this will adapt borders
             // nicely and is based on office-defaults for standard-page-border-sizes.
