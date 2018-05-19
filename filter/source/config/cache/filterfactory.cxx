@@ -20,7 +20,6 @@
 
 #include "filterfactory.hxx"
 #include "constant.hxx"
-#include "versions.hxx"
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/processfactory.hxx>
@@ -79,39 +78,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
 
     OUString sRealFilter = sFilter;
 
-    #ifdef FILTER_CONFIG_MIGRATION_Q_
-
-        /* -> TODO - HACK
-            check if the given filter name really exist ...
-            Because our old implementation worked with an internal
-            type name instead of a filter name. For a small migration time
-            we must simulate this old feature :-( */
-
-        auto & cache = TheFilterCache::get();
-
-        if (!cache.hasItem(FilterCache::E_FILTER, sFilter) && cache.hasItem(FilterCache::E_TYPE, sFilter))
-        {
-            OSL_FAIL("Who use this deprecated functionality?");
-
-            css::uno::Sequence< css::beans::NamedValue > lQuery { { PROPNAME_TYPE, css::uno::makeAny(sFilter) } };
-
-            css::uno::Reference< css::container::XEnumeration > xSet = createSubSetEnumerationByProperties(lQuery);
-            while(xSet->hasMoreElements())
-            {
-                ::comphelper::SequenceAsHashMap lHandlerProps(xSet->nextElement());
-                if (!(lHandlerProps[PROPNAME_NAME] >>= sRealFilter))
-                    continue;
-            }
-
-            // prevent outside code against NoSuchElementException!
-            // But don't implement such defensive strategy for our new create handling :-)
-            if (!cache.hasItem(FilterCache::E_FILTER, sRealFilter))
-                return css::uno::Reference< css::uno::XInterface>();
-        }
-
-        /* <- HACK */
-
-    #endif // FILTER_CONFIG_MIGRATION_Q_
+    auto & cache = TheFilterCache::get();
 
     // search filter on cache
     CacheItem aFilter = cache.getItem(FilterCache::E_FILTER, sRealFilter);

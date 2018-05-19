@@ -20,7 +20,6 @@
 
 #include "frameloaderfactory.hxx"
 #include "constant.hxx"
-#include "versions.hxx"
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/processfactory.hxx>
@@ -59,39 +58,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
 
     OUString sRealLoader = sLoader;
 
-    #ifdef FILTER_CONFIG_MIGRATION_Q_
-
-        /* -> TODO - HACK
-            check if the given loader name really exist ...
-            Because our old implementation worked with an internal
-            type name instead of a loader name. For a small migration time
-            we must simulate this old feature :-( */
-
-        auto & cache = TheFilterCache::get();
-
-        if (!cache.hasItem(FilterCache::E_FRAMELOADER, sLoader) && cache.hasItem(FilterCache::E_TYPE, sLoader))
-        {
-            css::uno::Sequence< OUString > lTypes { sLoader };
-
-            css::uno::Sequence< css::beans::NamedValue > lQuery { { PROPNAME_TYPES, css::uno::makeAny(lTypes) } };
-
-            css::uno::Reference< css::container::XEnumeration > xSet = BaseContainer::createSubSetEnumerationByProperties(lQuery);
-            while(xSet->hasMoreElements())
-            {
-                ::comphelper::SequenceAsHashMap lLoaderProps(xSet->nextElement());
-                if (!(lLoaderProps[PROPNAME_NAME] >>= sRealLoader))
-                    continue;
-            }
-
-            // prevent outside code against NoSuchElementException!
-            // But don't implement such defensive strategy for our new create handling :-)
-            if (!cache.hasItem(FilterCache::E_FRAMELOADER, sRealLoader))
-                return css::uno::Reference< css::uno::XInterface>();
-        }
-
-        /* <- HACK */
-
-    #endif // FILTER_CONFIG_MIGRATION_Q_
+    auto & cache = TheFilterCache::get();
 
     // search loader on cache
     CacheItem aLoader = cache.getItem(m_eType, sRealLoader);
