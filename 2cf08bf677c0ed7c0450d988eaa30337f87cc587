@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_f7f42788",
+        "filename": "sd/uiconfig/simpress/ui/notebookbar.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 6742,
+      "author": {
+        "id": 1001692
+      },
+      "writtenOn": "2018-05-19T14:22:18Z",
+      "side": 1,
+      "message": "\"PresentationDialog\" for \".uno:Presentation\" action?",
+      "range": {
+        "startLine": 6742,
+        "startChar": 64,
+        "endLine": 6742,
+        "endChar": 92
+      },
+      "revId": "2cf08bf677c0ed7c0450d988eaa30337f87cc587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_57617338",
+        "filename": "sd/uiconfig/simpress/ui/notebookbar.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 6925,
+      "author": {
+        "id": 1001692
+      },
+      "writtenOn": "2018-05-19T14:22:18Z",
+      "side": 1,
+      "message": "\"SlideShow-PresentationDialog\"?",
+      "range": {
+        "startLine": 6925,
+        "startChar": 63,
+        "endLine": 6925,
+        "endChar": 83
+      },
+      "revId": "2cf08bf677c0ed7c0450d988eaa30337f87cc587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_97368b50",
+        "filename": "sd/uiconfig/simpress/ui/notebookbar.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 10147,
+      "author": {
+        "id": 1001692
+      },
+      "writtenOn": "2018-05-19T14:22:18Z",
+      "side": 1,
+      "message": "\"Image-AlignBottom\" for \".uno:AlignDown\" action?",
+      "range": {
+        "startLine": 10147,
+        "startChar": 68,
+        "endLine": 10147,
+        "endChar": 85
+      },
+      "revId": "2cf08bf677c0ed7c0450d988eaa30337f87cc587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_174b7bca",
+        "filename": "sd/uiconfig/simpress/ui/notebookbar.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 10485,
+      "author": {
+        "id": 1001692
+      },
+      "writtenOn": "2018-05-19T14:22:18Z",
+      "side": 1,
+      "message": "\"Draw-InsertCaptionDialog\" for \".uno:AnimationEffects\" action?",
+      "range": {
+        "startLine": 10485,
+        "startChar": 64,
+        "endLine": 10485,
+        "endChar": 88
+      },
+      "revId": "2cf08bf677c0ed7c0450d988eaa30337f87cc587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_f7226700",
+        "filename": "sd/uiconfig/simpress/ui/notebookbar.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 11830,
+      "author": {
+        "id": 1001692
+      },
+      "writtenOn": "2018-05-19T14:22:18Z",
+      "side": 1,
+      "message": "\"Tools-ShowFmExplorer\" for \".uno:OptionTreeDialog\" action?",
+      "range": {
+        "startLine": 11830,
+        "startChar": 64,
+        "endLine": 11830,
+        "endChar": 84
+      },
+      "revId": "2cf08bf677c0ed7c0450d988eaa30337f87cc587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
