@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_aa0de638",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1049,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-05-19T19:25:40Z",
+      "side": 1,
+      "message": "Related to no SwAttrSet at all. Not sure why the default one contains a ::SET version of some properties, and also not sure why those ::SET version disappears when another property is set. Anyway, it seems to be resolved OK, but it seems like something is wrong deep inside.",
+      "parentUuid": "9a30ddce_20acbcec",
+      "range": {
+        "startLine": 1049,
+        "startChar": 24,
+        "endLine": 1049,
+        "endChar": 63
+      },
+      "revId": "4bcb4e3de5d3e1ac69d8ac23c185d0f9afdb4f5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_00741866",
         "filename": "sw/source/core/unocore/unotbl.cxx",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-05-18T06:38:33Z",
       "side": 1,
       "message": "I would have liked to have had a function that let me do this on initialization. I guess I could still add that functionality - just making sure that there isn\u0027t already a way to do that which I missed.",
+      "range": {
+        "startLine": 1065,
+        "startChar": 20,
+        "endLine": 1065,
+        "endChar": 66
+      },
+      "revId": "4bcb4e3de5d3e1ac69d8ac23c185d0f9afdb4f5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_0a1fd25f",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1065,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-05-19T19:25:40Z",
+      "side": 1,
+      "message": "found adequate examples.",
+      "parentUuid": "9a30ddce_00741866",
       "range": {
         "startLine": 1065,
         "startChar": 20,
