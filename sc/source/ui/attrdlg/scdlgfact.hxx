@@ -142,7 +142,13 @@ class AbstractScCondFormatManagerDlg_Impl : public AbstractScCondFormatManagerDl
 
 class AbstractScDataPilotDatabaseDlg_Impl  :public AbstractScDataPilotDatabaseDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScDataPilotDatabaseDlg_Impl, ScDataPilotDatabaseDlg)
+    std::unique_ptr<ScDataPilotDatabaseDlg> m_xDlg;
+public:
+    explicit AbstractScDataPilotDatabaseDlg_Impl(ScDataPilotDatabaseDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual void    GetValues( ScImportSourceDesc& rDesc ) override;
 };
 
@@ -526,7 +532,7 @@ public:
 
     virtual VclPtr<AbstractScCondFormatManagerDlg> CreateScCondFormatMgrDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList ) override;
 
-    virtual VclPtr<AbstractScDataPilotDatabaseDlg> CreateScDataPilotDatabaseDlg(vcl::Window* pParent) override;
+    virtual VclPtr<AbstractScDataPilotDatabaseDlg> CreateScDataPilotDatabaseDlg(weld::Window* pParent) override;
 
     virtual VclPtr<AbstractScDataPilotSourceTypeDlg> CreateScDataPilotSourceTypeDlg(weld::Window* pParent,
         bool bEnableExternal) override;
