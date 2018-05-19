@@ -478,8 +478,13 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
         return;
     }
 
-    SdUndoGroup* pUndoGroup(new SdUndoGroup(GetDoc()));
-    pUndoGroup->SetComment(SdResId(STR_UNDO_CHANGE_PAGEFORMAT));
+    SdUndoGroup* pUndoGroup(nullptr);
+    SfxViewShell* pViewShell(GetViewShell());
+    if (pViewShell)
+    {
+        pUndoGroup = new SdUndoGroup(GetDoc());
+        pUndoGroup->SetComment(SdResId(STR_UNDO_CHANGE_PAGEFORMAT));
+    }
     Broadcast (ViewShellHint(ViewShellHint::HINT_PAGE_RESIZE_START));
 
     // use Model-based method at SdDrawDocument
@@ -503,9 +508,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     }
 
     // handed over undo group to undo manager
-    SfxViewShell* pViewShell(GetViewShell());
-
-    if(nullptr != pViewShell)
+    if (pViewShell)
     {
         pViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager()->AddUndoAction(pUndoGroup);
     }
