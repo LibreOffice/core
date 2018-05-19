@@ -299,7 +299,7 @@ namespace xmloff
         /** return the AttributeAssignment which corresponds to the given attribute
 
             @param _rAttribName
-                the name of the attrribute
+                the name of the attribute
             @return
                 a pointer to the <type>AttributeAssignment</type> structure as requested, NULL if the attribute
                 does not represent a property.
@@ -309,7 +309,7 @@ namespace xmloff
 
         /** add a attribute assignment referring to a string property to the map
             @param _pAttributeName
-                the name of the attrribute
+                the name of the attribute
             @param _rPropertyName
                 the name of the property assigned to the attribute
         */
@@ -319,7 +319,7 @@ namespace xmloff
         /** add a attribute assignment referring to a boolean property to the map
 
             @param _pAttributeName
-                the name of the attrribute
+                the name of the attribute
             @param _rPropertyName
                 the name of the property assigned to the attribute
             @param _bAttributeDefault
@@ -335,7 +335,7 @@ namespace xmloff
         /** add a attribute assignment referring to an int16 property to the map
 
             @param _pAttributeName
-                the name of the attrribute
+                the name of the attribute
             @param _rPropertyName
                 the name of the property assigned to the attribute
         */
@@ -345,7 +345,7 @@ namespace xmloff
         /** add a attribute assignment referring to an int32 property to the map
 
             @param _pAttributeName
-                the name of the attrribute
+                the name of the attribute
             @param _rPropertyName
                 the name of the property assigned to the attribute
         */
@@ -355,7 +355,7 @@ namespace xmloff
         /** add a attribute assignment referring to an enum property to the map
 
             @param _pAttributeName
-                the name of the attrribute
+                the name of the attribute
             @param _rPropertyName
                 the name of the property assigned to the attribute
             @param _pValueMap
