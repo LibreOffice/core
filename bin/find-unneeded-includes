@@ -165,7 +165,7 @@ def run_tool(task_queue, failed_files):
             p = subprocess.Popen(invocation, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             retcode = processIWYUOutput(p.communicate()[0].decode('utf-8').splitlines(), moduleRules)
             if retcode != 0:
-                print("ERROR: '" + invocation + "' found unused includes.")
+                print("ERROR: The following command found unused includes:\n" + invocation)
                 failed_files.append(invocation)
         task_queue.task_done()
 
