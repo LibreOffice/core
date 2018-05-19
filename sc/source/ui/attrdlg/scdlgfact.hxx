@@ -116,7 +116,13 @@ class AbstractScAutoFormatDlg_Impl : public AbstractScAutoFormatDlg
 
 class AbstractScColRowLabelDlg_Impl : public AbstractScColRowLabelDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScColRowLabelDlg_Impl,ScColRowLabelDlg)
+    std::unique_ptr<ScColRowLabelDlg> m_xDlg;
+public:
+    explicit AbstractScColRowLabelDlg_Impl(ScColRowLabelDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual bool IsCol() override;
     virtual bool IsRow() override;
 };
@@ -498,7 +504,7 @@ public:
                                                                 ScAutoFormat* pAutoFormat,
                                                                 const ScAutoFormatData* pSelFormatData,
                                                                 ScViewData *pViewData) override;
-    virtual VclPtr<AbstractScColRowLabelDlg> CreateScColRowLabelDlg (vcl::Window* pParent,
+    virtual VclPtr<AbstractScColRowLabelDlg> CreateScColRowLabelDlg (weld::Window* pParent,
                                                                 bool bCol,
                                                                 bool bRow) override;
 

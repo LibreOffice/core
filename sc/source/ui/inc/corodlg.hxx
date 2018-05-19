@@ -20,37 +20,26 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CORODLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CORODLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 
-class ScColRowLabelDlg : public ModalDialog
+class ScColRowLabelDlg : public weld::GenericDialogController
 {
 public:
-    ScColRowLabelDlg(vcl::Window* pParent,
-                     bool bCol,
-                     bool bRow)
-        : ModalDialog(pParent, "ChangeSourceDialog",
-        "modules/scalc/ui/changesourcedialog.ui")
+    ScColRowLabelDlg(weld::Window* pParent, bool bCol, bool bRow)
+        : GenericDialogController(pParent, "modules/scalc/ui/changesourcedialog.ui", "ChangeSourceDialog")
+        , m_xBtnRow(m_xBuilder->weld_check_button("row"))
+        , m_xBtnCol(m_xBuilder->weld_check_button("col"))
     {
-        get(m_pBtnRow, "row");
-        get(m_pBtnCol, "col");
-        m_pBtnCol->Check(bCol);
-        m_pBtnRow->Check(bRow);
-    }
-    virtual ~ScColRowLabelDlg() override { disposeOnce(); }
-    virtual void dispose() override
-    {
-        m_pBtnRow.clear();
-        m_pBtnCol.clear();
-        ModalDialog::dispose();
+        m_xBtnCol->set_active(bCol);
+        m_xBtnRow->set_active(bRow);
     }
 
-    bool IsCol() const { return m_pBtnCol->IsChecked(); }
-    bool IsRow() const { return m_pBtnRow->IsChecked(); }
+    bool IsCol() const { return m_xBtnCol->get_active(); }
+    bool IsRow() const { return m_xBtnRow->get_active(); }
 
 private:
-    VclPtr<CheckBox> m_pBtnRow;
-    VclPtr<CheckBox> m_pBtnCol;
+    std::unique_ptr<weld::CheckButton> m_xBtnRow;
+    std::unique_ptr<weld::CheckButton> m_xBtnCol;
 };
 
 #endif

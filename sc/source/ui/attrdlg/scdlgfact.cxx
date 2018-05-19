@@ -77,7 +77,12 @@
 
 IMPL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScAutoFormatDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScColRowLabelDlg_Impl);
+
+short AbstractScColRowLabelDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractScCondFormatManagerDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataPilotDatabaseDlg_Impl);
 
@@ -231,12 +236,12 @@ OUString AbstractScAutoFormatDlg_Impl::GetCurrFormatName()
 
 bool  AbstractScColRowLabelDlg_Impl::IsCol()
 {
-    return  pDlg->IsCol();
+    return m_xDlg->IsCol();
 }
 
 bool AbstractScColRowLabelDlg_Impl::IsRow()
 {
-    return pDlg->IsRow();
+    return m_xDlg->IsRow();
 }
 
 void AbstractScDataPilotDatabaseDlg_Impl::GetValues( ScImportSourceDesc& rDesc )
@@ -688,12 +693,10 @@ VclPtr<AbstractScAutoFormatDlg> ScAbstractDialogFactory_Impl::CreateScAutoFormat
     return VclPtr<AbstractScAutoFormatDlg_Impl>::Create(pDlg);
 }
 
-VclPtr<AbstractScColRowLabelDlg>  ScAbstractDialogFactory_Impl::CreateScColRowLabelDlg(vcl::Window* pParent,
-                                                                bool bCol ,
-                                                                bool bRow)
+VclPtr<AbstractScColRowLabelDlg>  ScAbstractDialogFactory_Impl::CreateScColRowLabelDlg(weld::Window* pParent,
+                                                                bool bCol, bool bRow)
 {
-    VclPtr<ScColRowLabelDlg> pDlg = VclPtr<ScColRowLabelDlg>::Create( pParent, bCol,bRow );
-    return VclPtr<AbstractScColRowLabelDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScColRowLabelDlg_Impl>::Create(new ScColRowLabelDlg(pParent, bCol, bRow));
 }
 
 VclPtr<AbstractScSortWarningDlg> ScAbstractDialogFactory_Impl::CreateScSortWarningDlg( vcl::Window* pParent, const OUString& rExtendText, const OUString& rCurrentText )
