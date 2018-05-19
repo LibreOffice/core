@@ -11,19 +11,7 @@
 #define INCLUDED_SC_SOURCE_UI_OPTDLG_CALCOPTIONSDLG_HXX
 
 #include <config_features.h>
-
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
-
-#include <svx/checklbx.hxx>
-
-#include <svtools/treelistbox.hxx>
-
+#include <vcl/weld.hxx>
 #include <calcconfig.hxx>
 
 #if HAVE_FEATURE_OPENCL
@@ -31,17 +19,16 @@
 #include <opencl/platforminfo.hxx>
 #endif
 
-class ScCalcOptionsDialog : public ModalDialog
+class ScCalcOptionsDialog : public weld::GenericDialogController
 {
 public:
-    ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfig& rConfig, bool bWriteConfig);
+    ScCalcOptionsDialog(weld::Window* pParent, const ScCalcConfig& rConfig, bool bWriteConfig);
     virtual ~ScCalcOptionsDialog() override;
-    virtual void dispose() override;
 
-    DECL_LINK( AsZeroModifiedHdl, Button*, void);
-    DECL_LINK( ConversionModifiedHdl, ListBox&, void);
-    DECL_LINK( SyntaxModifiedHdl, ListBox&, void);
-    DECL_LINK( CurrentDocOnlyHdl, Button*, void);
+    DECL_LINK(AsZeroModifiedHdl, weld::ToggleButton&, void);
+    DECL_LINK(ConversionModifiedHdl, weld::ComboBoxText&, void);
+    DECL_LINK(SyntaxModifiedHdl, weld::ComboBoxText&, void);
+    DECL_LINK(CurrentDocOnlyHdl, weld::ToggleButton&, void);
 
     const ScCalcConfig& GetConfig() const { return maConfig;}
     bool GetWriteCalcConfig() const { return mbWriteConfig;}
@@ -50,15 +37,14 @@ private:
     void CoupleEmptyAsZeroToStringConversion();
 
 private:
-    VclPtr<CheckBox> mpEmptyAsZero;
-    VclPtr<ListBox> mpConversion;
-    VclPtr<ListBox> mpSyntax;
-    VclPtr<CheckBox> mpCurrentDocOnly;
-
     ScCalcConfig maConfig;
-
     bool mbSelectedEmptyStringAsZero;
     bool mbWriteConfig;
+
+    std::unique_ptr<weld::CheckButton> mxEmptyAsZero;
+    std::unique_ptr<weld::ComboBoxText> mxConversion;
+    std::unique_ptr<weld::CheckButton> mxCurrentDocOnly;
+    std::unique_ptr<weld::ComboBoxText> mxSyntax;
 };
 
 #endif
