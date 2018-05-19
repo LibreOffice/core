@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SC_INC_DOCUMENT_HXX
 #define INCLUDED_SC_INC_DOCUMENT_HXX
 
-#include <vcl/prntypes.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/errcode.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -34,11 +32,9 @@
 #include "types.hxx"
 #include <formula/grammar.hxx>
 #include <formula/types.hxx>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include "typedstrdata.hxx"
 #include "calcmacros.hxx"
 #include "calcconfig.hxx"
-#include <o3tl/deleter.hxx>
 #include <svl/hint.hxx>
 #include <tools/gen.hxx>
 #include <svl/zforlist.hxx>
@@ -47,11 +43,15 @@
 #include <cassert>
 #include <memory>
 #include <map>
-#include <mutex>
 #include <set>
 #include <vector>
 
 #include "markdata.hxx"
+
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace o3tl { template <typename T> struct default_delete; }
+
+class Timer;
 
 enum class SvtScriptType;
 enum class ScMF;
@@ -85,7 +85,6 @@ class TableValues;
 class RowHeightContext;
 struct SetFormulaDirtyContext;
 class RefMovedHint;
-struct SortUndoParam;
 struct ReorderParam;
 class FormulaGroupAreaListener;
 class ColumnSet;
@@ -97,14 +96,11 @@ class ExternalDataMapper;
 }
 
 class Fraction;
-class SvxFontItem;
 
-class KeyEvent;
 class OutputDevice;
 class SdrObject;
 class SfxBroadcaster;
 class SfxListener;
-class SfxHint;
 class SfxItemSet;
 class SfxObjectShell;
 class SfxBindings;
@@ -113,7 +109,6 @@ class SfxItemPool;
 class SfxPrinter;
 class SfxStyleSheetBase;
 class SvMemoryStream;
-class SvNumberFormatter;
 class SvxBoxInfoItem;
 class SvxBoxItem;
 class SvxForbiddenCharactersTable;
@@ -124,7 +119,6 @@ class SvxSearchItem;
 namespace vcl { class Window; }
 class XColorList;
 
-struct ScAttrEntry;
 class ScAutoFormatData;
 class ScBroadcastAreaSlotMachine;
 class ScChangeViewSettings;
@@ -144,12 +138,9 @@ class ScExtDocOptions;
 class ScExternalRefManager;
 class ScFormulaCell;
 class ScMacroManager;
-class ScMarkData;
 class ScOutlineTable;
 class ScPatternAttr;
 class ScPrintRangeSaver;
-class ScRangeData;
-class ScRangeName;
 class ScStyleSheet;
 class ScStyleSheetPool;
 class ScTable;
@@ -162,7 +153,6 @@ class ScChangeTrack;
 class ScEditEngineDefaulter;
 class ScFieldEditEngine;
 class ScNoteEditEngine;
-struct ScConsolidateParam;
 class ScDPObject;
 class ScDPCollection;
 class ScMatrix;
@@ -186,7 +176,6 @@ class ScFormulaParserPool;
 struct ScClipParam;
 class ScRowBreakIterator;
 struct ScSetStringParam;
-class ScDocRowHeightUpdater;
 struct ScColWidthParam;
 class ScSheetEvents;
 class ScProgress;
@@ -194,7 +183,6 @@ class SvtListener;
 class ScEditDataArray;
 class EditTextObject;
 struct ScRefCellValue;
-class ScDocumentImport;
 class ScPostIt;
 struct ScSubTotalParam;
 struct ScQueryParam;
@@ -214,7 +202,6 @@ typedef std::map<OUString, BitmapEx> IconSetBitmapMap;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
-        class XMultiServiceFactory;
         struct EventObject;
     }
     namespace i18n {

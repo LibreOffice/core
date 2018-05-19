@@ -19,9 +19,12 @@
 #ifndef INCLUDED_SC_INC_DPCACHE_HXX
 #define INCLUDED_SC_INC_DPCACHE_HXX
 
-#include "global.hxx"
-#include "dpnumgroupinfo.hxx"
+#include "address.hxx"
 #include "calcmacros.hxx"
+#include "dpitemdata.hxx"
+#include "dpnumgroupinfo.hxx"
+#include "scdllapi.h"
+#include "types.hxx"
 
 #include <mdds/flat_segment_tree.hpp>
 
@@ -32,7 +35,9 @@
 
 struct ScQueryParam;
 class ScDPObject;
-class ScDPItemData;
+class ScDocument;
+class SvNumberFormatter;
+
 enum class SvNumFormatType : sal_Int16;
 
 /**

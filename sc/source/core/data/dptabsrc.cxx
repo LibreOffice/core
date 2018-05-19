@@ -37,6 +37,7 @@
 #include <patattr.hxx>
 #include <formulacell.hxx>
 
+#include <dpcache.hxx>
 #include <dptabres.hxx>
 #include <dptabdat.hxx>
 #include <global.hxx>

@@ -29,6 +29,7 @@
 #include <svx/svdpage.hxx>
 #include <svtools/embedhlp.hxx>
 
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 

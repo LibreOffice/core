@@ -68,6 +68,7 @@
 #include <sc.hrc>
 #include <vcl/virdev.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <drwlayer.hxx>
 
 static void lcl_LimitRect( tools::Rectangle& rRect, const tools::Rectangle& rVisible )
 {

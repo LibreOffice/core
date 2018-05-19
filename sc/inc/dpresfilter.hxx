@@ -10,12 +10,15 @@
 #ifndef INCLUDED_SC_INC_DPRESFILTER_HXX
 #define INCLUDED_SC_INC_DPRESFILTER_HXX
 
-#include "dpitemdata.hxx"
+#include <rtl/ustring.hxx>
+#include "calcmacros.hxx"
 
 #include <memory>
 #include <map>
 #include <vector>
 #include <unordered_map>
+
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldFilter;

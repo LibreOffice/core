@@ -61,6 +61,7 @@
 #include <svl/broadcast.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <editeng/editstat.hxx>
+#include <rtl/tencinfo.h>
 
 #include <cstdio>
 #include <refdata.hxx>

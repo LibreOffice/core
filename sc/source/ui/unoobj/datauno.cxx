@@ -52,6 +52,7 @@
 #include <queryentry.hxx>
 #include <dputil.hxx>
 #include <sortparam.hxx>
+#include <dpobject.hxx>
 
 #include <comphelper/extract.hxx>
 #include <comphelper/servicehelper.hxx>

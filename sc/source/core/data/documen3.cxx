@@ -43,6 +43,7 @@
 #include <chartlock.hxx>
 #include <refupdat.hxx>
 #include <docoptio.hxx>
+#include <scmod.hxx>
 #include <clipoptions.hxx>
 #include <viewopti.hxx>
 #include <scextopt.hxx>

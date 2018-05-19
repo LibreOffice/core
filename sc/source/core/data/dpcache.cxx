@@ -39,6 +39,7 @@
 #include <formula/errorcodes.hxx>
 #include <svl/zforlist.hxx>
 #include <o3tl/make_unique.hxx>
+#include <osl/diagnose.h>
 
 #if DUMP_PIVOT_TABLE
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>

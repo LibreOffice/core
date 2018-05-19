@@ -19,6 +19,7 @@
 
 #include <dpgroup.hxx>
 
+#include <dpcache.hxx>
 #include <global.hxx>
 #include <document.hxx>
 #include <dpfilteredcache.hxx>

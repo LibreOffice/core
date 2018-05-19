@@ -20,15 +20,10 @@
 #ifndef INCLUDED_SC_INC_DOCOPTIO_HXX
 #define INCLUDED_SC_INC_DOCOPTIO_HXX
 
-#include <unotools/configitem.hxx>
 #include <unotools/textsearch.hxx>
 #include <svl/poolitem.hxx>
-#include <svl/itemprop.hxx>
 #include "scdllapi.h"
-#include "scmod.hxx"
 #include "optutil.hxx"
-
-#include <formula/grammar.hxx>
 
 class SC_DLLPUBLIC ScDocOptions
 {
