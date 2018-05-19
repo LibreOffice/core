@@ -172,7 +172,7 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
 
         case 3: // "modules/scalc/ui/changesourcedialog.ui"
         {
-            pReturnDialog = mpFact->CreateScColRowLabelDlg(mpViewShell->GetDialogParent(), true, false);
+            pReturnDialog = mpFact->CreateScColRowLabelDlg(mpViewShell->GetFrameWeld(), true, false);
             break;
         }
 

@@ -342,7 +342,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
                 if (pViewSh && bValid && !aChartName.isEmpty() )
                 {
-                    vcl::Window* pParent = pViewSh->GetDialogParent();
+                    weld::Window* pParent = pViewSh->GetFrameWeld();
 
                     SCCOL nCol1 = aSingleRange.aStart.Col();
                     SCROW nRow1 = aSingleRange.aStart.Row();
