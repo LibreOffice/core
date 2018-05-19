@@ -2723,7 +2723,8 @@ bool MathType::HandleTemplate(int nLevel, sal_uInt8 &rSelector,
 
     if (bRemove)
     {
-        rRet.remove(rLastTemplateBracket, 1);
+        if (rLastTemplateBracket < rRet.getLength())
+            rRet.remove(rLastTemplateBracket, 1);
         rRet.append("} ");
         rLastTemplateBracket = -1;
     }
