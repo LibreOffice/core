@@ -254,3 +254,36 @@ blacklist:
     - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/style/XStyle.hpp
     - com/sun/star/style/XStyleLoader2.hpp
+    sc/inc/TablePivotChart.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/document/XEmbeddedObjectSupplier.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/table/XTablePivotChart.hpp
+    sc/inc/TablePivotCharts.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/table/XTablePivotCharts.hpp
+    sc/inc/targuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XNameAccess.hpp
+    - com/sun/star/document/XLinkTargetSupplier.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sc/inc/textuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/text/XTextFieldsSupplier.hpp
+    sc/inc/token.hxx:
+    # needed for std::shared_ptr
+    - memory
+    sc/inc/tokenuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/sheet/XFormulaParser.hpp
+    sc/inc/types.hxx:
+    # base class has to be a complete type
+    - o3tl/typed_flags_set.hxx

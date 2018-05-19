@@ -56,6 +56,7 @@
 #include <refhint.hxx>
 #include <listenercontext.hxx>
 #include <token.hxx>
+#include <compressedarray.hxx>
 
 #include <scitems.hxx>
 #include <editeng/boxitem.hxx>

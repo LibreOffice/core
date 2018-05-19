@@ -21,7 +21,6 @@
 #define INCLUDED_SC_INC_TABPROTECTION_HXX
 
 #include <sal/types.h>
-#include <com/sun/star/uno/Sequence.hxx>
 
 #include "global.hxx"
 #include "rangelst.hxx"

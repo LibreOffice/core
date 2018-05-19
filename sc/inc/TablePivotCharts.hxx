@@ -11,13 +11,10 @@
 #define INCLUDED_SC_INC_TABLEPIVOTCHARTS_HXX
 
 #include <com/sun/star/table/XTablePivotCharts.hpp>
-#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 
 #include <svl/lstner.hxx>
-#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include "types.hxx"

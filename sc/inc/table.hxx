@@ -21,16 +21,12 @@
 #define INCLUDED_SC_INC_TABLE_HXX
 
 #include <vector>
-#include <utility>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include "attarray.hxx"
 #include "column.hxx"
 #include "colcontainer.hxx"
 #include "sortparam.hxx"
-#include "compressedarray.hxx"
-#include "postit.hxx"
 #include "types.hxx"
 #include "cellvalue.hxx"
 #include <formula/types.hxx>
@@ -39,8 +35,10 @@
 #include "document.hxx"
 
 #include <set>
-#include <map>
 #include <memory>
+
+template <typename A, typename D> class ScBitMaskCompressedArray;
+template <typename A, typename D> class ScCompressedArray;
 
 namespace utl {
     class TextSearch;
@@ -55,7 +53,6 @@ namespace com { namespace sun { namespace star {
 namespace formula { struct VectorRefArray; }
 namespace sc {
 
-struct FormulaGroupContext;
 class StartListeningContext;
 class EndListeningContext;
 class CopyFromClipContext;
@@ -76,8 +73,6 @@ class TableValues;
 class RowHeightContext;
 class CompileFormulaContext;
 struct SetFormulaDirtyContext;
-class RefMovedHint;
-struct ReorderParam;
 class ColumnIterator;
 
 }
@@ -89,7 +84,6 @@ class SvxBoxItem;
 class SvxSearchItem;
 
 class ScAutoFormatData;
-class ScDocument;
 class ScEditDataArray;
 class ScFormulaCell;
 class ScOutlineTable;
@@ -105,7 +99,6 @@ class ScTableProtection;
 class ScUserListData;
 struct RowInfo;
 struct ScFunctionData;
-struct ScLineFlags;
 class CollatorWrapper;
 class ScFlatUInt16RowSegments;
 class ScFlatBoolRowSegments;
@@ -114,9 +107,10 @@ struct ScSetStringParam;
 struct ScColWidthParam;
 class ScRangeName;
 class ScDBData;
-class ScDocumentImport;
 class ScHint;
+class ScPostIt;
 struct ScInterpreterContext;
+
 
 class ScColumnsRange final
 {
