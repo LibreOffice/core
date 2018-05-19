@@ -23,6 +23,8 @@
 #include <docoptio.hxx>
 
 #include <unotools/textsearch.hxx>
+#include <rtl/math.hxx>
+#include <osl/diagnose.h>
 
 namespace sc {
 

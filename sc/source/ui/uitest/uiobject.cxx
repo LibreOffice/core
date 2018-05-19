@@ -16,6 +16,7 @@
 #include <viewdata.hxx>
 #include <dbfunc.hxx>
 #include <tabvwsh.hxx>
+#include <drwlayer.hxx>
 
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>

@@ -46,6 +46,7 @@
 #include <dpobject.hxx>
 #include <dpsave.hxx>
 #include <dpdimsave.hxx>
+#include <tools/datetime.hxx>
 
 namespace oox {
 namespace xls {

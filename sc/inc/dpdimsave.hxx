@@ -22,7 +22,8 @@
 
 #include <vector>
 #include <map>
-#include "dpgroup.hxx"
+#include "dpitemdata.hxx"
+#include "dpnumgroupinfo.hxx"
 #include "scdllapi.h"
 #include "dptypes.hxx"
 

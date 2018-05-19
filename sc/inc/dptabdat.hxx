@@ -20,9 +20,7 @@
 #ifndef INCLUDED_SC_INC_DPTABDAT_HXX
 #define INCLUDED_SC_INC_DPTABDAT_HXX
 
-#include "dpoutput.hxx"
 #include "dpfilteredcache.hxx"
-#include "dpcache.hxx"
 #include "calcmacros.hxx"
 
 #include <svl/zforlist.hxx>

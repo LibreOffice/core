@@ -30,6 +30,7 @@
 #include "xelink.hxx"
 #include "ftools.hxx"
 #include "excrecds.hxx"
+#include <o3tl/deleter.hxx>
 
 class ExcXmlRecord : public ExcRecord
 {

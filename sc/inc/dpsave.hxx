@@ -23,7 +23,6 @@
 #include <memory>
 #include <vector>
 
-#include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -36,6 +35,7 @@
 #include <boost/optional.hpp>
 
 namespace com { namespace sun { namespace star { namespace sheet {
+    class XDimensionsSupplier;
     struct DataPilotFieldReference;
     struct DataPilotFieldSortInfo;
     struct DataPilotFieldAutoShowInfo;

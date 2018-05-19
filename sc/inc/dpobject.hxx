@@ -23,12 +23,11 @@
 #include "scdllapi.h"
 #include "global.hxx"
 #include "address.hxx"
-#include "dpoutput.hxx"
 #include "dptypes.hxx"
 #include "pivot.hxx"
 #include "calcmacros.hxx"
 
-#include <com/sun/star/sheet/XDimensionsSupplier.hpp>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
 #include <memory>
 #include <set>
@@ -39,6 +38,7 @@ namespace com { namespace sun { namespace star {
 
     namespace container {
         class XIndexAccess;
+        class XNameAccess;
     }
 
     namespace sdbc {
@@ -47,6 +47,7 @@ namespace com { namespace sun { namespace star {
 
     namespace sheet {
         class XMembersAccess;
+        class XDimensionsSupplier;
         struct DataPilotTablePositionData;
         struct DataPilotTableHeaderData;
         struct DataPilotFieldFilter;
@@ -61,6 +62,8 @@ class ScSheetSourceDesc;
 class ScDPTableData;
 class ScDPDimensionSaveData;
 class ScRangeList;
+class ScDPCache;
+class ScDocument;
 
 struct ScDPServiceDesc
 {

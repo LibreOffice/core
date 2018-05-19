@@ -32,6 +32,7 @@
 #include <undoolk.hxx>
 
 #include <sfx2/lokhelper.hxx>
+#include <svx/svdundo.hxx>
 
 /** Change column widths or row heights */
 ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,

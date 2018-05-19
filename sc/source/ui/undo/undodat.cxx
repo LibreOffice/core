@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/app.hxx>
+#include <svx/svdundo.hxx>
 
 #include <undodat.hxx>
 #include <undoutil.hxx>

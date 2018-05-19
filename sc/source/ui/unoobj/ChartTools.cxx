@@ -12,7 +12,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
-
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>

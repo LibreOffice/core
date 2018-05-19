@@ -22,6 +22,7 @@
 #include <docsh.hxx>
 #include <svx/svdocirc.hxx>
 #include <scitems.hxx>
+#include <drwlayer.hxx>
 
 #include <sc.hrc>
 

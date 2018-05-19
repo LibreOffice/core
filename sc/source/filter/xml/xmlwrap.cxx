@@ -68,6 +68,7 @@
 #include <scerrors.hxx>
 #include "XMLExportSharedData.hxx"
 #include <docuno.hxx>
+#include <drwlayer.hxx>
 #include <sheetdata.hxx>
 #include "XMLCodeNameProvider.hxx"
 #include <docsh.hxx>

@@ -20,15 +20,11 @@
 #ifndef INCLUDED_SC_INC_DPOUTPUT_HXX
 #define INCLUDED_SC_INC_DPOUTPUT_HXX
 
-#include <com/sun/star/sheet/XDimensionsSupplier.hpp>
-#include <com/sun/star/sheet/DataResult.hpp>
-#include <com/sun/star/sheet/MemberResult.hpp>
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
 #include "address.hxx"
 
-#include "dpfilteredcache.hxx"
 #include "dptypes.hxx"
 
 #include <memory>
@@ -38,6 +34,10 @@ namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldFilter;
     struct DataPilotTablePositionData;
 }}}}
+
+namespace com { namespace sun { namespace star { namespace sheet { class XDimensionsSupplier; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { struct DataResult; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { struct MemberResult; } } } }
 
 namespace tools { class Rectangle; }
 class ScDocument;

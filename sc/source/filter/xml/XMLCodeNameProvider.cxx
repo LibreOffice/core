@@ -19,6 +19,7 @@
 
 #include "XMLCodeNameProvider.hxx"
 #include <document.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/sequence.hxx>
 
 using namespace com::sun::star;

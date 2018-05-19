@@ -20,11 +20,12 @@
 #ifndef INCLUDED_SC_INC_DBDOCUTL_HXX
 #define INCLUDED_SC_INC_DBDOCUTL_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
 #include "types.hxx"
 #include <sal/types.h>
 
 class ScDocument;
+
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
 
 namespace com { namespace sun { namespace star { namespace sdbc {
     class XRow;
