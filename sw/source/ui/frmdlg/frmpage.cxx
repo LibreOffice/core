@@ -1993,7 +1993,7 @@ IMPL_LINK( SwFramePage, PosHdl, ListBox&, rLB, void )
     else
         m_bAtVertPosModified = true;
 
-    // special treatment for HTML-Mode with horizonal-vertical-dependencies
+    // special treatment for HTML-Mode with horizontal-vertical-dependencies
     if(m_bHtmlMode && (RndStdIds::FLY_AT_CHAR == GetAnchor()))
     {
         bool bSet = false;

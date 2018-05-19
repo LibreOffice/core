@@ -281,7 +281,7 @@
                         <xsl:value-of select="$frame_v_anchor"/>
                     </xsl:attribute>
                     <!--/xsl:if-->
-                    <!--xsl:if test="w:tblpPr/@w:tblpXSpec" to get the horizntal alignment-->
+                    <!--xsl:if test="w:tblpPr/@w:tblpXSpec" to get the horizontal alignment-->
                     <xsl:variable name="horizental_alignment">
                         <xsl:choose>
                             <xsl:when test="w:tblpPr/@w:tblpXSpec = 'left' ">

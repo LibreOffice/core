@@ -191,7 +191,7 @@ namespace sdr
                 // all layers. The StyleSheet-problem was solved in
                 // AttributeProperties::MoveToItemPool at the end. There, a StyleSheet with the
                 // same name was searched for in the target-SdrModel.
-                // Start by retetting the current TargetStyleSheet so that nothing goes wrong
+                // Start by resetting the current TargetStyleSheet so that nothing goes wrong
                 // when we do not find a fitting TargetStyleSheet.
                 // Note: The test for SdrModelChange above was wrong (compared the already set
                 // new SdrObject), so this never triggered and pTargetStyleSheet was never set to
