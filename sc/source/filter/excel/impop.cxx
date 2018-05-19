@@ -34,6 +34,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/pageitem.hxx>
+#include <svx/svxids.hrc>
 #include <svl/zforlist.hxx>
 #include <unotools/configmgr.hxx>
 

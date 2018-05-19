@@ -21,7 +21,6 @@
 #define INCLUDED_SC_INC_VALIDAT_HXX
 
 #include "conditio.hxx"
-#include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include "scdllapi.h"
 
 namespace vcl { class Window; }

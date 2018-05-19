@@ -11,7 +11,6 @@
 #define INCLUDED_SC_INC_UNDORANGENAME_HXX
 
 #include <undobase.hxx>
-#include "rangenam.hxx"
 
 #include <memory>
 #include <map>

@@ -22,7 +22,6 @@
 
 #include <svx/optgrid.hxx>
 
-#include <svx/svxids.hrc>
 #include "scdllapi.h"
 #include "optutil.hxx"
 #include "global.hxx"
