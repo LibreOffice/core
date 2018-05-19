@@ -21,7 +21,6 @@
 #include "contenthandlerfactory.hxx"
 #include "querytokenizer.hxx"
 #include "constant.hxx"
-#include "versions.hxx"
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/processfactory.hxx>
@@ -62,39 +61,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
 
     OUString sRealHandler = sHandler;
 
-    #ifdef FILTER_CONFIG_MIGRATION_Q_
-
-        /* -> TODO - HACK
-            check if the given handler name really exists ...
-            Because our old implementation worked with an internal
-            type name instead of a handler name. For a small migration time
-            we must simulate this old feature :-( */
-
-        auto & cache = TheFilterCache::get();
-
-        if (!cache.hasItem(FilterCache::E_CONTENTHANDLER, sHandler) && cache.hasItem(FilterCache::E_TYPE, sHandler))
-        {
-            css::uno::Sequence< OUString > lTypes { sHandler };
-
-            css::uno::Sequence< css::beans::NamedValue > lQuery { { PROPNAME_TYPES, css::uno::makeAny(lTypes) } };
-
-            css::uno::Reference< css::container::XEnumeration > xSet = BaseContainer::createSubSetEnumerationByProperties(lQuery);
-            while(xSet->hasMoreElements())
-            {
-                ::comphelper::SequenceAsHashMap lHandlerProps(xSet->nextElement());
-                if (!(lHandlerProps[PROPNAME_NAME] >>= sRealHandler))
-                    continue;
-            }
-
-            // prevent outside code against NoSuchElementException!
-            // But don't implement such defensive strategy for our new create handling :-)
-            if (!cache.hasItem(FilterCache::E_CONTENTHANDLER, sRealHandler))
-                return css::uno::Reference< css::uno::XInterface>();
-        }
-
-        /* <- HACK */
-
-    #endif // FILTER_CONFIG_MIGRATION_Q_
+    auto & cache = TheFilterCache::get();
 
     // search handler on cache
     CacheItem aHandler = cache.getItem(FilterCache::E_CONTENTHANDLER, sRealHandler);
