@@ -4538,7 +4538,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="CalcLabel">
+              <object class="GtkLabel" id="HomeLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="notebookbar|CalcLabel">Home</property>
@@ -6329,7 +6329,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="PageLayoutLabel">
+              <object class="GtkLabel" id="LayoutLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="notebookbar|PageLayoutLabel">Layout</property>
@@ -13267,125 +13267,6 @@
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
       </packing>
-    </child>
-  </object>
-  <object class="GtkMenu" id="stylemenu">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="stylemenudefault">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Default&amp;FamilyName:string=CellStyles</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="stylemenusep1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="stylemenuacc1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Accent%201&amp;FamilyName:string=CellStyles</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="stylemenuacc2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Accent%202&amp;FamilyName:string=CellStyles</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="stylemenuacc3">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Accent%203&amp;FamilyName:string=CellStyles</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="stylemenusep2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="stylemenuhed1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Heading%201&amp;FamilyName:string=CellStyles</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="stylemenuhed2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Heading%202&amp;FamilyName:string=CellStyles</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="stylemenusep3">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="stylemenustatg">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Good&amp;FamilyName:string=CellStyles</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="stylemenustatn">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Neutral&amp;FamilyName:string=CellStyles</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="stylemenustatb">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Bad&amp;FamilyName:string=CellStyles</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="stylemenustatw">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Warning&amp;FamilyName:string=CellStyles</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="stylemenustate">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Error&amp;FamilyName:string=CellStyles</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="stylemenusep4">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="stylemenutxtn">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Note&amp;FamilyName:string=CellStyles</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="stylemenutxtf">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Footnote&amp;FamilyName:string=CellStyles</property>
-      </object>
     </child>
   </object>
 </interface>
