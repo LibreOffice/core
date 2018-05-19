@@ -31,45 +31,35 @@ ScSortDlg::ScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
     AddTabPage("options", ScTabPageSortOptions::Create, nullptr);
 }
 
-ScSortWarningDlg::ScSortWarningDlg(vcl::Window* pParent,
+ScSortWarningDlg::ScSortWarningDlg(weld::Window* pParent,
     const OUString& rExtendText, const OUString& rCurrentText)
-    : ModalDialog(pParent, "SortWarning", "modules/scalc/ui/sortwarning.ui")
+    : GenericDialogController(pParent, "modules/scalc/ui/sortwarning.ui", "SortWarning")
+    , m_xFtText(m_xBuilder->weld_label("sorttext"))
+    , m_xBtnExtSort(m_xBuilder->weld_button("extend"))
+    , m_xBtnCurSort(m_xBuilder->weld_button("current"))
 {
-    get( aFtText, "sorttext" );
-    get( aBtnExtSort, "extend" );
-    get( aBtnCurSort, "current" );
-
-    OUString sTextName = aFtText->GetText();
+    OUString sTextName = m_xFtText->get_label();
     sTextName = sTextName.replaceFirst("%1", rExtendText);
     sTextName = sTextName.replaceFirst("%2", rCurrentText);
-    aFtText->SetText( sTextName );
+    m_xFtText->set_label(sTextName);
 
-    aBtnExtSort->SetClickHdl( LINK( this, ScSortWarningDlg, BtnHdl ) );
-    aBtnCurSort->SetClickHdl( LINK( this, ScSortWarningDlg, BtnHdl ) );
+    m_xBtnExtSort->connect_clicked( LINK( this, ScSortWarningDlg, BtnHdl ) );
+    m_xBtnCurSort->connect_clicked( LINK( this, ScSortWarningDlg, BtnHdl ) );
 }
 
 ScSortWarningDlg::~ScSortWarningDlg()
 {
-    disposeOnce();
 }
 
-void ScSortWarningDlg::dispose()
+IMPL_LINK(ScSortWarningDlg, BtnHdl, weld::Button&, rBtn, void)
 {
-    aFtText.clear();
-    aBtnExtSort.clear();
-    aBtnCurSort.clear();
-    ModalDialog::dispose();
-}
-
-IMPL_LINK( ScSortWarningDlg, BtnHdl, Button*, pBtn, void )
-{
-    if ( pBtn == aBtnExtSort )
+    if (&rBtn == m_xBtnExtSort.get())
     {
-        EndDialog( BTN_EXTEND_RANGE );
+        m_xDialog->response(BTN_EXTEND_RANGE);
     }
-    else if( pBtn == aBtnCurSort )
+    else if(&rBtn == m_xBtnCurSort.get())
     {
-        EndDialog( BTN_CURRENT_SELECTION );
+        m_xDialog->response(BTN_CURRENT_SELECTION);
     }
 }
 
