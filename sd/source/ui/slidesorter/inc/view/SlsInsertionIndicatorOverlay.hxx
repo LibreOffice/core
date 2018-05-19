@@ -44,7 +44,7 @@ namespace sd { namespace slidesorter { namespace view {
 
 class FramePainter;
 
-/** The insertion indicator is painted as a vertical or horizonal bar
+/** The insertion indicator is painted as a vertical or horizontal bar
     in the space between slides.
 */
 class InsertionIndicatorOverlay

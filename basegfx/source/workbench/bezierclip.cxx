@@ -215,7 +215,7 @@ bool Impl_calcSafeParams( double&           t1,
             {
                 // r_y is virtually zero, thus we've got a horizontal
                 // line. Now check whether we maybe coincide with lower or
-                // upper horizonal bound line.
+                // upper horizontal bound line.
                 if( tolEqual(p0.y, lowerYBound) ||
                     tolEqual(p0.y, upperYBound) )
                 {

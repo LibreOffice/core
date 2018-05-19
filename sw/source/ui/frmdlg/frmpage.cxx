@@ -1261,7 +1261,7 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
     return bRet;
 }
 
-// initialise horizonal and vertical Pos
+// initialise horizontal and vertical Pos
 void SwFramePage::InitPos(RndStdIds eId,
                                 sal_Int16 nH,
                                 sal_Int16 nHRel,
@@ -1822,7 +1822,7 @@ void SwFramePage::RangeModifyHdl()
 
     if ( m_pHMap )
     {
-        // alignment horizonal
+        // alignment horizontal
         const sal_Int32 nMapPos = GetMapPos(m_pHMap, *m_pHorizontalDLB);
         aVal.nHoriOrient = GetAlignment(m_pHMap, nMapPos, *m_pHoriRelationLB);
         aVal.nHRelOrient = GetRelation(*m_pHoriRelationLB);
