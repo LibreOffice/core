@@ -2861,13 +2861,10 @@ void ScCellShell::ExecuteDataPilotDialog()
             }
             else if ( pTypeDlg->IsDatabase() )
             {
-                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-
+                assert(pFact && "ScAbstractFactory create fail!");
                 ScopedVclPtr<AbstractScDataPilotDatabaseDlg> pDataDlg(
-                    pFact->CreateScDataPilotDatabaseDlg(
-                        pTabViewShell->GetDialogParent()));
-
-                OSL_ENSURE(pDataDlg, "Dialog create fail!");
+                    pFact->CreateScDataPilotDatabaseDlg(pTabViewShell->GetFrameWeld()));
+                assert(pDataDlg  && "Dialog create fail!");
                 if ( pDataDlg->Execute() == RET_OK )
                 {
                     ScImportSourceDesc aImpDesc(pDoc);

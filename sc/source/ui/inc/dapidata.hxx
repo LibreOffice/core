@@ -20,28 +20,24 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DAPIDATA_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DAPIDATA_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/combobox.hxx>
+#include <vcl/weld.hxx>
 
 struct ScImportSourceDesc;
 
-class ScDataPilotDatabaseDlg : public ModalDialog
+class ScDataPilotDatabaseDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<ListBox>  m_pLbDatabase;
-    VclPtr<ComboBox> m_pCbObject;
-    VclPtr<ListBox>  m_pLbType;
+    std::unique_ptr<weld::ComboBoxText> m_xLbDatabase;
+    std::unique_ptr<weld::ComboBoxText> m_xCbObject;
+    std::unique_ptr<weld::ComboBoxText> m_xLbType;
 
     void    FillObjects();
 
-    DECL_LINK( SelectHdl, ListBox&, void );
+    DECL_LINK(SelectHdl, weld::ComboBoxText&, void);
 
 public:
-    ScDataPilotDatabaseDlg(vcl::Window* pParent);
+    ScDataPilotDatabaseDlg(weld::Window* pParent);
     virtual ~ScDataPilotDatabaseDlg() override;
-    virtual void dispose() override;
 
     void    GetValues( ScImportSourceDesc& rDesc );
 };

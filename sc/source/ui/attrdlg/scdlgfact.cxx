@@ -84,7 +84,11 @@ short AbstractScColRowLabelDlg_Impl::Execute()
 }
 
 IMPL_ABSTDLG_BASE(AbstractScCondFormatManagerDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScDataPilotDatabaseDlg_Impl);
+
+short AbstractScDataPilotDatabaseDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractScDataPilotSourceTypeDlg_Impl::Execute()
 {
@@ -251,7 +255,7 @@ bool AbstractScColRowLabelDlg_Impl::IsRow()
 
 void AbstractScDataPilotDatabaseDlg_Impl::GetValues( ScImportSourceDesc& rDesc )
 {
-    pDlg->GetValues(rDesc);
+    m_xDlg->GetValues(rDesc);
 }
 
 bool AbstractScDataPilotSourceTypeDlg_Impl::IsDatabase() const
@@ -716,10 +720,9 @@ VclPtr<AbstractScCondFormatManagerDlg> ScAbstractDialogFactory_Impl::CreateScCon
     return VclPtr<AbstractScCondFormatManagerDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractScDataPilotDatabaseDlg> ScAbstractDialogFactory_Impl::CreateScDataPilotDatabaseDlg(vcl::Window* pParent)
+VclPtr<AbstractScDataPilotDatabaseDlg> ScAbstractDialogFactory_Impl::CreateScDataPilotDatabaseDlg(weld::Window* pParent)
 {
-    VclPtr<ScDataPilotDatabaseDlg> pDlg = VclPtr<ScDataPilotDatabaseDlg>::Create( pParent );
-    return VclPtr<AbstractScDataPilotDatabaseDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScDataPilotDatabaseDlg_Impl>::Create(new ScDataPilotDatabaseDlg(pParent));
 }
 
 VclPtr<AbstractScDataPilotSourceTypeDlg> ScAbstractDialogFactory_Impl::CreateScDataPilotSourceTypeDlg(
