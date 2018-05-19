@@ -440,7 +440,14 @@ public:
 
 class AbstractScSortWarningDlg_Impl : public AbstractScSortWarningDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScSortWarningDlg_Impl, ScSortWarningDlg )
+protected:
+    std::unique_ptr<ScSortWarningDlg> m_xDlg;
+public:
+    explicit AbstractScSortWarningDlg_Impl(ScSortWarningDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
 };
 
 class AbstractScStringInputDlg_Impl :  public AbstractScStringInputDlg
@@ -508,7 +515,7 @@ public:
                                                                 bool bCol,
                                                                 bool bRow) override;
 
-    virtual VclPtr<AbstractScSortWarningDlg> CreateScSortWarningDlg(vcl::Window* pParent, const OUString& rExtendText, const OUString& rCurrentText ) override;
+    virtual VclPtr<AbstractScSortWarningDlg> CreateScSortWarningDlg(weld::Window* pParent, const OUString& rExtendText, const OUString& rCurrentText ) override;
 
     virtual VclPtr<AbstractScCondFormatManagerDlg> CreateScCondFormatMgrDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList ) override;
 

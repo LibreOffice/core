@@ -173,7 +173,11 @@ bool AbstractScShowTabDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContex
     return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
-IMPL_ABSTDLG_BASE(AbstractScSortWarningDlg_Impl);
+short AbstractScSortWarningDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractScTabBgColorDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScTextImportOptionsDlg_Impl);
@@ -699,10 +703,9 @@ VclPtr<AbstractScColRowLabelDlg>  ScAbstractDialogFactory_Impl::CreateScColRowLa
     return VclPtr<AbstractScColRowLabelDlg_Impl>::Create(new ScColRowLabelDlg(pParent, bCol, bRow));
 }
 
-VclPtr<AbstractScSortWarningDlg> ScAbstractDialogFactory_Impl::CreateScSortWarningDlg( vcl::Window* pParent, const OUString& rExtendText, const OUString& rCurrentText )
+VclPtr<AbstractScSortWarningDlg> ScAbstractDialogFactory_Impl::CreateScSortWarningDlg(weld::Window* pParent, const OUString& rExtendText, const OUString& rCurrentText)
 {
-    VclPtr<ScSortWarningDlg> pDlg = VclPtr<ScSortWarningDlg>::Create(pParent, rExtendText, rCurrentText );
-    return VclPtr<AbstractScSortWarningDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScSortWarningDlg_Impl>::Create(new ScSortWarningDlg(pParent, rExtendText, rCurrentText));
 }
 
 VclPtr<AbstractScCondFormatManagerDlg> ScAbstractDialogFactory_Impl::CreateScCondFormatMgrDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList )
