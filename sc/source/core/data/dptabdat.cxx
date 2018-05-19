@@ -18,7 +18,7 @@
  */
 
 #include <dptabdat.hxx>
-
+#include <dpcache.hxx>
 #include <global.hxx>
 #include <dpfilteredcache.hxx>
 #include <dptabres.hxx>

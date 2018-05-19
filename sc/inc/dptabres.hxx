@@ -24,10 +24,7 @@
 #include "dpfilteredcache.hxx"
 #include "calcmacros.hxx"
 
-#include <com/sun/star/sheet/MemberResult.hpp>
-#include <com/sun/star/sheet/DataResult.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 
 #include <map>
 #include <unordered_map>
@@ -38,6 +35,10 @@
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
 } } } }
+
+namespace com { namespace sun { namespace star { namespace sheet { struct DataResult; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { struct MemberResult; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
 
 class ScDPSource;
 class ScDPDimension;

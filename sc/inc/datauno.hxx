@@ -24,7 +24,6 @@
 #include "queryparam.hxx"
 #include "subtotalparam.hxx"
 
-#include <com/sun/star/sheet/TableFilterField.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XSheetFilterDescriptor.hpp>
@@ -49,6 +48,10 @@
 #include <svl/lstner.hxx>
 
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace sheet { struct TableFilterField2; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { struct TableFilterField3; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { struct TableFilterField; } } } }
 
 class ScDBData;
 class ScDocShell;

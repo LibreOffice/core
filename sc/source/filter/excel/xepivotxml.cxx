@@ -9,6 +9,7 @@
 
 #include <xepivotxml.hxx>
 #include <dpcache.hxx>
+#include <dpitemdata.hxx>
 #include <dpobject.hxx>
 #include <dpsave.hxx>
 #include <dputil.hxx>

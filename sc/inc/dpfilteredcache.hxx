@@ -23,11 +23,16 @@
 #include <sal/types.h>
 #include "dpitemdata.hxx"
 #include "calcmacros.hxx"
+#include "scdllapi.h"
+#include "types.hxx"
 
 #include <unordered_set>
 #include <vector>
 
 #include <mdds/flat_segment_tree.hpp>
+
+namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
 
 class ScDPCache;
 struct ScDPValue;

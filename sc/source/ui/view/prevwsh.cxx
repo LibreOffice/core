@@ -40,6 +40,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 
+#include <drwlayer.hxx>
 #include <prevwsh.hxx>
 #include <preview.hxx>
 #include <printfun.hxx>

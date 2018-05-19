@@ -44,6 +44,7 @@
 #include <docsh.hxx>
 #include <document.hxx>
 #include <docuno.hxx>
+#include <drwlayer.hxx>
 
 using namespace css;
 

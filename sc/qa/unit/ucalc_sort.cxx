@@ -22,6 +22,7 @@
 #include <scitems.hxx>
 #include <editutil.hxx>
 #include <table.hxx>
+#include <drwlayer.hxx>
 
 #include <sal/config.h>
 #include <editeng/wghtitem.hxx>

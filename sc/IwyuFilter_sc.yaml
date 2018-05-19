@@ -82,9 +82,34 @@ blacklist:
     sc/inc/conditio.hxx:
     # base class has to be a complete type
     - tools/link.hxx
-    sc/inc/dbdocutl.hxx:
+    sc/inc/dapiuno.hxx:
     # base class has to be a complete type
-    - com/sun/star/uno/Reference.hxx
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/container/XNameContainer.hpp
+    - com/sun/star/sheet/XDataPilotDataLayoutFieldSupplier.hpp
+    - com/sun/star/sheet/XDataPilotFieldGrouping.hpp
+    - com/sun/star/sheet/XDataPilotField.hpp
+    - com/sun/star/sheet/XDataPilotTable2.hpp
+    - com/sun/star/sheet/XDataPilotTables.hpp
+    sc/inc/datauno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/sheet/XCellRangeReferrer.hpp
+    - com/sun/star/sheet/XConsolidationDescriptor.hpp
+    - com/sun/star/sheet/XDatabaseRange.hpp
+    - com/sun/star/sheet/XDatabaseRanges.hpp
+    - com/sun/star/sheet/XSheetFilterDescriptor2.hpp
+    - com/sun/star/sheet/XSheetFilterDescriptor3.hpp
+    - com/sun/star/sheet/XSheetFilterDescriptor.hpp
+    - com/sun/star/sheet/XSubTotalDescriptor.hpp
+    - com/sun/star/sheet/XSubTotalField.hpp
+    - com/sun/star/sheet/XUnnamedDatabaseRanges.hpp
+    - com/sun/star/util/XRefreshable.hpp
     sc/inc/defltuno.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
@@ -94,31 +119,24 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/frame/XDispatchProviderInterceptor.hpp
     - com/sun/star/view/XSelectionChangeListener.hpp
+    sc/inc/docuno.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/drawing/XDrawPages.hpp
+    - com/sun/star/sheet/XCellRangesAccess.hpp
+    - com/sun/star/sheet/XScenarios.hpp
+    - com/sun/star/sheet/XSheetAnnotations.hpp
+    - com/sun/star/sheet/XSpreadsheets2.hpp
+    - com/sun/star/table/XTableColumns.hpp
+    - com/sun/star/table/XTableRows.hpp
     sc/inc/dpglobal.hxx:
     # base class has to be a complete type
     - o3tl/typed_flags_set.hxx
-    sc/inc/dpoutput.hxx:
-    # base class has to be a complete type
-    - com/sun/star/sheet/DataResult.hpp
-    - com/sun/star/sheet/MemberResult.hpp
-    - com/sun/star/sheet/XDimensionsSupplier.hpp
-    sc/inc/dpobject.hxx:
-    # base class has to be a complete type
-    - com/sun/star/sheet/XDimensionsSupplier.hpp
-    sc/inc/dpsave.hxx:
-    # base class has to be a complete type
-    - com/sun/star/sheet/XDimensionsSupplier.hpp
-    sc/inc/dptabres.hxx:
-    # base class has to be a complete type
-    - com/sun/star/sheet/DataResult.hpp
-    - com/sun/star/sheet/MemberResult.hpp
-    - com/sun/star/uno/Sequence.hxx
     sc/inc/dptabsrc.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
     - com/sun/star/container/XNamed.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/sheet/MemberResult.hpp
     - com/sun/star/sheet/XDataPilotMemberResults.hpp
     - com/sun/star/sheet/XDataPilotResults.hpp
     - com/sun/star/sheet/XDimensionsSupplier.hpp
