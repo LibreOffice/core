@@ -138,7 +138,7 @@ void lcl_setParams(const RowVector& row, Reference<XParameters> const& xParam,
                 css::util::Time time;
                 if (row.at(i) >>= time)
                 {
-                    xParam->setTime(nColIndex, time);
+                    xParam->setTime(nColIndex + 1, time);
                 }
             }
             break;
