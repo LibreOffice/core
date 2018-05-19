@@ -98,6 +98,7 @@
 #include <formulagroup.hxx>
 #include <tokenarray.hxx>
 #include <tokenstringcontext.hxx>
+#include <compressedarray.hxx>
 
 #include <formula/vectortoken.hxx>
 

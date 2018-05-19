@@ -21,17 +21,16 @@
 #define INCLUDED_SC_INC_TOKENUNO_HXX
 
 #include <memory>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
-#include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
 #include <formula/FormulaOpCodeMapperObj.hxx>
-#include "address.hxx"
 #include "compiler.hxx"
+
+namespace com { namespace sun { namespace star { namespace sheet { struct FormulaOpCodeMapEntry; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { struct FormulaToken; } } } }
 
 class ScTokenArray;
 class ScDocShell;

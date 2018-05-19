@@ -25,6 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <targuno.hxx>
 #include <miscuno.hxx>

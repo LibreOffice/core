@@ -22,33 +22,14 @@
 
 #include <svl/lstner.hxx>
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
-#include <com/sun/star/beans/XVetoableChangeListener.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/beans/XPropertyStateChangeListener.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/XPropertiesChangeListener.hpp>
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
-#include <com/sun/star/beans/XPropertyContainer.hpp>
-#include <com/sun/star/beans/PropertyStateChangeEvent.hpp>
-#include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/container/XElementAccess.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <cppuhelper/implbase.hxx>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertyChangeListener; } } } }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySetInfo; } } } }
+namespace com { namespace sun { namespace star { namespace beans { class XVetoableChangeListener; } } } }
 
 class ScDocShell;
 

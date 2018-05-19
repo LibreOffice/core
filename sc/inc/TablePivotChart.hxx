@@ -17,7 +17,6 @@
 
 #include <svl/lstner.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/implbase.hxx>
 
 #include "types.hxx"
 

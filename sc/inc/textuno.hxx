@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_INC_TEXTUNO_HXX
 #define INCLUDED_SC_INC_TEXTUNO_HXX
 
-#include "global.hxx"
 #include "address.hxx"
 #include <editeng/unotext.hxx>
 #include <svl/lstner.hxx>
@@ -32,7 +31,6 @@
 #include <cppuhelper/weakref.hxx>
 
 #include <rtl/ref.hxx>
-#include "scdllapi.h"
 
 #include <memory>
 
@@ -40,7 +38,6 @@ class EditEngine;
 class EditTextObject;
 class SvxEditEngineForwarder;
 class ScDocShell;
-class ScAddress;
 class ScCellObj;
 class ScSimpleEditSource;
 class ScCellEditSource;

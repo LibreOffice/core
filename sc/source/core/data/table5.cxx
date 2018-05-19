@@ -42,6 +42,7 @@
 #include <scmod.hxx>
 #include <printopt.hxx>
 #include <bcaslot.hxx>
+#include <compressedarray.hxx>
 
 #include <com/sun/star/sheet/TablePageBreakData.hpp>
 

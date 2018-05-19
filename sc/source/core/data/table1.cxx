@@ -50,6 +50,7 @@
 #include <scmatrix.hxx>
 #include <refupdatecontext.hxx>
 #include <rowheightcontext.hxx>
+#include <compressedarray.hxx>
 
 #include <formula/vectortoken.hxx>
 #include <token.hxx>

@@ -11,7 +11,6 @@
 #define INCLUDED_SC_INC_TYPEDSTRDATA_HXX
 
 #include <rtl/ustring.hxx>
-#include "scdllapi.h"
 
 #include <set>
 

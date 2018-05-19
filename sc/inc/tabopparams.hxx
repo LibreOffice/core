@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_INC_TABOPPARAMS_HXX
 #define INCLUDED_SC_INC_TABOPPARAMS_HXX
 
-#include "global.hxx"
 #include "address.hxx"
 
 #include <vector>

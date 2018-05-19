@@ -21,7 +21,7 @@
 #define INCLUDED_SC_INC_TABBGCOLOR_HXX
 
 #include <tools/color.hxx>
-#include "address.hxx"
+#include "types.hxx"
 
 #include <vector>
 
