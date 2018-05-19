@@ -21,6 +21,7 @@
 #undef SC_DLLIMPLEMENTATION
 #endif
 
+#include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>

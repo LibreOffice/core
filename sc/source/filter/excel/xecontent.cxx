@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <com/sun/star/sheet/XAreaLinks.hpp>
 #include <com/sun/star/sheet/XAreaLink.hpp>
+#include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include <comphelper/string.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
