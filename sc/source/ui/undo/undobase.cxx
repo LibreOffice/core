@@ -18,6 +18,7 @@
  */
 
 #include <vcl/virdev.hxx>
+#include <svx/svdundo.hxx>
 
 #include <undobase.hxx>
 #include <refundo.hxx>

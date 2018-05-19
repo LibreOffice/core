@@ -26,7 +26,6 @@
 #include <com/sun/star/sheet/XMembersSupplier.hpp>
 #include <com/sun/star/sheet/XDataPilotResults.hpp>
 #include <com/sun/star/sheet/XDataPilotMemberResults.hpp>
-#include <com/sun/star/sheet/MemberResult.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
@@ -54,6 +53,7 @@
 namespace com { namespace sun { namespace star {
     namespace sheet {
         struct DataPilotFieldFilter;
+        struct MemberResult;
     }
     namespace table {
         struct CellAddress;

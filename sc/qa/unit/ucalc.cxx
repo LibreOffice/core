@@ -68,6 +68,7 @@
 #include <bcaslot.hxx>
 #include <sharedformula.hxx>
 #include <tabprotection.hxx>
+#include <scmod.hxx>
 
 #include <formula/IFunctionDescription.hxx>
 

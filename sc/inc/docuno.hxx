@@ -37,7 +37,6 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets2.hpp>
 #include <com/sun/star/sheet/XDocumentAuditing.hpp>
-#include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/XDataProviderAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
@@ -48,14 +47,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XCellRangesAccess.hpp>
 #include <com/sun/star/sheet/opencl/XOpenCLSelection.hpp>
-#include <com/sun/star/sheet/opencl/OpenCLPlatform.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <svl/itemprop.hxx>
-#include <vcl/event.hxx>
 #include <vcl/ITiledRenderable.hxx>
-#include "drwlayer.hxx"
+
+namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataProvider; } } } } }
+namespace com { namespace sun { namespace star { namespace sheet { namespace opencl { struct OpenCLPlatform; } } } } }
 
 class ScDocShell;
 class ScAnnotationObj;
