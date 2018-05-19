@@ -11,9 +11,9 @@
 #define INCLUDED_SC_INC_DPITEMDATA_HXX
 
 #include "scdllapi.h"
-#include "address.hxx"
 
 #include <sal/types.h>
+#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include "calcmacros.hxx"
 #include "dpglobal.hxx"

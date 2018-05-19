@@ -42,6 +42,7 @@
 #include <scmod.hxx>
 #include <global.hxx>
 #include <document.hxx>
+#include <drwlayer.hxx>
 #include <attrib.hxx>
 #include <tabview.hxx>
 #include <tabvwsh.hxx>

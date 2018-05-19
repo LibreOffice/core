@@ -95,6 +95,7 @@
 
 #include <viewutil.hxx>
 #include <docoptio.hxx>
+#include <scmod.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;

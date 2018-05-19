@@ -19,6 +19,7 @@
 
 #include <svl/zforlist.hxx>
 
+#include <dpcache.hxx>
 #include <dpshttab.hxx>
 #include <dptabres.hxx>
 #include <document.hxx>

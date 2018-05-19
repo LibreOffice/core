@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <dpcache.hxx>
 #include <dpfilteredcache.hxx>
 #include <document.hxx>
 #include <address.hxx>

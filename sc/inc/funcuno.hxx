@@ -27,6 +27,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
 #include "document.hxx"
+#include <svl/itemprop.hxx>
+#include <o3tl/deleter.hxx>
 
 class ScDocOptions;
 
