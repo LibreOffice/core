@@ -812,13 +812,11 @@ IMPL_LINK( ScDPSubtotalOptDlg, SelectHdl, ListBox&, rLBox, void )
     }
 }
 
-ScDPShowDetailDlg::ScDPShowDetailDlg( vcl::Window* pParent, ScDPObject& rDPObj, css::sheet::DataPilotFieldOrientation nOrient ) :
-    ModalDialog     ( pParent, "ShowDetail", "modules/scalc/ui/showdetaildialog.ui" ),
-    mrDPObj(rDPObj)
+ScDPShowDetailDlg::ScDPShowDetailDlg(weld::Window* pParent, ScDPObject& rDPObj, css::sheet::DataPilotFieldOrientation nOrient)
+    : GenericDialogController(pParent, "modules/scalc/ui/showdetaildialog.ui", "ShowDetail")
+    , mrDPObj(rDPObj)
+    , mxLbDims(m_xBuilder->weld_tree_view("dimsTreeview"))
 {
-    get(mpLbDims, "dimsTreeview");
-    get(mpBtnOk, "ok");
-
     ScDPSaveData* pSaveData = rDPObj.GetSaveData();
     long nDimCount = rDPObj.GetDimCount();
     for (long nDim=0; nDim<nDimCount; nDim++)
@@ -837,39 +835,31 @@ ScDPShowDetailDlg::ScDPShowDetailDlg( vcl::Window* pParent, ScDPObject& rDPObj, 
                     if (pLayoutName)
                         aName = *pLayoutName;
                 }
-                mpLbDims->InsertEntry( aName );
+                mxLbDims->append_text(aName);
                 maNameIndexMap.emplace(aName, nDim);
             }
         }
     }
-    if( mpLbDims->GetEntryCount() )
-        mpLbDims->SelectEntryPos( 0 );
+    if (mxLbDims->n_children())
+       mxLbDims->select(0);
 
-    mpLbDims->SetDoubleClickHdl( LINK( this, ScDPShowDetailDlg, DblClickHdl ) );
+    mxLbDims->connect_row_activated(LINK(this, ScDPShowDetailDlg, DblClickHdl));
 }
 
 ScDPShowDetailDlg::~ScDPShowDetailDlg()
 {
-    disposeOnce();
 }
 
-void ScDPShowDetailDlg::dispose()
+short ScDPShowDetailDlg::execute()
 {
-    mpLbDims.clear();
-    mpBtnOk.clear();
-    ModalDialog::dispose();
-}
-
-short ScDPShowDetailDlg::Execute()
-{
-    return mpLbDims->GetEntryCount() ? ModalDialog::Execute() : static_cast<short>(RET_CANCEL);
+    return mxLbDims->n_children() ? m_xDialog->run() : static_cast<short>(RET_CANCEL);
 }
 
 OUString ScDPShowDetailDlg::GetDimensionName() const
 {
     // Look up the internal dimension name which may be different from the
     // displayed field name.
-    OUString aSelectedName = mpLbDims->GetSelectedEntry();
+    OUString aSelectedName = mxLbDims->get_selected_text();
     DimNameIndexMap::const_iterator itr = maNameIndexMap.find(aSelectedName);
     if (itr == maNameIndexMap.end())
         // This should never happen!
@@ -880,10 +870,9 @@ OUString ScDPShowDetailDlg::GetDimensionName() const
     return mrDPObj.GetDimName(nDim, bIsDataLayout);
 }
 
-IMPL_LINK( ScDPShowDetailDlg, DblClickHdl, ListBox&, rLBox, void )
+IMPL_LINK_NOARG(ScDPShowDetailDlg, DblClickHdl, weld::TreeView&, void)
 {
-    if( &rLBox == mpLbDims )
-        mpBtnOk->Click();
+    m_xDialog->response(RET_OK);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

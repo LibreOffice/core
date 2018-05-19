@@ -407,7 +407,14 @@ class AbstractScDPDateGroupDlg_Impl : public AbstractScDPDateGroupDlg
 
 class AbstractScDPShowDetailDlg_Impl : public AbstractScDPShowDetailDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScDPShowDetailDlg_Impl, ScDPShowDetailDlg)
+protected:
+    std::shared_ptr<ScDPShowDetailDlg> m_xDlg;
+public:
+    explicit AbstractScDPShowDetailDlg_Impl(ScDPShowDetailDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual OUString GetDimensionName() const override;
 };
 
@@ -597,9 +604,9 @@ public:
                                                                 sal_Int32 nDatePart,
                                                                 const Date& rNullDate ) override;
 
-    virtual VclPtr<AbstractScDPShowDetailDlg> CreateScDPShowDetailDlg( vcl::Window* pParent,
+    virtual VclPtr<AbstractScDPShowDetailDlg> CreateScDPShowDetailDlg(weld::Window* pParent,
                                                                 ScDPObject& rDPObj,
-                                                                css::sheet::DataPilotFieldOrientation nOrient ) override;
+                                                                css::sheet::DataPilotFieldOrientation nOrient) override;
 
     virtual VclPtr<AbstractScNewScenarioDlg> CreateScNewScenarioDlg ( vcl::Window* pParent, const OUString& rName,
                                                                 bool bEdit, bool bSheetProtected ) override;
