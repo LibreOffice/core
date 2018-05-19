@@ -543,7 +543,7 @@ void SwFntObj::GuessLeading( const SwViewShell&
                 // (above original comment preserved for cultural reasons)
                 // Those who lie about their Leading, may lie about their
                 // Ascent/Descent as well, hence the Font will be lowered a
-                // litte without changing its height.
+                // little without changing its height.
                 long nDiff = std::min( rMet.GetDescent() - aWinMet.GetDescent(),
                     aWinMet.GetAscent() - rMet.GetAscent() - nTmpLeading );
                 if( nDiff > 0 )
