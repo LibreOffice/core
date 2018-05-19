@@ -178,7 +178,7 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
 
         case 4: // "modules/scalc/ui/selectdatasource.ui"
         {
-            pReturnDialog = mpFact->CreateScDataPilotDatabaseDlg(mpViewShell->GetDialogParent());
+            pReturnDialog = mpFact->CreateScDataPilotDatabaseDlg(mpViewShell->GetFrameWeld());
             break;
         }
         case 5: // "modules/scalc/ui/selectsource.ui"
