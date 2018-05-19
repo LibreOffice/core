@@ -354,7 +354,7 @@ public:
             css::uno::Reference<css::text::XTextRange> const& xInsertPosition);
     bool                        ExportTo( SfxMedium &rMedium );
 
-    /** Returns to if preparing was succesful, else false. */
+    /** Returns to if preparing was successful, else false. */
     bool PrepareForSigning();
     bool CheckIsReadonly(bool bSignScriptingContent);
     void AfterSigning(bool bSignSuccess, bool bSignScriptingContent);
