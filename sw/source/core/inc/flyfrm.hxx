@@ -77,7 +77,7 @@ protected:
 private:
     // It must be possible to block Content-bound flys so that they will be not
     // formatted; in this case MakeAll() returns immediately. This is necessary
-    // for page changes during formattting. In addition, it is needed during
+    // for page changes during formatting. In addition, it is needed during
     // the constructor call of the root object since otherwise the anchor will
     // be formatted before the root is anchored correctly to a shell and
     // because too much would be formatted as a result.

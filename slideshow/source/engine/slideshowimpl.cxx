@@ -2158,7 +2158,7 @@ void SlideShowImpl::notifySlideAnimationsEnded()
 
     OSL_ENSURE( !isDisposed(), "### already disposed!" );
 
-    // This struct will receive the (interruptable) event,
+    // This struct will receive the (interruptible) event,
     // that triggers the notifySlideEnded() method.
     InterruptableEventPair aNotificationEvents;
 
@@ -2208,7 +2208,7 @@ void SlideShowImpl::notifySlideAnimationsEnded()
 
             // generate click event. Thus, the user must
             // trigger the actual end of a slide. No need to
-            // generate interruptable event here, there's no
+            // generate interruptible event here, there's no
             // timeout involved.
             aNotificationEvents.mpImmediateEvent =
                 makeEvent( [this] () { this->notifySlideEnded(false); },
@@ -2217,7 +2217,7 @@ void SlideShowImpl::notifySlideAnimationsEnded()
     }
 
     // register events on the queues. To make automatic slide
-    // changes interruptable, register the interruption event
+    // changes interruptible, register the interruption event
     // as a nextEffectEvent target. Note that the timeout
     // event is optional (e.g. manual slide changes don't
     // generate a timeout)
