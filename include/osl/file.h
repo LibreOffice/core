@@ -635,7 +635,7 @@ typedef void *oslFileHandle;
 
 /** Open a regular file.
 
-    Open a file. Only regular files can be openend.
+    Open a file. Only regular files can be opened.
 
     @param[in] pustrFileURL
     The full qualified URL of the file to open.

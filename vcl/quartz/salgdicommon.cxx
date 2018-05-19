@@ -2129,7 +2129,7 @@ void XorEmulation::SetTarget( int nWidth, int nHeight, int nTargetDepth,
     CGContextSetStrokeColorSpace( m_xMaskContext, aCGColorSpace );
     CGContextSetShouldAntialias( m_xMaskContext, false );
 
-    // improve the XorMask's XOR emulation a litte
+    // improve the XorMask's XOR emulation a little
     // NOTE: currently only enabled for monochrome contexts
     if( aCGColorSpace == GetSalData()->mxGraySpace )
     {
