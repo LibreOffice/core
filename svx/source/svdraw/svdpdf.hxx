@@ -40,9 +40,9 @@ class SdrModel;
 class SdrPage;
 class SdrObject;
 class SvdProgressInfo;
-typedef void* FPDF_DOCUMENT;
-typedef void* FPDF_PAGEOBJECT;
-typedef void* FPDF_TEXTPAGE;
+typedef struct fpdf_document_t__* FPDF_DOCUMENT;
+typedef struct fpdf_pageobject_t__* FPDF_PAGEOBJECT;  // (text, path, etc.)
+typedef struct fpdf_textpage_t__* FPDF_TEXTPAGE;
 
 // Helper Class to import PDF
 class ImpSdrPdfImport final

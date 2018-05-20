@@ -1,61 +1,10 @@
-diff --git a/core/fpdfapi/page/cpdf_colorstate.cpp b/core/fpdfapi/page/cpdf_colorstate.cpp
-index 693fcf1..14e883f 100644
---- a/core/fpdfapi/page/cpdf_colorstate.cpp
-+++ b/core/fpdfapi/page/cpdf_colorstate.cpp
-@@ -124,7 +124,7 @@ void CPDF_ColorState::SetColor(CPDF_Color& color,
-                                uint32_t& rgb,
-                                CPDF_ColorSpace* pCS,
-                                float* pValue,
--                               uint32_t nValues) {
-+                               uint32_t nValues) const {
-   if (pCS)
-     color.SetColorSpace(pCS);
-   else if (color.IsNull())
-diff --git a/core/fpdfapi/page/cpdf_colorstate.h b/core/fpdfapi/page/cpdf_colorstate.h
-index 9619051..dbe9c47 100644
---- a/core/fpdfapi/page/cpdf_colorstate.h
-+++ b/core/fpdfapi/page/cpdf_colorstate.h
-@@ -64,7 +64,7 @@ class CPDF_ColorState {
-                 uint32_t& rgb,
-                 CPDF_ColorSpace* pCS,
-                 float* pValue,
--                uint32_t nValues);
-+                uint32_t nValues) const;
- 
-   SharedCopyOnWrite<ColorData> m_Ref;
- };
-diff --git a/core/fpdfapi/page/cpdf_pageobjectlist.cpp b/core/fpdfapi/page/cpdf_pageobjectlist.cpp
-index afd2c98..2c8e061 100644
---- a/core/fpdfapi/page/cpdf_pageobjectlist.cpp
-+++ b/core/fpdfapi/page/cpdf_pageobjectlist.cpp
-@@ -8,6 +8,6 @@
- 
- #include "third_party/base/stl_util.h"
- 
--CPDF_PageObject* CPDF_PageObjectList::GetPageObjectByIndex(int index) {
-+CPDF_PageObject* CPDF_PageObjectList::GetPageObjectByIndex(int index) const {
-   return pdfium::IndexInBounds(*this, index) ? (*this)[index].get() : nullptr;
- }
-diff --git a/core/fpdfapi/page/cpdf_pageobjectlist.h b/core/fpdfapi/page/cpdf_pageobjectlist.h
-index b450537..77c7d81 100644
---- a/core/fpdfapi/page/cpdf_pageobjectlist.h
-+++ b/core/fpdfapi/page/cpdf_pageobjectlist.h
-@@ -15,7 +15,7 @@ class CPDF_PageObject;
- class CPDF_PageObjectList
-     : public std::deque<std::unique_ptr<CPDF_PageObject>> {
-  public:
--  CPDF_PageObject* GetPageObjectByIndex(int index);
-+  CPDF_PageObject* GetPageObjectByIndex(int index) const;
- };
- 
- #endif  // CORE_FPDFAPI_PAGE_CPDF_PAGEOBJECTLIST_H_
 diff --git a/core/fpdftext/cpdf_textpage.cpp b/core/fpdftext/cpdf_textpage.cpp
-index e712549..a7973f7 100644
+index 5690698..4d7c48a 100644
 --- a/core/fpdftext/cpdf_textpage.cpp
 +++ b/core/fpdftext/cpdf_textpage.cpp
-@@ -1490,3 +1490,32 @@ bool CPDF_TextPage::IsRectIntersect(const CFX_FloatRect& rect1,
-   rect.Intersect(rect2);
-   return !rect.IsEmpty();
+@@ -1464,3 +1464,32 @@ Optional<PAGECHAR_INFO> CPDF_TextPage::GenerateCharInfo(wchar_t unicode) {
+                                  info.m_Origin.x, info.m_Origin.y);
+   return info;
  }
 +
 +WideString CPDF_TextPage::GetTextObjectText(CPDF_TextObject* pTextObj)
@@ -87,10 +36,10 @@ index e712549..a7973f7 100644
 +  return strText;
 +}
 diff --git a/core/fpdftext/cpdf_textpage.h b/core/fpdftext/cpdf_textpage.h
-index c87ab00..e5a1ba8 100644
+index 43a0312..7d5d5ec 100644
 --- a/core/fpdftext/cpdf_textpage.h
 +++ b/core/fpdftext/cpdf_textpage.h
-@@ -110,6 +110,8 @@ class CPDF_TextPage {
+@@ -105,6 +105,8 @@ class CPDF_TextPage {
    WideString GetPageText(int start, int count) const;
    WideString GetAllPageText() const { return GetPageText(0, CountChars()); }
  
@@ -99,12 +48,43 @@ index c87ab00..e5a1ba8 100644
    int CountRects(int start, int nCount);
    bool GetRect(int rectIndex, CFX_FloatRect* pRect) const;
  
-diff --git a/fpdfsdk/fpdfeditimg.cpp b/fpdfsdk/fpdfeditimg.cpp
-index 0d7ba56..37bdf99 100644
---- a/fpdfsdk/fpdfeditimg.cpp
-+++ b/fpdfsdk/fpdfeditimg.cpp
-@@ -167,6 +167,26 @@ FPDFImageObj_GetBitmap(FPDF_PAGEOBJECT image_object) {
-   return pBitmap.Leak();
+diff --git a/fpdfsdk/cpdfsdk_helpers.h b/fpdfsdk/cpdfsdk_helpers.h
+index d93ecfc..c700592 100644
+--- a/fpdfsdk/cpdfsdk_helpers.h
++++ b/fpdfsdk/cpdfsdk_helpers.h
+@@ -40,7 +40,8 @@ class CPDF_TextPage;
+ class CPDF_TextPageFind;
+ class IPDFSDK_PauseAdapter;
+ class FX_PATHPOINT;
+-
++class CPDF_TextObject;
++class CPDF_FormObject;
+ #ifdef PDF_ENABLE_XFA
+ class CPDFXFA_Context;
+ class CPDFXFA_Page;
+@@ -204,6 +205,16 @@ inline CPDF_TextPageFind* CPDFTextPageFindFromFPDFSchHandle(
+   return reinterpret_cast<CPDF_TextPageFind*>(handle);
+ }
+ 
++inline CPDF_TextObject* CPDFTextObjectFromFPDFPageObject(
++    FPDF_PAGEOBJECT page_object) {
++  return reinterpret_cast<CPDF_TextObject*>(page_object);
++}
++
++inline CPDF_FormObject* CPDFFormObjectFromFPDFPageObject(
++    FPDF_PAGEOBJECT page_object) {
++  return reinterpret_cast<CPDF_FormObject*>(page_object);
++}
++
+ ByteString CFXByteStringFromFPDFWideString(FPDF_WIDESTRING wide_string);
+ 
+ #ifdef PDF_ENABLE_XFA
+diff --git a/fpdfsdk/fpdf_editimg.cpp b/fpdfsdk/fpdf_editimg.cpp
+index fed1581..968b84a 100644
+--- a/fpdfsdk/fpdf_editimg.cpp
++++ b/fpdfsdk/fpdf_editimg.cpp
+@@ -186,6 +186,26 @@ FPDFImageObj_GetBitmap(FPDF_PAGEOBJECT image_object) {
+   return FPDFBitmapFromCFXDIBitmap(pBitmap.Leak());
  }
  
 +FPDF_EXPORT FPDF_BITMAP FPDF_CALLCONV
@@ -124,18 +104,18 @@ index 0d7ba56..37bdf99 100644
 +  RetainPtr<CFX_DIBitmap> pBitmap;
 +  pBitmap = pSource->CloneConvert(FXDIB_Argb);
 +
-+  return pBitmap.Leak();
++  return FPDFBitmapFromCFXDIBitmap(pBitmap.Leak());
 +}
 +
  FPDF_EXPORT unsigned long FPDF_CALLCONV
  FPDFImageObj_GetImageDataDecoded(FPDF_PAGEOBJECT image_object,
                                   void* buffer,
-diff --git a/fpdfsdk/fpdfeditpage.cpp b/fpdfsdk/fpdfeditpage.cpp
-index ca2cf3f..1eaa232 100644
---- a/fpdfsdk/fpdfeditpage.cpp
-+++ b/fpdfsdk/fpdfeditpage.cpp
-@@ -11,12 +11,14 @@
- #include <utility>
+diff --git a/fpdfsdk/fpdf_editpage.cpp b/fpdfsdk/fpdf_editpage.cpp
+index ec29891..a52e1a9 100644
+--- a/fpdfsdk/fpdf_editpage.cpp
++++ b/fpdfsdk/fpdf_editpage.cpp
+@@ -12,12 +12,14 @@
+ #include <vector>
  
  #include "core/fpdfapi/edit/cpdf_pagecontentgenerator.h"
 +#include "core/fpdfapi/font/cpdf_font.h"
@@ -149,16 +129,16 @@ index ca2cf3f..1eaa232 100644
  #include "core/fpdfapi/page/cpdf_shadingobject.h"
  #include "core/fpdfapi/parser/cpdf_array.h"
  #include "core/fpdfapi/parser/cpdf_document.h"
-@@ -24,6 +26,7 @@
+@@ -25,6 +27,7 @@
  #include "core/fpdfapi/parser/cpdf_string.h"
  #include "core/fpdfdoc/cpdf_annot.h"
  #include "core/fpdfdoc/cpdf_annotlist.h"
 +#include "core/fpdftext/cpdf_textpage.h"
- #include "fpdfsdk/fsdk_define.h"
+ #include "fpdfsdk/cpdfsdk_helpers.h"
  #include "public/fpdf_formfill.h"
  #include "third_party/base/logging.h"
-@@ -363,3 +366,240 @@ FPDFPageObj_GetBounds(FPDF_PAGEOBJECT pageObject,
-   *top = bbox.top;
+@@ -624,3 +627,245 @@ FPDFPageObj_SetLineCap(FPDF_PAGEOBJECT page_object, int line_cap) {
+   pPageObj->SetDirty(true);
    return true;
  }
 +
@@ -252,7 +232,7 @@ index ca2cf3f..1eaa232 100644
 +  int ret_count = byte_str_len / sizeof(unsigned short);
 +
 +  ASSERT(ret_count <= char_count + 1);  // +1 to account for the NUL terminator.
-+  memcpy(result, byte_str.GetBuffer(byte_str_len), byte_str_len);
++  memcpy(result, byte_str.GetBuffer(byte_str_len).data(), byte_str_len);
 +  return ret_count;
 +}
 +
@@ -292,7 +272,7 @@ index ca2cf3f..1eaa232 100644
 +  int ret_count = byte_str_len / kBytesPerCharacter;
 +
 +  ASSERT(ret_count <= char_count + 1);  // +1 to account for the NUL terminator.
-+  memcpy(result, byte_str.GetBuffer(byte_str_len), byte_str_len);
++  memcpy(result, byte_str.GetBuffer(byte_str_len).data(), byte_str_len);
 +  return ret_count;
 +}
 +
@@ -335,10 +315,15 @@ index ca2cf3f..1eaa232 100644
 +      return false;
 +  }
 +
-+  const uint32_t RGB = bStroke ? pTxtObj->m_ColorState.GetStrokeRGB() : pTxtObj->m_ColorState.GetFillRGB();
-+  *R = FXSYS_GetRValue(RGB);
-+  *G = FXSYS_GetGValue(RGB);
-+  *B = FXSYS_GetBValue(RGB);
++  const CPDF_Color* pColor = bStroke ? pTxtObj->m_ColorState.GetStrokeColor() : pTxtObj->m_ColorState.GetFillColor();
++  if (pColor == nullptr)
++    return false;
++
++  int r, g, b;
++  pColor->GetRGB(&r, &g, &b);
++  *R = r;
++  *G = g;
++  *B = b;
 +  *A = static_cast<unsigned int>(
 +      (pTxtObj->m_GeneralState.GetStrokeAlpha() * 255.f) + 0.5f);
 +
@@ -368,7 +353,7 @@ index ca2cf3f..1eaa232 100644
 +    const CFX_Matrix& matrix = pFrmObj->form_matrix();
 +    const CPDF_PageObjectList* pObjectList = pFrmObj->form()->GetPageObjectList();
 +    if (pObjectList)
-+        return pObjectList->GetPageObjectByIndex(index);
++        return FPDFPageObjectFromCPDFPageObject(pObjectList->GetPageObjectByIndex(index));
 +  }
 +
 +  return nullptr;
@@ -398,11 +383,11 @@ index ca2cf3f..1eaa232 100644
 +    *f = matrix.f;
 +  }
 +}
-diff --git a/fpdfsdk/fpdfeditpath.cpp b/fpdfsdk/fpdfeditpath.cpp
-index a291987..0202284 100644
---- a/fpdfsdk/fpdfeditpath.cpp
-+++ b/fpdfsdk/fpdfeditpath.cpp
-@@ -101,6 +101,16 @@ FPDFPath_SetStrokeWidth(FPDF_PAGEOBJECT path, float width) {
+diff --git a/fpdfsdk/fpdf_editpath.cpp b/fpdfsdk/fpdf_editpath.cpp
+index aca2beb..017dbcd 100644
+--- a/fpdfsdk/fpdf_editpath.cpp
++++ b/fpdfsdk/fpdf_editpath.cpp
+@@ -117,6 +117,16 @@ FPDFPath_SetStrokeWidth(FPDF_PAGEOBJECT path, float width) {
    return true;
  }
  
@@ -419,7 +404,7 @@ index a291987..0202284 100644
  FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFPath_SetFillColor(FPDF_PAGEOBJECT path,
                                                            unsigned int R,
                                                            unsigned int G,
-@@ -217,6 +227,25 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFPath_SetDrawMode(FPDF_PAGEOBJECT path,
+@@ -235,6 +245,25 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFPath_SetDrawMode(FPDF_PAGEOBJECT path,
    return true;
  }
  
@@ -445,7 +430,7 @@ index a291987..0202284 100644
  FPDF_EXPORT void FPDF_CALLCONV FPDFPath_SetLineJoin(FPDF_PAGEOBJECT path,
                                                      int line_join) {
    if (!path)
-@@ -250,6 +279,30 @@ FPDF_EXPORT void FPDF_CALLCONV FPDFPath_SetLineCap(FPDF_PAGEOBJECT path,
+@@ -268,6 +297,30 @@ FPDF_EXPORT void FPDF_CALLCONV FPDFPath_SetLineCap(FPDF_PAGEOBJECT path,
  }
  
  FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
@@ -476,22 +461,11 @@ index a291987..0202284 100644
  FPDFPathSegment_GetPoint(FPDF_PATHSEGMENT segment, float* x, float* y) {
    auto* pPathPoint = FXPathPointFromFPDFPathSegment(segment);
    if (!pPathPoint || !x || !y)
-diff --git a/fpdfsdk/fpdftext.cpp b/fpdfsdk/fpdftext.cpp
-index 68bf4f8..1cac9c7 100644
---- a/fpdfsdk/fpdftext.cpp
-+++ b/fpdfsdk/fpdftext.cpp
-@@ -31,10 +31,6 @@ namespace {
- 
- constexpr size_t kBytesPerCharacter = sizeof(unsigned short);
- 
--CPDF_TextPage* CPDFTextPageFromFPDFTextPage(FPDF_TEXTPAGE text_page) {
--  return static_cast<CPDF_TextPage*>(text_page);
--}
--
- CPDF_TextPageFind* CPDFTextPageFindFromFPDFSchHandle(FPDF_SCHHANDLE handle) {
-   return static_cast<CPDF_TextPageFind*>(handle);
- }
-@@ -105,6 +101,28 @@ FPDF_EXPORT double FPDF_CALLCONV FPDFText_GetFontSize(FPDF_TEXTPAGE text_page,
+diff --git a/fpdfsdk/fpdf_text.cpp b/fpdfsdk/fpdf_text.cpp
+index a1bbbb4..01b74c9 100644
+--- a/fpdfsdk/fpdf_text.cpp
++++ b/fpdfsdk/fpdf_text.cpp
+@@ -95,6 +95,28 @@ FPDF_EXPORT double FPDF_CALLCONV FPDFText_GetFontSize(FPDF_TEXTPAGE text_page,
    return charinfo.m_FontSize;
  }
  
@@ -520,65 +494,13 @@ index 68bf4f8..1cac9c7 100644
  FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFText_GetCharBox(FPDF_TEXTPAGE text_page,
                                                          int index,
                                                          double* left,
-diff --git a/fpdfsdk/fpdfview.cpp b/fpdfsdk/fpdfview.cpp
-index e890aa0..09d2345 100644
---- a/fpdfsdk/fpdfview.cpp
-+++ b/fpdfsdk/fpdfview.cpp
-@@ -336,6 +336,20 @@ CPDF_Page* CPDFPageFromFPDFPage(FPDF_PAGE page) {
- #endif  // PDF_ENABLE_XFA
- }
- 
-+CPDF_TextPage* CPDFTextPageFromFPDFTextPage(FPDF_TEXTPAGE text_page) {
-+  return static_cast<CPDF_TextPage*>(text_page);
-+}
-+
-+CPDF_TextObject* CPDFTextObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object) {
-+  auto* obj = CPDFPageObjectFromFPDFPageObject(page_object);
-+  return obj ? obj->AsText() : nullptr;
-+}
-+
-+CPDF_FormObject* CPDFFormObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object) {
-+  auto* obj = CPDFPageObjectFromFPDFPageObject(page_object);
-+  return obj ? obj->AsForm() : nullptr;
-+}
-+
- CPDF_PathObject* CPDFPathObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object) {
-   auto* obj = CPDFPageObjectFromFPDFPageObject(page_object);
-   return obj ? obj->AsPath() : nullptr;
-diff --git a/fpdfsdk/fsdk_define.h b/fpdfsdk/fsdk_define.h
-index 77c2315..e9a309a 100644
---- a/fpdfsdk/fsdk_define.h
-+++ b/fpdfsdk/fsdk_define.h
-@@ -25,6 +25,9 @@ class CPDF_Annot;
- class CPDF_Page;
- class CPDF_PageObject;
- class CPDF_PageRenderContext;
-+class CPDF_TextObject;
-+class CPDF_TextPage;
-+class CPDF_FormObject;
- class CPDF_PathObject;
- class CPDF_Stream;
- class IFSDK_PAUSE_Adapter;
-@@ -65,6 +68,12 @@ FPDF_DOCUMENT FPDFDocumentFromCPDFDocument(CPDF_Document* doc);
- 
- CPDF_Page* CPDFPageFromFPDFPage(FPDF_PAGE page);
- 
-+CPDF_TextPage* CPDFTextPageFromFPDFTextPage(FPDF_TEXTPAGE text_page);
-+
-+CPDF_TextObject* CPDFTextObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object);
-+
-+CPDF_FormObject* CPDFFormObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object);
-+
- CPDF_PathObject* CPDFPathObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object);
- 
- CPDF_PageObject* CPDFPageObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object);
 diff --git a/public/fpdf_edit.h b/public/fpdf_edit.h
-index 54735a3..4d81aac 100644
+index c0766a3..4351649 100644
 --- a/public/fpdf_edit.h
 +++ b/public/fpdf_edit.h
-@@ -520,6 +520,15 @@ FPDFPath_GetStrokeColor(FPDF_PAGEOBJECT path,
- FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
- FPDFPath_SetStrokeWidth(FPDF_PAGEOBJECT path, float width);
+@@ -660,6 +660,15 @@ FPDFPageObj_GetStrokeColor(FPDF_PAGEOBJECT page_object,
+                            unsigned int* B,
+                            unsigned int* A);
  
 +// Get the stroke width of a path.
 +//
@@ -589,10 +511,10 @@ index 54735a3..4d81aac 100644
 +FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
 +FPDFPath_GetStrokeWidth(FPDF_PAGEOBJECT path, float* width);
 +
- // Set the line join of |page_object|.
+ // Set the stroke width of a path.
  //
- // page_object  - handle to a page object.
-@@ -688,6 +697,36 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFPath_SetDrawMode(FPDF_PAGEOBJECT path,
+ // path   - the handle to the path object.
+@@ -898,6 +907,36 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFPath_SetDrawMode(FPDF_PAGEOBJECT path,
                                                           int fillmode,
                                                           FPDF_BOOL stroke);
  
@@ -629,7 +551,7 @@ index 54735a3..4d81aac 100644
  // Create a new text object using one of the standard PDF fonts.
  //
  // document   - handle to the document.
-@@ -761,6 +800,125 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
+@@ -971,6 +1010,125 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
                            FPDF_FONT font,
                            float font_size);
  
@@ -756,7 +678,7 @@ index 54735a3..4d81aac 100644
  }  // extern "C"
  #endif  // __cplusplus
 diff --git a/public/fpdf_text.h b/public/fpdf_text.h
-index 043dc16..fe3b971 100644
+index 3502337..6524cd3 100644
 --- a/public/fpdf_text.h
 +++ b/public/fpdf_text.h
 @@ -342,6 +342,26 @@ FPDF_EXPORT int FPDF_CALLCONV FPDFText_GetSchCount(FPDF_SCHHANDLE handle);
@@ -787,10 +709,10 @@ index 043dc16..fe3b971 100644
  //          Prepare information about weblinks in a page.
  // Parameters:
 diff --git a/public/fpdfview.h b/public/fpdfview.h
-index 35e87ae..80ab0ad 100644
+index 0ccd140..b451b9c 100644
 --- a/public/fpdfview.h
 +++ b/public/fpdfview.h
-@@ -908,6 +908,9 @@ FPDF_EXPORT FPDF_BITMAP FPDF_CALLCONV FPDFBitmap_CreateEx(int width,
+@@ -905,6 +905,9 @@ FPDF_EXPORT FPDF_BITMAP FPDF_CALLCONV FPDFBitmap_CreateEx(int width,
  //          function; see the list of such formats above.
  FPDF_EXPORT int FPDF_CALLCONV FPDFBitmap_GetFormat(FPDF_BITMAP bitmap);
  
