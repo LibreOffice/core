@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_0dbb6c28",
+        "filename": "sfx2/source/bastyp/bitset.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-05-20T14:46:38Z",
+      "side": 1,
+      "message": "I don\u0027t understand the purpose of the method, I wonder if it might be \"unify\".",
+      "range": {
+        "startLine": 46,
+        "startChar": 3,
+        "endLine": 46,
+        "endChar": 8
+      },
+      "revId": "e4b0a3226d6834099e83b5e86bac3e187ca77316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
