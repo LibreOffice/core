@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_0d644ce2",
+        "filename": "slideshow/source/engine/slideshowimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2161,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-05-20T14:41:00Z",
+      "side": 1,
+      "message": "\"interruptable\" is the right word, see https://en.wiktionary.org/wiki/interruptable",
+      "range": {
+        "startLine": 2161,
+        "startChar": 37,
+        "endLine": 2161,
+        "endChar": 50
+      },
+      "revId": "f9686ceae4935a464d86c48f91745c582d9a604c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
