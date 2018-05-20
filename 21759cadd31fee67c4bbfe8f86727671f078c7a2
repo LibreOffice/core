@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_4d9c84c0",
+        "filename": "filter/source/svg/svgfilter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-05-20T14:42:50Z",
+      "side": 1,
+      "message": "I understand that \"explode\" seems to be the most approaching word of \"expolde\", but I don\u0027t understand the sentence with it.",
+      "range": {
+        "startLine": 240,
+        "startChar": 76,
+        "endLine": 240,
+        "endChar": 83
+      },
+      "revId": "21759cadd31fee67c4bbfe8f86727671f078c7a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
