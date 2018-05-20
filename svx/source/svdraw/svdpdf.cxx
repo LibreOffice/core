@@ -562,7 +562,8 @@ void ImpSdrPdfImport::InsertObj(SdrObject* pObj, bool bScale)
                         SdrObject* pCandidate = aIter.Next();
                         OSL_ENSURE(pCandidate && dynamic_cast<SdrObjGroup*>(pCandidate) == nullptr,
                                    "SdrObjListIter with SdrIterMode::DeepNoGroups error (!)");
-                        SdrObject* pNewClone = pCandidate->Clone();
+                        SdrObject* pNewClone(
+                            pCandidate->CloneSdrObject(pCandidate->getSdrModelFromSdrObject()));
 
                         if (pNewClone)
                         {
@@ -925,6 +926,20 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
         aFnt.SetFontSize(aFontSize);
         mpVD->SetFont(aFnt);
         mbFntDirty = true;
+    }
+
+    std::unique_ptr<char[]> pFontName(new char[80 + 1]); // + terminating null
+    char* pCharFontName = reinterpret_cast<char*>(pFontName.get());
+    int nFontNameChars = FPDFTextObj_GetFontName(pPageObject, pCharFontName);
+    if (nFontNameChars > 0)
+    {
+        OUString sFontName = OUString::createFromAscii(pFontName.get());
+        if (sFontName != aFnt.GetFamilyName())
+        {
+            aFnt.SetFamilyName(sFontName);
+            mpVD->SetFont(aFnt);
+            mbFntDirty = true;
+        }
     }
 
     Color aTextColor(COL_TRANSPARENT);
