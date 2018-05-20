@@ -414,6 +414,11 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 if ((fShapeHeight / nRow) / (fShapeWidth / nCol) >= fAspectRatio)
                     break;
             }
+
+            sal_Int32 temp = nCol;
+            nCol = nRow;
+            nRow = temp;
+
             SAL_INFO("oox.drawingml", "Snake layout grid: " << nCol << "x" << nRow);
 
             sal_Int32 nWidth = rShape->getSize().Width / (nCol + (nCol-1)*fSpace);
@@ -506,6 +511,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 for (auto & aParagraph : pTextBody->getParagraphs())
                     aParagraph->getProperties().setParaAdjust(css::style::ParagraphAdjust::ParagraphAdjust_CENTER);
             }
+
             break;
         }
 
