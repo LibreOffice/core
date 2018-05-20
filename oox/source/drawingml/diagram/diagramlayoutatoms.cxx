@@ -402,18 +402,19 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             // TODO: get values from constraints
             sal_Int32 nCount = rShape->getChildren().size();
             double fSpace = 0.3;
-            double fAspectRatio = 0.6;
+            double fAspectRatio = 0.54; // diagram should not spill outside, earlier it was 0.6
 
             sal_Int32 nCol = 1;
             sal_Int32 nRow = 1;
-            for ( ; nCol<nCount; nCol++)
+            for ( ; nRow<nCount; nRow++)
             {
-                nRow = (nCount+nCol-1) / nCol;
+                nCol = (nCount+nRow-1) / nRow;
                 const double fShapeHeight = rShape->getSize().Height;
                 const double fShapeWidth = rShape->getSize().Width;
-                if ((fShapeHeight / nRow) / (fShapeWidth / nCol) >= fAspectRatio)
+                if ((fShapeHeight / nCol) / (fShapeWidth / nRow) >= fAspectRatio)
                     break;
             }
+
             SAL_INFO("oox.drawingml", "Snake layout grid: " << nCol << "x" << nRow);
 
             sal_Int32 nWidth = rShape->getSize().Width / (nCol + (nCol-1)*fSpace);
@@ -426,20 +427,89 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 aCurrPos.Y = rShape->getSize().Height - aChildSize.Height;
 
             sal_Int32 nStartX = aCurrPos.X;
-            sal_Int32 nColIdx = 0;
+            sal_Int32 nColIdx = 0,index = 0;
 
-            for (auto & aCurrShape : rShape->getChildren())
+            sal_Int32 num = rShape->getChildren().size();
+
+            const sal_Int32 aContDir = maMap.count(XML_contDir) ? maMap.find(XML_contDir)->second : XML_sameDir;
+
+            switch(aContDir)
             {
-                aCurrShape->setPosition(aCurrPos);
-                aCurrShape->setSize(aChildSize);
-                aCurrShape->setChildSize(aChildSize);
-                aCurrPos.X += nIncX * (aChildSize.Width + fSpace*aChildSize.Width);
-                if (++nColIdx == nCol)
+                case XML_sameDir:
+                for (auto & aCurrShape : rShape->getChildren())
                 {
-                    aCurrPos.X = nStartX;
-                    aCurrPos.Y += nIncY * (aChildSize.Height + fSpace*aChildSize.Height);
-                    nColIdx = 0;
+                    aCurrShape->setPosition(aCurrPos);
+                    aCurrShape->setSize(aChildSize);
+                    aCurrShape->setChildSize(aChildSize);
+
+                    index++; // counts index of child, helpful for positioning.
+
+                    if(index%nCol==0 || ((index/nCol)+1)!=nRow)
+                        aCurrPos.X += nIncX * (aChildSize.Width + fSpace*aChildSize.Width);
+
+                    if(++nColIdx == nCol) // condition for next row
+                    {
+                        // if last row, then position children according to number of shapes.
+                        if((index+1)%nCol!=0 && (index+1)>=3 && ((index+1)/nCol+1)==nRow && num!=nRow*nCol)
+                            // position first child of last row
+                            aCurrPos.X = nStartX + (nIncX * (aChildSize.Width + fSpace*aChildSize.Width))/2;
+                        else
+                            // if not last row, positions first child of that row
+                            aCurrPos.X = nStartX;
+                        aCurrPos.Y += nIncY * (aChildSize.Height + fSpace*aChildSize.Height);
+                        nColIdx = 0;
+                    }
+
+                    // positions children in the last row.
+                    if(index%nCol!=0 && index>=3 && ((index/nCol)+1)==nRow)
+                        aCurrPos.X += (nIncX * (aChildSize.Width + fSpace*aChildSize.Width));
                 }
+                break;
+                case XML_revDir:
+                for (auto & aCurrShape : rShape->getChildren())
+                {
+                    aCurrShape->setPosition(aCurrPos);
+                    aCurrShape->setSize(aChildSize);
+                    aCurrShape->setChildSize(aChildSize);
+
+                    index++; // counts index of child, helpful for positioning.
+
+                    /*
+                    index%col -> tests node is at last column
+                    ((index/nCol)+1)!=nRow) -> tests node is at last row or not
+                    ((index/nCol)+1)%2!=0 -> tests node is at row which is multiple of 2, important for revDir
+                    num!=nRow*nCol -> tests how last row nodes should be spread.
+                    */
+
+                    if((index%nCol==0 || ((index/nCol)+1)!=nRow) && ((index/nCol)+1)%2!=0)
+                        aCurrPos.X +=  (aChildSize.Width + fSpace*aChildSize.Width);
+                    else if( index%nCol!=0 && ((index/nCol)+1)!=nRow) // child other than placed at last column
+                        aCurrPos.X -= (aChildSize.Width + fSpace*aChildSize.Width);
+
+                    if(++nColIdx == nCol) // condition for next row
+                    {
+                        // if last row, then position children according to number of shapes.
+                        if((index+1)%nCol!=0 && (index+1)>=4 && ((index+1)/nCol+1)==nRow && num!=nRow*nCol && ((index/nCol)+1)%2==0)
+                            // position first child of last row
+                            aCurrPos.X -= aChildSize.Width*3/2;
+                        else if((index+1)%nCol!=0 && (index+1)>=4 && ((index+1)/nCol+1)==nRow && num!=nRow*nCol && ((index/nCol)+1)%2!=0)
+                            aCurrPos.X = nStartX + (nIncX * (aChildSize.Width + fSpace*aChildSize.Width))/2;
+                        else if(((index/nCol)+1)%2!=0)
+                            aCurrPos.X = nStartX;
+
+                        aCurrPos.Y += nIncY * (aChildSize.Height + fSpace*aChildSize.Height);
+                        nColIdx = 0;
+                    }
+
+                    // positions children in the last row.
+                    if(index%nCol!=0 && index>=3 && ((index/nCol)+1)==nRow && ((index/nCol)+1)%2==0)
+                        //if row%2=0 then start from left else
+                        aCurrPos.X -= (nIncX * (aChildSize.Width + fSpace*aChildSize.Width));
+                    else if(index%nCol!=0 && index>=3 && ((index/nCol)+1)==nRow && ((index/nCol)+1)%2!=0)
+                        // start from right
+                        aCurrPos.X += (nIncX * (aChildSize.Width + fSpace*aChildSize.Width));
+                }
+                break;
             }
             break;
         }
@@ -456,7 +526,6 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
         {
             // adjust text alignment
             // TODO: adjust text size to fit shape
-
             TextBodyPtr pTextBody = rShape->getTextBody();
             if (!pTextBody ||
                 pTextBody->getParagraphs().empty() ||
