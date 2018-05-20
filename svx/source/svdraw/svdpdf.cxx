@@ -924,6 +924,20 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
         mbFntDirty = true;
     }
 
+    std::unique_ptr<char[]> pFontName(new char[80 + 1]); // + terminating null
+    char* pCharFontName = reinterpret_cast<char*>(pFontName.get());
+    int nFontNameChars = FPDFTextObj_GetFontName(pPageObject, pCharFontName);
+    if (nFontNameChars > 0)
+    {
+        OUString sFontName = OUString::createFromAscii(pFontName.get());
+        if (sFontName != aFnt.GetFamilyName())
+        {
+            aFnt.SetFamilyName(sFontName);
+            mpVD->SetFont(aFnt);
+            mbFntDirty = true;
+        }
+    }
+
     Color aTextColor(COL_TRANSPARENT);
     unsigned int nR, nG, nB, nA;
     if (FPDFTextObj_GetColor(pPageObject, &nR, &nG, &nB, &nA))
@@ -1206,11 +1220,11 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
 
     if (!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(basegfx::B2DPolyPolygon(aPolyPoly)))
     {
-    SdrPathObj* pPath = new SdrPathObj(OBJ_POLY, aPolyPoly);
-    pPath->SetModel(mpModel);
-    SetAttributes(pPath);
-    InsertObj(pPath, false);
-}
+        SdrPathObj *pPath = new SdrPathObj(OBJ_POLY, aPolyPoly);
+        pPath->SetModel(mpModel);
+        SetAttributes(pPath);
+        InsertObj(pPath, false);
+    }
 }
 
 Point ImpSdrPdfImport::PointsToLogic(double x, double y) const
