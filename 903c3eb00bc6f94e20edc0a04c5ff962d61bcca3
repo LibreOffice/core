@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_2a2c96aa",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-20T13:29:52Z",
+      "side": 1,
+      "message": "I don\u0027t think this is going to return the same value as before, you probably need to do something like\n   Date(aActTime) - pFormatter-\u003eGetNullDate()\nor the second operand will be cast to DateTime and we\u0027ll get the time as part of the difference, which we didn\u0027t have before",
+      "revId": "903c3eb00bc6f94e20edc0a04c5ff962d61bcca3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
