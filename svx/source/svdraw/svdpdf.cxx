@@ -562,7 +562,8 @@ void ImpSdrPdfImport::InsertObj(SdrObject* pObj, bool bScale)
                         SdrObject* pCandidate = aIter.Next();
                         OSL_ENSURE(pCandidate && dynamic_cast<SdrObjGroup*>(pCandidate) == nullptr,
                                    "SdrObjListIter with SdrIterMode::DeepNoGroups error (!)");
-                        SdrObject* pNewClone = pCandidate->Clone();
+                        SdrObject* pNewClone(
+                            pCandidate->CloneSdrObject(pCandidate->getSdrModelFromSdrObject()));
 
                         if (pNewClone)
                         {
@@ -927,6 +928,20 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
         mbFntDirty = true;
     }
 
+    std::unique_ptr<char[]> pFontName(new char[80 + 1]); // + terminating null
+    char* pCharFontName = reinterpret_cast<char*>(pFontName.get());
+    int nFontNameChars = FPDFTextObj_GetFontName(pPageObject, pCharFontName);
+    if (nFontNameChars > 0)
+    {
+        OUString sFontName = OUString::createFromAscii(pFontName.get());
+        if (sFontName != aFnt.GetFamilyName())
+        {
+            aFnt.SetFamilyName(sFontName);
+            mpVD->SetFont(aFnt);
+            mbFntDirty = true;
+        }
+    }
+
     Color aTextColor(COL_TRANSPARENT);
     unsigned int nR, nG, nB, nA;
     if (FPDFTextObj_GetColor(pPageObject, &nR, &nG, &nB, &nA))
@@ -960,7 +975,7 @@ void ImpSdrPdfImport::ImportText(const Point& rPos, const Size& rSize, const OUS
     else if (eAlg == ALIGN_BOTTOM)
         aPos.AdjustY(-nTextHeight);
 
-    Rectangle aTextRect(aPos, aSize);
+    tools::Rectangle aTextRect(aPos, aSize);
     SdrRectObj* pText = new SdrRectObj(*mpModel, OBJ_TEXT, aTextRect);
 
     pText->SetMergedItem(makeSdrTextUpperDistItem(0));
@@ -1026,8 +1041,8 @@ void ImpSdrPdfImport::MapScaling()
 
 void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectIndex*/)
 {
-    std::unique_ptr<std::remove_pointer<FPDF_BITMAP>::type, FPDFBitmapDeleter>
-                        bitmap(FPDFImageObj_GetBitmapBgra(pPageObject));
+    std::unique_ptr<std::remove_pointer<FPDF_BITMAP>::type, FPDFBitmapDeleter> bitmap(
+        FPDFImageObj_GetBitmapBgra(pPageObject));
     if (!bitmap)
     {
         SAL_WARN("sd.filter", "Failed to get IMAGE");

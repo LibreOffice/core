@@ -11,6 +11,7 @@
 #define INCLUDED_VCL_SOURCE_FILTER_IPDF_PDFREAD_HXX
 
 #include <tools/stream.hxx>
+#include <vector>
 
 namespace com
 {
