@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_ea699e26",
+        "filename": ".git-hooks/commit-msg",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-05-20T09:11:45Z",
+      "side": 1,
+      "message": "This script is not part of the commit",
+      "revId": "738ea99837bd04158ff4c32b79f702dad5daed2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_ca6e9a2e",
+        "filename": "icon-themes/karasa_jaga/avmedia/res/test.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-05-20T09:11:45Z",
+      "side": 1,
+      "message": "This file is not needed AFAICS",
+      "revId": "738ea99837bd04158ff4c32b79f702dad5daed2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_0a7992f6",
+        "filename": "icon-themes/karasa_jaga_svg/chart2/nostackstepped3d_52x60.svg",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-05-20T09:11:45Z",
+      "side": 1,
+      "message": "Some vector graphics are uncompressed SVG. Just mentioning.",
+      "revId": "738ea99837bd04158ff4c32b79f702dad5daed2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_4a61ca38",
+        "filename": "vcl/source/app/IconThemeInfo.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-05-20T09:11:45Z",
+      "side": 1,
+      "message": "Missing here is to assign the plain name in the function filename_from_url(). We can do that in a follow-up patch.",
+      "revId": "738ea99837bd04158ff4c32b79f702dad5daed2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
