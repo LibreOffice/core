@@ -13173,7 +13173,6 @@ shell/source/sessioninstall/SyncDbusSessionHelper.hxx
 shell/source/sessioninstall/services.cxx
 shell/source/tools/lngconvex/cmdline.cxx
 shell/source/tools/lngconvex/cmdline.hxx
-shell/source/tools/lngconvex/defs.hxx
 shell/source/tools/lngconvex/lngconvex.cxx
 shell/source/tools/regsvrex/regsvrex.cxx
 shell/source/unix/exec/shellexec.cxx
