@@ -111,7 +111,7 @@ index fed1581..968b84a 100644
  FPDFImageObj_GetImageDataDecoded(FPDF_PAGEOBJECT image_object,
                                   void* buffer,
 diff --git a/fpdfsdk/fpdf_editpage.cpp b/fpdfsdk/fpdf_editpage.cpp
-index ec29891..a52e1a9 100644
+index ec29891..9daffc0 100644
 --- a/fpdfsdk/fpdf_editpage.cpp
 +++ b/fpdfsdk/fpdf_editpage.cpp
 @@ -12,12 +12,14 @@
@@ -137,7 +137,7 @@ index ec29891..a52e1a9 100644
  #include "fpdfsdk/cpdfsdk_helpers.h"
  #include "public/fpdf_formfill.h"
  #include "third_party/base/logging.h"
-@@ -624,3 +627,245 @@ FPDFPageObj_SetLineCap(FPDF_PAGEOBJECT page_object, int line_cap) {
+@@ -624,3 +627,268 @@ FPDFPageObj_SetLineCap(FPDF_PAGEOBJECT page_object, int line_cap) {
    pPageObj->SetDirty(true);
    return true;
  }
@@ -160,6 +160,29 @@ index ec29891..a52e1a9 100644
 +
 +  CPDF_TextObject* pTxtObj = CPDFTextObjectFromFPDFPageObject(text_object);
 +  return pTxtObj->GetFontSize();
++}
++
++FPDF_EXPORT int FPDF_CALLCONV
++FPDFTextObj_GetFontName(FPDF_PAGEOBJECT text_object, char* result)
++{
++  if (!text_object)
++    return 0;
++
++  CPDF_TextObject* pTxtObj = CPDFTextObjectFromFPDFPageObject(text_object);
++  CPDF_Font* pPdfFont = pTxtObj->GetFont();
++  if (!pPdfFont)
++    return 0;
++
++  CFX_Font* pFont = pPdfFont->GetFont();
++  if (!pFont)
++    return 0;
++
++  ByteString byte_str = pFont->GetFamilyName();
++  const size_t byte_str_len = byte_str.GetLength();
++
++  memcpy(result, byte_str.GetBuffer(byte_str_len).data(), byte_str_len);
++  result[byte_str_len] = '\0';
++  return byte_str_len;
 +}
 +
 +FPDF_EXPORT void FPDF_CALLCONV
@@ -495,7 +518,7 @@ index a1bbbb4..01b74c9 100644
                                                          int index,
                                                          double* left,
 diff --git a/public/fpdf_edit.h b/public/fpdf_edit.h
-index c0766a3..4351649 100644
+index c0766a3..75381bb 100644
 --- a/public/fpdf_edit.h
 +++ b/public/fpdf_edit.h
 @@ -660,6 +660,15 @@ FPDFPageObj_GetStrokeColor(FPDF_PAGEOBJECT page_object,
@@ -551,7 +574,7 @@ index c0766a3..4351649 100644
  // Create a new text object using one of the standard PDF fonts.
  //
  // document   - handle to the document.
-@@ -971,6 +1010,125 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
+@@ -971,6 +1010,135 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
                            FPDF_FONT font,
                            float font_size);
  
@@ -564,7 +587,6 @@ index c0766a3..4351649 100644
 +FPDF_EXPORT int FPDF_CALLCONV
 +FPDFTextObj_CountChars(FPDF_PAGEOBJECT text_object);
 +
-+
 +// Get the font size of a text object.
 +//
 +// text_object - Handle of text object returned by FPDFPageObj_NewTextObj
@@ -574,6 +596,17 @@ index c0766a3..4351649 100644
 +// The value of the font size
 +FPDF_EXPORT int FPDF_CALLCONV
 +FPDFTextObj_GetFontSize(FPDF_PAGEOBJECT text_object);
++
++// Get the font name of a text object.
++//
++// text_object - Handle of text object returned by FPDFPageObj_NewTextObj
++//               or FPDFPageObj_NewTextObjEx.
++// result - The result in ascii.
++//
++// Return Value:
++// The number of characters / bytes written in result.
++FPDF_EXPORT int FPDF_CALLCONV
++FPDFTextObj_GetFontName(FPDF_PAGEOBJECT text_object, char* result);
 +
 +// Get the matrix of a particular text object.
 +//
