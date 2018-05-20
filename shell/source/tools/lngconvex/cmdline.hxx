@@ -20,11 +20,11 @@
 #ifndef INCLUDED_SHELL_SOURCE_TOOLS_LNGCONVEX_CMDLINE_HXX
 #define INCLUDED_SHELL_SOURCE_TOOLS_LNGCONVEX_CMDLINE_HXX
 
+#include <string>
+
 #include <sal/config.h>
 
 #include <sal/types.h>
-
-#include "defs.hxx"
 
 
 /** Simple command line abstraction
