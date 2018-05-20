@@ -402,7 +402,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             // TODO: get values from constraints
             sal_Int32 nCount = rShape->getChildren().size();
             double fSpace = 0.3;
-            double fAspectRatio = 0.6;
+            double fAspectRatio = 0.54; // diagram should not spill outside, earlier it was 0.6
 
             sal_Int32 nCol = 1;
             sal_Int32 nRow = 1;
@@ -414,6 +414,9 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 if ((fShapeHeight / nRow) / (fShapeWidth / nCol) >= fAspectRatio)
                     break;
             }
+
+            std::swap(nCol,nRow);
+
             SAL_INFO("oox.drawingml", "Snake layout grid: " << nCol << "x" << nRow);
 
             sal_Int32 nWidth = rShape->getSize().Width / (nCol + (nCol-1)*fSpace);
@@ -426,21 +429,52 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 aCurrPos.Y = rShape->getSize().Height - aChildSize.Height;
 
             sal_Int32 nStartX = aCurrPos.X;
-            sal_Int32 nColIdx = 0;
+            sal_Int32 nColIdx = 0,index = 0;
 
-            for (auto & aCurrShape : rShape->getChildren())
+            sal_Int32 num = rShape->getChildren().size();
+
+            const sal_Int32 aContDir = maMap.count(XML_contDir) ? maMap.find(XML_contDir)->second : XML_sameDir;
+
+            sal_Int32 dir=1;
+            switch(aContDir)
             {
-                aCurrShape->setPosition(aCurrPos);
-                aCurrShape->setSize(aChildSize);
-                aCurrShape->setChildSize(aChildSize);
-                aCurrPos.X += nIncX * (aChildSize.Width + fSpace*aChildSize.Width);
-                if (++nColIdx == nCol)
+                case XML_sameDir: dir=1;break;
+                case XML_revDir:  dir=0;break;
+            }
+
+            if(dir==1)
+            {
+                for (auto & aCurrShape : rShape->getChildren())
                 {
-                    aCurrPos.X = nStartX;
-                    aCurrPos.Y += nIncY * (aChildSize.Height + fSpace*aChildSize.Height);
-                    nColIdx = 0;
+                    aCurrShape->setPosition(aCurrPos);
+                    aCurrShape->setSize(aChildSize);
+                    aCurrShape->setChildSize(aChildSize);
+
+                    index++; // counts index of child, helpful for positioning.
+
+                    if(index%nCol==0 || ((index/nCol)+1)!=nRow)
+                        aCurrPos.X += nIncX * (aChildSize.Width + fSpace*aChildSize.Width);
+
+                    if(++nColIdx == nCol) // condition for next row
+                    {
+                        // if last row, then position children according to number of shapes.
+                        if((index+1)%nCol!=0 && (index+1)>=3 && ((index+1)/nCol+1)==nRow && num!=nRow*nCol)
+                            // position first child of last row
+                            aCurrPos.X = nStartX + (nIncX * (aChildSize.Width + fSpace*aChildSize.Width))/2;
+                        else
+                            // if not last row, positions first child of that row
+                            aCurrPos.X = nStartX;
+                        aCurrPos.Y += nIncY * (aChildSize.Height + fSpace*aChildSize.Height);
+                        nColIdx = 0;
+                    }
+
+                    // positions children in the last row.
+                    if(index%nCol!=0 && index>=3 && ((index/nCol)+1)==nRow)
+                        aCurrPos.X += (nIncX * (aChildSize.Width + fSpace*aChildSize.Width));
                 }
             }
+            else
+                // TODO : Implement for reverse direction
             break;
         }
 
@@ -456,7 +490,6 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
         {
             // adjust text alignment
             // TODO: adjust text size to fit shape
-
             TextBodyPtr pTextBody = rShape->getTextBody();
             if (!pTextBody ||
                 pTextBody->getParagraphs().empty() ||
@@ -492,7 +525,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
             // explicit alignment
             ParamMap::const_iterator aDir = maMap.find(XML_parTxLTRAlign);
-            // TODO: XML_parTxRTLAlign
+            // TODO: XML_txML_parTxRTLAlign
             if (aDir != maMap.end())
             {
                 css::style::ParagraphAdjust aAlignment = GetParaAdjust(aDir->second);
