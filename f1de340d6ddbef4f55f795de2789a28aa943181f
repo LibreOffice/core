@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_cd6954c0",
+        "filename": "slideshow/source/inc/interruptabledelayevent.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-05-20T14:39:53Z",
+      "side": 1,
+      "message": "\"interruptible\" isn\u0027t correct. \"interruptable\" is ok\nSee https://en.wiktionary.org/wiki/interruptable",
+      "range": {
+        "startLine": 102,
+        "startChar": 24,
+        "endLine": 102,
+        "endChar": 37
+      },
+      "revId": "f1de340d6ddbef4f55f795de2789a28aa943181f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
