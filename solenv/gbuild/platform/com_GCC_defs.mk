@@ -96,6 +96,17 @@ gb_CXXFLAGS_COMMON += \
     -Wunused-const-variable=1
 endif
 
+ifeq ($(shell expr '$(GCC_VERSION)' '>=' 800),1)
+gb_CXXFLAGS_COMMON += \
+	-Wno-error=cast-function-type \
+	-Wno-error=sizeof-pointer-memaccess \
+	-Wno-error=class-memaccess \
+	-Wno-error=parentheses \
+	-Wno-error=implicit-fallthrough \
+	-Wno-error=ignored-qualifiers \
+
+endif
+
 ifeq ($(COM_IS_CLANG),TRUE)
 gb_CXXFLAGS_COMMON += -Wimplicit-fallthrough
 endif
