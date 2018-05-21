@@ -16,6 +16,24 @@
       "revId": "903c3eb00bc6f94e20edc0a04c5ff962d61bcca3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_ad9d005b",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2018-05-21T00:20:10Z",
+      "side": 1,
+      "message": "Thank you for your comment, Noel.\nAFAIUC it\u0027s \"sal_Int64 operator -( const DateTime\u0026 rDateTime, const Date\u0026 rDate )\", so the same as \"sal_Int32 operator -( const Date\u0026 rDate1, const Date\u0026 rDate2 )\", isn\u0027t it?",
+      "parentUuid": "9a30ddce_2a2c96aa",
+      "revId": "903c3eb00bc6f94e20edc0a04c5ff962d61bcca3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
