@@ -341,7 +341,7 @@ MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, con
 
     mpPathObj->SetMergedItem(XLineTransparenceItem(50));
 
-    mpMark = new SdrMark( mpPathObj, mrView.GetSdrPageView() );
+    mpMark.reset(new SdrMark( mpPathObj, mrView.GetSdrPageView() ));
 
     mpPathObj->AddListener( *this );
 
@@ -778,7 +778,7 @@ bool MotionPathTag::MarkPoint(SdrHdl& rHdl, bool bUnmark )
         SmartHdl* pSmartHdl = dynamic_cast< SmartHdl* >( &rHdl );
         if( pSmartHdl && pSmartHdl->getTag().get() == this )
         {
-            if (mrView.MarkPointHelper(&rHdl,mpMark,bUnmark))
+            if (mrView.MarkPointHelper(&rHdl,mpMark.get(),bUnmark))
             {
                 mrView.MarkListHasChanged();
                 bRet=true;
@@ -807,7 +807,7 @@ bool MotionPathTag::MarkPoints(const ::tools::Rectangle* pRect, bool bUnmark )
                 Point aPos(pHdl->GetPos());
                 if( pRect==nullptr || pRect->IsInside(aPos))
                 {
-                    if( mrView.MarkPointHelper(pHdl,mpMark,bUnmark) )
+                    if( mrView.MarkPointHelper(pHdl,mpMark.get(),bUnmark) )
                         bChgd=true;
                 }
             }
@@ -854,7 +854,7 @@ void MotionPathTag::CheckPossibilities()
                 bool bSegmFuz(false);
                 basegfx::B2VectorContinuity eSmooth = basegfx::B2VectorContinuity::NONE;
 
-                mrView.CheckPolyPossibilitiesHelper( mpMark, b1stSmooth, b1stSegm, bCurve, bSmoothFuz, bSegmFuz, eSmooth );
+                mrView.CheckPolyPossibilitiesHelper( mpMark.get(), b1stSmooth, b1stSegm, bCurve, bSmoothFuz, bSegmFuz, eSmooth );
             }
         }
     }
@@ -987,11 +987,7 @@ void MotionPathTag::disposing()
         SdrObject::Free(pTemp);
     }
 
-    if( mpMark )
-    {
-        delete mpMark;
-        mpMark = nullptr;
-    }
+    mpMark.reset();
 
     SmartTag::disposing();
 }
