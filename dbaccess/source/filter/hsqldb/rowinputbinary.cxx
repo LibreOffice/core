@@ -333,7 +333,19 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColType
             {
                 sal_Int64 value = 0;
                 m_pStream->ReadInt64(value);
-                css::util::Time time((value % 1000) * 1000000, value / 1000, 0, 0, true);
+                auto valueInSecs = value / 1000;
+                sal_uInt16 nHours = 0;
+                // value is comprised between -3600 and -1
+                // so add 3600 in order the rest of calculus is ok
+                if (valueInSecs < 0)
+                    valueInSecs += 3600;
+                else
+                    nHours = (valueInSecs / 3600) + 1;
+
+                valueInSecs = valueInSecs % 3600;
+                const sal_uInt16 nMins = valueInSecs / 60;
+                const sal_uInt16 nSecs = valueInSecs % 60;
+                css::util::Time time(0, nSecs, nMins, nHours, true);
                 aData.push_back(makeAny(time));
             }
             break;
