@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_ed5a984f",
+        "filename": "extensions/source/ole/servprov.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-21T10:51:50Z",
+      "side": 1,
+      "message": "judging by the use site, should be taking a \u0026 instead of a * ?",
+      "revId": "8913625ed8296bce3f36ca82cd3ac9934c70a11b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
