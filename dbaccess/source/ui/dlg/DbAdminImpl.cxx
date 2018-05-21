@@ -390,9 +390,9 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const OUString
     }
     catch (const Exception& e)
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         // wrap the exception into an SQLException
-        SQLException aSQLWrapper(e.Message, getORB(), "S1000", 0, Any());
-        throw SQLException(sCurrentActionError, getORB(), "S1000", 0, makeAny(aSQLWrapper));
+        throw SQLException(sCurrentActionError, getORB(), "S1000", 0, anyEx);
     }
 
     Reference< XDriver > xDriver = xDriverManager->getDriverByURL(_sURL);

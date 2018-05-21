@@ -51,6 +51,7 @@
 
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -1024,10 +1025,10 @@ void SAL_CALL ModuleUIConfigurationManager::reset()
                 }
                 catch (const Exception& e)
                 {
-                    css::uno::Any a(e);
+                    css::uno::Any anyEx = cppu::getCaughtException();
                     throw css::lang::WrappedTargetRuntimeException(
                             "ModuleUIConfigurationManager::reset exception",
-                            css::uno::Reference<css::uno::XInterface>(*this), a);
+                            css::uno::Reference<css::uno::XInterface>(*this), anyEx);
                 }
             }
 

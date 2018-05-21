@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <rtl/character.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -125,10 +126,11 @@ lcl_initDocumentProperties(SvXMLImport & rImport,
     } catch (const uno::RuntimeException&) {
         throw;
     } catch (const uno::Exception& e) {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             "SvXMLMetaDocumentContext::initDocumentProperties: "
             "properties init exception",
-            rImport, makeAny(e));
+            rImport, anyEx);
     }
 }
 
@@ -152,9 +154,10 @@ lcl_initGenerator(SvXMLImport & rImport,
     } catch (const uno::RuntimeException&) {
         throw;
     } catch (const uno::Exception& e) {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             "SvXMLMetaDocumentContext::initGenerator: exception",
-            rImport, makeAny(e));
+            rImport, anyEx);
     }
 }
 

@@ -21,6 +21,7 @@
 #include "vbaaxis.hxx"
 #include "vbachart.hxx"
 #include <basic/sberrors.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XlAxisType.hpp>
 #include <ooo/vba/excel/XlAxisGroup.hpp>
@@ -126,10 +127,11 @@ public:
         }
         catch (const css::script::BasicErrorException& e)
         {
+            css::uno::Any anyEx = cppu::getCaughtException();
             throw css::lang::WrappedTargetException(
                    "Error Getting Index!",
                    static_cast < OWeakObject * > ( this ),
-                   makeAny( e ) );
+                   anyEx );
         }
     }
     // XElementAccess

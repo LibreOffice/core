@@ -21,6 +21,7 @@
 #include <string.h>
 #include <vector>
 
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -36,6 +37,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/process.h>
 
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
@@ -962,8 +964,10 @@ void insert_singletons(
                         }
                         catch (const container::NoSuchElementException & exc)
                         {
-                            throw RuntimeException(
-                                "cannot get service type description: " + exc.Message );
+                            css::uno::Any anyEx = cppu::getCaughtException();
+                            throw css::lang::WrappedTargetRuntimeException(
+                                    "cannot get service type description: " + exc.Message,
+                                    nullptr, anyEx );
                         }
                     }
                 }

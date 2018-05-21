@@ -54,6 +54,7 @@
 #include <svl/macitem.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <memory>
@@ -419,10 +420,11 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
     }
     catch (const uno::Exception& e)
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
                "Error Getting AutoText!",
                static_cast < OWeakObject * > ( this ),
-               makeAny( e ) );
+               anyEx );
     }
 
     return xEntry;

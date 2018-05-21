@@ -22,6 +22,7 @@
 #include <com/sun/star/embed/OLESimpleStorage.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -308,9 +309,10 @@ void SAL_CALL OLESimpleStorage::insertByName( const OUString& aName, const uno::
     }
     catch( const uno::Exception& e )
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetException("Insert has failed!",
                                             uno::Reference< uno::XInterface >(),
-                                            uno::makeAny( e ) );
+                                            anyEx );
     }
 }
 
@@ -453,10 +455,12 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
             DELETEZ( pStream );
             throw;
         }
-        catch (const uno::Exception&)
+        catch (const uno::Exception& ex)
         {
+            css::uno::Any anyEx = cppu::getCaughtException();
             DELETEZ( pStream );
-            throw lang::WrappedTargetException(); // TODO:
+            throw css::lang::WrappedTargetRuntimeException( ex.Message,
+                    nullptr, anyEx );
         }
 
         DELETEZ( pStream );

@@ -31,6 +31,7 @@
 
 #include "vbacontrols.hxx"
 #include "vbacontrol.hxx"
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/XControlProvider.hpp>
 #include <unordered_map>
@@ -412,9 +413,10 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
     }
     catch (const uno::Exception& e)
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException( "Can not create AXControl!",
                 uno::Reference< uno::XInterface >(),
-                uno::makeAny( e ) );
+                anyEx );
     }
 
     return aResult;

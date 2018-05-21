@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 
@@ -378,7 +379,8 @@ void Adapter::setValue( const OUString & aPropertyName, const Any & value )
     }
     catch( const IllegalArgumentException & exc )
     {
-        throw InvocationTargetException( exc.Message, *this, css::uno::makeAny( exc ) );
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw InvocationTargetException( exc.Message, *this, anyEx );
     }
 }
 
