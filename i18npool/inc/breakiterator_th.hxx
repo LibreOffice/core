@@ -18,25 +18,42 @@
  */
 #ifndef INCLUDED_I18NPOOL_INC_BREAKITERATOR_TH_HXX
 #define INCLUDED_I18NPOOL_INC_BREAKITERATOR_TH_HXX
-#include "breakiterator_ctl.hxx"
+
+#include "breakiterator_unicode.hxx"
+#include "xdictionary.hxx"
 
 namespace i18npool {
 
 
 //  class BreakIterator_th
 
-class BreakIterator_th : public BreakIterator_CTL
+class BreakIterator_th : public BreakIterator_Unicode
 {
 public:
     BreakIterator_th();
     virtual ~BreakIterator_th() override;
+    virtual sal_Int32 SAL_CALL previousCharacters(const OUString& text, sal_Int32 start,
+        const css::lang::Locale& nLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 count,
+        sal_Int32& nDone) override;
+    virtual sal_Int32 SAL_CALL nextCharacters(const OUString& text, sal_Int32 start,
+        const css::lang::Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 count,
+        sal_Int32& nDone) override;
+    virtual css::i18n::LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
+        const css::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
+        const css::i18n::LineBreakHyphenationOptions& hOptions,
+        const css::i18n::LineBreakUserOptions& bOptions ) override;
 
-protected:
-    void makeIndex(const OUString& text, sal_Int32 pos) override;
+private:
+    OUString cachedText; // for cell index
+    sal_Int32* nextCellIndex;
+    sal_Int32* previousCellIndex;
+    sal_Int32 cellIndexSize;
+
+    void makeIndex(const OUString& text, sal_Int32 pos);
 };
 
 }
 
-#endif // INCLUDED_I18NPOOL_INC_BREAKITERATOR_TH_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

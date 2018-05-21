@@ -17,28 +17,113 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <breakiterator_th.hxx>
 #include <wtt.h>
 
 #include <string.h>
 #include <algorithm>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
 namespace i18npool {
 
-
-//  class Breakiterator_th
-//  ----------------------------------------------------;
-BreakIterator_th::BreakIterator_th()
+/**
+ * Constructor.
+ */
+BreakIterator_th::BreakIterator_th() :
+    cachedText(),
+    nextCellIndex( nullptr ),
+    previousCellIndex( nullptr ),
+    cellIndexSize( 512 )
 {
     cBreakIterator = "com.sun.star.i18n.BreakIterator_th";
+    // to improve performance, alloc big enough memory in construct.
+    nextCellIndex = static_cast<sal_Int32*>(calloc(cellIndexSize, sizeof(sal_Int32)));
+    previousCellIndex = static_cast<sal_Int32*>(calloc(cellIndexSize, sizeof(sal_Int32)));
     lineRule=nullptr;
 }
 
+/**
+ * Deconstructor.
+ */
 BreakIterator_th::~BreakIterator_th()
 {
+    free(nextCellIndex);
+    free(previousCellIndex);
+}
+
+sal_Int32 SAL_CALL BreakIterator_th::previousCharacters( const OUString& Text,
+    sal_Int32 nStartPos, const lang::Locale& rLocale,
+    sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
+{
+    if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) {
+        nDone = 0;
+        if (nStartPos > 0) {    // for others to skip cell.
+            makeIndex(Text, nStartPos);
+
+            if (nextCellIndex[nStartPos-1] == 0) // not a CTL character
+                return BreakIterator_Unicode::previousCharacters(Text, nStartPos, rLocale,
+                    nCharacterIteratorMode, nCount, nDone);
+            else while (nCount > 0 && nextCellIndex[nStartPos - 1] > 0) {
+                nCount--; nDone++;
+                nStartPos = previousCellIndex[nStartPos - 1];
+            }
+        } else
+            nStartPos = 0;
+    } else { // for BS to delete one char.
+        for (nDone = 0; nDone < nCount && nStartPos > 0; nDone++)
+            Text.iterateCodePoints(&nStartPos, -1);
+    }
+
+    return nStartPos;
+}
+
+sal_Int32 SAL_CALL BreakIterator_th::nextCharacters(const OUString& Text,
+    sal_Int32 nStartPos, const lang::Locale& rLocale,
+    sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone)
+{
+    sal_Int32 len = Text.getLength();
+    if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) {
+        nDone = 0;
+        if (nStartPos < len) {
+            makeIndex(Text, nStartPos);
+
+            if (nextCellIndex[nStartPos] == 0) // not a CTL character
+                return BreakIterator_Unicode::nextCharacters(Text, nStartPos, rLocale,
+                    nCharacterIteratorMode, nCount, nDone);
+            else while (nCount > 0 && nextCellIndex[nStartPos] > 0) {
+                nCount--; nDone++;
+                nStartPos = nextCellIndex[nStartPos];
+            }
+        } else
+            nStartPos = len;
+    } else {
+        for (nDone = 0; nDone < nCount && nStartPos < Text.getLength(); nDone++)
+            Text.iterateCodePoints(&nStartPos);
+    }
+
+    return nStartPos;
+}
+
+// Make sure line is broken on cell boundary if we implement cell iterator.
+LineBreakResults SAL_CALL BreakIterator_th::getLineBreak(
+    const OUString& Text, sal_Int32 nStartPos,
+    const lang::Locale& rLocale, sal_Int32 nMinBreakPos,
+    const LineBreakHyphenationOptions& hOptions,
+    const LineBreakUserOptions& bOptions )
+{
+    LineBreakResults lbr = BreakIterator_Unicode::getLineBreak(Text, nStartPos,
+                    rLocale, nMinBreakPos, hOptions, bOptions );
+    if (lbr.breakIndex < Text.getLength()) {
+        makeIndex(Text, lbr.breakIndex);
+        lbr.breakIndex = previousCellIndex[ lbr.breakIndex ];
+    }
+    return lbr;
 }
 
 #define SARA_AM 0x0E33
