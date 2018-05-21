@@ -919,6 +919,29 @@ void TestBreakIterator::testThai()
         }
         while (nPos > 0);
     }
+
+    // tdf#113694
+    {
+        const sal_Unicode NON_BMP[] = { 0xD800, 0xDC00 };
+        OUString aTest(NON_BMP, SAL_N_ELEMENTS(NON_BMP));
+
+        sal_Int32 nDone=0;
+        sal_Int32 nPos;
+
+        nPos = m_xBreak->nextCharacters(aTest, 0, aLocale,
+            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full surrogate pair", static_cast<sal_Int32>(SAL_N_ELEMENTS(NON_BMP)), nPos);
+        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(NON_BMP), aLocale,
+            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full surrogate pair", static_cast<sal_Int32>(0), nPos);
+
+        nPos = m_xBreak->nextCharacters(aTest, 0, aLocale,
+            i18n::CharacterIteratorMode::SKIPCHARACTER, 1, nDone);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full surrogate pair", static_cast<sal_Int32>(SAL_N_ELEMENTS(NON_BMP)), nPos);
+        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(NON_BMP), aLocale,
+            i18n::CharacterIteratorMode::SKIPCHARACTER, 1, nDone);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full surrogate pair", static_cast<sal_Int32>(0), nPos);
+    }
 }
 
 #ifdef TODO
