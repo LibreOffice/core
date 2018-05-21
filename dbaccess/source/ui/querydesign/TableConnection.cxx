@@ -57,13 +57,11 @@ namespace dbaui
         OConnectionLineDataVec& rLineData = GetData()->GetConnLineDataList();
         m_vConnLine.reserve(rLineData.size());
         for (auto const& elem : rLineData)
-            m_vConnLine.push_back( new OConnectionLine(this, elem) );
+            m_vConnLine.emplace_back( new OConnectionLine(this, elem) );
     }
 
     void OTableConnection::clearLineData()
     {
-        for (auto const& elem : m_vConnLine)
-            delete elem;
         m_vConnLine.clear();
     }
     void OTableConnection::UpdateLineList()
@@ -85,10 +83,10 @@ namespace dbaui
         // copy linelist
         if(! rConn.GetConnLineList().empty() )
         {
-            const std::vector<OConnectionLine*>& rLine = rConn.GetConnLineList();
+            const std::vector<std::unique_ptr<OConnectionLine>>& rLine = rConn.GetConnLineList();
             m_vConnLine.reserve(rLine.size());
             for (auto const& elem : rLine)
-                m_vConnLine.push_back( new OConnectionLine(*elem));
+                m_vConnLine.emplace_back( new OConnectionLine(*elem));
         }
 
         // as the data are not mine, I also do not delete the old
@@ -146,7 +144,7 @@ namespace dbaui
         return std::any_of(m_vConnLine.begin(),
                              m_vConnLine.end(),
                              [&rMousePos]
-                             ( const OConnectionLine* pLine )
+                             ( const std::unique_ptr<OConnectionLine> & pLine )
                              { return pLine->CheckHit( rMousePos ); } );
     }
 
