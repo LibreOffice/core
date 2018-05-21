@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SD_INC_DOCUMENTRENDERER_HRC
 #define INCLUDED_SD_INC_DOCUMENTRENDERER_HRC
 
-#include <utility>
-
 #define NC_(Context, String) (Context "\004" u8##String)
 
 const char* STR_IMPRESS_PRINT_UI_CONTENT_CHOICES[] =

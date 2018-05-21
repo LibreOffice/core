@@ -20,9 +20,6 @@
 #ifndef INCLUDED_SD_INC_HELPIDS_H
 #define INCLUDED_SD_INC_HELPIDS_H
 
-#include <svx/svxcommands.h>
-#include "sdcommands.h"
-
 #define HID_SDDRAWVIEWSHELL                                     "SD_HID_SDDRAWVIEWSHELL"
 #define HID_SDGRAPHICVIEWSHELL                                  "SD_HID_SDGRAPHICVIEWSHELL"
 #define HID_SDOUTLINEVIEWSHELL                                  "SD_HID_SDOUTLINEVIEWSHELL"

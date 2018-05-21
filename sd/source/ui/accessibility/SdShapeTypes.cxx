@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svx/ShapeTypeHandler.hxx>
 #include <SdShapeTypes.hxx>
 #include <AccessiblePresentationShape.hxx>
 #include <AccessiblePresentationGraphicShape.hxx>

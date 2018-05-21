@@ -20,11 +20,8 @@
 #ifndef INCLUDED_SD_INC_UNDO_UNDOMANAGER_HXX
 #define INCLUDED_SD_INC_UNDO_UNDOMANAGER_HXX
 
-#include <misc/scopelock.hxx>
 #include <svx/sdrundomanager.hxx>
 #include <sddllapi.h>
-
-class SfxViewShell;
 
 namespace sd
 {

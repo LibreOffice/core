@@ -20,10 +20,6 @@
 #ifndef INCLUDED_SD_INC_SDSHAPETYPES_HXX
 #define INCLUDED_SD_INC_SDSHAPETYPES_HXX
 
-#include <svx/ShapeTypeHandler.hxx>
-#include <svx/AccessibleShape.hxx>
-#include <com/sun/star/accessibility/XAccessible.hpp>
-
 namespace accessibility {
 
 /** Register the SD presentation shape types with the ShapeTypeHandler singleton.

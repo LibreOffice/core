@@ -31,8 +31,6 @@ namespace com { namespace sun { namespace star {
     namespace uno { template<class X> class Reference; }
 } } }
 
-class SdPage;
-
 namespace sd {
 
 class TransitionPreset;

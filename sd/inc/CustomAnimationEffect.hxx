@@ -30,7 +30,6 @@
 #include <list>
 #include <vector>
 #include <map>
-#include <memory>
 
 class SdrPathObj;
 class SdrModel;

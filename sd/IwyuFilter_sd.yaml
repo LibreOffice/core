@@ -1,0 +1,67 @@
+---
+assumeFilename: sd/source/core/drawdoc.cxx
+blacklist:
+    sd/inc/createpresentation.hxx:
+    # base class has to be a complete type
+    - com/sun/star/uno/Reference.hxx
+    sd/inc/createunopageimpl.hxx:
+    # base class has to be a complete type
+    - com/sun/star/uno/Reference.hxx
+    sd/inc/createunocustomshow.hxx:
+    # base class has to be a complete type
+    - com/sun/star/uno/Reference.hxx
+    sd/inc/CustomAnimationCloner.hxx:
+    # base class has to be a complete type
+    - com/sun/star/animations/XAnimationNode.hpp
+    sd/inc/CustomAnimationPreset.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    sd/inc/CustomAnimationEffect.hxx:
+    # base class has to be a complete type
+    - com/sun/star/animations/XAnimationNode.hpp
+    - com/sun/star/animations/XAudio.hpp
+    - com/sun/star/animations/XTimeContainer.hpp
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/util/XChangesListener.hpp
+    sd/inc/OutlinerIterator.hxx:
+    # base class has to be a complete type
+    - svx/svdobj.hxx
+    sd/inc/sderror.hxx:
+    # needed for defines
+    - vcl/errcode.hxx
+    sd/inc/stlfamily.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/container/XNameContainer.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XSingleServiceFactory.hpp
+    - com/sun/star/uno/Any.hxx
+    sd/inc/stlpool.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/lang/XComponent.hpp
+    sd/inc/stlsheet.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/style/XStyle.hpp
+    - com/sun/star/util/XModifyBroadcaster.hpp
+    sd/inc/textapi.hxx:
+    # base class has to be a complete type
+    - editeng/outliner.hxx
+    sd/inc/TransitionPreset.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - memory
+    sd/inc/undoanim.hxx:
+    # base class has to be a complete type
+    - com/sun/star/animations/XAnimationNode.hpp
+    sd/inc/undo/undoobjects.hxx:
+    # base class has to be a complete type
+    - tools/weakbase.hxx

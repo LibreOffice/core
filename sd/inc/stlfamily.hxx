@@ -22,10 +22,8 @@
 
 #include <memory>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -37,8 +35,6 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <svl/style.hxx>
-
-#include <editeng/unoipset.hxx>
 
 class SdStyleSheet;
 class SdPage;

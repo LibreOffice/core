@@ -20,14 +20,10 @@
 #ifndef INCLUDED_SD_INC_SDATTR_HXX
 #define INCLUDED_SD_INC_SDATTR_HXX
 
-#include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 
 #include "sdattr.hrc"
-#include "glob.hxx"
-#include "fadedef.h"
-#include "diadef.h"
 
 // layer attributes
 inline SfxStringItem makeSdAttrLayerName( const OUString& aStr )

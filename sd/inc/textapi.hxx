@@ -20,14 +20,9 @@
 #ifndef INCLUDED_SD_INC_TEXTAPI_HXX
 #define INCLUDED_SD_INC_TEXTAPI_HXX
 
-#include <editeng/unoedsrc.hxx>
 #include <editeng/unotext.hxx>
-#include <editeng/eeitem.hxx>
 #include <rtl/ref.hxx>
 #include <editeng/outliner.hxx>
-#include <editeng/unoprnms.hxx>
-#include <editeng/unoforou.hxx>
-#include <editeng/unoipset.hxx>
 
 class SdDrawDocument;
 

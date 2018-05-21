@@ -21,6 +21,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <svl/itemset.hxx>
+#include <svl/intitem.hxx>
 #include <vcl/svapp.hxx>
 
 #include <sdattr.hxx>

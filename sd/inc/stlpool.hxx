@@ -22,11 +22,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <map>
@@ -37,10 +33,8 @@
 
 #include "sddllapi.h"
 
-class SdStyleSheet;
 class SdDrawDocument;
 class SdPage;
-class SfxStyleSheetBase;
 class SvxNumberFormat;
 
 typedef std::map< const SdPage*, SdStyleFamilyRef > SdStyleFamilyMap;

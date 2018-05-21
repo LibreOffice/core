@@ -35,13 +35,12 @@
 
 #include <svl/style.hxx>
 
-#include <editeng/unoipset.hxx>
-
 #include <memory>
 
 #include "prlayout.hxx"
 
 class ModifyListenerForewarder;
+struct SfxItemPropertySimpleEntry;
 
 typedef cppu::ImplInheritanceHelper< SfxUnoStyleSheet,
                                     css::beans::XPropertySet,
