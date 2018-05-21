@@ -250,6 +250,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                     m_bIsPreviewDoubleClick : 1, // #i114045#
                     m_bMakeSelectionVisible : 1, // transport the bookmark selection
                     m_bAnnotationMode; ///< The real cursor position is inside an annotation.
+    bool m_bInitOnceCompleted = false;
 
     /// LibreOfficeKit has to force the page size for PgUp/PgDown
     /// functionality based on the user's view, instead of using the m_aVisArea.
