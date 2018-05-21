@@ -248,6 +248,8 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     {
         const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Open, aFile);
         AquaSalInstance::aAppEventList.push_back( pAppEvent );
+        AquaSalInstance *pInst = GetSalData()->mpInstance;
+        pInst->TriggerUserEventProcessing();
     }
     return YES;
 }
@@ -276,6 +278,8 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         // [app replyToOpenOrPrint: NSApplicationDelegateReplySuccess];
         const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Open, aFileList);
         AquaSalInstance::aAppEventList.push_back( pAppEvent );
+        AquaSalInstance *pInst = GetSalData()->mpInstance;
+        pInst->TriggerUserEventProcessing();
     }
 }
 
@@ -286,6 +290,8 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     aFile.push_back( GetOUString( pFile ) );
     const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Print, aFile);
     AquaSalInstance::aAppEventList.push_back( pAppEvent );
+    AquaSalInstance *pInst = GetSalData()->mpInstance;
+    pInst->TriggerUserEventProcessing();
     return YES;
 }
 -(NSApplicationPrintReply)application: (NSApplication *) app printFiles:(NSArray *)files withSettings: (NSDictionary *)printSettings showPrintPanels:(BOOL)bShowPrintPanels
@@ -305,6 +311,8 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     }
     const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Print, aFileList);
     AquaSalInstance::aAppEventList.push_back( pAppEvent );
+    AquaSalInstance *pInst = GetSalData()->mpInstance;
+    pInst->TriggerUserEventProcessing();
     // we have no back channel here, we have to assume success
     // correct handling would be NSPrintingReplyLater and then send [app replyToOpenOrPrint]
     return NSPrintingSuccess;
