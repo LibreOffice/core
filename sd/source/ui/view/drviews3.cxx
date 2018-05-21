@@ -952,6 +952,14 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     }
 
                     aLRSpace.SetRight(aRect.Right() + aPageSize.Width() - aParaRect.Right());
+
+                    if ( aEditAttr.GetItemState( SDRATTR_TEXT_RIGHTDIST ) == SfxItemState::SET )
+                    {
+                        const SdrMetricItem& rTRDItem = aEditAttr.Get( SDRATTR_TEXT_RIGHTDIST );
+                        long nRD = rTRDItem.GetValue();
+                        aLRSpace.SetRight( aLRSpace.GetRight() + nRD );
+                    }
+
                     aULSpace.SetUpper( aPagePos.Y() + maMarkRect.Top() );
                     aULSpace.SetLower( aRect.Bottom() + aPageSize.Height() - maMarkRect.Bottom() );
 
