@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_cdf95482",
+        "filename": "oox/source/drawingml/diagram/diagramlayoutatoms.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-21T07:08:01Z",
+      "side": 1,
+      "message": "std::swap(nCol, nRow) ?",
+      "revId": "2807070d11baa27d45de242fe8b348b502737550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
