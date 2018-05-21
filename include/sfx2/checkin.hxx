@@ -9,27 +9,23 @@
 #ifndef INCLUDED_SFX2_CHECKIN_HXX
 #define INCLUDED_SFX2_CHECKIN_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/weld.hxx>
 
-class SfxCheckinDialog : public ModalDialog
+class SfxCheckinDialog : public weld::GenericDialogController
 {
-    private:
-        VclPtr<Edit>       m_pCommentED;
-        VclPtr<CheckBox>   m_pMajorCB;
+private:
+    std::unique_ptr<weld::TextView> m_xCommentED;
+    std::unique_ptr<weld::CheckButton> m_xMajorCB;
+    std::unique_ptr<weld::Button> m_xOKBtn;
 
-        VclPtr<OKButton>   m_pOKBtn;
+    DECL_LINK(OKHdl, weld::Button&, void);
 
-        DECL_LINK(OKHdl, Button*, void);
+public:
+    SfxCheckinDialog(weld::Window* pParent);
+    virtual ~SfxCheckinDialog() override;
 
-    public:
-        SfxCheckinDialog( vcl::Window* pParent );
-        virtual ~SfxCheckinDialog() override;
-        virtual void dispose() override;
-
-        OUString GetComment( );
-        bool IsMajor( );
+    OUString GetComment();
+    bool IsMajor();
 };
 
 #endif
