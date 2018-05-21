@@ -1336,8 +1336,9 @@ void DocumentFieldsManager::SetFixFields( const DateTime* pNewDateTime )
     }
     else
     {
-        nDate = Date( Date::SYSTEM ).GetDate();
-        nTime = tools::Time( tools::Time::SYSTEM ).GetTime();
+        DateTime aDateTime( DateTime::SYSTEM );
+        nDate = aDateTime.GetDate();
+        nTime = aDateTime.GetTime();
     }
 
     SwFieldIds const aTypes[] {
