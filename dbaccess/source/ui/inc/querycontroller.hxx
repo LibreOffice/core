@@ -61,9 +61,9 @@ namespace dbaui
 
         css::uno::Sequence< css::beans::PropertyValue >       m_aFieldInformation;
 
-        ::svxform::OSystemParseContext*         m_pParseContext;
+        std::unique_ptr<::svxform::OSystemParseContext>       m_pParseContext;
         ::connectivity::OSQLParser              m_aSqlParser;
-        ::connectivity::OSQLParseTreeIterator*  m_pSqlIterator;
+        std::unique_ptr<::connectivity::OSQLParseTreeIterator> m_pSqlIterator;
 
         css::uno::Reference< css::sdb::XSQLQueryComposer >    m_xComposer;
         /// if we're editing an existing view, this is non-NULL
