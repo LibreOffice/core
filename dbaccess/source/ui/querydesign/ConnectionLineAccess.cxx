@@ -18,6 +18,7 @@
  */
 
 #include <ConnectionLineAccess.hxx>
+#include <ConnectionLine.hxx>
 #include <JoinTableView.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
