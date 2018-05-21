@@ -67,10 +67,11 @@ public:
         }
         catch (const uno::Exception& e)
         {
+            css::uno::Any anyEx(cppu::getCaughtException());
             throw lang::WrappedTargetException(
                     "Error creating ScVbaChartObject!",
                     static_cast < OWeakObject * > ( this ),
-                    makeAny( e ) );
+                    anyEx );
         }
         return ret;
     }

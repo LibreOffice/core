@@ -42,6 +42,7 @@
 
 #include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svx/xmleohlp.hxx>
 #include <map>
@@ -566,9 +567,10 @@ OUString SAL_CALL SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL(const OUSt
     }
     catch (const Exception& e)
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw WrappedTargetRuntimeException(
             "SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL non-RuntimeException",
-            static_cast<uno::XWeak*>(this), uno::makeAny(e));
+            static_cast<uno::XWeak*>(this), anyEx);
     }
     return sRet;
 }

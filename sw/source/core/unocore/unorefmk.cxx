@@ -23,6 +23,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
@@ -1506,9 +1507,8 @@ getPrefixAndSuffix(
     } catch (uno::RuntimeException &) {
         throw;
     } catch (const uno::Exception & e) {
-        throw lang::WrappedTargetRuntimeException(
-            "getPrefixAndSuffix: exception",
-            nullptr, uno::makeAny(e));
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw lang::WrappedTargetRuntimeException("getPrefixAndSuffix: exception", nullptr, anyEx);
     }
 }
 

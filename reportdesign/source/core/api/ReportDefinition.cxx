@@ -1647,12 +1647,15 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
         catch (const uno::Exception&)
         {
             if ( i == nLastOpenMode )
+            {
+                css::uno::Any anyEx = cppu::getCaughtException();
                 throw lang::WrappedTargetException(
                     "An error occurred while creating the document storage.",
                         // TODO: resource
                     *this,
-                    ::cppu::getCaughtException()
+                    anyEx
                 );
+            }
         }
     }
 

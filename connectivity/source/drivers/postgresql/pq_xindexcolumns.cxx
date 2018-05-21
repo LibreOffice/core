@@ -38,10 +38,12 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include "pq_xcolumns.hxx"
 #include "pq_xindexcolumns.hxx"
@@ -145,9 +147,11 @@ void IndexColumns::refresh()
             m_name2index[ columnName ] = index;
         }
     }
-    catch ( css::sdbc::SQLException & e )
+    catch ( css::sdbc::SQLException & ex )
     {
-        throw RuntimeException( e.Message , e.Context );
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException( ex.Message,
+                        nullptr, anyEx );
     }
 
     fire( RefreshedBroadcaster( *this ) );

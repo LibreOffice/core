@@ -18,11 +18,13 @@
  */
 
 #include <cppuhelper/compbase_ex.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <rtl/string.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 using namespace ::osl;
@@ -120,8 +122,9 @@ void WeakComponentImplHelperBase::dispose()
         }
         catch (Exception & exc)
         {
-            throw RuntimeException(
-                "unexpected UNO exception caught: " + exc.Message );
+            css::uno::Any anyEx = cppu::getCaughtException();
+            throw lang::WrappedTargetRuntimeException( "unexpected UNO exception caught",
+                            nullptr, anyEx );
         }
     }
 }
@@ -244,8 +247,9 @@ void WeakAggComponentImplHelperBase::dispose()
         }
         catch (Exception & exc)
         {
-            throw RuntimeException(
-                "unexpected UNO exception caught: " + exc.Message );
+            css::uno::Any anyEx = cppu::getCaughtException();
+            throw lang::WrappedTargetRuntimeException( "unexpected UNO exception caught",
+                            nullptr, anyEx );
         }
     }
 }

@@ -27,6 +27,7 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
@@ -399,15 +400,11 @@ void ScriptProtocolHandler::createScriptProvider()
             m_xScriptProvider.set( xFac->createScriptProvider( aContext ), UNO_QUERY_THROW );
         }
     }
-    catch ( const RuntimeException & e )
-    {
-        OUString temp = "ScriptProtocolHandler::createScriptProvider(),  ";
-        throw RuntimeException( temp.concat( e.Message ) );
-    }
     catch ( const Exception & e )
     {
-        OUString temp = "ScriptProtocolHandler::createScriptProvider: ";
-        throw RuntimeException( temp.concat( e.Message ) );
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException( "ScriptProtocolHandler::createScriptProvider",
+                        nullptr, anyEx );
     }
 }
 

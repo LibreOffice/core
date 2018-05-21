@@ -33,6 +33,7 @@
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
@@ -43,6 +44,7 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/mimeconfighelper.hxx>
@@ -382,14 +384,16 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                         m_xParentStorage->removeElement( m_aEntryName );
                     m_xParentStorage->renameElement( aTmpStreamName, m_aEntryName );
                 }
-                catch ( const uno::Exception& )
+                catch ( const uno::Exception& ex )
                 {
+                    css::uno::Any anyEx = cppu::getCaughtException();
                     try {
                         close( true );
                     } catch( const uno::Exception& ) {}
 
                     m_xParentStorage->dispose(); // ??? the storage has information loss, it should be closed without committing!
-                    throw uno::RuntimeException(); // the repairing is not possible
+                    throw css::lang::WrappedTargetRuntimeException( ex.Message,
+                                    nullptr, anyEx ); // the repairing is not possible
                 }
             SAL_FALLTHROUGH;
             case 2:
@@ -398,13 +402,15 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                     m_xObjectStream = m_xParentStorage->openStreamElement( m_aEntryName, m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE );
                     m_nObjectState = embed::EmbedStates::LOADED;
                 }
-                catch( const uno::Exception& )
+                catch( const uno::Exception& ex )
                 {
+                    css::uno::Any anyEx = cppu::getCaughtException();
                     try {
                         close( true );
                     } catch( const uno::Exception& ) {}
 
-                    throw uno::RuntimeException(); // the repairing is not possible
+                    throw css::lang::WrappedTargetRuntimeException( ex.Message,
+                                    nullptr, anyEx ); // the repairing is not possible
                 }
                 SAL_FALLTHROUGH;
 

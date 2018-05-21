@@ -127,10 +127,10 @@ void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyNam
     }
     catch( const uno::Exception& ex )
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         OSL_FAIL("invalid exception caught in WrappedPropertySet::setPropertyValue");
-        lang::WrappedTargetException aWrappedException;
-        aWrappedException.TargetException <<= ex;
-        throw aWrappedException;
+        throw lang::WrappedTargetException( ex.Message,
+                        nullptr, anyEx );
     }
 }
 Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName )
@@ -165,10 +165,10 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
     }
     catch( const uno::Exception& ex )
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         OSL_FAIL("invalid exception caught in WrappedPropertySet::setPropertyValue");
-        lang::WrappedTargetException aWrappedException;
-        aWrappedException.TargetException <<= ex;
-        throw aWrappedException;
+        throw lang::WrappedTargetException( ex.Message,
+                        nullptr, anyEx );
     }
 
     return aRet;

@@ -515,14 +515,7 @@ namespace cmis
         {
             if ( !m_sObjectId.isEmpty( ) )
             {
-                try
-                {
-                    m_pObject = getSession( xEnv )->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
-                }
-                catch ( const libcmis::Exception& )
-                {
-                    throw libcmis::Exception( "Object not found" );
-                }
+                m_pObject = getSession( xEnv )->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
             }
             else if (!(m_sObjectPath.isEmpty() || m_sObjectPath == "/"))
             {
