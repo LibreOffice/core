@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="rpt">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="DateTimeDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="datetimedialog|DateTimeDialog">Date and Time</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -104,10 +110,10 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_left">12</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="datetimedialog|datelistbox_label">_Format:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">datelistbox</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -136,10 +142,10 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_left">12</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="datetimedialog|timelistbox_label">Fo_rmat:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">timelistbox</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -147,7 +153,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBox" id="timelistbox">
+              <object class="GtkComboBoxText" id="timelistbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
@@ -158,7 +164,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBox" id="datelistbox">
+              <object class="GtkComboBoxText" id="datelistbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>

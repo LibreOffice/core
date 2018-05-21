@@ -1554,8 +1554,8 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             {
                 if ( !aArgs.getLength() )
                 {
-                    ScopedVclPtrInstance< ODateTimeDialog > aDlg(getView(),getDesignView()->getCurrentSection(),this);
-                    aDlg->Execute();
+                    ODateTimeDialog aDlg(getFrameWeld(), getDesignView()->getCurrentSection(), this);
+                    aDlg.execute();
                 }
                 else
                     createDateTime(aArgs);
