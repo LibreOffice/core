@@ -43,6 +43,7 @@
 #include <osl/mutex.hxx>
 #include <services.hxx>
 #include <comphelper/listenernotification.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <svtools/imageresourceaccess.hxx>
 #define LOCAL_URL_PREFIX    '#'
 
@@ -424,8 +425,9 @@ namespace frm
         }
         catch( const Exception& e )
         {
+            css::uno::Any anyEx = cppu::getCaughtException();
             OSL_FAIL( "OClickableImageBaseControl::implSubmit: caught an unknown exception!" );
-            throw WrappedTargetException( OUString(), *this, makeAny( e ) );
+            throw WrappedTargetException( OUString(), *this, anyEx );
         }
     }
 

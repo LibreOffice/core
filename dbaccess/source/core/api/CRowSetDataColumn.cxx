@@ -113,9 +113,10 @@ void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nH
         }
         catch(const SQLException &e)
         {
+            css::uno::Any anyEx = cppu::getCaughtException();
             throw WrappedTargetRuntimeException("Could not retrieve column value: " + e.Message,
                                                 *const_cast<ORowSetDataColumn*>(this),
-                                                Any(e));
+                                                anyEx);
         }
     }
     else if ( PROPERTY_ID_LABEL == nHandle && !m_sLabel.isEmpty() )

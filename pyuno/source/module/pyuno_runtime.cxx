@@ -40,6 +40,7 @@
 #include <com/sun/star/script/InvocationAdapterFactory.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <vector>
 
@@ -804,8 +805,9 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
             }
             catch( const css::uno::Exception & e )
             {
+                css::uno::Any anyEx = cppu::getCaughtException();
                 throw WrappedTargetRuntimeException(
-                        e.Message, e.Context, makeAny(e));
+                        e.Message, e.Context, anyEx);
             }
 
         }

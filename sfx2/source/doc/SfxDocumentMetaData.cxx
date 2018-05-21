@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -678,10 +679,10 @@ SfxDocumentMetaData::setMetaText(const char* i_name,
             return true;
         }
     } catch (const css::xml::dom::DOMException & e) {
-        css::uno::Any a(e);
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
                 "SfxDocumentMetaData::setMetaText: DOM exception",
-                css::uno::Reference<css::uno::XInterface>(*this), a);
+                css::uno::Reference<css::uno::XInterface>(*this), anyEx);
     }
 }
 
@@ -809,10 +810,10 @@ SfxDocumentMetaData::setMetaList(const char* i_name,
 
         return true;
     } catch (const css::xml::dom::DOMException & e) {
-        css::uno::Any a(e);
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
                 "SfxDocumentMetaData::setMetaList: DOM exception",
-                css::uno::Reference<css::uno::XInterface>(*this), a);
+                css::uno::Reference<css::uno::XInterface>(*this), anyEx);
     }
 }
 
@@ -948,10 +949,10 @@ SfxDocumentMetaData::updateElement(const char *i_name,
         }
         m_meta[name] = xNode;
     } catch (const css::xml::dom::DOMException & e) {
-        css::uno::Any a(e);
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
                 "SfxDocumentMetaData::updateElement: DOM exception",
-                css::uno::Reference<css::uno::XInterface>(*this), a);
+                css::uno::Reference<css::uno::XInterface>(*this), anyEx);
     }
 }
 
@@ -1105,10 +1106,10 @@ void SfxDocumentMetaData::init(
             xRElem->appendChild(xParent);
             m_xParent = xParent;
         } catch (const css::xml::dom::DOMException & e) {
-            css::uno::Any a(e);
+            css::uno::Any anyEx = cppu::getCaughtException();
             throw css::lang::WrappedTargetRuntimeException(
                     "SfxDocumentMetaData::init: DOM exception",
-                    css::uno::Reference<css::uno::XInterface>(*this), a);
+                    css::uno::Reference<css::uno::XInterface>(*this), anyEx);
         }
     }
 
@@ -1887,10 +1888,11 @@ SfxDocumentMetaData::loadFromMedium(const OUString & URL,
     } catch (const css::io::IOException &) {
         throw;
     } catch (const css::uno::Exception & e) {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetException(
                 "SfxDocumentMetaData::loadFromMedium: exception",
                 css::uno::Reference<css::uno::XInterface>(*this),
-                css::uno::makeAny(e));
+                anyEx);
     }
     if (!xStorage.is()) {
         throw css::uno::RuntimeException(
@@ -2002,10 +2004,10 @@ SfxDocumentMetaData::createClone()
     } catch (const css::uno::RuntimeException &) {
         throw;
     } catch (const css::uno::Exception & e) {
-        css::uno::Any a(e);
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
                 "SfxDocumentMetaData::createClone: exception",
-                css::uno::Reference<css::uno::XInterface>(*this), a);
+                css::uno::Reference<css::uno::XInterface>(*this), anyEx);
     }
     return css::uno::Reference<css::util::XCloneable> (pNew);
 }

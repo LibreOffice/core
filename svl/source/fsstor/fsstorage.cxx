@@ -1015,9 +1015,11 @@ sal_Bool SAL_CALL FSStorage::hasElements()
     {
         throw;
     }
-    catch (const uno::Exception&)
+    catch (const uno::Exception& ex)
     {
-        throw uno::RuntimeException();
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw lang::WrappedTargetRuntimeException( ex.Message,
+                        nullptr, anyEx );
     }
 }
 
