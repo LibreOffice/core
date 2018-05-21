@@ -26,6 +26,9 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/unoforou.hxx>
+#include <editeng/unoprnms.hxx>
+#include <editeng/unoipset.hxx>
 #include <Outliner.hxx>
 #include <svx/svdpool.hxx>
 

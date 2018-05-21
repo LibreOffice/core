@@ -28,9 +28,6 @@
 #include <tools/color.hxx>
 #include "sddllapi.h"
 
-class SdrObject;
-class SdrPathObj;
-
 class SD_DLLPUBLIC SdAnimationInfo : public SdrObjUserData
 {
 public:

@@ -22,9 +22,8 @@
 
 #include <memory>
 #include <svx/svdundo.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdobj.hxx>
 #include <pres.hxx>
+#include <tools/weakbase.hxx>
 
 class SdrObjUserCall;
 class SdPage;

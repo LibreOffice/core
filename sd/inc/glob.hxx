@@ -20,9 +20,6 @@
 #ifndef INCLUDED_SD_INC_GLOB_HXX
 #define INCLUDED_SD_INC_GLOB_HXX
 
-#include <svl/style.hxx>
-#include <sal/types.h>
-
 #define SD_IF_SDAPP                     SFX_INTERFACE_SD_START + SfxInterfaceId(0)
 #define SD_IF_SDDRAWDOCSHELL            SFX_INTERFACE_SD_START + SfxInterfaceId(1)
 #define SD_IF_SDDRAWVIEWSHELL           SFX_INTERFACE_SD_START + SfxInterfaceId(3)

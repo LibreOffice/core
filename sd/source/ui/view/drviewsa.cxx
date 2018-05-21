@@ -34,6 +34,7 @@
 #include <svx/zoomslideritem.hxx>
 #include <svl/eitem.hxx>
 
+#include <sdcommands.h>
 #include <svx/dialogs.hrc>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>

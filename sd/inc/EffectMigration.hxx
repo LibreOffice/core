@@ -28,7 +28,6 @@ class SdDrawDocument;
 class SdPage;
 class SvxShape;
 class SdAnimationInfo;
-class SdrObject;
 class SdrPathObj;
 class SdrObjGroup;
 

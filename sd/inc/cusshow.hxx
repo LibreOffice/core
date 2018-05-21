@@ -24,7 +24,6 @@
 #include <cppuhelper/weakref.hxx>
 #include "sddllapi.h"
 
-class SdDrawDocument;
 class SdPage;
 
 class SD_DLLPUBLIC SdCustomShow final

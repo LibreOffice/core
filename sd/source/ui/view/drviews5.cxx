@@ -26,6 +26,7 @@
 #include <svx/svdpagv.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
+#include <sdcommands.h>
 
 #include <tools/poly.hxx>
 #include <svx/fmshell.hxx>

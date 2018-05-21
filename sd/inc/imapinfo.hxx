@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_INC_IMAPINFO_HXX
 #define INCLUDED_SD_INC_IMAPINFO_HXX
 
-#include "sdiocmpt.hxx"
 #include "glob.hxx"
 #include <svx/svdobj.hxx>
 #include <svtools/imap.hxx>
