@@ -1545,6 +1545,10 @@ interface DrawView
         StateMethod = GetRulerState ;
     ]
 
+    SID_RULER_PROTECT // status()
+    [
+        StateMethod = GetRulerState ;
+    ]
     SID_RULER_TEXT_RIGHT_TO_LEFT
     [
         ExecMethod = ExecRuler ;
