@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
+#include <iostream>
 #include "rowinputbinary.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
@@ -333,7 +333,8 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColType
             {
                 sal_Int64 value = 0;
                 m_pStream->ReadInt64(value);
-                css::util::Time time((value % 1000) * 1000000, value / 1000, 0, 0, true);
+                // no need to make more calculus since value is in nanosec
+                css::util::Time time(value, 0, 0, 0, true);
                 aData.push_back(makeAny(time));
             }
             break;
