@@ -22,12 +22,14 @@
 #include <osl/diagnose.h>
 
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 
 #include "iahndl.hxx"
 #include <comphelper/namedvaluecollection.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -139,7 +141,9 @@ UUIInteractionHandler::handle(
     }
     catch (uno::RuntimeException const & ex)
     {
-        throw uno::RuntimeException(ex.Message, *this);
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException( ex.Message,
+                *this, anyEx );
     }
 }
 
@@ -152,7 +156,9 @@ sal_Bool SAL_CALL UUIInteractionHandler::handleInteractionRequest(
     }
     catch (uno::RuntimeException const & ex)
     {
-        throw uno::RuntimeException( ex.Message, *this );
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException( ex.Message,
+                *this, anyEx );
     }
 }
 

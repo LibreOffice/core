@@ -43,6 +43,7 @@
 #include <com/sun/star/script/XScriptListener.hpp>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/interfacecontainer2.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
@@ -311,9 +312,10 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
                 }
                 catch (const CannotConvertException& e)
                 {
+                    css::uno::Any anyEx = cppu::getCaughtException();
                     throw css::lang::WrappedTargetRuntimeException(
                         "wrapped CannotConvertException " + e.Message,
-                        css::uno::Reference<css::uno::XInterface>(), Any(e));
+                        css::uno::Reference<css::uno::XInterface>(), anyEx);
                 }
             }
         }

@@ -391,13 +391,15 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFal
             return xSubStorage;
     }
     catch(const css::uno::RuntimeException&)
-        { throw; }
+    {
+        throw;
+    }
     catch(const css::uno::Exception& ex)
-        { exResult = ex; }
-
-    // b) readonly already tried? => forward last error!
-    if ((eOpenMode & css::embed::ElementModes::WRITE) != css::embed::ElementModes::WRITE) // fallback possible ?
-        throw exResult;
+    {
+        // b) readonly already tried? => forward last error!
+        if ((eOpenMode & css::embed::ElementModes::WRITE) != css::embed::ElementModes::WRITE) // fallback possible ?
+            throw;
+    }
 
     // c) try it readonly
     //    don't catch exception here! Outside code wish to know, if operation failed or not.

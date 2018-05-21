@@ -25,6 +25,7 @@
  *************************************************************************/
 
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -238,8 +239,9 @@ ContentProvider::createPackage( const PackageUri & rURI )
     }
     catch ( uno::Exception const & e )
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
-            e.Message, e.Context, css::uno::makeAny(e));
+            e.Message, e.Context, anyEx);
     }
 
     rtl::Reference< Package> xPackage = new Package( rURL, xNameAccess, this );

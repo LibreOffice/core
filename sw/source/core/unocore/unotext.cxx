@@ -35,6 +35,7 @@
 #include <comphelper/profilezone.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <cmdid.h>
@@ -345,7 +346,9 @@ SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
         catch (const lang::IllegalArgumentException& iae)
         {
             // stupid method not allowed to throw iae
-            throw uno::RuntimeException(iae.Message, nullptr);
+            css::uno::Any anyEx = cppu::getCaughtException();
+            throw lang::WrappedTargetRuntimeException( iae.Message,
+                            uno::Reference< uno::XInterface >(), anyEx );
         }
     }
     if (bAbsorb)
@@ -1461,10 +1464,10 @@ SwXText::insertTextContentWithProperties(
         }
         catch (const uno::Exception& e)
         {
+            css::uno::Any anyEx = cppu::getCaughtException();
             m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
-            lang::WrappedTargetRuntimeException wrapped;
-            wrapped.TargetException <<= e;
-            throw wrapped;
+            throw lang::WrappedTargetRuntimeException( e.Message,
+                            uno::Reference< uno::XInterface >(), anyEx );
         }
     }
     m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);

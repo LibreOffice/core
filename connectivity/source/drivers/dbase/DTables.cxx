@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <dbase/DCatalog.hxx>
 #include <comphelper/types.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <strings.hrc>
 #include <connectivity/dbexception.hxx>
 
@@ -85,9 +86,10 @@ sdbcx::ObjectType ODbaseTables::appendObject( const OUString& _rForName, const R
             {
                 throw;
             }
-            catch(Exception&)
+            catch(Exception const & ex)
             {
-                throw SQLException();
+                css::uno::Any anyEx = cppu::getCaughtException();
+                throw SQLException( ex.Message, nullptr, "", 0, anyEx );
             }
         }
     }
