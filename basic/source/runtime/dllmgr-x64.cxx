@@ -319,12 +319,12 @@ ErrCode marshal(
                 break;
             case SbxSTRING:
                 {
-                    std::vector< char > * blob2 = data.newBlob();
                     void * p;
                     ErrCode e = marshalString(variable, special, data, &p);
                     if (e != ERRCODE_NONE) {
                         return e;
                     }
+                    std::vector< char >* blob2 = data.newBlob();
                     add(*blob2, p, 8, 0);
                     add(blob, address(*blob2), 8, offset);
                     break;
