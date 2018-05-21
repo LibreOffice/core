@@ -31,6 +31,7 @@
 #include <svtools/miscopt.hxx>
 
 #include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace chart
@@ -301,50 +302,37 @@ IMPL_LINK_NOARG( GL3DResourceGroup, SettingChangedHdl, CheckBox&, void )
         m_pChangeListener->stateChanged(this);
 }
 
-class SplinePropertiesDialog : public ModalDialog
+class SplinePropertiesDialog : public weld::GenericDialogController
 {
 public:
-    explicit SplinePropertiesDialog( vcl::Window* pParent );
-    virtual ~SplinePropertiesDialog() override { disposeOnce(); }
-    virtual void dispose() override;
+    explicit SplinePropertiesDialog(weld::Window* pParent);
 
     void fillControls( const ChartTypeParameter& rParameter );
     void fillParameter( ChartTypeParameter& rParameter, bool bSmoothLines );
 
 private:
-    DECL_LINK( SplineTypeListBoxHdl, ListBox&, void );
+    DECL_LINK(SplineTypeListBoxHdl, weld::ComboBoxText&, void);
 
 private:
-    VclPtr<ListBox>      m_pLB_Spline_Type;
-
-    VclPtr<NumericField> m_pMF_SplineResolution;
-    VclPtr<FixedText>    m_pFT_SplineOrder;
-    VclPtr<NumericField> m_pMF_SplineOrder;
+    std::unique_ptr<weld::ComboBoxText> m_xLB_Spline_Type;
+    std::unique_ptr<weld::SpinButton> m_xMF_SplineResolution;
+    std::unique_ptr<weld::Label> m_xFT_SplineOrder;
+    std::unique_ptr<weld::SpinButton> m_xMF_SplineOrder;
 };
 
 const sal_uInt16 CUBIC_SPLINE_POS = 0;
 const sal_uInt16 B_SPLINE_POS = 1;
 
-SplinePropertiesDialog::SplinePropertiesDialog( vcl::Window* pParent )
-        : ModalDialog( pParent, "SmoothLinesDialog", "modules/schart/ui/smoothlinesdlg.ui")
+SplinePropertiesDialog::SplinePropertiesDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "modules/schart/ui/smoothlinesdlg.ui", "SmoothLinesDialog")
+    , m_xLB_Spline_Type(m_xBuilder->weld_combo_box_text("SplineTypeComboBox"))
+    , m_xMF_SplineResolution(m_xBuilder->weld_spin_button("ResolutionSpinbutton"))
+    , m_xFT_SplineOrder(m_xBuilder->weld_label("PolynomialsLabel"))
+    , m_xMF_SplineOrder(m_xBuilder->weld_spin_button("PolynomialsSpinButton"))
 {
-    get(m_pLB_Spline_Type, "SplineTypeComboBox");
-    get(m_pMF_SplineResolution, "ResolutionSpinbutton");
-    get(m_pFT_SplineOrder, "PolynomialsLabel");
-    get(m_pMF_SplineOrder, "PolynomialsSpinButton");
+    m_xDialog->set_title(SchResId(STR_DLG_SMOOTH_LINE_PROPERTIES));
 
-    SetText( SchResId( STR_DLG_SMOOTH_LINE_PROPERTIES ) );
-
-    m_pLB_Spline_Type->SetSelectHdl( LINK (this, SplinePropertiesDialog, SplineTypeListBoxHdl ) );
-}
-
-void SplinePropertiesDialog::dispose()
-{
-    m_pLB_Spline_Type.clear();
-    m_pMF_SplineResolution.clear();
-    m_pFT_SplineOrder.clear();
-    m_pMF_SplineOrder.clear();
-    ModalDialog::dispose();
+    m_xLB_Spline_Type->connect_changed(LINK(this, SplinePropertiesDialog, SplineTypeListBoxHdl));
 }
 
 void SplinePropertiesDialog::fillControls( const ChartTypeParameter& rParameter )
@@ -352,38 +340,40 @@ void SplinePropertiesDialog::fillControls( const ChartTypeParameter& rParameter 
     switch(rParameter.eCurveStyle)
     {
     case CurveStyle_CUBIC_SPLINES:
-        m_pLB_Spline_Type->SelectEntryPos(CUBIC_SPLINE_POS);
+        m_xLB_Spline_Type->set_active(CUBIC_SPLINE_POS);
         break;
     case CurveStyle_B_SPLINES:
-        m_pLB_Spline_Type->SelectEntryPos(B_SPLINE_POS);
+        m_xLB_Spline_Type->set_active(B_SPLINE_POS);
         break;
     default:
-        m_pLB_Spline_Type->SelectEntryPos(CUBIC_SPLINE_POS);
+        m_xLB_Spline_Type->set_active(CUBIC_SPLINE_POS);
         break;
     }
-    m_pMF_SplineOrder->SetValue( rParameter.nSplineOrder );
-    m_pMF_SplineResolution->SetValue( rParameter.nCurveResolution );
+    m_xMF_SplineOrder->set_value( rParameter.nSplineOrder );
+    m_xMF_SplineResolution->set_value( rParameter.nCurveResolution );
 
     //dis/enabling
-    m_pFT_SplineOrder->Enable(m_pLB_Spline_Type->GetSelectedEntryPos() == B_SPLINE_POS);
-    m_pMF_SplineOrder->Enable(m_pLB_Spline_Type->GetSelectedEntryPos() == B_SPLINE_POS);
+    m_xFT_SplineOrder->set_sensitive(m_xLB_Spline_Type->get_active() == B_SPLINE_POS);
+    m_xMF_SplineOrder->set_sensitive(m_xLB_Spline_Type->get_active() == B_SPLINE_POS);
 }
+
 void SplinePropertiesDialog::fillParameter( ChartTypeParameter& rParameter, bool bSmoothLines )
 {
     if(!bSmoothLines)
         rParameter.eCurveStyle=CurveStyle_LINES;
-    else if(m_pLB_Spline_Type->GetSelectedEntryPos() == CUBIC_SPLINE_POS)
+    else if(m_xLB_Spline_Type->get_active() == CUBIC_SPLINE_POS)
         rParameter.eCurveStyle=CurveStyle_CUBIC_SPLINES;
-    else if(m_pLB_Spline_Type->GetSelectedEntryPos() == B_SPLINE_POS)
+    else if(m_xLB_Spline_Type->get_active() == B_SPLINE_POS)
         rParameter.eCurveStyle=CurveStyle_B_SPLINES;
 
-    rParameter.nCurveResolution = static_cast< sal_Int32 >( m_pMF_SplineResolution->GetValue());
-    rParameter.nSplineOrder = static_cast< sal_Int32 >( m_pMF_SplineOrder->GetValue());
+    rParameter.nCurveResolution = m_xMF_SplineResolution->get_value();
+    rParameter.nSplineOrder = m_xMF_SplineOrder->get_value();
 }
-IMPL_LINK_NOARG(SplinePropertiesDialog, SplineTypeListBoxHdl, ListBox&, void)
+
+IMPL_LINK_NOARG(SplinePropertiesDialog, SplineTypeListBoxHdl, weld::ComboBoxText&, void)
 {
-    m_pFT_SplineOrder->Enable(m_pLB_Spline_Type->GetSelectedEntryPos() == B_SPLINE_POS);
-    m_pMF_SplineOrder->Enable(m_pLB_Spline_Type->GetSelectedEntryPos() == B_SPLINE_POS);
+    m_xFT_SplineOrder->set_sensitive(m_xLB_Spline_Type->get_active() == B_SPLINE_POS);
+    m_xMF_SplineOrder->set_sensitive(m_xLB_Spline_Type->get_active() == B_SPLINE_POS);
 }
 
 class SteppedPropertiesDialog : public ModalDialog
@@ -480,7 +470,7 @@ private:
     VclPtr<FixedText>  m_pFT_LineType;
     VclPtr<ListBox>    m_pLB_LineType;
     VclPtr<PushButton> m_pPB_DetailsDialog;
-    VclPtr< SplinePropertiesDialog > m_pSplinePropertiesDialog;
+    std::unique_ptr<SplinePropertiesDialog> m_xSplinePropertiesDialog;
     VclPtr< SteppedPropertiesDialog > m_pSteppedPropertiesDialog;
 };
 
@@ -496,9 +486,12 @@ SplineResourceGroup::SplineResourceGroup(VclBuilderContainer* pWindow)
 
 SplinePropertiesDialog& SplineResourceGroup::getSplinePropertiesDialog()
 {
-    if( !m_pSplinePropertiesDialog.get() )
-        m_pSplinePropertiesDialog.reset( VclPtr<SplinePropertiesDialog>::Create( m_pPB_DetailsDialog->GetParentDialog() ) );
-    return *m_pSplinePropertiesDialog;
+    if( !m_xSplinePropertiesDialog.get() )
+    {
+        Dialog* pDialog = m_pPB_DetailsDialog->GetParentDialog();
+        m_xSplinePropertiesDialog.reset(new SplinePropertiesDialog(pDialog ? pDialog->GetFrameWeld() : nullptr));
+    }
+    return *m_xSplinePropertiesDialog;
 }
 
 SteppedPropertiesDialog& SplineResourceGroup::getSteppedPropertiesDialog()
@@ -576,7 +569,7 @@ IMPL_LINK_NOARG(SplineResourceGroup, SplineDetailsDialogHdl, Button*, void)
 
     const sal_Int32 iOldLineTypePos = m_pLB_LineType->GetSelectedEntryPos();
     m_pLB_LineType->SelectEntryPos(POS_LINETYPE_SMOOTH);
-    if( getSplinePropertiesDialog().Execute() == RET_OK )
+    if (getSplinePropertiesDialog().run() == RET_OK)
     {
         if( m_pChangeListener )
             m_pChangeListener->stateChanged(this);
