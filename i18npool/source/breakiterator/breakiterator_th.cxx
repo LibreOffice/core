@@ -127,7 +127,7 @@ void BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 const nStartPos
 
     sal_Int32 startPos = nStartPos;
     while (startPos > 0 && is_Thai(str[startPos-1])) startPos--;
-    sal_Int32 endPos = std::min(len, nStartPos+1);
+    sal_Int32 endPos = nStartPos;
     while (endPos < len && is_Thai(str[endPos])) endPos++;
 
     sal_Int32 start, end, pos;
