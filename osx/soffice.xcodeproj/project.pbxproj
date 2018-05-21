@@ -15,6 +15,7 @@
 		BE02FCEA171335B80069F37F /* util.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = util.cxx; path = ../jvmfwk/plugins/sunmajor/pluginlib/util.cxx; sourceTree = "<group>"; };
 		BE02FCEB171335B80069F37F /* vendorbase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vendorbase.cxx; path = ../jvmfwk/plugins/sunmajor/pluginlib/vendorbase.cxx; sourceTree = "<group>"; };
 		BE02FCEC171335B80069F37F /* vendorlist.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vendorlist.cxx; path = ../jvmfwk/plugins/sunmajor/pluginlib/vendorlist.cxx; sourceTree = "<group>"; };
+		BE09705E20B2E1E000A6C26A /* file.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = file.cxx; path = ../../../../sal/osl/unx/file.cxx; sourceTree = "<group>"; };
 		BE145F5C17B24BA4004CBBBA /* sunjavaplugin.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sunjavaplugin.cxx; path = ../jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx; sourceTree = "<group>"; };
 		BE2DACF1182D0CBB00A4D2F7 /* formulagroupcl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = formulagroupcl.cxx; path = ../sc/source/core/opencl/formulagroupcl.cxx; sourceTree = "<group>"; };
 		BE2DACF2182D0CBB00A4D2F7 /* op_database.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = op_database.cxx; path = ../sc/source/core/opencl/op_database.cxx; sourceTree = "<group>"; };
@@ -266,6 +267,30 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		BE09705B20B2E19A00A6C26A /* sal */ = {
+			isa = PBXGroup;
+			children = (
+				BE09705C20B2E1AC00A6C26A /* osl */,
+			);
+			path = sal;
+			sourceTree = "<group>";
+		};
+		BE09705C20B2E1AC00A6C26A /* osl */ = {
+			isa = PBXGroup;
+			children = (
+				BE09705D20B2E1B300A6C26A /* unx */,
+			);
+			path = osl;
+			sourceTree = "<group>";
+		};
+		BE09705D20B2E1B300A6C26A /* unx */ = {
+			isa = PBXGroup;
+			children = (
+				BE09705E20B2E1E000A6C26A /* file.cxx */,
+			);
+			path = unx;
+			sourceTree = "<group>";
+		};
 		BE2DACF9182FAB3800A4D2F7 /* window */ = {
 			isa = PBXGroup;
 			children = (
@@ -623,6 +648,7 @@
 		BEC3D9171710B0390030AD56 = {
 			isa = PBXGroup;
 			children = (
+				BE09705B20B2E19A00A6C26A /* sal */,
 				BEB6E30B1FFF984200B0BDB0 /* avmedia */,
 				BE2DAD2B183148BE00A4D2F7 /* formula */,
 				BE2DAD28182FAB7900A4D2F7 /* sw */,
