@@ -444,7 +444,7 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
         if (pW->IsMapModeEnabled())
             *pLOKTwipsPos = pW->PixelToLogic(aPos, MapMode(MapUnit::MapTwip));
         else
-            *pLOKTwipsPos = pW->LogicToLogic(aPos, pW->GetMapMode(), MapMode(MapUnit::MapTwip));
+            *pLOKTwipsPos = OutputDevice::LogicToLogic(aPos, pW->GetMapMode(), MapMode(MapUnit::MapTwip));
     }
 
     // caller expects coordinates relative to top-level win
