@@ -28,6 +28,7 @@
 #include <strings.hxx>
 
 #include <comphelper/logging.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <memory>
 
@@ -220,9 +221,11 @@ void java_lang_Object::ThrowRuntimeException( JNIEnv* _pEnvironment, const Refer
     {
         ThrowSQLException(_pEnvironment, _rxContext);
     }
-    catch (const SQLException& e)
+    catch (const SQLException& ex)
     {
-        throw WrappedTargetRuntimeException(e.Message, e.Context, makeAny(e));
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException( ex.Message,
+                        ex.Context, anyEx );
     }
 }
 

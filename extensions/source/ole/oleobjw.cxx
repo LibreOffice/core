@@ -29,11 +29,13 @@
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/FailReason.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/bridge/ModelDependent.hpp>
 
 #include <com/sun/star/bridge/oleautomation/NamedArgument.hpp>
 #include <com/sun/star/bridge/oleautomation/PropertyPutArgument.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <typelib/typedescription.hxx>
 #include <rtl/uuid.h>
@@ -156,11 +158,12 @@ Any SAL_CALL IUnknownWrapper::invokeGetProperty( const OUString& aPropertyName, 
         }
         aResult = invokeWithDispIdComTlb( aDescGet, aPropertyName, aParams, aOutParamIndex, aOutParam );
     }
-    catch ( const Exception& e )
+    catch ( const Exception& )
     {
-       throw RuntimeException("[automation bridge] unexpected exception in "
-               "IUnknownWrapper::invokeGetProperty ! Message : \n" +
-                e.Message);
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException(
+                "[automation bridge] unexpected exception in IUnknownWrapper::invokeGetProperty",
+                nullptr, anyEx );
     }
     return aResult;
 }
@@ -184,11 +187,12 @@ Any SAL_CALL IUnknownWrapper::invokePutProperty( const OUString& aPropertyName, 
         }
         aResult = invokeWithDispIdComTlb( aDescPut, aPropertyName, aParams, aOutParamIndex, aOutParam );
     }
-    catch ( const Exception& e )
+    catch ( const Exception& )
     {
-       throw RuntimeException("[automation bridge] unexpected exception in "
-               "IUnknownWrapper::invokePutProperty ! Message : \n" +
-                e.Message);
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException(
+                "[automation bridge] unexpected exception in IUnknownWrapper::invokePutProperty",
+                nullptr, anyEx );
     }
     return aResult;
 }
@@ -237,14 +241,14 @@ Any SAL_CALL IUnknownWrapper::invoke( const OUString& aFunctionName,
     }
     catch (const BridgeRuntimeError & e)
     {
-         throw RuntimeException(e.message);
+        throw RuntimeException(e.message);
     }
     catch (const Exception & e)
     {
-        throw RuntimeException("[automation bridge] unexpected exception in "
-                                     "IUnknownWrapper::invoke ! Message : \n" +
-                               e.Message);
-
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException(
+                "[automation bridge] unexpected exception in IUnknownWrapper::invoke",
+                nullptr, anyEx );
     }
     catch(...)
     {
@@ -408,10 +412,10 @@ void SAL_CALL IUnknownWrapper::setValue( const OUString& aPropertyName,
     }
     catch (const Exception & e)
     {
-        throw RuntimeException("[automation bridge] unexpected exception in "
-                               "IUnknownWrapper::setValue ! Message : \n" +
-                               e.Message);
-
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException(
+                "[automation bridge] unexpected exception in IUnknownWrapper::setValue",
+                nullptr, anyEx );
     }
     catch (...)
     {
@@ -550,9 +554,10 @@ Any SAL_CALL IUnknownWrapper::getValue( const OUString& aPropertyName )
     }
     catch (const Exception & e)
     {
-        throw RuntimeException("[automation bridge] unexpected exception in "
-                               "IUnknownWrapper::getValue ! Message : \n" +
-                               e.Message);
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException(
+                "[automation bridge] unexpected exception in IUnknownWrapper::getValue",
+                nullptr, anyEx );
     }
     catch (...)
     {
@@ -599,9 +604,10 @@ sal_Bool SAL_CALL IUnknownWrapper::hasMethod( const OUString& aName )
     }
     catch (const Exception & e)
     {
-        throw RuntimeException("[automation bridge] unexpected exception in "
-                               "IUnknownWrapper::hasMethod ! Message : \n" +
-                               e.Message);
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException(
+                "[automation bridge] unexpected exception in IUnknownWrapper::hasMethod",
+                nullptr, anyEx );
     }
     catch (...)
     {
@@ -648,10 +654,10 @@ sal_Bool SAL_CALL IUnknownWrapper::hasProperty( const OUString& aName )
     }
     catch (const Exception & e)
     {
-        throw RuntimeException("[automation bridge] unexpected exception in "
-                               "IUnknownWrapper::hasProperty ! Message : \n" +
-                               e.Message);
-
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException(
+                "[automation bridge] unexpected exception in IUnknownWrapper::hasProperty",
+                nullptr, anyEx );
     }
     catch (...)
     {
@@ -1207,12 +1213,14 @@ void SAL_CALL IUnknownWrapper::initialize( const Sequence< Any >& aArguments )
         }
         catch ( const BridgeRuntimeError & e )
         {
-            throw RuntimeException( e.message );
+            throw RuntimeException(e.message);
         }
         catch( const Exception& e )
         {
-            throw RuntimeException(
-                    "[automation bridge] unexpected exception in IUnknownWrapper::initialize() error message: \n" + e.Message );
+            css::uno::Any anyEx = cppu::getCaughtException();
+            throw css::lang::WrappedTargetRuntimeException(
+                    "[automation bridge] unexpected exception in IUnknownWrapper::initialize()",
+                    nullptr, anyEx );
         }
     }
 }

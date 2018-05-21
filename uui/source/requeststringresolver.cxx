@@ -19,6 +19,8 @@
 
 #include "requeststringresolver.hxx"
 #include "iahndl.hxx"
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace css;
@@ -65,7 +67,9 @@ UUIInteractionRequestStringResolver::getStringFromInformationalRequest(
     }
     catch (uno::RuntimeException const & ex)
     {
-        throw uno::RuntimeException(ex.Message, *this);
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException( ex.Message,
+                *this, anyEx );
     }
 }
 

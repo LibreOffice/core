@@ -20,6 +20,8 @@
 #include <sal/config.h>
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 #include <extended/textwindowaccessibility.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
@@ -538,10 +540,11 @@ css::accessibility::TextSegment SAL_CALL Paragraph::getTextAtLineWithCaret(  )
             getTextAtLineNumber( nLineNo ) :
             css::accessibility::TextSegment();
     } catch (const css::lang::IndexOutOfBoundsException&) {
-        throw css::uno::RuntimeException(
-            "textwindowaccessibility.cxx:"
-            " Paragraph::getTextAtLineWithCaret",
-            static_cast< css::uno::XWeak * >( this ) );
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException(
+                "textwindowaccessibility.cxx:"
+                " Paragraph::getTextAtLineWithCaret",
+                static_cast< css::uno::XWeak * >( this ), anyEx );
     }
 }
 
