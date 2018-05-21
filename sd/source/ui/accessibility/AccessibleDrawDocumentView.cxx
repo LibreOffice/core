@@ -106,7 +106,7 @@ void AccessibleDrawDocumentView::Init()
         xShapeList.set( xView->getCurrentPage(), uno::UNO_QUERY);
 
     // Create the children manager.
-    mpChildrenManager = new ChildrenManager(this, xShapeList, maShapeTreeInfo, *this);
+    mpChildrenManager.reset(new ChildrenManager(this, xShapeList, maShapeTreeInfo, *this));
 
     rtl::Reference<AccessiblePageShape> xPage(CreateDrawPageShape());
     if (xPage.is())
@@ -214,7 +214,7 @@ uno::Reference<XAccessible> SAL_CALL
 
     // Create a copy of the pointer to the children manager and release the
     // mutex before calling any of its methods.
-    ChildrenManager* pChildrenManager = mpChildrenManager;
+    ChildrenManager* pChildrenManager = mpChildrenManager.get();
     aGuard.clear();
 
     // Forward request to children manager.
@@ -730,12 +730,7 @@ void AccessibleDrawDocumentView::Deactivated()
 
 void AccessibleDrawDocumentView::impl_dispose()
 {
-    if (mpChildrenManager != nullptr)
-    {
-        delete mpChildrenManager;
-        mpChildrenManager = nullptr;
-    }
-
+    mpChildrenManager.reset();
     AccessibleDocumentViewBase::impl_dispose();
 }
 
@@ -744,13 +739,8 @@ void AccessibleDrawDocumentView::impl_dispose()
 */
 void SAL_CALL AccessibleDrawDocumentView::disposing()
 {
-
     // Release resources.
-    if (mpChildrenManager != nullptr)
-    {
-        delete mpChildrenManager;
-        mpChildrenManager = nullptr;
-    }
+    mpChildrenManager.reset();
 
     // Forward call to base classes.
     AccessibleDocumentViewBase::disposing ();
