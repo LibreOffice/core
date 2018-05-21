@@ -47,7 +47,7 @@ public:
     static TextApiObject* getImplementation( const css::uno::Reference< css::text::XText >& );
 
 private:
-    TextAPIEditSource*  mpSource;
+    std::unique_ptr<TextAPIEditSource>  mpSource;
     TextApiObject( TextAPIEditSource* pEditSource );
 };
 

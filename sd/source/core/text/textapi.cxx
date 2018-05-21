@@ -144,8 +144,7 @@ void TextApiObject::dispose()
     if( mpSource )
     {
         mpSource->Dispose();
-        delete mpSource;
-        mpSource = nullptr;
+        mpSource.reset();
     }
 
 }
