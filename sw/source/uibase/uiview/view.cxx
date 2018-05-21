@@ -221,6 +221,28 @@ IMPL_LINK_NOARG(SwView, FormControlActivated, LinkParamNone*, void)
     }
 }
 
+namespace
+{
+uno::Reference<frame::XLayoutManager> getLayoutManager(const SfxViewFrame& rViewFrame)
+{
+    uno::Reference<frame::XLayoutManager> xLayoutManager;
+    uno::Reference<beans::XPropertySet> xPropSet(rViewFrame.GetFrame().GetFrameInterface(),
+                                                 uno::UNO_QUERY);
+    if (xPropSet.is())
+    {
+        try
+        {
+            xLayoutManager.set(xPropSet->getPropertyValue("LayoutManager"), uno::UNO_QUERY);
+        }
+        catch (const Exception& e)
+        {
+            SAL_WARN("sw.ui", "Failure getting layout manager: " + e.Message);
+        }
+    }
+    return xLayoutManager;
+}
+}
+
 void SwView::SelectShell()
 {
     // Attention: Maintain the SelectShell for the WebView additionally
@@ -426,6 +448,21 @@ void SwView::SelectShell()
             GetEditWin().SetInputContext( aCntxt );
         }
 
+        // Show Mail Merge toolbar initially for documents with Database fields
+        if (!m_bInitOnceCompleted && GetWrtShell().IsAnyDatabaseFieldInDoc())
+        {
+            auto xLayoutManager = getLayoutManager(*GetViewFrame());
+            if (xLayoutManager.is())
+            {
+                const OUString sResourceURL("private:resource/toolbar/mailmerge");
+                if (!xLayoutManager->getElement(sResourceURL).is())
+                {
+                    xLayoutManager->createElement(sResourceURL);
+                    xLayoutManager->showElement(sResourceURL);
+                }
+            }
+        }
+
         // Activate the toolbar to the new selection which also was active last time.
         // Before a flush () must be, but does not affect the UI according to MBA and
         // is not a performance problem.
@@ -450,6 +487,8 @@ void SwView::SelectShell()
         m_pWrtShell->UpdateTable();
 
     GetViewImpl()->GetUNOObject_Impl()->NotifySelChanged();
+
+    m_bInitOnceCompleted = true;
 }
 
 // Interaction: AttrChangedNotify() and TimeoutHdl.
