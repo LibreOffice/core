@@ -71,10 +71,11 @@ class AquaSalInstance : public SalInstance, public SalUserEventList
 
     bool RunInMainYield( bool bHandleAllCurrentEvents );
 
-    virtual void TriggerUserEventProcessing() override;
     virtual void ProcessEvent( SalUserEvent aEvent ) override;
 
 public:
+    virtual void TriggerUserEventProcessing() override;
+
     SalYieldMutex*                          mpSalYieldMutex;        // Sal-Yield-Mutex
     OUString                                maDefaultPrinter;
     oslThreadIdentifier                     maMainThread;
