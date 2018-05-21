@@ -40,74 +40,55 @@ InsertAxisOrGridDialogData::InsertAxisOrGridDialogData()
 
 // SchAxisDlg
 
-SchAxisDlg::SchAxisDlg(vcl::Window* pWindow,
+SchAxisDlg::SchAxisDlg(weld::Window* pWindow,
     const InsertAxisOrGridDialogData& rInput, bool bAxisDlg)
-    : ModalDialog(pWindow,
-          bAxisDlg ?
-              OUString("InsertAxisDialog") :
-              OUString("InsertGridDialog"),
+    : GenericDialogController(pWindow,
           bAxisDlg ?
               OUString("modules/schart/ui/insertaxisdlg.ui") :
-              OUString("modules/schart/ui/insertgriddlg.ui"))
+              OUString("modules/schart/ui/insertgriddlg.ui"),
+          bAxisDlg ?
+              OString("InsertAxisDialog") :
+              OString("InsertGridDialog"))
+    , m_xCbPrimaryX(m_xBuilder->weld_check_button("primaryX"))
+    , m_xCbPrimaryY(m_xBuilder->weld_check_button("primaryY"))
+    , m_xCbPrimaryZ(m_xBuilder->weld_check_button("primaryZ"))
+    , m_xCbSecondaryX(m_xBuilder->weld_check_button("secondaryX"))
+    , m_xCbSecondaryY(m_xBuilder->weld_check_button("secondaryY"))
+    , m_xCbSecondaryZ(m_xBuilder->weld_check_button("secondaryZ"))
 {
-    get(m_pCbPrimaryX, "primaryX");
-    get(m_pCbPrimaryY, "primaryY");
-    get(m_pCbPrimaryZ, "primaryZ");
-    get(m_pCbSecondaryX, "secondaryX");
-    get(m_pCbSecondaryY, "secondaryY");
-    get(m_pCbSecondaryZ, "secondaryZ");
-
     if (bAxisDlg)
     {
-
         //todo: remove if secondary z axis are possible somewhere
-        m_pCbSecondaryZ->Hide();
+        m_xCbSecondaryZ->hide();
     }
 
-    m_pCbPrimaryX->Check( rInput.aExistenceList[0] );
-    m_pCbPrimaryY->Check( rInput.aExistenceList[1] );
-    m_pCbPrimaryZ->Check( rInput.aExistenceList[2] );
-    m_pCbSecondaryX->Check( rInput.aExistenceList[3] );
-    m_pCbSecondaryY->Check( rInput.aExistenceList[4] );
-    m_pCbSecondaryZ->Check( rInput.aExistenceList[5] );
+    m_xCbPrimaryX->set_active( rInput.aExistenceList[0] );
+    m_xCbPrimaryY->set_active( rInput.aExistenceList[1] );
+    m_xCbPrimaryZ->set_active( rInput.aExistenceList[2] );
+    m_xCbSecondaryX->set_active( rInput.aExistenceList[3] );
+    m_xCbSecondaryY->set_active( rInput.aExistenceList[4] );
+    m_xCbSecondaryZ->set_active( rInput.aExistenceList[5] );
 
-    m_pCbPrimaryX->Enable( rInput.aPossibilityList[0] );
-    m_pCbPrimaryY->Enable( rInput.aPossibilityList[1] );
-    m_pCbPrimaryZ->Enable( rInput.aPossibilityList[2] );
-    m_pCbSecondaryX->Enable( rInput.aPossibilityList[3] );
-    m_pCbSecondaryY->Enable( rInput.aPossibilityList[4] );
-    m_pCbSecondaryZ->Enable( rInput.aPossibilityList[5] );
+    m_xCbPrimaryX->set_sensitive( rInput.aPossibilityList[0] );
+    m_xCbPrimaryY->set_sensitive( rInput.aPossibilityList[1] );
+    m_xCbPrimaryZ->set_sensitive( rInput.aPossibilityList[2] );
+    m_xCbSecondaryX->set_sensitive( rInput.aPossibilityList[3] );
+    m_xCbSecondaryY->set_sensitive( rInput.aPossibilityList[4] );
+    m_xCbSecondaryZ->set_sensitive( rInput.aPossibilityList[5] );
 }
-
-SchAxisDlg::~SchAxisDlg()
-{
-    disposeOnce();
-}
-
-void SchAxisDlg::dispose()
-{
-    m_pCbPrimaryX.clear();
-    m_pCbPrimaryY.clear();
-    m_pCbPrimaryZ.clear();
-    m_pCbSecondaryX.clear();
-    m_pCbSecondaryY.clear();
-    m_pCbSecondaryZ.clear();
-    ModalDialog::dispose();
-}
-
 
 void SchAxisDlg::getResult( InsertAxisOrGridDialogData& rOutput )
 {
-    rOutput.aExistenceList[0]=m_pCbPrimaryX->IsChecked();
-    rOutput.aExistenceList[1]=m_pCbPrimaryY->IsChecked();
-    rOutput.aExistenceList[2]=m_pCbPrimaryZ->IsChecked();
-    rOutput.aExistenceList[3]=m_pCbSecondaryX->IsChecked();
-    rOutput.aExistenceList[4]=m_pCbSecondaryY->IsChecked();
-    rOutput.aExistenceList[5]=m_pCbSecondaryZ->IsChecked();
+    rOutput.aExistenceList[0]=m_xCbPrimaryX->get_active();
+    rOutput.aExistenceList[1]=m_xCbPrimaryY->get_active();
+    rOutput.aExistenceList[2]=m_xCbPrimaryZ->get_active();
+    rOutput.aExistenceList[3]=m_xCbSecondaryX->get_active();
+    rOutput.aExistenceList[4]=m_xCbSecondaryY->get_active();
+    rOutput.aExistenceList[5]=m_xCbSecondaryZ->get_active();
 }
 
-SchGridDlg::SchGridDlg( vcl::Window* pParent, const InsertAxisOrGridDialogData& rInput )
-                : SchAxisDlg( pParent, rInput, false )//rInAttrs, b3D, bNet, bSecondaryX, bSecondaryY, false )
+SchGridDlg::SchGridDlg(weld::Window* pParent, const InsertAxisOrGridDialogData& rInput)
+    : SchAxisDlg(pParent, rInput, false) //rInAttrs, b3D, bNet, bSecondaryX, bSecondaryY, false )
 {
 }
 

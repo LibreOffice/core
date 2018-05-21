@@ -1487,6 +1487,15 @@ VclPtr<ChartWindow> ChartController::GetChartWindow()
     return dynamic_cast<ChartWindow*>(VCLUnoHelper::GetWindow(m_xViewWindow).get());
 }
 
+weld::Window* ChartController::GetChartFrame()
+{
+    // clients getting the naked VCL Window from UNO should always have the
+    // solar mutex (and keep it over the lifetime of this ptr), as VCL might
+    // might deinit otherwise
+    DBG_TESTSOLARMUTEX();
+    return Application::GetFrameWeld(m_xViewWindow);
+}
+
 bool ChartController::isAdditionalShapeSelected()
 {
     return m_aSelection.isAdditionalShapeSelected();
