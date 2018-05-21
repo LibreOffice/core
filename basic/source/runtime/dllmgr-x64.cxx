@@ -31,6 +31,7 @@
 
 #include <basic/sbx.hxx>
 #include <basic/sbxvar.hxx>
+#include "runtime.hxx"
 #include <osl/thread.h>
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
@@ -256,9 +257,15 @@ ErrCode marshal(
     std::vector< char > & blob, std::size_t offset, MarshalData & data)
 {
     OSL_ASSERT(variable != nullptr);
-    if (!(variable->GetFlags() & SbxFlagBits::Reference)) {
-        if ((variable->GetType() & SbxARRAY) == 0) {
-            switch (variable->GetType()) {
+
+    SbxDataType eVarType = variable->GetType();
+    bool bByVal = !(variable->GetFlags() & SbxFlagBits::Reference);
+    if( !bByVal && !SbiRuntime::isVBAEnabled() && eVarType == SbxSTRING )
+        bByVal = true;
+
+    if (bByVal) {
+        if ((eVarType & SbxARRAY) == 0) {
+            switch (eVarType) {
             case SbxINTEGER:
                 add(blob, variable->GetInteger(), outer ? 8 : 2, offset);
                 break;
@@ -307,8 +314,8 @@ ErrCode marshal(
             }
         }
     } else {
-        if ((variable->GetType() & SbxARRAY) == 0) {
-            switch (variable->GetType()) {
+        if ((eVarType & SbxARRAY) == 0) {
+            switch (eVarType) {
             case SbxINTEGER:
             case SbxLONG:
             case SbxSINGLE:
