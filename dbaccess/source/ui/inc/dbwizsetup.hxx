@@ -58,7 +58,7 @@ class ODbTypeWizDialogSetup final : public svt::RoadmapWizard , public IItemSetH
 {
 private:
     std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
-    SfxItemSet*             m_pOutSet;
+    std::unique_ptr<SfxItemSet> m_pOutSet;
     OUString                m_sURL;
     OUString                m_sOldURL;
     bool                    m_bIsConnectable : 1;
