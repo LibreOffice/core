@@ -29,6 +29,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <svx/ruler.hxx>
+#include <svx/svdotable.hxx>
 #include <editeng/numitem.hxx>
 #include <svx/rulritem.hxx>
 #include <sfx2/zoomitem.hxx>
@@ -932,7 +933,16 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
                     aPointItem.SetValue( aPos );
 
-                    aLRSpace.SetLeft( aPagePos.X() + maMarkRect.Left() );
+                    ::tools::Rectangle aParaRect(maMarkRect);
+                    if (pObj->GetObjIdentifier() == OBJ_TABLE)
+                    {
+                        sdr::table::SdrTableObj* pTable = static_cast<sdr::table::SdrTableObj*>(pObj);
+                        sdr::table::CellPos cellpos;
+                        pTable->getActiveCellPos(cellpos);
+                        pTable->getCellBounds(cellpos, aParaRect);
+                    }
+
+                    aLRSpace.SetLeft(aPagePos.X() + aParaRect.Left());
 
                     if ( aEditAttr.GetItemState( SDRATTR_TEXT_LEFTDIST ) == SfxItemState::SET )
                     {
@@ -941,7 +951,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                         aLRSpace.SetLeft( aLRSpace.GetLeft() + nLD );
                     }
 
-                    aLRSpace.SetRight( aRect.Right() + aPageSize.Width() - maMarkRect.Right() );
+                    aLRSpace.SetRight(aRect.Right() + aPageSize.Width() - aParaRect.Right());
                     aULSpace.SetUpper( aPagePos.Y() + maMarkRect.Top() );
                     aULSpace.SetLower( aRect.Bottom() + aPageSize.Height() - maMarkRect.Bottom() );
 
