@@ -320,8 +320,9 @@ void SwHTMLParser::NewField()
     case SwFieldIds::Time:
         {
             sal_uInt32 nNumFormat = 0;
-            sal_Int64 nTime = tools::Time( tools::Time::SYSTEM ).GetTime();
-            sal_Int32 nDate = Date( Date::SYSTEM ).GetDate();
+            DateTime aDateTime( DateTime::SYSTEM );
+            sal_Int64 nTime = aDateTime.GetTime();
+            sal_Int32 nDate = aDateTime.GetDate();
             sal_uInt16 nSub = 0;
             bool bValidFormat = false;
             HTMLNumFormatTableEntry * pFormatTable;
