@@ -36,7 +36,7 @@ namespace dbaui
 
     class OTableConnection : public vcl::Window
     {
-        std::vector<OConnectionLine*> m_vConnLine;
+        std::vector<std::unique_ptr<OConnectionLine>> m_vConnLine;
         TTableConnectionData::value_type
                                         m_pData;
         VclPtr<OJoinTableView>          m_pParent;
@@ -88,7 +88,7 @@ namespace dbaui
         tools::Rectangle   GetBoundingRect() const;
 
         const TTableConnectionData::value_type& GetData() const { return m_pData; }
-        const std::vector<OConnectionLine*>&  GetConnLineList() const { return m_vConnLine; }
+        const std::vector<std::unique_ptr<OConnectionLine>>&  GetConnLineList() const { return m_vConnLine; }
         OJoinTableView*                  GetParent() const { return m_pParent; }
         virtual void Draw(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
         using Window::Draw;

@@ -892,8 +892,8 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
             SvTreeListEntry* pFirstSourceVisible = pSourceBox->GetFirstEntryInView();
             SvTreeListEntry* pFirstDestVisible = pDestBox->GetFirstEntryInView();
 
-            const std::vector<OConnectionLine*>& rLines = pConn->GetConnLineList();
-            std::vector<OConnectionLine*>::const_reverse_iterator aIter = rLines.rbegin();
+            const std::vector<std::unique_ptr<OConnectionLine>>& rLines = pConn->GetConnLineList();
+            auto aIter = rLines.rbegin();
             for(;aIter != rLines.rend();++aIter)
             {
                 if ((*aIter)->IsValid())
@@ -1144,8 +1144,8 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
             {
                 if (rSelConnection)
                 {
-                    const std::vector<OConnectionLine*>& rLines = rSelConnection->GetConnLineList();
-                    std::vector<OConnectionLine*>::const_iterator aIter = std::find_if(rLines.begin(), rLines.end(),std::mem_fn(&OConnectionLine::IsValid));
+                    const std::vector<std::unique_ptr<OConnectionLine>>& rLines = rSelConnection->GetConnLineList();
+                    auto aIter = std::find_if(rLines.begin(), rLines.end(),std::mem_fn(&OConnectionLine::IsValid));
                     if( aIter != rLines.end() )
                         executePopup((*aIter)->getMidPoint(), rSelConnection);
                 }

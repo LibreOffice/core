@@ -60,7 +60,7 @@ void ORelationTableConnection::Draw(vcl::RenderContext& rRenderContext, const to
     long nTemp;
 
     const OConnectionLine* pTopLine = nullptr;
-    const std::vector<OConnectionLine*>& rConnLineList = GetConnLineList();
+    const std::vector<std::unique_ptr<OConnectionLine>>& rConnLineList = GetConnLineList();
 
     for (auto const& elem : rConnLineList)
     {
@@ -71,7 +71,7 @@ void ORelationTableConnection::Draw(vcl::RenderContext& rRenderContext, const to
             if(nTemp < nTop)
             {
                 nTop = nTemp;
-                pTopLine = elem;
+                pTopLine = elem.get();
             }
         }
     }
