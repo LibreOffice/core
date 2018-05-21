@@ -353,10 +353,10 @@ void SfxObjectShell::CheckIn( )
     {
         uno::Reference< document::XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY_THROW );
         // Pop up dialog to ask for comment and major
-        ScopedVclPtrInstance< SfxCheckinDialog > checkinDlg(&GetFrame( )->GetWindow( ));
-        if ( checkinDlg->Execute( ) == RET_OK )
+        SfxCheckinDialog checkinDlg(GetFrame()->GetWindow().GetFrameWeld());
+        if (checkinDlg.run() == RET_OK)
         {
-            xCmisDoc->checkIn( checkinDlg->IsMajor(), checkinDlg->GetComment() );
+            xCmisDoc->checkIn(checkinDlg.IsMajor(), checkinDlg.GetComment());
             uno::Reference< util::XModifiable > xModifiable( GetModel( ), uno::UNO_QUERY );
             if ( xModifiable.is( ) )
                 xModifiable->setModified( false );
