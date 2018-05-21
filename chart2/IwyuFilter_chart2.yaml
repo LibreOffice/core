@@ -185,4 +185,49 @@ blacklist:
     - com/sun/star/beans/XPropertySet.hpp
     - cppuhelper/propshlp.hxx
     - com/sun/star/beans/XPropertyState.hpp
-
+    chart2/source/model/inc/BaseCoordinateSystem.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XChartTypeContainer.hpp
+    - com/sun/star/chart2/XCoordinateSystem.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XModifyBroadcaster.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    chart2/source/model/inc/ChartTypeManager.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XChartTypeManager.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/model/inc/DataSeries.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XDataSeries.hpp
+    - com/sun/star/chart2/XRegressionCurveContainer.hpp
+    - com/sun/star/chart2/data/XDataSink.hpp
+    - com/sun/star/chart2/data/XDataSource.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XModifyBroadcaster.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    chart2/source/model/inc/Diagram.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart/X3DDefaultSetter.hpp
+    - com/sun/star/chart2/XCoordinateSystemContainer.hpp
+    - com/sun/star/chart2/XDiagram.hpp
+    - com/sun/star/chart2/XTitled.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XModifyBroadcaster.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    chart2/source/model/inc/StockBar.hxx:
+    # base class has to be a complete type
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XModifyBroadcaster.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    chart2/source/model/inc/XMLFilter.hxx:
+    # base class has to be a complete type
+    - com/sun/star/document/XExporter.hpp
+    - com/sun/star/document/XFilter.hpp
+    - com/sun/star/document/XImporter.hpp
+    - com/sun/star/io/XActiveDataSource.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/lang/XServiceInfo.hpp

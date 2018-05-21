@@ -19,14 +19,12 @@
 #ifndef INCLUDED_CHART2_SOURCE_MODEL_INC_CHARTTYPEMANAGER_HXX
 #define INCLUDED_CHART2_SOURCE_MODEL_INC_CHARTTYPEMANAGER_HXX
 
-#include <OPropertySet.hxx>
-#include <MutexContainer.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-
 #include <com/sun/star/chart2/XChartTypeManager.hpp>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace chart
 {

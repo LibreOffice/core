@@ -20,6 +20,7 @@
 #include <PolarCoordinateSystem.hxx>
 #include <servicenames_coosystems.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace ::com::sun::star;
 

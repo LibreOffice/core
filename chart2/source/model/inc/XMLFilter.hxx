@@ -20,18 +20,19 @@
 #define INCLUDED_CHART2_SOURCE_MODEL_INC_XMLFILTER_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/xml/sax/XWriter.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/errcode.hxx>
 
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XWriter; } } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiComponentFactory; } } } }
 
 namespace com { namespace sun { namespace star {
 namespace embed
