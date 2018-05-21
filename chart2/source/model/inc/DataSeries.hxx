@@ -27,10 +27,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 // helper classes
 #include <cppuhelper/implbase.hxx>
@@ -42,6 +39,8 @@
 
 #include <MutexContainer.hxx>
 #include <OPropertySet.hxx>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
 
 namespace chart
 {
