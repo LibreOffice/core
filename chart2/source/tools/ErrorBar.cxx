@@ -22,6 +22,7 @@
 #include <EventListenerHelper.hxx>
 #include <PropertyHelper.hxx>
 #include <CloneHelper.hxx>
+#include <ModifyListenerHelper.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>

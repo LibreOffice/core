@@ -21,16 +21,12 @@
 
 // helper classes
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/weak.hxx>
 
 // interfaces and types
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
-#include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/style/XStyleSupplier.hpp>
-#include <osl/mutex.hxx>
 #include "charttoolsdllapi.hxx"
 
 #include <memory>

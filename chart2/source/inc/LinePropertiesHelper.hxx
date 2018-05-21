@@ -23,6 +23,7 @@
 #include "FastPropertyIdRanges.hxx"
 #include "charttoolsdllapi.hxx"
 #include <com/sun/star/beans/Property.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <vector>
 

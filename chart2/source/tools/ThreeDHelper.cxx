@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/ShadeMode.hpp>
 #include <tools/diagnose_ex.h>
 
 namespace chart

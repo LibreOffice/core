@@ -29,7 +29,6 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
-#include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b3dpoint.hxx>
@@ -37,8 +36,6 @@
 #include "charttoolsdllapi.hxx"
 
 #include <vector>
-#include <algorithm>
-#include <iterator>
 
 namespace chart
 {

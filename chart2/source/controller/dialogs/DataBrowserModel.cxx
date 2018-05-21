@@ -45,6 +45,7 @@
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <tools/diagnose_ex.h>
+#include <comphelper/property.hxx>
 
 #include <rtl/math.hxx>
 

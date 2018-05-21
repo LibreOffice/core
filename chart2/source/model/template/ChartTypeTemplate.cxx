@@ -37,6 +37,7 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <tools/diagnose_ex.h>
+#include <comphelper/property.hxx>
 
 #include <algorithm>
 #include <iterator>

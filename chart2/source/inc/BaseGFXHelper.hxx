@@ -20,9 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_INC_BASEGFXHELPER_HXX
 
 #include <basegfx/matrix/b3dhommatrix.hxx>
-#include <basegfx/polygon/b3dpolypolygon.hxx>
-#include <basegfx/polygon/b3dpolygon.hxx>
-#include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/vector/b3dvector.hxx>

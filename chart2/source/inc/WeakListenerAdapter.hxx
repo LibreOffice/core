@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_WEAKLISTENERADAPTER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_WEAKLISTENERADAPTER_HXX
 
-#include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
