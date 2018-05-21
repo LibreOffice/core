@@ -4168,6 +4168,36 @@ struct ScDependantsCalculator
         return true;
     }
 
+    // Checks if the doubleref engulfs all of formula group cells
+    // Note : does not check if there is a partial overlap, that can be done by calling
+    //        isSelfReference[Absolute|Relative]() on both the start and end of the double ref
+    bool isDoubleRefSpanGroupRange(const ScRange& rAbs, bool bIsRef1RowRel, bool bIsRef2RowRel)
+    {
+        if (rAbs.aStart.Col() > mrPos.Col() || rAbs.aEnd.Col() < mrPos.Col())
+            return false;
+
+        SCROW nStartRow    = mrPos.Row();
+        SCROW nEndRow      = nStartRow + mnLen - 1;
+        SCROW nRefStartRow = rAbs.aStart.Row();
+        SCROW nRefEndRow   = rAbs.aEnd.Row();
+
+        if (bIsRef1RowRel && bIsRef2RowRel &&
+            ((nRefStartRow <= nStartRow && nRefEndRow >= nEndRow) ||
+             ((nRefStartRow + mnLen - 1) <= nStartRow &&
+              (nRefEndRow + mnLen - 1) >= nEndRow)))
+            return true;
+
+        if (!bIsRef1RowRel && nRefStartRow <= nStartRow &&
+            (nRefEndRow >= nEndRow || (nRefEndRow + mnLen - 1) >= nEndRow))
+            return true;
+
+        if (!bIsRef2RowRel &&
+            nRefStartRow <= nStartRow && nRefEndRow >= nEndRow)
+            return true;
+
+        return false;
+    }
+
     // FIXME: another copy-paste
     SCROW trimLength(SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCROW nRowLen)
     {
@@ -4247,8 +4277,9 @@ struct ScDependantsCalculator
                     if (aRef.Ref1.Tab() != aRef.Ref2.Tab())
                         return false;
 
+                    bool bIsRef1RowRel = aRef.Ref1.IsRowRel();
                     // Check for self reference.
-                    if (aRef.Ref1.IsRowRel())
+                    if (bIsRef1RowRel)
                     {
                         if (isSelfReferenceRelative(aAbs.aStart, aRef.Ref1.Row()))
                             return false;
@@ -4256,12 +4287,16 @@ struct ScDependantsCalculator
                     else if (isSelfReferenceAbsolute(aAbs.aStart))
                         return false;
 
-                    if (aRef.Ref2.IsRowRel())
+                    bool bIsRef2RowRel = aRef.Ref2.IsRowRel();
+                    if (bIsRef2RowRel)
                     {
                         if (isSelfReferenceRelative(aAbs.aEnd, aRef.Ref2.Row()))
                             return false;
                     }
                     else if (isSelfReferenceAbsolute(aAbs.aEnd))
+                        return false;
+
+                    if (isDoubleRefSpanGroupRange(aAbs, bIsRef1RowRel, bIsRef2RowRel))
                         return false;
 
                     // Row reference is relative.
