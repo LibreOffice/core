@@ -106,7 +106,7 @@ private:
     css::uno::Reference< css::drawing::XShape > mxOrigin;
     SdrPathObj* mpPathObj;
     css::awt::Point maOriginPos;
-    SdrMark* mpMark;
+    std::unique_ptr<SdrMark> mpMark;
     OUString msLastPath;
     bool mbInUpdatePath;
 };
