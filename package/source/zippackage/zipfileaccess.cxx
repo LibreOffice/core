@@ -25,6 +25,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <zipfileaccess.hxx>
 #include <ZipEnumeration.hxx>
@@ -282,11 +283,11 @@ uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
     {
         throw;
     }
-    catch (const uno::Exception& e)
+    catch (const uno::Exception&)
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetException( "This package is unusable!",
-                  static_cast < OWeakObject * > ( this ),
-                                        makeAny(e));
+                  static_cast < OWeakObject * > ( this ), anyEx);
     }
 
     if ( !xEntryStream.is() )

@@ -342,9 +342,11 @@ void UpdateInstallDialog::Thread::downloadExtensions()
         try
         {
             dp_misc::create_folder(nullptr, destFolder, m_updateCmdEnv.get() );
-        } catch (const cssu::Exception & e)
+        } catch (const cssu::Exception &)
         {
-            throw cssu::Exception(e.Message + " No extensions will be installed.", nullptr);
+            css::uno::Any anyEx = cppu::getCaughtException();
+            throw css::lang::WrappedTargetException( "No extensions will be installed",
+                            nullptr, anyEx );
         }
 
 

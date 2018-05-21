@@ -21,6 +21,7 @@
 #include "vbaaxis.hxx"
 #include "vbachart.hxx"
 #include <basic/sberrors.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XlAxisType.hpp>
 #include <ooo/vba/excel/XlAxisGroup.hpp>
@@ -124,12 +125,13 @@ public:
             AxesCoordinate dIndexes = mCoordinates[ Index ];
             return uno::makeAny( ScVbaAxes::createAxis( mxChart, mxContext, dIndexes.second, dIndexes.first ) );
         }
-        catch (const css::script::BasicErrorException& e)
+        catch (const css::script::BasicErrorException&)
         {
+            css::uno::Any anyEx = cppu::getCaughtException();
             throw css::lang::WrappedTargetException(
                    "Error Getting Index!",
                    static_cast < OWeakObject * > ( this ),
-                   makeAny( e ) );
+                   anyEx );
         }
     }
     // XElementAccess

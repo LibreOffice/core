@@ -2373,7 +2373,9 @@ void SAL_CALL SfxBaseModel::updateCmisProperties( const Sequence< document::Cmis
         }
         catch (const Exception & e)
         {
-            throw RuntimeException( e.Message, e.Context );
+            css::uno::Any anyEx = cppu::getCaughtException();
+            throw lang::WrappedTargetRuntimeException( e.Message,
+                            e.Context, anyEx );
         }
     }
 
@@ -2406,7 +2408,9 @@ void SAL_CALL SfxBaseModel::checkOut(  )
         }
         catch ( const Exception & e )
         {
-            throw RuntimeException( e.Message, e.Context );
+            css::uno::Any anyEx = cppu::getCaughtException();
+            throw lang::WrappedTargetRuntimeException( e.Message,
+                            e.Context, anyEx );
         }
     }
 }
@@ -2430,7 +2434,9 @@ void SAL_CALL SfxBaseModel::cancelCheckOut(  )
         }
         catch ( const Exception & e )
         {
-            throw RuntimeException( e.Message, e.Context );
+            css::uno::Any anyEx = cppu::getCaughtException();
+            throw lang::WrappedTargetRuntimeException( e.Message,
+                            e.Context, anyEx );
         }
     }
 }
@@ -2471,7 +2477,9 @@ void SAL_CALL SfxBaseModel::checkIn( sal_Bool bIsMajor, const OUString& rMessage
         }
         catch ( const Exception & e )
         {
-            throw RuntimeException( e.Message, e.Context );
+            css::uno::Any anyEx = cppu::getCaughtException();
+            throw lang::WrappedTargetRuntimeException( e.Message,
+                            e.Context, anyEx );
         }
     }
 }
@@ -2493,7 +2501,9 @@ uno::Sequence< document::CmisVersion > SAL_CALL SfxBaseModel::getAllVersions( )
         }
         catch ( const Exception & e )
         {
-            throw RuntimeException( e.Message, e.Context );
+            css::uno::Any anyEx = cppu::getCaughtException();
+            throw lang::WrappedTargetRuntimeException( e.Message,
+                            e.Context, anyEx );
         }
     }
     return aVersions;
