@@ -302,9 +302,12 @@ OUString const & CachedContentResultSet::CCRS_Cache
         }
         return *o3tl::doAccess<OUString>(getRowAny(nRow));
     }
-    catch(const SQLException&)
+    catch(const SQLException& ex)
     {
-        throw RuntimeException();
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException( ex.Message,
+                        css::uno::Reference< css::uno::XInterface >(),
+                        anyEx );
     }
 }
 
@@ -323,9 +326,12 @@ Reference< XContentIdentifier > CachedContentResultSet::CCRS_Cache
         }
         return *o3tl::doAccess<Reference<XContentIdentifier>>(getRowAny(nRow));
     }
-    catch(const SQLException&)
+    catch(const SQLException& ex)
     {
-        throw RuntimeException();
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException( ex.Message,
+                        css::uno::Reference< css::uno::XInterface >(),
+                        anyEx );
     }
 }
 
@@ -344,9 +350,12 @@ Reference< XContent > CachedContentResultSet::CCRS_Cache
         }
         return *o3tl::doAccess<Reference<XContent>>(getRowAny(nRow));
     }
-    catch (const SQLException&)
+    catch (const SQLException& ex)
     {
-        throw RuntimeException();
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException( ex.Message,
+                        css::uno::Reference< css::uno::XInterface >(),
+                        anyEx );
     }
 }
 

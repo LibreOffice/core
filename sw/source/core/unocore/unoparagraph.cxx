@@ -20,6 +20,7 @@
 #include <unoparagraph.hxx>
 
 #include <comphelper/interfacecontainer2.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <cmdid.h>
@@ -43,6 +44,7 @@
 #include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 
@@ -577,13 +579,15 @@ SwXParagraph::getPropertyValues(const uno::Sequence< OUString >& rPropertyNames)
     }
     catch (beans::UnknownPropertyException &)
     {
-        throw uno::RuntimeException("Unknown property exception caught",
-            static_cast<cppu::OWeakObject *>(this));
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException("Unknown property exception caught",
+                static_cast < cppu::OWeakObject * > ( this ), anyEx );
     }
     catch (lang::WrappedTargetException &)
     {
-        throw uno::RuntimeException("WrappedTargetException caught",
-            static_cast<cppu::OWeakObject *>(this));
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException("WrappedTargetException caught",
+                static_cast < cppu::OWeakObject * > ( this ), anyEx );
     }
 
     return aValues;

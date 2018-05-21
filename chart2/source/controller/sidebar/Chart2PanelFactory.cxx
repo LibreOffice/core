@@ -26,6 +26,7 @@
 #include <rtl/ref.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -111,9 +112,10 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
     }
     catch (const css::uno::Exception& e)
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
-            "ChartPanelFactory::createUIElement exception",
-            nullptr, css::uno::Any(e));
+                    "ChartPanelFactory::createUIElement",
+                    nullptr, anyEx );
     }
 
     return xElement;

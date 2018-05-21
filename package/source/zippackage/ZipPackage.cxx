@@ -1039,10 +1039,11 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     }
     catch ( const css::io::IOException & r )
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw WrappedTargetException(
                 THROW_WHERE "Error adding mimetype to the ZipOutputStream!",
                 static_cast < OWeakObject * > ( this ),
-                makeAny( r ) );
+                anyEx );
     }
 }
 
@@ -1434,8 +1435,9 @@ void SAL_CALL ZipPackage::commitChanges()
     }
     catch (const ucb::ContentCreationException& r)
     {
+       css::uno::Any anyEx = cppu::getCaughtException();
         throw WrappedTargetException(THROW_WHERE "Temporary file should be creatable!",
-                    static_cast < OWeakObject * > ( this ), makeAny ( r ) );
+                    static_cast < OWeakObject * > ( this ), anyEx );
     }
     if ( xTempInStream.is() )
     {
@@ -1447,8 +1449,9 @@ void SAL_CALL ZipPackage::commitChanges()
         }
         catch( const uno::Exception& r )
         {
+            css::uno::Any anyEx = cppu::getCaughtException();
             throw WrappedTargetException(THROW_WHERE "Temporary file should be seekable!",
-                    static_cast < OWeakObject * > ( this ), makeAny ( r ) );
+                    static_cast < OWeakObject * > ( this ), anyEx );
         }
 
         try
@@ -1458,8 +1461,9 @@ void SAL_CALL ZipPackage::commitChanges()
         }
         catch( const io::IOException& r )
         {
+            css::uno::Any anyEx = cppu::getCaughtException();
             throw WrappedTargetException(THROW_WHERE "Temporary file should be connectable!",
-                    static_cast < OWeakObject * > ( this ), makeAny ( r ) );
+                    static_cast < OWeakObject * > ( this ), anyEx );
         }
 
         if ( m_eMode == e_IMode_XStream )
@@ -1486,8 +1490,9 @@ void SAL_CALL ZipPackage::commitChanges()
             }
             catch( const uno::Exception& r )
             {
+                css::uno::Any anyEx = cppu::getCaughtException();
                 throw WrappedTargetException(THROW_WHERE "This package is read only!",
-                        static_cast < OWeakObject * > ( this ), makeAny ( r ) );
+                        static_cast < OWeakObject * > ( this ), anyEx );
             }
 
             try
@@ -1584,10 +1589,11 @@ void SAL_CALL ZipPackage::commitChanges()
                     if ( bCanBeCorrupted )
                         DisconnectFromTargetAndThrowException_Impl( xTempInStream );
 
+                    css::uno::Any anyEx = cppu::getCaughtException();
                     throw WrappedTargetException(
                                                 THROW_WHERE "This package may be read only!",
                                                 static_cast < OWeakObject * > ( this ),
-                                                makeAny ( r ) );
+                                                anyEx );
                 }
             }
         }

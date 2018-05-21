@@ -37,6 +37,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -255,8 +257,10 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
     catch ( const deployment::DeploymentException & ) { return true; }
     catch ( const ucb::CommandFailedException & ) { return true; }
     catch ( const ucb::CommandAbortedException & ) { return true; }
-    catch ( const lang::IllegalArgumentException & e ) {
-        throw uno::RuntimeException( e.Message, e.Context );
+    catch ( const lang::IllegalArgumentException & ex ) {
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException( ex.Message,
+                        nullptr, anyEx );
     }
 
 #ifdef DEBUG

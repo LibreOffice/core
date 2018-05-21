@@ -41,6 +41,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/functional.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/svapp.hxx>
@@ -1138,8 +1139,9 @@ void DlgEdObj::_propertyChange( const  css::beans::PropertyChangeEvent& evt )
                 }
                 catch (container::NoSuchElementException const& e)
                 {
+                    css::uno::Any anyEx = cppu::getCaughtException();
                     throw lang::WrappedTargetRuntimeException("", nullptr,
-                            uno::Any(e));
+                            anyEx);
                 }
             }
         }
