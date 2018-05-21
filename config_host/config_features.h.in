@@ -113,7 +113,8 @@
  *
  * Prevents attempts by LibreOffice to write into its installation. That means
  * at least that no "system-wide" extensions can be added, if the location for
- * them is the traditional one. Experimental work in progress, not actually implemented.
+ * them is the traditional one right in the middle of the installation.
+ * Probably not completely implemented.
  */
 
 #define HAVE_FEATURE_READONLY_INSTALLSET 0

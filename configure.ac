@@ -1430,8 +1430,8 @@ AC_ARG_WITH(package-version,
 libo_FUZZ_ARG_ENABLE(readonly-installset,
     AS_HELP_STRING([--enable-readonly-installset],
         [Prevents any attempts by LibreOffice to write into its installation. That means
-         at least that no "system-wide" extensions can be added. Experimental work in
-         progress.]),
+         at least that no "system-wide" extensions can be added. Partly experimental work in
+         progress, probably not fully implemented (but is useful for sandboxed macOS builds).]),
 ,)
 
 libo_FUZZ_ARG_ENABLE(postgresql-sdbc,
