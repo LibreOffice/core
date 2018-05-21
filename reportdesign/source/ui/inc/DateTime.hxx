@@ -19,11 +19,7 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DATETIME_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DATETIME_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/report/XSection.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -38,23 +34,20 @@ class OReportController;
 |* Groups and Sorting dialog
 |*
 \************************************************************************/
-class ODateTimeDialog : public ModalDialog
+class ODateTimeDialog : public weld::GenericDialogController
 {
-    VclPtr<CheckBox>                                m_pDate;
-    VclPtr<FixedText>                               m_pFTDateFormat;
-    VclPtr<ListBox>                                 m_pDateListBox;
-    VclPtr<CheckBox>                                m_pTime;
-    VclPtr<FixedText>                               m_pFTTimeFormat;
-    VclPtr<ListBox>                                 m_pTimeListBox;
-    VclPtr<OKButton>                                m_pPB_OK;
-
-    svt::ControlDependencyManager           m_aDateControlling;
-    svt::ControlDependencyManager           m_aTimeControlling;
-
     ::rptui::OReportController*             m_pController;
     css::uno::Reference< css::report::XSection>
                                             m_xHoldAlive;
     css::lang::Locale                       m_nLocale;
+
+    std::unique_ptr<weld::CheckButton> m_xDate;
+    std::unique_ptr<weld::Label> m_xFTDateFormat;
+    std::unique_ptr<weld::ComboBoxText> m_xDateListBox;
+    std::unique_ptr<weld::CheckButton> m_xTime;
+    std::unique_ptr<weld::Label> m_xFTTimeFormat;
+    std::unique_ptr<weld::ComboBoxText> m_xTimeListBox;
+    std::unique_ptr<weld::Button> m_xPB_OK;
 
     /** returns the format string
     *
@@ -70,19 +63,17 @@ class ODateTimeDialog : public ModalDialog
     */
     sal_Int32 getFormatKey(bool _bDate) const;
 
-    DECL_LINK( CBClickHdl, Button*, void );
+    DECL_LINK(CBClickHdl, weld::ToggleButton&, void);
     ODateTimeDialog(const ODateTimeDialog&) = delete;
     void operator =(const ODateTimeDialog&) = delete;
 
     // fill methods
     void InsertEntry(sal_Int16 _nNumberFormatId);
 public:
-    ODateTimeDialog( vcl::Window* pParent
-                        ,const css::uno::Reference< css::report::XSection>& _xHoldAlive
-                        ,::rptui::OReportController* _pController);
-    virtual ~ODateTimeDialog() override;
-    virtual void dispose() override;
-    virtual short   Execute() override;
+    ODateTimeDialog(weld::Window* pParent,
+                     const css::uno::Reference< css::report::XSection>& _xHoldAlive,
+                     ::rptui::OReportController* _pController);
+    short   execute();
 };
 
 } // namespace rptui
