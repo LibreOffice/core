@@ -37,6 +37,7 @@
 // InvocationToAllListenerMapper
 #include <com/sun/star/script/XInvocation.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -510,9 +511,10 @@ Any SAL_CALL FilterAllListenerImpl::approveFiring( const AllEventObject& Event )
                 convertToEventReturn( aRet, aRetType );
             }
         }
-        catch( const CannotConvertException& e )
+        catch( const CannotConvertException& )
         {
-            throw InvocationTargetException( OUString(), Reference< XInterface >(), Any(&e, cppu::UnoType<CannotConvertException>::get()) );
+            css::uno::Any anyEx = cppu::getCaughtException();
+            throw InvocationTargetException( OUString(), Reference< XInterface >(), anyEx );
         }
     }
     return aRet;

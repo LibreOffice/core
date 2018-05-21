@@ -19,6 +19,7 @@
 #include <zlib.h>
 
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -38,6 +39,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 
 using namespace css;
 using namespace css::xml::dom;
@@ -593,9 +595,11 @@ namespace
             {
                 return;
             }
-            catch (const lang::IllegalArgumentException & e)
+            catch (const lang::IllegalArgumentException & ex)
             {
-                throw uno::RuntimeException(e.Message, e.Context);
+                css::uno::Any anyEx = cppu::getCaughtException();
+                throw css::lang::WrappedTargetRuntimeException( ex.Message,
+                                ex.Context, anyEx );
             }
 
             for (sal_Int32 i = 0; i < xAllPackages.getLength(); ++i)

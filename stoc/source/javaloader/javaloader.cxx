@@ -29,6 +29,8 @@
 #include <uno/lbnames.h>
 #include <uno/mapping.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 
 #ifdef LINUX
 #undef minor
@@ -252,7 +254,10 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
         }
         catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
         {
-            throw RuntimeException("jvmaccess::VirtualMachine::AttachGuard::CreationException");
+            css::uno::Any anyEx = cppu::getCaughtException();
+            throw css::lang::WrappedTargetRuntimeException(
+                "jvmaccess::VirtualMachine::AttachGuard::CreationException",
+                static_cast< cppu::OWeakObject * >(this), anyEx );
         }
 
         // set the service manager at the javaloader

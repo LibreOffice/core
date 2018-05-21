@@ -19,6 +19,7 @@ $(eval $(call gb_Library_use_api,jvmaccess,\
 
 $(eval $(call gb_Library_use_libraries,jvmaccess,\
     cppu \
+    cppuhelper \
     sal \
     salhelper \
 ))

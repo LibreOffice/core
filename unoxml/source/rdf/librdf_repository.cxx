@@ -55,6 +55,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -721,8 +722,10 @@ void SAL_CALL librdf_NamedGraph::clear()
     const OUString contextU( m_xName->getStringValue() );
     try {
         m_pRep->clearGraph_NoLock(contextU);
-    } catch (lang::IllegalArgumentException &) {
-        throw uno::RuntimeException();
+    } catch (lang::IllegalArgumentException const & ex) {
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw lang::WrappedTargetRuntimeException( ex.Message,
+                        *this, anyEx );
     }
 }
 
@@ -851,9 +854,10 @@ uno::Reference< rdf::XBlankNode > SAL_CALL librdf_Repository::createBlankNode()
     try {
         return rdf::BlankNode::create(m_xContext, nodeID);
     } catch (const lang::IllegalArgumentException & iae) {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 "librdf_Repository::createBlankNode: "
-                "illegal blank node label", *this, uno::makeAny(iae));
+                "illegal blank node label", *this, anyEx);
     }
 }
 
@@ -1457,9 +1461,10 @@ void SAL_CALL librdf_Repository::setStatementRDFa(
                 uno::UNO_QUERY_THROW);
         }
     } catch (const lang::IllegalArgumentException & iae) {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 "librdf_Repository::setStatementRDFa: "
-                "cannot create literal", *this, uno::makeAny(iae));
+                "cannot create literal", *this, anyEx);
     }
 
     std::shared_ptr<librdf_TypeConverter::Resource> const pSubject(
@@ -1497,9 +1502,10 @@ void SAL_CALL librdf_Repository::setStatementRDFa(
     }
     catch (const container::NoSuchElementException& e)
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 "librdf_Repository::setStatementRDFa: "
-                "cannot addStatementGraph", *this, uno::makeAny(e));
+                "cannot addStatementGraph", *this, anyEx);
     }
 }
 
@@ -1540,9 +1546,10 @@ librdf_Repository::getStatementRDFa(
         xXmlId.set( rdf::URI::create(m_xContext, s_nsOOo + sXmlId),
             uno::UNO_QUERY_THROW);
     } catch (const lang::IllegalArgumentException & iae) {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 "librdf_Repository::getStatementRDFa: "
-                "cannot create URI for XML ID", *this, uno::makeAny(iae));
+                "cannot create URI for XML ID", *this, anyEx);
     }
 
     ::std::vector< rdf::Statement > ret;
@@ -1563,9 +1570,10 @@ librdf_Repository::getStatementRDFa(
     }
     catch (const container::NoSuchElementException& e)
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 "librdf_Repository::getStatementRDFa: "
-                "cannot getStatementsGraph", *this, uno::makeAny(e));
+                "cannot getStatementsGraph", *this, anyEx);
     }
 
     ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
@@ -2197,9 +2205,10 @@ librdf_TypeConverter::convertToXURI(librdf_uri* i_pURI) const
     try {
         return rdf::URI::create(m_xContext, uriU);
     } catch (const lang::IllegalArgumentException & iae) {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 "librdf_TypeConverter::convertToXURI: "
-                "illegal uri", m_rRep, uno::makeAny(iae));
+                "illegal uri", m_rRep, anyEx);
     }
 }
 
@@ -2239,9 +2248,10 @@ librdf_TypeConverter::convertToXResource(librdf_node* i_pNode) const
             return uno::Reference<rdf::XResource>(
                 rdf::BlankNode::create(m_xContext, labelU), uno::UNO_QUERY);
         } catch (const lang::IllegalArgumentException & iae) {
+            css::uno::Any anyEx = cppu::getCaughtException();
             throw lang::WrappedTargetRuntimeException(
                     "librdf_TypeConverter::convertToXResource: "
-                    "illegal blank node label", m_rRep, uno::makeAny(iae));
+                    "illegal blank node label", m_rRep, anyEx);
         }
     } else {
         return uno::Reference<rdf::XResource>(convertToXURI(i_pNode),
