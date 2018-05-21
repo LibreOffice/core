@@ -129,7 +129,7 @@ private:
         responsible to determine the visible shapes and create on demand the
         accessible objects representing them.
     */
-    ChildrenManager* mpChildrenManager;
+    std::unique_ptr<ChildrenManager> mpChildrenManager;
 
     // This method is called from the component helper base class while
     // disposing.
