@@ -19,9 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_INSERTAXIS_GRID_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_INSERTAXIS_GRID_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 namespace chart
@@ -40,21 +38,18 @@ struct InsertAxisOrGridDialogData
 |* insert Axis dialog (also base for grid dialog)
 |*
 \************************************************************************/
-class SchAxisDlg : public ModalDialog
+class SchAxisDlg : public weld::GenericDialogController
 {
 protected:
-    VclPtr<CheckBox> m_pCbPrimaryX;
-    VclPtr<CheckBox> m_pCbPrimaryY;
-    VclPtr<CheckBox> m_pCbPrimaryZ;
-    VclPtr<CheckBox> m_pCbSecondaryX;
-    VclPtr<CheckBox> m_pCbSecondaryY;
-    VclPtr<CheckBox> m_pCbSecondaryZ;
+    std::unique_ptr<weld::CheckButton> m_xCbPrimaryX;
+    std::unique_ptr<weld::CheckButton> m_xCbPrimaryY;
+    std::unique_ptr<weld::CheckButton> m_xCbPrimaryZ;
+    std::unique_ptr<weld::CheckButton> m_xCbSecondaryX;
+    std::unique_ptr<weld::CheckButton> m_xCbSecondaryY;
+    std::unique_ptr<weld::CheckButton> m_xCbSecondaryZ;
 
 public:
-    SchAxisDlg(vcl::Window* pParent, const InsertAxisOrGridDialogData& rInput, bool bAxisDlg=true);
-    virtual ~SchAxisDlg() override;
-    virtual void dispose() override;
-
+    SchAxisDlg(weld::Window* pParent, const InsertAxisOrGridDialogData& rInput, bool bAxisDlg = true);
     void getResult( InsertAxisOrGridDialogData& rOutput );
 };
 
@@ -66,7 +61,7 @@ public:
 class SchGridDlg : public SchAxisDlg
 {
 public:
-    SchGridDlg( vcl::Window* pParent, const InsertAxisOrGridDialogData& rInput );
+    SchGridDlg(weld::Window* pParent, const InsertAxisOrGridDialogData& rInput);
 };
 
 } //namespace chart

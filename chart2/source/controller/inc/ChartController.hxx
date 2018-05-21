@@ -321,6 +321,7 @@ public:
     DrawModelWrapper* GetDrawModelWrapper();
     DrawViewWrapper* GetDrawViewWrapper();
     VclPtr<ChartWindow> GetChartWindow();
+    weld::Window* GetChartFrame();
     bool isAdditionalShapeSelected();
     void SetAndApplySelection(const css::uno::Reference<css::drawing::XShape>& rxShape);
     void StartTextEdit( const Point* pMousePixel = nullptr );
