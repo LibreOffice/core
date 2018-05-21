@@ -42,6 +42,7 @@
 #include <unotools/charclass.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/property.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <vector>

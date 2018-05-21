@@ -1,0 +1,188 @@
+---
+assumeFilename: chart2/source/controller/main/ChartWindow.cxx
+blacklist:
+    chart2/source/inc/BaseGFXHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/Rectangle.hpp
+    - com/sun/star/drawing/PolyPolygonShape3D.hpp
+    chart2/source/inc/CharacterProperties.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/Property.hpp
+    - com/sun/star/beans/XMultiPropertySet.hpp
+    chart2/source/inc/CachedDataSequence.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/chart2/data/XDataSequence.hpp
+    - com/sun/star/chart2/data/XNumericalDataSequence.hpp
+    - com/sun/star/chart2/data/XTextualDataSequence.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/uno/XComponentContext.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XModifyBroadcaster.hpp
+    chart2/source/inc/ColorPerPointHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/inc/CommonConverters.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/Rectangle.hpp
+    - com/sun/star/chart2/data/XDataSequence.hpp
+    - com/sun/star/drawing/PolyPolygonBezierCoords.hpp
+    chart2/source/inc/ColorPerPointHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/inc/ConfigColorScheme.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XColorScheme.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/inc/chartview/DataPointSymbolSupplier.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/drawing/Direction3D.hpp
+    - com/sun/star/drawing/XShapes.hpp
+    chart2/source/inc/chartview/ExplicitScaleValues.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart/TimeUnit.hpp
+    - com/sun/star/chart2/AxisType.hpp
+    - com/sun/star/chart2/XScaling.hpp
+    chart2/source/inc/chartview/DrawModelWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/XDrawPage.hpp
+    - com/sun/star/frame/XModel.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - svx/svdobj.hxx
+    chart2/source/inc/DataSource.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/data/XDataSink.hpp
+    - com/sun/star/chart2/data/XDataSource.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/inc/DisposeHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/uno/Reference.hxx
+    chart2/source/inc/EventListenerHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XEventListener.hpp
+    chart2/source/inc/ErrorBar.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/chart2/data/XDataSink.hpp
+    - com/sun/star/chart2/data/XDataSource.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/uno/Any.hxx
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XModifyBroadcaster.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    chart2/source/inc/FormattedStringHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/chart2/XFormattedString2.hpp
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/inc/FillProperties.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/Property.hpp
+    chart2/source/inc/InternalData.hxx:
+    # base class has to be a complete type
+    - com/sun/star/uno/Sequence.hxx
+    chart2/source/inc/LifeTime.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/util/CloseVetoException.hpp
+    - com/sun/star/util/XCloseListener.hpp
+    - com/sun/star/util/XCloseable.hpp
+    - cppuhelper/interfacecontainer.hxx
+    chart2/source/inc/LinePropertiesHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/Property.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/inc/MediaDescriptorHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/PropertyValue.hpp
+    - com/sun/star/embed/XStorage.hpp
+    - com/sun/star/io/XInputStream.hpp
+    - com/sun/star/io/XOutputStream.hpp
+    - com/sun/star/io/XStream.hpp
+    chart2/source/inc/ModifyListenerHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/uno/XWeak.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    - cppuhelper/weakref.hxx
+    chart2/source/inc/NameContainer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNameContainer.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloneable.hpp
+    chart2/source/inc/NumberFormatterWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/util/XNumberFormatsSupplier.hpp
+    - svl/zforlist.hxx
+    chart2/source/inc/PropertyHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/uno/Any.hxx
+    chart2/source/inc/PopupRequest.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XRequestCallback.hpp
+    chart2/source/inc/RangeHighlighter.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/chart2/data/XRangeHighlighter.hpp
+    - com/sun/star/view/XSelectionSupplier.hpp
+    chart2/source/inc/RelativePositionHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/Size.hpp
+    - com/sun/star/chart2/RelativeSize.hpp
+    chart2/source/inc/RelativeSizeHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/Size.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/inc/Scaling.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XScaling.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XServiceName.hpp
+    chart2/source/inc/StatisticsHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XDataSeries.hpp
+    - com/sun/star/chart2/data/XDataProvider.hpp
+    - com/sun/star/chart2/data/XDataSource.hpp
+    - com/sun/star/uno/Sequence.hxx
+    chart2/source/inc/SceneProperties.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/Property.hpp
+    chart2/source/inc/ThreeDHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XDiagram.hpp
+    chart2/source/inc/UserDefinedProperties.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/Property.hpp
+    chart2/source/inc/UncachedDataSequence.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/chart2/XInternalDataProvider.hpp
+    - com/sun/star/chart2/data/XDataSequence.hpp
+    - com/sun/star/chart2/data/XNumericalDataSequence.hpp
+    - com/sun/star/chart2/data/XTextualDataSequence.hpp
+    - com/sun/star/container/XIndexReplace.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XModifiable.hpp
+    chart2/source/inc/WeakListenerAdapter.hxx:
+    # base class has to be a complete type
+    - com/sun/star/util/XModifyListener.hpp
+    - com/sun/star/view/XSelectionChangeListener.hpp
+    chart2/source/inc/WrappedProperty.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    chart2/source/inc/WrappedPropertySet.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/Property.hpp
+    - com/sun/star/beans/XMultiPropertySet.hpp
+    - com/sun/star/beans/XMultiPropertyStates.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - cppuhelper/propshlp.hxx
+    - com/sun/star/beans/XPropertyState.hpp
+

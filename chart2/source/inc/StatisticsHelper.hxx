@@ -20,7 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_INC_STATISTICSHELPER_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>

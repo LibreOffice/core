@@ -22,7 +22,6 @@
 
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
-#include <com/sun/star/drawing/ShadeMode.hpp>
 #include "charttoolsdllapi.hxx"
 
 namespace chart

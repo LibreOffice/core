@@ -22,9 +22,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <list>
 #include <algorithm>
-#include <utility>
 
 namespace chart
 {

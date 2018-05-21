@@ -23,7 +23,6 @@
 #include <svx/svdobj.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <chartview/chartviewdllapi.hxx>

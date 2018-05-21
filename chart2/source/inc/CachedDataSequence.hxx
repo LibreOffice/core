@@ -37,8 +37,6 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
-#include <vector>
-
 namespace chart
 {
 

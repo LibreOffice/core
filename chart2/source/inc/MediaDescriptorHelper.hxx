@@ -21,8 +21,6 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/util/URL.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>

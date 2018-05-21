@@ -25,12 +25,10 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include "charttoolsdllapi.hxx"
 
 // interfaces and types
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
@@ -38,10 +36,7 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-
-#include <vector>
 
 namespace chart
 {

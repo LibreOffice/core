@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_COMMONFUNCTORS_HXX
 #define INCLUDED_CHART2_SOURCE_INC_COMMONFUNCTORS_HXX
 
-#include <algorithm>
 #include <o3tl/any.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/uno/Any.hxx>

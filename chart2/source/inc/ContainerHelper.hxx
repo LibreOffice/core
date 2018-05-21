@@ -20,12 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_INC_CONTAINERHELPER_HXX
 
 #include <vector>
-#include <set>
-#include <map>
-
-#include <algorithm>
-#include <functional>
-#include <o3tl/functional.hxx>
 
 namespace chart
 {

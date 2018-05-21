@@ -19,10 +19,8 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_MODIFYLISTENERHELPER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_MODIFYLISTENERHELPER_HXX
 
-#include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
