@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_e8d286ff",
+        "filename": "dbaccess/source/filter/hsqldb/rowinputbinary.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-21T19:58:08Z",
+      "side": 1,
+      "message": "are you sure about this? even if the input value is in nanosec, it probably has a range \u003e 999 999 999, which means you likely need something like\n\n  auto nanosec \u003d value % 1000000000;\n  value \u003d value / 1000000000;\n  auto seconds \u003d value % 60;\n  value \u003d value / 60;\n  auto minutes \u003d value % 60;\n  auto value \u003d minutes / 60;\n  css::util::Time aTime(nanosec, seconds, minutes, value, true);\n\nsince it is nanosec in the range of 0 to 24 hours",
+      "revId": "da2720ffd53d3da68af00e59f6585a3e99390fdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
