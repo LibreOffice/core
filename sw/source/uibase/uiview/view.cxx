@@ -219,6 +219,22 @@ IMPL_LINK_NOARG(SwView, FormControlActivated, LinkParamNone*, void)
     }
 }
 
+namespace
+{
+uno::Reference<frame::XLayoutManager> getLayoutManager(const SfxViewFrame* pViewFrame)
+{
+    uno::Reference<frame::XLayoutManager> xLayoutManager;
+    uno::Reference<beans::XPropertySet> xPropSet(pViewFrame->GetFrame().GetFrameInterface(),
+                                                 uno::UNO_QUERY);
+    if (xPropSet.is())
+    {
+        uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
+        aValue >>= xLayoutManager;
+    }
+    return xLayoutManager;
+}
+}
+
 void SwView::SelectShell()
 {
     // Attention: Maintain the SelectShell for the WebView additionally
@@ -420,6 +436,21 @@ void SwView::SelectShell()
             GetEditWin().SetInputContext( aCntxt );
         }
 
+        if (!m_bInitOnceCompleted && GetWrtShell().IsAnyDatabaseFieldInDoc())
+        {
+            if (auto xLayoutManager = getLayoutManager(GetViewFrame()))
+            {
+                const OUString sResourceURL("private:resource/toolbar/mailmerge");
+                uno::Reference<ui::XUIElement> xUIElement
+                    = xLayoutManager->getElement(sResourceURL);
+                if (!xUIElement.is())
+                {
+                    xLayoutManager->createElement(sResourceURL);
+                    xLayoutManager->showElement(sResourceURL);
+                }
+            }
+        }
+
         // Activate the toolbar to the new selection which also was active last time.
         // Before a flush () must be, but does not affect the UI according to MBA and
         // is not a performance problem.
@@ -444,6 +475,8 @@ void SwView::SelectShell()
         m_pWrtShell->UpdateTable();
 
     GetViewImpl()->GetUNOObject_Impl()->NotifySelChanged();
+
+    m_bInitOnceCompleted = true;
 }
 
 // Interaction: AttrChangedNotify() and TimeoutHdl.
@@ -708,6 +741,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_bInDtor(false),
     m_bOldShellWasPagePreview(false),
     m_bIsPreviewDoubleClick(false),
+    m_bInitOnceCompleted(false),
     m_nLOKPageUpDownOffset(0)
 {
     static bool bRequestDoubleBuffering = getenv("VCL_DOUBLEBUFFERING_ENABLE");
