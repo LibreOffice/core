@@ -43,7 +43,7 @@ namespace dbaui
         VclPtr<ListBox>                m_pLB_JoinType;
         VclPtr<CheckBox>               m_pCBNatural;
 
-        OTableListBoxControl*               m_pTableControl;
+        std::unique_ptr<OTableListBoxControl> m_pTableControl;
 
         EJoinType                           eJoinType;
         TTableConnectionData::value_type    m_pConnData; // contains left and right table

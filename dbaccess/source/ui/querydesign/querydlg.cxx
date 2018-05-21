@@ -67,7 +67,7 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
     m_pConnData.reset(_pData->NewInstance());
     m_pConnData->CopyFrom(*_pData);
 
-    m_pTableControl = new OTableListBoxControl(this, _pTableMap, this);
+    m_pTableControl.reset(new OTableListBoxControl(this, _pTableMap, this));
 
     m_pCBNatural->Check(static_cast<OQueryTableConnectionData*>(m_pConnData.get())->isNatural());
 
@@ -143,7 +143,7 @@ DlgQryJoin::~DlgQryJoin()
 
 void DlgQryJoin::dispose()
 {
-    delete m_pTableControl;
+    m_pTableControl.reset();
     m_pML_HelpText.clear();
     m_pPB_OK.clear();
     m_pLB_JoinType.clear();
