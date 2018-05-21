@@ -248,6 +248,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                     m_bOldShellWasPagePreview : 1,
                     m_bIsPreviewDoubleClick : 1, // #i114045#
                     m_bMakeSelectionVisible : 1; // transport the bookmark selection
+    bool m_bInitOnceCompleted = false;
 
     /// LibreOfficeKit has to force the page size for PgUp/PgDown
     /// functionality based on the user's view, instead of using the m_aVisArea.
