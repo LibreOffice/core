@@ -133,7 +133,7 @@ public:
     void testTableBorderLineStyle();
     void testBnc862510_6();
     void testBnc862510_7();
-#if ENABLE_PDFIMPORT
+#if ENABLE_PDFIMPORT && defined(IMPORT_PDF_ELEMENTS)
     void testPDFImport();
     void testPDFImportSkipImages();
 #endif
@@ -212,7 +212,7 @@ public:
     CPPUNIT_TEST(testTableBorderLineStyle);
     CPPUNIT_TEST(testBnc862510_6);
     CPPUNIT_TEST(testBnc862510_7);
-#if ENABLE_PDFIMPORT
+#if ENABLE_PDFIMPORT && defined(IMPORT_PDF_ELEMENTS)
     CPPUNIT_TEST(testPDFImport);
     CPPUNIT_TEST(testPDFImportSkipImages);
 #endif
@@ -1186,7 +1186,7 @@ void SdImportTest::testBnc862510_7()
     xDocShRef->DoClose();
 }
 
-#if ENABLE_PDFIMPORT
+#if ENABLE_PDFIMPORT && defined(IMPORT_PDF_ELEMENTS)
 
 void SdImportTest::testPDFImport()
 {
