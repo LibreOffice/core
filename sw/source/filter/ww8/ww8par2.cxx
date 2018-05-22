@@ -3721,21 +3721,21 @@ WW8RStyle::WW8RStyle(WW8Fib& _rFib, SwWW8ImplReader* pI)
     , mbFCTLSizeChanged(false)
     , mbWidowsChanged(false)
 {
-    mpIo->m_vColl.resize(cstd);
+    mpIo->m_vColl.resize(m_cstd);
 }
 
 void WW8RStyle::Set1StyleDefaults()
 {
     // see #i25247#, #i25561#, #i48064#, #i92341# for default font
     if (!mbCJKFontChanged)   // Style no CJK Font? set the default
-        mpIo->SetNewFontAttr(ftcFE, true, RES_CHRATR_CJK_FONT);
+        mpIo->SetNewFontAttr(m_ftcFE, true, RES_CHRATR_CJK_FONT);
 
     if (!mbCTLFontChanged)   // Style no CTL Font? set the default
-        mpIo->SetNewFontAttr(ftcBi, true, RES_CHRATR_CTL_FONT);
+        mpIo->SetNewFontAttr(m_ftcBi, true, RES_CHRATR_CTL_FONT);
 
     // western 2nd to make western charset conversion the default
     if (!mbFontChanged)      // Style has no Font? set the default,
-        mpIo->SetNewFontAttr(ftcAsci, true, RES_CHRATR_FONT);
+        mpIo->SetNewFontAttr(m_ftcAsci, true, RES_CHRATR_FONT);
 
     if( !mpIo->m_bNoAttrImport )
     {
@@ -3815,7 +3815,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
 
     // Set Based on style
     sal_uInt16 j = rSI.m_nBase;
-    if (j != nThisStyle && j < cstd )
+    if (j != nThisStyle && j < m_cstd )
     {
         SwWW8StyInf* pj = &mpIo->m_vColl[j];
         if (rSI.m_pFormat && pj->m_pFormat && rSI.m_bColl == pj->m_bColl)
@@ -3858,7 +3858,7 @@ void WW8RStyle::PostStyle(SwWW8StyInf const &rSI, bool bOldNoImp)
     mpIo->m_nCharFormat = -1;
 
     // if style is based on nothing or base ignored
-    if ((rSI.m_nBase >= cstd || mpIo->m_vColl[rSI.m_nBase].m_bImportSkipped) && rSI.m_bColl)
+    if ((rSI.m_nBase >= m_cstd || mpIo->m_vColl[rSI.m_nBase].m_bImportSkipped) && rSI.m_bColl)
     {
         // If Char-Styles does not work
         // -> set hard WW-Defaults
@@ -3888,7 +3888,7 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
 
     // valid and not NUL and not yet imported
 
-    if( rSI.m_nBase < cstd && !mpIo->m_vColl[rSI.m_nBase].m_bImported )
+    if( rSI.m_nBase < m_cstd && !mpIo->m_vColl[rSI.m_nBase].m_bImported )
         Import1Style( rSI.m_nBase );
 
     mpStStrm->Seek( rSI.m_nFilePos );
@@ -3940,7 +3940,7 @@ void WW8RStyle::RecursiveReg(sal_uInt16 nNr)
 
     rSI.m_bImported = true;
 
-    if( rSI.m_nBase < cstd && !mpIo->m_vColl[rSI.m_nBase].m_bImported )
+    if( rSI.m_nBase < m_cstd && !mpIo->m_vColl[rSI.m_nBase].m_bImported )
         RecursiveReg(rSI.m_nBase);
 
     mpIo->RegisterNumFormatOnStyle(nNr);
@@ -3959,7 +3959,7 @@ void WW8RStyle::PostProcessStyles()
      Clear all imported flags so that we can recursively apply numbering
      formats and use it to mark handled ones
     */
-    for (i=0; i < cstd; ++i)
+    for (i=0; i < m_cstd; ++i)
         mpIo->m_vColl[i].m_bImported = false;
 
     /*
@@ -3973,7 +3973,7 @@ void WW8RStyle::PostProcessStyles()
      tabstops we don't get problems with doubly adjusting tabstops that
      are inheritied.
     */
-    for (i=0; i < cstd; ++i)
+    for (i=0; i < m_cstd; ++i)
     {
         if (mpIo->m_vColl[i].m_bValid)
         {
@@ -3984,7 +3984,7 @@ void WW8RStyle::PostProcessStyles()
 
 void WW8RStyle::ScanStyles()        // investigate style dependencies
 {                                   // and detect Filepos for each Style
-    for (sal_uInt16 i = 0; i < cstd; ++i)
+    for (sal_uInt16 i = 0; i < m_cstd; ++i)
     {
         SwWW8StyInf &rSI = mpIo->m_vColl[i];
 
@@ -4243,7 +4243,7 @@ namespace
 
 void WW8RStyle::ImportOldFormatStyles()
 {
-    for (sal_uInt16 i=0; i < cstd; ++i)
+    for (sal_uInt16 i=0; i < m_cstd; ++i)
     {
         mpIo->m_vColl[i].m_bColl = true;
         //every chain must end eventually at the null style (style code 222)
@@ -4254,11 +4254,11 @@ void WW8RStyle::ImportOldFormatStyles()
         mpIo->m_xWwFib->m_chseTables, mpIo->m_xWwFib->m_lid);
 
     sal_uInt16 cstcStd(0);
-    rSt.ReadUInt16( cstcStd );
+    m_rStream.ReadUInt16( cstcStd );
 
-    size_t nMaxByteCount = rSt.remainingSize();
+    size_t nMaxByteCount = m_rStream.remainingSize();
     sal_uInt16 cbName(0);
-    rSt.ReadUInt16(cbName);
+    m_rStream.ReadUInt16(cbName);
     if (cbName > nMaxByteCount)
     {
         SAL_WARN("sw.ww8", "WW8RStyle::ImportOldFormatStyles: truncating out of range "
@@ -4270,7 +4270,7 @@ void WW8RStyle::ImportOldFormatStyles()
     while (nByteCount < cbName)
     {
         sal_uInt8 nCount(0);
-        rSt.ReadUChar( nCount );
+        m_rStream.ReadUChar( nCount );
         nByteCount++;
 
         sal_uInt8 stc = static_cast< sal_uInt8 >((stcp - cstcStd) & 255);
@@ -4284,7 +4284,7 @@ void WW8RStyle::ImportOldFormatStyles()
         {
             if (nCount != 0)   // user style
             {
-                OString aTmp = read_uInt8s_ToOString(rSt, nCount);
+                OString aTmp = read_uInt8s_ToOString(m_rStream, nCount);
                 nByteCount += aTmp.getLength();
                 sName = OStringToOUString(aTmp, eStructChrSet);
             }
@@ -4308,9 +4308,9 @@ void WW8RStyle::ImportOldFormatStyles()
     sal_uInt16 nStyles=stcp;
 
     std::vector<pxoffset> aCHPXOffsets(stcp);
-    nMaxByteCount = rSt.remainingSize();
+    nMaxByteCount = m_rStream.remainingSize();
     sal_uInt16 cbChpx(0);
-    rSt.ReadUInt16(cbChpx);
+    m_rStream.ReadUInt16(cbChpx);
     if (cbChpx > nMaxByteCount)
     {
         SAL_WARN("sw.ww8", "WW8RStyle::ImportOldFormatStyles: truncating out of range "
@@ -4325,12 +4325,12 @@ void WW8RStyle::ImportOldFormatStyles()
         if (stcp == aCHPXOffsets.size())
         {
             //more data than style slots, skip remainder
-            rSt.SeekRel(cbChpx-nByteCount);
+            m_rStream.SeekRel(cbChpx-nByteCount);
             break;
         }
 
         sal_uInt8 cb(0);
-        rSt.ReadUChar( cb );
+        m_rStream.ReadUChar( cb );
         nByteCount++;
 
         aCHPXOffsets[stcp].mnSize = 0;
@@ -4339,10 +4339,10 @@ void WW8RStyle::ImportOldFormatStyles()
         {
             sal_uInt8 nRemainder = cb;
 
-            aCHPXOffsets[stcp].mnOffset = rSt.Tell();
+            aCHPXOffsets[stcp].mnOffset = m_rStream.Tell();
             aCHPXOffsets[stcp].mnSize = nRemainder;
 
-            Word2CHPX aChpx = ReadWord2Chpx(rSt, aCHPXOffsets[stcp].mnOffset,
+            Word2CHPX aChpx = ReadWord2Chpx(m_rStream, aCHPXOffsets[stcp].mnOffset,
                 aCHPXOffsets[stcp].mnSize);
             aConvertedChpx.push_back( ChpxToSprms(aChpx) );
 
@@ -4355,9 +4355,9 @@ void WW8RStyle::ImportOldFormatStyles()
     }
 
     std::vector<pxoffset> aPAPXOffsets(stcp);
-    nMaxByteCount = rSt.remainingSize();
+    nMaxByteCount = m_rStream.remainingSize();
     sal_uInt16 cbPapx(0);
-    rSt.ReadUInt16(cbPapx);
+    m_rStream.ReadUInt16(cbPapx);
     if (cbPapx > nMaxByteCount)
     {
         SAL_WARN("sw.ww8", "WW8RStyle::ImportOldFormatStyles: truncating out of range "
@@ -4370,12 +4370,12 @@ void WW8RStyle::ImportOldFormatStyles()
     {
         if (stcp == aPAPXOffsets.size())
         {
-            rSt.SeekRel(cbPapx-nByteCount);
+            m_rStream.SeekRel(cbPapx-nByteCount);
             break;
         }
 
         sal_uInt8 cb(0);
-        rSt.ReadUChar( cb );
+        m_rStream.ReadUChar( cb );
         nByteCount++;
 
         aPAPXOffsets[stcp].mnSize = 0;
@@ -4383,15 +4383,15 @@ void WW8RStyle::ImportOldFormatStyles()
         if (cb != 0xFF)
         {
             sal_uInt8 stc2(0);
-            rSt.ReadUChar( stc2 );
-            rSt.SeekRel(6);
+            m_rStream.ReadUChar( stc2 );
+            m_rStream.SeekRel(6);
             nByteCount+=7;
             sal_uInt8 nRemainder = cb-7;
 
-            aPAPXOffsets[stcp].mnOffset = rSt.Tell();
+            aPAPXOffsets[stcp].mnOffset = m_rStream.Tell();
             aPAPXOffsets[stcp].mnSize = nRemainder;
 
-            rSt.SeekRel(nRemainder);
+            m_rStream.SeekRel(nRemainder);
             nByteCount += nRemainder;
         }
 
@@ -4399,15 +4399,15 @@ void WW8RStyle::ImportOldFormatStyles()
     }
 
     sal_uInt16 iMac(0);
-    rSt.ReadUInt16( iMac );
+    m_rStream.ReadUInt16( iMac );
 
     if (iMac > nStyles) iMac = nStyles;
 
     for (stcp = 0; stcp < iMac; ++stcp)
     {
         sal_uInt8 stcNext(0), stcBase(0);
-        rSt.ReadUChar( stcNext );
-        rSt.ReadUChar( stcBase );
+        m_rStream.ReadUChar( stcNext );
+        m_rStream.ReadUChar( stcBase );
 
         sal_uInt8 stc = static_cast< sal_uInt8 >((stcp - cstcStd) & 255);
 
@@ -4452,7 +4452,7 @@ void WW8RStyle::ImportNewFormatStyles()
 {
     ScanStyles();                       // Scan Based On
 
-    for (sal_uInt16 i = 0; i < cstd; ++i) // import Styles
+    for (sal_uInt16 i = 0; i < m_cstd; ++i) // import Styles
         if (mpIo->m_vColl[i].m_bValid)
             Import1Style( i );
 }
@@ -4471,12 +4471,12 @@ void WW8RStyle::Import()
     else
         ImportNewFormatStyles();
 
-    for (sal_uInt16 i = 0; i < cstd; ++i)
+    for (sal_uInt16 i = 0; i < m_cstd; ++i)
     {
         // Follow chain
         SwWW8StyInf* pi = &mpIo->m_vColl[i];
         sal_uInt16 j = pi->m_nFollow;
-        if( j < cstd )
+        if( j < m_cstd )
         {
             SwWW8StyInf* pj = &mpIo->m_vColl[j];
             if ( j != i                             // rational Index ?
