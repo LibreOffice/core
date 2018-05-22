@@ -53,8 +53,7 @@ class ScrollBar;
 class SVX_DLLPUBLIC SvxSearchCharSet : public SvxShowCharSet
 {
 public:
-    SvxSearchCharSet(weld::Builder& rBuilder, const OString& rDrawingId,
-                     const OString& rScrollId, const VclPtr<VirtualDevice> &rDevice);
+    SvxSearchCharSet(weld::ScrolledWindow* pScrolledWindow, const VclPtr<VirtualDevice> &rDevice);
     virtual ~SvxSearchCharSet() override;
 
     virtual void                        RecalculateFont(vcl::RenderContext& rRenderContext) override;
@@ -77,9 +76,9 @@ private:
     //to uniquely identify each appended element
     std::unordered_map<sal_Int32, sal_UCS4> m_aItemList;
 private:
-    virtual void            DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2) override;
-    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
-    DECL_LINK(DoKeyDown, const KeyEvent&, bool);
+    virtual void DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
 };
 
 #endif

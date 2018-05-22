@@ -652,7 +652,7 @@ BitmapEx& RectCtl::GetRectBitmap()
     return *pBitmap;
 }
 
-RectCtl::RectCtl(weld::Builder& rBuilder, const OString& rDrawingId, SvxTabPage* pPage, RectPoint eRpt, sal_uInt16 nBorder, sal_uInt16 nCircle)
+RectCtl::RectCtl(SvxTabPage* pPage, RectPoint eRpt, sal_uInt16 nBorder, sal_uInt16 nCircle)
     : m_pPage(pPage)
     , nBorderWidth(Application::GetDefaultDevice()->LogicToPixel(Size(nBorder, 0), MapMode(MapUnit::Map100thMM)).Width())
     , nRadius(Application::GetDefaultDevice()->LogicToPixel(Size(nCircle, 0), MapMode(MapUnit::Map100thMM)).Width())
@@ -661,18 +661,13 @@ RectCtl::RectCtl(weld::Builder& rBuilder, const OString& rDrawingId, SvxTabPage*
     , m_nState(CTL_STATE::NONE)
     , mbCompleteDisable(false)
 {
-    m_xControl.reset(rBuilder.weld_drawing_area(rDrawingId, CreateAccessible()));
-    m_xControl->connect_style_updated(LINK(this, RectCtl, MarkToResetSettings));
-    m_xControl->connect_draw(LINK(this, RectCtl, DoPaint));
-    m_xControl->connect_size_allocate(LINK(this, RectCtl, DoResize));
-    m_xControl->connect_mouse_press(LINK(this, RectCtl, DoMouseButtonDown));
-    m_xControl->connect_key_press(LINK(this, RectCtl, DoKeyDown));
-    m_xControl->connect_focus_in(LINK(this, RectCtl, DoGetFocus));
-    m_xControl->connect_focus_out(LINK(this, RectCtl, DoLoseFocus));
-    m_xControl->connect_focus_rect(LINK(this, RectCtl, DoFocusRect));
+}
 
-    m_xControl->set_size_request(m_xControl->get_approximate_digit_width() * 25, m_xControl->get_text_height() * 5);
-    Resize_Impl();
+void RectCtl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 25,
+                                   pDrawingArea->get_text_height() * 5);
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
 }
 
 void RectCtl::SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder, sal_uInt16 nCircle)
@@ -690,29 +685,29 @@ RectCtl::~RectCtl()
     pAccContext.clear();
 }
 
-IMPL_LINK(RectCtl, DoResize, const Size&, rSize, void)
+void RectCtl::Resize()
 {
-    m_aSize = rSize;
     Resize_Impl();
 }
 
 void RectCtl::Resize_Impl()
 {
+    Size aSize(GetOutputSizePixel());
+
     aPtLT = Point( 0 + nBorderWidth,  0 + nBorderWidth );
-    aPtMT = Point( m_aSize.Width() / 2, 0 + nBorderWidth );
-    aPtRT = Point( m_aSize.Width() - nBorderWidth, 0 + nBorderWidth );
+    aPtMT = Point( aSize.Width() / 2, 0 + nBorderWidth );
+    aPtRT = Point( aSize.Width() - nBorderWidth, 0 + nBorderWidth );
 
-    aPtLM = Point( 0 + nBorderWidth,  m_aSize.Height() / 2 );
-    aPtMM = Point( m_aSize.Width() / 2, m_aSize.Height() / 2 );
-    aPtRM = Point( m_aSize.Width() - nBorderWidth, m_aSize.Height() / 2 );
+    aPtLM = Point( 0 + nBorderWidth,  aSize.Height() / 2 );
+    aPtMM = Point( aSize.Width() / 2, aSize.Height() / 2 );
+    aPtRM = Point( aSize.Width() - nBorderWidth, aSize.Height() / 2 );
 
-    aPtLB = Point( 0 + nBorderWidth,    m_aSize.Height() - nBorderWidth );
-    aPtMB = Point( m_aSize.Width() / 2,   m_aSize.Height() - nBorderWidth );
-    aPtRB = Point( m_aSize.Width() - nBorderWidth, m_aSize.Height() - nBorderWidth );
+    aPtLB = Point( 0 + nBorderWidth,    aSize.Height() - nBorderWidth );
+    aPtMB = Point( aSize.Width() / 2,   aSize.Height() - nBorderWidth );
+    aPtRB = Point( aSize.Width() - nBorderWidth, aSize.Height() - nBorderWidth );
 
     Reset();
-    MarkToResetSettings(*m_xControl);
-    m_xControl->queue_draw();
+    StyleUpdated();
 }
 
 void RectCtl::InitRectBitmap()
@@ -762,10 +757,11 @@ void RectCtl::InitRectBitmap()
     pBitmap->Replace( aColorAry1, aColorAry2, 7 );
 }
 
-IMPL_LINK_NOARG(RectCtl, MarkToResetSettings, weld::Widget&, void)
+void RectCtl::StyleUpdated()
 {
     delete pBitmap;
     pBitmap = nullptr; // forces new creating of bitmap
+    CustomWidgetController::StyleUpdated();
 }
 
 void RectCtl::InitSettings(vcl::RenderContext& rRenderContext)
@@ -779,7 +775,7 @@ void RectCtl::InitSettings(vcl::RenderContext& rRenderContext)
 
 // The clicked rectangle (3 x 3) is determined and the parent (dialog)
 // is notified that the item was changed
-IMPL_LINK(RectCtl, DoMouseButtonDown, const MouseEvent&, rMEvt, void)
+void RectCtl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // CompletelyDisabled() added to have a disabled state for RectCtl
     if(!IsCompletelyDisabled())
@@ -789,11 +785,11 @@ IMPL_LINK(RectCtl, DoMouseButtonDown, const MouseEvent&, rMEvt, void)
         SetActualRP( eRP );
 
         if (m_pPage)
-            m_pPage->PointChanged(m_xControl.get(), eRP);
+            m_pPage->PointChanged(GetDrawingArea(), eRP);
     }
 }
 
-IMPL_LINK(RectCtl, DoKeyDown, const KeyEvent&, rKeyEvt, bool)
+bool RectCtl::KeyInput(const KeyEvent& rKeyEvt)
 {
     // CompletelyDisabled() added to have a disabled state for RectCtl
     if (IsCompletelyDisabled())
@@ -871,16 +867,14 @@ IMPL_LINK(RectCtl, DoKeyDown, const KeyEvent&, rKeyEvt, bool)
         SetActualRP( eNewRP );
 
         if (m_pPage)
-            m_pPage->PointChanged(m_xControl.get(), eRP);
+            m_pPage->PointChanged(GetDrawingArea(), eRP);
     }
     return true;
 }
 
 // the control (rectangle with 9 circles)
-IMPL_LINK(RectCtl, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
+void RectCtl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    vcl::RenderContext& rRenderContext = aPayload.first;
-
     InitSettings(rRenderContext);
 
     Point aPtDiff(1, 1);
@@ -891,14 +885,14 @@ IMPL_LINK(RectCtl, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
     rRenderContext.SetFillColor(rStyles.GetDialogColor());
     rRenderContext.DrawRect(tools::Rectangle(Point(0,0), rRenderContext.GetOutputSize()));
 
-    if (m_xControl->get_sensitive())
+    if (IsEnabled())
         rRenderContext.SetLineColor(rStyles.GetLabelTextColor());
     else
         rRenderContext.SetLineColor(rStyles.GetShadowColor());
 
     rRenderContext.SetFillColor();
 
-    if (!m_xControl->get_sensitive())
+    if (!IsEnabled())
     {
         Color aOldCol = rRenderContext.GetLineColor();
         rRenderContext.SetLineColor(rStyles.GetLightColor());
@@ -912,7 +906,7 @@ IMPL_LINK(RectCtl, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
     Size aBtnSize(11, 11);
     Size aDstBtnSize(aBtnSize);
     Point aToCenter(aDstBtnSize.Width() >> 1, aDstBtnSize.Height() >> 1);
-    Point aBtnPnt1(m_xControl->get_sensitive() ? 0 : 22, 0);
+    Point aBtnPnt1(IsEnabled() ? 0 : 22, 0);
     Point aBtnPnt2(11, 0);
     Point aBtnPnt3(22, 0);
 
@@ -954,7 +948,7 @@ IMPL_LINK(RectCtl, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
     // CompletelyDisabled() added to have a disabled state for SvxRectCtl
     if (!IsCompletelyDisabled())
     {
-        if (m_xControl->get_sensitive())
+        if (IsEnabled())
         {
             Point aCenterPt(aPtNew);
             aCenterPt -= aToCenter;
@@ -964,10 +958,10 @@ IMPL_LINK(RectCtl, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
     }
 }
 
-IMPL_LINK(RectCtl, DoFocusRect, weld::Widget&, rControl, tools::Rectangle)
+tools::Rectangle RectCtl::GetFocusRect()
 {
     tools::Rectangle aRet;
-    if (rControl.has_focus())
+    if (HasFocus())
         aRet = CalculateFocusRectangle();
     return aRet;
 }
@@ -1012,9 +1006,9 @@ Point RectCtl::SetActualRPWithoutInvalidate( RectPoint eNewRP )
     return aPtLast;
 }
 
-IMPL_LINK_NOARG(RectCtl, DoGetFocus, weld::Widget&, void)
+void RectCtl::GetFocus()
 {
-    m_xControl->queue_draw();
+    Invalidate();
 
     // Send accessibility event.
     if (pAccContext.is())
@@ -1023,9 +1017,9 @@ IMPL_LINK_NOARG(RectCtl, DoGetFocus, weld::Widget&, void)
     }
 }
 
-IMPL_LINK_NOARG(RectCtl, DoLoseFocus, weld::Widget&, void)
+void RectCtl::LoseFocus()
 {
-    m_xControl->queue_draw();
+    Invalidate();
 }
 
 Point RectCtl::GetApproxLogPtFromPixPt( const Point& rPt ) const
@@ -1034,11 +1028,13 @@ Point RectCtl::GetApproxLogPtFromPixPt( const Point& rPt ) const
     long    x;
     long    y;
 
+    Size aSize(GetOutputSizePixel());
+
     if( !( m_nState & CTL_STATE::NOHORZ ) )
     {
-        if( aPt.X() < m_aSize.Width() / 3 )
+        if( aPt.X() < aSize.Width() / 3 )
             x = aPtLT.X();
-        else if( aPt.X() < m_aSize.Width() * 2 / 3 )
+        else if( aPt.X() < aSize.Width() * 2 / 3 )
             x = aPtMM.X();
         else
             x = aPtRB.X();
@@ -1048,9 +1044,9 @@ Point RectCtl::GetApproxLogPtFromPixPt( const Point& rPt ) const
 
     if( !( m_nState & CTL_STATE::NOVERT ) )
     {
-        if( aPt.Y() < m_aSize.Height() / 3 )
+        if( aPt.Y() < aSize.Height() / 3 )
             y = aPtLT.Y();
-        else if( aPt.Y() < m_aSize.Height() * 2 / 3 )
+        else if( aPt.Y() < aSize.Height() * 2 / 3 )
             y = aPtMM.Y();
         else
             y = aPtRB.Y();
@@ -1086,7 +1082,7 @@ void RectCtl::Reset()
 {
     aPtNew = GetPointFromRP( eDefRP );
     eRP = eDefRP;
-    m_xControl->queue_draw();
+    Invalidate();
 }
 
 // Returns the currently selected RectPoint
@@ -1096,7 +1092,7 @@ void RectCtl::SetActualRP( RectPoint eNewRP )
 {
     SetActualRPWithoutInvalidate(eNewRP);
 
-    m_xControl->queue_draw();
+    Invalidate();
 
     // notify accessibility object about change
     if (pAccContext.is())
@@ -1117,10 +1113,10 @@ void RectCtl::SetState( CTL_STATE nState )
         _aPtNew.setY( aPtMM.Y() );
 
     eRP = GetRPFromPoint( _aPtNew );
-    m_xControl->queue_draw();
+    Invalidate();
 
     if (m_pPage)
-        m_pPage->PointChanged(m_xControl.get(), eRP);
+        m_pPage->PointChanged(GetDrawingArea(), eRP);
 }
 
 tools::Rectangle RectCtl::CalculateFocusRectangle() const
@@ -1164,7 +1160,7 @@ RectPoint RectCtl::GetApproxRPFromPixPt( const css::awt::Point& r ) const
 void RectCtl::DoCompletelyDisable(bool bNew)
 {
     mbCompleteDisable = bNew;
-    m_xControl->queue_draw();
+    Invalidate();
 }
 
 // Control for editing bitmaps
