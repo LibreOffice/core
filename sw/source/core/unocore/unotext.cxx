@@ -559,7 +559,7 @@ SwXText::insertTextContent(
         pTmp = pTmp->StartOfSectionNode();
     }
     // if the document starts with a section
-    while (pOwnStartNode->IsSectionNode())
+    while (pOwnStartNode && pOwnStartNode->IsSectionNode())
     {
         pOwnStartNode = pOwnStartNode->StartOfSectionNode();
     }
