@@ -130,6 +130,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/bastyp/progress \
     sfx2/source/bastyp/sfxhtml \
     sfx2/source/bastyp/sfxresid \
+    sfx2/source/commandpopup/CommandPopup \
     sfx2/source/config/evntconf \
     sfx2/source/control/asyncfunc \
     sfx2/source/control/bindings \
