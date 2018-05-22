@@ -78,13 +78,12 @@ public:
 
     static double GetNow()
     {
-        Date aDateNow( Date::SYSTEM );
-        tools::Time aTimeNow( tools::Time::SYSTEM );
-         Date aRefDate( 1,1,1900 );
-        long nDiffDays = aDateNow - aRefDate;
+        DateTime aNow( DateTime::SYSTEM );
+        Date aRefDate( 1,1,1900 );
+        long nDiffDays = aNow - aRefDate;
         nDiffDays += 2; // Change VisualBasic: 1.Jan.1900 == 2
 
-        long nDiffSeconds = aTimeNow.GetHour() * 3600 + aTimeNow.GetMin() * 60 + aTimeNow.GetSec();
+        long nDiffSeconds = aNow.GetHour() * 3600 + aNow.GetMin() * 60 + aNow.GetSec();
         return static_cast<double>(nDiffDays) + static_cast<double>(nDiffSeconds)/double(24*3600);
     }
 
