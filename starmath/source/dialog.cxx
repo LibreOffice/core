@@ -958,24 +958,17 @@ void SmAlignDialog::WriteTo(SmFormat &rFormat) const
     rFormat.RequestApplyChanges();
 }
 
-SmShowSymbolSet::SmShowSymbolSet(weld::DrawingArea* pDrawingArea, weld::ScrolledWindow* pScrolledWindow)
+SmShowSymbolSet::SmShowSymbolSet(weld::ScrolledWindow* pScrolledWindow)
     : nLen(0)
     , nRows(0)
     , nColumns(0)
     , nXOffset(0)
     , nYOffset(0)
     , nSelectSymbol(SYMBOL_NONE)
-    , m_xDrawingArea(pDrawingArea)
     , m_xScrolledWindow(pScrolledWindow)
 {
-    m_xDrawingArea->connect_size_allocate(LINK(this, SmShowSymbolSet, DoResize));
-    m_xDrawingArea->connect_draw(LINK(this, SmShowSymbolSet, DoPaint));
-    m_xDrawingArea->connect_mouse_press(LINK(this, SmShowSymbolSet, DoMouseButtonDown));
-    m_xDrawingArea->connect_key_press(LINK(this, SmShowSymbolSet, DoKeyDown));
     m_xScrolledWindow->set_user_managed_scrolling();
     m_xScrolledWindow->connect_vadjustment_changed(LINK(this, SmShowSymbolSet, ScrollHdl));
-    m_xDrawingArea->set_size_request(m_xDrawingArea->get_approximate_digit_width() * 27,
-                                     m_xDrawingArea->get_text_height() * 9);
 }
 
 Point SmShowSymbolSet::OffsetPoint(const Point &rPoint) const
@@ -983,14 +976,13 @@ Point SmShowSymbolSet::OffsetPoint(const Point &rPoint) const
     return Point(rPoint.X() + nXOffset, rPoint.Y() + nYOffset);
 }
 
-IMPL_LINK(SmShowSymbolSet, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
+void SmShowSymbolSet::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    vcl::RenderContext& rRenderContext = aPayload.first;
-
-    if (m_aSize != m_aOldSize)
+    Size aWinSize(GetOutputSizePixel());
+    if (aWinSize != m_aOldSize)
     {
         calccols(rRenderContext);
-        m_aOldSize = m_aSize;
+        m_aOldSize = aWinSize;
     }
 
     Color aBackgroundColor;
@@ -1045,9 +1037,9 @@ IMPL_LINK(SmShowSymbolSet, DoPaint, weld::DrawingArea::draw_args, aPayload, void
     rRenderContext.Pop();
 }
 
-IMPL_LINK(SmShowSymbolSet, DoMouseButtonDown, const MouseEvent&, rMEvt, void)
+void SmShowSymbolSet::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    m_xDrawingArea->grab_focus();
+    GrabFocus();
 
     Size aOutputSize(nColumns * nLen, nRows * nLen);
     aOutputSize.AdjustWidth(nXOffset );
@@ -1069,7 +1061,7 @@ IMPL_LINK(SmShowSymbolSet, DoMouseButtonDown, const MouseEvent&, rMEvt, void)
     }
 }
 
-IMPL_LINK(SmShowSymbolSet, DoKeyDown, const KeyEvent&, rKEvt, bool)
+bool SmShowSymbolSet::KeyInput(const KeyEvent& rKEvt)
 {
     sal_uInt16 n = nSelectSymbol;
 
@@ -1100,7 +1092,7 @@ IMPL_LINK(SmShowSymbolSet, DoKeyDown, const KeyEvent&, rKEvt, bool)
         (n >= sal::static_int_cast<sal_uInt16>((m_xScrolledWindow->vadjustment_get_value() + nRows) * nColumns)))
     {
         m_xScrolledWindow->vadjustment_set_value(n / nColumns);
-        m_xDrawingArea->queue_draw();
+        Invalidate();
     }
 
     SelectSymbol(n);
@@ -1114,7 +1106,7 @@ void SmShowSymbolSet::calccols(vcl::RenderContext& rRenderContext)
     // Height of 16pt in pixels (matching 'aOutputSize')
     nLen = rRenderContext.LogicToPixel(Size(0, 16), MapMode(MapUnit::MapPoint)).Height();
 
-    Size aOutputSize = m_aSize;
+    Size aOutputSize(GetOutputSizePixel());
 
     nColumns = aOutputSize.Width() / nLen;
     nRows = aOutputSize.Height() / nLen;
@@ -1130,14 +1122,14 @@ void SmShowSymbolSet::calccols(vcl::RenderContext& rRenderContext)
 void SmShowSymbolSet::SetSymbolSet(const SymbolPtrVec_t& rSymbolSet)
 {
     aSymbolSet = rSymbolSet;
-    m_xDrawingArea->queue_draw();
+    Invalidate();
 }
 
 void SmShowSymbolSet::SetScrollBarRange()
 {
     const int nLastRow = (aSymbolSet.size() - 1 + nColumns) / nColumns;
     m_xScrolledWindow->vadjustment_configure(m_xScrolledWindow->vadjustment_get_value(), 0, nLastRow, 1, nRows - 1, nRows);
-    m_xDrawingArea->queue_draw();
+    Invalidate();
 }
 
 void SmShowSymbolSet::SelectSymbol(sal_uInt16 nSymbol)
@@ -1148,7 +1140,7 @@ void SmShowSymbolSet::SelectSymbol(sal_uInt16 nSymbol)
     {
         Point aPoint(OffsetPoint(Point(((nSelectSymbol - v) % nColumns) * nLen,
                                        ((nSelectSymbol - v) / nColumns) * nLen)));
-        m_xDrawingArea->queue_draw_area(aPoint.X(), aPoint.Y(), nLen, nLen);
+        Invalidate(tools::Rectangle(aPoint, Size(nLen, nLen)));
     }
 
     if (nSymbol < aSymbolSet.size())
@@ -1161,49 +1153,30 @@ void SmShowSymbolSet::SelectSymbol(sal_uInt16 nSymbol)
     {
         Point aPoint(OffsetPoint(Point(((nSelectSymbol - v) % nColumns) * nLen,
                                        ((nSelectSymbol - v) / nColumns) * nLen)));
-        m_xDrawingArea->queue_draw_area(aPoint.X(), aPoint.Y(), nLen, nLen);
+        Invalidate(tools::Rectangle(aPoint, Size(nLen, nLen)));
     }
 
     if (!nColumns)
-        m_xDrawingArea->queue_draw();
-}
-
-IMPL_LINK(SmShowSymbolSet, DoResize, const Size&, rSize, void)
-{
-    m_aSize = rSize;
-    m_xDrawingArea->queue_draw();
+        Invalidate();
 }
 
 IMPL_LINK_NOARG(SmShowSymbolSet, ScrollHdl, weld::ScrolledWindow&, void)
 {
-    m_xDrawingArea->queue_draw();
+    Invalidate();
 }
 
-IMPL_LINK(SmShowSymbol, DoResize, const Size&, rSize, void)
+SmShowSymbol::SmShowSymbol()
 {
-    m_aSize = rSize;
-    m_xDrawingArea->queue_draw();
-}
-
-SmShowSymbol::SmShowSymbol(weld::DrawingArea* pDrawingArea)
-    : m_xDrawingArea(pDrawingArea)
-{
-    m_xDrawingArea->connect_size_allocate(LINK(this, SmShowSymbol, DoResize));
-    m_xDrawingArea->connect_draw(LINK(this, SmShowSymbol, DoPaint));
-    m_xDrawingArea->connect_mouse_press(LINK(this, SmShowSymbol, DoMouseButtonDown));
-    m_xDrawingArea->set_size_request(m_xDrawingArea->get_approximate_digit_width() * 27,
-                                     m_xDrawingArea->get_text_height() * 9);
 }
 
 void SmShowSymbol::setFontSize(vcl::Font &rFont) const
 {
-    rFont.SetFontSize(Size(0, m_aSize.Height() - m_aSize.Height() / 3));
+    Size aSize(GetOutputSizePixel());
+    rFont.SetFontSize(Size(0, aSize.Height() - aSize.Height() / 3));
 }
 
-IMPL_LINK(SmShowSymbol, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
+void SmShowSymbol::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    vcl::RenderContext& rRenderContext = aPayload.first;
-
     Color aBackgroundColor;
     Color aTextColor;
     lclGetSettingColors(aBackgroundColor, aTextColor);
@@ -1222,7 +1195,7 @@ IMPL_LINK(SmShowSymbol, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
                                   (rRenderContext.GetOutputSize().Height() * 7 / 10)), rText);
 }
 
-IMPL_LINK(SmShowSymbol, DoMouseButtonDown, const MouseEvent&, rMEvt, void)
+void SmShowSymbol::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if (rMEvt.GetClicks() > 1)
         aDblClickHdlLink.Call(*this);
@@ -1241,7 +1214,7 @@ void SmShowSymbol::SetSymbol(const SmSym *pSymbol)
         SetText( aText );
     }
 
-    m_xDrawingArea->queue_draw();
+    Invalidate();
 }
 
 void SmSymbolDialog::FillSymbolSets()
@@ -1343,9 +1316,10 @@ SmSymbolDialog::SmSymbolDialog(weld::Window *pParent, OutputDevice *pFntListDevi
     , rSymbolMgr(rMgr)
     , pFontListDev(pFntListDevice)
     , m_xSymbolSets(m_xBuilder->weld_combo_box_text("symbolset"))
-    , m_xSymbolSetDisplay(new SmShowSymbolSet(m_xBuilder->weld_drawing_area("symbolsetdisplay"), m_xBuilder->weld_scrolled_window("scrolledwindow")))
+    , m_xSymbolSetDisplay(new SmShowSymbolSet(m_xBuilder->weld_scrolled_window("scrolledwindow")))
+    , m_xSymbolSetDisplayArea(new weld::CustomWeld(*m_xBuilder, "symbolsetdisplay", *m_xSymbolSetDisplay))
     , m_xSymbolName(m_xBuilder->weld_label("symbolname"))
-    , m_xSymbolDisplay(new SmShowSymbol(m_xBuilder->weld_drawing_area("preview")))
+    , m_xSymbolDisplay(new weld::CustomWeld(*m_xBuilder, "preview", m_aSymbolDisplay))
     , m_xGetBtn(m_xBuilder->weld_button("ok"))
     , m_xEditBtn(m_xBuilder->weld_button("edit"))
 {
@@ -1360,7 +1334,7 @@ SmSymbolDialog::SmSymbolDialog(weld::Window *pParent, OutputDevice *pFntListDevi
     m_xSymbolSets->connect_changed(LINK(this, SmSymbolDialog, SymbolSetChangeHdl));
     m_xSymbolSetDisplay->SetSelectHdl(LINK(this, SmSymbolDialog, SymbolChangeHdl));
     m_xSymbolSetDisplay->SetDblClickHdl(LINK(this, SmSymbolDialog, SymbolDblClickHdl2));
-    m_xSymbolDisplay->SetDblClickHdl(LINK(this, SmSymbolDialog, SymbolDblClickHdl));
+    m_aSymbolDisplay.SetDblClickHdl(LINK(this, SmSymbolDialog, SymbolDblClickHdl));
     m_xEditBtn->connect_clicked(LINK(this, SmSymbolDialog, EditClickHdl));
     m_xGetBtn->connect_clicked(LINK(this, SmSymbolDialog, GetClickHdl));
 }
@@ -1409,7 +1383,7 @@ void SmSymbolDialog::SelectSymbol(sal_uInt16 nSymbolNo)
         pSym = aSymbolSet[ nSymbolNo ];
 
     m_xSymbolSetDisplay->SelectSymbol(nSymbolNo);
-    m_xSymbolDisplay->SetSymbol(pSym);
+    m_aSymbolDisplay.SetSymbol(pSym);
     m_xSymbolName->set_label(pSym ? pSym->GetName() : OUString());
 }
 
@@ -1420,10 +1394,8 @@ const SmSym* SmSymbolDialog::GetSymbol() const
     return bValid ? aSymbolSet[ nSymbolNo ] : nullptr;
 }
 
-IMPL_LINK(SmShowChar, DoResize, const Size&, rSize, void)
+void SmShowChar::Resize()
 {
-    m_aSize = rSize;
-
     const OUString &rText = GetText();
     if (rText.isEmpty())
         return;
@@ -1432,10 +1404,8 @@ IMPL_LINK(SmShowChar, DoResize, const Size&, rSize, void)
     SetSymbol(cChar, GetFont()); //force recalculation of size
 }
 
-IMPL_LINK(SmShowChar, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
+void SmShowChar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    vcl::RenderContext& rRenderContext = aPayload.first;
-
     Color aTextCol = rRenderContext.GetTextColor();
     Color aFillCol = rRenderContext.GetFillColor();
 
@@ -1445,7 +1415,8 @@ IMPL_LINK(SmShowChar, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
     rRenderContext.SetTextColor(aWindowTextColor);
     rRenderContext.SetFillColor(aWindowColor);
 
-    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), m_aSize));
+    Size aSize(GetOutputSizePixel());
+    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), aSize));
 
     OUString aText(GetText());
     if (!aText.isEmpty())
@@ -1456,8 +1427,8 @@ IMPL_LINK(SmShowChar, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
 
         Size aTextSize(rRenderContext.GetTextWidth(aText), rRenderContext.GetTextHeight());
 
-        rRenderContext.DrawText(Point((m_aSize.Width()  - aTextSize.Width()) / 2,
-                                      (m_aSize.Height() - aTextSize.Height()) / 2), aText);
+        rRenderContext.DrawText(Point((aSize.Width()  - aTextSize.Width()) / 2,
+                                      (aSize.Height() - aTextSize.Height()) / 2), aText);
     }
 
     rRenderContext.SetTextColor(aTextCol);
@@ -1474,14 +1445,15 @@ void SmShowChar::SetSymbol( const SmSym *pSym )
 void SmShowChar::SetSymbol( sal_UCS4 cChar, const vcl::Font &rFont )
 {
     vcl::Font aFont( rFont );
-    aFont.SetFontSize(Size(0, m_aSize.Height() - m_aSize.Height() / 3));
+    Size aSize(GetOutputSizePixel());
+    aFont.SetFontSize(Size(0, aSize.Height() - aSize.Height() / 3));
     aFont.SetAlignment(ALIGN_BASELINE);
     SetFont(aFont);
 
     OUString aText(&cChar, 1);
     SetText( aText );
 
-    m_xDrawingArea->queue_draw();
+    Invalidate();
 }
 
 void SmSymDefineDialog::FillSymbols(weld::ComboBoxText& rComboBox, bool bDeleteText)
@@ -1635,7 +1607,7 @@ IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl, SvxShowCharSet*, void)
             m_xFontsSubsetLB->set_active(-1);
     }
 
-    m_xSymbolDisplay->SetSymbol(cChar, m_xCharsetDisplay->GetFont());
+    m_aSymbolDisplay.SetSymbol(cChar, m_xCharsetDisplay->GetFont());
 
     UpdateButtons();
 
@@ -1661,7 +1633,7 @@ IMPL_LINK( SmSymDefineDialog, AddClickHdl, weld::Button&, rButton, void )
     m_aSymbolMgrCopy.AddOrReplaceSymbol( aNewSymbol );
 
     // update display of new symbol
-    m_xSymbolDisplay->SetSymbol( &aNewSymbol );
+    m_aSymbolDisplay.SetSymbol( &aNewSymbol );
     m_xSymbolName->set_label(aNewSymbol.GetName());
     m_xSymbolSetName->set_label(aNewSymbol.GetSymbolSetName());
 
@@ -1697,7 +1669,7 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, weld::Button&, rButton, void )
         SetOrigSymbol(nullptr, OUString());
 
     // update display of new symbol
-    m_xSymbolDisplay->SetSymbol(&aNewSymbol);
+    m_aSymbolDisplay.SetSymbol(&aNewSymbol);
     m_xSymbolName->set_label(aNewSymbol.GetName());
     m_xSymbolSetName->set_label(aNewSymbol.GetSymbolSetName());
 
@@ -1788,9 +1760,10 @@ SmSymDefineDialog::SmSymDefineDialog(weld::Window* pParent, OutputDevice *pFntLi
     , m_xAddBtn(m_xBuilder->weld_button("add"))
     , m_xChangeBtn(m_xBuilder->weld_button("modify"))
     , m_xDeleteBtn(m_xBuilder->weld_button("delete"))
-    , m_xOldSymbolDisplay(new SmShowChar(m_xBuilder->weld_drawing_area("oldSymbolDisplay")))
-    , m_xSymbolDisplay(new SmShowChar(m_xBuilder->weld_drawing_area("symbolDisplay")))
-    , m_xCharsetDisplay(new SvxShowCharSet(*m_xBuilder, "charsetDisplay", "showscroll", m_xVirDev))
+    , m_xOldSymbolDisplay(new weld::CustomWeld(*m_xBuilder, "oldSymbolDisplay", m_aOldSymbolDisplay))
+    , m_xSymbolDisplay(new weld::CustomWeld(*m_xBuilder, "symbolDisplay", m_aSymbolDisplay))
+    , m_xCharsetDisplay(new SvxShowCharSet(m_xBuilder->weld_scrolled_window("showscroll"), m_xVirDev))
+    , m_xCharsetDisplayArea(new weld::CustomWeld(*m_xBuilder, "charsetDisplay", *m_xCharsetDisplay))
 {
     // auto completion is troublesome since that symbols character also gets automatically selected in the
     // display and if the user previously selected a character to define/redefine that one this is bad
@@ -1920,12 +1893,12 @@ void SmSymDefineDialog::SetOrigSymbol(const SmSym *pSymbol,
 
         aSymName    = pSymbol->GetName();
         aSymSetName = rSymbolSetName;
-        m_xOldSymbolDisplay->SetSymbol( pSymbol );
+        m_aOldSymbolDisplay.SetSymbol( pSymbol );
     }
     else
     {   // delete displayed symbols
-        m_xOldSymbolDisplay->SetText(OUString());
-        m_xOldSymbolDisplay->queue_draw();
+        m_aOldSymbolDisplay.SetText(OUString());
+        m_aOldSymbolDisplay.Invalidate();
     }
     m_xOldSymbolName->set_label(aSymName);
     m_xOldSymbolSetName->set_label(aSymSetName);
@@ -1965,7 +1938,7 @@ bool SmSymDefineDialog::SelectSymbol(weld::ComboBoxText& rComboBox,
                 // work really well (e.g. it can be empty even though the font itself is
                 // bold or italic) we're manually setting the Font with respect to the Symbol
                 m_xCharsetDisplay->SetFont(rFont);
-                m_xSymbolDisplay->SetFont(rFont);
+                m_aSymbolDisplay.SetFont(rFont);
 
                 // select associated character
                 SelectChar(pSymbol->GetCharacter());
@@ -2011,7 +1984,7 @@ void SmSymDefineDialog::SetFont(const OUString &rFontName, const OUString &rStyl
     SetFontStyle(rStyleName, aFontMetric);
 
     m_xCharsetDisplay->SetFont(aFontMetric);
-    m_xSymbolDisplay->SetFont(aFontMetric);
+    m_aSymbolDisplay.SetFont(aFontMetric);
 
     // update subset listbox for new font's unicode subsets
     FontCharMapRef xFontCharMap;
@@ -2046,7 +2019,7 @@ bool SmSymDefineDialog::SelectFont(const OUString &rFontName, bool bApplyFont)
         if (bApplyFont)
         {
             SetFont(m_xFonts->get_active_text(), m_xStyles->get_active_text());
-            m_xSymbolDisplay->SetSymbol(m_xCharsetDisplay->GetSelectCharacter(), m_xCharsetDisplay->GetFont());
+            m_aSymbolDisplay.SetSymbol(m_xCharsetDisplay->GetSelectCharacter(), m_xCharsetDisplay->GetFont());
         }
         bRet = true;
     }
@@ -2075,7 +2048,7 @@ bool SmSymDefineDialog::SelectStyle(const OUString &rStyleName, bool bApplyFont)
         if (bApplyFont)
         {
             SetFont(m_xFonts->get_active_text(), m_xStyles->get_active_text());
-            m_xSymbolDisplay->SetSymbol(m_xCharsetDisplay->GetSelectCharacter(), m_xCharsetDisplay->GetFont());
+            m_aSymbolDisplay.SetSymbol(m_xCharsetDisplay->GetSelectCharacter(), m_xCharsetDisplay->GetFont());
         }
         bRet = true;
     }
@@ -2090,7 +2063,7 @@ bool SmSymDefineDialog::SelectStyle(const OUString &rStyleName, bool bApplyFont)
 void SmSymDefineDialog::SelectChar(sal_Unicode cChar)
 {
     m_xCharsetDisplay->SelectCharacter( cChar );
-    m_xSymbolDisplay->SetSymbol(cChar, m_xCharsetDisplay->GetFont());
+    m_aSymbolDisplay.SetSymbol(cChar, m_xCharsetDisplay->GetFont());
 
     UpdateButtons();
 }

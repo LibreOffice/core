@@ -126,7 +126,7 @@ SwEnvFormatPage::SwEnvFormatPage(TabPageParent pParent, const SfxItemSet& rSet)
     , m_xSizeFormatBox(m_xBuilder->weld_combo_box_text("format"))
     , m_xSizeWidthField(m_xBuilder->weld_metric_spin_button("width", FUNIT_CM))
     , m_xSizeHeightField(m_xBuilder->weld_metric_spin_button("height", FUNIT_CM))
-    , m_xPreview(new SwEnvPreview(m_xBuilder->weld_drawing_area("preview")))
+    , m_xPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreview))
 {
     SetExchangeSupport();
 
@@ -180,7 +180,7 @@ SwEnvFormatPage::SwEnvFormatPage(TabPageParent pParent, const SfxItemSet& rSet)
 void SwEnvFormatPage::Init(SwEnvDlg* pDialog)
 {
     m_pDialog = pDialog;
-    m_xPreview->SetDialog(m_pDialog);
+    m_aPreview.SetDialog(m_pDialog);
 }
 
 SwEnvFormatPage::~SwEnvFormatPage()

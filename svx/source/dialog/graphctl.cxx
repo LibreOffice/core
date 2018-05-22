@@ -771,23 +771,13 @@ css::uno::Reference< css::accessibility::XAccessible > GraphCtrl::CreateAccessib
     return mpAccContext.get();
 }
 
-SvxGraphCtrl::SvxGraphCtrl(weld::Builder& rBuilder, const OString& rDrawingId)
+SvxGraphCtrl::SvxGraphCtrl()
     : aMap100(MapUnit::Map100thMM)
-    , mxDrawingArea(rBuilder.weld_drawing_area(rDrawingId))
 {
-    mxDrawingArea->connect_size_allocate(LINK(this, SvxGraphCtrl, DoResize));
-    mxDrawingArea->connect_draw(LINK(this, SvxGraphCtrl, DoPaint));
 }
 
-IMPL_LINK(SvxGraphCtrl, DoResize, const Size&, rSize, void)
+void SvxGraphCtrl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    maSize = rSize;
-    mxDrawingArea->queue_draw();
-}
-
-IMPL_LINK(SvxGraphCtrl, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
-{
-    vcl::RenderContext& rRenderContext = aPayload.first;
     rRenderContext.Erase();
     const bool bGraphicValid(GraphicType::NONE != aGraphic.GetType());
     // #i73381# in non-SdrMode, paint to local directly
@@ -796,7 +786,7 @@ IMPL_LINK(SvxGraphCtrl, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
         MapMode         aDisplayMap( aMap100 );
         Point           aNewPos;
         Size            aNewSize;
-        const Size      aWinSize = Application::GetDefaultDevice()->PixelToLogic( maSize, aMap100 );
+        const Size      aWinSize = Application::GetDefaultDevice()->PixelToLogic(GetOutputSizePixel(), aMap100);
         const long      nWidth = aWinSize.Width();
         const long      nHeight = aWinSize.Height();
         double          fGrfWH = static_cast<double>(aGraphSize.Width()) / aGraphSize.Height();
@@ -841,7 +831,7 @@ void SvxGraphCtrl::SetGraphic(const Graphic& rGraphic)
     else
         aGraphSize = OutputDevice::LogicToLogic( aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), aMap100 );
 
-    mxDrawingArea->queue_draw();
+    Invalidate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

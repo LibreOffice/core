@@ -24,6 +24,7 @@
 #include <svx/svxdllapi.h>
 #include <svx/rectenum.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 #include <svx/xtable.hxx>
 #include <rtl/ref.hxx>
@@ -146,10 +147,9 @@ public:
     bool IsCompletelyDisabled() const { return mbCompleteDisable; }
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC RectCtl
+class SAL_WARN_UNUSED SVX_DLLPUBLIC RectCtl : public weld::CustomWidgetController
 {
 private:
-    std::unique_ptr<weld::DrawingArea> m_xControl;
     VclPtr<SvxTabPage> m_pPage;
 
     SVX_DLLPRIVATE void             InitSettings(vcl::RenderContext& rRenderContext);
@@ -161,7 +161,6 @@ protected:
     rtl::Reference<RectCtlAccessibleContext> pAccContext;
     sal_uInt16 nBorderWidth;
     sal_uInt16 nRadius;
-    Size m_aSize;
     Point aPtLT, aPtMT, aPtRT;
     Point aPtLM, aPtMM, aPtRM;
     Point aPtLB, aPtMB, aPtRB;
@@ -178,19 +177,19 @@ protected:
 
     Point               GetApproxLogPtFromPixPt( const Point& rRoughPixelPoint ) const;
 public:
-    RectCtl(weld::Builder& rBuilder, const OString& rDrawingId, SvxTabPage* pPage,
-            RectPoint eRpt = RectPoint::MM, sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80);
+    RectCtl(SvxTabPage* pPage, RectPoint eRpt = RectPoint::MM, sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80);
     void SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder, sal_uInt16 nCircl);
-    ~RectCtl();
+    virtual ~RectCtl() override;
 
-    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
-    DECL_LINK(DoResize, const Size& rSize, void);
-    DECL_LINK(DoMouseButtonDown, const MouseEvent&, void);
-    DECL_LINK(DoKeyDown, const KeyEvent&, bool);
-    DECL_LINK(DoGetFocus, weld::Widget&, void);
-    DECL_LINK(DoLoseFocus, weld::Widget&, void);
-    DECL_LINK(MarkToResetSettings, weld::Widget&, void);
-    DECL_LINK(DoFocusRect, weld::Widget&, tools::Rectangle);
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+    virtual void Resize() override;
+    virtual void MouseButtonDown(const MouseEvent&) override;
+    virtual bool KeyInput(const KeyEvent&) override;
+    virtual void GetFocus() override;
+    virtual void LoseFocus() override;
+    virtual tools::Rectangle GetFocusRect() override;
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    virtual void StyleUpdated() override;
 
     void                Reset();
     RectPoint           GetActualRP() const { return eRP;}
@@ -203,19 +202,14 @@ public:
     tools::Rectangle           CalculateFocusRectangle() const;
     tools::Rectangle           CalculateFocusRectangle( RectPoint eRectPoint ) const;
 
-    css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() { return m_xControl->get_accessible_parent(); }
-    css::uno::Reference<css::accessibility::XAccessible> CreateAccessible();
-    a11yrelationset get_accessible_relation_set() { return m_xControl->get_accessible_relation_set(); }
+    css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() { return GetDrawingArea()->get_accessible_parent(); }
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    a11yrelationset get_accessible_relation_set() { return GetDrawingArea()->get_accessible_relation_set(); }
 
     RectPoint          GetApproxRPFromPixPt( const css::awt::Point& rPixelPoint ) const;
 
     bool IsCompletelyDisabled() const { return mbCompleteDisable; }
     void DoCompletelyDisable(bool bNew);
-
-    bool IsVisible() const { return m_xControl->get_visible(); }
-    bool HasFocus() const { return m_xControl->has_focus(); }
-    void GrabFocus() { m_xControl->grab_focus(); }
-    Size GetSize() const { return m_aSize; }
 };
 
 /*************************************************************************

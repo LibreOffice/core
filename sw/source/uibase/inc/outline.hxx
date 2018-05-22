@@ -84,6 +84,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     SwNumRule*          pNumRule;
     OUString*           pCollNames;
     sal_uInt16          nActLevel;
+    SwNumberingPreview  m_aPreviewWIN;
 
     std::unique_ptr<weld::TreeView> m_xLevelLB;
     std::unique_ptr<weld::ComboBoxText> m_xCollBox;
@@ -94,7 +95,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     std::unique_ptr<weld::Entry> m_xPrefixED;
     std::unique_ptr<weld::Entry> m_xSuffixED;
     std::unique_ptr<weld::SpinButton> m_xStartEdit;
-    std::unique_ptr<SwNumberingPreview> m_xPreviewWIN;
+    std::unique_ptr<weld::CustomWeld> m_xPreviewWIN;
 
     DECL_LINK( LevelHdl, weld::TreeView&, void );
     DECL_LINK( ToggleComplete, weld::SpinButton&, void );
@@ -107,7 +108,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
 
     void    Update();
 
-    void    SetModified() { m_xPreviewWIN->queue_draw(); }
+    void    SetModified() { m_aPreviewWIN.Invalidate(); }
     void    CheckForStartValue_Impl(sal_uInt16 nNumberingType);
 
     using SfxTabPage::ActivatePage;
@@ -129,7 +130,7 @@ public:
     void SetNumRule(SwNumRule *pRule)
     {
         pNumRule = pRule;
-        m_xPreviewWIN->SetNumRule(pNumRule);
+        m_aPreviewWIN.SetNumRule(pNumRule);
     }
 };
 
