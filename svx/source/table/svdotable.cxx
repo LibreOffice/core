@@ -1760,7 +1760,7 @@ SdrTableObj& SdrTableObj::operator=(const SdrTableObj& rObj)
     // call parent
     // before SdrObject::operator= was called which is wrong from
     // the derivation hierarchy and may leave quite some entries
-    // unititialized. Changed to SdrTextObj::operator=, but had to adapt
+    // uninitialized. Changed to SdrTextObj::operator=, but had to adapt
     // usage of pNewOutlinerParaObject/mpText there due to nullptr access
     SdrTextObj::operator=(rObj);
 
