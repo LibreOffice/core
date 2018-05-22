@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_7e3bac9c",
+        "filename": "sw/source/filter/ww8/wrtw8esh.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-22T20:02:32Z",
+      "side": 1,
+      "message": "What is the need to convert to whole degrees? It would make some corner cases (like 4450) to round to, say, 45 degrees, and have wrong (?) behaviour. If the 100th-degrees constants below are not intuitive, a comment describing the units would be enough: please use 36000, 4500, 13500, etc.",
+      "range": {
+        "startLine": 696,
+        "startChar": 65,
+        "endLine": 696,
+        "endChar": 71
+      },
+      "revId": "4b9ea9ba21a0ce20776d27964e4127b5d02d3cdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_9e42200f",
+        "filename": "sw/source/filter/ww8/wrtw8esh.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-22T20:02:32Z",
+      "side": 1,
+      "message": "We have NormAngle360() in \u003csvx/svdtrans.hxx\u003e for that. In theory, the negative angle could be more than 360 degrees; in that case, something like this would be correct:\n\n  while (nAngle \u003c 0)\n    nAngle +\u003d 360; // 36000\n  nAngle %\u003d 360; // 36000",
+      "range": {
+        "startLine": 698,
+        "startChar": 24,
+        "endLine": 701,
+        "endChar": 50
+      },
+      "revId": "4b9ea9ba21a0ce20776d27964e4127b5d02d3cdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
