@@ -3278,8 +3278,7 @@ void SwpHints::DeleteAtPos( const size_t nPos )
     if( pHint->Which() == RES_TXTATR_FIELD )
     {
         SwTextField *const pTextField(static_txtattr_cast<SwTextField*>(pHint));
-        const SwField* pField = pTextField->GetFormatField().GetField();
-        const SwFieldType* pFieldTyp = pField->GetTyp();
+        const SwFieldType* pFieldTyp = pTextField->GetFormatField().GetField()->GetTyp();
         if( SwFieldIds::Dde == pFieldTyp->Which() )
         {
             const SwTextNode* pNd = pTextField->GetpTextNode();
@@ -3288,7 +3287,7 @@ void SwpHints::DeleteAtPos( const size_t nPos )
             pTextField->ChgTextNode(nullptr);
         }
         else if (m_bHiddenByParaField
-                 && m_rParent.FieldCanHidePara(pField->GetTyp()->Which()))
+                 && m_rParent.FieldCanHidePara(pFieldTyp->Which()))
         {
             m_bCalcHiddenParaField = true;
         }
