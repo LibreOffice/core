@@ -98,9 +98,8 @@ void DrawArrow(vcl::RenderContext& rRenderContext, const Point &rP1, const Point
 
 }
 
-SwLabPreview::SwLabPreview(weld::DrawingArea* pWidget)
-    : m_xDrawingArea(pWidget)
-    , m_aGrayColor(COL_LIGHTGRAY)
+SwLabPreview::SwLabPreview()
+    : m_aGrayColor(COL_LIGHTGRAY)
     , m_aHDistStr(SwResId(STR_HDIST))
     , m_aVDistStr(SwResId(STR_VDIST))
     , m_aWidthStr(SwResId(STR_WIDTH))
@@ -109,12 +108,21 @@ SwLabPreview::SwLabPreview(weld::DrawingArea* pWidget)
     , m_aUpperStr(SwResId(STR_UPPER))
     , m_aColsStr(SwResId(STR_COLS))
     , m_aRowsStr(SwResId(STR_ROWS))
+    , m_lHDistWidth(0)
+    , m_lVDistWidth(0)
+    , m_lHeightWidth(0)
+    , m_lLeftWidth(0)
+    , m_lUpperWidth(0)
+    , m_lColsWidth(0)
+    , m_lXWidth(0)
+    , m_lXHeight(0)
+{
+}
+
+void SwLabPreview::SetDrawingArea(weld::DrawingArea* pWidget)
 {
     pWidget->set_size_request(pWidget->get_approximate_digit_width() * 54,
                               pWidget->get_text_height() * 15);
-
-    m_xDrawingArea->connect_size_allocate(LINK(this, SwLabPreview, DoResize));
-    m_xDrawingArea->connect_draw(LINK(this, SwLabPreview, DoPaint));
 
     m_lHDistWidth  = pWidget->get_pixel_size(m_aHDistStr).Width();
     m_lVDistWidth  = pWidget->get_pixel_size(m_aVDistStr).Width();
@@ -122,21 +130,17 @@ SwLabPreview::SwLabPreview(weld::DrawingArea* pWidget)
     m_lLeftWidth   = pWidget->get_pixel_size(m_aLeftStr).Width();
     m_lUpperWidth  = pWidget->get_pixel_size(m_aUpperStr).Width();
     m_lColsWidth   = pWidget->get_pixel_size(m_aColsStr).Width();
-    m_lXHeight = pWidget->get_text_height();
     m_lXWidth  = pWidget->get_pixel_size(OUString('X')).Width();
+    m_lXHeight = pWidget->get_text_height();
+
+    CustomWidgetController::SetDrawingArea(pWidget);
 }
 
-IMPL_LINK(SwLabPreview, DoResize, const Size&, rSize, void)
+void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    m_aSize = rSize;
-}
-
-IMPL_LINK(SwLabPreview, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
-{
-    vcl::RenderContext& rRenderContext = aPayload.first;
-
-    const long lOutWPix = m_aSize.Width();
-    const long lOutHPix = m_aSize.Height();
+    const Size aSize(GetOutputSizePixel());
+    const long lOutWPix = aSize.Width();
+    const long lOutHPix = aSize.Height();
 
     // Scale factor
     const double fxpix = double(lOutWPix - (2 * (m_lLeftWidth + 15))) / double(lOutWPix);
@@ -276,7 +280,7 @@ IMPL_LINK(SwLabPreview, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
 void SwLabPreview::UpdateItem(const SwLabItem& rItem)
 {
     m_aItem = rItem;
-    m_xDrawingArea->queue_draw();
+    Invalidate();
 }
 
 SwLabFormatPage::SwLabFormatPage(TabPageParent pParent, const SfxItemSet& rSet)
@@ -286,7 +290,7 @@ SwLabFormatPage::SwLabFormatPage(TabPageParent pParent, const SfxItemSet& rSet)
     , bModified(false)
     , m_xMakeFI(m_xBuilder->weld_label("make"))
     , m_xTypeFI(m_xBuilder->weld_label("type"))
-    , m_xPreview(new SwLabPreview(m_xBuilder->weld_drawing_area("preview")))
+    , m_xPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreview))
     , m_xHDistField(m_xBuilder->weld_metric_spin_button("hori", FUNIT_CM))
     , m_xVDistField(m_xBuilder->weld_metric_spin_button("vert", FUNIT_CM))
     , m_xWidthField(m_xBuilder->weld_metric_spin_button("width", FUNIT_CM))
@@ -355,7 +359,7 @@ IMPL_LINK_NOARG(SwLabFormatPage, PreviewHdl, Timer *, void)
     aPreviewIdle.Stop();
     ChangeMinMax();
     FillItem( aItem );
-    m_xPreview->UpdateItem( aItem );
+    m_aPreview.UpdateItem(aItem);
 }
 
 void SwLabFormatPage::ChangeMinMax()
