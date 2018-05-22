@@ -23,10 +23,12 @@
 
 #include <map>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/Reference.h>
 
 #include <charttoolsdllapi.hxx>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
 
 namespace chart
 {

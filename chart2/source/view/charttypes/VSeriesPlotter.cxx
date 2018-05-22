@@ -19,11 +19,13 @@
 
 #include <memory>
 #include <VSeriesPlotter.hxx>
+#include <VLineProperties.hxx>
 #include <AbstractShapeFactory.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include <svl/zformat.hxx>
 
 #include <CommonConverters.hxx>
+#include <ExplicitCategoriesProvider.hxx>
 #include <ViewDefines.hxx>
 #include <ObjectIdentifier.hxx>
 #include <StatisticsHelper.hxx>
@@ -52,6 +54,7 @@
 #include <unonames.hxx>
 #include <SpecialCharacters.hxx>
 
+#include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>

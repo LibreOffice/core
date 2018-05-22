@@ -21,7 +21,8 @@
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_CLIPPING_HXX
 
 #include <basegfx/range/b2drectangle.hxx>
-#include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
+
+namespace com { namespace sun { namespace star { namespace drawing { struct PolyPolygonShape3D; } } } }
 
 namespace chart
 {

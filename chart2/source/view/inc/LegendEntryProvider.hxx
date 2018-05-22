@@ -19,15 +19,18 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_LEGENDENTRYPROVIDER_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_LEGENDENTRYPROVIDER_HXX
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
-#include <com/sun/star/chart2/XFormattedString2.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Sequence.h>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XFormattedString2; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace chart
 {

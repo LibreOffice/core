@@ -21,21 +21,20 @@
 
 #include "PropertyMapper.hxx"
 
-#include <com/sun/star/chart2/DataPointLabel.hpp>
-#include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
-#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
-#include <com/sun/star/chart2/XChartType.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <cppuhelper/weakref.hxx>
+#include <com/sun/star/awt/Size.hpp>
 
 #include <memory>
-#include <vector>
 #include <map>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartType; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataSequence; } } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { struct DataPointLabel; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { struct Symbol; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
 
 namespace chart
 {
