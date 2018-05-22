@@ -99,7 +99,7 @@ public:
     PDFExtOutDevData( const OutputDevice& rOutDev );
     virtual ~PDFExtOutDevData() override;
 
-    bool PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction );
+    bool PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const GDIMetaFile& rMtf );
     void ResetSyncData();
 
     void PlayGlobalActions( PDFWriter& rWriter );
