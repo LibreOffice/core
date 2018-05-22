@@ -673,7 +673,7 @@ IMPL_LINK(SfxTemplateManagerDlg, CreateContextMenuHdl, ThumbnailViewItem*, pItem
 
 IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
-    uno::Sequence< PropertyValue > aArgs(4);
+    uno::Sequence< PropertyValue > aArgs(5);
     aArgs[0].Name = "AsTemplate";
     aArgs[0].Value <<= true;
     aArgs[1].Name = "MacroExecutionMode";
@@ -682,6 +682,8 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, voi
     aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
     aArgs[3].Name = "InteractionHandler";
     aArgs[3].Value <<= task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
+    aArgs[4].Name = "ReadOnly";
+    aArgs[4].Value <<= true;
 
     TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
 
