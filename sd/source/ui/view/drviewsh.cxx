@@ -58,7 +58,7 @@ void DrawViewShell::GotoBookmark(const OUString& rBookmark)
 
 void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rWin)
 {
-    if ( SlideShow::IsRunning( GetViewShellBase() ) )
+    if ( (IsMouseButtonDown() && !IsMouseSelecting()) || SlideShow::IsRunning( GetViewShellBase() ) )
         return;
 
     // tdf#98646 check if Rectangle which contains the bounds of the region to
