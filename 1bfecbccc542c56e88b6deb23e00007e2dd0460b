@@ -16,6 +16,24 @@
       "revId": "1bfecbccc542c56e88b6deb23e00007e2dd0460b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_439c5569",
+        "filename": "testtools/source/cliversioning/version_libs/version_3_1.dll",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2018-05-22T11:55:48Z",
+      "side": 1,
+      "message": "Hi thorsten,\n   thanks a lot for your review.\n\n   I can\u0027t see the need for executables on these files, anyway, I reverted to the previous condition.\n\n   I\u0027m going to upload new version in minutes.\n\nThanks again,\nAndrea",
+      "parentUuid": "9a30ddce_4478fa2b",
+      "revId": "1bfecbccc542c56e88b6deb23e00007e2dd0460b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
