@@ -1336,7 +1336,7 @@ void SwSubFont::DrawStretchText_( SwDrawTextInfo &rInf )
     rInf.SetPos(aOldPos);
 }
 
-sal_Int32 SwSubFont::GetCursorOfst_( SwDrawTextInfo& rInf )
+TextFrameIndex SwSubFont::GetCursorOfst_( SwDrawTextInfo& rInf )
 {
     if ( !pLastFont || pLastFont->GetOwner()!=m_pMagic )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
@@ -1468,7 +1468,7 @@ void SwDrawTextInfo::Shift( sal_uInt16 nDir )
 /**
  * @note Used for the "continuous underline" feature.
  **/
-SwUnderlineFont::SwUnderlineFont( SwFont& rFnt, sal_Int32 nEnd, const Point& rPoint )
+SwUnderlineFont::SwUnderlineFont(SwFont& rFnt, TextFrameIndex const nEnd, const Point& rPoint)
         : m_aPos( rPoint ), m_nEnd( nEnd ), m_pFont( &rFnt )
 {
 };
