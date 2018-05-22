@@ -1710,16 +1710,17 @@ void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
 }
 
 static SwTextFrame* lcl_GetFlyInContentAnchor( SwTextFrame* _pProposedAnchorFrame,
-                                   const sal_Int32 _nTextOfs )
+                                   SwPosition const& rAnchorPos)
 {
     SwTextFrame* pAct = _pProposedAnchorFrame;
     SwTextFrame* pTmp;
+    TextFrameIndex const nTextOffset(_pProposedAnchorFrame->MapModelToViewPos(rAnchorPos));
     do
     {
         pTmp = pAct;
         pAct = pTmp->GetFollow();
     }
-    while( pAct && _nTextOfs >= pAct->GetOfst() );
+    while (pAct && nTextOffset >= pAct->GetOfst());
     return pTmp;
 }
 
@@ -1862,7 +1863,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                         {
                             pFrame = lcl_GetFlyInContentAnchor(
                                         static_cast<SwTextFrame*>(pFrame),
-                                        pAnch->GetContentAnchor()->nContent.GetIndex() );
+                                        *pAnch->GetContentAnchor());
                         }
 
                         if ( !pAnchorFrameOfMaster )
