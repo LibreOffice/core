@@ -487,7 +487,7 @@ Image AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, bool bBig, bool
     Image aImage;
 
     SAL_INFO("fwk", "Expensive: Addons GetImageFromURL " << aURL <<
-             " big " << (bBig?"big":"litte") <<
+             " big " << (bBig?"big":"little") <<
              " scale " << (bNoScale ? "noscale" : "scale"));
 
     ImageManager::iterator pIter = m_aImageManager.find(aURL);
