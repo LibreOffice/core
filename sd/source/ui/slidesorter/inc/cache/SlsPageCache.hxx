@@ -65,7 +65,7 @@ class GenericPageCache;
 class PageCache
 {
 public:
-    /** The page chache is created with a reference to the slide sorter so
+    /** The page cache is created with a reference to the slide sorter so
         that it has access to both the view and the model and so can fill
         itself with requests for all or just the visible pages.
 

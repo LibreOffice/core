@@ -6922,7 +6922,7 @@
                             <property name="show_arrow">False</property>
                             <property name="icon_size">3</property>
                             <child>
-                              <object class="GtkToolButton" id="SlidShow-PresentationDialog">
+                              <object class="GtkToolButton" id="SlideShow-PresentationDialog">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
