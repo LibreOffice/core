@@ -79,8 +79,8 @@ class SwSubFont : public SvxFont
     void DrawStretchCapital( SwDrawTextInfo &rInf );
     void DoOnCapitals( SwDoCapitals &rDo );
     void DrawStretchText_( SwDrawTextInfo &rInf );
-    sal_Int32 GetCursorOfst_( SwDrawTextInfo& rInf );
-    sal_Int32 GetCapitalCursorOfst( SwDrawTextInfo& rInf );
+    TextFrameIndex GetCursorOfst_( SwDrawTextInfo& rInf );
+    TextFrameIndex GetCapitalCursorOfst( SwDrawTextInfo& rInf );
 
     inline void SetColor( const Color& rColor );
     inline void SetFillColor( const Color& rColor );
@@ -297,10 +297,9 @@ public:
     // makes the logical font be effective in the OutputDevice
     void ChgPhysFnt( SwViewShell const *pSh, OutputDevice& rOut );
 
-    sal_Int32 GetCapitalBreak( SwViewShell const* pSh,  const OutputDevice* pOut,
+    TextFrameIndex GetCapitalBreak( SwViewShell const* pSh,  const OutputDevice* pOut,
         const SwScriptInfo* pScript, const OUString& rText,
-        long nTextWidth, const sal_Int32 nIdx,
-        const sal_Int32 nLen );
+        long nTextWidth, TextFrameIndex nIdx, TextFrameIndex nLen);
 
     void DoOnCapitals( SwDoCapitals &rDo )
         { m_aSub[m_nActual].DoOnCapitals( rDo ); }
@@ -308,9 +307,9 @@ public:
     Size GetTextSize_( SwDrawTextInfo& rInf )
         { rInf.SetFont( this ); return m_aSub[m_nActual].GetTextSize_( rInf ); }
 
-    sal_Int32 GetTextBreak( SwDrawTextInfo const & rInf, long nTextWidth );
+    TextFrameIndex GetTextBreak( SwDrawTextInfo const & rInf, long nTextWidth );
 
-    sal_Int32 GetCursorOfst_( SwDrawTextInfo& rInf )
+    TextFrameIndex GetCursorOfst_( SwDrawTextInfo& rInf )
         { return m_aSub[m_nActual].GetCursorOfst_( rInf ); }
 
     void DrawText_( SwDrawTextInfo &rInf )
@@ -947,14 +946,14 @@ inline void SwFont::SetHighlightColor( const Color& aNewColor )
 class SwUnderlineFont
 {
     Point m_aPos;
-    sal_Int32 m_nEnd;
+    TextFrameIndex m_nEnd;
     std::unique_ptr<SwFont> m_pFont;
 
 public:
     // sets the font which should paint the common baseline,
     // index where continuous underline ends,
     // and the starting point of the common baseline
-    SwUnderlineFont( SwFont& rFnt ,sal_Int32 m_nEnd , const Point& rPoint );
+    SwUnderlineFont(SwFont& rFnt, TextFrameIndex nEnd, const Point& rPoint);
     ~SwUnderlineFont();
 
     SwFont& GetFont()
@@ -963,7 +962,7 @@ public:
         return *m_pFont;
     }
     const Point& GetPos() const { return m_aPos; }
-    sal_Int32 GetEnd() const { return m_nEnd; }
+    TextFrameIndex GetEnd() const { return m_nEnd; }
     // the x coordinate of the starting point has to be set for each portion
     void SetPos( const Point& rPoint ) { m_aPos = rPoint;  }
 };

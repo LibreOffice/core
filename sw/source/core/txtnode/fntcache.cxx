@@ -1992,7 +1992,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     return aTextSize;
 }
 
-sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
+TextFrameIndex SwFntObj::GetCursorOfst(SwDrawTextInfo &rInf)
 {
     long nSpaceAdd =       rInf.GetSpace() / SPACING_PRECISION_FACTOR;
     const long nSperren = -rInf.GetSperren() / SPACING_PRECISION_FACTOR;
@@ -2285,7 +2285,7 @@ SwCacheObj *SwFntAccess::NewObj( )
     return new SwFntObj( *static_cast<SwSubFont const *>(m_pOwner), ++pMagicNo, pShell );
 }
 
-sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo const & rInf, long nTextWidth )
+TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, long nTextWidth)
 {
     ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
