@@ -863,7 +863,7 @@ void SwSetExpField::SetValue( const double& rAny )
     SwValueField::SetValue(rAny);
 
     if( IsSequenceField() )
-        sExpand = FormatNumber( GetValue(), static_cast<SvxNumType>(GetFormat()) );
+        sExpand = FormatNumber( GetValue(), static_cast<SvxNumType>(GetFormat()), GetLanguage() );
     else
         sExpand = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue( rAny,
                                                 GetFormat(), GetLanguage());
