@@ -826,7 +826,7 @@ sal_uInt16 SwEditShell::GetLineCount()
     {
         if( nullptr != ( pContentFrame = pCNd->getLayoutFrame( GetLayout() ) ) && pContentFrame->IsTextFrame() )
         {
-            nRet = nRet + static_cast<SwTextFrame*>(pContentFrame)->GetLineCount( COMPLETE_STRING );
+            nRet = nRet + static_cast<SwTextFrame*>(pContentFrame)->GetLineCount(TextFrameIndex(COMPLETE_STRING));
         }
     }
     return nRet;
