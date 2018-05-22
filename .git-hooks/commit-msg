@@ -1,0 +1,193 @@
+#!/bin/sh
+#
+# An example hook script to check the commit log message.
+# Called by git-commit with one argument, the name of the file
+# that has the commit message.  The hook should exit with non-zero
+# status after issuing an appropriate message if it wants to stop the
+# commit.  The hook is allowed to edit the commit message file.
+#
+# To enable this hook, make this file executable.
+
+# Uncomment the below to add a Signed-off-by line to the message.
+# SOB=$(git var GIT_AUTHOR_IDENT | sed -n 's/^\(.*>\).*$/Signed-off-by: \1/p')
+# grep -qs "^$SOB" "$1" || echo "$SOB" >> "$1"
+
+# This example catches duplicate Signed-off-by lines.
+
+base_dir=$(dirname $0)
+MSG="$1"
+
+abort() {
+    cp $1 $1.save
+    cat >&2 <<EOF
+Commit aborted, your commit message was saved as '$1.save'.
+
+Reason: $2
+
+EOF
+    exit 1
+}
+
+test "" = "$(grep '^Signed-off-by: ' "$1" |
+	 sort | uniq -c | sed -e '/^[ 	]*1[ 	]/d')" || {
+	abort "$1" "Duplicate Signed-off-by lines."
+}
+
+# Check that the first line exists, and is not an asterisk
+
+if [ -z "`head -n 1 $1 | grep -v '^[[:blank:]]*\*$'`" ] ; then
+    abort "$1" "Please provide the general description on the first line."
+fi
+
+# ...and that it is not too long
+
+if [ "`head -n 1 $1 | wc -c`" -gt 79 ] ; then
+    abort "$1" "The first line is too long, please try to fit into 79 characters."
+fi
+
+fdo_regex='fdo#[0-9]+'
+if egrep -q "$fdo_regex" $1; then
+    for bugid in `head -n 1 $1 |egrep -o "$fdo_regex" |sed 's/fdo#//'`
+    do
+        if [ "`echo $bugid |sed 's/fdo#//'`" -gt 88775 ]; then
+            abort "$1" "The first line contains a suspicious fdo# rereference: 'fdo#$bugid', did you mean tdf#?"
+        fi
+    done
+fi
+
+# ...and that it does not continue on the second line
+if [ "`wc -l < $1`" -gt 1 -a -n "`head -n 2 $1 | tail -n 1 | sed 's/^#.*//'`" ] ; then
+    abort "$1" "The second line is not empty - maybe the first line continues there?"
+fi
+
+# Check that the message is not a ChangeLog-like one
+
+if [ -n "`head -n 1 $1 | grep '^[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.*<.*@.*>'`" ] ; then
+    abort "$1" "The commit message looks like ChangeLog, please use the git form."
+fi
+
+# Check for whitespace in front of *'s
+
+if [ -n "`sed '/^#/,$d' $1 | grep '^[[:space:]]\+\*.*:'`" -a -z "`grep '^\*' $1`" ] ; then
+    abort "$1" "Please don't use whitespace in front of '* file: Description.' entries."
+fi
+
+# Check that lines do not start with '#<something>' (possibly accidental commit,
+# such as starting the message with '#ifdef', git commits start with '#<whitespace>'.
+
+if [ -n "`grep '^#[^[:blank:]]' $1`" ] ; then
+    abort "$1" "Possible accidental comment in the commit message (leading # without space)."
+fi
+
+
+#------------------ copied gerrit commit-msg hook to handle ChangeId -->
+# From Gerrit Code Review 2.3
+#
+# Part of Gerrit Code Review (http://code.google.com/p/gerrit/)
+#
+# Copyright (C) 2009 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+CHANGE_ID_AFTER="Bug|Issue"
+
+# Check for, and add if missing, a unique Change-Id
+#
+add_ChangeId() {
+        clean_message=`sed -e '
+                /^diff --git a\/.*/{
+                        s///
+                        q
+                }
+                /^Signed-off-by:/d
+                /^#/d
+        ' "$MSG" | git stripspace`
+        if test -z "$clean_message"
+        then
+                return
+        fi
+
+        id=`grep -i '^Change-Id:' "$MSG" | sed -e "s/.*: I//"`
+        temp_msg=`grep -v -i '^Change-Id:' "$MSG"`
+        echo "$temp_msg" > "$MSG"
+
+        if  test -z "$id"
+        then
+            id=`_gen_ChangeId`
+        fi
+        perl -e '
+                $MSG = shift;
+                $id = shift;
+                $CHANGE_ID_AFTER = shift;
+
+                undef $/;
+                open(I, $MSG); $_ = <I>; close I;
+                s|^diff --git a/.*||ms;
+                s|^#.*$||mg;
+                exit unless $_;
+
+                @message = split /\n/;
+                $haveFooter = 0;
+                $startFooter = @message;
+                for($line = @message - 1; $line >= 0; $line--) {
+                        $_ = $message[$line];
+
+                        if (/^[a-zA-Z0-9-]+: /) {
+                                $haveFooter++;
+                                next;
+                        }
+                        next if /^[ []/;
+                        $startFooter = $line if ($haveFooter && /^\r?$/);
+                        last;
+                }
+
+                @footer = @message[$startFooter+1..@message];
+                @message = @message[0..$startFooter];
+                push(@footer, "") unless @footer;
+
+                for ($line = 0; $line < @footer; $line++) {
+                        $_ = $footer[$line];
+                        next if /^($CHANGE_ID_AFTER):/i;
+                        last;
+                }
+                splice(@footer, $line, 0, "Change-Id: I$id");
+
+                $_ = join("\n", @message, @footer);
+                open(O, ">$MSG"); print O; close O;
+        ' "$MSG" "$id" "$CHANGE_ID_AFTER"
+}
+_gen_ChangeIdInput() {
+        echo "tree `git write-tree`"
+        if parent=`git rev-parse HEAD^0 2>/dev/null`
+        then
+                echo "parent $parent"
+        fi
+        echo "author `git var GIT_AUTHOR_IDENT`"
+        echo "committer `git var GIT_COMMITTER_IDENT`"
+        echo
+        printf '%s' "$clean_message"
+}
+_gen_ChangeId() {
+        _gen_ChangeIdInput |
+        git hash-object -t commit --stdin
+}
+
+
+add_ChangeId
+#------------------ copied gerrit commit-msg hook to handle ChangeId <--
+
+
+exit 0
+
+# vi:set shiftwidth=4 expandtab:
