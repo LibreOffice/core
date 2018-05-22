@@ -23,8 +23,7 @@
 
 #include <o3tl/make_unique.hxx>
 
-#include <tools/date.hxx>
-#include <tools/time.hxx>
+#include <tools/datetime.hxx>
 
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -198,8 +197,9 @@ OUString XMLTextListsHelper::GenerateNewListId() const
     else
     {
         // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
-        sal_Int64 n = ::tools::Time( ::tools::Time::SYSTEM ).GetTime();
-        n += Date( Date::SYSTEM ).GetDateUnsigned();
+        DateTime aDateTime( DateTime::SYSTEM );
+        sal_Int64 n = aDateTime.GetTime();
+        n += aDateTime.GetDateUnsigned();
         n += comphelper::rng::uniform_int_distribution(0, std::numeric_limits<int>::max());
         // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
         sTmpStr += OUString::number( n );
