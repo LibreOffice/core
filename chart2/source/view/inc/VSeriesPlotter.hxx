@@ -25,9 +25,14 @@
 #include "LabelAlignment.hxx"
 #include "MinimumAndMaximumSupplier.hxx"
 #include "LegendEntryProvider.hxx"
-#include <ExplicitCategoriesProvider.hxx>
-#include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
+
+namespace com { namespace sun { namespace star { namespace awt { struct Point; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartType; } } } }
+
+
+namespace chart { class ExplicitCategoriesProvider; }
+namespace chart { struct ExplicitScaleData; }
 
 namespace com { namespace sun { namespace star {
     namespace util {

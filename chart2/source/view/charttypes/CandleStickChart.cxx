@@ -20,6 +20,7 @@
 #include "CandleStickChart.hxx"
 #include <ShapeFactory.hxx>
 #include <CommonConverters.hxx>
+#include <ExplicitCategoriesProvider.hxx>
 #include <ObjectIdentifier.hxx>
 #include <LabelPositionHelper.hxx>
 #include "BarPositionHelper.hxx"

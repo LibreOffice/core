@@ -231,3 +231,32 @@ blacklist:
     - com/sun/star/io/XActiveDataSource.hpp
     - com/sun/star/lang/XMultiServiceFactory.hpp
     - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/view/inc/AbstractShapeFactory.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/Direction3D.hpp
+    chart2/source/view/inc/3DChartObjects.hxx:
+    # base class has to be a complete type
+    - boost/shared_array.hpp
+    - map
+    chart2/source/view/inc/Linear3DTransformation.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XTransformation.hpp
+    chart2/source/view/inc/GL3DRenderer.hxx:
+    # base class has to be a complete type
+    - boost/shared_array.hpp
+    - map
+    - vector
+    - string.h
+    chart2/source/view/inc/GL3DBarChart.hxx:
+    # base class has to be a complete type
+    - deque
+    - memory
+    - vector
+    - GL3DPlotterBase.hxx
+    - vcl/idle.hxx
+    chart2/source/view/inc/VLineProperties.hxx:
+    # base class has to be a complete type
+    - com/sun/star/uno/Reference.h
+    chart2/source/view/inc/VPolarTransformation.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XTransformation.hpp

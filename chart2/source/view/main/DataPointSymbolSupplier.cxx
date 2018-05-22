@@ -19,6 +19,7 @@
 
 #include <chartview/DataPointSymbolSupplier.hxx>
 #include <AbstractShapeFactory.hxx>
+#include <com/sun/star/drawing/Position3D.hpp>
 
 namespace chart
 {

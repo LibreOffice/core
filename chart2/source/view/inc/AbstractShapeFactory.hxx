@@ -11,25 +11,26 @@
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_ABSTRACTSHAPEFACTORY_HXX
 
 #include "PropertyMapper.hxx"
-#include "VLineProperties.hxx"
-#include <BaseGFXHelper.hxx>
+#include <basegfx/range/b2irectangle.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/chart2/XFormattedString.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
-#include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
-#include <com/sun/star/drawing/Position3D.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/drawing/XShapes2.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <rtl/ustring.hxx>
 
 class OpenGLWindow;
+namespace chart { struct VLineProperties; }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XFormattedString; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { struct HomogenMatrix; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { struct PolyPolygonShape3D; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { struct Position3D; } } } }
+namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 
 namespace chart {
 

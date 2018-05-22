@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_DATEHELPER_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_DATEHELPER_HXX
 
-#include <com/sun/star/chart2/XScaling.hpp>
 #include <tools/date.hxx>
 
 namespace chart

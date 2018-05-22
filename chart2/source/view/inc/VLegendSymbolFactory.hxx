@@ -20,9 +20,14 @@
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_VLEGENDSYMBOLFACTORY_HXX
 
 #include "LegendEntryProvider.hxx"
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/uno/Reference.h>
+
+namespace com { namespace sun { namespace star { namespace awt { struct Size; } } } }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
 
 namespace chart
 {

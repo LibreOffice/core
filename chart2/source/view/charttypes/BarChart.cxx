@@ -33,6 +33,7 @@
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 
+#include <com/sun/star/chart2/XTransformation.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <rtl/math.hxx>
 #include <unordered_set>
