@@ -44,6 +44,7 @@ class Size;
 class SfxChildWindow;
 class SfxInfoBarWindow;
 enum class InfobarType;
+class CommandPopupHandler;
 
 class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
 {
@@ -55,6 +56,8 @@ class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
     ImplSVHelpData*             m_pHelpData;
     ImplSVWinData*              m_pWinData;
     sal_uInt16                  m_nAdjustPosPixelLock;
+
+    std::unique_ptr<CommandPopupHandler> m_pCommandPopupHandler;
 
 private:
     SAL_DLLPRIVATE void Construct_Impl( SfxObjectShell *pObjSh );

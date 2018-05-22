@@ -266,6 +266,11 @@ interface TopWindow : BrowseWindow
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
+    SID_COMMAND_POPUP
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
     SID_CLOSEWIN // ole(no) api(final/play/rec)
     [
         ExecMethod = Exec_Impl ;
@@ -311,4 +316,3 @@ shell SfxViewFrame
         StateMethod = GetState_Impl ;
     ]
 }
-

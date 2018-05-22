@@ -21,6 +21,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/classificationbox \
 	sfx2/uiconfig/ui/cmisinfopage \
 	sfx2/uiconfig/ui/cmisline \
+	sfx2/uiconfig/ui/commandpopup \
 	sfx2/uiconfig/ui/custominfopage \
 	sfx2/uiconfig/ui/deck \
 	sfx2/uiconfig/ui/descriptioninfopage \
