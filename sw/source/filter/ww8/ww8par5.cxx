@@ -1895,8 +1895,12 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, OUString& rStr )
             if ( aReadParam.GoToTokenParam() )
             {
                 const OUString aSiz = aReadParam.GetResult();
-                if ( !aSiz.isEmpty() )
-                    nSize = aSiz.toInt32() * 20; // pT -> twip
+                if (!aSiz.isEmpty())
+                {
+                    bool bFail = o3tl::checked_multiply<sal_Int32>(aSiz.toInt32(), 20, nSize); // pT -> twip
+                    if (bFail)
+                        nSize = -1;
+                }
             }
             break;
         }
