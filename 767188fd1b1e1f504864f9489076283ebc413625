@@ -22,6 +22,24 @@
       "revId": "767188fd1b1e1f504864f9489076283ebc413625",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_2378412a",
+        "filename": "sfx2/source/appl/shutdownicon.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2018-05-22T12:02:08Z",
+      "side": 0,
+      "message": "since qstart.desktop is not used on mac os x, probably yes.",
+      "parentUuid": "9a30ddce_63bb19e6",
+      "revId": "767188fd1b1e1f504864f9489076283ebc413625",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
