@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_63831957",
+        "filename": "dbaccess/source/filter/hsqldb/createparser.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1001240
+      },
+      "writtenOn": "2018-05-22T08:53:46Z",
+      "side": 1,
+      "message": "Would it work on column names which do not contain apostrophes?\n\nE.g. what if the user created a table without apostrophe in direct sql?",
+      "range": {
+        "startLine": 191,
+        "startChar": 8,
+        "endLine": 191,
+        "endChar": 51
+      },
+      "revId": "a7e92df660cbf276296e16cfb4039d7f1c9a386c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
