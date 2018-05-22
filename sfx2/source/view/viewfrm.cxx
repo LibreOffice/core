@@ -25,6 +25,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
+#include <svx/svdview.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchRecorder.hpp>
@@ -45,6 +46,7 @@
 #include <svl/undo.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 #include <svtools/miscopt.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -90,6 +92,9 @@
 
 #include <unotools/configmgr.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+
+#include <commandpopup/CommandPopup.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1693,6 +1698,7 @@ SfxViewFrame::SfxViewFrame
     , m_pHelpData(CreateSVHelpData())
     , m_pWinData(CreateSVWinData())
     , m_nAdjustPosPixelLock( 0 )
+    , m_pCommandPopupHandler(new CommandPopupHandler)
 {
 
     rFrame.SetCurrentViewFrame_Impl( this );
@@ -2972,8 +2978,15 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             rReq.Done();
             break;
         }
+        case SID_COMMAND_POPUP:
+        {
+            tools::Rectangle aRectangle(Point(0,0), GetWindow().GetSizePixel());
+            weld::Window* pParent = weld::GetPopupParent(GetWindow(), aRectangle);
+            m_pCommandPopupHandler->showPopup(pParent, GetFrame().GetFrameInterface());
 
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+            rReq.Done();
+            break;
+        }
         case SID_WIN_FULLSCREEN:
         {
             const SfxBoolItem* pItem = rReq.GetArg<SfxBoolItem>(rReq.GetSlot());
