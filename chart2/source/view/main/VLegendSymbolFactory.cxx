@@ -22,7 +22,9 @@
 #include <AbstractShapeFactory.hxx>
 #include <ObjectIdentifier.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;

@@ -10,13 +10,13 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_GL3DPLOTTERBASE_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_GL3DPLOTTERBASE_HXX
 
-#include "VDataSeries.hxx"
 #include <vector>
 #include <memory>
 
 namespace chart {
 
 class ExplicitCategoriesProvider;
+class VDataSeries;
 
 class GL3DPlotterBase
 {

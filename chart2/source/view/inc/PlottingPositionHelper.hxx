@@ -19,18 +19,20 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_PLOTTINGPOSITIONHELPER_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_PLOTTINGPOSITIONHELPER_HXX
 
-#include "LabelAlignment.hxx"
 #include <chartview/ExplicitScaleValues.hxx>
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <rtl/math.hxx>
-#include <com/sun/star/chart2/XTransformation.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
-#include <com/sun/star/drawing/HomogenMatrix.hpp>
-#include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
 #include <basegfx/matrix/b3dhommatrix.hxx>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/uno/Sequence.h>
+
+namespace com { namespace sun { namespace star { namespace chart2 { class XTransformation; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { struct HomogenMatrix; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { struct PolyPolygonShape3D; } } } }
 
 namespace chart
 {
