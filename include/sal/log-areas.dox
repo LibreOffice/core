@@ -520,7 +520,6 @@ certain functionality.
 @li @c sw.level2
 @li @c sw.mailmerge - Writer mail merge
 @li @c sw.pageframe - debug lifecycle of SwPageFrame
-@li @c sw.qa - Writer unit tests
 @li @c sw.rtf - .rtf export filter
 @li @c sw.tiled
 @li @c sw.ui
