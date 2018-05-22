@@ -22,6 +22,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/metaact.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
@@ -301,7 +302,7 @@ struct PageSyncData
     { mpGlobalData = pGlobal; }
 
     void PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDataSync::Action eAct );
-    bool PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const PDFExtOutDevData& rOutDevData );
+    bool PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const GDIMetaFile& rMtf, const PDFExtOutDevData& rOutDevData );
 };
 
 void PageSyncData::PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDataSync::Action eAct )
@@ -317,7 +318,7 @@ void PageSyncData::PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDa
         aSync.nIdx = 0x7fffffff;    // sync not possible
     mActions.push_back( aSync );
 }
-bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const PDFExtOutDevData& rOutDevData )
+bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const GDIMetaFile& rMtf, const PDFExtOutDevData& rOutDevData )
 {
     bool bRet = false;
     if ( mActions.size() && ( mActions.front().nIdx == rCurGDIMtfAction ) )
@@ -463,6 +464,22 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                         if( pData && nBytes )
                         {
                             aTmp.WriteBytes( pData, nBytes );
+
+                            // Look up the output rectangle from the previous
+                            // bitmap scale action if possible. This has the
+                            // correct position for images repeated in
+                            // Writer headers/footers for non-first pages.
+                            if (rCurGDIMtfAction > 0)
+                            {
+                                const MetaAction* pAction = rMtf.GetAction(rCurGDIMtfAction - 1);
+                                if (pAction && pAction->GetType() == MetaActionType::BMPSCALE)
+                                {
+                                    const MetaBmpScaleAction* pA
+                                        = static_cast<const MetaBmpScaleAction*>(pAction);
+                                    aOutputRect.SetPos(pA->GetPoint());
+                                }
+                            }
+
                             rWriter.DrawJPGBitmap( aTmp, aGraphic.GetBitmap().GetBitCount() > 8, aGraphic.GetSizePixel(), aOutputRect, aMask, aGraphic );
                         }
 
@@ -584,9 +601,9 @@ void PDFExtOutDevData::ResetSyncData()
 {
     *mpPageSyncData = PageSyncData( mpGlobalSyncData );
 }
-bool PDFExtOutDevData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rIdx )
+bool PDFExtOutDevData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rIdx, const GDIMetaFile& rMtf )
 {
-    return mpPageSyncData->PlaySyncPageAct( rWriter, rIdx, *this );
+    return mpPageSyncData->PlaySyncPageAct( rWriter, rIdx, rMtf, *this );
 }
 void PDFExtOutDevData::PlayGlobalActions( PDFWriter& rWriter )
 {
