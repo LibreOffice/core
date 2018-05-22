@@ -3017,7 +3017,14 @@ void RtfAttributeOutput::FormatULSpace(const SvxULSpaceItem& rULSpace)
             if (!m_rExport.GetCurItemSet())
                 return;
 
-            sw::util::HdFtDistanceGlue aDistances(*m_rExport.GetCurItemSet());
+            // If we export a follow page format, then our doc model has
+            // separate header/footer distances for the first page and the
+            // follow pages, but Word can have only a single distance. In case
+            // the two values differ, work with the value from the first page
+            // format to be in sync with the import.
+            sw::util::HdFtDistanceGlue aDistances(m_rExport.GetFirstPageItemSet()
+                                                      ? *m_rExport.GetFirstPageItemSet()
+                                                      : *m_rExport.GetCurItemSet());
 
             if (aDistances.dyaTop)
             {
