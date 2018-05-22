@@ -59,6 +59,39 @@ SvxCharacterMap::SvxCharacterMap(weld::Window* pParent, const SfxItemSet* pSet, 
     , isSearchMode(true)
     , m_bHasInsert(bInsert)
     , mxContext(comphelper::getProcessComponentContext())
+    , m_aRecentCharView{SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev)}
+    , m_aFavCharView{SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev)}
+    , m_aShowChar(m_xVirDev)
     , m_xOKBtn(bInsert ? m_xBuilder->weld_button("insert") : m_xBuilder->weld_button("ok"))
     , m_xFontText(m_xBuilder->weld_label("fontft"))
     , m_xFontLB(m_xBuilder->weld_combo_box_text("fontlb"))
@@ -71,53 +104,55 @@ SvxCharacterMap::SvxCharacterMap(weld::Window* pParent, const SfxItemSet* pSet, 
     , m_xCharName(m_xBuilder->weld_label("charname"))
     , m_xRecentGrid(m_xBuilder->weld_widget("viewgrid"))
     , m_xFavGrid(m_xBuilder->weld_widget("favgrid"))
-    , m_xShowChar(new SvxShowText(*m_xBuilder, "showchar", m_xVirDev))
-    , m_xRecentCharView{o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar1", m_xVirDev),
-                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar2", m_xVirDev),
-                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar3", m_xVirDev),
-                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar4", m_xVirDev),
-                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar5", m_xVirDev),
-                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar6", m_xVirDev),
-                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar7", m_xVirDev),
-                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar8", m_xVirDev),
-                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar9", m_xVirDev),
-                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar10", m_xVirDev),
-                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar11", m_xVirDev),
-                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar12", m_xVirDev),
-                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar13", m_xVirDev),
-                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar14", m_xVirDev),
-                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar15", m_xVirDev),
-                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar16", m_xVirDev)}
-    , m_xFavCharView{o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar1", m_xVirDev),
-                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar2", m_xVirDev),
-                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar3", m_xVirDev),
-                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar4", m_xVirDev),
-                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar5", m_xVirDev),
-                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar6", m_xVirDev),
-                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar7", m_xVirDev),
-                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar8", m_xVirDev),
-                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar9", m_xVirDev),
-                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar10", m_xVirDev),
-                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar11", m_xVirDev),
-                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar12", m_xVirDev),
-                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar13", m_xVirDev),
-                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar14", m_xVirDev),
-                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar15", m_xVirDev),
-                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar16", m_xVirDev)}
-    , m_xShowSet(new SvxShowCharSet(*m_xBuilder, "showcharset", "showscroll", m_xVirDev))
-    , m_xSearchSet(new SvxSearchCharSet(*m_xBuilder, "searchcharset", "searchscroll", m_xVirDev))
+    , m_xShowChar(new weld::CustomWeld(*m_xBuilder, "showchar", m_aShowChar))
+    , m_xRecentCharView{o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar1", m_aRecentCharView[0]),
+                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar2", m_aRecentCharView[1]),
+                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar3", m_aRecentCharView[2]),
+                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar4", m_aRecentCharView[3]),
+                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar5", m_aRecentCharView[4]),
+                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar6", m_aRecentCharView[5]),
+                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar7", m_aRecentCharView[6]),
+                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar8", m_aRecentCharView[7]),
+                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar9", m_aRecentCharView[8]),
+                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar10", m_aRecentCharView[9]),
+                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar11", m_aRecentCharView[10]),
+                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar12", m_aRecentCharView[11]),
+                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar13", m_aRecentCharView[12]),
+                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar14", m_aRecentCharView[13]),
+                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar15", m_aRecentCharView[14]),
+                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar16", m_aRecentCharView[15])}
+    , m_xFavCharView{o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar1", m_aFavCharView[0]),
+                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar2", m_aFavCharView[1]),
+                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar3", m_aFavCharView[2]),
+                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar4", m_aFavCharView[3]),
+                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar5", m_aFavCharView[4]),
+                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar6", m_aFavCharView[5]),
+                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar7", m_aFavCharView[6]),
+                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar8", m_aFavCharView[7]),
+                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar9", m_aFavCharView[8]),
+                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar10", m_aFavCharView[9]),
+                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar11", m_aFavCharView[10]),
+                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar12", m_aFavCharView[11]),
+                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar13", m_aFavCharView[12]),
+                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar14", m_aFavCharView[13]),
+                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar15", m_aFavCharView[14]),
+                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar16", m_aFavCharView[15])}
+    , m_xShowSet(new SvxShowCharSet(m_xBuilder->weld_scrolled_window("showscroll"), m_xVirDev))
+    , m_xShowSetArea(new weld::CustomWeld(*m_xBuilder, "showcharset", *m_xShowSet))
+    , m_xSearchSet(new SvxSearchCharSet(m_xBuilder->weld_scrolled_window("searchscroll"), m_xVirDev))
+    , m_xSearchSetArea(new weld::CustomWeld(*m_xBuilder, "searchcharset", *m_xSearchSet))
 {
-    m_xShowChar->SetCentered(true);
+    m_aShowChar.SetCentered(true);
     m_xFontLB->make_sorted();
     //lock the size request of this widget to the width of all possible entries
     fillAllSubsets(*m_xSubsetLB);
     m_xSubsetLB->set_size_request(m_xSubsetLB->get_preferred_size().Width(), -1);
-    m_xCharName->set_size_request(m_xShowChar->get_preferred_size().Width(), m_xCharName->get_text_height() * 4);
+    m_xCharName->set_size_request(m_aShowChar.get_preferred_size().Width(), m_xCharName->get_text_height() * 4);
     //lock the size request of this widget to the width of the original .ui string
     m_xHexCodeText->set_size_request(m_xHexCodeText->get_preferred_size().Width(), -1);
     //so things don't jump around if all the children are hidden
-    m_xRecentGrid->set_size_request(-1, m_xRecentCharView[0]->get_preferred_size().Height());
-    m_xFavGrid->set_size_request(-1, m_xFavCharView[0]->get_preferred_size().Height());
+    m_xRecentGrid->set_size_request(-1, m_aRecentCharView[0].get_preferred_size().Height());
+    m_xFavGrid->set_size_request(-1, m_aFavCharView[0].get_preferred_size().Height());
 
     init();
 
@@ -162,9 +197,9 @@ short SvxCharacterMap::execute()
         sal_UCS4 cChar = m_xShowSet->GetSelectCharacter();
         // using the new UCS4 constructor
         OUString aOUStr( &cChar, 1 );
-        m_xShowChar->SetText(aOUStr);
+        m_aShowChar.SetText(aOUStr);
 
-        setFavButtonState(aOUStr, m_xShowChar->GetFont().GetFamilyName());
+        setFavButtonState(aOUStr, m_aShowChar.GetFont().GetFamilyName());
         m_xOKBtn->set_sensitive(true);
     }
 
@@ -177,12 +212,10 @@ void SvxCharacterMap::SetChar( sal_UCS4 c )
     setFavButtonState(OUString(&c, 1), aFont.GetFamilyName());
 }
 
-
 sal_UCS4 SvxCharacterMap::GetChar() const
 {
-   return (m_xShowChar->GetText()).toChar();
+   return (m_aShowChar.GetText()).toChar();
 }
-
 
 void SvxCharacterMap::DisableFontSelection()
 {
@@ -236,17 +269,17 @@ void SvxCharacterMap::updateRecentCharControl()
         it != maRecentCharList.end() || it2 != maRecentCharFontList.end();
         ++it, ++it2, i++)
     {
-        m_xRecentCharView[i]->SetText(*it);
-        vcl::Font rFont = m_xRecentCharView[i]->GetFont();
+        m_aRecentCharView[i].SetText(*it);
+        vcl::Font rFont = m_aRecentCharView[i].GetFont();
         rFont.SetFamilyName( *it2 );
-        m_xRecentCharView[i]->SetFont(rFont);
-        m_xRecentCharView[i]->Show();
+        m_aRecentCharView[i].SetFont(rFont);
+        m_aRecentCharView[i].Show();
     }
 
     for(; i < 16 ; i++)
     {
-        m_xRecentCharView[i]->SetText(OUString());
-        m_xRecentCharView[i]->Hide();
+        m_aRecentCharView[i].SetText(OUString());
+        m_aRecentCharView[i].Hide();
     }
 }
 
@@ -343,17 +376,17 @@ void SvxCharacterMap::updateFavCharControl()
         it != maFavCharList.end() || it2 != maFavCharFontList.end();
         ++it, ++it2, i++)
     {
-        m_xFavCharView[i]->SetText(*it);
-        vcl::Font rFont = m_xFavCharView[i]->GetFont();
+        m_aFavCharView[i].SetText(*it);
+        vcl::Font rFont = m_aFavCharView[i].GetFont();
         rFont.SetFamilyName( *it2 );
-        m_xFavCharView[i]->SetFont(rFont);
-        m_xFavCharView[i]->Show();
+        m_aFavCharView[i].SetFont(rFont);
+        m_aFavCharView[i].Show();
     }
 
     for(; i < 16 ; i++)
     {
-        m_xFavCharView[i]->SetText(OUString());
-        m_xFavCharView[i]->Hide();
+        m_aFavCharView[i].SetText(OUString());
+        m_aFavCharView[i].Hide();
     }
     m_xShowSet->getFavCharacterList();
     m_xSearchSet->getFavCharacterList();
@@ -467,7 +500,7 @@ void SvxCharacterMap::init()
         sal_UCS4 cChar = m_xShowSet->GetSelectCharacter();
         // using the new UCS4 constructor
         OUString aOUStr( &cChar, 1 );
-        m_xShowChar->SetText(aOUStr);
+        m_aShowChar.SetText(aOUStr);
 
         setFavButtonState(aOUStr, aDefStr);
         m_xOKBtn->set_sensitive(true);
@@ -481,14 +514,14 @@ void SvxCharacterMap::init()
 
     for(int i = 0; i < 16; i++)
     {
-        m_xRecentCharView[i]->SetHasInsert(m_bHasInsert);
-        m_xRecentCharView[i]->setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
-        m_xRecentCharView[i]->setClearClickHdl(LINK(this,SvxCharacterMap, RecentClearClickHdl));
-        m_xRecentCharView[i]->setClearAllClickHdl(LINK(this,SvxCharacterMap, RecentClearAllClickHdl));
-        m_xFavCharView[i]->SetHasInsert(m_bHasInsert);
-        m_xFavCharView[i]->setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
-        m_xFavCharView[i]->setClearClickHdl(LINK(this,SvxCharacterMap, FavClearClickHdl));
-        m_xFavCharView[i]->setClearAllClickHdl(LINK(this,SvxCharacterMap, FavClearAllClickHdl));
+        m_aRecentCharView[i].SetHasInsert(m_bHasInsert);
+        m_aRecentCharView[i].setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
+        m_aRecentCharView[i].setClearClickHdl(LINK(this,SvxCharacterMap, RecentClearClickHdl));
+        m_aRecentCharView[i].setClearAllClickHdl(LINK(this,SvxCharacterMap, RecentClearAllClickHdl));
+        m_aFavCharView[i].SetHasInsert(m_bHasInsert);
+        m_aFavCharView[i].setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
+        m_aFavCharView[i].setClearClickHdl(LINK(this,SvxCharacterMap, FavClearClickHdl));
+        m_aFavCharView[i].setClearAllClickHdl(LINK(this,SvxCharacterMap, FavClearAllClickHdl));
     }
 
     setCharName(90);
@@ -614,7 +647,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, weld::ComboBoxText&, void)
     // notify children using this font
     m_xShowSet->SetFont( aFont );
     m_xSearchSet->SetFont( aFont );
-    m_xShowChar->SetFont( aFont );
+    m_aShowChar.SetFont( aFont );
     if (isSearchMode)
     {
         SearchUpdateHdl(*m_xSearchText);
@@ -841,12 +874,12 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchUpdateHdl, weld::Entry&, void)
 
 IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView*, rView, void)
 {
-    m_xShowChar->SetText( rView->GetText() );
-    m_xShowChar->SetFont(rView->GetFont());
-    m_xShowChar->queue_draw();
+    m_aShowChar.SetText( rView->GetText() );
+    m_aShowChar.SetFont(rView->GetFont());
+    m_aShowChar.Invalidate();
 
     setFavButtonState(rView->GetText(), rView->GetFont().GetFamilyName());//check state
-    rView->grab_focus();
+    rView->GrabFocus();
 
     // Get the hexadecimal code
     OUString charValue = rView->GetText();
@@ -861,7 +894,7 @@ IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView*, rView, void)
     m_xDecimalCodeText->set_text(aDecimalText);
     setCharName(cChar);
 
-    rView->queue_draw();
+    rView->Invalidate();
     m_xOKBtn->set_sensitive(true);
 }
 
@@ -895,7 +928,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchCharSelectHdl, SvxShowCharSet*, void)
 
 IMPL_LINK_NOARG(SvxCharacterMap, InsertClickHdl, weld::Button&, void)
 {
-   insertCharToDoc(m_xShowChar->GetText());
+   insertCharToDoc(m_aShowChar.GetText());
    m_xDialog->response(RET_OK);
 }
 
@@ -903,12 +936,12 @@ IMPL_LINK_NOARG(SvxCharacterMap, FavSelectHdl, weld::Button&, void)
 {
     if (m_xFavouritesBtn->get_label().match(CuiResId(RID_SVXSTR_ADD_FAVORITES)))
     {
-        updateFavCharacterList(m_xShowChar->GetText(), m_xShowChar->GetFont().GetFamilyName());
-        setFavButtonState(m_xShowChar->GetText(), m_xShowChar->GetFont().GetFamilyName());
+        updateFavCharacterList(m_aShowChar.GetText(), m_aShowChar.GetFont().GetFamilyName());
+        setFavButtonState(m_aShowChar.GetText(), m_aShowChar.GetFont().GetFamilyName());
     }
     else
     {
-        deleteFavCharacterFromList(m_xShowChar->GetText(), m_xShowChar->GetFont().GetFamilyName());
+        deleteFavCharacterFromList(m_aShowChar.GetText(), m_aShowChar.GetFont().GetFamilyName());
         m_xFavouritesBtn->set_label(CuiResId(RID_SVXSTR_ADD_FAVORITES));
         m_xFavouritesBtn->set_sensitive(false);
     }
@@ -958,9 +991,9 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
 
     if(m_xShowSet->HasFocus() || m_xHexCodeText->has_focus() || m_xDecimalCodeText->has_focus() )
     {
-        m_xShowChar->SetText( aText );
-        m_xShowChar->SetFont( aFont );
-        m_xShowChar->queue_draw();
+        m_aShowChar.SetText( aText );
+        m_aShowChar.SetFont( aFont );
+        m_aShowChar.Invalidate();
 
         setFavButtonState(aText, aFont.GetFamilyName());
     }
@@ -1001,9 +1034,9 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchCharHighlightHdl, SvxShowCharSet*, void)
 
     if(m_xSearchSet->HasFocus())
     {
-        m_xShowChar->SetText( aText );
-        m_xShowChar->SetFont( aFont );
-        m_xShowChar->queue_draw();
+        m_aShowChar.SetText( aText );
+        m_aShowChar.SetFont( aFont );
+        m_aShowChar.Invalidate();
 
         setFavButtonState(aText, aFont.GetFamilyName());
     }
@@ -1031,7 +1064,7 @@ void SvxCharacterMap::selectCharByCode(Radix radix)
         SetChar(cChar);
     else {
         m_xCharName->set_label(CuiResId(RID_SVXSTR_MISSING_GLYPH));
-        m_xShowChar->SetText(" ");
+        m_aShowChar.SetText(" ");
         switch(radix)
         {
             case Radix::decimal:
@@ -1087,29 +1120,28 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchCharPreSelectHdl, SvxShowCharSet*, void)
 }
 
 // class SvxShowText =====================================================
-SvxShowText::SvxShowText(weld::Builder& rBuilder, const OString& rId, const VclPtr<VirtualDevice>& rVirDev)
-    : m_xDrawingArea(rBuilder.weld_drawing_area(rId))
-    , m_xVirDev(rVirDev)
+SvxShowText::SvxShowText(const VclPtr<VirtualDevice>& rVirDev)
+    : m_xVirDev(rVirDev)
     , mnY(0)
     , mbCenter(false)
 {
-    m_xDrawingArea->connect_size_allocate(LINK(this, SvxShowText, DoResize));
-    m_xDrawingArea->connect_draw(LINK(this, SvxShowText, DoPaint));
+}
 
+void SvxShowText::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
     vcl::Font aFont = m_xVirDev->GetFont();
     Size aFontSize(aFont.GetFontSize().Width() * 5, aFont.GetFontSize().Height() * 5);
     aFont.SetFontSize(aFontSize);
     m_xVirDev->Push(PUSH_ALLFONT);
     m_xVirDev->SetFont(aFont);
-    m_xDrawingArea->set_size_request(m_xVirDev->approximate_digit_width() + 2 * 12,
-                                     m_xVirDev->LogicToPixel(aFontSize).Height() * 2);
+    pDrawingArea->set_size_request(m_xVirDev->approximate_digit_width() + 2 * 12,
+                                   m_xVirDev->LogicToPixel(aFontSize).Height() * 2);
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
     m_xVirDev->Pop();
 }
 
-IMPL_LINK(SvxShowText, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
+void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    vcl::RenderContext& rRenderContext = aPayload.first;
-
     rRenderContext.SetFont(m_aFont);
 
     Color aTextCol = rRenderContext.GetTextColor();
@@ -1123,8 +1155,9 @@ IMPL_LINK(SvxShowText, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
 
     const OUString aText = GetText();
 
-    long nAvailWidth = m_aSize.Width();
-    long nWinHeight = m_aSize.Height();
+    Size aSize(GetOutputSizePixel());
+    long nAvailWidth = aSize.Width();
+    long nWinHeight = aSize.Height();
 
     bool bGotBoundary = true;
     bool bShrankFont = false;
@@ -1156,7 +1189,7 @@ IMPL_LINK(SvxShowText, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
     Point aPoint(2, mnY);
     // adjust position using ink boundary if possible
     if (!bGotBoundary)
-        aPoint.setX( (m_aSize.Width() - rRenderContext.GetTextWidth(aText)) / 2 );
+        aPoint.setX( (aSize.Width() - rRenderContext.GetTextWidth(aText)) / 2 );
     else
     {
         // adjust position before it gets out of bounds
@@ -1164,7 +1197,7 @@ IMPL_LINK(SvxShowText, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
 
         // shift back vertically if needed
         int nYLDelta = aBoundRect.Top();
-        int nYHDelta = m_aSize.Height() - aBoundRect.Bottom();
+        int nYHDelta = aSize.Height() - aBoundRect.Bottom();
         if( nYLDelta <= 0 )
             aPoint.AdjustY( -(nYLDelta - 1) );
         else if( nYHDelta <= 0 )
@@ -1173,13 +1206,13 @@ IMPL_LINK(SvxShowText, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
         if (mbCenter)
         {
             // move glyph to middle of cell
-            aPoint.setX( -aBoundRect.Left() + (m_aSize.Width() - aBoundRect.GetWidth()) / 2 );
+            aPoint.setX( -aBoundRect.Left() + (aSize.Width() - aBoundRect.GetWidth()) / 2 );
         }
         else
         {
             // shift back horizontally if needed
             int nXLDelta = aBoundRect.Left();
-            int nXHDelta = m_aSize.Width() - aBoundRect.Right();
+            int nXHDelta = aSize.Width() - aBoundRect.Right();
             if( nXLDelta <= 0 )
                 aPoint.AdjustX( -(nXLDelta - 1) );
             else if( nXHDelta <= 0 )
@@ -1187,7 +1220,7 @@ IMPL_LINK(SvxShowText, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
         }
     }
 
-    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), m_aSize));
+    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), aSize));
     rRenderContext.DrawText(aPoint, aText);
     rRenderContext.SetTextColor(aTextCol);
     rRenderContext.SetFillColor(aFillCol);
@@ -1195,10 +1228,9 @@ IMPL_LINK(SvxShowText, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
         rRenderContext.SetFont(aOrigFont);
 }
 
-
 void SvxShowText::SetFont( const vcl::Font& rFont )
 {
-    long nWinHeight = m_aSize.Height();
+    long nWinHeight = GetOutputSizePixel().Height();
 
     m_aFont = vcl::Font(rFont);
     m_aFont.SetWeight(WEIGHT_NORMAL);
@@ -1211,19 +1243,18 @@ void SvxShowText::SetFont( const vcl::Font& rFont )
     mnY = (nWinHeight - m_xVirDev->GetTextHeight()) / 2;
     m_xVirDev->Pop();
 
-    m_xDrawingArea->queue_draw();
+    Invalidate();
 }
 
-IMPL_LINK(SvxShowText, DoResize, const Size&, rSize, void)
+void SvxShowText::Resize()
 {
-    m_aSize = rSize;
     SetFont(GetFont()); //force recalculation of size
 }
 
 void SvxShowText::SetText(const OUString& rText)
 {
     m_sText = rText;
-    queue_draw();
+    Invalidate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

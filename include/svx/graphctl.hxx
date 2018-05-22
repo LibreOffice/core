@@ -21,6 +21,7 @@
 
 #include <vcl/ctrl.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 
@@ -124,31 +125,19 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 };
 
-class SVX_DLLPUBLIC SvxGraphCtrl
+class SVX_DLLPUBLIC SvxGraphCtrl : public weld::CustomWidgetController
 {
     MapMode             aMap100;
     Graphic             aGraphic;
     Size                aGraphSize;
-    Size                maSize;
 
-    std::unique_ptr<weld::DrawingArea> mxDrawingArea;
-
-    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
-    DECL_LINK(DoResize, const Size& rSize, void);
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
 public:
 
-    SvxGraphCtrl(weld::Builder& rBuilder, const OString& rDrawingId);
+    SvxGraphCtrl();
     virtual ~SvxGraphCtrl();
-
     void                SetGraphic( const Graphic& rGraphic );
-
-    const Size&         GetSize() const { return maSize; }
-
-    void set_size_request(int nWidth, int nHeight)
-    {
-        mxDrawingArea->set_size_request(nWidth, nHeight);
-    }
 };
 
 class GraphCtrlView : public SdrView

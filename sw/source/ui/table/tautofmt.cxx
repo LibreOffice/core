@@ -55,18 +55,6 @@ SwAutoFormatDlg::SwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pWrtShell,
                                  bool bAutoFormat, const SwTableAutoFormat* pSelFormat)
     : GenericDialogController(pParent, "modules/swriter/ui/autoformattable.ui",
             "AutoFormatTableDialog")
-    , m_xLbFormat(m_xBuilder->weld_tree_view("formatlb"))
-    , m_xBtnNumFormat(m_xBuilder->weld_check_button("numformatcb"))
-    , m_xBtnBorder(m_xBuilder->weld_check_button("bordercb"))
-    , m_xBtnFont(m_xBuilder->weld_check_button("fontcb"))
-    , m_xBtnPattern(m_xBuilder->weld_check_button("patterncb"))
-    , m_xBtnAlignment(m_xBuilder->weld_check_button("alignmentcb"))
-    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
-    , m_xBtnAdd(m_xBuilder->weld_button("add"))
-    , m_xBtnRemove(m_xBuilder->weld_button("remove"))
-    , m_xBtnRename(m_xBuilder->weld_button("rename"))
-    , m_xWndPreview(new AutoFormatPreview(m_xBuilder->weld_drawing_area("preview")))
-    , m_xTableTable(new SwTableAutoFormatTable)
     , m_aStrTitle(SwResId(STR_ADD_AUTOFORMAT_TITLE))
     , m_aStrLabel(SwResId(STR_ADD_AUTOFORMAT_LABEL))
     , m_aStrClose(SwResId(STR_BTN_AUTOFORMAT_CLOSE))
@@ -79,8 +67,20 @@ SwAutoFormatDlg::SwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pWrtShell,
     , m_nDfltStylePos(0)
     , m_bCoreDataChanged(false)
     , m_bSetAutoFormat(bAutoFormat)
+    , m_xTableTable(new SwTableAutoFormatTable)
+    , m_xLbFormat(m_xBuilder->weld_tree_view("formatlb"))
+    , m_xBtnNumFormat(m_xBuilder->weld_check_button("numformatcb"))
+    , m_xBtnBorder(m_xBuilder->weld_check_button("bordercb"))
+    , m_xBtnFont(m_xBuilder->weld_check_button("fontcb"))
+    , m_xBtnPattern(m_xBuilder->weld_check_button("patterncb"))
+    , m_xBtnAlignment(m_xBuilder->weld_check_button("alignmentcb"))
+    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
+    , m_xBtnAdd(m_xBuilder->weld_button("add"))
+    , m_xBtnRemove(m_xBuilder->weld_button("remove"))
+    , m_xBtnRename(m_xBuilder->weld_button("rename"))
+    , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aWndPreview))
 {
-    m_xWndPreview->DetectRTL(pWrtShell);
+    m_aWndPreview.DetectRTL(pWrtShell);
     m_xTableTable->Load();
 
     const int nWidth = m_xLbFormat->get_approximate_digit_width() * 32;
@@ -200,7 +200,7 @@ IMPL_LINK(SwAutoFormatDlg, CheckHdl, weld::ToggleButton&, rBtn, void)
             m_bCoreDataChanged = true;
         }
 
-        m_xWndPreview->NotifyChange(rData);
+        m_aWndPreview.NotifyChange(rData);
     }
 }
 
@@ -369,7 +369,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl, weld::TreeView&, void)
     if (nSelPos >= m_nDfltStylePos)
     {
         m_nIndex = nSelPos - m_nDfltStylePos;
-        m_xWndPreview->NotifyChange((*m_xTableTable)[m_nIndex]);
+        m_aWndPreview.NotifyChange((*m_xTableTable)[m_nIndex]);
         bBtnEnable = 0 != m_nIndex;
         UpdateChecks( (*m_xTableTable)[m_nIndex], true );
     }
@@ -386,7 +386,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl, weld::TreeView&, void)
         aTmp.SetWidthHeight( false );
 
         if (nOldIdx != m_nIndex)
-            m_xWndPreview->NotifyChange(aTmp);
+            m_aWndPreview.NotifyChange(aTmp);
         UpdateChecks( aTmp, false );
     }
 

@@ -20,23 +20,20 @@
 #define INCLUDED_SFX2_SOURCE_INC_PREVIEW_HXX
 
 #include <tools/link.hxx>
+#include <vcl/customweld.hxx>
 
 class SfxObjectShell;
 class GDIMetaFile;
 
-class SfxPreviewWin_Impl
+class SfxPreviewWin_Impl : public weld::CustomWidgetController
 {
+private:
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
 protected:
     std::shared_ptr<GDIMetaFile> xMetaFile;
-    std::unique_ptr<weld::DrawingArea> m_xDrawingArea;
 public:
-    SfxPreviewWin_Impl(weld::DrawingArea* pArea);
+    SfxPreviewWin_Impl();
     void            SetObjectShell( SfxObjectShell const * pObj );
-    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
-    DECL_LINK(DoResize, const Size& rSize, void);
-    void queue_draw() { m_xDrawingArea->queue_draw(); }
-    void show() { m_xDrawingArea->show(); }
-    void set_size_request(int nWidth, int nHeight) { m_xDrawingArea->set_size_request(nWidth, nHeight); }
     static void ImpPaint(vcl::RenderContext& rRenderContext, GDIMetaFile* pFile);
 };
 
