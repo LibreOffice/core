@@ -237,7 +237,7 @@ sal_uInt16 XclExpString::GetHeaderSize() const
     return
         (mb8BitLen ? 1 : 2) +           // length field
         (IsWriteFlags() ? 1 : 0) +      // flag field
-        (IsWriteFormats() ? 2 : 0);     // richtext formattting count
+        (IsWriteFormats() ? 2 : 0);     // richtext formatting count
 }
 
 std::size_t XclExpString::GetBufferSize() const
@@ -250,7 +250,7 @@ std::size_t XclExpString::GetSize() const
     return
         GetHeaderSize() +                                   // header
         GetBufferSize() +                                   // character buffer
-        (IsWriteFormats() ? (4 * GetFormatsCount()) : 0);   // richtext formattting
+        (IsWriteFormats() ? (4 * GetFormatsCount()) : 0);   // richtext formatting
 }
 
 sal_uInt16 XclExpString::GetChar( sal_uInt16 nCharIdx ) const
