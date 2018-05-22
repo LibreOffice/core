@@ -729,10 +729,10 @@ DECLARE_FILE_MAILMERGE_TEST(testEmptyValuesLegacyODT, "tdf35798-legacy.odt", "5-
         for (int i = 0; i < 8; ++i)
         {
             auto xPara = getParagraph(i+1);
-            SAL_WARN("sw.qa", "Testing doc " + OUString::number(doc) + " paragraph "
-                             + OUString::number(i + 1));
-            CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(EmptyValuesLegacyData[doc][i]),
-                                 xPara->getString());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                OString("in doc " + OString::number(doc) + " paragraph " + OString::number(i + 1))
+                    .getStr(),
+                OUString::createFromAscii(EmptyValuesLegacyData[doc][i]), xPara->getString());
         }
         CPPUNIT_ASSERT_EQUAL(8, getParagraphs());
     }
@@ -757,10 +757,10 @@ DECLARE_FILE_MAILMERGE_TEST(testEmptyValuesNewODT, "tdf35798-new.odt", "5-with-b
             if (!pExpected)
                 break;
             auto xPara = getParagraph(i + 1);
-            SAL_WARN("sw.qa", "Testing doc " + OUString::number(doc) + " paragraph "
-                             + OUString::number(i + 1));
-            CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(pExpected),
-                                 xPara->getString());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                OString("in doc " + OString::number(doc) + " paragraph " + OString::number(i + 1))
+                    .getStr(),
+                OUString::createFromAscii(pExpected), xPara->getString());
         }
         CPPUNIT_ASSERT_EQUAL(i, getParagraphs());
     }
@@ -781,10 +781,10 @@ DECLARE_FILE_MAILMERGE_TEST(testEmptyValuesLegacyFODT, "tdf35798-legacy.fodt", "
         for (int i = 0; i < 8; ++i)
         {
             auto xPara = getParagraph(i + 1);
-            SAL_WARN("sw.qa", "Testing doc " + OUString::number(doc) + " paragraph "
-                             + OUString::number(i + 1));
-            CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(EmptyValuesLegacyData[doc][i]),
-                                 xPara->getString());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                OString("in doc " + OString::number(doc) + " paragraph " + OString::number(i + 1))
+                    .getStr(),
+                OUString::createFromAscii(EmptyValuesLegacyData[doc][i]), xPara->getString());
         }
         CPPUNIT_ASSERT_EQUAL(8, getParagraphs());
     }
@@ -809,9 +809,10 @@ DECLARE_FILE_MAILMERGE_TEST(testEmptyValuesNewFODT, "tdf35798-new.fodt", "5-with
             if (!pExpected)
                 break;
             auto xPara = getParagraph(i + 1);
-            SAL_WARN("sw.qa", "Testing doc " + OUString::number(doc) + " paragraph "
-                             + OUString::number(i + 1));
-            CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(pExpected), xPara->getString());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                OString("in doc " + OString::number(doc) + " paragraph " + OString::number(i + 1))
+                    .getStr(),
+                OUString::createFromAscii(pExpected), xPara->getString());
         }
         CPPUNIT_ASSERT_EQUAL(i, getParagraphs());
     }
