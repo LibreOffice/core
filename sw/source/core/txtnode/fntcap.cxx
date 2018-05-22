@@ -206,9 +206,9 @@ void SwDoGetCapitalBreak::Do()
     }
 }
 
-sal_Int32 SwFont::GetCapitalBreak( SwViewShell const * pSh, const OutputDevice* pOut,
+TextFrameIndex SwFont::GetCapitalBreak( SwViewShell const * pSh, const OutputDevice* pOut,
     const SwScriptInfo* pScript, const OUString& rText, long const nTextWidth,
-    const sal_Int32 nIdx, const sal_Int32 nLen )
+    TextFrameIndex const nIdx, TextFrameIndex const nLen)
 {
     // Start:
     Point aPos( 0, 0 );
@@ -372,7 +372,7 @@ void SwDoCapitalCursorOfst::Do()
     }
 }
 
-sal_Int32 SwSubFont::GetCapitalCursorOfst( SwDrawTextInfo& rInf )
+TextFrameIndex SwSubFont::GetCapitalCursorOfst( SwDrawTextInfo& rInf )
 {
     const long nOldKern = rInf.GetKern();
     rInf.SetKern( CheckKerning() );
