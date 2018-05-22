@@ -81,6 +81,24 @@
       "revId": "d75e28ffc15625629a87a17f01d8d00ccb78d5c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_a3ac31a1",
+        "filename": "sfx2/source/appl/shutdownicon.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-22T11:46:56Z",
+      "side": 1,
+      "message": "It may not use them; I said not that, but that now the compiler would see that a function defined for that compiler and that should return a value, doesn\u0027t return.",
+      "parentUuid": "9a30ddce_e3cf097d",
+      "revId": "d75e28ffc15625629a87a17f01d8d00ccb78d5c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
