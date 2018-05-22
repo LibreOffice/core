@@ -387,7 +387,7 @@ class SvxSearchItem;
 
 // default-ids for windows
 
-// free                                     (SID_SFX_START + 610)
+#define SID_COMMAND_POPUP                   (SID_SFX_START + 610)
 #define SID_NEWWINDOW                       (SID_SFX_START + 620)
 #define SID_CLOSEWIN                        (SID_SFX_START + 621)
 #define SID_VIEWSHELL                       (SID_SFX_START + 623)

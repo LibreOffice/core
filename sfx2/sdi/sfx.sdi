@@ -1269,6 +1269,23 @@ SfxStringItem FullName SID_DOCFULLNAME
     GroupId = ;
 ]
 
+SfxVoidItem CommandPopup SID_COMMAND_POPUP
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
 
 SfxBoolItem FullScreen SID_WIN_FULLSCREEN
 
