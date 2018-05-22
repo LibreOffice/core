@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <BaseGFXHelper.hxx>
 #include <VCoordinateSystem.hxx>
 #include "VCartesianCoordinateSystem.hxx"
 #include "VPolarCoordinateSystem.hxx"

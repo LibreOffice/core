@@ -12,9 +12,7 @@
 
 #include <glm/glm.hpp>
 #include <tools/color.hxx>
-#include <vcl/bitmapex.hxx>
 
-#include <vcl/opengl/OpenGLContext.hxx>
 #include "GL3DRenderer.hxx"
 
 #include <boost/shared_array.hpp>

@@ -15,14 +15,14 @@
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include <com/sun/star/awt/Point.hpp>
 #include <boost/shared_array.hpp>
 #include <tools/gen.hxx>
+#include <tools/color.hxx>
+#include <string.h>
 
-#include <vcl/bitmapex.hxx>
+#include <epoxy/gl.h>
 
 #include <vector>
-#include <list>
 #include <map>
 
 namespace chart {

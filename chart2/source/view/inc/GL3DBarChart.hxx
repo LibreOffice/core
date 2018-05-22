@@ -15,17 +15,18 @@
 #include <deque>
 #include <memory>
 #include <vector>
-#include "VDataSeries.hxx"
 
 #include <glm/glm.hpp>
 
-#include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/openglwin.hxx>
 
 #include <rtl/ref.hxx>
-#include <salhelper/thread.hxx>
+
 #include <osl/conditn.hxx>
+
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartType; } } } }
+class Timer;
 
 namespace chart {
 

@@ -35,6 +35,7 @@
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/NormalsKind.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 
 namespace chart
 {

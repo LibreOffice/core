@@ -23,8 +23,10 @@
 #include <CommonConverters.hxx>
 #include <RelativeSizeHelper.hxx>
 #include <PropertyMapper.hxx>
+#include <VLineProperties.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/chart2/XFormattedString.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
@@ -40,7 +42,11 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/XShapes2.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
