@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_43c53559",
+        "filename": "sfx2/source/appl/shutdownicon.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2018-05-22T11:45:13Z",
+      "side": 1,
+      "message": "didn\u0027t add that assert... I just removed the UNX part, but yeah, *maybe* it should be removed or moved up... So far I didn\u0027t care about runtime, just the build",
+      "parentUuid": "9a30ddce_03e41d0b",
+      "revId": "d75e28ffc15625629a87a17f01d8d00ccb78d5c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_43ee15ed",
         "filename": "sfx2/source/appl/shutdownicon.cxx",
         "patchSetId": 11
@@ -42,6 +60,24 @@
         "endLine": 636,
         "endChar": 16
       },
+      "revId": "d75e28ffc15625629a87a17f01d8d00ccb78d5c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_e3cf097d",
+        "filename": "sfx2/source/appl/shutdownicon.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2018-05-22T11:45:13Z",
+      "side": 1,
+      "message": "as said on IRC (also by mst_), MACOSX doesn\u0027t use .desktop files, so  there is no difference here? Just before the code before the change was too generic..",
+      "parentUuid": "9a30ddce_43ee15ed",
       "revId": "d75e28ffc15625629a87a17f01d8d00ccb78d5c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
