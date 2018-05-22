@@ -98,9 +98,11 @@ bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
     const SwTextFrame *pMyFrame = static_cast<SwTextFrame*>(rMyNd.getLayoutFrame( rMyNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr, false) ),
                    *pFrame = static_cast<SwTextFrame*>(rBehindNd.getLayoutFrame( rBehindNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr, false) );
 
-    while( pFrame && !pFrame->IsInside( nSttPos ) )
+    TextFrameIndex const nMySttPosIndex(pMyFrame->MapModelToView(&rMyNd, nMySttPos));
+    TextFrameIndex const nSttPosIndex(pFrame->MapModelToView(&rBehindNd, nSttPos));
+    while (pFrame && !pFrame->IsInside(nSttPosIndex))
         pFrame = pFrame->GetFollow();
-    while( pMyFrame && !pMyFrame->IsInside( nMySttPos ) )
+    while (pMyFrame && !pMyFrame->IsInside(nMySttPosIndex))
         pMyFrame = pMyFrame->GetFollow();
 
     if( !pFrame || !pMyFrame || pFrame == pMyFrame )
@@ -566,7 +568,8 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
         {
             const SwTextFrame* pFrame = static_cast<SwTextFrame*>(pTextNd->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr, false)),
                         *pSave = pFrame;
-            while( pFrame && !pFrame->IsInside( nNumStart ) )
+            TextFrameIndex const nNumStartIndex(pFrame->MapModelToView(pTextNd, nNumStart));
+            while (pFrame && !pFrame->IsInside(nNumStartIndex))
                 pFrame = pFrame->GetFollow();
 
             if( pFrame || nullptr != ( pFrame = pSave ))
