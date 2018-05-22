@@ -16,6 +16,24 @@
       "revId": "d99eed32d172b895cc5410e3f30919acb21bb5bd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_c3868512",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2018-05-22T11:57:34Z",
+      "side": 1,
+      "message": "Hi thorsten,\n   thanks a lot for your review.\n\n   I guess the hash was about the version in my repo.\n   Anyway, I\u0027m going to push new version of the message in a while.\n\nThanks again,\nAndrea",
+      "parentUuid": "9a30ddce_f038c43f",
+      "revId": "d99eed32d172b895cc5410e3f30919acb21bb5bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
