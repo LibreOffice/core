@@ -13,7 +13,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 # import org.libreoffice.unotest
 # import pathlib
 from uitest.path import get_srcdir_url
-#Bug 113979 - Paste unformated text does not ignore empty cells
+#Bug 113979 - Paste unformatted text does not ignore empty cells
 def get_url_for_data_file(file_name):
 #    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
     return get_srcdir_url() + "/sc/qa/uitest/calc_tests/data/" + file_name
