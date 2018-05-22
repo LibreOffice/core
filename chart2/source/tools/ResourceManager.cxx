@@ -20,6 +20,7 @@
 #include "ResourceManager.hxx"
 
 #include <vcl/svapp.hxx>
+#include <vcl/lazydelete.hxx>
 #include <tools/resmgr.hxx>
 
 namespace chart
@@ -28,11 +29,11 @@ namespace chart
 ResMgr & ResourceManager::getResourceManager()
 {
     // not threadsafe
-    static std::unique_ptr<ResMgr> pResourceManager;
+    static vcl::DeleteOnDeinit<ResMgr> pResourceManager(nullptr);
     const LanguageTag& rLocale = Application::GetSettings().GetUILanguageTag();
-    if( ! pResourceManager || pResourceManager->GetLocale() != rLocale )
+    if( ! pResourceManager.get() || pResourceManager.get()->GetLocale() != rLocale )
         pResourceManager.reset( ResMgr::CreateResMgr("chartcontroller", rLocale) );
-    OSL_ASSERT( pResourceManager );
+    OSL_ASSERT( pResourceManager.get() );
     return *pResourceManager.get();
 }
 
