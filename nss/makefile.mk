@@ -129,10 +129,9 @@ OS_TARGET=WIN95
 # make use of stlport headerfiles
 EXT_USE_STLPORT=TRUE
 
-#To build nss one has to call "make nss_build_all" in 
-#nss
+# To build nss one has to call "make nss_build_all" in nss
 NSS_BUILD_DIR= $(subst,\,/ $(PWD)/$(MISC)/build/$(TARFILE_ROOTDIR)/nss)
-BUILD_ACTION= PATH="$(PATH):$(moz_build)/msys/bin:$(moz_build)/moztools/bin" && $(subst,/,$/ $(MOZILLABUILD)/msys/bin/bash) -i \
+BUILD_ACTION= PATH="$(PATH):$(moz_build)/msys/bin:$(moz_build)/bin:$(moz_build)/msys/local/bin:$(moz_build)/moztools/bin" && $(subst,/,$/ $(MOZILLABUILD)/msys/bin/bash) -i \
     -c "cd $(NSS_BUILD_DIR) && make nss_build_all NSS_DISABLE_GTESTS=1"
 
 OUT2LIB= \
