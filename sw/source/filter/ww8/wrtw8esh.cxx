@@ -689,6 +689,30 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                 if (pObj)
                 {
                     aRect = pObj->GetLogicRect();
+
+                    // tdf#70838 Export rotated shape vertically
+                    // See also normative specification on this topic:
+                    // [MS-DOC] Microsoft Corporation, "Word (.doc) Binary File Format". Section 2.9.222 Rca
+                    // http://interoperability.blob.core.windows.net/files/MS-DOC/[MS-DOC]-160929.pdf
+                    // Note that this method applies to LibreOffice frame only.
+                    // So watermark which uses PAGE_PRINT_AREA vertical orientation should not be tweaked.
+                    if (text::RelOrientation::FRAME == rVOr.GetRelationOrient())
+                    {
+                        sal_Int32 nAngle = pObj->GetRotateAngle();
+
+                        while (nAngle < 0)
+                            nAngle += 36000; // angle in 1/100 degree
+                        nAngle %= 36000;
+
+                        if ( ( nAngle >= 4500 && nAngle <= 13500 ) || ( nAngle >= 22500 && nAngle <= 31500 ) )
+                        {
+                            const sal_Int32 width = aRect.getWidth();
+                            const sal_Int32 height = aRect.getHeight();
+
+                            aRect.setWidth( height );
+                            aRect.setHeight( width );
+                        }
+                    }
                 }
             }
 
