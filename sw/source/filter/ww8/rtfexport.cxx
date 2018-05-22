@@ -1348,7 +1348,10 @@ void RtfExport::OutPageDescription(const SwPageDesc& rPgDsc, bool bCheckForFirst
 
     const SwFormat* pFormat = &m_pCurrentPageDesc->GetMaster(); //GetLeft();
     m_bOutPageDescs = true;
+    if (m_pCurrentPageDesc != &rPgDsc)
+        m_pFirstPageItemSet = &rPgDsc.GetMaster().GetAttrSet();
     OutputFormat(*pFormat, true, false);
+    m_pFirstPageItemSet = nullptr;
     m_bOutPageDescs = false;
 
     // normal header / footer (without a style)
