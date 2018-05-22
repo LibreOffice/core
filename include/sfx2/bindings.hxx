@@ -33,12 +33,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatchRecorder.hpp>
 #include <com/sun/star/uno/Reference.h>
-
-//  some other includes
-
 #include <sfx2/viewfrm.hxx>
-
-//  forwards, typedefs, declarations
 
 class SystemWindow;
 class SfxSlot;
