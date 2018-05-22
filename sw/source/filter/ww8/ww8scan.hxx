@@ -1546,24 +1546,24 @@ public:
 class WW8Style
 {
 protected:
-    WW8Fib& rFib;
-    SvStream& rSt;
+    WW8Fib& m_rFib;
+    SvStream& m_rStream;
 
-    sal_uInt16  cstd;                      // Count of styles in stylesheet
-    sal_uInt16  cbSTDBaseInFile;           // Length of STD Base as stored in a file
-    sal_uInt16  fStdStylenamesWritten : 1; // Are built-in stylenames stored?
+    sal_uInt16  m_cstd;                      // Count of styles in stylesheet
+    sal_uInt16  m_cbSTDBaseInFile;           // Length of STD Base as stored in a file
+    sal_uInt16  m_fStdStylenamesWritten : 1; // Are built-in stylenames stored?
     sal_uInt16  : 15;                      // Spare flags
-    sal_uInt16  stiMaxWhenSaved;           // Max sti known when file was written
-    sal_uInt16  istdMaxFixedWhenSaved;     // How many fixed-index istds are there?
-    sal_uInt16  nVerBuiltInNamesWhenSaved; // Current version of built-in stylenames
+    sal_uInt16  m_stiMaxWhenSaved;           // Max sti known when file was written
+    sal_uInt16  m_istdMaxFixedWhenSaved;     // How many fixed-index istds are there?
+    sal_uInt16  m_nVerBuiltInNamesWhenSaved; // Current version of built-in stylenames
     // ftc used by StandardChpStsh for this document
-    sal_uInt16  ftcAsci;
+    sal_uInt16  m_ftcAsci;
     // CJK ftc used by StandardChpStsh for this document
-    sal_uInt16  ftcFE;
+    sal_uInt16  m_ftcFE;
     // CTL/Other ftc used by StandardChpStsh for this document
-    sal_uInt16  ftcOther;
+    sal_uInt16  m_ftcOther;
     // CTL ftc used by StandardChpStsh for this document
-    sal_uInt16  ftcBi;
+    sal_uInt16  m_ftcBi;
 
     //No copying
     WW8Style(const WW8Style&);
@@ -1573,7 +1573,7 @@ public:
     WW8Style( SvStream& rSt, WW8Fib& rFibPara );
     WW8_STD* Read1STDFixed(sal_uInt16& rSkip);
     WW8_STD* Read1Style(sal_uInt16& rSkip, OUString* pString);
-    sal_uInt16 GetCount() const { return cstd; }
+    sal_uInt16 GetCount() const { return m_cstd; }
 };
 
 class WW8Fonts final
