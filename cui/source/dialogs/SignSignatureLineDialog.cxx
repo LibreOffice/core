@@ -142,6 +142,7 @@ void SignSignatureLineDialog::Apply()
     if (!m_xSelectedCertifate.is())
     {
         SAL_WARN("cui.dialogs", "No certificate selected!");
+        return;
     }
 
     SfxObjectShell* pShell = SfxObjectShell::Current();
