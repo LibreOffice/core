@@ -64,9 +64,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-static sal_uInt16 nTimeOut = 300;
-
-#define TIMEOUT_FIRST       nTimeOut
+#define TIMEOUT_FIRST       300
 #define TIMEOUT_UPDATING     20
 
 typedef std::unordered_map< sal_uInt16, bool > InvalidateSlotMap;
