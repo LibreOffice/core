@@ -22,15 +22,13 @@
 #include "swuilabimp.hxx"
 #include <labimg.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 
 class SwLabFormatPage;
 
-class SwLabPreview
+class SwLabPreview : public weld::CustomWidgetController
 {
-    std::unique_ptr<weld::DrawingArea> m_xDrawingArea;
-
-    Size m_aSize;
     Color m_aGrayColor;
 
     OUString m_aHDistStr;
@@ -54,12 +52,12 @@ class SwLabPreview
 
     SwLabItem m_aItem;
 
-    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
-    DECL_LINK(DoResize, const Size& rSize, void);
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
 public:
 
-    explicit SwLabPreview(weld::DrawingArea* pDrawingArea);
+    SwLabPreview();
 
     void UpdateItem(const SwLabItem& rItem);
 };
@@ -70,9 +68,11 @@ class SwLabFormatPage : public SfxTabPage
     SwLabItem aItem;
     bool bModified;
 
+    SwLabPreview m_aPreview;
+
     std::unique_ptr<weld::Label>  m_xMakeFI;
     std::unique_ptr<weld::Label>  m_xTypeFI;
-    std::unique_ptr<SwLabPreview> m_xPreview;
+    std::unique_ptr<weld::CustomWeld> m_xPreview;
     std::unique_ptr<weld::MetricSpinButton>  m_xHDistField;
     std::unique_ptr<weld::MetricSpinButton>  m_xVDistField;
     std::unique_ptr<weld::MetricSpinButton>  m_xWidthField;

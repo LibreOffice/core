@@ -44,25 +44,20 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-SwEnvPreview::SwEnvPreview(weld::DrawingArea* pDrawingArea)
-    : m_xDrawingArea(pDrawingArea)
-    , m_pDialog(nullptr)
+SwEnvPreview::SwEnvPreview()
+    : m_pDialog(nullptr)
 {
-    m_xDrawingArea->set_size_request(m_xDrawingArea->get_approximate_digit_width() * 20,
-                                     m_xDrawingArea->get_text_height() * 8);
-    m_xDrawingArea->connect_size_allocate(LINK(this, SwEnvPreview, DoResize));
-    m_xDrawingArea->connect_draw(LINK(this, SwEnvPreview, DoPaint));
 }
 
-IMPL_LINK(SwEnvPreview, DoResize, const Size&, rSize, void)
+void SwEnvPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    m_aSize = rSize;
+    pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 20,
+                                   pDrawingArea->get_text_height() * 8);
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
 }
 
-IMPL_LINK(SwEnvPreview, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
+void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    vcl::RenderContext& rRenderContext = aPayload.first;
-
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
     rRenderContext.SetBackground(rRenderContext.GetSettings().GetStyleSettings().GetDialogColor());
     rRenderContext.Erase();
@@ -72,9 +67,11 @@ IMPL_LINK(SwEnvPreview, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
     const long nPageW = std::max(rItem.m_nWidth, rItem.m_nHeight);
     const long nPageH = std::min(rItem.m_nWidth, rItem.m_nHeight);
 
+    Size aSize(GetOutputSizePixel());
+
     const double f = 0.8 * std::min(
-        double(m_aSize.Width()) / double(nPageW),
-        double(m_aSize.Height()) / double(nPageH));
+        double(aSize.Width()) / double(nPageW),
+        double(aSize.Height()) / double(nPageH));
 
     Color aBack = rSettings.GetWindowColor();
     Color aFront = SwViewOption::GetFontColor();
@@ -87,8 +84,8 @@ IMPL_LINK(SwEnvPreview, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
     // Envelope
     const long nW = static_cast<long>(f * nPageW);
     const long nH = static_cast<long>(f * nPageH);
-    const long nX = (m_aSize.Width () - nW) / 2;
-    const long nY = (m_aSize.Height() - nH) / 2;
+    const long nX = (aSize.Width () - nW) / 2;
+    const long nY = (aSize.Height() - nH) / 2;
     rRenderContext.SetFillColor(aBack);
     rRenderContext.DrawRect(tools::Rectangle(Point(nX, nY), Size(nW, nH)));
 
@@ -196,7 +193,7 @@ SwEnvPage::SwEnvPage(TabPageParent pParent, const SfxItemSet& rSet)
     , m_xInsertBT(m_xBuilder->weld_button("insert"))
     , m_xSenderBox(m_xBuilder->weld_check_button("sender"))
     , m_xSenderEdit(m_xBuilder->weld_text_view("senderedit"))
-    , m_xPreview(new SwEnvPreview(m_xBuilder->weld_drawing_area("preview")))
+    , m_xPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreview))
 {
     auto nTextBoxHeight(m_xAddrEdit->get_height_rows(10));
     auto nTextBoxWidth(m_xAddrEdit->get_approximate_digit_width() * 25);
@@ -216,7 +213,7 @@ void SwEnvPage::Init(SwEnvDlg* pDialog)
 {
     m_pDialog = pDialog;
     m_pSh = m_pDialog->pSh;
-    m_xPreview->SetDialog(pDialog);
+    m_aPreview.SetDialog(pDialog);
 
     // Install handlers
     m_xDatabaseLB->connect_changed(LINK(this, SwEnvPage, DatabaseHdl));
