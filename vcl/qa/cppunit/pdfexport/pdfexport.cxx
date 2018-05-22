@@ -23,11 +23,9 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <tools/zcodec.hxx>
-#if HAVE_FEATURE_PDFIUM
 #include <fpdf_edit.h>
 #include <fpdf_text.h>
 #include <fpdfview.h>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -39,15 +37,12 @@ class PdfExportTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
     uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
-#if HAVE_FEATURE_PDFIUM
     FPDF_PAGE mpPdfPage = nullptr;
     FPDF_DOCUMENT mpPdfDocument = nullptr;
-#endif
 
 public:
     virtual void setUp() override;
     virtual void tearDown() override;
-#if HAVE_FEATURE_PDFIUM
     void load(const OUString& rFile, vcl::filter::PDFDocument& rDocument);
     /// Tests that a pdf image is roundtripped back to PDF as a vector format.
     void testTdf106059();
@@ -86,10 +81,9 @@ public:
 #endif
     void testTdf109143();
     void testTdf105954();
-#endif
+    void testTdf106702();
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
-#if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testTdf106059);
     CPPUNIT_TEST(testTdf105461);
     CPPUNIT_TEST(testTdf107868);
@@ -115,7 +109,7 @@ public:
 #endif
     CPPUNIT_TEST(testTdf109143);
     CPPUNIT_TEST(testTdf105954);
-#endif
+    CPPUNIT_TEST(testTdf106702);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -126,31 +120,25 @@ void PdfExportTest::setUp()
     mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
 
-#if HAVE_FEATURE_PDFIUM
     FPDF_LIBRARY_CONFIG config;
     config.version = 2;
     config.m_pUserFontPaths = nullptr;
     config.m_pIsolate = nullptr;
     config.m_v8EmbedderSlot = 0;
     FPDF_InitLibraryWithConfig(&config);
-#endif
 }
 
 void PdfExportTest::tearDown()
 {
-#if HAVE_FEATURE_PDFIUM
     FPDF_ClosePage(mpPdfPage);
     FPDF_CloseDocument(mpPdfDocument);
     FPDF_DestroyLibrary();
-#endif
 
     if (mxComponent.is())
         mxComponent->dispose();
 
     test::BootstrapFixture::tearDown();
 }
-
-#if HAVE_FEATURE_PDFIUM
 
 char const DATA_DIRECTORY[] = "/vcl/qa/cppunit/pdfexport/data/";
 
@@ -1343,7 +1331,70 @@ void PdfExportTest::testTdf105954()
     CPPUNIT_ASSERT_LESS(static_cast<unsigned int>(250), aMeta.width);
 }
 
-#endif
+void PdfExportTest::testTdf106702()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106702.odt";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result with pdfium.
+    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    mpPdfDocument
+        = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
+    CPPUNIT_ASSERT(mpPdfDocument);
+
+    // The document has two pages.
+    CPPUNIT_ASSERT_EQUAL(2, FPDF_GetPageCount(mpPdfDocument));
+
+    // First page already has the correct image position.
+    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/0);
+    CPPUNIT_ASSERT(mpPdfPage);
+    int nExpected = 0;
+    int nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(mpPdfPage, i);
+        if (FPDFPageObj_GetType(pPageObject) != FPDF_PAGEOBJ_IMAGE)
+            continue;
+
+        float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
+        FPDFPageObj_GetBounds(pPageObject, &fLeft, &fBottom, &fRight, &fTop);
+        nExpected = fTop;
+        break;
+    }
+
+    // Second page had an incorrect image position.
+    FPDF_ClosePage(mpPdfPage);
+    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/1);
+    CPPUNIT_ASSERT(mpPdfPage);
+    int nActual = 0;
+    nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(mpPdfPage, i);
+        if (FPDFPageObj_GetType(pPageObject) != FPDF_PAGEOBJ_IMAGE)
+            continue;
+
+        float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
+        FPDFPageObj_GetBounds(pPageObject, &fLeft, &fBottom, &fRight, &fTop);
+        nActual = fTop;
+        break;
+    }
+
+    // This failed, vertical pos is 818 points, was 1674 (outside visible page
+    // bounds).
+    CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
 
