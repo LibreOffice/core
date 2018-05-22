@@ -114,6 +114,8 @@ public:
     virtual void    MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin) override;
     virtual void    MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin) override;
     virtual void    Command(const CommandEvent& rCEvt, ::sd::Window* pWin) override;
+    bool            IsMouseButtonDown() { return mbMouseButtonDown; }
+    bool            IsMouseSelecting() { return mbMouseSelecting; }
 
     virtual void    Resize() override;
 
@@ -443,6 +445,8 @@ private:
     css::uno::Reference< css::lang::XEventListener >      mxScannerListener;
     rtl::Reference<TransferableClipboardListener>         mxClipEvtLstnr;
     bool                                                  mbPastePossible;
+    bool                                                  mbMouseButtonDown;
+    bool                                                  mbMouseSelecting;
 
     virtual void Notify (SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
