@@ -29,6 +29,7 @@ class SwEnvFormatPage : public SfxTabPage
     SwEnvDlg* m_pDialog;
     std::vector<sal_uInt16>  m_aIDs;
 
+    SwEnvPreview m_aPreview;
     std::unique_ptr<weld::MetricSpinButton>  m_xAddrLeftField;
     std::unique_ptr<weld::MetricSpinButton>  m_xAddrTopField;
     std::unique_ptr<weld::MenuButton> m_xAddrEditButton;
@@ -38,7 +39,7 @@ class SwEnvFormatPage : public SfxTabPage
     std::unique_ptr<weld::ComboBoxText> m_xSizeFormatBox;
     std::unique_ptr<weld::MetricSpinButton>  m_xSizeWidthField;
     std::unique_ptr<weld::MetricSpinButton>  m_xSizeHeightField;
-    std::unique_ptr<SwEnvPreview> m_xPreview;
+    std::unique_ptr<weld::CustomWeld> m_xPreview;
 
     DECL_LINK(ModifyHdl, weld::MetricSpinButton&, void);
     DECL_LINK(AddrEditHdl, const OString&, void);

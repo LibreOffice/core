@@ -47,19 +47,11 @@ void SfxPreviewWin_Impl::SetObjectShell(SfxObjectShell const * pObj)
         ? pObj->GetPreviewMetaFile()
         : std::shared_ptr<GDIMetaFile>();
     xMetaFile = xFile;
-    m_xDrawingArea->queue_draw();
+    Invalidate();
 }
 
-SfxPreviewWin_Impl::SfxPreviewWin_Impl(weld::DrawingArea* pDrawingArea)
-    : m_xDrawingArea(pDrawingArea)
+SfxPreviewWin_Impl::SfxPreviewWin_Impl()
 {
-    m_xDrawingArea->connect_size_allocate(LINK(this, SfxPreviewWin_Impl, DoResize));
-    m_xDrawingArea->connect_draw(LINK(this, SfxPreviewWin_Impl, DoPaint));
-}
-
-IMPL_LINK_NOARG(SfxPreviewWin_Impl, DoResize, const Size&, void)
-{
-    m_xDrawingArea->queue_draw();
 }
 
 void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, GDIMetaFile* pFile)
@@ -104,9 +96,9 @@ void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, GDIMetaFil
     }
 }
 
-IMPL_LINK(SfxPreviewWin_Impl, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
+void SfxPreviewWin_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    ImpPaint(aPayload.first, xMetaFile.get());
+    ImpPaint(rRenderContext, xMetaFile.get());
 }
 
 IMPL_LINK_NOARG(SfxNewFileDialog, Update, Timer*, void)
@@ -121,8 +113,8 @@ IMPL_LINK_NOARG(SfxNewFileDialog, Update, Timer*, void)
     const sal_uInt16 nEntry = GetSelectedTemplatePos();
     if (!nEntry)
     {
-        m_xPreviewWin->queue_draw();
-        m_xPreviewWin->SetObjectShell(nullptr);
+        m_xPreviewController->Invalidate();
+        m_xPreviewController->SetObjectShell(nullptr);
         return;
     }
 
@@ -164,12 +156,12 @@ IMPL_LINK_NOARG(SfxNewFileDialog, Update, Timer*, void)
                 ErrorHandler::HandleError(lErr);
             if (!m_xDocShell.Is())
             {
-                m_xPreviewWin->SetObjectShell(nullptr);
+                m_xPreviewController->SetObjectShell(nullptr);
                 return;
             }
         }
 
-        m_xPreviewWin->SetObjectShell(m_xDocShell);
+        m_xPreviewController->SetObjectShell(m_xDocShell);
     }
 }
 
@@ -238,6 +230,8 @@ sal_uInt16  SfxNewFileDialog::GetSelectedTemplatePos() const
 
 SfxNewFileDialog::SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode nFlags)
     : GenericDialogController(pParent, "sfx/ui/loadtemplatedialog.ui", "LoadTemplateDialog")
+    , m_nFlags(nFlags)
+    , m_xPreviewController(new SfxPreviewWin_Impl)
     , m_xRegionLb(m_xBuilder->weld_tree_view("categories"))
     , m_xTemplateLb(m_xBuilder->weld_tree_view("templates"))
     , m_xTextStyleCB(m_xBuilder->weld_check_button("text"))
@@ -247,9 +241,8 @@ SfxNewFileDialog::SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode n
     , m_xMergeStyleCB(m_xBuilder->weld_check_button("overwrite"))
     , m_xLoadFilePB(m_xBuilder->weld_button("fromfile"))
     , m_xMoreBt(m_xBuilder->weld_expander("expander"))
-    , m_xPreviewWin(new SfxPreviewWin_Impl(m_xBuilder->weld_drawing_area("image")))
+    , m_xPreviewWin(new weld::CustomWeld(*m_xBuilder, "image", *m_xPreviewController))
     , m_xAltTitleFt(m_xBuilder->weld_label("alttitle"))
-    , m_nFlags(nFlags)
 {
     const int nWidth = m_xRegionLb->get_approximate_digit_width() * 32;
     const int nHeight = m_xRegionLb->get_height_rows(8);

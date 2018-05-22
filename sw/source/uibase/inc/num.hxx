@@ -49,6 +49,8 @@ class SwNumPositionTabPage : public SfxTabPage
     bool                bInInintControl     : 1;  // work around modify-error; should be resolved from 391 on
     bool                bLabelAlignmentPosAndSpaceModeActive;
 
+    SwNumberingPreview  m_aPreviewWIN;
+
     std::unique_ptr<weld::TreeView> m_xLevelLB;
     std::unique_ptr<weld::Widget> m_xPositionFrame;
 
@@ -77,7 +79,7 @@ class SwNumPositionTabPage : public SfxTabPage
     std::unique_ptr<weld::Label> m_xIndentAtFT;
     std::unique_ptr<weld::MetricSpinButton> m_xIndentAtMF;
     std::unique_ptr<weld::Button> m_xStandardPB;
-    std::unique_ptr<SwNumberingPreview> m_xPreviewWIN;
+    std::unique_ptr<weld::CustomWeld> m_xPreviewWIN;
 
 
     void                InitControls();
@@ -119,10 +121,11 @@ public:
     void                SetModified();
 #else
     void                SetModified()
-                            {   bModified = true;
-                                m_xPreviewWIN->SetLevel(nActNumLvl);
-                                m_xPreviewWIN->queue_draw();
-                            }
+    {
+        bModified = true;
+        m_aPreviewWIN.SetLevel(nActNumLvl);
+        m_aPreviewWIN.Invalidate();
+    }
 #endif
 };
 
