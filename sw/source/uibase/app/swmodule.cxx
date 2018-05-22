@@ -128,7 +128,7 @@
 bool     g_bNoInterrupt     = false;
 
 #include <sfx2/app.hxx>
-
+#include <vcl/lazydelete.hxx>
 #include <svx/svxerr.hxx>
 
 #include <unomid.h>
@@ -140,11 +140,11 @@ using namespace com::sun::star;
 ResMgr & GetSwResMgr()
 {
     // not threadsafe
-    static std::unique_ptr<ResMgr> pResourceManager;
+    static vcl::DeleteOnDeinit<ResMgr> pResourceManager(nullptr);
     const LanguageTag& rLocale = Application::GetSettings().GetUILanguageTag();
-    if( ! pResourceManager || pResourceManager->GetLocale() != rLocale )
+    if( ! pResourceManager.get() || pResourceManager.get()->GetLocale() != rLocale )
         pResourceManager.reset( ResMgr::CreateResMgr("sw", rLocale) );
-    OSL_ASSERT( pResourceManager );
+    OSL_ASSERT( pResourceManager.get() );
     return *pResourceManager.get();
 }
 
