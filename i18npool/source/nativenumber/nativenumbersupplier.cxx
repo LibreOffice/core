@@ -61,6 +61,11 @@ typedef struct {
 #define NUMBER_OMIT_ONE_67 (NUMBER_OMIT_ONE_6|NUMBER_OMIT_ONE_7)
 #define NUMBER_OMIT_ZERO_ONE_67 ( NUMBER_OMIT_ZERO|NUMBER_OMIT_ONE_67 )
 
+#define FORMAT_NUMBERTEXT_ID "one"
+#define FORMAT_NUMBERTEXT_CARDINAL "cardinal"
+#define FORMAT_NUMBERTEXT_ORDINAL  "ordinal"
+#define FORMAT_NUMBERTEXT_ORDINAL_INDICATOR "ordinal-number"
+
 namespace i18npool {
 
 struct theNatNumMutex : public rtl::Static<osl::Mutex, theNatNumMutex> {};
@@ -570,9 +575,9 @@ OUString getNumberText(const Locale& aLocale, sal_Int16 numType, const OUString&
     OUString aLoc = LanguageTag::convertToBcp47(aLocale);
     OUString numbertext_prefix;
     if (numType == NativeNumberMode::NATNUM14)
-        numbertext_prefix = "ordinal-number ";
+        numbertext_prefix = FORMAT_NUMBERTEXT_ORDINAL_INDICATOR " ";
     else if (numType == NativeNumberMode::NATNUM13)
-        numbertext_prefix = "ordinal ";
+        numbertext_prefix = FORMAT_NUMBERTEXT_ORDINAL " ";
     // Several hundreds of headings could result typing lags because
     // of the continuous update of the multiple number names during typing.
     // We fix this by buffering the result of the conversion.
@@ -772,6 +777,15 @@ NativeNumberXmlAttributes SAL_CALL NativeNumberSupplierService::convertToXmlAttr
     static const sal_Int16 attLong          = 2;
     static const sal_Char *attType[] = { "short", "medium", "long" };
 
+    switch (nNativeNumberMode) {
+        case NativeNumberMode::NATNUM12:        // Cardinal number names
+            return NativeNumberXmlAttributes(rLocale, FORMAT_NUMBERTEXT_ID, FORMAT_NUMBERTEXT_CARDINAL);
+        case NativeNumberMode::NATNUM13:        // Ordinal number names
+            return NativeNumberXmlAttributes(rLocale, FORMAT_NUMBERTEXT_ID, FORMAT_NUMBERTEXT_ORDINAL);
+        case NativeNumberMode::NATNUM14:        // Ordinal indicator
+            return NativeNumberXmlAttributes(rLocale, FORMAT_NUMBERTEXT_ID, FORMAT_NUMBERTEXT_ORDINAL_INDICATOR);
+    }
+
     sal_Int16 number = NumberChar_HalfWidth, type = attShort;
 
     sal_Int16 langnum = -1;
@@ -850,6 +864,15 @@ sal_Int16 SAL_CALL NativeNumberSupplierService::convertFromXmlAttributes( const 
     for (sal_Int16 i = 0; i < NumberChar_Count; i++)
         numberChar[i] = NumberChar[i][1];
     OUString number(numberChar, NumberChar_Count);
+
+    if (aAttr.Format == FORMAT_NUMBERTEXT_ID) {
+        if ( aAttr.Style == FORMAT_NUMBERTEXT_CARDINAL )
+            return NativeNumberMode::NATNUM12;
+        else if ( aAttr.Style == FORMAT_NUMBERTEXT_ORDINAL )
+            return NativeNumberMode::NATNUM13;
+        else if ( aAttr.Style == FORMAT_NUMBERTEXT_ORDINAL_INDICATOR )
+            return NativeNumberMode::NATNUM14;
+    }
 
     sal_Int16 num = sal::static_int_cast<sal_Int16>( number.indexOf(aAttr.Format) );
 
