@@ -1457,6 +1457,7 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
         sal_uInt32 nIndex = 1;
         sal_Int32 nLogNumber = 1;
         sal_uInt8 aGUID[ 16 ]; // GUID for action info records
+        bool bValidGUID = false;
         while( !aActionStack.empty() )
         {
             XclExpChTrAction* pAction = aActionStack.top();
@@ -1466,7 +1467,6 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
                 (pAction->GetUsername() != sLastUsername) ||
                 (pAction->GetDateTime() != aLastDateTime) )
             {
-                bool bValidGUID;
                 lcl_GenerateGUID( aGUID, bValidGUID );
                 sLastUsername = pAction->GetUsername();
                 aLastDateTime = pAction->GetDateTime();
@@ -1495,6 +1495,7 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
         sal_Int32 nLogNumber = 1;
         XclExpXmlChTrHeader* pCurHeader = nullptr;
         sal_uInt8 aGUID[ 16 ]; // GUID for action info records
+        bool bValidGUID = false;
 
         while (!aActionStack.empty())
         {
@@ -1505,7 +1506,6 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
                 (pAction->GetUsername() != sLastUsername) ||
                 (pAction->GetDateTime() != aLastDateTime) )
             {
-                bool bValidGUID;
                 lcl_GenerateGUID( aGUID, bValidGUID );
                 sLastUsername = pAction->GetUsername();
                 aLastDateTime = pAction->GetDateTime();
