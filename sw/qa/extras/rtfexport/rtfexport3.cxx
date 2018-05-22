@@ -114,6 +114,17 @@ DECLARE_RTFEXPORT_TEST(testTdf117268, "tdf117268.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextRangeCompare->compareRegionStarts(xAnchorCell, xCell));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf117505, "tdf117505.odt")
+{
+    uno::Reference<container::XNameAccess> xPageStyles(getStyles("PageStyles"));
+    uno::Reference<beans::XPropertySet> xFirstPage(xPageStyles->getByName("First Page"),
+                                                   uno::UNO_QUERY);
+    // This was 499, small header height resulted in visible whitespace from
+    // remaining top margin -> header content moved down.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1499),
+                         getProperty<sal_Int32>(xFirstPage, "HeaderHeight"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
