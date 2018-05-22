@@ -756,7 +756,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         {
             // Experimental PDF importing using PDFium. This is currently enabled for LOK only and
             // we handle it not via XmlFilterAdaptor but a new SdPdfFiler.
-            const bool bPdfiumImport = comphelper::LibreOfficeKit::isActive() && pMedium->GetFilter() &&
+            const bool bPdfiumImport = (comphelper::LibreOfficeKit::isActive() || getenv("LO_IMPORT_USE_PDFIUM")) && pMedium->GetFilter() &&
                                        (pMedium->GetFilter()->GetFilterName() == "draw_pdf_import");
             pImpl->nLoadedFlags = SfxLoadedFlags::NONE;
             pImpl->bModelInitialized = false;
