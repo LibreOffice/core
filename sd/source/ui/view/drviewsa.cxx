@@ -112,6 +112,8 @@ DrawViewShell::DrawViewShell( ViewShellBase& rViewShellBase, vcl::Window* pParen
           [this] () { return this->GetSidebarContextName(); },
           uno::Reference<frame::XController>(&rViewShellBase.GetDrawController()),
           vcl::EnumContext::Context::Default))
+    , mbMouseButtonDown(false)
+    , mbMouseSelecting(false)
 {
     if (pFrameViewArgument != nullptr)
         mpFrameView = pFrameViewArgument;

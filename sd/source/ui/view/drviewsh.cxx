@@ -58,6 +58,9 @@ void DrawViewShell::GotoBookmark(const OUString& rBookmark)
 
 void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rWin)
 {
+    if ( (IsMouseButtonDown() && !IsMouseSelecting()) || SlideShow::IsRunning( GetViewShellBase() ) )
+        return;
+
     // tdf#98646 check if Rectangle which contains the bounds of the region to
     // be shown eventually contains values that cause overflows when processing
     // e.g. when calling GetWidth()
@@ -90,7 +93,7 @@ void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rW
         rWin.Pop();
     Size aVisAreaSize(aVisArea.GetSize());
 
-    if (!aVisArea.IsInside(rRect) && !SlideShow::IsRunning( GetViewShellBase() ) )
+    if ( !aVisArea.IsInside(rRect) )
     {
         // object is not entirely in visible area
         sal_Int32 nFreeSpaceX(aVisAreaSize.Width() - aLogicSize.Width());
