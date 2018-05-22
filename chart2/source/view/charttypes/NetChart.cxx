@@ -20,6 +20,7 @@
 #include "NetChart.hxx"
 #include <PlottingPositionHelper.hxx>
 #include <AbstractShapeFactory.hxx>
+#include <ExplicitCategoriesProvider.hxx>
 #include <CommonConverters.hxx>
 #include <ViewDefines.hxx>
 #include <ObjectIdentifier.hxx>
@@ -39,6 +40,7 @@
 
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/NormalsKind.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 
 namespace chart

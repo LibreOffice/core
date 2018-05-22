@@ -23,8 +23,11 @@
 #include "LabelAlignment.hxx"
 #include "PropertyMapper.hxx"
 #include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/drawing/Position3D.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
+
+namespace com { namespace sun { namespace star { namespace drawing { struct Position3D; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
+namespace com { namespace sun { namespace star { namespace awt { struct Size; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
 
 namespace chart
 {

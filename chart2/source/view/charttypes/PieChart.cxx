@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <BaseGFXHelper.hxx>
+#include <VLineProperties.hxx>
 #include "PieChart.hxx"
 #include <PlottingPositionHelper.hxx>
 #include <AbstractShapeFactory.hxx>

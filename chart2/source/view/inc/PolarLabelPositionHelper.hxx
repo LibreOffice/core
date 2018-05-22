@@ -22,7 +22,6 @@
 
 #include "LabelPositionHelper.hxx"
 #include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/drawing/Position3D.hpp>
 
 namespace chart
 {

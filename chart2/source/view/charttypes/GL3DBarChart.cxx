@@ -8,7 +8,8 @@
  */
 
 #include <GL3DBarChart.hxx>
-
+#include <vcl/opengl/OpenGLContext.hxx>
+#include <vcl/idle.hxx>
 #include <epoxy/gl.h>
 
 #include <cmath>
@@ -19,6 +20,8 @@
 #include <GL3DRenderer.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <DataSeriesHelper.hxx>
+#include <VDataSeries.hxx>
+#include <salhelper/thread.hxx>
 
 #include <osl/time.h>
 #ifdef _WIN32

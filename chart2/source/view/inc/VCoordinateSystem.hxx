@@ -20,21 +20,25 @@
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_VCOORDINATESYSTEM_HXX
 
 #include "MinimumAndMaximumSupplier.hxx"
-#include "ScaleAutomatism.hxx"
 #include <ThreeDHelper.hxx>
-#include <ExplicitCategoriesProvider.hxx>
 #include <chartview/ExplicitScaleValues.hxx>
-
-#include <com/sun/star/chart2/XCoordinateSystem.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <map>
 #include <memory>
 #include <vector>
+
+namespace chart { class ExplicitCategoriesProvider; }
+namespace chart { class ScaleAutomatism; }
+namespace com { namespace sun { namespace star { namespace awt { struct Rectangle; } } } }
+namespace com { namespace sun { namespace star { namespace awt { struct Size; } } } }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XAxis; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XCoordinateSystem; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+
 
 namespace chart
 {

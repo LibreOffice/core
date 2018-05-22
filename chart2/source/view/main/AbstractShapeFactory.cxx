@@ -25,6 +25,8 @@
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
@@ -35,6 +37,7 @@
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
 
+#include <BaseGFXHelper.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
