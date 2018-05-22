@@ -44,6 +44,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/unowrap.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 #include <bitmaps.hlst>
 
@@ -2399,6 +2400,57 @@ namespace weld
         {
             m_xContentArea->move(m_xRelocate.get(), m_xOrigParent.get());
         }
+    }
+
+    IMPL_LINK(CustomWeld, DoResize, const Size&, rSize, void)
+    {
+        m_rWidgetController.SetOutputSizePixel(rSize);
+        m_rWidgetController.Resize();
+    }
+
+    IMPL_LINK(CustomWeld, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
+    {
+        m_rWidgetController.Paint(aPayload.first, aPayload.second);
+    }
+
+    IMPL_LINK(CustomWeld, DoMouseButtonDown, const MouseEvent&, rMEvt, void)
+    {
+        m_rWidgetController.MouseButtonDown(rMEvt);
+    }
+
+    IMPL_LINK(CustomWeld, DoMouseMove, const MouseEvent&, rMEvt, void)
+    {
+        m_rWidgetController.MouseMove(rMEvt);
+    }
+
+    IMPL_LINK(CustomWeld, DoMouseButtonUp, const MouseEvent&, rMEvt, void)
+    {
+        m_rWidgetController.MouseButtonUp(rMEvt);
+    }
+
+    IMPL_LINK_NOARG(CustomWeld, DoGetFocus, weld::Widget&, void)
+    {
+        m_rWidgetController.GetFocus();
+    }
+
+    IMPL_LINK_NOARG(CustomWeld, DoLoseFocus, weld::Widget&, void)
+    {
+        m_rWidgetController.LoseFocus();
+    }
+
+    IMPL_LINK(CustomWeld, DoKeyPress, const KeyEvent&, rKEvt, bool)
+    {
+        return m_rWidgetController.KeyInput(rKEvt);
+    }
+
+    IMPL_LINK_NOARG(CustomWeld, DoFocusRect, weld::Widget&, tools::Rectangle)
+    {
+        return m_rWidgetController.GetFocusRect();
+    }
+
+    IMPL_LINK_NOARG(CustomWeld, DoStyleUpdated, weld::Widget&, void)
+    {
+        m_rWidgetController.StyleUpdated();
     }
 }
 

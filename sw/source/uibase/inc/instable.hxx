@@ -37,17 +37,6 @@
 
 class SwInsTableDlg : public weld::GenericDialogController
 {
-    std::unique_ptr<weld::Entry> m_xNameEdit;
-    std::unique_ptr<weld::SpinButton> m_xColNF;
-    std::unique_ptr<weld::SpinButton> m_xRowNF;
-    std::unique_ptr<weld::CheckButton> m_xHeaderCB;
-    std::unique_ptr<weld::CheckButton> m_xRepeatHeaderCB;
-    std::unique_ptr<weld::SpinButton> m_xRepeatHeaderNF;
-    std::unique_ptr<weld::Widget> m_xRepeatGroup;
-    std::unique_ptr<weld::CheckButton> m_xDontSplitCB;
-    std::unique_ptr<weld::Button> m_xInsertBtn;
-    std::unique_ptr<weld::TreeView> m_xLbFormat;
-    std::unique_ptr<AutoFormatPreview> m_xWndPreview;
     TextFilter      m_aTextFilter;
 
     SwWrtShell*     pShell;
@@ -59,6 +48,20 @@ class SwInsTableDlg : public weld::GenericDialogController
     sal_uInt8       minTableIndexInLb;
     sal_uInt8       maxTableIndexInLb;
     sal_Int64       nEnteredValRepeatHeaderNF;
+
+    AutoFormatPreview m_aWndPreview;
+
+    std::unique_ptr<weld::Entry> m_xNameEdit;
+    std::unique_ptr<weld::SpinButton> m_xColNF;
+    std::unique_ptr<weld::SpinButton> m_xRowNF;
+    std::unique_ptr<weld::CheckButton> m_xHeaderCB;
+    std::unique_ptr<weld::CheckButton> m_xRepeatHeaderCB;
+    std::unique_ptr<weld::SpinButton> m_xRepeatHeaderNF;
+    std::unique_ptr<weld::Widget> m_xRepeatGroup;
+    std::unique_ptr<weld::CheckButton> m_xDontSplitCB;
+    std::unique_ptr<weld::Button> m_xInsertBtn;
+    std::unique_ptr<weld::TreeView> m_xLbFormat;
+    std::unique_ptr<weld::CustomWeld> m_xWndPreview;
 
     // Returns 255 if mapping is not possible.
     // This means there cannot be more than 255 autotable style.
