@@ -63,6 +63,7 @@ SvxTextAttrPage::SvxTextAttrPage(TabPageParent pPage, const SfxItemSet& rInAttrs
     , bAutoGrowHeightEnabled(false)
     , bWordWrapTextEnabled(false)
     , bFitToSizeEnabled(false)
+    , m_aCtlPosition(this)
     , m_xDrawingText(m_xBuilder->weld_widget("drawingtext"))
     , m_xCustomShapeText(m_xBuilder->weld_widget("customshapetext"))
     , m_xTsbAutoGrowWidth(m_xBuilder->weld_check_button("TSB_AUTOGROW_WIDTH"))
@@ -77,10 +78,10 @@ SvxTextAttrPage::SvxTextAttrPage(TabPageParent pPage, const SfxItemSet& rInAttrs
     , m_xMtrFldTop(m_xBuilder->weld_metric_spin_button("MTR_FLD_TOP", FUNIT_CM))
     , m_xMtrFldBottom(m_xBuilder->weld_metric_spin_button("MTR_FLD_BOTTOM", FUNIT_CM))
     , m_xFlPosition(m_xBuilder->weld_frame("FL_POSITION"))
-    , m_xCtlPosition(new RectCtl(*m_xBuilder, "CTL_POSITION", this))
+    , m_xCtlPosition(new weld::CustomWeld(*m_xBuilder, "CTL_POSITION", m_aCtlPosition))
     , m_xTsbFullWidth(m_xBuilder->weld_check_button("TSB_FULL_WIDTH"))
 {
-    m_xCtlPosition->SetControlSettings(RectPoint::MM, 240, 100);
+    m_aCtlPosition.SetControlSettings(RectPoint::MM, 240, 100);
 
     FieldUnit eFUnit = GetModuleFieldUnit( rInAttrs );
     SetFieldUnit( *m_xMtrFldLeft, eFUnit );
@@ -264,15 +265,15 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
             m_xTsbFullWidth->set_state(TRISTATE_TRUE);
         }
 
-        m_xCtlPosition->SetActualRP( eRP );
+        m_aCtlPosition.SetActualRP( eRP );
     }
     else
     {
         // VertAdjust or HorAdjust is not unequivocal
-        m_xCtlPosition->Reset();
+        m_aCtlPosition.Reset();
 
-        m_xCtlPosition->SetState(CTL_STATE::NOVERT);
-        m_xCtlPosition->DoCompletelyDisable(true);
+        m_aCtlPosition.SetState(CTL_STATE::NOVERT);
+        m_aCtlPosition.DoCompletelyDisable(true);
 
         m_xTsbFullWidth->set_state(TRISTATE_INDET);
         m_xFlPosition->set_sensitive( false );
@@ -389,7 +390,7 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
     }
 
     // centered
-    RectPoint eRP = m_xCtlPosition->GetActualRP();
+    RectPoint eRP = m_aCtlPosition.GetActualRP();
     SdrTextVertAdjust eTVA, eOldTVA;
     SdrTextHorzAdjust eTHA, eOldTHA;
 
@@ -417,7 +418,7 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
     }
 
     // #103516# Do not change values if adjust controls were disabled.
-    bool bIsDisabled(m_xCtlPosition->IsCompletelyDisabled());
+    bool bIsDisabled(m_aCtlPosition.IsCompletelyDisabled());
 
     if(!bIsDisabled)
     {
@@ -591,21 +592,21 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl, weld::Button&, void)
         if (IsTextDirectionLeftToRight())
         {
             // Move text anchor to horizontal middle axis.
-            switch( m_xCtlPosition->GetActualRP() )
+            switch( m_aCtlPosition.GetActualRP() )
             {
                 case RectPoint::LT:
                 case RectPoint::RT:
-                    m_xCtlPosition->SetActualRP( RectPoint::MT );
+                    m_aCtlPosition.SetActualRP( RectPoint::MT );
                     break;
 
                 case RectPoint::LM:
                 case RectPoint::RM:
-                    m_xCtlPosition->SetActualRP( RectPoint::MM );
+                    m_aCtlPosition.SetActualRP( RectPoint::MM );
                     break;
 
                 case RectPoint::LB:
                 case RectPoint::RB:
-                    m_xCtlPosition->SetActualRP( RectPoint::MB );
+                    m_aCtlPosition.SetActualRP( RectPoint::MB );
                     break;
                 default: ;//prevent warning
             }
@@ -613,21 +614,21 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl, weld::Button&, void)
         else
         {
             // Move text anchor to vertical middle axis.
-            switch( m_xCtlPosition->GetActualRP() )
+            switch( m_aCtlPosition.GetActualRP() )
             {
                 case RectPoint::LT:
                 case RectPoint::LB:
-                    m_xCtlPosition->SetActualRP( RectPoint::LM );
+                    m_aCtlPosition.SetActualRP( RectPoint::LM );
                     break;
 
                 case RectPoint::MT:
                 case RectPoint::MB:
-                    m_xCtlPosition->SetActualRP( RectPoint::MM );
+                    m_aCtlPosition.SetActualRP( RectPoint::MM );
                     break;
 
                 case RectPoint::RT:
                 case RectPoint::RB:
-                    m_xCtlPosition->SetActualRP( RectPoint::RM );
+                    m_aCtlPosition.SetActualRP( RectPoint::RM );
                 break;
                 default: ;//prevent warning
             }

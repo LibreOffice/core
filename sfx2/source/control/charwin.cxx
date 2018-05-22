@@ -28,42 +28,39 @@
 
 using namespace com::sun::star;
 
-SvxCharView::SvxCharView(weld::Builder& rBuilder, const OString& rId, const VclPtr<VirtualDevice>& rVirDev)
+SvxCharView::SvxCharView(const VclPtr<VirtualDevice>& rVirDev)
     : mxVirDev(rVirDev)
-    , mxDrawingArea(rBuilder.weld_drawing_area(rId))
     , mnY(0)
     , maPosition(0,0)
     , maHasInsert(true)
 {
-    mxDrawingArea->connect_size_allocate(LINK(this, SvxCharView, DoResize));
-    mxDrawingArea->connect_draw(LINK(this, SvxCharView, DoPaint));
-    mxDrawingArea->connect_mouse_press(LINK(this, SvxCharView, DoMouseButtonDown));
-    mxDrawingArea->connect_key_press(LINK(this, SvxCharView, DoKeyDown));
-    mxDrawingArea->connect_focus_in(LINK(this, SvxCharView, DoGetFocus));
-    mxDrawingArea->connect_focus_out(LINK(this, SvxCharView, DoLoseFocus));
+}
 
+void SvxCharView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     vcl::Font aFont = rStyleSettings.GetLabelFont();
     const Size aFontSize = aFont.GetFontSize();
     aFont.SetFontSize(Size(aFontSize.Width() * 2.5, aFontSize.Height() * 2.5));
     mxVirDev->Push(PUSH_ALLFONT);
     mxVirDev->SetFont(aFont);
-    mxDrawingArea->set_size_request(mxVirDev->approximate_digit_width() * 2,
-                                    mxVirDev->GetTextHeight());
+    pDrawingArea->set_size_request(mxVirDev->approximate_digit_width() * 2,
+                                   mxVirDev->GetTextHeight());
     mxVirDev->Pop();
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
 }
 
-IMPL_LINK_NOARG(SvxCharView, DoGetFocus, weld::Widget&, void)
+void SvxCharView::GetFocus()
 {
-    mxDrawingArea->queue_draw();
+    Invalidate();
 }
 
-IMPL_LINK_NOARG(SvxCharView, DoLoseFocus, weld::Widget&, void)
+void SvxCharView::LoseFocus()
 {
-    mxDrawingArea->queue_draw();
+    Invalidate();
 }
 
-IMPL_LINK(SvxCharView, DoMouseButtonDown, const MouseEvent&, rMEvt, void)
+void SvxCharView::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if ( rMEvt.IsLeft() )
     {
@@ -79,13 +76,13 @@ IMPL_LINK(SvxCharView, DoMouseButtonDown, const MouseEvent&, rMEvt, void)
     {
         Point aPosition(rMEvt.GetPosPixel());
         maPosition = aPosition;
-        mxDrawingArea->grab_focus();
-        mxDrawingArea->queue_draw();
+        GrabFocus();
+        Invalidate();
         createContextMenu();
     }
 }
 
-IMPL_LINK(SvxCharView, DoKeyDown, const KeyEvent&, rKEvt, bool)
+bool SvxCharView::KeyInput(const KeyEvent& rKEvt)
 {
     bool bRet = false;
     vcl::KeyCode aCode = rKEvt.GetKeyCode();
@@ -119,10 +116,11 @@ void SvxCharView::InsertCharToDoc()
 
 void SvxCharView::createContextMenu()
 {
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(mxDrawingArea.get(), "sfx/ui/charviewmenu.ui"));
+    weld::DrawingArea* pDrawingArea = GetDrawingArea();
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pDrawingArea, "sfx/ui/charviewmenu.ui"));
     std::unique_ptr<weld::Menu> xItemMenu(xBuilder->weld_menu("charviewmenu"));
-    ContextMenuSelect(xItemMenu->popup_at_rect(mxDrawingArea.get(), tools::Rectangle(maPosition, Size(1,1))));
-    queue_draw();
+    ContextMenuSelect(xItemMenu->popup_at_rect(pDrawingArea, tools::Rectangle(maPosition, Size(1,1))));
+    Invalidate();
 }
 
 void SvxCharView::ContextMenuSelect(const OString& rMenuId)
@@ -133,10 +131,8 @@ void SvxCharView::ContextMenuSelect(const OString& rMenuId)
         maClearAllClickHdl.Call(this);
 }
 
-IMPL_LINK(SvxCharView, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
+void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    vcl::RenderContext& rRenderContext = aPayload.first;
-
     rRenderContext.SetFont(maFont);
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -148,8 +144,9 @@ IMPL_LINK(SvxCharView, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
 
     const OUString aText = GetText();
 
-    long nAvailWidth = m_aSize.Width();
-    long nWinHeight = m_aSize.Height();
+    Size aSize(GetOutputSizePixel());
+    long nAvailWidth = aSize.Width();
+    long nWinHeight = aSize.Height();
 
     bool bGotBoundary = true;
     bool bShrankFont = false;
@@ -180,7 +177,7 @@ IMPL_LINK(SvxCharView, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
     Point aPoint(2, mnY);
 
     if (!bGotBoundary)
-        aPoint.setX( (m_aSize.Width() - rRenderContext.GetTextWidth(aText)) / 2 );
+        aPoint.setX( (aSize.Width() - rRenderContext.GetTextWidth(aText)) / 2 );
     else
     {
         // adjust position
@@ -188,20 +185,20 @@ IMPL_LINK(SvxCharView, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
 
         // vertical adjustment
         int nYLDelta = aBoundRect.Top();
-        int nYHDelta = m_aSize.Height() - aBoundRect.Bottom();
+        int nYHDelta = aSize.Height() - aBoundRect.Bottom();
         if( nYLDelta <= 0 )
             aPoint.AdjustY( -(nYLDelta - 1) );
         else if( nYHDelta <= 0 )
             aPoint.AdjustY(nYHDelta - 1 );
 
         // centrally align glyph
-        aPoint.setX( -aBoundRect.Left() + (m_aSize.Width() - aBoundRect.GetWidth()) / 2 );
+        aPoint.setX( -aBoundRect.Left() + (aSize.Width() - aBoundRect.GetWidth()) / 2 );
     }
 
-    if (mxDrawingArea->has_focus())
+    if (HasFocus())
     {
         rRenderContext.SetFillColor(aHighlightColor);
-        rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), m_aSize));
+        rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), aSize));
 
         rRenderContext.SetTextColor(aHighlightTextColor);
         rRenderContext.DrawText(aPoint, aText);
@@ -209,7 +206,7 @@ IMPL_LINK(SvxCharView, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
     else
     {
         rRenderContext.SetFillColor(aFillColor);
-        rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), m_aSize));
+        rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), aSize));
 
         rRenderContext.SetTextColor(aWindowTextColor);
         rRenderContext.DrawText(aPoint, aText);
@@ -238,7 +235,7 @@ void SvxCharView::setClearAllClickHdl(const Link<SvxCharView*,void> &rLink)
 
 void SvxCharView::SetFont( const vcl::Font& rFont )
 {
-    long nWinHeight = m_aSize.Height();
+    long nWinHeight = GetOutputSizePixel().Height();
     maFont = vcl::Font(rFont);
     maFont.SetWeight(WEIGHT_NORMAL);
     maFont.SetAlignment(ALIGN_TOP);
@@ -250,19 +247,18 @@ void SvxCharView::SetFont( const vcl::Font& rFont )
     mnY = (nWinHeight - mxVirDev->GetTextHeight()) / 2;
     mxVirDev->Pop();
 
-    queue_draw();
+    Invalidate();
 }
 
-IMPL_LINK(SvxCharView, DoResize, const Size&, rSize, void)
+void SvxCharView::Resize()
 {
-    m_aSize = rSize;
     SetFont(GetFont());  //force recalculation of size
 }
 
 void SvxCharView::SetText( const OUString& rText )
 {
     m_sText = rText;
-    queue_draw();
+    Invalidate();
 }
 
 void SvxCharView::SetHasInsert( bool bInsert )

@@ -37,18 +37,6 @@ enum AutoFormatLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 
 class SwAutoFormatDlg : public weld::GenericDialogController
 {
-    std::unique_ptr<weld::TreeView> m_xLbFormat;
-    std::unique_ptr<weld::CheckButton> m_xBtnNumFormat;
-    std::unique_ptr<weld::CheckButton> m_xBtnBorder;
-    std::unique_ptr<weld::CheckButton> m_xBtnFont;
-    std::unique_ptr<weld::CheckButton> m_xBtnPattern;
-    std::unique_ptr<weld::CheckButton> m_xBtnAlignment;
-    std::unique_ptr<weld::Button> m_xBtnCancel;
-    std::unique_ptr<weld::Button> m_xBtnAdd;
-    std::unique_ptr<weld::Button> m_xBtnRemove;
-    std::unique_ptr<weld::Button> m_xBtnRename;
-    std::unique_ptr<AutoFormatPreview> m_xWndPreview;
-    std::unique_ptr<SwTableAutoFormatTable> m_xTableTable;
     OUString        m_aStrTitle;
     OUString        m_aStrLabel;
     OUString        m_aStrClose;
@@ -62,6 +50,21 @@ class SwAutoFormatDlg : public weld::GenericDialogController
     sal_uInt8       m_nDfltStylePos;
     bool            m_bCoreDataChanged : 1;
     bool            m_bSetAutoFormat : 1;
+
+    AutoFormatPreview m_aWndPreview;
+    std::unique_ptr<SwTableAutoFormatTable> m_xTableTable;
+
+    std::unique_ptr<weld::TreeView> m_xLbFormat;
+    std::unique_ptr<weld::CheckButton> m_xBtnNumFormat;
+    std::unique_ptr<weld::CheckButton> m_xBtnBorder;
+    std::unique_ptr<weld::CheckButton> m_xBtnFont;
+    std::unique_ptr<weld::CheckButton> m_xBtnPattern;
+    std::unique_ptr<weld::CheckButton> m_xBtnAlignment;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
+    std::unique_ptr<weld::Button> m_xBtnAdd;
+    std::unique_ptr<weld::Button> m_xBtnRemove;
+    std::unique_ptr<weld::Button> m_xBtnRename;
+    std::unique_ptr<weld::CustomWeld> m_xWndPreview;
 
     void Init( const SwTableAutoFormat* pSelFormat );
     void UpdateChecks( const SwTableAutoFormat&, bool bEnableBtn );

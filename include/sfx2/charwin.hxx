@@ -22,14 +22,13 @@
 
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/dllapi.h>
+#include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 
-class SFX2_DLLPUBLIC SvxCharView
+class SFX2_DLLPUBLIC SvxCharView : public weld::CustomWidgetController
 {
 private:
     VclPtr<VirtualDevice> mxVirDev;
-    std::unique_ptr<weld::DrawingArea> mxDrawingArea;
-    Size m_aSize;
     long            mnY;
     Point           maPosition;
     vcl::Font       maFont;
@@ -40,34 +39,29 @@ private:
     Link<SvxCharView*, void> maClearClickHdl;
     Link<SvxCharView*, void> maClearAllClickHdl;
 
-
-    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
-    DECL_LINK(DoResize, const Size& rSize, void);
-    DECL_LINK(DoMouseButtonDown, const MouseEvent&, void);
-    DECL_LINK(DoKeyDown, const KeyEvent&, bool);
-    DECL_LINK(DoGetFocus, weld::Widget&, void);
-    DECL_LINK(DoLoseFocus, weld::Widget&, void);
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Resize() override;
+    virtual void MouseButtonDown(const MouseEvent&) override;
+    virtual void GetFocus() override;
+    virtual void LoseFocus() override;
+    virtual bool KeyInput(const KeyEvent&) override;
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 public:
-    SvxCharView(weld::Builder& rBuilder, const OString& rId, const VclPtr<VirtualDevice>& rVirDev);
+    SvxCharView(const VclPtr<VirtualDevice>& rVirDev);
 
     void            SetFont( const vcl::Font& rFont );
     vcl::Font       GetFont() const { return maFont; }
     void            SetText( const OUString& rText );
     OUString        GetText() const { return m_sText; }
-    void            Show() { mxDrawingArea->show(); }
-    void            Hide() { mxDrawingArea->hide(); }
     void            SetHasInsert( bool bInsert );
     void            InsertCharToDoc();
 
     void            createContextMenu();
 
-    void            grab_focus() { mxDrawingArea->grab_focus(); }
-    void            queue_draw() { mxDrawingArea->queue_draw(); }
-    Size            get_preferred_size() const { return mxDrawingArea->get_preferred_size(); }
+    Size            get_preferred_size() const { return GetDrawingArea()->get_preferred_size(); }
 
-    void            connect_focus_in(const Link<weld::Widget&, void>& rLink) { mxDrawingArea->connect_focus_in(rLink); }
-    void            connect_focus_out(const Link<weld::Widget&, void>& rLink) { mxDrawingArea->connect_focus_out(rLink); }
-
+    void            connect_focus_in(const Link<weld::Widget&, void>& rLink);
+    void            connect_focus_out(const Link<weld::Widget&, void>& rLink);
 
     void setMouseClickHdl(const Link<SvxCharView*,void> &rLink);
     void setClearClickHdl(const Link<SvxCharView*,void> &rLink);

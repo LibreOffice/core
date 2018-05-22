@@ -39,8 +39,8 @@ SdVectorizeDlg::SdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::
     , m_xFtFillHoles(m_xBuilder->weld_label("tilesft"))
     , m_xMtFillHoles(m_xBuilder->weld_metric_spin_button("tiles", FUNIT_PIXEL))
     , m_xCbFillHoles(m_xBuilder->weld_check_button("fillholes"))
-    , m_xBmpWin(new SvxGraphCtrl(*m_xBuilder, "source"))
-    , m_xMtfWin(new SvxGraphCtrl(*m_xBuilder, "vectorized"))
+    , m_xBmpWin(new weld::CustomWeld(*m_xBuilder, "source", m_aBmpWin))
+    , m_xMtfWin(new weld::CustomWeld(*m_xBuilder, "vectorized", m_aMtfWin))
     , m_xPrgs(m_xBuilder->weld_progress_bar("progressbar"))
     , m_xBtnOK(m_xBuilder->weld_button("ok"))
     , m_xBtnPreview(m_xBuilder->weld_button("preview"))
@@ -97,11 +97,11 @@ SdVectorizeDlg::~SdVectorizeDlg()
 
 void SdVectorizeDlg::InitPreviewBmp()
 {
-    const ::tools::Rectangle aRect( GetRect( m_xBmpWin->GetSize(), aBmp.GetSizePixel() ) );
+    const ::tools::Rectangle aRect( GetRect( m_aBmpWin.GetOutputSizePixel(), aBmp.GetSizePixel() ) );
 
     aPreviewBmp = aBmp;
     aPreviewBmp.Scale( aRect.GetSize() );
-    m_xBmpWin->SetGraphic( aPreviewBmp );
+    m_aBmpWin.SetGraphic( aPreviewBmp );
 }
 
 Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap const & rBmp, Fraction& rScale )
@@ -247,7 +247,7 @@ IMPL_LINK( SdVectorizeDlg, ProgressHdl, long, nData, void )
 IMPL_LINK_NOARG(SdVectorizeDlg, ClickPreviewHdl, weld::Button&, void)
 {
     Calculate( aBmp, aMtf );
-    m_xMtfWin->SetGraphic( aMtf );
+    m_aMtfWin.SetGraphic( aMtf );
     m_xBtnPreview->set_sensitive(false);
 }
 
