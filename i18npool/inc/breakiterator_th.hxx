@@ -45,9 +45,8 @@ public:
 
 private:
     OUString cachedText; // for cell index
-    sal_Int32* nextCellIndex;
-    sal_Int32* previousCellIndex;
-    sal_Int32 cellIndexSize;
+    std::vector<sal_Int32> m_aNextCellIndex;
+    std::vector<sal_Int32> m_aPreviousCellIndex;
 
     void makeIndex(const OUString& text, sal_Int32 pos);
 };
