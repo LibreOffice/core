@@ -28,9 +28,8 @@
 
 #define FRAME_OFFSET 4
 
-AutoFormatPreview::AutoFormatPreview(weld::DrawingArea* pDrawingArea)
-    : mxDrawingArea(pDrawingArea)
-    , maCurrentData(OUString())
+AutoFormatPreview::AutoFormatPreview()
+    : maCurrentData(OUString())
     , mbFitWidth(false)
     , mbRTL(false)
     , maStringJan(SwResId(STR_JAN))
@@ -46,14 +45,12 @@ AutoFormatPreview::AutoFormatPreview(weld::DrawingArea* pDrawingArea)
     mxNumFormat.reset(new SvNumberFormatter(xContext, LANGUAGE_SYSTEM));
 
     Init();
-
-    mxDrawingArea->connect_size_allocate(LINK(this, AutoFormatPreview, DoResize));
-    mxDrawingArea->connect_draw(LINK(this, AutoFormatPreview, DoPaint));
 }
 
-IMPL_LINK(AutoFormatPreview, DoResize, const Size&, rSize, void)
+void AutoFormatPreview::Resize()
 {
-    maPreviousSize = Size(rSize.Width() - 6, rSize.Height() - 30);
+    Size aSize = GetOutputSizePixel();
+    maPreviousSize = Size(aSize.Width() - 6, aSize.Height() - 30);
     mnLabelColumnWidth = (maPreviousSize.Width() - 4) / 4 - 12;
     mnDataColumnWidth1 = (maPreviousSize.Width() - 4 - 2 * mnLabelColumnWidth) / 3;
     mnDataColumnWidth2 = (maPreviousSize.Width() - 4 - 2 * mnLabelColumnWidth) / 4;
@@ -413,13 +410,11 @@ void AutoFormatPreview::NotifyChange(const SwTableAutoFormat& rNewData)
     mbFitWidth = maCurrentData.IsJustify(); // true;  //???
     CalcCellArray(mbFitWidth);
     CalcLineMap();
-    mxDrawingArea->queue_draw();
+    Invalidate();
 }
 
-IMPL_LINK(AutoFormatPreview, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
+void AutoFormatPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    vcl::RenderContext& rRenderContext = aPayload.first;
-
     rRenderContext.Push(PushFlags::ALL);
 
     DrawModeFlags nOldDrawMode = rRenderContext.GetDrawMode();

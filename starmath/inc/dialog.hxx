@@ -258,9 +258,8 @@ public:
 
 /**************************************************************************/
 
-class SmShowSymbolSet
+class SmShowSymbolSet : public weld::CustomWidgetController
 {
-    Size m_aSize;
     Size m_aOldSize;
     SymbolPtrVec_t aSymbolSet;
     Link<SmShowSymbolSet&,void> aSelectHdlLink;
@@ -269,20 +268,27 @@ class SmShowSymbolSet
     long        nRows, nColumns;
     long        nXOffset, nYOffset;
     sal_uInt16  nSelectSymbol;
-    std::unique_ptr<weld::DrawingArea> m_xDrawingArea;
     std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;
 
     void SetScrollBarRange();
     Point OffsetPoint(const Point &rPoint) const;
 
-    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
-    DECL_LINK(DoMouseButtonDown, const MouseEvent& rMEvt, void);
-    DECL_LINK(DoKeyDown, const KeyEvent& rKEvt, bool);
-    DECL_LINK(DoResize, const Size& rSize, void);
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
+
     DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
 
 public:
-    SmShowSymbolSet(weld::DrawingArea* pDrawingArea, weld::ScrolledWindow* pScrolledWindow);
+    SmShowSymbolSet(weld::ScrolledWindow* pScrolledWindow);
+
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
+    {
+        pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 27,
+                                       pDrawingArea->get_text_height() * 9);
+        CustomWidgetController::SetDrawingArea(pDrawingArea);
+    }
+
     void calccols(vcl::RenderContext& rRenderContext);
     void    SelectSymbol(sal_uInt16 nSymbol);
     sal_uInt16  GetSelectSymbol() const { return nSelectSymbol; }
@@ -291,24 +297,28 @@ public:
     void SetDblClickHdl(const Link<SmShowSymbolSet&,void>& rLink) { aDblClickHdlLink = rLink; }
 };
 
-class SmShowSymbol
+class SmShowSymbol : public weld::CustomWidgetController
 {
 private:
-    Size m_aSize;
     vcl::Font m_aFont;
     OUString m_aText;
-    std::unique_ptr<weld::DrawingArea> m_xDrawingArea;
 
     Link<SmShowSymbol&,void> aDblClickHdlLink;
 
-    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
-    DECL_LINK(DoMouseButtonDown, const MouseEvent& rMEvt, void);
-    DECL_LINK(DoResize, const Size& rSize, void);
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
 
     void setFontSize(vcl::Font &rFont) const;
 
 public:
-    SmShowSymbol(weld::DrawingArea* pDrawingArea);
+    SmShowSymbol();
+
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
+    {
+        pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 27,
+                                       pDrawingArea->get_text_height() * 9);
+        CustomWidgetController::SetDrawingArea(pDrawingArea);
+    }
 
     void SetText(const OUString& rText) { m_aText = rText; }
     const OUString& GetText() const { return m_aText; }
@@ -330,10 +340,13 @@ class SmSymbolDialog : public weld::GenericDialogController
 
     VclPtr<OutputDevice> pFontListDev;
 
+    SmShowSymbol m_aSymbolDisplay;
+
     std::unique_ptr<weld::ComboBoxText> m_xSymbolSets;
     std::unique_ptr<SmShowSymbolSet> m_xSymbolSetDisplay;
+    std::unique_ptr<weld::CustomWeld> m_xSymbolSetDisplayArea;
     std::unique_ptr<weld::Label> m_xSymbolName;
-    std::unique_ptr<SmShowSymbol> m_xSymbolDisplay;
+    std::unique_ptr<weld::CustomWeld> m_xSymbolDisplay;
     std::unique_ptr<weld::Button> m_xGetBtn;
     std::unique_ptr<weld::Button> m_xEditBtn;
 
@@ -357,25 +370,25 @@ public:
     void    SelectSymbol(sal_uInt16 nSymbolPos);
 };
 
-class SmShowChar
+class SmShowChar : public weld::CustomWidgetController
 {
 private:
-    std::unique_ptr<weld::DrawingArea> m_xDrawingArea;
     OUString m_aText;
     vcl::Font m_aFont;
-    Size m_aSize;
 
-    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
-    DECL_LINK(DoResize, const Size& rSize, void);
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+    virtual void Resize() override;
 
 public:
-    SmShowChar(weld::DrawingArea* pDrawingArea)
-        : m_xDrawingArea(pDrawingArea)
+    SmShowChar()
     {
-        m_xDrawingArea->connect_size_allocate(LINK(this, SmShowChar, DoResize));
-        m_xDrawingArea->connect_draw(LINK(this, SmShowChar, DoPaint));
-        m_xDrawingArea->set_size_request(m_xDrawingArea->get_approximate_digit_width() * 7,
-                                         m_xDrawingArea->get_text_height() * 3);
+    }
+
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
+    {
+        pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 7,
+                                       pDrawingArea->get_text_height() * 3);
+        CustomWidgetController::SetDrawingArea(pDrawingArea);
     }
 
     void SetSymbol(const SmSym *pSym);
@@ -384,8 +397,6 @@ public:
     const OUString& GetText() const { return m_aText; }
     void SetFont(const vcl::Font& rFont) { m_aFont = rFont; }
     const vcl::Font& GetFont() const { return m_aFont; }
-
-    void queue_draw() { m_xDrawingArea->queue_draw(); }
 };
 
 class SmSymDefineDialog : public weld::GenericDialogController
@@ -393,6 +404,8 @@ class SmSymDefineDialog : public weld::GenericDialogController
     VclPtr<VirtualDevice> m_xVirDev;
     SmSymbolManager m_aSymbolMgrCopy;
     SmSymbolManager& m_rSymbolMgr;
+    SmShowChar m_aOldSymbolDisplay;
+    SmShowChar m_aSymbolDisplay;
     std::unique_ptr<SmSym> m_xOrigSymbol;
     std::unique_ptr<SubsetMap> m_xSubsetMap;
     std::unique_ptr<FontList> m_xFontList;
@@ -410,9 +423,10 @@ class SmSymDefineDialog : public weld::GenericDialogController
     std::unique_ptr<weld::Button> m_xAddBtn;
     std::unique_ptr<weld::Button> m_xChangeBtn;
     std::unique_ptr<weld::Button> m_xDeleteBtn;
-    std::unique_ptr<SmShowChar> m_xOldSymbolDisplay;
-    std::unique_ptr<SmShowChar> m_xSymbolDisplay;
+    std::unique_ptr<weld::CustomWeld> m_xOldSymbolDisplay;
+    std::unique_ptr<weld::CustomWeld> m_xSymbolDisplay;
     std::unique_ptr<SvxShowCharSet>  m_xCharsetDisplay;
+    std::unique_ptr<weld::CustomWeld>  m_xCharsetDisplayArea;
 
     DECL_LINK(OldSymbolChangeHdl, weld::ComboBoxText&, void);
     DECL_LINK(OldSymbolSetChangeHdl, weld::ComboBoxText&, void);
