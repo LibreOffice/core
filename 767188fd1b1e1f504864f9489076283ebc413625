@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_63bb19e6",
+        "filename": "sfx2/source/appl/shutdownicon.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-22T11:28:23Z",
+      "side": 0,
+      "message": "No idea what should be done on macOS - but is the answer to that really \"nothing\"?",
+      "range": {
+        "startLine": 736,
+        "startChar": 2,
+        "endLine": 759,
+        "endChar": 13
+      },
+      "revId": "767188fd1b1e1f504864f9489076283ebc413625",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

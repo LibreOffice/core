@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_03e41d0b",
+        "filename": "sfx2/source/appl/shutdownicon.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-22T11:28:23Z",
+      "side": 1,
+      "message": "That is a strange assert here. The if() on that is known to do nothing in case of !ENABLE_QUICKSTART_APPLET -\u003e on UNX.",
+      "range": {
+        "startLine": 149,
+        "startChar": 4,
+        "endLine": 149,
+        "endChar": 49
+      },
+      "revId": "d75e28ffc15625629a87a17f01d8d00ccb78d5c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_43ee15ed",
+        "filename": "sfx2/source/appl/shutdownicon.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-22T11:28:23Z",
+      "side": 1,
+      "message": "Now that must fail on MacOS because of not returning?",
+      "range": {
+        "startLine": 636,
+        "startChar": 0,
+        "endLine": 636,
+        "endChar": 16
+      },
+      "revId": "d75e28ffc15625629a87a17f01d8d00ccb78d5c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
