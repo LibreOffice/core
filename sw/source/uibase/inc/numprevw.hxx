@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_NUMPREVW_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_NUMPREVW_HXX
 
+#include <vcl/customweld.hxx>
 #include <vcl/window.hxx>
 
 class SwNumRule;
@@ -59,10 +60,8 @@ class NumberingPreview : public vcl::Window
 
 };
 
-class SwNumberingPreview
+class SwNumberingPreview : public weld::CustomWidgetController
 {
-    std::unique_ptr<weld::DrawingArea> m_xDrawingArea;
-    Size m_aSize;
     const SwNumRule*    pActNum;
     vcl::Font           aStdFont;
     long                nPageWidth;
@@ -71,31 +70,22 @@ class SwNumberingPreview
     sal_uInt16          nActLevel;
 
 private:
-    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
-    DECL_LINK(DoResize, const Size& rSize, void);
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
 public:
-    SwNumberingPreview(weld::DrawingArea* pDrawingArea)
-        : m_xDrawingArea(pDrawingArea)
-        , pActNum(nullptr)
+    SwNumberingPreview()
+       : pActNum(nullptr)
         , nPageWidth(0)
         , pOutlineNames(nullptr)
         , bPosition(false)
         , nActLevel(USHRT_MAX)
     {
-        m_xDrawingArea->connect_size_allocate(LINK(this, SwNumberingPreview, DoResize));
-        m_xDrawingArea->connect_draw(LINK(this, SwNumberingPreview, DoPaint));
-    }
-
-    void queue_draw()
-    {
-        m_xDrawingArea->queue_draw();
     }
 
     void    SetNumRule(const SwNumRule* pNum)
     {
         pActNum = pNum;
-        queue_draw();
+        Invalidate();
     }
 
     void    SetPageWidth(long nPgWidth)
@@ -105,9 +95,7 @@ public:
     void    SetPositionMode()
                     { bPosition = true;}
     void    SetLevel(sal_uInt16 nSet) {nActLevel = nSet;}
-
 };
-
 
 #endif
 

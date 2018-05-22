@@ -87,7 +87,7 @@ SwNumPositionTabPage::SwNumPositionTabPage(TabPageParent pParent, const SfxItemS
     , m_xIndentAtFT(m_xBuilder->weld_label("indentat"))
     , m_xIndentAtMF(m_xBuilder->weld_metric_spin_button("indentatmf", FUNIT_CM))
     , m_xStandardPB(m_xBuilder->weld_button("standard"))
-    , m_xPreviewWIN(new SwNumberingPreview(m_xBuilder->weld_drawing_area("preview")))
+    , m_xPreviewWIN(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWIN))
 {
     SetExchangeSupport();
 
@@ -131,7 +131,7 @@ SwNumPositionTabPage::SwNumPositionTabPage(TabPageParent pParent, const SfxItemS
     m_xLevelLB->select_text(sEntry);
 
     m_xRelativeCB->set_active(bLastRelative);
-    m_xPreviewWIN->SetPositionMode();
+    m_aPreviewWIN.SetPositionMode();
 }
 
 SwNumPositionTabPage::~SwNumPositionTabPage()
@@ -380,7 +380,7 @@ void SwNumPositionTabPage::ActivatePage(const SfxItemSet& )
         InitControls();
     }
     m_xRelativeCB->set_sensitive(1 != nActNumLvl);
-    m_xPreviewWIN->queue_draw();
+    m_aPreviewWIN.Invalidate();
 }
 
 DeactivateRC SwNumPositionTabPage::DeactivatePage(SfxItemSet *_pSet)
@@ -437,7 +437,7 @@ void SwNumPositionTabPage::Reset( const SfxItemSet* rSet )
         pActNum = new  SwNumRule(*pSaveNum);
     else if(*pSaveNum != *pActNum)
         *pActNum = *pSaveNum;
-    m_xPreviewWIN->SetNumRule(pActNum);
+    m_aPreviewWIN.SetNumRule(pActNum);
     InitPosAndSpaceMode();
     ShowControlsDependingOnPosAndSpaceMode();
     InitControls();
@@ -517,7 +517,7 @@ void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)
     m_xIndentAtMF->set_max(m_xIndentAtMF->normalize( nWidth ), FUNIT_TWIP );
 
     const SwRect& rPrtRect = pWrtSh->GetAnyCurRect(CurRectType::Page);
-    m_xPreviewWIN->SetPageWidth(rPrtRect.Width());
+    m_aPreviewWIN.SetPageWidth(rPrtRect.Width());
     FieldUnit eMetric = ::GetDfltMetric( dynamic_cast<SwWebView*>( &pWrtSh->GetView()) != nullptr  );
     if(eMetric == FUNIT_MM)
     {
@@ -872,8 +872,8 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, StandardHdl, weld::Button&, void)
 void SwNumPositionTabPage::SetModified()
 {
     bModified = true;
-    m_xPreviewWIN->SetLevel(nActNumLvl);
-    m_xPreviewWIN->queue_draw();
+    m_aPreviewWIN.SetLevel(nActNumLvl);
+    m_aPreviewWIN.Invalidate();
 }
 #endif
 

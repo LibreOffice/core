@@ -400,7 +400,7 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(TabPageParent pPage,
     , m_xPrefixED(m_xBuilder->weld_entry("prefix"))
     , m_xSuffixED(m_xBuilder->weld_entry("suffix"))
     , m_xStartEdit(m_xBuilder->weld_spin_button("startat"))
-    , m_xPreviewWIN(new SwNumberingPreview(m_xBuilder->weld_drawing_area("preview")))
+    , m_xPreviewWIN(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWIN))
 {
     SetExchangeSupport();
 
@@ -723,8 +723,8 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     pNumRule = static_cast<SwOutlineTabDialog*>(GetDialogController())->GetNumRule();
     pCollNames = static_cast<SwOutlineTabDialog*>(GetDialogController())->GetCollNames();
 
-    m_xPreviewWIN->SetNumRule(pNumRule);
-    m_xPreviewWIN->SetOutlineNames(pCollNames);
+    m_aPreviewWIN.SetNumRule(pNumRule);
+    m_aPreviewWIN.SetOutlineNames(pCollNames);
     // set start value - nActLevel must be 1 here
     sal_uInt16 nTmpLevel = lcl_BitToLevel(nActLevel);
     const SwNumFormat& rNumFormat = pNumRule->Get( nTmpLevel );
@@ -1058,16 +1058,9 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
     rRenderContext.DrawOutDev(Point(0,0), aSize, Point(0,0), aSize, *pVDev);
 }
 
-IMPL_LINK(SwNumberingPreview, DoResize, const Size&, rSize, void)
+void SwNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    m_aSize = rSize;
-}
-
-IMPL_LINK(SwNumberingPreview, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
-{
-    vcl::RenderContext& rRenderContext = aPayload.first;
-
-    const Size aSize(rRenderContext.PixelToLogic(m_aSize));
+    const Size aSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
 
     ScopedVclPtrInstance<VirtualDevice> pVDev(rRenderContext);
     pVDev->SetMapMode(rRenderContext.GetMapMode());

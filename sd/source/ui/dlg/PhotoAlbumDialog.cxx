@@ -49,7 +49,7 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument* pA
     , m_xDownBtn(m_xBuilder->weld_button("down_btn"))
     , m_xRemoveBtn(m_xBuilder->weld_button("rem_btn"))
     , m_xImagesLst(m_xBuilder->weld_tree_view("images_tree"))
-    , m_xImg(new SvxGraphCtrl(*m_xBuilder, "preview_img"))
+    , m_xImg(new weld::CustomWeld(*m_xBuilder, "preview_img", m_aImg))
     , m_xInsTypeCombo(m_xBuilder->weld_combo_box_text("opt_combo"))
     , m_xASRCheck(m_xBuilder->weld_check_button("asr_check"))
     , m_xASRCheckCrop(m_xBuilder->weld_check_button("asr_check_crop"))
@@ -583,7 +583,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, DownHdl, weld::Button&, void)
 IMPL_LINK_NOARG(SdPhotoAlbumDialog, RemoveHdl, weld::Button&, void)
 {
     m_xImagesLst->remove(m_xImagesLst->get_selected_index());
-    m_xImg->SetGraphic(Graphic());
+    m_aImg.SetGraphic(Graphic());
 
     EnableDisableButtons();
 }
@@ -635,11 +635,11 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl, weld::TreeView&, void)
             aBmp.Scale( nYRatio, nYRatio );
 
         aBmp.Convert( BmpConversion::N24Bit );
-        m_xImg->SetGraphic(Graphic(aBmp));
+        m_aImg.SetGraphic(Graphic(aBmp));
     }
     else
     {
-        m_xImg->SetGraphic(Graphic());
+        m_aImg.SetGraphic(Graphic());
     }
     EnableDisableButtons();
 }
