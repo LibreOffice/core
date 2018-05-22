@@ -483,7 +483,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
             pFrame->RegisterToNode( *pNode );
             if (!pFrame->IsFollow() && pFrame->GetOfst())
             {
-                pFrame->SetOfst( 0 );
+                pFrame->SetOfst( TextFrameIndex(0) );
             }
         }
 
