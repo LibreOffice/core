@@ -112,7 +112,7 @@ public:
     css::uno::Reference< css::frame::XDispatchProvider >  xProv;
     SfxWorkWindow*          pWorkWin;
     SfxBindings*            pSubBindings;
-    std::vector<SfxStateCache *> pCaches;   // One chache for each binding
+    std::vector<SfxStateCache *> pCaches;   // One cache for each binding
     std::size_t             nCachedFunc1;   // index for the last one called
     std::size_t             nCachedFunc2;   // index for the second last called
     std::size_t             nMsgPos;        // Message-Position relative the one to be updated
