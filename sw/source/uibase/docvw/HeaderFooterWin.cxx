@@ -466,6 +466,11 @@ void SwHeaderFooterWin::ExecuteCommand(const OString& rIdent)
         SfxViewFrame* pVFrame = rSh.GetView().GetViewFrame();
         pVFrame->GetBindings().Execute(FN_INSERT_FLD_PGNUMBER);
     }
+    else if (rIdent == "insert_pagecount")
+    {
+        SfxViewFrame* pVFrame = rSh.GetView().GetViewFrame();
+        pVFrame->GetBindings().Execute(FN_INSERT_FLD_PGCOUNT);
+    }
 }
 
 void SwHeaderFooterWin::SetReadonly( bool bReadonly )
