@@ -21,6 +21,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 		external/nss/nss.cygwin64.in32bit.patch) \
     $(if $(findstring 120_70,$(VCVER)_$(WINDOWS_SDK_VERSION)), \
         external/nss/nss-winXP-sdk.patch.1) \
+	external/nss/nss-no-c99.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
