@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_1e4b90ca",
+        "filename": "sw/inc/view.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-23T07:36:14Z",
+      "side": 1,
+      "message": "I argue that \"bool m_bFoo;\" is enough in new code, let the compiler decide what number of bits it allocates for the member.",
+      "parentUuid": "9a30ddce_1ef47084",
+      "revId": "c1656bd9dfd5a64dc007613d8f70147a9c2ce707",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_3ec1342f",
         "filename": "sw/source/uibase/uiview/view.cxx",
         "patchSetId": 2
