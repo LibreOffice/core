@@ -58,6 +58,7 @@ fi       0  1035
 fo       0  1080   # Faroese
 fr       0  1036
 fr-CA    0  3084
+fy       0  1122   # Frisian
 fur      0  1585
 ga       0  2108   # Irish
 gd       0  1084   # Gaelic (Scotland)

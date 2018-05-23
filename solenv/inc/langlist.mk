@@ -49,6 +49,7 @@ eu \
 fa \
 fi \
 fr \
+fy \
 ga \
 gd \
 gl \

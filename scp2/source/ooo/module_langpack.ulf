@@ -40,6 +40,12 @@ en-US = "French"
 [STR_DESC_MODULE_LANGPACK_FR]
 en-US = "Installs the French user interface"
 
+[STR_NAME_MODULE_LANGPACK_FY]
+en-US = "Frisian"
+
+[STR_DESC_MODULE_LANGPACK_FY]
+en-US = "Installs the Frisian user interface"
+
 [STR_NAME_MODULE_LANGPACK_IT]
 en-US = "Italian"
 
