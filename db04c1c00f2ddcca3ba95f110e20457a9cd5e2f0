@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_1eaf1082",
+        "filename": "sfx2/source/appl/shutdownicon.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-23T06:26:22Z",
+      "side": 1,
+      "message": "this block can go now",
+      "revId": "db04c1c00f2ddcca3ba95f110e20457a9cd5e2f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
