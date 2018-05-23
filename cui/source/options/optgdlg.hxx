@@ -121,6 +121,7 @@ private:
 #if defined( UNX )
     DECL_LINK( OnAntialiasingToggled, CheckBox&, void );
 #endif
+    DECL_LINK(OnForceOpenGLToggled, CheckBox&, void);
     void UpdateOGLStatus();
 
 public:
