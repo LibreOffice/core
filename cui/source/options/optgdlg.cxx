@@ -659,6 +659,8 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 #endif
 
+    m_pForceOpenGL->SetToggleHdl(LINK(this, OfaViewTabPage, OnForceOpenGLToggled));
+
     // Set known icon themes
     OUString sAutoStr( m_pIconStyleLB->GetEntry( 0 ) );
     m_pIconStyleLB->Clear();
@@ -735,6 +737,13 @@ IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled, CheckBox&, void )
     m_pAAPointLimit->Enable( bAAEnabled );
 }
 #endif
+
+IMPL_LINK_NOARG(OfaViewTabPage, OnForceOpenGLToggled, CheckBox&, void)
+{
+    if (m_pForceOpenGL->IsChecked())
+        // Ignoring the opengl blacklist implies that opengl is on.
+        m_pUseOpenGL->Check();
+}
 
 VclPtr<SfxTabPage> OfaViewTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
