@@ -50,7 +50,7 @@ private:
     };
     //TODO - This is sorted, so should probably be a std::set rather than vector.
     //       But we also use random access (probably unnecessarily).
-    std::vector<ScriptChangeInfo> aScriptChanges;
+    std::vector<ScriptChangeInfo> m_ScriptChanges;
     //! Records a single change in direction.
     struct DirectionChangeInfo
     {
@@ -58,12 +58,12 @@ private:
         sal_uInt8       type;     //!< Direction that we change to.
         DirectionChangeInfo(sal_Int32 pos, sal_uInt8 typ) : position(pos), type(typ) {};
     };
-    std::vector<DirectionChangeInfo> aDirectionChanges;
-    std::deque< sal_Int32 > aKashida;
-    std::deque< sal_Int32 > aKashidaInvalid;
-    std::deque< sal_Int32 > aNoKashidaLine;
-    std::deque< sal_Int32 > aNoKashidaLineEnd;
-    std::deque< sal_Int32 > aHiddenChg;
+    std::vector<DirectionChangeInfo> m_DirectionChanges;
+    std::deque< sal_Int32 > m_Kashida;
+    std::deque< sal_Int32 > m_KashidaInvalid;
+    std::deque< sal_Int32 > m_NoKashidaLine;
+    std::deque< sal_Int32 > m_NoKashidaLineEnd;
+    std::deque< sal_Int32 > m_HiddenChg;
     //! Records a single change in compression.
     struct CompressionChangeInfo
     {
@@ -72,13 +72,13 @@ private:
         CompType  type;     //!< Type of compression that we change to.
         CompressionChangeInfo(sal_Int32 pos, sal_Int32 len, CompType typ) : position(pos), length(len), type(typ) {};
     };
-    std::vector<CompressionChangeInfo> aCompressionChanges;
+    std::vector<CompressionChangeInfo> m_CompressionChanges;
 #ifdef DBG_UTIL
     CompType DbgCompType( const sal_Int32 nPos ) const;
 #endif
 
-    sal_Int32 nInvalidityPos;
-    sal_uInt8 nDefaultDir;
+    sal_Int32 m_nInvalidityPos;
+    sal_uInt8 m_nDefaultDir;
 
     void UpdateBidiInfo( const OUString& rText );
 
@@ -103,75 +103,75 @@ public:
     // set/get position from which data is invalid
     void SetInvalidityA(const sal_Int32 nPos)
     {
-        if (nPos < nInvalidityPos)
-            nInvalidityPos = nPos;
+        if (nPos < m_nInvalidityPos)
+            m_nInvalidityPos = nPos;
     }
     sal_Int32 GetInvalidityA() const
     {
-        return nInvalidityPos;
+        return m_nInvalidityPos;
     }
 
     // get default direction for paragraph
-    sal_uInt8 GetDefaultDir() const { return nDefaultDir; };
+    sal_uInt8 GetDefaultDir() const { return m_nDefaultDir; };
 
     // array operations, nCnt refers to array position
-    size_t CountScriptChg() const { return aScriptChanges.size(); }
+    size_t CountScriptChg() const { return m_ScriptChanges.size(); }
     sal_Int32 GetScriptChg( const size_t nCnt ) const
     {
-        OSL_ENSURE( nCnt < aScriptChanges.size(),"No ScriptChange today!");
-        return aScriptChanges[nCnt].position;
+        assert(nCnt < m_ScriptChanges.size());
+        return m_ScriptChanges[nCnt].position;
     }
     sal_uInt8 GetScriptType( const size_t nCnt ) const
     {
-        OSL_ENSURE( nCnt < aScriptChanges.size(),"No ScriptType today!");
-        return aScriptChanges[nCnt].type;
+        assert( nCnt < m_ScriptChanges.size());
+        return m_ScriptChanges[nCnt].type;
     }
 
-    size_t CountDirChg() const { return aDirectionChanges.size(); }
+    size_t CountDirChg() const { return m_DirectionChanges.size(); }
     sal_Int32 GetDirChg( const size_t nCnt ) const
     {
-        OSL_ENSURE( nCnt < aDirectionChanges.size(),"No DirChange today!");
-        return aDirectionChanges[ nCnt ].position;
+        assert(nCnt < m_DirectionChanges.size());
+        return m_DirectionChanges[ nCnt ].position;
     }
     sal_uInt8 GetDirType( const size_t nCnt ) const
     {
-        OSL_ENSURE( nCnt < aDirectionChanges.size(),"No DirType today!");
-        return aDirectionChanges[ nCnt ].type;
+        assert(nCnt < m_DirectionChanges.size());
+        return m_DirectionChanges[ nCnt ].type;
     }
 
     size_t CountKashida() const
     {
-        return aKashida.size();
+        return m_Kashida.size();
     }
 
     sal_Int32 GetKashida(const size_t nCnt) const
     {
-        OSL_ENSURE( nCnt < aKashida.size(),"No Kashidas today!");
-        return aKashida[nCnt];
+        assert(nCnt < m_Kashida.size());
+        return m_Kashida[nCnt];
     }
 
-    size_t CountCompChg() const { return aCompressionChanges.size(); };
+    size_t CountCompChg() const { return m_CompressionChanges.size(); };
     sal_Int32 GetCompStart( const size_t nCnt ) const
     {
-        OSL_ENSURE( nCnt < aCompressionChanges.size(),"No CompressionStart today!");
-        return aCompressionChanges[ nCnt ].position;
+        assert(nCnt < m_CompressionChanges.size());
+        return m_CompressionChanges[ nCnt ].position;
     }
     sal_Int32 GetCompLen( const size_t nCnt ) const
     {
-        OSL_ENSURE( nCnt < aCompressionChanges.size(),"No CompressionLen today!");
-        return aCompressionChanges[ nCnt ].length;
+        assert(nCnt < m_CompressionChanges.size());
+        return m_CompressionChanges[ nCnt ].length;
     }
     CompType GetCompType( const size_t nCnt ) const
     {
-        OSL_ENSURE( nCnt < aCompressionChanges.size(),"No CompressionType today!");
-        return aCompressionChanges[ nCnt ].type;
+        assert(nCnt < m_CompressionChanges.size());
+        return m_CompressionChanges[ nCnt ].type;
     }
 
-    size_t CountHiddenChg() const { return aHiddenChg.size(); };
+    size_t CountHiddenChg() const { return m_HiddenChg.size(); };
     sal_Int32 GetHiddenChg( const size_t nCnt ) const
     {
-        OSL_ENSURE( nCnt < aHiddenChg.size(),"No HiddenChg today!");
-        return aHiddenChg[ nCnt ];
+        assert(nCnt < m_HiddenChg.size());
+        return m_HiddenChg[ nCnt ];
     }
     static void CalcHiddenRanges(const SwTextNode& rNode, MultiSelection& rHiddenMulti);
     static void selectHiddenTextProperty(const SwTextNode& rNode, MultiSelection &rHiddenMulti);
