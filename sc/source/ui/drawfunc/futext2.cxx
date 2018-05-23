@@ -26,7 +26,7 @@
 
 std::unique_ptr<SdrOutliner> FuText::MakeOutliner()
 {
-    ScViewData& rViewData = pViewShell->GetViewData();
+    ScViewData& rViewData = rViewShell.GetViewData();
     std::unique_ptr<SdrOutliner> pOutl = SdrMakeOutliner(OutlinerMode::OutlineObject, *pDrDoc);
 
     rViewData.UpdateOutlinerFlags(*pOutl);

@@ -53,7 +53,7 @@ FuConstruct::~FuConstruct()
 Point FuConstruct::CurrentGridSyncOffsetAndPos( Point& rInOutPos )
 {
     Point aRetGridOff;
-    ScViewData& rViewData = pViewShell->GetViewData();
+    ScViewData& rViewData = rViewShell.GetViewData();
     ScDocument* pDoc = rViewData.GetDocument();
     if ( pDoc )
     {
@@ -71,7 +71,7 @@ Point FuConstruct::CurrentGridSyncOffsetAndPos( Point& rInOutPos )
         ScSplitPos eWhich = rViewData.GetActivePart();
         ScGridWindow* pGridWin = rViewData.GetActiveWin();
         // and equiv screen pos
-        Point aScreenPos =  pViewShell->GetViewData().GetScrPos( aOldStt.Col(), aOldStt.Row(), eWhich, true );
+        Point aScreenPos =  rViewShell.GetViewData().GetScrPos( aOldStt.Col(), aOldStt.Row(), eWhich, true );
         MapMode aDrawMode = pGridWin->GetDrawMapMode();
         Point aCurPosHmm = pGridWin->PixelToLogic(aScreenPos, aDrawMode );
         Point aOff = ( rInOutPos - aCurPosHmm );
@@ -161,15 +161,15 @@ bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
 
         if ( pHdl != nullptr )
         {
-            pViewShell->SetActivePointer(pHdl->GetPointer());
+            rViewShell.SetActivePointer(pHdl->GetPointer());
         }
         else if ( pView->IsMarkedHit(aPnt) )
         {
-            pViewShell->SetActivePointer(Pointer(PointerStyle::Move));
+            rViewShell.SetActivePointer(Pointer(PointerStyle::Move));
         }
         else
         {
-            pViewShell->SetActivePointer( aNewPointer );
+            rViewShell.SetActivePointer( aNewPointer );
         }
     }
     return true;
@@ -202,11 +202,11 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                     bool bVertical = ( pOPO && pOPO->IsVertical() );
                     sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 
-                    pViewShell->GetViewData().GetDispatcher().
+                    rViewShell.GetViewData().GetDispatcher().
                         Execute(nTextSlotId, SfxCallMode::SLOT | SfxCallMode::RECORD);
 
                     // Get the created FuText now and change into EditModus
-                    FuPoor* pPoor = pViewShell->GetViewData().GetView()->GetDrawFuncPtr();
+                    FuPoor* pPoor = rViewShell.GetViewData().GetView()->GetDrawFuncPtr();
                     if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // has no RTTI
                     {
                         FuText* pText = static_cast<FuText*>(pPoor);
@@ -253,7 +253,7 @@ bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
         {
             pView->MarkObj(aPnt, -2, false, rMEvt.IsMod1());
 
-            SfxDispatcher& rDisp = pViewShell->GetViewData().GetDispatcher();
+            SfxDispatcher& rDisp = rViewShell.GetViewData().GetDispatcher();
             if ( pView->AreObjectsMarked() )
                 rDisp.Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
             else
@@ -280,7 +280,7 @@ bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
             }
             else                            // end drawing mode
             {
-                pViewShell->GetViewData().GetDispatcher().
+                rViewShell.GetViewData().GetDispatcher().
                     Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
             }
             break;

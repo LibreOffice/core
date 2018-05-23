@@ -191,7 +191,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                            uno::Sequence< uno::Any > aInArgs;
                            pObjSh->CallXScript( pInfo->GetMacro(),
                                aInArgs, aRet, aOutArgsIndex, aOutArgs, true, &aCaller );
-                           pViewShell->FakeButtonUp( pViewShell->GetViewData().GetActivePart() );
+                           rViewShell.FakeButtonUp( rViewShell.GetViewData().GetActivePart() );
                            return true;        // no CaptureMouse etc.
                        }
                    }
@@ -225,13 +225,13 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 if ( !sURL.isEmpty() )
                 {
                     ScGlobal::OpenURL( sURL, sTarget );
-                    pViewShell->FakeButtonUp( pViewShell->GetViewData().GetActivePart() );
+                    rViewShell.FakeButtonUp( rViewShell.GetViewData().GetActivePart() );
                     return true;        // no CaptureMouse etc.
                 }
 
                 //  Is another object being edited in this view?
                 //  (Editing is ended in MarkListHasChanged - test before UnmarkAll)
-                SfxInPlaceClient* pClient = pViewShell->GetIPClient();
+                SfxInPlaceClient* pClient = rViewShell.GetIPClient();
                 bool bWasOleActive = ( pClient && pClient->IsObjectInPlaceActive() );
 
                 //  Selection
@@ -266,12 +266,12 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         bReturn = true;
                     }
                     else                                    // object at the edge
-                        if (pViewShell->IsDrawSelMode())
+                        if (rViewShell.IsDrawSelMode())
                             bReturn = true;
                 }
                 else
                 {
-                    if (pViewShell->IsDrawSelMode())
+                    if (rViewShell.IsDrawSelMode())
                     {
 
                         // select object
@@ -329,7 +329,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     SetMouseButtonCode(rMEvt.GetButtons());
 
     bool bReturn = FuDraw::MouseButtonUp(rMEvt);
-    bool bOle = pViewShell->GetViewFrame()->GetFrame().IsInPlace();
+    bool bOle = rViewShell.GetViewFrame()->GetFrame().IsInPlace();
 
     SdrObject* pObj = nullptr;
     if (aDragTimer.IsActive() )
@@ -341,7 +341,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
     bool bCopy = false;
-    ScViewData& rViewData = pViewShell->GetViewData();
+    ScViewData& rViewData = rViewShell.GetViewData();
     ScDocument* pDocument = rViewData.GetDocument();
     SdrPageView* pPageView = ( pView ? pView->GetSdrPageView() : nullptr );
     SdrPage* pPage = ( pPageView ? pPageView->GetPage() : nullptr );
@@ -428,7 +428,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     }
 
     // maybe consider OLE object
-    SfxInPlaceClient* pIPClient = pViewShell->GetIPClient();
+    SfxInPlaceClient* pIPClient = rViewShell.GetIPClient();
 
     if (pIPClient)
     {
@@ -466,7 +466,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         {
                             if (static_cast<SdrOle2Obj*>(pObj)->GetObjRef().is())
                             {
-                                pViewShell->ActivateObject( static_cast<SdrOle2Obj*>(pObj), 0 );
+                                rViewShell.ActivateObject( static_cast<SdrOle2Obj*>(pObj), 0 );
                             }
                         }
                     }
@@ -481,11 +481,11 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         bool bVertical = ( pOPO && pOPO->IsVertical() );
                         sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 
-                        pViewShell->GetViewData().GetDispatcher().
+                        rViewShell.GetViewData().GetDispatcher().
                             Execute(nTextSlotId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
 
                         // Get the created FuText now and change into EditModus
-                        FuPoor* pPoor = pViewShell->GetViewData().GetView()->GetDrawFuncPtr();
+                        FuPoor* pPoor = rViewShell.GetViewData().GetView()->GetDrawFuncPtr();
                         if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // has no RTTI
                         {
                             FuText* pText = static_cast<FuText*>(pPoor);
@@ -509,8 +509,8 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     //  command handler for context menu follows after MouseButtonUp,
     //  therefore here the hard IsLeft call
     if ( !bReturn && rMEvt.IsLeft() )
-        if (pViewShell->IsDrawSelMode())
-            pViewShell->GetViewData().GetDispatcher().
+        if (rViewShell.IsDrawSelMode())
+            rViewShell.GetViewData().GetDispatcher().
                 Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
 
     if ( bCopy && pDocument && pPage )

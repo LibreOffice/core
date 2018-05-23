@@ -42,7 +42,7 @@ class FuPoor
 {
 protected:
     ScDrawView*     pView;
-    ScTabViewShell* pViewShell;
+    ScTabViewShell& rViewShell;
     VclPtr<vcl::Window>     pWindow;
     SdrModel*       pDrDoc;
 

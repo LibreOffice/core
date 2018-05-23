@@ -158,7 +158,7 @@ void FuConstPolygon::Activate()
 
     aNewPointer = Pointer( PointerStyle::DrawPolygon );
     aOldPointer = pWindow->GetPointer();
-    pViewShell->SetActivePointer( aNewPointer );
+    rViewShell.SetActivePointer( aNewPointer );
 }
 
 void FuConstPolygon::Deactivate()
@@ -169,7 +169,7 @@ void FuConstPolygon::Deactivate()
 
     FuConstruct::Deactivate();
 
-    pViewShell->SetActivePointer( aOldPointer );
+    rViewShell.SetActivePointer( aOldPointer );
 }
 
 // Create default drawing objects via keyboard
