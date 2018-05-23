@@ -469,22 +469,23 @@ void SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     SwRect aRect( rInf.GetPos(), rInf.GetSize() );
     if( rInf.GetSpace() )
     {
-        sal_Int32 nTmpLen = COMPLETE_STRING == rInf.GetLen() ? rInf.GetText().getLength() :
-                                                      rInf.GetLen();
+        TextFrameIndex const nTmpLen = TextFrameIndex(COMPLETE_STRING) == rInf.GetLen()
+                ? TextFrameIndex(rInf.GetText().getLength())
+                : rInf.GetLen();
         if( rInf.GetSpace() > 0 )
         {
             sal_Int32 nSpaceCnt = 0;
-            const sal_Int32 nEndPos = rInf.GetIdx() + nTmpLen;
-            for( sal_Int32 nPos = rInf.GetIdx(); nPos < nEndPos; ++nPos )
+            const TextFrameIndex nEndPos = rInf.GetIdx() + nTmpLen;
+            for (TextFrameIndex nPos = rInf.GetIdx(); nPos < nEndPos; ++nPos)
             {
-                if( CH_BLANK == rInf.GetText()[ nPos ] )
+                if (CH_BLANK == rInf.GetText()[sal_Int32(nPos)])
                     ++nSpaceCnt;
             }
             if( nSpaceCnt )
                 aRect.Width( aRect.Width() + nSpaceCnt * rInf.GetSpace() );
         }
         else
-            aRect.Width( aRect.Width() - nTmpLen * rInf.GetSpace() );
+            aRect.Width( aRect.Width() - sal_Int32(nTmpLen) * rInf.GetSpace() );
     }
 
     if( aClipSave.IsOn() && rInf.GetOut().IsClipRegion() )
