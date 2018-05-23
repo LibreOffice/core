@@ -1321,6 +1321,12 @@ AC_ARG_ENABLE(build-unowinreg,
          compiler is needed on Linux.]),
 ,)
 
+AC_ARG_ENABLE(build-opensymbol,
+    AS_HELP_STRING([--enable-build-opensymbol],
+        [Do not use the prebuilt opens___.ttf. Build it instead. This needs
+	 fontforge.]),
+,)
+
 AC_ARG_ENABLE(dependency-tracking,
     AS_HELP_STRING([--enable-dependency-tracking],
         [Do not reject slow dependency extractors.])[
@@ -7550,6 +7556,15 @@ AC_SUBST(BUILD_UNOWINREG)
 AC_SUBST(MINGWCXX)
 AC_SUBST(MINGWSTRIP)
 
+AC_MSG_CHECKING([whether to build opens___.ttf])
+if test "$enable_build_opensymbol" = ""; then
+	AC_MSG_RESULT([yes])
+	AC_CHECK_TOOL(FONTFORGE, fontforge, AC_MSG_ERROR([fontforge not found.]))
+else
+	AC_MSG_RESULT([no])
+fi
+AC_SUBST(FONTFORGE)
+
 dnl ===================================================================
 dnl Check for system zlib
 dnl ===================================================================
@@ -8521,7 +8536,10 @@ fi
 dnl ===================================================================
 dnl Check for PostgreSQL stuff
 dnl ===================================================================
+AC_MSG_CHECKING([whether to build the PostgreSQL SDBC driver])
 if test "x$enable_postgresql_sdbc" != "xno"; then
+    AC_MSG_RESULT([yes])
+    AC_MSG_CHECKING([whether to build the PostgreSQL SDBC driver])
     SCPDEFS="$SCPDEFS -DWITH_POSTGRESQL_SDBC"
 
     if test "$with_krb5" = "yes" -a "$enable_openssl" = "no"; then
@@ -8662,6 +8680,8 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
         LIBS=$save_LIBS
     fi
     BUILD_POSTGRESQL_SDBC=TRUE
+else
+    AC_MSG_RESULT([no])
 fi
 AC_SUBST(WITH_KRB5)
 AC_SUBST(WITH_GSSAPI)
