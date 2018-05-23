@@ -2729,10 +2729,16 @@ void SwTabFramePainter::Insert( const SwFrame& rFrame, const SvxBoxItem& rBoxIte
 {
     // build 4 line entries for the 4 borders:
     SwRect aBorderRect = rFrame.getFrameArea();
-    if ( rFrame.IsTabFrame() )
+    // Frame area of a table might be larger than the containing frame
+    // so we have to intersect the border rect with upper frames til
+    // the first frame that is not part of a table.
+    const SwLayoutFrame *pUpper = rFrame.GetUpper();
+    while(pUpper)
     {
-        aBorderRect = rFrame.getFramePrintArea();
-        aBorderRect.Pos() += rFrame.getFrameArea().Pos();
+        aBorderRect.Intersection(pUpper->getFrameArea());
+        if (!pUpper->IsInTab())
+            break;
+        pUpper = pUpper->GetUpper();
     }
 
     bool const bBottomAsTop(lcl_IsFirstRowInFollowTableWithoutRepeatedHeadlines(
