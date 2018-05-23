@@ -122,6 +122,7 @@ class OfaTreeOptionsDialog final: public SfxModalDialog
 {
 private:
     VclPtr<OKButton>       pOkPB;
+    VclPtr<PushButton>     pApplyPB;
     VclPtr<PushButton>     pBackPB;
 
     VclPtr<SvTreeListBox>  pTreeLB;
@@ -161,9 +162,12 @@ private:
     static VectorOfNodes LoadNodes( Module* pModule, const OUString& rExtensionId );
     void            InsertNodes( const VectorOfNodes& rNodeList );
 
+    void            ApplyOptions( bool deactivate );
+
     DECL_STATIC_LINK(OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox*, void );
     DECL_LINK(ShowPageHdl_Impl, SvTreeListBox*, void);
     DECL_LINK(BackHdl_Impl, Button*, void);
+    DECL_LINK(ApplyHdl_Impl, Button*, void);
     DECL_LINK(OKHdl_Impl, Button*, void);
     void SelectHdl_Impl();
 
