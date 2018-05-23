@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <comphelper/dispatchcommand.hxx>
 #include <sal/macros.h>
 #include <tools/helpers.hxx>
 
@@ -198,22 +199,15 @@ static AquaSalFrame* getMouseContainerFrame()
     [pNSWindow useOptimizedDrawing: YES]; // OSX recommendation when there are no overlapping subviews within the receiver
 #endif
 
-    // enable OSX>=10.7 fullscreen options if available and useful
+    // Enable fullscreen options if available and useful
     bool bAllowFullScreen = (SalFrameStyleFlags::NONE == (mpFrame->mnStyle & (SalFrameStyleFlags::DIALOG | SalFrameStyleFlags::TOOLTIP | SalFrameStyleFlags::SYSTEMCHILD | SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::TOOLWINDOW | SalFrameStyleFlags::INTRO)));
     bAllowFullScreen &= (SalFrameStyleFlags::NONE == (~mpFrame->mnStyle & SalFrameStyleFlags::SIZEABLE));
     bAllowFullScreen &= (mpFrame->mpParent == nullptr);
-    const SEL setCollectionBehavior = @selector(setCollectionBehavior:);
-    if( bAllowFullScreen && [pNSWindow respondsToSelector: setCollectionBehavior])
-    {
-        const int bMode= (bAllowFullScreen ? NSWindowCollectionBehaviorFullScreenPrimary : NSWindowCollectionBehaviorFullScreenAuxiliary);
-        [pNSWindow performSelector:setCollectionBehavior withObject:reinterpret_cast<id>(static_cast<intptr_t>(bMode))];
-    }
 
-    // disable OSX>=10.7 window restoration until we support it directly
-    const SEL setRestorable = @selector(setRestorable:);
-    if( [pNSWindow respondsToSelector: setRestorable]) {
-        [pNSWindow performSelector:setRestorable withObject:reinterpret_cast<id>(NO)];
-    }
+    [pNSWindow setCollectionBehavior: (bAllowFullScreen ? NSWindowCollectionBehaviorFullScreenPrimary : NSWindowCollectionBehaviorFullScreenAuxiliary)];
+
+    // Disable window restoration until we support it directly
+    [pNSWindow setRestorable: NO];
 
     return static_cast<SalFrameWindow *>(pNSWindow);
 }
@@ -388,7 +382,10 @@ static AquaSalFrame* getMouseContainerFrame()
 
     if( !mpFrame || !AquaSalFrame::isAlive( mpFrame))
         return;
-    mpFrame->mbFullScreen = true;
+
+    if ( !mpFrame->mbFullScreen )
+        comphelper::dispatchCommand( ".uno:FullScreen", {} );
+
     (void)pNotification;
 }
 
@@ -398,7 +395,10 @@ static AquaSalFrame* getMouseContainerFrame()
 
     if( !mpFrame || !AquaSalFrame::isAlive( mpFrame))
         return;
-    mpFrame->mbFullScreen = false;
+
+    if ( mpFrame->mbFullScreen )
+        comphelper::dispatchCommand( ".uno:FullScreen", {} );
+
     (void)pNotification;
 }
 

@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -24,6 +24,7 @@
 
 #include <osl/file.h>
 
+#include <comphelper/dispatchcommand.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>
@@ -214,10 +215,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
     [mpNSWindow setDelegate: static_cast<id<NSWindowDelegate> >(mpNSWindow)];
 
-    if( [mpNSWindow respondsToSelector: @selector(setRestorable:)])
-    {
-        objc_msgSend(mpNSWindow, @selector(setRestorable:), NO);
-    }
     const NSRect aRect = { NSZeroPoint, NSMakeSize( maGeometry.nWidth, maGeometry.nHeight )};
     mnTrackingRectTag = [mpNSView addTrackingRect: aRect owner: mpNSView userData: nil assumeInside: NO];
 
@@ -572,11 +569,26 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
         else if( [mpNSWindow isMiniaturized] )
             [mpNSWindow deminiaturize: NSApp];
 
+        if ( pState->mnState == WindowStateState::FullScreen )
+        {
+            if (!mbFullScreen)
+            {
+                // FIXME: What to do here? This doesn't work, the window does not go full-screen:
+                // comphelper::dispatchCommand( ".uno:FullScreen", {} );
+
+                // And neither does this, the window goes full-screen but the View:Full Screen menu
+                // entry is not checked.
+                // ShowFullScreen( true, 0 );
+
+                // If this is fixed, then the "FIXME: Hack:" in PersistentWindowState::frameAction()
+                // can be dropped.
+            }
+        }
         /* ZOOMED is not really maximized (actually it toggles between a user set size and
            the program specified one), but comes closest since the default behavior is
            "maximized" if the user did not intervene
         */
-        if( pState->mnState == WindowStateState::Maximized )
+        else if( pState->mnState == WindowStateState::Maximized )
         {
             if(! [mpNSWindow isZoomed])
                 [mpNSWindow zoom: NSApp];
@@ -638,7 +650,9 @@ bool AquaSalFrame::GetWindowState( SalFrameState* pState )
     pState->mnWidth     = long(aStateRect.size.width);
     pState->mnHeight    = long(aStateRect.size.height);
 
-    if( [mpNSWindow isMiniaturized] )
+    if( mbFullScreen )
+        pState->mnState = WindowStateState::FullScreen;
+    else if( [mpNSWindow isMiniaturized] )
         pState->mnState = WindowStateState::Minimized;
     else if( ! [mpNSWindow isZoomed] )
         pState->mnState = WindowStateState::Normal;
@@ -690,7 +704,7 @@ void AquaSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
     if ( !mpNSWindow )
         return;
 
-    SAL_INFO("vcl.osx", OSL_THIS_FUNC << ": mbFullScreen=" << mbFullScreen << ", bFullScreen=" << bFullScreen);
+    SAL_INFO("vcl.osx", "AquaSalFrame::ShowFullScreen: mbFullScreen=" << mbFullScreen << ", bFullScreen=" << bFullScreen);
 
     if( mbFullScreen == bFullScreen )
         return;
@@ -699,84 +713,23 @@ void AquaSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
 
     mbFullScreen = bFullScreen;
 
-    if( bFullScreen )
+    NSUInteger nCurrentSystemStyle = [mpNSWindow styleMask];
+    if( ((nCurrentSystemStyle & NSWindowStyleMaskFullScreen) && !mbFullScreen)
+        || (!(nCurrentSystemStyle & NSWindowStyleMaskFullScreen) && mbFullScreen) )
     {
-        // hide the dock and the menubar if we are on the menu screen
-        // which is always on index 0 according to documentation
-        bool bHideMenu = (nDisplay == 0);
-
-        NSRect aNewContentRect = NSZeroRect;
-        // get correct screen
-        NSScreen* pScreen = nil;
-        NSArray* pScreens = [NSScreen screens];
-        if( pScreens )
-        {
-            if( nDisplay >= 0 && static_cast<unsigned int>(nDisplay) < [pScreens count] )
-                pScreen = [pScreens objectAtIndex: nDisplay];
-            else
-            {
-                // this means span all screens
-                bHideMenu = true;
-                NSEnumerator* pEnum = [pScreens objectEnumerator];
-                while( (pScreen = [pEnum nextObject]) != nil )
-                {
-                    NSRect aScreenRect = [pScreen frame];
-                    if( aScreenRect.origin.x < aNewContentRect.origin.x )
-                    {
-                        aNewContentRect.size.width += aNewContentRect.origin.x - aScreenRect.origin.x;
-                        aNewContentRect.origin.x = aScreenRect.origin.x;
-                    }
-                    if( aScreenRect.origin.y < aNewContentRect.origin.y )
-                    {
-                        aNewContentRect.size.height += aNewContentRect.origin.y - aScreenRect.origin.y;
-                        aNewContentRect.origin.y = aScreenRect.origin.y;
-                    }
-                    if( aScreenRect.origin.x + aScreenRect.size.width > aNewContentRect.origin.x + aNewContentRect.size.width )
-                        aNewContentRect.size.width = aScreenRect.origin.x + aScreenRect.size.width - aNewContentRect.origin.x;
-                    if( aScreenRect.origin.y + aScreenRect.size.height > aNewContentRect.origin.y + aNewContentRect.size.height )
-                        aNewContentRect.size.height = aScreenRect.origin.y + aScreenRect.size.height - aNewContentRect.origin.y;
-                }
-            }
-        }
-        if( aNewContentRect.size.width == 0 && aNewContentRect.size.height == 0 )
-        {
-            if( pScreen == nil )
-                pScreen = [mpNSWindow screen];
-            if( pScreen == nil )
-                pScreen = [NSScreen mainScreen];
-
-            aNewContentRect = [pScreen frame];
-        }
-
-        if( bHideMenu )
-            [NSMenu setMenuBarVisible:NO];
-
-        maFullScreenRect = [mpNSWindow frame];
-        {
-            [mpNSWindow setFrame: [NSWindow frameRectForContentRect: aNewContentRect styleMask: mnStyleMask] display: mbShown ? YES : NO];
-        }
-
-        UpdateFrameGeometry();
-
-        if( mbShown )
-            CallCallback( SalEvent::MoveResize, nullptr );
+        SAL_INFO("vcl.osx", "Calling toggleFullScreen");
+        [mpNSWindow toggleFullScreen:nil];
     }
-    else
-    {
-        {
-            [mpNSWindow setFrame: maFullScreenRect display: mbShown ? YES : NO];
-        }
-        UpdateFrameGeometry();
 
-        if( mbShown )
-            CallCallback( SalEvent::MoveResize, nullptr );
+    UpdateFrameGeometry();
 
-        // show the dock and the menubar
-        [NSMenu setMenuBarVisible:YES];
-    }
     if( mbShown )
+    {
+        CallCallback( SalEvent::MoveResize, nullptr );
+
         // trigger filling our backbuffer
         SendPaintEvent();
+    }
 }
 
 void AquaSalFrame::StartPresentation( bool bStart )
@@ -1560,7 +1513,12 @@ void AquaSalFrame::UpdateFrameGeometry()
     }
 
     NSRect aFrameRect = [mpNSWindow frame];
-    NSRect aContentRect = [NSWindow contentRectForFrameRect: aFrameRect styleMask: mnStyleMask];
+    NSRect aContentRect;
+
+    if (mbFullScreen)
+        aContentRect = [NSWindow contentRectForFrameRect: aFrameRect styleMask: 0];
+    else
+        aContentRect = [NSWindow contentRectForFrameRect: aFrameRect styleMask: mnStyleMask];
 
     NSRect aTrackRect = { NSZeroPoint, aContentRect.size };
 

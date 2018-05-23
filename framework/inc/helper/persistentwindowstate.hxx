@@ -119,6 +119,8 @@ class PersistentWindowState :   public  ::cppu::WeakImplHelper<
         static OUString implst_getWindowStateFromConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext      ,
                                                                const OUString&                                    sModuleName);
 
+        static bool implst_isWindowFullScreen(const css::uno::Reference< css::awt::XWindow >& xWindow);
+
         /** @short  retrieve the window state from the container window.
 
             @param  xWindow

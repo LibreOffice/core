@@ -38,7 +38,6 @@
 #include <stdexcept>
 
 class AquaSalGraphics;
-class AquaSalFrame;
 class AquaSalTimer;
 class AquaSalInstance;
 class AquaSalMenu;
@@ -61,7 +60,6 @@ public:
     int                             mnMinHeight;            // min. client height in pixels
     int                             mnMaxWidth;             // max. client width in pixels
     int                             mnMaxHeight;            // max. client height in pixels
-    NSRect                          maFullScreenRect;       // old window size when in FullScreen
     bool                            mbGraphics;             // is Graphics used?
     bool                            mbFullScreen;           // is Window in FullScreen?
     bool                            mbShown;
