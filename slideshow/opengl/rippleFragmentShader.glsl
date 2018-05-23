@@ -38,7 +38,7 @@ void main()
     // We want the ripple to span all of the slide at the end of the transition.
     float t = time * (sqrt(2.0) * (slideRatio < 1.0 ? 1.0 / slideRatio : slideRatio));
 
-    // Interpolate the distance to the center in fonction of the time.
+    // Interpolate the distance to the center in function of the time.
     float mixed = smoothstep(t*w-v, t*w+v, dist);
 
     // Get the displacement offset from the current pixel, for fragments that have been touched by the ripple already.
