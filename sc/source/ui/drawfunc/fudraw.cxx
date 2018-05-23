@@ -40,11 +40,11 @@
 #include <drawview.hxx>
 
 // base class for draw module specific functions
-FuDraw::FuDraw(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-               SdrModel* pDoc, const SfxRequest& rReq) :
-    FuPoor      (pViewSh, pWin, pViewP, pDoc, rReq),
-    aNewPointer ( PointerStyle::Arrow ),
-    aOldPointer ( PointerStyle::Arrow )
+FuDraw::FuDraw(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
+               SdrModel* pDoc, const SfxRequest& rReq)
+    : FuPoor(rViewSh, pWin, pViewP, pDoc, rReq)
+    , aNewPointer(PointerStyle::Arrow)
+    , aOldPointer(PointerStyle::Arrow)
 {
 }
 

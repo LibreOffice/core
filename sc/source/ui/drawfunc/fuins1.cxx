@@ -99,7 +99,7 @@ void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
 
 static void lcl_InsertGraphic( const Graphic& rGraphic,
                         const OUString& rFileName, const OUString& rFilterName, bool bAsLink, bool bApi,
-                        ScTabViewShell* pViewSh, const vcl::Window* pWindow, SdrView* pView,
+                        ScTabViewShell& rViewSh, const vcl::Window* pWindow, SdrView* pView,
                         ScAnchorType aAnchorType = SCA_CELL )
 {
     Graphic& rGraphic1 = const_cast<Graphic &>(rGraphic);
@@ -117,7 +117,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
             }
         }
     }
-    ScDrawView* pDrawView = pViewSh->GetScDrawView();
+    ScDrawView* pDrawView = rViewSh.GetScDrawView();
 
     // #i123922# check if an existing object is selected; if yes, evtl. replace
     // the graphic for a SdrGraphObj (including link state updates) or adapt the fill
@@ -167,9 +167,9 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
 
     SdrPageView* pPV  = pView->GetSdrPageView();
     SdrPage* pPage = pPV->GetPage();
-    Point aInsertPos = pViewSh->GetInsertPos();
+    Point aInsertPos = rViewSh.GetInsertPos();
 
-    ScViewData& rData = pViewSh->GetViewData();
+    ScViewData& rData = rViewSh.GetViewData();
     if ( rData.GetDocument()->IsNegativePage( rData.GetTabNo() ) )
         aInsertPos.AdjustX( -(aLogicSize.Width()) );       // move position to left edge
 
@@ -255,12 +255,12 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
     pView->InsertObjectAtView( pObj, *pPV, bApi ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE );
 }
 
-FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
+FuInsertGraphic::FuInsertGraphic( ScTabViewShell&   rViewSh,
                                   vcl::Window*      pWin,
                                   ScDrawView*       pViewP,
                                   SdrModel*         pDoc,
                                   SfxRequest&       rReq )
-       : FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
+       : FuPoor(rViewSh, pWin, pViewP, pDoc, rReq)
 {
     const SfxItemSet* pReqArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
@@ -281,7 +281,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
         ErrCode nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, &GraphicFilter::GetGraphicFilter() );
         if ( nError == ERRCODE_NONE )
         {
-            lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, true, pViewSh, pWindow, pView );
+            lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, true, rViewSh, pWindow, pView );
         }
     }
     else
@@ -347,7 +347,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
                 else
                     aAnchorType = SCA_DONTKNOW;
 
-                lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, false, pViewSh, pWindow, pView, aAnchorType );
+                lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, false, rViewSh, pWindow, pView, aAnchorType );
 
                 //  append items for recording
                 rReq.AppendItem( SfxStringItem( SID_INSERT_GRAPHIC, aFileName ) );
@@ -367,12 +367,12 @@ FuInsertGraphic::~FuInsertGraphic()
 {
 }
 
-FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
+FuInsertMedia::FuInsertMedia( ScTabViewShell&   rViewSh,
                               vcl::Window*      pWin,
                               ScDrawView*       pViewP,
                               SdrModel*         pDoc,
                               const SfxRequest& rReq ) :
-    FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
+    FuPoor(rViewSh, pWin, pViewP, pDoc, rReq)
 {
     OUString     aURL;
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
@@ -413,7 +413,7 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
         else
 #endif
         {
-            lcl_InsertMedia( aURL, bAPI, pViewSh, pWindow, pView, aPrefSize,
+            lcl_InsertMedia( aURL, bAPI, &rViewSh, pWindow, pView, aPrefSize,
                     bLink );
 
             if( pWin )

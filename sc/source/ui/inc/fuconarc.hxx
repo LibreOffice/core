@@ -25,9 +25,9 @@
 /** Draw rectangle */
 class FuConstArc : public FuConstruct
 {
- public:
-    FuConstArc( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
-                   SdrModel* pDoc, const SfxRequest& rReq);
+public:
+    FuConstArc(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
+               SdrModel* pDoc, const SfxRequest& rReq);
 
     virtual ~FuConstArc() override;
                                        // Mouse- & Key-Events

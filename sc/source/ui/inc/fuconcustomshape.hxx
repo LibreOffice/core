@@ -29,7 +29,7 @@ class FuConstCustomShape : public FuConstruct
     void SetAttributes( SdrObject* pObj );
 
 public:
-    FuConstCustomShape(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
+    FuConstCustomShape(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
                        SdrModel* pDoc, const SfxRequest& rReq);
 
     virtual ~FuConstCustomShape() override;

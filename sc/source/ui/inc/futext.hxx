@@ -30,7 +30,7 @@ class SdrOutliner;
 class FuText : public FuConstruct
 {
 public:
-    FuText(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
+    FuText(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
                    SdrModel* pDoc, const SfxRequest& rReq);
 
     virtual ~FuText() override;
