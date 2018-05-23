@@ -698,16 +698,18 @@ SwFontScript SwScriptInfo::WhichFont( sal_Int32 nIdx, const OUString* pText, con
 }
 
 // searches for script changes in rText and stores them
-void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode )
+void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
+        sw::MergedPara const*const pMerged)
 {
-    InitScriptInfo( rNode, m_nDefaultDir == UBIDI_RTL );
+    InitScriptInfo( rNode, pMerged, m_nDefaultDir == UBIDI_RTL );
 }
 
-void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
+void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
+        sw::MergedPara const*const pMerged, bool bRTL)
 {
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
-    const OUString& rText = rNode.GetText();
+    const OUString& rText(pMerged ? pMerged->mergedText : rNode.GetText());
 
     // HIDDEN TEXT INFORMATION
 
@@ -748,9 +750,9 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
     // compression type
     const CharCompressType aCompEnum = rNode.getIDocumentSettingAccess()->getCharacterCompressionType();
 
+    auto const& rParaItems((pMerged ? *pMerged->pParaPropsNode : rNode).GetSwAttrSet());
     // justification type
-    const bool bAdjustBlock = SvxAdjust::Block ==
-                                  rNode.GetSwAttrSet().GetAdjust().GetAdjust();
+    const bool bAdjustBlock = SvxAdjust::Block == rParaItems.GetAdjust().GetAdjust();
 
     // FIND INVALID RANGES IN SCRIPT INFO ARRAYS:
 
@@ -1005,7 +1007,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
         // we search for connecting opportunities (kashida)
         else if ( bAdjustBlock && i18n::ScriptType::COMPLEX == nScript )
         {
-            SwScanner aScanner( rNode, rNode.GetText(), nullptr, ModelToViewHelper(),
+            SwScanner aScanner( rNode, rText, nullptr, ModelToViewHelper(),
                                 i18n::WordType::DICTIONARY_WORD,
                                 nLastKashida, nChg );
 
