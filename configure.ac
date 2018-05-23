@@ -8521,7 +8521,9 @@ fi
 dnl ===================================================================
 dnl Check for PostgreSQL stuff
 dnl ===================================================================
+AC_MSG_CHECKING([whether to build the PostgreSQL SDBC driver])
 if test "x$enable_postgresql_sdbc" != "xno"; then
+    AC_MSG_RESULT([yes])
     SCPDEFS="$SCPDEFS -DWITH_POSTGRESQL_SDBC"
 
     if test "$with_krb5" = "yes" -a "$enable_openssl" = "no"; then
@@ -8662,6 +8664,8 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
         LIBS=$save_LIBS
     fi
     BUILD_POSTGRESQL_SDBC=TRUE
+else
+    AC_MSG_RESULT([no])
 fi
 AC_SUBST(WITH_KRB5)
 AC_SUBST(WITH_GSSAPI)
