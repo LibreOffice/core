@@ -23,6 +23,7 @@
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -846,7 +847,10 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
 
                     }
                     else if ( aPropName == "GraphicBitmap" )
-                        xGraphic = pPropValue[i].Value.get<uno::Reference<graphic::XGraphic>>();
+                    {
+                        auto xBitmap = pPropValue[i].Value.get<uno::Reference<awt::XBitmap>>();
+                        xGraphic.set(xBitmap, uno::UNO_QUERY);
+                    }
                     else if ( aPropName == "GraphicSize" )
                     {
                         if (auto aSize = o3tl::tryAccess<css::awt::Size>(pPropValue[i].Value))
