@@ -680,13 +680,8 @@ SwScriptInfo::~SwScriptInfo()
 
 // Converts i18n Script Type (LATIN, ASIAN, COMPLEX, WEAK) to
 // Sw Script Types (SwFontScript::Latin, SwFontScript::CJK, SwFontScript::CTL), used to identify the font
-SwFontScript SwScriptInfo::WhichFont( sal_Int32 nIdx, const OUString* pText, const SwScriptInfo* pSI )
+static SwFontScript lcl_ScriptToFont(sal_uInt16 const nScript)
 {
-    assert((pSI || pText) && "How should I determine the script type?");
-    const sal_uInt16 nScript = pSI
-        ? pSI->ScriptType( nIdx )                         // use our SwScriptInfo if available
-        : g_pBreakIt->GetRealScriptOfText( *pText, nIdx ); // else  ask the break iterator
-
     switch ( nScript ) {
         case i18n::ScriptType::LATIN : return SwFontScript::Latin;
         case i18n::ScriptType::ASIAN : return SwFontScript::CJK;
@@ -695,6 +690,18 @@ SwFontScript SwScriptInfo::WhichFont( sal_Int32 nIdx, const OUString* pText, con
 
     OSL_FAIL( "Somebody tells lies about the script type!" );
     return SwFontScript::Latin;
+}
+
+SwFontScript SwScriptInfo::WhichFont(TextFrameIndex const nIdx) const
+{
+    const sal_uInt16 nScript(ScriptType(nIdx));
+    return lcl_ScriptToFont(nScript);
+}
+
+SwFontScript SwScriptInfo::WhichFont(sal_Int32 nIdx, OUString const& rText)
+{
+    const sal_uInt16 nScript(g_pBreakIt->GetRealScriptOfText(rText, nIdx));
+    return lcl_ScriptToFont(nScript);
 }
 
 // searches for script changes in rText and stores them

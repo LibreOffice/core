@@ -638,7 +638,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             const SwFontScript nCurrScript = m_pFont->GetActual(); // pScriptInfo->ScriptType( rInf.GetIdx() );
             const SwFontScript nNextScript = nTmp >= rInf.GetText().getLength() ?
                                      SwFontScript::CJK :
-                                     SwScriptInfo::WhichFont( nTmp, nullptr, m_pScriptInfo );
+                                     m_pScriptInfo->WhichFont(nTmp);
 
             // snap non-asian text to grid if next portion is ASIAN or
             // there are no more portions in this line

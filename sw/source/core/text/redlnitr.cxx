@@ -150,9 +150,9 @@ void SwAttrIter::InitFontAndAttrHandler(SwTextNode const& rTextNode,
 
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
-    m_pFont->SetActual( SwScriptInfo::WhichFont( 0, nullptr, m_pScriptInfo ) );
+    m_pFont->SetActual( m_pScriptInfo->WhichFont(TextFrameIndex(0)) );
 
-    sal_Int32 nChg = 0;
+    TextFrameIndex nChg(0);
     size_t nCnt = 0;
 
     do
@@ -177,7 +177,7 @@ void SwAttrIter::InitFontAndAttrHandler(SwTextNode const& rTextNode,
             m_pFont->GetMagic( m_aMagicNo[ nTmp ], m_aFontIdx[ nTmp ], nTmp );
         }
     }
-    while (nChg < rText.getLength());
+    while (nChg < TextFrameIndex(rText.getLength()));
 }
 
 void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,

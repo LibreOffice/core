@@ -375,7 +375,7 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
         }
     }
 
-    m_pFont->SetActual( SwScriptInfo::WhichFont( nNewPos, nullptr, m_pScriptInfo ) );
+    m_pFont->SetActual( m_pScriptInfo->WhichFont(nNewPos) );
 
     if( m_pRedline )
         m_nChgCnt = m_nChgCnt + m_pRedline->Seek(*m_pFont, newPos.first->GetIndex(), newPos.second, m_nPosition);
