@@ -1253,6 +1253,17 @@ public:
 
     virtual void set_size_request(int nWidth, int nHeight) override
     {
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+        if (GTK_IS_VIEWPORT(pParent))
+        {
+            pParent = gtk_widget_get_parent(pParent);
+            if (GTK_IS_SCROLLED_WINDOW(pParent))
+            {
+                gtk_scrolled_window_set_min_content_width(GTK_SCROLLED_WINDOW(pParent), nWidth);
+                gtk_scrolled_window_set_min_content_height(GTK_SCROLLED_WINDOW(pParent), nHeight);
+                return;
+            }
+        }
         gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
 
@@ -1420,6 +1431,11 @@ public:
     virtual void grab_remove() override
     {
         gtk_grab_remove(m_pWidget);
+    }
+
+    virtual bool get_direction() const override
+    {
+        return gtk_widget_get_direction(m_pWidget) == GTK_TEXT_DIR_RTL;
     }
 
     virtual ~GtkInstanceWidget() override
@@ -3307,9 +3323,9 @@ public:
         {
             gtk_scrolled_window_set_min_content_width(GTK_SCROLLED_WINDOW(pParent), nWidth);
             gtk_scrolled_window_set_min_content_height(GTK_SCROLLED_WINDOW(pParent), nHeight);
+            return;
         }
-        else
-            gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
+        gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
 
     virtual void set_selection_mode(bool bMultiple) override
@@ -3524,9 +3540,9 @@ public:
         {
             gtk_scrolled_window_set_min_content_width(GTK_SCROLLED_WINDOW(pParent), nWidth);
             gtk_scrolled_window_set_min_content_height(GTK_SCROLLED_WINDOW(pParent), nHeight);
+            return;
         }
-        else
-            gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
+        gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
 
     virtual void set_text(const OUString& rText) override
@@ -3838,6 +3854,11 @@ public:
     virtual void queue_draw_area(int x, int y, int width, int height) override
     {
         gtk_widget_queue_draw_area(GTK_WIDGET(m_pDrawingArea), x, y, width, height);
+    }
+
+    virtual void queue_resize() override
+    {
+        gtk_widget_queue_resize(GTK_WIDGET(m_pDrawingArea));
     }
 
     virtual a11yref get_accessible_parent() override

@@ -187,7 +187,11 @@ short AbstractScSortWarningDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractScTabBgColorDlg_Impl);
+short AbstractScTabBgColorDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScTextImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(ScAbstractTabDialog_Impl);
@@ -660,7 +664,7 @@ OUString AbstractScStringInputDlg_Impl::GetInputString() const
 
 void AbstractScTabBgColorDlg_Impl::GetSelectedColor( Color& rColor ) const
 {
-    pDlg->GetSelectedColor( rColor );
+    m_xDlg->GetSelectedColor( rColor );
 }
 
 void AbstractScImportOptionsDlg_Impl::GetImportOptions( ScImportOptions& rOptions ) const
@@ -932,13 +936,12 @@ VclPtr<AbstractScStringInputDlg> ScAbstractDialogFactory_Impl::CreateScStringInp
 }
 
 VclPtr<AbstractScTabBgColorDlg> ScAbstractDialogFactory_Impl::CreateScTabBgColorDlg(
-                                                            vcl::Window* pParent,
+                                                            weld::Window* pParent,
                                                             const OUString& rTitle,
                                                             const OUString& rTabBgColorNoColorText,
                                                             const Color& rDefaultColor)
 {
-    VclPtr<ScTabBgColorDlg> pDlg = VclPtr<ScTabBgColorDlg>::Create( pParent, rTitle, rTabBgColorNoColorText, rDefaultColor );
-    return VclPtr<AbstractScTabBgColorDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScTabBgColorDlg_Impl>::Create(new ScTabBgColorDlg(pParent, rTitle, rTabBgColorNoColorText, rDefaultColor));
 }
 
 VclPtr<AbstractScImportOptionsDlg> ScAbstractDialogFactory_Impl::CreateScImportOptionsDlg (
