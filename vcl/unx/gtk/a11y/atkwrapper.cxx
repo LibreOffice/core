@@ -469,7 +469,7 @@ wrapper_get_index_in_parent( AtkObject *atk_obj )
 {
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
 
-    //if we're a native GtkDrawingArea with custom a11y, use the default toolkit index in parent
+    //if we're a native GtkDrawingArea with custom a11y, use the default toolkit a11y
     if (obj->mpOrig)
         return atk_object_get_index_in_parent(obj->mpOrig);
 

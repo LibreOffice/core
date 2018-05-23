@@ -18,23 +18,33 @@
  */
 
 #include "atkwrapper.hxx"
-
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
+#include <gtk/gtk.h>
 
 using namespace ::com::sun::star;
 
+AtkObjectWrapper* getObjectWrapper(AtkComponent *pComponent)
+{
+    AtkObjectWrapper *pWrap = nullptr;
+    if (ATK_IS_OBJECT_WRAPPER(pComponent))
+        pWrap = ATK_OBJECT_WRAPPER(pComponent);
+    else if (GTK_IS_DRAWING_AREA(pComponent)) //when using a GtkDrawingArea as a custom widget in welded gtk3
+    {
+        GtkWidget* pDrawingArea = GTK_WIDGET(pComponent);
+        AtkObject* pAtkObject = gtk_widget_get_accessible(pDrawingArea);
+        pWrap = ATK_IS_OBJECT_WRAPPER(pAtkObject) ? ATK_OBJECT_WRAPPER(pAtkObject) : nullptr;
+    }
+    return pWrap;
+}
+
 /// @throws uno::RuntimeException
 static css::uno::Reference<css::accessibility::XAccessibleComponent>
-    getComponent( AtkComponent *pComponent )
+    getComponent(AtkObjectWrapper *pWrap)
 {
-    AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pComponent );
-    if( pWrap )
+    if (pWrap)
     {
-        if( !pWrap->mpComponent.is() )
-        {
+        if (!pWrap->mpComponent.is())
             pWrap->mpComponent.set(pWrap->mpContext, css::uno::UNO_QUERY);
-        }
-
         return pWrap->mpComponent;
     }
 
@@ -60,10 +70,15 @@ extern "C" {
 static gboolean
 component_wrapper_grab_focus (AtkComponent *component)
 {
+    AtkObjectWrapper* obj = getObjectWrapper(component);
+    //if we're a native GtkDrawingArea with custom a11y, use the default toolkit a11y
+    if (obj && obj->mpOrig)
+        return atk_component_grab_focus(ATK_COMPONENT(obj->mpOrig));
+
     try
     {
         css::uno::Reference<css::accessibility::XAccessibleComponent> pComponent
-            = getComponent( component );
+            = getComponent(obj);
         if( pComponent.is() )
         {
             pComponent->grabFocus();
@@ -86,10 +101,15 @@ component_wrapper_contains (AtkComponent *component,
                             gint          y,
                             AtkCoordType  coord_type)
 {
+    AtkObjectWrapper* obj = getObjectWrapper(component);
+    //if we're a native GtkDrawingArea with custom a11y, use the default toolkit a11y
+    if (obj && obj->mpOrig)
+        return atk_component_contains(ATK_COMPONENT(obj->mpOrig), x, y, coord_type);
+
     try
     {
         css::uno::Reference<css::accessibility::XAccessibleComponent> pComponent
-            = getComponent( component );
+            = getComponent(obj);
         if( pComponent.is() )
             return pComponent->containsPoint( translatePoint( pComponent, x, y, coord_type ) );
     }
@@ -109,10 +129,15 @@ component_wrapper_ref_accessible_at_point (AtkComponent *component,
                                            gint          y,
                                            AtkCoordType  coord_type)
 {
+    AtkObjectWrapper* obj = getObjectWrapper(component);
+    //if we're a native GtkDrawingArea with custom a11y, use the default toolkit a11y
+    if (obj && obj->mpOrig)
+        return atk_component_ref_accessible_at_point(ATK_COMPONENT(obj->mpOrig), x, y, coord_type);
+
     try
     {
         css::uno::Reference<css::accessibility::XAccessibleComponent> pComponent
-            = getComponent( component );
+            = getComponent(obj);
 
         if( pComponent.is() )
         {
@@ -138,10 +163,18 @@ component_wrapper_get_position (AtkComponent   *component,
                                 gint           *y,
                                 AtkCoordType   coord_type)
 {
+    AtkObjectWrapper* obj = getObjectWrapper(component);
+    //if we're a native GtkDrawingArea with custom a11y, use the default toolkit a11y
+    if (obj && obj->mpOrig)
+    {
+        atk_component_get_extents(ATK_COMPONENT(obj->mpOrig), x, y, nullptr, nullptr, coord_type);
+        return;
+    }
+
     try
     {
         css::uno::Reference<css::accessibility::XAccessibleComponent> pComponent
-            = getComponent( component );
+            = getComponent(obj);
         if( pComponent.is() )
         {
             awt::Point aPos;
@@ -168,10 +201,18 @@ component_wrapper_get_size (AtkComponent   *component,
                             gint           *width,
                             gint           *height)
 {
+    AtkObjectWrapper* obj = getObjectWrapper(component);
+    //if we're a native GtkDrawingArea with custom a11y, use the default toolkit a11y
+    if (obj && obj->mpOrig)
+    {
+        atk_component_get_extents(ATK_COMPONENT(obj->mpOrig), nullptr, nullptr, width, height, ATK_XY_WINDOW);
+        return;
+    }
+
     try
     {
         css::uno::Reference<css::accessibility::XAccessibleComponent> pComponent
-            = getComponent( component );
+            = getComponent(obj);
         if( pComponent.is() )
         {
             awt::Size aSize = pComponent->getSize();
