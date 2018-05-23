@@ -148,6 +148,8 @@ public:
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
+    virtual OUString get_action(VclEventId nEvent) const override;
+
 protected:
 
     virtual OUString get_name() const override;
@@ -230,6 +232,8 @@ public:
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
+    virtual OUString get_action(VclEventId nEvent) const override;
+
 protected:
 
     virtual OUString get_name() const override;
@@ -250,6 +254,8 @@ public:
     virtual StringMap get_state() override;
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+    virtual OUString get_action(VclEventId nEvent) const override;
 
 protected:
 
