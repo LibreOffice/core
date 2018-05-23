@@ -21,14 +21,18 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/curl-msvc.patch.1 \
 	external/curl/curl-msvc-disable-protocols.patch.1 \
 	external/curl/curl-7.26.0_win-proxy.patch \
-	external/curl/CVE-2018-14618.patch \
-	external/curl/CVE-2018-16890.patch \
-	external/curl/CVE-2019-3822.patch \
+	external/curl/zlib.patch.0 \
 ))
 
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/curl-android.patch \
+))
+endif
+
+ifeq ($(OS)-$(COM_IS_CLANG),WNT-TRUE)
+$(eval $(call gb_UnpackedTarball_add_patches,curl, \
+    external/curl/clang-cl.patch.0 \
 ))
 endif
 
