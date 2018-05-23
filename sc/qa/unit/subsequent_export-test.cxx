@@ -175,6 +175,7 @@ public:
 #if !defined _WIN32
     void testSupBookVirtualPathXLS();
 #endif
+    void testAbsNamedRangeHTML();
     void testSheetLocalRangeNameXLS();
     void testSheetTextBoxHyperlinkXLSX();
     void testFontSizeXLSX();
@@ -281,6 +282,7 @@ public:
     CPPUNIT_TEST(testImageWithSpecialID);
     CPPUNIT_TEST(testPreserveTextWhitespaceXLSX);
     CPPUNIT_TEST(testPreserveTextWhitespace2XLSX);
+    CPPUNIT_TEST(testAbsNamedRangeHTML);
     CPPUNIT_TEST(testSheetLocalRangeNameXLS);
     CPPUNIT_TEST(testSheetTextBoxHyperlinkXLSX);
     CPPUNIT_TEST(testFontSizeXLSX);
@@ -3323,6 +3325,20 @@ void ScExportTest::testImageWithSpecialID()
         }
         xDocSh2->DoClose();
     }
+}
+
+void ScExportTest::testAbsNamedRangeHTML()
+{
+    ScDocShellRef xDocSh = loadDoc("numberformat.", FORMAT_HTML);
+    xDocSh->DoHardRecalc();
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_ODS);
+    xDocSh->DoClose();
+    xDocSh2->DoHardRecalc();
+
+    ScDocument& rDoc = xDocSh2->GetDocument();
+    ScRangeData* pRangeData = rDoc.GetRangeName()->findByUpperName(OUString("HTML_1"));
+    ScSingleRefData* pRef = pRangeData->GetCode()->FirstToken()->GetSingleRef();
+    CPPUNIT_ASSERT_MESSAGE("HTML_1 is an absolute reference",!pRef->IsTabRel());
 }
 
 void ScExportTest::testSheetLocalRangeNameXLS()
