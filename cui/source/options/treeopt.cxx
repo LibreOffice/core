@@ -490,6 +490,7 @@ struct OptionsGroupInfo
 void OfaTreeOptionsDialog::InitWidgets()
 {
     get(pOkPB, "ok");
+    get(pApplyPB, "apply");
     get(pBackPB, "revert");
     get(pTreeLB, "pages");
     get(pTabBox, "box");
@@ -601,6 +602,7 @@ void OfaTreeOptionsDialog::dispose()
     deleteGroupNames();
     m_pParent.clear();
     pOkPB.clear();
+    pApplyPB.clear();
     pBackPB.clear();
     pTreeLB.clear();
     pTabBox.clear();
@@ -660,6 +662,46 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, BackHdl_Impl, Button*, void)
     }
 }
 
+void OfaTreeOptionsDialog::ApplyOptions(bool deactivate)
+{
+    SvTreeListEntry* pEntry = pTreeLB->First();
+    while ( pEntry )
+    {
+        if ( pTreeLB->GetParent( pEntry ) )
+        {
+            OptionsPageInfo* pPageInfo = static_cast<OptionsPageInfo *>(pEntry->GetUserData());
+            if ( pPageInfo->m_pPage && !pPageInfo->m_pPage->HasExchangeSupport() )
+            {
+                OptionsGroupInfo* pGroupInfo =
+                    static_cast<OptionsGroupInfo*>(pTreeLB->GetParent(pEntry)->GetUserData());
+                pPageInfo->m_pPage->FillItemSet(pGroupInfo->m_pOutItemSet.get());
+            }
+
+            if ( pPageInfo->m_pExtPage )
+            {
+                if ( deactivate )
+                {
+                    pPageInfo->m_pExtPage->DeactivatePage();
+                }
+                pPageInfo->m_pExtPage->SavePage();
+            }
+        }
+        pEntry = pTreeLB->Next(pEntry);
+    }
+}
+
+IMPL_LINK_NOARG(OfaTreeOptionsDialog, ApplyHdl_Impl, Button*, void)
+{
+    ApplyOptions(/*deactivate =*/false);
+
+    if ( bNeedsRestart )
+    {
+        SolarMutexGuard aGuard;
+        ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
+                                        m_pParent->GetFrameWeld(), eRestartReason);
+    }
+}
+
 IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl, Button*, void)
 {
     pTreeLB->EndSelection();
@@ -685,27 +727,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl, Button*, void)
         }
     }
 
-    SvTreeListEntry* pEntry = pTreeLB->First();
-    while ( pEntry )
-    {
-        if ( pTreeLB->GetParent( pEntry ) )
-        {
-            OptionsPageInfo* pPageInfo = static_cast<OptionsPageInfo *>(pEntry->GetUserData());
-            if ( pPageInfo->m_pPage && !pPageInfo->m_pPage->HasExchangeSupport() )
-            {
-                OptionsGroupInfo* pGroupInfo =
-                    static_cast<OptionsGroupInfo*>(pTreeLB->GetParent(pEntry)->GetUserData());
-                pPageInfo->m_pPage->FillItemSet(pGroupInfo->m_pOutItemSet.get());
-            }
-
-            if ( pPageInfo->m_pExtPage )
-            {
-                pPageInfo->m_pExtPage->DeactivatePage();
-                pPageInfo->m_pExtPage->SavePage();
-            }
-        }
-        pEntry = pTreeLB->Next(pEntry);
-    }
+    ApplyOptions(/*deactivate =*/ true);
     EndDialog(RET_OK);
 
     if ( bNeedsRestart )
@@ -787,6 +809,7 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
     pTreeLB->SetExpandedHdl( LINK( this, OfaTreeOptionsDialog, ExpandedHdl_Impl ) );
     pTreeLB->SetSelectHdl( LINK( this, OfaTreeOptionsDialog, ShowPageHdl_Impl ) );
     pBackPB->SetClickHdl( LINK( this, OfaTreeOptionsDialog, BackHdl_Impl ) );
+    pApplyPB->SetClickHdl( LINK( this, OfaTreeOptionsDialog, ApplyHdl_Impl ) );
     pOkPB->SetClickHdl( LINK( this, OfaTreeOptionsDialog, OKHdl_Impl ) );
 }
 
