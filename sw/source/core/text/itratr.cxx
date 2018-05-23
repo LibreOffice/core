@@ -769,7 +769,7 @@ static bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const OUString &
         if( nStop > nEnd )
             nStop = nEnd;
 
-        SwDrawTextInfo aDrawInf( rArg.pSh, *rArg.pOut, nullptr, rText, nIdx, nStop - nIdx );
+        SwDrawTextInfo aDrawInf(rArg.pSh, *rArg.pOut, rText, nIdx, nStop - nIdx);
         long nCurrentWidth = pFnt->GetTextSize_( aDrawInf ).Width();
         rArg.nRowWidth += nCurrentWidth;
         if( bClear )
@@ -1044,7 +1044,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
             {
                 OUString sTmp( cChar );
                 SwDrawTextInfo aDrawInf( getIDocumentLayoutAccess().GetCurrentViewShell(),
-                    *pOut, nullptr, sTmp, 0, 1, 0, false );
+                    *pOut, sTmp, 0, 1, 0, false );
                 nCurrentWidth = aIter.GetFnt()->GetTextSize_( aDrawInf ).Width();
                 aArg.nWordWidth += nCurrentWidth;
                 aArg.nRowWidth += nCurrentWidth;
@@ -1267,7 +1267,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
         // calculate text widths up to cChar
         if ( nStop > nIdx )
         {
-            SwDrawTextInfo aDrawInf( pSh, *pOut, nullptr, GetText(), nIdx, nStop - nIdx );
+            SwDrawTextInfo aDrawInf(pSh, *pOut, GetText(), nIdx, nStop - nIdx);
             nProWidth += aIter.GetFnt()->GetTextSize_( aDrawInf ).Width();
         }
 
@@ -1284,7 +1284,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
         {
             // tab receives width of one space
             OUString sTmp( CH_BLANK );
-            SwDrawTextInfo aDrawInf( pSh, *pOut, nullptr, sTmp, 0, 1 );
+            SwDrawTextInfo aDrawInf( pSh, *pOut, sTmp, 0, 1 );
             nProWidth += aIter.GetFnt()->GetTextSize_( aDrawInf ).Width();
             nIdx++;
         }
@@ -1293,7 +1293,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
         else if ( cChar == CHAR_HARDBLANK || cChar == CHAR_HARDHYPHEN )
         {
             OUString sTmp( cChar );
-            SwDrawTextInfo aDrawInf( pSh, *pOut, nullptr, sTmp, 0, 1 );
+            SwDrawTextInfo aDrawInf( pSh, *pOut, sTmp, 0, 1 );
             nProWidth += aIter.GetFnt()->GetTextSize_( aDrawInf ).Width();
             nIdx++;
         }
@@ -1304,7 +1304,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
             case RES_TXTATR_FTN :
                 {
                     const OUString aText = pHint->GetFootnote().GetNumStr();
-                    SwDrawTextInfo aDrawInf( pSh, *pOut, nullptr, aText, 0, aText.getLength() );
+                    SwDrawTextInfo aDrawInf(pSh, *pOut, aText, 0, aText.getLength());
 
                     nProWidth += aIter.GetFnt()->GetTextSize_( aDrawInf ).Width();
                     break;
@@ -1315,7 +1315,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
                 {
                     SwField *pField = const_cast<SwField*>(pHint->GetFormatField().GetField());
                     OUString const aText = pField->ExpandField(true);
-                    SwDrawTextInfo aDrawInf( pSh, *pOut, nullptr, aText, 0, aText.getLength() );
+                    SwDrawTextInfo aDrawInf(pSh, *pOut, aText, 0, aText.getLength());
 
                     nProWidth += aIter.GetFnt()->GetTextSize_( aDrawInf ).Width();
                     break;
@@ -1362,7 +1362,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
     aIter.SeekAndChgAttrIter( nStt, pOut );
     pOut->SetMapMode( aOldMap );
 
-    SwDrawTextInfo aDrawInf( pSh, *pOut, nullptr, GetText(), nStt, 1 );
+    SwDrawTextInfo aDrawInf( pSh, *pOut, GetText(), nStt, 1 );
     return static_cast<sal_uInt16>( nWidth ? ((100 * aIter.GetFnt()->GetTextSize_( aDrawInf ).Height()) / nWidth ) : 0 );
 }
 
