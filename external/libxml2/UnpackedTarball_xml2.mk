@@ -21,6 +21,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,xml2,\
 	external/libxml2/0001-Increase-buffer-space-for-port-in-HTTP-redirect-supp.patch.1 \
 	external/libxml2/0001-Fix-buffer-size-checks-in-xmlSnprintfElementContent.patch.1 \
 	external/libxml2/0001-Fix-handling-of-parameter-entity-references.patch.1 \
+	external/libxml2/libxml2-no-c99.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
