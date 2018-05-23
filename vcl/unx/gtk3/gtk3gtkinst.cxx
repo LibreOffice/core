@@ -1253,6 +1253,17 @@ public:
 
     virtual void set_size_request(int nWidth, int nHeight) override
     {
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+        if (GTK_IS_VIEWPORT(pParent))
+        {
+            pParent = gtk_widget_get_parent(pParent);
+            if (GTK_IS_SCROLLED_WINDOW(pParent))
+            {
+                gtk_scrolled_window_set_min_content_width(GTK_SCROLLED_WINDOW(pParent), nWidth);
+                gtk_scrolled_window_set_min_content_height(GTK_SCROLLED_WINDOW(pParent), nHeight);
+                return;
+            }
+        }
         gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
 
@@ -1369,6 +1380,11 @@ public:
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
 
+    virtual void set_tooltip_text(const OUString& rTip) override
+    {
+        gtk_widget_set_tooltip_text(m_pWidget, OUStringToOString(rTip, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
     virtual weld::Container* weld_parent() const override;
 
     virtual OString get_buildable_name() const override
@@ -1420,6 +1436,11 @@ public:
     virtual void grab_remove() override
     {
         gtk_grab_remove(m_pWidget);
+    }
+
+    virtual bool get_direction() const override
+    {
+        return gtk_widget_get_direction(m_pWidget) == GTK_TEXT_DIR_RTL;
     }
 
     virtual ~GtkInstanceWidget() override
@@ -3307,9 +3328,9 @@ public:
         {
             gtk_scrolled_window_set_min_content_width(GTK_SCROLLED_WINDOW(pParent), nWidth);
             gtk_scrolled_window_set_min_content_height(GTK_SCROLLED_WINDOW(pParent), nHeight);
+            return;
         }
-        else
-            gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
+        gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
 
     virtual void set_selection_mode(bool bMultiple) override
@@ -3524,9 +3545,9 @@ public:
         {
             gtk_scrolled_window_set_min_content_width(GTK_SCROLLED_WINDOW(pParent), nWidth);
             gtk_scrolled_window_set_min_content_height(GTK_SCROLLED_WINDOW(pParent), nHeight);
+            return;
         }
-        else
-            gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
+        gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
 
     virtual void set_text(const OUString& rText) override
@@ -3627,6 +3648,7 @@ private:
     gulong m_nKeyPressSignalId;
     gulong m_nKeyReleaseSignalId;
     gulong m_nStyleUpdatedSignalId;
+    gulong m_nQueryTooltip;
 
     static gboolean signalDraw(GtkWidget*, cairo_t* cr, gpointer widget)
     {
@@ -3687,6 +3709,24 @@ private:
     void signal_style_updated()
     {
         m_aStyleUpdatedHdl.Call(*this);
+    }
+    static gboolean signalQueryTooltip(GtkWidget*, gint x, gint y,
+                                         gboolean /*keyboard_mode*/, GtkTooltip *tooltip,
+                                         gpointer widget)
+    {
+        GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
+        tools::Rectangle aHelpArea(x, y);
+        OUString aTooltip = pThis->signal_query_tooltip(aHelpArea);
+        if (aTooltip.isEmpty())
+            return false;
+        gtk_tooltip_set_text(tooltip, OUStringToOString(aTooltip, RTL_TEXTENCODING_UTF8).getStr());
+        GdkRectangle aGdkHelpArea;
+        aGdkHelpArea.x = aHelpArea.Left();
+        aGdkHelpArea.y = aHelpArea.Top();
+        aGdkHelpArea.width = aHelpArea.GetWidth();
+        aGdkHelpArea.height = aHelpArea.GetHeight();
+        gtk_tooltip_set_tip_area(tooltip, &aGdkHelpArea);
+        return true;
     }
     static gboolean signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer widget)
     {
@@ -3815,7 +3855,9 @@ public:
         , m_nKeyPressSignalId(g_signal_connect(m_pDrawingArea, "key-press-event", G_CALLBACK(signalKey), this))
         , m_nKeyReleaseSignalId(g_signal_connect(m_pDrawingArea,"key-release-event", G_CALLBACK(signalKey), this))
         , m_nStyleUpdatedSignalId(g_signal_connect(m_pDrawingArea,"style-updated", G_CALLBACK(signalStyleUpdated), this))
+        , m_nQueryTooltip(g_signal_connect(m_pDrawingArea, "query-tooltip", G_CALLBACK(signalQueryTooltip), this))
     {
+        gtk_widget_set_has_tooltip(m_pWidget, true);
         g_object_set_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea", this);
     }
 
@@ -3838,6 +3880,11 @@ public:
     virtual void queue_draw_area(int x, int y, int width, int height) override
     {
         gtk_widget_queue_draw_area(GTK_WIDGET(m_pDrawingArea), x, y, width, height);
+    }
+
+    virtual void queue_resize() override
+    {
+        gtk_widget_queue_resize(GTK_WIDGET(m_pDrawingArea));
     }
 
     virtual a11yref get_accessible_parent() override
@@ -3865,6 +3912,7 @@ public:
             g_object_unref(m_pAccessible);
         if (m_pSurface)
             cairo_surface_destroy(m_pSurface);
+        g_signal_handler_disconnect(m_pDrawingArea, m_nQueryTooltip);
         g_signal_handler_disconnect(m_pDrawingArea, m_nStyleUpdatedSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nKeyPressSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nKeyReleaseSignalId);
