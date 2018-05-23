@@ -298,7 +298,7 @@ UnoActionRemoveContext::UnoActionRemoveContext(SwUnoTableCursor const& rCursor)
     }
 }
 
-UnoActionRemoveContext::~UnoActionRemoveContext()
+UnoActionRemoveContext::~UnoActionRemoveContext() COVERITY_NOEXCEPT_FALSE
 {
     if (m_pDoc)
     {

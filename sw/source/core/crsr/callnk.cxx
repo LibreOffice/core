@@ -96,7 +96,7 @@ static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell const & rShe
     }
 }
 
-SwCallLink::~SwCallLink()
+SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
 {
     if( nNdTyp == SwNodeType::NONE || !rShell.m_bCallChgLnk ) // see ctor
         return ;

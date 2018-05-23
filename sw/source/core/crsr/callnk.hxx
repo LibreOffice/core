@@ -37,7 +37,7 @@ public:
     bool bHasSelection;
 
     explicit SwCallLink( SwCursorShell & rSh );
-    ~SwCallLink();
+    ~SwCallLink() COVERITY_NOEXCEPT_FALSE;
 
     static long getLayoutFrame( const SwRootFrame*, SwTextNode const & rNd, sal_Int32 nCntPos, bool bCalcFrame );
 };

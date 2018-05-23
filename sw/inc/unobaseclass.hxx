@@ -75,12 +75,12 @@ public:
 class UnoActionRemoveContext
 {
 private:
-        SwDoc *const m_pDoc;
+    SwDoc *const m_pDoc;
 
 public:
-        UnoActionRemoveContext(SwDoc *const pDoc);
-        UnoActionRemoveContext(SwUnoTableCursor const& rCursor);
-        ~UnoActionRemoveContext();
+    UnoActionRemoveContext(SwDoc *const pDoc);
+    UnoActionRemoveContext(SwUnoTableCursor const& rCursor);
+    ~UnoActionRemoveContext() COVERITY_NOEXCEPT_FALSE;
 };
 
 /// helper function for implementing SwClient::Modify
