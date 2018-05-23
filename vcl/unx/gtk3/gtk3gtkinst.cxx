@@ -3825,6 +3825,7 @@ public:
         {
             GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
             m_pAccessible = atk_object_wrapper_new(m_xAccessible, gtk_widget_get_accessible(pParent), pDefaultAccessible);
+            g_object_ref(m_pAccessible);
         }
         return m_pAccessible;
     }

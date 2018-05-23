@@ -105,6 +105,7 @@ void                   valueIfaceInit(AtkValueIface *iface);
 #define ATK_TYPE_OBJECT_WRAPPER atk_object_wrapper_get_type()
 #define ATK_OBJECT_WRAPPER(obj) \
     (G_TYPE_CHECK_INSTANCE_CAST ((obj), ATK_TYPE_OBJECT_WRAPPER, AtkObjectWrapper))
+#define ATK_IS_OBJECT_WRAPPER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), ATK_TYPE_OBJECT_WRAPPER))
 
 static inline gchar *
 OUStringToGChar(const OUString& rString )
