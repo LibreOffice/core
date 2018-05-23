@@ -58,7 +58,6 @@
 #include <cfg.hxx>
 #include <SvxMenuConfigPage.hxx>
 #include <SvxConfigPageHelper.hxx>
-#include "eventdlg.hxx"
 #include <dialmgr.hxx>
 
 #include <comphelper/processfactory.hxx>
