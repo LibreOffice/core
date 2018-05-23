@@ -1303,7 +1303,7 @@ void SwScriptInfo::UpdateBidiInfo( const OUString& rText )
 // Scripts are Asian (Chinese, Japanese, Korean),
 //             Latin ( English etc.)
 //         and Complex ( Hebrew, Arabian )
-sal_Int32 SwScriptInfo::NextScriptChg(const sal_Int32 nPos)  const
+TextFrameIndex SwScriptInfo::NextScriptChg(const TextFrameIndex nPos)  const
 {
     const size_t nEnd = CountScriptChg();
     for( size_t nX = 0; nX < nEnd; ++nX )
@@ -1316,7 +1316,7 @@ sal_Int32 SwScriptInfo::NextScriptChg(const sal_Int32 nPos)  const
 }
 
 // returns the script of the character at the input position
-sal_Int16 SwScriptInfo::ScriptType(const sal_Int32 nPos) const
+sal_Int16 SwScriptInfo::ScriptType(const TextFrameIndex nPos) const
 {
     const size_t nEnd = CountScriptChg();
     for( size_t nX = 0; nX < nEnd; ++nX )
@@ -1329,7 +1329,7 @@ sal_Int16 SwScriptInfo::ScriptType(const sal_Int32 nPos) const
     return SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() );
 }
 
-sal_Int32 SwScriptInfo::NextDirChg( const sal_Int32 nPos,
+TextFrameIndex SwScriptInfo::NextDirChg(const TextFrameIndex nPos,
                                      const sal_uInt8* pLevel )  const
 {
     const sal_uInt8 nCurrDir = pLevel ? *pLevel : 62;
@@ -1344,7 +1344,7 @@ sal_Int32 SwScriptInfo::NextDirChg( const sal_Int32 nPos,
     return COMPLETE_STRING;
 }
 
-sal_uInt8 SwScriptInfo::DirType(const sal_Int32 nPos) const
+sal_uInt8 SwScriptInfo::DirType(const TextFrameIndex nPos) const
 {
     const size_t nEnd = CountDirChg();
     for( size_t nX = 0; nX < nEnd; ++nX )
@@ -1497,8 +1497,9 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTextNode& rNode, sal_Int32 nP
     return bNewContainsHiddenChars;
 }
 
-bool SwScriptInfo::GetBoundsOfHiddenRange( sal_Int32 nPos, sal_Int32& rnStartPos,
-                                           sal_Int32& rnEndPos, PositionList* pList ) const
+bool SwScriptInfo::GetBoundsOfHiddenRange(TextFrameIndex nPos,
+        TextFrameIndex & rnStartPos, TextFrameIndex & rnEndPos,
+        PositionList *const pList) const
 {
     rnStartPos = COMPLETE_STRING;
     rnEndPos = 0;
@@ -1541,7 +1542,7 @@ bool SwScriptInfo::IsInHiddenRange( const SwTextNode& rNode, sal_Int32 nPos )
 
 #ifdef DBG_UTIL
 // returns the type of the compressed character
-SwScriptInfo::CompType SwScriptInfo::DbgCompType( const sal_Int32 nPos ) const
+SwScriptInfo::CompType SwScriptInfo::DbgCompType(const TextFrameIndex nPos) const
 {
     const size_t nEnd = CountCompChg();
     for( size_t nX = 0; nX < nEnd; ++nX )
@@ -1560,7 +1561,7 @@ SwScriptInfo::CompType SwScriptInfo::DbgCompType( const sal_Int32 nPos ) const
 
 // returns, if there are compressable kanas or specials
 // between nStart and nEnd
-size_t SwScriptInfo::HasKana( sal_Int32 nStart, const sal_Int32 nLen ) const
+size_t SwScriptInfo::HasKana(TextFrameIndex const nStart, TextFrameIndex const nLen) const
 {
     const size_t nCnt = CountCompChg();
     sal_Int32 nEnd = nStart + nLen;
@@ -1580,7 +1581,7 @@ size_t SwScriptInfo::HasKana( sal_Int32 nStart, const sal_Int32 nLen ) const
     return SAL_MAX_SIZE;
 }
 
-long SwScriptInfo::Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
+long SwScriptInfo::Compress(long* pKernArray, TextFrameIndex nIdx, TextFrameIndex nLen,
                              const sal_uInt16 nCompress, const sal_uInt16 nFontHeight,
                              bool bCenter,
                              Point* pPoint ) const
@@ -1699,8 +1700,8 @@ long SwScriptInfo::Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
 
 sal_Int32 SwScriptInfo::KashidaJustify( long* pKernArray,
                                         long* pScrArray,
-                                        sal_Int32 nStt,
-                                        sal_Int32 nLen,
+                                        TextFrameIndex const nStt,
+                                        TextFrameIndex const nLen,
                                         long nSpaceAdd ) const
 {
     SAL_WARN_IF( !nLen, "sw.core", "Kashida justification without text?!" );
@@ -1816,9 +1817,9 @@ bool SwScriptInfo::IsArabicText( const OUString& rText, sal_Int32 nStt, sal_Int3
     return false;
 }
 
-bool SwScriptInfo::IsKashidaValid(sal_Int32 nKashPos) const
+bool SwScriptInfo::IsKashidaValid(size_t const nKashPos) const
 {
-    for (sal_Int32 i : m_KashidaInvalid)
+    for (size_t i : m_KashidaInvalid)
     {
         if ( i == nKashPos )
             return false;
@@ -1826,7 +1827,7 @@ bool SwScriptInfo::IsKashidaValid(sal_Int32 nKashPos) const
     return true;
 }
 
-void SwScriptInfo::ClearKashidaInvalid(sal_Int32 nKashPos)
+void SwScriptInfo::ClearKashidaInvalid(size_t const nKashPos)
 {
     for (size_t i = 0; i < m_KashidaInvalid.size(); ++i)
     {
@@ -1842,7 +1843,8 @@ void SwScriptInfo::ClearKashidaInvalid(sal_Int32 nKashPos)
 // marks the first valid kashida in the given text range as invalid
 // bMark == false:
 // clears all kashida invalid flags in the given text range
-bool SwScriptInfo::MarkOrClearKashidaInvalid(sal_Int32 nStt, sal_Int32 nLen,
+bool SwScriptInfo::MarkOrClearKashidaInvalid(
+    TextFrameIndex const nStt, TextFrameIndex const nLen,
     bool bMark, sal_Int32 nMarkCount)
 {
     size_t nCntKash = 0;
@@ -1878,14 +1880,15 @@ bool SwScriptInfo::MarkOrClearKashidaInvalid(sal_Int32 nStt, sal_Int32 nLen,
     return false;
 }
 
-void SwScriptInfo::MarkKashidaInvalid(sal_Int32 nKashPos)
+void SwScriptInfo::MarkKashidaInvalid(size_t const nKashPos)
 {
     m_KashidaInvalid.push_back(nKashPos);
 }
 
 // retrieve the kashida positions in the given text range
-void SwScriptInfo::GetKashidaPositions(sal_Int32 nStt, sal_Int32 nLen,
-    sal_Int32* pKashidaPosition)
+void SwScriptInfo::GetKashidaPositions(
+    TextFrameIndex const nStt, TextFrameIndex const nLen,
+    TextFrameIndex *const pKashidaPosition)
 {
     size_t nCntKash = 0;
     while( nCntKash < CountKashida() )
@@ -1907,14 +1910,14 @@ void SwScriptInfo::GetKashidaPositions(sal_Int32 nStt, sal_Int32 nLen,
     }
 }
 
-void SwScriptInfo::SetNoKashidaLine(sal_Int32 nStt, sal_Int32 nLen)
+void SwScriptInfo::SetNoKashidaLine(TextFrameIndex const nStt, TextFrameIndex const nLen)
 {
     m_NoKashidaLine.push_back( nStt );
     m_NoKashidaLineEnd.push_back( nStt + nLen );
 }
 
 // determines if the line uses kashida justification
-bool SwScriptInfo::IsKashidaLine(sal_Int32 nCharIdx) const
+bool SwScriptInfo::IsKashidaLine(TextFrameIndex const nCharIdx) const
 {
     for (size_t i = 0; i < m_NoKashidaLine.size(); ++i)
     {
@@ -1924,7 +1927,7 @@ bool SwScriptInfo::IsKashidaLine(sal_Int32 nCharIdx) const
     return true;
 }
 
-void SwScriptInfo::ClearNoKashidaLine(sal_Int32 nStt, sal_Int32 nLen)
+void SwScriptInfo::ClearNoKashidaLine(TextFrameIndex const nStt, TextFrameIndex const nLen)
 {
     size_t i = 0;
     while (i < m_NoKashidaLine.size())
@@ -1940,7 +1943,8 @@ void SwScriptInfo::ClearNoKashidaLine(sal_Int32 nStt, sal_Int32 nLen)
 }
 
 // mark the given character indices as invalid kashida positions
-void SwScriptInfo::MarkKashidasInvalid(sal_Int32 nCnt, const sal_Int32* pKashidaPositions)
+void SwScriptInfo::MarkKashidasInvalid(sal_Int32 const nCnt,
+        const TextFrameIndex* pKashidaPositions)
 {
     SAL_WARN_IF( !pKashidaPositions || nCnt == 0, "sw.core", "Where are kashidas?" );
 
