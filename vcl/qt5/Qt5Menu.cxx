@@ -105,8 +105,13 @@ void Qt5Menu::DoFullMenuUpdate( Menu* pMenuBar, QMenu* pParentMenu )
                 // submenu
                 pQMenu = pQMenu->addMenu( toQString(aText) );
             else
-                // leaf menu
-                pQMenu->addAction( toQString(aText) );
+            {
+                if ( pSalMenuItem->mnType == MenuItemType::SEPARATOR )
+                    pQMenu->addSeparator();
+                else
+                    // leaf menu
+                    pQMenu->addAction( toQString(aText) );
+            }
         }
 
         if ( pSalMenuItem->mpSubMenu != nullptr )
@@ -153,6 +158,7 @@ void Qt5Menu::NativeItemText( OUString& rItemText )
 
 Qt5MenuItem::Qt5MenuItem( const SalItemParams* pItemData ) :
     mnId( pItemData->nId ),
+    mnType( pItemData->eType ),
     mpVCLMenu( pItemData->pMenu ),
     mpParentMenu( nullptr ),
     mpSubMenu( nullptr )
