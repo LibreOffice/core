@@ -49,8 +49,8 @@ using namespace ::com::sun::star::i18n::ScriptType;
 
 // Returns for how many characters an extra space has to be added
 // (for justified alignment).
-static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
-                               const SwLinePortion& rPor )
+static TextFrameIndex lcl_AddSpace(const SwTextSizeInfo &rInf,
+        const OUString* pStr, const SwLinePortion& rPor)
 {
     TextFrameIndex nPos, nEnd;
     const SwScriptInfo* pSI = nullptr;
@@ -69,7 +69,7 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
         pSI = &const_cast<SwParaPortion*>(rInf.GetParaPortion())->GetScriptInfo();
     }
 
-    sal_Int32 nCnt = 0;
+    TextFrameIndex nCnt(0);
     sal_uInt8 nScript = 0;
 
     // If portion consists of Asian characters and language is not
@@ -122,7 +122,7 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
             // i60591: need to check result of KashidaJustify
             // determine if kashida justification is applicable
             if (nKashRes != -1)
-                return nKashRes;
+                return TextFrameIndex(nKashRes);
         }
     }
 
@@ -575,7 +575,7 @@ bool SwTextPortion::GetExpText( const SwTextSizeInfo &, OUString & ) const
 TextFrameIndex SwTextPortion::GetSpaceCnt(const SwTextSizeInfo &rInf,
                                           TextFrameIndex& rCharCnt) const
 {
-    sal_Int32 nCnt = 0;
+    TextFrameIndex nCnt(0);
     TextFrameIndex nPos(0);
 
     if ( rInf.SnapToGrid() )
@@ -613,7 +613,7 @@ TextFrameIndex SwTextPortion::GetSpaceCnt(const SwTextSizeInfo &rInf,
 
 long SwTextPortion::CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) const
 {
-    sal_Int32 nCnt = 0;
+    TextFrameIndex nCnt(0);
 
     if ( rInf.SnapToGrid() )
     {
@@ -639,7 +639,7 @@ long SwTextPortion::CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) co
             else
             {
                 nSpaceAdd = -nSpaceAdd;
-                nCnt = aStr.getLength();
+                nCnt = TextFrameIndex(aStr.getLength());
             }
         }
     }
@@ -665,7 +665,7 @@ long SwTextPortion::CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) co
         }
     }
 
-    return nCnt * nSpaceAdd / SPACING_PRECISION_FACTOR;
+    return sal_Int32(nCnt) * nSpaceAdd / SPACING_PRECISION_FACTOR;
 }
 
 void SwTextPortion::HandlePortion( SwPortionHandler& rPH ) const
