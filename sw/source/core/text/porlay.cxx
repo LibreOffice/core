@@ -663,8 +663,8 @@ SwCharRange &SwCharRange::operator+=(const SwCharRange &rRange)
 }
 
 SwScriptInfo::SwScriptInfo()
-    : nInvalidityPos(0)
-    , nDefaultDir(0)
+    : m_nInvalidityPos(0)
+    , m_nDefaultDir(0)
 {
 };
 
@@ -694,7 +694,7 @@ SwFontScript SwScriptInfo::WhichFont( sal_Int32 nIdx, const OUString* pText, con
 // searches for script changes in rText and stores them
 void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode )
 {
-    InitScriptInfo( rNode, nDefaultDir == UBIDI_RTL );
+    InitScriptInfo( rNode, m_nDefaultDir == UBIDI_RTL );
 }
 
 void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
@@ -709,26 +709,26 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
     MultiSelection aHiddenMulti( aRange );
     CalcHiddenRanges( rNode, aHiddenMulti );
 
-    aHiddenChg.clear();
+    m_HiddenChg.clear();
     for( sal_Int32 i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
     {
         const Range& rRange = aHiddenMulti.GetRange( i );
         const sal_Int32 nStart = rRange.Min();
         const sal_Int32 nEnd = rRange.Max() + 1;
 
-        aHiddenChg.push_back( nStart );
-        aHiddenChg.push_back( nEnd );
+        m_HiddenChg.push_back( nStart );
+        m_HiddenChg.push_back( nEnd );
     }
 
     // SCRIPT AND SCRIPT RELATED INFORMATION
 
-    sal_Int32 nChg = nInvalidityPos;
+    sal_Int32 nChg = m_nInvalidityPos;
 
     // COMPLETE_STRING means the data structure is up to date
-    nInvalidityPos = COMPLETE_STRING;
+    m_nInvalidityPos = COMPLETE_STRING;
 
     // this is the default direction
-    nDefaultDir = static_cast<sal_uInt8>(bRTL ? UBIDI_RTL : UBIDI_LTR);
+    m_nDefaultDir = static_cast<sal_uInt8>(bRTL ? UBIDI_RTL : UBIDI_LTR);
 
     // counter for script info arrays
     size_t nCnt = 0;
@@ -807,7 +807,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
     // INVALID DATA FROM THE SCRIPT INFO ARRAYS HAS TO BE DELETED:
 
     // remove invalid entries from script information arrays
-    aScriptChanges.erase( aScriptChanges.begin() + nCnt, aScriptChanges.end() );
+    m_ScriptChanges.erase(m_ScriptChanges.begin() + nCnt, m_ScriptChanges.end());
 
     // get the start of the last compression group
     sal_Int32 nLastCompression = nChg;
@@ -823,7 +823,8 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
     }
 
     // remove invalid entries from compression information arrays
-    aCompressionChanges.erase(aCompressionChanges.begin() + nCntComp, aCompressionChanges.end() );
+    m_CompressionChanges.erase(m_CompressionChanges.begin() + nCntComp,
+            m_CompressionChanges.end());
 
     // get the start of the last kashida group
     sal_Int32 nLastKashida = nChg;
@@ -834,7 +835,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
     }
 
     // remove invalid entries from kashida array
-    aKashida.erase( aKashida.begin() + nCntKash, aKashida.end() );
+    m_Kashida.erase(m_Kashida.begin() + nCntKash, m_Kashida.end());
 
     // TAKE CARE OF WEAK CHARACTERS: WE MUST FIND AN APPROPRIATE
     // SCRIPT FOR WEAK CHARACTERS AT THE BEGINNING OF A PARAGRAPH
@@ -866,7 +867,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
 
         if ( nScript != nNextScript )
         {
-            aScriptChanges.emplace_back(nEnd, nScript );
+            m_ScriptChanges.emplace_back(nEnd, nScript);
             nCnt++;
             nScript = nNextScript;
         }
@@ -874,7 +875,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
 
     // UPDATE THE SCRIPT INFO ARRAYS:
 
-    while ( nChg < rText.getLength() || ( aScriptChanges.empty() && rText.isEmpty() ) )
+    while (nChg < rText.getLength() || (m_ScriptChanges.empty() && rText.isEmpty()))
     {
         SAL_WARN_IF( i18n::ScriptType::WEAK == nScript,
                 "sw.core", "Inserting WEAK into SwScriptInfo structure" );
@@ -912,16 +913,16 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
             if (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK ||
                 nType == U_COMBINING_SPACING_MARK )
             {
-                aScriptChanges.emplace_back(nChg-1, nScript );
+                m_ScriptChanges.emplace_back(nChg-1, nScript);
             }
             else
             {
-                aScriptChanges.emplace_back(nChg, nScript );
+                m_ScriptChanges.emplace_back(nChg, nScript);
             }
         }
         else
         {
-            aScriptChanges.emplace_back(nChg, nScript );
+            m_ScriptChanges.emplace_back(nChg, nScript);
         }
         ++nCnt;
 
@@ -970,7 +971,8 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                         if ( CharCompressType::PunctuationAndKana == aCompEnum ||
                              ePrevState != KANA )
                         {
-                            aCompressionChanges.emplace_back(nPrevChg, nLastCompression - nPrevChg, ePrevState );
+                            m_CompressionChanges.emplace_back(nPrevChg,
+                                    nLastCompression - nPrevChg, ePrevState);
                         }
                     }
 
@@ -988,7 +990,8 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                 if ( CharCompressType::PunctuationAndKana == aCompEnum ||
                      ePrevState != KANA )
                 {
-                    aCompressionChanges.emplace_back(nPrevChg, nLastCompression - nPrevChg, ePrevState );
+                    m_CompressionChanges.emplace_back(nPrevChg,
+                            nLastCompression - nPrevChg, ePrevState);
                 }
             }
         }
@@ -1151,7 +1154,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
 
                 if ( -1 != nKashidaPos )
                 {
-                    aKashida.insert( aKashida.begin() + nCntKash, nKashidaPos);
+                    m_Kashida.insert(m_Kashida.begin() + nCntKash, nKashidaPos);
                     nCntKash++;
                 }
             } // end of kashida search
@@ -1168,7 +1171,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
     // check kashida data
     long nTmpKashidaPos = -1;
     bool bWrongKash = false;
-    for (size_t i = 0; i < aKashida.size(); ++i )
+    for (size_t i = 0; i < m_Kashida.size(); ++i)
     {
         long nCurrKashidaPos = GetKashida( i );
         if ( nCurrKashidaPos <= nTmpKashidaPos )
@@ -1182,7 +1185,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
 #endif
 
     // remove invalid entries from direction information arrays
-    aDirectionChanges.clear();
+    m_DirectionChanges.clear();
 
     // Perform Unicode Bidi Algorithm for text direction information
     {
@@ -1192,7 +1195,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
         // 1. All text in RTL runs will use the CTL font
         // #i89825# change the script type also to CTL (hennerdrewes)
         // 2. Text in embedded LTR runs that does not have any strong LTR characters (numbers!)
-        for ( size_t nDirIdx = 0; nDirIdx < aDirectionChanges.size(); ++nDirIdx )
+        for (size_t nDirIdx = 0; nDirIdx < m_DirectionChanges.size(); ++nDirIdx)
         {
             const sal_uInt8 nCurrDirType = GetDirType( nDirIdx );
                 // nStart is start of RTL run:
@@ -1224,19 +1227,20 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                 // we have to insert a new script change:
                 if ( nStart > 0 && nStartPosOfGroup < nStart )
                 {
-                    aScriptChanges.insert(aScriptChanges.begin() + nScriptIdx,
+                    m_ScriptChanges.insert(m_ScriptChanges.begin() + nScriptIdx,
                                           ScriptChangeInfo(nStart, nScriptTypeOfGroup) );
                     ++nScriptIdx;
                 }
 
                 // Remove entries in ScriptArray which end inside the RTL run:
-                while ( nScriptIdx < aScriptChanges.size() && GetScriptChg( nScriptIdx ) <= nEnd )
+                while (nScriptIdx < m_ScriptChanges.size()
+                       && GetScriptChg(nScriptIdx) <= nEnd)
                 {
-                    aScriptChanges.erase(aScriptChanges.begin() + nScriptIdx);
+                    m_ScriptChanges.erase(m_ScriptChanges.begin() + nScriptIdx);
                 }
 
                 // Insert a new entry in ScriptArray for the end of the RTL run:
-                aScriptChanges.insert(aScriptChanges.begin() + nScriptIdx,
+                m_ScriptChanges.insert(m_ScriptChanges.begin() + nScriptIdx,
                                       ScriptChangeInfo(nEnd, i18n::ScriptType::COMPLEX) );
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1244,7 +1248,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                 // position and that we don't have "empty" changes.
                 sal_uInt8 nLastTyp = i18n::ScriptType::WEAK;
                 sal_Int32 nLastPos = 0;
-                for (std::vector<ScriptChangeInfo>::const_iterator i2 = aScriptChanges.begin(); i2 != aScriptChanges.end(); ++i2)
+                for (std::vector<ScriptChangeInfo>::const_iterator i2 = m_ScriptChanges.begin(); i2 != m_ScriptChanges.end(); ++i2)
                 {
                     SAL_WARN_IF( nLastTyp == i2->type ||
                             nLastPos >= i2->position,
@@ -1261,7 +1265,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
 void SwScriptInfo::UpdateBidiInfo( const OUString& rText )
 {
     // remove invalid entries from direction information arrays
-    aDirectionChanges.clear();
+    m_DirectionChanges.clear();
 
     // Bidi functions from icu 2.0
 
@@ -1270,7 +1274,7 @@ void SwScriptInfo::UpdateBidiInfo( const OUString& rText )
     nError = U_ZERO_ERROR;
 
     ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(rText.getStr()), rText.getLength(),
-                   nDefaultDir, nullptr, &nError );
+                   m_nDefaultDir, nullptr, &nError );
     nError = U_ZERO_ERROR;
     int nCount = ubidi_countRuns( pBidi, &nError );
     int32_t nStart = 0;
@@ -1279,7 +1283,7 @@ void SwScriptInfo::UpdateBidiInfo( const OUString& rText )
     for ( int nIdx = 0; nIdx < nCount; ++nIdx )
     {
         ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
-        aDirectionChanges.emplace_back(nEnd, nCurrDir );
+        m_DirectionChanges.emplace_back(nEnd, nCurrDir);
         nStart = nEnd;
     }
 
@@ -1685,7 +1689,7 @@ long SwScriptInfo::Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
 // Note on calling KashidaJustify():
 // Kashida positions may be marked as invalid. Therefore KashidaJustify may return the clean
 // total number of kashida positions, or the number of kashida positions after some positions
-// have been dropped, depending on the state of the aKashidaInvalid array.
+// have been dropped, depending on the state of the m_KashidaInvalid array.
 
 sal_Int32 SwScriptInfo::KashidaJustify( long* pKernArray,
                                         long* pScrArray,
@@ -1808,7 +1812,7 @@ bool SwScriptInfo::IsArabicText( const OUString& rText, sal_Int32 nStt, sal_Int3
 
 bool SwScriptInfo::IsKashidaValid(sal_Int32 nKashPos) const
 {
-    for (sal_Int32 i : aKashidaInvalid)
+    for (sal_Int32 i : m_KashidaInvalid)
     {
         if ( i == nKashPos )
             return false;
@@ -1818,11 +1822,11 @@ bool SwScriptInfo::IsKashidaValid(sal_Int32 nKashPos) const
 
 void SwScriptInfo::ClearKashidaInvalid(sal_Int32 nKashPos)
 {
-    for ( size_t i = 0; i < aKashidaInvalid.size(); ++i )
+    for (size_t i = 0; i < m_KashidaInvalid.size(); ++i)
     {
-        if ( aKashidaInvalid [ i ] == nKashPos )
+        if (m_KashidaInvalid [ i ] == nKashPos)
         {
-            aKashidaInvalid.erase ( aKashidaInvalid.begin() + i );
+            m_KashidaInvalid.erase(m_KashidaInvalid.begin() + i);
             return;
         }
     }
@@ -1870,7 +1874,7 @@ bool SwScriptInfo::MarkOrClearKashidaInvalid(sal_Int32 nStt, sal_Int32 nLen,
 
 void SwScriptInfo::MarkKashidaInvalid(sal_Int32 nKashPos)
 {
-    aKashidaInvalid.push_back(nKashPos);
+    m_KashidaInvalid.push_back(nKashPos);
 }
 
 // retrieve the kashida positions in the given text range
@@ -1899,16 +1903,16 @@ void SwScriptInfo::GetKashidaPositions(sal_Int32 nStt, sal_Int32 nLen,
 
 void SwScriptInfo::SetNoKashidaLine(sal_Int32 nStt, sal_Int32 nLen)
 {
-    aNoKashidaLine.push_back( nStt );
-    aNoKashidaLineEnd.push_back( nStt+nLen );
+    m_NoKashidaLine.push_back( nStt );
+    m_NoKashidaLineEnd.push_back( nStt + nLen );
 }
 
 // determines if the line uses kashida justification
 bool SwScriptInfo::IsKashidaLine(sal_Int32 nCharIdx) const
 {
-    for (size_t i = 0; i < aNoKashidaLine.size(); ++i)
+    for (size_t i = 0; i < m_NoKashidaLine.size(); ++i)
     {
-        if (nCharIdx >= aNoKashidaLine[ i ] && nCharIdx < aNoKashidaLineEnd[ i ])
+        if (nCharIdx >= m_NoKashidaLine[i] && nCharIdx < m_NoKashidaLineEnd[i])
             return false;
     }
     return true;
@@ -1917,12 +1921,12 @@ bool SwScriptInfo::IsKashidaLine(sal_Int32 nCharIdx) const
 void SwScriptInfo::ClearNoKashidaLine(sal_Int32 nStt, sal_Int32 nLen)
 {
     size_t i = 0;
-    while( i < aNoKashidaLine.size())
+    while (i < m_NoKashidaLine.size())
     {
-        if( nStt + nLen >= aNoKashidaLine[ i ] && nStt < aNoKashidaLineEnd [ i ] )
+        if (nStt + nLen >= m_NoKashidaLine[i] && nStt < m_NoKashidaLineEnd[i])
         {
-            aNoKashidaLine.erase(aNoKashidaLine.begin() + i);
-            aNoKashidaLineEnd.erase(aNoKashidaLineEnd.begin() + i);
+            m_NoKashidaLine.erase(m_NoKashidaLine.begin() + i);
+            m_NoKashidaLineEnd.erase(m_NoKashidaLineEnd.begin() + i);
         }
         else
             ++i;
