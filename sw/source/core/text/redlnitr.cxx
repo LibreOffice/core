@@ -204,8 +204,8 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
 
     // determine script changes if not already done for current paragraph
     assert(m_pScriptInfo);
-    if ( m_pScriptInfo->GetInvalidityA() != COMPLETE_STRING )
-         m_pScriptInfo->InitScriptInfo( rTextNode, bRTL );
+    if (m_pScriptInfo->GetInvalidityA() != TextFrameIndex(COMPLETE_STRING))
+         m_pScriptInfo->InitScriptInfo(rTextNode, m_pMergedPara, bRTL);
 
     InitFontAndAttrHandler(rTextNode,
             m_pMergedPara ? m_pMergedPara->mergedText : rTextNode.GetText(),
