@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -38,6 +38,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
+#include <vcl/wrkwin.hxx>
 #include <unotools/moduleoptions.hxx>
 
 using namespace com::sun::star;
@@ -175,6 +176,20 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
             css::uno::Any());
         return;
     }
+
+#ifdef MACOSX
+    // FIXME: In full-screen mode, if we call ShowFullScreenMode(false) here, it leads to a crash
+    // later, so disallow closing for now. And yes, if we don't allow closing a window that is in
+    // full-screen mode, the menu entry should be greyed out then, too. But doing that looks
+    // insanely hard, too. I am so tempted to just abort this and instead just don't even try to
+    // support the system full-screen mode.
+    if (m_pSysWindow)
+    {
+        WorkWindow *pWorkWindow = dynamic_cast<WorkWindow*>(m_pSysWindow.get());
+        if (pWorkWindow && pWorkWindow->IsFullScreenMode())
+            return;
+    }
+#endif
 
     if (m_pSysWindow && m_pSysWindow->GetCloseHdl().IsSet())
     {

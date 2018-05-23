@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -125,6 +125,11 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
 
         case css::frame::FrameAction_COMPONENT_DETACHING :
             {
+                // FIXME: Hack: Don't save state for full-screen windows. We can't properly restore
+                // them anyway.
+                if (implst_isWindowFullScreen(xWindow))
+                    break;
+
                 OUString sWindowState = PersistentWindowState::implst_getWindowStateFromWindow(xWindow);
                 PersistentWindowState::implst_setWindowStateOnConfig(xContext, sModuleName, sWindowState);
             }
@@ -197,6 +202,28 @@ void PersistentWindowState::implst_setWindowStateOnConfig(
         { throw; }
     catch(const css::uno::Exception&)
         {}
+}
+
+bool PersistentWindowState::implst_isWindowFullScreen(const css::uno::Reference< css::awt::XWindow >& xWindow)
+{
+    bool bRetval = false;
+
+    if (xWindow.is())
+    {
+        SolarMutexGuard aSolarGuard;
+
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
+        if ( pWindow && pWindow->IsSystemWindow() )
+        {
+            WindowStateData aWSD;
+            aWSD.SetMask(WindowStateMask::All);
+            static_cast<SystemWindow*>(pWindow.get())->GetWindowStateData(aWSD);
+            if (aWSD.GetState() & WindowStateState::FullScreen)
+                bRetval = true;
+        }
+    }
+
+    return bRetval;
 }
 
 OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)

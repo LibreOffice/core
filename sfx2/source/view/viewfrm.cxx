@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -146,7 +146,11 @@ void SfxViewFrame::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SID_BROWSER);
     GetStaticInterface()->RegisterChildWindow(SID_RECORDING_FLOATWINDOW);
 #if HAVE_FEATURE_DESKTOP
+#ifndef MACOSX
+    // No floating toolbar to exit full-screen mode on macOS please; there is a system way to do it
+    // and that is what we want.
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_FULLSCREEN, SfxVisibilityFlags::FullScreen, ToolbarId::FullScreenToolbox);
+#endif
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_APPLICATION, SfxVisibilityFlags::Standard, ToolbarId::EnvToolbox);
 #endif
 }
@@ -2710,7 +2714,10 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                     css::uno::Reference< css::frame::XFrame > xFrame(
                             GetFrame().GetFrameInterface(),
                             css::uno::UNO_QUERY);
-
+#ifndef MACOSX
+                    // On macOS we don't deactivate the menu bar in system full-screen mode, which
+                    // is how we implement the LibreOffice full-screen mode. The menu bar auto-hides
+                    // in the full-screen mode.
                     Reference< css::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
                     Reference< css::frame::XLayoutManager > xLayoutManager;
                     if ( xPropSet.is() )
@@ -2724,10 +2731,11 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                         {
                         }
                     }
-
+#endif
                     bool bNewFullScreenMode = pItem ? pItem->GetValue() : !pWork->IsFullScreenMode();
                     if ( bNewFullScreenMode != pWork->IsFullScreenMode() )
                     {
+#ifndef MACOSX
                         Reference< css::beans::XPropertySet > xLMPropSet( xLayoutManager, UNO_QUERY );
                         if ( xLMPropSet.is() )
                         {
@@ -2741,8 +2749,11 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                             {
                             }
                         }
+#endif
                         pWork->ShowFullScreenMode( bNewFullScreenMode );
+#ifndef MACOSX
                         pWork->SetMenuBarMode( bNewFullScreenMode ? MenuBarMode::Hide : MenuBarMode::Normal );
+#endif
                         GetFrame().GetWorkWindow_Impl()->SetFullScreen_Impl( bNewFullScreenMode );
                         if ( !pItem )
                             rReq.AppendItem( SfxBoolItem( SID_WIN_FULLSCREEN, bNewFullScreenMode ) );
