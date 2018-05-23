@@ -69,6 +69,7 @@ $(packimages_DIR)/sourceimagelist.ilst : \
 		$(SRCDIR)/vcl/inc/bitmaps.hlst \
 		$(SRCDIR)/xmlsecurity/inc/bitmaps.hlst
 	grep res $^ | cut -d'"' -f2 | sed "s/^/%MODULE%\//" | sed "s/%MODULE%.res/%GLOBALRES%/g" > $@
+	$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/solenv/bin/image_add_svg_variants.py -l $@
 
 # commandimagelist.ilst and sorted.lst are phony to rebuild everything each time
 .PHONY : $(packimages_DIR)/commandimagelist.ilst $(packimages_DIR)/sorted.lst
