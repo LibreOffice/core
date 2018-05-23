@@ -69,6 +69,24 @@
       "revId": "db04c1c00f2ddcca3ba95f110e20457a9cd5e2f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_7e2f2cf6",
+        "filename": "sfx2/source/appl/shutdownicon.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2018-05-23T07:31:51Z",
+      "side": 1,
+      "message": "so this resulted in\n\n/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/CxxObject/sfx2/source/appl/appcfg.o: In function `SfxApplication::SetOptions_Impl(SfxItemSet const\u0026)\u0027:\n/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/sfx2/source/appl/appcfg.cxx:636: undefined reference to `ShutdownIcon::SetAutostart(bool)\u0027\n/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/CxxObject/sfx2/source/appl/shutdownicon.o: In function `ShutdownIcon::initialize(com::sun::star::uno::Sequence\u003ccom::sun::star::uno::Any\u003e const\u0026)\u0027:\n/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/sfx2/source/appl/shutdownicon.cxx:588: undefined reference to `ShutdownIcon::SetAutostart(bool)\u0027\n/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/sfx2/source/appl/shutdownicon.cxx:590: undefined reference to `ShutdownIcon::SetAutostart(bool)\u0027\n\n...",
+      "parentUuid": "9a30ddce_fecddc5d",
+      "revId": "db04c1c00f2ddcca3ba95f110e20457a9cd5e2f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
