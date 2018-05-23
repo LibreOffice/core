@@ -31,36 +31,26 @@
 
 #define HDL(hdl) LINK(this,ScTabBgColorDlg,hdl)
 
-ScTabBgColorDlg::ScTabBgColorDlg(vcl::Window* pParent, const OUString& rTitle,
+ScTabBgColorDlg::ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle,
     const OUString& rTabBgColorNoColorText, const Color& rDefaultColor)
-    : ModalDialog(pParent, "TabColorDialog", "modules/scalc/ui/tabcolordialog.ui")
+    : GenericDialogController(pParent, "modules/scalc/ui/tabcolordialog.ui", "TabColorDialog")
     , m_aTabBgColor(rDefaultColor)
     , m_aTabBgColorNoColorText(rTabBgColorNoColorText)
-
+    , m_xTabBgColorSet(new weld::CustomWeld(*m_xBuilder, "colorset", m_aTabBgColorSet))
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
 {
-    get(m_pTabBgColorSet, "colorset");
-    m_pTabBgColorSet->SetDialog(this);
-    m_pTabBgColorSet->SetColCount(SvxColorValueSet::getColumnCount());
-    get(m_pBtnOk, "ok");
+    m_aTabBgColorSet.SetDialog(this);
+    m_aTabBgColorSet.SetColCount(SvxColorValueSet::getColumnCount());
 
-    SetText( rTitle );
-    SetStyle(GetStyle() | WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK | WB_DIALOGCONTROL | WB_SYSTEMWINDOW | WB_STANDALONE | WB_HIDE);
+    m_xDialog->set_title(rTitle);
 
     FillColorValueSets_Impl();
-    m_pTabBgColorSet->SetDoubleClickHdl( HDL(TabBgColorDblClickHdl_Impl) );
-    m_pBtnOk->SetClickHdl( HDL(TabBgColorOKHdl_Impl) );
+    m_aTabBgColorSet.SetDoubleClickHdl(HDL(TabBgColorDblClickHdl_Impl));
+    m_xBtnOk->connect_clicked(HDL(TabBgColorOKHdl_Impl));
 }
 
 ScTabBgColorDlg::~ScTabBgColorDlg()
 {
-    disposeOnce();
-}
-
-void ScTabBgColorDlg::dispose()
-{
-    m_pTabBgColorSet.clear();
-    m_pBtnOk.clear();
-    ModalDialog::dispose();
 }
 
 void ScTabBgColorDlg::GetSelectedColor( Color& rColor ) const
@@ -86,74 +76,53 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     if ( pColorList.is() )
     {
         nColorCount = pColorList->Count();
-        m_pTabBgColorSet->addEntriesForXColorList(*pColorList);
+        m_aTabBgColorSet.addEntriesForXColorList(*pColorList);
     }
 
     if (nColorCount)
     {
-        const WinBits nBits(m_pTabBgColorSet->GetStyle() | WB_NAMEFIELD | WB_ITEMBORDER | WB_NONEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_NOPOINTERFOCUS);
-        m_pTabBgColorSet->SetText( m_aTabBgColorNoColorText );
-        m_pTabBgColorSet->SetStyle( nBits );
+        const WinBits nBits(m_aTabBgColorSet.GetStyle() | WB_NAMEFIELD | WB_ITEMBORDER | WB_NONEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_NOPOINTERFOCUS);
+        m_aTabBgColorSet.SetText(m_aTabBgColorNoColorText);
+        m_aTabBgColorSet.SetStyle(nBits);
     }
 
     //lock down a preferred size
     const sal_uInt32 nColCount = SvxColorValueSet::getColumnCount();
     const sal_uInt32 nRowCount(ceil(double(nColorCount)/nColCount));
     const sal_uInt32 nLength = SvxColorValueSet::getEntryEdgeLength();
-    Size aSize(m_pTabBgColorSet->CalcWindowSizePixel(Size(nLength, nLength), nColCount, nRowCount));
-    m_pTabBgColorSet->set_width_request(aSize.Width()+8);
-    m_pTabBgColorSet->set_height_request(aSize.Height()+8);
-
-    m_pTabBgColorSet->SelectItem(0);
+    Size aSize(m_aTabBgColorSet.CalcWindowSizePixel(Size(nLength, nLength), nColCount, nRowCount));
+    m_xTabBgColorSet->set_size_request(aSize.Width() + 8, aSize.Height() + 8);
+    m_aTabBgColorSet.SelectItem(0);
 }
 
 ///    Handler, called when color selection is changed
-IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, ValueSet*, void)
+IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, SvtValueSet*, void)
 {
-    sal_uInt16 nItemId = m_pTabBgColorSet->GetSelectedItemId();
-    Color aColor = nItemId ? ( m_pTabBgColorSet->GetItemColor( nItemId ) ) : COL_AUTO;
+    sal_uInt16 nItemId = m_aTabBgColorSet.GetSelectedItemId();
+    Color aColor = nItemId ? ( m_aTabBgColorSet.GetItemColor( nItemId ) ) : COL_AUTO;
     m_aTabBgColor = aColor;
-    EndDialog( RET_OK );
+    m_xDialog->response(RET_OK);
 }
 
 //    Handler, called when the OK button is pushed
-IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorOKHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorOKHdl_Impl, weld::Button&, void)
 {
-    sal_uInt16 nItemId = m_pTabBgColorSet->GetSelectedItemId();
-    Color aColor = nItemId ? ( m_pTabBgColorSet->GetItemColor( nItemId ) ) : COL_AUTO;
+    sal_uInt16 nItemId = m_aTabBgColorSet.GetSelectedItemId();
+    Color aColor = nItemId ? ( m_aTabBgColorSet.GetItemColor( nItemId ) ) : COL_AUTO;
     m_aTabBgColor = aColor;
-    EndDialog( RET_OK );
+    m_xDialog->response(RET_OK);
 }
 
-ScTabBgColorDlg::ScTabBgColorValueSet::ScTabBgColorValueSet(vcl::Window* pParent, WinBits nStyle)
-    : SvxColorValueSet(pParent, nStyle)
-    , m_pTabBgColorDlg(nullptr)
+ScTabBgColorDlg::ScTabBgColorValueSet::ScTabBgColorValueSet()
+    : m_pTabBgColorDlg(nullptr)
 {
 }
 
 ScTabBgColorDlg::ScTabBgColorValueSet::~ScTabBgColorValueSet()
 {
-    disposeOnce();
 }
 
-void ScTabBgColorDlg::ScTabBgColorValueSet::dispose()
-{
-    m_pTabBgColorDlg.clear();
-    SvxColorValueSet::dispose();
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeScTabBgColorValueSet(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    WinBits nWinBits = WB_TABSTOP;
-
-    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-
-    rRet = VclPtr<ScTabBgColorDlg::ScTabBgColorValueSet>::Create(pParent, nWinBits);
-}
-
-void ScTabBgColorDlg::ScTabBgColorValueSet::KeyInput( const KeyEvent& rKEvt )
+bool ScTabBgColorDlg::ScTabBgColorValueSet::KeyInput( const KeyEvent& rKEvt )
 {
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
@@ -163,11 +132,12 @@ void ScTabBgColorDlg::ScTabBgColorValueSet::KeyInput( const KeyEvent& rKEvt )
             sal_uInt16 nItemId = GetSelectedItemId();
             const Color& aColor = nItemId ? ( GetItemColor( nItemId ) ) : COL_AUTO;
             m_pTabBgColorDlg->m_aTabBgColor = aColor;
-            m_pTabBgColorDlg->EndDialog(RET_OK);
+            m_pTabBgColorDlg->response(RET_OK);
+            return true;
         }
         break;
     }
-    SvxColorValueSet::KeyInput(rKEvt);
+    return ColorValueSet::KeyInput(rKEvt);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
