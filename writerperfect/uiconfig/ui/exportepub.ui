@@ -90,7 +90,6 @@
                     <property name="margin_top">6</property>
                     <property name="label" translatable="yes" context="exportepub|generalft">General</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">versionlb</property>
                     <property name="xalign">0</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -428,7 +427,6 @@
                     <property name="margin_top">6</property>
                     <property name="label" translatable="yes" context="exportepub|metadataft">Metadata</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">versionlb</property>
                     <property name="xalign">0</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
