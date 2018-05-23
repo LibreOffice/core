@@ -76,18 +76,6 @@ private:
     const T& mrTest;
 };
 
-class AppendToList
-{
-public:
-    explicit AppendToList(vector<ScRange>& rRanges) : mrRanges(rRanges) {}
-    void operator() (const ScRange& r)
-    {
-        mrRanges.push_back(r);
-    }
-private:
-    vector<ScRange>& mrRanges;
-};
-
 class CountCells
 {
 public:
@@ -143,7 +131,6 @@ private:
 //  ScRangeList
 ScRangeList::~ScRangeList()
 {
-    RemoveAll();
 }
 
 ScRefFlags ScRangeList::Parse( const OUString& rStr, const ScDocument* pDoc,
@@ -1034,11 +1021,9 @@ ScRangeList::ScRangeList() : mnMaxRowUsed(-1) {}
 
 ScRangeList::ScRangeList( const ScRangeList& rList ) :
     SvRefBase(),
-    mnMaxRowUsed(-1)
+    maRanges(rList.maRanges),
+    mnMaxRowUsed(rList.mnMaxRowUsed)
 {
-    maRanges.reserve(rList.maRanges.size());
-    for_each(rList.maRanges.begin(), rList.maRanges.end(), AppendToList(maRanges));
-    mnMaxRowUsed = rList.mnMaxRowUsed;
 }
 
 ScRangeList::ScRangeList( const ScRangeList&& rList ) :
@@ -1057,9 +1042,7 @@ ScRangeList::ScRangeList( const ScRange& rRange ) :
 
 ScRangeList& ScRangeList::operator=(const ScRangeList& rList)
 {
-    RemoveAll();
-    maRanges.reserve(rList.maRanges.size());
-    for_each(rList.maRanges.begin(), rList.maRanges.end(), AppendToList(maRanges));
+    maRanges = rList.maRanges;
     mnMaxRowUsed = rList.mnMaxRowUsed;
     return *this;
 }
@@ -1098,6 +1081,7 @@ void ScRangeList::Remove(size_t nPos)
 void ScRangeList::RemoveAll()
 {
     maRanges.clear();
+    mnMaxRowUsed = -1;
 }
 
 ScRange ScRangeList::Combine() const
