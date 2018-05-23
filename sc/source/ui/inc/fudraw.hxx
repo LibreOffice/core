@@ -31,7 +31,7 @@ class FuDraw : public FuPoor
     Pointer aOldPointer;
 
  public:
-    FuDraw(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
+    FuDraw(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, const SfxRequest& rReq);
     virtual ~FuDraw() override;
 

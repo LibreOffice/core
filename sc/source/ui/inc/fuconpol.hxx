@@ -25,8 +25,8 @@
 /** Base class for all functions */
 class FuConstPolygon : public FuConstruct
 {
- public:
-    FuConstPolygon(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
+public:
+    FuConstPolygon(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
                    SdrModel* pDoc, const SfxRequest& rReq);
 
     virtual ~FuConstPolygon() override;

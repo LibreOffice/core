@@ -25,37 +25,37 @@
 
 class FuInsertGraphic : public FuPoor
 {
- public:
-    FuInsertGraphic( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
+public:
+    FuInsertGraphic(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertGraphic() override;
 };
 
 class FuInsertOLE : public FuPoor
 {
- public:
-    FuInsertOLE( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
+public:
+    FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
 };
 
 class FuInsertChart : public FuPoor
 {
- public:
-    FuInsertChart( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
+public:
+    FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
 };
 
 class FuInsertChartFromFile : public FuPoor
 {
- public:
-    FuInsertChartFromFile( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
+public:
+    FuInsertChartFromFile(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, const SfxRequest& rReq, const OUString& rURL);
 };
 
 class FuInsertMedia : public FuPoor
 {
- public:
-    FuInsertMedia( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
+public:
+    FuInsertMedia(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, const SfxRequest& rReq);
     virtual ~FuInsertMedia() override;
 };

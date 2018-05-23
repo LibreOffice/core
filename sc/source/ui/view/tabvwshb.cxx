@@ -325,23 +325,23 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
     switch ( nSlot )
     {
         case SID_INSERT_GRAPHIC:
-            FuInsertGraphic(this, pWin, pView, pDrModel, rReq);
+            FuInsertGraphic(*this, pWin, pView, pDrModel, rReq);
             // shell is set in MarkListHasChanged
             break;
 
         case SID_INSERT_AVMEDIA:
-            FuInsertMedia(this, pWin, pView, pDrModel, rReq);
+            FuInsertMedia(*this, pWin, pView, pDrModel, rReq);
             // shell is set in MarkListHasChanged
             break;
 
         case SID_INSERT_DIAGRAM:
-            FuInsertChart(this, pWin, pView, pDrModel, rReq);
+            FuInsertChart(*this, pWin, pView, pDrModel, rReq);
             break;
 
         case SID_INSERT_OBJECT:
         case SID_INSERT_SMATH:
         case SID_INSERT_FLOATINGFRAME:
-            FuInsertOLE(this, pWin, pView, pDrModel, rReq);
+            FuInsertOLE(*this, pWin, pView, pDrModel, rReq);
             break;
 
         case SID_INSERT_DIAGRAM_FROM_FILE:
@@ -354,7 +354,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                 {
                     INetURLObject aURLObj( aDlg.GetPath() );
                     OUString aURL = aURLObj.GetURLNoPass();
-                    FuInsertChartFromFile(this, pWin, pView, pDrModel, rReq, aURL);
+                    FuInsertChartFromFile(*this, pWin, pView, pDrModel, rReq, aURL);
                 }
             }
             catch (const uno::Exception& e)

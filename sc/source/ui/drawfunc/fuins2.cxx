@@ -219,9 +219,9 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
 
 }
 
-FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
+FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
            SdrModel* pDoc, SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pViewP, pDoc, rReq)
 {
     if( ! rReq.IsAPI() )
         rReq.Done();
@@ -278,7 +278,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
                         nAspect = embed::Aspects::MSOLE_ICON;
 
                     if ( xObj.is() )
-                        pViewSh->GetObjectShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
+                        rViewSh.GetObjectShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
                     // to activate DrawShell (no need to activate Object)
                     bIsFromFile = !pDlg->IsCreateNew();
                 }
@@ -341,11 +341,11 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
 
             //  initialize chart ?
             if ( SvtModuleOptions().IsChart() && SotExchange::IsChart( SvGlobalName( xObj->getClassID() ) ) )
-                lcl_ChartInit(xObj, &pViewSh->GetViewData(), OUString(), false);
+                lcl_ChartInit(xObj, &rViewSh.GetViewData(), OUString(), false);
 
-            ScViewData& rData = pViewSh->GetViewData();
+            ScViewData& rData = rViewSh.GetViewData();
 
-            Point aPnt = pViewSh->GetInsertPos();
+            Point aPnt = rViewSh.GetInsertPos();
             if ( rData.GetDocument()->IsNegativePage( rData.GetTabNo() ) )
                 aPnt.AdjustX( -(aSize.Width()) );      // move position to left edge
             tools::Rectangle aRect (aPnt, aSize);
@@ -405,9 +405,9 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
         rReq.Ignore();
 }
 
-FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
+FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
            SdrModel* pDoc, SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pViewP, pDoc, rReq)
 {
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
@@ -423,21 +423,21 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
     OUString aRangeString;
     bool bRangeIsPivotTable = false;
     ScRange aPositionRange;             // cell range for chart positioning
-    ScMarkData aMark = pViewSh->GetViewData().GetMarkData();
+    ScMarkData aMark = rViewSh.GetViewData().GetMarkData();
     if( pReqArgs )
     {
         const SfxPoolItem* pItem;
         if( pReqArgs->HasItem( FN_PARAM_5, &pItem ) )
             aRangeString = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
-        aPositionRange = pViewSh->GetViewData().GetCurPos();
+        aPositionRange = rViewSh.GetViewData().GetCurPos();
     }
     else
     {
-        ScDocument* pDocument = pViewSh->GetViewData().GetDocument();
-        ScDPObject* pObject = pDocument->GetDPAtCursor(pViewSh->GetViewData().GetCurX(),
-                                                       pViewSh->GetViewData().GetCurY(),
-                                                       pViewSh->GetViewData().GetTabNo());
+        ScDocument* pDocument = rViewSh.GetViewData().GetDocument();
+        ScDPObject* pObject = pDocument->GetDPAtCursor(rViewSh.GetViewData().GetCurX(),
+                                                       rViewSh.GetViewData().GetCurY(),
+                                                       rViewSh.GetViewData().GetTabNo());
         if (pObject)
         {
             aRangeString = pObject->GetName();
@@ -448,7 +448,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
             bool bAutomaticMark = false;
             if ( !aMark.IsMarked() && !aMark.IsMultiMarked() )
             {
-                pViewSh->GetViewData().GetView()->MarkDataArea();
+                rViewSh.GetViewData().GetView()->MarkDataArea();
                 bAutomaticMark = true;
             }
 
@@ -472,7 +472,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
             }
 
             if(bAutomaticMark)
-                pViewSh->GetViewData().GetView()->Unmark();
+                rViewSh.GetViewData().GetView()->Unmark();
         }
     }
 
@@ -520,7 +520,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
         xObj->setVisualAreaSize( nAspect, aSz );
     }
 
-    ScViewData& rData = pViewSh->GetViewData();
+    ScViewData& rData = rViewSh.GetViewData();
     ScDocShell* pScDocSh = rData.GetDocShell();
     ScDocument& rScDoc   = pScDocSh->GetDocument();
     bool bUndo (rScDoc.IsUndoEnabled());
@@ -569,7 +569,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
                 }
 
                 pScDocSh->Broadcast( ScTablesHint( SC_TAB_INSERTED, nNewTab ) );
-                pViewSh->SetTabNo( nNewTab, true );
+                rViewSh.SetTabNo( nNewTab, true );
                 pScDocSh->PostPaintExtras();            //! done afterwards ???
             }
             else
@@ -579,7 +579,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
         }
         else if ( nToTable != rData.GetTabNo() )
         {
-            pViewSh->SetTabNo( nToTable, true );
+            rViewSh.SetTabNo( nToTable, true );
         }
     }
 
@@ -588,7 +588,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
     //  object position
 
     // get chart position (from window size and data range)
-    Point aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
+    Point aStart = rViewSh.GetChartInsertPos( aSize, aPositionRange );
 
     tools::Rectangle aRect (aStart, aSize);
     SdrOle2Obj* pObj = new SdrOle2Obj(
@@ -709,7 +709,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
 
                         // reset marked cell area
 
-                        pViewSh->GetViewData().GetViewShell()->SetMarkData(aMark);
+                        rViewSh.GetViewData().GetViewShell()->SetMarkData(aMark);
                     }
                     else
                     {
@@ -734,9 +734,9 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
     // BM/IHA --
 }
 
-FuInsertChartFromFile::FuInsertChartFromFile( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
+FuInsertChartFromFile::FuInsertChartFromFile(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
            SdrModel* pDoc, const SfxRequest& rReq, const OUString& rURL):
-    FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
+    FuPoor(rViewSh, pWin, pViewP, pDoc, rReq)
 {
     uno::Reference< io::XInputStream > xStorage = comphelper::OStorageHelper::GetInputStreamFromURL(
             rURL, comphelper::getProcessComponentContext());
@@ -751,8 +751,8 @@ FuInsertChartFromFile::FuInsertChartFromFile( ScTabViewShell* pViewSh, vcl::Wind
     awt::Size aSz = xObj->getVisualAreaSize( nAspect );
     Size aSize( aSz.Width, aSz.Height );
 
-    ScRange aPositionRange = pViewSh->GetViewData().GetCurPos();
-    Point aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
+    ScRange aPositionRange = rViewSh.GetViewData().GetCurPos();
+    Point aStart = rViewSh.GetChartInsertPos( aSize, aPositionRange );
     tools::Rectangle aRect (aStart, aSize);
     SdrOle2Obj* pObj = new SdrOle2Obj(
         *pDoc, // TTTT should be reference

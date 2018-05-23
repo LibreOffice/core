@@ -25,9 +25,9 @@
 /** Draw rectangle */
 class FuConstruct : public FuDraw
 {
- public:
-    FuConstruct(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
-                   SdrModel* pDoc, const SfxRequest& rReq);
+public:
+    FuConstruct(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
+                SdrModel* pDoc, const SfxRequest& rReq);
 
     virtual ~FuConstruct() override;
                                        // Mouse- & Key-Events
