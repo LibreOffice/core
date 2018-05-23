@@ -1321,6 +1321,12 @@ AC_ARG_ENABLE(build-unowinreg,
          compiler is needed on Linux.]),
 ,)
 
+AC_ARG_ENABLE(build-opensymbol,
+    AS_HELP_STRING([--enable-build-opensymbol],
+        [Do not use the prebuilt opens___.ttf. Build it instead. This needs
+	 fontforge.]),
+,)
+
 AC_ARG_ENABLE(dependency-tracking,
     AS_HELP_STRING([--enable-dependency-tracking],
         [Do not reject slow dependency extractors.])[
@@ -7550,6 +7556,15 @@ AC_SUBST(BUILD_UNOWINREG)
 AC_SUBST(MINGWCXX)
 AC_SUBST(MINGWSTRIP)
 
+AC_MSG_CHECKING([whether to build opens___.ttf])
+if test "$enable_build_opensymbol" = ""; then
+	AC_MSG_RESULT([yes])
+	AC_CHECK_TOOL(FONTFORGE, fontforge, AC_MSG_ERROR([fontforge not found.]))
+else
+	AC_MSG_RESULT([no])
+fi
+AC_SUBST(FONTFORGE)
+
 dnl ===================================================================
 dnl Check for system zlib
 dnl ===================================================================
@@ -8503,6 +8518,7 @@ if test "$with_java" != "no"; then
         AC_MSG_RESULT([internal])
         SYSTEM_HSQLDB=
         BUILD_TYPE="$BUILD_TYPE HSQLDB"
+        NEED_ANT=TRUE
         AC_MSG_CHECKING([whether hsqldb should be built with JDBC 4.1])
         javanumver=`$JAVAINTERPRETER -version 2>&1 | $AWK -v num=true -f $SRC_ROOT/solenv/bin/getcompver.awk`
         if expr "$javanumver" '>=' 000100060000 > /dev/null; then
@@ -10619,6 +10635,7 @@ if test "$enable_report_builder" != "no" -a "$with_java" != "no"; then
         AC_MSG_RESULT([internal])
         SYSTEM_JFREEREPORT=
         BUILD_TYPE="$BUILD_TYPE JFREEREPORT"
+        NEED_ANT=TRUE
     fi
 else
     AC_MSG_RESULT([no])
@@ -10662,6 +10679,7 @@ if test "$ENABLE_REPORTBUILDER" = "TRUE"; then
         AC_MSG_RESULT([internal])
         SYSTEM_APACHE_COMMONS=
         BUILD_TYPE="$BUILD_TYPE APACHE_COMMONS"
+        NEED_ANT=TRUE
     fi
 fi
 AC_SUBST(SYSTEM_APACHE_COMMONS)
@@ -10724,6 +10742,7 @@ if test "${enable_scripting_javascript}" != "no" -a "x$with_java" != "xno"; then
         AC_MSG_RESULT([internal])
         SYSTEM_RHINO=
         BUILD_TYPE="$BUILD_TYPE RHINO"
+        NEED_ANT=TRUE
     fi
 else
     AC_MSG_RESULT([no])
@@ -11640,7 +11659,7 @@ dnl ===================================================================
 dnl Test for the presence of Ant and that it works
 dnl ===================================================================
 
-if test "$ENABLE_JAVA" != ""; then
+if test "$ENABLE_JAVA" != "" -a "$NEED_ANT" = "TRUE"; then
     ANT_HOME=; export ANT_HOME
     WITH_ANT_HOME=; export WITH_ANT_HOME
     if test -z "$with_ant_home" -a -n "$LODE_HOME" ; then
