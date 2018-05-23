@@ -192,7 +192,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
     // Get script type of line numbering:
     pFnt->SetActual( SwScriptInfo::WhichFont( 0, &aTmp, nullptr ) );
 
-    SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), nullptr, aTmp, 0, aTmp.getLength() );
+    SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), aTmp, 0, aTmp.getLength() );
     aDrawInf.SetSpace( 0 );
     aDrawInf.SetWrong( nullptr );
     aDrawInf.SetGrammarCheck( nullptr );
@@ -547,7 +547,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 if ( EmptyHeight( ) > 1 )
                 {
                     const OUString aTmp( CH_PAR );
-                    SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), nullptr, aTmp, 0, 1 );
+                    SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), aTmp, 0, 1 );
                     aDrawInf.SetPos( aPos );
                     aDrawInf.SetSpace( 0 );
                     aDrawInf.SetKanaComp( 0 );

@@ -1651,11 +1651,11 @@ TextFrameIndex SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoin
                     // additional information:
                     aDrawInf.SetNumberOfBlanks( pPor->InTextGrp() ?
                                                 static_cast<const SwTextPortion*>(pPor)->GetSpaceCnt( aSizeInf, nCharCnt ) :
-                                                0 );
+                                                TextFrameIndex(0) );
                 }
 
                 if ( pPor->InFieldGrp() && pCMS && pCMS->m_pSpecialPos )
-                    aDrawInf.SetLen( COMPLETE_STRING );
+                    aDrawInf.SetLen( TextFrameIndex(COMPLETE_STRING) );
 
                 aDrawInf.SetSpace( nSpaceAdd );
                 aDrawInf.SetFont( aSizeInf.GetFont() );
