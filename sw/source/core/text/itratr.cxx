@@ -846,7 +846,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
         aIter.SeekAndChgAttrIter( nIdx, pOut );
 
         // scan for end of portion
-        const sal_Int32 nNextChg = std::max(aIter.GetNextAttr(), aScriptInfo.NextScriptChg( nIdx ));
+        const sal_Int32 nNextChg = std::min(aIter.GetNextAttr(), aScriptInfo.NextScriptChg(nIdx));
 
         sal_Int32 nStop = nIdx;
         sal_Unicode cChar = CH_BLANK;
