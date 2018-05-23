@@ -57,6 +57,24 @@
       "revId": "3a337f35d9a75d136b0b5c167cf573d075dc1549",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_59de0212",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1069,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-23T14:33:02Z",
+      "side": 1,
+      "message": "SfxItemSet::GetItemState() returns SfxItemState::UNKNOWN by default. Then if the which id is in one of the which id ranges of the set, then it\u0027s DEFAULT, finally if the item set actually has a pool item for that which id, then it\u0027s SET. (svl/README has some documentation around these item sets and pool items.)\n\nThe which id ranges of a set is fixed at construction time, an item set ~always takes an item pool (for \"pooled items\", i.e. defaults) and a set of which id ranges in its constructor.\n\nI hope this answers your question. :-)",
+      "parentUuid": "9a30ddce_f99fb64d",
+      "revId": "3a337f35d9a75d136b0b5c167cf573d075dc1549",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
