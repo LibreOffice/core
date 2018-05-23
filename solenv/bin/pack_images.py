@@ -246,12 +246,15 @@ def create_zip_archive(zip_list, links, tmp_dir, tmp_zip_file, sort_file=None):
         if links.keys():
             LOGGER.info("Add file 'links.txt' to zip archive")
             create_links_file(tmp_dir, links)
-            tmp_zip.write('links.txt')
+            tmp_zip.write('links.txt', compress_type=zipfile.ZIP_DEFLATED)
 
         for link in ordered_zip_list:
             LOGGER.info("Add file '%s' from path '%s' to zip archive", link, tmp_dir)
             try:
-                tmp_zip.write(link)
+                if (link.endswith(".svg")):
+                    tmp_zip.write(link, compress_type=zipfile.ZIP_DEFLATED)
+                else:
+                    tmp_zip.write(link)
             except OSError:
                 LOGGER.warning("Unable to add file '%s' to zip archive", link)
 
