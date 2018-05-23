@@ -32,6 +32,7 @@ class Point;
 class MultiSelection;
 typedef std::vector< sal_Int32 > PositionList;
 enum class SwFontScript;
+namespace sw { struct MergedPara; }
 
 #define SPACING_PRECISION_FACTOR 100
 
@@ -100,8 +101,8 @@ public:
     ~SwScriptInfo();
 
     // determines script changes
-    void InitScriptInfo( const SwTextNode& rNode, bool bRTL );
-    void InitScriptInfo( const SwTextNode& rNode );
+    void InitScriptInfo(const SwTextNode& rNode, sw::MergedPara const* pMerged, bool bRTL);
+    void InitScriptInfo(const SwTextNode& rNode, sw::MergedPara const* pMerged);
 
     // set/get position from which data is invalid
     void SetInvalidityA(const TextFrameIndex nPos)
