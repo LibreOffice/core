@@ -104,7 +104,7 @@ void FuConstArc::Activate()
     pView->SetCurrentObj( sal::static_int_cast<sal_uInt16>( aObjKind ) );
 
     aOldPointer = pWindow->GetPointer();
-    pViewShell->SetActivePointer( aNewPointer );
+    rViewShell.SetActivePointer( aNewPointer );
 
     FuDraw::Activate();
 }
@@ -112,7 +112,7 @@ void FuConstArc::Activate()
 void FuConstArc::Deactivate()
 {
     FuDraw::Deactivate();
-    pViewShell->SetActivePointer( aOldPointer );
+    rViewShell.SetActivePointer( aOldPointer );
 }
 
 // Create default drawing objects via keyboard

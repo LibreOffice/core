@@ -242,13 +242,13 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
     if ( nSlot == SID_INSERT_OBJECT && pNameItem )
     {
         SvGlobalName aClassName = pNameItem->GetValue();
-        xObj = pViewShell->GetViewFrame()->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aName );
+        xObj = rViewShell.GetViewFrame()->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aName );
     }
     else if ( nSlot == SID_INSERT_SMATH )
     {
         if ( SvtModuleOptions().IsMath() )
         {
-            xObj = pViewShell->GetViewFrame()->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SM_CLASSID_60 ).GetByteSequence(), aName );
+            xObj = rViewShell.GetViewFrame()->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SM_CLASSID_60 ).GetByteSequence(), aName );
             rReq.AppendItem( SfxGlobalNameItem( SID_INSERT_OBJECT, SvGlobalName( SO3_SM_CLASSID_60 ) ) );
         }
     }
@@ -266,7 +266,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 ScopedVclPtr<SfxAbstractInsertObjectDialog> pDlg(
-                        pFact->CreateInsertObjectDialog( pViewShell->GetFrameWeld(), SC_MOD()->GetSlotPool()->GetSlot(nSlot)->GetCommandString(),
+                        pFact->CreateInsertObjectDialog( rViewShell.GetFrameWeld(), SC_MOD()->GetSlotPool()->GetSlot(nSlot)->GetCommandString(),
                         xStorage, &aServerLst ));
                 if ( pDlg )
                 {
@@ -386,11 +386,11 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
                 if (bIsFromFile)
                 {
                     // Object selected, activate Draw-Shell
-                    pViewShell->SetDrawShell( true );
+                    rViewShell.SetDrawShell( true );
                 }
                 else
                 {
-                    pViewShell->ActivateObject(pObj, embed::EmbedVerbs::MS_OLEVERB_SHOW);
+                    rViewShell.ActivateObject(pObj, embed::EmbedVerbs::MS_OLEVERB_SHOW);
                 }
             }
 
@@ -483,7 +483,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
     const sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
 
     uno::Reference < embed::XEmbeddedObject > xObj =
-        pViewShell->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID_60 ).GetByteSequence(), aName );
+        rViewShell.GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID_60 ).GetByteSequence(), aName );
 
     uno::Reference< css::chart2::data::XDataReceiver > xReceiver;
     uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
@@ -621,7 +621,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
         //the controller will be unlocked by the dialog when the dialog is told to do so
 
         // only activate object if not called via API (e.g. macro)
-        pViewShell->ActivateObject(pObj, embed::EmbedVerbs::MS_OLEVERB_SHOW);
+        rViewShell.ActivateObject(pObj, embed::EmbedVerbs::MS_OLEVERB_SHOW);
 
         //open wizard
         //@todo get context from calc if that has one
@@ -661,7 +661,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                                 if ( aDialogSize.Width() > 0 && aDialogSize.Height() > 0 )
                                 {
                                     //calculate and set new position
-                                    Point aDialogPos = pViewShell->GetChartDialogPos( aDialogSize, aRect );
+                                    Point aDialogPos = rViewShell.GetChartDialogPos( aDialogSize, aRect );
                                     xDialogProps->setPropertyValue("Position",
                                         uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
                                 }
@@ -681,9 +681,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                     if( nDialogRet == ui::dialogs::ExecutableDialogResults::CANCEL )
                     {
                         // leave OLE inplace mode and unmark
-                        OSL_ASSERT( pViewShell );
                         OSL_ASSERT( pView );
-                        pViewShell->DeactivateOle();
+                        rViewShell.DeactivateOle();
                         pView->UnmarkAll();
 
                         // old page view pointer is invalid after switching sheets
@@ -705,7 +704,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                         bAddUndo = false;       // don't create the undo action for inserting
 
                         // leave the draw shell
-                        pViewShell->SetDrawShell( false );
+                        rViewShell.SetDrawShell( false );
 
                         // reset marked cell area
 
@@ -742,7 +741,7 @@ FuInsertChartFromFile::FuInsertChartFromFile(ScTabViewShell& rViewSh, vcl::Windo
             rURL, comphelper::getProcessComponentContext());
 
     comphelper::EmbeddedObjectContainer& rObjContainer =
-        pViewShell->GetObjectShell()->GetEmbeddedObjectContainer();
+        rViewShell.GetObjectShell()->GetEmbeddedObjectContainer();
 
     OUString aName;
     uno::Reference< embed::XEmbeddedObject > xObj = rObjContainer.InsertEmbeddedObject( xStorage, aName );
@@ -768,7 +767,7 @@ FuInsertChartFromFile::FuInsertChartFromFile(ScTabViewShell& rViewSh, vcl::Windo
     pView->UnmarkAllObj();
     pView->MarkObj( pObj, pPV );
 
-    pViewShell->ActivateObject(pObj, embed::EmbedVerbs::MS_OLEVERB_SHOW);
+    rViewShell.ActivateObject(pObj, embed::EmbedVerbs::MS_OLEVERB_SHOW);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

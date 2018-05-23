@@ -108,7 +108,7 @@ void FuConstCustomShape::Activate()
 
     aNewPointer = Pointer( PointerStyle::DrawRect );
     aOldPointer = pWindow->GetPointer();
-    pViewShell->SetActivePointer( aNewPointer );
+    rViewShell.SetActivePointer( aNewPointer );
 
     SdrLayer* pLayer = pView->GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_CONTROLS);
     if (pLayer)
@@ -125,7 +125,7 @@ void FuConstCustomShape::Deactivate()
     if (pLayer)
         pView->SetActiveLayer( pLayer->GetName() );
 
-    pViewShell->SetActivePointer( aOldPointer );
+    rViewShell.SetActivePointer( aOldPointer );
 }
 
 // Create default drawing objects via keyboard

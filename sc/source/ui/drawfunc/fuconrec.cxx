@@ -207,7 +207,7 @@ void FuConstRectangle::Activate()
     pView->SetCurrentObj(sal::static_int_cast<sal_uInt16>(aObjKind));
 
     aOldPointer = pWindow->GetPointer();
-    pViewShell->SetActivePointer( aNewPointer );
+    rViewShell.SetActivePointer( aNewPointer );
 
     FuConstruct::Activate();
 }
@@ -347,7 +347,7 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal
 void FuConstRectangle::Deactivate()
 {
     FuConstruct::Deactivate();
-    pViewShell->SetActivePointer( aOldPointer );
+    rViewShell.SetActivePointer( aOldPointer );
 }
 
 // Create default drawing objects via keyboard

@@ -33,7 +33,7 @@
 FuPoor::FuPoor(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, const SfxRequest& rReq) :
     pView(pViewP),
-    pViewShell(&rViewSh),
+    rViewShell(rViewSh),
     pWindow(pWin),
     pDrDoc(pDoc),
     aSfxRequest(rReq),
@@ -89,27 +89,27 @@ void FuPoor::ForceScroll(const Point& aPixPos)
     if ( aPixPos.Y() <= 0              ) dy = -1;
     if ( aPixPos.Y() >= aSize.Height() ) dy =  1;
 
-    ScViewData& rViewData = pViewShell->GetViewData();
+    ScViewData& rViewData = rViewShell.GetViewData();
     if ( rViewData.GetDocument()->IsNegativePage( rViewData.GetTabNo() ) )
         dx = -dx;
 
     ScSplitPos eWhich = rViewData.GetActivePart();
     if ( dx > 0 && rViewData.GetHSplitMode() == SC_SPLIT_FIX && WhichH(eWhich) == SC_SPLIT_LEFT )
     {
-        pViewShell->ActivatePart( ( eWhich == SC_SPLIT_TOPLEFT ) ?
+        rViewShell.ActivatePart( ( eWhich == SC_SPLIT_TOPLEFT ) ?
                         SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT );
         dx = 0;
     }
     if ( dy > 0 && rViewData.GetVSplitMode() == SC_SPLIT_FIX && WhichV(eWhich) == SC_SPLIT_TOP )
     {
-        pViewShell->ActivatePart( ( eWhich == SC_SPLIT_TOPLEFT ) ?
+        rViewShell.ActivatePart( ( eWhich == SC_SPLIT_TOPLEFT ) ?
                         SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT );
         dy = 0;
     }
 
     if ( dx != 0 || dy != 0 )
     {
-        pViewShell->ScrollLines(2*dx, 4*dy);
+        rViewShell.ScrollLines(2*dx, 4*dy);
         aScrollTimer.Start();
     }
 }
@@ -185,7 +185,7 @@ IMPL_LINK_NOARG(FuPoor, DragHdl, void*, void)
     {
         pWindow->ReleaseMouse();
         bIsInDragMode = true;
-        pViewShell->GetScDrawView()->BeginDrag(pWindow, aMDPos);
+        rViewShell.GetScDrawView()->BeginDrag(pWindow, aMDPos);
     }
 }
 
