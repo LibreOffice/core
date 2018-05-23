@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_SALGEOM_HXX
 #define INCLUDED_VCL_INC_SALGEOM_HXX
 
+#include <iostream>
+
 #include <vcl/dllapi.h>
 
 struct SalFrameGeometry {
@@ -46,6 +48,14 @@ struct SalFrameGeometry {
         nDisplayScreenNumber( 0 )
     {}
 };
+
+inline std::ostream &operator <<(std::ostream& s, const SalFrameGeometry& rGeom)
+{
+    s << rGeom.nWidth << "x" << rGeom.nHeight << "@(" << rGeom.nX << "," << rGeom.nY << "):{"
+      << rGeom.nLeftDecoration << "," << rGeom.nTopDecoration << "," << rGeom.nRightDecoration << "," << rGeom.nBottomDecoration << "}";
+
+    return s;
+}
 
 /// Interface used to share logic on sizing between
 /// SalVirtualDevices and SalFrames
