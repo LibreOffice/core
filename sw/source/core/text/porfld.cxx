@@ -1137,7 +1137,7 @@ void SwCombinedPortion::Paint( const SwTextPaintInfo &rInf ) const
             }
         }
         const_cast<SwTextPaintInfo&>(rInf).SetPos( aOutPos );
-        rInf.DrawText( m_aExpand, *this, i, TextFrameIndex(1) );
+        rInf.DrawText(m_aExpand, *this, TextFrameIndex(i), TextFrameIndex(1));
     }
     // rInf is const, so we have to take back our manipulations
     const_cast<SwTextPaintInfo&>(rInf).SetPos( aOldPos );
@@ -1213,7 +1213,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
                 aTmpFont.SetSize( aFontSize, nScrp );
             }
 
-            SwDrawTextInfo aDrawInf( pSh, *rInf.GetOut(), nullptr, m_aExpand, i, 1 );
+            SwDrawTextInfo aDrawInf(pSh, *rInf.GetOut(), m_aExpand, i, 1);
             Size aSize = aTmpFont.GetTextSize_( aDrawInf );
             const sal_uInt16 nAsc = aTmpFont.GetAscent( pSh, *rInf.GetOut() );
             aPos[ i ] = static_cast<sal_uInt16>(aSize.Width());
