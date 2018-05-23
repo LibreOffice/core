@@ -46,8 +46,8 @@ public:
     explicit SwCapitalInfo( const OUString& rOrigText ) :
         rString( rOrigText ), nIdx( 0 ), nLen( 0 ) {};
     const OUString& rString;
-    sal_Int32 nIdx;
-    sal_Int32 nLen;
+    TextFrameIndex nIdx;
+    TextFrameIndex nLen;
 };
 
 // rFnt: required for CalcCaseMap
@@ -56,32 +56,32 @@ public:
 // nLen: Length if the substring in rOrigString
 // nIdx: Referes to a position in the display string and should be mapped
 //       to a position in rOrigString
-sal_Int32 sw_CalcCaseMap( const SwFont& rFnt,
+TextFrameIndex sw_CalcCaseMap(const SwFont& rFnt,
                             const OUString& rOrigString,
-                            sal_Int32 nOfst,
-                            sal_Int32 nLen,
-                            sal_Int32 nIdx )
+                            TextFrameIndex const nOfst,
+                            TextFrameIndex const nLen,
+                            TextFrameIndex const nIdx)
 {
     int j = 0;
-    const sal_Int32 nEnd = nOfst + nLen;
-    OSL_ENSURE( nEnd <= rOrigString.getLength(), "sw_CalcCaseMap: Wrong parameters" );
+    const TextFrameIndex nEnd = nOfst + nLen;
+    OSL_ENSURE( sal_Int32(nEnd) <= rOrigString.getLength(), "sw_CalcCaseMap: Wrong parameters" );
 
     // special case for title case:
     const bool bTitle = SvxCaseMap::Capitalize == rFnt.GetCaseMap();
-    for ( sal_Int32 i = nOfst; i < nEnd; ++i )
+    for (TextFrameIndex i = nOfst; i < nEnd; ++i)
     {
-        OUString aTmp(rOrigString.copy(i, 1));
+        OUString aTmp(rOrigString.copy(sal_Int32(i), 1));
 
         if ( !bTitle ||
              g_pBreakIt->GetBreakIter()->isBeginWord(
-                 rOrigString, i,
+                 rOrigString, sal_Int32(i),
                  g_pBreakIt->GetLocale( rFnt.GetLanguage() ),
                  WordType::ANYWORD_IGNOREWHITESPACES ) )
             aTmp = rFnt.GetActualFont().CalcCaseMap( aTmp );
 
         j += aTmp.getLength();
 
-        if ( j > nIdx )
+        if (TextFrameIndex(j) > nIdx)
             return i;
     }
 
@@ -156,7 +156,8 @@ class SwDoGetCapitalBreak : public SwDoCapitals
 {
 protected:
     long nTextWidth;
-    sal_Int32 m_nBreak;
+    TextFrameIndex m_nBreak;
+
 public:
     SwDoGetCapitalBreak( SwDrawTextInfo &rInfo, long const nWidth)
         :   SwDoCapitals ( rInfo )
@@ -166,7 +167,7 @@ public:
     virtual ~SwDoGetCapitalBreak() {}
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) override;
     virtual void Do() override;
-    sal_Int32 getBreak() const { return m_nBreak; }
+    TextFrameIndex getBreak() const { return m_nBreak; }
 };
 
 void SwDoGetCapitalBreak::Init( SwFntObj *, SwFntObj * )
@@ -181,11 +182,12 @@ void SwDoGetCapitalBreak::Do()
             nTextWidth -= rInf.GetSize().Width();
         else
         {
-            sal_Int32 nEnd = rInf.GetEnd();
-            m_nBreak = GetOut().GetTextBreak( rInf.GetText(), nTextWidth,
-                               rInf.GetIdx(), rInf.GetLen(), rInf.GetKern() );
+            TextFrameIndex nEnd = rInf.GetEnd();
+            m_nBreak = TextFrameIndex(GetOut().GetTextBreak(
+                           rInf.GetText(), nTextWidth, sal_Int32(rInf.GetIdx()),
+                           sal_Int32(rInf.GetLen()), rInf.GetKern()));
 
-            if (m_nBreak > nEnd || m_nBreak < 0)
+            if (m_nBreak > nEnd || m_nBreak < TextFrameIndex(0))
                 m_nBreak = nEnd;
 
             // m_nBreak may be relative to the display string. It has to be
@@ -316,7 +318,7 @@ class SwDoCapitalCursorOfst : public SwDoCapitals
 protected:
     SwFntObj *pUpperFnt;
     SwFntObj *pLowerFnt;
-    sal_Int32 nCursor;
+    TextFrameIndex nCursor;
     sal_uInt16 nOfst;
 public:
     SwDoCapitalCursorOfst( SwDrawTextInfo &rInfo, const sal_uInt16 nOfs ) :
@@ -326,7 +328,7 @@ public:
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) override;
     virtual void Do() override;
 
-    sal_Int32 GetCursor(){ return nCursor; }
+    TextFrameIndex GetCursor(){ return nCursor; }
 };
 
 void SwDoCapitalCursorOfst::Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont )
@@ -386,7 +388,7 @@ TextFrameIndex SwSubFont::GetCapitalCursorOfst( SwDrawTextInfo& rInf )
 
 class SwDoDrawStretchCapital : public SwDoDrawCapital
 {
-    const sal_Int32 nStrLen;
+    const TextFrameIndex nStrLen;
     const sal_uInt16 nCapWidth;
     const sal_uInt16 nOrgWidth;
 public:
@@ -411,8 +413,8 @@ void SwDoDrawStretchCapital::Do()
         long nDiff = long(nOrgWidth) - long(nCapWidth);
         if( nDiff )
         {
-            nDiff *= rInf.GetLen();
-            nDiff /= nStrLen;
+            nDiff *= sal_Int32(rInf.GetLen());
+            nDiff /= sal_Int32(nStrLen);
             nDiff += nPartWidth;
             if( 0 < nDiff )
                 nPartWidth = nDiff;
@@ -431,12 +433,12 @@ void SwDoDrawStretchCapital::Do()
             rInf.GetFrame()->SwitchHorizontalToVertical( aPos );
 
         // Optimise:
-        if( 1 >= rInf.GetLen() )
-            GetOut().DrawText( aPos, rInf.GetText(), rInf.GetIdx(),
-                rInf.GetLen() );
+        if (TextFrameIndex(1) >= rInf.GetLen())
+            GetOut().DrawText(aPos, rInf.GetText(), sal_Int32(rInf.GetIdx()),
+                sal_Int32(rInf.GetLen()));
         else
-            GetOut().DrawStretchText( aPos, nPartWidth,
-                                rInf.GetText(), rInf.GetIdx(), rInf.GetLen() );
+            GetOut().DrawStretchText(aPos, nPartWidth, rInf.GetText(),
+                    sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
     }
     const_cast<Point&>(rInf.GetPos()).AdjustX(nPartWidth );
 }
@@ -445,8 +447,8 @@ void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
 {
     // Precondition: rInf.GetPos() has already been calculated
 
-    if( rInf.GetLen() == COMPLETE_STRING )
-        rInf.SetLen( rInf.GetText().getLength() );
+    if (rInf.GetLen() == TextFrameIndex(COMPLETE_STRING))
+        rInf.SetLen(TextFrameIndex(rInf.GetText().getLength()));
 
     const Point aOldPos = rInf.GetPos();
     const sal_uInt16 nCapWidth = static_cast<sal_uInt16>( GetCapitalSize( rInf ).Width() );
@@ -465,14 +467,15 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 
     long nKana = 0;
     const OUString aText( CalcCaseMap( rDo.GetInf().GetText() ) );
-    sal_Int32 nMaxPos = std::min( rDo.GetInf().GetText().getLength() - rDo.GetInf().GetIdx(),
+    TextFrameIndex nMaxPos = std::min(
+        TextFrameIndex(rDo.GetInf().GetText().getLength()) - rDo.GetInf().GetIdx(),
                              rDo.GetInf().GetLen() );
     rDo.GetInf().SetLen( nMaxPos );
 
     const OUString oldText = rDo.GetInf().GetText();
     rDo.GetInf().SetText( aText );
-    sal_Int32 nPos = rDo.GetInf().GetIdx();
-    sal_Int32 nOldPos = nPos;
+    TextFrameIndex nPos = rDo.GetInf().GetIdx();
+    TextFrameIndex nOldPos = nPos;
     nMaxPos = nMaxPos + nPos;
 
     // Look if the length of the original text and the ToUpper-converted
@@ -549,10 +552,10 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 
     if( nPos < nMaxPos )
     {
-        nPos = g_pBreakIt->GetBreakIter()->endOfCharBlock(
-                        oldText, nPos,
-            g_pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
-        if (nPos < 0)
+        nPos = TextFrameIndex(g_pBreakIt->GetBreakIter()->endOfCharBlock(
+                        oldText, sal_Int32(nPos),
+            g_pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER));
+        if (nPos < TextFrameIndex(0))
             nPos = nOldPos;
         else if( nPos > nMaxPos )
             nPos = nMaxPos;
@@ -574,11 +577,12 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                 // Build an own 'changed' string for the given part of the
                 // source string and use it. That new string may differ in length
                 // from the source string.
-                const OUString aNewText = CalcCaseMap( oldText.copy(nOldPos, nPos-nOldPos) );
+                const OUString aNewText = CalcCaseMap(
+                    oldText.copy(sal_Int32(nOldPos), sal_Int32(nPos-nOldPos)));
                 aCapInf.nIdx = nOldPos;
                 aCapInf.nLen = nPos - nOldPos;
-                rDo.GetInf().SetIdx( 0 );
-                rDo.GetInf().SetLen( aNewText.getLength() );
+                rDo.GetInf().SetIdx(TextFrameIndex(0));
+                rDo.GetInf().SetLen(TextFrameIndex(aNewText.getLength()));
                 rDo.GetInf().SetText( aNewText );
             }
             else
@@ -598,10 +602,10 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
             rDo.Do();
             nOldPos = nPos;
         }
-        nPos = g_pBreakIt->GetBreakIter()->nextCharBlock(
-                            oldText, nPos,
-               g_pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
-        if (nPos < 0 || nPos > nMaxPos)
+        nPos = TextFrameIndex(g_pBreakIt->GetBreakIter()->nextCharBlock(
+                            oldText, sal_Int32(nPos),
+               g_pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER));
+        if (nPos < TextFrameIndex(0) || nPos > nMaxPos)
             nPos = nMaxPos;
         OSL_ENSURE( nPos, "nextCharBlock not implemented?" );
 #if OSL_DEBUG_LEVEL > 1
@@ -618,11 +622,11 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                 rDo.GetInf().SetUpper( true );
                 pLastFont = pBigFont;
                 pLastFont->SetDevFont( rDo.GetInf().GetShell(), rDo.GetOut() );
-                sal_Int32 nTmp;
+                TextFrameIndex nTmp;
                 if( bWordWise )
                 {
                     nTmp = nOldPos;
-                    while (nTmp < nPos && CH_BLANK == oldText[nTmp])
+                    while (nTmp < nPos && CH_BLANK == oldText[sal_Int32(nTmp)])
                         ++nTmp;
                     if( nOldPos < nTmp )
                     {
@@ -640,11 +644,12 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                             // Build an own 'changed' string for the given part of the
                             // source string and use it. That new string may differ in length
                             // from the source string.
-                            const OUString aNewText = CalcCaseMap( oldText.copy(nOldPos, nTmp-nOldPos) );
+                            const OUString aNewText = CalcCaseMap(
+                                oldText.copy(sal_Int32(nOldPos), sal_Int32(nTmp-nOldPos)));
                             aCapInf.nIdx = nOldPos;
                             aCapInf.nLen = nTmp - nOldPos;
-                            rDo.GetInf().SetIdx( 0 );
-                            rDo.GetInf().SetLen( aNewText.getLength() );
+                            rDo.GetInf().SetIdx(TextFrameIndex(0));
+                            rDo.GetInf().SetLen(TextFrameIndex(aNewText.getLength()));
                             rDo.GetInf().SetText( aNewText );
                         }
                         else
@@ -658,7 +663,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                         nKana += rDo.GetInf().GetKanaDiff();
                         rDo.GetInf().SetOut( *pOldOut );
                         if( nSpaceAdd )
-                            aPartSize.AdjustWidth(nSpaceAdd * ( nTmp - nOldPos ) );
+                            aPartSize.AdjustWidth(nSpaceAdd * sal_Int32(nTmp - nOldPos));
                         if( nTmpKern && nPos < nMaxPos )
                             aPartSize.AdjustWidth(nTmpKern );
                         rDo.GetInf().SetSize( aPartSize );
@@ -667,7 +672,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                         nOldPos = nTmp;
                     }
 
-                    while (nTmp < nPos && CH_BLANK != oldText[nTmp])
+                    while (nTmp < nPos && CH_BLANK != oldText[sal_Int32(nTmp)])
                         ++nTmp;
                 }
                 else
@@ -680,11 +685,12 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                         // Build an own 'changed' string for the given part of the
                         // source string and use it. That new string may differ in length
                         // from the source string.
-                        const OUString aNewText = CalcCaseMap( oldText.copy(nOldPos, nTmp-nOldPos) );
+                        const OUString aNewText = CalcCaseMap(
+                            oldText.copy(sal_Int32(nOldPos), sal_Int32(nTmp-nOldPos)));
                         aCapInf.nIdx = nOldPos;
                         aCapInf.nLen = nTmp - nOldPos;
-                        rDo.GetInf().SetIdx( 0 );
-                        rDo.GetInf().SetLen( aNewText.getLength() );
+                        rDo.GetInf().SetIdx(TextFrameIndex(0));
+                        rDo.GetInf().SetLen(TextFrameIndex(aNewText.getLength()));
                         rDo.GetInf().SetText( aNewText );
                     }
                     else
@@ -699,9 +705,9 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                     rDo.GetInf().SetOut( *pOldOut );
                     if( !bWordWise && rDo.GetInf().GetSpace() )
                     {
-                        for( sal_Int32 nI = nOldPos; nI < nPos; ++nI )
+                        for (TextFrameIndex nI = nOldPos; nI < nPos; ++nI)
                         {
-                            if (CH_BLANK == oldText[nI])
+                            if (CH_BLANK == oldText[sal_Int32(nI)])
                                 aPartSize.AdjustWidth(nSpaceAdd );
                         }
                     }
@@ -713,10 +719,10 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                 }
             } while( nOldPos != nPos );
         }
-        nPos = g_pBreakIt->GetBreakIter()->endOfCharBlock(
-                            oldText, nPos,
-               g_pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
-        if (nPos < 0 || nPos > nMaxPos)
+        nPos = TextFrameIndex(g_pBreakIt->GetBreakIter()->endOfCharBlock(
+                            oldText, sal_Int32(nPos),
+               g_pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER));
+        if (nPos < TextFrameIndex(0) || nPos > nMaxPos)
             nPos = nMaxPos;
         OSL_ENSURE( nPos, "endOfCharBlock not implemented?" );
 #if OSL_DEBUG_LEVEL > 1

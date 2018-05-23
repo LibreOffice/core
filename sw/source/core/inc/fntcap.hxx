@@ -22,14 +22,15 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include "TextFrameIndex.hxx"
 
 class SwFont;
 
-sal_Int32 sw_CalcCaseMap( const SwFont& rFnt,
+TextFrameIndex sw_CalcCaseMap( const SwFont& rFnt,
                           const OUString& rOrigString,
-                          sal_Int32 nOfst,
-                          sal_Int32 nLen,
-                          sal_Int32 nIdx );
+                          TextFrameIndex nOfst,
+                          TextFrameIndex nLen,
+                          TextFrameIndex nIdx );
 
 
 #endif
