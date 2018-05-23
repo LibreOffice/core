@@ -100,7 +100,7 @@ static void lcl_GetCharRectInsideField( SwTextSizeInfo& rInf, SwRect& rOrig,
         if ( pString )
         {
             // get script for field portion
-            rInf.GetFont()->SetActual( SwScriptInfo::WhichFont( 0, pString, nullptr ) );
+            rInf.GetFont()->SetActual( SwScriptInfo::WhichFont(0, *pString) );
 
             TextFrameIndex const nOldLen = pPor->GetLen();
             const_cast<SwLinePortion*>(pPor)->SetLen(TextFrameIndex(nLen - 1));
