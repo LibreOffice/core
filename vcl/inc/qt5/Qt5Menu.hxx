@@ -12,6 +12,7 @@
 #include <salmenu.hxx>
 
 class MenuItemList;
+class QMenu;
 class QMenuBar;
 class Qt5MenuItem;
 class Qt5Frame;
@@ -24,12 +25,9 @@ private:
     Qt5Menu*                     mpParentSalMenu;
     Qt5Frame*                    mpFrame;
     bool                         mbMenuBar;
-
     QMenuBar*                    mpQMenuBar;
 
-    void ActivateAllSubMenus( Menu* pMenuBar );
-    void Update();
-
+    void DoFullMenuUpdate( Menu* pMenuBar, QMenu* pParentMenu = nullptr );
     void NativeItemText( OUString &rItemText );
 
 public:

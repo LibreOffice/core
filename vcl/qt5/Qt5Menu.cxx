@@ -53,6 +53,16 @@ void Qt5Menu::RemoveItem( unsigned nPos )
 
 void Qt5Menu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos )
 {
+    SolarMutexGuard aGuard;
+    Qt5MenuItem *pItem = static_cast< Qt5MenuItem* >( pSalMenuItem );
+    Qt5Menu *pQSubMenu = static_cast< Qt5Menu* >( pSubMenu );
+
+    if ( pQSubMenu == nullptr )
+        return;
+
+    pQSubMenu->mpParentSalMenu = this;
+    pItem->mpSubMenu = pQSubMenu;
+
 }
 
 void Qt5Menu::SetFrame( const SalFrame* pFrame )
@@ -68,26 +78,10 @@ void Qt5Menu::SetFrame( const SalFrame* pFrame )
     if( pMainWindow )
         mpQMenuBar = pMainWindow->menuBar();
 
-    ActivateAllSubMenus( mpVCLMenu );
-
-    Update();
+    DoFullMenuUpdate( mpVCLMenu );
 }
 
-void Qt5Menu::ActivateAllSubMenus( Menu* pMenuBar )
-{
-    for (Qt5MenuItem* pSalItem : maItems)
-    {
-        if ( pSalItem->mpSubMenu != nullptr )
-        {
-            pMenuBar->HandleMenuActivateEvent(pSalItem->mpSubMenu->GetMenu());
-            pSalItem->mpSubMenu->ActivateAllSubMenus(pMenuBar);
-            pSalItem->mpSubMenu->Update();
-            pMenuBar->HandleMenuDeActivateEvent(pSalItem->mpSubMenu->GetMenu());
-        }
-    }
-}
-
-void Qt5Menu::Update()
+void Qt5Menu::DoFullMenuUpdate( Menu* pMenuBar, QMenu* pParentMenu )
 {
     Menu* pVCLMenu = mpVCLMenu;
 
@@ -99,11 +93,27 @@ void Qt5Menu::Update()
         Qt5MenuItem *pSalMenuItem = GetItemAtPos( nItem );
         sal_uInt16 nId = pSalMenuItem->mnId;
         OUString aText = pVCLMenu->GetItemText( nId );
+        QMenu* pQMenu = pParentMenu;
+        NativeItemText( aText );
 
         if (mbMenuBar && mpQMenuBar)
+            // top-level menu
+            pQMenu = mpQMenuBar->addMenu( toQString(aText) );
+        else
         {
-             NativeItemText( aText );
-             mpQMenuBar->addMenu( toQString(aText) );
+            if( pSalMenuItem->mpSubMenu )
+                // submenu
+                pQMenu = pQMenu->addMenu( toQString(aText) );
+            else
+                // leaf menu
+                pQMenu->addAction( toQString(aText) );
+        }
+
+        if ( pSalMenuItem->mpSubMenu != nullptr )
+        {
+            pMenuBar->HandleMenuActivateEvent(pSalMenuItem->mpSubMenu->GetMenu());
+            pSalMenuItem->mpSubMenu->DoFullMenuUpdate( pMenuBar, pQMenu );
+            pMenuBar->HandleMenuDeActivateEvent(pSalMenuItem->mpSubMenu->GetMenu());
         }
     }
 }
