@@ -53,7 +53,7 @@ $(eval $(call gb_CppunitTest_use_vcl,sc_tiledrendering))
 
 $(eval $(call gb_CppunitTest_use_rdb,sc_tiledrendering,services))
 
-$(eval $(call gb_CppunitTest_use_configuration,sc_tiledrendering))
+$(eval $(call gb_CppunitTest_use_instdir_configuration,sc_tiledrendering))
 
 $(call gb_CppunitTest_get_target,sc_tiledrendering) : $(call gb_AllLangResTarget_get_target,sc)
 
