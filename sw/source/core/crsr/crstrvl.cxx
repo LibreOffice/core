@@ -992,7 +992,7 @@ bool SwCursorShell::GotoPrevOutline()
     SwNode* pNd = &(pCursor->GetNode());
     SwOutlineNodes::size_type nPos;
     bool bRet = false;
-    rNds.GetOutLineNds().Seek_Entry(pNd, &nPos);
+    (void)rNds.GetOutLineNds().Seek_Entry(pNd, &nPos);
     if ( nPos == 0 )
     {
         nPos = rNds.GetOutLineNds().size();
