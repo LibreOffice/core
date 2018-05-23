@@ -95,6 +95,7 @@ void Qt5Menu::DoFullMenuUpdate( Menu* pMenuBar, QMenu* pParentMenu )
         OUString aText = pVCLMenu->GetItemText( nId );
         QMenu* pQMenu = pParentMenu;
         NativeItemText( aText );
+        vcl::KeyCode nAccelKey = pVCLMenu->GetAccelKey( nId );
 
         if (mbMenuBar && mpQMenuBar)
             // top-level menu
@@ -109,8 +110,11 @@ void Qt5Menu::DoFullMenuUpdate( Menu* pMenuBar, QMenu* pParentMenu )
                 if ( pSalMenuItem->mnType == MenuItemType::SEPARATOR )
                     pQMenu->addSeparator();
                 else
+                {
                     // leaf menu
-                    pQMenu->addAction( toQString(aText) );
+                    QAction *pAction = pQMenu->addAction( toQString(aText) );
+                    pAction->setShortcut( toQString( nAccelKey.GetName(GetFrame()->GetWindow()) ) );
+                }
             }
         }
 
@@ -149,6 +153,15 @@ void Qt5Menu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const vc
 
 void Qt5Menu::GetSystemMenuData( SystemMenuData* pData )
 {
+}
+
+const Qt5Frame* Qt5Menu::GetFrame() const
+{
+    SolarMutexGuard aGuard;
+    const Qt5Menu* pMenu = this;
+    while( pMenu && ! pMenu->mpFrame )
+        pMenu = pMenu->mpParentSalMenu;
+    return pMenu ? pMenu->mpFrame : nullptr;
 }
 
 void Qt5Menu::NativeItemText( OUString& rItemText )
