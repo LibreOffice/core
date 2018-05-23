@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_1ef47084",
+        "filename": "sw/inc/view.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-23T07:26:46Z",
+      "side": 1,
+      "message": "explicitly? do you mean that it will be implicitly done, or do you mean that the optimization is useless at all - regardless it will take 1 bit or 8? (Just trying to understand mechanics - I\u0027m OK with both explanations, and don\u0027t argue that we need to save those bits at any cost.)",
+      "parentUuid": "9a30ddce_1ec63048",
+      "revId": "c1656bd9dfd5a64dc007613d8f70147a9c2ce707",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_3ec1342f",
         "filename": "sw/source/uibase/uiview/view.cxx",
         "patchSetId": 2
