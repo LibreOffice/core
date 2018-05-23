@@ -5087,7 +5087,7 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
         bool bMultipleRows = false, bMultipleCols = false;
         for( size_t nRangeIdx = 0; nRangeIdx < nRangeCount; ++nRangeIdx )
         {
-            const ScRange rRange = aRangeList[ nRangeIdx ];
+            const ScRange & rRange = aRangeList[ nRangeIdx ];
             bMultipleRows = ( bMultipleRows || ( rRange.aStart.Row() != rRange.aEnd.Row() ) );
             bMultipleCols = ( bMultipleCols || ( rRange.aStart.Col() != rRange.aEnd.Col() ) );
             SCTAB nMax = static_cast<SCTAB>(maTabs.size());
