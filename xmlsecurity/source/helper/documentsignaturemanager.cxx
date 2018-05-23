@@ -385,8 +385,7 @@ bool DocumentSignatureManager::add(
         maSignatureHelper.AddForSigning(nSecurityId, aElements[n], bBinaryMode, bAdESCompliant);
     }
 
-    maSignatureHelper.SetDateTime(nSecurityId, Date(Date::SYSTEM),
-                                  tools::Time(tools::Time::SYSTEM));
+    maSignatureHelper.SetDateTime(nSecurityId, DateTime(DateTime::SYSTEM));
     maSignatureHelper.SetDescription(nSecurityId, rDescription);
 
     if (!rSignatureLineId.isEmpty())
