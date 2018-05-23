@@ -1,3 +1,9 @@
+libreoffice-5-4-7-2.M6
+    * acim#1133: tdf#117043 pivot table refresh fix
+
+libreoffice-5-4-7-2.M5
+    * RTF fixes: Port LO 4.3.7.2 Linagora patch
+
 libreoffice-5-4-7-2.M4
     * Initialization of the 5-4-1-1 MIMO version
     * Apply RTF patch
