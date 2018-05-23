@@ -44,8 +44,6 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
-#include <tools/date.hxx>
-#include <tools/time.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
@@ -139,9 +137,9 @@ void XMLSignatureHelper::SetGpgCertificate(sal_Int32 nSecurityId,
         ouGpgOwner);
 }
 
-void XMLSignatureHelper::SetDateTime( sal_Int32 nSecurityId, const ::Date& rDate, const tools::Time& rTime )
+void XMLSignatureHelper::SetDateTime( sal_Int32 nSecurityId, const ::DateTime& rDateTime )
 {
-    css::util::DateTime stDateTime = ::DateTime(rDate, rTime).GetUNODateTime();
+    css::util::DateTime stDateTime = rDateTime.GetUNODateTime();
     mpXSecController->setDate( nSecurityId, stDateTime );
 }
 

@@ -37,8 +37,7 @@
 #include <com/sun/star/xml/crypto/sax/XSignatureCreationResultListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultListener.hpp>
 
-class Date;
-namespace tools { class Time; }
+class DateTime;
 
 namespace com {
 namespace sun {
@@ -128,7 +127,7 @@ public:
     void SetGpgCertificate(sal_Int32 nSecurityId, const OUString& ouGpgCertDigest,
         const OUString& ouGpgCert, const OUString& ouGpgOwner);
 
-    void        SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const tools::Time& rTime );
+    void        SetDateTime( sal_Int32 nSecurityId, const DateTime& rDateTime );
     void SetDescription(sal_Int32 nSecurityId, const OUString& rDescription);
     void SetSignatureLineId(sal_Int32 nSecurityId, const OUString& rSignatureLineId);
     void

@@ -35,8 +35,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
-#include <tools/date.hxx>
-#include <tools/time.hxx>
+#include <tools/datetime.hxx>
 #include <o3tl/make_unique.hxx>
 
 #include <certificate.hxx>
@@ -385,8 +384,7 @@ bool DocumentSignatureManager::add(
         maSignatureHelper.AddForSigning(nSecurityId, aElements[n], bBinaryMode, bAdESCompliant);
     }
 
-    maSignatureHelper.SetDateTime(nSecurityId, Date(Date::SYSTEM),
-                                  tools::Time(tools::Time::SYSTEM));
+    maSignatureHelper.SetDateTime(nSecurityId, DateTime(DateTime::SYSTEM));
     maSignatureHelper.SetDescription(nSecurityId, rDescription);
 
     if (!rSignatureLineId.isEmpty())
