@@ -217,7 +217,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_OBJECT_SELECT:
             // not always switch back
             if(pView->GetMarkedObjectList().GetMarkCount() == 0) SetDrawShell(bEx);
-            pTabView->SetDrawFuncPtr(new FuSelection(this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuSelection(*this, pWin, pView, pDoc, aNewReq));
             break;
 
         case SID_DRAW_LINE:

@@ -56,9 +56,9 @@
 
 using namespace com::sun::star;
 
-FuSelection::FuSelection(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-               SdrModel* pDoc, const SfxRequest& rReq ) :
-    FuDraw(pViewSh, pWin, pViewP, pDoc, rReq)
+FuSelection::FuSelection(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
+                         SdrModel* pDoc, const SfxRequest& rReq)
+    : FuDraw(&rViewSh, pWin, pViewP, pDoc, rReq)
 {
 }
 
@@ -329,7 +329,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     SetMouseButtonCode(rMEvt.GetButtons());
 
     bool bReturn = FuDraw::MouseButtonUp(rMEvt);
-    bool bOle = pViewShell && pViewShell->GetViewFrame()->GetFrame().IsInPlace();
+    bool bOle = pViewShell->GetViewFrame()->GetFrame().IsInPlace();
 
     SdrObject* pObj = nullptr;
     if (aDragTimer.IsActive() )
@@ -341,8 +341,8 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
     bool bCopy = false;
-    ScViewData* pViewData = ( pViewShell ? &pViewShell->GetViewData() : nullptr );
-    ScDocument* pDocument = ( pViewData ? pViewData->GetDocument() : nullptr );
+    ScViewData& rViewData = pViewShell->GetViewData();
+    ScDocument* pDocument = rViewData.GetDocument();
     SdrPageView* pPageView = ( pView ? pView->GetSdrPageView() : nullptr );
     SdrPage* pPage = ( pPageView ? pPageView->GetPage() : nullptr );
     ::std::vector< OUString > aExcludedChartNames;
@@ -428,7 +428,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     }
 
     // maybe consider OLE object
-    SfxInPlaceClient* pIPClient = pViewShell ? pViewShell->GetIPClient() : nullptr;
+    SfxInPlaceClient* pIPClient = pViewShell->GetIPClient();
 
     if (pIPClient)
     {
@@ -454,7 +454,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
                 SdrViewEvent aVEvt;
                 SdrHitKind eHit = pView->PickAnything( rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt );
-                if (eHit != SdrHitKind::NONE && aVEvt.pObj == pObj &&  pViewShell)
+                if (eHit != SdrHitKind::NONE && aVEvt.pObj == pObj)
                 {
                     sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
 
@@ -513,13 +513,13 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             pViewShell->GetViewData().GetDispatcher().
                 Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
 
-    if ( bCopy && pViewData && pDocument && pPage )
+    if ( bCopy && pDocument && pPage )
     {
-        ScDocShell* pDocShell = pViewData->GetDocShell();
+        ScDocShell* pDocShell = rViewData.GetDocShell();
         ScModelObj* pModelObj = ( pDocShell ? ScModelObj::getImplementation( pDocShell->GetModel() ) : nullptr );
         if ( pModelObj )
         {
-            SCTAB nTab = pViewData->GetTabNo();
+            SCTAB nTab = rViewData.GetTabNo();
             ScChartHelper::CreateProtectedChartListenersAndNotify( pDocument, pPage, pModelObj, nTab,
                 aProtectedChartRangesVector, aExcludedChartNames );
         }
