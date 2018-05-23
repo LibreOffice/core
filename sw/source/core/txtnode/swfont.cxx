@@ -1038,8 +1038,9 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
     SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
 
     Size aTextSize;
-    sal_Int32 nLn = ( rInf.GetLen() == COMPLETE_STRING ? rInf.GetText().getLength()
-                                                   : rInf.GetLen() );
+    TextFrameIndex const nLn = rInf.GetLen() == TextFrameIndex(COMPLETE_STRING)
+            ? TextFrameIndex(rInf.GetText().getLength())
+            : rInf.GetLen();
     rInf.SetLen( nLn );
     if( IsCapital() && nLn )
         aTextSize = GetCapitalSize( rInf );
@@ -1062,14 +1063,14 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
                 // If the length of the original string and the CaseMapped one
                 // are different, it is necessary to handle the given text part as
                 // a single snippet since its size may differ, too.
-                sal_Int32 nOldIdx(rInf.GetIdx());
-                sal_Int32 nOldLen(rInf.GetLen());
-                const OUString aSnippet(oldStr.copy(nOldIdx, nOldLen));
+                TextFrameIndex const nOldIdx(rInf.GetIdx());
+                TextFrameIndex const nOldLen(rInf.GetLen());
+                const OUString aSnippet(oldStr.copy(sal_Int32(nOldIdx), sal_Int32(nOldLen)));
                 const OUString aNewText(CalcCaseMap(aSnippet));
 
                 rInf.SetText( aNewText );
-                rInf.SetIdx( 0 );
-                rInf.SetLen( aNewText.getLength() );
+                rInf.SetIdx( TextFrameIndex(0) );
+                rInf.SetLen( TextFrameIndex(aNewText.getLength()) );
 
                 aTextSize = pLastFont->GetTextSize( rInf );
 
@@ -1097,26 +1098,28 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
         }
     }
 
-    if (1==rInf.GetLen() && CH_TXT_ATR_FIELDSTART==rInf.GetText()[rInf.GetIdx()])
+    if (TextFrameIndex(1) == rInf.GetLen()
+        && CH_TXT_ATR_FIELDSTART == rInf.GetText()[sal_Int32(rInf.GetIdx())])
     {
-        sal_Int32 nOldIdx(rInf.GetIdx());
-        sal_Int32 nOldLen(rInf.GetLen());
+        TextFrameIndex const nOldIdx(rInf.GetIdx());
+        TextFrameIndex const nOldLen(rInf.GetLen());
         const OUString aNewText(CH_TXT_ATR_SUBST_FIELDSTART);
         rInf.SetText( aNewText );
-        rInf.SetIdx( 0 );
-        rInf.SetLen( aNewText.getLength() );
+        rInf.SetIdx( TextFrameIndex(0) );
+        rInf.SetLen( TextFrameIndex(aNewText.getLength()) );
         aTextSize = pLastFont->GetTextSize( rInf );
         rInf.SetIdx( nOldIdx );
         rInf.SetLen( nOldLen );
     }
-    else if (1==rInf.GetLen() && CH_TXT_ATR_FIELDEND==rInf.GetText()[ rInf.GetIdx() ])
+    else if (TextFrameIndex(1) == rInf.GetLen()
+            && CH_TXT_ATR_FIELDEND == rInf.GetText()[sal_Int32(rInf.GetIdx())])
     {
-        sal_Int32 nOldIdx(rInf.GetIdx());
-        sal_Int32 nOldLen(rInf.GetLen());
+        TextFrameIndex const nOldIdx(rInf.GetIdx());
+        TextFrameIndex const nOldLen(rInf.GetLen());
         const OUString aNewText(CH_TXT_ATR_SUBST_FIELDEND);
         rInf.SetText( aNewText );
-        rInf.SetIdx( 0 );
-        rInf.SetLen( aNewText.getLength() );
+        rInf.SetIdx( TextFrameIndex(0) );
+        rInf.SetLen( TextFrameIndex(aNewText.getLength()) );
         aTextSize = pLastFont->GetTextSize( rInf );
         rInf.SetIdx( nOldIdx );
         rInf.SetLen( nOldLen );
@@ -1128,10 +1131,10 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
 void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
 {
     rInf.SetGreyWave( bGrey );
-    sal_Int32 nLn = rInf.GetText().getLength();
+    TextFrameIndex const nLn(rInf.GetText().getLength());
     if( !rInf.GetLen() || !nLn )
         return;
-    if( COMPLETE_STRING == rInf.GetLen() )
+    if (TextFrameIndex(COMPLETE_STRING) == rInf.GetLen())
         rInf.SetLen( nLn );
 
     FontLineStyle nOldUnder = LINESTYLE_NONE;
@@ -1176,14 +1179,14 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
                 // If the length of the original string and the CaseMapped one
                 // are different, it is necessary to handle the given text part as
                 // a single snippet since its size may differ, too.
-                sal_Int32 nOldIdx(rInf.GetIdx());
-                sal_Int32 nOldLen(rInf.GetLen());
-                const OUString aSnippet(oldStr.copy(nOldIdx, nOldLen));
+                TextFrameIndex const nOldIdx(rInf.GetIdx());
+                TextFrameIndex const nOldLen(rInf.GetLen());
+                const OUString aSnippet(oldStr.copy(sal_Int32(nOldIdx), sal_Int32(nOldLen)));
                 const OUString aNewText = CalcCaseMap(aSnippet);
 
                 rInf.SetText( aNewText );
-                rInf.SetIdx( 0 );
-                rInf.SetLen( aNewText.getLength() );
+                rInf.SetIdx( TextFrameIndex(0) );
+                rInf.SetLen( TextFrameIndex(aNewText.getLength()) );
 
                 pLastFont->DrawText( rInf );
 
@@ -1205,8 +1208,8 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
         Size aFontSize = GetTextSize_( rInf );
         const OUString oldStr = rInf.GetText();
 
-        sal_Int32 nOldIdx = rInf.GetIdx();
-        sal_Int32 nOldLen = rInf.GetLen();
+        TextFrameIndex const nOldIdx = rInf.GetIdx();
+        TextFrameIndex const nOldLen = rInf.GetLen();
         long nSpace = 0;
         if( rInf.GetSpace() )
         {
@@ -1236,8 +1239,8 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
 
         rInf.SetWidth( sal_uInt16(aFontSize.Width() + nSpace) );
         rInf.SetText( "  " );
-        rInf.SetIdx( 0 );
-        rInf.SetLen( 2 );
+        rInf.SetIdx( TextFrameIndex(0) );
+        rInf.SetLen( TextFrameIndex(2) );
         SetUnderline( nOldUnder );
         rInf.SetUnderFnt( nullptr );
 
@@ -1305,20 +1308,21 @@ void SwSubFont::DrawStretchText_( SwDrawTextInfo &rInf )
 
         if ( !IsCaseMap() )
             rInf.GetOut().DrawStretchText( aPos, rInf.GetWidth(),
-                            rInf.GetText(), rInf.GetIdx(), rInf.GetLen() );
+                rInf.GetText(), sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
         else
-            rInf.GetOut().DrawStretchText( aPos, rInf.GetWidth(), CalcCaseMap(
-                            rInf.GetText() ), rInf.GetIdx(), rInf.GetLen() );
+            rInf.GetOut().DrawStretchText( aPos, rInf.GetWidth(),
+                    CalcCaseMap(rInf.GetText()),
+                    sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
     }
 
     if( pUnderFnt && nOldUnder != LINESTYLE_NONE )
     {
         const OUString oldStr = rInf.GetText();
-        sal_Int32 nOldIdx = rInf.GetIdx();
-        sal_Int32 nOldLen = rInf.GetLen();
+        TextFrameIndex const nOldIdx = rInf.GetIdx();
+        TextFrameIndex const nOldLen = rInf.GetLen();
         rInf.SetText( "  " );
-        rInf.SetIdx( 0 );
-        rInf.SetLen( 2 );
+        rInf.SetIdx( TextFrameIndex(0) );
+        rInf.SetLen( TextFrameIndex(2) );
         SetUnderline( nOldUnder );
         rInf.SetUnderFnt( nullptr );
 
@@ -1343,10 +1347,11 @@ TextFrameIndex SwSubFont::GetCursorOfst_( SwDrawTextInfo& rInf )
 
     SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
 
-    sal_Int32 nLn = rInf.GetLen() == COMPLETE_STRING ? rInf.GetText().getLength()
-                                                 : rInf.GetLen();
+    TextFrameIndex const nLn = rInf.GetLen() == TextFrameIndex(COMPLETE_STRING)
+            ? TextFrameIndex(rInf.GetText().getLength())
+            : rInf.GetLen();
     rInf.SetLen( nLn );
-    sal_Int32 nCursor = 0;
+    TextFrameIndex nCursor(0);
     if( IsCapital() && nLn )
         nCursor = GetCapitalCursorOfst( rInf );
     else
