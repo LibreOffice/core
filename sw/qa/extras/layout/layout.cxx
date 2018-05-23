@@ -22,12 +22,14 @@ public:
     void testTdf116925();
     void testTdf117028();
     void testUserFieldTypeLanguage();
+    void testTdf106390();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
     CPPUNIT_TEST(testTdf116925);
     CPPUNIT_TEST(testTdf117028);
     CPPUNIT_TEST(testUserFieldTypeLanguage);
+    CPPUNIT_TEST(testTdf106390);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -130,6 +132,24 @@ void SwLayoutWriter::testUserFieldTypeLanguage()
     // This was "123,456.00", via a buggy 1234.56 -> 1234,56 -> 123456 ->
     // 123,456.00 transform chain.
     assertXPath(pXmlDoc, "/root/page/body/txt/Special[@nType='POR_FLD']", "rText", "1,234.56");
+}
+
+void SwLayoutWriter::testTdf106390()
+{
+    SwDoc* pDoc = createDoc("tdf106390.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumper.dumpAndParse(*xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    sal_Int32 nBottom = getXPath(pXmlDoc, "//sectrectclipregion", "bottom").toInt32();
+
+    // No end point of line segments shall go below the bottom of the clipping area.
+    const OString sXPath = "//polyline/point[@y>" + OString::number(nBottom) + "]";
+
+    assertXPath(pXmlDoc, sXPath, 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
