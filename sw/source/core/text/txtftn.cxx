@@ -1251,7 +1251,7 @@ SwFootnoteSave::SwFootnoteSave( const SwTextSizeInfo &rInf,
         {
             // examine text and set script
             OUString aTmpStr( rFootnote.GetViewNumStr( *pDoc ) );
-            pFnt->SetActual( SwScriptInfo::WhichFont( 0, &aTmpStr, nullptr ) );
+            pFnt->SetActual( SwScriptInfo::WhichFont(0, aTmpStr) );
         }
 
         const SwEndNoteInfo* pInfo;

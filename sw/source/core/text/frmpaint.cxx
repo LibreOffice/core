@@ -190,7 +190,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
                                 : rLineInf.GetDivider() );
 
     // Get script type of line numbering:
-    pFnt->SetActual( SwScriptInfo::WhichFont( 0, &aTmp, nullptr ) );
+    pFnt->SetActual( SwScriptInfo::WhichFont(0, aTmp) );
 
     SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), aTmp, 0, aTmp.getLength() );
     aDrawInf.SetSpace( 0 );
