@@ -529,7 +529,7 @@ void SwTextPortion::Paint( const SwTextPaintInfo &rInf ) const
         assert(false); // this is some debugging only code
         rInf.DrawBackBrush( *this );
         const OUString aText(CH_TXT_ATR_SUBST_FIELDEND);
-        rInf.DrawText( aText, *this, 0, aText.getLength() );
+        rInf.DrawText(aText, *this, TextFrameIndex(0), TextFrameIndex(aText.getLength()));
     }
     else if (rInf.OnWin() && TextFrameIndex(1) == rInf.GetLen()
         && CH_TXT_ATR_FIELDSTART == rInf.GetText()[sal_Int32(rInf.GetIdx())])
@@ -537,7 +537,7 @@ void SwTextPortion::Paint( const SwTextPaintInfo &rInf ) const
         assert(false); // this is some debugging only code
         rInf.DrawBackBrush( *this );
         const OUString aText(CH_TXT_ATR_SUBST_FIELDSTART);
-        rInf.DrawText( aText, *this, 0, aText.getLength() );
+        rInf.DrawText(aText, *this, TextFrameIndex(0), TextFrameIndex(aText.getLength()));
     }
     else if( GetLen() )
     {
@@ -757,7 +757,7 @@ void SwHolePortion::Paint( const SwTextPaintInfo &rInf ) const
     }
 
     const OUString aText( ' ' );
-    rInf.DrawText( aText, *this, 0, 1 );
+    rInf.DrawText(aText, *this, TextFrameIndex(0), TextFrameIndex(1));
 
     delete pFontSave;
     delete pHoleFont;
