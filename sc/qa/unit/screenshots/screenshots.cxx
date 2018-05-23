@@ -217,7 +217,7 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
 
         case 9: // "modules/scalc/ui/tabcolordialog.ui"
         {
-            pReturnDialog = mpFact->CreateScTabBgColorDlg(mpViewShell->GetDialogParent(),
+            pReturnDialog = mpFact->CreateScTabBgColorDlg(mpViewShell->GetFrameWeld(),
                                 ScResId(SCSTR_SET_TAB_BG_COLOR),
                                 ScResId(SCSTR_NO_TAB_BG_COLOR), Color(0xff00ff) );
             break;
