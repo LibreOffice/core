@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_3e55b41c",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1053,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-23T09:57:39Z",
+      "side": 1,
+      "message": "Is it cleaner to not throw here, but just check if pEntry is not nullptr?",
+      "revId": "3a337f35d9a75d136b0b5c167cf573d075dc1549",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

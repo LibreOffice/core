@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a30ddce_5e326811",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-23T09:57:39Z",
+      "side": 0,
+      "message": "So that you can just move down the pEntry is nullptr -\u003e throw code down to here. Which means at the end your patch does not touch that at all, you just add code below it.",
+      "revId": "b62a70c9d268c28175c4af9d3a13a4972b12e079",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_8083a855",
         "filename": "sw/source/core/unocore/unotext.cxx",
         "patchSetId": 1
@@ -25,6 +42,23 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_7e356cf5",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2039,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-23T09:57:39Z",
+      "side": 0,
+      "message": "I like how you can avoid exceptions for expected code path here, nice work!",
+      "revId": "b62a70c9d268c28175c4af9d3a13a4972b12e079",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_e05c64ef",
         "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
         "patchSetId": 1
@@ -42,6 +76,23 @@
         "endLine": 460,
         "endChar": 85
       },
+      "revId": "b62a70c9d268c28175c4af9d3a13a4972b12e079",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_9e3ce0e3",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-05-23T09:57:39Z",
+      "side": 0,
+      "message": "Similarly here, glad to see you can now get rid of these ugly workarounds.",
       "revId": "b62a70c9d268c28175c4af9d3a13a4972b12e079",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
