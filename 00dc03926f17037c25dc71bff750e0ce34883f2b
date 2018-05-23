@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_f9c0967e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-23T12:17:55Z",
+      "side": 1,
+      "message": "same comment as for the other patch - would be good to have a placeholder bugzilla task here (can be the same), that links all the smartart improvement / testing patches",
+      "revId": "00dc03926f17037c25dc71bff750e0ce34883f2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
