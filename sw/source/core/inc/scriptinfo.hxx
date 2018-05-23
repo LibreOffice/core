@@ -367,7 +367,8 @@ public:
     static SwScriptInfo* GetScriptInfo( const SwTextNode& rNode,
                                         bool bAllowInvalid = false );
 
-    static SwFontScript WhichFont(sal_Int32 nIdx, const OUString* pText, const SwScriptInfo* pSI);
+    SwFontScript WhichFont(TextFrameIndex nIdx) const;
+    static SwFontScript WhichFont(sal_Int32 nIdx, OUString const & rText);
 };
 
 #endif
