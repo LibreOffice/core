@@ -52,14 +52,14 @@ using namespace ::com::sun::star::i18n::ScriptType;
 static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
                                const SwLinePortion& rPor )
 {
-    sal_Int32 nPos, nEnd;
+    TextFrameIndex nPos, nEnd;
     const SwScriptInfo* pSI = nullptr;
 
     if ( pStr )
     {
         // passing a string means we are inside a field
-        nPos = 0;
-        nEnd = pStr->getLength();
+        nPos = TextFrameIndex(0);
+        nEnd = TextFrameIndex(pStr->getLength());
     }
     else
     {
@@ -78,7 +78,8 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
     if ( pSI )
         nScript = pSI->ScriptType( nPos );
     else
-        nScript = static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType( *pStr, nPos ));
+        nScript = static_cast<sal_uInt8>(
+            g_pBreakIt->GetBreakIter()->getScriptType(*pStr, sal_Int32(nPos)));
 
     // Note: rInf.GetIdx() can differ from nPos,
     // e.g., when rPor is a field portion. nPos referes to the string passed
@@ -152,18 +153,18 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
     // Note: We do not want to add space to an isolated latin blank in front
     // of some complex characters in RTL environment
     const bool bDoNotAddSpace =
-            LATIN == nScript && ( nEnd == nPos + 1 ) && pSI &&
+            LATIN == nScript && (nEnd == nPos + TextFrameIndex(1)) && pSI &&
             ( i18n::ScriptType::COMPLEX ==
-              pSI->ScriptType( nPos + 1 ) ) &&
+              pSI->ScriptType(nPos + TextFrameIndex(1))) &&
             rInf.GetTextFrame() && rInf.GetTextFrame()->IsRightToLeft();
 
     if ( bDoNotAddSpace )
         return nCnt;
 
-    sal_Int32 nTextEnd = std::min(nEnd, pStr->getLength());
+    TextFrameIndex nTextEnd = std::min(nEnd, TextFrameIndex(pStr->getLength()));
     for ( ; nPos < nTextEnd; ++nPos )
     {
-        if( CH_BLANK == (*pStr)[ nPos ] )
+        if (CH_BLANK == (*pStr)[ sal_Int32(nPos) ])
             ++nCnt;
     }
 
@@ -173,7 +174,7 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
     // nPos referes to the original string, even if a field string has
     // been passed to this function
     nPos = rInf.GetIdx() + rPor.GetLen();
-    if ( nPos < rInf.GetText().getLength() )
+    if (nPos < TextFrameIndex(rInf.GetText().getLength()))
     {
         sal_uInt8 nNextScript = 0;
         const SwLinePortion* pPor = rPor.GetPortion();
@@ -196,7 +197,8 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
             nNextScript = static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType( aStr, 0 ));
         }
         else
-            nNextScript = static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType( rInf.GetText(), nPos ));
+            nNextScript = static_cast<sal_uInt8>(
+                g_pBreakIt->GetBreakIter()->getScriptType(rInf.GetText(), sal_Int32(nPos)));
 
         if( ASIAN == nNextScript )
         {
@@ -574,7 +576,7 @@ TextFrameIndex SwTextPortion::GetSpaceCnt(const SwTextSizeInfo &rInf,
                                           TextFrameIndex& rCharCnt) const
 {
     sal_Int32 nCnt = 0;
-    sal_Int32 nPos = 0;
+    TextFrameIndex nPos(0);
 
     if ( rInf.SnapToGrid() )
     {
@@ -597,7 +599,7 @@ TextFrameIndex SwTextPortion::GetSpaceCnt(const SwTextSizeInfo &rInf,
             const_cast<SwTextSizeInfo &>(rInf).SetOnWin( bOldOnWin );
 
             nCnt = nCnt + lcl_AddSpace( rInf, &aStr, *this );
-            nPos = aStr.getLength();
+            nPos = TextFrameIndex(aStr.getLength());
         }
     }
     else if( !IsDropPortion() )
