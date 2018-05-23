@@ -563,6 +563,17 @@ OUString ButtonUIObject::get_name() const
     return OUString("ButtonUIObject");
 }
 
+OUString ButtonUIObject::get_action(VclEventId nEvent) const
+{
+    if (nEvent == VclEventId::ButtonClick)
+    {
+        return this->get_type() + " Action:CLICK Id:" + mxButton->get_id() + " Parent:" +
+            get_top_parent(mxButton)->get_id();
+    }
+    else
+        return WindowUIObject::get_action(nEvent);
+}
+
 std::unique_ptr<UIObject> ButtonUIObject::create(vcl::Window* pWindow)
 {
     Button* pButton = dynamic_cast<Button*>(pWindow);
@@ -773,6 +784,17 @@ OUString CheckBoxUIObject::get_name() const
     return OUString("CheckBoxUIObject");
 }
 
+OUString CheckBoxUIObject::get_action(VclEventId nEvent) const
+{
+    if (nEvent == VclEventId::CheckboxToggle)
+    {
+        return this->get_type() + " Action:CLICK Id:" + mxCheckBox->get_id() + " Parent:" +
+            get_top_parent(mxCheckBox)->get_id();
+    }
+    else
+        return WindowUIObject::get_action(nEvent);
+}
+
 std::unique_ptr<UIObject> CheckBoxUIObject::create(vcl::Window* pWindow)
 {
     CheckBox* pCheckBox = dynamic_cast<CheckBox*>(pWindow);
@@ -810,6 +832,17 @@ StringMap RadioButtonUIObject::get_state()
 OUString RadioButtonUIObject::get_name() const
 {
     return OUString("RadioButtonUIObject");
+}
+
+OUString RadioButtonUIObject::get_action(VclEventId nEvent) const
+{
+    if (nEvent == VclEventId::RadiobuttonToggle)
+    {
+        return this->get_type() + " Action:CLICK Id:" + mxRadioButton->get_id() + " Parent:" +
+            get_top_parent(mxRadioButton)->get_id();
+    }
+    else
+        return WindowUIObject::get_action(nEvent);
 }
 
 std::unique_ptr<UIObject> RadioButtonUIObject::create(vcl::Window* pWindow)
