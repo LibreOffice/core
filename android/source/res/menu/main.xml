@@ -45,6 +45,24 @@
             android:title="@string/action_add_worksheet"
             android:orderInCategory="100"
             android:enabled="false" />
+
+        <item android:id="@+id/action_rename_worksheet"
+            android:title="@string/action_rename_worksheet"
+            android:orderInCategory="100"
+            android:enabled="false"
+            android:visible="true" />
+
+        <item android:id="@+id/action_delete_worksheet"
+            android:title="@string/action_delete_worksheet"
+            android:orderInCategory="100"
+            android:enabled="false"
+            android:visible="true"/>
+
+        <item android:id="@+id/action_delete_slide"
+            android:title="@string/action_delete_slide"
+            android:orderInCategory="100"
+            android:enabled="false"
+            android:visible="true"/>
     </group>
 
     <group android:id="@+id/group_edit_clipboard"

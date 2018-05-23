@@ -89,6 +89,14 @@ public class LOEvent implements Comparable<LOEvent> {
         mNotify = notify;
     }
 
+    public LOEvent(int type, String someString, String value, boolean notify) {
+        mType = type;
+        mTypeString = "String";
+        mString = someString;
+        mValue = value;
+        mNotify = notify;
+    }
+
     public LOEvent(int type, String key, String value) {
         mType = type;
         mTypeString = "key / value";

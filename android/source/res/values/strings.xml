@@ -178,6 +178,14 @@
     <string name="action_paste">Paste</string>
     <string name="action_cut">Cut</string>
     <string name="action_back">Back</string>
+
     <string name="action_text_copied">Text copied to the clipboard</string>
+    <string name="action_rename_worksheet">Rename worksheet</string>
+    <string name="action_delete_worksheet">Delete worksheet</string>
+    <string name="action_delete_slide">Delete slide</string>
+    <string name="name_already_used">Given name is already being used.</string>
+    <string name="part_name_changed">Part name has been changed.</string>
+    <string name="part_deleted">Part has been deleted.</string>
+
 
 </resources>
