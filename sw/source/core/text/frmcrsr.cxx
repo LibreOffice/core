@@ -1075,18 +1075,19 @@ void SwTextFrame::PrepareVisualMove(TextFrameIndex & nPos, sal_uInt8& nCursorLev
 
     // Bidi functions from icu 2.0
 
-    const sal_Unicode* pLineString = GetTextNode()->GetText().getStr();
+    const sal_Unicode* pLineString = GetText().getStr();
 
     UErrorCode nError = U_ZERO_ERROR;
-    UBiDi* pBidi = ubidi_openSized( nLen, 0, &nError );
-    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), nLen, nDefaultDir, nullptr, &nError );
+    UBiDi* pBidi = ubidi_openSized( sal_Int32(nLen), 0, &nError );
+    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString),
+                    sal_Int32(nLen), nDefaultDir, nullptr, &nError );
 
-    sal_Int32 nTmpPos = 0;
+    TextFrameIndex nTmpPos(0);
     bool bOutOfBounds = false;
 
     if ( nPos < nStt + nLen )
     {
-        nTmpPos = ubidi_getVisualIndex( pBidi, nPos, &nError );
+        nTmpPos = TextFrameIndex(ubidi_getVisualIndex( pBidi, sal_Int32(nPos), &nError ));
 
         // visual indices are always LTR aligned
         if ( bVisualRight )
@@ -1117,7 +1118,7 @@ void SwTextFrame::PrepareVisualMove(TextFrameIndex & nPos, sal_uInt8& nCursorLev
 
     if ( ! bOutOfBounds )
     {
-        nPos = ubidi_getLogicalIndex( pBidi, nTmpPos, &nError );
+        nPos = TextFrameIndex(ubidi_getLogicalIndex( pBidi, sal_Int32(nTmpPos), &nError ));
 
         if ( bForward )
         {
