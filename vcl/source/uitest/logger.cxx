@@ -157,7 +157,10 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
         aKeyCode = "{\"TEXT\": \"" + OUStringLiteral1(nChar) + "\"}";
     }
 
-    OUString aContent = "Action on element: " + rID + " with action: TYPE and content: " + aKeyCode;
+    std::unique_ptr<UIObject> pUIObject = xUIElement->GetUITestFactory()(xUIElement.get());
+
+    OUString aContent = pUIObject->get_type() + " Action:TYPE Id:" +
+            rID + " Parent: UNKNOWN "+ aKeyCode;
     maStream.WriteLine(OUStringToOString(aContent, RTL_TEXTENCODING_UTF8));
 }
 

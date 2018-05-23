@@ -603,7 +603,7 @@ void collectUIInformation(const util::URL& rURL)
     if (!pFile)
         return;
 
-    UITestLogger::getInstance().logCommand(rURL.Complete);
+    UITestLogger::getInstance().logCommand("CommandSent Name:" + rURL.Complete);
 }
 
 }
