@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_b9f7fef3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-23T12:15:46Z",
+      "side": 1,
+      "message": "Can you file a placeholder bugzilla task for this work? Makes it easier then to group commits / comment on changes later",
+      "revId": "bcb4936ffec15a8e156009ee94c63f54cb8e6f27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_f9d97684",
+        "filename": "oox/source/drawingml/diagram/diagramlayoutatoms.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-23T12:15:46Z",
+      "side": 1,
+      "message": "magic numbers w/o some explanation are not ideal ;)",
+      "revId": "bcb4936ffec15a8e156009ee94c63f54cb8e6f27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_19e9ea14",
+        "filename": "oox/source/drawingml/diagram/diagramlayoutatoms.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-23T12:15:46Z",
+      "side": 1,
+      "message": "if this is a loop counter - not ideally placed here. perhaps stick it into the for-statement even?",
+      "revId": "bcb4936ffec15a8e156009ee94c63f54cb8e6f27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_59d1a256",
+        "filename": "oox/source/drawingml/diagram/diagramlayoutatoms.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-23T12:15:46Z",
+      "side": 1,
+      "message": "more magic numbers :)",
+      "revId": "bcb4936ffec15a8e156009ee94c63f54cb8e6f27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_99cb1aa5",
+        "filename": "oox/source/drawingml/diagram/diagramlayoutatoms.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-05-23T12:15:46Z",
+      "side": 1,
+      "message": "extraneous white space change?",
+      "revId": "bcb4936ffec15a8e156009ee94c63f54cb8e6f27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
