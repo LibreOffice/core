@@ -1034,11 +1034,9 @@ ScRangeList::ScRangeList() : mnMaxRowUsed(-1) {}
 
 ScRangeList::ScRangeList( const ScRangeList& rList ) :
     SvRefBase(),
-    mnMaxRowUsed(-1)
+    maRanges(rList.maRanges),
+    mnMaxRowUsed(rList.mnMaxRowUsed)
 {
-    maRanges.reserve(rList.maRanges.size());
-    for_each(rList.maRanges.begin(), rList.maRanges.end(), AppendToList(maRanges));
-    mnMaxRowUsed = rList.mnMaxRowUsed;
 }
 
 ScRangeList::ScRangeList( const ScRangeList&& rList ) :
@@ -1098,6 +1096,7 @@ void ScRangeList::Remove(size_t nPos)
 void ScRangeList::RemoveAll()
 {
     maRanges.clear();
+    mnMaxRowUsed = -1;
 }
 
 ScRange ScRangeList::Combine() const
