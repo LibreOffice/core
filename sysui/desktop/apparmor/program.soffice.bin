@@ -191,6 +191,7 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
    /usr/bin/gpgsm rm,
 
     owner @{HOME}/.gnupg/* r,
+    owner @{HOME}/.gnupg/random_seed rk,
   }
 
   # probably should become a subprofile like gpg above, but then it doesn't
