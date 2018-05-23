@@ -730,10 +730,10 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
 
     // SCRIPT AND SCRIPT RELATED INFORMATION
 
-    sal_Int32 nChg = m_nInvalidityPos;
+    TextFrameIndex nChg = m_nInvalidityPos;
 
     // COMPLETE_STRING means the data structure is up to date
-    m_nInvalidityPos = COMPLETE_STRING;
+    m_nInvalidityPos = TextFrameIndex(COMPLETE_STRING);
 
     // this is the default direction
     m_nDefaultDir = static_cast<sal_uInt8>(bRTL ? UBIDI_RTL : UBIDI_LTR);
@@ -799,18 +799,18 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
     if ( nChg )
         --nChg;
 
-    const sal_Int32 nGrpStart = nCnt ? GetScriptChg( nCnt - 1 ) : 0;
+    const TextFrameIndex nGrpStart = nCnt ? GetScriptChg(nCnt - 1) : TextFrameIndex(0);
 
     // we go back in our group until we reach the first character of
     // type nScript
     while ( nChg > nGrpStart &&
-            nScript != g_pBreakIt->GetBreakIter()->getScriptType( rText, nChg ) )
+            nScript != g_pBreakIt->GetBreakIter()->getScriptType(rText, sal_Int32(nChg)))
         --nChg;
 
     // If we are at the start of a group, we do not trust nScript,
     // we better get nScript from the breakiterator:
     if ( nChg == nGrpStart )
-        nScript = static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType( rText, nChg ));
+        nScript = static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType(rText, sal_Int32(nChg)));
 
     // INVALID DATA FROM THE SCRIPT INFO ARRAYS HAS TO BE DELETED:
 
@@ -818,7 +818,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
     m_ScriptChanges.erase(m_ScriptChanges.begin() + nCnt, m_ScriptChanges.end());
 
     // get the start of the last compression group
-    sal_Int32 nLastCompression = nChg;
+    TextFrameIndex nLastCompression = nChg;
     if( nCntComp )
     {
         --nCntComp;
@@ -835,7 +835,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
             m_CompressionChanges.end());
 
     // get the start of the last kashida group
-    sal_Int32 nLastKashida = nChg;
+    TextFrameIndex nLastKashida = nChg;
     if( nCntKash && i18n::ScriptType::COMPLEX == nScript )
     {
         --nCntKash;
@@ -848,17 +848,17 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
     // TAKE CARE OF WEAK CHARACTERS: WE MUST FIND AN APPROPRIATE
     // SCRIPT FOR WEAK CHARACTERS AT THE BEGINNING OF A PARAGRAPH
 
-    if( WEAK == g_pBreakIt->GetBreakIter()->getScriptType( rText, nChg ) )
+    if (WEAK == g_pBreakIt->GetBreakIter()->getScriptType(rText, sal_Int32(nChg)))
     {
         // If the beginning of the current group is weak, this means that
         // all of the characters in this group are weak. We have to assign
         // the scripts to these characters depending on the fonts which are
         // set for these characters to display them.
-        sal_Int32 nEnd =
-                g_pBreakIt->GetBreakIter()->endOfScript( rText, nChg, WEAK );
+        TextFrameIndex nEnd = TextFrameIndex(
+            g_pBreakIt->GetBreakIter()->endOfScript(rText, sal_Int32(nChg), WEAK));
 
-        if (nEnd > rText.getLength() || nEnd < 0)
-            nEnd = rText.getLength();
+        if (nEnd > TextFrameIndex(rText.getLength()) || nEnd < TextFrameIndex(0))
+            nEnd = TextFrameIndex(rText.getLength());
 
         nScript = SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() );
 
@@ -869,9 +869,9 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
         nChg = nEnd;
 
         // Get next script type or set to weak in order to exit
-        sal_uInt8 nNextScript = ( nEnd < rText.getLength() ) ?
-           static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType( rText, nEnd )) :
-           sal_uInt8(WEAK);
+        sal_uInt8 nNextScript = (nEnd < TextFrameIndex(rText.getLength()))
+            ? static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType(rText, sal_Int32(nEnd)))
+            : sal_uInt8(WEAK);
 
         if ( nScript != nNextScript )
         {
@@ -883,45 +883,53 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
 
     // UPDATE THE SCRIPT INFO ARRAYS:
 
-    while (nChg < rText.getLength() || (m_ScriptChanges.empty() && rText.isEmpty()))
+    while (nChg < TextFrameIndex(rText.getLength())
+           || (m_ScriptChanges.empty() && rText.isEmpty()))
     {
         SAL_WARN_IF( i18n::ScriptType::WEAK == nScript,
                 "sw.core", "Inserting WEAK into SwScriptInfo structure" );
 
-        sal_Int32 nSearchStt = nChg;
-        nChg = g_pBreakIt->GetBreakIter()->endOfScript( rText, nSearchStt, nScript );
+        TextFrameIndex nSearchStt = nChg;
+        nChg = TextFrameIndex(g_pBreakIt->GetBreakIter()->endOfScript(
+                    rText, sal_Int32(nSearchStt), nScript));
 
-        if (nChg > rText.getLength() || nChg < 0)
-            nChg = rText.getLength();
+        if (nChg > TextFrameIndex(rText.getLength()) || nChg < TextFrameIndex(0))
+            nChg = TextFrameIndex(rText.getLength());
 
         // #i28203#
         // for 'complex' portions, we make sure that a portion does not contain more
         // than one script:
         if( i18n::ScriptType::COMPLEX == nScript )
         {
-            const short nScriptType = ScriptTypeDetector::getCTLScriptType( rText, nSearchStt );
-            sal_Int32 nNextCTLScriptStart = nSearchStt;
+            const short nScriptType = ScriptTypeDetector::getCTLScriptType(
+                    rText, sal_Int32(nSearchStt) );
+            TextFrameIndex nNextCTLScriptStart = nSearchStt;
             short nCurrentScriptType = nScriptType;
             while( css::i18n::CTLScriptType::CTL_UNKNOWN == nCurrentScriptType || nScriptType == nCurrentScriptType )
             {
-                nNextCTLScriptStart = ScriptTypeDetector::endOfCTLScriptType( rText, nNextCTLScriptStart );
-                if( nNextCTLScriptStart >= rText.getLength() || nNextCTLScriptStart >= nChg )
+                nNextCTLScriptStart = TextFrameIndex(
+                        ScriptTypeDetector::endOfCTLScriptType(
+                            rText, sal_Int32(nNextCTLScriptStart)));
+                if (nNextCTLScriptStart >= TextFrameIndex(rText.getLength())
+                    || nNextCTLScriptStart >= nChg)
                     break;
-                nCurrentScriptType = ScriptTypeDetector::getCTLScriptType( rText, nNextCTLScriptStart );
+                nCurrentScriptType = ScriptTypeDetector::getCTLScriptType(
+                                        rText, sal_Int32(nNextCTLScriptStart));
             }
             nChg = std::min( nChg, nNextCTLScriptStart );
         }
 
         // special case for dotted circle since it can be used with complex
         // before a mark, so we want it associated with the mark's script
-        if (nChg < rText.getLength() && nChg > 0 && (i18n::ScriptType::WEAK ==
-            g_pBreakIt->GetBreakIter()->getScriptType(rText,nChg - 1)))
+        if (nChg < TextFrameIndex(rText.getLength()) && nChg > TextFrameIndex(0)
+            && (i18n::ScriptType::WEAK ==
+                g_pBreakIt->GetBreakIter()->getScriptType(rText, sal_Int32(nChg) - 1)))
         {
-            int8_t nType = u_charType(rText[nChg] );
+            int8_t nType = u_charType(rText[sal_Int32(nChg)]);
             if (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK ||
                 nType == U_COMBINING_SPACING_MARK )
             {
-                m_ScriptChanges.emplace_back(nChg-1, nScript);
+                m_ScriptChanges.emplace_back(nChg-TextFrameIndex(1), nScript);
             }
             else
             {
@@ -941,11 +949,11 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
         {
             CompType ePrevState = NONE;
             CompType eState = NONE;
-            sal_Int32 nPrevChg = nLastCompression;
+            TextFrameIndex nPrevChg = nLastCompression;
 
             while ( nLastCompression < nChg )
             {
-                sal_Unicode cChar = rText[ nLastCompression ];
+                sal_Unicode cChar = rText[ sal_Int32(nLastCompression) ];
 
                 // examine current character
                 switch ( cChar )
@@ -1168,8 +1176,8 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
             } // end of kashida search
         }
 
-        if ( nChg < rText.getLength() )
-            nScript = static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType( rText, nChg ));
+        if (nChg < TextFrameIndex(rText.getLength()))
+            nScript = static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType(rText, sal_Int32(nChg)));
 
         nLastCompression = nChg;
         nLastKashida = nChg;
@@ -1177,11 +1185,11 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
 
 #if OSL_DEBUG_LEVEL > 0
     // check kashida data
-    long nTmpKashidaPos = -1;
+    TextFrameIndex nTmpKashidaPos(-1);
     bool bWrongKash = false;
     for (size_t i = 0; i < m_Kashida.size(); ++i)
     {
-        long nCurrKashidaPos = GetKashida( i );
+        TextFrameIndex nCurrKashidaPos = GetKashida( i );
         if ( nCurrKashidaPos <= nTmpKashidaPos )
         {
             bWrongKash = true;
@@ -1207,12 +1215,13 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
         {
             const sal_uInt8 nCurrDirType = GetDirType( nDirIdx );
                 // nStart is start of RTL run:
-                const sal_Int32 nStart = nDirIdx > 0 ? GetDirChg( nDirIdx - 1 ) : 0;
+            const TextFrameIndex nStart = nDirIdx > 0 ? GetDirChg(nDirIdx - 1) : TextFrameIndex(0);
                 // nEnd is end of RTL run:
-                const sal_Int32 nEnd = GetDirChg( nDirIdx );
+            const TextFrameIndex nEnd = GetDirChg( nDirIdx );
 
             if ( nCurrDirType % 2 == UBIDI_RTL  || // text in RTL run
-                ( nCurrDirType > UBIDI_LTR && !lcl_HasStrongLTR( rText, nStart, nEnd ) ) ) // non-strong text in embedded LTR run
+                (nCurrDirType > UBIDI_LTR && // non-strong text in embedded LTR run
+                 !lcl_HasStrongLTR(rText, sal_Int32(nStart), sal_Int32(nEnd))))
             {
                 // nScriptIdx points into the ScriptArrays:
                 size_t nScriptIdx = 0;
@@ -1224,7 +1233,9 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                 while ( GetScriptChg( nScriptIdx ) <= nStart )
                     ++nScriptIdx;
 
-                const sal_Int32 nStartPosOfGroup = nScriptIdx ? GetScriptChg( nScriptIdx - 1 ) : 0;
+                const TextFrameIndex nStartPosOfGroup = nScriptIdx
+                        ? GetScriptChg(nScriptIdx - 1)
+                        : TextFrameIndex(0);
                 const sal_uInt8 nScriptTypeOfGroup = GetScriptType( nScriptIdx );
 
                 SAL_WARN_IF( nStartPosOfGroup > nStart || GetScriptChg( nScriptIdx ) <= nStart,
@@ -1233,7 +1244,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                 // Check if we have to insert a new script change at
                 // position nStart. If nStartPosOfGroup < nStart,
                 // we have to insert a new script change:
-                if ( nStart > 0 && nStartPosOfGroup < nStart )
+                if (nStart > TextFrameIndex(0) && nStartPosOfGroup < nStart)
                 {
                     m_ScriptChanges.insert(m_ScriptChanges.begin() + nScriptIdx,
                                           ScriptChangeInfo(nStart, nScriptTypeOfGroup) );
@@ -1291,7 +1302,7 @@ void SwScriptInfo::UpdateBidiInfo( const OUString& rText )
     for ( int nIdx = 0; nIdx < nCount; ++nIdx )
     {
         ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
-        m_DirectionChanges.emplace_back(nEnd, nCurrDir);
+        m_DirectionChanges.emplace_back(TextFrameIndex(nEnd), nCurrDir);
         nStart = nEnd;
     }
 
@@ -1314,7 +1325,7 @@ TextFrameIndex SwScriptInfo::NextScriptChg(const TextFrameIndex nPos)  const
             return GetScriptChg( nX );
     }
 
-    return COMPLETE_STRING;
+    return TextFrameIndex(COMPLETE_STRING);
 }
 
 // returns the script of the character at the input position
@@ -1343,7 +1354,7 @@ TextFrameIndex SwScriptInfo::NextDirChg(const TextFrameIndex nPos,
             return GetDirChg( nX );
     }
 
-    return COMPLETE_STRING;
+    return TextFrameIndex(COMPLETE_STRING);
 }
 
 sal_uInt8 SwScriptInfo::DirType(const TextFrameIndex nPos) const
@@ -1503,14 +1514,14 @@ bool SwScriptInfo::GetBoundsOfHiddenRange(TextFrameIndex nPos,
         TextFrameIndex & rnStartPos, TextFrameIndex & rnEndPos,
         PositionList *const pList) const
 {
-    rnStartPos = COMPLETE_STRING;
-    rnEndPos = 0;
+    rnStartPos = TextFrameIndex(COMPLETE_STRING);
+    rnEndPos = TextFrameIndex(0);
 
     const size_t nEnd = CountHiddenChg();
     for( size_t nX = 0; nX < nEnd; ++nX )
     {
-        const sal_Int32 nHiddenStart = GetHiddenChg( nX++ );
-        const sal_Int32 nHiddenEnd = GetHiddenChg( nX );
+        const TextFrameIndex nHiddenStart = GetHiddenChg( nX++ );
+        const TextFrameIndex nHiddenEnd = GetHiddenChg( nX );
 
         if ( nHiddenStart > nPos )
             break;
@@ -1549,7 +1560,7 @@ SwScriptInfo::CompType SwScriptInfo::DbgCompType(const TextFrameIndex nPos) cons
     const size_t nEnd = CountCompChg();
     for( size_t nX = 0; nX < nEnd; ++nX )
     {
-        const sal_Int32 nChg = GetCompStart( nX );
+        const TextFrameIndex nChg = GetCompStart(nX);
 
         if ( nPos < nChg )
             return NONE;
@@ -1566,12 +1577,12 @@ SwScriptInfo::CompType SwScriptInfo::DbgCompType(const TextFrameIndex nPos) cons
 size_t SwScriptInfo::HasKana(TextFrameIndex const nStart, TextFrameIndex const nLen) const
 {
     const size_t nCnt = CountCompChg();
-    sal_Int32 nEnd = nStart + nLen;
+    TextFrameIndex nEnd = nStart + nLen;
 
     for( size_t nX = 0; nX < nCnt; ++nX )
     {
-        sal_Int32 nKanaStart  = GetCompStart( nX );
-        sal_Int32 nKanaEnd = nKanaStart + GetCompLen( nX );
+        TextFrameIndex nKanaStart  = GetCompStart(nX);
+        TextFrameIndex nKanaEnd = nKanaStart + GetCompLen(nX);
 
         if ( nKanaStart >= nEnd )
             return SAL_MAX_SIZE;
@@ -1602,14 +1613,14 @@ long SwScriptInfo::Compress(long* pKernArray, TextFrameIndex nIdx, TextFrameInde
     if ( SAL_MAX_SIZE == nCompIdx )
         return 0;
 
-    sal_Int32 nChg = GetCompStart( nCompIdx );
-    sal_Int32 nCompLen = GetCompLen( nCompIdx );
+    TextFrameIndex nChg = GetCompStart( nCompIdx );
+    TextFrameIndex nCompLen = GetCompLen( nCompIdx );
     sal_Int32 nI = 0;
     nLen += nIdx;
 
     if( nChg > nIdx )
     {
-        nI = nChg - nIdx;
+        nI = sal_Int32(nChg - nIdx);
         nIdx = nChg;
     }
     else if( nIdx < nChg + nCompLen )
@@ -1676,7 +1687,7 @@ long SwScriptInfo::Compress(long* pKernArray, TextFrameIndex nIdx, TextFrameInde
         if( nIdx >= nLen )
             break;
 
-        sal_Int32 nTmpChg = nLen;
+        TextFrameIndex nTmpChg = nLen;
         if( ++nCompIdx < nCompCount )
         {
             nTmpChg = GetCompStart( nCompIdx );
@@ -1721,7 +1732,7 @@ sal_Int32 SwScriptInfo::KashidaJustify( long* pKernArray,
         ++nCntKash;
     }
 
-    const sal_Int32 nEnd = nStt + nLen;
+    const TextFrameIndex nEnd = nStt + nLen;
 
     size_t nCntKashEnd = nCntKash;
     while ( nCntKashEnd < CountKashida() )
@@ -1748,12 +1759,14 @@ sal_Int32 SwScriptInfo::KashidaJustify( long* pKernArray,
         while (nCntKash < nCntKashEnd && !IsKashidaValid(nCntKash))
             ++nCntKash;
 
-        sal_Int32 nIdx = nCntKash < nCntKashEnd && IsKashidaValid(nCntKash) ? GetKashida(nCntKash) : nEnd;
+        TextFrameIndex nIdx = nCntKash < nCntKashEnd && IsKashidaValid(nCntKash)
+            ? GetKashida(nCntKash)
+            : nEnd;
         long nKashAdd = nSpaceAdd;
 
         while ( nIdx < nEnd )
         {
-            sal_Int32 nArrayPos = nIdx - nStt;
+            TextFrameIndex nArrayPos = nIdx - nStt;
 
             // next kashida position
             ++nCntKash;
@@ -1764,13 +1777,13 @@ sal_Int32 SwScriptInfo::KashidaJustify( long* pKernArray,
             if ( nIdx > nEnd )
                 nIdx = nEnd;
 
-            const sal_Int32 nArrayEnd = nIdx - nStt;
+            const TextFrameIndex nArrayEnd = nIdx - nStt;
 
             while ( nArrayPos < nArrayEnd )
             {
-                pKernArray[ nArrayPos ] += nKashAdd;
+                pKernArray[ sal_Int32(nArrayPos) ] += nKashAdd;
                 if ( pScrArray )
-                    pScrArray[ nArrayPos ] += nKashAdd;
+                    pScrArray[ sal_Int32(nArrayPos) ] += nKashAdd;
                 ++nArrayPos;
             }
             nKashAdd += nSpaceAdd;
@@ -1857,7 +1870,7 @@ bool SwScriptInfo::MarkOrClearKashidaInvalid(
         nCntKash++;
     }
 
-    const sal_Int32 nEnd = nStt + nLen;
+    const TextFrameIndex nEnd = nStt + nLen;
 
     while ( nCntKash < CountKashida() )
     {
@@ -1900,7 +1913,7 @@ void SwScriptInfo::GetKashidaPositions(
         nCntKash++;
     }
 
-    const sal_Int32 nEnd = nStt + nLen;
+    const TextFrameIndex nEnd = nStt + nLen;
 
     size_t nCntKashEnd = nCntKash;
     while ( nCntKashEnd < CountKashida() )
@@ -2018,7 +2031,8 @@ SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTextNode& rTNd,
         pScriptInfo = const_cast<SwScriptInfo*>(pLast->GetScriptInfo());
         if ( pScriptInfo )
         {
-            if ( bAllowInvalid || COMPLETE_STRING == pScriptInfo->GetInvalidityA() )
+            if (bAllowInvalid ||
+                TextFrameIndex(COMPLETE_STRING) == pScriptInfo->GetInvalidityA())
                 break;
             pScriptInfo = nullptr;
         }
