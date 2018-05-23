@@ -787,7 +787,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
                     ScopedVclPtr<AbstractScTabBgColorDlg> pDlg(pFact->CreateScTabBgColorDlg(
-                                                                GetDialogParent(),
+                                                                GetFrameWeld(),
                                                                 ScResId(SCSTR_SET_TAB_BG_COLOR),
                                                                 ScResId(SCSTR_NO_TAB_BG_COLOR),
                                                                 aTabBgColor));

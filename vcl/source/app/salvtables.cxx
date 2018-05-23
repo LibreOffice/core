@@ -368,6 +368,11 @@ public:
         m_xWidget->ReleaseMouse();
     }
 
+    virtual bool get_direction() const override
+    {
+        return m_xWidget->IsRTLEnabled();
+    }
+
     virtual weld::Container* weld_parent() const override;
 
     virtual ~SalInstanceWidget() override
@@ -1747,6 +1752,11 @@ public:
     virtual void queue_draw_area(int x, int y, int width, int height) override
     {
         m_xDrawingArea->Invalidate(tools::Rectangle(Point(x, y), Size(width, height)));
+    }
+
+    virtual void queue_resize() override
+    {
+        m_xDrawingArea->queue_resize();
     }
 
     virtual a11yref get_accessible_parent() override
