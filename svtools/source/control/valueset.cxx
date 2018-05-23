@@ -2275,4 +2275,1459 @@ void ValueSet::SetEdgeBlending(bool bNew)
     }
 }
 
+SvtValueSet::SvtValueSet()
+    : maVirDev( VclPtr<VirtualDevice>::Create())
+    , maColor(COL_TRANSPARENT)
+    , mnStyle(0)
+    , mbFormat(true)
+{
+    maVirDev->SetBackground(Application::GetSettings().GetStyleSettings().GetFaceColor());
+
+    mpNoneItem.reset(nullptr);
+
+    mnItemWidth         = 0;
+    mnItemHeight        = 0;
+    mnTextOffset        = 0;
+    mnVisLines          = 0;
+    mnLines             = 0;
+    mnUserItemWidth     = 0;
+    mnUserItemHeight    = 0;
+    mnFirstLine         = 0;
+    mnSelItemId         = 0;
+    mnHighItemId        = 0;
+    mnCols              = 0;
+    mnCurCol            = 0;
+    mnUserCols          = 0;
+    mnUserVisLines      = 0;
+    mnSpacing           = 0;
+    mnFrameStyle        = DrawFrameStyle::NONE;
+    mbNoSelection       = true;
+    mbBlackSel          = false;
+    mbDoubleSel         = false;
+    mbScroll            = false;
+    mbFullMode          = true;
+    mbEdgeBlending      = false;
+    mbHasVisibleItems   = false;
+}
+
+void SvtValueSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    // #106446#, #106601# force mirroring of virtual device
+    maVirDev->EnableRTL(pDrawingArea->get_direction());
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
+}
+
+Reference<XAccessible> SvtValueSet::CreateAccessible()
+{
+    if (!mxAccessible)
+        mxAccessible.set(new SvtValueSetAcc(this));
+    return mxAccessible;
+}
+
+SvtValueSet::~SvtValueSet()
+{
+    Reference<XComponent> xComponent(mxAccessible, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->dispose();
+
+    ImplDeleteItems();
+}
+
+void SvtValueSet::ImplDeleteItems()
+{
+    const size_t n = mItemList.size();
+
+    for ( size_t i = 0; i < n; ++i )
+    {
+        SvtValueSetItem* pItem = mItemList[i];
+        if ( pItem->mbVisible && ImplHasAccessibleListeners() )
+        {
+            Any aOldAny;
+            Any aNewAny;
+
+            aOldAny <<= pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ );
+            ImplFireAccessibleEvent(AccessibleEventId::CHILD, aOldAny, aNewAny);
+        }
+
+        delete pItem;
+    }
+
+    mItemList.clear();
+}
+
+void SvtValueSet::Select()
+{
+    maSelectHdl.Call( this );
+}
+
+void SvtValueSet::UserDraw( const UserDrawEvent& )
+{
+}
+
+size_t SvtValueSet::ImplGetItem( const Point& rPos ) const
+{
+    if (!mbHasVisibleItems)
+    {
+        return VALUESET_ITEM_NOTFOUND;
+    }
+
+    if (mpNoneItem.get() && maNoneItemRect.IsInside(rPos))
+    {
+        return VALUESET_ITEM_NONEITEM;
+    }
+
+    if (maItemListRect.IsInside(rPos))
+    {
+        const int xc = rPos.X() - maItemListRect.Left();
+        const int yc = rPos.Y() - maItemListRect.Top();
+        // The point is inside the area of item list,
+        // let's find the containing item.
+        const int col = xc / (mnItemWidth + mnSpacing);
+        const int x = xc % (mnItemWidth + mnSpacing);
+        const int row = yc / (mnItemHeight + mnSpacing);
+        const int y = yc % (mnItemHeight + mnSpacing);
+
+        if (x < mnItemWidth && y < mnItemHeight)
+        {
+            // the point is inside item rect and not inside spacing
+            const size_t item = (mnFirstLine + row) * static_cast<size_t>(mnCols) + col;
+            if (item < mItemList.size())
+            {
+                return item;
+            }
+        }
+    }
+
+    return VALUESET_ITEM_NOTFOUND;
+}
+
+SvtValueSetItem* SvtValueSet::ImplGetItem( size_t nPos )
+{
+    if (nPos == VALUESET_ITEM_NONEITEM)
+        return mpNoneItem.get();
+    else
+        return (nPos < mItemList.size()) ? mItemList[nPos] : nullptr;
+}
+
+SvtValueSetItem* SvtValueSet::ImplGetFirstItem()
+{
+    return mItemList.size() ? mItemList[0] : nullptr;
+}
+
+sal_uInt16 SvtValueSet::ImplGetVisibleItemCount() const
+{
+    sal_uInt16 nRet = 0;
+    const size_t nItemCount = mItemList.size();
+
+    for ( size_t n = 0; n < nItemCount; ++n )
+    {
+        if ( mItemList[n]->mbVisible )
+            ++nRet;
+    }
+
+    return nRet;
+}
+
+void SvtValueSet::ImplFireAccessibleEvent( short nEventId, const Any& rOldValue, const Any& rNewValue )
+{
+    SvtValueSetAcc* pAcc = SvtValueSetAcc::getImplementation(mxAccessible);
+
+    if( pAcc )
+        pAcc->FireAccessibleEvent( nEventId, rOldValue, rNewValue );
+}
+
+bool SvtValueSet::ImplHasAccessibleListeners()
+{
+    SvtValueSetAcc* pAcc = SvtValueSetAcc::getImplementation(mxAccessible);
+    return( pAcc && pAcc->HasAccessibleListeners() );
+}
+
+void SvtValueSet::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+{
+    if (GetStyle() & WB_FLATVALUESET)
+    {
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+        rRenderContext.SetLineColor();
+        rRenderContext.SetFillColor(rStyleSettings.GetFaceColor());
+        long nOffY = maVirDev->GetOutputSizePixel().Height();
+        Size aWinSize(GetOutputSizePixel());
+        rRenderContext.DrawRect(tools::Rectangle(Point(0, nOffY ), Point( aWinSize.Width(), aWinSize.Height())));
+    }
+
+    ImplDraw(rRenderContext);
+}
+
+void SvtValueSet::GetFocus()
+{
+    SAL_INFO("svtools", "value set getting focus");
+    Invalidate();
+    CustomWidgetController::GetFocus();
+
+    // Tell the accessible object that we got the focus.
+    SvtValueSetAcc* pAcc = SvtValueSetAcc::getImplementation(mxAccessible);
+    if (pAcc)
+        pAcc->GetFocus();
+}
+
+void SvtValueSet::LoseFocus()
+{
+    SAL_INFO("svtools", "value set losing focus");
+    Invalidate();
+    CustomWidgetController::LoseFocus();
+
+    // Tell the accessible object that we lost the focus.
+    SvtValueSetAcc* pAcc = SvtValueSetAcc::getImplementation(mxAccessible);
+    if( pAcc )
+        pAcc->LoseFocus();
+}
+
+void SvtValueSet::Resize()
+{
+    mbFormat = true;
+    if ( IsReallyVisible() && IsUpdateMode() )
+        Invalidate();
+    CustomWidgetController::Resize();
+}
+
+bool SvtValueSet::KeyInput( const KeyEvent& rKeyEvent )
+{
+    size_t nLastItem = mItemList.size();
+
+    if ( !nLastItem || !ImplGetFirstItem() )
+        return CustomWidgetController::KeyInput(rKeyEvent);
+
+    if (mbFormat)
+        Invalidate();
+
+    --nLastItem;
+
+    const size_t nCurPos = mnSelItemId ? GetItemPos(mnSelItemId)
+                                       : (mpNoneItem.get() ? VALUESET_ITEM_NONEITEM : 0);
+    size_t nItemPos = VALUESET_ITEM_NOTFOUND;
+    size_t nVStep = mnCols;
+
+    switch (rKeyEvent.GetKeyCode().GetCode())
+    {
+        case KEY_HOME:
+            nItemPos = mpNoneItem.get() ? VALUESET_ITEM_NONEITEM : 0;
+            break;
+
+        case KEY_END:
+            nItemPos = nLastItem;
+            break;
+
+        case KEY_LEFT:
+            if (nCurPos != VALUESET_ITEM_NONEITEM)
+            {
+                if (nCurPos)
+                {
+                    nItemPos = nCurPos-1;
+                }
+                else if (mpNoneItem.get())
+                {
+                    nItemPos = VALUESET_ITEM_NONEITEM;
+                }
+            }
+            break;
+
+        case KEY_RIGHT:
+            if (nCurPos < nLastItem)
+            {
+                if (nCurPos == VALUESET_ITEM_NONEITEM)
+                {
+                    nItemPos = 0;
+                }
+                else
+                {
+                    nItemPos = nCurPos+1;
+                }
+            }
+            break;
+
+        case KEY_PAGEUP:
+            if (rKeyEvent.GetKeyCode().IsShift() || rKeyEvent.GetKeyCode().IsMod1() || rKeyEvent.GetKeyCode().IsMod2())
+            {
+                return CustomWidgetController::KeyInput(rKeyEvent);
+            }
+            nVStep *= mnVisLines;
+            SAL_FALLTHROUGH;
+        case KEY_UP:
+            if (nCurPos != VALUESET_ITEM_NONEITEM)
+            {
+                if (nCurPos == nLastItem)
+                {
+                    const size_t nCol = mnCols ? nLastItem % mnCols : 0;
+                    if (nCol < mnCurCol)
+                    {
+                        // Move to previous row/page, keeping the old column
+                        nVStep -= mnCurCol - nCol;
+                    }
+                }
+                if (nCurPos >= nVStep)
+                {
+                    // Go up of a whole page
+                    nItemPos = nCurPos-nVStep;
+                }
+                else if (mpNoneItem.get())
+                {
+                    nItemPos = VALUESET_ITEM_NONEITEM;
+                }
+                else if (nCurPos > mnCols)
+                {
+                    // Go to same column in first row
+                    nItemPos = nCurPos % mnCols;
+                }
+            }
+            break;
+
+        case KEY_PAGEDOWN:
+            if (rKeyEvent.GetKeyCode().IsShift() || rKeyEvent.GetKeyCode().IsMod1() || rKeyEvent.GetKeyCode().IsMod2())
+            {
+                return CustomWidgetController::KeyInput(rKeyEvent);
+            }
+            nVStep *= mnVisLines;
+            SAL_FALLTHROUGH;
+        case KEY_DOWN:
+            if (nCurPos != nLastItem)
+            {
+                if (nCurPos == VALUESET_ITEM_NONEITEM)
+                {
+                    nItemPos = nVStep-mnCols+mnCurCol;
+                }
+                else
+                {
+                    nItemPos = nCurPos+nVStep;
+                }
+                if (nItemPos > nLastItem)
+                {
+                    nItemPos = nLastItem;
+                }
+            }
+            break;
+
+        case KEY_RETURN:
+            if (GetStyle() & WB_NO_DIRECTSELECT)
+            {
+                Select();
+                break;
+            }
+            SAL_FALLTHROUGH;
+        default:
+            return CustomWidgetController::KeyInput(rKeyEvent);
+    }
+
+    if ( nItemPos == VALUESET_ITEM_NOTFOUND )
+        return false;
+
+    if ( nItemPos!=VALUESET_ITEM_NONEITEM && nItemPos<nLastItem )
+    {
+        // update current column only in case of a new position
+        // which is also not a "specially" handled one.
+        mnCurCol = mnCols ? nItemPos % mnCols : 0;
+    }
+    const sal_uInt16 nItemId = (nItemPos != VALUESET_ITEM_NONEITEM) ? GetItemId( nItemPos ) : 0;
+    if ( nItemId != mnSelItemId )
+    {
+        SelectItem( nItemId );
+        if (!(GetStyle() & WB_NO_DIRECTSELECT))
+        {
+            // select only if WB_NO_DIRECTSELECT is not set
+            Select();
+        }
+    }
+
+    return true;
+}
+
+void SvtValueSet::MouseButtonDown( const MouseEvent& rMouseEvent )
+{
+    if ( rMouseEvent.IsLeft() )
+    {
+        SvtValueSetItem* pItem = ImplGetItem( ImplGetItem( rMouseEvent.GetPosPixel() ) );
+        if (pItem && !rMouseEvent.IsMod2())
+        {
+            if (rMouseEvent.GetClicks() == 1)
+            {
+                SelectItem( pItem->mnId );
+                if (!(GetStyle() & WB_NOPOINTERFOCUS))
+                    GrabFocus();
+                Select();
+            }
+            else if ( rMouseEvent.GetClicks() == 2 )
+                maDoubleClickHdl.Call( this );
+
+            return;
+        }
+    }
+
+    CustomWidgetController::MouseButtonDown( rMouseEvent );
+}
+
+size_t SvtValueSet::GetItemCount() const
+{
+    return mItemList.size();
+}
+
+size_t SvtValueSet::GetItemPos( sal_uInt16 nItemId ) const
+{
+    for ( size_t i = 0, n = mItemList.size(); i < n; ++i ) {
+        if ( mItemList[i]->mnId == nItemId ) {
+            return i;
+        }
+    }
+    return VALUESET_ITEM_NOTFOUND;
+}
+
+sal_uInt16 SvtValueSet::GetItemId( size_t nPos ) const
+{
+    return ( nPos < mItemList.size() ) ? mItemList[nPos]->mnId : 0 ;
+}
+
+sal_uInt16 SvtValueSet::GetItemId( const Point& rPos ) const
+{
+    size_t nItemPos = ImplGetItem( rPos );
+    if ( nItemPos != VALUESET_ITEM_NOTFOUND )
+        return GetItemId( nItemPos );
+
+    return 0;
+}
+
+tools::Rectangle SvtValueSet::GetItemRect( sal_uInt16 nItemId ) const
+{
+    const size_t nPos = GetItemPos( nItemId );
+
+    if ( nPos!=VALUESET_ITEM_NOTFOUND && mItemList[nPos]->mbVisible )
+        return ImplGetItemRect( nPos );
+
+    return tools::Rectangle();
+}
+
+void SvtValueSet::EnableFullItemMode( bool bFullMode )
+{
+    mbFullMode = bFullMode;
+}
+
+tools::Rectangle SvtValueSet::ImplGetItemRect( size_t nPos ) const
+{
+    const size_t nVisibleBegin = static_cast<size_t>(mnFirstLine)*mnCols;
+    const size_t nVisibleEnd = nVisibleBegin + static_cast<size_t>(mnVisLines)*mnCols;
+
+    // Check if the item is inside the range of the displayed ones,
+    // taking into account that last row could be incomplete
+    if ( nPos<nVisibleBegin || nPos>=nVisibleEnd || nPos>=mItemList.size() )
+        return tools::Rectangle();
+
+    nPos -= nVisibleBegin;
+
+    const size_t row = mnCols ? nPos/mnCols : 0;
+    const size_t col = mnCols ? nPos%mnCols : 0;
+    const long x = maItemListRect.Left()+col*(mnItemWidth+mnSpacing);
+    const long y = maItemListRect.Top()+row*(mnItemHeight+mnSpacing);
+
+    return tools::Rectangle( Point(x, y), Size(mnItemWidth, mnItemHeight) );
+}
+
+void SvtValueSet::SetFormat()
+{
+    mbFormat = true;
+}
+
+void SvtValueSet::ImplDraw(vcl::RenderContext& rRenderContext)
+{
+    if (mbFormat)
+        Format(rRenderContext);
+
+    Point aDefPos;
+    Size aSize = maVirDev->GetOutputSizePixel();
+
+    rRenderContext.DrawOutDev(aDefPos, aSize, aDefPos, aSize, *maVirDev.get());
+
+    // draw parting line to the Namefield
+    if (GetStyle() & WB_NAMEFIELD)
+    {
+        if (!(GetStyle() & WB_FLATVALUESET))
+        {
+            const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+            Size aWinSize(GetOutputSizePixel());
+            Point aPos1(NAME_LINE_OFF_X, mnTextOffset + NAME_LINE_OFF_Y);
+            Point aPos2(aWinSize.Width() - (NAME_LINE_OFF_X * 2), mnTextOffset + NAME_LINE_OFF_Y);
+            if (!(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono))
+            {
+                rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+                rRenderContext.DrawLine(aPos1, aPos2);
+                aPos1.AdjustY( 1 );
+                aPos2.AdjustY( 1 );
+                rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
+            }
+            else
+                rRenderContext.SetLineColor(rStyleSettings.GetWindowTextColor());
+            rRenderContext.DrawLine(aPos1, aPos2);
+        }
+    }
+
+    ImplDrawSelect(rRenderContext);
+}
+
+void SvtValueSet::SelectItem( sal_uInt16 nItemId )
+{
+    size_t nItemPos = 0;
+
+    if ( nItemId )
+    {
+        nItemPos = GetItemPos( nItemId );
+        if ( nItemPos == VALUESET_ITEM_NOTFOUND )
+            return;
+    }
+
+    if ( !((mnSelItemId != nItemId) || mbNoSelection) )
+        return;
+
+    sal_uInt16 nOldItem = mnSelItemId ? mnSelItemId : 1;
+    mnSelItemId = nItemId;
+    mbNoSelection = false;
+
+    bool bNewOut = !mbFormat && IsReallyVisible() && IsUpdateMode();
+    bool bNewLine = false;
+
+    // if necessary scroll to the visible area
+    if (mbScroll && nItemId && mnCols)
+    {
+        sal_uInt16 nNewLine = static_cast<sal_uInt16>(nItemPos / mnCols);
+        if ( nNewLine < mnFirstLine )
+        {
+            mnFirstLine = nNewLine;
+            bNewLine = true;
+        }
+        else if ( nNewLine > static_cast<sal_uInt16>(mnFirstLine+mnVisLines-1) )
+        {
+            mnFirstLine = static_cast<sal_uInt16>(nNewLine-mnVisLines+1);
+            bNewLine = true;
+        }
+    }
+
+    if ( bNewOut )
+    {
+        if ( bNewLine )
+        {
+            // redraw everything if the visible area has changed
+            mbFormat = true;
+        }
+        Invalidate();
+    }
+
+    if( ImplHasAccessibleListeners() )
+    {
+        // focus event (deselect)
+        if( nOldItem )
+        {
+            const size_t nPos = GetItemPos( nItemId );
+
+            if( nPos != VALUESET_ITEM_NOTFOUND )
+            {
+                ValueItemAcc* pItemAcc = ValueItemAcc::getImplementation(
+                    mItemList[nPos]->GetAccessible( false/*bIsTransientChildrenDisabled*/ ) );
+
+                if( pItemAcc )
+                {
+                    Any aOldAny;
+                    Any aNewAny;
+                    aOldAny <<= Reference<XInterface>(static_cast<cppu::OWeakObject*>(pItemAcc));
+                    ImplFireAccessibleEvent(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
+                }
+            }
+        }
+
+        // focus event (select)
+        const size_t nPos = GetItemPos( mnSelItemId );
+
+        SvtValueSetItem* pItem;
+        if( nPos != VALUESET_ITEM_NOTFOUND )
+            pItem = mItemList[nPos];
+        else
+            pItem = mpNoneItem.get();
+
+        ValueItemAcc* pItemAcc = nullptr;
+        if (pItem != nullptr)
+            pItemAcc = ValueItemAcc::getImplementation( pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ ) );
+
+        if( pItemAcc )
+        {
+            Any aOldAny;
+            Any aNewAny;
+            aNewAny <<= Reference<XInterface>(static_cast<cppu::OWeakObject*>(pItemAcc));
+            ImplFireAccessibleEvent(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny);
+        }
+
+        // selection event
+        Any aOldAny;
+        Any aNewAny;
+        ImplFireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny);
+    }
+    maHighlightHdl.Call(this);
+}
+
+void SvtValueSet::SetNoSelection()
+{
+    mbNoSelection   = true;
+
+    if (IsReallyVisible() && IsUpdateMode())
+        Invalidate();
+}
+
+void SvtValueSet::Format(vcl::RenderContext const & rRenderContext)
+{
+    Size aWinSize(GetOutputSizePixel());
+    size_t nItemCount = mItemList.size();
+    WinBits nStyle = GetStyle();
+    long nTxtHeight = rRenderContext.GetTextHeight();
+    long nOff;
+    long nNoneHeight;
+    long nNoneSpace;
+
+    // calculate item offset
+    if (nStyle & WB_ITEMBORDER)
+    {
+        if (nStyle & WB_DOUBLEBORDER)
+            nOff = ITEM_OFFSET_DOUBLE;
+        else
+            nOff = ITEM_OFFSET;
+    }
+    else
+        nOff = 0;
+
+    // consider size, if NameField does exist
+    if (nStyle & WB_NAMEFIELD)
+    {
+        mnTextOffset = aWinSize.Height() - nTxtHeight - NAME_OFFSET;
+        aWinSize.AdjustHeight( -(nTxtHeight + NAME_OFFSET) );
+
+        if (!(nStyle & WB_FLATVALUESET))
+        {
+            mnTextOffset -= NAME_LINE_HEIGHT + NAME_LINE_OFF_Y;
+            aWinSize.AdjustHeight( -(NAME_LINE_HEIGHT + NAME_LINE_OFF_Y) );
+        }
+    }
+    else
+        mnTextOffset = 0;
+
+    // consider offset and size, if NoneField does exist
+    if (nStyle & WB_NONEFIELD)
+    {
+        nNoneHeight = nTxtHeight + nOff;
+        nNoneSpace = mnSpacing;
+    }
+    else
+    {
+        nNoneHeight = 0;
+        nNoneSpace = 0;
+
+        if (mpNoneItem.get())
+            mpNoneItem.reset(nullptr);
+    }
+
+    // calculate number of columns
+    if (!mnUserCols)
+    {
+        if (mnUserItemWidth)
+        {
+            mnCols = static_cast<sal_uInt16>((aWinSize.Width() - mnSpacing) / (mnUserItemWidth + mnSpacing));
+            if (mnCols <= 0)
+                mnCols = 1;
+        }
+        else
+        {
+            mnCols = 1;
+        }
+    }
+    else
+    {
+        mnCols = mnUserCols;
+    }
+
+    // calculate number of rows
+    mbScroll = false;
+
+    // Floor( (M+N-1)/N )==Ceiling( M/N )
+    mnLines = (static_cast<long>(nItemCount) + mnCols - 1) / mnCols;
+    if (mnLines <= 0)
+        mnLines = 1;
+
+    long nCalcHeight = aWinSize.Height() - nNoneHeight;
+    if (mnUserVisLines)
+    {
+        mnVisLines = mnUserVisLines;
+    }
+    else if (mnUserItemHeight)
+    {
+        mnVisLines = (nCalcHeight - nNoneSpace + mnSpacing) / (mnUserItemHeight + mnSpacing);
+        if (!mnVisLines)
+            mnVisLines = 1;
+    }
+    else
+    {
+        mnVisLines = mnLines;
+    }
+
+    if (mnLines > mnVisLines)
+        mbScroll = true;
+
+    if (mnLines <= mnVisLines)
+    {
+        mnFirstLine = 0;
+    }
+    else
+    {
+        if (mnFirstLine > static_cast<sal_uInt16>(mnLines - mnVisLines))
+            mnFirstLine = static_cast<sal_uInt16>(mnLines - mnVisLines);
+    }
+
+    // calculate item size
+    const long nColSpace  = (mnCols - 1) * static_cast<long>(mnSpacing);
+    const long nLineSpace = ((mnVisLines - 1) * mnSpacing) + nNoneSpace;
+    if (mnUserItemWidth && !mnUserCols)
+    {
+        mnItemWidth = mnUserItemWidth;
+        if (mnItemWidth > aWinSize.Width() - nColSpace)
+            mnItemWidth = aWinSize.Width() - nColSpace;
+    }
+    else
+        mnItemWidth = (aWinSize.Width() - nColSpace) / mnCols;
+    if (mnUserItemHeight && !mnUserVisLines)
+    {
+        mnItemHeight = mnUserItemHeight;
+        if (mnItemHeight > nCalcHeight - nNoneSpace)
+            mnItemHeight = nCalcHeight - nNoneSpace;
+    }
+    else
+    {
+        nCalcHeight -= nLineSpace;
+        mnItemHeight = nCalcHeight / mnVisLines;
+    }
+
+    // Init VirDev
+    maVirDev->SetSettings(rRenderContext.GetSettings());
+    maVirDev->SetOutputSizePixel(aWinSize);
+
+    // nothing is changed in case of too small items
+    if ((mnItemWidth <= 0) ||
+        (mnItemHeight <= ((nStyle & WB_ITEMBORDER) ? 4 : 2)) ||
+        !nItemCount)
+    {
+        mbHasVisibleItems = false;
+
+        if (nStyle & WB_NONEFIELD)
+        {
+            if (mpNoneItem.get())
+            {
+                mpNoneItem->mbVisible = false;
+                mpNoneItem->maText = GetText();
+            }
+        }
+
+        for (size_t i = 0; i < nItemCount; i++)
+        {
+            mItemList[i]->mbVisible = false;
+        }
+    }
+    else
+    {
+        mbHasVisibleItems = true;
+
+        // determine Frame-Style
+        if (nStyle & WB_DOUBLEBORDER)
+            mnFrameStyle = DrawFrameStyle::DoubleIn;
+        else
+            mnFrameStyle = DrawFrameStyle::In;
+
+        // determine selected color and width
+        // if necessary change the colors, to make the selection
+        // better detectable
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+        Color aHighColor(rStyleSettings.GetHighlightColor());
+        if (((aHighColor.GetRed() > 0x80) || (aHighColor.GetGreen() > 0x80) ||
+             (aHighColor.GetBlue() > 0x80)) ||
+            ((aHighColor.GetRed() == 0x80) && (aHighColor.GetGreen() == 0x80) &&
+             (aHighColor.GetBlue() == 0x80)))
+        {
+            mbBlackSel = true;
+        }
+        else
+        {
+            mbBlackSel = false;
+        }
+        // draw the selection with double width if the items are bigger
+        if ((nStyle & WB_DOUBLEBORDER) &&
+            ((mnItemWidth >= 25) && (mnItemHeight >= 20)))
+        {
+            mbDoubleSel = true;
+        }
+        else
+        {
+            mbDoubleSel = false;
+        }
+
+        // calculate offsets
+        long nStartX;
+        long nStartY;
+        if (mbFullMode)
+        {
+            long nAllItemWidth = (mnItemWidth * mnCols) + nColSpace;
+            long nAllItemHeight = (mnItemHeight * mnVisLines) + nNoneHeight + nLineSpace;
+            nStartX = (aWinSize.Width() - nAllItemWidth) / 2;
+            nStartY = (aWinSize.Height() - nAllItemHeight) / 2;
+        }
+        else
+        {
+            nStartX = 0;
+            nStartY = 0;
+        }
+
+        // calculate and draw items
+        maVirDev->SetLineColor();
+        long x = nStartX;
+        long y = nStartY;
+
+        // create NoSelection field and show it
+        if (nStyle & WB_NONEFIELD)
+        {
+            if (!mpNoneItem)
+                mpNoneItem.reset(new SvtValueSetItem(*this));
+
+            mpNoneItem->mnId = 0;
+            mpNoneItem->meType = VALUESETITEM_NONE;
+            mpNoneItem->mbVisible = true;
+            maNoneItemRect.SetLeft( x );
+            maNoneItemRect.SetTop( y );
+            maNoneItemRect.SetRight( maNoneItemRect.Left() + aWinSize.Width() - x - 1 );
+            maNoneItemRect.SetBottom( y + nNoneHeight - 1 );
+
+            ImplFormatItem(rRenderContext, mpNoneItem.get(), maNoneItemRect);
+
+            y += nNoneHeight + nNoneSpace;
+        }
+
+        // draw items
+        sal_uLong nFirstItem = static_cast<sal_uLong>(mnFirstLine) * mnCols;
+        sal_uLong nLastItem = nFirstItem + (mnVisLines * mnCols);
+
+        maItemListRect.SetLeft( x );
+        maItemListRect.SetTop( y );
+        maItemListRect.SetRight( x + mnCols * (mnItemWidth + mnSpacing) - mnSpacing - 1 );
+        maItemListRect.SetBottom( y + mnVisLines * (mnItemHeight + mnSpacing) - mnSpacing - 1 );
+
+        if (!mbFullMode)
+        {
+            // If want also draw parts of items in the last line,
+            // then we add one more line if parts of these line are
+            // visible
+            if (y + (mnVisLines * (mnItemHeight + mnSpacing)) < aWinSize.Height())
+                nLastItem += mnCols;
+            maItemListRect.SetBottom( aWinSize.Height() - y );
+        }
+        for (size_t i = 0; i < nItemCount; i++)
+        {
+            SvtValueSetItem* pItem = mItemList[i];
+
+            if (i >= nFirstItem && i < nLastItem)
+            {
+                if (!pItem->mbVisible && ImplHasAccessibleListeners())
+                {
+                    Any aOldAny;
+                    Any aNewAny;
+
+                    aNewAny <<= pItem->GetAccessible(false/*bIsTransientChildrenDisabled*/);
+                    ImplFireAccessibleEvent(AccessibleEventId::CHILD, aOldAny, aNewAny);
+                }
+
+                pItem->mbVisible = true;
+                ImplFormatItem(rRenderContext, pItem, tools::Rectangle(Point(x, y), Size(mnItemWidth, mnItemHeight)));
+
+                if (!((i + 1) % mnCols))
+                {
+                    x = nStartX;
+                    y += mnItemHeight + mnSpacing;
+                }
+                else
+                    x += mnItemWidth + mnSpacing;
+            }
+            else
+            {
+                if (pItem->mbVisible && ImplHasAccessibleListeners())
+                {
+                    Any aOldAny;
+                    Any aNewAny;
+
+                    aOldAny <<= pItem->GetAccessible(false/*bIsTransientChildrenDisabled*/);
+                    ImplFireAccessibleEvent(AccessibleEventId::CHILD, aOldAny, aNewAny);
+                }
+
+                pItem->mbVisible = false;
+            }
+        }
+    }
+
+    // waiting for the next since the formatting is finished
+    mbFormat = false;
+}
+
+void SvtValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext)
+{
+    if (!IsReallyVisible())
+        return;
+
+    const bool bFocus = HasFocus();
+    if (!bFocus && mbNoSelection)
+    {
+        ImplDrawItemText(rRenderContext, OUString());
+        return;
+    }
+
+    ImplDrawSelect(rRenderContext, mnSelItemId, bFocus, !mbNoSelection);
+}
+
+void SvtValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel )
+{
+    SvtValueSetItem* pItem;
+    tools::Rectangle aRect;
+    if (nItemId)
+    {
+        const size_t nPos = GetItemPos( nItemId );
+        pItem = mItemList[ nPos ];
+        aRect = ImplGetItemRect( nPos );
+    }
+    else if (mpNoneItem.get())
+    {
+        pItem = mpNoneItem.get();
+        aRect = maNoneItemRect;
+    }
+    else if (bFocus && (pItem = ImplGetFirstItem()))
+    {
+        aRect = ImplGetItemRect(0);
+    }
+    else
+    {
+        return;
+    }
+
+    if (!pItem->mbVisible)
+        return;
+
+    // draw selection
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    rRenderContext.SetFillColor();
+
+    Color aDoubleColor(rStyleSettings.GetHighlightColor());
+    Color aSingleColor(rStyleSettings.GetHighlightTextColor());
+    if (!mbDoubleSel)
+    {
+        /*
+        *  #99777# contrast enhancement for thin mode
+        */
+        const Wallpaper& rWall = maVirDev->GetBackground();
+        if (!rWall.IsBitmap() && ! rWall.IsGradient())
+        {
+            const Color& rBack = rWall.GetColor();
+            if (rBack.IsDark() && ! aDoubleColor.IsBright())
+            {
+                aDoubleColor = COL_WHITE;
+                aSingleColor = COL_BLACK;
+            }
+            else if (rBack.IsBright() && !aDoubleColor.IsDark())
+            {
+                aDoubleColor = COL_BLACK;
+                aSingleColor = COL_WHITE;
+            }
+        }
+    }
+
+    // specify selection output
+    WinBits nStyle = GetStyle();
+    if (nStyle & WB_MENUSTYLEVALUESET)
+    {
+        if (bDrawSel)
+        {
+            rRenderContext.SetLineColor(mbBlackSel ? COL_BLACK : aDoubleColor);
+            rRenderContext.DrawRect(aRect);
+        }
+    }
+    else
+    {
+        if (bDrawSel)
+        {
+            rRenderContext.SetLineColor(mbBlackSel ? COL_BLACK : aDoubleColor);
+            rRenderContext.DrawRect(aRect);
+        }
+        if (mbDoubleSel)
+        {
+            aRect.AdjustLeft( 1 );
+            aRect.AdjustTop( 1 );
+            aRect.AdjustRight( -1 );
+            aRect.AdjustBottom( -1 );
+            if (bDrawSel)
+                rRenderContext.DrawRect(aRect);
+        }
+        aRect.AdjustLeft( 1 );
+        aRect.AdjustTop( 1 );
+        aRect.AdjustRight( -1 );
+        aRect.AdjustBottom( -1 );
+        tools::Rectangle aRect2 = aRect;
+        aRect.AdjustLeft( 1 );
+        aRect.AdjustTop( 1 );
+        aRect.AdjustRight( -1 );
+        aRect.AdjustBottom( -1 );
+        if (bDrawSel)
+            rRenderContext.DrawRect(aRect);
+        if (mbDoubleSel)
+        {
+            aRect.AdjustLeft( 1 );
+            aRect.AdjustTop( 1 );
+            aRect.AdjustRight( -1 );
+            aRect.AdjustBottom( -1 );
+            if (bDrawSel)
+                rRenderContext.DrawRect(aRect);
+        }
+
+        if (bDrawSel)
+        {
+            rRenderContext.SetLineColor(mbBlackSel ? COL_WHITE : aSingleColor);
+        }
+        else
+        {
+            rRenderContext.SetLineColor(COL_LIGHTGRAY);
+        }
+        rRenderContext.DrawRect(aRect2);
+    }
+
+    ImplDrawItemText(rRenderContext, pItem->maText);
+}
+
+void SvtValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, SvtValueSetItem* pItem, tools::Rectangle aRect)
+{
+    WinBits nStyle = GetStyle();
+    if (nStyle & WB_ITEMBORDER)
+    {
+        aRect.AdjustLeft(1 );
+        aRect.AdjustTop(1 );
+        aRect.AdjustRight( -1 );
+        aRect.AdjustBottom( -1 );
+
+        if (nStyle & WB_FLATVALUESET)
+        {
+            sal_Int32 nBorder = (nStyle & WB_DOUBLEBORDER) ? 2 : 1;
+
+            aRect.AdjustLeft(nBorder );
+            aRect.AdjustTop(nBorder );
+            aRect.AdjustRight( -nBorder );
+            aRect.AdjustBottom( -nBorder );
+        }
+        else
+        {
+            DecorationView aView(maVirDev.get());
+            aRect = aView.DrawFrame(aRect, mnFrameStyle);
+        }
+    }
+
+    if (pItem == mpNoneItem.get())
+        pItem->maText = GetText();
+
+    if (!((aRect.GetHeight() > 0) && (aRect.GetWidth() > 0)))
+        return;
+
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+    if (pItem == mpNoneItem.get())
+    {
+        maVirDev->SetFont(rRenderContext.GetFont());
+        maVirDev->SetTextColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor());
+        maVirDev->SetTextFillColor();
+        maVirDev->SetFillColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuColor() : rStyleSettings.GetWindowColor());
+        maVirDev->DrawRect(aRect);
+        Point aTxtPos(aRect.Left() + 2, aRect.Top());
+        long nTxtWidth = rRenderContext.GetTextWidth(pItem->maText);
+        if ((aTxtPos.X() + nTxtWidth) > aRect.Right())
+        {
+            maVirDev->SetClipRegion(vcl::Region(aRect));
+            maVirDev->DrawText(aTxtPos, pItem->maText);
+            maVirDev->SetClipRegion();
+        }
+        else
+            maVirDev->DrawText(aTxtPos, pItem->maText);
+    }
+    else if (pItem->meType == VALUESETITEM_COLOR)
+    {
+        maVirDev->SetFillColor(pItem->maColor);
+        maVirDev->DrawRect(aRect);
+    }
+    else
+    {
+        if (IsColor())
+            maVirDev->SetFillColor(maColor);
+        else if (nStyle & WB_MENUSTYLEVALUESET)
+            maVirDev->SetFillColor(rStyleSettings.GetMenuColor());
+        else if (IsEnabled())
+            maVirDev->SetFillColor(rStyleSettings.GetWindowColor());
+        else
+            maVirDev->SetFillColor(rStyleSettings.GetFaceColor());
+        maVirDev->DrawRect(aRect);
+
+        if (pItem->meType == VALUESETITEM_USERDRAW)
+        {
+            UserDrawEvent aUDEvt(nullptr, maVirDev.get(), aRect, pItem->mnId);
+            UserDraw(aUDEvt);
+        }
+        else
+        {
+            Size aImageSize = pItem->maImage.GetSizePixel();
+            Size  aRectSize = aRect.GetSize();
+            Point aPos(aRect.Left(), aRect.Top());
+            aPos.AdjustX((aRectSize.Width() - aImageSize.Width()) / 2 );
+
+            if (pItem->meType != VALUESETITEM_IMAGE_AND_TEXT)
+                aPos.AdjustY((aRectSize.Height() - aImageSize.Height()) / 2 );
+
+            DrawImageFlags  nImageStyle  = DrawImageFlags::NONE;
+            if (!IsEnabled())
+                nImageStyle  |= DrawImageFlags::Disable;
+
+            if (aImageSize.Width()  > aRectSize.Width() ||
+                aImageSize.Height() > aRectSize.Height())
+            {
+                maVirDev->SetClipRegion(vcl::Region(aRect));
+                maVirDev->DrawImage(aPos, pItem->maImage, nImageStyle);
+                maVirDev->SetClipRegion();
+            }
+            else
+                maVirDev->DrawImage(aPos, pItem->maImage, nImageStyle);
+
+            if (pItem->meType == VALUESETITEM_IMAGE_AND_TEXT)
+            {
+                maVirDev->SetFont(rRenderContext.GetFont());
+                maVirDev->SetTextColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor());
+                maVirDev->SetTextFillColor();
+
+                long nTxtWidth = maVirDev->GetTextWidth(pItem->maText);
+
+                if (nTxtWidth > aRect.GetWidth())
+                    maVirDev->SetClipRegion(vcl::Region(aRect));
+
+                maVirDev->DrawText(Point(aRect.Left() +
+                                         (aRect.GetWidth() - nTxtWidth) / 2,
+                                         aRect.Bottom() - maVirDev->GetTextHeight()),
+                                   pItem->maText);
+
+                if (nTxtWidth > aRect.GetWidth())
+                    maVirDev->SetClipRegion();
+            }
+        }
+    }
+
+    const sal_uInt16 nEdgeBlendingPercent(GetEdgeBlending() ? rStyleSettings.GetEdgeBlending() : 0);
+
+    if (nEdgeBlendingPercent)
+    {
+        const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
+        const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
+        const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
+        const BitmapEx aBlendFrame(createBlendFrame(aRect.GetSize(), nAlpha, rTopLeft, rBottomRight));
+
+        if (!aBlendFrame.IsEmpty())
+        {
+            maVirDev->DrawBitmapEx(aRect.TopLeft(), aBlendFrame);
+        }
+    }
+}
+
+void SvtValueSet::ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUString& rText)
+{
+    if (!(GetStyle() & WB_NAMEFIELD))
+        return;
+
+    Size aWinSize(GetOutputSizePixel());
+    long nTxtWidth = rRenderContext.GetTextWidth(rText);
+    long nTxtOffset = mnTextOffset;
+
+    // delete rectangle and show text
+    if (GetStyle() & WB_FLATVALUESET)
+    {
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+        rRenderContext.SetLineColor();
+        rRenderContext.SetFillColor(rStyleSettings.GetFaceColor());
+        rRenderContext.DrawRect(tools::Rectangle(Point(0, nTxtOffset), Point(aWinSize.Width(), aWinSize.Height())));
+        rRenderContext.SetTextColor(rStyleSettings.GetButtonTextColor());
+    }
+    else
+    {
+        nTxtOffset += NAME_LINE_HEIGHT+NAME_LINE_OFF_Y;
+        rRenderContext.SetBackground(Application::GetSettings().GetStyleSettings().GetFaceColor());
+        rRenderContext.Erase(tools::Rectangle(Point(0, nTxtOffset), Point(aWinSize.Width(), aWinSize.Height())));
+    }
+    rRenderContext.DrawText(Point((aWinSize.Width() - nTxtWidth) / 2, nTxtOffset + (NAME_OFFSET / 2)), rText);
+}
+
+bool SvtValueSet::ImplScroll(const Point& rPos)
+{
+    if (!mbScroll || !maItemListRect.IsInside(rPos))
+        return false;
+
+    const long nScrollOffset = (mnItemHeight <= 16) ? SCROLL_OFFSET / 2 : SCROLL_OFFSET;
+    bool bScroll = false;
+
+    if (rPos.Y() <= maItemListRect.Top() + nScrollOffset)
+    {
+        if (mnFirstLine > 0)
+        {
+            --mnFirstLine;
+            bScroll = true;
+        }
+    }
+    else if (rPos.Y() >= maItemListRect.Bottom() - nScrollOffset)
+    {
+        if (mnFirstLine < static_cast<sal_uInt16>(mnLines - mnVisLines))
+        {
+            ++mnFirstLine;
+            bScroll = true;
+        }
+    }
+
+    if (!bScroll)
+        return false;
+
+    mbFormat = true;
+    Invalidate();
+    return true;
+}
+
+void SvtValueSet::StyleUpdated()
+{
+    mbFormat = true;
+    Invalidate();
+}
+
+void SvtValueSet::SetColCount( sal_uInt16 nNewCols )
+{
+    if ( mnUserCols != nNewCols )
+    {
+        mnUserCols = nNewCols;
+        mbFormat = true;
+        queue_resize();
+        if ( IsReallyVisible() && IsUpdateMode() )
+            Invalidate();
+    }
+}
+
+Color SvtValueSet::GetItemColor( sal_uInt16 nItemId ) const
+{
+    size_t nPos = GetItemPos( nItemId );
+
+    if ( nPos != VALUESET_ITEM_NOTFOUND )
+        return mItemList[nPos]->maColor;
+    else
+        return Color();
+}
+
+Size SvtValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCols,
+                                    sal_uInt16 nDesireLines ) const
+{
+    size_t nCalcCols = nDesireCols;
+    size_t nCalcLines = nDesireLines;
+
+    if ( !nCalcCols )
+    {
+        if ( mnUserCols )
+            nCalcCols = mnUserCols;
+        else
+            nCalcCols = 1;
+    }
+
+    if ( !nCalcLines )
+    {
+        nCalcLines = mnVisLines;
+
+        if ( mbFormat )
+        {
+            if ( mnUserVisLines )
+                nCalcLines = mnUserVisLines;
+            else
+            {
+                // Floor( (M+N-1)/N )==Ceiling( M/N )
+                nCalcLines = (mItemList.size()+nCalcCols-1) / nCalcCols;
+                if ( !nCalcLines )
+                    nCalcLines = 1;
+            }
+        }
+    }
+
+    Size        aSize( rItemSize.Width() * nCalcCols, rItemSize.Height() * nCalcLines );
+    WinBits     nStyle = GetStyle();
+    long        nTxtHeight = GetTextHeight();
+    long        n;
+
+    if ( nStyle & WB_ITEMBORDER )
+    {
+        if ( nStyle & WB_DOUBLEBORDER )
+            n = ITEM_OFFSET_DOUBLE;
+        else
+            n = ITEM_OFFSET;
+
+        aSize.AdjustWidth(n * nCalcCols );
+        aSize.AdjustHeight(n * nCalcLines );
+    }
+    else
+        n = 0;
+
+    if ( mnSpacing )
+    {
+        aSize.AdjustWidth(mnSpacing * (nCalcCols - 1) );
+        aSize.AdjustHeight(mnSpacing * (nCalcLines - 1) );
+    }
+
+    if ( nStyle & WB_NAMEFIELD )
+    {
+        aSize.AdjustHeight(nTxtHeight + NAME_OFFSET );
+        if ( !(nStyle & WB_FLATVALUESET) )
+            aSize.AdjustHeight(NAME_LINE_HEIGHT + NAME_LINE_OFF_Y );
+    }
+
+    if ( nStyle & WB_NONEFIELD )
+    {
+        aSize.AdjustHeight(nTxtHeight + n + mnSpacing );
+    }
+
+    return aSize;
+}
+
+void SvtValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
+                           const OUString& rText )
+{
+    SvtValueSetItem* pItem = new SvtValueSetItem( *this );
+    pItem->mnId     = nItemId;
+    pItem->meType   = VALUESETITEM_COLOR;
+    pItem->maColor  = rColor;
+    pItem->maText   = rText;
+    ImplInsertItem( pItem, VALUESET_APPEND );
+}
+
+void SvtValueSet::ImplInsertItem( SvtValueSetItem *const pItem, const size_t nPos )
+{
+    DBG_ASSERT( pItem->mnId, "ValueSet::InsertItem(): ItemId == 0" );
+    DBG_ASSERT( GetItemPos( pItem->mnId ) == VALUESET_ITEM_NOTFOUND,
+                "ValueSet::InsertItem(): ItemId already exists" );
+
+    if ( nPos < mItemList.size() ) {
+        SvtValueItemList::iterator it = mItemList.begin();
+        ::std::advance( it, nPos );
+        mItemList.insert( it, pItem );
+    } else {
+        mItemList.push_back( pItem );
+    }
+
+    queue_resize();
+
+    mbFormat = true;
+    if ( IsReallyVisible() && IsUpdateMode() )
+        Invalidate();
+}
+
+void SvtValueSet::SetEdgeBlending(bool bNew)
+{
+    if(mbEdgeBlending != bNew)
+    {
+        mbEdgeBlending = bNew;
+        mbFormat = true;
+
+        if (GetDrawingArea() && IsReallyVisible() && IsUpdateMode())
+        {
+            Invalidate();
+        }
+    }
+}
+
+Size SvtValueSet::CalcItemSizePixel( const Size& rItemSize) const
+{
+    Size aSize = rItemSize;
+
+    WinBits nStyle = GetStyle();
+    if ( nStyle & WB_ITEMBORDER )
+    {
+        long n;
+
+        if ( nStyle & WB_DOUBLEBORDER )
+            n = ITEM_OFFSET_DOUBLE;
+        else
+            n = ITEM_OFFSET;
+
+        aSize.AdjustWidth(n );
+        aSize.AdjustHeight(n );
+    }
+
+    return aSize;
+}
+
+void SvtValueSet::SetLineCount( sal_uInt16 nNewLines )
+{
+    if ( mnUserVisLines != nNewLines )
+    {
+        mnUserVisLines = nNewLines;
+        mbFormat = true;
+        queue_resize();
+        if ( IsReallyVisible() && IsUpdateMode() )
+            Invalidate();
+    }
+}
+
+void SvtValueSet::SetItemWidth( long nNewItemWidth )
+{
+    if ( mnUserItemWidth != nNewItemWidth )
+    {
+        mnUserItemWidth = nNewItemWidth;
+        mbFormat = true;
+        queue_resize();
+        if ( IsReallyVisible() && IsUpdateMode() )
+            Invalidate();
+    }
+}
+
+void SvtValueSet::SetItemHeight( long nNewItemHeight )
+{
+    if ( mnUserItemHeight != nNewItemHeight )
+    {
+        mnUserItemHeight = nNewItemHeight;
+        mbFormat = true;
+        queue_resize();
+        if ( IsReallyVisible() && IsUpdateMode() )
+            Invalidate();
+    }
+}
+
+OUString SvtValueSet::RequestHelp(tools::Rectangle& rHelpRect)
+{
+    Point aPos = rHelpRect.TopLeft();
+    const size_t nItemPos = ImplGetItem( aPos );
+    OUString sRet;
+    if (nItemPos != VALUESET_ITEM_NOTFOUND)
+    {
+        rHelpRect = ImplGetItemRect(nItemPos);
+        sRet = GetItemText(ImplGetItem(nItemPos)->mnId);
+    }
+    return sRet;
+}
+
+OUString SvtValueSet::GetItemText(sal_uInt16 nItemId) const
+{
+    const size_t nPos = GetItemPos(nItemId);
+
+    if ( nPos != VALUESET_ITEM_NOTFOUND )
+        return mItemList[nPos]->maText;
+
+    return OUString();
+}
+
+void SvtValueSet::SetColor(const Color& rColor)
+{
+    maColor  = rColor;
+    mbFormat = true;
+    if (IsReallyVisible() && IsUpdateMode())
+        Invalidate();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
