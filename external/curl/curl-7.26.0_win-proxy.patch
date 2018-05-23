@@ -1,14 +1,14 @@
---- curl-7.26.0/lib/Makefile.vc12
-+++ misc/build/curl-7.26.0/lib/Makefile.vc12
-@@ -118,7 +118,7 @@
- WINSSLLIBS   = crypt32.lib
- ZLIBLIBSDLL  = zdll.lib
- ZLIBLIBS     = zlib.lib
--WINLIBS      = ws2_32.lib wldap32.lib advapi32.lib
-+WINLIBS      = ws2_32.lib wldap32.lib advapi32.lib winhttp.lib crypt32.lib
- CFLAGS       = $(CFLAGS) $(EXCFLAGS)
+--- curl/winbuild/MakefileBuild.vc.orig	2017-10-23 17:15:22.969492548 +0200
++++ curl/winbuild/MakefileBuild.vc	2017-10-23 17:16:38.491490679 +0200
+@@ -72,7 +72,7 @@
  
- CFGSET       = FALSE
+ CFLAGS_LIBCURL_STATIC  = /DCURL_STATICLIB
+ 
+-WIN_LIBS    = ws2_32.lib wldap32.lib advapi32.lib crypt32.lib
++WIN_LIBS    = ws2_32.lib wldap32.lib advapi32.lib crypt32.lib winhttp.lib
+ 
+ BASE_NAME              = libcurl
+ BASE_NAME_DEBUG        = $(BASE_NAME)_debug
 --- curl-7.26.0/lib/url.c
 +++ misc/build/curl-7.26.0/lib/url.c
 @@ -78,6 +78,10 @@
@@ -23,9 +23,9 @@
  #include "netrc.h"
  
 @@ -4586,6 +4590,21 @@
-   return FALSE;
  }
  
+ #ifndef CURL_DISABLE_HTTP
 +#ifdef _WIN32
 +static char *wstrToCstr(LPWSTR wStr)
 +{
@@ -44,20 +44,12 @@
  /****************************************************************
  * Detect what (if any) proxy to use. Remember that this selects a host
  * name and is not limited to HTTP proxies only.
-@@ -4594,6 +4613,7 @@
- static char *detect_proxy(struct connectdata *conn)
- {
-   char *proxy = NULL;
-+  char *no_proxy=NULL;
- 
- #ifndef CURL_DISABLE_HTTP
-   /* If proxy was not specified, we check for default proxy environment
-@@ -4613,7 +4633,64 @@
+@@ -4613,6 +4633,66 @@
     * For compatibility, the all-uppercase versions of these variables are
     * checked if the lowercase versions don't exist.
     */
--  char *no_proxy=NULL;
 +#ifdef _WIN32
++  char *no_proxy = NULL;
 +  WINHTTP_CURRENT_USER_IE_PROXY_CONFIG *ieProxyConfig;
 +  ieProxyConfig = (WINHTTP_CURRENT_USER_IE_PROXY_CONFIG *)
 +    malloc(sizeof(WINHTTP_CURRENT_USER_IE_PROXY_CONFIG));
@@ -114,15 +106,16 @@
 +    GlobalFree(ieProxyConfig->lpszProxy);
 +    GlobalFree(ieProxyConfig->lpszProxyBypass);
 +  }
++  free(no_proxy);
 +#else /* !WIN32 */
    char proxy_env[128];
- 
-   no_proxy=curl_getenv("no_proxy");
+   const char *protop = conn->handler->scheme;
+   char *envp = proxy_env;
 @@ -4663,6 +4739,7 @@
-     }
-   } /* if(!check_noproxy(conn->host.name, no_proxy)) - it wasn't specified
-        non-proxy */
+   }
+   if(proxy)
+     infof(conn->data, "Uses proxy env variable %s == '%s'\n", envp, proxy);
 +#endif /* WIN32 */
-   free(no_proxy);
  
- #else /* !CURL_DISABLE_HTTP */
+   return proxy;
+ }
