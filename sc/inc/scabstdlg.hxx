@@ -507,10 +507,10 @@ public:
                                                                     const OString& rHelpId,
                                                                     const OString& rEditHelpId) = 0;
 
-    virtual VclPtr<AbstractScTabBgColorDlg> CreateScTabBgColorDlg (  vcl::Window* pParent,
-                                                                const OUString& rTitle, //Dialog Title
-                                                                const OUString& rTabBgColorNoColorText, //Label for no tab color
-                                                                const Color& rDefaultColor ) = 0; //Currently selected Color
+    virtual VclPtr<AbstractScTabBgColorDlg> CreateScTabBgColorDlg(weld::Window* pParent,
+                                                                  const OUString& rTitle, //Dialog Title
+                                                                  const OUString& rTabBgColorNoColorText, //Label for no tab color
+                                                                  const Color& rDefaultColor) = 0; //Currently selected Color
 
     virtual VclPtr<AbstractScImportOptionsDlg> CreateScImportOptionsDlg ( bool                    bAscii,
                                                                     const ScImportOptions*  pOptions,
