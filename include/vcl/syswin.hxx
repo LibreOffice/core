@@ -70,6 +70,7 @@ enum class WindowStateState {
     Rollup         = 0x0008,
     MaximizedHorz  = 0x0010,
     MaximizedVert  = 0x0020,
+    FullScreen     = 0x0040,
     SystemMask     = 0xffff
 };
 namespace o3tl
