@@ -904,7 +904,7 @@ dbaccess/res/exinfo.png cmd/sc_helpindex.png
 
 dbaccess/res/form_16.png cmd/sc_dbformedit.png
 dbaccess/res/forms_16.png cmd/sc_dbformedit.png
-dbaccess/res/forms_32.png res/forms_32.png
+res/forms_32.png dbaccess/res/forms_32.png
 
 dbaccess/res/lc036.png cmd/lc_dbnewreport.png
 dbaccess/res/lc037.png cmd/lc_delete.png
@@ -918,11 +918,11 @@ dbaccess/res/nu08.png cmd/sc_cancel.png
 dbaccess/res/one_left.png cmd/sc_prevrecord.png
 dbaccess/res/one_right.png cmd/sc_nextrecord.png
 dbaccess/res/jo01.png dbaccess/res/pkey.png
-dbaccess/res/queries_32.png res/queries_32.png
+res/queries_32.png dbaccess/res/queries_32.png
 
 dbaccess/res/report_16.png cmd/sc_executereport.png
 dbaccess/res/reports_16.png cmd/sc_executereport.png
-dbaccess/res/reports_32.png res/reports_32.png
+res/reports_32.png dbaccess/res/reports_32.png
 
 dbaccess/res/sc036.png cmd/sc_executereport.png
 dbaccess/res/sc037.png cmd/sc_delete.png
@@ -932,7 +932,7 @@ dbaccess/res/sc040.png cmd/sc_reload.png
 
 dbaccess/res/sortdown.png cmd/sc_sortascending.png
 dbaccess/res/sortup.png cmd/sc_sortdescending.png
-dbaccess/res/tables_32.png res/tables_32.png
+res/tables_32.png dbaccess/res/tables_32.png
 
 # desktop
 # ==============================================

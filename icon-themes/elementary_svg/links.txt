@@ -904,7 +904,7 @@ dbaccess/res/exinfo.svg cmd/sc_helpindex.svg
 
 dbaccess/res/form_16.svg cmd/sc_dbformedit.svg
 dbaccess/res/forms_16.svg cmd/sc_dbformedit.svg
-dbaccess/res/forms_32.svg res/forms_32.svg
+res/forms_32.svg dbaccess/res/forms_32.svg
 
 dbaccess/res/lc036.svg cmd/lc_dbnewreport.svg
 dbaccess/res/lc037.svg cmd/lc_delete.svg
@@ -918,11 +918,11 @@ dbaccess/res/nu08.svg cmd/sc_cancel.svg
 dbaccess/res/one_left.svg cmd/sc_prevrecord.svg
 dbaccess/res/one_right.svg cmd/sc_nextrecord.svg
 dbaccess/res/jo01.svg dbaccess/res/pkey.svg
-dbaccess/res/queries_32.svg res/queries_32.svg
+res/queries_32.svg dbaccess/res/queries_32.svg
 
 dbaccess/res/report_16.svg cmd/sc_executereport.svg
 dbaccess/res/reports_16.svg cmd/sc_executereport.svg
-dbaccess/res/reports_32.svg res/reports_32.svg
+res/reports_32.svg dbaccess/res/reports_32.svg
 
 dbaccess/res/sc036.svg cmd/sc_executereport.svg
 dbaccess/res/sc037.svg cmd/sc_delete.svg
@@ -932,7 +932,7 @@ dbaccess/res/sc040.svg cmd/sc_reload.svg
 
 dbaccess/res/sortdown.svg cmd/sc_sortascending.svg
 dbaccess/res/sortup.svg cmd/sc_sortdescending.svg
-dbaccess/res/tables_32.svg res/tables_32.svg
+res/tables_32.svg dbaccess/res/tables_32.svg
 
 # desktop
 # ==============================================
@@ -1001,7 +1001,6 @@ res/lx03165.svg cmd/lc_save.svg
 res/lx03189.svg cmd/lc_open.svg
 res/sc05501.svg cmd/sc_open.svg
 res/lx03256.svg cmd/lc_insertplugin.svg
-res/sc0554.svg cmd/sc_formatpaintbrush.svg
 
 res/mainapp_16.svg cmd/sc_showsinglepage.svg
 res/mainapp_16.svg cmd/sc_showsinglepage.svg
@@ -1196,7 +1195,7 @@ svtools/res/back_small.svg cmd/sc_prevrecord.svg
 svtools/res/back_large.svg cmd/lc_prevrecord.svg
 svtools/res/ed06.svg dbaccess/res/pkey.svg
 svtools/res/folder.svg cmd/sc_open.svg
-svtools/res/folderop.svg cmd/sc_open.svg
+svtools/res/folderop.svg cmd/sc_open.svgf
 
 # svx
 # ==============================================
