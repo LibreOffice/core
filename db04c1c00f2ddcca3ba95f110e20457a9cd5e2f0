@@ -123,6 +123,24 @@
       "revId": "db04c1c00f2ddcca3ba95f110e20457a9cd5e2f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_3e1db4bd",
+        "filename": "sfx2/source/appl/shutdownicon.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2018-05-23T07:56:26Z",
+      "side": 1,
+      "message": "This probably can be simplified even more.\n\nBecause later on:\n\nbool ShutdownIcon::GetAutostart( )\n{\n#if defined MACOSX\n    return true;\n#else\n    bool bRet \u003d false;\n#ifdef ENABLE_QUICKSTART_APPLET\n    OUString aShortcut( getShortcutName() );\n    OUString aShortcutUrl;\n    osl::File::getFileURLFromSystemPath( aShortcut, aShortcutUrl );\n    osl::File f( aShortcutUrl );\n    osl::File::RC error \u003d f.open( osl_File_OpenFlag_Read );\n    if( error \u003d\u003d osl::File::E_None )\n    {\n        f.close();\n        bRet \u003d true;\n    }\n#endif // ENABLE_QUICKSTART_APPLET\n    return bRet;\n#endif\n\nso that ENABLE_QUICKSTART_APPLET part is basically a _WIN32 part.\n\nBut can we do that cleanups after this is merged, please? :)",
+      "parentUuid": "9a30ddce_5eb7c8d7",
+      "revId": "db04c1c00f2ddcca3ba95f110e20457a9cd5e2f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
