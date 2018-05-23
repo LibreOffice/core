@@ -21,6 +21,10 @@ private:
     weld::DrawingArea* m_pDrawingArea;
 
 public:
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible()
+    {
+        return css::uno::Reference<css::accessibility::XAccessible>();
+    }
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) = 0;
     virtual void Resize() {}
     virtual void MouseButtonDown(const MouseEvent&) {}
@@ -30,17 +34,15 @@ public:
     virtual void LoseFocus() {}
     virtual void StyleUpdated() { Invalidate(); }
     virtual bool KeyInput(const KeyEvent&) { return false; }
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible()
-    {
-        return css::uno::Reference<css::accessibility::XAccessible>();
-    }
     virtual tools::Rectangle GetFocusRect() { return tools::Rectangle(); }
     virtual FactoryFunction GetUITestFactory() const { return nullptr; }
+    virtual OUString RequestHelp(tools::Rectangle&) { return OUString(); }
     Size const& GetOutputSizePixel() const { return m_aSize; }
     void SetOutputSizePixel(const Size& rSize) { m_aSize = rSize; }
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) { m_pDrawingArea = pDrawingArea; }
     weld::DrawingArea* GetDrawingArea() const { return m_pDrawingArea; }
     void Invalidate() { m_pDrawingArea->queue_draw(); }
+    static bool IsUpdateMode() { return true; }
     void Invalidate(const tools::Rectangle& rRect)
     {
         m_pDrawingArea->queue_draw_area(rRect.Left(), rRect.Top(), rRect.GetWidth(),
@@ -51,12 +53,20 @@ public:
     void GrabFocus() { m_pDrawingArea->grab_focus(); }
     bool HasFocus() const { return m_pDrawingArea->has_focus(); }
     bool IsVisible() const { return m_pDrawingArea->get_visible(); }
+    bool IsReallyVisible() const { return m_pDrawingArea->is_visible(); }
     bool IsEnabled() const { return m_pDrawingArea->get_sensitive(); }
+    int GetTextHeight() const { return m_pDrawingArea->get_text_height(); }
+    OUString GetAccessibleName() const { return m_pDrawingArea->get_accessible_name(); }
     void grab_add() { m_pDrawingArea->grab_add(); }
     void grab_remove() { m_pDrawingArea->grab_remove(); }
     void set_size_request(int nWidth, int nHeight)
     {
         m_pDrawingArea->set_size_request(nWidth, nHeight);
+    }
+    void queue_resize() { m_pDrawingArea->queue_resize(); }
+    CustomWidgetController()
+        : m_pDrawingArea(nullptr)
+    {
     }
     virtual ~CustomWidgetController();
 };
@@ -77,6 +87,7 @@ private:
     DECL_LINK(DoKeyPress, const KeyEvent&, bool);
     DECL_LINK(DoFocusRect, weld::Widget&, tools::Rectangle);
     DECL_LINK(DoStyleUpdated, weld::Widget&, void);
+    DECL_LINK(DoRequestHelp, tools::Rectangle&, OUString);
 
 public:
     CustomWeld(weld::Builder& rBuilder, const OString& rDrawingId,
