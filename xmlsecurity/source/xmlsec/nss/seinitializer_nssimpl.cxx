@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * and turn off the additional virtual methods which are part of some interfaces when compiled
- * with debug
- */
-#ifdef DEBUG
-#undef DEBUG
-#endif
-
 #include <comphelper/processfactory.hxx>
 #include <sal/types.h>
 #include <rtl/bootstrap.hxx>
