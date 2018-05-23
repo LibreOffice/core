@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-/*
- * and turn off the additional virtual methods which are part of some interfaces when compiled
- * with debug
- */
-#undef DEBUG
-
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
