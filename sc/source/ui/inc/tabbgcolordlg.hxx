@@ -25,45 +25,44 @@
 #include <vcl/button.hxx>
 #include <svx/SvxColorValueSet.hxx>
 
-class ScTabBgColorDlg : public ModalDialog
+class ScTabBgColorDlg : public weld::GenericDialogController
 {
 public:
-    ScTabBgColorDlg( vcl::Window* pParent,
-                     const OUString& rTitle,
-                     const OUString& rTabBgColorNoColorText,
-                     const Color& rDefaultColor );
+    ScTabBgColorDlg(weld::Window* pParent,
+                    const OUString& rTitle,
+                    const OUString& rTabBgColorNoColorText,
+                    const Color& rDefaultColor);
     virtual ~ScTabBgColorDlg() override;
-    virtual void dispose() override;
 
     void GetSelectedColor( Color& rColor ) const;
 
-    class ScTabBgColorValueSet : public SvxColorValueSet
+    class ScTabBgColorValueSet : public ColorValueSet
     {
     public:
-        ScTabBgColorValueSet(vcl::Window* pParent, WinBits nStyle);
+        ScTabBgColorValueSet();
         virtual ~ScTabBgColorValueSet() override;
-        virtual void dispose() override;
 
         void SetDialog(ScTabBgColorDlg* pTabBgColorDlg)
         {
             m_pTabBgColorDlg = pTabBgColorDlg;
         }
 
-        virtual void KeyInput( const KeyEvent& rKEvt ) override;
+        virtual bool KeyInput( const KeyEvent& rKEvt ) override;
     private:
-        VclPtr<ScTabBgColorDlg> m_pTabBgColorDlg;
+        ScTabBgColorDlg* m_pTabBgColorDlg;
     };
 
 private:
-    VclPtr<ScTabBgColorValueSet>   m_pTabBgColorSet;
-    VclPtr<OKButton>               m_pBtnOk;
     Color                   m_aTabBgColor;
     const OUString          m_aTabBgColorNoColorText;
+    ScTabBgColorValueSet    m_aTabBgColorSet;
+    std::unique_ptr<weld::CustomWeld> m_xTabBgColorSet;
+    std::unique_ptr<weld::Button> m_xBtnOk;
 
     void            FillColorValueSets_Impl();
 
-    DECL_LINK(TabBgColorDblClickHdl_Impl, ValueSet*, void);
-    DECL_LINK(TabBgColorOKHdl_Impl, Button*, void);
+    DECL_LINK(TabBgColorDblClickHdl_Impl, SvtValueSet*, void);
+    DECL_LINK(TabBgColorOKHdl_Impl, weld::Button&, void);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TABBGCOLORDLG_HXX

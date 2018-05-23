@@ -94,6 +94,9 @@ public:
     virtual void grab_add() = 0;
     virtual void grab_remove() = 0;
 
+    //true for rtl, false otherwise
+    virtual bool get_direction() const = 0;
+
     virtual Container* weld_parent() const = 0;
 
     virtual ~Widget() {}
@@ -815,6 +818,7 @@ public:
     }
     virtual void queue_draw() = 0;
     virtual void queue_draw_area(int x, int y, int width, int height) = 0;
+    virtual void queue_resize() = 0;
     virtual a11yref get_accessible_parent() = 0;
     virtual a11yrelationset get_accessible_relation_set() = 0;
 };
