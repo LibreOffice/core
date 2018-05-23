@@ -216,6 +216,18 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                         pPage->GetObj(0)->CloneSdrObject(
                             bUseSpecialCalcMode ? *mpDestModel : mpSdrView->getSdrModelFromSdrView()));
 
+                    // tdf#117629
+                    // Since the 'old' ::CloneSdrObject also copies the SdrPage* the
+                    // SdrObject::getUnoShape() *will* create the wrong UNO API object
+                    // early. This IS one of the reasons I do change these things - this
+                    // error does not happen with my next change I am working on already
+                    // ARGH! For now, reset the SdrPage* to nullptr.
+                    // What sense does it have to copy the SdrPage* of the original SdrObject ?!?
+                    // TTTT: This also *might* be the hidden reason for the strange code at the
+                    // end of SdrObject::SetPage that tries to delete the SvxShape under some
+                    // circumstances...
+                    pNewObject->SetPage(nullptr);
+
                     tools::Rectangle aObjRect( pNewObject->GetLogicRect() );
                     tools::Rectangle aVisArea = pOutDev->PixelToLogic(tools::Rectangle(Point(0,0), pOutDev->GetOutputSizePixel()));
                     Point aPagePos = aVisArea.Center();
