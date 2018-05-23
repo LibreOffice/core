@@ -16,6 +16,47 @@
       "revId": "3a337f35d9a75d136b0b5c167cf573d075dc1549",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_b90d3e39",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1053,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-05-23T14:21:25Z",
+      "side": 1,
+      "message": "I HAVE to check the table properties first - because some WIDs are in both paragraphs AND tables.  Since this is primarily a table, it needs to have priority. I wrestled with whether to move this entire section AFTER the table implementation code, but that would have meant another \"git blame\" entry / extra indentation.\n\nSo, based on that logic, your suggestion about the \"throw exception\" makes more consistent sense than my implementation. I\u0027ll make that change.",
+      "parentUuid": "9a30ddce_3e55b41c",
+      "revId": "3a337f35d9a75d136b0b5c167cf573d075dc1549",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_f99fb64d",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1069,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-05-23T14:21:25Z",
+      "side": 1,
+      "message": "I have questions about this.  If there WAS not SwAttrSet, then GetSwAttrSet() will create a basic one. However, the result of GetItemState is NOT DEFAULT as I would expect, but it is SET??? (e.g. for ParaLineSpacing and ParaBottomMargin). And yet, if an earlier item creates the itemset (like BottomBorder) then the result comes back as DEFAULT.",
+      "range": {
+        "startLine": 1069,
+        "startChar": 26,
+        "endLine": 1069,
+        "endChar": 37
+      },
+      "revId": "3a337f35d9a75d136b0b5c167cf573d075dc1549",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

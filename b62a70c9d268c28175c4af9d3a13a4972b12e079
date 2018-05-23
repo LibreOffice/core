@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_d914b245",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-05-23T14:21:25Z",
+      "side": 0,
+      "message": "Well, my code will still need to be ABOVE it.  But at least I can avoid a \"formatting change\" and leave this line in place.",
+      "parentUuid": "9a30ddce_5e326811",
+      "revId": "b62a70c9d268c28175c4af9d3a13a4972b12e079",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_8083a855",
         "filename": "sw/source/core/unocore/unotext.cxx",
         "patchSetId": 1
