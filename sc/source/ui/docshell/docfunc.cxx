@@ -511,14 +511,13 @@ static void lcl_collectAllPredOrSuccRanges(
 {
     ScDocument& rDoc = rDocShell.GetDocument();
     vector<ScTokenRef> aRefTokens;
-    ScRangeList aSrcRanges(rSrcRanges);
-    if (aSrcRanges.empty())
+    if (rSrcRanges.empty())
         return;
-    ScRange const & rFrontRange = aSrcRanges.front();
+    ScRange const & rFrontRange = rSrcRanges.front();
     ScDetectiveFunc aDetFunc(&rDoc, rFrontRange.aStart.Tab());
-    for (size_t i = 0, n = aSrcRanges.size(); i < n; ++i)
+    for (size_t i = 0, n = rSrcRanges.size(); i < n; ++i)
     {
-        ScRange const & r = aSrcRanges[i];
+        ScRange const & r = rSrcRanges[i];
         if (bPred)
         {
             aDetFunc.GetAllPreds(
