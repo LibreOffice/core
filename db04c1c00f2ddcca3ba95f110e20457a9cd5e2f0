@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_1edd500e",
+        "filename": "sfx2/source/appl/shutdownicon.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2018-05-23T07:20:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a30ddce_1eaf1082",
+      "revId": "db04c1c00f2ddcca3ba95f110e20457a9cd5e2f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_5eb7c8d7",
         "filename": "sfx2/source/appl/shutdownicon.cxx",
         "patchSetId": 15
@@ -30,6 +48,24 @@
       "writtenOn": "2018-05-23T06:29:51Z",
       "side": 1,
       "message": "this can be simplified to\n\n  #if defined ENABLE_QUICKSTART_APPLET \u0026\u0026 defined _WIN32",
+      "revId": "db04c1c00f2ddcca3ba95f110e20457a9cd5e2f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_fecddc5d",
+        "filename": "sfx2/source/appl/shutdownicon.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2018-05-23T07:20:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a30ddce_5eb7c8d7",
       "revId": "db04c1c00f2ddcca3ba95f110e20457a9cd5e2f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
