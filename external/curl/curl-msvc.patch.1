@@ -1,27 +1,27 @@
-MSVC: using SOLARINC and EXCFLAGS
+MSVC: using SOLARINC
 
---- curl/lib/Makefile.vc12	2012-05-24 12:07:02.000000000 -0400
-+++ curl/lib/Makefile.vc12	2012-10-29 11:53:44.658809300 -0400
-@@ -117,7 +117,7 @@
- ZLIBLIBSDLL  = zdll.lib
- ZLIBLIBS     = zlib.lib
- WINLIBS      = ws2_32.lib wldap32.lib advapi32.lib
--CFLAGS       = $(CFLAGS)
-+CFLAGS       = $(CFLAGS) $(EXCFLAGS)
+--- curl/winbuild/MakefileBuild.vc.orig	2017-10-23 16:36:07.713550851 +0200
++++ curl/winbuild/MakefileBuild.vc	2017-10-23 16:38:19.301547594 +0200
+@@ -60,7 +60,7 @@
+ !ELSE
+ CC_NODEBUG  = $(CC) /O2 /DNDEBUG
+ CC_DEBUG    = $(CC) /Od /D_DEBUG /RTC1 /Z7 /LDd
+-CFLAGS      = /I. /I ../lib /I../include /nologo /W4 /wd4127 /EHsc /DWIN32 /FD /c /DBUILDING_LIBCURL
++CFLAGS      = /I. /I ../lib /I../include /nologo /W4 /wd4127 /EHsc /DWIN32 /FD /c /DBUILDING_LIBCURL $(SOLARINC)
+ !ENDIF
  
- CFGSET       = FALSE
+ LFLAGS     = /nologo /machine:$(MACHINE)
+@@ -300,11 +300,11 @@
+ # CURL_XX macros are for the curl.exe command
  
-@@ -620,11 +620,11 @@
- debug-dll-ssl-dll\libcurl.res \
- debug-dll-zlib-dll\libcurl.res \
- debug-dll-ssl-dll-zlib-dll\libcurl.res: libcurl.rc
--	rc /dDEBUGBUILD=1 /Fo $@ libcurl.rc
-+	rc $(SOLARINC) /dDEBUGBUILD=1 /Fo $@ libcurl.rc
-
- release-dll\libcurl.res \
- release-dll-ssl-dll\libcurl.res \
- release-dll-zlib-dll\libcurl.res \
- release-dll-ssl-dll-zlib-dll\libcurl.res: libcurl.rc
--	rc /dDEBUGBUILD=0 /Fo $@ libcurl.rc
-+	rc $(SOLARINC) /dDEBUGBUILD=0 /Fo $@ libcurl.rc
- !ENDIF  # End of case where a config was provided.
+ !IF "$(DEBUG)"=="yes"
+-RC_FLAGS = /dDEBUGBUILD=1 /Fo $@ $(LIBCURL_SRC_DIR)\libcurl.rc
++RC_FLAGS = $(SOLARINC) /dDEBUGBUILD=1 /Fo $@ $(LIBCURL_SRC_DIR)\libcurl.rc
+ CURL_CC       = $(CC_DEBUG) $(RTLIB_DEBUG)
+ CURL_RC_FLAGS = /i../include /dDEBUGBUILD=1 /Fo $@ $(CURL_SRC_DIR)\curl.rc
+ !ELSE
+-RC_FLAGS = /dDEBUGBUILD=0 /Fo $@ $(LIBCURL_SRC_DIR)\libcurl.rc
++RC_FLAGS = $(SOLARINC) /dDEBUGBUILD=0 /Fo $@ $(LIBCURL_SRC_DIR)\libcurl.rc
+ CURL_CC       = $(CC_NODEBUG) $(RTLIB)
+ CURL_RC_FLAGS = /i../include /dDEBUGBUILD=0 /Fo $@ $(CURL_SRC_DIR)\curl.rc
+ !ENDIF
