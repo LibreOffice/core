@@ -944,14 +944,64 @@ void SdExportTest::testBulletsAsImage()
         uno::Reference<container::XIndexAccess> xLevels(xPropSet->getPropertyValue("NumberingRules"), uno::UNO_QUERY_THROW);
         uno::Sequence<beans::PropertyValue> aProperties;
         xLevels->getByIndex(0) >>= aProperties; // 1st level
+
         uno::Reference<awt::XBitmap> xBitmap;
-        for (const beans::PropertyValue& rProperty : aProperties)
+        awt::Size aSize;
+        sal_Int16 nNumberingType = -1;
+
+        for (beans::PropertyValue const & rProperty : aProperties)
         {
-            if (rProperty.Name == "GraphicBitmap")
+            if (rProperty.Name == "NumberingType")
+            {
+                nNumberingType = rProperty.Value.get<sal_Int16>();
+            }
+            else if (rProperty.Name == "GraphicBitmap")
+            {
                 xBitmap = rProperty.Value.get<uno::Reference<awt::XBitmap>>();
+            }
+            else if (rProperty.Name == "GraphicSize")
+            {
+                aSize = rProperty.Value.get<awt::Size>();
+            }
         }
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), style::NumberingType::BITMAP, nNumberingType);
+
+        // Graphic Bitmap
         const OString sFailed = sFailedMessageBase + "No bitmap for the bullets";
         CPPUNIT_ASSERT_MESSAGE(sFailed.getStr(), xBitmap.is());
+        Graphic aGraphic(uno::Reference<graphic::XGraphic>(xBitmap, uno::UNO_QUERY));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), GraphicType::Bitmap, aGraphic.GetType());
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessageBase.getStr(), aGraphic.GetSizeBytes() > sal_uLong(0));
+
+        if (nExportFormat == ODP || nExportFormat == PPT)
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), 16L, aGraphic.GetSizePixel().Width());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), 16L, aGraphic.GetSizePixel().Height());
+        }
+        else // FIXME: what happened here
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), 64L, aGraphic.GetSizePixel().Width());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), 64L, aGraphic.GetSizePixel().Height());
+        }
+
+        // Graphic Size
+        if (nExportFormat == ODP)
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), sal_Int32(500), aSize.Width);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), sal_Int32(500), aSize.Height);
+
+        }
+        else if (nExportFormat == PPT) // seems like a conversion error
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), sal_Int32(504), aSize.Width);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), sal_Int32(504), aSize.Height);
+        }
+        else // FIXME: totally wrong
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), sal_Int32(790), aSize.Width);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), sal_Int32(790), aSize.Height);
+        }
 
         xDocShRef->DoClose();
     }
