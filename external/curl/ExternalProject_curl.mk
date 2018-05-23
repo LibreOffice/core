@@ -10,7 +10,7 @@
 $(eval $(call gb_ExternalProject_ExternalProject,curl))
 
 $(eval $(call gb_ExternalProject_use_externals,curl,\
-	nss3 \
+	$(if $(ENABLE_NSS),nss3) \
 	zlib \
 ))
 
@@ -21,7 +21,7 @@ $(eval $(call gb_ExternalProject_register_targets,curl,\
 ifneq ($(OS),WNT)
 
 curl_CPPFLAGS :=
-curl_LDFLAGS := $(if $(filter LINUX FREEBSD,$(OS)),"-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN)
+curl_LDFLAGS := $(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN)
 
 ifneq ($(OS),ANDROID)
 ifneq ($(SYSBASE),)
@@ -39,16 +39,15 @@ endif
 # use --with-nss only on platforms other than Mac OS X and iOS
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_ExternalProject_run,build,\
-		CPPFLAGS="$(curl_CPPFLAGS)" \
-		LDFLAGS=$(curl_LDFLAGS) \
 		./configure \
 			$(if $(filter IOS MACOSX,$(OS)),\
 				--with-darwinssl,\
-				--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out")) \
-			--without-ssl --without-gnutls --without-polarssl --without-cyassl --without-axtls \
+				$(if $(ENABLE_NSS),--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out"),--without-nss)) \
+			--without-ssl --without-gnutls --without-polarssl --without-cyassl --without-axtls --without-mbedtls \
 			--enable-ftp --enable-http --enable-ipv6 \
 			--without-libidn2 --without-libpsl --without-librtmp \
 			--without-libssh2 --without-metalink --without-nghttp2 \
+			--without-libssh --without-brotli \
 			--disable-ares \
 			--disable-dict --disable-file --disable-gopher --disable-imap \
 			--disable-ldap --disable-ldaps --disable-manual --disable-pop3 \
@@ -58,34 +57,33 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 			$(if $(ENABLE_DEBUG),--enable-debug) \
+			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
-		&& cd lib \
-		&& $(MAKE) \
-	)
-
-else ifeq ($(OS)$(COM),WNTGCC)
-
-$(call gb_ExternalProject_get_state_target,curl,build):
-	$(call gb_ExternalProject_run,build,\
-		./configure --with-nss --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher \
-			--disable-file --disable-ldap --disable-telnet --disable-dict --build=i586-pc-mingw32 --host=i586-pc-mingw32 \
-			$(if $(ENABLE_DEBUG),--enable-debug) \
-			CC="$(CC) -mthreads $(if $(MINGW_SHARED_GCCLIB),-shared-libgcc)" \
-			LIBS="-lws2_32 -lwinmm $(if $(MINGW_SHARED_GXXLIB),$(MINGW_SHARED_LIBSTDCPP))" \
-			LDFLAGS="$(patsubst ;, -L,$(ILIB))" \
-			CPPFLAGS="$(INCLUDE)" OBJDUMP="objdump" \
+			$(if $(filter MACOSX,$(OS)),CFLAGS='$(CFLAGS) \
+				-mmacosx-version-min=$(MAC_OS_X_VERSION_MIN_REQUIRED_DOTS)') \
+			CPPFLAGS='$(curl_CPPFLAGS)' \
+			LDFLAGS='$(curl_LDFLAGS)' \
+			ZLIB_CFLAGS='$(ZLIB_CFLAGS)' ZLIB_LIBS='$(ZLIB_LIBS)' \
 		&& cd lib \
 		&& $(MAKE) \
 	)
 
 else ifeq ($(COM),MSC)
 
+$(eval $(call gb_ExternalProject_use_nmake,curl,build))
+
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_ExternalProject_run,build,\
-		MAKEFLAGS= LIB="$(ILIB)" nmake -f Makefile.vc12 \
-			cfg=$(if $(MSVC_USE_DEBUG_RUNTIME),debug-dll,release-dll) \
-			EXCFLAGS="/EHs /D_CRT_SECURE_NO_DEPRECATE /DUSE_WINDOWS_SSPI /D_USING_V110_SDK71_ $(SOLARINC)" $(if $(filter X86_64,$(CPUNAME)),MACHINE=X64) \
-	,lib)
+		nmake -f Makefile.vc \
+			mode=dll \
+			VC=12 \
+			$(if $(filter X86_64,$(CPUNAME)),MACHINE=x64,MACHINE=x86) \
+			GEN_PDB=$(if $(gb_SYMBOL),yes,no) \
+			DEBUG=$(if $(MSVC_USE_DEBUG_RUNTIME),yes,no) \
+			ENABLE_IPV6=yes \
+			ENABLE_SSPI=yes \
+			ENABLE_WINSSL=yes \
+	,winbuild)
 
 endif
 

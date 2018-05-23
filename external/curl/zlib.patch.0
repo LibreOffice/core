@@ -1,0 +1,100 @@
+--- configure
++++ configure
+@@ -937,8 +937,8 @@
+ ZLIB_LIBS
+ HAVE_LIBZ_FALSE
+ HAVE_LIBZ_TRUE
+-HAVE_LIBZ
+ PKGCONFIG
++HAVE_LIBZ
+ CURL_DISABLE_GOPHER
+ CURL_DISABLE_SMTP
+ CURL_DISABLE_SMB
+@@ -20709,7 +20709,6 @@
+ clean_CPPFLAGS=$CPPFLAGS
+ clean_LDFLAGS=$LDFLAGS
+ clean_LIBS=$LIBS
+-ZLIB_LIBS=""
+ 
+ # Check whether --with-zlib was given.
+ if test "${with_zlib+set}" = set; then :
+@@ -20718,6 +20719,7 @@
+ 
+ 
+ if test "$OPT_ZLIB" = "no" ; then
++    ZLIB_LIBS=""
+     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: zlib disabled" >&5
+ $as_echo "$as_me: WARNING: zlib disabled" >&2;}
+ else
+@@ -20725,6 +20725,21 @@
+     OPT_ZLIB=""
+   fi
+ 
++ if test -n "$ZLIB_CFLAGS$ZLIB_LIBS"; then
++  CPPFLAGS="$CPPFLAGS $ZLIB_CFLAGS"
++  LIBS="$ZLIB_LIBS $LIBS"
++  HAVE_LIBZ="1"
++
++
++$as_echo "#define HAVE_ZLIB_H 1" >>confdefs.h
++
++
++$as_echo "#define HAVE_LIBZ 1" >>confdefs.h
++
++  AMFIXLIB="1"
++ else
++  ZLIB_LIBS=""
++
+   if test -z "$OPT_ZLIB" ; then
+ 
+     if test -n "$PKG_CONFIG"; then
+@@ -21005,6 +21020,7 @@
+ $as_echo "$as_me: found both libz and libz.h header" >&6;}
+     curl_zlib_msg="enabled"
+   fi
++ fi
+ fi
+ 
+  if test x"$AMFIXLIB" = x1; then
+--- configure.ac
++++ configure.ac
+@@ -880,19 +880,30 @@
+ clean_CPPFLAGS=$CPPFLAGS
+ clean_LDFLAGS=$LDFLAGS
+ clean_LIBS=$LIBS
+-ZLIB_LIBS=""
+ AC_ARG_WITH(zlib,
+ AC_HELP_STRING([--with-zlib=PATH],[search for zlib in PATH])
+ AC_HELP_STRING([--without-zlib],[disable use of zlib]),
+                [OPT_ZLIB="$withval"])
+ 
+ if test "$OPT_ZLIB" = "no" ; then
++    ZLIB_LIBS=""
+     AC_MSG_WARN([zlib disabled])
+ else
+   if test "$OPT_ZLIB" = "yes" ; then
+     OPT_ZLIB=""
+   fi
+ 
++ if test -n "$ZLIB_CFLAGS$ZLIB_LIBS"; then
++  CPPFLAGS="$CPPFLAGS $ZLIB_CFLAGS"
++  LIBS="$ZLIB_LIBS $LIBS"
++  HAVE_LIBZ="1"
++  AC_SUBST(HAVE_LIBZ)
++  AC_DEFINE(HAVE_ZLIB_H, 1, [if you have the zlib.h header file])
++  AC_DEFINE(HAVE_LIBZ, 1, [if zlib is available])
++  AMFIXLIB="1"
++ else
++  ZLIB_LIBS=""
++
+   if test -z "$OPT_ZLIB" ; then
+     CURL_CHECK_PKGCONFIG(zlib)
+ 
+@@ -975,6 +986,7 @@
+     AC_MSG_NOTICE([found both libz and libz.h header])
+     curl_zlib_msg="enabled"
+   fi
++ fi
+ fi
+ 
+ dnl set variable for use in automakefile(s)
