@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_99831a04",
+        "filename": "sc/source/ui/view/viewfun5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2018-05-23T14:13:45Z",
+      "side": 1,
+      "message": "No need to have this conditional on LOK - just choose the right parent, and use it even in the desktop case, ie. unconditionally :-)",
+      "range": {
+        "startLine": 340,
+        "startChar": 43,
+        "endLine": 340,
+        "endChar": 109
+      },
+      "revId": "1670c5d719be03b28ca4b5a64547005e67183e10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
