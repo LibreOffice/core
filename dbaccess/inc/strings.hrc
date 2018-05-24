@@ -490,6 +490,8 @@
 #define STR_QUERY_REL_DELETE_WINDOW                 NC_("STR_QUERY_REL_DELETE_WINDOW", "When you delete this table all corresponding relations will be deleted as well. Continue?")
 #define STR_QUERY_REL_COULD_NOT_CREATE              NC_("STR_QUERY_REL_COULD_NOT_CREATE", "The database could not create the relation. Maybe foreign keys for this kind of table aren't supported.\nPlease check your documentation of the database.")
 
+#define STR_MIGRATION_FIREBIRD_COLUMN_TOO_LONG NC_("STR_MIGRATION_FIREBIRD_COLUMN_TOO_LONG", "Firebird 3 does not currently support column names of more than 30 characters, please shorten your column names in the original file and try again.")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
