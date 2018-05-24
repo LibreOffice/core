@@ -1612,16 +1612,6 @@ interface BaseText
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
-    SID_VERTICALTEXT_STATE
-    [
-        StateMethod = GetAttrState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-    SID_CTLFONT_STATE
-    [
-        StateMethod = GetAttrState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
         FN_READONLY_SELECTION_MODE
         [
                 ExecMethod = Execute ;
