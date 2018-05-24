@@ -18,7 +18,7 @@ namespace utils
 {
 OUString getTableNameFromStmt(const OUString& sSql);
 
-void ensureFirebirdTableLength(const OUString& sName);
+void ensureFirebirdColumnLength(const OUString& sName);
 }
 }
 
