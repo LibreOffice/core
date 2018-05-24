@@ -114,8 +114,9 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
                         if ( aObjList[ i ].equalsIgnoreAsciiCase( m_aCustomShapeType ) )
                         {
                             FmFormModel aModel;
-                            SfxItemPool& rPool = aModel.GetItemPool();
+                            SfxItemPool& rPool(aModel.GetItemPool());
                             rPool.FreezeIdRanges();
+
                             if ( GalleryExplorer::GetSdrObj( GALLERY_THEME_POWERPOINT, i, &aModel ) )
                             {
                                 const SdrObject* pSourceObj = aModel.GetPage( 0 )->GetObj( 0 );

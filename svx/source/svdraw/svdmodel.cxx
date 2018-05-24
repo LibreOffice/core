@@ -111,8 +111,9 @@ struct SdrModelImpl
 };
 
 
-void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbeddedHelper,
-    bool bUseExtColorTable)
+void SdrModel::ImpCtor(
+    SfxItemPool* pPool,
+    ::comphelper::IEmbeddedHelper* _pEmbeddedHelper)
 {
     mpImpl.reset(new SdrModelImpl);
     mpImpl->mpUndoManager=nullptr;
@@ -168,8 +169,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     else
         mnCharCompressType = CharCompressType::NONE;
 
-    bExtColorTable=bUseExtColorTable;
-
     if ( pPool == nullptr )
     {
         pItemPool=new SdrItemPool(nullptr);
@@ -216,26 +215,13 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     ImpCreateTables();
 }
 
-SdrModel::SdrModel():
-    maMaPag(),
+SdrModel::SdrModel(
+    SfxItemPool* pPool,
+    ::comphelper::IEmbeddedHelper* pPers)
+:   maMaPag(),
     maPages()
 {
-    ImpCtor(nullptr, nullptr, false);
-}
-
-SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers):
-    maMaPag(),
-    maPages()
-{
-    ImpCtor(pPool,pPers,false/*bUseExtColorTable*/);
-}
-
-SdrModel::SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable):
-    maMaPag(),
-    maPages(),
-    aTablePath(rPath)
-{
-    ImpCtor(pPool,pPers,bUseExtColorTable);
+    ImpCtor(pPool,pPers);
 }
 
 SdrModel::~SdrModel()
@@ -616,11 +602,12 @@ bool SdrModel::IsUndoEnabled() const
 
 void SdrModel::ImpCreateTables()
 {
+    // use standard path for initial construction
+    const OUString aTablePath(!utl::ConfigManager::IsFuzzing() ? SvtPathOptions().GetPalettePath() : "");
+
     for( auto i : o3tl::enumrange<XPropertyListType>() )
     {
-        if( !bExtColorTable || i != XPropertyListType::Color )
-            maProperties[i] = XPropertyList::CreatePropertyList (
-                i, aTablePath, ""/*TODO?*/ );
+        maProperties[i] = XPropertyList::CreatePropertyList(i, aTablePath, ""/*TODO?*/ );
     }
 }
 
@@ -655,7 +642,7 @@ void SdrModel::ClearModel(bool bCalledFromDestructor)
 
 SdrModel* SdrModel::AllocModel() const
 {
-    SdrModel* pModel=new SdrModel;
+    SdrModel* pModel=new SdrModel();
     pModel->SetScaleUnit(eObjUnit,aObjUnit);
     return pModel;
 }

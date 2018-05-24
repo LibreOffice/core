@@ -138,6 +138,15 @@ public:
     SdrHintKind      GetKind() const { return meHint;}
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//  SdrModel
+//      DlgEdModel
+//      FmFormModel
+//          ScDrawLayer
+//          SdDrawDocument
+//          SwDrawModel
+//      OReportModel
 
 struct SdrModelImpl;
 
@@ -147,7 +156,6 @@ protected:
     std::vector<SdrPage*> maMaPag;     // master pages
     std::vector<SdrPage*> maPages;
     Link<SdrUndoAction*,void>  aUndoLink;  // link to a NotifyUndo-Handler
-    OUString       aTablePath;
     Size           aMaxObjSize; // e.g. for auto-growing text
     Fraction       aObjUnit;   // description of the coordinate units for ClipBoard, Drag&Drop, ...
     MapUnit        eObjUnit;   // see above
@@ -236,8 +244,10 @@ private:
     SVX_DLLPRIVATE void ImpReformatAllTextObjects();
     SVX_DLLPRIVATE void ImpReformatAllEdgeObjects();
     SVX_DLLPRIVATE void ImpCreateTables();
-    SVX_DLLPRIVATE void ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable);
 
+    SVX_DLLPRIVATE void ImpCtor(
+        SfxItemPool* pPool,
+        ::comphelper::IEmbeddedHelper* pPers);
 
     // this is a weak reference to a possible living api wrapper for this model
     css::uno::Reference< css::uno::XInterface > mxUnoModel;
@@ -256,9 +266,9 @@ public:
     // if you want to use symbol objects inherited from SdrAttrObj.
     // If, however, you use objects inheriting from SdrObject you are free
     // to chose a pool of your liking.
-    explicit SdrModel();
-    explicit SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers);
-    explicit SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable);
+    explicit SdrModel(
+        SfxItemPool* pPool = nullptr,
+        ::comphelper::IEmbeddedHelper* pPers = nullptr);
     virtual ~SdrModel() override;
     void ClearModel(bool bCalledFromDestructor);
 

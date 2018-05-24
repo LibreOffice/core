@@ -22,7 +22,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdocapt.hxx>
 #include <sfx2/printer.hxx>
-#include <unotools/pathoptions.hxx>
 #include <svl/itempool.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -79,9 +78,7 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl, Timer *, void)
 {
     if (!m_bVisible)
     {
-        SvtPathOptions aPathOpt;
-        OUString aPath = aPathOpt.GetPalettePath();
-        m_pModel = new SdrModel(aPath, nullptr, nullptr, false);
+        m_pModel = new SdrModel();
         m_pModel->SetScaleUnit(MapUnit::Map100thMM);
         SfxItemPool& rPool = m_pModel->GetItemPool();
         rPool.SetDefaultMetric(MapUnit::Map100thMM);
