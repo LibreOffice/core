@@ -11,6 +11,7 @@ $(eval $(call gb_Library_Library,dbahsql))
 
 $(eval $(call gb_Library_set_include,dbahsql,\
     $$(INCLUDE) \
+    -I$(SRCDIR)/dbaccess/inc \
     -I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
@@ -27,6 +28,7 @@ $(eval $(call gb_Library_use_libraries,dbahsql,\
     comphelper \
     cppu \
     cppuhelper \
+    dba \
     sal \
     salhelper \
     dbtools \
