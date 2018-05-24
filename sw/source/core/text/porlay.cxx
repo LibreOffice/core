@@ -1803,7 +1803,8 @@ sal_Int32 SwScriptInfo::KashidaJustify( long* pKernArray,
 // Checks if the current text is 'Arabic' text. Note that only the first
 // character has to be checked because a ctl portion only contains one
 // script, see NewTextPortion
-bool SwScriptInfo::IsArabicText( const OUString& rText, sal_Int32 nStt, sal_Int32 nLen )
+bool SwScriptInfo::IsArabicText(const OUString& rText,
+        TextFrameIndex const nStt, TextFrameIndex const nLen)
 {
     using namespace ::com::sun::star::i18n;
     static const ScriptTypeList typeList[] = {
@@ -1989,9 +1990,10 @@ void SwScriptInfo::MarkKashidasInvalid(sal_Int32 const nCnt,
     }
 }
 
-sal_Int32 SwScriptInfo::ThaiJustify( const OUString& rText, long* pKernArray,
-                                     long* pScrArray, sal_Int32 nStt,
-                                     sal_Int32 nLen, sal_Int32 nNumberOfBlanks,
+TextFrameIndex SwScriptInfo::ThaiJustify( const OUString& rText, long* pKernArray,
+                                     long* pScrArray, TextFrameIndex const nStt,
+                                     TextFrameIndex const nLen,
+                                     TextFrameIndex nNumberOfBlanks,
                                      long nSpaceAdd )
 {
     SAL_WARN_IF( nStt + nLen > rText.getLength(), "sw.core", "String in ThaiJustify too small" );
@@ -2236,7 +2238,8 @@ void SwScriptInfo::CalcHiddenRanges( const SwTextNode& rNode, MultiSelection& rH
     rNode.SetHiddenCharAttribute( bNewHiddenCharsHidePara, bNewContainsHiddenChars );
 }
 
-sal_Int32 SwScriptInfo::CountCJKCharacters( const OUString &rText, sal_Int32 nPos, sal_Int32 nEnd, LanguageType aLang)
+TextFrameIndex SwScriptInfo::CountCJKCharacters(const OUString &rText,
+    TextFrameIndex nPos, TextFrameIndex const nEnd, LanguageType aLang)
 {
     sal_Int32 nCount = 0;
     if (nEnd > nPos)
@@ -2258,8 +2261,8 @@ sal_Int32 SwScriptInfo::CountCJKCharacters( const OUString &rText, sal_Int32 nPo
 }
 
 void SwScriptInfo::CJKJustify( const OUString& rText, long* pKernArray,
-                                     long* pScrArray, sal_Int32 nStt,
-                                     sal_Int32 nLen, LanguageType aLang,
+                                     long* pScrArray, TextFrameIndex const nStt,
+                                     TextFrameIndex const nLen, LanguageType aLang,
                                      long nSpaceAdd, bool bIsSpaceStop )
 {
     assert( pKernArray != nullptr && nStt >= 0 );
