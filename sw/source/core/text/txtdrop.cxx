@@ -509,7 +509,7 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
     if( !pDropFormat )
         return nullptr;
 
-    sal_Int32 nPorLen = pDropFormat->GetWholeWord() ? 0 : pDropFormat->GetChars();
+    TextFrameIndex nPorLen(pDropFormat->GetWholeWord() ? 0 : pDropFormat->GetChars());
     nPorLen = m_pFrame->GetTextNode()->GetDropLen( nPorLen );
     if( !nPorLen )
     {
@@ -549,7 +549,7 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
 
     // build DropPortionParts:
     OSL_ENSURE( ! rInf.GetIdx(), "Drop Portion not at 0 position!" );
-    sal_Int32 nNextChg = 0;
+    TextFrameIndex nNextChg(0);
     const SwCharFormat* pFormat = pDropFormat->GetCharFormat();
     SwDropPortionPart* pCurrPart = nullptr;
 
@@ -570,8 +570,8 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
         pTmpFnt->SetVertical( 0, rInf.GetTextFrame()->IsVertical() );
 
         // find next attribute change / script change
-        const sal_Int32 nTmpIdx = nNextChg;
-        sal_Int32 nNextAttr = std::min( GetNextAttr(), rInf.GetText().getLength() );
+        const TextFrameIndex nTmpIdx = nNextChg;
+        TextFrameIndex nNextAttr = GetNextAttr();
         nNextChg = m_pScriptInfo->NextScriptChg( nTmpIdx );
         if( nNextChg > nNextAttr )
             nNextChg = nNextAttr;
