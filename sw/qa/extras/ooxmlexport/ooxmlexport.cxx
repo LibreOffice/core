@@ -665,6 +665,27 @@ DECLARE_OOXMLEXPORT_TEST(testOoxmlCjklist44, "cjklist44.docx")
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_HANGUL_KO, numFormat);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testOoxmlTextNumberList, "text_number_list.docx")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::TEXT_NUMBER, numFormat);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testOoxmlTextCardinalList, "text_cardinal_list.docx")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::TEXT_CARDINAL, numFormat);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testOoxmlTextOrdinalList, "text_ordinal_list.docx")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::TEXT_ORDINAL, numFormat);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testOoxmlNumListZHTW, "numlist-zhtw.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
