@@ -4017,7 +4017,7 @@ public:
         // the popup menu render them in full, in the interim allow the text to wrap in both cases
         GList* cells = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(m_pComboBoxText));
         GtkCellRenderer* cell = static_cast<GtkCellRenderer*>(cells->data);
-        g_object_set(G_OBJECT(cell), "wrap-width", 3, nullptr);
+        g_object_set(G_OBJECT(cell), "ellipsize", PANGO_ELLIPSIZE_MIDDLE, nullptr);
         g_list_free(cells);
 
         if (GtkEntry* pEntry = get_entry())
@@ -4053,7 +4053,9 @@ public:
         // tweak the cell render to get a narrower size to stick
         GList* cells = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(m_pComboBoxText));
         GtkCellRenderer* cell = static_cast<GtkCellRenderer*>(cells->data);
-        gtk_cell_renderer_set_fixed_size(cell, nWidth, -1);
+        GtkRequisition size;
+        gtk_cell_renderer_get_preferred_size(cell, m_pWidget, &size, nullptr);
+        gtk_cell_renderer_set_fixed_size(cell, nWidth, size.height);
         g_list_free(cells);
 
         gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
