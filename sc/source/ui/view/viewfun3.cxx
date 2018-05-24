@@ -306,26 +306,26 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
 
             // Check for geometrical feasibility of the ranges.
             bool bValidRanges = true;
-            ScRange & r = aClipParam.maRanges.front();
+            ScRange const * p = &aClipParam.maRanges.front();
             SCCOL nPrevColDelta = 0;
             SCROW nPrevRowDelta = 0;
-            SCCOL nPrevCol = r.aStart.Col();
-            SCROW nPrevRow = r.aStart.Row();
-            SCCOL nPrevColSize = r.aEnd.Col() - r.aStart.Col() + 1;
-            SCROW nPrevRowSize = r.aEnd.Row() - r.aStart.Row() + 1;
+            SCCOL nPrevCol = p->aStart.Col();
+            SCROW nPrevRow = p->aStart.Row();
+            SCCOL nPrevColSize = p->aEnd.Col() - p->aStart.Col() + 1;
+            SCROW nPrevRowSize = p->aEnd.Row() - p->aStart.Row() + 1;
             for ( size_t i = 1; i < aClipParam.maRanges.size(); ++i )
             {
-                r = aClipParam.maRanges[i];
+                p = &aClipParam.maRanges[i];
                 if ( pDoc->HasSelectedBlockMatrixFragment(
-                    r.aStart.Col(), r.aStart.Row(), r.aEnd.Col(), r.aEnd.Row(), rMark) )
+                    p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(), rMark) )
                 {
                     if (!bApi)
                         ErrorMessage(STR_MATRIXFRAGMENTERR);
                     return false;
                 }
 
-                SCCOL nColDelta = r.aStart.Col() - nPrevCol;
-                SCROW nRowDelta = r.aStart.Row() - nPrevRow;
+                SCCOL nColDelta = p->aStart.Col() - nPrevCol;
+                SCROW nRowDelta = p->aStart.Row() - nPrevRow;
 
                 if ((nColDelta && nRowDelta) || (nPrevColDelta && nRowDelta) || (nPrevRowDelta && nColDelta))
                 {
@@ -341,8 +341,8 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
                         aClipParam.meDirection = ScClipParam::Row;
                 }
 
-                SCCOL nColSize = r.aEnd.Col() - r.aStart.Col() + 1;
-                SCROW nRowSize = r.aEnd.Row() - r.aStart.Row() + 1;
+                SCCOL nColSize = p->aEnd.Col() - p->aStart.Col() + 1;
+                SCROW nRowSize = p->aEnd.Row() - p->aStart.Row() + 1;
 
                 if (aClipParam.meDirection == ScClipParam::Column && nRowSize != nPrevRowSize)
                 {
@@ -358,8 +358,8 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
                     break;
                 }
 
-                nPrevCol = r.aStart.Col();
-                nPrevRow = r.aStart.Row();
+                nPrevCol = p->aStart.Col();
+                nPrevRow = p->aStart.Row();
                 nPrevColDelta = nColDelta;
                 nPrevRowDelta = nRowDelta;
                 nPrevColSize  = nColSize;
