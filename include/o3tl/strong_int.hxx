@@ -75,8 +75,7 @@ isInRange(T2 value) {
 /// Wrap up an integer type so that we prevent accidental conversion to other integer types.
 ///
 /// e.g.
-///   struct MyIntTag {};
-///   typedef o3tl::strong_int<unsigned, MyIntTag> MyInt;
+///   typedef o3tl::strong_int<unsigned, struct MyIntTag> MyInt;
 ///
 /// \param UNDERLYING_TYPE the underlying scalar type
 /// \param PHANTOM_TYPE    a type tag, used to distinguish this instantiation of the template
