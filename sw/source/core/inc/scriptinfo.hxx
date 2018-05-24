@@ -332,7 +332,7 @@ public:
                  Start index of the text
      @return Returns if the language is an Arabic language
  */
-    static bool IsArabicText( const OUString& rText, sal_Int32 nStt, sal_Int32 nLen );
+    static bool IsArabicText(const OUString& rText, TextFrameIndex nStt, TextFrameIndex nLen);
 
 /** Performs a thai justification on the kerning array
 
@@ -352,16 +352,18 @@ public:
                 The value which has to be added to the cells.
     @return The number of extra spaces in the given range
 */
-    static sal_Int32 ThaiJustify( const OUString& rText, long* pKernArray,
-                                  long* pScrArray, sal_Int32 nIdx,
-                                  sal_Int32 nLen, sal_Int32 nNumberOfBlanks = 0,
+    static TextFrameIndex ThaiJustify( const OUString& rText, long* pKernArray,
+                                  long* pScrArray, TextFrameIndex nIdx,
+                                  TextFrameIndex nLen,
+                                  TextFrameIndex nNumberOfBlanks = TextFrameIndex(0),
                                   long nSpaceAdd = 0 );
 
-    static sal_Int32 CountCJKCharacters( const OUString &rText, sal_Int32 nPos, sal_Int32 nEnd, LanguageType aLang);
+    static TextFrameIndex CountCJKCharacters(const OUString &rText,
+            TextFrameIndex nPos, TextFrameIndex nEnd, LanguageType aLang);
 
     static void CJKJustify( const OUString& rText, long* pKernArray,
-                                  long* pScrArray, sal_Int32 nStt,
-                                  sal_Int32 nLen, LanguageType aLang,
+                                  long* pScrArray, TextFrameIndex nStt,
+                                  TextFrameIndex nLen, LanguageType aLang,
                                   long nSpaceAdd, bool bIsSpaceStop );
 
     static SwScriptInfo* GetScriptInfo( const SwTextNode& rNode,
