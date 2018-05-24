@@ -66,8 +66,7 @@ namespace svl
     Id for <SfxInterface>s, gives a quasi-static access to the interface
     through an array to <SfxApplication>.
 */
-struct SfxInterfaceIdTag {};
-typedef o3tl::strong_int<sal_uInt16, SfxInterfaceIdTag> SfxInterfaceId;
+typedef o3tl::strong_int<sal_uInt16, struct SfxInterfaceIdTag> SfxInterfaceId;
 
 constexpr auto SFX_INTERFACE_NONE         = SfxInterfaceId(0);
 constexpr auto SFX_INTERFACE_SFXAPP       = SfxInterfaceId(1);

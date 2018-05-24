@@ -29,8 +29,7 @@
 
 struct MarkedUndoAction;
 
-struct ViewShellIdTag;
-typedef o3tl::strong_int<sal_Int32, ViewShellIdTag> ViewShellId;
+typedef o3tl::strong_int<sal_Int32, struct ViewShellIdTag> ViewShellId;
 
 class SVL_DLLPUBLIC SfxRepeatTarget
 {
