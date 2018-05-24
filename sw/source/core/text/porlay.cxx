@@ -1814,8 +1814,8 @@ bool SwScriptInfo::IsArabicText(const OUString& rText,
 
     // go forward if current position does not hold a regular character:
     const CharClass& rCC = GetAppCharClass();
-    sal_Int32 nIdx = nStt;
-    const sal_Int32 nEnd = nStt + nLen;
+    sal_Int32 nIdx = sal_Int32(nStt);
+    const sal_Int32 nEnd = sal_Int32(nStt + nLen);
     while ( nIdx < nEnd && !rCC.isLetterNumeric( rText, nIdx ) )
     {
         ++nIdx;
@@ -1996,25 +1996,25 @@ TextFrameIndex SwScriptInfo::ThaiJustify( const OUString& rText, long* pKernArra
                                      TextFrameIndex nNumberOfBlanks,
                                      long nSpaceAdd )
 {
-    SAL_WARN_IF( nStt + nLen > rText.getLength(), "sw.core", "String in ThaiJustify too small" );
+    SAL_WARN_IF( nStt + nLen > TextFrameIndex(rText.getLength()), "sw.core", "String in ThaiJustify too small" );
 
-    SwTwips nNumOfTwipsToDistribute = nSpaceAdd * nNumberOfBlanks /
+    SwTwips nNumOfTwipsToDistribute = nSpaceAdd * sal_Int32(nNumberOfBlanks) /
                                       SPACING_PRECISION_FACTOR;
 
     long nSpaceSum = 0;
-    sal_Int32 nCnt = 0;
+    TextFrameIndex nCnt(0);
 
-    for (sal_Int32 nI = 0; nI < nLen; ++nI)
+    for (sal_Int32 nI = 0; nI < sal_Int32(nLen); ++nI)
     {
-        const sal_Unicode cCh = rText[nStt + nI];
+        const sal_Unicode cCh = rText[sal_Int32(nStt) + nI];
 
         // check if character is not above or below base
         if ( ( 0xE34 > cCh || cCh > 0xE3A ) &&
              ( 0xE47 > cCh || cCh > 0xE4E ) && cCh != 0xE31 )
         {
-            if ( nNumberOfBlanks > 0 )
+            if (nNumberOfBlanks > TextFrameIndex(0))
             {
-                nSpaceAdd = nNumOfTwipsToDistribute / nNumberOfBlanks;
+                nSpaceAdd = nNumOfTwipsToDistribute / sal_Int32(nNumberOfBlanks);
                 --nNumberOfBlanks;
                 nNumOfTwipsToDistribute -= nSpaceAdd;
             }
@@ -2241,16 +2241,17 @@ void SwScriptInfo::CalcHiddenRanges( const SwTextNode& rNode, MultiSelection& rH
 TextFrameIndex SwScriptInfo::CountCJKCharacters(const OUString &rText,
     TextFrameIndex nPos, TextFrameIndex const nEnd, LanguageType aLang)
 {
-    sal_Int32 nCount = 0;
+    TextFrameIndex nCount(0);
     if (nEnd > nPos)
     {
         sal_Int32 nDone = 0;
         const lang::Locale &rLocale = g_pBreakIt->GetLocale( aLang );
         while ( nPos < nEnd )
         {
-            nPos = g_pBreakIt->GetBreakIter()->nextCharacters( rText, nPos,
+            nPos = TextFrameIndex(g_pBreakIt->GetBreakIter()->nextCharacters(
+                    rText, sal_Int32(nPos),
                     rLocale,
-                    i18n::CharacterIteratorMode::SKIPCELL, 1, nDone );
+                    i18n::CharacterIteratorMode::SKIPCELL, 1, nDone));
             nCount++;
         }
     }
@@ -2265,21 +2266,21 @@ void SwScriptInfo::CJKJustify( const OUString& rText, long* pKernArray,
                                      TextFrameIndex const nLen, LanguageType aLang,
                                      long nSpaceAdd, bool bIsSpaceStop )
 {
-    assert( pKernArray != nullptr && nStt >= 0 );
-    if (nLen > 0)
+    assert( pKernArray != nullptr && sal_Int32(nStt) >= 0 );
+    if (sal_Int32(nLen) > 0)
     {
         long nSpaceSum = 0;
         const lang::Locale &rLocale = g_pBreakIt->GetLocale( aLang );
         sal_Int32 nDone = 0;
-        sal_Int32 nNext = nStt;
-        for ( sal_Int32 nI = 0; nI < nLen ; ++nI )
+        sal_Int32 nNext(nStt);
+        for ( sal_Int32 nI = 0; nI < sal_Int32(nLen); ++nI )
         {
-            if ( nI + nStt == nNext )
+            if (nI + sal_Int32(nStt) == nNext)
             {
                 nNext = g_pBreakIt->GetBreakIter()->nextCharacters( rText, nNext,
                         rLocale,
                         i18n::CharacterIteratorMode::SKIPCELL, 1, nDone );
-                if (nNext < nStt + nLen || !bIsSpaceStop)
+                if (nNext < sal_Int32(nStt + nLen) || !bIsSpaceStop)
                     nSpaceSum += nSpaceAdd;
             }
             pKernArray[ nI ] += nSpaceSum;
