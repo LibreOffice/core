@@ -49,31 +49,12 @@ struct FmFormModelImplData
     }
 };
 
-FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
-    : SdrModel(pPool, pPers)
-    , m_pImpl(nullptr)
-    , m_pObjShell(nullptr)
-    , m_bOpenInDesignMode(false)
-    , m_bAutoControlFocus(false)
-{
-    m_pImpl.reset( new FmFormModelImplData );
-    m_pImpl->mxUndoEnv = new FmXUndoEnvironment(*this);
-}
-
-FmFormModel::FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers)
-    : SdrModel(rPath, pPool, pPers, false)
-    , m_pImpl(nullptr)
-    , m_pObjShell(nullptr)
-    , m_bOpenInDesignMode(false)
-    , m_bAutoControlFocus(false)
-{
-    m_pImpl.reset( new FmFormModelImplData );
-    m_pImpl->mxUndoEnv = new FmXUndoEnvironment(*this);
-}
-
-FmFormModel::FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
-                         bool bUseExtColorTable)
-    : SdrModel(rPath, pPool, pPers, bUseExtColorTable)
+FmFormModel::FmFormModel(
+    SfxItemPool* pPool,
+    SfxObjectShell* pPers)
+:   SdrModel(
+        pPool,
+        pPers)
     , m_pImpl(nullptr)
     , m_pObjShell(nullptr)
     , m_bOpenInDesignMode(false)

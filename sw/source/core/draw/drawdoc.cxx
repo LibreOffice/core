@@ -20,7 +20,6 @@
 #include <svx/svxids.hrc>
 #include <tools/stream.hxx>
 #include <unotools/configmgr.hxx>
-#include <unotools/pathoptions.hxx>
 #include <sot/storage.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
@@ -41,18 +40,10 @@
 using namespace com::sun::star;
 
 // Constructor
-
-const OUString GetPalettePath()
-{
-    if (utl::ConfigManager::IsFuzzing())
-        return OUString();
-    SvtPathOptions aPathOpt;
-    return aPathOpt.GetPalettePath();
-}
-
 SwDrawModel::SwDrawModel(SwDoc *const pDoc)
-    : FmFormModel( ::GetPalettePath(), &pDoc->GetAttrPool(),
-                     pDoc->GetDocShell(), true )
+:   FmFormModel(
+        &pDoc->GetAttrPool(),
+        pDoc->GetDocShell())
     , m_pDoc( pDoc )
 {
     SetScaleUnit( MapUnit::MapTwip );

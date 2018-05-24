@@ -241,12 +241,9 @@ static ScRange lcl_getClipRangeFromClipDoc(ScDocument* pClipDoc, SCTAB nClipTab)
 }
 
 ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
-    FmFormModel( !utl::ConfigManager::IsFuzzing() ? SvtPathOptions().GetPalettePath() : OUString(),
-                 nullptr,                          // SfxItemPool* Pool
-                 pGlobalDrawPersist ?
-                     pGlobalDrawPersist :
-                     ( pDocument ? pDocument->GetDocumentShell() : nullptr ),
-                 true ),        // bUseExtColorTable (is set below)
+    FmFormModel(
+        nullptr,
+        pGlobalDrawPersist ? pGlobalDrawPersist : (pDocument ? pDocument->GetDocumentShell() : nullptr)),
     aName( rName ),
     pDoc( pDocument ),
     bRecording( false ),

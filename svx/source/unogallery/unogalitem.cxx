@@ -322,7 +322,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
                 if( gallery::GalleryItemType::DRAWING == getType() )
                 {
                     ::GalleryTheme* pGalTheme = ( isValid() ? mpTheme->implGetTheme() : nullptr );
-                    FmFormModel*    pModel = new FmFormModel;
+                    FmFormModel*    pModel = new FmFormModel();
 
                     pModel->GetItemPool().FreezeIdRanges();
 
