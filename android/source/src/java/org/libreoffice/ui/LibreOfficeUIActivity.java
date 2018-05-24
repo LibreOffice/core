@@ -431,8 +431,18 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                     documentProvider = provider[0];
                     homeDirectory = documentProvider.getRootDirectory();
                     currentDirectory = homeDirectory;
-                    filePaths = currentDirectory.listFiles(FileUtilities
+                    List<IFile> paths = currentDirectory.listFiles(FileUtilities
                             .getFileFilter(filterMode));
+                    filePaths = new ArrayList<IFile>();
+                    for(IFile file: paths) {
+                        if(showHiddenFiles){
+                            filePaths.add(file);
+                        } else {
+                            if(!file.getName().startsWith(".")){
+                                filePaths.add(file);
+                            }
+                        }
+                    }
                 }
                 catch (final RuntimeException e) {
                     final Activity activity = LibreOfficeUIActivity.this;
