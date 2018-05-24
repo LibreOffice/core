@@ -317,11 +317,6 @@ AquaSalMenu::~AquaSalMenu()
 
 bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags)
 {
-    // do not use native popup menu when AQUA_NATIVE_MENUS is set to false
-    if( ! VisibleMenuBar() ) {
-        return false;
-    }
-
     // set offsets for positioning
     const float offset = 9.0;
 
@@ -488,17 +483,6 @@ void AquaSalMenu::removeFallbackMenuItem( NSMenuItem* pOldItem )
 
 bool AquaSalMenu::VisibleMenuBar()
 {
-    // Enable/disable experimental native menus code?
-
-    // To disable native menus, set the environment variable AQUA_NATIVE_MENUS to FALSE
-
-    static const char *pExperimental = getenv ("AQUA_NATIVE_MENUS");
-
-    if ( pExperimental && !strcasecmp(pExperimental, "FALSE") )
-        return false;
-
-    // End of experimental code enable/disable part
-
     return true;
 }
 
@@ -811,7 +795,7 @@ void AquaSalMenu::statusLayout()
 
 bool AquaSalMenu::AddMenuBarButton( const SalMenuButtonItem& i_rNewItem )
 {
-    if( ! mbMenuBar || ! VisibleMenuBar() )
+    if( ! mbMenuBar  )
         return false;
 
     MenuBarButtonEntry* pEntry = findButtonItem( i_rNewItem.mnId );
