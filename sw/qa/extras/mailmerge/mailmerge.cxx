@@ -673,7 +673,7 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf102010, "empty.odt", "10-testing-addresses.od
 
 namespace
 {
-constexpr char const* const EmptyValuesLegacyData[][8]
+const char const* const EmptyValuesLegacyData[][8]
     = { { "Heading", "Title: ", "First Name: firstname1", "Last Name: lastname1",
           "Title:  First Name: firstname1", "First Name: firstname1 Last Name: lastname1",
           "Title:  First Name: firstname1 Last Name: lastname1", "Trailing text" },
@@ -688,7 +688,7 @@ constexpr char const* const EmptyValuesLegacyData[][8]
           "Title:  First Name:  Last Name: lastname4", "Trailing text" },
         { "Heading", "Title: title5", "First Name: ", "Last Name: ", "Title: title5 First Name: ",
           "First Name:  Last Name: ", "Title: title5 First Name:  Last Name: ", "Trailing text" } };
-constexpr char const* const EmptyValuesNewData[][8]
+const char const* const EmptyValuesNewData[][8]
     = { { "Heading", "First Name: firstname1", "Last Name: lastname1",
           "Title:  First Name: firstname1", "First Name: firstname1 Last Name: lastname1",
           "Title:  First Name: firstname1 Last Name: lastname1", "Trailing text" },
