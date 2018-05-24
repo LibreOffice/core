@@ -36,10 +36,12 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include "pq_xcolumns.hxx"
 #include "pq_xkeycolumns.hxx"
@@ -149,7 +151,9 @@ void KeyColumns::refresh()
     }
     catch ( css::sdbc::SQLException & e )
     {
-        throw RuntimeException( e.Message , e.Context );
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException( e.Message,
+                        e.Context, anyEx );
     }
 
     fire( RefreshedBroadcaster( *this ) );

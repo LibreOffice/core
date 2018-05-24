@@ -324,11 +324,13 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                 if (!sStreamRelPath.isEmpty())
                     xStorage = xStorage->openStorageElement(sStreamRelPath, embed::ElementModes::READ);
             }
+            catch (const RuntimeException&)
+            {
+                throw;
+            }
             catch (const Exception&)
             {
                 Any aError = ::cppu::getCaughtException();
-                if  (aError.isExtractableTo(::cppu::UnoType<RuntimeException>::get()))
-                    throw;
                 throw lang::WrappedTargetRuntimeException(OUString(), *this, aError);
             }
         }

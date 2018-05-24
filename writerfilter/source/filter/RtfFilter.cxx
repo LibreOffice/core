@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -148,11 +149,12 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& rDescrip
         sal_uInt32 nEndTime = osl_getGlobalTimer();
         SAL_INFO("writerfilter.profile", "RtfFilter::filter: finished in " << nEndTime - nStartTime << " ms");
     }
-    catch (const io::WrongFormatException& e)
+    catch (const io::WrongFormatException&)
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         // cannot throw WrongFormatException directly :(
         throw lang::WrappedTargetRuntimeException("",
-                static_cast<OWeakObject*>(this), uno::makeAny(e));
+                static_cast<OWeakObject*>(this), anyEx);
     }
     catch (const uno::Exception& e)
     {

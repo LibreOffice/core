@@ -39,6 +39,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <unotools/mediadescriptor.hxx>
 
 #include <iostream>
@@ -515,11 +516,11 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
             throw;
         }
         // note: cannot throw anything other than SAXException out of here?
-        catch (uno::Exception const& e)
+        catch (uno::Exception const&)
         {
-            SAL_WARN("writerfilter.ooxml", "OOXMLDocumentImpl::resolve(): " << e);
-            throw lang::WrappedTargetRuntimeException("", nullptr,
-                    uno::makeAny(e));
+            css::uno::Any anyEx = cppu::getCaughtException();
+            SAL_WARN("writerfilter.ooxml", "OOXMLDocumentImpl::resolve(): " << anyEx);
+            throw lang::WrappedTargetRuntimeException("", nullptr, anyEx);
         }
         catch (...)
         {

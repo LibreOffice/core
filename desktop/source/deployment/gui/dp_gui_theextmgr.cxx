@@ -24,11 +24,13 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/deployment/DeploymentException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
@@ -202,7 +204,9 @@ void TheExtensionManager::checkUpdates()
     } catch ( const ucb::CommandAbortedException & ) {
         return;
     } catch ( const lang::IllegalArgumentException & e ) {
-        throw uno::RuntimeException( e.Message, e.Context );
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException( e.Message,
+                        e.Context, anyEx );
     }
 
     for ( sal_Int32 i = 0; i < xAllPackages.getLength(); ++i )
@@ -281,7 +285,9 @@ void TheExtensionManager::createPackageList()
     } catch ( const ucb::CommandAbortedException & ) {
         return;
     } catch ( const lang::IllegalArgumentException & e ) {
-        throw uno::RuntimeException( e.Message, e.Context );
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException( e.Message,
+                        e.Context, anyEx );
     }
 
     for ( sal_Int32 i = 0; i < xAllPackages.getLength(); ++i )

@@ -31,12 +31,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 #include <config_dconf.h>
 #include <config_folders.h>
 #include <osl/conditn.hxx>
@@ -453,8 +455,10 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
             throw css::uno::RuntimeException(
                 "unknown external value descriptor ID: " + e.Message);
         } catch (css::lang::WrappedTargetException & e) {
-            throw css::uno::RuntimeException(
-                "cannot obtain external value: " + e.Message);
+            css::uno::Any anyEx = cppu::getCaughtException();
+            throw css::lang::WrappedTargetRuntimeException(
+                "cannot obtain external value: " + e.Message,
+                nullptr, anyEx );
         }
     }
     return value;

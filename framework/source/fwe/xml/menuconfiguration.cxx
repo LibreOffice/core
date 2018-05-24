@@ -30,6 +30,7 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -80,20 +81,23 @@ Reference< XIndexAccess > MenuConfiguration::CreateMenuBarConfigurationFromXML(
     }
     catch ( const RuntimeException& e )
     {
-        throw WrappedTargetException( e.Message, Reference< XInterface >(), Any() );
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw WrappedTargetException( e.Message, Reference< XInterface >(), anyEx );
     }
     catch( const SAXException& e )
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         SAXException aWrappedSAXException;
 
         if ( !( e.WrappedException >>= aWrappedSAXException ))
-            throw WrappedTargetException( e.Message, Reference< XInterface >(), Any() );
+            throw WrappedTargetException( e.Message, Reference< XInterface >(), anyEx );
         else
-            throw WrappedTargetException( aWrappedSAXException.Message, Reference< XInterface >(), Any() );
+            throw WrappedTargetException( aWrappedSAXException.Message, Reference< XInterface >(), e.WrappedException );
     }
     catch( const css::io::IOException& e )
     {
-        throw WrappedTargetException( e.Message, Reference< XInterface >(), Any() );
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw WrappedTargetException( e.Message, Reference< XInterface >(), anyEx );
     }
 }
 
@@ -111,15 +115,18 @@ void MenuConfiguration::StoreMenuBarConfigurationToXML(
     }
     catch ( const RuntimeException& e )
     {
-        throw WrappedTargetException( e.Message, Reference< XInterface >(), Any() );
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw WrappedTargetException( e.Message, Reference< XInterface >(), anyEx );
     }
     catch ( const SAXException& e )
     {
-        throw WrappedTargetException( e.Message, Reference< XInterface >(), Any() );
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw WrappedTargetException( e.Message, Reference< XInterface >(), anyEx );
     }
     catch ( const css::io::IOException& e )
     {
-        throw WrappedTargetException( e.Message, Reference< XInterface >(), Any() );
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw WrappedTargetException( e.Message, Reference< XInterface >(), anyEx );
     }
 }
 

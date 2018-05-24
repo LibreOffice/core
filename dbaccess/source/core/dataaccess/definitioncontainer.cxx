@@ -30,6 +30,7 @@
 #include <comphelper/enumhelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ucb/CommandInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -619,10 +620,11 @@ void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& e
             implRemove( sOldName );
             implAppend( sNewName, xContent );
         }
-        catch(const Exception&)
+        catch(const Exception& ex)
         {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
-            throw RuntimeException();
+            css::uno::Any anyEx = cppu::getCaughtException();
+            throw css::lang::WrappedTargetRuntimeException( ex.Message,
+                            nullptr, anyEx );
         }
         m_bInPropertyChange = false;
     }

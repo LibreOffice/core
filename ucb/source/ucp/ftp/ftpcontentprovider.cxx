@@ -19,9 +19,11 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <osl/socket.hxx>
 #include "ftpcontentprovider.hxx"
 #include "ftpcontent.hxx"
@@ -162,6 +164,11 @@ Reference<XContent> SAL_CALL FTPContentProvider::queryContent(
         {
             try {
                 init();
+            } catch (css::uno::Exception const & ex) {
+                css::uno::Any anyEx = cppu::getCaughtException();
+                throw css::lang::WrappedTargetRuntimeException( ex.Message,
+                                css::uno::Reference< css::uno::XInterface >(),
+                                anyEx );
             } catch( ... ) {
                 throw RuntimeException();
             }
