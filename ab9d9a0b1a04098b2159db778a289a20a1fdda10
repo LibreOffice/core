@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_5dc0ade0",
+        "filename": "sc/source/filter/excel/xename.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-24T11:05:53Z",
+      "side": 1,
+      "message": "Didn\u0027t trace where rRangeData actually comes from, but this looks as if lcl_Ensure3DNamedRange() operates on the original named expression\u0027s token array, and modifying that would be wrong.",
+      "revId": "ab9d9a0b1a04098b2159db778a289a20a1fdda10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
