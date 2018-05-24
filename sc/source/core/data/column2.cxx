@@ -2818,14 +2818,37 @@ bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2 )
     if (nRow1 > nRow2)
         return false;
 
-    for (auto i = nRow1; i <= nRow2; ++i)
+    std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow1);
+    sc::CellStoreType::const_iterator it = aPos.first;
+    size_t nOffset = aPos.second;
+    SCROW nRow = nRow1;
+    for (;it != maCells.end() && nRow <= nRow2; ++it, nOffset = 0)
     {
-        auto aCell = GetCellValue(i);
-        if (aCell.meType == CELLTYPE_FORMULA)
-            aCell.mpFormula->MaybeInterpret();
-        // These require EditEngine (in ScEditUtils::GetString()), which is probably too complex for use in threads.
-        if (aCell.meType == CELLTYPE_EDIT)
-            return false;
+        switch( it->type )
+        {
+            case sc::element_type_edittext:
+                // These require EditEngine (in ScEditUtils::GetString()), which is probably
+                // too complex for use in threads.
+                return false;
+            case sc::element_type_formula:
+            {
+                size_t nRowsToRead = nRow2 - nRow + 1;
+                size_t nEnd = std::min(it->size, nOffset+nRowsToRead); // last row + 1
+                sc::formula_block::const_iterator itCell = sc::formula_block::begin(*it->data);
+                std::advance(itCell, nOffset);
+                for (size_t i = nOffset; i < nEnd; ++itCell, ++i)
+                {
+                    // Loop inside the formula block.
+                    (*itCell)->MaybeInterpret();
+                }
+                nRow += nEnd;
+                break;
+            }
+            default:
+                // Skip this block.
+                nRow += it->size - nOffset;
+                continue;
+        }
     }
 
     return true;
