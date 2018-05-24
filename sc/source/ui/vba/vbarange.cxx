@@ -22,6 +22,7 @@
 #include <vbahelper/helperdecl.hxx>
 
 #include <comphelper/unwrapargs.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/any.hxx>
 #include <sfx2/objsh.hxx>
 
@@ -61,6 +62,7 @@
 #include <com/sun/star/table/TableSortField.hpp>
 #include <com/sun/star/util/XMergeable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -2981,7 +2983,9 @@ ScVbaRange::getHidden()
     }
     catch( const uno::Exception& e )
     {
-        throw uno::RuntimeException( e.Message );
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException( e.Message,
+                        nullptr, anyEx );
     }
     return uno::makeAny( !bIsVisible );
 }
@@ -3008,7 +3012,9 @@ ScVbaRange::setHidden( const uno::Any& _hidden )
     }
     catch( const uno::Exception& e )
     {
-        throw uno::RuntimeException( e.Message );
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException( e.Message,
+                        nullptr, anyEx );
     }
 }
 

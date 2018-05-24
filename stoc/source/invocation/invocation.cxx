@@ -19,6 +19,7 @@
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
@@ -562,9 +563,10 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
         }
         catch (const Exception & exc)
         {
+            css::uno::Any anyEx = cppu::getCaughtException();
             throw InvocationTargetException(
                 "exception occurred in setValue(): " + exc.Message,
-                Reference< XInterface >(), makeAny( exc /* though sliced */ ) );
+                Reference< XInterface >(), anyEx );
         }
     }
 }

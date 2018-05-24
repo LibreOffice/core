@@ -27,6 +27,7 @@
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include "ohierarchyholder.hxx"
 
@@ -275,9 +276,11 @@ void SAL_CALL OHierarchyElement_Impl::disposing( const lang::EventObject& Source
 
         TestForClosing();
     }
-    catch( uno::Exception& )
+    catch( uno::Exception& ex )
     {
-        throw uno::RuntimeException(); // no exception must happen here, usually an exception means disaster
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw lang::WrappedTargetRuntimeException( ex.Message,
+                        nullptr, anyEx ); // no exception must happen here, usually an exception means disaster
     }
 }
 
@@ -309,12 +312,13 @@ void SAL_CALL OHierarchyElement_Impl::commited( const css::lang::EventObject& /*
     {
         Commit();
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                             "Can not commit storage sequence!",
                             uno::Reference< uno::XInterface >(),
-                            uno::makeAny( e ) );
+                            anyEx );
     }
 }
 

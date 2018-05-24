@@ -19,6 +19,7 @@
 
 #include <config_folders.h>
 
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -255,17 +256,23 @@ public:
 
             return uno::makeAny(aEntry);
         }
-
-        // action has been aborted
-        catch( ucb::CommandAbortedException const & e)
-            { throw lang::WrappedTargetException( "Command aborted", *this, uno::makeAny(e) ); }
-
-        // let runtime exception pass
-        catch( uno::RuntimeException const & ) { throw; }
-
-        // document not accessible
-        catch( uno::Exception const & e)
-            { throw lang::WrappedTargetException( "Document not accessible", *this, uno::makeAny(e) ); }
+        catch( ucb::CommandAbortedException const &)
+        {
+            // action has been aborted
+            css::uno::Any anyEx = cppu::getCaughtException();
+            throw lang::WrappedTargetException( "Command aborted", *this, anyEx );
+        }
+        catch( uno::RuntimeException const & )
+        {
+            // let runtime exception pass
+            throw;
+        }
+        catch( uno::Exception const &)
+        {
+            // document not accessible
+            css::uno::Any anyEx = cppu::getCaughtException();
+            throw lang::WrappedTargetException( "Document not accessible", *this, anyEx );
+        }
     }
 
 private:

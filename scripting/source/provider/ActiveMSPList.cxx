@@ -218,10 +218,11 @@ Reference< provider::XScriptProvider >
     }
     catch( const Exception& )
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             "Failed to create MasterScriptProvider for context '"
             + context + "'.",
-            *this, ::cppu::getCaughtException() );
+            *this, anyEx );
     }
     return msp;
 }

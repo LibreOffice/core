@@ -29,6 +29,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
 #include <com/sun/star/registry/InvalidValueException.hpp>
 #include <com/sun/star/registry/MergeConflictException.hpp>
@@ -48,6 +49,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <cppu/unotype.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
@@ -262,10 +264,11 @@ void Service::open(OUString const & rURL, sal_Bool bReadOnly, sal_Bool)
     } catch (css::uno::RuntimeException &) {
         throw;
     } catch (css::uno::Exception & e) {
-        throw css::uno::RuntimeException(
-            ("com.sun.star.configuration.ConfigurationRegistry: open failed: " +
-             e.Message),
-            static_cast< cppu::OWeakObject * >(this));
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException(
+            "com.sun.star.configuration.ConfigurationRegistry: open failed: " +
+            e.Message,
+            static_cast< cppu::OWeakObject * >(this), anyEx );
     }
     url_ = rURL;
     readOnly_ = bReadOnly;
