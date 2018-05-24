@@ -68,11 +68,10 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 
 else ifeq ($(COM),MSC)
 
-$(eval $(call gb_ExternalProject_use_nmake,curl,build))
-
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_ExternalProject_run,build,\
-		nmake -f Makefile.vc \
+		CC="$(shell cygpath -w $(filter-out -%,$(CC))) $(filter -%,$(CC))" \
+		MAKEFLAGS= LIB="$(ILIB)" nmake -f Makefile.vc \
 			mode=dll \
 			VC=12 \
 			$(if $(filter X86_64,$(CPUNAME)),MACHINE=x64,MACHINE=x86) \
