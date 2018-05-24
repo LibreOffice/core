@@ -24,7 +24,7 @@ namespace basctl
 {
 
 DlgEdModel::DlgEdModel()
-    :SdrModel()
+:   SdrModel()
 {
 }
 
