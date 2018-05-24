@@ -45,6 +45,6 @@
 #define AVMEDIA_STR_ALL_FILES       NC_("AVMEDIA_STR_ALL_FILES", "All files")
 #define AVMEDIA_STR_ERR_URL         NC_("AVMEDIA_STR_ERR_URL", "The format of the selected file is not supported.")
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
