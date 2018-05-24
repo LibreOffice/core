@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_fd824193",
+        "filename": "dbaccess/source/filter/hsqldb/createparser.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-05-24T11:46:50Z",
+      "side": 1,
+      "message": "nitpick: what about putting this var after the following if block?",
+      "range": {
+        "startLine": 33,
+        "startChar": 18,
+        "endLine": 33,
+        "endChar": 28
+      },
+      "revId": "f8089ef9d6000c4a7310e5fd7e15cc13e2af5480",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
