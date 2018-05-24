@@ -1500,7 +1500,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                 SCCOL nCellX = nX;                  // position where the cell really starts
                 SCROW nCellY = nY;
                 bool bDoCell = false;
-                bool bNeedEdit = false;
+                bool bUseEditEngine = false;
 
                 //  Part of a merged cell?
 
@@ -1589,17 +1589,17 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                     if (aCell.isEmpty())
                         bDoCell = false;
                     else if (aCell.meType == CELLTYPE_EDIT)
-                        bNeedEdit = true;
+                        bUseEditEngine = true;
                 }
 
                 // Check if this cell is mis-spelled.
-                if (bDoCell && !bNeedEdit && aCell.meType == CELLTYPE_STRING)
+                if (bDoCell && !bUseEditEngine && aCell.meType == CELLTYPE_STRING)
                 {
                     if (mpSpellCheckCxt && mpSpellCheckCxt->isMisspelled(nCellX, nCellY))
-                        bNeedEdit = true;
+                        bUseEditEngine = true;
                 }
 
-                if (bDoCell && !bNeedEdit)
+                if (bDoCell && !bUseEditEngine)
                 {
                     if ( nCellY == nY && nCellX >= nX1 && nCellX <= nX2 )
                     {
@@ -1677,20 +1677,20 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                     //  use edit engine for rotated, stacked or mixed-script text
                     if ( aVars.GetOrient() == SvxCellOrientation::Stacked ||
                          aVars.IsRotated() || IsAmbiguousScript(nScript) )
-                        bNeedEdit = true;
+                        bUseEditEngine = true;
                 }
-                if (bDoCell && !bNeedEdit)
+                if (bDoCell && !bUseEditEngine)
                 {
                     bool bFormulaCell = (aCell.meType == CELLTYPE_FORMULA);
                     if ( bFormulaCell )
                         lcl_CreateInterpretProgress(bProgress, mpDoc, aCell.mpFormula);
                     if ( aVars.SetText(aCell) )
                         pOldPattern = nullptr;
-                    bNeedEdit = aVars.HasEditCharacters() || (bFormulaCell && aCell.mpFormula->IsMultilineResult());
+                    bUseEditEngine = aVars.HasEditCharacters() || (bFormulaCell && aCell.mpFormula->IsMultilineResult());
                 }
                 long nTotalMargin = 0;
                 SvxCellHorJustify eOutHorJust = SvxCellHorJustify::Standard;
-                if (bDoCell && !bNeedEdit)
+                if (bDoCell && !bUseEditEngine)
                 {
                     CellType eCellType = aCell.meType;
                     bCellIsValue = ( eCellType == CELLTYPE_VALUE );
@@ -1731,7 +1731,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                         {
                             // Only horizontal scaling is handled here.
                             // DrawEdit is used to vertically scale 90 deg rotated text.
-                            bNeedEdit = true;
+                            bUseEditEngine = true;
                         }
                         else if ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip )     // horizontal
                         {
@@ -1796,23 +1796,23 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                     if ( bBreak )
                     {
                         if ( aVars.GetOrient() == SvxCellOrientation::Standard )
-                            bNeedEdit = ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip );
+                            bUseEditEngine = ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip );
                         else
                         {
                             long nHeight = aVars.GetTextSize().Height() +
                                             static_cast<long>(aVars.GetMargin()->GetTopMargin()*mnPPTY) +
                                             static_cast<long>(aVars.GetMargin()->GetBottomMargin()*mnPPTY);
-                            bNeedEdit = ( nHeight > aAreaParam.maClipRect.GetHeight() );
+                            bUseEditEngine = ( nHeight > aAreaParam.maClipRect.GetHeight() );
                         }
                     }
-                    if (!bNeedEdit)
+                    if (!bUseEditEngine)
                     {
-                        bNeedEdit =
+                        bUseEditEngine =
                             aVars.GetHorJust() == SvxCellHorJustify::Block &&
                             aVars.GetHorJustMethod() == SvxCellJustifyMethod::Distribute;
                     }
                 }
-                if (bNeedEdit)
+                if (bUseEditEngine)
                 {
                     //  mark the cell in CellInfo to be drawn in DrawEdit:
                     //  Cells to the left are marked directly, cells to the
