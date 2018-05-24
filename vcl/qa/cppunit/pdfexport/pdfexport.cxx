@@ -40,8 +40,13 @@ class PdfExportTest : public test::BootstrapFixture, public unotest::MacrosTest
     uno::Reference<lang::XComponent> mxComponent;
     FPDF_PAGE mpPdfPage = nullptr;
     FPDF_DOCUMENT mpPdfDocument = nullptr;
+    utl::TempFile maTempFile;
+    SvMemoryStream maMemory;
+    // Export the document as PDF, then parse it with PDFium.
+    void exportAndParse(const OUString& rURL, const utl::MediaDescriptor& rDescriptor);
 
 public:
+    PdfExportTest();
     virtual void setUp() override;
     virtual void tearDown() override;
     void load(const OUString& rFile, vcl::filter::PDFDocument& rDocument);
@@ -77,6 +82,7 @@ public:
     void testTdf109143();
     void testTdf105954();
     void testTdf106702();
+    void testTdf113143();
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
     CPPUNIT_TEST(testTdf106059);
@@ -102,8 +108,31 @@ public:
     CPPUNIT_TEST(testTdf109143);
     CPPUNIT_TEST(testTdf105954);
     CPPUNIT_TEST(testTdf106702);
+    CPPUNIT_TEST(testTdf113143);
     CPPUNIT_TEST_SUITE_END();
 };
+
+PdfExportTest::PdfExportTest()
+{
+    maTempFile.EnableKillingFile();
+}
+
+void PdfExportTest::exportAndParse(const OUString& rURL, const utl::MediaDescriptor& rDescriptor)
+{
+    // Import the bugdoc and export as PDF.
+    mxComponent = loadFromDesktop(rURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->storeToURL(maTempFile.GetURL(), rDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result with pdfium.
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    maMemory.WriteStream(aFile);
+    mpPdfDocument
+        = FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr);
+    CPPUNIT_ASSERT(mpPdfDocument);
+}
 
 void PdfExportTest::setUp()
 {
@@ -142,14 +171,12 @@ void PdfExportTest::load(const OUString& rFile, vcl::filter::PDFDocument& rDocum
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
-    SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(rDocument.Read(aStream));
 }
 
@@ -161,8 +188,6 @@ void PdfExportTest::testTdf106059()
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     // Explicitly enable the usage of the reference XObject markup.
@@ -170,11 +195,11 @@ void PdfExportTest::testTdf106059()
         {"UseReferenceXObject", uno::Any(true) }
     }));
     aMediaDescriptor["FilterData"] <<= aFilterData;
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
     // Assert that the XObject in the page resources dictionary is a reference XObject.
@@ -241,14 +266,12 @@ void PdfExportTest::testTdf105461()
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result with pdfium.
-    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
     mpPdfDocument = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
@@ -289,19 +312,17 @@ void PdfExportTest::testTdf107868()
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
     uno::Reference<view::XPrintable> xPrintable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPrintable.is());
     uno::Sequence<beans::PropertyValue> aOptions(comphelper::InitPropertySequence(
     {
-        {"FileName", uno::makeAny(aTempFile.GetURL())},
+        {"FileName", uno::makeAny(maTempFile.GetURL())},
         {"Wait", uno::makeAny(true)}
     }));
     xPrintable->print(aOptions);
 
     // Parse the export result with pdfium.
-    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
     mpPdfDocument = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
@@ -376,15 +397,13 @@ void PdfExportTest::testTdf106206()
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
     // The document has one page.
@@ -427,15 +446,13 @@ void PdfExportTest::testTdf109143()
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
     // The document has one page.
@@ -467,15 +484,13 @@ void PdfExportTest::testTdf106972()
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
     // Get access to the only form object on the only page.
@@ -513,15 +528,13 @@ void PdfExportTest::testTdf106972Pdf17()
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
     // Get access to the only image on the only page.
@@ -734,14 +747,12 @@ void PdfExportTest::testTdf108963()
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result with pdfium.
-    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
     mpPdfDocument = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
@@ -932,14 +943,12 @@ void PdfExportTest::testTdf115117_1a()
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result with pdfium.
-    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
     mpPdfDocument = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
@@ -977,14 +986,12 @@ void PdfExportTest::testTdf115117_2a()
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result with pdfium.
-    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
     mpPdfDocument = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
@@ -1018,18 +1025,16 @@ void PdfExportTest::testTdf105954()
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { { "ReduceImageResolution", uno::Any(true) },
           { "MaxImageResolution", uno::Any(static_cast<sal_Int32>(300)) } }));
     aMediaDescriptor["FilterData"] <<= aFilterData;
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result with pdfium.
-    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
     mpPdfDocument
@@ -1058,23 +1063,9 @@ void PdfExportTest::testTdf106702()
 {
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106702.odt";
-    mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-
-    // Parse the export result with pdfium.
-    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    mpPdfDocument
-        = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
-    CPPUNIT_ASSERT(mpPdfDocument);
+    exportAndParse(aURL, aMediaDescriptor);
 
     // The document has two pages.
     CPPUNIT_ASSERT_EQUAL(2, FPDF_GetPageCount(mpPdfDocument));
@@ -1117,6 +1108,62 @@ void PdfExportTest::testTdf106702()
     // This failed, vertical pos is 818 points, was 1674 (outside visible page
     // bounds).
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+}
+
+void PdfExportTest::testTdf113143()
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf113143.odp";
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "ExportNotesPages", uno::Any(true) },
+        // ReduceImageResolution is on by default and that hides the bug we
+        // want to test.
+        { "ReduceImageResolution", uno::Any(false) },
+    }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    exportAndParse(aURL, aMediaDescriptor);
+
+    // The document has two pages.
+    CPPUNIT_ASSERT_EQUAL(2, FPDF_GetPageCount(mpPdfDocument));
+
+    // First has the original (larger) image.
+    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/0);
+    CPPUNIT_ASSERT(mpPdfPage);
+    int nLarger = 0;
+    int nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(mpPdfPage, i);
+        if (FPDFPageObj_GetType(pPageObject) != FPDF_PAGEOBJ_IMAGE)
+            continue;
+
+        float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
+        FPDFPageObj_GetBounds(pPageObject, &fLeft, &fBottom, &fRight, &fTop);
+        nLarger = fRight - fLeft;
+        break;
+    }
+
+    // Second page has the scaled (smaller) image.
+    FPDF_ClosePage(mpPdfPage);
+    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/1);
+    CPPUNIT_ASSERT(mpPdfPage);
+    int nSmaller = 0;
+    nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(mpPdfPage, i);
+        if (FPDFPageObj_GetType(pPageObject) != FPDF_PAGEOBJ_IMAGE)
+            continue;
+
+        float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
+        FPDFPageObj_GetBounds(pPageObject, &fLeft, &fBottom, &fRight, &fTop);
+        nSmaller = fRight - fLeft;
+        break;
+    }
+
+    // This failed, both were 319, now nSmaller is 169.
+    CPPUNIT_ASSERT_LESS(nLarger, nSmaller);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
