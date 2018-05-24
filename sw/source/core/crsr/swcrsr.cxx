@@ -1593,13 +1593,15 @@ SwCursor::DoSetBidiLevelLeftRight(
         }
         else
         {
-            const SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( rTNd );
+            SwTextFrame const* pFrame;
+            const SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo(rTNd, &pFrame);
             if ( pSI )
             {
                 const sal_Int32 nMoveOverPos = io_rbLeft ?
                                                ( nPos ? nPos - 1 : 0 ) :
                                                 nPos;
-                SetCursorBidiLevel( pSI->DirType( nMoveOverPos ) );
+                TextFrameIndex nIndex(pFrame->MapModelToView(&rTNd, nMoveOverPos));
+                SetCursorBidiLevel( pSI->DirType(nIndex) );
             }
         }
     }
@@ -1736,8 +1738,9 @@ void SwCursor::DoSetBidiLevelUpDown()
     SwNode& rNode = GetPoint()->nNode.GetNode();
     if ( rNode.IsTextNode() )
     {
+        SwTextFrame const* pFrame;
         const SwScriptInfo* pSI =
-            SwScriptInfo::GetScriptInfo( *rNode.GetTextNode() );
+            SwScriptInfo::GetScriptInfo( *rNode.GetTextNode(), &pFrame );
         if ( pSI )
         {
             SwIndex& rIdx = GetPoint()->nContent;
@@ -1745,8 +1748,9 @@ void SwCursor::DoSetBidiLevelUpDown()
 
             if (nPos && nPos < rNode.GetTextNode()->GetText().getLength())
             {
-                const sal_uInt8 nCurrLevel = pSI->DirType( nPos );
-                const sal_uInt8 nPrevLevel = pSI->DirType( nPos - 1 );
+                TextFrameIndex const nIndex(pFrame->MapModelToView(rNode.GetTextNode(), nPos));
+                const sal_uInt8 nCurrLevel = pSI->DirType( nIndex );
+                const sal_uInt8 nPrevLevel = pSI->DirType( nIndex - TextFrameIndex(1) );
 
                 if ( nCurrLevel % 2 != nPrevLevel % 2 )
                 {
