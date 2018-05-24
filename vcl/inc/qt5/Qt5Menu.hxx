@@ -17,8 +17,9 @@ class QMenuBar;
 class Qt5MenuItem;
 class Qt5Frame;
 
-class Qt5Menu : public SalMenu
+class Qt5Menu : public QObject, public SalMenu
 {
+    Q_OBJECT
 private:
     std::vector< Qt5MenuItem* >  maItems;
     VclPtr<Menu>                 mpVCLMenu;
@@ -53,6 +54,9 @@ public:
     Menu*                       GetMenu() { return mpVCLMenu; }
     unsigned                    GetItemCount() { return maItems.size(); }
     Qt5MenuItem*                GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
+
+private slots:
+    void DispatchCommand();
 };
 
 class Qt5MenuItem : public SalMenuItem

@@ -9,6 +9,7 @@
 
 #include "Qt5Frame.hxx"
 #include "Qt5Menu.hxx"
+#include <Qt5Menu.moc>
 
 #include <QtWidgets/QtWidgets>
 
@@ -62,7 +63,6 @@ void Qt5Menu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned
 
     pQSubMenu->mpParentSalMenu = this;
     pItem->mpSubMenu = pQSubMenu;
-
 }
 
 void Qt5Menu::SetFrame( const SalFrame* pFrame )
@@ -114,6 +114,7 @@ void Qt5Menu::DoFullMenuUpdate( Menu* pMenuBar, QMenu* pParentMenu )
                     // leaf menu
                     QAction *pAction = pQMenu->addAction( toQString(aText) );
                     pAction->setShortcut( toQString( nAccelKey.GetName(GetFrame()->GetWindow()) ) );
+                    connect( pAction, &QAction::triggered, this, &Qt5Menu::DispatchCommand );
                 }
             }
         }
@@ -162,6 +163,11 @@ const Qt5Frame* Qt5Menu::GetFrame() const
     while( pMenu && ! pMenu->mpFrame )
         pMenu = pMenu->mpParentSalMenu;
     return pMenu ? pMenu->mpFrame : nullptr;
+}
+
+void Qt5Menu::DispatchCommand()
+{
+    SAL_WARN("vcl.qt5", "menu triggered");
 }
 
 void Qt5Menu::NativeItemText( OUString& rItemText )
