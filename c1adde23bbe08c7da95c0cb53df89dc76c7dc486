@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_40752696",
+        "filename": "framework/source/accelerators/storageholder.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-24T12:39:23Z",
+      "side": 1,
+      "message": "Ah, good point, I saw the return in the try block and missed that it was conditional",
+      "parentUuid": "9a30ddce_4027e6b5",
+      "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_203112ed",
         "filename": "framework/source/fwe/xml/menuconfiguration.cxx",
         "patchSetId": 8
@@ -81,6 +99,24 @@
       "writtenOn": "2018-05-24T12:27:40Z",
       "side": 1,
       "message": "dropping the special case for e wrapping yet another SAXException is fine?",
+      "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_60786a90",
+        "filename": "framework/source/fwe/xml/menuconfiguration.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-24T12:39:23Z",
+      "side": 1,
+      "message": "good point, will revert this part",
+      "parentUuid": "9a30ddce_203112ed",
       "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -104,6 +140,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_806f1ec4",
+        "filename": "sot/source/unoolestorage/xolesimplestorage.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-24T12:39:23Z",
+      "side": 1,
+      "message": "good point, will fix",
+      "parentUuid": "9a30ddce_404e0670",
+      "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_8058fe33",
         "filename": "stoc/source/invocation/invocation.cxx",
         "patchSetId": 8
@@ -115,6 +169,24 @@
       "writtenOn": "2018-05-24T12:27:40Z",
       "side": 1,
       "message": "in some cases, you keep the original Message added to the new exceptions\u0027s Message (like here), in other cases you dropped it; any rationale for the seeming inconsistency?",
+      "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_e0645ae6",
+        "filename": "stoc/source/invocation/invocation.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-24T12:39:23Z",
+      "side": 1,
+      "message": "I don\u0027t see that it adds anything useful to repeat the mesage, but that\u0027s a change that I can do in another commit, will revert any places that I did that.",
+      "parentUuid": "9a30ddce_8058fe33",
       "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -155,6 +227,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_00640ee2",
+        "filename": "sw/source/core/unocore/unosect.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-24T12:39:23Z",
+      "side": 1,
+      "message": "Just can\u0027t help myself, I\u0027ll revert those",
+      "parentUuid": "9a30ddce_a05b422d",
+      "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_004dee6b",
         "filename": "ucb/source/ucp/cmis/cmis_content.cxx",
         "patchSetId": 8
@@ -166,6 +256,24 @@
       "writtenOn": "2018-05-24T12:27:40Z",
       "side": 1,
       "message": "how is this change related to the overall topic of the commit?",
+      "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_409c46c0",
+        "filename": "ucb/source/ucp/cmis/cmis_content.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-05-24T12:39:23Z",
+      "side": 1,
+      "message": "doh! that should have been separated out, it looks wrong to lose the original exception info",
+      "parentUuid": "9a30ddce_004dee6b",
       "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
