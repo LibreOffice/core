@@ -21,18 +21,11 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/curl-msvc.patch.1 \
 	external/curl/curl-msvc-disable-protocols.patch.1 \
 	external/curl/curl-7.26.0_win-proxy.patch \
-	external/curl/zlib.patch.0 \
 ))
 
-ifeq ($(SYSTEM_NSS),)
+ifeq ($(OS),ANDROID)
 $(eval $(call gb_UnpackedTarball_add_patches,curl,\
-	external/curl/curl-nss.patch.1 \
-))
-endif
-
-ifeq ($(OS)-$(COM_IS_CLANG),WNT-TRUE)
-$(eval $(call gb_UnpackedTarball_add_patches,curl, \
-    external/curl/clang-cl.patch.0 \
+	external/curl/curl-android.patch \
 ))
 endif
 

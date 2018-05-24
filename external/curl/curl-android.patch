@@ -1,0 +1,16 @@
+diff -ur curl-7.26.0/ltmain.sh misc/build/curl-7.26.0/ltmain.sh
+--- curl-7.26.0/ltmain.sh	2012-07-02 14:05:04.256112279 +0200
++++ misc/build/curl-7.26.0/ltmain.sh	2012-07-02 14:07:23.775119842 +0200
+@@ -7307,6 +7307,12 @@
+ 	  func_warning "\`-release' is ignored for convenience libraries"
+       else
+ 
++	# Force no versioning suffix for Android thanks to silly
++	# apkbuilder which doesn't add extra native libs unless their
++	# name ends with .so
++
++	version_type=none
++
+ 	# Parse the version information argument.
+ 	save_ifs="$IFS"; IFS=':'
+ 	set dummy $vinfo 0 0 0
