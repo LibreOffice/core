@@ -129,14 +129,16 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
             if ( nPrevPos )
                 --nPrevPos;
 
-            SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( static_cast<SwTextNode&>(rNode), true );
+            SwTextFrame const* pFrame;
+            SwScriptInfo *const pSI = SwScriptInfo::GetScriptInfo(
+                    static_cast<SwTextNode&>(rNode), &pFrame, true);
 
             sal_uInt8 nLevel = 0;
             if ( ! pSI )
             {
                 // seems to be an empty paragraph.
                 Point aPt; // why ???
-                SwTextFrame *const pFrame = static_cast<SwTextFrame*>(
+                pFrame = static_cast<SwTextFrame*>(
                         static_cast<SwTextNode&>(rNode).getLayoutFrame(
                             GetLayout(), &aPt, pTmpCursor->GetPoint(), false));
 
@@ -149,10 +151,6 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
             {
                 if (TextFrameIndex(COMPLETE_STRING) != pSI->GetInvalidityA())
                 {
-                    // note: if pSI was found, there must be a frame
-                    SwTextFrame *const pFrame = static_cast<SwTextFrame*>(
-                        static_cast<SwTextNode&>(rNode).getLayoutFrame(
-                            GetLayout(), nullptr, pTmpCursor->GetPoint(), false));
                     // mystery why this doesn't use the other overload?
                     pSI->InitScriptInfo(static_cast<SwTextNode&>(rNode), pFrame->GetMergedPara());
                 }
