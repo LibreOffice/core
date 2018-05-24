@@ -504,6 +504,8 @@ public:
      */
     SwTwips GetFootnoteLine( const SwTextFootnote *pFootnote ) const;
 
+    TextFrameIndex GetDropLen(TextFrameIndex nWishLen) const;
+
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void CheckDirection( bool bVert ) override;
 
