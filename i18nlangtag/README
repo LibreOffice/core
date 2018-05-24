@@ -41,9 +41,6 @@ When changing a (translation's) language tag (for example, 'ca-XV' to 'ca-valenc
 * i18nlangtag/qa/cppunit/test_languagetag.cxx
 ** add a unit test for the new tag and old tag
 
-* instsetoo_native/util/pack.lst
-** replace the tag in List_of_languages and sort alphabetically
-
 * l10ntools/source/ulfconv/msi-encodinglist.txt
 ** replace the tag and sort alphabetically
 
