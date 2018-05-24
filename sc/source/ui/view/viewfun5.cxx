@@ -38,7 +38,6 @@
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>
 #include <sot/storage.hxx>
-#include <unotools/pathoptions.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/transfer.hxx>
@@ -508,12 +507,13 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
         {
             MakeDrawLayer();    // before loading model, so 3D factory has been created
 
-            SvtPathOptions aPathOpt;
-            OUString aPath = aPathOpt.GetPalettePath();
-
             ScDocShellRef aDragShellRef( new ScDocShell );
             aDragShellRef->DoInitNew();
-            std::unique_ptr<FmFormModel> pModel(new FmFormModel( aPath, nullptr, aDragShellRef.get() ));
+
+            std::unique_ptr<FmFormModel> pModel(
+                new FmFormModel(
+                    nullptr,
+                    aDragShellRef.get()));
 
             pModel->GetItemPool().FreezeIdRanges();
             xStm->Seek(0);
