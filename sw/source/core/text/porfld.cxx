@@ -211,9 +211,10 @@ void SwFieldPortion::CheckScript( const SwTextSizeInfo &rInf )
     // nNextScriptChg will be evaluated during SwFieldPortion::Format()
 
     if (nChg < aText.getLength() && nChg >= 0)
-        m_nNextScriptChg = g_pBreakIt->GetBreakIter()->endOfScript( aText, nChg, nScript );
+        m_nNextScriptChg = TextFrameIndex(
+                g_pBreakIt->GetBreakIter()->endOfScript(aText, nChg, nScript));
     else
-        m_nNextScriptChg = aText.getLength();
+        m_nNextScriptChg = TextFrameIndex(aText.getLength());
 
     SwFontScript nTmp;
     switch ( nScript ) {
@@ -238,7 +239,7 @@ void SwFieldPortion::CheckScript( const SwTextSizeInfo &rInf )
         UBiDiLevel nCurrDir;
         ubidi_getLogicalRun( pBidi, 0, &nEnd, &nCurrDir );
         ubidi_close( pBidi );
-        const sal_Int32 nNextDirChg = nEnd;
+        const TextFrameIndex nNextDirChg(nEnd);
         m_nNextScriptChg = std::min( m_nNextScriptChg, nNextDirChg );
 
         // #i89825# change the script type also to CTL
