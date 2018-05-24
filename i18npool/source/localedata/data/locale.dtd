@@ -127,6 +127,12 @@
 <!-- LangID must be a valid two or three letter language identifier defined by
      ISO 639. Use ISO 639-1 two letter code where available, else ISO 639-2 or
      639-3 three letter code.
+
+     If the Variant element designates a BCP 47 language tag (because the
+     locale is not expressable as a Language,Country pair, for example contains
+     a script tag) then the LangID value MUST be the code 'qlt' (reserved by
+     ISO 639-3 for private use) to tell the language tag processor that the
+     actual language tag is in the Variant element.
 -->
 
 <!ELEMENT Country (CountryID, DefaultName) >
@@ -140,7 +146,10 @@
 -->
 
 <!ELEMENT Variant (#PCDATA) >
-<!-- Reserved for future use, currently unused. -->
+<!-- If the LangID element contains the value 'qlt' then the Variant element
+     MUST contain the valid BCP 47 language tag of the locale. If LangID is
+     another ISO 639 code than 'qlt' then the Variant element must be empty.
+-->
 
 
 <!-- The LC_FORMAT element contains number format codes and may actually appear
