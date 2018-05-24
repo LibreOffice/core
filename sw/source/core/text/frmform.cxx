@@ -779,7 +779,7 @@ void SwTextFrame::SetOfst_(TextFrameIndex const nNewOfst)
         SwCharRange &rReformat = pPara->GetReformat();
         rReformat.Start() = TextFrameIndex(0);
         rReformat.Len() = TextFrameIndex(GetText().getLength());
-        pPara->GetDelta() = rReformat.Len();
+        pPara->GetDelta() = sal_Int32(rReformat.Len());
     }
     InvalidateSize();
 }
@@ -1281,7 +1281,7 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
     }
 
     // Calculating the good ol' nDelta
-    pPara->GetDelta() -= long(pNew->GetLen()) - long(nOldLen);
+    pPara->GetDelta() -= sal_Int32(pNew->GetLen()) - sal_Int32(nOldLen);
 
     // Stop!
     if( rLine.IsStop() )
