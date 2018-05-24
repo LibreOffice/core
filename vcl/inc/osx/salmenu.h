@@ -56,8 +56,6 @@ public:
     virtual ~AquaSalMenu() override;
 
     virtual bool VisibleMenuBar() override;
-    // must return true to actually display native menu bars
-    // otherwise only menu messages are processed (eg, OLE on Windows)
 
     virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos ) override;
     virtual void RemoveItem( unsigned nPos ) override;
