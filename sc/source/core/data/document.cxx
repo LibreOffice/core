@@ -3133,7 +3133,7 @@ void ScDocument::GetClipArea(SCCOL& nClipX, SCROW& nClipY, bool bIncludeFiltered
     SCROW nEndRow   = rRange.aEnd.Row();
     for ( size_t i = 1, n = rClipRanges.size(); i < n; ++i )
     {
-        ScRange const rRange2 = rClipRanges[ i ];
+        ScRange const & rRange2 = rClipRanges[ i ];
         if (rRange2.aStart.Col() < nStartCol)
             nStartCol = rRange2.aStart.Col();
         if (rRange2.aStart.Row() < nStartRow)
