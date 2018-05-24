@@ -961,6 +961,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(if $(ENABLE_HTMLHELP),\
 		helpcontent2_html_dynamic \
 		helpcontent2_html_media \
+		helpcontent2_html_icon-themes \
 		helpcontent2_html_static \
 	) \
 ))
