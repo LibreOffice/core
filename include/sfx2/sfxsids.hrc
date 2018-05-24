@@ -656,8 +656,6 @@ class SfxDocumentInfoItem;
 
 #define SID_RESTORE_EDITING_VIEW            (SID_SFX_START + 1663)
 
-#endif  // #ifndef INCLUDED_SFX2_SFXSIDS_HRC
-
 // SfxSecurityPage related stuff
 
 #define FN_EDIT2                (SID_SW_START + 1800)
@@ -681,5 +679,7 @@ class SfxDocumentInfoItem;
 #endif
 #define FID_CHG_RECORD          (EDIT_MENU_START + 18)
 #define SID_CHG_PROTECT         (SC_VIEW_START + 84)
+
+#endif  // #ifndef INCLUDED_SFX2_SFXSIDS_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
