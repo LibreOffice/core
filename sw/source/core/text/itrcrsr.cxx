@@ -249,7 +249,8 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
             rSpace.IsAutoFirst() )
         {
             nFirstLineOfs = GetFnt()->GetSize( GetFnt()->GetActual() ).Height();
-            LanguageType aLang = m_pFrame->GetTextNode()->GetLang( 0, 1, css::i18n::ScriptType::ASIAN);
+            LanguageType const aLang = m_pFrame->GetLangOfChar(
+                    TextFrameIndex(0), css::i18n::ScriptType::ASIAN);
             if (aLang != LANGUAGE_KOREAN && aLang != LANGUAGE_JAPANESE)
                 nFirstLineOfs<<=1;
 
