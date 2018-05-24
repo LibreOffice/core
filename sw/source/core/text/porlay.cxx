@@ -2081,7 +2081,8 @@ TextFrameIndex SwScriptInfo::ThaiJustify( const OUString& rText, long* pKernArra
 }
 
 SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTextNode& rTNd,
-                                           bool bAllowInvalid )
+                                           SwTextFrame const**const o_ppFrame,
+                                           bool const bAllowInvalid)
 {
     SwIterator<SwTextFrame,SwTextNode> aIter( rTNd );
     SwScriptInfo* pScriptInfo = nullptr;
@@ -2093,7 +2094,13 @@ SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTextNode& rTNd,
         {
             if (bAllowInvalid ||
                 TextFrameIndex(COMPLETE_STRING) == pScriptInfo->GetInvalidityA())
+            {
+                if (o_ppFrame)
+                {
+                    *o_ppFrame = pLast;
+                }
                 break;
+            }
             pScriptInfo = nullptr;
         }
     }

@@ -28,6 +28,7 @@
 #include "TextFrameIndex.hxx"
 
 class SwTextNode;
+class SwTextFrame;
 class Point;
 class MultiSelection;
 typedef std::vector< sal_Int32 > PositionList;
@@ -366,8 +367,11 @@ public:
                                   TextFrameIndex nLen, LanguageType aLang,
                                   long nSpaceAdd, bool bIsSpaceStop );
 
+    /// return a frame for the node, ScriptInfo is its member...
+    /// (many clients need both frame and SI, and both have to match)
     static SwScriptInfo* GetScriptInfo( const SwTextNode& rNode,
-                                        bool bAllowInvalid = false );
+                                        SwTextFrame const** o_pFrame = nullptr,
+                                        bool bAllowInvalid = false);
 
     SwFontScript WhichFont(TextFrameIndex nIdx) const;
     static SwFontScript WhichFont(sal_Int32 nIdx, OUString const & rText);
