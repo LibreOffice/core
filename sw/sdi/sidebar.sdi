@@ -23,8 +23,5 @@ interface Sidebar
     SID_ATTR_TRANSFORM_POS_X    [ StateMethod = GetDrawAttrStateForIFBX; ]
     SID_ATTR_TRANSFORM_POS_Y    [ StateMethod = GetDrawAttrStateForIFBX; ]
     SID_ATTR_TRANSFORM_ANGLE    [ StateMethod = GetDrawAttrStateForIFBX; ]
-    SID_ATTR_TRANSFORM_ROT_X    [ StateMethod = GetDrawAttrStateForIFBX; ]
-    SID_ATTR_TRANSFORM_ROT_Y    [ StateMethod = GetDrawAttrStateForIFBX; ]
-    SID_ATTR_TRANSFORM_PROTECT_POS  [ StateMethod = GetDrawAttrStateForIFBX;]
     SID_ATTR_TRANSFORM_PROTECT_SIZE [ StateMethod = GetDrawAttrStateForIFBX;]
 }

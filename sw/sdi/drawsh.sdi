@@ -17,13 +17,6 @@
  */
 interface TextDraw : TextDrawBase
 {
-    SID_ATTR_LINEEND_STYLE
-    [
-        ExecMethod = ExecDrawAttrArgs ;
-        StateMethod = DisableState ;
-        Export = FALSE;
-    ]
-
     SID_ATTR_LINE_START
     [
         ExecMethod = ExecDrawAttrArgs ;
@@ -412,83 +405,6 @@ shell SwDrawShell : SwDrawBaseShell
         import TextDraw;
 
      // no export
-
-    SID_FORMTEXT_STYLE
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_ADJUST
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_DISTANCE
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_START
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_MIRROR
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_HIDEFORM
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_OUTLINE
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_SHDWXVAL
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_SHADOW
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_SHDWCOLOR
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_SHDWYVAL
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
 
     FN_FORMAT_FOOTNOTE_DLG // status()
     [

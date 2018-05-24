@@ -51,11 +51,6 @@ interface StarWriter
         ExecMethod = ExecOther ;
         StateMethod = StateOther ;
     ]
-    SID_ATTR_UNDO_COUNT // ole(no) api(final/play)
-    [
-        ExecMethod = ExecOther ;
-        StateMethod = StateOther ;
-    ]
 
     FN_MAILMERGE_WIZARD
     [

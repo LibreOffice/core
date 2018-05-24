@@ -348,22 +348,6 @@ interface TextDrawText
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
-    SID_VERTICALTEXT_STATE
-    [
-        StateMethod = GetState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-    SID_CTLFONT_STATE
-    [
-        StateMethod = GetState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-    SID_CHAR_DLG  // api:
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
 
     SID_CHAR_DLG_EFFECT
     [
@@ -405,83 +389,6 @@ interface TextDrawText
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
-    SID_FORMTEXT_STYLE // api:
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_ADJUST  // api:
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_DISTANCE // api:
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_START  // api:
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_MIRROR // api:
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_HIDEFORM   // api:
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_OUTLINE // api:
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_SHADOW  // api:
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_SHDWCOLOR // api:
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_SHDWXVAL  // api:
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_FORMTEXT_SHDWYVAL  // api:
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
     SID_THESAURUS // api:
     [
         ExecMethod = ExecDrawLingu ;
@@ -514,11 +421,6 @@ interface TextDrawText
     [
         ExecMethod = Execute;
         StateMethod = GetDrawTextCtrlState
-    ]
-
-    SID_SEARCH_DLG
-    [
-        StateMethod = StateDisableItems
     ]
 
     SID_HYPERLINK_SETLINK  // status()

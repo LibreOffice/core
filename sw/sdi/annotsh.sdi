@@ -148,18 +148,6 @@ interface Annotation : _Annotation
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
-    SID_VERTICALTEXT_STATE
-    [
-        StateMethod = GetState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_CTLFONT_STATE
-    [
-        StateMethod = GetState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
     SID_TRANSLITERATE_SENTENCE_CASE
     [
         ExecMethod = ExecTransliteration;
