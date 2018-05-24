@@ -66,6 +66,7 @@ public:
 
     void testDescription();
     void testECDSA();
+    void testECDSAOOXML();
     /// Test a typical ODF where all streams are signed.
     void testODFGood();
     /// Test a typical broken ODF signature where one stream is corrupted.
@@ -116,6 +117,7 @@ public:
     CPPUNIT_TEST_SUITE(SigningTest);
     CPPUNIT_TEST(testDescription);
     CPPUNIT_TEST(testECDSA);
+    CPPUNIT_TEST(testECDSAOOXML);
     CPPUNIT_TEST(testODFGood);
     CPPUNIT_TEST(testODFBroken);
     CPPUNIT_TEST(testODFNo);
@@ -301,6 +303,47 @@ void SigningTest::testECDSA()
     // This was SecurityOperationStatus_UNKNOWN, signing with an ECDSA key was
     // broken.
     CPPUNIT_ASSERT_EQUAL(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED, rInformations[0].nStatus);
+}
+
+void SigningTest::testECDSAOOXML()
+{
+    // Create an empty document and store it to a tempfile, finally load it as a storage.
+    createDoc("");
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("MS Word 2007 XML");
+    xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    CPPUNIT_ASSERT(aManager.init());
+    uno::Reference<embed::XStorage> xStorage
+        = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
+            ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
+    CPPUNIT_ASSERT(xStorage.is());
+    aManager.mxStore = xStorage;
+    aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
+
+    // Then add a document signature.
+    uno::Reference<security::XCertificate> xCertificate
+        = getCertificate(aManager, svl::crypto::SignatureMethodAlgorithm::ECDSA);
+    if (!xCertificate.is())
+        return;
+    OUString aDescription;
+    sal_Int32 nSecurityId;
+    aManager.add(xCertificate, mxSecurityContext, aDescription, nSecurityId,
+                 /*bAdESCompliant=*/false);
+
+    // Read back the signature and make sure that it's valid.
+    aManager.read(/*bUseTempStream=*/true);
+    std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
+    // This was SecurityOperationStatus_UNKNOWN, signing with an ECDSA key was
+    // broken.
+    CPPUNIT_ASSERT_EQUAL(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED,
+                         rInformations[0].nStatus);
 }
 
 void SigningTest::testOOXMLDescription()
