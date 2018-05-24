@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_c06916c0",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3136,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-24T12:38:20Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be const\u0026 instead of a copy?",
+      "range": {
+        "startLine": 3136,
+        "startChar": 16,
+        "endLine": 3136,
+        "endChar": 21
+      },
+      "revId": "c10928e703366341ab912c42e8959a087a7fa9ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
