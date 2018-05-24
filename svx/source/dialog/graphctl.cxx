@@ -128,7 +128,7 @@ void GraphCtrl::InitSdrModel()
     delete pModel;
 
     // Creating a Model
-    pModel = new SdrModel;
+    pModel = new SdrModel();
     pModel->GetItemPool().FreezeIdRanges();
     pModel->SetScaleUnit( aMap100.GetMapUnit() );
     pModel->SetScaleFraction( Fraction( 1, 1 ) );
