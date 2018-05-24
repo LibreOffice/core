@@ -307,8 +307,15 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
                 const sal_Int32 nStt = (n == nSttNd) ? nSttCnt : 0;
                 const sal_Int32 nEnd = (n == nEndNd)
                     ? nEndCnt : pTextNd->GetText().getLength();
-                const SwScriptInfo* pScriptInfo = SwScriptInfo::GetScriptInfo( *pTextNd );
-                sal_uInt8 nScript = pScriptInfo ? pScriptInfo->ScriptType( nStt ) : css::i18n::ScriptType::WEAK;
+                SwTextFrame const* pFrame;
+                const SwScriptInfo *const pScriptInfo =
+                    SwScriptInfo::GetScriptInfo(*pTextNd, &pFrame);
+                TextFrameIndex const iStt(pScriptInfo
+                        ? pFrame->MapModelToView(pTextNd, nStt)
+                        : TextFrameIndex(-1/*invalid, do not use*/));
+                sal_uInt8 nScript = pScriptInfo
+                    ? pScriptInfo->ScriptType(iStt)
+                    : css::i18n::ScriptType::WEAK;
                 nWhich = GetWhichOfScript( nWhich, nScript );
 
                 // item from attribute set
@@ -340,7 +347,9 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
                         if( *pAttrEnd <= nStt )
                             continue;
 
-                        nScript = pScriptInfo ? pScriptInfo->ScriptType( nStt ) : css::i18n::ScriptType::WEAK;
+                        nScript = pScriptInfo
+                            ? pScriptInfo->ScriptType(iStt)
+                            : css::i18n::ScriptType::WEAK;
                         nWhich = GetWhichOfScript( nWhich, nScript );
                         const SfxItemSet* pAutoSet = CharFormat::GetItemSet( pHt->GetAttr() );
                         if( pAutoSet )
@@ -651,7 +660,9 @@ SvtScriptType SwEditShell::GetScriptType() const
                 if( pTNd )
                 {
                     // try to get SwScriptInfo
-                    const SwScriptInfo* pScriptInfo = SwScriptInfo::GetScriptInfo( *pTNd );
+                    SwTextFrame const* pFrame;
+                    const SwScriptInfo *const pScriptInfo =
+                        SwScriptInfo::GetScriptInfo(*pTNd, &pFrame);
 
                     sal_Int32 nPos = pStt->nContent.GetIndex();
                     //Task 90448: we need the scripttype of the previous
@@ -667,9 +678,9 @@ SvtScriptType SwEditShell::GetScriptType() const
 
                     if (!pTNd->GetText().isEmpty())
                     {
-                        nScript = pScriptInfo ?
-                                  pScriptInfo->ScriptType( nPos ) :
-                                  g_pBreakIt->GetBreakIter()->getScriptType( pTNd->GetText(), nPos );
+                        nScript = pScriptInfo
+                            ? pScriptInfo->ScriptType(pFrame->MapModelToView(pTNd, nPos))
+                            : g_pBreakIt->GetBreakIter()->getScriptType( pTNd->GetText(), nPos );
                     }
                     else
                         nScript = SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() );
@@ -689,7 +700,9 @@ SvtScriptType SwEditShell::GetScriptType() const
                         const OUString& rText = pTNd->GetText();
 
                         // try to get SwScriptInfo
-                        const SwScriptInfo* pScriptInfo = SwScriptInfo::GetScriptInfo( *pTNd );
+                        SwTextFrame const* pFrame;
+                        const SwScriptInfo *const pScriptInfo =
+                            SwScriptInfo::GetScriptInfo(*pTNd, &pFrame);
 
                         sal_Int32 nChg = aIdx == pStt->nNode
                                                 ? pStt->nContent.GetIndex()
@@ -706,8 +719,11 @@ SvtScriptType SwEditShell::GetScriptType() const
                         sal_uInt16 nScript;
                         while( nChg < nEndPos )
                         {
+                            TextFrameIndex iChg(pScriptInfo
+                                    ? pFrame->MapModelToView(pTNd, nChg)
+                                    : TextFrameIndex(-1/*invalid, do not use*/));
                             nScript = pScriptInfo ?
-                                      pScriptInfo->ScriptType( nChg ) :
+                                      pScriptInfo->ScriptType( iChg ) :
                                       g_pBreakIt->GetBreakIter()->getScriptType(
                                                                 rText, nChg );
 
@@ -721,10 +737,27 @@ SvtScriptType SwEditShell::GetScriptType() const
 
                             sal_Int32 nFieldPos = nChg+1;
 
-                            nChg = pScriptInfo ?
-                                   pScriptInfo->NextScriptChg( nChg ) :
-                                   g_pBreakIt->GetBreakIter()->endOfScript(
+                            if (pScriptInfo)
+                            {
+                                iChg = pScriptInfo->NextScriptChg(iChg);
+                                if (iChg == TextFrameIndex(COMPLETE_STRING))
+                                {
+                                    nChg = pTNd->Len();
+                                }
+                                else
+                                {
+                                    std::pair<SwTextNode*, sal_Int32> const tmp(
+                                        pFrame->MapViewToModel(iChg));
+                                    nChg = (tmp.first == pTNd)
+                                        ? tmp.second
+                                        : pTNd->Len();
+                                }
+                            }
+                            else
+                            {
+                                nChg = g_pBreakIt->GetBreakIter()->endOfScript(
                                                     rText, nChg, nScript );
+                            }
 
                             nFieldPos = rText.indexOf(
                                             CH_TXTATR_BREAKWORD, nFieldPos);
