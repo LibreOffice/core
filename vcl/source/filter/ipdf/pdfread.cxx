@@ -227,12 +227,14 @@ namespace vcl
 {
 
 bool ImportPDF(SvStream& rStream, Bitmap &rBitmap,
+               size_t nPageIndex,
                css::uno::Sequence<sal_Int8> &rPdfData,
                sal_uInt64 nPos, sal_uInt64 nSize)
 {
     // Get the preview of the first page.
     std::vector<Bitmap> aBitmaps;
-    if (generatePreview(rStream, aBitmaps, nPos, nSize, 0, 1) != 1)
+    if (generatePreview(rStream, aBitmaps, nPos, nSize, nPageIndex, 1) != 1 ||
+        aBitmaps.empty())
         return false;
 
     rBitmap = aBitmaps[0];
@@ -255,7 +257,7 @@ bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
 {
     uno::Sequence<sal_Int8> aPdfData;
     Bitmap aBitmap;
-    bool bRet = ImportPDF(rStream, aBitmap, aPdfData);
+    bool bRet = ImportPDF(rStream, aBitmap, 0, aPdfData);
     rGraphic = aBitmap;
     rGraphic.setPdfData(std::make_shared<css::uno::Sequence<sal_Int8>>(aPdfData));
     rGraphic.setPageNumber(0); // We currently import only the first page.
