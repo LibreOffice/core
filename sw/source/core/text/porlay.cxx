@@ -1521,6 +1521,8 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTextNode& rNode, sal_Int32 nP
         }
     }
 
+    // sw_redlinehide: this won't work if it's merged
+#if 0
     const SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( rNode );
     if ( pSI )
     {
@@ -1533,6 +1535,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTextNode& rNode, sal_Int32 nP
         rNode.SetHiddenCharAttribute( bNewHiddenCharsHidePara, bNewContainsHiddenChars );
     }
     else
+#endif
     {
 
         // No valid SwScriptInfo Object, we have to do it the hard way:
@@ -1576,8 +1579,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTextNode& rNode, sal_Int32 nP
 }
 
 bool SwScriptInfo::GetBoundsOfHiddenRange(TextFrameIndex nPos,
-        TextFrameIndex & rnStartPos, TextFrameIndex & rnEndPos,
-        PositionList *const pList) const
+        TextFrameIndex & rnStartPos, TextFrameIndex & rnEndPos) const
 {
     rnStartPos = TextFrameIndex(COMPLETE_STRING);
     rnEndPos = TextFrameIndex(0);
@@ -1595,15 +1597,6 @@ bool SwScriptInfo::GetBoundsOfHiddenRange(TextFrameIndex nPos,
             rnStartPos = nHiddenStart;
             rnEndPos   = nHiddenEnd;
             break;
-        }
-    }
-
-    if ( pList )
-    {
-        for( size_t nX = 0; nX < nEnd; ++nX )
-        {
-            pList->push_back( GetHiddenChg( nX++ ) );
-            pList->push_back( GetHiddenChg( nX ) );
         }
     }
 

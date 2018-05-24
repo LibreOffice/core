@@ -223,7 +223,7 @@ public:
                                         sal_Int32& rnStartPos, sal_Int32& rnEndPos,
                                         PositionList* pList = nullptr );
     bool GetBoundsOfHiddenRange(TextFrameIndex nPos, TextFrameIndex & rnStartPos,
-                                TextFrameIndex & rnEndPos, PositionList* pList = nullptr) const;
+                                TextFrameIndex & rnEndPos) const;
 
     static bool IsInHiddenRange( const SwTextNode& rNode, sal_Int32 nPos );
 
