@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_00924e9e",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2847,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-05-24T12:50:57Z",
+      "side": 1,
+      "message": "Not sure we get nRow right in the element_type_formula case - don\u0027t we want a \u0027break\u0027 after default: and closing the switch - and then do the nRow jump ?\n\nOtherwise - looks great.",
+      "revId": "4b717f118680bcab8646d7b7f2e7bed5a5640eec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
