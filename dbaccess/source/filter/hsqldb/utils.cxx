@@ -22,6 +22,9 @@
 #include <comphelper/processfactory.hxx>
 #include <connectivity/dbexception.hxx>
 
+#include <strings.hrc>
+#include <core_resource.hxx>
+
 #include "utils.hxx"
 
 using namespace dbahsql;
@@ -48,14 +51,11 @@ OUString utils::getTableNameFromStmt(const OUString& sSql)
         return *wordIter;
 }
 
-void utils::ensureFirebirdTableLength(const OUString& sName)
+void utils::ensureFirebirdColumnLength(const OUString& sName)
 {
     if (sName.getLength() > 30) // Firebird limitation
     {
-        constexpr char NAME_TOO_LONG[] = "Firebird 3 doesn't currently support table names of more "
-                                         "than 30 characters, please shorten your table names in "
-                                         "the original file and try again.";
-        dbtools::throwGenericSQLException(NAME_TOO_LONG,
+        dbtools::throwGenericSQLException(DBA_RES(STR_MIGRATION_FIREBIRD_COLUMN_TOO_LONG),
                                           ::comphelper::getProcessComponentContext());
     }
 }

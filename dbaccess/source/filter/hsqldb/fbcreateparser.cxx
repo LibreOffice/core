@@ -110,7 +110,7 @@ void FbCreateStmtParser::ensureProperTableLengths() const
 {
     const std::vector<ColumnDefinition>& rColumns = getColumnDef();
     for (const auto& col : rColumns)
-        utils::ensureFirebirdTableLength(col.getName());
+        utils::ensureFirebirdColumnLength(col.getName());
 }
 
 OUString FbCreateStmtParser::compose() const
