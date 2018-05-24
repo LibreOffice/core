@@ -145,7 +145,9 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
                 SwScriptInfo aScriptInfo;
                 aScriptInfo.InitScriptInfo(static_cast<SwTextNode&>(rNode),
                         pFrame->GetMergedPara(), pFrame->IsRightToLeft());
-                nLevel = aScriptInfo.DirType( nPrevPos );
+                TextFrameIndex const iPrevPos(pFrame->MapModelToView(
+                            &static_cast<SwTextNode&>(rNode), nPrevPos));
+                nLevel = aScriptInfo.DirType( iPrevPos );
             }
             else
             {
@@ -154,7 +156,9 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
                     // mystery why this doesn't use the other overload?
                     pSI->InitScriptInfo(static_cast<SwTextNode&>(rNode), pFrame->GetMergedPara());
                 }
-                nLevel = pSI->DirType( nPrevPos );
+                TextFrameIndex const iPrevPos(pFrame->MapModelToView(
+                            &static_cast<SwTextNode&>(rNode), nPrevPos));
+                nLevel = pSI->DirType(iPrevPos);
             }
 
             pTmpCursor->SetCursorBidiLevel( nLevel );
