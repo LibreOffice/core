@@ -51,8 +51,9 @@ const OUString GetPalettePath()
 }
 
 SwDrawModel::SwDrawModel(SwDoc *const pDoc)
-    : FmFormModel( ::GetPalettePath(), &pDoc->GetAttrPool(),
-                     pDoc->GetDocShell(), true )
+:   FmFormModel(
+        &pDoc->GetAttrPool(),
+        pDoc->GetDocShell())
     , m_pDoc( pDoc )
 {
     SetScaleUnit( MapUnit::MapTwip );

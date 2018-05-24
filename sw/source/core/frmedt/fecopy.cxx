@@ -1309,8 +1309,11 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
     StartUndo();
 
     SvtPathOptions aPathOpt;
-    std::unique_ptr<FmFormModel> pModel( new FmFormModel( aPathOpt.GetPalettePath(),
-                                            nullptr, GetDoc()->GetDocShell() ) );
+    std::unique_ptr< FmFormModel > pModel(
+        new FmFormModel(
+            nullptr,
+            GetDoc()->GetDocShell()));
+
     pModel->GetItemPool().FreezeIdRanges();
 
     rStrm.Seek(0);
