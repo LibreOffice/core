@@ -47,12 +47,9 @@ private:
     void operator=(const FmFormModel& rSrcModel) = delete;
 
 public:
-
-    FmFormModel(SfxItemPool* pPool=nullptr, SfxObjectShell* pPers=nullptr );
-    FmFormModel(const OUString& rPath, SfxItemPool* pPool=nullptr,
-                SfxObjectShell* pPers=nullptr );
-    FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
-                bool bUseExtColorTable);
+    FmFormModel(
+        SfxItemPool* pPool = nullptr,
+        SfxObjectShell* pPers = nullptr);
 
     virtual ~FmFormModel() override;
 

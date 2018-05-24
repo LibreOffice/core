@@ -2786,8 +2786,10 @@ void Svx3DWin::LBSelectColor( SvxColorListBox* pLb, const Color& rColor )
 
 void Svx3DWin::UpdatePreview()
 {
-    if( pModel == nullptr )
+    if(nullptr == pModel)
+    {
         pModel = new FmFormModel();
+    }
 
     // Get Itemset
     SfxItemSet aSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{});
