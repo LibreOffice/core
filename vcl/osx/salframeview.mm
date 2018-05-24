@@ -152,27 +152,6 @@ static AquaSalFrame* s_pMouseFrame = nullptr;
 // which lack that information
 static sal_uInt16 s_nLastButton = 0;
 
-// combinations of keys we need to handle ourselves
-static const struct ExceptionalKey
-{
-    const sal_uInt16        nKeyCode;
-    const unsigned int  nModifierMask;
-    const sal_uInt16        nModifiedKeyCode;
-    const bool              bZeroCharacter;
-} aExceptionalKeys[] =
-{
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        // 'NSAlternateKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSControlKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSShiftKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSNumericPadKeyMask' is deprecated: first deprecated in macOS 10.12
-    { KEY_D, NSControlKeyMask | NSShiftKeyMask | NSAlternateKeyMask, KEY_D, true },
-    { KEY_D, NSCommandKeyMask | NSShiftKeyMask | NSAlternateKeyMask, KEY_D, true },
-    { KEY_POINT, NSNumericPadKeyMask, KEY_DECIMAL, false }
-SAL_WNODEPRECATED_DECLARATIONS_POP
-};
-
 static AquaSalFrame* getMouseContainerFrame()
 {
     AquaSalFrame* pDispatchFrame = nullptr;
@@ -1012,23 +991,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         {
             if( [self sendSingleCharacter: mpLastEvent] )
                 return YES;
-        }
-        unichar keyChar = [pUnmodifiedString characterAtIndex: 0];
-        sal_uInt16 nKeyCode = ImplMapCharCode( keyChar );
-
-        // Caution: should the table grow to more than 5 or 6 entries,
-        // we must consider moving it to a kind of hash map
-        const unsigned int nExceptions = SAL_N_ELEMENTS( aExceptionalKeys );
-        for( unsigned int i = 0; i < nExceptions; i++ )
-        {
-            if( nKeyCode == aExceptionalKeys[i].nKeyCode &&
-                (mpFrame->mnLastModifierFlags & aExceptionalKeys[i].nModifierMask)
-                == aExceptionalKeys[i].nModifierMask )
-            {
-                [self sendKeyInputAndReleaseToFrame: aExceptionalKeys[i].nModifiedKeyCode character: (aExceptionalKeys[i].bZeroCharacter ? 0 : keyChar) ];
-
-                return YES;
-            }
         }
     }
     return NO;
