@@ -3126,22 +3126,22 @@ void ScDocument::GetClipArea(SCCOL& nClipX, SCROW& nClipY, bool bIncludeFiltered
         // No clip range.  Bail out.
         return;
 
-    ScRange & rRange = rClipRanges.front();
+    ScRange const & rRange = rClipRanges.front();
     SCCOL nStartCol = rRange.aStart.Col();
     SCCOL nEndCol   = rRange.aEnd.Col();
     SCROW nStartRow = rRange.aStart.Row();
     SCROW nEndRow   = rRange.aEnd.Row();
     for ( size_t i = 1, n = rClipRanges.size(); i < n; ++i )
     {
-        rRange = rClipRanges[ i ];
-        if (rRange.aStart.Col() < nStartCol)
-            nStartCol = rRange.aStart.Col();
-        if (rRange.aStart.Row() < nStartRow)
-            nStartRow = rRange.aStart.Row();
-        if (rRange.aEnd.Col() > nEndCol)
-            nEndCol = rRange.aEnd.Col();
-        if (rRange.aEnd.Row() < nEndRow)
-            nEndRow = rRange.aEnd.Row();
+        ScRange const rRange2 = rClipRanges[ i ];
+        if (rRange2.aStart.Col() < nStartCol)
+            nStartCol = rRange2.aStart.Col();
+        if (rRange2.aStart.Row() < nStartRow)
+            nStartRow = rRange2.aStart.Row();
+        if (rRange2.aEnd.Col() > nEndCol)
+            nEndCol = rRange2.aEnd.Col();
+        if (rRange2.aEnd.Row() < nEndRow)
+            nEndRow = rRange2.aEnd.Row();
     }
 
     nClipX = nEndCol - nStartCol;
