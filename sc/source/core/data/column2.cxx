@@ -2823,6 +2823,9 @@ bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2 )
         auto aCell = GetCellValue(i);
         if (aCell.meType == CELLTYPE_FORMULA)
             aCell.mpFormula->MaybeInterpret();
+        // These require EditEngine (in ScEditUtils::GetString()), which is probably too complex for use in threads.
+        if (aCell.meType == CELLTYPE_EDIT)
+            return false;
     }
 
     return true;
