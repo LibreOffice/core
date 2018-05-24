@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_4000c601",
+        "filename": "comphelper/source/misc/storagehelper.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-24T12:27:40Z",
+      "side": 1,
+      "message": "not sure it\u0027s a good idea to use a WrappedTargetRuntimeException with potentially void TargetException",
+      "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_a00d0239",
+        "filename": "connectivity/source/drivers/jdbc/Object.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-24T12:27:40Z",
+      "side": 1,
+      "message": "why rename?  (and similarly in other places)",
+      "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_e00ffa2b",
+        "filename": "cppuhelper/source/component.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-24T12:27:40Z",
+      "side": 1,
+      "message": "why add that unnecessary const?  (and similarly in other places)",
+      "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_4027e6b5",
+        "filename": "framework/source/accelerators/storageholder.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-24T12:27:40Z",
+      "side": 1,
+      "message": "this shall also be reached when the try block finishes normally?",
+      "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_203112ed",
+        "filename": "framework/source/fwe/xml/menuconfiguration.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-24T12:27:40Z",
+      "side": 1,
+      "message": "dropping the special case for e wrapping yet another SAXException is fine?",
+      "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_404e0670",
+        "filename": "sot/source/unoolestorage/xolesimplestorage.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-24T12:27:40Z",
+      "side": 1,
+      "message": "why change from WrappedTargetException to WrappedTargetRuntimeException?",
+      "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_8058fe33",
+        "filename": "stoc/source/invocation/invocation.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-24T12:27:40Z",
+      "side": 1,
+      "message": "in some cases, you keep the original Message added to the new exceptions\u0027s Message (like here), in other cases you dropped it; any rationale for the seeming inconsistency?",
+      "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_60514a0e",
+        "filename": "stoc/source/invocation/invocation.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-24T12:27:40Z",
+      "side": 1,
+      "message": "(I would avoid the unrelated Reference -\u003e nullptr change, but shrug)",
+      "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_a05b422d",
+        "filename": "sw/source/core/unocore/unosect.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-24T12:27:40Z",
+      "side": 1,
+      "message": "why do such random whitespace change?  (also in other places?)",
+      "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_004dee6b",
+        "filename": "ucb/source/ucp/cmis/cmis_content.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-24T12:27:40Z",
+      "side": 1,
+      "message": "how is this change related to the overall topic of the commit?",
+      "revId": "c1adde23bbe08c7da95c0cb53df89dc76c7dc486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
