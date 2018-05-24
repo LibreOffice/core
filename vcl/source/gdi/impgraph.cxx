@@ -1578,7 +1578,8 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                     if (!rImpGraphic.mpPdfData)
                         rImpGraphic.mpPdfData.reset(new uno::Sequence<sal_Int8>());
 
-                    if (vcl::ImportPDF(rIStm, aBitmap, *rImpGraphic.mpPdfData,
+                    if (vcl::ImportPDF(rIStm, aBitmap, rImpGraphic.mnPageNumber,
+                                       *rImpGraphic.mpPdfData,
                                        rIStm.Tell(), nPdfDataLength))
                     {
                         rImpGraphic.maEx = aBitmap;

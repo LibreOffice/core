@@ -129,11 +129,8 @@ bool SdPdfFilter::Import()
 
         // Create the page and insert the Graphic.
         SdPage* pPage = mrDocument.GetSdPage(nPageNumber++, PageKind::Standard);
-
-        SAL_WARN("sd.filter", "Graphic PrefSize: " << aGraphic.GetPrefSize());
         Size aGrfSize(OutputDevice::LogicToLogic(aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(),
                                                  MapMode(MapUnit::Map100thMM)));
-        SAL_WARN("sd.filter", "Graphic Logic Size: " << aGrfSize);
 
         Size aPagSize(pPage->GetSize());
         aPagSize.AdjustWidth(-(pPage->GetLftBorder() + pPage->GetRgtBorder()));
@@ -164,8 +161,6 @@ bool SdPdfFilter::Import()
         aPos.setX(((aPagSize.Width() - aGrfSize.Width()) >> 1) + pPage->GetLftBorder());
         aPos.setY(((aPagSize.Height() - aGrfSize.Height()) >> 1) + pPage->GetUppBorder());
 
-        SAL_WARN("sd.filter", "Graphic Pos: " << aPos);
-        SAL_WARN("sd.filter", "Graphic Logic Size: " << aGrfSize);
         pPage->InsertObject(new SdrGrafObj(aGraphic, Rectangle(aPos, aGrfSize)));
     }
 
