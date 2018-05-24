@@ -1213,20 +1213,23 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
         long nSpace = 0;
         if( rInf.GetSpace() )
         {
-            sal_Int32 nTmpEnd = nOldIdx + nOldLen;
-            if (nTmpEnd > oldStr.getLength())
-                nTmpEnd = oldStr.getLength();
+            TextFrameIndex nTmpEnd = nOldIdx + nOldLen;
+            if (nTmpEnd > TextFrameIndex(oldStr.getLength()))
+                nTmpEnd = TextFrameIndex(oldStr.getLength());
 
             const SwScriptInfo* pSI = rInf.GetScriptInfo();
 
             const bool bAsianFont =
                 ( rInf.GetFont() && SwFontScript::CJK == rInf.GetFont()->GetActual() );
-            for( sal_Int32 nTmp = nOldIdx; nTmp < nTmpEnd; ++nTmp )
+            for (TextFrameIndex nTmp = nOldIdx; nTmp < nTmpEnd; ++nTmp)
             {
-                if (CH_BLANK == oldStr[nTmp] || bAsianFont ||
-                    ( nTmp + 1 < oldStr.getLength() && pSI &&
-                      i18n::ScriptType::ASIAN == pSI->ScriptType( nTmp + 1 ) ) )
+                if (CH_BLANK == oldStr[sal_Int32(nTmp)] || bAsianFont ||
+                    (nTmp + TextFrameIndex(1) < TextFrameIndex(oldStr.getLength())
+                     && pSI
+                     && i18n::ScriptType::ASIAN == pSI->ScriptType(nTmp + TextFrameIndex(1))))
+                {
                     ++nSpace;
+                }
             }
 
             // if next portion if a hole portion we do not consider any
