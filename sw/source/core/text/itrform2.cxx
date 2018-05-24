@@ -603,10 +603,10 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             {
                 // The distance between two different scripts is set
                 // to 20% of the fontheight.
-                sal_Int32 nTmp = rInf.GetIdx() + pPor->GetLen();
-                if( nTmp == m_pScriptInfo->NextScriptChg( nTmp - 1 ) &&
-                    nTmp != rInf.GetText().getLength() &&
-                    (m_pScriptInfo->ScriptType(nTmp - 1) == css::i18n::ScriptType::ASIAN ||
+                TextFrameIndex const nTmp = rInf.GetIdx() + pPor->GetLen();
+                if (nTmp == m_pScriptInfo->NextScriptChg(nTmp - TextFrameIndex(1)) &&
+                    nTmp != TextFrameIndex(rInf.GetText().getLength()) &&
+                    (m_pScriptInfo->ScriptType(nTmp - TextFrameIndex(1)) == css::i18n::ScriptType::ASIAN ||
                      m_pScriptInfo->ScriptType(nTmp) == css::i18n::ScriptType::ASIAN) )
                 {
                     const sal_uInt16 nDist = static_cast<sal_uInt16>(rInf.GetFont()->GetHeight()/5);
@@ -616,8 +616,8 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                         // we do not want a kerning portion if any end
                         // would be a punctuation character
                         const CharClass& rCC = GetAppCharClass();
-                        if ( rCC.isLetterNumeric( rInf.GetText(), nTmp - 1 ) &&
-                             rCC.isLetterNumeric( rInf.GetText(), nTmp ) )
+                        if (rCC.isLetterNumeric(rInf.GetText(), sal_Int32(nTmp) - 1)
+                            && rCC.isLetterNumeric(rInf.GetText(), sal_Int32(nTmp)))
                         {
                             // does the kerning portion still fit into the line?
                             if ( rInf.X() + pPor->Width() + nDist <= rInf.Width() )
@@ -632,13 +632,14 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
 
         if ( bHasGrid && pGrid->IsSnapToChars() && pPor != pGridKernPortion && ! pMulti && ! pPor->InTabGrp() )
         {
-            sal_Int32 nTmp = rInf.GetIdx() + pPor->GetLen();
+            TextFrameIndex const nTmp = rInf.GetIdx() + pPor->GetLen();
             const SwTwips nRestWidth = rInf.Width() - rInf.X() - pPor->Width();
 
             const SwFontScript nCurrScript = m_pFont->GetActual(); // pScriptInfo->ScriptType( rInf.GetIdx() );
-            const SwFontScript nNextScript = nTmp >= rInf.GetText().getLength() ?
-                                     SwFontScript::CJK :
-                                     m_pScriptInfo->WhichFont(nTmp);
+            const SwFontScript nNextScript =
+                nTmp >= TextFrameIndex(rInf.GetText().getLength())
+                    ? SwFontScript::CJK
+                    : m_pScriptInfo->WhichFont(nTmp);
 
             // snap non-asian text to grid if next portion is ASIAN or
             // there are no more portions in this line
@@ -950,11 +951,11 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
     TextFrameIndex nNextChg = std::min(nNextAttr, TextFrameIndex(rInf.GetText().getLength()));
 
     // end of script type:
-    const sal_Int32 nNextScript = m_pScriptInfo->NextScriptChg( rInf.GetIdx() );
+    const TextFrameIndex nNextScript = m_pScriptInfo->NextScriptChg(rInf.GetIdx());
     nNextChg = std::min( nNextChg, nNextScript );
 
     // end of direction:
-    const sal_Int32 nNextDir = m_pScriptInfo->NextDirChg( rInf.GetIdx() );
+    const TextFrameIndex nNextDir = m_pScriptInfo->NextDirChg(rInf.GetIdx());
     nNextChg = std::min( nNextChg, nNextDir );
 
     // Turbo boost:
