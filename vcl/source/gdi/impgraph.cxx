@@ -1887,12 +1887,18 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                 rIStm.ReadUInt32(nPdfDataLength);
                 Bitmap aBitmap;
 
-                if (nPdfDataLength && !rIStm.GetError() &&
-                    vcl::ImportPDF(rIStm, aBitmap, *rImpGraphic.mpPdfData,
-                                   rIStm.Tell(), nPdfDataLength))
+                if (nPdfDataLength && !rIStm.GetError())
                 {
-                    rImpGraphic.maEx = aBitmap;
-                    rImpGraphic.meType = GraphicType::Bitmap;
+                    if (!rImpGraphic.mpPdfData)
+                        rImpGraphic.mpPdfData.reset(new uno::Sequence<sal_Int8>());
+
+                    if (vcl::ImportPDF(rIStm, aBitmap, rImpGraphic.mnPageNumber,
+                                       *rImpGraphic.mpPdfData,
+                                       rIStm.Tell(), nPdfDataLength))
+                    {
+                        rImpGraphic.maEx = aBitmap;
+                        rImpGraphic.meType = GraphicType::Bitmap;
+                    }
                 }
             }
             else
