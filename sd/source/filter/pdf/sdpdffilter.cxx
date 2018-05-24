@@ -129,37 +129,12 @@ bool SdPdfFilter::Import()
 
         // Create the page and insert the Graphic.
         SdPage* pPage = mrDocument.GetSdPage(nPageNumber++, PageKind::Standard);
-        Size aGrfSize(OutputDevice::LogicToLogic(aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(),
-                                                 MapMode(MapUnit::Map100thMM)));
+        const Size aGrfSize(OutputDevice::LogicToLogic(
+            aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)));
 
-        Size aPagSize(pPage->GetSize());
-        aPagSize.AdjustWidth(-(pPage->GetLeftBorder() + pPage->GetRightBorder()));
-        aPagSize.AdjustHeight(-(pPage->GetUpperBorder() + pPage->GetLowerBorder()));
-
-        // scale to fit page
-        if (((aGrfSize.Height() > aPagSize.Height()) || (aGrfSize.Width() > aPagSize.Width()))
-            && aGrfSize.Height() && aPagSize.Height())
-        {
-            const double fGrfWH = static_cast<double>(aGrfSize.Width()) / aGrfSize.Height();
-            const double fWinWH = static_cast<double>(aPagSize.Width()) / aPagSize.Height();
-
-            // adjust graphic to page size (scales)
-            if (fGrfWH < fWinWH)
-            {
-                aGrfSize.setWidth(static_cast<long>(aPagSize.Height() * fGrfWH));
-                aGrfSize.setHeight(aPagSize.Height());
-            }
-            else if (fGrfWH > 0.F)
-            {
-                aGrfSize.setWidth(aPagSize.Width());
-                aGrfSize.setHeight(static_cast<long>(aPagSize.Width() / fGrfWH));
-            }
-        }
-
-        // set output rectangle for graphic
-        Point aPos;
-        aPos.setX(((aPagSize.Width() - aGrfSize.Width()) >> 1) + pPage->GetLeftBorder());
-        aPos.setY(((aPagSize.Height() - aGrfSize.Height()) >> 1) + pPage->GetUpperBorder());
+        // Make the page size match the rendered image.
+        pPage->SetSize(aGrfSize);
+        Point aPos(0, 0);
 
         pPage->InsertObject(new SdrGrafObj(pPage->getSdrModelFromSdrPage(), aGraphic,
                                            ::tools::Rectangle(aPos, aGrfSize)));
