@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_7d45716e",
+        "filename": "sc/source/filter/excel/xename.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-24T11:28:35Z",
+      "side": 1,
+      "message": "For the same reason as lined out in https://gerrit.libreoffice.org/54739\n\nAdjusting references from relative to absolute probably should only be done if it is actually a named range, not an arbitrary named expression.",
+      "revId": "8feb3b753bf1e88cd8be2d5c229d4393e5e29043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
