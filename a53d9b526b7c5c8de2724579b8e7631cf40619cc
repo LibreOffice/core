@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_bd2609cc",
+        "filename": "sc/source/filter/html/htmlimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-24T11:35:08Z",
+      "side": 1,
+      "message": "The 3D flag does not indicate whether the reference is relative or absolute or whether it points to a different sheet or not, it indicates whether the sheet name will be shown.",
+      "revId": "a53d9b526b7c5c8de2724579b8e7631cf40619cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
