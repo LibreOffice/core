@@ -92,7 +92,7 @@ static TextFrameIndex lcl_AddSpace(const SwTextSizeInfo &rInf,
     if ( nEnd > nPos && ASIAN == nScript )
     {
         LanguageType aLang =
-            rInf.GetTextFrame()->GetTextNode()->GetLang( rInf.GetIdx(), 1, nScript );
+            rInf.GetTextFrame()->GetLangOfChar(rInf.GetIdx(), nScript);
 
         if (!MsLangId::isKorean(aLang))
         {
@@ -130,7 +130,7 @@ static TextFrameIndex lcl_AddSpace(const SwTextSizeInfo &rInf,
     if ( nEnd > nPos && COMPLEX == nScript )
     {
         LanguageType aLang =
-            rInf.GetTextFrame()->GetTextNode()->GetLang( rInf.GetIdx(), 1, nScript );
+            rInf.GetTextFrame()->GetLangOfChar(rInf.GetIdx(), nScript);
 
         if ( LANGUAGE_THAI == aLang )
         {
@@ -203,7 +203,7 @@ static TextFrameIndex lcl_AddSpace(const SwTextSizeInfo &rInf,
         if( ASIAN == nNextScript )
         {
             LanguageType aLang =
-                rInf.GetTextFrame()->GetTextNode()->GetLang( nPos, 1, nNextScript );
+                rInf.GetTextFrame()->GetLangOfChar(nPos, nNextScript);
 
             if (!MsLangId::isKorean(aLang))
                 ++nCnt;
