@@ -73,7 +73,7 @@
 
 #include <tunables/global>
 
-profile libreoffice-soffice INSTDIR-program/soffice.bin {
+profile libreoffice-soffice INSTDIR-program/soffice.bin flags=(complain) {
   #include <abstractions/private-files>
 
   #include <abstractions/audio>
@@ -143,6 +143,7 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   /usr/lib{,32,64}/jvm/                         r,
   /usr/lib{,32,64}/jvm/**                       r,
   /usr/lib{,32,64}/jvm/**/jre/bin/java          mix,
+  /usr/lib{,32,64}/jvm/**/bin/java              mix,
   INSTDIR-**                        rw,
   INSTDIR-**.so                     m,
   INSTDIR-program/soffice.bin       mix,
