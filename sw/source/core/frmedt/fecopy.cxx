@@ -23,7 +23,6 @@
 #include <vcl/graph.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
-#include <unotools/pathoptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewsh.hxx>
@@ -1308,9 +1307,11 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
     StartAllAction();
     StartUndo();
 
-    SvtPathOptions aPathOpt;
-    std::unique_ptr<FmFormModel> pModel( new FmFormModel( aPathOpt.GetPalettePath(),
-                                            nullptr, GetDoc()->GetDocShell() ) );
+    std::unique_ptr< FmFormModel > pModel(
+        new FmFormModel(
+            nullptr,
+            GetDoc()->GetDocShell()));
+
     pModel->GetItemPool().FreezeIdRanges();
 
     rStrm.Seek(0);

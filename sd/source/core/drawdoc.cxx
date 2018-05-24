@@ -131,7 +131,9 @@ PresentationSettings::PresentationSettings()
 }
 
 SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
-: FmFormModel( !utl::ConfigManager::IsFuzzing() ? SvtPathOptions().GetPalettePath() : OUString(), nullptr, pDrDocSh )
+:   FmFormModel(
+        nullptr,
+        pDrDocSh)
 , mpOutliner(nullptr)
 , mpInternalOutliner(nullptr)
 , mpWorkStartupTimer(nullptr)

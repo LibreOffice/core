@@ -50,10 +50,10 @@ namespace chart
 {
 
 DrawModelWrapper::DrawModelWrapper()
-        : SdrModel( SvtPathOptions().GetPalettePath(), nullptr, nullptr, false )
-        , m_pChartItemPool(nullptr)
-        , m_xMainDrawPage(nullptr)
-        , m_xHiddenDrawPage(nullptr)
+:   SdrModel()
+    , m_pChartItemPool(nullptr)
+    , m_xMainDrawPage(nullptr)
+    , m_xHiddenDrawPage(nullptr)
 {
     m_pChartItemPool = ChartItemPool::CreateChartItemPool();
 

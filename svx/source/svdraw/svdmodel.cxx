@@ -17,22 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/svdmodel.hxx>
-
 #include <cassert>
 #include <math.h>
-
 #include <osl/endian.h>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
-
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-
 #include <unotools/configmgr.hxx>
-
+#include <unotools/pathoptions.hxx>
 #include <svl/whiter.hxx>
 #include <svl/asiancfg.hxx>
 #include <svx/xit.hxx>
@@ -43,12 +38,9 @@
 #include <svx/xflftrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xlnstit.hxx>
-
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
-
 #include <svx/xtable.hxx>
-
 #include <svx/svditer.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdpage.hxx>
@@ -64,10 +56,8 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svdoutlinercache.hxx>
-
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
-
 #include <officecfg/Office/Common.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/colritem.hxx>
@@ -80,10 +70,8 @@
 #include <svl/zforlist.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
-
 #include <tools/tenccvt.hxx>
 #include <unotools/syslocale.hxx>
-
 #include <svx/sdr/properties/properties.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
@@ -111,8 +99,9 @@ struct SdrModelImpl
 };
 
 
-void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbeddedHelper,
-    bool bUseExtColorTable)
+void SdrModel::ImpCtor(
+    SfxItemPool* pPool,
+    ::comphelper::IEmbeddedHelper* _pEmbeddedHelper)
 {
     mpImpl.reset(new SdrModelImpl);
     mpImpl->mpUndoManager=nullptr;
@@ -168,8 +157,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     else
         mnCharCompressType = CharCompressType::NONE;
 
-    bExtColorTable=bUseExtColorTable;
-
     if ( pPool == nullptr )
     {
         pItemPool=new SdrItemPool(nullptr);
@@ -216,26 +203,13 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     ImpCreateTables();
 }
 
-SdrModel::SdrModel():
-    maMaPag(),
+SdrModel::SdrModel(
+    SfxItemPool* pPool,
+    ::comphelper::IEmbeddedHelper* pPers)
+:   maMaPag(),
     maPages()
 {
-    ImpCtor(nullptr, nullptr, false);
-}
-
-SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers):
-    maMaPag(),
-    maPages()
-{
-    ImpCtor(pPool,pPers,false/*bUseExtColorTable*/);
-}
-
-SdrModel::SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable):
-    maMaPag(),
-    maPages(),
-    aTablePath(rPath)
-{
-    ImpCtor(pPool,pPers,bUseExtColorTable);
+    ImpCtor(pPool,pPers);
 }
 
 SdrModel::~SdrModel()
@@ -616,11 +590,12 @@ bool SdrModel::IsUndoEnabled() const
 
 void SdrModel::ImpCreateTables()
 {
+    // use standard path for initial construction
+    const OUString aTablePath(!utl::ConfigManager::IsFuzzing() ? SvtPathOptions().GetPalettePath() : "");
+
     for( auto i : o3tl::enumrange<XPropertyListType>() )
     {
-        if( !bExtColorTable || i != XPropertyListType::Color )
-            maProperties[i] = XPropertyList::CreatePropertyList (
-                i, aTablePath, ""/*TODO?*/ );
+        maProperties[i] = XPropertyList::CreatePropertyList(i, aTablePath, ""/*TODO?*/ );
     }
 }
 
@@ -655,7 +630,7 @@ void SdrModel::ClearModel(bool bCalledFromDestructor)
 
 SdrModel* SdrModel::AllocModel() const
 {
-    SdrModel* pModel=new SdrModel;
+    SdrModel* pModel=new SdrModel();
     pModel->SetScaleUnit(eObjUnit,aObjUnit);
     return pModel;
 }
