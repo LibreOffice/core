@@ -148,7 +148,8 @@
 <!ELEMENT Variant (#PCDATA) >
 <!-- If the LangID element contains the value 'qlt' then the Variant element
      MUST contain the valid BCP 47 language tag of the locale. If LangID is
-     another ISO 639 code than 'qlt' then the Variant element must be empty.
+     another ISO 639 code than 'qlt' then the Variant element must be empty or
+     not present.
 -->
 
 
