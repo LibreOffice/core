@@ -169,6 +169,61 @@ sal_Int32 SwTextNode::GetDropLen( sal_Int32 nWishLen ) const
     return i;
 }
 
+/// nWishLen = 0 indicates that we want a whole word
+TextFrameIndex SwTextFrame::GetDropLen(TextFrameIndex const nWishLen) const
+{
+    TextFrameIndex nEnd(GetText().getLength());
+    if (nWishLen && nWishLen < nEnd)
+        nEnd = nWishLen;
+
+    if (! nWishLen)
+    {
+        // find first word
+        const SwAttrSet& rAttrSet = GetTextNodeForParaProps()->GetSwAttrSet();
+        const sal_uInt16 nTextScript = g_pBreakIt->GetRealScriptOfText(GetText(), 0);
+
+        LanguageType eLanguage;
+
+        switch ( nTextScript )
+        {
+        case i18n::ScriptType::ASIAN :
+            eLanguage = rAttrSet.GetCJKLanguage().GetLanguage();
+            break;
+        case i18n::ScriptType::COMPLEX :
+            eLanguage = rAttrSet.GetCTLLanguage().GetLanguage();
+            break;
+        default :
+            eLanguage = rAttrSet.GetLanguage().GetLanguage();
+            break;
+        }
+
+        Boundary aBound = g_pBreakIt->GetBreakIter()->getWordBoundary(
+            GetText(), 0, g_pBreakIt->GetLocale(eLanguage),
+            WordType::DICTIONARY_WORD, true );
+
+        nEnd = TextFrameIndex(aBound.endPos);
+    }
+
+    TextFrameIndex i(0);
+    for ( ; i < nEnd; ++i)
+    {
+        sal_Unicode const cChar = GetText()[sal_Int32(i)];
+        if (CH_TAB == cChar || CH_BREAK == cChar ||
+            CH_TXTATR_BREAKWORD == cChar || CH_TXTATR_INWORD == cChar)
+        {
+#ifndef NDEBUG
+            if (CH_TXTATR_BREAKWORD == cChar || CH_TXTATR_INWORD == cChar)
+            {
+                std::pair<SwTextNode const*, sal_Int32> const pos(MapViewToModel(i));
+                assert(pos.first->GetTextAttrForCharAt(pos.second) != nullptr);
+            }
+#endif
+            break;
+        }
+    }
+    return i;
+}
+
 /**
  * If a dropcap is found the return value is true otherwise false. The
  * drop cap sizes passed back by reference are font height, drop height
@@ -510,7 +565,7 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
         return nullptr;
 
     TextFrameIndex nPorLen(pDropFormat->GetWholeWord() ? 0 : pDropFormat->GetChars());
-    nPorLen = m_pFrame->GetTextNode()->GetDropLen( nPorLen );
+    nPorLen = m_pFrame->GetDropLen( nPorLen );
     if( !nPorLen )
     {
         ClearDropFormat();
