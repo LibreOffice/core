@@ -369,10 +369,13 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
                 // compare current script with script from last "real" character
                 if ( SwFontScript(nScript - 1) != rInf.GetFont()->GetActual() )
-                    aLang = rInf.GetTextFrame()->GetTextNode()->GetLang(
-                        CH_TXTATR_BREAKWORD == cFieldChr ?
-                        nDoNotStepOver :
-                        nLangIndex, 0, nScript );
+                {
+                    aLang = rInf.GetTextFrame()->GetLangOfChar(
+                        CH_TXTATR_BREAKWORD == cFieldChr
+                            ? nDoNotStepOver
+                            : nLangIndex,
+                        nScript, true);
+                }
             }
         }
 
