@@ -29,6 +29,8 @@
 #include "error.hxx"
 #include "node.hxx"
 
+#define DEPTH_LIMIT 1024
+
 class SmParser
 {
     OUString        m_aBufferString;
@@ -53,7 +55,7 @@ class SmParser
         {
             ++m_rParseDepth;
         }
-        bool TooDeep() const { return m_rParseDepth > 1024; }
+        bool TooDeep() const { return m_rParseDepth > DEPTH_LIMIT; }
         ~DepthProtect()
         {
             --m_rParseDepth;
