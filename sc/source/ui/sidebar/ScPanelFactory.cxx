@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <comphelper/namedvaluecollection.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace css;
@@ -109,11 +110,12 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
     {
         throw;
     }
-    catch (const uno::Exception& e)
+    catch (const uno::Exception&)
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             "ScPanelFactory::createUIElement exception",
-            nullptr, uno::makeAny(e));
+            nullptr, anyEx);
     }
 
     return xElement;

@@ -45,6 +45,7 @@
 #include <com/sun/star/task/XInteractionContinuation.hpp>
 #include <com/sun/star/xforms/InvalidDataOnSubmitException.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/interaction.hxx>
@@ -469,12 +470,13 @@ void SAL_CALL Submission::submitWithInteraction(
         // allowed to leave
         throw;
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         // exception caught: re-throw as wrapped target exception
         throw WrappedTargetException(
             lcl_message( sID, " due to exception being thrown" ),
-            *this, makeAny( e ) );
+            *this, anyEx );
     }
 
     if( !bResult )

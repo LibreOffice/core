@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/io/SequenceInputStream.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -93,8 +94,10 @@ OUString getNodeValue(
     try {
         return node->getNodeValue();
     } catch (const css::xml::dom::DOMException & e) {
-        throw css::uno::RuntimeException(
-            "com.sun.star.xml.dom.DOMException: " + e.Message);
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException(
+            "com.sun.star.xml.dom.DOMException: " + e.Message,
+            nullptr, anyEx );
     }
 }
 
@@ -303,8 +306,10 @@ DescriptionInfoset getDescriptionInfoset(OUString const & sExtensionFolderURL)
             getRootElement();
     } catch (const NoDescriptionException &) {
     } catch (const css::deployment::DeploymentException & e) {
-        throw css::uno::RuntimeException(
-             "com.sun.star.deployment.DeploymentException: " + e.Message, nullptr);
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException(
+            "com.sun.star.deployment.DeploymentException: " + e.Message,
+            nullptr, anyEx );
     }
     return DescriptionInfoset(context, root);
 }

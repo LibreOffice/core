@@ -52,6 +52,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -95,6 +96,7 @@
 #include <vcl/svapp.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <dp_dependencies.hxx>
 #include <dp_descriptioninfoset.hxx>
@@ -521,7 +523,9 @@ UpdateDialog::UpdateDialog(
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (const uno::Exception & e) {
-        throw uno::RuntimeException(e.Message, e.Context);
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException( e.Message,
+                        e.Context, anyEx );
     }
     m_pUpdates->SetSelectHdl(LINK(this, UpdateDialog, selectionHandler));
     m_pAll->SetToggleHdl(LINK(this, UpdateDialog, allHandler));

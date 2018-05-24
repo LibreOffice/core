@@ -204,11 +204,12 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& rDesc
         {
             throw;
         }
-        catch (uno::Exception const& e)
+        catch (uno::Exception const&)
         {
-            SAL_WARN("writerfilter", "WriterFilter::filter(): failed with " << e);
+            css::uno::Any anyEx = cppu::getCaughtException();
+            SAL_WARN("writerfilter", "WriterFilter::filter(): failed with " << anyEx);
             throw lang::WrappedTargetRuntimeException("",
-                    static_cast<OWeakObject*>(this), uno::makeAny(e));
+                    static_cast<OWeakObject*>(this), anyEx);
         }
 
         // Adding some properties to the document's grab bag for interoperability purposes:

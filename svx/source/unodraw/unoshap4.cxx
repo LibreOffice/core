@@ -30,6 +30,7 @@
 #include <svx/svdpool.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <vcl/svapp.hxx>
 
@@ -879,19 +880,21 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
                     pMedia->SetInputStream(xStream);
                 }
             }
-            catch (const css::ucb::ContentCreationException& e)
+            catch (const css::ucb::ContentCreationException&)
             {
+                css::uno::Any exc = cppu::getCaughtException();
                 throw css::lang::WrappedTargetException(
                         "ContentCreationException Setting InputStream!",
                         static_cast<OWeakObject *>(this),
-                        makeAny(e));
+                        exc);
             }
-            catch (const css::ucb::CommandFailedException& e)
+            catch (const css::ucb::CommandFailedException&)
             {
+                css::uno::Any anyEx = cppu::getCaughtException();
                 throw css::lang::WrappedTargetException(
                         "CommandFailedException Setting InputStream!",
                         static_cast<OWeakObject *>(this),
-                        makeAny(e));
+                        anyEx);
             }
 #endif
         break;
@@ -964,19 +967,19 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
                 {
                     rValue <<= pMedia->GetInputStream();
                 }
-                catch (const css::ucb::ContentCreationException& e)
+                catch (const css::ucb::ContentCreationException&)
                 {
+                    css::uno::Any anyEx = cppu::getCaughtException();
                     throw css::lang::WrappedTargetException(
                             "ContentCreationException Getting InputStream!",
-                            static_cast < OWeakObject * > ( this ),
-                            makeAny( e ) );
+                            static_cast < OWeakObject * > ( this ), anyEx );
                 }
-                catch (const css::ucb::CommandFailedException& e)
+                catch (const css::ucb::CommandFailedException&)
                 {
+                    css::uno::Any anyEx = cppu::getCaughtException();
                     throw css::lang::WrappedTargetException(
                             "CommandFailedException Getting InputStream!",
-                            static_cast < OWeakObject * > ( this ),
-                            makeAny( e ) );
+                            static_cast < OWeakObject * > ( this ), anyEx );
                 }
 
                 break;

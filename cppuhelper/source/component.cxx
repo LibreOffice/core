@@ -20,8 +20,10 @@
 #include <rtl/string.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/component.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 using namespace osl;
@@ -189,8 +191,10 @@ void OComponentHelper::dispose()
         }
         catch (Exception & exc)
         {
-            throw RuntimeException(
-                "unexpected UNO exception caught: " + exc.Message );
+            css::uno::Any anyEx = cppu::getCaughtException();
+            throw lang::WrappedTargetRuntimeException(
+                "unexpected UNO exception caught: " + exc.Message,
+                nullptr, anyEx );
         }
     }
     else
