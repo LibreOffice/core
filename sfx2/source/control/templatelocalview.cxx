@@ -23,6 +23,7 @@
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <rtl/ustring.hxx>
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -766,7 +767,28 @@ void TemplateLocalView::insertItems(const std::vector<TemplateItemProperties> &r
 
         pChild->mnDocId = pCur->nDocId;
         pChild->mnRegionId = pCur->nRegionId;
-        pChild->maTitle = pCur->aName;
+
+        // Remove file extension for OOXML files
+        sal_Int32 dotIndex = (pCur->aName).lastIndexOf('.');
+        OUString newName;
+        OUString maybeExtension = (pCur->aName).copy(dotIndex + 1);
+        bool isOOXML = false;
+        if (maybeExtension.equals("dotx") || maybeExtension.equals("xltx") ||
+            maybeExtension.equals("potx") || maybeExtension.equals("accdt"))
+        {
+            isOOXML= true;
+        }
+
+        if (dotIndex <= 0 || !isOOXML)
+        {
+            newName = pCur->aName;
+        }
+        else
+        {
+            newName = (pCur->aName).copy(0, dotIndex);
+        }
+        pChild->maTitle = newName;
+
         pChild->setPath(pCur->aPath);
 
         if(!bShowCategoryInTooltip)
@@ -774,7 +796,7 @@ void TemplateLocalView::insertItems(const std::vector<TemplateItemProperties> &r
         else
         {
             OUString sHelpText = SfxResId(STR_TEMPLATE_TOOLTIP);
-            sHelpText = (sHelpText.replaceFirst("$1", pCur->aName)).replaceFirst("$2", pCur->aRegionName);
+            sHelpText = (sHelpText.replaceFirst("$1", newName).replaceFirst("$2", pCur->aRegionName));
             pChild->setHelpText(sHelpText);
         }
 
