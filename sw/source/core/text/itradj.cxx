@@ -131,8 +131,8 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
 
     // kashida positions found in SwScriptInfo are not necessarily valid in every font
     // if two characters are replaced by a ligature glyph, there will be no place for a kashida
-    std::unique_ptr<sal_Int32[]> pKashidaPos( new sal_Int32[ rKashidas ] );
-    std::unique_ptr<sal_Int32[]> pKashidaPosDropped( new sal_Int32[ rKashidas ] );
+    std::unique_ptr<TextFrameIndex[]> pKashidaPos(new TextFrameIndex[rKashidas]);
+    std::unique_ptr<TextFrameIndex[]> pKashidaPosDropped(new TextFrameIndex[rKashidas]);
     rSI.GetKashidaPositions ( nIdx, rItr.GetLength(), pKashidaPos.get() );
     sal_Int32 nKashidaIdx = 0;
     while ( rKashidas && nIdx < nEnd )
@@ -142,7 +142,7 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
 
         // is there also a script change before?
         // if there is, nNext should point to the script change
-        sal_Int32 nNextScript = rSI.NextScriptChg( nIdx );
+        TextFrameIndex const nNextScript = rSI.NextScriptChg( nIdx );
         if( nNextScript < nNext )
             nNext = nNextScript;
 
@@ -161,15 +161,17 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
             {
                 ComplexTextLayoutFlags nOldLayout = rInf.GetOut()->GetLayoutMode();
                 rInf.GetOut()->SetLayoutMode ( nOldLayout | ComplexTextLayoutFlags::BiDiRtl );
-                nKashidasDropped = rInf.GetOut()->ValidateKashidas ( rInf.GetText(), nIdx, nNext - nIdx,
-                                               nKashidasInAttr, pKashidaPos.get() + nKashidaIdx,
-                                               pKashidaPosDropped.get() );
+                nKashidasDropped = rInf.GetOut()->ValidateKashidas(
+                    rInf.GetText(), sal_Int32(nIdx), sal_Int32(nNext - nIdx),
+                    nKashidasInAttr,
+                    reinterpret_cast<sal_Int32*>(pKashidaPos.get() + nKashidaIdx),
+                    reinterpret_cast<sal_Int32*>(pKashidaPosDropped.get()));
                 rInf.GetOut()->SetLayoutMode ( nOldLayout );
                 if ( nKashidasDropped )
                 {
                     rSI.MarkKashidasInvalid(nKashidasDropped, pKashidaPosDropped.get());
                     rKashidas -= nKashidasDropped;
-                    nGluePortion -= nKashidasDropped;
+                    nGluePortion -= TextFrameIndex(nKashidasDropped);
                 }
             }
             nKashidaIdx += nKashidasInAttr;
@@ -199,11 +201,11 @@ static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwT
 
             // is there also a script change before?
             // if there is, nNext should point to the script change
-            sal_Int32 nNextScript = rSI.NextScriptChg( nIdx );
+            TextFrameIndex const nNextScript = rSI.NextScriptChg( nIdx );
             if( nNextScript < nNext )
                nNext = nNextScript;
 
-            if ( nNext == COMPLETE_STRING || nNext > nEnd )
+            if (nNext == TextFrameIndex(COMPLETE_STRING) || nNext > nEnd)
                 nNext = nEnd;
             sal_Int32 nKashidasInAttr = rSI.KashidaJustify ( nullptr, nullptr, nIdx, nNext - nIdx );
 
