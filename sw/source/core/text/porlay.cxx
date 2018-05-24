@@ -720,19 +720,77 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
 
     // HIDDEN TEXT INFORMATION
 
-    Range aRange( 0, !rText.isEmpty() ? rText.getLength() - 1 : 0 );
-    MultiSelection aHiddenMulti( aRange );
-    CalcHiddenRanges( rNode, aHiddenMulti );
-
     m_HiddenChg.clear();
-    for( sal_Int32 i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
+    if (pMerged)
     {
-        const Range& rRange = aHiddenMulti.GetRange( i );
-        const sal_Int32 nStart = rRange.Min();
-        const sal_Int32 nEnd = rRange.Max() + 1;
+        SwTextNode const* pNode(nullptr);
+        TextFrameIndex nOffset(0);
+        for (auto iter = pMerged->extents.begin(); iter != pMerged->extents.end(); ++iter)
+        {
+            if (iter->pNode == pNode)
+            {
+                nOffset += TextFrameIndex(iter->nEnd - iter->nStart);
+                continue; // skip extents at end of previous node
+            }
+            pNode = iter->pNode;
+            Range aRange( 0, pNode->Len() > 0 ? pNode->Len() - 1 : 0 );
+            MultiSelection aHiddenMulti( aRange );
+            CalcHiddenRanges( *pNode, aHiddenMulti );
 
-        m_HiddenChg.push_back( nStart );
-        m_HiddenChg.push_back( nEnd );
+            for (sal_Int32 i = 0; i < aHiddenMulti.GetRangeCount(); ++i)
+            {
+                const Range& rRange = aHiddenMulti.GetRange( i );
+                const sal_Int32 nStart = rRange.Min();
+                const sal_Int32 nEnd = rRange.Max() + 1;
+
+                while (true)
+                {
+                    // because of the selectRedLineDeleted call, never overlaps
+                    // extents, must be contained inside one extent
+                    assert(!(iter->nStart <= nStart && nStart < iter->nEnd && iter->nEnd < nEnd));
+                    assert(!(nStart < iter->nStart && iter->nStart < nEnd && nEnd <= iter->nEnd));
+                    if (iter->nStart <= nStart && nEnd <= iter->nEnd)
+                    {
+                        if (iter->nStart == nStart && !m_HiddenChg.empty()
+                            && m_HiddenChg.back() == nOffset)
+                        {
+                            // previous one went until end of extent, extend it
+                            m_HiddenChg.back() += TextFrameIndex(nEnd - iter->nStart);
+                        }
+                        else // new one
+                        {
+                            m_HiddenChg.push_back(nOffset + TextFrameIndex(nStart - iter->nStart));
+                            m_HiddenChg.push_back(nOffset + TextFrameIndex(nEnd - iter->nStart));
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        nOffset += TextFrameIndex(iter->nEnd - iter->nStart);
+                        ++iter;
+                        // because selectRedLineDeleted, must find it in pNode
+                        assert(iter != pMerged->extents.end());
+                        assert(iter->pNode == pNode);
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        Range aRange( 0, !rText.isEmpty() ? rText.getLength() - 1 : 0 );
+        MultiSelection aHiddenMulti( aRange );
+        CalcHiddenRanges( rNode, aHiddenMulti );
+
+        for (sal_Int32 i = 0; i < aHiddenMulti.GetRangeCount(); ++i)
+        {
+            const Range& rRange = aHiddenMulti.GetRange( i );
+            const sal_Int32 nStart = rRange.Min();
+            const sal_Int32 nEnd = rRange.Max() + 1;
+
+            m_HiddenChg.push_back( TextFrameIndex(nStart) );
+            m_HiddenChg.push_back( TextFrameIndex(nEnd) );
+        }
     }
 
     // SCRIPT AND SCRIPT RELATED INFORMATION
