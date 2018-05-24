@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a30ddce_bdb1a991",
+        "filename": "sc/source/filter/excel/xename.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-24T11:22:37Z",
+      "side": 1,
+      "message": "What if it is a svSingleRef with a relative sheet reference?\n\nAlso, I think the adjustment should be made only if the expression is actually one named range, not an arbitrary reference starting a named expression. So check with ScRangeData::GetType() if either ScRangeData::Type::AbsPos or ScRangeData::Type::AbsArea is set.",
+      "revId": "ab9d9a0b1a04098b2159db778a289a20a1fdda10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_ddac9d37",
+        "filename": "sc/source/filter/excel/xename.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-24T11:22:37Z",
+      "side": 1,
+      "message": "Testing for IsFlag3D() here seems odd. It is set to indicate whether the sheet name should be shown for the reference particle, but doesn\u0027t indicate if a reference is absolute or relative, and also not whether the reference points to a different sheet.",
+      "revId": "ab9d9a0b1a04098b2159db778a289a20a1fdda10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_5dc0ade0",
         "filename": "sc/source/filter/excel/xename.cxx",
         "patchSetId": 1
