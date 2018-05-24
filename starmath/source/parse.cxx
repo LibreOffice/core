@@ -1103,8 +1103,16 @@ std::unique_ptr<SmNode> SmParser::DoProduct()
 
     auto xFirst = DoPower();
 
+    int nDepthLimit = 0;
+
     while (TokenInGroup(TG::Product))
     {
+        //this linear loop builds a recursive structure, if it gets
+        //too deep then later processing, e.g. releasing the tree,
+        //can exhaust stack
+        if (nDepthLimit > DEPTH_LIMIT)
+            throw std::range_error("parser depth limit");
+
         std::unique_ptr<SmStructureNode> xSNode;
         std::unique_ptr<SmNode> xOper;
         bool bSwitchArgs = false;
@@ -1169,6 +1177,7 @@ std::unique_ptr<SmNode> SmParser::DoProduct()
             xSNode->SetSubNodes(xFirst.release(), xOper.release(), xArg.release());
         }
         xFirst = std::move(xSNode);
+        ++nDepthLimit;
     }
     return xFirst;
 }
