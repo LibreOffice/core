@@ -130,7 +130,12 @@ void OOXMLSecExporter::Impl::writeCanonicalizationTransform()
 void OOXMLSecExporter::Impl::writeSignatureMethod()
 {
     rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
-    pAttributeList->AddAttribute("Algorithm", ALGO_RSASHA256);
+
+    if (m_rInformation.eAlgorithmID == svl::crypto::SignatureMethodAlgorithm::ECDSA)
+        pAttributeList->AddAttribute("Algorithm", ALGO_ECDSASHA256);
+    else
+        pAttributeList->AddAttribute("Algorithm", ALGO_RSASHA256);
+
     m_xDocumentHandler->startElement("SignatureMethod", uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
     m_xDocumentHandler->endElement("SignatureMethod");
 }
