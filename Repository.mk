@@ -947,6 +947,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 		helpcontent2_html_lang \
 		helpcontent2_html_lang_generated \
 		helpcontent2_html_media \
+		helpcontent2_html_icon-themes \
 		helpcontent2_html_static \
 	) \
 ))
