@@ -466,8 +466,9 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
 
                             // Look up the output rectangle from the previous
                             // bitmap scale action if possible. This has the
-                            // correct position for images repeated in
-                            // Writer headers/footers for non-first pages.
+                            // correct position and size for images with a
+                            // custom translation (Writer header) or scaling
+                            // (Impress notes page).
                             if (rCurGDIMtfAction > 0)
                             {
                                 const MetaAction* pAction = rMtf.GetAction(rCurGDIMtfAction - 1);
@@ -476,6 +477,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                                     const MetaBmpScaleAction* pA
                                         = static_cast<const MetaBmpScaleAction*>(pAction);
                                     aOutputRect.SetPos(pA->GetPoint());
+                                    aOutputRect.SetSize(pA->GetSize());
                                 }
                             }
 
