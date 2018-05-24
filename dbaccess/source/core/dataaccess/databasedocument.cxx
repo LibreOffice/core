@@ -646,18 +646,21 @@ void SAL_CALL ODatabaseDocument::storeToRecoveryFile( const OUString& i_TargetLo
         // commit the root storage
         tools::stor::commitStorageIfWriteable( xTargetStorage );
     }
+    catch( const IOException& )
+    {
+        throw;
+    }
+    catch( const RuntimeException& )
+    {
+        throw;
+    }
+    catch( const WrappedTargetException& )
+    {
+        throw;
+    }
     catch( const Exception& )
     {
         Any aError = ::cppu::getCaughtException();
-        if  (   aError.isExtractableTo( ::cppu::UnoType< IOException >::get() )
-            ||  aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() )
-            ||  aError.isExtractableTo( ::cppu::UnoType< WrappedTargetException >::get() )
-            )
-        {
-            // allowed to leave
-            throw;
-        }
-
         throw WrappedTargetException( OUString(), *this, aError );
     }
 }

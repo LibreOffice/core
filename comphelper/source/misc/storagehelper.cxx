@@ -28,6 +28,7 @@
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -55,6 +56,7 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #if HAVE_FEATURE_GPGME
 # include <gpgme.h>
@@ -119,6 +121,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
     aArgs[1] <<= nStorageMode;
 
     uno::Reference< lang::XSingleServiceFactory > xFact;
+    css::uno::Any anyEx;
     try {
         ::ucbhelper::Content aCntnt( aURL,
             uno::Reference< css::ucb::XCommandEnvironment > (),
@@ -128,9 +131,18 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
         } else {
             xFact = GetFileSystemStorageFactory( rxContext );
         }
-    } catch (uno::Exception &) { }
+    } catch (uno::Exception &)
+    {
+        anyEx = cppu::getCaughtException();
+    }
 
-    if (!xFact.is()) throw uno::RuntimeException();
+    if (!xFact.is())
+    {
+        if (anyEx.hasValue())
+            throw css::lang::WrappedTargetRuntimeException( "", nullptr, anyEx );
+        else
+            throw uno::RuntimeException();
+    }
 
     uno::Reference< embed::XStorage > xTempStorage(
         xFact->createInstanceWithArguments( aArgs ), uno::UNO_QUERY_THROW );

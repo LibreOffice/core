@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <o3tl/safeint.hxx>
 #include <osl/time.h>
@@ -676,12 +677,13 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
     {
         throw;
     }
-    catch( uno::Exception& e )
+    catch( uno::Exception& )
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw xml::sax::SAXException(
             "Error while setting document property!",
             uno::Reference< uno::XInterface >(),
-            uno::makeAny( e ) );
+            anyEx );
     }
 }
 

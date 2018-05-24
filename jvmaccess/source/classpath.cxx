@@ -25,6 +25,7 @@
 #include <vector>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -32,6 +33,7 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrlReference.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
@@ -66,9 +68,11 @@ jobjectArray jvmaccess::ClassPath::translateToUrls(
                 try {
                     url = expUrl->expand( expander );
                 } catch (const css::lang::IllegalArgumentException & e) {
-                    throw css::uno::RuntimeException(
+                    css::uno::Any anyEx = cppu::getCaughtException();
+                    throw css::lang::WrappedTargetRuntimeException(
                         "com.sun.star.lang.IllegalArgumentException: "
-                         + e.Message);
+                         + e.Message,
+                         nullptr, anyEx );
                 }
             }
             jvalue arg;

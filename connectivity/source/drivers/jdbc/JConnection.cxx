@@ -39,6 +39,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <jvmaccess/classpath.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <jni.h>
 #include <strings.hrc>
@@ -688,15 +689,15 @@ void java_sql_Connection::loadDriverFromProperties( const OUString& _sDriverClas
             }
         }
     }
-    catch( const SQLException& e )
+    catch( const SQLException& )
     {
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw SQLException(
             lcl_getDriverLoadErrorMessage( getResources(),_sDriverClass, _sDriverClassPath ),
             *this,
             OUString(),
             1000,
-            makeAny(e)
-        );
+            anyEx);
     }
     catch( Exception& )
     {

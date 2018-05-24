@@ -26,6 +26,7 @@
 #include <com/sun/star/embed/StorageWrappedTargetException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/packages/NoEncryptionException.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
 
 #include "tdoc_uri.hxx"
@@ -425,23 +426,25 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
                         "Bug! Value of property OpenMode has wrong type!" );
             }
         }
-        catch ( beans::UnknownPropertyException const & e )
+        catch ( beans::UnknownPropertyException const & )
         {
+            css::uno::Any anyEx = cppu::getCaughtException();
             OSL_FAIL( "Property OpenMode not supported!" );
 
             throw embed::StorageWrappedTargetException(
                     "Bug! Value of property OpenMode has wrong type!",
                     uno::Reference< uno::XInterface >(),
-                    uno::makeAny( e ) );
+                    anyEx );
         }
-        catch ( lang::WrappedTargetException const & e )
+        catch ( lang::WrappedTargetException const & )
         {
+            css::uno::Any anyEx = cppu::getCaughtException();
             OSL_FAIL( "Caught WrappedTargetException!" );
 
             throw embed::StorageWrappedTargetException(
                     "WrappedTargetException during getPropertyValue!",
                     uno::Reference< uno::XInterface >(),
-                    uno::makeAny( e ) );
+                    anyEx );
         }
     }
     else

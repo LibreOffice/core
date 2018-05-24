@@ -35,6 +35,7 @@
 
 #include <com/sun/star/io/XActiveDataSource.hpp>
 
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -212,14 +213,13 @@ inline sal_uInt32 SaxWriterHelper::writeSequence()
     {
         m_out->writeBytes( m_Sequence );
     }
-    catch (const IOException & e)
+    catch (const IOException &)
     {
-        Any a;
-        a <<= e;
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw SAXException(
             "IO exception during writing",
             Reference< XInterface > (),
-            a );
+            anyEx );
     }
     nLastLineFeedPos -= SEQUENCESIZE;
     return 0;
@@ -1088,14 +1088,13 @@ void SAXWriter::endDocument()
     {
         m_out->closeOutput();
     }
-    catch (const IOException & e)
+    catch (const IOException &)
     {
-        Any a;
-        a <<= e;
+        css::uno::Any anyEx = cppu::getCaughtException();
         throw SAXException(
             "IO exception during closing the IO Stream",
             Reference< XInterface > (),
-            a );
+            anyEx );
     }
 }
 
