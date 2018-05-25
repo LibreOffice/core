@@ -996,6 +996,8 @@ CalendarWrapper*     ScGlobal::GetCalendar()
 }
 CollatorWrapper*        ScGlobal::GetCollator()
 {
+    static osl::Mutex aMutex;
+    osl::MutexGuard aGuard(aMutex);
     if ( !pCollator )
     {
         pCollator = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
@@ -1005,6 +1007,8 @@ CollatorWrapper*        ScGlobal::GetCollator()
 }
 CollatorWrapper*        ScGlobal::GetCaseCollator()
 {
+    static osl::Mutex aMutex;
+    osl::MutexGuard aGuard(aMutex);
     if ( !pCaseCollator )
     {
         pCaseCollator = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
