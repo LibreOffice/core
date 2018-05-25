@@ -34,6 +34,24 @@
       "revId": "a53d9b526b7c5c8de2724579b8e7631cf40619cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_c37da01d",
+        "filename": "sc/source/filter/html/htmlimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-05-25T11:03:38Z",
+      "side": 1,
+      "message": "My -1 is for the code change.. let me explain.\n\nThe bFlag3D specifies only whether the sheet name (and separator, in OOXML more complex) will be displayed (or written to file for textual formats and ODF and OOXML) for the reference\u0027s address parts. It is not related to relative or absolute sheet addressing, which are only determined by the bTabRel flag.\n\nSo what happens with a reference initialized with ScComplexRefData::InitRange(ScRange(0,0,0,0,1,0)) (A1:A2 on Sheet1) is that with ScSingleRefData::InitFlags() all flags are set to false, so all references are absolute but also the bFlag3D are not set. When obtaining the string from such reference and the cell position on which the reference is obtained is on the same sheet this probably results here in $A$1:$A$2 thus when read again a reference relative to the current sheet is created.\n\nTo always include the sheet name, setting Ref1.SetFlag3D(true) is correct, which then results in $Sheet1.$A$1:$A$2, but setting Ref2.SetFlag3D(true) unconditionally would give $Sheet1.$A$1:$Sheet1.$A$2 which is not desired. Ref2.bFlag3D should only be set if the second sheet reference is different from the first sheet reference.\n\nUnconditionally setting bFlag3D in ScComplexRefData::InitRange() is not good because it doesn\u0027t know the context in which the reference is created. Setting bFlag3D would only be possible if both sheet references are absolute and differ. There are also places that init the range as absolute and only change parts to relative. I\u0027d rather not touch the flag init without a very deep investigation.",
+      "parentUuid": "9a30ddce_231afc6e",
+      "revId": "a53d9b526b7c5c8de2724579b8e7631cf40619cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
