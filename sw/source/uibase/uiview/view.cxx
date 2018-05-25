@@ -243,6 +243,19 @@ uno::Reference<frame::XLayoutManager> getLayoutManager(const SfxViewFrame& rView
 }
 }
 
+void SwView::ShowUIElement(const OUString& sElementURL) const
+{
+    auto xLayoutManager = getLayoutManager(*GetViewFrame());
+    if (xLayoutManager.is())
+    {
+        if (!xLayoutManager->getElement(sElementURL).is())
+        {
+            xLayoutManager->createElement(sElementURL);
+            xLayoutManager->showElement(sElementURL);
+        }
+    }
+}
+
 void SwView::SelectShell()
 {
     // Attention: Maintain the SelectShell for the WebView additionally
@@ -450,18 +463,7 @@ void SwView::SelectShell()
 
         // Show Mail Merge toolbar initially for documents with Database fields
         if (!m_bInitOnceCompleted && GetWrtShell().IsAnyDatabaseFieldInDoc())
-        {
-            auto xLayoutManager = getLayoutManager(*GetViewFrame());
-            if (xLayoutManager.is())
-            {
-                const OUString sResourceURL("private:resource/toolbar/mailmerge");
-                if (!xLayoutManager->getElement(sResourceURL).is())
-                {
-                    xLayoutManager->createElement(sResourceURL);
-                    xLayoutManager->showElement(sResourceURL);
-                }
-            }
-        }
+            ShowUIElement("private:resource/toolbar/mailmerge");
 
         // Activate the toolbar to the new selection which also was active last time.
         // Before a flush () must be, but does not affect the UI according to MBA and
