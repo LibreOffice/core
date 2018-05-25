@@ -50,9 +50,9 @@ public:
     SvxCharView(const VclPtr<VirtualDevice>& rVirDev);
 
     void            SetFont( const vcl::Font& rFont );
-    vcl::Font       GetFont() const { return maFont; }
+    vcl::Font const & GetFont() const { return maFont; }
     void            SetText( const OUString& rText );
-    OUString        GetText() const { return m_sText; }
+    OUString const & GetText() const { return m_sText; }
     void            SetHasInsert( bool bInsert );
     void            InsertCharToDoc();
 

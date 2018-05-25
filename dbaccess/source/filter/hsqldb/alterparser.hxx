@@ -32,9 +32,9 @@ private:
 
 protected:
     AlterAction getActionType() const { return m_eAction; }
-    OUString getColumnName() const { return m_sColumnName; }
+    OUString const& getColumnName() const { return m_sColumnName; }
     sal_Int32 getIdentityParam() const { return m_nIdentityParam; }
-    OUString getStatement() const { return m_sStmt; }
+    OUString const& getStatement() const { return m_sStmt; }
 
 public:
     virtual ~AlterStmtParser() = default;
@@ -42,7 +42,7 @@ public:
     /**
      * @return name of the table which is to be created.
      */
-    OUString getTableName() const { return m_sTableName; }
+    OUString const& getTableName() const { return m_sTableName; }
 
     void parse(const OUString& sSql);
 

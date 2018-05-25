@@ -116,7 +116,7 @@ private:
     bool                operator==( const ImpGraphic& rImpGraphic ) const;
     bool                operator!=( const ImpGraphic& rImpGraphic ) const { return !( *this == rImpGraphic ); }
 
-    OUString getOriginURL() const
+    OUString const & getOriginURL() const
     {
         return maGraphicExternalLink.msURL;
     }

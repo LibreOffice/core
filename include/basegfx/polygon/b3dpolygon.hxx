@@ -66,28 +66,28 @@ namespace basegfx
         sal_uInt32 count() const;
 
         // Coordinate interface
-        B3DPoint getB3DPoint(sal_uInt32 nIndex) const;
+        B3DPoint const & getB3DPoint(sal_uInt32 nIndex) const;
         void setB3DPoint(sal_uInt32 nIndex, const B3DPoint& rValue);
 
         // Coordinate append
         void append(const B3DPoint& rPoint, sal_uInt32 nCount = 1);
 
         // BColor interface
-        BColor getBColor(sal_uInt32 nIndex) const;
+        BColor const & getBColor(sal_uInt32 nIndex) const;
         void setBColor(sal_uInt32 nIndex, const BColor& rValue);
         bool areBColorsUsed() const;
         void clearBColors();
 
         // Normals interface
         B3DVector const & getNormal() const; // plane normal
-        B3DVector getNormal(sal_uInt32 nIndex) const; // normal in each point
+        B3DVector const & getNormal(sal_uInt32 nIndex) const; // normal in each point
         void setNormal(sal_uInt32 nIndex, const B3DVector& rValue);
         void transformNormals(const B3DHomMatrix& rMatrix);
         bool areNormalsUsed() const;
         void clearNormals();
 
         // TextureCoordinate interface
-        B2DPoint getTextureCoordinate(sal_uInt32 nIndex) const;
+        B2DPoint const & getTextureCoordinate(sal_uInt32 nIndex) const;
         void setTextureCoordinate(sal_uInt32 nIndex, const B2DPoint& rValue);
         void transformTextureCoordinates(const B2DHomMatrix& rMatrix);
         bool areTextureCoordinatesUsed() const;

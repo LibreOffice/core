@@ -1442,7 +1442,7 @@ namespace basegfx
         return mpPolygon->count();
     }
 
-    basegfx::B3DPoint B3DPolygon::getB3DPoint(sal_uInt32 nIndex) const
+    basegfx::B3DPoint const & B3DPolygon::getB3DPoint(sal_uInt32 nIndex) const
     {
         OSL_ENSURE(nIndex < mpPolygon->count(), "B3DPolygon access outside range (!)");
 
@@ -1457,7 +1457,7 @@ namespace basegfx
             mpPolygon->setPoint(nIndex, rValue);
     }
 
-    BColor B3DPolygon::getBColor(sal_uInt32 nIndex) const
+    BColor const & B3DPolygon::getBColor(sal_uInt32 nIndex) const
     {
         OSL_ENSURE(nIndex < mpPolygon->count(), "B3DPolygon access outside range (!)");
 
@@ -1488,7 +1488,7 @@ namespace basegfx
         return mpPolygon->getNormal();
     }
 
-    B3DVector B3DPolygon::getNormal(sal_uInt32 nIndex) const
+    B3DVector const & B3DPolygon::getNormal(sal_uInt32 nIndex) const
     {
         OSL_ENSURE(nIndex < mpPolygon->count(), "B3DPolygon access outside range (!)");
 
@@ -1520,7 +1520,7 @@ namespace basegfx
             mpPolygon->clearNormals();
     }
 
-    B2DPoint B3DPolygon::getTextureCoordinate(sal_uInt32 nIndex) const
+    B2DPoint const & B3DPolygon::getTextureCoordinate(sal_uInt32 nIndex) const
     {
         OSL_ENSURE(nIndex < mpPolygon->count(), "B3DPolygon access outside range (!)");
 
