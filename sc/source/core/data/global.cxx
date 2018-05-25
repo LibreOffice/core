@@ -178,6 +178,7 @@ sal_uInt16 ScGlobal::GetStandardRowHeight()
 
 SvNumberFormatter* ScGlobal::GetEnglishFormatter()
 {
+    assert(!bThreadedGroupCalcInProgress);
     if ( !pEnglishFormatter )
     {
         pEnglishFormatter = new SvNumberFormatter(
@@ -224,6 +225,7 @@ bool ScGlobal::CheckWidthInvalidate( bool& bNumFormatChanged,
 
 const SvxSearchItem& ScGlobal::GetSearchItem()
 {
+    assert(!bThreadedGroupCalcInProgress);
     if (!pSearchItem)
     {
         pSearchItem = new SvxSearchItem( SID_SEARCH_ITEM );
@@ -234,6 +236,7 @@ const SvxSearchItem& ScGlobal::GetSearchItem()
 
 void ScGlobal::SetSearchItem( const SvxSearchItem& rNew )
 {
+    assert(!bThreadedGroupCalcInProgress);
     // FIXME: An assignment operator would be nice here
     delete pSearchItem;
     pSearchItem = static_cast<SvxSearchItem*>(rNew.Clone());
@@ -244,6 +247,7 @@ void ScGlobal::SetSearchItem( const SvxSearchItem& rNew )
 
 void ScGlobal::ClearAutoFormat()
 {
+    assert(!bThreadedGroupCalcInProgress);
     if (pAutoFormat)
     {
         //  When modified via StarOne then only the SaveLater flag is set and no saving is done.
@@ -262,6 +266,7 @@ ScAutoFormat* ScGlobal::GetAutoFormat()
 
 ScAutoFormat* ScGlobal::GetOrCreateAutoFormat()
 {
+    assert(!bThreadedGroupCalcInProgress);
     if ( !pAutoFormat )
     {
         pAutoFormat = new ScAutoFormat;
@@ -273,6 +278,7 @@ ScAutoFormat* ScGlobal::GetOrCreateAutoFormat()
 
 LegacyFuncCollection* ScGlobal::GetLegacyFuncCollection()
 {
+    assert(!bThreadedGroupCalcInProgress);
     if (!pLegacyFuncCollection)
         pLegacyFuncCollection = new LegacyFuncCollection();
     return pLegacyFuncCollection;
@@ -280,6 +286,7 @@ LegacyFuncCollection* ScGlobal::GetLegacyFuncCollection()
 
 ScUnoAddInCollection* ScGlobal::GetAddInCollection()
 {
+    assert(!bThreadedGroupCalcInProgress);
     if (!pAddInCollection)
         pAddInCollection = new ScUnoAddInCollection();
     return pAddInCollection;
@@ -287,6 +294,7 @@ ScUnoAddInCollection* ScGlobal::GetAddInCollection()
 
 ScUserList* ScGlobal::GetUserList()
 {
+    assert(!bThreadedGroupCalcInProgress);
     // Hack: Load Cfg item at the App
     global_InitAppOptions();
 
@@ -297,6 +305,7 @@ ScUserList* ScGlobal::GetUserList()
 
 void ScGlobal::SetUserList( const ScUserList* pNewList )
 {
+    assert(!bThreadedGroupCalcInProgress);
     if ( pNewList )
     {
         if ( !pUserList )
@@ -432,6 +441,7 @@ OUString ScGlobal::GetLongErrorString(FormulaError nErr)
 
 SvxBrushItem* ScGlobal::GetButtonBrushItem()
 {
+    assert(!bThreadedGroupCalcInProgress);
     pButtonBrushItem->SetColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
     return pButtonBrushItem;
 }
@@ -490,6 +500,7 @@ const OUString& ScGlobal::GetClipDocName()
 
 void ScGlobal::SetClipDocName( const OUString& rNew )
 {
+    assert(!bThreadedGroupCalcInProgress);
     *pStrClipDocName = rNew;
 }
 
@@ -631,6 +642,7 @@ bool ScGlobal::HasStarCalcFunctionList()
 
 ScFunctionList* ScGlobal::GetStarCalcFunctionList()
 {
+    assert(!bThreadedGroupCalcInProgress);
     if ( !pStarCalcFunctionList )
         pStarCalcFunctionList = new ScFunctionList;
 
@@ -639,6 +651,7 @@ ScFunctionList* ScGlobal::GetStarCalcFunctionList()
 
 ScFunctionMgr* ScGlobal::GetStarCalcFunctionMgr()
 {
+    assert(!bThreadedGroupCalcInProgress);
     if ( !pStarCalcFunctionMgr )
         pStarCalcFunctionMgr = new ScFunctionMgr;
 
@@ -654,6 +667,7 @@ void ScGlobal::ResetFunctionList()
 
 ScUnitConverter* ScGlobal::GetUnitConverter()
 {
+    assert(!bThreadedGroupCalcInProgress);
     if ( !pUnitConverter )
         pUnitConverter = new ScUnitConverter;
 
@@ -967,6 +981,7 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, const SvNumberFormatter& rFormatte
 
 utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
 {
+    assert(!bThreadedGroupCalcInProgress);
     if ( !pTransliteration )
     {
         const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
@@ -989,6 +1004,7 @@ const LocaleDataWrapper* ScGlobal::GetpLocaleData()
 }
 CalendarWrapper*     ScGlobal::GetCalendar()
 {
+    assert(!bThreadedGroupCalcInProgress);
     if ( !pCalendar )
     {
         pCalendar = new CalendarWrapper( ::comphelper::getProcessComponentContext() );
@@ -1020,6 +1036,7 @@ CollatorWrapper*        ScGlobal::GetCaseCollator()
 }
 ::utl::TransliterationWrapper* ScGlobal::GetCaseTransliteration()
 {
+    assert(!bThreadedGroupCalcInProgress);
     if ( !pCaseTransliteration )
     {
         const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
@@ -1030,6 +1047,7 @@ CollatorWrapper*        ScGlobal::GetCaseCollator()
 }
 css::lang::Locale*     ScGlobal::GetLocale()
 {
+    assert(!bThreadedGroupCalcInProgress);
     if ( !pLocale )
     {
         pLocale = new css::lang::Locale( Application::GetSettings().GetLanguageTag().getLocale());
@@ -1039,6 +1057,7 @@ css::lang::Locale*     ScGlobal::GetLocale()
 
 ScFieldEditEngine& ScGlobal::GetStaticFieldEditEngine()
 {
+    assert(!bThreadedGroupCalcInProgress);
     if (!pFieldEditEngine)
     {
         // Creating a ScFieldEditEngine with pDocument=NULL leads to document
