@@ -66,6 +66,7 @@
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -1285,7 +1286,7 @@ namespace accessibility
                 }
                 catch( const uno::Exception& )
                 {
-                    SAL_WARN("svx", "Unhandled exception.");
+                    DBG_UNHANDLED_EXCEPTION("svx");
                 }
             }
         }
@@ -1399,7 +1400,7 @@ namespace accessibility
         }
         catch( const uno::Exception& )
         {
-            SAL_WARN("svx", "Unhandled exception.");
+            DBG_UNHANDLED_EXCEPTION("svx");
             mbInNotify = false;
         }
 
