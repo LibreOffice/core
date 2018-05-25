@@ -119,7 +119,7 @@ namespace frm
 #define PROPERTY_ID_IMAGE_URL           (PROPERTY_ID_START + 79)    // ::rtl::OUString
 #define PROPERTY_ID_SELECT_VALUE        (PROPERTY_ID_START + 80)    // StringSeq
 #define PROPERTY_ID_SELECT_VALUE_SEQ    (PROPERTY_ID_START + 81)    // StringSeq
-    // free
+#define PROPERTY_ID_VISIBLESTRINGITEMLIST (PROPERTY_ID_START + 82)    // stringsequence
     // free
     // free
     // free
