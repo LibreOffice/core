@@ -76,9 +76,9 @@ IconThemeSelectorTest::GetFakeInstalledThemes()
 {
     std::vector<vcl::IconThemeInfo> r;
     vcl::IconThemeInfo a;
-    a.mThemeId = "colibre";
-    r.push_back(a);
     a.mThemeId = "breeze";
+    r.push_back(a);
+    a.mThemeId = "colibre";
     r.push_back(a);
     a.mThemeId = "elementary";
     r.push_back(a);
