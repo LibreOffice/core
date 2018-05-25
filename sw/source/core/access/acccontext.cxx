@@ -402,8 +402,12 @@ void SwAccessibleContext::DisposeChildren(const SwFrame *pFrame,
         if( pLower )
         {
             ::rtl::Reference< SwAccessibleContext > xAccImpl;
-            if( rLower.IsAccessible( GetShell()->IsPreview() ) )
+            if (rLower.IsAccessible(GetShell()->IsPreview())
+                       // tdf#117601 dispose the darn thing if it ever was accessible
+                    || GetMap()->Contains(pLower))
+            {
                 xAccImpl = GetMap()->GetContextImpl( pLower, false );
+            }
             if( xAccImpl.is() )
                 xAccImpl->Dispose( bRecursive );
             else
