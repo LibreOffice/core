@@ -139,3 +139,4 @@ sw/uiconfig/swriter/ui/watermarkdialog.ui://GtkLabel[@id='TransparencyLabel'] or
 sw/uiconfig/swriter/ui/watermarkdialog.ui://GtkLabel[@id='ColorLabel'] orphan-label
 sw/uiconfig/swriter/ui/watermarkdialog.ui://GtkSpinButton[@id='Angle'] no-labelled-by
 sw/uiconfig/swriter/ui/watermarkdialog.ui://GtkSpinButton[@id='Transparency'] no-labelled-by
+sw/uiconfig/swriter/ui/watermarkdialog.ui://svxcorelo-SvxColorListBox[@id='Color'] no-labelled-by

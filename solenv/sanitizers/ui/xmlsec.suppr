@@ -12,6 +12,7 @@ xmlsecurity/uiconfig/ui/selectcertificatedialog.ui://GtkLabel[@id='STR_KEY_CERT_
 xmlsecurity/uiconfig/ui/selectcertificatedialog.ui://GtkLabel[@id='STR_CRL_SIGN'] orphan-label
 xmlsecurity/uiconfig/ui/selectcertificatedialog.ui://GtkLabel[@id='STR_ENCIPHER_ONLY'] orphan-label
 xmlsecurity/uiconfig/ui/selectcertificatedialog.ui://GtkLabel[@id='str_sign'] orphan-label
+xmlsecurity/uiconfig/ui/selectcertificatedialog.ui://GtkLabel[@id='str_selectsign'] orphan-label
 xmlsecurity/uiconfig/ui/selectcertificatedialog.ui://GtkLabel[@id='str_encrypt'] orphan-label
 xmlsecurity/uiconfig/ui/selectcertificatedialog.ui://GtkLabel[@id='sign'] orphan-label
 xmlsecurity/uiconfig/ui/selectcertificatedialog.ui://GtkLabel[@id='encrypt'] orphan-label
