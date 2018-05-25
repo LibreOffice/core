@@ -62,7 +62,7 @@ namespace drawinglayer
             basegfx::B3DPoint                               maPlanePoint;
             double                                          mfLightPlaneScalar;
 
-            /// flag if shadow plane projection preparation leaded to valid results
+            /// flag if shadow plane projection preparation led to valid results
             bool                                            mbShadowProjectionIsValid : 1;
 
             /// flag if conversion is switched on

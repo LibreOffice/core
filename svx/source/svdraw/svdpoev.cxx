@@ -556,7 +556,7 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
             if(PolyPolygonEditor::GetRelativePolyPoint(aXPP, nPt, nPolyNum, nPointNum))
             {
                 //#i83671# used nLocalPointNum (which was the polygon point count)
-                // instead of the point index (nPointNum). This of course leaded
+                // instead of the point index (nPointNum). This of course led
                 // to a wrong point access to the B2DPolygon.
                 basegfx::B2DPolygon aNewXP(aXPP.getB2DPolygon(nPolyNum));
                 Point aPos, aC1, aC2;
