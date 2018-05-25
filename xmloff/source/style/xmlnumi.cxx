@@ -88,8 +88,6 @@ public:
 
 class SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl : public SvXMLImportContext
 {
-    SvxXMLListLevelStyleContext_Impl&   rListLevel;
-
 public:
 
     SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl(
@@ -946,8 +944,7 @@ SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAli
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
         SvxXMLListLevelStyleContext_Impl& rLLevel ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    rListLevel( rLLevel )
+    SvXMLImportContext( rImport, nPrfx, rLName )
 {
     static const SvXMLTokenMap aTokenMap( lcl_getStyleAlignmentAttributesAttrTokenMap() );
     SvXMLUnitConverter& rUnitConv = GetImport().GetMM100UnitConverter();
@@ -981,19 +978,19 @@ SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAli
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_LISTTAB_STOP_POSITION:
             if (rUnitConv.convertMeasureToCore(nVal, rValue, 0, SHRT_MAX))
-                rListLevel.SetListtabStopPosition( nVal );
+                rLLevel.SetListtabStopPosition( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_FIRST_LINE_INDENT:
             if (rUnitConv.convertMeasureToCore(nVal, rValue, SHRT_MIN, SHRT_MAX))
-                rListLevel.SetFirstLineIndent( nVal );
+                rLLevel.SetFirstLineIndent( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_INDENT_AT:
             if (rUnitConv.convertMeasureToCore(nVal, rValue, SHRT_MIN, SHRT_MAX))
-                rListLevel.SetIndentAt( nVal );
+                rLLevel.SetIndentAt( nVal );
             break;
         }
     }
-    rListLevel.SetLabelFollowedBy( eLabelFollowedBy );
+    rLLevel.SetLabelFollowedBy( eLabelFollowedBy );
 }
 
 void SvxXMLListStyleContext::SetAttribute( sal_uInt16 nPrefixKey,

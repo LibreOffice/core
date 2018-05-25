@@ -29,9 +29,6 @@
 
 class SdXMLNotesContext : public SdXMLGenericPageContext
 {
-private:
-    OUString msPageMasterName;
-
 public:
     SdXMLNotesContext( SdXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,

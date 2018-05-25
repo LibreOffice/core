@@ -33,7 +33,6 @@ class XMLTextListBlockContext : public SvXMLImportContext
 
     // text:style-name property of <list> element
     OUString         msListStyleName;
-    OUString         sXmlId;
 
     SvXMLImportContextRef   mxParentListBlock;
 
