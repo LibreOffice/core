@@ -89,7 +89,6 @@ private:
     void Clear_( SwFont* pFnt );
     bool ChkSpecialUnderline_() const;
     void FillHints( std::size_t nAuthor, RedlineType_t eType );
-    short Seek_(SwFont& rFnt, sal_uLong nNode, sal_Int32 nNew, sal_Int32 nOld);
     short EnterExtend(SwFont& rFnt, sal_uLong const nNode, sal_Int32 const nNew)
     {
         if (m_pExt) return m_pExt->Enter(rFnt, nNode, nNew);
@@ -109,11 +108,7 @@ public:
     bool IsOn() const { return m_bOn || (m_pExt && m_pExt->IsOn()); }
     void Clear( SwFont* pFnt ) { if (m_bOn) Clear_( pFnt ); }
     void ChangeTextAttr( SwFont* pFnt, SwTextAttr const &rHt, bool bChg );
-    short Seek(SwFont& rFnt, sal_uLong nNode, sal_Int32 nNew, sal_Int32 nOld)
-    {
-        if (m_eMode != Mode::Hide || m_pExt) return Seek_(rFnt, nNode, nNew, nOld);
-        return 0;
-    }
+    short Seek(SwFont& rFnt, sal_uLong nNode, sal_Int32 nNew, sal_Int32 nOld);
     void Reset() {
         if (m_nAct != m_nFirst) m_nAct = SwRedlineTable::npos;
         if (m_pExt) m_pExt->Reset();
