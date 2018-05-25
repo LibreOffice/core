@@ -1255,14 +1255,11 @@ public:
     {
         GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
         if (GTK_IS_VIEWPORT(pParent))
-        {
             pParent = gtk_widget_get_parent(pParent);
-            if (GTK_IS_SCROLLED_WINDOW(pParent))
-            {
-                gtk_scrolled_window_set_min_content_width(GTK_SCROLLED_WINDOW(pParent), nWidth);
-                gtk_scrolled_window_set_min_content_height(GTK_SCROLLED_WINDOW(pParent), nHeight);
-                return;
-            }
+        if (GTK_IS_SCROLLED_WINDOW(pParent))
+        {
+            gtk_scrolled_window_set_min_content_width(GTK_SCROLLED_WINDOW(pParent), nWidth);
+            gtk_scrolled_window_set_min_content_height(GTK_SCROLLED_WINDOW(pParent), nHeight);
         }
         gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
