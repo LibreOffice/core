@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_e350e460",
+        "filename": "dbaccess/source/filter/hsqldb/createparser.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-25T13:43:06Z",
+      "side": 1,
+      "message": "Possibly we could check if the length of the string allows for the four more characters? at line 35, like \"if (nIndex \u003d\u003d -1 || rSource.GetLength() \u003c nIndex + 5)\"? Or else we will crash here someday.",
+      "range": {
+        "startLine": 42,
+        "startChar": 39,
+        "endLine": 42,
+        "endChar": 53
+      },
+      "revId": "ded4dcbbce875efeffba7e894a6dea1f584e8e9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_a35eec73",
+        "filename": "dbaccess/source/filter/hsqldb/createparser.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-05-25T13:43:06Z",
+      "side": 1,
+      "message": "The name is misleading here, unfortunately... the result is not utf8, it\u0027s utf16 (OUString); so something like lcl_unescapeUnicode would be possibly better?",
+      "range": {
+        "startLine": 51,
+        "startChar": 9,
+        "endLine": 51,
+        "endChar": 26
+      },
+      "revId": "ded4dcbbce875efeffba7e894a6dea1f584e8e9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
