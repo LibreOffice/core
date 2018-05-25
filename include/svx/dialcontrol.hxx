@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <vcl/ctrl.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/itemconnect.hxx>
 #include <svx/svxdllapi.h>
 
@@ -33,7 +34,7 @@ namespace svx {
 class SAL_WARN_UNUSED DialControlBmp final : public VirtualDevice
 {
 public:
-    explicit            DialControlBmp( vcl::Window& rParent );
+    explicit            DialControlBmp(OutputDevice& rReference);
 
     void                InitBitmap(const vcl::Font& rFont);
     void                SetSize(const Size& rSize);
@@ -53,7 +54,7 @@ private:
 
     tools::Rectangle    maRect;
     bool                mbEnabled;
-    vcl::Window&        mrParent;
+    OutputDevice&       mrParent;
     long                mnCenterX;
     long                mnCenterY;
 };
@@ -154,6 +155,94 @@ private:
     void                InvalidateControl();
 
     DECL_LINK( LinkedFieldModifyHdl, Edit&, void );
+    void LinkedFieldModifyHdl();
+};
+
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxDialControl : public weld::CustomWidgetController
+{
+private:
+    OUString m_aText;
+public:
+    virtual void        SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+
+    virtual void        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+
+    virtual void        StyleUpdated() override;
+
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void        MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual bool        KeyInput(const KeyEvent& rKEvt) override;
+    virtual void        LoseFocus() override;
+
+    virtual void        Resize() override;
+
+    const OUString&     GetText() const { return m_aText; }
+    void SetText(const OUString& rText) { m_aText = rText; }
+
+    /** Returns true, if the control is not in "don't care" state. */
+    bool                HasRotation() const;
+    /** Sets the control to "don't care" state. */
+    void                SetNoRotation();
+
+    /** Returns the current rotation angle in 1/100 degrees. */
+    sal_Int32           GetRotation() const;
+    /** Sets the rotation to the passed value (in 1/100 degrees). */
+    void                SetRotation( sal_Int32 nAngle );
+
+    /** Links the passed numeric edit field to the control (bi-directional).
+     *  nDecimalPlaces:
+     *     field value is unsign given decimal places
+     *     default is 0 which means field values are in degrees,
+     *     2 means 100th of degree
+     */
+    void                SetLinkedField(weld::SpinButton* pField, sal_Int32 nDecimalPlaces = 0);
+
+    /** The passed handler is called whenever the rotation value changes. */
+    void                SetModifyHdl( const Link<SvxDialControl*,void>& rLink );
+
+    /** Save value for later comparison */
+    void                SaveValue();
+
+    /** Compare value with the saved value */
+    bool                IsValueModified();
+
+protected:
+    struct DialControl_Impl
+    {
+        ScopedVclPtr<DialControlBmp> mxBmpEnabled;
+        ScopedVclPtr<DialControlBmp> mxBmpDisabled;
+        ScopedVclPtr<DialControlBmp> mxBmpBuffered;
+        Link<SvxDialControl*,void>      maModifyHdl;
+        weld::SpinButton*   mpLinkField;
+        sal_Int32           mnLinkedFieldValueMultiplyer;
+        Size                maWinSize;
+        vcl::Font           maWinFont;
+        sal_Int32           mnAngle;
+        sal_Int32           mnInitialAngle;
+        sal_Int32           mnOldAngle;
+        long                mnCenterX;
+        long                mnCenterY;
+        bool                mbNoRot;
+
+        explicit            DialControl_Impl(OutputDevice& rReference);
+        void                Init( const Size& rWinSize, const vcl::Font& rWinFont );
+        void                SetSize( const Size& rWinSize );
+    };
+    std::unique_ptr< DialControl_Impl > mpImpl;
+
+    virtual void        HandleMouseEvent( const Point& rPos, bool bInitial );
+    void                HandleEscapeEvent();
+
+    void                SetRotation( sal_Int32 nAngle, bool bBroadcast );
+
+    void                Init( const Size& rWinSize, const vcl::Font& rWinFont );
+    void                Init( const Size& rWinSize );
+
+private:
+    void                InvalidateControl();
+
+    DECL_LINK( LinkedFieldModifyHdl, weld::SpinButton&, void );
     void LinkedFieldModifyHdl();
 };
 

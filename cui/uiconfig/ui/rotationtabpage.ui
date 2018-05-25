@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustmentANGLE">
     <property name="upper">359.99000000000001</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjustmentPOS">
+  <object class="GtkAdjustment" id="adjustmentPOS1">
+    <property name="lower">-500</property>
+    <property name="upper">50000</property>
+    <property name="step_increment">10</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentPOS2">
     <property name="lower">-500</property>
     <property name="upper">50000</property>
     <property name="step_increment">10</property>
@@ -48,10 +53,10 @@
                       <object class="GtkLabel" id="FT_POS_X">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="rotationtabpage|FT_POS_X">Position _X:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">MTR_FLD_POS_X:0.00cm</property>
+                        <property name="mnemonic_widget">MTR_FLD_POS_X</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -62,10 +67,10 @@
                       <object class="GtkLabel" id="FT_POS_Y">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="rotationtabpage|FT_POS_Y">Position _Y:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">MTR_FLD_POS_Y:0.00cm</property>
+                        <property name="mnemonic_widget">MTR_FLD_POS_Y</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -73,10 +78,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_FLD_POS_X:0.00cm">
+                      <object class="GtkSpinButton" id="MTR_FLD_POS_X">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="adjustment">adjustmentPOS</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustmentPOS1</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -85,10 +91,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_FLD_POS_Y:0.00cm">
+                      <object class="GtkSpinButton" id="MTR_FLD_POS_Y">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="adjustment">adjustmentPOS</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustmentPOS2</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -124,14 +131,31 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-SvxRectCtl" id="CTL_RECT">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes" context="rotationtabpage|CTL_RECT|tooltip_text">Rotation point</property>
+                        <property name="can_focus">True</property>
                         <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="hscrollbar_policy">never</property>
+                        <property name="vscrollbar_policy">never</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkViewport">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkDrawingArea" id="CTL_RECT">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                                <property name="tooltip_text" translatable="yes" context="rotationtabpage|CTL_RECT|tooltip_text">Rotation point</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
+                        <property name="expand">True</property>
                         <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
@@ -151,8 +175,8 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
             <property name="label" translatable="yes" context="rotationtabpage|label1">Pivot Point</property>
+            <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -193,10 +217,10 @@
                       <object class="GtkLabel" id="FT_ANGLE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="rotationtabpage|FT_ANGLE">_Angle:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">NF_ANGLE</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -208,6 +232,7 @@
                       <object class="GtkSpinButton" id="NF_ANGLE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentANGLE</property>
                         <property name="digits">2</property>
                         <property name="wrap">True</property>
@@ -237,7 +262,6 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="rotationtabpage|FT_ANGLEPRESETS">Default _settings:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">CTL_ANGLE</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -246,11 +270,25 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-DialControl" id="CTL_ANGLE">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes" context="rotationtabpage|CTL_ANGLE|tooltip_text">Rotation Angle</property>
+                        <property name="can_focus">True</property>
                         <property name="halign">center</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkViewport">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkDrawingArea" id="CTL_ANGLE">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                                <property name="tooltip_text" translatable="yes" context="rotationtabpage|CTL_ANGLE|tooltip_text">Rotation Angle</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -273,8 +311,8 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
             <property name="label" translatable="yes" context="rotationtabpage|label2">Rotation Angle</property>
+            <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -297,8 +335,8 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
     <widgets>
-      <widget name="MTR_FLD_POS_X:0.00cm"/>
-      <widget name="MTR_FLD_POS_Y:0.00cm"/>
+      <widget name="MTR_FLD_POS_X"/>
+      <widget name="MTR_FLD_POS_Y"/>
       <widget name="NF_ANGLE"/>
     </widgets>
   </object>

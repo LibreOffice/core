@@ -175,15 +175,6 @@ class SvxAngleTabPage : public SvxTabPage
     static const sal_uInt16 pAngleRanges[];
 
 private:
-    VclPtr<VclFrame>            m_pFlPosition;
-    VclPtr<MetricField>         m_pMtrPosX;
-    VclPtr<MetricField>         m_pMtrPosY;
-    VclPtr<SvxRectCtl>          m_pCtlRect;
-
-    VclPtr<VclFrame>            m_pFlAngle;
-    VclPtr<NumericField>        m_pNfAngle;
-    VclPtr<svx::DialControl>    m_pCtlAngle;
-
     const SfxItemSet&   rOutAttrs;
     const SdrView*      pView;
 
@@ -194,10 +185,20 @@ private:
     MapUnit             ePoolUnit;
     FieldUnit           eDlgUnit;
 
+    svx::SvxDialControl m_aCtlAngle;
+    RectCtl m_aCtlRect;
+
+    std::unique_ptr<weld::Widget> m_xFlPosition;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrPosX;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrPosY;
+    std::unique_ptr<weld::CustomWeld> m_xCtlRect;
+    std::unique_ptr<weld::Widget> m_xFlAngle;
+    std::unique_ptr<weld::SpinButton> m_xNfAngle;
+    std::unique_ptr<weld::CustomWeld> m_xCtlAngle;
+
 public:
-         SvxAngleTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
+    SvxAngleTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxAngleTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     static const sal_uInt16*  GetRanges() { return pAngleRanges; }
@@ -208,8 +209,8 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
-    virtual void PointChanged( weld::DrawingArea* pWindow, RectPoint eRP ) override;
+    virtual void PointChanged(weld::DrawingArea* pWindow, RectPoint eRP) override;
+    virtual void PointChanged(vcl::Window* pWindow, RectPoint eRP) override;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }

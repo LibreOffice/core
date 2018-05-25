@@ -426,7 +426,7 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
 
 void ColorFieldControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    grab_add();
+    CaptureMouse();
     mbMouseCaptured = true;
     ShowPosition(rMEvt.GetPosPixel(), true);
     Modify();
@@ -443,7 +443,7 @@ void ColorFieldControl::MouseMove(const MouseEvent& rMEvt)
 
 void ColorFieldControl::MouseButtonUp(const MouseEvent&)
 {
-    grab_remove();
+    ReleaseMouse();
     mbMouseCaptured = false;
 }
 
@@ -537,14 +537,12 @@ private:
     VclPtr<VirtualDevice> mxBitmap;
     sal_Int16 mnLevel;
     double mdValue;
-    bool mbMouseCaptured;
 };
 
 ColorSliderControl::ColorSliderControl()
     : meMode( DefaultMode )
     , mnLevel( 0 )
     , mdValue( -1.0 )
-    , mbMouseCaptured(false)
 {
 }
 
@@ -651,15 +649,14 @@ void ColorSliderControl::ChangePosition(long nY)
 
 void ColorSliderControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    grab_add();
-    mbMouseCaptured = true;
+    CaptureMouse();
     ChangePosition(rMEvt.GetPosPixel().Y());
     Modify();
 }
 
 void ColorSliderControl::MouseMove(const MouseEvent& rMEvt)
 {
-    if (mbMouseCaptured)
+    if (IsMouseCaptured())
     {
         ChangePosition(rMEvt.GetPosPixel().Y());
         Modify();
@@ -668,8 +665,7 @@ void ColorSliderControl::MouseMove(const MouseEvent& rMEvt)
 
 void ColorSliderControl::MouseButtonUp(const MouseEvent&)
 {
-    grab_remove();
-    mbMouseCaptured = false;
+    ReleaseMouse();
 }
 
 void ColorSliderControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
