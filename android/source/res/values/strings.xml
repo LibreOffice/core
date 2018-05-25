@@ -179,5 +179,6 @@
     <string name="action_cut">Cut</string>
     <string name="action_back">Back</string>
     <string name="action_text_copied">Text copied to the clipboard</string>
+    <string name="please_enter">Please enter:</string>
 
 </resources>
