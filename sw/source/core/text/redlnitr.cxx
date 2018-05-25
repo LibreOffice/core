@@ -303,6 +303,7 @@ SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
     }
     else
         m_pExt = nullptr;
+    assert(m_pExt || m_eMode != Mode::Ignore); // only create if necessary
     Seek(rFnt, m_nNdIdx, 0, COMPLETE_STRING);
 }
 
@@ -314,7 +315,8 @@ SwRedlineItr::~SwRedlineItr() COVERITY_NOEXCEPT_FALSE
 
 // The return value of SwRedlineItr::Seek tells you if the current font
 // has been manipulated by leaving (-1) or accessing (+1) of a section
-short SwRedlineItr::Seek_(SwFont& rFnt, sal_uLong const nNode, sal_Int32 const nNew, sal_Int32 const nOld)
+short SwRedlineItr::Seek(SwFont& rFnt,
+        sal_uLong const nNode, sal_Int32 const nNew, sal_Int32 const nOld)
 {
     short nRet = 0;
     if( ExtOn() )
