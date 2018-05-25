@@ -736,7 +736,7 @@
       </node>
       <node oor:name=".uno:TextAttributes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Text Attributes</value>
+          <value xml:lang="en-US">Text Attributes...</value>
         </prop>
       </node>
       <node oor:name=".uno:SetAnchorToChar" oor:op="replace">
