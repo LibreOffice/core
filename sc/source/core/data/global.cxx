@@ -305,18 +305,12 @@ ScAutoFormat* ScGlobal::GetOrCreateAutoFormat()
 
 LegacyFuncCollection* ScGlobal::GetLegacyFuncCollection()
 {
-    assert(!bThreadedGroupCalcInProgress);
-    if (!pLegacyFuncCollection)
-        pLegacyFuncCollection = new LegacyFuncCollection();
-    return pLegacyFuncCollection;
+    return doubleCheckedInit( pLegacyFuncCollection, []() { return new LegacyFuncCollection(); });
 }
 
 ScUnoAddInCollection* ScGlobal::GetAddInCollection()
 {
-    assert(!bThreadedGroupCalcInProgress);
-    if (!pAddInCollection)
-        pAddInCollection = new ScUnoAddInCollection();
-    return pAddInCollection;
+    return doubleCheckedInit( pAddInCollection, []() { return new ScUnoAddInCollection(); });
 }
 
 ScUserList* ScGlobal::GetUserList()
@@ -1008,26 +1002,27 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, const SvNumberFormatter& rFormatte
 
 utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
 {
-    assert(!bThreadedGroupCalcInProgress);
-    if ( !pTransliteration )
-    {
-        const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
-        pTransliteration = new ::utl::TransliterationWrapper(
-            ::comphelper::getProcessComponentContext(), TransliterationFlags::IGNORE_CASE );
-        pTransliteration->loadModuleIfNeeded( eOfficeLanguage );
-    }
-    return pTransliteration;
+    return doubleCheckedInit( pTransliteration,
+        []()
+        {
+            const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
+            ::utl::TransliterationWrapper* p = new ::utl::TransliterationWrapper(
+                ::comphelper::getProcessComponentContext(), TransliterationFlags::IGNORE_CASE );
+            p->loadModuleIfNeeded( eOfficeLanguage );
+            return p;
+        });
 }
 ::utl::TransliterationWrapper* ScGlobal::GetCaseTransliteration()
 {
-    assert(!bThreadedGroupCalcInProgress);
-    if ( !pCaseTransliteration )
-    {
-        const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
-        pCaseTransliteration = new ::utl::TransliterationWrapper(::comphelper::getProcessComponentContext(), TransliterationFlags::NONE );
-        pCaseTransliteration->loadModuleIfNeeded( eOfficeLanguage );
-    }
-    return pCaseTransliteration;
+    return doubleCheckedInit( pCaseTransliteration,
+        []()
+        {
+            const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
+            ::utl::TransliterationWrapper* p = new ::utl::TransliterationWrapper(
+                ::comphelper::getProcessComponentContext(), TransliterationFlags::NONE );
+            p->loadModuleIfNeeded( eOfficeLanguage );
+            return p;
+        });
 }
 
 const LocaleDataWrapper* ScGlobal::GetpLocaleData()
@@ -1069,12 +1064,8 @@ CollatorWrapper*        ScGlobal::GetCaseCollator()
 }
 css::lang::Locale*     ScGlobal::GetLocale()
 {
-    assert(!bThreadedGroupCalcInProgress);
-    if ( !pLocale )
-    {
-        pLocale = new css::lang::Locale( Application::GetSettings().GetLanguageTag().getLocale());
-    }
-    return pLocale;
+    return doubleCheckedInit( pLocale,
+        []() { return new css::lang::Locale( Application::GetSettings().GetLanguageTag().getLocale()); });
 }
 
 ScFieldEditEngine& ScGlobal::GetStaticFieldEditEngine()
