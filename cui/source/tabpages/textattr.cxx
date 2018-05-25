@@ -81,7 +81,7 @@ SvxTextAttrPage::SvxTextAttrPage(TabPageParent pPage, const SfxItemSet& rInAttrs
     , m_xCtlPosition(new weld::CustomWeld(*m_xBuilder, "CTL_POSITION", m_aCtlPosition))
     , m_xTsbFullWidth(m_xBuilder->weld_check_button("TSB_FULL_WIDTH"))
 {
-    m_aCtlPosition.SetControlSettings(RectPoint::MM, 240, 100);
+    m_aCtlPosition.SetControlSettings(RectPoint::MM, 240);
 
     FieldUnit eFUnit = GetModuleFieldUnit( rInAttrs );
     SetFieldUnit( *m_xMtrFldLeft, eFUnit );
