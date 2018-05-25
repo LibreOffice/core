@@ -14,6 +14,7 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/help.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
@@ -627,6 +628,7 @@ private:
     Link<const KeyEvent&, bool> m_aKeyPressHdl;
     Link<const KeyEvent&, bool> m_aKeyReleaseHdl;
     Link<VclDrawingArea&, void> m_aStyleUpdatedHdl;
+    Link<tools::Rectangle&, OUString> m_aQueryTooltipHdl;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override
     {
@@ -675,6 +677,24 @@ private:
         {
             m_aStyleUpdatedHdl.Call(*this);
             Invalidate();
+        }
+    }
+    virtual void RequestHelp(const HelpEvent& rHelpEvent)
+    {
+        if (rHelpEvent.GetMode() & (HelpEventMode::QUICK | HelpEventMode::BALLOON))
+        {
+            Point aPos(rHelpEvent.GetMousePosPixel());
+            tools::Rectangle aHelpArea(aPos.X(), aPos.Y());
+            OUString sHelpTip = m_aQueryTooltipHdl.Call(aHelpArea);
+            if (sHelpTip.isEmpty())
+                return;
+            Point aPt = OutputToScreenPixel(aHelpArea.TopLeft());
+            aHelpArea.SetLeft(aPt.X());
+            aHelpArea.SetTop(aPt.Y());
+            aPt = OutputToScreenPixel(aHelpArea.BottomRight());
+            aHelpArea.SetRight(aPt.X());
+            aHelpArea.SetBottom(aPt.Y());
+            Help::ShowQuickHelp(this, aHelpArea, sHelpTip);
         }
     }
     virtual FactoryFunction GetUITestFactory() const override
@@ -731,6 +751,10 @@ public:
     void SetStyleUpdatedHdl(const Link<VclDrawingArea&, void>& rLink)
     {
         m_aStyleUpdatedHdl = rLink;
+    }
+    void SetQueryTooltipHdl(const Link<tools::Rectangle&, OUString>& rLink)
+    {
+        m_aQueryTooltipHdl = rLink;
     }
 };
 

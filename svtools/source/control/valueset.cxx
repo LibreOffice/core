@@ -3699,4 +3699,27 @@ void SvtValueSet::SetItemHeight( long nNewItemHeight )
     }
 }
 
+OUString SvtValueSet::RequestHelp(tools::Rectangle& rHelpRect)
+{
+    Point aPos = rHelpRect.TopLeft();
+    const size_t nItemPos = ImplGetItem( aPos );
+    OUString sRet;
+    if (nItemPos != VALUESET_ITEM_NOTFOUND)
+    {
+        rHelpRect = ImplGetItemRect(nItemPos);
+        sRet = GetItemText(ImplGetItem(nItemPos)->mnId);
+    }
+    return sRet;
+}
+
+OUString SvtValueSet::GetItemText(sal_uInt16 nItemId) const
+{
+    const size_t nPos = GetItemPos(nItemId);
+
+    if ( nPos != VALUESET_ITEM_NOTFOUND )
+        return mItemList[nPos]->maText;
+
+    return OUString();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
