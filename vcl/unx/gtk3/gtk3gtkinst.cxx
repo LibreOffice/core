@@ -1430,6 +1430,11 @@ public:
         gtk_grab_add(m_pWidget);
     }
 
+    virtual bool has_grab() const override
+    {
+        return gtk_widget_has_grab(m_pWidget);
+    }
+
     virtual void grab_remove() override
     {
         gtk_grab_remove(m_pWidget);
@@ -1438,6 +1443,11 @@ public:
     virtual bool get_direction() const override
     {
         return gtk_widget_get_direction(m_pWidget) == GTK_TEXT_DIR_RTL;
+    }
+
+    virtual void set_direction(bool bRTL) override
+    {
+        gtk_widget_set_direction(m_pWidget, bRTL ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR);
     }
 
     virtual ~GtkInstanceWidget() override
@@ -3918,6 +3928,11 @@ public:
         g_signal_handler_disconnect(m_pDrawingArea, m_nButtonReleaseSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nSizeAllocateSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nDrawSignalId);
+    }
+
+    virtual OutputDevice& get_ref_device() override
+    {
+        return *m_xDevice;
     }
 };
 

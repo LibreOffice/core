@@ -124,7 +124,7 @@ void SvxShowCharSet::MouseButtonDown(const MouseEvent& rMEvt)
         {
             GrabFocus();
             bDrag = true;
-            grab_add();
+            CaptureMouse();
 
             int nIndex = PixelToMapIndex( rMEvt.GetPosPixel() );
             // Fire the focus event
@@ -153,7 +153,7 @@ void SvxShowCharSet::MouseButtonUp(const MouseEvent& rMEvt)
         // released mouse over character map
         if ( tools::Rectangle(Point(), GetOutputSizePixel()).IsInside(rMEvt.GetPosPixel()))
             aSelectHdl.Call( this );
-        grab_remove();
+        ReleaseMouse();
         bDrag = false;
     }
 }
