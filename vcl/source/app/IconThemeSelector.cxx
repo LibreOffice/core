@@ -11,12 +11,13 @@
 
 #include <vcl/IconThemeScanner.hxx>
 #include <vcl/IconThemeInfo.hxx>
+#include <config_mpl.h>
 
 #include <algorithm>
 
 namespace vcl {
 
-/*static*/ const OUStringLiteral IconThemeSelector::FALLBACK_ICON_THEME_ID("colibre");
+/*static*/ const OUStringLiteral IconThemeSelector::FALLBACK_ICON_THEME_ID("tango");
 
 namespace {
 
@@ -51,20 +52,32 @@ IconThemeSelector::IconThemeSelector()
 IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvironment)
 {
     OUString r;
+#ifdef _WIN32
+    r = "colibre";
+    (void)desktopEnvironment;
+#else
     if ( desktopEnvironment.equalsIgnoreAsciiCase("kde4") ||
-         desktopEnvironment.equalsIgnoreAsciiCase("kde5") ||
-         desktopEnvironment.equalsIgnoreAsciiCase("macosx") ) {
+         desktopEnvironment.equalsIgnoreAsciiCase("kde5") ) {
         r = "breeze";
+    }
+    if ( desktopEnvironment.equalsIgnoreAsciiCase("macosx") ) {
+#if MPL_HAVE_SUBSET
+        r = "tango";
+#else
+        r = "breeze";
+#endif
     }
     else
     if ( desktopEnvironment.equalsIgnoreAsciiCase("gnome") ||
          desktopEnvironment.equalsIgnoreAsciiCase("mate") ||
          desktopEnvironment.equalsIgnoreAsciiCase("unity") ) {
-        r = "elementary";
+        r = "tango";
     }
     else {
-        r = FALLBACK_ICON_THEME_ID; //effective also on Windows
+        r = FALLBACK_ICON_THEME_ID;
     }
+#endif
+
     return r;
 }
 
