@@ -538,13 +538,6 @@ SvtHistoryOptions::~SvtHistoryOptions()
     m_pImpl.reset();
 }
 
-sal_uInt32 SvtHistoryOptions::GetSize( EHistoryType eHistory ) const
-{
-    MutexGuard aGuard(theHistoryOptionsMutex::get());
-
-    return m_pImpl->GetCapacity(eHistory);
-}
-
 void SvtHistoryOptions::Clear( EHistoryType eHistory )
 {
     MutexGuard aGuard(theHistoryOptionsMutex::get());

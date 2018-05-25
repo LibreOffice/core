@@ -208,7 +208,6 @@ public:
     void                SetInCheckIn( bool bInCheckIn );
     bool                IsInCheckIn( );
     bool                IsSkipImages( );
-    OUString            GetConvertImagesFilter();
 
     SAL_DLLPRIVATE bool HasStorage_Impl() const;
 

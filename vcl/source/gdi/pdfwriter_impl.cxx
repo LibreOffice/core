@@ -11405,17 +11405,6 @@ void PDFWriterImpl::setAlternateText( const OUString& rText )
     }
 }
 
-void PDFWriterImpl::setAutoAdvanceTime( sal_uInt32 nSeconds, sal_Int32 nPageNr )
-{
-    if( nPageNr < 0 )
-        nPageNr = m_nCurrentPage;
-
-    if( nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()) )
-        return;
-
-    m_aPages[ nPageNr ].m_nDuration = nSeconds;
-}
-
 void PDFWriterImpl::setPageTransition( PDFWriter::PageTransition eType, sal_uInt32 nMilliSec, sal_Int32 nPageNr )
 {
     if( nPageNr < 0 )

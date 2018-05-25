@@ -388,11 +388,6 @@ librevenge::RVNGPropertyList& XMLStyleContext::GetPageLayoutPropertyList()
     return m_aPageLayoutPropertyList;
 }
 
-librevenge::RVNGPropertyList& XMLStyleContext::GetMasterPagePropertyList()
-{
-    return m_aMasterPagePropertyList;
-}
-
 } // namespace exp
 } // namespace writerperfect
 

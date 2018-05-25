@@ -114,7 +114,6 @@ extern rtl_arena_type * gp_default_arena;
 typedef void (*ArenaForeachFn)(void *addr, sal_Size size);
 
 void rtl_arena_foreach(rtl_arena_type *arena, ArenaForeachFn fn);
-void rtl_cache_foreach(rtl_cache_type *arena, ArenaForeachFn foreachFn);
 
 #endif // INCLUDED_SAL_RTL_ALLOC_ARENA_HXX
 

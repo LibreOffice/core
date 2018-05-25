@@ -60,16 +60,6 @@ public:
     SvtHistoryOptions();
     virtual ~SvtHistoryOptions() override;
 
-    /** Get max size of specified history.
-
-        Call this methods to get information about max. size of specified list.
-        If a new one is add to it the oldest one is deleted automatically.
-
-        @param  eHistory select right history.
-        @return Current max size of specified list.
-    */
-    sal_uInt32 GetSize(EHistoryType eHistory) const;
-
     /** Clear complete specified list.
 
         @param      eHistory select right history.
