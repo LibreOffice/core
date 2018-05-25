@@ -42,7 +42,6 @@ public:
     librevenge::RVNGPropertyList& GetTablePropertyList();
     librevenge::RVNGPropertyList& GetGraphicPropertyList();
     librevenge::RVNGPropertyList& GetPageLayoutPropertyList();
-    librevenge::RVNGPropertyList& GetMasterPagePropertyList();
 
 private:
     OUString m_aName;

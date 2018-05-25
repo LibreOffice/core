@@ -2320,19 +2320,6 @@ MessageDialog::MessageDialog(vcl::Window* pParent, WinBits nStyle)
     SetType(WindowType::MESSBOX);
 }
 
-MessageDialog::MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
-    : Dialog(pParent, OStringToOUString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription, WindowType::MESSBOX)
-    , m_eButtonsType(VclButtonsType::NONE)
-    , m_eMessageType(VclMessageType::Info)
-    , m_pOwnedContentArea(nullptr)
-    , m_pOwnedActionArea(nullptr)
-    , m_pGrid(nullptr)
-    , m_pImage(nullptr)
-    , m_pPrimaryMessage(nullptr)
-    , m_pSecondaryMessage(nullptr)
-{
-}
-
 MessageDialog::MessageDialog(vcl::Window* pParent,
     const OUString &rMessage,
     VclMessageType eMessageType,

@@ -1268,7 +1268,6 @@ public:
     void setAlternateText( const OUString& rText );
 
     // transitional effects
-    void setAutoAdvanceTime( sal_uInt32 nSeconds, sal_Int32 nPageNr );
     void setPageTransition( PDFWriter::PageTransition eType, sal_uInt32 nMilliSec, sal_Int32 nPageNr );
 
     // controls

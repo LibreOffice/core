@@ -50,8 +50,6 @@ public:
     ~ScSortKeyWindow();
 
     void AddSortKey( sal_uInt16 nItem );
-    void DoScroll( sal_Int32 nNewPos );
-    sal_Int32 GetItemHeight() const { return m_nItemHeight; }
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_SORTKEYDLG_HXX
