@@ -98,8 +98,6 @@ public:
 
 class XMLEventSoundContext : public SvXMLImportContext
 {
-    SdXMLEventContext*  mpParent;
-
 public:
 
     XMLEventSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, SdXMLEventContext* pParent );
@@ -107,9 +105,9 @@ public:
 
 
 XMLEventSoundContext::XMLEventSoundContext( SvXMLImport& rImp, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, SdXMLEventContext* pParent )
-: SvXMLImportContext( rImp, nPrfx, rLocalName ), mpParent( pParent )
+: SvXMLImportContext( rImp, nPrfx, rLocalName )
 {
-    if( mpParent && nPrfx == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_SOUND ) )
+    if( pParent && nPrfx == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_SOUND ) )
     {
         const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -124,13 +122,13 @@ XMLEventSoundContext::XMLEventSoundContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
             case XML_NAMESPACE_XLINK:
                 if( IsXMLToken( aAttrLocalName, XML_HREF ) )
                 {
-                    mpParent->msSoundURL = rImp.GetAbsoluteReference(sValue);
+                    pParent->msSoundURL = rImp.GetAbsoluteReference(sValue);
                 }
                 break;
             case XML_NAMESPACE_PRESENTATION:
                 if( IsXMLToken( aAttrLocalName, XML_PLAY_FULL ) )
                 {
-                    mpParent->mbPlayFull = IsXMLToken( sValue, XML_TRUE );
+                    pParent->mbPlayFull = IsXMLToken( sValue, XML_TRUE );
                 }
             }
         }

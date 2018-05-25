@@ -45,7 +45,6 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
     xPropSet( rPageStylePropSet ),
     sOn( bFooter ? OUString("FooterIsOn") : OUString("HeaderIsOn") ),
     sShareContent( bFooter ? OUString("FooterIsShared") : OUString("HeaderIsShared") ),
-    sShareContentFirst( "FirstIsShared" ),
     sText( bFooter ? OUString("FooterText") : OUString("HeaderText") ),
     sTextFirst(bFooter ? OUString("FooterTextFirst") : OUString("HeaderTextFirst")),
     sTextLeft( bFooter ?  OUString("FooterTextLeft") : OUString("HeaderTextLeft") ),
@@ -53,6 +52,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
     bLeft( bLft ),
     bFirst( bFrst )
 {
+    const OUString sShareContentFirst( "FirstIsShared" );
     // NOTE: if this ever handles XML_DISPLAY attr then beware of fdo#72850 !
     if( bLeft || bFirst )
     {

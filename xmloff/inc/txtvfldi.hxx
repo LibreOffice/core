@@ -403,9 +403,7 @@ public:
  */
 class XMLVariableDeclImportContext : public SvXMLImportContext
 {
-    OUString sName;
     XMLValueImportHelper aValueHelper;
-    sal_Int8 nNumLevel;
     sal_Unicode cSeparationChar;
 
 public:

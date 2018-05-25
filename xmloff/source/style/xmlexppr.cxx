@@ -179,7 +179,6 @@ class FilterPropertiesInfo_Impl
 {
     sal_uInt32                              nCount;
     FilterPropertyInfoList_Impl             aPropInfos;
-    FilterPropertyInfoList_Impl::iterator   aLastItr;
 
     std::unique_ptr<Sequence<OUString>>     pApiNames;
 
@@ -201,7 +200,6 @@ FilterPropertiesInfo_Impl::FilterPropertiesInfo_Impl() :
     aPropInfos(),
     pApiNames( nullptr )
 {
-    aLastItr = aPropInfos.begin();
 }
 
 void FilterPropertiesInfo_Impl::AddProperty(
