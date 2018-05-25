@@ -1614,6 +1614,31 @@ void SwTextFrame::CollectAutoCmplWrds( SwContentNode const * pActNode, sal_Int32
         pNode->SetAutoCompleteWordDirty( false );
 }
 
+SwInterHyphInfoTextFrame::SwInterHyphInfoTextFrame(
+        SwTextFrame const& rFrame, SwTextNode const& rNode,
+        SwInterHyphInfo const& rHyphInfo)
+    : nStart(rFrame.MapModelToView(&rNode, rHyphInfo.nStart))
+    , nEnd(rFrame.MapModelToView(&rNode, rHyphInfo.nEnd))
+    , nWordStart(0)
+    , nWordLen(0)
+{
+}
+
+void SwInterHyphInfoTextFrame::UpdateTextNodeHyphInfo(SwTextFrame const& rFrame,
+        SwTextNode const& rNode, SwInterHyphInfo & o_rHyphInfo)
+{
+    std::pair<SwTextNode const*, sal_Int32> const wordStart(rFrame.MapViewToModel(nWordStart));
+    std::pair<SwTextNode const*, sal_Int32> const wordEnd(rFrame.MapViewToModel(nWordStart+nWordLen));
+    if (wordStart.first != &rNode || wordEnd.first != &rNode)
+    {   // not sure if this can happen since nStart/nEnd are in rNode
+        SAL_WARN("sw.core", "UpdateTextNodeHyphInfo: outside of node");
+        return;
+    }
+    o_rHyphInfo.nWordStart = wordStart.second;
+    o_rHyphInfo.nWordLen = wordEnd.second - wordStart.second;
+    o_rHyphInfo.SetHyphWord(m_xHyphWord);
+}
+
 /// Find the SwTextFrame and call its Hyphenate
 bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
@@ -1630,9 +1655,7 @@ bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
                 this->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
                 rHyphInf.GetCursorPos()));
         });
-    if( pFrame )
-        pFrame = &(pFrame->GetFrameAtOfst( rHyphInf.nStart ));
-    else
+    if (!pFrame)
     {
         // There was a comment here that claimed that the following assertion
         // shouldn't exist as it's triggered by "Trennung ueber Sonderbereiche",
@@ -1640,21 +1663,25 @@ bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
         OSL_ENSURE( pFrame, "!SwTextNode::Hyphenate: can't find any frame" );
         return false;
     }
+    SwInterHyphInfoTextFrame aHyphInfo(*pFrame, *this, rHyphInf);
+
+    pFrame = &(pFrame->GetFrameAtOfst( aHyphInfo.nStart ));
 
     while( pFrame )
     {
-        if( pFrame->Hyphenate( rHyphInf ) )
+        if (pFrame->Hyphenate(aHyphInfo))
         {
             // The layout is not robust wrt. "direct formatting"
             // cf. layact.cxx, SwLayAction::TurboAction_(), if( !pCnt->IsValid() ...
             pFrame->SetCompletePaint();
+            aHyphInfo.UpdateTextNodeHyphInfo(*pFrame, *this, rHyphInf);
             return true;
         }
         pFrame = pFrame->GetFollow();
         if( pFrame )
         {
-            rHyphInf.nEnd = rHyphInf.nEnd - (pFrame->GetOfst() - rHyphInf.nStart);
-            rHyphInf.nStart = pFrame->GetOfst();
+            aHyphInfo.nEnd = aHyphInfo.nEnd - (pFrame->GetOfst() - aHyphInfo.nStart);
+            aHyphInfo.nStart = pFrame->GetOfst();
         }
     }
     return false;
