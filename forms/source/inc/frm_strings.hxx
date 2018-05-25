@@ -126,6 +126,7 @@ namespace frm
     #define PROPERTY_TIMEMAX                  "TimeMax"
     #define PROPERTY_LINECOUNT                "LineCount"
     #define PROPERTY_BOUNDCOLUMN              "BoundColumn"
+    #define PROPERTY_FILTERCOLUMN             "FilterColumn"
     #define PROPERTY_FONT                     "FontDescriptor"
     #define PROPERTY_FILLCOLOR                "FillColor"
     #define PROPERTY_LINECOLOR                "LineColor"

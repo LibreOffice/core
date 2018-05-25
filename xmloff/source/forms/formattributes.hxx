@@ -75,6 +75,7 @@ enum class DAFlags {
     ListSource            = 0x0008,
     ListSource_TYPE       = 0x0010,
     InputRequired         = 0x0020,
+    FilterColumn          = 0x0040,
 };
 namespace o3tl {
     template<> struct typed_flags<DAFlags> : is_typed_flags<DAFlags, 0x003f> {};
