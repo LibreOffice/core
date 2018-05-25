@@ -81,7 +81,7 @@ private:
     sal_uInt16                  mnDDHeight;
     sal_Int32                   mnSaveValue;
     sal_Int32                   m_nMaxWidthChars;
-    Link<ListBox&,void>          maSelectHdl;
+    Link<ListBox&,void>         maSelectHdl;
     Link<ListBox&,void>         maDoubleClickHdl;
     sal_uInt16                  mnLineCount;
 
