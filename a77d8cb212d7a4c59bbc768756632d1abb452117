@@ -33,6 +33,24 @@
       "revId": "a77d8cb212d7a4c59bbc768756632d1abb452117",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_0305f8ba",
+        "filename": "vcl/source/app/IconThemeSelector.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-05-25T10:20:48Z",
+      "side": 1,
+      "message": "Sifr looks like Breeze and fits macOS much better than Colibre. Sifr is CC and not blacklisted. \n\nDefaulting to Tango now for the old environments.",
+      "parentUuid": "9a30ddce_a3134c0c",
+      "revId": "a77d8cb212d7a4c59bbc768756632d1abb452117",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
