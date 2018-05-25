@@ -19,6 +19,7 @@
 
 class IconThemeSelectorTest : public CppUnit::TestFixture
 {
+#ifndef _WIN32 //default theme on Windows is Colibre independently from any desktop environment
     void
     BreezeIsReturnedForKde5Desktop();
 
@@ -51,10 +52,13 @@ class IconThemeSelectorTest : public CppUnit::TestFixture
 
     static std::vector<vcl::IconThemeInfo>
     GetFakeInstalledThemes();
+#endif
 
     // Adds code needed to register the test suite
+
     CPPUNIT_TEST_SUITE(IconThemeSelectorTest);
 
+#ifndef _WIN32
     CPPUNIT_TEST(BreezeIsReturnedForKde5Desktop);
     CPPUNIT_TEST(ElementaryIsReturnedForGnomeDesktop);
     CPPUNIT_TEST(ThemeIsOverriddenByPreferredTheme);
@@ -65,22 +69,25 @@ class IconThemeSelectorTest : public CppUnit::TestFixture
     CPPUNIT_TEST(FallbackThemeIsReturnedForEmptyInput);
     CPPUNIT_TEST(DifferentPreferredThemesAreInequal);
     CPPUNIT_TEST(DifferentHighContrastModesAreInequal);
+#endif
 
     // End of test suite definition
 
     CPPUNIT_TEST_SUITE_END();
 };
 
+#ifndef _WIN32
+
 /*static*/ std::vector<vcl::IconThemeInfo>
 IconThemeSelectorTest::GetFakeInstalledThemes()
 {
     std::vector<vcl::IconThemeInfo> r;
     vcl::IconThemeInfo a;
-    a.mThemeId = "colibre";
-    r.push_back(a);
     a.mThemeId = "breeze";
     r.push_back(a);
     a.mThemeId = "elementary";
+    r.push_back(a);
+    a.mThemeId = "colibre";
     r.push_back(a);
     a.mThemeId = "sifr";
     r.push_back(a);
@@ -189,6 +196,8 @@ IconThemeSelectorTest::DifferentPreferredThemesAreInequal()
     bool equal = (s1 == s2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Different preferred themes are detected as inequal", false, equal);
 }
+
+#endif
 
 // Put the test suite in the registry
 CPPUNIT_TEST_SUITE_REGISTRATION(IconThemeSelectorTest);
