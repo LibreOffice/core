@@ -1380,6 +1380,11 @@ public:
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
 
+    virtual void set_tooltip_text(const OUString& rTip) override
+    {
+        gtk_widget_set_tooltip_text(m_pWidget, OUStringToOString(rTip, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
     virtual weld::Container* weld_parent() const override;
 
     virtual OString get_buildable_name() const override
@@ -3643,6 +3648,7 @@ private:
     gulong m_nKeyPressSignalId;
     gulong m_nKeyReleaseSignalId;
     gulong m_nStyleUpdatedSignalId;
+    gulong m_nQueryTooltip;
 
     static gboolean signalDraw(GtkWidget*, cairo_t* cr, gpointer widget)
     {
@@ -3703,6 +3709,24 @@ private:
     void signal_style_updated()
     {
         m_aStyleUpdatedHdl.Call(*this);
+    }
+    static gboolean signalQueryTooltip(GtkWidget*, gint x, gint y,
+                                         gboolean /*keyboard_mode*/, GtkTooltip *tooltip,
+                                         gpointer widget)
+    {
+        GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
+        tools::Rectangle aHelpArea(x, y);
+        OUString aTooltip = pThis->signal_query_tooltip(aHelpArea);
+        if (aTooltip.isEmpty())
+            return false;
+        gtk_tooltip_set_text(tooltip, OUStringToOString(aTooltip, RTL_TEXTENCODING_UTF8).getStr());
+        GdkRectangle aGdkHelpArea;
+        aGdkHelpArea.x = aHelpArea.Left();
+        aGdkHelpArea.y = aHelpArea.Top();
+        aGdkHelpArea.width = aHelpArea.GetWidth();
+        aGdkHelpArea.height = aHelpArea.GetHeight();
+        gtk_tooltip_set_tip_area(tooltip, &aGdkHelpArea);
+        return true;
     }
     static gboolean signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer widget)
     {
@@ -3831,7 +3855,9 @@ public:
         , m_nKeyPressSignalId(g_signal_connect(m_pDrawingArea, "key-press-event", G_CALLBACK(signalKey), this))
         , m_nKeyReleaseSignalId(g_signal_connect(m_pDrawingArea,"key-release-event", G_CALLBACK(signalKey), this))
         , m_nStyleUpdatedSignalId(g_signal_connect(m_pDrawingArea,"style-updated", G_CALLBACK(signalStyleUpdated), this))
+        , m_nQueryTooltip(g_signal_connect(m_pDrawingArea, "query-tooltip", G_CALLBACK(signalQueryTooltip), this))
     {
+        gtk_widget_set_has_tooltip(m_pWidget, true);
         g_object_set_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea", this);
     }
 
@@ -3886,6 +3912,7 @@ public:
             g_object_unref(m_pAccessible);
         if (m_pSurface)
             cairo_surface_destroy(m_pSurface);
+        g_signal_handler_disconnect(m_pDrawingArea, m_nQueryTooltip);
         g_signal_handler_disconnect(m_pDrawingArea, m_nStyleUpdatedSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nKeyPressSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nKeyReleaseSignalId);

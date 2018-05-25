@@ -493,6 +493,7 @@ public:
     virtual void    LoseFocus() override;
     virtual void    Resize() override;
     virtual void    StyleUpdated() override;
+    virtual OUString RequestHelp(tools::Rectangle& rHelpRect) override;
 
     virtual void    Select();
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
