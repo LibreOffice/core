@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_83100803",
+        "filename": "vcl/source/app/IconThemeSelector.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-05-25T10:15:40Z",
+      "side": 1,
+      "message": "The paranoid in me always puts the \u0027#\u0027 in character 0 on the line - old pre-processors relied on that ;-)",
+      "revId": "a77d8cb212d7a4c59bbc768756632d1abb452117",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_a3134c0c",
+        "filename": "vcl/source/app/IconThemeSelector.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-05-25T10:15:40Z",
+      "side": 1,
+      "message": "We remove Sifr from the MPL black-list and include it as a default here ? why don\u0027t we just default to colibre ? but good to have  conditional here.",
+      "revId": "a77d8cb212d7a4c59bbc768756632d1abb452117",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
