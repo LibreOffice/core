@@ -16,6 +16,24 @@
       "revId": "8cb1f55debf56ded49fd980420ee699f1bdc45b0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_e6e39203",
+        "filename": "sw/source/core/unocore/unorefmk.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2018-05-25T19:51:20Z",
+      "side": 1,
+      "message": "it wasnt used in the old code -- that wasnt the problem.\n\nHowever not translating from the old SwModify at one point was.",
+      "parentUuid": "9a30ddce_43de1012",
+      "revId": "8cb1f55debf56ded49fd980420ee699f1bdc45b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
