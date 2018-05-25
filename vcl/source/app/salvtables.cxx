@@ -346,6 +346,11 @@ public:
         return m_xWidget->GetAccessibleName();
     }
 
+    virtual void set_tooltip_text(const OUString& rTip) override
+    {
+        m_xWidget->SetQuickHelpText(rTip);
+    }
+
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
     {
         m_xWidget->AddEventListener(LINK(this, SalInstanceWidget, FocusInListener));
@@ -1725,6 +1730,7 @@ private:
     DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
     DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
     DECL_LINK(StyleUpdatedHdl, VclDrawingArea&, void);
+    DECL_LINK(QueryTooltipHdl, tools::Rectangle&, OUString);
 
 public:
     SalInstanceDrawingArea(VclDrawingArea* pDrawingArea, const a11yref& rAlly,
@@ -1742,6 +1748,7 @@ public:
         m_xDrawingArea->SetKeyPressHdl(LINK(this, SalInstanceDrawingArea, KeyPressHdl));
         m_xDrawingArea->SetKeyReleaseHdl(LINK(this, SalInstanceDrawingArea, KeyReleaseHdl));
         m_xDrawingArea->SetStyleUpdatedHdl(LINK(this, SalInstanceDrawingArea, StyleUpdatedHdl));
+        m_xDrawingArea->SetQueryTooltipHdl(LINK(this, SalInstanceDrawingArea, QueryTooltipHdl));
     }
 
     virtual void queue_draw() override
@@ -1792,6 +1799,7 @@ public:
 
     virtual ~SalInstanceDrawingArea() override
     {
+        m_xDrawingArea->SetQueryTooltipHdl(Link<tools::Rectangle&, OUString>());
         m_xDrawingArea->SetStyleUpdatedHdl(Link<VclDrawingArea&, void>());
         m_xDrawingArea->SetMousePressHdl(Link<const MouseEvent&, void>());
         m_xDrawingArea->SetMouseMoveHdl(Link<const MouseEvent&, void>());
@@ -1844,6 +1852,11 @@ IMPL_LINK(SalInstanceDrawingArea, KeyReleaseHdl, const KeyEvent&, rEvent, bool)
 IMPL_LINK_NOARG(SalInstanceDrawingArea, StyleUpdatedHdl, VclDrawingArea&, void)
 {
     m_aStyleUpdatedHdl.Call(*this);
+}
+
+IMPL_LINK(SalInstanceDrawingArea, QueryTooltipHdl, tools::Rectangle&, rHelpArea, OUString)
+{
+    return m_aQueryTooltipHdl.Call(rHelpArea);
 }
 
 //ComboBox and ListBox have similar apis, ComboBoxes in LibreOffice have an edit box and ListBoxes

@@ -79,6 +79,8 @@ public:
     virtual void set_accessible_name(const OUString& rName) = 0;
     virtual OUString get_accessible_name() const = 0;
 
+    virtual void set_tooltip_text(const OUString& rTip) = 0;
+
     virtual void connect_focus_in(const Link<Widget&, void>& rLink)
     {
         assert(!m_aFocusInHdl.IsSet());
@@ -793,6 +795,12 @@ protected:
     Link<const KeyEvent&, bool> m_aKeyReleaseHdl;
     Link<Widget&, void> m_aStyleUpdatedHdl;
     Link<Widget&, tools::Rectangle> m_aGetFocusRectHdl;
+    Link<tools::Rectangle&, OUString> m_aQueryTooltipHdl;
+
+    OUString signal_query_tooltip(tools::Rectangle& rHelpArea)
+    {
+        return m_aQueryTooltipHdl.Call(rHelpArea);
+    }
 
 public:
     void connect_draw(const Link<draw_args, void>& rLink) { m_aDrawHdl = rLink; }
@@ -815,6 +823,10 @@ public:
     void connect_focus_rect(const Link<Widget&, tools::Rectangle>& rLink)
     {
         m_aGetFocusRectHdl = rLink;
+    }
+    void connect_query_tooltip(const Link<tools::Rectangle&, OUString>& rLink)
+    {
+        m_aQueryTooltipHdl = rLink;
     }
     virtual void queue_draw() = 0;
     virtual void queue_draw_area(int x, int y, int width, int height) = 0;

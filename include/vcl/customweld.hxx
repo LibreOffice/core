@@ -36,6 +36,7 @@ public:
     virtual bool KeyInput(const KeyEvent&) { return false; }
     virtual tools::Rectangle GetFocusRect() { return tools::Rectangle(); }
     virtual FactoryFunction GetUITestFactory() const { return nullptr; }
+    virtual OUString RequestHelp(tools::Rectangle&) { return OUString(); }
     Size GetOutputSizePixel() const { return m_aSize; }
     void SetOutputSizePixel(const Size& rSize) { m_aSize = rSize; }
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) { m_pDrawingArea = pDrawingArea; }
@@ -86,6 +87,7 @@ private:
     DECL_LINK(DoKeyPress, const KeyEvent&, bool);
     DECL_LINK(DoFocusRect, weld::Widget&, tools::Rectangle);
     DECL_LINK(DoStyleUpdated, weld::Widget&, void);
+    DECL_LINK(DoRequestHelp, tools::Rectangle&, OUString);
 
 public:
     CustomWeld(weld::Builder& rBuilder, const OString& rDrawingId,

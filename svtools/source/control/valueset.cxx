@@ -3722,12 +3722,4 @@ OUString SvtValueSet::GetItemText(sal_uInt16 nItemId) const
     return OUString();
 }
 
-void SvtValueSet::SetColor(const Color& rColor)
-{
-    maColor  = rColor;
-    mbFormat = true;
-    if (IsReallyVisible() && IsUpdateMode())
-        Invalidate();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
