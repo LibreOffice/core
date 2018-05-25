@@ -81,6 +81,7 @@
 #define SID_HANGING_INDENT                              ( SID_SVX_START + 68 )
 #define SID_ATTR_PARA_BULLET                            ( SID_SVX_START + 250 )
 #define SID_ATTR_PARA_OUTLLEVEL                         ( SID_SVX_START + 300 )
+#define SID_FIELD                                       ( SID_SVX_START + 363 ) // related to EE_FEATURE_FIELD
 #define SID_ATTR_PARA_REGISTER                          ( SID_SVX_START + 413 )
 #define SID_ATTR_PARA_PAGENUM                           ( SID_SVX_START + 457 )
 #define SID_ATTR_PARA_NUMRULE                           ( SID_SVX_START + 587 )

@@ -162,7 +162,7 @@ const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_FRAMEDIRECTION, true },         // EE_PARA_WRITINGDIR
         { 0, true },                               // EE_PARA_XMLATTRIBS
         { SID_ATTR_PARA_HANGPUNCTUATION, true },   // EE_PARA_HANGINGPUNCTUATION
-        { SID_ATTR_PARA_FORBIDDEN_RULES, true },
+        { SID_ATTR_PARA_FORBIDDEN_RULES, true },   // EE_PARA_FORBIDDENRULES
         { SID_ATTR_PARA_SCRIPTSPACE, true },       // EE_PARA_ASIANCJKSPACING
         { SID_ATTR_NUMBERING_RULE, true },         // EE_PARA_NUMBULL
         { 0, true },                               // EE_PARA_HYPHENATE
@@ -177,42 +177,43 @@ const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_TABSTOP, true },                // EE_PARA_TABS
         { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, true }, // EE_PARA_JUST_METHOD
         { SID_ATTR_ALIGN_VER_JUSTIFY, true },      // EE_PARA_VER_JUST
-        { SID_ATTR_CHAR_COLOR, true },
-        { SID_ATTR_CHAR_FONT, true },
-        { SID_ATTR_CHAR_FONTHEIGHT, true },
-        { SID_ATTR_CHAR_SCALEWIDTH, true },
-        { SID_ATTR_CHAR_WEIGHT, true },
-        { SID_ATTR_CHAR_UNDERLINE, true },
-        { SID_ATTR_CHAR_STRIKEOUT, true },
-        { SID_ATTR_CHAR_POSTURE, true },
-        { SID_ATTR_CHAR_CONTOUR, true },
-        { SID_ATTR_CHAR_SHADOWED, true },
-        { SID_ATTR_CHAR_ESCAPEMENT, true },
-        { SID_ATTR_CHAR_AUTOKERN, true },
-        { SID_ATTR_CHAR_KERNING, true },
-        { SID_ATTR_CHAR_WORDLINEMODE, true },
-        { SID_ATTR_CHAR_LANGUAGE, true },
-        { SID_ATTR_CHAR_CJK_LANGUAGE, true },
-        { SID_ATTR_CHAR_CTL_LANGUAGE, true },
-        { SID_ATTR_CHAR_CJK_FONT, true },
-        { SID_ATTR_CHAR_CTL_FONT, true },
-        { SID_ATTR_CHAR_CJK_FONTHEIGHT, true },
-        { SID_ATTR_CHAR_CTL_FONTHEIGHT, true },
-        { SID_ATTR_CHAR_CJK_WEIGHT, true },
-        { SID_ATTR_CHAR_CTL_WEIGHT, true },
-        { SID_ATTR_CHAR_CJK_POSTURE, true },
-        { SID_ATTR_CHAR_CTL_POSTURE, true },
-        { SID_ATTR_CHAR_EMPHASISMARK, true },
-        { SID_ATTR_CHAR_RELIEF, true },
+        { SID_ATTR_CHAR_COLOR, true },         // EE_CHAR_COLOR
+        { SID_ATTR_CHAR_FONT, true },          // EE_CHAR_FONTINFO
+        { SID_ATTR_CHAR_FONTHEIGHT, true },    // EE_CHAR_FONTHEIGHT
+        { SID_ATTR_CHAR_SCALEWIDTH, true },    // EE_CHAR_FONTWIDTH
+        { SID_ATTR_CHAR_WEIGHT, true },        // EE_CHAR_WEIGHT
+        { SID_ATTR_CHAR_UNDERLINE, true },     // EE_CHAR_UNDERLINE
+        { SID_ATTR_CHAR_STRIKEOUT, true },     // EE_CHAR_STRIKEOUT
+        { SID_ATTR_CHAR_POSTURE, true },       // EE_CHAR_ITALIC
+        { SID_ATTR_CHAR_CONTOUR, true },       // EE_CHAR_OUTLINE
+        { SID_ATTR_CHAR_SHADOWED, true },      // EE_CHAR_SHADOW
+        { SID_ATTR_CHAR_ESCAPEMENT, true },    // EE_CHAR_ESCAPEMENT
+        { SID_ATTR_CHAR_AUTOKERN, true },      // EE_CHAR_PAIRKERNING
+        { SID_ATTR_CHAR_KERNING, true },       // EE_CHAR_KERNING
+        { SID_ATTR_CHAR_WORDLINEMODE, true },  // EE_CHAR_WLM
+        { SID_ATTR_CHAR_LANGUAGE, true },      // EE_CHAR_LANGUAGE
+        { SID_ATTR_CHAR_CJK_LANGUAGE, true },  // EE_CHAR_LANGUAGE_CJK
+        { SID_ATTR_CHAR_CTL_LANGUAGE, true },  // EE_CHAR_LANGUAGE_CTL
+        { SID_ATTR_CHAR_CJK_FONT, true },      // EE_CHAR_FONTINFO_CJK
+        { SID_ATTR_CHAR_CTL_FONT, true },      // EE_CHAR_FONTINFO_CTL
+        { SID_ATTR_CHAR_CJK_FONTHEIGHT, true }, // EE_CHAR_FONTHEIGHT_CJK
+        { SID_ATTR_CHAR_CTL_FONTHEIGHT, true }, // EE_CHAR_FONTHEIGHT_CTL
+        { SID_ATTR_CHAR_CJK_WEIGHT, true },    // EE_CHAR_WEIGHT_CJK
+        { SID_ATTR_CHAR_CTL_WEIGHT, true },    // EE_CHAR_WEIGHT_CTL
+        { SID_ATTR_CHAR_CJK_POSTURE, true },   // EE_CHAR_ITALIC_CJK
+        { SID_ATTR_CHAR_CTL_POSTURE, true },   // EE_CHAR_ITALIC_CTL
+        { SID_ATTR_CHAR_EMPHASISMARK, true },  // EE_CHAR_EMPHASISMARK
+        { SID_ATTR_CHAR_RELIEF, true },        // EE_CHAR_RELIEF
         { 0, true },                           // EE_CHAR_RUBI_DUMMY
         { 0, true },                           // EE_CHAR_XMLATTRIBS
-        { SID_ATTR_CHAR_OVERLINE, true },
+        { SID_ATTR_CHAR_OVERLINE, true },      // EE_CHAR_OVERLINE
         { SID_ATTR_CHAR_CASEMAP, true },       // EE_CHAR_CASEMAP
         { SID_ATTR_CHAR_GRABBAG, true },       // EE_CHAR_GRABBAG
         { SID_ATTR_CHAR_BACK_COLOR, true },    // EE_CHAR_BKGCOLOR
         { 0, true },                           // EE_FEATURE_TAB
         { 0, true },                           // EE_FEATURE_LINEBR
         { SID_ATTR_CHAR_CHARSETCOLOR, true },  // EE_FEATURE_NOTCONV
+        { SID_FIELD, false },                  // EE_FEATURE_FIELD
 };
 
 EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE )
