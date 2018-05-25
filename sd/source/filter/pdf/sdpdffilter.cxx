@@ -99,9 +99,12 @@ bool SdPdfFilter::Import()
     const OUString aFileName(
         mrMedium.GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE));
 
+    // Rendering resolution.
+    const double dResolutionDPI = 96.;
+
     uno::Sequence<sal_Int8> aPdfData;
     std::vector<Bitmap> aBitmaps;
-    if (vcl::ImportPDF(aFileName, aBitmaps, aPdfData) == 0)
+    if (vcl::ImportPDF(aFileName, aBitmaps, aPdfData, dResolutionDPI) == 0)
         return false;
 
     // Prepare the link with the PDF stream.
@@ -129,8 +132,12 @@ bool SdPdfFilter::Import()
 
         // Create the page and insert the Graphic.
         SdPage* pPage = mrDocument.GetSdPage(nPageNumber++, PageKind::Standard);
-        const Size aGrfSize(OutputDevice::LogicToLogic(aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(),
-                                                       MapMode(MapUnit::Map100thMM)));
+        Size aGrfSize(OutputDevice::LogicToLogic(aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(),
+                                                 MapMode(MapUnit::Map100thMM)));
+
+        // Resize to original size based on 72 dpi to preserve page size.
+        aGrfSize = Size(aGrfSize.Width() * 72. / dResolutionDPI,
+                        aGrfSize.Height() * 72. / dResolutionDPI);
 
         // Make the page size match the rendered image.
         pPage->SetSize(aGrfSize);
