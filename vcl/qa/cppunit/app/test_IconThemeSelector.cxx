@@ -19,11 +19,12 @@
 
 class IconThemeSelectorTest : public CppUnit::TestFixture
 {
+#ifndef _WIN32 //default theme on Windows is Colibre independently from any desktop environment
     void
     BreezeIsReturnedForKde5Desktop();
 
     void
-    ElementaryIsReturnedForGnomeDesktop();
+    TangoIsReturnedForGnomeDesktop();
 
     void
     ThemeIsOverriddenByPreferredTheme();
@@ -51,12 +52,15 @@ class IconThemeSelectorTest : public CppUnit::TestFixture
 
     static std::vector<vcl::IconThemeInfo>
     GetFakeInstalledThemes();
+#endif
 
     // Adds code needed to register the test suite
+
     CPPUNIT_TEST_SUITE(IconThemeSelectorTest);
 
+#ifndef _WIN32
     CPPUNIT_TEST(BreezeIsReturnedForKde5Desktop);
-    CPPUNIT_TEST(ElementaryIsReturnedForGnomeDesktop);
+    CPPUNIT_TEST(TangoIsReturnedForGnomeDesktop);
     CPPUNIT_TEST(ThemeIsOverriddenByPreferredTheme);
     CPPUNIT_TEST(ThemeIsOverriddenByHighContrastMode);
     CPPUNIT_TEST(NotInstalledThemeDoesNotOverride);
@@ -65,22 +69,25 @@ class IconThemeSelectorTest : public CppUnit::TestFixture
     CPPUNIT_TEST(FallbackThemeIsReturnedForEmptyInput);
     CPPUNIT_TEST(DifferentPreferredThemesAreInequal);
     CPPUNIT_TEST(DifferentHighContrastModesAreInequal);
+#endif
 
     // End of test suite definition
 
     CPPUNIT_TEST_SUITE_END();
 };
 
+#ifndef _WIN32
+
 /*static*/ std::vector<vcl::IconThemeInfo>
 IconThemeSelectorTest::GetFakeInstalledThemes()
 {
     std::vector<vcl::IconThemeInfo> r;
     vcl::IconThemeInfo a;
-    a.mThemeId = "colibre";
-    r.push_back(a);
     a.mThemeId = "breeze";
     r.push_back(a);
-    a.mThemeId = "elementary";
+    a.mThemeId = "tango";
+    r.push_back(a);
+    a.mThemeId = "colibre";
     r.push_back(a);
     a.mThemeId = "sifr";
     r.push_back(a);
@@ -97,12 +104,12 @@ IconThemeSelectorTest::BreezeIsReturnedForKde5Desktop()
 }
 
 void
-IconThemeSelectorTest::ElementaryIsReturnedForGnomeDesktop()
+IconThemeSelectorTest::TangoIsReturnedForGnomeDesktop()
 {
     std::vector<vcl::IconThemeInfo> themes = GetFakeInstalledThemes();
     vcl::IconThemeSelector s;
     OUString r = s.SelectIconThemeForDesktopEnvironment(themes, "gnome");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("'elementary' theme is returned for gnome desktop", OUString("elementary"), r);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("'tango' theme is returned for gnome desktop", OUString("tango"), r);
 }
 
 void
@@ -113,7 +120,7 @@ IconThemeSelectorTest::ThemeIsOverriddenByPreferredTheme()
     s.SetPreferredIconTheme(preferred, false);
     std::vector<vcl::IconThemeInfo> themes = GetFakeInstalledThemes();
     OUString selected = s.SelectIconThemeForDesktopEnvironment(themes, "gnome");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("'elementary' theme is overridden by breeze", preferred, selected);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("'tango' theme is overridden by breeze", preferred, selected);
 }
 
 void
@@ -189,6 +196,8 @@ IconThemeSelectorTest::DifferentPreferredThemesAreInequal()
     bool equal = (s1 == s2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Different preferred themes are detected as inequal", false, equal);
 }
+
+#endif
 
 // Put the test suite in the registry
 CPPUNIT_TEST_SUITE_REGISTRATION(IconThemeSelectorTest);
