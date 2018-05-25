@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_06f346d7",
+        "filename": "sw/source/core/txtnode/fmtatr2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2018-05-25T19:50:17Z",
+      "side": 0,
+      "message": "Namely: here.",
+      "revId": "137c38a1ba01c51c421f695e1558d2c1499c6627",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
