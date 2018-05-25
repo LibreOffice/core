@@ -465,6 +465,8 @@ namespace xmloff
                         m_aListSource;
         std::vector< OUString >
                         m_aValueList;
+        std::vector< OUString >
+                        m_aFilterField;
 
         std::vector< sal_Int16 >
                         m_aSelectedSeq;

@@ -121,6 +121,24 @@ namespace frm
         }
     }
 
+    void OEntryListHelper::getBoolAttr( Sequence< rtl::OUString >& _rListFilter )
+    {
+        bool bRet=false;
+        for (auto & str : _rListFilter)
+        {
+            bRet = false;
+            if ( str.equalsIgnoreAsciiCase("true") || str.equalsIgnoreAsciiCase("t") )
+                bRet = true;
+            else
+                bRet = str.toInt32() != 0;
+
+            if(bRet)
+                str = "true";
+            else
+                str = "false";
+        }
+    }
+
 
     void SAL_CALL OEntryListHelper::entryRangeRemoved( const ListEntryEvent& _rEvent )
     {
