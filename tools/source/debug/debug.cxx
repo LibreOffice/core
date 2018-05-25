@@ -20,6 +20,9 @@
 #if defined (UNX) || defined (__GNUC__)
 #include <unistd.h>
 #endif
+#if defined (UNX) && defined (__GNUC__)
+#include <cxxabi.h>
+#endif
 
 #include <errno.h>
 #include <time.h>
@@ -97,6 +100,11 @@ void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunc
         if ( exception.Context.is() )
         {
             const char* pContext = typeid( *exception.Context.get() ).name();
+#if defined (UNX) && defined (__GNUC__)
+            // demangle the type name, not necessary under windows, we already get demangled names there
+            int status;
+            pContext = abi::__cxa_demangle( pContext, nullptr, nullptr, &status);
+#endif
             sMessage += "\n    context: ";
             sMessage += pContext;
         }
