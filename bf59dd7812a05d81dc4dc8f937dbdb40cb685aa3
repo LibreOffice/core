@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_86a6560e",
+        "filename": "dbaccess/source/filter/hsqldb/rowinputbinary.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-05-25T17:48:15Z",
+      "side": 1,
+      "message": "Isn\u0027t it the same as what I did some lines above in the if block?",
+      "parentUuid": "9a30ddce_6386b466",
+      "revId": "bf59dd7812a05d81dc4dc8f937dbdb40cb685aa3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_837d6870",
         "filename": "dbaccess/source/filter/hsqldb/rowinputbinary.cxx",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2018-05-25T07:45:04Z",
       "side": 1,
       "message": "you\u0027re dropping the milliseconds part of the time,  you need to do:\n    sal_Int32 nNanos \u003d (valueInSecs % 1000000) * 1000;\n    css::util::Time time( nNanos, nSecs, nMins, nHours, true);",
+      "revId": "bf59dd7812a05d81dc4dc8f937dbdb40cb685aa3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_a6a99ae1",
+        "filename": "dbaccess/source/filter/hsqldb/rowinputbinary.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-05-25T17:48:15Z",
+      "side": 1,
+      "message": "You\u0027re right, I\u0027ll upload a new patch",
+      "parentUuid": "9a30ddce_837d6870",
       "revId": "bf59dd7812a05d81dc4dc8f937dbdb40cb685aa3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
