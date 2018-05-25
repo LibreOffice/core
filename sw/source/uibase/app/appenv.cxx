@@ -123,7 +123,7 @@ OUString InsertLabEnvText( SwWrtShell& rSh, SwFieldMgr& rFieldMgr, const OUStrin
             if ( !bField )
                 rSh.Insert( sTmpText );
         }
-        rSh.InsertLineBreak();
+        rSh.SplitNode();
     }
     rSh.DelLeft();  // Again remove last linebreak
 
