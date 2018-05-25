@@ -178,11 +178,11 @@ gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkEntry
 gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkSpinButton
 gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkSpinner
 gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkProgressBar
-#gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.svxcorelo-SvxColorListBox
-#gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.svxcorelo-SvxLanguageBox
-#gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.sfxlo-SvxCharView
-#gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.foruilo-RefEdit
-#gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.svxcorelo-PaperSizeListBox
+gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.svxcorelo-SvxColorListBox
+gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.svxcorelo-SvxLanguageBox
+gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.sfxlo-SvxCharView
+gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.foruilo-RefEdit
+gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.svxcorelo-PaperSizeListBox
 # Probably need labelling
 #gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkComboBox
 #gb_UIConfig_gla11y_PARAMETERS += --enable-specific no-labelled-by.GtkComboBoxText
