@@ -388,6 +388,9 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
             if (pFirstFlyFormat)
                 pSh->GotoFly(pFirstFlyFormat->GetName(), FLYCNTTYPE_ALL, false);
 
+            if (pSh->IsAnyDatabaseFieldInDoc())
+                pSh->GetView().ShowUIElement("private:resource/toolbar/mailmerge");
+
             pSh->EndAllAction();
             pSh->DoUndo();
         }
