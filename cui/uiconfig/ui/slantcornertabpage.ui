@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment4">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkAdjustment" id="adjustmentRADIUS">
     <property name="upper">500</property>
     <property name="step_increment">10</property>
@@ -49,7 +69,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="slantcornertabpage|label5">_X:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">controlx1:0.00cm</property>
+                        <property name="mnemonic_widget">controlx1</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -59,9 +79,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="controlx1:0.00cm">
+                      <object class="GtkSpinButton" id="controlx1">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -87,7 +109,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="slantcornertabpage|label6">_Y:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">controly1:0.00cm</property>
+                        <property name="mnemonic_widget">controly1</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -97,9 +119,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="controly1:0.00cm">
+                      <object class="GtkSpinButton" id="controly1">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment3</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -158,7 +182,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="slantcornertabpage|FT_RADIUS">_Radius:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">MTR_FLD_RADIUS:0.00cm</property>
+                    <property name="mnemonic_widget">MTR_FLD_RADIUS</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -167,9 +191,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="MTR_FLD_RADIUS:0.00cm">
+                  <object class="GtkSpinButton" id="MTR_FLD_RADIUS">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentRADIUS</property>
                     <property name="digits">2</property>
                   </object>
@@ -222,7 +247,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="slantcornertabpage|FT_ANGLE">_Angle:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">MTR_FLD_ANGLE:0.00degrees</property>
+                    <property name="mnemonic_widget">MTR_FLD_ANGLE</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -231,9 +256,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="MTR_FLD_ANGLE:0.00degrees">
+                  <object class="GtkSpinButton" id="MTR_FLD_ANGLE">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentSLANT</property>
                     <property name="digits">2</property>
                   </object>
@@ -293,7 +319,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="slantcornertabpage|label4">_X:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">controlx2:0.00cm</property>
+                        <property name="mnemonic_widget">controlx2</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -303,9 +329,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="controlx2:0.00cm">
+                      <object class="GtkSpinButton" id="controlx2">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -331,7 +359,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="slantcornertabpage|label7">_Y:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">controly2:0.00cm</property>
+                        <property name="mnemonic_widget">controly2</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -341,9 +369,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="controly2:0.00cm">
+                      <object class="GtkSpinButton" id="controly2">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment4</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -392,16 +422,16 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
     <widgets>
-      <widget name="MTR_FLD_RADIUS:0.00cm"/>
-      <widget name="MTR_FLD_ANGLE:0.00degrees"/>
+      <widget name="MTR_FLD_RADIUS"/>
+      <widget name="MTR_FLD_ANGLE"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup5">
     <widgets>
-      <widget name="controlx1:0.00cm"/>
-      <widget name="controly1:0.00cm"/>
-      <widget name="controlx2:0.00cm"/>
-      <widget name="controly2:0.00cm"/>
+      <widget name="controlx1"/>
+      <widget name="controly1"/>
+      <widget name="controlx2"/>
+      <widget name="controly2"/>
     </widgets>
   </object>
 </interface>
