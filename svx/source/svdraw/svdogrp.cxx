@@ -178,7 +178,7 @@ void SdrObjGroup::NbcSetLayer(SdrLayerID nLayer)
 
 void SdrObjGroup::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
 {
-    // call patrent
+    // call parent
     SdrObject::handlePageChange(pOldPage, pNewPage);
 
     for(size_t i(0); i < GetObjCount(); i++)
