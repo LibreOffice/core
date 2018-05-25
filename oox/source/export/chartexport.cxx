@@ -1239,7 +1239,7 @@ void ChartExport::exportManualLayout(const css::chart2::RelativePosition& rPos,
             x -= w;
         break;
         default:
-            SAL_WARN("oox", "unhandled alignment case for manual layout export");
+            SAL_WARN("oox", "unhandled alignment case for manual layout export " << static_cast<sal_uInt16>(rPos.Anchor));
     }
 
     pFS->singleElement(FSNS(XML_c, XML_x),

@@ -891,7 +891,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
             }
             else
             {
-                SAL_WARN("oox.shape", "unhandled graphic type" );
+                SAL_WARN("oox.shape", "unhandled graphic type " << static_cast<int>(aType) );
                 /*Earlier, even in case of unhandled graphic types we were
                   proceeding to write the image, which would eventually
                   write an empty image with a zero size, and return a valid
