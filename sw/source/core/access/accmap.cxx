@@ -2158,6 +2158,11 @@ void SwAccessibleMap::RemoveContext( const SdrObject *pObj )
     }
 }
 
+bool SwAccessibleMap::Contains(const SwFrame *pFrame) const
+{
+    return (pFrame && mpFrameMap && mpFrameMap->find(pFrame) != mpFrameMap->end());
+}
+
 void SwAccessibleMap::A11yDispose( const SwFrame *pFrame,
                                    const SdrObject *pObj,
                                    vcl::Window* pWindow,
@@ -2173,9 +2178,9 @@ void SwAccessibleMap::A11yDispose( const SwFrame *pFrame,
     OSL_ENSURE( !aFrameOrObj.GetSwFrame() || aFrameOrObj.GetSwFrame()->IsAccessibleFrame(),
             "non accessible frame should be disposed" );
 
-    if (aFrameOrObj.IsAccessible( GetShell()->IsPreview() )
-            // fdo#87199 dispose the darn thing if it ever was accessible
-        || (pFrame && mpFrameMap && mpFrameMap->find(pFrame) != mpFrameMap->end()))
+    if (aFrameOrObj.IsAccessible(GetShell()->IsPreview())
+               // fdo#87199 dispose the darn thing if it ever was accessible
+            || Contains(pFrame))
     {
         ::rtl::Reference< SwAccessibleContext > xAccImpl;
         ::rtl::Reference< SwAccessibleContext > xParentAccImpl;
