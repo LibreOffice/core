@@ -395,7 +395,7 @@ public:
     static bool isAnyEditViewInRange(bool bColumns, SCCOLROW nStart, SCCOLROW nEnd);
     css::uno::Reference<css::drawing::XShapes> getSelectedXShapes();
 
-    css::uno::Reference<css::datatransfer::XTransferable2> GetClipData() { return m_xClipData; };
+    const css::uno::Reference<css::datatransfer::XTransferable2> & GetClipData() { return m_xClipData; };
     void SetClipData(const css::uno::Reference<css::datatransfer::XTransferable2>& xTransferable) { m_xClipData = xTransferable; }
 };
 

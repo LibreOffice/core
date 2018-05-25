@@ -215,7 +215,7 @@ NavigatorDragType SdNavigatorWin::GetNavigatorDragType()
     return eDT;
 }
 
-VclPtr<SdPageObjsTLB> SdNavigatorWin::GetObjects()
+VclPtr<SdPageObjsTLB> const & SdNavigatorWin::GetObjects()
 {
     return maTlbObjects;
 }

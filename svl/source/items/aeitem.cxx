@@ -66,7 +66,7 @@ sal_uInt16 SfxAllEnumItem::GetValueCount() const
     return pValues ? pValues->size() : 0;
 }
 
-OUString SfxAllEnumItem::GetValueTextByPos( sal_uInt16 nPos ) const
+OUString const & SfxAllEnumItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     assert(pValues && nPos < pValues->size());
     return (*pValues)[nPos].aText;

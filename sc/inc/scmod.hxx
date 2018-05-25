@@ -175,7 +175,7 @@ public:
     void                SetPrintOptions ( const ScPrintOptions& rOpt );
     void                InsertEntryToLRUList(sal_uInt16 nFIndex);
 
-    SC_DLLPUBLIC css::uno::Reference<css::datatransfer::XTransferable2>
+    SC_DLLPUBLIC const css::uno::Reference<css::datatransfer::XTransferable2> &
         GetClipData() { return m_xClipData; }
     SC_DLLPUBLIC void SetClipData(
         const css::uno::Reference<css::datatransfer::XTransferable2>& xTransferable) { m_xClipData = xTransferable; }
