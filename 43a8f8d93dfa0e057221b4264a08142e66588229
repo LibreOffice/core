@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_c3de806c",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4365,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-05-25T08:33:56Z",
+      "side": 1,
+      "message": "Really not so convinced here. If we have eg.\nA:A - numbers, B:B \u003dSUM(A1:A3) and C:C\u003dAVERAGE(B1:B3)\nwe want to thread the B:B calculation and the C:C calculation even if we start by calculating C1 (the calc. queue order is somewhat random) - do we do that ? \u003d)",
+      "revId": "43a8f8d93dfa0e057221b4264a08142e66588229",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
