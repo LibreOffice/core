@@ -111,8 +111,12 @@ class OListBoxModel final :public OBoundControlModel
     ValueList                                   m_aListSourceValues;
     ValueList                                   m_aBoundValues;         // do not write directly; use setBoundValues()
     mutable ValueList                           m_aConvertedBoundValues;
+    ValueList                                   m_aVisibleBoundValues;  // do not write directly; use setVisibleBoundValues()
+    mutable ValueList                           m_aConvertedVisibleBoundValues;
+
     mutable sal_Int32                           m_nConvertedBoundValuesType;
     css::uno::Sequence<sal_Int16>               m_aDefaultSelectSeq;    // DefaultSelected
+    css::uno::Sequence<sal_Bool>                m_bVisibleEntries;
     // </properties>
 
     mutable sal_Int16                           m_nNULLPos;             // position of the NULL value in our list
@@ -220,13 +224,16 @@ private:
     void        impl_refreshDbEntryList( bool _bForce );
 
     void        setBoundValues(const ValueList&);
+    void        setVisibleBoundValues(const ValueList &l);
     void        clearBoundValues();
 
     ValueList   impl_getValues() const;
+    ValueList   impl_getVisibleValues() const;
 
     sal_Int32   getValueType() const;
 
     void        convertBoundValues(sal_Int32 nType) const;
+    void        convertVisibleBoundValues(sal_Int32 nType) const;
 };
 
 
