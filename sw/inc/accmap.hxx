@@ -292,6 +292,9 @@ public:
     Point PixelToCore (const Point& rPoint) const;
     tools::Rectangle CoreToPixel (const tools::Rectangle& rRect) const;
 
+    // is there a known accessibility impl cached for the frame
+    bool Contains(const SwFrame *pFrame) const;
+
 private:
     /** get mapping mode for LogicToPixel and PixelToLogic conversions
 
