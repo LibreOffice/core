@@ -114,7 +114,7 @@ static OUString HelpLocaleString();
 namespace {
 
 /// Root path of the help.
-OUString getHelpRootURL()
+OUString const & getHelpRootURL()
 {
     static OUString s_instURL;
     if (!s_instURL.isEmpty())

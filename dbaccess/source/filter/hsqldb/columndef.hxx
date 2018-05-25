@@ -32,14 +32,14 @@ public:
                      bool bPrimary = false, sal_Int32 nAutoIncr = -1, bool bNullable = true,
                      bool bCaseInsensitive = false);
 
-    OUString getName() const { return m_sName; }
+    OUString const& getName() const { return m_sName; }
     sal_Int32 getDataType() const { return m_eType; }
     bool isPrimaryKey() const { return m_bPrimaryKey; }
     bool isNullable() const { return m_bNullable; }
     bool isAutoIncremental() const { return m_nAutoIncrement >= 0; }
     bool isCaseInsensitive() const { return m_bCaseInsensitive; }
     sal_Int32 getStartValue() const { return m_nAutoIncrement; }
-    const std::vector<sal_Int32> getParams() const { return m_aParams; }
+    const std::vector<sal_Int32>& getParams() const { return m_aParams; }
 };
 }
 

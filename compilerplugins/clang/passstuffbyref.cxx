@@ -274,6 +274,10 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
     if (startswith(type.getAsString(), "struct o3tl::strong_int")) {
         return;
     }
+    // extremely simple class, might as well pass by value
+    if (loplugin::TypeCheck(functionDecl->getReturnType()).Class("Color")) {
+        return;
+    }
 
     // functionDecl->dump();
 

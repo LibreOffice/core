@@ -58,9 +58,9 @@ public:
     SvxShowText(const VclPtr<VirtualDevice>& rVirDev);
 
     void            SetFont(const vcl::Font& rFont);
-    vcl::Font       GetFont() const { return m_aFont; }
+    vcl::Font const & GetFont() const { return m_aFont; }
     void            SetText(const OUString& rText);
-    OUString        GetText() const { return m_sText; }
+    OUString const & GetText() const { return m_sText; }
     void            SetCentered(bool bCenter) { mbCenter = bCenter; }
 
     Size            get_preferred_size() const { return GetDrawingArea()->get_preferred_size(); }

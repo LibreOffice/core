@@ -36,7 +36,7 @@ public:
     }
     virtual tools::Rectangle GetFocusRect() { return tools::Rectangle(); }
     virtual FactoryFunction GetUITestFactory() const { return nullptr; }
-    Size GetOutputSizePixel() const { return m_aSize; }
+    Size const& GetOutputSizePixel() const { return m_aSize; }
     void SetOutputSizePixel(const Size& rSize) { m_aSize = rSize; }
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) { m_pDrawingArea = pDrawingArea; }
     weld::DrawingArea* GetDrawingArea() const { return m_pDrawingArea; }

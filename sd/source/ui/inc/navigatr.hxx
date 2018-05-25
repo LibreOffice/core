@@ -101,7 +101,7 @@ public:
     bool                        InsertFile(const OUString& rFileName);
 
     NavigatorDragType           GetNavigatorDragType();
-    VclPtr<SdPageObjsTLB> GetObjects();
+    VclPtr<SdPageObjsTLB> const & GetObjects();
 
 protected:
     virtual bool                EventNotify(NotifyEvent& rNEvt) override;

@@ -42,7 +42,7 @@ class SvRTLInputBox : public weld::GenericDialogController
 public:
     SvRTLInputBox(weld::Window* pParent, const OUString& rPrompt, const OUString& rTitle,
         const OUString& rDefault, long nXTwips, long nYTwips );
-    OUString GetText() const { return m_aText; }
+    OUString const & GetText() const { return m_aText; }
 };
 
 SvRTLInputBox::SvRTLInputBox(weld::Window* pParent, const OUString& rPrompt,

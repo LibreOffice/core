@@ -62,7 +62,7 @@ namespace basegfx
         sal_uInt32 count() const;
 
         // B3DPolygon interface
-        B3DPolygon getB3DPolygon(sal_uInt32 nIndex) const;
+        B3DPolygon const & getB3DPolygon(sal_uInt32 nIndex) const;
         void setB3DPolygon(sal_uInt32 nIndex, const B3DPolygon& rPolygon);
 
         // BColor interface

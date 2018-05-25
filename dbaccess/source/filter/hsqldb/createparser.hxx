@@ -34,12 +34,12 @@ public:
     /**
      * @return name of the table which is to be created.
      */
-    OUString getTableName() const { return m_sTableName; }
+    OUString const& getTableName() const { return m_sTableName; }
 
     /**
      * @return primary keys of parsed table.
      */
-    std::vector<OUString> getPrimaryKeys() const { return m_PrimaryKeys; }
+    std::vector<OUString> const& getPrimaryKeys() const { return m_PrimaryKeys; }
 
     /**
      * @return a vector of column descriptors, representing the columns of the
