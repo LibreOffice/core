@@ -363,6 +363,7 @@ namespace xmloff
             exportedProperty( PROPERTY_VALUE_SEQ );
             exportedProperty( PROPERTY_SELECT_SEQ );
             exportedProperty( PROPERTY_LISTSOURCE );
+            exportedProperty( PROPERTY_LISTFILTER );
         }
         if ( m_eType == COMBOBOX )
             exportedProperty( PROPERTY_STRING_ITEM_LIST );
@@ -1273,9 +1274,13 @@ namespace xmloff
     void OControlExport::exportListSourceAsElements()
     {
         // the string lists
-        Sequence< OUString > aItems, aValues;
+        Sequence< OUString > aItems, aValues, aFilter;
         DBG_CHECK_PROPERTY( PROPERTY_STRING_ITEM_LIST, Sequence< OUString > );
         m_xProps->getPropertyValue(PROPERTY_STRING_ITEM_LIST) >>= aItems;
+
+        DBG_CHECK_PROPERTY( PROPERTY_LISTFILTER, Sequence< OUString > );
+        if ( DAFlags::NONE == ( m_nIncludeDatabase & DAFlags::ListFilter ) )
+            m_xProps->getPropertyValue(PROPERTY_LISTSOURCE) >>= aFilter;
 
         DBG_CHECK_PROPERTY( PROPERTY_LISTSOURCE, Sequence< OUString > );
         if ( DAFlags::NONE == ( m_nIncludeDatabase & DAFlags::ListSource ) )
@@ -1296,11 +1301,13 @@ namespace xmloff
         // loop through both lists ('til the maximum of both lengths)
         const OUString* pItems = aItems.getConstArray();
         const OUString* pValues = aValues.getConstArray();
+        const OUString* pFilter = aFilter.getConstArray();
 
         sal_Int32 nItems = aItems.getLength();
         sal_Int32 nValues = aValues.getLength();
+        sal_Int32 nFilter = aFilter.getLength();
 
-        sal_Int16 nMaxLen = static_cast<sal_Int16>(std::max(nItems, nValues));
+        sal_Int16 nMaxLen = static_cast<sal_Int16>(std::max(nItems, std::max(nValues, nFilter)));
 
         for (sal_Int16 i=0; i<nMaxLen; ++i )
         {
@@ -1322,6 +1329,15 @@ namespace xmloff
                     OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Value),
                     *pValues);
                 ++pValues;
+            }
+            if (i < nFilter)
+            {
+                // there is an filter value at this position
+                AddAttribute(
+                    OAttributeMetaData::getCommonControlAttributeNamespace(CCAFlags::Filter),
+                    OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Filter),
+                    *pFilter);
+                ++pFilter;
             }
 
             Int16Set::iterator aSelectedPos = aSelection.find(i);

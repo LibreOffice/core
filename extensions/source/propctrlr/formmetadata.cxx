@@ -46,7 +46,7 @@ namespace pcr
         sal_uInt32      nUIFlags;
 
         OPropertyInfoImpl(
-                        const OUString&            rName,
+                        const OUString&             rName,
                         sal_Int32                   _nId,
                         const OUString&             aTranslation,
                         sal_uInt16                  nPosId,
@@ -153,7 +153,9 @@ namespace pcr
         DEF_INFO_3( FILTERPROPOSAL,    FILTERPROPOSAL,      41, FILTERPROPOSAL,    FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE ),
         DEF_INFO_4( LISTSOURCETYPE,    LISTSOURCETYPE,      42, LISTSOURCETYPE,    FORM_VISIBLE, DATA_PROPERTY, ENUM, COMPOSEABLE ),
         DEF_INFO_3( LISTSOURCE,        LISTSOURCE,          43, LISTSOURCE,        FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE ),
+        DEF_INFO_3( LISTFILTER,        LISTFILTER,          204, LISTFILTER,       FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE ),
         DEF_INFO_3( BOUNDCOLUMN,       BOUNDCOLUMN,         44, BOUNDCOLUMN,       FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE ),
+        DEF_INFO_3( FILTERCOLUMN,      FILTERCOLUMN,        203, FILTERCOLUMN,     FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE ),
 
         // <!----------------->
         // XML node binding

@@ -238,6 +238,15 @@ namespace pcr
                 const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory
             ) const;
 
+        /** describes the UI for selecting a ListFilter (for list-like form controls)
+            @precond
+                ->m_xComponent is not <NULL/>
+        */
+        void impl_describeListFilterUI_throw(
+                css::inspection::LineDescriptor& _out_rDescriptor,
+                const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory
+             ) const;
+
         /** displays a database-related error to the user
         */
         void impl_displaySQLError_nothrow( const ::dbtools::SQLExceptionInfo& _rErrorDescriptor ) const;

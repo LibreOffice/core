@@ -599,7 +599,7 @@ private:
     ::comphelper::OPropertyChangeMultiplexer*
                                 m_pAggPropMultiplexer;
 
-    bool                        m_bFormListening            : 1;    // are we currently a XLoadListener at our ambient form?
+    bool                    m_bFormListening            : 1;    // are we currently a XLoadListener at our ambient form?
     bool                    m_bLoaded                   : 1;
     bool                    m_bRequired                 : 1;
     const bool              m_bCommitable               : 1;    // do we support XBoundComponent?

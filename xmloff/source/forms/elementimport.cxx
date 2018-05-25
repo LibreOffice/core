@@ -1598,6 +1598,12 @@ namespace xmloff
                 aValueList.Name = PROPERTY_LISTSOURCE;
                 aValueList.Value <<= comphelper::containerToSequence(m_aValueList);
                 implPushBackPropertyValue(aValueList);
+
+                // the filterlist sequence
+                PropertyValue aFilterField;
+                aFilterField.Name = PROPERTY_LISTFILTER;
+                aFilterField.Value <<= comphelper::containerToSequence(m_aFilterField);
+                implPushBackGenericPropertyValue(aFilterField);
             }
 
             // the select sequence

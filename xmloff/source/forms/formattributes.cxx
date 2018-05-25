@@ -64,6 +64,7 @@ namespace xmloff
             case CCAFlags::Value:             return "value";
             case CCAFlags::Orientation:       return "orientation";
             case CCAFlags::VisualEffect:     return "visual-effect";
+            case CCAFlags::Filter:           return "filter";
             default:
                 OSL_FAIL("OAttributeMetaData::getCommonControlAttributeName: invalid id (maybe you or-ed two flags?)!");
         }

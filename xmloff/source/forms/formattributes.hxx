@@ -61,6 +61,7 @@ enum class CCAFlags {
     Orientation           = 0x00400000,
     VisualEffect          = 0x00800000,
     EnableVisible         = 0x01000000,
+    Filter                = 0x02000000,
 };
 namespace o3tl {
     template<> struct typed_flags<CCAFlags> : is_typed_flags<CCAFlags, 0x01ffffff> {};
@@ -75,6 +76,7 @@ enum class DAFlags {
     ListSource            = 0x0008,
     ListSource_TYPE       = 0x0010,
     InputRequired         = 0x0020,
+    ListFilter            = 0x0040,
 };
 namespace o3tl {
     template<> struct typed_flags<DAFlags> : is_typed_flags<DAFlags, 0x003f> {};

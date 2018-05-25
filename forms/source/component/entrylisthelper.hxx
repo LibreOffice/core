@@ -53,6 +53,8 @@ namespace frm
                         m_xListSource;      /// our external list source
         std::vector< OUString >
                         m_aStringItems;     /// "overridden" StringItemList property value
+        std::vector< OUString >
+                        m_aVisibleStringItems;    /// visible StringItemList property value
         css::uno::Sequence< css::uno::Any >
                         m_aTypedItems;      /// "overridden" TypedItemList property value
         ::comphelper::OInterfaceContainerHelper2
@@ -67,6 +69,10 @@ namespace frm
         /// returns the current string item list
         const std::vector< OUString >&
                     getStringItemList() const { return m_aStringItems; }
+
+        /// returns the current visible string item list
+        const std::vector< OUString >&
+                    getVisibleStringItemList() const { return m_aVisibleStringItems; }
 
         /// returns the current typed item list
         const css::uno::Sequence< css::uno::Any >&
@@ -111,6 +117,8 @@ namespace frm
             @see hasExternalListSource
         */
         void        setNewStringItemList( const css::uno::Any& _rValue, ControlModelLock& _rInstanceLock );
+
+        void        setNewVisibleStringItemList( const css::uno::Any& _rValue, ControlModelLock& _rInstanceLock );
 
         /** helper for implementing setFastPropertyValueNoBroadcast
 
