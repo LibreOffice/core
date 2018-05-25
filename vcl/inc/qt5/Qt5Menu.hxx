@@ -42,6 +42,7 @@ public:
     virtual void                SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos ) override;
     virtual void                SetFrame( const SalFrame* pFrame ) override;
     const Qt5Frame*             GetFrame() const;
+    Qt5Menu*                    GetTopLevel();
     virtual void                CheckItem( unsigned nPos, bool bCheck ) override;
     virtual void                EnableItem( unsigned nPos, bool bEnable ) override;
     virtual void                ShowItem( unsigned nPos, bool bShow ) override;
@@ -56,7 +57,7 @@ public:
     Qt5MenuItem*                GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
 
 private slots:
-    void DispatchCommand();
+    void DispatchCommand( Qt5MenuItem* pQItem );
 };
 
 class Qt5MenuItem : public SalMenuItem
