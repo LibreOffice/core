@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    android:id="@+id/numberpickerLayout">
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Rows:"
+        android:gravity="center"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/number_picker_rows_positive"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/image_button_background"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="+"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/numberpickerLayout"
+        app:layout_constraintTop_toTopOf="@+id/numberpickerLayout" />
+
+    <TextView
+        android:id="@+id/number_picker_row_count"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="3"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/number_picker_rows_positive"
+        app:layout_constraintStart_toEndOf="@+id/number_picker_rows_negative"
+        app:layout_constraintTop_toTopOf="@+id/numberpickerLayout" />
+
+    <TextView
+        android:id="@+id/number_picker_rows_negative"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="-"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:background="@drawable/image_button_background"
+        app:layout_constraintEnd_toEndOf="@+id/numberpickerLayout"
+        app:layout_constraintStart_toStartOf="@+id/numberpickerLayout"
+        app:layout_constraintTop_toTopOf="@+id/numberpickerLayout" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="24dp"
+        android:text="Columns:"
+        android:gravity="center"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/numberpickerLayout"
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+    <TextView
+        android:id="@+id/number_picker_cols_negative"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="-"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:background="@drawable/image_button_background"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="@+id/numberpickerLayout"
+        app:layout_constraintStart_toStartOf="@+id/numberpickerLayout"
+        app:layout_constraintTop_toBottomOf="@+id/number_picker_rows_negative" />
+
+    <TextView
+        android:id="@+id/number_picker_col_count"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="3"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/number_picker_cols_positive"
+        app:layout_constraintStart_toEndOf="@+id/number_picker_cols_negative"
+        app:layout_constraintTop_toBottomOf="@+id/number_picker_row_count" />
+
+    <TextView
+        android:id="@+id/number_picker_cols_positive"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="24dp"
+        android:text="+"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:background="@drawable/image_button_background"
+        app:layout_constraintEnd_toEndOf="@+id/numberpickerLayout"
+        app:layout_constraintTop_toBottomOf="@+id/number_picker_rows_positive" />
+</android.support.constraint.ConstraintLayout>

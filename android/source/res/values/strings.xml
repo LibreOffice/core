@@ -179,5 +179,21 @@
     <string name="action_cut">Cut</string>
     <string name="action_back">Back</string>
     <string name="action_text_copied">Text copied to the clipboard</string>
+    <string name="insert_table">Insert table</string>
+    <string name="select_insert_options">Select insert options:</string>
+    <string name="select_delete_options">Select delete options:</string>
+
+    <string-array name="insertrowscolumns">
+        <item>Insert Rows Before</item>
+        <item>Insert Rows After</item>
+        <item>Insert Columns Before</item>
+        <item>Insert Columns After</item>
+        <item>Insert Table</item>
+    </string-array>
+    <string-array name="deleterowcolumns">
+        <item>Delete Rows</item>
+        <item>Delete Columns</item>
+        <item>Delete Table</item>
+    </string-array>
 
 </resources>
