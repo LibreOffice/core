@@ -661,13 +661,12 @@ XMLAuthorFieldImportContext::XMLAuthorFieldImportContext(
     sal_uInt16 nToken)
 :   XMLSenderFieldImportContext(rImport, rHlp, nPrfx, sLocalName, nToken)
 ,   bAuthorFullName(true)
-,   sServiceAuthor(sAPI_author)
 ,   sPropertyAuthorFullName("FullName")
 ,   sPropertyFixed(sAPI_is_fixed)
 ,   sPropertyContent(sAPI_content)
 {
     // overwrite service name from XMLSenderFieldImportContext
-    SetServiceName(sServiceAuthor);
+    SetServiceName(sAPI_author);
 }
 
 void XMLAuthorFieldImportContext::StartElement(

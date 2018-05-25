@@ -79,8 +79,6 @@ class XMLNumberedParaContext : public SvXMLImportContext
     sal_Int16 m_Level;
     /// text:start-value
     sal_Int16 m_StartValue;
-    /// xml:id
-    OUString m_XmlId;
     /// text:list-id
     OUString m_ListId;
     /// text:style-name

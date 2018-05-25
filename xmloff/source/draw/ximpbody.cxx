@@ -49,7 +49,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
 ,   mbHadSMILNodes( false )
 {
     bool bHaveXmlId( false );
-    OUString sXmlId;
+    OUString sXmlId, sStyleName, sContextName;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
 
@@ -65,12 +65,12 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
         {
             case XML_TOK_DRAWPAGE_NAME:
             {
-                maContextName = sValue;
+                sContextName = sValue;
                 break;
             }
             case XML_TOK_DRAWPAGE_STYLE_NAME:
             {
-                maStyleName = sValue;
+                sStyleName = sValue;
                 break;
             }
             case XML_TOK_DRAWPAGE_MASTER_PAGE_NAME:
@@ -128,13 +128,13 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     uno::Reference< drawing::XDrawPage > xShapeDrawPage(rShapes, uno::UNO_QUERY);
 
     // set PageName?
-    if(!maContextName.isEmpty())
+    if(!sContextName.isEmpty())
     {
         if(xShapeDrawPage.is())
         {
             uno::Reference < container::XNamed > xNamed(xShapeDrawPage, uno::UNO_QUERY);
             if(xNamed.is())
-                xNamed->setName(maContextName);
+                xNamed->setName(sContextName);
         }
     }
 
@@ -181,7 +181,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
         }
     }
 
-    SetStyle( maStyleName );
+    SetStyle( sStyleName );
 
     if( !maHREF.isEmpty() )
     {

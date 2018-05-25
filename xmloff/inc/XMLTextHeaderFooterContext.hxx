@@ -34,7 +34,6 @@ class XMLTextHeaderFooterContext: public SvXMLImportContext
 
     const OUString sOn;
     const OUString sShareContent;
-    const OUString sShareContentFirst;
     const OUString sText;
     const OUString sTextFirst;
     const OUString sTextLeft;

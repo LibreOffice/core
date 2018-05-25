@@ -27,7 +27,7 @@ SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
     uno::Reference< drawing::XShapes > const & rShapes)
 :   SdXMLGenericPageContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 {
-    OUString sStyleName;
+    OUString sStyleName, sPageMasterName;
 
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -42,7 +42,7 @@ SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
         {
             case XML_TOK_MASTERPAGE_PAGE_MASTER_NAME:
             {
-                msPageMasterName = sValue;
+                sPageMasterName = sValue;
                 break;
             }
             case XML_TOK_MASTERPAGE_STYLE_NAME:
@@ -81,9 +81,9 @@ SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
     }
 
     // set page-master?
-    if(!msPageMasterName.isEmpty())
+    if(!sPageMasterName.isEmpty())
     {
-        SetPageMaster( msPageMasterName );
+        SetPageMaster( sPageMasterName );
     }
 }
 

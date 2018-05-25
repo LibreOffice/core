@@ -34,7 +34,6 @@ class AnimationsImportHelperImpl;
 class AnimationNodeContext : public SvXMLImportContext
 {
     std::shared_ptr<AnimationsImportHelperImpl> mpHelper;
-    bool mbRootContext;
     css::uno::Reference< css::animations::XAnimationNode > mxNode;
 
     void init_node( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );

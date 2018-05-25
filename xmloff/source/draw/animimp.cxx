@@ -393,8 +393,6 @@ public:
 
 class XMLAnimationsSoundContext : public SvXMLImportContext
 {
-    XMLAnimationsEffectContext* mpParent;
-
 public:
 
     XMLAnimationsSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, XMLAnimationsEffectContext* pParent );
@@ -402,9 +400,9 @@ public:
 
 
 XMLAnimationsSoundContext::XMLAnimationsSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, XMLAnimationsEffectContext* pParent )
-: SvXMLImportContext( rImport, nPrfx, rLocalName ), mpParent( pParent )
+: SvXMLImportContext( rImport, nPrfx, rLocalName )
 {
-    if( mpParent && nPrfx == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_SOUND ) )
+    if( pParent && nPrfx == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_SOUND ) )
     {
         const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -419,13 +417,13 @@ XMLAnimationsSoundContext::XMLAnimationsSoundContext( SvXMLImport& rImport, sal_
             case XML_NAMESPACE_XLINK:
                 if( IsXMLToken( aLocalName, XML_HREF ) )
                 {
-                    mpParent->maSoundURL = rImport.GetAbsoluteReference(sValue);
+                    pParent->maSoundURL = rImport.GetAbsoluteReference(sValue);
                 }
                 break;
             case XML_NAMESPACE_PRESENTATION:
                 if( IsXMLToken( aLocalName, XML_PLAY_FULL ) )
                 {
-                    mpParent->mbPlayFull = IsXMLToken( sValue, XML_TRUE );
+                    pParent->mbPlayFull = IsXMLToken( sValue, XML_TRUE );
                 }
             }
         }

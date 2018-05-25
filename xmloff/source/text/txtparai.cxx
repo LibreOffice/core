@@ -2215,7 +2215,6 @@ XMLNumberedParaContext::XMLNumberedParaContext(
         switch( rTokenMap.Get( nPrefix, aLocalName ) )
         {
             case XML_TOK_TEXT_NUMBERED_PARAGRAPH_XMLID:
-                m_XmlId = rValue;
 //FIXME: there is no UNO API for lists
                 break;
             case XML_TOK_TEXT_NUMBERED_PARAGRAPH_LIST_ID:

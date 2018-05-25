@@ -101,7 +101,6 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         switch( rTokenMap.Get( nPrefix, aLocalName ) )
         {
         case XML_TOK_TEXT_LIST_BLOCK_XMLID:
-            sXmlId = rValue;
 //FIXME: there is no UNO API for lists
             // xml:id is also the list ID (#i92221#)
             if ( mnLevel == 0 ) // root <list> element

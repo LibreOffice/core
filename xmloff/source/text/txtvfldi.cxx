@@ -712,8 +712,11 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
         SvXMLImportContext(rImport, nPrfx, rLocalName),
         // bug?? which properties for userfield/userfieldmaster
         aValueHelper(rImport, rHlp, true, false, true, false),
-        nNumLevel(-1), cSeparationChar('.')
+        cSeparationChar('.')
 {
+    sal_Int8 nNumLevel(-1);
+    OUString sName;
+
     if ( (XML_NAMESPACE_TEXT == nPrfx) &&
          ( ( IsXMLToken( rLocalName, XML_SEQUENCE_DECL )) ||
            ( IsXMLToken( rLocalName, XML_VARIABLE_DECL)) ||

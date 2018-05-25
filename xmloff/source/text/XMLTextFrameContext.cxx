@@ -339,8 +339,6 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
     OUString sHRef;
     OUString sFilterName;
     OUString sCode;
-    OUString sObject;
-    OUString sArchive;
     OUString sMimeType;
     OUString sFrameName;
     OUString sAppletName;
@@ -1069,10 +1067,8 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             sCode = rValue;
             break;
         case XML_TOK_TEXT_FRAME_OBJECT:
-            sObject = rValue;
             break;
         case XML_TOK_TEXT_FRAME_ARCHIVE:
-            sArchive = rValue;
             break;
         case XML_TOK_TEXT_FRAME_MAY_SCRIPT:
             bMayScript = IsXMLToken( rValue, XML_TRUE );

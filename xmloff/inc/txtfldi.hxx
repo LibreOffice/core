@@ -216,7 +216,6 @@ protected:
 class XMLAuthorFieldImportContext : public XMLSenderFieldImportContext
 {
     bool bAuthorFullName;
-    const OUString sServiceAuthor;
     const OUString sPropertyAuthorFullName;
     const OUString sPropertyFixed;
     const OUString sPropertyContent;
