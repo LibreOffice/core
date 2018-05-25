@@ -226,7 +226,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                     // TTTT: This also *might* be the hidden reason for the strange code at the
                     // end of SdrObject::SetPage that tries to delete the SvxShape under some
                     // circumstances...
-                    pNewObject->SetPage(nullptr);
+                    // pNewObject->SetPage(nullptr);
 
                     tools::Rectangle aObjRect( pNewObject->GetLogicRect() );
                     tools::Rectangle aVisArea = pOutDev->PixelToLogic(tools::Rectangle(Point(0,0), pOutDev->GetOutputSizePixel()));
