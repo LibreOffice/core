@@ -504,13 +504,13 @@ namespace frm
             DECL_PROP1(TABINDEX,            sal_Int16,                      BOUND);
             DECL_PROP2(BOUNDCOLUMN,         sal_Int16,                      BOUND, MAYBEVOID);
             DECL_PROP1(LISTSOURCETYPE,      ListSourceType,                 BOUND);
-            DECL_PROP1(LISTSOURCE,          css::uno::Sequence<OUString>,                 BOUND);
-            DECL_PROP3(VALUE_SEQ,           css::uno::Sequence<OUString>,                 BOUND, READONLY, TRANSIENT);
+            DECL_PROP1(LISTSOURCE,          css::uno::Sequence<OUString>,   BOUND);
+            DECL_PROP3(VALUE_SEQ,           css::uno::Sequence<OUString>,   BOUND, READONLY, TRANSIENT);
             DECL_PROP2(SELECT_VALUE_SEQ,    Sequence< Any >,                BOUND, TRANSIENT);
             DECL_PROP2(SELECT_VALUE,        Any,                            BOUND, TRANSIENT);
             DECL_PROP1(DEFAULT_SELECT_SEQ,  Sequence<sal_Int16>,            BOUND);
-            DECL_PROP1(STRINGITEMLIST,      Sequence< OUString >,    BOUND);
-            DECL_PROP1(TYPEDITEMLIST,       Sequence< Any >,    OPTIONAL);
+            DECL_PROP1(STRINGITEMLIST,      Sequence< OUString >,           BOUND);
+            DECL_PROP1(TYPEDITEMLIST,       Sequence< Any >,                OPTIONAL);
         END_DESCRIBE_PROPERTIES();
     }
 
@@ -1011,6 +1011,8 @@ namespace frm
             return;
         }
 
+        m_bVisibleEntries.realloc(aDisplayList.size());
+        // TODO: reading m_bVisibleEntries from aggregate
 
         // Create Values sequence
         // Add NULL entry
@@ -1022,9 +1024,29 @@ namespace frm
             m_nNULLPos = 0;
         }
 
+        int idx = 0;
+        ValueList aVisibleDisplayList;
+        if( static_cast<ValueList::size_type>( m_bVisibleEntries.getLength() ) > aDisplayList.size() )
+        {
+            SAL_WARN("forms.component", "OListBoxModel::loadData: inconsistent boolean entries!");
+        }
+        else
+        {
+            for ( auto const& bVisible : m_bVisibleEntries )
+            {
+                if(bVisible)
+                {
+                    aVisibleDisplayList.push_back(aDisplayList.at(idx));
+                }
+                idx++;
+            }
+        }
+
         setBoundValues(aValueList);
+        setVisibleBoundValues(aValueList);
 
         setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( lcl_convertToStringSequence( aDisplayList ) ) );
+        setFastPropertyValue( PROPERTY_ID_VISIBLESTRINGITEMLIST, makeAny( lcl_convertToStringSequence( aVisibleDisplayList ) ) );
         setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, makeAny( css::uno::Sequence<css::uno::Any>() ) );
     }
 
@@ -1070,9 +1092,25 @@ namespace frm
 
     void OListBoxModel::setVisibleBoundValues(const ValueList &l)
     {
-        //TODO: Apply filtering here
+        int idx = 0;
+        ValueList aBoundList = l;
+        if( static_cast<ValueList::size_type>( m_bVisibleEntries.getLength() ) > aBoundList.size() )
+        {
+            SAL_WARN("forms.component", "OListBoxModel::loadData: inconsistent boolean entries!");
+        }
+        else
+        {
+            for ( auto const & bVisible : m_bVisibleEntries )
+            {
+                if(bVisible)
+                {
+                    m_aVisibleBoundValues.push_back(aBoundList.at(idx));
+                }
+                idx++;
+            }
+        }
+
         m_aConvertedVisibleBoundValues.clear();
-        m_aVisibleBoundValues = l;
     }
 
     void OListBoxModel::clearBoundValues()
@@ -1220,7 +1258,7 @@ namespace frm
             // the dedicated "NULL" entry is selected
             return s_aEmptyValue;
 
-        ValueList aValues( impl_getValues() );
+        ValueList aValues( impl_getVisibleValues() );
 
         size_t selectedValue = aSelectedIndices[0];
         if ( selectedValue >= aValues.size() )
@@ -1273,7 +1311,7 @@ namespace frm
         }
         else
         {
-            ValueList aValues( impl_getValues() );
+            ValueList aValues( impl_getVisibleValues() );
             assert( m_nConvertedBoundValuesType == getValueType());
             ORowSetValue v(i_aValue);
             v.setTypeKind( m_nConvertedBoundValuesType );
@@ -1290,7 +1328,7 @@ namespace frm
 
     Sequence< sal_Int16 > OListBoxModel::translateBindingValuesToControlValue(const Sequence< const Any > &i_aValues) const
     {
-        const ValueList aValues( impl_getValues() );
+        const ValueList aValues( impl_getVisibleValues() );
         assert( m_nConvertedBoundValuesType == getValueType());
         Sequence< sal_Int16 > aSelectionIndicies(i_aValues.getLength());
 
@@ -1499,7 +1537,7 @@ namespace frm
             for ( OUString const & selectEntry : aSelectEntries )
             {
                 int idx = 0;
-                for(const OUString& s : getStringItemList())
+                for(const OUString& s : getVisibleStringItemList())
                 {
                     if (s==selectEntry)
                         aSelectionSet.insert(idx);
@@ -1518,7 +1556,7 @@ namespace frm
             OSL_VERIFY( _rExternalValue >>= sStringToSelect );
             ::std::set< sal_Int16 > aSelectionSet;
             int idx = 0;
-            for(const OUString& s : getStringItemList())
+            for(const OUString& s : getVisibleStringItemList())
             {
                 if (s==sStringToSelect)
                     aSelectionSet.insert(idx);
@@ -1566,7 +1604,7 @@ namespace frm
                 if ( _rSelectSequence.getLength() == 1 )
                 {
                     sal_Int32 nIndex = _rSelectSequence[0];
-                    if (0 <= nIndex && nIndex < _rTypedList.getLength())
+                    if (nIndex >= 0 && nIndex < _rTypedList.getLength())
                         aReturn = _rTypedList[nIndex];
                 }
             }
@@ -1701,12 +1739,12 @@ namespace frm
         break;
 
         case eEntryList:
-            aReturn = lcl_getMultiSelectedEntries( aSelectSequence, getStringItemList() );
+            aReturn = lcl_getMultiSelectedEntries( aSelectSequence, getVisibleStringItemList() );
             break;
 
         case eEntry:
             {
-                const std::vector<OUString>& rStrings = getStringItemList();
+                const std::vector<OUString>& rStrings = getVisibleStringItemList();
                 const Sequence<Any>& rValues = getTypedItemList();
                 if (rStrings.size() == static_cast<size_t>(rValues.getLength()))
                     aReturn = lcl_getSingleSelectedEntryTyped( aSelectSequence, rValues );
@@ -1735,7 +1773,7 @@ namespace frm
         {
             Sequence< sal_Int16 > aSelectSequence;
             OSL_VERIFY( getControlValue() >>= aSelectSequence );
-            aCurrentValue = lcl_getSingleSelectedEntryAny( aSelectSequence, impl_getValues() );
+            aCurrentValue = lcl_getSingleSelectedEntryAny( aSelectSequence, impl_getVisibleValues() );
         }
         catch( const Exception& )
         {
@@ -1753,7 +1791,7 @@ namespace frm
         {
             Sequence< sal_Int16 > aSelectSequence;
             OSL_VERIFY( getControlValue() >>= aSelectSequence );
-            aCurrentValue = lcl_getMultiSelectedEntriesAny( aSelectSequence, impl_getValues() );
+            aCurrentValue = lcl_getMultiSelectedEntriesAny( aSelectSequence, impl_getVisibleValues() );
         }
         catch( const Exception& )
         {
