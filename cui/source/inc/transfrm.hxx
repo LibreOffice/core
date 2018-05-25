@@ -227,17 +227,6 @@ class SvxSlantTabPage : public SvxTabPage
     static const sal_uInt16 pSlantRanges[];
 
 private:
-    VclPtr<VclFrame>            m_pFlRadius;
-    VclPtr<MetricField>         m_pMtrRadius;
-    VclPtr<VclFrame>            m_pFlAngle;
-    VclPtr<MetricField>         m_pMtrAngle;
-
-    VclPtr<VclFrame>            m_aControlGroups[2];
-    VclPtr<VclContainer>        m_aControlGroupX[2];
-    VclPtr<MetricField>         m_aControlX[2];
-    VclPtr<VclContainer>        m_aControlGroupY[2];
-    VclPtr<MetricField>         m_aControlY[2];
-
     const SfxItemSet&   rOutAttrs;
 
     const SdrView*      pView;
@@ -248,10 +237,19 @@ private:
     MapUnit             ePoolUnit;
     FieldUnit           eDlgUnit;
 
+    std::unique_ptr<weld::Widget> m_xFlRadius;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrRadius;
+    std::unique_ptr<weld::Widget> m_xFlAngle;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrAngle;
+    std::unique_ptr<weld::Widget> m_aControlGroups[2];
+    std::unique_ptr<weld::Widget> m_aControlGroupX[2];
+    std::unique_ptr<weld::MetricSpinButton> m_aControlX[2];
+    std::unique_ptr<weld::Widget> m_aControlGroupY[2];
+    std::unique_ptr<weld::MetricSpinButton> m_aControlY[2];
+
 public:
-         SvxSlantTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
+    SvxSlantTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxSlantTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
     static const sal_uInt16* GetRanges() {  return pSlantRanges; }
