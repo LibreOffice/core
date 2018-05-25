@@ -728,7 +728,19 @@ OUString SwTextNode::GetCurWord( sal_Int32 nPos ) const
 SwScanner::SwScanner( const SwTextNode& rNd, const OUString& rText,
     const LanguageType* pLang, const ModelToViewHelper& rConvMap,
     sal_uInt16 nType, sal_Int32 nStart, sal_Int32 nEnde, bool bClp )
-    : m_rNode( rNd )
+    : SwScanner(
+        [&rNd](sal_Int32 const nBegin, sal_uInt16 const nScript, bool const bNoChar)
+            { return rNd.GetLang(nBegin, bNoChar ? 0 : 1, nScript); }
+        , rText, pLang, rConvMap, nType, nStart, nEnde, bClp)
+{
+}
+
+SwScanner::SwScanner(
+    std::function<LanguageType (sal_Int32, sal_Int32, bool)> const pGetLangOfChar,
+    const OUString& rText,
+    const LanguageType* pLang, const ModelToViewHelper& rConvMap,
+    sal_uInt16 nType, sal_Int32 nStart, sal_Int32 nEnde, bool bClp )
+    : m_pGetLangOfChar( pGetLangOfChar )
     , m_aPreDashReplacementText(rText)
     , m_pLanguage( pLang )
     , m_ModelToView( rConvMap )
@@ -775,7 +787,7 @@ SwScanner::SwScanner( const SwTextNode& rNd, const OUString& rText,
     {
         ModelToViewHelper::ModelPosition aModelBeginPos =
             m_ModelToView.ConvertToModelPosition( m_nBegin );
-        m_aCurrentLang = rNd.GetLang( aModelBeginPos.mnPos );
+        m_aCurrentLang = m_pGetLangOfChar(aModelBeginPos.mnPos, 0, true);
     }
 }
 
@@ -837,7 +849,7 @@ bool SwScanner::NextWord()
                     const sal_uInt16 nNextScriptType = g_pBreakIt->GetBreakIter()->getScriptType( m_aText, m_nBegin );
                     ModelToViewHelper::ModelPosition aModelBeginPos =
                         m_ModelToView.ConvertToModelPosition( m_nBegin );
-                    m_aCurrentLang = m_rNode.GetLang( aModelBeginPos.mnPos, 1, nNextScriptType );
+                    m_aCurrentLang = m_pGetLangOfChar(aModelBeginPos.mnPos, nNextScriptType, false);
                 }
 
                 if ( m_nWordType != i18n::WordType::WORD_COUNT )
