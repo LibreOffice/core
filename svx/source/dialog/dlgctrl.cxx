@@ -75,7 +75,6 @@ SvxRectCtl::SvxRectCtl(vcl::Window* pParent, RectPoint eRpt,
     , eDefRP(eRpt)
     , pBitmap(nullptr)
     , m_nState(CTL_STATE::NONE)
-    , mbCompleteDisable(false)
     , mbUpdateForeground(true)
     , mbUpdateBackground(true)
 {
@@ -217,110 +216,102 @@ void SvxRectCtl::InitSettings(vcl::RenderContext& rRenderContext)
 // is notified that the item was changed
 void SvxRectCtl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    // CompletelyDisabled() added to have a disabled state for SvxRectCtl
-    if(!IsCompletelyDisabled())
-    {
-        Point aPtLast = aPtNew;
+    Point aPtLast = aPtNew;
 
-        aPtNew = GetApproxLogPtFromPixPt( rMEvt.GetPosPixel() );
+    aPtNew = GetApproxLogPtFromPixPt( rMEvt.GetPosPixel() );
 
-        Invalidate( tools::Rectangle( aPtLast - Point( nRadius, nRadius ),
-                               aPtLast + Point( nRadius, nRadius ) ) );
-        Invalidate( tools::Rectangle( aPtNew - Point( nRadius, nRadius ),
-                               aPtNew + Point( nRadius, nRadius ) ) );
-        eRP = GetRPFromPoint( aPtNew );
+    Invalidate( tools::Rectangle( aPtLast - Point( nRadius, nRadius ),
+                           aPtLast + Point( nRadius, nRadius ) ) );
+    Invalidate( tools::Rectangle( aPtNew - Point( nRadius, nRadius ),
+                           aPtNew + Point( nRadius, nRadius ) ) );
+    eRP = GetRPFromPoint( aPtNew );
 
-        SetActualRP( eRP );
+    SetActualRP( eRP );
 
-        vcl::Window *pTabPage = getNonLayoutParent(this);
-        if (pTabPage && WindowType::TABPAGE == pTabPage->GetType())
-            static_cast<SvxTabPage*>(pTabPage)->PointChanged( this, eRP );
-    }
+    vcl::Window *pTabPage = getNonLayoutParent(this);
+    if (pTabPage && WindowType::TABPAGE == pTabPage->GetType())
+        static_cast<SvxTabPage*>(pTabPage)->PointChanged( this, eRP );
 }
 
 void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
 {
-    // CompletelyDisabled() added to have a disabled state for SvxRectCtl
-    if(!IsCompletelyDisabled())
+    RectPoint eNewRP = eRP;
+
+    switch( rKeyEvt.GetKeyCode().GetCode() )
     {
-        RectPoint eNewRP = eRP;
-
-        switch( rKeyEvt.GetKeyCode().GetCode() )
+        case KEY_DOWN:
         {
-            case KEY_DOWN:
-            {
-                if( !(m_nState & CTL_STATE::NOVERT) )
-                    switch( eNewRP )
-                    {
-                        case RectPoint::LT: eNewRP = RectPoint::LM; break;
-                        case RectPoint::MT: eNewRP = RectPoint::MM; break;
-                        case RectPoint::RT: eNewRP = RectPoint::RM; break;
-                        case RectPoint::LM: eNewRP = RectPoint::LB; break;
-                        case RectPoint::MM: eNewRP = RectPoint::MB; break;
-                        case RectPoint::RM: eNewRP = RectPoint::RB; break;
-                        default: ; //prevent warning
-                    }
-            }
-            break;
-            case KEY_UP:
-            {
-                if( !(m_nState & CTL_STATE::NOVERT) )
-                    switch( eNewRP )
-                    {
-                        case RectPoint::LM: eNewRP = RectPoint::LT; break;
-                        case RectPoint::MM: eNewRP = RectPoint::MT; break;
-                        case RectPoint::RM: eNewRP = RectPoint::RT; break;
-                        case RectPoint::LB: eNewRP = RectPoint::LM; break;
-                        case RectPoint::MB: eNewRP = RectPoint::MM; break;
-                        case RectPoint::RB: eNewRP = RectPoint::RM; break;
-                        default: ; //prevent warning
-                    }
-            }
-            break;
-            case KEY_LEFT:
-            {
-                if( !(m_nState & CTL_STATE::NOHORZ) )
-                    switch( eNewRP )
-                    {
-                        case RectPoint::MT: eNewRP = RectPoint::LT; break;
-                        case RectPoint::RT: eNewRP = RectPoint::MT; break;
-                        case RectPoint::MM: eNewRP = RectPoint::LM; break;
-                        case RectPoint::RM: eNewRP = RectPoint::MM; break;
-                        case RectPoint::MB: eNewRP = RectPoint::LB; break;
-                        case RectPoint::RB: eNewRP = RectPoint::MB; break;
-                        default: ; //prevent warning
-                    }
-            }
-            break;
-            case KEY_RIGHT:
-            {
-                if( !(m_nState & CTL_STATE::NOHORZ) )
-                    switch( eNewRP )
-                    {
-                        case RectPoint::LT: eNewRP = RectPoint::MT; break;
-                        case RectPoint::MT: eNewRP = RectPoint::RT; break;
-                        case RectPoint::LM: eNewRP = RectPoint::MM; break;
-                        case RectPoint::MM: eNewRP = RectPoint::RM; break;
-                        case RectPoint::LB: eNewRP = RectPoint::MB; break;
-                        case RectPoint::MB: eNewRP = RectPoint::RB; break;
-                        default: ; //prevent warning
-                    }
-            }
-            break;
-            default:
-                Control::KeyInput( rKeyEvt );
-                return;
+            if( !(m_nState & CTL_STATE::NOVERT) )
+                switch( eNewRP )
+                {
+                    case RectPoint::LT: eNewRP = RectPoint::LM; break;
+                    case RectPoint::MT: eNewRP = RectPoint::MM; break;
+                    case RectPoint::RT: eNewRP = RectPoint::RM; break;
+                    case RectPoint::LM: eNewRP = RectPoint::LB; break;
+                    case RectPoint::MM: eNewRP = RectPoint::MB; break;
+                    case RectPoint::RM: eNewRP = RectPoint::RB; break;
+                    default: ; //prevent warning
+                }
         }
-        if( eNewRP != eRP )
+        break;
+        case KEY_UP:
         {
-            SetActualRP( eNewRP );
-
-            vcl::Window *pTabPage = getNonLayoutParent(this);
-            if (pTabPage && WindowType::TABPAGE == pTabPage->GetType())
-                static_cast<SvxTabPage*>(pTabPage)->PointChanged(this, eRP);
-
-            SetFocusRect();
+            if( !(m_nState & CTL_STATE::NOVERT) )
+                switch( eNewRP )
+                {
+                    case RectPoint::LM: eNewRP = RectPoint::LT; break;
+                    case RectPoint::MM: eNewRP = RectPoint::MT; break;
+                    case RectPoint::RM: eNewRP = RectPoint::RT; break;
+                    case RectPoint::LB: eNewRP = RectPoint::LM; break;
+                    case RectPoint::MB: eNewRP = RectPoint::MM; break;
+                    case RectPoint::RB: eNewRP = RectPoint::RM; break;
+                    default: ; //prevent warning
+                }
         }
+        break;
+        case KEY_LEFT:
+        {
+            if( !(m_nState & CTL_STATE::NOHORZ) )
+                switch( eNewRP )
+                {
+                    case RectPoint::MT: eNewRP = RectPoint::LT; break;
+                    case RectPoint::RT: eNewRP = RectPoint::MT; break;
+                    case RectPoint::MM: eNewRP = RectPoint::LM; break;
+                    case RectPoint::RM: eNewRP = RectPoint::MM; break;
+                    case RectPoint::MB: eNewRP = RectPoint::LB; break;
+                    case RectPoint::RB: eNewRP = RectPoint::MB; break;
+                    default: ; //prevent warning
+                }
+        }
+        break;
+        case KEY_RIGHT:
+        {
+            if( !(m_nState & CTL_STATE::NOHORZ) )
+                switch( eNewRP )
+                {
+                    case RectPoint::LT: eNewRP = RectPoint::MT; break;
+                    case RectPoint::MT: eNewRP = RectPoint::RT; break;
+                    case RectPoint::LM: eNewRP = RectPoint::MM; break;
+                    case RectPoint::MM: eNewRP = RectPoint::RM; break;
+                    case RectPoint::LB: eNewRP = RectPoint::MB; break;
+                    case RectPoint::MB: eNewRP = RectPoint::RB; break;
+                    default: ; //prevent warning
+                }
+        }
+        break;
+        default:
+            Control::KeyInput( rKeyEvt );
+            return;
+    }
+    if( eNewRP != eRP )
+    {
+        SetActualRP( eNewRP );
+
+        vcl::Window *pTabPage = getNonLayoutParent(this);
+        if (pTabPage && WindowType::TABPAGE == pTabPage->GetType())
+            static_cast<SvxTabPage*>(pTabPage)->PointChanged(this, eRP);
+
+        SetFocusRect();
     }
 }
 
@@ -387,46 +378,26 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
 
     BitmapEx& rBitmap = GetRectBitmap();
 
-    // CompletelyDisabled() added to have a disabled state for SvxRectCtl
-    if (IsCompletelyDisabled())
-    {
-        rRenderContext.DrawBitmap(aPtLT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap.GetBitmap());
-        rRenderContext.DrawBitmap(aPtMT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap.GetBitmap());
-        rRenderContext.DrawBitmap(aPtRT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap.GetBitmap());
-        rRenderContext.DrawBitmap(aPtLM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap.GetBitmap());
-        rRenderContext.DrawBitmap(aPtMM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap.GetBitmap());
-        rRenderContext.DrawBitmap(aPtRM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap.GetBitmap());
-        rRenderContext.DrawBitmap(aPtLB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap.GetBitmap());
-        rRenderContext.DrawBitmap(aPtMB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap.GetBitmap());
-        rRenderContext.DrawBitmap(aPtRB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap.GetBitmap());
-    }
-    else
-    {
-        rRenderContext.DrawBitmap(aPtLT - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap.GetBitmap());
-        rRenderContext.DrawBitmap(aPtMT - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap.GetBitmap());
-        rRenderContext.DrawBitmap(aPtRT - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap.GetBitmap());
-        rRenderContext.DrawBitmap(aPtLM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap.GetBitmap());
+    rRenderContext.DrawBitmap(aPtLT - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap.GetBitmap());
+    rRenderContext.DrawBitmap(aPtMT - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap.GetBitmap());
+    rRenderContext.DrawBitmap(aPtRT - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap.GetBitmap());
+    rRenderContext.DrawBitmap(aPtLM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap.GetBitmap());
 
-        // Center for rectangle and line
-        rRenderContext.DrawBitmap(aPtMM - aToCenter, aDstBtnSize, aBtnPnt1, aBtnSize, rBitmap.GetBitmap());
+    // Center for rectangle and line
+    rRenderContext.DrawBitmap(aPtMM - aToCenter, aDstBtnSize, aBtnPnt1, aBtnSize, rBitmap.GetBitmap());
 
-        rRenderContext.DrawBitmap(aPtRM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap.GetBitmap());
-        rRenderContext.DrawBitmap(aPtLB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap.GetBitmap());
-        rRenderContext.DrawBitmap(aPtMB - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap.GetBitmap());
-        rRenderContext.DrawBitmap(aPtRB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap.GetBitmap());
-    }
+    rRenderContext.DrawBitmap(aPtRM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap.GetBitmap());
+    rRenderContext.DrawBitmap(aPtLB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap.GetBitmap());
+    rRenderContext.DrawBitmap(aPtMB - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap.GetBitmap());
+    rRenderContext.DrawBitmap(aPtRB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap.GetBitmap());
 
     // draw active button, avoid center pos for angle
-    // CompletelyDisabled() added to have a disabled state for SvxRectCtl
-    if (!IsCompletelyDisabled())
+    if (IsEnabled())
     {
-        if (IsEnabled())
-        {
-            Point aCenterPt(aPtNew);
-            aCenterPt -= aToCenter;
+        Point aCenterPt(aPtNew);
+        aCenterPt -= aToCenter;
 
-            rRenderContext.DrawBitmap(aCenterPt, aDstBtnSize, aBtnPnt2, aBtnSize, rBitmap.GetBitmap());
-        }
+        rRenderContext.DrawBitmap(aCenterPt, aDstBtnSize, aBtnPnt2, aBtnSize, rBitmap.GetBitmap());
     }
 }
 
@@ -652,10 +623,9 @@ BitmapEx& RectCtl::GetRectBitmap()
     return *pBitmap;
 }
 
-RectCtl::RectCtl(SvxTabPage* pPage, RectPoint eRpt, sal_uInt16 nBorder, sal_uInt16 nCircle)
+RectCtl::RectCtl(SvxTabPage* pPage, RectPoint eRpt, sal_uInt16 nBorder)
     : m_pPage(pPage)
     , nBorderWidth(Application::GetDefaultDevice()->LogicToPixel(Size(nBorder, 0), MapMode(MapUnit::Map100thMM)).Width())
-    , nRadius(Application::GetDefaultDevice()->LogicToPixel(Size(nCircle, 0), MapMode(MapUnit::Map100thMM)).Width())
     , eDefRP(eRpt)
     , pBitmap(nullptr)
     , m_nState(CTL_STATE::NONE)
@@ -670,10 +640,9 @@ void RectCtl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     CustomWidgetController::SetDrawingArea(pDrawingArea);
 }
 
-void RectCtl::SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder, sal_uInt16 nCircle)
+void RectCtl::SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder)
 {
     nBorderWidth = Application::GetDefaultDevice()->LogicToPixel(Size(nBorder, 0), MapMode(MapUnit::Map100thMM)).Width();
-    nRadius = Application::GetDefaultDevice()->LogicToPixel(Size(nCircle, 0), MapMode(MapUnit::Map100thMM)).Width();
     eDefRP = eRpt;
     Resize_Impl();
 }

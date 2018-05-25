@@ -98,9 +98,6 @@ private:
     css::uno::Reference< css::beans::XPropertySet > mxSelectedTable;
     css::uno::Reference< css::drawing::XDrawView > mxView;
     css::uno::Reference< css::container::XIndexAccess > mxTableFamily;
-
-    bool mbStyleSelected;
-    bool mbOptionsChanged;
 };
 
 class TableDesignPane : public PanelLayout
