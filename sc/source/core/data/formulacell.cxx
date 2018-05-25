@@ -4360,8 +4360,9 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return false;
 
     auto aScope = sc::FormulaLogger::get().enterGroup(*pDocument, *this);
+    ScRecursionHelper& rRecursionHelper = pDocument->GetRecursionHelper();
 
-    if (pDocument->GetRecursionHelper().GetRecursionCount())
+    if (rRecursionHelper.GetRecursionCount() || rRecursionHelper.IsInThreadingAttempt())
     {
         // Do not attempt to interpret a group when calculations are already
         // running, otherwise we may run into a circular reference hell. See
@@ -4398,7 +4399,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
     // ScFormulaCell::InterpretFormulaGroup() must never be called through
     // anything else than ScFormulaCell::Interpret(), same as
     // ScFormulaCell::InterpretTail()
-    RecursionCounter aRecursionCounter( pDocument->GetRecursionHelper(), this);
+    RecursionCounter aRecursionCounter( rRecursionHelper, this);
 
     if (!bThreadingProhibited && !ScCalcConfig::isOpenCLEnabled() &&
         pCode->IsEnabledForThreading() &&
@@ -4412,7 +4413,29 @@ bool ScFormulaCell::InterpretFormulaGroup()
         // Disable or hugely enlarge subset for S/W group
         // threading interpreter
 
-        if (!aCalculator.DoIt())
+        // At this stage the recursion is guaranteed to be at
+        // level 1 with mxGroup getting processed to decide
+        // whether or not to use threading.
+        assert(rRecursionHelper.GetRecursionCount() == 1);
+
+        // Before starting dependency computation, recursion count needs to be set to zero
+        // temporarily, otherwise dependency computation will not get completed
+        // if recursion level exceeds MAXRECURSION there.
+
+        // Rest of recursion helper fields are now default except aFGList, which should
+        // not be changed here.
+        rRecursionHelper.DecRecursionCount();
+        rRecursionHelper.SetInThreadingAttempt(true);
+        // Sanity check the RPN array of the group and compute the dependencies,
+        // now at pretended recursion level 0.
+        bool bOKToThread = aCalculator.DoIt();
+        // Threading "attempt" is over now
+        rRecursionHelper.SetInThreadingAttempt(false);
+        assert(rRecursionHelper.GetRecursionCount() == 0);
+        // Set back recursion count to the actual value of 1.
+        rRecursionHelper.IncRecursionCount();
+
+        if (!bOKToThread)
         {
             mxGroup->meCalcState = sc::GroupCalcDisabled;
             aScope.addMessage("could not do new dependencies calculation thing");
@@ -4476,7 +4499,6 @@ bool ScFormulaCell::InterpretFormulaGroup()
             nThreadCount /= 2;
 
         SAL_INFO("sc.threaded", "Running " << nThreadCount << " threads");
-
         {
             assert(!pDocument->mbThreadedGroupCalcInProgress);
             pDocument->mbThreadedGroupCalcInProgress = true;

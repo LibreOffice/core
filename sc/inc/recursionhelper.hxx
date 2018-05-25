@@ -58,6 +58,8 @@ class ScRecursionHelper
     bool                                bDoingRecursion;
     bool                                bInIterationReturn;
     bool                                bConverging;
+    // Base of the recursion is in a threading attempt of a formula-group.
+    bool                                bInThreadingAttempt;
 
     void Init();
     void ResetIteration();
@@ -102,6 +104,9 @@ public:
     /** Detects whether the formula-group is part of a simple cycle of formula-groups. */
     bool PushFormulaGroup(ScFormulaCellGroup* pGrp);
     void PopFormulaGroup();
+
+    bool IsInThreadingAttempt()           { return bInThreadingAttempt; }
+    void SetInThreadingAttempt(bool bSet) { bInThreadingAttempt = bSet; }
 };
 
 #endif // INCLUDED_SC_INC_RECURSIONHELPER_HXX
