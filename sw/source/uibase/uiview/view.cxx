@@ -219,6 +219,40 @@ IMPL_LINK_NOARG(SwView, FormControlActivated, LinkParamNone*, void)
     }
 }
 
+namespace
+{
+uno::Reference<frame::XLayoutManager> getLayoutManager(const SfxViewFrame& rViewFrame)
+{
+    uno::Reference<frame::XLayoutManager> xLayoutManager;
+    uno::Reference<beans::XPropertySet> xPropSet(rViewFrame.GetFrame().GetFrameInterface(),
+                                                 uno::UNO_QUERY);
+    if (xPropSet.is())
+    {
+        try
+        {
+            xLayoutManager.set(xPropSet->getPropertyValue("LayoutManager"), uno::UNO_QUERY);
+        }
+        catch (const Exception& e)
+        {
+            SAL_WARN("sw.ui", "Failure getting layout manager: " + e.Message);
+        }
+    }
+    return xLayoutManager;
+}
+}
+
+void SwView::ShowUIElement(const OUString& sElementURL) const
+{
+    if (auto xLayoutManager = getLayoutManager(*GetViewFrame()))
+    {
+        if (!xLayoutManager->getElement(sElementURL).is())
+        {
+            xLayoutManager->createElement(sElementURL);
+            xLayoutManager->showElement(sElementURL);
+        }
+    }
+}
+
 void SwView::SelectShell()
 {
     // Attention: Maintain the SelectShell for the WebView additionally
@@ -419,6 +453,10 @@ void SwView::SelectShell()
                                             InputContextFlags::ExtText )) );
             GetEditWin().SetInputContext( aCntxt );
         }
+
+        // Show Mail Merge toolbar initially for documents with Database fields
+        if (!m_bInitOnceCompleted && GetWrtShell().IsAnyDatabaseFieldInDoc())
+            ShowUIElement("private:resource/toolbar/mailmerge");
 
         // Activate the toolbar to the new selection which also was active last time.
         // Before a flush () must be, but does not affect the UI according to MBA and
