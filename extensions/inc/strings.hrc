@@ -80,6 +80,7 @@
 #define RID_STR_BOUNDCOLUMN                     NC_("RID_STR_BOUNDCOLUMN", "Bound field")
 #define RID_STR_LISTSOURCE                      NC_("RID_STR_LISTSOURCE", "List content")
 #define RID_STR_LISTSOURCETYPE                  NC_("RID_STR_LISTSOURCETYPE", "Type of list contents")
+#define RID_STR_FILTERCOLUMN                    NC_("RID_STR_FILTERCOLUMN", "Filter field")
 #define RID_STR_CURSORSOURCE                    NC_("RID_STR_CURSORSOURCE", "Content")
 #define RID_STR_CURSORSOURCETYPE                NC_("RID_STR_CURSORSOURCETYPE", "Content type")
 #define RID_STR_ALLOW_ADDITIONS                 NC_("RID_STR_ALLOW_ADDITIONS", "Allow additions")
