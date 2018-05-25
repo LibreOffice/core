@@ -16,7 +16,7 @@ void ScRecursionHelper::Init()
     bInRecursionReturn = bDoingRecursion = bInIterationReturn = false;
     aInsertPos = GetIterationEnd();
     ResetIteration();
-    aFGList.clear();
+    // Must not force clear aFGList ever.
 }
 
 void ScRecursionHelper::ResetIteration()
