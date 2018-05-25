@@ -629,6 +629,7 @@ public:
     const OUString& GetRedlineAuthor();
     /// See SfxViewShell::NotifyCursor().
     void NotifyCursor(SfxViewShell* pViewShell) const override;
+    void ShowUIElement(const OUString& sElementURL) const;
 };
 
 inline long SwView::GetXScroll() const
