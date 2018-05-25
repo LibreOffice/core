@@ -25,6 +25,8 @@
 #include <ndtxt.hxx>
 #include "TextFrameIndex.hxx"
 
+namespace com { namespace sun { namespace star { namespace linguistic2 { class XHyphenatedWord; } } } }
+
 class SwCharRange;
 class SwTextNode;
 class SwTextFormatter;
@@ -45,6 +47,31 @@ class SwPortionHandler;
 class SwScriptInfo;
 
 #define NON_PRINTING_CHARACTER_COLOR Color(0x26, 0x8b, 0xd2)
+
+/// a clone of SwInterHyphInfo, but with TextFrameIndex instead of node index
+class SwInterHyphInfoTextFrame
+{
+private:
+    /// output: hyphenated word
+    css::uno::Reference<css::linguistic2::XHyphenatedWord> m_xHyphWord;
+public:
+    /// input: requested range to hyphenate
+    TextFrameIndex nStart;
+    TextFrameIndex nEnd;
+    /// output: found word
+    TextFrameIndex nWordStart;
+    TextFrameIndex nWordLen;
+
+    SwInterHyphInfoTextFrame(SwTextFrame const& rFrame,
+            SwTextNode const& rNode, SwInterHyphInfo const& rHyphInfo);
+    void UpdateTextNodeHyphInfo(SwTextFrame const& rFrame,
+            SwTextNode const& rNode, SwInterHyphInfo & o_rHyphInfo);
+
+    void SetHyphWord(const css::uno::Reference<css::linguistic2::XHyphenatedWord> &xHW)
+    {
+        m_xHyphWord = xHW;
+    }
+};
 
 namespace sw {
 
@@ -425,7 +452,7 @@ public:
      * We format a Line for interactive hyphenation
      * @return found
      */
-    bool Hyphenate( SwInterHyphInfo &rInf );
+    bool Hyphenate(SwInterHyphInfoTextFrame & rInf);
 
     /// Test grow
     inline SwTwips GrowTst( const SwTwips nGrow );

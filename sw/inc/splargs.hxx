@@ -109,11 +109,15 @@ struct SwSpellArgs : SwArgsBase
 
 class SwInterHyphInfo
 {
-    css::uno::Reference< css::linguistic2::XHyphenatedWord >    xHyphWord;
+    /// output: hyphenated word
+    css::uno::Reference<css::linguistic2::XHyphenatedWord> xHyphWord;
+    /// input: cursor point to locate the frame
     const Point aCursorPos;
 public:
+    /// input: requested range to hyphenate
     sal_Int32 nStart;
     sal_Int32 nEnd;
+    /// output: found word
     sal_Int32 nWordStart;
     sal_Int32 nWordLen;
 
@@ -123,10 +127,6 @@ public:
         , nEnd(SAL_MAX_INT32)
         , nWordStart(0), nWordLen(0)
     {
-    }
-    sal_Int32 GetEnd() const
-    {
-        return nEnd;
     }
     const Point *GetCursorPos() const
     {

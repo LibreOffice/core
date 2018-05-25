@@ -748,6 +748,8 @@ static bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
     SwHyphArgs *pHyphArgs = static_cast<SwHyphArgs*>(pArgs);
     if( pNode )
     {
+        // sw_redlinehide: this will be called once per node for merged nodes;
+        // the fully deleted ones won't have frames so are skipped.
         SwContentFrame* pContentFrame = pNode->getLayoutFrame( pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
         if( pContentFrame && !static_cast<SwTextFrame*>(pContentFrame)->IsHiddenNow() )
         {
