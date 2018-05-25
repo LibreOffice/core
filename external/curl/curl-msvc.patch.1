@@ -7,7 +7,7 @@ MSVC: using SOLARINC
  CC_NODEBUG  = $(CC) /O2 /DNDEBUG
  CC_DEBUG    = $(CC) /Od /D_DEBUG /RTC1 /Z7 /LDd
 -CFLAGS      = /I. /I ../lib /I../include /nologo /W4 /wd4127 /EHsc /DWIN32 /FD /c /DBUILDING_LIBCURL
-+CFLAGS      = /I. /I ../lib /I../include /nologo /W4 /wd4127 /EHsc /DWIN32 /FD /c /DBUILDING_LIBCURL $(SOLARINC) /D_USING_V110_SDK71_
++CFLAGS      = /I. /I ../lib /I../include /nologo /W4 /wd4127 /EHsc /DWIN32 /FD /c /DBUILDING_LIBCURL $(SOLARINC)
  !ENDIF
  
  LFLAGS     = /nologo /machine:$(MACHINE)
